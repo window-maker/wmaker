@@ -37,12 +37,12 @@ void ShowTexturePanel(TexturePanel *panel);
 void HideTexturePanel(TexturePanel *panel);
 
 void SetTexturePanelTexture(TexturePanel *panel, char *name, 
-			    proplist_t texture);
+			    WMPropList *texture);
 
 
 char *GetTexturePanelTextureName(TexturePanel *panel);
 
-proplist_t GetTexturePanelTexture(TexturePanel *panel);
+WMPropList *GetTexturePanelTexture(TexturePanel *panel);
 
 RImage *RenderTexturePanelTexture(TexturePanel *panel, unsigned width, 
 				  unsigned height);
@@ -53,7 +53,7 @@ void SetTexturePanelOkAction(TexturePanel *panel, WMCallback *action,
 void SetTexturePanelCancelAction(TexturePanel *panel, WMCallback *action,
 				  void *clientData);
 
-void SetTexturePanelPixmapPath(TexturePanel *panel, proplist_t array);
+void SetTexturePanelPixmapPath(TexturePanel *panel, WMPropList *array);
 
 #endif
 

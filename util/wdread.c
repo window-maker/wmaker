@@ -36,7 +36,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include <proplist.h>
+#include <WINGs/WUtil.h>
+
 #include <pwd.h>
 
 
@@ -83,7 +84,7 @@ void help()
 int main(int argc, char **argv)
 {
     char path[256];
-    proplist_t key, value, dict;
+    WMPropList *key, *value, *dict;
     char *gsdir;
     int i;
     
@@ -105,7 +106,7 @@ int main(int argc, char **argv)
 	exit(1);
     }
     
-    key = PLMakeString(argv[2]);
+    key = WMCreatePLString(argv[2]);
     
     gsdir = getenv("GNUSTEP_USER_ROOT");
     if (gsdir) {
@@ -119,12 +120,12 @@ int main(int argc, char **argv)
     strcat(path, "/");
     strcat(path, argv[1]);
 
-    if ((dict = PLGetProplistWithPath(path)) == NULL)
+    if ((dict = WMReadPropListFromFile(path)) == NULL)
 	return 1;	/* bad domain */
-    if ((value = PLGetDictionaryEntry(dict, key)) == NULL)
+    if ((value = WMGetFromPLDictionary(dict, key)) == NULL)
 	return 2;	/* bad key */
 
-    printf("%s\n", PLGetString(value));
+    printf("%s\n", WMGetFromPLString(value));
     return 0;
 }
 

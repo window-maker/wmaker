@@ -4,8 +4,6 @@
 
 #include <X11/Xlocale.h>
 
-#include <proplist.h>
-
 
 _WINGsConfiguration WINGsConfiguration;
 

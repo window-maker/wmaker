@@ -119,7 +119,7 @@ typedef struct _TexturePanel {
     int currentType;
 
     
-    proplist_t pathList;
+    WMPropList *pathList;
 
 } _TexturePanel;
 
@@ -816,11 +816,11 @@ SetTexturePanelCancelAction(TexturePanel *panel, WMCallback *action, void *clien
 
 
 void
-SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
+SetTexturePanelTexture(TexturePanel *panel, char *name, WMPropList *texture)
 {
     WMScreen *scr = WMWidgetScreen(panel->win);
     char *str, *type;
-    proplist_t p;
+    WMPropList *p;
     WMColor *color;
     int i;
     char buffer[64];
@@ -831,22 +831,22 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
     if (!texture)
 	return;
 
-    p = PLGetArrayElement(texture, 0);
+    p = WMGetFromPLArray(texture, 0);
     if (!p) {
 	goto bad_texture;
     }
-    type = PLGetString(p);
+    type = WMGetFromPLString(p);
 
     /*...............................................*/
     if (strcasecmp(type, "solid")==0) {
 
 	WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_SOLID);
 
-	p = PLGetArrayElement(texture, 1);
+	p = WMGetFromPLArray(texture, 1);
 	if (!p) {
 	    str = "black";
 	} else {
-	    str = PLGetString(p);
+	    str = WMGetFromPLString(p);
 	}
 	color = WMCreateNamedColor(scr, str, False);
 
@@ -860,11 +860,11 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_SGRADIENT);
 
-	p = PLGetArrayElement(texture, 1);
+	p = WMGetFromPLArray(texture, 1);
 	if (!p) {
 	    str = "black";
 	} else {
-	    str = PLGetString(p);
+	    str = WMGetFromPLString(p);
 	}
 	color = WMCreateNamedColor(scr, str, False);
 
@@ -872,11 +872,11 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	WMReleaseColor(color);
 
-	p = PLGetArrayElement(texture, 2);
+	p = WMGetFromPLArray(texture, 2);
 	if (!p) {
 	    str = "black";
 	} else {
-	    str = PLGetString(p);
+	    str = WMGetFromPLString(p);
 	}
 	color = WMCreateNamedColor(scr, str, False);
 
@@ -896,21 +896,21 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 	gradient = type[1];
 
 	WMSetTextFieldText(panel->imageT,
-			   PLGetString(PLGetArrayElement(texture, 1)));
+			   WMGetFromPLString(WMGetFromPLArray(texture, 1)));
 	if (panel->imageFile)
 	    wfree(panel->imageFile);
-	panel->imageFile = wstrdup(PLGetString(PLGetArrayElement(texture, 1)));
+	panel->imageFile = wstrdup(WMGetFromPLString(WMGetFromPLArray(texture, 1)));
 
 
 	i = 180;
-	sscanf(PLGetString(PLGetArrayElement(texture, 2)), "%i", &i);
+	sscanf(WMGetFromPLString(WMGetFromPLArray(texture, 2)), "%i", &i);
 	WMSetSliderValue(panel->topaS, i);
 
-	p = PLGetArrayElement(texture, 3);
+	p = WMGetFromPLArray(texture, 3);
 	if (!p) {
 	    str = "black";
 	} else {
-	    str = PLGetString(p);
+	    str = WMGetFromPLString(p);
 	}
 	color = WMCreateNamedColor(scr, str, False);
 
@@ -918,11 +918,11 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	WMReleaseColor(color);
 
-	p = PLGetArrayElement(texture, 4);
+	p = WMGetFromPLArray(texture, 4);
 	if (!p) {
 	    str = "black";
 	} else {
-	    str = PLGetString(p);
+	    str = WMGetFromPLString(p);
 	}
 	color = WMCreateNamedColor(scr, str, False);
 
@@ -931,12 +931,12 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 	WMReleaseColor(color);
 	
 	WMSetTextFieldText(panel->imageT,
-			   PLGetString(PLGetArrayElement(texture, 1)));
+			   WMGetFromPLString(WMGetFromPLArray(texture, 1)));
 	
     if (panel->imageFile)
         wfree(panel->imageFile);
     if ((panel->imageFile = wfindfileinarray(panel->pathList,
-                PLGetString(PLGetArrayElement(texture, 1)))) != NULL) {
+                WMGetFromPLString(WMGetFromPLArray(texture, 1)))) != NULL) {
 
         panel->image = RLoadImage(WMScreenRContext(scr), panel->imageFile, 0);
         updateTGradImage(panel);
@@ -959,11 +959,11 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_GRADIENT);
 
-	p = PLGetArrayElement(texture, 1);
+	p = WMGetFromPLArray(texture, 1);
 	if (!p) {
 	    str = "black";
 	} else {
-	    str = PLGetString(p);
+	    str = WMGetFromPLString(p);
 	}
 	color = WMCreateNamedColor(scr, str, False);
 
@@ -971,15 +971,15 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 
 	WMReleaseColor(color);
 
-	for (i = 2; i < PLGetNumberOfElements(texture); i++) {
+	for (i = 2; i < WMGetPropListItemCount(texture); i++) {
 	    RColor *rgb;
 	    XColor xcolor;
 
-	    p = PLGetArrayElement(texture, i);
+	    p = WMGetFromPLArray(texture, i);
 	    if (!p) {
 		str = "black";
 	    } else {
-		str = PLGetString(p);
+		str = WMGetFromPLString(p);
 	    }
 
 	    XParseColor(WMScreenDisplay(scr), WMScreenRContext(scr)->cmap,
@@ -1023,15 +1023,15 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 	}
 
 	WMSetTextFieldText(panel->imageT,
-			   PLGetString(PLGetArrayElement(texture, 1)));
+			   WMGetFromPLString(WMGetFromPLArray(texture, 1)));
 	
 	if (panel->imageFile)
 	    wfree(panel->imageFile);
 	panel->imageFile = wfindfileinarray(panel->pathList,
-			    PLGetString(PLGetArrayElement(texture, 1)));
+			    WMGetFromPLString(WMGetFromPLArray(texture, 1)));
 
 	color = WMCreateNamedColor(scr,
-			   PLGetString(PLGetArrayElement(texture, 2)), False);
+			   WMGetFromPLString(WMGetFromPLArray(texture, 2)), False);
 	WMSetColorWellColor(panel->defcW, color);
 	WMReleaseColor(color);
 
@@ -1060,7 +1060,7 @@ SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
     return;
 
  bad_texture:
-    str = PLGetDescription(texture);
+    str = WMGetPropListDescription(texture, False);
     wwarning(_("error creating texture %s"), str);
     wfree(str);
 
@@ -1076,11 +1076,10 @@ GetTexturePanelTextureName(TexturePanel *panel)
 }
 
 
-
-proplist_t
+WMPropList*
 GetTexturePanelTexture(TexturePanel *panel)
 {
-    proplist_t prop = NULL;
+    WMPropList *prop = NULL;
     WMColor *color;
     char *str, *str2;
     char buff[32];
@@ -1092,8 +1091,8 @@ GetTexturePanelTexture(TexturePanel *panel)
      case TYPE_SOLID:
 	color = WMGetColorWellColor(panel->defcW);
 	str = WMGetColorRGBDescription(color);
-	prop = PLMakeArrayFromElements(PLMakeString("solid"),
-				       PLMakeString(str), NULL);
+	prop = WMCreatePLArray(WMCreatePLString("solid"),
+				       WMCreatePLString(str), NULL);
 	wfree(str);
 
 	break;
@@ -1104,24 +1103,24 @@ GetTexturePanelTexture(TexturePanel *panel)
 
 	switch (WMGetPopUpButtonSelectedItem(panel->arrP)) {
 	 case PTYPE_SCALE:
-	    prop = PLMakeArrayFromElements(PLMakeString("spixmap"), 
-					   PLMakeString(panel->imageFile),
-					   PLMakeString(str), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("spixmap"), 
+					   WMCreatePLString(panel->imageFile),
+					   WMCreatePLString(str), NULL);
 	    break;
 	 case PTYPE_MAXIMIZE:
-	    prop = PLMakeArrayFromElements(PLMakeString("mpixmap"), 
-					   PLMakeString(panel->imageFile),
-					   PLMakeString(str), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("mpixmap"), 
+					   WMCreatePLString(panel->imageFile),
+					   WMCreatePLString(str), NULL);
 	    break;
 	 case PTYPE_CENTER:
-	    prop = PLMakeArrayFromElements(PLMakeString("cpixmap"), 
-					   PLMakeString(panel->imageFile),
-					   PLMakeString(str), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("cpixmap"), 
+					   WMCreatePLString(panel->imageFile),
+					   WMCreatePLString(str), NULL);
 	    break;
 	 case PTYPE_TILE:
-	    prop = PLMakeArrayFromElements(PLMakeString("tpixmap"),
-					   PLMakeString(panel->imageFile),
-					   PLMakeString(str), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("tpixmap"),
+					   WMCreatePLString(panel->imageFile),
+					   WMCreatePLString(str), NULL);
 	    break;
 	}
 	wfree(str);
@@ -1137,23 +1136,23 @@ GetTexturePanelTexture(TexturePanel *panel)
 	sprintf(buff, "%i", WMGetSliderValue(panel->topaS));
 
 	if (WMGetButtonSelected(panel->dirdB)) {
-	    prop = PLMakeArrayFromElements(PLMakeString("tdgradient"),
-					   PLMakeString(panel->imageFile),
-					   PLMakeString(buff),
-					   PLMakeString(str),
-					   PLMakeString(str2), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("tdgradient"),
+					   WMCreatePLString(panel->imageFile),
+					   WMCreatePLString(buff),
+					   WMCreatePLString(str),
+					   WMCreatePLString(str2), NULL);
 	} else 	if (WMGetButtonSelected(panel->dirvB)) {
-	    prop = PLMakeArrayFromElements(PLMakeString("tvgradient"),
-					   PLMakeString(panel->imageFile),
-					   PLMakeString(buff),
-					   PLMakeString(str),
-					   PLMakeString(str2), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("tvgradient"),
+					   WMCreatePLString(panel->imageFile),
+					   WMCreatePLString(buff),
+					   WMCreatePLString(str),
+					   WMCreatePLString(str2), NULL);
 	} else {
-	    prop = PLMakeArrayFromElements(PLMakeString("thgradient"),
-					   PLMakeString(panel->imageFile),
-					   PLMakeString(buff),
-					   PLMakeString(str),
-					   PLMakeString(str2), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("thgradient"),
+					   WMCreatePLString(panel->imageFile),
+					   WMCreatePLString(buff),
+					   WMCreatePLString(str),
+					   WMCreatePLString(str2), NULL);
 	}
 	wfree(str);
 	wfree(str2);
@@ -1168,17 +1167,17 @@ GetTexturePanelTexture(TexturePanel *panel)
 	str2 = WMGetColorRGBDescription(color);
 	
 	if (WMGetButtonSelected(panel->dirdB)) {
-	    prop = PLMakeArrayFromElements(PLMakeString("dgradient"),
-					   PLMakeString(str),
-					   PLMakeString(str2), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("dgradient"),
+					   WMCreatePLString(str),
+					   WMCreatePLString(str2), NULL);
 	} else 	if (WMGetButtonSelected(panel->dirvB)) {
-	    prop = PLMakeArrayFromElements(PLMakeString("vgradient"),
-					   PLMakeString(str),
-					   PLMakeString(str2), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("vgradient"),
+					   WMCreatePLString(str),
+					   WMCreatePLString(str2), NULL);
 	} else {
-	    prop = PLMakeArrayFromElements(PLMakeString("hgradient"),
-					   PLMakeString(str),
-					   PLMakeString(str2), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("hgradient"),
+					   WMCreatePLString(str),
+					   WMCreatePLString(str2), NULL);
 	}
 	wfree(str);
 	wfree(str2);
@@ -1189,14 +1188,14 @@ GetTexturePanelTexture(TexturePanel *panel)
 	str = WMGetColorRGBDescription(color);
 
 	if (WMGetButtonSelected(panel->dirdB)) {
-	    prop = PLMakeArrayFromElements(PLMakeString("mdgradient"),
-					   PLMakeString(str), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("mdgradient"),
+					   WMCreatePLString(str), NULL);
 	} else 	if (WMGetButtonSelected(panel->dirvB)) {
-	    prop = PLMakeArrayFromElements(PLMakeString("mvgradient"),
-					   PLMakeString(str), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("mvgradient"),
+					   WMCreatePLString(str), NULL);
 	} else {
-	    prop = PLMakeArrayFromElements(PLMakeString("mhgradient"),
-					   PLMakeString(str), NULL);
+	    prop = WMCreatePLArray(WMCreatePLString("mhgradient"),
+					   WMCreatePLString(str), NULL);
 	}
 	wfree(str);
 
@@ -1210,7 +1209,7 @@ GetTexturePanelTexture(TexturePanel *panel)
 
 	    sprintf(buff, "#%02x%02x%02x", rgb->red, rgb->green, rgb->blue);
 
-	    PLAppendArrayElement(prop, PLMakeString(buff));
+	    WMAddToPLArray(prop, WMCreatePLString(buff));
 	}
 	break;
     }
@@ -1222,7 +1221,7 @@ GetTexturePanelTexture(TexturePanel *panel)
 
 
 void
-SetTexturePanelPixmapPath(TexturePanel *panel, proplist_t array)
+SetTexturePanelPixmapPath(TexturePanel *panel, WMPropList *array)
 {
     panel->pathList = array;
 }
@@ -1653,7 +1652,7 @@ int main(int argc, char **argv)
     SetTexturePanelCancelAction(panel,(WMAction*)testCancelButton,panel);
 
     SetTexturePanelTexture(panel, "pinky",
-			   PLGetProplistWithDescription("(mdgradient, pink, red, blue, yellow)"));
+			   WMCreatePropListFromDescription("(mdgradient, pink, red, blue, yellow)"));
 
     ShowTexturePanel(panel);
 

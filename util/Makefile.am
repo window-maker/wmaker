@@ -18,40 +18,39 @@ INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
 # X_EXTRA_LIBS is for libproplist in systems that need -lsocket
 # remove after we require lPL 0.10.2 which automatically resolves its
 # library dependancies using the libPropList.la file
-liblist= @LIBRARY_SEARCH_PATH@ @LIBPL@ @X_EXTRA_LIBS@
+liblist= @LIBRARY_SEARCH_PATH@ @X_EXTRA_LIBS@
 
-wdwrite_LDADD = $(liblist)
+wdwrite_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
 
-wdread_LDADD = $(liblist)
+wdread_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
 
 wxcopy_LDADD = @XLFLAGS@ @XLIBS@ 
 
 wxpaste_LDADD = @XLFLAGS@ @XLIBS@
 
-getstyle_LDADD = $(liblist)
+getstyle_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
 
-setstyle_LDADD = @XLFLAGS@ @XLIBS@ $(liblist)
+setstyle_LDADD = \
+	$(top_builddir)/WINGs/libWUtil.a \
+	@XLFLAGS@ @XLIBS@ $(liblist)
 
-seticons_LDADD= $(liblist)
+seticons_LDADD= $(top_builddir)/WINGs/libWUtil.a $(liblist)
 
-geticonset_LDADD= $(liblist)
+geticonset_LDADD= $(top_builddir)/WINGs/libWUtil.a $(liblist)
 
 wmagnify_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@LIBPL@ \
 	@DLLIBS@
 
 wmsetup_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@LIBPL@ \
 	@DLLIBS@
 
 wmsetbg_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@LIBPL@ \
 	@DLLIBS@
 
 CLEANFILES = wmaker.inst wmchlocale

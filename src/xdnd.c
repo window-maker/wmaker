@@ -13,7 +13,8 @@
 
 #include "workspace.h"
 
-#include "stdlib.h"
+#include <stdlib.h>
+#include <string.h>
 
 #include <X11/Xatom.h>
 
@@ -92,8 +93,7 @@ void wXDNDClearAwareness(Window window) {
 Bool
 wXDNDProcessSelection(XEvent *event)
 {
-	WScreen *scr = wScreenForWindow(event->xselection.requestor);
-    char *dropdata;
+    WScreen *scr = wScreenForWindow(event->xselection.requestor);
     char *retain;
     Atom ret_type;
     int ret_format;
@@ -180,6 +180,8 @@ wXDNDProcessSelection(XEvent *event)
         */
         wfree(scr->xdestring); /* this xdestring is not from Xlib (no XFree) */
     }
+
+    /* why doesn't this function return anything ? -Dan */
 }
 
 Bool
@@ -189,7 +191,6 @@ isAwareXDND(Window window)
     int format;
     unsigned long count, remaining;
     unsigned char *data=0;
-    Atom *types, *t;
 
     if (!window) return False;
     XGetWindowProperty (dpy, window, _XA_XdndAware,
@@ -209,8 +210,7 @@ isAwareXDND(Window window)
 Bool
 acceptXDND(Window window)
 {
-	WScreen *scr = wScreenForWindow(window);
-    WWindow *wwin = wWindowFor(window);
+    WScreen *scr = wScreenForWindow(window);
     WDock *dock;
     int icon_pos,i;
     

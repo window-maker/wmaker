@@ -50,15 +50,15 @@
 #include "kwm.h"
 #endif
 
-#include <proplist.h>
+#include <WINGs/WUtil.h>
 
 
 extern WPreferences wPreferences;
 extern XContext wWinContext;
 
 
-static proplist_t dWorkspaces=NULL;
-static proplist_t dClip, dName;
+static WMPropList *dWorkspaces=NULL;
+static WMPropList *dClip, *dName;
 
 #ifdef VIRTUAL_DESKTOP
 static BOOL initVDesk = False;
@@ -70,9 +70,9 @@ make_keys()
     if (dWorkspaces!=NULL)
 	return;
 
-    dWorkspaces = PLMakeString("Workspaces");
-    dName = PLMakeString("Name");
-    dClip = PLMakeString("Clip");
+    dWorkspaces = WMCreatePLString("Workspaces");
+    dName = WMCreatePLString("Name");
+    dClip = WMCreatePLString("Clip");
 }
 
 
@@ -996,72 +996,69 @@ wWorkspaceMenuUpdate(WScreen *scr, WMenu *menu)
 
 
 void
-wWorkspaceSaveState(WScreen *scr, proplist_t old_state)
+wWorkspaceSaveState(WScreen *scr, WMPropList *old_state)
 {
-    proplist_t parr, pstr;
-    proplist_t wks_state, old_wks_state;
-    proplist_t foo, bar;
+    WMPropList *parr, *pstr, *wks_state, *old_wks_state, *foo, *bar;
     int i;
 
     make_keys();
 
-    old_wks_state = PLGetDictionaryEntry(old_state, dWorkspaces);
-    parr = PLMakeArrayFromElements(NULL);
+    old_wks_state = WMGetFromPLDictionary(old_state, dWorkspaces);
+    parr = WMCreatePLArray(NULL);
     for (i=0; i < scr->workspace_count; i++) {
-        pstr = PLMakeString(scr->workspaces[i]->name);
-        wks_state = PLMakeDictionaryFromEntries(dName, pstr, NULL);
-        PLRelease(pstr);
+        pstr = WMCreatePLString(scr->workspaces[i]->name);
+        wks_state = WMCreatePLDictionary(dName, pstr, NULL);
+        WMReleasePropList(pstr);
         if (!wPreferences.flags.noclip) {
             pstr = wClipSaveWorkspaceState(scr, i);
-            PLInsertDictionaryEntry(wks_state, dClip, pstr);
-            PLRelease(pstr);
+            WMPutInPLDictionary(wks_state, dClip, pstr);
+            WMReleasePropList(pstr);
         } else if (old_wks_state!=NULL) {
-            if ((foo = PLGetArrayElement(old_wks_state, i))!=NULL) {
-                if ((bar = PLGetDictionaryEntry(foo, dClip))!=NULL) {
-                    PLInsertDictionaryEntry(wks_state, dClip, bar);
+            if ((foo = WMGetFromPLArray(old_wks_state, i))!=NULL) {
+                if ((bar = WMGetFromPLDictionary(foo, dClip))!=NULL) {
+                    WMPutInPLDictionary(wks_state, dClip, bar);
                 }
             }
         }
-        PLAppendArrayElement(parr, wks_state);
-        PLRelease(wks_state);
+        WMAddToPLArray(parr, wks_state);
+        WMReleasePropList(wks_state);
     }
-    PLInsertDictionaryEntry(scr->session_state, dWorkspaces, parr);
-    PLRelease(parr);
+    WMPutInPLDictionary(scr->session_state, dWorkspaces, parr);
+    WMReleasePropList(parr);
 }
 
 
 void
 wWorkspaceRestoreState(WScreen *scr)
 {
-    proplist_t parr, pstr, wks_state;
-    proplist_t clip_state;
+    WMPropList *parr, *pstr, *wks_state, *clip_state;
     int i, j, wscount;
 
     make_keys();
 
-    parr = PLGetDictionaryEntry(scr->session_state, dWorkspaces);
+    parr = WMGetFromPLDictionary(scr->session_state, dWorkspaces);
 
     if (!parr)
 	return;
 
     wscount = scr->workspace_count;
-    for (i=0; i < WMIN(PLGetNumberOfElements(parr), MAX_WORKSPACES); i++) {
-        wks_state = PLGetArrayElement(parr, i);
-        if (PLIsDictionary(wks_state))
-            pstr = PLGetDictionaryEntry(wks_state, dName);
+    for (i=0; i < WMIN(WMGetPropListItemCount(parr), MAX_WORKSPACES); i++) {
+        wks_state = WMGetFromPLArray(parr, i);
+        if (WMIsPLDictionary(wks_state))
+            pstr = WMGetFromPLDictionary(wks_state, dName);
         else
             pstr = wks_state;
 	if (i >= scr->workspace_count)
 	    wWorkspaceNew(scr);
 	if (scr->workspace_menu) {
 	    wfree(scr->workspace_menu->entries[i+2]->text);
-	    scr->workspace_menu->entries[i+2]->text = wstrdup(PLGetString(pstr));
+	    scr->workspace_menu->entries[i+2]->text = wstrdup(WMGetFromPLString(pstr));
 	    scr->workspace_menu->flags.realized = 0;
 	}
 	wfree(scr->workspaces[i]->name);
-        scr->workspaces[i]->name = wstrdup(PLGetString(pstr));
+        scr->workspaces[i]->name = wstrdup(WMGetFromPLString(pstr));
         if (!wPreferences.flags.noclip) {
-            clip_state = PLGetDictionaryEntry(wks_state, dClip);
+            clip_state = WMGetFromPLDictionary(wks_state, dClip);
             if (scr->workspaces[i]->clip)
                 wDockDestroy(scr->workspaces[i]->clip);
             scr->workspaces[i]->clip = wDockRestoreState(scr, clip_state,

@@ -13,7 +13,7 @@ bin_SCRIPTS = get-wings-flags get-wutil-flags
 lib_LIBRARIES = libWINGs.a libWUtil.a
 
 
-LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @LIBPL@ @INTLIBS@
+LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @INTLIBS@
 
 
 EXTRA_DIST = BUGS

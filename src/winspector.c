@@ -48,7 +48,7 @@
 #include "client.h"
 
 
-#include <proplist.h>
+#include <WINGs/WUtil.h>
 
 
 
@@ -133,43 +133,43 @@ static InspectorPanel *panelList=NULL;
 
 extern WPreferences wPreferences;
 
-static proplist_t ANoTitlebar = NULL;
-static proplist_t ANoResizebar;
-static proplist_t ANoMiniaturizeButton;
-static proplist_t ANoCloseButton;
-static proplist_t ANoBorder;
-static proplist_t ANoHideOthers;
-static proplist_t ANoMouseBindings;
-static proplist_t ANoKeyBindings;
-static proplist_t ANoAppIcon;
-static proplist_t AKeepOnTop;
-static proplist_t AKeepOnBottom;
-static proplist_t AOmnipresent;
-static proplist_t ASkipWindowList;
-static proplist_t AKeepInsideScreen;
-static proplist_t AUnfocusable;
-static proplist_t AAlwaysUserIcon;
-static proplist_t AStartMiniaturized;
-static proplist_t AStartMaximized;
-static proplist_t ADontSaveSession;
-static proplist_t AEmulateAppIcon;
-static proplist_t AFullMaximize;
-static proplist_t ACollapseAppIcons;
+static WMPropList *ANoTitlebar = NULL;
+static WMPropList *ANoResizebar;
+static WMPropList *ANoMiniaturizeButton;
+static WMPropList *ANoCloseButton;
+static WMPropList *ANoBorder;
+static WMPropList *ANoHideOthers;
+static WMPropList *ANoMouseBindings;
+static WMPropList *ANoKeyBindings;
+static WMPropList *ANoAppIcon;
+static WMPropList *AKeepOnTop;
+static WMPropList *AKeepOnBottom;
+static WMPropList *AOmnipresent;
+static WMPropList *ASkipWindowList;
+static WMPropList *AKeepInsideScreen;
+static WMPropList *AUnfocusable;
+static WMPropList *AAlwaysUserIcon;
+static WMPropList *AStartMiniaturized;
+static WMPropList *AStartMaximized;
+static WMPropList *ADontSaveSession;
+static WMPropList *AEmulateAppIcon;
+static WMPropList *AFullMaximize;
+static WMPropList *ACollapseAppIcons;
 #ifdef XKB_BUTTON_HINT
-static proplist_t ANoLanguageButton;
+static WMPropList *ANoLanguageButton;
 #endif
 
-static proplist_t AStartWorkspace;
+static WMPropList *AStartWorkspace;
 
-static proplist_t AIcon;
+static WMPropList *AIcon;
 
 /* application wide options */
-static proplist_t AStartHidden;
+static WMPropList *AStartHidden;
 
 
-static proplist_t AnyWindow;
-static proplist_t EmptyString;
-static proplist_t Yes, No;
+static WMPropList *AnyWindow;
+static WMPropList *EmptyString;
+static WMPropList *Yes, *No;
 
 
 #define PWIDTH	270
@@ -199,40 +199,40 @@ make_keys()
     if (ANoTitlebar!=NULL)
 	return;
 
-    AIcon = PLMakeString("Icon");
-    ANoTitlebar = PLMakeString("NoTitlebar");
-    ANoResizebar = PLMakeString("NoResizebar");
-    ANoMiniaturizeButton = PLMakeString("NoMiniaturizeButton");
-    ANoCloseButton = PLMakeString("NoCloseButton");
-    ANoBorder = PLMakeString("NoBorder");    
-    ANoHideOthers = PLMakeString("NoHideOthers");
-    ANoMouseBindings = PLMakeString("NoMouseBindings");
-    ANoKeyBindings = PLMakeString("NoKeyBindings");
-    ANoAppIcon = PLMakeString("NoAppIcon");
-    AKeepOnTop = PLMakeString("KeepOnTop");
-    AKeepOnBottom = PLMakeString("KeepOnBottom");
-    AOmnipresent = PLMakeString("Omnipresent");
-    ASkipWindowList = PLMakeString("SkipWindowList");
-    AKeepInsideScreen = PLMakeString("KeepInsideScreen");
-    AUnfocusable = PLMakeString("Unfocusable");
-    AAlwaysUserIcon = PLMakeString("AlwaysUserIcon");
-    AStartMiniaturized = PLMakeString("StartMiniaturized");
-    AStartMaximized = PLMakeString("StartMaximized");
-    AStartHidden = PLMakeString("StartHidden");
-    ADontSaveSession = PLMakeString("DontSaveSession");
-    AEmulateAppIcon = PLMakeString("EmulateAppIcon");
-    AFullMaximize = PLMakeString("FullMaximize");
-    ACollapseAppIcons = PLMakeString("CollapseAppIcons");    
+    AIcon = WMCreatePLString("Icon");
+    ANoTitlebar = WMCreatePLString("NoTitlebar");
+    ANoResizebar = WMCreatePLString("NoResizebar");
+    ANoMiniaturizeButton = WMCreatePLString("NoMiniaturizeButton");
+    ANoCloseButton = WMCreatePLString("NoCloseButton");
+    ANoBorder = WMCreatePLString("NoBorder");    
+    ANoHideOthers = WMCreatePLString("NoHideOthers");
+    ANoMouseBindings = WMCreatePLString("NoMouseBindings");
+    ANoKeyBindings = WMCreatePLString("NoKeyBindings");
+    ANoAppIcon = WMCreatePLString("NoAppIcon");
+    AKeepOnTop = WMCreatePLString("KeepOnTop");
+    AKeepOnBottom = WMCreatePLString("KeepOnBottom");
+    AOmnipresent = WMCreatePLString("Omnipresent");
+    ASkipWindowList = WMCreatePLString("SkipWindowList");
+    AKeepInsideScreen = WMCreatePLString("KeepInsideScreen");
+    AUnfocusable = WMCreatePLString("Unfocusable");
+    AAlwaysUserIcon = WMCreatePLString("AlwaysUserIcon");
+    AStartMiniaturized = WMCreatePLString("StartMiniaturized");
+    AStartMaximized = WMCreatePLString("StartMaximized");
+    AStartHidden = WMCreatePLString("StartHidden");
+    ADontSaveSession = WMCreatePLString("DontSaveSession");
+    AEmulateAppIcon = WMCreatePLString("EmulateAppIcon");
+    AFullMaximize = WMCreatePLString("FullMaximize");
+    ACollapseAppIcons = WMCreatePLString("CollapseAppIcons");    
 #ifdef XKB_BUTTON_HINT
-    ANoLanguageButton = PLMakeString("NoLanguageButton");
+    ANoLanguageButton = WMCreatePLString("NoLanguageButton");
 #endif
 
-    AStartWorkspace = PLMakeString("StartWorkspace");
+    AStartWorkspace = WMCreatePLString("StartWorkspace");
 
-    AnyWindow = PLMakeString("*");
-    EmptyString = PLMakeString("");
-    Yes = PLMakeString("Yes");
-    No = PLMakeString("No");
+    AnyWindow = WMCreatePLString("*");
+    EmptyString = WMCreatePLString("");
+    Yes = WMCreatePLString("Yes");
+    No = WMCreatePLString("No");
 }
 
 
@@ -428,14 +428,14 @@ updateIcon(WMButton *button, InspectorPanel *panel)
 #endif
 
 static int 
-getBool(proplist_t value)
+getBool(WMPropList *value)
 {
     char *val;
 
-    if (!PLIsString(value)) {
+    if (!WMIsPLString(value)) {
         return 0;
     }
-    if (!(val = PLGetString(value))) {
+    if (!(val = WMGetFromPLString(value))) {
         return 0;
     }
 
@@ -472,16 +472,16 @@ getBool(proplist_t value)
 
 
 static int
-insertAttribute(proplist_t dict, proplist_t window, proplist_t attr,
-                proplist_t value, int flags)
+insertAttribute(WMPropList *dict, WMPropList *window, WMPropList *attr,
+                WMPropList *value, int flags)
 {
-    proplist_t def_win, def_value=NULL;
+    WMPropList *def_win, *def_value=NULL;
     int update = 0;
     int modified = 0;
 
     if (!(flags & UPDATE_DEFAULTS) && dict) {
-        if ((def_win = PLGetDictionaryEntry(dict, AnyWindow)) != NULL) {
-            def_value = PLGetDictionaryEntry(def_win, attr);
+        if ((def_win = WMGetFromPLDictionary(dict, AnyWindow)) != NULL) {
+            def_value = WMGetFromPLDictionary(def_win, attr);
         }
     }
 
@@ -494,11 +494,11 @@ insertAttribute(proplist_t dict, proplist_t window, proplist_t attr,
     if ((flags & IS_BOOLEAN))
         update = (getBool(value) != getBool(def_value));
     else {
-        update = !PLIsEqual(value, def_value);
+        update = !WMIsPropListEqualTo(value, def_value);
     }
 
     if (update) {
-        PLInsertDictionaryEntry(window, attr, value);
+        WMPutInPLDictionary(window, attr, value);
         modified = 1;
     }
 
@@ -511,8 +511,8 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 {
     WWindow *wwin = panel->inspected;
     WDDomain *db = WDWindowAttributes;
-    proplist_t dict = db->dictionary;
-    proplist_t winDic, value, key;
+    WMPropList *dict = db->dictionary;
+    WMPropList *winDic, *value, *key;
     char *icon_file;
     int flags = 0;
     int different = 0;
@@ -521,18 +521,18 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     applySettings(panel->applyBtn, panel);
 	
     if (WMGetButtonSelected(panel->instRb) != 0)
-        key = PLMakeString(wwin->wm_instance);
+        key = WMCreatePLString(wwin->wm_instance);
     else if (WMGetButtonSelected(panel->clsRb) != 0)
-        key = PLMakeString(wwin->wm_class);
+        key = WMCreatePLString(wwin->wm_class);
     else if (WMGetButtonSelected(panel->bothRb) != 0) {
 		char *buffer;
 
 		buffer = wmalloc(strlen(wwin->wm_instance)+strlen(wwin->wm_class)+4);
         strcat(strcat(strcpy(buffer, wwin->wm_instance), "."), wwin->wm_class);
-        key = PLMakeString(buffer);
+        key = WMCreatePLString(buffer);
         wfree(buffer);
     } else if (WMGetButtonSelected(panel->defaultRb) != 0) {
-        key = PLRetain(AnyWindow);
+        key = WMRetainPropList(AnyWindow);
         flags = UPDATE_DEFAULTS;
     } else
         key = NULL;
@@ -541,15 +541,11 @@ saveSettings(WMButton *button, InspectorPanel *panel)
         return;
 
     if (!dict) {
-        dict = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+        dict = WMCreatePLDictionary(NULL, NULL, NULL);
         if (dict) {
             db->dictionary = dict;
-            value = PLMakeString(db->path);
-            PLSetFilename(dict, value);
-            PLRelease(value);
-        }
-        else {
-            PLRelease(key);
+        } else {
+            WMReleasePropList(key);
             return;
         }
     }
@@ -558,17 +554,17 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 		    USE_TEXT_FIELD) < 0)
         return;
 
-    PLSetStringCmpHook(NULL);
+    WMPLSetCaseSensitive(True);
 
-    winDic = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+    winDic = WMCreatePLDictionary(NULL, NULL, NULL);
 
     /* Update icon for window */
     icon_file = WMGetTextFieldText(panel->fileText);
     if (icon_file) {
         if (icon_file[0] != 0) {
-            value = PLMakeString(icon_file);
+            value = WMCreatePLString(icon_file);
             different |= insertAttribute(dict, winDic, AIcon, value, flags);
-            PLRelease(value);
+            WMReleasePropList(value);
         }
         wfree(icon_file);
     }
@@ -579,10 +575,10 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	i--;
 
 	if (i>=0 && i < panel->frame->screen_ptr->workspace_count) {
-	    value = PLMakeString(panel->frame->screen_ptr->workspaces[i]->name);
+	    value = WMCreatePLString(panel->frame->screen_ptr->workspaces[i]->name);
 	    different |= insertAttribute(dict, winDic, AStartWorkspace, value, 
 					 flags);
-	    PLRelease(value);
+	    WMReleasePropList(value);
         }
     }
 
@@ -668,13 +664,13 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	different |= insertAttribute(dict, winDic, ACollapseAppIcons, value, flags);
     } 
 
-    PLRemoveDictionaryEntry(dict, key);
+    WMRemoveFromPLDictionary(dict, key);
     if (different) {
-        PLInsertDictionaryEntry(dict, key, winDic);
+        WMPutInPLDictionary(dict, key, winDic);
     }
 
-    PLRelease(key); 
-    PLRelease(winDic);
+    WMReleasePropList(key); 
+    WMReleasePropList(winDic);
 
     different = 0;
     
@@ -682,14 +678,14 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     if (panel->inspected->main_window != panel->inspected->client_win
 	&& !(flags & UPDATE_DEFAULTS)) {
 	WApplication *wapp;
-	proplist_t appDic;
+	WMPropList *appDic;
 
 	wapp = wApplicationOf(panel->inspected->main_window);
 	if (wapp) {
 	    char *iconFile;
 		char *buffer;
 
-	    appDic = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+	    appDic = WMCreatePLDictionary(NULL, NULL, NULL);
 
 	    assert(wapp->main_window_desc->wm_instance!=NULL);
 	    assert(wapp->main_window_desc->wm_class!=NULL);
@@ -698,7 +694,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 						 +strlen(wapp->main_window_desc->wm_class)+4);
 	    strcat(strcpy(buffer, wapp->main_window_desc->wm_instance), ".");
 	    strcat(buffer, wapp->main_window_desc->wm_class);
-	    key = PLMakeString(buffer);
+	    key = WMCreatePLString(buffer);
             wfree(buffer);
 
 	    iconFile = wDefaultGetIconFile(wwin->screen_ptr, 
@@ -707,10 +703,10 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 					   False);
 
 	    if (iconFile && iconFile[0]!=0) {
-		value = PLMakeString(iconFile);
+		value = WMCreatePLString(iconFile);
 		different |= insertAttribute(dict, appDic, AIcon, value,
 					     flags&~IS_BOOLEAN);
-		PLRelease(value);
+		WMReleasePropList(value);
 	    }
 		
 	    value = (WMGetButtonSelected(panel->appChk[0])!=0) ? Yes : No;
@@ -725,19 +721,19 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	    different |= insertAttribute(dict, appDic, ACollapseAppIcons,  value, 
 					 flags);
 	    
-	    PLRemoveDictionaryEntry(dict, key);
+	    WMRemoveFromPLDictionary(dict, key);
 	    if (different) {
-		PLInsertDictionaryEntry(dict, key, appDic);
+		WMPutInPLDictionary(dict, key, appDic);
 	    }
-	    PLRelease(key);
-	    PLRelease(appDic);
+	    WMReleasePropList(key);
+	    WMReleasePropList(appDic);
 	}
     }
 
-    PLSave(dict, YES);
+    WMWritePropListToFile(dict, db->path, True);
 
     /* clean up */
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 }
 
 

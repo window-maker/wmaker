@@ -24,25 +24,25 @@
 
 typedef struct WDDomain {
     char *domain_name;
-    proplist_t dictionary;
+    WMPropList *dictionary;
     char *path;
     time_t timestamp;
 } WDDomain;
 
 #if 0
-proplist_t wDefaultsInit(int screen_number);
+WMPropList* wDefaultsInit(int screen_number);
 #endif
 
 
-WDDomain*wDefaultsInitDomain(char *domain, Bool requireDictionary);
+WDDomain* wDefaultsInitDomain(char *domain, Bool requireDictionary);
 
 void wDefaultsDestroyDomain(WDDomain *domain);
 
-void wReadDefaults(WScreen *scr, proplist_t new_dict);
+void wReadDefaults(WScreen *scr, WMPropList *new_dict);
 
 void wDefaultUpdateIcons(WScreen *scr);
 
-void wReadStaticDefaults(proplist_t dict);
+void wReadStaticDefaults(WMPropList *dict);
 
 void wDefaultsCheckDomains(void *screen);
 

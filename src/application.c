@@ -139,12 +139,12 @@ extractIcon(WWindow *wwin)
 static void
 saveIconNameFor(char *iconPath, char *wm_instance, char *wm_class)
 {
-    proplist_t dict = WDWindowAttributes->dictionary;
-    proplist_t adict, key, iconk;
-    proplist_t val;
+    WMPropList *dict = WDWindowAttributes->dictionary;
+    WMPropList *adict, *key, *iconk;
+    WMPropList *val;
     char *tmp;
     int i;
-	
+
     i = 0;
     if (wm_instance)
 	i += strlen(wm_instance);
@@ -162,31 +162,31 @@ saveIconNameFor(char *iconPath, char *wm_instance, char *wm_class)
 	    strcat(tmp, wm_class);
     }
     
-    key = PLMakeString(tmp); 
+    key = WMCreatePLString(tmp); 
     wfree(tmp);
-    adict = PLGetDictionaryEntry(dict, key);
+    adict = WMGetFromPLDictionary(dict, key);
     
-    iconk = PLMakeString("Icon");
+    iconk = WMCreatePLString("Icon");
     
     if (adict) {
-	val = PLGetDictionaryEntry(adict, iconk);
+	val = WMGetFromPLDictionary(adict, iconk);
     } else {
 	/* no dictionary for app, so create one */
-	adict = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-	PLInsertDictionaryEntry(dict, key, adict);
-	PLRelease(adict);
+	adict = WMCreatePLDictionary(NULL, NULL, NULL);
+	WMPutInPLDictionary(dict, key, adict);
+	WMReleasePropList(adict);
 	val = NULL;
     }
     if (!val) {
-	val = PLMakeString(iconPath);
-	PLInsertDictionaryEntry(adict, iconk, val);
-	PLRelease(val);
+	val = WMCreatePLString(iconPath);
+	WMPutInPLDictionary(adict, iconk, val);
+	WMReleasePropList(val);
     }
-    PLRelease(key);
-    PLRelease(iconk);
+    WMReleasePropList(key);
+    WMReleasePropList(iconk);
 
     if (val && !wPreferences.flags.noupdates)
-	PLSave(dict, YES);
+	WMWritePropListToFile(dict, WDWindowAttributes->path, True);
 }
 
 
@@ -549,7 +549,6 @@ void
 wApplicationSetCollapse(WApplication *app, Bool flag)
 {
     WApplication *list = app->main_window_desc->screen_ptr->wapp_list;
-    int index = 0;
     WWindow *wwin = app->main_window_desc;
 
     if (WFLAGP(app->main_window_desc, collapse_appicons) == flag)

@@ -1,6 +1,14 @@
+Changes since wmaker 0.65.0:
+............................
+
 - fixed problem with WINGs based apps exiting with a "X_RotateProperties"
   related error when text was selected in a textfiled.
 - moved wstrdup(), wstrconcat() and wstrappend() from memory.c to string.c
+- added property list handling code making libPropList unnecessary and
+  obsolete. Backward compatibility is provided through the 
+  WINGs/proplist-compat.h header file which has #defines from old libPropList
+  function names to new function names with minimal changes.
+- Renamed WMGetUDAllKeys() to WMGetUDKeys()
 
 
 Changes since wmaker 0.64.0:

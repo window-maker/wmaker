@@ -290,19 +290,19 @@ showHelp(WMConnection *cPtr) /*FOLD00*/
 static void
 listUsers(WMConnection *cPtr)
 {
-    proplist_t userList;
+    WMPropList *userList;
     char *id;
     int i, time;
 
-    userList = WMGetUDAllKeys(timeDB);
+    userList = WMGetUDKeys(timeDB);
 
-    for (i=0; i<PLGetNumberOfElements(userList); i++) {
-        id = PLGetString(PLGetArrayElement(userList, i));
+    for (i=0; i<WMGetPropListItemCount(userList); i++) {
+        id = WMGetFromPLString(WMGetFromPLArray(userList, i));
         time = WMGetUDIntegerForKey(timeDB, id);
         sendUpdateMessage(cPtr, id, time);
     }
 
-    PLRelease(userList);
+    WMReleasePropList(userList);
 }
 
 
@@ -591,6 +591,12 @@ removeConnection(void *observer, WMNotification *notification)
     WMDestroyConnection(cPtr);
 }
 
+static void
+updatedDomain(void *observer, WMNotification *notification)
+{
+    wmessage("defaults domain file changed on disk. synchronizing.");
+}
+
 
 #if 0
 static Bool
@@ -675,6 +681,8 @@ main(int argc, char **argv) /*FOLD00*/
     }
 
     timeDB = WMGetDefaultsFromPath("./UserTime.plist");
+    WMAddNotificationObserver(updatedDomain, NULL,
+                              WMUserDefaultsDidChangeNotification, NULL);
 
     clientConnections = WMCreateArray(4);
 

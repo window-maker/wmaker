@@ -1,6 +1,6 @@
 
 
-#include <WINGs/WINGs.h>
+#include <WINGs/WINGsP.h>
 
 #include "wtableview.h"
 

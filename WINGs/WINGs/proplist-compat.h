@@ -1,3 +1,56 @@
+/*
+ * This header file is provided for old libPropList compatibility.
+ * DO _NOT_ USE this except for letting your old libPropList-based code to
+ * work with the new property list code from WINGs, with minimal changes.
+ *
+ * All code written with old libPropList functions should work, given
+ * that the following changes are made:
+ *
+ * 1. Replace all
+ *       #include <proplist.h>
+ *    with
+ *       #include <WINGs/proplist-compat.h>
+ *    in your code.
+ *
+ * 2. Change all calls to PLSave() to have the extra filename parameter like:
+ *       PLSave(proplist_t proplist, char* filename, Bool atomically)
+ *
+ * 3. The PLSetStringCmpHook() function is no longer available. There is a
+ *    similar but simpler function provided which is enough for practical
+ *    purposes:
+ *       PLSetCaseSensitive(Bool caseSensitive)
+ *
+ * 4. The following functions do no longer exist. They were removed because
+ *    they were based on concepts borrowed from UserDefaults which conflict
+ *    with the retain/release mechanism:
+ *       PLSynchronize(), PLDeepSynchronize(), PLShallowSynchronize()
+ *       PLSetFilename(), PLGetFilename()
+ *       PLGetContainer()
+ *    You should change your code to not use them anymore.
+ *
+ * 5. The following functions are no longer available. They were removed
+ *    because they also used borrowed concepts which have no place in a
+ *    property list as defined in the OpenStep specifications. Also these
+ *    functions were hardly ever used in programs to our knowledge.
+ *       PLGetDomainNames(), PLGetDomain(), PLSetDomain(), PLDeleteDomain()
+ *       PLRegister(), PLUnregister()
+ *    You should also change your code to not use them anymore (in case you
+ *    ever used them anyway ;-) ).
+ *
+ * 6. Link your program with libWINGs or libWUtil instead of libPropList.
+ *    (libWINGs should be used for GUI apps, while libWUtil for non-GUI apps)
+ *
+ *
+ * Our recommandation is to rewrite your code to use the new functions and
+ * link against libWINGs/libWUtil. We do not recommend you to keep using old
+ * libPropList function names. This file is provided just to allow existing
+ * libropList based applications to run with minimal changes with the new
+ * proplist code from WINGs before their authors get the time to rewrite
+ * them. New proplist code from WINGs provide a better integration with the
+ * other data types from WINGs, not to mention that the proplist code in WINGs
+ * is actively maintained while the old libPropList is dead.
+ *
+ */
 
 
 #ifndef _PROPLIST_COMPAT_H_
@@ -12,8 +65,8 @@ typedef WMPropList* proplist_t;
 
 #define PLMakeString(bytes) WMCreatePLString(bytes)
 #define PLMakeData(bytes, length) WMCreatePLDataFromBytes(bytes, length)
-#define PLMakeArrayFromElements(pl, ...) WMCreatePLArray(pl, ...)
-#define PLMakeDictionaryFromEntries(key, value, ...) WMCreatePLDictionary(key, value, ...)
+#define PLMakeArrayFromElements WMCreatePLArray
+#define PLMakeDictionaryFromEntries WMCreatePLDictionary
 
 #define PLRetain(pl) WMRetainPropList(pl)
 #define PLRelease(pl) WMReleasePropList(pl)
@@ -38,7 +91,7 @@ typedef WMPropList* proplist_t;
 #define PLGetString(pl) WMGetFromPLString(pl)
 #define PLGetDataBytes(pl) WMGetPLDataBytes(pl)
 #define PLGetDataLength(pl) WMGetPLDataLength(pl)
-#define PLGetArrayElement(pl, index) WMGetFromArray(pl, index)
+#define PLGetArrayElement(pl, index) WMGetFromPLArray(pl, index)
 #define PLGetDictionaryEntry(pl, key) WMGetFromPLDictionary(pl, key)
 #define PLGetAllDictionaryKeys(pl) WMGetPLDictionaryKeys(pl)
 
@@ -55,20 +108,22 @@ typedef WMPropList* proplist_t;
 #define PLSave(pl, file, atm) WMWritePropListToFile(pl, file, atm)
 
 
+#if 0
+#define PLSetStringCmpHook(fn)
+#define PLDeepSynchronize(pl) PLDeepSynchronize_is_not_supported
+#define PLSynchronize(pl) PLSynchronize_is_not_supported
+#define PLShallowSynchronize(pl) error_PLShallowSynchronize_is_not_supported
+#define PLSetFilename(pl, filename) error_PLSetFilename_is_not_supported
+#define PLGetFilename(pl, filename) error_PLGetFilename_is_not_supported
+#define PLGetContainer(pl)
 
-//#define PLSetStringCmpHook(fn)
-//#define PLDeepSynchronize(pl) PLDeepSynchronize_is_not_supported
-//#define PLSynchronize(pl) PLSynchronize_is_not_supported
-//#define PLShallowSynchronize(pl) error_PLShallowSynchronize_is_not_supported
-//#define PLSetFilename(pl, filename) error_PLSetFilename_is_not_supported
-//#define PLGetFilename(pl, filename) error_PLGetFilename_is_not_supported
-//#define PLGetDomainNames()
-//#define PLGetDomain(name)
-//#define PLSetDomain(name, value, kickme)
-//#define PLDeleteDomain(name, kickme)
-//#define PLRegister(name, callback)
-//#define PLUnregister(name)
-//#define PLGetContainer(pl)
+#define PLGetDomainNames()
+#define PLGetDomain(name)
+#define PLSetDomain(name, value, kickme)
+#define PLDeleteDomain(name, kickme)
+#define PLRegister(name, callback)
+#define PLUnregister(name)
+#endif
 
 
 #endif

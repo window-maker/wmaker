@@ -48,6 +48,7 @@
 #include "funcs.h"
 #include "actions.h"
 #include "stacking.h"
+#include "client.h"
 
 #include "gnome.h"
 

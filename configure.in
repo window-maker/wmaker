@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.66.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.70.0)
 
 AM_PROG_LIBTOOL
 
@@ -506,59 +506,6 @@ dnl ===================================
 #
 
 
-dnl Check for libPropList
-dnl =====================
-
-LIBPL=""
-
-WM_CHECK_LIB(PropList, PLGetString, $X_EXTRA_LIBS)
-if test "x$ac_cv_lib_PropList_PLGetString" = xyes; then
-    WM_CHECK_HEADER(proplist.h)
-    if test "x$ac_cv_header_proplist_h" = xyes; then
-    	LIBPL="-lPropList"
-    fi
-fi
-
-if test "x$LIBPL" = "x"; then
-   echo
-   echo "ERROR!!! libPropList is not installed, or could not be found."
-   echo "         Window Maker requires libPropList to build."
-   echo "         Please read INSTALL to find where you can find libPropList,"
-   echo "         and install it first."
-   if test x$host_os = xlinux; then
-   echo "         If you're using some prepackaged version of libPropList,"
-   echo "         make sure you install it's \"development\" package as well."
-   fi
-   echo "         If you already have it installed, try using the"
-   if test "x$ac_cv_lib_PropList_PLGetString" != xyes; then
-   echo "         --with-libs-from flag to tell configure where the library"
-   echo "	  is installed and"
-   fi
-   echo "         --with-incs-from flag to tell configure where the header"
-   echo "	  files are installed"
-   exit 1
-fi
-
-lPLVersion="0.10.1"
-
-WM_CHECK_PROPLIST_VERSION($lPLVersion, goodlPL=yes, goodlPL=no)
-
-if test "$goodlPL" = no; then
-   echo
-   echo "ERROR!!! libPropList is an old version. Please consider upgrading"
-   echo "         to at least version ${lPLVersion}. Older versions have bugs that"
-   echo "         may cause Window Maker to crash randomly."
-   echo "         If your libPropList is older than 0.9.2 it will also prevent"
-   echo "         Window Maker from compiling because new functions were"
-   echo "         introduced since that version."
-   echo "         Please read INSTALL to find where you can find libPropList,"
-   echo "         and upgrade it before you proceed."
-   exit 1
-fi
-
-AC_SUBST(LIBPL)
-
-
 dnl ==============================================
 dnl         Graphic Format Libraries
 dnl ==============================================
@@ -937,7 +884,7 @@ exec_prefix=\$prefix
 
 WCFLAGS="-I\$prefix/include $inc_search_path"
 WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
-WLIBS="-lWINGs -lwraster $GFXLIBS $XLIBS -lm $NETLIBS -lPropList"
+WLIBS="-lWINGs -lwraster $GFXLIBS $XLIBS -lm $NETLIBS"
 
 usage="Usage: get-wings-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
 
@@ -976,7 +923,7 @@ exec_prefix=\$prefix
 
 WCFLAGS="-I\$prefix/include $inc_search_path"
 WLFLAGS="-L\$exec_prefix/lib $lib_search_path"
-WLIBS="-lWUtil $NETLIBS -lPropList"
+WLIBS="-lWUtil $NETLIBS"
 
 usage="Usage: get-wutil-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
 

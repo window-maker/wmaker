@@ -87,8 +87,8 @@ static void menuCloseClick(WCoreWindow *sender, void *data, XEvent *event);
 static void updateTexture(WMenu *menu);
 
 #ifndef LITE
-static int saveMenuRecurs(proplist_t menus, WScreen *scr, WMenu *menu);
-static int restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path);
+static int saveMenuRecurs(WMPropList *menus, WScreen *scr, WMenu *menu);
+static int restoreMenuRecurs(WScreen *scr, WMPropList *menus, WMenu *menu, char *path);
 #endif /* !LITE */
 
 static void selectEntry(WMenu *menu, int entry_no);
@@ -632,7 +632,7 @@ wMenuDestroy(WMenu *menu, int recurse)
 #ifdef USER_MENU
 
 	    if (menu->entries[i]->instances){
-		  PLRelease(menu->entries[i]->instances);
+		  WMReleasePropList(menu->entries[i]->instances);
 		}
 #endif /* USER_MENU */
 
@@ -2450,35 +2450,35 @@ menuCloseClick(WCoreWindow *sender, void *data, XEvent *event)
 
 
 static void
-saveMenuInfo(proplist_t dict, WMenu *menu, proplist_t key)
+saveMenuInfo(WMPropList *dict, WMenu *menu, WMPropList *key)
 {
-    proplist_t value, list;
+    WMPropList *value, *list;
     char buffer[256];
 
     snprintf(buffer, sizeof(buffer), "%i,%i", menu->frame_x, menu->frame_y);
-    value = PLMakeString(buffer);
-    list = PLMakeArrayFromElements(value, NULL);
+    value = WMCreatePLString(buffer);
+    list = WMCreatePLArray(value, NULL);
     if (menu->flags.lowered)
-	PLAppendArrayElement(list, PLMakeString("lowered"));
-    PLInsertDictionaryEntry(dict, key, list);
-    PLRelease(value);
-    PLRelease(list);
+	WMAddToPLArray(list, WMCreatePLString("lowered"));
+    WMPutInPLDictionary(dict, key, list);
+    WMReleasePropList(value);
+    WMReleasePropList(list);
 }
 
 
 void
 wMenuSaveState(WScreen *scr)
 {
-    proplist_t menus, key;
+    WMPropList *menus, *key;
     int save_menus = 0;
 
-    menus = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+    menus = WMCreatePLDictionary(NULL, NULL, NULL);
 
 #ifndef LITE
     if (scr->switch_menu && scr->switch_menu->flags.buttoned) {
-	key = PLMakeString("SwitchMenu");
+	key = WMCreatePLString("SwitchMenu");
 	saveMenuInfo(menus, scr->switch_menu, key);
-	PLRelease(key);
+	WMReleasePropList(key);
         save_menus = 1;
     }
 
@@ -2487,18 +2487,18 @@ wMenuSaveState(WScreen *scr)
 
 #endif /* !LITE */
     if (scr->workspace_menu && scr->workspace_menu->flags.buttoned) {
-        key = PLMakeString("WorkspaceMenu");
+        key = WMCreatePLString("WorkspaceMenu");
 	saveMenuInfo(menus, scr->workspace_menu, key);
-        PLRelease(key);
+        WMReleasePropList(key);
         save_menus = 1;
     }
     
     if (save_menus) {
-        key = PLMakeString("Menus");
-        PLInsertDictionaryEntry(scr->session_state, key, menus);
-        PLRelease(key);
+        key = WMCreatePLString("Menus");
+        WMPutInPLDictionary(scr->session_state, key, menus);
+        WMReleasePropList(key);
     }
-    PLRelease(menus);
+    WMReleasePropList(menus);
 }
 
 
@@ -2531,9 +2531,9 @@ getMenuPath(WMenu *menu, char *buffer, int bufSize)
 
 
 static Bool
-saveMenuRecurs(proplist_t menus, WScreen *scr, WMenu *menu)
+saveMenuRecurs(WMPropList *menus, WScreen *scr, WMenu *menu)
 {
-    proplist_t key;
+    WMPropList *key;
     int save_menus = 0, i;
     char buffer[512];
     Bool ok = True;
@@ -2548,9 +2548,9 @@ saveMenuRecurs(proplist_t menus, WScreen *scr, WMenu *menu)
 	ok = getMenuPath(menu, buffer, 510);
 
 	if (ok) {
-	    key = PLMakeString(buffer);
+	    key = WMCreatePLString(buffer);
 	    saveMenuInfo(menus, menu, key);
-	    PLRelease(key);	    
+	    WMReleasePropList(key);	    
 	    save_menus = 1;
 	}
     }
@@ -2570,26 +2570,26 @@ saveMenuRecurs(proplist_t menus, WScreen *scr, WMenu *menu)
 
 
 static Bool
-getMenuInfo(proplist_t info, int *x, int *y, Bool *lowered)
+getMenuInfo(WMPropList *info, int *x, int *y, Bool *lowered)
 {
-    proplist_t pos;
+    WMPropList *pos;
     
     *lowered = False;
     
-    if (PLIsArray(info)) {
-	proplist_t flags;
-	pos = PLGetArrayElement(info, 0);
-	flags = PLGetArrayElement(info, 1);
-	if (flags != NULL && PLIsString(flags) && PLGetString(flags) != NULL
-	    && strcmp(PLGetString(flags), "lowered") == 0) {
+    if (WMIsPLArray(info)) {
+	WMPropList *flags;
+	pos = WMGetFromPLArray(info, 0);
+	flags = WMGetFromPLArray(info, 1);
+	if (flags != NULL && WMIsPLString(flags) && WMGetFromPLString(flags) != NULL
+	    && strcmp(WMGetFromPLString(flags), "lowered") == 0) {
 	    *lowered = True;
 	}
     } else {
 	pos = info;
     }
 
-    if (pos != NULL && PLIsString(pos)) {
-	if (sscanf(PLGetString(pos), "%i,%i", x, y)!=2)
+    if (pos != NULL && WMIsPLString(pos)) {
+	if (sscanf(WMGetFromPLString(pos), "%i,%i", x, y)!=2)
 	    COMPLAIN("Position");
     } else {
 	COMPLAIN("(position, flags...)");
@@ -2601,7 +2601,7 @@ getMenuInfo(proplist_t info, int *x, int *y, Bool *lowered)
 
 
 static int
-restoreMenu(WScreen *scr, proplist_t menu, int which)
+restoreMenu(WScreen *scr, WMPropList *menu, int which)
 {
     int x, y;
     Bool lowered = False;
@@ -2644,9 +2644,9 @@ restoreMenu(WScreen *scr, proplist_t menu, int which)
 
 #ifndef LITE
 static int
-restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path)
+restoreMenuRecurs(WScreen *scr, WMPropList *menus, WMenu *menu, char *path)
 {
-    proplist_t key, entry;
+    WMPropList *key, *entry;
     char buffer[512];
     int i, x, y, res;
     Bool lowered;
@@ -2655,8 +2655,8 @@ restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path)
 	return False;
 
     snprintf(buffer, sizeof(buffer), "%s\\%s", path, menu->frame->title);
-    key = PLMakeString(buffer);
-    entry = PLGetDictionaryEntry(menus, key);
+    key = WMCreatePLString(buffer);
+    entry = WMGetFromPLDictionary(menus, key);
     res = False;
 
     if (entry && getMenuInfo(entry, &x, &y, &lowered)) {
@@ -2690,7 +2690,7 @@ restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path)
 	}
     }
     
-    PLRelease(key);
+    WMReleasePropList(key);
 
     for (i=0; i<menu->cascade_no; i++) {
 	if (restoreMenuRecurs(scr, menus, menu->cascades[i], buffer) != False)
@@ -2705,20 +2705,20 @@ restoreMenuRecurs(WScreen *scr, proplist_t menus, WMenu *menu, char *path)
 void
 wMenuRestoreState(WScreen *scr)
 {
-    proplist_t menus, menu, key, skey;
+    WMPropList *menus, *menu, *key, *skey;
 
-    key = PLMakeString("Menus");
-    menus = PLGetDictionaryEntry(scr->session_state, key);
-    PLRelease(key);
+    key = WMCreatePLString("Menus");
+    menus = WMGetFromPLDictionary(scr->session_state, key);
+    WMReleasePropList(key);
 
     if (!menus)
         return;
 
     /* restore menus */
 
-    skey = PLMakeString("SwitchMenu");
-    menu = PLGetDictionaryEntry(menus, skey);
-    PLRelease(skey);
+    skey = WMCreatePLString("SwitchMenu");
+    menu = WMGetFromPLDictionary(menus, skey);
+    WMReleasePropList(skey);
     restoreMenu(scr, menu, WSS_SWITCHMENU);
 
 #ifndef LITE

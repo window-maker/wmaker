@@ -1,4 +1,22 @@
 
+*** Thu Oct 04 06:00:09 EEST 2001 -Dan
+
+Property lists handling code
+----------------------------
+
+Code to handle property lists was added to WINGs. It is more robust
+than the libPropList code, mostly because some conflicting concepts 
+borrowed from UserDefaults (which libPropList uses) are no longer used in
+the property lists code.
+It is also better integrated with the other data types from WINGs.
+
+Old libPropList based code can still run with the new WINGs proplist
+code with minimal changes which are described in detail in the comments
+at the top of the WINGs/proplist-compat.h header file (the same file
+carries the #defines for mapping old libPropList functions to the new
+WINGs proplist functions).
+
+
 *** Sat Apr 21 09:12:09 EEST 2001 -Dan
 
 API change

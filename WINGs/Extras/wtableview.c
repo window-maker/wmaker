@@ -908,6 +908,7 @@ static void drawRow(WMTableView *table, int row, WMRect clipRect)
 }
 
 
+#if 0
 static void drawFullRow(WMTableView *table, int row)
 {
     int i;
@@ -926,6 +927,7 @@ static void drawFullRow(WMTableView *table, int row)
 	    (*column->delegate->drawCell)(column->delegate, column, row, d);
     }
 }
+#endif
 
 
 static void setRowSelected(WMTableView *table, unsigned row, Bool flag)
@@ -1054,8 +1056,6 @@ void WMSelectTableViewRow(WMTableView *table, int row)
 
 void WMReloadTableView(WMTableView *table)
 {
-    WMRect rect = getVisibleRect(table);
-
     if (table->editingRow >= 0)
 	stopRowEdit(table, table->editingRow);
 
@@ -1163,7 +1163,6 @@ static void handleResize(W_ViewDelegate *self, WMView *view)
     int height;
     WMTableView *table = view->self;
     WMSize size = getTotalSize(table);
-    WMScreen *scr = WMWidgetScreen(table);
     int vw, vh;
 
     width = W_VIEW_WIDTH(view) - 2;

@@ -52,7 +52,8 @@
 #include "framewin.h"
 #include "session.h"
 #include "xmodifier.h"
-#include <proplist.h>
+
+#include <WINGs/WUtil.h>
 
 
 
@@ -1579,23 +1580,23 @@ makeDefaultMenu(WScreen *scr)
  *---------------------------------------------------------------------- 
  */
 static WMenu*
-configureMenu(WScreen *scr, proplist_t definition)
+configureMenu(WScreen *scr, WMPropList *definition)
 {
     WMenu *menu = NULL;
-    proplist_t elem;
+    WMPropList *elem;
     int i, count;
-    proplist_t title, command, params;
+    WMPropList *title, *command, *params;
     char *tmp, *mtitle;
 
     
-    if (PLIsString(definition)) {
+    if (WMIsPLString(definition)) {
 	struct stat stat_buf;
 	char *path = NULL;
 	Bool menu_is_default = False;
 
 	/* menu definition is a string. Probably a path, so parse the file */
 
-	tmp = wexpandpath(PLGetString(definition));
+	tmp = wexpandpath(WMGetFromPLString(definition));
 
 	path = getLocalizedMenuFile(tmp);
 
@@ -1642,19 +1643,19 @@ configureMenu(WScreen *scr, proplist_t definition)
 	return menu;
     }
 
-    count = PLGetNumberOfElements(definition);
+    count = WMGetPropListItemCount(definition);
     if (count==0)
 	return NULL;
 
-    elem = PLGetArrayElement(definition, 0);
-    if (!PLIsString(elem)) {
-	tmp = PLGetDescription(elem);
+    elem = WMGetFromPLArray(definition, 0);
+    if (!WMIsPLString(elem)) {
+	tmp = WMGetPropListDescription(elem, False);
 	wwarning(_("%s:format error in root menu configuration \"%s\""), 
 		 "WMRootMenu", tmp);
 	wfree(tmp);
 	return NULL;
     }
-    mtitle = PLGetString(elem);
+    mtitle = WMGetFromPLString(elem);
     
     menu = wMenuCreate(scr, mtitle, False);
     menu->on_destroy = removeShortcutsForMenu;
@@ -1674,19 +1675,19 @@ configureMenu(WScreen *scr, proplist_t definition)
 #endif
 
     for (i=1; i<count; i++) {
-	elem = PLGetArrayElement(definition, i);
+	elem = WMGetFromPLArray(definition, i);
 #if 0
-	if (PLIsString(elem)) {
+	if (WMIsPLString(elem)) {
 	    char *file;
 	    
-	    file = PLGetString(elem);
+	    file = WMGetFromPLString(elem);
 	    
 	}
 #endif	
-	if (!PLIsArray(elem) || PLGetNumberOfElements(elem) < 2)
+	if (!WMIsPLArray(elem) || WMGetPropListItemCount(elem) < 2)
 	    goto error;
 	
-	if (PLIsArray(PLGetArrayElement(elem,1))) {
+	if (WMIsPLArray(WMGetFromPLArray(elem,1))) {
 	    WMenu *submenu;
 	    WMenuEntry *mentry;
 	    
@@ -1699,32 +1700,32 @@ configureMenu(WScreen *scr, proplist_t definition)
 	    }
 	} else {
 	    int idx = 0;
-	    char *shortcut;
+	    WMPropList *shortcut;
 	    /* normal entry */
 
-	    title = PLGetArrayElement(elem, idx++);
-	    shortcut = PLGetArrayElement(elem, idx++);
-	    if (strcmp(PLGetString(shortcut), "SHORTCUT")==0) {
-		shortcut = PLGetArrayElement(elem, idx++);
-		command = PLGetArrayElement(elem, idx++);
+	    title = WMGetFromPLArray(elem, idx++);
+	    shortcut = WMGetFromPLArray(elem, idx++);
+	    if (strcmp(WMGetFromPLString(shortcut), "SHORTCUT")==0) {
+		shortcut = WMGetFromPLArray(elem, idx++);
+		command = WMGetFromPLArray(elem, idx++);
 	    } else {
 		command = shortcut;
 		shortcut = NULL;
 	    }
-	    params = PLGetArrayElement(elem, idx++);
+	    params = WMGetFromPLArray(elem, idx++);
 
 	    if (!title || !command)
 		goto error;
 	    
-	    addMenuEntry(menu, PLGetString(title), 
-			 shortcut ? PLGetString(shortcut) : NULL, 
-			 PLGetString(command),
-			 params ? PLGetString(params) : NULL, "WMRootMenu");
+	    addMenuEntry(menu, WMGetFromPLString(title), 
+			 shortcut ? WMGetFromPLString(shortcut) : NULL, 
+			 WMGetFromPLString(command),
+			 params ? WMGetFromPLString(params) : NULL, "WMRootMenu");
 	}
 	continue;
 
       error:
-	tmp = PLGetDescription(elem);
+	tmp = WMGetPropListDescription(elem, False);
 	wwarning(_("%s:format error in root menu configuration \"%s\""), 
 		 "WMRootMenu", tmp);
 	wfree(tmp);
@@ -1760,12 +1761,12 @@ void
 OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
 {
     WMenu *menu=NULL;
-    proplist_t definition;
+    WMPropList *definition;
     /*
-    static proplist_t domain=NULL;
+    static WMPropList *domain=NULL;
     
     if (!domain) {
-	domain = PLMakeString("WMRootMenu");
+	domain = WMCreatePLString("WMRootMenu");
     }
      */
     
@@ -1795,7 +1796,7 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
     definition = PLGetDomain(domain);
  */
     if (definition) {
-	if (PLIsArray(definition)) {
+	if (WMIsPLArray(definition)) {
 	    if (!scr->root_menu 
 		|| WDRootMenu->timestamp > scr->root_menu->timestamp) {
 		menu = configureMenu(scr, definition);

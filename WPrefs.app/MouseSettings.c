@@ -196,8 +196,7 @@ doubleClick(WMWidget *w, void *data)
 }
 
 
-
-int
+static int
 getButtonAction(char *str)
 {
     if (!str)
@@ -217,6 +216,7 @@ getButtonAction(char *str)
 }
 
 
+static int
 getWheelAction(char *str)
 {
     if (!str)

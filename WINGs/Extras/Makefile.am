@@ -26,8 +26,7 @@ libExtraWINGs_a_SOURCES = 	\
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
 
-LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
-        @LIBPL@ 
+LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la
 
 test_LDADD = wtableview.o wtabledelegates.o $(LDADD)
 

@@ -23,7 +23,6 @@
 
 #include "WPrefs.h"
 
-#include <proplist.h>
 
 typedef struct _Panel {
     WMBox *box;
@@ -76,12 +75,12 @@ typedef struct _Panel {
 
 
 
-static proplist_t DefaultWindowTitleFont = NULL;
-static proplist_t DefaultMenuTitleFont = NULL;
-static proplist_t DefaultMenuTextFont = NULL;
-static proplist_t DefaultIconTitleFont = NULL;
-static proplist_t DefaultClipTitleFont = NULL;
-static proplist_t DefaultDisplayFont = NULL;
+static WMPropList *DefaultWindowTitleFont = NULL;
+static WMPropList *DefaultMenuTitleFont = NULL;
+static WMPropList *DefaultMenuTextFont = NULL;
+static WMPropList *DefaultIconTitleFont = NULL;
+static WMPropList *DefaultClipTitleFont = NULL;
+static WMPropList *DefaultDisplayFont = NULL;
 
 
 
@@ -268,7 +267,7 @@ setLanguageType(Panel *p, Bool multiByte)
 static void
 readFontEncodings(Panel *panel)
 {
-    proplist_t pl = NULL;
+    WMPropList *pl = NULL;
     char *path;
     char *msg;
 
@@ -278,19 +277,19 @@ readFontEncodings(Panel *panel)
 	goto error;
     }
     
-    pl = PLGetProplistWithPath(path);
+    pl = WMReadPropListFromFile(path);
     if (!pl) {
 	msg = _("Could not read font information file WPrefs.app/font.data");
 	goto error;
     } else {
 	int i;
-	proplist_t key = PLMakeString("Encodings");
-	proplist_t array;
+	WMPropList *key = WMCreatePLString("Encodings");
+	WMPropList *array;
 	WMMenuItem *mi;
 	
-	array = PLGetDictionaryEntry(pl, key);
-	PLRelease(key);
-	if (!array || !PLIsArray(array)) {
+	array = WMGetFromPLDictionary(pl, key);
+	WMReleasePropList(key);
+	if (!array || !WMIsPLArray(array)) {
 	    msg = _("Invalid data in font information file WPrefs.app/font.data.\n"
 		    "Encodings data not found.");
 	    goto error;
@@ -298,46 +297,46 @@ readFontEncodings(Panel *panel)
 
 	WMAddPopUpButtonItem(panel->langP, _("- Custom -"));
 	
-	for (i = 0; i < PLGetNumberOfElements(array); i++) {
-	    proplist_t item, str;
+	for (i = 0; i < WMGetPropListItemCount(array); i++) {
+	    WMPropList *item, *str;
 
-	    item = PLGetArrayElement(array, i);
-	    str = PLGetArrayElement(item, 0);
-	    mi = WMAddPopUpButtonItem(panel->langP, PLGetString(str));
-	    WMSetMenuItemRepresentedObject(mi, PLRetain(item));
+	    item = WMGetFromPLArray(array, i);
+	    str = WMGetFromPLArray(item, 0);
+	    mi = WMAddPopUpButtonItem(panel->langP, WMGetFromPLString(str));
+	    WMSetMenuItemRepresentedObject(mi, WMRetainPropList(item));
 	}
 	
-	key = PLMakeString("WindowTitleFont");
-	DefaultWindowTitleFont = PLGetDictionaryEntry(pl, key);
-	PLRelease(key);
+	key = WMCreatePLString("WindowTitleFont");
+	DefaultWindowTitleFont = WMGetFromPLDictionary(pl, key);
+	WMReleasePropList(key);
 	
-	key = PLMakeString("MenuTitleFont");
-	DefaultMenuTitleFont = PLGetDictionaryEntry(pl, key);
-	PLRelease(key);
+	key = WMCreatePLString("MenuTitleFont");
+	DefaultMenuTitleFont = WMGetFromPLDictionary(pl, key);
+	WMReleasePropList(key);
 
-	key = PLMakeString("MenuTextFont");
-	DefaultMenuTextFont = PLGetDictionaryEntry(pl, key);
-	PLRelease(key);
+	key = WMCreatePLString("MenuTextFont");
+	DefaultMenuTextFont = WMGetFromPLDictionary(pl, key);
+	WMReleasePropList(key);
     }
 
-    PLRelease(pl);
+    WMReleasePropList(pl);
     return;
 error:
     if (pl)
-	PLRelease(pl);
+	WMReleasePropList(pl);
 
     WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent, 
 		    _("Error"), msg, _("OK"), NULL, NULL);
 }
 
 
-
+#if 0
 static void
 changeLanguageAction(WMWidget *w, void *data)
 {
     /*Panel *panel = (Panel*)data;*/
     WMMenuItem *mi;
-    proplist_t pl;
+    WMPropList *pl;
 
     mi = WMGetPopUpButtonMenuItem(w, WMGetPopUpButtonSelectedItem(w));
     pl = WMGetMenuItemRepresentedObject(mi);
@@ -348,6 +347,7 @@ changeLanguageAction(WMWidget *w, void *data)
 	
     }
 }
+#endif
 
 
 static void

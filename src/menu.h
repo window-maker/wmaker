@@ -39,7 +39,7 @@ typedef struct WMenuEntry {
     void *clientdata;		       /* data to pass to callback */
     int cascade;		       /* cascade menu index */
 #ifdef USER_MENU
-	proplist_t instances;	/* allowed instances */
+    WMPropList *instances;	       /* allowed instances */
 #endif /* USER_MENU */
     struct {
 	unsigned int enabled:1;	       /* entry is selectable */

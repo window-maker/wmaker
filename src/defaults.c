@@ -70,13 +70,6 @@
 #include "properties.h"
 
 
-/*
- * Our own proplist reader parser. This one will not accept any
- * syntax errors and is more descriptive in the error messages.
- * It also doesn't seem to crash.
- */
-extern proplist_t ReadProplistFromFile(char *file);
-
 
 /***** Global *****/
 
@@ -90,8 +83,8 @@ extern Atom _XA_WINDOWMAKER_ICON_SIZE;
 extern Atom _XA_WINDOWMAKER_ICON_TILE;
 
 /*
-extern proplist_t wDomainName;
-extern proplist_t wAttributeDomainName;
+extern WMPropList *wDomainName;
+extern WMPropList *wAttributeDomainName;
  */
 extern WPreferences wPreferences;
 
@@ -104,8 +97,8 @@ typedef struct {
     void *addr;
     int (*convert)();
     int (*update)();
-    proplist_t plkey;
-    proplist_t plvalue;		       /* default value */
+    WMPropList *plkey;
+    WMPropList *plvalue;		       /* default value */
 } WDefaultEntry;
 
 
@@ -883,14 +876,14 @@ initDefaults()
     int i;
     WDefaultEntry *entry;
 
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 
     for (i=0; i<sizeof(optionList)/sizeof(WDefaultEntry); i++) {
 	entry = &optionList[i];
 
-	entry->plkey = PLMakeString(entry->key);
+	entry->plkey = WMCreatePLString(entry->key);
 	if (entry->default_value)
-	    entry->plvalue = PLGetProplistWithDescription(entry->default_value);
+	    entry->plvalue = WMCreatePropListFromDescription(entry->default_value);
 	else
 	    entry->plvalue = NULL;
     }
@@ -898,16 +891,16 @@ initDefaults()
     for (i=0; i<sizeof(staticOptionList)/sizeof(WDefaultEntry); i++) {
 	entry = &staticOptionList[i];
 	
-	entry->plkey = PLMakeString(entry->key);
+	entry->plkey = WMCreatePLString(entry->key);
 	if (entry->default_value)
-	    entry->plvalue = PLGetProplistWithDescription(entry->default_value);
+	    entry->plvalue = WMCreatePropListFromDescription(entry->default_value);
 	else
 	    entry->plvalue = NULL;
     }
         
 /*
-    wDomainName = PLMakeString(WMDOMAIN_NAME);
-    wAttributeDomainName = PLMakeString(WMATTRIBUTE_DOMAIN_NAME);
+    wDomainName = WMCreatePLString(WMDOMAIN_NAME);
+    wAttributeDomainName = WMCreatePLString(WMATTRIBUTE_DOMAIN_NAME);
 
     PLRegister(wDomainName, rereadDefaults);
     PLRegister(wAttributeDomainName, rereadDefaults);
@@ -918,11 +911,11 @@ initDefaults()
 
 
 #if 0
-proplist_t
+WMPropList*
 wDefaultsInit(int screen_number)
 {
     static int defaults_inited = 0;
-    proplist_t dict;
+    WMPropList *dict;
     
     if (!defaults_inited) {
 	initDefaults();
@@ -931,7 +924,7 @@ wDefaultsInit(int screen_number)
     dict = PLGetDomain(wDomainName);
     if (!dict) {
 	wwarning(_("could not read domain \"%s\" from defaults database"),
-		 PLGetString(wDomainName));
+		 WMGetFromPLString(wDomainName));
     }
 
     return dict;
@@ -943,7 +936,7 @@ void
 wDefaultsDestroyDomain(WDDomain *domain)
 {
     if (domain->dictionary)
-	PLRelease(domain->dictionary);
+	WMReleasePropList(domain->dictionary);
     wfree(domain->path);
     wfree(domain);
 }
@@ -957,7 +950,7 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
     static int inited = 0;
     char path[PATH_MAX];
     char *the_path;
-    proplist_t shared_dict=NULL;
+    WMPropList *shared_dict=NULL;
 
     if (!inited) {
 	inited = 1;
@@ -971,10 +964,10 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
     the_path = db->path;
     
     if (the_path && stat(the_path, &stbuf)>=0) {
-	db->dictionary = ReadProplistFromFile(the_path);
+	db->dictionary = WMReadPropListFromFile(the_path);
 	if (db->dictionary) {
-	    if (requireDictionary && !PLIsDictionary(db->dictionary)) {
-		PLRelease(db->dictionary);
+	    if (requireDictionary && !WMIsPLDictionary(db->dictionary)) {
+		WMReleasePropList(db->dictionary);
 		db->dictionary = NULL;
 		wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
 			 domain, the_path);
@@ -989,18 +982,18 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
     /* global system dictionary */
     snprintf(path, sizeof(path), "%s/WindowMaker/%s", SYSCONFDIR, domain);
     if (stat(path, &stbuf)>=0) {
-        shared_dict = ReadProplistFromFile(path);
+        shared_dict = WMReadPropListFromFile(path);
         if (shared_dict) {
-	    if (requireDictionary && !PLIsDictionary(shared_dict)) {
+	    if (requireDictionary && !WMIsPLDictionary(shared_dict)) {
 		wwarning(_("Domain %s (%s) of global defaults database is corrupted!"),
 			 domain, path);
-		PLRelease(shared_dict);
+		WMReleasePropList(shared_dict);
 		shared_dict = NULL;
 	    } else {
-		if (db->dictionary && PLIsDictionary(shared_dict) &&
-		    PLIsDictionary(db->dictionary)) {
-		    PLMergeDictionaries(shared_dict, db->dictionary);
-		    PLRelease(db->dictionary);
+		if (db->dictionary && WMIsPLDictionary(shared_dict) &&
+		    WMIsPLDictionary(db->dictionary)) {
+		    WMMergePLDictionaries(shared_dict, db->dictionary);
+		    WMReleasePropList(db->dictionary);
 		    db->dictionary = shared_dict;
 		    if (stbuf.st_mtime > db->timestamp)
 			db->timestamp = stbuf.st_mtime;
@@ -1016,22 +1009,14 @@ wDefaultsInitDomain(char *domain, Bool requireDictionary)
 	}
     }
 
-    /* set to save it in user's directory, no matter from where it was read */
-    if (db->dictionary) {
-        proplist_t tmp = PLMakeString(db->path);
-
-        PLSetFilename(db->dictionary, tmp);
-        PLRelease(tmp);
-    }
-
     return db;
 }
 
 
 void
-wReadStaticDefaults(proplist_t dict)
+wReadStaticDefaults(WMPropList *dict)
 {
-    proplist_t plvalue;
+    WMPropList *plvalue;
     WDefaultEntry *entry;
     int i;
     void *tdata;
@@ -1041,7 +1026,7 @@ wReadStaticDefaults(proplist_t dict)
 	entry = &staticOptionList[i];
 
 	if (dict)
-	  plvalue = PLGetDictionaryEntry(dict, entry->plkey);
+	  plvalue = WMGetFromPLDictionary(dict, entry->plkey);
 	else
 	  plvalue = NULL;
 	
@@ -1066,7 +1051,7 @@ wDefaultsCheckDomains(void *foo)
 {
     WScreen *scr;
     struct stat stbuf;
-    proplist_t dict;
+    WMPropList *dict;
     int i;
     char path[PATH_MAX];
 
@@ -1075,7 +1060,7 @@ wDefaultsCheckDomains(void *foo)
 #endif
     if (stat(WDWindowMaker->path, &stbuf)>=0
 	&& WDWindowMaker->timestamp < stbuf.st_mtime) {
-	proplist_t shared_dict = NULL;
+	WMPropList *shared_dict = NULL;
 #ifdef HEARTBEAT
 	puts("Checking WindowMaker domain");
 #endif
@@ -1084,11 +1069,11 @@ wDefaultsCheckDomains(void *foo)
 	/* global dictionary */
 	snprintf(path, sizeof(path), "%s/WindowMaker/WindowMaker", SYSCONFDIR);
 	if (stat(path, &stbuf)>=0) {
-	    shared_dict = ReadProplistFromFile(path);
-	    if (shared_dict && !PLIsDictionary(shared_dict)) {
+	    shared_dict = WMReadPropListFromFile(path);
+	    if (shared_dict && !WMIsPLDictionary(shared_dict)) {
 		wwarning(_("Domain %s (%s) of global defaults database is corrupted!"),
 			 "WindowMaker", path);
-		PLRelease(shared_dict);
+		WMReleasePropList(shared_dict);
 		shared_dict = NULL;
 	    } else if (!shared_dict) {
 		wwarning(_("could not load domain %s from global defaults database"),
@@ -1096,18 +1081,17 @@ wDefaultsCheckDomains(void *foo)
 	    }
 	}
 	/* user dictionary */
-	dict = ReadProplistFromFile(WDWindowMaker->path);
+	dict = WMReadPropListFromFile(WDWindowMaker->path);
 	if (dict) {
-	    if (!PLIsDictionary(dict)) {
-		PLRelease(dict);
+	    if (!WMIsPLDictionary(dict)) {
+		WMReleasePropList(dict);
 		dict = NULL;
 		wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
 			 "WindowMaker", WDWindowMaker->path);
 	    } else {
 		if (shared_dict) {
-		    PLSetFilename(shared_dict, PLGetFilename(dict));
-		    PLMergeDictionaries(shared_dict, dict);
-		    PLRelease(dict);
+		    WMMergePLDictionaries(shared_dict, dict);
+		    WMReleasePropList(dict);
 		    dict = shared_dict;
 		    shared_dict = NULL;
 		}
@@ -1117,7 +1101,7 @@ wDefaultsCheckDomains(void *foo)
 			wReadDefaults(scr, dict);
 		}
 		if (WDWindowMaker->dictionary) {
-		    PLRelease(WDWindowMaker->dictionary);
+		    WMReleasePropList(WDWindowMaker->dictionary);
 		}
 		WDWindowMaker->dictionary = dict;
 	    }
@@ -1126,7 +1110,7 @@ wDefaultsCheckDomains(void *foo)
 		     "WindowMaker");
 	}
 	if (shared_dict) {
-	    PLRelease(shared_dict);
+	    WMReleasePropList(shared_dict);
 	}
     }
 
@@ -1135,16 +1119,16 @@ wDefaultsCheckDomains(void *foo)
 #ifdef HEARTBEAT
 	puts("Checking WMWindowAttributes domain");
 #endif
-	dict = ReadProplistFromFile(WDWindowAttributes->path);
+	dict = WMReadPropListFromFile(WDWindowAttributes->path);
 	if (dict) {
-	    if (!PLIsDictionary(dict)) {
-		PLRelease(dict);
+	    if (!WMIsPLDictionary(dict)) {
+		WMReleasePropList(dict);
 		dict = NULL;
 		wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
 			 "WMWindowAttributes", WDWindowAttributes->path);
 	    } else {
 		if (WDWindowAttributes->dictionary)
-		    PLRelease(WDWindowAttributes->dictionary);
+		    WMReleasePropList(WDWindowAttributes->dictionary);
 		WDWindowAttributes->dictionary = dict;
 		for (i=0; i<wScreenCount; i++) {
 		    scr = wScreenWithNumber(i);
@@ -1178,19 +1162,19 @@ wDefaultsCheckDomains(void *foo)
 #ifndef LITE
     if (stat(WDRootMenu->path, &stbuf)>=0
         && WDRootMenu->timestamp < stbuf.st_mtime) {
-        dict = ReadProplistFromFile(WDRootMenu->path);
+        dict = WMReadPropListFromFile(WDRootMenu->path);
 #ifdef HEARTBEAT
         puts("Checking WMRootMenu domain");
 #endif
         if (dict) {
-            if (!PLIsArray(dict) && !PLIsString(dict)) {
-                PLRelease(dict);
+            if (!WMIsPLArray(dict) && !WMIsPLString(dict)) {
+                WMReleasePropList(dict);
                 dict = NULL;
                 wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
                          "WMRootMenu", WDRootMenu->path);
             } else {
                 if (WDRootMenu->dictionary) {
-                    PLRelease(WDRootMenu->dictionary);
+                    WMReleasePropList(WDRootMenu->dictionary);
                 }
                 WDRootMenu->dictionary = dict;
             }
@@ -1208,15 +1192,15 @@ wDefaultsCheckDomains(void *foo)
 
 
 void
-wReadDefaults(WScreen *scr, proplist_t new_dict)
+wReadDefaults(WScreen *scr, WMPropList *new_dict)
 {
-    proplist_t plvalue, old_value;
+    WMPropList *plvalue, *old_value;
     WDefaultEntry *entry;
     int i, must_update;
     int update_workspace_back = 0;	       /* kluge :/ */
     int needs_refresh;
     void *tdata;
-    proplist_t old_dict = (WDWindowMaker->dictionary!=new_dict 
+    WMPropList *old_dict = (WDWindowMaker->dictionary!=new_dict 
 			   ? WDWindowMaker->dictionary : NULL);
     
     must_update = 0;
@@ -1227,21 +1211,21 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 	entry = &optionList[i];
 	
 	if (new_dict)
-	    plvalue = PLGetDictionaryEntry(new_dict, entry->plkey);
+	    plvalue = WMGetFromPLDictionary(new_dict, entry->plkey);
 	else
 	    plvalue = NULL;
 
 	if (!old_dict)
 	    old_value = NULL;
 	else
-	    old_value = PLGetDictionaryEntry(old_dict, entry->plkey);
+	    old_value = WMGetFromPLDictionary(old_dict, entry->plkey);
 
 	
 	if (!plvalue && !old_value) {
 	    /* no default in  the DB. Use builtin default */
 	    plvalue = entry->plvalue;
 	    if (plvalue && new_dict) {
-		PLInsertDictionaryEntry(new_dict, entry->plkey, plvalue);
+		WMPutInPLDictionary(new_dict, entry->plkey, plvalue);
 		must_update = 1;
 	    }
 	} else if (!plvalue) {
@@ -1249,7 +1233,7 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 	    continue;
 	} else if (!old_value) {
 	    /* set value for the 1st time */
-	} else if (!PLIsEqual(plvalue, old_value)) {	    
+	} else if (!WMIsPropListEqualTo(plvalue, old_value)) {	    
 	    /* value has changed */
 	} else {
 	    
@@ -1265,7 +1249,7 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
 	if (plvalue) {
 #ifdef DEBUG
 	    printf("Updating %s to %s\n", entry->key, 
-		   PLGetDescription(plvalue));
+		   WMGetPropListDescription(plvalue, False));
 #endif
 	    /* convert data */
 	    if ((*entry->convert)(scr, entry, plvalue, entry->addr, &tdata)) {
@@ -1403,26 +1387,26 @@ wDefaultUpdateIcons(WScreen *scr)
 
 /* --------------------------- Local ----------------------- */
 
-#define GET_STRING_OR_DEFAULT(x, var) if (!PLIsString(value)) { \
+#define GET_STRING_OR_DEFAULT(x, var) if (!WMIsPLString(value)) { \
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."), \
 		entry->key, x); \
 	wwarning(_("using default \"%s\" instead"), entry->default_value); \
 	var = entry->default_value;\
-	} else var = PLGetString(value)\
+	} else var = WMGetFromPLString(value)\
 
 	
 
 
 
 static int
-string2index(proplist_t key, proplist_t val, proplist_t def,
+string2index(WMPropList *key, WMPropList *val, char *def,
 	     WOptionEnumeration *values)
 {
     char *str;
     WOptionEnumeration *v;
     char buffer[TOTAL_VALUES_LENGTH];
 
-    if (PLIsString(val) && (str = PLGetString(val))) {
+    if (WMIsPLString(val) && (str = WMGetFromPLString(val))) {
 	for (v=values; v->string!=NULL; v++) {
 	    if (strcasecmp(v->string, str)==0)
 		return v->value;
@@ -1438,7 +1422,7 @@ string2index(proplist_t key, proplist_t val, proplist_t def,
 	}
     }
     wwarning(_("wrong option value for key \"%s\". Should be one of %s"),
-	     PLGetString(key), buffer);
+	     WMGetFromPLString(key), buffer);
 
     if (def) {
 	return string2index(key, val, NULL, values);
@@ -1457,7 +1441,7 @@ string2index(proplist_t key, proplist_t val, proplist_t def,
  * 	must not be freed and is used by the set functions
  */
 static int 
-getBool(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
+getBool(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
 	void **ret)
 {
     static char data;
@@ -1485,7 +1469,7 @@ again:
 	    wwarning(_("can't convert \"%s\" to boolean for key \"%s\""),
 		     val, entry->key);
 	    if (second_pass==0) {
-		val = PLGetString(entry->plvalue);
+		val = WMGetFromPLString(entry->plvalue);
 		second_pass = 1;
 		wwarning(_("using default \"%s\" instead"), val);
 		goto again;
@@ -1506,7 +1490,7 @@ again:
 
 
 static int 
-getInt(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
+getInt(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
        void **ret)
 {
     static int data;
@@ -1518,7 +1502,7 @@ getInt(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     if (sscanf(val, "%i", &data)!=1) {
         wwarning(_("can't convert \"%s\" to integer for key \"%s\""),
                  val, entry->key);
-        val = PLGetString(entry->plvalue);
+        val = WMGetFromPLString(entry->plvalue);
         wwarning(_("using default \"%s\" instead"), val);
         if (sscanf(val, "%i", &data)!=1) {
             return False;
@@ -1536,16 +1520,16 @@ getInt(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 
 
 static int 
-getCoord(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
+getCoord(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
          void **ret)
 {
     static WCoord data;
     char *val_x, *val_y;
     int nelem, changed=0;
-    proplist_t elem_x, elem_y;
+    WMPropList *elem_x, *elem_y;
 
 again:
-    if (!PLIsArray(value)) {
+    if (!WMIsPLArray(value)) {
         wwarning(_("Wrong option format for key \"%s\". Should be %s."),
                  entry->key, "Coordinate");
         if (changed==0) {
@@ -1557,7 +1541,7 @@ again:
         return False;
     }
 
-    nelem = PLGetNumberOfElements(value);
+    nelem = WMGetPropListItemCount(value);
     if (nelem != 2) {
         wwarning(_("Incorrect number of elements in array for key \"%s\"."),
                  entry->key);
@@ -1570,10 +1554,10 @@ again:
         return False;
     }
 
-    elem_x = PLGetArrayElement(value, 0);
-    elem_y = PLGetArrayElement(value, 1);
+    elem_x = WMGetFromPLArray(value, 0);
+    elem_y = WMGetFromPLArray(value, 1);
     
-    if (!elem_x || !elem_y || !PLIsString(elem_x) || !PLIsString(elem_y)) {
+    if (!elem_x || !elem_y || !WMIsPLString(elem_x) || !WMIsPLString(elem_y)) {
         wwarning(_("Wrong value for key \"%s\". Should be Coordinate."),
                  entry->key);
         if (changed==0) {
@@ -1585,8 +1569,8 @@ again:
         return False;
     }
 
-    val_x = PLGetString(elem_x);
-    val_y = PLGetString(elem_y);
+    val_x = WMGetFromPLString(elem_x);
+    val_y = WMGetFromPLString(elem_y);
 
     if (sscanf(val_x, "%i", &data.x)!=1 || sscanf(val_y, "%i", &data.y)!=1) {
         wwarning(_("can't convert array to integers for \"%s\"."), entry->key);
@@ -1622,7 +1606,7 @@ again:
 #if 0
 /* This function is not used at the moment. */
 static int 
-getString(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
+getString(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr, 
 	  void **ret)
 {
     static char *data;
@@ -1630,7 +1614,7 @@ getString(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     GET_STRING_OR_DEFAULT("String", data);
     
     if (!data) {
-        data = PLGetString(entry->plvalue);
+        data = WMGetFromPLString(entry->plvalue);
         if (!data)
             return False;
     }
@@ -1647,17 +1631,17 @@ getString(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 
 
 static int 
-getPathList(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
+getPathList(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
 	    void **ret)
 {
     static char *data;
     int i, count, len;
     char *ptr;
-    proplist_t d;
+    WMPropList *d;
     int changed=0;
 
 again:
-    if (!PLIsArray(value)) {
+    if (!WMIsPLArray(value)) {
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
                  entry->key, "an array of paths");
         if (changed==0) {
@@ -1670,7 +1654,7 @@ again:
     }
 
     i = 0;
-    count = PLGetNumberOfElements(value);
+    count = WMGetPropListItemCount(value);
     if (count < 1) {
         if (changed==0) {
             value = entry->plvalue;
@@ -1683,23 +1667,23 @@ again:
 
     len = 0;
     for (i=0; i<count; i++) {
-	d = PLGetArrayElement(value, i);
-	if (!d || !PLIsString(d)) {
+	d = WMGetFromPLArray(value, i);
+	if (!d || !WMIsPLString(d)) {
 	    count = i;
 	    break;
 	}
-	len += strlen(PLGetString(d))+1;
+	len += strlen(WMGetFromPLString(d))+1;
     }
 
     ptr = data = wmalloc(len+1);
 
     for (i=0; i<count; i++) {
-	d = PLGetArrayElement(value, i);
-	if (!d || !PLIsString(d)) {
+	d = WMGetFromPLArray(value, i);
+	if (!d || !WMIsPLString(d)) {
 	    break;
 	}
-	strcpy(ptr, PLGetString(d));
-	ptr += strlen(PLGetString(d));
+	strcpy(ptr, WMGetFromPLString(d));
+	ptr += strlen(WMGetFromPLString(d));
 	*ptr = ':';
 	ptr++;
     }
@@ -1715,7 +1699,7 @@ again:
 
 
 static int 
-getEnum(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
+getEnum(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr, 
 	void **ret)
 {
     static signed char data;
@@ -1755,22 +1739,22 @@ getEnum(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
  */
 
 static WTexture*
-parse_texture(WScreen *scr, proplist_t pl)
+parse_texture(WScreen *scr, WMPropList *pl)
 {
-    proplist_t elem;
+    WMPropList *elem;
     char *val;
     int nelem;
     WTexture *texture=NULL;
     
-    nelem = PLGetNumberOfElements(pl);
+    nelem = WMGetPropListItemCount(pl);
     if (nelem < 1)
       return NULL;
     
     
-    elem = PLGetArrayElement(pl, 0);
-    if (!elem || !PLIsString(elem))
+    elem = WMGetFromPLArray(pl, 0);
+    if (!elem || !WMIsPLString(elem))
       return NULL;
-    val = PLGetString(elem);
+    val = WMGetFromPLString(elem);
 
     
     if (strcasecmp(val, "solid")==0) {
@@ -1781,10 +1765,10 @@ parse_texture(WScreen *scr, proplist_t pl)
 
 	/* get color */
 	
-	elem = PLGetArrayElement(pl, 1);
-	if (!elem || !PLIsString(elem)) 
+	elem = WMGetFromPLArray(pl, 1);
+	if (!elem || !WMIsPLString(elem)) 
 	  return NULL;
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	if (!XParseColor(dpy, scr->w_colormap, val, &color)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
@@ -1813,10 +1797,10 @@ parse_texture(WScreen *scr, proplist_t pl)
 
 	
 	/* get from color */
-	elem = PLGetArrayElement(pl, 1);
-	if (!elem || !PLIsString(elem)) 
+	elem = WMGetFromPLArray(pl, 1);
+	if (!elem || !WMIsPLString(elem)) 
 	  return NULL;
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
@@ -1828,11 +1812,11 @@ parse_texture(WScreen *scr, proplist_t pl)
 	color1.blue = xcolor.blue >> 8;
 	
 	/* get to color */
-	elem = PLGetArrayElement(pl, 2);
-	if (!elem || !PLIsString(elem)) {
+	elem = WMGetFromPLArray(pl, 2);
+	if (!elem || !WMIsPLString(elem)) {
 	    return NULL;
 	}
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
@@ -1858,10 +1842,10 @@ parse_texture(WScreen *scr, proplist_t pl)
 
 	/* get from color */
 	for (i = 0; i < 2; i++) {
-	    elem = PLGetArrayElement(pl, 1+i);
-	    if (!elem || !PLIsString(elem))
+	    elem = WMGetFromPLArray(pl, 1+i);
+	    if (!elem || !WMIsPLString(elem))
 		return NULL;
-	    val = PLGetString(elem);
+	    val = WMGetFromPLString(elem);
 
 	    if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 		wwarning(_("\"%s\" is not a valid color name"), val);
@@ -1872,19 +1856,19 @@ parse_texture(WScreen *scr, proplist_t pl)
 	    colors1[i].green = xcolor.green >> 8;
 	    colors1[i].blue = xcolor.blue >> 8;
 	}
-	elem = PLGetArrayElement(pl, 3);
-	if (!elem || !PLIsString(elem))
+	elem = WMGetFromPLArray(pl, 3);
+	if (!elem || !WMIsPLString(elem))
 	    return NULL;
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 	th1 = atoi(val);
 
 
 	/* get from color */
 	for (i = 0; i < 2; i++) {
-	    elem = PLGetArrayElement(pl, 4+i);
-	    if (!elem || !PLIsString(elem))
+	    elem = WMGetFromPLArray(pl, 4+i);
+	    if (!elem || !WMIsPLString(elem))
 		return NULL;
-	    val = PLGetString(elem);
+	    val = WMGetFromPLString(elem);
 
 	    if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 		wwarning(_("\"%s\" is not a valid color name"), val);
@@ -1895,10 +1879,10 @@ parse_texture(WScreen *scr, proplist_t pl)
 	    colors2[i].green = xcolor.green >> 8;
 	    colors2[i].blue = xcolor.blue >> 8;
 	}
-	elem = PLGetArrayElement(pl, 6);
-	if (!elem || !PLIsString(elem))
+	elem = WMGetFromPLArray(pl, 6);
+	if (!elem || !WMIsPLString(elem))
 	    return NULL;
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 	th2 = atoi(val);
 
 	texture = (WTexture*)wTextureMakeIGradient(scr, th1, colors1,
@@ -1929,15 +1913,15 @@ parse_texture(WScreen *scr, proplist_t pl)
 	colors = wmalloc(sizeof(RColor*)*(count+1));
 
 	for (i=0; i<count; i++) {
-	    elem = PLGetArrayElement(pl, i+1);
-	    if (!elem || !PLIsString(elem)) {
+	    elem = WMGetFromPLArray(pl, i+1);
+	    if (!elem || !WMIsPLString(elem)) {
 		for (--i; i>=0; --i) {
 		    wfree(colors[i]);
 		}
 		wfree(colors);
 		return NULL;
 	    }
-	    val = PLGetString(elem);
+	    val = WMGetFromPLString(elem);
 
 	    if (!XParseColor(dpy, scr->w_colormap, val, &color)) {
 		wwarning(_("\"%s\" is not a valid color name"), val);
@@ -1973,11 +1957,11 @@ parse_texture(WScreen *scr, proplist_t pl)
             type = WTP_TILE;
 
 	/* get color */
-	elem = PLGetArrayElement(pl, 2);
-	if (!elem || !PLIsString(elem)) {
+	elem = WMGetFromPLArray(pl, 2);
+	if (!elem || !WMIsPLString(elem)) {
 	    return NULL;
 	}
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	if (!XParseColor(dpy, scr->w_colormap, val, &color)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
@@ -1985,10 +1969,10 @@ parse_texture(WScreen *scr, proplist_t pl)
 	}
 	
 	/* file name */
-	elem = PLGetArrayElement(pl, 1);
-	if (!elem || !PLIsString(elem)) 
+	elem = WMGetFromPLArray(pl, 1);
+	if (!elem || !WMIsPLString(elem)) 
 	  return NULL;
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	texture = (WTexture*)wTextureMakePixmap(scr, type, val, &color);
     } else if (strcasecmp(val, "thgradient")==0
@@ -2012,10 +1996,10 @@ parse_texture(WScreen *scr, proplist_t pl)
 	}
 	
 	/* get from color */
-	elem = PLGetArrayElement(pl, 3);
-	if (!elem || !PLIsString(elem)) 
+	elem = WMGetFromPLArray(pl, 3);
+	if (!elem || !WMIsPLString(elem)) 
 	  return NULL;
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
@@ -2027,11 +2011,11 @@ parse_texture(WScreen *scr, proplist_t pl)
 	color1.blue = xcolor.blue >> 8;
 
 	/* get to color */
-	elem = PLGetArrayElement(pl, 4);
-	if (!elem || !PLIsString(elem)) {
+	elem = WMGetFromPLArray(pl, 4);
+	if (!elem || !WMIsPLString(elem)) {
 	    return NULL;
 	}
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	if (!XParseColor(dpy, scr->w_colormap, val, &xcolor)) {
 	    wwarning(_("\"%s\" is not a valid color name"), val);
@@ -2043,11 +2027,11 @@ parse_texture(WScreen *scr, proplist_t pl)
 	color2.blue = xcolor.blue >> 8;
 
 	/* get opacity */
-	elem = PLGetArrayElement(pl, 2);
-	if (!elem || !PLIsString(elem))
+	elem = WMGetFromPLArray(pl, 2);
+	if (!elem || !WMIsPLString(elem))
 	    opacity = 128;
 	else
-	    val = PLGetString(elem);
+	    val = WMGetFromPLString(elem);
 	
 	if (!val || (opacity = atoi(val)) < 0 || opacity > 255) {
 	    wwarning(_("bad opacity value for tgradient texture \"%s\". Should be [0..255]"), val);
@@ -2055,10 +2039,10 @@ parse_texture(WScreen *scr, proplist_t pl)
 	}
 
 	/* get file name */
-	elem = PLGetArrayElement(pl, 1);
-	if (!elem || !PLIsString(elem))
+	elem = WMGetFromPLArray(pl, 1);
+	if (!elem || !WMIsPLString(elem))
 	  return NULL;
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	texture = (WTexture*)wTextureMakeTGradient(scr, style, &color1, &color2,
 						   val, opacity);
@@ -2074,18 +2058,18 @@ parse_texture(WScreen *scr, proplist_t pl)
 	    return NULL;
 
 	/* get the library name */
-	elem = PLGetArrayElement(pl, 1);
-	if (!elem || !PLIsString(elem)) {
+	elem = WMGetFromPLArray(pl, 1);
+	if (!elem || !WMIsPLString(elem)) {
 	    return NULL;
 	}
-	lib = PLGetString(elem);
+	lib = WMGetFromPLString(elem);
 
 	/* get the function name */
-	elem = PLGetArrayElement(pl, 2);
-	if (!elem || !PLIsString(elem)) {
+	elem = WMGetFromPLArray(pl, 2);
+	if (!elem || !WMIsPLString(elem)) {
 	    return NULL;
 	}
-	func = PLGetString(elem);
+	func = WMGetFromPLString(elem);
 
 	argc = nelem - 2;
 	argv = (char **)wmalloc(argc * sizeof(char *));
@@ -2093,13 +2077,13 @@ parse_texture(WScreen *scr, proplist_t pl)
 	/* get the parameters */
 	argv[0] = wstrdup(func);
 	for (i = 0; i < argc - 1; i++) {
-	    elem = PLGetArrayElement(pl, 3 + i);
-	    if (!elem || !PLIsString(elem)) {
+	    elem = WMGetFromPLArray(pl, 3 + i);
+	    if (!elem || !WMIsPLString(elem)) {
 		wfree(argv);
 
 		return NULL;
 	    }
-	    argv[i+1] = wstrdup(PLGetString(elem));
+	    argv[i+1] = wstrdup(WMGetFromPLString(elem));
 	}
 
 	function = wTextureMakeFunction(scr, lib, func, argc, argv);
@@ -2129,14 +2113,14 @@ parse_texture(WScreen *scr, proplist_t pl)
 
 
 static int 
-getTexture(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
+getTexture(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
 	   void **ret)
 {
     static WTexture *texture;
     int changed=0;
 
 again:
-    if (!PLIsArray(value)) { 
+    if (!WMIsPLArray(value)) { 
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
 		 entry->key, "Texture");
         if (changed==0) {
@@ -2149,11 +2133,11 @@ again:
     }
     
     if (strcmp(entry->key, "WidgetColor")==0 && !changed) {
-	proplist_t pl;
+	WMPropList *pl;
 	
-	pl = PLGetArrayElement(value, 0);
-	if (!pl || !PLIsString(pl) || !PLGetString(pl)
-	    || strcasecmp(PLGetString(pl), "solid")!=0) {
+	pl = WMGetFromPLArray(value, 0);
+	if (!pl || !WMIsPLString(pl) || !WMGetFromPLString(pl)
+	    || strcasecmp(WMGetFromPLString(pl), "solid")!=0) {
 	    wwarning(_("Wrong option format for key \"%s\". Should be %s."),
 		     entry->key, "Solid Texture");
 
@@ -2189,16 +2173,16 @@ again:
 
 
 static int
-getWSBackground(WScreen *scr, WDefaultEntry *entry, proplist_t value,
+getWSBackground(WScreen *scr, WDefaultEntry *entry, WMPropList *value,
 		void *addr, void **ret)
 {
-    proplist_t elem;
+    WMPropList *elem;
     int changed = 0;
     char *val;
     int nelem;
 
 again:
-    if (!PLIsArray(value)) {
+    if (!WMIsPLArray(value)) {
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
                  "WorkspaceBack", "Texture or None");
         if (changed==0) {
@@ -2212,10 +2196,10 @@ again:
 
     /* only do basic error checking and verify for None texture */
 
-    nelem = PLGetNumberOfElements(value);
+    nelem = WMGetPropListItemCount(value);
     if (nelem > 0) {
-	elem = PLGetArrayElement(value, 0);
-	if (!elem || !PLIsString(elem)) {
+	elem = WMGetFromPLArray(value, 0);
+	if (!elem || !WMIsPLString(elem)) {
 	    wwarning(_("Wrong type for workspace background. Should be a texture type."));
 	    if (changed==0) {
 		value = entry->plvalue;
@@ -2225,27 +2209,27 @@ again:
 	    }
 	    return False;
 	}
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	if (strcasecmp(val, "None")==0)
 	    return True;
     }
-    *ret = PLRetain(value);
+    *ret = WMRetainPropList(value);
 
     return True;
 }
 
 
 static int
-getWSSpecificBackground(WScreen *scr, WDefaultEntry *entry, proplist_t value,
+getWSSpecificBackground(WScreen *scr, WDefaultEntry *entry, WMPropList *value,
 			void *addr, void **ret)
 {
-    proplist_t elem;
+    WMPropList *elem;
     int nelem;
     int changed = 0;
 
 again:
-    if (!PLIsArray(value)) {
+    if (!WMIsPLArray(value)) {
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
                  "WorkspaceSpecificBack", "an array of textures");
         if (changed==0) {
@@ -2259,18 +2243,18 @@ again:
 
     /* only do basic error checking and verify for None texture */
 
-    nelem = PLGetNumberOfElements(value);
+    nelem = WMGetPropListItemCount(value);
     if (nelem > 0) {
 	while (nelem--) {
-	    elem = PLGetArrayElement(value, nelem);
-	    if (!elem || !PLIsArray(elem)) {
+	    elem = WMGetFromPLArray(value, nelem);
+	    if (!elem || !WMIsPLArray(elem)) {
 		wwarning(_("Wrong type for background of workspace %i. Should be a texture."),
 			 nelem);
 	    }
 	}
     }
 
-    *ret = PLRetain(value);
+    *ret = WMRetainPropList(value);
 
 #ifdef notworking
     /* 
@@ -2281,11 +2265,11 @@ again:
      * value from the defaults DB.
      */
     if (!scr->flags.backimage_helper_launched && !scr->flags.startup) {
-	proplist_t key = PLMakeString("WorkspaceBack");
+	WMPropList *key = WMCreatePLString("WorkspaceBack");
 
-	PLRemoveDictionaryEntry(WDWindowMaker->dictionary, key);
+	WMRemoveFromPLDictionary(WDWindowMaker->dictionary, key);
 
-	PLRelease(key);
+	WMReleasePropList(key);
     }
 #endif
     return True;
@@ -2293,7 +2277,7 @@ again:
 
 
 static int 
-getFont(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
+getFont(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr, 
 	void **ret)
 {
     static WMFont *font;
@@ -2321,7 +2305,7 @@ getFont(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 
 
 static int 
-getColor(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
+getColor(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr, 
 	 void **ret)
 {
     static XColor color;
@@ -2336,7 +2320,7 @@ again:
         wwarning(_("could not get color for key \"%s\""),
                  entry->key);
         if (second_pass==0) {
-            val = PLGetString(entry->plvalue);
+            val = WMGetFromPLString(entry->plvalue);
             second_pass = 1;
             wwarning(_("using default \"%s\" instead"), val);
             goto again;
@@ -2359,7 +2343,7 @@ again:
 
 
 static int
-getKeybind(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
+getKeybind(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr, 
 	 void **ret)
 {
     static WShortKey shortcut;
@@ -2422,7 +2406,7 @@ getKeybind(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 
 
 static int
-getModMask(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
+getModMask(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr, 
 	   void **ret)
 {
     static unsigned int mask;
@@ -2452,7 +2436,7 @@ getModMask(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 
 #ifdef NEWSTUFF
 static int
-getRImages(WScreen *scr, WDefaultEntry *entry, proplist_t value,
+getRImages(WScreen *scr, WDefaultEntry *entry, WMPropList *value,
 	   void *addr, void **ret)
 {
     unsigned int mask;
@@ -2606,22 +2590,22 @@ check_bitmap_status(int status, char *filename, Pixmap bitmap)
  * (bitmap, <cursor_bitmap>, <cursor_mask>)
  */
 static int
-parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
+parse_cursor(WScreen *scr, WMPropList *pl, Cursor *cursor)
 {
-    proplist_t elem;
+    WMPropList *elem;
     char *val;
     int nelem;
     int status = 0;
     
-    nelem = PLGetNumberOfElements(pl);
+    nelem = WMGetPropListItemCount(pl);
     if (nelem < 1) {
 	return(status);
     }
-    elem = PLGetArrayElement(pl, 0);
-    if (!elem || !PLIsString(elem)) {
+    elem = WMGetFromPLArray(pl, 0);
+    if (!elem || !WMIsPLString(elem)) {
 	return(status);
     }
-    val = PLGetString(elem);
+    val = WMGetFromPLString(elem);
     
     if (0 == strcasecmp(val, "none")) {
 	status = 1;
@@ -2634,11 +2618,11 @@ parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
 	    wwarning(_("bad number of arguments in cursor specification"));
 	    return(status);
 	}
-	elem = PLGetArrayElement(pl, 1);
-	if (!elem || !PLIsString(elem)) {
+	elem = WMGetFromPLArray(pl, 1);
+	if (!elem || !WMIsPLString(elem)) {
 	    return(status);
 	}
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 
 	for (i = 0; NULL != cursor_table[i].name; i++) {
 	    if (0 == strcasecmp(val, cursor_table[i].name)) {
@@ -2667,22 +2651,22 @@ parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
 	    wwarning(_("bad number of arguments in cursor specification"));
 	    return(status);
 	}
-	elem = PLGetArrayElement(pl, 1);
-	if (!elem || !PLIsString(elem)) {
+	elem = WMGetFromPLArray(pl, 1);
+	if (!elem || !WMIsPLString(elem)) {
 	    return(status);
 	}
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 	bitmap_name = FindImage(wPreferences.pixmap_path, val);
 	if (!bitmap_name) {
 	    wwarning(_("could not find cursor bitmap file \"%s\""), val);
 	    return(status);
 	}
-	elem = PLGetArrayElement(pl, 2);
-	if (!elem || !PLIsString(elem)) {
+	elem = WMGetFromPLArray(pl, 2);
+	if (!elem || !WMIsPLString(elem)) {
 	    wfree(bitmap_name);
 	    return(status);
 	}
-	val = PLGetString(elem);
+	val = WMGetFromPLString(elem);
 	mask_name = FindImage(wPreferences.pixmap_path, val);
 	if (!mask_name) {
 	    wfree(bitmap_name);
@@ -2712,7 +2696,7 @@ parse_cursor(WScreen *scr, proplist_t pl, Cursor *cursor)
 
 
 static int
-getCursor(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
+getCursor(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
 	  void **ret)
 {
     static Cursor cursor;
@@ -2720,7 +2704,7 @@ getCursor(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     int changed = 0;
     
 again:
-    if (!PLIsArray(value)) {
+    if (!WMIsPLArray(value)) {
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
 		 entry->key, "cursor specification");
 	if (!changed) {
@@ -3142,32 +3126,32 @@ trackDeadProcess(pid_t pid, unsigned char status, WScreen *scr)
 
 
 static int
-setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value, 
+setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, WMPropList *value, 
 			 void *bar)
 {
-    int i;
-    proplist_t val;
+    WMPropList *val;
     char *str;
+    int i;
 
     if (scr->flags.backimage_helper_launched) {
-	if (PLGetNumberOfElements(value)==0) {
+	if (WMGetPropListItemCount(value)==0) {
 	    SendHelperMessage(scr, 'C', 0, NULL);
 	    SendHelperMessage(scr, 'K', 0, NULL);
 
-	    PLRelease(value);
+	    WMReleasePropList(value);
 	    return 0;
 	}
     } else {
 	pid_t pid;
 	int filedes[2];
 
-	if (PLGetNumberOfElements(value) == 0)
+	if (WMGetPropListItemCount(value) == 0)
 	    return 0;
 	
 	if (pipe(filedes) < 0) {
 	    wsyserror("pipe() failed:can't set workspace specific background image");
 	    
-	    PLRelease(value);
+	    WMReleasePropList(value);
 	    return 0;
 	}
 
@@ -3216,10 +3200,10 @@ setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	
     }
 
-    for (i = 0; i < PLGetNumberOfElements(value); i++) {
-	val = PLGetArrayElement(value, i);
-	if (val && PLIsArray(val) && PLGetNumberOfElements(val)>0) {
-	    str = PLGetDescription(val);
+    for (i = 0; i < WMGetPropListItemCount(value); i++) {
+	val = WMGetFromPLArray(value, i);
+	if (val && WMIsPLArray(val) && WMGetPropListItemCount(val)>0) {
+	    str = WMGetPropListDescription(val, False);
 
 	    SendHelperMessage(scr, 'S', i+1, str);
 
@@ -3230,23 +3214,23 @@ setWorkspaceSpecificBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
     }
     sleep(1);
 
-    PLRelease(value);
+    WMReleasePropList(value);
     return 0;
 }
 
 
 static int
-setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value, 
+setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, WMPropList *value, 
 		 void *bar)
 {
     if (scr->flags.backimage_helper_launched) {
 	char *str;
 
-	if (PLGetNumberOfElements(value)==0) {
+	if (WMGetPropListItemCount(value)==0) {
 	    SendHelperMessage(scr, 'U', 0, NULL);
 	} else {
 	    /* set the default workspace background to this one */
-	    str = PLGetDescription(value);
+	    str = WMGetPropListDescription(value, False);
 	    if (str) {
 		SendHelperMessage(scr, 'S', 0, str);
 		wfree(str);
@@ -3255,14 +3239,14 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 		SendHelperMessage(scr, 'U', 0, NULL);
 	    }
 	}
-    } else if (PLGetNumberOfElements(value) > 0) {
+    } else if (WMGetPropListItemCount(value) > 0) {
 	char *command;
         char *text;
         char *dither;
 	int len;
 
 	SetupEnvironment(scr);
-	text = PLGetDescription(value);
+	text = WMGetPropListDescription(value, False);
 	len = strlen(text)+40;
         command = wmalloc(len);
         dither = wPreferences.no_dithering ? "-m" : "-d";
@@ -3274,7 +3258,7 @@ setWorkspaceBack(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 	system(command);
 	wfree(command);
     }
-    PLRelease(value);
+    WMReleasePropList(value);
 
     return 0;
 }

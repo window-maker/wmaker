@@ -6,20 +6,8 @@
 
 #include <X11/Xutil.h>
 
-/* Xmd.h which is indirectly included by GNUstep.h defines BOOL, 
- * but libPropList also defines it. So we do this kluge to get rid of BOOL
- * temporarily */
-#ifdef BOOL
-# define WINGS_BOOL
-# undef BOOL
-#endif
-
 #include "GNUstep.h"
 
-#ifdef WINGS_BOOL
-# define BOOL
-# undef WINGS_BOOL
-#endif
 
 
 extern struct W_Application WMApplication;

@@ -148,7 +148,7 @@ static void
 showData(_Panel *panel)
 {
     char *str;
-    proplist_t arr;
+    WMPropList *arr;
     int x, y;
 
     str = GetStringForKey("WindowPlacement");
@@ -159,12 +159,12 @@ showData(_Panel *panel)
 
     x = 0; 
     y = 0;
-    if (arr && (!PLIsArray(arr) || PLGetNumberOfElements(arr)!=2)) {
+    if (arr && (!WMIsPLArray(arr) || WMGetPropListItemCount(arr)!=2)) {
 	wwarning(_("invalid data in option WindowPlaceOrigin. Using default (0,0)"));
     } else {
 	if (arr) {
-	    x = atoi(PLGetString(PLGetArrayElement(arr, 0)));
-	    y = atoi(PLGetString(PLGetArrayElement(arr, 1)));
+	    x = atoi(WMGetFromPLString(WMGetFromPLArray(arr, 0)));
+	    y = atoi(WMGetFromPLString(WMGetFromPLArray(arr, 1)));
 	}
     }
 
@@ -195,7 +195,7 @@ showData(_Panel *panel)
 static void
 storeData(_Panel *panel)
 {
-    proplist_t arr;
+    WMPropList *arr;
     char x[16], y[16];
     
     SetBoolForKey(WMGetButtonSelected(panel->miconB), "NoWindowOverIcons");
@@ -206,11 +206,11 @@ storeData(_Panel *panel)
 		    "WindowPlacement");
     sprintf(x, "%i", WMGetSliderValue(panel->hsli));
     sprintf(y, "%i", WMGetSliderValue(panel->vsli));
-    arr = PLMakeArrayFromElements(PLMakeString(x), PLMakeString(y), NULL);
+    arr = WMCreatePLArray(WMCreatePLString(x), WMCreatePLString(y), NULL);
     SetObjectForKey(arr, "WindowPlaceOrigin");
     SetIntegerForKey(WMGetSliderValue(panel->resS), "EdgeResistance");
     SetBoolForKey(WMGetButtonSelected(panel->resrB), "Attraction");
-    PLRelease(arr);
+    WMReleasePropList(arr);
 }
 
 

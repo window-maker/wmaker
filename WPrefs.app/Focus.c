@@ -60,7 +60,6 @@ typedef struct _Panel {
 #define DELAY_ICON "timer%i"
 #define DELAY_ICON_S "timer%is"
 
-static void changeFocusMode(WMWidget *w, void *data);
 
 static void
 showData(_Panel *panel)

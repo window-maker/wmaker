@@ -2,12 +2,25 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
---- 0.66.0
+--- 0.70.0
+
+New dock option
+---------------
 
 Copy/paste launch in dock. For example, put
 netscape %s in the Docked icon for Netscape,
 select an url somewhere and then middle-click the icon.
 The command will be launched with the "pasted" string.
+
+
+Less dependancies
+-----------------
+
+starting with 0.70.0 libPropList is no longer required to build Window
+Maker. PropList handling code was added to WINGs being now better
+integrated with all the rest. For more details check the Changelog
+./WINGs/NEWS, ./WINGs/WINGs/WUtil.h and ./WINGs/WINGs/proplist-compat.h
+
 
 
 --- 0.65.1

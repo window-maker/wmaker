@@ -19,6 +19,18 @@ Changes since version 0.65.1:
 - fixed bug in positioning of window list menu when opened by kbd
 - internal code clean-up with notifications for window state change and other
   stuff
+- removed the libPropList dependancy by adding property list handling
+  code to WINGs. This code is not only better integrated with the other
+  WINGs data structures, but it's also more robust. Also a backward
+  compatibility header file is provided which maps old libPropList
+  function names to the new WINGs based proplist names allowing old code
+  to be linked to WINGs with minimal changes. For details on how to use
+  the compat mode, read the comments on the top of WINGs/proplist-compat.h
+  Say bye, bye libPropList =)
+- rewrote all Window Maker code to use the new WINGs based proplist functions.
+- fixed a few compilation warnings and a problem caused by an uninitialized 
+  variable.
+
 
 Changes since version 0.65.0:
 .............................

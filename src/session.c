@@ -92,7 +92,7 @@
 #include "dock.h"
 
 
-#include <proplist.h>
+#include <WINGs/WUtil.h>
 
 /** Global **/
 
@@ -116,20 +116,20 @@ static char *sClientID = NULL;
 #endif
 
 
-static proplist_t sApplications = NULL;
-static proplist_t sCommand;
-static proplist_t sName;
-static proplist_t sHost;
-static proplist_t sWorkspace;
-static proplist_t sShaded;
-static proplist_t sMiniaturized;
-static proplist_t sHidden;
-static proplist_t sGeometry;
-static proplist_t sShortcutMask;
+static WMPropList *sApplications = NULL;
+static WMPropList *sCommand;
+static WMPropList *sName;
+static WMPropList *sHost;
+static WMPropList *sWorkspace;
+static WMPropList *sShaded;
+static WMPropList *sMiniaturized;
+static WMPropList *sHidden;
+static WMPropList *sGeometry;
+static WMPropList *sShortcutMask;
 
-static proplist_t sDock;
+static WMPropList *sDock;
 
-static proplist_t sYes, sNo;
+static WMPropList *sYes, *sNo;
 
 
 static void
@@ -138,33 +138,33 @@ make_keys()
     if (sApplications!=NULL)
         return;
 
-    sApplications = PLMakeString("Applications");
-    sCommand = PLMakeString("Command");
-    sName = PLMakeString("Name");
-    sHost = PLMakeString("Host");
-    sWorkspace = PLMakeString("Workspace");
-    sShaded = PLMakeString("Shaded");
-    sMiniaturized = PLMakeString("Miniaturized");
-    sHidden = PLMakeString("Hidden");
-    sGeometry = PLMakeString("Geometry");
-    sDock = PLMakeString("Dock");
-    sShortcutMask = PLMakeString("ShortcutMask");
+    sApplications = WMCreatePLString("Applications");
+    sCommand = WMCreatePLString("Command");
+    sName = WMCreatePLString("Name");
+    sHost = WMCreatePLString("Host");
+    sWorkspace = WMCreatePLString("Workspace");
+    sShaded = WMCreatePLString("Shaded");
+    sMiniaturized = WMCreatePLString("Miniaturized");
+    sHidden = WMCreatePLString("Hidden");
+    sGeometry = WMCreatePLString("Geometry");
+    sDock = WMCreatePLString("Dock");
+    sShortcutMask = WMCreatePLString("ShortcutMask");
 
-    sYes = PLMakeString("Yes");
-    sNo = PLMakeString("No");
+    sYes = WMCreatePLString("Yes");
+    sNo = WMCreatePLString("No");
 }
 
 
 
 static int 
-getBool(proplist_t value)
+getBool(WMPropList *value)
 {
     char *val;
 
-    if (!PLIsString(value)) {
+    if (!WMIsPLString(value)) {
         return 0;
     }
-    if (!(val = PLGetString(value))) {
+    if (!(val = WMGetFromPLString(value))) {
         return 0;
     }
 
@@ -188,14 +188,14 @@ getBool(proplist_t value)
 
 
 static unsigned
-getInt(proplist_t value)
+getInt(WMPropList *value)
 {
     char *val;
     unsigned n;
     
-    if (!PLIsString(value))
+    if (!WMIsPLString(value))
 	return 0;
-    val = PLGetString(value);
+    val = WMGetFromPLString(value);
     if (!val)
 	return 0;
     if (sscanf(val, "%u", &n) != 1)
@@ -206,7 +206,7 @@ getInt(proplist_t value)
 
 
 
-static proplist_t
+static WMPropList*
 makeWindowState(WWindow *wwin, WApplication *wapp)
 {
     WScreen *scr = wwin->screen_ptr;
@@ -216,9 +216,9 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
     int i;
     unsigned mask;
     char *class, *instance, *command=NULL, buffer[512];
-    proplist_t win_state, cmd, name, workspace;
-    proplist_t shaded, miniaturized, hidden, geometry;
-    proplist_t dock, shortcut;
+    WMPropList *win_state, *cmd, *name, *workspace;
+    WMPropList *shaded, *miniaturized, *hidden, *geometry;
+    WMPropList *dock, *shortcut;
 
     if (wwin->main_window!=None && wwin->main_window!=wwin->client_win)
         win = wwin->main_window;
@@ -242,18 +242,18 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
         else
             snprintf(buffer, sizeof(buffer), ".");
 
-        name = PLMakeString(buffer);
-        cmd = PLMakeString(command);
+        name = WMCreatePLString(buffer);
+        cmd = WMCreatePLString(command);
         /*sprintf(buffer, "%d", wwin->frame->workspace+1);
-        workspace = PLMakeString(buffer);*/
-        workspace = PLMakeString(scr->workspaces[wwin->frame->workspace]->name);
+        workspace = WMCreatePLString(buffer);*/
+        workspace = WMCreatePLString(scr->workspaces[wwin->frame->workspace]->name);
         shaded = wwin->flags.shaded ? sYes : sNo;
         miniaturized = wwin->flags.miniaturized ? sYes : sNo;
         hidden = wwin->flags.hidden ? sYes : sNo;
         snprintf(buffer, sizeof(buffer), "%ix%i+%i+%i", 
 		 wwin->client.width, wwin->client.height,
 		wwin->frame_x, wwin->frame_y);
-        geometry = PLMakeString(buffer);
+        geometry = WMCreatePLString(buffer);
 	
 	for (mask = 0, i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
 	    if (scr->shortcutWindows[i] != NULL &&
@@ -263,9 +263,9 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
 	}
 
 	snprintf(buffer, sizeof(buffer), "%u", mask);
-	shortcut = PLMakeString(buffer);
+	shortcut = WMCreatePLString(buffer);
 
-        win_state = PLMakeDictionaryFromEntries(sName, name,
+        win_state = WMCreatePLDictionary(sName, name,
                                                 sCommand, cmd,
                                                 sWorkspace, workspace,
                                                 sShaded, shaded,
@@ -275,11 +275,11 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
                                                 sGeometry, geometry,
                                                 NULL);
 
-        PLRelease(name);
-        PLRelease(cmd);
-        PLRelease(workspace);
-        PLRelease(geometry);
-	PLRelease(shortcut);
+        WMReleasePropList(name);
+        WMReleasePropList(cmd);
+        WMReleasePropList(workspace);
+        WMReleasePropList(geometry);
+	WMReleasePropList(shortcut);
         if (wapp && wapp->app_icon && wapp->app_icon->dock) {
             int i;
             char *name;
@@ -293,9 +293,9 @@ makeWindowState(WWindow *wwin, WApplication *wapp)
                 /*n = i+1;*/
                 name = scr->workspaces[i]->name;
             }
-            dock = PLMakeString(name);
-            PLInsertDictionaryEntry(win_state, sDock, dock);
-            PLRelease(dock);
+            dock = WMCreatePLString(name);
+            WMPutInPLDictionary(win_state, sDock, dock);
+            WMReleasePropList(dock);
         }
     } else {
         win_state = NULL;
@@ -313,20 +313,20 @@ void
 wSessionSaveState(WScreen *scr)
 {
     WWindow *wwin = scr->focused_window;
-    proplist_t win_info, wks;
-    proplist_t list=NULL;
+    WMPropList *win_info, *wks;
+    WMPropList *list=NULL;
     WMArray *wapp_list=NULL;
 
 
     make_keys();
 
     if (!scr->session_state) {
-        scr->session_state = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+        scr->session_state = WMCreatePLDictionary(NULL, NULL, NULL);
         if (!scr->session_state)
             return;
     }
 
-    list = PLMakeArrayFromElements(NULL);
+    list = WMCreatePLArray(NULL);
 
     wapp_list = WMCreateArray(16);
 
@@ -338,8 +338,8 @@ wSessionSaveState(WScreen *scr)
 	    && !WFLAGP(wwin, dont_save_session)) {
             /* A entry for this application was not yet saved. Save one. */
             if ((win_info = makeWindowState(wwin, wapp))!=NULL) {
-                list = PLAppendArrayElement(list, win_info);
-                PLRelease(win_info);
+                WMAddToPLArray(list, win_info);
+                WMReleasePropList(win_info);
                 /* If we were succesful in saving the info for this window
                  * add the application the window belongs to, to the
                  * application list, so no multiple entries for the same
@@ -350,13 +350,13 @@ wSessionSaveState(WScreen *scr)
         }
         wwin = wwin->prev;
     }
-    PLRemoveDictionaryEntry(scr->session_state, sApplications);
-    PLInsertDictionaryEntry(scr->session_state, sApplications, list);
-    PLRelease(list);
+    WMRemoveFromPLDictionary(scr->session_state, sApplications);
+    WMPutInPLDictionary(scr->session_state, sApplications, list);
+    WMReleasePropList(list);
 
-    wks = PLMakeString(scr->workspaces[scr->current_workspace]->name);
-    PLInsertDictionaryEntry(scr->session_state, sWorkspace, wks);
-    PLRelease(wks);
+    wks = WMCreatePLString(scr->workspaces[scr->current_workspace]->name);
+    WMPutInPLDictionary(scr->session_state, sWorkspace, wks);
+    WMReleasePropList(wks);
 
     WMFreeArray(wapp_list);
 }
@@ -370,8 +370,8 @@ wSessionClearState(WScreen *scr)
     if (!scr->session_state)
         return;
 
-    PLRemoveDictionaryEntry(scr->session_state, sApplications);
-    PLRemoveDictionaryEntry(scr->session_state, sWorkspace);
+    WMRemoveFromPLDictionary(scr->session_state, sApplications);
+    WMRemoveFromPLDictionary(scr->session_state, sWorkspace);
 }
 
 
@@ -412,19 +412,19 @@ execCommand(WScreen *scr, char *command, char *host)
 
 
 static WSavedState*
-getWindowState(WScreen *scr, proplist_t win_state)
+getWindowState(WScreen *scr, WMPropList *win_state)
 {
     WSavedState *state = wmalloc(sizeof(WSavedState));
-    proplist_t value;
+    WMPropList *value;
     char *tmp;
     unsigned mask;
     int i;
 
     memset(state, 0, sizeof(WSavedState));
     state->workspace = -1;
-    value = PLGetDictionaryEntry(win_state, sWorkspace);
-    if (value && PLIsString(value)) {
-        tmp = PLGetString(value);
+    value = WMGetFromPLDictionary(win_state, sWorkspace);
+    if (value && WMIsPLString(value)) {
+        tmp = WMGetFromPLString(value);
         if (sscanf(tmp, "%i", &state->workspace)!=1) {
             state->workspace = -1;
             for (i=0; i < scr->workspace_count; i++) {
@@ -437,20 +437,20 @@ getWindowState(WScreen *scr, proplist_t win_state)
             state->workspace--;
         }
     }
-    if ((value = PLGetDictionaryEntry(win_state, sShaded))!=NULL)
+    if ((value = WMGetFromPLDictionary(win_state, sShaded))!=NULL)
         state->shaded = getBool(value);
-    if ((value = PLGetDictionaryEntry(win_state, sMiniaturized))!=NULL)
+    if ((value = WMGetFromPLDictionary(win_state, sMiniaturized))!=NULL)
         state->miniaturized = getBool(value);
-    if ((value = PLGetDictionaryEntry(win_state, sHidden))!=NULL)
+    if ((value = WMGetFromPLDictionary(win_state, sHidden))!=NULL)
         state->hidden = getBool(value);
-    if ((value = PLGetDictionaryEntry(win_state, sShortcutMask))!=NULL) {
+    if ((value = WMGetFromPLDictionary(win_state, sShortcutMask))!=NULL) {
         mask = getInt(value);
 	state->window_shortcuts = mask;
     }
     
-    value = PLGetDictionaryEntry(win_state, sGeometry);
-    if (value && PLIsString(value)) {
-        if (!(sscanf(PLGetString(value), "%ix%i+%i+%i",
+    value = WMGetFromPLDictionary(win_state, sGeometry);
+    if (value && WMIsPLString(value)) {
+        if (!(sscanf(WMGetFromPLString(value), "%ix%i+%i+%i",
                    &state->w, &state->h, &state->x, &state->y)==4 &&
 	      (state->w>0 && state->h>0))) {
 	    state->w = 0;
@@ -469,7 +469,7 @@ wSessionRestoreState(WScreen *scr)
 {
     WSavedState *state;
     char *instance, *class, *command, *host;
-    proplist_t win_info, apps, cmd, value;
+    WMPropList *win_info, *apps, *cmd, *value;
     pid_t pid;
     int i, count;
     WDock *dock;
@@ -482,25 +482,25 @@ wSessionRestoreState(WScreen *scr)
     if (!scr->session_state)
         return;
 
-    PLSetStringCmpHook(NULL);
+    WMPLSetCaseSensitive(True);
 
-    apps = PLGetDictionaryEntry(scr->session_state, sApplications);
+    apps = WMGetFromPLDictionary(scr->session_state, sApplications);
     if (!apps)
         return;
 
-    count = PLGetNumberOfElements(apps);
+    count = WMGetPropListItemCount(apps);
     if (count==0) 
         return;
 
     for (i=0; i<count; i++) {
-        win_info = PLGetArrayElement(apps, i);
+        win_info = WMGetFromPLArray(apps, i);
 
-        cmd = PLGetDictionaryEntry(win_info, sCommand);
-        if (!cmd || !PLIsString(cmd) || !(command = PLGetString(cmd))) {
+        cmd = WMGetFromPLDictionary(win_info, sCommand);
+        if (!cmd || !WMIsPLString(cmd) || !(command = WMGetFromPLString(cmd))) {
             continue;
         }
 
-        value = PLGetDictionaryEntry(win_info, sName);
+        value = WMGetFromPLDictionary(win_info, sName);
         if (!value)
             continue;
 
@@ -508,17 +508,17 @@ wSessionRestoreState(WScreen *scr)
         if (!instance && !class)
             continue;
 
-        value = PLGetDictionaryEntry(win_info, sHost);
-        if (value && PLIsString(value))
-            host = PLGetString(value);
+        value = WMGetFromPLDictionary(win_info, sHost);
+        if (value && WMIsPLString(value))
+            host = WMGetFromPLString(value);
         else
             host = NULL;
 
         state = getWindowState(scr, win_info);
 
         dock = NULL;
-        value = PLGetDictionaryEntry(win_info, sDock);
-        if (value && PLIsString(value) && (tmp = PLGetString(value))!=NULL) {
+        value = WMGetFromPLDictionary(win_info, sDock);
+        if (value && WMIsPLString(value) && (tmp = WMGetFromPLString(value))!=NULL) {
             if (sscanf(tmp, "%i", &n)!=1) {
                 if (!strcasecmp(tmp, "DOCK")) {
                     dock = scr->dock;
@@ -565,14 +565,14 @@ wSessionRestoreState(WScreen *scr)
         if (class) wfree(class);
     }
     /* clean up */
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 }
 
 
 void
 wSessionRestoreLastWorkspace(WScreen *scr)
 {
-    proplist_t wks;
+    WMPropList *wks;
     int w, i;
     char *tmp;
 
@@ -581,16 +581,16 @@ wSessionRestoreLastWorkspace(WScreen *scr)
     if (!scr->session_state)
         return;
 
-    PLSetStringCmpHook(NULL);
+    WMPLSetCaseSensitive(True);
 
-    wks = PLGetDictionaryEntry(scr->session_state, sWorkspace);
-    if (!wks || !PLIsString(wks))
+    wks = WMGetFromPLDictionary(scr->session_state, sWorkspace);
+    if (!wks || !WMIsPLString(wks))
         return;
 
-    tmp = PLGetString(wks);
+    tmp = WMGetFromPLString(wks);
 
     /* clean up */
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 
     if (sscanf(tmp, "%i", &w)!=1) {
         w = -1;
@@ -757,14 +757,14 @@ getWindowRole(Window window)
  * window shortcut #
  */
 
-static proplist_t
+static WMPropList*
 makeAppState(WWindow *wwin)
 {
     WApplication *wapp;
-    proplist_t state;
+    WMPropList *state;
     WScreen *scr = wwin->screen_ptr;
         
-    state = PLMakeArrayWithElements(NULL, NULL);
+    state = WMCreatePLArray(NULL, NULL);
 
     wapp = wApplicationOf(wwin->main_window);
     
@@ -772,7 +772,7 @@ makeAppState(WWindow *wwin)
         if (wapp->app_icon && wapp->app_icon->dock) {
 
 	    if (wapp->app_icon->dock == scr->dock) {
-		PLAppendArrayElement(state, PLMakeString("Dock"));
+		WMAddToPLArray(state, WMCreatePLString("Dock"));
 	    } else {
 		int i;
 
@@ -782,12 +782,12 @@ makeAppState(WWindow *wwin)
 
                 assert(i < scr->workspace_count);
 
-                PLAppendArrayElement(state, 
-				     PLMakeString(scr->workspaces[i]->name));
+                WMAddToPLArray(state, 
+				     WMCreatePLString(scr->workspaces[i]->name));
 	    }
 	}
 	
-	PLAppendArrayElement(state, PLMakeString(wapp->hidden ? "1" : "0"));
+	WMAddToPLArray(state, WMCreatePLString(wapp->hidden ? "1" : "0"));
     }
     
     return state;
@@ -799,16 +799,16 @@ Bool
 wSessionGetStateFor(WWindow *wwin, WSessionData *state)
 {
     char *str;
-    proplist_t slist;
-    proplist_t elem;
-    proplist_t value;
+    WMPropList *slist;
+    WMPropList *elem;
+    WMPropList *value;
     int index = 0;
 
     index = 3;
 
     /* geometry */
-    value = PLGetArrayElement(slist, index++);    
-    str = PLGetString(value);
+    value = WMGetFromPLArray(slist, index++);    
+    str = WMGetFromPLString(value);
 
     sscanf(str, "%i %i %i %i %i %i", &state->x, &state->y,
 	   &state->width, &state->height,
@@ -816,43 +816,43 @@ wSessionGetStateFor(WWindow *wwin, WSessionData *state)
 
 
     /* state */
-    value = PLGetArrayElement(slist, index++);
-    str = PLGetString(value);
+    value = WMGetFromPLArray(slist, index++);
+    str = WMGetFromPLString(value);
 
     sscanf(str, "%i %i %i", &state->miniaturized, &state->shaded,
 	   &state->maximized);
 
 
     /* attributes */
-    value = PLGetArrayElement(slist, index++);
-    str = PLGetString(value);
+    value = WMGetFromPLArray(slist, index++);
+    str = WMGetFromPLString(value);
 
     getAttributeState(str, &state->mflags, &state->flags);
 
 
     /* workspace */
-    value = PLGetArrayElement(slist, index++);
-    str = PLGetString(value);
+    value = WMGetFromPLArray(slist, index++);
+    str = WMGetFromPLString(value);
 
     sscanf(str, "%i", &state->workspace);
 
 
     /* app state (repeated for all windows of the app) */
-    value = PLGetArrayElement(slist, index++);
-    str = PLGetString(value);
+    value = WMGetFromPLArray(slist, index++);
+    str = WMGetFromPLString(value);
 
     /* ???? */
 
     /* shortcuts */
-    value = PLGetArrayElement(slist, index++);
-    str = PLGetString(value);
+    value = WMGetFromPLArray(slist, index++);
+    str = WMGetFromPLString(value);
 
     sscanf(str, "%i", &state->shortcuts);
 }
 
 
 
-static proplist_t
+static WMPropList*
 makeAttributeState(WWindow *wwin)
 {
     unsigned int data1, data2;
@@ -892,32 +892,32 @@ makeAttributeState(WWindow *wwin)
 	    W_FLAG(dont_save_session),
 	    W_FLAG(emulate_appicon));
 
-    return PLMakeString(buffer);
+    return WMCreatePLString(buffer);
 }
 
 
 static void
-appendStringInArray(proplist_t array, char *str)
+appendStringInArray(WMPropList *array, char *str)
 {
-    proplist_t val;
+    WMPropList *val;
     
-    val = PLMakeString(str);
-    PLAppendArrayElement(array, val);
-    PLRelease(val);
+    val = WMCreatePLString(str);
+    WMAddToPLArray(array, val);
+    WMReleasePropList(val);
 }
 
 
-static proplist_t
+static WMPropList*
 makeClientState(WWindow *wwin)
 {
-    proplist_t state;
-    proplist_t tmp;
+    WMPropList *state;
+    WMPropList *tmp;
     char *str;
     char buffer[512];
     int i;
     unsigned shortcuts;
 
-    state = PLMakeArrayWithElements(NULL, NULL);
+    state = WMCreatePLArray(NULL, NULL);
     
     /* WM_WINDOW_ROLE */
     str = getWindowRole(wwin->client_win);
@@ -953,8 +953,8 @@ makeClientState(WWindow *wwin)
 
     /* attributes */
     tmp = makeAttributeState(wwin);
-    PLAppendArrayElement(state, tmp);
-    PLRelease(tmp);
+    WMAddToPLArray(state, tmp);
+    WMReleasePropList(tmp);
 
     /* workspace */
     snprintf(buffer, sizeof(buffer), "%i", wwin->frame->workspace);
@@ -962,8 +962,8 @@ makeClientState(WWindow *wwin)
 
     /* app state (repeated for all windows of the app) */
     tmp = makeAppState(wwin);
-    PLAppendArrayElement(state, tmp);
-    PLRelease(tmp);
+    WMAddToPLArray(state, tmp);
+    WMReleasePropList(tmp);
 
     /* shortcuts */
     shortcuts = 0;
@@ -993,7 +993,7 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     Bool gsPrefix = False;
     char *discardCmd = NULL;
     time_t t;
-    proplist_t state;
+    WMPropList *state, *plState;
     int len;
 
 #ifdef DEBUG1
@@ -1034,7 +1034,7 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
     } while (access(F_OK, statefile)!=-1);
 
     /* save the states of all windows we're managing */
-    state = PLMakeArrayFromElements(NULL, NULL);
+    state = WMCreatePLArray(NULL, NULL);
 
     /*
      * Format:
@@ -1049,42 +1049,34 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
 	WScreen *scr;
 	WWindow *wwin;
 	char buf[32];
-	proplist_t pscreen;
-	
+	WMPropList *pscreen;
+
 	scr = wScreenWithNumber(i);
 
 	snprintf(buf, sizeof(buf), "%i", scr->screen);
-	pscreen = PLMakeArrayFromElements(PLMakeString(buf), NULL);
+	pscreen = WMCreatePLArray(WMCreatePLString(buf), NULL);
 
 	wwin = scr->focused_window;
 	while (wwin) {
-	    proplist_t pwindow;
+            WMPropList *pwindow;
 
 	    pwindow = makeClientState(wwin);
-	    PLAppendArrayElement(pscreen, pwindow);
+	    WMAddToPLArray(pscreen, pwindow);
 
 	    wwin = wwin->prev;
 	}
 
-	PLAppendArrayElement(state, pscreen);
+	WMAddToPLArray(state, pscreen);
     }
 
-    {
-	proplist_t statefile;
+    plState = WMCreatePLDictionary(WMCreatePLString("Version"),
+                                          WMCreatePLString("1.0"),
+                                          WMCreatePLString("Screens"),
+                                          state, NULL);
 
-	statefile = PLMakeDictionaryFromEntries(PLMakeString("Version"),
-						PLMakeString("1.0"),
+    WMWritePropListToFile(plState, statefile, False);
 
-						PLMakeString("Screens"),
-						state,
-
-						NULL);
-
-	PLSetFilename(statefile, PLMakeString(statefile));
-	PLSave(statefile, NO);
-
-	PLRelease(statefile);
-    }
+    WMReleasePropList(plState);
 
     /* set the remaining properties that we didn't set at
      * startup time */

@@ -63,7 +63,7 @@
 # include "openlook.h"
 #endif
 
-#include <proplist.h>
+#include <WINGs/WUtil.h>
 
 #include "defaults.h"
 
@@ -104,10 +104,10 @@ static char STIPPLE_DATA[] = {0x02, 0x01};
 
 static int CantManageScreen = 0;
 
-static proplist_t dApplications = NULL;
-static proplist_t dWorkspace;
-static proplist_t dDock;
-static proplist_t dClip;
+static WMPropList *dApplications = NULL;
+static WMPropList *dWorkspace;
+static WMPropList *dDock;
+static WMPropList *dClip;
 
 
 static void
@@ -116,10 +116,10 @@ make_keys()
     if (dApplications!=NULL)
         return;
 
-    dApplications = PLMakeString("Applications");
-    dWorkspace = PLMakeString("Workspace");
-    dDock = PLMakeString("Dock");
-    dClip = PLMakeString("Clip");
+    dApplications = WMCreatePLString("Applications");
+    dWorkspace = WMCreatePLString("Workspace");
+    dDock = WMCreatePLString("Dock");
+    dClip = WMCreatePLString("Clip");
 }
 
 
@@ -1007,7 +1007,7 @@ wScreenUpdateUsableArea(WScreen *scr)
 void
 wScreenRestoreState(WScreen *scr)
 {
-    proplist_t state;
+    WMPropList *state;
     char *path;
 
     
@@ -1025,18 +1025,18 @@ wScreenRestoreState(WScreen *scr)
 	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
 	path = wdefaultspathfordomain(buf);
     }
-    scr->session_state = PLGetProplistWithPath(path);
+    scr->session_state = WMReadPropListFromFile(path);
     wfree(path);
     if (!scr->session_state && wScreenCount>1) {
 	char buf[16];
 	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
 	path = wdefaultspathfordomain(buf);
-	scr->session_state = PLGetProplistWithPath(path);
+	scr->session_state = WMReadPropListFromFile(path);
 	wfree(path);
     }
 
     if (!wPreferences.flags.noclip) {
-        state = PLGetDictionaryEntry(scr->session_state, dClip);
+        state = WMGetFromPLDictionary(scr->session_state, dClip);
         scr->clip_icon = wClipRestoreState(scr, state);
     }
 
@@ -1050,7 +1050,7 @@ wScreenRestoreState(WScreen *scr)
 #endif
 
     if (!wPreferences.flags.nodock) {
-        state = PLGetDictionaryEntry(scr->session_state, dDock);
+        state = WMGetFromPLDictionary(scr->session_state, dDock);
         scr->dock = wDockRestoreState(scr, state, WM_DOCK);
     }
 
@@ -1063,7 +1063,7 @@ wScreenSaveState(WScreen *scr)
 {
     WWindow *wwin;
     char *str;
-    proplist_t path, old_state, foo;
+    WMPropList *old_state, *foo;
     CARD32 data[2];
 
 
@@ -1090,23 +1090,23 @@ wScreenSaveState(WScreen *scr)
 
 
     old_state = scr->session_state;
-    scr->session_state = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+    scr->session_state = WMCreatePLDictionary(NULL, NULL, NULL);
 
-    PLSetStringCmpHook(NULL);
+    WMPLSetCaseSensitive(True);
 
     /* save dock state to file */
     if (!wPreferences.flags.nodock) {
         wDockSaveState(scr, old_state);
     } else {
-        if ((foo = PLGetDictionaryEntry(old_state, dDock))!=NULL) {
-            PLInsertDictionaryEntry(scr->session_state, dDock, foo);
+        if ((foo = WMGetFromPLDictionary(old_state, dDock))!=NULL) {
+            WMPutInPLDictionary(scr->session_state, dDock, foo);
         }
     }
     if (!wPreferences.flags.noclip) {
         wClipSaveState(scr);
     } else {
-        if ((foo = PLGetDictionaryEntry(old_state, dClip))!=NULL) {
-            PLInsertDictionaryEntry(scr->session_state, dClip, foo);
+        if ((foo = WMGetFromPLDictionary(old_state, dClip))!=NULL) {
+            WMPutInPLDictionary(scr->session_state, dClip, foo);
         }
     }
 
@@ -1115,16 +1115,16 @@ wScreenSaveState(WScreen *scr)
     if (wPreferences.save_session_on_exit) {
         wSessionSaveState(scr);
     } else {
-        if ((foo = PLGetDictionaryEntry(old_state, dApplications))!=NULL) {
-            PLInsertDictionaryEntry(scr->session_state, dApplications, foo);
+        if ((foo = WMGetFromPLDictionary(old_state, dApplications))!=NULL) {
+            WMPutInPLDictionary(scr->session_state, dApplications, foo);
         }
-        if ((foo = PLGetDictionaryEntry(old_state, dWorkspace))!=NULL) {
-            PLInsertDictionaryEntry(scr->session_state, dWorkspace, foo);
+        if ((foo = WMGetFromPLDictionary(old_state, dWorkspace))!=NULL) {
+            WMPutInPLDictionary(scr->session_state, dWorkspace, foo);
         }
     }
 
     /* clean up */
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 
     wMenuSaveState(scr);
 
@@ -1135,14 +1135,11 @@ wScreenSaveState(WScreen *scr)
 	snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
 	str = wdefaultspathfordomain(buf);
     }
-    path = PLMakeString(str);
-    wfree(str);
-    PLSetFilename(scr->session_state, path);
-    if (!PLSave(scr->session_state, YES)) {
-	wsyserror(_("could not save session state in %s"), PLGetString(path));
+    if (!WMWritePropListToFile(scr->session_state, str, True)) {
+	wsyserror(_("could not save session state in %s"), str);
     }
-    PLRelease(path);
-    PLRelease(old_state);
+    wfree(str);
+    WMReleasePropList(old_state);
 }
 
 

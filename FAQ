@@ -234,14 +234,11 @@ inside the WindowMaker directory.
 Installation:
 -=-=-=-=-=-=-
 
-2.1 Where can I get proplist.h? 
--------------------------------
-You didn't read the INSTALL file, did you?  Please read that now.
-libPropList is downloaded seperately and you need to install it _before_
-attempting to configure Window Maker.
+2.1 Where can I get libPropList/proplist.h?
+-------------------------------------------
+starting with Window Maker 0.70.0, libPropList is no longer needed.
+It was obsoleted by adding property list handling code to the WINGs library.
 
-You can find a gzipped tar archive of libPropList at
-ftp://ftp.windowmaker.org/pub/libs/
 
 
 2.2 Why do no icons show up after installing Window Maker >= 0.15.x 

@@ -9,18 +9,19 @@
 
 #include "../src/config.h"
 
+#include "wconfig.h"
+
 #include "WINGs.h"
 
-#include <proplist.h>
 
 
 typedef struct W_UserDefaults {
-    proplist_t defaults;
+    WMPropList *defaults;
 
-    proplist_t appDomain;
+    WMPropList *appDomain;
 
-    proplist_t searchListArray;
-    proplist_t *searchList;	       /* cache for searchListArray */
+    WMPropList *searchListArray;
+    WMPropList **searchList;	       /* cache for searchListArray */
 
     char dirty;
 
@@ -163,7 +164,8 @@ WMEnableUDPeriodicSynchronization(WMUserDefaults *database, Bool enable)
 void
 WMSynchronizeUserDefaults(WMUserDefaults *database)
 {
-    Bool fileIsNewer = False, release = False;
+    Bool fileIsNewer = False, release = False, notify = False;
+    WMPropList *plF, *key;
     char *path;
     struct stat stbuf;
 
@@ -178,14 +180,45 @@ WMSynchronizeUserDefaults(WMUserDefaults *database)
         fileIsNewer = True;
 
     if (database->appDomain && (database->dirty || fileIsNewer)) {
+        if (database->dirty && fileIsNewer) {
+            plF = WMReadPropListFromFile(path);
+            if (plF) {
+                plF = WMMergePLDictionaries(plF, database->appDomain);
+                WMReleasePropList(database->appDomain);
+                database->appDomain = plF;
+                key = database->searchList[0];
+                WMPutInPLDictionary(database->defaults, key, plF);
+                notify = True;
+            } else {
+                /* something happened with the file. just overwrite it */
+                wwarning(_("cannot read domain from file '%s' when syncing"),
+                         path);
+                WMWritePropListToFile(database->appDomain, path, True);
+            }
+        } else if (database->dirty) {
+            WMWritePropListToFile(database->appDomain, path, True);
+        } else if (fileIsNewer) {
+            plF = WMReadPropListFromFile(path);
+            if (plF) {
+                WMReleasePropList(database->appDomain);
+                database->appDomain = plF;
+                key = database->searchList[0];
+                WMPutInPLDictionary(database->defaults, key, plF);
+                notify = True;
+            } else {
+                /* something happened with the file. just overwrite it */
+                wwarning(_("cannot read domain from file '%s' when syncing"),
+                         path);
+                WMWritePropListToFile(database->appDomain, path, True);
+            }
+        }
 
-        /*fprintf(stderr, "syncing: %s %d %d\n", path, database->dirty, fileIsNewer);*/
-
-        PLShallowSynchronize(database->appDomain);
         database->dirty = 0;
+
         if (stat(path, &stbuf) >= 0)
             database->timestamp = stbuf.st_mtime;
-        if (fileIsNewer) {
+
+        if (notify) {
             WMPostNotificationName(WMUserDefaultsDidChangeNotification,
                                    database, NULL);
         }
@@ -205,14 +238,14 @@ WMSaveUserDefaults(WMUserDefaults *database)
         char *path;
         Bool release = False;
 
-        PLSave(database->appDomain, YES);
-        database->dirty = 0;
         if (!database->path) {
             path = wdefaultspathfordomain(WMGetApplicationName());
             release = True;
         } else {
             path = database->path;
         }
+        WMWritePropListToFile(database->appDomain, path, True);
+        database->dirty = 0;
         if (stat(path, &stbuf) >= 0)
             database->timestamp = stbuf.st_mtime;
         if (release)
@@ -225,8 +258,8 @@ WMUserDefaults*
 WMGetStandardUserDefaults(void)
 {
     WMUserDefaults *defaults;
-    proplist_t domain;
-    proplist_t key;
+    WMPropList *domain;
+    WMPropList *key;
     struct stat stbuf;
     char *path;
     int i;
@@ -245,12 +278,12 @@ WMGetStandardUserDefaults(void)
     defaults = wmalloc(sizeof(WMUserDefaults));
     memset(defaults, 0, sizeof(WMUserDefaults));
 
-    defaults->defaults = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+    defaults->defaults = WMCreatePLDictionary(NULL, NULL, NULL);
 
-    defaults->searchList = wmalloc(sizeof(proplist_t)*3);
+    defaults->searchList = wmalloc(sizeof(WMPropList*)*3);
 
     /* application domain */
-    key = PLMakeString(WMGetApplicationName());
+    key = WMCreatePLString(WMGetApplicationName());
     defaults->searchList[0] = key;
 
     /* temporary kluge */
@@ -258,59 +291,49 @@ WMGetStandardUserDefaults(void)
         domain = NULL;
         path = NULL;
     } else {
-        path = wdefaultspathfordomain(PLGetString(key));
+        path = wdefaultspathfordomain(WMGetFromPLString(key));
 
         if (stat(path, &stbuf) >= 0)
             defaults->timestamp = stbuf.st_mtime;
 
-        domain = PLGetProplistWithPath(path);
+        domain = WMReadPropListFromFile(path);
     }
-    if (!domain) {
-        proplist_t p;
 
-        domain = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-        if (path) {
-            p = PLMakeString(path);
-            PLSetFilename(domain, p);
-            PLRelease(p);
-        }
-    }
+    if (!domain)
+        domain = WMCreatePLDictionary(NULL, NULL, NULL);
+
     if (path)
         wfree(path);
 
     defaults->appDomain = domain;
 
     if (domain)
-        PLInsertDictionaryEntry(defaults->defaults, key, domain);
-
-    PLRelease(key);
+        WMPutInPLDictionary(defaults->defaults, key, domain);
 
     /* global domain */
-    key = PLMakeString("WMGLOBAL");
+    key = WMCreatePLString("WMGLOBAL");
     defaults->searchList[1] = key;
 
-    path = wdefaultspathfordomain(PLGetString(key));
+    path = wdefaultspathfordomain(WMGetFromPLString(key));
 
-    domain = PLGetProplistWithPath(path);
+    domain = WMReadPropListFromFile(path);
 
     wfree(path);
 
     if (!domain)
-        domain = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+        domain = WMCreatePLDictionary(NULL, NULL, NULL);
 
     if (domain)
-        PLInsertDictionaryEntry(defaults->defaults, key, domain);
-
-    PLRelease(key);
+        WMPutInPLDictionary(defaults->defaults, key, domain);
 
     /* terminate list */
     defaults->searchList[2] = NULL;
 
-    defaults->searchListArray = PLMakeArrayFromElements(NULL,NULL);
+    defaults->searchListArray = WMCreatePLArray(NULL,NULL);
 
     i = 0;
     while (defaults->searchList[i]) {
-        PLAppendArrayElement(defaults->searchListArray,
+        WMAddToPLArray(defaults->searchListArray,
                              defaults->searchList[i]);
         i++;
     }
@@ -330,8 +353,8 @@ WMUserDefaults*
 WMGetDefaultsFromPath(char *path)
 {
     WMUserDefaults *defaults;
-    proplist_t domain;
-    proplist_t key;
+    WMPropList *domain;
+    WMPropList *key;
     struct stat stbuf;
     char *name;
     int i;
@@ -351,9 +374,9 @@ WMGetDefaultsFromPath(char *path)
     defaults = wmalloc(sizeof(WMUserDefaults));
     memset(defaults, 0, sizeof(WMUserDefaults));
 
-    defaults->defaults = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+    defaults->defaults = WMCreatePLDictionary(NULL, NULL, NULL);
 
-    defaults->searchList = wmalloc(sizeof(proplist_t)*2);
+    defaults->searchList = wmalloc(sizeof(WMPropList*)*2);
 
     /* the domain we want, go in the first position */
     name = strrchr(path, '/');
@@ -362,40 +385,32 @@ WMGetDefaultsFromPath(char *path)
     else
         name++;
 
-    key = PLMakeString(name);
+    key = WMCreatePLString(name);
     defaults->searchList[0] = key;
 
     if (stat(path, &stbuf) >= 0)
         defaults->timestamp = stbuf.st_mtime;
 
-    domain = PLGetProplistWithPath(path);
+    domain = WMReadPropListFromFile(path);
 
-    if (!domain) {
-        proplist_t p;
-
-        domain = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-        p = PLMakeString(path);
-        PLSetFilename(domain, p);
-        PLRelease(p);
-    }
+    if (!domain)
+        domain = WMCreatePLDictionary(NULL, NULL, NULL);
 
     defaults->path = wstrdup(path);
 
     defaults->appDomain = domain;
 
     if (domain)
-        PLInsertDictionaryEntry(defaults->defaults, key, domain);
-
-    PLRelease(key);
+        WMPutInPLDictionary(defaults->defaults, key, domain);
 
     /* terminate list */
     defaults->searchList[1] = NULL;
 
-    defaults->searchListArray = PLMakeArrayFromElements(NULL,NULL);
+    defaults->searchListArray = WMCreatePLArray(NULL,NULL);
 
     i = 0;
     while (defaults->searchList[i]) {
-        PLAppendArrayElement(defaults->searchListArray,
+        WMAddToPLArray(defaults->searchListArray,
                              defaults->searchList[i]);
         i++;
     }
@@ -411,85 +426,85 @@ WMGetDefaultsFromPath(char *path)
 }
 
 
-/* Returns a PLArray with all keys in the user defaults database.
- * Free the returned array with PLRelease() when no longer needed,
+/* Returns a WMPropList array with all keys in the user defaults database.
+ * Free the array with WMReleasePropList() when no longer needed,
  * but do not free the elements of the array! They're just references. */
-proplist_t
-WMGetUDAllKeys(WMUserDefaults *database)
+WMPropList*
+WMGetUDKeys(WMUserDefaults *database)
 {
-    return PLGetAllDictionaryKeys(database->appDomain);
+    return WMGetPLDictionaryKeys(database->appDomain);
 }
 
 
-proplist_t
+WMPropList*
 WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName)
 {
-    proplist_t domainName, domain;
-    proplist_t object = NULL;
-    proplist_t key = PLMakeString(defaultName);
+    WMPropList *domainName, *domain;
+    WMPropList *object = NULL;
+    WMPropList *key = WMCreatePLString(defaultName);
     int i = 0;
     
     while (database->searchList[i] && !object) {
 	domainName = database->searchList[i];
-	domain = PLGetDictionaryEntry(database->defaults, domainName);
+	domain = WMGetFromPLDictionary(database->defaults, domainName);
 	if (domain) {
-	    object = PLGetDictionaryEntry(domain, key);
+	    object = WMGetFromPLDictionary(domain, key);
 	}
 	i++;
     }
-    PLRelease(key);
+    WMReleasePropList(key);
     
     return object;
 }
 
 
 void
-WMSetUDObjectForKey(WMUserDefaults *database, proplist_t object,
+WMSetUDObjectForKey(WMUserDefaults *database, WMPropList *object,
 		    char *defaultName)
 {
-    proplist_t key = PLMakeString(defaultName);
+    WMPropList *key = WMCreatePLString(defaultName);
 
     database->dirty = 1;
 
-    PLInsertDictionaryEntry(database->appDomain, key, object);
-    PLRelease(key);
+    WMPutInPLDictionary(database->appDomain, key, object);
+    WMReleasePropList(key);
 }
 
 
 void
 WMRemoveUDObjectForKey(WMUserDefaults *database, char *defaultName)
 {
-    proplist_t key = PLMakeString(defaultName);
+    WMPropList *key = WMCreatePLString(defaultName);
 
     database->dirty = 1;
 
-    PLRemoveDictionaryEntry(database->appDomain, key);
+    WMRemoveFromPLDictionary(database->appDomain, key);
     
-    PLRelease(key);
+    WMReleasePropList(key);
 }
 
 
 char*
 WMGetUDStringForKey(WMUserDefaults *database, char *defaultName)
 {
-    proplist_t val;
+    WMPropList *val;
     
     val = WMGetUDObjectForKey(database, defaultName);
 
     if (!val)
 	return NULL;
 
-    if (!PLIsString(val))
+    if (!WMIsPLString(val))
 	return NULL;
 
-    return PLGetString(val);
+    return WMGetFromPLString(val);
 }
 
 
 int
 WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName)
 {
-    proplist_t val;
+    WMPropList *val;
     char *str;
     int value;
 
@@ -498,10 +513,10 @@ WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName)
     if (!val)
 	return 0;
 
-    if (!PLIsString(val))
+    if (!WMIsPLString(val))
 	return 0;
     
-    str = PLGetString(val);
+    str = WMGetFromPLString(val);
     if (!str)
 	return 0;
     
@@ -516,16 +531,16 @@ WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName)
 float
 WMGetUDFloatForKey(WMUserDefaults *database, char *defaultName)
 {
-    proplist_t val;
+    WMPropList *val;
     char *str;
     float value;
 
     val = WMGetUDObjectForKey(database, defaultName);
     
-    if (!val || !PLIsString(val))
+    if (!val || !WMIsPLString(val))
 	return 0.0;
 
-    if (!(str = PLGetString(val)))
+    if (!(str = WMGetFromPLString(val)))
 	return 0.0;
 
     if (sscanf(str, "%f", &value)!=1)
@@ -539,7 +554,7 @@ WMGetUDFloatForKey(WMUserDefaults *database, char *defaultName)
 Bool
 WMGetUDBoolForKey(WMUserDefaults *database, char *defaultName)
 {
-    proplist_t val;
+    WMPropList *val;
     int value;
     char *str;
 
@@ -548,10 +563,10 @@ WMGetUDBoolForKey(WMUserDefaults *database, char *defaultName)
     if (!val)
 	return False;
 
-    if (!PLIsString(val))
+    if (!WMIsPLString(val))
 	return False;
     
-    str = PLGetString(val);
+    str = WMGetFromPLString(val);
     if (!str)
 	return False;
     
@@ -571,14 +586,14 @@ WMGetUDBoolForKey(WMUserDefaults *database, char *defaultName)
 void
 WMSetUDIntegerForKey(WMUserDefaults *database, int value, char *defaultName)
 {
-    proplist_t object;
+    WMPropList *object;
     char buffer[128];
 
     sprintf(buffer, "%i", value);
-    object = PLMakeString(buffer);
+    object = WMCreatePLString(buffer);
  
     WMSetUDObjectForKey(database, object, defaultName);
-    PLRelease(object);
+    WMReleasePropList(object);
 }
 
 
@@ -587,12 +602,12 @@ WMSetUDIntegerForKey(WMUserDefaults *database, int value, char *defaultName)
 void
 WMSetUDStringForKey(WMUserDefaults *database, char *value, char *defaultName)
 {
-    proplist_t object;
+    WMPropList *object;
 
-    object = PLMakeString(value);
+    object = WMCreatePLString(value);
 
     WMSetUDObjectForKey(database, object, defaultName);
-    PLRelease(object);
+    WMReleasePropList(object);
 }
 
 
@@ -600,14 +615,14 @@ WMSetUDStringForKey(WMUserDefaults *database, char *value, char *defaultName)
 void
 WMSetUDFloatForKey(WMUserDefaults *database, float value, char *defaultName)
 {
-    proplist_t object;
+    WMPropList *object;
     char buffer[128];
 
     sprintf(buffer, "%f", value);
-    object = PLMakeString(buffer);
+    object = WMCreatePLString(buffer);
 
     WMSetUDObjectForKey(database, object, defaultName);
-    PLRelease(object);
+    WMReleasePropList(object);
 }
 
 
@@ -615,18 +630,18 @@ WMSetUDFloatForKey(WMUserDefaults *database, float value, char *defaultName)
 void
 WMSetUDBoolForKey(WMUserDefaults *database, Bool value, char *defaultName)
 {
-    static proplist_t yes = NULL, no = NULL;
+    static WMPropList *yes = NULL, *no = NULL;
 
     if (!yes) {
-	yes = PLMakeString("YES");
-	no = PLMakeString("NO");
+	yes = WMCreatePLString("YES");
+	no = WMCreatePLString("NO");
     }
 
     WMSetUDObjectForKey(database, value ? yes : no, defaultName);
 }
 
 
-proplist_t
+WMPropList*
 WMGetUDSearchList(WMUserDefaults *database)
 {
     return database->searchListArray;
@@ -634,30 +649,30 @@ WMGetUDSearchList(WMUserDefaults *database)
 
 
 void
-WMSetUDSearchList(WMUserDefaults *database, proplist_t list)
+WMSetUDSearchList(WMUserDefaults *database, WMPropList *list)
 {
     int i, c;
     
     if (database->searchList) {
 	i = 0;
 	while (database->searchList[i]) {
-	    PLRelease(database->searchList[i]);
+	    WMReleasePropList(database->searchList[i]);
 	    i++;
 	}
 	wfree(database->searchList);
     }
     if (database->searchListArray) {
-	PLRelease(database->searchListArray);
+	WMReleasePropList(database->searchListArray);
     }
 
-    c = PLGetNumberOfElements(list);
-    database->searchList = wmalloc(sizeof(proplist_t)*(c+1));
+    c = WMGetPropListItemCount(list);
+    database->searchList = wmalloc(sizeof(WMPropList*)*(c+1));
 
     for (i=0; i<c; i++) {
-	database->searchList[i] = PLGetArrayElement(list, i);
+	database->searchList[i] = WMGetFromPLArray(list, i);
     }
     
-    database->searchListArray = PLDeepCopy(list);
+    database->searchListArray = WMDeepCopyPropList(list);
 }
 
 

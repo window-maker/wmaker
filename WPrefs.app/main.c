@@ -53,21 +53,6 @@ wAbort(Bool foo)
 }
 
 
-static BOOL
-stringCompareHook(proplist_t pl1, proplist_t pl2)
-{
-    char *str1, *str2;
-
-    str1 = PLGetString(pl1);
-    str2 = PLGetString(pl2);
-
-    if (strcasecmp(str1, str2)==0)
-      return YES;
-    else
-      return NO;
-}
-
-
 static void
 print_help(char *progname)
 {
@@ -177,7 +162,7 @@ main(int argc, char **argv)
 	exit(0);
     }
 
-    PLSetStringCmpHook(stringCompareHook);
+    WMPLSetCaseSensitive(False);
 
     Initialize(scr);
 

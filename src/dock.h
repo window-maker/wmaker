@@ -70,7 +70,7 @@ typedef struct WDock {
 
 
 WDock *wDockCreate(WScreen *scr, int type);
-WDock *wDockRestoreState(WScreen *scr, proplist_t dock_state, int type);
+WDock *wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type);
 
 void wDockDestroy(WDock *dock);
 void wDockHideIcons(WDock *dock);
@@ -78,7 +78,7 @@ void wDockShowIcons(WDock *dock);
 void wDockLower(WDock *dock);
 void wDockRaise(WDock *dock);
 void wDockRaiseLower(WDock *dock);
-void wDockSaveState(WScreen *scr, proplist_t old_state);
+void wDockSaveState(WScreen *scr, WMPropList *old_state);
 
 Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y);
 Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
@@ -97,8 +97,8 @@ int wDockReceiveDNDDrop(WScreen *scr, XEvent *event);
 
 void wClipIconPaint(WAppIcon *aicon);
 void wClipSaveState(WScreen *scr);
-proplist_t wClipSaveWorkspaceState(WScreen *scr, int workspace);
-WAppIcon* wClipRestoreState(WScreen *scr, proplist_t clip_state);
+WMPropList *wClipSaveWorkspaceState(WScreen *scr, int workspace);
+WAppIcon *wClipRestoreState(WScreen *scr, WMPropList *clip_state);
 
 void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace);
 

@@ -947,27 +947,27 @@ freeItemData(ItemData *data)
 
 
 static ItemData*
-parseCommand(proplist_t item)
+parseCommand(WMPropList *item)
 {
     ItemData *data = NEW(ItemData);
-    proplist_t p;
+    WMPropList *p;
     char *command = NULL;
     char *parameter = NULL;
     char *shortcut = NULL;
     int i = 1;
     
     
-    p = PLGetArrayElement(item, i++);
-    command = PLGetString(p);
+    p = WMGetFromPLArray(item, i++);
+    command = WMGetFromPLString(p);
     if (strcmp(command, "SHORTCUT") == 0) {
-	p = PLGetArrayElement(item, i++);
-	shortcut = PLGetString(p);
-	p = PLGetArrayElement(item, i++);
-	command = PLGetString(p);
+	p = WMGetFromPLArray(item, i++);
+	shortcut = WMGetFromPLString(p);
+	p = WMGetFromPLArray(item, i++);
+	command = WMGetFromPLString(p);
     }
-    p = PLGetArrayElement(item, i++);
+    p = WMGetFromPLArray(item, i++);
     if (p)
-	parameter = PLGetString(p);
+	parameter = WMGetFromPLString(p);
 
     if (strcmp(command, "EXEC") == 0 || strcmp(command, "SHEXEC") == 0) {
 	
@@ -1438,31 +1438,31 @@ menuItemSelected(WEditMenuDelegate *delegate, WEditMenu *menu,
 
 
 static WEditMenu*
-buildSubmenu(_Panel *panel, proplist_t pl)
+buildSubmenu(_Panel *panel, WMPropList *pl)
 {
     WMScreen *scr = WMWidgetScreen(panel->parent);
     WEditMenu *menu;
     WEditMenuItem *item;
     char *title;
-    proplist_t tp, bp;
+    WMPropList *tp, *bp;
     int i;
     
-    tp = PLGetArrayElement(pl, 0);
-    title = PLGetString(tp);
+    tp = WMGetFromPLArray(pl, 0);
+    title = WMGetFromPLString(tp);
 
     menu = WCreateEditMenu(scr, title);
     
-    for (i = 1; i < PLGetNumberOfElements(pl); i++) {
-	proplist_t pi;
+    for (i = 1; i < WMGetPropListItemCount(pl); i++) {
+	WMPropList *pi;
 	
-	pi = PLGetArrayElement(pl, i);
+	pi = WMGetFromPLArray(pl, i);
 
-	tp = PLGetArrayElement(pi, 0);
-	bp = PLGetArrayElement(pi, 1);
+	tp = WMGetFromPLArray(pi, 0);
+	bp = WMGetFromPLArray(pi, 1);
 	
-	title = PLGetString(tp);
+	title = WMGetFromPLString(tp);
 
-	if (!bp || PLIsArray(bp)) {	       /* it's a submenu */
+	if (!bp || WMIsPLArray(bp)) {	       /* it's a submenu */
 	    WEditMenu *submenu;
 	    
 	    submenu = buildSubmenu(panel, pi);
@@ -1494,17 +1494,17 @@ buildSubmenu(_Panel *panel, proplist_t pl)
 
 
 static void
-buildMenuFromPL(_Panel *panel, proplist_t pl)
+buildMenuFromPL(_Panel *panel, WMPropList *pl)
 {
     panel->menu = buildSubmenu(panel, pl);
 }
 
 
 
-static proplist_t
+static WMPropList*
 getDefaultMenu(_Panel *panel)
 {
-    proplist_t menu, pmenu;
+    WMPropList *menu, *pmenu;
     char *menuPath, *gspath;
 
     gspath = wusergnusteppath();
@@ -1513,7 +1513,7 @@ getDefaultMenu(_Panel *panel)
     /* if there is a localized plmenu for the tongue put it's filename here */
     sprintf(menuPath, _("%s/Library/WindowMaker/plmenu"), gspath);
 
-    menu = PLGetProplistWithPath(menuPath);
+    menu = WMReadPropListFromFile(menuPath);
     if (!menu) {
 	wwarning("%s:could not read property list menu", menuPath);
 
@@ -1521,7 +1521,7 @@ getDefaultMenu(_Panel *panel)
 		   _("%s/Library/WindowMaker/plmenu"))!=0) {
 
 	    sprintf(menuPath, "%s/Library/WindowMaker/plmenu", gspath);
-	    menu = PLGetProplistWithPath(menuPath);
+	    menu = WMReadPropListFromFile(menuPath);
 	    wwarning("%s:could not read property list menu", menuPath);
 	}
 	if (!menu) {
@@ -1551,7 +1551,7 @@ showData(_Panel *panel)
 {
     char *gspath;
     char *menuPath;
-    proplist_t pmenu;
+    WMPropList *pmenu;
 
     gspath = wusergnusteppath();
 
@@ -1559,9 +1559,9 @@ showData(_Panel *panel)
     strcpy(menuPath, gspath);
     strcat(menuPath, "/Defaults/WMRootMenu");
 
-    pmenu = PLGetProplistWithPath(menuPath);
+    pmenu = WMReadPropListFromFile(menuPath);
     
-    if (!pmenu || !PLIsArray(pmenu)) {
+    if (!pmenu || !WMIsPLArray(pmenu)) {
 	int res;
 	
 	res = WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
@@ -1576,7 +1576,7 @@ showData(_Panel *panel)
 	    pmenu = getDefaultMenu(panel);
 
 	    if (!pmenu) {
-		pmenu = PLMakeArrayFromElements(PLMakeString("Applications"),
+		pmenu = WMCreatePLArray(WMCreatePLString("Applications"),
 						NULL);
 	    }
 	} else {
@@ -1589,7 +1589,7 @@ showData(_Panel *panel)
 
     buildMenuFromPL(panel, pmenu);
 
-    PLRelease(pmenu);
+    WMReleasePropList(pmenu);
 }
 
 
@@ -1606,21 +1606,21 @@ notblank(char *s)
 }
 
 
-static proplist_t
+static WMPropList*
 processData(char *title, ItemData *data)
 {
-    proplist_t item;
+    WMPropList *item;
     char *s1;
-    static char *pscut = NULL;
-    static char *pomenu = NULL;
+    static WMPropList *pscut = NULL;
+    static WMPropList *pomenu = NULL;
     int i;
 
     if (!pscut) {
-	pscut = PLMakeString("SHORTCUT");
-	pomenu = PLMakeString("OPEN_MENU");
+	pscut = WMCreatePLString("SHORTCUT");
+	pomenu = WMCreatePLString("OPEN_MENU");
     }
 
-    item = PLMakeArrayFromElements(PLMakeString(title), NULL);
+    item = WMCreatePLArray(WMCreatePLString(title), NULL);
     
 
     switch (data->type) {
@@ -1638,39 +1638,39 @@ processData(char *title, ItemData *data)
 #endif
 
 	if (notblank(data->param.exec.shortcut)) {
-	    PLAppendArrayElement(item, pscut);
-	    PLAppendArrayElement(item, 
-				 PLMakeString(data->param.exec.shortcut));
+	    WMAddToPLArray(item, pscut);
+	    WMAddToPLArray(item, 
+				 WMCreatePLString(data->param.exec.shortcut));
 	}
 
-	PLAppendArrayElement(item, PLMakeString(s1));
-	PLAppendArrayElement(item, PLMakeString(data->param.exec.command));
+	WMAddToPLArray(item, WMCreatePLString(s1));
+	WMAddToPLArray(item, WMCreatePLString(data->param.exec.command));
 	break;
 
      case CommandInfo:
 	if (notblank(data->param.command.shortcut)) {
-	    PLAppendArrayElement(item, pscut);
-	    PLAppendArrayElement(item, 
-				 PLMakeString(data->param.command.shortcut));
+	    WMAddToPLArray(item, pscut);
+	    WMAddToPLArray(item, 
+				 WMCreatePLString(data->param.command.shortcut));
 	}
 	
 	i = data->param.command.command;
 	
-	PLAppendArrayElement(item, PLMakeString(commandNames[i]));
+	WMAddToPLArray(item, WMCreatePLString(commandNames[i]));
 	
 	switch (i) {
 	 case 3:
 	 case 4:
 	    if (data->param.command.parameter) {
-		PLAppendArrayElement(item, 
-				     PLMakeString(data->param.command.parameter));
+		WMAddToPLArray(item, 
+				     WMCreatePLString(data->param.command.parameter));
 	    }
 	    break;
 
 	 case 6: /* restart */
 	    if (data->param.command.parameter) {
-		PLAppendArrayElement(item, 
-				     PLMakeString(data->param.command.parameter));
+		WMAddToPLArray(item, 
+				     WMCreatePLString(data->param.command.parameter));
 	    }
 	    break;
 	}
@@ -1680,17 +1680,17 @@ processData(char *title, ItemData *data)
      case PipeInfo:
 	if (!data->param.pipe.command)
 	    return NULL;
-	PLAppendArrayElement(item, pomenu);
+	WMAddToPLArray(item, pomenu);
 	s1 = wstrconcat("| ", data->param.pipe.command);
-	PLAppendArrayElement(item, PLMakeString(s1));
+	WMAddToPLArray(item, WMCreatePLString(s1));
 	wfree(s1);
 	break;
 	
      case ExternalInfo:
 	if (!data->param.external.path)
 	    return NULL;
-	PLAppendArrayElement(item, pomenu);
-	PLAppendArrayElement(item, PLMakeString(data->param.external.path));
+	WMAddToPLArray(item, pomenu);
+	WMAddToPLArray(item, WMCreatePLString(data->param.external.path));
 	break;
 	
      case DirectoryInfo:
@@ -1705,7 +1705,7 @@ processData(char *title, ItemData *data)
 	    l += strlen(data->param.directory.command);
 	    l += 32;
 
-	    PLAppendArrayElement(item, pomenu);
+	    WMAddToPLArray(item, pomenu);
 	    
 	    tmp = wmalloc(l);
 	    sprintf(tmp, "%s%s WITH %s",
@@ -1713,17 +1713,17 @@ processData(char *title, ItemData *data)
 		    data->param.directory.directory,
 		    data->param.directory.command);
 	    
-	    PLAppendArrayElement(item, PLMakeString(tmp));
+	    WMAddToPLArray(item, WMCreatePLString(tmp));
 	    wfree(tmp);
 	}
 	break;
 	
      case WSMenuInfo:
-	PLAppendArrayElement(item, PLMakeString("WORKSPACE_MENU"));
+	WMAddToPLArray(item, WMCreatePLString("WORKSPACE_MENU"));
 	break;
 
      case WWindowListInfo:
-	PLAppendArrayElement(item, PLMakeString("WINDOWS_MENU"));
+	WMAddToPLArray(item, WMCreatePLString("WINDOWS_MENU"));
 	break;
 
      default:
@@ -1735,20 +1735,20 @@ processData(char *title, ItemData *data)
 }
 
 
-static proplist_t
+static WMPropList*
 processSubmenu(WEditMenu *menu)
 {
     WEditMenuItem *item;
-    proplist_t pmenu;
-    proplist_t pl;
+    WMPropList *pmenu;
+    WMPropList *pl;
     char *s;
     int i;
     
     
     s = WGetEditMenuTitle(menu);
-    pl = PLMakeString(s);
+    pl = WMCreatePLString(s);
 
-    pmenu = PLMakeArrayFromElements(pl, NULL);
+    pmenu = WMCreatePLArray(pl, NULL);
 
     i = 0;
     while ((item = WGetEditMenuItem(menu, i++))) {
@@ -1766,7 +1766,7 @@ processSubmenu(WEditMenu *menu)
 	if (!pl)
 	    continue;
 
-	PLAppendArrayElement(pmenu, pl);
+	WMAddToPLArray(pmenu, pl);
     }
     
     return pmenu;
@@ -1774,10 +1774,10 @@ processSubmenu(WEditMenu *menu)
 	       
 
 
-static proplist_t
+static WMPropList*
 buildPLFromMenu(_Panel *panel)
 {
-    proplist_t menu;
+    WMPropList *menu;
     
     menu = processSubmenu(panel->menu);
     
@@ -1790,18 +1790,16 @@ buildPLFromMenu(_Panel *panel)
 static void
 storeData(_Panel *panel)
 {
-    proplist_t menu;
+    WMPropList *menu;
 
     if (panel->dontSave)
 	return;
-    
+
     menu = buildPLFromMenu(panel);
 
-    PLSetFilename(menu, PLMakeString(panel->menuPath));
-    
-    PLSave(menu, YES);
+    WMWritePropListToFile(menu, panel->menuPath, True);
 
-    PLRelease(menu);
+    WMReleasePropList(menu);
 }
 
 

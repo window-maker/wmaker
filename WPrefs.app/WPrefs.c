@@ -96,9 +96,10 @@ typedef struct _WPrefs {
 static _WPrefs WPrefs;
 
 /* system wide defaults dictionary. Read-only */
-static proplist_t GlobalDB = NULL;
+static WMPropList *GlobalDB = NULL;
 /* user defaults dictionary */
-static proplist_t WindowMakerDB = NULL;
+static WMPropList *WindowMakerDB = NULL;
+static char *WindowMakerDBPath = NULL;
 
 
 static Bool TIFFOK = False;
@@ -128,9 +129,9 @@ static void
 save(WMWidget *w, void *data)
 {
     int i;
-    proplist_t p1, p2;
-    proplist_t keyList;
-    proplist_t key;
+    WMPropList *p1, *p2;
+    WMPropList *keyList;
+    WMPropList *key;
     char *msg = "Reconfigure";
     XEvent ev;
 
@@ -143,30 +144,30 @@ save(WMWidget *w, void *data)
     }
 /*    puts("compressing data");*/
     /* compare the user dictionary with the global and remove redundant data */
-    keyList = PLGetAllDictionaryKeys(GlobalDB);
-/*    puts(PLGetDescription(WindowMakerDB));*/
-    for (i=0; i<PLGetNumberOfElements(keyList); i++) {
-	key = PLGetArrayElement(keyList, i);
+    keyList = WMGetPLDictionaryKeys(GlobalDB);
+/*    puts(WMGetPropListDescription(WindowMakerDB, False));*/
+    for (i=0; i<WMGetPropListItemCount(keyList); i++) {
+	key = WMGetFromPLArray(keyList, i);
 	
 	/* We don't have this value anyway, so no problem. 
 	 * Probably  a new option */
-	p1 = PLGetDictionaryEntry(WindowMakerDB, key);
+	p1 = WMGetFromPLDictionary(WindowMakerDB, key);
 	if (!p1)
 	    continue;
 	/* The global doesn't have it, so no problem either. */
-	p2 = PLGetDictionaryEntry(GlobalDB, key);
+	p2 = WMGetFromPLDictionary(GlobalDB, key);
 	if (!p2)
 	    continue;
 	/* If both values are the same, don't save. */
-	if (PLIsEqual(p1, p2))
-	    PLRemoveDictionaryEntry(WindowMakerDB, key);
+	if (WMIsPropListEqualTo(p1, p2))
+	    WMRemoveFromPLDictionary(WindowMakerDB, key);
     }
-/*    puts(PLGetDescription(WindowMakerDB));*/
-    PLRelease(keyList);
+/*    puts(WMGetPropListDescription(WindowMakerDB, False));*/
+    WMReleasePropList(keyList);
 /*    puts("storing data");*/
 
-    PLSave(WindowMakerDB, YES);
-    
+    WMWritePropListToFile(WindowMakerDB, WindowMakerDBPath, True);
+
 
     memset(&ev, 0, sizeof(XEvent));
 	    
@@ -738,7 +739,7 @@ GetWindow(Panel *panel)
 static void
 loadConfigurations(WMScreen *scr, WMWindow *mainw)
 {
-    proplist_t db, gdb;
+    WMPropList *db, *gdb;
     char *path;
     FILE *file;
     char buffer[1024];
@@ -746,11 +747,12 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     int v1, v2, v3;
     
     path = wdefaultspathfordomain("WindowMaker");
+    WindowMakerDBPath = path;
     
-    db = PLGetProplistWithPath(path);
+    db = WMReadPropListFromFile(path);
     if (db) {
-	if (!PLIsDictionary(db)) {
-	    PLRelease(db);
+	if (!WMIsPLDictionary(db)) {
+	    WMReleasePropList(db);
 	    db = NULL;
 	    sprintf(mbuf, _("Window Maker domain (%s) is corrupted!"), path);
 	    WMRunAlertPanel(scr, mainw, _("Error"), mbuf, _("OK"), NULL, NULL);
@@ -760,7 +762,6 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 		path);
 	WMRunAlertPanel(scr, mainw, _("Error"), mbuf, _("OK"), NULL, NULL);
     }
-    wfree(path);
 
     path = getenv("WMAKER_BIN_NAME");
     if (!path)
@@ -827,10 +828,11 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     if (file)
 	pclose(file);
 
-    gdb = PLGetProplistWithPath(buffer);
+    gdb = WMReadPropListFromFile(buffer);
+
     if (gdb) {
-	if (!PLIsDictionary(gdb)) {
-	    PLRelease(gdb);
+	if (!WMIsPLDictionary(gdb)) {
+	    WMReleasePropList(gdb);
 	    gdb = NULL;
 	    sprintf(mbuf, _("Window Maker domain (%s) is corrupted!"), buffer);
 	    WMRunAlertPanel(scr, mainw, _("Error"), mbuf, _("OK"), NULL, NULL);
@@ -842,10 +844,10 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     }
 
     if (!db) {
-	db = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+	db = WMCreatePLDictionary(NULL, NULL, NULL);
     }
     if (!gdb) {
-	gdb = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+	gdb = WMCreatePLDictionary(NULL, NULL, NULL);
     }
 
     GlobalDB = gdb;
@@ -854,89 +856,89 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 }
 
 
-proplist_t
+WMPropList*
 GetObjectForKey(char *defaultName)
 {
-    proplist_t object = NULL;
-    proplist_t key = PLMakeString(defaultName);
+    WMPropList *object = NULL;
+    WMPropList *key = WMCreatePLString(defaultName);
 
-    object = PLGetDictionaryEntry(WindowMakerDB, key);
+    object = WMGetFromPLDictionary(WindowMakerDB, key);
     if (!object)
-	object = PLGetDictionaryEntry(GlobalDB, key);
+	object = WMGetFromPLDictionary(GlobalDB, key);
 
-    PLRelease(key);
+    WMReleasePropList(key);
 
     return object;
 }
 
 
 void
-SetObjectForKey(proplist_t object, char *defaultName)
+SetObjectForKey(WMPropList *object, char *defaultName)
 {
-    proplist_t key = PLMakeString(defaultName);
+    WMPropList *key = WMCreatePLString(defaultName);
 
-    PLInsertDictionaryEntry(WindowMakerDB, key, object);
-    PLRelease(key);
+    WMPutInPLDictionary(WindowMakerDB, key, object);
+    WMReleasePropList(key);
 }
 
 
 void
 RemoveObjectForKey(char *defaultName)
 {
-    proplist_t key = PLMakeString(defaultName);
+    WMPropList *key = WMCreatePLString(defaultName);
     
-    PLRemoveDictionaryEntry(WindowMakerDB, key);
+    WMRemoveFromPLDictionary(WindowMakerDB, key);
     
-    PLRelease(key);
+    WMReleasePropList(key);
 }
 
 
 char*
 GetStringForKey(char *defaultName)
 {
-    proplist_t val;
+    WMPropList *val;
     
     val = GetObjectForKey(defaultName);
 
     if (!val)
 	return NULL;
 
-    if (!PLIsString(val))
+    if (!WMIsPLString(val))
 	return NULL;
 
-    return PLGetString(val);
+    return WMGetFromPLString(val);
 }
 
 
 
-proplist_t
+WMPropList*
 GetArrayForKey(char *defaultName)
 {
-    proplist_t val;
+    WMPropList *val;
     
     val = GetObjectForKey(defaultName);
     
     if (!val)
 	return NULL;
 
-    if (!PLIsArray(val))
+    if (!WMIsPLArray(val))
 	return NULL;
 
     return val;
 }
 
 
-proplist_t
+WMPropList*
 GetDictionaryForKey(char *defaultName)
 {
-    proplist_t val;
+    WMPropList *val;
 
     val = GetObjectForKey(defaultName);
     
     if (!val)
 	return NULL;
 
-    if (!PLIsDictionary(val))
+    if (!WMIsPLDictionary(val))
 	return NULL;
 
     return val;
@@ -946,7 +948,7 @@ GetDictionaryForKey(char *defaultName)
 int
 GetIntegerForKey(char *defaultName)
 {
-    proplist_t val;
+    WMPropList *val;
     char *str;
     int value;
 
@@ -955,10 +957,10 @@ GetIntegerForKey(char *defaultName)
     if (!val)
 	return 0;
 
-    if (!PLIsString(val))
+    if (!WMIsPLString(val))
 	return 0;
     
-    str = PLGetString(val);
+    str = WMGetFromPLString(val);
     if (!str)
 	return 0;
     
@@ -996,14 +998,14 @@ GetBoolForKey(char *defaultName)
 void
 SetIntegerForKey(int value, char *defaultName)
 {
-    proplist_t object;
+    WMPropList *object;
     char buffer[128];
 
     sprintf(buffer, "%i", value);
-    object = PLMakeString(buffer);
+    object = WMCreatePLString(buffer);
  
     SetObjectForKey(object, defaultName);
-    PLRelease(object);
+    WMReleasePropList(object);
 }
 
 
@@ -1011,23 +1013,23 @@ SetIntegerForKey(int value, char *defaultName)
 void
 SetStringForKey(char *value, char *defaultName)
 {
-    proplist_t object;
+    WMPropList *object;
 
-    object = PLMakeString(value);
+    object = WMCreatePLString(value);
  
     SetObjectForKey(object, defaultName);
-    PLRelease(object);
+    WMReleasePropList(object);
 }
 
 
 void
 SetBoolForKey(Bool value, char *defaultName)
 {
-    static proplist_t yes = NULL, no = NULL;
+    static WMPropList *yes = NULL, *no = NULL;
 
     if (!yes) {
-	yes = PLMakeString("YES");
-	no = PLMakeString("NO");
+	yes = WMCreatePLString("YES");
+	no = WMCreatePLString("NO");
     }
 
     SetObjectForKey(value ? yes : no, defaultName);

@@ -1001,7 +1001,6 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     int cancelSelection = 1;
     Bool shifted, controled, modified;
     Bool relay = True;
-    WMScreen *scr = tPtr->view->screen;
 
     /*printf("(%d,%d) -> ", tPtr->selection.position, tPtr->selection.count);*/
     if (((XKeyEvent *) event)->state & WM_EMACSKEYMASK)

@@ -503,7 +503,6 @@ static void
 keyPressHandler(XEvent *event, void *data)
 {
     IconPanel *panel = (IconPanel*)data;
-    Display *dpy = event->xany.display;
     char buffer[32];
     int count;
     KeySym ksym;
@@ -1592,28 +1591,28 @@ setCrashAction(void *self, void *clientData)
 static WMPixmap*
 getWindowMakerIconImage(WMScreen *scr)
 {
-    proplist_t dict, key, option, value=NULL;
+    WMPropList *dict, *key, *option, *value=NULL;
     WMPixmap *pix=NULL;
     char *path;
 
-    PLSetStringCmpHook(NULL);
+    WMPLSetCaseSensitive(True);
 
-    key = PLMakeString("Logo.WMPanel");
-    option = PLMakeString("Icon");
+    key = WMCreatePLString("Logo.WMPanel");
+    option = WMCreatePLString("Icon");
 
-    dict = PLGetDictionaryEntry(WDWindowAttributes->dictionary, key);
+    dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
 
     if (dict) {
-        value = PLGetDictionaryEntry(dict, option);
+        value = WMGetFromPLDictionary(dict, option);
     }
 
-    PLRelease(key);
-    PLRelease(option);
+    WMReleasePropList(key);
+    WMReleasePropList(option);
 
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 
-    if (value && PLIsString(value)) {
-        path = FindImage(wPreferences.icon_path, PLGetString(value));
+    if (value && WMIsPLString(value)) {
+        path = FindImage(wPreferences.icon_path, WMGetFromPLString(value));
 
         if (path) {
             RColor gray;

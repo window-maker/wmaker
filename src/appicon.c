@@ -382,7 +382,6 @@ Bool
 wAppIconIsFirstInstance(WAppIcon *icon)
 {
     WAppIcon *list = icon->icon->core->screen_ptr->app_icon_list;
-    int index = 0;
 
     if (!WFLAGP(icon->icon->owner, collapse_appicons))
 	return True;

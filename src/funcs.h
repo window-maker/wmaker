@@ -111,11 +111,9 @@ char *FindImage(char *paths, char *file);
 
 RImage*wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
 
-BOOL StringCompareHook(proplist_t pl1, proplist_t pl2);
-
 int IsEof(FILE * stream);	/* feof that stats pipes */
 
-void ParseWindowName(proplist_t value, char **winstance, char **wclass,
+void ParseWindowName(WMPropList *value, char **winstance, char **wclass,
                      char *where);
 
 void SendHelperMessage(WScreen *scr, char type, int workspace, char *msg);

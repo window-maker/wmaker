@@ -10,14 +10,6 @@
 #define NULL ((void*)0)
 #endif
 
-/*
- * Warning: proplist.h #defines BOOL which will clash with the
- * typedef BOOL in Xmd.h
- * proplist.h should use Bool (which is a #define in Xlib.h) instead.
- *
- */
-#include <proplist.h>
-
 
 #ifndef WMAX
 # define WMAX(a,b)	((a)>(b) ? (a) : (b))
@@ -231,7 +223,7 @@ char* wfindfile(char *paths, char *file);
 
 char* wfindfileinlist(char **path_list, char *file);
 
-char* wfindfileinarray(proplist_t array, char *file);
+char* wfindfileinarray(WMPropList* array, char *file);
 
 char* wexpandpath(char *path);
 
@@ -761,6 +753,10 @@ WMPropList* WMRetainPropList(WMPropList *plist);
 
 void WMReleasePropList(WMPropList *plist);
 
+/* Objects inserted in arrays and dictionaries will be retained,
+ * so you can safely release them after insertion.
+ * For dictionaries both the key and value are retained.
+ * Objects removed from arrays or dictionaries are released */
 void WMInsertInPLArray(WMPropList *plist, int index, WMPropList *item);
 
 void WMAddToPLArray(WMPropList *plist, WMPropList *item);
@@ -773,6 +769,9 @@ void WMPutInPLDictionary(WMPropList *plist, WMPropList *key, WMPropList *value);
 
 void WMRemoveFromPLDictionary(WMPropList *plist, WMPropList *key);
 
+/* It inserts all key/value pairs from source into dest, overwriting
+ * the values with the same keys from dest, keeping all values with keys
+ * only present in dest unchanged */
 WMPropList* WMMergePLDictionaries(WMPropList *dest, WMPropList *source);
 
 int WMGetPropListItemCount(WMPropList *plist);
@@ -787,26 +786,38 @@ Bool WMIsPLDictionary(WMPropList *plist);
 
 Bool WMIsPropListEqualTo(WMPropList *plist, WMPropList *other);
 
+/* Returns a reference. Do not free it! */
 char* WMGetFromPLString(WMPropList *plist);
 
+/* Returns a reference. Do not free it! */
 WMData* WMGetFromPLData(WMPropList *plist);
 
+/* Returns a reference. Do not free it! */
 const unsigned char* WMGetPLDataBytes(WMPropList *plist);
 
 int WMGetPLDataLength(WMPropList *plist);
 
+/* Returns a reference. */
 WMPropList* WMGetFromPLArray(WMPropList *plist, int index);
 
+/* Returns a reference. */
 WMPropList* WMGetFromPLDictionary(WMPropList *plist, WMPropList *key);
 
+/* Returns a PropList array with all the dictionary keys. Release it when
+ * you're done. Keys in array are retained from the original dictionary
+ * not copied */
 WMPropList* WMGetPLDictionaryKeys(WMPropList *plist);
 
+/* Creates only the first level deep object. All the elements inside are
+ * retained from the original */
 WMPropList* WMShallowCopyPropList(WMPropList *plist);
 
+/* Makes a completely separate replica of the original proplist */
 WMPropList* WMDeepCopyPropList(WMPropList *plist);
 
 WMPropList* WMCreatePropListFromDescription(char *desc);
 
+/* Free the returned string when you're done */
 char* WMGetPropListDescription(WMPropList *plist, Bool indented);
 
 WMPropList* WMReadPropListFromFile(char *file);
@@ -825,14 +836,14 @@ void WMSaveUserDefaults(WMUserDefaults *database);
 
 void WMEnableUDPeriodicSynchronization(WMUserDefaults *database, Bool enable);
 
-/* Returns a PLArray with all keys in the user defaults database.
- * Free the returned array with PLRelease() when no longer needed,
- * but do not free the elements of the array! They're just references. */
-proplist_t WMGetUDAllKeys(WMUserDefaults *database);
+/* Returns a WMPropList array with all the keys in the user defaults database.
+ * Free the array with WMReleasePropList() when no longer needed.
+ * Keys in array are just retained references to the original keys */
+WMPropList* WMGetUDKeys(WMUserDefaults *database);
 
-proplist_t WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName);
+WMPropList* WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName);
 
-void WMSetUDObjectForKey(WMUserDefaults *database, proplist_t object,
+void WMSetUDObjectForKey(WMUserDefaults *database, WMPropList *object,
 			 char *defaultName);
 
 void WMRemoveUDObjectForKey(WMUserDefaults *database, char *defaultName);
@@ -857,9 +868,9 @@ void WMSetUDFloatForKey(WMUserDefaults *database, float value,
 void WMSetUDBoolForKey(WMUserDefaults *database, Bool value,
 		       char *defaultName);
 
-proplist_t WMGetUDSearchList(WMUserDefaults *database);
+WMPropList* WMGetUDSearchList(WMUserDefaults *database);
 
-void WMSetUDSearchList(WMUserDefaults *database, proplist_t list);
+void WMSetUDSearchList(WMUserDefaults *database, WMPropList *list);
 
 extern char *WMUserDefaultsDidChangeNotification;
 

@@ -60,7 +60,6 @@ wmaker_SOURCES = 	\
 	placement.c \
 	properties.c \
 	properties.h \
-	proplist.c \
 	resources.c \
 	resources.h \
 	rootmenu.c \
@@ -114,7 +113,6 @@ INCLUDES = \
 wmaker_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
 	$(top_builddir)/wrlib/libwraster.la\
-	@LIBPL@ \
 	@XLIBS@ \
 	@INTLIBS@ \
 	@DLLIBS@

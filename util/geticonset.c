@@ -25,8 +25,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <proplist.h>
 #include <string.h>
+
+#include <WINGs/WUtil.h>
 
 #include "../src/wconfig.h"
 
@@ -77,9 +78,8 @@ print_help()
 int 
 main(int argc, char **argv)
 {
-    proplist_t window_name, icon_key, window_attrs, icon_value;
-    proplist_t all_windows, iconset;
-    proplist_t keylist;
+    WMPropList *window_name, *icon_key, *window_attrs, *icon_value;
+    WMPropList *all_windows, *iconset, *keylist;
     char *path;
     int i;
 
@@ -99,46 +99,43 @@ main(int argc, char **argv)
     
     path = defaultsPathForDomain("WMWindowAttributes");
     
-    all_windows = PLGetProplistWithPath(path);
+    all_windows = WMReadPropListFromFile(path);
     if (!all_windows) {
 	printf("%s:could not load WindowMaker configuration file \"%s\".\n", 
 	       ProgName, path);
 	exit(1);
     }
 
-    iconset = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+    iconset = WMCreatePLDictionary(NULL, NULL, NULL);
 
-    keylist = PLGetAllDictionaryKeys(all_windows);
-    icon_key = PLMakeString("Icon");
+    keylist = WMGetPLDictionaryKeys(all_windows);
+    icon_key = WMCreatePLString("Icon");
     
-    for (i=0; i<PLGetNumberOfElements(keylist); i++) {
-	proplist_t icondic;
+    for (i=0; i<WMGetPropListItemCount(keylist); i++) {
+	WMPropList *icondic;
 	
-	window_name = PLGetArrayElement(keylist, i);
-	if (!PLIsString(window_name))
+	window_name = WMGetFromPLArray(keylist, i);
+	if (!WMIsPLString(window_name))
 	    continue;
 		
-	window_attrs = PLGetDictionaryEntry(all_windows, window_name);
-	if (window_attrs && PLIsDictionary(window_attrs)) {
-	    icon_value = PLGetDictionaryEntry(window_attrs, icon_key);
+	window_attrs = WMGetFromPLDictionary(all_windows, window_name);
+	if (window_attrs && WMIsPLDictionary(window_attrs)) {
+	    icon_value = WMGetFromPLDictionary(window_attrs, icon_key);
 	    if (icon_value) {
 		
-		icondic = PLMakeDictionaryFromEntries(icon_key, icon_value, 
+		icondic = WMCreatePLDictionary(icon_key, icon_value, 
 						      NULL);
 
-		PLInsertDictionaryEntry(iconset, window_name, icondic);
+		WMPutInPLDictionary(iconset, window_name, icondic);
 	    }
 	}
     }
     
 
     if (argc==2) {
-	proplist_t val;
-	val = PLMakeString(argv[1]);
-	PLSetFilename(iconset, val);
-	PLSave(iconset, NO);
+	WMWritePropListToFile(iconset, argv[1], False);
     } else {
-	puts(PLGetDescriptionIndent(iconset, 0));
+	puts(WMGetPropListDescription(iconset, True));
     }
     exit(0);
 }

@@ -75,11 +75,11 @@ addPathToList(WMList *list, int index, char *path)
 static void
 showData(_Panel *panel)
 {
-    proplist_t array, val;
+    WMPropList *array, *val;
     int i;
     
     array = GetObjectForKey("IconPath");
-    if (!array || !PLIsArray(array)) {
+    if (!array || !WMIsPLArray(array)) {
 	if (array)
 	    wwarning(_("bad value in option IconPath. Using default path list"));
 	addPathToList(panel->icoL, -1, "~/pixmaps");
@@ -89,23 +89,23 @@ showData(_Panel *panel)
 	addPathToList(panel->icoL, -1, "/usr/local/share/WindowMaker/Pixmaps");
 	addPathToList(panel->icoL, -1, "/usr/share/WindowMaker/Icons");
     } else {
-	for (i=0; i<PLGetNumberOfElements(array); i++) {
-	    val = PLGetArrayElement(array, i);
-	    addPathToList(panel->icoL, -1, PLGetString(val));
+	for (i=0; i<WMGetPropListItemCount(array); i++) {
+	    val = WMGetFromPLArray(array, i);
+	    addPathToList(panel->icoL, -1, WMGetFromPLString(val));
 	}
     }
 
     array = GetObjectForKey("PixmapPath");
-    if (!array || !PLIsArray(array)) {
+    if (!array || !WMIsPLArray(array)) {
 	if (array)
 	    wwarning(_("bad value in option PixmapPath. Using default path list"));
 	addPathToList(panel->pixL, -1, "~/pixmaps");
 	addPathToList(panel->pixL, -1, "~/GNUstep/Library/WindowMaker/Pixmaps");
 	addPathToList(panel->pixL, -1, "/usr/local/share/WindowMaker/Pixmaps");
     } else {
-	for (i=0; i<PLGetNumberOfElements(array); i++) {
-	    val = PLGetArrayElement(array, i);
-	    addPathToList(panel->pixL, -1, PLGetString(val));
+	for (i=0; i<WMGetPropListItemCount(array); i++) {
+	    val = WMGetFromPLArray(array, i);
+	    addPathToList(panel->pixL, -1, WMGetFromPLString(val));
 	}
     }
 }
@@ -213,24 +213,24 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 static void
 storeData(_Panel *panel)
 {
-    proplist_t list;
-    proplist_t tmp;
+    WMPropList *list;
+    WMPropList *tmp;
     int i;
     char *p;
     
-    list = PLMakeArrayFromElements(NULL, NULL);
+    list = WMCreatePLArray(NULL, NULL);
     for (i=0; i<WMGetListNumberOfRows(panel->icoL); i++) {
 	p = WMGetListItem(panel->icoL, i)->text;
-	tmp = PLMakeString(p);
-	PLAppendArrayElement(list, tmp);
+	tmp = WMCreatePLString(p);
+	WMAddToPLArray(list, tmp);
     }
     SetObjectForKey(list, "IconPath");
     
-    list = PLMakeArrayFromElements(NULL, NULL);
+    list = WMCreatePLArray(NULL, NULL);
     for (i=0; i<WMGetListNumberOfRows(panel->pixL); i++) {
 	p = WMGetListItem(panel->pixL, i)->text;
-	tmp = PLMakeString(p);
-	PLAppendArrayElement(list, tmp);
+	tmp = WMCreatePLString(p);
+	WMAddToPLArray(list, tmp);
     }
     SetObjectForKey(list, "PixmapPath");
 }

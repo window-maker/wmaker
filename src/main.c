@@ -51,7 +51,7 @@
 #include "session.h"
 #include "dialog.h"
 
-#include <proplist.h>
+#include <WINGs/WUtil.h>
 
 /****** Global Variables ******/
 
@@ -71,8 +71,8 @@ int wScreenCount=0;
 WPreferences wPreferences;
 
 
-proplist_t wDomainName;
-proplist_t wAttributeDomainName;
+WMPropList *wDomainName;
+WMPropList *wAttributeDomainName;
 
 WShortKey wKeyBindings[WKBD_LAST];
 

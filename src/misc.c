@@ -947,23 +947,6 @@ ExpandOptions(WScreen *scr, char *cmdline)
 }
 
 
-/* We don't care for upper/lower case in comparing the keys; so we
-   have to define our own comparison function here */
-BOOL
-StringCompareHook(proplist_t pl1, proplist_t pl2)
-{
-    char *str1, *str2;
-
-    str1 = PLGetString(pl1);
-    str2 = PLGetString(pl2);
-
-    if (strcasecmp(str1, str2)==0)
-      return YES;
-    else
-      return NO;
-}
-
-
 /* feof doesn't seem to work on pipes */
 int
 IsEof(FILE * stream)
@@ -977,18 +960,18 @@ IsEof(FILE * stream)
 
 
 void
-ParseWindowName(proplist_t value, char **winstance, char **wclass, char *where)
+ParseWindowName(WMPropList *value, char **winstance, char **wclass, char *where)
 {
     char *name;
 
     *winstance = *wclass = NULL;
 
-    if (!PLIsString(value)) {
+    if (!WMIsPLString(value)) {
 	wwarning(_("bad window name value in %s state info"), where);
 	return;
     }
 
-    name = PLGetString(value);
+    name = WMGetFromPLString(value);
     if (!name || strlen(name)==0) {
 	wwarning(_("bad window name value in %s state info"), where);
 	return;

@@ -35,7 +35,8 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include <proplist.h>
+#include <WINGs/WUtil.h>
+
 #include <pwd.h>
 
 
@@ -81,8 +82,8 @@ void help()
 
 int main(int argc, char **argv)
 {
-    char path[256];
-    proplist_t dom, key, value, dict;
+    char *path;
+    WMPropList *dom, *key, *value, *dict;
     char *gsdir;
     int i;
     
@@ -104,36 +105,35 @@ int main(int argc, char **argv)
 	exit(1);
     }
     
-    dom = PLMakeString(argv[1]);
-    key = PLMakeString(argv[2]);
-    value = PLGetProplistWithDescription(argv[3]);
+    dom = WMCreatePLString(argv[1]);
+    key = WMCreatePLString(argv[2]);
+    value = WMCreatePropListFromDescription(argv[3]);
     if (!value) {
 	printf("%s:syntax error in value \"%s\"", ProgName, argv[3]);
 	exit(1);
     }
     gsdir = getenv("GNUSTEP_USER_ROOT");
     if (gsdir) {
-	strcpy(path, gsdir);
+	path = wstrdup(gsdir);
     } else {
-	strcpy(path, gethomedir());
-	strcat(path, "/GNUstep");
+	path = wstrdup(gethomedir());
+	path = wstrappend(path, "/GNUstep");
     }
-    strcat(path, "/");
-    strcat(path, DEFAULTS_DIR);
-    strcat(path, "/");
-    strcat(path, argv[1]);
+    path = wstrappend(path, "/");
+    path = wstrappend(path, DEFAULTS_DIR);
+    path = wstrappend(path, "/");
+    path = wstrappend(path, argv[1]);
 
-    dict = PLGetProplistWithPath(path);
+    dict = WMReadPropListFromFile(path);
     if (!dict) {
-	dict = PLMakeDictionaryFromEntries(key, value, NULL);
-	PLSetFilename(dict, PLMakeString(path));
+	dict = WMCreatePLDictionary(key, value, NULL);
     } else {
-	PLRemoveDictionaryEntry(dict, key);
-	PLInsertDictionaryEntry(dict, key, value);
+	WMPutInPLDictionary(dict, key, value);
     }
-    
-    PLSave(dict, YES);
-	
+
+    WMWritePropListToFile(dict, path, True);
+    wfree(path);
+
     return 0;
 }
 

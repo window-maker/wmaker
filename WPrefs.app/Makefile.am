@@ -51,6 +51,5 @@ WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
 WPrefs_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
 	$(top_builddir)/wrlib/libwraster.la \
-	@LIBPL@ \
 	@INTLIBS@
 

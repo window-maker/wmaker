@@ -25,13 +25,13 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <proplist.h>
 #include <sys/stat.h>
 #include <unistd.h>
-
-#include <X11/Xlib.h>
-
 #include <string.h>
+#include <X11/Xlib.h>
+#include <WINGs/WUtil.h>
+
+
 
 #include "../src/wconfig.h"
 
@@ -76,7 +76,7 @@ Display *dpy;
 
 
 
-proplist_t readBlackBoxStyle(char *path);
+WMPropList *readBlackBoxStyle(char *path);
 
 
 
@@ -112,14 +112,14 @@ defaultsPathForDomain(char *domain)
 
 
 void
-hackPathInTexture(proplist_t texture, char *prefix)
+hackPathInTexture(WMPropList *texture, char *prefix)
 {
-    proplist_t type;
+    WMPropList *type;
     char *t;
 
     /* get texture type */
-    type = PLGetArrayElement(texture, 0);
-    t = PLGetString(type);
+    type = WMGetFromPLArray(texture, 0);
+    t = WMGetFromPLString(type);
     if (t == NULL)
 	return;
     if (strcasecmp(t, "tpixmap")==0
@@ -129,64 +129,64 @@ hackPathInTexture(proplist_t texture, char *prefix)
 	|| strcasecmp(t, "tvgradient")==0
 	|| strcasecmp(t, "thgradient")==0		
 	|| strcasecmp(t, "tdgradient")==0) {
-	proplist_t file;
+	WMPropList *file;
 	char buffer[4018];
 
 	/* get pixmap file path */
-	file = PLGetArrayElement(texture, 1);
-	sprintf(buffer, "%s/%s", prefix, PLGetString(file));
+	file = WMGetFromPLArray(texture, 1);
+	sprintf(buffer, "%s/%s", prefix, WMGetFromPLString(file));
 	/* replace path with full path */
-	PLRemoveArrayElement(texture, 1);
-	PLInsertArrayElement(texture, PLMakeString(buffer), 1);
+	WMDeleteFromPLArray(texture, 1);
+	WMInsertInPLArray(texture, 1, WMCreatePLString(buffer));
     } else if (strcasecmp(t, "bitmap") == 0) {
-	proplist_t file;
+	WMPropList *file;
 	char buffer[4018];
 
 	/* get bitmap file path */
-	file = PLGetArrayElement(texture, 1);
-	sprintf(buffer, "%s/%s", prefix, PLGetString(file));
+	file = WMGetFromPLArray(texture, 1);
+	sprintf(buffer, "%s/%s", prefix, WMGetFromPLString(file));
 	/* replace path with full path */
-	PLRemoveArrayElement(texture, 1);
-	PLInsertArrayElement(texture, PLMakeString(buffer), 1);
+	WMDeleteFromPLArray(texture, 1);
+	WMInsertInPLArray(texture, 1, WMCreatePLString(buffer));
 	
 	/* get mask file path */
-	file = PLGetArrayElement(texture, 2);
-	sprintf(buffer, "%s/%s", prefix, PLGetString(file));
+	file = WMGetFromPLArray(texture, 2);
+	sprintf(buffer, "%s/%s", prefix, WMGetFromPLString(file));
 	/* replace path with full path */
-	PLRemoveArrayElement(texture, 2);
-	PLInsertArrayElement(texture, PLMakeString(buffer), 2);
+	WMDeleteFromPLArray(texture, 2);
+	WMInsertInPLArray(texture, 2, WMCreatePLString(buffer));
     }
 }
 
 
 void
-hackPaths(proplist_t style, char *prefix)
+hackPaths(WMPropList *style, char *prefix)
 {
-    proplist_t keys;
-    proplist_t key;
-    proplist_t value;
+    WMPropList *keys;
+    WMPropList *key;
+    WMPropList *value;
     int i;
 
 
-    keys = PLGetAllDictionaryKeys(style);
+    keys = WMGetPLDictionaryKeys(style);
 
-    for (i = 0; i < PLGetNumberOfElements(keys); i++) {
-	key = PLGetArrayElement(keys, i);
+    for (i = 0; i < WMGetPropListItemCount(keys); i++) {
+	key = WMGetFromPLArray(keys, i);
 
-	value = PLGetDictionaryEntry(style, key);
+	value = WMGetFromPLDictionary(style, key);
 	if (!value)
 	    continue;
 	
-	if (strcasecmp(PLGetString(key), "WorkspaceSpecificBack")==0) {
-	    if (PLIsArray(value)) {
+	if (strcasecmp(WMGetFromPLString(key), "WorkspaceSpecificBack")==0) {
+	    if (WMIsPLArray(value)) {
 		int j;
-		proplist_t texture;
+		WMPropList *texture;
 		
-		for (j = 0; j < PLGetNumberOfElements(value); j++) {
-		    texture = PLGetArrayElement(value, j);
+		for (j = 0; j < WMGetPropListItemCount(value); j++) {
+		    texture = WMGetFromPLArray(value, j);
 
-		    if (texture && PLIsArray(texture) 
-			&& PLGetNumberOfElements(texture) > 2) {
+		    if (texture && WMIsPLArray(texture) 
+			&& WMGetPropListItemCount(texture) > 2) {
 
 			hackPathInTexture(texture, prefix);
 		    }
@@ -194,7 +194,7 @@ hackPaths(proplist_t style, char *prefix)
 	    }
 	} else {
 	    
-	    if (PLIsArray(value) && PLGetNumberOfElements(value) > 2) {
+	    if (WMIsPLArray(value) && WMGetPropListItemCount(value) > 2) {
 
 		hackPathInTexture(value, prefix);
 	    }
@@ -204,36 +204,36 @@ hackPaths(proplist_t style, char *prefix)
 }
 
 
-static proplist_t
-getColor(proplist_t texture)
+static WMPropList*
+getColor(WMPropList *texture)
 {
-    proplist_t value, type;
+    WMPropList *value, *type;
     char *str;
 
-    type = PLGetArrayElement(texture, 0);
+    type = WMGetFromPLArray(texture, 0);
     if (!type)
 	return NULL;
 
     value = NULL;
 
-    str = PLGetString(type);
+    str = WMGetFromPLString(type);
     if (strcasecmp(str, "solid")==0) {
-	value = PLGetArrayElement(texture, 1);
+	value = WMGetFromPLArray(texture, 1);
     } else if (strcasecmp(str, "dgradient")==0
 	       || strcasecmp(str, "hgradient")==0
 	       || strcasecmp(str, "vgradient")==0) {
-	proplist_t c1, c2;
+	WMPropList *c1, *c2;
 	int r1, g1, b1, r2, g2, b2;
 	char buffer[32];
 
-	c1 = PLGetArrayElement(texture, 1);
-	c2 = PLGetArrayElement(texture, 2);
+	c1 = WMGetFromPLArray(texture, 1);
+	c2 = WMGetFromPLArray(texture, 2);
 	if (!dpy) {
-	    if (sscanf(PLGetString(c1), "#%2x%2x%2x", &r1, &g1, &b1)==3
-		&& sscanf(PLGetString(c2), "#%2x%2x%2x", &r2, &g2, &b2)==3) {
+	    if (sscanf(WMGetFromPLString(c1), "#%2x%2x%2x", &r1, &g1, &b1)==3
+		&& sscanf(WMGetFromPLString(c2), "#%2x%2x%2x", &r2, &g2, &b2)==3) {
 		sprintf(buffer, "#%02x%02x%02x", (r1+r2)/2, (g1+g2)/2,
 			(b1+b2)/2);
-		value = PLMakeString(buffer);
+		value = WMCreatePLString(buffer);
 	    } else {
 		value = c1;
 	    }
@@ -242,27 +242,27 @@ getColor(proplist_t texture)
 	    XColor color2;
 	    
 	    XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)), 
-			PLGetString(c1), &color1);
+			WMGetFromPLString(c1), &color1);
 	    XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)),
-			PLGetString(c2), &color2);
+			WMGetFromPLString(c2), &color2);
 
 	    sprintf(buffer, "#%02x%02x%02x", 
 		    (color1.red+color2.red)>>9,
 		    (color1.green+color2.green)>>9,
 		    (color1.blue+color2.blue)>>9);
-	    value = PLMakeString(buffer);	    
+	    value = WMCreatePLString(buffer);	    
 	}
     } else if (strcasecmp(str, "mdgradient")==0
 	       || strcasecmp(str, "mhgradient")==0
 	       || strcasecmp(str, "mvgradient")==0) {
 	
-	value = PLGetArrayElement(texture, 1);
+	value = WMGetFromPLArray(texture, 1);
 
     } else if (strcasecmp(str, "tpixmap")==0
 	       || strcasecmp(str, "cpixmap")==0
 	       || strcasecmp(str, "spixmap")==0) {
 	
-	value = PLGetArrayElement(texture, 2);
+	value = WMGetFromPLArray(texture, 2);
     }
 
     return value;
@@ -277,28 +277,26 @@ getColor(proplist_t texture)
  * IconTitleBack
  */
 void
-hackStyle(proplist_t style)
+hackStyle(WMPropList *style)
 {
-    proplist_t keys;
-    proplist_t tmp;
+    WMPropList *keys, *tmp;
+    int foundIconTitle = 0, foundResizebarBack = 0;
     int i;
-    int foundIconTitle = 0;
-    int foundResizebarBack = 0;
 
-    keys = PLGetAllDictionaryKeys(style);
+    keys = WMGetPLDictionaryKeys(style);
 
-    for (i = 0; i < PLGetNumberOfElements(keys); i++) {
+    for (i = 0; i < WMGetPropListItemCount(keys); i++) {
 	char *str;
 
-	tmp = PLGetArrayElement(keys, i);
-	str = PLGetString(tmp);
+	tmp = WMGetFromPLArray(keys, i);
+	str = WMGetFromPLString(tmp);
 	if (str) {
 	    int j, found;
 
 	    if (ignoreFonts) {
 		for (j = 0, found = 0; FontOptions[j]!=NULL; j++) {
 		    if (strcasecmp(str, FontOptions[j])==0) {
-			PLRemoveDictionaryEntry(style, tmp);
+			WMRemoveFromPLDictionary(style, tmp);
 			found = 1;
 			break;
 		    }
@@ -309,7 +307,7 @@ hackStyle(proplist_t style)
 	    if (ignoreCursors) {
 	        for (j = 0, found = 0; CursorOptions[j] != NULL; j++) {
 		    if (strcasecmp(str, CursorOptions[j]) == 0) {
-		        PLRemoveDictionaryEntry(style, tmp);
+		        WMRemoveFromPLDictionary(style, tmp);
 		        found = 1;
 		        break;
 		    }
@@ -329,20 +327,20 @@ hackStyle(proplist_t style)
 
     if (!foundIconTitle) {
 	/* set the default values */
-	tmp = PLGetDictionaryEntry(style, PLMakeString("FTitleColor"));
+	tmp = WMGetFromPLDictionary(style, WMCreatePLString("FTitleColor"));
 	if (tmp) {
-	    PLInsertDictionaryEntry(style, PLMakeString("IconTitleColor"),
+	    WMPutInPLDictionary(style, WMCreatePLString("IconTitleColor"),
 				    tmp);
 	}
 
-	tmp = PLGetDictionaryEntry(style, PLMakeString("FTitleBack"));
+	tmp = WMGetFromPLDictionary(style, WMCreatePLString("FTitleBack"));
 	if (tmp) {
-	    proplist_t value;
+	    WMPropList *value;
 
 	    value = getColor(tmp);
 
 	    if (value) {
-		PLInsertDictionaryEntry(style, PLMakeString("IconTitleBack"),
+		WMPutInPLDictionary(style, WMCreatePLString("IconTitleBack"),
 					value);
 	    }
 	}
@@ -350,43 +348,28 @@ hackStyle(proplist_t style)
 
     if (!foundResizebarBack) {
 	/* set the default values */
-	tmp = PLGetDictionaryEntry(style, PLMakeString("UTitleBack"));
+	tmp = WMGetFromPLDictionary(style, WMCreatePLString("UTitleBack"));
 	if (tmp) {
-	    proplist_t value;
+	    WMPropList *value;
 
 	    value = getColor(tmp);
 
 	    if (value) {
-		proplist_t t;
+		WMPropList *t;
 		
-		t = PLMakeArrayFromElements(PLMakeString("solid"), value, 
+		t = WMCreatePLArray(WMCreatePLString("solid"), value, 
 					    NULL);
-		PLInsertDictionaryEntry(style, PLMakeString("ResizebarBack"),
+		WMPutInPLDictionary(style, WMCreatePLString("ResizebarBack"),
 					t);
 	    }
 	}
     }
 
 
-    if (!PLGetDictionaryEntry(style, PLMakeString("MenuStyle"))) {
-	PLInsertDictionaryEntry(style, PLMakeString("MenuStyle"),
-				PLMakeString("normal"));
+    if (!WMGetFromPLDictionary(style, WMCreatePLString("MenuStyle"))) {
+	WMPutInPLDictionary(style, WMCreatePLString("MenuStyle"),
+				WMCreatePLString("normal"));
     }
-}
-
-
-BOOL
-StringCompareHook(proplist_t pl1, proplist_t pl2)
-{
-    char *str1, *str2;
-
-    str1 = PLGetString(pl1);
-    str2 = PLGetString(pl2);
-
-    if (strcasecmp(str1, str2)==0)
-      return YES;
-    else
-      return NO;
 }
 
 
@@ -418,7 +401,7 @@ print_help()
 int 
 main(int argc, char **argv)
 {
-    proplist_t prop, style;
+    WMPropList *prop, *style;
     char *path;
     char *file = NULL;
     struct stat statbuf;
@@ -479,11 +462,11 @@ main(int argc, char **argv)
 	}
     }
 
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 
     path = defaultsPathForDomain("WindowMaker");
 
-    prop = PLGetProplistWithPath(path);
+    prop = WMReadPropListFromFile(path);
     if (!prop) {
 	perror(path);
 	printf("%s:could not load WindowMaker configuration file.\n",
@@ -536,7 +519,7 @@ main(int argc, char **argv)
 
 	    strcat(buffer, "/style");
 	
-	    style = PLGetProplistWithPath(buffer);
+	    style = WMReadPropListFromFile(buffer);
 	    if (!style) {
 		perror(buffer);
 		printf("%s:could not load style file.\n", ProgName);
@@ -548,7 +531,7 @@ main(int argc, char **argv)
 	} else {
 	    /* normal style file */
 	    
-	    style = PLGetProplistWithPath(file);
+	    style = WMReadPropListFromFile(file);
 	    if (!style) {
 		perror(file);
 		printf("%s:could not load style file.\n", ProgName);
@@ -557,7 +540,7 @@ main(int argc, char **argv)
 	}
     }
     
-    if (!PLIsDictionary(style)) {
+    if (!WMIsPLDictionary(style)) {
 	printf("%s: '%s' is not a style file/theme\n", ProgName, file);
 	exit(1);
     }
@@ -566,13 +549,13 @@ main(int argc, char **argv)
 
     if (ignoreCount > 0) {
 	for (i = 0; i < ignoreCount; i++) {
-	    PLRemoveDictionaryEntry(style, PLMakeString(ignoreList[i]));
+	    WMRemoveFromPLDictionary(style, WMCreatePLString(ignoreList[i]));
 	}
     }
 
-    PLMergeDictionaries(prop, style);
+    WMMergePLDictionaries(prop, style);
 
-    PLSave(prop, YES);
+    WMWritePropListToFile(prop, path, True);
     {
 	XEvent ev;
 	
@@ -609,14 +592,13 @@ getToken(char *str, int i, char *buf)
 }
 
 
-proplist_t
+static WMPropList*
 readBlackBoxStyle(char *path)
 {
     FILE *f;
     char buffer[128], char token[128];
-    proplist_t style;
-    proplist_t p;
-    
+    WMPropList *style, *p;
+
     f = fopen(path, "r");
     if (!f) {
 	perror(path);

@@ -49,7 +49,6 @@
 #include <WINGs/WINGs.h>
 #include <wraster.h>
 
-#include <proplist.h>
 
 #define PROG_VERSION	"wmsetbg (Window Maker) 2.7"
 
@@ -121,27 +120,27 @@ BackgroundTexture*
 parseTexture(RContext *rc, char *text)
 {
     BackgroundTexture *texture = NULL;
-    proplist_t texarray;
-    proplist_t val;
+    WMPropList *texarray;
+    WMPropList *val;
     int count;
     char *tmp;
     char *type;
 
 #define GETSTRORGOTO(val, str, i, label) \
-		val = PLGetArrayElement(texarray, i);\
-		if (!PLIsString(val)) {\
+		val = WMGetFromPLArray(texarray, i);\
+		if (!WMIsPLString(val)) {\
 			wwarning("could not parse texture %s", text);\
 			goto label;\
 		}\
-		str = PLGetString(val)
+		str = WMGetFromPLString(val)
 
-    texarray = PLGetProplistWithDescription(text);
-    if (!texarray || !PLIsArray(texarray) 
-	|| (count = PLGetNumberOfElements(texarray)) < 2) {
+    texarray = WMCreatePropListFromDescription(text);
+    if (!texarray || !WMIsPLArray(texarray) 
+	|| (count = WMGetPropListItemCount(texarray)) < 2) {
 
 	wwarning("could not parse texture %s", text);
 	if (texarray)
-	    PLRelease(texarray);
+	    WMReleasePropList(texarray);
 	return NULL;
     }
 
@@ -263,8 +262,8 @@ parseTexture(RContext *rc, char *text)
 	memset(colors, 0, sizeof(RColor*)*(count-1));
 
 	for (i = 2; i < count; i++) {
-	    val = PLGetArrayElement(texarray, i);
-	    if (!PLIsString(val)) {
+	    val = WMGetFromPLArray(texarray, i);
+	    if (!WMIsPLString(val)) {
 		wwarning("could not parse texture %s", text);
 
 		for (j = 0; colors[j]!=NULL; j++)
@@ -272,7 +271,7 @@ parseTexture(RContext *rc, char *text)
 		wfree(colors);
 		goto error;
 	    }
-	    tmp = PLGetString(val);
+	    tmp = WMGetFromPLString(val);
 
 	    if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
 		wwarning("could not parse color %s in texture %s",
@@ -687,7 +686,7 @@ error:
     if (texture)
 	wfree(texture);
     if (texarray)
-	PLRelease(texarray);
+	WMReleasePropList(texarray);
 
     return NULL;
 }
@@ -1032,30 +1031,28 @@ globalDefaultsPathForDomain(char *domain)
 }
 
 
-proplist_t
+static WMPropList*
 getValueForKey(char *domain, char *keyName)
 {
     char *path;
-    proplist_t key;
-    proplist_t d;
-    proplist_t val;
+    WMPropList *key, *val, *d;
 
-    key = PLMakeString(keyName);
+    key = WMCreatePLString(keyName);
 
     /* try to find PixmapPath in user defaults */
     path = wdefaultspathfordomain(domain);
-    d = PLGetProplistWithPath(path);
+    d = WMReadPropListFromFile(path);
     if (!d) {
 	wwarning("could not open domain file %s", path);
     }
     wfree(path);
 
-    if (d && !PLIsDictionary(d)) {
-	PLRelease(d);
+    if (d && !WMIsPLDictionary(d)) {
+	WMReleasePropList(d);
 	d = NULL;
     }
     if (d) {
-	val = PLGetDictionaryEntry(d, key);
+	val = WMGetFromPLDictionary(d, key);
     } else {
 	val = NULL;
     }
@@ -1066,16 +1063,16 @@ getValueForKey(char *domain, char *keyName)
 	    wwarning("could not locate file for domain %s", domain);
 	    d = NULL;
 	} else {
-	    d = PLGetProplistWithPath(path);
+	    d = WMReadPropListFromFile(path);
 	    wfree(path);
 	}
 
-	if (d && !PLIsDictionary(d)) {
-	    PLRelease(d);
+	if (d && !WMIsPLDictionary(d)) {
+	    WMReleasePropList(d);
 	    d = NULL;
 	}
 	if (d) {
-	    val = PLGetDictionaryEntry(d, key);
+	    val = WMGetFromPLDictionary(d, key);
 	    
 	} else {
 	    val = NULL;
@@ -1083,11 +1080,11 @@ getValueForKey(char *domain, char *keyName)
     }
 
     if (val)
-	PLRetain(val);
+	WMRetainPropList(val);
 
-    PLRelease(key);
+    WMReleasePropList(key);
     if (d)
-	PLRelease(d);
+	WMReleasePropList(d);
 
     return val;
 }
@@ -1097,50 +1094,50 @@ getValueForKey(char *domain, char *keyName)
 char*
 getPixmapPath(char *domain)
 {
-    proplist_t val;
+    WMPropList *val;
     char *ptr, *data;
     int len, i, count;
 
     val = getValueForKey(domain, "PixmapPath");
     
-    if (!val || !PLIsArray(val)) {
+    if (!val || !WMIsPLArray(val)) {
 	if (val)
-	    PLRelease(val);
+	    WMReleasePropList(val);
 	return wstrdup("");
     }
 
-    count = PLGetNumberOfElements(val);
+    count = WMGetPropListItemCount(val);
     len = 0;
     for (i=0; i<count; i++) {
-	proplist_t v;
+	WMPropList *v;
 
-	v = PLGetArrayElement(val, i);
-	if (!v || !PLIsString(v)) {
+	v = WMGetFromPLArray(val, i);
+	if (!v || !WMIsPLString(v)) {
 	    continue;
 	}
-	len += strlen(PLGetString(v))+1;
+	len += strlen(WMGetFromPLString(v))+1;
     }
 
     ptr = data = wmalloc(len+1);
     *ptr = 0;
 
     for (i=0; i<count; i++) {
-	proplist_t v;
+	WMPropList *v;
 
-	v = PLGetArrayElement(val, i);
-	if (!v || !PLIsString(v)) {
+	v = WMGetFromPLArray(val, i);
+	if (!v || !WMIsPLString(v)) {
 	    continue;
 	}
-	strcpy(ptr, PLGetString(v));
+	strcpy(ptr, WMGetFromPLString(v));
 
-	ptr += strlen(PLGetString(v));
+	ptr += strlen(WMGetFromPLString(v));
 	*ptr = ':';
 	ptr++;
     }
     if (i>0)
 	ptr--; *(ptr--) = 0;
 
-    PLRelease(val);
+    WMReleasePropList(val);
 
     return data;
 }
@@ -1216,12 +1213,11 @@ P("     --help 			show this help and exit");
 void
 changeTextureForWorkspace(char *domain, char *texture, int workspace)
 {
-    proplist_t array;
-    proplist_t val;
+    WMPropList *array, *val;
     char *value;
     int j;
     
-    val = PLGetProplistWithDescription(texture);
+    val = WMCreatePropListFromDescription(texture);
     if (!val) {
 	wwarning("could not parse texture %s", texture);
 	return;
@@ -1230,25 +1226,25 @@ changeTextureForWorkspace(char *domain, char *texture, int workspace)
     array = getValueForKey("WindowMaker", "WorkspaceSpecificBack");
 
     if (!array) {
-	array = PLMakeArrayFromElements(NULL, NULL);
+	array = WMCreatePLArray(NULL, NULL);
     }
 
-    j = PLGetNumberOfElements(array);
+    j = WMGetPropListItemCount(array);
     if (workspace >= j) {
-	proplist_t empty;
+	WMPropList *empty;
 
-	empty = PLMakeArrayFromElements(NULL, NULL);
+	empty = WMCreatePLArray(NULL, NULL);
 
 	while (j++ < workspace-1) {
-	    PLAppendArrayElement(array, empty);
+	    WMAddToPLArray(array, empty);
 	}
-	PLAppendArrayElement(array, val);
+	WMAddToPLArray(array, val);
     } else {
-	PLRemoveArrayElement(array, workspace);
-	PLInsertArrayElement(array, val, workspace);
+	WMDeleteFromPLArray(array, workspace);
+	WMInsertInPLArray(array, workspace, val);
     }
 
-    value = PLGetDescription(array);
+    value = WMGetPropListDescription(array, False);
     updateDomain(domain, "WorkspaceSpecificBack", value);
 }
 
@@ -1391,15 +1387,15 @@ main(int argc, char **argv)
     
     PixmapPath = getPixmapPath(domain);
     if (!smooth) {
-	proplist_t val;
+	WMPropList *val;
 #if 0 /* some problem with Alpha... TODO: check if its right */
-	val = PLGetDictionaryEntry(domain, 
-				   PLMakeString("SmoothWorkspaceBack"));
+	val = WMGetFromPLDictionary(domain, 
+				   WMCreatePLString("SmoothWorkspaceBack"));
 #else
 	val = getValueForKey(domain, "SmoothWorkspaceBack");
 #endif
 
-	if (val && PLIsString(val) && strcasecmp(PLGetString(val), "YES")==0)
+	if (val && WMIsPLString(val) && strcasecmp(WMGetFromPLString(val), "YES")==0)
 	    smooth = True;
     }
 

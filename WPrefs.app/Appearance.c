@@ -122,7 +122,7 @@ typedef struct _Panel {
 typedef struct {
     char *title;
     char *texture;
-    proplist_t prop;
+    WMPropList *prop;
     Pixmap preview;
 
     char *path;
@@ -437,13 +437,13 @@ dumpRImage(char *path, RImage *image)
 
 
 static int
-isPixmap(proplist_t prop)
+isPixmap(WMPropList *prop)
 {
-    proplist_t p;
+    WMPropList *p;
     char *s;
 
-    p = PLGetArrayElement(prop, 0);
-    s = PLGetString(p);
+    p = WMGetFromPLArray(prop, 0);
+    s = WMGetFromPLString(p);
     if (strcasecmp(&s[1], "pixmap")==0)
 	return 1;
     else
@@ -518,7 +518,7 @@ drawMenuBevel(RImage *img)
 
 
 static Pixmap
-renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
+renderTexture(WMScreen *scr, WMPropList *texture, int width, int height,
 	      char *path, int border)
 {
     char *type;
@@ -529,11 +529,11 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
     RColor rcolor;
 
 
-    type = PLGetString(PLGetArrayElement(texture, 0));
+    type = WMGetFromPLString(WMGetFromPLArray(texture, 0));
 
     if (strcasecmp(type, "solid")==0) {
 
-	str = PLGetString(PLGetArrayElement(texture, 1));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 1));
 
 	str2rcolor(rc, str, &rcolor);
 
@@ -543,18 +543,18 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	int t1, t2;
 	RColor c1[2], c2[2];
 
-	str = PLGetString(PLGetArrayElement(texture, 1));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 1));
 	str2rcolor(rc, str, &c1[0]);
-	str = PLGetString(PLGetArrayElement(texture, 2));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 2));
 	str2rcolor(rc, str, &c1[1]);
-	str = PLGetString(PLGetArrayElement(texture, 3));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 3));
 	t1 = atoi(str);
 
-	str = PLGetString(PLGetArrayElement(texture, 4));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 4));
 	str2rcolor(rc, str, &c2[0]);
-	str = PLGetString(PLGetArrayElement(texture, 5));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 5));
 	str2rcolor(rc, str, &c2[1]);
-	str = PLGetString(PLGetArrayElement(texture, 6));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 6));
 	t2 = atoi(str);
 
 	image = RRenderInterwovenGradient(width, height, c1, t1, c2, t2);
@@ -575,9 +575,9 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    break;
 	}
 
-	str = PLGetString(PLGetArrayElement(texture, 1));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 1));
 	str2rcolor(rc, str, &rcolor);
-	str = PLGetString(PLGetArrayElement(texture, 2));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 2));
 	str2rcolor(rc, str, &rcolor2);
 
 	image = RRenderGradient(width, height, &rcolor, &rcolor2, style);
@@ -601,12 +601,12 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    break;
 	}
 
-	str = PLGetString(PLGetArrayElement(texture, 3));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 3));
 	str2rcolor(rc, str, &rcolor);
-	str = PLGetString(PLGetArrayElement(texture, 4));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 4));
 	str2rcolor(rc, str, &rcolor2);
 
-	str = PLGetString(PLGetArrayElement(texture, 1));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 1));
 
 	if ((path=wfindfileinarray(GetObjectForKey("PixmapPath"), str))!=NULL)
             timage = RLoadImage(rc, path, 0);
@@ -620,7 +620,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    image = RMakeTiledImage(timage, width, height);
 	    RReleaseImage(timage);
 
-	    i = atoi(PLGetString(PLGetArrayElement(texture, 2)));
+	    i = atoi(WMGetFromPLString(WMGetFromPLArray(texture, 2)));
 	
 	    RCombineImagesWithOpaqueness(image, grad, i);
 	    RReleaseImage(grad);
@@ -643,13 +643,13 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    break;
 	}
 
-	j = PLGetNumberOfElements(texture);
+	j = WMGetPropListItemCount(texture);
 	
 	if (j > 0) {
 	    colors = wmalloc(j * sizeof(RColor*));
 
 	    for (i = 2; i < j; i++) {
-		str = PLGetString(PLGetArrayElement(texture, i));
+		str = WMGetFromPLString(WMGetFromPLArray(texture, i));
 		colors[i-2] = wmalloc(sizeof(RColor));
 		str2rcolor(rc, str, colors[i-2]);
 	    }
@@ -666,7 +666,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	char *path;
 	RColor color;
 
-	str = PLGetString(PLGetArrayElement(texture, 1));
+	str = WMGetFromPLString(WMGetFromPLArray(texture, 1));
 
 	if ((path=wfindfileinarray(GetObjectForKey("PixmapPath"), str))!=NULL)
             timage = RLoadImage(rc, path, 0);
@@ -675,7 +675,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 	    wwarning("could not load file '%s': %s", path ? path : str,
 		     RMessageForError(RErrorCode));
 	} else {
-	    str = PLGetString(PLGetArrayElement(texture, 2));
+	    str = WMGetFromPLString(WMGetFromPLArray(texture, 2));
 	    str2rcolor(rc, str, &color);
 
 	    switch (toupper(type[0])) {
@@ -727,7 +727,7 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 
 
 static Pixmap
-renderMenu(_Panel *panel, proplist_t texture, int width, int iheight)
+renderMenu(_Panel *panel, WMPropList *texture, int width, int iheight)
 {
     WMScreen *scr = WMWidgetScreen(panel->parent);
     Display *dpy = WMScreenDisplay(scr);
@@ -949,7 +949,7 @@ okNewTexture(void *data)
     WMListItem *item;
     char *name;
     char *str;
-    proplist_t prop;
+    WMPropList *prop;
     TextureListItem *titem;
     WMScreen *scr = WMWidgetScreen(panel->parent);
 
@@ -962,7 +962,7 @@ okNewTexture(void *data)
 
     prop = GetTexturePanelTexture(panel->texturePanel);
 
-    str = PLGetDescription(prop);
+    str = WMGetPropListDescription(prop, False);
 
     titem->title = name;
     titem->prop = prop;
@@ -989,7 +989,7 @@ okEditTexture(void *data)
     WMListItem *item;
     char *name;
     char *str;
-    proplist_t prop;
+    WMPropList *prop;
     TextureListItem *titem;
 
     item = WMGetListItem(panel->texLs, WMGetListSelectedItemRow(panel->texLs));
@@ -1006,9 +1006,9 @@ okEditTexture(void *data)
 
     prop = GetTexturePanelTexture(panel->texturePanel);
 
-    str = PLGetDescription(prop);
+    str = WMGetPropListDescription(prop, False);
 
-    PLRelease(titem->prop);
+    WMReleasePropList(titem->prop);
     titem->prop = prop;
 
     titem->ispixmap = isPixmap(prop);
@@ -1098,7 +1098,7 @@ deleteTexture(WMWidget *w, void *data)
 
     wfree(titem->title);
     wfree(titem->texture);
-    PLRelease(titem->prop);
+    WMReleasePropList(titem->prop);
     if (titem->path) {
 	if (remove(titem->path) < 0 && errno != ENOENT) {
 	    wsyserror("could not remove file %s", titem->path);
@@ -1373,8 +1373,8 @@ loadRImage(WMScreen *scr, char *path)
 static void
 fillTextureList(WMList *lPtr)
 {
-    proplist_t textureList;
-    proplist_t texture;
+    WMPropList *textureList;
+    WMPropList *texture;
     WMUserDefaults *udb = WMGetStandardUserDefaults();
     TextureListItem *titem;
     WMScreen *scr  = WMWidgetScreen(lPtr);
@@ -1384,19 +1384,19 @@ fillTextureList(WMList *lPtr)
     if (!textureList)
 	return;
 
-    for (i = 0; i < PLGetNumberOfElements(textureList); i++) {
+    for (i = 0; i < WMGetPropListItemCount(textureList); i++) {
 	WMListItem *item;
 
-	texture = PLGetArrayElement(textureList, i);
+	texture = WMGetFromPLArray(textureList, i);
 
 	titem = wmalloc(sizeof(TextureListItem));
 	memset(titem, 0, sizeof(TextureListItem));
 
-	titem->title = wstrdup(PLGetString(PLGetArrayElement(texture, 0)));
-	titem->prop = PLRetain(PLGetArrayElement(texture, 1));
-	titem->texture = PLGetDescription(titem->prop);
+	titem->title = wstrdup(WMGetFromPLString(WMGetFromPLArray(texture, 0)));
+	titem->prop = WMRetainPropList(WMGetFromPLArray(texture, 1));
+	titem->texture = WMGetPropListDescription(titem->prop, False);
 	titem->selectedFor = 0;
-	titem->path = wstrdup(PLGetString(PLGetArrayElement(texture, 2)));
+	titem->path = wstrdup(WMGetFromPLString(WMGetFromPLArray(texture, 2)));
 
 	titem->preview = loadRImage(scr, titem->path);
 	if (!titem->preview) {
@@ -1413,7 +1413,7 @@ static void
 fillColorList(_Panel *panel)
 {
     WMColor *color;
-    proplist_t list;
+    WMPropList *list;
     WMUserDefaults *udb = WMGetStandardUserDefaults();
     WMScreen *scr = WMWidgetScreen(panel->box);
     int i;
@@ -1428,13 +1428,13 @@ fillColorList(_Panel *panel)
 	    WMReleaseColor(color);
 	}
     } else {
-	proplist_t c;
+	WMPropList *c;
 
-	for (i = 0; i < WMIN(24, PLGetNumberOfElements(list)); i++) {
-	    c = PLGetArrayElement(list, i);
-	    if (!c || !PLIsString(c))
+	for (i = 0; i < WMIN(24, WMGetPropListItemCount(list)); i++) {
+	    c = WMGetFromPLArray(list, i);
+	    if (!c || !WMIsPLString(c))
 		continue;
-	    color = WMCreateNamedColor(scr, PLGetString(c), False);
+	    color = WMCreateNamedColor(scr, WMGetFromPLString(c), False);
 	    if (!color)
 		continue;
 	    WMSetColorWellColor(panel->sampW[i], color);
@@ -2034,13 +2034,13 @@ setupTextureFor(WMList *list, char *key, char *defValue, char *title,
 
     titem->title = wstrdup(title);
     titem->prop = GetObjectForKey(key);
-    if (!titem->prop || !PLIsArray(titem->prop)) {
+    if (!titem->prop || !WMIsPLArray(titem->prop)) {
         /* Maybe also give a error message to stderr that the entry is bad? */
-	titem->prop = PLGetProplistWithDescription(defValue);
+	titem->prop = WMCreatePropListFromDescription(defValue);
     } else {
-	PLRetain(titem->prop);
+	WMRetainPropList(titem->prop);
     }
-    titem->texture = PLGetDescription((proplist_t)titem->prop);
+    titem->texture = WMGetPropListDescription((WMPropList*)titem->prop, False);
     titem->current = 1;
     titem->selectedFor = 1<<index;
     
@@ -2160,33 +2160,33 @@ storeData(_Panel *panel)
 static void
 prepareForClose(_Panel *panel)
 {
-    proplist_t textureList;
-    proplist_t texture;
+    WMPropList *textureList;
+    WMPropList *texture;
     TextureListItem *titem;
     WMListItem *item;
     WMUserDefaults *udb = WMGetStandardUserDefaults();
     int i;
 
-    textureList = PLMakeArrayFromElements(NULL, NULL);
+    textureList = WMCreatePLArray(NULL, NULL);
 
     /* store list of textures */
     for (i = 7; i < WMGetListNumberOfRows(panel->texLs); i++) {
 	item = WMGetListItem(panel->texLs, i);
 	titem = (TextureListItem*)item->clientData;
 
-	texture = PLMakeArrayFromElements(PLMakeString(titem->title),
-					  PLRetain(titem->prop),
-					  PLMakeString(titem->path),
+	texture = WMCreatePLArray(WMCreatePLString(titem->title),
+					  WMRetainPropList(titem->prop),
+					  WMCreatePLString(titem->path),
 					  NULL);
 
-	PLAppendArrayElement(textureList, texture);
+	WMAddToPLArray(textureList, texture);
     }
 
     WMSetUDObjectForKey(udb, textureList, "TextureList");
-    PLRelease(textureList);
+    WMReleasePropList(textureList);
     
     /* store list of colors */
-    textureList = PLMakeArrayFromElements(NULL, NULL);
+    textureList = WMCreatePLArray(NULL, NULL);
     for (i = 0; i < 24; i++) {
 	WMColor *color;
 	char *str;
@@ -2194,11 +2194,11 @@ prepareForClose(_Panel *panel)
 	color = WMGetColorWellColor(panel->sampW[i]);
 
 	str = WMGetColorRGBDescription(color);
-	PLAppendArrayElement(textureList, PLMakeString(str));
+	WMAddToPLArray(textureList, WMCreatePLString(str));
 	wfree(str);
     }
     WMSetUDObjectForKey(udb, textureList, "ColorList");
-    PLRelease(textureList);
+    WMReleasePropList(textureList);
 
     WMSynchronizeUserDefaults(udb);
 }

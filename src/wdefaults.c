@@ -48,7 +48,7 @@
 
 extern WPreferences wPreferences;
 
-extern proplist_t wAttributeDomainName;
+extern WMPropList *wAttributeDomainName;
 
 extern WDDomain *WDWindowAttributes;
 
@@ -57,83 +57,83 @@ extern WDDomain *WDWindowAttributes;
 
 
 /* type converters */
-static int getBool(proplist_t, proplist_t);
+static int getBool(WMPropList*, WMPropList*);
 
-static char* getString(proplist_t, proplist_t);
+static char* getString(WMPropList*, WMPropList*);
 
 
-static proplist_t ANoTitlebar = NULL;
-static proplist_t ANoResizebar;
-static proplist_t ANoMiniaturizeButton;
-static proplist_t ANoCloseButton;
-static proplist_t ANoBorder;
-static proplist_t ANoHideOthers;
-static proplist_t ANoMouseBindings;
-static proplist_t ANoKeyBindings;
-static proplist_t ANoAppIcon;	       /* app */
-static proplist_t AKeepOnTop;
-static proplist_t AKeepOnBottom;
-static proplist_t AOmnipresent;
-static proplist_t ASkipWindowList;
-static proplist_t AKeepInsideScreen;
-static proplist_t AUnfocusable;
-static proplist_t AAlwaysUserIcon;
-static proplist_t AStartMiniaturized;
-static proplist_t AStartMaximized;
-static proplist_t AStartHidden;	       /* app */
-static proplist_t ADontSaveSession;    /* app */
-static proplist_t AEmulateAppIcon;
-static proplist_t AFullMaximize;
-static proplist_t ACollapseAppIcons;   /* app */
+static WMPropList *ANoTitlebar = NULL;
+static WMPropList *ANoResizebar;
+static WMPropList *ANoMiniaturizeButton;
+static WMPropList *ANoCloseButton;
+static WMPropList *ANoBorder;
+static WMPropList *ANoHideOthers;
+static WMPropList *ANoMouseBindings;
+static WMPropList *ANoKeyBindings;
+static WMPropList *ANoAppIcon;	       /* app */
+static WMPropList *AKeepOnTop;
+static WMPropList *AKeepOnBottom;
+static WMPropList *AOmnipresent;
+static WMPropList *ASkipWindowList;
+static WMPropList *AKeepInsideScreen;
+static WMPropList *AUnfocusable;
+static WMPropList *AAlwaysUserIcon;
+static WMPropList *AStartMiniaturized;
+static WMPropList *AStartMaximized;
+static WMPropList *AStartHidden;	       /* app */
+static WMPropList *ADontSaveSession;    /* app */
+static WMPropList *AEmulateAppIcon;
+static WMPropList *AFullMaximize;
+static WMPropList *ACollapseAppIcons;   /* app */
 #ifdef XKB_BUTTON_HINT
-static proplist_t ANoLanguageButton;
+static WMPropList *ANoLanguageButton;
 #endif
 
-static proplist_t AStartWorkspace;
+static WMPropList *AStartWorkspace;
 
-static proplist_t AIcon;
+static WMPropList *AIcon;
 
 
-static proplist_t AnyWindow;
-static proplist_t No;
+static WMPropList *AnyWindow;
+static WMPropList *No;
 
 
 static void
 init_wdefaults(WScreen *scr)
 {
-    AIcon = PLMakeString("Icon");
+    AIcon = WMCreatePLString("Icon");
     
-    ANoTitlebar = PLMakeString("NoTitlebar");
-    ANoResizebar = PLMakeString("NoResizebar");
-    ANoMiniaturizeButton = PLMakeString("NoMiniaturizeButton");
-    ANoCloseButton = PLMakeString("NoCloseButton");
-    ANoBorder = PLMakeString("NoBorder");
-    ANoHideOthers = PLMakeString("NoHideOthers");
-    ANoMouseBindings = PLMakeString("NoMouseBindings");
-    ANoKeyBindings = PLMakeString("NoKeyBindings");
-    ANoAppIcon = PLMakeString("NoAppIcon");
-    AKeepOnTop = PLMakeString("KeepOnTop");
-    AKeepOnBottom = PLMakeString("KeepOnBottom");
-    AOmnipresent = PLMakeString("Omnipresent");
-    ASkipWindowList = PLMakeString("SkipWindowList");
-    AKeepInsideScreen = PLMakeString("KeepInsideScreen");
-    AUnfocusable = PLMakeString("Unfocusable");
-    AAlwaysUserIcon = PLMakeString("AlwaysUserIcon");
-    AStartMiniaturized = PLMakeString("StartMiniaturized");
-    AStartHidden = PLMakeString("StartHidden");
-    AStartMaximized = PLMakeString("StartMaximized");
-    ADontSaveSession = PLMakeString("DontSaveSession");
-    AEmulateAppIcon = PLMakeString("EmulateAppIcon");
-    AFullMaximize = PLMakeString("FullMaximize");
-    ACollapseAppIcons = PLMakeString("CollapseAppIcons");
+    ANoTitlebar = WMCreatePLString("NoTitlebar");
+    ANoResizebar = WMCreatePLString("NoResizebar");
+    ANoMiniaturizeButton = WMCreatePLString("NoMiniaturizeButton");
+    ANoCloseButton = WMCreatePLString("NoCloseButton");
+    ANoBorder = WMCreatePLString("NoBorder");
+    ANoHideOthers = WMCreatePLString("NoHideOthers");
+    ANoMouseBindings = WMCreatePLString("NoMouseBindings");
+    ANoKeyBindings = WMCreatePLString("NoKeyBindings");
+    ANoAppIcon = WMCreatePLString("NoAppIcon");
+    AKeepOnTop = WMCreatePLString("KeepOnTop");
+    AKeepOnBottom = WMCreatePLString("KeepOnBottom");
+    AOmnipresent = WMCreatePLString("Omnipresent");
+    ASkipWindowList = WMCreatePLString("SkipWindowList");
+    AKeepInsideScreen = WMCreatePLString("KeepInsideScreen");
+    AUnfocusable = WMCreatePLString("Unfocusable");
+    AAlwaysUserIcon = WMCreatePLString("AlwaysUserIcon");
+    AStartMiniaturized = WMCreatePLString("StartMiniaturized");
+    AStartHidden = WMCreatePLString("StartHidden");
+    AStartMaximized = WMCreatePLString("StartMaximized");
+    ADontSaveSession = WMCreatePLString("DontSaveSession");
+    AEmulateAppIcon = WMCreatePLString("EmulateAppIcon");
+    AFullMaximize = WMCreatePLString("FullMaximize");
+    ACollapseAppIcons = WMCreatePLString("CollapseAppIcons");
 #ifdef XKB_BUTTON_HINT
-    ANoLanguageButton = PLMakeString("NoLanguageButton");
+    ANoLanguageButton = WMCreatePLString("NoLanguageButton");
 #endif
 
-    AStartWorkspace = PLMakeString("StartWorkspace");
+    AStartWorkspace = WMCreatePLString("StartWorkspace");
     
-    AnyWindow = PLMakeString("*");
-    No = PLMakeString("No");
+    AnyWindow = WMCreatePLString("*");
+    No = WMCreatePLString("No");
     /*
     if (!scr->wattribs) {
 	scr->wattribs = PLGetDomain(wAttributeDomainName);
@@ -142,28 +142,28 @@ init_wdefaults(WScreen *scr)
 
 
 
-static proplist_t
-get_value(proplist_t dict_win, proplist_t dict_class, proplist_t dict_name, 
-	  proplist_t dict_any, proplist_t option, proplist_t default_value,
+static WMPropList*
+get_value(WMPropList *dict_win, WMPropList *dict_class, WMPropList *dict_name, 
+	  WMPropList *dict_any, WMPropList *option, WMPropList *default_value,
 	  Bool useGlobalDefault)
 {
-    proplist_t value;
+    WMPropList *value;
     
 
     if (dict_win) {
-	value = PLGetDictionaryEntry(dict_win, option);
+	value = WMGetFromPLDictionary(dict_win, option);
 	if (value)
 	    return value;
     }
     
     if (dict_name) {
-	value = PLGetDictionaryEntry(dict_name, option);
+	value = WMGetFromPLDictionary(dict_name, option);
 	if (value)
 	    return value;
     }
 
     if (dict_class) {
-	value = PLGetDictionaryEntry(dict_class, option);
+	value = WMGetFromPLDictionary(dict_class, option);
 	if (value)
 	    return value;
     }
@@ -172,7 +172,7 @@ get_value(proplist_t dict_win, proplist_t dict_class, proplist_t dict_name,
 	return NULL;
         
     if (dict_any) {
-	value = PLGetDictionaryEntry(dict_any, option);
+	value = WMGetFromPLDictionary(dict_any, option);
 	if (value)
 	    return value;
     }
@@ -198,26 +198,24 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 		       WWindowAttributes *mask,
 		       Bool useGlobalDefault)
 {
-    proplist_t value;
-    proplist_t key1, key2, key3;
-    proplist_t dw, dc, dn, da;
+    WMPropList *value, *key1, *key2, *key3, *dw, *dc, *dn, *da;
 
 
     if (class && instance) {
       char *buffer = NULL;
 	  buffer = wmalloc(strlen(class)+strlen(instance)+4);
-      key1 = PLMakeString(strcat(strcat(strcpy(buffer,instance),"."),class));
+      key1 = WMCreatePLString(strcat(strcat(strcpy(buffer,instance),"."),class));
 	  wfree(buffer);
     } else
       key1 = NULL;
 
     if (instance)
-      key2 = PLMakeString(instance);
+      key2 = WMCreatePLString(instance);
     else
       key2 = NULL;
 
     if (class)
-      key3 = PLMakeString(class);
+      key3 = WMCreatePLString(class);
     else
       key3 = NULL;
     
@@ -225,14 +223,14 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 	init_wdefaults(scr);
     }
 
-    PLSetStringCmpHook(NULL);
+    WMPLSetCaseSensitive(True);
 
     if (WDWindowAttributes->dictionary) {
-	dw = key1 ? PLGetDictionaryEntry(WDWindowAttributes->dictionary, key1) : NULL;
-	dn = key2 ? PLGetDictionaryEntry(WDWindowAttributes->dictionary, key2) : NULL;
-	dc = key3 ? PLGetDictionaryEntry(WDWindowAttributes->dictionary, key3) : NULL;
+	dw = key1 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key1) : NULL;
+	dn = key2 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key2) : NULL;
+	dc = key3 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key3) : NULL;
 	if (useGlobalDefault)
-	    da = PLGetDictionaryEntry(WDWindowAttributes->dictionary, AnyWindow);
+	    da = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
 	else
 	    da = NULL;
     } else {
@@ -242,11 +240,11 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 	da = NULL;
     }
     if (key1)
-      PLRelease(key1);
+      WMReleasePropList(key1);
     if (key2)
-      PLRelease(key2);
+      WMReleasePropList(key2);
     if (key3)
-      PLRelease(key3);
+      WMReleasePropList(key3);
 
 #define APPLY_VAL(value, flag, attrib)	\
 	if (value) {attr->flag = getBool(attrib, value); \
@@ -328,65 +326,65 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 #endif
 
     /* clean up */
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 }
 
 
 
-proplist_t
-get_generic_value(WScreen *scr, char *instance, char *class, proplist_t option,
+WMPropList*
+get_generic_value(WScreen *scr, char *instance, char *class, WMPropList *option,
 		  Bool noDefault)
 {
-    proplist_t value, key, dict;
+    WMPropList *value, *key, *dict;
     
     value = NULL;
 
-    PLSetStringCmpHook(NULL);
+    WMPLSetCaseSensitive(True);
 
     if (class && instance) {
 	char *buffer = NULL;
 	buffer = wmalloc(strlen(class)+strlen(instance)+4);
-	key = PLMakeString(strcat(strcat(strcpy(buffer,instance),"."),class));
+	key = WMCreatePLString(strcat(strcat(strcpy(buffer,instance),"."),class));
 
-	dict = PLGetDictionaryEntry(WDWindowAttributes->dictionary, key);
-	PLRelease(key);
+	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+	WMReleasePropList(key);
 	wfree(buffer);
 
 	if (dict) {
-	    value = PLGetDictionaryEntry(dict, option);
+	    value = WMGetFromPLDictionary(dict, option);
 	}
     }
 
     if (!value && instance) {
-	key = PLMakeString(instance);
+	key = WMCreatePLString(instance);
 	
-	dict = PLGetDictionaryEntry(WDWindowAttributes->dictionary, key);
-	PLRelease(key);
+	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+	WMReleasePropList(key);
 	if (dict) {
-	    value = PLGetDictionaryEntry(dict, option);
+	    value = WMGetFromPLDictionary(dict, option);
 	}
     }
 
     if (!value && class) {
-	key = PLMakeString(class);
+	key = WMCreatePLString(class);
 	
-	dict = PLGetDictionaryEntry(WDWindowAttributes->dictionary, key);
-	PLRelease(key);
+	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+	WMReleasePropList(key);
 
 	if (dict) {
-	    value = PLGetDictionaryEntry(dict, option);
+	    value = WMGetFromPLDictionary(dict, option);
 	}
     }
 
     if (!value && !noDefault) {
-	dict = PLGetDictionaryEntry(WDWindowAttributes->dictionary, AnyWindow);
+	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
 	
 	if (dict) {
-	    value = PLGetDictionaryEntry(dict, option);
+	    value = WMGetFromPLDictionary(dict, option);
 	}
     }
     
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 
     return value;
 }
@@ -396,7 +394,7 @@ char*
 wDefaultGetIconFile(WScreen *scr, char *instance, char *class, 
 		    Bool noDefault)
 {
-    proplist_t value;
+    WMPropList *value;
     char *tmp;
 
     if (!ANoTitlebar) {
@@ -450,7 +448,7 @@ wDefaultGetImage(WScreen *scr, char *winstance, char *wclass)
 int
 wDefaultGetStartWorkspace(WScreen *scr, char *instance, char *class)
 {
-    proplist_t value;
+    WMPropList *value;
     int w, i;
     char *tmp;
 
@@ -492,69 +490,66 @@ void
 wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
 {
     WDDomain *db = WDWindowAttributes;
-    proplist_t icon_value=NULL, value, attr, key, def_win, def_icon=NULL;
-    proplist_t dict = db->dictionary;
+    WMPropList *icon_value=NULL, *value, *attr, *key, *def_win, *def_icon=NULL;
+    WMPropList *dict = db->dictionary;
     int same = 0;
 
     if (!dict) {
-        dict = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+        dict = WMCreatePLDictionary(NULL, NULL, NULL);
         if (dict) {
             db->dictionary = dict;
-            value = PLMakeString(db->path);
-            PLSetFilename(dict, value);
-            PLRelease(value);
-        }
-        else
+        } else {
             return;
+        }
     }
 
-    PLSetStringCmpHook(NULL);
+    WMPLSetCaseSensitive(True);
 
     if (instance && class) {
     	char *buffer;
         buffer = wmalloc(strlen(instance) + strlen(class) + 2);
         strcat(strcat(strcpy(buffer, instance), "."), class);
-        key = PLMakeString(buffer);
+        key = WMCreatePLString(buffer);
         wfree(buffer);
     } else if (instance) {
-        key = PLMakeString(instance);
+        key = WMCreatePLString(instance);
     } else if (class) {
-        key = PLMakeString(class);
+        key = WMCreatePLString(class);
     } else {
-        key = PLRetain(AnyWindow);
+        key = WMRetainPropList(AnyWindow);
     }
 
     if (file) {
-        value = PLMakeString(file);
-        icon_value = PLMakeDictionaryFromEntries(AIcon, value, NULL);
-        PLRelease(value);
+        value = WMCreatePLString(file);
+        icon_value = WMCreatePLDictionary(AIcon, value, NULL);
+        WMReleasePropList(value);
 
-        if ((def_win = PLGetDictionaryEntry(dict, AnyWindow)) != NULL) {
-            def_icon = PLGetDictionaryEntry(def_win, AIcon);
+        if ((def_win = WMGetFromPLDictionary(dict, AnyWindow)) != NULL) {
+            def_icon = WMGetFromPLDictionary(def_win, AIcon);
         }
 
-        if (def_icon && !strcmp(PLGetString(def_icon), file))
+        if (def_icon && !strcmp(WMGetFromPLString(def_icon), file))
             same = 1;
     }
 
-    if ((attr = PLGetDictionaryEntry(dict, key)) != NULL) {
-        if (PLIsDictionary(attr)) {
+    if ((attr = WMGetFromPLDictionary(dict, key)) != NULL) {
+        if (WMIsPLDictionary(attr)) {
             if (icon_value!=NULL && !same)
-                PLMergeDictionaries(attr, icon_value);
+                WMMergePLDictionaries(attr, icon_value);
             else
-                PLRemoveDictionaryEntry(attr, AIcon);
+                WMRemoveFromPLDictionary(attr, AIcon);
         }
     } else if (icon_value!=NULL && !same) {
-        PLInsertDictionaryEntry(dict, key, icon_value);
+        WMPutInPLDictionary(dict, key, icon_value);
     }
     if (!wPreferences.flags.noupdates)
-	PLSave(dict, YES);
+	WMWritePropListToFile(dict, db->path, True);
 
-    PLRelease(key);
+    WMReleasePropList(key);
     if(icon_value)
-        PLRelease(icon_value);
+        WMReleasePropList(icon_value);
 
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 }
 
 
@@ -562,16 +557,16 @@ wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file)
 /* --------------------------- Local ----------------------- */
 
 static int 
-getBool(proplist_t key, proplist_t value)
+getBool(WMPropList *key, WMPropList *value)
 {
     char *val;
 
-    if (!PLIsString(value)) {
+    if (!WMIsPLString(value)) {
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-		 PLGetString(key), "Boolean");
+		 WMGetFromPLString(key), "Boolean");
 	return 0;
     }
-    val = PLGetString(value);
+    val = WMGetFromPLString(value);
     
     if ((val[1]=='\0' && (val[0]=='y' || val[0]=='Y' || val[0]=='T' 
 			  || val[0]=='t' || val[0]=='1'))
@@ -600,13 +595,13 @@ getBool(proplist_t key, proplist_t value)
  * WARNING: Do not free value returned by this!!
  */
 static char*
-getString(proplist_t key, proplist_t value)
+getString(WMPropList *key, WMPropList *value)
 {    
-    if (!PLIsString(value)) {
+    if (!WMIsPLString(value)) {
 	wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-		 PLGetString(key), "String");
+		 WMGetFromPLString(key), "String");
 	return NULL;
     }
         
-    return PLGetString(value);
+    return WMGetFromPLString(value);
 }

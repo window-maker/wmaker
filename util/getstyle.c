@@ -27,13 +27,13 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <proplist.h>
 #include <string.h>
 #include <unistd.h>
 #include <string.h>
 #include <pwd.h>
 #include <limits.h>
 #include <assert.h>
+#include <WINGs/WUtil.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX  1024
@@ -106,7 +106,7 @@ static char *theme_options[] = {
 
 char *ProgName;
 
-proplist_t PixmapPath = NULL;
+WMPropList *PixmapPath = NULL;
 
 char *ThemePath = NULL;
 
@@ -164,21 +164,6 @@ defaultsPathForDomain(char *domain)
 }
 
 
-BOOL
-StringCompareHook(proplist_t pl1, proplist_t pl2)
-{
-    char *str1, *str2;
-
-    str1 = PLGetString(pl1);
-    str2 = PLGetString(pl2);
-
-    if (strcasecmp(str1, str2)==0)
-      return YES;
-    else
-      return NO;
-}
-
-
 void
 abortar(char *reason)
 {
@@ -226,7 +211,7 @@ wgethomedir()
 
 
 void*
-wmalloc(int size)
+mymalloc(int size)
 {
     void *tmp;
     
@@ -240,11 +225,11 @@ wmalloc(int size)
 
 
 char*
-wstrdup(char *str)
+mystrdup(char *str)
 {
     char *tmp;
     
-    tmp = wmalloc(strlen(str)+1);
+    tmp = mymalloc(strlen(str)+1);
 
     strcpy(tmp, str);
 
@@ -355,13 +340,13 @@ wexpandpath(char *path)
 	}
     }
     
-    return wstrdup(buffer);
+    return mystrdup(buffer);
 }
 
 
 
 char*
-wfindfileinarray(proplist_t paths, char *file)
+wfindfileinarray(WMPropList *paths, char *file)
 {
     int i;
     char *path;
@@ -371,8 +356,8 @@ wfindfileinarray(proplist_t paths, char *file)
     if (!file)
 	return NULL;
     
-    if (*file=='/' || *file=='~' || !paths || !PLIsArray(paths) 
-	|| PLGetNumberOfElements(paths)==0) {
+    if (*file=='/' || *file=='~' || !paths || !WMIsPLArray(paths) 
+	|| WMGetPropListItemCount(paths)==0) {
 	if (access(file, R_OK)<0) {
 	    fullpath = wexpandpath(file);
 	    if (!fullpath)
@@ -385,21 +370,21 @@ wfindfileinarray(proplist_t paths, char *file)
 		return fullpath;
 	    }
 	} else {
-	    return wstrdup(file);
+	    return mystrdup(file);
 	}
     }
 
     flen = strlen(file);
-    for (i=0; i < PLGetNumberOfElements(paths); i++) {
-	proplist_t tmp;
+    for (i=0; i < WMGetPropListItemCount(paths); i++) {
+	WMPropList *tmp;
 	char *dir;
 
-	tmp = PLGetArrayElement(paths, i);
-	if (!PLIsString(tmp) || !(dir = PLGetString(tmp)))
+	tmp = WMGetFromPLArray(paths, i);
+	if (!WMIsPLString(tmp) || !(dir = WMGetFromPLString(tmp)))
 	    continue;
 
 	len = strlen(dir);
-	path = wmalloc(len+flen+2);
+	path = mymalloc(len+flen+2);
 	path = memcpy(path, dir, len);
 	path[len]=0;
 	strcat(path, "/");
@@ -451,21 +436,21 @@ findCopyFile(char *dir, char *file)
 
 
 char*
-makeThemePack(proplist_t style, char *themeName)
+makeThemePack(WMPropList *style, char *themeName)
 {
-    proplist_t keys;
-    proplist_t key;
-    proplist_t value;
+    WMPropList *keys;
+    WMPropList *key;
+    WMPropList *value;
     int i;
     char *themeDir;
 
-    themeDir = wmalloc(strlen(themeName)+50);
+    themeDir = mymalloc(strlen(themeName)+50);
     sprintf(themeDir, "%s.themed", themeName);
     ThemePath = themeDir;
     {
 	char *tmp;
 	
-	tmp = wmalloc(strlen(themeDir)+20);
+	tmp = mymalloc(strlen(themeDir)+20);
 	sprintf(tmp, "/bin/mkdir \"%s\"", themeDir);
 	if (system(tmp)!=0) {
 	    printf("%s: could not create directory %s. Probably there's already a theme with that name in this directory.\n", ProgName, themeDir);
@@ -473,18 +458,18 @@ makeThemePack(proplist_t style, char *themeName)
 	}
 	free(tmp);
     }
-    keys = PLGetAllDictionaryKeys(style);
+    keys = WMGetPLDictionaryKeys(style);
 
-    for (i = 0; i < PLGetNumberOfElements(keys); i++) {
-	key = PLGetArrayElement(keys, i);
+    for (i = 0; i < WMGetPropListItemCount(keys); i++) {
+	key = WMGetFromPLArray(keys, i);
 
-	value = PLGetDictionaryEntry(style, key);
-	if (value && PLIsArray(value) && PLGetNumberOfElements(value) > 2) {
-	    proplist_t type;
+	value = WMGetFromPLDictionary(style, key);
+	if (value && WMIsPLArray(value) && WMGetPropListItemCount(value) > 2) {
+	    WMPropList *type;
 	    char *t;
 
-	    type = PLGetArrayElement(value, 0);
-	    t = PLGetString(type);
+	    type = WMGetFromPLArray(value, 0);
+	    t = WMGetFromPLString(type);
 	    if (t == NULL)
 		continue;
 	    
@@ -495,55 +480,55 @@ makeThemePack(proplist_t style, char *themeName)
 		|| strcasecmp(t, "tdgradient")==0
 		|| strcasecmp(t, "tvgradient")==0
 		|| strcasecmp(t, "thgradient")==0) {
-		proplist_t file;
+		WMPropList *file;
 		char *p;
 		char *newPath;
 
-		file = PLGetArrayElement(value, 1);
+		file = WMGetFromPLArray(value, 1);
 
-		p = strrchr(PLGetString(file), '/');
+		p = strrchr(WMGetFromPLString(file), '/');
 		if (p) {
-		    copyFile(themeDir, PLGetString(file));
+		    copyFile(themeDir, WMGetFromPLString(file));
 
-		    newPath = wstrdup(p+1);
-		    PLRemoveArrayElement(value, 1);
-		    PLInsertArrayElement(value, PLMakeString(newPath), 1);
+		    newPath = mystrdup(p+1);
+		    WMDeleteFromPLArray(value, 1);
+		    WMInsertInPLArray(value, 1, WMCreatePLString(newPath));
 		    free(newPath);
 		} else {
-		    findCopyFile(themeDir, PLGetString(file));
+		    findCopyFile(themeDir, WMGetFromPLString(file));
 		}
 	    } else if (strcasecmp(t, "bitmap")==0) {
-		proplist_t file;
+		WMPropList *file;
 		char *p;
 		char *newPath;
 
-		file = PLGetArrayElement(value, 1);
+		file = WMGetFromPLArray(value, 1);
 
-		p = strrchr(PLGetString(file), '/');
+		p = strrchr(WMGetFromPLString(file), '/');
 		if (p) {
-		    copyFile(themeDir, PLGetString(file));
+		    copyFile(themeDir, WMGetFromPLString(file));
 
-		    newPath = wstrdup(p+1);
-		    PLRemoveArrayElement(value, 1);
-		    PLInsertArrayElement(value, PLMakeString(newPath), 1);
+		    newPath = mystrdup(p+1);
+		    WMDeleteFromPLArray(value, 1);
+		    WMInsertInPLArray(value, 1, WMCreatePLString(newPath));
 		    free(newPath);
 		} else {
-		    findCopyFile(themeDir, PLGetString(file));
+		    findCopyFile(themeDir, WMGetFromPLString(file));
 		}
 		
 		
-		file = PLGetArrayElement(value, 2);
+		file = WMGetFromPLArray(value, 2);
 
-		p = strrchr(PLGetString(file), '/');
+		p = strrchr(WMGetFromPLString(file), '/');
 		if (p) {
-		    copyFile(themeDir, PLGetString(file));
+		    copyFile(themeDir, WMGetFromPLString(file));
 
-		    newPath = wstrdup(p+1);
-		    PLRemoveArrayElement(value, 2);
-		    PLInsertArrayElement(value, PLMakeString(newPath), 2);
+		    newPath = mystrdup(p+1);
+		    WMDeleteFromPLArray(value, 2);
+		    WMInsertInPLArray(value, 2, WMCreatePLString(newPath));
 		    free(newPath);
 		} else {
-		    findCopyFile(themeDir, PLGetString(file));
+		    findCopyFile(themeDir, WMGetFromPLString(file));
 		}
 	    }
 	}
@@ -556,7 +541,7 @@ makeThemePack(proplist_t style, char *themeName)
 int 
 main(int argc, char **argv)
 {
-    proplist_t prop, style, key, val;
+    WMPropList *prop, *style, *key, *val;
     char *path;
     int i, theme_too=0;
     int make_pack = 0;
@@ -597,11 +582,11 @@ main(int argc, char **argv)
 	exit(1);
     }
 
-    PLSetStringCmpHook(StringCompareHook);
+    WMPLSetCaseSensitive(False);
 
     path = defaultsPathForDomain("WindowMaker");
 
-    prop = PLGetProplistWithPath(path);
+    prop = WMReadPropListFromFile(path);
     if (!prop) {
 	printf("%s:could not load WindowMaker configuration file \"%s\".\n", 
 	       ProgName, path);
@@ -610,36 +595,36 @@ main(int argc, char **argv)
 
     /* get global value */
     path = globalDefaultsPathForDomain("WindowMaker");
-    val = PLGetProplistWithPath(path);
+    val = WMReadPropListFromFile(path);
     if (val) {
-	PLMergeDictionaries(val, prop);
-	PLRelease(prop);
+	WMMergePLDictionaries(val, prop);
+	WMReleasePropList(prop);
 	prop = val;
     }
 
-    style = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+    style = WMCreatePLDictionary(NULL, NULL, NULL);
 
 
     for (i=0; options[i]!=NULL; i++) {
-        key = PLMakeString(options[i]);
+        key = WMCreatePLString(options[i]);
 
-        val = PLGetDictionaryEntry(prop, key);
+        val = WMGetFromPLDictionary(prop, key);
         if (val)
-            PLInsertDictionaryEntry(style, key, val);
+            WMPutInPLDictionary(style, key, val);
     }
 
-    val = PLGetDictionaryEntry(prop, PLMakeString("PixmapPath"));
+    val = WMGetFromPLDictionary(prop, WMCreatePLString("PixmapPath"));
     if (val)
     	PixmapPath = val;
 
     if (theme_too) {
         for (i=0; theme_options[i]!=NULL; i++) {
-            key = PLMakeString(theme_options[i]);
+            key = WMCreatePLString(theme_options[i]);
 
-            val = PLGetDictionaryEntry(prop, key);
+            val = WMGetFromPLDictionary(prop, key);
             if (val)
-                PLInsertDictionaryEntry(style, key, val);
-        }	
+                WMPutInPLDictionary(style, key, val);
+        }
     }
 
     if (make_pack) {
@@ -647,18 +632,16 @@ main(int argc, char **argv)
 
 	makeThemePack(style, style_file);
 
-	path = wmalloc(strlen(ThemePath)+32);
+	path = mymalloc(strlen(ThemePath)+32);
 	strcpy(path, ThemePath);
 	strcat(path, "/style");
-	PLSetFilename(style, PLMakeString(path));
-	PLSave(style, NO);
+        WMWritePropListToFile(style, path, False);
+        wfree(path);
     } else {
 	if (style_file) {
-	    val = PLMakeString(style_file);
-	    PLSetFilename(style, val);
-	    PLSave(style, NO);
+	    WMWritePropListToFile(style, style_file, False);
 	} else {
-	    puts(PLGetDescriptionIndent(style, 0));
+	    puts(WMGetPropListDescription(style, True));
 	}
     }
     exit(0);

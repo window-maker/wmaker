@@ -37,10 +37,10 @@
 typedef struct PLMenuReaderData {
     WRootMenuReader *reader;
 
-    proplist_t pl;
+    WMPropList *pl;
     int curIndex;
     
-    proplist_t *submenu;
+    WMPropList **submenu;
     int *curSubIndex;
     int submenuDepth;
     
@@ -78,7 +78,7 @@ typedef struct GNOMEMenuReaderData {
 
 
 
-static WRootMenuData *pl_openMenu(proplist_t pl);
+static WRootMenuData *pl_openMenu(WMPropList *pl);
 static Bool pl_hasMoreData(WRootMenuData *data);
 static Bool pl_nextCommand(WRootMenuData *data,
 			char **title,
@@ -148,7 +148,7 @@ static char linebuf[LINESIZE];
 /* ---------- proplist ---------- */
 
 
-static WRootMenuData *pl_openMenuFile(proplist_t pl)
+static WRootMenuData *pl_openMenuFile(WMPropList *pl)
 {
     PLRootMenuData *data = wmalloc(sizeof(PLRootMenuData));
 
@@ -186,7 +186,7 @@ static void pl_closeMenuFile(WRootMenuData *data)
     if (data->curSubIndex)
 	wfree(data->curSubIndex);
 
-    PLRelease(data->pl);
+    WMReleasePropList(data->pl);
     
     wfree(data);
 }
@@ -354,8 +354,8 @@ WRootMenuData *OpenMenu(char *path, time_t *menuTime)
     }
 
     /* then check whether it's a proplist menu */
-    pl = ReadProplistFromFile(path);
-    if (pl && PLIsArray(pl)) {
+    pl = WMReadPropListFromFile(path);
+    if (pl && WMIsPLArray(pl)) {
 	*menuTime = stat_buf.st_mtime;
 	return pl_openMenu(pl);
     }
@@ -392,19 +392,19 @@ WRootMenuData *ReopenRootMenu(time_t *checkTime,
 
     *checkTime = stat_buf.st_mtime;
 
-    pl = ReadProplistFromFile(path);
+    pl = WMReadPropListFromFile(path);
     if (!pl) {
 	wwarning(_("could not load domain %s from user defaults database"),
 		 "WMRootMenu");
 	return NULL;
     }
 
-    if (PLIsString(pl)) {
+    if (WMIsPLString(pl)) {
 	char *tmp;
 	char *path;
 	Bool menu_is_default = False;
 
-	tmp = wexpandpath(PLGetString(pl));
+	tmp = wexpandpath(WMGetFromPLString(pl));
 
 	path = getLocalizedMenuFile(tmp);
 
@@ -448,7 +448,7 @@ WRootMenuData *ReopenRootMenu(time_t *checkTime,
 	}
 
 	return OpenMenu(*menuPath, menuTimestamp);
-    } else if (PLIsArray(pl)) {
+    } else if (WMIsPLArray(pl)) {
 
 	*menuTimestamp = stat_buf.st_mtime;
 

@@ -69,11 +69,6 @@ The following is required to build Window Maker:
 	and the gcc suite. Otherwise you won't be able to build any X
 	program, including Window Maker.
 
-- libPropList
-	This library can be found in ftp://ftp.windowmaker.org/pub/libs
-	or in ftp://ftp.gnome.org/pub/libPropList
-	Install it before building Window Maker.
-
 - autoconf, automake and libtool
 	These tools are NOT needed, but IF you have one or
 	more of them installed, make sure you have ALL of the following 
@@ -85,12 +80,6 @@ The following is required to build Window Maker:
 	renaming them to something else or uninstalling them from your
 	system. If you don't develop software you don't need them,
 	so you can safely uninstall. 
-
-- lex (or flex) and yacc (or bison)
-	These are used by libPropList. lex is actually not needed since
-	it's output file is included, but either me or automake is stupid,
-	causing the configure script for libPropList to simply abort for no
-	convincent reason if lex is not found.
 
 
 OPTIONAL:
@@ -459,10 +448,10 @@ UPGRADING
 
 If you are upgrading from an older version of Window Maker:
 
-	1. Configure and build Window Maker as always
-	2. Install Window Maker (but do not run wmaker.inst)
-	3. Read the NEWS file and update your configuration files, 
-	   if necessary.
+   1. Configure and build Window Maker as always
+   2. Install Window Maker (but do not run wmaker.inst)
+   3. Read the NEWS file and update your configuration files if necessary.
+
 
 TROUBLESHOOTING
 ===============
@@ -482,8 +471,7 @@ ltconfig: unrecognized option `--no-reexec'
 Try `ltconfig --help' for more information.
 configure: error: libtool configure failed
 
-remove the --no-reexec option from aclocal.m4 and libPropList/aclocal.m4
-and reconfigure
+remove the --no-reexec option from aclocal.m4 and reconfigure
 Also make sure the autoconf and automake versions you have installed are:
 autoconf 2.13
 automake 1.4
@@ -491,12 +479,6 @@ libtool 1.3
 
 Note that it must not be libtool 1.2b, it must be libtool 1.3, 
 from the GNU sites.
-
-== Cant find proplist.h or libPropList.something
-
-Download and install libPropList from the places pointed to
-somewhere else in this file.
-
 
 == configure doesn't detect libtiff, or other graphic libraries.
 
@@ -625,3 +607,4 @@ and WPrefs.app)
 
 The wsetfont script that's supplied will allow you to change the font
 settings in a easier way. Take a look in the script for details on usage.
+

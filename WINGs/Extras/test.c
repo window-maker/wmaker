@@ -1,6 +1,7 @@
 
 
 #include <WINGs/WINGs.h>
+#include <stdio.h>
 #include "wtableview.h"
 #include "wtabledelegates.h"
 
@@ -33,7 +34,7 @@ void *valueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row)
 	    char buf[128];
 
 	    sprintf(buf, "Test row %i", i);
-		
+
 	    col1[i] = wstrdup(buf);
 	    col2[i] = 0;
 	}
@@ -73,7 +74,7 @@ void clickedTable(WMWidget *w, void *self)
 
 
 
-
+int
 main(int argc, char **argv)
 {
     WMScreen *scr;
@@ -128,4 +129,6 @@ main(int argc, char **argv)
     WMMapWidget(table);
     WMRealizeWidget(win);
     WMScreenMainLoop(scr);
+
+    return 0;
 }

@@ -55,7 +55,7 @@ void wWorkspaceMenuUpdate(WScreen *scr, WMenu *menu);
 
 void wWorkspaceMenuEdit(WScreen *scr);
 
-void wWorkspaceSaveState(WScreen *scr, proplist_t old_state);
+void wWorkspaceSaveState(WScreen *scr, WMPropList *old_state);
 void wWorkspaceRestoreState(WScreen *scr);
 
 void wWorkspaceRename(WScreen *scr, int workspace, char *name);

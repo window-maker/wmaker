@@ -153,7 +153,7 @@ handleEvents(XEvent *event, void *data)
 	    if (item) {
 		WMSelectTabViewItem(tPtr, item);
 	    } else if (tPtr->flags.dontFitAll) {
-		int redraw;
+		int redraw = 0;
 		int lastVisible = tPtr->firstVisible+tPtr->visibleTabs-1;
 
 		if (event->xbutton.x < BUTTONED_SIDE_OFFSET) {

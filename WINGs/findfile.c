@@ -286,7 +286,7 @@ wfindfileinlist(char **path_list, char *file)
 
 
 char*
-wfindfileinarray(proplist_t array, char *file)
+wfindfileinarray(WMPropList *array, char *file)
 {
     int i;
     char *path;
@@ -314,14 +314,14 @@ wfindfileinarray(proplist_t array, char *file)
     }
 
     flen = strlen(file);
-    for (i=0; i<PLGetNumberOfElements(array); i++) {
-	proplist_t prop;
+    for (i=0; i<WMGetPropListItemCount(array); i++) {
+	WMPropList *prop;
 	char *p;
 
-	prop = PLGetArrayElement(array, i);
+	prop = WMGetFromPLArray(array, i);
 	if (!prop)
 	    continue;
-	p = PLGetString(prop);
+	p = WMGetFromPLString(prop);
 
 	len = strlen(p);
 	path = wmalloc(len+flen+2);

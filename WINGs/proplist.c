@@ -409,6 +409,17 @@ indentedDescription(WMPropList *plist, int level)
     WMHashEnumerator e;
     int i;
 
+    if (plist->type==WPLArray || plist->type==WPLDictionary) {
+        retstr = description(plist);
+
+        if (retstr && ((2*(level+1) + strlen(retstr)) <= 77)) {
+            return retstr;
+        } else if (retstr) {
+            wfree(retstr);
+            retstr = NULL;
+        }
+    }
+
     switch (plist->type) {
     case WPLString:
         retstr = stringDescription(plist);
@@ -1175,10 +1186,12 @@ WMPutInPLDictionary(WMPropList *plist, WMPropList *key, WMPropList *value)
 {
     wassertr(plist->type==WPLDictionary);
 
+    /*WMRetainPropList(key);*/
     WMRemoveFromPLDictionary(plist, key);
     retainPropListByCount(key, plist->retainCount);
     retainPropListByCount(value, plist->retainCount);
     WMHashInsert(plist->d.dict, key, value);
+    /*WMReleasePropList(key);*/
 }
 
 

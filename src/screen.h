@@ -26,7 +26,7 @@
 #include "WindowMaker.h"
 #include <sys/types.h>
 
-#include <proplist.h>
+#include <WINGs/WUtil.h>
 
 #ifdef XINERAMA
 #include <X11/Xinerama.h>
@@ -264,7 +264,7 @@ typedef struct _WScreen {
     /* state and other informations */
     short cascade_index;	       /* for cascade window placement */
 
-    proplist_t session_state;
+    WMPropList *session_state;
 
     /* for double-click detection */
     Time last_click_time;

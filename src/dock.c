@@ -56,7 +56,7 @@
 #include "wsound.h"
 
 
-#include <proplist.h>
+#include <WINGs/WUtil.h>
 
 
 
@@ -97,19 +97,19 @@ extern void appIconMouseDown(WObjDescriptor *desc, XEvent *event);
 
 /***** Local variables ****/
 
-static proplist_t dCommand=NULL;
-static proplist_t dPasteCommand=NULL;
+static WMPropList *dCommand=NULL;
+static WMPropList *dPasteCommand=NULL;
 #ifdef OFFIX_DND
-static proplist_t dDropCommand=NULL;
+static WMPropList *dDropCommand=NULL;
 #endif
-static proplist_t dAutoLaunch, dLock;
-static proplist_t dName, dForced, dBuggyApplication, dYes, dNo;
-static proplist_t dHost, dDock, dClip;
-static proplist_t dAutoAttractIcons;
+static WMPropList *dAutoLaunch, *dLock;
+static WMPropList *dName, *dForced, *dBuggyApplication, *dYes, *dNo;
+static WMPropList *dHost, *dDock, *dClip;
+static WMPropList *dAutoAttractIcons;
 
-static proplist_t dPosition, dApplications, dLowered, dCollapsed, dAutoCollapse;
+static WMPropList *dPosition, *dApplications, *dLowered, *dCollapsed;
 
-static proplist_t dAutoRaiseLower, dOmnipresent;
+static WMPropList *dAutoCollapse, *dAutoRaiseLower, *dOmnipresent;
 
 static void dockIconPaint(WAppIcon *btn);
 
@@ -168,30 +168,30 @@ make_keys()
     if (dCommand!=NULL)
 	return;
 
-    dCommand = PLRetain(PLMakeString("Command"));
-    dPasteCommand = PLRetain(PLMakeString("PasteCommand"));    
-    dDropCommand = PLRetain(PLMakeString("DropCommand"));
-    dLock = PLRetain(PLMakeString("Lock"));
-    dAutoLaunch = PLRetain(PLMakeString("AutoLaunch"));
-    dName = PLRetain(PLMakeString("Name"));
-    dForced = PLRetain(PLMakeString("Forced"));
-    dBuggyApplication = PLRetain(PLMakeString("BuggyApplication"));
-    dYes = PLRetain(PLMakeString("Yes"));
-    dNo = PLRetain(PLMakeString("No"));
-    dHost = PLRetain(PLMakeString("Host"));
+    dCommand = WMRetainPropList(WMCreatePLString("Command"));
+    dPasteCommand = WMRetainPropList(WMCreatePLString("PasteCommand"));    
+    dDropCommand = WMRetainPropList(WMCreatePLString("DropCommand"));
+    dLock = WMRetainPropList(WMCreatePLString("Lock"));
+    dAutoLaunch = WMRetainPropList(WMCreatePLString("AutoLaunch"));
+    dName = WMRetainPropList(WMCreatePLString("Name"));
+    dForced = WMRetainPropList(WMCreatePLString("Forced"));
+    dBuggyApplication = WMRetainPropList(WMCreatePLString("BuggyApplication"));
+    dYes = WMRetainPropList(WMCreatePLString("Yes"));
+    dNo = WMRetainPropList(WMCreatePLString("No"));
+    dHost = WMRetainPropList(WMCreatePLString("Host"));
 
-    dPosition = PLMakeString("Position");
-    dApplications = PLMakeString("Applications");
-    dLowered = PLMakeString("Lowered");
-    dCollapsed = PLMakeString("Collapsed");
-    dAutoCollapse = PLMakeString("AutoCollapse");
-    dAutoRaiseLower = PLMakeString("AutoRaiseLower");
-    dAutoAttractIcons = PLMakeString("AutoAttractIcons");
+    dPosition = WMCreatePLString("Position");
+    dApplications = WMCreatePLString("Applications");
+    dLowered = WMCreatePLString("Lowered");
+    dCollapsed = WMCreatePLString("Collapsed");
+    dAutoCollapse = WMCreatePLString("AutoCollapse");
+    dAutoRaiseLower = WMCreatePLString("AutoRaiseLower");
+    dAutoAttractIcons = WMCreatePLString("AutoAttractIcons");
 
-    dOmnipresent = PLMakeString("Omnipresent");
+    dOmnipresent = WMCreatePLString("Omnipresent");
 
-    dDock = PLMakeString("Dock");
-    dClip = PLMakeString("Clip");
+    dDock = WMCreatePLString("Dock");
+    dClip = WMCreatePLString("Clip");
 }
 
 
@@ -1307,20 +1307,20 @@ dockIconPaint(WAppIcon *btn)
 }
 
 
-static proplist_t
+static WMPropList*
 make_icon_state(WAppIcon *btn)
 {
-    proplist_t node = NULL;
-    proplist_t command, autolaunch, lock, name, forced, host, position, buggy;
-    proplist_t omnipresent;
+    WMPropList *node = NULL;
+    WMPropList *command, *autolaunch, *lock, *name, *forced, *host;
+    WMPropList *position, *buggy, *omnipresent;
     char *tmp;
     char buffer[64];
 
     if (btn) {
 	if (!btn->command)
-	    command = PLMakeString("-");
+	    command = WMCreatePLString("-");
 	else
-	    command = PLMakeString(btn->command);
+	    command = WMCreatePLString(btn->command);
 
 	autolaunch = btn->auto_launch ? dYes : dNo;
 
@@ -1328,7 +1328,7 @@ make_icon_state(WAppIcon *btn)
 
 	tmp = EscapeWM_CLASS(btn->wm_instance, btn->wm_class);
 
-	name = PLMakeString(tmp);
+	name = WMCreatePLString(tmp);
 
 	wfree(tmp);
 
@@ -1340,9 +1340,9 @@ make_icon_state(WAppIcon *btn)
             snprintf(buffer, sizeof(buffer), "%i,%i", btn->x_pos, btn->y_pos);
         else
             snprintf(buffer, sizeof(buffer), "%hi,%hi", btn->xindex, btn->yindex);
-        position = PLMakeString(buffer);
+        position = WMCreatePLString(buffer);
 
-        node = PLMakeDictionaryFromEntries(dCommand, command,
+        node = WMCreatePLDictionary(dCommand, command,
                                            dName, name,
                                            dAutoLaunch, autolaunch,
 					   dLock, lock,
@@ -1350,33 +1350,33 @@ make_icon_state(WAppIcon *btn)
 					   dBuggyApplication, buggy,
                                            dPosition, position,
                                            NULL);
-        PLRelease(command);
-        PLRelease(name);
-        PLRelease(position);
+        WMReleasePropList(command);
+        WMReleasePropList(name);
+        WMReleasePropList(position);
 
         omnipresent = btn->omnipresent ? dYes : dNo;
         if (btn->dock != btn->icon->core->screen_ptr->dock &&
             (btn->xindex != 0 || btn->yindex != 0))
-            PLInsertDictionaryEntry(node, dOmnipresent, omnipresent);
+            WMPutInPLDictionary(node, dOmnipresent, omnipresent);
 
 #ifdef OFFIX_DND
         if (btn->dnd_command) {
-            command = PLMakeString(btn->dnd_command);
-            PLInsertDictionaryEntry(node, dDropCommand, command);
-            PLRelease(command);
+            command = WMCreatePLString(btn->dnd_command);
+            WMPutInPLDictionary(node, dDropCommand, command);
+            WMReleasePropList(command);
 	}
 #endif /* OFFIX_DND */
 	
 	if (btn->paste_command) {
-	    command = PLMakeString(btn->paste_command);
-	    PLInsertDictionaryEntry(node, dPasteCommand, command);
-	    PLRelease(command);
+	    command = WMCreatePLString(btn->paste_command);
+	    WMPutInPLDictionary(node, dPasteCommand, command);
+	    WMReleasePropList(command);
 	}
 
 	if (btn->client_machine && btn->remote_start) {
-	    host = PLMakeString(btn->client_machine);
-	    PLInsertDictionaryEntry(node, dHost, host);
-	    PLRelease(host);
+	    host = WMCreatePLString(btn->client_machine);
+	    WMPutInPLDictionary(node, dHost, host);
+	    WMReleasePropList(host);
 	}
     }
 
@@ -1384,16 +1384,16 @@ make_icon_state(WAppIcon *btn)
 }
 
 
-static proplist_t
+static WMPropList*
 dockSaveState(WDock *dock)
 {
     int i;
-    proplist_t icon_info;
-    proplist_t list=NULL, dock_state=NULL;
-    proplist_t value, key;
+    WMPropList *icon_info;
+    WMPropList *list=NULL, *dock_state=NULL;
+    WMPropList *value, *key;
     char buffer[256];
 
-    list = PLMakeArrayFromElements(NULL);
+    list = WMCreatePLArray(NULL);
 
     for (i=(dock->type==WM_DOCK ? 0 : 1); i<dock->max_icons; i++) {
         WAppIcon *btn = dock->icon_array[i];
@@ -1402,45 +1402,45 @@ dockSaveState(WDock *dock)
             continue;
 
         if ((icon_info = make_icon_state(dock->icon_array[i]))) {
-            list = PLAppendArrayElement(list, icon_info);
-            PLRelease(icon_info);
+            WMAddToPLArray(list, icon_info);
+            WMReleasePropList(icon_info);
         }
     }
     
-    dock_state = PLMakeDictionaryFromEntries(dApplications, list, 
+    dock_state = WMCreatePLDictionary(dApplications, list, 
 					     NULL);
 
     if (dock->type == WM_DOCK) {
 	snprintf(buffer, sizeof(buffer), "Applications%i", dock->screen_ptr->scr_height);
-	key = PLMakeString(buffer);
-	PLInsertDictionaryEntry(dock_state, key, list);
-	PLRelease(key);
+	key = WMCreatePLString(buffer);
+	WMPutInPLDictionary(dock_state, key, list);
+	WMReleasePropList(key);
 
 	
         snprintf(buffer, sizeof(buffer), "%i,%i", (dock->on_right_side ? -ICON_SIZE : 0),
                                   dock->y_pos);
-        value = PLMakeString(buffer);
-        PLInsertDictionaryEntry(dock_state, dPosition, value);
-        PLRelease(value);
+        value = WMCreatePLString(buffer);
+        WMPutInPLDictionary(dock_state, dPosition, value);
+        WMReleasePropList(value);
     }
-    PLRelease(list);
+    WMReleasePropList(list);
 
 
     value = (dock->lowered ? dYes : dNo);
-    PLInsertDictionaryEntry(dock_state, dLowered, value);
+    WMPutInPLDictionary(dock_state, dLowered, value);
 
     if (dock->type == WM_CLIP) {
         value = (dock->collapsed ? dYes : dNo);
-        PLInsertDictionaryEntry(dock_state, dCollapsed, value);
+        WMPutInPLDictionary(dock_state, dCollapsed, value);
 
         value = (dock->auto_collapse ? dYes : dNo);
-	PLInsertDictionaryEntry(dock_state, dAutoCollapse, value);
+	WMPutInPLDictionary(dock_state, dAutoCollapse, value);
 
         value = (dock->auto_raise_lower ? dYes : dNo);
-	PLInsertDictionaryEntry(dock_state, dAutoRaiseLower, value);
+	WMPutInPLDictionary(dock_state, dAutoRaiseLower, value);
 
         value = (dock->attract_icons ? dYes : dNo);
-        PLInsertDictionaryEntry(dock_state, dAutoAttractIcons, value);
+        WMPutInPLDictionary(dock_state, dAutoAttractIcons, value);
     }
 
     return dock_state;
@@ -1448,10 +1448,10 @@ dockSaveState(WDock *dock)
 
 
 void
-wDockSaveState(WScreen *scr, proplist_t old_state)
+wDockSaveState(WScreen *scr, WMPropList *old_state)
 {
-    proplist_t dock_state;
-    proplist_t keys;
+    WMPropList *dock_state;
+    WMPropList *keys;
 
     dock_state = dockSaveState(scr->dock);
 
@@ -1460,44 +1460,44 @@ wDockSaveState(WScreen *scr, proplist_t old_state)
      */
     if (old_state) {
 	int i;
-	proplist_t tmp;
+	WMPropList *tmp;
 
-	keys = PLGetAllDictionaryKeys(old_state);
-	for (i = 0; i < PLGetNumberOfElements(keys); i++) {
-	    tmp = PLGetArrayElement(keys, i);
+	keys = WMGetPLDictionaryKeys(old_state);
+	for (i = 0; i < WMGetPropListItemCount(keys); i++) {
+	    tmp = WMGetFromPLArray(keys, i);
 
-	    if (strncasecmp(PLGetString(tmp), "applications", 12) == 0
-		&& !PLGetDictionaryEntry(dock_state, tmp)) {
+	    if (strncasecmp(WMGetFromPLString(tmp), "applications", 12) == 0
+		&& !WMGetFromPLDictionary(dock_state, tmp)) {
 
-		PLInsertDictionaryEntry(dock_state,
+		WMPutInPLDictionary(dock_state,
 					tmp, 
-					PLGetDictionaryEntry(old_state, tmp));
+					WMGetFromPLDictionary(old_state, tmp));
 	    }
 	}
-	PLRelease(keys);
+	WMReleasePropList(keys);
     }
     
 
-    PLInsertDictionaryEntry(scr->session_state, dDock, dock_state);
+    WMPutInPLDictionary(scr->session_state, dDock, dock_state);
 
-    PLRelease(dock_state);
+    WMReleasePropList(dock_state);
 }
 
 
 void
 wClipSaveState(WScreen *scr)
 {
-    proplist_t clip_state;
+    WMPropList *clip_state;
 
     clip_state = make_icon_state(scr->clip_icon);
 
-    PLInsertDictionaryEntry(scr->session_state, dClip, clip_state);
+    WMPutInPLDictionary(scr->session_state, dClip, clip_state);
 
-    PLRelease(clip_state);
+    WMReleasePropList(clip_state);
 }
 
 
-proplist_t
+WMPropList*
 wClipSaveWorkspaceState(WScreen *scr, int workspace)
 {
     return dockSaveState(scr->workspaces[workspace]->clip);
@@ -1505,15 +1505,15 @@ wClipSaveWorkspaceState(WScreen *scr, int workspace)
 
 
 static Bool
-getBooleanDockValue(proplist_t value, proplist_t key)
+getBooleanDockValue(WMPropList *value, WMPropList *key)
 {
     if (value) {
-        if (PLIsString(value)) {
-            if (strcasecmp(PLGetString(value), "YES")==0)
+        if (WMIsPLString(value)) {
+            if (strcasecmp(WMGetFromPLString(value), "YES")==0)
                 return True;
         } else {
             wwarning(_("bad value in docked icon state info %s"),
-                     PLGetString(key));
+                     WMGetFromPLString(key));
         }
     }
     return False;
@@ -1521,19 +1521,19 @@ getBooleanDockValue(proplist_t value, proplist_t key)
 
 
 static WAppIcon*
-restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
+restore_icon_state(WScreen *scr, WMPropList *info, int type, int index)
 {
     WAppIcon *aicon;
-    proplist_t cmd, value;
+    WMPropList *cmd, *value;
 
 
-    cmd = PLGetDictionaryEntry(info, dCommand);
-    if (!cmd || !PLIsString(cmd)) {
+    cmd = WMGetFromPLDictionary(info, dCommand);
+    if (!cmd || !WMIsPLString(cmd)) {
 	return NULL;
     }
 
     /* parse window name */
-    value = PLGetDictionaryEntry(info, dName);
+    value = WMGetFromPLDictionary(info, dName);
     if (!value)
 	return NULL;
 
@@ -1550,7 +1550,7 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
 	/* get commands */
 
 	if (cmd)
-	    command = wstrdup(PLGetString(cmd));
+	    command = wstrdup(WMGetFromPLString(cmd));
 	else
 	    command = NULL;
 
@@ -1585,42 +1585,42 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
 
 
 #ifdef OFFIX_DND
-    cmd = PLGetDictionaryEntry(info, dDropCommand);
+    cmd = WMGetFromPLDictionary(info, dDropCommand);
     if (cmd)
-	aicon->dnd_command = wstrdup(PLGetString(cmd));
+	aicon->dnd_command = wstrdup(WMGetFromPLString(cmd));
 #endif
     
-    cmd = PLGetDictionaryEntry(info, dPasteCommand);
+    cmd = WMGetFromPLDictionary(info, dPasteCommand);
     if (cmd)
-	aicon->paste_command = wstrdup(PLGetString(cmd));    
+	aicon->paste_command = wstrdup(WMGetFromPLString(cmd));    
 
     /* check auto launch */
-    value = PLGetDictionaryEntry(info, dAutoLaunch);
+    value = WMGetFromPLDictionary(info, dAutoLaunch);
 
     aicon->auto_launch = getBooleanDockValue(value, dAutoLaunch);
 
     /* check lock */
-    value = PLGetDictionaryEntry(info, dLock);
+    value = WMGetFromPLDictionary(info, dLock);
 
     aicon->lock = getBooleanDockValue(value, dLock);
 
     /* check if it wasn't normally docked */
-    value = PLGetDictionaryEntry(info, dForced);
+    value = WMGetFromPLDictionary(info, dForced);
 
     aicon->forced_dock = getBooleanDockValue(value, dForced);
 
     /* check if we can rely on the stuff in the app */
-    value = PLGetDictionaryEntry(info, dBuggyApplication);
+    value = WMGetFromPLDictionary(info, dBuggyApplication);
 
     aicon->buggy_app = getBooleanDockValue(value, dBuggyApplication);
 
     /* get position in the dock */
-    value = PLGetDictionaryEntry(info, dPosition);
-    if (value && PLIsString(value)) {
-        if (sscanf(PLGetString(value), "%hi,%hi", &aicon->xindex,
+    value = WMGetFromPLDictionary(info, dPosition);
+    if (value && WMIsPLString(value)) {
+        if (sscanf(WMGetFromPLString(value), "%hi,%hi", &aicon->xindex,
                    &aicon->yindex)!=2)
             wwarning(_("bad value in docked icon state info %s"),
-                     PLGetString(dPosition));
+                     WMGetFromPLString(dPosition));
 
         /* check position sanity */
         /* incomplete section! */
@@ -1636,7 +1636,7 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
     }
 
     /* check if icon is omnipresent */
-    value = PLGetDictionaryEntry(info, dOmnipresent);
+    value = WMGetFromPLDictionary(info, dOmnipresent);
 
     aicon->omnipresent = getBooleanDockValue(value, dOmnipresent);
 
@@ -1651,10 +1651,10 @@ restore_icon_state(WScreen *scr, proplist_t info, int type, int index)
 
 
 WAppIcon*
-wClipRestoreState(WScreen *scr, proplist_t clip_state)
+wClipRestoreState(WScreen *scr, WMPropList *clip_state)
 {
     WAppIcon *icon;
-    proplist_t value;
+    WMPropList *value;
 
 
     icon = mainIconCreate(scr, WM_CLIP);
@@ -1662,17 +1662,17 @@ wClipRestoreState(WScreen *scr, proplist_t clip_state)
     if (!clip_state)
 	return icon;
     else
-        PLRetain(clip_state);
+        WMRetainPropList(clip_state);
 
     /* restore position */
 
-    value = PLGetDictionaryEntry(clip_state, dPosition);
+    value = WMGetFromPLDictionary(clip_state, dPosition);
 
     if (value) {
-	if (!PLIsString(value))
+	if (!WMIsPLString(value))
 	    COMPLAIN("Position");
 	else {
-	    if (sscanf(PLGetString(value), "%i,%i", &icon->x_pos,
+	    if (sscanf(WMGetFromPLString(value), "%i,%i", &icon->x_pos,
 		       &icon->y_pos)!=2)
 		COMPLAIN("Position");
 
@@ -1690,27 +1690,27 @@ wClipRestoreState(WScreen *scr, proplist_t clip_state)
     }
 
 #ifdef OFFIX_DND
-    value = PLGetDictionaryEntry(clip_state, dDropCommand);
-    if (value && PLIsString(value))
-	icon->dnd_command = wstrdup(PLGetString(value));
+    value = WMGetFromPLDictionary(clip_state, dDropCommand);
+    if (value && WMIsPLString(value))
+	icon->dnd_command = wstrdup(WMGetFromPLString(value));
 #endif
     
-    value = PLGetDictionaryEntry(clip_state, dPasteCommand);
-    if (value && PLIsString(value))
-	icon->paste_command = wstrdup(PLGetString(value));    
+    value = WMGetFromPLDictionary(clip_state, dPasteCommand);
+    if (value && WMIsPLString(value))
+	icon->paste_command = wstrdup(WMGetFromPLString(value));    
 
-    PLRelease(clip_state);
+    WMReleasePropList(clip_state);
 
     return icon;
 }
 
 
 WDock*
-wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
+wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
 {
     WDock *dock;
-    proplist_t apps;
-    proplist_t value;
+    WMPropList *apps;
+    WMPropList *value;
     WAppIcon *aicon, *old_top;
     int count, i;
 
@@ -1721,18 +1721,18 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
         return dock;
 
     if (dock_state)
-        PLRetain(dock_state);
+        WMRetainPropList(dock_state);
 
 
     /* restore position */
 
-    value = PLGetDictionaryEntry(dock_state, dPosition);
+    value = WMGetFromPLDictionary(dock_state, dPosition);
 
     if (value) {
-        if (!PLIsString(value))
+        if (!WMIsPLString(value))
             COMPLAIN("Position");
         else {
-            if (sscanf(PLGetString(value), "%i,%i", &dock->x_pos,
+            if (sscanf(WMGetFromPLString(value), "%i,%i", &dock->x_pos,
                        &dock->y_pos)!=2)
                 COMPLAIN("Position");
 
@@ -1764,13 +1764,13 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 
     dock->lowered = 0;
 
-    value = PLGetDictionaryEntry(dock_state, dLowered);
+    value = WMGetFromPLDictionary(dock_state, dLowered);
 
     if (value) {
-        if (!PLIsString(value))
+        if (!WMIsPLString(value))
             COMPLAIN("Lowered");
         else {
-            if (strcasecmp(PLGetString(value), "YES")==0)
+            if (strcasecmp(WMGetFromPLString(value), "YES")==0)
                 dock->lowered = 1;
         }
     }
@@ -1780,13 +1780,13 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 
     dock->collapsed = 0;
 
-    value = PLGetDictionaryEntry(dock_state, dCollapsed);
+    value = WMGetFromPLDictionary(dock_state, dCollapsed);
 
     if (value) {
-        if (!PLIsString(value))
+        if (!WMIsPLString(value))
             COMPLAIN("Collapsed");
         else {
-            if (strcasecmp(PLGetString(value), "YES")==0)
+            if (strcasecmp(WMGetFromPLString(value), "YES")==0)
                 dock->collapsed = 1;
         }
     }
@@ -1794,13 +1794,13 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 
     /* restore auto-collapsed state */
 
-    value = PLGetDictionaryEntry(dock_state, dAutoCollapse);
+    value = WMGetFromPLDictionary(dock_state, dAutoCollapse);
 
     if (value) {
-        if (!PLIsString(value))
+        if (!WMIsPLString(value))
             COMPLAIN("AutoCollapse");
         else {
-	    if (strcasecmp(PLGetString(value), "YES")==0) {
+	    if (strcasecmp(WMGetFromPLString(value), "YES")==0) {
                 dock->auto_collapse = 1;
 		dock->collapsed = 1;
 	    }
@@ -1810,13 +1810,13 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 
     /* restore auto-raise/lower state */
 
-    value = PLGetDictionaryEntry(dock_state, dAutoRaiseLower);
+    value = WMGetFromPLDictionary(dock_state, dAutoRaiseLower);
 
     if (value) {
-        if (!PLIsString(value))
+        if (!WMIsPLString(value))
             COMPLAIN("AutoRaiseLower");
         else {
-	    if (strcasecmp(PLGetString(value), "YES")==0) {
+	    if (strcasecmp(WMGetFromPLString(value), "YES")==0) {
                 dock->auto_raise_lower = 1;
 	    }
         }
@@ -1826,13 +1826,13 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 
     dock->attract_icons = 0;
 
-    value = PLGetDictionaryEntry(dock_state, dAutoAttractIcons);
+    value = WMGetFromPLDictionary(dock_state, dAutoAttractIcons);
 
     if (value) {
-        if (!PLIsString(value))
+        if (!WMIsPLString(value))
             COMPLAIN("AutoAttractIcons");
         else {
-            if (strcasecmp(PLGetString(value), "YES")==0)
+            if (strcasecmp(WMGetFromPLString(value), "YES")==0)
                 dock->attract_icons = 1;
         }
     }
@@ -1841,7 +1841,7 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
     /* application list */
     
     {
-	proplist_t tmp;
+	WMPropList *tmp;
 	char buffer[64];
 	
 	/*
@@ -1854,12 +1854,12 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 	
 	snprintf(buffer, sizeof(buffer), "Applications%i", scr->scr_height);
 
-	tmp = PLMakeString(buffer);
-	apps = PLGetDictionaryEntry(dock_state, tmp);
-	PLRelease(tmp);
+	tmp = WMCreatePLString(buffer);
+	apps = WMGetFromPLDictionary(dock_state, tmp);
+	WMReleasePropList(tmp);
 
 	if (!apps) {
-	    apps = PLGetDictionaryEntry(dock_state, dApplications);
+	    apps = WMGetFromPLDictionary(dock_state, dApplications);
 	}
     }
 
@@ -1867,7 +1867,7 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
         goto finish;
     }
 
-    count = PLGetNumberOfElements(apps);
+    count = WMGetPropListItemCount(apps);
 
     if (count==0)
         goto finish;
@@ -1887,7 +1887,7 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
             break;
         }
 
-        value = PLGetArrayElement(apps, i);
+        value = WMGetFromPLArray(apps, i);
         aicon = restore_icon_state(scr, value, type, dock->icon_count);
 
         dock->icon_array[dock->icon_count] = aicon;
@@ -1936,7 +1936,7 @@ wDockRestoreState(WScreen *scr, proplist_t dock_state, int type)
 
 finish:
     if (dock_state)
-        PLRelease(dock_state);
+        WMReleasePropList(dock_state);
 
     return dock;
 }

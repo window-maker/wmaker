@@ -96,7 +96,6 @@ createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
     WMScreen *scr = WMWidgetScreen(panel->parent);
-    WMBox *hbox, *vbox;
     WMPixmap *icon;
     int i;
     char *buf1, *buf2;

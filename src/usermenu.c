@@ -80,7 +80,6 @@
 #include "framewin.h"
 
 
-extern proplist_t ReadProplistFromFile(char *file);
 /*** var ***/
 extern WPreferences wPreferences;
 
@@ -134,7 +133,7 @@ removeUserMenudata(void *menudata)
 
 
 static WUserMenuData*
-convertShortcuts(WScreen *scr, proplist_t shortcut)
+convertShortcuts(WScreen *scr, WMPropList *shortcut)
 {
     WUserMenuData *data;
     KeySym ksym;
@@ -143,11 +142,11 @@ convertShortcuts(WScreen *scr, proplist_t shortcut)
     char buf[128], *b;
     int keycount,i,j,mod;
 
-    if (PLIsString(shortcut)) {
+    if (WMIsPLString(shortcut)) {
         keycount = 1;
     }
-    else if (PLIsArray(shortcut)) {
-        keycount = PLGetNumberOfElements(shortcut);
+    else if (WMIsPLArray(shortcut)) {
+        keycount = WMGetPropListItemCount(shortcut);
     }
     else return NULL;
     /*for (i=0;i<keycount;i++){*/
@@ -163,10 +162,10 @@ convertShortcuts(WScreen *scr, proplist_t shortcut)
 
     for (i=0,j=0;i<keycount;i++) {
         data->key[j].modifier = 0;
-        if (PLIsArray(shortcut)) {
-            strcpy(buf, PLGetString(PLGetArrayElement(shortcut, i)));
+        if (WMIsPLArray(shortcut)) {
+            strcpy(buf, WMGetFromPLString(WMGetFromPLArray(shortcut, i)));
         } else {
-            strcpy(buf, PLGetString(shortcut));
+            strcpy(buf, WMGetFromPLString(shortcut));
         }
         b = (char*)buf;
 
@@ -207,34 +206,34 @@ keyover:
 }
 
 static WMenu*
-configureUserMenu(WScreen *scr, proplist_t plum)
+configureUserMenu(WScreen *scr, WMPropList *plum)
 {
     char *mtitle;
     WMenu *menu=NULL;
-    proplist_t elem, title, command, params;
+    WMPropList *elem, *title, *command, *params;
     int count,i;
     WUserMenuData *data;
 
     if (!plum) return NULL;
-    if (!PLIsArray(plum)) {
+    if (!WMIsPLArray(plum)) {
         return NULL;
     }
 
-    count = PLGetNumberOfElements(plum);
+    count = WMGetPropListItemCount(plum);
     if (!count) return NULL;
 
-    elem = PLGetArrayElement(plum, 0);
-    if (!PLIsString(elem)) {
+    elem = WMGetFromPLArray(plum, 0);
+    if (!WMIsPLString(elem)) {
         return NULL;
     }
     
-    mtitle = PLGetString(elem);
+    mtitle = WMGetFromPLString(elem);
     
     menu=wMenuCreateForApp(scr, mtitle, True);
     
     for(i=1; i<count; i++) {
-        elem = PLGetArrayElement(plum,i);
-        if(PLIsArray(PLGetArrayElement(elem,1))) {
+        elem = WMGetFromPLArray(plum,i);
+        if(WMIsPLArray(WMGetFromPLArray(elem,1))) {
             WMenu *submenu;
             WMenuEntry *mentry;
             
@@ -246,36 +245,36 @@ configureUserMenu(WScreen *scr, proplist_t plum)
         }
         else {
             int idx = 0;
-            proplist_t instances=0;
+            WMPropList *instances=0;
 
-            title = PLGetArrayElement(elem,idx++);
-            command = PLGetArrayElement(elem,idx++);
-            if (PLGetNumberOfElements(elem) >= 3)
-                params = PLGetArrayElement(elem,idx++);
+            title = WMGetFromPLArray(elem,idx++);
+            command = WMGetFromPLArray(elem,idx++);
+            if (WMGetPropListItemCount(elem) >= 3)
+                params = WMGetFromPLArray(elem,idx++);
             
             if (!title || !command)
                 return menu;
 
-            if (!strcmp("SHORTCUT",PLGetString(command))) {
+            if (!strcmp("SHORTCUT",WMGetFromPLString(command))) {
                 WMenuEntry *entry;
 
                 data = convertShortcuts(scr, params);
                 if (data){
-                    entry = wMenuAddCallback(menu, PLGetString(title),
+                    entry = wMenuAddCallback(menu, WMGetFromPLString(title),
                                     notifyClient, data);
 
                     if (entry) {
-                        if (PLIsString(params)) {
-                            entry->rtext = GetShortcutString(PLGetString(params));
+                        if (WMIsPLString(params)) {
+                            entry->rtext = GetShortcutString(WMGetFromPLString(params));
                         }
                         entry->free_cdata = removeUserMenudata;
 
-                        if (PLGetNumberOfElements(elem) >= 4) {
-                            instances = PLGetArrayElement(elem,idx++);
-                            if(PLIsArray(instances))
-				if (instances && PLGetNumberOfElements(instances)
-				    && PLIsArray(instances)){
-				    entry->instances = PLRetain(instances);
+                        if (WMGetPropListItemCount(elem) >= 4) {
+                            instances = WMGetFromPLArray(elem,idx++);
+                            if(WMIsPLArray(instances))
+				if (instances && WMGetPropListItemCount(instances)
+				    && WMIsPLArray(instances)){
+				    entry->instances = WMRetainPropList(instances);
                             }
                         }
                     }
@@ -300,15 +299,15 @@ wUserMenuRefreshInstances(WMenu *menu, WWindow *wwin)
 
     for (i=0; i<menu->entry_no; i++) {
         if (menu->entries[i]->instances){
-            proplist_t ins;
+            WMPropList *ins;
             int oldflag;
-            count = PLGetNumberOfElements(menu->entries[i]->instances);
+            count = WMGetPropListItemCount(menu->entries[i]->instances);
 
             oldflag = menu->entries[i]->flags.enabled;
             menu->entries[i]->flags.enabled = 0;
             for (j=0; j<count;j++) {
-                ins = PLGetArrayElement(menu->entries[i]->instances,j);
-                if (!strcmp(wwin->wm_instance,PLGetString(ins))) {
+                ins = WMGetFromPLArray(menu->entries[i]->instances,j);
+                if (!strcmp(wwin->wm_instance,WMGetFromPLString(ins))) {
                     menu->entries[i]->flags.enabled = 1;
                     break;
                 }
@@ -334,16 +333,16 @@ readUserMenuFile(WScreen *scr, char *file_name)
 {
     WMenu *menu;
     char *mtitle;
-    proplist_t plum, elem, title, command, params;
+    WMPropList *plum, *elem, *title, *command, *params;
     int count,i;
 
     menu=NULL;
-    plum = ReadProplistFromFile(file_name);
+    plum = WMReadPropListFromFile(file_name);
     /**/
     
     if(plum){
         menu = configureUserMenu(scr, plum);
-        PLRelease(plum);
+        WMReleasePropList(plum);
     }
     return menu;
 }

@@ -30,8 +30,6 @@
 
 #include <X11/Xlib.h>
 
-#include <proplist.h>
-
 #include <wraster.h>
 
 #include <WINGs/WINGs.h>
@@ -85,9 +83,9 @@ WMWindow *GetWindow(Panel *panel);
 
 /* manipulate the dictionary for the WindowMaker domain */
 
-proplist_t GetObjectForKey(char *defaultName);
+WMPropList *GetObjectForKey(char *defaultName);
 
-void SetObjectForKey(proplist_t object, char *defaultName);
+void SetObjectForKey(WMPropList *object, char *defaultName);
 
 void RemoveObjectForKey(char *defaultName);
 

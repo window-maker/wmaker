@@ -30,7 +30,7 @@ typedef struct W_FontPanel {
     WMButton *revertB;
     WMButton *setB;
     
-    proplist_t fdb;
+    WMPropList *fdb;
 } FontPanel;
 
 

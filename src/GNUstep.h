@@ -24,23 +24,8 @@
 #ifndef WMGNUSTEP_H_
 #define WMGNUSTEP_H_
 
-/*
- * Kluge for when proplist.h is included too. proplist.h #defines BOOL
- * and Xmd.h (which is indirectly included from Xproto.h) typedefs BOOL.
- * The worst is that the BOOL from Xmd.h is a 8bit type, while BOOL from
- * proplist.h is int...
- */
-#ifdef BOOL
-#define WINGS_BOOL_FLAG
-#undef BOOL
-#endif
-
 #include <X11/Xproto.h>
 
-#ifdef WINGS_BOOL_FLAG
-#define BOOL int
-#undef WINGS_BOOL_FLAG
-#endif
 
 #define GNUSTEP_WM_MINIATURIZE_WINDOW "_GNUSTEP_WM_MINIATURIZE_WINDOW"
 

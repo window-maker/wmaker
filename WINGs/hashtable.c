@@ -435,8 +435,6 @@ Bool
 WMNextHashEnumeratorItemAndKey(WMHashEnumerator *enumerator,
                                void **item, void **key)
 {
-    const void *data = NULL;
-
     /* this assumes the table doesn't change between 
      * WMEnumerateHashTable() and WMNextHashEnumeratorItemAndKey() calls */
 
