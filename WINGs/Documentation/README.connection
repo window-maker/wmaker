@@ -1,0 +1,47 @@
+Methods of handling WMConnectionDidDieNotification notification events
+(same for WMConnectionDidTimeoutNotification)
+----------------------------------------------------------------------
+
+Once your program got this notification (you need to install an observer for 
+it), there are some ways to handle it:
+
+1. Make your observer enqueue a new notification in the ASAP queue, and the 
+   observer for this new notification (it can be the same function if you 
+   arrange to distinguish between the two cases), should remove the connection. 
+   You can also close the connection before enqueuing the new notification to
+   the ASAP queue, but is not strictly necessarily, since it will be closed 
+   when the observer for the new enqueued notification will be called and you 
+   will call the close/remove function there. This is just to make sure your 
+   connection will be silent, and won't generate new events until you reach 
+   that point.
+   This is by far the best method, since it will assure you that if you 
+   enqueue more than one notification to remove the same connection, they will
+   be coalesced, and called only once.
+2. In your observer, put the died/closed connection in a bag, and destroy all
+   the connections present in the bag, in your main loop, after you call the 
+   WHandleEvents()/WMHandleEvent(). Also closing the connection can be done
+   before putting the connection in the bag, but is optional as noted above.
+   In this case you need to make sure you don't put in the bag the same
+   connection more than once, in case the DieNotification is sent more that
+   once to you. This is automagically solved by method 1.
+3. In case it's your only connection, and you plan to exit if it was closed or
+   died, then you can safely close/remove it, and exit. As long as you no 
+   longer access it, there is no problem.
+
+4. Make you observer remove the connection. Then make sure that after that
+   point your code no longer tries to access that connection (this usually
+   means until your code gets back to the main loop). This is almost always
+   very hard to achive and subject to hidden errors. I do not recommend this
+   way of handling the died notification. It is ugly and very complicated to
+   handle. If you use it and get plenty of SIGSEGVs then you know why.
+   This method was not presented here to be used, but to show what should
+   be avoided in dealing with the died notification, in case someone gets the
+   idea to try it this way.
+
+
+Note:  read/write operations means to use our read/write functions (like 
+       WMGetMessage()/WMSendMessage()), not the C library ones read()/write().
+Note2: removing a connection is done by WMDestroyConnection(), while
+       WMCloseConnection() only closes the socket, and removed any pending
+       queues and timers on the connection.
+
