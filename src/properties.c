@@ -291,6 +291,25 @@ PropWriteGNUstepWMAttr(Window window, GNUstepWMAttributes *attr)
 }
 
 
+int
+PropGetWindowState(Window window)
+{
+    long *data;
+    long state;
+
+    data = (long*)PropGetCheckProperty(window, _XA_WM_STATE, _XA_WM_STATE,
+				       32, 1, NULL);
+
+    if (!data)
+	return -1;
+
+    state = *data;
+    XFree(data);
+
+    return state;
+}
+
+
 void
 PropCleanUp(Window root)
 {

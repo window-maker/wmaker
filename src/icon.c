@@ -417,7 +417,6 @@ getnameforicon(WWindow *wwin)
     len = strlen(prefix)+64+strlen(suffix);
     path = wmalloc(len+1);
     sprintf(path, "%s/.AppInfo", prefix);
-    free(prefix);
 
     if (access(path, F_OK)!=0) {
 	if (mkdir(path, S_IRUSR|S_IWUSR|S_IXUSR)) {
@@ -811,7 +810,9 @@ miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
     int grabbed=0;
     int clickButton=event->xbutton.button;
 
-    
+    if (WCHECK_STATE(WSTATE_MODAL))
+	return;
+
     if (IsDoubleClick(icon->core->screen_ptr, event)) {
 	miniwindowDblClick(desc, event);
 	return;

@@ -1,6 +1,6 @@
 {
   OpenTransientOnOwnerWorkspace = NO;
-  EdgeResistance = YES;
+  EdgeResistance = 30;
   IconificationStyle = Zoom;
   IconPath = (
     "~/GNUstep/Library/Icons",
@@ -48,7 +48,6 @@
   AutoArrangeIcons = NO;
   AdvanceToNewWorkspace = NO;
   CycleWorkspaces = NO;
-  WindozeCycling = NO;
   ResizeDisplay = line;
   MoveDisplay = floating;
   OpaqueMove = YES;

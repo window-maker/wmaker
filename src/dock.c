@@ -80,7 +80,6 @@ extern void DestroyDockAppSettingsPanel();
 extern void ShowDockAppSettingsPanel(WAppIcon *aicon);
 
 
-
 extern Cursor wCursor[WCUR_LAST];
 
 extern WPreferences wPreferences;
@@ -243,14 +242,21 @@ killCallback(WMenu *menu, WMenuEntry *entry)
     WAppIconAppList *tapplist;
     
     extern Atom _XA_WM_DELETE_WINDOW;
+#else
+    char *buffer;
 #endif
+
+    if (!WCHECK_STATE(WSTATE_NORMAL))
+	return;
 
     assert(entry->clientdata!=NULL);
     
     icon = (WAppIcon*)entry->clientdata;
-    
+
     icon->editing = 1;
-    
+
+    WCHANGE_STATE(WSTATE_MODAL);
+
 #ifdef REDUCE_APPICONS
     /* Send a delete message to the main window of each application
      * bound to this docked appicon. - cls
@@ -268,10 +274,14 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 	tapplist = tapplist->next;
     }
 #else
+    buffer = wstrappend(icon->wm_class,
+			_(" will be forcibly closed.\n"
+			  "Any unsaved changes will be lost.\n"
+			  "Please confirm."));
+
     if (wPreferences.dont_confirm_kill
 	|| wMessageDialog(menu->frame->screen_ptr, _("Kill Application"),
-			  _("This will kill the application.\nAny unsaved changes will be lost.\nPlease confirm."),
-			  _("Yes"), _("No"), NULL)==WAPRDefault) {
+			  buffer, _("Yes"), _("No"), NULL)==WAPRDefault) {
 	if (icon->icon && icon->icon->owner) {
 	    wClientKill(icon->icon->owner);
 	}
@@ -279,7 +289,8 @@ killCallback(WMenu *menu, WMenuEntry *entry)
 #endif /* !REDUCE_APPICONS */
     
     icon->editing = 0;
-}
+
+    WCHANGE_STATE(WSTATE_NORMAL);}
 
 
 static LinkedList*
@@ -3766,7 +3777,7 @@ iconMouseDown(WObjDescriptor *desc, XEvent *event)
     WDock *dock = aicon->dock;
     WScreen *scr = aicon->icon->core->screen_ptr;
 
-    if (aicon->editing)
+    if (aicon->editing || WCHECK_STATE(WSTATE_MODAL))
 	return;
 
     scr->last_dock = dock;

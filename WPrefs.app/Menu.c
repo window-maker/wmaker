@@ -1347,6 +1347,7 @@ showData(_Panel *panel)
     if (!menu || !PLIsArray(menu)) {
 	if (AskMenuCopy(panel->win)) {
 	    panel->dontSave = 0;
+	    panel->unsaved = 1;
 
 	    pmenu = getDefaultMenu(panel, &hasWSMenu);
 	} else {

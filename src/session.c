@@ -870,8 +870,6 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
 
     statefile = malloc(strlen(prefix)+64);
     if (!statefile) {
-	if (gsPrefix)
-	    free(prefix);
 	wwarning(_("out of memory while saving session state"));
 	goto fail;
     }
@@ -886,9 +884,6 @@ smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
 	    sprintf(statefile, "%s/wmaker.%l%i.state", prefix, t, i);
 	i++;
     } while (access(F_OK, statefile)!=-1);
-
-    if (gsPrefix)
-	free(prefix);
 
     /* save the states of all windows we're managing */
     state = PLMakeArrayFromElements(NULL, NULL);

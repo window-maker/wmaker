@@ -173,7 +173,6 @@ WMPathForResourceOfType(char *resource, char *ext)
     tmp = wusergnusteppath();
     if (tmp) {
 	path = checkFile(tmp, appdir, ext, resource);
-	free(tmp);
 	if (path) {
 	    free(appdir);
 	    return path;

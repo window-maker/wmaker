@@ -581,8 +581,8 @@ typedef struct {
 
 #define WTOP(w) (w)->frame_y
 #define WLEFT(w) (w)->frame_x
-#define WRIGHT(w) ((w)->frame_x + (int)(w)->frame->core->width)
-#define WBOTTOM(w) ((w)->frame_y + (int)(w)->frame->core->height)
+#define WRIGHT(w) ((w)->frame_x + (int)(w)->frame->core->width + FRAME_BORDER_WIDTH)
+#define WBOTTOM(w) ((w)->frame_y + (int)(w)->frame->core->height + FRAME_BORDER_WIDTH)
 
 static int
 compareWTop(const void *a, const void *b)
@@ -749,6 +749,8 @@ updateMoveData(WWindow *wwin, MoveData *data)
     tmp = scr->focused_window;
     while (tmp) {
 	if (tmp != wwin && scr->current_workspace == tmp->frame->workspace
+	    && !tmp->flags.miniaturized
+	    && !tmp->flags.hidden
 	    && !tmp->flags.obscured) {
 	    data->topList[data->count] = tmp;
 	    data->leftList[data->count] = tmp;
@@ -823,15 +825,14 @@ initMoveData(WWindow *wwin, MoveData *data)
 	 tmp != NULL;
 	 tmp = tmp->prev, i++);
 
-    if (i <= 1)
-	return;
+    if (i > 1) {
+	data->topList = wmalloc(sizeof(WWindow*) * i);
+	data->leftList = wmalloc(sizeof(WWindow*) * i);
+	data->rightList = wmalloc(sizeof(WWindow*) * i);
+	data->bottomList = wmalloc(sizeof(WWindow*) * i);
 
-    data->topList = wmalloc(sizeof(WWindow*) * i);
-    data->leftList = wmalloc(sizeof(WWindow*) * i);
-    data->rightList = wmalloc(sizeof(WWindow*) * i);
-    data->bottomList = wmalloc(sizeof(WWindow*) * i);
-
-    updateMoveData(wwin, data);
+	updateMoveData(wwin, data);
+    }
 
     data->realX = wwin->frame_x;
     data->realY = wwin->frame_y;
@@ -1075,27 +1076,33 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 	    drawFrames(wwin, scr->selected_windows, 
 		       data->realX - wwin->frame_x,
 		       data->realY - wwin->frame_y);
+	}
+	
+	if (!scr->selected_windows
+	    && wPreferences.move_display == WDIS_FRAME_CENTER) {
+		
+	    moveGeometryDisplayCentered(scr, newX + data->winWidth/2, 
+					newY + data->winHeight/2);
+	}
 
+	if (!opaqueMove) {
 	    /* draw frames */
 	    drawFrames(wwin, scr->selected_windows, 
 		       newX - wwin->frame_x,
 		       newY - wwin->frame_y);
 	}
-    }
 
-    if (!scr->selected_windows) {
+	if (!scr->selected_windows) {
 
-	if (wPreferences.move_display == WDIS_NEW) {
+	    if (wPreferences.move_display == WDIS_NEW) {
 
-	    showPosition(wwin, data->realX, data->realY);
-
-	} else if (wPreferences.move_display == WDIS_FRAME_CENTER) {
-
-	    moveGeometryDisplayCentered(scr, newX + data->winWidth/2, 
-					newY + data->winHeight/2);
+		showPosition(wwin, data->realX, data->realY);
+		
+	    }
+	    showPosition(wwin, newX, newY);
 	}
-	showPosition(wwin, newX, newY);
     }
+
 
     /* recalc relative window position */
     if (doResistance && (data->realX != newX || data->realY != newY)) {
@@ -1591,7 +1598,7 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 	    freeMoveData(&moveData);
 
 	    return started;
-	    
+
 	 default:
 	    if (started && !opaqueMove) {
 		drawFrames(wwin, scr->selected_windows, 

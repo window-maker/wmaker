@@ -2,6 +2,17 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.51.2
+
+Full Screen Maximization
+------------------------
+
+The FullMaximize window attribute will allow the window to
+be maximized to the full size of the screen (ignoring anything
+like titlebar, resizebar, dock, panels etc). It should be usefull
+for programs that must use the whole screen, like games or things 
+like presentation programs.
+
 
 --- 0.51.1
 

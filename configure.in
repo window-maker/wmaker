@@ -10,7 +10,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.51.1)
+AM_INIT_AUTOMAKE(WindowMaker, 0.51.2)
 
 AM_PROG_LIBTOOL
 
@@ -100,7 +100,7 @@ AC_CHECK_FUNCS(gethostname select poll strerror strncasecmp setpgid atexit)
 
 if test "x$CPP_PATH" = x; then
     AC_PATH_PROG(CPP_PATH, cpp, notfound, 
-		/lib:/usr/bin:/bin:/usr/lib:/usr/ccs/lib:$PATH)
+		$PATH:/lib:/usr/bin:/bin:/usr/lib:/usr/ccs/lib)
 fi
 
 dnl
@@ -589,15 +589,6 @@ dnl
 	fi
     fi
 
-# 
-# why the heck does debian name libtiff this way!?
-#
-    if test "x$my_libname" = x; then
-	WM_CHECK_LIB(tiff3g, TIFFGetVersion, [-lm])
-	if test "x$ac_cv_lib_tiff3g_TIFFGetVersion" = xyes; then
-	    my_libname="-ltiff3g"
-	fi
-    fi
 
     if test "x$my_libname" != x; then
 	WM_CHECK_HEADER(tiffio.h)
@@ -669,8 +660,8 @@ AC_DEFINE_UNQUOTED(PIXMAPDIR, "$pixmapdir")
 pkgdatadir=`eval echo $datadir`
 AC_DEFINE_UNQUOTED(PKGDATADIR, "$pkgdatadir/WindowMaker")
 
-sysconfdir=`eval echo $sysconfdir`
-AC_DEFINE_UNQUOTED(SYSCONFDIR, "$sysconfdir/WindowMaker")
+_sysconfdir=`eval echo $sysconfdir`
+AC_DEFINE_UNQUOTED(SYSCONFDIR, "$_sysconfdir/WindowMaker")
 
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
@@ -742,7 +733,9 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
 	WindowMaker/Pixmaps/Makefile WindowMaker/Styles/Makefile \
 	WindowMaker/Themes/Makefile \
 	WindowMaker/Themes/Night.themed/Makefile \
+	WindowMaker/Themes/LeetWM.themed/Makefile \
 	WindowMaker/Themes/Checker.themed/Makefile \
+	WindowMaker/Themes/STEP2000.themed/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
 	WPrefs.app/po/Makefile )
 
@@ -831,6 +824,7 @@ if test "x$MOFILES" != "x"; then
 	echo "Installation path of translated messages: $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"
 fi
 
+WM_PRINT_REDCRAP_BUG_STATUS
 
 if test "x$ac_cv_header_jpeglib_h" != xyes; then
 echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"

@@ -200,6 +200,14 @@ typedef enum {
 #define WSTATE_NEED_RESTART	2
 #define WSTATE_EXITING		3
 #define WSTATE_RESTARTING	4
+#define WSTATE_MODAL		5
+
+
+#define WCHECK_STATE(state)	(state == WProgramState)
+#define WCHANGE_STATE(nstate)	\
+	if (WProgramState == WSTATE_NORMAL\
+		|| nstate != WSTATE_MODAL)\
+		 WProgramState = (nstate)
 
 
 typedef struct {
@@ -352,6 +360,7 @@ typedef struct WPreferences {
 extern Display	*dpy;
 extern char *ProgName;
 extern unsigned int ValidModMask;
+extern char WProgramState;
 
 /****** Global Functions ******/
 extern void wAbort(Bool dumpCore);

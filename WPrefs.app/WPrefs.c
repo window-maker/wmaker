@@ -55,8 +55,6 @@ extern Panel *InitIcons(WMScreen *scr, WMWindow *win);
 
 extern Panel *InitThemes(WMScreen *scr, WMWindow *win);
 
-extern Panel *InitTextureAndColor(WMScreen *scr, WMWindow *win);
-
 extern Panel *InitAppearance(WMScreen *scr, WMWindow *win);
 
 
@@ -373,32 +371,20 @@ LocateImage(char *name)
 
 
 void
-AddSection(Panel *panel, char *iconFile)
+SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, char *file)
 {
-    WMButton *bPtr;
     WMPixmap *icon;
     RColor color;
     char *iconPath;
 
-    assert(WPrefs.sectionCount < MAX_SECTIONS);
-    
-    iconPath = LocateImage(iconFile);
-
-    bPtr = WMCreateCustomButton(WPrefs.buttonF,	WBBStateLightMask
-				|WBBStateChangeMask);
-    WMResizeWidget(bPtr, 64, 64);
-    WMMoveWidget(bPtr, WPrefs.sectionCount*64, 0);
-    WMSetButtonImagePosition(bPtr, WIPImageOnly);
-    WMSetButtonAction(bPtr, changeSection, panel);
-    WMHangData(bPtr, panel);
+    iconPath = LocateImage(file);
 
     color.red = 0xae;
     color.green = 0xaa;
     color.blue = 0xae;
     color.alpha = 0;
     if (iconPath) {
-	icon = WMCreateBlendedPixmapFromFile(WMWidgetScreen(WPrefs.win),
-					     iconPath, &color);
+	icon = WMCreateBlendedPixmapFromFile(scr, iconPath, &color);
 	if (!icon)
 	    wwarning(_("could not load icon file %s"), iconPath);
     } else {
@@ -415,8 +401,7 @@ AddSection(Panel *panel, char *iconFile)
     color.blue = 0xff;
     color.alpha = 0;
     if (iconPath) {
-	icon = WMCreateBlendedPixmapFromFile(WMWidgetScreen(WPrefs.win),
-					     iconPath, &color);
+	icon = WMCreateBlendedPixmapFromFile(scr, iconPath, &color);
 	if (!icon)
 	    wwarning(_("could not load icon file %s"), iconPath);
     } else {
@@ -427,6 +412,29 @@ AddSection(Panel *panel, char *iconFile)
 
     if (icon)
 	WMReleasePixmap(icon);
+
+    if (iconPath)
+	free(iconPath);
+}
+
+
+void
+AddSection(Panel *panel, char *iconFile)
+{
+    WMButton *bPtr;
+
+    assert(WPrefs.sectionCount < MAX_SECTIONS);
+    
+
+    bPtr = WMCreateCustomButton(WPrefs.buttonF,	WBBStateLightMask
+				|WBBStateChangeMask);
+    WMResizeWidget(bPtr, 64, 64);
+    WMMoveWidget(bPtr, WPrefs.sectionCount*64, 0);
+    WMSetButtonImagePosition(bPtr, WIPImageOnly);
+    WMSetButtonAction(bPtr, changeSection, panel);
+    WMHangData(bPtr, panel);
+
+    SetButtonAlphaImage(WMWidgetScreen(bPtr), bPtr, iconFile);
 
     WMMapWidget(bPtr);
 
@@ -439,8 +447,6 @@ AddSection(Panel *panel, char *iconFile)
     WPrefs.sectionCount++;
     
     WMResizeWidget(WPrefs.buttonF, WPrefs.sectionCount*64, 64);
-
-    free(iconPath);
 }
 
 
@@ -494,7 +500,7 @@ Initialize(WMScreen *scr)
     loadConfigurations(scr, WPrefs.win);
 
     WMSetLabelText(WPrefs.statusL, _("Initializing configuration panels..."));
-#if 1
+
     InitWindowHandling(scr, WPrefs.win);
     InitFocus(scr, WPrefs.win);
     InitMenuPreferences(scr, WPrefs.win);
@@ -504,22 +510,22 @@ Initialize(WMScreen *scr)
     InitPaths(scr, WPrefs.win);    
     InitWorkspace(scr, WPrefs.win);
     InitConfigurations(scr, WPrefs.win);
-#endif
+
     InitMenu(scr, WPrefs.win);
-#if 1
+
 #ifdef not_yet_fully_implemented
     InitKeyboardSettings(scr, WPrefs.win);
 #endif
     InitKeyboardShortcuts(scr, WPrefs.win);
     InitMouseSettings(scr, WPrefs.win);
-
 #ifdef not_yet_fully_implemented
     InitAppearance(scr, WPrefs.win);
+
     InitText(scr, WPrefs.win);
     InitThemes(scr, WPrefs.win);
 #endif
     InitExpert(scr, WPrefs.win);
-#endif
+
     WMRealizeWidget(WPrefs.scrollV);
 
     WMSetLabelText(WPrefs.statusL, 

@@ -1,6 +1,6 @@
 CATALOGS = @WPMOFILES@
 
-nlsdir = $(DESTDIR)$(NLSDIR)
+nlsdir = $(NLSDIR)
 
 CLEANFILES = $(CATALOGS)
 

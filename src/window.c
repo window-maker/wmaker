@@ -107,8 +107,7 @@ static FocusMode getFocusMode(WWindow *wwin);
 
 static int getSavedState(Window window, WSavedState **state);
 
-static void setupGNUstepHints(WWindow *wwin, 
-			      GNUstepWMAttributes *gs_hints);
+static void setupGNUstepHints(WWindow *wwin, GNUstepWMAttributes *gs_hints);
 
 /* event handlers */
 
@@ -226,39 +225,38 @@ static void
 setupGNUstepHints(WWindow *wwin, GNUstepWMAttributes *gs_hints)
 {
     if (gs_hints->flags & GSWindowStyleAttr) {
-	WSETUFLAG(wwin, no_titlebar,
-		  ((gs_hints->window_style & WMTitledWindowMask)?0:1));
-	
-	WSETUFLAG(wwin, no_close_button,
-		  ((gs_hints->window_style & WMClosableWindowMask)?0:1));
+	wwin->client_flags.no_titlebar = 
+		  ((gs_hints->window_style & WMTitledWindowMask)?0:1);
 
-	WSETUFLAG(wwin, no_closable,
-		  ((gs_hints->window_style & WMClosableWindowMask)?0:1));
+	wwin->client_flags.no_close_button =
+		  ((gs_hints->window_style & WMClosableWindowMask)?0:1);
 
-	WSETUFLAG(wwin, no_miniaturize_button,
-		  ((gs_hints->window_style & WMMiniaturizableWindowMask)?0:1));
+	wwin->client_flags.no_closable =
+		  ((gs_hints->window_style & WMClosableWindowMask)?0:1);
 
-	WSETUFLAG(wwin, no_miniaturizable,
-		  ((gs_hints->window_style & WMMiniaturizableWindowMask)?0:1));
+	wwin->client_flags.no_miniaturize_button =
+		  ((gs_hints->window_style & WMMiniaturizableWindowMask)?0:1);
 
-	WSETUFLAG(wwin, no_resizebar,
-		  ((gs_hints->window_style & WMResizableWindowMask)?0:1));
+	wwin->client_flags.no_miniaturizable =
+		  ((gs_hints->window_style & WMMiniaturizableWindowMask)?0:1);
 
-	WSETUFLAG(wwin, no_resizable,
-		  ((gs_hints->window_style & WMResizableWindowMask)?0:1));
+	wwin->client_flags.no_resizebar =
+		  ((gs_hints->window_style & WMResizableWindowMask)?0:1);
+
+	wwin->client_flags.no_resizable =
+		  ((gs_hints->window_style & WMResizableWindowMask)?0:1);
     } else {
 	/* setup the defaults */
-	WSETUFLAG(wwin, no_titlebar, 0);
-	WSETUFLAG(wwin, no_closable, 0);
-	WSETUFLAG(wwin, no_miniaturizable, 0);
-	WSETUFLAG(wwin, no_resizable, 0);
-	WSETUFLAG(wwin, no_close_button, 0);
-	WSETUFLAG(wwin, no_miniaturize_button, 0);
-	WSETUFLAG(wwin, no_resizebar, 0);
+	wwin->client_flags.no_titlebar = 0;
+	wwin->client_flags.no_closable = 0;
+	wwin->client_flags.no_miniaturizable = 0;
+	wwin->client_flags.no_resizable = 0;
+	wwin->client_flags.no_close_button = 0;
+	wwin->client_flags.no_miniaturize_button = 0;
+	wwin->client_flags.no_resizebar = 0;
     }
-
     if (gs_hints->extra_flags & GSNoApplicationIconFlag) {
-	WSETUFLAG(wwin, no_appicon, 1);
+	wwin->client_flags.no_appicon = 1;
     }
 }
 
@@ -425,7 +423,7 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 Bool
 wWindowCanReceiveFocus(WWindow *wwin)
 {
-    if (!wwin->flags.mapped && (!wwin->flags.shaded || wwin->flags.hidden))
+    if (!wwin->flags.mapped && !wwin->flags.shaded)
 	return False;
     if (WFLAGP(wwin, no_focusable) || wwin->flags.miniaturized)
 	return False;
@@ -469,6 +467,9 @@ wWindowObscuresWindow(WWindow *wwin, WWindow *obscured)
  * the window decoration attributes and others. User preferences
  * for the window are used if available, to configure window 
  * decorations and some behaviour.
+ * 	If in startup, windows that are override redirect,
+ * unmapped and never were managed and are Withdrawn are not
+ * managed.
  * 
  * Returns:
  * 	the new window descriptor
@@ -494,15 +495,31 @@ wManageWindow(WScreen *scr, Window window)
     WWindowState *win_state;
     WWindow *transientOwner = NULL;
     int window_level;
+    int wm_state;
     int foo;
     int workspace = -1;
     char *title;
+    Bool withdraw = False;
 
     /* mutex. */
-    XGrabServer(dpy);
+//    XGrabServer(dpy);
     XSync(dpy, False);
     /* make sure the window is still there */
     if (!XGetWindowAttributes(dpy, window, &wattribs)) {
+	XUngrabServer(dpy);
+	return NULL;
+    }
+
+    /* if it's an override-redirect, ignore it */
+    if (wattribs.override_redirect) {
+	XUngrabServer(dpy);
+	return NULL;
+    }
+
+    wm_state = PropGetWindowState(window);
+
+    /* if it's startup and the window is unmapped, don't manage it */
+    if (scr->flags.startup && wm_state < 0 && wattribs.map_state==IsUnmapped) {
 	XUngrabServer(dpy);
 	return NULL;
     }
@@ -548,7 +565,6 @@ wManageWindow(WScreen *scr, Window window)
      *
      *-------------------------------------------------- 
      */
-    wwin->wm_hints = XGetWMHints(dpy, window);
     PropGetWMClass(window, &wwin->wm_class, &wwin->wm_instance);
 
     /* setup descriptor */
@@ -569,24 +585,26 @@ wManageWindow(WScreen *scr, Window window)
     if (!PropGetGNUstepWMAttr(window, &wwin->wm_gnustep_attr)) {
 	wwin->wm_gnustep_attr = NULL;
     }
-    
+
     wwin->client_leader = PropGetClientLeader(window);
     if (wwin->client_leader!=None)
 	wwin->main_window = wwin->client_leader;
 
-    if (wwin->wm_hints)
-	XFree(wwin->wm_hints);
-	
     wwin->wm_hints = XGetWMHints(dpy, window);
 
     if (wwin->wm_hints)  {
-	if ((wwin->wm_hints->flags&StateHint) 
-	    && (wwin->wm_hints->initial_state == IconicState)) {
-	    wwin->flags.miniaturized = 1;
-	    /* don't do iconify animation */
-	    wwin->flags.skip_next_animation = 1;
+	if (wwin->wm_hints->flags & StateHint) {
+
+	    if (wwin->wm_hints->initial_state == IconicState) {
+
+		wwin->flags.miniaturized = 1;
+
+	    } else if (wwin->wm_hints->initial_state == WithdrawnState) {
+
+		withdraw = True;
+	    }
 	}
-      
+
 	if (wwin->wm_hints->flags & WindowGroupHint) {
 	    wwin->group_id = wwin->wm_hints->window_group;
 	    /* window_group has priority over CLIENT_LEADER */
@@ -686,19 +704,34 @@ wManageWindow(WScreen *scr, Window window)
     wKWMCheckClientInitialState(wwin);
 #endif
 
-    /* if there is a saved state, restore it */
+    /* apply previous state if it exists and we're in startup */
+    if (scr->flags.startup && wm_state >= 0) {
+
+	if (wm_state == IconicState) {
+
+	    wwin->flags.miniaturized = 1;
+
+	} else if (wm_state == WithdrawnState) {
+
+	    withdraw = True;
+	}
+    }
+
+    /* if there is a saved state (from file), restore it */
     win_state = NULL;
     if (wwin->main_window!=None/* && wwin->main_window!=window*/) {
         win_state = (WWindowState*)wWindowGetSavedState(wwin->main_window);
     } else {
         win_state = (WWindowState*)wWindowGetSavedState(window);
     }
-    if (win_state && !(wwin->wm_hints && wwin->wm_hints->flags&StateHint &&
-                       wwin->wm_hints->initial_state==WithdrawnState)) {
+    if (win_state && !withdraw) {
+
         if (win_state->state->hidden>0)
             wwin->flags.hidden = win_state->state->hidden;
+
         if (win_state->state->shaded>0 && !WFLAGP(wwin, no_shadeable))
             wwin->flags.shaded = win_state->state->shaded;
+
         if (win_state->state->miniaturized>0 &&
 	    !WFLAGP(wwin, no_miniaturizable)) {
             wwin->flags.miniaturized = win_state->state->miniaturized;
@@ -718,22 +751,23 @@ wManageWindow(WScreen *scr, Window window)
         }
     }
 
-    /* if we're restarting, restore saved state. This will overwrite previous */
+    /* if we're restarting, restore saved state (from hints). 
+     * This will overwrite previous */
     {
 	WSavedState *wstate;
 
 	if (getSavedState(window, &wstate)) {
 	    wwin->flags.shaded = wstate->shaded;
 	    wwin->flags.hidden = wstate->hidden;
-	    wwin->flags.miniaturized = 0;
+	    wwin->flags.miniaturized = wstate->miniaturized;
 	    workspace = wstate->workspace;
 	    free(wstate);
 	}
     }
 
     /* don't let transients start miniaturized if their owners are not */
-    if (transientOwner && !transientOwner->flags.miniaturized 
-	&& wwin->flags.miniaturized) {
+    if (transientOwner && !transientOwner->flags.miniaturized
+	&& wwin->flags.miniaturized && !withdraw) {
 	wwin->flags.miniaturized = 0;
 	if (wwin->wm_hints)
 	    wwin->wm_hints->initial_state = NormalState;
@@ -774,8 +808,7 @@ wManageWindow(WScreen *scr, Window window)
 
     /* do not ask for window placement if the window is
      * transient, during startup, if the initial workspace is another one
-     * or if the window wants to
-     * start iconic.
+     * or if the window wants to start iconic.
      * If geometry was saved, restore it. */
     {
 	Bool dontBring = False;
@@ -783,9 +816,9 @@ wManageWindow(WScreen *scr, Window window)
 	if (win_state && win_state->state->use_geometry) {
 	    x = win_state->state->x;
 	    y = win_state->state->y;
-	} else if (wwin->transient_for==None && !scr->flags.startup &&
-		   workspace==scr->current_workspace 
-		   && !wwin->flags.miniaturized 
+	} else if (wwin->transient_for==None && !scr->flags.startup 
+		   && workspace == scr->current_workspace
+		   && !wwin->flags.miniaturized
 		   && !wwin->flags.maximized
 		   && !(wwin->normal_hints->flags & (USPosition|PPosition))) {
 	    PlaceWindow(wwin, &x, &y, width, height);
@@ -796,14 +829,19 @@ wManageWindow(WScreen *scr, Window window)
 	if (WFLAGP(wwin, dont_move_off) && dontBring)
 	    wScreenBringInside(scr, &x, &y, width, height);
     }
-    /* 
+
+    if (wwin->flags.urgent) {
+	if (!IS_OMNIPRESENT(wwin))
+	    wwin->flags.omnipresent ^= 1;
+    }
+
+    /*
      *--------------------------------------------------
      * 
      * Create frame, borders and do reparenting
      *
      *--------------------------------------------------
      */
-    
     foo = WFF_LEFT_BUTTON | WFF_RIGHT_BUTTON;
     if (!WFLAGP(wwin, no_titlebar))
 	foo |= WFF_TITLEBAR;
@@ -941,11 +979,9 @@ wManageWindow(WScreen *scr, Window window)
     XLowerWindow(dpy, window);
 
     /* if window is in this workspace and should be mapped, then  map it */
-    if (!wwin->flags.miniaturized 
+    if (!wwin->flags.miniaturized
 	&& (workspace == scr->current_workspace || IS_OMNIPRESENT(wwin))
-        && !wwin->flags.hidden
-	&& !(wwin->wm_hints && (wwin->wm_hints->flags & StateHint)
-	     && wwin->wm_hints->initial_state == WithdrawnState)) {
+        && !wwin->flags.hidden && !withdraw) {
 
         /* The following "if" is to avoid crashing of clients that expect
          * WM_STATE set before they get mapped. Else WM_STATE is set later,
@@ -962,7 +998,7 @@ wManageWindow(WScreen *scr, Window window)
 #define _WIDTH(w) (w)->frame->core->width
 #define _HEIGHT(w) (w)->frame->core->height
 	if (!wPreferences.auto_focus && scr->focused_window
-	     && !scr->flags.startup && !transientOwner
+	    && !scr->flags.startup && !transientOwner
 	    && ((wWindowObscuresWindow(wwin, scr->focused_window)
 		 && (_WIDTH(wwin) > (_WIDTH(scr->focused_window)*5)/3
 		     || _HEIGHT(wwin) > (_HEIGHT(scr->focused_window)*5)/3)
@@ -1029,7 +1065,6 @@ wManageWindow(WScreen *scr, Window window)
 	wwin->prev = NULL;
     }
 
-    
 #ifdef GNOME_STUFF
     wGNOMEUpdateClientStateHint(wwin, True);
 #endif
@@ -1039,7 +1074,7 @@ wManageWindow(WScreen *scr, Window window)
 #endif
 
     XUngrabServer(dpy);
- 
+
     /*
      *--------------------------------------------------
      *
@@ -1066,18 +1101,20 @@ wManageWindow(WScreen *scr, Window window)
     wGNOMEUpdateClientListHint(scr);
 #endif
 #ifdef KWM_HINTS
+    wwin->flags.kwm_managed = 1;
+
     wKWMSendEventMessage(wwin, WKWMAddWindow);
 #endif
 
-    wColormapInstallForWindow(wwin->screen_ptr, scr->cmap_window);
+    wColormapInstallForWindow(scr, scr->cmap_window);
 
-    UpdateSwitchMenu(wwin->screen_ptr, wwin, ACTION_ADD);
+    UpdateSwitchMenu(scr, wwin, ACTION_ADD);
 
 #ifdef OLWM_HINTS
     if (wwin->client_flags.olwm_warp_to_pin && wwin->frame->titlebar != NULL
-	&& !WFLAGP(wwin, no_close_button)) {
+	&& !WFLAGP(wwin, no_close_button) && !withdraw) {
 
-	XWarpPointer(dpy, None, None, 0, 0, 0, 0, 
+	XWarpPointer(dpy, None, None, 0, 0, 0, 0,
 		     wwin->frame_x + width - wwin->frame->titlebar->height * 2,
 		     wwin->frame_y);
     }
@@ -1085,12 +1122,23 @@ wManageWindow(WScreen *scr, Window window)
 
     /*
      *--------------------------------------------------
+     * 
      *  Cleanup temporary stuff
+     *
      *--------------------------------------------------
      */
 
     if (win_state)
         wWindowDeleteSavedState(win_state);
+
+    /* If the window must be withdrawed, then do it now.
+     * Must do some optimization, 'though */
+    if (withdraw) {
+	wwin->flags.mapped = 0;
+	wClientSetState(wwin, WithdrawnState, None);
+	wUnmanageWindow(wwin, True, False);
+	wwin = NULL;
+    }
 
     return wwin;
 }
@@ -1265,7 +1313,7 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
         WWindow *pwin = wwin->inspector->frame; /* the inspector window */
         (*pwin->frame->on_click_right)(NULL, pwin, NULL);
     }
-    
+
     /* Close window menu if it's open for this window */
     if (wwin->flags.menu_open_for_me) {
 	CloseWindowMenu(scr);
@@ -1276,6 +1324,9 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 	    XRemoveFromSaveSet(dpy, wwin->client_win);
 
 	XSelectInput(dpy, wwin->client_win, NoEventMask);
+
+	XUngrabButton(dpy, AnyButton, AnyModifier, wwin->client_win);
+	XUngrabKey(dpy, AnyKey, AnyModifier, wwin->client_win);
     }
 
     XUnmapWindow(dpy, frame->window);
@@ -2010,6 +2061,7 @@ wWindowSaveState(WWindow *wwin)
     
     memset(data, 0, sizeof(CARD32)*9);
     data[0] = wwin->frame->workspace;
+    data[1] = wwin->flags.miniaturized;
     data[2] = wwin->flags.shaded;
     data[3] = wwin->flags.hidden;
 
@@ -2608,7 +2660,8 @@ titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 
 	XUngrabPointer(dpy, CurrentTime);
     } else if (event->xbutton.button == Button3 && event->xbutton.state==0
-	       && !wwin->flags.internal_window) {
+	       && !wwin->flags.internal_window
+	       && !WCHECK_STATE(WSTATE_MODAL)) {
 	WObjDescriptor *desc;
 
 	if (event->xbutton.window != wwin->frame->titlebar->window

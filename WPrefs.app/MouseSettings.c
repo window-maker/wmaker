@@ -55,6 +55,8 @@ typedef struct _Panel {
     
     WMFrame *ddelaF;
     WMButton *ddelaB[5];
+    WMTextField *ddelaT;
+    WMLabel *ddelaL;
     DoubleTest *tester;
     
     WMFrame *menuF;
@@ -143,7 +145,8 @@ speedClick(WMWidget *w, void *data)
 
 	tmp = WMGetTextFieldText(panel->acceT);
 	if (sscanf(tmp, "%f", &accel)!=1 || accel < 0) {
-	    WMRunAlertPanel(WMWidgetScreen(w), GetWindow(panel), _("Error"),
+	    WMRunAlertPanel(WMWidgetScreen(panel->acceT), GetWindow(panel),
+			    _("Error"),
 			    _("Invalid mouse acceleration value. Must be a positive real value."),
 			    _("OK"), NULL, NULL);
 	    free(tmp);
@@ -192,12 +195,16 @@ doubleClick(WMWidget *w, void *data)
     _Panel *panel = (_Panel*)data;
     int i;
     extern _WINGsConfiguration WINGsConfiguration;
+    char buffer[32];
 
     for (i=0; i<5; i++) {
 	if (panel->ddelaB[i]==w)
 	    break;
     }
     WINGsConfiguration.doubleClickDelay = DELAY(i);
+    
+    sprintf(buffer, "%i", DELAY(i));
+    WMSetTextFieldText(panel->ddelaT, buffer);
 }
 
 
@@ -302,26 +309,33 @@ showData(_Panel *panel)
     }
     sprintf(buffer, "%i", a);
     WMSetTextFieldText(panel->threT, buffer);
-    /* find best match */
-    a = 0;
+
+    a = -1;
     for (i=0; i<5; i++) {
-	if (fabs((0.5+((float)i*0.5))-accel) < fabs((0.5+((float)a*0.5))-accel))
+	if (0.5+(float)i*0.5 == accel)
 	    a = i;
     }
-    WMPerformButtonClick(panel->speedB[a]);
-    panel->lastClickedSpeed = panel->speedB[a];
+    if (a >= 0) {
+	WMPerformButtonClick(panel->speedB[a]);
+	panel->lastClickedSpeed = panel->speedB[a];
+    }
     panel->acceleration = accel;
+    sprintf(buffer, "%.2f", accel);
+    WMSetTextFieldText(panel->acceT, buffer);
 
     speedClick(panel->lastClickedSpeed, panel);
     /**/
     b = GetIntegerForKey("DoubleClickTime");
     /* find best match */
-    a = 0;
+    a = -1;
     for (i=0; i<5; i++) {
-	if (abs(b - DELAY(i)) < abs(b - DELAY(a)))
+	if (DELAY(i) == b)
 	    a = i;
     }
-    WMPerformButtonClick(panel->ddelaB[a]);
+    if (a >= 0)
+	WMPerformButtonClick(panel->ddelaB[a]);
+    sprintf(buffer, "%i", b);
+    WMSetTextFieldText(panel->ddelaT, buffer);
 
     /**/
     str = GetStringForKey("ModifierKey");
@@ -577,13 +591,14 @@ createPanel(Panel *p)
     free(buf2);
     
     panel->acceL = WMCreateLabel(panel->speedF);
-    WMResizeWidget(panel->acceL, 80, 16);
+    WMResizeWidget(panel->acceL, 70, 16);
     WMMoveWidget(panel->acceL, 10, 67);
+    WMSetLabelTextAlignment(panel->acceL, WARight);
     WMSetLabelText(panel->acceL, _("Acceler.:"));
 
     panel->acceT = WMCreateTextField(panel->speedF);
-    WMResizeWidget(panel->acceT, 35, 20);
-    WMMoveWidget(panel->acceT, 85, 65);
+    WMResizeWidget(panel->acceT, 40, 20);
+    WMMoveWidget(panel->acceT, 80, 65);
     WMAddNotificationObserver(returnPressed, panel,
 			      WMTextDidEndEditingNotification, panel->acceT);
 
@@ -591,6 +606,7 @@ createPanel(Panel *p)
     panel->threL = WMCreateLabel(panel->speedF);
     WMResizeWidget(panel->threL, 80, 16);
     WMMoveWidget(panel->threL, 120, 67);
+    WMSetLabelTextAlignment(panel->threL, WARight);
     WMSetLabelText(panel->threL, _("Threshold:"));
     
     panel->threT = WMCreateTextField(panel->speedF);
@@ -652,7 +668,27 @@ createPanel(Panel *p)
 
     panel->tester = CreateDoubleTest(panel->ddelaF, _("Test"));
     WMResizeWidget(panel->tester, 84, 29);
-    WMMoveWidget(panel->tester, 85, 55);
+    WMMoveWidget(panel->tester, 35, 55);
+
+    panel->ddelaT = WMCreateTextField(panel->ddelaF);
+    WMResizeWidget(panel->ddelaT, 40, 20);
+    WMMoveWidget(panel->ddelaT, 140, 60);
+
+    panel->ddelaL = WMCreateLabel(panel->ddelaF);
+    WMResizeWidget(panel->ddelaL, 40, 16);
+    WMMoveWidget(panel->ddelaL, 185, 65);
+    {
+	WMFont *font;
+	WMColor *color;
+	
+	font = WMSystemFontOfSize(scr, 10);
+	color = WMDarkGrayColor(scr);
+	WMSetLabelTextColor(panel->ddelaL, color);
+	WMSetLabelFont(panel->ddelaL, font);
+	WMReleaseFont(font);
+	WMReleaseColor(color);
+    }
+    WMSetLabelText(panel->ddelaL, "msec");
 
     WMMapSubwidgets(panel->ddelaF);
     
@@ -878,11 +914,9 @@ storeData(_Panel *panel)
 	free(tmp);
     }
 
-    for (i=0; i<5; i++) {
-	if (WMGetButtonSelected(panel->ddelaB[i]))
-	    break;
-    }
-    SetIntegerForKey(DELAY(i), "DoubleClickTime");
+    tmp = WMGetTextFieldText(panel->ddelaT);
+    if (sscanf(tmp, "%i", &i) == 1 && i > 0)
+	SetIntegerForKey(i, "DoubleClickTime");
 
     SetBoolForKey(WMGetButtonSelected(panel->disaB), "DisableWSMouseActions");
 

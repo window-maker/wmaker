@@ -260,7 +260,7 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
 	    
 #ifndef DOUBLE_BUFFER
 	if (sPtr->flags.decrDown)
-	    gc = W_GC(scr->white);
+	    gc = WMColorGC(scr->white);
 #endif
     } else { /* increment button */
 	if (sPtr->flags.horizontal) {
@@ -300,7 +300,7 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
 		       ofs+1, 2+1, bsize+1-3, bsize-3);
 #else
 	if ((!part&&sPtr->flags.decrDown) || (part&&sPtr->flags.incrDown))
-	    XFillRectangle(scr->display, d, W_GC(scr->white),
+	    XFillRectangle(scr->display, d, WMColorGC(scr->white),
 			   ofs+1, 2+1, bsize+1-3, bsize-3);
 #endif /* DOUBLE_BUFFER */
 	W_DrawRelief(scr, d, ofs, 2, bsize, bsize, WRRaised);
@@ -324,7 +324,7 @@ paintArrow(WMScroller *sPtr, Drawable d, int part)
 		       2+1, ofs+1, bsize-3, bsize+1-3);
 #else
 	if ((!part&&sPtr->flags.decrDown) || (part&&sPtr->flags.incrDown))
-	    XFillRectangle(scr->display, d, W_GC(scr->white),
+	    XFillRectangle(scr->display, d, WMColorGC(scr->white),
 			   2+1, ofs+1, bsize-3, bsize+1-3);
 #endif /* DOUBLE_BUFFER */
 	W_DrawRelief(scr, d, 2, ofs, bsize, bsize, WRRaised);
@@ -386,14 +386,14 @@ paintScroller(Scroller *sPtr)
 #ifdef DOUBLE_BUFFER
     d = XCreatePixmap(scr->display, view->window, view->size.width, 
 		      view->size.height, scr->depth);
-    XFillRectangle(scr->display, d, W_GC(scr->gray), 0, 0, 
+    XFillRectangle(scr->display, d, WMColorGC(scr->gray), 0, 0, 
 		   view->size.width, view->size.height);
 #endif
     
-    XDrawRectangle(scr->display, d, W_GC(scr->black), 0, 0,
+    XDrawRectangle(scr->display, d, WMColorGC(scr->black), 0, 0,
 		   view->size.width-1, view->size.height-1);
 #ifndef DOUBLE_BUFFER
-    XDrawRectangle(scr->display, d, W_GC(scr->gray), 1, 1,
+    XDrawRectangle(scr->display, d, WMColorGC(scr->gray), 1, 1,
 		   view->size.width-3, view->size.height-3);
 #endif
 

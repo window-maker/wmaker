@@ -19,7 +19,7 @@ SUPPORTED PLATFORMS
 - Solaris 2.6.0
 - Solaris 2.7beta
 - SCO Unix
-- SGI Irix
+- SGI Irix 5.x, 6.5
 - OSF/1
 - HP-UX
 - AIX 4.1.4 / IBM PowerPC
@@ -421,6 +421,10 @@ like not being able to use a graphic format library you think you have
 installed, look at the config.log file for clues of the problem.
 
 
+== Error with loading fonts, even if they exist.
+
+Try rebuilding without NLS support.
+
 == Error when configuring
 
 ltconfig: unrecognized option `--no-reexec'
@@ -487,9 +491,9 @@ CPP_PATH.
 LOCALES/INTERNATIONALIZATION
 ============================
 
-Window Maker has national language support. 
-To enable national language support, you must compile
-Window Maker with some additional parameters. 
+Window Maker has national language support. To enable national language
+support, you must compile Window Maker with some additional parameters.
+
 
 0 - You must have the GNU gettext package installed. It can be
 obtained at ftp://prep.ai.mit.edu/pub/gnu/gettext-nnn.tar.gz

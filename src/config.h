@@ -51,7 +51,7 @@
 /* #undef X_DISPLAY_MISSING */
 
 /* define to the path to cpp */
-#define CPP_PATH "/lib/cpp"
+#define CPP_PATH "/usr/bin/cpp"
 
 /* define if you want GNOME stuff support */
 /* #undef GNOME_STUFF */
@@ -174,5 +174,5 @@
 #define PACKAGE "WindowMaker"
 
 /* Version number of package */
-#define VERSION "0.51.1"
+#define VERSION "0.51.2"
 

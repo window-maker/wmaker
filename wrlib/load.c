@@ -100,18 +100,6 @@ extern RImage *RLoadGIF(RContext *context, char *file_name, int index);
 #endif
 
 
-static char*
-wstrdup(char *s)
-{
-    char *tmp;
-
-    tmp = malloc(strlen(s)+1);
-    if (!tmp)
-	return NULL;
-    return strcpy(tmp, s);
-}
-
-
 char**
 RSupportedFileFormats(void)
 {
@@ -289,7 +277,40 @@ RLoadImage(RContext *context, char *file, int index)
 }
 
 
+char*
+RGetImageFileFormat(char *file)
+{
+    switch (identFile(file)) {
+     case IM_XPM:
+	return "XPM";
 
+#ifdef USE_TIFF
+     case IM_TIFF:
+	return "TIFF";
+#endif /* USE_TIFF */
+
+#ifdef USE_PNG
+     case IM_PNG:
+	return "PNG";
+#endif /* USE_PNG */
+
+#ifdef USE_JPEG
+     case IM_JPEG:
+	return "JPEG";
+#endif /* USE_JPEG */
+
+#ifdef USE_GIF
+     case IM_GIF:
+	return "GIF";
+#endif /* USE_GIF */
+
+     case IM_PPM:
+	return "PPM";
+
+     default:
+	return NULL;
+    }
+}
 
 
 static int

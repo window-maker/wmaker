@@ -245,43 +245,43 @@ makeKnobPixmap(Slider *sPtr)
     }
     
     pix = XCreatePixmap(scr->display, sPtr->view->window, w, h, scr->depth);
-    XFillRectangle(scr->display, pix, W_GC(scr->gray), 0, 0, w, h);
+    XFillRectangle(scr->display, pix, WMColorGC(scr->gray), 0, 0, w, h);
 
     if (sPtr->knobThickness < 10) {
 	W_DrawRelief(scr, pix, 0, 0, w, h, WRRaised);
     } else if (sPtr->flags.vertical) {
-	XDrawLine(scr->display, pix, W_GC(scr->white), 0, 0, 0, h-3);
-	XDrawLine(scr->display, pix, W_GC(scr->white), 1, 0, 1, h-3);
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w-2, 1, w-2, h/2-2);
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w-2, h/2, w-2, h-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->white), 0, 0, 0, h-3);
+	XDrawLine(scr->display, pix, WMColorGC(scr->white), 1, 0, 1, h-3);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), w-2, 1, w-2, h/2-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), w-2, h/2, w-2, h-2);
 	
-	XDrawLine(scr->display, pix, W_GC(scr->white), 0, 0, w-2, 0);
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), 1, h/2-2, w-3, h/2-2);
-	XDrawLine(scr->display, pix, W_GC(scr->white), 0, h/2-1, w-3, h/2-1);
+	XDrawLine(scr->display, pix, WMColorGC(scr->white), 0, 0, w-2, 0);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), 1, h/2-2, w-3, h/2-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->white), 0, h/2-1, w-3, h/2-1);
 	
-	XDrawLine(scr->display, pix, W_GC(scr->black), w-1, 0, w-1, h-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->black), w-1, 0, w-1, h-2);
 	
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), 0, h-3, w-2, h-3);
-	XDrawLine(scr->display, pix, W_GC(scr->black), 0, h-2, w-1, h-2);
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), 0, h-1, w-1,h-1);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), 0, h-3, w-2, h-3);
+	XDrawLine(scr->display, pix, WMColorGC(scr->black), 0, h-2, w-1, h-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), 0, h-1, w-1,h-1);
     } else {
-	XDrawLine(scr->display, pix, W_GC(scr->white), 0, 0, w-3, 0);
+	XDrawLine(scr->display, pix, WMColorGC(scr->white), 0, 0, w-3, 0);
 	
-	XDrawLine(scr->display, pix, W_GC(scr->white), 0, 0, 0, h-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->white), 0, 0, 0, h-2);
 
-	XDrawLine(scr->display, pix, W_GC(scr->white), 1, 0, 1, h-3);
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w/2-2, 1, w/2-2, h-3);
-	XDrawLine(scr->display, pix, W_GC(scr->white), w/2-1, 0, w/2-1, h-3);
+	XDrawLine(scr->display, pix, WMColorGC(scr->white), 1, 0, 1, h-3);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), w/2-2, 1, w/2-2, h-3);
+	XDrawLine(scr->display, pix, WMColorGC(scr->white), w/2-1, 0, w/2-1, h-3);
 
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w-3, 0, w-3, h-2);
-	XDrawLine(scr->display, pix, W_GC(scr->black), w-2, 0, w-2, h-2);
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w-1, 0, w-1, h-1);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), w-3, 0, w-3, h-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->black), w-2, 0, w-2, h-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), w-1, 0, w-1, h-1);
 
-	XDrawLine(scr->display, pix, W_GC(scr->black), 1, h-1, w/2+1, h-1);
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), 1, h-2, w/2-2, h-2);
-	XDrawLine(scr->display, pix, W_GC(scr->darkGray), w/2, h-2, w-3,h-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->black), 1, h-1, w/2+1, h-1);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), 1, h-2, w/2-2, h-2);
+	XDrawLine(scr->display, pix, WMColorGC(scr->darkGray), w/2, h-2, w-3,h-2);
 
-	XDrawLine(scr->display, pix, W_GC(scr->black), 0, h-1, w-2, h-1);
+	XDrawLine(scr->display, pix, WMColorGC(scr->black), 0, h-1, w-2, h-1);
     }
     
     if (sPtr->knobPixmap)
@@ -339,9 +339,9 @@ paintSlider(Slider *sPtr)
 #define MAXV sPtr->maxValue
 #define POSV sPtr->value
     
-    bgc = W_GC(scr->black);
-    wgc = W_GC(scr->white);
-    lgc = W_GC(scr->gray);
+    bgc = WMColorGC(scr->black);
+    wgc = WMColorGC(scr->white);
+    lgc = WMColorGC(scr->gray);
 
     buffer = XCreatePixmap(scr->display, sPtr->view->window, 
 			   size.width, size.height, scr->depth);
@@ -487,12 +487,21 @@ handleActionEvents(XEvent *event, void *data)
 #else
 	    int tmp;
 
-	    tmp = valueForMousePoint(sPtr, event->xmotion.x, event->xmotion.y);
-	    if (tmp < sPtr->value)
-		tmp = sPtr->value-1;
-	    else
-		tmp = sPtr->value+1;
-	    WMSetSliderValue(sPtr, tmp);
+	    if (event->xbutton.button == Button2) {
+		sPtr->flags.dragging = 1;
+
+		sPtr->value = valueForMousePoint(sPtr, event->xmotion.x,
+						 event->xmotion.y);
+		paintSlider(sPtr);
+	    } else {
+		tmp = valueForMousePoint(sPtr, event->xmotion.x,
+					 event->xmotion.y);
+		if (tmp < sPtr->value)
+		    tmp = sPtr->value-1;
+		else
+		    tmp = sPtr->value+1;
+		WMSetSliderValue(sPtr, tmp);
+	    }
 #endif
 
 	    if (sPtr->flags.continuous && sPtr->action) {

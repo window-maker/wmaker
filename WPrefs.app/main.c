@@ -165,7 +165,7 @@ main(int argc, char **argv)
 	wfatal(_("could not open display %s"), XDisplayName(display_name));
 	exit(0);
     }
-#if 1
+#if 0
     XSynchronize(dpy, 1);
 #endif
     scr = WMCreateScreen(dpy, DefaultScreen(dpy));

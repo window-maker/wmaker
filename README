@@ -66,8 +66,10 @@ making windows and doors.
 Documentation
 =============
 
+Read before asking.
+
 * README files all over the source tree have info related to the stuff
-in the directories.
+in the directories. 
 
 * INSTALL has installation instructions and some troubleshooting tips.
 You're meant to read it before installing. it was not written just to 
@@ -302,17 +304,19 @@ to:
 #define NO_EMERGENCY_AUTORESTART
 
 Then, in the src directory type:
+make clean
 make CFLAGS=-g
 make install
 
 and wait for Window Maker to be installed.
 
 Once having Window Maker installed, start X and reproduce the bug so
-that Window Maker crashes. When it does crash, type the following from
-your shell:
+that Window Maker crashes. When it does crash, go to the directory
+where you compiled wmaker and type the following from your shell:
 
 script
-gdb wmaker path_to_the_core_file
+cd src
+gdb .libs/wmaker path_to_the_core_file
 
 Then, in the gdb prompt type "bt". Quit from gdb by typing "quit"
 and then, in the shell prompt, type "exit".

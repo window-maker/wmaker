@@ -1,3 +1,15 @@
+Changes since version 0.51.1:
+.............................
+
+- maximize for full screen
+- fixed problem with frame drawing in non-opaque 
+- fixed installation path prob [jmknoble@pobox.com]
+- fixed bug moving window when only one window is on screen
+- fixed bug with ignored GNUstep attributes
+- fixed WPrefs crash in Mouse Preferences
+- fixed crash bug in WINGs/wmaker startup
+- added workaround for kde pager crash bug
+
 Changes since version 0.51.0:
 .............................
 
@@ -34,7 +46,9 @@ Changes since version 0.51.0:
 - fixed crash with internal dialogs and multi-heads
 - added standard colormap support to wrlib (taken from libXmu sources)
 - fixed memory leak in attribute panel
-- fixed bug with window that can get focus if both shaded and hidden.
+- fixed crash with CalendarManager deiconify
+- fixed heisencrash when mapping new windows
+- fixed totally buggy wmaker.inst ~/.xinitrc checker
 
 Changes since version 0.50.2:
 .............................

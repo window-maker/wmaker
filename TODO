@@ -9,9 +9,11 @@ Do ASAP:
 - add multiline support for balloons
 - move/add balloon to WINGs
 - finish XStandardColormap stuff in wrlib
+- finish menu editor/other stuff in wprefs
 
 Need to do:
 ===========
+- put a "Do not save workspace state" in the exit confirmation dialog
 - allow user to select/restore default root menu from wprefs
 - fix windoze cycle window patch
 - support for X11R6.4 extension for getting extra visual info in wrlib's

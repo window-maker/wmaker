@@ -81,6 +81,9 @@ WINGs bug fixes, WINGs color panel
 Robert A. Holak <panthar@tradeservices.com>
 bug fix
 
+Michael Hokenson <logan@dct.com>
+wkde2menu.pl script
+
 IKARASHI Akira <ikarashi@itlb.te.noda.sut.ac.jp>
 Workspace change bug fix
 
@@ -98,7 +101,7 @@ made autoarrange icons a runtime option, SHADOW_RESIZEBAR c-time option,
 no workspace switch to the same workspace, dashed icon selection,
 misclellaneous bug fixes
 
-Alfredo K. Kojima <kojima@inf.ufrgs.br>
+Alfredo K. Kojima <kojima@windowmaker.org>
 Project maintainer
 
 Jay Kominek <jkominek@xtn.net>
@@ -140,9 +143,6 @@ selection in textfield
 Dan Pascu <dan@services.iiruc.ro>
 dock ghost (superfluous mode) fix, enhancement for scrollable menus,
 clip, numerous other stuff, project maintainer
-
-Kenneth W. Persinger Jr. <Kenn_Persinger@sector7.com>
-tcl/tk dockit
 
 Biagio Pippa <1993s017@educ.disi.unige.it>
 fixed miniaturization with transient window

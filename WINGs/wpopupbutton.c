@@ -403,7 +403,7 @@ paintPopUpButton(PopUpButton *bPtr)
     pixmap = XCreatePixmap(scr->display, bPtr->view->window, 
 			   bPtr->view->size.width, bPtr->view->size.height,
 			   scr->depth);
-    XFillRectangle(scr->display, pixmap, W_GC(scr->gray), 0, 0,
+    XFillRectangle(scr->display, pixmap, WMColorGC(scr->gray), 0, 0,
 		   bPtr->view->size.width, bPtr->view->size.height);
 
     W_DrawRelief(scr, pixmap, 0, 0, bPtr->view->size.width,
@@ -413,7 +413,7 @@ paintPopUpButton(PopUpButton *bPtr)
 	W_PaintText(bPtr->view, pixmap, scr->normalFont, 6, 
 		    (bPtr->view->size.height-WMFontHeight(scr->normalFont))/2,
 		    bPtr->view->size.width, WALeft, 
-		    bPtr->flags.enabled ? W_GC(scr->black) : W_GC(scr->darkGray),
+		    bPtr->flags.enabled ? WMColorGC(scr->black) : WMColorGC(scr->darkGray),
 		    False, caption, strlen(caption));
     }
 
@@ -489,7 +489,7 @@ paintMenuEntry(PopUpButton *bPtr, int index, int highlight)
 	return;
     }
 	
-    XFillRectangle(scr->display, bPtr->menuView->window, W_GC(scr->white),
+    XFillRectangle(scr->display, bPtr->menuView->window, WMColorGC(scr->white),
 		   1, index*itemHeight+1, width-3, itemHeight-3);
     
     itemPtr = bPtr->items;
@@ -500,7 +500,7 @@ paintMenuEntry(PopUpButton *bPtr, int index, int highlight)
 		 width, itemHeight, WRRaised);
 
     W_PaintText(bPtr->menuView, bPtr->menuView->window, scr->normalFont,  6, 
-		index*itemHeight + yo, width, WALeft, W_GC(scr->black), False,
+		index*itemHeight + yo, width, WALeft, WMColorGC(scr->black), False,
 		itemPtr->text, strlen(itemPtr->text));
 	
     if (!bPtr->flags.pullsDown && index == bPtr->selectedItemIndex) {
@@ -531,7 +531,7 @@ makeMenuPixmap(PopUpButton *bPtr)
     pixmap = XCreatePixmap(scr->display, bPtr->view->window, width, height, 
 			   scr->depth);
     
-    XFillRectangle(scr->display, pixmap, W_GC(scr->gray), 0, 0, width, height);
+    XFillRectangle(scr->display, pixmap, WMColorGC(scr->gray), 0, 0, width, height);
     
     itemPtr = bPtr->items;
     for (i = 0; i < bPtr->itemCount; i++) {
@@ -541,9 +541,9 @@ makeMenuPixmap(PopUpButton *bPtr)
 		     WRRaised);
 
         if (itemPtr->disabled)
-	    gc = W_GC(scr->darkGray);
+	    gc = WMColorGC(scr->darkGray);
 	else
-	    gc = W_GC(scr->black);
+	    gc = WMColorGC(scr->black);
 
 	W_PaintText(bPtr->menuView, pixmap, scr->normalFont,  6, 
 		    i*itemHeight + yo, width, WALeft, gc, False,
@@ -569,7 +569,8 @@ resizeMenu(PopUpButton *bPtr)
     int height;
     
     height = bPtr->itemCount * bPtr->view->size.height;
-    W_ResizeView(bPtr->menuView, bPtr->view->size.width, height);
+    if (height > 0)
+	W_ResizeView(bPtr->menuView, bPtr->view->size.width, height);
 }
 
 

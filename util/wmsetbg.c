@@ -696,6 +696,12 @@ duplicatePixmap(Pixmap pixmap, int width, int height)
 }
 
 
+static int
+dummyErrorHandler(Display *dpy, XErrorEvent *err)
+{
+    return 0;
+}
+
 void
 setPixmapProperty(Pixmap pixmap)
 {
@@ -717,7 +723,10 @@ setPixmapProperty(Pixmap pixmap)
                        &type, &format, &length, &after, &data);
 
     if ((type == XA_PIXMAP) && (format == 32) && (length == 1)) {
+	XSetErrorHandler(dummyErrorHandler);
         XKillClient(dpy, *((Pixmap *)data));
+	XSync(dpy, False);
+	XSetErrorHandler(NULL);
 	mode = PropModeReplace;
     } else {
 	mode = PropModeAppend;
@@ -976,7 +985,6 @@ char*
 getPixmapPath(char *domain)
 {
     proplist_t val;
-    proplist_t d;
     char *ptr, *data;
     int len, i, count;
 
@@ -1019,7 +1027,7 @@ getPixmapPath(char *domain)
     if (i>0)
 	ptr--; *(ptr--) = 0;
 
-    PLRelease(d);
+    PLRelease(val);
 
     return data;
 }
@@ -1118,7 +1126,6 @@ main(int argc, char **argv)
     char *texture = NULL;
     int workspace = -1;
     
-    
     signal(SIGINT, SIG_DFL);
     signal(SIGTERM, SIG_DFL);
     signal(SIGQUIT, SIG_DFL);
@@ -1141,7 +1148,7 @@ main(int argc, char **argv)
 		wfatal("too few arguments for %s\n", argv[i-1]);
 		exit(1);
 	    }
-	    display = argv[i+1];
+	    display = argv[i];
 	} else if (strcmp(argv[i], "-s")==0
 		   || strcmp(argv[i], "--scale")==0) {
 	    style = "spixmap";

@@ -288,6 +288,7 @@ void
 wClientKill(WWindow *wwin)
 {
     XKillClient(dpy, wwin->client_win);
+
     XFlush(dpy);
 }
 
@@ -743,8 +744,8 @@ GetColormapWindows(WWindow *wwin)
     wwin->cmap_windows = NULL;
     wwin->cmap_window_no = 0;
 
-    if (XGetWMColormapWindows(dpy, wwin->client_win, &(wwin->cmap_windows),
-			      &(wwin->cmap_window_no))==0
+    if (!XGetWMColormapWindows(dpy, wwin->client_win, &(wwin->cmap_windows),
+			      &(wwin->cmap_window_no))
 	|| !wwin->cmap_windows) {
 	wwin->cmap_window_no = 0;
 	wwin->cmap_windows = NULL;

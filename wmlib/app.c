@@ -65,9 +65,9 @@ WMAppAddWindow(WMAppContext *app, Window window)
     if (!win)
       return False;
 
-    free(app->windows);
-
     memcpy(win, app->windows, sizeof(Window)*app->win_count);
+
+    free(app->windows);
 
     win[app->win_count] = window;
     app->windows = win;

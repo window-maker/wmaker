@@ -31,7 +31,6 @@ findCloseColor(WMScreen *scr, unsigned short red, unsigned short green,
     WMColor *color;
     XColor xcolor;
     RColor rcolor;
-    XGCValues gcv;
 
     rcolor.red = red>>8;
     rcolor.green = green>>8;
@@ -49,11 +48,7 @@ findCloseColor(WMScreen *scr, unsigned short red, unsigned short green,
     color->refCount = 1;
     color->color = xcolor;
     color->flags.exact = 1;
-
-    gcv.foreground = color->color.pixel;
-    gcv.graphics_exposures = False;
-    color->gc = XCreateGC(scr->display, scr->rcontext->drawable, 
-			  GCForeground|GCGraphicsExposures, &gcv);
+    color->gc = NULL;
 
     return color;
 }
@@ -65,7 +60,6 @@ createRGBColor(WMScreen *scr, unsigned short red, unsigned short green,
 	       unsigned short blue)
 {
     WMColor *color;
-    XGCValues gcv;
     XColor xcolor;
 
     xcolor.red = red;
@@ -81,11 +75,7 @@ createRGBColor(WMScreen *scr, unsigned short red, unsigned short green,
     color->refCount = 1;
     color->color = xcolor;
     color->flags.exact = 1;
-
-    gcv.foreground = color->color.pixel;
-    gcv.graphics_exposures = False;
-    color->gc = XCreateGC(scr->display, scr->rcontext->drawable, 
-			  GCForeground|GCGraphicsExposures, &gcv);
+    color->gc = NULL;
 
     return color;
 }
@@ -116,8 +106,10 @@ WMCreateNamedColor(WMScreen *scr, char *name, Bool exact)
     
     if (!XParseColor(scr->display, scr->colormap, name, &xcolor))
 	return NULL;
-    
-    
+
+    if (scr->visual->class == TrueColor)
+	exact = True;
+
     if (!exact || !(color=createRGBColor(scr, xcolor.red, xcolor.green, 
 					 xcolor.blue))) {
 	color = findCloseColor(scr, xcolor.red, xcolor.green, xcolor.blue);
@@ -146,7 +138,8 @@ WMReleaseColor(WMColor *color)
     if (color->refCount < 1) {
 	XFreeColors(color->screen->display, color->screen->colormap,
 		    &(color->color.pixel), 1, 0);
-	XFreeGC(color->screen->display, color->gc);
+	if (color->gc)
+	    XFreeGC(color->screen->display, color->gc);
 	free(color);
     }
 }
@@ -156,7 +149,8 @@ void
 WMPaintColorSwatch(WMColor *color, Drawable d, int x, int y,
 		    unsigned int width, unsigned int height)
 {
-    XFillRectangle(color->screen->display, d, color->gc, x, y, width, height);
+    XFillRectangle(color->screen->display, d, WMColorGC(color), 
+		   x, y, width, height);
 }
 
 
@@ -170,6 +164,16 @@ WMColorPixel(WMColor *color)
 GC
 WMColorGC(WMColor *color)
 {
+    if (!color->gc) {
+	XGCValues gcv;
+	WMScreen *scr = color->screen;
+
+	gcv.foreground = color->color.pixel;
+	gcv.graphics_exposures = False;
+	color->gc = XCreateGC(scr->display, scr->rcontext->drawable,
+			      GCForeground|GCGraphicsExposures, &gcv);
+    }
+
     return color->gc;
 }
 
@@ -226,7 +230,6 @@ WMGrayColor(WMScreen *scr)
 					LIGHT_STIPPLE_HEIGHT);
 
 	    color = createRGBColor(scr, 0xffff, 0xffff, 0xffff);
-	    XFreeGC(scr->display, color->gc);
 
 	    gcv.foreground = white->color.pixel;
 	    gcv.background = black->color.pixel;
@@ -268,7 +271,6 @@ WMDarkGrayColor(WMScreen *scr)
 					  DARK_STIPPLE_HEIGHT);
 	
 	    color = createRGBColor(scr, 0, 0, 0);
-	    XFreeGC(scr->display, color->gc);
 
 	    gcv.foreground = white->color.pixel;
 	    gcv.background = black->color.pixel;

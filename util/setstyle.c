@@ -303,8 +303,9 @@ main(int argc, char **argv)
 
     prop = PLGetProplistWithPath(path);
     if (!prop) {
-	printf("%s:could not load WindowMaker configuration file \"%s\".\n", 
-	       ProgName, path);
+	perror(path);
+	printf("%s:could not load WindowMaker configuration file.\n",
+	       ProgName);
 	exit(1);
     }
 
@@ -345,8 +346,8 @@ main(int argc, char **argv)
 	
 	style = PLGetProplistWithPath(buffer);
 	if (!style) {
-	    printf("%s:could not load style file \"%s\".\n", ProgName, 
-		   buffer);
+	    perror(buffer);
+	    printf("%s:could not load style file.\n", ProgName);
 	    exit(1);
 	}
 
@@ -355,7 +356,8 @@ main(int argc, char **argv)
     } else {
 	style = PLGetProplistWithPath(file);
 	if (!style) {
-	    printf("%s:could not load style file \"%s\".\n", ProgName, file);
+	    perror(file);
+	    printf("%s:could not load style file.\n", ProgName);
 	    exit(1);
 	}
     }

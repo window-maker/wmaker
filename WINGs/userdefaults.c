@@ -35,22 +35,24 @@ extern char *WMGetApplicationName();
 char*
 wusergnusteppath()
 {
-    char *path;
+    static char *path = NULL;
     char *gspath;
     int pathlen;
 
-    gspath = getenv("GNUSTEP_USER_ROOT");
-    if (gspath) {
-	gspath = wexpandpath(gspath);
-	pathlen = strlen(gspath) + 4;
-	path = wmalloc(pathlen);
-	strcpy(path, gspath);
-	free(gspath);
-    } else {
-	pathlen = strlen(wgethomedir()) + 10;
-	path = wmalloc(pathlen);
-	strcpy(path, wgethomedir());
-	strcat(path, "/GNUstep");
+    if (!path) {
+	gspath = getenv("GNUSTEP_USER_ROOT");
+	if (gspath) {
+	    gspath = wexpandpath(gspath);
+	    pathlen = strlen(gspath) + 4;
+	    path = wmalloc(pathlen);
+	    strcpy(path, gspath);
+	    free(gspath);
+	} else {
+	    pathlen = strlen(wgethomedir()) + 10;
+	    path = wmalloc(pathlen);
+	    strcpy(path, wgethomedir());
+	    strcat(path, "/GNUstep");
+	}
     }
 
     return path;
@@ -66,7 +68,6 @@ wdefaultspathfordomain(char *domain)
     gspath = wusergnusteppath();
     path = wmalloc(strlen(gspath)+strlen(DEFAULTS_DIR)+strlen(domain)+4);
     strcpy(path, gspath);
-    free(gspath);
     strcat(path, DEFAULTS_DIR);
     strcat(path, "/");
     strcat(path, domain);

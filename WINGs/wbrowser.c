@@ -229,7 +229,7 @@ drawTitleOfColumn(WMBrowser *bPtr, int column)
     
     x=(column-bPtr->firstVisibleColumn)*(bPtr->columnSize.width+COLUMN_SPACING);
 
-    XFillRectangle(scr->display, bPtr->view->window, W_GC(scr->darkGray), x, 0,
+    XFillRectangle(scr->display, bPtr->view->window, WMColorGC(scr->darkGray), x, 0,
 		   bPtr->columnSize.width, bPtr->titleHeight);
     W_DrawRelief(scr, bPtr->view->window, x, 0,
 		 bPtr->columnSize.width, bPtr->titleHeight, WRSunken);
@@ -245,13 +245,13 @@ drawTitleOfColumn(WMBrowser *bPtr, int column)
 						   &titleLen, widthC);
 	    W_PaintText(bPtr->view, bPtr->view->window, scr->boldFont, x, 
 			(bPtr->titleHeight-WMFontHeight(scr->boldFont))/2,
-			bPtr->columnSize.width, WACenter, W_GC(scr->white),
+			bPtr->columnSize.width, WACenter, WMColorGC(scr->white),
 			False, titleBuf, titleLen);
 	    free (titleBuf);
 	} else {
 	    W_PaintText(bPtr->view, bPtr->view->window, scr->boldFont, x, 
 			(bPtr->titleHeight-WMFontHeight(scr->boldFont))/2,
-			bPtr->columnSize.width, WACenter, W_GC(scr->white),
+			bPtr->columnSize.width, WACenter, WMColorGC(scr->white),
 			False, bPtr->titles[column], titleLen);
 	}
     }
@@ -267,7 +267,7 @@ WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, char *title)
     if (bPtr->titles[column])
 	free(bPtr->titles[column]);
 
-    bPtr->titles[column] = (title!=NULL) ? wstrdup(title) : wstrdup("");
+    bPtr->titles[column] = wstrdup(title);
    
     if (COLUMN_IS_VISIBLE(bPtr, column) && bPtr->flags.isTitled) {
 	drawTitleOfColumn(bPtr, column);
@@ -517,7 +517,7 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     y = rect->pos.y;
 
     if (state & WLDSSelected)
-	XFillRectangle(scr->display, d, W_GC(scr->white), x, y,
+	XFillRectangle(scr->display, d, WMColorGC(scr->white), x, y,
 		       width, height);
     else 
 	XClearArea(scr->display, d, x, y, width, height, False);
@@ -530,24 +530,24 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 	    char *textBuf = createTruncatedString(scr->normalFont,
 		                                  text, &textLen, widthC);
             W_PaintText(view, d, scr->normalFont,  x+4, y, widthC,
-		    	WALeft, W_GC(scr->black), False, textBuf, textLen);
+		    	WALeft, WMColorGC(scr->black), False, textBuf, textLen);
 	    free(textBuf);
 	} else {
       	    W_PaintText(view, d, scr->normalFont,  x+4, y, widthC,
-		    	WALeft, W_GC(scr->black), False, text, textLen);
+		    	WALeft, WMColorGC(scr->black), False, text, textLen);
 	}
     }
 
     if (state & WLDSIsBranch) {
-	XDrawLine(scr->display, d, W_GC(scr->darkGray), x+width-11, y+3,
+	XDrawLine(scr->display, d, WMColorGC(scr->darkGray), x+width-11, y+3,
 		  x+width-6, y+height/2);
 	if (state & WLDSSelected)
-	    XDrawLine(scr->display, d,W_GC(scr->gray), x+width-11, y+height-5,
+	    XDrawLine(scr->display, d,WMColorGC(scr->gray), x+width-11, y+height-5,
 		      x+width-6, y+height/2);
 	else
-	    XDrawLine(scr->display, d,W_GC(scr->white), x+width-11, y+height-5,
+	    XDrawLine(scr->display, d,WMColorGC(scr->white), x+width-11, y+height-5,
 		      x+width-6, y+height/2);
-	XDrawLine(scr->display, d, W_GC(scr->black), x+width-12, y+3,
+	XDrawLine(scr->display, d, WMColorGC(scr->black), x+width-12, y+3,
 		  x+width-12, y+height-5);
     }
 }
@@ -893,31 +893,27 @@ listCallback(void *self, void *clientData)
     int i;
 
     item = WMGetListSelectedItem(lPtr);
-    if (!item) {
-        oldItem = item;
-        return;
-    }
+    if (!item || oldItem == item)
+	return;
 
-    if (oldItem != item) {
-        for (i=0; i<bPtr->columnCount; i++) {
-            if (lPtr == bPtr->columns[i])
-                break;
-        }
-        assert(i<bPtr->columnCount);
-
-        /* columns at right must be cleared */
-        removeColumn(bPtr, i+1);
-        /* open directory */
-        if (item->isBranch) {
-            WMAddBrowserColumn(bPtr);
-            loadColumn(bPtr, bPtr->usedColumnCount-1);
-        }
-        if (bPtr->usedColumnCount < bPtr->maxVisibleColumns)
-            i = 0;
-        else
-            i = bPtr->usedColumnCount-bPtr->maxVisibleColumns;
-        scrollToColumn(bPtr, i, True);
+    for (i=0; i<bPtr->columnCount; i++) {
+	if (lPtr == bPtr->columns[i])
+	    break;
     }
+    assert(i<bPtr->columnCount);
+
+    /* columns at right must be cleared */
+    removeColumn(bPtr, i+1);
+    /* open directory */
+    if (item->isBranch) {
+	WMAddBrowserColumn(bPtr);
+	loadColumn(bPtr, bPtr->usedColumnCount-1);
+    }
+    if (bPtr->usedColumnCount < bPtr->maxVisibleColumns)
+	i = 0;
+    else
+	i = bPtr->usedColumnCount-bPtr->maxVisibleColumns;
+    scrollToColumn(bPtr, i, True);
 
     /* call callback for click */
     if (bPtr->action)

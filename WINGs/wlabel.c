@@ -196,9 +196,9 @@ paintLabel(Label *lPtr)
     GC gc;
     
     if (lPtr->textColor)
-	gc = W_GC(lPtr->textColor);
+	gc = WMColorGC(lPtr->textColor);
     else
-	gc = W_GC(scrPtr->black);
+	gc = WMColorGC(scrPtr->black);
 
     W_PaintTextAndImage(lPtr->view, !lPtr->flags.noWrap, gc,
 			(lPtr->font!=NULL ? lPtr->font : scrPtr->normalFont),

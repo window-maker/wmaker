@@ -149,10 +149,10 @@ paintFrame(Frame *fPtr)
     	
 	tx = (view->size.width - tw) / 2;
     
-	XFillRectangle(scrPtr->display, view->window, W_GC(scrPtr->gray),
+	XFillRectangle(scrPtr->display, view->window, WMColorGC(scrPtr->gray),
 		       tx, ty, tw, th);
 
-	WMDrawString(scrPtr, view->window, W_GC(scrPtr->black), 
+	WMDrawString(scrPtr, view->window, WMColorGC(scrPtr->black), 
 		     scrPtr->normalFont, tx, ty, fPtr->caption,
 		     strlen(fPtr->caption));
     }

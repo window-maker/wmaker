@@ -415,7 +415,15 @@ wMaximizeWindow(WWindow *wwin, int directions)
 
     if (WFLAGP(wwin, no_resizable))
 	return;
+
     
+    if (WFLAGP(wwin, full_maximize)) {
+	usableArea.x1 = 0;
+	usableArea.y1 = 0;
+	usableArea.x2 = wwin->screen_ptr->scr_width;
+	usableArea.y2 = wwin->screen_ptr->scr_height;
+    }
+
     if (wwin->flags.shaded) {
 	wwin->flags.skip_next_animation = 1;
 	wUnshadeWindow(wwin);
@@ -446,6 +454,8 @@ wMaximizeWindow(WWindow *wwin, int directions)
 
 	new_height = (usableArea.y2-usableArea.y1)-FRAME_BORDER_WIDTH*2;
 	new_y = usableArea.y1;
+	if (WFLAGP(wwin, full_maximize))
+	    new_y -= wwin->frame->top_width;
 
     } else {
 
@@ -453,7 +463,10 @@ wMaximizeWindow(WWindow *wwin, int directions)
 	new_height = wwin->frame->core->height;
 
     }
-    new_height -= wwin->frame->top_width+wwin->frame->bottom_width;
+
+    if (!WFLAGP(wwin, full_maximize)) {
+	new_height -= wwin->frame->top_width+wwin->frame->bottom_width;
+    }
 
     wWindowConstrainSize(wwin, &new_width, &new_height);
     wWindowConfigure(wwin, new_x, new_y, new_width, new_height);
@@ -1012,10 +1025,11 @@ wDeiconifyWindow(WWindow  *wwin)
     if (!wwin->flags.miniaturized)
 	return;
 
-    if (wwin->transient_for != None) {
+    if (wwin->transient_for != None 
+	&& wwin->transient_for != wwin->screen_ptr->root_win) {
 	WWindow *owner = recursiveTransientFor(wwin);
 
-	if (wwin->flags.miniaturized) {
+	if (owner && owner->flags.miniaturized) {
 	    wDeiconifyWindow(owner);
 	    wSetFocusTo(wwin->screen_ptr, wwin);
 	    wRaiseFrame(wwin->frame->core);

@@ -72,6 +72,7 @@ static proplist_t AStartMiniaturized;
 static proplist_t AStartMaximized;
 static proplist_t ADontSaveSession;
 static proplist_t AEmulateAppIcon;
+static proplist_t AFullMaximize;
 
 static proplist_t AStartWorkspace;
 
@@ -119,6 +120,7 @@ make_keys()
     AStartHidden = PLMakeString("StartHidden");
     ADontSaveSession = PLMakeString("DontSaveSession");
     AEmulateAppIcon = PLMakeString("EmulateAppIcon");
+    AFullMaximize = PLMakeString("FullMaximize");
 
     AStartWorkspace = PLMakeString("StartWorkspace");
 
@@ -532,6 +534,9 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     value = (WMGetButtonSelected(panel->moreChk[6])!=0) ? Yes : No;
     insertAttribute(dict, winDic, AEmulateAppIcon,   value, &different, flags);
 
+    value = (WMGetButtonSelected(panel->moreChk[7])!=0) ? Yes : No;
+    insertAttribute(dict, winDic, AFullMaximize,   value, &different, flags);
+
     /* application wide settings for when */
     /* the window is the leader, save the attribute with the others */
     if (panel->inspected->main_window == panel->inspected->client_win) {
@@ -547,8 +552,9 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     if (different) {
         PLInsertDictionaryEntry(dict, key, winDic);
     }
+
     PLRelease(key); 
-    PLRelease(winDic); 
+    PLRelease(winDic);
 
     different = 0;
     
@@ -561,16 +567,16 @@ saveSettings(WMButton *button, InspectorPanel *panel)
 	wapp = wApplicationOf(panel->inspected->main_window);
 	if (wapp) {
 	    char *iconFile;
-	    
+
 	    appDic = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
 
 	    assert(wapp->main_window_desc->wm_instance!=NULL);
 	    assert(wapp->main_window_desc->wm_class!=NULL);
-		    
+
 	    strcat(strcpy(buffer, wapp->main_window_desc->wm_instance), ".");
 	    strcat(buffer, wwin->wm_class);
 	    key = PLMakeString(buffer);
-	    
+
 	    iconFile = wDefaultGetIconFile(wwin->screen_ptr, 
 					   wapp->main_window_desc->wm_instance,
 					   wapp->main_window_desc->wm_class,
@@ -709,6 +715,7 @@ applySettings(WMButton *button, InspectorPanel *panel)
     WSETUFLAG(wwin, no_focusable, WMGetButtonSelected(panel->moreChk[4]));
     WSETUFLAG(wwin, dont_save_session, WMGetButtonSelected(panel->moreChk[5]));
     WSETUFLAG(wwin, emulate_appicon, WMGetButtonSelected(panel->moreChk[6]));
+    WSETUFLAG(wwin, full_maximize, WMGetButtonSelected(panel->moreChk[7]));
     WSETUFLAG(wwin, always_user_icon, WMGetButtonSelected(panel->alwChk));
 
     if (WFLAGP(wwin, no_titlebar) && wwin->flags.shaded)
@@ -851,7 +858,7 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 	}
         WMSetButtonSelected(panel->attrChk[i], flag);
     }
-    for (i=0; i < 7; i++) {
+    for (i=0; i < 8; i++) {
 	int flag = 0;
 	
 	switch (i) {
@@ -875,6 +882,9 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 	    break;
 	 case 6:
 	    flag = WFLAGP(wwin, emulate_appicon);
+	    break;
+	 case 7:
+	    flag = WFLAGP(wwin, full_maximize);
 	    break;
 	}
 	WMSetButtonSelected(panel->moreChk[i], flag);
@@ -949,7 +959,7 @@ textEditedObserver(void *observerData, WMNotification *notification)
     if ((long)WMGetNotificationClientData(notification) != WMReturnTextMovement)
 	return;
 
-    if (observerData == panel->fileText) {
+    if (WMGetNotificationObject(notification) == panel->fileText) {
 	showIconFor(WMWidgetScreen(panel->win), panel, NULL, NULL, 
 		    USE_TEXT_FIELD);
     /*
@@ -1106,8 +1116,8 @@ createInspectorForWindow(WWindow *wwin)
     /**** attributes ****/
     panel->attrFrm = WMCreateFrame(panel->win);
     WMSetFrameTitle(panel->attrFrm, _("Attributes"));
-    WMMoveWidget(panel->attrFrm, 15, 50);
-    WMResizeWidget(panel->attrFrm, frame_width, 240);
+    WMMoveWidget(panel->attrFrm, 15, 45);
+    WMResizeWidget(panel->attrFrm, frame_width, 250);
 
     for (i=0; i < 10; i++) {
 	char *caption = NULL;
@@ -1166,10 +1176,10 @@ createInspectorForWindow(WWindow *wwin)
     /**** more attributes ****/
     panel->moreFrm = WMCreateFrame(panel->win);
     WMSetFrameTitle(panel->moreFrm, _("Advanced"));
-    WMMoveWidget(panel->moreFrm, 15, 50);
-    WMResizeWidget(panel->moreFrm, frame_width, 240);
+    WMMoveWidget(panel->moreFrm, 15, 45);
+    WMResizeWidget(panel->moreFrm, frame_width, 250);
 
-    for (i=0; i < 7; i++) {
+    for (i=0; i < 8; i++) {
 	char *caption = NULL;
 	int flag = 0;
 	
@@ -1202,6 +1212,10 @@ createInspectorForWindow(WWindow *wwin)
 	    caption = _("Emulate Application Icon");
 	    flag = WFLAGP(wwin, emulate_appicon);
 	    break;
+	 case 7:
+	    caption = _("Full Screen Maximization");
+	    flag = WFLAGP(wwin, full_maximize);
+	    break;
 	}
 	panel->moreChk[i] = WMCreateSwitchButton(panel->moreFrm);
 	WMMoveWidget(panel->moreChk[i], 10, 20*(i+1));
@@ -1212,7 +1226,7 @@ createInspectorForWindow(WWindow *wwin)
 
     panel->moreLbl = WMCreateLabel(panel->moreFrm);
     WMResizeWidget(panel->moreLbl, frame_width - (2 * 5), 60);
-    WMMoveWidget(panel->moreLbl, 5, 160);
+    WMMoveWidget(panel->moreLbl, 5, 180);
     WMSetLabelText(panel->moreLbl, 
 		   _("Enable the \"Don't bind...\" options to allow the "
 		     "application to receive all mouse or keyboard events."));

@@ -54,6 +54,7 @@
 #include "framewin.h"
 #include "session.h"
 #include "defaults.h"
+#include "properties.h"
 
 #include "xutil.h"
 
@@ -139,7 +140,6 @@ extern Atom _XDE_URLTYPE;
 extern Cursor wCursor[WCUR_LAST];
 
 /* special flags */
-extern char WProgramState;
 extern char WDelayedActionSet;
 
 /***** Local *****/
@@ -261,7 +261,7 @@ handleSig(int sig)
         wwarning(_("got signal %i - restarting\n"), sig);
 #endif
 
-	WProgramState = WSTATE_NEED_RESTART;
+	WCHANGE_STATE(WSTATE_NEED_RESTART);
 
 	/* setup idle handler, so that this will be handled when
 	 * the select() is returned becaused of the signal, even if
@@ -278,7 +278,7 @@ handleSig(int sig)
         wwarning(_("got signal %i - exiting...\n"), sig);
 #endif
 
-	WProgramState = WSTATE_NEED_EXIT;
+	WCHANGE_STATE(WSTATE_NEED_EXIT);
 
 	if (!WDelayedActionSet) {
 	    WDelayedActionSet = 1;
@@ -864,27 +864,6 @@ StartUp(Bool defaultScreenOnly)
 
 
 
-static int
-getState(Window window)
-{
-    Atom type;
-    int form;
-    unsigned long nitems, bytes_rem;
-    unsigned char *data;
-    long ret;
-
-    if (XGetWindowProperty(dpy, window, _XA_WM_STATE, 0, 3, False,
-			   _XA_WM_STATE, &type,&form,&nitems,&bytes_rem,
-			   &data)==Success) {
-	if (data != NULL) {
-	    ret = *(long*)data;
-	    free(data);
-	    return ret;
-	}
-    }
-    return -1;
-}
-
 
 static Bool
 windowInList(Window window, Window *list, int count)
@@ -913,12 +892,9 @@ manageAllWindows(WScreen *scr)
     Window root, parent;
     Window *children;
     unsigned int nchildren;
-    XWindowAttributes wattribs;
     unsigned int i, j;
-    int state;
     WWindow *wwin;
-    XWMHints *wmhints;
-    
+
     XGrabServer(dpy);
     XQueryTree(dpy, scr->root_win, &root, &parent, &children, &nchildren);
 
@@ -926,8 +902,10 @@ manageAllWindows(WScreen *scr)
 
     /* first remove all icon windows */
     for (i = 0; i < nchildren; i++) {
+	XWMHints *wmhints;
+
 	if (children[i]==None) 
-	  continue;
+	    continue;
 
     	wmhints = XGetWMHints(dpy, children[i]);
 	if (wmhints && (wmhints->flags & IconWindowHint)) {
@@ -944,61 +922,34 @@ manageAllWindows(WScreen *scr)
 	    XFree(wmhints);
 	}
     }
-    /* map all windows without OverrideRedirect */
+
+
     for (i = 0; i < nchildren; i++) {
 	if (children[i] == None)
 	    continue;
 
-
 #ifdef KWM_HINTS
 	wKWMCheckModule(scr, children[i]);
 #endif
-
-	XGetWindowAttributes(dpy, children[i], &wattribs);
-
-	state = getState(children[i]);
-	if (!wattribs.override_redirect 
-	    && (state>=0 || wattribs.map_state!=IsUnmapped)) {
-	    
-	    if (state==WithdrawnState) {
-		/* move the window far away so that it doesn't flash */
-		XMoveWindow(dpy, children[i], scr->scr_width+10,
-			    scr->scr_height+10);
+	wwin = wManageWindow(scr, children[i]);
+	if (wwin) {
+	    /* apply states got from WSavedState */
+	    /* shaded + minimized is not restored correctly */
+	    if (wwin->flags.shaded) {
+		wwin->flags.shaded = 0;
+		wShadeWindow(wwin);
 	    }
-	    wwin = wManageWindow(scr, children[i]);
-	    if (wwin) {
-		if (state == WithdrawnState) {
-		    wwin->flags.mapped = 0;
-		    wClientSetState(wwin, WithdrawnState, None);
-		    XSelectInput(dpy, wwin->client_win, NoEventMask);
-		    XRemoveFromSaveSet(dpy, wwin->client_win);
-		    wUnmanageWindow(wwin, True, False);
-                } else {
-                    /* apply states got from WSavedState */
-                    /* shaded + minimized is not restored correctly */
-                    if (wwin->flags.shaded) {
-			wwin->flags.shaded = 0;
-                        wShadeWindow(wwin);
-                    }
-		    if (wwin->wm_hints &&
-			(wwin->wm_hints->flags & StateHint) && state < 0)
-			state = wwin->wm_hints->initial_state;
+	    if (wwin->flags.miniaturized
+		&& (wwin->transient_for == None
+		    || wwin->transient_for == scr->root_win
+		    || !windowInList(wwin->transient_for, children, 
+				     nchildren))) {
 
-		    if ((state == IconicState || wwin->flags.miniaturized)
-			&& (wwin->transient_for == None
-			    || wwin->transient_for == wwin->client_win
-			    || !windowInList(wwin->transient_for,
-					     children, nchildren))) {
-			wwin->flags.miniaturized = 0;
-			wIconifyWindow(wwin);
-		    } else {
-			wClientSetState(wwin, NormalState, None);
-		    }
-		}
-            }
-	    if (state == WithdrawnState) {
-		/* move the window back to it's old position */
-		XMoveWindow(dpy, children[i], wattribs.x, wattribs.y);
+		wwin->flags.skip_next_animation = 1;
+		wwin->flags.miniaturized = 0;
+		wIconifyWindow(wwin);
+	    } else {
+		wClientSetState(wwin, NormalState, None);
 	    }
 	}
     }

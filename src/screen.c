@@ -501,7 +501,7 @@ createInternalWindows(WScreen *scr)
     XSelectInput(dpy, scr->no_focus_win, KeyPressMask|KeyReleaseMask);
     XMapWindow(dpy, scr->no_focus_win);
 
-    XSetInputFocus (dpy, scr->no_focus_win, RevertToParent, CurrentTime);
+    XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, CurrentTime);
  
     /* shadow window for dock buttons */
     vmask = CWBorderPixel|CWBackPixmap|CWBackPixel|CWCursor|CWSaveUnder|CWOverrideRedirect;

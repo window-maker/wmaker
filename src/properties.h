@@ -28,6 +28,7 @@
 unsigned char* PropGetCheckProperty(Window window, Atom hint, Atom type, 
 				    int format, int count, int *retCount);
 
+int PropGetWindowState(Window window);
 
 int PropGetNormalHints(Window window, XSizeHints *size_hints, int *pre_iccm);
 void PropGetProtocols(Window window, WProtocols *prots);

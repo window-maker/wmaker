@@ -358,10 +358,10 @@ renderPixmap(W_Screen *screen, Pixmap d, Pixmap mask, char **data,
 	     int width, int height)
 {
     int x, y;
-    GC whiteGC = W_GC(screen->white);
-    GC blackGC = W_GC(screen->black);
-    GC lightGC = W_GC(screen->gray);
-    GC darkGC = W_GC(screen->darkGray);
+    GC whiteGC = WMColorGC(screen->white);
+    GC blackGC = WMColorGC(screen->black);
+    GC lightGC = WMColorGC(screen->gray);
+    GC darkGC = WMColorGC(screen->darkGray);
 
 
     if (mask)
@@ -583,6 +583,7 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->rootWin = RootWindow(display, screen);
 
+    scrPtr->fontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
 
     /* initially allocate some colors */
     WMWhiteColor(scrPtr);

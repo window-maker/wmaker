@@ -57,7 +57,7 @@
  */
 #define USECPP
 
-/* #define CPP_PATH /lib/cpp */
+/* #define CPP_PATH /usr/bin/cpp */
 
 /*
  * support for OffiX DND drag and drop in the Dock

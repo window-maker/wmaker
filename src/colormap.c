@@ -41,7 +41,7 @@ wColormapInstallForWindow(WScreen *scr, WWindow *wwin)
     int done = 0;
     Window xwin = None;
 
-    if(wwin) {
+    if (wwin) {
 	xwin = wwin->client_win;
     } else {
 	xwin = scr->root_win;
@@ -55,7 +55,7 @@ wColormapInstallForWindow(WScreen *scr, WWindow *wwin)
     }
 
     /* install colormap for all windows of the client */
-    if (wwin && wwin->cmap_window_no > 0) {
+    if (wwin && wwin->cmap_window_no > 0 && wwin->cmap_windows) {
 	for (i = wwin->cmap_window_no - 1; i >= 0; i--) {
 	    Window w;
 

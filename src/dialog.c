@@ -70,7 +70,7 @@ wMessageDialog(WScreen *scr, char *title, char *message,
     parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 400, 180, 0, 0, 0);
     
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
-    
+
     wwin = wManageInternalWindow(scr, parent, None, NULL, 
 				 (scr->scr_width - 400)/2,
 				 (scr->scr_height - 180)/2, 400, 180);
@@ -452,7 +452,7 @@ wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class)
     panel->fileField = WMCreateTextField(panel->win);
     WMResizeWidget(panel->fileField, 345, 20);
     WMMoveWidget(panel->fileField, 95, 210);
-    WMSetTextFieldEnabled(panel->fileField, False);
+    WMSetTextFieldEditable(panel->fileField, False);
     
     panel->okButton = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->okButton, 80, 26);
@@ -614,9 +614,9 @@ destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 #endif /* SILLYNESS */
     WMUnmapWidget(thePanel);
 
-    WMDestroyWidget(thePanel->win);
-
     wUnmanageWindow(thePanel->wwin, False, False);
+
+    WMDestroyWidget(thePanel->win);
 
     free(thePanel);
     

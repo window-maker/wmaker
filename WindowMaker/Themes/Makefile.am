@@ -1,4 +1,4 @@
-SUBDIRS = Night.themed Checker.themed 
+SUBDIRS = Night.themed Checker.themed  LeetWM.themed STEP2000.themed
 
 defsdatadir = $(pkgdatadir)/Themes
 

@@ -546,13 +546,13 @@ paintItem(List *lPtr, int index)
 			  &rect);
     } else {
 	if (itemPtr->selected)
-	    XFillRectangle(scr->display, view->window, W_GC(scr->white), x, y,
+	    XFillRectangle(scr->display, view->window, WMColorGC(scr->white), x, y,
 			   width, height);
 	else
 	    XClearArea(scr->display, view->window, x, y, width, height, False);
 	
 	W_PaintText(view, view->window, scr->normalFont,  x+4, y, width,
-		    WALeft, W_GC(scr->black), False, 
+		    WALeft, WMColorGC(scr->black), False, 
 		    itemPtr->text, strlen(itemPtr->text));
     }
 }

@@ -105,7 +105,7 @@ paintDoubleTest(_DoubleTest *dPtr)
     W_Screen *scr = dPtr->view->screen;
 
     if (dPtr->active) {
-	XFillRectangle(scr->display, dPtr->view->window, W_GC(scr->white),
+	XFillRectangle(scr->display, dPtr->view->window, WMColorGC(scr->white),
 		       0, 0, dPtr->view->size.width, dPtr->view->size.height);
     } else {
 	XClearWindow(scr->display, dPtr->view->window);
@@ -119,7 +119,7 @@ paintDoubleTest(_DoubleTest *dPtr)
 	y = (dPtr->view->size.height-scr->normalFont->height)/2;
 	W_PaintText(dPtr->view, dPtr->view->window, scr->normalFont,  
 		    dPtr->on, dPtr->on+y, dPtr->view->size.width, WACenter, 
-		    W_GC(scr->black), False, dPtr->text, strlen(dPtr->text));
+		    WMColorGC(scr->black), False, dPtr->text, strlen(dPtr->text));
     }
 }
 

@@ -511,7 +511,7 @@ paintButton(Button *bPtr)
 
     if (bPtr->flags.selected) {
 	if (bPtr->flags.stateLight)
-	    gc = W_GC(scrPtr->white);
+	    gc = WMColorGC(scrPtr->white);
 
 	if (bPtr->flags.stateChange) {
 	    if (bPtr->altCaption) {
@@ -533,7 +533,7 @@ paintButton(Button *bPtr)
 	    offset = 1;
 	}
 	if (bPtr->flags.pushLight)
-	    gc = W_GC(scrPtr->white);
+	    gc = WMColorGC(scrPtr->white);
 	
 	if (bPtr->flags.pushChange) {
 	    if (bPtr->altCaption) {
@@ -546,9 +546,9 @@ paintButton(Button *bPtr)
     
 
     if (bPtr->flags.enabled)
-	textGC = W_GC(scrPtr->black);
+	textGC = WMColorGC(scrPtr->black);
     else
-	textGC = W_GC(scrPtr->darkGray);
+	textGC = WMColorGC(scrPtr->darkGray);
 
     W_PaintTextAndImage(bPtr->view, True, textGC,
 			(bPtr->font!=NULL ? bPtr->font : scrPtr->normalFont),

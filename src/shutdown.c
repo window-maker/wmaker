@@ -187,9 +187,12 @@ RestoreDesktop(WScreen *scr)
             next = core->stacking->above;
             
             if (core->descriptor.parent_type==WCLASS_WINDOW) {
+		Window window;
+
                 wwin = core->descriptor.parent;
-                wwin->flags.mapped=1;
+		window = wwin->client_win;
                 wUnmanageWindow(wwin, !wwin->flags.internal_window, False);
+		XMapWindow(dpy, window);
             }
             core = next;
         }

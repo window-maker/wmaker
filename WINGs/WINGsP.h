@@ -9,7 +9,7 @@
 #include "WINGs.h"
 #include "WUtil.h"
 
-#if WINGS_H_VERSION < 981220
+#if WINGS_H_VERSION < 990222
 #error There_is_an_old_WINGs.h_file_somewhere_in_your_system._Please_remove_it.
 #endif
 
@@ -59,6 +59,7 @@ typedef struct W_Font {
     short height;
     short y;
     short refCount;
+    char *name;
     unsigned int notFontSet:1;
 } W_Font;
 
@@ -156,7 +157,9 @@ typedef struct W_Screen {
     W_Font *normalFont;
 
     W_Font *boldFont;
-    
+
+    WMHashTable *fontCache;
+
     struct W_Pixmap *checkButtonImageOn;
     struct W_Pixmap *checkButtonImageOff;
     
@@ -324,7 +327,6 @@ _WINGsConfiguration WINGsConfiguration;
 #define W_VIEW_MAPPED(view)	(view)->flags.mapped
 
 #define W_PIXEL(c)		(c)->color.pixel
-#define W_GC(c)			(c)->gc
 
 #define W_FONTID(f)		(f)->font->fid
 

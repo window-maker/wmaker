@@ -101,7 +101,7 @@ wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
 EXTRA_DIST = $(wpdata_DATA) TexturePanel.icons 
 
-WPrefs_SOURCES =  	main.c 	WPrefs.c 	WPrefs.h 	Appearance.c 	Configurations.c 	Expert.c 	Focus.c 	Icons.c 	KeyboardSettings.c 	KeyboardShortcuts.c 	Menu.c 	MenuPreferences.c 	MouseSettings.c 	NoMenuAlert.c 	Paths.c 	Preferences.c 	Text.c 	TextureAndColor.c 	TexturePanel.c 	TexturePanel.h 	Themes.c 	WindowHandling.c 	Workspace.c 	double.c 	double.h 	editmenu.c 	editmenu.h 	MenuGuru.c 	xmodifier.c
+WPrefs_SOURCES =  	main.c 	WPrefs.c 	WPrefs.h 	Appearance.c 	Configurations.c 	Expert.c 	Focus.c 	Icons.c 	KeyboardSettings.c 	KeyboardShortcuts.c 	Menu.c 	MenuPreferences.c 	MouseSettings.c 	NoMenuAlert.c 	Paths.c 	Preferences.c 	Text.c 	TexturePanel.c 	TexturePanel.h 	Themes.c 	WindowHandling.c 	Workspace.c 	double.c 	double.h 	editmenu.c 	editmenu.h 	MenuGuru.c 	xmodifier.c
 
 
 CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
@@ -128,8 +128,8 @@ X_PRE_LIBS = @X_PRE_LIBS@
 WPrefs_OBJECTS =  main.o WPrefs.o Appearance.o Configurations.o Expert.o \
 Focus.o Icons.o KeyboardSettings.o KeyboardShortcuts.o Menu.o \
 MenuPreferences.o MouseSettings.o NoMenuAlert.o Paths.o Preferences.o \
-Text.o TextureAndColor.o TexturePanel.o Themes.o WindowHandling.o \
-Workspace.o double.o editmenu.o MenuGuru.o xmodifier.o
+Text.o TexturePanel.o Themes.o WindowHandling.o Workspace.o double.o \
+editmenu.o MenuGuru.o xmodifier.o
 WPrefs_LDFLAGS = 
 CFLAGS = @CFLAGS@
 COMPILE = $(CC) $(DEFS) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)

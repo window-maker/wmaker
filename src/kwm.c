@@ -1559,6 +1559,7 @@ wKWMSendEventMessage(WWindow *wwin, WKWMEventMessage message)
 
     if (wwin && (wwin->flags.internal_window
 		 || wwin->flags.kwm_hidden_for_modules
+		 || !wwin->flags.kwm_managed
 		 || WFLAGP(wwin, skip_window_list)))
 	return;
 

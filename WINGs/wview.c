@@ -103,33 +103,6 @@ adoptChildView(W_View *view, W_View *child)
 
 
 static void
-getPosition(Display *dpy, Window win, int *x_ret, int *y_ret)
-{
-    unsigned foo;
-    Window bar;
-    Window parent;
-    Window *childs;
-    int x, y;
-
-    XGetGeometry(dpy, win, &bar, &x, &y, &foo, &foo, &foo, &foo);
-    if (XQueryTree(dpy, win, &bar, &parent, &childs, &foo)) {
-	int px, py;
-
-	XFree(childs);
-	if (parent != bar) {
-	    getPosition(dpy, parent, &px, &py);
-
-	    x += px;
-	    y += py;
-	}
-    }
-    
-    *x_ret = x;
-    *y_ret = y;
-}
-
-
-static void
 handleEvents(XEvent *event, void *data)
 {
     W_View *view = (W_View*)data;
@@ -154,8 +127,12 @@ handleEvents(XEvent *event, void *data)
 		view->pos.x = event->xconfigure.x;
 		view->pos.y = event->xconfigure.y;
 	    } else {
-		getPosition(view->screen->display, view->window,
-			    &view->pos.x, &view->pos.y);
+		Window foo;
+
+		XTranslateCoordinates(view->screen->display,
+				      view->window, view->screen->rootWin,
+				      event->xconfigure.x, event->xconfigure.y,
+				      &view->pos.x, &view->pos.y, &foo);
 	    }
 	}
     }

@@ -1,7 +1,7 @@
 /*
  *  Raster graphics library
  * 
- *  Copyright (c) 1997, 1998 Alfredo K. Kojima
+ *  Copyright (c) 1997, 1998, 1999 Alfredo K. Kojima
  * 
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -39,8 +39,8 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.12 */
-#define WRASTER_HEADER_VERSION	12
+/* version of the header for the library: 0.13 */
+#define WRASTER_HEADER_VERSION	13
 
 
 #include <X11/Xlib.h>
@@ -249,6 +249,9 @@ enum {
  * Do not free the returned data.
  */
 char **RSupportedFileFormats(void);
+
+
+char *RGetImageFileFormat(char *file);
 
 /*
  * Xlib contexts

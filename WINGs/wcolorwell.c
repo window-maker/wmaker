@@ -24,6 +24,9 @@ typedef struct W_ColorWell {
     } flags;
 } ColorWell;
 
+static char *_ColorWellActivatedNotification = "_ColorWellActivatedNotification";
+
+
 
 static void destroyColorWell(ColorWell *cPtr);
 static void paintColorWell(ColorWell *cPtr);
@@ -35,6 +38,8 @@ static void handleDragEvents(XEvent *event, void *data);
 static void handleActionEvents(XEvent *event, void *data);
 
 static void resizeColorWell();
+
+
 
 W_ViewProcedureTable _ColorWellViewProcedures = {
     NULL,
@@ -56,6 +61,21 @@ static WMDragSourceProcs dragProcs = {
 #define MIN_WIDTH	16
 #define MIN_HEIGHT	8
 
+
+
+static void
+activatedObserver(void *data, WMNotification *notification)
+{
+    WMColorWell *cPtr = (WMColorWell*)data;
+
+    if (!cPtr->flags.active || WMGetNotificationObject(notification) == cPtr)
+	return;
+
+    W_SetViewBackgroundColor(cPtr->view, WMWidgetScreen(cPtr)->gray);
+    paintColorWell(cPtr);
+
+    cPtr->flags.active = 0;
+}
 
 
 WMColorWell*
@@ -97,8 +117,13 @@ WMCreateColorWell(WMWidget *parent)
     cPtr->colorView->flags.mapWhenRealized = 1;
 
     cPtr->flags.bordered = 1;
-    
+
     resizeColorWell(cPtr, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+
+    WMAddNotificationObserver(activatedObserver, cPtr, 
+			      _ColorWellActivatedNotification, NULL);
+
+    cPtr->color = WMBlackColor(WMWidgetScreen(cPtr));
 
     return cPtr;
 }
@@ -379,14 +404,54 @@ handleDragEvents(XEvent *event, void *data)
 static void
 handleActionEvents(XEvent *event, void *data)
 {
-/*    WMColorWell *cPtr = (ColorWell*)data;*/
+    WMColorWell *cPtr = (ColorWell*)data;
+    WMScreen *scr = WMWidgetScreen(cPtr);
+    WMColorPanel *cpanel;
     
+    if (cPtr->flags.active)
+	W_SetViewBackgroundColor(cPtr->view, scr->gray);
+    else
+	W_SetViewBackgroundColor(cPtr->view, scr->white);
+    paintColorWell(cPtr);
+
+    cPtr->flags.active ^= 1;
+
+    if (cPtr->flags.active) {
+	WMPostNotificationName(_ColorWellActivatedNotification, cPtr, NULL);
+    }
+/*
+    cpanel = WMGetColorPanel(scr);
+    if (cPtr->color)
+	WMSetColorPanelColor(cpanel, cPtr->color);
+    WMShowColorPanel(cpanel);
+ *
+ */
+    {
+	char *t;
+	WMColor *color;
+
+	t = WMRunInputPanel(scr, NULL, "Advanced Color Picker", 
+			    "Type a Color (this is temporary!!! I'm not THAT dumb :P)",
+			    NULL, "OK", "Cancel");
+	
+	if (t) {
+	    color = WMCreateNamedColor(scr, t, False);
+	    if (color) {
+		WMSetColorWellColor(cPtr, color);
+		WMReleaseColor(color);
+	    }
+	    free(t);
+	}
+
+    }
 }
 
 
 static void
 destroyColorWell(ColorWell *cPtr)
 {
+    WMRemoveNotificationObserver(cPtr);
+
     if (cPtr->color)
 	WMReleaseColor(cPtr->color);
    

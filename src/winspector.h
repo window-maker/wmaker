@@ -60,7 +60,7 @@ typedef struct InspectorPanel {
 
     /* 3rd page. more attributes */
     WMFrame *moreFrm;
-    WMButton *moreChk[7];
+    WMButton *moreChk[8];
     
     WMLabel *moreLbl;
 

@@ -265,7 +265,11 @@ typedef struct _WScreen {
     WMHandlerID *autoRaiseTimer;
     Window autoRaiseWindow;	       /* window that is scheduled to be
 					* raised */
-    
+
+
+    Window scrolledFMaximize;	       /* full maximized window which was
+					scrolled down for titlebar access */
+
     /* for window shortcuts */
     struct WWindow *shortcutWindow[MAX_WINDOW_SHORTCUTS];
 

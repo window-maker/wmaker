@@ -127,6 +127,8 @@ typedef struct {
     unsigned int start_maximized:1;
     unsigned int dont_save_session:1;  /* do not save app's state in session */
 
+    unsigned int full_maximize:1;
+
     /*
      * emulate_app_icon must be automatically disabled for apps that can
      * generate their own appicons and for apps that have no_appicon=1
@@ -268,8 +270,11 @@ typedef struct WWindow {
 	unsigned int waiting_save_ack:1;   /* waiting for SAVE_YOURSELF ack */
 
 	unsigned int obscured:1;       /* window is obscured */
+
+	unsigned int dragged_while_fmaximized;
 #ifdef KWM_HINTS
 	unsigned int kwm_hidden_for_modules:1;
+	unsigned int kwm_managed:1;
 #endif
 #ifdef OLWM_HINTS
 	unsigned int olwm_push_pin_out:1;/* emulate pushpin behaviour */

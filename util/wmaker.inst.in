@@ -23,7 +23,7 @@ BINDIR="#bindir#"
 
 make_dir() {
 	mkdir $1
-	chmod +rw $1
+	chmod +rwx $1
 }
 
 make_script() {
@@ -37,7 +37,7 @@ PATH="\$PATH:$BINDIR"
 # If you login from xdm, uncomment this to make error messages appear
 # in the console window.
 #
-# tail -f $HOME/.xsession-errors > /dev/console
+# tail -f $HOME/.xsession-errors > /dev/console &
 
 exec wmaker
 
@@ -240,21 +240,14 @@ fi
 
 cp $GLOBALDIR/README.themes $GSDIR/Library/WindowMaker 
 cp $GLOBALDIR/README $GSDIR/Library/WindowMaker
-# xx herbert
-if test -n "$BATCH"; then
-  test -f ~$GSDIR/Library/WindowMaker/autostart || \
+
+test -f ~$GSDIR/Library/WindowMaker/autostart || \
     cp $GLOBALDIR/autostart.sh $GSDIR/Library/WindowMaker/autostart
-  chmod +rx $GSDIR/Library/WindowMaker/autostart
-  test -f ~$GSDIR/Library/WindowMaker/exitscript || \
+chmod +rx $GSDIR/Library/WindowMaker/autostart
+
+test -f ~$GSDIR/Library/WindowMaker/exitscript || \
     cp $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
-  chmod +rx $GSDIR/Library/WindowMaker/exitscript
-else
-  cp -i $GLOBALDIR/autostart.sh $GSDIR/Library/WindowMaker/autostart
-  chmod +rx $GSDIR/Library/WindowMaker/autostart
-  cp -i $GLOBALDIR/exitscript.sh $GSDIR/Library/WindowMaker/exitscript
-  chmod +rx $GSDIR/Library/WindowMaker/exitscript
-fi
-# /xx herbert
+chmod +rx $GSDIR/Library/WindowMaker/exitscript
 
 # xx herbert
 if test -n "$BATCH" ; then
@@ -267,7 +260,7 @@ fi
 #
 #######################
 
-DATE=`date +%m%d%H%M`
+DATE=`date +%b%d.%T`
 
 show_end_message() {
 
@@ -286,13 +279,19 @@ else
 fi
 }
 
-wmaker_found=1
+wmaker_found=0
 for xinit in .xinitrc .Xclients .xsession; do
      test ! -f "$HOME/$xinit" && continue
-     test -z "`grep wmaker $HOME/$xinit`"
-     [ $? -eq 0 ] && wmaker_found=0
+     res="`grep wmaker $HOME/$xinit`"
+     if test "x$res" != x; then
+     	wmaker_found=1
+	break
+     fi
 done
-[ $wmaker_found -eq 1 ] && show_end_message && exit 0
+if test $wmaker_found = 1; then
+	show_end_message
+	exit 0
+fi
 
 
 trap "show_end_message;exit" 2
@@ -301,7 +300,8 @@ echo
 echo "Now the .xinitrc, .Xclients or .xsession script must be updated so that"
 echo "it calls wmaker when you start an X session."
 echo "Type the name of the file that must be changed (normally .xinitrc)."
-echo "If the file already exists, it will be backed up with a .old.$DATE extension"
+echo "If the file already exists, it will be backed up with a .old.$DATE "
+echo "extension"
 echo "If you want to edit it by hand, hit <Control>-C now."
 read file
 

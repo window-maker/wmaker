@@ -87,7 +87,7 @@ XLIBS = @XLIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 wprefsdir = @wprefsdir@
 
-SUBDIRS = Night.themed Checker.themed 
+SUBDIRS = Night.themed Checker.themed  LeetWM.themed STEP2000.themed
 
 defsdatadir = $(pkgdatadir)/Themes
 
@@ -104,7 +104,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:

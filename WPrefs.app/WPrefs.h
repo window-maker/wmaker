@@ -42,7 +42,7 @@
 
 /****/
 
-#define WVERSION	"0.11"
+#define WVERSION	"0.20"
 #define WMVERSION	"0.51.x"
 
 
@@ -72,6 +72,8 @@ typedef struct PanelRec {
 void AddSection(Panel *panel, char *iconFile);
 
 char *LocateImage(char *name);
+
+void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, char *file);
 
 WMWindow *GetWindow(Panel *panel);
 

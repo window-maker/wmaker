@@ -17,37 +17,37 @@ W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
 
     switch (relief) {
      case WRSimple:
-	XDrawRectangle(dpy, d, W_GC(scr->black), x, y, width-1, height-1);
+	XDrawRectangle(dpy, d, WMColorGC(scr->black), x, y, width-1, height-1);
 	return;
 	break;
 	
      case WRRaised:
-	bgc = W_GC(scr->black);
-	dgc = W_GC(scr->darkGray);
-	wgc = W_GC(scr->white);
-	lgc = W_GC(scr->gray);
+	bgc = WMColorGC(scr->black);
+	dgc = WMColorGC(scr->darkGray);
+	wgc = WMColorGC(scr->white);
+	lgc = WMColorGC(scr->gray);
 	break;
 	
      case WRSunken:
-	wgc = W_GC(scr->darkGray);
-	lgc = W_GC(scr->black);
-	bgc = W_GC(scr->white);
-	dgc = W_GC(scr->gray);
+	wgc = WMColorGC(scr->darkGray);
+	lgc = WMColorGC(scr->black);
+	bgc = WMColorGC(scr->white);
+	dgc = WMColorGC(scr->gray);
 	break;
 	
      case WRPushed:
-	lgc = wgc = W_GC(scr->black);
-	dgc = bgc = W_GC(scr->white);
+	lgc = wgc = WMColorGC(scr->black);
+	dgc = bgc = WMColorGC(scr->white);
 	break;
 	
      case WRRidge:
-	lgc = bgc = W_GC(scr->darkGray);
-	dgc = wgc = W_GC(scr->white);
+	lgc = bgc = WMColorGC(scr->darkGray);
+	dgc = wgc = WMColorGC(scr->white);
 	break;
 
      case WRGroove:
-	wgc = dgc = W_GC(scr->darkGray);
-	lgc = bgc = W_GC(scr->white);
+	wgc = dgc = WMColorGC(scr->darkGray);
+	lgc = bgc = WMColorGC(scr->white);
 	break;
 	
      default:

@@ -150,7 +150,7 @@ paintEditMenuItem(WEditMenuItem *iPtr)
 
     W_DrawRelief(scr, win, 0, 0, w+1, h, WRRaised);
 
-    WMDrawString(scr, win, W_GC(black), scr->normalFont, 5, 3, iPtr->label,
+    WMDrawString(scr, win, WMColorGC(black), scr->normalFont, 5, 3, iPtr->label,
 		 strlen(iPtr->label));
 }
 
@@ -366,7 +366,7 @@ WInsertMenuItemWithTitle(WEditMenu *mPtr, char *title, int index)
 	index = mPtr->itemCount;
 
     if (mPtr->itemCount == mPtr->itemsAlloced) {
-	WEditMenuItem **newList;
+	WEditMenuItem *newList;
 
 	newList = wmalloc(sizeof(WEditMenuItem*)*(mPtr->itemsAlloced+10));
 	memset(newList, 0, sizeof(WEditMenuItem*)*(mPtr->itemsAlloced+10));
@@ -458,11 +458,11 @@ paintMenuTitle(WEditMenu *mPtr)
     int w = W_VIEW(mPtr)->size.width;
     int h = mPtr->titleHeight;
 
-    XFillRectangle(scr->display, win, W_GC(black), 0, 0, w, h);
+    XFillRectangle(scr->display, win, WMColorGC(black), 0, 0, w, h);
 
     W_DrawRelief(scr, win, 0, 0, w+1, h, WRRaised);
 
-    WMDrawString(scr, win, W_GC(white), scr->boldFont, 5, 4, mPtr->label,
+    WMDrawString(scr, win, WMColorGC(white), scr->boldFont, 5, 4, mPtr->label,
 		 strlen(mPtr->label));
 }
 

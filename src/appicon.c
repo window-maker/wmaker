@@ -525,17 +525,32 @@ static void
 killCallback(WMenu *menu, WMenuEntry *entry)
 {
     WApplication *wapp = (WApplication*)entry->clientdata;
+    char *buffer;
+
+    if (!WCHECK_STATE(WSTATE_NORMAL))
+	return;
+
+    WCHANGE_STATE(WSTATE_MODAL);
+    
     assert(entry->clientdata!=NULL);
+
+    buffer = wstrappend(wapp->app_icon ? wapp->app_icon->wm_class : NULL,
+			_(" will be forcibly closed.\n"
+			  "Any unsaved changes will be lost.\n"
+			  "Please confirm."));
 
     wretain(wapp->main_window_desc);
     if (wPreferences.dont_confirm_kill
 	|| wMessageDialog(menu->frame->screen_ptr, _("Kill Application"),
-		       _("This will kill the application.\nAny unsaved changes will be lost.\nPlease confirm."),
-		       _("Yes"), _("No"), NULL)==WAPRDefault) {
+			  buffer, _("Yes"), _("No"), NULL)==WAPRDefault) {
 	if (!wapp->main_window_desc->flags.destroyed)
 	    wClientKill(wapp->main_window_desc);
     }
     wrelease(wapp->main_window_desc);
+
+    free(buffer);
+
+    WCHANGE_STATE(WSTATE_NORMAL);
 }
 
 
@@ -666,7 +681,7 @@ appIconMouseDown(WObjDescriptor *desc, XEvent *event)
     int clickButton = event->xbutton.button;
     Pixmap ghost = None;
 
-    if (aicon->editing)
+    if (aicon->editing || WCHECK_STATE(WSTATE_MODAL))
 	return;
     
     if (IsDoubleClick(scr, event)) {

@@ -1,4 +1,4 @@
-nlsdir      = $(DESTDIR)$(NLSDIR)
+nlsdir      = $(NLSDIR)
 
 CATALOGS = @MOFILES@
 

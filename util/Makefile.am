@@ -5,9 +5,10 @@ pkgdatadir  = $(datadir)/@PACKAGE@
 
 bin_PROGRAMS = wxcopy wxpaste wdwrite getstyle setstyle seticons geticonset wmsetbg
 
-bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont 
+bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont wkdemenu.pl
 
-EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c 
+EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c \
+		wkdemenu.pl
 
 INCLUDES = @DFLAGS@ -I$(top_srcdir)/wrlib @HEADER_SEARCH_PATH@
 

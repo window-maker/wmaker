@@ -1,8 +1,19 @@
+changes since wmaker 0.51.1:
+...........................
+
+- wusergnusteppath() will return a statically allocated string now.
+ DO NOT FREE IT ANYMORE!!
+
+
+
 changes since wmaker 0.51.0:
 ............................
 
 - applied c++ compat header patch from Martynas Kunigelis <mkunigelis@alna.lt>
 - added WMSetTextFieldBeveled()
+- removed W_GC() : use WMColorGC() instead
+- added WMCreatePixmap()
+- changed WMSetTextFieldEnabled() to WMSetTextFieldEditable()
 
 changes since wmaker 0.50.1:
 ............................

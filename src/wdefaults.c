@@ -82,6 +82,7 @@ static proplist_t AStartMaximized;
 static proplist_t AStartHidden;	       /* app */
 static proplist_t ADontSaveSession;    /* app */
 static proplist_t AEmulateAppIcon;
+static proplist_t AFullMaximize;
 
 static proplist_t AStartWorkspace;
 
@@ -117,6 +118,7 @@ init_wdefaults(WScreen *scr)
     AStartMaximized = PLMakeString("StartMaximized");
     ADontSaveSession = PLMakeString("DontSaveSession");
     AEmulateAppIcon = PLMakeString("EmulateAppIcon");
+    AFullMaximize = PLMakeString("FullMaximize");
 
     AStartWorkspace = PLMakeString("StartWorkspace");
     
@@ -298,6 +300,9 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 
     value = get_value(dw, dc, dn, da, AEmulateAppIcon, No, useGlobalDefault);
     APPLY_VAL(value, emulate_appicon, AEmulateAppIcon);
+
+    value = get_value(dw, dc, dn, da, AFullMaximize, No, useGlobalDefault);
+    APPLY_VAL(value, emulate_appicon, AFullMaximize);
 
     /* clean up */
     PLSetStringCmpHook(StringCompareHook);

@@ -6,7 +6,7 @@
 #include <wraster.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  981220
+#define WINGS_H_VERSION  990222
 
 
 #ifdef __cplusplus
@@ -512,6 +512,9 @@ WMPixmap *WMRetainPixmap(WMPixmap *pixmap);
 
 void WMReleasePixmap(WMPixmap *pixmap);
 
+WMPixmap *WMCreatePixmap(WMScreen *scrPtr, int width, int height, int depth,
+			 Bool masked);
+
 WMPixmap *WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap, 
 				     Pixmap mask, int width, int height,
 				     int depth);
@@ -774,9 +777,9 @@ void WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered);
 
 void WMSetTextFieldBeveled(WMTextField *tPtr, Bool flag);
 
-Bool WMGetTextFieldEnabled(WMTextField *tPtr);
+Bool WMGetTextFieldEditable(WMTextField *tPtr);
 
-void WMSetTextFieldEnabled(WMTextField *tPtr, Bool flag);
+void WMSetTextFieldEditable(WMTextField *tPtr, Bool flag);
 
 void WMSetTextFieldSecure(WMTextField *tPtr, Bool flag);
 
@@ -944,13 +947,19 @@ WMColorPanel *WMGetColorPanel(WMScreen *scrPtr);
 
 void WMFreeColorPanel(WMColorPanel *panel);
 
-int WMRunColorPanel(WMColorPanel *panel, WMWindow *owner, RColor color);
+void WMShowColorPanel(WMColorPanel *panel);
+
+void WMCloseColorPanel(WMColorPanel *panel);
 
 void WMSetColorPanelColor(WMColorPanel *panel, RColor color);
 
 RColor WMGetColorPanelColor(WMColorPanel *panel);
 
-void WMSetPickerMode(WMColorPanel *panel, WMColorPanelMode mode);
+void WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode);
+
+void WMSetColorPanelAction(WMColorPanel *panel, WMAction *action, void *data);
+
+
 
 /* ....................................................................... */
 

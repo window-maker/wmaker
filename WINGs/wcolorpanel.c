@@ -2,19 +2,18 @@
  * ColorPanel for WINGs
  *
  * by    ]d                            : Original idea and basic initial code
- *        Pascal Hofstee                : Code for wheeldrawing and calculating colors from it
- *        Alban Hertroys                : Suggesting optimizations for algorithms for color-
- *                                        wheel, and implementation of final algorithm.
- *        Alfredo K. Kojima            : For pointing out some memory-allocation problems.
+ *        Pascal Hofstee                : Code for wheeldrawing and calculating colors from it.
+ *                                        Primary coder of this Color Panel.
+ *        Alban Hertroys                : Optimizations for algorithms for color-
+ *                                        wheel. Also custom ColorPalettes and magnifying
+ *                                        glass. Secondary coder ;)
+ *        Alfredo K. Kojima            : For pointing out memory-allocation problems
+ *                                        and similair code-issues
  *        Marco van Hylckama-Vlieg    : For once again doing the artwork ;-)
- * 
- * 
- * Changes:
- * fixed absurd wstrdup() uses, gazillion memory leaks, buffer overruns etc etc
+ *
+ * small note: Tabstop size = 8
+ *
  */
-
-
-
 
 
 #include "WINGsP.h"
@@ -32,55 +31,50 @@
 # define PATH_MAX    1024
 #endif
 
-#define mglass_width 20
-#define mglass_height 20
 
-#define magnify_hotspot_x 17
-#define magnify_hotspot_y 10
-#define magnify_cursor_width 46
-#define magnify_cursor_height 36
-static char magnify_cursor_bits[] = {
-   0xc0, 0x0f, 0x00, 0x00, 0x00, 0xc0, 0x70, 0x70, 0x00, 0x00, 0x00, 0xc0,
-   0x18, 0xc0, 0x00, 0x00, 0x00, 0xc0, 0x04, 0x80, 0x01, 0x00, 0x00, 0xc0,
-   0x06, 0x00, 0x01, 0x00, 0x00, 0xc0, 0x02, 0x00, 0x02, 0x00, 0x00, 0xc0,
-   0x03, 0x00, 0x02, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x06, 0x00, 0x00, 0xc0,
-   0x01, 0x00, 0x04, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x04, 0x00, 0x00, 0xc0,
-   0x01, 0x00, 0x04, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x04, 0x00, 0x00, 0xc0,
-   0x01, 0x00, 0x04, 0x00, 0x00, 0xc0, 0x02, 0x00, 0x02, 0x00, 0x00, 0xc0,
-   0x02, 0x00, 0x02, 0x00, 0x00, 0xc0, 0x04, 0x00, 0x03, 0x00, 0x00, 0xc0,
-   0x0c, 0x80, 0x01, 0x00, 0x00, 0xc0, 0x18, 0xc0, 0x03, 0x00, 0x00, 0xc0,
-   0x70, 0x60, 0x04, 0x00, 0x00, 0xc0, 0x80, 0x1f, 0x01, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x0a, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x10, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x24, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x08, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x40, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x90, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x20, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x40, 0x01, 0x00, 0xc0,
-   0x00, 0x00, 0x00, 0x02, 0x00, 0xc0, 0x00, 0x00, 0x80, 0x04, 0x00, 0xc0,
-   0x00, 0x00, 0x00, 0x03, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0};
+/*
+ * Bitmaps for magnifying glass cursor
+ */
 
+/* Cursor */
+#define Cursor_x_hot 11
+#define Cursor_y_hot 11
+#define Cursor_width 32
+#define Cursor_height 32
+static unsigned char Cursor_bits[] = {
+    0x00,0x7e,0x00,0x00,0xc0,0x81,0x03,0x00,0x20,0x00,0x04,0x00,0x10,0x00,0x08,
+	0x00,0x08,0x00,0x10,0x00,0x04,0x00,0x20,0x00,0x02,0x00,0x40,0x00,0x02,0x00,
+	0x40,0x00,0x02,0x00,0x40,0x00,0x01,0x42,0x80,0x00,0x01,0x24,0x80,0x00,0x01,
+	0x00,0x80,0x00,0x01,0x00,0x80,0x00,0x01,0x24,0x80,0x00,0x01,0x42,0x80,0x00,
+	0x02,0x00,0x40,0x00,0x02,0x00,0x40,0x00,0x02,0x00,0x40,0x00,0x04,0x00,0x20,
+	0x00,0x08,0x00,0x50,0x00,0x10,0x00,0x88,0x00,0x20,0x00,0x5c,0x01,0xc0,0x81,
+	0x3b,0x02,0x00,0x7e,0x70,0x05,0x00,0x00,0xe0,0x08,0x00,0x00,0xc0,0x15,0x00,
+	0x00,0x80,0x23,0x00,0x00,0x00,0x57,0x00,0x00,0x00,0x8e,0x00,0x00,0x00,0x5c,
+	0x00,0x00,0x00,0xb8,0x00,0x00,0x00,0x70};
 
-#define magnify_mask_width 46
-#define magnify_mask_height 36
-static char magnify_mask_bits[] = {
-   0xc0, 0x0f, 0x00, 0x00, 0x00, 0xc0, 0x70, 0x70, 0x00, 0x00, 0x00, 0xc0,
-   0x18, 0xc0, 0x00, 0x00, 0x00, 0xc0, 0x04, 0x80, 0x01, 0x00, 0x00, 0xc0,
-   0x06, 0x00, 0x01, 0x00, 0x00, 0xc0, 0x02, 0x00, 0x02, 0x00, 0x00, 0xc0,
-   0x03, 0x00, 0x02, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x06, 0x00, 0x00, 0xc0,
-   0x01, 0x00, 0x04, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x04, 0x00, 0x00, 0xc0,
-   0x01, 0x00, 0x04, 0x00, 0x00, 0xc0, 0x01, 0x00, 0x04, 0x00, 0x00, 0xc0,
-   0x01, 0x00, 0x04, 0x00, 0x00, 0xc0, 0x02, 0x00, 0x02, 0x00, 0x00, 0xc0,
-   0x02, 0x00, 0x02, 0x00, 0x00, 0xc0, 0x04, 0x00, 0x03, 0x00, 0x00, 0xc0,
-   0x0c, 0x80, 0x01, 0x00, 0x00, 0xc0, 0x18, 0xc0, 0x03, 0x00, 0x00, 0xc0,
-   0x70, 0x60, 0x07, 0x00, 0x00, 0xc0, 0x80, 0x1f, 0x07, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x0e, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x1c, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x3c, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x38, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x70, 0x00, 0x00, 0xc0, 0x00, 0x00, 0xf0, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0xe0, 0x00, 0x00, 0xc0, 0x00, 0x00, 0xc0, 0x01, 0x00, 0xc0,
-   0x00, 0x00, 0x80, 0x03, 0x00, 0xc0, 0x00, 0x00, 0x80, 0x07, 0x00, 0xc0,
-   0x00, 0x00, 0x00, 0x03, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0,
-   0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0};
+/* Cursor shape-mask */
+#define Cursor_shape_width 32
+#define Cursor_shape_height 32
+static unsigned char Cursor_shape_bits[] = {
+    0x00,0x7e,0x00,0x00,0xc0,0x81,0x03,0x00,0x20,0x00,0x04,0x00,0x10,0x00,0x08,
+	0x00,0x08,0x00,0x10,0x00,0x04,0x00,0x20,0x00,0x02,0x00,0x40,0x00,0x02,0x00,
+	0x40,0x00,0x02,0x00,0x40,0x00,0x01,0x42,0x80,0x00,0x01,0x24,0x80,0x00,0x01,
+	0x00,0x80,0x00,0x01,0x00,0x80,0x00,0x01,0x24,0x80,0x00,0x01,0x42,0x80,0x00,
+	0x02,0x00,0x40,0x00,0x02,0x00,0x40,0x00,0x02,0x00,0x40,0x00,0x04,0x00,0x20,
+	0x00,0x08,0x00,0x70,0x00,0x10,0x00,0xf8,0x00,0x20,0x00,0xfc,0x01,0xc0,0x81,
+	0xfb,0x03,0x00,0x7e,0xf0,0x07,0x00,0x00,0xe0,0x0f,0x00,0x00,0xc0,0x1f,0x00,
+	0x00,0x80,0x3f,0x00,0x00,0x00,0x7f,0x00,0x00,0x00,0xfe,0x00,0x00,0x00,0xfc,
+	0x00,0x00,0x00,0xf8,0x00,0x00,0x00,0x70};
+
+/* Clip-mask for magnified pixels */
+#define Cursor_mask_width 22
+#define Cursor_mask_height 22
+static unsigned char Cursor_mask_bits[] = {
+    0x00,0x3f,0x00,0xe0,0xff,0x01,0xf0,0xff,0x03,0xf8,0xff,0x07,0xfc,0xff,0x0f,
+	0xfe,0xff,0x1f,0xfe,0xff,0x1f,0xfe,0xff,0x1f,0xff,0xff,0x3f,0xff,0xff,0x3f,
+	0xff,0xff,0x3f,0xff,0xff,0x3f,0xff,0xff,0x3f,0xff,0xff,0x3f,0xfe,0xff,0x1f,
+	0xfe,0xff,0x1f,0xfe,0xff,0x1f,0xfc,0xff,0x0f,0xf8,0xff,0x07,0xf0,0xff,0x03,
+	0xe0,0xff,0x01,0x00,0x3f,0x00};
 
 
 typedef struct MovingView {
@@ -101,6 +95,9 @@ typedef struct W_ColorPanel {
     WMWindow    *win;
     WMFont        *font8;
     WMFont        *font12;
+    
+    void *clientData;
+    WMAction *action;
     
     /* Common Stuff */
     WMColorWell    *colorWell;
@@ -201,18 +198,26 @@ typedef struct W_ColorPanel {
     char                    *configurationPath;
     
     struct {
+	unsigned int    continuous:1;
+
         unsigned int    dragging:1;
-        unsigned int    done:1;
     } flags;
 } W_ColorPanel;
 
 enum {
-    menuNewFromFile,
-	menuRename,
-	menuRemove,
-	menuCopy,
-	menuNewFromClipboard
+    CPmenuNewFromFile,
+	CPmenuRename,
+	CPmenuRemove,
+	CPmenuCopy,
+	CPmenuNewFromClipboard
 } customPaletteMenuItem;
+
+enum {
+    CLmenuAdd,
+	CLmenuRename,
+	CLmenuRemove
+} colorListMenuItem;
+
 
 #define    PWIDTH            194
 #define    PHEIGHT            266
@@ -233,14 +238,15 @@ enum {
 #define RGBTXT "/usr/X11R6/lib/X11/rgb.txt"
 #define MAX_LENGTH  1024
 
-static void wAbort();
-static int    fetchImageFile(char* toPath, char *imageSrcFile, char *imageDestFileName);
+static int    fetchFile(char* toPath, char *imageSrcFile, char *imageDestFileName);
 char *generateNewFilename(char *curName);
 
 static void    modeButtonCallback(WMWidget *w, void *data);
 static int    getPickerPart(W_ColorPanel *panel, int x, int y);
 static void readConfiguration(W_ColorPanel *panel);
 static void readXColors(W_ColorPanel *panel);
+
+static void closeWindowCallback(WMWidget *w, void *data);
 
 static Cursor magnifyGrabPointer(W_ColorPanel *panel);
 static WMPoint magnifyInitialize(W_ColorPanel *panel);
@@ -299,6 +305,9 @@ static void customPaletteMenuRemove(W_ColorPanel *panel);
 
 static void colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text, int state, WMRect *rect);
 static void colorListSelect(WMWidget *w, void *data);
+static void colorListColorMenuCallback(WMWidget *w, void *data);
+static void colorListListMenuCallback(WMWidget *w, void *data);
+static void colorListListMenuNew(W_ColorPanel *panel);
 
 static void    wheelInit(W_ColorPanel *panel);
 static void    grayInit(W_ColorPanel *panel);
@@ -307,11 +316,15 @@ static void    cmykInit(W_ColorPanel *panel);
 static void hsbInit(W_ColorPanel *panel);
 
 
-static void
-wAbort ()
+
+void
+WMSetColorPanelAction(WMColorPanel *panel, WMAction *action, void *data)
 {
-    exit(1);
+    panel->action = action;
+    panel->clientData = data;
 }
+
+
 
 static WMColorPanel*
 makeColorPanel(WMScreen *scrPtr, char *name)
@@ -335,8 +348,8 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     panel->win = WMCreateWindowWithStyle(scrPtr, name, WMTitledWindowMask | WMClosableWindowMask | WMResizableWindowMask);
     WMResizeWidget(panel->win, PWIDTH, PHEIGHT);
     WMSetWindowTitle(panel->win, "Colors");
-    
-    
+    WMSetWindowCloseAction(panel->win, closeWindowCallback, panel);
+
     /* Set Default ColorPanel Mode(s) */
     panel->mode = WMWheelModeColorPanel;
     panel->lastChanged = WMWheelModeColorPanel;
@@ -349,13 +362,12 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     WSetColorWellBordered(panel->colorWell, False);
     WMMoveWidget(panel->colorWell, 56, 4);
     
-    panel->magnifyBtn = WMCreateCommandButton(panel->win);
+    panel->magnifyBtn = WMCreateCustomButton(panel->win, WBBStateLightMask|WBBStateChangeMask);
     WMResizeWidget(panel->magnifyBtn, 46, 36);
     WMMoveWidget(panel->magnifyBtn, 6,4);
     WMSetButtonAction(panel->magnifyBtn, magnifyPutCursor, panel);
     WMSetButtonImagePosition(panel->magnifyBtn, WIPImageOnly);
     WMSetButtonImage(panel->magnifyBtn, scrPtr->magnifyIcon);
-    WMSetButtonAltImage(panel->magnifyBtn, scrPtr->altMagnifyIcon);
     
     panel->wheelBtn = WMCreateCustomButton(panel->win, WBBStateLightMask|WBBStateChangeMask);
     WMResizeWidget(panel->wheelBtn, 46, 32);
@@ -503,7 +515,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
     RDestroyImage(image);
-    W_PaintText(W_VIEW(panel->grayBrightnessS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->white), False, "Brightness", strlen("Brightness"));
+    W_PaintText(W_VIEW(panel->grayBrightnessS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Brightness", strlen("Brightness"));
     WMSetSliderImage(panel->grayBrightnessS, pixmap);
     WMReleasePixmap(pixmap);
     
@@ -571,7 +583,7 @@ WMTextDidEndEditingNotification, panel->grayBrightnessT);
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    W_PaintText(W_VIEW(panel->rgbRedS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->white), False, "Red", strlen("Red"));
+    W_PaintText(W_VIEW(panel->rgbRedS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Red", strlen("Red"));
     RDestroyImage(image);
     WMSetSliderImage(panel->rgbRedS, pixmap);
     WMReleasePixmap(pixmap);
@@ -580,8 +592,9 @@ WMTextDidEndEditingNotification, panel->grayBrightnessT);
     WMResizeWidget(panel->rgbRedT, 40, 18);
     WMMoveWidget(panel->rgbRedT, 146, 13);
     WMSetTextFieldAlignment(panel->rgbRedT, WALeft);
-    WMAddNotificationObserver(rgbTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->rgbRedT);
+    WMAddNotificationObserver(rgbTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification, 
+			      panel->rgbRedT);
     
     
     panel->rgbGreenS = WMCreateSlider(panel->rgbFrm);
@@ -598,7 +611,7 @@ WMTextDidEndEditingNotification, panel->rgbRedT);
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    W_PaintText(W_VIEW(panel->rgbGreenS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->white), False, "Green", strlen("Green"));
+    W_PaintText(W_VIEW(panel->rgbGreenS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Green", strlen("Green"));
     RDestroyImage(image);
     WMSetSliderImage(panel->rgbGreenS, pixmap);
     WMReleasePixmap(pixmap);
@@ -607,8 +620,9 @@ WMTextDidEndEditingNotification, panel->rgbRedT);
     WMResizeWidget(panel->rgbGreenT, 40, 18);
     WMMoveWidget(panel->rgbGreenT, 146, 35);
     WMSetTextFieldAlignment(panel->rgbGreenT, WALeft);
-    WMAddNotificationObserver(rgbTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->rgbGreenT);
+    WMAddNotificationObserver(rgbTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification,
+			      panel->rgbGreenT);
     
     
     panel->rgbBlueS = WMCreateSlider(panel->rgbFrm);
@@ -625,7 +639,7 @@ WMTextDidEndEditingNotification, panel->rgbGreenT);
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    W_PaintText(W_VIEW(panel->rgbBlueS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->white), False, "Blue", strlen("Blue"));
+    W_PaintText(W_VIEW(panel->rgbBlueS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Blue", strlen("Blue"));
     RDestroyImage(image);
     WMSetSliderImage(panel->rgbBlueS, pixmap);
     WMReleasePixmap(pixmap);
@@ -634,8 +648,9 @@ WMTextDidEndEditingNotification, panel->rgbGreenT);
     WMResizeWidget(panel->rgbBlueT, 40, 18);
     WMMoveWidget(panel->rgbBlueT, 146, 57);
     WMSetTextFieldAlignment(panel->rgbBlueT, WALeft);
-    WMAddNotificationObserver(rgbTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->rgbBlueT);
+    WMAddNotificationObserver(rgbTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification, 
+			      panel->rgbBlueT);
     /* End of RGB Panel */
     
     /* Widgets for CMYK Panel */
@@ -678,7 +693,7 @@ WMTextDidEndEditingNotification, panel->rgbBlueT);
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    W_PaintText(W_VIEW(panel->cmykCyanS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->black), False, "Cyan", strlen("Cyan"));
+    W_PaintText(W_VIEW(panel->cmykCyanS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Cyan", strlen("Cyan"));
     RDestroyImage(image);
     WMSetSliderImage(panel->cmykCyanS, pixmap);
     WMReleasePixmap(pixmap);
@@ -687,9 +702,9 @@ WMTextDidEndEditingNotification, panel->rgbBlueT);
     WMResizeWidget(panel->cmykCyanT, 40, 18);
     WMMoveWidget(panel->cmykCyanT, 146, 13);
     WMSetTextFieldAlignment(panel->cmykCyanT, WALeft);
-    WMAddNotificationObserver(cmykTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->cmykCyanT);
-    
+    WMAddNotificationObserver(cmykTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification, 
+			      panel->cmykCyanT);
     
     panel->cmykMagentaS = WMCreateSlider(panel->cmykFrm);
     WMResizeWidget(panel->cmykMagentaS, 141, 16);
@@ -705,7 +720,7 @@ WMTextDidEndEditingNotification, panel->cmykCyanT);
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    W_PaintText(W_VIEW(panel->cmykMagentaS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->black), False, "Magenta", strlen("Magenta"));
+    W_PaintText(W_VIEW(panel->cmykMagentaS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Magenta", strlen("Magenta"));
     RDestroyImage(image);
     WMSetSliderImage(panel->cmykMagentaS, pixmap);
     WMReleasePixmap(pixmap);
@@ -714,8 +729,9 @@ WMTextDidEndEditingNotification, panel->cmykCyanT);
     WMResizeWidget(panel->cmykMagentaT, 40, 18);
     WMMoveWidget(panel->cmykMagentaT, 146, 35);
     WMSetTextFieldAlignment(panel->cmykMagentaT, WALeft);
-    WMAddNotificationObserver(cmykTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->cmykMagentaT);
+    WMAddNotificationObserver(cmykTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification, 
+			      panel->cmykMagentaT);
     
     
     panel->cmykYellowS = WMCreateSlider(panel->cmykFrm);
@@ -732,7 +748,7 @@ WMTextDidEndEditingNotification, panel->cmykMagentaT);
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    W_PaintText(W_VIEW(panel->cmykYellowS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->black), False, "Yellow", strlen("Yellow"));
+    W_PaintText(W_VIEW(panel->cmykYellowS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Yellow", strlen("Yellow"));
     RDestroyImage(image);
     WMSetSliderImage(panel->cmykYellowS, pixmap);
     WMReleasePixmap(pixmap);
@@ -741,9 +757,9 @@ WMTextDidEndEditingNotification, panel->cmykMagentaT);
     WMResizeWidget(panel->cmykYellowT, 40, 18);
     WMMoveWidget(panel->cmykYellowT, 146, 57);
     WMSetTextFieldAlignment(panel->cmykYellowT, WALeft);
-    WMAddNotificationObserver(cmykTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->cmykYellowT);
-    
+    WMAddNotificationObserver(cmykTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification, 
+			      panel->cmykYellowT);
     
     panel->cmykBlackS = WMCreateSlider(panel->cmykFrm);
     WMResizeWidget(panel->cmykBlackS, 141, 16);
@@ -760,7 +776,7 @@ WMTextDidEndEditingNotification, panel->cmykYellowT);
     
     image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-    W_PaintText(W_VIEW(panel->cmykBlackS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->black), False, "Black", strlen("Black"));
+    W_PaintText(W_VIEW(panel->cmykBlackS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Black", strlen("Black"));
     RDestroyImage(image);
     WMSetSliderImage(panel->cmykBlackS, pixmap);
     WMReleasePixmap(pixmap);
@@ -769,8 +785,9 @@ WMTextDidEndEditingNotification, panel->cmykYellowT);
     WMResizeWidget(panel->cmykBlackT, 40, 18);
     WMMoveWidget(panel->cmykBlackT, 146, 79);
     WMSetTextFieldAlignment(panel->cmykBlackT, WALeft);
-    WMAddNotificationObserver(cmykTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->cmykBlackT);
+    WMAddNotificationObserver(cmykTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification, 
+			      panel->cmykBlackT);
     /* End of CMYK Panel */
     
     /* Widgets for HSB Panel */
@@ -791,9 +808,9 @@ WMTextDidEndEditingNotification, panel->cmykBlackT);
     WMResizeWidget(panel->hsbHueT, 40, 18);
     WMMoveWidget(panel->hsbHueT, 146, 13);
     WMSetTextFieldAlignment(panel->hsbHueT, WALeft);
-    WMAddNotificationObserver(hsbTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->hsbHueT);
-    
+    WMAddNotificationObserver(hsbTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification, 
+			      panel->hsbHueT);
     
     panel->hsbSaturationS = WMCreateSlider(panel->hsbFrm);
     WMResizeWidget(panel->hsbSaturationS, 141, 16);
@@ -807,9 +824,9 @@ WMTextDidEndEditingNotification, panel->hsbHueT);
     WMResizeWidget(panel->hsbSaturationT, 40, 18);
     WMMoveWidget(panel->hsbSaturationT, 146, 35);
     WMSetTextFieldAlignment(panel->hsbSaturationT, WALeft);
-    WMAddNotificationObserver(hsbTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->hsbSaturationT);
-    
+    WMAddNotificationObserver(hsbTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification, 
+			      panel->hsbSaturationT);
     
     panel->hsbBrightnessS = WMCreateSlider(panel->hsbFrm);
     WMResizeWidget(panel->hsbBrightnessS, 141, 16);
@@ -823,8 +840,9 @@ WMTextDidEndEditingNotification, panel->hsbSaturationT);
     WMResizeWidget(panel->hsbBrightnessT, 40, 18);
     WMMoveWidget(panel->hsbBrightnessT, 146, 57);
     WMSetTextFieldAlignment(panel->hsbBrightnessT, WALeft);
-    WMAddNotificationObserver(hsbTextFieldCallback, panel, \
-WMTextDidEndEditingNotification, panel->hsbBrightnessT);
+    WMAddNotificationObserver(hsbTextFieldCallback, panel,
+			      WMTextDidEndEditingNotification, 
+			      panel->hsbBrightnessT);
     /* End of HSB Panel */
     
     
@@ -866,16 +884,16 @@ WMTextDidEndEditingNotification, panel->hsbBrightnessT);
     WMResizeWidget(panel->customPaletteMenuBtn, PWIDTH - 8, 20);
     WMMoveWidget(panel->customPaletteMenuBtn, 0, PHEIGHT - 130);
     
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "New from File...");        /* item 0 */
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "Rename...");                /* item 1 */
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "Remove");                    /* item 2 */
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "Copy");                        /* item 3 */
-    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "New from Clipboard");    /* item 4 */
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "New from File...");
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "Rename...");
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "Remove");
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "Copy");
+    WMAddPopUpButtonItem(panel->customPaletteMenuBtn, "New from Clipboard");
     
-    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, 1, 0);
-    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, 2, 0);
-    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, 3, 0);
-    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, 4, 0);
+    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, CPmenuRename, 0);
+    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, CPmenuRemove, 0);
+    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, CPmenuCopy, 0);
+    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, CPmenuNewFromClipboard, 0);
     
     customRenderSpectrum(panel);
     panel->currentPalette = 0;
@@ -904,17 +922,31 @@ WMTextDidEndEditingNotification, panel->hsbBrightnessT);
     panel->colorListColorMenuBtn = WMCreatePopUpButton(panel->colorListFrm);
     WMSetPopUpButtonPullsDown(panel->colorListColorMenuBtn, 1);
     WMSetPopUpButtonText(panel->colorListColorMenuBtn, "Color");
-    /*    WMSetPopUpButtonAction(panel->colorListColorMenuBtn, colorListColorMenuCallback, panel); */
+    WMSetPopUpButtonAction(panel->colorListColorMenuBtn, colorListColorMenuCallback, panel);
     WMResizeWidget(panel->colorListColorMenuBtn, (PWIDTH - 16)/2, 20);
     WMMoveWidget(panel->colorListColorMenuBtn, 0, PHEIGHT - 130);
+    
+    WMAddPopUpButtonItem(panel->colorListColorMenuBtn, "Add...");
+    WMAddPopUpButtonItem(panel->colorListColorMenuBtn, "Rename...");
+    WMAddPopUpButtonItem(panel->colorListColorMenuBtn, "Remove");
+    
+    WMSetPopUpButtonItemEnabled(panel->colorListColorMenuBtn, CLmenuAdd, 0);
+    WMSetPopUpButtonItemEnabled(panel->colorListColorMenuBtn, CLmenuRename, 0);
+    WMSetPopUpButtonItemEnabled(panel->colorListColorMenuBtn, CLmenuRemove, 0);
     
     panel->colorListListMenuBtn = WMCreatePopUpButton(panel->colorListFrm);
     WMSetPopUpButtonPullsDown(panel->colorListListMenuBtn, 1);
     WMSetPopUpButtonText(panel->colorListListMenuBtn, "List");
-    /*    WMSetPopUpButtonAction(panel->colorListListMenuBtn, colorListListMenuCallback, panel); */
+    WMSetPopUpButtonAction(panel->colorListListMenuBtn, colorListListMenuCallback, panel);
     WMResizeWidget(panel->colorListListMenuBtn, (PWIDTH - 16)/2, 20);
     WMMoveWidget(panel->colorListListMenuBtn, (PWIDTH - 16)/2 + 8, PHEIGHT - 130);
     
+    WMAddPopUpButtonItem(panel->colorListListMenuBtn, "New...");
+    WMAddPopUpButtonItem(panel->colorListListMenuBtn, "Rename...");
+    WMAddPopUpButtonItem(panel->colorListListMenuBtn, "Remove");
+    
+    WMSetPopUpButtonItemEnabled(panel->colorListListMenuBtn, CLmenuRename, 0);
+    WMSetPopUpButtonItemEnabled(panel->colorListListMenuBtn, CLmenuRemove, 0);
     
     WMRealizeWidget(panel->win);
     WMMapSubwidgets(panel->win);
@@ -988,25 +1020,31 @@ WMFreeColorPanel(WMColorPanel *panel)
 }
 
 
-int
-WMRunColorPanel(WMColorPanel *panel, WMWindow *owner, RColor color)
+void
+WMCloseColorPanel(WMColorPanel *panel)
+{
+    WMCloseWindow(panel->win);
+}
+
+
+void
+WMShowColorPanel(WMColorPanel *panel)
 {
     WMScreen    *scr = WMWidgetScreen(panel->win);
     XEvent         event;
     RHSVColor    hsvcolor;
-    GC            bgc = W_GC(scr->black);
-    GC            wgc = W_GC(scr->white);
-    float        W_PI = 4*atan(1);
-    
-    WMChangePanelOwner(panel->win, owner);
-    
-    WMSetColorPanelColor(panel, color);
+    GC            bgc = WMColorGC(scr->black);
+    GC            wgc = WMColorGC(scr->white);
+    RColor color;
+
     panel->wheelMtrx = wheelInitMatrix(panel);    /* Needs to be done After Color is set */
+
+
     
     /* Maybe put this in sub-function ... Initialising selection images */
     RRGBtoHSV(&color, &hsvcolor);
-    panel->colx = 2 + rint((colorWheelSize / 2.0) * (1 + (hsvcolor.saturation/255.0) * cos( hsvcolor.hue*W_PI/180.0)));
-    panel->coly = 2 + rint((colorWheelSize / 2.0) * (1 + (hsvcolor.saturation/255.0) * sin(-hsvcolor.hue*W_PI/180.0)));
+    panel->colx = 2 + rint((colorWheelSize / 2.0) * (1 + (hsvcolor.saturation/255.0) * cos( hsvcolor.hue*M_PI/180.0)));
+    panel->coly = 2 + rint((colorWheelSize / 2.0) * (1 + (hsvcolor.saturation/255.0) * sin(-hsvcolor.hue*M_PI/180.0)));
     wheelUpdateBrightnessGradientFromHSV(panel, hsvcolor);
     WMSetSliderValue(panel->wheelBrightnessS, 255 - hsvcolor.value);
     
@@ -1018,22 +1056,19 @@ WMRunColorPanel(WMColorPanel *panel, WMWindow *owner, RColor color)
     panel->palx = customPaletteWidth/2;
     panel->paly = customPaletteHeight/2;
     
-    WMSetPickerMode(panel, WMWheelModeColorPanel);
-    
-    panel->flags.done = 0;
-    
+    WMSetColorPanelPickerMode(panel, WMWheelModeColorPanel);
+
     WMMapWidget(panel->win);
-    
-    while (!panel->flags.done) {
-        WMNextEvent(scr->display, &event);
-        WMHandleEvent(&event);
-    }
-    
-    WMCloseWindow(panel->win);
-    
-    return 0;
 }
 
+
+static void
+closeWindowCallback(WMWidget *w, void *data)
+{
+    W_ColorPanel *panel = (W_ColorPanel*)data;
+
+    WMCloseWindow(panel->win);
+}
 
 
 static void
@@ -1049,8 +1084,10 @@ readConfiguration(W_ColorPanel *panel)
     if (stat(panel->configurationPath, &stat_buf)!=0) {
         if (mkdir(panel->configurationPath, S_IRWXU|S_IRGRP|S_IROTH|S_IXGRP|S_IXOTH)!=0) {
 	    wsyserror("ColorPanel could not create directory %s needed to store configurations", panel->configurationPath);
-	    WMFreeColorPanel(panel);
-	    wAbort();
+	    WMSetPopUpButtonEnabled(panel->customPaletteMenuBtn, False);
+	    WMSetPopUpButtonEnabled(panel->colorListColorMenuBtn, False);
+	    WMSetPopUpButtonEnabled(panel->colorListListMenuBtn, False);
+	    WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win, "File Error", "Could not create ColorPanel configuration directory", "OK", NULL, NULL);
         }
         return;
     }
@@ -1102,7 +1139,7 @@ readXColors(W_ColorPanel *panel)
 
 
 void
-WMSetPickerMode(WMColorPanel *panel, WMColorPanelMode mode)
+WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode)
 {
     W_Screen    *scr = WMWidgetScreen(panel->win);
     
@@ -1188,36 +1225,23 @@ WMSetPickerMode(WMColorPanel *panel, WMColorPanelMode mode)
     panel->mode = mode;
 }
 
+
 void
 WMSetColorPanelColor(WMColorPanel *panel, RColor color)
 {
-    WMScreen    *scr = WMWidgetScreen(panel->win);
-    WMColor     *wellcolor;
-    int            originalHue;
-    
-    wellcolor = WMCreateRGBColor(scr, color.red << 8, color.green << 8, color.blue << 8, True);
-    WMSetColorWellColor(panel->colorWell, wellcolor);
-    WMReleaseColor(wellcolor);
-    
-    panel->color = color;
-    
-    /* If color was set by HSB-Panel do not convert back to hsv */
-    if (panel->lastChanged != WMHSBModeColorPanel) {
-	
-        /* if color is black, hue is undetermined, so it must be restored */
-        if ((panel->color.red == 0) &&
-            (panel->color.green == 0) &&
-            (panel->color.blue == 0) &&
-            (panel->hsvcolor.hue <= 359))
-        {
-            originalHue = panel->hsvcolor.hue;
-            RRGBtoHSV(&panel->color, &panel->hsvcolor);
-            panel->hsvcolor.hue = originalHue;
-        } else {
-            RRGBtoHSV(&panel->color, &panel->hsvcolor);
-        }
+return;
+}
+
+
+static void
+updateSwatch(WMColorPanel *panel, RColor color)
+{
+    WMSetColorPanelColor(panel, color);
+    if (panel->action && (!panel->flags.dragging || panel->flags.continuous)) {
+        (*panel->action)(panel, panel->clientData);
     }
 }
+
 
 static void
 modeButtonCallback(WMWidget *w, void *data)
@@ -1225,21 +1249,21 @@ modeButtonCallback(WMWidget *w, void *data)
     W_ColorPanel    *panel = (W_ColorPanel*)(data);
     
     if (w == panel->wheelBtn)
-        WMSetPickerMode(panel, WMWheelModeColorPanel);
+        WMSetColorPanelPickerMode(panel, WMWheelModeColorPanel);
     else if (w == panel->slidersBtn)
-        WMSetPickerMode(panel, panel->slidersmode);
+        WMSetColorPanelPickerMode(panel, panel->slidersmode);
     else if (w == panel->customPaletteBtn)
-        WMSetPickerMode(panel, WMCustomPaletteModeColorPanel);
+        WMSetColorPanelPickerMode(panel, WMCustomPaletteModeColorPanel);
     else if (w == panel->colorListBtn)
-        WMSetPickerMode(panel, WMColorListModeColorPanel);
+        WMSetColorPanelPickerMode(panel, WMColorListModeColorPanel);
     else if (w == panel->grayBtn)
-        WMSetPickerMode(panel, WMGrayModeColorPanel);
+        WMSetColorPanelPickerMode(panel, WMGrayModeColorPanel);
     else if (w == panel->rgbBtn)
-        WMSetPickerMode(panel, WMRGBModeColorPanel);
+        WMSetColorPanelPickerMode(panel, WMRGBModeColorPanel);
     else if (w == panel->cmykBtn)
-        WMSetPickerMode(panel, WMCMYKModeColorPanel);
+        WMSetColorPanelPickerMode(panel, WMCMYKModeColorPanel);
     else if (w == panel->hsbBtn)
-        WMSetPickerMode(panel, WMHSBModeColorPanel);
+        WMSetColorPanelPickerMode(panel, WMHSBModeColorPanel);
 }
 
 
@@ -1252,37 +1276,39 @@ magnifyGetImage(WMScreen *scr, int x, int y)
     int        x0, y0, w0, h0;
     int        displayWidth = DisplayWidth(scr->display, scr->screen);
     int        displayHeight = DisplayHeight(scr->display, scr->screen);
+    const int half_mask_width = (Cursor_mask_width +1)/2;
+    const int half_mask_height = (Cursor_mask_height +1)/2;
     
     /* Coordinate correction for back pixmap */
-    x0 = 0; y0 = 0; w0 = mglass_width; h0 = mglass_height;
+    x0 = 0; y0 = 0; w0 = Cursor_mask_width; h0 = Cursor_mask_height;
     
-    if (x < mglass_width/2) {
+    if (x < half_mask_width) {
         if (x < 0) x = 0;
-        x0 = mglass_width/2 - x;
-        w0  = mglass_width - x0;
+        x0 = half_mask_width - x;
+        w0  = Cursor_mask_width - x0;
     }
     
-    if (x > displayWidth - (mglass_width+1)/2) {
+    if (x > displayWidth - half_mask_width) {
         if (x > displayWidth)  x = displayWidth;
-        w0 = mglass_width - ((mglass_width+1)/2 - (displayWidth - x));
+        w0 = Cursor_mask_width - (half_mask_width - (displayWidth - x));
     }
     
-    if (y < mglass_height/2) {
+    if (y < half_mask_height) {
         if (y < 0) y = 0;
-        y0 = mglass_height/2 - y;
-        h0  = mglass_height - y0;
+        y0 = half_mask_height - y;
+        h0  = Cursor_mask_height - y0;
     }
     
-    if (y > displayHeight - (mglass_height+1)/2) {
+    if (y > displayHeight - half_mask_height) {
         if (y > displayHeight) y = displayHeight;
-        h0 = mglass_height - ((mglass_height+1)/2 - (displayHeight - y));
+        h0 = Cursor_mask_height - (half_mask_height - (displayHeight - y));
     }
     
-    image = XGetImage(scr->display, scr->rootWin, x + x0 - mglass_width/2, 
-		      y + y0 - mglass_height/2, w0, h0, AllPlanes, ZPixmap);
+    image = XGetImage(scr->display, scr->rootWin, x + x0 - Cursor_x_hot, 
+		      y + y0 - Cursor_y_hot, w0, h0, AllPlanes, ZPixmap);
     
-    pixmap = XCreatePixmap(scr->display, W_DRAWABLE(scr), 
-			   mglass_width, mglass_height, scr->depth);
+    pixmap = XCreatePixmap(scr->display, W_DRAWABLE(scr), Cursor_mask_width, 
+			   Cursor_mask_height, scr->depth);
     XPutImage(scr->display, pixmap, scr->copyGC, image, 0, 0, x0, y0, w0, h0);
     
     return pixmap;
@@ -1317,14 +1343,15 @@ magnifyGetStorePixmap(WMColorPanel *panel, int x1, int y1, int x2, int y2)
         yb = y1 - y2;
     }
     
-    w = mglass_width - abs(x1-x2);
-    h = mglass_height - abs(y1-y2);
+    w = Cursor_mask_width - abs(x1-x2);
+    h = Cursor_mask_height - abs(y1-y2);
     
     /* Get pixmap from screen */
     pixmap = magnifyGetImage(scr, x2, y2);
     
     /* Copy previously stored pixmap on covered part of above pixmap */
-    if (panel->magnifyGlass->valid) {
+    if (panel->magnifyGlass->valid)
+    {
         XCopyArea(scr->display, panel->magnifyGlass->pixmap, pixmap, 
                   scr->copyGC, xa, ya, w, h, xb, yb);
 	
@@ -1346,35 +1373,35 @@ magnifyCreatePixmap(WMColorPanel *panel)
     Pixmap    magPix;
     Pixmap    backPix;
     RImage    *pixelImg;
+    const int half_mask_width = Cursor_mask_width/2;
+    const int half_mask_height = Cursor_mask_height/2;
+    
     
     /*
      *  Get image
      */
     
     /* Rectangle that's going to be the background */
-    backPix = XCreatePixmap(scr->display, W_DRAWABLE(scr), mglass_width,
-			    mglass_height, scr->depth);
+    backPix = XCreatePixmap(scr->display, W_DRAWABLE(scr), Cursor_mask_width,
+			    Cursor_mask_height , scr->depth);
     XCopyArea(scr->display, panel->magnifyGlass->pixmap, backPix, scr->copyGC,
-              0, 0, mglass_width, mglass_height, 0, 0);
+              0, 0, Cursor_mask_width, Cursor_mask_height, 0, 0);
     
     /*
      * Magnify image
      */
     
-    magPix = XCreatePixmap(scr->display, W_DRAWABLE(scr), mglass_width, 
-			   mglass_height, scr->depth);
+    magPix = XCreatePixmap(scr->display, W_DRAWABLE(scr), Cursor_mask_width +2,
+			   Cursor_mask_height +2, scr->depth);
     
-    for (u=0; u<=3; u++)
-        for (v=0; v<=3; v++)
-            for (i=u*6; i < (u+1)*6; i++)
-                for (j=v*6; j < (v+1)*6; j++)
-                    if (((i >= 0) && (i < mglass_width)) 
-			&& ((j >= 0) && (j < mglass_height)))
-                        XCopyArea(scr->display, backPix, magPix, scr->copyGC, 
-				  u + 4, v + 4, 1, 1, i, j);
+    for (u=0; u<5+1; u++)    /* Copy an area of 5x5 pixels from the center */
+        for (v=0; v<5+1; v++)
+            for (i=u*5; i < (u+1)*5; i++)    /* magnify it 5 times */
+                for (j=v*5; j < (v+1)*5; j++)
+                    XCopyArea(scr->display, backPix, magPix, scr->copyGC, u +9, v +9, 1, 1, i, j);
     
     /* Get color under hotspot */
-    ofs = mglass_width/2 + (mglass_height/2)*mglass_width;
+    ofs = half_mask_width + half_mask_height * Cursor_mask_width;
     pixelImg = RCreateImageFromDrawable(scr->rcontext, backPix, backPix);
     panel->magnifyGlass->color.red   = pixelImg->data[0][ofs];
     panel->magnifyGlass->color.green = pixelImg->data[1][ofs];
@@ -1385,11 +1412,11 @@ magnifyCreatePixmap(WMColorPanel *panel)
     XSetClipMask(scr->display, scr->clipGC, panel->magnifyGlass->mask);
     XSetClipOrigin(scr->display, scr->clipGC, 0, 0);
     
-    XCopyArea(scr->display, magPix, backPix, scr->clipGC, 0, 0, 
-	      mglass_width, mglass_height, 0, 0);
-
+    XCopyArea(scr->display, magPix, backPix, scr->clipGC, 2, 2, Cursor_mask_width,
+	      Cursor_mask_height, 0, 0);    /* (2,2) puts center pixel on center of glass */
+    
     XFreePixmap(scr->display, magPix);
-
+    
     return backPix;
 }
 
@@ -1403,7 +1430,7 @@ magnifyCreateView(W_ColorPanel *panel)
     magView = W_CreateTopView(scr);
     magView->self = panel;
     
-    W_ResizeView(magView, mglass_width, mglass_height);
+    W_ResizeView(magView, Cursor_mask_width, Cursor_mask_height);
     
     magView->attribFlags |= CWOverrideRedirect | CWSaveUnder;
     magView->attribs.event_mask = StructureNotifyMask;
@@ -1420,30 +1447,26 @@ magnifyCreateView(W_ColorPanel *panel)
 static Cursor
 magnifyGrabPointer(W_ColorPanel *panel)
 {
-    W_Screen *scr = WMWidgetScreen(panel->win);
-    Pixmap magPixmap;
-    Pixmap magPixmap2;
-    Cursor magCursor;
-    XColor fgColor = {0,0,0,0,DoRed|DoGreen|DoBlue};
-    XColor bgColor = {0,0xbd00,0xa500,0x5200,DoRed|DoGreen|DoBlue};
-
+    W_Screen     *scr = WMWidgetScreen(panel->win);
+    Pixmap        magPixmap, magPixmap2;
+    Cursor        magCursor;
+    XColor        fgColor = {0,    0,0,0, DoRed|DoGreen|DoBlue};
+    XColor        bgColor = {0, 0xbf00, 0xa000, 0x5000, DoRed|DoGreen|DoBlue};
+    
     /* Cursor creation stuff */
     magPixmap = XCreatePixmapFromBitmapData(scr->display, W_DRAWABLE(scr), 
-					    magnify_cursor_bits, 
-					    magnify_cursor_width, 
-					    magnify_cursor_height, 1, 0, 1);
+					    Cursor_bits, Cursor_width, Cursor_height, 1, 0, 1);
     magPixmap2 = XCreatePixmapFromBitmapData(scr->display, W_DRAWABLE(scr),
-					    magnify_mask_bits, 
-					    magnify_mask_width, 
-					    magnify_mask_height, 1, 0, 1);
-    magCursor = XCreatePixmapCursor(scr->display, magPixmap, magPixmap2,
-				    &fgColor, &bgColor, magnify_hotspot_x,
-				    magnify_hotspot_y);
+					     Cursor_shape_bits, Cursor_width, Cursor_height, 1, 0, 1);
+    
+    magCursor = XCreatePixmapCursor(scr->display, magPixmap, magPixmap2, 
+				    &fgColor, &bgColor, Cursor_x_hot, Cursor_y_hot);
+    
     XFreePixmap(scr->display, magPixmap);
     XFreePixmap(scr->display, magPixmap2);
-
+    
     XRecolorCursor(scr->display, magCursor, &fgColor, &bgColor);
-
+    
     /* Set up Pointer */
     XGrabPointer (scr->display, panel->magnifyGlass->view->window, True, 
 		  PointerMotionMask | ButtonPressMask,
@@ -1452,6 +1475,7 @@ magnifyGrabPointer(W_ColorPanel *panel)
     
     return magCursor;
 }
+
 
 static WMPoint
 magnifyInitialize(W_ColorPanel *panel)
@@ -1467,10 +1491,9 @@ magnifyInitialize(W_ColorPanel *panel)
     
     
     /* Clipmask to make magnified view-contents circular */
-    panel->magnifyGlass->mask =
-	XCreatePixmapFromBitmapData(scr->display, W_DRAWABLE(scr),
-				    magnify_mask_bits, mglass_width, 
-				    mglass_height, 1, 0, 1);
+    panel->magnifyGlass->mask = XCreatePixmapFromBitmapData(scr->display, 
+							    W_DRAWABLE(scr), Cursor_mask_bits, 
+							    Cursor_mask_width, Cursor_mask_height, 1, 0, 1);    
     
     /* Draw initial magnified part */
     panel->magnifyGlass->valid = False;
@@ -1479,11 +1502,9 @@ magnifyInitialize(W_ColorPanel *panel)
     panel->magnifyGlass->valid = True;
     
     pixmap = magnifyCreatePixmap(panel);
-    W_MoveView(panel->magnifyGlass->view, x - magnify_hotspot_x,
-	       y - magnify_hotspot_y);
-
-    XSetWindowBackgroundPixmap(scr->display, panel->magnifyGlass->view->window,
-			       pixmap);
+    W_MoveView(panel->magnifyGlass->view, x - Cursor_x_hot +1, y - Cursor_y_hot +1);
+    
+    XSetWindowBackgroundPixmap(scr->display, panel->magnifyGlass->view->window, pixmap);
     XClearWindow(scr->display, panel->magnifyGlass->view->window);
     XFlush(scr->display);
     
@@ -1507,6 +1528,13 @@ magnifyPutCursor(WMWidget *w, void *data)
     XEvent        event;
     WMPoint        initialPosition;
     
+    /* Destroy wheelBackImg, so it'll update properly */
+    if (panel->selectionBackImg) {
+        XFreePixmap(WMWidgetScreen(panel->win)->display, panel->selectionBackImg);
+        panel->selectionBackImg = None;
+    }
+    
+    /* Create magnifying glass */
     panel->magnifyGlass = wmalloc(sizeof(MovingView));
     
     panel->magnifyGlass->view = magnifyCreateView(panel);
@@ -1525,7 +1553,7 @@ magnifyPutCursor(WMWidget *w, void *data)
         {
 	 case ButtonPress:
 	    if (event.xbutton.button == Button1) {
-		WMSetColorPanelColor(panel, panel->magnifyGlass->color);
+		updateSwatch(panel, panel->magnifyGlass->color);
 		switch (panel->mode) {
 		 case WMWheelModeColorPanel:
 		    wheelInit(panel);
@@ -1557,28 +1585,24 @@ magnifyPutCursor(WMWidget *w, void *data)
 	 case MotionNotify:
 	    /* Get a "dirty rectangle" */
 	    panel->magnifyGlass->pixmap = magnifyGetStorePixmap(
-		panel, x, y,    /* Cool, a circular reference ! */
-		event.xmotion.x_root, 
-		event.xmotion.y_root);  /* also free's magnifyGlass->pixmap */
+								panel, x+1, y+1,                                    /* Cool, a circular reference ! */
+								event.xmotion.x_root+1, event.xmotion.y_root+1);    /* also free's magnifyGlass->pixmap */
 	    
 	    /* Update coordinates */
 	    x = event.xmotion.x_root;
 	    y = event.xmotion.y_root;
 	    
 	    /* Move view */
-	    W_MoveView(panel->magnifyGlass->view, x - magnify_hotspot_x,
-		       y - magnify_hotspot_y);
-
+	    W_MoveView(panel->magnifyGlass->view, x - Cursor_x_hot +1, y - Cursor_y_hot +1);
+	    
 	    /* Put new image (with magn.) in view */
 	    pixmap = magnifyCreatePixmap(panel);
-	    XSetWindowBackgroundPixmap(scr->display, 
-				       panel->magnifyGlass->view->window, 
-				       pixmap);
+	    XSetWindowBackgroundPixmap(scr->display, panel->magnifyGlass->view->window, pixmap);
 	    XClearWindow(scr->display, panel->magnifyGlass->view->window);
-
+	    
 	    XFreePixmap(scr->display, pixmap);
 	    break;
-
+	    
 	 default:
 	    WMHandleEvent(&event);
 	    break;
@@ -1664,7 +1688,6 @@ wheelInitMatrix(W_ColorPanel *panel)
     float            hue;
     int                sat;
     float            xcor, ycor;
-    float            W_PI = 4 *atan(1);
     int                dhue[4];
     
     matrix = wheelCreateMatrix(colorWheelSize+4, colorWheelSize+4);
@@ -1709,22 +1732,22 @@ wheelInitMatrix(W_ColorPanel *panel)
                     hue = atan(ycor/xcor);
                 else {
                     if (ycor > 0)
-                        hue = W_PI * 0.5;
+                        hue = M_PI * 0.5;
                     else
-                        hue = W_PI * 1.5;
+                        hue = M_PI * 1.5;
                 }
                 
                 if (xcor < 0)
-                    hue += W_PI;
+                    hue += M_PI;
                 if ((xcor > 0) && (ycor < 0))
-                    hue += W_PI * 2.0;
+                    hue += M_PI * 2.0;
                 
                 hue = -hue;        /* Reverse direction of ColorWheel */
                 
                 if (hue < 0)
-                    hue += W_PI * 2.0;
+                    hue += M_PI * 2.0;
                 
-                dhue[0] = (hue*360) / (W_PI * 2.0);
+                dhue[0] = (hue*360) / (M_PI * 2.0);
                 
                 for (i = 0; i < 4; i++) {
 		    
@@ -1875,6 +1898,10 @@ wheelHandleActionEvents(XEvent *event, void *data)
 	
      case ButtonRelease:
 	panel->flags.dragging = 0;
+	if (!panel->flags.continuous) {
+	    if (panel->action)
+		(*panel->action)(panel->action, panel->clientData);
+	}
 	break;
 	
      case MotionNotify:
@@ -1969,7 +1996,7 @@ wheelUpdateSelection(W_ColorPanel *panel)
 {
     W_Screen    *scr = WMWidgetScreen(panel->win);
     
-    WMSetColorPanelColor(panel, panel->color);
+    updateSwatch(panel, panel->color);
     panel->lastChanged = WMWheelModeColorPanel;
     
     /* Redraw color selector (and make a backup of the part it will cover) */
@@ -2013,7 +2040,6 @@ wheelPositionSelectionOutBounds(W_ColorPanel *panel, int x, int y)
     RHSVColor    cur_hsv;
     float        hue;
     float        xcor, ycor;
-    float        W_PI = 4*atan(1);
     
     xcor = ((x*2.0) / (colorWheelSize+4)) - 1.0;
     ycor = ((y*2.0) / (colorWheelSize+4)) - 1.0;
@@ -2025,28 +2051,28 @@ wheelPositionSelectionOutBounds(W_ColorPanel *panel, int x, int y)
         hue = atan(ycor/xcor);
     else {
         if (ycor > 0)
-            hue = W_PI * 0.5;
+            hue = M_PI * 0.5;
         else
-            hue = W_PI * 1.5;
+            hue = M_PI * 1.5;
     }
     
     if (xcor < 0)
-        hue += W_PI;
+        hue += M_PI;
     if ((xcor > 0) && (ycor < 0))
-        hue += W_PI * 2.0;
+        hue += M_PI * 2.0;
     
     hue = -hue;
     
     if (hue < 0)
-        hue += W_PI * 2.0;
+        hue += M_PI * 2.0;
     
-    cur_hsv.hue = (hue*360.0)/(W_PI*2.0);
+    cur_hsv.hue = (hue*180.0)/(M_PI);
     RHSVtoRGB(&cur_hsv, &panel->color);
     
     wheelUndrawSelection(panel);
     
-    panel->colx = 2 + rint((colorWheelSize * (1.0 + cos( cur_hsv.hue*W_PI/180))) /2.0); /* "+2" because of "colorWheelSize + 4" */
-    panel->coly = 2 + rint((colorWheelSize * (1.0 + sin(-cur_hsv.hue*W_PI/180))) /2.0);
+    panel->colx = 2 + rint((colorWheelSize * (1.0 + cos( cur_hsv.hue*M_PI/180))) /2.0); /* "+2" because of "colorWheelSize + 4" */
+    panel->coly = 2 + rint((colorWheelSize * (1.0 + sin(-cur_hsv.hue*M_PI/180))) /2.0);
     
     wheelUpdateSelection(panel);
     wheelUpdateBrightnessGradientFromHSV(panel, cur_hsv);
@@ -2113,7 +2139,7 @@ grayBrightnessSliderCallback(WMWidget *w, void *data)
     WMSetTextFieldText(panel->grayBrightnessT, tmp);
     color.red = color.green = color.blue = rint(2.55*value);
     
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
     panel->lastChanged = WMGrayModeColorPanel;
 }
 
@@ -2141,7 +2167,7 @@ grayPresetButtonCallback(WMWidget *w, void *data)
     
     WMSetSliderValue(panel->grayBrightnessS, rint(100.0*i/6.0));
     
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
     panel->lastChanged = WMGrayModeColorPanel;
 }
 
@@ -2164,7 +2190,7 @@ grayBrightnessTextFieldCallback(void *observerData, WMNotification *notification
     WMSetSliderValue(panel->grayBrightnessS, value);
     
     color.red = color.green = color.blue = rint(255.0*value/100.0);
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
     panel->lastChanged = WMGrayModeColorPanel;
 }
 
@@ -2194,7 +2220,7 @@ rgbSliderCallback(WMWidget *w, void *data)
     color.green = value[1];
     color.blue = value[2];
     
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
     panel->lastChanged = WMRGBModeColorPanel;
 }
 
@@ -2202,8 +2228,8 @@ static void
 rgbTextFieldCallback(void *observerData, WMNotification *notification)
 {
     RColor    color;
-    char    tmp[4];
     int        value[3];
+    char    tmp[4];
     int        n;
     W_ColorPanel    *panel = (W_ColorPanel*)observerData;
     
@@ -2233,7 +2259,7 @@ rgbTextFieldCallback(void *observerData, WMNotification *notification)
     color.green = value[1];
     color.blue = value[2];
     
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
     panel->lastChanged = WMRGBModeColorPanel;
 }
 
@@ -2267,7 +2293,7 @@ cmykSliderCallback(WMWidget *w, void *data)
     color.green = rint((255.0 - (value[1] * 2.55)) * (1.0 - (value[3] / 100.0)));
     color.blue = rint((255.0 - (value[2] * 2.55)) * (1.0 - (value[3] / 100.0)));
     
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
     panel->lastChanged = WMCMYKModeColorPanel;
 }
 
@@ -2275,8 +2301,8 @@ static void
 cmykTextFieldCallback(void *observerData, WMNotification *notification)
 {
     RColor    color;
-    char    tmp[4];
     int        value[4];
+    char    tmp[4];
     int        n;
     W_ColorPanel    *panel = (W_ColorPanel*)observerData;
     
@@ -2310,7 +2336,7 @@ cmykTextFieldCallback(void *observerData, WMNotification *notification)
     color.green = rint((255.0 - (value[1] * 2.55)) * (1.0 - (value[3] / 100.0)));
     color.blue = rint((255.0 - (value[2] * 2.55)) * (1.0 - (value[3] / 100.0)));
     
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
     panel->lastChanged = WMCMYKModeColorPanel;
 }
 
@@ -2343,7 +2369,7 @@ hsbSliderCallback(WMWidget *w, void *data)
     RHSVtoRGB(&panel->hsvcolor, &color);
     
     panel->lastChanged = WMHSBModeColorPanel;
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
     
     if (w != panel->hsbBrightnessS)
         hsbUpdateBrightnessGradient(panel);
@@ -2357,8 +2383,8 @@ static void
 hsbTextFieldCallback(void *observerData, WMNotification *notification)
 {
     RColor    color;
-    char    tmp[4];
     int        value[3];
+    char    tmp[4];
     int        n;
     W_ColorPanel    *panel = (W_ColorPanel*)observerData;
     
@@ -2396,7 +2422,7 @@ hsbTextFieldCallback(void *observerData, WMNotification *notification)
     RHSVtoRGB(&panel->hsvcolor, &color);
     
     panel->lastChanged = WMHSBModeColorPanel;
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
     
     hsbUpdateBrightnessGradient(panel);
     hsbUpdateSaturationGradient(panel);
@@ -2422,7 +2448,7 @@ hsbUpdateBrightnessGradient(W_ColorPanel *panel)
     sliderImg = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
     sliderPxmp = WMCreatePixmapFromRImage(scr, sliderImg, 0);
     RDestroyImage(sliderImg);
-    W_PaintText(W_VIEW(panel->hsbBrightnessS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->white), False, "Brightness", strlen("Brightness"));
+    W_PaintText(W_VIEW(panel->hsbBrightnessS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->white), False, "Brightness", strlen("Brightness"));
     WMSetSliderImage(panel->hsbBrightnessS, sliderPxmp);
     WMReleasePixmap(sliderPxmp);
 }
@@ -2448,9 +2474,9 @@ hsbUpdateSaturationGradient(W_ColorPanel *panel)
     sliderPxmp = WMCreatePixmapFromRImage(scr, sliderImg, 0);
     RDestroyImage(sliderImg);
     if (hsvcolor.value < 128)
-        W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->white), False, "Saturation", strlen("Saturation"));
+        W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->white), False, "Saturation", strlen("Saturation"));
     else
-        W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->black), False, "Saturation", strlen("Saturation"));
+        W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->black), False, "Saturation", strlen("Saturation"));
     
     WMSetSliderImage(panel->hsbSaturationS, sliderPxmp);
     WMReleasePixmap(sliderPxmp);
@@ -2480,9 +2506,9 @@ hsbUpdateHueGradient(W_ColorPanel *panel)
     sliderPxmp = WMCreatePixmapFromRImage(scr, sliderImg, 0);
     RDestroyImage(sliderImg);
     if (hsvcolor.value < 128)
-        W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->white), False, "Hue", strlen("Hue"));
+        W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->white), False, "Hue", strlen("Hue"));
     else
-        W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->black), False, "Hue", strlen("Hue"));
+        W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->black), False, "Hue", strlen("Hue"));
     
     WMSetSliderImage(panel->hsbHueS, sliderPxmp);
     WMReleasePixmap(sliderPxmp);
@@ -2578,8 +2604,8 @@ customSetPalette(W_ColorPanel *panel)
     item = WMGetPopUpButtonSelectedItem (panel->customPaletteHistoryBtn);
     
     /* if palette != "Spectrum", we are allowed to rename and remove it */    
-    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, menuRename, (item > 0) );
-    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, menuRemove, (item > 0) );
+    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, CPmenuRename, (item > 0) );
+    WMSetPopUpButtonItemEnabled(panel->customPaletteMenuBtn, CPmenuRemove, (item > 0) );
 }
 
 
@@ -2602,7 +2628,7 @@ customPalettePositionSelection(W_ColorPanel *panel, int x, int y)
     panel->color.green = panel->customPaletteImg->data[1][ofs];
     panel->color.blue  = panel->customPaletteImg->data[2][ofs];
     
-    WMSetColorPanelColor(panel, panel->color);
+    updateSwatch(panel, panel->color);
     panel->lastChanged = WMCustomPaletteModeColorPanel;
     
     /* Redraw color selector (and make a backup of the part it will cover) */
@@ -2660,6 +2686,10 @@ customPaletteHandleActionEvents(XEvent *event, void *data)
 	
      case ButtonRelease:
 	panel->flags.dragging = 0;
+	if (!panel->flags.continuous) {
+	    if (panel->action)
+		(*panel->action)(panel->action, panel->clientData);
+	}
 	break;
 	
      case MotionNotify:
@@ -2682,23 +2712,21 @@ static void
 customPaletteMenuCallback(WMWidget *w, void *data)
 {
     W_ColorPanel    *panel = (W_ColorPanel*)data;
-    int    item;
-    
-    item = WMGetPopUpButtonSelectedItem(panel->customPaletteMenuBtn);
+    int    item = WMGetPopUpButtonSelectedItem(panel->customPaletteMenuBtn);
     
     switch (item) {
-     case menuNewFromFile:
+     case CPmenuNewFromFile:
 	customPaletteMenuNewFromFile(panel);
 	break;
-     case menuRename:
+     case CPmenuRename:
 	customPaletteMenuRename(panel);
 	break;
-     case menuRemove:
+     case CPmenuRemove:
 	customPaletteMenuRemove(panel);
 	break;
-     case menuCopy:
+     case CPmenuCopy:
 	break;
-     case menuNewFromClipboard:
+     case CPmenuNewFromClipboard:
 	break;
     }
 }
@@ -2726,16 +2754,16 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
     WMSetFilePanelCanChooseFiles(browseP, 1);
     
     /* Get a filename */
-    if (WMRunModalFilePanelForDirectory(browseP, panel->win, spath,
-					"Open Palette",
-					RSupportedFileFormats())) {
+    if (WMRunModalFilePanelForDirectory(browseP, panel->win, spath, 
+					"Open Palette", 
+					RSupportedFileFormats()) ) {
         filepath = WMGetFilePanelFileName(browseP);
-
+	
         /* Get seperation position between path and filename */ 
         i = strrchr(filepath, '/') - filepath + 1;
         if (i > strlen(filepath))
             i = strlen(filepath);
-
+	
         /* Store last browsed path */
         if (panel->lastBrowseDir)
             free(panel->lastBrowseDir);
@@ -2748,21 +2776,21 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 	
         /* Check for duplicate files, and rename it if there are any */
         tmp = wstrappend(panel->configurationPath, filename);
-        while (access(tmp, F_OK) == 0) {
-	    char *newName;
-
+        while (access (tmp, F_OK) == 0) {
+            char    *newName;
+	    
             free(tmp);
-
+            
             newName = generateNewFilename(filename);
-	    free(filename);
-	    filename = newName;
-
+            free(filename);
+            filename = newName;
+            
             tmp = wstrappend(panel->configurationPath, filename);
         }
         free(tmp);
 	
         /* Copy the image to $(gnustepdir)/Library/Colors/ & Add the filename to the history menu */
-        if (!fetchImageFile (panel->configurationPath, filepath, filename)) {        /* error = -1 */
+        if (fetchFile (panel->configurationPath, filepath, filename) == 0) {
 	    
             /* filepath is a "local" path now the file has been copied */
             free(filepath);
@@ -2778,29 +2806,29 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
                 customSetPalette(panel);
                 WMAddPopUpButtonItem(panel->customPaletteHistoryBtn, filename);
 		
-                panel->currentPalette = 
-		    WMGetPopUpButtonNumberOfItems(panel->customPaletteHistoryBtn)-1;
+                panel->currentPalette = WMGetPopUpButtonNumberOfItems(panel->customPaletteHistoryBtn)-1;
 		
-                WMSetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn, 
+                WMSetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn,
 					     panel->currentPalette);
             }
-        } else {
+        } 
+        else
+	{
             tmp = wstrappend(panel->configurationPath, filename);
 	    
-            i = remove(tmp);    /* Delete the file, it doesn't belong here */
+            i = remove(tmp);    /* Delete the file, it doesn't belong here */            
             WMRunAlertPanel(scr, panel->win, "File Error", "Invalid file format !", "OK", NULL, NULL);
             if (i != 0) {
-		wsyserror("can't remove file %s", tmp);
+                wsyserror("can't remove file %s", tmp);
                 WMRunAlertPanel(scr, panel->win, "File Error", "Couldn't remove file from Configuration Directory !", "OK", NULL, NULL);
-	    }
-
+            }
             free(tmp);
         }
         free(filepath);
-	free(filename);
+        free(filename);
     }
     WMFreeFilePanel(browseP);
-
+    
     free(spath);
 }
 
@@ -2958,7 +2986,6 @@ static void
 wheelInit(W_ColorPanel *panel)
 {
     RHSVColor    cur_hsv;
-    float        W_PI = 4 * atan(1);
     int            i;
     int            v;
     
@@ -2967,8 +2994,8 @@ wheelInit(W_ColorPanel *panel)
     WMSetSliderValue(panel->wheelBrightnessS, 255-cur_hsv.value);
     wheelUpdateBrightnessGradientFromHSV(panel, cur_hsv);
     
-    panel->colx = 2 + rint((colorWheelSize / 2.0) * (1 + (cur_hsv.saturation/255.0) * cos( cur_hsv.hue*W_PI/180.0)));
-    panel->coly = 2 + rint((colorWheelSize / 2.0) * (1 + (cur_hsv.saturation/255.0) * sin(-cur_hsv.hue*W_PI/180.0)));
+    panel->colx = 2 + rint((colorWheelSize / 2.0) * (1 + (cur_hsv.saturation/255.0) * cos( cur_hsv.hue*M_PI/180.0)));
+    panel->coly = 2 + rint((colorWheelSize / 2.0) * (1 + (cur_hsv.saturation/255.0) * sin(-cur_hsv.hue*M_PI/180.0)));
     
     for (i = 0; i < 256; i++) {
         /* We divide by 128 in advance, and check whether that number divides
@@ -3074,12 +3101,10 @@ colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text, int state, W
     RColor            color = *((RColor *)WMGetListItem(lPtr, index)->clientData);
     WMScreen        *scr = WMWidgetScreen(lPtr);
     Display            *dpy = WMScreenDisplay(scr);
-    RImage            *image;
-    WMPixmap        *pixmap;
-    int                i, j;
     W_ColorPanel    *panel = WMGetHangedData(lPtr);
     WMColor            *white = WMWhiteColor(scr);
     WMColor            *black = WMBlackColor(scr);
+    WMColor            *fillColor;
     
     width = rect->size.width;
     height = rect->size.height;
@@ -3087,26 +3112,18 @@ colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text, int state, W
     y = rect->pos.y;
     
     if (state & WLDSSelected)
-        XFillRectangle(dpy, d, WMColorGC(white), x, y, width, height);
+        WMPaintColorSwatch(white, d, x +15, y, width -15, height);
     else
-        XClearArea(dpy, d, x, y, width, height, False);
+        XClearArea(dpy, d, x +15, y, width -15, height, False);
     
-    image = RCreateImage(15, 15, False);
-    for (i=0; i < 15 ; i++) {
-        for (j=0; j < 15; j++) {
-            image->data[0][j*15+i] = color.red;
-            image->data[1][j*15+i] = color.green;
-            image->data[2][j*15+i] = color.blue;
-        }
-    }
+    fillColor = WMCreateRGBColor(scr, color.red*256, color.green*256, color.blue*256, False);
     
-    pixmap = WMCreatePixmapFromRImage(scr, image, 0);
-    RDestroyImage(image);
-    WMDrawPixmap(pixmap, d, x, y);
-    WMReleasePixmap(pixmap);
-    WMDrawString(scr, d, WMColorGC(black), panel->font12, x+18, y, text, 
-		 strlen(text));
-
+    WMSetColorInGC(fillColor, WMColorGC(fillColor));
+    WMPaintColorSwatch(fillColor, d, x, y, 15, 15);
+    WMReleaseColor(fillColor);
+    
+    WMDrawString(scr, d, WMColorGC(black), panel->font12, x+18, y, text, strlen(text));
+    
     WMReleaseColor(white);
     WMReleaseColor(black);
 }
@@ -3116,32 +3133,73 @@ static void
 colorListSelect(WMWidget *w, void *data)
 {
     W_ColorPanel    *panel = (W_ColorPanel *)data;
-    RColor  color = *((RColor *)WMGetListSelectedItem(w)->clientData);
+    RColor            color = *((RColor *)WMGetListSelectedItem(w)->clientData);
     
     panel->lastChanged = WMColorListModeColorPanel;
-    WMSetColorPanelColor(panel, color);
+    updateSwatch(panel, color);
 }
 
 
+static void
+colorListColorMenuCallback(WMWidget *w, void *data)
+{
+    W_ColorPanel *panel = (W_ColorPanel *)data;
+    int item = WMGetPopUpButtonSelectedItem(panel->colorListColorMenuBtn);
+    
+    switch (item) {
+     case CLmenuAdd:
+	break;
+     case CLmenuRename:
+	break;
+     case CLmenuRemove:
+	break;
+    }
+}
+
+
+static void
+colorListListMenuCallback(WMWidget *w, void *data)
+{
+    W_ColorPanel *panel = (W_ColorPanel *)data;
+    int item = WMGetPopUpButtonSelectedItem(panel->colorListListMenuBtn);
+    
+    switch (item) {
+     case CLmenuAdd:
+	/* New Color List */
+	colorListListMenuNew(panel);
+	break;
+     case CLmenuRename:
+	break;
+     case CLmenuRemove:
+	break;
+    }
+}
+
+
+static void
+colorListListMenuNew(W_ColorPanel *panel)
+{
+    
+}
 
 
 /************************** Common utility functions ************************/
 
 static int
-fetchImageFile(char *toPath, char *imageSrcFile, char *imageDestFile)
+fetchFile(char *toPath, char *srcFile, char *destFile)
 {
     int    src, dest;
     int    n;
     char    *tmp;
     char    buf[BUFSIZE];
     
-    if ((src = open(imageSrcFile, O_RDONLY)) < 0) {
-        wsyserror("Could not open %s", imageSrcFile);
+    if ((src = open(srcFile, O_RDONLY)) == 0) {
+        wsyserror("Could not open %s", srcFile);
         return -1;
     }
     
-    tmp = wstrappend(toPath, imageDestFile);
-    if ((dest = open( tmp, O_RDWR|O_CREAT, S_IRWXU|S_IRGRP|S_IROTH)) < 0) {
+    tmp = wstrappend(toPath, destFile);
+    if ((dest = open( tmp, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == 0) {
         wsyserror("Could not create %s", tmp);
         free(tmp);
         return -1;
@@ -3152,117 +3210,40 @@ fetchImageFile(char *toPath, char *imageSrcFile, char *imageDestFile)
     /* Copy the file */
     while ((n = read(src, buf, BUFSIZE)) > 0)
     {
-        if (write(dest, buf, n) != n)    {
-            wsyserror("Write error on file %s", imageDestFile);
+        if (write (dest, buf, n) != n)    {
+            wsyserror("Write error on file %s", destFile);
             return -1;
         }
     }
-
+    
     return 0;
 }
-
 
 
 char*
 generateNewFilename(char *curName)
 {
-#if 1
-    int n;
-    int baseLen;
-    char *ptr;
-    char *newName;
-
-    ptr = strrchr(curName, '{');
-    if (!ptr || sscanf(ptr, "{%i}", &n)!=1) {
-	return wstrappend(curName, " {1}");
+    int    n;
+    char    c;
+    int    baseLen;
+    char    *ptr;
+    char    *newName;
+    
+    ptr = curName;    
+    
+    while ((ptr = strrchr(ptr, '{')) && !(sscanf(ptr, "{%i}%c", &n, &c)==1)) {
+        ptr++;
     }
-
-    baseLen = ptr - curName;
-
+    if (!ptr) 
+        return wstrappend(curName, " {1}");
+    
+    baseLen = ptr - curName -1;
+    
     newName = wmalloc(baseLen + 16);
     strncpy(newName, curName, baseLen);
     newName[baseLen] = 0;
-
+    
     sprintf(&newName[baseLen], " {%i}", n+1);
-
-    return newName;
-#else
-    char    *newName;
-    char    *numStart, *numEnd;
-    char    *pre, *num, *post;
-    int    n, numLength;
-    char    *tmp;
-
-    newName = wstrdup(curName);
-
-    if (newName == NULL)
-        return wstrdup("Unnamed");
-    
-    /*
-     *    Modify the name to contain a number to make it unique 
-     */
-    
-    /* Get number-string from filename. */
-    numStart = strrchr(newName, '-');
-    if (numStart) {
-        if (strlen(numStart) > 1)
-            numStart++;                        /* Next character, please */
-	
-	
-        numEnd = strrchr(numStart, '-');    /* Already past "numbers" */
-	
-        if (numEnd) {
-            /* Now it gets interesting */
-	    
-            pre = wmalloc((numStart - newName +1) * sizeof(char));    /* a trailing '\0' is useful here */
-            strncpy (pre, newName, numStart-newName);
-            pre[numStart - newName] = '\0';
-	    
-            num = wmalloc((numEnd - numStart +1) * sizeof(char));
-            strncpy (num, numStart, numEnd-numStart);
-            num[numEnd - numStart] = '\0';
-	    
-            post = wstrdup( numEnd);
-	    
-            free(newName);    /* We don't need it anymore */
-	    
-            if (strcspn(num, "0123456789") == 0) {    
-                n = (int)strtol(num, NULL, 10);
-		
-                /* Increase number between brackets (in filename); This is what it all is about */
-                n++;
-		
-                free(num);
-                num = wmalloc(3 * sizeof(char));        /* Nobody uses more than 999 duplicate filenames, do you ? */
-                numLength = sprintf(num, "%d", n);
-		
-                free(num);
-                num = wmalloc(numLength * sizeof(char));
-                sprintf(num, "%d", n);
-		
-                tmp = wstrappend (num, post);
-                newName = wstrappend (pre, tmp);
-		
-                free(pre);
-                free(num);
-                free(post);
-                free(tmp);
-            }
-        }
-    }
-    
-    if (strcmp( curName, newName) == 0) {
-        /* The name is still unchanged, so there was no number (between brackets) in it.
-	 Add a number 1 to the end.
-	 */
-        tmp = wstrdup(newName);
-        if (newName)
-            free(newName);
-        newName = wstrappend(tmp, " -1-");
-        free(tmp);
-    }
     
     return newName;
-#endif
 }
-

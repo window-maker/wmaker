@@ -38,7 +38,7 @@ pkgdatadir = $(datadir)/@PACKAGE@
 pkglibdir = $(libdir)/@PACKAGE@
 pkgincludedir = $(includedir)/@PACKAGE@
 
-top_builddir = ..
+top_builddir = ../../..
 
 ACLOCAL = @ACLOCAL@
 AUTOCONF = @AUTOCONF@
@@ -87,79 +87,59 @@ XLIBS = @XLIBS@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 wprefsdir = @wprefsdir@
 
-man_MANS =  	geticonset.1x 	setstyle.1x 	wxpaste.1x 	getstyle.1x 	wdwrite.1x 	wmsetbg.1x 	seticons.1x 	wmaker.1x 	wxcopy.1x
+defsdatadir = $(pkgdatadir)/Themes/STEP2000.themed
+
+defsdata_DATA =  	BlueImage2.jpeg 	style
 
 
-EXTRA_DIST = $(man_MANS)
+EXTRA_DIST = $(defsdata_DATA)
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
-CONFIG_HEADER = ../src/config.h
+CONFIG_HEADER = ../../../src/config.h
 CONFIG_CLEAN_FILES = 
-man1dir = $(mandir)/man1
-MANS = $(man_MANS)
+DATA =  $(defsdata_DATA)
 
-NROFF = nroff
 DIST_COMMON =  Makefile.am Makefile.in
 
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = gtar
+TAR = tar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps doc/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps WindowMaker/Themes/STEP2000.themed/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
 	  && CONFIG_FILES=$(subdir)/$@ CONFIG_HEADERS= $(SHELL) ./config.status
 
 
-install-man1:
-	$(mkinstalldirs) $(DESTDIR)$(man1dir)
-	@list='$(man1_MANS)'; \
-	l2='$(man_MANS)'; for i in $$l2; do \
-	  case "$$i" in \
-	    *.1*) list="$$list $$i" ;; \
-	  esac; \
-	done; \
-	for i in $$list; do \
-	  if test -f $(srcdir)/$$i; then file=$(srcdir)/$$i; \
-	  else file=$$i; fi; \
-	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
-	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
-	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
-	  echo " $(INSTALL_DATA) $$file $(DESTDIR)$(man1dir)/$$inst"; \
-	  $(INSTALL_DATA) $$file $(DESTDIR)$(man1dir)/$$inst; \
+install-defsdataDATA: $(defsdata_DATA)
+	@$(NORMAL_INSTALL)
+	$(mkinstalldirs) $(DESTDIR)$(defsdatadir)
+	@list='$(defsdata_DATA)'; for p in $$list; do \
+	  if test -f $(srcdir)/$$p; then \
+	    echo " $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(defsdatadir)/$$p"; \
+	    $(INSTALL_DATA) $(srcdir)/$$p $(DESTDIR)$(defsdatadir)/$$p; \
+	  else if test -f $$p; then \
+	    echo " $(INSTALL_DATA) $$p $(DESTDIR)$(defsdatadir)/$$p"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(defsdatadir)/$$p; \
+	  fi; fi; \
 	done
 
-uninstall-man1:
-	@list='$(man1_MANS)'; \
-	l2='$(man_MANS)'; for i in $$l2; do \
-	  case "$$i" in \
-	    *.1*) list="$$list $$i" ;; \
-	  esac; \
-	done; \
-	for i in $$list; do \
-	  ext=`echo $$i | sed -e 's/^.*\\.//'`; \
-	  inst=`echo $$i | sed -e 's/\\.[0-9a-z]*$$//'`; \
-	  inst=`echo $$inst | sed '$(transform)'`.$$ext; \
-	  echo " rm -f $(DESTDIR)$(man1dir)/$$inst"; \
-	  rm -f $(DESTDIR)$(man1dir)/$$inst; \
-	done
-install-man: $(MANS)
-	@$(NORMAL_INSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) install-man1
-uninstall-man:
+uninstall-defsdataDATA:
 	@$(NORMAL_UNINSTALL)
-	$(MAKE) $(AM_MAKEFLAGS) uninstall-man1
+	list='$(defsdata_DATA)'; for p in $$list; do \
+	  rm -f $(DESTDIR)$(defsdatadir)/$$p; \
+	done
 tags: TAGS
 TAGS:
 
 
 distdir = $(top_builddir)/$(PACKAGE)-$(VERSION)/$(subdir)
 
-subdir = doc
+subdir = WindowMaker/Themes/STEP2000.themed
 
 distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
@@ -183,20 +163,20 @@ installcheck: installcheck-am
 install-exec-am:
 install-exec: install-exec-am
 
-install-data-am: install-man
+install-data-am: install-defsdataDATA
 install-data: install-data-am
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 install: install-am
-uninstall-am: uninstall-man
+uninstall-am: uninstall-defsdataDATA
 uninstall: uninstall-am
-all-am: Makefile $(MANS)
+all-am: Makefile $(DATA)
 all-redirect: all-am
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) AM_INSTALL_PROGRAM_FLAGS=-s install
 installdirs:
-	$(mkinstalldirs)  $(DESTDIR)$(mandir)/man1
+	$(mkinstalldirs)  $(DESTDIR)$(defsdatadir)
 
 
 mostlyclean-generic:
@@ -227,11 +207,11 @@ maintainer-clean-am:  maintainer-clean-generic distclean-am
 
 maintainer-clean: maintainer-clean-am
 
-.PHONY: install-man1 uninstall-man1 install-man uninstall-man tags \
-distdir info-am info dvi-am dvi check check-am installcheck-am \
-installcheck install-exec-am install-exec install-data-am install-data \
-install-am install uninstall-am uninstall all-redirect all-am all \
-installdirs mostlyclean-generic distclean-generic clean-generic \
+.PHONY: uninstall-defsdataDATA install-defsdataDATA tags distdir info-am \
+info dvi-am dvi check check-am installcheck-am installcheck \
+install-exec-am install-exec install-data-am install-data install-am \
+install uninstall-am uninstall all-redirect all-am all installdirs \
+mostlyclean-generic distclean-generic clean-generic \
 maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 

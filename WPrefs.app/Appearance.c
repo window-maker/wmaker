@@ -1,4 +1,4 @@
-/* TextureAndColor.c- color/texture for titlebar etc.
+/* Apperance.c- color/texture for titlebar etc.
  * 
  *  WPrefs - Window Maker Preferences Program
  * 
@@ -33,7 +33,7 @@ typedef struct _Panel {
 
     WMWindow *win;
 
-    WMLabel *prevL;
+    WMButton *prevB;
 
     WMPopUpButton *secP;
 
@@ -41,10 +41,30 @@ typedef struct _Panel {
     WMLabel *texL;
     WMList *texLs;
 
-    WMPopUpButton *cmdP;
-    WMTextField *texT;
-
+    WMButton *newB;
     WMButton *editB;
+    WMButton *ripB;
+    WMButton *delB;
+
+
+    proplist_t ftitleTex;
+    proplist_t utitleTex;
+    proplist_t ptitleTex;
+    proplist_t iconTex;
+    proplist_t menuTex;
+    proplist_t mtitleTex;
+    proplist_t backTex;
+    
+    int ftitleIndex;
+    int utitleIndex;
+    int ptitleIndex;
+    int iconIndex;
+    int menuIndex;
+    int mtitleIndex;
+    int backIndex;
+
+    WMFont *normalFont;
+    WMFont *selectedFont;
 
     /* for preview shit */
     Pixmap preview;
@@ -59,8 +79,12 @@ typedef struct _Panel {
 
 
 
-
 #define ICON_FILE	"appearance"
+
+#define TNEW_FILE 	"tnew"
+#define TDEL_FILE	"tdel"
+#define TEDIT_FILE	"tedit"
+#define TEXTR_FILE 	"textr"
 
 
 #define	FTITLE	(1<<0)
@@ -136,12 +160,62 @@ getStrArrayForKey(char *key)
 }
 #endif
 
+
+
+static void
+newTexture(WMButton *bPtr, void *data)
+{
+    _Panel *panel = (_Panel*)data;
+
+    
+}
+
+
+static void
+changePage(WMWidget *w, void *data)
+{
+    _Panel *panel = (_Panel*)data;
+    int section;
+
+    section = WMGetPopUpButtonSelectedItem(panel->secP);
+
+    WMSelectListItem(panel->texLs, section);
+
+}
+
+
+static void
+selectTexture(WMWidget *w, void *data)
+{
+    _Panel *panel = (_Panel*)data;
+    int section;
+
+    section = WMGetListSelectedItemRow(panel->secP);
+    
+
+}
+
+static void
+fillTextureList(WMList *lPtr)
+{
+    proplist_t textures;
+    WMUserDefaults *udb = WMGetStandardUserDefaults();
+
+    textures = WMGetUDObjectForKey(udb, "Textures");
+
+    if (!textures)
+	return;
+
+    
+}
+
+
 static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
     WMColor *color;
-    WMFont *boldFont;
+    WMFont *font;
     WMScreen *scr = WMWidgetScreen(panel->win);
 
     panel->frame = WMCreateFrame(panel->win);
@@ -149,25 +223,31 @@ createPanel(Panel *p)
     WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
 
     /* preview box */
-    panel->prevL = WMCreateLabel(panel->frame);
-    WMResizeWidget(panel->prevL, 260, 190);
-    WMMoveWidget(panel->prevL, 10, 10);
-    WMSetLabelRelief(panel->prevL, WRSunken);
+    panel->prevB = WMCreateCommandButton(panel->frame);
+    WMResizeWidget(panel->prevB, 260, 165);
+    WMMoveWidget(panel->prevB, 15, 10);
+    WMSetButtonImagePosition(panel->prevB, WIPImageOnly);
 
     panel->secP = WMCreatePopUpButton(panel->frame);
-    WMResizeWidget(panel->secP, 242, 20);
-    WMMoveWidget(panel->secP, 10, 207);
-/*    WMSetPopUpButtonAction(panel->secP, changePage, panel);
- */
-
+    WMResizeWidget(panel->secP, 260, 20);
+    WMMoveWidget(panel->secP, 15, 180);
+    WMSetPopUpButtonSelectedItem(panel->secP, 0);
+    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window"));
+    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Unfocused Windows"));
+    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Focused Window's Owner"));
+    WMAddPopUpButtonItem(panel->secP, _("Titlebar of Menus"));
+    WMAddPopUpButtonItem(panel->secP, _("Menu Items"));
+    WMAddPopUpButtonItem(panel->secP, _("Icon Background"));
+    WMAddPopUpButtonItem(panel->secP, _("Workspace Backgrounds"));
+    WMSetPopUpButtonAction(panel->secP, changePage, panel);
 
     /* texture list */
-    boldFont = WMBoldSystemFontOfSize(scr, 12);
+    font = WMBoldSystemFontOfSize(scr, 12);
 
     panel->texL = WMCreateLabel(panel->frame);
     WMResizeWidget(panel->texL, 225, 18);
     WMMoveWidget(panel->texL, 285, 10);
-    WMSetLabelFont(panel->texL, boldFont);
+    WMSetLabelFont(panel->texL, font);
     WMSetLabelText(panel->texL, _("Textures"));
     WMSetLabelRelief(panel->texL, WRSunken);
     WMSetLabelTextAlignment(panel->texL, WACenter);
@@ -178,31 +258,52 @@ createPanel(Panel *p)
     WMSetLabelTextColor(panel->texL, color);
     WMReleaseColor(color);
 
-    WMReleaseFont(boldFont);
-
+    WMReleaseFont(font);
 
     panel->texLs = WMCreateList(panel->frame);
     WMResizeWidget(panel->texLs, 225, 144);
     WMMoveWidget(panel->texLs, 285, 30);
+    
+    /* command buttons */
 
-    panel->cmdP = WMCreatePopUpButton(panel->frame);
-    WMResizeWidget(panel->cmdP, 225, 20);
-    WMMoveWidget(panel->cmdP, 285, 180);
-    WMSetPopUpButtonPullsDown(panel->cmdP, True);
-    WMSetPopUpButtonText(panel->cmdP, _("Texture Commands"));
-    WMAddPopUpButtonItem(panel->cmdP, _("Create New"));
-    WMAddPopUpButtonItem(panel->cmdP, _("Add From Text Field"));
-    WMAddPopUpButtonItem(panel->cmdP, _("Remove Selected"));
-    WMAddPopUpButtonItem(panel->cmdP, _("Extract From File"));
+    font = WMSystemFontOfSize(scr, 10);
+
+
+    panel->newB = WMCreateCommandButton(panel->frame);
+    WMResizeWidget(panel->newB, 56, 48);
+    WMMoveWidget(panel->newB, 285, 180);
+    WMSetButtonFont(panel->newB, font);
+    WMSetButtonImagePosition(panel->newB, WIPAbove);
+    WMSetButtonText(panel->newB, _("New"));
+    SetButtonAlphaImage(scr, panel->newB, TNEW_FILE);
+
+    panel->ripB = WMCreateCommandButton(panel->frame);
+    WMResizeWidget(panel->ripB, 56, 48);
+    WMMoveWidget(panel->ripB, 341, 180);
+    WMSetButtonFont(panel->ripB, font);
+    WMSetButtonImagePosition(panel->ripB, WIPAbove);
+    WMSetButtonText(panel->ripB, _("Extract..."));
+    SetButtonAlphaImage(scr, panel->ripB, TEXTR_FILE);
 
     panel->editB = WMCreateCommandButton(panel->frame);
-    WMResizeWidget(panel->editB, 64, 20);
-    WMMoveWidget(panel->editB, 260, 207);
-    WMSetButtonText(panel->editB, _("Browse..."));
+    WMResizeWidget(panel->editB, 56, 48);
+    WMMoveWidget(panel->editB, 397, 180);
+    WMSetButtonFont(panel->editB, font);
+    WMSetButtonImagePosition(panel->editB, WIPAbove);
+    WMSetButtonText(panel->editB, _("Edit"));
+    SetButtonAlphaImage(scr, panel->editB, TEDIT_FILE);
+    WMSetButtonEnabled(panel->editB, False);
 
-    panel->texT = WMCreateTextField(panel->frame);
-    WMResizeWidget(panel->texT, 176, 20);
-    WMMoveWidget(panel->texT, 330, 207);
+    panel->delB = WMCreateCommandButton(panel->frame);
+    WMResizeWidget(panel->delB, 56, 48);
+    WMMoveWidget(panel->delB, 453, 180);
+    WMSetButtonFont(panel->delB, font);
+    WMSetButtonImagePosition(panel->delB, WIPAbove);
+    WMSetButtonText(panel->delB, _("Delete"));
+    SetButtonAlphaImage(scr, panel->delB, TDEL_FILE);
+    WMSetButtonEnabled(panel->delB, False);
+
+    WMReleaseFont(font);
 
     /**/
 
@@ -211,8 +312,65 @@ createPanel(Panel *p)
 
     WMSetPopUpButtonSelectedItem(panel->secP, 0);
 
+    showData(panel);
+
+    fillTextureList(panel->texLs);
+
+}
+
+static proplist_t
+setupTextureFor(WMList *list, char *key, char *defValue, char *title)
+{
+    WMListItem *item;
+    char *tex, *str;
+    proplist_t prop;
+
+    prop = GetObjectForKey(key);
+    if (!prop) {
+	prop = PLMakeString(defValue);
+    }
+    tex = PLGetDescription(prop);
+    str = wstrappend(title, tex);
+    free(tex);
+    item = WMAddListItem(list, str);
+    free(str);
+    item->clientData = prop;
+
+    return prop;
+}
 
 
+static void
+showData(_Panel *panel)
+{
+    panel->ftitleTex = setupTextureFor(panel->texLs, "FTitleBack", 
+				       "(solid, black)", "[Focused]:");
+    panel->ftitleIndex = 0;
+
+    panel->utitleTex = setupTextureFor(panel->texLs, "UTitleBack",
+				       "(solid, gray)", "[Unfocused]:");
+    panel->utitleIndex = 1;
+
+    panel->ptitleTex = setupTextureFor(panel->texLs, "PTitleBack",
+				       "(solid, \"#616161\")",
+				       "[Owner of Focused]:");
+    panel->ptitleIndex = 2;
+
+    panel->mtitleTex = setupTextureFor(panel->texLs, "MenuTitleBack", 
+				       "(solid, black)", "[Menu Title]:");
+    panel->mtitleIndex = 3;
+
+    panel->menuTex = setupTextureFor(panel->texLs, "MenuTextBack", 
+				     "(solid, gray)", "[Menu Item]:");
+    panel->menuIndex = 4;
+
+    panel->iconTex = setupTextureFor(panel->texLs, "IconBack",
+				     "(solid, gray)", "[Icon]:");
+    panel->iconIndex = 5;
+
+    panel->backTex = setupTextureFor(panel->texLs, "WorkspaceBack",
+				     "(solid, black)", "[Workspace]:");
+    panel->backIndex = 6;
 }
 
 

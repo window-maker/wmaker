@@ -25,7 +25,7 @@ int main(int argc, char **argv)
   WMScreen		*scr;
   WMPixmap		*pixmap;
   WMColorPanel	*panel;
-  RColor		startcolor;
+
 
   WMInitializeApplication("WMColorPicker", &argc, argv);
     
@@ -44,10 +44,8 @@ int main(int argc, char **argv)
   WMSetApplicationIconImage(scr, pixmap); WMReleasePixmap(pixmap);
   panel = WMGetColorPanel(scr);
   
-  startcolor.red = 0;
-  startcolor.green = 0;
-  startcolor.blue = 255;
-  
-  WMRunColorPanel(panel, NULL, startcolor);
+  WMShowColorPanel(panel);
+
+  WMScreenMainLoop(scr);
   return 0;
 }

@@ -39,9 +39,9 @@ echo
 echo "NOTE: If this script fails, read the INSTALL file and"
 echo "install by hand."
 echo
-echo "Please read the INSTALL and FAQ files before e-mailing "
-echo "questions. (we are lazy to reply questions already answered "
-echo "there as much as you are lazy to read these ;) "
+echo "Please read the README, INSTALL and FAQ files before e-mailing "
+echo "questions. We will IGNORE any questions that are already"
+echo "answered in the documentation."
 echo
 perai
 echo

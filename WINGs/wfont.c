@@ -18,9 +18,16 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
     char *defaultString;
     XFontSetExtents *extents;
 
+    font = WMHashGet(scrPtr->fontCache, fontName);
+    if (font) {
+	WMRetainFont(font);
+	return font;
+    }
+
     font = malloc(sizeof(WMFont));
     if (!font)
       return NULL;
+    memset(font, 0, sizeof(WMFont));
 
     font->notFontSet = 0;
 
@@ -50,9 +57,13 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
     
     font->height = extents->max_logical_extent.height;
     font->y = font->height - (font->height + extents->max_logical_extent.y);
-    
+
     font->refCount = 1;
-    
+
+    font->name = wstrdup(fontName);
+
+    assert(WMHashInsert(scrPtr->fontCache, font->name, font)==NULL);
+
     return font;
 }
 
@@ -66,12 +77,13 @@ WMCreateFontInDefaultEncoding(WMScreen *scrPtr, char *fontName)
 
     font = malloc(sizeof(WMFont));
     if (!font)
-      return NULL;
+	return NULL;
+    memset(font, 0, sizeof(WMFont));
     
     font->notFontSet = 1;
     
     font->screen = scrPtr;
-
+    
     font->font.normal = XLoadQueryFont(display, fontName);
     if (!font->font.normal) {
 	free(font);
@@ -108,8 +120,13 @@ WMReleaseFont(WMFont *font)
     if (font->refCount < 1) {
 	if (font->notFontSet)
 	    XFreeFont(font->screen->display, font->font.normal);
-	else
+	else {
 	    XFreeFontSet(font->screen->display, font->font.set);
+	}
+	if (font->name) {
+	    WMHashRemove(font->screen->fontCache, font->name);
+	    free(font->name);
+	}
 	free(font);
     }
 }

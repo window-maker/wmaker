@@ -104,16 +104,22 @@ textChangedObserver(void *observerData, WMNotification *notification)
     char *text;
     WMList *list;
     int col = WMGetBrowserNumberOfColumns(panel->browser) - 1;
-    int i, j, textEvent;
+    int i, textEvent = (int)WMGetNotificationClientData(notification);
+    static int running = 0;
+
+    if (running)
+        return;
+
+    running = 1;
 
     if (panel->flags.ignoreTextChangeNotification)
 	return;
 
-    if (!(list = WMGetBrowserListInColumn(panel->browser, col)))
-        return;
+    list = WMGetBrowserListInColumn(panel->browser, col);
+    if (!list)
+	return;
 
     text = WMGetTextFieldText(panel->fileField);
-    textEvent = (int)WMGetNotificationClientData(notification);
 
     if (panel->flags.autoCompletion && textEvent!=WMDeleteTextEvent)
         i = closestListItem(list, text, False);
@@ -126,16 +132,14 @@ textChangedObserver(void *observerData, WMNotification *notification)
         int textLen = strlen(text), itemTextLen = strlen(item->text);
         int visibleItems = WMWidgetHeight(list)/WMGetListItemHeight(list);
 	
-        WMSetListPosition(list, i - visibleItems/2);
+        if (textEvent!=WMSetTextEvent || textLen<itemTextLen)
+            WMSetListPosition(list, i - visibleItems/2);
 	
-        if (textEvent!=WMDeleteTextEvent) {
+        if (textEvent!=WMDeleteTextEvent && textLen<itemTextLen) {
             WMRange range;
-
-            panel->flags.ignoreTextChangeNotification = 1;
+	    
 	    WMInsertTextFieldText(panel->fileField, &item->text[textLen],
-                                  textLen);
-            panel->flags.ignoreTextChangeNotification = 0;
-
+				  textLen);
 	    WMSetTextFieldCursorPosition(panel->fileField, itemTextLen);
 	    range.position = textLen;
 	    range.count = itemTextLen - textLen;
@@ -144,6 +148,7 @@ textChangedObserver(void *observerData, WMNotification *notification)
     }
 
     free(text);
+    running = 0;
 }
 
 
@@ -317,11 +322,11 @@ WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
     WMScreen *scr = WMWidgetScreen(panel->win);
     XEvent event;
 
-    WMChangePanelOwner(panel->win, owner);
-
     if (name && !owner) {
         WMSetWindowTitle(panel->win, name);
     }
+
+    WMChangePanelOwner(panel->win, owner);
 
     WMSetFilePanelDirectory(panel, path);
 
@@ -346,12 +351,19 @@ WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
 
     WMSetLabelText(panel->titleLabel, name);
 
+    scr->modalView = W_VIEW(panel->win);
     WMMapWidget(panel->win);
 
+    WMMoveWidget(panel->win, 
+		 (scr->rootView->size.width - WMWidgetWidth(panel->win))/2,
+		 (scr->rootView->size.height - WMWidgetHeight(panel->win))/2);
+
+    scr->modal = 1;
     while (!panel->flags.done) {	
 	WMNextEvent(scr->display, &event);
 	WMHandleEvent(&event);
     }
+    scr->modal = 0;
 
     /* Must withdraw window because the next time we map
      * it, it might have a different transient owner. 

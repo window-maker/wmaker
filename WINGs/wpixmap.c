@@ -31,6 +31,34 @@ WMReleasePixmap(WMPixmap *pixmap)
 
 
 WMPixmap*
+WMCreatePixmap(WMScreen *scrPtr, int width, int height, int depth, Bool masked)
+{
+    WMPixmap *pixPtr;
+
+    pixPtr = malloc(sizeof(WMPixmap));
+    if (!pixPtr) {
+	return NULL;
+    }
+    pixPtr->screen = scrPtr;
+    pixPtr->width = width;
+    pixPtr->height = height;
+    pixPtr->depth = depth;
+    pixPtr->refCount = 1;
+
+    pixPtr->pixmap = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr),
+				   width, height, depth);
+    if (masked) {
+	    pixPtr->mask = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr),
+					 width, height, 1);
+    } else {
+	pixPtr->mask = None;
+    }
+
+    return pixPtr;    
+}
+
+
+WMPixmap*
 WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap, Pixmap mask,
 			   int width, int height, int depth)
 {

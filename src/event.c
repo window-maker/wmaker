@@ -95,7 +95,6 @@ extern int wShapeEventBase;
 #endif
 
 /* special flags */
-extern char WProgramState;
 extern char WDelayedActionSet;
 
 
@@ -205,8 +204,8 @@ DispatchEvent(XEvent *event)
     if (deathHandler)
 	handleDeadProcess(NULL);
     
-    if (WProgramState==WSTATE_NEED_EXIT) {
-	WProgramState = WSTATE_EXITING;
+    if (WCHECK_STATE(WSTATE_NEED_EXIT)) {
+	WCHANGE_STATE(WSTATE_EXITING);
 	/* received SIGTERM */
 	/* 
 	 * WMHandleEvent() can't be called from anything
@@ -215,8 +214,8 @@ DispatchEvent(XEvent *event)
 	 */
 	Shutdown(WSExitMode);
 
-    } else if (WProgramState == WSTATE_NEED_RESTART) {
-	WProgramState = WSTATE_RESTARTING;
+    } else if (WCHECK_STATE(WSTATE_NEED_RESTART)) {
+	WCHANGE_STATE(WSTATE_RESTARTING);
 
 	Shutdown(WSRestartPreparationMode);
 	/* received SIGHUP */
@@ -354,7 +353,7 @@ void
 NotifyDeadProcess(pid_t pid, unsigned char status)
 {
     if (deadProcessPtr>=MAX_DEAD_PROCESSES-1) {
-	wwarning(_("stack overflow: too many dead processes"));
+	wwarning("stack overflow: too many dead processes");
 	return;
     }
     /* stack the process to be handled later,
@@ -502,45 +501,29 @@ handleMapRequest(XEvent *ev)
     }
 
     if (wwin) {
-	int state;
+	wClientSetState(wwin, NormalState, None);
+	if (wwin->flags.maximized) {
+	    wMaximizeWindow(wwin, wwin->flags.maximized);
+	}
+	if (wwin->flags.shaded) {
+	    wwin->flags.shaded = 0;
+	    wwin->flags.skip_next_animation = 1;
+	    wShadeWindow(wwin);
+	}
+	if (wwin->flags.miniaturized) {
+	    wwin->flags.miniaturized = 0;
+	    wwin->flags.skip_next_animation = 1;
+	    wIconifyWindow(wwin);
+	}
+	if (wwin->flags.hidden) {
+	    WApplication *wapp = wApplicationOf(wwin->main_window);
 
-	if (wwin->wm_hints && (wwin->wm_hints->flags & StateHint))
-	    state = wwin->wm_hints->initial_state;
-	else
-	    state = NormalState;
-
-        if (state == IconicState)
-            wwin->flags.miniaturized = 1;
-
-        if (state == WithdrawnState) {
-	    wwin->flags.mapped = 0;
-	    wClientSetState(wwin, WithdrawnState, None);
-	    wUnmanageWindow(wwin, True, False);
-        } else {
-            wClientSetState(wwin, NormalState, None);
-	    if (wwin->flags.maximized) {
-		wMaximizeWindow(wwin, wwin->flags.maximized);
+	    wwin->flags.hidden = 0;
+	    wwin->flags.skip_next_animation = 1;
+	    if (wapp) {
+		wHideApplication(wapp);
 	    }
-            if (wwin->flags.shaded) {
-                wwin->flags.shaded = 0;
-                wwin->flags.skip_next_animation = 1;
-                wShadeWindow(wwin);
-            }
-            if (wwin->flags.miniaturized) {
-                wwin->flags.miniaturized = 0;
-                wwin->flags.skip_next_animation = 1;
-                wIconifyWindow(wwin);
-            }
-	    if (wwin->flags.hidden) {
-                WApplication *wapp = wApplicationOf(wwin->main_window);
-
-                wwin->flags.hidden = 0;
-                wwin->flags.skip_next_animation = 1;
-                if (wapp) {
-                    wHideApplication(wapp);
-                }
-            }
-        }
+	}
     }
 }
 
@@ -1701,6 +1684,7 @@ handleMotionNotify(XEvent *event)
 {
     WMenu *menu;
     WScreen *scr = wScreenForRootWindow(event->xmotion.root);
+    WWindow *wwin;
 
     if (wPreferences.scrollable_menus) {
         if (event->xmotion.x_root <= 1 ||
@@ -1717,6 +1701,53 @@ handleMotionNotify(XEvent *event)
                 wMenuScroll(menu, event);
         }
     }
+#if 0
+    if (event->xmotion.subwindow == None)
+	return;
+
+    if (scr->scrolledFMaximize != None) {
+	    WWindow *twin;
+
+	    twin = wWindowFor(scr->scrolledFMaximize);
+	    if (twin && twin->frame_y ==) {
+		
+		
+	    }
+	    scr->scrolledFMaximize = NULL;
+	    
+	} else {
+
+    /* scroll full maximized window */
+    if (event->xmotion.y_root < 1
+	|| event->xmotion.y_root > scr->scr_height - 1) {
+
+	wwin = wWindowFor(event->xmotion.subwindow);
+
+	if (wwin && (wwin->flags.maximized & MAX_VERTICAL)
+	    && WFLAGP(wwin, full_maximize) 
+	    && event->xmotion.x_root >= wwin->frame_x
+	    && event->xmotion.x_root <= wwin->frame_x + wwin->frame->core->width) {
+
+	    if (!WFLAGP(wwin, no_titlebar)
+		&& wwin->frame_y <= - wwin->frame->top_width) {
+
+		wWindowMove(wwin, wwin->frame_x, 0);
+		wwin->flags.dragged_while_fmaximized = 0;
+
+	    } else if (!WFLAGP(wwin, no_resizebar)
+		       && wwin->frame_y + wwin->frame->core->height >=
+		       scr->scr_height + wwin->frame->bottom_width) {
+		
+		int y = scr->scr_height + wwin->frame->bottom_width;
+
+		y = scr->scr_height - wwin->frame_y - wwin->frame->core->height;
+
+		wWindowMove(wwin, wwin->frame_x, y);
+		wwin->flags.dragged_while_fmaximized = 0;
+	    }
+	}
+    }
+#endif
 }
 
 

@@ -30,7 +30,6 @@ WPrefs_SOURCES = \
 	Paths.c \
 	Preferences.c \
 	Text.c \
-	TextureAndColor.c \
 	TexturePanel.c \
 	TexturePanel.h \
 	Themes.c \

@@ -223,7 +223,7 @@ createPanel(Panel *p)
     WMSetFrameTitle(panel->placF, _("Window Placement"));
 
     panel->placP = WMCreatePopUpButton(panel->placF);
-    WMResizeWidget(panel->placP, 120, 20);
+    WMResizeWidget(panel->placP, 105, 20);
     WMMoveWidget(panel->placP, 15, 20);
     WMAddPopUpButtonItem(panel->placP, _("Automatic"));
     WMAddPopUpButtonItem(panel->placP, _("Random"));
@@ -231,7 +231,7 @@ createPanel(Panel *p)
     WMAddPopUpButtonItem(panel->placP, _("Cascade"));
     
     panel->porigL = WMCreateLabel(panel->placF);
-    WMResizeWidget(panel->porigL, 138, 32);
+    WMResizeWidget(panel->porigL, 120, 32);
     WMMoveWidget(panel->porigL, 5, 45);
     WMSetLabelTextAlignment(panel->porigL, WACenter);
     WMSetLabelText(panel->porigL, _("Placement Origin"));
@@ -250,15 +250,21 @@ createPanel(Panel *p)
     swidth = WidthOfScreen(DefaultScreenOfDisplay(WMScreenDisplay(scr)));
     sheight = HeightOfScreen(DefaultScreenOfDisplay(WMScreenDisplay(scr)));
     
-    if (120*sheight/swidth < 70*swidth/sheight) {
-	width = 70*swidth/sheight;
+    if (sheight > swidth) {
 	height = 70;
+	width = 70*swidth/sheight;
+	if (width > 115)
+	    width = 115;
+	height = 115*sheight/swidth;
     } else {
-	height = 120*sheight/swidth;
-	width = 120;
+	width = 115;
+	height = 115*sheight/swidth;
+	if (height > 70)
+	    height = 70;
+	width = 70*swidth/sheight;
     }
     WMResizeWidget(panel->porigF, width, height);
-    WMMoveWidget(panel->porigF, 135+(120-width)/2, 20+(70-height)/2);
+    WMMoveWidget(panel->porigF, 130+(115-width)/2, 20+(70-height)/2);
 
     panel->porigW = WMCreateLabel(panel->porigF);
     WMResizeWidget(panel->porigW, THUMB_SIZE, THUMB_SIZE);
@@ -268,14 +274,14 @@ createPanel(Panel *p)
     
     panel->hsli = WMCreateSlider(panel->placF);
     WMResizeWidget(panel->hsli, width, 12);
-    WMMoveWidget(panel->hsli, 135+(120-width)/2, 20+(70-height)/2+height+2);
+    WMMoveWidget(panel->hsli, 130+(115-width)/2, 20+(70-height)/2+height+2);
     WMSetSliderAction(panel->hsli, sliderCallback, panel);
     WMSetSliderMinValue(panel->hsli, 0);
     WMSetSliderMaxValue(panel->hsli, swidth);
 
     panel->vsli = WMCreateSlider(panel->placF);
     WMResizeWidget(panel->vsli, 12, height);
-    WMMoveWidget(panel->vsli, 135+(120-width)/2+width+2, 20+(70-height)/2);
+    WMMoveWidget(panel->vsli, 130+(115-width)/2+width+2, 20+(70-height)/2);
     WMSetSliderAction(panel->vsli, sliderCallback, panel);
     WMSetSliderMinValue(panel->vsli, 0);
     WMSetSliderMaxValue(panel->vsli, sheight);

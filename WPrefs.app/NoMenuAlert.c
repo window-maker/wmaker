@@ -42,15 +42,15 @@ typedef struct NoMenuPanel {
 	"This either means that there is a syntax error in it or that "\
 	"the menu is in a format not supported by WPrefs (WPrefs only "\
 	"supports property list menus).\n"\
-	"     If you want to change the current menu, please read "\
-	"the '%s' file, press 'Keep Current Menu' and edit it with a "\
+	"     If you want to keep using the current menu, please read "\
+	"the '%s/%s' file, press 'Keep Current Menu' and edit it with a "\
 	"text editor.\n"\
 	"     If you want to use this editor, press 'Copy Default Menu'. "\
 	"It will copy the default menu and will instruct Window Maker "\
 	"to use it instead of the current one.\n"\
 	"     If you want more flexibility, keep using the current one "\
 	"as it allows you to use C preprocessor (cpp) macros, while being "\
-	"easy to edit."
+	"easy to edit. Window Maker supports both formats."
 
 
 static void
@@ -79,7 +79,7 @@ Bool
 AskMenuCopy(WMWindow *wwin)
 {
     NoMenuPanel panel;
-    char buffer[1024];
+    char buffer[2048];
 
     panel.wwin = WMCreatePanelForWindow(wwin, "noMenuAlert");
     WMResizeWidget(panel.wwin, 430, 260);
@@ -90,7 +90,8 @@ AskMenuCopy(WMWindow *wwin)
     WMResizeWidget(panel.text, 370, 200);
     WMMoveWidget(panel.text, 30, 20);
 
-    sprintf(buffer, _(MESSAGE_TEXT), "shit/ewq/ewq/rweq");
+    sprintf(buffer, _(MESSAGE_TEXT), wusergnusteppath(),
+	    "Library/WindowMaker/README");
     WMSetLabelText(panel.text, buffer);
 
     panel.copyBtn = WMCreateCommandButton(panel.wwin);

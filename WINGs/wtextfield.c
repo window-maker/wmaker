@@ -410,14 +410,14 @@ WMSetTextFieldSecure(WMTextField *tPtr, Bool flag)
 
 
 Bool
-WMGetTextFieldEnabled(WMTextField *tPtr)
+WMGetTextFieldEditable(WMTextField *tPtr)
 {
     return tPtr->flags.enabled;
 }
 
 
 void
-WMSetTextFieldEnabled(WMTextField *tPtr, Bool flag)
+WMSetTextFieldEditable(WMTextField *tPtr, Bool flag)
 {
     tPtr->flags.enabled = flag;
     
@@ -581,15 +581,15 @@ drawRelief(WMView *view, Bool beveled)
     int width = view->size.width;
     int height = view->size.height;
     
-    dgc = W_GC(scr->darkGray);
+    dgc = WMColorGC(scr->darkGray);
 
     if (!beveled) {
 	XDrawRectangle(dpy, view->window, dgc, 0, 0, width-1, height-1);
 
 	return;
     }
-    wgc = W_GC(scr->white);
-    lgc = W_GC(scr->gray);
+    wgc = WMColorGC(scr->white);
+    lgc = WMColorGC(scr->gray);
 
     /* top left */
     XDrawLine(dpy, view->window, dgc, 0, 0, width-1, 0);
@@ -820,8 +820,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     switch (ksym) {
      case XK_Tab:
 	if (event->xkey.state & ShiftMask) {
-            if (tPtr->view->prevFocusChain &&
-                tPtr->view->prevFocusChain->flags.mapped) {
+	    if (tPtr->view->prevFocusChain) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 				     tPtr->view->prevFocusChain);
 		tPtr->flags.notIllegalMovement = 1;
@@ -829,8 +828,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	    WMPostNotificationName(WMTextDidEndEditingNotification, tPtr,
 				   (void*)WMBacktabTextMovement);
 	} else {
-            if (tPtr->view->nextFocusChain &&
-                tPtr->view->nextFocusChain->flags.mapped) {
+	    if (tPtr->view->nextFocusChain) {
 		W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 				 tPtr->view->nextFocusChain);
 		tPtr->flags.notIllegalMovement = 1;
