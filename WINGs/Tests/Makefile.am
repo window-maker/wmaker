@@ -2,7 +2,7 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-noinst_PROGRAMS = wtest wmquery wmfile testmywidget testcolorpanel 
+noinst_PROGRAMS = wtest wmquery wmfile testmywidget 
 
 LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
 	@LIBPL@

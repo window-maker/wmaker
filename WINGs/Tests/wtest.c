@@ -115,7 +115,8 @@ testFrame(WMScreen *scr)
 }
 
 
-static void resizedWindow(void *self, WMNotification *notif)
+static void
+resizedWindow(void *self, WMNotification *notif)
 {
     WMView *view = (WMView*)WMGetNotificationObject(notif);
     WMSize size = WMGetViewSize(view);
@@ -507,6 +508,21 @@ testColorWell(WMScreen *scr)
     WMMapWidget(win);
 }
 
+
+void
+testColorPanel(WMScreen *scr)
+{
+    WMColorPanel *panel = WMGetColorPanel(scr);
+
+    /*if (colorname) {
+        startcolor = WMCreateNamedColor(scr, colorname, False);
+        WMSetColorPanelColor(panel, startcolor);
+        WMReleaseColor(startcolor);
+    }*/
+
+    WMShowColorPanel(panel);
+}
+
 void
 sliderCallback(WMWidget *w, void *data)
 {
@@ -544,6 +560,7 @@ testSlider(WMScreen *scr)
     WMMapSubwidgets(win);
     WMMapWidget(win);
 }
+
 
 void
 testTextField(WMScreen *scr)
@@ -1282,6 +1299,7 @@ main(int argc, char **argv)
 
     testDragAndDrop(scr);
 #if 0
+    testColorPanel(scr);
     testScrollView(scr);
     testTabView(scr);    
     testBox(scr);
