@@ -229,7 +229,7 @@
  * define DEFINABLE_CURSOR if you want WindowMaker's default cursor
  * to be user-definable instead of using a hard-coded left_ptr.
  */
-#define DEFINABLE_CURSOR
+#undef DEFINABLE_CURSOR
 
 
 /*

@@ -803,14 +803,29 @@ WDefaultEntry optionList[] = {
     }
     ,{"MoveCursor", "(builtin, fleur)",		(void*)WCUR_MOVE,
           NULL,				getCursor,	setCursor
-    }
-    ,{"ResizeCursor", "(builtin, sizing)",	(void*)WCUR_RESIZE,
-          NULL,				getCursor,	setCursor
-    }
-    ,{"WaitCursor", "(builtin, watch)",		(void*)WCUR_WAIT,
-          NULL,				getCursor,	setCursor
-    }
+    },
 #if 0
+    {"TopLeftResizeCursor", "(builtin, sizing)",	(void*)WCUR_TOPLEFTRESIZE,
+          NULL,				getCursor,	setCursor
+    },
+    {"TopRightResizeCursor", "(builtin, sizing)",	(void*)WCUR_TOPRIGHTRESIZE,
+          NULL,				getCursor,	setCursor
+    },
+    {"BottomLeftResizeCursor", "(builtin, sizing)",	(void*)WCUR_BOTTOMLEFTRESIZE,
+          NULL,				getCursor,	setCursor
+    },
+    {"BottomRightResizeCursor", "(builtin, sizing)",	(void*)WCUR_BOTTOMRIGHTRESIZE,
+          NULL,				getCursor,	setCursor
+    },
+    {"VerticalResizeCursor", "(builtin, sizing)",	(void*)WCUR_VERTICALRESIZE,
+          NULL,				getCursor,	setCursor
+    },
+    {"HorizonResizeCursor", "(builtin, sizing)",	(void*)WCUR_HORIZONRESIZE,
+          NULL,				getCursor,	setCursor
+    },
+    {"WaitCursor", "(builtin, watch)",		(void*)WCUR_WAIT,
+          NULL,				getCursor,	setCursor
+    }
     ,{"ArrowCursor", "(builtin, top_left_arrow)",	(void*)WCUR_ARROW,
           NULL,				getCursor,	setCursor
     }
