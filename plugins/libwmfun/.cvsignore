@@ -1,5 +1,6 @@
 Makefile Makefile.in
 *.lo *.la
+stamp-h stamp-h.in config.h
 .libs
 .psrc .inslog2 tca.map tca.log
 *.rpt
