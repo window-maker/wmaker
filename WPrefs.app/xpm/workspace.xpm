@@ -4,7 +4,7 @@ static char * workspace_xpm[] = {
 "  	c None",
 ". 	c #2C2C2C",
 "+ 	c #FEFEFE",
-"@ 	c #5D627C",
+"@ 	c #505075",
 "# 	c #E8E8E8",
 "$ 	c #A2A2A3",
 "% 	c #A7A7A8",

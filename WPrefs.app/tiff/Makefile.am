@@ -10,7 +10,6 @@ tiffdata_DATA = \
 	dock.tiff \
 	dontlinkworkspaces.tiff \
 	ergonomic.tiff \
-	ergowood.tiff \
 	expert.tiff \
 	fonts.tiff \
 	iconprefs.tiff \
@@ -21,7 +20,6 @@ tiffdata_DATA = \
 	menualign2.tiff \
 	menuprefs.tiff \
 	menus.tiff \
-	miscprefs2.tiff \
 	moreanim.tiff \
 	mousesettings.tiff \
 	mousespeed.tiff \
@@ -47,7 +45,6 @@ tiffdata_DATA = \
 	speed4s.tiff \
 	tdel.tiff \
 	tedit.tiff \
-	temp.tiff \
 	textr.tiff \
 	theme.tiff \
 	timer0.tiff \

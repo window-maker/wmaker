@@ -10,7 +10,6 @@ xpmdata_DATA = \
 	dock.xpm \
 	dontlinkworkspaces.xpm \
 	ergonomic.xpm \
-	ergowood.xpm \
 	expert.xpm \
 	fonts.xpm \
 	iconprefs.xpm \
@@ -21,7 +20,6 @@ xpmdata_DATA = \
 	menualign2.xpm \
 	menuprefs.xpm \
 	menus.xpm \
-	miscprefs2.xpm \
 	moreanim.xpm \
 	mousesettings.xpm \
 	mousespeed.xpm \
@@ -47,7 +45,6 @@ xpmdata_DATA = \
 	speed4s.xpm \
 	tdel.xpm \
 	tedit.xpm \
-	temp.xpm \
 	textr.xpm \
 	theme.xpm \
 	timer0.xpm \
