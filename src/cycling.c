@@ -216,14 +216,16 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     scr->flags.doing_alt_tab = 1;
 
 #ifdef MOX_CYCLING
-    swpanel =  wInitSwitchPanel(scr, scr->current_workspace);
+    swpanel =  wInitSwitchPanel(scr, wwin, scr->current_workspace);
     oldFocused = wwin;
   
     if (swpanel) {
-        newFocused = wSwitchPanelSelectNext(swpanel, next);
+        newFocused = wSwitchPanelSelectNext(swpanel, !next);
         wWindowFocus(newFocused, oldFocused);
         oldFocused = newFocused;
     }
+    else
+      newFocused= wwin;
 #else /* !MOX_CYCLING */
     if (next) {
         if (wPreferences.windows_cycling)

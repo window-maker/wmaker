@@ -208,135 +208,147 @@ static void addIconForWindow(WSwitchPanel *panel, WWindow *wwin, int iconWidth)
 }
 
 
-WSwitchPanel *wInitSwitchPanel(WScreen *scr, int workspace)
+WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
 {
-  WWindow *wwin;
-  WSwitchPanel *panel= wmalloc(sizeof(WSwitchPanel));
-  int i;
-  int width;
-  int height;
-  int iconWidth = ICON_IDEAL_SIZE;
-  WMBox *vbox;
-  
-  panel->current= 0;
-  panel->defIcon= NULL;
+    WWindow *wwin;
+    WSwitchPanel *panel= wmalloc(sizeof(WSwitchPanel));
+    int i;
+    int width;
+    int height;
+    int iconWidth = ICON_IDEAL_SIZE;
+    WMBox *vbox;
+    
+    panel->defIcon= NULL;
+    
+    panel->normalColor = WMGrayColor(scr->wmscreen);
+    panel->selectColor = WMWhiteColor(scr->wmscreen);
+    
+    panel->scr= scr;
+    panel->windows= WMCreateArray(10);
+    
+    for (wwin= curwin; wwin; wwin= wwin->prev) {
+        if (wwin->frame->workspace == workspace &&  wWindowCanReceiveFocus(wwin) &&
+            (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window)) {
+            WMInsertInArray(panel->windows, 0, wwin);
+        }
+    }
+    wwin = curwin;
+    /* start over from the beginning of the list */
+    while (wwin->next)
+      wwin = wwin->next;
 
-  panel->normalColor = WMGrayColor(scr->wmscreen);
-  panel->selectColor = WMWhiteColor(scr->wmscreen);
+    for (wwin= curwin; wwin && wwin != curwin; wwin= wwin->prev) {
+        if (wwin->frame->workspace == workspace &&  wWindowCanReceiveFocus(wwin) &&
+            (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window)) {
+            WMInsertInArray(panel->windows, 0, wwin);
+        }
+    }
 
-  panel->scr= scr;
-  panel->windows= WMCreateArray(10);
-
-  for (wwin= scr->focused_window; wwin; wwin= wwin->prev) {
-      if (wwin->frame->workspace == workspace &&  wWindowCanReceiveFocus(wwin) &&
-          (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window)) {
-          WMInsertInArray(panel->windows, 0, wwin);
-      }
-  }
-
-  width= (iconWidth + ICON_EXTRASPACE)*WMGetArrayItemCount(panel->windows);
-
-  if (width > WMScreenWidth(scr->wmscreen))
-  {
-    width= WMScreenWidth(scr->wmscreen) - 100;
-    iconWidth = width / WMGetArrayItemCount(panel->windows) - ICON_EXTRASPACE;
-  }
-  
-  if (iconWidth < 16 || WMGetArrayItemCount(panel->windows) == 0)
-  {
-    /* if there are too many windows, don't bother trying to show the panel */
-    WMFreeArray(panel->windows);
-    wfree(panel);
-    return NULL;
-  }
-
-  height= iconWidth + 20 + 10 + ICON_EXTRASPACE;
-  
-  panel->icons= WMCreateArray(WMGetArrayItemCount(panel->windows));
-  panel->images= WMCreateArray(WMGetArrayItemCount(panel->windows));
-  
-  panel->win = WMCreateWindow(scr->wmscreen, "");
-  WMResizeWidget(panel->win, width + 10, height);
-  
-  {
-    WMFrame *frame = WMCreateFrame(panel->win);
-    WMSetFrameRelief(frame, WRSimple);
-    WMSetViewExpandsToParent(WMWidgetView(frame), 0, 0, 0, 0);
-
-    vbox = WMCreateBox(panel->win);
-  }
-  WMSetViewExpandsToParent(WMWidgetView(vbox), 5, 5, 5, 5);
-  WMSetBoxHorizontal(vbox, False);
-
-  panel->label = WMCreateLabel(vbox);
-  WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->label), False, True, 20, 0, 0);
-  if (scr->focused_window && scr->focused_window->frame->title)
-      WMSetLabelText(panel->label, scr->focused_window->frame->title);
-  else
-      WMSetLabelText(panel->label, "");
-  {
-    WMColor *color;
-    WMFont *boldFont= WMBoldSystemFontOfSize(scr->wmscreen, 12);
-
-    WMSetLabelRelief(panel->label, WRSimple);
-    WMSetLabelFont(panel->label, boldFont);
-    color = WMDarkGrayColor(scr->wmscreen);
-    WMSetWidgetBackgroundColor(panel->label, color); 
-    WMReleaseColor(color);
-    color = WMWhiteColor(scr->wmscreen);
-    WMSetLabelTextColor(panel->label, color);
-    WMReleaseColor(color);
-
-    WMReleaseFont(boldFont);
-  }
-  
-  {
-    RImage *tmp= NULL;
-    RColor bgColor;
-    char *path = FindImage(wPreferences.pixmap_path, "swtile.png");
-    if (path) {
-      tmp = RLoadImage(panel->scr->rcontext, path, 0);
-      wfree(path);
+    width= (iconWidth + ICON_EXTRASPACE)*WMGetArrayItemCount(panel->windows);
+    
+    if (width > WMScreenWidth(scr->wmscreen))
+    {
+        width= WMScreenWidth(scr->wmscreen) - 100;
+        iconWidth = width / WMGetArrayItemCount(panel->windows) - ICON_EXTRASPACE;
     }
     
-    if (!tmp)
-      tmp= RGetImageFromXPMData(scr->rcontext, tile_xpm);
+    if (iconWidth < 16 || WMGetArrayItemCount(panel->windows) == 0)
+    {
+        /* if there are too many windows, don't bother trying to show the panel */
+        WMFreeArray(panel->windows);
+        wfree(panel);
+        return NULL;
+    }
+    
+    height= iconWidth + 20 + 10 + ICON_EXTRASPACE;
+    
+    panel->icons= WMCreateArray(WMGetArrayItemCount(panel->windows));
+    panel->images= WMCreateArray(WMGetArrayItemCount(panel->windows));
+    
+    panel->win = WMCreateWindow(scr->wmscreen, "");
+    WMResizeWidget(panel->win, width + 10, height);
+    
+    {
+        WMFrame *frame = WMCreateFrame(panel->win);
+        WMSetFrameRelief(frame, WRSimple);
+        WMSetViewExpandsToParent(WMWidgetView(frame), 0, 0, 0, 0);
+        
+        vbox = WMCreateBox(panel->win);
+    }
+    WMSetViewExpandsToParent(WMWidgetView(vbox), 5, 5, 5, 5);
+    WMSetBoxHorizontal(vbox, False);
 
-    panel->tile = RScaleImage(tmp, iconWidth+ICON_EXTRASPACE, iconWidth+ICON_EXTRASPACE);
+    panel->label = WMCreateLabel(vbox);
+    WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->label), False, True, 20, 0, 0);
+    if (scr->focused_window && scr->focused_window->frame->title)
+      WMSetLabelText(panel->label, scr->focused_window->frame->title);
+    else
+      WMSetLabelText(panel->label, "");
 
-    bgColor.alpha = 255;
-    bgColor.red = WMRedComponentOfColor(WMGrayColor(scr->wmscreen))>>8;
-    bgColor.green = WMGreenComponentOfColor(WMGrayColor(scr->wmscreen))>>8;
-    bgColor.blue = WMBlueComponentOfColor(WMGrayColor(scr->wmscreen))>>8;
-
-    RCombineImageWithColor(panel->tile, &bgColor);
-
-    RReleaseImage(tmp);
-  }
+    {
+        WMColor *color;
+        WMFont *boldFont= WMBoldSystemFontOfSize(scr->wmscreen, 12);
+        
+        WMSetLabelRelief(panel->label, WRSimple);
+        WMSetLabelFont(panel->label, boldFont);
+        color = WMDarkGrayColor(scr->wmscreen);
+        WMSetWidgetBackgroundColor(panel->label, color); 
+        WMReleaseColor(color);
+        color = WMWhiteColor(scr->wmscreen);
+        WMSetLabelTextColor(panel->label, color);
+        WMReleaseColor(color);
+        
+        WMReleaseFont(boldFont);
+    }
   
-  panel->hbox = WMCreateBox(vbox);
-  WMSetBoxHorizontal(panel->hbox, True);
-  WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->hbox), True, True, 20, 0, 2);
-
-  WM_ITERATE_ARRAY(panel->windows, wwin, i) {
-      addIconForWindow(panel, wwin, iconWidth);
-      changeImage(panel, i, 0);
-  }
-
-  WMMapSubwidgets(panel->win);
-  WMRealizeWidget(panel->win);
-  WMMapWidget(panel->win);
-  {
-      WMPoint center;
-
-      center= wGetPointToCenterRectInHead(scr, wGetHeadForPointerLocation(scr),
-                                           width+10, height);
-      WMMoveWidget(panel->win, center.x, center.y);
-  }
-
-  changeImage(panel, 0, 1);
+    {
+        RImage *tmp= NULL;
+        RColor bgColor;
+        char *path = FindImage(wPreferences.pixmap_path, "swtile.png");
+        if (path) {
+            tmp = RLoadImage(panel->scr->rcontext, path, 0);
+            wfree(path);
+        }
+        
+        if (!tmp)
+          tmp= RGetImageFromXPMData(scr->rcontext, tile_xpm);
+        
+        panel->tile = RScaleImage(tmp, iconWidth+ICON_EXTRASPACE, iconWidth+ICON_EXTRASPACE);
+        
+        bgColor.alpha = 255;
+        bgColor.red = WMRedComponentOfColor(WMGrayColor(scr->wmscreen))>>8;
+        bgColor.green = WMGreenComponentOfColor(WMGrayColor(scr->wmscreen))>>8;
+        bgColor.blue = WMBlueComponentOfColor(WMGrayColor(scr->wmscreen))>>8;
+        
+        RCombineImageWithColor(panel->tile, &bgColor);
+        
+        RReleaseImage(tmp);
+    }
   
-  return panel;
+    panel->hbox = WMCreateBox(vbox);
+    WMSetBoxHorizontal(panel->hbox, True);
+    WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->hbox), True, True, 20, 0, 4);
+    
+    WM_ITERATE_ARRAY(panel->windows, wwin, i) {
+        addIconForWindow(panel, wwin, iconWidth);
+        changeImage(panel, i, 0);
+    }
+    
+    WMMapSubwidgets(panel->win);
+    WMRealizeWidget(panel->win);
+    WMMapWidget(panel->win);
+    {
+        WMPoint center;
+        
+        center= wGetPointToCenterRectInHead(scr, wGetHeadForPointerLocation(scr),
+                                            width+10, height);
+        WMMoveWidget(panel->win, center.x, center.y);
+    }
+
+    panel->current= WMGetFirstInArray(panel->windows, curwin);
+    changeImage(panel, panel->current, 1);
+    
+    return panel;
 }
 
 
