@@ -95,10 +95,10 @@ static int canReceiveFocus(WWindow *wwin)
 }
 
 
-static void changeImage(WSwitchPanel *panel, int index, int selected)
+static void changeImage(WSwitchPanel *panel, int idecks, int selected)
 {
-    WMFrame *icon = WMGetFromArray(panel->icons, index);
-    RImage *image= WMGetFromArray(panel->images, index);
+    WMFrame *icon = WMGetFromArray(panel->icons, idecks);
+    RImage *image= WMGetFromArray(panel->images, idecks);
 
     if (!panel->bg && !panel->tile) {
         if (!selected)
@@ -112,7 +112,7 @@ static void changeImage(WSwitchPanel *panel, int index, int selected)
         WMPoint pos;
         Pixmap p;
 
-        if (canReceiveFocus(WMGetFromArray(panel->windows, index)) < 0)
+        if (canReceiveFocus(WMGetFromArray(panel->windows, idecks)) < 0)
           opaq= 50;
 
         pos= WMGetViewPosition(WMWidgetView(icon));
@@ -354,7 +354,7 @@ static RImage *getTile(WSwitchPanel *panel)
 
 
 static void
-drawTitle(WSwitchPanel *panel, int index, char *title)
+drawTitle(WSwitchPanel *panel, int idecks, char *title)
 {
     char *ntitle;
     int width= WMWidgetWidth(panel->win);
@@ -373,7 +373,7 @@ drawTitle(WSwitchPanel *panel, int index, char *title)
             {
                 int w= WMWidthOfString(panel->font, ntitle, strlen(ntitle));
             
-                x= BORDER_SPACE+(index-panel->firstVisible)*ICON_TILE_SIZE + ICON_TILE_SIZE/2 - w/2;
+                x= BORDER_SPACE+(idecks-panel->firstVisible)*ICON_TILE_SIZE + ICON_TILE_SIZE/2 - w/2;
                 if (x < BORDER_SPACE)
                     x= BORDER_SPACE;
                 else if (x + w > width-BORDER_SPACE)
@@ -679,12 +679,15 @@ WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
 {
     WMFrame *icon;
     int i;
+    int focus= -1;
     
     if (!panel->win)
       return NULL;
 
-    if (event->type == MotionNotify) {
-        int focus= -1;
+    if (event->type == LeaveNotify) {
+        if (event->xcrossing.window == WMWidgetXID(panel->win))
+            focus= 0;
+    } else if (event->type == MotionNotify) {
 
         WM_ITERATE_ARRAY(panel->icons, icon, i) {
             if (WMWidgetXID(icon) == event->xmotion.window) {
@@ -692,23 +695,19 @@ WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
                 break;
             }
         }
-
-        if (focus < 0)
-          focus= 0;
-        
-        if (focus >= 0 && panel->current != focus) {
-            WWindow *wwin;
+    }  
+    if (focus >= 0 && panel->current != focus) {
+        WWindow *wwin;
             
-            changeImage(panel, panel->current, 0);
-            changeImage(panel, focus, 1);
-            panel->current= focus;
+        changeImage(panel, panel->current, 0);
+        changeImage(panel, focus, 1);
+        panel->current= focus;
             
-            wwin= WMGetFromArray(panel->windows, focus);
+        wwin= WMGetFromArray(panel->windows, focus);
             
-            drawTitle(panel, panel->current, wwin->frame->title);
+        drawTitle(panel, panel->current, wwin->frame->title);
             
-            return wwin;
-        }
+        return wwin;
     }
 
     return NULL;

@@ -128,7 +128,8 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
         int i;
 
         WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask
-                    |PointerMotionMask|ButtonReleaseMask, &ev);
+                    |PointerMotionMask|ButtonReleaseMask
+        	    |LeaveWindowMask, &ev);
 
         /* ignore CapsLock */
         modifiers = ev.xkey.state & ValidModMask;
@@ -204,7 +205,8 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                 }
             }
             break;
-            
+         
+        case LeaveNotify:
         case MotionNotify:
         case ButtonRelease:
             {
