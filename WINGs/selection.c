@@ -313,7 +313,7 @@ handleNotifyEvent(XEvent *event)
     WM_ITERATE_ARRAY(selCallbacks, handler, iter) {
 	
 	if (W_VIEW_DRAWABLE(handler->view) != event->xselection.requestor
-	    && handler->selection == event->xselection.selection) {
+	    || handler->selection != event->xselection.selection) {
 	    continue;
 	}
 	handler->flags.done_pending = 1;

@@ -416,31 +416,26 @@ raiseMenus(WMenu *menu)
 Bool
 wRootMenuPerformShortcut(XEvent *event)
 {
+    WScreen *scr = wScreenForRootWindow(event->xkey.root);
     Shortcut *ptr;
     int modifiers;
     int done = 0;
     Window dummy;
     int foo;
 
-    if (wScreenCount>1 &&
-        XQueryPointer(dpy, event->xkey.root, &dummy, &dummy, &foo, &foo, &foo,
-                      &foo, &foo)==False) {
-        /* Pointer is not on this screen. */
-        return True;
-    }
-
     /* ignore CapsLock */
     modifiers = event->xkey.state & ValidModMask;
 
     for (ptr = shortcutList; ptr!=NULL; ptr = ptr->next) {
-	if (ptr->keycode==0) 
-	    continue;
-	
-	if (ptr->keycode==event->xkey.keycode && (ptr->modifier==modifiers)) {
-	    (*ptr->entry->callback)(ptr->menu, ptr->entry);
-	    done = True;
-	}
+        if (ptr->keycode==0 || ptr->menu->menu->screen_ptr!=scr)
+            continue;
+
+        if (ptr->keycode==event->xkey.keycode && ptr->modifier==modifiers) {
+            (*ptr->entry->callback)(ptr->menu, ptr->entry);
+            done = True;
+        }
     }
+
     return done;
 }
 
