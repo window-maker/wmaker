@@ -57,6 +57,7 @@ changes since wmaker 0.62.1:
 - added wmessage() for printing a variable formatted string to stderr, with
   the program name prepended to it. Similar to wwarning(), except that it
   doesn't add "warning:" in the output message.
+- added WMBox widget
 
 
 changes since wmaker 0.62.0:
