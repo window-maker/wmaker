@@ -21,6 +21,7 @@ prefsdata_DATA =\
 	Green.style\
 	GreyBlue.style\
 	Gtk.style\
+	Interlace.style\
 	LightBlue.style\
 	NewBlue.style\
 	NightSky.style\
