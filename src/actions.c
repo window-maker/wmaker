@@ -1326,8 +1326,7 @@ unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate,
 	wWindowChangeWorkspace(wwin, wwin->screen_ptr->current_workspace);
 
     wwin->flags.hidden=0;
-    wwin->flags.mapped=1;
-    
+
     wSoundPlay(WSOUND_UNHIDE);
 #ifdef ANIMATIONS
     if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations 
@@ -1340,12 +1339,15 @@ unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate,
     }
 #endif
     wwin->flags.skip_next_animation = 0;
-    XMapWindow(dpy, wwin->client_win);
-    XMapWindow(dpy, wwin->frame->core->window);
-    wClientSetState(wwin, NormalState, None);
-    wRaiseFrame(wwin->frame->core);
+    if (wwin->screen_ptr->current_workspace == wwin->frame->workspace) {
+        XMapWindow(dpy, wwin->client_win);
+        XMapWindow(dpy, wwin->frame->core->window);
+        wClientSetState(wwin, NormalState, None);
+        wwin->flags.mapped=1;
+        wRaiseFrame(wwin->frame->core);
+    }
     if (wwin->flags.inspector_open) {
-	wUnhideInspectorForWindow(wwin);
+        wUnhideInspectorForWindow(wwin);
     }
 
     WMPostNotificationName(WMNChangedState, wwin, "hide");

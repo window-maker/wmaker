@@ -793,13 +793,23 @@ wManageWindow(WScreen *scr, Window window)
     }
 #endif /* OLWM_HINTS */
 
+    /* Make broken apps behave as a nice app. */
+    if (WFLAGP(wwin, emulate_appicon)) {
+	wwin->main_window = wwin->client_win;
+    }
+
     if (wwin->flags.is_gnustep) {
         WSETUFLAG(wwin, shared_appicon, 0);
     }
 
-    /* Make broken apps behave as a nice app. */
-    if (WFLAGP(wwin, emulate_appicon)) {
-	wwin->main_window = wwin->client_win;
+    {
+        extern Atom _XA_WINDOWMAKER_MENU;
+        XTextProperty text_prop;
+
+        if (XGetTextProperty(dpy, wwin->main_window, &text_prop,
+                             _XA_WINDOWMAKER_MENU)) {
+            WSETUFLAG(wwin, shared_appicon, 0);
+        }
     }
 
     if (!withdraw && wwin->main_window && WFLAGP(wwin, shared_appicon)) {

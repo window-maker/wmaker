@@ -28,7 +28,7 @@ Changes since version 0.70.0:
 - Added real appicon sharing (apps of the same kind will have a single shared 
   appicon).
 - Fixed user and global defaults domain merging to preserve values present in
-  global but not in user in subdictionaries.
+  global but not in user, in sub-dictionaries.
 - Made dock/clip steal appicons of applications that were started from a
   shell/xterm or from the main menu, if there is a docked appicon of that
   class that is not running at the time the app is launched.
@@ -38,6 +38,7 @@ Changes since version 0.70.0:
 - Updated the animation constants for scrolling/sliding/shading to better
   adapt to newer/faster machines. Also used wusleep(10) when the delay was 0
   to get rid of the jerky animation when there was no delay.
+- Fixed bug with Unhide mapping windows from other workspaces.
 
 
 Changes since version 0.65.1:

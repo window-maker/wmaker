@@ -828,7 +828,7 @@ hideCallback(WMenu *menu, WMenuEntry *entry)
     wapp = wApplicationOf(btn->icon->owner->main_window);
 
     if (wapp->flags.hidden) {
-	wWorkspaceChange(btn->icon->core->screen_ptr,wapp->last_workspace);
+	wWorkspaceChange(btn->icon->core->screen_ptr, wapp->last_workspace);
 	wUnhideApplication(wapp, False, False);
     } else {
 	wHideApplication(wapp);
