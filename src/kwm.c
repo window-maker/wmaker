@@ -24,6 +24,9 @@
  * 
  * Supported stuff:
  * ================
+ * 
+ * kfm icon selection from krootbgwm
+ * 
  * kwm.h function/method	Notes
  *----------------------------------------------------------------------------
  * setUnsavedDataHint() 	currently, only gives visual clue that 
@@ -115,6 +118,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <signal.h>
 
 
 #include "WindowMaker.h"
@@ -130,6 +139,7 @@
 #include "actions.h"
 #include "workspace.h"
 #include "dialog.h"
+#include "stacking.h"
 
 #include "kwm.h"
 
@@ -1636,16 +1646,30 @@ wKWMSendEventMessage(WWindow *wwin, WKWMEventMessage message)
     sendToModules(wwin ? wwin->screen_ptr : NULL, msg, wwin, 0);
 }
 
-#if 0
+
 static void
+writeSocket(int sock, char *data)
+{
+    char buffer[128];
+
+    sprintf(buffer, "%i ", strlen(data));
+    write(sock, buffer, strlen(buffer));
+    write(sock, data, strlen(data));
+}
+
+
+static int
 connectKFM(WScreen *scr)
 {
-    char *pidf;
+    char *path;
     char buffer[128];
     char *ptr;
     FILE *f;
-    
-    pidf = wstrappend(whomedir(), "/.kde/share/apps/kfm/pid");
+    int pid;
+    int sock = 0;
+    struct sockaddr_un addr;
+
+    path = wstrappend(wgethomedir(), "/.kde/share/apps/kfm/pid");
     strcpy(buffer, getenv("DISPLAY"));
 
     ptr = strchr(buffer, ':');
@@ -1661,98 +1685,80 @@ connectKFM(WScreen *scr)
 	sprintf(b, ".%i", scr->screen);
 	strcat(buffer, b);
     }
-    ptr = pidf;
-    pidf = wstrappend(ptr, buffer);
+    ptr = path;
+    path = wstrappend(ptr, buffer);
     free(ptr);
 
     /* pid file */
-    f = fopen(pidf, "r");
-    
-    char buffer[ 1024 ];
+    f = fopen(path, "r");
+    free(path);
+    if (!f)
+	return -1;
+
     buffer[0] = 0;
-    fgets( buffer, 1023, f );
-    int pid = atoi( buffer );
-    if ( pid <= 0 )
-    {
-	warning("ERROR: Invalid PID");
-	fclose( f );
-	return;
-    }
+    fgets(buffer, 123, f);
+    pid = atoi(buffer);
+    if (pid <= 0)
+	return -1;
 
-    // Is the PID ok ?
-    if ( kill( pid, 0 ) != 0 )
-    {
-	// Did we already try to start a new kfm ?
-	if ( flag == 0 && allowRestart )
-	{
-	    flag = 1;
-	    // Try to start a new kfm
-	    system( "kfm -d &" );
-	    sleep( 10 );
-	    fclose( f );
-	    init();
-	    return;
-	}
+    if (kill(pid, 0) != 0)
+	return -1;
 
-	warning("ERROR: KFM crashed");
-	fclose( f );
-	return;
-    }
-
-    // Read the socket's name
     buffer[0] = 0;
-    fscanf(f, "%s", buffer); 
-    fclose( f );
-    char * slot = strdup( buffer );
-    if ( slot == (void *) 0 )
-    {
-	warning("ERROR: Invalid Slot");
-	return;
-    }
-    
-    // Connect to KFM
-    ipc = new KfmIpc( slot );
-    free(slot);
+    fscanf(f, "%s", buffer);
+    fclose(f);
 
-    connect( ipc, SIGNAL( finished() ), this, SLOT( slotFinished() ) );
-    connect( ipc, SIGNAL( error( int, const char* ) ),
-	     this, SLOT( slotError( int, const char* ) ) );
-    connect( ipc, SIGNAL( dirEntry( const char*, const char*, const char*, const char*, const char*, int ) ),
-	     this, SLOT( slotDirEntry( const char*, const char*, const char*, const char*, const char*, int ) ) );
+    sock = socket(AF_UNIX, SOCK_STREAM, 0);
+    if (sock < 0)
+	return -1;
+    addr.sun_family = AF_UNIX;
+    strcpy(addr.sun_path, buffer);
 
-    // Read the password
-    QString fn = KApplication::localkdedir() + "/share/apps/kfm/magic";
-    f = fopen( fn.data(), "rb" );
-    if ( f == 0L )
-    {
-	QString ErrorMessage;
-	ksprintf(&ErrorMessage, i18n("You dont have the file %s\n"
-				    "Could not do Authorization"), fn.data());
-	
-	QMessageBox::message( i18n("KFM Error"), ErrorMessage );
-	return;
-    }
-    char *p = fgets( buffer, 1023, f );
-    fclose( f );
-    if ( p == 0L )
-    {
-	QString ErrorMessage;
-	ksprintf(&ErrorMessage, i18n("The file %s is corrupted\n"
-				    "Could not do Authorization"), fn.data());
-	QMessageBox::message( i18n("KFM Error"), ErrorMessage );
-	return;
+    if (connect(sock, (struct sockaddr*)&addr, sizeof(addr)) < 0) {
+	close(sock);
+	return -1;
     }
 
-    ipc->auth( buffer );
-    
-    ok = TRUE;
+    path = wstrappend(wgethomedir(), "/.kde/share/apps/kfm/magic");
+    f = fopen(path, "r");
+    if (!f) {
+	return -1;
+    }
+    ptr = fgets(buffer, 123, f);
+    fclose(f);
+    if (!ptr) {
+	return -1;
+    }
+    puts(buffer);
+
+    ptr = wstrappend("auth", buffer);
+
+    writeSocket(sock, ptr);
+    free(ptr);
+
+    return sock;
 }
+
 
 void
-wKWMSendRootSelection(WScreen *scr, int x, int y, int w, int h, Bool control)
+wKWMSelectRootRegion(WScreen *scr, int x, int y, int w, int h, Bool control)
 {
+    char buffer[128];
+    int sock;
+
+    puts("CONNECTING");
+    sock = connectKFM(scr);
+    if (sock < 0)
+	return;
+    puts("SENDING DATA");
+
+    writeSocket(sock, "refreshDesktop");
     
+    sprintf(buffer, "selectRootIcons %i %i %i %i %c", x, y, w, h, control);
+    writeSocket(sock, buffer);
+    
+    close(sock);
 }
-#endif
+
 
 #endif /* KWM_HINTS */

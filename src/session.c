@@ -682,15 +682,35 @@ wSessionSendSaveYourself(WScreen *scr)
  */
 
 
+static char*
+getWindowRole(Window window)
+{
+    XTextProperty prop;
+    static Atom atom = 0;
+    
+    if (!atom)
+	atom = XInternAtom(dpy, "WM_WINDOW_ROLE", False);
+
+    if (XGetTextProperty(dpy, window, &prop, atom)) {
+	if (prop.encoding == XA_STRING && prop.format == 8 && prop.nitems > 0)
+	    return prop.value;
+    }
+    
+    return NULL;
+}
+
+
 /*
- * Windows are identified as:
- * 	WM_CLASS(instance.class).WM_WINDOW_ROLE
  *
  * Saved Info:
- * 
- * WM_CLASS.instance 
- * WM_CLASSS.class
+ *
  * WM_WINDOW_ROLE
+ *
+ * WM_CLASS.instance
+ * WM_CLASS.class
+ * WM_NAME
+ * WM_COMMAND
+ * 
  * geometry
  * state = (miniaturized, shaded, etc)
  * attribute
@@ -736,6 +756,64 @@ makeAppState(WWindow *wwin)
 }
 
 
+
+Bool
+wSessionGetStateFor(WWindow *wwin, WSessionData *state)
+{
+    char *str;
+    proplist_t slist;
+    proplist_t elem;
+    proplist_t value;
+    int index = 0;
+
+    index = 3;
+
+    /* geometry */
+    value = PLGetArrayElement(slist, index++);    
+    str = PLGetString(value);
+
+    sscanf(str, "%i %i %i %i %i %i", &state->x, &state->y,
+	   &state->width, &state->height,
+	   &state->user_changed_width, &state->user_changed_height);
+
+    
+    /* state */
+    value = PLGetArrayElement(slist, index++);
+    str = PLGetString(value);
+
+    sscanf(str, "%i %i %i", &state->miniaturized, &state->shaded,
+	   &state->maximized);
+
+    
+    /* attributes */
+    value = PLGetArrayElement(slist, index++);
+    str = PLGetString(value);
+
+    getAttributeState(str, &state->mflags, &state->flags);
+
+    
+    /* workspace */
+    value = PLGetArrayElement(slist, index++);
+    str = PLGetString(value);
+    
+    sscanf(str, "%i", &state->workspace);
+
+
+    /* app state (repeated for all windows of the app) */
+    value = PLGetArrayElement(slist, index++);
+    str = PLGetString(value);
+
+    /* ???? */
+
+    /* shortcuts */
+    value = PLGetArrayElement(slist, index++);
+    str = PLGetString(value);
+    
+    sscanf(str, "%i", &state->shortcuts);
+}
+
+
+
 static proplist_t
 makeAttributeState(WWindow *wwin)
 {
@@ -745,7 +823,8 @@ makeAttributeState(WWindow *wwin)
 #define W_FLAG(wwin, FLAG)	((wwin)->defined_user_flags.FLAG \
 					? (wwin)->user_flags.FLAG : -1)
 
-    sprintf(buffer, "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+    sprintf(buffer, 
+	    "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 	    W_FLAG(no_titlebar),
 	    W_FLAG(no_resizable),
 	    W_FLAG(no_closable),
@@ -779,6 +858,17 @@ makeAttributeState(WWindow *wwin)
 }
 
 
+static void
+appendStringInArray(proplist_t array, char *str)
+{
+    proplist_t val;
+    
+    val = PLMakeString(str);
+    PLAppendArrayElement(array, val);
+    PLRelease(val);
+}
+
+
 static proplist_t
 makeClientState(WWindow *wwin)
 {
@@ -787,47 +877,62 @@ makeClientState(WWindow *wwin)
     char *str;
     char buffer[256];
     int i;
-    
+    unsigned shortcuts;
+
     state = PLMakeArrayWithElements(NULL, NULL);
     
-    /* spec */
-    PLAppendArrayElement(state, PLMakeString(wwin->wm_instance));
-    PLAppendArrayElement(state, PLMakeString(wwin->wm_class));
+    /* WM_WINDOW_ROLE */
+    str = getWindowRole(wwin->client_win);
+    if (!str)
+	appendStringInArray(state, "");
+    else {
+	appendStringInArray(state, str);
+	XFree(str);
+    }
 
-    PLAppendArrayElement(state, PLMakeString(str));
+    /* WM_CLASS.instance */
+    appendStringInArray(state, wwin->wm_instance);
+
+    /* WM_CLASS.class */
+    appendStringInArray(state, wwin->wm_class);
+
+    /* WM_NAME */
+    
 
     /* geometry */
-    sprintf(buffer, "%i %i %i %i", wwin->frame_x, wwin->frame_y,
-	    wwin->frame->core->width, wwin->frame->core->height);
-    PLAppendArrayElement(state, PLMakeString(buffer));
+    sprintf(buffer, "%i %i %i %i %i %i", wwin->frame_x, wwin->frame_y,
+	    wwin->client.width, wwin->client.height,
+	    wwin->flags.user_changed_width, wwin->flags.user_changed_height);
+    appendStringInArray(state, buffer);
 
     /* state */
     sprintf(buffer, "%i %i %i", wwin->flags.miniaturized,
 	    wwin->flags.shaded, wwin->flags.maximized);
-    PLAppendArrayElement(state, PLMakeString(buffer));
+    appendStringInArray(state, buffer);
 
     /* attributes */
-    PLAppendArrayElement(state, makeAttributeState(wwin));
+    tmp = makeAttributeState(wwin);
+    PLAppendArrayElement(state, tmp);
+    PLRelease(tmp);
 
     /* workspace */
     sprintf(buffer, "%i", wwin->frame->workspace);
-    PLAppendArrayElement(state, PLMakeString(buffer));
+    appendStringInArray(state, buffer);
 
     /* app state (repeated for all windows of the app) */
-    PLAppendArrayElement(state, makeAppState(wwin));
+    tmp = makeAppState(wwin);
+    PLAppendArrayElement(state, tmp);
+    PLRelease(tmp);
 
     /* shortcuts */
-    tmp = PLMakeArrayWithElements(NULL, NULL);
-    
+    shortcuts = 0;
     for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-
 	if (scr->shortcutWindow[i] == wwin) {
-
-	    sprintf(buffer, "%i", i);
-	    PLAppendArrayElement(tmp, PLMakeString(buffer));
+	    shortcuts |= 1 << i;
 	}
     }
-    PLAppendArrayElement(state, tmp);
+    sprintf(buffer, "%ui", shortcuts);
+    appendStringInArray(tmp, buffer);
 
     return state;
 }

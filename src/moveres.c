@@ -41,6 +41,10 @@
 
 #include "list.h"
 
+#ifdef KWM_HINTS
+#include "kwm.h"
+#endif
+
 /* How many different types of geometry/position
  display thingies are there? */
 #define NUM_DISPLAYS 4
@@ -1395,24 +1399,30 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 	    XUngrabKeyboard(dpy, CurrentTime);
 	    XUngrabPointer(dpy, CurrentTime);
 	    XUngrabServer(dpy);
-	    if(done==2){
+
+	    if(done==2) {
     		if (wwin->flags.shaded || scr->selected_windows) {
 		    LinkedList *list;
 		    list=scr->selected_windows;
-		    if(!scr->selected_windows){
+		    if (!scr->selected_windows) {
 		    	wWindowMove(wwin, src_x+off_x, src_y+off_y);
 		        wWindowSynthConfigureNotify(wwin);
+		    } else {
+			doWindowMove(wwin,scr->selected_windows,off_x,off_y);
+			while (list) {
+			    wWindowSynthConfigureNotify(list->head);
+			    list = list->tail;
+			}
 		    }
-		    else {
-			    doWindowMove(wwin,scr->selected_windows,off_x,off_y);
-			    while (list) {
-				wWindowSynthConfigureNotify(list->head);
-				list = list->tail;
-			    }
-		    }
-		}
-		else {
-		    wWindowConfigure(wwin, src_x+off_x, src_y+off_y, ww, wh - vert_border);
+		} else {
+		    if (wwin->client.width != ww)
+			wwin->flags.user_changed_width = 1;
+
+		    if (wwin->client.height != wh - vert_border)
+			wwin->flags.user_changed_height = 1;
+
+		    wWindowConfigure(wwin, src_x+off_x, src_y+off_y, 
+				     ww, wh - vert_border);
 		    wWindowSynthConfigureNotify(wwin);
 		}
 		wWindowChangeWorkspace(wwin, scr->current_workspace);
@@ -1530,10 +1540,11 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		if (!warped && !wPreferences.no_autowrap) {
 		    int oldWorkspace = scr->current_workspace;
 
-		    drawFrames(wwin, scr->selected_windows, 
-			       moveData.realX - wwin->frame_x,
-			       moveData.realY - wwin->frame_y);
-
+		    if (!opaqueMove) {
+			drawFrames(wwin, scr->selected_windows, 
+				   moveData.realX - wwin->frame_x,
+				   moveData.realY - wwin->frame_y);
+		    }
 		    if (checkWorkspaceChange(wwin, &moveData, opaqueMove)) {
 			if (scr->current_workspace != oldWorkspace
 			    && wPreferences.edge_resistance > 0
@@ -1542,9 +1553,11 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 			warped = 1;
 		    }
 
-		    drawFrames(wwin, scr->selected_windows,
-			       moveData.realX - wwin->frame_x,
-			       moveData.realY - wwin->frame_y);
+		    if (!opaqueMove) {
+			drawFrames(wwin, scr->selected_windows,
+				   moveData.realX - wwin->frame_x,
+				   moveData.realY - wwin->frame_y);
+		    }
 		} else {
 		    warped = 0;
 		}
@@ -1859,12 +1872,19 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
 
 	    if (started) {
 		showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
-		
+
 		drawTransparentFrame(wwin, fx, fy, fw, fh);
-		
+
 		XUngrabKeyboard(dpy, CurrentTime);
 		unmapGeometryDisplay(wwin);
 		XUngrabServer(dpy);
+		
+		if (wwin->client.width != fw)
+		    wwin->flags.user_changed_width = 1;
+
+		if (wwin->client.height != fh - vert_border)
+		    wwin->flags.user_changed_height = 1;
+
 		wWindowConfigure(wwin, fx, fy, fw, fh - vert_border);
 	    }
 #ifdef DEBUG
@@ -1984,6 +2004,12 @@ wSelectWindows(WScreen *scr, XEvent *ev)
 	    XUngrabServer(dpy);
 	    XUngrabPointer(dpy, CurrentTime);
 	    selectWindowsInside(scr, x, y, x + w, y + h);
+	   
+#ifdef KWM_HINTS
+	    wKWMSelectRootRegion(scr, x, y, w, h, 
+				 event.xbutton.state & ControlMask);
+#endif /* KWM_HINTS */
+
 #ifdef DEBUG
 	    puts("End window selection");
 #endif

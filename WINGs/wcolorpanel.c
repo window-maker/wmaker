@@ -95,9 +95,6 @@ typedef struct W_ColorPanel {
 	WMWindow	*win;
 	WMFont		*font8;
 	WMFont		*font12;
-
-	void		*clientData;
-	WMAction	*action;
 	
 	/* Common Stuff */
 	WMColorWell	*colorWell;
@@ -198,9 +195,8 @@ typedef struct W_ColorPanel {
 	char					*configurationPath;
 	
 	struct {
-		unsigned int	continuous:1;
-
 		unsigned int	dragging:1;
+		unsigned int	done:1;
 	} flags;
 } W_ColorPanel;
 
@@ -245,8 +241,6 @@ static void	modeButtonCallback(WMWidget *w, void *data);
 static int	getPickerPart(W_ColorPanel *panel, int x, int y);
 static void readConfiguration(W_ColorPanel *panel);
 static void readXColors(W_ColorPanel *panel);
-
-static void closeWindowCallback(WMWidget *w, void *data);
 
 static Cursor magnifyGrabPointer(W_ColorPanel *panel);
 static WMPoint magnifyInitialize(W_ColorPanel *panel);
@@ -316,14 +310,6 @@ static void	cmykInit(W_ColorPanel *panel);
 static void hsbInit(W_ColorPanel *panel);
 
 
-
-void
-WMSetColorPanelAction(WMColorPanel *panel, WMAction *action, void *data)
-{
-   panel->action = action;
-   panel->clientData = data;
-}
-
 static WMColorPanel*
 makeColorPanel(WMScreen *scrPtr, char *name)
 {
@@ -346,7 +332,6 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 	panel->win = WMCreateWindowWithStyle(scrPtr, name, WMTitledWindowMask | WMClosableWindowMask | WMResizableWindowMask);
 	WMResizeWidget(panel->win, PWIDTH, PHEIGHT);
 	WMSetWindowTitle(panel->win, "Colors");
-	WMSetWindowCloseAction(panel->win, closeWindowCallback, panel);
 	
 
 	/* Set Default ColorPanel Mode(s) */
@@ -514,7 +499,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 		image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
 		pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
 		RDestroyImage(image);
-		W_PaintText(W_VIEW(panel->grayBrightnessS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Brightness", strlen("Brightness"));
+		W_PaintText(W_VIEW(panel->grayBrightnessS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->white), False, "Brightness", strlen("Brightness"));
 		WMSetSliderImage(panel->grayBrightnessS, pixmap);
 		WMReleasePixmap(pixmap);
 		
@@ -582,7 +567,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 		
 		image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
 		pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-		W_PaintText(W_VIEW(panel->rgbRedS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Red", strlen("Red"));
+		W_PaintText(W_VIEW(panel->rgbRedS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->white), False, "Red", strlen("Red"));
 		RDestroyImage(image);
 		WMSetSliderImage(panel->rgbRedS, pixmap);
 		WMReleasePixmap(pixmap);
@@ -609,7 +594,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 		
 		image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
 		pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-		W_PaintText(W_VIEW(panel->rgbGreenS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Green", strlen("Green"));
+		W_PaintText(W_VIEW(panel->rgbGreenS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->white), False, "Green", strlen("Green"));
 		RDestroyImage(image);
 		WMSetSliderImage(panel->rgbGreenS, pixmap);
 		WMReleasePixmap(pixmap);
@@ -636,7 +621,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 		
 		image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
 		pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-		W_PaintText(W_VIEW(panel->rgbBlueS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->white), False, "Blue", strlen("Blue"));
+		W_PaintText(W_VIEW(panel->rgbBlueS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->white), False, "Blue", strlen("Blue"));
 		RDestroyImage(image);
 		WMSetSliderImage(panel->rgbBlueS, pixmap);
 		WMReleasePixmap(pixmap);
@@ -689,7 +674,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 		
 		image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
 		pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-		W_PaintText(W_VIEW(panel->cmykCyanS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Cyan", strlen("Cyan"));
+		W_PaintText(W_VIEW(panel->cmykCyanS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->black), False, "Cyan", strlen("Cyan"));
 		RDestroyImage(image);
 		WMSetSliderImage(panel->cmykCyanS, pixmap);
 		WMReleasePixmap(pixmap);
@@ -716,7 +701,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 		
 		image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
 		pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-		W_PaintText(W_VIEW(panel->cmykMagentaS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Magenta", strlen("Magenta"));
+		W_PaintText(W_VIEW(panel->cmykMagentaS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->black), False, "Magenta", strlen("Magenta"));
 		RDestroyImage(image);
 		WMSetSliderImage(panel->cmykMagentaS, pixmap);
 		WMReleasePixmap(pixmap);
@@ -743,7 +728,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 		
 		image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
 		pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-		W_PaintText(W_VIEW(panel->cmykYellowS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Yellow", strlen("Yellow"));
+		W_PaintText(W_VIEW(panel->cmykYellowS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->black), False, "Yellow", strlen("Yellow"));
 		RDestroyImage(image);
 		WMSetSliderImage(panel->cmykYellowS, pixmap);
 		WMReleasePixmap(pixmap);
@@ -771,7 +756,7 @@ makeColorPanel(WMScreen *scrPtr, char *name)
 		
 		image = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
 		pixmap = WMCreatePixmapFromRImage(scrPtr, image, 0);
-		W_PaintText(W_VIEW(panel->cmykBlackS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scrPtr->black), False, "Black", strlen("Black"));
+		W_PaintText(W_VIEW(panel->cmykBlackS), pixmap->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scrPtr->black), False, "Black", strlen("Black"));
 		RDestroyImage(image);
 		WMSetSliderImage(panel->cmykBlackS, pixmap);
 		WMReleasePixmap(pixmap);
@@ -1013,32 +998,51 @@ WMFreeColorPanel(WMColorPanel *panel)
 }
 
 
-void
-WMCloseColorPanel(WMColorPanel *panel)
-{
-   WMCloseWindow(panel->win);
-}
-
-
-void
-WMShowColorPanel(WMColorPanel *panel)
+int
+WMRunColorPanel(WMColorPanel *panel, WMWindow *owner, RColor color)
 {
 	WMScreen	*scr = WMWidgetScreen(panel->win);
+	XEvent 		event;
+	RHSVColor	hsvcolor;
+	GC			bgc = W_GC(scr->black);
+	GC			wgc = W_GC(scr->white);
+	
+	WMChangePanelOwner(panel->win, owner);
+	
+	WMSetColorPanelColor(panel, color);
+	panel->wheelMtrx = wheelInitMatrix(panel);	/* Needs to be done After Color is set */
 
-	WMSetColorPanelPickerMode(panel, WMWheelModeColorPanel);
-	wheelInit(panel);
+	/* Maybe put this in sub-function ... Initialising selection images */
+	RRGBtoHSV(&color, &hsvcolor);
+	panel->colx = 2 + rint((colorWheelSize / 2.0) * (1 + (hsvcolor.saturation/255.0) * cos( hsvcolor.hue*M_PI/180.0)));
+	panel->coly = 2 + rint((colorWheelSize / 2.0) * (1 + (hsvcolor.saturation/255.0) * sin(-hsvcolor.hue*M_PI/180.0)));
+	wheelUpdateBrightnessGradientFromHSV(panel, hsvcolor);
+	WMSetSliderValue(panel->wheelBrightnessS, 255 - hsvcolor.value);
 
+	panel->selectionImg = XCreatePixmap(scr->display, W_VIEW(panel->wheelFrm)->window, 4, 4, scr->depth);
+	XFillRectangle(scr->display, panel->selectionImg, bgc, 0, 0, 4, 4);
+	XFillRectangle(scr->display, panel->selectionImg, wgc, 1, 1, 2, 2);
+	/* End of initialisation section */
+
+	panel->palx = customPaletteWidth/2;
+	panel->paly = customPaletteHeight/2;
+	
+	WMSetPickerMode(panel, WMWheelModeColorPanel);
+
+	panel->flags.done = 0;
+	
 	WMMapWidget(panel->win);
+	
+	while (!panel->flags.done) {
+		WMNextEvent(scr->display, &event);
+		WMHandleEvent(&event);
+	}
+	
+	WMCloseWindow(panel->win);
+	
+	return 0;
 }
 
-
-static void
-closeWindowCallback(WMWidget *w, void *data)
-{
-   W_ColorPanel	*panel = (W_ColorPanel*)data;
-
-   WMCloseWindow(panel->win);
-}
 
 
 static void
@@ -1109,7 +1113,7 @@ readXColors(W_ColorPanel *panel)
 
 
 void
-WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode)
+WMSetPickerMode(WMColorPanel *panel, WMColorPanelMode mode)
 {
 	W_Screen	*scr = WMWidgetScreen(panel->win);
 
@@ -1196,73 +1200,17 @@ WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode)
 }
 
 void
-WMSetColorPanelColor(WMColorPanel *panel, WMColor *color)
+WMSetColorPanelColor(WMColorPanel *panel, RColor color)
 {
 	WMScreen	*scr = WMWidgetScreen(panel->win);
-	RHSVColor	hsvcolor;
-	RColor		intcolor;
-	GC			bgc = WMColorGC(scr->black);
-	GC			wgc = WMColorGC(scr->white);
-	int			originalHue;
-
-	WMSetColorWellColor(panel->colorWell, color);
-	
-	intcolor.red = color->color.red >> 8;
-	intcolor.green = color->color.green >> 8;
-	intcolor.blue = color->color.blue >> 8;
-
-	panel->color = intcolor;
-
-	/* If color was set by HSB-Panel do not convert back to hsv */
-	if (panel->lastChanged != WMHSBModeColorPanel) {
-
-		/* if color is black, hue is undetermined, so it must be restored */
-		if ((panel->color.red == 0) &&
-			(panel->color.green == 0) &&
-			(panel->color.blue == 0) &&
-			(panel->hsvcolor.hue <= 359))
-		{
-			originalHue = panel->hsvcolor.hue;
-			RRGBtoHSV(&panel->color, &panel->hsvcolor);
-			panel->hsvcolor.hue = originalHue;
-		} else {
-			RRGBtoHSV(&panel->color, &panel->hsvcolor);
-		}
-	}
-
-	panel->wheelMtrx = wheelInitMatrix(panel);	/* Needs to be done After Color is set */
-
-	/* Maybe put this in a sub-function ... Initialising selected images */
-	RRGBtoHSV(&intcolor, &hsvcolor);
-	panel->colx = 2 + rint((colorWheelSize / 2.0) * (1 + (hsvcolor.saturation/255.0) * cos( hsvcolor.hue*M_PI/180.0)));
-	panel->coly = 2 + rint((colorWheelSize / 2.0) * (1 + (hsvcolor.saturation/255.0) * sin(-hsvcolor.hue*M_PI/180.0)));
-	wheelUpdateBrightnessGradientFromHSV(panel, hsvcolor);
-	WMSetSliderValue(panel->wheelBrightnessS, 255 - hsvcolor.value);
-
-	panel->selectionImg = XCreatePixmap(scr->display, W_VIEW(panel->wheelFrm)->window, 4, 4, scr->depth);
-	XFillRectangle(scr->display, panel->selectionImg, bgc, 0, 0, 4, 4);
-	XFillRectangle(scr->display, panel->selectionImg, wgc, 1, 1, 2, 2);
-	/* End of initialisation section */
-
-	panel->palx = customPaletteWidth/2;
-	panel->paly = customPaletteHeight/2;
-
-	WMSetColorPanelPickerMode(panel, panel->mode);
-}
-
-
-updateSwatch(WMColorPanel *panel, RColor color)
-{
-	WMScreen	*scr = WMWidgetScreen(panel->win);
-	WMColor		*wellcolor;
+	WMColor 	*wellcolor;
 	int			originalHue;
 
 	wellcolor = WMCreateRGBColor(scr, color.red << 8, color.green << 8, color.blue << 8, True);
-	
 	WMSetColorWellColor(panel->colorWell, wellcolor);
 	WMReleaseColor(wellcolor);
-
-  	panel->color = color;
+	
+	panel->color = color;
 
 	/* If color was set by HSB-Panel do not convert back to hsv */
 	if (panel->lastChanged != WMHSBModeColorPanel) {
@@ -1279,10 +1227,6 @@ updateSwatch(WMColorPanel *panel, RColor color)
 		} else {
 			RRGBtoHSV(&panel->color, &panel->hsvcolor);
 		}
-	}
-
-	if (panel->action && (!panel->flags.dragging || panel->flags.continuous)) {
-		(*panel->action)(panel, panel->clientData);
 	}
 }
 
@@ -1292,21 +1236,21 @@ modeButtonCallback(WMWidget *w, void *data)
 	W_ColorPanel	*panel = (W_ColorPanel*)(data);
 	
 	if (w == panel->wheelBtn)
-		WMSetColorPanelPickerMode(panel, WMWheelModeColorPanel);
+		WMSetPickerMode(panel, WMWheelModeColorPanel);
 	else if (w == panel->slidersBtn)
-		WMSetColorPanelPickerMode(panel, panel->slidersmode);
+		WMSetPickerMode(panel, panel->slidersmode);
 	else if (w == panel->customPaletteBtn)
-		WMSetColorPanelPickerMode(panel, WMCustomPaletteModeColorPanel);
+		WMSetPickerMode(panel, WMCustomPaletteModeColorPanel);
 	else if (w == panel->colorListBtn)
-		WMSetColorPanelPickerMode(panel, WMColorListModeColorPanel);
+		WMSetPickerMode(panel, WMColorListModeColorPanel);
 	else if (w == panel->grayBtn)
-		WMSetColorPanelPickerMode(panel, WMGrayModeColorPanel);
+		WMSetPickerMode(panel, WMGrayModeColorPanel);
 	else if (w == panel->rgbBtn)
-		WMSetColorPanelPickerMode(panel, WMRGBModeColorPanel);
+		WMSetPickerMode(panel, WMRGBModeColorPanel);
 	else if (w == panel->cmykBtn)
-		WMSetColorPanelPickerMode(panel, WMCMYKModeColorPanel);
+		WMSetPickerMode(panel, WMCMYKModeColorPanel);
 	else if (w == panel->hsbBtn)
-		WMSetColorPanelPickerMode(panel, WMHSBModeColorPanel);
+		WMSetPickerMode(panel, WMHSBModeColorPanel);
 }
 
 
@@ -1481,6 +1425,7 @@ magnifyCreateView(W_ColorPanel *panel)
 	magView->attribs.save_under = True;
 
 	W_RealizeView(magView);
+	W_MapView(magView);
 
 	return magView;
 }
@@ -1492,7 +1437,7 @@ magnifyGrabPointer(W_ColorPanel *panel)
 	W_Screen 	*scr = WMWidgetScreen(panel->win);
 	Pixmap		magPixmap, magPixmap2;
 	Cursor		magCursor;
-	XColor		fgColor = {0, 0,0,0, DoRed|DoGreen|DoBlue};
+	XColor		fgColor = {0,	0,0,0, DoRed|DoGreen|DoBlue};
 	XColor		bgColor = {0, 0xbf00, 0xa000, 0x5000, DoRed|DoGreen|DoBlue};
 
 	/* Cursor creation stuff */
@@ -1544,6 +1489,7 @@ magnifyInitialize(W_ColorPanel *panel)
 	panel->magnifyGlass->valid = True;
 
 	pixmap = magnifyCreatePixmap(panel);
+	W_MoveView(panel->magnifyGlass->view, x - Cursor_x_hot +1, y - Cursor_y_hot +1);
 
 	XSetWindowBackgroundPixmap(scr->display, panel->magnifyGlass->view->window, pixmap);
 	XClearWindow(scr->display, panel->magnifyGlass->view->window);
@@ -1577,16 +1523,14 @@ magnifyPutCursor(WMWidget *w, void *data)
 
 	/* Create magnifying glass */
 	panel->magnifyGlass = wmalloc(sizeof(MovingView));
+
 	panel->magnifyGlass->view = magnifyCreateView(panel);
+	magCursor = magnifyGrabPointer(panel);
 
 	initialPosition = magnifyInitialize(panel);
 	x = initialPosition.x;
 	y = initialPosition.y;
 
-	W_MoveView(panel->magnifyGlass->view, x - Cursor_x_hot +1, y - Cursor_y_hot +1);
-	W_MapView(panel->magnifyGlass->view);
-
-	magCursor = magnifyGrabPointer(panel);
 
 	while(panel->magnifyGlass->valid) 
 	{
@@ -1596,7 +1540,7 @@ magnifyPutCursor(WMWidget *w, void *data)
 		{
 			case ButtonPress:
 				if (event.xbutton.button == Button1) {
-					updateSwatch(panel, panel->magnifyGlass->color);
+					WMSetColorPanelColor(panel, panel->magnifyGlass->color);
 					switch (panel->mode) {
 						case WMWheelModeColorPanel:
 							wheelInit(panel);
@@ -1644,24 +1588,6 @@ magnifyPutCursor(WMWidget *w, void *data)
 				XClearWindow(scr->display, panel->magnifyGlass->view->window);
 
 				XFreePixmap(scr->display, pixmap);
-				break;
-
-			case FocusOut:		/* fall through */
-			case FocusIn:
-				/*
-				 * Color Panel window (panel->win) lost or received focus.
-				 * We need to update the pixmap in the magnifying glass.
-				 */
-				XUngrabPointer(scr->display, CurrentTime);
-				W_UnmapView(panel->magnifyGlass->view);
-
-				magnifyInitialize(panel);
-
-				W_MapView(panel->magnifyGlass->view);
-				XGrabPointer (scr->display, panel->magnifyGlass->view->window, True, 
-								  PointerMotionMask | ButtonPressMask,
-								  GrabModeAsync, GrabModeAsync,
-								  scr->rootWin, magCursor, CurrentTime);
 				break;
 
 			default:
@@ -1959,10 +1885,6 @@ wheelHandleActionEvents(XEvent *event, void *data)
 			
 		case ButtonRelease:
 			panel->flags.dragging = 0;
-			if (!panel->flags.continuous) {
-			   if (panel->action)
-				  (*panel->action)(panel->action, panel->clientData);
-			}
 			break;
 			
 		case MotionNotify:
@@ -2057,7 +1979,7 @@ wheelUpdateSelection(W_ColorPanel *panel)
 {
 	W_Screen	*scr = WMWidgetScreen(panel->win);
 
-	updateSwatch(panel, panel->color);
+	WMSetColorPanelColor(panel, panel->color);
 	panel->lastChanged = WMWheelModeColorPanel;
 
 	/* Redraw color selector (and make a backup of the part it will cover) */
@@ -2200,7 +2122,7 @@ grayBrightnessSliderCallback(WMWidget *w, void *data)
 	WMSetTextFieldText(panel->grayBrightnessT, tmp);
 	color.red = color.green = color.blue = rint(2.55*value);
 	
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 	panel->lastChanged = WMGrayModeColorPanel;
 }
 
@@ -2228,7 +2150,7 @@ grayPresetButtonCallback(WMWidget *w, void *data)
 	
 	WMSetSliderValue(panel->grayBrightnessS, rint(100.0*i/6.0));
 	
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 	panel->lastChanged = WMGrayModeColorPanel;
 }
 
@@ -2251,7 +2173,7 @@ grayBrightnessTextFieldCallback(void *observerData, WMNotification *notification
 	WMSetSliderValue(panel->grayBrightnessS, value);
 
 	color.red = color.green = color.blue = rint(255.0*value/100.0);
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 	panel->lastChanged = WMGrayModeColorPanel;
 }
 
@@ -2281,7 +2203,7 @@ rgbSliderCallback(WMWidget *w, void *data)
 	color.green = value[1];
 	color.blue = value[2];
 	
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 	panel->lastChanged = WMRGBModeColorPanel;
 }
 
@@ -2320,7 +2242,7 @@ rgbTextFieldCallback(void *observerData, WMNotification *notification)
 	color.green = value[1];
 	color.blue = value[2];
 	
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 	panel->lastChanged = WMRGBModeColorPanel;
 }
 
@@ -2354,7 +2276,7 @@ cmykSliderCallback(WMWidget *w, void *data)
 	color.green = rint((255.0 - (value[1] * 2.55)) * (1.0 - (value[3] / 100.0)));
 	color.blue = rint((255.0 - (value[2] * 2.55)) * (1.0 - (value[3] / 100.0)));
 			
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 	panel->lastChanged = WMCMYKModeColorPanel;
 }
 
@@ -2397,7 +2319,7 @@ cmykTextFieldCallback(void *observerData, WMNotification *notification)
 	color.green = rint((255.0 - (value[1] * 2.55)) * (1.0 - (value[3] / 100.0)));
 	color.blue = rint((255.0 - (value[2] * 2.55)) * (1.0 - (value[3] / 100.0)));
 	
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 	panel->lastChanged = WMCMYKModeColorPanel;
 }
 
@@ -2430,7 +2352,7 @@ hsbSliderCallback(WMWidget *w, void *data)
 	RHSVtoRGB(&panel->hsvcolor, &color);
 
 	panel->lastChanged = WMHSBModeColorPanel;
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 
 	if (w != panel->hsbBrightnessS)
 		hsbUpdateBrightnessGradient(panel);
@@ -2483,7 +2405,7 @@ hsbTextFieldCallback(void *observerData, WMNotification *notification)
 	RHSVtoRGB(&panel->hsvcolor, &color);
 
 	panel->lastChanged = WMHSBModeColorPanel;
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 	
 	hsbUpdateBrightnessGradient(panel);
 	hsbUpdateSaturationGradient(panel);
@@ -2509,7 +2431,7 @@ hsbUpdateBrightnessGradient(W_ColorPanel *panel)
 	sliderImg = RRenderGradient(141, 16, &from, &to, RGRD_HORIZONTAL);
 	sliderPxmp = WMCreatePixmapFromRImage(scr, sliderImg, 0);
 	RDestroyImage(sliderImg);
-	W_PaintText(W_VIEW(panel->hsbBrightnessS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->white), False, "Brightness", strlen("Brightness"));
+	W_PaintText(W_VIEW(panel->hsbBrightnessS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->white), False, "Brightness", strlen("Brightness"));
 	WMSetSliderImage(panel->hsbBrightnessS, sliderPxmp);
 	WMReleasePixmap(sliderPxmp);
 }
@@ -2535,9 +2457,9 @@ hsbUpdateSaturationGradient(W_ColorPanel *panel)
 	sliderPxmp = WMCreatePixmapFromRImage(scr, sliderImg, 0);
 	RDestroyImage(sliderImg);
 	if (hsvcolor.value < 128)
-		W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->white), False, "Saturation", strlen("Saturation"));
+		W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->white), False, "Saturation", strlen("Saturation"));
 	else
-		W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->black), False, "Saturation", strlen("Saturation"));
+		W_PaintText(W_VIEW(panel->hsbSaturationS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->black), False, "Saturation", strlen("Saturation"));
 
 	WMSetSliderImage(panel->hsbSaturationS, sliderPxmp);
 	WMReleasePixmap(sliderPxmp);
@@ -2567,9 +2489,9 @@ hsbUpdateHueGradient(W_ColorPanel *panel)
 	sliderPxmp = WMCreatePixmapFromRImage(scr, sliderImg, 0);
 	RDestroyImage(sliderImg);
 	if (hsvcolor.value < 128)
-		W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->white), False, "Hue", strlen("Hue"));
+		W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->white), False, "Hue", strlen("Hue"));
 	else
-		W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, WMColorGC(scr->black), False, "Hue", strlen("Hue"));
+		W_PaintText(W_VIEW(panel->hsbHueS), sliderPxmp->pixmap, panel->font12, 2, 0, 100, WALeft, W_GC(scr->black), False, "Hue", strlen("Hue"));
 
 	WMSetSliderImage(panel->hsbHueS, sliderPxmp);
 	WMReleasePixmap(sliderPxmp);
@@ -2689,7 +2611,7 @@ customPalettePositionSelection(W_ColorPanel *panel, int x, int y)
 	panel->color.green = panel->customPaletteImg->data[1][ofs];
 	panel->color.blue  = panel->customPaletteImg->data[2][ofs];
 
-	updateSwatch(panel, panel->color);
+	WMSetColorPanelColor(panel, panel->color);
 	panel->lastChanged = WMCustomPaletteModeColorPanel;
 
 	/* Redraw color selector (and make a backup of the part it will cover) */
@@ -2747,10 +2669,6 @@ customPaletteHandleActionEvents(XEvent *event, void *data)
 
 		case ButtonRelease:
 			panel->flags.dragging = 0;
-			if (!panel->flags.continuous) {
-			   if (panel->action)
-					 (*panel->action)(panel->action, panel->clientData);
-			}
 			break;
 
 		case MotionNotify:
@@ -2815,7 +2733,7 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 	WMSetFilePanelCanChooseFiles(browseP, 1);
 
 	/* Get a filename */
-	if (WMRunModalFilePanelForDirectory(browseP, panel->win, spath, 
+	if (WMRunModalOpenPanelForDirectory(browseP, panel->win, spath, 
 				"Open Palette", 
 				RSupportedFileFormats()) ) {
 		filepath = WMGetFilePanelFileName(browseP);
@@ -3197,7 +3115,7 @@ colorListSelect(WMWidget *w, void *data)
 	RColor			color = *((RColor *)WMGetListSelectedItem(w)->clientData);
 	
 	panel->lastChanged = WMColorListModeColorPanel;
-	updateSwatch(panel, color);
+	WMSetColorPanelColor(panel, color);
 }
 
 
@@ -3290,15 +3208,12 @@ generateNewFilename(char *curName)
 	char	*ptr;
 	char	*newName;
 
-
-	assert(curName);
-
 	ptr = curName;	
 
-	if (
-		 ((ptr = strrchr(ptr, '{')) == 0) || 
-		 sscanf(ptr, "{%i}%c", &n, &c) != 1
-		) 
+	while ((ptr = strrchr(ptr, '{')) && !(sscanf(ptr, "{%i}%c", &n, &c)==1)) {
+		ptr++;
+	}
+	if (!ptr) 
 		return wstrappend(curName, " {1}");
 		
 	baseLen = ptr - curName -1;

@@ -7,7 +7,11 @@ Changes since version 0.52.0:
 - changed configuration updating to use notifications
 - fixed window move through workspaces in nonopaquemove
 - added message to immediately reread configuration data
-
+- fixed some bug in XKB modelock toggling
+- KDE: added kfm icon selection
+- fixed crash bug when hiding apps with appicon disabled
+- fixed wrong initial workspace # being shown on attributes panel
+- XSMP updates
 
 Changes since version 0.51.2:
 .............................

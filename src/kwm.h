@@ -95,5 +95,8 @@ char *wKWMGetWorkspaceName(WScreen *scr, int workspace);
 
 Bool wKWMGetIconGeometry(WWindow *wwin, WArea *area);
 
+void wKWMSelectRootRegion(WScreen *scr, int x, int y, int w, int h, 
+			  Bool control);
+
 #endif
 

@@ -147,6 +147,13 @@ WMCreateBrowser(WMWidget *parent)
 }
 
 
+int
+WMGetBrowserMaxVisibleColumns(WMBrowser *bPtr)
+{
+    return bPtr->maxVisibleColumns;
+}
+
+
 void
 WMSetBrowserMaxVisibleColumns(WMBrowser *bPtr, int columns)
 {

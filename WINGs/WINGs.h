@@ -911,6 +911,8 @@ int WMGetBrowserSelectedRowInColumn(WMBrowser *bPtr, int column);
 
 int WMGetBrowserNumberOfColumns(WMBrowser *bPtr);
 
+int WMGetBrowserMaxVisibleColumns(WMBrowser *bPtr);
+
 WMList *WMGetBrowserListInColumn(WMBrowser *bPtr, int column);
 
 extern char *WMBrowserDidScrollNotification;

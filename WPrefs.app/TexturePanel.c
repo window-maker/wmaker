@@ -613,13 +613,15 @@ updateImage(TexturePanel *panel, char *path)
     }
     
     if (WMGetPopUpButtonSelectedItem(panel->typeP) == TYPE_PIXMAP) {
-	pixmap = WMCreatePixmapFromRImage(scr, image, 128);
+	if (image) {
+	    pixmap = WMCreatePixmapFromRImage(scr, image, 128);
 
-	size = WMGetPixmapSize(pixmap);
-	WMSetLabelImage(panel->imageL, pixmap);
-	WMResizeWidget(panel->imageL, size.width, size.height);
+	    size = WMGetPixmapSize(pixmap);
+	    WMSetLabelImage(panel->imageL, pixmap);
+	    WMResizeWidget(panel->imageL, size.width, size.height);
 	
-	WMReleasePixmap(pixmap);
+	    WMReleasePixmap(pixmap);
+	}
     } else {
 	updateTGradImage(panel);
     }

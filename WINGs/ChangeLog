@@ -1,3 +1,9 @@
+changes since wmaker 0.52.0:
+............................
+
+- added int WMGetBrowserMaxVisibleColumns(WMBrowser *bPtr);
+
+
 changes since wmaker 0.51.2:
 ............................
 

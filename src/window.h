@@ -268,6 +268,10 @@ typedef struct WWindow {
 	unsigned int obscured:1;       /* window is obscured */
 
 	unsigned int dragged_while_fmaximized;
+
+	unsigned int user_changed_width:1;
+	unsigned int user_changed_height:1;
+
 #ifdef KWM_HINTS
 	unsigned int kwm_hidden_for_modules:1;
 	unsigned int kwm_managed:1;

@@ -1295,7 +1295,7 @@ createInspectorForWindow(WWindow *wwin)
     i = wDefaultGetStartWorkspace(wwin->screen_ptr, wwin->wm_instance,
                                   wwin->wm_class);
     if (i >= 0 && i <= wwin->screen_ptr->workspace_count) {
-	WMSetPopUpButtonSelectedItem(panel->wsP, i);
+	WMSetPopUpButtonSelectedItem(panel->wsP, i + 1);
     } else {
 	WMSetPopUpButtonSelectedItem(panel->wsP, 0);
     }

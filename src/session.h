@@ -23,6 +23,28 @@
 #ifndef WMSESSION_H_
 #define WMSESSION_H_
 
+
+typedef struct {
+    int x;
+    int y;
+    unsigned int w;		       /* client size */
+    unsigned int h;
+
+    int workspace;
+    unsigned shortcuts; /* mask like 1<<shortcut_number */
+
+    WWindowAttributes mflags;
+    WWindowAttributes flags;
+
+    char miniaturized;
+    char shaded;
+    char maximized;
+
+    char user_changed_width;
+    char user_changed_height;
+} WSessionData;
+
+
 void wSessionSaveState(WScreen *scr);
 
 void wSessionSaveClients(WScreen *scr);

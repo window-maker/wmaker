@@ -1405,7 +1405,8 @@ wHideApplication(WApplication *wapp)
 	wArrangeIcons(scr, True);
     }
 #ifdef HIDDENDOT
-    wAppIconPaint(wapp->app_icon);
+    if (wapp->app_icon)
+    	wAppIconPaint(wapp->app_icon);
 #endif
 }
 

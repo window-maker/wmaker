@@ -75,8 +75,12 @@ appearanceObserver(void *self, WMNotification *notif)
     if (flags & WColorSettings) {
     }
      */
+
+    wIconPaint(icon);
+
+    /* so that the appicon expose handlers will paint the appicon specific 
+     * stuff */
     XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);
-/*    wIconPaint(icon);*/
 }
 
 
@@ -86,8 +90,9 @@ tileObserver(void *self, WMNotification *notif)
     WIcon *icon = (WIcon*)self;
 
     icon->force_paint = 1;
+    wIconPaint(icon);
+
     XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);
-/*    wIconPaint(icon);*/
 }
 
 /************************************/

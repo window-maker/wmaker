@@ -1702,11 +1702,20 @@ handleKeyPress(XEvent *event)
         break;
 #ifdef KEEP_XKB_LOCK_STATUS
      case WKBD_TOGGLE:
-        if(wPreferences.modelock){
-	    XkbGetState(dpy,XkbUseCoreKbd,&staterec);
-	    /*toggle*/
-	    XkbLockGroup(dpy,XkbUseCoreKbd,
-			 wwin->frame->languagemode=staterec.compat_state&32?0:1);
+        if(wPreferences.modelock) {
+            /*toggle*/
+            wwin = scr->focused_window;
+
+            if (wwin && wwin->flags.mapped
+                && wwin->frame->workspace == wwin->screen_ptr->current_workspace
+                && !wwin->flags.miniaturized && !wwin->flags.hidden) {
+                    XkbGetState(dpy,XkbUseCoreKbd,&staterec);
+
+		    wwin->frame->languagemode = staterec.compat_state&32 
+						? 0 : 1;
+                    XkbLockGroup(dpy,XkbUseCoreKbd, wwin->frame->languagemode);
+                                 
+            }
         }
         break;
 #endif /* KEEP_XKB_LOCK_STATUS */
