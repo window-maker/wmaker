@@ -571,7 +571,7 @@ wMenuRealize(WMenu *menu)
         text = menu->entries[i]->rtext;
         if (text)
             rwidth = WMWidthOfString(scr->menu_entry_font, text, strlen(text))
-                + 5;
+                + 10;
         else if (menu->entries[i]->cascade>=0)
             rwidth = 16;
         else

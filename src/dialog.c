@@ -1910,7 +1910,7 @@ wShowGNUstepPanel(WScreen *scr)
     panel->scr = scr;
 
     panel->win = WMCreateWindow(scr->wmscreen, "About GNUstep");
-    WMResizeWidget(panel->win, 325, 200);
+    WMResizeWidget(panel->win, 325, 205);
 
     pixmap = WMCreatePixmap(scr->wmscreen, 130, 130,
 			    WMScreenDepth(scr->wmscreen), True);
@@ -1940,8 +1940,8 @@ wShowGNUstepPanel(WScreen *scr)
     }
 
     panel->textL = WMCreateLabel(panel->win);
-    WMResizeWidget(panel->textL, 275, 130);
-    WMMoveWidget(panel->textL, 30, 50);
+    WMResizeWidget(panel->textL, 305, 140);
+    WMMoveWidget(panel->textL, 10, 50);
     WMSetLabelTextAlignment(panel->textL, WARight);
     WMSetLabelImagePosition(panel->textL, WIPOverlaps);
     WMSetLabelText(panel->textL,

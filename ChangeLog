@@ -99,6 +99,9 @@ Changes since version 0.80.2:
   (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - Fixed the 'KDE omnipresent' bug.
 - Fixed bug with focusing a deminiaturized window with sloppy focus mode
+- Fixed aspect of window list menu (window name was too close to workspace
+  indicator)
+- Fixed menu panel in WPrefs.app. Explanatory text did not fit into the label
 
 
 Changes since version 0.80.1:

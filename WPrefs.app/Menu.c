@@ -887,13 +887,11 @@ createPanel(_Panel *p)
     WMMoveWidget(panel->quickB, 10, 120);
     WMSetButtonText(panel->quickB, _("Do not confirm action."));
     WMSetButtonAction(panel->quickB, buttonClicked, panel);
-    
-    
-    
-    
+
+
     label = WMCreateLabel(panel->optionsF);
-    WMResizeWidget(label, width - 10, FRAME_HEIGHT - 50);
-    WMMoveWidget(label, 10, 20);
+    WMResizeWidget(label, width+5, FRAME_HEIGHT - 50);
+    WMMoveWidget(label, 7, 20);
     WMSetLabelText(label, 
 		   _("Instructions:\n\n"
 		     " - drag items from the left to the menu to add new items\n"
