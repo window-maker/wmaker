@@ -411,7 +411,8 @@ static void doScroll(WMWidget *self, void *data)
 }
 
 
-static void splitterHandler(XEvent *event, void *data)
+static void
+splitterHandler(XEvent *event, void *data)
 {
     WMTableColumn *column = (WMTableColumn*)data;
     WMTableView *table = column->table;

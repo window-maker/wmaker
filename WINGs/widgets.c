@@ -761,7 +761,7 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     if (!scrPtr->normalFont) {
 	wwarning(_("could not load any fonts. Make sure your font installation"
-		 "and locale settings are correct."));
+                   " and locale settings are correct."));
 
 	return NULL;
     }

@@ -31,10 +31,10 @@ static void didResizeProgressIndicator();
 
 W_ViewDelegate _ProgressIndicatorDelegate = {
     NULL,
-	NULL,
-	didResizeProgressIndicator,
-	NULL,
-	NULL
+    NULL,
+    didResizeProgressIndicator,
+    NULL,
+    NULL
 };
 
 
@@ -43,15 +43,17 @@ static void paintProgressIndicator(ProgressIndicator *pPtr);
 static void realizeProgressIndicator(ProgressIndicator *pPtr);
 static void handleEvents(XEvent *event, void *data);
 
-static void realizeObserver(void *self, WMNotification *not) {
-    
+
+
+static void
+realizeObserver(void *self, WMNotification *not)
+{
     realizeProgressIndicator(self);
 }
 
 
-
 WMProgressIndicator*
-    WMCreateProgressIndicator(WMWidget *parent)
+WMCreateProgressIndicator(WMWidget *parent)
 {
     ProgressIndicator *pPtr;
     
@@ -267,6 +269,7 @@ paintProgressIndicator(ProgressIndicator *pPtr)
     
     XFreePixmap(scr->display, buffer);
 }
+
 
 static void
 handleEvents(XEvent *event, void *data)

@@ -1,3 +1,4 @@
+# KTranslator Generated File
 # SOME DESCRIPTIVE TITLE.
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -6,8 +7,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: WINGs 0.80.0\n"
-"POT-Creation-Date: 2001-12-31 20:59+0100\n"
-"PO-Revision-Date: 2001-12-31 22:30+0100\n"
+"POT-Creation-Date: 2002-01-09 21:06+0100\n"
+"PO-Revision-Date: 2002-01-09 21:20+0100\n"
 "Last-Translator: Guido Scholz <guido.scholz@bayernline.de>\n"
 "Language-Team: Deutsch <de@li.org>\n"
 "MIME-Version: 1.0\n"
@@ -57,8 +58,9 @@ msgstr "Kann aktuellen Hostnamen nicht ermitteln"
 
 #: ../../WINGs/proplist.c:150
 msgid "Only string or data is supported for a proplist dictionary key"
-msgstr "Nur \"string\" oder \"data\" wird als Schlüssel für ein "
-"\"proplist dictionary\" unterstützt"
+msgstr ""
+"Nur string oder data wird als Schlüssel für ein proplist dictionary "
+"unterstützt"
 
 #: ../../WINGs/proplist.c:184 ../../WINGs/proplist.c:236
 #: ../../WINGs/proplist.c:394 ../../WINGs/proplist.c:474
@@ -70,27 +72,27 @@ msgstr ""
 
 #: ../../WINGs/proplist.c:630
 msgid "unterminated PropList string"
-msgstr "nicht terminierter PropList \"string\""
+msgstr "nicht terminierter PropList string"
 
 #: ../../WINGs/proplist.c:670
 msgid "unterminated PropList data"
-msgstr "nicht terminiertes PropList \"data"
+msgstr "nicht terminiertes PropList data"
 
 #: ../../WINGs/proplist.c:678
 msgid "unterminated PropList data (missing hexdigit)"
-msgstr "nicht terminiertes PropList \"data\" (fehlendes hex-Zeichen)"
+msgstr "nicht terminiertes PropList data (fehlendes hex-Zeichen)"
 
 #: ../../WINGs/proplist.c:690
 msgid "non hexdigit character in PropList data"
-msgstr "falsches hex-Zeichen in PropList \"data\""
+msgstr "falsches hex-Zeichen in PropList data"
 
 #: ../../WINGs/proplist.c:725
 msgid "unterminated PropList array"
-msgstr "nicht terminiertes PropList \"array\""
+msgstr "nicht terminiertes PropList array"
 
 #: ../../WINGs/proplist.c:733
 msgid "missing or unterminated PropList array"
-msgstr "fehlendes oder nicht terminiertes PropList \"array\""
+msgstr "fehlendes oder nicht terminiertes PropList array"
 
 #: ../../WINGs/proplist.c:743
 msgid "could not get PropList array element"
@@ -128,8 +130,9 @@ msgstr ""
 msgid ""
 "was expecting a string, data, array or dictionary. If it's a string, try "
 "enclosing it with \"."
-msgstr "string, data, array oder dictionary wurde erwartet. Zeichenketten "
-"mit \" einklammern."
+msgstr ""
+"string, data, array oder dictionary wurde erwartet. Zeichenketten mit \" "
+"einklammern."
 
 #: ../../WINGs/proplist.c:888
 msgid "Comments are not allowed inside WindowMaker owned domain files."
@@ -213,7 +216,7 @@ msgstr "Farben"
 
 #: ../../WINGs/wcolorpanel.c:605 ../../WINGs/wcolorpanel.c:2824
 msgid "Brightness"
-msgstr ""
+msgstr "Helligkeit"
 
 #: ../../WINGs/wcolorpanel.c:607 ../../WINGs/wcolorpanel.c:683
 #: ../../WINGs/wcolorpanel.c:716 ../../WINGs/wcolorpanel.c:750
@@ -255,7 +258,7 @@ msgstr "Schwarz"
 
 #: ../../WINGs/wcolorpanel.c:991
 msgid "Spectrum"
-msgstr ""
+msgstr "Spektrum"
 
 #: ../../WINGs/wcolorpanel.c:1021
 msgid "Palette"
@@ -307,7 +310,8 @@ msgstr "Neu..."
 #, c-format
 msgid ""
 "Color Panel: Could not create directory %s needed to store configurations"
-msgstr "Color Panel: Konnte das Verzeichnis %s zum Speichern nicht erzeugen"
+msgstr ""
+"Color Panel: Konnte das Verzeichnis %s zum Speichern der Konfiguration nicht erzeugen"
 
 #. Delete the file, it doesn't belong here
 #: ../../WINGs/wcolorpanel.c:1237 ../../WINGs/wcolorpanel.c:3207
@@ -325,7 +329,7 @@ msgstr "Konnte Konfigurationsverzeichnis für Farbdialog nicht erzeugen"
 #: ../../WINGs/wfilepanel.c:659 ../../WINGs/wfilepanel.c:760
 #: ../../WINGs/wfilepanel.c:971 ../../WINGs/wfontpanel.c:709
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: ../../WINGs/wcolorpanel.c:1245 ../../WINGs/wcolorpanel.c:1281
 #: ../../WINGs/wcolorpanel.c:1299
@@ -335,7 +339,7 @@ msgstr "Color Panel: Konnte Datei nicht finden"
 #: ../../WINGs/wcolorpanel.c:1486 ../../WINGs/wcolorpanel.c:1551
 #: ../../WINGs/wcolorpanel.c:1615
 msgid "Color Panel: X failed request"
-msgstr ""
+msgstr "Color Panel: X Anfrage schlug fehl"
 
 #: ../../WINGs/wcolorpanel.c:2860
 msgid "Saturation"
@@ -502,7 +506,7 @@ msgstr "Nicht genügend Speicher verfügbar."
 #: ../../WINGs/wfilepanel.c:742 ../../WINGs/wfilepanel.c:801
 #, c-format
 msgid "'%s' is on a read-only filesystem."
-msgstr "'%s' liegt auf einem \"read-only\" Dateisystem"
+msgstr "'%s' liegt auf einem read-only Dateisystem."
 
 #: ../../WINGs/wfilepanel.c:745 ../../WINGs/wfilepanel.c:777
 #: ../../WINGs/wfilepanel.c:804
@@ -566,21 +570,21 @@ msgid ""
 msgstr ""
 "die Zeichenkette \"%s\" ersetzt alle anderen Zeichen dieser Zeichensätze."
 
-#: ../../WINGs/wfont.c:282 ../../WINGs/wfont.c:318
+#: ../../WINGs/wfont.c:287 ../../WINGs/wfont.c:323
 #, c-format
 msgid "could not load font set %s. Trying fixed."
 msgstr "konnte Fonts nicht laden. Nehme fixed-Font."
 
-#: ../../WINGs/wfont.c:288 ../../WINGs/wfont.c:324
+#: ../../WINGs/wfont.c:293 ../../WINGs/wfont.c:329
 #, c-format
 msgid "could not load font %s. Trying fixed."
 msgstr "Konnte Font %s nicht laden. Nehme fixed-Font."
 
-#: ../../WINGs/wfont.c:292 ../../WINGs/wfont.c:328
+#: ../../WINGs/wfont.c:297 ../../WINGs/wfont.c:333
 msgid "could not load fixed font!"
 msgstr "konnte fixed-Font nicht laden!"
 
-#: ../../WINGs/wfont.c:423
+#: ../../WINGs/wfont.c:428
 #, c-format
 msgid "font description %s is too large."
 msgstr "Fontbeschreibung ist zu groß."
@@ -603,11 +607,11 @@ msgstr "Größe"
 
 #: ../../WINGs/wfontpanel.c:252
 msgid "Set"
-msgstr "Satz"
+msgstr "Setzen"
 
 #: ../../WINGs/wfontpanel.c:257
 msgid "Revert"
-msgstr ""
+msgstr "Zurückn."
 
 #: ../../WINGs/wfontpanel.c:709
 msgid "Could not retrieve font list"
@@ -628,7 +632,7 @@ msgstr "Kursiv"
 
 #: ../../WINGs/wfontpanel.c:873
 msgid "Oblique"
-msgstr ""
+msgstr "Schräg"
 
 #: ../../WINGs/wfontpanel.c:875
 msgid "Rev Italic"
@@ -647,13 +651,13 @@ msgstr "Normal"
 msgid "WINGs: could not load widget images file: %s"
 msgstr "WINGs: Konnte Widget-Bildatei %s nicht laden."
 
-#: ../../WINGs/widgets.c:761
+#: ../../WINGs/widgets.c:763
 msgid ""
 "could not load any fonts. Make sure your font installationand locale "
 "settings are correct."
 msgstr ""
-"Konnte keine Fonts laden. Überprüfen Sie, ob Ihre "
-"Fontinstallation und -einstellungen korrekt sind."
+"Konnte keine Fonts laden. Überprüfen Sie, ob Ihre Fontinstallation und "
+"-einstellungen korrekt sind."
 
 #: ../../WINGs/wruler.c:189
 msgid "0   inches"

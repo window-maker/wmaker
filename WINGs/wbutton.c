@@ -41,35 +41,35 @@ typedef struct W_Button {
 	WMAlignment alignment:2;
 
 	unsigned int selected:1;
-	
+
 	unsigned int enabled:1;
 
 	unsigned int bordered:1;
 
 	unsigned int springLoaded:1;
-	
+
 	unsigned int pushIn:1;	       /* change relief while pushed */
-	
+
 	unsigned int pushLight:1;      /* highlight while pushed */
-	
+
 	unsigned int pushChange:1;     /* change caption while pushed */
-	    
+
 	unsigned int stateLight:1;     /* state indicated by highlight */
-	
+
 	unsigned int stateChange:1;    /* state indicated by caption change */
 
 	unsigned int statePush:1;      /* state indicated by relief */
 
 	unsigned int continuous:1;     /* continually perform action */
-	/* */
+
 	unsigned int prevSelected:1;
 
 	unsigned int pushed:1;
-	
+
 	unsigned int wasPushed:1;
 
 	unsigned int redrawPending:1;
-	
+
 	unsigned int addedObserver:1;
     } flags;
 } Button;

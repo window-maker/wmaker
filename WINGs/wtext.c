@@ -2200,11 +2200,13 @@ requestHandler(WMView *view, Atom selection, Atom target, void *cdata,
     return NULL;
 }        
 
+
 static void
 lostHandler(WMView *view, Atom selection, void *cdata)
 {
     releaseSelection((WMText *)view->self);
-}   
+}
+
 
 static WMSelectionProcs selectionHandler = {
     requestHandler, lostHandler, NULL 
@@ -2217,6 +2219,7 @@ ownershipObserver(void *observerData, WMNotification *notification)
     if (observerData != WMGetNotificationClientData(notification))
         lostHandler(WMWidgetView(observerData), XA_PRIMARY, NULL);
 }
+
 
 static void 
 autoSelectText(Text *tPtr, int clicks) 
@@ -3176,7 +3179,8 @@ WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser, WMAction *writer
         handleActionEvents, tPtr);
     
     WMAddNotificationObserver(ownershipObserver, tPtr, 
-        "_lostOwnership", tPtr);
+                              WMSelectionOwnerDidChangeNotification,
+                              tPtr);
     
     WMSetViewDragSourceProcs(tPtr->view, &_DragSourceProcs);
     WMSetViewDragDestinationProcs(tPtr->view, &_DragDestinationProcs);
