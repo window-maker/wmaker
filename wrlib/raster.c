@@ -272,6 +272,36 @@ RCombineImagesWithOpaqueness(RImage *image, RImage *src, int opaqueness)
 #undef OP
 }
 
+int
+calculateCombineArea(RImage *des, RImage *src,
+        int *sx, int *sy,
+        int *swidth, int *sheight,
+        int *dx, int *dy) {
+
+    if (*dx < 0) {
+        *sx = -*dx;
+        *swidth = *swidth + *dx;
+        *dx = 0;
+    }
+
+    if (*dx + *swidth > des->width) {
+        *swidth = des->width - *dx;
+    }
+
+    if (*dy < 0) {
+        *sy = -*dy;
+        *sheight = *sheight + *dy;
+        *dy = 0;
+    }
+
+    if (*dy + *sheight > des->height) {
+        *sheight = des->height - *dy;
+    }
+
+    if (*sheight > 0 && *swidth > 0) {
+        return True;
+    } else return False;
+}
 
 void
 RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
@@ -282,18 +312,8 @@ RCombineArea(RImage *image, RImage *src, int sx, int sy, unsigned width,
     unsigned char *s;
     int alpha, calpha;
 
-
-    assert(dy < image->height);
-    assert(dx < image->width);
-
-    assert(sy + height <= src->height);
-    assert(sx + width <= src->width);
-
-    if (width > image->width - dx)
-	width = image->width - dx;
-
-    if (height > image->height - dy)
-	height = image->height - dy;
+    if(!calculateCombineArea(image, src, &sx, &sy, &width, &height, &dx, &dy))
+        return;
 
     if (!HAS_ALPHA(src)) {
 	if (!HAS_ALPHA(image)) {
@@ -372,19 +392,8 @@ RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
     int dalpha = HAS_ALPHA(image);
     int dch = (dalpha ? 4 : 3);
 
-    assert(dy < image->height);
-    assert(dx < image->width);
-
-    assert(sy + height <= src->height);
-    assert(sx + width <= src->width);
-
-
-    /* clip */
-    width -= sx;
-    height -= sy;
-
-    if (height > image->height - dy)
-	height = image->height - dy;
+    if(!calculateCombineArea(image, src, &sx, &sy, &width, &height, &dx, &dy))
+        return;
 
     d = image->data + (dy*image->width + dx) * dch;
     dwi = (image->width - width)*dch;
