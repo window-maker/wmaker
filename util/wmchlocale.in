@@ -1,0 +1,122 @@
+#!/bin/sh
+#
+# Change locale-dependent settings of WindowMaker.
+#
+# v0.1 by judas@hell <tomka@oalevice.sk> on Jan 28 2001
+#
+#
+
+PROGRAM=`basename $0`
+VERSION="0.1"
+
+if [ "x$GNUSTEP_USER_ROOT" == "x" ]; then
+    GSDIR="$HOME/GNUstep"
+else
+    GSDIR="$GNUSTEP_USER_ROOT"
+    if [ ! -d "GSDIR" ]; then
+	echo "GNUSTEP_USER_ROOT variable does not contain path to valid directory..." >/dev/stderr
+	exit 1
+    fi
+fi
+GLOBALDIR="#pkgdatadir#"
+LOCALDIR="$GSDIR/Library/WindowMaker"
+
+help_msg() {
+    echo -e "\n"\
+	"$PROGRAM, v$VERSION by judas@hell\n"\
+	"Syntax:\n"\
+	"    $PROGRAM [--auto] [--nodef] [<new-locale> | default]\n"\
+	"\n"\
+	"<new-locale>	locale you want WindowMaker to move to (e.g. ja or default)\n"\
+	"--auto		use current locale\n"\
+	"--nodef	try to change only codings of fonts\n"
+    exit 0
+}
+
+if (( $# == 0 )); then
+    help_msg
+fi
+
+for i in $*; do
+    case $i in
+    --auto)
+	auto="YES";;
+    --nodef)
+	nodef="--nodef";;
+    *)
+	if [ -z "$new_locale" ]; then
+	    new_locale="$i"
+	else
+	    echo -e "\nUnrecognized command line argument, run without arguments to see help.\n"
+	    exit 1
+	fi;;
+    esac
+done
+if [ "$new_locale" == "default" ]; then
+    new_locale=""
+fi
+
+if [ -n "$auto" ] && [ -z "$new_locale" ]; then
+    new_locale=$LANG
+    if [ -z "$new_locale" ]; then
+	new_locale="${LC_ALL%_*}"
+    fi
+fi
+
+if [ -z "$new_locale" ]; then
+    echo -e "\nNo locale is set, using default...\n" >/dev/stderr
+elif ! (locale -a |grep "^$new_locale$" &>/dev/null); then
+    echo -e "\n"\
+	"Locale $new_locale currently set is not supported on your system...\n"\
+	"Check your LANG and LC_ALL variables or install your locale support\n"\
+	"\n" >/dev/stderr
+    exit 1
+fi
+
+echo -n "Setting Window Maker root menu... "
+
+if [ -z "$new_locale" ] || [ "$new_locale" == "en" ]; then
+    menu_list="plmenu menu"
+else
+    menu_list="plmenu.$new_locale menu.$new_locale plmenu menu"
+fi
+for new_menu in $menu_list; do
+    for wm_dir in $LOCALDIR $GLOBALDIR; do
+	if [ -f "$wm_dir/$new_menu" ]; then
+	    if [ -n "$new_locale" ] && echo "$new_menu" |grep "menu.$new_locale" &>/dev/null; then
+		echo "success"
+	    else
+		echo "fail (copying default)"
+	    fi
+	    if [ "${new_menu:0:4}" == "menu" ]; then		# plain
+		echo "\"$wm_dir/$new_menu\"" >"$GSDIR/Defaults/WMRootMenu"
+	    else						# proplist
+		cp -f "$wm_dir/$new_menu" "$GSDIR/Defaults/WMRootMenu"
+	    fi
+	    any_found="YES"
+	    break 2
+	fi
+    done
+done
+if [ -z "$any_found" ]; then
+    echo "fail (no menu found)"
+fi
+
+echo -n "Setting Window Maker fonts... "
+
+if [ -z "$new_locale" ] || [ "$new_locale" == "en" ]; then
+    args="default $nodef"
+else
+    args="--locale=$new_locale $nodef"
+fi
+if wsetfont "$args" &>/dev/null; then
+    echo "success"
+else
+    echo -n "fail"
+    if wsetfont default &>/dev/null; then
+	echo " (setting default)"
+    else
+	echo " (totally)"
+    fi
+fi
+
