@@ -247,6 +247,9 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
         XUngrabKeyboard(dpy, CurrentTime);
     }
 
+    if (swpanel)
+        wSwitchPanelDestroy(swpanel);
+
     if (newFocused) {
         wRaiseFrame(newFocused->frame->core);
         CommitStacking(scr);
