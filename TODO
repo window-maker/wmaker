@@ -5,12 +5,17 @@ To do before next release:
   and give a warning if font is not converted, but let user manually convert
   it with convertfonts as the process may need manual tweaking for best
   results)
+- convertfonts to handle fontsets (keep in mind that many people without
+  multibyte still have a fontsets in their config files). ev use LANG and
+  MB_CUR_MAX
 - automate convertfonts for different locales
 - Append .UTF-8 to locale
 - figure out a better gnustep path for wprefs.app installation
 - add -fno-strict-aliasing (do this only for gcc >= 3.3)
 - pick a good font fallback
 - figure a better fullscreen level
+- add default pixelsize if font doesn't define any size.
+- clean up netwm hints on exit
 
 
 remake wrlib rule to not compile with -fomit-frame-pointer and stuff
