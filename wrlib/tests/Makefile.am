@@ -6,7 +6,7 @@ noinst_PROGRAMS = testdraw testgrad testrot view
 
 EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
 
-INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
+INCLUDES = -I.. $(DFLAGS) @HEADER_SEARCH_PATH@
 
 LIBLIST = $(top_builddir)/wrlib/libwraster.la
 
