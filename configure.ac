@@ -100,15 +100,7 @@ dnl not used anywhere
 dnl AC_FUNC_MEMCMP  
 AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
-<<<<<<< configure.ac
-<<<<<<< configure.ac
-AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setpgid atexit mallinfo vsnprintf)
-=======
-AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setpgid atexit mallinfo snprintf vsnprintf asprintf vasprintf mkstemp)
->>>>>>> 1.4
-=======
 AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp setpgid atexit mallinfo mkstemp snprintf vsnprintf asprintf vasprintf)
->>>>>>> 1.15
 
 
 dnl ripped from samba
@@ -183,22 +175,9 @@ AC_DEFINE_UNQUOTED(CPP_PATH, "$CPP_PATH")
 
 dnl Checks for header files.
 dnl =======================
-<<<<<<< configure.ac
-AC_HEADER_STDC
-=======
->>>>>>> 1.4
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
-<<<<<<< configure.ac
-<<<<<<< configure.ac
-AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h\
-		libintl.h sys/select.h poll.h malloc.h stdlib.h)
-=======
-AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h libintl.h sys/select.h poll.h malloc.h ctype.h stdlib.h string.h strings.h)
->>>>>>> 1.4
-=======
 AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h libintl.h sys/select.h poll.h malloc.h ctype.h string.h strings.h)
->>>>>>> 1.15
 
 
 

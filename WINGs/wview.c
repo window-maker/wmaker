@@ -449,7 +449,7 @@ destroyView(W_View *view)
     
     WMRemoveNotificationObserver(view);
     
-#if 0    
+#if 0
     if (view->dragSourceProcs)
 	wfree(view->dragSourceProcs);
 
@@ -733,9 +733,8 @@ WMGetViewScreenPosition(WMView *view)
 }
 
 
-
-
-static void resizedParent(void *self, WMNotification *notif)
+static void
+resizedParent(void *self, WMNotification *notif)
 {
     WMSize size = WMGetViewSize((WMView*)WMGetNotificationObject(notif));
     WMView *view = (WMView*)self;
@@ -745,7 +744,7 @@ static void resizedParent(void *self, WMNotification *notif)
 		   size.height - (view->topOffs + view->bottomOffs));
 }
 
-			
+
 void
 WMSetViewExpandsToParent(WMView *view, int leftOffs, int topOffs, 
 			 int rightOffs, int bottomOffs)
@@ -766,3 +765,5 @@ WMSetViewExpandsToParent(WMView *view, int leftOffs, int topOffs,
     W_ResizeView(view, size.width - (leftOffs + rightOffs), 
 		 size.height - (topOffs + bottomOffs));
 }
+
+

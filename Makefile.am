@@ -19,10 +19,3 @@ WindowMaker.lsm: WindowMaker.lsm.in
 		-e "s/SIZE/$$size M/"\
 		WindowMaker.lsm.in > WindowMaker-$(VERSION).lsm
 
-#dist-hook:
-#	touch `find -name configure.in -print`
-#	touch `find -name aclocal.m4 -print`
-#	touch `find -name Makefile.am -print`
-#	touch `find -name Makefile.in -print`
-#	touch `find -name configure -print`
-

@@ -7,6 +7,9 @@ Changes since wmaker 0.80.0:
 - fixed labels not to display '\n' as a character if multiple '\n' are passed
   but just skip to the next line.
 - better warning when importing non-digit characters in PropList Data.
+- rewrote WMBox to use a WMArray for subviews. with this change fixed a bug
+  about arranging subviews after removing one and a memleak occuring in the
+  same case.
 
 
 Changes since wmaker 0.70.0:

@@ -1056,6 +1056,7 @@ updateClipOptionsMenu(WMenu *menu, WDock *dock)
     entry = menu->entries[++index];
     entry->flags.indicator_on = dock->auto_raise_lower;
     entry->clientdata = dock;
+    wMenuSetEnabled(menu, index, dock->lowered);
 
     /* attract icons */
     entry = menu->entries[++index];

@@ -820,10 +820,19 @@ paintEntry(WMenu *menu, int index, int selected)
 	ih = indicator->height;
 	XSetClipMask(dpy, scr->copy_gc, indicator->mask);
 	XSetClipOrigin(dpy, scr->copy_gc, 5, y+(h-ih)/2);
-	if (selected)
-	    XSetForeground(dpy, scr->copy_gc, scr->black_pixel);
-	else
-	    XSetForeground(dpy, scr->copy_gc, scr->mtext_pixel);
+        if (selected) {
+            if (entry->flags.enabled) {
+                XSetForeground(dpy, scr->copy_gc, scr->black_pixel);
+            } else {
+                XSetForeground(dpy, scr->copy_gc, scr->dtext_pixel);
+            }
+        } else {
+            if (entry->flags.enabled) {
+                XSetForeground(dpy, scr->copy_gc, scr->mtext_pixel);
+            } else {
+                XSetForeground(dpy, scr->copy_gc, scr->dtext_pixel);
+            }
+        }
 	XFillRectangle(dpy, win, scr->copy_gc, 5, y+(h-ih)/2, iw, ih);
 	/*
 	XCopyArea(dpy, indicator->image, win, scr->copy_gc, 0, 0,

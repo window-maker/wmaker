@@ -40,6 +40,7 @@ SUPPORTED PLATFORMS
 - IBM S/390 running Linux
 - IBM S/390 running Conectiva Linux (experimental)
 - iBook running Darwin
+- Darwin PPC / Macos X
 - Windows NT with Cygwin/XFree86
 - Sony PlayStation2 running Linux
 
@@ -73,9 +74,9 @@ The following is required to build Window Maker:
 	These tools are NOT needed, but IF you have one or
 	more of them installed, make sure you have ALL of the following 
 	with exactly these versions:
-		autoconf 2.13
+		autoconf 2.52
 		automake 1.4
-		libtool 1.3
+		libtool 1.4.2
 	If you have a different version, disable them by temporarily
 	renaming them to something else or uninstalling them from your
 	system. If you don't develop software you don't need them,
@@ -149,12 +150,6 @@ To get a list of other options, run ./configure --help
 	The -I flag must precede each paths, like:
 	--with-incs-from="-I/opt/headers -I/usr/local/include"
 
---enable-single-icon
-	enables the collapsing of all appicons of the WM_CLASS+WM_INSTANCE
-	into a single one. This feature is not supported at all by the
-	developers. If you have some trouble with it, contact it's author:
-	Christopher Seawood <cls@seawood.org>
-
 --disable-shm
 	disable use of the MIT shared memory extension. This will slow down
 	texture generation a little bit, but in some cases it seems to be
@@ -183,9 +178,6 @@ To get a list of other options, run ./configure --help
 --enable-modelock
 	XKB language status lock support. If you don't know what it is you
 	probably don't need it.
-
---enable-sound	
-	enable support of sound effects module
 
 --disable-xpm   
 	disables use of the XPM library even if it is available on your

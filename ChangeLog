@@ -33,8 +33,15 @@ Changes since version 0.80.0:
   manager" option in the crashing dialog panel.
 - Window Maker will now use the WINDOWMAKER_ALT_WM environment variable (if
   it is defined) to overwrite the default hardcoded fallback window manager.
+- Fixed marks for menu entries to be grayed as the text for disabled entries.
+- Fixed Clip's "Autoraise" option to be marked as disabled when the
+  "Keep on Top" option is active.
+- Added ability to browse for files/directories in the WPrefs menu editor.
 - Added Czech translations of documentation (Jiri Hnidek <Jiri.Hnidek@vslib.cz>)
 - Fixed segfault with incomplete WM_CLASS specifications. 
+- Fixed a bug about arranging subviews in a WMBox after removing a subview
+  and a memleak occuring in the same situation.
+
 
 Changes since version 0.70.0:
 .............................

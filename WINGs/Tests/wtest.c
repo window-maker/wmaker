@@ -138,19 +138,13 @@ testBox(WMScreen *scr)
     win = WMCreateWindow(scr, "testBox");
     WMSetWindowTitle(win, "Box");
     WMSetWindowCloseAction(win, closeAction, NULL);
-
-    WMSetViewNotifySizeChanges(WMWidgetView(win), True);
+    WMResizeWidget(win, 400, 300);
 
     box = WMCreateBox(win);
     WMSetBoxBorderWidth(box, 5);
-    
-    WMAddNotificationObserver(resizedWindow, box,
-			      WMViewSizeDidChangeNotification, 
-			      WMWidgetView(win));
-    WMResizeWidget(win, 400, 300);
-    
+    WMSetViewExpandsToParent(WMWidgetView(box), 0, 0, 0, 0);
 
-/*    WMSetBoxHorizontal(box, True); */
+    /*WMSetBoxHorizontal(box, True);*/
     for (i = 0; i < 4; i++) {
 	btn = WMCreateCommandButton(box);
 	WMSetButtonText(btn, "bla");
@@ -1316,14 +1310,9 @@ main(int argc, char **argv)
 
     testFrame(scr);
 
-
-
-
-
     testSplitView(scr);
 
     testGradientButtons(scr);
-
 
     testOpenFilePanel(scr);
 

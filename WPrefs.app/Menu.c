@@ -76,8 +76,9 @@ typedef struct _Panel {
 
     WMFrame *commandF;
     WMTextField *commandT;	       /* command to run */
+    WMButton *browseB;
     WMButton *xtermC;		       /* inside xterm? */
-    
+
     WMFrame *pathF;
     WMTextField *pathT;
 
@@ -248,11 +249,41 @@ icommandLClicked(WMWidget *w, void *data)
 }
 
 
+static void
+browseForFile(WMWidget *self, void *clientData)
+{
+    _Panel *panel = (_Panel*)clientData;
+    WMFilePanel *filePanel;
+    char *text, *oldprog, *newprog;
 
+    filePanel = WMGetOpenPanel(WMWidgetScreen(self));
+    text = WMGetTextFieldText(panel->commandT);
 
+    oldprog = wtrimspace(text);
+    wfree(text);
 
+    if (oldprog[0]==0 || oldprog[0]!='/') {
+        wfree(oldprog);
+        oldprog = wstrdup("/");
+    } else {
+        char *ptr = oldprog;
+        while (*ptr && !isspace(*ptr))
+            ptr++;
+        *ptr = 0;
+    }
 
+    WMSetFilePanelCanChooseDirectories(filePanel, False);
 
+    if (WMRunModalFilePanelForDirectory(filePanel, panel->parent, oldprog,
+                                        _("Select Program"), NULL)==True) {
+        newprog = WMGetFilePanelFileName(filePanel);
+        WMSetTextFieldText(panel->commandT, newprog);
+        updateMenuItem(panel, panel->currentItem, panel->commandT);
+        wfree(newprog);
+    }
+
+    wfree(oldprog);
+}
 
 
 static char*
@@ -644,10 +675,17 @@ createPanel(_Panel *p)
     WMResizeWidget(panel->commandF, width, 50);
     WMMoveWidget(panel->commandF, 10, 20);
     WMSetFrameTitle(panel->commandF, _("Program to Run"));
+    WMSetFrameTitlePosition(panel->commandF, WTPAtTop);
 
     panel->commandT = WMCreateTextField(panel->commandF);
-    WMResizeWidget(panel->commandT, width - 20, 20);
+    WMResizeWidget(panel->commandT, width - 95, 20);
     WMMoveWidget(panel->commandT, 10, 20);
+
+    panel->browseB = WMCreateCommandButton(panel->commandF);
+    WMResizeWidget(panel->browseB, 70, 24);
+    WMMoveWidget(panel->browseB, width - 80, 18);
+    WMSetButtonText(panel->browseB, _("Browse"));
+    WMSetButtonAction(panel->browseB, browseForFile, panel);
 
     WMAddNotificationObserver(dataChanged, panel,
 			      WMTextDidChangeNotification,
@@ -779,7 +817,7 @@ createPanel(_Panel *p)
     WMSetFrameTitle(panel->shortF, _("Keyboard Shortcut"));
 
     panel->shortT = WMCreateTextField(panel->shortF);
-    WMResizeWidget(panel->shortT, width - 20 - 170, 20);
+    WMResizeWidget(panel->shortT, width - 20 - 150, 20);
     WMMoveWidget(panel->shortT, 10, 20);
 
     WMAddNotificationObserver(dataChanged, panel,
@@ -787,14 +825,14 @@ createPanel(_Panel *p)
 			      panel->shortT);
 
     panel->sgrabB = WMCreateCommandButton(panel->shortF);
-    WMResizeWidget(panel->sgrabB, 80, 24);
-    WMMoveWidget(panel->sgrabB, width - 90, 18);
+    WMResizeWidget(panel->sgrabB, 70, 24);
+    WMMoveWidget(panel->sgrabB, width - 80, 18);
     WMSetButtonText(panel->sgrabB, _("Capture"));
     WMSetButtonAction(panel->sgrabB, sgrabClicked, panel);
 
     panel->sclearB = WMCreateCommandButton(panel->shortF);
-    WMResizeWidget(panel->sclearB, 80, 24);
-    WMMoveWidget(panel->sclearB, width - 175, 18);
+    WMResizeWidget(panel->sclearB, 70, 24);
+    WMMoveWidget(panel->sclearB, width - 155, 18);
     WMSetButtonText(panel->sclearB, _("Clear"));
     WMSetButtonAction(panel->sclearB, sgrabClicked, panel);
 
