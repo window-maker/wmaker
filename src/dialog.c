@@ -1124,7 +1124,8 @@ handleLogoPush(XEvent *event, void *data)
         "WHAT YOU SAY??",
         "SOMEBODY SET UP US THE BOMB",
         "ALL YOUR BASE ARE BELONG TO US!",
-        "Oh My God!!! Larry is back!"
+        "Oh My God!!! Larry is back!",
+        "Alex Perez is aliveeeeeeee!!!"
     };
 
 

@@ -17,6 +17,8 @@ Changes since version 0.91.0:
 - added code to automatically update the icon paths from the old .AppInfo
   style to the new Library/WindowMaker style in WMWindowAttributes when
   Window Maker starts to make transition transparent for users.
+- fixed issue with window being moved by 1 pixel up and left when the window
+  move was initiated by the client
 
 
 Changes since version 0.90.0:

@@ -239,19 +239,23 @@ wClientConfigure(WWindow *wwin, XConfigureRequestEvent *xcre)
         /* If the window is shaded, wrong height will be set for the window */
         if (xcre->value_mask & CWX) {
             nx = xcre->x;
-            if (HAS_BORDER(wwin))
+            /* Subtracting the border makes the window shift by 1 pixel -Dan */
+            /*if (HAS_BORDER(wwin)) {
                 nx -= FRAME_BORDER_WIDTH;
-        }
-        else
+            }*/
+        } else {
             nx = wwin->frame_x;
+        }
 
         if (xcre->value_mask & CWY) {
             ny = xcre->y - ((ofs_y < 0) ? 0 : wwin->frame->top_width);
-            if (HAS_BORDER(wwin))
+            /* Subtracting the border makes the window shift by 1 pixel -Dan */
+            /*if (HAS_BORDER(wwin)) {
                 ny -= FRAME_BORDER_WIDTH;
-        }
-        else
+            }*/
+        } else {
             ny = wwin->frame_y;
+        }
 
         if (xcre->value_mask & CWWidth)
             nwidth = xcre->width;
