@@ -25,7 +25,11 @@
 
 #include <stdlib.h>
 #include <string.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "WindowMaker.h"
 #include "menu.h"
@@ -183,6 +187,7 @@ saveIconNameFor(char *iconPath, char *wm_instance, char *wm_class)
 	PLRelease(val);
     }
     PLRelease(key);
+    PLRelease(iconk);
 
     if (val && !wPreferences.flags.noupdates)
 	PLSave(dict, YES);
@@ -398,12 +403,37 @@ wApplicationCreate(WScreen *scr, Window main_window)
     }
 
     if (wapp->app_icon) {
-	char *tmp;
+	char *tmp, *path;
+        struct stat dummy;
+        RImage *image;
 
-	/* if the displayed icon was supplied by the client, save the icon */
 	tmp = wDefaultGetIconFile(scr, wapp->app_icon->wm_instance,
 				  wapp->app_icon->wm_class, True);
-	if (!tmp)
+
+        /* If the icon was saved by us from the client supplied icon, but is
+         * missing, recreate it. */
+        if (tmp && strstr(tmp, ".AppInfo/WindowMaker")!=NULL &&
+            stat(tmp, &dummy)!=0 && errno==ENOENT) {
+            wmessage(_("recreating missing icon '%s'"), tmp);
+            path = wIconStore(wapp->app_icon->icon);
+            if (path) {
+                wfree(path);
+            }
+            image = wDefaultGetImage(scr, wapp->app_icon->wm_instance,
+                                     wapp->app_icon->wm_class);
+            if (image) {
+                wIconChangeImage(wapp->app_icon->icon, image);
+                wAppIconPaint(wapp->app_icon);
+                /* TODO:
+                 * wIconChangeImage() should be rewriten to use retain/release
+                 * The way it is now is too confusing about where the icon is
+                 * finally released.  -Dan */
+                /* --this is wrong at the moment-- RReleaseImage(image);*/
+            }
+        }
+
+	/* if the displayed icon was supplied by the client, save the icon */
+        if (!tmp)
 	    extractClientIcon(wapp->app_icon);
     }
     

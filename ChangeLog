@@ -53,6 +53,10 @@ Changes since version 0.64.0:
   mouse buttons: MouseLeftButtonAction, MouseMiddleButtonAction,
   MouseRightButtonAction and MouseWheelAction. They replace the above 3
   removed options, but use a different semantic. More in NEWS.
+- client supplied icons that were saved by Window Maker in the directory
+  ~/GNUstep/.AppInfo/WindowMaker/ will be recreated if missing when the
+  application starts.
+- fixed a small memleak when the client supplied icon was extracted and saved.
 
 
 Changes since version 0.63.1:
