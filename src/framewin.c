@@ -947,9 +947,11 @@ wFrameWindowPaint(WFrameWindow *fwin)
 {
     WScreen *scr = fwin->screen_ptr;
 #ifdef DRAWSTRING_PLUGIN
+#define DRAWSTRING_CURRENT_STATE fwin->flags.state + fwin->drawstring_proc_offset
     Pixmap *background;
     Pixmap tmp_bg;
     int tb = fwin->top_width;
+    WPluginData *pd;
 #endif
 
     if (fwin->flags.is_client_window_frame)
@@ -1083,11 +1085,28 @@ wFrameWindowPaint(WFrameWindow *fwin)
             scr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
 #endif
 
+#ifdef DRAWSTRING_PLUGIN
+    if(scr->drawstring_func[DRAWSTRING_CURRENT_STATE]) {
+        title = ShrinkString(*fwin->font, fwin->title,
+                fwin->titlebar->width - lofs - rofs,
+                scr->drawstring_func[DRAWSTRING_CURRENT_STATE]);
+        titlelen = strlen(title);
+        pd = wPluginPackData(1, scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->data);
+        scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->proc.widthOfString[W_DSPROC_WIDTHOFSTRING](
+                title, titlelen, pd, &w, NULL, NULL);
+        wfree(pd);
+    } else {
+        title = ShrinkString(*fwin->font, fwin->title,
+                fwin->titlebar->width - lofs - rofs, NULL);
+        titlelen = strlen(title);
+        w = WMWidthOfString(*fwin->font, title, titlelen);
+    }
+#else
 	title = ShrinkString(*fwin->font, fwin->title,
 			     fwin->titlebar->width - lofs - rofs);
 	titlelen = strlen(title);
 	w = WMWidthOfString(*fwin->font, title, titlelen);
-
+#endif
 	switch (fwin->flags.justification) {
 	 case WTJ_LEFT:
 	    x = lofs;
@@ -1109,28 +1128,25 @@ wFrameWindowPaint(WFrameWindow *fwin)
 		       fwin->title_pixel[fwin->flags.state]);
 	
 #ifdef DRAWSTRING_PLUGIN
-#define DRAWSTRING_CURRENT_STATE fwin->flags.state + fwin->drawstring_proc_offset
+    /* if the plugin want to do shrinking locally, they can trick
+    * wmaker by returning a very short value (such as 0) to widthOfString -- I think */
     if (scr->drawstring_func[DRAWSTRING_CURRENT_STATE]) {
-        void **p;
-
-        p = wPluginPackData(6,
-                                    /* 0 number of argument, will be passed */
+        pd = wPluginPackData(6,      /* number of argument, will be passed */
                 scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->data,
-                                    /* 1 plugin data, as it was initialized */
-                background,
-                                    /* 2 current background Pixmap */
-                fwin->title_gc,     /* 3 gc */
-                *fwin->font,        /* 4 WMFont** */
+                                    /* 0 plugin data, as it was initialized */
+                background,         /* 1 current background Pixmap */
+                fwin->title_gc,     /* 2 gc */
+                *fwin->font,        /* 3 WMFont** */
                 &fwin->titlebar->width,
-                                    /* 5 suggested width */
-                &tb                 /* 6 suggested height */
+                                    /* 4 suggested width */
+                &tb                 /* 5 suggested height */
                 );
-        scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->proc.drawString(
+        scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->proc.drawString[W_DSPROC_DRAWSTRING](
                 scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->arg,
                 fwin->titlebar->window,
                 x, 0, 
-                fwin->title, strlen(fwin->title), p);
-        free(p);
+                title, strlen(fwin->title), pd);
+        wfree(pd);
     } else {
         WMDrawString(scr->wmscreen, fwin->titlebar->window, 
                 *fwin->title_gc, *fwin->font,

@@ -22,6 +22,9 @@
  * $Id$
  *
  * $Log$
+ * Revision 1.3  2000/12/11 03:10:26  id
+ * changes related to plugin system & drawstring
+ *
  * Revision 1.2  2000/12/03 22:18:20  id
  * initiate
  *
@@ -40,6 +43,11 @@
 #include <X11/Xlib.h>
 
 #include <wraster.h>
+
+typedef struct _WPluginData {
+        int size;
+            void **array;
+} WPluginData;
 
 extern void initWindowMaker (Display *d, Colormap c);
 extern int start_image (const char *name, int argc, int argc_min, int argc_max,

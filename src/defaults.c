@@ -2212,8 +2212,10 @@ getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
             elem = PLGetArrayElement(value, 2); /* function name */
             if (!elem || !PLIsString(elem)) return False;
             func = PLGetString(elem);
-            scr->drawstring_func[changed] = wPluginCreateFunction (W_FUNCTION_DRAWSTRING,
-                    lib, "initDrawString", func, "destroyDrawString", value,
+            scr->drawstring_func[changed] = wPluginCreateFunction(W_FUNCTION_DRAWSTRING,
+                    lib, "initDrawString",
+                    wPluginPackData(2, func, "widthOfString"),
+                    "destroyDrawString", value,
                     wPluginPackData(3, dpy, &scr->w_colormap, "dummy"));
         }
 

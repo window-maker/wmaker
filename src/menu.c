@@ -731,6 +731,14 @@ paintEntry(WMenu *menu, int index, int selected)
     WScreen *scr=menu->frame->screen_ptr;
     Window win = menu->menu->window;
     WMenuEntry *entry=menu->entries[index];
+#ifdef DRAWSTRING_PLUGIN
+    Pixmap tmp_bg;
+    Pixmap *texture_data;
+    WPluginData *p;
+    int _y;
+    int tb = menu->entry_height; /* convert short into int */
+#endif
+        
 
     if (!menu->flags.realized) return;
     h = menu->entry_height;
@@ -800,12 +808,6 @@ paintEntry(WMenu *menu, int index, int selected)
 
 #ifdef DRAWSTRING_PLUGIN
     if (scr->drawstring_func[W_STRING_MTEXT]) {
-        Pixmap tmp_bg;
-        Pixmap *texture_data;
-        void **p;
-        int _y;
-        int tb = menu->entry_height; /* convert short into int */
-        
         _y = (wPreferences.menu_style == MS_NORMAL) ? 0 : y;
         texture_data = menu->flags.brother ?
             &menu->brother->menu_texture_data : &menu->menu_texture_data;
@@ -835,10 +837,9 @@ paintEntry(WMenu *menu, int index, int selected)
                 &textGC,
                 scr->menu_entry_font,
                 &menu->frame->core->width,
-                &tb,
-                "extendable");
+                &tb, "extendable");
 
-        scr->drawstring_func[W_STRING_MTEXT]->proc.drawString(
+        scr->drawstring_func[W_STRING_MTEXT]->proc.drawString[W_DSPROC_DRAWSTRING](
                 scr->drawstring_func[W_STRING_MTEXT]->arg,
                 win,
                 x, y,
@@ -908,11 +909,54 @@ paintEntry(WMenu *menu, int index, int selected)
     /* draw right text */
     
     if (entry->rtext && entry->cascade<0) {
+
+#ifdef DRAWSTRING_PLUGIN
+    if (scr->drawstring_func[W_STRING_MTEXT]) {
+        /*
+        p = wPluginPackData(1, scr->drawstring_func[W_STRING_MTEXT]->data);
+        scr->drawstring_func[W_STRING_MTEXT]->proc.widthOfString[W_DSPROC_WIDTHOFSTRING](
+                entry->rtext, strlen(entry->rtext), p, &tw, NULL, NULL);
+        wfree(p);
+
+        texture_data = menu->flags.brother ?
+            &menu->brother->menu_texture_data : &menu->menu_texture_data;
+
+        tmp_bg = XCreatePixmap(dpy, win, w, menu->entry_height,
+                DefaultDepth(dpy, DefaultScreen(dpy)));
+
+        XCopyArea(dpy, win, tmp_bg, textGC,
+                0, y, w, menu->entry_height, 0, 0);
+
+        p = wPluginPackData(6,
+                scr->drawstring_func[W_STRING_MTEXT]->data,
+                &tmp_bg,
+                &textGC,
+                scr->menu_entry_font,
+                &menu->frame->core->width,
+                &tb, "extendable");
+
+        scr->drawstring_func[W_STRING_MTEXT]->proc.drawString[W_DSPROC_DRAWSTRING](
+                scr->drawstring_func[W_STRING_MTEXT]->arg,
+                win,
+                w-0-tw, y,
+                entry->rtext, strlen(entry->rtext), p);
+
+        XFreePixmap(dpy, tmp_bg);
+
+        free(p);
+        */
+    } else {
+        tw = WMWidthOfString(scr->menu_entry_font, entry->rtext,
+                strlen(entry->rtext));
+        WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, w-6-tw, 
+                y + 3 + wPreferences.menu_text_clearance, entry->rtext, strlen(entry->rtext));
+    }
+#else
 	tw = WMWidthOfString(scr->menu_entry_font, entry->rtext,
 			     strlen(entry->rtext));
-
-	WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, w-6-tw, 
-		     y + 3 + wPreferences.menu_text_clearance, entry->rtext, strlen(entry->rtext));
+    WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, w-6-tw, 
+            y + 3 + wPreferences.menu_text_clearance, entry->rtext, strlen(entry->rtext));
+#endif
     }
 }
 

@@ -48,6 +48,7 @@
 #include "dialog.h"
 #include "xutil.h"
 #include "xmodifier.h"
+#include "plugin.h"
 
 
 /**** global variables *****/
@@ -420,23 +421,45 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 
 
 char*
+#ifdef DRAWSTRING_PLUGIN
+ShrinkString(WMFont *font, char *string, int width, WFunction *func)
+#else
 ShrinkString(WMFont *font, char *string, int width)
+#endif
 {
     int w, w1=0;
     int p;
     char *pos;
     char *text;
     int p1, p2, t;
+#ifdef DRAWSTRING_PLUGIN
+    WPluginData *pd;
+#endif
 
     if (wPreferences.multi_byte_text)
 	return wstrdup(string);
 
     p = strlen(string);
+#ifdef DRAWSTRING_PLUGIN
+    if (func) {
+        pd = wPluginPackData(1, func->data);
+        func->proc.widthOfString[W_DSPROC_WIDTHOFSTRING](
+                string, strlen(string), pd, &w, NULL, NULL);
+    } else w = WMWidthOfString(font, string, p);
+#else
     w = WMWidthOfString(font, string, p);
+#endif
     text = wmalloc(strlen(string)+8);
     strcpy(text, string);
     if (w<=width)
+#ifdef DRAWSTRING_PLUGIN
+    {
+        if (func) wfree(pd);
+        return text;
+    }
+#else
       return text;
+#endif
 
     pos = strchr(text, ' ');
     if (!pos)
@@ -445,7 +468,14 @@ ShrinkString(WMFont *font, char *string, int width)
     if (pos) {
 	*pos = 0;
 	p = strlen(text);
-	w1 = WMWidthOfString(font, text, p);
+#ifdef DRAWSTRING_PLUGIN
+    if (func) {
+        func->proc.widthOfString[W_DSPROC_WIDTHOFSTRING](
+                text, strlen(text), pd, &w1, NULL, NULL);
+    } else w1 = WMWidthOfString(font, text, p);
+#else
+    w1 = WMWidthOfString(font, text, p);
+#endif
 	if (w1 > width) {
 	    w1 = 0;
 	    p = 0;
@@ -462,14 +492,28 @@ ShrinkString(WMFont *font, char *string, int width)
 	*text=0;
     }
     strcat(text, "...");
+#ifdef DRAWSTRING_PLUGIN
+    if (func) {
+        func->proc.widthOfString[W_DSPROC_WIDTHOFSTRING](
+                "...", 3, pd, &w1, NULL, NULL);
+    } else w1 = WMWidthOfString(font, "...", 3);
+    width -= w1;
+#else
     width -= WMWidthOfString(font, "...", 3);
-    
+#endif
     pos = string;
     p1=0;
     p2=p;
     t = (p2-p1)/2;
     while (p2>p1 && p1!=t) {
+#ifdef DRAWSTRING_PLUGIN
+    if (func) {
+        func->proc.widthOfString[W_DSPROC_WIDTHOFSTRING](
+                &string[p-t], t, pd, &w, NULL, NULL);
+    } else w = WMWidthOfString(font, &string[p-t], t);
+#else
 	w = WMWidthOfString(font, &string[p-t], t);
+#endif
 	if (w>width) {
 	    p2 = t;
 	    t = p1+(p2-p1)/2;
@@ -479,6 +523,9 @@ ShrinkString(WMFont *font, char *string, int width)
 	} else 
 	  p2=p1=t;
     }
+#ifdef DRAWSTRING_PLUGIN
+    if (func) wfree(pd);
+#endif
     strcat(text, &string[p-p1]);
 
     return text;

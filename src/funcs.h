@@ -26,6 +26,9 @@
 #include <stdio.h>
 
 #include "window.h"
+#ifdef DRAWSTRING_PLUGIN
+#include "plugin.h"
+#endif
 
 typedef void (WCallBack)(void *cdata);
 
@@ -116,7 +119,11 @@ WWindow *NextToFocusBefore(WWindow *wwin);
 
 void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y);
 
+#ifdef DRAWSTRING_PLUGIN
+char *ShrinkString(WMFont *font, char *string, int width, WFunction *func);
+#else
 char *ShrinkString(WMFont *font, char *string, int width);
+#endif
 
 char *FindImage(char *paths, char *file);
 

@@ -39,6 +39,11 @@
 #define W_FUNCTION_ANY 0
 #define W_FUNCTION_DRAWSTRING 1
 
+typedef struct _WPluginData {
+    int size;
+    void **array;
+} WPluginData;
+
 typedef void _DL_AnyProc(proplist_t);
 
 /* first 3 must == WS_FOCUSED WS_UNFOCUSED WS_PFOCUSED -- ]d */
@@ -50,27 +55,29 @@ typedef void _DL_AnyProc(proplist_t);
 #define W_STRING_MTEXT  4
 #define W_STRING_MEMBERS 5
 
-typedef void _DL_DrawStringProc(proplist_t, Drawable, int, int, char*, int, void**);
+typedef void _DL_DrawStringProc(proplist_t, Drawable, int, int, char*, int, WPluginData*);
+typedef void _DL_WidthStringProc(char*, int, WPluginData*, int*, int*, int*);
 #endif
 
-typedef void _DL_FreeDataProc(proplist_t pl, void *free_data);
+typedef void _DL_FreeDataProc(proplist_t pl, WPluginData *free_data);
 
-typedef int _DL_InitDataProc(proplist_t pl, void *init_data); /* prototype
-                                                                 for function
-                                                                 initializer
-                                                                 */
+typedef int _DL_InitDataProc(proplist_t pl, WPluginData *init_data);
+                                        /* prototype for function initializer */
+
+#define W_DSPROC_DRAWSTRING 0
+#define W_DSPROC_WIDTHOFSTRING 1
+#define W_DSPROC_MEMBERS 2
 
 typedef struct _WFunction {
     int type;
     void *handle;
     proplist_t arg;
-    void *data;
+    WPluginData *data;
     _DL_FreeDataProc *freeData;
     union {
-        _DL_AnyProc *any;
-#ifdef DRAWSTRING_PLUGIN
-        _DL_DrawStringProc *drawString;
-#endif
+        _DL_AnyProc **any;
+        _DL_DrawStringProc **drawString;
+        _DL_WidthStringProc **widthOfString;
     } proc;
     /*
     char *libraryName;
@@ -90,11 +97,11 @@ typedef struct _WFunction {
  */
 
 WFunction* wPluginCreateFunction(int type, char *library_name,
-        char *init_proc_name, char *proc_name, char *free_data_proc_name,
-        proplist_t pl_arg, void *init_data);
+        char *init_proc_name, WPluginData *funcs, char *free_data_proc_name,
+        proplist_t pl_arg, WPluginData *init_data);
 
 void wPluginDestroyFunction(WFunction *function);
 
-void** wPluginPackData(int members, ...);
+WPluginData* wPluginPackData(int members, ...);
 
 #endif

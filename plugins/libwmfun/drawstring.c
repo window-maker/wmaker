@@ -37,8 +37,7 @@ typedef struct __FreeTypeData{
     RColor color;
     WMFreeTypeRImage **glyphs_array;
     WMFreeTypeRImage **glyphs_shadow_array;
-    /* will use this when we have frame window plugin */
-    /* char *last_titlestr; */
+    void (*strwidth)();
 } WMFreeTypeData;
 #endif /* USE_FREETYPE */
 
@@ -60,14 +59,15 @@ initDrawPlainString(Display *dpy, Colormap *cmap) {
 }
 
 void
-destroyDrawPlainString(proplist_t pl, void **func_data) {
+destroyDrawPlainString(proplist_t pl, WPluginData *func_data) {
     return;
 }
 
+/* FIX FIX FIX */
 void
 drawPlainString (proplist_t pl, Drawable d,
         int x, int y, unsigned width, unsigned height,
-        char *text, void **func_data)
+        char *text, WPluginData *func_data)
 {
     XColor color1, color2, color3, color4;
     char *plcolor;
@@ -78,8 +78,8 @@ drawPlainString (proplist_t pl, Drawable d,
     WMFont *font;
 
     length = strlen(text);
-    gc = func_data[0];
-    font = func_data[1];
+    gc = func_data->array[2]; 
+    font = func_data->array[3];
 
 
     /*
@@ -188,15 +188,43 @@ WMFreeTypeRImage *renderChar(FT_Face face, FT_ULong char_index, RColor *color) {
     return tmp_data;
 }
 
+void
+widthOfFreeTypeString (unsigned char *text, int length, WPluginData *func_data,
+        int *width, int *height, int *top) {
+    WMFreeTypeData *data;
+    RImage *rimg;
+    int i;
+
+    /* see framewin.c for the order of arguments (look in wPluginPackData) */
+    data = ((WPluginData*)func_data->array[0])->array[2]; /* initialized data */
+
+    if (width) *width = 0;
+    /* may finish height & top later if they really are neccessary */
+
+    /* create temp for drawing */
+    for (i = 0; i < length; i++) {
+        if (!data->glyphs_array[text[i]]) {
+            data->glyphs_array[text[i]] = renderChar(data->face, (FT_ULong)text[i], &data->color);
+            data->glyphs_shadow_array[text[i]] = renderChar(data->face, (FT_ULong)text[i], &black_color);
+        }
+        if (data->glyphs_array[text[i]])
+        if (data->glyphs_array[text[i]]->image) {
+            if (width)
+            *width += data->glyphs_array[text[i]]->advance_x >> 6;
+        }
+    }
+}
+
+
 /* drawFreeTypeString */
-void initDrawFreeTypeString(proplist_t pl, void **init_data) {
+void initDrawFreeTypeString(proplist_t pl, WPluginData *init_data) {
     WMFreeTypeData *data;
     XColor xcolor;
 
-    _debug("invoke initDrawFreeTypeString with init_data[3] %s\n", init_data[3]);
-
+    _debug("invoke initDrawFreeTypeString with init_data[3] %s\n",
+            init_data->array[2]);
     _debug("%x is ds_dpy\n", ds_dpy);
-    initDrawPlainString((Display *)init_data[1], (Colormap *)init_data[2]);
+    initDrawPlainString((Display *)init_data->array[0], (Colormap *)init_data->array[1]);
     _debug("then %x is ds_dpy\n", ds_dpy);
 
     /* set init_data[2] to array of RImage */
@@ -205,8 +233,8 @@ void initDrawFreeTypeString(proplist_t pl, void **init_data) {
     * this would better to have sharable font system but
     * I want to see this more in WINGs though -- ]d
     */
-    init_data[3] = malloc(sizeof(WMFreeTypeData));
-    data = init_data[3];
+    init_data->array[2] = malloc(sizeof(WMFreeTypeData));
+    data = init_data->array[2];
     getColor(PLGetString(PLGetArrayElement(pl, 3)), ds_cmap, &xcolor);
     data->color.red = xcolor.red >> 8;
     data->color.green = xcolor.green >> 8;
@@ -216,6 +244,7 @@ void initDrawFreeTypeString(proplist_t pl, void **init_data) {
     memset(data->glyphs_array, 0, sizeof(WMFreeTypeRImage*) * MAX_GLYPHS);
     data->glyphs_shadow_array = malloc(sizeof(WMFreeTypeRImage*) * MAX_GLYPHS);
     memset(data->glyphs_shadow_array, 0, sizeof(WMFreeTypeRImage*) * MAX_GLYPHS);
+    data->strwidth = widthOfFreeTypeString;
 
     if (!rc) {
         RContextAttributes rcattr;
@@ -239,11 +268,11 @@ void initDrawFreeTypeString(proplist_t pl, void **init_data) {
 }
 
 void
-destroyDrawFreeTypeString(proplist_t pl, void **func_data) {
+destroyDrawFreeTypeString(proplist_t pl, WPluginData *func_data) {
     int i; /* error? no no no */
     WMFreeTypeData *data;
 
-    data = (WMFreeTypeData *) func_data[3];
+    data = (WMFreeTypeData *) func_data->array[2];
     for (i = 0; i < MAX_GLYPHS; i++) {
         if (data->glyphs_array[i]) {
             if (data->glyphs_array[i]->image)
@@ -305,10 +334,11 @@ logicalCombineArea(RImage *bg, RImage *image,
     }
 }
 
+
 void
 drawFreeTypeString (proplist_t pl, Drawable d,
         int x, int y, 
-        unsigned char *text, int length, void **func_data) {
+        unsigned char *text, int length, WPluginData *func_data) {
     WMFreeTypeData *data;
     RImage *rimg;
     int i, j, width, height;
@@ -318,16 +348,16 @@ drawFreeTypeString (proplist_t pl, Drawable d,
     Window wdummy;
 
     /* see framewin.c for the order of arguments (look in wPluginPackData) */
-    data = ((void **)func_data[1])[3]; /* initialized data */
-    if (func_data[2])
-        pixmap = *(Pixmap *)func_data[2];
-    gc = *(GC *)func_data[3];
-    width = *(int *)func_data[5];
-    height = *(int *)func_data[6];
+    data = ((WPluginData*)func_data->array[0])->array[2]; /* initialized data */
+    if (func_data->array[1])
+        pixmap = *(Pixmap *)func_data->array[1];
+    gc = *(GC *)func_data->array[2];
+    width = *(int *)func_data->array[4];
+    height = *(int *)func_data->array[5];
 
 
     /* create temp for drawing */
-    if (!func_data[2]) {
+    if (!func_data->array[1]) {
         XGetGeometry(ds_dpy, d, &wdummy, &dummy, &dummy, &xwidth, &xheight, &dummy, &dummy);
         pixmap = XCreatePixmap(ds_dpy, d, xwidth, xheight, DefaultDepth(ds_dpy, DefaultScreen(ds_dpy)));
         XClearWindow(ds_dpy, d);
@@ -368,13 +398,6 @@ drawFreeTypeString (proplist_t pl, Drawable d,
         XFreePixmap(ds_dpy, pixmap);
         RDestroyImage(rimg);
 
-        /*
-        _debug("%d\n", height);
-        i = (height + data->face->size->metrics.y_ppem)/2 - data->face->size->metrics.y_ppem;
-        XDrawLine(ds_dpy, d, gc, 5, y + i, 100, y + data->face->size->metrics.y_ppem);
-        XDrawLine(ds_dpy, d, gc, 100, y + i, 5, y + data->face->size->metrics.y_ppem);
-        */
-
     }
 }
  
@@ -383,18 +406,27 @@ drawFreeTypeString (proplist_t pl, Drawable d,
 /* core */
 
 void
-destroyDrawString (proplist_t pl, void **init_data) {
+destroyDrawString (proplist_t pl, WPluginData *init_data) {
     if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawPlainString") == 0) 
-        destroyDrawPlainString((Display *)init_data[0], NULL);
+        destroyDrawPlainString((Display *)init_data->array[0], NULL);
     else if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawFreeTypeString") == 0) 
         destroyDrawFreeTypeString(pl, init_data);
 }
 
 void
-initDrawString (proplist_t pl, void **init_data) {
+widthOfString (unsigned char *text, int length, WPluginData *func_data,
+        int *width, int *height, int *top) {
+    WMFreeTypeData *data;
+
+    data = ((WPluginData*)func_data->array[0])->array[2];
+    data->strwidth(text, length, func_data, width, height, top);
+}
+
+void
+initDrawString (proplist_t pl, WPluginData *init_data) {
     _debug("invoke initDrawString: %s\n", PLGetString(PLGetArrayElement(pl, 2)));
     if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawPlainString") == 0) 
-        initDrawPlainString((Display *)init_data[1], (Colormap *)init_data[2]);
+        initDrawPlainString((Display *)init_data->array[0], (Colormap *)init_data->array[1]);
 #ifdef USE_FREETYPE
     else if (strcmp(PLGetString(PLGetArrayElement(pl, 2)), "drawFreeTypeString") == 0) 
         initDrawFreeTypeString(pl, init_data);

@@ -45,30 +45,33 @@
 #include <proplist.h>
 
 
-void** 
+WPluginData* 
 wPluginPackData(int members, ...) 
 {
     void **p;
     va_list vp;
     int i;
-    p = wmalloc(sizeof(void *) * (members + 1));
-    memset(p, 0, sizeof(void *) * (members + 1));
-    p[0] = (void *)members;
+    WPluginData *data;
+    data = wmalloc(sizeof(WPluginData));
+    data->size = members;
+    data->array = wmalloc(sizeof(void *) * (members));
+    memset(data->array, 0, sizeof(void *) * (members));
     va_start(vp, members);
-    for(i=1;i<members+1;i++) {
-        p[i] = va_arg(vp, void *);
+    for(i=0;i<members;i++) {
+        data->array[i] = va_arg(vp, void *);
     }
     va_end(vp);
-    return p;
+    return data;
 }
 
 WFunction *
 wPluginCreateFunction(int type, char *library_name,
-        char *init_proc_name, char *proc_name, char *free_data_proc_name,
-        proplist_t pl_arg, void *init_data) 
+        char *init_proc_name, WPluginData *proc_name, char *free_data_proc_name,
+        proplist_t pl_arg, WPluginData *init_data) 
 {
     WFunction *function;
     _DL_InitDataProc *initProc;
+    int i;
 
     function = wmalloc(sizeof(WFunction));
     memset(function, 0, sizeof(WFunction));
@@ -80,12 +83,17 @@ wPluginCreateFunction(int type, char *library_name,
         return NULL;
     }
 
-    function->proc.any = dlsym(function->handle, proc_name);
-    if (!function->proc.any) {
-        wwarning(_("function \"%s\" not found in library \"%s\""), proc_name, library_name);
-        dlclose(function->handle);
-        wfree(function);
-        return NULL;
+    i = proc_name->size;
+    function->proc.any = wmalloc(sizeof(_DL_AnyProc) * i);
+    for (i = 0; i < proc_name->size; i++) {
+        function->proc.any[i] = dlsym(function->handle, (char *)proc_name->array[i]);
+        if (!function->proc.any[i]) {
+            wwarning(_("function \"%s\" not found in library \"%s\""), proc_name, library_name);
+            dlclose(function->handle);
+            wfree(function->proc.any);
+            wfree(function);
+            return NULL;
+        }
     }
 
     if (free_data_proc_name) {
@@ -129,6 +137,7 @@ wPluginDestroyFunction(WFunction *function)
         wfree(function->data);
     }
     if (function->arg) PLRelease(function->arg);
+    if (function->proc.any) wfree(function->proc.any);
     wfree(function);
     return;
 }
