@@ -293,6 +293,8 @@ wSessionSaveState(WScreen *scr)
 
     list = PLMakeArrayFromElements(NULL);
 
+    wapp_list = WMCreateBag(16);
+
     while (wwin) {
         WApplication *wapp=wApplicationOf(wwin->main_window);
 
