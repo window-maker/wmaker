@@ -2,6 +2,22 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.60.1
+
+
+Window Edge Attraction
+----------------------
+
+Window edge attraction was now added.
+
+Attraction = YES/NO;
+
+will enable/disable gravity to edge's boder.
+The strength of gravity can be controled by modify `EdgeResistance' value
+in WindowMaker configuration file.
+
+
+
 --- 0.60.0
 
 
