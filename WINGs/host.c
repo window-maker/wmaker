@@ -1,8 +1,8 @@
 /*
  *  WINGs WMHost function library
- * 
+ *
  *  Copyright (c) 1999 Dan Pascu
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -35,8 +35,6 @@ typedef struct W_Host {
 
     WMBag  *names;
     WMBag  *addresses;
-    int    nameCount;
-    int    addressCount;
 
     int    refCount;
 } W_Host;
@@ -48,6 +46,56 @@ static Bool hostCacheEnabled = True;
 
 /* Max hostname length (RFC  1123) */
 #define	W_MAXHOSTNAMELEN	255
+
+
+static WMHost*
+getHostFromCache(char *name)
+{
+    if (!hostCache)
+        return NULL;
+
+    return WMHashGet(hostCache, name);
+}
+
+
+static WMHost*
+getHostWithHostEntry(struct hostent *host, char *name)
+{
+    WMHost *hPtr;
+    struct in_addr in;
+    int i;
+
+    hPtr = (WMHost*)wmalloc(sizeof(WMHost));
+    memset(hPtr, 0, sizeof(WMHost));
+
+    hPtr->names = WMCreateBag(1);
+    hPtr->addresses = WMCreateBag(1);
+
+    WMPutInBag(hPtr->names, wstrdup(host->h_name));
+
+    for (i=0; host->h_aliases[i]!=NULL; i++) {
+        WMPutInBag(hPtr->names, wstrdup(host->h_aliases[i]));
+    }
+
+    for (i=0; host->h_addr_list[i]!=NULL; i++) {
+        memcpy((void*)&in.s_addr, (const void*)host->h_addr_list[i],
+               host->h_length);
+        WMPutInBag(hPtr->addresses, wstrdup(inet_ntoa(in)));
+    }
+
+    hPtr->refCount = 1;
+
+    if (hostCacheEnabled) {
+        if (!hostCache)
+            hostCache = WMCreateHashTable(WMStringPointerHashCallbacks);
+        hPtr->name = wstrdup(name);
+        wassertr(WMHashInsert(hostCache, hPtr->name, hPtr)==NULL);
+        hPtr->refCount++;
+    }
+
+    return hPtr;
+}
+
 
 WMHost*
 WMGetCurrentHost()
@@ -69,59 +117,26 @@ WMHost*
 WMGetHostWithName(char* name)
 {
     struct hostent *host;
-    struct in_addr in;
     WMHost *hPtr;
-    int i;
 
     if (name == NULL) {
         wwarning("NULL host name in 'WMGetHostWithName()'");
         return NULL;
     }
 
-    if (!hostCache)
-        hostCache = WMCreateHashTable(WMStringPointerHashCallbacks);
-
-    hPtr = WMHashGet(hostCache, name);
-    if (hPtr) {
-        WMRetainHost(hPtr);
-        return hPtr;
+    if (hostCacheEnabled) {
+        if ((hPtr = getHostFromCache(name)) != NULL) {
+            WMRetainHost(hPtr);
+            return hPtr;
+        }
     }
 
     host = gethostbyname(name);
     if (host == NULL) {
-        wwarning("Invalid host name/address '%s'", name);
         return NULL;
     }
 
-    hPtr = (WMHost*)wmalloc(sizeof(WMHost));
-    memset(hPtr, 0, sizeof(WMHost));
-
-    hPtr->names = WMCreateBag(1);
-    hPtr->addresses = WMCreateBag(1);
-
-    WMPutInBag(hPtr->names, wstrdup(host->h_name));
-
-    for (i=0; host->h_aliases[i]!=NULL; i++) {
-        WMPutInBag(hPtr->names, wstrdup(host->h_aliases[i]));
-    }
-
-    hPtr->nameCount = WMGetBagItemCount(hPtr->names);
-
-    for (i=0; host->h_addr_list[i]!=NULL; i++) {
-        memcpy((void*)&in.s_addr, (const void*)host->h_addr_list[i],
-               host->h_length);
-        WMPutInBag(hPtr->addresses, wstrdup(inet_ntoa(in)));
-    }
-
-    hPtr->addressCount = WMGetBagItemCount(hPtr->addresses);
-
-    hPtr->refCount = 1;
-
-    if (hostCacheEnabled) {
-        hPtr->name = wstrdup(name);
-        wassertr(WMHashInsert(hostCache, hPtr->name, hPtr)==NULL);
-        hPtr->refCount++;
-    }
+    hPtr = getHostWithHostEntry(host, name);
 
     return hPtr;
 }
@@ -130,20 +145,38 @@ WMGetHostWithName(char* name)
 WMHost*
 WMGetHostWithAddress(char* address)
 {
+    struct hostent *host;
+    struct in_addr in;
+    WMHost *hPtr;
+
     if (address == NULL) {
         wwarning("NULL address in 'WMGetHostWithAddress()'");
         return NULL;
     }
 
-    return WMGetHostWithName(address);
-#if 0
-    hostaddr.s_addr = inet_addr((char*)[address cString]);
-    if (hostaddr.s_addr == -1) {
+    if (hostCacheEnabled) {
+        if ((hPtr = getHostFromCache(address)) != NULL) {
+            WMRetainHost(hPtr);
+            return hPtr;
+        }
+    }
+
+#ifndef	HAVE_INET_ATON
+    if ((in.s_addr = inet_addr(address)) == INADDR_NONE)
+        return NULL;
+#else
+    if (inet_aton(address, &in.s_addr) == 0)
+        return NULL;
+#endif
+
+    host = gethostbyaddr((char*)&in, sizeof(in), AF_INET);
+    if (host == NULL) {
         return NULL;
     }
 
-    h = gethostbyaddr((char*)&hostaddr, sizeof(hostaddr), AF_INET);
-#endif
+    hPtr = getHostWithHostEntry(host, address);
+
+    return hPtr;
 }
 
 
@@ -228,7 +261,7 @@ WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
     if (hPtr == aPtr)
         return True;
 
-    for (i=0; i<aPtr->addressCount; i++) {
+    for (i=0; i<WMGetBagItemCount(aPtr->addresses); i++) {
         if (WMGetFirstInBag(hPtr->addresses, WMGetFromBag(aPtr->addresses, i)))
             return True;
     }
@@ -240,7 +273,9 @@ WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
 char*
 WMGetHostName(WMHost *hPtr)
 {
-    return WMGetFromBag(hPtr->names, 0);
+    return (WMGetBagItemCount(hPtr->names) > 0 ?
+            WMGetFromBag(hPtr->names, 0) : NULL);
+    /*return WMGetFromBag(hPtr->names, 0);*/
 }
 
 
@@ -254,7 +289,8 @@ WMGetHostNames(WMHost *hPtr)
 char*
 WMGetHostAddress(WMHost *hPtr)
 {
-    return (hPtr->addressCount > 0 ? WMGetFromBag(hPtr->addresses, 0) : NULL);
+    return (WMGetBagItemCount(hPtr->addresses) > 0 ?
+            WMGetFromBag(hPtr->addresses, 0) : NULL);
 }
 
 

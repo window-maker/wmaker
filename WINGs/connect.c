@@ -132,11 +132,16 @@ static void
 didInitialize(ConnectionDelegate *self, WMConnection *cPtr)
 {
     int state = WMGetConnectionState(cPtr);
+    WMHost *host;
 
     if (state == WCConnected) {
-        fprintf(stderr, "connected to '%s:%s'\n", WMGetConnectionAddress(cPtr),
+        host = WMGetHostWithAddress(WMGetConnectionAddress(cPtr));
+        fprintf(stderr, "connected to '%s:%s'\n",
+                host?WMGetHostName(host):WMGetConnectionAddress(cPtr),
                 WMGetConnectionService(cPtr));
         initialized = 1;
+        if (host)
+            WMReleaseHost(host);
         return;
     } else {
         wsyserrorwithcode(WCErrorCode, "Unable to connect");
