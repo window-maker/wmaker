@@ -21,9 +21,6 @@ xpmdata_DATA = \
 	menualign2.xpm \
 	menuprefs.xpm \
 	menus.xpm \
-	minimouseleft.xpm \
-	minimousemiddle.xpm \
-	minimouseright.xpm \
 	miscprefs2.xpm \
 	moreanim.xpm \
 	mousesettings.xpm \

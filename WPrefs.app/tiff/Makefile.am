@@ -21,9 +21,6 @@ tiffdata_DATA = \
 	menualign2.tiff \
 	menuprefs.tiff \
 	menus.tiff \
-	minimouseleft.tiff \
-	minimousemiddle.tiff \
-	minimouseright.tiff \
 	miscprefs2.tiff \
 	moreanim.tiff \
 	mousesettings.tiff \
