@@ -360,32 +360,39 @@ drawTitle(WSwitchPanel *panel, int index, char *title)
     int width= WMWidgetWidth(panel->win);
     int x;
 
-    ntitle= ShrinkString(panel->font, title, width-2*BORDER_SPACE);
+    if (title)
+        ntitle= ShrinkString(panel->font, title, width-2*BORDER_SPACE);
+    else
+        ntitle= NULL;
 
     if (panel->bg) {
-        if (strcmp(ntitle, title)!=0)
-          x= BORDER_SPACE;
-        else
-        {
-            int w= WMWidthOfString(panel->font, ntitle, strlen(ntitle));
-            
-            x= BORDER_SPACE+(index-panel->firstVisible)*ICON_TILE_SIZE + ICON_TILE_SIZE/2 - w/2;
-            if (x < BORDER_SPACE)
+        if (ntitle) {
+            if (strcmp(ntitle, title)!=0)
               x= BORDER_SPACE;
-            else if (x + w > width-BORDER_SPACE)
-              x= width-BORDER_SPACE-w;
-        }
-        
+            else
+            {
+                int w= WMWidthOfString(panel->font, ntitle, strlen(ntitle));
+            
+                x= BORDER_SPACE+(index-panel->firstVisible)*ICON_TILE_SIZE + ICON_TILE_SIZE/2 - w/2;
+                if (x < BORDER_SPACE)
+                    x= BORDER_SPACE;
+                else if (x + w > width-BORDER_SPACE)
+                    x= width-BORDER_SPACE-w;
+            }
+        }       
         XClearWindow(dpy, WMWidgetXID(panel->win));
-        WMDrawString(panel->scr->wmscreen, 
-                     WMWidgetXID(panel->win),
-                     panel->white, panel->font,
-                     x, WMWidgetHeight(panel->win) - BORDER_SPACE - LABEL_HEIGHT + WMFontHeight(panel->font)/2,
-                     ntitle, strlen(ntitle));
+        if (ntitle)
+            WMDrawString(panel->scr->wmscreen, 
+                         WMWidgetXID(panel->win),
+                         panel->white, panel->font,
+                         x, WMWidgetHeight(panel->win) - BORDER_SPACE - LABEL_HEIGHT + WMFontHeight(panel->font)/2,
+                         ntitle, strlen(ntitle));
     } else {
-        WMSetLabelText(panel->label, ntitle);
+        if (ntitle)
+            WMSetLabelText(panel->label, ntitle);
     }
-    free(ntitle);
+    if (ntitle)
+        free(ntitle);
 }
 
 
