@@ -62,7 +62,7 @@ RLoadGIF(RContext *context, char *file, int index)
     RErrorCode = RERR_BADINDEX;
 
     gif = DGifOpenFileName(file);
-    
+
     if (!gif) {
 	switch (GifLastError()) {
 	 case D_GIF_ERR_OPEN_FAILED:
@@ -76,6 +76,12 @@ RLoadGIF(RContext *context, char *file, int index)
 	    break;
 	}
 	return NULL;
+    }
+
+    if (gif->Image.Width<1 || gif->Image.Height<1) {
+        DGifCloseFile(gif);
+	RErrorCode = RERR_BADIMAGEFILE;
+        return NULL;
     }
 
     colormap = gif->SColorMap;
@@ -206,7 +212,7 @@ giferr:
      default:
 	RErrorCode = RERR_BADIMAGEFILE;
 	break;
-    }    
+    }
 bye:
     if (image)
 	RReleaseImage(image);

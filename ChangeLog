@@ -23,7 +23,7 @@ Changes since version 0.80.1:
 - Added kinput2 bug workaround in stock WMWindowAttributes (Seiichi SATO 
   <sato@cvs-net.co.jp>)
 - Added Belarusian translation (Ihar Viarheichyk <iverg@mail.ru>)
-- Fixed wrlib to not try to load braindead images with 0x0 size
+- Fixed wrlib not to load braindead images with 0 sized width or height
 - Removed double no-position-display when cycling position display types
   with Shift key while moving windows.
 - Changed the default position display while moving a window to 'Center'.

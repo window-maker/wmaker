@@ -81,10 +81,10 @@ RLoadTIFF(RContext *context, char *file, int index)
 	TIFFClose(tif);
 	return NULL;
     }
-      
+
     /* read data */
     ptr = data = (uint32*)_TIFFmalloc(width * height * sizeof(uint32));
-    
+
     if (!data) {
 	RErrorCode = RERR_NOMEMORY;
     } else {
