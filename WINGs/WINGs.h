@@ -203,6 +203,12 @@ enum {
 } WMRulerMargins;
 
 
+/* Insert type for WMText */
+typedef enum {
+    itAppend=0,
+    itPrepend
+} InsertType;
+
 
 /* drag operations */
 typedef enum {
@@ -513,12 +519,12 @@ typedef void WMParseAction(WMWidget *self, void *clientData, short type);
 /* these are the things parsers (for text) do */
 
 typedef struct _parserActions {
-    void *(*createParagraph) (short fmargin, short bmargin,
-        short rmargin, short *tabstops, short numTabs, WMAlignment a);
+    void *(*createParagraph) (short fmargin, short bmargin, short rmargin,
+                              short *tabstops, short numTabs, WMAlignment a);
     void (*insertParagraph) (WMText *tPtr, void *para, InsertType type);
     void *(*createPChunk) (WMPixmap *pixmap, short script, ushort ul);
-    void *(*createTChunk) (char *text, short chars, WMFont *font, 
-        WMColor *color, short script, ushort ul);
+    void *(*createTChunk) (char *text, short chars, WMFont *font,
+                           WMColor *color, short script, ushort ul);
     void (*insertChunk) (WMText *tPtr, void *chunk, InsertType type);
 } WMParserActions;
 
