@@ -102,7 +102,7 @@ AC_FUNC_VPRINTF
 AC_FUNC_ALLOCA
 AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp \
 	       setsid atexit mallinfo mkstemp snprintf vsnprintf asprintf \
-	       vasprintf mbsnrtowcs mbsrtowcs)
+	       vasprintf mbsnrtowcs mbsrtowcs mbrtowc mbrlen)
 
 
 dnl ripped from samba
@@ -1094,7 +1094,7 @@ echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
 echo "Installation path for WPrefs.app    : $wprefsdir" | sed -e 's|\$(prefix)|'"$prefix|"
 echo "Supported graphic format libraries  : $supported_gfx"
-echo "Antialiased font support for WINGs  : $xft"
+echo "Antialiased text support for WINGs  : $xft"
 echo "Xinerama extension support          : $xinerama"
 echo "Use assembly routines for wrlib     : $asm_support"
 echo "Use inline MMX(tm) x86 assembly     : $mmx_support"

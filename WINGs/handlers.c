@@ -605,7 +605,7 @@ W_HandleInputEvents(Bool waitForInput, int inputfd)
 
     return (count > 0);
 #else /* not HAVE_SELECT, not HAVE_POLL */
-    Neither select nor poll. You lose.
+# error   Neither select nor poll. You lose.
 #endif /* HAVE_SELECT */
 #endif /* HAVE_POLL */
 }

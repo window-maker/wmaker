@@ -201,12 +201,6 @@ typedef struct W_Screen {
 
     WMHashTable *fontCache;
 
-    WMHashTable *xftFontCache;
-
-    WMHashTable *fontSetCache;
-
-    WMHashTable *xftFontSetCache;
-
     Bool useMultiByte;
 
     Bool antialiasedText;

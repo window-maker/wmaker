@@ -16,6 +16,599 @@
 #include <X11/Xlocale.h>
 
 
+#ifdef XFT
+
+#if defined(HAVE_MBSNRTOWCS1)
+
+static size_t
+wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
+{
+    mbstate_t ps;
+    size_t n;
+
+    memset(&ps, 0, sizeof(mbstate_t));
+    n = mbsnrtowcs(dest, src, nbytes, len, &ps);
+    if (n!=(size_t)-1 && *src) {
+        *src -= ps.__count;
+    }
+
+    return n;
+}
+
+#elif defined(HAVE_MBRTOWC)
+
+// This is 8 times slower than the version above.
+static size_t
+wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
+{
+    mbstate_t ps;
+    const char *ptr;
+    size_t n;
+    int nb;
+
+    if (nbytes==0)
+        return 0;
+
+    ptr = *src;
+    n = 0;
+
+    memset(&ps, 0, sizeof(mbstate_t));
+
+    if (dest == NULL) {
+        for (;;) {
+            nb = mbrtowc(NULL, ptr, nbytes, &ps);
+            if (nb < 0) {
+                return ((size_t)-1);
+            } else if (nb==0 || nb>nbytes) {
+                return n;
+            }
+            ptr += nb;
+            nbytes -= nb;
+            n++;
+        }
+    }
+
+    while (len-- > 0) {
+        nb = mbrtowc(dest, ptr, nbytes, &ps);
+        if (nb == -2) {
+            *src = ptr;
+            return n;
+        } else if (nb == -1) {
+            *src = ptr;
+            return ((size_t)-1);
+        } else if (nb == 0) {
+            *src = NULL;
+            return n;
+        }
+        ptr += nb;
+        nbytes -= nb;
+        n++;
+        dest++;
+    }
+
+    *src = ptr;
+    return n;
+}
+
+#else
+# error  No mbsnrtowcs. You loose.
+#endif
+
+
+WMFont*
+WMCreateFont(WMScreen *scrPtr, char *fontName)
+{
+    WMFont *font;
+    Display *display = scrPtr->display;
+    char *fname, *ptr;
+
+    /* This is for back-compat (to allow reading of old xlfd descriptions) */
+    if (fontName[0]=='-' && (ptr = strchr(fontName, ','))) {
+	fname = wmalloc(ptr - fontName + 1);
+	strncpy(fname, fontName, ptr - fontName);
+	fname[ptr - fontName] = 0;
+    } else {
+	fname = wstrdup(fontName);
+    }
+
+    font = WMHashGet(scrPtr->fontCache, fname);
+    if (font) {
+	WMRetainFont(font);
+	wfree(fname);
+	return font;
+    }
+
+    font = wmalloc(sizeof(WMFont));
+    memset(font, 0, sizeof(WMFont));
+
+    font->screen = scrPtr;
+
+    printf("%s\n", fname);
+    if (fname[0] == '-') {
+        /* Backward compat thing. Remove in a later version */
+        font->font = XftFontOpenXlfd(display, scrPtr->screen, fname);
+    } else {
+        font->font = XftFontOpenName(display, scrPtr->screen, fname);
+    }
+    if (!font->font) {
+        wfree(font);
+        wfree(fname);
+        return NULL;
+    }
+    font->height = font->font->ascent+font->font->descent;
+    font->y = font->font->ascent;
+
+    font->refCount = 1;
+
+    font->name = fname;
+
+    assert(WMHashInsert(scrPtr->fontCache, font->name, font)==NULL);
+
+    return font;
+}
+
+
+WMFont*
+WMRetainFont(WMFont *font)
+{
+    wassertrv(font!=NULL, NULL);
+
+    font->refCount++;
+
+    return font;
+}
+
+
+void
+WMReleaseFont(WMFont *font)
+{
+    wassertr(font!=NULL);
+
+    font->refCount--;
+    if (font->refCount < 1) {
+        XftFontClose(font->screen->display, font->font);
+        if (font->name) {
+            WMHashRemove(font->screen->fontCache, font->name);
+	    wfree(font->name);
+	}
+	wfree(font);
+    }
+}
+
+
+Bool
+WMIsAntialiasingEnabled(WMScreen *scrPtr)
+{
+    return scrPtr->antialiasedText;
+}
+
+
+unsigned int
+WMFontHeight(WMFont *font)
+{
+    wassertrv(font!=NULL, 0);
+
+    return font->height;
+}
+
+
+char*
+WMGetFontName(WMFont *font)
+{
+    wassertrv(font!=NULL, NULL);
+
+    return font->name;
+}
+
+
+WMFont*
+WMDefaultSystemFont(WMScreen *scrPtr)
+{
+    return WMRetainFont(scrPtr->normalFont);
+}
+
+
+WMFont*
+WMDefaultBoldSystemFont(WMScreen *scrPtr)
+{
+    return WMRetainFont(scrPtr->boldFont);
+}
+
+
+WMFont*
+WMSystemFontOfSize(WMScreen *scrPtr, int size)
+{
+    WMFont *font;
+    char *fontSpec;
+
+    // we can here use fontnames like arial,times,sans-8:...
+    // which allow automatic fallback to times if arial is not available
+    // then sans if times is also unavailable.
+    fontSpec = makeFontSetOfSize(WINGsConfiguration.systemFont, size);
+
+    font = WMCreateFont(scrPtr, fontSpec);
+
+    if (!font) {
+        wwarning(_("could not load font %s. Trying sans."), fontSpec);
+        font = WMCreateFont(scrPtr, "sans:pixelsize=12");
+    }
+    wfree(fontSpec);
+
+    return font;
+}
+
+
+WMFont*
+WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
+{
+    WMFont *font;
+    char *fontSpec;
+
+    // we can here use fontnames like arial,times,sans-8:...
+    // which allow automatic fallback to times if arial is not available
+    // then sans if times is also unavailable.
+    fontSpec = makeFontSetOfSize(WINGsConfiguration.boldSystemFont, size);
+
+    font = WMCreateFont(scrPtr, fontSpec);
+
+    if (!font) {
+        wwarning(_("could not load font %s. Trying sans."), fontSpec);
+        font = WMCreateFont(scrPtr, "sans:bold:pixelsize=12");
+    }
+    wfree(fontSpec);
+
+    return font;
+}
+
+
+int
+WMWidthOfString(WMFont *font, char *text, int length)
+{
+    XGlyphInfo extents;
+
+    wassertrv(font!=NULL, 0);
+    wassertrv(text!=NULL, 0);
+
+    if (!font->notFontSet) {
+        wchar_t *wtext;
+        char *mtext;
+        int len;
+
+        wtext = (wchar_t *)wmalloc(sizeof(wchar_t)*(length+1));
+        mtext = text;
+        len = wmbsnrtowcs(wtext, &mtext, length, length);
+        if (len>0) {
+            wtext[len] = L'\0'; /* not really necessary here */
+            XftTextExtents32(font->screen->display, font->font,
+                             (XftChar32 *)wtext, len, &extents);
+        } else {
+            if (len==-1) {
+                wwarning(_("Conversion to widechar failed (possible "
+                           "invalid multibyte sequence): '%s':(pos %d)\n"),
+                         text, mtext-text+1);
+            }
+            extents.xOff = 0;
+        }
+        wfree(wtext);
+    } else {
+        XftTextExtents8(font->screen->display, font->font,
+                        (XftChar8 *)text, length, &extents);
+    }
+
+    return extents.xOff; /* don't ask :P */
+}
+
+
+
+void
+WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
+             int x, int y, char *text, int length)
+{
+    XftColor xftcolor;
+
+    wassertr(font!=NULL);
+
+    xftcolor.color.red = color->color.red;
+    xftcolor.color.green = color->color.green;
+    xftcolor.color.blue = color->color.blue;
+    xftcolor.color.alpha = color->alpha;;
+    xftcolor.pixel = W_PIXEL(color);
+
+    XftDrawChange(scr->xftdraw, d);
+
+    if (!font->notFontSet) {
+        wchar_t *wtext;
+        char *mtext;
+        int len;
+
+        wtext = (wchar_t *)wmalloc(sizeof(wchar_t)*(length+1));
+        mtext = text;
+        len = wmbsnrtowcs(wtext, &mtext, length, length);
+        if (len>0) {
+            XftDrawString32(scr->xftdraw, &xftcolor, font->font,
+                            x, y + font->y, (XftChar32*)wtext, len);
+        } else if (len==-1) {
+            wwarning(_("Conversion to widechar failed (possible invalid "
+                       "multibyte sequence): '%s':(pos %d)\n"),
+                     text, mtext-text+1);
+            /* we can draw normal text, or we can draw as much widechar
+             * text as was already converted until the error. go figure */
+            /*XftDrawString8(scr->xftdraw, &xftcolor, font->font,
+             x, y + font->y, (XftChar8*)text, length);*/
+        }
+        wfree(wtext);
+    } else {
+        XftDrawString8(scr->xftdraw, &xftcolor, font->font,
+                       x, y + font->y, (XftChar8*)text, length);
+    }
+}
+
+
+void
+WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background,
+                  WMFont *font, int x, int y, char *text, int length)
+{
+    XftColor textColor;
+    XftColor bgColor;
+
+    wassertr(font!=NULL);
+
+    textColor.color.red = color->color.red;
+    textColor.color.green = color->color.green;
+    textColor.color.blue = color->color.blue;
+    textColor.color.alpha = color->alpha;;
+    textColor.pixel = W_PIXEL(color);
+
+    bgColor.color.red = background->color.red;
+    bgColor.color.green = background->color.green;
+    bgColor.color.blue = background->color.blue;
+    bgColor.color.alpha = background->alpha;;
+    bgColor.pixel = W_PIXEL(background);
+
+    XftDrawChange(scr->xftdraw, d);
+
+    XftDrawRect(scr->xftdraw, &bgColor, x, y,
+                WMWidthOfString(font, text, length),
+                font->height);
+
+    if (!font->notFontSet) {
+        wchar_t *wtext;
+        char *mtext;
+        int len;
+
+        mtext = text;
+        wtext = (wchar_t *)wmalloc(sizeof(wchar_t)*(length+1));
+        len = wmbsnrtowcs(wtext, &mtext, length, length);
+        if (len>0) {
+            XftDrawString32(scr->xftdraw, &textColor, font->font,
+                            x, y + font->y, (XftChar32*)wtext, len);
+        } else if (len==-1) {
+            wwarning(_("Conversion to widechar failed (possible invalid "
+                       "multibyte sequence): '%s':(pos %d)\n"),
+                     text, mtext-text+1);
+            /* we can draw normal text, or we can draw as much widechar
+             * text as was already converted until the error. go figure */
+            /*XftDrawString8(scr->xftdraw, &textColor, font->font,
+             x, y + font->y, (XftChar8*)text, length);*/
+        }
+        wfree(wtext);
+    } else {
+        XftDrawString8(scr->xftdraw, &textColor, font->font,
+                       x, y + font->y, (XftChar8*)text, length);
+    }
+}
+
+
+
+
+static char*
+makeFontSetOfSize(char *fontset, int size)
+{
+    char font[300], *f;
+    char *newfs = NULL;
+    char *ptr;
+
+    do {
+	char *tmp;
+	int end;
+
+
+	f = fontset;
+	ptr = strchr(fontset, ',');
+	if (ptr) {
+	    int count = ptr-fontset;
+
+	    if (count > 255) {
+		wwarning(_("font description %s is too large."), fontset);
+	    } else {
+		memcpy(font, fontset, count);
+		font[count] = 0;
+		f = (char*)font;
+	    }
+	}
+
+	if (newfs)
+	    end = strlen(newfs);
+	else
+	    end = 0;
+
+	tmp = wmalloc(end + strlen(f) + 8);
+	if (end != 0) {
+	    sprintf(tmp, "%s,", newfs);
+	    sprintf(tmp + end + 1, f, size);
+	} else {
+	    sprintf(tmp + end, f, size);
+	}
+
+	if (newfs)
+	    wfree(newfs);
+	newfs = tmp;
+
+	fontset = ptr+1;
+    } while (ptr!=NULL);
+
+    return newfs;
+}
+
+
+#define FONT_PROPS 14
+
+typedef struct {
+    char *props[FONT_PROPS];
+} W_FontAttributes;
+
+
+static void
+changeFontProp(char *buf, char *newprop, int position)
+{
+    char buf2[512];
+    char *ptr, *pptr, *rptr;
+    int count;
+
+    if (buf[0]!='-') {
+        /* // remove warning later. or maybe not */
+        wwarning(_("Invalid font specification: '%s'\n"), buf);
+        return;
+    }
+
+    ptr = pptr = rptr = buf;
+    count = 0;
+    while (*ptr && *ptr!=',') {
+        if (*ptr == '-') {
+            count++;
+            if (count-1==position+1) {
+                rptr = ptr;
+                break;
+            }
+            if (count-1==position) {
+                pptr = ptr+1;
+            }
+        }
+        ptr++;
+    }
+    if (position==FONT_PROPS-1) {
+        rptr = ptr;
+    }
+
+    *pptr = 0;
+    snprintf(buf2, 512, "%s%s%s", buf, newprop, rptr);
+    strcpy(buf, buf2);
+}
+
+
+static WMArray*
+getOptions(char *options)
+{
+    char *ptr, *ptr2, *str;
+    WMArray *result;
+    int count;
+
+    result = WMCreateArrayWithDestructor(2, (WMFreeDataProc*)wfree);
+
+    ptr = options;
+    while (1) {
+        ptr2 = strchr(ptr, ',');
+        if (!ptr2) {
+            WMAddToArray(result, wstrdup(ptr));
+            break;
+        } else {
+            count = ptr2 - ptr;
+            str = wmalloc(count+1);
+            memcpy(str, ptr, count);
+            str[count] = 0;
+            WMAddToArray(result, str);
+            ptr = ptr2 + 1;
+        }
+    }
+
+    return result;
+}
+
+
+WMFont*
+WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
+                      const WMFontAttributes *changes)
+{
+    int index[FONT_PROPS], count[FONT_PROPS];
+    int totalProps, i, j, carry;
+    char fname[512];
+    WMFontFlags fFlags;
+    WMBag *props;
+    WMArray *options;
+    WMFont *result;
+    char *prop;
+
+    snprintf(fname, 512, "%s", font->name);
+
+    fFlags = (font->antialiased ? WFAntialiased : WFNotAntialiased);
+    fFlags |= (font->notFontSet ? WFNormalFont : WFFontSet);
+
+    props = WMCreateBagWithDestructor(1, (WMFreeDataProc*)WMFreeArray);
+
+    totalProps = 0;
+    for (i=0; i<FONT_PROPS; i++) {
+        prop = ((W_FontAttributes*)changes)->props[i];
+        count[i] = index[i] = 0;
+        if (!prop) {
+            /* No change for this property */
+            continue;
+        } else if (strchr(prop, ',')==NULL) {
+            /* Simple option */
+            changeFontProp(fname, prop, i);
+        } else {
+            /* Option with fallback alternatives */
+            if ((changes==WFAEmphasized || changes==WFABoldEmphasized) &&
+                font->antialiased && strcmp(prop, "o,i")==0) {
+                options = getOptions("i,o");
+            } else {
+                options = getOptions(prop);
+            }
+            WMInsertInBag(props, i, options);
+            count[i] = WMGetArrayItemCount(options);
+            if (totalProps==0)
+                totalProps = 1;
+            totalProps = totalProps * count[i];
+        }
+    }
+
+    if (totalProps == 0) {
+        /* No options with fallback alternatives at all */
+        WMFreeBag(props);
+        return WMCreateFontWithFlags(scrPtr, fname, fFlags);
+    }
+
+    for (i=0; i<totalProps; i++) {
+        for (j=0; j<FONT_PROPS; j++) {
+            if (count[j]!=0) {
+                options = WMGetFromBag(props, j);
+                prop = WMGetFromArray(options, index[j]);
+                if (prop) {
+                    changeFontProp(fname, prop, j);
+                }
+            }
+        }
+        result = WMCreateFontWithFlags(scrPtr, fname, fFlags);
+        if (result) {
+            WMFreeBag(props);
+            return result;
+        }
+        for (j=FONT_PROPS-1, carry=1; j>=0; j--) {
+            if (count[j]!=0) {
+                index[j] += carry;
+                carry = (index[j]==count[j]);
+                index[j] %= count[j];
+            }
+        }
+    }
+
+    WMFreeBag(props);
+
+    return NULL;
+}
+
+
+#else /* No XFT support */
+
 
 static char *makeFontSetOfSize(char *fontset, int size);
 
@@ -1069,6 +1662,7 @@ WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
     return NULL;
 }
 
+#endif
 
 
 // should WFANormal also set "normal" or leave it alone?
