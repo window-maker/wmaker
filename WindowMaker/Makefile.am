@@ -9,9 +9,10 @@ prefsdata_DATA =\
 	exitscript.sh\
 	menu\
 	menu.ca\
+	menu.cn\
 	menu.cz\
-	menu.de\
 	menu.da\
+	menu.de\
 	menu.el\
 	menu.es\
 	menu.fi\
@@ -32,10 +33,11 @@ prefsdata_DATA =\
 	menu.tr\
 	menu.zh_TW.Big5\
 	plmenu\
+	plmenu.cn\
+	plmenu.dk\
 	plmenu.fr\
 	plmenu.hr\
-	plmenu.dk\
-	wmmacros \
+	wmmacros\
 	xtree.dat
 
 EXTRA_DIST = $(prefsdata_DATA) mkMakefile

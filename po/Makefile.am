@@ -6,7 +6,7 @@ CLEANFILES = $(CATALOGS) WindowMaker.pot
 
 EXTRA_DIST = cs.po de.po es.po fr.po gl.po ja.po ko.po nl.po pt.po se.po it.po \
 	no.po ru.po tr.po fi.po hr.po el.po pl.po ro.po da.po zh_TW.Big5.po\
-	zh_CN.GB2312.po
+	zh_CN.GB2312.po sk.po
 
 POTFILES  = \
 	$(top_builddir)/src/appicon.c \

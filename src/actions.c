@@ -928,6 +928,7 @@ wIconifyWindow(WWindow *wwin)
 	wwin->icon = wIconCreate(wwin);
     }
 
+    wwin->icon->mapped = 1;
     wwin->flags.miniaturized = 1;
     wwin->flags.mapped = 0;
 

@@ -4,520 +4,597 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Window Maker-0.51.0\n"
-"POT-Creation-Date: 1999-02-09 13:00+0800\n"
-"PO-Revision-Date: 1999-04-10 13:30+0800\n"
+"Project-Id-Version: Window Maker-0.53.0\n"
+"POT-Creation-Date: 1999-04-20 10:11+0800\n"
+"PO-Revision-Date: 1999-04-20 13:30+0800\n"
 "Last-Translator: Wang Jian <larkw@263.net>\n"
 "Language-Team: chinese <zh@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=gb2312-80\n"
 "Content-Transfer-Encoding: 8-bit\n"
+"Translator: Wang Jian <larkw@263.net>\n"
 
-#: ../src/appicon.c:509 ../src/dialog.c:216 ../src/dialog.c:272
-#: ../src/dock.c:3060 ../src/dockedapp.c:208 ../src/winspector.c:281
-#: ../src/winspector.c:297
+#: ../src/appicon.c:541 ../src/dialog.c:223 ../src/dialog.c:279
+#: ../src/dock.c:3114 ../src/dockedapp.c:210 ../src/rootmenu.c:1743
+#: ../src/winspector.c:284 ../src/winspector.c:300
 msgid "Error"
 msgstr "错误"
 
-#: ../src/appicon.c:510
+#: ../src/appicon.c:542
 msgid "Could not open specified icon file"
 msgstr "不能打开指定的图标文件"
 
-#: ../src/appicon.c:511 ../src/dialog.c:115 ../src/dialog.c:216
-#: ../src/dialog.c:272 ../src/dialog.c:460 ../src/dock.c:424
-#: ../src/dock.c:3061 ../src/dockedapp.c:208 ../src/dockedapp.c:352
-#: ../src/winspector.c:282 ../src/winspector.c:298
+#: ../src/appicon.c:543 ../src/dialog.c:122 ../src/dialog.c:223
+#: ../src/dialog.c:279 ../src/dialog.c:467 ../src/dialog.c:1476
+#: ../src/dock.c:473 ../src/dock.c:3115 ../src/dockedapp.c:211
+#: ../src/dockedapp.c:357 ../src/rootmenu.c:1747 ../src/winspector.c:285
+#: ../src/winspector.c:301
 msgid "OK"
 msgstr "确定"
 
-#: ../src/appicon.c:532 ../src/dock.c:272 ../src/winmenu.c:123
-msgid "Kill Application"
-msgstr "强行中止程序"
-
-#: ../src/appicon.c:533 ../src/dock.c:273 ../src/winmenu.c:124
+#: ../src/appicon.c:570 ../src/dock.c:276
 msgid ""
-"This will kill the application.\n"
+" will be forcibly closed.\n"
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"这会强行中止指定的程序.\n"
+"将会被强行中止.\n"
 "没有保存的修改会丢失.\n"
 "请确定."
 
-#: ../src/appicon.c:534 ../src/dock.c:274 ../src/winmenu.c:125
+#: ../src/appicon.c:576 ../src/dock.c:281 ../src/winmenu.c:124
+msgid "Kill Application"
+msgstr "强行中止程序"
+
+#: ../src/appicon.c:577 ../src/dock.c:282 ../src/winmenu.c:126
 msgid "Yes"
 msgstr "是"
 
-#: ../src/appicon.c:534 ../src/dock.c:274 ../src/winmenu.c:125
+#: ../src/appicon.c:577 ../src/dock.c:282 ../src/winmenu.c:126
 msgid "No"
 msgstr "否"
 
-#: ../src/appicon.c:548 ../src/dock.c:1064
+#: ../src/appicon.c:595 ../src/dock.c:1109
 msgid "Unhide Here"
 msgstr "显示"
 
-#: ../src/appicon.c:549 ../src/appicon.c:574 ../src/dock.c:1066
-#: ../src/dock.c:1068 ../src/dock.c:3186 ../src/dock.c:3188
-#: ../src/winmenu.c:441
+#: ../src/appicon.c:596 ../src/appicon.c:621 ../src/dock.c:1111
+#: ../src/dock.c:1113 ../src/dock.c:3240 ../src/dock.c:3242
+#: ../src/winmenu.c:446
 msgid "Hide"
 msgstr "隐藏"
 
-#: ../src/appicon.c:550
+#: ../src/appicon.c:597
 msgid "Set Icon..."
 msgstr "设置图标..."
 
-#: ../src/appicon.c:551 ../src/dock.c:1072 ../src/rootmenu.c:226
-#: ../src/rootmenu.c:240 ../src/winmenu.c:488
+#: ../src/appicon.c:598 ../src/dock.c:1117 ../src/rootmenu.c:227
+#: ../src/rootmenu.c:241 ../src/winmenu.c:493
 msgid "Kill"
 msgstr "强行中止"
 
-#: ../src/appicon.c:572 ../src/dock.c:3184
+#: ../src/appicon.c:619 ../src/dock.c:3238
 msgid "Unhide"
 msgstr "显示"
 
-#: ../src/defaults.c:752 ../src/startup.c:709 ../src/startup.c:727
-#: ../src/startup.c:733
+#: ../src/defaults.c:808 ../src/startup.c:772 ../src/startup.c:790
+#: ../src/startup.c:796
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
 msgstr "不能从默认的数据库中读取域 \"%s\""
 
-#: ../src/defaults.c:798 ../src/defaults.c:922 ../src/defaults.c:961
-#: ../src/defaults.c:991
+#: ../src/defaults.c:854 ../src/defaults.c:979 ../src/defaults.c:1018
+#: ../src/defaults.c:1048
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
 msgstr "默认数据库中的域 %s (%s)的数据已经损坏!"
 
-#: ../src/defaults.c:803 ../src/defaults.c:943 ../src/defaults.c:974
-#: ../src/defaults.c:1000
+#: ../src/defaults.c:859 ../src/defaults.c:1000 ../src/defaults.c:1031
+#: ../src/defaults.c:1057
 #, c-format
 msgid "could not load domain %s from user defaults database"
 msgstr "不能从用户的默认数据库中载入域 %s"
 
-#: ../src/defaults.c:814 ../src/defaults.c:907
+#: ../src/defaults.c:870 ../src/defaults.c:964
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
 msgstr "全局数据库中的域 %s (%s)的数据已经损坏!"
 
-#: ../src/defaults.c:833 ../src/defaults.c:912
+#: ../src/defaults.c:889 ../src/defaults.c:969
 #, c-format
 msgid "could not load domain %s from global defaults database"
 msgstr "不能从全局数据库中载入域 %s"
 
-#: ../src/defaults.c:1283
+#: ../src/defaults.c:1277
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
 msgstr "使用的关键字\"%s\"的值不正确.应该是%s之一"
 
-#: ../src/defaults.c:1330
+#: ../src/defaults.c:1324
 #, c-format
 msgid "can't convert \"%s\" to boolean for key \"%s\""
 msgstr "不能把关键字\"%s\"的值\"%s\"转化成布尔值"
 
-#: ../src/defaults.c:1335 ../src/defaults.c:1369 ../src/defaults.c:1401
-#: ../src/defaults.c:1414 ../src/defaults.c:1429 ../src/defaults.c:1443
-#: ../src/defaults.c:1515 ../src/defaults.c:1527 ../src/defaults.c:1875
-#: ../src/defaults.c:1892 ../src/defaults.c:1905 ../src/defaults.c:1938
-#: ../src/defaults.c:1954 ../src/defaults.c:1985 ../src/defaults.c:2058
+#: ../src/defaults.c:1329 ../src/defaults.c:1363 ../src/defaults.c:1395
+#: ../src/defaults.c:1408 ../src/defaults.c:1423 ../src/defaults.c:1437
+#: ../src/defaults.c:1509 ../src/defaults.c:1521 ../src/defaults.c:1927
+#: ../src/defaults.c:1944 ../src/defaults.c:1957 ../src/defaults.c:1990
+#: ../src/defaults.c:2006 ../src/defaults.c:2037 ../src/defaults.c:2124
 #, c-format
 msgid "using default \"%s\" instead"
 msgstr "使用默认的\"%s\""
 
-#: ../src/defaults.c:1366
+#: ../src/defaults.c:1360
 #, c-format
 msgid "can't convert \"%s\" to integer for key \"%s\""
 msgstr "不能把关键字\"%s\"的值\"%s\"转化成整数值"
 
-#: ../src/defaults.c:1396 ../src/defaults.c:1510 ../src/defaults.c:1870
-#: ../src/defaults.c:1887 ../src/defaults.c:1933 ../src/defaults.c:1980
-#: ../src/wdefaults.c:541 ../src/wdefaults.c:577
+#: ../src/defaults.c:1390 ../src/defaults.c:1504 ../src/defaults.c:1922
+#: ../src/defaults.c:1939 ../src/defaults.c:1985 ../src/defaults.c:2032
+#: ../src/wdefaults.c:546 ../src/wdefaults.c:582
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
 msgstr "关键字\"%s\"的值格式不正确.应该是%s."
 
-#: ../src/defaults.c:1409
+#: ../src/defaults.c:1403
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
 msgstr "关键字\"%s\"的值中数组的元素数目不对."
 
-#: ../src/defaults.c:1424
+#: ../src/defaults.c:1418
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
 msgstr "关键字\"%s\"的值不正确.应该是坐标."
 
-#: ../src/defaults.c:1439
+#: ../src/defaults.c:1433
 #, c-format
 msgid "can't convert array to integers for \"%s\"."
 msgstr "不能把\"%s\"的数组转化为整数值."
 
-#: ../src/defaults.c:1636 ../src/defaults.c:1668 ../src/defaults.c:1684
-#: ../src/defaults.c:1730 ../src/defaults.c:1770 ../src/defaults.c:1808
-#: ../src/defaults.c:1824
+#: ../src/defaults.c:1631 ../src/defaults.c:1663 ../src/defaults.c:1679
+#: ../src/defaults.c:1725 ../src/defaults.c:1765 ../src/defaults.c:1803
+#: ../src/defaults.c:1819
 #, c-format
 msgid "\"%s\" is not a valid color name"
 msgstr "\"%s\"不是有效的颜色名"
 
-#: ../src/defaults.c:1649
+#: ../src/defaults.c:1644
 msgid "bad number of arguments in gradient specification"
 msgstr "在过渡色设置中的参数个数不正确"
 
-#: ../src/defaults.c:1703
+#: ../src/defaults.c:1698
 msgid "too few arguments in multicolor gradient specification"
 msgstr "在对颜色过渡色设置中参数过少"
 
-#: ../src/defaults.c:1797
+#: ../src/defaults.c:1792
 msgid "bad number of arguments in textured gradient specification"
 msgstr "在纹理过渡色设置中的参数个数不正确"
 
-#: ../src/defaults.c:1840
+#: ../src/defaults.c:1835
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
 msgstr "纹理过渡色的纹理\"%s\"的不透明值不正确.应该是[0..255]"
 
-#: ../src/defaults.c:1853
+#: ../src/defaults.c:1895
+#, c-format
+msgid "could not initialize library %s"
+msgstr "不能初始化库: %s"
+
+#: ../src/defaults.c:1898
+#, c-format
+msgid "could not find function %s::%s"
+msgstr "找不到函数 %s::%s"
+
+#: ../src/defaults.c:1905
 #, c-format
 msgid "invalid texture type %s"
 msgstr "无效的纹理类型 %s"
 
-#: ../src/defaults.c:1900
+#: ../src/defaults.c:1952
 #, c-format
 msgid "Error in texture specification for key \"%s\""
 msgstr "关键值\"%s\"的纹理设置不正确"
 
-#: ../src/defaults.c:1950
+#: ../src/defaults.c:2002
 msgid "Wrong type for workspace background. Should be a texture type."
 msgstr "工作区背景的类型不正确.应该是纹理类型."
 
-#: ../src/defaults.c:1998
+#: ../src/defaults.c:2050
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
 msgstr "工作区 %i 的背景类型不正确.应该是纹理图."
 
-#: ../src/defaults.c:2023
+#: ../src/defaults.c:2091
 msgid "could not load any usable font!!!"
 msgstr "不能载入任何可用的字体!!!"
 
-#: ../src/defaults.c:2053
+#: ../src/defaults.c:2119
 #, c-format
 msgid "could not get color for key \"%s\""
 msgstr "不能给关键值\"%s\"分配到颜色"
 
-#: ../src/defaults.c:2112 ../src/rootmenu.c:454
+#: ../src/defaults.c:2179 ../src/rootmenu.c:493
 #, c-format
 msgid "%s:invalid key modifier \"%s\""
 msgstr "%s:无效的键修饰符\"%s\""
 
-#: ../src/defaults.c:2124
+#: ../src/defaults.c:2191
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
 msgstr "%s:无效的快捷键设置\"%s\""
 
-#: ../src/defaults.c:2131
+#: ../src/defaults.c:2198
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
 msgstr "%s:在快捷键\"%s\"中有无效的键"
 
-#: ../src/defaults.c:2157
+#: ../src/defaults.c:2224
 #, c-format
 msgid "%s: modifier key %s is not valid"
 msgstr "%s: 修饰键 %s 无效"
 
-#: ../src/defaults.c:2233
-msgid "could not render texture for icon background"
-msgstr "不能给图标背景使用纹理"
+#: ../src/defaults.c:2258
+#, c-format
+msgid "could not load image in option %s: %s"
+msgstr "不能载入选项\"%s\" 中的图像: %s"
 
-#: ../src/dialog.c:115 ../src/dialog.c:467 ../src/dock.c:424
-#: ../src/dockedapp.c:358 ../src/rootmenu.c:188 ../src/rootmenu.c:226
-#: ../src/rootmenu.c:240
+#: ../src/defaults.c:2340
+msgid "could not render texture for icon background"
+msgstr "不能给图标背景绘制纹理"
+
+#: ../src/dialog.c:122 ../src/dialog.c:474 ../src/dock.c:473
+#: ../src/dockedapp.c:363 ../src/rootmenu.c:189 ../src/rootmenu.c:227
+#: ../src/rootmenu.c:241
 msgid "Cancel"
 msgstr "取消"
 
-#: ../src/dialog.c:211
+#: ../src/dialog.c:218
 msgid "Could not open directory "
 msgstr "不能打开目录 "
 
-#: ../src/dialog.c:267
+#: ../src/dialog.c:274
 msgid "Could not load image file "
 msgstr "不能载入图像文件 "
 
-#: ../src/dialog.c:404
+#: ../src/dialog.c:411
 msgid "Directories"
 msgstr "目录"
 
-#: ../src/dialog.c:413
+#: ../src/dialog.c:420
 msgid "Icons"
 msgstr "图标"
 
-#: ../src/dialog.c:450
+#: ../src/dialog.c:457
 msgid "File Name:"
 msgstr "文件名:"
 
-#: ../src/dialog.c:473
+#: ../src/dialog.c:480
 msgid "Choose File"
 msgstr "选择文件"
 
-#: ../src/dialog.c:490 ../src/dialog.c:492
+#: ../src/dialog.c:497 ../src/dialog.c:499
 msgid "Icon Chooser"
 msgstr "图标选择"
 
-#: ../src/dock.c:213
+#: ../src/dialog.c:1400 ../src/startup.c:325
+msgid "cannot open connection for crashing dialog panel. Aborting."
+msgstr "不能为退出对话框打开连接.中止."
+
+#: ../src/dialog.c:1426
+msgid "Fatal error"
+msgstr "致命错误"
+
+#: ../src/dialog.c:1437
+#, c-format
+msgid ""
+"Window Maker received signal %i\n"
+"(%s)."
+msgstr ""
+"Window Maker收到信号 %i\n"
+"(%s)."
+
+#: ../src/dialog.c:1440
+#, c-format
+msgid "Window Maker received signal %i."
+msgstr "Window Maker收到信号%i."
+
+#: ../src/dialog.c:1449
+msgid ""
+" This fatal error occured probably due to a bug. Please fill the included "
+"BUGFORM and report it to bugs@windowmaker.org."
+msgstr "发生一个致命错误,也许是因为一个bug.请填写好软件中包含的BUGFORM"
+"并向bugs@windowmaker.org报告bug."
+
+#: ../src/dialog.c:1457
+msgid "What do you want to do now?"
+msgstr "你现在想做什么?"
+
+#: ../src/dialog.c:1463
+msgid "Select action"
+msgstr "选择动作"
+
+#: ../src/dialog.c:1464
+msgid "Abort and leave a core file"
+msgstr "中止并产生core文件"
+
+#: ../src/dialog.c:1465
+msgid "Restart Window Maker"
+msgstr "重新启动WindowMaker"
+
+#: ../src/dialog.c:1466
+msgid "Start alternate window manager"
+msgstr "使用备用的窗口管理器"
+
+#: ../src/dock.c:210
 #, c-format
 msgid "Type the name for workspace %i:"
 msgstr "输入工作区%i的名字:"
 
-#: ../src/dock.c:214 ../src/dock.c:1043
+#: ../src/dock.c:211 ../src/dock.c:1088
 msgid "Rename Workspace"
 msgstr "重新命名工作区"
 
-#: ../src/dock.c:422
+#: ../src/dock.c:471
 msgid "Workspace Clip"
 msgstr "工作区夹子"
 
-#: ../src/dock.c:423
+#: ../src/dock.c:472
 msgid "All selected icons will be removed!"
 msgstr "所有选中的图标会被删除!"
 
-#: ../src/dock.c:470
+#: ../src/dock.c:519
 msgid "Keep Icon"
 msgstr "保留图标"
 
-#: ../src/dock.c:471 ../src/dock.c:1978 ../src/dock.c:2107
+#: ../src/dock.c:520 ../src/dock.c:2022 ../src/dock.c:2151
 msgid "Type the command used to launch the application"
 msgstr "输入启动程序所使用的命令"
 
-#: ../src/dock.c:856
+#: ../src/dock.c:901
 #, c-format
 msgid "could not launch application %s\n"
 msgstr "不能启动程序 %s\n"
 
-#: ../src/dock.c:911
+#: ../src/dock.c:956
 msgid "could not create workspace submenu for Clip menu"
 msgstr "不能为夹子菜单建立工作区子菜单"
 
-#: ../src/dock.c:974
+#: ../src/dock.c:1019
 msgid "could not create options submenu for Clip menu"
 msgstr "不能为夹子菜单建立选项子菜单"
 
-#: ../src/dock.c:978 ../src/dock.c:1032 ../src/winmenu.c:383
+#: ../src/dock.c:1023 ../src/dock.c:1077 ../src/winmenu.c:388
 msgid "Keep on top"
 msgstr "保持在最上"
 
-#: ../src/dock.c:984
+#: ../src/dock.c:1029
 msgid "Collapsed"
 msgstr "打开"
 
-#: ../src/dock.c:990
+#: ../src/dock.c:1035
 msgid "AutoCollapse"
 msgstr "自动打开"
 
-#: ../src/dock.c:996
+#: ../src/dock.c:1041
 msgid "AutoRaiseLower"
 msgstr "自动放前和放后"
 
-#: ../src/dock.c:1002
+#: ../src/dock.c:1047
 msgid "AutoAttract Icons"
 msgstr "自动吸收图标"
 
-#: ../src/dock.c:1008
+#: ../src/dock.c:1053
 msgid "Keep Attracted Icons"
 msgstr "保留吸收的图标"
 
-#: ../src/dock.c:1038
+#: ../src/dock.c:1083
 msgid "Clip Options"
 msgstr "夹子选项"
 
-#: ../src/dock.c:1045
+#: ../src/dock.c:1090
 msgid "(Un)Select Icon"
 msgstr "(取消)选择图标"
 
-#: ../src/dock.c:1047
+#: ../src/dock.c:1092
 msgid "(Un)Select All Icons"
 msgstr "(取消)选择所有图标"
 
-#: ../src/dock.c:1050
+#: ../src/dock.c:1095
 msgid "Keep Icon(s)"
 msgstr "保留图标"
 
-#: ../src/dock.c:1052
+#: ../src/dock.c:1097
 msgid "Move Icon(s) To"
 msgstr "把图标移动到"
 
-#: ../src/dock.c:1057
+#: ../src/dock.c:1102
 msgid "Remove Icon(s)"
 msgstr "删除图标"
 
-#: ../src/dock.c:1059
+#: ../src/dock.c:1104
 msgid "Attract Icons"
 msgstr "吸收图标"
 
-#: ../src/dock.c:1062
+#: ../src/dock.c:1107
 msgid "Launch"
 msgstr "启动"
 
-#: ../src/dock.c:1070
+#: ../src/dock.c:1115
 msgid "Settings..."
 msgstr "设置..."
 
-#: ../src/dock.c:1455 ../src/dock.c:1469 ../src/dock.c:1483 ../src/dock.c:1493
+#: ../src/dock.c:1500 ../src/dock.c:1514 ../src/dock.c:1528 ../src/dock.c:1538
 #, c-format
 msgid "bad value in docked icon state info %s"
 msgstr "嵌入图标的状态信息%s的值不正确"
 
-#: ../src/dock.c:1501
+#: ../src/dock.c:1546
 #, c-format
 msgid "bad value in docked icon position %i,%i"
 msgstr "嵌入图标的位置 %i,%i 值错误"
 
-#: ../src/dock.c:1745
+#: ../src/dock.c:1789
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
 msgstr "在嵌入器中有太多的图标.忽略不合适的图标"
 
 #. icon->forced_dock = 1;
-#: ../src/dock.c:1977 ../src/dock.c:2106
+#: ../src/dock.c:2021 ../src/dock.c:2150
 msgid "Dock Icon"
 msgstr "嵌入图标"
 
-#: ../src/dock.c:3053 ../src/dock.c:3057
+#: ../src/dock.c:3107 ../src/dock.c:3111
 #, c-format
 msgid "Could not execute command \"%s\""
 msgstr "不能执行命令\"%s\""
 
-#: ../src/dockedapp.c:128
+#: ../src/dockedapp.c:130
 #, c-format
 msgid "could not find icon %s, used in a docked application"
 msgstr "找不到在嵌入运行的程序使用的图标 %s"
 
-#: ../src/dockedapp.c:207
+#: ../src/dockedapp.c:209
 #, c-format
-msgid "Could not open specified icon file:%s"
-msgstr "不能打开指定的图标文件:%s"
+msgid "Could not open specified icon file: %s"
+msgstr "不能打开指定的图标文件: %s"
 
-#: ../src/dockedapp.c:293
+#: ../src/dockedapp.c:211
+msgid "Ignore"
+msgstr "忽略"
+
+#: ../src/dockedapp.c:298
 msgid "Start when WindowMaker is started"
 msgstr "在WindowMaker启动时启动"
 
-#: ../src/dockedapp.c:300
+#: ../src/dockedapp.c:305
 msgid "Application path and arguments"
 msgstr "程序路径和参数"
 
-#: ../src/dockedapp.c:311
+#: ../src/dockedapp.c:316
 msgid "Command for files dropped with DND"
 msgstr "用DND拖放的文件的处理命令"
 
-#: ../src/dockedapp.c:323
+#: ../src/dockedapp.c:328
 #, c-format
 msgid "%d will be replaced with the file name"
-msgstr "%d 被替换为文件名"
+msgstr "%d 将被替换文件名"
 
-#: ../src/dockedapp.c:327
+#: ../src/dockedapp.c:332
 msgid "DND support was not compiled in"
 msgstr "没有编译进对DND的支持"
 
-#: ../src/dockedapp.c:333
+#: ../src/dockedapp.c:338
 msgid "Icon Image"
 msgstr "图标图像"
 
-#: ../src/dockedapp.c:345 ../src/winspector.c:1235
+#: ../src/dockedapp.c:350 ../src/winspector.c:1245
 msgid "Browse..."
 msgstr "浏览..."
 
-#: ../src/dockedapp.c:390
+#: ../src/dockedapp.c:395
 msgid "Docked Application Settings"
 msgstr "嵌入的程序的设置"
 
-#: ../src/event.c:352
-msgid "stack overflow: too many dead processes"
-msgstr "堆栈溢出: 太多的死进程"
-
-#: ../src/framewin.c:485
+#: ../src/framewin.c:489 ../src/framewin.c:565 ../src/menu.c:461
+#: ../src/texture.c:549
 #, c-format
-msgid "could not render gradient: %s"
-msgstr "不能显示过渡色: %s"
+msgid "could not render texture: %s"
+msgstr "不能绘制纹理: %s"
 
-#: ../src/framewin.c:501 ../src/framewin.c:516 ../src/framewin.c:527
-#: ../src/framewin.c:534 ../src/framewin.c:541 ../src/icon.c:296
-#: ../src/texture.c:578
+#: ../src/framewin.c:505 ../src/framewin.c:520 ../src/framewin.c:531
+#: ../src/framewin.c:538 ../src/framewin.c:545 ../src/icon.c:350
+#: ../src/menu.c:490
 #, c-format
 msgid "error rendering image:%s"
 msgstr "显示图像时出错:%s"
 
-#: ../src/icon.c:182 ../src/wdefaults.c:411
+#: ../src/framewin.c:588
+#, c-format
+msgid "error rendering image: %s"
+msgstr "显示图像时出错: %s"
+
+#: ../src/icon.c:229 ../src/wdefaults.c:416
 #, c-format
 msgid "error loading image file \"%s\""
 msgstr "载入图像文件\"%s\"时出错"
 
-#: ../src/icon.c:430 ../src/icon.c:439
+#: ../src/icon.c:477 ../src/icon.c:486
 #, c-format
 msgid "could not create directory %s"
 msgstr "不能建立目录 %s"
 
-#: ../src/icon.c:706
+#: ../src/icon.c:753
 #, c-format
 msgid "could not find default icon \"%s\""
 msgstr "找不到默认的图标\"%s\""
 
-#: ../src/icon.c:712
+#: ../src/icon.c:759
 #, c-format
 msgid "could not load default icon \"%s\":%s"
 msgstr "不能载入默认图标\"%s\":%s"
 
-#: ../src/main.c:195
-msgid "could not exec window manager"
-msgstr "不能执行窗口管理器"
+#: ../src/main.c:198
+msgid "failed to restart Window Maker."
+msgstr "不能重新启动Window Maker."
 
-#: ../src/main.c:196
-msgid "Restart failed!!!"
-msgstr "重起失败!!!"
+#: ../src/main.c:201
+#, c-format
+msgid "could not exec %s"
+msgstr "不能执行 %s"
 
-#: ../src/main.c:243
+#: ../src/main.c:250
 #, c-format
 msgid "%s aborted.\n"
 msgstr "%s 中止.\n"
 
-#: ../src/main.c:254
+#: ../src/main.c:261
 #, c-format
 msgid "Usage: %s [options]\n"
 msgstr "用法: %s [选项]\n"
 
-#: ../src/main.c:255
+#: ../src/main.c:262
 msgid "The Window Maker window manager for the X window system"
 msgstr "X窗口系统的Window Maker窗口管理器"
 
-#: ../src/main.c:257
+#: ../src/main.c:264
 msgid " -display host:dpy\tdisplay to use"
 msgstr " -display host:dpy\t显示服务器"
 
-#: ../src/main.c:259
+#: ../src/main.c:266
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
 msgstr " --no-cpp \t\t禁止对配置文件的预处理"
 
-#: ../src/main.c:261
+#: ../src/main.c:268
 msgid " --no-dock\t\tdo not open the application Dock"
 msgstr " --no-dock\t\t不打开程序嵌入器"
 
-#: ../src/main.c:262
+#: ../src/main.c:269
 msgid " --no-clip\t\tdo not open the workspace Clip"
 msgstr " --no-clip\t\t不打开工作区夹子"
 
 #.
 #. puts(_(" --locale locale		locale to use"));
 #.
-#: ../src/main.c:266
+#: ../src/main.c:273
 msgid " --visual-id visualid\tvisual id of visual to use"
 msgstr " --visual-id visualid\t要使用的visual的visual id"
 
-#: ../src/main.c:267
+#: ../src/main.c:274
 msgid " --static\t\tdo not update or save configurations"
 msgstr " --static\t\t不更新或保存配置"
 
-#: ../src/main.c:268
+#: ../src/main.c:276
+msgid " --synchronous\t\tturn on synchronous display mode"
+msgstr " --synchronous\t\t打开同步显示模式"
+
+#: ../src/main.c:278
 msgid " --version\t\tprint version and exit"
 msgstr " --version\t\t打印版本信息然后退出"
 
-#: ../src/main.c:269
+#: ../src/main.c:279
 msgid " --help\t\t\tshow this message"
 msgstr " --help\t\t\t显示这个信息"
 
-#: ../src/main.c:281
+#: ../src/main.c:291
 #, c-format
 msgid ""
 "could not find user GNUstep directory (%s).\n"
@@ -526,50 +603,50 @@ msgstr ""
 "不能找到用户的GNUstep目录 (%s).\n"
 "请确定你正确安装了WindowMaker并运行了wmaker.inst"
 
-#: ../src/main.c:300
+#: ../src/main.c:309 ../src/main.c:314
 #, c-format
 msgid "%s:could not execute initialization script"
 msgstr "%s:不能执行初始化脚本"
 
-#: ../src/main.c:317
+#: ../src/main.c:331 ../src/main.c:336
 #, c-format
 msgid "%s:could not execute exit script"
 msgstr "%s:不能执行退出脚本"
 
-#: ../src/main.c:378 ../src/main.c:385 ../src/main.c:393 ../src/main.c:409
+#: ../src/main.c:405 ../src/main.c:412 ../src/main.c:420 ../src/main.c:436
 #, c-format
 msgid "too few arguments for %s"
 msgstr "%s的参数太少"
 
-#: ../src/main.c:397
+#: ../src/main.c:424
 #, c-format
 msgid "bad value for visualid: \"%s\""
 msgstr "visualid的值不正确: \"%s\""
 
-#: ../src/main.c:414
-#y, c-format
-msgid "%s: invalid argument '%s'"
-msgstr "%s: 无效参数 '%s'"
-
-#: ../src/main.c:415
+#: ../src/main.c:444
 #, c-format
-msgid "Try '%s --help' for more information"
-msgstr "用 '%s --help' 得到更多信息"
+msgid "%s: invalid argument '%s'\n"
+msgstr "%s: 无效参数 '%s'\n"
 
-#: ../src/main.c:458
+#: ../src/main.c:445
+#, c-format
+msgid "Try '%s --help' for more information\n"
+msgstr "用 '%s --help' 得到更多信息\n"
+
+#: ../src/main.c:488
 msgid "X server does not support locale"
 msgstr "X 服务器不支持locale"
 
-#: ../src/main.c:461
+#: ../src/main.c:491
 msgid "cannot set locale modifiers"
 msgstr "不能设置locale修饰符"
 
-#: ../src/main.c:478
+#: ../src/main.c:508
 #, c-format
 msgid "could not open display \"%s\""
 msgstr "不能打开显示服务器 \"%s\""
 
-#: ../src/menu.c:285
+#: ../src/menu.c:297
 msgid "wrealloc() failed while trying to add menu item"
 msgstr "在添加菜单项时 wrealloc() 失败"
 
@@ -593,15 +670,15 @@ msgstr "你的系统配置不正确.HOSTNAME被设为 %s"
 msgid "your machine is misconfigured. HOST is set to %s"
 msgstr "你的系统配置不正确.HOST被设为%s"
 
-#: ../src/misc.c:773
+#: ../src/misc.c:772
 msgid "selection timed-out"
 msgstr "选择超时"
 
-#: ../src/misc.c:789
+#: ../src/misc.c:788
 msgid "Program Arguments"
 msgstr "程序参数"
 
-#: ../src/misc.c:790
+#: ../src/misc.c:789
 msgid "Enter command arguments:"
 msgstr "输入命令参数:"
 
@@ -626,8 +703,8 @@ msgstr "在展开\"%s\"时内存不足"
 msgid "out of memory during expansion of \"%w\""
 msgstr "在展开\"%w\"时内存不足"
 
-#: ../src/misc.c:1018
 #
+#: ../src/misc.c:1018
 msgid "out of memory during expansion of \"%W\""
 msgstr "在展开\"%W\"时内存不足"
 
@@ -649,7 +726,7 @@ msgstr "选择不可用"
 msgid "bad window name value in %s state info"
 msgstr "在%s状态信息中窗口名字错"
 
-#: ../src/misc.c:1406
+#: ../src/misc.c:1407
 msgid "could not send message to background image helper"
 msgstr "不能把消息发送到背景图像辅助程序"
 
@@ -699,8 +776,11 @@ msgid "missing ; in dictionary entry"
 msgstr "在字典入口中缺少';'"
 
 #: ../src/proplist.c:432
-msgid "was expecting a string, dictionary, data or array."
-msgstr "需要一个字符串,字典,数据或者数组."
+msgid ""
+"was expecting a string, dictionary, data or array. If it's a string, try "
+"enclosing it with \"."
+msgstr "需要一个字符串,字典,数据或者数组.如果它是个字符串,试用"
+"\"来括起它."
 
 #: ../src/proplist.c:434
 msgid "Comments are not allowed inside WindowMaker owned domain files."
@@ -749,19 +829,19 @@ msgstr "不能分析颜色\"%s\""
 msgid "could not allocate color \"%s\""
 msgstr "不能分配颜色\"%s\""
 
-#: ../src/rootmenu.c:186 ../src/rootmenu.c:188
+#: ../src/rootmenu.c:187 ../src/rootmenu.c:189
 msgid "Exit"
 msgstr "退出"
 
-#: ../src/rootmenu.c:187
+#: ../src/rootmenu.c:188
 msgid "Exit window manager?"
 msgstr "退出窗口管理器?"
 
-#: ../src/rootmenu.c:223
+#: ../src/rootmenu.c:224
 msgid "Close X session"
 msgstr "关闭X会话"
 
-#: ../src/rootmenu.c:224
+#: ../src/rootmenu.c:225
 msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
@@ -769,19 +849,18 @@ msgstr ""
 "关闭窗口系统会话?\n"
 "强行中止可能会关闭未保存数据的程序."
 
-#.
 #. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
 #. wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
 #.
-#: ../src/rootmenu.c:226 ../src/winmenu.c:481
+#: ../src/rootmenu.c:227 ../src/winmenu.c:486
 msgid "Close"
 msgstr "关闭"
 
-#: ../src/rootmenu.c:237
+#: ../src/rootmenu.c:238
 msgid "Kill X session"
 msgstr "中止X会话"
 
-#: ../src/rootmenu.c:238
+#: ../src/rootmenu.c:239
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
@@ -789,183 +868,195 @@ msgstr ""
 "强行结束窗口系统会话?\n"
 "(所有的程序会被关闭)"
 
-#: ../src/rootmenu.c:467
+#: ../src/rootmenu.c:506
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
 msgstr "%s:入口%s的快捷键\"%s\"是无效的"
 
-#: ../src/rootmenu.c:475
+#: ../src/rootmenu.c:514
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
 msgstr "%s:入口%s的快捷键\"%s\"含有无效键"
 
-#: ../src/rootmenu.c:528
+#: ../src/rootmenu.c:567
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
 msgstr "%s: 菜单文件中'\"'未配对"
 
-#: ../src/rootmenu.c:578
+#: ../src/rootmenu.c:617
 #, c-format
 msgid "%s: missing command"
 msgstr "%s: 缺少命令"
 
-#: ../src/rootmenu.c:611
+#: ../src/rootmenu.c:650
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
 msgstr "无效的OPEN_MENU说明: %s"
 
-#: ../src/rootmenu.c:684
+#: ../src/rootmenu.c:698
 #, c-format
 msgid "%s:could not stat menu"
 msgstr "%s:不能启动菜单"
 
-#: ../src/rootmenu.c:692
+#: ../src/rootmenu.c:706
 #, c-format
 msgid "%s:could not stat menu:%s"
 msgstr "%s:不能启动菜单:%s"
 
-#: ../src/rootmenu.c:710
+#: ../src/rootmenu.c:724
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
 msgstr "OPEN_MENU有太多的参数: %s"
 
-#: ../src/rootmenu.c:746
+#: ../src/rootmenu.c:760
 msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
 msgstr "在应用程序菜单中有多个'WORKSPACE_MENU'命令.只允许有一个."
 
-#: ../src/rootmenu.c:775 ../src/rootmenu.c:793
+#: ../src/rootmenu.c:789 ../src/rootmenu.c:807
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
 msgstr "%s:缺少菜单命令\"%s\"的参数"
 
-#: ../src/rootmenu.c:856
+#: ../src/rootmenu.c:870
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
 msgstr "%s:在菜单配置中有未知的命令\"%s\"."
 
-#: ../src/rootmenu.c:864
+#: ../src/rootmenu.c:878
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
 msgstr "%s:不能给入口\"%s\"添加快捷方式"
 
-#: ../src/rootmenu.c:1001
+#: ../src/rootmenu.c:1015
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
 msgstr "%s:在菜单配置中超过了最大行长度: %s"
 
-#: ../src/rootmenu.c:1023 ../src/rootmenu.c:1115 ../src/rootmenu.c:1216
+#: ../src/rootmenu.c:1037 ../src/rootmenu.c:1129 ../src/rootmenu.c:1230
 #, c-format
 msgid "%s:missing command in menu config: %s"
 msgstr "%s:在菜单配置中缺少命令: %s"
 
-#: ../src/rootmenu.c:1053
+#: ../src/rootmenu.c:1067
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
 msgstr "%s:菜单文件语法错误:没有'END'声明"
 
-#: ../src/rootmenu.c:1082 ../src/rootmenu.c:1181
+#: ../src/rootmenu.c:1096 ../src/rootmenu.c:1195
 msgid "could not make arguments for menu file preprocessor"
 msgstr "不能给菜单文件预处理器提供参数"
 
-#: ../src/rootmenu.c:1088 ../src/rootmenu.c:1188
+#: ../src/rootmenu.c:1102 ../src/rootmenu.c:1202
 #, c-format
 msgid "%s:could not open/preprocess menu file"
 msgstr "%s:不能打开和预处理菜单文件"
 
-#: ../src/rootmenu.c:1100 ../src/rootmenu.c:1201
+#: ../src/rootmenu.c:1114 ../src/rootmenu.c:1215
 #, c-format
 msgid "%s:could not open menu file"
 msgstr "%s:不能打开菜单文件"
 
-#: ../src/rootmenu.c:1127
+#: ../src/rootmenu.c:1141
 #, c-format
 msgid "%s:invalid menu file. MENU command is missing"
 msgstr "%s:无效的菜单文件.缺少'MENU'命令"
 
-#: ../src/rootmenu.c:1136
+#: ../src/rootmenu.c:1150
 msgid "error reading preprocessed menu data"
 msgstr "在读取预处理后的菜单数据时出错"
 
-#: ../src/rootmenu.c:1228
+#: ../src/rootmenu.c:1242
 #, c-format
 msgid "%s:no title given for the root menu"
 msgstr "%s:没有给出根窗口菜单的标题"
 
-#: ../src/rootmenu.c:1311 ../src/rootmenu.c:1378 ../src/rootmenu.c:1422
+#: ../src/rootmenu.c:1325 ../src/rootmenu.c:1392 ../src/rootmenu.c:1436
 #, c-format
 msgid "out of memory while constructing directory menu %s"
 msgstr "在构造目录菜单%s时内存不足"
 
-#: ../src/rootmenu.c:1321
+#: ../src/rootmenu.c:1335
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
 msgstr "%s:不能查看菜单目录中的文件\"%s\""
 
-#: ../src/rootmenu.c:1476
+#: ../src/rootmenu.c:1490
 msgid "Commands"
 msgstr "命令"
 
-#: ../src/rootmenu.c:1479
+#: ../src/rootmenu.c:1493
 msgid "Restart"
 msgstr "重新启动"
 
-#: ../src/rootmenu.c:1480
+#: ../src/rootmenu.c:1494
 msgid "Exit..."
 msgstr "退出..."
 
-#: ../src/rootmenu.c:1553
+#: ../src/rootmenu.c:1539
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
 msgstr "找不到在'WMRootMenu'中引用的菜单文件\"%s\""
 
-#: ../src/rootmenu.c:1560
+#: ../src/rootmenu.c:1546
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
 msgstr "不能存取在'WMRootMenu'中引用的菜单"
 
-#: ../src/rootmenu.c:1571
+#: ../src/rootmenu.c:1557
 #, c-format
 msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
 "not be found "
 msgstr "当找不到在'WMRootMenu'中引用的菜单时试用默认菜单\"%s\""
 
-#: ../src/rootmenu.c:1594 ../src/rootmenu.c:1670
+#: ../src/rootmenu.c:1580 ../src/rootmenu.c:1656
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
 msgstr "%s:根窗口菜单配置\"%s\"格式错误"
 
-#: ../src/screen.c:428
-msgid "could not load logo image for panels"
-msgstr "不能载入面板使用的标志图像"
+#: ../src/rootmenu.c:1744
+msgid ""
+"The applications menu could not be loaded.Look at the console output for a "
+"detaileddescription of the errors"
+msgstr ""
+"不能载入应用程序菜单.请在控制台输出中查看错误的详细说明"
 
-#: ../src/screen.c:431
+#: ../src/screen.c:436
+#, c-format
+msgid "could not load logo image for panels: %s"
+msgstr "不能载入面板使用的标志图像: %s"
+
+#: ../src/screen.c:440
 #, c-format
 msgid "error making logo image for panel:%s"
 msgstr "创建面板使用的标志图像时出错:%s"
 
-#: ../src/screen.c:695
+#: ../src/screen.c:726
 #, c-format
 msgid "could not initialize graphics library context: %s"
 msgstr "不能初始化图形库上下文: %s"
 
-#: ../src/screen.c:727
+#: ../src/screen.c:757
 msgid "could not do initialization of WINGs widget set"
 msgstr "不能初始化'WINGs'的构件集"
 
-#: ../src/screen.c:1059
+#: ../src/screen.c:1091
 #, c-format
 msgid "could not save session state in %s"
 msgstr "不能在%s中保存会话的状态"
 
-#: ../src/session.c:182 ../src/wdefaults.c:559 ../src/winspector.c:345
+#: ../src/session.c:182 ../src/wdefaults.c:564 ../src/winspector.c:348
 #, c-format
 msgid "can't convert \"%s\" to boolean"
 msgstr "不能把\"%s\"转化为布尔值"
 
-#: ../src/session.c:875 ../src/session.c:969
+#: ../src/session.c:981
+msgid "out of memory while saving session state"
+msgstr "在保存会话状态时内存不足"
+
+#: ../src/session.c:1072
 msgid "end of memory while saving session state"
 msgstr "在保存会话状态时内存不足"
 
@@ -975,25 +1066,25 @@ msgstr "在保存会话状态时内存不足"
 #. * If the sm was the last client of session, then we'll die
 #. * anyway, otherwise we can continue doing our stuff.
 #.
-#: ../src/session.c:1103
+#: ../src/session.c:1206
 msgid "connection to the session manager was lost"
 msgstr "到会话管理器的连接中断"
 
-#: ../src/stacking.c:72
+#: ../src/stacking.c:73
 msgid "could not get window list!!"
 msgstr "不能得到窗口列表!!"
 
-#: ../src/startup.c:195
+#: ../src/startup.c:194
 #, c-format
 msgid "internal X error: %s\n"
 msgstr "X内部错误: %s\n"
 
-#: ../src/startup.c:258
+#: ../src/startup.c:259
 #, c-format
 msgid "got signal %i (%s) - restarting\n"
 msgstr "收到信号 %i (%s) - 正在重新启动\n"
 
-#: ../src/startup.c:260
+#: ../src/startup.c:261
 #, c-format
 msgid "got signal %i - restarting\n"
 msgstr "收到信号 %i - 正在重新启动\n"
@@ -1018,38 +1109,46 @@ msgstr "收到信号 %i (%s)\n"
 msgid "got signal %i\n"
 msgstr "收到信号 %i\n"
 
-#: ../src/startup.c:298
+#: ../src/startup.c:303
 msgid ""
 "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
 msgstr "在试图做崩溃后处理时崩溃.立即中止."
 
-#: ../src/startup.c:309
+#. we try to restart Window Maker
+#: ../src/startup.c:337
+msgid "trying to restart Window Maker..."
+msgstr "正在尝试重新启动Window Maker..."
+
+#: ../src/startup.c:342
+msgid "trying to start alternate window manager..."
+msgstr "正在尝试启动其他的窗口管理器..."
+
+#: ../src/startup.c:347
+msgid "failed to start alternate window manager. Aborting."
+msgstr "无法启动替代的窗口管理器.中止."
+
+#: ../src/startup.c:349
 msgid ""
 "a fatal error has occured, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
-msgstr "发生一个致命错误,也许是因为一个bug.请填写好BUGFORM并报告bug."
+msgstr "发生一个致命错误,也许是因为一个bug.请填写好软件中包含的BUGFORM"
+"并报告bug."
 
-#. restart another window manager so that the X session doesn't
-#. * go to space
-#: ../src/startup.c:316
-msgid "trying to start alternative window manager..."
-msgstr "正在尝试使用替代的窗口管理器..."
-
-#: ../src/startup.c:719
+#: ../src/startup.c:782
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
 msgstr "图标大小配置为 %i,但是它太小了.使用 16.\n"
 
-#: ../src/startup.c:763
-msgid "it seems that there already is a window manager running"
+#: ../src/startup.c:821
+msgid "it seems that there is already a window manager running"
 msgstr "看起来已经有窗口管理器在运行了"
 
-#: ../src/startup.c:769
+#: ../src/startup.c:827
 #, c-format
 msgid "could not manage screen %i"
 msgstr "不能管理屏幕 %i"
 
-#: ../src/startup.c:829
+#: ../src/startup.c:887
 msgid "could not manage any screen"
 msgstr "不能管理任何屏幕"
 
@@ -1057,27 +1156,36 @@ msgstr "不能管理任何屏幕"
 msgid "Windows"
 msgstr "窗口"
 
-#: ../src/texture.c:274 ../src/texture.c:318
+#: ../src/texture.c:290 ../src/texture.c:334
 #, c-format
 msgid "image file \"%s\" used as texture could not be found."
 msgstr "找不到被用来作为纹理的文件\"%s\"."
 
-#: ../src/texture.c:280 ../src/texture.c:324
+#: ../src/texture.c:296 ../src/texture.c:340
 #, c-format
 msgid "could not load texture pixmap \"%s\":%s"
 msgstr "不能载入纹理位图\"%s\":%s"
 
-#: ../src/texture.c:463 ../src/texture.c:574
+#: ../src/texture.c:400
 #, c-format
-msgid "could not render texture: %s"
-msgstr "不能显示纹理: %s"
+msgid "library \"%s\" cound not be opened."
+msgstr "不能打开库\"%s\"."
 
-#: ../src/wdefaults.c:405
+#: ../src/texture.c:409
+#, c-format
+msgid "function \"%s\" not found in library \"%s\""
+msgstr "没有在库\"%s\"中找到函数\"%s\""
+
+#: ../src/texture.c:416
+msgid "function textures not supported on this system, sorry."
+msgstr "在这个系统中没有对函索纹理功能的支持."
+
+#: ../src/wdefaults.c:410
 #, c-format
 msgid "could not find icon file \"%s\""
 msgstr "找不到图标文件\"%s\""
 
-#: ../src/window.c:2377 ../src/window.c:2509
+#: ../src/window.c:2539 ../src/window.c:2673
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
@@ -1085,118 +1193,127 @@ msgstr ""
 "好象是NumLock,ScrollLock或者类似的键被打开.\n"
 "请把它关闭,否则一些鼠标动作和快捷键会失效."
 
-#: ../src/winmenu.c:249 ../src/winmenu.c:257
+#: ../src/winmenu.c:125
+msgid ""
+"This will kill the application.\n"
+"Any unsaved changes will be lost.\n"
+"Please confirm."
+msgstr ""
+"这会强行中止指定的程序.\n"
+"没有保存的修改会丢失.\n"
+"请确定."
+
+#: ../src/winmenu.c:252 ../src/winmenu.c:260
 msgid "Set Shortcut"
 msgstr "设置快捷键"
 
-#: ../src/winmenu.c:333 ../src/winmenu.c:379
+#: ../src/winmenu.c:338 ../src/winmenu.c:384
 msgid "could not create submenu for window menu"
-msgstr "不能建立子菜单"
+msgstr "不能为窗口菜单建立子菜单"
 
-#: ../src/winmenu.c:388
+#: ../src/winmenu.c:393
 msgid "Keep at bottom"
 msgstr "保持在最低层"
 
-#: ../src/winmenu.c:393 ../src/winspector.c:1141
+#: ../src/winmenu.c:398 ../src/winspector.c:1147
 msgid "Omnipresent"
-msgstr "一直存在"
+msgstr "存在所有工作区"
 
-#.
 #. * Warning: If you make some change that affects the order of the
 #. * entries, you must update the command #defines in the top of
 #. * this file.
 #.
-#: ../src/winmenu.c:416 ../src/winmenu.c:551
+#: ../src/winmenu.c:421 ../src/winmenu.c:556
 msgid "Maximize"
 msgstr "最大化"
 
-#: ../src/winmenu.c:424 ../src/winmenu.c:537
+#: ../src/winmenu.c:429 ../src/winmenu.c:542
 msgid "Miniaturize"
 msgstr "最小化"
 
-#: ../src/winmenu.c:433 ../src/winmenu.c:565
+#: ../src/winmenu.c:438 ../src/winmenu.c:573
 msgid "Shade"
 msgstr "折叠"
 
-#: ../src/winmenu.c:449
+#: ../src/winmenu.c:454
 msgid "Resize/Move"
 msgstr "调整大小/移动"
 
-#: ../src/winmenu.c:457
+#: ../src/winmenu.c:462
 msgid "Select"
 msgstr "选择"
 
-#: ../src/winmenu.c:465
+#: ../src/winmenu.c:470
 msgid "Move To"
 msgstr "移到"
 
-#: ../src/winmenu.c:470
+#: ../src/winmenu.c:475
 msgid "Attributes..."
 msgstr "属性..."
 
-#: ../src/winmenu.c:472
+#: ../src/winmenu.c:477
 msgid "Options"
 msgstr "选项"
 
-#: ../src/winmenu.c:532
+#: ../src/winmenu.c:537
 msgid "Deminiaturize"
 msgstr "恢复大小"
 
-#: ../src/winmenu.c:546
+#: ../src/winmenu.c:551
 msgid "Unmaximize"
 msgstr "恢复大小"
 
-#: ../src/winmenu.c:560
+#: ../src/winmenu.c:568
 msgid "Unshade"
 msgstr "打开"
 
-#: ../src/winspector.c:279
+#: ../src/winspector.c:282
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
 msgstr "找不到给窗口指定的图标\"%s\""
 
-#: ../src/winspector.c:295
+#: ../src/winspector.c:298
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
 msgstr "不能打开指定的图标\"%s\":%s"
 
-#: ../src/winspector.c:1016
+#: ../src/winspector.c:1022
 msgid "Save"
 msgstr "保存"
 
-#: ../src/winspector.c:1024
+#: ../src/winspector.c:1030
 msgid "Apply"
 msgstr "应用"
 
-#: ../src/winspector.c:1030
+#: ../src/winspector.c:1036
 msgid "Reload"
 msgstr "重新载入"
 
-#: ../src/winspector.c:1039 ../src/winspector.c:1049
+#: ../src/winspector.c:1045 ../src/winspector.c:1055
 msgid "Window Specification"
 msgstr "窗口规范"
 
-#: ../src/winspector.c:1040
+#: ../src/winspector.c:1046
 msgid "Window Attributes"
 msgstr "窗口属性"
 
-#: ../src/winspector.c:1041
+#: ../src/winspector.c:1047
 msgid "Advanced Options"
 msgstr "高级选项"
 
-#: ../src/winspector.c:1042
+#: ../src/winspector.c:1048
 msgid "Icon and Initial Workspace"
 msgstr "图标和初始工作区"
 
-#: ../src/winspector.c:1043
+#: ../src/winspector.c:1049
 msgid "Application Specific"
 msgstr "和应用有关"
 
-#: ../src/winspector.c:1057
+#: ../src/winspector.c:1063
 msgid "Defaults for all windows"
 msgstr "所有窗口使用的默认值"
 
-#: ../src/winspector.c:1100
+#: ../src/winspector.c:1106
 msgid ""
 "The configuration will apply to all\n"
 "windows that have their WM_CLASS property set to the above selected\n"
@@ -1206,145 +1323,160 @@ msgstr ""
 "把'WM_CLASS'特性设置为\n"
 "上面选择的名字的所有窗口"
 
-#: ../src/winspector.c:1107
+#: ../src/winspector.c:1113
 msgid "Attributes"
 msgstr "属性"
 
-#: ../src/winspector.c:1117
-msgid "Disable titlebar"
+#: ../src/winspector.c:1123
+msgid "Disable Titlebar"
 msgstr "不显示标题行"
 
-#: ../src/winspector.c:1121
-msgid "Disable resizebar"
+#: ../src/winspector.c:1127
+msgid "Disable Resizebar"
 msgstr "不显示调整大小边框"
 
-#: ../src/winspector.c:1125
-msgid "Disable close button"
+#: ../src/winspector.c:1131
+msgid "Disable Close Button"
 msgstr "不显示关闭按钮"
 
-#: ../src/winspector.c:1129
-msgid "Disable miniaturize button"
+#: ../src/winspector.c:1135
+msgid "Disable Miniaturize Button"
 msgstr "不显示最小化按钮"
 
-#: ../src/winspector.c:1133
-msgid "Keep on top / floating"
+#: ../src/winspector.c:1139
+msgid "Keep on Top / Floating"
 msgstr "保持在上/浮动"
 
-#: ../src/winspector.c:1137
-msgid "Keep at bottom / sunken"
+#: ../src/winspector.c:1143
+msgid "Keep at Bottom / Sunken"
 msgstr "保持在下/埋没"
 
-#: ../src/winspector.c:1145
+#: ../src/winspector.c:1151
 msgid "Start Miniaturized"
 msgstr "最小化启动"
 
-#: ../src/winspector.c:1149
+#: ../src/winspector.c:1155
 msgid "Start Maximized"
 msgstr "最大化启动"
 
-#: ../src/winspector.c:1153
-msgid "Skip window list"
+#: ../src/winspector.c:1159
+msgid "Skip Window List"
 msgstr "跳过窗口列表"
 
-#: ../src/winspector.c:1167
+#: ../src/winspector.c:1173
 msgid "Advanced"
 msgstr "高级"
 
-#: ../src/winspector.c:1177
+#: ../src/winspector.c:1183
 msgid "Ignore HideOthers"
 msgstr "忽略'隐藏其他'"
 
-#: ../src/winspector.c:1181
-msgid "Don't bind keyboard shortcuts"
+#: ../src/winspector.c:1187
+msgid "Don't Bind Keyboard Shortcuts"
 msgstr "不关联快捷键"
 
-#: ../src/winspector.c:1185
-msgid "Don't bind mouse clicks"
+#: ../src/winspector.c:1191
+msgid "Don't Bind Mouse Clicks"
 msgstr "不关联鼠标点击"
 
-#: ../src/winspector.c:1189
-msgid "Keep inside screen"
+#: ../src/winspector.c:1195
+msgid "Keep Inside Screen"
 msgstr "保持在屏幕内"
 
-#: ../src/winspector.c:1193
-msgid "Don't let it take focus"
+#: ../src/winspector.c:1199
+msgid "Don't Let It Take Focus"
 msgstr "不取得聚焦"
 
-#: ../src/winspector.c:1197
+#: ../src/winspector.c:1203
 msgid "Don't Save Session"
 msgstr "不保存会话"
 
-#: ../src/winspector.c:1201
+#: ../src/winspector.c:1207
 msgid "Emulate Application Icon"
 msgstr "模拟程序图标"
 
-#: ../src/winspector.c:1216
+#: ../src/winspector.c:1211
+msgid "Full Screen Maximization"
+msgstr "最大化到满屏幕"
+
+#: ../src/winspector.c:1226
 msgid ""
 "Enable the \"Don't bind...\" options to allow the application to receive all "
 "mouse or keyboard events."
-msgstr ""
-"允许\"不关联...\"选项,使程序接受所有的鼠标和键盘事件."
+msgstr "允许\"不关联...\"选项,使程序接受所有的鼠标和键盘事件."
 
-#: ../src/winspector.c:1223
+#: ../src/winspector.c:1233
 msgid "Miniwindow Image"
 msgstr "小窗口图像"
 
-#: ../src/winspector.c:1242
+#: ../src/winspector.c:1252
 msgid "Update"
 msgstr "更新"
 
-#: ../src/winspector.c:1257
-msgid "Icon file name:"
+#: ../src/winspector.c:1267
+msgid "Icon File Name:"
 msgstr "图标文件名:"
 
-#: ../src/winspector.c:1269
+#: ../src/winspector.c:1279
 msgid "Ignore client supplied icon"
 msgstr "忽略程序内建的图标"
 
-#: ../src/winspector.c:1276
+#: ../src/winspector.c:1286
 msgid "Initial Workspace"
 msgstr "初始工作区"
 
-#: ../src/winspector.c:1281
+#: ../src/winspector.c:1291
 msgid "Nowhere in particular"
 msgstr "无特别处理"
 
-#: ../src/winspector.c:1315
+#: ../src/winspector.c:1309
 msgid "Application Wide"
 msgstr "全部应用"
 
-#: ../src/winspector.c:1325
+#: ../src/winspector.c:1319
 msgid "Start Hidden"
 msgstr "启动后隐藏"
 
-#: ../src/winspector.c:1329
-msgid "No application icon"
+#: ../src/winspector.c:1323
+msgid "No Application Icon"
 msgstr "没有程序图标"
 
-#: ../src/workspace.c:102 ../src/workspace.c:103 ../src/workspace.c:480
+#: ../src/workspace.c:106 ../src/workspace.c:107 ../src/workspace.c:655
 #, c-format
 msgid "Workspace %i"
 msgstr "工作区 %i"
 
-#: ../src/workspace.c:537
+#: ../src/workspace.c:712
 msgid "Workspaces"
 msgstr "工作区"
 
-#: ../src/workspace.c:539
+#: ../src/workspace.c:714
 msgid "could not create Workspace menu"
 msgstr "不能建立工作区菜单"
 
-#: ../src/workspace.c:546
+#: ../src/workspace.c:721
 msgid "New"
 msgstr "新建"
 
-#: ../src/workspace.c:547
+#: ../src/workspace.c:722
 msgid "Destroy Last"
 msgstr "去掉最后一个"
 
 #: ../src/xutil.c:228
 msgid "invalid data in selection"
 msgstr "选择中有无效数据"
+
+#~ msgid "stack overflow: too many dead processes"
+#~ msgstr "堆栈溢出: 太多的死进程"
+
+#~ msgid "could not render gradient: %s"
+#~ msgstr "不能显示过渡色: %s"
+
+#~ msgid "could not exec window manager"
+#~ msgstr "不能执行窗口管理器"
+
+#~ msgid "Restart failed!!!"
+#~ msgstr "重起失败!!!"
 
 #~ msgid "Keep Clip On Top"
 #~ msgstr "玂癹皐程糷"
