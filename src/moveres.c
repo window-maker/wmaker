@@ -427,7 +427,7 @@ drawTransparentFrame(WWindow *wwin, int x, int y, int width, int height)
     int bottom = 0;
     
     if (!WFLAGP(wwin, no_titlebar) && !wwin->flags.shaded) {
-	h = WMFontHeight(wwin->screen_ptr->title_font) + TITLEBAR_EXTRA_HEIGHT;
+	h = WMFontHeight(wwin->screen_ptr->title_font) + wPreferences.window_title_clearance * 2;
     }
     if (!WFLAGP(wwin, no_resizebar) && !wwin->flags.shaded) {
 	/* Can't use wwin-frame->bottom_width because, in some cases 
@@ -1852,7 +1852,7 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
     shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
     shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
     if (!WFLAGP(wwin, no_titlebar))
-    	h = WMFontHeight(wwin->screen_ptr->title_font) + TITLEBAR_EXTRA_HEIGHT;
+    	h = WMFontHeight(wwin->screen_ptr->title_font) + wPreferences.window_title_clearance * 2;
     else
 	h = 0;
     while (1) {
@@ -2155,7 +2155,7 @@ InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	return;
     }
     if (!WFLAGP(wwin, no_titlebar)) {
-	h = WMFontHeight(scr->title_font) + TITLEBAR_EXTRA_HEIGHT;
+	h = WMFontHeight(scr->title_font) + wPreferences.window_title_clearance * 2;
 	height += h;
     }
     if (!WFLAGP(wwin, no_resizebar)) {

@@ -311,9 +311,9 @@
 
 #define DEF_FRAME_THICKNESS 1	       /* linewidth of the move/resize frame */
 
-#define DEF_WINDOW_TITLE_EXTEND_SPACE 0
-#define DEF_MENU_TITLE_EXTEND_SPACE 0
-#define DEF_MENU_TEXT_EXTEND_SPACE 0
+#define DEF_WINDOW_TITLE_EXTEND_SPACE "4"
+#define DEF_MENU_TITLE_EXTEND_SPACE "4"
+#define DEF_MENU_TEXT_EXTEND_SPACE "0"
 
 #define DEF_XPM_CLOSENESS	40000 
 
@@ -533,8 +533,6 @@
 #define RESIZEBAR_HEIGHT 8	       /* height of the resizebar */
 #define RESIZEBAR_MIN_WIDTH 20	       /* min. width of handles-corner_width */
 #define RESIZEBAR_CORNER_WIDTH 28      /* width of the corner of resizebars */
-
-#define TITLEBAR_EXTRA_HEIGHT 8
 
 #define MENU_INDICATOR_SPACE	12
 

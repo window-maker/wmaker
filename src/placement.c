@@ -553,7 +553,7 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
             unsigned width, unsigned height)
 {
     WScreen *scr = wwin->screen_ptr;
-    int h = WMFontHeight(scr->title_font) + TITLEBAR_EXTRA_HEIGHT;
+    int h = WMFontHeight(scr->title_font) + wPreferences.window_title_clearance * 2;
 
     switch (wPreferences.window_placement) {
      case WPM_MANUAL:
