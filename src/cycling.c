@@ -349,7 +349,11 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 #endif
         XUngrabKeyboard(dpy, CurrentTime);
     }
-    wSetFocusTo(scr, newFocused);
+
+    if (newFocused) {
+        wSetFocusTo(scr, newFocused);
+        wMakeWindowVisible(newFocused);
+    }
 
 #ifdef MOX_CYCLING
     if (swpanel)

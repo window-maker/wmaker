@@ -129,6 +129,25 @@ extern WPreferences wPreferences;
 #define ICON_IDEAL_SIZE 48
 #define ICON_EXTRASPACE 16
 
+
+
+static int canReceiveFocus(WWindow *wwin)
+{
+  if (!wwin->flags.mapped)
+  {
+    if (!wwin->flags.shaded && !wwin->flags.miniaturized && !wwin->flags.hidden)
+      return 0;
+    else
+      return -1;
+  }
+  if (WFLAGP(wwin, no_focusable))
+    return 0;
+  if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
+    return 0;
+  return 1;
+}
+
+
 static void changeImage(WSwitchPanel *panel, int index, int selected)
 {
   WMPixmap *pixmap= NULL;
@@ -138,26 +157,33 @@ static void changeImage(WSwitchPanel *panel, int index, int selected)
   if (image && label) {
     RColor bgColor;
     RImage *back;
-      WMScreen *wscr= WMWidgetScreen(label);
+    WMScreen *wscr= WMWidgetScreen(label);
+    int opaq= 255;
+    
+    if (canReceiveFocus(WMGetFromArray(panel->windows, index)) < 0)
+      opaq= 50;
 
     if (selected) {
       back= RCloneImage(panel->tile);
-      RCombineArea(back, image, 0, 0, image->width, image->height,
-                   (back->width - image->width)/2, (back->height - image->height)/2);
+      RCombineAreaWithOpaqueness(back, image, 0, 0, image->width, image->height,
+                                 (back->width - image->width)/2, (back->height - image->height)/2,
+                                 opaq);
       
       pixmap= WMCreatePixmapFromRImage(wscr, back, -1);
       RReleaseImage(back);
     } else {
-      bgColor.alpha= 100;
+      bgColor.alpha= opaq;
       bgColor.red = WMRedComponentOfColor(WMGrayColor(wscr))>>8;
       bgColor.green = WMGreenComponentOfColor(WMGrayColor(wscr))>>8;
       bgColor.blue = WMBlueComponentOfColor(WMGrayColor(wscr))>>8;
 
-      image= RCloneImage(image);
-      RCombineImageWithColor(image, &bgColor);
+      back= RCreateImage(image->width, image->height, 1);
+      RFillImage(back, &bgColor);
       
-      pixmap= WMCreatePixmapFromRImage(wscr, image, -1);
-      RReleaseImage(image);
+      RCombineImagesWithOpaqueness(back, image, opaq);
+      
+      pixmap= WMCreatePixmapFromRImage(wscr, back, -1);
+      RReleaseImage(back);
     }
   }
 
@@ -215,27 +241,30 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     int height;
     int iconWidth = ICON_IDEAL_SIZE;
     WMBox *vbox;
+    int fl;
   
     memset(panel, 0, sizeof(WSwitchPanel));
 
     panel->scr= scr;
     panel->windows= WMCreateArray(10);
     
-    for (wwin= curwin; wwin; wwin= wwin->prev) {
-        if (wwin->frame->workspace == workspace &&  wWindowCanReceiveFocus(wwin) &&
-            (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window)) {
-            WMInsertInArray(panel->windows, 0, wwin);
+    for (fl= 0; fl < 2; fl++) {
+        for (wwin= curwin; wwin; wwin= wwin->prev) {
+            if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
+                (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window)) {
+                WMInsertInArray(panel->windows, 0, wwin);
+            }
         }
-    }
-    wwin = curwin;
-    /* start over from the beginning of the list */
-    while (wwin->next)
-      wwin = wwin->next;
-
-    for (wwin= curwin; wwin && wwin != curwin; wwin= wwin->prev) {
-        if (wwin->frame->workspace == workspace &&  wWindowCanReceiveFocus(wwin) &&
-            (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window)) {
-            WMInsertInArray(panel->windows, 0, wwin);
+        wwin = curwin;
+        /* start over from the beginning of the list */
+        while (wwin->next)
+          wwin = wwin->next;
+        
+        for (wwin= curwin; wwin && wwin != curwin; wwin= wwin->prev) {
+            if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
+                (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window)) {
+                WMInsertInArray(panel->windows, 0, wwin);
+            }
         }
     }
 
@@ -259,7 +288,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
         return panel; 
     }
     
-    height= iconWidth + 20 + 10 + ICON_EXTRASPACE;
+    height= iconWidth + 20 + 10 + ICON_EXTRASPACE + 10;
     
     panel->icons= WMCreateArray(WMGetArrayItemCount(panel->windows));
     panel->images= WMCreateArray(WMGetArrayItemCount(panel->windows));
