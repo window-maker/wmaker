@@ -2,6 +2,7 @@
 
 /*
  * This event handling stuff was based on Tk.
+ * adapted from wevent.c
  */
 
 #include "WINGsP.h"
@@ -16,7 +17,7 @@
 #endif
 
 
-//#include <X11/Xos.h>
+#include <X11/Xos.h>
 
 #ifdef HAVE_SYS_SELECT_H
 # include <sys/select.h>
@@ -94,11 +95,11 @@ WMHandlerID
 WMAddTimerHandler(int milliseconds, WMCallback *callback, void *cdata)
 {
     TimerHandler *handler, *tmp;
-    
+
     handler = malloc(sizeof(TimerHandler));
     if (!handler)
       return NULL;
-    
+
     rightNow(&handler->when);
     addmillisecs(&handler->when, milliseconds);
     handler->callback = callback;
@@ -153,7 +154,7 @@ WMDeleteTimerHandler(WMHandlerID handlerID)
 {
     TimerHandler *tmp, *handler=(TimerHandler*)handlerID;
 
-    if (!handler || !timerHandler) 
+    if (!handler || !timerHandler)
       return;
 
     tmp = timerHandler;
@@ -178,7 +179,7 @@ WMHandlerID
 WMAddIdleHandler(WMCallback *callback, void *cdata)
 {
     IdleHandler *handler, *tmp;
-    
+
     handler = malloc(sizeof(IdleHandler));
     if (!handler)
 	return NULL;
@@ -232,16 +233,16 @@ WMHandlerID
 WMAddInputHandler(int fd, int condition, WMInputProc *proc, void *clientData)
 {
     InputHandler *handler;
-    
+
     handler = wmalloc(sizeof(InputHandler));
-    
+
     handler->fd = fd;
     handler->mask = condition;
     handler->callback = proc;
     handler->clientData = clientData;
-    
+
     handler->next = inputHandler;
-    
+
     inputHandler = handler;
 
     return handler;
@@ -269,7 +270,7 @@ WMDeleteInputHandler(WMHandlerID handlerID)
 	    }
 	    tmp = tmp->next;
 	}
-    }    
+    }
 }
 
 
@@ -284,7 +285,7 @@ checkIdleHandlers()
     }
 
     handler = idleHandler;
-    
+
     /* we will process all idleHandlers so, empty the handler list */
     idleHandler = NULL;
 
@@ -293,7 +294,7 @@ checkIdleHandlers()
 	(*handler->callback)(handler->clientData);
 	/* remove the handler */
 	free(handler);
-	
+
 	handler = tmp;
     }
     W_FlushIdleNotificationQueue();
@@ -350,23 +351,46 @@ delayUntilNextTimerEvent(struct timeval *delay)
 }
 
 
-Bool
-W_WaitForEvent(Display *dpy, unsigned long xeventmask)
+/*
+ * This functions will handle input events on all registered file descriptors.
+ * Input:
+ *    - waitForInput - True if we want the function to wait until an event
+ *                     appears on a file descriptor we watch, False if we
+ *                     want the function to immediately return if there is
+ *                     no data available on the file descriptors we watch.
+ * Output:
+ *    if waitForInput is False, the function will return False if there are no
+ *                     input handlers registered, or if there is no data
+ *                     available on the registered ones, and will return True
+ *                     if there is at least one input handler that has data
+ *                     available.
+ *    if waitForInput is True, the function will return False if there are no
+ *                     input handlers registered, else it will block until an
+ *                     event appears on one of the file descriptors it watches
+ *                     and then it will return True.
+ *
+ * If the retured value is True, the input handlers for the corresponding file
+ * descriptors are also called.
+ *
+ */
+static Bool
+handleInputEvents(Bool waitForInput)
 {
 #if defined(HAVE_POLL) && defined(HAVE_POLL_H) && !defined(HAVE_SELECT)
     struct pollfd *fds;
     InputHandler *handler;
-    int count, timeout, nfds, k, retval;
+    int count, timeout, nfds, k;
 
-    for (nfds = 1, handler = inputHandler; 
+    if (!inputHandler)
+        return False;
+
+    for (nfds = 0, handler = inputHandler;
          handler != 0; handler = handler->next) nfds++;
-    
-    fds = wmalloc(nfds * sizeof(struct pollfd));
-    fds[0].fd = ConnectionNumber(dpy);
-    fds[0].events = POLLIN;
 
-    for (k = 1, handler = inputHandler; 
-         handler; 
+    fds = wmalloc(nfds * sizeof(struct pollfd));
+
+    for (k = 0, handler = inputHandler;
+         handler;
          handler = handler->next, k++) {
         fds[k].fd = handler->fd;
         fds[k].events = 0;
@@ -383,10 +407,13 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
     }
 
     /*
-     * Setup the select() timeout to the estimated time until the
-     * next timer expires.
+     * If we don't wait for input, set timeout to return immediately,
+     * else setup the timeout to the estimated time until the
+     * next timer expires or if no timer is pending to infinite.
      */
-    if (timerPending()) {
+    if (!waitForInput) {
+        timeout = 0;
+    } else if (timerPending()) {
         struct timeval tv;
 	delayUntilNextTimerEvent(&tv);
         timeout = tv.tv_sec * 1000 + tv.tv_usec / 1000;
@@ -394,22 +421,11 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
         timeout = -1;
     }
 
-    if (xeventmask==0) {
-	if (XPending(dpy))      
-	    return True;
-    } else {
-	XEvent ev;
-	if (XCheckMaskEvent(dpy, xeventmask, &ev)) {
-	    XPutBackEvent(dpy, &ev);
-	    return True;
-	}
-    }
-    
     count = poll(fds, nfds, timeout);
 
     if (count > 0) {
 	handler = inputHandler;
-        k = 1;
+        k = 0;
 	while (handler) {
 	    int mask;
             InputHandler *next;
@@ -418,17 +434,17 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 
 	    if (fds[k].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI))
 		mask |= WIReadMask;
-	    
+
 	    if (fds[k].revents & (POLLOUT | POLLWRBAND))
 		mask |= WIWriteMask;
-	    
+
 	    if (fds[k].revents & (POLLHUP | POLLNVAL | POLLERR))
 		mask |= WIExceptMask;
 
             next = handler->next;
 
 	    if (mask!=0 && handler->callback) {
-		(*handler->callback)(handler->fd, mask, 
+		(*handler->callback)(handler->fd, mask,
 				     handler->clientData);
 	    }
 
@@ -437,12 +453,11 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 	}
     }
 
-    retval = fds[0].revents & (POLLIN|POLLRDNORM|POLLRDBAND|POLLPRI);
     free(fds);
 
     W_FlushASAPNotificationQueue();
 
-    return retval;
+    return (count > 0);
 #else /* not HAVE_POLL */
 #ifdef HAVE_SELECT
     struct timeval timeout;
@@ -452,12 +467,14 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
     int count;
     InputHandler *handler = inputHandler;
 
+    if (!inputHandler)
+        return False;
+
     FD_ZERO(&rset);
     FD_ZERO(&wset);
     FD_ZERO(&eset);
 
-    FD_SET(ConnectionNumber(dpy), &rset);
-    maxfd = ConnectionNumber(dpy);
+    maxfd = 0;
 
     while (handler) {
 	if (handler->mask & WIReadMask)
@@ -475,30 +492,22 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 	handler = handler->next;
     }
 
-
     /*
-     * Setup the select() timeout to the estimated time until the
-     * next timer expires.
+     * If we don't wait for input, set timeout to return immediately,
+     * else setup the timeout to the estimated time until the
+     * next timer expires or if no timer is pending to infinite.
      */
-    if (timerPending()) {
+    if (!waitForInput) {
+        timeout.tv_sec = 0;
+        timeout.tv_usec = 0;
+        timeoutPtr = &timeout;
+    } else if (timerPending()) {
 	delayUntilNextTimerEvent(&timeout);
 	timeoutPtr = &timeout;
     } else {
 	timeoutPtr = (struct timeval*)0;
     }
 
-    XSync(dpy, False);
-    if (xeventmask==0) {
-	if (XPending(dpy))
-	    return True;
-    } else {
-	XEvent ev;
-	if (XCheckMaskEvent(dpy, xeventmask, &ev)) {
-	    XPutBackEvent(dpy, &ev);
-	    return True;
-	}
-    }
-    
     count = select(1 + maxfd, &rset, &wset, &eset, timeoutPtr);
 
     if (count > 0) {
@@ -512,17 +521,17 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 
 	    if (FD_ISSET(handler->fd, &rset))
 		mask |= WIReadMask;
-	    
+
 	    if (FD_ISSET(handler->fd, &wset))
 		mask |= WIWriteMask;
-	    
+
 	    if (FD_ISSET(handler->fd, &eset))
 		mask |= WIExceptMask;
 
             next = handler->next;
 
 	    if (mask!=0 && handler->callback) {
-		(*handler->callback)(handler->fd, mask, 
+		(*handler->callback)(handler->fd, mask,
 				     handler->clientData);
 	    }
 
@@ -532,7 +541,7 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 
     W_FlushASAPNotificationQueue();
 
-    return FD_ISSET(ConnectionNumber(dpy), &rset);
+    return (count > 0);
 #else /* not HAVE_SELECT, not HAVE_POLL */
 Neither select nor poll. You lose.
 #endif /* HAVE_SELECT */
@@ -541,39 +550,40 @@ Neither select nor poll. You lose.
 
 
 void
-WMNextEvent(Display *dpy, XEvent *event)
-{ 
+WHandleEvents()
+{
     /* Check any expired timers */
     if (timerPending()) {
-	checkTimerHandlers();
+        checkTimerHandlers();
     }
 
-    while (XPending(dpy) == 0) {
-	/* Do idle stuff */
-	/* Do idle and timer stuff while there are no timer or X events */
-	while (!XPending(dpy) && idlePending()) {
-	    if (idlePending())
-		checkIdleHandlers();
-	    /* dispatch timer events */
-	    if (timerPending())
-		checkTimerHandlers();
-	}
-
-	/*
-	 * Make sure that new events did not arrive while we were doing
-	 * timer/idle stuff. Or we might block forever waiting for
-	 * an event that already arrived. 
-	 */
-	/* wait to something happen */
-	W_WaitForEvent(dpy, 0);
-	
-        /* Check any expired timers */
-        if (timerPending()) {
-            checkTimerHandlers();
+    /* We need to make sure that we have some input handler before calling
+     * checkIdleHandlers() in a while loop, because else the while loop
+     * can run forever (if some idle handler reinitiates itself).
+     */
+    if (inputHandler) {
+        /* Do idle and timer stuff while there are no input events */
+        while (idlePending() && inputHandler && !handleInputEvents(False)) {
+            if (idlePending())
+                checkIdleHandlers();
+            /* dispatch timer events */
+            if (timerPending())
+                checkTimerHandlers();
         }
+    } else {
+        if (idlePending())
+            checkIdleHandlers();
+        /* dispatch timer events */
+        if (timerPending())
+            checkTimerHandlers();
     }
 
-    XNextEvent(dpy, event);
+    handleInputEvents(True);
+
+    /* Check any expired timers */
+    if (timerPending()) {
+        checkTimerHandlers();
+    }
 }
 
 

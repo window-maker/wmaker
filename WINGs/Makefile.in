@@ -101,7 +101,7 @@ LIBLIST = $(top_builddir)/wrlib/libwraster.la 	 @LIBRARY_SEARCH_PATH@ @GFXLIBS@ 
 
 #lib_LTLIBRARIES = libWINGs.la
 
-lib_LIBRARIES = libWINGs.a
+lib_LIBRARIES = libWINGs.a libWUtil.a
 
 #libWINGs_la_LDFLAGS = -version-info 1:1:0
 
@@ -146,6 +146,9 @@ EXTRA_DIST = logo.xpm BUGS
 libWINGs_a_SOURCES =  	WINGs.h 	WINGsP.h 	configuration.c 	llist.h 	llist.c 	international.c 	notification.c 	selection.c 	userdefaults.c 	wapplication.c 	wappresource.c 	wballoon.c 	wbrowser.c 	wbutton.c 	wcolor.c 	wcolorpanel.c 	wcolorwell.c 	wevent.c 	wfilepanel.c 	wframe.c 	wfont.c 	wfontpanel.c 	widgets.c 	wlabel.c 	wlist.c 	wmisc.c 	wpanel.c 	wpixmap.c 	wpopupbutton.c 	wscroller.c 	wscrollview.c 	wslider.c 	wsplitview.c 	wtabview.c 	wtextfield.c 	wwindow.c 	wview.c 	error.c 	findfile.c 	hashtable.c 	memory.c 	usleep.c
 
 
+libWUtil_a_SOURCES =  	WINGs.h 	WINGsP.h 	llist.h 	llist.c 	international.c 	notification.c 	userdefaults.c 	wapplication.c 	wutil.c 	error.c 	findfile.c 	hashtable.c 	memory.c 	usleep.c
+
+
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/src 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
 
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -169,6 +172,10 @@ wevent.o wfilepanel.o wframe.o wfont.o wfontpanel.o widgets.o wlabel.o \
 wlist.o wmisc.o wpanel.o wpixmap.o wpopupbutton.o wscroller.o \
 wscrollview.o wslider.o wsplitview.o wtabview.o wtextfield.o wwindow.o \
 wview.o error.o findfile.o hashtable.o memory.o usleep.o
+libWUtil_a_LIBADD = 
+libWUtil_a_OBJECTS =  llist.o international.o notification.o \
+userdefaults.o wapplication.o wutil.o error.o findfile.o hashtable.o \
+memory.o usleep.o
 AR = ar
 PROGRAMS =  $(noinst_PROGRAMS)
 
@@ -208,8 +215,8 @@ DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
 TAR = tar
 GZIP_ENV = --best
-SOURCES = $(libWINGs_a_SOURCES) $(wtest_SOURCES) $(wmquery_SOURCES) $(wmfile_SOURCES) $(fontl_SOURCES) $(testmywidget_SOURCES) $(testcolorpanel_SOURCES) $(testnot_SOURCES)
-OBJECTS = $(libWINGs_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJECTS) $(fontl_OBJECTS) $(testmywidget_OBJECTS) $(testcolorpanel_OBJECTS) $(testnot_OBJECTS)
+SOURCES = $(libWINGs_a_SOURCES) $(libWUtil_a_SOURCES) $(wtest_SOURCES) $(wmquery_SOURCES) $(wmfile_SOURCES) $(fontl_SOURCES) $(testmywidget_SOURCES) $(testcolorpanel_SOURCES) $(testnot_SOURCES)
+OBJECTS = $(libWINGs_a_OBJECTS) $(libWUtil_a_OBJECTS) $(wtest_OBJECTS) $(wmquery_OBJECTS) $(wmfile_OBJECTS) $(fontl_OBJECTS) $(testmywidget_OBJECTS) $(testcolorpanel_OBJECTS) $(testnot_OBJECTS)
 
 all: all-redirect
 .SUFFIXES:
@@ -296,6 +303,11 @@ libWINGs.a: $(libWINGs_a_OBJECTS) $(libWINGs_a_DEPENDENCIES)
 	-rm -f libWINGs.a
 	$(AR) cru libWINGs.a $(libWINGs_a_OBJECTS) $(libWINGs_a_LIBADD)
 	$(RANLIB) libWINGs.a
+
+libWUtil.a: $(libWUtil_a_OBJECTS) $(libWUtil_a_DEPENDENCIES)
+	-rm -f libWUtil.a
+	$(AR) cru libWUtil.a $(libWUtil_a_OBJECTS) $(libWUtil_a_LIBADD)
+	$(RANLIB) libWUtil.a
 
 mostlyclean-noinstPROGRAMS:
 

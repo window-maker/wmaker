@@ -12,7 +12,7 @@ LIBLIST= $(top_builddir)/wrlib/libwraster.la\
 
 #lib_LTLIBRARIES = libWINGs.la
 
-lib_LIBRARIES = libWINGs.a
+lib_LIBRARIES = libWINGs.a libWUtil.a
 
 #libWINGs_la_LDFLAGS = -version-info 1:1:0
 
@@ -94,6 +94,23 @@ libWINGs_a_SOURCES = 	\
 	wtextfield.c \
 	wwindow.c \
 	wview.c \
+	error.c \
+	findfile.c \
+	hashtable.c \
+	memory.c \
+	usleep.c
+
+
+libWUtil_a_SOURCES = 	\
+	WINGs.h \
+	WINGsP.h \
+	llist.h \
+	llist.c \
+	international.c \
+	notification.c \
+	userdefaults.c \
+	wapplication.c \
+	wutil.c \
 	error.c \
 	findfile.c \
 	hashtable.c \

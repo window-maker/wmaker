@@ -3,6 +3,50 @@ changes since wmaker 0.60.0:
 
 - added WMScreenWidth() and WMScreenHeight() functions.
 - fixed some problems when compiling with non gcc compilers.
+- added libWUtil, a library that is a subset of libWINGs. It contains utils
+  that can be used in writing non-GUI programs. They include: hashes,
+  notifications, input/idle/timer handlers, user defaults database handling,
+  memory handling, application resource handling, etc.
+  All the non-GUI stuff from libWINGs is present.
+  Still linWINGs contain all this stuff so if you use libWINGs, you don't
+  need to link against libWUtil too.
+  One notable aspect of libWUtil is that it has a modified version of the
+  event handling function. It is named WHandleEvents() and will handle all
+  input/idle/timer events the app has.
+  If your app has a permanent input handler (as for example a socket a server
+  is listening on), then the main loop of the app can be:
+  	while(1) {
+    	    WHandleEvents();
+  	}
+  but if there is no permanent input handler, you need to add some delay to
+  avoid a too high cpu load by your program:
+  	while(1) {
+            WHandleEvents();
+            wusleep(5000);
+        }
+  A permanent input handler is one that is established when the program starts
+  and is present until the program exits.
+  One that is deleted and later reinstalled, is not considered permanent.
+  This difference is because if there is some input handler, the function will
+  block until some event appears, while if there is no input handler the
+  function will return almost immediately (after handling the timer/idle
+  stuff).
+
+  Except the stuff declared in WUtil.h, the following functions declared in
+  WINGs.h are also present in libWUtil (you will need to #include <WINGs.h>
+  if you use one of these):
+	WMInitializeApplication(char *applicationName, int *argc, char **argv);
+	WMSetResourcePath(char *path);
+	WMGetApplicationName();
+	WMPathForResourceOfType(char *resource, char *ext);
+	WMAddTimerHandler(int milliseconds, WMCallback *callback, void *cdata);
+	WMDeleteTimerWithClientData(void *cdata);
+	WMDeleteTimerHandler(WMHandlerID handlerID);
+	WMAddIdleHandler(WMCallback *callback, void *cdata);
+	WMDeleteIdleHandler(WMHandlerID handlerID);
+	WMAddInputHandler(int fd, int condition, WMInputProc *proc,
+        		  void *clientData);
+	WMDeleteInputHandler(WMHandlerID handlerID);
 
 
 changes since wmaker 0.53.0:

@@ -477,7 +477,7 @@ typedef struct WMTabViewDelegate {
 
 void WMInitializeApplication(char *applicationName, int *argc, char **argv);
 
-void WMSetApplicationDataPath(char *path);
+void WMSetResourcePath(char *path);
 
 /* don't free the returned string */
 char *WMGetApplicationName();
