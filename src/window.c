@@ -2086,6 +2086,9 @@ wWindowConfigureBorders(WWindow *wwin)
 	int newy, oldh;
 
 	flags = WFF_LEFT_BUTTON|WFF_RIGHT_BUTTON;
+#ifdef XKB_BUTTON_HINT
+    flags |= WFF_LANGUAGE_BUTTON;
+#endif
 	if (!WFLAGP(wwin, no_titlebar))
 	    flags |= WFF_TITLEBAR;
 	if (!WFLAGP(wwin, no_resizebar))
@@ -2108,6 +2111,12 @@ wWindowConfigureBorders(WWindow *wwin)
 	    && wwin->frame->flags.hide_left_button)
 	    flags |= WFF_LEFT_BUTTON;
 
+#ifdef XKB_BUTTON_HINT
+    if (!WFLAGP(wwin, no_language_button)
+            && wwin->frame->flags.hide_language_button)
+        flags |= WFF_LANGUAGE_BUTTON;
+#endif
+
 	if (!WFLAGP(wwin, no_close_button)
 	    && wwin->frame->flags.hide_right_button)
 	    flags |= WFF_RIGHT_BUTTON;
@@ -2121,6 +2130,12 @@ wWindowConfigureBorders(WWindow *wwin)
 	if (WFLAGP(wwin, no_miniaturize_button)
 	    && !wwin->frame->flags.hide_left_button)
 	    flags |= WFF_LEFT_BUTTON;
+
+#ifdef XKB_BUTTON_HINT
+	if (WFLAGP(wwin, no_language_button)
+	    && !wwin->frame->flags.hide_language_button)
+	    flags |= WFF_LANGUAGE_BUTTON;
+#endif
 
 	if (WFLAGP(wwin, no_close_button)
 	    && !wwin->frame->flags.hide_right_button)

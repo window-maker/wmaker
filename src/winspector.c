@@ -74,6 +74,9 @@ static proplist_t AStartMaximized;
 static proplist_t ADontSaveSession;
 static proplist_t AEmulateAppIcon;
 static proplist_t AFullMaximize;
+#ifdef XKB_BUTTON_HINT
+static proplist_t ANoLanguageButton;
+#endif
 
 static proplist_t AStartWorkspace;
 
@@ -122,6 +125,9 @@ make_keys()
     ADontSaveSession = PLMakeString("DontSaveSession");
     AEmulateAppIcon = PLMakeString("EmulateAppIcon");
     AFullMaximize = PLMakeString("FullMaximize");
+#ifdef XKB_BUTTON_HINT
+    ANoLanguageButton = PLMakeString("NoLanguageButton");
+#endif
 
     AStartWorkspace = PLMakeString("StartWorkspace");
 
@@ -534,6 +540,11 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     value = (WMGetButtonSelected(panel->moreChk[7])!=0) ? Yes : No;
     insertAttribute(dict, winDic, AFullMaximize,   value, &different, flags);
 
+#ifdef XKB_BUTTON_HINT
+    value = (WMGetButtonSelected(panel->moreChk[8])!=0) ? Yes : No;
+    insertAttribute(dict, winDic, ANoLanguageButton,  value, &different, flags);
+#endif
+
     /* application wide settings for when */
     /* the window is the leader, save the attribute with the others */
     if (panel->inspected->main_window == panel->inspected->client_win) {
@@ -713,6 +724,9 @@ applySettings(WMButton *button, InspectorPanel *panel)
     WSETUFLAG(wwin, dont_save_session, WMGetButtonSelected(panel->moreChk[5]));
     WSETUFLAG(wwin, emulate_appicon, WMGetButtonSelected(panel->moreChk[6]));
     WSETUFLAG(wwin, full_maximize, WMGetButtonSelected(panel->moreChk[7]));
+#ifdef XKB_BUTTON_HINT
+    WSETUFLAG(wwin, no_language_button, WMGetButtonSelected(panel->moreChk[8]));
+#endif
     WSETUFLAG(wwin, always_user_icon, WMGetButtonSelected(panel->alwChk));
 
     if (WFLAGP(wwin, no_titlebar) && wwin->flags.shaded)
@@ -885,6 +899,11 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 	 case 7:
 	    flag = WFLAGP(wwin, full_maximize);
 	    break;
+#ifdef XKB_BUTTON_HINT
+     case 8:
+        flag = WFLAGP(wwin, no_language_button);
+        break;
+#endif
 	}
 	WMSetButtonSelected(panel->moreChk[i], flag);
     }
@@ -1194,7 +1213,11 @@ createInspectorForWindow(WWindow *wwin)
     WMMoveWidget(panel->moreFrm, 15, 45);
     WMResizeWidget(panel->moreFrm, frame_width, 250);
 
+#ifdef XKB_BUTTON_HINT
+    for (i=0; i < 9; i++) {
+#else
     for (i=0; i < 8; i++) {
+#endif
 	char *caption = NULL;
 	int flag = 0;
 	char *descr = NULL;
@@ -1255,6 +1278,13 @@ createInspectorForWindow(WWindow *wwin)
 		      "maximized. The titlebar and resizebar will be moved\n"
 		      "to outside the screen.");
 	    break;
+#ifdef XKB_BUTTON_HINT
+     case 8:
+        caption = _("Disable Language Button");
+        flag = WFLAGP(wwin, no_language_button);
+        descr = _("Remove the `toggle language' button of the window.");
+        break;
+#endif
 	}
 	panel->moreChk[i] = WMCreateSwitchButton(panel->moreFrm);
 	WMMoveWidget(panel->moreChk[i], 10, 20*(i+1));

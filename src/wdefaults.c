@@ -83,6 +83,9 @@ static proplist_t AStartHidden;	       /* app */
 static proplist_t ADontSaveSession;    /* app */
 static proplist_t AEmulateAppIcon;
 static proplist_t AFullMaximize;
+#ifdef XKB_BUTTON_HINT
+static proplist_t ANoLanguageButton;
+#endif
 
 static proplist_t AStartWorkspace;
 
@@ -119,6 +122,9 @@ init_wdefaults(WScreen *scr)
     ADontSaveSession = PLMakeString("DontSaveSession");
     AEmulateAppIcon = PLMakeString("EmulateAppIcon");
     AFullMaximize = PLMakeString("FullMaximize");
+#ifdef XKB_BUTTON_HINT
+    ANoLanguageButton = PLMakeString("NoLanguageButton");
+#endif
 
     AStartWorkspace = PLMakeString("StartWorkspace");
     
@@ -303,6 +309,11 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
 
     value = get_value(dw, dc, dn, da, AFullMaximize, No, useGlobalDefault);
     APPLY_VAL(value, full_maximize, AFullMaximize);
+
+#ifdef XKB_BUTTON_HINT
+    value = get_value(dw, dc, dn, da, ANoLanguageButton, No, useGlobalDefault);
+    APPLY_VAL(value, no_language_button, ANoLanguageButton);
+#endif
 
     /* clean up */
     PLSetStringCmpHook(StringCompareHook);
