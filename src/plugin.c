@@ -24,7 +24,13 @@
  * Do you think I should move this code into another file? -- ]d
  */
 
+
+
 #include "plugin.h"
+
+/* GAH! */
+#ifdef DRAWSTRING_PLUGIN
+
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -130,3 +136,5 @@ wPluginDestroyFunction(WFunction *function)
     return;
 }
 
+
+#endif

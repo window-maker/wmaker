@@ -288,7 +288,7 @@ getWindowLevel(int layer)
 }
 
 
-void
+Bool
 wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 {
     Atom type_ret;
@@ -296,6 +296,7 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
     unsigned long nitems_ret;
     unsigned long bytes_after_ret;
     long flags, val, *data = 0;
+    Bool hasHints = False;
 
     /* hints */
     
@@ -311,6 +312,7 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 	if (flags & (WIN_HINTS_SKIP_FOCUS|WIN_HINTS_SKIP_WINLIST)) {
 	    wwin->client_flags.skip_window_list = 1;
 	}
+	hasHints = True;
     }
 
     /* layer */
@@ -323,6 +325,7 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 	XFree(data);
 
 	*layer = getWindowLevel(val);
+	hasHints = True;
     }
     
     /* workspace */
@@ -336,6 +339,7 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 
 	if (val > 0)
 	    *workspace = val;
+	hasHints = True;
     }
 
     /* reserved area */
@@ -362,11 +366,14 @@ wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace)
 	wwin->screen_ptr->reservedAreas = area;
 
         wScreenUpdateUsableArea(wwin->screen_ptr);
+	hasHints = True;
     }
+    
+    return hasHints;
 }
 
 
-void
+Bool
 wGNOMECheckInitialClientState(WWindow *wwin)
 {
     Atom type_ret;
@@ -379,7 +386,7 @@ wGNOMECheckInitialClientState(WWindow *wwin)
 			   XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret, 
 			   &bytes_after_ret,
 			   (unsigned char**)&data)!=Success || !data)
-	return;
+	return False;
 
     flags = *data;
 
@@ -399,6 +406,8 @@ wGNOMECheckInitialClientState(WWindow *wwin)
 
     if (flags & WIN_STATE_SHADED)
 	wwin->flags.shaded = 1;
+    
+    return True;
 }
 
 

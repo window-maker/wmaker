@@ -789,9 +789,13 @@ wKWMCheckClientInitialState(WWindow *wwin)
 
 	wwin->flags.miniaturized = 1;
     }
-    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &val) && val) {
-
-	wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
+    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &val)) {
+	if (val == 2)
+	    wwin->flags.maximized = MAX_VERTICAL;
+	else if (val == 1)
+	    wwin->flags.maximized = MAX_HORIZONTAL;
+	else if (val == 3)
+	    wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
     }
     if (getAreaHint(wwin->client_win, _XA_KWM_WIN_GEOMETRY_RESTORE, &area)
 	&& (wwin->old_geometry.x != area.x1
@@ -848,17 +852,25 @@ wKWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 
 	}
     } else if (event->atom == _XA_KWM_WIN_MAXIMIZED) {
+	int bla = 0;
 
 #ifdef DEBUG1
 	printf("got KDE maximize change\n");
 #endif
-	flag = !getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED,
-			     &value) || value;
+	flag = getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &value);
 
-	if (flag != (wwin->flags.maximized!=0)) {
+	if (flag) {
+	    if (value == 3)
+		bla = MAX_VERTICAL|MAX_HORIZONTAL;
+	    else if (value == 2)
+		bla = MAX_VERTICAL;
+	    else if (value == 1)
+		bla = MAX_HORIZONTAL;
+	}
 
-	    if (flag)
-		wMaximizeWindow(wwin, flag*(MAX_VERTICAL|MAX_HORIZONTAL));
+	if (bla != wwin->flags.maximized) {
+	    if (bla != 0)
+		wMaximizeWindow(wwin, bla);
 	    else
 		wUnmaximizeWindow(wwin);
 	} 
@@ -1553,8 +1565,14 @@ wKWMUpdateClientStateHint(WWindow *wwin, WKWMStateFlag flags)
 		      IS_OMNIPRESENT(wwin));
     }
     if (flags & KWMMaximizedFlag) {
-	setSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, 
-		      wwin->flags.maximized!=0);
+	int value = 0;
+
+	if (wwin->flags.maximized & MAX_VERTICAL)
+	    value |= 2;
+	if (wwin->flags.maximized & MAX_HORIZONTAL)
+	    value |= 1;
+
+	setSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, value);
     }
 }
 

@@ -35,7 +35,7 @@ void wGNOMEUpdateCurrentWorkspaceHint(WScreen *scr);
 
 void wGNOMEUpdateWorkspaceNamesHint(WScreen *scr);
 
-void wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace);
+Bool wGNOMECheckClientHints(WWindow *wwin, int *layer, int *workspace);
 
 void wGNOMEUpdateClientStateHint(WWindow *wwin, Bool changedWorkspace);
 
@@ -43,7 +43,7 @@ Bool wGNOMEProcessClientMessage(XClientMessageEvent *event);
 
 void wGNOMERemoveClient(WWindow *wwin);
 
-void wGNOMECheckInitialClientState(WWindow *wwin);
+Bool wGNOMECheckInitialClientState(WWindow *wwin);
 
 Bool wGNOMEProxyizeButtonEvent(WScreen *scr, XEvent *event);
 

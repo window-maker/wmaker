@@ -423,18 +423,22 @@ wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
     } else {
 	int tmp_workspace = -1;
 	int tmp_level = -1;
+	Bool check;
+	
+	check = False;
 	
 #ifdef MWM_HINTS
 	wMWMCheckClientHints(wwin);
 #endif /* MWM_HINTS */
 
-#ifdef KWM_HINTS
-	wKWMCheckClientHints(wwin, &tmp_level, &tmp_workspace);
-#endif /* KWM_HINTS */
-	
 #ifdef GNOME_STUFF
-	wGNOMECheckClientHints(wwin, &tmp_level, &tmp_workspace);
+	check = wGNOMECheckClientHints(wwin, &tmp_level, &tmp_workspace);
 #endif /* GNOME_STUFF */
+	
+#ifdef KWM_HINTS
+	if (!check)
+	    wKWMCheckClientHints(wwin, &tmp_level, &tmp_workspace);
+#endif /* KWM_HINTS */
 
 #ifdef OLWM_HINTS
 	wOLWMCheckClientHints(wwin);
@@ -769,12 +773,18 @@ wManageWindow(WScreen *scr, Window window)
 	wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
     }
 
+    {
+	Bool bla;
+	
+	bla = False;
 #ifdef GNOME_STUFF
-    wGNOMECheckInitialClientState(wwin);
+	bla = wGNOMECheckInitialClientState(wwin);
 #endif
 #ifdef KWM_HINTS
-    wKWMCheckClientInitialState(wwin);
+	if (!bla)
+	    wKWMCheckClientInitialState(wwin);
 #endif
+    }
 
     /* apply previous state if it exists and we're in startup */
     if (scr->flags.startup && wm_state >= 0) {
