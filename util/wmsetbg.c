@@ -1024,7 +1024,7 @@ globalDefaultsPathForDomain(char *domain)
 {
     char path[1024];
 
-    sprintf(path, "%s/%s", SYSCONFDIR, domain);
+    sprintf(path, "%s/WindowMaker/%s", SYSCONFDIR, domain);
 
     return wstrdup(path);
 }

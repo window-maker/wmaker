@@ -110,7 +110,7 @@ globalDefaultsPathForDomain(char *domain)
     char path[1024];
     char *tmp;
 
-    sprintf(path, "%s/%s", SYSCONFDIR, domain);
+    sprintf(path, "%s/WindowMaker/%s", SYSCONFDIR, domain);
 
     tmp = malloc(strlen(path)+2);
     assert(tmp!=NULL);
