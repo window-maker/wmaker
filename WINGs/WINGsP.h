@@ -137,6 +137,7 @@ typedef struct W_Screen {
     W_FocusInfo *focusInfo;
 
     struct W_Pixmap *applicationIcon;
+    Window applicationIconWindow;
 
     struct W_Window *windowList;       /* list of windows in the app */
 

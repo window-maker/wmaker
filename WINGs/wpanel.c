@@ -71,7 +71,7 @@ WMRunAlertPanel(WMScreen *scrPtr, WMWindow *owner,
 	}
 	WMSetWindowInitialPosition(panel->win, px, py);
     }
-			       
+
     
     scrPtr->modalView = W_VIEW(panel->win);
     WMMapWidget(panel->win);

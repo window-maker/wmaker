@@ -80,6 +80,8 @@ void *wmalloc(size_t size)
 {
     void *tmp;
 
+    assert(size > 0);
+
 #ifdef TEST_WITH_GC
     tmp = GC_malloc(size);
 #else

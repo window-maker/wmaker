@@ -596,6 +596,8 @@ void WMSetApplicationIconImage(WMScreen *app, WMPixmap *icon);
 
 WMPixmap *WMGetApplicationIconImage(WMScreen *app);
 
+void WMSetApplicationIconWindow(WMScreen *scr, Window window);
+
 void WMSetFocusToWidget(WMWidget *widget);
 
 WMEventHook *WMHookEventHandler(WMEventHook *handler);
@@ -787,6 +789,8 @@ unsigned int WMScreenHeight(WMScreen *scr);
 void WMUnmapWidget(WMWidget *w);
 
 void WMMapWidget(WMWidget *w);
+
+Bool WMWidgetIsMapped(WMWidget *w);
 
 void WMRaiseWidget(WMWidget *w);
 
@@ -1066,6 +1070,7 @@ int WMFindRowOfListItemWithTitle(WMList *lPtr, char *title);
 WMListItem *WMGetListItem(WMList *lPtr, int row);
 
 WMArray *WMGetListItems(WMList *lPtr);
+
 
 void WMRemoveListItem(WMList *lPtr, int row);
 

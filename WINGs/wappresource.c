@@ -26,6 +26,24 @@ extern struct W_Application WMApplication;
 
 
 void
+WMSetApplicationIconWindow(WMScreen *scr, Window window)
+{    
+    scr->applicationIconWindow = window;
+    
+    if (scr->groupLeader) {
+	XWMHints *hints;
+
+	hints = XGetWMHints(scr->display, scr->groupLeader);
+	hints->flags |= IconWindowHint;
+	hints->icon_window = window;
+    
+	XSetWMHints(scr->display, scr->groupLeader, hints);
+	XFree(hints);
+    }
+}
+
+
+void
 WMSetApplicationIconImage(WMScreen *scr, WMPixmap *icon)
 {    
     if (scr->applicationIcon)

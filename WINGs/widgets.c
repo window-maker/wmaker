@@ -933,6 +933,13 @@ WMUnmapWidget(WMWidget *w)
 }
 
 
+Bool
+WMWidgetIsMapped(WMWidget *w)
+{
+    return W_VIEW(w)->flags.mapped;
+}
+
+
 void
 WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color)
 {    
