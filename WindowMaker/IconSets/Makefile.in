@@ -106,7 +106,7 @@ DIST_COMMON =  Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:
@@ -221,7 +221,7 @@ maintainer-clean-generic clean mostlyclean distclean maintainer-clean
 
 Default.iconset: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes
 	-rm -f Default.iconset
-	cp $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes Default.iconset
+	grep Icon $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes > Default.iconset
 	chmod 644 Default.iconset
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.

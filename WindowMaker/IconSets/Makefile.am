@@ -9,7 +9,7 @@ CLEANFILES = Default.iconset
 
 Default.iconset: $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes
 	-rm -f Default.iconset
-	cp $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes Default.iconset
+	grep Icon $(top_srcdir)/WindowMaker/Defaults/WMWindowAttributes > Default.iconset
 	chmod 644 Default.iconset
 
 
