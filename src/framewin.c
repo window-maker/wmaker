@@ -1229,16 +1229,16 @@ wFrameWindowChangeTitle(WFrameWindow *fwin, char *new_title)
 
     if (fwin->title)
 	wfree(fwin->title);
-    
+
     fwin->title = wstrdup(new_title);
-    
+
     if (fwin->titlebar) {
 	XClearWindow(dpy, fwin->titlebar->window);
 
 	wFrameWindowPaint(fwin);
     }
     checkTitleSize(fwin);
-    
+
     return 1;
 }
 

@@ -36,6 +36,8 @@ typedef struct WApplication {
 
     struct WAppIcon *app_icon;
 
+    int index;
+    
     int refcount;
 
     struct WWindow *last_focused;      /* focused window before hide */

@@ -49,7 +49,7 @@
 
 /* How many different types of geometry/position
  display thingies are there? */
-#define NUM_DISPLAYS 4
+#define NUM_DISPLAYS 5
 
 #define LEFT            1
 #define RIGHT           2
@@ -167,7 +167,8 @@ cyclePositionDisplay(WWindow *wwin, int x, int y, int w, int h)
     wPreferences.move_display++;
     wPreferences.move_display %= NUM_DISPLAYS;
 
-    if (wPreferences.move_display == WDIS_NEW) {
+    if (wPreferences.move_display == WDIS_NEW
+	|| wPreferences.move_display == WDIS_NONE) {
 	WMUnmapWidget(scr->gview);
     } else {
 	if (wPreferences.move_display == WDIS_CENTER) {
@@ -188,7 +189,8 @@ mapPositionDisplay(WWindow *wwin, int x, int y, int w, int h)
 {
     WScreen *scr = wwin->screen_ptr;
     
-    if (wPreferences.move_display == WDIS_NEW) {
+    if (wPreferences.move_display == WDIS_NEW
+	|| wPreferences.move_display == WDIS_NONE) {
 	return;
     } else if (wPreferences.move_display == WDIS_CENTER) {
 	moveGeometryDisplayCentered(scr, scr->scr_width / 2,
@@ -350,7 +352,8 @@ cycleGeometryDisplay(WWindow *wwin, int x, int y, int w, int h, int dir)
     wPreferences.size_display++;
     wPreferences.size_display %= NUM_DISPLAYS;
     
-    if (wPreferences.size_display == WDIS_NEW) {
+    if (wPreferences.size_display == WDIS_NEW
+	|| wPreferences.size_display == WDIS_NONE) {
 	WMUnmapWidget(scr->gview);
     } else {
 	if (wPreferences.size_display == WDIS_CENTER) {
@@ -372,7 +375,8 @@ mapGeometryDisplay(WWindow *wwin, int x, int y, int w, int h)
 {
     WScreen *scr = wwin->screen_ptr;
     
-    if (wPreferences.size_display == WDIS_NEW)
+    if (wPreferences.size_display == WDIS_NEW
+	|| wPreferences.size_display == WDIS_NONE)
 	return;
     
     if (wPreferences.size_display == WDIS_CENTER) {

@@ -245,6 +245,7 @@ static WOptionEnumeration sePlacements[] = {
 };
 
 static WOptionEnumeration seGeomDisplays[] = {
+    {"None", WDIS_NONE, 0},
     {"Center", WDIS_CENTER, 0},
     {"Corner", WDIS_TOPLEFT, 0},
     {"Floating", WDIS_FRAME_CENTER, 0},

@@ -508,7 +508,7 @@ keyPressHandler(XEvent *event, void *data)
     int didx;
     int item;
     WMList *list = NULL;
-
+    
     if (event->type == KeyRelease)
 	return;
 

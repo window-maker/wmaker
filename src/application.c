@@ -433,6 +433,40 @@ wApplicationCreate(WScreen *scr, Window main_window)
 	    extractClientIcon(wapp->app_icon);
     }
 
+    /* set the application instance index */
+    {
+	WApplication *list = scr->wapp_list;
+	int index = 0;
+	WWindow *wwin = wapp->main_window_desc;
+/*
+    if (!WFLAGP(wwin, collapse_appicons))
+	return 0;
+ */
+
+	/* look for a free index # */
+	while (list) {
+	    if (strcmp(wwin->wm_instance,
+		       list->main_window_desc->wm_instance) == 0
+		&&
+		strcmp(wwin->wm_class,
+		       list->main_window_desc->wm_class) == 0) {
+		
+		if (list->index == index) {
+		    index++;
+		    
+		    /* restart list traversal */
+		    list = scr->wapp_list;
+		    continue;
+		}
+	    }
+	    
+	    list = list->next;
+	}
+	
+	wapp->index = index;
+    }
+    
+    
     wSoundPlay(WSOUND_APPSTART);
 
 #ifdef DEBUG
@@ -551,30 +585,6 @@ wApplicationSetCollapse(WApplication *app, Bool flag)
 int
 wApplicationIndexOfGroup(WApplication *app)
 {
-    WApplication *list = app->main_window_desc->screen_ptr->wapp_list;
-    int index = 0;
-    WWindow *wwin = app->main_window_desc;
-/*
-    if (!WFLAGP(wwin, collapse_appicons))
-	return 0;
- */
-    
-    while (list) {
-	if (app == list)
-	    return index;
-
-	if (strcmp(wwin->wm_instance,
-		   list->main_window_desc->wm_instance) == 0
-	    &&
-	    strcmp(wwin->wm_class,
-		   list->main_window_desc->wm_class) == 0)
-	    index++;
-
-	list = list->next;
-    }
-    
-    puts("OH SHIT!?!?!? HOW THE FUCK DID WE GET HERE!?!?!?!?!");
-    
-    return 0;
+    return app->index;
 }
 
