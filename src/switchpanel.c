@@ -22,6 +22,7 @@
 #include "wconfig.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 #include "WindowMaker.h"
 #include "screen.h"
@@ -113,10 +114,7 @@ struct SwitchPanel {
   WMArray *images;
   WMArray *windows;
   int current;
-  
-  WMColor *normalColor;
-  WMColor *selectColor;
-  
+    
   RImage *defIcon;
   
   RImage *tile;
@@ -217,12 +215,9 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     int height;
     int iconWidth = ICON_IDEAL_SIZE;
     WMBox *vbox;
-    
-    panel->defIcon= NULL;
-    
-    panel->normalColor = WMGrayColor(scr->wmscreen);
-    panel->selectColor = WMWhiteColor(scr->wmscreen);
-    
+  
+    memset(panel, 0, sizeof(WSwitchPanel));
+
     panel->scr= scr;
     panel->windows= WMCreateArray(10);
     
@@ -255,9 +250,8 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     if (iconWidth < 16 || WMGetArrayItemCount(panel->windows) == 0)
     {
         /* if there are too many windows, don't bother trying to show the panel */
-        WMFreeArray(panel->windows);
-        wfree(panel);
-        return NULL;
+
+        return panel; 
     }
     
     height= iconWidth + 20 + 10 + ICON_EXTRASPACE;
@@ -356,19 +350,23 @@ void wSwitchPanelDestroy(WSwitchPanel *panel)
 {
   int i;
   RImage *image;
-  WM_ITERATE_ARRAY(panel->images, image, i) {
-    if (image)
-      RReleaseImage(image);
+
+  if (panel->images) {
+    WM_ITERATE_ARRAY(panel->images, image, i) {
+      if (image)
+        RReleaseImage(image);
+    }
+    WMFreeArray(panel->images);
   }
-  WMDestroyWidget(panel->win);
-  WMFreeArray(panel->icons);
+  if (panel->win)
+    WMDestroyWidget(panel->win);
+  if (panel->icons)
+    WMFreeArray(panel->icons);
   WMFreeArray(panel->windows);
-  WMFreeArray(panel->images);
-  WMReleaseColor(panel->selectColor);
-  WMReleaseColor(panel->normalColor);
   if (panel->defIcon)
     RReleaseImage(panel->defIcon);
-  RReleaseImage(panel->tile);
+  if (panel->tile)
+    RReleaseImage(panel->tile);
   wfree(panel);
 }
 
@@ -378,7 +376,8 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back)
   WWindow *wwin;
   int count = WMGetArrayItemCount(panel->windows);
 
-  changeImage(panel, panel->current, 0);
+  if (panel->win)
+    changeImage(panel, panel->current, 0);
   
   if (!back)
     panel->current = (count + panel->current - 1) % count;
@@ -386,11 +385,12 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back)
     panel->current = (panel->current + 1) % count;
 
   wwin = WMGetFromArray(panel->windows, panel->current);
-  
-  WMSetLabelText(panel->label, wwin->frame->title);
 
-  changeImage(panel, panel->current, 1);
-  
+  if (panel->win) {
+    WMSetLabelText(panel->label, wwin->frame->title);
+
+    changeImage(panel, panel->current, 1);
+  }
   return wwin;
 }
 
