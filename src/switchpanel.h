@@ -29,6 +29,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace);
 void wSwitchPanelDestroy(WSwitchPanel *panel);
 
 WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back);
+WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back);
 
 WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event);
 

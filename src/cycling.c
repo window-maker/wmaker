@@ -26,6 +26,10 @@
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
 
+// TODO: remove non-MOX_CYCLING junk
+//       fix the stacking/window raising during alt-tabbing
+//       allow selection of icons with mouse
+
 #define MOX_CYCLING
 
 #include "WindowMaker.h"
@@ -190,13 +194,15 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 #ifdef MOX_CYCLING
     WSwitchPanel *swpanel = NULL;
 #endif
-    KeyCode leftKey, rightKey;
+    KeyCode leftKey, rightKey, homeKey, endKey;
 
     if (!wwin)
         return;
   
     leftKey = XKeysymToKeycode(dpy, XK_Left);
     rightKey = XKeysymToKeycode(dpy, XK_Right);
+    homeKey = XKeysymToKeycode(dpy, XK_Home);
+    endKey = XKeysymToKeycode(dpy, XK_End);
 
     if (next)
         hasModifier = (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0);
@@ -307,6 +313,14 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                     XRaiseWindow(dpy, newFocused->frame->core->window);
                 }
 #endif /* !MOX_CYCLING */
+            } else if (ev.xkey.keycode == homeKey || ev.xkey.keycode == endKey) {
+                if (swpanel) {
+                    newFocused = wSwitchPanelSelectFirst(swpanel, ev.xkey.keycode != homeKey);
+                    if (newFocused) {
+                        wWindowFocus(newFocused, oldFocused);
+                        oldFocused = newFocused;
+                    }
+                }
             } else if (ev.type == MotionNotify) {
                 WWindow *tmp;
                 if (swpanel) {

@@ -133,6 +133,8 @@ extern WPreferences wPreferences;
 
 static int canReceiveFocus(WWindow *wwin)
 {
+  if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
+    return 0;
   if (!wwin->flags.mapped)
   {
     if (!wwin->flags.shaded && !wwin->flags.miniaturized && !wwin->flags.hidden)
@@ -141,8 +143,6 @@ static int canReceiveFocus(WWindow *wwin)
       return -1;
   }
   if (WFLAGP(wwin, no_focusable))
-    return 0;
-  if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
     return 0;
   return 1;
 }
@@ -364,7 +364,6 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     
     WMMapSubwidgets(panel->win);
     WMRealizeWidget(panel->win);
-    WMMapWidget(panel->win);
     {
         WMPoint center;
         
@@ -376,7 +375,9 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     panel->current= WMGetFirstInArray(panel->windows, curwin);
     if (panel->current >= 0)
         changeImage(panel, panel->current, 1);
-    
+
+    WMMapWidget(panel->win);
+
     return panel;
 }
 
@@ -432,6 +433,32 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back)
   return wwin;
 }
 
+
+WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
+{
+  WWindow *wwin;
+  int count = WMGetArrayItemCount(panel->windows);
+
+  if (count == 0)
+    return NULL;
+
+  if (panel->win)
+    changeImage(panel, panel->current, 0);
+  
+  if (!back)
+    panel->current = count-1;
+  else
+    panel->current = 0;
+
+  wwin = WMGetFromArray(panel->windows, panel->current);
+
+  if (panel->win) {
+    WMSetLabelText(panel->label, wwin->frame->title);
+
+    changeImage(panel, panel->current, 1);
+  }
+  return wwin;
+}
 
 
 WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
