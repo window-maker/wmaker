@@ -192,7 +192,7 @@ createPanel(Panel *p)
     for (i=0; i<4; i++) {
 	panel->ballB[i] = WMCreateSwitchButton(panel->ballF);
 	WMResizeWidget(panel->ballB[i], 205, 20);
-	WMMoveWidget(panel->ballB[i], 15, 25+i*30);
+	WMMoveWidget(panel->ballB[i], 15, 20+i*25);
     }
     WMSetButtonText(panel->ballB[0], _("incomplete window titles"));
     WMSetButtonText(panel->ballB[1], _("miniwindow titles"));

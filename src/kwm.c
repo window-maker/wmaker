@@ -780,6 +780,7 @@ void
 wKWMCheckClientInitialState(WWindow *wwin)
 {
     long val;
+    WArea area;
 
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_STICKY, &val) && val) {
 
@@ -792,6 +793,17 @@ wKWMCheckClientInitialState(WWindow *wwin)
     if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &val) && val) {
 
 	wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
+    }
+    if (getAreaHint(wwin->client_win, _XA_KWM_WIN_GEOMETRY_RESTORE, &area)
+	&& (wwin->old_geometry.x != area.x1
+	    || wwin->old_geometry.y != area.y1
+	    || wwin->old_geometry.width != area.x2 - area.x1
+	    || wwin->old_geometry.height != area.y2 - area.y1)) {
+
+	wwin->old_geometry.x = area.x1;
+	wwin->old_geometry.y = area.y1;
+	wwin->old_geometry.width = area.x2 - area.x1;
+	wwin->old_geometry.height = area.y2 - area.y1;
     }
 }
 

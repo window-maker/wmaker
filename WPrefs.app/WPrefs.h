@@ -2,7 +2,7 @@
  * 
  *  WPrefs - Window Maker Preferences Program
  * 
- *  Copyright (c) 1998 Alfredo K. Kojima
+ *  Copyright (c) 1998, 1999 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@
 /****/
 
 #define WVERSION	"0.40"
-#define WMVERSION	"0.53.x"
+#define WMVERSION	"0.54.x"
 
 
 extern char *NOptionValueChanged;

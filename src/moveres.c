@@ -120,7 +120,7 @@ showPosition(WWindow *wwin, int x, int y)
     int fw, fh;
 
     if (wPreferences.move_display == WDIS_NEW) {
-#if 0
+#if 1
         int width = wwin->frame->core->width;
         int height = wwin->frame->core->height;
 
@@ -160,7 +160,7 @@ static void
 cyclePositionDisplay(WWindow *wwin, int x, int y, int w, int h)
 {
     WScreen *scr = wwin->screen_ptr;
-    
+
     wPreferences.move_display++;
     wPreferences.move_display %= NUM_DISPLAYS;
     
@@ -176,7 +176,6 @@ cyclePositionDisplay(WWindow *wwin, int x, int y, int w, int h)
 	    moveGeometryDisplayCentered(scr, x + w/2, y + h/2);
 	}
 	XMapRaised(dpy, scr->geometry_display);
-	showPosition(wwin, x, y);
     }
 }
 
@@ -1071,6 +1070,11 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 	newY = data->calcY;
 
     if (data->realX != newX || data->realY != newY) {
+
+	if (wPreferences.move_display == WDIS_NEW
+	    && !scr->selected_windows) {
+	    showPosition(wwin, data->realX, data->realY);
+	}
 	if (opaqueMove) {
 	    doWindowMove(wwin, scr->selected_windows,
 			 newX - wwin->frame_x,
@@ -1097,12 +1101,6 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
 	}
 
 	if (!scr->selected_windows) {
-
-	    if (wPreferences.move_display == WDIS_NEW) {
-
-		showPosition(wwin, data->realX, data->realY);
-		
-	    }
 	    showPosition(wwin, newX, newY);
 	}
     }
@@ -1450,6 +1448,14 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
     rimg = InitGhostWindowMove(scr);
 #endif
 
+    if (wPreferences.opaque_move && !wPreferences.use_saveunders) {
+	XSetWindowAttributes attr;
+
+	attr.save_under = True;
+	XChangeWindowAttributes(dpy, wwin->frame->core->window,
+				CWSaveUnder, &attr);
+    }
+
     initMoveData(wwin, &moveData);
 
     moveData.mouseX = ev->xmotion.x_root;
@@ -1495,8 +1501,19 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 			       moveData.realY - wwin->frame_y);
 		}
 
-		cyclePositionDisplay(wwin, moveData.realX, moveData.realY, 
+		if (wPreferences.move_display == WDIS_NEW
+		    && !scr->selected_windows) {
+		    showPosition(wwin, moveData.realX, moveData.realY);
+		    XUngrabServer(dpy);
+		}
+		cyclePositionDisplay(wwin, moveData.realX, moveData.realY,
 				     moveData.winWidth, moveData.winHeight);
+
+		if (wPreferences.move_display == WDIS_NEW
+		    && !scr->selected_windows) {
+		    XGrabServer(dpy);
+		    showPosition(wwin, moveData.realX, moveData.realY);
+		}
 
 		if (!opaqueMove) {
                     drawFrames(wwin, scr->selected_windows,
@@ -1518,6 +1535,11 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		if (!warped && !wPreferences.no_autowrap) {
 		    int oldWorkspace = scr->current_workspace;
 
+		    if (wPreferences.move_display == WDIS_NEW
+			&& !scr->selected_windows) {
+			showPosition(wwin, moveData.realX, moveData.realY);
+			XUngrabServer(dpy);
+		    }
 		    if (!opaqueMove) {
 			drawFrames(wwin, scr->selected_windows, 
 				   moveData.realX - wwin->frame_x,
@@ -1530,11 +1552,16 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 			    updateMoveData(wwin, &moveData);
 			warped = 1;
 		    }
-
 		    if (!opaqueMove) {
-			drawFrames(wwin, scr->selected_windows,
+			drawFrames(wwin, scr->selected_windows, 
 				   moveData.realX - wwin->frame_x,
 				   moveData.realY - wwin->frame_y);
+		    }
+		    if (wPreferences.move_display == WDIS_NEW
+			&& !scr->selected_windows) {
+			XSync(dpy, False);
+			showPosition(wwin, moveData.realX, moveData.realY);
+			XGrabServer(dpy);
 		    }
 		} else {
 		    warped = 0;
@@ -1556,8 +1583,12 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 		if (started && !opaqueMove)
 		    drawFrames(wwin, scr->selected_windows, 0, 0);
 
-		if (!opaqueMove)
+		if (!opaqueMove || (wPreferences.move_display==WDIS_NEW
+				    && !scr->selected_windows)) {
 		    XGrabServer(dpy);
+		    if (wPreferences.move_display==WDIS_NEW)
+			showPosition(wwin, moveData.realX, moveData.realY);
+		}
 	    }
 	    break;
 
@@ -1619,6 +1650,14 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
 	    }
 	    break;
 	}
+    }
+
+    if (wPreferences.opaque_move && !wPreferences.use_saveunders) {
+	XSetWindowAttributes attr;
+
+	attr.save_under = False;
+	XChangeWindowAttributes(dpy, wwin->frame->core->window,
+				CWSaveUnder, &attr);
     }
 
     freeMoveData(&moveData);

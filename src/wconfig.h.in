@@ -363,7 +363,7 @@
 #define MENU_SELECT_DELAY 200
 
 /* delay for jumpback of scrolled menus */
-#define MENU_JUMP_BACK_DELAY 	200
+#define MENU_JUMP_BACK_DELAY 	300
 
 /* *** animation speed constants *** */
 

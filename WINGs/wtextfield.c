@@ -1070,6 +1070,7 @@ handleTextFieldActionEvents(XEvent *event, void *data)
      case KeyPress:
         if (tPtr->flags.enabled && tPtr->flags.focused)
             handleTextFieldKeyPress(tPtr, event);
+	
         break;
 
      case MotionNotify:

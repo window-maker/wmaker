@@ -1,578 +1,741 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Free Software Foundation, Inc.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
 msgid ""
 msgstr ""
-"Date: 1998-08-24 14:42:31-0300\n"
-"From: Bastien NOCERA <hadess@writeme.com>\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 1999-04-22 07:08+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: French \n"
-"Content-Type: text/plain; charset=ISO8859-1\n"
-"Xgettext-Options: --default-domain=WindowMaker --add-comments --keyword=_\n"
-"Files: ../src/appicon.c ../src/defaults.c ../src/dialog.c ../src/dock.c ../src/dockedapp.c ../src/event.c ../src/framewin.c ../src/icon.c ../src/main.c ../src/menu.c ../src/misc.c ../src/pixmap.c ../src/proplist.c ../src/resources.c ../src/rootmenu.c ../src/screen.c ../src/session.c ../src/stacking.c ../src/startup.c ../src/switchmenu.c ../src/texture.c ../src/wdefaults.c ../src/window.c ../src/winmenu.c ../src/winspector.c ../src/workspace.c ../src/xutil.c\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: ENCODING\n"
 
-#: ../src/appicon.c:500 ../src/dialog.c:262 ../src/dialog.c:318 ../src/dock.c:2989 ../src/dockedapp.c:206 ../src/rootmenu.c:164 ../src/winspector.c:276 ../src/winspector.c:289
+#: ../src/appicon.c:541 ../src/dialog.c:223 ../src/dialog.c:279
+#: ../src/dock.c:3114 ../src/dockedapp.c:210 ../src/rootmenu.c:1743
+#: ../src/winspector.c:284 ../src/winspector.c:300
 msgid "Error"
 msgstr "Erreur."
 
-#: ../src/appicon.c:501
+#: ../src/appicon.c:542
 msgid "Could not open specified icon file"
 msgstr "Icone spécifié introuvable."
 
-#: ../src/appicon.c:522 ../src/dock.c:263 ../src/winmenu.c:85
-msgid "Kill Application"
-msgstr "Tuer l'application"
+#: ../src/appicon.c:543 ../src/dialog.c:122 ../src/dialog.c:223
+#: ../src/dialog.c:279 ../src/dialog.c:467 ../src/dialog.c:1476
+#: ../src/dock.c:473 ../src/dock.c:3115 ../src/dockedapp.c:211
+#: ../src/dockedapp.c:357 ../src/rootmenu.c:1747 ../src/winspector.c:285
+#: ../src/winspector.c:301
+msgid "OK"
+msgstr "OK"
 
-#: ../src/appicon.c:523 ../src/dock.c:264 ../src/winmenu.c:86
+#: ../src/appicon.c:570 ../src/dock.c:276
 msgid ""
-"This will kill the application.\n"
+" will be forcibly closed.\n"
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"L'application va être tuée.\n"
-"Les changements non sauvegardés seront perdus.\n"
-"Confirmez l'action."
+" va être tué.\n"
+"Tous les changements non sauvegardés seront perdus.\n"
+"Confirmez avec OK."
 
-#: ../src/appicon.c:538 ../src/dock.c:1017
-msgid "Unhide Here"
-msgstr "Montrer ici"
+#: ../src/appicon.c:576 ../src/dock.c:281 ../src/winmenu.c:124
+msgid "Kill Application"
+msgstr "Tuer l'application"
 
-#: ../src/appicon.c:539 ../src/dock.c:1019
-msgid "(Un)Hide"
-msgstr "Cacher/Montrer"
-
-#: ../src/appicon.c:540
-msgid "Set Icon..."
-msgstr "Associer un icone"
-
-#: ../src/appicon.c:541 ../src/dock.c:1023 ../src/winmenu.c:260
-msgid "Kill"
-msgstr "Tuer"
-
-#: ../src/defaults.c:572 ../src/screen.c:535 ../src/screen.c:643 ../src/screen.c:649
-msgid "could not read domain \"%s\" from defaults database"
-msgstr "Domaine \"%s\" introuvable dans la base par défaut."
-
-#: ../src/defaults.c:618 ../src/defaults.c:740 ../src/defaults.c:775 ../src/defaults.c:801
-msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr "Domaine %s (%s) de la base par défaut corrompu!"
-
-#: ../src/defaults.c:623 ../src/defaults.c:757 ../src/defaults.c:784 ../src/defaults.c:809
-msgid "could not load domain %s from user defaults database"
-msgstr "Domaine %s illisible depuis la base utilisateur par défaut."
-
-#: ../src/defaults.c:634 ../src/defaults.c:725
-msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr "Domaine %s (%s) de la base globale par défaut est corrompu!"
-
-#: ../src/defaults.c:651 ../src/defaults.c:730
-msgid "could not load domain %s from global defaults database"
-msgstr "Domaine %s illisible depuis la base globale par défaut."
-
-#: ../src/defaults.c:1097
-msgid "can't convert \"%s\" to boolean for key \"%s\""
-msgstr "Conversion de \"%s\" en donnée booléenne pour la clé \"%s\" impossible."
-
-#: ../src/defaults.c:1102 ../src/defaults.c:1136 ../src/defaults.c:1168 ../src/defaults.c:1181 ../src/defaults.c:1196 ../src/defaults.c:1211 ../src/defaults.c:1282 ../src/defaults.c:1294 ../src/defaults.c:1353 ../src/defaults.c:1397 ../src/defaults.c:1439 ../src/defaults.c:1485 ../src/defaults.c:1531 ../src/defaults.c:1754 ../src/defaults.c:1768 ../src/defaults.c:1801 ../src/defaults.c:1813 ../src/defaults.c:1825 ../src/defaults.c:1849 ../src/defaults.c:1867 ../src/defaults.c:1880 ../src/defaults.c:1893 ../src/defaults.c:1930 ../src/defaults.c:1968 ../src/defaults.c:2032
-msgid "using default \"%s\" instead"
-msgstr "Utilise la valeur par défaut \"%s\" en remplacement."
-
-#: ../src/defaults.c:1133
-msgid "can't convert \"%s\" to integer for key \"%s\""
-msgstr "Conversion de \"%s\" en donnée entière pour la clé \"%s\" impossible."
-
-#: ../src/defaults.c:1163 ../src/defaults.c:1277 ../src/defaults.c:1749 ../src/defaults.c:1796 ../src/wdefaults.c:541 ../src/wdefaults.c:577
-msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "Mauvais format d'option pour la clé \"%s\". Devrait être %s."
-
-#: ../src/defaults.c:1176
-msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "Nombre incorrects d'éléments pour la clé \"%s\"."
-
-#: ../src/defaults.c:1191
-msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "Mauvaise valeur pour la clé \"%s\". Devrait être des Coordonnées."
-
-#: ../src/defaults.c:1206
-msgid "can't convert array to integers for \"%s\"."
-msgstr "Conversion vers des données entières pour la clé \"%s\" impossible."
-
-#: ../src/defaults.c:1345
-msgid "Invalid focus mode \"%s\". Should be Manual, Auto or Sloppy."
-msgstr "Mode de focus \"%s\" invalide. Devrait être Manual, Auto ou Sloppy."
-
-#: ../src/defaults.c:1348
-msgid "Invalid colormap focus mode \"%s\". Should be Manual or Auto."
-msgstr "Mode de focus des couleurs \"%s\" invalide. Devrait être Manuel ou Auto."
-
-#: ../src/defaults.c:1391
-msgid "Invalid window placement mode \"%s\". Should be Auto, Cascade, Random or Manual."
-msgstr "Mode de placement des fenêtres \"%s\" invalide. Devrait être Auto, Cascade, Random ou Manual."
-
-#: ../src/defaults.c:1433
-msgid "Invalid geometry display type \"%s\". Should be Center, Corner, Floating or Line."
-msgstr "Type d'affichage de la géométrie \"%s\" invalide. Devrait être Center, Corner, Floating ou Line."
-
-#: ../src/defaults.c:1480
-msgid "Invalid speed \"%s\". Should be UltraFast, Fast, Medium, Slow or UltraSlow."
-msgstr "Vitesse \"%s\" invalide. Devrait être UltraFast, Fast, Medium, Slow ou UltraSlow."
-
-#: ../src/defaults.c:1525
-msgid "Invalid mouse button \"%s\". Should be Left, Middle, Right or Button1 through Button5"
-msgstr "Bouton de souris \"%s\" invalide. Devrait être Left, Middle, Right ou de Button1 à Button5."
-
-#: ../src/defaults.c:1594 ../src/defaults.c:1625 ../src/defaults.c:1637 ../src/defaults.c:1679 ../src/defaults.c:1716
-msgid "\"%s\" is not a valid color name"
-msgstr "\"%s\" est un nom de couleur invalide."
-
-#: ../src/defaults.c:1606
-msgid "bad number of arguments in gradient specification"
-msgstr "Mauvais nombre d'arguments dans la spécification du dégradé."
-
-#: ../src/defaults.c:1652
-msgid "too few arguments in multicolor gradient specification"
-msgstr "Trop peu d'arguments dans la spécification du dégradé multicolore."
-
-#: ../src/defaults.c:1763
-msgid "Error in texture specification for key \"%s\""
-msgstr "Erreur dans la spécification de la texture de la clé \"%s\"."
-
-#: ../src/defaults.c:1809 ../src/defaults.c:1845
-msgid "Too few elements in array for key \"WorkspaceBack\"."
-msgstr "Trop peu d'éléments pour la clé \"WorkspaceBack\"."
-
-#: ../src/defaults.c:1821
-msgid "Wrong type for workspace background. Should be Texture."
-msgstr "Mauvais type de donnée pour le fond d'écran. Devrait être une Texture."
-
-#: ../src/defaults.c:1863
-msgid "Cannot get color entry for key \"WorkspaceBack\"."
-msgstr "Obtention de la couleur pour la clé \"WorkspaceBack\" impossible."
-
-#: ../src/defaults.c:1875
-msgid "key \"WorkspaceBack\" has invalid color \"%s\""
-msgstr "La clé \"WorkspaceBack\" a une couleur \"%s\" invalide."
-
-#: ../src/defaults.c:1889
-msgid "Cannot get file entry for key \"WorkspaceBack\"."
-msgstr "Obtention du fichier pour la clé  \"WorkspaceBack\" impossible."
-
-#: ../src/defaults.c:1907
-msgid "could not run \"%s\""
-msgstr "Ne peut pas lancer \"%s\"."
-
-#: ../src/defaults.c:1913
-msgid "could not find background image \"%s\""
-msgstr "Image \"%s\" pour le fond d'écran introuvable."
-
-#: ../src/defaults.c:1926
-msgid "Error in texture specification for key \"WorkspaceBack\""
-msgstr "Erreur dans la spécification de la texture pour la clé  \"WorkspaceBack\"."
-
-#: ../src/defaults.c:1963
-msgid "Invalid justification type \"%s\". Should be Left, Center or Right"
-msgstr "Type de justification \"%s\" invalide. Devrait être  Left, Center ou Right."
-
-#: ../src/defaults.c:1997
-msgid "could not load any usable font"
-msgstr "Aucune police utilisable chargeable."
-
-#: ../src/defaults.c:2027
-msgid "could not get color for key \"%s\""
-msgstr "Obtention de la couleur pour la clé \"%s\" impossible."
-
-#: ../src/defaults.c:2086 ../src/rootmenu.c:435
-msgid "%s:invalid key modifier \"%s\""
-msgstr "%s: modificateur de clé \"%s\" invalide."
-
-#: ../src/defaults.c:2098
-msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s: spécification de raccourci-clavier \"%s\" invalide."
-
-#: ../src/defaults.c:2105
-msgid "%s:invalid key in shortcut \"%s\""
-msgstr "%s: touche invalide dans le raccourci \"%s\"."
-
-#: ../src/defaults.c:2201
-msgid "could not render texture for icon background"
-msgstr "Affichage de la texture de fond d'icone impossible."
-
-#: ../src/defaults.c:2546
-msgid "could not render texture for workspace background"
-msgstr "Affichage de la texture de fond d'écran impossible."
-
-#: ../src/dialog.c:67 ../src/dialog.c:79 ../src/dialog.c:162 ../src/dialog.c:498 ../src/dockedapp.c:349
-msgid "OK"
-msgstr "Ok"
-
-
-#: ../src/dialog.c:67 ../src/dialog.c:72 ../src/dialog.c:162 ../src/dialog.c:505 ../src/dockedapp.c:355
-msgid "Cancel"
-msgstr "Annuler"
-
-#: ../src/dialog.c:72 ../src/rootmenu.c:206
-msgid "Exit"
-msgstr "Quitter"
-
-#: ../src/dialog.c:84
+#: ../src/appicon.c:577 ../src/dock.c:282 ../src/winmenu.c:126
 msgid "Yes"
 msgstr "Oui"
 
-#: ../src/dialog.c:84
+#: ../src/appicon.c:577 ../src/dock.c:282 ../src/winmenu.c:126
 msgid "No"
 msgstr "Non"
 
-#: ../src/dialog.c:257
+#: ../src/appicon.c:595 ../src/dock.c:1109
+msgid "Unhide Here"
+msgstr "Montrer ici"
+
+#: ../src/appicon.c:596 ../src/appicon.c:621 ../src/dock.c:1111
+#: ../src/dock.c:1113 ../src/dock.c:3240 ../src/dock.c:3242
+#: ../src/winmenu.c:446
+msgid "Hide"
+msgstr "Cacher"
+
+#: ../src/appicon.c:597
+msgid "Set Icon..."
+msgstr "Associer un icone..."
+
+#: ../src/appicon.c:598 ../src/dock.c:1117 ../src/rootmenu.c:227
+#: ../src/rootmenu.c:241 ../src/winmenu.c:493
+msgid "Kill"
+msgstr "Tuer"
+
+#: ../src/appicon.c:619 ../src/dock.c:3238
+msgid "Unhide"
+msgstr "Montrer"
+
+#: ../src/defaults.c:808 ../src/startup.c:772 ../src/startup.c:790
+#: ../src/startup.c:796
+#, c-format
+msgid "could not read domain \"%s\" from defaults database"
+msgstr "Domaine «%s» introuvable dans la base par défaut."
+
+#: ../src/defaults.c:854 ../src/defaults.c:979 ../src/defaults.c:1018
+#: ../src/defaults.c:1048
+#, c-format
+msgid "Domain %s (%s) of defaults database is corrupted!"
+msgstr "Domaine %s (%s) de la base par défaut corrompu!"
+
+#: ../src/defaults.c:859 ../src/defaults.c:1000 ../src/defaults.c:1031
+#: ../src/defaults.c:1057
+#, c-format
+msgid "could not load domain %s from user defaults database"
+msgstr "Domaine %s illisible depuis la base utilisateur par défaut."
+
+#: ../src/defaults.c:870 ../src/defaults.c:964
+#, c-format
+msgid "Domain %s (%s) of global defaults database is corrupted!"
+msgstr "Domaine %s (%s) de la base globale par défaut est corrompu!"
+
+#: ../src/defaults.c:889 ../src/defaults.c:969
+#, c-format
+msgid "could not load domain %s from global defaults database"
+msgstr "Domaine %s illisible depuis la base globale par défaut."
+
+#: ../src/defaults.c:1277
+#, c-format
+msgid "wrong option value for key \"%s\". Should be one of %s"
+msgstr "Mauvaise valeur d'option pour la clé «%s». Devrait être parmi %s"
+
+#: ../src/defaults.c:1324
+#, c-format
+msgid "can't convert \"%s\" to boolean for key \"%s\""
+msgstr "Conversion de «%s» en donnée booléenne pour la clé \"%s\" impossible."
+
+#: ../src/defaults.c:1329 ../src/defaults.c:1363 ../src/defaults.c:1395
+#: ../src/defaults.c:1408 ../src/defaults.c:1423 ../src/defaults.c:1437
+#: ../src/defaults.c:1509 ../src/defaults.c:1521 ../src/defaults.c:1927
+#: ../src/defaults.c:1944 ../src/defaults.c:1957 ../src/defaults.c:1990
+#: ../src/defaults.c:2006 ../src/defaults.c:2037 ../src/defaults.c:2124
+#, c-format
+msgid "using default \"%s\" instead"
+msgstr "Utilise la valeur par défaut «%s» en remplacement."
+
+#: ../src/defaults.c:1360
+#, c-format
+msgid "can't convert \"%s\" to integer for key \"%s\""
+msgstr "Conversion de «%s» en donnée entière pour la clé «%s» impossible."
+
+#: ../src/defaults.c:1390 ../src/defaults.c:1504 ../src/defaults.c:1922
+#: ../src/defaults.c:1939 ../src/defaults.c:1985 ../src/defaults.c:2032
+#: ../src/wdefaults.c:546 ../src/wdefaults.c:582
+#, c-format
+msgid "Wrong option format for key \"%s\". Should be %s."
+msgstr "Mauvais format d'option pour la clé «%s». Devrait être %s."
+
+#: ../src/defaults.c:1403
+#, c-format
+msgid "Incorrect number of elements in array for key \"%s\"."
+msgstr "Nombre incorrects d'éléments pour la clé «%s»."
+
+#: ../src/defaults.c:1418
+#, c-format
+msgid "Wrong value for key \"%s\". Should be Coordinate."
+msgstr "Mauvaise valeur pour la clé «%s». Devrait être des Coordonnées."
+
+#: ../src/defaults.c:1433
+#, c-format
+msgid "can't convert array to integers for \"%s\"."
+msgstr "Conversion vers des données entières pour la clé «%s» impossible."
+
+#: ../src/defaults.c:1631 ../src/defaults.c:1663 ../src/defaults.c:1679
+#: ../src/defaults.c:1725 ../src/defaults.c:1765 ../src/defaults.c:1803
+#: ../src/defaults.c:1819
+#, c-format
+msgid "\"%s\" is not a valid color name"
+msgstr "«%s» est un nom de couleur invalide."
+
+#: ../src/defaults.c:1644
+msgid "bad number of arguments in gradient specification"
+msgstr "Mauvais nombre d'arguments dans la spécification du dégradé."
+
+#: ../src/defaults.c:1698
+msgid "too few arguments in multicolor gradient specification"
+msgstr "Trop peu d'arguments dans la spécification du dégradé multicolore."
+
+#: ../src/defaults.c:1792
+msgid "bad number of arguments in textured gradient specification"
+msgstr "Mauvais nombre d'arguments dans la spécification du dégradé texturé."
+
+#: ../src/defaults.c:1835
+#, c-format
+msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
+msgstr "Mauvaise valeur d'opacité pour la texture tgradient «%s». Devrait être [0..255]"
+
+#: ../src/defaults.c:1895
+#, c-format
+msgid "could not initialize library %s"
+msgstr "Ne peut pas initialiser la librairie %s"
+
+#: ../src/defaults.c:1898
+#, c-format
+msgid "could not find function %s::%s"
+msgstr "Function %s::%s introuvable"
+
+#: ../src/defaults.c:1905
+#, c-format
+msgid "invalid texture type %s"
+msgstr "Type de texture %s invalide"
+
+#: ../src/defaults.c:1952
+#, c-format
+msgid "Error in texture specification for key \"%s\""
+msgstr "Erreur dans la spécification de la texture pour la clé «%s»"
+
+#: ../src/defaults.c:2002
+msgid "Wrong type for workspace background. Should be a texture type."
+msgstr "Mauvais type de fond d'écran. Devrait être une texture."
+
+#: ../src/defaults.c:2050
+#, c-format
+msgid "Wrong type for background of workspace %i. Should be a texture."
+msgstr "Mauvais type de fond d'écran pour le bureau %i. Devrait être une texture."
+
+#: ../src/defaults.c:2091
+msgid "could not load any usable font!!!"
+msgstr "Aucune police utilisable chargeable."
+
+#: ../src/defaults.c:2119
+#, c-format
+msgid "could not get color for key \"%s\""
+msgstr "Obtention de la couleur pour la clé «%s» impossible."
+
+#: ../src/defaults.c:2179 ../src/rootmenu.c:493
+#, c-format
+msgid "%s:invalid key modifier \"%s\""
+msgstr "%s: modificateur de touche «%s» invalide."
+
+#: ../src/defaults.c:2191
+#, c-format
+msgid "%s:invalid kbd shortcut specification \"%s\""
+msgstr "%s: spécification de raccourci-clavier «%s» invalide."
+
+#: ../src/defaults.c:2198
+#, c-format
+msgid "%s:invalid key in shortcut \"%s\""
+msgstr "%s: touche invalide dans le raccourci «%s»."
+
+#: ../src/defaults.c:2224
+#, c-format
+msgid "%s: modifier key %s is not valid"
+msgstr "%s: modificateur de touche «%s» invalide."
+
+#: ../src/defaults.c:2258
+#, c-format
+msgid "could not load image in option %s: %s"
+msgstr "Ne peut pas charger l'image de l'option %s: %s"
+
+#: ../src/defaults.c:2340
+msgid "could not render texture for icon background"
+msgstr "Affichage de la texture de fond d'icone impossible."
+
+#: ../src/dialog.c:122 ../src/dialog.c:474 ../src/dock.c:473
+#: ../src/dockedapp.c:363 ../src/rootmenu.c:189 ../src/rootmenu.c:227
+#: ../src/rootmenu.c:241
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../src/dialog.c:218
 msgid "Could not open directory "
 msgstr "Ouverture du répertoire impossible."
 
-#: ../src/dialog.c:313
+#: ../src/dialog.c:274
 msgid "Could not load image file "
 msgstr "Lecture de l'image impossible."
 
-#: ../src/dialog.c:442
+#: ../src/dialog.c:411
 msgid "Directories"
 msgstr "Répertoires"
 
-#: ../src/dialog.c:451
+#: ../src/dialog.c:420
 msgid "Icons"
 msgstr "Icones"
 
-#: ../src/dialog.c:488
+#: ../src/dialog.c:457
 msgid "File Name:"
 msgstr "Nom de fichier:"
 
-#: ../src/dialog.c:511
+#: ../src/dialog.c:480
 msgid "Choose File"
 msgstr "Choissisez un fichier"
 
-#: ../src/dialog.c:521
+#: ../src/dialog.c:497 ../src/dialog.c:499
 msgid "Icon Chooser"
 msgstr "Sélectionneur d'icone"
 
-#: ../src/dock.c:207
+#: ../src/dialog.c:1400 ../src/startup.c:325
+msgid "cannot open connection for crashing dialog panel. Aborting."
+msgstr "Ouverture d'une connexion pour le panneau de crash impossible. Abandon."
+
+#: ../src/dialog.c:1426
+msgid "Fatal error"
+msgstr "Erreur fatale"
+
+#: ../src/dialog.c:1437
+#, c-format
+msgid ""
+"Window Maker received signal %i\n"
+"(%s)."
+msgstr ""
+"Window Maker a reçu le signal %i\n"
+"(%s)."
+
+#: ../src/dialog.c:1440
+#, c-format
+msgid "Window Maker received signal %i."
+msgstr "Window Maker a reçu le signal %i."
+
+#: ../src/dialog.c:1449
+msgid ""
+" This fatal error occured probably due to a bug. Please fill the included "
+"BUGFORM and report it to bugs@windowmaker.org."
+msgstr ""
+" Cette erreur est probablement apparue suite à un bug. Remplissez le "
+"formulaire BUGFORM et envoyez-le à bugs@windowmaker.org."
+
+#: ../src/dialog.c:1457
+msgid "What do you want to do now?"
+msgstr "Que voulez faire maintenant ?"
+
+#: ../src/dialog.c:1463
+msgid "Select action"
+msgstr "Choisissez une action"
+
+#: ../src/dialog.c:1464
+msgid "Abort and leave a core file"
+msgstr "Abandonner et créer un core dump"
+
+#: ../src/dialog.c:1465
+msgid "Restart Window Maker"
+msgstr "Redémarrer Window Maker"
+
+#: ../src/dialog.c:1466
+msgid "Start alternate window manager"
+msgstr "Démarrer un autre gestionnaire de fenêtres"
+
+#: ../src/dock.c:210
+#, c-format
 msgid "Type the name for workspace %i:"
 msgstr "Entrez un nom pour le Bureau %i:"
 
-#: ../src/dock.c:208 ../src/dock.c:996
+#: ../src/dock.c:211 ../src/dock.c:1088
 msgid "Rename Workspace"
 msgstr "Renommer le Bureau"
 
-#: ../src/dock.c:408
+#: ../src/dock.c:471
 msgid "Workspace Clip"
 msgstr "Clip pour le Bureau"
 
-#: ../src/dock.c:409
+#: ../src/dock.c:472
 msgid "All selected icons will be removed!"
 msgstr "Tous les icones séléctionnés vont être supprimés!"
 
-#: ../src/dock.c:458
+#: ../src/dock.c:519
 msgid "Keep Icon"
 msgstr "Garder l'icone"
 
-#: ../src/dock.c:459 ../src/dock.c:1923 ../src/dock.c:2039
+#: ../src/dock.c:520 ../src/dock.c:2022 ../src/dock.c:2151
 msgid "Type the command used to launch the application"
 msgstr "Entrez la commande utilisée pour lancer l'application"
 
-#: ../src/dock.c:820
+#: ../src/dock.c:901
+#, c-format
 msgid "could not launch application %s\n"
 msgstr "Lancement de l'application %s impossible.\n"
 
-#: ../src/dock.c:875
+#: ../src/dock.c:956
 msgid "could not create workspace submenu for Clip menu"
 msgstr "Création du sous-menu Bureau pour le menu du Clip impossible."
 
-#: ../src/dock.c:933
+#: ../src/dock.c:1019
 msgid "could not create options submenu for Clip menu"
 msgstr "Création du sous-menu Options pour le menu du Clip impossible."
 
-#: ../src/dock.c:937
-msgid "Floating Clip"
-msgstr "Clip flottant"
+#: ../src/dock.c:1023 ../src/dock.c:1077 ../src/winmenu.c:388
+msgid "Keep on top"
+msgstr "Garder au-dessus"
 
-#: ../src/dock.c:943
+#: ../src/dock.c:1029
 msgid "Collapsed"
 msgstr "Refermé"
 
-#: ../src/dock.c:949
+#: ../src/dock.c:1035
 msgid "AutoCollapse"
-msgstr "Auto-Fermeture"
+msgstr "Auto­Fermeture"
 
-#: ../src/dock.c:955
+#: ../src/dock.c:1041
+msgid "AutoRaiseLower"
+msgstr "Auto-Positionnement"
+
+#: ../src/dock.c:1047
 msgid "AutoAttract Icons"
 msgstr "Attirer les Icones"
 
-#: ../src/dock.c:961
+#: ../src/dock.c:1053
 msgid "Keep Attracted Icons"
-msgstr "Garder les Icones Attirés"
+msgstr "Garder les Icones"
 
-#: ../src/dock.c:985
-msgid "Floating Dock"
-msgstr "Dock flottant"
-
-#: ../src/dock.c:991
+#: ../src/dock.c:1083
 msgid "Clip Options"
-msgstr "Options du Clip"
+msgstr "Options de Clip"
 
-#: ../src/dock.c:998
+#: ../src/dock.c:1090
 msgid "(Un)Select Icon"
 msgstr "(Dé)Séléctionner l'Icone"
 
-#: ../src/dock.c:1000
+#: ../src/dock.c:1092
 msgid "(Un)Select All Icons"
 msgstr "(Dé)Séléctionner tous les Icones"
 
-#: ../src/dock.c:1003
+#: ../src/dock.c:1095
 msgid "Keep Icon(s)"
 msgstr "Garder le(s) Icone(s)"
 
-#: ../src/dock.c:1005
+#: ../src/dock.c:1097
 msgid "Move Icon(s) To"
 msgstr "Déplacer le(s) Icone(s) vers"
 
-#: ../src/dock.c:1010
+#: ../src/dock.c:1102
 msgid "Remove Icon(s)"
 msgstr "Supprimer le(s) Icone(s)"
 
-#: ../src/dock.c:1012
+#: ../src/dock.c:1104
 msgid "Attract Icons"
 msgstr "Attirer le(s) Icone(s)"
 
-#: ../src/dock.c:1015
+#: ../src/dock.c:1107
 msgid "Launch"
 msgstr "Lancer"
 
-#: ../src/dock.c:1021
+#: ../src/dock.c:1115
 msgid "Settings..."
 msgstr "Paramètres..."
 
-#: ../src/dock.c:1417 ../src/dock.c:1431 ../src/dock.c:1445 ../src/dock.c:1455
+#: ../src/dock.c:1500 ../src/dock.c:1514 ../src/dock.c:1528 ../src/dock.c:1538
+#, c-format
 msgid "bad value in docked icon state info %s"
-msgstr "mauvaise valeur dans l'information %s sur l'état de l'icone."
+msgstr "Mauvaise valeur dans l'information %s sur l'état de l'icone."
 
-#: ../src/dock.c:1463
+#: ../src/dock.c:1546
+#, c-format
 msgid "bad value in docked icon position %i,%i"
-msgstr "mauvaise valeur pour l'icone de position %i,%i."
+msgstr "Mauvaise valeur pour l'icone de position %i,%i."
 
-#: ../src/dock.c:1692
+#: ../src/dock.c:1789
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr "il y a trop d'icones dans le dock. Le surplus sera ignoré."
+msgstr "Il y a trop d'icones dans le dock. Le surplus sera ignoré."
 
 #. icon->forced_dock = 1;
-#: ../src/dock.c:1922 ../src/dock.c:2038
+#: ../src/dock.c:2021 ../src/dock.c:2150
 msgid "Dock Icon"
 msgstr "Docker l'icone"
 
-#: ../src/dock.c:2982 ../src/dock.c:2986
+#: ../src/dock.c:3107 ../src/dock.c:3111
+#, c-format
 msgid "Could not execute command \"%s\""
-msgstr "Exécution de la commande \"%s\" impossible."
+msgstr "Exécution de la commande «%s» impossible."
 
-#: ../src/dockedapp.c:128
+#: ../src/dockedapp.c:130
+#, c-format
 msgid "could not find icon %s, used in a docked application"
 msgstr "Icone %s, utilisé dans l'application dockée, introuvable."
 
-#: ../src/dockedapp.c:205
-msgid "Could not open specified icon file:%s"
+
+#: ../src/dockedapp.c:209
+#, c-format
+msgid "Could not open specified icon file: %s"
 msgstr "Ouverture de l'icone %s impossible."
 
-#: ../src/dockedapp.c:290
+#: ../src/dockedapp.c:211
+msgid "Ignore"
+msgstr "Ignorer"
+
+#: ../src/dockedapp.c:298
 msgid "Start when WindowMaker is started"
 msgstr "Démarrer en même temps que WindowMaker"
 
-#: ../src/dockedapp.c:297
+#: ../src/dockedapp.c:305
 msgid "Application path and arguments"
 msgstr "Chemin de l'application et arguments"
 
-#: ../src/dockedapp.c:308
+#: ../src/dockedapp.c:316
 msgid "Command for files dropped with DND"
 msgstr "Commande pour les fichiers lâchés par DND"
 
-#: ../src/dockedapp.c:320
+#: ../src/dockedapp.c:328
+#, c-format
 msgid "%d will be replaced with the file name"
 msgstr "%d sera remplacé par le nom du fichier"
 
-#: ../src/dockedapp.c:324
+#: ../src/dockedapp.c:332
 msgid "DND support was not compiled in"
 msgstr "Le support du DND n'a pas été compilé"
 
-#: ../src/dockedapp.c:330
+#: ../src/dockedapp.c:338
 msgid "Icon Image"
 msgstr "Fichier Icone"
 
-#: ../src/dockedapp.c:342 ../src/winspector.c:1158
+#: ../src/dockedapp.c:350 ../src/winspector.c:1245
 msgid "Browse..."
 msgstr "Parcourir..."
 
-#: ../src/dockedapp.c:387
+#: ../src/dockedapp.c:395
 msgid "Docked Application Settings"
 msgstr "Paramètres de l'application dockée"
 
-#: ../src/event.c:465
-msgid "stack overflow: too many dead processes"
-msgstr "Débordement de la pile: trop de processus morts."
+#: ../src/framewin.c:489 ../src/framewin.c:565 ../src/menu.c:461
+#: ../src/texture.c:549
+#, c-format
+msgid "could not render texture: %s"
+msgstr "Affichage de la texture %s impossible"
 
-#: ../src/framewin.c:526
-msgid "could not render gradient: %s"
-msgstr "Affichage du dégradé %s impossible."
-
-#: ../src/framewin.c:542 ../src/framewin.c:557 ../src/framewin.c:568 ../src/framewin.c:575 ../src/framewin.c:582 ../src/icon.c:294 ../src/texture.c:496
+#: ../src/framewin.c:505 ../src/framewin.c:520 ../src/framewin.c:531
+#: ../src/framewin.c:538 ../src/framewin.c:545 ../src/icon.c:350
+#: ../src/menu.c:490
+#, c-format
 msgid "error rendering image:%s"
-msgstr "Erreur lors de l'affichage de l'image \"%s\"."
+msgstr "Erreur lors de l'affichage de l'image «%s»."
 
-#: ../src/icon.c:180 ../src/wdefaults.c:399
+#: ../src/framewin.c:588
+#, c-format
+msgid "error rendering image: %s"
+msgstr "Erreur lors de l'affichage de l'image «%s»."
+
+#: ../src/icon.c:229 ../src/wdefaults.c:416
+#, c-format
 msgid "error loading image file \"%s\""
-msgstr "Erreur dans le chargement de l'image \"%s\"."
+msgstr "Erreur dans le chargement de l'image «%s»."
 
-#: ../src/icon.c:612
+#: ../src/icon.c:477 ../src/icon.c:486
+#, c-format
+msgid "could not create directory %s"
+msgstr "Création du répertoire %s impossible."
+
+#: ../src/icon.c:753
+#, c-format
 msgid "could not find default icon \"%s\""
-msgstr "Icone par défaut \"%s\" introuvable."
+msgstr "Icone par défaut «%s» introuvable."
 
-#: ../src/icon.c:618
+#: ../src/icon.c:759
+#, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr "Chargement de l'icone par défaut \"%s\":%s"
+msgstr "Chargement de l'icone par défaut «%s» impossible:%s"
 
-#: ../src/main.c:169
-msgid "Restart failed!!!"
-msgstr "Redémarrage raté!!!"
-
-#: ../src/main.c:185
-msgid "%s aborted.\n"
-msgstr "%s annulé.\n"
-
-#: ../src/main.c:196
-msgid "usage: %s [-options]\n"
-msgstr "usage: %s [-options]\n"
-
-#: ../src/main.c:197
-msgid "options:"
-msgstr "options:"
-
-#: ../src/main.c:199
-msgid " -nocpp \t\tdisable preprocessing of configuration files"
-msgstr " -nocpp \t\tannule le pré-traitement des fichiers de configuration"
+#: ../src/main.c:198
+msgid "failed to restart Window Maker."
+msgstr "Redémarrage de Window Maker raté."
 
 #: ../src/main.c:201
-msgid " -nodock\t\tdo not open the application Dock"
-msgstr " -nodock\t\tne lance pas le Dock"
+#, c-format
+msgid "could not exec %s"
+msgstr "Exécution de %s impossible."
 
-#: ../src/main.c:202
-msgid " -noclip\t\tdo not open the workspace Clip"
-msgstr " -noclip\t\tne lance pas le Clip"
+#: ../src/main.c:250
+#, c-format
+msgid "%s aborted.\n"
+msgstr "%s abandonné.\n"
 
-#.
-#. puts(_(" -locale locale		locale to use"));
-#.
-#: ../src/main.c:206
-msgid " -visualid visualid\tvisual id of visual to use"
-msgstr " -visualid visualid\tvisual id du visuel à utiliser"
+#: ../src/main.c:261
+#, c-format
+msgid "Usage: %s [options]\n"
+msgstr "Usage: %s [-options]\n"
 
-#: ../src/main.c:207
+#: ../src/main.c:262
+msgid "The Window Maker window manager for the X window system"
+msgstr "Le gestionnaire de fenêtres Window Maker pour X"
+
+#: ../src/main.c:264
 msgid " -display host:dpy\tdisplay to use"
 msgstr " -display host:dpy\tdisplay à utiliser"
 
-#: ../src/main.c:208
-msgid " -version\t\tprint version and exit"
-msgstr " -version\t\taffiche le numéro de version et quitte"
+#: ../src/main.c:266
+msgid " --no-cpp \t\tdisable preprocessing of configuration files"
+msgstr " --no-cpp \t\tannule le pré-traitement des fichiers de configuration"
 
-#: ../src/main.c:220
+#: ../src/main.c:268
+msgid " --no-dock\t\tdo not open the application Dock"
+msgstr " --no-dock\t\tne lance pas le Dock"
+
+#: ../src/main.c:269
+msgid " --no-clip\t\tdo not open the workspace Clip"
+msgstr " --no-clip\t\tne lance pas le Clip"
+
+#.
+#. puts(_(" --locale locale		locale to use"));
+#.
+#: ../src/main.c:273
+msgid " --visual-id visualid\tvisual id of visual to use"
+msgstr " --visual-id visualid\tvisual id du visuel à utiliser"
+
+#: ../src/main.c:274
+msgid " --static\t\tdo not update or save configurations"
+msgstr " --static\t\tne pas mettre-à-jour ni sauver la configuration"
+
+#: ../src/main.c:276
+msgid " --synchronous\t\tturn on synchronous display mode"
+msgstr " --synchronous\t\tutilise un affichage synchrone"
+
+#: ../src/main.c:278
+msgid " --version\t\tprint version and exit"
+msgstr " --version\t\taffiche le numéro de version et quitte"
+
+#: ../src/main.c:279
+msgid " --help\t\t\tshow this message"
+msgstr " --help\t\taffiche ce message"
+
+#: ../src/main.c:291
+#, c-format
 msgid ""
-"could not find user GNUstep directory.\n"
-"Make sure you have installed WindowMaker correctly and run wmaker.inst"
+"could not find user GNUstep directory (%s).\n"
+"Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
 "Répertoire GNUstep de l'utilisateur introuvable.\n"
 "Assurez-vous d'avoir installer WindowMaker correctement et d'avoir lancer wmaker.inst"
 
-#: ../src/main.c:241
+#: ../src/main.c:309 ../src/main.c:314
+#, c-format
 msgid "%s:could not execute initialization script"
 msgstr "%s:exécution ratée du script d'initialisation."
 
-#: ../src/main.c:298 ../src/main.c:305 ../src/main.c:312
+#: ../src/main.c:331 ../src/main.c:336
+#, c-format
+msgid "%s:could not execute exit script"
+msgstr "%s:exécution ratée du script de sortie."
+
+#: ../src/main.c:405 ../src/main.c:412 ../src/main.c:420 ../src/main.c:436
+#, c-format
 msgid "too few arguments for %s"
 msgstr "Trop peu d'arguments pour %s."
 
-#: ../src/main.c:316
+#: ../src/main.c:424
+#, c-format
 msgid "bad value for visualid: \"%s\""
-msgstr "Mauvaise valeur de visualid: \"%s\""
+msgstr "Mauvaise valeur de visualid: «%s»"
 
-#: ../src/main.c:359
+#: ../src/main.c:444
+#, c-format
+msgid "%s: invalid argument '%s'\n"
+msgstr "%s: argument «%s» invalide\n"
+
+#: ../src/main.c:445
+#, c-format
+msgid "Try '%s --help' for more information\n"
+msgstr "Essayez '%s --help' pour plus d'informations\n"
+
+#: ../src/main.c:488
 msgid "X server does not support locale"
-msgstr "le Serveur X ne supporte pas les \"locale\""
+msgstr "le Serveur X ne supporte pas les locale"
 
-#: ../src/main.c:362
+#: ../src/main.c:491
 msgid "cannot set locale modifiers"
-msgstr "Modificateurs de \"locale\" inappliquables."
+msgstr "Modificateurs de locale inappliquables."
 
-#: ../src/main.c:376
+#: ../src/main.c:508
+#, c-format
 msgid "could not open display \"%s\""
-msgstr "Ouverture du \"display\" \"%s\" impossible."
+msgstr "Ouverture du display «%s» impossible."
 
-#: ../src/menu.c:285
+#: ../src/menu.c:297
 msgid "wrealloc() failed while trying to add menu item"
 msgstr "Echec de wrealloc() pendant l'ajout d'un élément de menu."
 
-#: ../src/misc.c:70
+#: ../src/misc.c:71
+#, c-format
 msgid "could not define value for %s for cpp"
-msgstr "Définition de la valeur \"%s\" pour cpp impossible."
+msgstr "Définition de la valeur %s pour cpp impossible."
 
-#: ../src/misc.c:100
+#: ../src/misc.c:101
+#, c-format
 msgid "could not get password entry for UID %i"
 msgstr "Mot de passe de l'UID %i introuvable."
 
-#: ../src/misc.c:124
+#: ../src/misc.c:125
+#, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
 msgstr "Votre machine est mal configurée. HOSTNAME a pour valeur %s."
 
-#: ../src/misc.c:130
+#: ../src/misc.c:131
+#, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
 msgstr "Votre machine est mal configurée. HOST a pour valeur %s."
 
-#: ../src/misc.c:709
+#: ../src/misc.c:772
 msgid "selection timed-out"
 msgstr "La sélection n'est plus valable."
 
-#: ../src/misc.c:723
+#: ../src/misc.c:788
 msgid "Program Arguments"
 msgstr "Arguments du programme"
 
-#: ../src/misc.c:742
+#: ../src/misc.c:789
 msgid "Enter command arguments:"
 msgstr "Entrez les arguments de la commande:"
 
-#: ../src/misc.c:763
+#: ../src/misc.c:887
 msgid "unable to get dropped data from DND drop"
 msgstr "Obtention des données du DND impossible."
 
-#: ../src/misc.c:771
+#: ../src/misc.c:895
 msgid "error getting dropped data from DND drop"
 msgstr "Erreur pendant l'acquisition des données du DND."
 
-#: ../src/misc.c:777
+#: ../src/misc.c:901
 msgid "out of memory while getting data from DND drop"
 msgstr "Plus de mémoire pendant l'acquisition des données du DND."
 
-#: ../src/misc.c:821 ../src/misc.c:940
+#: ../src/misc.c:946 ../src/misc.c:1081
+#, c-format
 msgid "out of memory during expansion of \"%s\""
-msgstr "Plus de mémoire pendant l'expansion de \"%s\"."
+msgstr "Plus de mémoire pendant l'expansion de «%s»."
 
-#: ../src/misc.c:875
+#: ../src/misc.c:1000
 msgid "out of memory during expansion of \"%w\""
-msgstr "Plus de mémoire pendant l'expansion de \"%w\"."
+msgstr "Plus de mémoire pendant l'expansion de «%w»."
 
-#: ../src/misc.c:894
+#: ../src/misc.c:1018
+msgid "out of memory during expansion of \"%W\""
+msgstr "Plus de mémoire pendant l'expansion de «%W»."
+
+
+#: ../src/misc.c:1034
 msgid "out of memory during expansion of \"%a\""
-msgstr "Plus de mémoire pendant l'expansion de \"%a\"."
+msgstr "Plus de mémoire pendant l'expansion de «%a»."
 
-#: ../src/misc.c:916
+#: ../src/misc.c:1060
+#, c-format
 msgid "out of memory during expansion of \"%d\""
-msgstr "Plus de mémoire pendant l'expansion de \"%d\"."
+msgstr "Plus de mémoire pendant l'expansion de «%d»."
 
-#: ../src/misc.c:928
+#: ../src/misc.c:1074
 msgid "selection not available"
 msgstr "Sélection indisponible."
 
-#: ../src/misc.c:1006 ../src/misc.c:1012
+#: ../src/misc.c:1146 ../src/misc.c:1152
+#, c-format
 msgid "bad window name value in %s state info"
 msgstr "Nom de fenêtre incorrecte dans les informations sur %s."
 
+#: ../src/misc.c:1407
+msgid "could not send message to background image helper"
+msgstr "Envoi de messages vers le gestionnaire de fond d'écran impossible."
+
 #: ../src/pixmap.c:235
+#, c-format
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr "Chargement du fichier de masque \"%s\" impossible. Aucun masque ne sera utilisé."
+msgstr "Chargement du fichier de masque «%s» impossible. Aucun masque ne sera utilisé."
 
 #: ../src/proplist.c:180
 msgid "unterminated string"
@@ -608,21 +771,26 @@ msgstr "Erreur lors de l'analyse de la clé du dictionnaire."
 
 #: ../src/proplist.c:332
 msgid "missing = in dictionary entry"
-msgstr "\"=\" manquant dans l'entrée du dictionnaire."
+msgstr "«=» manquant dans l'entrée du dictionnaire."
 
 #: ../src/proplist.c:351
 msgid "missing ; in dictionary entry"
-msgstr "\";\" manquant dans l'entrée du dictionnaire."
+msgstr "«;» manquant dans l'entrée du dictionnaire."
 
 #: ../src/proplist.c:432
-msgid "was expecting a string, dictionary, data or array."
-msgstr "Attendait une chaîne, un dictionnaire, une donnée ou un tableau."
+msgid ""
+"was expecting a string, dictionary, data or array. If it's a string, try "
+"enclosing it with \"."
+msgstr ""
+"Attendait une chaîne, un dictionnaire, une donnée ou un  tableau. Si c'est "
+"une chaîne, essayez de l'encadrer avec des \"."
 
 #: ../src/proplist.c:434
 msgid "Comments are not allowed inside WindowMaker owned domain files."
 msgstr "Les commentaires ne sont pas autorisés dans les fichiers de domaine appartenant à WindowMaker."
 
 #: ../src/proplist.c:453
+#, c-format
 msgid "could not open domain file %s"
 msgstr "Ouverture du fichier de domaine %s impossible."
 
@@ -631,11 +799,13 @@ msgid "extra data after end of file"
 msgstr "Surplus de donnée à la fin du fichier."
 
 #: ../src/resources.c:71
+#, c-format
 msgid "The following character sets are missing in %s:"
 msgstr "Les jeux de caractères suivants manquent dans %s:"
 
 #: ../src/resources.c:76
-msgid "The string \"%s\" will be used in place."
+#, c-format
+msgid "The string \"%s\" will be used in place"
 msgstr "La chaîne \"%s\" sera utilisée à la place"
 
 #: ../src/resources.c:78
@@ -643,238 +813,390 @@ msgid "of any characters from those sets."
 msgstr "de tous les caractères de ces jeux."
 
 #: ../src/resources.c:81
+#, c-format
 msgid "could not create font set %s. Trying fixed"
-msgstr "Création du jeu de caractères %s impossible. Essaye \"fixed\"."
+msgstr "Création du jeu de caractères %s impossible. Essaye fixed."
 
 #: ../src/resources.c:98
+#, c-format
 msgid "could not load font %s. Trying fixed"
-msgstr "Chargement de la police %s impossible. Essaye \"fixed\"."
+msgstr "Chargement de la police %s impossible. Essaye fixed."
 
 #: ../src/resources.c:136
+#, c-format
 msgid "could not parse color \"%s\""
-msgstr "Analyse de la couleur \"%s\" impossible."
+msgstr "Analyse de la couleur «%s» impossible."
 
 #: ../src/resources.c:140
+#, c-format
 msgid "could not allocate color \"%s\""
-msgstr "Allocation de la couleur \"%s\" impossible."
+msgstr "Allocation de la couleur «%s» impossible."
 
-#: ../src/rootmenu.c:162
-msgid "Program \"%s\" not found or cannot be executed."
-msgstr "Le programme \"%s\" non trouvé ou ne peut pas être exécuté."
+#: ../src/rootmenu.c:187 ../src/rootmenu.c:189
+msgid "Exit"
+msgstr "Quitter"
 
-#: ../src/rootmenu.c:207
+#: ../src/rootmenu.c:188
 msgid "Exit window manager?"
 msgstr "Sortir de WindowMaker?"
 
-#: ../src/rootmenu.c:227
+#: ../src/rootmenu.c:224
 msgid "Close X session"
 msgstr "Fermer la session X"
 
-#: ../src/rootmenu.c:228
+#: ../src/rootmenu.c:225
 msgid ""
 "Close Window System session?\n"
-"(all applications will be closed)"
+"Kill might close applications with unsaved data."
 msgstr ""
 "Fermer la session X-Window\n"
 "(toutes les applications seront fermées)"
 
-#: ../src/rootmenu.c:230
-msgid "Exiting...\n"
-msgstr "Sort...\n"
+#.
+#. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
+#. wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
+#.
+#: ../src/rootmenu.c:227 ../src/winmenu.c:486
+msgid "Close"
+msgstr "Fermer"
 
-#: ../src/rootmenu.c:449
+#: ../src/rootmenu.c:238
+msgid "Kill X session"
+msgstr "Tuer la session X"
+
+#: ../src/rootmenu.c:239
+msgid ""
+"Kill Window System session?\n"
+"(all applications will be closed)"
+msgstr ""
+"Tuer la session X?\n"
+"(toutes les applications seront fermées)"
+
+#: ../src/rootmenu.c:506
+#, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s: spécification de raccourci-clavier \"%s\" invalide pour l'entrée %s."
+msgstr "%s: spécification de raccourci-clavier «%s» invalide pour l'entrée %s."
 
-#: ../src/rootmenu.c:457
+#: ../src/rootmenu.c:514
+#, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr "%s: touche invalide dans le raccourci \"%s\" pour l'entrée %s."
+msgstr "%s: touche invalide dans le raccourci «%s» pour l'entrée %s."
 
-#: ../src/rootmenu.c:510
+#: ../src/rootmenu.c:567
+#, c-format
 msgid "%s: unmatched '\"' in menu file"
 msgstr "%s: problème de '\"' dans le fichier de menu."
 
-#: ../src/rootmenu.c:559
+#: ../src/rootmenu.c:617
+#, c-format
 msgid "%s: missing command"
 msgstr "%s: commande manquante."
 
-#: ../src/rootmenu.c:592
+#: ../src/rootmenu.c:650
+#, c-format
 msgid "invalid OPEN_MENU specification: %s"
 msgstr "spécification de OPEN_MENU invalide: %s"
 
-#: ../src/rootmenu.c:657
+#: ../src/rootmenu.c:698
+#, c-format
 msgid "%s:could not stat menu"
 msgstr "%s:échec de stat() pour le menu."
 
-#: ../src/rootmenu.c:665
-msgid "%s:could not stat menu :%s"
+#: ../src/rootmenu.c:706
+#, c-format
+msgid "%s:could not stat menu:%s"
 msgstr "%s: échec de stat() pour le menu: %s"
 
-#: ../src/rootmenu.c:683
+#: ../src/rootmenu.c:724
+#, c-format
 msgid "too many parameters in OPEN_MENU: %s"
 msgstr "trop de paramétres pour OPEN_MENU: %s"
 
-#: ../src/rootmenu.c:719
-msgid "There are more than one WORKSPACE_MENU commands in the applications menu. Only one is allowed."
-msgstr "Il y a plus d'une déclaration WORKSPACE_MENU dans le menu. Une seule est autorisée."
+#: ../src/rootmenu.c:760
+msgid ""
+"There are more than one WORKSPACE_MENU commands in the applications menu. "
+"Only one is allowed."
+msgstr ""
+"Il y a plus d'une déclaration WORKSPACE_MENU dans le menu. Une seule "
+"est autorisée."
 
-#: ../src/rootmenu.c:748 ../src/rootmenu.c:766
+#: ../src/rootmenu.c:789 ../src/rootmenu.c:807
+#, c-format
 msgid "%s:missing parameter for menu command \"%s\""
-msgstr "%s:paramètre manquant pour la commande de menu \"%s\"."
+msgstr "%s:paramètre manquant pour la commande de menu «%s»."
 
-#: ../src/rootmenu.c:829
+#: ../src/rootmenu.c:870
+#, c-format
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr "%s:commande \"%s\" inconnue dans le fichier de configuration."
+msgstr "%s:commande «%s» inconnue dans le fichier du menu."
 
-#: ../src/rootmenu.c:837
+#: ../src/rootmenu.c:878
+#, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr "%s:ne peut pas ajouter le raccourci pour l'entrée \"%s\"."
+msgstr "%s:ne peut pas ajouter le raccourci pour l'entrée «%s»."
 
-#: ../src/rootmenu.c:974
+#: ../src/rootmenu.c:1015
+#, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
 msgstr "%s:ligne trop longue lors de la configuration du menu: %s"
 
-#: ../src/rootmenu.c:996 ../src/rootmenu.c:1088 ../src/rootmenu.c:1189
+#: ../src/rootmenu.c:1037 ../src/rootmenu.c:1129 ../src/rootmenu.c:1230
+#, c-format
 msgid "%s:missing command in menu config: %s"
 msgstr "%s:commande manquante lors de la configuration du menu: %s"
 
-#: ../src/rootmenu.c:1026
+#: ../src/rootmenu.c:1067
+#, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
 msgstr "%s:erreur de syntaxe dans le fichier de menu: déclaration END manquante."
 
-#: ../src/rootmenu.c:1055 ../src/rootmenu.c:1154
+#: ../src/rootmenu.c:1096 ../src/rootmenu.c:1195
 msgid "could not make arguments for menu file preprocessor"
 msgstr "Création des arguments pour le pré-processeur impossible."
 
-#: ../src/rootmenu.c:1061 ../src/rootmenu.c:1161
+#: ../src/rootmenu.c:1102 ../src/rootmenu.c:1202
+#, c-format
 msgid "%s:could not open/preprocess menu file"
 msgstr "%s:Ouverture/Traitement du fichier de menu impossible."
 
-#: ../src/rootmenu.c:1073 ../src/rootmenu.c:1174
+#: ../src/rootmenu.c:1114 ../src/rootmenu.c:1215
+#, c-format
 msgid "%s:could not open menu file"
 msgstr "%s:Ouverture du fichier de menu impossible."
 
-#: ../src/rootmenu.c:1100
+#: ../src/rootmenu.c:1141
+#, c-format
 msgid "%s:invalid menu file. MENU command is missing"
 msgstr "%s:fichier de menu invalide. Déclaration MENU manquante."
 
-#: ../src/rootmenu.c:1109
+#: ../src/rootmenu.c:1150
 msgid "error reading preprocessed menu data"
 msgstr "Erreur lors de la lecture du menu pré-traité."
 
-#: ../src/rootmenu.c:1201
+#: ../src/rootmenu.c:1242
+#, c-format
 msgid "%s:no title given for the root menu"
 msgstr "%s:aucun titre donné pour le menu principal."
 
-#: ../src/rootmenu.c:1255 ../src/rootmenu.c:1318 ../src/rootmenu.c:1362
+#: ../src/rootmenu.c:1325 ../src/rootmenu.c:1392 ../src/rootmenu.c:1436
+#, c-format
 msgid "out of memory while constructing directory menu %s"
 msgstr "Plus de mémoire pendant de la création du sous-menu %s."
 
-#: ../src/rootmenu.c:1265
+#: ../src/rootmenu.c:1335
+#, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr "%s:échec de stat() sur le fichier \"%s\" dans le répertoire du menu."
+msgstr "%s:échec de stat() sur le fichier «%s» dans le répertoire du menu."
 
-#: ../src/rootmenu.c:1411
+#: ../src/rootmenu.c:1490
 msgid "Commands"
 msgstr "Commandes"
 
-#: ../src/rootmenu.c:1413
+#: ../src/rootmenu.c:1493
+msgid "Restart"
+msgstr "Redémarrer"
+
+#: ../src/rootmenu.c:1494
 msgid "Exit..."
 msgstr "Sortir..."
 
-#: ../src/rootmenu.c:1477
-msgid "%s:could not find menu file \"%s\""
-msgstr "%s:Fichier de menu \"%s\" introuvable."
+#: ../src/rootmenu.c:1539
+#, c-format
+msgid "could not find menu file \"%s\" referenced in WMRootMenu"
+msgstr "Fichier de menu «%s» référencé dans WMRootMenu introuvable."
 
-#: ../src/rootmenu.c:1484
-msgid "%s:could not access menu \"%s\""
-msgstr "%s:Accéssion au menu \"%s\" impossible."
+#: ../src/rootmenu.c:1546
+#, c-format
+msgid "could not access menu \"%s\" referenced in WMRootMenu"
+msgstr "Fichier de menu «%s» référencé dans WMRootMenu inaccessible."
 
-#: ../src/rootmenu.c:1510 ../src/rootmenu.c:1565
+#: ../src/rootmenu.c:1557
+#, c-format
+msgid ""
+"using default menu file \"%s\" as the menu referenced in WMRootMenu could "
+"not be found "
+msgstr ""
+"Utilise le menu par défaut «%s» étant donné que le menu référencé dans "
+"WMRootMenu n'a pas pû être trouvé."
+
+#: ../src/rootmenu.c:1580 ../src/rootmenu.c:1656
+#, c-format
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s:erreur de formatage lors de la configuration du menu \"%s\"."
+msgstr "%s:erreur de formatage lors de la configuration du menu «%s»."
 
-#: ../src/screen.c:111
-msgid "it seems that there already is a window manager running"
-msgstr "Il semblerait qu'un gestionnaire de fenêtres soit déjà actif."
+#: ../src/rootmenu.c:1744
+msgid ""
+"The applications menu could not be loaded.Look at the console output for a "
+"detaileddescription of the errors"
+msgstr ""
+"Le menu n'a pas pû être chargé. Regardez la sortie de la console pour une "
+"description détaillée des erreurs"
 
-#: ../src/screen.c:394
-msgid "could not load logo image for panels"
-msgstr "Chargement des logos pour les fenêtres de messages impossible."
+#: ../src/screen.c:436
+#, c-format
+msgid "could not load logo image for panels: %s"
+msgstr "Chargement des logos pour les fenêtres de messages impossible: %s"
 
-#: ../src/screen.c:397
+#: ../src/screen.c:440
+#, c-format
 msgid "error making logo image for panel:%s"
 msgstr "Erreur lors de la création de logo pour la fenêtre de message:%s"
 
-#: ../src/screen.c:544
-msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
-msgstr "La taille des icones est configurée à %i, mais c'est trop petit. Utilise 16, à la place.\n"
-
-#: ../src/screen.c:587
+#: ../src/screen.c:726
+#, c-format
 msgid "could not initialize graphics library context: %s"
-msgstr "Initialisation du contexte de la librairie graphique impossible: %s"
+msgstr "Initialisation de la librairie graphique impossible: %s"
 
-#: ../src/session.c:113 ../src/wdefaults.c:559 ../src/winspector.c:335
+#: ../src/screen.c:757
+msgid "could not do initialization of WINGs widget set"
+msgstr "Initialisation de la librairie WINGs impossible."
+
+#: ../src/screen.c:1091
+#, c-format
+msgid "could not save session state in %s"
+msgstr "Sauvegarde de la session dans %s impossible."
+
+#: ../src/session.c:182 ../src/wdefaults.c:564 ../src/winspector.c:348
+#, c-format
 msgid "can't convert \"%s\" to boolean"
-msgstr "Conversion de \"%s\" en donnée booléenne impossible."
+msgstr "Conversion de «%s» en booléen impossible."
 
-#: ../src/stacking.c:88
+#: ../src/session.c:981
+msgid "out of memory while saving session state"
+msgstr "Plus de mémoire pendant le sauvegarde de session."
+
+#: ../src/session.c:1072
+msgid "end of memory while saving session state"
+msgstr "Plus de mémoire pendant le sauvegarde de session."
+
+#. This is not fatal but can mean the session manager exited.
+#. * If the session manager exited normally we would get a
+#. * Die message, so this probably means an abnormal exit.
+#. * If the sm was the last client of session, then we'll die
+#. * anyway, otherwise we can continue doing our stuff.
+#.
+#: ../src/session.c:1206
+msgid "connection to the session manager was lost"
+msgstr "La connexion vers le gestionnaire de session a été perdue."
+
+#: ../src/stacking.c:73
 msgid "could not get window list!!"
 msgstr "Obtention de la liste des fenêtres impossible!!"
 
-#: ../src/startup.c:163
+#: ../src/startup.c:194
+#, c-format
 msgid "internal X error: %s\n"
 msgstr "erreur X interne: %s\n"
 
-#: ../src/startup.c:225
+#: ../src/startup.c:259
+#, c-format
 msgid "got signal %i (%s) - restarting\n"
 msgstr "Signal %i (%s) reçu - redémarre.\n"
 
-#: ../src/startup.c:227
+#: ../src/startup.c:261
+#, c-format
 msgid "got signal %i - restarting\n"
 msgstr "Signal %i reçu - redémarre.\n"
 
-#: ../src/startup.c:240
-msgid "%s: Received signal SIGTERM. Exiting..."
-msgstr "%s: Signal SIGTERM reçu. Quitte..."
+#: ../src/startup.c:275
+#, c-format
+msgid "got signal %i (%s) - exiting...\n"
+msgstr "Signal %i (%s) reçu. Quitte...\n"
 
-#: ../src/startup.c:251
+#: ../src/startup.c:277
+#, c-format
+msgid "got signal %i - exiting...\n"
+msgstr "Signal %i reçu - Quitte...\n"
+
+#: ../src/startup.c:290
+#, c-format
 msgid "got signal %i (%s)\n"
 msgstr "Signal %i (%s) reçu.\n"
 
-#: ../src/startup.c:253
+#: ../src/startup.c:292
+#, c-format
 msgid "got signal %i\n"
 msgstr "Signal %i reçu.\n"
 
-#: ../src/startup.c:258
-msgid "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
-msgstr "Crashé pendant un nettoyage post-crash. Suspension immédiate."
+#: ../src/startup.c:303
+msgid ""
+"crashed while trying to do some post-crash cleanup. Aborting immediatelly."
+msgstr ""
+"Crashé pendant un nettoyage post-crash. Suspension immédiate."
 
-#: ../src/startup.c:267
-msgid "trying to start alternative window manager..."
+#. we try to restart Window Maker
+#: ../src/startup.c:337
+msgid "trying to restart Window Maker..."
+msgstr "Tente de relancer Window Maker..."
+
+#: ../src/startup.c:342
+msgid "trying to start alternate window manager..."
 msgstr "Tente de lancer un autre gestionnaire de fenêtres..."
 
-#: ../src/switchmenu.c:124
+#: ../src/startup.c:347
+msgid "failed to start alternate window manager. Aborting."
+msgstr "Démarrage d'un autre gestionnaire de fenêtres impossible. Abandonne."
+
+#: ../src/startup.c:349
+msgid ""
+"a fatal error has occured, probably due to a bug. Please fill the included "
+"BUGFORM and report it."
+msgstr ""
+" Cette erreur est probablement apparue suite à un bug. Remplissez le "
+"formulaire BUGFORM et envoyez-le à bugs@windowmaker.org."
+
+#: ../src/startup.c:782
+#, c-format
+msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
+msgstr "La taille des icones est configurée à %i, mais c'est trop petit. Utilise 16, à la place.\n"
+
+#: ../src/startup.c:821
+msgid "it seems that there is already a window manager running"
+msgstr "Il semblerait qu'un gestionnaire de fenêtres soit déjà actif."
+
+#: ../src/startup.c:827
+#, c-format
+msgid "could not manage screen %i"
+msgstr "Gestion de l'écran %i impossible."
+
+#: ../src/startup.c:887
+msgid "could not manage any screen"
+msgstr "Aucun écran ne peut être géré."
+
+#: ../src/switchmenu.c:114
 msgid "Windows"
 msgstr "Fenêtres"
 
-#: ../src/texture.c:260
+#: ../src/texture.c:290 ../src/texture.c:334
+#, c-format
 msgid "image file \"%s\" used as texture could not be found."
-msgstr "Image \"%s\" utilisée comme texture introuvable."
+msgstr "Image «%s» utilisée comme texture introuvable."
 
-#: ../src/texture.c:266
+#: ../src/texture.c:296 ../src/texture.c:340
+#, c-format
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr "Chargement de la texture \"%s\" impossible:%s"
+msgstr "Chargement de la texture «%s» impossible:%s"
 
-#: ../src/texture.c:362 ../src/texture.c:492
-msgid "could not render texture: %s"
-msgstr "Affichage de la texture impossible: %s"
+#: ../src/texture.c:400
+#, c-format
+msgid "library \"%s\" cound not be opened."
+msgstr "La librairie «%s» n'a pas pû être ouverte."
 
-#: ../src/wdefaults.c:393
+#: ../src/texture.c:409
+#, c-format
+msgid "function \"%s\" not found in library \"%s\""
+msgstr "Fonction «%s» introuvable dans la librairie «%s»"
+
+#: ../src/texture.c:416
+msgid "function textures not supported on this system, sorry."
+msgstr "Les plug-ins de textures ne sont pas supportés par ce système, désolé."
+
+#: ../src/wdefaults.c:410
+#, c-format
 msgid "could not find icon file \"%s\""
-msgstr "Icone \"%s\" introuvable."
+msgstr "Icone «%s» introuvable."
 
-#: ../src/window.c:1900 ../src/window.c:2039
+#: ../src/window.c:2539 ../src/window.c:2673
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
@@ -882,92 +1204,128 @@ msgstr ""
 "NumLock, ScrollLock ou une touche similaire semble activée.\n"
 "Désactivez-la ou certaines actions du clavier et de la souris ne fonctionneront pas."
 
-#: ../src/winmenu.c:182
-msgid "could not create workspace submenu for window menu"
-msgstr "Création du sous-menu Bureau pour le menu de fenêtres impossible."
+#: ../src/winmenu.c:125
+msgid ""
+"This will kill the application.\n"
+"Any unsaved changes will be lost.\n"
+"Please confirm."
+msgstr ""
+"L'application va être tuée.\n"
+"Les changements non sauvegardés seront perdus.\n"
+"Confirmez l'action."
 
-#: ../src/winmenu.c:204
-msgid "(Un)Maximize"
-msgstr "(Dé)Maximiser"
+#: ../src/winmenu.c:252 ../src/winmenu.c:260
+msgid "Set Shortcut"
+msgstr "Attribuer un Raccourci"
 
-#: ../src/winmenu.c:212
+#: ../src/winmenu.c:338 ../src/winmenu.c:384
+msgid "could not create submenu for window menu"
+msgstr "Création du sous-menu pour le menu de fenêtres impossible."
+
+#: ../src/winmenu.c:393
+msgid "Keep at bottom"
+msgstr "Garder en-dessous"
+
+#: ../src/winmenu.c:398 ../src/winspector.c:1147
+msgid "Omnipresent"
+msgstr "Omniprésente"
+
+#.
+#. * Warning: If you make some change that affects the order of the
+#. * entries, you must update the command #defines in the top of
+#. * this file.
+#.
+#: ../src/winmenu.c:421 ../src/winmenu.c:556
+msgid "Maximize"
+msgstr "Maximiser"
+
+#: ../src/winmenu.c:429 ../src/winmenu.c:542
 msgid "Miniaturize"
 msgstr "Miniaturiser"
 
-#: ../src/winmenu.c:221
-msgid "(Un)Shade"
-msgstr "(Dé)Plier"
+#: ../src/winmenu.c:438 ../src/winmenu.c:573
+msgid "Shade"
+msgstr "Plier"
 
-#: ../src/winmenu.c:229
-msgid "Hide"
-msgstr "Cacher"
+#: ../src/winmenu.c:454
+msgid "Resize/Move"
+msgstr "Déplacer/Dimensionner"
 
-#: ../src/winmenu.c:236
-msgid "Hide Others"
-msgstr "Cacher les autres"
-
-#: ../src/winmenu.c:238
+#: ../src/winmenu.c:462
 msgid "Select"
 msgstr "Séléctionner"
 
-#: ../src/winmenu.c:246
+#: ../src/winmenu.c:470
 msgid "Move To"
 msgstr "Déplacer vers"
 
-#: ../src/winmenu.c:251
+#: ../src/winmenu.c:475
 msgid "Attributes..."
 msgstr "Attributs..."
 
-#: ../src/winmenu.c:253
-msgid "Close"
-msgstr "Fermer"
+#: ../src/winmenu.c:477
+msgid "Options"
+msgstr "Options"
 
-#: ../src/winspector.c:274
+#: ../src/winmenu.c:537
+msgid "Deminiaturize"
+msgstr "Déminiaturiser"
+
+#: ../src/winmenu.c:551
+msgid "Unmaximize"
+msgstr "Démaximiser"
+
+#: ../src/winmenu.c:568
+msgid "Unshade"
+msgstr "Déplier"
+
+#: ../src/winspector.c:282
+#, c-format
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr "Icone \"%s\" introuvable pour cette fenêtre."
+msgstr "Icone «%s» introuvable pour cette fenêtre."
 
-#: ../src/winspector.c:287
+#: ../src/winspector.c:298
+#, c-format
 msgid "Could not open specified icon \"%s\":%s"
-msgstr "Icone spécifié \"%s\" introuvable:%s"
+msgstr "Icone spécifié «%s» introuvable:%s"
 
-#: ../src/winspector.c:958
+#: ../src/winspector.c:1022
 msgid "Save"
 msgstr "Sauver"
 
-#: ../src/winspector.c:964
+#: ../src/winspector.c:1030
 msgid "Apply"
 msgstr "Appliquer"
 
-#: ../src/winspector.c:970
-msgid "Revert"
-msgstr "Défaire"
+#: ../src/winspector.c:1036
+msgid "Reload"
+msgstr "Recharger"
 
-#. *** window spec ***
-#: ../src/winspector.c:979 ../src/winspector.c:987
+#: ../src/winspector.c:1045 ../src/winspector.c:1055
 msgid "Window Specification"
 msgstr "Spécification de la fenêtre"
 
-#: ../src/winspector.c:980
+#: ../src/winspector.c:1046
 msgid "Window Attributes"
 msgstr "Attributs de la fenêtre"
 
-#: ../src/winspector.c:981
+#: ../src/winspector.c:1047
 msgid "Advanced Options"
 msgstr "Options Avancées"
 
-#: ../src/winspector.c:982
+#: ../src/winspector.c:1048
 msgid "Icon and Initial Workspace"
 msgstr "Icone et Bureau Initial"
 
-#: ../src/winspector.c:983
+#: ../src/winspector.c:1049
 msgid "Application Specific"
 msgstr "Spécifique à l'application"
 
-#: ../src/winspector.c:995
+#: ../src/winspector.c:1063
 msgid "Defaults for all windows"
 msgstr "Défauts pour toutes les fenêtres"
 
-#: ../src/winspector.c:1031
+#: ../src/winspector.c:1106
 msgid ""
 "The configuration will apply to all\n"
 "windows that have their WM_CLASS property set to the above selected\n"
@@ -977,134 +1335,147 @@ msgstr ""
 "les fenêtres dont la propriété WM_CLASS coïncide avec le nom séléctionné\n"
 "ci-dessus, lors de la sauvegarde."
 
-#: ../src/winspector.c:1038
+#: ../src/winspector.c:1113
 msgid "Attributes"
 msgstr "Attributs"
 
-#: ../src/winspector.c:1048
-msgid "Disable titlebar"
+#: ../src/winspector.c:1123
+msgid "Disable Titlebar"
 msgstr "Désactiver la barre de titre"
 
-#: ../src/winspector.c:1052
-msgid "Disable resizebar"
+#: ../src/winspector.c:1127
+msgid "Disable Resizebar"
 msgstr "Désactiver la barre de redimensionnement"
 
-#: ../src/winspector.c:1056
-msgid "Disable close button"
+#: ../src/winspector.c:1131
+msgid "Disable Close Button"
 msgstr "Désactiver le bouton de fermeture"
 
-#: ../src/winspector.c:1060
-msgid "Disable miniaturize button"
+#: ../src/winspector.c:1135
+msgid "Disable Miniaturize Button"
 msgstr "Désactiver le bouton de miniaturisation"
 
-#: ../src/winspector.c:1064
-msgid "Keep on top"
-msgstr "Garder au-dessus"
+#: ../src/winspector.c:1139
+msgid "Keep on Top / Floating"
+msgstr "Garder au-dessus / Flottante"
 
-#: ../src/winspector.c:1068
-msgid "Omnipresent"
-msgstr "Omniprésente"
+#: ../src/winspector.c:1143
+msgid "Keep at Bottom / Sunken"
+msgstr "Garder en-dessous / Coulée"
 
-#: ../src/winspector.c:1072
+#: ../src/winspector.c:1151
 msgid "Start Miniaturized"
 msgstr "Lancer Miniaturisée"
 
-#: ../src/winspector.c:1076
-msgid "Skip window list"
+#: ../src/winspector.c:1155
+msgid "Start Maximized"
+msgstr "Lancer Maximisée"
+
+#: ../src/winspector.c:1159
+msgid "Skip Window List"
 msgstr "Passe la liste des fenêtres"
 
-#: ../src/winspector.c:1090
+#: ../src/winspector.c:1173
 msgid "Advanced"
 msgstr "Avancés"
 
-#: ../src/winspector.c:1100
+#: ../src/winspector.c:1183
 msgid "Ignore HideOthers"
-msgstr "Ignore \"Cacher les Autres\""
+msgstr "Ignore «Cacher les Autres»"
 
-#: ../src/winspector.c:1104
-msgid "Don't bind keyboard shortcuts"
+#: ../src/winspector.c:1187
+msgid "Don't Bind Keyboard Shortcuts"
 msgstr "Ne pas associer de raccourcis-clavier"
 
-#: ../src/winspector.c:1108
-msgid "Don't bind mouse clicks"
+#: ../src/winspector.c:1191
+msgid "Don't Bind Mouse Clicks"
 msgstr "Ne pas associer de clicks de souris"
 
-#: ../src/winspector.c:1112
-msgid "Keep inside screen"
+#: ../src/winspector.c:1195
+msgid "Keep Inside Screen"
 msgstr "Garder dans l'écran"
 
-#: ../src/winspector.c:1116
-msgid "Don't let it take focus"
-msgstr "Ne prend pas le \"focus\""
+#: ../src/winspector.c:1199
+msgid "Don't Let It Take Focus"
+msgstr "Ne prend pas le focus"
 
-#: ../src/winspector.c:1120
+#: ../src/winspector.c:1203
 msgid "Don't Save Session"
 msgstr "Exclure des Sauvegardes de Sessions"
 
-#: ../src/winspector.c:1124
+#: ../src/winspector.c:1207
 msgid "Emulate Application Icon"
-msgstr "Emuler le \"AppIcon\""
+msgstr "Emuler le AppIcon"
 
-#: ../src/winspector.c:1139
-msgid "Enable the \"Don't bind...\" options to allow the application to receive all mouse or keyboard events."
-msgstr "Activer les options \"Ne pas associer...\" pour que l'application reçoive tous les évenements clavier ou souris."
+#: ../src/winspector.c:1211
+msgid "Full Screen Maximization"
+msgstr "Maximisation Plein Ecran"
 
-#: ../src/winspector.c:1146
+#: ../src/winspector.c:1226
+msgid ""
+"Enable the \"Don't bind...\" options to allow the application to receive all "
+"mouse or keyboard events."
+msgstr ""
+"Activer les options \"Ne pas associer...\" pour que  l'application reçoive "
+"tous les évenements clavier ou souris."
+
+#: ../src/winspector.c:1233
 msgid "Miniwindow Image"
 msgstr "Image de la Mini-Fenêtre"
 
-#: ../src/winspector.c:1164
+#: ../src/winspector.c:1252
 msgid "Update"
 msgstr "Mettre à jour"
 
-#: ../src/winspector.c:1169
-msgid "Icon file name:"
+#: ../src/winspector.c:1267
+msgid "Icon File Name:"
 msgstr "Nom de l'icone:"
 
-#: ../src/winspector.c:1179
+#: ../src/winspector.c:1279
 msgid "Ignore client supplied icon"
 msgstr "Ignorer l'icone fourni"
 
-#: ../src/winspector.c:1185
+#: ../src/winspector.c:1286
 msgid "Initial Workspace"
 msgstr "Bureau initial"
 
-#: ../src/winspector.c:1191
+#: ../src/winspector.c:1291
 msgid "Nowhere in particular"
 msgstr "Nulle part en particulier"
 
-#: ../src/winspector.c:1222
+#: ../src/winspector.c:1309
 msgid "Application Wide"
 msgstr "Pour toute l'Application"
 
-#: ../src/winspector.c:1232
+#: ../src/winspector.c:1319
 msgid "Start Hidden"
 msgstr "Démarrer Cachée"
 
-#: ../src/winspector.c:1236
-msgid "No application icon"
-msgstr "Pas de \"AppIcon\""
+#: ../src/winspector.c:1323
+msgid "No Application Icon"
+msgstr "Pas de AppIcon"
 
-#: ../src/workspace.c:89 ../src/workspace.c:90 ../src/workspace.c:390
+#: ../src/workspace.c:106 ../src/workspace.c:107 ../src/workspace.c:655
+#, c-format
 msgid "Workspace %i"
 msgstr "Bureau %i"
 
-#: ../src/workspace.c:439
+#: ../src/workspace.c:712
 msgid "Workspaces"
 msgstr "Bureaux"
 
-#: ../src/workspace.c:441
+#: ../src/workspace.c:714
 msgid "could not create Workspace menu"
 msgstr "Création du menu de Bureau impossible."
 
-#: ../src/workspace.c:448
+#: ../src/workspace.c:721
 msgid "New"
 msgstr "Nouveau"
 
-#: ../src/workspace.c:449
+#: ../src/workspace.c:722
 msgid "Destroy Last"
 msgstr "Détruire le Dernier"
 
-#: ../src/xutil.c:220
+#: ../src/xutil.c:228
 msgid "invalid data in selection"
 msgstr "Données invalides dans la séléction."

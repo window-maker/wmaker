@@ -1722,8 +1722,7 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
 	    if (keyboard)
 		wMenuMapAt(menu, 0, 0, True);
 	    else
-		wMenuMapCopyAt(menu, x-menu->frame->core->width/2, 
-			       y-menu->frame->top_width/2);
+		wMenuMapCopyAt(menu, x-menu->frame->core->width/2, y);
 	}
 	return;
     }
@@ -1769,8 +1768,7 @@ OpenRootMenu(WScreen *scr, int x, int y, int keyboard)
 	scr->root_menu = menu;
     }
     if (menu) {
-	wMenuMapAt(menu, x-menu->frame->core->width/2, y-menu->frame->top_width/2,
-		   keyboard);
+	wMenuMapAt(menu, x-menu->frame->core->width/2, y, keyboard);
     }
     
     if (scr->flags.root_menu_changed_shortcuts)

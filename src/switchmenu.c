@@ -102,12 +102,12 @@ OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard)
 		if (keyboard)
 		    wMenuMapAt(switchmenu, 0, 0, True);
 		else
-		    wMenuMapCopyAt(switchmenu, x-switchmenu->frame->core->width/2,
-			       y-switchmenu->frame->top_width/2);
+		    wMenuMapCopyAt(switchmenu, 
+				   x-switchmenu->frame->core->width/2, y);
 	    }
 	} else {
-	    wMenuMapAt(switchmenu, x-switchmenu->frame->core->width/2,
-		       y-switchmenu->frame->top_width/2, keyboard);
+	    wMenuMapAt(switchmenu, x-switchmenu->frame->core->width/2, y,
+		       keyboard);
 	}
 	return;
     }
@@ -125,8 +125,8 @@ OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard)
     if (switchmenu) {
 	if (!switchmenu->flags.realized)
 	    wMenuRealize(switchmenu);
-	wMenuMapAt(switchmenu, x-switchmenu->frame->core->width/2,
-		   y-switchmenu->frame->top_width/2, keyboard);
+	wMenuMapAt(switchmenu, x-switchmenu->frame->core->width/2, y, 
+		   keyboard);
     }
 }
 

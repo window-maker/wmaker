@@ -172,18 +172,19 @@ W_BalloonHandleLeaveView(WMView *view)
 {
     Balloon *bPtr = view->screen->balloon;
 
-    if (bPtr->view->flags.mapped && bPtr->forWindow == view->window) {
-	W_UnmapView(bPtr->view);
-
+    if (bPtr->forWindow == view->window) {
+	if (bPtr->view->flags.mapped) {
+	    W_UnmapView(bPtr->view);
+	    bPtr->noDelayTimer = WMAddTimerHandler(NO_DELAY_DELAY,
+						   clearNoDelay, bPtr);
+	}
 	if (bPtr->timer)
 	    WMDeleteTimerHandler(bPtr->timer);
 
 	bPtr->timer = NULL;
 
-	bPtr->noDelayTimer = WMAddTimerHandler(NO_DELAY_DELAY, clearNoDelay, 
-					       bPtr);
+	bPtr->forWindow = None;
     }
-    bPtr->forWindow = None;
 }
 
 
@@ -210,8 +211,6 @@ showBalloon(void *data)
 
     showText(bPtr, x, y, view->size.width, view->size.height, text);
 
-    bPtr->forWindow = view->window;
-
     bPtr->flags.noDelay = 1;
 }
 
@@ -228,8 +227,6 @@ W_BalloonHandleEnterView(WMView *view)
 
     text = WMHashGet(bPtr->table, view);
     if (!text) {
-	bPtr->forWindow = None;
-
 	if (bPtr->view->flags.realized)
 	    W_UnmapView(bPtr->view);
 
@@ -238,10 +235,13 @@ W_BalloonHandleEnterView(WMView *view)
 
     if (bPtr->timer)
 	WMDeleteTimerHandler(bPtr->timer);
+    bPtr->timer = NULL;
 
     if (bPtr->noDelayTimer)
 	WMDeleteTimerHandler(bPtr->noDelayTimer);
     bPtr->noDelayTimer = NULL;
+
+    bPtr->forWindow = view->window;
 
     if (bPtr->flags.noDelay) {
 	bPtr->timer = NULL;
