@@ -44,10 +44,10 @@ RImage*
 RLoadGIF(RContext *context, char *file, int index)
 {
     RImage *image = NULL;
-#if 0
+    unsigned char *cptr;
     GifFileType *gif = NULL;
     GifPixelType *buffer = NULL;
-    int i, j, k, ofs = 0;
+    int i, j, k;
     int width, height;
     GifRecordType recType;
     ColorMapObject *colormap;
@@ -136,6 +136,12 @@ RLoadGIF(RContext *context, char *file, int index)
 
 	    if (gif->Image.Interlace) {
 		int l;
+		int pelsPerLine;
+
+		if (RRGBAFormat==image->format)
+		    pelsPerLine = width * 4;
+		else
+		    pelsPerLine = width * 3;
 
 		for (j = 0; j < 4; j++) {
 		    for (k = InterlacedOffset[j]; k < height;
@@ -143,25 +149,28 @@ RLoadGIF(RContext *context, char *file, int index)
 			if (DGifGetLine(gif, buffer, width)==GIF_ERROR) {
 			    goto giferr;
 			}
-			ofs = k*width;
-			for (l = 0; l < width; l++, ofs++) {
+			cptr = image->data + (k*pelsPerLine);
+			for (l = 0; l < width; l++) {
 			    int pixel = buffer[l];
-			    image->data[0][ofs] = rmap[pixel];
-			    image->data[1][ofs] = gmap[pixel];
-			    image->data[2][ofs] = bmap[pixel];
+			    *cptr++ = rmap[pixel];
+			    *cptr++ = gmap[pixel];
+			    *cptr++ = bmap[pixel];
 			}
 		    }
 		}
 	    } else {
+		cptr = image->data;
 		for (j = 0; j < height; j++) {
 		    if (DGifGetLine(gif, buffer, width)==GIF_ERROR) {
 			goto giferr;
 		    }
-		    for (k = 0; k < width; k++, ofs++) {
+		    for (k = 0; k < width; k++) {
 			int pixel = buffer[k];
-			image->data[0][ofs] = rmap[pixel];
-			image->data[1][ofs] = gmap[pixel];
-			image->data[2][ofs] = bmap[pixel];
+			*cptr++ = rmap[pixel];
+			*cptr++ = gmap[pixel];
+			*cptr++ = bmap[pixel];
+			if (RRGBAFormat==image->format)
+			    cptr++;
 		    }
 		}
 	    }
@@ -209,7 +218,7 @@ did_not_get_any_errors:
 
     if (gif)
 	DGifCloseFile(gif);
-#endif
+
     return image;
 }
 
