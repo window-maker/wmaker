@@ -63,6 +63,7 @@ Changes since wmaker 0.80.1:
 - fixed bug in tableview (clicked row callback got incorrect row) (Carlos Torres 
   <vlaadbrain@operamail.com>)
 - Fixed bug in resizing a scrollview
+- Fixed bug with wrong text wrapping (Alexey Voinov <voins@voins.program.ru>)
 
 
 Changes since wmaker 0.80.0:

@@ -101,7 +101,7 @@ fitText(char *text, WMFont *font, int width, int wrap)
     i = 0;
     if (wrap) {
 	if (text[0]=='\n')
-	    return 1;
+	    return 0;
 	
 	do {
 	    i++;
