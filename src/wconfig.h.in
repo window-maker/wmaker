@@ -170,6 +170,14 @@
 #define HIDDENDOT
 
 
+/*
+ * Ignores the PPosition hint from clients. This is needed for some
+ * programs that have buggy implementations of such hint and place
+ * themselves in strange locations.
+ */
+#undef IGNORE_PPOSITION
+
+
 #define SILLYNESS
 
 

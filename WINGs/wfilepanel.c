@@ -304,6 +304,10 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
 
     WMLoadBrowserColumnZero(fPtr->browser);
     
+    WMSetWindowInitialPosition(fPtr->win,
+	       (scrPtr->rootView->size.width - WMWidgetWidth(fPtr->win))/2,
+               (scrPtr->rootView->size.height - WMWidgetHeight(fPtr->win))/2);
+
     fPtr->flags.canChooseFiles = 1;
     fPtr->flags.canChooseDirectories = 1;
     fPtr->flags.autoCompletion = 1;
@@ -398,9 +402,6 @@ WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
         break;
     }
 
-    WMSetWindowInitialPosition(panel->win,
-		 (scr->rootView->size.width - WMWidgetWidth(panel->win))/2,
-		 (scr->rootView->size.height - WMWidgetHeight(panel->win))/2);
     WMSetLabelText(panel->titleLabel, name);
 
     scr->modalView = W_VIEW(panel->win);

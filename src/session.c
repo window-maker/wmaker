@@ -844,7 +844,7 @@ makeAttributeState(WWindow *wwin)
 	    W_FLAG(no_bind_mouse),
 	    W_FLAG(no_hide_others),
 	    W_FLAG(no_appicon),
-	    W_FLAG(ignore_stupid_hints),
+	    W_FLAG(dont_move_off),
 	    W_FLAG(no_focusable),
 	    W_FLAG(always_user_icon),
 	    W_FLAG(start_miniaturized),

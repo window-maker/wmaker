@@ -98,6 +98,7 @@ WMCreateAlertPanel(WMScreen *scrPtr, WMWindow *owner,
     WMSetWindowInitialPosition(panel->win,
 	 (scrPtr->rootView->size.width - WMWidgetWidth(panel->win))/2,
 	 (scrPtr->rootView->size.height - WMWidgetHeight(panel->win))/2);
+
     WMSetWindowTitle(panel->win, "");
 
     if (scrPtr->applicationIcon) {		

@@ -74,7 +74,7 @@ static proplist_t AKeepOnTop;
 static proplist_t AKeepOnBottom;
 static proplist_t AOmnipresent;
 static proplist_t ASkipWindowList;
-static proplist_t AIgnoreGeometryHints;
+static proplist_t AKeepInsideScreen;
 static proplist_t AUnfocusable;
 static proplist_t AAlwaysUserIcon;
 static proplist_t AStartMiniaturized;
@@ -113,7 +113,7 @@ init_wdefaults(WScreen *scr)
     AKeepOnBottom = PLMakeString("KeepOnBottom");
     AOmnipresent = PLMakeString("Omnipresent");
     ASkipWindowList = PLMakeString("SkipWindowList");
-    AIgnoreGeometryHints = PLMakeString("IgnoreGeometryHints");
+    AKeepInsideScreen = PLMakeString("KeepInsideScreen");
     AUnfocusable = PLMakeString("Unfocusable");
     AAlwaysUserIcon = PLMakeString("AlwaysUserIcon");
     AStartMiniaturized = PLMakeString("StartMiniaturized");
@@ -285,8 +285,8 @@ wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
     value = get_value(dw, dc, dn, da, ASkipWindowList, No, useGlobalDefault);
     APPLY_VAL(value, skip_window_list, ASkipWindowList);
     
-    value = get_value(dw, dc, dn, da, AIgnoreGeometryHints, No, useGlobalDefault);
-    APPLY_VAL(value, ignore_stupid_hints, AIgnoreGeometryHints);
+    value = get_value(dw, dc, dn, da, AKeepInsideScreen, No, useGlobalDefault);
+    APPLY_VAL(value, dont_move_off, AKeepInsideScreen);
 
     value = get_value(dw, dc, dn, da, AUnfocusable, No, useGlobalDefault);
     APPLY_VAL(value, no_focusable, AUnfocusable);

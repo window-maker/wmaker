@@ -66,7 +66,7 @@ static proplist_t AKeepOnTop;
 static proplist_t AKeepOnBottom;
 static proplist_t AOmnipresent;
 static proplist_t ASkipWindowList;
-static proplist_t AIgnoreGeometryHints;
+static proplist_t AKeepInsideScreen;
 static proplist_t AUnfocusable;
 static proplist_t AAlwaysUserIcon;
 static proplist_t AStartMiniaturized;
@@ -116,7 +116,7 @@ make_keys()
     AKeepOnBottom = PLMakeString("KeepOnBottom");
     AOmnipresent = PLMakeString("Omnipresent");
     ASkipWindowList = PLMakeString("SkipWindowList");
-    AIgnoreGeometryHints = PLMakeString("IgnoreGeometryHints");
+    AKeepInsideScreen = PLMakeString("KeepInsideScreen");
     AUnfocusable = PLMakeString("Unfocusable");
     AAlwaysUserIcon = PLMakeString("AlwaysUserIcon");
     AStartMiniaturized = PLMakeString("StartMiniaturized");
@@ -532,7 +532,7 @@ saveSettings(WMButton *button, InspectorPanel *panel)
     different |= insertAttribute(dict, winDic, ANoMouseBindings, value, flags);
 
     value = (WMGetButtonSelected(panel->moreChk[3])!=0) ? Yes : No;
-    different |= insertAttribute(dict, winDic, AIgnoreGeometryHints,value, flags);
+    different |= insertAttribute(dict, winDic, AKeepInsideScreen,value, flags);
 
     value = (WMGetButtonSelected(panel->moreChk[4])!=0) ? Yes : No;
     different |= insertAttribute(dict, winDic, AUnfocusable, value, flags);
@@ -731,7 +731,7 @@ applySettings(WMButton *button, InspectorPanel *panel)
     WSETUFLAG(wwin, no_hide_others, WMGetButtonSelected(panel->moreChk[0]));
     WSETUFLAG(wwin, no_bind_keys, WMGetButtonSelected(panel->moreChk[1]));
     WSETUFLAG(wwin, no_bind_mouse, WMGetButtonSelected(panel->moreChk[2]));
-    WSETUFLAG(wwin, ignore_stupid_hints, WMGetButtonSelected(panel->moreChk[3]));
+    WSETUFLAG(wwin, dont_move_off, WMGetButtonSelected(panel->moreChk[3]));
     WSETUFLAG(wwin, no_focusable, WMGetButtonSelected(panel->moreChk[4]));
     WSETUFLAG(wwin, dont_save_session, WMGetButtonSelected(panel->moreChk[5]));
     WSETUFLAG(wwin, emulate_appicon, WMGetButtonSelected(panel->moreChk[6]));
@@ -897,7 +897,7 @@ revertSettings(WMButton *button, InspectorPanel *panel)
 	    flag = WFLAGP(wwin, no_bind_mouse);
 	    break;
 	 case 3:
-	    flag = WFLAGP(wwin, ignore_stupid_hints);
+	    flag = WFLAGP(wwin, dont_move_off);
 	    break;
 	 case 4:
 	    flag = WFLAGP(wwin, no_focusable);
@@ -1282,11 +1282,10 @@ createInspectorForWindow(WWindow *wwin)
 		      "configured).");
 	    break;
 	 case 3:
-	    caption = _("Ignore PPosition/PSize hints");
-	    flag = WFLAGP(wwin, ignore_stupid_hints);
+	    caption = _("Keep Inside Screen");
+	    flag = WFLAGP(wwin, dont_move_off);
 	    descr = _("Do not allow the window to move itself completely\n"
-                      "outside the screen, nor take imposible sizes like 1x1.\n"
-                      "For bug compatibility.\n");
+		      "outside the screen. For bug compatibility.\n");
 	    break;
 	 case 4:
 	    caption = _("Don't Let It Take Focus");
