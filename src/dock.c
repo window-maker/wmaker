@@ -352,12 +352,13 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
     }
 #endif /* GRADIENT_CLIP_ARROW */
 
-    p[0].x = p[3].x = ICON_SIZE-4-as;
-    p[0].y = p[3].y = 6;
-    p[1].x = ICON_SIZE-7;
-    p[1].y = 6;
-    p[2].x = ICON_SIZE-7;
-    p[2].y = 3+as;
+    /* top right arrow */
+    p[0].x = p[3].x = ICON_SIZE-5-as;
+    p[0].y = p[3].y = 5;
+    p[1].x = ICON_SIZE-6;
+    p[1].y = 5;
+    p[2].x = ICON_SIZE-6;
+    p[2].y = 4+as;
     if (rpushed) {
         XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
         XDrawLines(dpy, win, scr->draw_gc, p, 4, CoordModeOrigin);
@@ -370,12 +371,13 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
         XDrawLines(dpy, win, gc, p,4,CoordModeOrigin);
     }
 
-    p[0].x = p[3].x = 6;
-    p[0].y = p[3].y = ICON_SIZE-4-as;
-    p[1].x = 6;
-    p[1].y = ICON_SIZE-7;
-    p[2].x = 3+as;
-    p[2].y = ICON_SIZE-7;
+    /* bottom left arrow */
+    p[0].x = p[3].x = 5;
+    p[0].y = p[3].y = ICON_SIZE-5-as;
+    p[1].x = 5;
+    p[1].y = ICON_SIZE-6;
+    p[2].x = 4+as;
+    p[2].y = ICON_SIZE-6;
     if (lpushed) {
 	XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
         XDrawLines(dpy, win, scr->draw_gc, p, 4, CoordModeOrigin);
@@ -426,11 +428,11 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
 		 pt, &light);
 
     /* arrow bevel */
-    ROperateLine(tile, RSubtractOperation, ICON_SIZE - 5 - as, 5,
-                 ICON_SIZE - 6, 5, &dark);
+    ROperateLine(tile, RSubtractOperation, ICON_SIZE - 7 - as, 4,
+                 ICON_SIZE - 5, 4, &dark);
     ROperateLine(tile, RSubtractOperation, ICON_SIZE - 6 - as, 5,
-		 ICON_SIZE - 6, 5 + as, &dark);
-    ROperateLine(tile, RAddOperation, ICON_SIZE - 6, 5, ICON_SIZE - 6, 5 + as,
+		 ICON_SIZE - 5, 6 + as, &dark);
+    ROperateLine(tile, RAddOperation, ICON_SIZE - 5, 4, ICON_SIZE - 5, 6 + as,
 		 &light);
     
     /* bottom left */
@@ -441,11 +443,11 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
 		 wPreferences.icon_size-2, &light);
 
     /* arrow bevel */
+    ROperateLine(tile, RSubtractOperation, 4, ICON_SIZE - 7 - as, 4,
+                 ICON_SIZE - 5, &dark);
     ROperateLine(tile, RSubtractOperation, 5, ICON_SIZE - 6 - as, 
-		 5 + as, ICON_SIZE - 6, &dark);
-    ROperateLine(tile, RSubtractOperation, 5, ICON_SIZE - 5 - as, 5,
-                 ICON_SIZE - 6, &dark);
-    ROperateLine(tile, RAddOperation, 5, ICON_SIZE - 6, 5 + as, ICON_SIZE - 6,
+		 6 + as, ICON_SIZE - 5, &dark);
+    ROperateLine(tile, RAddOperation, 4, ICON_SIZE - 5, 6 + as, ICON_SIZE - 5,
 		 &light);
 
     return tile;
