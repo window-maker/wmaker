@@ -784,6 +784,7 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
         k = 1;
 	while (handler) {
 	    int mask;
+            InputHandler *next;
 
 	    mask = 0;
 
@@ -795,13 +796,15 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 	    
 	    if (fds[k].revents & (POLLHUP | POLLNVAL | POLLERR))
 		mask |= WIExceptMask;
-	    
+
+            next = handler->next;
+
 	    if (mask!=0 && handler->callback) {
 		(*handler->callback)(handler->fd, mask, 
 				     handler->clientData);
 	    }
 
-	    handler = handler->next;
+	    handler = next;
             k++;
 	}
     }
@@ -875,6 +878,7 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 
 	while (handler) {
 	    int mask;
+            InputHandler *next;
 
 	    mask = 0;
 
@@ -886,13 +890,15 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 	    
 	    if (FD_ISSET(handler->fd, &eset))
 		mask |= WIExceptMask;
-	    
+
+            next = handler->next;
+
 	    if (mask!=0 && handler->callback) {
 		(*handler->callback)(handler->fd, mask, 
 				     handler->clientData);
 	    }
 
-	    handler = handler->next;
+	    handler = next;
 	}
     }
 
