@@ -566,6 +566,7 @@ wManageWindow(WScreen *scr, Window window)
     int workspace = -1;
     char *title;
     Bool withdraw = False;
+    Bool raise = False;
 
     /* mutex. */
     /* XGrabServer(dpy); */
@@ -1110,7 +1111,9 @@ wManageWindow(WScreen *scr, Window window)
             }
 
             if (app->flags.hidden) {
-                wwin->flags.hidden = 1;
+                /*wwin->flags.hidden = 1;*/
+                wUnhideApplication(app, False, False);
+                raise = True;
             }
         }
     }
@@ -1183,7 +1186,7 @@ wManageWindow(WScreen *scr, Window window)
 	    DoWindowBirth(wwin);
 	}
 
-	wWindowMap(wwin);
+        wWindowMap(wwin);
     }
 
     /* setup stacking descriptor */
@@ -1213,6 +1216,12 @@ wManageWindow(WScreen *scr, Window window)
 	tmp->prev = wwin;
 	wwin->next = tmp;
 	wwin->prev = NULL;
+    }
+
+    /* raise is set to true if we un-hid the app when this window was born.
+     * we raise, else old windows of this app will be above this new one. */
+    if (raise) {
+        wRaiseFrame(wwin->frame->core);
     }
 
     /* Update name must come after WApplication stuff is done */

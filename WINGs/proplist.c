@@ -1544,14 +1544,15 @@ WMReadPropListFromFile(char *file)
 
     f = fopen(file, "r");
     if (!f) {
-        wsyserror(_("could not open domain file %s for reading"), file);
+        /* let the user print the error message if he really needs to */
+        /*wsyserror(_("could not open domain file '%s' for reading"), file);*/
         return NULL;
     }
 
     if (stat(file, &stbuf)==0) {
         length = (size_t) stbuf.st_size;
     } else {
-        wsyserror(_("could not get size for domain file %s"), file);
+        wsyserror(_("could not get size for file '%s'"), file);
         fclose(f);
         return NULL;
     }
@@ -1563,7 +1564,7 @@ WMReadPropListFromFile(char *file)
     pldata->lineNumber = 1;
 
     if (fread(pldata->ptr, length, 1, f) != 1) {
-        wsyserror(_("error reading from file %s"), file);
+        wsyserror(_("error reading from file '%s'"), file);
         plist = NULL;
         goto cleanup;
     }

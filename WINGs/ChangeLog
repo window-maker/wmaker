@@ -4,6 +4,8 @@ Changes since wmaker 0.70.0:
 - added an internal strcasecmp() (only on systems where is not present)
 - removed some redundant includes of ../src/config.h when wconfig.h is 
   included too
+- removed a wsyserror() message when reading a property list from file
+  (the programmer should decide if to give that message or just ignore).
 
 
 Changes since wmaker 0.65.0:
