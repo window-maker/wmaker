@@ -2383,7 +2383,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 
 	    if (ex_y>=0 && ex_y<=max_y_icons && (aicon==icon || !aicon)) {
                 *ret_x = 0;
-		*ret_y = ex_y;
+                *ret_y = ex_y;
                 return True;
 	    }
 
@@ -2420,16 +2420,16 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 		||
 		 (ex_y < closest && closest - ex_y <= DOCK_DETTACH_THRESHOLD+1))) {
                 *ret_x = 0;
-		*ret_y = closest;
-		return True;
+                *ret_y = closest;
+                return True;
 	    }
 	} else { /* !redocking */
 
 	    /* if slot is free and the icon is close enough, return it */
 	    if (!aicon && ex_x == 0 && ex_y >= 0 && ex_y <= max_y_icons) {
                 *ret_x = 0;
-		*ret_y = ex_y;
-		return True;
+                *ret_y = ex_y;
+                return True;
 	    }
 	}
     } else { /* CLIP */
@@ -3645,25 +3645,11 @@ handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
                 
 		if (!ondock) {
 		    XMapWindow(dpy, scr->dock_shadow);
-#if 0
-                    if (!collapsed && (collapsed = last_dock->collapsed)) {
-                        last_dock->collapsed = 0;
-                        wDockShowIcons(last_dock);
-                    }
-#endif
 		}
 		ondock = 1;
 	    } else {
                 if (ondock) {
                     XUnmapWindow(dpy, scr->dock_shadow);
-#if 0
-                    if (last_dock && collapsed &&
-                        aicon->running && (ev.xmotion.state & MOD_MASK)) {
-                        last_dock->collapsed = 1;
-                        wDockHideIcons(last_dock);
-                        collapsed = 0;
-                    }
-#endif
                 }
 		ondock = 0;
 	    }
