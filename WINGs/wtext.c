@@ -3603,7 +3603,7 @@ WMSetTextIgnoresNewline(WMText *tPtr, Bool ignore)
 {
     if (!tPtr)
         return;
-   // tPtr->flags.ignoreNewLine = ignore;
+   /* tPtr->flags.ignoreNewLine = ignore;*/
 }
 
 Bool
