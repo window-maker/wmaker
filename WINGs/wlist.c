@@ -29,6 +29,8 @@ typedef struct W_List {
 
     WMHandlerID	*idleID;    /* for updating the scroller after adding elements */
 
+    WMHandlerID	*selectID;  /* for selecting items in list while scrolling */
+
     WMScroller *vScroller;
 
     struct {
@@ -48,6 +50,8 @@ typedef struct W_List {
 #define DEFAULT_WIDTH	150
 #define DEFAULT_HEIGHT	150
 
+#define SCROLL_DELAY    100
+
 
 static void destroyList(List *lPtr);
 static void paintList(List *lPtr);
@@ -55,9 +59,14 @@ static void paintList(List *lPtr);
 
 static void handleEvents(XEvent *event, void *data);
 static void handleActionEvents(XEvent *event, void *data);
-static void updateScroller(List *lPtr);
+
+static void updateScroller(void *data);
+static void scrollForwardSelecting(void *data);
+static void scrollBackwardSelecting(void *data);
 
 static void vScrollCallBack(WMWidget *scroller, void *self);
+
+static void toggleItemSelection(WMList *lPtr, int index);
 
 static void updateGeometry(WMList *lPtr);
 static void didResizeList();
@@ -287,6 +296,10 @@ WMClearList(WMList *lPtr)
     if (!lPtr->idleID) {
         WMDeleteIdleHandler(lPtr->idleID);
         lPtr->idleID = NULL;
+    }
+    if (lPtr->selectID) {
+        WMDeleteTimerHandler(lPtr->selectID);
+        lPtr->selectID = NULL;
     }
     if (lPtr->view->flags.realized) {
         updateScroller(lPtr);
@@ -570,8 +583,10 @@ scrollTo(List *lPtr, int newTop)
 #endif
 
 static void
-updateScroller(List *lPtr)
+updateScroller(void *data)
 {
+    List *lPtr = (List*)data;
+
     float knobProportion, floatValue, tmp;
     int count = WMGetArrayItemCount(lPtr->items);
 
@@ -591,6 +606,77 @@ updateScroller(List *lPtr)
 
         WMSetScrollerParameters(lPtr->vScroller, floatValue, knobProportion);
     }
+}
+
+
+static void
+scrollForwardSelecting(void *data)
+{
+    List *lPtr = (List*)data;
+    int lastSelected;
+
+    lastSelected = lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll-1;
+
+    if (lastSelected >= WMGetArrayItemCount(lPtr->items)-1) {
+        lPtr->selectID = NULL;
+        if (lPtr->flags.dontFitAll)
+            scrollByAmount(lPtr, 1);
+        return;
+    }
+
+    /* selecting NEEDS to be done before scrolling to avoid flickering */
+    if (lPtr->flags.allowMultipleSelection) {
+        WMListItem *item;
+        WMRange range;
+
+        item = WMGetFromArray(lPtr->selectedItems, 0);
+        range.position = WMGetFirstInArray(lPtr->items, item);
+        if (lastSelected+1 >= range.position) {
+            range.count = lastSelected - range.position + 2;
+        } else {
+            range.count = lastSelected - range.position;
+        }
+        WMSetListSelectionToRange(lPtr, range);
+    } else {
+        WMSelectListItem(lPtr, lastSelected+1);
+    }
+    scrollByAmount(lPtr, 1);
+
+    lPtr->selectID = WMAddTimerHandler(SCROLL_DELAY, scrollForwardSelecting,
+                                       lPtr);
+}
+
+
+static void
+scrollBackwardSelecting(void *data)
+{
+    List *lPtr = (List*)data;
+
+    if (lPtr->topItem < 1) {
+        lPtr->selectID = NULL;
+        return;
+    }
+
+    /* selecting NEEDS to be done before scrolling to avoid flickering */
+    if (lPtr->flags.allowMultipleSelection) {
+        WMListItem *item;
+        WMRange range;
+
+        item = WMGetFromArray(lPtr->selectedItems, 0);
+        range.position = WMGetFirstInArray(lPtr->items, item);
+        if (lPtr->topItem-1 >= range.position) {
+            range.count = lPtr->topItem - range.position;
+        } else {
+            range.count = lPtr->topItem - range.position - 2;
+        }
+        WMSetListSelectionToRange(lPtr, range);
+    } else {
+        WMSelectListItem(lPtr, lPtr->topItem-1);
+    }
+    scrollByAmount(lPtr, -1);
+
+    lPtr->selectID = WMAddTimerHandler(SCROLL_DELAY, scrollBackwardSelecting,
+                                       lPtr);
 }
 
 
@@ -916,12 +1002,13 @@ toggleItemSelection(WMList *lPtr, int index)
     }
 }
 
+#define behavior2
 
 static void
 handleActionEvents(XEvent *event, void *data)
 {
     List *lPtr = (List*)data;
-    int tmp;
+    int tmp, height;
     int topItem = lPtr->topItem;
     static int lastClicked = -1, prevItem = -1;
 
@@ -936,6 +1023,10 @@ handleActionEvents(XEvent *event, void *data)
         }
 
         lPtr->flags.buttonPressed = 0;
+        if (lPtr->selectID) {
+            WMDeleteTimerHandler(lPtr->selectID);
+            lPtr->selectID = NULL;
+        }
         tmp = getItemIndexAt(lPtr, event->xbutton.y);
 
         if (tmp >= 0) {
@@ -949,13 +1040,39 @@ handleActionEvents(XEvent *event, void *data)
         break;
 
     case EnterNotify:
+#ifndef behavior2
         lPtr->flags.buttonPressed = lPtr->flags.buttonWasPressed;
         lPtr->flags.buttonWasPressed = 0;
+#endif
+        if (lPtr->selectID) {
+            WMDeleteTimerHandler(lPtr->selectID);
+            lPtr->selectID = NULL;
+        }
         break;
 
     case LeaveNotify:
+#ifndef behavior2
         lPtr->flags.buttonWasPressed = lPtr->flags.buttonPressed;
         lPtr->flags.buttonPressed = 0;
+#endif
+
+        height = WMWidgetHeight(lPtr);
+
+#ifdef behavior2
+        if (lPtr->flags.buttonPressed && !lPtr->selectID) {
+#else
+        if (lPtr->flags.buttonWasPressed && !lPtr->selectID) {
+#endif
+            if (event->xcrossing.y >= height) {
+                lPtr->selectID = WMAddTimerHandler(SCROLL_DELAY,
+                                                   scrollForwardSelecting,
+                                                   lPtr);
+            } else if (event->xcrossing.y <= 0) {
+                lPtr->selectID = WMAddTimerHandler(SCROLL_DELAY,
+                                                   scrollBackwardSelecting,
+                                                   lPtr);
+            }
+        }
         break;
 
     case ButtonPress:
@@ -1031,7 +1148,28 @@ handleActionEvents(XEvent *event, void *data)
         break;
 
     case MotionNotify:
-        if (lPtr->flags.buttonPressed) {
+#ifdef behavior2
+        height = WMWidgetHeight(lPtr);
+        if (lPtr->selectID && event->xmotion.y>=0 && event->xmotion.y<=height) {
+            WMDeleteTimerHandler(lPtr->selectID);
+            lPtr->selectID = NULL;
+        }
+#endif
+        if (lPtr->flags.buttonPressed && !lPtr->selectID) {
+#ifdef behavior2
+            if (event->xmotion.y <= 0) {
+                lPtr->selectID = WMAddTimerHandler(SCROLL_DELAY,
+                                                   scrollBackwardSelecting,
+                                                   lPtr);
+                break;
+            } else if (event->xmotion.y >= height) {
+                lPtr->selectID = WMAddTimerHandler(SCROLL_DELAY,
+                                                   scrollForwardSelecting,
+                                                   lPtr);
+                break;
+            }
+#endif
+
             tmp = getItemIndexAt(lPtr, event->xmotion.y);
             if (tmp>=0 && tmp!=prevItem) {
                 if (lPtr->flags.allowMultipleSelection) {
@@ -1093,6 +1231,10 @@ destroyList(List *lPtr)
     if (lPtr->idleID)
         WMDeleteIdleHandler(lPtr->idleID);
     lPtr->idleID = NULL;
+
+    if (lPtr->selectID)
+        WMDeleteTimerHandler(lPtr->selectID);
+    lPtr->selectID = NULL;
 
     WMFreeArray(lPtr->items);
 

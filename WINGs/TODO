@@ -1,10 +1,10 @@
 - move paint to idle handlers
-- finish the multiple selection code for lists (check for add handlers for 
-  scrolling while drag-selecting).
 - check whether WMDestroyWidget() should first call WMUnmapWidget().
 - check if its useful to add some WMBrowserSelectionDidChangeNotification
   (actually a pass-through for WMListSelectionDidChangeNotification).
   Or a delegate to be called when the list selection change.
+- check which behavior is better for list selecting while scrolling
+  (the #define behavior2 in wlist.c)
 
 
 - optimize color allocation for repeated colors
