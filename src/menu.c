@@ -73,7 +73,7 @@ static struct {
     {MENU_SCROLL_STEPS_F, MENU_SCROLL_DELAY_F},
     {MENU_SCROLL_STEPS_M, MENU_SCROLL_DELAY_M},
     {MENU_SCROLL_STEPS_S, MENU_SCROLL_DELAY_S},
-    {MENU_SCROLL_STEPS_U, MENU_SCROLL_DELAY_U}};
+    {MENU_SCROLL_STEPS_US, MENU_SCROLL_DELAY_US}};
 
 
 static void menuMouseDown(WObjDescriptor *desc, XEvent *event);

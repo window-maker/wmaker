@@ -3172,8 +3172,7 @@ retry:
 	}
 
 	if ((icon->wm_instance || icon->wm_class)
-	    && (icon->launching
-		|| (dock->screen_ptr->flags.startup && !icon->running))) {
+            && (icon->launching || !icon->running)) {
 
 	    if (icon->wm_instance && wm_instance &&
 		strcmp(icon->wm_instance, wm_instance)!=0) {
@@ -3202,7 +3201,31 @@ retry:
 		    icon->main_window = window;
 
 	    }
-	    found = True;
+            found = True;
+            if (!wPreferences.no_animations && !icon->launching &&
+                !dock->screen_ptr->flags.startup) {
+                WAppIcon *aicon;
+                int x0, y0;
+
+                icon->launching = 1;
+                dockIconPaint(icon);
+
+                aicon = wAppIconCreateForDock(dock->screen_ptr, NULL,
+                                              wm_instance, wm_class,
+                                              TILE_NORMAL);
+                PlaceIcon(dock->screen_ptr, &x0, &y0);
+                wAppIconMove(aicon, x0, y0);
+                /* Should this always be lowered? -Dan */
+                if (dock->lowered)
+                    wLowerFrame(aicon->icon->core);
+                XMapWindow(dpy, aicon->icon->core->window);
+                aicon->launching = 1;
+                wAppIconPaint(aicon);
+                SlideWindow(aicon->icon->core->window, x0, y0,
+                            icon->x_pos, icon->y_pos);
+                XUnmapWindow(dpy, aicon->icon->core->window);
+                wAppIconDestroy(aicon);
+            }
 	    wDockFinishLaunch(dock, icon);
 	    break;
 	}

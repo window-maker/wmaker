@@ -29,6 +29,15 @@ Changes since version 0.70.0:
   appicon).
 - Fixed user and global defaults domain merging to preserve values present in
   global but not in user in subdictionaries.
+- Made dock/clip steal appicons of applications that were started from a
+  shell/xterm or from the main menu, if there is a docked appicon of that
+  class that is not running at the time the app is launched.
+- Added animation to show that the appicon was stolen by the dock (the way
+  NEXTSTEP did - map an appicon as it normally would have been, then slide it
+  to the position the docked appicon is).
+- Updated the animation constants for scrolling/sliding/shading to better
+  adapt to newer/faster machines. Also used wusleep(10) when the delay was 0
+  to get rid of the jerky animation when there was no delay.
 
 
 Changes since version 0.65.1:

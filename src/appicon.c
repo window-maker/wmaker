@@ -277,10 +277,6 @@ drawCorner(WIcon *icon)
 void
 wAppIconMove(WAppIcon *aicon, int x, int y)
 {
-    WApplication *app;
-
-    app = wApplicationOf(aicon->icon->owner->main_window);
-
     XMoveWindow(dpy, aicon->icon->core->window, x, y);
     aicon->x_pos = x;
     aicon->y_pos = y;

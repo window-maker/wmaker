@@ -363,12 +363,10 @@ wApplicationCreate(WScreen *scr, Window main_window)
 
         if (clip && clip->attract_icons && wDockFindFreeSlot(clip, &x, &y)) {
             wapp->app_icon->attracted = 1;
-            if (!wapp->app_icon->icon->shadowed) {
-                wapp->app_icon->icon->shadowed = 1;
-                wapp->app_icon->icon->force_paint = 1;
-                /* We don't do an wAppIconPaint() here because it's in
-                 * wDockAttachIcon(). -Dan.
-                 */
+            if (!icon->shadowed) {
+                icon->shadowed = 1;
+                icon->force_paint = 1;
+                /* wAppIconPaint() is done in wDockAttachIcon() below */
             }
             wDockAttachIcon(clip, wapp->app_icon, x, y);
         } else {

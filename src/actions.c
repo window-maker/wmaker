@@ -78,7 +78,7 @@ static struct {
     {SHADE_STEPS_F, SHADE_DELAY_F},
     {SHADE_STEPS_M, SHADE_DELAY_M},
     {SHADE_STEPS_S, SHADE_DELAY_S},
-    {SHADE_STEPS_U, SHADE_DELAY_U}};
+    {SHADE_STEPS_US, SHADE_DELAY_US}};
 
 #define SHADE_STEPS	shadePars[(int)wPreferences.shade_speed].steps
 #define SHADE_DELAY	shadePars[(int)wPreferences.shade_speed].delay
@@ -286,8 +286,11 @@ wShadeWindow(WWindow  *wwin)
 	    if (time(NULL)-time0 > MAX_ANIMATION_TIME)
 		break;
 
-            if (SHADE_DELAY > 0)
+            if (SHADE_DELAY > 0) {
                 wusleep(SHADE_DELAY*1000L);
+            } else {
+                wusleep(10);
+            }
 	    h-=s;
 	    y-=s;
 	}
@@ -363,8 +366,11 @@ wUnshadeWindow(WWindow  *wwin)
 		XResizeWindow(dpy, wwin->frame->core->window, w, h);
 		XMoveWindow(dpy, wwin->client_win, 0, y);
 		XFlush(dpy);
-                if (SHADE_DELAY > 0)
+                if (SHADE_DELAY > 0) {
                     wusleep(SHADE_DELAY*2000L/3);
+                } else {
+                    wusleep(10);
+                }
 		h+=s;
 		y+=s;
 		
@@ -561,6 +567,8 @@ animateResizeFlip(WScreen *scr, int x, int y, int w, int h,
 	XFlush(dpy);
 #if (MINIATURIZE_ANIMATION_DELAY_F > 0)
         wusleep(MINIATURIZE_ANIMATION_DELAY_F);
+#else
+        wusleep(10);
 #endif
 
 	XDrawLines(dpy,scr->root_win,scr->frame_gc,points, 5, CoordModeOrigin);
@@ -627,6 +635,8 @@ animateResizeTwist(WScreen *scr, int x, int y, int w, int h,
 	XFlush(dpy);
 #if (MINIATURIZE_ANIMATION_DELAY_T > 0)
         wusleep(MINIATURIZE_ANIMATION_DELAY_T);
+#else
+        wusleep(10);
 #endif
 
         XDrawLines(dpy, scr->root_win, scr->frame_gc, points, 5, CoordModeOrigin);
@@ -673,6 +683,8 @@ animateResizeZoom(WScreen *scr, int x, int y, int w, int h,
 	XFlush(dpy);
 #if (MINIATURIZE_ANIMATION_DELAY_Z > 0)
         wusleep(MINIATURIZE_ANIMATION_DELAY_Z);
+#else
+        wusleep(10);
 #endif
 	for (j=0; j<FRAMES; j++) {
 	    XDrawRectangle(dpy, scr->root_win, scr->frame_gc, 
@@ -698,6 +710,8 @@ animateResizeZoom(WScreen *scr, int x, int y, int w, int h,
     XFlush(dpy);
 #if (MINIATURIZE_ANIMATION_DELAY_Z > 0)
     wusleep(MINIATURIZE_ANIMATION_DELAY_Z);
+#else
+    wusleep(10);
 #endif
     for (j=0; j<FRAMES; j++) {
 	XDrawRectangle(dpy, scr->root_win, scr->frame_gc, 

@@ -350,7 +350,7 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 	{ICON_SLIDE_DELAY_F, ICON_SLIDE_STEPS_F, ICON_SLIDE_SLOWDOWN_F},
 	{ICON_SLIDE_DELAY_M, ICON_SLIDE_STEPS_M, ICON_SLIDE_SLOWDOWN_M},
 	{ICON_SLIDE_DELAY_S, ICON_SLIDE_STEPS_S, ICON_SLIDE_SLOWDOWN_S},
-	{ICON_SLIDE_DELAY_U, ICON_SLIDE_STEPS_U, ICON_SLIDE_SLOWDOWN_U}};
+	{ICON_SLIDE_DELAY_US, ICON_SLIDE_STEPS_US, ICON_SLIDE_SLOWDOWN_US}};
     
     
 
@@ -407,6 +407,8 @@ SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
         XFlush(dpy);
         if (apars[(int)wPreferences.icon_slide_speed].delay > 0) {
             wusleep(apars[(int)wPreferences.icon_slide_speed].delay*1000L);
+        } else {
+            wusleep(10);
         }
 	if (time(NULL) - time0 > MAX_ANIMATION_TIME)
 	    break;
