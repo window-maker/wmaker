@@ -65,7 +65,7 @@ mystrcasecmp(const unsigned char *s1, const unsigned char *s2)
 {
 	if (!*s1 || !*s2) return 0;
 	while (*s2 != '\0') {
-		if (TOLOWER (*s1) != TOLOWER (*s2)) 
+		if (TOLOWER (*s1) != TOLOWER (*s2)) /* true if *s1 == 0 ! */
 			return 0;
 		s1++;
 		s2++;
@@ -79,6 +79,7 @@ typedef struct _currentFormat {
 	WMBag *colors;
 	WMColor *ccolor;
 	WMFont *cfont;
+	WMRulerMargins margins;
 	//WMBag *aligns; // for tables...
 	/* the following are "nested" 
 		i.e.:  <b><b><i></b><b></i>   
@@ -133,7 +134,6 @@ void parseToken(WMText *tPtr, char *token, short tk)
 	/* nice and fast for small tokens... no need for too much brain 
 		power here */
 		switch(TOLOWER(*token)) {
-
 			case 'i': 
 				if(!mode) {
 					cfmt.cfont = WMGetFontItalic(scr, cfmt.cfont);
@@ -145,7 +145,6 @@ void parseToken(WMText *tPtr, char *token, short tk)
 			 		cfmt.cfont = (WMFont *)WMGetFromBag(cfmt.fonts,
 						WMGetBagItemCount(cfmt.fonts)-1); 
 				} break;
-
 			case 'b': 
 				if(!mode) {
 					cfmt.cfont = WMGetFontBold(scr, cfmt.cfont);
@@ -161,8 +160,8 @@ void parseToken(WMText *tPtr, char *token, short tk)
 				cfmt.first = True;
 				tb = WMCreateTextBlockWithText(NULL, cfmt.cfont, 	
 					cfmt.ccolor, cfmt.first, 0);
-				WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, 0);
-				WMAppendTextBlock(tPtr, tb);
+				WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, cfmt.margins);
+				//WMAppendTextBlock(tPtr, tb);
 				cfmt.first = False;
 				break;
 			case 'u': cfmt.u = !mode; break;
@@ -195,7 +194,7 @@ void parseToken(WMText *tPtr, char *token, short tk)
 				switch(TOLOWER(*token)) {
 				case 's': 		
 				if(TOLOWER(*(1+token)) == 'r' && TOLOWER(*(2+token)) == 'c') {
-				mark = (char *)strchr(token, '='); 
+				mark = strchr(token, '='); 
 				if(mark) {
 				char img[256], *iptr;
 				token = mark+1;
@@ -208,7 +207,7 @@ void parseToken(WMText *tPtr, char *token, short tk)
 					tb = WMCreateTextBlockWithPixmap(pixmap, 
 						iptr, cfmt.ccolor, cfmt.first, 0);
 					WMSetTextBlockProperties(tb, cfmt.first, 
-						False, (cfmt.u?1:0), 0, 0);
+						False, (cfmt.u?1:0), 0, cfmt.margins);
 					WMAppendTextBlock(tPtr, tb);
 					cfmt.first = False;
 				}
@@ -291,29 +290,42 @@ void HTMLParser(WMWidget *w, void *clientData)
 		init = 0;
 	}
 
+#if 0
+	if(strlen(stream) == 1 && stream[0] == '\n') { 
+		/* sometimes if the text entered is a single char AND is a newline, 
+			the user prolly typed it */
+		cfmt.para = (cfmt.actions.createParagraph) (cfmt.fmargin, cfmt.bmargin, 
+			WMWidgetWidth(tPtr)-30, NULL, 0, cfmt.align);
+		(cfmt.actions.insertParagraph) (tPtr, cfmt.para, cfmt.type);
+		return;
+	}   
+#endif
+
+
+/*
+*/
 
 	while( (c=*(stream++))) {
+//printf("%c", c);
 		if(c == '\n' || c =='\t')
 			//c = ' '; //continue;
 			continue;
-
 		if(c == ' ') {
 			if(wasspace) 
 				continue;
 			wasspace = 1;
-		} else 
-			wasspace = 0;
+		}else wasspace = 0;
 
 		if(c == '<'  && !mode) { 
-			mode = 1;
-
+			mode=1;
 			if(textlen>0) { 
 				text[textlen] = 0;
 				tb = WMCreateTextBlockWithText(text, cfmt.cfont,
 					 cfmt.ccolor, cfmt.first, textlen);
-				WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, 0);
+				WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, cfmt.margins);
 				WMAppendTextBlock(tPtr, tb);
 				cfmt.first = False;
+//printf("%s\n", text);
 			}
 			textlen = 0;
 		} else if(c == '>' && mode) {
@@ -338,7 +350,7 @@ void HTMLParser(WMWidget *w, void *clientData)
 			(WMColor *)WMGetFromBag(cfmt.colors,
 				WMGetBagItemCount(cfmt.colors)-1), 
 			cfmt.first, textlen);
-		WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, 0);
+		WMSetTextBlockProperties(tb, cfmt.first, False, (cfmt.u?1:0), 0, cfmt.margins);
 		WMAppendTextBlock(tPtr, tb);
 		cfmt.first = False;
 	}
@@ -399,9 +411,9 @@ main(int argc, char **argv)
 	WMSetTextUsesMonoFont(text, !True);
 	WMSetTextParser(text, HTMLParser);
 #if 0
+	WMShowTextRuler(text, True);
 	WMSetTextUseFixedPitchFont(text, False);
 	WMSetTextHasRuler(text, True);
-	WMShowTextRuler(text, True);
 	WMSetTextHasVerticalScroller(text, True);
 	//WMSetTextHasHorizontalScroller(text, True);
 	WMFreezeText(text);
@@ -472,7 +484,8 @@ interesting widgets like this list widget: ");
 		tb = WMCreateTextBlockWithObject(te, "{a text object}", 
 			WMBlackColor(scr), False, 0);
 		WMAppendTextBlock(text, tb);
-		WMSetTextHasVerticalScroller(te, False);
+		WMSetTextHasVerticalScroller(te, True);
+		WMSetTextHasHorizontalScroller(te, True);
     	WMRefreshText(te, 0, 0);
 	}
 

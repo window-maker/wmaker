@@ -385,22 +385,17 @@ typedef struct WMInputPanel {
 
 
 
-/* WMRuler: a tabstop is a linked list of tabstops, 
-   each containing the position of the tabstop */
 
+/* WMRuler: */
 typedef struct {
-    int value;
-    struct WMTabStops *next;
-} WMTabStops;
-
-/* All indentation and tab markers are _relative_ to the left margin marker */
-typedef struct {
-    int left;		 /* left margin marker */
-    int right;		 /* right margin marker */
-    int first;		 /* indentation marker for first line only */
-    int body;		 /* body indentation marker */
-    WMTabStops *tabs;
+    unsigned int *tabs;     /* a growable array of tabstops */
+    unsigned short ntabstops:4; /* how many there are */
+    unsigned short left:15; /* left margin marker */
+    unsigned short right:15;    /* right margin marker */
+    unsigned short first:15;    /* indentation marker for first line only */
+    unsigned short body:15; /* body indentation marker */
 } WMRulerMargins;
+/* All indentation and tab markers are _relative_ to the left margin marker */
 
 
 typedef void *WMHandlerID;
@@ -1457,17 +1452,17 @@ void WMPrependTextStream(WMText *tPtr, char *text);
 
 void WMAppendTextStream(WMText *tPtr, char *text);
 
-/* free the returned text */
+/* free the text */
 char * WMGetTextStream(WMText *tPtr);
 
-/* destroy the bag */
-WMBag * WMGetTextStreamObjects(WMText *tPtr);
-
-/* free the returned text */
+/* free the text */
 char * WMGetTextSelected(WMText *tPtr);
 
 /* destroy the bag */
-WMBag * WMGetTextSelectedObjects(WMText *tPtr);
+WMBag * WMGetTextStreamIntoBag(WMText *tPtr);
+
+/* destroy the bag */
+WMBag * WMGetTextSelectedIntoBag(WMText *tPtr);
 
 void *WMCreateTextBlockWithObject(WMWidget *w, char *description,
     WMColor *color, unsigned short first, unsigned short reserved);
@@ -1480,12 +1475,12 @@ void *WMCreateTextBlockWithText(char *text, WMFont *font,
     
 void WMSetTextBlockProperties(void *vtb, unsigned int first,
     unsigned int kanji, unsigned int underlined, int script,
-    unsigned int marginN);
+	WMRulerMargins margins);
     
 void WMGetTextBlockProperties(void *vtb, unsigned int *first,
     unsigned int *kanji, unsigned int *underlined, int *script,
-    unsigned int *marginN);
-    
+	WMRulerMargins *margins);
+
 void WMSetTextSelectionColor(WMText *tPtr, WMColor *color);
 
 void WMSetTextSelectionFont(WMText *tPtr, WMFont *font);
