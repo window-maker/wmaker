@@ -706,7 +706,7 @@ char*
 WMSetBrowserPath(WMBrowser *bPtr, char *path)
 {
     int i;
-    char *str = wstrdup(path);
+    char *str;
     char *tmp, *retPtr = NULL;
     int item;
     WMListItem *listItem;
@@ -722,6 +722,7 @@ WMSetBrowserPath(WMBrowser *bPtr, char *path)
     WMSetListPosition(bPtr->columns[0], 0);
 
     i = 0;
+    str = wstrdup(path);
     tmp = strtok(str, bPtr->pathSeparator);
     while (tmp) {
 	/* select it in the column */
@@ -747,6 +748,7 @@ WMSetBrowserPath(WMBrowser *bPtr, char *path)
 
 	i++;
     }
+
     wfree(str);
 
     for (i = bPtr->usedColumnCount - 1;

@@ -42,6 +42,7 @@ changes since wmaker 0.62.1:
 - WMDestroyWidget() now calls WMUnmapWidget() first
 - added WMScrollerDidScrollNotification to scroller
 - added WMGetScrollViewVisibleRect()
+- fixed a mem leak in the browser code.
 
 
 changes since wmaker 0.62.0:
