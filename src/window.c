@@ -2215,7 +2215,8 @@ wWindowSaveState(WWindow *wwin)
     data[3] = wwin->flags.hidden;
 
     for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-	if (WMCountInBag(wwin->screen_ptr->shortcutWindows[i], wwin))
+	if (wwin->screen_ptr->shortcutWindows[i] &&
+	    WMCountInBag(wwin->screen_ptr->shortcutWindows[i], wwin))
 	    data[9] |= 1<<i;
     }
     XChangeProperty(dpy, wwin->client_win, _XA_WINDOWMAKER_STATE,
