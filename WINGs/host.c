@@ -19,6 +19,7 @@
  */
 
 
+#include "../src/config.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -30,9 +31,9 @@
 #include "WUtil.h"
 
 
-/* Tell stupid Solaris what's going on */
-#ifndef INADDR_NONE
-#define INADDR_NONE  (-1)
+/* For some Solaris systems */
+#if !defined(HAVE_INET_ATON) && !defined(INADDR_NONE)
+# define INADDR_NONE  (-1)
 #endif
 
 
@@ -171,7 +172,7 @@ WMGetHostWithAddress(char* address)
     if ((in.s_addr = inet_addr(address)) == INADDR_NONE)
         return NULL;
 #else
-    if (inet_aton(address, &in.s_addr) == 0)
+    if (inet_aton(address, &in) == 0)
         return NULL;
 #endif
 

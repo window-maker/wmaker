@@ -1,7 +1,7 @@
 /*
  *  WINGs WMConnection function library
  * 
- *  Copyright (c) 1999 Dan Pascu
+ *  Copyright (c) 1999-2000 Dan Pascu
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -58,6 +58,11 @@
 # define SA_RESTART             0
 #endif
 
+/* For some Solaris systems */
+#if !defined(HAVE_INET_ATON) && !defined(INADDR_NONE)
+# define INADDR_NONE  (-1)
+#endif
+
 /* Stuff for setting the sockets into non-blocking mode. */
 /*#ifdef	__POSIX_SOURCE
 # define NONBLOCK_OPT           O_NONBLOCK
@@ -67,9 +72,7 @@
 
 #define NONBLOCK_OPT            O_NONBLOCK
 
-
 #define NETBUF_SIZE             4096
-
 
 #define DEF_TIMEOUT             600   /* 600 seconds == 10 minutes */
 
