@@ -53,7 +53,8 @@ enum {
   WMTitleBarMain = 2
 };
 
-#ifndef _WINGS_H_
+#ifndef _DEFINED_GNUSTEP_WINDOW_INFO
+#define	_DEFINED_GNUSTEP_WINDOW_INFO
 /*
  * Window levels are taken from GNUstep (gui/AppKit/NSWindow.h)
  * NSDesktopWindowLevel intended to be the level at which things
@@ -88,7 +89,7 @@ enum {
   WMIconWindowMask = 64,
   WMMiniWindowMask = 128
 };
-#endif /* _WINGS_H_ */
+#endif
 
 /* window manager -> appkit notifications */
 #define GNUSTEP_WM_NOTIFICATION		"GNUSTEP_WM_NOTIFICATION"

@@ -42,6 +42,8 @@ typedef struct {
 #define ClientMessageMask	(1L<<30)
 
 
+#ifndef _DEFINED_GNUSTEP_WINDOW_INFO
+#define	_DEFINED_GNUSTEP_WINDOW_INFO
 /*
  * Window levels are taken from GNUstep (gui/AppKit/NSWindow.h)
  * NSDesktopWindowLevel intended to be the level at which things
@@ -76,6 +78,8 @@ enum {
   WMIconWindowMask = 64,
   WMMiniWindowMask = 128
 };
+#endif
+
 
 /* button types */
 typedef enum {

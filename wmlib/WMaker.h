@@ -68,7 +68,8 @@ typedef struct {
 #define WMFHideApplication		12
 
 
-#if !defined(_NSWindow_h_) && !defined(_GNUstep_H_GUITypes)
+#ifndef _DEFINED_GNUSTEP_WINDOW_INFO
+#define	_DEFINED_GNUSTEP_WINDOW_INFO
 /*
  * Window levels are taken from GNUstep (gui/AppKit/NSWindow.h)
  * NSDesktopWindowLevel intended to be the level at which things
