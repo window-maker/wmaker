@@ -8,7 +8,6 @@
 
 #define DO_BLINK 0
 
-
 /* TODO: 
  * -  FIX wrap... long lines that don't fit are not char wrapped yet.
  * -            hrm... something to do with already having tbs...
