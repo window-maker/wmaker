@@ -24,7 +24,7 @@
 #include "WPrefs.h"
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
@@ -32,7 +32,7 @@ typedef struct _Panel {
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
     
     WMFrame *kfocF;
     WMPopUpButton *kfocP;
@@ -231,19 +231,18 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     int i;
     char *buf1, *buf2;
     WMPixmap *icon;
     WMColor *color;
     WMFont *font;
 
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
     
     /***************** Input Focus Mode *****************/
-    panel->kfocF = WMCreateFrame(panel->frame);
+    panel->kfocF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->kfocF, 240, 130);
     WMMoveWidget(panel->kfocF, 15, 15);
     WMSetFrameTitle(panel->kfocF, _("Input Focus Mode"));
@@ -265,7 +264,7 @@ createPanel(Panel *p)
     
     /***************** Colormap Installation Mode ****************/
     
-    panel->cfocF = WMCreateFrame(panel->frame);
+    panel->cfocF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->cfocF, 240, 70);
     WMMoveWidget(panel->cfocF, 15, 150);
     WMSetFrameTitle(panel->cfocF, _("Install colormap in the window..."));
@@ -284,7 +283,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->cfocF);
     
     /***************** Automatic window raise delay *****************/
-    panel->raisF = WMCreateFrame(panel->frame);
+    panel->raisF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->raisF, 245, 70);
     WMMoveWidget(panel->raisF, 265, 15);
     WMSetFrameTitle(panel->raisF, _("Automatic Window Raise Delay"));
@@ -354,7 +353,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->raisF);
     
     /***************** Options ****************/
-    panel->optF = WMCreateFrame(panel->frame);
+    panel->optF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->optF, 245, 125);
     WMMoveWidget(panel->optF, 265, 95);
     
@@ -372,8 +371,8 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->optF);
 
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
     
     showData(panel);
 }
@@ -393,7 +392,7 @@ InitFocus(WMScreen *scr, WMWindow *win)
     panel->description = _("Keyboard focus switching policy, colormap switching\n"
 			   "policy for 8bpp displays and other related options.");
 
-    panel->win = win;
+    panel->parent = win;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

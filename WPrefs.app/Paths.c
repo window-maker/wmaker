@@ -25,14 +25,14 @@
 #include <unistd.h>
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
     char *sectionName;
 
     char *description;
     
     CallbackRec callbacks;
 
-    WMWindow *win;
+    WMWidget *parent;
     
     WMTabView *tabv;
 
@@ -145,7 +145,7 @@ browseForFile(WMWidget *w, void *data)
 
     WMSetFilePanelCanChooseFiles(filePanel, False);
 
-    if (WMRunModalFilePanelForDirectory(filePanel, panel->win, "/",
+    if (WMRunModalFilePanelForDirectory(filePanel, panel->parent, "/",
                                         _("Select directory"), NULL) == True) {
         char *str = WMGetFilePanelFileName(filePanel);
 
@@ -241,7 +241,7 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     WMTabViewItem *tab;
 
     panel->white = WMWhiteColor(scr);
@@ -249,18 +249,18 @@ createPanel(Panel *p)
     panel->red = WMCreateRGBColor(scr, 0xffff, 0, 0, True);
     panel->font = WMSystemFontOfSize(scr, 12);
     
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
     
-    panel->tabv = WMCreateTabView(panel->frame);
+    
+    panel->tabv = WMCreateTabView(panel->box);
     WMMoveWidget(panel->tabv, 12, 10);
     WMResizeWidget(panel->tabv, 500, 215);
 
     
 
     /* icon path */
-    panel->icoF = WMCreateFrame(panel->frame);
+    panel->icoF = WMCreateFrame(panel->box);
     WMSetFrameRelief(panel->icoF, WRFlat);
     WMResizeWidget(panel->icoF, 230, 210);
 
@@ -291,7 +291,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->icoF);
 
     /* pixmap path */
-    panel->pixF = WMCreateFrame(panel->frame);
+    panel->pixF = WMCreateFrame(panel->box);
     WMSetFrameRelief(panel->pixF, WRFlat);
     WMResizeWidget(panel->pixF, 230, 210);
     
@@ -322,8 +322,8 @@ createPanel(Panel *p)
 
     WMMapSubwidgets(panel->pixF);
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
     
     showData(panel);
 }
@@ -331,7 +331,7 @@ createPanel(Panel *p)
 
 
 Panel*
-InitPaths(WMScreen *scr, WMWindow *win)
+InitPaths(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -343,7 +343,7 @@ InitPaths(WMScreen *scr, WMWindow *win)
     panel->description = _("Search paths to use when looking for pixmaps\n"
 			   "and icons.");
 
-    panel->win = win;
+    panel->parent = parent;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

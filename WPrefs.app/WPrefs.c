@@ -25,37 +25,37 @@
 #include <assert.h>
 
 
-extern Panel *InitWindowHandling(WMScreen *scr, WMWindow *win);
+extern Panel *InitWindowHandling(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitKeyboardSettings(WMScreen *scr, WMWindow *win);
+extern Panel *InitKeyboardSettings(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitMouseSettings(WMScreen *scr, WMWindow *win);
+extern Panel *InitMouseSettings(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitKeyboardShortcuts(WMScreen *scr, WMWindow *win);
+extern Panel *InitKeyboardShortcuts(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitWorkspace(WMScreen *scr, WMWindow *win);
+extern Panel *InitWorkspace(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitFocus(WMScreen *scr, WMWindow *win);
+extern Panel *InitFocus(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitPreferences(WMScreen *scr, WMWindow *win);
+extern Panel *InitPreferences(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitFont(WMScreen *scr, WMWindow *win);
+extern Panel *InitFont(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitConfigurations(WMScreen *scr, WMWindow *win);
+extern Panel *InitConfigurations(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitPaths(WMScreen *scr, WMWindow *win);
+extern Panel *InitPaths(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitMenu(WMScreen *scr, WMWindow *win);
+extern Panel *InitMenu(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitExpert(WMScreen *scr, WMWindow *win);
+extern Panel *InitExpert(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitMenuPreferences(WMScreen *scr, WMWindow *win);
+extern Panel *InitMenuPreferences(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitIcons(WMScreen *scr, WMWindow *win);
+extern Panel *InitIcons(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitThemes(WMScreen *scr, WMWindow *win);
+extern Panel *InitThemes(WMScreen *scr, WMWidget *parent);
 
-extern Panel *InitAppearance(WMScreen *scr, WMWindow *win);
+extern Panel *InitAppearance(WMScreen *scr, WMWidget *parent);
 
 
 
@@ -88,7 +88,7 @@ typedef struct _WPrefs {
     WMLabel *versionL;
     WMLabel *creditsL;
     WMLabel *statusL;
-    
+        
     Panel *currentPanel;
 } _WPrefs;
 
@@ -379,7 +379,7 @@ showPanel(Panel *panel)
     if (rec->callbacks.showPanel)
 	(*rec->callbacks.showPanel)(panel);
 
-    WMMapWidget(rec->frame);
+    WMMapWidget(rec->box);
 }
 
 
@@ -389,7 +389,7 @@ hidePanel(Panel *panel)
 {
     PanelRec *rec = (PanelRec*)panel;    
     
-    WMUnmapWidget(rec->frame);
+    WMUnmapWidget(rec->box);
     
     if (rec->callbacks.hidePanel)
 	(*rec->callbacks.hidePanel)(panel);
@@ -413,23 +413,26 @@ changeSection(WMWidget *self, void *data)
     if (WPrefs.currentPanel == data)
 	return;
 	
-    if (WPrefs.banner) {
-	WMDestroyWidget(WPrefs.banner);
-	WPrefs.banner = NULL;
+    if (WPrefs.currentPanel == NULL) {
+	WMDestroyWidget(WPrefs.nameL);
+	WMDestroyWidget(WPrefs.creditsL);
+	WMDestroyWidget(WPrefs.versionL);
+	WMDestroyWidget(WPrefs.statusL);
+
+	WMSetFrameRelief(WPrefs.banner, WRGroove);
+
 /*	WMMapWidget(WPrefs.undosBtn);
 	WMMapWidget(WPrefs.undoBtn);
  */
 	WMMapWidget(WPrefs.saveBtn);
     }
-    
+
     showPanel(data);
-    
+
     if (WPrefs.currentPanel)
 	hidePanel(WPrefs.currentPanel);
     WPrefs.currentPanel = data;
 }
-
-
 
 
 
@@ -688,33 +691,34 @@ Initialize(WMScreen *scr)
 
     WMSetLabelText(WPrefs.statusL, _("Initializing configuration panels..."));
 
-    InitWindowHandling(scr, WPrefs.win);
-    InitFocus(scr, WPrefs.win);
-    InitMenuPreferences(scr, WPrefs.win);
-    InitIcons(scr, WPrefs.win);
-    InitPreferences(scr, WPrefs.win);
+    InitFocus(scr, WPrefs.banner);
+    InitWindowHandling(scr, WPrefs.banner);
 
-    InitPaths(scr, WPrefs.win);    
-    InitWorkspace(scr, WPrefs.win);
-    InitConfigurations(scr, WPrefs.win);
+    InitMenuPreferences(scr, WPrefs.banner);
+    InitIcons(scr, WPrefs.banner);
+    InitPreferences(scr, WPrefs.banner);
 
-    InitMenu(scr, WPrefs.win);
+    InitPaths(scr, WPrefs.banner);    
+    InitWorkspace(scr, WPrefs.banner);
+    InitConfigurations(scr, WPrefs.banner);
+
+    InitMenu(scr, WPrefs.banner);
 
 #ifdef not_yet_fully_implemented
-    InitKeyboardSettings(scr, WPrefs.win);
+    InitKeyboardSettings(scr, WPrefs.banner);
 #endif
-    InitKeyboardShortcuts(scr, WPrefs.win);
-    InitMouseSettings(scr, WPrefs.win);
+    InitKeyboardShortcuts(scr, WPrefs.banner);
+    InitMouseSettings(scr, WPrefs.banner);
 
-    InitAppearance(scr, WPrefs.win);
+    InitAppearance(scr, WPrefs.banner);
     
 #ifdef akk
-    InitFont(scr, WPrefs.win);
+    InitFont(scr, WPrefs.banner);
 #endif
 #ifdef not_yet_fully_implemented
-    InitThemes(scr, WPrefs.win);
+    InitThemes(scr, WPrefs.banner);
 #endif
-    InitExpert(scr, WPrefs.win);
+    InitExpert(scr, WPrefs.banner);
 
     WMRealizeWidget(WPrefs.scrollV);
 

@@ -24,7 +24,7 @@
 #include "WPrefs.h"
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
@@ -32,7 +32,7 @@ typedef struct _Panel {
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
 
     WMFrame *scrF;
     WMButton *scrB[5];
@@ -95,20 +95,18 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
-
+    WMScreen *scr = WMWidgetScreen(panel->parent);
+    WMBox *hbox, *vbox;
     WMPixmap *icon;
     int i;
     char *buf1, *buf2;
     char *path;
     
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
-    
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
     
     /***************** Menu Scroll Speed ****************/
-    panel->scrF = WMCreateFrame(panel->frame);
+    panel->scrF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->scrF, 235, 90);
     WMMoveWidget(panel->scrF, 25, 20);
     WMSetFrameTitle(panel->scrF, _("Menu Scrolling Speed"));
@@ -157,7 +155,7 @@ createPanel(Panel *p)
 
     /***************** Submenu Alignment ****************/
     
-    panel->aliF = WMCreateFrame(panel->frame);
+    panel->aliF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->aliF, 220, 90);
     WMMoveWidget(panel->aliF, 280, 20);
     WMSetFrameTitle(panel->aliF, _("Submenu Alignment"));
@@ -197,7 +195,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->aliF);
     
     /***************** Options ****************/
-    panel->optF = WMCreateFrame(panel->frame);
+    panel->optF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->optF, 475, 80);
     WMMoveWidget(panel->optF, 25, 130);
     
@@ -213,8 +211,8 @@ createPanel(Panel *p)
     
     WMMapSubwidgets(panel->optF);
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
 
     showData(panel);
 }
@@ -222,7 +220,7 @@ createPanel(Panel *p)
 
 
 Panel*
-InitMenuPreferences(WMScreen *scr, WMWindow *win)
+InitMenuPreferences(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -234,7 +232,7 @@ InitMenuPreferences(WMScreen *scr, WMWindow *win)
     panel->description = _("Menu usability related options. Scrolling speed,\n"
 			   "alignment of submenus etc.");
 
-    panel->win = win;
+    panel->parent = parent;
     
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

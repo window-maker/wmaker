@@ -24,14 +24,14 @@
 #include "WPrefs.h"
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
     char *sectionName;   
 
     char *description;
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
 
     WMFrame *icoF;
     WMButton *icoB[5];
@@ -173,7 +173,7 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     char *buf1, *buf2;
     WMPixmap *icon, *altIcon;
     RImage *xis = NULL;
@@ -191,19 +191,19 @@ createPanel(Panel *p)
 	wfree(path);
     }
 
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
 
     /*********** Icon Slide Speed **********/
     
-    panel->icoF = WMCreateFrame(panel->frame);
+    panel->icoF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->icoF, 230, 45);
     WMMoveWidget(panel->icoF, 15, 10);
     WMSetFrameTitle(panel->icoF, _("Icon Slide Speed"));
     
     /*********** Shade Animation Speed **********/
-    panel->shaF = WMCreateFrame(panel->frame);
+    panel->shaF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->shaF, 230, 45);
     WMMoveWidget(panel->shaF, 15, 60);
     WMSetFrameTitle(panel->shaF, _("Shade Animation Speed"));
@@ -265,7 +265,7 @@ createPanel(Panel *p)
 
 
     /***************** Smoothed Scaling *****************/
-    panel->smoF = WMCreateFrame(panel->frame);
+    panel->smoF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->smoF, 115, 110);
     WMMoveWidget(panel->smoF, 18, 115);
     WMSetFrameTitle(panel->smoF, _("Smooth Scaling"));
@@ -307,7 +307,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->smoF);
 
     /***************** Titlebar Style Size ****************/
-    panel->titlF = WMCreateFrame(panel->frame);
+    panel->titlF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->titlF, 105, 110);
     WMMoveWidget(panel->titlF, 140, 115);
     WMSetFrameTitle(panel->titlF, _("Titlebar Style"));
@@ -345,7 +345,7 @@ createPanel(Panel *p)
 
     /**************** Features ******************/
     
-    panel->animF = WMCreateFrame(panel->frame);
+    panel->animF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->animF, 255, 115);
     WMMoveWidget(panel->animF, 255, 10);
     WMSetFrameTitle(panel->animF, _("Animations and Sound"));
@@ -423,7 +423,7 @@ createPanel(Panel *p)
     /*********** Dithering **********/
     panel->cmapSize = 4;
     
-    panel->dithF = WMCreateFrame(panel->frame);
+    panel->dithF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->dithF, 255, 95);
     WMMoveWidget(panel->dithF, 255, 130);
     WMSetFrameTitle(panel->dithF, _("Dithering colormap for 8bpp"));
@@ -467,8 +467,8 @@ createPanel(Panel *p)
 
     WMMapSubwidgets(panel->dithF);
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
     
     if (xis)
 	RDestroyImage(xis);
@@ -511,7 +511,7 @@ storeData(_Panel *panel)
 
 
 Panel*
-InitConfigurations(WMScreen *scr, WMWindow *win)
+InitConfigurations(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -524,7 +524,7 @@ InitConfigurations(WMScreen *scr, WMWindow *win)
 			   "toggling and number of colors to reserve for\n"
 			   "Window Maker on 8bit displays.");
 
-    panel->win = win;
+    panel->parent = parent;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

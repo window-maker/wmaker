@@ -38,14 +38,14 @@
 #include "TexturePanel.h"
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
     char *sectionName;
 
     char *description;
 
     CallbackRec callbacks;
 
-    WMWindow *win;
+    WMWidget *parent;
 
     WMLabel *prevL;
 
@@ -729,10 +729,10 @@ renderTexture(WMScreen *scr, proplist_t texture, int width, int height,
 static Pixmap
 renderMenu(_Panel *panel, proplist_t texture, int width, int iheight)
 {
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     Display *dpy = WMScreenDisplay(scr);
     Pixmap pix, tmp;
-    GC gc = XCreateGC(dpy, WMWidgetXID(panel->win), 0, NULL);
+    GC gc = XCreateGC(dpy, WMWidgetXID(panel->parent), 0, NULL);
     int i;
 
     switch (panel->menuStyle) {
@@ -764,7 +764,7 @@ renderPreview(_Panel *panel, GC gc, int part, int relief)
     WMListItem *item;
     TextureListItem *titem;
     Pixmap pix;
-    WMScreen *scr = WMWidgetScreen(panel->frame);
+    WMScreen *scr = WMWidgetScreen(panel->box);
 
     item = WMGetListItem(panel->texLs, panel->textureIndex[part]);
     titem = (TextureListItem*)item->clientData;
@@ -787,7 +787,7 @@ renderPreview(_Panel *panel, GC gc, int part, int relief)
 static void
 updatePreviewBox(_Panel *panel, int elements)
 {
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     Display *dpy = WMScreenDisplay(scr);
  /*   RContext *rc = WMScreenRContext(scr);*/
     int refresh = 0;
@@ -796,13 +796,13 @@ updatePreviewBox(_Panel *panel, int elements)
     int colorUpdate = 0;
     WMColor *black = WMBlackColor(scr);
 
-    gc = XCreateGC(dpy, WMWidgetXID(panel->win), 0, NULL);
+    gc = XCreateGC(dpy, WMWidgetXID(panel->parent), 0, NULL);
 
 
     if (panel->preview == None) {
 	WMColor *color;
 
-	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->win),
+	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->parent),
 				       240-4, 215-4, WMScreenDepth(scr));
 
 	color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
@@ -951,7 +951,7 @@ okNewTexture(void *data)
     char *str;
     proplist_t prop;
     TextureListItem *titem;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
 
     titem = wmalloc(sizeof(TextureListItem));
     memset(titem, 0, sizeof(TextureListItem));
@@ -1127,7 +1127,7 @@ extractTexture(WMWidget *w, void *data)
     WMSetFilePanelCanChooseDirectories(opanel, False);
     WMSetFilePanelCanChooseFiles(opanel, True);
 
-    if (WMRunModalFilePanelForDirectory(opanel, panel->win, wgethomedir(),
+    if (WMRunModalFilePanelForDirectory(opanel, panel->parent, wgethomedir(),
 					_("Select File"), NULL)) {
 	path = WMGetFilePanelFileName(opanel);
 
@@ -1145,7 +1145,7 @@ changePage(WMWidget *w, void *data)
     int section;
     WMListItem *item;
     TextureListItem *titem;
-    WMScreen *scr = WMWidgetScreen(panel->frame);
+    WMScreen *scr = WMWidgetScreen(panel->box);
     RContext *rc = WMScreenRContext(scr);
     static WMPoint positions[] = {
 	{5, 10},
@@ -1415,7 +1415,7 @@ fillColorList(_Panel *panel)
     WMColor *color;
     proplist_t list;
     WMUserDefaults *udb = WMGetStandardUserDefaults();
-    WMScreen *scr = WMWidgetScreen(panel->frame);
+    WMScreen *scr = WMWidgetScreen(panel->box);
     int i;
     
     list = WMGetUDObjectForKey(udb, "ColorList");
@@ -1452,7 +1452,7 @@ changeColorPage(WMWidget *w, void *data)
 {
     _Panel *panel = (_Panel*)data;
     int section;
-    WMScreen *scr = WMWidgetScreen(panel->frame);
+    WMScreen *scr = WMWidgetScreen(panel->box);
     RContext *rc = WMScreenRContext(scr);
     static WMPoint positions[] = {
 	{5, 10},
@@ -1521,7 +1521,7 @@ paintText(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
 static void
 updateColorPreviewBox(_Panel *panel, int elements)
 {
-    WMScreen *scr = WMWidgetScreen(panel->frame);
+    WMScreen *scr = WMWidgetScreen(panel->box);
     WMPixmap *pixmap;
     Pixmap d;
 
@@ -1689,7 +1689,7 @@ createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
     WMFont *font;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     WMTabViewItem *item;
     int i;
     char *tmp;
@@ -1722,12 +1722,11 @@ createPanel(Panel *p)
     panel->offLed = WMCreatePixmapFromXPMData(scr, blueled2_xpm);
     panel->hand = WMCreatePixmapFromXPMData(scr, hand_xpm);
 
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
 
     /* preview box */
-    panel->prevL = WMCreateLabel(panel->frame);
+    panel->prevL = WMCreateLabel(panel->box);
     WMResizeWidget(panel->prevL, 240, FRAME_HEIGHT - 20);
     WMMoveWidget(panel->prevL, 15, 10);
     WMSetLabelRelief(panel->prevL, WRSunken);
@@ -1741,14 +1740,14 @@ createPanel(Panel *p)
 
     tabviewDelegate.data = panel;
 
-    panel->tabv = WMCreateTabView(panel->frame);
+    panel->tabv = WMCreateTabView(panel->box);
     WMResizeWidget(panel->tabv, 245, FRAME_HEIGHT - 20);
     WMMoveWidget(panel->tabv, 265, 10);
     WMSetTabViewDelegate(panel->tabv, &tabviewDelegate);
 
     /*** texture list ***/
 
-    panel->texF = WMCreateFrame(panel->frame);
+    panel->texF = WMCreateFrame(panel->box);
     WMSetFrameRelief(panel->texF, WRFlat);
 
     item = WMCreateTabViewItemWithIdentifier(0);
@@ -1845,7 +1844,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->texF);
 
     /*** colors ***/
-    panel->colF = WMCreateFrame(panel->frame);
+    panel->colF = WMCreateFrame(panel->box);
     WMSetFrameRelief(panel->colF, WRFlat);
 
     item = WMCreateTabViewItemWithIdentifier(1);
@@ -1898,7 +1897,7 @@ createPanel(Panel *p)
 #ifdef unfinished
     /*** root bg ***/
     
-    panel->bgF = WMCreateFrame(panel->frame);
+    panel->bgF = WMCreateFrame(panel->box);
     WMSetFrameRelief(panel->bgF, WRFlat);
     
     item = WMCreateTabViewItemWithIdentifier(2);
@@ -1923,7 +1922,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->bgF);
 #endif /* unfinished */
     /*** options ***/
-    panel->optF = WMCreateFrame(panel->frame);
+    panel->optF = WMCreateFrame(panel->box);
     WMSetFrameRelief(panel->optF, WRFlat);
 
     item = WMCreateTabViewItemWithIdentifier(3);
@@ -2005,8 +2004,8 @@ createPanel(Panel *p)
 
     /**/
 
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
 
     WMSetPopUpButtonSelectedItem(panel->secP, 0);
 
@@ -2018,7 +2017,7 @@ createPanel(Panel *p)
 
     fillColorList(panel);
 
-    panel->texturePanel = CreateTexturePanel(panel->win);
+    panel->texturePanel = CreateTexturePanel(panel->parent);
 }
 
 
@@ -2087,8 +2086,8 @@ showData(_Panel *panel)
 	if (!str)
 	    str = colorOptions[i*2+1];
 
-	if (!(color = WMCreateNamedColor(WMWidgetScreen(panel->frame), str, False))) {
-	    color = WMCreateNamedColor(WMWidgetScreen(panel->frame), "#000000", False);
+	if (!(color = WMCreateNamedColor(WMWidgetScreen(panel->box), str, False))) {
+	    color = WMCreateNamedColor(WMWidgetScreen(panel->box), "#000000", False);
 	}
 
 	panel->colors[i] = color;
@@ -2219,7 +2218,7 @@ InitAppearance(WMScreen *scr, WMWindow *win)
     panel->description = _("Background texture configuration for windows,\n"
 			   "menus and icons.");
 
-    panel->win = win;
+    panel->parent = win;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;
@@ -2254,10 +2253,10 @@ OpenExtractPanelFor(_Panel *panel, char *path)
     ExtractPanel *epanel;
     WMColor *color;
     WMFont *font;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
 
     epanel = wmalloc(sizeof(ExtractPanel));
-    epanel->win = WMCreatePanelWithStyleForWindow(panel->win, "extract",
+    epanel->win = WMCreatePanelWithStyleForWindow(panel->parent, "extract",
 						  WMTitledWindowMask
 						  |WMClosableWindowMask);
     WMResizeWidget(epanel->win, 245, 250);

@@ -24,7 +24,7 @@
 #include "WPrefs.h"
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
@@ -32,7 +32,7 @@ typedef struct _Panel {
 
     CallbackRec callbacks;
 
-    WMWindow *win;
+    WMWidget *parent;
 
     WMFrame *delaF;
     WMButton *delaB[4];
@@ -55,20 +55,19 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     int i;
     WMColor *color;
     WMFont *font;
 
     color = WMDarkGrayColor(scr);
     font = WMSystemFontOfSize(scr, 10);
-    
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
     
     /**************** Initial Key Repeat ***************/
-    panel->delaF = WMCreateFrame(panel->frame);
+    panel->delaF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->delaF, 495, 60);
     WMMoveWidget(panel->delaF, 15, 10);
     WMSetFrameTitle(panel->delaF, _("Initial Key Repeat"));
@@ -109,7 +108,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->delaF);
     
     /**************** Key Repeat Rate ***************/
-    panel->rateF = WMCreateFrame(panel->frame);
+    panel->rateF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->rateF, 495, 60);
     WMMoveWidget(panel->rateF, 15, 95);
     WMSetFrameTitle(panel->rateF, _("Key Repeat Rate"));
@@ -149,7 +148,7 @@ createPanel(Panel *p)
     
     WMMapSubwidgets(panel->rateF);
 
-    panel->testT = WMCreateTextField(panel->frame);
+    panel->testT = WMCreateTextField(panel->box);
     WMResizeWidget(panel->testT, 480, 20);
     WMMoveWidget(panel->testT, 20, 180);
     WMSetTextFieldText(panel->testT, _("Type here to test"));
@@ -157,14 +156,14 @@ createPanel(Panel *p)
     WMReleaseColor(color);
     WMReleaseFont(font);
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
 }
 
 
 
 Panel*
-InitKeyboardSettings(WMScreen *scr, WMWindow *win)
+InitKeyboardSettings(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -175,7 +174,7 @@ InitKeyboardSettings(WMScreen *scr, WMWindow *win)
 
     panel->description = _("Not done");
 
-    panel->win = win;
+    panel->parent = parent;
     
     panel->callbacks.createWidgets = createPanel;
         

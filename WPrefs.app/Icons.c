@@ -25,7 +25,7 @@
 
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
@@ -33,7 +33,7 @@ typedef struct _Panel {
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
     
     WMFrame *posF;
     WMFrame *posVF;
@@ -171,12 +171,12 @@ createPanel(Panel *p)
     int i;
     char buf[16];
 
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
     
     /***************** Positioning of Icons *****************/
-    panel->posF = WMCreateFrame(panel->frame);
+    panel->posF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->posF, 260, 135);
     WMMoveWidget(panel->posF, 25, 10);
     WMSetFrameTitle(panel->posF, _("Icon Positioning"));
@@ -208,7 +208,7 @@ createPanel(Panel *p)
     WMMoveWidget(panel->posB[6], 70+95, 38+35);
     WMResizeWidget(panel->posB[6], 15, 35);
 
-    color = WMCreateRGBColor(WMWidgetScreen(panel->win), 0x5100, 0x5100, 
+    color = WMCreateRGBColor(WMWidgetScreen(panel->parent), 0x5100, 0x5100, 
 			     0x7100, True);
     panel->posVF = WMCreateFrame(panel->posF);
     WMResizeWidget(panel->posVF, 95, 70);
@@ -223,7 +223,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->posF);
     
     /***************** Animation ****************/
-    panel->animF = WMCreateFrame(panel->frame);
+    panel->animF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->animF, 205, 135);
     WMMoveWidget(panel->animF, 295, 10);
     WMSetFrameTitle(panel->animF, _("Iconification Animation"));
@@ -245,7 +245,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->animF);
 
     /***************** Options ****************/
-    panel->optF = WMCreateFrame(panel->frame);
+    panel->optF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->optF, 260, 70);
     WMMoveWidget(panel->optF, 25, 150);
 /*    WMSetFrameTitle(panel->optF, _("Icon Display"));*/
@@ -269,7 +269,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->optF);
     
     /***************** Icon Size ****************/
-    panel->sizeF = WMCreateFrame(panel->frame);
+    panel->sizeF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->sizeF, 205, 70);
     WMMoveWidget(panel->sizeF, 295, 150);
     WMSetFrameTitle(panel->sizeF, _("Icon Size"));
@@ -287,8 +287,8 @@ createPanel(Panel *p)
     
     WMMapSubwidgets(panel->sizeF);
 
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
     
     showData(panel);
 }
@@ -337,7 +337,7 @@ storeData(_Panel *panel)
 
 
 Panel*
-InitIcons(WMScreen *scr, WMWindow *win)
+InitIcons(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -349,7 +349,7 @@ InitIcons(WMScreen *scr, WMWindow *win)
     panel->description = _("Icon/Miniwindow handling options. Icon positioning\n"
 			   "area, sizes of icons, miniaturization animation style.");
 
-    panel->win = win;
+    panel->parent = parent;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

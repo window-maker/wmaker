@@ -24,14 +24,14 @@
 #include "WPrefs.h"
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
     char *sectionName;
 
     char *description;
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
 
     WMButton *swi[8];
 
@@ -62,13 +62,12 @@ createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
     int i;
-    
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
 
     for (i=0; i<7; i++) {
-	panel->swi[i] = WMCreateSwitchButton(panel->frame);
+	panel->swi[i] = WMCreateSwitchButton(panel->box);
 	WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
 	WMMoveWidget(panel->swi[i], 20, 20+i*25);
     }
@@ -81,8 +80,8 @@ createPanel(Panel *p)
     WMSetButtonText(panel->swi[5], _("Disable confirmation panel for the Kill command"));
     WMSetButtonText(panel->swi[6], _("Disable cycling color highlighting of icons"));
 
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
     
     showData(panel);
 }
@@ -106,7 +105,7 @@ storeDefaults(_Panel *panel)
 
 
 Panel*
-InitExpert(WMScreen *scr, WMWindow *win)
+InitExpert(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -118,7 +117,7 @@ InitExpert(WMScreen *scr, WMWindow *win)
     panel->description = _("Options for people who know what they're doing...\n"
 			   "Also have some other misc. options.");
 
-    panel->win = win;
+    panel->parent = parent;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeDefaults;

@@ -25,7 +25,7 @@
 
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
@@ -33,7 +33,7 @@ typedef struct _Panel {
 
     CallbackRec callbacks;
 
-    WMWindow *win;
+    WMWidget *parent;
 
     WMFrame *navF;
 
@@ -151,7 +151,7 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     WMPixmap *icon1, *icon2;
     RImage *xis = NULL;
     RContext *rc = WMScreenRContext(scr);
@@ -166,12 +166,11 @@ createPanel(Panel *p)
 	wfree(path);
     }
 
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
     
     /***************** Workspace Navigation *****************/
-    panel->navF = WMCreateFrame(panel->frame);
+    panel->navF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->navF, 365, 210);
     WMMoveWidget(panel->navF, 15, 10);
     WMSetFrameTitle(panel->navF, _("Workspace Navigation"));
@@ -279,7 +278,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->navF);
 
     /***************** Dock/Clip *****************/
-    panel->dockF = WMCreateFrame(panel->frame);
+    panel->dockF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->dockF, 115, 210);
     WMMoveWidget(panel->dockF, 390, 10);
     WMSetFrameTitle(panel->dockF, _("Dock/Clip"));
@@ -331,8 +330,8 @@ createPanel(Panel *p)
     if (xis)
 	RDestroyImage(xis);
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
 
     showData(panel);
 }
@@ -355,7 +354,7 @@ storeData(_Panel *panel)
 
 
 Panel*
-InitWorkspace(WMScreen *scr, WMWindow *win)
+InitWorkspace(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -367,7 +366,7 @@ InitWorkspace(WMScreen *scr, WMWindow *win)
     panel->description = _("Workspace navigation features.\n"
 			   "You can also enable/disable the Dock and Clip here.");
 
-    panel->win = win;
+    panel->parent = parent;
     
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

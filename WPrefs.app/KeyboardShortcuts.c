@@ -28,7 +28,7 @@
 
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
@@ -36,7 +36,7 @@ typedef struct _Panel {
 
     CallbackRec callbacks;
 
-    WMWindow *win;
+    WMWidget *parent;
 
     WMLabel *actL;
     WMList *actLs;
@@ -177,14 +177,14 @@ static void
 captureClick(WMWidget *w, void *data)
 {
     _Panel *panel = (_Panel*)data;
-    Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->win));
+    Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->parent));
     char *shortcut;
     
     if (!panel->capturing) {
 	panel->capturing = 1;
 	WMSetButtonText(w, _("Cancel"));
 	WMSetLabelText(panel->instructionsL, _("Press the desired shortcut key(s) or click Cancel to stop capturing."));
-	XGrabKeyboard(dpy, WMWidgetXID(panel->win), True, GrabModeAsync,
+	XGrabKeyboard(dpy, WMWidgetXID(panel->parent), True, GrabModeAsync,
 		      GrabModeAsync, CurrentTime);
 	shortcut = captureShortcut(dpy, panel);
 	if (shortcut) {
@@ -341,20 +341,21 @@ static void
 createPanel(Panel *p)
 {   
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     WMColor *color;
     WMFont *boldFont;
 
     panel->capturing = 0;
     
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+
+
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
 
     boldFont = WMBoldSystemFontOfSize(scr, 12);
 
     /* **************** Actions **************** */
-    panel->actL = WMCreateLabel(panel->frame);
+    panel->actL = WMCreateLabel(panel->box);
     WMResizeWidget(panel->actL, 280, 20);
     WMMoveWidget(panel->actL, 20, 10);
     WMSetLabelFont(panel->actL, boldFont);
@@ -368,7 +369,7 @@ createPanel(Panel *p)
     WMSetLabelTextColor(panel->actL, color);
     WMReleaseColor(color);
     
-    panel->actLs = WMCreateList(panel->frame);
+    panel->actLs = WMCreateList(panel->box);
     WMResizeWidget(panel->actLs, 280, 190);
     WMMoveWidget(panel->actLs, 20, 32);
     WMSetListUserDrawProc(panel->actLs, paintItem);
@@ -430,7 +431,7 @@ createPanel(Panel *p)
 
     /***************** Shortcut ****************/
 
-    panel->shoF = WMCreateFrame(panel->frame);
+    panel->shoF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->shoF, 190, 210);
     WMMoveWidget(panel->shoF, 315, 10);
     WMSetFrameTitle(panel->shoF, _("Shortcut"));
@@ -464,8 +465,8 @@ createPanel(Panel *p)
     
     WMReleaseFont(boldFont);
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
     
     
     showData(panel);
@@ -499,7 +500,7 @@ storeData(_Panel *panel)
 
 
 Panel*
-InitKeyboardShortcuts(WMScreen *scr, WMWindow *win)
+InitKeyboardShortcuts(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -511,7 +512,7 @@ InitKeyboardShortcuts(WMScreen *scr, WMWindow *win)
     panel->description = _("Change the keyboard shortcuts for actions such\n"
 			   "as changing workspaces and opening menus.");
 
-    panel->win = win;
+    panel->parent = parent;
     
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

@@ -26,13 +26,13 @@
 #include <unistd.h>
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
 
     WMButton *saveB;
     WMList *list;
@@ -93,7 +93,7 @@ downloadFile(WMScreen *scr, _Panel *panel, char *file)
     if (pid < 0) {
 	wsyserror("could not fork() process");
 
-	WMRunAlertPanel(scr, panel->win, _("Error"), 
+	WMRunAlertPanel(scr, GetWindow(panel), _("Error"), 
 			"Could not start download. fork() failed",
 			_("OK"), NULL, NULL);
 	return -1;
@@ -162,25 +162,24 @@ createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
 
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
 
-    panel->saveB = WMCreateCommandButton(panel->frame);
+    panel->saveB = WMCreateCommandButton(panel->box);
     WMResizeWidget(panel->saveB, 154, 24);
     WMMoveWidget(panel->saveB, 15, 10);
     WMSetButtonText(panel->saveB, _("Save Current Theme"));
 
-    panel->list = WMCreateList(panel->frame);
+    panel->list = WMCreateList(panel->box);
     WMResizeWidget(panel->list, 154, 150);
     WMMoveWidget(panel->list, 15, 40);
 
-    panel->loadB = WMCreateCommandButton(panel->frame);
+    panel->loadB = WMCreateCommandButton(panel->box);
     WMResizeWidget(panel->loadB, 74, 24);
     WMMoveWidget(panel->loadB, 15, 200);
     WMSetButtonText(panel->loadB, _("Load"));
 
-    panel->instB = WMCreateCommandButton(panel->frame);
+    panel->instB = WMCreateCommandButton(panel->box);
     WMResizeWidget(panel->instB, 74, 24);
     WMMoveWidget(panel->instB, 95, 200);
     WMSetButtonText(panel->instB, _("Install"));
@@ -188,7 +187,7 @@ createPanel(Panel *p)
     
     /**************** Tile of the day ****************/
     
-    panel->totF = WMCreateFrame(panel->frame);
+    panel->totF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->totF, 210, 105);
     WMMoveWidget(panel->totF, 240, 10);
     WMSetFrameTitle(panel->totF, _("Tile of The Day"));
@@ -208,7 +207,7 @@ createPanel(Panel *p)
     
     /**************** Bar of the day ****************/
 
-    panel->botF = WMCreateFrame(panel->frame);
+    panel->botF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->botF, 315, 95);
     WMMoveWidget(panel->botF, 190, 125);
     WMSetFrameTitle(panel->botF, _("Bar of The Day"));
@@ -226,8 +225,8 @@ createPanel(Panel *p)
 
     WMMapSubwidgets(panel->botF);
 
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
     
     showData(panel);
 }
@@ -241,7 +240,7 @@ storeData(_Panel *panel)
 
 
 Panel*
-InitThemes(WMScreen *scr, WMWindow *win)
+InitThemes(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -250,7 +249,7 @@ InitThemes(WMScreen *scr, WMWindow *win)
 
     panel->sectionName = _("Themes");
     
-    panel->win = win;
+    panel->parent = parent;
     
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

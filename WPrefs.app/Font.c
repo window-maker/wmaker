@@ -26,14 +26,14 @@
 #include <proplist.h>
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
     char *sectionName;   
 
     char *description;
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
 
 
     WMLabel *prevL;
@@ -113,7 +113,7 @@ drawMenuItem(WMScreen *scr, Display *dpy, Drawable d,
 static void
 paintPreviewBox(Panel *panel)
 {
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     Display *dpy = WMScreenDisplay(scr);
     GC black = WMColorGC(panel->black);
     GC white = WMColorGC(panel->white);
@@ -124,7 +124,7 @@ paintPreviewBox(Panel *panel)
     if (panel->preview == None) {
 	WMPixmap *pix;
 	
-	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->win),
+	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->parent),
 				       240-4, 215-4, WMScreenDepth(scr));
 
 	pix = WMCreatePixmapFromXPixmaps(scr, panel->preview, None,
@@ -212,7 +212,7 @@ paintPreviewBox(Panel *panel)
 static void
 showData(_Panel *panel)
 {
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     char *str;
     
     str = GetStringForKey("WindowTitleFont");
@@ -326,7 +326,7 @@ error:
     if (pl)
 	PLRelease(pl);
 
-    WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win, 
+    WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent, 
 		    _("Error"), msg, _("OK"), NULL, NULL);
 }
 
@@ -354,14 +354,14 @@ static void
 createPanel(Panel *p)
 {    
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
-    
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     
 
-    panel->prevL = WMCreateLabel(panel->frame);
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
+    
+
+    panel->prevL = WMCreateLabel(panel->box);
     WMResizeWidget(panel->prevL, 240, FRAME_HEIGHT-20);
     WMMoveWidget(panel->prevL, 15, 10);
     WMSetLabelRelief(panel->prevL, WRSunken);
@@ -370,7 +370,7 @@ createPanel(Panel *p)
     
     /* language selection */
     
-    panel->langF = WMCreateFrame(panel->frame);
+    panel->langF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->langF, 245, 50);
     WMMoveWidget(panel->langF, 265, 10);
     WMSetFrameTitle(panel->langF, _("Default Font Sets"));
@@ -383,7 +383,7 @@ createPanel(Panel *p)
 
     
     /* multibyte */
-    panel->fsetL = WMCreateLabel(panel->frame);
+    panel->fsetL = WMCreateLabel(panel->box);
     WMResizeWidget(panel->fsetL, 205, 20);
     WMMoveWidget(panel->fsetL, 215, 127);
     WMSetLabelText(panel->fsetL, _("Font Set"));
@@ -407,32 +407,32 @@ createPanel(Panel *p)
 	WMReleaseColor(color);
     }
 
-    panel->fsetLs = WMCreateList(panel->frame);
+    panel->fsetLs = WMCreateList(panel->box);
     WMResizeWidget(panel->fsetLs, 205, 71);
     WMMoveWidget(panel->fsetLs, 215, 149);
     
 
-    panel->addB = WMCreateCommandButton(panel->frame);
+    panel->addB = WMCreateCommandButton(panel->box);
     WMResizeWidget(panel->addB, 80, 24);
     WMMoveWidget(panel->addB, 430, 127);
     WMSetButtonText(panel->addB, _("Add..."));
 
-    panel->editB = WMCreateCommandButton(panel->frame);
+    panel->editB = WMCreateCommandButton(panel->box);
     WMResizeWidget(panel->editB, 80, 24);
     WMMoveWidget(panel->editB, 430, 161);
     WMSetButtonText(panel->editB, _("Change..."));
 
-    panel->remB = WMCreateCommandButton(panel->frame);
+    panel->remB = WMCreateCommandButton(panel->box);
     WMResizeWidget(panel->remB, 80, 24);
     WMMoveWidget(panel->remB, 430, 195);
     WMSetButtonText(panel->remB, _("Remove"));
 
     /* single byte */
-    panel->fontT = WMCreateTextField(panel->frame);
+    panel->fontT = WMCreateTextField(panel->box);
     WMResizeWidget(panel->fontT, 240, 20);
     WMMoveWidget(panel->fontT, 265, 130);
     
-    panel->changeB = WMCreateCommandButton(panel->frame);
+    panel->changeB = WMCreateCommandButton(panel->box);
     WMResizeWidget(panel->changeB, 104, 24);
     WMMoveWidget(panel->changeB, 335, 160);
     WMSetButtonText(panel->changeB, _("Change..."));
@@ -453,8 +453,8 @@ createPanel(Panel *p)
 	WMAddListItem(panel->settingLs, Options[i].description);
     }
 #endif
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
 
     setLanguageType(panel, False);
 
@@ -467,7 +467,7 @@ createPanel(Panel *p)
 
 
 Panel*
-InitFont(WMScreen *scr, WMWindow *win)
+InitFont(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -477,7 +477,7 @@ InitFont(WMScreen *scr, WMWindow *win)
     panel->sectionName = _("Font Preferences");
     panel->description = _("Font Configurations for Windows, Menus etc");
 
-    panel->win = win;
+    panel->parent = parent;
     
     panel->callbacks.createWidgets = createPanel;
     

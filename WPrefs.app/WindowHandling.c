@@ -24,7 +24,7 @@
 #include "WPrefs.h"
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
@@ -32,7 +32,7 @@ typedef struct _Panel {
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
     
     WMFrame *placF;
     WMPopUpButton *placP;
@@ -218,21 +218,28 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     WMColor *color;
     WMPixmap *pixmap;
     int width, height;
     int swidth, sheight;
     char *path;
+    WMBox *hbox;
     
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 2, 2);
+    WMSetBoxHorizontal(panel->box, False);
+    WMSetBoxBorderWidth(panel->box, 8);
+    
+    hbox = WMCreateBox(panel->box);
+    WMSetBoxHorizontal(hbox, True);
+    WMAddBoxSubview(panel->box, WMWidgetView(hbox), False, True, 110, 0, 10);
     
     /************** Window Placement ***************/
-    panel->placF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->placF, 270, 110);
-    WMMoveWidget(panel->placF, 20, 10);
+    panel->placF = WMCreateFrame(hbox);
+    WMMapWidget(panel->placF);
+    WMAddBoxSubview(hbox, WMWidgetView(panel->placF), True, True, 100, 0, 10);
+
     WMSetFrameTitle(panel->placF, _("Window Placement"));
     WMSetBalloonTextForView(_("How to place windows when they are first put\n"
 			       "on screen."), WMWidgetView(panel->placF));
@@ -269,18 +276,18 @@ createPanel(Panel *p)
     if (sheight > swidth) {
 	height = 70;
 	width = 70*swidth/sheight;
-	if (width > 115)
-	    width = 115;
-	height = 115*sheight/swidth;
+	if (width > 240)
+	    width = 240;
+	height = 240*sheight/swidth;
     } else {
-	width = 115;
-	height = 115*sheight/swidth;
+	width = 240;
+	height = 240*sheight/swidth;
 	if (height > 70)
 	    height = 70;
 	width = 70*swidth/sheight;
     }
     WMResizeWidget(panel->porigF, width, height);
-    WMMoveWidget(panel->porigF, 130+(115-width)/2, 20+(70-height)/2);
+    WMMoveWidget(panel->porigF, 130+(240-width)/2, 20+(70-height)/2);
 
     panel->porigW = WMCreateLabel(panel->porigF);
     WMResizeWidget(panel->porigW, THUMB_SIZE, THUMB_SIZE);
@@ -290,14 +297,14 @@ createPanel(Panel *p)
     
     panel->hsli = WMCreateSlider(panel->placF);
     WMResizeWidget(panel->hsli, width, 12);
-    WMMoveWidget(panel->hsli, 130+(115-width)/2, 20+(70-height)/2+height+2);
+    WMMoveWidget(panel->hsli, 130+(240-width)/2, 20+(70-height)/2+height+2);
     WMSetSliderAction(panel->hsli, sliderCallback, panel);
     WMSetSliderMinValue(panel->hsli, 0);
     WMSetSliderMaxValue(panel->hsli, swidth);
 
     panel->vsli = WMCreateSlider(panel->placF);
     WMResizeWidget(panel->vsli, 12, height);
-    WMMoveWidget(panel->vsli, 130+(115-width)/2+width+2, 20+(70-height)/2);
+    WMMoveWidget(panel->vsli, 130+(240-width)/2+width+2, 20+(70-height)/2);
     WMSetSliderAction(panel->vsli, sliderCallback, panel);
     WMSetSliderMinValue(panel->vsli, 0);
     WMSetSliderMaxValue(panel->vsli, sheight);
@@ -307,9 +314,10 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->placF);
 
     /************** Opaque Move ***************/
-    panel->opaqF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->opaqF, 205, 110);
-    WMMoveWidget(panel->opaqF, 300, 10);
+    panel->opaqF = WMCreateFrame(hbox);
+    WMMapWidget(panel->opaqF);
+    WMAddBoxSubview(hbox, WMWidgetView(panel->opaqF), False, True, 110, 0, 0);
+    
     WMSetFrameTitle(panel->opaqF, _("Opaque Move"));
     WMSetBalloonTextForView(_("Whether the window contents should be moved\n"
 			       "when dragging windows aroung or if only a\n"
@@ -318,7 +326,7 @@ createPanel(Panel *p)
 
     panel->opaqB = WMCreateButton(panel->opaqF, WBTToggle);
     WMResizeWidget(panel->opaqB, 64, 64);
-    WMMoveWidget(panel->opaqB, 70, 25);
+    WMMoveWidget(panel->opaqB, 24, 25);
     WMSetButtonImagePosition(panel->opaqB, WIPImageOnly);
 
     path = LocateImage(NON_OPAQUE_MOVE_PIXMAP);
@@ -347,18 +355,18 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->opaqF);
     
     /**************** Account for Icon/Dock ***************/
-    panel->maxiF = WMCreateFrame(panel->frame);
+    panel->maxiF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->maxiF, 205, 95);
-    WMMoveWidget(panel->maxiF, 300, 125);
+    WMMoveWidget(panel->maxiF, 305, 125);
     WMSetFrameTitle(panel->maxiF, _("When maximizing..."));
     
     panel->miconB = WMCreateSwitchButton(panel->maxiF);
-    WMResizeWidget(panel->miconB, 185, 30);
+    WMResizeWidget(panel->miconB, 190, 30);
     WMMoveWidget(panel->miconB, 10, 18);
     WMSetButtonText(panel->miconB, _("...do not cover icons"));
 
     panel->mdockB = WMCreateSwitchButton(panel->maxiF);
-    WMResizeWidget(panel->mdockB, 185, 30);
+    WMResizeWidget(panel->mdockB, 190, 30);
     WMMoveWidget(panel->mdockB, 10, 53);
 
     WMSetButtonText(panel->mdockB, _("...do not cover dock"));
@@ -367,9 +375,9 @@ createPanel(Panel *p)
 
     /**************** Edge Resistance  ****************/
 
-    panel->resF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->resF, 270, 45);
-    WMMoveWidget(panel->resF, 20, 125);
+    panel->resF = WMCreateFrame(panel->box);
+    WMResizeWidget(panel->resF, 285, 45);
+    WMMoveWidget(panel->resF, 8, 125);
     WMSetFrameTitle(panel->resF, _("Edge Resistance"));
 
     WMSetBalloonTextForView(_("Edge resistance will make windows `resist'\n"
@@ -397,7 +405,7 @@ createPanel(Panel *p)
     WMMoveWidget(panel->resrB, 200, 12);
     WMResizeWidget(panel->resrB, 65, 30);
     WMSetButtonText(panel->resrB, _("Attract"));
-	WMGroupButtons(panel->resrB, panel->resaB);
+    WMGroupButtons(panel->resrB, panel->resaB);
 
 
 
@@ -405,9 +413,9 @@ createPanel(Panel *p)
 
     /**************** Transients on Parent Workspace ****************/
     
-    panel->tranF = WMCreateFrame(panel->frame);
-    WMResizeWidget(panel->tranF, 270, 40);
-    WMMoveWidget(panel->tranF, 20, 180);
+    panel->tranF = WMCreateFrame(panel->box);
+    WMResizeWidget(panel->tranF, 285, 40);
+    WMMoveWidget(panel->tranF, 8, 180);
     
     panel->tranB = WMCreateSwitchButton(panel->tranF);
     WMMoveWidget(panel->tranB, 10, 5);
@@ -416,8 +424,8 @@ createPanel(Panel *p)
     
     WMMapSubwidgets(panel->tranF);
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
  
     /* show the config data */
     showData(panel);
@@ -432,7 +440,7 @@ undo(_Panel *panel)
 
 
 Panel*
-InitWindowHandling(WMScreen *scr, WMWindow *win)
+InitWindowHandling(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -444,7 +452,7 @@ InitWindowHandling(WMScreen *scr, WMWindow *win)
     panel->description = _("Window handling options. Initial placement style\n"
 			   "edge resistance, opaque move etc.");
 
-    panel->win = win;
+    panel->parent = parent;
     
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

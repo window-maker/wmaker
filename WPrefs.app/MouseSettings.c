@@ -38,7 +38,7 @@
 
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
@@ -46,7 +46,7 @@ typedef struct _Panel {
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
     
     WMFrame *speedF;
     WMLabel *speedL;
@@ -169,11 +169,11 @@ speedChange(WMWidget *w, void *data)
     tmp = WMGetTextFieldText(panel->threT);
     if (sscanf(tmp, "%i", &threshold)!=1 || threshold < 0 
 	|| threshold > panel->maxThreshold) {
-	WMRunAlertPanel(WMWidgetScreen(panel->win), GetWindow(panel), _("Error"),
+	WMRunAlertPanel(WMWidgetScreen(panel->parent), GetWindow(panel), _("Error"),
 			_("Invalid mouse acceleration threshold value. Must be the number of pixels to travel before accelerating."),
 			_("OK"), NULL, NULL);
     } else {
-	setMouseAccel(WMWidgetScreen(panel->win), panel->acceleration, 
+	setMouseAccel(WMWidgetScreen(panel->parent), panel->acceleration, 
 		      threshold);
     }
     wfree(tmp);
@@ -259,7 +259,7 @@ showData(_Panel *panel)
     int a=-1, b=-1, c=-1;
     float accel;
     char buffer[32];
-    Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->win));
+    Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->parent));
 
     str = GetStringForKey("SelectWindowsMouseButton");
     if (str) {
@@ -457,7 +457,7 @@ static void
 createPanel(Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     WMPixmap *icon;
     char *buf1, *buf2;
     int i;
@@ -468,12 +468,11 @@ createPanel(Panel *p)
     color.green = 0xae;
     color.blue = 0xaa;
     
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
     
     /**************** Mouse Speed ****************/
-    panel->speedF = WMCreateFrame(panel->frame);
+    panel->speedF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->speedF, 245, 100);
     WMMoveWidget(panel->speedF, 15, 15);
     WMSetFrameTitle(panel->speedF, _("Mouse Speed"));
@@ -531,7 +530,7 @@ createPanel(Panel *p)
     
     /***************** Doubleclick Delay ****************/
 
-    panel->ddelaF = WMCreateFrame(panel->frame);
+    panel->ddelaF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->ddelaF, 245, 95);
     WMMoveWidget(panel->ddelaF, 15, 125);
     WMSetFrameTitle(panel->ddelaF, _("Double-Click Delay"));
@@ -605,7 +604,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->ddelaF);
     
     /* ************** Workspace Action Buttons **************** */
-    panel->menuF = WMCreateFrame(panel->frame);
+    panel->menuF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->menuF, 240, 145);
     WMMoveWidget(panel->menuF, 270, 15);
     WMSetFrameTitle(panel->menuF, _("Workspace Mouse Actions"));
@@ -656,7 +655,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->menuF);
     
     /* ************** Grab Modifier **************** */
-    panel->grabF = WMCreateFrame(panel->frame);
+    panel->grabF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->grabF, 240, 55);
     WMMoveWidget(panel->grabF, 270, 165);
     WMSetFrameTitle(panel->grabF, _("Mouse Grab Modifier"));
@@ -674,8 +673,8 @@ createPanel(Panel *p)
     
     WMMapSubwidgets(panel->grabF);
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
     
     
     showData(panel);
@@ -808,7 +807,7 @@ storeData(_Panel *panel)
 
 
 Panel*
-InitMouseSettings(WMScreen *scr, WMWindow *win)
+InitMouseSettings(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
     
@@ -820,7 +819,7 @@ InitMouseSettings(WMScreen *scr, WMWindow *win)
     panel->description = _("Mouse speed/acceleration, double click delay,\n"
 			   "mouse button bindings etc.");
 
-    panel->win = win;
+    panel->parent = parent;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

@@ -24,7 +24,7 @@
 #include "WPrefs.h"
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;
 
@@ -32,7 +32,7 @@ typedef struct _Panel {
 
     CallbackRec callbacks;
     
-    WMWindow *win;
+    WMWidget *parent;
 
     WMFrame *sizeF;
     WMPopUpButton *sizeP;
@@ -203,13 +203,12 @@ createPanel(Panel *p)
     _Panel *panel = (_Panel*)p;
     int i;
     
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
     
     
     /***************** Size Display ****************/
-    panel->sizeF = WMCreateFrame(panel->frame);
+    panel->sizeF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->sizeF, 240, 60);
     WMMoveWidget(panel->sizeF, 20, 10);
     WMSetFrameTitle(panel->sizeF, _("Size Display"));
@@ -229,7 +228,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->sizeF);
 
     /***************** Position Display ****************/
-    panel->posiF = WMCreateFrame(panel->frame);
+    panel->posiF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->posiF, 240, 60);
     WMMoveWidget(panel->posiF, 20, 75);
     WMSetFrameTitle(panel->posiF, _("Position Display"));
@@ -248,7 +247,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->posiF);
 
     /***************** Balloon Text ****************/
-    panel->ballF = WMCreateFrame(panel->frame);
+    panel->ballF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->ballF, 235, 125);
     WMMoveWidget(panel->ballF, 270, 10);
     WMSetFrameTitle(panel->ballF, _("Show balloon text for..."));
@@ -266,7 +265,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->ballF);
 
     /***************** Options ****************/
-    panel->optF = WMCreateFrame(panel->frame);
+    panel->optF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->optF, 235, 75);
     WMMoveWidget(panel->optF, 270, 145);
 
@@ -285,7 +284,7 @@ createPanel(Panel *p)
     WMMapSubwidgets(panel->optF);
     
     /***************** Workspace border ****************/
-    panel->borderF = WMCreateFrame(panel->frame);
+    panel->borderF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->borderF, 240, 75);
     WMMoveWidget(panel->borderF, 20, 145);
     WMSetFrameTitle(panel->borderF, _("Workspace border"));
@@ -314,8 +313,8 @@ createPanel(Panel *p)
 
     WMMapSubwidgets(panel->borderF);
     
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
 
     showData(panel);
 }
@@ -323,7 +322,7 @@ createPanel(Panel *p)
 
 
 Panel*
-InitPreferences(WMScreen *scr, WMWindow *win)
+InitPreferences(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
 
@@ -334,7 +333,7 @@ InitPreferences(WMScreen *scr, WMWindow *win)
     panel->description = _("Various settings like balloon text, geometry\n"
 			   "displays etc.");
 
-    panel->win = win;
+    panel->parent = parent;
     
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

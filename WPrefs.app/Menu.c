@@ -46,13 +46,13 @@ typedef enum {
 #define MAX_SECTION_SIZE 4
 
 typedef struct _Panel {
-    WMFrame *frame;
+    WMBox *box;
     char *sectionName;
 
     char *description;
 
     CallbackRec callbacks;
-    WMWindow *win;
+    WMWidget *parent;
 
     
     WMFont *boldFont;
@@ -311,7 +311,7 @@ static void
 sgrabClicked(WMWidget *w, void *data)
 {
     _Panel *panel = (_Panel*)data;
-    Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->win));
+    Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->parent));
     char *shortcut;
 
     
@@ -324,7 +324,7 @@ sgrabClicked(WMWidget *w, void *data)
     if (!panel->capturing) {
 	panel->capturing = 1;
 	WMSetButtonText(w, _("Cancel"));
-	XGrabKeyboard(dpy, WMWidgetXID(panel->win), True, GrabModeAsync,
+	XGrabKeyboard(dpy, WMWidgetXID(panel->parent), True, GrabModeAsync,
 		      GrabModeAsync, CurrentTime);
 	shortcut = captureShortcut(dpy, panel);
 	if (shortcut) {
@@ -408,7 +408,7 @@ static void
 createPanel(_Panel *p)
 {
     _Panel *panel = (_Panel*)p;
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     WMColor *black = WMBlackColor(scr);
     WMColor *white = WMWhiteColor(scr);
     WMColor *gray = WMGrayColor(scr);
@@ -465,12 +465,10 @@ createPanel(_Panel *p)
 	XFreeGC(dpy, gc);
     }
 
+    panel->box = WMCreateBox(panel->parent);
+    WMSetBoxExpandsToParent(panel->box, 2, 2, 0, 0);
 
-    panel->frame = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->frame, FRAME_WIDTH, FRAME_HEIGHT);
-    WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
-
-    panel->typeP = WMCreatePopUpButton(panel->frame);
+    panel->typeP = WMCreatePopUpButton(panel->box);
     WMResizeWidget(panel->typeP, 150, 20);
     WMMoveWidget(panel->typeP, 10, 10);
 
@@ -487,16 +485,16 @@ createPanel(_Panel *p)
 	WEditMenu *smenu;
 	ItemData *data;
 
-	pad = makeFactoryMenu(panel->frame, 150);
+	pad = makeFactoryMenu(panel->box, 150);
 	WMMoveWidget(pad, 10, 40);
 	
-	data = putNewItem(panel, pad, ExecInfo, "Run Program");
-	data = putNewItem(panel, pad, CommandInfo, "Internal Command");
-	smenu = putNewSubmenu(pad, "Submenu");
-	data = putNewItem(panel, pad, ExternalInfo, "External Submenu");
-	data = putNewItem(panel, pad, PipeInfo, "Generated Submenu");
-	data = putNewItem(panel, pad, DirectoryInfo, "Directory Contents");
-	data = putNewItem(panel, pad, WSMenuInfo, "Workspace Menu");
+	data = putNewItem(panel, pad, ExecInfo, _("Run Program"));
+	data = putNewItem(panel, pad, CommandInfo, _("Internal Command"));
+	smenu = putNewSubmenu(pad, _("Submenu"));
+	data = putNewItem(panel, pad, ExternalInfo, _("External Submenu"));
+	data = putNewItem(panel, pad, PipeInfo, _("Generated Submenu"));
+	data = putNewItem(panel, pad, DirectoryInfo, _("Directory Contents"));
+	data = putNewItem(panel, pad, WSMenuInfo, _("Workspace Menu"));
 
 	panel->itemPad[0] = pad;
     }
@@ -506,12 +504,12 @@ createPanel(_Panel *p)
 	ItemData *data;
 	WMScrollView *sview;
 
-	sview = WMCreateScrollView(panel->frame);
+	sview = WMCreateScrollView(panel->box);
 	WMResizeWidget(sview, 150, 180);
 	WMMoveWidget(sview, 10, 40);
 	WMSetScrollViewHasVerticalScroller(sview, True);
 
-	pad = makeFactoryMenu(panel->frame, 130);
+	pad = makeFactoryMenu(panel->box, 130);
 
 	WMSetScrollViewContentView(sview, WMWidgetView(pad));
 
@@ -562,12 +560,12 @@ createPanel(_Panel *p)
 	ItemData *data;
 	WMScrollView *sview;
 
-	sview = WMCreateScrollView(panel->frame);
+	sview = WMCreateScrollView(panel->box);
 	WMResizeWidget(sview, 150, 180);
 	WMMoveWidget(sview, 10, 40);
 	WMSetScrollViewHasVerticalScroller(sview, True);
 
-	pad = makeFactoryMenu(panel->frame, 130);
+	pad = makeFactoryMenu(panel->box, 130);
 
 	WMSetScrollViewContentView(sview, WMWidgetView(pad));
 
@@ -629,7 +627,7 @@ createPanel(_Panel *p)
 
     width = FRAME_WIDTH - 20 - 150 - 10;
 
-    panel->optionsF = WMCreateFrame(panel->frame);
+    panel->optionsF = WMCreateFrame(panel->box);
     WMResizeWidget(panel->optionsF, width, FRAME_HEIGHT - 15);
     WMMoveWidget(panel->optionsF, 10 + 150 + 10, 5);
     
@@ -855,9 +853,9 @@ createPanel(_Panel *p)
 		     " - click on a menu item to change related information"));
     WMMapWidget(label);
 
-    WMRealizeWidget(panel->frame);
-    WMMapSubwidgets(panel->frame);
-    WMMapWidget(panel->frame);
+    WMRealizeWidget(panel->box);
+    WMMapSubwidgets(panel->box);
+    WMMapWidget(panel->box);
     
 
     {
@@ -889,7 +887,7 @@ createPanel(_Panel *p)
     {
 	WMPoint pos;
 
-	pos = WMGetViewScreenPosition(WMWidgetView(panel->frame));
+	pos = WMGetViewScreenPosition(WMWidgetView(panel->box));
 
 	if (pos.x < 200) {
 	    pos.x += FRAME_WIDTH + 20;
@@ -1433,7 +1431,7 @@ menuItemSelected(WEditMenuDelegate *delegate, WEditMenu *menu,
 static WEditMenu*
 buildSubmenu(_Panel *panel, proplist_t pl)
 {
-    WMScreen *scr = WMWidgetScreen(panel->win);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     WEditMenu *menu;
     WEditMenuItem *item;
     char *title;
@@ -1522,7 +1520,7 @@ getDefaultMenu(_Panel *panel)
 
 	    sprintf(buffer, _("Could not open default menu from '%s'"),
 		    menuPath);
-	    WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
+	    WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
 			    _("Error"), buffer,	_("OK"), NULL, NULL);
 	}
     }
@@ -1557,7 +1555,7 @@ showData(_Panel *panel)
     if (!pmenu || !PLIsArray(pmenu)) {
 	int res;
 	
-	res = WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
+	res = WMRunAlertPanel(WMWidgetScreen(panel->parent), panel->parent,
 			      _("Warning"),
 			      _("The menu file format currently in use is not supported\n"
 				"by this tool. Do you want to discard the current menu\n"
@@ -1800,7 +1798,7 @@ hideMenus(_Panel *panel)
 
 
 Panel*
-InitMenu(WMScreen *scr, WMWindow *win)
+InitMenu(WMScreen *scr, WMWidget *parent)
 {
     _Panel *panel;
     
@@ -1811,7 +1809,7 @@ InitMenu(WMScreen *scr, WMWindow *win)
 
     panel->description = _("Edit the menu for launching applications.");
 
-    panel->win = win;
+    panel->parent = parent;
 
     panel->callbacks.createWidgets = createPanel;
     panel->callbacks.updateDomain = storeData;

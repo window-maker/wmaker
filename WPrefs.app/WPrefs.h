@@ -41,8 +41,8 @@
 
 /****/
 
-#define WVERSION	"0.43"
-#define WMVERSION	"0.62.x"
+#define WVERSION	"0.44"
+#define WMVERSION	"0.64.x"
 
 extern char *NOptionValueChanged;
 
@@ -63,7 +63,7 @@ typedef struct {
 
 /* all Panels must start with the following layout */
 typedef struct PanelRec {
-    WMFrame *frame;
+    WMBox *box;
 
     char *sectionName;		       /* section name to display in titlebar */
 
@@ -113,8 +113,8 @@ void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 
 
 #define FRAME_TOP	105
-#define FRAME_LEFT	-2
-#define FRAME_WIDTH	524
+#define FRAME_LEFT	-1
+#define FRAME_WIDTH	522
 #define FRAME_HEIGHT	235
 
 
