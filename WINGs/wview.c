@@ -370,7 +370,7 @@ destroyView(W_View *view)
 	if (info) {
 	    if (info->toplevel==view) {
 		view->screen->focusInfo = info->next;
-		free(info);
+		wfree(info);
 	    } else {
 		while (info->next) {
 		    if (info->next->toplevel == view)
@@ -379,7 +379,7 @@ destroyView(W_View *view)
 		}
 		if (info->next) {
 		    W_FocusInfo *next = info->next->next;
-		    free(info->next);
+		    wfree(info->next);
 		    info->next = next;
 		} 
 		/* else the toplevel did not have any focused subview */
@@ -416,12 +416,12 @@ destroyView(W_View *view)
     W_CleanUpEvents(view);
 #if 0    
     if (view->dragSourceProcs)
-	free(view->dragSourceProcs);
+	wfree(view->dragSourceProcs);
 
     if (view->dragDestinationProcs)
-	free(view->dragDestinationProcs);
+	wfree(view->dragDestinationProcs);
 #endif
-    free(view);
+    wfree(view);
 }
 
 

@@ -195,7 +195,7 @@ wfindfile(char *paths, char *file)
 		return NULL;
 	    
 	    if (access(fullpath, F_OK)<0) {
-		free(fullpath);
+		wfree(fullpath);
 		return NULL;
 	    } else {
 		return fullpath;
@@ -217,12 +217,12 @@ wfindfile(char *paths, char *file)
 	strcat(path, "/");
 	strcat(path, file);
 	fullpath = wexpandpath(path);
-	free(path);
+	wfree(path);
 	if (fullpath) {
 	    if (access(fullpath, F_OK)==0) {
 		return fullpath;
 	    }
-	    free(fullpath);
+	    wfree(fullpath);
 	}
 	tmp=&(tmp[len+1]);
 	if (*tmp==0) break;
@@ -249,7 +249,7 @@ wfindfileinlist(char **path_list, char *file)
 		return NULL;
 	    
 	    if (access(fullpath, F_OK)<0) {
-		free(fullpath);
+		wfree(fullpath);
 		return NULL;
 	    } else {
 		return fullpath;
@@ -269,13 +269,13 @@ wfindfileinlist(char **path_list, char *file)
 	strcat(path, file);
 	/* expand tilde */
 	fullpath = wexpandpath(path);
-	free(path);
+	wfree(path);
 	if (fullpath) {
 	    /* check if file exists */
 	    if (access(fullpath, F_OK)==0) {
 		return fullpath;
 	    }
-	    free(fullpath);
+	    wfree(fullpath);
 	}
     }
     return NULL;
@@ -301,7 +301,7 @@ wfindfileinarray(proplist_t array, char *file)
 		return NULL;
 
 	    if (access(fullpath, F_OK)<0) {
-		free(fullpath);
+		wfree(fullpath);
 		return NULL;
 	    } else {
 		return fullpath;
@@ -329,13 +329,13 @@ wfindfileinarray(proplist_t array, char *file)
 	strcat(path, file);
 	/* expand tilde */
 	fullpath = wexpandpath(path);
-	free(path);
+	wfree(path);
 	if (fullpath) {
 	    /* check if file exists */
 	    if (access(fullpath, F_OK)==0) {
 		return fullpath;
 	    }
-	    free(fullpath);
+	    wfree(fullpath);
 	}
     }
     return NULL;

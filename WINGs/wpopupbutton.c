@@ -83,7 +83,7 @@ WMCreatePopUpButton(WMWidget *parent)
     
     bPtr->view = W_CreateView(W_VIEW(parent));
     if (!bPtr->view) {
-	free(bPtr);
+	wfree(bPtr);
 	return NULL;
     }
     bPtr->view->self = bPtr;
@@ -211,9 +211,9 @@ WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index)
 
 
     if (index == 0) {
-	free(bPtr->items->text);
+	wfree(bPtr->items->text);
 	tmp = bPtr->items->nextPtr;
-	free(bPtr->items);
+	wfree(bPtr->items);
 	bPtr->items = tmp;
     } else {
 	ItemList *next;
@@ -224,8 +224,8 @@ WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index)
 	    tmp = tmp->nextPtr;
 	next = tmp->nextPtr->nextPtr;
 	
-	free(tmp->nextPtr->text);
-	free(tmp->nextPtr);
+	wfree(tmp->nextPtr->text);
+	wfree(tmp->nextPtr);
 
 	tmp->nextPtr = next;
     }
@@ -303,7 +303,7 @@ void
 WMSetPopUpButtonText(WMPopUpButton *bPtr, char *text)
 {
     if (bPtr->caption)
-	free(bPtr->caption);
+	wfree(bPtr->caption);
     if (text)
 	bPtr->caption = wstrdup(text);
     else
@@ -823,17 +823,17 @@ destroyPopUpButton(PopUpButton *bPtr)
     
     itemPtr = bPtr->items;
     while (itemPtr!=NULL) {
-	free(itemPtr->text);
+	wfree(itemPtr->text);
 	tmp = itemPtr->nextPtr;
-	free(itemPtr);
+	wfree(itemPtr);
 	itemPtr = tmp;
     }
     
     if (bPtr->caption)
-	free(bPtr->caption);
+	wfree(bPtr->caption);
 
     /* have to destroy explicitly because the popup is a toplevel */
     W_DestroyView(bPtr->menuView);
 
-    free(bPtr);
+    wfree(bPtr);
 }

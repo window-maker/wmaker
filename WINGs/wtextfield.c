@@ -291,7 +291,7 @@ WMCreateTextField(WMWidget *parent)
     
     tPtr->view = W_CreateView(W_VIEW(parent));
     if (!tPtr->view) {
-	free(tPtr);
+	wfree(tPtr);
 	return NULL;
     }
     tPtr->view->self = tPtr;
@@ -362,7 +362,7 @@ WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
     /* check if buffer will hold the text */
     if (len + tPtr->textLen >= tPtr->bufferSize) {
 	tPtr->bufferSize = tPtr->textLen + len + TEXT_BUFFER_INCR;
-	tPtr->text = realloc(tPtr->text, tPtr->bufferSize);
+	tPtr->text = wrealloc(tPtr->text, tPtr->bufferSize);
     }
     
     if (position < 0 || position >= tPtr->textLen) {
@@ -446,7 +446,7 @@ WMSetTextFieldText(WMTextField *tPtr, char *text)
 	
 	if (tPtr->textLen >= tPtr->bufferSize) {
 	    tPtr->bufferSize = tPtr->textLen + TEXT_BUFFER_INCR;
-	    tPtr->text = realloc(tPtr->text, tPtr->bufferSize);
+	    tPtr->text = wrealloc(tPtr->text, tPtr->bufferSize);
 	}
 	strcpy(tPtr->text, text);
     }
@@ -718,7 +718,7 @@ paintCursor(TextField *tPtr)
 	      tPtr->view->size.height - tPtr->offsetWidth - 1);
 
     if (tPtr->flags.secure)
-        free(text);
+        wfree(text);
 }
 
 
@@ -882,7 +882,7 @@ paintTextField(TextField *tPtr)
     }
 
     if (tPtr->flags.secure)
-        free(text);
+        wfree(text);
     XCopyArea(screen->display, drawbuffer, view->window,
 	      screen->copyGC, 0,0, view->size.width,
 	      view->size.height,0,0);
@@ -1437,7 +1437,7 @@ destroyTextField(TextField *tPtr)
     WMRemoveNotificationObserver(tPtr);
 
     if (tPtr->text)
-	free(tPtr->text);
+	wfree(tPtr->text);
 
-    free(tPtr);
+    wfree(tPtr);
 }

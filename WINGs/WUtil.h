@@ -156,9 +156,10 @@ char *wexpandpath(char *path);
 
 /* don't free the returned string */
 char *wgethomedir();
-
 void *wmalloc(size_t size);
 void *wrealloc(void *ptr, size_t newsize);
+void wfree(void *ptr);
+
 
 void wrelease(void *ptr);
 void *wretain(void *ptr);

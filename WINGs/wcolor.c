@@ -140,7 +140,7 @@ WMReleaseColor(WMColor *color)
 		    &(color->color.pixel), 1, 0);
 	if (color->gc)
 	    XFreeGC(color->screen->display, color->gc);
-	free(color);
+	wfree(color);
     }
 }
 

@@ -54,7 +54,7 @@ wusergnusteppath()
 	    pathlen = strlen(gspath) + 4;
 	    path = wmalloc(pathlen);
 	    strcpy(path, gspath);
-	    free(gspath);
+	    wfree(gspath);
 	} else {
 	    pathlen = strlen(wgethomedir()) + 10;
 	    path = wmalloc(pathlen);
@@ -185,7 +185,7 @@ WMGetStandardUserDefaults(void)
         }
     }
     if (path)
-        free(path);
+        wfree(path);
 
     defaults->appDomain = domain;
 
@@ -202,7 +202,7 @@ WMGetStandardUserDefaults(void)
 
     domain = PLGetProplistWithPath(path);
 
-    free(path);
+    wfree(path);
 
     if (!domain)
         domain = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
@@ -538,7 +538,7 @@ WMSetUDSearchList(WMUserDefaults *database, proplist_t list)
 	    PLRelease(database->searchList[i]);
 	    i++;
 	}
-	free(database->searchList);
+	wfree(database->searchList);
     }
     if (database->searchListArray) {
 	PLRelease(database->searchListArray);

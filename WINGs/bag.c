@@ -177,8 +177,8 @@ WMSortBag(WMBag *bag, int (*comparer)(const void*, const void*))
 void 
 WMFreeBag(WMBag *bag)
 {
-    free(bag->items);
-    free(bag);
+    wfree(bag->items);
+    wfree(bag);
 }
 
 

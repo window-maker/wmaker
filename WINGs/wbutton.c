@@ -117,7 +117,7 @@ WMCreateCustomButton(WMWidget *parent, int behaviourMask)
     
     bPtr->view = W_CreateView(W_VIEW(parent));
     if (!bPtr->view) {
-	free(bPtr);
+	wfree(bPtr);
 	return NULL;
     }
     bPtr->view->self = bPtr;
@@ -340,7 +340,7 @@ void
 WMSetButtonText(WMButton *bPtr, char *text)
 {
     if (bPtr->caption)
-	free(bPtr->caption);
+	wfree(bPtr->caption);
 
     if (text!=NULL) {
 	bPtr->caption = wstrdup(text);
@@ -359,7 +359,7 @@ void
 WMSetButtonAltText(WMButton *bPtr, char *text)
 {
     if (bPtr->altCaption)
-	free(bPtr->altCaption);
+	wfree(bPtr->altCaption);
     
     if (text!=NULL) {
 	bPtr->altCaption = wstrdup(text);
@@ -752,10 +752,10 @@ destroyButton(Button *bPtr)
 	WMReleaseFont(bPtr->font);
     
     if (bPtr->caption)
-	free(bPtr->caption);
+	wfree(bPtr->caption);
 
     if (bPtr->altCaption)
-	free(bPtr->altCaption);
+	wfree(bPtr->altCaption);
     
     if (bPtr->image)
 	WMReleasePixmap(bPtr->image);
@@ -769,7 +769,7 @@ destroyButton(Button *bPtr)
     if (bPtr->altImage)
 	WMReleasePixmap(bPtr->altImage);
 
-    free(bPtr);
+    wfree(bPtr);
 }
 
 

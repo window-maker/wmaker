@@ -129,7 +129,7 @@ WMCreateColorWell(WMWidget *parent)
     
     cPtr->view = W_CreateView(W_VIEW(parent));
     if (!cPtr->view) {
-	free(cPtr);
+	wfree(cPtr);
 	return NULL;
     }
     cPtr->view->self = cPtr;
@@ -139,7 +139,7 @@ WMCreateColorWell(WMWidget *parent)
     cPtr->colorView = W_CreateView(cPtr->view);
     if (!cPtr->colorView) {
 	W_DestroyView(cPtr->view);
-	free(cPtr);
+	wfree(cPtr);
 	return NULL;
     }
     cPtr->colorView->self = cPtr;
@@ -480,6 +480,6 @@ destroyColorWell(ColorWell *cPtr)
     if (cPtr->color)
 	WMReleaseColor(cPtr->color);
    
-    free(cPtr);
+    wfree(cPtr);
 }
 

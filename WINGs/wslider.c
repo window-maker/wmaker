@@ -79,7 +79,7 @@ WMCreateSlider(WMWidget *parent)
     
     sPtr->view = W_CreateView(W_VIEW(parent));
     if (!sPtr->view) {
-	free(sPtr);
+	wfree(sPtr);
 	return NULL;
     }
     sPtr->view->self = sPtr;
@@ -550,6 +550,6 @@ destroySlider(Slider *sPtr)
 
     WMRemoveNotificationObserver(sPtr);
 
-    free(sPtr);
+    wfree(sPtr);
 }
 

@@ -77,7 +77,7 @@ WMDestroyAlertPanel(WMAlertPanel *panel)
 {
     WMUnmapWidget(panel->win);
     WMDestroyWidget(panel->win);
-    free(panel);
+    wfree(panel);
 }
 
 
@@ -293,7 +293,7 @@ WMDestroyInputPanel(WMInputPanel *panel)
     WMRemoveNotificationObserver(panel);
     WMUnmapWidget(panel->win);
     WMDestroyWidget(panel->win);
-    free(panel);
+    wfree(panel);
 }
 
 

@@ -91,7 +91,7 @@ WMCreateList(WMWidget *parent)
 
     lPtr->view = W_CreateView(W_VIEW(parent));
     if (!lPtr->view) {
-	free(lPtr);
+	wfree(lPtr);
 	return NULL;
     }
     lPtr->view->self = lPtr;
@@ -173,10 +173,6 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
 
     WMInsertInBag(lPtr->items, row, item);
 
-    if (row < lPtr->fullFitLines+lPtr->flags.dontFitAll-lPtr->topItem) {
-	paintList(lPtr);
-    }
-
     /* update the scroller when idle, so that we don't waste time
      * updating it when another item is going to be added later */
     if (!lPtr->idleID) {
@@ -213,8 +209,8 @@ WMRemoveListItem(WMList *lPtr, int row)
 
     item = WMGetFromBag(lPtr->items, row);
     if (item->text)
-	free(item->text);
-    free(item);
+	wfree(item->text);
+    wfree(item);
 
     WMDeleteFromBag(lPtr->items, row);
 
@@ -274,8 +270,8 @@ WMClearList(WMList *lPtr)
 
     for (i = 0; i < WMGetBagItemCount(lPtr->items); i++) {
 	item = WMGetFromBag(lPtr->items, i);
-	free(item->text);
-	free(item);
+	wfree(item->text);
+	wfree(item);
     }
     WMEmptyBag(lPtr->items);
 
@@ -791,10 +787,10 @@ destroyList(List *lPtr)
 
     for (i = 0; i < WMGetBagItemCount(lPtr->items); i++) {
 	item = WMGetFromBag(lPtr->items, i);
-	free(item->text);
-	free(item);
+	wfree(item->text);
+	wfree(item);
     }
     WMFreeBag(lPtr->items);
     
-    free(lPtr);
+    wfree(lPtr);
 }

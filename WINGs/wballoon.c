@@ -61,7 +61,7 @@ W_CreateBalloon(WMScreen *scr)
 
     bPtr->view = W_CreateTopView(scr);
     if (!bPtr->view) {
-	free(bPtr);
+	wfree(bPtr);
 	return NULL;
     }
     bPtr->view->self = bPtr;
@@ -110,7 +110,7 @@ WMSetBalloonTextForView(char *text, WMView *view)
     }
 
     if (oldText) {
-	free(oldText);
+	wfree(oldText);
     }
 }
 
@@ -466,7 +466,7 @@ destroyBalloon(Balloon *bPtr)
     e = WMEnumerateHashTable(bPtr->table);
 
     while ((str = WMNextHashEnumeratorItem(&e))) {
-	free(str);
+	wfree(str);
     }
     WMFreeHashTable(bPtr->table);
 
@@ -476,5 +476,5 @@ destroyBalloon(Balloon *bPtr)
     if (bPtr->font)
 	WMReleaseFont(bPtr->font);
 
-    free(bPtr);
+    wfree(bPtr);
 }

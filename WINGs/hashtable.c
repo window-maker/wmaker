@@ -114,7 +114,7 @@ rebuildTable(WMHashTable *table)
 	    oldArray[i] = next;
 	}
     }
-    free(oldArray);
+    wfree(oldArray);
 }
 
 
@@ -149,7 +149,7 @@ WMResetHashTable(WMHashTable *table)
 	while (item) {
 	    tmp = item->next;
 	    RELKEY(table, item);
-	    free(item);
+	    wfree(item);
 	    item = tmp;
 	}
     }
@@ -157,7 +157,7 @@ WMResetHashTable(WMHashTable *table)
     table->itemCount = 0;
     
     if (table->size > INITIAL_CAPACITY) {
-	free(table->table);
+	wfree(table->table);
 	table->size = INITIAL_CAPACITY;
 	table->table = wmalloc(sizeof(HashItem*)*table->size);
     }
@@ -176,12 +176,12 @@ WMFreeHashTable(WMHashTable *table)
 	while (item) {
 	    tmp = item->next;
 	    RELKEY(table, item->key);
-	    free(item);
+	    wfree(item);
 	    item = tmp;
 	}
     }
-    free(table->table);
-    free(table);
+    wfree(table->table);
+    wfree(table);
 }
 
 
@@ -296,7 +296,7 @@ deleteFromList(HashTable *table, HashItem *item, const void *key)
 	
 	next = item->next;
 	RELKEY(table, item->key);
-	free(item);
+	wfree(item);
 	
 	table->itemCount--;
 

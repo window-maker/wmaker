@@ -55,7 +55,7 @@ WMCreateLabel(WMWidget *parent)
     
     lPtr->view = W_CreateView(W_VIEW(parent));
     if (!lPtr->view) {
-	free(lPtr);
+	wfree(lPtr);
 	return NULL;
     }
     lPtr->view->self = lPtr;
@@ -132,7 +132,7 @@ void
 WMSetLabelText(WMLabel *lPtr, char *text)
 {
     if (lPtr->caption)
-	free(lPtr->caption);
+	wfree(lPtr->caption);
     
     if (text!=NULL) {
 	lPtr->caption = wstrdup(text);
@@ -230,7 +230,7 @@ destroyLabel(Label *lPtr)
 	WMReleaseColor(lPtr->textColor);
     
     if (lPtr->caption)
-	free(lPtr->caption);
+	wfree(lPtr->caption);
 
     if (lPtr->font)
 	WMReleaseFont(lPtr->font);
@@ -238,5 +238,5 @@ destroyLabel(Label *lPtr)
     if (lPtr->image)
 	WMReleasePixmap(lPtr->image);
 
-    free(lPtr);
+    wfree(lPtr);
 }

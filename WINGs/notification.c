@@ -62,7 +62,7 @@ WMReleaseNotification(WMNotification *notification)
     notification->refCount--;
     
     if (notification->refCount < 1) {
-	free(notification);
+	wfree(notification);
     }
 }
 
@@ -274,7 +274,7 @@ WMRemoveNotificationObserver(void *observer)
 	if (orec->next)
 	    orec->next->prev = orec->prev;
 
-	free(orec);
+	wfree(orec);
 	
 	orec = tmp;
     }
@@ -334,7 +334,7 @@ WMRemoveNotificationObserverWithName(void *observer, char *name, void *object)
 		orec->prev->next = orec->next;
 	    if (orec->next)
 		orec->next->prev = orec->prev;
-	    free(orec);
+	    wfree(orec);
         } else {
 	    /* append this action in the new action list */
 	    orec->nextAction = NULL;

@@ -26,7 +26,7 @@ WMReleasePixmap(WMPixmap *pixmap)
 	    XFreePixmap(pixmap->screen->display, pixmap->pixmap);
 	if (pixmap->mask)
 	    XFreePixmap(pixmap->screen->display, pixmap->mask);
-	free(pixmap);
+	wfree(pixmap);
     }
 }
 

@@ -31,6 +31,10 @@
 #include <assert.h>
 #include <signal.h>
 
+#ifdef TEST_WITH_GC
+#include <gc/gc.h>
+#endif
+
 #ifndef False
 # define False 0
 #endif
@@ -75,8 +79,12 @@ static WMHashTable *table = NULL;
 void *wmalloc(size_t size)
 {
     void *tmp;
-    
+
+#ifdef TEST_WITH_GC
+    tmp = GC_malloc(size);
+#else
     tmp = malloc(size);
+#endif
     if (tmp == NULL) {
 	wwarning("malloc() failed. Retrying after 2s.");
 	sleep(2);
@@ -101,9 +109,17 @@ void *wrealloc(void *ptr, size_t newsize)
     void *nptr;
 
     if (!ptr) {
+#ifdef TEST_WITH_GC
+	nptr = GC_malloc(newsize);
+#else
 	nptr = malloc(newsize);
+#endif
     } else {
+#ifdef TEST_WITH_GC
+	nptr = GC_realloc(ptr, newsize);
+#else
 	nptr=realloc(ptr, newsize);
+#endif
     }
     if (nptr==NULL) {
 	printf("Could not do realloc");
@@ -141,6 +157,19 @@ wretain(void *ptr)
 }
 
 
+
+void
+wfree(void *ptr)
+{
+#ifdef TEST_WITH_GC
+    GC_free(ptr);
+#else
+    free(ptr);
+#endif
+}
+
+
+
 void
 wrelease(void *ptr)
 {
@@ -156,8 +185,8 @@ wrelease(void *ptr)
 	    printf("RELEASING %p\n", ptr);
 #endif
 	    WMHashRemove(table, ptr);
-	    free(refcount);
-	    free(ptr);
+	    wfree(refcount);
+	    wfree(ptr);
 	}
 #ifdef VERBOSE
 	else {

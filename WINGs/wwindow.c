@@ -162,7 +162,7 @@ WMCreateWindowWithStyle(WMScreen *screen, char *name, int style)
 
     win->view = W_CreateTopView(screen);
     if (!win->view) {
-	free(win);
+	wfree(win);
 	return NULL;
     }
     win->view->self = win;
@@ -202,7 +202,7 @@ WMSetWindowTitle(WMWindow *win, char *title)
     int result;
 
     if (win->title!=NULL)
-	free(win->title);
+	wfree(win->title);
     if (title!=NULL)
 	win->title = wstrdup(title);
     else
@@ -247,7 +247,7 @@ WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData)
 	    XSetWMProtocols(scr->display, win->view->window, newAtoms, count);
 	    if (atoms)
 		XFree(atoms);
-	    free(newAtoms);
+	    wfree(newAtoms);
 	} else if (!action && win->closeAction) {
 	    int i, ncount;
 	    
@@ -265,7 +265,7 @@ WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData)
 				ncount);
 		if (atoms)
 		    XFree(atoms);
-		free(newAtoms);
+		wfree(newAtoms);
 	    }
 	}
     }
@@ -580,7 +580,7 @@ WMSetWindowMiniwindowTitle(WMWindow *win, char *title)
     if ((win->miniTitle && !title) || (!win->miniTitle && title)
 	|| (title && win->miniTitle && strcoll(title, win->miniTitle)!=0)) {
 	if (win->miniTitle)
-	    free(win->miniTitle);
+	    wfree(win->miniTitle);
 	
 	if (title)
 	    win->miniTitle = wstrdup(title);
@@ -703,11 +703,11 @@ destroyWindow(_Window *win)
     }
 
     if (win->title) {
-	free(win->title);
+	wfree(win->title);
     }
     
     if (win->miniTitle) {
-	free(win->miniTitle);
+	wfree(win->miniTitle);
     }
     
     if (win->miniImage) {
@@ -715,9 +715,9 @@ destroyWindow(_Window *win)
     }
     
     if (win->wname)
-	free(win->wname);
+	wfree(win->wname);
 
-    free(win);
+    wfree(win);
 }
 
 

@@ -164,7 +164,7 @@ textChangedObserver(void *observerData, WMNotification *notification)
 	}
     }
 
-    free(text);
+    wfree(text);
 }
 
 
@@ -366,7 +366,7 @@ WMFreeFilePanel(WMFilePanel *panel)
     WMRemoveNotificationObserver(panel);
     WMUnmapWidget(panel->win);
     WMDestroyWidget(panel->win);
-    free(panel);
+    wfree(panel);
 }
 
 
@@ -601,7 +601,7 @@ fillColumn(WMBrowserDelegate *self, WMBrowser *bPtr, int column, WMList *list)
 
     panel = WMGetHangedData(bPtr);
     listDirectoryOnColumn(panel, column, path);
-    free(path);
+    wfree(path);
 }
 
 
@@ -637,7 +637,7 @@ showError(WMScreen *scr, WMWindow *owner, char *s, char *file)
         errStr = wstrdup(s);
     }
     WMRunAlertPanel(scr, owner, "Error", errStr, "OK", NULL, NULL);
-    free(errStr);
+    wfree(errStr);
 }
 
 
@@ -717,9 +717,9 @@ createDir(WMButton *bPre, WMFilePanel *panel)
     }
     else WMSetFilePanelDirectory(panel, file);
 
-    free(directory_name);
-    free(directory);
-    free(file);
+    wfree(directory_name);
+    wfree(directory);
+    wfree(file);
 
 }
 
@@ -759,7 +759,7 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
             default:
                 showError(scr, panel->win, "Can not delete '%s'.", file);
         }
-        free(file);
+        wfree(file);
         return;
     } else if (S_ISDIR(filestat.st_mode)) {
         buffer = wmalloc(strlen(file)+20);
@@ -822,8 +822,8 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
             WMSetFilePanelDirectory(panel, file);
         }
     }
-    free(buffer);
-    free(file);
+    wfree(buffer);
+    wfree(file);
 }
 
 static void
@@ -924,8 +924,8 @@ getCurrentFileName(WMFilePanel *panel)
         } else
            strcpy(tmp, file);
 
-	free(file);
-	free(path);
+	wfree(file);
+	wfree(path);
 	return tmp;
     } else {
 	return path;
@@ -943,7 +943,7 @@ validOpenFile(WMFilePanel *panel)
 
     if (file[0] != '\0')
         haveFile = 1;
-    free(file);
+    wfree(file);
 
     col = WMGetBrowserSelectedColumn(panel->browser);
     item = WMGetBrowserSelectedItemInColumn(panel->browser, col);
@@ -982,10 +982,10 @@ buttonClick(WMButton *bPtr, WMFilePanel *panel)
 		WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
 				"Error", "File does not exist.",
 				"Ok", NULL, NULL);
-		free(file);
+		wfree(file);
 		return;
 	    }
-	    free(file);
+	    wfree(file);
 	}
 	panel->flags.canceled = 0;
     } else

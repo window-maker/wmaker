@@ -53,7 +53,7 @@ void
 WMSetFrameTitle(WMFrame *fPtr, char *title)
 {
     if (fPtr->caption)
-	free(fPtr->caption);
+	wfree(fPtr->caption);
     if (title)
 	fPtr->caption = wstrdup(title);
     else
@@ -187,7 +187,7 @@ WMCreateFrame(WMWidget *parent)
 
     fPtr->view = W_CreateView(W_VIEW(parent));
     if (!fPtr->view) {
-	free(fPtr);
+	wfree(fPtr);
 	return NULL;
     }
     fPtr->view->self = fPtr;
@@ -209,7 +209,7 @@ static void
 destroyFrame(Frame *fPtr)
 {    
     if (fPtr->caption)
-	free(fPtr->caption);
+	wfree(fPtr->caption);
 
-    free(fPtr);
+    wfree(fPtr);
 }

@@ -21,7 +21,7 @@
  * 		For some reason after using the magnifying glass, the windowlist
  * 		of the color-panel (panel->view->screen) becomes 0x0. This
  * 		results in a core-dump of testcolorpanel, and in 3 times
- * 		"WPrefs in free(): warning: chunk is already free." with WPrefs.
+ * 		"WPrefs in wfree(): warning: chunk is already free." with WPrefs.
  */
 
 /* TODO:
@@ -1094,11 +1094,11 @@ WMFreeColorPanel(WMColorPanel *panel)
     
     /* structs */
     if (panel->lastBrowseDir)
-	free(panel->lastBrowseDir);
+	wfree(panel->lastBrowseDir);
     if (panel->configurationPath)
-	free(panel->configurationPath);
+	wfree(panel->configurationPath);
     
-    free(panel);
+    wfree(panel);
 }
 
 
@@ -1816,7 +1816,7 @@ magnifyPutCursor(WMWidget *w, void *data)
     XFreePixmap(scr->display, panel->magnifyGlass->pixmap);
     panel->magnifyGlass->pixmap = None;
     
-    free(panel->magnifyGlass);
+    wfree(panel->magnifyGlass);
 }
 
 
@@ -1851,10 +1851,10 @@ wheelCreateMatrix(unsigned int width, unsigned int height)
     error:
     for (i = 0; i < 3; i++) {
 	if (matrix->data[i])
-	    free(matrix->data[i]);
+	    wfree(matrix->data[i]);
     }
     if (matrix)
-	free(matrix);
+	wfree(matrix);
     RErrorCode = RERR_NOMEMORY;
     return NULL;
 }
@@ -1869,9 +1869,9 @@ wheelDestroyMatrix(wheelMatrix *matrix)
     
     for (i = 0; i < 3; i++) {
 	if (matrix->data[i])
-	    free(matrix->data[i]);
+	    wfree(matrix->data[i]);
     }
-    free(matrix);
+    wfree(matrix);
 }
 
 
@@ -2758,10 +2758,10 @@ hsbUpdateHueGradient(W_ColorPanel *panel)
     
     for (i=0; i<7; i++) {
 	if (colors[i])
-	    free(colors[i]);
+	    wfree(colors[i]);
     }
     if (colors)
-	free(colors);
+	wfree(colors);
 }
 
 /*************** Custom Palette Functions ****************/
@@ -3027,7 +3027,7 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 	
 	/* Store last browsed path */
 	if (panel->lastBrowseDir)
-	    free(panel->lastBrowseDir);
+	    wfree(panel->lastBrowseDir);
 	panel->lastBrowseDir = wmalloc((i+1)*sizeof(char));
 	strncpy(panel->lastBrowseDir, filepath, i);
 	panel->lastBrowseDir[i] = '\0';
@@ -3040,22 +3040,22 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 	while (access (tmp, F_OK) == 0) {
 	    char	*newName;
 	    
-	    free(tmp);
+	    wfree(tmp);
 	    
 	    newName = generateNewFilename(filename);
-	    free(filename);
+	    wfree(filename);
 	    filename = newName;
 	    
 	    tmp = wstrappend(panel->configurationPath, filename);
 	}
-	free(tmp);
+	wfree(tmp);
 	
 	/* Copy image to $(gnustepdir)/Library/Colors/ & 
 	 * Add filename to history menu */
 	if (fetchFile (panel->configurationPath, filepath, filename) == 0) {
 	    
 	    /* filepath is a "local" path now the file has been copied */
-	    free(filepath);
+	    wfree(filepath);
 	    filepath = wstrappend(panel->configurationPath, filename);
 	    
 	    /* load the image & add menu entries */
@@ -3088,14 +3088,14 @@ customPaletteMenuNewFromFile(W_ColorPanel *panel)
 				"Couldn't remove file from Configuration Directory !", 
 				"OK", NULL, NULL);
 	    }
-	    free(tmp);
+	    wfree(tmp);
 	}
-	free(filepath);
-	free(filename);
+	wfree(filepath);
+	wfree(filename);
     }
     WMFreeFilePanel(browseP);
     
-    free(spath);
+    wfree(spath);
 }
 
 
@@ -3119,7 +3119,7 @@ customPaletteMenuRename(W_ColorPanel *panel)
 	
 	/* As some people do certain stupid things... */
 	if (strcmp(toName, fromName) == 0) {
-	    free(toName);
+	    wfree(toName);
 	    return;
 	}
 	
@@ -3153,9 +3153,9 @@ customPaletteMenuRename(W_ColorPanel *panel)
 		}
 		
 	    } else {
-		free(fromPath);
-		free(toName);
-		free(toPath);
+		wfree(fromPath);
+		wfree(toName);
+		wfree(toPath);
 		
 		return;
 	    }
@@ -3170,9 +3170,9 @@ customPaletteMenuRename(W_ColorPanel *panel)
 	    
 	    WMSetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn, item);
 	}
-	free(fromPath);
-	free(toPath);
-	free(toName);
+	wfree(fromPath);
+	wfree(toPath);
+	wfree(toName);
     }
 }
 
@@ -3192,11 +3192,11 @@ customPaletteMenuRemove(W_ColorPanel *panel)
 		     WMGetPopUpButtonItem(panel->customPaletteHistoryBtn, item ));
     text = wstrappend( tmp, ".\n\nAre you sure you want to remove this"
 		      " palette ?");
-    free(tmp);
+    wfree(tmp);
     
     choice = WMRunAlertPanel(scr, panel->win, NULL, text, "Yes", "No", NULL);
     /* returns 0 (= "Yes") or 1 (="No") */
-    free(text);
+    wfree(text);
     
     if (choice == 0) {
 	
@@ -3205,7 +3205,7 @@ customPaletteMenuRemove(W_ColorPanel *panel)
 	
 	if ( remove(tmp) != 0)
 	    wsyserror("Couldn't remove palette %s\n", tmp);
-	free(tmp);
+	wfree(tmp);
 	
 	/* item -1 always exists */
 	WMSetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn, item-1);
@@ -3249,7 +3249,7 @@ customPaletteHistoryCallback(WMWidget *w, void *data)
 	    }
 	    panel->customPaletteImg = tmp;
 	}
-	free(filename);
+	wfree(filename);
     }
     customSetPalette(panel);
     
@@ -3484,10 +3484,10 @@ fetchFile(char *toPath, char *srcFile, char *destFile)
     if ((dest = open( tmp, O_RDWR|O_CREAT, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) 
 	== 0) {
 	wsyserror("Could not create %s", tmp);
-	free(tmp);
+	wfree(tmp);
 	return -1;
     }
-    free(tmp);
+    wfree(tmp);
     
     
     /* Copy the file */

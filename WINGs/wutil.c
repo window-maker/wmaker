@@ -133,13 +133,13 @@ WMDeleteTimerWithClientData(void *cdata)
     tmp = timerHandler;
     if (tmp->clientData==cdata) {
         timerHandler = tmp->next;
-        free(tmp);
+        wfree(tmp);
     } else {
         while (tmp->next) {
             if (tmp->next->clientData==cdata) {
                 handler = tmp->next;
                 tmp->next = handler->next;
-                free(handler);
+                wfree(handler);
                 break;
             }
             tmp = tmp->next;
@@ -160,12 +160,12 @@ WMDeleteTimerHandler(WMHandlerID handlerID)
     tmp = timerHandler;
     if (tmp==handler) {
 	timerHandler = handler->next;
-	free(handler);
+	wfree(handler);
     } else {
 	while (tmp->next) {
 	    if (tmp->next==handler) {
 		tmp->next=handler->next;
-		free(handler);
+		wfree(handler);
 		break;
 	    }
 	    tmp = tmp->next;
@@ -214,12 +214,12 @@ WMDeleteIdleHandler(WMHandlerID handlerID)
     tmp = idleHandler;
     if (tmp == handler) {
 	idleHandler = handler->next;
-	free(handler);
+	wfree(handler);
     } else {
 	while (tmp->next) {
 	    if (tmp->next == handler) {
 		tmp->next = handler->next;
-		free(handler);
+		wfree(handler);
 		break;
 	    }
 	    tmp = tmp->next;
@@ -260,12 +260,12 @@ WMDeleteInputHandler(WMHandlerID handlerID)
     tmp = inputHandler;
     if (tmp == handler) {
 	inputHandler = handler->next;
-	free(handler);
+	wfree(handler);
     } else {
 	while (tmp->next) {
 	    if (tmp->next == handler) {
 		tmp->next = handler->next;
-		free(handler);
+		wfree(handler);
 		break;
 	    }
 	    tmp = tmp->next;
@@ -293,7 +293,7 @@ checkIdleHandlers()
 	tmp = handler->next;
 	(*handler->callback)(handler->clientData);
 	/* remove the handler */
-	free(handler);
+	wfree(handler);
 
 	handler = tmp;
     }
@@ -315,7 +315,7 @@ checkTimerHandlers()
 	timerHandler = timerHandler->next;
 	handler->next = NULL;
 	(*handler->callback)(handler->clientData);
-	free(handler);
+	wfree(handler);
     }
 
     W_FlushASAPNotificationQueue();
@@ -453,7 +453,7 @@ handleInputEvents(Bool waitForInput)
 	}
     }
 
-    free(fds);
+    wfree(fds);
 
     W_FlushASAPNotificationQueue();
 

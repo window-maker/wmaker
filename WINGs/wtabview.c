@@ -101,7 +101,7 @@ WMCreateTabView(WMWidget *parent)
 
     tPtr->view = W_CreateView(W_VIEW(parent));
     if (!tPtr->view) {
-	free(tPtr);
+	wfree(tPtr);
 	return NULL;
     }
     tPtr->view->self = tPtr;
@@ -529,13 +529,13 @@ destroyTabView(TabView *tPtr)
 	WMSetTabViewItemView(tPtr->items[i], NULL);
 	WMDestroyTabViewItem(tPtr->items[i]);
     }
-    free(tPtr->items);
+    wfree(tPtr->items);
 
     WMReleaseColor(tPtr->lightGray);
     WMReleaseColor(tPtr->tabColor);
     WMReleaseFont(tPtr->font);
 
-    free(tPtr);
+    wfree(tPtr);
 }
 
 /******************************************************************/
@@ -642,7 +642,7 @@ void
 WMSetTabViewItemLabel(WMTabViewItem *item, char *label)
 {
     if (item->label)
-	free(item->label);
+	wfree(item->label);
 
     item->label = wstrdup(label);
 
@@ -676,10 +676,10 @@ void
 WMDestroyTabViewItem(WMTabViewItem *item)
 {
     if (item->label)
-	free(item->label);
+	wfree(item->label);
 
     if (item->view)
 	W_DestroyView(item->view);
 
-    free(item);
+    wfree(item);
 }

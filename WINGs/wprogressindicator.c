@@ -62,7 +62,7 @@ WMProgressIndicator*
     
     pPtr->view = W_CreateView(W_VIEW(parent));
     if (!pPtr->view) {
-	free(pPtr);
+	wfree(pPtr);
 	return NULL;
     }
     
@@ -293,6 +293,6 @@ destroyProgressIndicator(ProgressIndicator *pPtr)
 {
     WMRemoveNotificationObserver(pPtr);
     
-    free(pPtr);
+    wfree(pPtr);
 }
 

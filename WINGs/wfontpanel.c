@@ -137,6 +137,16 @@ notificationObserver(void *self, WMNotification *notif)
 }
 
 
+static void
+closeWindow(WMWidget *w, void *data)
+{
+    FontPanel *panel = (FontPanel*)data;
+    
+    WMHideFontPanel(panel);
+}
+
+
+
 WMFontPanel*
 WMGetFontPanel(WMScreen *scr)
 {
@@ -157,6 +167,8 @@ WMGetFontPanel(WMScreen *scr)
     WMResizeWidget(panel->win, DEF_WIDTH, DEF_HEIGHT);
     WMSetWindowMinSize(panel->win, MIN_WIDTH, MIN_HEIGHT);
     WMSetViewNotifySizeChanges(WMWidgetView(panel->win), True);
+    
+    WMSetWindowCloseAction(panel->win, closeWindow, panel);
 
     panel->split = WMCreateSplitView(panel->win);
     WMResizeWidget(panel->split, DEF_WIDTH, DEF_HEIGHT - BUTTON_SPACE_HEIGHT);
@@ -283,7 +295,7 @@ WMFreeFontPanel(WMFontPanel *panel)
     WMRemoveNotificationObserver(panel);
     WMUnmapWidget(panel->win);
     WMDestroyWidget(panel->win);
-    free(panel);
+    wfree(panel);
 }
 
 
@@ -887,7 +899,7 @@ familyClick(WMWidget *w, void *data)
 
     if (oface) {
 	facei = WMFindRowOfListItemWithTitle(panel->typLs, oface);
-	free(oface);
+	wfree(oface);
     }
     if (facei < 0) {
 	facei = 0;
@@ -904,7 +916,7 @@ familyClick(WMWidget *w, void *data)
     }
 
     if (osize)
-	free(osize);
+	wfree(osize);
 
 
     preview(panel);
@@ -957,7 +969,7 @@ typefaceClick(WMWidget *w, void *data)
     sizeClick(panel->sizLs, panel);
 
     if (osize)
-	free(osize);
+	wfree(osize);
 
     preview(panel);
 }

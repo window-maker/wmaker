@@ -115,7 +115,7 @@ WMCreateBrowser(WMWidget *parent)
 
     bPtr->view = W_CreateView(W_VIEW(parent));
     if (!bPtr->view) {
-	free(bPtr);
+	wfree(bPtr);
 	return NULL;
     }
     bPtr->view->self = bPtr;
@@ -225,7 +225,7 @@ void
 WMSetBrowserPathSeparator(WMBrowser *bPtr, char *separator)
 {
     if (bPtr->pathSeparator)
-	free(bPtr->pathSeparator);
+	wfree(bPtr->pathSeparator);
     bPtr->pathSeparator = wstrdup(separator);
 }
 
@@ -319,14 +319,14 @@ removeColumn(WMBrowser *bPtr, int column)
     }
     for (i=column; i < clearEnd; i++) {
 	if (bPtr->titles[i]) {
-	    free(bPtr->titles[i]);
+	    wfree(bPtr->titles[i]);
 	    bPtr->titles[i] = NULL;
 	}
 	WMClearList(bPtr->columns[i]);
     }
     for (;i < destroyEnd; i++) {
 	if (bPtr->titles[i]) {
-	    free(bPtr->titles[i]);
+	    wfree(bPtr->titles[i]);
 	    bPtr->titles[i] = NULL;
 	}
         WMRemoveNotificationObserverWithName(bPtr,
@@ -339,8 +339,8 @@ removeColumn(WMBrowser *bPtr, int column)
     tlist = wmalloc(sizeof(char*) * (bPtr->columnCount));
     memcpy(clist, bPtr->columns, sizeof(WMList*) * (bPtr->columnCount));
     memcpy(tlist, bPtr->titles, sizeof(char*) * (bPtr->columnCount));
-    free(bPtr->titles);
-    free(bPtr->columns);
+    wfree(bPtr->titles);
+    wfree(bPtr->columns);
     bPtr->titles = tlist;
     bPtr->columns = clist;
 }
@@ -382,7 +382,7 @@ WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, char *title)
     assert(column < bPtr->usedColumnCount);
 
     if (bPtr->titles[column])
-	free(bPtr->titles[column]);
+	wfree(bPtr->titles[column]);
 
     bPtr->titles[column] = wstrdup(title);
 
@@ -532,7 +532,7 @@ paintItem(WMList *lPtr, int index, Drawable d, char *text, int state,
 		                                  text, &textLen, widthC);
             W_PaintText(view, d, scr->normalFont,  x+4, y, widthC,
 		    	WALeft, WMColorGC(scr->black), False, textBuf, textLen);
-	    free(textBuf);
+	    wfree(textBuf);
 	} else {
       	    W_PaintText(view, d, scr->normalFont,  x+4, y, widthC,
 		    	WALeft, WMColorGC(scr->black), False, text, textLen);
@@ -713,7 +713,7 @@ WMSetBrowserPath(WMBrowser *bPtr, char *path)
 
 	i++;
     }
-    free(str);
+    wfree(str);
 
     for (i = bPtr->usedColumnCount - 1;
     	 (i > -1) && !WMGetListSelectedItem(bPtr->columns[i]);
@@ -801,7 +801,7 @@ loadColumn(WMBrowser *bPtr, int column)
 	title = (*bPtr->delegate->titleOfColumn)(bPtr->delegate, bPtr, column);
 
 	if (bPtr->titles[column])
-	    free(bPtr->titles[column]);
+	    wfree(bPtr->titles[column]);
 
 	bPtr->titles[column] = wstrdup(title);
 
@@ -1071,9 +1071,9 @@ WMAddBrowserColumn(WMBrowser *bPtr)
     memcpy(clist, bPtr->columns, sizeof(WMList*)*(bPtr->columnCount-1));
     memcpy(tlist, bPtr->titles, sizeof(char*)*(bPtr->columnCount-1));
     if (bPtr->columns)
-	free(bPtr->columns);
+	wfree(bPtr->columns);
     if (bPtr->titles)
-	free(bPtr->titles);
+	wfree(bPtr->titles);
     bPtr->columns = clist;
     bPtr->titles = tlist;
 
@@ -1115,15 +1115,15 @@ destroyBrowser(WMBrowser *bPtr)
 
     for (i = 0; i < bPtr->columnCount; i++) {
 	if (bPtr->titles[i])
-	    free(bPtr->titles[i]);
+	    wfree(bPtr->titles[i]);
     }
-    free(bPtr->titles);
+    wfree(bPtr->titles);
 
-    free(bPtr->pathSeparator);
+    wfree(bPtr->pathSeparator);
 
     WMRemoveNotificationObserver(bPtr);
 
-    free(bPtr);
+    wfree(bPtr);
 }
 
 

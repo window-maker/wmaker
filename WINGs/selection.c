@@ -50,7 +50,7 @@ WMDeleteSelectionHandler(WMWidget *widget, Atom selection)
 	}
         selHandlers = tmp->next;
 	timestamp = tmp->timestamp;
-        free(tmp);
+        wfree(tmp);
     } else {
         while (tmp->next) {
             if (tmp->next->widget == widget) {
@@ -62,7 +62,7 @@ WMDeleteSelectionHandler(WMWidget *widget, Atom selection)
                 handler = tmp->next;
                 tmp->next = handler->next;
 		timestamp = handler->timestamp;
-                free(handler);
+                wfree(handler);
                 break;
             }
             tmp = tmp->next;
@@ -188,11 +188,11 @@ W_HandleSelectionEvent(XEvent *event)
 					event->xselectionrequest.requestor,
 					prop, atom, data, length, format)) {
 
-			free(data);
+			wfree(data);
 			notifySelection(event, None);
 			break;
 		    }
-		    free(data);
+		    wfree(data);
 
 		    notifySelection(event, prop);
 

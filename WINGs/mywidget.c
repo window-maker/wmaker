@@ -108,7 +108,7 @@ CreateMyWidget(WMWidget *parent)
      */
     mPtr->view = W_CreateView(W_VIEW(parent));
     if (!mPtr->view) {
-	free(mPtr);
+	wfree(mPtr);
 	return NULL;
     }
     /* always do this */
@@ -200,7 +200,7 @@ SetMyWidgetText(MyWidget *mPtr, char *text)
     CHECK_CLASS(mPtr, myWidgetClass);
 
     if (mPtr->text)
-	free(mPtr->text);
+	wfree(mPtr->text);
     
     mPtr->text = wstrdup(text);
     
@@ -219,9 +219,9 @@ destroyMyWidget(_MyWidget *mPtr)
      */
         
     if (mPtr->text)
-	free(mPtr->text);
+	wfree(mPtr->text);
     
-    free(mPtr);
+    wfree(mPtr);
 }
 
 

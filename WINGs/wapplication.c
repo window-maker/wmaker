@@ -51,7 +51,7 @@ void
 WMSetResourcePath(char *path)
 {
     if (WMApplication.resourcePath)
-	free(WMApplication.resourcePath);
+	wfree(WMApplication.resourcePath);
     WMApplication.resourcePath = wstrdup(path);
 }
 
@@ -84,7 +84,7 @@ checkFile(char *path, char *folder, char *ext, char *resource)
     strcat(ret, resource);
     
     if (access(ret, F_OK)!=0) {
-	free(ret);
+	wfree(ret);
 	ret = NULL;
     }
 
@@ -128,7 +128,7 @@ WMPathForResourceOfType(char *resource, char *ext)
 	} else {
 	    path = NULL;
 	}
-	free(tmp);
+	wfree(tmp);
 	if (path)
 	    return path;
     }
@@ -139,7 +139,7 @@ WMPathForResourceOfType(char *resource, char *ext)
     if (getenv("GNUSTEP_USER_ROOT")) {
 	path = checkFile(getenv("GNUSTEP_USER_ROOT"), appdir, ext, resource);
 	if (path) {
-	    free(appdir);
+	    wfree(appdir);
 	    return path;
 	}
     }
@@ -148,7 +148,7 @@ WMPathForResourceOfType(char *resource, char *ext)
     if (tmp) {
 	path = checkFile(tmp, appdir, ext, resource);
 	if (path) {
-	    free(appdir);
+	    wfree(appdir);
 	    return path;
 	}
     }
@@ -156,14 +156,14 @@ WMPathForResourceOfType(char *resource, char *ext)
     if (getenv("GNUSTEP_LOCAL_ROOT")) {
 	path = checkFile(getenv("GNUSTEP_LOCAL_ROOT"), appdir, ext, resource);
 	if (path) {
-	    free(appdir);
+	    wfree(appdir);
 	    return path;
 	}
     }
     
     path = checkFile("/usr/local/GNUstep", appdir, ext, resource);
     if (path) {
-	free(appdir);
+	wfree(appdir);
 	return path;
     }
 
@@ -171,14 +171,14 @@ WMPathForResourceOfType(char *resource, char *ext)
     if (getenv("GNUSTEP_SYSTEM_ROOT")) {
 	path = checkFile(getenv("GNUSTEP_SYSTEM_ROOT"), appdir, ext, resource);
 	if (path) {
-	    free(appdir);
+	    wfree(appdir);
 	    return path;
 	}
     }
 
     path = checkFile("/usr/GNUstep", appdir, ext, resource);
     if (path) {
-	free(appdir);
+	wfree(appdir);
 	return path;
     }
     

@@ -60,13 +60,13 @@ WMCreateScrollView(WMWidget *parent)
     
     sPtr->view = W_CreateView(W_VIEW(parent));
     if (!sPtr->view) {
-	free(sPtr);
+	wfree(sPtr);
 	return NULL;
     }
     sPtr->viewport = W_CreateView(sPtr->view);
     if (!sPtr->view) {
 	W_DestroyView(sPtr->view);
-	free(sPtr);
+	wfree(sPtr);
 	return NULL;
     }
     sPtr->view->self = sPtr;
@@ -499,6 +499,6 @@ destroyScrollView(ScrollView *sPtr)
 {
     
    
-    free(sPtr);
+    wfree(sPtr);
 }
 

@@ -101,7 +101,7 @@ WMCreateSplitView(WMWidget *parent)
     
     sPtr->view = W_CreateView(W_VIEW(parent));
     if (!sPtr->view) {
-	free(sPtr);
+	wfree(sPtr);
 	return NULL;
     }
     sPtr->view->self = sPtr;
@@ -389,6 +389,6 @@ destroySplitView(SplitView *sPtr)
 {
     WMRemoveNotificationObserver(sPtr);
    
-    free(sPtr);
+    wfree(sPtr);
 }
 

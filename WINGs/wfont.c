@@ -49,7 +49,7 @@ WMCreateFontSet(WMScreen *scrPtr, char *fontName)
 		     defaultString);
     }
     if (!font->font.set) {
-	free(font);
+	wfree(font);
 	return NULL;
     }
     
@@ -87,13 +87,13 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
     font = WMHashGet(scrPtr->fontCache, fname);
     if (font) {
 	WMRetainFont(font);
-	free(fname);
+	wfree(fname);
 	return font;
     }
 
     font = malloc(sizeof(WMFont));
     if (!font) {
-	free(fname);
+	wfree(fname);
 	return NULL;
     }
     memset(font, 0, sizeof(WMFont));
@@ -104,7 +104,7 @@ WMCreateNormalFont(WMScreen *scrPtr, char *fontName)
     
     font->font.normal = XLoadQueryFont(display, fname);
     if (!font->font.normal) {
-	free(font);
+	wfree(font);
 	return NULL;
     }
 
@@ -158,9 +158,9 @@ WMReleaseFont(WMFont *font)
 	}
 	if (font->name) {
 	    WMHashRemove(font->screen->fontCache, font->name);
-	    free(font->name);
+	    wfree(font->name);
 	}
-	free(font);
+	wfree(font);
     }
 }
 
@@ -202,11 +202,11 @@ WMSystemFontOfSize(WMScreen *scrPtr, int size)
 	}
 	if (!font) {
 	    wwarning("could not load fixed font!");
-	    free(fontSpec);
+	    wfree(fontSpec);
 	    return NULL;
 	}
     }
-    free(fontSpec);
+    wfree(fontSpec);
 
     return font;
 }
@@ -238,11 +238,11 @@ WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
 	}
 	if (!font) {
 	    wwarning("could not load fixed font!");
-	    free(fontSpec);
+	    wfree(fontSpec);
 	    return NULL;
 	}
     }
-    free(fontSpec);
+    wfree(fontSpec);
     
     return font;
 }
@@ -354,7 +354,7 @@ makeFontSetOfSize(char *fontset, int size)
 	}
 
 	if (newfs)
-	    free(newfs);
+	    wfree(newfs);
 	newfs = tmp;
 
 	fontset = ptr+1;
