@@ -506,8 +506,8 @@ if test "$shape" = yes; then
 fi
 
 
-dnl Xft antialiased font support
-dnl ============================
+dnl Xft2 antialiased font support
+dnl =============================
 
 xft=yes
 XFTLIBS=""

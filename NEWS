@@ -25,7 +25,15 @@ You can pick fonts for Window Maker in the Font configuration section of
 WPrefs.
 
 Antialiased text is enabled by default, but can be disabled by adding
+
 AntialiasedText = NO; in ~/GNUstep/Defaults/WMGLOBAL
+
+This will disable antialiased text for any WINGs based application. If you
+only want to disable them for a specific application only, like WindowMaker
+for example, then add the same option in the applications configuration file,
+in this case ~/GNUstep/Defaults/WindowMaker
+For WindowMaker, this can also be achieved from the Expert panel in WPrefs.
+
 Note that bitmapped fonts look much better than TrueType when antialiasing is
 disabled.
 

@@ -1,10 +1,5 @@
 To do before next release:
 --------------------------
-- Fix font conversion (in WINGs, with convertfonts, setstyle and getstyle)
-  in WINGs convert automatically for a while (remove in later versions
-  and give a warning if font is not converted, but let user manually convert
-  it with convertfonts as the process may need manual tweaking for best
-  results)
 - check whether window states are being saved/restored properly via netwm
   on restart/crash-restart (grep for XXX/TODO)
 

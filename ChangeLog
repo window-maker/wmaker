@@ -16,7 +16,7 @@ Changes since version 0.80.2:
 - Removed obsoleted acconfig.h and implemented its functionality using
   AC_DEFINE and AC_DEFINE_UNQUOTED as autoconf 2.5x recommends.
   This will definitely enforce the need to use autoconf 2.5x
-- Added Xft support to WINGs, for rendering antialiased fonts with 
+- Added Xft2 support to WINGs, for rendering antialiased fonts with 
   transparency. Details in WINGs/ChangeLog.
 - Fixed problem with long, preset workspace names (Wanderlei Antonio Cavassin 
   <cavassin@conectiva.com.br>)
