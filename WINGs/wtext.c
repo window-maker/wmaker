@@ -2279,7 +2279,9 @@ R_imaGFX:      if(tb->next) {
 
         case XK_BackSpace:
         case XK_Delete:
+#ifdef XK_KP_Delete
         case XK_KP_Delete:
+#endif
             deleteTextInteractively(tPtr, ksym);
             updateCursorPosition(tPtr);
             paintText(tPtr);
