@@ -994,12 +994,15 @@ wFrameWindowPaint(WFrameWindow *fwin)
                     DefaultDepth(dpy, DefaultScreen(dpy)));
             XFillRectangle(dpy, tmp_bg, (*fwin->title_texture)->solid.normal_gc,
                     0, 0, fwin->titlebar->width, tb);
+            printf("bevel 1 %s\n", fwin->title);
             wDrawBevel(tmp_bg, fwin->titlebar->width,
                     fwin->titlebar->height,
                     (WTexSolid*)fwin->title_texture[fwin->flags.state], 
                     WREL_RAISED);
+            XDrawLine(dpy, tmp_bg, fwin->resizebar_texture[0]->dim_gc, 0, 0, w, tb);
             background = &tmp_bg;
         } else {
+            printf("bevel 2\n");
             wDrawBevel(fwin->titlebar->window, fwin->titlebar->width,
                     fwin->titlebar->height,
                     (WTexSolid*)fwin->title_texture[fwin->flags.state], 

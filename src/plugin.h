@@ -76,8 +76,10 @@ typedef struct _WFunction {
     _DL_FreeDataProc *freeData;
     union {
         _DL_AnyProc **any;
+#ifdef DRAWSTRING_PLUGIN
         _DL_DrawStringProc **drawString;
         _DL_WidthStringProc **widthOfString;
+#endif
     } proc;
     /*
     char *libraryName;
