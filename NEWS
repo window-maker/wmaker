@@ -48,6 +48,33 @@ If it will not be able to restart or start the alternate window manager, it
 will abort and leave the core file.
 
 
+Application User Menu
+---------------------
+
+Applications with application icon can have menu which defined by user.
+This menu will send fake keyboard event to applications' windows so
+applications must response the short cut key that was sent by user menu.
+To Enable this feature, you have to put
+#define USER_MENU
+in wconfig.h and place menu files in directory ~GNUstep/Defaults/UserMenus.
+(or /usr/local/etc/WindowMaker/UserMenus for global setting)
+Menu is in PropList format and the filename is in format
+<instance name>.<class name>.menu or application's main window.
+(for example, menu for xcalc is xcalc.XCalc.menu)
+
+Example syntax
+
+(
+  "Calculator",
+  ("Put 1", SHORTCUT, "2"),
+  ("Functions",
+    ("Put 2", SHORTCUT, "2"),
+    ("Put 3,4 and 5", SHORTCUT, (3,4,5))
+  ),
+  ("Exit", SHORTCUT, "Control+q"),
+)
+
+
 
 --- 0.52.0
 
