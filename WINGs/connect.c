@@ -57,14 +57,6 @@ wAbort(Bool foo) /*FOLD00*/
 }
 
 
-static void
-printHelp(char *progname) /*FOLD00*/
-{
-    printf("usage: %s [host [port]]\n\n", progname);
-    printf(" --help			print this message\n");
-}
-
-
 static char*
 getMessage(WMConnection *cPtr)
 {
@@ -175,8 +167,8 @@ main(int argc, char **argv) /*FOLD00*/
 
     if (argc>1) {
         for (i=1; i<argc; i++) {
-            if (strcmp(argv[i], "--help")==0) {
-                printHelp(argv[0]);
+            if (strcmp(argv[i], "--help")==0 || strcmp(argv[i], "-h")==0) {
+                printf("usage: %s [host [port]]\n\n", argv[0]);
                 exit(0);
             } else {
                 if (!host)
@@ -186,6 +178,9 @@ main(int argc, char **argv) /*FOLD00*/
             }
         }
     }
+
+    printf("Trying to make connection to '%s:%s'\n",
+           host?host:"localhost", port);
 
     sPtr = WMCreateConnectionToAddressAndNotify(host, port, NULL);
     if (!sPtr) {
