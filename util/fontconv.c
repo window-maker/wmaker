@@ -6,7 +6,7 @@
 
 #include "../src/wconfig.h"
 
-#define DEFAULT_FONT "sans:pixelsize=12"
+#define DEFAULT_FONT "sans serif:pixelsize=12"
 
 static int
 countChar(char *str, char c)
@@ -54,7 +54,7 @@ getXLFDTokens(char *xlfd)
         len--;
         if (len <= 0)
             break;
-        size = strcspn(ptr, "-");
+        size = strcspn(ptr, "-,");
         tokens[i].str = ptr;
         tokens[i].len = size;
         ptr += size;
@@ -85,19 +85,43 @@ strToInt(str *token)
 
 
 static char*
+mapWeightToName(str *weight)
+{
+    char *normalNames[] = {"medium", "normal", "regular"};
+    static char buf[32];
+    int i;
+
+    if (weight->len==0)
+        return "";
+
+    for (i=0; i<sizeof(normalNames)/sizeof(char*); i++) {
+        if (strlen(normalNames[i])==weight->len &&
+            strncmp(normalNames[i], weight->str, weight->len))
+        {
+            return "";
+        }
+    }
+
+    snprintf(buf, sizeof(buf), ":%.*s", weight->len, weight->str);
+
+    return buf;
+}
+
+
+static char*
 mapSlantToName(str *slant)
 {
-    if (slant->len==0 || slant->str[0]=='*')
-        return "roman";
+    if (slant->len==0)
+        return "";
 
     switch(slant->str[0]) {
     case 'i':
-        return "italic";
+        return ":italic";
     case 'o':
-        return "oblique";
+        return ":oblique";
     case 'r':
     default:
-        return "roman";
+        return "";
     }
 }
 
@@ -106,7 +130,7 @@ char*
 xlfdToFc(char *xlfd, char *useFamily, Bool keepXLFD)
 {
     str *tokens, *family, *weight, *slant;
-    char *name, buf[512];
+    char *name, buf[64], *slt;
     int size, pixelsize;
 
     tokens = getXLFDTokens(xlfd);
@@ -116,6 +140,8 @@ xlfdToFc(char *xlfd, char *useFamily, Bool keepXLFD)
     family = &(tokens[1]);
     weight = &(tokens[2]);
     slant  = &(tokens[3]);
+    pixelsize = strToInt(&tokens[6]);
+    size = strToInt(&tokens[7]);
 
     if (useFamily) {
         name = wstrdup(useFamily);
@@ -123,31 +149,23 @@ xlfdToFc(char *xlfd, char *useFamily, Bool keepXLFD)
         if (family->len==0 || family->str[0]=='*')
             return wstrdup(DEFAULT_FONT);
 
-        sprintf(buf, "%.*s", family->len, family->str);
+        snprintf(buf, sizeof(buf), "%.*s", family->len, family->str);
         name = wstrdup(buf);
     }
 
-    pixelsize = strToInt(&tokens[6]);
-    size = strToInt(&tokens[7]);
+    if (size>0 && pixelsize<=0) {
+        snprintf(buf, sizeof(buf), "-%d", size/10);
+        name = wstrappend(name, buf);
+    }
+
+    name = wstrappend(name, mapWeightToName(weight));
+    name = wstrappend(name, mapSlantToName(slant));
 
     if (size<=0 && pixelsize<=0) {
         name = wstrappend(name, ":pixelsize=12");
     } else if (pixelsize>0) {
         /* if pixelsize is present size will be ignored so we skip it */
-        sprintf(buf, ":pixelsize=%d", pixelsize);
-        name = wstrappend(name, buf);
-    } else {
-        sprintf(buf, "-%d", size/10);
-        name = wstrappend(name, buf);
-    }
-
-    if (weight->len>0 && weight->str[0]!='*') {
-        sprintf(buf, ":weight=%.*s", weight->len, weight->str);
-        name = wstrappend(name, buf);
-    }
-
-    if (slant->len>0 && slant->str[0]!='*') {
-        sprintf(buf, ":slant=%s", mapSlantToName(slant));
+        snprintf(buf, sizeof(buf), ":pixelsize=%d", pixelsize);
         name = wstrappend(name, buf);
     }
 
@@ -165,19 +183,11 @@ char*
 convertFont(char *font, Bool keepXLFD)
 {
     if (font[0]=='-') {
-        char *res;
-        char *tmp= wstrdup(font);
-        
         if (MB_CUR_MAX < 2) {
-            char *ptr = strchr(tmp, ',');
-            if (ptr) *ptr= 0;
-            res = xlfdToFc(tmp, NULL, keepXLFD);
+            return xlfdToFc(font, NULL, keepXLFD);
         } else {
-            res = xlfdToFc(tmp, "sans", keepXLFD);
+            return xlfdToFc(font, "sans serif", keepXLFD);
         }
-        wfree(tmp);
-        
-        return res;
     } else {
         return font;
     }

@@ -103,6 +103,9 @@ main(int argc, char **argv)
         }
     }
 
+    /* we need this in order for MB_CUR_MAX to work */
+    setlocale(LC_ALL, "");
+
     WMPLSetCaseSensitive(False);
 
     if (stat(file, &statbuf) < 0) {

@@ -13,7 +13,7 @@
 #include <X11/Xlocale.h>
 
 
-#define DEFAULT_FONT "sans-serif:pixelsize=12"
+#define DEFAULT_FONT "sans serif:pixelsize=12"
 
 #define DEFAULT_SIZE WINGsConfiguration.defaultFontSize
 
@@ -38,7 +38,7 @@ xlfdToFcPattern(char *xlfd, int size)
     wfree(fname);
 
     if (!pattern) {
-        wwarning(_("invalid font: %s. Using default %s"), xlfd, DEFAULT_FONT);
+        wwarning(_("invalid font: %s. Trying '%s'"), xlfd, DEFAULT_FONT);
         pattern = FcNameParse(DEFAULT_FONT);
     }
 

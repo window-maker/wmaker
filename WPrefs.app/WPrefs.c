@@ -61,8 +61,8 @@ extern Panel *InitAppearance(WMScreen *scr, WMWidget *parent);
 
 
 
-#define ICON_TITLE_FONT "sans:pixelsize=9"
-#define ICON_TITLE_VFONT "sans:pixelsize=9:weight=100"
+#define ICON_TITLE_FONT "sans serif:pixelsize=9"
+#define ICON_TITLE_VFONT "sans serif:pixelsize=9:weight=100"
 
 
 #define MAX_SECTIONS 16

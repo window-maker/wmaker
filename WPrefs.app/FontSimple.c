@@ -235,7 +235,7 @@ lookup_available_fonts(_Panel *panel)
     if (pat)
       FcPatternDestroy(pat);
 
-    panel->fonts->families[panel->fonts->familyn++].name= wstrdup("sans");
+    panel->fonts->families[panel->fonts->familyn++].name= wstrdup("sans serif");
     family= panel->fonts->families + panel->fonts->familyn-1;
     family->styles= wmalloc(sizeof(FontStyle)*2);
     family->stylen= 2;
@@ -453,7 +453,7 @@ selectedOption(WMWidget *w, void *data)
             FcDefaultSubstitute(pat);
 
             if (FcPatternGetString(pat, FC_FAMILY, 0, &name) != FcResultMatch)
-                name= "sans";
+                name= "sans serif";
 
             found= 0;
             // select family
@@ -672,7 +672,7 @@ createPanel(Panel *p)
         }
     }
     else
-      WMAddListItem(panel->familyL, "sans");
+      WMAddListItem(panel->familyL, "sans serif");
 
     WMSetListAction(panel->familyL, selectedFamily, panel);
 

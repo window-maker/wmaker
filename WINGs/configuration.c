@@ -10,9 +10,9 @@ _WINGsConfiguration WINGsConfiguration;
 
 
 
-#define SYSTEM_FONT "sans:pixelsize=12"
-
-#define BOLD_SYSTEM_FONT "sans:bold:pixelsize=12"
+#define SYSTEM_FONT "Trebuchet MS,Luxi Sans"
+#define BOLD_SYSTEM_FONT "Trebuchet MS,Luxi Sans:bold"
+#define DEFAULT_FONT_SIZE 12
 
 #define FLOPPY_PATH "/floppy"
 
@@ -38,48 +38,6 @@ getButtonWithName(const char *name, unsigned defaultButton)
     }
 
     return defaultButton;
-}
-
-
-// fix this
-static Bool
-missingOrInvalidXLFD(char *xlfd)
-{
-    char *ptr = xlfd;
-    Bool broken = False;
-    int count = 0;
-
-    if (!xlfd)
-        return True;
-
-    while (*ptr) {
-        if (*ptr=='%') {
-            ptr++;
-            if ((*ptr=='d' || *ptr=='i') && count==0) {
-                count++;
-            } else {
-                broken = True;
-                break;
-            }
-        } else if (*ptr==',') {
-            count = 0;
-        }
-        ptr++;
-    }
-
-    if (broken) {
-        if (xlfd == WINGsConfiguration.systemFont) {
-            ptr = "system font";
-        } else if (xlfd == WINGsConfiguration.boldSystemFont) {
-            ptr = "bold system font";
-        } else {
-            ptr = "Unknown System Font";
-        }
-        wwarning(_("Invalid %s specification: '%s' (only %%d is allowed and "
-                   "at most once for each font in a fontset)."), ptr, xlfd);
-    }
-
-    return broken;
 }
 
 
@@ -139,11 +97,14 @@ W_ReadConfigurations(void)
             WMGetUDIntegerForKey(defaults, "DefaultFontSize");
     }
 
-    if (missingOrInvalidXLFD(WINGsConfiguration.systemFont)) {
+    if (!WINGsConfiguration.systemFont) {
         WINGsConfiguration.systemFont = SYSTEM_FONT;
     }
-    if (missingOrInvalidXLFD(WINGsConfiguration.boldSystemFont)) {
+    if (!WINGsConfiguration.boldSystemFont) {
         WINGsConfiguration.boldSystemFont = BOLD_SYSTEM_FONT;
+    }
+    if (WINGsConfiguration.defaultFontSize == 0) {
+        WINGsConfiguration.defaultFontSize = DEFAULT_FONT_SIZE;
     }
     if (!WINGsConfiguration.floppyPath) {
         WINGsConfiguration.floppyPath = FLOPPY_PATH;
@@ -156,9 +117,6 @@ W_ReadConfigurations(void)
     }
     if (WINGsConfiguration.mouseWheelDown == 0) {
         WINGsConfiguration.mouseWheelDown = Button5;
-    }
-    if (WINGsConfiguration.defaultFontSize == 0) {
-        WINGsConfiguration.defaultFontSize = 12;
     }
 
 }
