@@ -27,12 +27,66 @@ typedef struct W_EditMenuItem WEditMenuItem;
 
 typedef struct WEditMenuDelegate {
     void *data;
-    
-    void (*itemCloned)(struct WEditMenuDelegate*, WEditMenu *menu,
-		       WEditMenuItem *origItem, WEditMenuItem *newItem);
-    void (*itemSelected)(struct WEditMenuDelegate*, WEditMenu *menu,
-			 WEditMenuItem *item);
-    void (*itemDeselected)(struct WEditMenuDelegate*, WEditMenu *menu,
-			   WEditMenuItem *item);
-    
+
+    void (*itemCloned)(struct WEditMenuDelegate*, WEditMenu*,
+		       WEditMenuItem*, WEditMenuItem *);
+    void (*itemSelected)(struct WEditMenuDelegate*, WEditMenu*,
+			 WEditMenuItem*);
+    void (*itemDeselected)(struct WEditMenuDelegate*, WEditMenu*,
+			   WEditMenuItem*);
+    Bool (*shouldRemoveItem)(struct WEditMenuDelegate*, WEditMenu*,
+			     WEditMenuItem*);
 } WEditMenuDelegate;
+
+
+
+
+WEditMenuItem *WCreateEditMenuItem(WMWidget *parent, char *title, 
+				   Bool isTitle);
+
+
+char *WGetEditMenuItemTitle(WEditMenuItem *item);
+
+void *WGetEditMenuItemData(WEditMenuItem *item);
+
+void WSetEditMenuItemData(WEditMenuItem *item, void *data, 
+			   WMCallback *destroyer);
+
+WEditMenu *WCreateEditMenu(WMScreen *scr, char *title);
+
+WEditMenu *WCreateEditMenuPad(WMWidget *parent);
+
+void WSetEditMenuDelegate(WEditMenu *mPtr, WEditMenuDelegate *delegate);
+
+WEditMenuItem *WInsertMenuItemWithTitle(WEditMenu *mPtr, int index, 
+					char *title);
+
+WEditMenuItem *WAddMenuItemWithTitle(WEditMenu *mPtr, char *title);
+
+void WSetEditMenuTitle(WEditMenu *mPtr, char *title);
+
+void WSetEditMenuAcceptsDrop(WEditMenu *mPtr, Bool flag);
+
+void WSetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item,
+			 WEditMenu *submenu);
+
+
+WEditMenu *WGetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item);
+
+void WRemoveEditMenuItem(WEditMenu *mPtr, WEditMenuItem *item);
+
+void WSetEditMenuSelectable(WEditMenu *mPtr, Bool flag);
+
+void WSetEditMenuEditable(WEditMenu *mPtr, Bool flag);
+
+void WSetEditMenuIsFactory(WEditMenu *mPtr, Bool flag);
+
+void WSetEditMenuMinSize(WEditMenu *mPtr, WMSize size);
+
+void WSetEditMenuMaxSize(WEditMenu *mPtr, WMSize size);
+
+WMPoint WGetEditMenuLocationForSubmenu(WEditMenu *mPtr, WEditMenu *submenu);
+
+void WTearOffEditMenu(WEditMenu *menu, WEditMenu *submenu);
+
+Bool WEditMenuIsTornOff(WEditMenu *mPtr);

@@ -99,14 +99,12 @@ static char *keyOptions[] = {
 	"WindowShortcut2Key",
 	"WindowShortcut3Key",
 	"WindowShortcut4Key",
-#ifdef EXTEND_WINDOWSHORTCUT
 	"WindowShortcut5Key",
 	"WindowShortcut6Key",
 	"WindowShortcut7Key",
 	"WindowShortcut8Key",
 	"WindowShortcut9Key",
 	"WindowShortcut10Key",
-#endif
 	"ClipRaiseKey",
 	"ClipLowerKey",
 #ifndef XKB_MODELOCK
@@ -408,14 +406,12 @@ createPanel(Panel *p)
     WMAddListItem(panel->actLs, _("Shortcut for window 2"));
     WMAddListItem(panel->actLs, _("Shortcut for window 3"));
     WMAddListItem(panel->actLs, _("Shortcut for window 4"));
-#ifdef EXTEND_WINDOWSHORTCUT
     WMAddListItem(panel->actLs, _("Shortcut for window 5"));
     WMAddListItem(panel->actLs, _("Shortcut for window 6"));
     WMAddListItem(panel->actLs, _("Shortcut for window 7"));
     WMAddListItem(panel->actLs, _("Shortcut for window 8"));
     WMAddListItem(panel->actLs, _("Shortcut for window 9"));
     WMAddListItem(panel->actLs, _("Shortcut for window 10"));
-#endif
     WMAddListItem(panel->actLs, _("Raise Clip"));
     WMAddListItem(panel->actLs, _("Lower Clip"));
     WMAddListItem(panel->actLs, _("Raise/Lower Clip"));

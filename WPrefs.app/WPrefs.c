@@ -2,7 +2,7 @@
  * 
  *  WPrefs - Window Maker Preferences Program
  * 
- *  Copyright (c) 1998 Alfredo K. Kojima
+ *  Copyright (c) 1998-2000 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -376,6 +376,9 @@ showPanel(Panel *panel)
 
     WMSetWindowTitle(WPrefs.win, rec->sectionName);
     
+    if (rec->callbacks.showPanel)
+	(*rec->callbacks.showPanel)(panel);
+
     WMMapWidget(rec->frame);
 }
 
@@ -387,6 +390,9 @@ hidePanel(Panel *panel)
     PanelRec *rec = (PanelRec*)panel;    
     
     WMUnmapWidget(rec->frame);
+    
+    if (rec->callbacks.hidePanel)
+	(*rec->callbacks.hidePanel)(panel);
 }
 
 
@@ -689,7 +695,8 @@ Initialize(WMScreen *scr)
     InitWorkspace(scr, WPrefs.win);
     InitConfigurations(scr, WPrefs.win);
 
-    InitMenu(scr, WPrefs.win);
+    changeSection(NULL, InitMenu(scr, WPrefs.win));
+    return;
 
 #ifdef not_yet_fully_implemented
     InitKeyboardSettings(scr, WPrefs.win);
@@ -752,9 +759,13 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
     path = getenv("WMAKER_BIN_NAME");
     if (!path)
 	path = "wmaker";
-    path = wstrappend(path, " --version");
+    {
+	char *command;
 
-    file = popen(path, "r");
+	command = wstrappend(path, " --version");
+	file = popen(command, "r");
+	free(command);
+    }
     if (!file || !fgets(buffer, 1023, file)) {
 	wsyserror(_("could not extract version information from Window Maker"));
 	wfatal(_("Make sure wmaker is in your search path."));
@@ -789,9 +800,15 @@ loadConfigurations(WMScreen *scr, WMWindow *mainw)
 	WMRunAlertPanel(scr, mainw, _("Warning"), mbuf, _("OK"), NULL, NULL);
     }
 
-    file = popen("wmaker --global_defaults_path", "r");
+    {
+	char *command;
+	
+	command = wstrappend(path, " --global_defaults_path");
+	file = popen(command, "r");
+	free(command);
+    }
     if (!file || !fgets(buffer, 1023, file)) {
-	wsyserror(_("could not run \"wmaker --global_defaults_path\"."));
+	wsyserror(_("could not run \"%s --global_defaults_path\"."), path);
 	exit(1);
     } else {
 	char *ptr;

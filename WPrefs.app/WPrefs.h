@@ -58,6 +58,8 @@ typedef struct {
     Bool (*requiresRestart)(Panel*);   /* return True if some static option was changed */
     void (*undoChanges)(Panel*);       /* reset values to those in the dictionary */
     void (*prepareForClose)(Panel*);   /* called when exiting WPrefs */
+    void (*showPanel)(Panel*);	       /* called when entering the panel */
+    void (*hidePanel)(Panel*);	       /* called when exiting the panel */
 } CallbackRec;
 
 
@@ -124,8 +126,10 @@ void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 #if HAVE_LIBINTL_H && I18N
 # include <libintl.h>
 # define _(text) gettext(text)
+# define N_(text) (text)
 #else
 # define _(text) (text)
+# define N_(text) (text)
 #endif
 
 #endif

@@ -69,9 +69,7 @@ typedef struct W_EditMenu {
     /* item dragging */
     int draggedItem;
     int dragX, dragY;
-    
-    struct W_EditMenu **dropTargets;
-    
+        
     /* only for non-standalone menu */
     WMSize maxSize;
     WMSize minSize;
@@ -79,7 +77,8 @@ typedef struct W_EditMenu {
     struct {
 	unsigned standalone:1;
 	unsigned isTitled:1;
-	
+
+	unsigned acceptsDrop:1;	
 	unsigned isFactory:1;
 	unsigned isSelectable:1;
 	unsigned isEditable:1;
@@ -161,6 +160,12 @@ WCreateEditMenuItem(WMWidget *parent, char *title, Bool isTitle)
 }
 
 
+char *WGetEditMenuItemTitle(WEditMenuItem *item)
+{
+    return item->label;
+}
+
+
 void *WGetEditMenuItemData(WEditMenuItem *item)
 {
     return item->data;
@@ -194,7 +199,7 @@ paintEditMenuItem(WEditMenuItem *iPtr)
     if (iPtr->flags.isTitle && !iPtr->flags.isHighlighted) {
 	color = scr->white;
     }
-    
+
 
     XClearWindow(scr->display, win);
 
@@ -292,10 +297,12 @@ static void destroyEditMenu(WEditMenu *mPtr);
 static void updateMenuContents(WEditMenu *mPtr);
 
 static void handleEvents(XEvent *event, void *data);
-static void handleActionEvents(XEvent *event, void *data);
 
 static void editItemLabel(WEditMenuItem *item);
 static void stopEditItem(WEditMenu *menu, Bool apply);
+
+
+static void deselectItem(WEditMenu *menu);
 
 
 static W_Class EditMenuClass = 0;
@@ -368,6 +375,25 @@ realizeObserver(void *self, WMNotification *not)
 }
 
 
+static void
+itemSelectObserver(void *self, WMNotification *notif)
+{
+    WEditMenu *menu = (WEditMenu*)self;
+    WEditMenu *rmenu;
+
+    rmenu = (WEditMenu*)WMGetNotificationObject(notif);
+    /* check whether rmenu is from the same hierarchy of menu? */
+    
+    if (rmenu == menu) {
+	return;
+    }
+
+    if (menu->selectedItem && !menu->selectedItem->submenu) {
+	deselectItem(menu);
+    }
+}
+
+
 static WEditMenu*
 makeEditMenu(WMScreen *scr, WMWidget *parent, char *title)
 {
@@ -404,12 +430,13 @@ makeEditMenu(WMScreen *scr, WMWidget *parent, char *title)
     WMAddNotificationObserver(realizeObserver, mPtr,
                               WMViewRealizedNotification, mPtr->view);
 
+    WMAddNotificationObserver(itemSelectObserver, mPtr,
+                              "EditMenuItemSelected", NULL);
+
     mPtr->items = WMCreateBag(4);
 
     WMCreateEventHandler(mPtr->view, ExposureMask|StructureNotifyMask,
 			 handleEvents, mPtr);
-
-    WMCreateEventHandler(mPtr->view, ButtonPressMask,handleActionEvents, mPtr);
     
 
     if (title != NULL) {
@@ -459,10 +486,10 @@ WInsertMenuItemWithTitle(WEditMenu *mPtr, int index, char *title)
     item = WCreateEditMenuItem(mPtr, title, False);
 
     WMMapWidget(item);
-    
-    if (index >= WMGetBagItemCount(mPtr->items))
+
+    if (index >= WMGetBagItemCount(mPtr->items)) {
 	WMPutInBag(mPtr->items, item);
-    else {
+    } else {
 	if (index < 0)
 	    index = 0;
 	if (mPtr->flags.isTitled)
@@ -485,16 +512,24 @@ WAddMenuItemWithTitle(WEditMenu *mPtr, char *title)
 }
 
 
+
 void
-WSetEditMenuItemDropTargets(WEditMenu *mPtr, WEditMenu **dropTargets, 
-			    int count)
+WSetEditMenuTitle(WEditMenu *mPtr, char *title)
 {
-    if (mPtr->dropTargets)
-	free(mPtr->dropTargets);
-    
-    mPtr->dropTargets = wmalloc(sizeof(WEditMenu*)*(count+1));
-    memcpy(mPtr->dropTargets, dropTargets, sizeof(WEditMenu*)*count);
-    mPtr->dropTargets[count] = NULL;
+    WEditMenuItem *item;
+
+    item = WMGetFromBag(mPtr->items, 0);
+
+    free(item->label);
+    item->label = wstrdup(title);
+    updateMenuContents(mPtr);
+}
+
+
+void
+WSetEditMenuAcceptsDrop(WEditMenu *mPtr, Bool flag)
+{
+    mPtr->flags.acceptsDrop = flag;
 }
 
 
@@ -506,6 +541,14 @@ WSetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item, WEditMenu *submenu)
 
     paintEditMenuItem(item);
 }
+
+
+WEditMenu*
+WGetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item)
+{
+    return item->submenu;
+}
+
 
 static int simpleMatch(void *a, void *b)
 {
@@ -576,17 +619,18 @@ WGetEditMenuLocationForSubmenu(WEditMenu *mPtr, WEditMenu *submenu)
     WMBagIterator iter;
     WEditMenuItem *item;
     int y;
-    
-    if (mPtr->flags.isTitled) {
-	y = mPtr->titleHeight;
-    } else {
+
+    if (mPtr->flags.isTitled)
+	y = -mPtr->titleHeight;
+    else
 	y = 0;
-    }
     WM_ITERATE_BAG(mPtr->items, item, iter) {
 	if (item->submenu == submenu) {
-	    return wmkpoint(mPtr->view->pos.x + mPtr->view->size.width, y);
+	    WMPoint pt = WMGetViewScreenPosition(mPtr->view);
+
+	    return wmkpoint(pt.x + mPtr->view->size.width, pt.y + y);
 	}
-	y += mPtr->itemHeight;
+	y += W_VIEW_HEIGHT(item->view);
     }
 
     puts("invalid submenu passed to WGetEditMenuLocationForSubmenu()");
@@ -595,10 +639,21 @@ WGetEditMenuLocationForSubmenu(WEditMenu *mPtr, WEditMenu *submenu)
 }
 
 
+void
+WTearOffEditMenu(WEditMenu *menu, WEditMenu *submenu)
+{
+    submenu->flags.isTornOff = 1;
+
+    if (menu->selectedItem && menu->selectedItem->submenu == submenu)
+	deselectItem(menu);
+}
+						    
+
+
 Bool
 WEditMenuIsTornOff(WEditMenu *mPtr)
 {
-    return !mPtr->flags.isTornOff;
+    return mPtr->flags.isTornOff;
 }
 
 
@@ -661,37 +716,79 @@ updateMenuContents(WEditMenu *mPtr)
 
 
 static void
+unmapMenu(WEditMenu *menu)
+{
+    WMUnmapWidget(menu);
+ 
+    if (menu->selectedItem) {
+	deselectItem(menu);
+    }
+}
+
+
+static void
+deselectItem(WEditMenu *menu)
+{
+    WEditMenu *submenu;
+    WEditMenuItem *item = menu->selectedItem;
+    
+    highlightItem(item, False);
+    
+    if (menu->delegate && menu->delegate->itemDeselected) {
+	(*menu->delegate->itemDeselected)(menu->delegate, menu, item);
+    }
+    submenu = item->submenu;
+
+    if (submenu && !WEditMenuIsTornOff(submenu)) {
+	unmapMenu(submenu);
+    }
+    
+    menu->selectedItem = NULL;
+}
+
+
+static void
 selectItem(WEditMenu *menu, WEditMenuItem *item)
 {
-    if (!menu->flags.isSelectable) {
+    if (!menu->flags.isSelectable || menu->selectedItem == item) {
 	return;
     }
-
     if (menu->selectedItem) {
-	highlightItem(menu->selectedItem, False);
-
-	if (menu->delegate) {
-	    (*menu->delegate->itemDeselected)(menu->delegate, menu, 
-					      menu->selectedItem);
-	}
+	deselectItem(menu);
     }
 
     if (menu->flags.isEditing) {
 	stopEditItem(menu, False);
     }
 
-    if (item) {
+    if (item && !item->flags.isTitle) {
 	highlightItem(item, True);
 
 	if (item->submenu) {
 	    WMPoint pt;
-	    
+	    XSizeHints *hints;
+
+	    hints = XAllocSizeHints();
+
 	    pt = WGetEditMenuLocationForSubmenu(menu, item->submenu);
+
+	    hints->flags = USPosition;
+	    hints->x = pt.x;
+	    hints->y = pt.y;
+
 	    WMMoveWidget(item->submenu, pt.x, pt.y);
+	    XSetWMNormalHints(W_VIEW_DISPLAY(item->submenu->view),
+			      W_VIEW_DRAWABLE(item->submenu->view),
+			      hints);
+	    XFree(hints);
 	    WMMapWidget(item->submenu);
+	    
+	    item->submenu->flags.isTornOff = 0;
 	}
-	
-	if (menu->delegate) {
+
+	WMPostNotificationName("EditMenuItemSelected", menu, NULL);
+
+	if (menu->delegate && menu->delegate->itemSelected) {
 	    (*menu->delegate->itemSelected)(menu->delegate, menu, item);
 	}
     }
@@ -728,18 +825,6 @@ handleEvents(XEvent *event, void *data)
 }
 
 
-
-
-static void
-handleActionEvents(XEvent *event, void *data)
-{
-//    WEditMenu *mPtr = (WEditMenu*)data;
-
-    switch (event->type) {
-     case ButtonPress:
-	break;
-    }
-}
 
 
 /* -------------------------- Menu Label Editing ------------------------ */
@@ -887,38 +972,38 @@ slideWindow(Display *dpy, Window win, int srcX, int srcY, int dstX, int dstY)
 }
 
 
-static WEditMenu*
-getEditMenuForWindow(WEditMenu **menus, Window window)
+static int errorHandler(Display *d, XErrorEvent *ev)
 {
-    while (*menus) {
-	if (W_VIEW_DRAWABLE((*menus)->view) == window) {
-	    return *menus;
-	}
-	menus++;
-    }
-    
-    return NULL;
+    /* just ignore */
+    return 0;
 }
 
 
 static WEditMenu*
-findMenuInWindow(Display *dpy, Window toplevel, int x, int y,
-		  WEditMenu **menus)
+findMenuInWindow(Display *dpy, Window toplevel, int x, int y)
 {
     Window foo, bar;
     Window *children;
     unsigned nchildren;
     int i;
     WEditMenu *menu;
+    WMView *view;
+    int (*oldHandler)(Display *, XErrorEvent *);
 
-    menu = getEditMenuForWindow(menus, toplevel);
-    if (menu)
-	return menu;
+    view = W_GetViewForXWindow(dpy, toplevel);
+    if (view && view->self && WMWidgetClass(view->self) == EditMenuClass) {
+	menu = (WEditMenu*)view->self;
+	if (menu->flags.acceptsDrop) {
+	    return menu;
+	}
+    }
     
     if (!XQueryTree(dpy, toplevel, &foo, &bar,
 		    &children, &nchildren) || children == NULL) {
 	return NULL;
     }
+    
+    oldHandler = XSetErrorHandler(errorHandler);
     
     /* first window that contains the point is the one */
     for (i = nchildren-1; i >= 0; i--) {
@@ -932,13 +1017,15 @@ findMenuInWindow(Display *dpy, Window toplevel, int x, int y,
 
 	    tmp = children[i];
 
-	    menu = findMenuInWindow(dpy, tmp, x - attr.x, y - attr.y, menus);
+	    menu = findMenuInWindow(dpy, tmp, x - attr.x, y - attr.y);
 	    if (menu) {
 		XFree(children);
 		return menu;
 	    }
 	}
     }
+    
+    XSetErrorHandler(oldHandler);
 
     XFree(children);
     return NULL;
@@ -1001,6 +1088,9 @@ handleItemDrop(WEditMenu *menu, WEditMenuItem *item, int x, int y)
     W_ReparentView(item->view, menu->view, 0, index*menu->itemHeight);
     
     item->parent = menu;
+    if (item->submenu) {
+	item->submenu->parent = menu;
+    }
 
     updateMenuContents(menu);
 }
@@ -1018,15 +1108,20 @@ dragMenu(WEditMenu *menu)
     
     XGetGeometry(scr->display, W_VIEW_DRAWABLE(menu->view), &blaw, &dx, &dy,
 		 &blau, &blau, &blau, &blau);
+
     XTranslateCoordinates(scr->display, W_VIEW_DRAWABLE(menu->view),
 			  scr->rootWin, dx, dy, &dx, &dy, &blaw);
+
     dx = menu->dragX - dx;
     dy = menu->dragY - dy;
-
+    
     XGrabPointer(scr->display, scr->rootWin, False,
 		 ButtonReleaseMask|ButtonMotionMask,
 		 GrabModeAsync, GrabModeAsync, None, scr->defaultCursor,
 		 CurrentTime);
+    
+    if (menu->parent)
+	WTearOffEditMenu(menu->parent, menu);
 
     while (!done) {
 	WMNextEvent(scr->display, &ev);
@@ -1051,6 +1146,26 @@ dragMenu(WEditMenu *menu)
 }
 
 
+static WEditMenu*
+duplicateMenu(WEditMenu *menu)
+{
+    WEditMenu *nmenu;
+    WEditMenuItem *title;
+    
+    if (menu->flags.isTitled) {
+	title = WMGetFromBag(menu->items, 0);
+    }
+
+    nmenu = WCreateEditMenu(WMWidgetScreen(menu), title->label);
+    
+    memcpy(&nmenu->flags, &menu->flags, sizeof(menu->flags));
+    nmenu->delegate = menu->delegate;
+
+    WMRealizeWidget(nmenu);
+    
+    return nmenu;
+}
+
 
 static void
 dragItem(WEditMenu *menu, WEditMenuItem *item)
@@ -1068,6 +1183,7 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
     int orix, oriy;
     Bool enteredMenu = False;
     WMSize oldSize = item->view->size;
+    WEditMenuItem *dritem = item;
     WEditMenu *dmenu = NULL;
 
     
@@ -1082,9 +1198,6 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
     
     selectItem(menu, NULL);
 
-    assert(menu->dropTargets != NULL);
-
-
     win = scr->rootWin;
     
     XTranslateCoordinates(dpy, W_VIEW_DRAWABLE(item->view), win,
@@ -1097,19 +1210,12 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
     W_RealizeView(dview);
     
     if (menu->flags.isFactory) {
-	WEditMenuItem *nitem;
+	dritem = WCreateEditMenuItem(menu, item->label, False);
 
-	nitem = WCreateEditMenuItem(menu, item->label, False);
-	
-	if (menu->delegate) {
-	    (*menu->delegate->itemCloned)(menu->delegate, menu, item, nitem);
-	}
-	item = nitem;
-	
-	W_ReparentView(item->view, dview, 0, 0);
-	WMResizeWidget(item, oldSize.width, oldSize.height);
-	WMRealizeWidget(item);
-	WMMapWidget(item);
+	W_ReparentView(dritem->view, dview, 0, 0);
+	WMResizeWidget(dritem, oldSize.width, oldSize.height);
+	WMRealizeWidget(dritem);
+	WMMapWidget(dritem);
     } else {
 	W_ReparentView(item->view, dview, 0, 0);
     }
@@ -1133,15 +1239,15 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
 	 case MotionNotify:
 	    XQueryPointer(dpy, win, &blaw, &blaw, &blai, &blai, &x, &y, &blau);
 
-	    dmenu = findMenuInWindow(dpy, win, x, y, menu->dropTargets);
+	    dmenu = findMenuInWindow(dpy, win, x, y);
 		
 	    if (dmenu) {
-		handleDragOver(dmenu, dview, item, x - dx, y - dy);
+		handleDragOver(dmenu, dview, dritem, x - dx, y - dy);
 		enteredMenu = True;
 	    } else {
 		if (enteredMenu) {
 		    W_ResizeView(dview, oldSize.width, oldSize.height);
-		    W_ResizeView(item->view, oldSize.width, oldSize.height);
+		    W_ResizeView(dritem->view, oldSize.width, oldSize.height);
 		    enteredMenu = False;
 		}
 		W_MoveView(dview, x - dx, y - dy);
@@ -1160,12 +1266,44 @@ dragItem(WEditMenu *menu, WEditMenuItem *item)
     }
     XUngrabPointer(dpy, CurrentTime);
 
-    if (menu->flags.isFactory && !enteredMenu) {
-	slideWindow(dpy, W_VIEW_DRAWABLE(dview), x-dx, y-dy, orix, oriy);
+    
+    if (!enteredMenu) {
+	Bool rem = True;
+	
+	if (!menu->flags.isFactory) {
+	    WMUnmapWidget(dritem);
+	    if (menu->delegate && menu->delegate->shouldRemoveItem) {
+		rem = (*menu->delegate->shouldRemoveItem)(menu->delegate,
+							  menu, item);
+	    }
+	    WMMapWidget(dritem);
+	}
+
+	if (!rem || menu->flags.isFactory) {
+	    slideWindow(dpy, W_VIEW_DRAWABLE(dview), x-dx, y-dy, orix, oriy);
+
+	    if (!menu->flags.isFactory) {
+		WRemoveEditMenuItem(menu, dritem);
+		handleItemDrop(dmenu ? dmenu : menu, dritem, orix, oriy);
+	    }
+	} else {
+	    WRemoveEditMenuItem(menu, dritem);
+	}
     } else {
-	WRemoveEditMenuItem(menu, item);
-	if (enteredMenu) {
-	    handleItemDrop(dmenu, item, x-dy, y-dy);
+	WRemoveEditMenuItem(menu, dritem);
+
+	if (menu->delegate && menu->delegate->itemCloned) {
+	    (*menu->delegate->itemCloned)(menu->delegate, menu,
+					  item, dritem);
+	}
+	
+	handleItemDrop(dmenu, dritem, x-dy, y-dy);
+	
+	if (item->submenu && menu->flags.isFactory) {
+	    WEditMenu *submenu;
+	    
+	    submenu = duplicateMenu(item->submenu);
+	    WSetEditMenuSubmenu(dmenu, dritem, submenu);
 	}
     }
 
@@ -1217,12 +1355,19 @@ handleItemClick(XEvent *event, void *data)
 static void
 destroyEditMenu(WEditMenu *mPtr)
 {
+    WEditMenuItem *item;
+    WMBagIterator iter;
+
     WMRemoveNotificationObserver(mPtr);
 
+    WM_ITERATE_BAG(mPtr->items, item, iter) {
+	if (item->submenu) {
+	    WMDestroyWidget(item->submenu);
+	}
+    }
+    
     WMFreeBag(mPtr->items);
     
-    free(mPtr->dropTargets);
-
     free(mPtr);
 }
 
