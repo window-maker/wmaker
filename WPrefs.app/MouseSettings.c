@@ -777,14 +777,11 @@ static void
 storeCommandInScript(char *cmd, char *line)
 {
     char *path;
-    char *p;
     FILE *f;
     char buffer[128];
 
-    p = wusergnusteppath();
-    path = wmalloc(strlen(p)+64);
-    sprintf(path, "%s/Library/WindowMaker/autostart", p);
-
+    path = wstrappend(wusergnusteppath(), "/Library/WindowMaker/autostart");
+    
     f = fopen(path, "r");
     if (!f) {
 	f = fopen(path, "w");
@@ -801,8 +798,8 @@ storeCommandInScript(char *cmd, char *line)
 	char *tmppath;
 	FILE *fo;
 
-	tmppath = wmalloc(strlen(p)+64);
-	sprintf(tmppath, "%s/Library/WindowMaker/autostart.tmp", p);
+	tmppath = wstrappend(wusergnusteppath(), 
+			     "/Library/WindowMaker/autostart.tmp");
 	fo = fopen(tmppath, "w");
 	if (!fo) {
 	    wsyserror(_("could not create temporary file %s"), tmppath);

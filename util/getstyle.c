@@ -21,7 +21,7 @@
  */
 
 
-#define PROG_VERSION "getstyle (Window Maker) 0.3"
+#define PROG_VERSION "getstyle (Window Maker) 0.4"
 
 
 
@@ -182,7 +182,7 @@ abortar(char *reason)
 
     if (ThemePath) {
 	printf("Removing unfinished theme pack\n");
-	sprintf(buffer, "/bin/rm -fr %s", ThemePath);
+	sprintf(buffer, "/bin/rm -fr \"%s\"", ThemePath);
 	
 	if (system(buffer)!=0) {
 	    printf("%s: could not execute command %s\n", ProgName, buffer);
@@ -420,7 +420,7 @@ copyFile(char *dir, char *file)
 {
     char buffer[4000];
     
-    sprintf(buffer, "/bin/cp %s %s", file, dir);
+    sprintf(buffer, "/bin/cp \"%s\" \"%s\"", file, dir);
     if (system(buffer)!=0) {
 	printf("%s: could not copy file %s\n", ProgName, file);
     }
@@ -460,7 +460,7 @@ makeThemePack(proplist_t style, char *themeName)
 	char *tmp;
 	
 	tmp = wmalloc(strlen(themeDir)+20);
-	sprintf(tmp, "/bin/mkdir %s", themeDir);
+	sprintf(tmp, "/bin/mkdir \"%s\"", themeDir);
 	if (system(tmp)!=0) {
 	    printf("%s: could not create directory %s. Probably there's already a theme with that name in this directory.\n", ProgName, themeDir);
 	    exit(1);

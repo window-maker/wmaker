@@ -968,8 +968,10 @@ wShowInfoPanel(WScreen *scr)
 
 
     if (thePanel) {
-	wRaiseFrame(thePanel->wwin->frame->core);
-	wSetFocusTo(scr, thePanel->wwin);
+	if (thePanel->scr == scr) {
+	    wRaiseFrame(thePanel->wwin->frame->core);
+	    wSetFocusTo(scr, thePanel->wwin);
+	}
 	return;
     }
     

@@ -81,6 +81,7 @@ iconPosition(WCoreWindow *wcore, int sx1, int sy1, int sx2, int sy2,
 	       (((WIcon*)parent)->owner->frame->workspace == workspace
 		|| IS_OMNIPRESENT(((WIcon*)parent)->owner)
 		|| wPreferences.sticky_icons)
+	       && ((WIcon*)parent)->mapped
 	       && (!((WIcon*)parent)->owner->flags.hidden
 		   || wcore->screen_ptr->flags.startup)) {
 

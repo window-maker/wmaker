@@ -1025,16 +1025,16 @@ handleEnterNotify(XEvent *event)
 	 * is for the frame window and window doesn't have focus yet */
 	if ((wPreferences.focus_mode==WKF_POINTER
 	     || wPreferences.focus_mode==WKF_SLOPPY)
-		&& wwin->frame->core->window==event->xcrossing.window
+	    && wwin->frame->core->window==event->xcrossing.window
 	    && !scr->flags.doing_alt_tab) {
-
-		if (!wwin->flags.focused)
+	    
+	    if (!wwin->flags.focused && !WFLAGP(wwin, no_focusable))
 		wSetFocusTo(scr, wwin);
-
-		if (scr->autoRaiseTimer)
-			WMDeleteTimerHandler(scr->autoRaiseTimer);
-		scr->autoRaiseTimer = NULL;
-
+	    
+	    if (scr->autoRaiseTimer)
+		WMDeleteTimerHandler(scr->autoRaiseTimer);
+	    scr->autoRaiseTimer = NULL;
+	    
 	    if (wPreferences.raise_delay && !WFLAGP(wwin, no_focusable)) {
 		scr->autoRaiseWindow = wwin->frame->core->window;
 		scr->autoRaiseTimer

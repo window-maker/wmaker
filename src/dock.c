@@ -425,14 +425,12 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
     ROperateLine(tile, RAddOperation, tp, 2, wPreferences.icon_size-3,
 		 pt, &light);
 
-    //RDrawLine(tile, ICON_SIZE - 6 - as, 5, ICON_SIZE - 6, 5, &black);
     ROperateLine(tile, RSubtractOperation, ICON_SIZE - 5 - as, 5,
                  ICON_SIZE - 6, 5, &dark);
     ROperateLine(tile, RSubtractOperation, ICON_SIZE - 6 - as, 5,
 		 ICON_SIZE - 6, 5 + as, &dark);
     ROperateLine(tile, RAddOperation, ICON_SIZE - 6, 5, ICON_SIZE - 6, 5 + as,
 		 &light);
-
     
     /* bottom left */
     ROperateLine(tile, RAddOperation, 2, tp+2, pt-2,
@@ -443,13 +441,11 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
 
     ROperateLine(tile, RSubtractOperation, 5, ICON_SIZE - 6 - as, 
 		 5 + as, ICON_SIZE - 6, &dark);
-    //RDrawLine(tile, 5, ICON_SIZE - 6 - as, 5, ICON_SIZE - 6, &black);
     ROperateLine(tile, RSubtractOperation, 5, ICON_SIZE - 5 - as, 5,
                  ICON_SIZE - 6, &dark);
     
     ROperateLine(tile, RAddOperation, 5, ICON_SIZE - 6, 5 + as, ICON_SIZE - 6,
 		 &light);
-
 
     return tile;
 }
@@ -3314,7 +3310,8 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
 	unhideHere = (event->xbutton.state & ShiftMask);
 
         /* go to the last workspace that the user worked on the app */
-	if (!unhideHere) {
+	if (wapp->last_workspace != dock->screen_ptr->current_workspace
+	    && !unhideHere) {
 	    wWorkspaceChange(dock->screen_ptr, wapp->last_workspace);
 	}
 

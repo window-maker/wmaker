@@ -194,8 +194,6 @@ typedef struct _WScreen {
     GC disabled_menu_entry_gc;	       /* disabled menu entries */
     GC info_text_gc;		       /* for size/position display */
     GC icon_select_gc;
-    GC workspace_name_gc;	       /* for the name shown when workspace
-					* is changed */
 
     GC frame_gc;		       /* gc for resize/move frame (root) */
     GC line_gc;			       /* gc for drawing XORed lines (root) */

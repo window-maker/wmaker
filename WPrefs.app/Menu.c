@@ -438,6 +438,7 @@ performCommand(WMWidget *w, void *data)
     int row;
     static int cmdIndex=0;
     char *title = NULL;
+    Bool removed = False;
 
     column = WMGetBrowserFirstVisibleColumn(panel->browser);
     if (pop == panel->cmd2P) {
@@ -494,6 +495,10 @@ performCommand(WMWidget *w, void *data)
 	updateForItemType(panel, TNothing);
 	panel->editedItem = NULL;
 	panel->unsaved = 1;
+	if (pop == panel->cmd1P) {
+	    WMSetTextFieldText(panel->tit2T, NULL);
+	}
+	removed = True;
 	return;
      case CCut:
 	if (row < 0)
@@ -505,7 +510,6 @@ performCommand(WMWidget *w, void *data)
 	}
 	if (panel->itemClipboard)
 	    PLRelease(panel->itemClipboard);
-
 	WMRemoveBrowserItem(panel->browser, column, row);
 	menuItem = PLGetArrayElement(menu, row+1);
 	PLRemoveArrayElement(menu, row+1);
@@ -516,6 +520,7 @@ performCommand(WMWidget *w, void *data)
 	WMSetPopUpButtonItemEnabled(panel->cmd1P, CPaste, True);
 	WMSetPopUpButtonItemEnabled(panel->cmd2P, CPaste, True);
 	panel->unsaved = 1;
+	removed = True;
 	return;	
      case CCopy:
 	if (row < 0)
@@ -553,6 +558,12 @@ performCommand(WMWidget *w, void *data)
 	PLInsertArrayElement(menu, menuItem, row+1);
     free(title);
     panel->unsaved = 1;
+    
+    if (removed) {
+	if (pop == panel->cmd1P) {
+	    WMSetTextFieldText(panel->tit2T, NULL);
+	}
+    }
 }
 
 

@@ -1752,8 +1752,6 @@ wKWMSelectRootRegion(WScreen *scr, int x, int y, int w, int h, Bool control)
     if (sock < 0)
 	return;
     puts("SENDING DATA");
-
-    writeSocket(sock, "refreshDesktop");
     
     sprintf(buffer, "selectRootIcons %i %i %i %i %c", x, y, w, h, control);
     writeSocket(sock, buffer);

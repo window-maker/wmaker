@@ -2,7 +2,7 @@
  *
  *  WindowMaker window manager
  * 
- *  Copyright (c) 1997, 1998 Alfredo K. Kojima
+ *  Copyright (c) 1997, 1998, 1999 Alfredo K. Kojima
  * 
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@
  */
 
 
-#define PROG_VERSION "setstyle (Window Maker) 0.3"
+#define PROG_VERSION "setstyle (Window Maker) 0.4"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -86,6 +86,36 @@ defaultsPathForDomain(char *domain)
 }
 
 
+
+void
+hackPathInTexture(proplist_t texture, char *prefix)
+{
+    proplist_t type;
+    char *t;
+
+    /* get texture type */
+    type = PLGetArrayElement(texture, 0);
+    t = PLGetString(type);
+    if (t && (strcasecmp(t, "tpixmap")==0
+	      || strcasecmp(t, "spixmap")==0
+	      || strcasecmp(t, "mpixmap")==0
+	      || strcasecmp(t, "cpixmap")==0
+	      || strcasecmp(t, "tvgradient")==0
+	      || strcasecmp(t, "thgradient")==0		
+	      || strcasecmp(t, "tdgradient")==0)) {
+	proplist_t file;
+	char buffer[4018];
+
+	/* get pixmap file path */
+	file = PLGetArrayElement(texture, 1);
+	sprintf(buffer, "%s/%s", prefix, PLGetString(file));
+	/* replace path with full path */
+	PLRemoveArrayElement(texture, 1);
+	PLInsertArrayElement(texture, PLMakeString(buffer), 1);
+    }
+}
+
+
 void
 hackPaths(proplist_t style, char *prefix)
 {
@@ -101,26 +131,29 @@ hackPaths(proplist_t style, char *prefix)
 	key = PLGetArrayElement(keys, i);
 
 	value = PLGetDictionaryEntry(style, key);
-	if (value && PLIsArray(value) && PLGetNumberOfElements(value) > 2) {
-	    proplist_t type;
-	    char *t;
-	    
-	    type = PLGetArrayElement(value, 0);
-	    t = PLGetString(type);
-	    if (t && (strcasecmp(t, "tpixmap")==0
-		      || strcasecmp(t, "spixmap")==0
-		      || strcasecmp(t, "mpixmap")==0
-		      || strcasecmp(t, "cpixmap")==0
-		      || strcasecmp(t, "tvgradient")==0
-		      || strcasecmp(t, "thgradient")==0		
-		      || strcasecmp(t, "tdgradient")==0)) {
-		proplist_t file;
-		char buffer[4018];
+	if (!value)
+	    continue;
+	
+	if (strcasecmp(PLGetString(key), "WorkspaceSpecificBack")==0) {
+	    if (PLIsArray(value)) {
+		int j;
+		proplist_t texture;
+		
+		for (j = 0; j < PLGetNumberOfElements(value); j++) {
+		    texture = PLGetArrayElement(value, j);
 
-		file = PLGetArrayElement(value, 1);
-		sprintf(buffer, "%s/%s", prefix, PLGetString(file));
-		PLRemoveArrayElement(value, 1);
-		PLInsertArrayElement(value, PLMakeString(buffer), 1);
+		    if (texture && PLIsArray(texture) 
+			&& PLGetNumberOfElements(texture) > 2) {
+
+			hackPathInTexture(texture, prefix);
+		    }
+		}
+	    }
+	} else {
+	    
+	    if (PLIsArray(value) && PLGetNumberOfElements(value) > 2) {
+
+		hackPathInTexture(value, prefix);
 	    }
 	}
     }

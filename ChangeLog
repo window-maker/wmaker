@@ -8,7 +8,6 @@ Changes since version 0.52.0:
 - fixed window move through workspaces in nonopaquemove
 - added message to immediately reread configuration data
 - fixed some bug in XKB modelock toggling
-- KDE: added kfm icon selection
 - fixed crash bug when hiding apps with appicon disabled
 - fixed wrong initial workspace # being shown on attributes panel
 - XSMP updates
@@ -24,9 +23,12 @@ Changes since version 0.52.0:
 - fixed the problem with showing a window as focused in the window list menu
   while it was on another workspace.
 - show workspace name on screen when switching workspaces
+- made setstyle support WorkspaceSpecificBack
+- fixed getstyle prob with filenames with spaces (Pierre Phaneuf
+						<pp@ludusdesign.com)
+- fixed crash with InfoPanel in multihead dpy
 - Fixed bug in WPrefs that added a new line at the end of autostart script
   at every save, growing it indefinitely.
-
 
 Changes since version 0.51.2:
 .............................

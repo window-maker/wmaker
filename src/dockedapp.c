@@ -206,12 +206,15 @@ panelBtnCallback(WMWidget *self, void *data)
 	    char *buf;
 	    
 	    buf = wmalloc(strlen(text) + 64);
-	    sprintf(buf, _("Could not open specified icon file:%s"), text);
-	    wMessageDialog(panel->wwin->screen_ptr, _("Error"), buf, _("OK"),
-			   NULL, NULL);
+	    sprintf(buf, _("Could not open specified icon file: %s"), text);
+	    if (wMessageDialog(panel->wwin->screen_ptr, _("Error"), buf, 
+			       _("OK"), _("Ignore"), NULL) == WAPRDefault) {
+		if (text)
+		    free(text);
+		free(buf);
+		return;
+	    }
 	    free(buf);
-	    done = 0;
-	    return;
 	} else {
 	    WAppIcon *aicon = panel->editedIcon;
 
