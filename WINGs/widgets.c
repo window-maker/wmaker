@@ -755,8 +755,17 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 	XFreePixmap(display, blank);
     }
 
+#ifdef HAVE_XINTERNATOMS
     XInternAtoms(display, atomNames, sizeof(atomNames)/sizeof(char*), False,
 		 atoms);
+#else
+    {
+	int i;
+	for (i = 0; i < sizeof(atomNames)/sizeof(char*); i++) {
+	    atoms[i] = XInternAtom(display, atomNames[i], False);
+	}
+    }
+#endif
     
     scrPtr->attribsAtom = atoms[0];
     
