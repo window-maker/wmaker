@@ -269,12 +269,12 @@
 #define DEF_FRAME_COLOR   "white"
 
 
-#define DEF_TITLE_FONT "\"Trebuchet MS,Luxi Sans:bold:pixelsize=12\""
-#define DEF_MENU_TITLE_FONT "\"Trebuchet MS,Luxi Sans:bold:pixelsize=12\""
-#define DEF_MENU_ENTRY_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=12\""
-#define DEF_ICON_TITLE_FONT "\"Arial,Luxi Sans:pixelsize=9\""
+#define DEF_TITLE_FONT "\"Trebuchet MS,Luxi Sans:bold:pixelsize=11\""
+#define DEF_MENU_TITLE_FONT "\"Trebuchet MS,Luxi Sans:bold:pixelsize=11\""
+#define DEF_MENU_ENTRY_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=11\""
+#define DEF_ICON_TITLE_FONT "\"Arial,Luxi Sans:pixelsize=8\""
 #define DEF_CLIP_TITLE_FONT "\"Verdana:bold:pixelsize=10\""
-#define DEF_INFO_TEXT_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=12\""
+#define DEF_INFO_TEXT_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=11\""
 
 #define DEF_WORKSPACE_NAME_FONT "\"Trebuchet MS,Luxi Sans:pixelsize=24\""
 

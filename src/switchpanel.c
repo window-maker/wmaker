@@ -460,7 +460,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
 
     panel->tileTmp= RCreateImage(ICON_TILE_SIZE, ICON_TILE_SIZE, 1);
     panel->tile= getTile(panel);
-    if (panel->tile) {
+    if (panel->tile && wPreferences.swbackImage[8]) {
         panel->bg= createBackImage(scr, width+2*BORDER_SPACE, height+2*BORDER_SPACE);
     }
     if (!panel->tileTmp || !panel->tile) {
@@ -524,7 +524,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     if (panel->bg) {
         Pixmap pixmap, mask;
 
-        RConvertImageMask(scr->rcontext, panel->bg, &pixmap, &mask, 254);
+        RConvertImageMask(scr->rcontext, panel->bg, &pixmap, &mask, 250);
 
         XSetWindowBackgroundPixmap(dpy, WMWidgetXID(panel->win), pixmap);
 
