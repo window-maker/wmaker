@@ -24,6 +24,8 @@
 /* the definitions in this file can change at any time. WINGs has more
  * stable definitions */
 
+#undef BOOL
+
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>
 
