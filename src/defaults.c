@@ -668,10 +668,10 @@ WDefaultEntry optionList[] = {
     {"VMaximizeKey", "None",			(void*)WKBD_VMAXIMIZE,
 	  NULL,				getKeybind,	setKeyGrab
     },
-    {"RaiseKey", "Meta+Up",			(void*)WKBD_RAISE,
+    {"RaiseKey", "\"Meta+Up\"",			(void*)WKBD_RAISE,
 	  NULL,				getKeybind,	setKeyGrab
     },
-    {"LowerKey", "Meta+Down",			(void*)WKBD_LOWER,
+    {"LowerKey", "\"Meta+Down\"",			(void*)WKBD_LOWER,
 	  NULL,				getKeybind,	setKeyGrab
     },
     {"RaiseLowerKey", "None",			(void*)WKBD_RAISELOWER,
@@ -994,7 +994,7 @@ wDefaultsCheckDomains(void *foo)
 	WDWindowMaker->timestamp = stbuf.st_mtime;	
 
 	/* global dictionary */
-	sprintf(path, "%s/WindowMaker", SYSCONFDIR);
+	sprintf(path, "%s/WindowMaker/WindowMaker", SYSCONFDIR);
 	if (stat(path, &stbuf)>=0) {
 	    shared_dict = ReadProplistFromFile(path);
 	    if (shared_dict && !PLIsDictionary(shared_dict)) {
