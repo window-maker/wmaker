@@ -39,7 +39,7 @@ extern Panel *InitFocus(WMScreen *scr, WMWindow *win);
 
 extern Panel *InitPreferences(WMScreen *scr, WMWindow *win);
 
-extern Panel *InitText(WMScreen *scr, WMWindow *win);
+extern Panel *InitFont(WMScreen *scr, WMWindow *win);
 
 extern Panel *InitConfigurations(WMScreen *scr, WMWindow *win);
 
@@ -594,9 +594,11 @@ Initialize(WMScreen *scr)
     InitMouseSettings(scr, WPrefs.win);
 
     InitAppearance(scr, WPrefs.win);
-
+    
+#ifdef akk
+    InitFont(scr, WPrefs.win);
+#endif
 #ifdef not_yet_fully_implemented
-    InitText(scr, WPrefs.win);
     InitThemes(scr, WPrefs.win);
 #endif
     InitExpert(scr, WPrefs.win);

@@ -20,6 +20,7 @@ WPrefs_SOURCES = \
 	Configurations.c \
 	Expert.c \
 	Focus.c \
+	Font.c \
 	Icons.c \
 	KeyboardSettings.c \
 	KeyboardShortcuts.c \
@@ -29,7 +30,6 @@ WPrefs_SOURCES = \
 	NoMenuAlert.c \
 	Paths.c \
 	Preferences.c \
-	Text.c \
 	TexturePanel.c \
 	TexturePanel.h \
 	Themes.c \

@@ -225,46 +225,49 @@ static char *blueled2_xpm[] = {
 "..####.."
 };
 
+
 /* XPM */
 static char * hand_xpm[] = {
-"22 21 17 1",
-" 	c None",
-".	c #030305",
-"+	c #101010",
-"@	c #535355",
-"#	c #7F7F7E",
-"$	c #969697",
-"%	c #B5B5B6",
-"&	c #C5C5C6",
-"*	c #D2D2D0",
-"=	c #DCDCDC",
-"-	c #E5E5E4",
-";	c #ECECEC",
-">	c #767674",
-",	c #F2F2F4",
-"'	c #676767",
-")	c #FDFDFB",
-"!	c #323234",
+"22 21 19 1",
+"       c None",
+".      c #030305",
+"+      c #7F7F7E",
+"@      c #B5B5B6",
+"#      c #C5C5C6",
+"$      c #969697",
+"%      c #FDFDFB",
+"&      c #F2F2F4",
+"*      c #E5E5E4",
+"=      c #ECECEC",
+"-      c #DCDCDC",
+";      c #D2D2D0",
+">      c #101010",
+",      c #767674",
+"'      c #676767",
+")      c #535355",
+"!      c #323234",
+"~      c #3E3C56",
+"{      c #333147",
 "                      ",
 "       .....          ",
-"     ..#%&&$.         ",
-"    .))),%..........  ",
-"   .)-)),&)))))))))$. ",
-"  .-&))))))))),,,,;;. ",
-" .=)))))))));-=***&$. ",
-" .=)))))))),..+.....  ",
-" +=)))))))))-&#.      ",
-" +=)))))))))-%>.      ",
-" +&)))))))))-%'.      ",
-" +$,,))))));...       ",
-" .#%%*;,)),*$>+       ",
-"  .'>$%&&&&$#@.       ",
-"   .!'>#$##>'.        ",
-"     ..+++++.         ",
+"     ..+@##$.         ",
+"    .%%%&@..........  ",
+"   .%*%%&#%%%%%%%%%$. ",
+"  .*#%%%%%%%%%&&&&==. ",
+" .-%%%%%%%%%=*-;;;#$. ",
+" .-%%%%%%%%&..>.....  ",
+" >-%%%%%%%%%*#+.      ",
+" >-%%%%%%%%%*@,.      ",
+" >#%%%%%%%%%*@'.      ",
+" >$&&%%%%%%=...       ",
+" .+@@;=&%%&;$,>       ",
+"  .',$@####$+).       ",
+"   .!',+$++,'.        ",
+"     ..>>>>>.         ",
 "                      ",
-"     ##@@@##          ",
-"   @@@@@@@@@@@        ",
-"     >>@@@##          ",
+"     ~~{{{~~          ",
+"   {{{{{{{{{{{        ",
+"     ~~{{{~~          ",
 "                      "};
 
 
@@ -768,6 +771,7 @@ updatePreviewBox(_Panel *panel, int elements)
     Pixmap pix;
     GC gc;
     int colorUpdate = 0;
+    WMColor *black = WMBlackColor(scr);
 
     gc = XCreateGC(dpy, WMWidgetXID(panel->win), 0, NULL);
 
@@ -778,7 +782,7 @@ updatePreviewBox(_Panel *panel, int elements)
 	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->win),
 				       240-4, 215-4, WMScreenDepth(scr));
 
-	color = WMGrayColor(scr);
+	color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
 	XFillRectangle(dpy, panel->preview, WMColorGC(color),
 		       0, 0, 240-4, 215-4);
 	WMReleaseColor(color);
@@ -789,14 +793,29 @@ updatePreviewBox(_Panel *panel, int elements)
 
     if (elements & (1<<PFOCUSED)) {
 	renderPreview(panel, gc, PFOCUSED, RBEV_RAISED2);
+	XDrawRectangle(dpy, panel->preview, WMColorGC(black),
+		       previewPositions[PFOCUSED].pos.x-1,
+		       previewPositions[PFOCUSED].pos.y-1,
+		       previewPositions[PFOCUSED].size.width,
+		       previewPositions[PFOCUSED].size.height);
 	colorUpdate |= FTITLE_COL;
     }
     if (elements & (1<<PUNFOCUSED)) {
 	renderPreview(panel, gc, PUNFOCUSED, RBEV_RAISED2);
+	XDrawRectangle(dpy, panel->preview, WMColorGC(black),
+		       previewPositions[PUNFOCUSED].pos.x-1,
+		       previewPositions[PUNFOCUSED].pos.y-1,
+		       previewPositions[PUNFOCUSED].size.width,
+		       previewPositions[PUNFOCUSED].size.height);
 	colorUpdate |= UTITLE_COL;
     }
     if (elements & (1<<POWNER)) {
 	renderPreview(panel, gc, POWNER, RBEV_RAISED2);
+	XDrawRectangle(dpy, panel->preview, WMColorGC(black),
+		       previewPositions[POWNER].pos.x-1,
+		       previewPositions[POWNER].pos.y-1,
+		       previewPositions[POWNER].size.width,
+		       previewPositions[POWNER].size.height);
 	colorUpdate |= OTITLE_COL;
     }
     if (elements & (1<<PRESIZEBAR)) {
@@ -862,6 +881,7 @@ updatePreviewBox(_Panel *panel, int elements)
     }
 
     XFreeGC(dpy, gc);
+    WMReleaseColor(black);
 }
 
 
@@ -1128,7 +1148,7 @@ changePage(WMWidget *w, void *data)
     {
 	WMColor *color;
 
-	color = WMGrayColor(scr);
+	color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
 	XFillRectangle(rc->dpy, panel->preview, WMColorGC(color),
 		       positions[panel->oldsection].x, 
 		       positions[panel->oldsection].y, 22, 22);
@@ -1432,7 +1452,7 @@ changeColorPage(WMWidget *w, void *data)
     if (panel->preview) {
 	WMColor *color;
 
-	color = WMGrayColor(scr);
+	color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
 	XFillRectangle(rc->dpy, panel->preview, WMColorGC(color),
 		       positions[panel->oldcsection].x, 
 		       positions[panel->oldcsection].y, 22, 22);

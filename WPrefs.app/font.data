@@ -1,0 +1,67 @@
+{
+    Encodings = (("default", 0, "iso8859-1",
+		  "ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz\n1234567890"),
+		 ("latin1 iso8859-1", 0, "iso8859-1",
+		  "ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz\n1234567890"),
+		 ("latin2 iso8859-2", 0, "iso8859-2",
+		  "ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz\n1234567890"),
+		 ("Greek iso8859-7", 0, "iso8859-7",
+		  "ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz\n1234567890"),
+		 ("Japanese jis", 1, "jis",
+		  "ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz\n1234567890"),
+		 ("Korean ksc5601", 1, "ksc5601",
+		  "ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz\n1234567890"),
+		 ("Russian koi8", 0, "koi8",
+		  "ABCDEFGHIKLMNOPQRSTUVXYWZabcdefghiklmnopqrstuvxywz\n1234567890")
+		 );
+
+    WindowTitleFont = {
+	"iso8859-1" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-iso8859-1");
+	"iso8859-2" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-iso8859-2");
+	"iso8859-7" = ("-*-helvetica-bold-r-normal-*-14-*-*-*-*-*-iso8859-7");
+	"jis" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*",
+		 "-*-*-medium-r-normal-*-14-*",
+		 "-*-*-medium-r-normal-*-*-*");
+	"ksc5601" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*",
+		     "-*-kodig-medium-r-normal--12-*-*-*-*-*-*-*",
+		     "-*-*-medium-r-normal--12-*-*-*-*-*-*-*",
+		     "-*-*-medium-r-normal--*-*-*-*-*-*-*-*",
+		     "-*-*-*-r-normal--*-*-*-*-*-*-*-*",
+		     "-*-*-*-*-*--*-*-*-*-*-*-*-*","*");
+	"koi8" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-koi8-r");
+    };
+    
+    MenuTitleFont = {
+	"iso8859-1" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-iso8859-1");
+	"iso8859-2" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-iso8859-2");
+	"iso8859-7" = ("-*-helvetica-bold-r-normal-*-14-*-*-*-*-*-iso8859-7");
+	"jis" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*",
+		 "-*-*-medium-r-normal-*-14-*",
+		 "-*-*-medium-r-normal-*-*-*");
+	"ksc5601" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*",
+		     "-*-kodig-medium-r-normal--12-*-*-*-*-*-*-*",
+		     "-*-*-medium-r-normal--12-*-*-*-*-*-*-*",
+		     "-*-*-medium-r-normal--*-*-*-*-*-*-*-*",
+		     "-*-*-*-r-normal--*-*-*-*-*-*-*-*",
+		     "-*-*-*-*-*--*-*-*-*-*-*-*-*","*");
+	"koi8" = ("-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-koi8-r");
+    };
+
+    MenuTextFont = {
+	"iso8859-1" = ("-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-1");
+	"iso8859-2" = ("-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-iso8859-2");
+	"iso8859-7" = ("-*-helvetica-medium-r-normal-*-14-*-*-*-*-*-iso8859-7");
+	"jis" = ("-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*",
+		 "-*-*-medium-r-medium-*-14-*",
+		 "-*-*-medium-r-medium-*-*-*");
+	"ksc5601" = ("-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*",
+		     "-*-kodig-medium-r-normal--12-*-*-*-*-*-*-*",
+		     "-*-*-medium-r-normal--12-*-*-*-*-*-*-*",
+		     "-*-*-medium-r-normal--*-*-*-*-*-*-*-*",
+		     "-*-*-*-r-normal--*-*-*-*-*-*-*-*",
+		     "-*-*-*-*-*--*-*-*-*-*-*-*-*","*");
+	"koi8" = ("-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-koi8-r");
+    };
+}
+
+

@@ -107,7 +107,7 @@ wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
 EXTRA_DIST = $(wpdata_DATA)
 
-WPrefs_SOURCES =  	main.c 	WPrefs.c 	WPrefs.h 	Appearance.c 	Configurations.c 	Expert.c 	Focus.c 	Icons.c 	KeyboardSettings.c 	KeyboardShortcuts.c 	Menu.c 	MenuPreferences.c 	MouseSettings.c 	NoMenuAlert.c 	Paths.c 	Preferences.c 	Text.c 	TexturePanel.c 	TexturePanel.h 	Themes.c 	WindowHandling.c 	Workspace.c 	double.c 	double.h 	editmenu.c 	editmenu.h 	MenuGuru.c 	xmodifier.c
+WPrefs_SOURCES =  	main.c 	WPrefs.c 	WPrefs.h 	Appearance.c 	Configurations.c 	Expert.c 	Focus.c 	Font.c 	Icons.c 	KeyboardSettings.c 	KeyboardShortcuts.c 	Menu.c 	MenuPreferences.c 	MouseSettings.c 	NoMenuAlert.c 	Paths.c 	Preferences.c 	TexturePanel.c 	TexturePanel.h 	Themes.c 	WindowHandling.c 	Workspace.c 	double.c 	double.h 	editmenu.c 	editmenu.h 	MenuGuru.c 	xmodifier.c
 
 
 CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
@@ -132,9 +132,9 @@ X_CFLAGS = @X_CFLAGS@
 X_LIBS = @X_LIBS@
 X_PRE_LIBS = @X_PRE_LIBS@
 WPrefs_OBJECTS =  main.o WPrefs.o Appearance.o Configurations.o Expert.o \
-Focus.o Icons.o KeyboardSettings.o KeyboardShortcuts.o Menu.o \
+Focus.o Font.o Icons.o KeyboardSettings.o KeyboardShortcuts.o Menu.o \
 MenuPreferences.o MouseSettings.o NoMenuAlert.o Paths.o Preferences.o \
-Text.o TexturePanel.o Themes.o WindowHandling.o Workspace.o double.o \
+TexturePanel.o Themes.o WindowHandling.o Workspace.o double.o \
 editmenu.o MenuGuru.o xmodifier.o
 WPrefs_LDFLAGS = 
 CFLAGS = @CFLAGS@
@@ -149,7 +149,7 @@ DIST_COMMON =  README Makefile.am Makefile.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 SOURCES = $(WPrefs_SOURCES)
 OBJECTS = $(WPrefs_OBJECTS)
@@ -158,7 +158,7 @@ all: all-redirect
 .SUFFIXES:
 .SUFFIXES: .S .c .lo .o .s
 $(srcdir)/Makefile.in: Makefile.am $(top_srcdir)/configure.in $(ACLOCAL_M4) 
-	cd $(top_srcdir) && $(AUTOMAKE) --gnu --include-deps WPrefs.app/Makefile
+	cd $(top_srcdir) && $(AUTOMAKE) --gnu WPrefs.app/Makefile
 
 Makefile: $(srcdir)/Makefile.in  $(top_builddir)/config.status
 	cd $(top_builddir) \
@@ -348,7 +348,7 @@ distdir: $(DISTFILES)
 	@for file in $(DISTFILES); do \
 	  d=$(srcdir); \
 	  if test -d $$d/$$file; then \
-	    cp -pr $$d/$$file $(distdir)/$$file; \
+	    cp -pr $$/$$file $(distdir)/$$file; \
 	  else \
 	    test -f $(distdir)/$$file \
 	    || ln $$d/$$file $(distdir)/$$file 2> /dev/null \
