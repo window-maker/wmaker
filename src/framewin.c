@@ -1068,7 +1068,7 @@ wFrameWindowPaint(WFrameWindow *fwin)
               fwin->title_pixel[fwin->flags.state+3]);
            for(shadowx=0;shadowx<TITLE_TEXT_SHADOW_WIDTH;shadowx++)
            for(shadowy=0;shadowy<TITLE_TEXT_SHADOW_HEIGHT;shadowy++)
-		   WMDrawString(scr->wmscreen, fwin->titlebar->window,
+		   WMDrawString(fwin->screen_ptr->wmscreen, fwin->titlebar->window,
 				*fwin->title_gc, *fwin->font,
 				x + shadowx + TITLE_TEXT_SHADOW_X_OFFSET, 
 				TITLEBAR_EXTRA_HEIGHT/2
