@@ -30,8 +30,6 @@
 //       fix the stacking/window raising during alt-tabbing
 //       allow selection of icons with mouse
 
-#define MOX_CYCLING
-
 #include "WindowMaker.h"
 #include "GNUstep.h"
 #include "screen.h"
@@ -51,132 +49,18 @@ extern WPreferences wPreferences;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 
-
-
-
-#ifndef MOX_CYCLING
-static WWindow*
-nextToFocusAfter(WWindow *wwin)
+static void raiseWindow(WSwitchPanel *swpanel, WWindow *wwin)
 {
-    WWindow *tmp = wwin->prev;
-
-    while (tmp) {
-        if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-            return tmp;
-        }
-        tmp = tmp->prev;
+    if (wwin->flags.mapped) {
+        Window win[2];
+    
+        win[0]= wSwitchPanelGetWindow(swpanel);
+        win[1]= wwin->frame->core->window;
+    
+        XRestackWindows(dpy, win, 2);
     }
-
-    tmp = wwin;
-    /* start over from the beginning of the list */
-    while (tmp->next)
-        tmp = tmp->next;
-
-    while (tmp && tmp != wwin) {
-        if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-            return tmp;
-        }
-        tmp = tmp->prev;
-    }
-
-    return wwin;
 }
 
-
-static WWindow*
-nextToFocusBefore(WWindow *wwin)
-{
-    WWindow *tmp = wwin->next;
-
-    while (tmp) {
-        if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-            return tmp;
-        }
-        tmp = tmp->next;
-    }
-
-    /* start over from the beginning of the list */
-    tmp = wwin;
-    while (tmp->prev)
-        tmp = tmp->prev;
-
-    while (tmp && tmp != wwin) {
-        if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-
-            return tmp;
-        }
-        tmp = tmp->next;
-    }
-
-    return wwin;
-}
-
-
-
-
-static WWindow*
-nextFocusWindow(WWindow *wwin)
-{
-    WWindow *tmp, *closest, *min;
-    Window d;
-
-    if (!wwin)
-        return NULL;
-    tmp = wwin->prev;
-    closest = NULL;
-    min = wwin;
-    d = 0xffffffff;
-    while (tmp) {
-        if (wWindowCanReceiveFocus(tmp)
-            && (!WFLAGP(tmp, skip_window_list)|| tmp->flags.internal_window)) {
-            if (min->client_win > tmp->client_win)
-                min = tmp;
-            if (tmp->client_win > wwin->client_win
-                && (!closest
-                    || (tmp->client_win - wwin->client_win) < d)) {
-                closest = tmp;
-                d = tmp->client_win - wwin->client_win;
-            }
-        }
-        tmp = tmp->prev;
-    }
-    if (!closest||closest==wwin)
-        return min;
-    return closest;
-}
-
-
-static WWindow*
-prevFocusWindow(WWindow *wwin)
-{
-    WWindow *tmp, *closest, *max;
-    Window d;
-
-    if (!wwin)
-        return NULL;
-    tmp = wwin->prev;
-    closest = NULL;
-    max = wwin;
-    d = 0xffffffff;
-    while (tmp) {
-        if (wWindowCanReceiveFocus(tmp) &&
-            (!WFLAGP(tmp, skip_window_list) || tmp->flags.internal_window)) {
-            if (max->client_win < tmp->client_win)
-                max = tmp;
-            if (tmp->client_win < wwin->client_win
-                && (!closest
-                    || (wwin->client_win - tmp->client_win) < d)) {
-                closest = tmp;
-                d = wwin->client_win - tmp->client_win;
-            }
-        }
-        tmp = tmp->prev;
-    }
-    if (!closest||closest==wwin)
-        return max;
-    return closest;
-}
-#endif /* !MOX_CYCLING */
 
 
 void
@@ -191,12 +75,10 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     Bool hasModifier;
     Bool somethingElse = False;
     XEvent ev;
-#ifdef MOX_CYCLING
     WSwitchPanel *swpanel = NULL;
-#endif
     KeyCode leftKey, rightKey, homeKey, endKey;
 
-    if (!wwin)
+    if (!wwin || wwin->frame->workspace != scr->current_workspace)
         return;
   
     leftKey = XKeysymToKeycode(dpy, XK_Left);
@@ -221,7 +103,6 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 
     scr->flags.doing_alt_tab = 1;
 
-#ifdef MOX_CYCLING
     swpanel =  wInitSwitchPanel(scr, wwin, scr->current_workspace);
     oldFocused = wwin;
   
@@ -230,28 +111,13 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
         if (newFocused) {
             wWindowFocus(newFocused, oldFocused);
             oldFocused = newFocused;
+
+            if (wPreferences.circ_raise)
+              raiseWindow(swpanel, newFocused);
         }
     }
     else
       newFocused= wwin;
-#else /* !MOX_CYCLING */
-    if (next) {
-        if (wPreferences.windows_cycling)
-            newFocused = nextToFocusAfter(wwin);
-        else
-            newFocused = nextFocusWindow(wwin);
-    } else {
-        if (wPreferences.windows_cycling)
-            newFocused = nextToFocusBefore(wwin);
-        else
-            newFocused = prevFocusWindow(wwin);
-    }
-
-    if (wPreferences.circ_raise)
-        XRaiseWindow(dpy, newFocused->frame->core->window);
-    wWindowFocus(newFocused, scr->focused_window);
-    oldFocused = newFocused;
-#endif /* !MOX_CYCLING */
 
     while (hasModifier && !done) {
         WMMaskEvent(dpy, KeyPressMask|KeyReleaseMask|ExposureMask|PointerMotionMask, &ev);
@@ -271,54 +137,45 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
                 && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers)
                 || ev.xkey.keycode == rightKey) {
 
-#ifdef MOX_CYCLING
                 if (swpanel) {
                     newFocused = wSwitchPanelSelectNext(swpanel, False);
                     if (newFocused) {
                         wWindowFocus(newFocused, oldFocused);
                         oldFocused = newFocused;
+                      
+                        if (wPreferences.circ_raise) {
+                            CommitStacking(scr);
+                            raiseWindow(swpanel, newFocused);
+                        }
                     }
                 }
-#else /* !MOX_CYCLING */
-                newFocused = nextToFocusAfter(newFocused);
-                wWindowFocus(newFocused, oldFocused);
-                oldFocused = newFocused;
-
-                if (wPreferences.circ_raise) {
-                    /* restore order */
-                    CommitStacking(scr);
-                    XRaiseWindow(dpy, newFocused->frame->core->window);
-                }
-#endif /* !MOX_CYCLING */
             } else if ((wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
                         && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers)
                        || ev.xkey.keycode == leftKey) {
 
-#ifdef MOX_CYCLING
                 if (swpanel) {
                     newFocused = wSwitchPanelSelectNext(swpanel, True);
                     if (newFocused) {
                         wWindowFocus(newFocused, oldFocused);
                         oldFocused = newFocused;
+                        
+                        if (wPreferences.circ_raise) {
+                            CommitStacking(scr);
+                            raiseWindow(swpanel, newFocused);
+                        }
                     }
                 }
-#else /* !MOX_CYCLING */
-                newFocused = nextToFocusBefore(newFocused);
-                wWindowFocus(newFocused, oldFocused);
-                oldFocused = newFocused;
-
-                if (wPreferences.circ_raise) {
-                    /* restore order */
-                    CommitStacking(scr);
-                    XRaiseWindow(dpy, newFocused->frame->core->window);
-                }
-#endif /* !MOX_CYCLING */
             } else if (ev.xkey.keycode == homeKey || ev.xkey.keycode == endKey) {
                 if (swpanel) {
                     newFocused = wSwitchPanelSelectFirst(swpanel, ev.xkey.keycode != homeKey);
                     if (newFocused) {
                         wWindowFocus(newFocused, oldFocused);
                         oldFocused = newFocused;
+
+                        if (wPreferences.circ_raise) {
+                            CommitStacking(scr);
+                            raiseWindow(swpanel, newFocused);
+                        }
                     }
                 }
             } else if (ev.type == MotionNotify) {
@@ -365,25 +222,20 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     }
 
     if (newFocused) {
+        CommitStacking(scr);
+        if (!newFocused->flags.mapped)
+            wMakeWindowVisible(newFocused);
         wSetFocusTo(scr, newFocused);
-        wMakeWindowVisible(newFocused);
+        wRaiseFrame(newFocused->frame->core);
     }
 
-#ifdef MOX_CYCLING
     if (swpanel)
         wSwitchPanelDestroy(swpanel);
-#endif
-
-    if (wPreferences.circ_raise && newFocused) {
-        wRaiseFrame(newFocused->frame->core);
-        CommitStacking(scr);
-    }
 
     scr->flags.doing_alt_tab = 0;
 
-    if (somethingElse) {
+    if (somethingElse)
         WMHandleEvent(&ev);
-    }
 }
 
 

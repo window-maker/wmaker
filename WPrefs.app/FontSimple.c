@@ -693,7 +693,7 @@ createPanel(Panel *p)
 
         box = WMCreateBox(vbox);
         WMSetBoxHorizontal(box, True);
-        WMAddBoxSubview(vbox, WMWidgetView(box), True, True, 20, 0, 4);
+        WMAddBoxSubview(vbox, WMWidgetView(box), True, True, 20, 0, 0);
 
         panel->styleL = WMCreateList(box);
         WMAddBoxSubview(box, WMWidgetView(panel->styleL), True, True, 0, 0, 4);

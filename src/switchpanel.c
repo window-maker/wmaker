@@ -128,7 +128,7 @@ extern WPreferences wPreferences;
 
 #define ICON_IDEAL_SIZE 48
 #define ICON_EXTRASPACE 16
-
+#define LABEL_HEIGHT 25
 
 
 static int canReceiveFocus(WWindow *wwin)
@@ -288,7 +288,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
         return panel; 
     }
     
-    height= iconWidth + 20 + 10 + ICON_EXTRASPACE + 10;
+    height= iconWidth + LABEL_HEIGHT + 10 + ICON_EXTRASPACE + 10;
     
     panel->icons= WMCreateArray(WMGetArrayItemCount(panel->windows));
     panel->images= WMCreateArray(WMGetArrayItemCount(panel->windows));
@@ -307,7 +307,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     WMSetBoxHorizontal(vbox, False);
 
     panel->label = WMCreateLabel(vbox);
-    WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->label), False, True, 20, 0, 0);
+    WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->label), False, True, LABEL_HEIGHT, 0, 0);
     if (scr->focused_window && scr->focused_window->frame->title)
       WMSetLabelText(panel->label, scr->focused_window->frame->title);
     else
@@ -317,7 +317,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
         WMColor *color;
         WMFont *boldFont= WMBoldSystemFontOfSize(scr->wmscreen, 12);
         
-        WMSetLabelRelief(panel->label, WRSimple);
+        WMSetLabelRelief(panel->label, WRSunken);
         WMSetLabelFont(panel->label, boldFont);
         color = WMDarkGrayColor(scr->wmscreen);
         WMSetWidgetBackgroundColor(panel->label, color); 
@@ -477,3 +477,7 @@ WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
 }
 
 
+Window wSwitchPanelGetWindow(WSwitchPanel *swpanel)
+{
+    return WMWidgetXID(swpanel->win);
+}

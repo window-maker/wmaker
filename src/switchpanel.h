@@ -33,4 +33,6 @@ WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back);
 
 WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event);
 
+Window wSwitchPanelGetWindow(WSwitchPanel *swpanel);
+
 #endif /* _SWITCHPANEL_H_ */

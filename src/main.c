@@ -466,7 +466,8 @@ check_defaults()
 {
     char *path;
 
-    path = wdefaultspathfordomain("");
+    path = wdefaultspathfordomain("WindowMaker");
+
     if (access(path, R_OK)!=0) {
 #if 0
         wfatal(_("could not find user GNUstep directory (%s).\n"
