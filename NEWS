@@ -26,7 +26,7 @@ drawstring plugin instead of plain color. For example:
     FTitleColor = (
         function,
         libwmfun.so,
-        drawplainstring,
+        drawPlainString,
         gold,
         black,
         gray49
