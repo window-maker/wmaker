@@ -197,31 +197,26 @@ makeShortcutCommand(WMenu *menu, WMenuEntry *entry)
 {
     WWindow *wwin = (WWindow*)entry->clientdata;
     WScreen *scr = wwin->screen_ptr;
-    
-    scr->shortcutWindow[entry->order-WO_ENTRIES] = wwin;
+    int index = entry->order-WO_ENTRIES;
 
-    if (scr->shortcutSelectedWindows[entry->order-WO_ENTRIES])
-	WMFreeBag(scr->shortcutSelectedWindows[entry->order-WO_ENTRIES]);
+    if (scr->shortcutWindows[index]) {
+	WMFreeBag(scr->shortcutWindows[index]);
+	scr->shortcutWindows[index] = NULL;
+    }
 
     if (wwin->flags.selected && scr->selected_windows) {
-        WMBag *bag;
+        WMBag *selwin = scr->selected_windows;
 	int i;
 	
-	scr->shortcutSelectedWindows[entry->order-WO_ENTRIES] = WMCreateBag(4);
+	scr->shortcutWindows[index] = WMCreateBag(4);
 
-        bag = scr->selected_windows;
+        for (i = 0; i < WMGetBagItemCount(selwin); i++) {
+	    WWindow *tmp = WMGetFromBag(selwin, i);
 
-        for (i = 0; i < WMGetBagItemCount(bag); i++) {
-	    WWindow *tmp = WMGetFromBag(bag, i);
-	    
-	    WMPutInBag(scr->shortcutSelectedWindows[entry->order-WO_ENTRIES],
-		       tmp);
+	    WMPutInBag(scr->shortcutWindows[index], tmp);
         }
     }
-    else {
-        scr->shortcutSelectedWindows[entry->order-WO_ENTRIES] = NULL;
-    }
-    
+
     wSelectWindow(wwin, !wwin->flags.selected);
     XFlush(dpy);
     wusleep(3000);
@@ -278,20 +273,17 @@ updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
     for (i=WO_ENTRIES; i<smenu->entry_no; i++) {
 	char *tmp;
 	int shortcutNo = i-WO_ENTRIES;
-	WWindow *twin = wwin->screen_ptr->shortcutWindow[shortcutNo];
 	WMenuEntry *entry = smenu->entries[i];
-	WMBag *shortSelWindows = wwin->screen_ptr->shortcutSelectedWindows[shortcutNo];
+	WMBag *shortSelWindows = wwin->screen_ptr->shortcutWindows[shortcutNo];
 
 	sprintf(buffer, "%s %i", _("Set Shortcut"), shortcutNo+1);
 	
-	if (!twin && !shortSelWindows) {
+	if (!shortSelWindows) {
 	    entry->flags.indicator_on = 0;
 	} else {
 	    entry->flags.indicator_on = 1;
-	    if (twin == wwin)
+	    if (WMCountInBag(shortSelWindows, wwin))
 		entry->flags.indicator_type = MI_DIAMOND;
-	    else if (shortSelWindows && WMCountInBag(shortSelWindows, wwin))
-		entry->flags.indicator_type = MI_HIDDEN;
 	    else
 		entry->flags.indicator_type = MI_CHECK;
 	}

@@ -1702,39 +1702,47 @@ handleKeyPress(XEvent *event)
 
 	index = command-WKBD_WINDOW1;
 	
-        if (scr->shortcutSelectedWindows[index]) {
-            WMBag *list = scr->shortcutSelectedWindows[index];
+        if (scr->shortcutWindows[index]) {
+            WMBag *list = scr->shortcutWindows[index];
             int cw;
 	    int i;
+	    int count = WMGetBagItemCount(list);
+	    WWindow *twin;
 
             wUnselectWindows(scr);
-            if (scr->shortcutWindow[index])
-                wMakeWindowVisible(scr->shortcutWindow[index]);
             cw = scr->current_workspace;
-            for (i = 0; i < WMGetBagItemCount(list); i++) {
-		WWindow *wwin = WMGetFromBag(list, i);
-                wWindowChangeWorkspace(wwin, cw);
-                wMakeWindowVisible(wwin);
-                wSelectWindow(wwin, True);
-            }
-        } else if (scr->shortcutWindow[index]){
 
-            wMakeWindowVisible(scr->shortcutWindow[index]);
+            for (i = count-1; i >= 0; i--) {
+		WWindow *wwin = WMGetFromBag(list, i);
+
+		if (count > 1)
+		    wWindowChangeWorkspace(wwin, cw);
+
+                wMakeWindowVisible(wwin);
+
+		if (count > 1)
+		    wSelectWindow(wwin, True);
+            }
+	    
+	    /* rotate the order of windows, to create a cycling effect */
+	    twin = WMGetFromBag(list, 0);
+	    WMDeleteFromBag(list, 0);
+	    WMPutInBag(list, twin);
 
         } else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {
 
-            scr->shortcutWindow[index] = wwin;
+	    INITBAG(scr->shortcutWindows[index]);
+            WMPutInBag(scr->shortcutWindows[index], wwin);
+
             if (wwin->flags.selected && scr->selected_windows) {
-                WMBag *bag;
+                WMBag *selwins = scr->selected_windows;
 		int i;
 
-                bag = scr->selected_windows;
-		INITBAG(scr->shortcutSelectedWindows[index]);
+		for (i = 0; i < WMGetBagItemCount(selwins); i++) {
+		    WWindow *tmp = WMGetFromBag(selwins, i);
 
-		for (i = 0; i < WMGetBagItemCount(bag); i++) {
-		    WWindow *tmp = WMGetFromBag(bag, i);
-		    
-                    WMPutInBag(scr->shortcutSelectedWindows[index], tmp);
+		    if (tmp != wwin)
+			WMPutInBag(scr->shortcutWindows[index], tmp);
                 }
             }
             wSelectWindow(wwin, !wwin->flags.selected);
@@ -1746,16 +1754,15 @@ handleKeyPress(XEvent *event)
         } else if (WMGetBagItemCount(scr->selected_windows)) {
 
             if (wwin->flags.selected && scr->selected_windows) {
-                WMBag *bag;
+                WMBag *selwins = scr->selected_windows;
 		int i;
 
-                bag = scr->selected_windows;
-                INITBAG(scr->shortcutSelectedWindows[index]);
+                INITBAG(scr->shortcutWindows[index]);
 
-		for (i = 0; i < WMGetBagItemCount(bag); i++) {
-		    WWindow *tmp = WMGetFromBag(bag, i);
+		for (i = 0; i < WMGetBagItemCount(selwins); i++) {
+		    WWindow *tmp = WMGetFromBag(selwins, i);
 
-                    WMPutInBag(scr->shortcutSelectedWindows[index],  tmp);
+                    WMPutInBag(scr->shortcutWindows[index],  tmp);
                 }
             }
         }

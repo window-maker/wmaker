@@ -212,13 +212,14 @@ wWindowDestroy(WWindow *wwin)
     wwin->flags.destroyed = 1;
 
     for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-	if (wwin->screen_ptr->shortcutSelectedWindows[i]) {
-	    WMRemoveFromBag(wwin->screen_ptr->shortcutSelectedWindows[i], wwin);
+	if (!wwin->screen_ptr->shortcutWindows[i])
+	    continue;
 
-	    if (!WMGetBagItemCount(wwin->screen_ptr->shortcutSelectedWindows[i])) {
-		WMFreeBag(wwin->screen_ptr->shortcutSelectedWindows[i]);
-		wwin->screen_ptr->shortcutSelectedWindows[i] = NULL;
-	    }
+	WMRemoveFromBag(wwin->screen_ptr->shortcutWindows[i], wwin);
+
+	if (!WMGetBagItemCount(wwin->screen_ptr->shortcutWindows[i])) {
+	    WMFreeBag(wwin->screen_ptr->shortcutWindows[i]);
+	    wwin->screen_ptr->shortcutWindows[i] = NULL;
 	}
     }
 
@@ -802,8 +803,12 @@ wManageWindow(WScreen *scr, Window window)
 		int i;
 
 		for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-		    if (wstate->window_shortcuts & (1<<i))
-			scr->shortcutWindow[i] = wwin;
+		    if (wstate->window_shortcuts & (1<<i)) {
+			if (!scr->shortcutWindows[i])
+			    scr->shortcutWindows[i] = WMCreateBag(4);
+
+			WMPutInBag(scr->shortcutWindows[i], wwin);
+		    }
 		}
 	    }
 	    free(wstate);
@@ -2210,7 +2215,7 @@ wWindowSaveState(WWindow *wwin)
     data[3] = wwin->flags.hidden;
 
     for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-	if (wwin->screen_ptr->shortcutWindow[i] == wwin)
+	if (WMCountInBag(wwin->screen_ptr->shortcutWindows[i], wwin))
 	    data[9] |= 1<<i;
     }
     XChangeProperty(dpy, wwin->client_win, _XA_WINDOWMAKER_STATE,

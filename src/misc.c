@@ -116,6 +116,7 @@ MakeCPPArgs(char *path)
     int i;
     char buffer[MAXLINE], *buf, *line;
     Visual *visual;
+    char *tmp;
     
     line = wmalloc(MAXLINE);
     *line = 0;
@@ -150,13 +151,13 @@ MakeCPPArgs(char *path)
     putidef(line, " -DSCR_HEIGHT=", 
 	    HeightOfScreen(DefaultScreenOfDisplay(dpy)));
 
-    #if 0
-    strcpy(buffer, path);    
-    buf = strrchr(buffer, '/');
+    /* put the dir where the menu is being read from to the
+     * search path */
+    tmp = wstrdup(path);
+    buf = strrchr(tmp, '/');
     if (buf) *buf = 0; /* trunc filename */
-    putdef(line, " -I", buffer);
-    #endif
-
+    putdef(line, " -I", tmp);
+    free(tmp);
 
 
     /* this should be done just once, but it works this way */

@@ -281,8 +281,7 @@ typedef struct _WScreen {
 					scrolled down for titlebar access */
 
     /* for window shortcuts */
-    struct WWindow *shortcutWindow[MAX_WINDOW_SHORTCUTS];
-    WMBag *shortcutSelectedWindows[MAX_WINDOW_SHORTCUTS];
+    WMBag *shortcutWindows[MAX_WINDOW_SHORTCUTS];
 
 #ifdef XDND
     char *xdestring;
