@@ -713,7 +713,7 @@ renderMenu(_Panel *panel, proplist_t texture, int width, int iheight)
     switch (panel->menuStyle) {
      case MSTYLE_NORMAL:
 	tmp = renderTexture(scr, texture, width, iheight, NULL, RBEV_RAISED2);
-	    
+
 	pix = XCreatePixmap(dpy, tmp, width, iheight*4, WMScreenDepth(scr));
 	for (i = 0; i < 4; i++) {
 	    XCopyArea(dpy, tmp, pix, gc, 0, 0, width, iheight, 0, iheight*i);
@@ -768,8 +768,6 @@ updatePreviewBox(_Panel *panel, int elements)
     int refresh = 0;
     Pixmap pix;
     GC gc;
-    WMListItem *item;
-    TextureListItem *titem;
     int colorUpdate = 0;
 
     gc = XCreateGC(dpy, WMWidgetXID(panel->win), 0, NULL);
@@ -810,6 +808,9 @@ updatePreviewBox(_Panel *panel, int elements)
 	colorUpdate |= MTITLE_COL;
     }
     if (elements & (1<<PMITEM)) {
+	WMListItem *item;
+	TextureListItem *titem;
+
 	item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
 	titem = (TextureListItem*)item->clientData;
 
@@ -832,6 +833,12 @@ updatePreviewBox(_Panel *panel, int elements)
 	XDrawLine(dpy, panel->preview, gc, 29, 119, 119, 119);
     }
     if (elements & (1<<PICON)) {
+	WMListItem *item;
+	TextureListItem *titem;
+
+	item = WMGetListItem(panel->texLs, panel->textureIndex[6]);
+	titem = (TextureListItem*)item->clientData;
+
 	renderPreview(panel, gc, PICON,
 		      titem->ispixmap ? 0 : RBEV_RAISED3);
 
