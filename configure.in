@@ -423,6 +423,11 @@ if test "$use_locale" = yes; then
 fi
 
 
+dnl Check whether XInternAtoms() exist
+dnl ==================================
+AC_CHECK_LIB(X11, XInternAtoms, AC_DEFINE(HAVE_XINTERNATOMS),,$XLFLAGS $XLIBS)
+
+
 dnl XKB keyboard language status
 dnl ============================
 AC_ARG_ENABLE(modelock,
@@ -445,7 +450,6 @@ if test "$shape" = yes; then
 		added_xext=yes
                 AC_DEFINE(SHAPE)], shape=no, $XLFLAGS $XLIBS)
 fi
-
 
 
 dnl XINERAMA support

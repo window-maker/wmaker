@@ -1,3 +1,10 @@
+Changes since version 0.62.0:
+.............................
+- made shortcuts available during alt+tab
+- save lowered state of menus
+- fixed portability bugs for old X servers
+- added check for XInternAtoms in configure and replacement code
+
 Changes since version 0.61.1:
 .............................
 

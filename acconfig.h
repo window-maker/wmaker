@@ -90,6 +90,9 @@
 /* define if you have then inet_aton function */
 #undef HAVE_INET_ATON
 
+/* define if your X server has XInternAtoms() */
+#undef HAVE_XINTERNATOMS
+
 /* define if processor is x86 */
 #undef ASM_X86
 
