@@ -1840,11 +1840,13 @@ reqBlockSize(unsigned short requested)
 
 
 static void
-clearText(Text *tPtr)
+clearText(Text *tPtr, int destroy)
 {
     tPtr->vpos = tPtr->hpos = 0;
     tPtr->docHeight = tPtr->docWidth = 0;
-    updateScrollers(tPtr);
+
+    if(!destroy)
+        updateScrollers(tPtr);
 
     if (!tPtr->firstTextBlock) 
         return;
@@ -1974,7 +1976,6 @@ insertTextInteractively(Text *tPtr, char *text, int len)
 
     tb = tPtr->currentTextBlock;
     if (!tb || tb->graphic) {
-        text[len] = 0;
         WMAppendTextStream(tPtr, text);
         tPtr->tpos = tPtr->currentTextBlock->used;
         layOutDocument(tPtr);
@@ -2532,7 +2533,7 @@ handleEvents(XEvent *event, void *data)
 
 
         case DestroyNotify:
-            clearText(tPtr);
+            clearText(tPtr, True);
             if(tPtr->hS)
                 WMDestroyWidget(tPtr->hS);
             if(tPtr->vS)
@@ -2994,7 +2995,7 @@ WMPrependTextStream(WMText *tPtr, char *text)
         if(tPtr->flags.ownsSelection)
             releaseSelection(tPtr);
         else
-            clearText(tPtr);
+            clearText(tPtr, False);
         return;
     }
 
@@ -3017,7 +3018,7 @@ WMAppendTextStream(WMText *tPtr, char *text)
         if(tPtr->flags.ownsSelection)
             releaseSelection(tPtr);
         else
-            clearText(tPtr);
+            clearText(tPtr, False);
         return;
     }
 
