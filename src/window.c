@@ -3145,7 +3145,7 @@ frameMouseDown(WObjDescriptor *desc, XEvent *event)
 	}
 	if (event->xbutton.button == Button3 && !WFLAGP(wwin, no_resizable))
 	    wMouseResizeWindow(wwin, event);
-	else 
+	else if (event->xbutton.button==Button1 || event->xbutton.button==Button2)
 	    wMouseMoveWindow(wwin, event);
 	XUngrabPointer(dpy, CurrentTime);
     }

@@ -42,7 +42,7 @@ Changes since version 0.80.2:
 - Fixed focus handling for windows that set WM_HINTS.take_focus = False.
 - Fixed a problem in the stacking code which could lead to segmentation faults
   (Jeff Teunissen <deek@d2dc.net>)
-- Fixed a crashing bug in the menu code when modal panel are involved.
+- Fixed a crashing bug in the menu code with modal panels involved.
 - Fixed incorrect focusing of application's windows after an unhide (sometimes
   the incorrect window got focus instead of the apps's last focused window)
 - Unshade application's shaded windows when Dbl-MiddleClick-ing its appicon.
@@ -52,6 +52,7 @@ Changes since version 0.80.2:
 - Fixed edge resistance and move/resize frame drawing for borderless windows
 - Fixed wrong display position for the move/resize widgets after xinerama
   patch (Peter Zijlstra <a.p.zijlstra@chello.nl>)
+- Fixed bug with cursor locked in drag mode after Alt-dragging a window
 
 
 Changes since version 0.80.1:
