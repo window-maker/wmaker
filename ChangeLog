@@ -121,6 +121,7 @@ Changes since version 0.80.2:
   'Restart Window Maker' option was selected, under some circumstances.
 - Added workaround in global WMWindowAttributes, to avoid creating a second
   appicon when a KDE3 application opens a config panel.
+- Updated slovak translation (Jan Tomka <judas@linux.sk>)
 
 
 Changes since version 0.80.1:
