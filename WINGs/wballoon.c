@@ -1,7 +1,7 @@
 
 
 
-#include "../src/config.h"
+#include "wconfig.h"
 #include "WINGsP.h"
 
 #ifdef SHAPE

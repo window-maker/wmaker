@@ -1,4 +1,5 @@
-/* #include <X11/Xatom.h> */
+
+
 #include "WINGsP.h"
 
 #define VERSION_INFO(dragInfo) dragInfo->protocolVersion

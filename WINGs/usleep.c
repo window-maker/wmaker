@@ -1,6 +1,6 @@
 
 
-#include "../src/config.h"
+#include "wconfig.h"
 
 
 #ifdef HAVE_SYS_TIME_H

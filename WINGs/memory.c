@@ -19,8 +19,7 @@
  */
 
 
-#include "../src/config.h"
-
+#include "wconfig.h"
 #include "WUtil.h"
 
 #include <stdlib.h>

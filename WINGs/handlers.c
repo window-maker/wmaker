@@ -3,9 +3,8 @@
  * WINGs internal handlers: timer, idle and input handlers
  */
 
+#include "wconfig.h"
 #include "WINGsP.h"
-
-#include "../src/config.h"
 
 #include <sys/types.h>
 #include <unistd.h>

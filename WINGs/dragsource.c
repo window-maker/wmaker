@@ -1,4 +1,7 @@
-#include "../src/config.h"
+
+
+#include "wconfig.h"
+#include "WINGsP.h"
 
 #include <X11/Xatom.h>
 #include <X11/cursorfont.h>
@@ -6,7 +9,6 @@
 #include <X11/extensions/shape.h>
 #endif
 
-#include "WINGsP.h"
 
 
 #define XDND_DESTINATION_RESPONSE_MAX_DELAY 10000
