@@ -17,7 +17,7 @@ AC_INIT(src/WindowMaker.h)
 
 AM_INIT_AUTOMAKE(WindowMaker, 0.70.0)
 
-AM_PROG_LIBTOOL
+AC_PROG_LIBTOOL
 
 # by Marcelo Magallon <mmagallo@efis.ucr.ac.cr>
 # Turn around -rpath problem with libtool 1.0c
