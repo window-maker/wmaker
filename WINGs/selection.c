@@ -262,11 +262,59 @@ WMCreateSelectionHandler(WMWidget *w, Atom selection, Time timestamp,
 
 
 
-
 static void
 timeoutHandler(void *data)
 {
     *(int*)data = 1;
+}
+
+
+static Bool
+getInternalSelection(WMScreen *scr, Atom selection, Atom target,
+		     void **data, unsigned *length)
+{
+    Window owner;
+    SelectionHandler *handler;
+
+    /*
+     * Check if the selection is owned by this application and if so,
+     * do the conversion directly.
+     */
+
+    data = NULL;
+
+    owner = XGetSelectionOwner(scr->display, selection);
+    if (!owner)
+	return False;
+
+    handler = selHandlers;
+
+    while (handler) {
+	if (WMWidgetXID(handler->widget) == owner
+	    /*	    && handler->selection == event->selection*/) {
+	    break;
+	}
+	handler = handler->next;
+    }
+
+    if (!handler)
+	return False;
+
+    if (handler->convProc) {
+	Atom atom;
+	int format;
+
+	if (!(*handler->convProc)(handler->widget, handler->selection, 
+				  target, &atom, data, length, &format)) {
+	    return True;
+	}
+
+	if (handler->doneProc) {
+	    (*handler->doneProc)(handler->widget, handler->selection, target);
+	}
+    }
+
+    return True;
 }
 
 
@@ -316,8 +364,16 @@ W_GetTextSelection(WMScreen *scr, Atom selection)
 	WMHandlerID timer;
 	int timeout = 0;
 	XEvent ev;
+	unsigned length;
 	
 	XDeleteProperty(scr->display, scr->groupLeader, scr->clipboardAtom);
+
+	if (getInternalSelection(scr, selection, XA_STRING, (void**)&data,
+				 &length)) {
+
+	    return data;
+	}
+	
 	XConvertSelection(scr->display, selection, XA_STRING,
 			  scr->clipboardAtom, scr->groupLeader,
 			  scr->lastEventTime);
@@ -333,7 +389,7 @@ W_GetTextSelection(WMScreen *scr, Atom selection)
 	    wwarning("selection retrieval timed out");
 	    return NULL;
 	}
-	
+
 	/* nobody owns the selection or the current owner has
 	 * nothing to do with what we need */
 	if (ev.xselection.property == None) {
