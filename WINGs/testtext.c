@@ -1,3 +1,4 @@
+#include <WINGsP.h>
 #include <WINGs.h>
 #include <X11/Xlib.h>
 #include <fcntl.h>
