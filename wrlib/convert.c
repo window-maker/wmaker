@@ -271,7 +271,11 @@ image2TrueColor(RContext *ctx, RImage *image)
         return NULL;
     }
 
-    
+
+#ifdef BENCH
+    cycle_bench(1);
+#endif
+
     if (ctx->attribs->render_mode==RBestMatchRendering) {
 	int ofs, r, g, b;
 	int x, y;
@@ -300,10 +304,6 @@ image2TrueColor(RContext *ctx, RImage *image)
 
 #ifdef DEBUG
         puts("true color dither");
-#endif
-
-#ifdef BENCH
-    cycle_bench(1);
 #endif
 
 #ifdef ASM_X86_MMX
