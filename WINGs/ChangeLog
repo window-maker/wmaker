@@ -1,3 +1,10 @@
+changes since wmaker 0.62.1:
+............................
+- added WRuler widget
+- added WText widget (rtf multiline text widget) 
+	Nwanua Elumeze <nwanua@colorado.edu>
+- added a new AUTO option for the UseMultiByte option
+
 changes since wmaker 0.62.0:
 ............................
 - added WMSetWidgetDefaultFont(), WMSetWidgetDefaultBoldFont()

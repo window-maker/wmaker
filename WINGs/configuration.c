@@ -2,6 +2,8 @@
 
 #include "WINGsP.h"
 
+#include <X11/Xlocale.h>
+
 #include <proplist.h>
 
 
@@ -52,6 +54,7 @@ W_ReadConfigurations(void)
     if (defaults) {
         char *buttonName;
         unsigned button;
+	char *str;
 
 	WINGsConfiguration.systemFont = 
 	    WMGetUDStringForKey(defaults, "SystemFont");
@@ -59,8 +62,26 @@ W_ReadConfigurations(void)
 	WINGsConfiguration.boldSystemFont = 
 	    WMGetUDStringForKey(defaults, "BoldSystemFont");
 
-	WINGsConfiguration.useMultiByte =
-	    WMGetUDBoolForKey(defaults, "MultiByteText");
+	WINGsConfiguration.useMultiByte = False;
+	str = WMGetUDStringForKey(defaults, "MultiByteText");
+	if (str) {
+	    if (strcasecmp(str, "YES") == 0) {
+		WINGsConfiguration.useMultiByte = True;
+	    } else if (strcasecmp(str, "AUTO") == 0) {
+		char *locale;
+		
+		/* if it's a multibyte language (japanese, chinese or korean)
+		 * then set it to True */
+		locale = setlocale(LC_CTYPE, NULL);
+		if (locale != NULL 
+		    && (strncmp(locale, "ja", 2) == 0
+			|| strncmp(locale, "zh", 2) == 0
+			|| strncmp(locale, "ko", 2) == 0)) {
+
+		    WINGsConfiguration.useMultiByte = True;
+		}
+	    }
+	}
 
 	WINGsConfiguration.doubleClickDelay = 
 	    WMGetUDIntegerForKey(defaults, "DoubleClickTime");	

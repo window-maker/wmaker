@@ -193,6 +193,17 @@ enum {
 };
 
 
+enum {
+    WRulerLeft=0,
+	WRulerBody, 
+	WRulerFirst, 
+	WRulerRight,
+	WRulerBoth,
+	WRulerDocLeft
+} WMRulerMargins;
+
+
+
 /* drag operations */
 typedef enum {
     WDOperationNone,
@@ -275,7 +286,9 @@ enum {
     WC_SplitView = 13,
     WC_TabView = 14,
     WC_ProgressIndicator = 15,
-    WC_MenuView = 16
+    WC_MenuView = 16,
+    WC_Ruler = 17,
+    WC_Text = 18
 };
 
 /* All widgets must start with the following structure
@@ -319,6 +332,9 @@ typedef struct W_Slider WMSlider;
 typedef struct W_Matrix WMMatrix;      /* not ready */
 typedef struct W_SplitView WMSplitView;
 typedef struct W_TabView WMTabView;
+typedef struct W_Ruler WMRuler;
+typedef struct W_Text WMText;
+
 
 /* not widgets */
 typedef struct W_TabViewItem WMTabViewItem;
@@ -488,6 +504,23 @@ typedef struct WMSelectionProcs {
     void (*selectionDone)(WMView *view, Atom selection, Atom target,
 			  void *cdata);
 } WMSelectionProcs;
+
+
+
+
+typedef void WMParseAction(WMWidget *self, void *clientData, short type);
+
+/* these are the things parsers (for text) do */
+
+typedef struct _parserActions {
+    void *(*createParagraph) (short fmargin, short bmargin,
+        short rmargin, short *tabstops, short numTabs, WMAlignment a);
+    void (*insertParagraph) (WMText *tPtr, void *para, InsertType type);
+    void *(*createPChunk) (WMPixmap *pixmap, short script, ushort ul);
+    void *(*createTChunk) (char *text, short chars, WMFont *font, 
+        WMColor *color, short script, ushort ul);
+    void (*insertChunk) (WMText *tPtr, void *chunk, InsertType type);
+} WMParserActions;
 
 
 
@@ -1347,6 +1380,99 @@ void WMSetSplitViewResizeSubviewsProc(WMSplitView *sPtr,
 */
 
 int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
+
+/* ...................................................................... */
+
+
+WMRuler *WMCreateRuler(WMWidget *parent);
+
+void WMShowRulerTabs(WMRuler *rPtr, Bool Show);
+
+int WMGetRulerMargin(WMRuler *rPtr, int which);
+
+int WMGetReleasedRulerMargin(WMRuler *rPtr);
+
+int WMGetGrabbedRulerMargin(WMRuler *rPtr);
+
+int WMGetRulerOffset(WMRuler *rPtr);
+
+void WMSetRulerOffset(WMRuler *rPtr, int pixels);
+
+void WMSetRulerMargin(WMRuler *rPtr, int which, int pixels);
+
+void WMSetRulerAction(WMRuler *rPtr, WMAction *action, void *clientData);
+
+void WMSetRulerMoveAction(WMRuler *rPtr, WMAction *action, void *clientData);
+
+
+/* ....................................................................... */
+
+WMText *WMCreateText(WMWidget *parent);
+
+int WMGetTextParagraphs(WMText *tPtr);
+int WMGetTextCurrentParagraph(WMText *tPtr);
+void WMSetTextCurrentParagraph(WMText *tPtr, int current);
+void WMRemoveTextParagraph(WMText *tPtr, int which);
+
+int WMGetTextChunks(WMText *tPtr);
+int WMGetTextCurrentChunk(WMText *tPtr);
+void WMRemoveTextChunk(WMText *tPtr, int which);
+void WMSetTextCurrentChunk(WMText *tPtr, int current);
+
+void W_InsertText(WMText *tPtr, void *data, int position);/* position = -1||0*/
+#define WMAppendTextStream(t, d) W_InsertText(t, d, -1)
+#define WMPrependTextStream(t, d) W_InsertText(t, d, 0)
+
+
+void WMSetTextParser(WMText *tPtr, WMParseAction *parser);
+WMParserActions WMGetTextParserActions(WMText *tPtr);
+#if 0
+typedef enum {
+	WDPCreateParagraph=0, 
+	WDPInsertParagraph=1,
+	WDPCreateText=2,
+	WDPCreateImage=3,
+	WDPInsertChunk
+} WMDoParse;
+void WMDoTextParse(WMText *tPtr, short action);
+#endif
+
+char * WMGetTextAll(WMText *tPtr);
+void WMSetTextWriter(WMText *tPtr, WMParseAction *writer);
+
+void WMSetTextHasHorizontalScroller(WMText *tPtr, Bool flag);
+void WMSetTextHasVerticalScroller(WMText *tPtr, Bool flag);
+
+void WMRefreshText(WMText *tPtr, int vpos, int hpos);
+void WMFreezeText(WMText *tPtr);
+void WMThawText(WMText *tPtr);
+
+void WMSetTextMonoFont(WMText *tPtr, Bool mono);
+Bool WMGetTextMonoFont(WMText *tPtr);
+void WMSetTextEditable(WMText *tPtr, Bool editable);
+Bool WMGetTextEditable(WMText *tPtr);
+void WMForceTextFocus(WMText *tPtr);
+
+void WMSetTextAlignment(WMText *tPtr, WMAlignment alignment);
+void WMIgnoreTextNewline(WMText *tPtr, Bool ignore);
+
+
+Bool WMScrollText(WMText *tPtr, int amount);
+Bool WMPageText(WMText *tPtr, Bool scrollUp);
+
+
+void WMShowTextRuler(WMText *tPtr, Bool show);
+Bool WMGetTextRulerShown(WMText *tPtr);
+void WMShowTextRulerTabs(WMText *tPtr, Bool show);
+void WMSetTextRulerMargin(WMText *tPtr, char which, short pixels);
+short WMGetTextRulerMargin(WMText *tPtr, char which);
+
+void WMSetTextUseFixedPitchFont(WMText *tPtr, Bool fixed);
+void WMSetTextDefaultColor(WMText *tPtr, WMColor *color);
+void WMSetTextDefaultFont(WMText *tPtr, WMFont *font);
+void WMSetTextDefaultAlignment(WMText *tPtr, WMAlignment alignment);
+void WMSetTextBackgroundColor(WMText *tPtr, WMColor *color);
+
 
 
 /* ....................................................................... */

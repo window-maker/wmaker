@@ -13,7 +13,7 @@ include_HEADERS = WINGs.h WUtil.h WINGsP.h
 bin_SCRIPTS = get-wings-flags get-wutil-flags
 
 noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel\
-	connect puzzle
+	connect puzzle testtext
 
 lib_LIBRARIES = libWINGs.a libWUtil.a
 
@@ -30,7 +30,7 @@ wtest_DEPENDENCIES = libWINGs.a
 connect_LDADD = libWUtil.a @LIBRARY_SEARCH_PATH@ @NETLIBS@ @LIBPL@
 
 
-EXTRA_DIST = logo.xpm BUGS
+EXTRA_DIST = logo.xpm BUGS wm.png upbtn.xpm wm.html
 
 # wbutton.c 
 libWINGs_a_SOURCES = 	\
@@ -65,11 +65,13 @@ libWINGs_a_SOURCES = 	\
 	wpixmap.c \
 	wpopupbutton.c \
 	wprogressindicator.c \
+	wruler.c \
 	wscroller.c \
 	wscrollview.c \
 	wslider.c \
 	wsplitview.c \
 	wtabview.c \
+	wtext.c \
 	wtextfield.c \
 	wwindow.c \
 	wview.c \
