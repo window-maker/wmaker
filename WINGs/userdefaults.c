@@ -14,7 +14,7 @@
 
 typedef struct W_UserDefaults {
     proplist_t defaults;
-    
+
     proplist_t appDomain;
 
     proplist_t searchListArray;
@@ -22,10 +22,17 @@ typedef struct W_UserDefaults {
 
     char dirty;
 
+    char *path;                        /* where is db located */
+
+    struct W_UserDefaults *next;
+
 } UserDefaults;
 
 
 static UserDefaults *sharedUserDefaults = NULL;
+static UserDefaults **sharedDefaultsList = NULL;
+static Bool registeredSaveOnExit = False;
+
 
 extern char *WMGetApplicationName();
 
@@ -83,11 +90,37 @@ saveDefaultsChanges(int foo, void *bar)
 saveDefaultsChanges(void)
 #endif
 {
+    /* save the user defaults database */
     if (sharedUserDefaults && sharedUserDefaults->dirty) {
 	PLSave(sharedUserDefaults->appDomain, YES);
     }
+
+    /* now save the extra defaults databases we may have */
+    if (sharedDefaultsList) {
+        UserDefaults *tmp = *sharedDefaultsList;
+
+        while (tmp) {
+            if (tmp->dirty)
+                PLSave(tmp->appDomain, YES);
+            tmp = tmp->next;
+        }
+    }
 }
 
+
+/* set to save changes in defaults when program is exited */
+static void
+registerSaveOnExit(void)
+{
+    if (!registeredSaveOnExit) {
+#ifndef HAVE_ATEXIT
+        on_exit(saveDefaultsChanges, (void*)NULL);
+#else
+        atexit(saveDefaultsChanges);
+#endif
+        registeredSaveOnExit = True;
+    }
+}
 
 
 void
@@ -182,19 +215,95 @@ WMGetStandardUserDefaults(void)
 
 	sharedUserDefaults = defaults;
 	
-	/* set to save changes in defaults when program is exited */
+        registerSaveOnExit();
 
-
-#ifndef HAVE_ATEXIT
-	on_exit(saveDefaultsChanges, (void*)NULL);
-#else
-	atexit(saveDefaultsChanges);
-#endif
     }
 
     return sharedUserDefaults;
 }
 
+
+WMUserDefaults*
+WMGetDefaultsFromPath(char *path)
+{
+    WMUserDefaults *defaults;
+    proplist_t domain;
+    proplist_t key;
+    char *name;
+    int i;
+
+    assert(path != NULL);
+
+    if (sharedDefaultsList) {
+        defaults = *sharedDefaultsList;
+        while (defaults) {
+            if (strcmp(defaults->path, path) == 0)
+                return defaults;
+            defaults = defaults->next;
+        }
+    }
+
+    /* we didn't found the database we are looking for. Go read it. */
+    defaults = wmalloc(sizeof(WMUserDefaults));
+    memset(defaults, 0, sizeof(WMUserDefaults));
+
+    defaults->defaults = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+
+    defaults->searchList = wmalloc(sizeof(proplist_t)*2);
+
+    /* the domain we want go first */
+    name = strrchr(path, '/');
+    if (!name)
+        name = path;
+    else
+        name++;
+    key = PLMakeString(name);
+    defaults->searchList[0] = key;
+
+    domain = PLGetProplistWithPath(path);
+
+    if (!domain) {
+        proplist_t p;
+
+        domain = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
+        p = PLMakeString(path);
+        PLSetFilename(domain, p);
+        PLRelease(p);
+    }
+
+    defaults->path = wstrdup(path);
+
+    defaults->appDomain = domain;
+
+    if (domain)
+        PLInsertDictionaryEntry(defaults->defaults, key, domain);
+
+    PLRelease(key);
+
+    /* terminate list */
+    defaults->searchList[1] = NULL;
+
+    defaults->searchListArray=PLMakeArrayFromElements(NULL,NULL);
+
+    i = 0;
+    while (defaults->searchList[i]) {
+        PLAppendArrayElement(defaults->searchListArray,
+                             defaults->searchList[i]);
+        i++;
+    }
+
+    if (sharedDefaultsList)
+        defaults->next = *sharedDefaultsList;
+    sharedDefaultsList = &defaults;
+
+    registerSaveOnExit();
+
+    name = PLGetDescriptionIndent(defaults->defaults, 0);
+    puts(name);
+    free(name);
+
+    return defaults;
+}
 
 
 proplist_t

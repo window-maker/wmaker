@@ -24,6 +24,8 @@ Changes since version 0.52.0:
 - fixed the problem with showing a window as focused in the window list menu
   while it was on another workspace.
 - show workspace name on screen when switching workspaces
+- Fixed bug in WPrefs that added a new line at the end of autostart script
+  at every save, growing it indefinitely.
 
 
 Changes since version 0.51.2:

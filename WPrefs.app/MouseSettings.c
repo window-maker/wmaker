@@ -812,7 +812,13 @@ storeCommandInScript(char *cmd, char *line)
 	while (!feof(f)) {
 	    if (!fgets(buffer, 127, f)) {
 		break;
-	    }
+            }
+            if (buffer[0] == '\n') {
+                /* don't write empty lines, else the file will grow
+                 * indefinitely (one '\n' added at end of file on each save).
+                 */
+                continue;
+            }
 	    if (strncmp(buffer, cmd, len)==0) {
 		if (!ok) {
 		    fputs(line, fo);

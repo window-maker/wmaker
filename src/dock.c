@@ -425,10 +425,12 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
     ROperateLine(tile, RAddOperation, tp, 2, wPreferences.icon_size-3,
 		 pt, &light);
 
-    RDrawLine(tile, ICON_SIZE - 6 - as, 5, ICON_SIZE - 6, 5, &black);
+    //RDrawLine(tile, ICON_SIZE - 6 - as, 5, ICON_SIZE - 6, 5, &black);
+    ROperateLine(tile, RSubtractOperation, ICON_SIZE - 5 - as, 5,
+                 ICON_SIZE - 6, 5, &dark);
     ROperateLine(tile, RSubtractOperation, ICON_SIZE - 6 - as, 5,
-		 ICON_SIZE - 7, 4 + as, &dark);
-    ROperateLine(tile, RAddOperation, ICON_SIZE - 6, 6, ICON_SIZE - 6, 5 + as,
+		 ICON_SIZE - 6, 5 + as, &dark);
+    ROperateLine(tile, RAddOperation, ICON_SIZE - 6, 5, ICON_SIZE - 6, 5 + as,
 		 &light);
 
     
@@ -440,10 +442,12 @@ wClipMakeTile(WScreen *scr, RImage *normalTile)
 		 wPreferences.icon_size-2, &light);
 
     ROperateLine(tile, RSubtractOperation, 5, ICON_SIZE - 6 - as, 
-		 4 + as, ICON_SIZE - 7, &dark);
-    RDrawLine(tile, 5, ICON_SIZE - 6 - as, 5, ICON_SIZE - 6, &black);
+		 5 + as, ICON_SIZE - 6, &dark);
+    //RDrawLine(tile, 5, ICON_SIZE - 6 - as, 5, ICON_SIZE - 6, &black);
+    ROperateLine(tile, RSubtractOperation, 5, ICON_SIZE - 5 - as, 5,
+                 ICON_SIZE - 6, &dark);
     
-    ROperateLine(tile, RAddOperation, 6, ICON_SIZE - 6, 5 + as, ICON_SIZE - 6,
+    ROperateLine(tile, RAddOperation, 5, ICON_SIZE - 6, 5 + as, ICON_SIZE - 6,
 		 &light);
 
 

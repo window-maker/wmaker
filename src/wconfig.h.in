@@ -309,7 +309,7 @@
 #define DEF_CLIP_TITLE_FONT "\"-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*\""
 #define DEF_INFO_TEXT_FONT "\"-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*\""
 
-#define DEF_WORKSPACE_NAME_FONT "-*-lucida-bold-r-normal--24-*"
+#define DEF_WORKSPACE_NAME_FONT "-*-lucida-bold-r-*-*-24-*-*-*-*-*-*-*"
 #endif /* !I18N_MB */
 
 #define HELVETICA10_FONT "-*-helvetica-medium-r-normal-*-10-*-*-*-*-*-*-*"

@@ -251,6 +251,8 @@ void WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
 
 WMUserDefaults *WMGetStandardUserDefaults(void);
 
+WMUserDefaults *WMGetDefaultsFromPath(char *path);
+
 void WMSynchronizeUserDefaults(WMUserDefaults *database);
     
 proplist_t WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName);
