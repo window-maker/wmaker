@@ -417,7 +417,7 @@ WMGetDefaultsFromPath(char *path)
 proplist_t
 WMGetUDAllKeys(WMUserDefaults *database)
 {
-    return PLGetAllDictionaryKeys(database->defaults);
+    return PLGetAllDictionaryKeys(database->appDomain);
 }
 
 
