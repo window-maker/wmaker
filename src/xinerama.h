@@ -29,6 +29,14 @@
 
 void wInitXinerama(WScreen *scr);
 
+
+#define XFLAG_NONE	0x00
+#define XFLAG_DEAD	0x01
+#define XFLAG_MULTIPLE	0x02
+#define XFLAG_PARTIAL	0x04
+
+int wGetRectPlacementInfo(WScreen *scr, WMRect rect, int *flags);
+
 int wGetHeadForRect(WScreen *scr, WMRect rect);
 
 int wGetHeadForWindow(WWindow *wwin);
@@ -39,7 +47,9 @@ int wGetHeadForPointerLocation(WScreen *scr);
 
 WMRect wGetRectForHead(WScreen *scr, int head);
 
-WMRect wGetUsableRectForHead(WScreen *scr, int head);
+WArea wGetUsableAreaForHead(WScreen *scr, int head, WArea *totalAreaPtr);
+
+WMPoint wGetPointToCenterRectInHead(WScreen *scr, int head, int width, int height);
 
 #endif
 

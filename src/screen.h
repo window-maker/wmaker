@@ -95,9 +95,9 @@ typedef struct _WScreen {
     
 #ifdef XINERAMA
     XineramaScreenInfo *xine_screens;
+#endif
     int xine_count;		       /* 0 means not active */
     int xine_primary_head;	       /* main working screen */
-#endif
 
     Window no_focus_win;	       /* window to get focus when nobody
 					* else can do it */
@@ -348,6 +348,8 @@ void wScreenSaveState(WScreen *scr);
 void wScreenRestoreState(WScreen *scr);
 
 int wScreenBringInside(WScreen *scr, int *x, int *y, int width, int height);
+int wScreenKeepInside(WScreen *scr, int *x, int *y, int width, int height);
+
 
 /* in startup.c */
 WScreen *wScreenWithNumber(int i);

@@ -40,6 +40,10 @@
 
 #include "../src/config.h"
 
+#ifdef XINERAMA
+#include <X11/extensions/Xinerama.h>
+#endif
+
 #ifdef HAVE_DLFCN_H
 #include <dlfcn.h>
 #endif
@@ -62,7 +66,12 @@ Window root;
 int scr;
 int scrWidth;
 int scrHeight;
+int scrX, scrY;
 
+#ifdef XINERAMA
+XineramaScreenInfo *xine_screens;
+int	xine_count;
+#endif
 
 Bool smooth = False;
 
@@ -113,6 +122,86 @@ loadImage(RContext *rc, char *file)
     wfree(path);
 
     return image;
+}
+
+
+void applyImage( RContext * rc, BackgroundTexture *texture, RImage *image, char type, int x, int y, int width, int height) {
+
+    int w, h;
+    Bool fimage = False;
+
+    switch( toupper(type)) {
+	case 'S':
+	case 'M':
+	    if ( type == 'S') {
+		w = width;
+		h = height;
+	    } else {
+		if ( image->width*height > image->height*width) {
+		    w = width;
+		    h = (width*image->height) / image->width;
+		} else {
+		    w = (height*image->width) / image->height;
+		    h = height;
+		}
+	    }
+
+	    if ( w != image->width || h != image->height) {
+		RImage * simage;
+
+		if ( smooth) {
+		    simage = RSmoothScaleImage( image, w, h);
+		} else {
+		    simage = RScaleImage( image, w, h);
+		}
+
+		if ( !simage) {
+		    wwarning( "could not scale image:%s", RMessageForError(RErrorCode));
+		    return;
+		}
+		fimage = True;
+		image = simage;
+	    }
+
+	    /* fall through */
+	case 'C':
+	    {
+		Pixmap pixmap;
+
+		if ( !RConvertImage(rc, image, &pixmap)) {
+		    wwarning( "could not convert texture:%s", RMessageForError(RErrorCode));
+		    return;
+		}
+
+		if ( image->width != width || image->height != height) {
+		    int sx, sy, w, h;
+
+		    if ( image->height < height) {
+			h = image->height;
+			y += (height - h) / 2;
+			sy = 0;
+		    } else {
+			sy = (image->height - height) / 2;
+			h = height;
+		    }
+		    if ( image->width < width) {
+			w = image->width;
+			x += (width - w) / 2;
+			sx = 0;
+		    } else {
+			sx = (image->width - width) / 2;
+			w = width;
+		    }
+
+		    XCopyArea(dpy, pixmap, texture->pixmap, DefaultGC(dpy, scr), sx, sy, w, h, x, y);
+		} else 
+		    XCopyArea(dpy, pixmap, texture->pixmap, DefaultGC(dpy, scr), 0, 0, width, height, x, y);
+
+		XFreePixmap(dpy, pixmap);
+		if ( fimage) RReleaseImage( image);
+	    }
+	    break;
+    }
 }
 
 
@@ -404,6 +493,7 @@ parseTexture(RContext *rc, char *text)
 	    break;
 	 case 'S':
 	 case 'M':
+#if 0
 	    if (toupper(type[0])=='S') {
 		w = scrWidth;
 		h = scrHeight;
@@ -488,10 +578,37 @@ parseTexture(RContext *rc, char *text)
 		texture->height = scrHeight;
 	    }
 	    break;
+#else
+	case 'C':
+	    {
+		Pixmap tpixmap = XCreatePixmap( dpy, root, scrWidth, scrHeight, DefaultDepth(dpy, scr));
+		XFillRectangle(dpy, tpixmap, DefaultGC(dpy, scr), 0, 0, scrWidth, scrHeight);
+
+		texture->pixmap = tpixmap;
+		texture->color = color;
+		texture->width = scrWidth;
+		texture->height = scrHeight;
+		    
+		if ( xine_count) {
+		    int i;
+		    for ( i=0; i<xine_count; ++i) {
+			applyImage( rc, texture, image, type[0], 
+				    xine_screens[i].x_org, xine_screens[i].y_org,
+				    xine_screens[i].width, xine_screens[i].height);
+		    }
+		} else {
+		    applyImage( rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
+		}
+		RReleaseImage( image);
+	    }
+	    break;
+#endif
 	}
 
+#if 0
 	texture->pixmap = pixmap;
 	texture->color = color;
+#endif
     } else if (strcasecmp(type, "thgradient")==0
 	       || strcasecmp(type, "tvgradient")==0
 	       || strcasecmp(type, "tdgradient")==0) {
@@ -1414,6 +1531,12 @@ main(int argc, char **argv)
     
     scrWidth = WidthOfScreen(DefaultScreenOfDisplay(dpy));
     scrHeight = HeightOfScreen(DefaultScreenOfDisplay(dpy));
+    scrX = scrY = 0;
+
+#ifdef XINERAMA
+    xine_screens = XineramaQueryScreens(dpy, &xine_count);
+#endif
+
 
     if (!obey_user && DefaultDepth(dpy, scr) <= 8)
         render_mode = RDitheredRendering;

@@ -58,6 +58,7 @@
 #include "framewin.h"
 #include "properties.h"
 #include "balloon.h"
+#include "xinerama.h"
 
 #ifdef GNOME_STUFF
 # include "gnome.h"
@@ -1140,11 +1141,11 @@ handleEnterNotify(XEvent *event)
     }
 
     if (event->xcrossing.window == event->xcrossing.root
-	&& event->xcrossing.detail == NotifyNormal
-	&& event->xcrossing.detail != NotifyInferior
+	&& (event->xcrossing.mode == NotifyNormal ||
+	    event->xcrossing.mode == NotifyUngrab )
+	&& event->xcrossing.detail == NotifyInferior
 	&& wPreferences.focus_mode != WKF_CLICK) {
-
-	wSetFocusTo(scr, scr->focused_window);
+	    wSetFocusTo(scr, NULL);
     }
 
 #ifdef BALLOON_TEXT
@@ -1162,15 +1163,6 @@ handleLeaveNotify(XEvent *event)
 		     (XPointer *)&desc)!=XCNOENT) {
         if(desc->handle_leavenotify)
 	    (*desc->handle_leavenotify)(desc, event);
-    }
-    if (event->xcrossing.window == event->xcrossing.root
-	&& event->xcrossing.mode == NotifyNormal
-	&& event->xcrossing.detail != NotifyInferior
-	&& wPreferences.focus_mode != WKF_CLICK) {
-
-	WScreen *scr = wScreenForRootWindow(event->xcrossing.root);
-
-	wSetFocusTo(scr, NULL);
     }
 }
 
@@ -1403,10 +1395,16 @@ handleKeyPress(XEvent *event)
 #ifndef LITE
      case WKBD_ROOTMENU:
 	/*OpenRootMenu(scr, event->xkey.x_root, event->xkey.y_root, True);*/
-        OpenRootMenu(scr, scr->scr_width/2, scr->scr_height/2, True);
+	{
+	    WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+            OpenRootMenu(scr, rect.pos.x + rect.size.width/2, rect.pos.y + rect.size.height/2, True);
+	}
         break;
      case WKBD_WINDOWLIST:
-        OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, True);
+	{
+	    WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+            OpenSwitchMenu(scr, rect.pos.x + rect.size.width/2, rect.pos.y + rect.size.height/2, True);
+	}
         break;
 #endif /* !LITE */
      case WKBD_WINDOWMENU:
@@ -1719,15 +1717,18 @@ handleKeyPress(XEvent *event)
 static void 
 handleMotionNotify(XEvent *event)
 {
-    WMenu *menu;
     WScreen *scr = wScreenForRootWindow(event->xmotion.root);
 
     if (wPreferences.scrollable_menus) {
-        if (scr->flags.jump_back_pending ||
-            event->xmotion.x_root <= 1 ||
-            event->xmotion.x_root >= (scr->scr_width - 2) ||
-            event->xmotion.y_root <= 1 ||
-            event->xmotion.y_root >= (scr->scr_height - 2)) {
+	WMPoint p = { event->xmotion.x_root, event->xmotion.y_root };
+	WMRect rect = wGetRectForHead(scr, wGetHeadForPoint(scr, p));
+
+	if (scr->flags.jump_back_pending ||
+	    p.x <= (rect.pos.x + 1) ||
+	    p.x >= (rect.pos.x + rect.size.width - 2) ||
+	    p.y <= (rect.pos.y + 1) ||
+	    p.y >= (rect.pos.y + rect.size.height - 2)) {
+    	    WMenu *menu;
 #ifdef DEBUG
             L("pointer at screen edge");
 #endif

@@ -85,6 +85,9 @@ Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
 
 void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret);
 
+int calcIntersectionArea(int x1, int y1, int w1, int h1,
+			 int x2, int y2, int w2, int h2);
+
 void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height);
 

@@ -38,6 +38,7 @@
 #include "funcs.h"
 #include "defaults.h"
 #include "framewin.h"
+#include "xinerama.h"
 
 
 /**** Global variables ****/
@@ -448,20 +449,28 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-    y = aicon->y_pos;
-    if (y < 0)
-	y = 0;
-    else if (y + PHEIGHT > scr->scr_height)
-	y = scr->scr_height - PHEIGHT - 30;
+    /*
+     * make things relative to head
+     */
+    {
+	WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
 
-    if (aicon->dock && aicon->dock->type == WM_DOCK) {
-	if (aicon->dock->on_right_side)
-	    x = scr->scr_width/2;
-	else
-	    x = scr->scr_width/2 - PWIDTH - 2;
-    } else {
-	x = (scr->scr_width - PWIDTH)/2;
+	y = aicon->y_pos;
+	if (y < 0)
+	    y = 0;
+	else if (y + PHEIGHT > rect.pos.y + rect.size.height)
+	    y = rect.pos.y + rect.size.height - PHEIGHT - 30;
+
+	if (aicon->dock && aicon->dock->type == WM_DOCK) {
+	    if (aicon->dock->on_right_side)
+		x = rect.pos.x + rect.size.width/2;
+	    else
+		x = rect.pos.x + rect.size.width/2 - PWIDTH - 2;
+	} else {
+	    x = rect.pos.x + (rect.size.width - PWIDTH)/2;
+	}
     }
+
     panel->wwin = wManageInternalWindow(scr, parent, None,
 					_("Docked Application Settings"),
 					x, y, PWIDTH, PHEIGHT);

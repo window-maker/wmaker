@@ -39,6 +39,7 @@
 #include "application.h"
 #include "appicon.h"
 #include "dock.h"
+#include "xinerama.h"
 
 
 extern WPreferences wPreferences;
@@ -140,14 +141,22 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
     int isize = wPreferences.icon_size;
     int done = 0;
     WMBagIterator iter;
-
     /*
      * Find out screen boundaries.
      */
-    sx1 = 0;
-    sy1 = 0;
-    sx2 = scr->scr_width;
-    sy2 = scr->scr_height;
+
+    /*
+     * Allows each head to have miniwindows
+     */
+    WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+
+    sx1 = rect.pos.x;
+    sy1 = rect.pos.y;
+    sw = rect.size.width;
+    sh = rect.size.height;
+    sx2 = sx1 + sw;
+    sy2 = sy1 + sh;
+
     if (scr->dock) {
 	if (scr->dock->on_right_side)
             sx2 -= isize + DOCK_EXTRA_SPACE;
@@ -155,8 +164,8 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 	    sx1 += isize + DOCK_EXTRA_SPACE;
     }
 
-    sw = isize * (scr->scr_width/isize);
-    sh = isize * (scr->scr_height/isize);
+    sw = isize * (sw/isize);
+    sh = isize * (sh/isize);
     fullW = (sx2-sx1)/isize;
     fullH = (sy2-sy1)/isize;
 
@@ -284,9 +293,10 @@ calcIntersectionLength(int p1, int l1, int p2, int l2)
 /*
  * This function calculates the area of the intersection of two rectangles.
  */
-static int
+
+int
 calcIntersectionArea(int x1, int y1, int w1, int h1,
-                                int x2, int y2, int w2, int h2)
+		     int x2, int y2, int w2, int h2)
 {
     return calcIntersectionLength(x1, w1, x2, w2)
            * calcIntersectionLength(y1, h1, y2, h2);
@@ -337,7 +347,8 @@ calcSumOfCoveredAreas(WWindow *wwin, int x, int y, int w, int h)
 
 static void
 smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
-                 unsigned int width, unsigned int height)
+                 unsigned int width, unsigned int height,
+		 WArea usableArea)
 {
     WScreen *scr = wwin->screen_ptr;
     int test_x = 0, test_y = Y_ORIGIN(scr);
@@ -346,7 +357,6 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
     int min_isect, min_isect_x, min_isect_y;
     int sum_isect;
     int extra_height;
-    WArea usableArea = scr->totalUsableArea;
 
     if (wwin->frame)
 	extra_height = wwin->frame->top_width + wwin->frame->bottom_width;
@@ -413,7 +423,8 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 
 static Bool
 autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
-                unsigned int width, unsigned int height, int tryCount)
+                unsigned int width, unsigned int height, int tryCount,
+		WArea usableArea)
 {
     WScreen *scr = wwin->screen_ptr;
     int test_x = 0, test_y = Y_ORIGIN(scr);
@@ -421,7 +432,7 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
     int swidth, sx;
     WWindow *test_window;
     int extra_height;
-    WArea usableArea = scr->totalUsableArea;
+
     
     if (wwin->frame)
 	extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
@@ -435,8 +446,7 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 
     height += extra_height;
 
-    while (((test_y + height) < (scr->scr_height)) && (!loc_ok)) {
-
+    while (((test_y + height) < (usableArea.y2 - usableArea.y1)) && !loc_ok) {
 	test_x = sx;
 
 	while (((test_x + width) < swidth) && (!loc_ok)) {
@@ -527,10 +537,11 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 
 static void 
 cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
-              unsigned int width, unsigned int height, int h)
+              unsigned int width, unsigned int height, int h,
+	      WArea usableArea)
 {
     unsigned int extra_height;
-    WArea usableArea = scr->totalUsableArea;
+
 
     if (wwin->frame)
 	extra_height = wwin->frame->top_width + wwin->frame->bottom_width;
@@ -549,26 +560,53 @@ cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
 }
 
 
+static void
+randomPlaceWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
+		  unsigned int width, unsigned int height,
+		  WArea usableArea)
+{
+    int w, h, extra_height;
+    
+    if (wwin->frame)
+	extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
+    else
+	extra_height = 24; /* random value */
+    
+    w = ((usableArea.x2-X_ORIGIN(scr)) - width);
+    h = ((usableArea.y2-Y_ORIGIN(scr)) - height - extra_height);
+    if (w<1) w = 1;
+    if (h<1) h = 1;
+    *x_ret = X_ORIGIN(scr) + rand()%w;
+    *y_ret = Y_ORIGIN(scr) + rand()%h;
+}
+
+
+
 void
 PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
             unsigned width, unsigned height)
 {
     WScreen *scr = wwin->screen_ptr;
     int h = WMFontHeight(scr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
-
+    WArea usableArea = wGetUsableAreaForHead(scr, 
+					     wGetHeadForPointerLocation(scr),
+					     NULL);
+   
     switch (wPreferences.window_placement) {
      case WPM_MANUAL:
 	InteractivePlaceWindow(wwin, x_ret, y_ret, width, height);
 	break;
 
      case WPM_SMART:
-	smartPlaceWindow(wwin, x_ret, y_ret, width, height);
+	smartPlaceWindow(wwin, x_ret, y_ret, width, height, usableArea);
 	break;
 
      case WPM_AUTO:
-	if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 0)) {
+	if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 0,
+			    usableArea)) {
 	    break;
-	} else if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 1)) {
+	} else if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 1,
+				   usableArea)) {
 	    break;
 	}
 	/* there isn't a break here, because if we fail, it should fall
@@ -579,32 +617,17 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
         if (wPreferences.window_placement == WPM_AUTO)
             scr->cascade_index++;
 
-	cascadeWindow(scr, wwin, x_ret, y_ret, width, height, h);
+	cascadeWindow(scr, wwin, x_ret, y_ret, width, height, h, usableArea);
 
         if (wPreferences.window_placement == WPM_CASCADE)
             scr->cascade_index++;
 	break;
 
      case WPM_RANDOM:
-	{
-	    int w, h, extra_height;
-	    WArea usableArea = scr->totalUsableArea;
-
-            if (wwin->frame)
-                extra_height = wwin->frame->top_width + wwin->frame->bottom_width + 2;
-            else
-                extra_height = 24; /* random value */
-
-	    w = ((usableArea.x2-X_ORIGIN(scr)) - width);
-	    h = ((usableArea.y2-Y_ORIGIN(scr)) - height - extra_height);
-	    if (w<1) w = 1;
-	    if (h<1) h = 1;
-	    *x_ret = X_ORIGIN(scr) + rand()%w;
-	    *y_ret = Y_ORIGIN(scr) + rand()%h;
-	}
+	randomPlaceWindow(scr, wwin, x_ret, y_ret, width, height, usableArea);
 	break;
 
-#ifdef DEBUG	
+#ifdef DEBUG
      default:
 	puts("Invalid window placement!!!");
 	*x_ret = 0;
@@ -612,15 +635,20 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 #endif
     }
     
-    if (*x_ret + width > scr->scr_width)
-	*x_ret = scr->scr_width - width;
-    if (*x_ret < 0)
-        *x_ret = 0;
+    /*
+     * clip to usableArea instead of full screen
+     * this will also take dock/clip etc.. into account
+     * aswell as being xinerama friendly
+     */
+    if (*x_ret + width > usableArea.x2)
+	*x_ret = usableArea.x2 - width;
+    if (*x_ret < usableArea.x1)
+        *x_ret = usableArea.x1;
 
-    if (*y_ret + height > scr->scr_height)
-	*y_ret = scr->scr_height - height;
-    if (*y_ret < 0)
-        *y_ret = 0;
+    if (*y_ret + height > usableArea.y2)
+	*y_ret = usableArea.y2 - height;
+    if (*y_ret < usableArea.y1)
+        *y_ret = usableArea.y1;
 }
 
 

@@ -412,7 +412,6 @@ wMaximizeWindow(WWindow *wwin, int directions)
     WArea usableArea = wwin->screen_ptr->totalUsableArea;
     WArea totalArea;
 
-
     if (WFLAGP(wwin, no_resizable))
 	return;
     
@@ -421,24 +420,28 @@ wMaximizeWindow(WWindow *wwin, int directions)
     totalArea.x2 = wwin->screen_ptr->scr_width;
     totalArea.y2 = wwin->screen_ptr->scr_height;
 
-#ifdef XINERAMA
     if (wwin->screen_ptr->xine_count > 0
 	&& !(directions & MAX_IGNORE_XINERAMA)) {
 	WScreen *scr = wwin->screen_ptr;
 	WMRect rect;
+	int head;
 
-	rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
-	totalArea.x1 = rect.pos.x;
-	totalArea.y1 = rect.pos.y;
-	totalArea.x2 = totalArea.x1 + rect.size.width;
-	totalArea.y2 = totalArea.y1 + rect.size.height;
+	/* XXX:
+	if ( keyboard) {
+	    rect.pos.x = wwin->frame_x;
+	    rect.pos.y = wwin->frame_y;
+	    rect.size.width = wwin->frame->core->width;
+	    rect.size.height = wwin->frame->core->height;
 
-	usableArea.x1 = WMAX(totalArea.x1, usableArea.x1);
-	usableArea.y1 = WMAX(totalArea.y1, usableArea.y1);
-	usableArea.x2 = WMIN(totalArea.x2, usableArea.x2);
-	usableArea.y2 = WMIN(totalArea.y2, usableArea.y2);
+	    head = wGetHeadForRect(scr, rect);
+	} else
+	*/
+	head = wGetHeadForPointerLocation(scr);
+
+	rect = wGetRectForHead(scr, head);
+
+	usableArea = wGetUsableAreaForHead(scr, head, &totalArea);
     }
-#endif /* XINERAMA */
 
     if (WFLAGP(wwin, full_maximize)) {
 	usableArea = totalArea;
@@ -1502,10 +1505,18 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
     /*
      * Find out screen boundaries.
      */
-    sx1 = 0;
-    sy1 = 0;
-    sx2 = scr->scr_width;
-    sy2 = scr->scr_height;
+
+    /*
+     * Allows each head to have miniwindows
+     */
+    WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+
+    sx1 = rect.pos.x;
+    sy1 = rect.pos.y;
+    sw = rect.size.width;
+    sh = rect.size.height;
+    sx2 = sx1 + sw;
+    sy2 = sy1 + sh;
     if (scr->dock) {
 	if (scr->dock->on_right_side)
             sx2 -= isize + DOCK_EXTRA_SPACE;
@@ -1513,8 +1524,14 @@ wArrangeIcons(WScreen *scr, Bool arrangeAll)
 	    sx1 += isize + DOCK_EXTRA_SPACE;
     }
 
+#if 0
     sw = isize * (scr->scr_width/isize);
     sh = isize * (scr->scr_height/isize);
+#else
+    sw = isize * (sw/isize);
+    sh = isize * (sh/isize);
+#endif
+    fullW = (sx2-sx1)/isize;
     fullW = (sx2-sx1)/isize;
     fullH = (sy2-sy1)/isize;
 

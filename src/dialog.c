@@ -69,23 +69,10 @@ extern WPreferences wPreferences;
 
 static WMPoint getCenter(WScreen *scr, int width, int height)
 {
-    WMPoint pt;
-    
-#ifdef XINERAMA
-    WMRect rect;
-    
-    rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
-
-    pt.x = rect.pos.x + (rect.size.width - width)/2;
-    pt.y = rect.pos.y + (rect.size.height - height)/2;
-#else
-    pt.x = (scr->scr_width - width) / 2;
-    pt.y = (scr->scr_height - height) / 2;	
-#endif    
-
-    return pt;
+    return wGetPointToCenterRectInHead(scr, 
+			     wGetHeadForPointerLocation(scr), 
+			     width, height);
 }
-    
 
 
 int
@@ -146,6 +133,7 @@ wExitDialog(WScreen *scr, char *title, char *message,
     WMButton *saveSessionBtn;
     Window parent;
     WWindow *wwin;
+    WMPoint center;
     int result;
 
     panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message,
@@ -165,9 +153,10 @@ wExitDialog(WScreen *scr, char *title, char *message,
 
     XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
+    center = getCenter(scr, 400, 180);
     wwin = wManageInternalWindow(scr, parent, None, NULL,
-                                (scr->scr_width - 400)/2,
-                                (scr->scr_height - 180)/2, 400, 180);
+                                center.x, center.y, 400, 180);
+
     wwin->client_leader = WMWidgetXID(panel->win);
 
     WMMapWidget(panel->win);

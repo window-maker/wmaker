@@ -53,6 +53,7 @@
 #include "stacking.h"
 #include "defaults.h"
 #include "workspace.h"
+#include "xinerama.h"
 
 
 #ifdef MWM_HINTS
@@ -774,6 +775,8 @@ wManageWindow(WScreen *scr, Window window)
     /* get geometry stuff */
     wClientGetNormalHints(wwin, &wattribs, True, &x, &y, &width, &height);
 
+/*    printf( "wManageWindow: %d %d %d %d\n", x, y, width, height);*/
+
     /* get colormap windows */
     GetColormapWindows(wwin);
 
@@ -1099,27 +1102,114 @@ wManageWindow(WScreen *scr, Window window)
 	    
 	    if (transientOwner && transientOwner->flags.mapped) {
 		int offs = WMAX(20, 2*transientOwner->frame->top_width);
+		WMRect rect;
+		int head;
 		
 		x = transientOwner->frame_x + 
 		    abs((transientOwner->frame->core->width - width)/2) + offs;
 		y = transientOwner->frame_y +
 		    abs((transientOwner->frame->core->height - height)/3) + offs;
 
-		if (x < 0)
-		    x = 0;
-		else if (x + width > scr->scr_width)
-		    x = scr->scr_width - width;
+		/*
+		 * limit transient windows to be inside their parent's head
+		 */
+		rect.pos.x = transientOwner->frame_x;
+		rect.pos.y = transientOwner->frame_y;
+		rect.size.width = transientOwner->frame->core->width;
+		rect.size.height = transientOwner->frame->core->height;
+		
+		head = wGetHeadForRect(scr, rect);
+		rect = wGetRectForHead(scr, head);
+		
+		if (x < rect.pos.x)
+		    x = rect.pos.x;
+		else if (x + width > rect.pos.x + rect.size.width)
+		    x = rect.pos.x + rect.size.width - width;
+		
+		if (y < rect.pos.y)
+		    y = rect.pos.y;
+		else if (y + height > rect.pos.y + rect.size.height)
+		    y = rect.pos.y + rect.size.height - height;
 
-		if (y < 0)
-		    y = 0;
-		else if (y + height > scr->scr_height)
-		    y = scr->scr_height - height;
 	    } else {
 		PlaceWindow(wwin, &x, &y, width, height);
 	    }
 	    if (wPreferences.window_placement == WPM_MANUAL)
 		dontBring = True;
 	} 
+	else if (scr->xine_count &&
+		  wwin->normal_hints->flags & PPosition) {
+	    int head, flags;
+	    WMRect rect;
+	    int reposition = 0;
+	    
+	    /*
+	     * Make spash screens come out in the center of a head
+	     * trouble is that most splashies never get here
+	     * they are managed trough atoms but god knows where.
+	     * Dan, do you know ?
+	     * 
+	     * Most of them are not managed, they are set
+	     * OverrideRedirect, which means we can't do anything about
+	     * them. -alfredo
+	     */
+#if 0
+	    printf( "xinerama PPosition: x: %d %d\n", x, (scr->scr_width - width)/2);
+	    printf( "xinerama PPosition: y: %d %d\n", y, (scr->scr_height - height)/2);
+
+	    if ( (unsigned)(x + (width - scr->scr_width)/2 + 10) < 20 &&
+		 (unsigned)(y + (height - scr->scr_height)/2 + 10) < 20) {
+
+		reposition = 1;
+
+	    } else 
+#endif
+	    {
+		/*
+		 * xinerama checks for: across head and dead space
+		 */
+		rect.pos.x = x;
+		rect.pos.y = y;
+		rect.size.width = width;
+		rect.size.height = height;
+
+		head = wGetRectPlacementInfo(scr, rect, &flags);
+
+		if (flags & XFLAG_DEAD)
+		    reposition = 1;
+
+		if (flags & XFLAG_MULTIPLE)
+		    reposition = 2;
+	    }
+	    
+	    switch (reposition) {
+	     case 1:
+		head = wGetHeadForPointerLocation(scr);
+		rect = wGetRectForHead(scr, head);
+		
+		x = rect.pos.x + (x * rect.size.width)/scr->scr_width;
+		y = rect.pos.y + (y * rect.size.height)/scr->scr_height;
+		break;
+		
+	     case 2:
+		rect = wGetRectForHead(scr, head);
+		
+		if (x < rect.pos.x)
+		    x = rect.pos.x;
+		else if (x + width > rect.pos.x + rect.size.width)
+		    x = rect.pos.x + rect.size.width - width;
+		
+		if (y < rect.pos.y)
+		    y = rect.pos.y;
+		else if (y + height > rect.pos.y + rect.size.height)
+		    y = rect.pos.y + rect.size.height - height;
+		
+		break;
+		
+	     default:
+		break;
+	    }
+	}
 
 	if (WFLAGP(wwin, dont_move_off) && dontBring)
 	    wScreenBringInside(scr, &x, &y, width, height);

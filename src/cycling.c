@@ -36,6 +36,7 @@
 #include "actions.h"
 #include "stacking.h"
 #include "funcs.h"
+#include "xinerama.h"
 
 /* Globals */
 extern WPreferences wPreferences;
@@ -303,9 +304,16 @@ StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     }
 
     scr->flags.doing_alt_tab = 0;
-    if (openedSwitchMenu) 
-	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
-    
+    if (openedSwitchMenu) {
+	/*
+	 * place window in center of current head
+	 */
+	WMPoint center = wGetPointToCenterRectInHead(scr, 
+				   wGetHeadForPointerLocation(scr), 
+					   0, 0);
+	OpenSwitchMenu(scr, center.x, center.y, False);
+    }
+
     if (somethingElse) {
 	WMHandleEvent(&ev);
     }

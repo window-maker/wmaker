@@ -41,6 +41,8 @@
 #include "workspace.h"
 
 #include "geomview.h"
+#include "screen.h"
+#include "xinerama.h"
 
 #include <WINGs/WINGsP.h>
 
@@ -110,19 +112,45 @@ moveGeometryDisplayCentered(WScreen *scr, int x, int y)
 {
     unsigned int w = WMWidgetWidth(scr->gview);
     unsigned int h = WMWidgetHeight(scr->gview);
+    unsigned int x1 = 0, y1 = 0, x2 = scr->scr_width, y2 = scr->scr_height;
 
+      
     x -= w / 2;
     y -= h / 2;
 
-    if (x < 1)
-        x = 1;
-    else if (x > (scr->scr_width - w - 3))
-        x = scr->scr_width - w - 3;
-
-    if (y < 1)
-        y = 1;
-    else if (y > (scr->scr_height - h - 3))
-        y = scr->scr_height - h - 3;
+    /*
+     * dead area check
+     */
+    if (scr->xine_count) {
+	WMRect rect;
+	int head, flags;
+	
+	rect.pos.x = x;
+	rect.pos.y = y;
+ 	rect.size.width = w;
+	rect.size.height = h;
+	
+	head = wGetRectPlacementInfo(scr, rect, &flags);
+	
+	if (flags & (XFLAG_DEAD | XFLAG_PARTIAL)) {
+	    rect = wGetRectForHead(scr, head);
+ 	    x1 = rect.pos.x;
+	    y1 = rect.pos.y;
+	    x2 = x1 + rect.size.width;
+	    y2 = y1 + rect.size.height;
+	}
+    }
+    
+    if (x < x1 + 1)
+	x = x1 + 1;
+    else if (x > (x2 - w))
+	x = x2 - w;
+    
+    if (y < y1 + 1)
+	y = y1 + 1;
+    else if (y > (y2 - h))
+	y = y2 - h;
+    
 
     WMMoveWidget(scr->gview, x, y);
 }
@@ -178,8 +206,10 @@ cyclePositionDisplay(WWindow *wwin, int x, int y, int w, int h)
         WMUnmapWidget(scr->gview);
     } else {
         if (wPreferences.move_display == WDIS_CENTER) {
-            moveGeometryDisplayCentered(scr,
-                                        scr->scr_width/2, scr->scr_height/2);
+	    WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+	    moveGeometryDisplayCentered(scr, 
+					rect.pos.x + rect.size.width/2, 
+					rect.pos.y + rect.size.width/2);
         } else if (wPreferences.move_display == WDIS_TOPLEFT) {
             moveGeometryDisplayCentered(scr, 1, 1);
         } else if (wPreferences.move_display == WDIS_FRAME_CENTER) {
@@ -199,8 +229,10 @@ mapPositionDisplay(WWindow *wwin, int x, int y, int w, int h)
         || wPreferences.move_display == WDIS_NONE) {
         return;
     } else if (wPreferences.move_display == WDIS_CENTER) {
-        moveGeometryDisplayCentered(scr, scr->scr_width / 2,
-                                    scr->scr_height / 2);
+	WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+	moveGeometryDisplayCentered(scr, 
+				    rect.pos.x + rect.size.width/2, 
+				    rect.pos.y + rect.size.width/2);
     } else if (wPreferences.move_display == WDIS_TOPLEFT) {
         moveGeometryDisplayCentered(scr, 1, 1);
     } else if (wPreferences.move_display == WDIS_FRAME_CENTER) {
@@ -383,8 +415,10 @@ cycleGeometryDisplay(WWindow *wwin, int x, int y, int w, int h, int dir)
         WMUnmapWidget(scr->gview);
     } else {
         if (wPreferences.size_display == WDIS_CENTER) {
-            moveGeometryDisplayCentered(scr,
-                                        scr->scr_width / 2, scr->scr_height / 2);
+	    WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+	    moveGeometryDisplayCentered(scr, 
+					rect.pos.x + rect.size.width/2, 
+					rect.pos.y + rect.size.width/2);
         } else if (wPreferences.size_display == WDIS_TOPLEFT) {
             moveGeometryDisplayCentered(scr, 1, 1);
         } else if (wPreferences.size_display == WDIS_FRAME_CENTER) {
@@ -406,8 +440,10 @@ mapGeometryDisplay(WWindow *wwin, int x, int y, int w, int h)
         return;
 
     if (wPreferences.size_display == WDIS_CENTER) {
-        moveGeometryDisplayCentered(scr, scr->scr_width / 2,
-                                    scr->scr_height / 2);
+	WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+	moveGeometryDisplayCentered(scr, 
+				    rect.pos.x + rect.size.width/2, 
+				    rect.pos.y + rect.size.width/2);
     } else if (wPreferences.size_display == WDIS_TOPLEFT) {
         moveGeometryDisplayCentered(scr, 1, 1);
     } else if (wPreferences.size_display == WDIS_FRAME_CENTER) {
@@ -423,9 +459,8 @@ static void
 doWindowMove(WWindow *wwin, WMArray *array, int dx, int dy)
 {
     WWindow *tmpw;
+    WScreen *scr = wwin->screen_ptr;
     int x, y;
-    int scr_width = wwin->screen_ptr->scr_width;
-    int scr_height = wwin->screen_ptr->scr_height;
 
     if (!array || !WMGetArrayItemCount(array)) {
         wWindowMove(wwin, wwin->frame_x + dx, wwin->frame_y + dy);
@@ -436,17 +471,23 @@ doWindowMove(WWindow *wwin, WMArray *array, int dx, int dy)
             x = tmpw->frame_x + dx;
             y = tmpw->frame_y + dy;
 
+#if 1 /* XXX: with xinerama patch was #if 0, check this */
             /* don't let windows become unreachable */
 
             if (x + (int)tmpw->frame->core->width < 20)
                 x = 20 - (int)tmpw->frame->core->width;
-            else if (x + 20 > scr_width)
-                x = scr_width - 20;
+            else if (x + 20 > scr->scr_width)
+                x = scr->scr_width - 20;
 
             if (y + (int)tmpw->frame->core->height < 20)
                 y = 20 - (int)tmpw->frame->core->height;
-            else if (y + 20 > scr_height)
-                y = scr_height - 20;
+            else if (y + 20 > scr->scr_height)
+                y = scr->scr_height - 20;
+#else
+	    wScreenBringInside(scr, &x, &y,
+			       (int)tmpw->frame->core->width,
+			       (int)tmpw->frame->core->height);
+#endif
 
             wWindowMove(tmpw, x, y);
         }
@@ -509,7 +550,7 @@ drawFrames(WWindow *wwin, WMArray *array, int dx, int dy)
             y = tmpw->frame_y + dy;
 
             /* don't let windows become unreachable */
-
+#if 1 /* XXX: was 0 in XINERAMA patch, check */
             if (x + (int)tmpw->frame->core->width < 20)
                 x = 20 - (int)tmpw->frame->core->width;
             else if (x + 20 > scr_width)
@@ -519,6 +560,12 @@ drawFrames(WWindow *wwin, WMArray *array, int dx, int dy)
                 y = 20 - (int)tmpw->frame->core->height;
             else if (y + 20 > scr_height)
                 y = scr_height - 20;
+
+#else
+	    wScreenBringInside(wwin->screen_ptr, &x, &y,
+			       (int)tmpw->frame->core->width,
+			       (int)tmpw->frame->core->height);
+#endif
 
             drawTransparentFrame(tmpw, x, y, tmpw->frame->core->width,
                                  tmpw->frame->core->height);
@@ -981,10 +1028,16 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
         if (dx || dy) {
             int i;
             /* window is the leftmost window: check against screen edge */
-            l_edge = scr->totalUsableArea.x1;
-            r_edge = scr->totalUsableArea.x2 + resist;
-            edge_l = scr->totalUsableArea.x1 - resist;
-            edge_r = scr->totalUsableArea.x2;
+
+ 	    /*
+ 	     * Add inter head resistance 1/2 (if needed)
+ 	     */
+ 	    WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+ 
+ 	    l_edge = WMAX(scr->totalUsableArea.x1, rect.pos.x);
+ 	    edge_l = l_edge - resist;
+ 	    edge_r = WMIN(scr->totalUsableArea.x2, rect.pos.x + rect.size.width);
+ 	    r_edge = edge_r + resist;
 
             /* 1 */
             if ((data->rightIndex >= 0) && (data->rightIndex <= data->count)) {
@@ -1080,10 +1133,13 @@ updateWindowPosition(WWindow *wwin, MoveData *data, Bool doResistance,
             }
 
             /* VeRT */
-            t_edge = scr->totalUsableArea.y1;
-            b_edge = scr->totalUsableArea.y2 + resist;
-            edge_t = scr->totalUsableArea.y1 - resist;
-            edge_b = scr->totalUsableArea.y2;
+	    /*
+	     * Add inter head resistance 2/2 (if needed)
+	     */
+ 	    t_edge = WMAX(scr->totalUsableArea.y1, rect.pos.y);
+	    edge_t = t_edge - resist;
+ 	    edge_b = WMIN(scr->totalUsableArea.y2, rect.pos.y + rect.size.height);
+ 	    b_edge = edge_b + resist;
 
             if ((data->bottomIndex >= 0) && (data->bottomIndex <= data->count)) {
                 WWindow *looprw;

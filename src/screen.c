@@ -605,7 +605,6 @@ wScreenInit(int screen_number)
     RContextAttributes rattr;
     extern int wVisualID;
     long event_mask;
-    WMColor *color;
     XErrorHandler oldHandler;
 
     scr = wmalloc(sizeof(WScreen));
@@ -666,10 +665,7 @@ wScreenInit(int screen_number)
 	return NULL;
     }
     
-#ifdef XINERAMA
     wInitXinerama(scr);
-#endif
-    
 
     XDefineCursor(dpy, scr->root_win, wCursor[WCUR_ROOT]);
 
@@ -832,19 +828,9 @@ wScreenInit(int screen_number)
 
 
 
-static WArea subtractRectangle(WArea area, WArea rect)
-{
-    WArea result = area;
-    
-    
-}
-
-
 void
 wScreenUpdateUsableArea(WScreen *scr)
 {
-    WReservedArea *area;
-
     scr->totalUsableArea = scr->usableArea;
 
 
@@ -1119,7 +1105,46 @@ wScreenBringInside(WScreen *scr, int *x, int *y, int width, int height)
 {
     int moved = 0;
     int tol_w, tol_h;
+    /*
+     * With respect to the head that contains most of the window.
+     */
+    int sx1, sy1, sx2, sy2;
 
+    WMRect rect;
+    int head, flags;
+
+    rect.pos.x = *x;
+    rect.pos.y = *y;
+    rect.size.width = width;
+    rect.size.height = height;
+
+    head = wGetRectPlacementInfo(scr, rect, &flags);
+    rect = wGetRectForHead(scr, head);
+
+    sx1 = rect.pos.x;
+    sy1 = rect.pos.y;
+    sx2 = sx1 + rect.size.width;
+    sy2 = sy1 + rect.size.height;
+
+#if 0 /* NOTE: gives funky group movement */
+    if (flags & XFLAG_MULTIPLE) {
+	/*
+	 * since we span multiple heads, pull window totaly inside
+	 */
+	if (*x < sx1)
+	    *x = sx1, moved = 1;
+	else if (*x + width > sx2)
+	    *x = sx2 - width, moved = 1;
+
+	if (*y < sy1)
+	    *y = sy1, moved = 1;
+	else if (*y + height > sy2)
+	    *y = sy2 - height, moved = 1;
+
+	return moved;
+    }
+#endif
+    
     if (width > 20)
 	tol_w = width/2;
     else
@@ -1130,15 +1155,51 @@ wScreenBringInside(WScreen *scr, int *x, int *y, int width, int height)
     else
 	tol_h = 20;
 
-    if (*x+width < 10)
-	*x = -tol_w, moved = 1;
-    else if (*x >= scr->scr_width - 10)
-	*x = scr->scr_width - tol_w - 1, moved = 1;
+    if (*x + width < sx1 + 10)
+	*x = sx1 - tol_w, moved = 1;
+    else if (*x >= sx2 - 10)
+	*x = sx2 - tol_w - 1, moved = 1;
 
-    if (*y < -height + 10)
-	*y = -tol_h, moved = 1;
-    else if (*y >= scr->scr_height - 10)
-	*y = scr->scr_height - tol_h - 1, moved = 1;
+    if (*y < sy1 - height + 10)
+	*y = sy1 - tol_h, moved = 1;
+    else if (*y >= sy2 - 10)
+	*y = sy2 - tol_h - 1, moved = 1;
+
+    return moved;
+}
+
+
+
+int
+wScreenKeepInside(WScreen *scr, int *x, int *y, int width, int height)
+{
+    int moved = 0;
+    int sx1, sy1, sx2, sy2;
+    WMRect rect;
+    int head;
+
+    rect.pos.x = *x;
+    rect.pos.y = *y;
+    rect.size.width = width;
+    rect.size.height = height;
+
+    head = wGetHeadForRect(scr, rect);
+    rect = wGetRectForHead(scr, head);
+
+    sx1 = rect.pos.x;
+    sy1 = rect.pos.y;
+    sx2 = sx1 + rect.size.width;
+    sy2 = sy1 + rect.size.height;
+
+    if (*x < sx1)
+	*x = sx1, moved = 1;
+    else if (*x + width > sx2)
+	*x = sx2 - width, moved = 1;
+
+    if (*y < sy1)
+	*y = sy1, moved = 1;
+    else if (*y + height > sy2)
+	*y = sy2 - height, moved = 1;
 
     return moved;
 }

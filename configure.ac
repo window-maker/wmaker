@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.81.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.81.2)
 
 AC_PROG_LIBTOOL
 
@@ -526,10 +526,10 @@ fi
 
 dnl XINERAMA support
 dnl ================
-xinerama=no
-#AC_ARG_ENABLE(xinerama, 
-#[  --disable-xinerama     disable XInerama extension support],
-#		xinerama=$enableval, xinerama=yes)
+xinerama=yes
+AC_ARG_ENABLE(xinerama, 
+[  --disable-xinerama     disable XInerama extension support],
+		xinerama=$enableval, xinerama=yes)
 
 if test "$xinerama" = yes; then
 	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, [XLIBS="-lXinerama $XLIBS"

@@ -1074,16 +1074,29 @@ to force the modification time into the future.
 4.16 How can I set dock/clip to use single click to launch
      applications, instead of double click?
 ----------------------------------
-You cannot do this. This is because single click is used to select app-icons,
-or to raise/lower the app-icon or the dock/clip.
-If this is impelmented then you will be unable to select or raise/lower
-dock/clip or app-icons, without also launching the application it represents.
+This question was officially answered as follows:
 
-So don't ask for this to be implemented, because it will not be. Double
-click is used for a reason, is not just some weird idea we got in a morning
-when we wake up too early.
+    You cannot do this. This is because single click is used to select
+    app-icons, or to raise/lower the app-icon or the dock/clip.  If
+    this is impelmented then you will be unable to select or
+    raise/lower dock/clip or app-icons, without also launching the
+    application it represents.
 
+    So don't ask for this to be implemented, because it will not
+    be. Double click is used for a reason, is not just some weird idea
+    we got in a morning when we wake up too early.
 
+Regardless of that, there is now an option in WPrefs, under "Expert
+User Preferences," which allows you to set "Launch applications and
+restore windows with a single click."  (See the files contrib/README
+and contrib/single_click.diff in the source package for details.)
+
+If you set that option, a left button single click will launch or
+restore, rather than select, the app-icon.  You can use other methods
+(or temporarily turn the option off again) to select app-icons or
+raise/lower the dock/clip.  You can toggle the selected state of any
+app-icon via its right button menu, and there are auto-raise and
+keep-on-top options for the dock and clip.
 
 
 4.18 How do I restore the configuration app to the dock?

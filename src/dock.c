@@ -54,7 +54,7 @@
 #include "framewin.h"
 #include "superfluous.h"
 #include "wsound.h"
-
+#include "xinerama.h"
 
 
 
@@ -1712,20 +1712,22 @@ wClipRestoreState(WScreen *scr, WMPropList *clip_state)
 	if (!WMIsPLString(value))
 	    COMPLAIN("Position");
 	else {
+	    WMRect rect;
+	    int flags;
+
 	    if (sscanf(WMGetFromPLString(value), "%i,%i", &icon->x_pos,
 		       &icon->y_pos)!=2)
 		COMPLAIN("Position");
 
 	    /* check position sanity */
-	    if (icon->y_pos < 0)
-		icon->y_pos = 0;
-	    else if (icon->y_pos > scr->scr_height-ICON_SIZE)
-                icon->y_pos = scr->scr_height-ICON_SIZE;
-
-            if (icon->x_pos < 0)
-                icon->x_pos = 0;
-            else if (icon->x_pos > scr->scr_width-ICON_SIZE)
-                icon->x_pos = scr->scr_width-ICON_SIZE;
+	    rect.pos.x = icon->x_pos;
+	    rect.pos.y = icon->y_pos;
+	    rect.size.width = rect.size.height = ICON_SIZE;
+		
+	    wGetRectPlacementInfo(scr, rect, &flags);
+	    if (flags & (XFLAG_DEAD | XFLAG_PARTIAL))
+		wScreenKeepInside(scr, &icon->x_pos, &icon->y_pos, 
+				  ICON_SIZE, ICON_SIZE);
 	}
     }
 
@@ -1772,15 +1774,23 @@ wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
         if (!WMIsPLString(value))
             COMPLAIN("Position");
         else {
+	    WMRect rect;
+	    int flags;
+
             if (sscanf(WMGetFromPLString(value), "%i,%i", &dock->x_pos,
                        &dock->y_pos)!=2)
                 COMPLAIN("Position");
 
             /* check position sanity */
-            if (dock->y_pos < 0)
-                dock->y_pos = 0;
-            else if (dock->y_pos > scr->scr_height-ICON_SIZE)
-                dock->y_pos = scr->scr_height - ICON_SIZE;
+	    rect.pos.x = dock->x_pos;
+	    rect.pos.y = dock->y_pos;
+	    rect.size.width = rect.size.height = ICON_SIZE;
+		
+	    wGetRectPlacementInfo(scr, rect, &flags);
+	    if (flags & (XFLAG_DEAD | XFLAG_PARTIAL)) {
+		int x = dock->x_pos;
+		wScreenKeepInside(scr, &x, &dock->y_pos, ICON_SIZE, ICON_SIZE);
+	    }
 
             /* This is no more needed. ??? */
             if (type == WM_CLIP) {
@@ -2464,6 +2474,7 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
     WAppIcon *nicon = NULL;
     int max_y_icons, max_x_icons;
 
+    /* TODO: XINERAMA, for these */
     max_x_icons = scr->scr_width/ICON_SIZE;
     max_y_icons = scr->scr_height/ICON_SIZE-1;
 
@@ -2491,11 +2502,18 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
         ex_x = (req_x + offset - dx)/ICON_SIZE;
 
     /* check if the icon is outside the screen boundaries */
-    if (dx + ex_x*ICON_SIZE < -ICON_SIZE+2 ||
-	dx + ex_x*ICON_SIZE >= scr->scr_width-1 ||
-	dy + ex_y*ICON_SIZE < -ICON_SIZE+2 ||
-	dy + ex_y*ICON_SIZE >= scr->scr_height-1)
-	return False;
+    {
+	WMRect rect;
+	int flags;
+
+	rect.pos.x = dx + ex_x*ICON_SIZE;
+	rect.pos.y = dy + ex_y*ICON_SIZE;
+	rect.size.width = rect.size.height = ICON_SIZE;
+
+	wGetRectPlacementInfo(scr, rect, &flags);
+	if (flags & (XFLAG_DEAD | XFLAG_PARTIAL))
+	    return False;
+    }
 
     if (dock->type == WM_DOCK) {
 	if (icon->dock != dock && ex_x != 0)
@@ -2623,9 +2641,17 @@ wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
 }
 
 
-#define ON_SCREEN(x, y, sx, ex, sy, ey) \
-    ((((x)+ICON_SIZE/2) >= (sx)) && (((y)+ICON_SIZE/2) >= (sy)) && \
-    (((x) + (ICON_SIZE/2)) <= (ex)) && (((y) + (ICON_SIZE/2)) <= ey))
+static int onScreen(WScreen *scr, int x, int y, int sx, int ex, int sy, int ey)
+{
+    WMRect rect = { (x), (y), (ICON_SIZE), (ICON_SIZE) };
+    int flags; 
+
+    wGetRectPlacementInfo(scr, rect, &flags);
+
+    return !(flags & (XFLAG_DEAD | XFLAG_PARTIAL));
+}
+
+#define ON_SCREEN(x, y, sx, ex, sy, ey) onScreen(scr, x, y, sx, ex, sy, ey)
 
 
 /*
@@ -3662,22 +3688,10 @@ handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 		break;
 	    }
             if (dock->type == WM_CLIP) {
-                if (ev.xmotion.x_root - ofs_x < 0) {
-                    x = 0;
-                } else if (ev.xmotion.x_root - ofs_x + ICON_SIZE >
-                           scr->scr_width) {
-                    x = scr->scr_width - ICON_SIZE;
-                } else {
-                    x = ev.xmotion.x_root - ofs_x;
-                }
-                if (ev.xmotion.y_root - ofs_y < 0) {
-                    y = 0;
-                } else if (ev.xmotion.y_root - ofs_y + ICON_SIZE >
-                           scr->scr_height) {
-                    y = scr->scr_height - ICON_SIZE;
-                } else {
-                    y = ev.xmotion.y_root - ofs_y;
-                }
+		x = ev.xmotion.x_root - ofs_x;
+		y = ev.xmotion.y_root - ofs_y;
+		wScreenKeepInside(scr, &x, &y, ICON_SIZE, ICON_SIZE);
+
                 moveDock(dock, x, y);
             } else {
             /* move vertically if pointer is inside the dock*/
@@ -3686,14 +3700,9 @@ handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 		|| (!dock->on_right_side &&
 		    ev.xmotion.x_root <= dock->x_pos + ICON_SIZE*2)) {
 
-		if (ev.xmotion.y_root - ofs_y < 0) {
-		    y = 0;
-		} else if (ev.xmotion.y_root - ofs_y + ICON_SIZE >
-			   scr->scr_height) {
-		    y = scr->scr_height - ICON_SIZE;
-		} else {
-		    y = ev.xmotion.y_root - ofs_y;
-		}
+		x = ev.xmotion.x_root - ofs_x;
+		y = ev.xmotion.y_root - ofs_y;
+		wScreenKeepInside(scr, &x, &y, ICON_SIZE, ICON_SIZE);
                 moveDock(dock, dock->x_pos, y);
 	    }
 	    /* move horizontally to change sides */

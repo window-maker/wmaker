@@ -31,6 +31,9 @@ Changes since version 0.80.1:
 - Fixed wrlib to not accept too large images (fixes buffer overflow)
 - Patched FAQ (David Coe <davidc@debian.org>)
 - Fixed bug with resizebars appearing out of nothing when reloading configs
+- Fixed sloppy focus bug (Pawel S. Veselov <pv76716@druid.SFBay.Sun.COM>)
+- Applied Xinerama patch (after fixes) from (Peter Zijlstra
+  <a.p.zijlstra@chello.nl>)
 
 Changes since version 0.80.0:
 .............................

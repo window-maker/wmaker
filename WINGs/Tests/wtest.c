@@ -1303,14 +1303,15 @@ main(int argc, char **argv)
      */
 
 
+    testTextField(scr);
 
-    testDragAndDrop(scr);
-    testText(scr);
 
     testFontPanel(scr);
 
 
 #if 0
+    testText(scr);
+    testDragAndDrop(scr);
     testColorPanel(scr);
     testScrollView(scr);
     testTabView(scr);    
@@ -1322,7 +1323,6 @@ main(int argc, char **argv)
 
     testColorWell(scr);
 
-    testTextField(scr);
 
     testDragAndDrop(scr);
     testFontPanel(scr);
