@@ -483,6 +483,25 @@ WMCreateInputPanel(WMScreen *scrPtr, WMWindow *owner, char *title, char *msg,
 
 
 
+static void
+handleKeyPress3(XEvent *event, void *clientData)
+{
+    WMGenericPanel *panel = (WMAlertPanel*)clientData;
+    KeySym ksym;
+    
+    XLookupString(&event->xkey, NULL, 0, &ksym, NULL);
+        
+    if (ksym == XK_Return && panel->defBtn) {
+	WMPerformButtonClick(panel->defBtn);
+    } else if (ksym == XK_Escape) {
+	if (panel->altBtn) {
+	    WMPerformButtonClick(panel->altBtn);
+	} else {
+	    panel->result = WAPRDefault;
+	    WMBreakModalLoop(WMWidgetScreen(panel->win));
+	}
+    }
+}
 
 
 void
@@ -618,8 +637,8 @@ WMCreateGenericPanel(WMScreen *scrPtr, WMWindow *owner,
 
     WMMapSubwidgets(hbox);
 
-//    WMCreateEventHandler(W_VIEW(panel->win), KeyPressMask,
-//			 handleKeyPress3, panel);
+    WMCreateEventHandler(W_VIEW(panel->win), KeyPressMask,
+			 handleKeyPress3, panel);
 
     WMRealizeWidget(panel->win);
     WMMapSubwidgets(panel->win);

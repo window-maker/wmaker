@@ -566,7 +566,7 @@ updateScrollerProportion(ScrollView *sPtr)
 	oldP = WMGetScrollerKnobProportion(sPtr->hScroller);
 	
 	prop = (float)sPtr->viewport->size.width/(float)sPtr->contentView->size.width;
-
+	
 	if (oldP == 1.0) 
 	    value = 0;
 	else

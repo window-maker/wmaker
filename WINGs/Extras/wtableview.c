@@ -876,7 +876,7 @@ static void handleTableEvents(XEvent *event, void *data)
      case MotionNotify:
 	if (table->dragging && event->xmotion.y >= 0) {
 	    row = event->xmotion.y/table->rowHeight;
-	    if (table->clickedRow != row && row >= 0) {
+	    if (table->clickedRow != row && row >= 0 && row < table->rows) {
 		setRowSelected(table, table->clickedRow, False);
 		setRowSelected(table, row, True);
 		table->clickedRow = row;

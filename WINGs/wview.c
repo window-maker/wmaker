@@ -448,6 +448,8 @@ destroyView(W_View *view)
     
     WMUnregisterViewDraggedTypes(view);
     
+    WMRemoveNotificationObserver(view);
+    
 #if 0    
     if (view->dragSourceProcs)
 	wfree(view->dragSourceProcs);

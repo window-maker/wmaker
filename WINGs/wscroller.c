@@ -4,6 +4,8 @@
 
 #include "WINGsP.h"
 
+#include <math.h>
+
 /* undefine will disable the autoadjusting of the knob dimple to be
  * directly below the cursor 
  * DOES NOT WORK */
@@ -121,6 +123,9 @@ WMCreateScroller(WMWidget *parent)
 			 handleActionEvents, sPtr);
     
     sPtr->flags.hitPart = WSNoPart;
+    
+    sPtr->floatValue = 0.0;
+    sPtr->knobProportion = 1.0;
 
     return sPtr;
 }
@@ -170,6 +175,8 @@ WMSetScrollerParameters(WMScroller *sPtr, float floatValue,
 {
     CHECK_CLASS(sPtr, WC_Scroller);
 
+    assert(!isnan(floatValue));
+    
     if (floatValue < 0.0)
 	sPtr->floatValue = 0.0;
     else if (floatValue > 1.0)
@@ -429,7 +436,6 @@ paintScroller(Scroller *sPtr)
 	knobL = (float)knobLength(sPtr);
 
 	knobP = sPtr->floatValue * ((float)length - knobL);
-
 	
 	if (sPtr->flags.horizontal) {
 	    /* before */
@@ -712,7 +718,8 @@ floatValueForPoint(int slotOfs, int slotLength, int knobLength, int point)
     /* Compute the float value */
     floatValue = (position-(float)slotOfs) / (float)(slotLength-knobLength);
 #endif
-    
+
+    assert(!isnan(floatValue));
     return floatValue;
 }
 
