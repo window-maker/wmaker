@@ -1017,47 +1017,45 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     /*printf("(%d,%d) -> ", tPtr->selection.position, tPtr->selection.count);*/
     if (((XKeyEvent *) event)->state & WM_EMACSKEYMASK)
 	control_pressed = 1;
-    
-    shifted = event->xkey.state & ShiftMask;
-    controled = event->xkey.state & ControlMask;
-    if ((event->xkey.state & (ShiftMask|ControlMask)) != 0) {
-	modified = True;
-    } else {
-	modified = False;
-    }
+
+    shifted = (event->xkey.state & ShiftMask ? True : False);
+    controled = (event->xkey.state & ControlMask ? True : False);
+    modified = shifted || controled;
 
     count = XLookupString(&event->xkey, buffer, 63, &ksym, NULL);
     buffer[count] = '\0';
-    
+
     switch (ksym) {
      case XK_Tab:
 #ifdef XK_ISO_Left_Tab
      case XK_ISO_Left_Tab:
 #endif
-	if (!controled && !modified) {
+	if (!controled) {
 	    if (shifted) {
 		if (tPtr->view->prevFocusChain) {
 		    W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 					 tPtr->view->prevFocusChain);
-		    tPtr->flags.notIllegalMovement = 1;
+                    tPtr->flags.notIllegalMovement = 1;
 		}
 		data = (void*)WMBacktabTextMovement;
 	    } else {
 		if (tPtr->view->nextFocusChain) {
 		    W_SetFocusOfTopLevel(W_TopLevelOfView(tPtr->view),
 					 tPtr->view->nextFocusChain);
-		    tPtr->flags.notIllegalMovement = 1;
+                    tPtr->flags.notIllegalMovement = 1;
 		}
 		data = (void*)WMTabTextMovement;
 	    }
 	    textEvent = WMTextDidEndEditingNotification;
+
+            cancelSelection = 0;
 
 	    relay = False;
 	}
 	break;
 
      case XK_Escape:
-	if (!shifted && !controled && !modified) {
+	if (!modified) {
 	    data = (void*)WMEscapeTextMovement;
 	    textEvent = WMTextDidEndEditingNotification;
 	    
@@ -1066,7 +1064,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	break;
 
      case XK_Return:
-	if (!shifted && !controled && !modified) {
+	if (!modified) {
 	    data = (void*)WMReturnTextMovement;
 	    textEvent = WMTextDidEndEditingNotification;
 	    
@@ -1078,89 +1076,87 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	if (!control_pressed)
 	    goto normal_key;
 	else
-	    modified = False;
+            controled = False;
+
 #ifdef XK_KP_Left
      case XK_KP_Left:
 #endif
      case XK_Left:
-	if (!modified) {
-	    if (tPtr->cursorPosition > 0) {
-		paintCursor(tPtr);
-		if (event->xkey.state & ControlMask) {
-		    int i = tPtr->cursorPosition - 1;
-		    
-		    while (i > 0 && tPtr->text[i] != ' ') i--;
-		    while (i > 0 && tPtr->text[i] == ' ') i--;
-		    
-		    tPtr->cursorPosition = (i > 0) ? i + 1 : 0;
-		} else
-		    tPtr->cursorPosition--;
-		
-		if (tPtr->cursorPosition < tPtr->viewPosition) {
-		    tPtr->viewPosition = tPtr->cursorPosition;
-		    refresh = 1;
-		} else
-		    paintCursor(tPtr);
-	    }
-	    if (event->xkey.state & ShiftMask)
-		cancelSelection = 0;
-	    
-	    relay = False;
-	}
+        if (tPtr->cursorPosition > 0) {
+            paintCursor(tPtr);
+            if (controled) {
+                int i = tPtr->cursorPosition - 1;
+
+                while (i > 0 && tPtr->text[i] != ' ') i--;
+                while (i > 0 && tPtr->text[i] == ' ') i--;
+
+                tPtr->cursorPosition = (i > 0) ? i + 1 : 0;
+            } else
+                tPtr->cursorPosition--;
+
+            if (tPtr->cursorPosition < tPtr->viewPosition) {
+                tPtr->viewPosition = tPtr->cursorPosition;
+                refresh = 1;
+            } else
+                paintCursor(tPtr);
+        }
+        if (shifted)
+            cancelSelection = 0;
+
+        relay = False;
+
 	break;
 
     case WM_EMACSKEY_RIGHT:
         if (!control_pressed)
             goto normal_key;
         else
-	    modified = False;
+	    controled = False;
 
 #ifdef XK_KP_Right
     case XK_KP_Right:
 #endif
     case XK_Right:
-	if (!modified) {
-	    if (tPtr->cursorPosition < tPtr->textLen) {
-		paintCursor(tPtr);
-		if (event->xkey.state & ControlMask) {
-		    int i = tPtr->cursorPosition;
-		    
-		    while (tPtr->text[i] && tPtr->text[i] != ' ') i++;
-		    while (tPtr->text[i] == ' ') i++;
-		    
-		    tPtr->cursorPosition = i;
-		} else {
-		    tPtr->cursorPosition++;
-		}
-		while (WMWidthOfString(tPtr->font,
-				       &(tPtr->text[tPtr->viewPosition]),
-				       tPtr->cursorPosition-tPtr->viewPosition)
-		       > tPtr->usableWidth) {
-		    tPtr->viewPosition++;
-		    refresh = 1;
-		}
-		if (!refresh)
-		    paintCursor(tPtr);
-	    }
-	    if (event->xkey.state & ShiftMask)
-		cancelSelection = 0;
-	    
-	    relay = False;
-	}
+        if (tPtr->cursorPosition < tPtr->textLen) {
+            paintCursor(tPtr);
+            if (controled) {
+                int i = tPtr->cursorPosition;
+
+                while (tPtr->text[i] && tPtr->text[i] != ' ') i++;
+                while (tPtr->text[i] == ' ') i++;
+
+                tPtr->cursorPosition = i;
+            } else {
+                tPtr->cursorPosition++;
+            }
+            while (WMWidthOfString(tPtr->font,
+                                   &(tPtr->text[tPtr->viewPosition]),
+                                   tPtr->cursorPosition-tPtr->viewPosition)
+                   > tPtr->usableWidth) {
+                tPtr->viewPosition++;
+                refresh = 1;
+            }
+            if (!refresh)
+                paintCursor(tPtr);
+        }
+        if (shifted)
+            cancelSelection = 0;
+
+        relay = False;
+
 	break;
 	
     case WM_EMACSKEY_HOME:
         if (!control_pressed)
             goto normal_key;
-        else {
-	    modified = False;
-	    controled = False;
-	}
+        else
+            controled = False;
+
 #ifdef XK_KP_Home
     case XK_KP_Home:
 #endif
     case XK_Home:
-	if (!modified && !controled) {
+	if (!controled) {
 	    if (tPtr->cursorPosition > 0) {
 		paintCursor(tPtr);
 		tPtr->cursorPosition = 0;
@@ -1170,7 +1166,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 		} else
 		    paintCursor(tPtr);
 	    }
-	    if (event->xkey.state & ShiftMask)
+	    if (shifted)
 		cancelSelection = 0;
 	    
 	    relay = False;
@@ -1180,15 +1176,14 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     case WM_EMACSKEY_END:
         if (!control_pressed)
             goto normal_key;
-        else {
-	    modified = False;
-	    controled = False;
-	}
+        else
+            controled = False;
+
 #ifdef XK_KP_End
     case XK_KP_End:
 #endif
     case XK_End:
-	if (!modified && !controled) {
+	if (!controled) {
 	    if (tPtr->cursorPosition < tPtr->textLen) {
 		paintCursor(tPtr);
 		tPtr->cursorPosition = tPtr->textLen;
@@ -1203,7 +1198,7 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 		if (!refresh)
 		    paintCursor(tPtr);
 	    }
-	    if (event->xkey.state & ShiftMask)
+	    if (shifted)
 		cancelSelection = 0;
 	    
 	    relay = False;
@@ -1212,14 +1207,12 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	
      case WM_EMACSKEY_BS:
          if (!control_pressed)
-            goto normal_key;
-         else {
-	    modified = False;
-	    controled = False;
-	    shifted = False;
-	}
+             goto normal_key;
+         else
+             modified = False;
+
      case XK_BackSpace:
-	if (!modified && !shifted && !controled) {
+	if (!modified) {
 	    if (tPtr->selection.count) {
 		WMDeleteTextFieldRange(tPtr, tPtr->selection);
 		data = (void*)WMDeleteTextEvent;
@@ -1240,16 +1233,14 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
     case WM_EMACSKEY_DEL:
         if (!control_pressed)
             goto normal_key;
-	else {
-	    modified = False;
-	    controled = False;
-	    shifted = False;
-        }
+	else
+            modified = False;
+
 #ifdef XK_KP_Delete
     case XK_KP_Delete:
 #endif
     case XK_Delete:
-	if (!modified && !controled && !shifted) {
+	if (!modified) {
 	    if (tPtr->selection.count) {
 		WMDeleteTextFieldRange(tPtr, tPtr->selection);
 		data = (void*)WMDeleteTextEvent;

@@ -12,6 +12,7 @@ Changes since wmaker 0.80.0:
   same case.
 - Fixed WMGetViewScreenPosition() to consider the window decorations.
 - Added ability to enable/disable individual WMTableViewItems.
+- Fixed textfields regarding interpretation of special keys with modifiers.
 
 
 Changes since wmaker 0.70.0:
