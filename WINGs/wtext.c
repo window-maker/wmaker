@@ -29,18 +29,15 @@
 /* TODO: 
  *
  * -  FIX wrap... long lines that don't fit are not char wrapped yet.
+ * -  check if support for Horizontal Scroll is complete
  * -  FIX html parser:  1. <b>foo</i>  should STILL BE BOLD!
  * -                    2.  " foo > bar "  should not confuse it.
- * -  change Array stuffs to WMArray
  * -  assess danger of destroying widgets whose actions link to other pages
- * -  integrate WMConvertFontTo* functions into WINGs proper (fontpanel)?
  * -  change cursor shape around pixmaps
  * -  redo blink code to reduce paint event... use pixmap buffer...
  * -  add paragraph support (full) and '\n' code in getStream..
  * -  use currentTextBlock and neighbours for fast paint and layout
  * -  replace copious uses of Refreshtext with appropriate layOut()...
- * -  WMFindInTextStream should also highlight found text...
- * -  add full support for Horizontal Scroll
 */
 
 
@@ -255,23 +252,22 @@ mystrchr(char *s, char needle, unsigned short len)
     return NULL;
 }
 
-/* tb->text doesn't necessarily end in '\0' hmph! (strstr) */
+
+/* tb->text doesn't necessarily end in '\0' hmph! (strchr) */
 static inline char *
-mystrstr(char *haystack, char *needle, unsigned short len)
+mystrrstr(char *haystack, char *needle, unsigned short len, char *end)
 {
-    if (!haystack || !needle || len < 1) {
+    char *ptr;
+
+    if(!haystack || !needle)
         return NULL;
-    } else { 
-        char *s = wmalloc(len+1);
-        char *r;
-    
-        memcpy(s, haystack, len);
-        s[len] = 0;
-        r = (strstr(s, needle));
-        wfree(s);
-        return r;
-   }
-} 
+
+    for (ptr = haystack; ptr > end; ptr--) {
+        if (*ptr == *needle && !strncmp(ptr, needle, len))
+            return ptr;
+    }
+    return NULL;
+}
 
 static int
 mystrcasecmp(const unsigned char *s1, const unsigned char *s2, 
@@ -849,7 +845,6 @@ updateCursorPosition(Text *tPtr)
     tPtr->cursor.y = y;
     tPtr->cursor.h = h;
     tPtr->cursor.x = x;
-    paintText(tPtr);
 }
 
 
@@ -1114,7 +1109,7 @@ output(&tb->text[start], tPtr->tpos - start);
  				x -= WMWidthOfString(font, &tb->text[start], 
                 tPtr->tpos - start);
             }
-            tPtr->sel.x = (x<0?0:x);
+            tPtr->sel.x = (x<0?0:x)+1;
 
             if((mark = mystrchr(&tb->text[start], ' ', tb->used-start))) {
                 tPtr->sel.w = WMWidthOfString(font, &tb->text[start],
@@ -2002,6 +1997,8 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
     switch(ksym) {
 
         case XK_Left: 
+printf("foind %d \n", WMFindInTextStream(tPtr, "ion", 0, 0));
+return;
         if(!(tb = tPtr->currentTextBlock))
             break;
             if(tb->graphic) 
@@ -2014,10 +2011,11 @@ L_imaGFX:       if(tb->prior) {
                 } else tPtr->tpos = 0;
             } else tPtr->tpos--;
             updateCursorPosition(tPtr);
+            paintText(tPtr);
          break;
 
         case XK_Right:  
-printf("foind %d \n", WMFindInTextStream(tPtr, "It", 1, 0));
+printf("foind %d \n", WMFindInTextStream(tPtr, "ion", 1, 0));
 return;
         if(!(tb = tPtr->currentTextBlock))
             break;
@@ -2030,6 +2028,7 @@ R_imaGFX:      if(tb->next) {
                 } else tPtr->tpos = tb->used;
             } else  tPtr->tpos++;
             updateCursorPosition(tPtr);
+            paintText(tPtr);
         break;
             
         case XK_Down:
@@ -2049,6 +2048,7 @@ R_imaGFX:      if(tb->next) {
         case XK_KP_Delete:
             deleteTextInteractively(tPtr, ksym);
             updateCursorPosition(tPtr);
+            paintText(tPtr);
         break;
 
         case XK_Control_R :
@@ -2062,6 +2062,7 @@ R_imaGFX:      if(tb->next) {
         if (buffer[0] != 0 && !control_pressed) {
             insertTextInteractively(tPtr, buffer, 1);
             updateCursorPosition(tPtr);
+            paintText(tPtr);
 
         } else if (control_pressed && ksym==XK_r) {
             Bool i = !tPtr->flags.rulerShown; 
@@ -3669,8 +3670,8 @@ Bool
 WMFindInTextStream(WMText *tPtr, char *needle, Bool direction, 
     Bool caseSensitive)
 {
-    TextBlock *tb = NULL;
-    char *haystack = NULL, *mark = NULL;
+    TextBlock *tb;
+    char *s, *mark;
     unsigned short pos;
 
     if (!tPtr || !needle)
@@ -3682,26 +3683,54 @@ WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
             return False;
        }
     } else { 
-        if(tb != ((direction>0) ?tPtr->firstTextBlock : tPtr->lastTextBlock))
-            tb = (direction>0) ? tb->next : tb->prior;
+        //if(tb != ((direction>0) ?tPtr->firstTextBlock : tPtr->lastTextBlock))
+          //  tb = (direction>0) ? tb->next : tb->prior;
+        if(tb !=  tPtr->lastTextBlock)
+            tb = tb->prior;
     }
    
-printf("\n%p\n\n", tb);
 
     while(tb) {
         if (!tb->graphic) { 
-    pos = tPtr->tpos;
-    if(pos+1 < tb->used)
-        pos++;
-printf("here\n");
-output(tb->text, tb->used);
-            mark = strstr(&tb->text[pos], needle); //, tb->used);
+            pos = tPtr->tpos;
+            if(pos+1 < tb->used)
+                pos++;
+pos--;
+            if(tb->used - pos> 0 && pos > 0) { 
+                char tmp = tb->text[tb->used];
+                tb->text[tb->used] = 0;
+
+                if(direction > 0) 
+ 	                mark = strstr(&tb->text[pos], needle);
+                else
+ 	                mark = mystrrstr(&tb->text[pos], needle, 
+                       strlen(needle), tb->text);
+
+                tb->text[tb->used] = tmp;
+
+            } else {
+                return False;
+            }
+                
             if(mark) { 
-                tPtr->currentTextBlock = tb;
+                WMFont *font = tPtr->flags.monoFont?tPtr->dFont:tb->d.font;
+
                 tPtr->tpos = (int)(mark - tb->text);
+
+                tPtr->currentTextBlock = tb;
                 updateCursorPosition(tPtr);
+                tPtr->sel.y = tPtr->cursor.y+5;
+                tPtr->sel.h = tPtr->cursor.h-10;
+                tPtr->sel.x = tPtr->cursor.x +1;
+                tPtr->sel.w = WMIN(WMWidthOfString(font, 
+                   &tb->text[tPtr->tpos], strlen(needle)),
+                   tPtr->docWidth - tPtr->sel.x);
+                tPtr->flags.ownsSelection = True;
+                paintText(tPtr);
+
                 return True;
             }
+
         }   
         tb = (direction>0) ? tb->next : tb->prior;
         pos = 0;
