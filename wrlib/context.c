@@ -713,7 +713,9 @@ RCreateContext(Display *dpy, int screen_number, RContextAttributes *attribs)
 	free(context);
 	return NULL;
     }
-    
+
+    Hermes_Init();
+
     context->hermes_data->palette = Hermes_PaletteInstance();
     {
 	unsigned long flags = 0;
