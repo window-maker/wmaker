@@ -185,6 +185,12 @@ WMFreeHashTable(WMHashTable *table)
 }
 
 
+unsigned
+WMCountHashTable(WMHashTable *table)
+{
+    return table->itemCount;
+}
+
 
 void*
 WMHashGet(WMHashTable *table, const void *key)
@@ -388,10 +394,34 @@ WMNextHashEnumeratorKey(WMHashEnumerator *enumerator)
 }
 
 
-unsigned
-WMCountHashTable(WMHashTable *table)
+Bool
+WMNextHashEnumeratorItemAndKey(WMHashEnumerator *enumerator,
+                               void **item, void **key)
 {
-    return table->itemCount;
+    const void *data = NULL;
+
+    /* this assumes the table doesn't change between 
+     * WMEnumerateHashTable() and WMNextHashEnumeratorItemAndKey() calls */
+
+    if (enumerator->nextItem==NULL) {
+	HashTable *table = enumerator->table;
+	while (++enumerator->index < table->size) {
+	    if (table->table[enumerator->index]!=NULL) {
+		enumerator->nextItem = table->table[enumerator->index];
+		break;
+	    }
+	}
+    }
+
+    if (enumerator->nextItem) {
+        *item = (void*)((HashItem*)enumerator->nextItem)->data;
+        *key = (void*)((HashItem*)enumerator->nextItem)->key;
+        enumerator->nextItem = ((HashItem*)enumerator->nextItem)->next;
+
+        return True;
+    }
+
+    return False;
 }
 
 

@@ -121,13 +121,13 @@ typedef struct W_Array WMArray;
 typedef struct W_Bag WMBag;
 typedef struct W_Data WMData;
 typedef struct W_TreeNode WMTreeNode;
-typedef struct W_HashTable WMDictionary;
 typedef struct W_HashTable WMHashTable;
 typedef struct W_UserDefaults WMUserDefaults;
 typedef struct W_Notification WMNotification;
 typedef struct W_NotificationQueue WMNotificationQueue;
 typedef struct W_Host WMHost;
 typedef struct W_Connection WMConnection;
+typedef struct W_PropList WMPropList;
 
 
 
@@ -332,6 +332,8 @@ void WMFreeHashTable(WMHashTable *table);
 
 void WMResetHashTable(WMHashTable *table);
 
+unsigned WMCountHashTable(WMHashTable *table);
+
 void* WMHashGet(WMHashTable *table, const void *key);
 
 /* put data in table, replacing already existing data and returning
@@ -340,14 +342,20 @@ void* WMHashInsert(WMHashTable *table, const void *key, const void *data);
 
 void WMHashRemove(WMHashTable *table, const void *key);
 
-/* warning: do not manipulate the table while using these functions */
+/* warning: do not manipulate the table while using the enumerator functions */
 WMHashEnumerator WMEnumerateHashTable(WMHashTable *table);
 
 void* WMNextHashEnumeratorItem(WMHashEnumerator *enumerator);
 
 void* WMNextHashEnumeratorKey(WMHashEnumerator *enumerator);
 
-unsigned WMCountHashTable(WMHashTable *table);
+/* Returns True if there is a next element, in which case key and item
+ * will contain the next element's key and value respectively.
+ * If there is no next element available it will return False and in this
+ * case key and item will be undefined.
+ */
+Bool WMNextHashEnumeratorItemAndKey(WMHashEnumerator *enumerator,
+                                    void **item, void **key);
 
 
 

@@ -36,6 +36,7 @@ libWINGs_a_SOURCES = 	\
 	memory.c \
 	misc.c \
 	notification.c \
+	proplist.c \
 	selection.c \
 	string.c \
 	tree.c \
@@ -75,8 +76,7 @@ libWINGs_a_SOURCES = 	\
 	wtext.c \
 	wtextfield.c \
 	wview.c \
-	wwindow.c \
-	snprintf.c
+	wwindow.c
 
 
 libWUtil_a_SOURCES = 	\
@@ -93,14 +93,15 @@ libWUtil_a_SOURCES = 	\
 	memory.c \
 	misc.c \
 	notification.c \
+	proplist.c \
 	string.c \
 	tree.c \
 	userdefaults.c \
 	usleep.c \
 	wapplication.c \
 	wconfig.h \
-	wutil.c\
-	snprintf.c
+	wutil.c
+
 
 CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
 
