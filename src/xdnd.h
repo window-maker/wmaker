@@ -4,7 +4,7 @@
 
 
 void wXDNDInitializeAtoms();
-Bool wXDNDProcessSelection(XSelectionEvent *event);
+Bool wXDNDProcessSelection(XEvent *event);
 Bool wXDNDProcessClientMessage(XClientMessageEvent *event);
 void wXDNDMakeAwareness(Window window);
 void wXDNDClearAwareness(Window window);

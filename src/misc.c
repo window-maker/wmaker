@@ -875,14 +875,6 @@ get_dnd_selection(WScreen *scr)
     char *flat_string;
     int count;
     
-#ifdef XDND
-    if(scr->xdestring) {
-        /*
-        printf(" return %s\n",scr->xdestring);
-        */
-	return (wstrdup(scr->xdestring));
-    }
-#endif
     result=XGetTextProperty(dpy, scr->root_win, &text_ret, _XA_DND_SELECTION);
     
     if (result==0 || text_ret.value==NULL || text_ret.encoding==None
@@ -936,7 +928,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
     char *out, *nout;
     char *selection=NULL;
     char *user_input=NULL;
-#ifdef OFFIX_DND
+#if defined(OFFIX_DND) || defined(XDND)
     char *dropped_thing=NULL;
 #endif
     char tmpbuf[TMPBUFSIZE];
@@ -1047,8 +1039,13 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		}
 		break;
 
-#ifdef OFFIX_DND
+#if defined(OFFIX_DND) || defined(XDND)
 	     case 'd':
+#ifdef XDND
+        if(scr->xdestring) {
+            dropped_thing = wstrdup(scr->xdestring);
+        }
+#endif
 		if (!dropped_thing) {
 		    dropped_thing = get_dnd_selection(scr);
 		}

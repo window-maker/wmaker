@@ -90,17 +90,20 @@ void wXDNDClearAwareness(Window window) {
 }
 
 Bool
-wXDNDProcessSelection(XSelectionEvent *event)
+wXDNDProcessSelection(XEvent *event)
 {
-	WScreen *scr = wScreenForWindow(event->requestor);
+	WScreen *scr = wScreenForWindow(event->xselection.requestor);
     char *dropdata;
+    char *retain = scr->xdestring;
     Atom ret_type;
     int ret_format;
     unsigned long ret_item;
     unsigned long remain_byte;
     char * delme;
+    XEvent xevent;
     Window selowner = XGetSelectionOwner(dpy,_XA_XdndSelection);
-    XGetWindowProperty(dpy, event->requestor, _XA_WINDOWMAKER_XDNDEXCHANGE,
+    XGetWindowProperty(dpy, event->xselection.requestor,
+            _XA_WINDOWMAKER_XDNDEXCHANGE,
             0, 65536, True, atom_support, &ret_type, &ret_format,
             &ret_item, &remain_byte, (unsigned char **)&delme);
     if (delme){
@@ -110,19 +113,34 @@ wXDNDProcessSelection(XSelectionEvent *event)
 		scr->xdestring=delme;
     }
 
-    {
-        /*finished*/
-        XEvent xevent;
-        memset (&xevent, 0, sizeof(xevent));
-        xevent.xany.type = ClientMessage;
-        xevent.xany.display = dpy;
-        xevent.xclient.window = selowner;
-        xevent.xclient.message_type = _XA_XdndFinished;
-        xevent.xclient.format = 32;
-    
-        XDND_FINISHED_TARGET_WIN(&xevent) = event->requestor;
-        XSendEvent(dpy, selowner, 0, 0, &xevent);
-   }
+    /*send finished*/
+    memset (&xevent, 0, sizeof(xevent));
+    xevent.xany.type = ClientMessage;
+    xevent.xany.display = dpy;
+    xevent.xclient.window = selowner;
+    xevent.xclient.message_type = _XA_XdndFinished;
+    xevent.xclient.format = 32;
+    XDND_FINISHED_TARGET_WIN(&xevent) = event->xselection.requestor;
+    XSendEvent(dpy, selowner, 0, 0, &xevent);
+
+    /*process dropping*/
+    for (;retain[0];retain++) {
+        if (retain[0] < 32) retain[0] = 32;
+        if (!strncmp(retain, "file:", 5)) {
+            int i;
+            for (i=0;i<5;retain[i++]=' ');
+        }
+    }
+    retain = scr->xdestring;
+    if (scr->xdestring){
+        if (!strncmp(scr->xdestring, "file:", 5))
+            scr->xdestring+=5;
+    }
+    wDockReceiveDNDDrop(scr,event);
+    if (retain){
+        XFree(retain);
+        scr->xdestring = NULL;
+    }
 }
 
 Bool

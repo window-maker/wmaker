@@ -436,27 +436,7 @@ saveTimestamp(XEvent *event)
      case SelectionNotify:
 	LastTimestamp = event->xselection.time;
 #ifdef XDND
-    wXDNDProcessSelection(&event->xselection);
-    {
-        char *retain = scr->xdestring;
-        for (;retain[0];retain++) {
-            if (retain[0] < 32) retain[0] = 32;
-            if (!strncmp(retain, "file:", 5)) {
-                int i;
-                for (i=0;i<5;retain[i++]=' ');
-            }
-        }
-        retain = scr->xdestring;
-        if (scr->xdestring){
-            if (!strncmp(scr->xdestring, "file:", 5))
-                scr->xdestring+=5;
-        }
-        wDockReceiveDNDDrop(scr,event);
-        if (retain){
-            XFree(retain);
-            scr->xdestring = NULL;
-        }
-    }
+    wXDNDProcessSelection(event);
 #endif
 	break;
     }
