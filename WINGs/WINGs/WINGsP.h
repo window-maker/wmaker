@@ -203,6 +203,8 @@ typedef struct W_Screen {
 
     Bool useMultiByte;
 
+    Bool useWideChar;
+
     Bool antialiasedText;
 
     unsigned int ignoredModifierMask; /* modifiers to ignore when typing txt */

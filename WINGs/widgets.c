@@ -622,12 +622,6 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
 
     scrPtr->fontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
 
-    scrPtr->xftFontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
-
-    scrPtr->fontSetCache = WMCreateHashTable(WMStringPointerHashCallbacks);
-
-    scrPtr->xftFontSetCache = WMCreateHashTable(WMStringPointerHashCallbacks);
-
 #ifdef XFT
     scrPtr->xftdraw = XftDrawCreate(scrPtr->display, W_DRAWABLE(scrPtr),
                                     scrPtr->visual, scrPtr->colormap);
@@ -760,6 +754,8 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->stipple = stipple;
 
     scrPtr->useMultiByte = WINGsConfiguration.useMultiByte;
+
+    scrPtr->useWideChar = 1;
 
     scrPtr->antialiasedText = WINGsConfiguration.antialiasedText;
 

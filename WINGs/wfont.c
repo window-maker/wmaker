@@ -18,7 +18,7 @@
 
 #ifdef XFT
 
-#if defined(HAVE_MBSNRTOWCS1)
+#if defined(HAVE_MBSNRTOWCS)
 
 static size_t
 wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
@@ -49,13 +49,10 @@ wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
     if (nbytes==0)
         return 0;
 
-    ptr = *src;
-    n = 0;
-
     memset(&ps, 0, sizeof(mbstate_t));
 
     if (dest == NULL) {
-        for (;;) {
+        for (ptr=*src, n=0; nbytes>0; n++) {
             nb = mbrtowc(NULL, ptr, nbytes, &ps);
             if (nb == -1) {
                 return ((size_t)-1);
@@ -64,11 +61,10 @@ wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
             }
             ptr += nb;
             nbytes -= nb;
-            n++;
         }
     }
 
-    while (len-- > 0) {
+    for (ptr=*src, n=0; n<len && nbytes>0; n++, dest++) {
         nb = mbrtowc(dest, ptr, nbytes, &ps);
         if (nb == -2) {
             *src = ptr;
@@ -82,8 +78,6 @@ wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
         }
         ptr += nb;
         nbytes -= nb;
-        n++;
-        dest++;
     }
 
     *src = ptr;
@@ -91,8 +85,105 @@ wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
 }
 
 #else
-# error  No mbsnrtowcs. You loose.
+
+// Not only 8 times slower than the version based on mbsnrtowcs
+// but also this version is not thread safe nor reentrant
+
+static size_t
+wmbsnrtowcs(wchar_t *dest, const char **src, size_t nbytes, size_t len)
+{
+    const char *ptr;
+    size_t n;
+    int nb;
+
+    if (nbytes==0)
+        return 0;
+
+    mbtowc(NULL, NULL, 0); /* reset shift state */
+
+    if (dest == NULL) {
+        for (ptr=*src, n=0; nbytes>0; n++) {
+            nb = mbtowc(NULL, ptr, nbytes);
+            if (nb == -1) {
+                mbtowc(NULL, NULL, 0);
+                nb = mbtowc(NULL, ptr, strlen(ptr));
+                return (nb == -1 ? (size_t)-1 : n);
+            } else if (nb==0) {
+                return n;
+            }
+            ptr += nb;
+            nbytes -= nb;
+        }
+    }
+
+    for (ptr=*src, n=0; n<len && nbytes>0; n++, dest++) {
+        nb = mbtowc(dest, ptr, nbytes);
+        if (nb == -1) {
+            mbtowc(NULL, NULL, 0);
+            nb = mbtowc(NULL, ptr, strlen(ptr));
+            *src = ptr;
+            return (nb == -1 ? (size_t)-1 : n);
+        } else if (nb == 0) {
+            *src = NULL;
+            return n;
+        }
+        ptr += nb;
+        nbytes -= nb;
+    }
+
+    *src = ptr;
+    return n;
+}
+
 #endif
+
+
+static Bool
+alreadyHasStringValue(XftPattern *pattern, const char *object, char *value)
+{
+    XftResult r;
+    char *s;
+    int id;
+
+    if (!value || value[0]==0)
+        return True;
+
+    id = 0;
+    while ((r=XftPatternGetString(pattern, object, id, &s))!=XftResultNoId) {
+        if (r == XftResultMatch && strcasecmp(value, s) == 0) {
+            return True;
+        }
+        id++;
+    }
+
+    return False;
+}
+
+
+// check if to add a fallback size too. -Dan
+static char*
+makeFontOfSize(char *font, int size, char *fallback)
+{
+    XftPattern *pattern;
+    char *result;
+    int len;
+
+    len = strlen(font) + 64;
+    pattern = XftNameParse(font);
+    XftPatternDel(pattern, "pixelsize");
+    XftPatternAddDouble(pattern, "pixelsize", (double)size);
+    if (fallback) {
+        if (!alreadyHasStringValue(pattern, "family", fallback)) {
+            len += strlen(fallback);
+            XftPatternAddString(pattern, "family", fallback);
+        }
+    }
+    result = wmalloc(len);
+    XftNameUnparse(pattern, result, len);
+    XftPatternDestroy(pattern);
+
+    return result;
+}
 
 
 WMFont*
@@ -221,17 +312,14 @@ WMSystemFontOfSize(WMScreen *scrPtr, int size)
     WMFont *font;
     char *fontSpec;
 
-    // we can here use fontnames like arial,times,sans-8:...
-    // which allow automatic fallback to times if arial is not available
-    // then sans if times is also unavailable.
-    fontSpec = makeFontSetOfSize(WINGsConfiguration.systemFont, size);
+    fontSpec = makeFontOfSize(WINGsConfiguration.systemFont, size, "sans");
 
     font = WMCreateFont(scrPtr, fontSpec);
 
     if (!font) {
-        wwarning(_("could not load font %s. Trying sans."), fontSpec);
-        font = WMCreateFont(scrPtr, "sans:pixelsize=12");
+        wwarning(_("could not load font %s."), fontSpec);
     }
+
     wfree(fontSpec);
 
     return font;
@@ -244,17 +332,14 @@ WMBoldSystemFontOfSize(WMScreen *scrPtr, int size)
     WMFont *font;
     char *fontSpec;
 
-    // we can here use fontnames like arial,times,sans-8:...
-    // which allow automatic fallback to times if arial is not available
-    // then sans if times is also unavailable.
-    fontSpec = makeFontSetOfSize(WINGsConfiguration.boldSystemFont, size);
+    fontSpec = makeFontOfSize(WINGsConfiguration.boldSystemFont, size, "sans");
 
     font = WMCreateFont(scrPtr, fontSpec);
 
     if (!font) {
-        wwarning(_("could not load font %s. Trying sans."), fontSpec);
-        font = WMCreateFont(scrPtr, "sans:bold:pixelsize=12");
+        wwarning(_("could not load font %s."), fontSpec);
     }
+
     wfree(fontSpec);
 
     return font;
@@ -269,9 +354,9 @@ WMWidthOfString(WMFont *font, char *text, int length)
     wassertrv(font!=NULL, 0);
     wassertrv(text!=NULL, 0);
 
-    if (!font->notFontSet) {
+    if (font->screen->useWideChar) {
         wchar_t *wtext;
-        char *mtext;
+        const char *mtext;
         int len;
 
         wtext = (wchar_t *)wmalloc(sizeof(wchar_t)*(length+1));
@@ -316,9 +401,9 @@ WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
 
     XftDrawChange(scr->xftdraw, d);
 
-    if (!font->notFontSet) {
+    if (font->screen->useWideChar) {
         wchar_t *wtext;
-        char *mtext;
+        const char *mtext;
         int len;
 
         wtext = (wchar_t *)wmalloc(sizeof(wchar_t)*(length+1));
@@ -371,9 +456,9 @@ WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background
                 WMWidthOfString(font, text, length),
                 font->height);
 
-    if (!font->notFontSet) {
+    if (font->screen->useWideChar) {
         wchar_t *wtext;
-        char *mtext;
+        const char *mtext;
         int len;
 
         mtext = text;
@@ -396,132 +481,6 @@ WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color, WMColor *background
         XftDrawString8(scr->xftdraw, &textColor, font->font,
                        x, y + font->y, (XftChar8*)text, length);
     }
-}
-
-
-
-
-static char*
-makeFontSetOfSize(char *fontset, int size)
-{
-    char font[300], *f;
-    char *newfs = NULL;
-    char *ptr;
-
-    do {
-	char *tmp;
-	int end;
-
-
-	f = fontset;
-	ptr = strchr(fontset, ',');
-	if (ptr) {
-	    int count = ptr-fontset;
-
-	    if (count > 255) {
-		wwarning(_("font description %s is too large."), fontset);
-	    } else {
-		memcpy(font, fontset, count);
-		font[count] = 0;
-		f = (char*)font;
-	    }
-	}
-
-	if (newfs)
-	    end = strlen(newfs);
-	else
-	    end = 0;
-
-	tmp = wmalloc(end + strlen(f) + 8);
-	if (end != 0) {
-	    sprintf(tmp, "%s,", newfs);
-	    sprintf(tmp + end + 1, f, size);
-	} else {
-	    sprintf(tmp + end, f, size);
-	}
-
-	if (newfs)
-	    wfree(newfs);
-	newfs = tmp;
-
-	fontset = ptr+1;
-    } while (ptr!=NULL);
-
-    return newfs;
-}
-
-
-#define FONT_PROPS 14
-
-typedef struct {
-    char *props[FONT_PROPS];
-} W_FontAttributes;
-
-
-static void
-changeFontProp(char *buf, char *newprop, int position)
-{
-    char buf2[512];
-    char *ptr, *pptr, *rptr;
-    int count;
-
-    if (buf[0]!='-') {
-        /* // remove warning later. or maybe not */
-        wwarning(_("Invalid font specification: '%s'\n"), buf);
-        return;
-    }
-
-    ptr = pptr = rptr = buf;
-    count = 0;
-    while (*ptr && *ptr!=',') {
-        if (*ptr == '-') {
-            count++;
-            if (count-1==position+1) {
-                rptr = ptr;
-                break;
-            }
-            if (count-1==position) {
-                pptr = ptr+1;
-            }
-        }
-        ptr++;
-    }
-    if (position==FONT_PROPS-1) {
-        rptr = ptr;
-    }
-
-    *pptr = 0;
-    snprintf(buf2, 512, "%s%s%s", buf, newprop, rptr);
-    strcpy(buf, buf2);
-}
-
-
-static WMArray*
-getOptions(char *options)
-{
-    char *ptr, *ptr2, *str;
-    WMArray *result;
-    int count;
-
-    result = WMCreateArrayWithDestructor(2, (WMFreeDataProc*)wfree);
-
-    ptr = options;
-    while (1) {
-        ptr2 = strchr(ptr, ',');
-        if (!ptr2) {
-            WMAddToArray(result, wstrdup(ptr));
-            break;
-        } else {
-            count = ptr2 - ptr;
-            str = wmalloc(count+1);
-            memcpy(str, ptr, count);
-            str[count] = 0;
-            WMAddToArray(result, str);
-            ptr = ptr2 + 1;
-        }
-    }
-
-    return result;
 }
 
 
@@ -605,6 +564,85 @@ WMCopyFontWithChanges(WMScreen *scrPtr, WMFont *font,
 
     return NULL;
 }
+
+
+#if 0
+
+#define FONT_PROPS 14
+
+typedef struct {
+    char *props[FONT_PROPS];
+} W_FontAttributes;
+
+
+static void
+changeFontProp(char *buf, char *newprop, int position)
+{
+    char buf2[512];
+    char *ptr, *pptr, *rptr;
+    int count;
+
+    if (buf[0]!='-') {
+        /* // remove warning later. or maybe not */
+        wwarning(_("Invalid font specification: '%s'\n"), buf);
+        return;
+    }
+
+    ptr = pptr = rptr = buf;
+    count = 0;
+    while (*ptr && *ptr!=',') {
+        if (*ptr == '-') {
+            count++;
+            if (count-1==position+1) {
+                rptr = ptr;
+                break;
+            }
+            if (count-1==position) {
+                pptr = ptr+1;
+            }
+        }
+        ptr++;
+    }
+    if (position==FONT_PROPS-1) {
+        rptr = ptr;
+    }
+
+    *pptr = 0;
+    snprintf(buf2, 512, "%s%s%s", buf, newprop, rptr);
+    strcpy(buf, buf2);
+}
+
+
+static WMArray*
+getOptions(char *options)
+{
+    char *ptr, *ptr2, *str;
+    WMArray *result;
+    int count;
+
+    result = WMCreateArrayWithDestructor(2, (WMFreeDataProc*)wfree);
+
+    ptr = options;
+    while (1) {
+        ptr2 = strchr(ptr, ',');
+        if (!ptr2) {
+            WMAddToArray(result, wstrdup(ptr));
+            break;
+        } else {
+            count = ptr2 - ptr;
+            str = wmalloc(count+1);
+            memcpy(str, ptr, count);
+            str[count] = 0;
+            WMAddToArray(result, str);
+            ptr = ptr2 + 1;
+        }
+    }
+
+    return result;
+}
+
+
+#endif
 
 
 #else /* No XFT support */
