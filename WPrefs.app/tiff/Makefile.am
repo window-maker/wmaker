@@ -1,6 +1,6 @@
 tiffdatadir = $(wprefsdir)/tiff
 
-tiffdata_DATA = \
+EXTRA_DIST = \
 	advancetonewworkspace.tiff \
 	animations.tiff \
 	appearance.tiff \
@@ -66,4 +66,12 @@ tiffdata_DATA = \
 	workspacename.tiff \
 	xis.tiff 
 
-EXTRA_DIST = $(tiffdata_DATA)
+TIFF_FILES=
+
+tiffdata_DATA=$(TIFF_FILES)
+
+install-data-local:
+	if [ @ICONEXT@ = "tiff" -a x"$(TIFF_FILES)" = "x" ] ; then\
+		$(MAKE) install-data TIFF_FILES="$(EXTRA_DIST)";\
+	fi
+

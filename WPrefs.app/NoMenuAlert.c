@@ -90,8 +90,21 @@ AskMenuCopy(WMWindow *wwin)
     WMResizeWidget(panel.text, 370, 200);
     WMMoveWidget(panel.text, 30, 20);
 
-    sprintf(buffer, _(MESSAGE_TEXT), wusergnusteppath(),
-	    "Library/WindowMaker/README");
+    sprintf(buffer, 
+	    _("     The menu that is being used now could not be opened. "
+	"This either means that there is a syntax error in it or that "
+	"the menu is in a format not supported by WPrefs (WPrefs only "
+	"supports property list menus).\n"
+	"     If you want to keep using the current menu, please read "
+	"the '%s/%s' file, press 'Keep Current Menu' and edit it with a "
+	"text editor.\n"
+	"     If you want to use this editor, press 'Copy Default Menu'. "
+	"It will copy the default menu and will instruct Window Maker "
+	"to use it instead of the current one.\n"
+	"     If you want more flexibility, keep using the current one "
+	"as it allows you to use C preprocessor (cpp) macros, while being "
+	"easy to edit. Window Maker supports both formats."),
+	    wusergnusteppath(), "Library/WindowMaker/README");
     WMSetLabelText(panel.text, buffer);
 
     panel.copyBtn = WMCreateCommandButton(panel.wwin);

@@ -1,6 +1,7 @@
 xpmdatadir = $(wprefsdir)/xpm
 
-xpmdata_DATA = \
+
+EXTRA_DIST = \
 	advancetonewworkspace.xpm \
 	animations.xpm \
 	appearance.xpm \
@@ -66,4 +67,13 @@ xpmdata_DATA = \
 	workspacename.xpm \
 	xis.xpm 
 
-EXTRA_DIST = $(xpmdata_DATA)
+
+XPM_FILES=
+
+xpmdata_DATA=$(XPM_FILES)
+
+install-data-local:
+	if [ @ICONEXT@ = "xpm" -a x"$(XPM_FILES)" = "x" ] ; then\
+		$(MAKE) install-data XPM_FILES="$(EXTRA_DIST)";\
+	fi
+
