@@ -28,6 +28,7 @@ Changes since wmaker 0.64.0:
 - replaced bags with arrays wherever appropriate. This will improve
   performance a bit.
 - replaced some recursive code with iterative code in selection.c
+- added WMCreateBlendedPixmapFromRImage()
 
 
 changes since wmaker 0.63.1:

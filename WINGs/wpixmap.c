@@ -49,8 +49,8 @@ WMCreatePixmap(WMScreen *scrPtr, int width, int height, int depth, Bool masked)
     pixPtr->pixmap = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr),
 				   width, height, depth);
     if (masked) {
-	    pixPtr->mask = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr),
-					 width, height, 1);
+        pixPtr->mask = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr),
+                                     width, height, 1);
     } else {
 	pixPtr->mask = None;
     }
@@ -125,6 +125,21 @@ WMCreatePixmapFromRImage(WMScreen *scrPtr, RImage *image, int threshold)
     pixPtr->refCount = 1;
 
     return pixPtr;    
+}
+
+
+WMPixmap*
+WMCreateBlendedPixmapFromRImage(WMScreen *scrPtr, RImage *image, RColor *color)
+{
+    WMPixmap *pixPtr;
+    RImage *copy;
+
+    copy = RCloneImage(image);
+    RCombineImageWithColor(copy, color);
+    pixPtr = WMCreatePixmapFromRImage(scrPtr, copy, 0);
+    RDestroyImage(copy);
+
+    return pixPtr;
 }
 
 

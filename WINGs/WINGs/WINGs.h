@@ -737,6 +737,9 @@ WMSize WMGetPixmapSize(WMPixmap *pixmap);
 
 WMPixmap *WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName);
 
+WMPixmap* WMCreateBlendedPixmapFromRImage(WMScreen *scrPtr, RImage *image,
+                                          RColor *color);
+
 WMPixmap *WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName,
 					RColor *color);
 
