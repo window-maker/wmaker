@@ -1790,7 +1790,7 @@ wWindowUpdateName(WWindow *wwin, char *newTitle)
 	title = newTitle;
     }
     
-#ifdef NO_WINDOW_ENUMERATOR
+#ifndef NO_WINDOW_ENUMERATOR
     if (instIndex > 0) {
 	sprintf(prefix, "  [%i]", instIndex);
 	
@@ -1805,8 +1805,12 @@ wWindowUpdateName(WWindow *wwin, char *newTitle)
 	wKWMSendEventMessage(wwin, WKWMChangedClient);
 #endif
     }
+
+#ifndef NO_WINDOW_ENUMERATOR
     if (instIndex > 0)
 	wfree(title);
+#endif
+
 }
 
 
