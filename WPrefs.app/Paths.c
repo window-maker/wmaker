@@ -254,7 +254,7 @@ createPanel(Panel *p)
     WMMoveWidget(panel->frame, FRAME_LEFT, FRAME_TOP);
     
     panel->tabv = WMCreateTabView(panel->frame);
-    WMMoveWidget(panel->tabv, 10, 10);
+    WMMoveWidget(panel->tabv, 12, 10);
     WMResizeWidget(panel->tabv, 500, 215);
 
     
@@ -277,14 +277,14 @@ createPanel(Panel *p)
     
     panel->icoaB = WMCreateCommandButton(panel->icoF);
     WMResizeWidget(panel->icoaB, 95, 24);
-    WMMoveWidget(panel->icoaB, 110, 165);
+    WMMoveWidget(panel->icoaB, 293, 165);
     WMSetButtonText(panel->icoaB, _("Add"));
     WMSetButtonAction(panel->icoaB, browseForFile, panel);
     WMSetButtonImagePosition(panel->icoaB, WIPRight);
 
     panel->icorB = WMCreateCommandButton(panel->icoF);
     WMResizeWidget(panel->icorB, 95, 24);
-    WMMoveWidget(panel->icorB, 10, 165);
+    WMMoveWidget(panel->icorB, 395, 165);
     WMSetButtonText(panel->icorB, _("Remove"));
     WMSetButtonAction(panel->icorB, pushButton, panel);
 
@@ -308,14 +308,14 @@ createPanel(Panel *p)
     
     panel->pixaB = WMCreateCommandButton(panel->pixF);
     WMResizeWidget(panel->pixaB, 95, 24);
-    WMMoveWidget(panel->pixaB, 110, 165);
+    WMMoveWidget(panel->pixaB, 293, 165);
     WMSetButtonText(panel->pixaB, _("Add"));
     WMSetButtonAction(panel->pixaB, browseForFile, panel);
     WMSetButtonImagePosition(panel->pixaB, WIPRight);
     
     panel->pixrB = WMCreateCommandButton(panel->pixF);
     WMResizeWidget(panel->pixrB, 95, 24);
-    WMMoveWidget(panel->pixrB, 10, 165);
+    WMMoveWidget(panel->pixrB, 395, 165);
     WMSetButtonText(panel->pixrB, _("Remove"));
     WMSetButtonAction(panel->pixrB, pushButton, panel);
 
