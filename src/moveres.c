@@ -1641,8 +1641,8 @@ wMouseMoveWindow(WWindow *wwin, XEvent *ev)
                                moveData.realX - wwin->frame_x,
 			       moveData.realY - wwin->frame_y);
 		}
-	    } else {
-		WMHandleEvent(&event);
+	    /*} else {
+		WMHandleEvent(&event); this causes problems needs fixing */
 	    }
 	    break;
 
