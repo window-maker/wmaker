@@ -983,7 +983,9 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 	if (!control_pressed) {
 	    goto normal_key;
 	}
+#ifdef XK_KP_Left
      case XK_KP_Left:
+#endif
      case XK_Left:
 	if (tPtr->cursorPosition > 0) {
 	    paintCursor(tPtr);
@@ -1010,7 +1012,9 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
       if (!control_pressed) {
 	goto normal_key;
       }
+#ifdef XK_KP_Right
     case XK_KP_Right:
+#endif
      case XK_Right:
 	if (tPtr->cursorPosition < tPtr->textLen) {
 	    paintCursor(tPtr);
@@ -1040,7 +1044,9 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
       if (!control_pressed) {
 	goto normal_key;
       }
+#ifdef XK_KP_Home
     case XK_KP_Home:
+#endif
      case XK_Home:
 	if (tPtr->cursorPosition > 0) {
 	    paintCursor(tPtr);
@@ -1058,7 +1064,9 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
       if (!control_pressed) {
 	goto normal_key;
       }
+#ifdef XK_KP_End
      case XK_KP_End:
+#endif
      case XK_End:
 	if (tPtr->cursorPosition < tPtr->textLen) {
 	    paintCursor(tPtr);
@@ -1104,7 +1112,9 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
       if (!control_pressed) {
 	goto normal_key;
       }
+#ifdef XK_KP_Delete
     case XK_KP_Delete:
+#endif
      case XK_Delete:
 	if (tPtr->cursorPosition < tPtr->textLen || tPtr->prevselection.count) {
             WMRange range;

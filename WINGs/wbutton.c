@@ -263,6 +263,12 @@ updateDisabledMask(WMButton *bPtr)
     }
 }
 
+void
+WMSetButtonImageDefault(WMButton *bPtr)
+{
+    WMSetButtonImage (bPtr, WMWidgetScreen(bPtr)->buttonArrow);
+    WMSetButtonAltImage (bPtr, WMWidgetScreen(bPtr)->pushedButtonArrow);
+}
 
 void
 WMSetButtonImage(WMButton *bPtr, WMPixmap *image)

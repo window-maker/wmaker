@@ -60,8 +60,6 @@ libWINGs_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
 	configuration.c \
-	llist.h \
-	llist.c \
 	international.c \
 	notification.c \
 	selection.c \
@@ -86,6 +84,7 @@ libWINGs_a_SOURCES = 	\
 	wpanel.c \
 	wpixmap.c \
 	wpopupbutton.c \
+	wprogressindicator.c \
 	wscroller.c \
 	wscrollview.c \
 	wslider.c \
@@ -96,6 +95,7 @@ libWINGs_a_SOURCES = 	\
 	wview.c \
 	error.c \
 	findfile.c \
+	bag.c \
 	hashtable.c \
 	memory.c \
 	usleep.c
@@ -104,8 +104,7 @@ libWINGs_a_SOURCES = 	\
 libWUtil_a_SOURCES = 	\
 	WINGs.h \
 	WINGsP.h \
-	llist.h \
-	llist.c \
+	bag.c \
 	international.c \
 	notification.c \
 	userdefaults.c \

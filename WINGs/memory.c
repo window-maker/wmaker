@@ -43,7 +43,7 @@ static void
 defaultHandler(int bla)
 {
     if (bla)
-	raise(SIGABRT);
+	kill(getpid(), SIGABRT);
     else
 	exit(1);
 }

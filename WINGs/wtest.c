@@ -331,6 +331,30 @@ testTextField(WMScreen *scr)
 
 
 void
+testProgressIndicator(WMScreen *scr)
+{
+    WMWindow *win;
+    WMProgressIndicator *pPtr;
+
+    windowCount++;
+    
+    win = WMCreateWindow(scr, "testProgressIndicator");
+    WMResizeWidget(win, 292, 32);
+
+    WMSetWindowCloseAction(win, closeAction, NULL);    
+
+    pPtr = WMCreateProgressIndicator(win);
+    WMMoveWidget(pPtr, 8, 8);
+    WMSetProgressIndicatorValue(pPtr, 75);
+
+    WMRealizeWidget(win);
+    WMMapSubwidgets(win);
+    WMMapWidget(win);
+    
+}
+
+
+void
 testPullDown(WMScreen *scr)
 {
     WMWindow *win;
@@ -437,14 +461,16 @@ testTabView(WMScreen *scr)
 }
 
 
-
 #include "WUtil.h"
+
+
 
 int main(int argc, char **argv)
 {
     WMScreen *scr;
     WMPixmap *pixmap;
 
+    
     /* Initialize the application */
     WMInitializeApplication("Test", &argc, argv);
     
@@ -486,17 +512,19 @@ int main(int argc, char **argv)
      * Put the testSomething() function you want to test here.
      */
 
-    testGradientButtons(scr);
 
 
+    testFontPanel(scr);
 #if 0
+
+    testProgressIndicator(scr);
+    testGradientButtons(scr);
     testColorWell(scr);
 
     testTabView(scr);
     testTextField(scr);
 
     testOpenFilePanel(scr);
-    testFontPanel(scr);
     testList(scr);
     testGradientButtons(scr);
     testScrollView(scr);

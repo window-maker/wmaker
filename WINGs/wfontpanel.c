@@ -70,9 +70,8 @@ static char *scalableFontSizes[] = {
 
 static void arrangeLowerFrame(FontPanel *panel);
 
-static proplist_t createFontDatabase(WMScreen *scr);
 
-static void listFamilies(proplist_t fdb, WMList *list);
+static void listFamilies(WMScreen *scr, WMFontPanel *panel);
 
 static void
 splitViewConstrainCallback(WMSplitView *sPtr, int divIndex, int *min, int *max)
@@ -279,8 +278,9 @@ WMGetFontPanel(WMScreen *scr)
 			      WMViewSizeDidChangeNotification, 
 			      WMWidgetView(panel->lowerF));
 
-    panel->fdb = createFontDatabase(scr);
-    listFamilies(panel->fdb, panel->famLs);
+
+    listFamilies(scr, panel);
+ 
     
     return panel;
 }
@@ -404,8 +404,10 @@ arrangeLowerFrame(FontPanel *panel)
 #define NUM_FIELDS 14
 
 
+#if 1
+
 static Bool
-parseFont(char *font, char **values)
+parseFont(char *font, char values[NUM_FIELDS][256])
 {
     char *ptr;
     int part;
@@ -418,7 +420,7 @@ parseFont(char *font, char **values)
     while (*ptr) {
 	if (*ptr == '-') {
 	    *bptr = 0;
-	    values[part]=wstrdup(buffer);
+	    strcpy(values[part], buffer);
 	    bptr = buffer;
 	    part++;
 	} else {
@@ -427,7 +429,7 @@ parseFont(char *font, char **values)
 	ptr++;
     }
     *bptr = 0;
-    values[part]=wstrdup(buffer);
+    strcpy(values[part], buffer);
     
     return True;
 }
@@ -452,203 +454,203 @@ isXLFD(char *font, int *length_ret)
 
 
 
-static proplist_t foundryKey = NULL;
-static proplist_t typeKey = NULL;
-static proplist_t sizeKey, encKey, xlfdKey;
+typedef struct {
+    char *weight;
+    char *slant;
+
+    char *setWidth;
+    char *addStyle;
+    
+    char showWeight; /* not Medium */
+    char showSlant; /* not R */
+    char showSetWidth; /* when duplicated */
+    char showAddStyle; /* when duplicated */
+} Typeface;
+
+
+typedef struct {
+    char *name;
+
+    char *foundry;
+    char *registry, *encoding;
+
+    char showFoundry; /* when duplicated */
+    char showRegistry; /* when duplicated */
+
+    WMBag *typefaces;
+} Family;
+
 
 
 static void
-addSizeToEnc(proplist_t enc, char **fields)
+addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 {
-    proplist_t sizel;
     
-    sizel = PLGetDictionaryEntry(enc, sizeKey);
-    if (!sizel) {
-	sizel = PLMakeArrayFromElements(PLMakeString(fields[PIXEL_SIZE]),NULL);
-	PLInsertDictionaryEntry(enc, sizeKey, sizel);
-    } else {
-	PLAppendArrayElement(sizel, PLMakeString(fields[PIXEL_SIZE]));
-    }
 }
 
 
-static proplist_t
-addTypefaceToFont(proplist_t font, char **fields)
-{
-    proplist_t face, encod, facedic, encodic;
-    char buffer[256];
-    
-    strcpy(buffer, fields[WEIGHT]);
-    
-    if (strcasecmp(fields[SLANT], "R")==0)
-	strcat(buffer, " Roman ");
-    else if (strcasecmp(fields[SLANT], "I")==0)
-	strcat(buffer, " Italic ");
-    else if (strcasecmp(fields[SLANT], "O")==0)
-	strcat(buffer, " Oblique ");
-    else if (strcasecmp(fields[SLANT], "RI")==0)
-	strcat(buffer, " Reverse Italic ");
-    else if (strcasecmp(fields[SLANT], "RO")==0)
-	strcat(buffer, " Reverse Oblique ");
-    else if (strcasecmp(fields[SLANT], "OT")==0)
-	strcat(buffer, " ? ");
-/*    else
- * polymorphic fonts
+
+/*
+ * families (same family name) (Hashtable of family -> bag)
+ * 	registries (same family but different registries)
+ * 
  */
-    strcat(buffer, fields[SETWIDTH]);
-    strcat(buffer, " ");
-    strcat(buffer, fields[ADD_STYLE]);
 
-    face = PLMakeString(buffer);
-
-    facedic = PLGetDictionaryEntry(font, face);
-    if (!facedic) {
-	facedic = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-	PLInsertDictionaryEntry(font, face, facedic);
-	PLRelease(facedic);
-    }
-    PLRelease(face);
-
-    strcpy(buffer, fields[REGISTRY]);
-    strcat(buffer, "-");
-    strcat(buffer, fields[ENCODING]);
-    encod = PLMakeString(buffer);
-
-    encodic = PLGetDictionaryEntry(facedic, encod);
-    if (!encodic) {
-	proplist_t tmp;
-	sprintf(buffer, "-%s-%s-%s-%s-%s-%s-%%d-0-%s-%s-%s-%s-%s-%s",
-		fields[FOUNDRY], fields[FAMILY], fields[WEIGHT], 
-		fields[SLANT], fields[SETWIDTH], fields[ADD_STYLE],
-		fields[RES_X], fields[RES_Y], fields[SPACING],
-		fields[AV_WIDTH], fields[REGISTRY], fields[ENCODING]);
-	tmp = PLMakeString(buffer);
-
-	encodic = PLMakeDictionaryFromEntries(xlfdKey, tmp, NULL);
-	PLRelease(tmp);
-	PLInsertDictionaryEntry(facedic, encod, encodic);
-	PLRelease(encodic);
-    }
-    addSizeToEnc(encodic, fields);
-    return font;
-}
-
-
-static proplist_t
-makeFontEntry(char **fields)
+static void
+addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 {
-    proplist_t font;
-    proplist_t value;
-    proplist_t tmp;
-    value = PLMakeString(fields[FOUNDRY]);
-    
-    tmp = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-    
-    font = PLMakeDictionaryFromEntries(foundryKey, value,
-				       typeKey, tmp,
-				       NULL);
-    PLRelease(value);
-    PLRelease(tmp);
+    int i;
+    Family *fam;
+    WMBag *family;
 
-    addTypefaceToFont(font, fields);
+    family = WMHashGet(families, fontFields[FAMILY]);
+    
+    if (family) {
+	/* look for same encoding/registry and foundry */
+	for (i = 0; i < WMGetBagItemCount(family); i++) {
+	    int enc, reg, found;
+	    
+	    fam = WMGetFromBag(family, i);
+	    
+	    enc = (strcmp(fam->encoding, fontFields[ENCODING]) == 0);
+	    reg = (strcmp(fam->registry, fontFields[REGISTRY]) == 0);
+	    found = (strcmp(fam->foundry, fontFields[FOUNDRY]) == 0);
+	    
+	    if (enc && reg && found) {
+		addTypefaceToFamily(fam, fontFields);
+		return;
+	    }
+	}
+	/* look for same encoding/registry */
+	for (i = 0; i < WMGetBagItemCount(family); i++) {
+	    int enc, reg;
+	    
+	    fam = WMGetFromBag(family, i);
+	    
+	    enc = (strcmp(fam->encoding, fontFields[ENCODING]) == 0);
+	    reg = (strcmp(fam->registry, fontFields[REGISTRY]) == 0);
 
-    return font;
+	    if (enc && reg) {
+		/* has the same encoding, but the foundry is different */
+		fam->showRegistry = 1;
+
+		fam = wmalloc(sizeof(Family));
+		memset(fam, 0, sizeof(Family));
+
+		fam->name = wstrdup(fontFields[FAMILY]);
+		fam->foundry = wstrdup(fontFields[FOUNDRY]);
+		fam->registry = wstrdup(fontFields[REGISTRY]);
+		fam->encoding = wstrdup(fontFields[ENCODING]);
+		fam->showRegistry = 1;
+
+		addTypefaceToFamily(fam, fontFields);
+
+		WMPutInBag(family, fam);
+
+		return;
+	    }
+	}
+	/* look for same foundry */
+	for (i = 0; i < WMGetBagItemCount(family); i++) {
+	    int found;
+	    
+	    fam = WMGetFromBag(family, i);
+	    
+	    found = (strcmp(fam->foundry, fontFields[FOUNDRY]) == 0);
+
+	    if (found) {
+		/* has the same foundry, but encoding is different */
+		fam->showFoundry = 1;
+
+		fam = wmalloc(sizeof(Family));
+		memset(fam, 0, sizeof(Family));
+
+		fam->name = wstrdup(fontFields[FAMILY]);
+		fam->foundry = wstrdup(fontFields[FOUNDRY]);
+		fam->registry = wstrdup(fontFields[REGISTRY]);
+		fam->encoding = wstrdup(fontFields[ENCODING]);
+		fam->showFoundry = 1;
+
+		addTypefaceToFamily(fam, fontFields);
+
+		WMPutInBag(family, fam);
+
+		return;
+	    }
+	}
+	/* foundry and encoding do not match anything known */
+	fam = wmalloc(sizeof(Family));
+	memset(fam, 0, sizeof(Family));
+
+	fam->name = wstrdup(fontFields[FAMILY]);
+	fam->foundry = wstrdup(fontFields[FOUNDRY]);
+	fam->registry = wstrdup(fontFields[REGISTRY]);
+	fam->encoding = wstrdup(fontFields[ENCODING]);
+
+	addTypefaceToFamily(fam, fontFields);
+
+	WMPutInBag(family, fam);
+	
+	return;
+    }
+
+    family = WMCreateBag(8);
+
+    fam = wmalloc(sizeof(Family));
+    memset(fam, 0, sizeof(Family));
+
+    fam->name = wstrdup(fontFields[FAMILY]);
+    fam->foundry = wstrdup(fontFields[FOUNDRY]);
+    fam->registry = wstrdup(fontFields[REGISTRY]);
+    fam->encoding = wstrdup(fontFields[ENCODING]);
+	
+    addTypefaceToFamily(fam, fontFields);
+    
+    WMPutInBag(family, fam);
+
+    WMHashInsert(families, fam->name, family);
 }
 
 
-static proplist_t
-createFontDatabase(WMScreen *scr)
+
+static void
+listFamilies(WMScreen *scr, WMFontPanel *panel)
 {
     char **fontList;
     int count;
-    char *fields[NUM_FIELDS];
-    int font_name_length;
-    char buffer[256];
     int i;
-    proplist_t fdb;
-    proplist_t font;
-    proplist_t family;
-    proplist_t foundry;
-    proplist_t tmp;
+    WMHashTable *families = WMCreateHashTable(WMStringHashCallbacks);
+    char fields[NUM_FIELDS][256];
 
-    if (!foundryKey) {
-	foundryKey = PLMakeString("Foundry");
-	typeKey = PLMakeString("Typeface");
-	encKey = PLMakeString("Encoding");
-	sizeKey = PLMakeString("Sizes");
-	xlfdKey = PLMakeString("XLFD");
-    }
-
-    /* retrieve a complete listing of the available fonts */
     fontList = XListFonts(scr->display, ALL_FONTS_MASK, MAX_FONTS_TO_RETRIEVE, 
-			  &count);
+                          &count);
     if (!fontList) {
-	wwarning("could not retrieve font list");
-	return NULL;
+	WMRunAlertPanel(scr, panel->win, "Error", 
+			"Could not retrieve font list", "OK", NULL, NULL);
+	return;
     }
 
-    fdb = PLMakeDictionaryFromEntries(NULL, NULL, NULL);
-
-    for (i=0; i<count; i++) {
-	if (!isXLFD(fontList[i], &font_name_length)) {
+    for (i = 0; i < count; i++) {
+	int fname_len;
+	
+	if (!isXLFD(fontList[i], &fname_len)) {
+	    *fontList[i] = '\0';
 	    continue;
 	}
-	/* the XLFD specs limit the size of a font description in 255 chars */
-	assert(font_name_length < 256);
-
-	if (parseFont(fontList[i], fields)) {	    
-	    family = PLMakeString(fields[FAMILY]);
-	    font = PLGetDictionaryEntry(fdb, family);
-	    if (font) {
-		foundry = PLGetDictionaryEntry(font, foundryKey);
-		if (strcmp(PLGetString(foundry), fields[FOUNDRY])==0) {
-		    /* already a font with the same family */
-		    addTypefaceToFont(font, fields);
-		} else {
-		    /* same font family by different foundries */
-		    sprintf(buffer, "%s (%s)", fields[FAMILY],
-			    fields[FOUNDRY]);
-		    PLRelease(family);
-		    family = PLMakeString(buffer);
-		    
-		    font = PLGetDictionaryEntry(fdb, family);
-		    if (font) {
-			/* already a font with the same family */
-			addTypefaceToFont(font, fields);
-		    } else {
-			tmp = makeFontEntry(fields);
-			PLInsertDictionaryEntry(fdb, family, tmp);
-			PLRelease(tmp);
-		    }
-		}
-	    } else {
-		tmp = makeFontEntry(fields);
-		PLInsertDictionaryEntry(fdb, family, tmp);
-		PLRelease(tmp);
-	    }
-	    PLRelease(family);
+	if (fname_len > 255) {
+	    wwarning("font name %s is longer than 256, which is invalid.",
+		     fontList[i]);
+	    *fontList[i] = '\0';
+	    continue;
 	}
-    }
-    XFreeFontNames(fontList);
-    
-    return fdb;
-}
-
-
-
-
-
-
-static void
-listFamilies(proplist_t fdb, WMList *list)
-{
-    proplist_t arr;
-    proplist_t fam;
-    int i;
-    
-    arr = PLGetAllDictionaryKeys(fdb);
-    for (i = 0; i<PLGetNumberOfElements(arr); i++) {
-	fam = PLGetArrayElement(arr, i);
-	WMAddSortedListItem(list, PLGetString(fam));
+	if (!parseFont(fontList[i], fields)) {
+	    *fontList[i] = '\0';
+	    continue;
+	}
+	addFontToFamily(families, (char**)fields);
     }
 }
+
+
+
+#endif

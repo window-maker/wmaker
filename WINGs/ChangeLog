@@ -3,6 +3,8 @@ changes since wmaker 0.60.0:
 
 - added WMScreenWidth() and WMScreenHeight() functions.
 - fixed some problems when compiling with non gcc compilers.
+- added WMSetButtonImageDefault() (craig nellist <crn@ozemail.com.au>)
+- added WMBag (array/list)
 - added libWUtil, a library that is a subset of libWINGs. It contains utils
   that can be used in writing non-GUI programs. They include: hashes,
   notifications, input/idle/timer handlers, user defaults database handling,
@@ -47,6 +49,7 @@ changes since wmaker 0.60.0:
 	WMAddInputHandler(int fd, int condition, WMInputProc *proc,
         		  void *clientData);
 	WMDeleteInputHandler(WMHandlerID handlerID);
+- added progress indicator widget
 
 
 changes since wmaker 0.53.0:

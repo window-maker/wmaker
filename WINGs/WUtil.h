@@ -92,11 +92,12 @@ typedef enum {
 
 
 
-
+typedef struct W_Bag WMBag; /* equivalent to a linked list or array */
 typedef struct W_HashTable WMHashTable;
 typedef struct W_UserDefaults WMUserDefaults;
 typedef struct W_Notification WMNotification;
 typedef struct W_NotificationQueue WMNotificationQueue;
+
 
 
 /* DO NOT ACCESS THE CONTENTS OF THIS STRUCT */
@@ -118,6 +119,7 @@ typedef struct {
     void	(*releaseKey)(const void *);    
 } WMHashTableCallbacks;
 
+    
 
 #if 0
 typedef struct {
@@ -126,6 +128,7 @@ typedef struct {
 } WMSEscapes;
 #endif
 
+    
 
 typedef void WMNotificationObserverAction(void *observerData, 
 					  WMNotification *notification);
@@ -223,6 +226,46 @@ extern const WMHashTableCallbacks WMStringHashCallbacks;
 extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
 /* keys are strings, bug they are not copied */
 
+
+/*......................................................................*/
+
+
+WMBag *WMCreateBag(int size);
+    
+int WMGetBagItemCount(WMBag *bag);
+
+void WMAppendBag(WMBag *bag, WMBag *appendedBag);
+
+void WMPutInBag(WMBag *bag, void *item);
+
+void WMInsertInBag(WMBag *bag, int index, void *item);
+
+int WMGetFirstInBag(WMBag *bag, void *item);
+
+int WMGetLastInBag(WMBag *bag, void *item);
+
+void WMRemoveFromBag(WMBag *bag, void *item);
+
+void WMDeleteFromBag(WMBag *bag, int index);
+
+void *WMGetFromBag(WMBag *bag, int index);
+
+int WMCountInBag(WMBag *bag, void *item);
+
+    
+/* comparer must return:
+ * < 0 if a < b
+ * > 0 if a > b
+ * = 0 if a = b
+ */
+void WMSortBag(WMBag *bag, int (*comparer)(void*,void*));
+
+void WMEmptyBag(WMBag *bag);
+    
+void WMFreeBag(WMBag *bag);
+
+WMBag *WMMapBag(WMBag *bag, void* (*function)(void*));
+    
 /*......................................................................*/
 
 WMNotification *WMCreateNotification(char *name, void *object, void *clientData);

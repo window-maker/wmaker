@@ -114,7 +114,7 @@ typedef struct W_ColorPanel {
     WMFont		*font8;
     WMFont		*font12;
     
-    void		*clientData;
+    void 	*clientData;
     WMAction2	*action;
     
     /* Common Stuff */
@@ -263,12 +263,12 @@ enum {
 
 #define MAX_LENGTH  1024
 
-static int	fetchFile(char* toPath, char *imageSrcFile, 
+static int fetchFile(char* toPath, char *imageSrcFile, 
 			  char *imageDestFileName);
 char *generateNewFilename(char *curName);
 
-static void	modeButtonCallback(WMWidget *w, void *data);
-static int	getPickerPart(W_ColorPanel *panel, int x, int y);
+static void modeButtonCallback(WMWidget *w, void *data);
+static int getPickerPart(W_ColorPanel *panel, int x, int y);
 static void readConfiguration(W_ColorPanel *panel);
 static void readXColors(W_ColorPanel *panel);
 
@@ -282,12 +282,12 @@ static Pixmap magnifyGetStorePixmap(W_ColorPanel *panel, int x1, int y1,
 				    int x2, int y2);
 static Pixmap magnifyGetImage(WMScreen *scr, int x, int y);
 
-static wheelMatrix*	wheelCreateMatrix(unsigned int width , unsigned int height);
-static void	wheelDestroyMatrix(wheelMatrix *matrix);
-static wheelMatrix*	wheelInitMatrix(W_ColorPanel *panel);
-static void	wheelRender(W_ColorPanel *panel);
-static Bool	wheelInsideColorWheel(W_ColorPanel *panel, unsigned long ofs);
-static void	wheelPaint(W_ColorPanel *panel);
+static wheelMatrix* wheelCreateMatrix(unsigned int width , unsigned int height);
+static void wheelDestroyMatrix(wheelMatrix *matrix);
+static wheelMatrix* wheelInitMatrix(W_ColorPanel *panel);
+static void wheelRender(W_ColorPanel *panel);
+static Bool wheelInsideColorWheel(W_ColorPanel *panel, unsigned long ofs);
+static void wheelPaint(W_ColorPanel *panel);
 
 static void wheelHandleEvents(XEvent *event, void *data);
 static void wheelHandleActionEvents(XEvent *event, void *data);
@@ -297,14 +297,14 @@ static void wheelUndrawSelection(W_ColorPanel *panel);
 
 static void wheelPositionSelection(W_ColorPanel *panel, int x, int y);
 static void wheelPositionSelectionOutBounds(W_ColorPanel *panel, int x, int y);
-static void	wheelUpdateBrightnessGradientFromHSV (W_ColorPanel *panel, 
+static void wheelUpdateBrightnessGradientFromHSV (W_ColorPanel *panel, 
 						      RHSVColor topColor);
 static void wheelUpdateBrightnessGradientFromLocation (W_ColorPanel *panel);
 static void wheelUpdateBrightnessGradient(W_ColorPanel *panel, RColor topColor);
 
-static void	grayBrightnessSliderCallback(WMWidget *w, void *data);
+static void grayBrightnessSliderCallback(WMWidget *w, void *data);
 static void grayPresetButtonCallback(WMWidget *w, void *data);
-static void	grayBrightnessTextFieldCallback(void *observerData, 
+static void grayBrightnessTextFieldCallback(void *observerData, 
 						WMNotification *notification);
 
 static void rgbSliderCallback(WMWidget *w, void *data);
@@ -318,9 +318,9 @@ static void cmykTextFieldCallback(void *observerData,
 static void hsbSliderCallback(WMWidget *w, void *data);
 static void hsbTextFieldCallback(void *observerData, 
 				 WMNotification *notification);
-static void	hsbUpdateBrightnessGradient(W_ColorPanel *panel);
-static void	hsbUpdateSaturationGradient(W_ColorPanel *panel);
-static void	hsbUpdateHueGradient(W_ColorPanel *panel);
+static void hsbUpdateBrightnessGradient(W_ColorPanel *panel);
+static void hsbUpdateSaturationGradient(W_ColorPanel *panel);
+static void hsbUpdateHueGradient(W_ColorPanel *panel);
 
 static void customRenderSpectrum(W_ColorPanel *panel);
 static void customSetPalette(W_ColorPanel *panel);
@@ -343,10 +343,10 @@ static void colorListColorMenuCallback(WMWidget *w, void *data);
 static void colorListListMenuCallback(WMWidget *w, void *data);
 static void colorListListMenuNew(W_ColorPanel *panel);
 
-static void	wheelInit(W_ColorPanel *panel);
-static void	grayInit(W_ColorPanel *panel);
-static void	rgbInit(W_ColorPanel *panel);
-static void	cmykInit(W_ColorPanel *panel);
+static void wheelInit(W_ColorPanel *panel);
+static void grayInit(W_ColorPanel *panel);
+static void rgbInit(W_ColorPanel *panel);
+static void cmykInit(W_ColorPanel *panel);
 static void hsbInit(W_ColorPanel *panel);
 
 

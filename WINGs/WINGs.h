@@ -263,7 +263,8 @@ enum {
     WC_Slider = 11,
     WC_Matrix = 12,		       /* not ready */
     WC_SplitView = 13,
-    WC_TabView = 14
+    WC_TabView = 14,
+    WC_ProgressIndicator = 15
 };
 
 /* All widgets must start with the following structure
@@ -301,6 +302,7 @@ typedef struct W_ScrollView WMScrollView;
 typedef struct W_List WMList;
 typedef struct W_Browser WMBrowser;
 typedef struct W_PopUpButton WMPopUpButton;
+typedef struct W_ProgressIndicator WMProgressIndicator;
 typedef struct W_ColorWell WMColorWell;
 typedef struct W_Slider WMSlider;
 typedef struct W_Matrix WMMatrix;      /* not ready */
@@ -384,6 +386,7 @@ typedef void WMAction(WMWidget *self, void *clientData);
 
 /* same as WMAction, but for stuff that arent widgets */
 typedef void WMAction2(void *self, void *clientData);
+
 
 typedef void WMCallback(void *data);
 
@@ -796,6 +799,8 @@ WMButton *WMCreateButton(WMWidget *parent, WMButtonType type);
 
 WMButton *WMCreateCustomButton(WMWidget *parent, int behaviourMask);
 
+void WMSetButtonImageDefault(WMButton *bPtr);
+
 void WMSetButtonImage(WMButton *bPtr, WMPixmap *image);
 
 void WMSetButtonAltImage(WMButton *bPtr, WMPixmap *image);
@@ -1050,6 +1055,23 @@ int WMGetPopUpButtonNumberOfItems(WMPopUpButton *bPtr);
 void WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag);
 
 Bool WMGetPopUpButtonEnabled(WMPopUpButton *bPtr);
+
+/* ....................................................................... */
+
+WMProgressIndicator *WMCreateProgressIndicator(WMWidget *parent);
+
+void WMSetProgressIndicatorMinValue(WMProgressIndicator *progressindicator, int value);
+
+void WMSetProgressIndicatorMaxValue(WMProgressIndicator *progressindicator, int value);
+
+void WMSetProgressIndicatorValue(WMProgressIndicator *progressindicator, int value);
+
+int WMGetProgressIndicatorMinValue(WMProgressIndicator *progressindicator);
+
+int WMGetProgressIndicatorMaxValue(WMProgressIndicator *progressindicator);
+
+int WMGetProgressIndicatorValue(WMProgressIndicator *progressindicator);
+
 
 /* ....................................................................... */
 

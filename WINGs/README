@@ -58,6 +58,7 @@ Widgets provided by WINGs:
 - color well
 - split view (only 2 subviews)
 - tabbed view
+- progress indicator
 
 - input box
 - file panel

@@ -694,7 +694,7 @@ createDir(WMButton *bPre, WMFilePanel *panel)
     if ((s = strrchr(directory_name, '/')) && !s[1]) s[0] = 0;
 
     file = wmalloc(strlen(directory_name)+strlen(directory)+1);
-    sprintf(file, "%s/%s\0", directory, directory_name);
+    sprintf(file, "%s/%s", directory, directory_name);
     while (s = strstr(file,"//")) {
         int i;
         for (i = 2;s[i] == '/';i++);
@@ -762,10 +762,10 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
         return;
     } else if (S_ISDIR(filestat.st_mode)) {
         buffer = wmalloc(strlen(file)+20);
-        sprintf(buffer,"Delete directory %s ?\0",file);
+        sprintf(buffer,"Delete directory %s ?",file);
     } else {
         buffer = wmalloc(strlen(file)+15);
-        sprintf(buffer,"Delete file %s ?\0",file);
+        sprintf(buffer,"Delete file %s ?",file);
     }
 
     if (!WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
