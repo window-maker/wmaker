@@ -467,7 +467,8 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 		if ((tx < (test_x + width)) && ((tx + tw) > test_x) &&
 		    (ty < (test_y + height)) && ((ty + th) > test_y) &&
 		    (test_window->flags.mapped ||
-		     (test_window->flags.shaded &&
+                     (test_window->flags.shaded &&
+                      test_window->frame->workspace==scr->current_workspace &&
 		      !(test_window->flags.miniaturized ||
 			test_window->flags.hidden)))) {
 
@@ -502,6 +503,7 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 		    (ty < (test_y + height)) && ((ty + th) > test_y) &&
 		    (test_window->flags.mapped ||
 		     (test_window->flags.shaded &&
+                      test_window->frame->workspace==scr->current_workspace &&
 		      !(test_window->flags.miniaturized ||
 			test_window->flags.hidden)))) {
 
