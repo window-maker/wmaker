@@ -66,9 +66,11 @@ typedef struct _AppSettingsPanel {
     WMButton *browseBtn;
 
     WMButton *autoLaunchBtn;
-    
+
     WMButton *okBtn;
     WMButton *cancelBtn;
+
+    Window parent;
 
     /* kluge */
     unsigned int destroyed:1;
@@ -392,6 +394,8 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     
     panel->wwin->client_leader = WMWidgetXID(panel->win);
 
+    panel->parent = parent;
+
     WMMapWidget(panel->win);
     
     wWindowMap(panel->wwin);
@@ -421,10 +425,10 @@ DestroyDockAppSettingsPanel(AppSettingsPanel *panel)
 
     WMDestroyWidget(panel->win);    
 
-    XDestroyWindow(dpy, panel->wwin->client_win);
-    
+    XDestroyWindow(dpy, panel->parent);
+
     panel->editedIcon->panel = NULL;
-    
+
     panel->editedIcon->editing = 0;
 
     free(panel);

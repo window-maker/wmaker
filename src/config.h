@@ -125,6 +125,9 @@
  * defined by configure */
 #define SYSCONFDIR "/usr/local/etc/WindowMaker"
 
+/* whether XKB language MODELOCK should be enabled */
+/* #undef XKB_MODELOCK */
+
 /* Define if you have the atexit function.  */
 #define HAVE_ATEXIT 1
 
@@ -174,5 +177,5 @@
 #define PACKAGE "WindowMaker"
 
 /* Version number of package */
-#define VERSION "0.51.2"
+#define VERSION "0.52.0"
 

@@ -196,7 +196,7 @@ PlaceIcon(WScreen *scr, int *x_ret, int *y_ret)
 
 #define INDEX(x,y)	(((y)+1)*(sw+2) + (x) + 1)
 
-    for (level = WMNormalLevel; level >= WMDesktopLevel; level--) {
+    for (level = MAX_WINDOW_LEVELS-1; level >= WMDesktopLevel; level--) {
 	obj = scr->stacking_list[level];
 	
 	while (obj) {

@@ -65,6 +65,7 @@ static void updateScroller(List *lPtr);
 
 static void vScrollCallBack(WMWidget *scroller, void *self);
 
+static void updateGeometry(WMList *lPtr);
 static void resizeList();
 
 
@@ -187,7 +188,9 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
     memset(item, 0, sizeof(WMListItem));
     item->text = wstrdup(text);
 
-    if (lPtr->selectedItem >= row && lPtr->selectedItem >= 0)
+
+    if (lPtr->selectedItem >= row && lPtr->selectedItem >= 0
+	&& row >= 0)
 	lPtr->selectedItem++;
 
     if (lPtr->items==NULL) {
@@ -311,6 +314,8 @@ WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height)
     
     lPtr->flags.userItemHeight = 1;
     lPtr->itemHeight = height;
+    
+    updateGeometry(lPtr);
 }
 
 
@@ -804,14 +809,10 @@ handleActionEvents(XEvent *event, void *data)
 
 
 static void
-resizeList(WMList *lPtr, unsigned int width, unsigned int height)
-{
-    W_ResizeView(lPtr->view, width, height);
-    
-    WMResizeWidget(lPtr->vScroller, 1, height-2);
-    
-    lPtr->fullFitLines = (height - 4) / lPtr->itemHeight;
-    if (lPtr->fullFitLines * lPtr->itemHeight < height-4) {
+updateGeometry(WMList *lPtr)
+{    
+    lPtr->fullFitLines = (lPtr->view->size.height - 4) / lPtr->itemHeight;
+    if (lPtr->fullFitLines * lPtr->itemHeight < lPtr->view->size.height - 4) {
 	lPtr->flags.dontFitAll = 1;
     } else {
 	lPtr->flags.dontFitAll = 0;
@@ -824,6 +825,17 @@ resizeList(WMList *lPtr, unsigned int width, unsigned int height)
     }
 
     updateScroller(lPtr);
+}
+
+
+static void
+resizeList(WMList *lPtr, unsigned int width, unsigned int height)
+{
+    W_ResizeView(lPtr->view, width, height);
+    
+    WMResizeWidget(lPtr->vScroller, 1, height-2);
+
+    updateGeometry(lPtr);
 }
 
 

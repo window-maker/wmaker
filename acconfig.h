@@ -78,3 +78,6 @@
 /* the place where the configuration is stored
  * defined by configure */
 #undef SYSCONFDIR
+
+/* whether XKB language MODELOCK should be enabled */
+#undef XKB_MODELOCK

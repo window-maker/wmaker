@@ -124,6 +124,9 @@
  * defined by configure */
 #undef SYSCONFDIR
 
+/* whether XKB language MODELOCK should be enabled */
+#undef XKB_MODELOCK
+
 /* Define if you have the atexit function.  */
 #undef HAVE_ATEXIT
 

@@ -28,8 +28,7 @@
 typedef struct _TexturePanel TexturePanel;
 
 
-
-TexturePanel *CreateTexturePanel(WMScreen *scr);
+TexturePanel *CreateTexturePanel(WMWindow *keyWindow);
 
 void DestroyTexturePanel(TexturePanel *panel);
 
@@ -37,19 +36,24 @@ void ShowTexturePanel(TexturePanel *panel);
 
 void HideTexturePanel(TexturePanel *panel);
 
-void SetTexturePanelTexture(TexturePanel *panel, char *texture);
+void SetTexturePanelTexture(TexturePanel *panel, char *name, 
+			    proplist_t texture);
 
-char *GetTexturePanelTextureString(TexturePanel *panel);
+
+char *GetTexturePanelTextureName(TexturePanel *panel);
+
+proplist_t GetTexturePanelTexture(TexturePanel *panel);
 
 RImage *RenderTexturePanelTexture(TexturePanel *panel, unsigned width, 
 				  unsigned height);
 
-void SetTexturePanelOkAction(TexturePanel *panel, WMAction *action, 
+void SetTexturePanelOkAction(TexturePanel *panel, WMCallback *action,
 			      void *clientData);
 
-void SetTexturePanelCancelAction(TexturePanel *panel, WMAction *action,
+void SetTexturePanelCancelAction(TexturePanel *panel, WMCallback *action,
 				  void *clientData);
 
+void SetTexturePanelPixmapPath(TexturePanel *panel, proplist_t array);
 
 #endif
 

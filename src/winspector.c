@@ -1026,7 +1026,7 @@ createInspectorForWindow(WWindow *wwin)
     WMMoveWidget(panel->saveBtn, (2 * (btn_width + 10)) + 15, 310);
     WMSetButtonText(panel->saveBtn, _("Save"));
     WMResizeWidget(panel->saveBtn, btn_width, 28);
-    if (wPreferences.flags.noupdates)
+    if (wPreferences.flags.noupdates || !(wwin->wm_class || wwin->wm_instance))
 	WMSetButtonEnabled(panel->saveBtn, False);
 
     panel->applyBtn = WMCreateCommandButton(panel->win);
@@ -1362,8 +1362,8 @@ createInspectorForWindow(WWindow *wwin)
     } else {
 	int tmp;
 	
-	if (wwin->transient_for!=None
-	    && wwin->transient_for!=scr->root_win)
+	if ((wwin->transient_for!=None && wwin->transient_for!=scr->root_win)
+	    || !wwin->wm_class || !wwin->wm_instance)
 	    tmp = False;
 	else
 	    tmp = True;
@@ -1380,7 +1380,12 @@ createInspectorForWindow(WWindow *wwin)
     else
 	WMSetButtonEnabled(panel->attrChk[3], True);
 
+    
+    if (!wwin->wm_class && !wwin->wm_instance) {
+	WMSetPopUpButtonItemEnabled(panel->pagePopUp, 0, False);
+    }
 
+    
     WMRealizeWidget(panel->win);
 
     WMMapSubwidgets(panel->win);
@@ -1428,6 +1433,7 @@ createInspectorForWindow(WWindow *wwin)
 
     showIconFor(WMWidgetScreen(panel->alwChk), panel, wwin->wm_instance, 
 		wwin->wm_class, UPDATE_TEXT_FIELD);
+
     return panel;
 }
 

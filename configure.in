@@ -10,7 +10,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.51.2)
+AM_INIT_AUTOMAKE(WindowMaker, 0.52.0)
 
 AM_PROG_LIBTOOL
 
@@ -342,7 +342,7 @@ dnl XKB keyboard language status
 dnl ============================
 AC_ARG_ENABLE(modelock,
 [  --enable-modelock	  XKB keyboard language status support],
-		X_CFLAGS="$X_CFLAGS -DXKB_MODELOCK",)
+		AC_DEFINE(XKB_MODELOCK))
 
 
 
@@ -496,6 +496,7 @@ fi
 dnl JPEG Support
 dnl ============
 jpeg=yes
+ljpeg=""
 AC_ARG_ENABLE(jpeg,
 [  --disable-jpeg	  disable JPEG support through libjpeg],
 	jpeg=$enableval, jpeg=yes, jpeg=no)
@@ -504,6 +505,9 @@ if test "$jpeg" = yes; then
     WM_CHECK_LIB(jpeg, jpeg_destroy_compress)
 
     if test "x$ac_cv_lib_jpeg_jpeg_destroy_compress" = xyes; then
+
+    	ljpeg="-ljpeg"
+
 	WM_CHECK_HEADER(jpeglib.h)
 	if test "x$ac_cv_header_jpeglib_h" = xyes; then
 	    GFXLIBS="$GFXLIBS -ljpeg"
@@ -576,14 +580,14 @@ dnl Retry with zlib
 dnl
     unset ac_cv_lib_tiff_TIFFGetVersion
     if test "x$my_libname" = x; then
-    	WM_CHECK_LIB(tiff, TIFFGetVersion, [-lz -lm])
+    	WM_CHECK_LIB(tiff, TIFFGetVersion, [$ljpeg -lz -lm])
 	if test "x$ac_cv_lib_tiff_TIFFGetVersion" = xyes; then
 	    my_libname="-ltiff -lz"
 	fi
     fi
 
     if test "x$my_libname" = x; then
-	WM_CHECK_LIB(tiff34, TIFFGetVersion, [-lm])
+	WM_CHECK_LIB(tiff34, TIFFGetVersion, [$ljpeg -lm])
 	if test "x$ac_cv_lib_tiff34_TIFFGetVersion" = xyes; then
 	    my_libname="-ltiff34"
 	fi

@@ -25,87 +25,119 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <ctype.h>
 
 #include <X11/Xlib.h>
 
+
 #include <WINGs.h>
 #include <WUtil.h>
 
+#include "WPrefs.h"
 
-#include "TexturePanel.h"
-#include "TexturePanel.icons"
+//#include "TexturePanel.h"
+
+typedef struct _TexturePanel TexturePanel;
+
+#define MAX_SECTION_PARTS 4
 
 typedef struct _TexturePanel {
     WMWindow *win;
 
-    WMFrame *typeF;
-    WMButton *tsoliB;
-    WMButton *tgradB;
-    WMButton *tpixmB;
+    /* texture name */
+    WMFrame *nameF;
+    WMTextField *nameT;
     
-    WMButton *okB;
-    WMButton *cancB;
-    
-    /* solid */
-    WMFrame *scolorF;
-    WMColorWell *scolorW;
-    
-    /* gradient */
-    WMFrame *gcolorF;
-    WMList *gcolorLs;
-    WMColorWell *gcolorW;
-    WMButton *gaddB;
-    WMButton *gremB;
-    WMButton *gupdB;
+    /* texture type */
+    WMPopUpButton *typeP;
 
-    WMFrame *gdirF;
-    WMButton *ghorB;
-    WMButton *gverB;
-    WMButton *gdiaB;
+    /* default color */
+    WMFrame *defcF;
+    WMColorWell *defcW;
+
+    WMFont *listFont;
+
+    /*-- Gradient --*/
+
+    Pixmap gimage;
+
+    /* colors */
+    WMFrame *gcolF;
+    WMList *gcolL;
+    WMButton *gcolaB;
+    WMButton *gcoldB;
+    WMSlider *ghueS;
+    WMSlider *gsatS;
+    WMSlider *gvalS;
+
+    WMSlider *gbriS;
+    WMSlider *gconS;
+
+    /* direction (common) */
+    WMFrame *dirF;
+    WMButton *dirhB;
+    WMButton *dirvB;
+    WMButton *dirdB;
+
+    /*-- Simple Gradient --*/
+
+
+    /*-- Textured Gradient --*/
+
+    WMFrame *tcolF;
+    WMColorWell *tcol1W;
+    WMColorWell *tcol2W;
+
+    WMFrame *topaF;
+    WMSlider *topaS;
+
+    /*-- Image --*/
+    WMFrame *imageF;
+    WMScrollView *imageV;
+    WMTextField *imageT;
+    WMLabel *imageL;
+    WMButton *browB;
+    WMButton *dispB;
+    WMPopUpButton *arrP;
+
+    char *imageFile;
+
+    /*****/
+
+    WMButton *okB;
+    WMButton *cancelB;
     
-    /* pixmap */
-    WMFrame *pimagF;
-    WMLabel *pimagL;
-    WMTextField *pimagT;
-    WMButton *pbrowB;
     
-    WMFrame *pcolorF;
-    WMColorWell *pcolorW;
-    
-    WMFrame *pmodeF;
-    WMButton *pscalB;
-    WMButton *ptileB;
-    
-    WMAction *okAction;
+    WMCallback *okAction;
     void *okData;
     
-    WMAction *cancelAction;
+    WMCallback *cancelAction;
     void *cancelData;
+
+    /****/
+    WMWidget *sectionParts[5][MAX_SECTION_PARTS];
+
+    int currentType;
+
     
+    proplist_t pathList;
+
 } _TexturePanel;
 
 
 
-char*
-WMGetColorWellRGBString(WMColorWell *cPtr) 
-{
-    char *rgbString;
-    WMColor *color;
-    
-    
-    rgbString = wmalloc(13);
-    color = WMGetColorWellColor(cPtr);
-    
-    if (color) {
-	sprintf(rgbString,"rgb:%02x/%02x/%02x",
-		(WMRedComponentOfColor(color) >> 8), 
-		(WMGreenComponentOfColor(color) >> 8),
-		(WMBlueComponentOfColor(color) >> 8));
-    }
-    
-    return rgbString;
-}
+#define TYPE_SOLID	0
+#define TYPE_GRADIENT	1
+#define TYPE_SGRADIENT	2
+#define TYPE_TGRADIENT	3
+#define TYPE_PIXMAP	4
+
+
+#define PTYPE_TILE	0
+#define PTYPE_SCALE	1
+#define PTYPE_CENTER	2
+#define PTYPE_MAXIMIZE	3
 
 
 
@@ -114,283 +146,510 @@ WMGetColorWellRGBString(WMColorWell *cPtr)
  * Private Functions
  *--------------------------------------------------------------------------
  */
-static void buttonCallback(WMWidget *self, void *data);
-static void renderTextureButtons (_TexturePanel *panel);
-static void paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state, WMRect *rect);
-static void notificationObserver(void *self, WMNotification *notif);
+
+/************/
 
 static void
-notificationObserver(void *self, WMNotification *notif)
+updateGradButtons(TexturePanel *panel)
 {
-    _TexturePanel *panel = (_TexturePanel*)self;
-    void *object = WMGetNotificationObject(notif);
-    char *text;
-    
-    if (WMGetNotificationName(notif) == WMTextDidChangeNotification) {
-	if (object == panel->pimagT) {
-	    text = WMGetTextFieldText(panel->pimagT);
-	    if (strlen(text)) {
-		WMSetButtonEnabled(panel->okB, True);
-	    } else {
-		WMSetButtonEnabled(panel->okB, False);
-	    }
-	    free(text); 
-	} 
+    RImage *image;
+    WMPixmap *pixmap;
+    int colorn;
+    RColor **colors;
+
+    colorn = WMGetListNumberOfRows(panel->gcolL);
+    if (colorn < 1) {
+	pixmap = NULL;
+    } else {
+	int i;
+	WMListItem *item;
+
+	colors = wmalloc(sizeof(RColor*)*(colorn+1));
+
+	for (i = 0; i < colorn; i++) {
+	    item = WMGetListItem(panel->gcolL, i);
+	    colors[i] = (RColor*)item->clientData;
+	}
+	colors[i] = NULL;
+
+	image = RRenderMultiGradient(80, 30, colors, RHorizontalGradient);
+	pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
+					  image, 128);
+	RDestroyImage(image);
+	WMSetButtonImage(panel->dirhB, pixmap);
+	WMReleasePixmap(pixmap);
+
+	image = RRenderMultiGradient(80, 30, colors, RVerticalGradient);
+	pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
+					  image, 128);
+	RDestroyImage(image);
+	WMSetButtonImage(panel->dirvB, pixmap);
+	WMReleasePixmap(pixmap);
+
+	image = RRenderMultiGradient(80, 30, colors, RDiagonalGradient);
+	pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
+					  image, 128);
+	RDestroyImage(image);
+	WMSetButtonImage(panel->dirdB, pixmap);
+	WMReleasePixmap(pixmap);
+
+	free(colors);
     }
 }
 
 
 static void
-paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state, WMRect *rect)
+updateSGradButtons(TexturePanel *panel)
 {
-    WMScreen *scr;
+    RImage *image;
+    WMPixmap *pixmap;
+    RColor from;
+    RColor to;
+    WMColor *color;
+
+    color = WMGetColorWellColor(panel->tcol1W);
+    from.red = WMRedComponentOfColor(color)>>8;
+    from.green = WMGreenComponentOfColor(color)>>8;
+    from.blue = WMBlueComponentOfColor(color)>>8;
+
+    color = WMGetColorWellColor(panel->tcol2W);
+    to.red = WMRedComponentOfColor(color)>>8;
+    to.green = WMGreenComponentOfColor(color)>>8;
+    to.blue = WMBlueComponentOfColor(color)>>8;
+
+    image = RRenderGradient(80, 30, &from, &to, RHorizontalGradient);
+    pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
+				      image, 128);
+    RDestroyImage(image);
+    WMSetButtonImage(panel->dirhB, pixmap);
+    WMReleasePixmap(pixmap);
+    
+    image = RRenderGradient(80, 30, &from, &to, RVerticalGradient);
+    pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
+				      image, 128);
+    RDestroyImage(image);
+    WMSetButtonImage(panel->dirvB, pixmap);
+    WMReleasePixmap(pixmap);
+    
+    image = RRenderGradient(80, 30, &from, &to, RDiagonalGradient);
+    pixmap = WMCreatePixmapFromRImage(WMWidgetScreen(panel->gcolL),
+				      image, 128);
+    RDestroyImage(image);
+    WMSetButtonImage(panel->dirdB, pixmap);
+    WMReleasePixmap(pixmap);
+}
+
+
+static void
+changeTypeCallback(WMWidget *w, void *data)
+{
+    TexturePanel *panel = (TexturePanel*)data;
+    int newType;
+    int i;
+
+    newType = WMGetPopUpButtonSelectedItem(w);
+    if (newType == panel->currentType)
+	return;
+
+    if (panel->currentType >= 0) {
+	for (i = 0; i < MAX_SECTION_PARTS; i++) {
+	    if (panel->sectionParts[panel->currentType][i] == NULL)
+		break;
+	    WMUnmapWidget(panel->sectionParts[panel->currentType][i]);
+	}
+    }
+
+    for (i = 0; i < MAX_SECTION_PARTS; i++) {
+	if (panel->sectionParts[newType][i] == NULL)
+	    break;
+	WMMapWidget(panel->sectionParts[newType][i]);
+    }
+    panel->currentType = newType;
+
+    switch (newType) {
+     case TYPE_SGRADIENT:
+	updateSGradButtons(panel);
+	break;
+     case TYPE_GRADIENT:
+	updateGradButtons(panel);
+	break;
+    }
+}
+
+
+/*********** Gradient ************/
+
+static void
+updateSVSlider(WMSlider *sPtr, Bool saturation, WMFont *font, RHSVColor *hsv)
+{
+    RImage *image;
+    WMPixmap *pixmap;
+    WMScreen *scr = WMWidgetScreen(sPtr);
+    RColor from, to;
+    RHSVColor tmp;
+
+    tmp = *hsv;
+    if (saturation) {
+	tmp.saturation = 0;
+	RHSVtoRGB(&tmp, &from);
+	tmp.saturation = 255;
+	RHSVtoRGB(&tmp, &to);
+    } else {
+	tmp.value = 0;
+	RHSVtoRGB(&tmp, &from);
+	tmp.value = 255;
+	RHSVtoRGB(&tmp, &to);
+    }
+    image = RRenderGradient(130, 16, &from, &to, RHorizontalGradient);
+    pixmap = WMCreatePixmapFromRImage(scr, image, 128);
+    RDestroyImage(image);
+
+    if (hsv->value < 128 || !saturation) {
+	WMColor *col = WMWhiteColor(scr);
+
+	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
+		     (16 - WMFontHeight(font))/2 - 1,
+		     saturation ? "Saturation" : "Brightness", 10);
+	WMReleaseColor(col);
+    } else {
+	WMColor *col = WMBlackColor(scr);
+
+	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
+		     (16 - WMFontHeight(font))/2 - 1,
+		     saturation ? "Saturation" : "Brightness", 10);
+	WMReleaseColor(col);
+    }
+    WMSetSliderImage(sPtr, pixmap);
+    WMReleasePixmap(pixmap);
+}
+
+
+static void
+updateHueSlider(WMSlider *sPtr, WMFont *font, RHSVColor *hsv)
+{
+    RColor *colors[8];
+    RImage *image;
+    WMPixmap *pixmap;
+    WMScreen *scr = WMWidgetScreen(sPtr);
+    RHSVColor thsv;
+    int i;
+
+    thsv = *hsv;
+    for (i = 0; i <= 6; i++) {
+        thsv.hue = (360*i)/6;
+        colors[i] = wmalloc(sizeof(RColor));
+        RHSVtoRGB(&thsv, colors[i]);
+    }
+    colors[i] = NULL;
+
+    image = RRenderMultiGradient(130, 16, colors, RGRD_HORIZONTAL);
+    pixmap = WMCreatePixmapFromRImage(scr, image, 128);
+    RDestroyImage(image);
+
+    if (hsv->value < 128) {
+	WMColor *col = WMWhiteColor(scr);
+
+	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
+		     (16 - WMFontHeight(font))/2 - 1, "Hue", 3);
+	WMReleaseColor(col);
+    } else {
+	WMColor *col = WMBlackColor(scr);
+
+	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(col), font, 2,
+		     (16 - WMFontHeight(font))/2 - 1, "Hue", 3);
+	WMReleaseColor(col);
+    }
+    WMSetSliderImage(sPtr, pixmap);
+    WMReleasePixmap(pixmap);
+
+    for (i = 0; i <= 6; i++)
+	free(colors[i]);
+}
+
+
+
+static void
+sliderChangeCallback(WMWidget *w, void *data)
+{
+    TexturePanel *panel = (TexturePanel*)data;
+    RHSVColor hsv, *hsvp;
+    int row, rows;
+    WMListItem *item;
+    RColor **colors;
+    int i;
+    RImage *image;
+    WMScreen *scr = WMWidgetScreen(w);
+
+    hsv.hue = WMGetSliderValue(panel->ghueS);
+    hsv.saturation = WMGetSliderValue(panel->gsatS);
+    hsv.value = WMGetSliderValue(panel->gvalS);
+
+    row = WMGetListSelectedItemRow(panel->gcolL);
+    if (row >= 0) {
+	RColor *rgb;
+
+	item = WMGetListItem(panel->gcolL, row);
+
+	rgb = (RColor*)item->clientData;
+
+	RHSVtoRGB(&hsv, rgb);
+	
+	sprintf(item->text, "%02x,%02x,%02x", rgb->red, rgb->green, rgb->blue);
+    }
+
+    if (w == panel->ghueS) {
+	updateSVSlider(panel->gsatS, True, panel->listFont, &hsv);
+	updateSVSlider(panel->gvalS, False, panel->listFont, &hsv);
+    } else if (w == panel->gsatS) {
+	updateHueSlider(panel->ghueS, panel->listFont, &hsv);
+	updateSVSlider(panel->gvalS, False, panel->listFont, &hsv);
+    } else {
+	updateHueSlider(panel->ghueS, panel->listFont, &hsv);
+	updateSVSlider(panel->gsatS, True, panel->listFont, &hsv);
+    }
+
+    rows = WMGetListNumberOfRows(panel->gcolL);
+    if (rows == 0)
+	return;
+
+    colors = wmalloc(sizeof(RColor*)*(rows+1));
+
+    for (i = 0; i < rows; i++) {
+	item = WMGetListItem(panel->gcolL, i);
+
+	colors[i] = (RColor*)item->clientData;
+    }
+    colors[i] = NULL;
+
+    if (panel->gimage != None) {
+	XFreePixmap(WMScreenDisplay(scr), panel->gimage);
+    }
+
+    image = RRenderMultiGradient(30, i*WMGetListItemHeight(panel->gcolL), 
+				 colors, RVerticalGradient);
+    RConvertImage(WMScreenRContext(scr), image, &panel->gimage);
+    RDestroyImage(image);
+
+    free(colors);
+
+    WMRedisplayWidget(panel->gcolL);
+
+    updateGradButtons(panel);
+}
+
+
+static void
+paintGradListItem(WMList *lPtr, int index, Drawable d, char *text, int state, 
+		  WMRect *rect)
+{
+    TexturePanel *panel = (TexturePanel*)WMGetHangedData(lPtr);
+    WMScreen *scr = WMWidgetScreen(lPtr);
     int width, height, x, y;
-    GC gc;
     Display *dpy;
-    
-    scr = WMWidgetScreen(lPtr);
+    WMColor *white = WMWhiteColor(scr);
+    WMListItem *item;
+    WMColor *black = WMBlackColor(scr);
+
     dpy = WMScreenDisplay(scr);
-    
+
     width = rect->size.width;
     height = rect->size.height;
     x = rect->pos.x;
     y = rect->pos.y;
-    
+
     if (state & WLDSSelected)
-        XFillRectangle(dpy, d, WMColorGC(WMWhiteColor(scr)), x, y,width, height);
+        XFillRectangle(dpy, d, WMColorGC(white), x, y, width, height);
     else
-        XClearArea(WMScreenDisplay(scr), d, x, y, width, height, False);
-    
-    gc = XCreateGC(dpy, RootWindow(dpy, 0),0,NULL);
-    WMSetColorInGC(WMCreateNamedColor(scr, text, True),gc);
-    XFillRectangle (dpy, d, gc,x+5,y+3,width-8,height-6);
-    XFreeGC(dpy,gc);
+        XClearArea(dpy, d, x, y, width, height, False);
+
+    item = WMGetListItem(lPtr, index);
+
+    if (panel->gimage) {
+	XCopyArea(WMScreenDisplay(scr), panel->gimage, d, WMColorGC(white),
+		  0, height*index, 30, height, x + 5, y);
+    }
+    WMDrawString(scr, d, WMColorGC(black), panel->listFont, 
+		 x + 40, y + 1, text, strlen(text));
+
+    WMReleaseColor(white);
+    WMReleaseColor(black);
+}
+
+
+
+static void
+gradAddCallback(WMWidget *w, void *data)
+{
+    TexturePanel *panel = (TexturePanel*)data;
+    WMListItem *item;
+    int row;
+    RColor *rgb;
+
+    row = WMGetListSelectedItemRow(panel->gcolL) + 1;
+    item = WMInsertListItem(panel->gcolL, row, "00,00,00");
+    rgb = wmalloc(sizeof(RColor));
+    memset(rgb, 0, sizeof(RColor));
+    item->clientData = rgb;
+
+    WMSelectListItem(panel->gcolL, row);
+
+    updateGradButtons(panel);
+
+    sliderChangeCallback(panel->ghueS, panel);
+}
+
+
+
+static void
+gradClickCallback(WMWidget *w, void *data)
+{
+    TexturePanel *panel = (TexturePanel*)data;
+    WMListItem *item;
+    int row;
+    RHSVColor hsv;
+
+    row = WMGetListSelectedItemRow(w);
+    if (row < 0)
+	return;
+
+    item = WMGetListItem(panel->gcolL, row);
+    RRGBtoHSV((RColor*)item->clientData, &hsv);
+
+    WMSetSliderValue(panel->ghueS, hsv.hue);
+    WMSetSliderValue(panel->gsatS, hsv.saturation);
+    WMSetSliderValue(panel->gvalS, hsv.value);
+
+    sliderChangeCallback(panel->ghueS, panel);
+    sliderChangeCallback(panel->gsatS, panel);
 }
 
 
 static void
-buttonCallback(WMWidget *self, void *data)
+gradDeleteCallback(WMWidget *w, void *data)
 {
-    _TexturePanel *panel = (_TexturePanel*)data;
-    char *text, *color;
-    WMOpenPanel *op;
-    int itemRow;
-    
-    WMSetButtonEnabled(panel->okB, True);
-    
-    /* Global Buttons */
-    
-    if (self == panel->okB) {
-	if (panel->okAction) {
-	    (*panel->okAction)(self, panel->okData);
-	} else {
-	    wwarning ("Texture panel OK button undefined");
-	}
-    } else if (self == panel->cancB) {
-	if (panel->cancelAction) {
-	    (*panel->cancelAction)(self, panel->cancelData);
-	} else {
-	    wwarning ("Texture panel CANCEL button undefined");
-	}
-    } else if (self == panel->tsoliB) {
-	WMMapWidget(panel->scolorF);
-	WMUnmapWidget(panel->gcolorF);
-	WMUnmapWidget(panel->gdirF);
-	WMUnmapWidget(panel->pimagF);
-	WMUnmapWidget(panel->pcolorF);
-	WMUnmapWidget(panel->pmodeF);	
-    } else if (self == panel->tgradB) {
-	WMMapWidget(panel->gcolorF);
-	WMMapWidget(panel->gdirF);
-	WMUnmapWidget(panel->scolorF);
-	WMUnmapWidget(panel->pimagF);
-	WMUnmapWidget(panel->pcolorF);
-	WMUnmapWidget(panel->pmodeF);
-    } else if (self == panel->tpixmB) {
-	WMMapWidget(panel->pimagF);
-	WMMapWidget(panel->pcolorF);
-	WMMapWidget(panel->pmodeF);
-	WMUnmapWidget(panel->gcolorF);
-	WMUnmapWidget(panel->gdirF);
-	WMUnmapWidget(panel->scolorF);
-	
-	text = WMGetTextFieldText(panel->pimagT);
-	if (!strlen(text)) {
-	    WMSetButtonEnabled(panel->okB, False);
-	}
-	free(text);
-	
-	/* Gradient Panel Buttons */
-	
-    } else if (self == panel->gaddB) {
-	color = WMGetColorWellRGBString(panel->gcolorW);
-	itemRow = WMGetListSelectedItemRow(panel->gcolorLs);
-	WMInsertListItem(panel->gcolorLs,itemRow, color);
-	free(color);
-	renderTextureButtons(panel);
-	
-    } else if (self == panel->gremB) {
-	if (WMGetListNumberOfRows(panel->gcolorLs) != 1) {
-	    itemRow = WMGetListSelectedItemRow(panel->gcolorLs);
-	    WMRemoveListItem(panel->gcolorLs,itemRow);
-	    renderTextureButtons(panel);
-	}
-	
-    } else if (self == panel->gupdB) {
-	color = WMGetColorWellRGBString(panel->gcolorW);
-	itemRow = WMGetListSelectedItemRow(panel->gcolorLs);
-	WMRemoveListItem(panel->gcolorLs,itemRow);
-	WMInsertListItem(panel->gcolorLs,itemRow, color);
-	free(color);
-	renderTextureButtons(panel);
-	
-	/* Pixmap Panel Buttons */
-	
-    } else if (self == panel->pbrowB) {
-	op = WMGetOpenPanel(WMWidgetScreen(panel->pbrowB));
-	if (WMRunModalFilePanelForDirectory(op, NULL, "/usr/local", NULL, NULL)) {
-	    char *path;
-	    path = WMGetFilePanelFileName(op);
-	    WMSetTextFieldText(panel->pimagT, path);
-	    if (strlen(path)) {
-		WMSetButtonEnabled(panel->okB, True);
+    TexturePanel *panel = (TexturePanel*)data;
+    WMListItem *item;
+    int row;
+
+    row = WMGetListSelectedItemRow(panel->gcolL);
+    if (row < 0)
+	return;
+
+    item = WMGetListItem(panel->gcolL, row);
+    free(item->clientData);
+
+    WMRemoveListItem(panel->gcolL, row);
+
+    WMSelectListItem(panel->gcolL, row - 1);
+
+    updateGradButtons(panel);
+
+    gradClickCallback(panel->gcolL, panel);
+}
+
+
+/*************** Simple Gradient ***************/
+
+static void
+colorWellObserver(void *self, WMNotification *n)
+{
+    updateSGradButtons(self);
+}
+
+
+/****************** Image ******************/
+
+static void
+browseImageCallback(WMWidget *w, void *data)
+{
+    TexturePanel *panel = (TexturePanel*)data;
+    WMOpenPanel *opanel;
+    WMScreen *scr = WMWidgetScreen(w);
+
+    opanel = WMGetOpenPanel(scr);
+    WMSetFilePanelCanChooseDirectories(opanel, False);
+    WMSetFilePanelCanChooseFiles(opanel, True);
+
+    if (WMRunModalFilePanelForDirectory(opanel, panel->win, "/home",
+					"Open Image", NULL)) {
+	char *path, *fullpath;
+	char *tmp, *tmp2;
+
+	fullpath = WMGetFilePanelFileName(opanel);
+	if (!fullpath)
+	    return;
+	path = wstrdup(fullpath);
+
+	tmp2 = strrchr(fullpath, '/');
+	if (tmp2)
+	    tmp2++;
+
+	tmp = wfindfileinarray(panel->pathList, tmp2);
+
+	if (tmp) {
+	    if (strcmp(fullpath, tmp)==0) {
+		free(path);
+		path = tmp2;
 	    }
-	    free(path);  
+	    free(tmp);
 	}
-	WMFreeFilePanel(op);
-    }
-    
-}
 
-#if 0
-
-static void
-changePanel(WMWidget *self, void *data)
-{    
-    _TexturePanel *panel = (_TexturePanel*)data;
-    char *text = NULL;
-    
-    WMSetButtonEnabled(panel->okB, True);
-    if (self == panel->tsoliB) {
-	WMMapWidget(panel->scolorF);
-	WMUnmapWidget(panel->gcolorF);
-	WMUnmapWidget(panel->gdirF);
-	WMUnmapWidget(panel->pimagF);
-	WMUnmapWidget(panel->pcolorF);
-	WMUnmapWidget(panel->pmodeF);	
-    } else if (self == panel->tgradB) {
-	WMMapWidget(panel->gcolorF);
-	WMMapWidget(panel->gdirF);
-	WMUnmapWidget(panel->scolorF);
-	WMUnmapWidget(panel->pimagF);
-	WMUnmapWidget(panel->pcolorF);
-	WMUnmapWidget(panel->pmodeF);
-    } else {
-	WMMapWidget(panel->pimagF);
-	WMMapWidget(panel->pcolorF);
-	WMMapWidget(panel->pmodeF);
-	WMUnmapWidget(panel->gcolorF);
-	WMUnmapWidget(panel->gdirF);
-	WMUnmapWidget(panel->scolorF);
-	
-        text = WMGetTextFieldText(panel->pimagT);
-        if (!strlen(text)) {
-	    WMSetButtonEnabled(panel->okB, False);
-	}
-        free(text);
-    }
-    
-}
-
-static void 
-modifyGradientList(WMWidget *self, void *data)
-{
-    _TexturePanel *panel = (_TexturePanel*)data;
-    char *color = NULL;
-    int itemRow;
-    
-    itemRow = WMGetListSelectedItemRow(panel->gcolorLs);
-    
-    color = WMGetColorWellRGBString(panel->gcolorW);
-    
-    if (self == panel->gaddB) {
-	WMInsertListItem(panel->gcolorLs,itemRow, color);
-    } else if (self == panel->gremB) {
-	if (WMGetListNumberOfRows(panel->gcolorLs) != 1) {
-	    WMRemoveListItem(panel->gcolorLs,itemRow);
-	}
-	
-    } else {
-	WMRemoveListItem(panel->gcolorLs,itemRow);
-	WMInsertListItem(panel->gcolorLs,itemRow, color);
-    }
-    free (color);
-    
-    renderTextureButtons(panel);
-}
-#endif
-
-
-static void
-renderTextureButtons(_TexturePanel *panel)
-{ 
-    RColor **colors = NULL;
-    XColor color;
-    WMPixmap *icon;
-    RImage *imgh, *imgv, *imgd;
-    WMScreen *scr;
-    
-    int i, listRows;
-    
-    scr = WMWidgetScreen(panel->gcolorLs);
-    listRows = WMGetListNumberOfRows(panel->gcolorLs);
-    colors = wmalloc(sizeof(RColor*)*(listRows+1));
-    
-    for (i=0; i < listRows; i++) {
-	if (!XParseColor(WMScreenDisplay(scr), (WMScreenRContext(scr))->cmap, 
-			 wstrdup(WMGetListItem(panel->gcolorLs, i)->text),&color)) {
-	    wfatal("could not parse color \"%s\"\n", WMGetListItem(panel->gcolorLs, i)->text);
-	    exit(1);
+	if (!RGetImageFileFormat(fullpath)) {
+	    WMRunAlertPanel(scr, panel->win, _("Error"),
+			    _("The selected file does not contain a supported image."),
+			    _("OK"), NULL, NULL);
+	    free(path);
+	    free(fullpath);
 	} else {
-	    colors[i] = malloc(sizeof(RColor));
-	    colors[i]->red = color.red >> 8;
-	    colors[i]->green = color.green >> 8;
-	    colors[i]->blue = color.blue >> 8;
+	    RImage *image, *scaled;
+	    WMPixmap *pixmap;
+	    WMSize size;
+
+	    image = RLoadImage(WMScreenRContext(scr), fullpath, 0);
+	    if (!image) {
+		char *message;
+
+		message = wstrappend(_("Could not load the selected file: "),
+				     (char*)RMessageForError(RErrorCode));
+
+		WMRunAlertPanel(scr, panel->win, _("Error"), message,
+				_("OK"), NULL, NULL);
+		free(message);
+		free(path);
+		free(fullpath);
+		return;
+	    }
+
+	    pixmap = WMCreatePixmapFromRImage(scr, image, 128);
+	    RDestroyImage(image);
+
+	    size = WMGetPixmapSize(pixmap);
+	    WMSetLabelImage(panel->imageL, pixmap);
+	    WMResizeWidget(panel->imageL, size.width, size.height);
+
+	    WMReleasePixmap(pixmap);
+
+	    panel->imageFile = path;
+
+	    WMSetTextFieldText(panel->imageT, path);
+
+	    free(fullpath);
 	}
     }
-    colors[i] = NULL;
+}
+
+
+
+static void
+buttonCallback(WMWidget *w, void *data)
+{
+    TexturePanel *panel = (TexturePanel*)data;
     
-    imgh = RRenderMultiGradient(50, 20, colors, RGRD_HORIZONTAL);
-    if (!imgh) {
-	wwarning("internal error:%s", RMessageForError(RErrorCode));
+    if (w == panel->okB) {
+	(*panel->okAction)(panel->okData);
     } else {
-	icon = WMCreatePixmapFromRImage(scr, imgh, 120);
-	RDestroyImage(imgh);
-	WMSetButtonImage(panel->ghorB, icon);
-	WMReleasePixmap(icon);
+	(*panel->cancelAction)(panel->cancelData);
     }
-    
-    imgv = RRenderMultiGradient(50, 20, colors, RGRD_VERTICAL);
-    if (!imgv) {
-	wwarning("internal error:%s", RMessageForError(RErrorCode));
-    } else {
-	icon = WMCreatePixmapFromRImage(scr, imgv, 120);
-	RDestroyImage(imgv);
-	WMSetButtonImage(panel->gverB, icon);
-	WMReleasePixmap(icon);
-    }
-    
-    imgd = RRenderMultiGradient(50, 20, colors, RGRD_DIAGONAL);
-    if (!imgd) {
-	wwarning("internal error:%s", RMessageForError(RErrorCode));
-    } else {
-	icon = WMCreatePixmapFromRImage(scr, imgd, 120);
-	RDestroyImage(imgd);
-	WMSetButtonImage(panel->gdiaB, icon);
-	WMReleasePixmap(icon);
-    }
-    
-    free(colors);
 }
 
 
@@ -402,9 +661,7 @@ renderTextureButtons(_TexturePanel *panel)
 void
 DestroyTexturePanel(TexturePanel *panel)
 {
-    WMUnmapWidget(panel->win);
-    WMDestroyWidget(panel->win);
-    free(panel);
+
 }
 
 
@@ -421,8 +678,9 @@ HideTexturePanel(TexturePanel *panel)
     WMUnmapWidget(panel->win);
 }
 
+
 void
-SetTexturePanelOkAction(TexturePanel *panel, WMAction *action, void *clientData)
+SetTexturePanelOkAction(TexturePanel *panel, WMCallback *action, void *clientData)
 {
     panel->okAction = action;
     panel->okData = clientData;
@@ -430,517 +688,669 @@ SetTexturePanelOkAction(TexturePanel *panel, WMAction *action, void *clientData)
 
 
 void
-SetTexturePanelCancelAction(TexturePanel *panel, WMAction *action, void *clientData)
+SetTexturePanelCancelAction(TexturePanel *panel, WMCallback *action, void *clientData)
 {
     panel->cancelAction = action;
     panel->cancelData = clientData;
 }
 
+
 void
-SetTexturePanelTexture(TexturePanel *panel, char *texture)
+SetTexturePanelTexture(TexturePanel *panel, char *name, proplist_t texture)
 {
-    char *parseString;
-    char *parseStringPosition;
-    char *enclosures = "( )";
-    char *seperators = " ,\"";
-    char *filename;
-    
-    WMSetButtonSelected(panel->tsoliB, False); 
-    WMSetButtonSelected(panel->tgradB, False); 
-    WMSetButtonSelected(panel->tpixmB, False); 
-    
-    parseString = wstrdup(texture);
-    parseStringPosition = parseString;
-    
-    parseStringPosition = strtok(parseStringPosition,seperators);
-    wwarning ("Parsing...");
-    
-    while (parseStringPosition) {
-	
-	if (!strpbrk(parseStringPosition,enclosures)) {
-	    if (strcasecmp(parseStringPosition,"solid") == 0) {
-		wwarning("Switch to solid");
-		WMPerformButtonClick(panel->tsoliB);
-		
-		parseStringPosition = strtok(NULL,seperators);
-		
-		while (parseStringPosition) {  
-		    if (!strpbrk(parseStringPosition,enclosures)) {
-			WMSetColorWellColor(panel->scolorW,WMCreateNamedColor(WMWidgetScreen(panel->scolorW), parseStringPosition, True));
-		    } 
-		    parseStringPosition = strtok(NULL,seperators);
-		}
-		
-	    } else if ((strstr(parseStringPosition,"pixmap")) && (strcasecmp(strstr(parseStringPosition,"pixmap"),"pixmap") == 0)) {
-		WMSetButtonSelected(panel->ptileB, False); 
-		WMSetButtonSelected(panel->pscalB, False); 
-		
-		WMPerformButtonClick(panel->tpixmB);
-		
-		if  (tolower(*parseStringPosition) == 't') {
-		    wwarning ("Switch to Tiled Pixmap");
-		    WMPerformButtonClick(panel->ptileB);
-		} else {
-		    wwarning ("Switch to Scaled Pixmap");
-		    WMPerformButtonClick(panel->pscalB);
-		}
-		
-		
-		filename = NULL;
-		parseStringPosition = strtok(NULL,seperators);
-		do {
-		    if (filename) filename = wstrappend(filename," ");
-		    filename = wstrappend(filename,parseStringPosition);
-		    parseStringPosition = strtok(NULL,seperators);
-		} while (!strstr(parseStringPosition,"rgb:"));
-		
-		WMSetTextFieldText(panel->pimagT, filename);
-		free(filename);   
-		
-		/* parseStringPosition = strtok(NULL,seperators); */
-		
-		WMSetColorWellColor(panel->pcolorW,WMCreateNamedColor(WMWidgetScreen(panel->scolorW), parseStringPosition, True));
-		
-	    } else if ((strstr(parseStringPosition,"gradient")) && (strcasecmp(strstr(parseStringPosition,"gradient"),"gradient") == 0)) {
-		WMSetButtonSelected(panel->ghorB, False); 
-		WMSetButtonSelected(panel->gverB, False); 
-		WMSetButtonSelected(panel->gdiaB, False); 
-		
-		WMPerformButtonClick(panel->tgradB);
-		
-		if (strstr(parseStringPosition,"h")) {
-		    WMPerformButtonClick(panel->ghorB);
-		} else if (strstr(parseStringPosition,"v")) {
-		    WMPerformButtonClick(panel->gverB);
-		} else {
-		    WMPerformButtonClick(panel->gdiaB);
-		}
-		
-		WMClearList(panel->gcolorLs);
-		
-		parseStringPosition = strtok(NULL,seperators);
-		while (parseStringPosition) {  
-		    if (!strpbrk(parseStringPosition,enclosures)) {
-			WMAddListItem(panel->gcolorLs, parseStringPosition);
-			WMSetColorWellColor(panel->gcolorW,WMCreateNamedColor(WMWidgetScreen(panel->scolorW), parseStringPosition, True));
-		    } 
-		    parseStringPosition = strtok(NULL,seperators);
-		}
-	    } else {
-		wfatal("Unknown Texture Type");
-	    }
-	    
-	    while (parseStringPosition) {  
-		parseStringPosition = strtok(NULL,seperators);
-	    }
-	    
-	}
-	
-	parseStringPosition = strtok(NULL,seperators);
+    WMScreen *scr = WMWidgetScreen(panel->win);
+    char *str, *type;
+    proplist_t p;
+    WMColor *color;
+    int i;
+    char buffer[64];
+    int gradient = 0;
+
+    WMSetTextFieldText(panel->nameT, name);
+
+    if (!texture)
+	return;
+
+    p = PLGetArrayElement(texture, 0);
+    if (!p) {
+	goto bad_texture;
     }
-    renderTextureButtons (panel);
-    free(parseString);
+    type = PLGetString(p);
+
+    /*...............................................*/
+    if (strcasecmp(type, "solid")==0) {
+
+	WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_SOLID);
+
+	p = PLGetArrayElement(texture, 1);
+	if (!p) {
+	    goto bad_texture;
+	}
+
+	str = PLGetString(p);
+	color = WMCreateNamedColor(scr, str, False);
+
+	WMSetColorWellColor(panel->defcW, color);
+
+	WMReleaseColor(color);
+    /*...............................................*/
+    } else if (strcasecmp(type, "hgradient")==0
+	       || strcasecmp(type, "vgradient")==0
+	       || strcasecmp(type, "dgradient")==0) {
+
+	WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_SGRADIENT);
+
+	p = PLGetArrayElement(texture, 1);
+	if (!p) {
+	    goto bad_texture;
+	}
+	str = PLGetString(p);
+	color = WMCreateNamedColor(scr, str, False);
+
+	WMSetColorWellColor(panel->tcol1W, color);
+
+	WMReleaseColor(color);
+
+	p = PLGetArrayElement(texture, 2);
+	if (!p) {
+	    goto bad_texture;
+	}
+	str = PLGetString(p);
+	color = WMCreateNamedColor(scr, str, False);
+
+	WMSetColorWellColor(panel->tcol2W, color);
+
+	WMReleaseColor(color);
+
+	gradient = type[0];
+    /*...............................................*/
+    } else if (strcasecmp(type, "thgradient")==0
+	       || strcasecmp(type, "tvgradient")==0
+	       || strcasecmp(type, "tdgradient")==0) {
+
+	WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_TGRADIENT);
+
+	/****** TODO: setador de textura apartir desse */
+	gradient = type[1];
+    /*...............................................*/
+    } else if (strcasecmp(type, "mhgradient")==0
+	       || strcasecmp(type, "mvgradient")==0
+	       || strcasecmp(type, "mdgradient")==0) {
+	WMListItem *item;
+
+	for (i = 0; i < WMGetListNumberOfRows(panel->gcolL); i++) {
+	    item = WMGetListItem(panel->gcolL, i);
+	    free(item->clientData);
+	}
+	WMClearList(panel->gcolL);
+
+	WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_GRADIENT);
+
+	p = PLGetArrayElement(texture, 1);
+	if (!p) {
+	    goto bad_texture;
+	}
+
+	str = PLGetString(p);
+	color = WMCreateNamedColor(scr, str, False);
+
+	WMSetColorWellColor(panel->defcW, color);
+
+	WMReleaseColor(color);
+
+	for (i = 2; i < PLGetNumberOfElements(texture); i++) {
+	    RColor *rgb;
+	    XColor xcolor;
+
+	    p = PLGetArrayElement(texture, i);
+	    if (!p) {
+		goto bad_texture;
+	    }
+	    str = PLGetString(p);
+
+	    XParseColor(WMScreenDisplay(scr), WMScreenRContext(scr)->cmap,
+			str, &xcolor);
+
+	    rgb = wmalloc(sizeof(RColor));
+	    rgb->red = xcolor.red >> 8;
+	    rgb->green = xcolor.green >> 8;
+	    rgb->blue = xcolor.blue >> 8;
+	    sprintf(buffer, "%02x,%02x,%02x", rgb->red, rgb->green, rgb->blue);
+
+	    item = WMAddListItem(panel->gcolL, buffer);
+	    item->clientData = rgb;
+	}
+
+	sliderChangeCallback(panel->ghueS, panel);
+
+	gradient = type[1];
+    /*...............................................*/
+    } else if (strcasecmp(type, "cpixmap")==0
+	       || strcasecmp(type, "spixmap")==0
+	       || strcasecmp(type, "mpixmap")==0
+	       || strcasecmp(type, "tpixmap")==0) {
+
+	WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_PIXMAP);
+
+	switch (toupper(type[0])) {
+	 case 'C':
+	    WMSetPopUpButtonSelectedItem(panel->arrP, PTYPE_CENTER);
+	    break;
+	 case 'S':
+	    WMSetPopUpButtonSelectedItem(panel->arrP, PTYPE_SCALE);
+	    break;
+	 case 'M':
+	    WMSetPopUpButtonSelectedItem(panel->arrP, PTYPE_MAXIMIZE);
+	    break;
+	 default:
+	 case 'T':
+	    WMSetPopUpButtonSelectedItem(panel->arrP, PTYPE_TILE);
+	    break;
+	}
+
+	WMSetTextFieldText(panel->imageT,
+			   PLGetString(PLGetArrayElement(texture, 1)));
+    }
+
+    changeTypeCallback(panel->typeP, panel);
+
+    if (gradient > 0) {
+	updateGradButtons(panel);
+
+	switch (toupper(gradient)) {
+	 case 'H':
+	    WMPerformButtonClick(panel->dirhB);
+	    break;
+	 case 'V':
+	    WMPerformButtonClick(panel->dirvB);
+	    break;
+	 default:
+	 case 'D':
+	    WMPerformButtonClick(panel->dirdB);
+	    break;
+	}
+    }
+
+    return;
+
+ bad_texture:
+    str = PLGetDescription(texture);
+    wwarning("error creating texture %s", str);
+    free(str);
+
 }
+
 
 
 char*
-GetTexturePanelTextureString(TexturePanel *panel)
-{ 
-    char *colorString = NULL;
-    char *start       = "( ";
-    char *finish      = " )";
-    char *seperator   = ", ";
-    char *quote       = "\"";
-    int  i, listRows;
-    
-    colorString = wstrappend(colorString,start);
-    
-    if (WMGetButtonSelected(panel->tsoliB)) {
-	colorString = wstrappend(colorString,"solid");
-	colorString = wstrappend(colorString,seperator);
-	colorString = wstrappend(colorString, quote);
-	colorString = wstrappend(colorString,WMGetColorWellRGBString(panel->scolorW));
-	colorString = wstrappend(colorString, quote);
-	
-    } else if (WMGetButtonSelected(panel->tgradB)) {
-	listRows = WMGetListNumberOfRows(panel->gcolorLs);
-	
-	if (listRows > 2) {
-	    colorString = wstrappend(colorString,"m");
-	}
-	if (WMGetButtonSelected(panel->ghorB)) {
-	    colorString = wstrappend(colorString,"hgradient");
-	} else if (WMGetButtonSelected(panel->gverB)) {
-	    colorString = wstrappend(colorString,"vgradient");
-	} else {
-	    colorString = wstrappend(colorString,"dgradient");
-	}
-	
-	for (i=0; i < listRows; i++) {
-	    colorString = wstrappend(colorString, seperator);
-	    colorString = wstrappend(colorString, quote);
-	    colorString = wstrappend(colorString, wstrdup(WMGetListItem(panel->gcolorLs, i)->text));
-	    colorString = wstrappend(colorString, quote);
-	}
-    } else if (WMGetButtonSelected(panel->tpixmB)) {
-	if (WMGetButtonSelected(panel->pscalB)) {
-	    colorString = wstrappend(colorString,"spixmap");
-	} else {
-	    colorString = wstrappend(colorString,"tpixmap");
-	}
-	colorString = wstrappend(colorString,seperator);
-	colorString = wstrappend(colorString, WMGetTextFieldText(panel->pimagT));
-	colorString = wstrappend(colorString,seperator);
-	colorString = wstrappend(colorString, quote);
-	colorString = wstrappend(colorString, WMGetColorWellRGBString(panel->pcolorW));
-	colorString = wstrappend(colorString, quote);
-    }
-    
-    colorString = wstrappend(colorString,finish);
-    
-    return colorString;
-}
-
-
-RImage*
-RenderTexturePanelTexture(TexturePanel *panel, unsigned width, unsigned height)
+GetTexturePanelTextureName(TexturePanel *panel)
 {
-    XColor color;
-    RContext *ctx;
-    RColor  solidColor;
-    RColor **colors = NULL;
-    RImage *image=NULL, *fileImage;
-    WMScreen *scr;
-    WMColor *wellColor;
-    
-    int i, listRows, style;
-    
-    scr = WMWidgetScreen(panel->gcolorLs);
-    ctx = WMScreenRContext(scr);
-    
-    if (WMGetButtonSelected(panel->tsoliB)) {
-	
-	image = RCreateImage(width, height, 1);
-	wellColor = WMGetColorWellColor(panel->scolorW);
-	
-	solidColor.red = (WMRedComponentOfColor(wellColor)  >> 8);
-	solidColor.green = (WMGreenComponentOfColor(wellColor) >> 8) ;
-	solidColor.blue = (WMBlueComponentOfColor(wellColor) >> 8);
-	solidColor.alpha = 0xff;
-	
-	WMReleaseColor(wellColor);
-	
-	RClearImage(image, &solidColor);
-	
-    } else if (WMGetButtonSelected(panel->tgradB)) {
-	
-	if (WMGetButtonSelected(panel->ghorB)) {
-	    style = RGRD_HORIZONTAL;
-	} else if (WMGetButtonSelected(panel->gverB)) {
-	    style = RGRD_VERTICAL;
-	} else {
-	    style = RGRD_DIAGONAL;
-	}
-	
-	listRows = WMGetListNumberOfRows(panel->gcolorLs);
-	colors = wmalloc(sizeof(RColor*)*(listRows+1));
-	
-	for (i=0; i < listRows; i++) {
-	    if (!XParseColor(WMScreenDisplay(scr), ctx->cmap, 
-			     wstrdup(WMGetListItem(panel->gcolorLs, i)->text),&color)) {
-		wfatal("could not parse color \"%s\"\n", WMGetListItem(panel->gcolorLs, i)->text);
-		exit(1);
-	    } else {
-		colors[i] = malloc(sizeof(RColor));
-		colors[i]->red = color.red >> 8;
-		colors[i]->green = color.green >> 8;
-		colors[i]->blue = color.blue >> 8;
-	    }
-	}
-	colors[i] = NULL;
-	
-	image =  RRenderMultiGradient(width, height, colors, style);
-	
-    } else if (WMGetButtonSelected(panel->tpixmB)) {
-	
-	if (fopen(WMGetTextFieldText(panel->pimagT),"r")) {
-	    
-	    fileImage = RLoadImage(ctx, WMGetTextFieldText(panel->pimagT), 0);
-	    if (WMGetButtonSelected(panel->pscalB)) {
-		image = RScaleImage(fileImage, width, height);
-	    } else {
-		image = RMakeTiledImage(fileImage, width, height);;
-	    }
-	} else {      
-	    wwarning ("Invalid File Name");
-	    return  RCreateImage(1,1,1);
-	}
-    }
-    
-    return image;
+    return WMGetTextFieldText(panel->nameT);
+
 }
+
+
+
+proplist_t
+GetTexturePanelTexture(TexturePanel *panel)
+{
+    proplist_t prop = NULL;
+    WMColor *color;
+    char *str, *str2;
+    char buff[32];
+    int i;
+
+
+    switch (WMGetPopUpButtonSelectedItem(panel->typeP)) {
+
+     case TYPE_SOLID:
+	color = WMGetColorWellColor(panel->defcW);
+	str = WMGetColorRGBDescription(color);
+	prop = PLMakeArrayFromElements(PLMakeString("solid"),
+				       PLMakeString(str), NULL);
+	free(str);
+
+	break;
+
+     case TYPE_PIXMAP:
+	color = WMGetColorWellColor(panel->defcW);
+	str = WMGetColorRGBDescription(color);
+
+	switch (WMGetPopUpButtonSelectedItem(panel->arrP)) {
+	 case PTYPE_SCALE:
+	    prop = PLMakeArrayFromElements(PLMakeString("spixmap"), 
+					   PLMakeString(panel->imageFile),
+					   PLMakeString(str), NULL);
+	    break;
+	 case PTYPE_MAXIMIZE:
+	    prop = PLMakeArrayFromElements(PLMakeString("mpixmap"), 
+					   PLMakeString(panel->imageFile),
+					   PLMakeString(str), NULL);
+	    break;
+	 case PTYPE_CENTER:
+	    prop = PLMakeArrayFromElements(PLMakeString("cpixmap"), 
+					   PLMakeString(panel->imageFile),
+					   PLMakeString(str), NULL);
+	    break;
+	 case PTYPE_TILE:
+	    prop = PLMakeArrayFromElements(PLMakeString("tpixmap"), 
+					   PLMakeString(panel->imageFile),
+					   PLMakeString(str), NULL);
+	    break;
+	}
+	free(str);
+	break;
+
+     case TYPE_SGRADIENT:
+	color = WMGetColorWellColor(panel->tcol1W);
+	str = WMGetColorRGBDescription(color);
+
+	color = WMGetColorWellColor(panel->tcol2W);
+	str2 = WMGetColorRGBDescription(color);
+	
+	if (WMGetButtonSelected(panel->dirdB)) {
+	    prop = PLMakeArrayFromElements(PLMakeString("dgradient"),
+					   PLMakeString(str),
+					   PLMakeString(str2), NULL);
+	} else 	if (WMGetButtonSelected(panel->dirvB)) {
+	    prop = PLMakeArrayFromElements(PLMakeString("vgradient"),
+					   PLMakeString(str),
+					   PLMakeString(str2), NULL);
+	} else {
+	    prop = PLMakeArrayFromElements(PLMakeString("hgradient"),
+					   PLMakeString(str),
+					   PLMakeString(str2), NULL);
+	}
+	free(str);
+	free(str2);
+	break;
+
+     case TYPE_GRADIENT:
+	color = WMGetColorWellColor(panel->defcW);
+	str = WMGetColorRGBDescription(color);
+
+	if (WMGetButtonSelected(panel->dirdB)) {
+	    prop = PLMakeArrayFromElements(PLMakeString("mdgradient"),
+					   PLMakeString(str), NULL);
+	} else 	if (WMGetButtonSelected(panel->dirvB)) {
+	    prop = PLMakeArrayFromElements(PLMakeString("mvgradient"),
+					   PLMakeString(str), NULL);
+	} else {
+	    prop = PLMakeArrayFromElements(PLMakeString("mhgradient"),
+					   PLMakeString(str), NULL);
+	}
+	free(str);
+
+	for (i = 0; i < WMGetListNumberOfRows(panel->gcolL); i++) {
+	    RColor *rgb;
+	    WMListItem *item;
+	    
+	    item = WMGetListItem(panel->gcolL, i);
+	    
+	    rgb = (RColor*)item->clientData;
+
+	    sprintf(buff, "#%02x%02x%02x", rgb->red, rgb->green, rgb->blue);
+
+	    PLAppendArrayElement(prop, PLMakeString(buff));
+	}
+	break;
+    }
+
+
+    return prop;
+}
+
+
+
+void
+SetTexturePanelPixmapPath(TexturePanel *panel, proplist_t array)
+{
+    panel->pathList = array;
+}
+
+
 
 TexturePanel*
-CreateTexturePanel(WMScreen *scr)
+CreateTexturePanel(WMWindow *keyWindow)
+//CreateTexturePanel(WMScreen *scr)
 {
-    RImage *image;
-    WMPixmap *icon;
-    WMColor *red;
     TexturePanel *panel;
-    RColor white,black;
+    WMScreen *scr = WMWidgetScreen(keyWindow);
+
+    panel = wmalloc(sizeof(TexturePanel));
+    memset(panel, 0, sizeof(TexturePanel));
+
+    panel->listFont = WMSystemFontOfSize(scr, 12);
+
+
+    panel->win = WMCreatePanelWithStyleForWindow(keyWindow, "texturePanel",
+						 WMTitledWindowMask
+						 |WMClosableWindowMask);
+ /*
+    panel->win = WMCreateWindowWithStyle(scr, "texturePanel",
+					 WMTitledWindowMask
+					 |WMClosableWindowMask);
+  */
+
+    WMResizeWidget(panel->win, 325, 423);
+    WMSetWindowTitle(panel->win, _("Texture Panel"));
+
+
+    /* texture name */
+    panel->nameF = WMCreateFrame(panel->win);
+    WMResizeWidget(panel->nameF, 185, 50);
+    WMMoveWidget(panel->nameF, 15, 10);
+    WMSetFrameTitle(panel->nameF, _("Texture Name"));
+
+    panel->nameT = WMCreateTextField(panel->nameF);
+    WMResizeWidget(panel->nameT, 160, 20);
+    WMMoveWidget(panel->nameT, 12, 18);
+
+    WMMapSubwidgets(panel->nameF);
+
+    /* texture types */
+    panel->typeP = WMCreatePopUpButton(panel->win);
+    WMResizeWidget(panel->typeP, 185, 20);
+    WMMoveWidget(panel->typeP, 15, 65);
+    WMAddPopUpButtonItem(panel->typeP, _("Solid Color"));
+    WMAddPopUpButtonItem(panel->typeP, _("Gradient Texture"));
+    WMAddPopUpButtonItem(panel->typeP, _("Simple Gradient Texture"));
+    WMAddPopUpButtonItem(panel->typeP, _("Textured Gradient"));
+    WMAddPopUpButtonItem(panel->typeP, _("Image Texture"));
+    WMSetPopUpButtonSelectedItem(panel->typeP, 0);
+    WMSetPopUpButtonAction(panel->typeP, changeTypeCallback, panel);
+
+    WMSetPopUpButtonItemEnabled(panel->typeP, TYPE_TGRADIENT, False);
+
+    /* color */
+    panel->defcF = WMCreateFrame(panel->win);
+    WMResizeWidget(panel->defcF, 100, 75);
+    WMMoveWidget(panel->defcF, 210, 10);
+    WMSetFrameTitle(panel->defcF, _("Default Color"));
+
+    panel->defcW = WMCreateColorWell(panel->defcF);
+    WMResizeWidget(panel->defcW, 60, 45);
+    WMMoveWidget(panel->defcW, 20, 20);
+
+    WMMapSubwidgets(panel->defcF);
+
+    /****** Gradient ******/
+    panel->gcolF = WMCreateFrame(panel->win);
+    WMResizeWidget(panel->gcolF, 295, 205);
+    WMMoveWidget(panel->gcolF, 15, 95);
+    WMSetFrameTitle(panel->gcolF, _("Gradient Colors"));
+
+    panel->gcolL = WMCreateList(panel->gcolF);
+    WMResizeWidget(panel->gcolL, 130, 140);
+    WMMoveWidget(panel->gcolL, 10, 25);
+    WMHangData(panel->gcolL, panel);
+    WMSetListUserDrawProc(panel->gcolL, paintGradListItem);
+    WMSetListAction(panel->gcolL, gradClickCallback, panel);
+
+    panel->gcolaB = WMCreateCommandButton(panel->gcolF);
+    WMResizeWidget(panel->gcolaB, 64, 24);
+    WMMoveWidget(panel->gcolaB, 10, 170);
+    WMSetButtonText(panel->gcolaB, _("Add"));
+    WMSetButtonAction(panel->gcolaB, gradAddCallback, panel);
     
-    white.red=255;
-    white.blue=255;
-    white.green=255;
-    white.alpha=255;
-    
-    black.red=0;
-    black.blue=0;
-    black.green=0;
-    black.alpha=0;
-    
-    panel = wmalloc(sizeof(_TexturePanel));
-    memset(panel, 0, sizeof(_TexturePanel));
-    red = WMCreateRGBColor(scr,100,100,100,True);
-    
-    panel->win = WMCreateWindow(scr, "textureBuilder");
-    WMResizeWidget(panel->win, 275, 365);
-    WMSetWindowTitle(panel->win, "Texture Builder");
-    
-    /***************** Generic stuff ****************/
-    
-    panel->typeF = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->typeF, 245, 80);
-    WMMoveWidget(panel->typeF, 15, 10);
-    WMSetFrameTitle(panel->typeF, "Texture Type");
-    
-    panel->tsoliB = WMCreateButton(panel->typeF, WBTOnOff);
-    WMResizeWidget(panel->tsoliB, 48, 48);
-    WMMoveWidget(panel->tsoliB, 42, 20);
-    WMSetButtonImagePosition(panel->tsoliB, WIPImageOnly);
-    image = RGetImageFromXPMData(WMScreenRContext(scr), solid_xpm);
-    if (!image) {
-	wwarning("internal error:%s", RMessageForError(RErrorCode));
-    } else {
-	icon = WMCreatePixmapFromRImage(scr, image, 120);
-	RDestroyImage(image);
-	WMSetButtonImage(panel->tsoliB, icon);
-	WMReleasePixmap(icon);
+    panel->gcoldB = WMCreateCommandButton(panel->gcolF);
+    WMResizeWidget(panel->gcoldB, 64, 24);
+    WMMoveWidget(panel->gcoldB, 75, 170);
+    WMSetButtonText(panel->gcoldB, _("Delete"));
+    WMSetButtonAction(panel->gcoldB, gradDeleteCallback, panel);
+
+#if 0
+    panel->gbriS = WMCreateSlider(panel->gcolF);
+    WMResizeWidget(panel->gbriS, 130, 16);
+    WMMoveWidget(panel->gbriS, 150, 25);
+    WMSetSliderKnobThickness(panel->gbriS, 8);
+    WMSetSliderMaxValue(panel->gbriS, 100);
+    WMSetSliderAction(panel->gbriS, sliderChangeCallback, panel);
+    {
+	WMPixmap *pixmap;
+	WMColor *color;
+
+	pixmap = WMCreatePixmap(scr, 130, 16, WMScreenDepth(scr), False);
+	color = WMDarkGrayColor(scr);
+	XFillRectangle(WMScreenDisplay(scr), WMGetPixmapXID(pixmap),
+		       WMColorGC(color), 0, 0, 130, 16);
+	WMReleaseColor(color);
+	color = WMWhiteColor(color);
+	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(color),
+		     panel->listFont, 2, 
+		     (16 - WMFontHeight(panel->listFont))/2 - 1,
+		     "Brightness", 10);
+	WMSetSliderImage(panel->gbriS, pixmap);
+	WMReleasePixmap(pixmap);
     }
-    WMSetButtonAction(panel->tsoliB, buttonCallback, panel);
-    
-    panel->tgradB = WMCreateButton(panel->typeF, WBTOnOff);
-    WMGroupButtons(panel->tsoliB, panel->tgradB);
-    WMResizeWidget(panel->tgradB, 48, 48);
-    WMMoveWidget(panel->tgradB, 98, 20);
-    WMSetButtonImagePosition(panel->tgradB, WIPImageOnly);
-    image = RGetImageFromXPMData(WMScreenRContext(scr), gradient_xpm);
-    if (!image) {
-	wwarning("internal error:%s", RMessageForError(RErrorCode));
-    } else {
-	icon = WMCreatePixmapFromRImage(scr, image, 120);
-	RDestroyImage(image);
-	WMSetButtonImage(panel->tgradB, icon);
-	WMReleasePixmap(icon);
+
+    panel->gconS = WMCreateSlider(panel->gcolF);
+    WMResizeWidget(panel->gconS, 130, 16);
+    WMMoveWidget(panel->gconS, 150, 50);
+    WMSetSliderKnobThickness(panel->gconS, 8);
+    WMSetSliderMaxValue(panel->gconS, 100);
+    WMSetSliderAction(panel->gconS, sliderChangeCallback, panel);
+    {
+	WMPixmap *pixmap;
+	WMColor *color;
+
+	pixmap = WMCreatePixmap(scr, 130, 16, WMScreenDepth(scr), False);
+	color = WMDarkGrayColor(scr);
+	XFillRectangle(WMScreenDisplay(scr), WMGetPixmapXID(pixmap),
+		       WMColorGC(color), 0, 0, 130, 16);
+	WMReleaseColor(color);
+	color = WMWhiteColor(scr);
+	WMDrawString(scr, WMGetPixmapXID(pixmap), WMColorGC(color), 
+		     panel->listFont, 2,
+		     (16 - WMFontHeight(panel->listFont))/2 - 1,
+		     "Contrast", 8);
+	WMSetSliderImage(panel->gconS, pixmap);
+	WMReleasePixmap(pixmap);
     }
-    WMSetButtonAction(panel->tgradB, buttonCallback, panel);
-    
-    panel->tpixmB = WMCreateButton(panel->typeF, WBTOnOff);
-    WMGroupButtons(panel->tsoliB, panel->tpixmB);
-    WMResizeWidget(panel->tpixmB, 48, 48);
-    WMMoveWidget(panel->tpixmB, 154, 20);
-    WMSetButtonImagePosition(panel->tpixmB, WIPImageOnly);
-    image = RGetImageFromXPMData(WMScreenRContext(scr), pixmap_xpm);
-    if (!image) {
-	wwarning("internal error:%s", RMessageForError(RErrorCode));
-    } else {
-	icon = WMCreatePixmapFromRImage(scr, image, 120);
-	RDestroyImage(image);
-	WMSetButtonImage(panel->tpixmB, icon);
-	WMReleasePixmap(icon);
+#endif
+    panel->ghueS = WMCreateSlider(panel->gcolF);
+    WMResizeWidget(panel->ghueS, 130, 16);
+    WMMoveWidget(panel->ghueS, 150, 100);
+    WMSetSliderKnobThickness(panel->ghueS, 8);
+    WMSetSliderMaxValue(panel->ghueS, 359);
+    WMSetSliderAction(panel->ghueS, sliderChangeCallback, panel);
+
+    panel->gsatS = WMCreateSlider(panel->gcolF);
+    WMResizeWidget(panel->gsatS, 130, 16);
+    WMMoveWidget(panel->gsatS, 150, 125);
+    WMSetSliderKnobThickness(panel->gsatS, 8);
+    WMSetSliderMaxValue(panel->gsatS, 255);
+    WMSetSliderAction(panel->gsatS, sliderChangeCallback, panel);
+
+    panel->gvalS = WMCreateSlider(panel->gcolF);
+    WMResizeWidget(panel->gvalS, 130, 16);
+    WMMoveWidget(panel->gvalS, 150, 150);
+    WMSetSliderKnobThickness(panel->gvalS, 8);
+    WMSetSliderMaxValue(panel->gvalS, 255);
+    WMSetSliderAction(panel->gvalS, sliderChangeCallback, panel);
+
+
+    WMMapSubwidgets(panel->gcolF);
+
+    /** Direction **/
+    panel->dirF = WMCreateFrame(panel->win);
+    WMSetFrameTitle(panel->dirF, _("Direction"));
+    WMResizeWidget(panel->dirF, 295, 75);
+    WMMoveWidget(panel->dirF, 15, 305);
+
+    panel->dirvB = WMCreateButton(panel->dirF, WBTOnOff);
+    WMSetButtonImagePosition(panel->dirvB, WIPImageOnly);
+    WMResizeWidget(panel->dirvB, 90, 40);
+    WMMoveWidget(panel->dirvB, 10, 20);
+
+    panel->dirhB = WMCreateButton(panel->dirF, WBTOnOff);
+    WMSetButtonImagePosition(panel->dirhB, WIPImageOnly);
+    WMResizeWidget(panel->dirhB, 90, 40);
+    WMMoveWidget(panel->dirhB, 102, 20);
+
+    panel->dirdB = WMCreateButton(panel->dirF, WBTOnOff);
+    WMSetButtonImagePosition(panel->dirdB, WIPImageOnly);
+    WMResizeWidget(panel->dirdB, 90, 40);
+    WMMoveWidget(panel->dirdB, 194, 20);
+
+    WMGroupButtons(panel->dirvB, panel->dirhB);
+    WMGroupButtons(panel->dirvB, panel->dirdB);
+
+    WMMapSubwidgets(panel->dirF);
+
+    /****************** Textured Gradient ******************/
+    panel->tcolF = WMCreateFrame(panel->win);
+    WMResizeWidget(panel->tcolF, 100, 135);
+    WMMoveWidget(panel->tcolF, 210, 10);
+    WMSetFrameTitle(panel->tcolF, _("Gradient"));
+
+    panel->tcol1W = WMCreateColorWell(panel->tcolF);
+    WMResizeWidget(panel->tcol1W, 60, 45);
+    WMMoveWidget(panel->tcol1W, 20, 25);
+    WMAddNotificationObserver(colorWellObserver, panel,
+			      WMColorWellDidChangeNotification, panel->tcol1W);
+
+    panel->tcol2W = WMCreateColorWell(panel->tcolF);
+    WMResizeWidget(panel->tcol2W, 60, 45);
+    WMMoveWidget(panel->tcol2W, 20, 75);
+    WMAddNotificationObserver(colorWellObserver, panel,
+			      WMColorWellDidChangeNotification, panel->tcol2W);
+
+    /** Opacity */
+    panel->topaF = WMCreateFrame(panel->win);
+    WMResizeWidget(panel->topaF, 185, 50);
+    WMMoveWidget(panel->topaF, 15, 95);
+    WMSetFrameTitle(panel->topaF, _("Gradient Opacity"));
+
+    panel->topaS = WMCreateSlider(panel->topaF);
+    WMResizeWidget(panel->topaS, 155, 18);
+    WMMoveWidget(panel->topaS, 15, 20);
+    WMSetSliderMaxValue(panel->topaS, 255);
+    WMSetSliderValue(panel->topaS, 200);
+    WMMapSubwidgets(panel->topaF);
+
+    {
+	WMPixmap *pixmap;
+	Pixmap p;
+	WMColor *color;
+
+	pixmap = WMCreatePixmap(scr, 155, 18, WMScreenDepth(scr), False);
+	p = WMGetPixmapXID(pixmap);
+
+	color = WMDarkGrayColor(scr);
+	XFillRectangle(WMScreenDisplay(scr), p, WMColorGC(color),
+		       0, 0, 155, 18);
+	WMReleaseColor(color);
+
+	color = WMWhiteColor(scr);
+	WMDrawString(scr, p, WMColorGC(color), panel->listFont,
+		     2, 1, "0%", 2);
+	WMDrawString(scr, p, WMColorGC(color), panel->listFont,
+		     153 - WMWidthOfString(panel->listFont, "100%", 4), 1,
+		     "100%", 4);
+	WMReleaseColor(color);
+
+	WMSetSliderImage(panel->topaS, pixmap);
+	WMReleasePixmap(pixmap);
     }
-    WMSetButtonAction(panel->tpixmB, buttonCallback, panel);
-    
+
+    WMMapSubwidgets(panel->tcolF);
+
+    /****************** Image ******************/
+    panel->imageF = WMCreateFrame(panel->win);
+    WMResizeWidget(panel->imageF, 295, 150);
+    WMMoveWidget(panel->imageF, 15, 150);
+    WMSetFrameTitle(panel->imageF, _("Image"));
+
+    panel->imageL = WMCreateLabel(panel->imageF);
+    WMSetLabelImagePosition(panel->imageL, WIPImageOnly);
+
+    panel->imageT = WMCreateTextField(panel->imageF);
+    WMResizeWidget(panel->imageT, 90, 20);
+    WMMoveWidget(panel->imageT, 190, 25);
+
+    panel->imageV = WMCreateScrollView(panel->imageF);
+    WMResizeWidget(panel->imageV, 165, 115);
+    WMMoveWidget(panel->imageV, 15, 20);
+    WMSetScrollViewRelief(panel->imageV, WRSunken);
+    WMSetScrollViewHasHorizontalScroller(panel->imageV, True);
+    WMSetScrollViewHasVerticalScroller(panel->imageV, True);
+    WMSetScrollViewContentView(panel->imageV, WMWidgetView(panel->imageL));
+
+    panel->browB = WMCreateCommandButton(panel->imageF);
+    WMResizeWidget(panel->browB, 90, 24);
+    WMMoveWidget(panel->browB, 190, 50);
+    WMSetButtonText(panel->browB, _("Browse..."));
+    WMSetButtonAction(panel->browB, browseImageCallback, panel);
+
+    panel->dispB = WMCreateCommandButton(panel->imageF);
+    WMResizeWidget(panel->dispB, 90, 24);
+    WMMoveWidget(panel->dispB, 190, 80);
+    WMSetButtonText(panel->dispB, _("Show"));
+
+    panel->arrP = WMCreatePopUpButton(panel->imageF);
+    WMResizeWidget(panel->arrP, 90, 20);
+    WMMoveWidget(panel->arrP, 190, 120);
+    WMAddPopUpButtonItem(panel->arrP, _("Tile"));
+    WMAddPopUpButtonItem(panel->arrP, _("Scale"));
+    WMAddPopUpButtonItem(panel->arrP, _("Center"));
+    WMAddPopUpButtonItem(panel->arrP, _("Maximize"));
+    WMSetPopUpButtonSelectedItem(panel->arrP, 0);
+
+    WMMapSubwidgets(panel->imageF);
+
+    /****/
+
     panel->okB = WMCreateCommandButton(panel->win);
-    WMResizeWidget(panel->okB, 70, 28);
-    WMMoveWidget(panel->okB, 110, 325);
-    WMSetButtonText(panel->okB, "OK");
-    WMSetButtonAction(panel->okB,buttonCallback,panel);
+    WMResizeWidget(panel->okB, 84, 24);
+    WMMoveWidget(panel->okB, 225, 390);
+    WMSetButtonText(panel->okB, _("OK"));
+    WMSetButtonAction(panel->okB, buttonCallback, panel);
     
-    panel->cancB = WMCreateCommandButton(panel->win);
-    WMResizeWidget(panel->cancB, 70, 28);
-    WMMoveWidget(panel->cancB, 190, 325);
-    WMSetButtonText(panel->cancB, "Cancel");
-    WMSetButtonAction(panel->cancB,buttonCallback,panel);
-    
-    WMMapSubwidgets(panel->typeF);
-    
-    /***************** Solid *****************/
-    panel->scolorF = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->scolorF, 245, 125);
-    WMMoveWidget(panel->scolorF, 15, 140);
-    WMSetFrameTitle(panel->scolorF, "Color");
-    
-    panel->scolorW = WMCreateColorWell(panel->scolorF);
-    WMResizeWidget(panel->scolorW, 60, 45);
-    WMMoveWidget(panel->scolorW, 95, 40);
-    WMSetColorWellColor(panel->scolorW,WMCreateRGBColor(scr, 0xddff, 0xddff, 0, True));
-    
-    WMMapSubwidgets(panel->scolorF);
-    
-    /***************** Gradient *****************/
-    panel->gcolorF = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->gcolorF, 245, 145);
-    WMMoveWidget(panel->gcolorF, 15, 95);
-    WMSetFrameTitle(panel->gcolorF, "Colors");
-    
-    panel->gcolorLs = WMCreateList(panel->gcolorF);
-    WMResizeWidget(panel->gcolorLs, 120, 84);
-    WMMoveWidget(panel->gcolorLs, 20, 20);
-    
-    WMSetListUserDrawProc(panel->gcolorLs, paintListItem);
-    
-    WMAddListItem(panel->gcolorLs, "rgb:ff/ff/ff");
-    WMAddListItem(panel->gcolorLs, "rgb:00/00/ff");
-    
-    panel->gcolorW = WMCreateColorWell(panel->gcolorF);
-    WMResizeWidget(panel->gcolorW, 60, 45);
-    WMMoveWidget(panel->gcolorW, 160, 40);
-    WMSetColorWellColor(panel->gcolorW,WMCreateRGBColor(scr, 0xffff, 0, 0, True));    
-    
-    panel->gremB = WMCreateCommandButton(panel->gcolorF);
-    WMResizeWidget(panel->gremB, 64, 24);
-    WMMoveWidget(panel->gremB, 20, 110);
-    WMSetButtonText(panel->gremB, "Remove");
-    WMSetButtonAction(panel->gremB,(WMAction*)buttonCallback,panel);
-    
-    panel->gupdB = WMCreateCommandButton(panel->gcolorF);
-    WMResizeWidget(panel->gupdB, 64, 24);
-    WMMoveWidget(panel->gupdB, 90, 110);
-    WMSetButtonText(panel->gupdB, "Update");
-    WMSetButtonAction(panel->gupdB,(WMAction*)buttonCallback,panel);
-    
-    panel->gaddB = WMCreateCommandButton(panel->gcolorF);
-    WMResizeWidget(panel->gaddB, 64, 24);
-    WMMoveWidget(panel->gaddB, 160, 110);
-    WMSetButtonText(panel->gaddB, "Add");
-    WMSetButtonAction(panel->gaddB,(WMAction*)buttonCallback,panel);
-    WMMapSubwidgets(panel->gcolorF);
-    
-    panel->gdirF = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->gdirF, 245, 65);
-    WMMoveWidget(panel->gdirF, 15, 245);
-    WMSetFrameTitle(panel->gdirF, "Direction");
-    
-    panel->ghorB = WMCreateButton(panel->gdirF, WBTOnOff);
-    WMResizeWidget(panel->ghorB, 64, 34);
-    WMMoveWidget(panel->ghorB, 20, 20);
-    WMSetButtonImagePosition(panel->ghorB, WIPImageOnly);
-    WMPerformButtonClick(panel->ghorB);
-    
-    
-    panel->gverB = WMCreateButton(panel->gdirF, WBTOnOff);
-    WMResizeWidget(panel->gverB, 64, 34);
-    WMMoveWidget(panel->gverB, 90, 20);
-    WMSetButtonImagePosition(panel->gverB, WIPImageOnly);
-    WMGroupButtons(panel->ghorB, panel->gverB);
-    
-    panel->gdiaB = WMCreateButton(panel->gdirF, WBTOnOff);
-    WMResizeWidget(panel->gdiaB, 64, 34);
-    WMMoveWidget(panel->gdiaB, 160, 20);
-    WMSetButtonImagePosition(panel->gdiaB, WIPImageOnly);
-    WMGroupButtons(panel->ghorB, panel->gdiaB);
-    
-    WMMapSubwidgets(panel->gdirF);
-    
-    /***************** Pixmap *****************/
-    panel->pimagF = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->pimagF, 245, 140);
-    WMMoveWidget(panel->pimagF, 15, 96);
-    WMSetFrameTitle(panel->pimagF, "Image");
-    
-    panel->pimagL = WMCreateLabel(panel->pimagF);
-    WMResizeWidget(panel->pimagL, 220, 83);
-    WMMoveWidget(panel->pimagL, 10, 20);
-    WMSetLabelImagePosition(panel->pimagL, WIPImageOnly);
-    
-    panel->pimagT = WMCreateTextField(panel->pimagF);
-    WMResizeWidget(panel->pimagT, 147, 20);
-    WMMoveWidget(panel->pimagT, 10, 110);
-    
-    panel->pbrowB = WMCreateCommandButton(panel->pimagF);
-    WMResizeWidget(panel->pbrowB, 68, 24);
-    WMMoveWidget(panel->pbrowB, 165, 108);
-    WMSetButtonText(panel->pbrowB, "Browse...");
-    WMSetButtonAction(panel->pbrowB,buttonCallback,panel);
-    
-    WMMapSubwidgets(panel->pimagF);
-    
-    panel->pcolorF = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->pcolorF, 90, 75);
-    WMMoveWidget(panel->pcolorF, 15, 240);
-    WMSetFrameTitle(panel->pcolorF, "Color");
-    
-    panel->pcolorW = WMCreateColorWell(panel->pcolorF);
-    WMResizeWidget(panel->pcolorW, 60, 45);
-    WMMoveWidget(panel->pcolorW, 15, 20);
-    WMSetColorWellColor(panel->pcolorW,WMCreateRGBColor(scr, 0x00, 0xddff, 0xffff, True));    
-    
-    
-    WMMapSubwidgets(panel->pcolorF);
-    
-    panel->pmodeF = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->pmodeF, 145, 70);
-    WMMoveWidget(panel->pmodeF, 115, 245);
-    
-    panel->pscalB = WMCreateButton(panel->pmodeF, WBTOnOff);
-    WMResizeWidget(panel->pscalB, 54, 50);
-    WMMoveWidget(panel->pscalB, 10, 10);
-    WMSetButtonImagePosition(panel->pscalB, WIPImageOnly);
-    WMPerformButtonClick(panel->pscalB);
-    
-    image = RGetImageFromXPMData(WMScreenRContext(scr), scaled_xpm);
-    if (!image) {
-	wwarning("internal error:%s", RMessageForError(RErrorCode));
-    } else {
-	icon = WMCreatePixmapFromRImage(scr, image, 120);
-	RDestroyImage(image);
-	WMSetButtonImage(panel->pscalB, icon);
-	WMReleasePixmap(icon);
-    }
-    
-    panel->ptileB = WMCreateButton(panel->pmodeF, WBTOnOff);
-    WMResizeWidget(panel->ptileB, 54, 50);
-    WMMoveWidget(panel->ptileB, 75, 10);
-    WMSetButtonImagePosition(panel->ptileB, WIPImageOnly);
-    image = RGetImageFromXPMData(WMScreenRContext(scr), tiled_xpm);
-    if (!image) {
-	wwarning("internal error:%s", RMessageForError(RErrorCode));
-    } else {
-	icon = WMCreatePixmapFromRImage(scr, image, 120);
-	RDestroyImage(image);
-	WMSetButtonImage(panel->ptileB, icon);
-	WMReleasePixmap(icon);
-    }
-    WMGroupButtons(panel->pscalB, panel->ptileB);
-    
-    WMMapSubwidgets(panel->pmodeF);
-    
+    panel->cancelB = WMCreateCommandButton(panel->win);
+    WMResizeWidget(panel->cancelB, 84, 24);
+    WMMoveWidget(panel->cancelB, 130, 390);
+    WMSetButtonText(panel->cancelB, _("Cancel"));
+    WMSetButtonAction(panel->cancelB, buttonCallback, panel);
+
+    WMMapWidget(panel->nameF);
+    WMMapWidget(panel->typeP);
+    WMMapWidget(panel->okB);
+    WMMapWidget(panel->cancelB);
+
+    WMUnmapWidget(panel->arrP);
+
     WMRealizeWidget(panel->win);
-    WMMapSubwidgets(panel->win);
-    
-    WMPerformButtonClick(panel->tsoliB);
-    
-    WMMapWidget(panel->win);
-    
-    renderTextureButtons (panel);
-    
-    
-    /* register notification observers */
-    WMAddNotificationObserver(notificationObserver, panel,
-                              WMTextDidChangeNotification,
-                              panel->pimagT);
-    
+
+    panel->currentType = -1;
+
+    panel->sectionParts[TYPE_SOLID][0] = panel->defcF;
+
+    panel->sectionParts[TYPE_GRADIENT][0] = panel->defcF;
+    panel->sectionParts[TYPE_GRADIENT][1] = panel->gcolF;
+    panel->sectionParts[TYPE_GRADIENT][2] = panel->dirF;
+
+    panel->sectionParts[TYPE_SGRADIENT][0] = panel->tcolF;
+    panel->sectionParts[TYPE_SGRADIENT][1] = panel->dirF;
+
+    panel->sectionParts[TYPE_TGRADIENT][0] = panel->tcolF;
+    panel->sectionParts[TYPE_TGRADIENT][1] = panel->dirF;
+    panel->sectionParts[TYPE_TGRADIENT][2] = panel->imageF;
+    panel->sectionParts[TYPE_TGRADIENT][3] = panel->topaF;
+    panel->sectionParts[TYPE_TGRADIENT][4] = panel->arrP;
+
+    panel->sectionParts[TYPE_PIXMAP][0] = panel->defcF;
+    panel->sectionParts[TYPE_PIXMAP][1] = panel->imageF;
+    panel->sectionParts[TYPE_PIXMAP][2] = panel->arrP;
+
+
+    /* setup for first time */
+
+    changeTypeCallback(panel->typeP, panel);
+
+    sliderChangeCallback(panel->ghueS, panel);
+    sliderChangeCallback(panel->gsatS, panel);
+
     return panel;
 }
 
@@ -952,11 +1362,13 @@ CreateTexturePanel(WMScreen *scr)
  *--------------------------------------------------------------------------
  */
 
-#ifdef test
+#if 0
 
 char *ProgName = "test";
 
-void testOKButton(WMWidget *self, void *data){
+void
+testOKButton(WMWidget *self, void *data)
+{
     char *test;
     Display *dpy;
     Window win;
@@ -964,7 +1376,7 @@ void testOKButton(WMWidget *self, void *data){
     RImage *image;
     
     TexturePanel *panel = (TexturePanel*)data;
-    test = GetTexturePanelTextureString(panel);
+//    test = GetTexturePanelTextureString(panel);
     
     wwarning(test);
     
@@ -974,17 +1386,17 @@ void testOKButton(WMWidget *self, void *data){
     XMapRaised(dpy, win);
     XFlush(dpy);
     
-    image = RenderTexturePanelTexture(panel, 250, 250);
+  //  image = RenderTexturePanelTexture(panel, 250, 250);
     
     RConvertImage(WMScreenRContext(WMWidgetScreen(panel->okB)), image, &pix);
     
     XCopyArea(dpy, pix, win, (WMScreenRContext(WMWidgetScreen(panel->okB)))->copy_gc, 0, 0, image->width, image->height, 
 	      0, 0);
     
-    SetTexturePanelTexture(panel, test);
     free (test);
     
 }
+
 void testCancelButton(WMWidget *self, void *data){
     wwarning("Exiting test....");
     exit(0);
@@ -1012,16 +1424,17 @@ int main(int argc, char **argv)
     }
     
     scr = WMCreateSimpleApplicationScreen(dpy);
-    
+
     panel = CreateTexturePanel(scr);
-    
+
     SetTexturePanelOkAction(panel,(WMAction*)testOKButton,panel);
     SetTexturePanelCancelAction(panel,(WMAction*)testCancelButton,panel);
-    
+
+    SetTexturePanelTexture(panel, "pinky",
+			   PLGetProplistWithDescription("(mdgradient, pink, red, blue, yellow)"));
+
     ShowTexturePanel(panel);
-    
-    SetTexturePanelTexture(panel,"  ( tpixmap, ballot box.xpm, \"rgb:ff/de/ff\" )  ");
-    
+
     WMScreenMainLoop(scr);
     return 0;
 }

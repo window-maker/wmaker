@@ -971,6 +971,10 @@ WMColor *WMGetColorWellColor(WMColorWell *cPtr);
 
 void WSetColorWellBordered(WMColorWell *cPtr, Bool flag);
 
+
+extern char *WMColorWellDidChangeNotification;
+
+
 /* ...................................................................... */
 
 WMScrollView *WMCreateScrollView(WMWidget *parent);

@@ -518,8 +518,9 @@ Initialize(WMScreen *scr)
 #endif
     InitKeyboardShortcuts(scr, WPrefs.win);
     InitMouseSettings(scr, WPrefs.win);
-#ifdef not_yet_fully_implemented
+
     InitAppearance(scr, WPrefs.win);
+#ifdef not_yet_fully_implemented
 
     InitText(scr, WPrefs.win);
     InitThemes(scr, WPrefs.win);

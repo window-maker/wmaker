@@ -884,7 +884,6 @@ storeCommandInScript(char *cmd, char *line)
     system(buffer);
 
 end:
-    free(p);
     free(path);
     if (f)
 	fclose(f);

@@ -512,17 +512,17 @@ W_ResizeView(W_View *view, unsigned int width, unsigned int height)
 void
 W_RedisplayView(W_View *view)
 {
-    XExposeEvent ev;
+    XEvent ev;
     
     if (!view->flags.mapped)
 	return;
     
-    ev.type = Expose;
-    ev.display = view->screen->display;
-    ev.window = view->window;
-    ev.count = 0;
+    ev.xexpose.type = Expose;
+    ev.xexpose.display = view->screen->display;
+    ev.xexpose.window = view->window;
+    ev.xexpose.count = 0;
 
-    WMHandleEvent((XEvent*)&ev);
+    WMHandleEvent(&ev);
 }
 
 

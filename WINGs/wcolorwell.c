@@ -5,6 +5,9 @@
 #include "WINGsP.h"
 
 
+char *WMColorWellDidChangeNotification = "WMColorWellDidChangeNotification";
+
+
 typedef struct W_ColorWell {
     W_Class widgetClass;
     WMView *view;
@@ -323,6 +326,8 @@ dragColor(ColorWell *cPtr, XEvent *event, WMPixmap *image)
 	 case ButtonRelease:
 	    if (activeWell != NULL) {
 		WMSetColorWellColor(activeWell, cPtr->color);
+		WMPostNotificationName(WMColorWellDidChangeNotification,
+				       activeWell, NULL);
 	    } else {
 		slideView(dragView, ev.xbutton.x_root, ev.xbutton.y_root,
 			  event->xmotion.x_root, event->xmotion.y_root);
@@ -438,6 +443,8 @@ handleActionEvents(XEvent *event, void *data)
 	    color = WMCreateNamedColor(scr, t, False);
 	    if (color) {
 		WMSetColorWellColor(cPtr, color);
+		WMPostNotificationName(WMColorWellDidChangeNotification,
+				       cPtr, NULL);
 		WMReleaseColor(color);
 	    }
 	    free(t);

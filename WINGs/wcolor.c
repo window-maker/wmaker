@@ -320,8 +320,8 @@ WMGetColorRGBDescription(WMColor *color)
 {
     char *str = wmalloc(32);
     
-    sprintf(str, "rgb:%4x/%4x/%4x", color->color.red, color->color.green,
-	    color->color.blue);
+    sprintf(str, "#%02x%02x%02x", color->color.red>>8, color->color.green>>8,
+	    color->color.blue>>8);
     
     return str;
 }

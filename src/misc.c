@@ -1008,7 +1008,7 @@ ExpandOptions(WScreen *scr, char *cmdline)
 		
 	     case 'W':
 		sprintf(tmpbuf, "0x%x", 
-			(unsigned int)scr->current_workspace);
+			(unsigned int)scr->current_workspace + 1);
 		slen = strlen(tmpbuf);
 		olen += slen;
 		nout = realloc(out,olen);

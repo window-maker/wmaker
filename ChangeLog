@@ -1,3 +1,11 @@
+Changes since version 0.51.2:
+.............................
+
+- made the Attributes panel be available for all windows, even
+for completely broken apps (although settings wont be saved for
+completely broken apps)
+
+
 Changes since version 0.51.1:
 .............................
 
@@ -10,11 +18,13 @@ Changes since version 0.51.1:
 - fixed WPrefs crash in Mouse Preferences
 - fixed crash bug in WINGs/wmaker startup
 - added workaround for kde pager crash bug
+- made %W in root menu and wmsetbg -w take numbers starting from 1
+- fixed crash bugs with kpanel
 
 Changes since version 0.51.0:
 .............................
 
-- icon explosion is stopped when clicking on anywhere
+- put . to mark hidden apps
 - fixed dont set xset stuff option in WPrefs
 - fixed menu title messup in WPrefs
 - fixed WPrefs message dialogs for invalid menus

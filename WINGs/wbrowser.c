@@ -918,6 +918,7 @@ listCallback(void *self, void *clientData)
             i = bPtr->usedColumnCount-bPtr->maxVisibleColumns;
         scrollToColumn(bPtr, i, True);
     }
+  
 
     /* call callback for click */
     if (bPtr->action)

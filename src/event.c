@@ -639,11 +639,11 @@ handleButtonPress(XEvent *event)
 	    wSelectWindows(scr, event);
 	}
 #ifdef MOUSE_WS_SWITCH
-	else if (event->xbutton.button==Button4) {
+	else if (event->xbutton.button==Button5) {
 
 	    wWorkspaceRelativeChange(scr, -1);
 
-	} else if (event->xbutton.button==Button5) {
+	} else if (event->xbutton.button==Button4) {
 
 	    wWorkspaceRelativeChange(scr, 1);
 

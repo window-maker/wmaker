@@ -283,3 +283,58 @@ wfindfileinlist(char **path_list, char *file)
 
 
 
+char*
+wfindfileinarray(proplist_t array, char *file)
+{
+    int i;
+    char *path;
+    int len, flen;
+    char *fullpath;
+
+    if (!file)
+	return NULL;
+    
+    if (*file=='/' || *file=='~' || !array) {
+	if (access(file, F_OK)<0) {
+	    fullpath = wexpandpath(file);
+	    if (!fullpath)
+		return NULL;
+
+	    if (access(fullpath, F_OK)<0) {
+		free(fullpath);
+		return NULL;
+	    } else {
+		return fullpath;
+	    }
+	} else {
+	    return wstrdup(file);
+	}
+    }
+
+    flen = strlen(file);
+    for (i=0; PLGetNumberOfElements(array); i++) {
+	char *p = PLGetString(PLGetArrayElement(array, i));
+
+	len = strlen(p);
+	path = wmalloc(len+flen+2);
+	path = memcpy(path, p, len);
+	path[len]=0;
+	strcat(path, "/");
+	strcat(path, file);
+	/* expand tilde */
+	fullpath = wexpandpath(path);
+	free(path);
+	if (fullpath) {
+	    /* check if file exists */
+	    if (access(fullpath, F_OK)==0) {
+		return fullpath;
+	    }
+	    free(fullpath);
+	}
+    }
+    return NULL;
+}
+
+
+
+

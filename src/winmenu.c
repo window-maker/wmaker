@@ -169,8 +169,7 @@ execMenuCommand(WMenu *menu, WMenuEntry *entry)
 	break;
 
      case MC_PROPERTIES:
-	if (wwin->wm_class || wwin->wm_instance)
-	    wShowInspectorForWindow(wwin);
+	wShowInspectorForWindow(wwin);
 	break;
 
      case MC_HIDE:
@@ -581,7 +580,7 @@ updateMenuForWindow(WMenu *menu, WWindow *wwin)
 
     wMenuSetEnabled(menu, MC_DUMMY_MOVETO, !IS_OMNIPRESENT(wwin));
     
-    if ((wwin->wm_class || wwin->wm_instance) && !wwin->flags.inspector_open) {
+    if (!wwin->flags.inspector_open) {
 	wMenuSetEnabled(menu, MC_PROPERTIES, True);
     } else {
 	wMenuSetEnabled(menu, MC_PROPERTIES, False);

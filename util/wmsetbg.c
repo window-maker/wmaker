@@ -1076,8 +1076,6 @@ changeTextureForWorkspace(char *domain, char *texture, int workspace)
     proplist_t val;
     char *value;
     int j;
-
-    workspace++;
     
     val = PLGetProplistWithDescription(texture);
     if (!val) {

@@ -136,6 +136,8 @@ char *wfindfile(char *paths, char *file);
 
 char *wfindfileinlist(char **path_list, char *file);
 
+char *wfindfileinarray(proplist_t array, char *file);
+    
 char *wexpandpath(char *path);
 
 /* don't free the returned string */

@@ -1,5 +1,11 @@
+changes since wmaker 0.51.2:
+............................
+
+- added WMColorWellDidChangeNotification
+- added wfindfileinarray()
+
 changes since wmaker 0.51.1:
-...........................
+............................
 
 - wusergnusteppath() will return a statically allocated string now.
  DO NOT FREE IT ANYMORE!!

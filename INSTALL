@@ -138,12 +138,12 @@ To get a list of other options, run ./configure --help
 --with-libs-from
 	specify additional paths for libraries to be searched.
 	The -L flag must precede each path, like:
-	--with-libs-from=-L/opt/libs -L/usr/local/lib
+	--with-libs-from="-L/opt/libs -L/usr/local/lib"
 
 --with-incs-from
 	specify additional paths for header files to be searched.
 	The -I flag must precede each paths, like:
-	--with-incs-from=-I/opt/headers -I/usr/local/include
+	--with-incs-from="-I/opt/headers -I/usr/local/include"
 
 --enable-kanji
 	support to display Kanji characters, Korean, Chinese and other

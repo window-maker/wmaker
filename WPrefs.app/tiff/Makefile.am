@@ -44,7 +44,10 @@ tiffdata_DATA = \
 	speed3s.tiff \
 	speed4.tiff \
 	speed4s.tiff \
+	tdel.tiff \
+	tedit.tiff \
 	temp.tiff \
+	textr.tiff \
 	theme.tiff \
 	timer0.tiff \
 	timer0s.tiff \
@@ -58,6 +61,7 @@ tiffdata_DATA = \
 	timer4s.tiff \
 	timer5.tiff \
 	timer5s.tiff \
+	tnew.tiff \
 	whandling.tiff \
 	windowfocus.tiff \
 	workspace.tiff \

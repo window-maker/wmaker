@@ -289,6 +289,7 @@ for xinit in .xinitrc .Xclients .xsession; do
      fi
 done
 if test $wmaker_found = 1; then
+	echo "Found Window Maker to already be your default window manager."
 	show_end_message
 	exit 0
 fi
