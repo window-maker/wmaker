@@ -34,8 +34,8 @@ typedef struct WStacking {
 
 typedef struct _WCoreWindow {
     Window window;
-    unsigned int width;		       /* size of the window */
-    unsigned int height;
+    int width;		               /* size of the window */
+    int height;
     WScreen *screen_ptr;	       /* ptr to screen of the window */
     
     WObjDescriptor descriptor;

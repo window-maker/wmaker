@@ -696,8 +696,6 @@ void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int width, int height
 {
     scr->workspaces[workspace]->width = WMAX(width,scr->scr_width);
     scr->workspaces[workspace]->height = WMAX(height,scr->scr_height);
-
-    printf("%d %d\n", scr->workspaces[workspace]->width, scr->workspaces[workspace]->height);
 }
 
 void updateWorkspaceGeometry(WScreen *scr, int workspace, int *view_x, int *view_y) {
@@ -706,23 +704,22 @@ void updateWorkspaceGeometry(WScreen *scr, int workspace, int *view_x, int *view
 
     /* adjust workspace layout */
     wwin = scr->focused_window;
-    most_left = scr->scr_width;
-    most_top = scr->scr_width;
-    most_right = 0;
-    most_bottom = 0;
+    most_right = scr->scr_width;
+    most_bottom = scr->scr_height;
+    most_left = 0;
+    most_top = 0;
 
     for(;wwin; wwin = wwin->prev) {
         if (wwin->frame->workspace == workspace) {
             if (!wwin->flags.miniaturized
-                    && !wwin->flags.hidden
-                    && !wwin->flags.obscured) {
-
-                printf("x%d y%d w%d h%d\n", wwin->frame_x, wwin->frame_y, wwin->frame->core->width, wwin->frame->core->height);
-
+                    && !wwin->flags.hidden) {
                 if (wwin->frame_x < most_left) { /* record positions, should this be cached? */
                     most_left = wwin->frame_x;
+                    /*
+                    printf("most_left is set to %d %d %d %d\n", wwin->frame_x, wwin->frame_y, wwin->frame->core->width, wwin->frame->core->height);
+                    */
                 }
-                if (wwin->frame_x + wwin->frame->core->width > most_right) {
+                if ((int)wwin->frame_x + (int)wwin->frame->core->width > most_right) {
                     most_right = wwin->frame_x + wwin->frame->core->width;
                 }
                 if (wwin->frame_y < most_top) {
@@ -730,39 +727,78 @@ void updateWorkspaceGeometry(WScreen *scr, int workspace, int *view_x, int *view
                 }
                 if (wwin->frame_y + wwin->frame->core->height > most_bottom) {
                     most_bottom = wwin->frame_y + wwin->frame->core->height;
+                    /*
+                    printf("most_bottom is set to %d %d %d %d\n", wwin->frame_x, wwin->frame_y, wwin->frame->core->width, wwin->frame->core->height);
+                    */
                 }
             }
         }
     }
 
+    scr->workspaces[workspace]->width = WMAX(most_right, scr->scr_width) - WMIN(most_left, 0);
+    scr->workspaces[workspace]->height = WMAX(most_bottom, scr->scr_height) - WMIN(most_top, 0);
+    /*
+    printf("-t%d b%d l%d r%d -- %d %d %d\n", most_top, most_bottom, most_left, most_right,
+                scr->workspaces[workspace]->view_x, *view_x,
+                scr->workspaces[workspace]->width);
+                */
 
+    /*
     if (most_left + scr->workspaces[workspace]->view_x < 0) {
-        scr->workspaces[workspace]->width -= scr->workspaces[workspace]->view_x + most_left;
+    printf("-t%d b%d l%d r%d -- %d %d %d\n", most_top, most_bottom, most_left, most_right,
+                scr->workspaces[workspace]->view_x, *view_x,
+                scr->workspaces[workspace]->width);
+    */
+
         *view_x += -most_left - scr->workspaces[workspace]->view_x;
         scr->workspaces[workspace]->view_x = -most_left;
-    } else if (scr->workspaces[workspace]->view_x > 0) {
-        scr->workspaces[workspace]->width -= scr->workspaces[workspace]->view_x;
+
+        *view_y += -most_top - scr->workspaces[workspace]->view_y;
+        scr->workspaces[workspace]->view_y = -most_top;
+
+        /*
+    printf("-t%d b%d l%d r%d -- %d %d %d\n", most_top, most_bottom, most_left, most_right,
+                scr->workspaces[workspace]->view_x, *view_x,
+                scr->workspaces[workspace]->width);
+    } else if (scr->workspaces[workspace]->view_x > 0 && most_left > 0) {
         *view_x -= scr->workspaces[workspace]->view_x;
         scr->workspaces[workspace]->view_x = 0;
-    }
+    }*/
 
-    if (most_right + scr->workspaces[workspace]->view_x > scr->scr_width) {
-        scr->workspaces[workspace]->width = most_right + scr->workspaces[workspace]->view_x;
-    } else if (most_right < scr->scr_width) {
-        scr->workspaces[workspace]->width = scr->workspaces[workspace]->view_x + scr->scr_width;
+    /*
+    if (*view_x < 0) {
+        *view_x = 0;
     }
-    if (*view_x < 0) *view_x = 0;
-    if (*view_x > scr->workspaces[workspace]->width - scr->scr_width)
+    if (*view_x > scr->workspaces[workspace]->width - scr->scr_width) {
         *view_x = scr->workspaces[workspace]->width - scr->scr_width;
-
+    }
+    printf("-t%d b%d l%d r%d -- %d %d %d\n", most_top, most_bottom, most_left, most_right,
+                scr->workspaces[workspace]->view_x, *view_x,
+                scr->workspaces[workspace]->width);
+    */
+    /*
     if (most_top + scr->workspaces[workspace]->view_y < 0) {
         scr->workspaces[workspace]->height -= scr->workspaces[workspace]->view_y + most_top;
+        *view_y += -most_top - scr->workspaces[workspace]->view_y;
         scr->workspaces[workspace]->view_y = -most_top;
-        *view_y -= -most_top - scr->workspaces[workspace]->view_y;
+    } else if (scr->workspaces[workspace]->view_y > 0) {
+        scr->workspaces[workspace]->height -= scr->workspaces[workspace]->view_y;
+        *view_y -= scr->workspaces[workspace]->view_y;
+        scr->workspaces[workspace]->view_y = 0;
     }
+
     if (most_bottom + scr->workspaces[workspace]->view_y > scr->scr_height) {
         scr->workspaces[workspace]->height = most_bottom + scr->workspaces[workspace]->view_y;
+    } else if (most_bottom < scr->scr_height) {
+        scr->workspaces[workspace]->height = scr->workspaces[workspace]->view_y + scr->scr_height;
     }
+    if (*view_y < 0) {
+        *view_y = 0;
+    }
+    if (*view_y > scr->workspaces[workspace]->height - scr->scr_height) {
+        *view_y = scr->workspaces[workspace]->height - scr->scr_height;
+    }
+    */
 }
 
 Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
@@ -771,10 +807,29 @@ Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
     int diff_x, diff_y;
     WWindow *wwin;
 
+    printf("wWorkspaceSetViewPort %d %d\n", view_x, view_y);
+
     updateWorkspaceGeometry(scr, workspace, &view_x, &view_y);
 
+    if (view_x + scr->scr_width > scr->workspaces[workspace]->width) {
+        /* puts("right edge of vdesk"); */
+        view_x = scr->workspaces[workspace]->width - scr->scr_width;
+    }
     if (view_x < 0) {
-        printf("reset view_x from %d\n",view_x);
+        /* puts("left edge of vdesk"); */
+        view_x = 0;
+    }
+    if (view_y + scr->scr_height > scr->workspaces[workspace]->height) {
+        /* puts("right edge of vdesk"); */
+        view_y = scr->workspaces[workspace]->height - scr->scr_height;
+    }
+    if (view_y < 0) {
+        /* puts("left edge of vdesk"); */
+        view_y = 0;
+    }
+
+    /*
+    if (view_x < 0) {
         view_x = 0;
         adjust_flag = True;
     } else if (view_x > scr->workspaces[workspace]->width - scr->scr_width) {
@@ -789,14 +844,15 @@ Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
         view_y = scr->workspaces[workspace]->height - scr->scr_height;
         adjust_flag = True;
     }
+    */
 
     diff_x = scr->workspaces[workspace]->view_x - view_x;
     diff_y = scr->workspaces[workspace]->view_y - view_y;
     if (!diff_x && !diff_y)
         return False;
 
-    scr->workspaces[workspace]->view_x = WMIN(view_x, scr->workspaces[workspace]->width - scr->scr_width);
-    scr->workspaces[workspace]->view_y = WMIN(view_y, scr->workspaces[workspace]->height - scr->scr_height);
+    scr->workspaces[workspace]->view_x = view_x;
+    scr->workspaces[workspace]->view_y = view_y;
 
 
     for( wwin = scr->focused_window; wwin; wwin = wwin->prev) {
@@ -805,7 +861,6 @@ Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
             wWindowSynthConfigureNotify(wwin);
         }
     }
-
 
     return adjust_flag;
 }
