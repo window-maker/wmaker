@@ -114,6 +114,9 @@ Changes since version 0.80.2:
 - Fixed bug with incorrect un-escaping if there is a dot in wm_class.
 - Updated Catalan translations (Ernest Adrogue <eadrogue@gmx.net>)
 - Updated Spanish translation of WPrefs (Alberto Gimenez <algibe@teleline.es>)
+- Fixed synchronization problem between hair cursor and mouse cursor in
+  wmagnify with mouse cursor at the screen edge (Jon Diercks <jon@diercks.net>)
+
 
 Changes since version 0.80.1:
 .............................

@@ -232,7 +232,7 @@ updateImage(BufferData *data, int rx, int ry)
 	for (x = 0; x < data->width; x++) {
 	    unsigned long pixel;
 
-	    pixel = getpix(image, x-xoffs, y-yoffs, xoffs, yoffs);
+	    pixel = getpix(image, x, y, xoffs, yoffs);
 
 	    if (drawpoint(data, pixel, x, y))
 		changedPixels++;
