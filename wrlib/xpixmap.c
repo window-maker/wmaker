@@ -106,6 +106,8 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
 		    *data++ = 0xff;
 		    *data++ = 0xff;
 		}
+		if (mask)
+		    *data++ = 0;
 	    }
 	}
     } else {
@@ -115,16 +117,22 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
 		*(data++) = NORMALIZE_RED(pixel);
 		*(data++) = NORMALIZE_GREEN(pixel);
 		*(data++) = NORMALIZE_BLUE(pixel);
+		if (mask)
+		    *(data++) = 0;
 	    }
 	}
     }
 
+    data = img->data;
 
 #define MIN(a,b) ((a)<(b)?(a):(b))
     if (mask) {
 	for (y = 0; y < MIN(mask->height, image->height); y++) {
-	    for (x = 0; x < MIN(mask->width, image->width); x++) {
-		if (XGetPixel(mask, x, y)) {
+	    for (x = 0; x < image->width; x++) {
+
+		data += 3;	/* Skip R, G & B */
+
+		if (mask->width <= image->width && XGetPixel(mask, x, y)) {
 		    *(data++) = 0xff;
 		} else {
 		    *(data++) = 0;
