@@ -93,65 +93,36 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
     data = img->data;
 
     if (image->depth==1) {
-        if (mask) {
-            for (y = 0; y < image->height; y++) {
-                for (x = 0; x < image->width; x++) {
-                    pixel = XGetPixel(image, x, y);
-                    if (pixel) {
-                        *data++ = 0;
-                        *data++ = 0;
-                        *data++ = 0;
-                    } else {
-                        *data++ = 0xff;
-                        *data++ = 0xff;
-                        *data++ = 0xff;
-                    }
-                    data++;
-                }
+        for (y = 0; y < image->height; y++) {
+        for (x = 0; x < image->width; x++) {
+            pixel = XGetPixel(image, x, y);
+            if (pixel) {
+                *data++ = 0;
+                *data++ = 0;
+                *data++ = 0;
+            } else {
+                *data++ = 0xff;
+                *data++ = 0xff;
+                *data++ = 0xff;
             }
-        } else {
-            for (y = 0; y < image->height; y++) {
-                for (x = 0; x < image->width; x++) {
-                    pixel = XGetPixel(image, x, y);
-                    if (pixel) {
-                        *data++ = 0;
-                        *data++ = 0;
-                        *data++ = 0;
-                    } else {
-                        *data++ = 0xff;
-                        *data++ = 0xff;
-                        *data++ = 0xff;
-                    }
-                }
-            }
+            if (mask) data++;
+        }
         }
     } else {
-        if (mask) {
-            for (y = 0; y < image->height; y++) {
-                for (x = 0; x < image->width; x++) {
-                    pixel = XGetPixel(image, x, y);
-                    *(data++) = NORMALIZE_RED(pixel);
-                    *(data++) = NORMALIZE_GREEN(pixel);
-                    *(data++) = NORMALIZE_BLUE(pixel);
-                    data++;
-                }
-            }
-        } else {
-            for (y = 0; y < image->height; y++) {
-                for (x = 0; x < image->width; x++) {
-                    pixel = XGetPixel(image, x, y);
-                    *(data++) = NORMALIZE_RED(pixel);
-                    *(data++) = NORMALIZE_GREEN(pixel);
-                    *(data++) = NORMALIZE_BLUE(pixel);
-                }
-            }
+        for (y = 0; y < image->height; y++) {
+        for (x = 0; x < image->width; x++) {
+            pixel = XGetPixel(image, x, y);
+            *(data++) = NORMALIZE_RED(pixel);
+            *(data++) = NORMALIZE_GREEN(pixel);
+            *(data++) = NORMALIZE_BLUE(pixel);
+            if (mask) data++;
+        }
         }
     }
 
 #define MIN(a,b) ((a)<(b)?(a):(b))
     if (mask) {
-        data = img->data;
-        data += 3;	/* Skip R, G & B */
+        data = img->data + 3;	/* Skip R, G & B */
         for (y = 0; y < MIN(mask->height, image->height); y++) {
             for (x = 0; x < MIN(mask->width, image->width); x++) {
                 if (mask->width <= image->width && XGetPixel(mask, x, y)) {
