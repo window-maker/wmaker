@@ -142,11 +142,13 @@ WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item)
     if (tPtr->maxItems == tPtr->itemCount) {
 	WMTabViewItem **items;
 
-	items = wrealloc(tPtr->items, tPtr->maxItems + 10);
+	items = wrealloc(tPtr->items,
+			 sizeof(WMTabViewItem*) * (tPtr->maxItems + 10));
 	if (!items) {
 	    wwarning("out of memory allocating memory for tabview");
 	    return;
 	}
+	memset(&items[tPtr->maxItems], 0, sizeof(WMTabViewItem*) * 10);
 	tPtr->items = items;
 	tPtr->maxItems += 10;
     }
@@ -507,6 +509,7 @@ destroyTabView(TabView *tPtr)
     int i;
 
     for (i = 0; i < tPtr->itemCount; i++) {
+	WMSetTabViewItemView(tPtr->items[i], NULL);
 	WMDestroyTabViewItem(tPtr->items[i]);
     }
     free(tPtr->items);
