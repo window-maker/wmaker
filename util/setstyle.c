@@ -168,12 +168,12 @@ getColor(proplist_t texture)
 	    XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)), 
 			PLGetString(c1), &color1);
 	    XParseColor(dpy, DefaultColormap(dpy, DefaultScreen(dpy)),
-			PLGetString(c1), &color2);
-	    
+			PLGetString(c2), &color2);
+
 	    sprintf(buffer, "#%02x%02x%02x", 
-		    (color1.red+color2.red)>>3,
-		    (color1.green+color2.green)>>3,
-		    (color1.blue+color2.blue)>>3);
+		    (color1.red+color2.red)>>9,
+		    (color1.green+color2.green)>>9,
+		    (color1.blue+color2.blue)>>9);
 	    value = PLMakeString(buffer);	    
 	}
     } else if (strcasecmp(str, "mdgradient")==0

@@ -1,6 +1,9 @@
 {
+  TitleJustify = center;
   HighlightColor = white;
   HighlightTextColor = black;
+  ClipTitleColor = white;
+  CClipTitleColor = gray20;
   FTitleColor = black;
   PTitleColor = white;
   UTitleColor = gray20;
@@ -27,6 +30,7 @@
   );
   PTitleBack = (hgradient, "rgb:50/50/50", "rgb:80/80/80");
   UTitleBack = (hgradient, "rgb:90/90/90", "rgb:d0/d0/d0");
+  ResizebarBack = (solid, "#b0b0b0");
   MenuTitleColor = black;
   MenuTextColor = black;
   MenuDisabledColor = gray40;
@@ -52,4 +56,8 @@
     white
   );
   MenuTextBack = (hgradient, "rgb:d0/d0/d0", "rgb:80/80/80");
+  IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+  IconTitleColor = black;
+  IconTitleBack = white;
+  MenuStyle = normal;
 }

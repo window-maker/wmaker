@@ -1,5 +1,5 @@
 {
-  WindozeCycling = YES;
+  WindozeCycling = NO;
   PopupSwitchMenu = NO;
   MenuStyle = normal;
   DisableMiniwindows = NO;

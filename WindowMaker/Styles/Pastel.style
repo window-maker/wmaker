@@ -1,15 +1,23 @@
 {
+  TitleJustify = center;
   HighlightColor = white;
   HighlightTextColor = black;
-FTitleColor = "gray30";
-PTitleColor = "white";
-UTitleColor = "gray30";
-MenuTitleColor = "gray30";
-MenuDisabledColor = "gray50";
-MenuTextColor = "gray30";
-FTitleBack = (hgradient, "PaleTurquoise3", "PaleTurquoise4");
-UTitleBack = (hgradient, "cornsilk2", "cornsilk4");
-PTitleBack = (hgradient, "slategray2", "slategray4");
-MenuTitleBack = (hgradient, "lightyellow2", "lightyellow4");
-MenuTextBack = (hgradient, "slategray2", "slategray4");
+  ClipTitleColor = white;
+  CClipTitleColor = gray20;
+  FTitleColor = gray30;
+  PTitleColor = white;
+  UTitleColor = gray30;
+  FTitleBack = (hgradient, PaleTurquoise3, PaleTurquoise4);
+  PTitleBack = (hgradient, pink, pink4);
+  UTitleBack = (hgradient, cornsilk2, cornsilk4);
+  ResizebarBack = (hgradient, cornsilk2, cornsilk4);
+  MenuTitleColor = gray30;
+  MenuTextColor = gray30;
+  MenuDisabledColor = gray50;
+  MenuTitleBack = (hgradient, lightyellow2, lightyellow4);
+  MenuTextBack = (hgradient, slategray2, slategray4);
+  IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+  IconTitleColor = gray30;
+  IconTitleBack = "#7eacac";
+  MenuStyle = normal;
 }

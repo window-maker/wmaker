@@ -16,4 +16,6 @@
   MenuTitleBack = (hgradient, "rgb:30/32/3e", black);
   MenuTextBack = (hgradient, "rgb:50/5a/5e", "rgb:20/2a/2e");
   IconBack = (mdgradient, gray40, "rgb:50/5a/5e", "rgb:30/32/3e", "rgb:20/2a/2e");
+  IconTitleColor = white;
+  IconTitleBack = "#20202e";
 }

@@ -72,8 +72,11 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     RImage *image;
     Pixmap pixmap;
     XImage *ximage;
+    GC gc;
+    XGCValues gcv;
     int i;
     int w, h;
+	int run;
 
     h = w = wPreferences.icon_size;
     if (x < 0 || x + w > scr->scr_width || y < 0 || y + h > scr->scr_height)
@@ -83,6 +86,7 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
     if (!icon)
 	return;
 
+    XGrabServer(dpy);
     XUnmapWindow(dpy, win);
     XSync(dpy, False);
 
@@ -94,27 +98,43 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 	return;
     }
 
-    XSetClipMask(dpy, scr->copy_gc, None);
+    gcv.foreground = scr->white_pixel;
+    gcv.background = scr->black_pixel;
+    gcv.graphics_exposures = False;
+    gcv.subwindow_mode = IncludeInferiors;
+    gc = XCreateGC(dpy, scr->w_win, GCForeground|GCBackground|GCSubwindowMode
+		   |GCGraphicsExposures, &gcv);
 
-    for (i=0; i<DEMATERIALIZE_STEPS; i++) {
+	/*
+    XSetClipMask(dpy, scr->copy_gc, None);
+	*/
+
+    for (i=0,run=0; i<DEMATERIALIZE_STEPS; i++) {
 	XEvent foo;
-	if (XCheckTypedEvent(dpy, ButtonPress, &foo)) {
+	if (!run && XCheckTypedEvent(dpy, ButtonPress, &foo)) {
+	    run=1;
 	    XPutBackEvent(dpy, &foo);
-	    XClearWindow(dpy, scr->root_win);
-	    break;
+	    /*
+	     XClearWindow(dpy, scr->root_win);
+	     break;
+	     */
 	}
 	image = RCloneImage(back);
 	RCombineImagesWithOpaqueness(image, icon, 
 		     (DEMATERIALIZE_STEPS-1-i)*256/(DEMATERIALIZE_STEPS+2));
 	RConvertImage(scr->rcontext, image, &pixmap);
-	XCopyArea(dpy, pixmap, scr->root_win, scr->copy_gc, 0, 0, w, h, x, y);
+	XCopyArea(dpy, pixmap, scr->root_win, gc, 0, 0, w, h, x, y);
 	XFreePixmap(dpy, pixmap);
 	XFlush(dpy);
-	wusleep(1000);
+	if(!run) wusleep(1000);
     }
+	/*
     XClearArea(dpy, scr->root_win, x, y, w, h, False);
+	*/
     XFlush(dpy);
 
+    XUngrabServer(dpy);
+    XFreeGC(dpy, gc);
     RDestroyImage(icon);
     RDestroyImage(back);
 }

@@ -1,14 +1,23 @@
 {
-HighlightColor = blue;
-HighlightTextColor = white;
-FTitleColor = white;
-PTitleColor = black;
-UTitleColor = darkblue;
-FTitleBack = (solid, darkblue);
-PTitleBack = (solid, "rgb:d5/d6/d5");
-UTitleBack = (solid, "rgb:d5/d6/d5");
-MenuTitleBack = (solid, darkblue);
-MenuTextBack = (solid, "rgb:d5/d6/d5");
-MenuTextColor = black;
-MenuTitleColor = white;
+  TitleJustify = center;
+  HighlightColor = blue;
+  HighlightTextColor = white;
+  ClipTitleColor = white;
+  CClipTitleColor = gray20;
+  FTitleColor = white;
+  PTitleColor = black;
+  UTitleColor = darkblue;
+  FTitleBack = (solid, darkblue);
+  PTitleBack = (solid, "rgb:d5/d6/d5");
+  UTitleBack = (solid, "rgb:d5/d6/d5");
+  ResizebarBack = (solid, "rgb:d5/d6/d5");
+  MenuTitleColor = white;
+  MenuTextColor = black;
+  MenuDisabledColor = gray40;
+  MenuTitleBack = (solid, darkblue);
+  MenuTextBack = (solid, "rgb:d5/d6/d5");
+  IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+  IconTitleColor = white;
+  IconTitleBack = darkblue;
+  MenuStyle = normal;
 }

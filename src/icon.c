@@ -80,7 +80,8 @@ appearanceObserver(void *self, WMNotification *notif)
 
     /* so that the appicon expose handlers will paint the appicon specific 
      * stuff */
-    XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);
+    XClearArea(dpy, icon->core->window, 0, 0, icon->core->width, 
+	       icon->core->height, True);
 }
 
 
@@ -237,6 +238,8 @@ wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
     
     wIconUpdate(icon);
 
+    WMAddNotificationObserver(appearanceObserver, icon, 
+			      WNIconAppearanceSettingsChanged, icon);
     WMAddNotificationObserver(tileObserver, icon, 
 			      WNIconTileSettingsChanged, icon);
 

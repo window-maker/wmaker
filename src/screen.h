@@ -236,8 +236,10 @@ typedef struct _WScreen {
     unsigned int geometry_display_width;
     unsigned int geometry_display_height;
     int keymove_tick;
-    
-    struct RContext *rcontext;
+
+    Pixmap clip_arrow_gradient;
+
+    struct RContext *rcontext;	       /* wrlib context */
     
     WMScreen *wmscreen;		       /* for widget library */
     

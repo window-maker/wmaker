@@ -576,13 +576,13 @@ renderResizebarTexture(WScreen *scr, WTexture *texture, int width, int height,
     ROperateLine(img, RSubtractOperation, 0, 0, width-1, 0, &dark);
     ROperateLine(img, RAddOperation, 0, 1, width-1, 1, &light);
 
-    ROperateLine(img, RSubtractOperation, cwidth, 2, cwidth, height, &dark);
-    ROperateLine(img, RAddOperation, cwidth+1, 2, cwidth+1, height, &light);
+    ROperateLine(img, RSubtractOperation, cwidth, 2, cwidth, height-1, &dark);
+    ROperateLine(img, RAddOperation, cwidth+1, 2, cwidth+1, height-1, &light);
 
     ROperateLine(img, RSubtractOperation, width-cwidth-2, 2, width-cwidth-2,
-		 height, &dark);
+		 height-1, &dark);
     ROperateLine(img, RAddOperation, width-cwidth-1, 2, width-cwidth-1, 
-		 height, &light);
+		 height-1, &light);
 
     if (!RConvertImage(scr->rcontext, img, pmap)) {
 	wwarning(_("error rendering image: %s"), RMessageForError(RErrorCode));

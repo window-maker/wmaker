@@ -18,6 +18,8 @@ Changes since version 0.52.0:
 - applied windoze cycle patch from  Paul Warren <pdw@ferret.lmh.ox.ac.uk>
 - changed initscript and exitscript execution from fork()/exec() to system()
 - added ResizebarBack and added appropriate backwards compat. hacks in setstyle
+- applied ]d's patch to allow DEMATERIALIZE_ICON over windows
+- made clip arrows gradiented
 
 Changes since version 0.51.2:
 .............................

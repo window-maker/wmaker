@@ -48,8 +48,9 @@
 /* 
  * #define to enable WindozeCycling.  Set WindozeCycling = YES in 
  * your WindowMaker config file
+ * WARNING: this still has some bugs
  */
-#define WEENDOZE_CYCLE
+#undef WEENDOZE_CYCLE
 
 
 /* undefine ANIMATIONS if you don't want animations for iconification,
@@ -422,6 +423,9 @@
 
 /* Vicinity in which an icon can be attached to the clip */
 #define CLIP_ATTACH_VICINITY	1
+
+#define CLIP_BUTTON_SIZE  23
+
 
 /* The amount of space (in multiples of the icon size)
  * a docked icon must be dragged out to detach it */

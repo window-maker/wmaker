@@ -137,7 +137,7 @@ appearanceObserver(void *self, WMNotification *notif)
     WWindow *wwin = (WWindow*)self;
     int flags = (int)WMGetNotificationClientData(notif);
 
-    if (!wwin->frame || !wwin->frame->titlebar)
+    if (!wwin->frame || (!wwin->frame->titlebar && !wwin->frame->resizebar))
 	return;
 
     if (flags & WFontSettings) {
@@ -147,6 +147,9 @@ appearanceObserver(void *self, WMNotification *notif)
 	wwin->frame->flags.need_texture_remake = 1;
     }
     if (flags & (WTextureSettings | WColorSettings)) {
+	if (wwin->frame->titlebar)
+	    XClearWindow(dpy, wwin->frame->titlebar->window);
+
 	wFrameWindowPaint(wwin->frame);
     }
 }

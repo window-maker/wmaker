@@ -9,11 +9,15 @@
   UTitleColor = gray60;
   FTitleBack = (hgradient, "rgb:18/38/59", black);
   PTitleBack = (hgradient, "rgb:18/38/59", black);
-  UTitleBack = (hgradient, "rgb:38/58/79", "rgb:30/40/50");
+  UTitleBack = (hgradient, "rgb:38/58/79", "rgb:26/36/46");
+  ResizebarBack = (hgradient, "rgb:38/58/79", "rgb:26/36/46");
   MenuTitleColor = white;
   MenuTextColor = white;
   MenuDisabledColor = "rgb:61/61/61";
   MenuTitleBack = (hgradient, "rgb:08/24/38", black);
   MenuTextBack = (hgradient, "rgb:18/38/59", "rgb:00/14/28");
   IconBack = (mdgradient, "rgb:61/51/59", "rgb:38/58/79", black, "rgb:18/38/59");
+  IconTitleColor = white;
+  IconTitleBack = "#0c1c2c";
+  MenuStyle = normal;
 }

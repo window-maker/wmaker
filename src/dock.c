@@ -65,8 +65,6 @@
 #define CLIP_IDLE         0
 #define CLIP_FORWARD      2
 
-#define CLIP_BUTTON_SIZE  23
-
 
 /**** Global variables ****/
 
@@ -319,7 +317,8 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
     int pt = CLIP_BUTTON_SIZE*ICON_SIZE/64;
     int tp = ICON_SIZE - pt;
     int as = pt - 15; /* 15 = 5+5+5 */
-
+    GC gc;
+    Bool collapsed = clipIcon->dock->collapsed;
 
     if (rpushed) {
 	p[0].x = tp+1;
@@ -341,6 +340,14 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
 	XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
 	XSetForeground(dpy, scr->draw_gc, scr->black_pixel);
     }
+    if (collapsed) {
+	gc = scr->clip_title_gc;
+    } else {
+	XSetFillStyle(dpy, scr->copy_gc, FillTiled);
+	XSetTile(dpy, scr->copy_gc, scr->clip_arrow_gradient);
+	XSetClipMask(dpy, scr->copy_gc, None);
+	gc = scr->copy_gc;
+    }
 
     p[0].x = p[3].x = ICON_SIZE-6-as;
     p[0].y = p[3].y = 5;
@@ -352,8 +359,11 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
         XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
         XDrawLines(dpy, win, scr->draw_gc, p, 4, CoordModeOrigin);
     } else {
-	XFillPolygon(dpy, win, scr->clip_title_gc, p,3,Convex,CoordModeOrigin);
-        XDrawLines(dpy, win, scr->clip_title_gc, p,4,CoordModeOrigin);
+	if (!collapsed)
+	    XSetTSOrigin(dpy, gc, ICON_SIZE-6-as, 5);
+
+	XFillPolygon(dpy, win, gc, p,3,Convex,CoordModeOrigin);
+        XDrawLines(dpy, win, gc, p,4,CoordModeOrigin);
     }
 
     p[0].x = p[3].x = 5;
@@ -366,9 +376,14 @@ paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
 	XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
         XDrawLines(dpy, win, scr->draw_gc, p, 4, CoordModeOrigin);
     } else {
-        XFillPolygon(dpy, win, scr->clip_title_gc, p,3,Convex,CoordModeOrigin);
-        XDrawLines(dpy, win, scr->clip_title_gc, p,4,CoordModeOrigin);
+	if (!collapsed)
+	    XSetTSOrigin(dpy, gc, 5, ICON_SIZE-6-as);
+	
+        XFillPolygon(dpy, win, gc, p,3,Convex,CoordModeOrigin);
+        XDrawLines(dpy, win, gc, p,4,CoordModeOrigin);
     }
+    if (!collapsed)
+	XSetFillStyle(dpy, scr->copy_gc, FillSolid);
 }
 
 

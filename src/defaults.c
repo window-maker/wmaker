@@ -200,15 +200,14 @@ static int updateUsableArea();
 #define REFRESH_MENU_TITLE_COLOR	(1<<6)
 #define REFRESH_WINDOW_TITLE_COLOR (1<<7)
 #define REFRESH_WINDOW_FONT	(1<<8)
-#define REFRESH_FORE_COLOR	(1<<9)
-#define REFRESH_ICON_TILE	(1<<10)
-#define REFRESH_ICON_FONT	(1<<11)
-#define REFRESH_WORKSPACE_BACK	(1<<12)
+#define REFRESH_ICON_TILE	(1<<9)
+#define REFRESH_ICON_FONT	(1<<10)
+#define REFRESH_WORKSPACE_BACK	(1<<11)
 
-#define REFRESH_BUTTON_IMAGES   (1<<13)
+#define REFRESH_BUTTON_IMAGES   (1<<12)
 
-#define REFRESH_ICON_TITLE_COLOR (1<<14)
-#define REFRESH_ICON_TITLE_BACK (1<<15)
+#define REFRESH_ICON_TITLE_COLOR (1<<13)
+#define REFRESH_ICON_TITLE_BACK (1<<14)
 
 
 
@@ -2106,8 +2105,7 @@ static int
 getColor(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr, 
 	 void **ret)
 {
-    static unsigned long pixel;    
-    XColor color;
+    static XColor color;
     char *val;
     int second_pass=0;
 
@@ -2127,14 +2125,15 @@ again:
         }
         return False;
     }
-    
-    pixel = color.pixel;
-    
+
     if (ret)
-      *ret = &pixel;
+      *ret = &color;
     
+    assert(addr==NULL);
+    /*
     if (addr)
       *(unsigned long*)addr = pixel;
+     */
     
     return True;
 }
@@ -2281,7 +2280,7 @@ getRImages(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 static int
 setJustify(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
 {
-    return REFRESH_FORE_COLOR;
+    return REFRESH_WINDOW_TITLE_COLOR;
 }
 
 
@@ -2515,7 +2514,7 @@ setHightlight(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
     
     scr->select_pixel = color->pixel;
 
-    return REFRESH_FORE_COLOR;
+    return REFRESH_MENU_COLOR;
 }
 
 
@@ -2529,7 +2528,7 @@ setHightlightText(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
     
     scr->select_text_pixel = color->pixel;
 
-    return REFRESH_FORE_COLOR;
+    return REFRESH_MENU_COLOR;
 }
 
 
@@ -2540,10 +2539,29 @@ setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 	scr->clip_title_pixel[index]!=scr->black_pixel) {
 	wFreeColor(scr, scr->clip_title_pixel[index]);
     }
-    
     scr->clip_title_pixel[index] = color->pixel;
 
-    return REFRESH_FORE_COLOR;
+    if (index == CLIP_NORMAL) {
+	RImage *image;
+	RColor color1, color2;
+	int pt = CLIP_BUTTON_SIZE*wPreferences.icon_size/64;
+	int as = pt - 15; /* 15 = 5+5+5 */
+	
+	FREE_PIXMAP(scr->clip_arrow_gradient);
+
+	color1.red = (color->red >> 8)*6/10;
+	color1.green = (color->green >> 8)*6/10;
+	color1.blue = (color->blue >> 8)*6/10;
+
+	color2.red = WMIN((color->red >> 8)*20/10, 255);
+	color2.green = WMIN((color->green >> 8)*20/10, 255);
+	color2.blue = WMIN((color->blue >> 8)*20/10, 255);
+
+	image = RRenderGradient(as+1, as+1, &color1, &color2, RDiagonalGradient);
+	RConvertImage(scr->rcontext, image, &scr->clip_arrow_gradient);
+	RDestroyImage(image);
+    }
+    return REFRESH_ICON_TITLE_COLOR;
 }
 
 
@@ -2650,7 +2668,7 @@ setMenuDisabledColor(WScreen *scr, WDefaultEntry *entry, XColor *color, void *fo
     }
     XChangeGC(dpy, scr->disabled_menu_entry_gc, gcm, &gcv);
 
-    return REFRESH_FORE_COLOR;
+    return REFRESH_MENU_COLOR;
 #undef gcm
 }
 
