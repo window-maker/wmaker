@@ -146,6 +146,44 @@ Shutdown(WShutdownMode mode)
 
 
 
+static restoreWindows(WMBag *bag, WMBagIterator iter)
+{
+    WCoreWindow *next;
+    WCoreWindow *core;
+    WWindow *wwin;
+    
+
+    if (iter == NULL) {
+	core = WMBagFirst(bag, &iter);
+    } else {
+	core = WMBagNext(bag, &iter);
+    }
+    
+    if (core == NULL)
+	return;
+    
+    restoreWindows(bag, iter);
+        
+    /* go to the end of the list */
+    while (core->stacking->under)
+	core = core->stacking->under;
+
+    while (core) {
+	next = core->stacking->above;
+            
+	if (core->descriptor.parent_type==WCLASS_WINDOW) {
+	    Window window;
+
+	    wwin = core->descriptor.parent;
+	    window = wwin->client_win;
+	    wUnmanageWindow(wwin, !wwin->flags.internal_window, False);
+	    XMapWindow(dpy, window);
+	}
+	core = next;
+    }
+}
+   
+
 /*
  *----------------------------------------------------------------------
  * RestoreDesktop--
@@ -161,9 +199,6 @@ Shutdown(WShutdownMode mode)
 void
 RestoreDesktop(WScreen *scr)
 {
-    WMBagIterator iter;
-    WCoreWindow *core;
-
     if (scr->helper_pid > 0) {
 	kill(scr->helper_pid, SIGTERM);
 	scr->helper_pid = 0;
@@ -173,30 +208,7 @@ RestoreDesktop(WScreen *scr)
     wDestroyInspectorPanels();
 
     /* reparent windows back to the root window, keeping the stacking order */
-    for (core = WMBagFirst(scr->stacking_list, &iter);
-	 iter != NULL && core != NULL;
-	 core = WMBagNext(scr->stacking_list, &iter)) {
-        WCoreWindow *next;
-        WWindow *wwin;
-
-        /* go to the end of the list */
-        while (core->stacking->under)
-            core = core->stacking->under;
-
-        while (core) {
-            next = core->stacking->above;
-            
-            if (core->descriptor.parent_type==WCLASS_WINDOW) {
-		Window window;
-
-                wwin = core->descriptor.parent;
-		window = wwin->client_win;
-                wUnmanageWindow(wwin, !wwin->flags.internal_window, False);
-		XMapWindow(dpy, window);
-            }
-            core = next;
-        }
-    }
+    restoreWindows(scr->stacking_list, NULL);
 
     XUngrabServer(dpy);
     XSetInputFocus(dpy, PointerRoot, RevertToParent, CurrentTime);
