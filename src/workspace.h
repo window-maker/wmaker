@@ -43,8 +43,8 @@ void wWorkspaceForceChange(WScreen *scr, int workspace);
 void wWorkspaceManageEdge(WScreen *scr);
 void wWorkspaceRaiseEdge(WScreen *scr);
 void wWorkspaceResizeViewPort(WScreen *scr, int workspace, int width, int height);
-void wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y);
-void wWorkspaceAdjustViewPort(WScreen *scr, int workspace, int view_x, int view_y);
+Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y);
+Bool wWorkspaceAdjustViewPort(WScreen *scr, int workspace, int view_x, int view_y);
 void wWorkspaceGetViewPosition(WScreen *scr, int workspace, int *view_x, int *view_y);
 #endif
 
