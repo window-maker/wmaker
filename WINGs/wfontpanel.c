@@ -972,7 +972,7 @@ sizeClick(WMWidget *w, void *data)
 
     WMSetTextFieldText(panel->sizT, item->text);
     
-    WMSelectTextFieldRange(panel->sizT, wmkrange(0, strlen(item->text));
+    WMSelectTextFieldRange(panel->sizT, wmkrange(0, strlen(item->text)));
 
     preview(panel);
 }
