@@ -329,6 +329,12 @@ dnl ===========================================
 
 AC_PATH_XTRA
 
+if test $no_x; then
+    AC_MSG_ERROR([The path for the X11 files not found!
+Make sure you have X and it's headers and libraries (the -devel packages
+in Linux) installed.])
+fi
+
 X_LIBRARY_PATH=$x_libraries
 
 XCFLAGS="$X_CFLAGS"
@@ -656,6 +662,8 @@ if test "$enable_debug" = yes; then
 #	Efence makes things too slow. Add it by hand in the Makefiles
 #	if it is really needed.
 #    AC_CHECK_LIB(efence, malloc, LIBS="$LIBS -lefence")
+else
+    DFLAGS="-DWITHOUT_NANA"
 fi
 AC_SUBST(DFLAGS)
 

@@ -6,9 +6,13 @@ Changes since version 0.61.1:
 - removed "Keep Attracted Icons" option from Clip's menu. See NEWS.
 - fixed bug in Xdnd code to be able to work with QT. (This is QT's bug so
   it will change again in future)
+- replaced debugging output stuff with Nana
+- fixed problem with session restoring and dock autolaunch (Jacek Naglak
+							<nag@promail.pl>)
+- put WorkspaceNamePosition in WPrefs
+- added a lock to docked icons
 - fixed crashing bug in WPrefs.app's Appearance section.
 - fixed sorting of names in icon chooser, and file browser.
-
 
 Changes since version 0.61.0:
 .............................
