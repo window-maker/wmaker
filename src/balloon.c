@@ -340,7 +340,8 @@ miniwindowBalloon(WObjDescriptor *object)
     scr->balloon->h = icon->core->height;
     scr->balloon->text = wstrdup(icon->icon_name);
     scr->balloon->objectWindow = icon->core->window;
-    if (scr->balloon->prevType == object->parent_type
+    if ((scr->balloon->prevType == object->parent_type
+    || scr->balloon->prevType == WCLASS_APPICON)
 	&& scr->balloon->ignoreTimer) {
 	XUnmapWindow(dpy, scr->balloon->window);
 	showBalloon(scr);
@@ -374,7 +375,8 @@ appiconBalloon(WObjDescriptor *object)
     scr->balloon->h = aicon->icon->core->height-2;
 
     scr->balloon->objectWindow = aicon->icon->core->window;
-    if (scr->balloon->prevType == object->parent_type
+    if ((scr->balloon->prevType == object->parent_type
+    || scr->balloon->prevType == WCLASS_MINIWINDOW)
 	&& scr->balloon->ignoreTimer) {
 	XUnmapWindow(dpy, scr->balloon->window);
 	showBalloon(scr);
@@ -448,6 +450,8 @@ wBalloonEnteredObject(WScreen *scr, WObjDescriptor *object)
      case WCLASS_DOCK_ICON:
 	if (object->parent != scr->clip_icon && wPreferences.appicon_balloon)
 	    appiconBalloon(object);
+    else
+        wBalloonHide(scr);
 	break;
 
      case WCLASS_MINIWINDOW:
