@@ -7,6 +7,10 @@ Changes since version 0.80.0:
   WMState.<number> file on multihead system.
 - Fixed problem with keyboard shortcuts executed an every screen for
   multihead systems.
+- Updated traditional chinese translations 
+- Fixed buglet in non-caching rootmenu option 
+  ("John H. Robinson, IV" <jhriv@ucsd.edu>)
+- Added Malay translation
 - Fixed problem with kcalc not having a miniaturize button.
 - Added "Hide Others" to the window menu.
 - Fixed text in info panel for multibyte (Seiichi SATO <ssato@sh.rim.or.jp>)
@@ -21,6 +25,8 @@ Changes since version 0.80.0:
   (Bohdan Vlasyuk <bohdan@bodq.vstu.vinnica.ua>)
 - Fixed a bug that crashed Window Maker when setting the "Emulate AppIcon"
   option for a window using the window Inspector.
+- Let XRender transparent window be see-through to desktop
+- Added Greek (el) language pixmap (Michalis Kabrianis <Michalis@bigfoot.com>)
 
 
 Changes since version 0.70.0:
@@ -49,6 +55,7 @@ Changes since version 0.70.0:
   default.
 - Mapping a new window that belongs to a running application that is hidden,
   will unhide the application.
+- Added || pipe menu for generating non-cached menus
 - Removed the collapse appicons thing.
 - Added real appicon sharing (apps of the same kind will have a single shared 
   appicon).
@@ -64,6 +71,7 @@ Changes since version 0.70.0:
   adapt to newer/faster machines. Also used wusleep(10) when the delay was 0
   to get rid of the jerky animation when there was no delay.
 - Fixed bug with Unhide mapping windows from other workspaces.
+- keyboard shortcuts are active during mouse window drag
 - Saving a domain file will first strip all entries that are also present in
   the global domain as well and are exactly the same. This fixes a bug where
   settings from the global domain file were merged in the user domain file
@@ -71,7 +79,6 @@ Changes since version 0.70.0:
   ignored making a system admin unable to set global defaults for all users
   using the global domains.
 - Fixed bug with improper setting of root/titlebar cursor (definable cursors).
-
 
 Changes since version 0.65.1:
 .............................
@@ -91,9 +98,21 @@ Changes since version 0.65.1:
 - added spanish INSTALL file (Efrain Maximiliano Palermo <max_drake2001@yahoo.com.ar>)
 - updated Finnish pots (Tomi Kajala <tomi@iki.fi>)
 - copy/paste launching in Dock
+<<<<<<< ChangeLog
+- fixed switch to wrong workspace bug (Masashi Shimbo <shimbo@cis.ibaraki.ac.jp>)
+- added snprintf and removed XConvertCase usage for portability
+- added wcopy/wpaste scripts from (<luke@research.canon.com.au>)
+- added Xinerama support: see details in NEWS
+- fixed artifact pattern left in TrueColor dithering code (visible with
+tiled gradients)
+
+=======
 - fixed bug in positioning of window list menu when opened by kbd
 - internal code clean-up with notifications for window state change and other
   stuff
+<<<<<<< ChangeLog
+>>>>>>> 1.144
+=======
 - added snprintf implementation for systems that don't have this function
 - removed the libPropList dependancy by adding property list handling
   code to WINGs. This code is not only better integrated with the other
@@ -108,6 +127,7 @@ Changes since version 0.65.1:
 - fixed a few compilation warnings and a problem caused by an uninitialized 
   variable.
 
+>>>>>>> 1.150
 
 Changes since version 0.65.0:
 .............................
