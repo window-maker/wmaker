@@ -20,7 +20,7 @@
  *  USA.
  */
 
-
+#if 0
 #include <WINGsP.h>
 #include <WUtil.h>
 #include <stdlib.h>
@@ -666,3 +666,4 @@ destroyEditMenu(WEditMenu *mPtr)
 
     free(mPtr);
 }
+#endif
