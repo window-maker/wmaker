@@ -74,7 +74,7 @@ typedef WMPropList* proplist_t;
 #define PLSetCaseSensitive(c) WMPLSetCaseSensitive(c)
 
 #define PLMakeString(bytes) WMCreatePLString(bytes)
-#define PLMakeData(bytes, length) WMCreatePLDataFromBytes(bytes, length)
+#define PLMakeData(bytes, length) WMCreatePLDataWithBytes(bytes, length)
 #define PLMakeArrayFromElements WMCreatePLArray
 #define PLMakeDictionaryFromEntries WMCreatePLDictionary
 

@@ -16,6 +16,18 @@
   ScilabGraphic4.Xscilab = {KeepInsideScreen=YES;};
   ScilabGraphic5.Xscilab = {KeepInsideScreen=YES;};
   ScilabGraphic6.Xscilab = {KeepInsideScreen=YES;};
+  D4X = {KeepInsideScreen = Yes;};
+  D4X_DnDBasket.D4X_DnDBasket = {
+    NoResizebar = Yes;
+    SkipWindowList = Yes;
+    DontSaveSession = Yes;
+    KeepOnTop = Yes;
+    NoCloseButton = Yes;
+    NoTitlebar = Yes;
+    NoMiniaturizeButton = Yes;
+    Unfocusable = Yes;
+    Omnipresent = Yes;
+  };
   bookmarks.Netscape = {NoAppIcon = YES;};
   xcalc = {AlwaysUserIcon = Yes;Icon = "HP-16C-48.xpm";};
   Netscape = {Icon = Netscape.xpm;};

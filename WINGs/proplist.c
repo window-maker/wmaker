@@ -730,7 +730,7 @@ getPLArray(PLData *pldata)
         } else if (c == ',') {
             /* continue normally */
         } else if (!first) {
-            COMPLAIN(pldata, _("missing , or unterminated PropList array"));
+            COMPLAIN(pldata, _("missing or unterminated PropList array"));
             ok = 0;
             break;
         } else {
