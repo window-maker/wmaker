@@ -2004,6 +2004,10 @@ int req_width, req_height;	       /* new size of the client */
     }
     wwin->frame_x = req_x;
     wwin->frame_y = req_y;
+    if (!WFLAGP(wwin, no_border)) {
+	wwin->client.x += FRAME_BORDER_WIDTH;
+	wwin->client.y += FRAME_BORDER_WIDTH;
+    }
 
 #ifdef SHAPE
     if (wShapeSupported && wwin->flags.shaped && resize) {
@@ -2040,6 +2044,10 @@ int req_x, req_y;		       /* new position of the frame */
 
     wwin->client.x = req_x;
     wwin->client.y = req_y + wwin->frame->top_width;
+    if (!WFLAGP(wwin, no_border)) {
+	wwin->client.x += FRAME_BORDER_WIDTH;
+	wwin->client.y += FRAME_BORDER_WIDTH;
+    }
 
     XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);
 
