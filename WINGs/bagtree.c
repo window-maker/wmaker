@@ -145,7 +145,7 @@ static void treeInsert(W_TreeBag *tree, W_Node *node)
     
     while (x != tree->nil) {
 	y = x;
-	if (node->index < x->index)
+	if (node->index <= x->index)
 	    x = x->left;
 	else
 	    x = x->right;
@@ -153,7 +153,7 @@ static void treeInsert(W_TreeBag *tree, W_Node *node)
     node->parent = y;
     if (y == tree->nil)
 	tree->root = node;
-    else if (node->index < y->index)
+    else if (node->index <= y->index)
 	y->left = node;
     else
 	y->right = node;
@@ -544,6 +544,8 @@ static int removeFromBag(WMBag *self, void *item)
 	}
 	
 	ptr = rbTreeDelete(SELF, ptr);
+	if (self->destructor)
+	    self->destructor(ptr->data);
 	free(ptr);
 
 	return 1;
@@ -563,6 +565,8 @@ static int eraseFromBag(WMBag *self, int index)
 	SELF->count--;
 	
 	ptr = rbTreeDelete(SELF, ptr);
+	if (self->destructor)
+	    self->destructor(ptr->data);
 	free(ptr);
 
 	return 1;
@@ -588,6 +592,8 @@ static int deleteFromBag(WMBag *self, int index)
 	}
 	
 	ptr = rbTreeDelete(SELF, ptr);
+	if (self->destructor)
+	    self->destructor(ptr->data);
 	free(ptr);
 
 	return 1;
@@ -657,8 +663,9 @@ static void *replaceInBag(WMBag *self, int index, void *item)
 
     if (item == NULL) {
 	SELF->count--;
-	
 	ptr = rbTreeDelete(SELF, ptr);
+	if (self->destructor)
+	    self->destructor(ptr->data);
 	free(ptr);
     } else if (ptr != SELF->nil) {
 	old = ptr->data;
@@ -691,6 +698,8 @@ static int sortBag(WMBag *self, int (*comparer)(const void*, const void*))
     W_Node *tmp;
     int i;
 
+    if (SELF->count == 0)
+	return 1;
 
     items = wmalloc(sizeof(void*)*SELF->count);
     i = 0;
@@ -746,6 +755,9 @@ static void emptyBag(WMBag *self)
 static void freeBag(WMBag *self)
 {
     emptyBag(self);
+    
+    free(SELF->nil);
+    free(self->data);
     
     free(self);
 }
