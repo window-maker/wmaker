@@ -109,6 +109,7 @@ typedef struct W_Text {
 
     GC bgGC;                    /* the background GC to draw with */
     GC fgGC;                    /* the foreground GC to draw with */
+    GC stippledGC;              /* the GC to overlay selected graphics with */
     Pixmap db;                  /* the buffer on which to draw */
     WMPixmap *bgPixmap;         /* the background pixmap */
 
@@ -195,6 +196,15 @@ output(char *ptr, int len)
 #define CURSOR_BLINK_OFF_DELAY  400
 #endif
 
+
+#define STIPPLE_WIDTH 8
+#define STIPPLE_HEIGHT 8
+static unsigned char STIPPLE_BITS[] = {
+    0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa
+};
+
+
+
 static char *default_bullet[] = {
     "6 6 4 1",
     "   c None s None", ".  c black",
@@ -205,6 +215,7 @@ static char *default_bullet[] = {
     ".....o",
     " ...oo",
     "  ooo "};
+
 
 static void handleEvents(XEvent *event, void *data);
 static void layOutDocument(Text *tPtr);
@@ -390,7 +401,7 @@ _selEnd:    rect->x = tb->sections[s].x + lw;
     if (selected) { 
         rect->y = tb->sections[s]._y - tPtr->vpos;
         rect->height = tb->sections[s].h;
-if(tb->graphic) { printf("graphic s%d h%d\n", s,tb->sections[s].h);}
+if(tb->graphic) { printf("DEBUG: graphic s%d h%d\n", s,tb->sections[s].h);}
     }
     return selected;
 
@@ -525,10 +536,17 @@ removeSelection(Text *tPtr)
 
             if ( (tb->s_end - tb->s_begin == tb->used) || tb->graphic) { 
                 tPtr->currentTextBlock = tb;
+                if(tb->next) {
+                  tPtr->tpos = 0;
+                } else if(tb->prior) {
+                  if(tb->prior->graphic)
+                      tPtr->tpos = 1;
+                  else
+                      tPtr->tpos = tb->prior->used;
+                } else tPtr->tpos = 0;
+
                 WMDestroyTextBlock(tPtr, WMRemoveTextBlock(tPtr));
                 tb = tPtr->currentTextBlock;
-                if (tb)
-                    tPtr->tpos = 0;
                 continue;
 
             } else if (tb->s_end <= tb->used) {
@@ -700,8 +718,6 @@ _getSibling:
     /* first, place all text that can be viewed */
     while (!done && tb) {
 
-/* paragraph diagnostic 
-if(tb->blank) {tb->text[0] = 'F'; } */
 
         if (tb->graphic) {
             tb = tb->next;
@@ -791,16 +807,6 @@ if(tb->blank) {tb->text[0] = 'F'; } */
                     }
                 }
                 
-                if (tPtr->flags.ownsSelection) {
-                    XRectangle rect;
-
-                    if ( sectionWasSelected(tPtr, tb, &rect, 0)) {
-                        tb->selected = True;
-                        XFillRectangle(dpy, tPtr->db, greyGC,
-                            rect.x, rect.y, rect.width, rect.height);
-                    }
-                }
-
                 if(tb->object) {
                     WMMoveWidget(tb->d.widget, 
                         tb->sections[0].x + tPtr->visible.x - tPtr->hpos, 
@@ -813,6 +819,17 @@ if(tb->blank) {tb->text[0] = 'F'; } */
                         tb->sections[0].y - tPtr->vpos);
                     h = tb->d.pixmap->height + 1;
 
+                }
+
+                if (tPtr->flags.ownsSelection) {
+                    XRectangle rect;
+
+                    if ( sectionWasSelected(tPtr, tb, &rect, 0)) {
+                        tb->selected = True;
+                        XFillRectangle(dpy, tPtr->db, tPtr->stippledGC,
+                        //XFillRectangle(dpy, tPtr->db, greyGC,
+                            rect.x, rect.y, rect.width, rect.height);
+                    }
                 }
 
                 if (!tPtr->flags.monoFont && tb->underlined) { 
@@ -969,6 +986,8 @@ updateCursorPosition(Text *tPtr)
         y = tb->sections[0].y;
         h = tb->sections[0].h;
         x = tb->sections[0].x;
+        if(tPtr->tpos == 1)
+            x += tb->sections[0].w;
 
     } else {
         if(tPtr->tpos > tb->used)
@@ -1196,9 +1215,16 @@ _doneV:
 
           if(x > tPtr->cursor.x + gw/2) {  
             pos = 1;
-printf("here x%d:  %d\n", x, tPtr->cursor.x + gw/2);
             tPtr->cursor.x += gw;
-          } else pos = 0;
+          } else { 
+printf("first %d\n", tb->first);
+            if(tb->prior) { 
+              if(tb->prior->graphic) pos = 1;
+              else pos = tb->prior->used;
+            tb = tb->prior;
+            } else pos = 0;
+              
+          }
           
           s = 0;
           goto _doneH;
@@ -1222,7 +1248,11 @@ printf("here x%d:  %d\n", x, tPtr->cursor.x + gw/2);
       }
         
 _doneH:  
-     tPtr->tpos = (pos<tb->used)? pos : tb->used;
+     if(tb->graphic) {
+         tPtr->tpos = (pos<=1)? pos : 0;
+     } else {
+         tPtr->tpos = (pos<tb->used)? pos : tb->used;
+     }
 _doNothing:
     if (!tb)
         printf("...for this app will surely crash :-)\n");
@@ -1581,7 +1611,7 @@ _layOut:
             tb->nsections = 0;
         } 
 
-        if (tb->blank && tb->next && !tb->next->first) {
+        if (tb->first && tb->blank && tb->next && !tb->next->first) {
             TextBlock *next = tb->next;
             tPtr->currentTextBlock = tb;
             WMDestroyTextBlock(tPtr, WMRemoveTextBlock(tPtr));
@@ -1886,7 +1916,11 @@ deleteTextInteractively(Text *tPtr, KeySym ksym)
                    tb = tb->prior;    
                 }
 
-                tPtr->tpos = tb->used;
+                if(tb->graphic)
+                    tPtr->tpos = 1;
+                else
+                    tPtr->tpos = tb->used;
+
                 tPtr->currentTextBlock = tb;
                 done = 1;
                 if(wasFirst) {
@@ -1923,11 +1957,25 @@ deleteTextInteractively(Text *tPtr, KeySym ksym)
 
             if (sibling) { 
                 tPtr->currentTextBlock = sibling;
-                tPtr->tpos = (back? sibling->used : 0);
+                if(tb->graphic)
+                    tPtr->tpos = (back? 1 : 0);
+                else
+                    tPtr->tpos = (back? sibling->used : 0);
             }
         /* no more chars, so mark it as blank */
-        } else if(tb->used == 0) 
+        } else if(tb->used == 0) {
             tb->blank = 1;
+        } else if(tb->graphic) { 
+          Bool hasNext = (Bool)(tb->next);
+
+          WMDestroyTextBlock(tPtr, WMRemoveTextBlock(tPtr));
+          if(hasNext) { 
+            tPtr->tpos = 0;
+          } else if(tPtr->currentTextBlock) { 
+            tPtr->tpos = (tPtr->currentTextBlock->graphic?
+              1 : tPtr->currentTextBlock->used);
+          }
+        } else printf("DEBUG: unaccounted for... catch this!\n");
     }
 
     layOutDocument(tPtr);
@@ -2254,6 +2302,24 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
     
     switch(ksym) {
 
+        case XK_Home:
+        if((tPtr->currentTextBlock = tPtr->firstTextBlock))
+            tPtr->tpos = 0; 
+        updateCursorPosition(tPtr);
+        paintText(tPtr);
+        break;
+
+        case XK_End:
+        if((tPtr->currentTextBlock = tPtr->lastTextBlock)) {
+            if(tPtr->currentTextBlock->graphic)
+                tPtr->tpos = 1;
+            else
+                tPtr->tpos = tPtr->currentTextBlock->used; 
+        }
+        updateCursorPosition(tPtr);
+        paintText(tPtr);
+        break;
+
         case XK_Left: 
         if(!(tb = tPtr->currentTextBlock))
             break;
@@ -2263,7 +2329,11 @@ handleTextKeyPress(Text *tPtr, XEvent *event)
             if(tPtr->tpos==0) { 
 L_imaGFX:       if(tb->prior) {
                     tPtr->currentTextBlock = tb->prior;
-                    tPtr->tpos = tPtr->currentTextBlock->used;
+                    if(tPtr->currentTextBlock->graphic)
+                        tPtr->tpos = 1;
+                    else
+                        tPtr->tpos = tPtr->currentTextBlock->used;
+
                     if(!tb->first && tPtr->tpos > 0)
                         tPtr->tpos--;
                 } else tPtr->tpos = 0;
@@ -2283,7 +2353,12 @@ R_imaGFX:      if(tb->next) {
                     tPtr->tpos = 0;
                     if(!tb->next->first && tb->next->used>0)
                         tPtr->tpos++;
-                } else tPtr->tpos = tb->used;
+                } else { 
+                  if(tb->graphic)
+                     tPtr->tpos = 1;
+                  else
+                     tPtr->tpos = tb->used;
+                }
             } else  tPtr->tpos++;
             updateCursorPosition(tPtr);
             paintText(tPtr);
@@ -3010,6 +3085,9 @@ WMText *
 WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser, WMAction *writer)
 {
     Text *tPtr;
+    Display *dpy;
+    WMScreen *scr;
+    XGCValues gcv;
 
     tPtr = wmalloc(sizeof(Text));
     memset(tPtr, 0, sizeof(Text));
@@ -3020,24 +3098,38 @@ WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser, WMAction *writer
         wfree(tPtr);
         return NULL;
     }
+
     tPtr->view->self = tPtr;
-    tPtr->view->attribs.cursor = tPtr->view->screen->textCursor;
+    tPtr->view->attribs.cursor = scr->textCursor;
     tPtr->view->attribFlags |= CWOverrideRedirect | CWCursor;
     W_ResizeView(tPtr->view, 250, 200);
 
-    tPtr->dColor = WMWhiteColor(tPtr->view->screen);
+    dpy = tPtr->view->screen->display;
+    scr = tPtr->view->screen;
+
+    tPtr->dColor = WMWhiteColor(scr);
     tPtr->bgGC = WMColorGC(tPtr->dColor);
     W_SetViewBackgroundColor(tPtr->view, tPtr->dColor);
     WMReleaseColor(tPtr->dColor);
 
-    tPtr->dColor = WMBlackColor(tPtr->view->screen);
+    tPtr->dColor = WMBlackColor(scr);
     tPtr->fgGC = WMColorGC(tPtr->dColor);
 
+    gcv.graphics_exposures = False;
+    gcv.foreground = W_PIXEL(scr->gray);
+    gcv.background = W_PIXEL(scr->darkGray);
+    gcv.fill_style = FillStippled;
+    gcv.stipple = XCreateBitmapFromData(dpy, W_DRAWABLE(scr),
+        STIPPLE_BITS, STIPPLE_WIDTH, STIPPLE_HEIGHT);
+    tPtr->stippledGC = XCreateGC(dpy, W_DRAWABLE(scr),
+        GCForeground|GCBackground|GCStipple
+        |GCFillStyle|GCGraphicsExposures, &gcv);
+                  
     tPtr->ruler = NULL;
     tPtr->vS = NULL;
     tPtr->hS = NULL;
 
-    tPtr->dFont = WMRetainFont(WMSystemFontOfSize(tPtr->view->screen, 12));
+    tPtr->dFont = WMRetainFont(WMSystemFontOfSize(scr, 12));
 
     tPtr->view->delegate = &_TextViewDelegate;
 
@@ -3176,8 +3268,12 @@ WMAppendTextStream(WMText *tPtr, char *text)
         insertPlainText(tPtr, text);
 
     tPtr->flags.needsLayOut = True;
-    if(tPtr->currentTextBlock)
-        tPtr->tpos = tPtr->currentTextBlock->used;
+    if(tPtr->currentTextBlock) { 
+        if(tPtr->currentTextBlock->graphic)
+            tPtr->tpos = 1;
+        else
+            tPtr->tpos = tPtr->currentTextBlock->used;
+    }
 
     if(!tPtr->flags.frozen) {
         layOutDocument(tPtr);
@@ -3393,7 +3489,12 @@ WMPrependTextBlock(WMText *tPtr, void *vtb)
         }
         WMAddToArray(tPtr->gfxItems, (void *)tb);
         tPtr->tpos = 0;
-    } else tPtr->tpos = tb->used;
+    } else {
+        if(tb->graphic) 
+            tPtr->tpos = 1;
+        else
+            tPtr->tpos = tb->used;
+    }
 
     if (!tPtr->lastTextBlock || !tPtr->firstTextBlock) {
         tb->next = tb->prior = NULL;
@@ -3439,7 +3540,14 @@ WMAppendTextBlock(WMText *tPtr, void *vtb)
         }
         WMAddToArray(tPtr->gfxItems, (void *)tb);
         tPtr->tpos = 0;
-    } else tPtr->tpos = tb->used;
+
+    } else {
+        if(tb->graphic) 
+            tPtr->tpos = 1;
+        else
+            tPtr->tpos = tb->used;
+    }
+
 
     if (!tPtr->lastTextBlock || !tPtr->firstTextBlock) {
         tb->next = tb->prior = NULL;
@@ -3473,7 +3581,6 @@ WMRemoveTextBlock(WMText *tPtr)
 
     if (!tPtr || !tPtr->firstTextBlock || !tPtr->lastTextBlock
             || !tPtr->currentTextBlock) {
-/*        printf("cannot remove non existent TextBlock!\n"); */
         return NULL;
     }
 
