@@ -1,4 +1,4 @@
 Makefile Makefile.in
-WMState WMWindowAttributes WindowMaker
+WMState WMWindowAttributes WindowMaker WMRootMenu
 .psrc .inslog2 tca.map tca.log
 *.rpt

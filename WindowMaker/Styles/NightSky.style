@@ -25,5 +25,5 @@
   IconBack = (mhgradient, "#000000", "#595969", "#444661", "#202831");
   IconTitleColor = white;
   IconTitleBack = "#4d748f";
-  MenuStyle = singletexture;
+  MenuStyle = normal;
 }

@@ -27,6 +27,7 @@ prefsdata_DATA =\
 	menu.no\
 	menu.pl\
 	menu.pt\
+	menu.ro\
 	menu.ru\
 	menu.se\
 	menu.sl\
@@ -43,6 +44,7 @@ prefsdata_DATA =\
 	plmenu.it\
 	plmenu.ko\
 	plmenu.pl\
+	plmenu.ro\
 	plmenu.zh_CN\
 	wmmacros\
 	xtree.dat
