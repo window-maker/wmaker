@@ -4,8 +4,8 @@
 # and friends, quickly.
 #
 
-aclocal
+aclocal -I .
 autoheader
 autoconf
-libtoolize --force --automake
-automake -a --gnu --include-deps
+libtoolize --copy --force --automake
+automake --add-missing --gnu --include-deps
