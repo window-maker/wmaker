@@ -49,8 +49,8 @@ x86_check_mmx()
 	 "xorl %%ebx, %%eax	\n"
 	 "andl $(1<<21), %%eax	\n"
 	 "jz .NotPentium	\n"
-	 "xorl %%eax, %%eax	\n"
-	 
+	 "xorl %%eax, %%eax	\n" // no eax effect because of the movl below
+	                            // except reseting flags. is it needed?
 	 "movl $1, %%eax	\n"
 	 "cpuid			\n"
 	 "test $(1<<23), %%edx	\n"
@@ -60,6 +60,7 @@ x86_check_mmx()
 	 ".NotMMX:		\n"
 	 ".Bye:			\n"
 	 ".NotPentium:		\n"
+         "popal			\n"
 
 	 : "=rm" (result));
 
