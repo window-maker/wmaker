@@ -1429,6 +1429,12 @@ main(int argc, char **argv)
     rattr.standard_colormap_mode = RCreateStdColormap;
 
     rc = RCreateContext(dpy, scr, &rattr);
+
+    if (!rc) {
+        rattr.standard_colormap_mode = RIgnoreStdColormap;
+        rc = RCreateContext(dpy, scr, &rattr);
+    }
+    
     if (!rc) {
 	wfatal("could not initialize wrlib:",
 	       RMessageForError(RErrorCode));
