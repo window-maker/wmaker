@@ -53,6 +53,8 @@ Changes since wmaker 0.80.1:
 - Added WMGetFontName()
 - Added fontpanel callback
 - Added WMSetTableViewHasHorizontalScroller()
+- Fixed bug that could cause SIGSEGV by accessing beyond the end of text in
+  a WINGs textfield widget.
 
 
 Changes since wmaker 0.80.0:

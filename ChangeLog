@@ -66,6 +66,8 @@ Changes since version 0.80.2:
 - Fixed bug in wmsetbg that caused scale and maxscale to both do maxscale
   (Alexey Voinov <voins@voins.program.ru>)
 - Fixed bug with scrolling menus introduced by the xinerama patch.
+- Fixed bug that could cause SIGSEGV by accessing beyond the end of text in
+  a WINGs textfield widget.
 
 
 Changes since version 0.80.1:

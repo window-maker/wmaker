@@ -1335,11 +1335,12 @@ pointToCursorPosition(TextField *tPtr, int x)
     if (tPtr->flags.bordered)
 	x -= 2;
 
-    a = tPtr->viewPosition;
-    b = tPtr->viewPosition + tPtr->textLen;
     if (WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]), 
 			tPtr->textLen - tPtr->viewPosition) < x)
 	return tPtr->textLen;
+
+    a = tPtr->viewPosition;
+    b = tPtr->textLen;
 
     while (a < b && b-a>1) {
 	mid = (a+b)/2;
@@ -1352,6 +1353,7 @@ pointToCursorPosition(TextField *tPtr, int x)
 	else
 	    return mid;
     }
+
     return (a+b)/2;
 }
 
