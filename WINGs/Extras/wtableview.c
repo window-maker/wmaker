@@ -233,8 +233,8 @@ static void scrollToPoint(WMTableView *table, int x, int y)
     float value, prop;
     
     if (size.width > W_VIEW_WIDTH(table->tableView)) {
-	prop = (float)size.width / (float)W_VIEW_WIDTH(table->tableView);
-	value = x * (float)(size.width - W_VIEW_WIDTH(table->tableView));
+	prop = (float)W_VIEW_WIDTH(table->tableView) / (float)size.width;
+	value = (float)x / (float)(size.width - W_VIEW_WIDTH(table->tableView));
     } else {
 	prop = 1.0;
 	value = 0.0;
@@ -243,12 +243,13 @@ static void scrollToPoint(WMTableView *table, int x, int y)
 
     
     if (size.height > W_VIEW_HEIGHT(table->tableView)) {
-	prop = (float)size.height / (float)W_VIEW_HEIGHT(table->tableView);
-	value = y * (float)(size.height - W_VIEW_HEIGHT(table->tableView));
+	prop = (float)W_VIEW_HEIGHT(table->tableView) / (float)size.height;
+	value = (float)y / (float)(size.height - W_VIEW_HEIGHT(table->tableView));
     } else {
 	prop = 1.0;
 	value = 0.0;
     }
+
     WMSetScrollerParameters(table->vscroll, value, prop);
     
     
