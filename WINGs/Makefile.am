@@ -2,7 +2,7 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-SUBDIRS = Resources
+SUBDIRS = . Documentation Resources Examples Tests
 
 
 
@@ -12,9 +12,6 @@ include_HEADERS = WINGs.h WUtil.h WINGsP.h
 
 bin_SCRIPTS = get-wings-flags get-wutil-flags
 
-noinst_PROGRAMS = wtest wmquery wmfile fontl testmywidget testcolorpanel\
-	connect puzzle testtext
-
 lib_LIBRARIES = libWINGs.a libWUtil.a
 
 
@@ -23,16 +20,7 @@ LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la\
 	-lm @LIBPL@
 
 
-testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h 
-
-wtest_DEPENDENCIES = libWINGs.a
-
-testtext_DEPENDENCIES = libWINGs.a
-
-connect_LDADD = libWUtil.a @LIBRARY_SEARCH_PATH@ @NETLIBS@ @LIBPL@
-
-
-EXTRA_DIST = logo.xpm BUGS wm.png upbtn.xpm wm.html
+EXTRA_DIST = BUGS
 
 # wbutton.c 
 libWINGs_a_SOURCES = 	\

@@ -1,0 +1,3 @@
+Makefile Makefile.in
+.psrc .inslog2 tca.map tca.log
+*.rpt

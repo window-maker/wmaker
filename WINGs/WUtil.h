@@ -352,7 +352,7 @@ extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
  * 
  * Cons:
  * A little slower [O(n)] for insertion/deletion of elements that 
- * 	arent in the end
+ * 	aren't in the end
  * Element indexes with large difference will cause large holes
  */
 #if 0

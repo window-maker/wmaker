@@ -850,12 +850,13 @@ dnl AC_CHECK_PROG(TEXI2HTML, texi2html, texi2html, ,$PATH)
 dnl AC_SUBST(DOCTYPES)
 
 AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile wmlib/Makefile \
-	WINGs/Makefile WINGs/Resources/Makefile src/Makefile src/wconfig.h \
-	wrlib/Makefile doc/Makefile WindowMaker/Makefile contrib/Makefile \
-	WindowMaker/Backgrounds/Makefile WindowMaker/Defaults/Makefile \
-	WindowMaker/IconSets/Makefile WindowMaker/Icons/Makefile \
-	WindowMaker/Pixmaps/Makefile WindowMaker/Styles/Makefile \
-	WindowMaker/Themes/Makefile \
+	WINGs/Makefile WINGs/Documentation/Makefile WINGs/Examples/Makefile \
+	WINGs/Resources/Makefile WINGs/Tests/Makefile wrlib/Makefile \
+	src/Makefile src/wconfig.h doc/Makefile contrib/Makefile \
+	WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
+	WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile \
+	WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile \
+	WindowMaker/Styles/Makefile WindowMaker/Themes/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
 	WPrefs.app/po/Makefile contrib/WindowMaker.spec )
 

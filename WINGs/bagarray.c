@@ -20,27 +20,27 @@ typedef struct W_ArrayBag {
 } W_ArrayBag;
 
 
-static int    getItemCount(WMBag *bag);
+static int   getItemCount(WMBag *bag);
 static int   appendBag(WMBag *bag, WMBag *appendedBag);
 static int   putInBag(WMBag *bag, void *item);
 static int   insertInBag(WMBag *bag, int index, void *item);
 static int   removeFromBag(WMBag *bag, void *item);
 static int   deleteFromBag(WMBag *bag, int index);
-static void*  getFromBag(WMBag *bag, int index);
-static int    firstInBag(WMBag *bag, void *item);
-static int    countInBag(WMBag *bag, void *item);
-static void*  replaceInBag(WMBag *bag, int index, void *item);
+static void* getFromBag(WMBag *bag, int index);
+static int   firstInBag(WMBag *bag, void *item);
+static int   countInBag(WMBag *bag, void *item);
+static void* replaceInBag(WMBag *bag, int index, void *item);
 static int   sortBag(WMBag *bag, int (*comparer)(const void*, const void*));
-static void   emptyBag(WMBag *bag);
-static void   freeBag(WMBag *bag);
-static void mapBag(WMBag *bag, void (*function)(void*, void*), void *data);
-static int    findInBag(WMBag *bag, int (*match)(void*));
-static void*  first(WMBag *bag, void **ptr);
-static void*  last(WMBag *bag, void **ptr);
-static void*  next(WMBag *bag, void **ptr);
-static void*  previous(WMBag *bag, void **ptr);
-static void*  iteratorAtIndex(WMBag *bag, int index, WMBagIterator *ptr);
-static int    indexForIterator(WMBag *bag, WMBagIterator ptr);
+static void  emptyBag(WMBag *bag);
+static void  freeBag(WMBag *bag);
+static void  mapBag(WMBag *bag, void (*function)(void*, void*), void *data);
+static int   findInBag(WMBag *bag, int (*match)(void*));
+static void* first(WMBag *bag, void **ptr);
+static void* last(WMBag *bag, void **ptr);
+static void* next(WMBag *bag, void **ptr);
+static void* previous(WMBag *bag, void **ptr);
+static void* iteratorAtIndex(WMBag *bag, int index, WMBagIterator *ptr);
+static int   indexForIterator(WMBag *bag, WMBagIterator ptr);
 
 
 static W_BagFunctions arrayFunctions = {
@@ -69,7 +69,7 @@ static W_BagFunctions arrayFunctions = {
 };
 
 
-#define ARRAY ((W_ArrayBag*)bag->data)
+#define ARRAY ((W_ArrayBag*)(bag->data))
 
 
 #define I2O(a, i) ((a)->base + i)
@@ -233,7 +233,6 @@ getFromBag(WMBag *bag, int index)
 
     return ARRAY->items[index];
 }
-
 
 
 static int

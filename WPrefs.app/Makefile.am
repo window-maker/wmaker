@@ -39,6 +39,7 @@ WPrefs_SOURCES = \
 	editmenu.c \
 	editmenu.h \
 	imagebrowser.c \
+	imagebrowser.h \
 	xmodifier.c
 
 CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
