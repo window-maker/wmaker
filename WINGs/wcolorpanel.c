@@ -17,6 +17,20 @@
  */
 
 
+/* BUGS:
+ * 		For some reason after using the magnifying glass, the windowlist
+ * 		of the color-panel (panel->view->screen) becomes 0x0. This
+ * 		results in a core-dump of testcolorpanel, and in 3 times
+ * 		"WPrefs in free(): warning: chunk is already free." with WPrefs.
+ */
+
+/* TODO:
+ * 	-	Custom color-lists and custom colors in custom colo-lists.
+ * 	-	Stored colors
+ * 	-	Resizing
+ */
+
+
 #include "WINGsP.h"
 #include <math.h>
 #include <unistd.h>
@@ -1113,7 +1127,6 @@ closeWindowCallback(WMWidget *w, void *data)
    W_ColorPanel	*panel = (W_ColorPanel*)data;
 
    WMCloseColorPanel(panel);
-/*   WMUnmapWidget(panel->win); */
 }
 
 
@@ -1564,7 +1577,6 @@ magnifyCreateView(W_ColorPanel *panel)
 	WMView		*magView;
 
 	magView = W_CreateTopView(scr);
-	magView->self = panel;
 
 	W_ResizeView(magView, Cursor_mask_width, Cursor_mask_height);
 
@@ -1678,7 +1690,8 @@ magnifyPutCursor(WMWidget *w, void *data)
 	x = initialPosition.x;
 	y = initialPosition.y;
 
-	W_MoveView(panel->magnifyGlass->view, x - Cursor_x_hot +1, 
+	W_MoveView(panel->magnifyGlass->view, 
+		  x - Cursor_x_hot +1, 
 		  y - Cursor_y_hot +1);
 	W_MapView(panel->magnifyGlass->view);
 
@@ -1695,6 +1708,7 @@ magnifyPutCursor(WMWidget *w, void *data)
 			case ButtonPress:
 				if (event.xbutton.button == Button1) {
 					updateSwatch(panel, panel->magnifyGlass->color);
+				}
 					switch (panel->mode) {
 						case WMWheelModeColorPanel:
 							wheelInit(panel);
@@ -1717,8 +1731,6 @@ magnifyPutCursor(WMWidget *w, void *data)
 							break;
 					}
 					panel->lastChanged = panel->mode; 
-				}
-
 				panel->magnifyGlass->valid = False;
 				WMSetButtonSelected(panel->magnifyBtn, False);
 				break;
