@@ -49,7 +49,14 @@
     "rgb:79/a2/d0",
     "rgb:96/d7/e7"
   );
-  IconBack = (mdgradient, "rgb:18/34/54", "rgb:28/45/69", "rgb:08/24/20");
+  IconBack = (
+    mdgradient,
+    "rgb:58/74/94",
+    "rgb:79/a2/d0",
+    "rgb:28/45/96",
+    "rgb:20/24/4a",
+    "rgb:20/24/4a"
+  );
   IconTitleColor = white;
   IconTitleBack = "rgb:18/2c/70";
   MenuStyle = normal;
