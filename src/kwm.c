@@ -643,12 +643,11 @@ wKWMInitStuff(WScreen *scr)
 void
 wKWMSendStacking(WScreen *scr, Window module)
 {
-    int i;
+    WMBagIterate i;
     WCoreWindow *core;
 
-    for (i = 0; i < MAX_WINDOW_LEVELS; i++) {
-	for (core = scr->stacking_list[i]; core != NULL; 
-	     core = core->stacking->under) {
+    WM_ITERATE_BAG(scr->stacking_list, core, i) {
+	for (; core != NULL; core = core->stacking->under) {
 	    WWindow *wwin;
 
 	    wwin = wWindowFor(core->window);
