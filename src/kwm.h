@@ -45,7 +45,7 @@ void wKWMInitStuff(WScreen *scr);
 
 Bool wKWMGetUsableArea(WScreen *scr, WArea *area);
 
-void wKWMCheckClientHints(WWindow *wwin, long *workspace);
+void wKWMCheckClientHints(WWindow *wwin, int *workspace);
 
 Bool wKWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event);
 
@@ -63,7 +63,7 @@ void wKWMUpdateClientGeometryRestore(WWindow *wwin);
 
 void wKWMUpdateClientWorkspace(WWindow *wwin);
 
-void wKWMUpdateClientState(WWindow *wwin, WKWMStateFlag flags);
+void wKWMUpdateClientStateHint(WWindow *wwin, WKWMStateFlag flags);
 
 Bool wKWMManageableClient(WScreen *scr, Window win, char *title);
 

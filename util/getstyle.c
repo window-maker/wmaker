@@ -39,6 +39,7 @@
 /* table of style related options */
 static char *options[] = {
     "TitleJustify",	
+    "ClipTitleFont",
     "WindowTitleFont",	
     "MenuTitleFont",	
     "MenuTextFont",	
@@ -46,6 +47,7 @@ static char *options[] = {
     "DisplayFont",	
     "HighlightColor",	
     "HighlightTextColor",
+    "ClipTitleColor",
     "CClipTitleColor",
     "FTitleColor",	
     "PTitleColor",	

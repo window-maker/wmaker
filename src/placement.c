@@ -407,8 +407,6 @@ PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
             else
                 extra_height = 24; /* random value */
 
-	    //w = ((usableArea.x2-usableArea.x1) - width);
-	    //h = ((usableArea.y2-usableArea.y1) - height - extra_height);
 	    w = ((usableArea.x2-X_ORIGIN(scr)) - width);
 	    h = ((usableArea.y2-Y_ORIGIN(scr)) - height - extra_height);
 	    if (w<1) w = 1;

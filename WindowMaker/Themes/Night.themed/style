@@ -8,8 +8,8 @@
   DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
   HighlightColor = white;
   HighlightTextColor = black;
-  ClipTitleColor = "rgb:79/96/cf";
-  CClipTitleColor = "rgb:61/61/61";
+  ClipTitleColor = "rgb:00/b7/f7";
+  CClipTitleColor = "rgb:00/61/81";
   FTitleColor = white;
   PTitleColor = white;
   UTitleColor = "rgb:79/96/cf";
@@ -47,6 +47,13 @@
     "rgb:79/a2/d0",
     "rgb:96/d7/e7"
   );
-  IconBack = (mdgradient, "rgb:18/34/54", "rgb:28/45/69", "rgb:08/24/20");
+  IconBack = (
+    mdgradient,
+    "rgb:58/74/94",
+    "rgb:79/a2/d0",
+    "rgb:28/45/96",
+    "rgb:20/24/4a",
+    "rgb:20/24/4a"
+  );
   WorkspaceBack = (spixmap, SeaNight.jpeg, black);
 }

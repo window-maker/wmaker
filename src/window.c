@@ -975,7 +975,7 @@ wManageWindow(WScreen *scr, Window window)
 #endif
 #ifdef KWM_HINTS
     wKWMUpdateClientWorkspace(wwin);
-    wKWMUpdateClientState(wwin, KWMAllFlags);
+    wKWMUpdateClientStateHint(wwin, KWMAllFlags);
 #endif
 
     XUngrabServer(dpy);

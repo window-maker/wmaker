@@ -218,7 +218,7 @@ getSimpleHint(Window win, Atom atom, long *retval)
 
     assert(atom!=0);
 
-    data = (long*)PropGetCheckProperty(window, atom, atom, 32, 1, NULL);
+    data = (long*)PropGetCheckProperty(win, atom, atom, 32, 1, NULL);
 
     if (!data)
 	return False;
@@ -1424,7 +1424,7 @@ wKWMUpdateClientGeometryRestore(WWindow *wwin)
 
 
 void
-wKWMUpdateClientState(WWindow *wwin, WKWMStateFlag flags)
+wKWMUpdateClientStateHint(WWindow *wwin, WKWMStateFlag flags)
 {
     if (flags & KWMIconifiedFlag) {
 	setSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED, 

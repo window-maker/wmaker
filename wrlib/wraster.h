@@ -42,8 +42,10 @@
 /* version of the header for the library: 0.11 */
 #define WRASTER_HEADER_VERSION	11
 
+#if 0
 #ifdef HAVE_ALLOCA_H
 #include <alloca.h>
+#endif
 #endif
 
 
