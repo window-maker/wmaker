@@ -330,26 +330,16 @@ dnl
 NETLIBS=""
 
 AC_CHECK_FUNC(connect,,
-	AC_CHECK_LIB(socket, connect, NETLIBS="$NETLIBS -lsocket",))
+	AC_CHECK_LIB(socket, connect, NETLIBS="$NETLIBS -lsocket"))
 
 AC_CHECK_FUNC(gethostbyname,,
-	AC_CHECK_LIB(nsl, gethostbyname, NETLIBS="$NETLIBS -lnsl",))
+	AC_CHECK_LIB(nsl, gethostbyname, NETLIBS="$NETLIBS -lnsl"))
 
 AC_CHECK_FUNC(inet_aton, AC_DEFINE(HAVE_INET_ATON),
-       for lib in bsd socket inet resolv; do
-         AC_CHECK_LIB($lib, inet_aton, [AC_DEFINE(HAVE_INET_ATON)
-           NETLIBS="$NETLIBS -l$lib"; break])
-       done)
-
-dnl save_LIBS=$LIBS
-dnl LIBS="$LIBS $NETLIBS -lresolv"
-dnl AC_CHECK_FUNCS(inet_aton)
-dnl if test $ac_cv_func_inet_aton = yes; then
-dnl   NETLIBS="$NETLIBS -lresolv"
-dnl fi
-dnl 
-dnl LIBS=$save_LIBS
-
+     for lib in resolv socket inet bsd; do
+	AC_CHECK_LIB($lib, inet_aton, [AC_DEFINE(HAVE_INET_ATON)
+	             NETLIBS="$NETLIBS -l$lib"; break],, $NETLIBS)
+     done)
 
 AC_SUBST(NETLIBS)
 
