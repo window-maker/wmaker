@@ -401,6 +401,23 @@ typedef struct WMInputPanel {
 } WMInputPanel;
 
 
+/* WMRuler stuff */
+/* All indentation and tab markers are _relative_ to the left margin marker */
+
+/* a tabstop is a linked list of tabstops, each containing the position of the tabstop */
+
+typedef struct {
+    int value;
+    struct WMTabStops *next;
+} WMTabStops;
+
+typedef struct {
+    int left;		 /* left margin marker */
+    int right;		 /* right margin marker */
+    int first;		 /* indentation marker for first line only */
+    int body;		 /* body indentation marker */
+    WMTabStops *tabs;
+} WMRulerMargins;
 
 
 
@@ -1389,27 +1406,25 @@ int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
 
 /* ...................................................................... */
 
-
-WMRuler *WMCreateRuler(WMWidget *parent);
+WMRuler *WMCreateRuler (WMWidget *parent);
 
 void WMShowRulerTabs(WMRuler *rPtr, Bool Show);
 
-int WMGetRulerMargin(WMRuler *rPtr, int which);
+WMRulerMargins WMGetRulerMargins(WMRuler *rPtr);
 
-int WMGetReleasedRulerMargin(WMRuler *rPtr);
+void WMSetRulerMargins(WMRuler *rPtr, WMRulerMargins margins);
 
 int WMGetGrabbedRulerMargin(WMRuler *rPtr);
+
+int WMGetReleasedRulerMargin(WMRuler *rPtr);
 
 int WMGetRulerOffset(WMRuler *rPtr);
 
 void WMSetRulerOffset(WMRuler *rPtr, int pixels);
 
-void WMSetRulerMargin(WMRuler *rPtr, int which, int pixels);
-
-void WMSetRulerAction(WMRuler *rPtr, WMAction *action, void *clientData);
-
 void WMSetRulerMoveAction(WMRuler *rPtr, WMAction *action, void *clientData);
 
+void WMSetRulerReleaseAction(WMRuler *rPtr, WMAction *action, void *clientData);
 
 /* ....................................................................... */
 
