@@ -129,9 +129,6 @@ static int getString();
 static int getPathList();
 static int getEnum();
 static int getTexture();
-#ifdef DRAWSTRING_PLUGIN
-static int getTextRenderer();
-#endif
 static int getWSBackground();
 static int getWSSpecificBackground();
 static int getFont();
@@ -615,17 +612,6 @@ WDefaultEntry optionList[] = {
     {"CClipTitleColor", "\"#454045\"",		(void*)CLIP_COLLAPSED,
 	  NULL,				getColor,	setClipTitleColor
     },
-#ifdef DRAWSTRING_PLUGIN
-    {"FTitleColor",    "white",             (void*)WS_FOCUSED,
-         NULL,          getTextRenderer,    setWTitleColor
-    },
-    {"PTitleColor",    "white",             (void*)WS_PFOCUSED,
-         NULL,          getTextRenderer,    setWTitleColor
-    },
-    {"UTitleColor",    "black",             (void*)WS_UNFOCUSED,
-         NULL,          getTextRenderer,    setWTitleColor
-    },
-#else
     {"FTitleColor",	"white",		(void*)WS_FOCUSED,
 	  NULL,				getColor,	setWTitleColor
     },
@@ -635,7 +621,6 @@ WDefaultEntry optionList[] = {
     {"UTitleColor",	"black",		(void*)WS_UNFOCUSED,
 	  NULL,				getColor,	setWTitleColor
     },
-#endif
     {"FTitleBack",	"(solid, black)",      	NULL,
 	  NULL,				getTexture,	setFTitleBack
     },
@@ -648,21 +633,12 @@ WDefaultEntry optionList[] = {
     {"ResizebarBack",	"(solid, gray)",	NULL,
 	  NULL,				getTexture,	setResizebarBack
     },
-#ifdef DRAWSTRING_PLUGIN
-    {"MenuTitleColor", "white",             NULL,
-        NULL,           getTextRenderer,    setMenuTitleColor
-    },
-    {"MenuTextColor",	"black",       		NULL,
-	  NULL,				getTextRenderer,	setMenuTextColor
-    },
-#else
     {"MenuTitleColor",	"white",       		NULL,
 	  NULL,				getColor,	setMenuTitleColor
     },
     {"MenuTextColor",	"black",       		NULL,
 	  NULL,				getColor,	setMenuTextColor
     },
-#endif
     {"MenuDisabledColor", "\"#616161\"",       	NULL,
 	  NULL,				getColor,	setMenuDisabledColor
     },
@@ -2168,68 +2144,6 @@ again:
 }
 
 
-
-#ifdef DRAWSTRING_PLUGIN
-static int
-getTextRenderer(WScreen *scr, WDefaultEntry *entry, proplist_t value,
-        void *addr, void **ret)
-{
-    proplist_t elem;
-    char *val, *lib, *func, **argv;
-    int argc, changed;
-
-    /* Destroying functions if they are already loaded. */
-    /* The function will auto-check NULL, does this break any ethic? */
-    if (strcmp(entry->key, "FTitleColor")==0) {
-        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_FTITLE]);
-        scr->drawstring_func[W_STRING_FTITLE] = NULL;
-    } else if (strcmp(entry->key, "UTitleColor")==0) {
-        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_UTITLE]);
-        scr->drawstring_func[W_STRING_UTITLE] = NULL;
-    } else if (strcmp(entry->key, "PTitleColor")==0) {
-        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_PTITLE]);
-        scr->drawstring_func[W_STRING_PTITLE] = NULL;
-    } else if (strcmp(entry->key, "MenuTitleColor")==0) {
-        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_MTITLE]);
-        scr->drawstring_func[W_STRING_MTITLE] = NULL;
-    } else if (strcmp(entry->key, "MenuTextColor")==0) { /* problemssss */
-        wPluginDestroyFunction(scr->drawstring_func[changed = W_STRING_MTEXT]);
-        scr->drawstring_func[W_STRING_MTEXT] = NULL;
-    }
-
-    if (PLIsArray(value)) {
-        if ((argc = PLGetNumberOfElements(value)) < 4) return False;
-        argc -= 2;
-        argv = (char **)wmalloc(argc * sizeof(char *));
-
-        elem = PLGetArrayElement(value,0);
-        if (!elem || !PLIsString(elem)) return False;
-        val = PLGetString(elem);
-        if (strcasecmp(val, "function")==0) {
-            elem = PLGetArrayElement(value, 1); /* library name */
-            if (!elem || !PLIsString(elem)) return False;
-            lib = PLGetString(elem);
-            elem = PLGetArrayElement(value, 2); /* function name */
-            if (!elem || !PLIsString(elem)) return False;
-            func = PLGetString(elem);
-            scr->drawstring_func[changed] = wPluginCreateFunction(W_FUNCTION_DRAWSTRING,
-                    lib, "initDrawString",
-                    wPluginPackData(2, func, "widthOfString"),
-                    "destroyDrawString", value,
-                    wPluginPackData(3, dpy, &scr->w_colormap, "dummy"));
-        }
-
-        return getColor(scr, entry, PLGetArrayElement(value,3), addr, ret);
-    } else if (PLIsString(value)) {
-        return getColor(scr, entry, value, addr, ret);
-    }
-    
-    return False;
-}
-#endif /* DRAWSTRING_PLUGIN */
-
-
-
 static int
 getWSBackground(WScreen *scr, WDefaultEntry *entry, proplist_t value,
 		void *addr, void **ret)
@@ -3083,9 +2997,6 @@ setMenuTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 {
     if (scr->menu_title_pixel[0]!=scr->white_pixel &&
             scr->menu_title_pixel[0]!=scr->black_pixel) {
-#ifdef DRAWSTRING_PLUGIN
-        if(!scr->drawstring_func[W_STRING_MTITLE])
-#endif
             wFreeColor(scr, scr->menu_title_pixel[0]);
     }
     

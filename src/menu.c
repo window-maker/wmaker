@@ -174,9 +174,6 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
 	wFrameWindowCreate(screen, tmp, 8, 2, 1, 1, &wPreferences.menu_title_clearance, flags,
 			   screen->menu_title_texture, NULL,
                            screen->menu_title_pixel,
-#ifdef DRAWSTRING_PLUGIN
-			   W_STRING_MTITLE,
-#endif
 			   &screen->menu_title_gc,
                            &screen->menu_title_font);
 			   
@@ -731,14 +728,6 @@ paintEntry(WMenu *menu, int index, int selected)
     WScreen *scr=menu->frame->screen_ptr;
     Window win = menu->menu->window;
     WMenuEntry *entry=menu->entries[index];
-#ifdef DRAWSTRING_PLUGIN
-    Pixmap tmp_bg;
-    Pixmap *texture_data;
-    WPluginData *p;
-    int _y;
-    int tb = menu->entry_height; /* convert short into int */
-#endif
-        
 
     if (!menu->flags.realized) return;
     h = menu->entry_height;
@@ -767,19 +756,6 @@ paintEntry(WMenu *menu, int index, int selected)
 	if (scr->menu_item_texture->any.type == WTEX_SOLID)
 	    drawFrame(scr, win, y, w, h, type);
     } else { 
-#ifdef DRAWSTRING_PLUGIN
-	if (scr->menu_item_texture->any.type == WTEX_SOLID) {
-	    XClearArea(dpy, win, 0, y + 1, w - 1, h - 3, False);
-	    drawFrame(scr, win, y, w, h, type);
-	} else {
-           /*
-            * if the function is there, it responses for clearing area
-            * to reduce flickering
-            */
-        if (!scr->drawstring_func[W_STRING_MTEXT])
-            XClearArea(dpy, win, 0, y, w, h, False);
-	}
-#else
 	if (scr->menu_item_texture->any.type == WTEX_SOLID) {
 	    XClearArea(dpy, win, 0, y + 1, w - 1, h - 3, False);
 	    /* draw the frame */
@@ -787,7 +763,6 @@ paintEntry(WMenu *menu, int index, int selected)
 	} else {
 	    XClearArea(dpy, win, 0, y, w, h, False);
 	}
-#endif
     }
 
     if (selected) {
@@ -806,57 +781,8 @@ paintEntry(WMenu *menu, int index, int selected)
     if (entry->flags.indicator)
 	x += MENU_INDICATOR_SPACE + 2;
 
-#ifdef DRAWSTRING_PLUGIN
-    if (scr->drawstring_func[W_STRING_MTEXT]) {
-        _y = (wPreferences.menu_style == MS_NORMAL) ? 0 : y;
-        texture_data = menu->flags.brother ?
-            &menu->brother->menu_texture_data : &menu->menu_texture_data;
-
-        tmp_bg = XCreatePixmap(dpy, win, w, menu->entry_height,
-                DefaultDepth(dpy, DefaultScreen(dpy)));
-
-        if (scr->menu_item_texture->any.type == WTEX_SOLID) {
-            XFillRectangle(dpy, tmp_bg, scr->menu_item_texture->solid.normal_gc,
-                    0, 0, w, h);
-            drawFrame(scr, tmp_bg, 0, w, h, type);
-
-        } else {
-            XCopyArea(dpy, *texture_data, tmp_bg, textGC,
-                    0, _y, w, menu->entry_height, 0, 0);
-        }
-
-        if (selected) {
-            XSetForeground(dpy, scr->select_menu_gc, scr->select_pixel);
-            XFillRectangle(dpy, tmp_bg, scr->select_menu_gc, 1, 1, w-2, h-3);
-        }
-
-
-        p = wPluginPackData(6,
-                scr->drawstring_func[W_STRING_MTEXT]->data,
-                &tmp_bg,
-                &textGC,
-                scr->menu_entry_font,
-                &menu->frame->core->width,
-                &tb, "extendable");
-
-        scr->drawstring_func[W_STRING_MTEXT]->proc.drawString[W_DSPROC_DRAWSTRING](
-                scr->drawstring_func[W_STRING_MTEXT]->arg,
-                win,
-                x, y,
-                entry->text, strlen(entry->text), p);
-
-        XFreePixmap(dpy, tmp_bg);
-
-        free(p);
-    } else {
-        WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font,
-                x, 3 + y + wPreferences.menu_text_clearance, entry->text, strlen(entry->text));
-    }
-
-#else
     WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, 
 		 x, 3 + y + wPreferences.menu_text_clearance, entry->text, strlen(entry->text));
-#endif
 
     if (entry->cascade>=0) {
 	/* draw the cascade indicator */
@@ -910,53 +836,10 @@ paintEntry(WMenu *menu, int index, int selected)
     
     if (entry->rtext && entry->cascade<0) {
 
-#ifdef DRAWSTRING_PLUGIN
-    if (scr->drawstring_func[W_STRING_MTEXT]) {
-        /*
-        p = wPluginPackData(1, scr->drawstring_func[W_STRING_MTEXT]->data);
-        scr->drawstring_func[W_STRING_MTEXT]->proc.widthOfString[W_DSPROC_WIDTHOFSTRING](
-                entry->rtext, strlen(entry->rtext), p, &tw, NULL, NULL);
-        wfree(p);
-
-        texture_data = menu->flags.brother ?
-            &menu->brother->menu_texture_data : &menu->menu_texture_data;
-
-        tmp_bg = XCreatePixmap(dpy, win, w, menu->entry_height,
-                DefaultDepth(dpy, DefaultScreen(dpy)));
-
-        XCopyArea(dpy, win, tmp_bg, textGC,
-                0, y, w, menu->entry_height, 0, 0);
-
-        p = wPluginPackData(6,
-                scr->drawstring_func[W_STRING_MTEXT]->data,
-                &tmp_bg,
-                &textGC,
-                scr->menu_entry_font,
-                &menu->frame->core->width,
-                &tb, "extendable");
-
-        scr->drawstring_func[W_STRING_MTEXT]->proc.drawString[W_DSPROC_DRAWSTRING](
-                scr->drawstring_func[W_STRING_MTEXT]->arg,
-                win,
-                w-0-tw, y,
-                entry->rtext, strlen(entry->rtext), p);
-
-        XFreePixmap(dpy, tmp_bg);
-
-        free(p);
-        */
-    } else {
-        tw = WMWidthOfString(scr->menu_entry_font, entry->rtext,
-                strlen(entry->rtext));
-        WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, w-6-tw, 
-                y + 3 + wPreferences.menu_text_clearance, entry->rtext, strlen(entry->rtext));
-    }
-#else
 	tw = WMWidthOfString(scr->menu_entry_font, entry->rtext,
 			     strlen(entry->rtext));
     WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font, w-6-tw, 
             y + 3 + wPreferences.menu_text_clearance, entry->rtext, strlen(entry->rtext));
-#endif
     }
 }
 

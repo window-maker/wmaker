@@ -195,12 +195,7 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 	  sprintf(title, "%s", wwin->frame->title);
 	else
 	  sprintf(title, "%s", DEF_WINDOW_TITLE);
-#ifdef DRAWSTRING_PLUGIN
-	t = ShrinkString(scr->menu_entry_font, title, MAX_WINDOWLIST_WIDTH,
-            scr->drawstring_func[W_STRING_MTEXT]);
-#else
 	t = ShrinkString(scr->menu_entry_font, title, MAX_WINDOWLIST_WIDTH);
-#endif
 
 	if (IS_OMNIPRESENT(wwin))
 	    idx = -1;
@@ -257,12 +252,7 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
 		    else
 		      sprintf(title, "%s", DEF_WINDOW_TITLE);
 
-#ifdef DRAWSTRING_PLUGIN
-            t = ShrinkString(scr->menu_entry_font, title, MAX_WINDOWLIST_WIDTH,
-                    scr->drawstring_func[W_STRING_MTEXT]);
-#else
 		    t = ShrinkString(scr->menu_entry_font, title, MAX_WINDOWLIST_WIDTH);
-#endif
 		    entry->text = t;
 
 		    wMenuRealize(switchmenu);

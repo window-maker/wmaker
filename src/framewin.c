@@ -66,9 +66,6 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
 		   int width, int height, int *clearance, int flags,
 		   WTexture **title_texture, WTexture **resize_texture,
 		   unsigned long *color,
-#ifdef DRAWSTRING_PLUGIN
-           int function_offset,
-#endif
            GC *gc, WMFont **font)
 {
     WFrameWindow *fwin;
@@ -84,9 +81,6 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
     fwin->resizebar_texture = resize_texture;
     fwin->title_pixel = color;
     fwin->title_clearance = clearance;
-#ifdef DRAWSTRING_PLUGIN
-    fwin->drawstring_proc_offset = function_offset;
-#endif
     fwin->title_gc = gc;
     fwin->font = font;
 #ifdef KEEP_XKB_LOCK_STATUS
@@ -946,13 +940,6 @@ void
 wFrameWindowPaint(WFrameWindow *fwin)
 {
     WScreen *scr = fwin->screen_ptr;
-#ifdef DRAWSTRING_PLUGIN
-#define DRAWSTRING_CURRENT_STATE fwin->flags.state + fwin->drawstring_proc_offset
-    Pixmap *background;
-    Pixmap tmp_bg;
-    int tb = fwin->top_width;
-    WPluginData *pd;
-#endif
 
     if (fwin->flags.is_client_window_frame)
 	fwin->flags.justification = wPreferences.title_justification;
@@ -987,34 +974,11 @@ wFrameWindowPaint(WFrameWindow *fwin)
 
     if (fwin->titlebar && !fwin->flags.repaint_only_resizebar
 	&& fwin->title_texture[fwin->flags.state]->any.type==WTEX_SOLID) {
-#ifdef DRAWSTRING_PLUGIN
-        if (fwin->title) {
-            tmp_bg = XCreatePixmap(dpy, fwin->titlebar->window,
-                    fwin->titlebar->width, tb,
-                    DefaultDepth(dpy, DefaultScreen(dpy)));
-            XFillRectangle(dpy, tmp_bg, fwin->title_texture[fwin->flags.state]->solid.normal_gc,
-                    0, 0, fwin->titlebar->width, tb);
-            wDrawBevel(tmp_bg, fwin->titlebar->width,
-                    fwin->titlebar->height,
-                    (WTexSolid*)fwin->title_texture[fwin->flags.state], 
-                    WREL_RAISED);
-            background = &tmp_bg;
-        } else {
-            wDrawBevel(fwin->titlebar->window, fwin->titlebar->width,
-                    fwin->titlebar->height,
-                    (WTexSolid*)fwin->title_texture[fwin->flags.state], 
-                    WREL_RAISED);
-        }
-#else
         wDrawBevel(fwin->titlebar->window, fwin->titlebar->width,
                 fwin->titlebar->height,
                 (WTexSolid*)fwin->title_texture[fwin->flags.state], 
                 WREL_RAISED);
-#endif
     }
-#ifdef DRAWSTRING_PLUGIN
-    else background = &fwin->title_back[fwin->flags.state];
-#endif
 
     if (fwin->resizebar	&& !fwin->flags.repaint_only_titlebar
 	&& fwin->resizebar_texture[0]->any.type == WTEX_SOLID) {
@@ -1085,28 +1049,11 @@ wFrameWindowPaint(WFrameWindow *fwin)
             scr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
 #endif
 
-#ifdef DRAWSTRING_PLUGIN
-    if(scr->drawstring_func[DRAWSTRING_CURRENT_STATE]) {
-        title = ShrinkString(*fwin->font, fwin->title,
-                fwin->titlebar->width - lofs - rofs,
-                scr->drawstring_func[DRAWSTRING_CURRENT_STATE]);
-        titlelen = strlen(title);
-        pd = wPluginPackData(1, scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->data);
-        scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->proc.widthOfString[W_DSPROC_WIDTHOFSTRING](
-                title, titlelen, pd, &w, NULL, NULL);
-        wfree(pd);
-    } else {
-        title = ShrinkString(*fwin->font, fwin->title,
-                fwin->titlebar->width - lofs - rofs, NULL);
-        titlelen = strlen(title);
-        w = WMWidthOfString(*fwin->font, title, titlelen);
-    }
-#else
 	title = ShrinkString(*fwin->font, fwin->title,
 			     fwin->titlebar->width - lofs - rofs);
 	titlelen = strlen(title);
 	w = WMWidthOfString(*fwin->font, title, titlelen);
-#endif
+
 	switch (fwin->flags.justification) {
 	 case WTJ_LEFT:
 	    x = lofs;
@@ -1127,46 +1074,9 @@ wFrameWindowPaint(WFrameWindow *fwin)
 	XSetForeground(dpy, *fwin->title_gc, 
 		       fwin->title_pixel[fwin->flags.state]);
 	
-#ifdef DRAWSTRING_PLUGIN
-    /* if the plugin want to do shrinking locally, they can trick
-    * wmaker by returning a very short value (such as 0) to widthOfString -- I think */
-    if (scr->drawstring_func[DRAWSTRING_CURRENT_STATE]) {
-        pd = wPluginPackData(6,      /* number of argument, will be passed */
-                scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->data,
-                                    /* 0 plugin data, as it was initialized */
-                background,         /* 1 current background Pixmap */
-                fwin->title_gc,     /* 2 gc */
-                *fwin->font,        /* 3 WMFont** */
-                &fwin->titlebar->width,
-                                    /* 4 suggested width */
-                &tb                 /* 5 suggested height */
-                );
-        scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->proc.drawString[W_DSPROC_DRAWSTRING](
-                scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->arg,
-                fwin->titlebar->window,
-                x, 0, 
-                title, strlen(fwin->title), pd);
-        wfree(pd);
-    } else {
-        if (fwin->title && fwin->title_texture[fwin->flags.state]->any.type==WTEX_SOLID) {
-            XCopyArea(dpy, tmp_bg, fwin->titlebar->window, *fwin->title_gc,
-                    0, 0, fwin->titlebar->width, tb, 0, 0);
-        }
-        WMDrawString(scr->wmscreen, fwin->titlebar->window, 
-                *fwin->title_gc, *fwin->font,
-                x, ((signed)fwin->top_width - (signed)WMFontHeight(*fwin->font))/2, 
-                title, titlelen);
-    }
-
-    if (fwin->title && fwin->title_texture[fwin->flags.state]->any.type==WTEX_SOLID) {
-        XFreePixmap(dpy, tmp_bg);
-    }
-#undef DRAWSTRING_CURRENT_STATE
-#else
     WMDrawString(scr->wmscreen, fwin->titlebar->window, 
             *fwin->title_gc, *fwin->font, x, *fwin->title_clearance + TITLEBAR_EXTEND_SPACE, 
             title, titlelen);
-#endif /* DRAWSTRING_PLUGIN */
 
 	wfree(title);
 	

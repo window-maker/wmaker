@@ -1001,9 +1001,6 @@ wManageWindow(WScreen *scr, Window window)
 				     scr->window_title_texture,
 				     scr->resizebar_texture,
 				     scr->window_title_pixel, 
-#ifdef DRAWSTRING_PLUGIN
-                     W_STRING_FTITLE,
-#endif
 				     &scr->window_title_gc, 
 				     &scr->title_font);
 
@@ -1367,9 +1364,6 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
 				     scr->window_title_texture,
 				     scr->resizebar_texture,
 				     scr->window_title_pixel, 
-#ifdef DRAWSTRING_PLUGIN
-                     W_STRING_FTITLE,
-#endif
 				     &scr->window_title_gc, 
 				     &scr->title_font);
     

@@ -161,10 +161,6 @@ typedef struct _WScreen {
     WMPixel dtext_pixel;	        /* disabled menu item text */
     WMPixel line_pixel;
     WMPixel frame_border_pixel;	       /* frame border */
-#ifdef DRAWSTRING_PLUGIN
-    WFunction *drawstring_func[W_STRING_MEMBERS];
-                                    /* ftitle, utitle, ptitle, mtitle, mtext */
-#endif
 
 
     union WTexture *menu_title_texture[3];/* menu titlebar texture (tex, -, -) */

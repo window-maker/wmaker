@@ -9,6 +9,5 @@ libwmfun_la_SOURCES = bilinear.c \
 		getopt.c \
 		getopt.h \
 		getopt1.c \
-		wave.c \
-		drawstring.c
+		wave.c
 

@@ -824,13 +824,8 @@ wIconPaint(WIcon *icon)
 	int l;
 	int w;
 
-#ifdef DRAWSTRING_PLUGIN
-	tmp = ShrinkString(scr->icon_title_font, icon->icon_name,
-			   wPreferences.icon_size-4, NULL);
-#else
 	tmp = ShrinkString(scr->icon_title_font, icon->icon_name,
 			   wPreferences.icon_size-4);
-#endif
 	w = WMWidthOfString(scr->icon_title_font, tmp, l=strlen(tmp));
 
 	if (w > icon->core->width - 4)
