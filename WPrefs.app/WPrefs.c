@@ -713,9 +713,9 @@ Initialize(WMScreen *scr)
 
     InitAppearance(scr, WPrefs.banner);
 
-#ifdef akk
+/* #ifdef akk */
     InitFont(scr, WPrefs.banner);
-#endif
+/* #endif */
 
 #ifdef not_yet_fully_implemented
     InitThemes(scr, WPrefs.banner);

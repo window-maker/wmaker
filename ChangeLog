@@ -48,12 +48,13 @@ Changes since version 0.80.2:
 - Unshade application's shaded windows when Dbl-MiddleClick-ing its appicon.
   (this is to be consistent with deminiaturizing application's miniwindows
   which also happens in this case, since shading is a form of miniaturization)
-- Fixed bug with tpixmap from previous xinerama patch
+- Fixed bug with tpixmap from previous xinerama patch (reported by g0sh)
 - Fixed edge resistance and move/resize frame drawing for borderless windows
 - Fixed wrong display position for the move/resize widgets after xinerama
   patch (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - Fixed bug with cursor locked in drag mode after Alt-dragging a window
-
+- Added Catalan translation (Ernest Adrogué <eadrogue@gmx.net>)
+- Updated German translations (Torsten Marek <shlomme@gmx.net>)
 
 Changes since version 0.80.1:
 .............................

@@ -1,0 +1,675 @@
+# Catalan messages for WINGs.
+# Copyright (C) 2003 Free Software Foundation, Inc.
+# This file is distributed under the same license as GNU Window Maker.
+# Ernest Adrogué <eadrogue@gmx.net>, 2003.
+#
+# Version history:
+# 	WM-ver	author			email			date
+# 	0.80.2	Ernest Adrogué		eadrogue@gmx.net	23 Feb 2003
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WINGs 0.80.2\n"
+"POT-Creation-Date: 2003-02-23 16:54+0100\n"
+"PO-Revision-Date: 2002-12-06 14:15+0100\n"
+"Last-Translator: Ernest Adrogué <eadrogue@gmx.net>\n"
+"Language-Team: Catalan <ca@dodds.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=iso-8859-1\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../WINGs/connection.c:461 ../../WINGs/connection.c:526
+#: ../../WINGs/connection.c:569
+msgid "Bad address-service-protocol combination"
+msgstr "Combinació adreça-servei-protocol incorrecta"
+
+#: ../../WINGs/error.c:54
+#, c-format
+msgid "Unknown error %d"
+msgstr "Error no identificat %d"
+
+#: ../../WINGs/error.c:59
+#, c-format
+msgid "Error %d"
+msgstr "Error %d"
+
+#: ../../WINGs/error.c:110
+msgid " warning: "
+msgstr " atenció: "
+
+#: ../../WINGs/error.c:137
+msgid " fatal error: "
+msgstr " error fatal: "
+
+#: ../../WINGs/error.c:163 ../../WINGs/error.c:192
+msgid " error: "
+msgstr " error: "
+
+#: ../../WINGs/findfile.c:48
+#, c-format
+msgid "could not get password entry for UID %i"
+msgstr "no s'ha pogut obtenir l'informació d'usuari per l'UID %i"
+
+#: ../../WINGs/findfile.c:66
+#, c-format
+msgid "could not get password entry for user %s"
+msgstr "no s'ha pogut obtenir l'informació d'usuari per l'usuari %s"
+
+#: ../../WINGs/host.c:114
+msgid "Cannot get current host name"
+msgstr "No s'ha pogut obtenir el nom de host actual"
+
+#: ../../WINGs/proplist.c:91
+#, c-format
+msgid "syntax error in %s %s, line %i: %s"
+msgstr "error de sintaxi en %s %s, línia %i: %s"
+
+#: ../../WINGs/proplist.c:150
+msgid "Only string or data is supported for a proplist dictionary key"
+msgstr ""
+"Les entrades de diccionari PropList només poden contenir dades o una cadena"
+
+#: ../../WINGs/proplist.c:184 ../../WINGs/proplist.c:236
+#: ../../WINGs/proplist.c:394 ../../WINGs/proplist.c:474
+#: ../../WINGs/proplist.c:1075 ../../WINGs/proplist.c:1127
+#: ../../WINGs/proplist.c:1293 ../../WINGs/proplist.c:1372
+#: ../../WINGs/proplist.c:1493 ../../WINGs/proplist.c:1540
+msgid "Used proplist functions on non-WMPropLists objects"
+msgstr "S'han usat funcions proplist en objectes no-WMPropLists"
+
+#: ../../WINGs/proplist.c:630
+msgid "unterminated PropList string"
+msgstr "cadena PropList incompleta"
+
+#: ../../WINGs/proplist.c:670
+msgid "unterminated PropList data"
+msgstr "dades PropList incompletes"
+
+#: ../../WINGs/proplist.c:678
+msgid "unterminated PropList data (missing hexdigit)"
+msgstr "Dades PropList incompletes (falta un digit hexadecimal)"
+
+#: ../../WINGs/proplist.c:690 ../../WINGs/proplist.c:695
+msgid "non hexdigit character in PropList data"
+msgstr "cap digit hexadecimal a les dades PropList"
+
+#: ../../WINGs/proplist.c:729
+msgid "unterminated PropList array"
+msgstr "matriu PropList incompleta"
+
+#: ../../WINGs/proplist.c:737
+msgid "missing or unterminated PropList array"
+msgstr "matriu PropList incompleta o inexistent"
+
+#: ../../WINGs/proplist.c:747
+msgid "could not get PropList array element"
+msgstr "no s'ha pogut obtenir un element de la matriu PropList"
+
+#: ../../WINGs/proplist.c:776
+msgid "unterminated PropList dictionary"
+msgstr "diccionari PropList incomplet"
+
+#: ../../WINGs/proplist.c:793
+msgid "missing PropList dictionary key"
+msgstr "falta una entrada PropList de diccionari"
+
+#: ../../WINGs/proplist.c:795
+msgid "missing PropList dictionary entry key or unterminated dictionary"
+msgstr "falta una entrada PropList de diccionari o bé està incompleta"
+
+#: ../../WINGs/proplist.c:803
+msgid "error parsing PropList dictionary key"
+msgstr "error analitzant l'entrada PropList de diccionari"
+
+#: ../../WINGs/proplist.c:811
+msgid "missing = in PropList dictionary entry"
+msgstr "falta un \"=\" a l'entrada de diccionari PropList"
+
+#: ../../WINGs/proplist.c:819
+msgid "error parsing PropList dictionary entry value"
+msgstr "error analitzant el valor de l'entrada de diccionari PropList"
+
+#: ../../WINGs/proplist.c:827
+msgid "missing ; in PropList dictionary entry"
+msgstr "falta un \";\" en l'entrada de diccionari PropList"
+
+#: ../../WINGs/proplist.c:888
+msgid ""
+"was expecting a string, data, array or dictionary. If it's a string, try "
+"enclosing it with \"."
+msgstr ""
+"s'esperava una cadena, dada, matriu o diccionari. Si es tractava d'una\n"
+"cadena proveu d'escriure-la \"entre cometes\"."
+
+#: ../../WINGs/proplist.c:892
+msgid "Comments are not allowed inside WindowMaker owned domain files."
+msgstr "No es permeten comentaris en els fitxers de domini de Window Maker."
+
+#: ../../WINGs/proplist.c:1563 ../../WINGs/proplist.c:1628
+msgid "extra data after end of property list"
+msgstr "sobren dades després de la llista de propietats"
+
+#: ../../WINGs/proplist.c:1606
+#, c-format
+msgid "could not get size for file '%s'"
+msgstr "no s'ha pogut obtenir la mida de \"%s\""
+
+#: ../../WINGs/proplist.c:1618
+#, c-format
+msgid "error reading from file '%s'"
+msgstr "error llegint el fitxer \"%s\""
+
+#: ../../WINGs/proplist.c:1669
+#, c-format
+msgid "mkstemp (%s) failed"
+msgstr "la rutina mkstemp (%s) ha fallat"
+
+#: ../../WINGs/proplist.c:1680
+#, c-format
+msgid "mktemp (%s) failed"
+msgstr "la rutina mktemp (%s) ha fallat"
+
+#: ../../WINGs/proplist.c:1691
+#, c-format
+msgid "open (%s) failed"
+msgstr "la rutina open (%s) ha fallat"
+
+#: ../../WINGs/proplist.c:1698
+#, c-format
+msgid "writing to file: %s failed"
+msgstr "l'escriptura del fitxer \"%s\" ha fallat"
+
+#: ../../WINGs/proplist.c:1706
+#, c-format
+msgid "fclose (%s) failed"
+msgstr "la rutina fclose (%s) ha fallat"
+
+#: ../../WINGs/proplist.c:1715
+#, c-format
+msgid "rename ('%s' to '%s') failed"
+msgstr "el canvi de nom (\"%s\" a \"%s\") ha fallat"
+
+#. something happened with the file. just overwrite it
+#: ../../WINGs/userdefaults.c:192 ../../WINGs/userdefaults.c:208
+#, c-format
+msgid "cannot read domain from file '%s' when syncing"
+msgstr "no s'ha pogut llegir un domini del fitxer \"%s\" quan es sincronitzava"
+
+#: ../../WINGs/wcolor.c:198 ../../WINGs/wcolor.c:211 ../../WINGs/wcolor.c:250
+#: ../../WINGs/wcolor.c:291
+#, c-format
+msgid "could not allocate %s color"
+msgstr "no s'ha pogut assignar espai pel color \"%s\""
+
+#: ../../WINGs/wcolor.c:198
+msgid "white"
+msgstr "blanc"
+
+#: ../../WINGs/wcolor.c:211
+msgid "black"
+msgstr "negre"
+
+#: ../../WINGs/wcolor.c:250
+msgid "gray"
+msgstr "gris"
+
+#: ../../WINGs/wcolor.c:291
+msgid "dark gray"
+msgstr "gris fosc"
+
+#: ../../WINGs/wcolorpanel.c:415
+msgid "Colors"
+msgstr "Colors"
+
+#: ../../WINGs/wcolorpanel.c:605 ../../WINGs/wcolorpanel.c:2824
+msgid "Brightness"
+msgstr "Claror"
+
+#: ../../WINGs/wcolorpanel.c:607 ../../WINGs/wcolorpanel.c:683
+#: ../../WINGs/wcolorpanel.c:716 ../../WINGs/wcolorpanel.c:750
+#: ../../WINGs/wcolorpanel.c:810 ../../WINGs/wcolorpanel.c:844
+#: ../../WINGs/wcolorpanel.c:878 ../../WINGs/wcolorpanel.c:913
+#: ../../WINGs/wcolorpanel.c:2164 ../../WINGs/wcolorpanel.c:2826
+#: ../../WINGs/wcolorpanel.c:2862 ../../WINGs/wcolorpanel.c:2898
+#: ../../WINGs/wcolorpanel.c:3746
+msgid "Color Panel: Could not allocate memory"
+msgstr "Panell de color: No s'ha pogut assignar memòria"
+
+#: ../../WINGs/wcolorpanel.c:680 ../../WINGs/wcolorpanel.c:681
+msgid "Red"
+msgstr "Roig"
+
+#: ../../WINGs/wcolorpanel.c:713 ../../WINGs/wcolorpanel.c:714
+msgid "Green"
+msgstr "Verd"
+
+#: ../../WINGs/wcolorpanel.c:747 ../../WINGs/wcolorpanel.c:748
+msgid "Blue"
+msgstr "Blau"
+
+#: ../../WINGs/wcolorpanel.c:807 ../../WINGs/wcolorpanel.c:808
+msgid "Cyan"
+msgstr "Cian"
+
+#: ../../WINGs/wcolorpanel.c:841 ../../WINGs/wcolorpanel.c:842
+msgid "Magenta"
+msgstr "Magenta"
+
+#: ../../WINGs/wcolorpanel.c:875 ../../WINGs/wcolorpanel.c:876
+msgid "Yellow"
+msgstr "Groc"
+
+#: ../../WINGs/wcolorpanel.c:910 ../../WINGs/wcolorpanel.c:911
+msgid "Black"
+msgstr "Negre"
+
+#: ../../WINGs/wcolorpanel.c:991
+msgid "Spectrum"
+msgstr "Espectre"
+
+#: ../../WINGs/wcolorpanel.c:1021
+msgid "Palette"
+msgstr "Paleta"
+
+#: ../../WINGs/wcolorpanel.c:1027
+msgid "New from File..."
+msgstr "Obté d'un fitxer..."
+
+#: ../../WINGs/wcolorpanel.c:1028 ../../WINGs/wcolorpanel.c:1076
+#: ../../WINGs/wcolorpanel.c:1093
+msgid "Rename..."
+msgstr "Reanomena..."
+
+#: ../../WINGs/wcolorpanel.c:1029 ../../WINGs/wcolorpanel.c:1077
+#: ../../WINGs/wcolorpanel.c:1094 ../../WINGs/wcolorpanel.c:3321
+msgid "Remove"
+msgstr "Elimina"
+
+#: ../../WINGs/wcolorpanel.c:1030
+msgid "Copy"
+msgstr "Copia"
+
+#: ../../WINGs/wcolorpanel.c:1031
+msgid "New from Clipboard"
+msgstr "Obté del porta-retalls..."
+
+#: ../../WINGs/wcolorpanel.c:1052
+msgid "X11-Colors"
+msgstr "Colors-X11"
+
+#: ../../WINGs/wcolorpanel.c:1069
+msgid "Color"
+msgstr "Color"
+
+#: ../../WINGs/wcolorpanel.c:1075
+msgid "Add..."
+msgstr "Afegeix..."
+
+#: ../../WINGs/wcolorpanel.c:1085
+msgid "List"
+msgstr "Llista"
+
+#: ../../WINGs/wcolorpanel.c:1092
+msgid "New..."
+msgstr "Nou..."
+
+#: ../../WINGs/wcolorpanel.c:1231
+#, c-format
+msgid ""
+"Color Panel: Could not create directory %s needed to store configurations"
+msgstr ""
+"Panell de color: No s'ha pogut crear el directori \"%s\" necessari per desar "
+"la configuració"
+
+#. Delete the file, it doesn't belong here
+#: ../../WINGs/wcolorpanel.c:1237 ../../WINGs/wcolorpanel.c:3207
+#: ../../WINGs/wcolorpanel.c:3211
+msgid "File Error"
+msgstr "Error de fitxer"
+
+#: ../../WINGs/wcolorpanel.c:1238
+msgid "Could not create ColorPanel configuration directory"
+msgstr "No s'ha pogut crear el directori de configuració del Panell de color"
+
+#: ../../WINGs/wcolorpanel.c:1239 ../../WINGs/wcolorpanel.c:3208
+#: ../../WINGs/wcolorpanel.c:3213 ../../WINGs/wcolorpanel.c:3240
+#: ../../WINGs/wfilepanel.c:250 ../../WINGs/wfilepanel.c:647
+#: ../../WINGs/wfilepanel.c:659 ../../WINGs/wfilepanel.c:760
+#: ../../WINGs/wfilepanel.c:971 ../../WINGs/wfontpanel.c:709
+msgid "OK"
+msgstr "D'acord"
+
+#: ../../WINGs/wcolorpanel.c:1245 ../../WINGs/wcolorpanel.c:1281
+#: ../../WINGs/wcolorpanel.c:1299
+msgid "Color Panel: Could not find file"
+msgstr "Panell de color: No s'ha trobat el fitxer"
+
+#: ../../WINGs/wcolorpanel.c:1486 ../../WINGs/wcolorpanel.c:1551
+#: ../../WINGs/wcolorpanel.c:1615
+msgid "Color Panel: X failed request"
+msgstr "Panell de color: petició X fallida"
+
+#: ../../WINGs/wcolorpanel.c:2860
+msgid "Saturation"
+msgstr "Saturació"
+
+#: ../../WINGs/wcolorpanel.c:2896
+msgid "Hue"
+msgstr "Matís"
+
+#: ../../WINGs/wcolorpanel.c:3146
+msgid "Open Palette"
+msgstr "Obrir paleta"
+
+#: ../../WINGs/wcolorpanel.c:3208
+msgid "Invalid file format !"
+msgstr "El format del fitxer no és vàlid !"
+
+#: ../../WINGs/wcolorpanel.c:3210
+#, c-format
+msgid "can't remove file %s"
+msgstr "no s'ha pogut eliminar el fitxer \"%s\""
+
+#: ../../WINGs/wcolorpanel.c:3212
+msgid "Couldn't remove file from Configuration Directory !"
+msgstr "No s'ha pogut eliminar el fitxer del directori de configuració !"
+
+#: ../../WINGs/wcolorpanel.c:3239
+msgid "Rename"
+msgstr "Reanomena"
+
+#: ../../WINGs/wcolorpanel.c:3239
+msgid "Rename palette to:"
+msgstr "Reanomenar la paleta a:"
+
+#: ../../WINGs/wcolorpanel.c:3240 ../../WINGs/wfilepanel.c:259
+#: ../../WINGs/wfilepanel.c:659 ../../WINGs/wfilepanel.c:760
+msgid "Cancel"
+msgstr "Cancel·la"
+
+#. Careful, this palette exists already
+#: ../../WINGs/wcolorpanel.c:3256 ../../WINGs/wfilepanel.c:760
+msgid "Warning"
+msgstr "Atenció"
+
+#: ../../WINGs/wcolorpanel.c:3257
+msgid ""
+"Palette already exists !\n"
+"\n"
+"Overwrite ?"
+msgstr ""
+"La paleta existeix!\n"
+"\n"
+"La voleu sobreescriure?"
+
+#: ../../WINGs/wcolorpanel.c:3257 ../../WINGs/wcolorpanel.c:3321
+msgid "No"
+msgstr "No"
+
+#: ../../WINGs/wcolorpanel.c:3257 ../../WINGs/wcolorpanel.c:3321
+msgid "Yes"
+msgstr "Sí"
+
+#: ../../WINGs/wcolorpanel.c:3289
+#, c-format
+msgid "Couldn't rename palette %s to %s\n"
+msgstr "No s'ha pogut reanomenar la paleta %s a %s\n"
+
+#: ../../WINGs/wcolorpanel.c:3315
+msgid "This will permanently remove the palette "
+msgstr "Això eliminarà la paleta per sempre "
+
+#: ../../WINGs/wcolorpanel.c:3318
+msgid ""
+".\n"
+"\n"
+"Are you sure you want to remove this palette ?"
+msgstr ""
+".\n"
+"\n"
+"Esteu segurs que voleu eliminar aquesta paleta?"
+
+#: ../../WINGs/wcolorpanel.c:3343
+#, c-format
+msgid "Couldn't remove palette %s\n"
+msgstr "No s'ha pogut eliminar la paleta %s\n"
+
+#: ../../WINGs/wcolorpanel.c:3648
+#, c-format
+msgid "Could not open %s"
+msgstr "No s'ha pogut obrir %s"
+
+#: ../../WINGs/wcolorpanel.c:3655
+#, c-format
+msgid "Could not create %s"
+msgstr "No s'ha pogut crear %s"
+
+#: ../../WINGs/wcolorpanel.c:3666
+#, c-format
+msgid "Write error on file %s"
+msgstr "Error d'escriptura en el fitxer %s"
+
+#: ../../WINGs/wcolorpanel.c:3711
+msgid "Color Panel: Color unspecified"
+msgstr "Panell de color: Color no especificat"
+
+#: ../../WINGs/wfilepanel.c:235
+msgid "Name:"
+msgstr "Nom:"
+
+#: ../../WINGs/wfilepanel.c:332 ../../WINGs/wfilepanel.c:396
+msgid "Open"
+msgstr "Obre"
+
+#: ../../WINGs/wfilepanel.c:350 ../../WINGs/wfilepanel.c:402
+msgid "Save"
+msgstr "Desa"
+
+#: ../../WINGs/wfilepanel.c:562
+#, c-format
+msgid "WINGs: could not open directory %s\n"
+msgstr "WINGs: no s'ha pogut obrir el directori %s\n"
+
+#: ../../WINGs/wfilepanel.c:580
+#, c-format
+msgid "WINGs: could not stat %s\n"
+msgstr "WINGs: no s'ha pogut determinar l'estat de %s\n"
+
+#: ../../WINGs/wfilepanel.c:647 ../../WINGs/wfilepanel.c:970
+#: ../../WINGs/wfontpanel.c:708
+msgid "Error"
+msgstr "Error"
+
+#: ../../WINGs/wfilepanel.c:658
+msgid "Create Directory"
+msgstr "Crear directori"
+
+#: ../../WINGs/wfilepanel.c:659
+msgid "Enter directory name"
+msgstr "Entreu el nom del directori"
+
+#: ../../WINGs/wfilepanel.c:695 ../../WINGs/wfilepanel.c:734
+#: ../../WINGs/wfilepanel.c:765 ../../WINGs/wfilepanel.c:793
+msgid "Permission denied."
+msgstr "Permís denegat."
+
+#: ../../WINGs/wfilepanel.c:698
+#, c-format
+msgid "'%s' already exists."
+msgstr "\"%s\" existia prèviament."
+
+#: ../../WINGs/wfilepanel.c:701
+msgid "Path does not exist."
+msgstr "El camí no existeix."
+
+#: ../../WINGs/wfilepanel.c:731 ../../WINGs/wfilepanel.c:790
+#, c-format
+msgid "'%s' does not exist."
+msgstr "\"%s\" no existeix."
+
+#: ../../WINGs/wfilepanel.c:738 ../../WINGs/wfilepanel.c:797
+msgid "Insufficient memory available."
+msgstr "No hi ha prou memòria disponible."
+
+#: ../../WINGs/wfilepanel.c:742 ../../WINGs/wfilepanel.c:801
+#, c-format
+msgid "'%s' is on a read-only filesystem."
+msgstr "\"%s\" es troba en un sistema de fitxers de només lectura."
+
+#: ../../WINGs/wfilepanel.c:745 ../../WINGs/wfilepanel.c:777
+#: ../../WINGs/wfilepanel.c:804
+#, c-format
+msgid "Can not delete '%s'."
+msgstr "No s'ha pogut eliminar \"%s\"."
+
+#: ../../WINGs/wfilepanel.c:752
+#, c-format
+msgid "Delete directory %s ?"
+msgstr "Eliminar el directori %s ?"
+
+#: ../../WINGs/wfilepanel.c:756
+#, c-format
+msgid "Delete file %s ?"
+msgstr "Eliminar el fitxer %s ?"
+
+#: ../../WINGs/wfilepanel.c:768
+#, c-format
+msgid "Directory '%s' does not exist."
+msgstr "El directori \"%s\" no existeix."
+
+#: ../../WINGs/wfilepanel.c:771
+#, c-format
+msgid "Directory '%s' is not empty."
+msgstr "El directori \"%s\" no està buit."
+
+#: ../../WINGs/wfilepanel.c:774
+#, c-format
+msgid "Directory '%s' is busy."
+msgstr "El directori \"%s\" es troba ocupat."
+
+#: ../../WINGs/wfilepanel.c:787
+#, c-format
+msgid "'%s' is a directory."
+msgstr "\"%s\" és un directori."
+
+#: ../../WINGs/wfilepanel.c:829
+#, c-format
+msgid "An error occured browsing '%s'."
+msgstr "S'ha produït un error mentre s'explorava \"%s\"."
+
+#: ../../WINGs/wfilepanel.c:833
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "\"%s\" no és un directori."
+
+#: ../../WINGs/wfilepanel.c:970
+msgid "File does not exist."
+msgstr "El fitxer no existeix."
+
+#: ../../WINGs/wfont.c:129
+#, c-format
+msgid "the following character sets are missing in %s:"
+msgstr "els següents conjunts de caràcters falten a %s:"
+
+#: ../../WINGs/wfont.c:136
+#, c-format
+msgid ""
+"the string \"%s\" will be used in place of any characters from those sets."
+msgstr ""
+"la cadena \"%s\" s'usarà en lloc dels caràcters d'aquests conjunts de "
+"caràcters."
+
+#: ../../WINGs/wfont.c:300 ../../WINGs/wfont.c:336
+#, c-format
+msgid "could not load font set %s. Trying fixed."
+msgstr "no s'ha pogut carregar el tipus de lletra %s. Provant amb \"fixed\"."
+
+#: ../../WINGs/wfont.c:306 ../../WINGs/wfont.c:342
+#, c-format
+msgid "could not load font %s. Trying fixed."
+msgstr "no s'ha pogut carregar el tipus de lletra %s. Provant amb \"fixed\"."
+
+#: ../../WINGs/wfont.c:310 ../../WINGs/wfont.c:346
+msgid "could not load fixed font!"
+msgstr "no s'ha pogut carregar el tipus de lletra \"fixed\" !"
+
+#: ../../WINGs/wfont.c:441
+#, c-format
+msgid "font description %s is too large."
+msgstr "la descripció de tipus de lletra %s és massa gran."
+
+#: ../../WINGs/wfontpanel.c:205
+msgid "Test!!!"
+msgstr "Prova!!!"
+
+#: ../../WINGs/wfontpanel.c:211
+msgid "Family"
+msgstr "Familia"
+
+#: ../../WINGs/wfontpanel.c:222
+msgid "Typeface"
+msgstr "Fosa"
+
+#: ../../WINGs/wfontpanel.c:233
+msgid "Size"
+msgstr "Mida"
+
+#: ../../WINGs/wfontpanel.c:252
+msgid "Set"
+msgstr "Conjunt"
+
+#: ../../WINGs/wfontpanel.c:257
+msgid "Revert"
+msgstr "Torna"
+
+#: ../../WINGs/wfontpanel.c:709
+msgid "Could not retrieve font list"
+msgstr "No s'ha pogut obtenir la llista de tipus de lletra"
+
+#: ../../WINGs/wfontpanel.c:721
+#, c-format
+msgid "font name %s is longer than 256, which is invalid."
+msgstr ""
+"el nom de tipus de lletra %s ocupa més de 256 caràcters, per tant no és "
+"vàlid."
+
+#: ../../WINGs/wfontpanel.c:868
+msgid "Roman"
+msgstr "Romana"
+
+#: ../../WINGs/wfontpanel.c:871
+msgid "Italic"
+msgstr "Itàlica"
+
+#: ../../WINGs/wfontpanel.c:873
+msgid "Oblique"
+msgstr "Obliqua"
+
+#: ../../WINGs/wfontpanel.c:875
+msgid "Rev Italic"
+msgstr "Itàlica rev"
+
+#: ../../WINGs/wfontpanel.c:877
+msgid "Rev Oblique"
+msgstr "Obliqua rev"
+
+#: ../../WINGs/wfontpanel.c:883
+msgid "Normal"
+msgstr "Normal"
+
+#: ../../WINGs/widgets.c:415
+#, c-format
+msgid "WINGs: could not load widget images file: %s"
+msgstr "WINGs: no s'ha pogut carregar el fitxer d'imatges dels elements: %s"
+
+#: ../../WINGs/widgets.c:763
+msgid ""
+"could not load any fonts. Make sure your font installation and locale "
+"settings are correct."
+msgstr ""
+"no s'ha pogut carregar cap font. Assegureu-vos que l'instal·lació dels tipus "
+"de lletra i la configuració del local és adquada."
+
+#: ../../WINGs/wruler.c:189
+msgid "0   inches"
+msgstr "0   polzades"
