@@ -1000,7 +1000,7 @@ handleEnterNotify(XEvent *event)
             event->xcrossing.y_root >= (scr->scr_height - 2)) {
 
 #ifdef DEBUG
-            debug_puts("pointer at screen edge in EnterNotify event, fear");
+            dbputs("pointer at screen edge in EnterNotify event, fear");
 #endif
 
            menu = wMenuUnderPointer(scr);
