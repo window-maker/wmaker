@@ -461,17 +461,13 @@ DoWindowBirth(WWindow *wwin)
 #ifdef SILLYNESS
 static WMPixmap *data[12];
 
-
 static Bool
 loadData(WScreen *scr)
 {
-#ifdef needs_update
     FILE *f;
     int i;
     RImage *image;
     Pixmap d[12];
-
-    return False;
 
     f = fopen(PKGDATADIR"/xtree.dat", "r");
     if (!f)
@@ -484,13 +480,7 @@ loadData(WScreen *scr)
     }
 
     for (i = 0; i < 12; i++) {
-	if (fread(image->data[0], 50*50, 1, f)!=1) {
-	    goto error;
-	}
-	if (fread(image->data[1], 50*50, 1, f)!=1) {
-	    goto error;
-	}
-	if (fread(image->data[2], 50*50, 1, f)!=1) {
+	if (fread(image->data, 50*50*3, 1, f)!=1) {
 	    goto error;
 	}
 	if (!RConvertImage(scr->rcontext, image, &(d[i]))) {
@@ -516,7 +506,7 @@ error:
     while (--i > 0) {
 	XFreePixmap(dpy, d[i]);
     }
-#endif
+
     return False;
 }
 
