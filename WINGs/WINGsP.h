@@ -6,7 +6,6 @@
 #include <X11/Xutil.h>
 
 
-#include "WUtil.h"
 #include "WINGs.h"
 
 #if WINGS_H_VERSION < 990222

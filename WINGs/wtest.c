@@ -403,20 +403,34 @@ testTabView(WMScreen *scr)
     WMAddItemInTabView(tabv, tab);
     WMSetTabViewItemLabel(tab, "Instances");
 
-
     frame = WMCreateFrame(win);
     WMSetFrameRelief(frame, WRFlat);
     label = WMCreateLabel(frame);
-    WMResizeWidget(label, 100, 100);
-    WMMoveWidget(label, 40, 40);
+    WMResizeWidget(label, 40, 50);
     WMSetLabelText(label, "Label 2");
     WMMapWidget(label);
+
 
     tab = WMCreateTabViewItemWithIdentifier(0);
     WMSetTabViewItemView(tab, WMWidgetView(frame));
     WMAddItemInTabView(tabv, tab);
     WMSetTabViewItemLabel(tab, "Classes");
 
+
+    frame = WMCreateFrame(win);
+    WMSetFrameRelief(frame, WRFlat);
+    label = WMCreateLabel(frame);
+    WMResizeWidget(label, 100, 100);
+    WMMoveWidget(label, 60, 40);
+    WMSetLabelText(label, "Label 3");
+    WMMapWidget(label);
+
+    tab = WMCreateTabViewItemWithIdentifier(0);
+    WMSetTabViewItemView(tab, WMWidgetView(frame));
+    WMAddItemInTabView(tabv, tab);
+    WMSetTabViewItemLabel(tab, "Something");
+
+    
     WMRealizeWidget(win);
     WMMapSubwidgets(win);
     WMMapWidget(win);

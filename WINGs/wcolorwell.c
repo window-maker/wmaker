@@ -67,8 +67,41 @@ static WMDragSourceProcs dragProcs = {
 
 
 static void
+colorChangedObserver(void *data, WMNotification *notification)
+{
+    /*
+    WMColorPanel *panel = (WMColorPanel*)WMGetNotificationObject(notification);
+    WMColorWell *cPtr = (WMColorWell*)data;
+    WMColor *color;
+
+    if (!cPtr->flags.active)
+	return;
+
+    color = WMGetColorPanelColor(panel);
+    
+    WMSetColorWellColor(cPtr, color);*/
+   
+}
+
+
+static void
+updateColorCallback(void *self, void *data)
+{
+    /*
+    WMColorPanel *panel = (WMColorPanel*)self;
+    WMColorWell *cPtr = (ColorWell*)data;
+    WMColor *color;
+
+    color = WMGetColorPanelColor(panel);
+    WMSetColorWellColor(cPtr, color);*/
+}
+
+
+
+static void
 activatedObserver(void *data, WMNotification *notification)
 {
+/*
     WMColorWell *cPtr = (WMColorWell*)data;
 
     if (!cPtr->flags.active || WMGetNotificationObject(notification) == cPtr)
@@ -78,7 +111,9 @@ activatedObserver(void *data, WMNotification *notification)
     paintColorWell(cPtr);
 
     cPtr->flags.active = 0;
+ */
 }
+
 
 
 WMColorWell*
@@ -127,6 +162,9 @@ WMCreateColorWell(WMWidget *parent)
 			      _ColorWellActivatedNotification, NULL);
 
     cPtr->color = WMBlackColor(WMWidgetScreen(cPtr));
+
+    WMAddNotificationObserver(colorChangedObserver, cPtr,
+			      WMColorPanelColorChangedNotification, NULL);
 
     return cPtr;
 }
@@ -287,7 +325,7 @@ dragColor(ColorWell *cPtr, XEvent *event, WMPixmap *image)
     WMScreen *scr = cPtr->view->screen;
     Display *dpy = scr->display;
     XColor black = {0, 0,0,0, DoRed|DoGreen|DoBlue};
-    XColor green = {0, 0x4500,0xb000,0x4500, DoRed|DoGreen|DoBlue};
+    XColor green = {0x0045b045, 0x4500,0xb000,0x4500, DoRed|DoGreen|DoBlue};
     XColor back = {0, 0xffff,0xffff,0xffff, DoRed|DoGreen|DoBlue};
     Bool done = False;
     WMColorWell *activeWell = NULL;
@@ -405,7 +443,6 @@ handleDragEvents(XEvent *event, void *data)
 }
 
 
-
 static void
 handleActionEvents(XEvent *event, void *data)
 {
@@ -425,31 +462,12 @@ handleActionEvents(XEvent *event, void *data)
 	WMPostNotificationName(_ColorWellActivatedNotification, cPtr, NULL);
     }
     cpanel = WMGetColorPanel(scr);
+
+    WMSetColorPanelAction(cpanel, updateColorCallback, cPtr);
+
     if (cPtr->color)
 	WMSetColorPanelColor(cpanel, cPtr->color);
     WMShowColorPanel(cpanel);
-/*	
-    {
-	char *t;
-	WMColor *color;
-
-	t = WMRunInputPanel(scr, NULL, "Advanced Color Picker", 
-			    "Type a Color (this is temporary!!! I'm not THAT dumb :P)",
-			    NULL, "OK", "Cancel");
-	
-	if (t) {
-	    color = WMCreateNamedColor(scr, t, False);
-	    if (color) {
-		WMSetColorWellColor(cPtr, color);
-		WMPostNotificationName(WMColorWellDidChangeNotification,
-				       cPtr, NULL);
-		WMReleaseColor(color);
-	    }
-	    free(t);
-	}
-
-    }
-*/
 }
 
 

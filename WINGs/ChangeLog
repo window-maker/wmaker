@@ -20,6 +20,12 @@ changes since wmaker 0.53.0:
 	in the delegate variable. 
 	Take a look in wfilepanel.c to see how it is used there.
 
+- WMTextField
+	Removed all the didChange notifications that were sent when the text
+	was changed programmatically. Only changes made by user interaction
+	will be notified now. If you need the old behaviour, send notifications
+	manually when you change the text.
+
 - added WMTabView
 
 changes since wmaker 0.52.0:

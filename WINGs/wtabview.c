@@ -437,27 +437,6 @@ paintTabView(TabView *tPtr)
     int i;
     WMRect rect;
 
-    switch (tPtr->flags.type) {
-     case WTTopTabsBevelBorder:
-	drawRelief(scr, W_VIEW(tPtr)->window, 0, tPtr->tabHeight - 1,
-		   W_VIEW(tPtr)->size.width,
-		   W_VIEW(tPtr)->size.height - tPtr->tabHeight + 1);
-	break;
-
-     case WTNoTabsBevelBorder:
-	W_DrawRelief(scr, W_VIEW(tPtr)->window, 0, 0, W_VIEW(tPtr)->size.width,
-		     W_VIEW(tPtr)->size.height, WRRaised);
-	break;
-
-     case WTNoTabsLineBorder:
-	W_DrawRelief(scr, W_VIEW(tPtr)->window, 0, 0, W_VIEW(tPtr)->size.width,
-		     W_VIEW(tPtr)->size.height, WRSimple);
-	break;
-
-     case WTNoTabsNoBorder:
-	break;
-    }
-
     if (tPtr->flags.type == WTTopTabsBevelBorder) {
 	buffer = XCreatePixmap(dpy, W_VIEW(tPtr)->window,
 			       W_VIEW(tPtr)->size.width, tPtr->tabHeight,
@@ -485,7 +464,7 @@ paintTabView(TabView *tPtr)
 
 	XDrawLine(dpy, buffer, white, 
 		  8 + 10 + (rect.size.width-10) * tPtr->itemCount,
-		  tPtr->tabHeight - 1, W_VIEW(tPtr)->size.width, 
+		  tPtr->tabHeight - 1, W_VIEW(tPtr)->size.width - 1,
 		  tPtr->tabHeight - 1);
 
 
@@ -499,6 +478,26 @@ paintTabView(TabView *tPtr)
 		  W_VIEW(tPtr)->size.width, tPtr->tabHeight, 0, 0);
 
 	XFreePixmap(dpy, buffer);
+    }
+    switch (tPtr->flags.type) {
+     case WTTopTabsBevelBorder:
+	drawRelief(scr, W_VIEW(tPtr)->window, 0, tPtr->tabHeight - 1,
+		   W_VIEW(tPtr)->size.width,
+		   W_VIEW(tPtr)->size.height - tPtr->tabHeight + 1);
+	break;
+
+     case WTNoTabsBevelBorder:
+	W_DrawRelief(scr, W_VIEW(tPtr)->window, 0, 0, W_VIEW(tPtr)->size.width,
+		     W_VIEW(tPtr)->size.height, WRRaised);
+	break;
+
+     case WTNoTabsLineBorder:
+	W_DrawRelief(scr, W_VIEW(tPtr)->window, 0, 0, W_VIEW(tPtr)->size.width,
+		     W_VIEW(tPtr)->size.height, WRSimple);
+	break;
+
+     case WTNoTabsNoBorder:
+	break;
     }
 }
 

@@ -194,7 +194,6 @@ enum {
     WMDeleteTextEvent
 };
 
-
 typedef enum {
 	WMGrayModeColorPanel,
  	WMRGBModeColorPanel,
@@ -383,6 +382,8 @@ typedef void WMEventHook(XEvent *event);
  * clientData to the data set to with WMSetClientData() */
 typedef void WMAction(WMWidget *self, void *clientData);
 
+/* same as WMAction, but for stuff that arent widgets */
+typedef void WMAction2(void *self, void *clientData);
 
 typedef void WMCallback(void *data);
 
@@ -1024,13 +1025,11 @@ void WMCloseColorPanel(WMColorPanel *panel);
 
 void WMSetColorPanelColor(WMColorPanel *panel, WMColor *color);
 
-RColor WMGetColorPanelColor(WMColorPanel *panel);
-
 void WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode);
 
-void WMSetColorPanelAction(WMColorPanel *panel, WMAction *action, void *data);
+void WMSetColorPanelAction(WMColorPanel *panel, WMAction2 *action, void *data);
 
-
+extern char *WMColorPanelColorChangedNotification;
 
 /* ....................................................................... */
 

@@ -177,7 +177,8 @@ decrToFit(TextField *tPtr)
 
 static Bool
 requestHandler(WMWidget *w, Atom selection, Atom target, Atom *type,
-        void **value, unsigned *length, int *format) {
+	       void **value, unsigned *length, int *format) 
+{
     TextField *tPtr = w;
     int count,count2;
     Display *dpy = tPtr->view->screen->display;
