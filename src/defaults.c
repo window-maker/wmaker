@@ -154,6 +154,7 @@ static int setMenuTextFont();
 static int setIconTitleFont();
 static int setIconTitleColor();
 static int setIconTitleBack();
+static int setDisplayFont();
 static int setLargeDisplayFont();
 static int setWTitleColor();
 static int setFTitleBack();
@@ -230,7 +231,8 @@ static WOptionEnumeration seColormapModes[] = {
 };
 
 static WOptionEnumeration sePlacements[] = {
-    {"Auto", WPM_AUTO, 0}, {"Smart", WPM_SMART, 0},
+    {"Auto", WPM_AUTO, 0},
+    {"Smart", WPM_SMART, 0},
     {"Cascade", WPM_CASCADE, 0},
     {"Random", WPM_RANDOM, 0},
     {"Manual", WPM_MANUAL, 0},
@@ -566,6 +568,9 @@ WDefaultEntry optionList[] = {
     },
     {"ClipTitleFont",	DEF_CLIP_TITLE_FONT,	NULL,
 	  NULL,				getFont,	setClipTitleFont
+    },
+    {"DisplayFont",    DEF_INFO_TEXT_FONT,     NULL,
+          NULL,                         getFont,        setDisplayFont
     },
     {"LargeDisplayFont",DEF_WORKSPACE_NAME_FONT, NULL,
 	  NULL,				getFont,	setLargeDisplayFont
@@ -2573,6 +2578,28 @@ setClipTitleFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
 
 
 static int
+setDisplayFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
+{
+    if (scr->info_text_font) {
+        WMReleaseFont(scr->info_text_font);
+    }
+
+    scr->info_text_font = font;
+
+    /* This test works because the scr structure is initially zeroed out
+     and None = 0. Any other time, the window should be valid. */
+    if (scr->geometry_display != None) {
+        wGetGeometryWindowSize(scr, &scr->geometry_display_width,
+                               &scr->geometry_display_height);
+        XResizeWindow(dpy, scr->geometry_display,
+                      scr->geometry_display_width, scr->geometry_display_height);
+    }
+
+    return 0;
+}
+
+
+static int
 setLargeDisplayFont(WScreen *scr, WDefaultEntry *entry, WMFont *font, void *foo)
 {
     if (scr->workspace_name_font) {
@@ -2913,6 +2940,10 @@ setWidgetColor(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo
 	wTextureDestroy(scr, (WTexture*)scr->widget_texture);
     }
     scr->widget_texture = *(WTexSolid**)texture;
+
+    if (scr->geometry_display != None)
+        XSetWindowBackground(dpy, scr->geometry_display,
+                             scr->widget_texture->normal.pixel);
 
     return 0;
 }

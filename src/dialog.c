@@ -964,8 +964,6 @@ handleLogoPush(XEvent *event, void *data)
 "             .....XmnbN:q&Bo....             ",
 "                 ............                "};
     static char *msgs[] = {
-	"Sloppy focus is a *?#@",
-	    "Repent! Sloppy focus users will burn in hell!!!",
 	    "Have a nice day!"
     };
 
