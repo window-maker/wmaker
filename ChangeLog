@@ -8,6 +8,7 @@ Changes since version 0.80.1:
 - Map clip's menu so that it never gets out of screen on the left or the right.
 - Patch to add binary mode on opening files (needed for Windows with Cygwin)
   (sent by luke <luke@posh.optushome.com.au>)
+- Updated French translations (Antoine Hulin <antoine@origan.fdn.org>)
 
 
 Changes since version 0.80.0:

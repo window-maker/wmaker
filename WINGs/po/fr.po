@@ -3,11 +3,10 @@
 # Copyright (C) YEAR Free Software Foundation, Inc.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: WINGs 0.80.0\n"
-"POT-Creation-Date: 2002-01-09 21:06+0100\n"
+"POT-Creation-Date: 2002-07-20 23:57+0200\n"
 "PO-Revision-Date: 2002-01-09 21:20+0100\n"
 "Last-Translator: Emmanuel Benoit <tseeker@neptune.fr>\n"
 "Language-Team: Français <fr@li.org>\n"
@@ -18,7 +17,7 @@ msgstr ""
 #: ../../WINGs/connection.c:461 ../../WINGs/connection.c:526
 #: ../../WINGs/connection.c:569
 msgid "Bad address-service-protocol combination"
-msgstr "Mauvaise combinaison Adresse-Service-Protocole"
+msgstr "Mauvaise combinaison adresse-service-protocole"
 
 #: ../../WINGs/error.c:54
 #, c-format
@@ -32,42 +31,49 @@ msgstr "Erreur %d"
 
 #: ../../WINGs/error.c:110
 msgid " warning: "
-msgstr " Avertissement: "
+msgstr " Avertissement : "
 
 #: ../../WINGs/error.c:137
 msgid " fatal error: "
-msgstr " erreur fatale: "
+msgstr " erreur fatale : "
 
 #: ../../WINGs/error.c:163 ../../WINGs/error.c:192
 msgid " error: "
-msgstr " erreur: "
+msgstr " erreur : "
 
 #: ../../WINGs/findfile.c:48
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr "Impossible de lire l'entrée password pour l'UID %i"
+msgstr "Impossible de lire le mot de passe de l'UID %i"
 
 #: ../../WINGs/findfile.c:66
 #, c-format
 msgid "could not get password entry for user %s"
-msgstr "Impossible de lire l'entrée password pour l'utilisateur %s"
+msgstr "Impossible de lire le mot de passe de l'utilisateur %i"
 
 #: ../../WINGs/host.c:114
 msgid "Cannot get current host name"
-msgstr "Impossible de déterminer le nom de machine actuel"
+msgstr "Impossible de déterminer le nom de la machine"
+
+# TODO pas de traduction correcte possible, cf source.
+#: ../../WINGs/proplist.c:91
+#, c-format
+msgid "syntax error in %s %s, line %i: %s"
+msgstr "Faute de syntaxe dans %s %s, ligne %i : %s"
 
 #: ../../WINGs/proplist.c:150
 msgid "Only string or data is supported for a proplist dictionary key"
 msgstr ""
-"Seuls string ou data sont supportés pour une clée de dictionnaire proplist"
+"Seuls les types string ou data sont supportés pour une clé de dictionnaire "
+"Proplist"
 
 #: ../../WINGs/proplist.c:184 ../../WINGs/proplist.c:236
 #: ../../WINGs/proplist.c:394 ../../WINGs/proplist.c:474
-#: ../../WINGs/proplist.c:1071 ../../WINGs/proplist.c:1123
-#: ../../WINGs/proplist.c:1289 ../../WINGs/proplist.c:1368
-#: ../../WINGs/proplist.c:1489 ../../WINGs/proplist.c:1536
+#: ../../WINGs/proplist.c:1075 ../../WINGs/proplist.c:1127
+#: ../../WINGs/proplist.c:1293 ../../WINGs/proplist.c:1372
+#: ../../WINGs/proplist.c:1493 ../../WINGs/proplist.c:1540
 msgid "Used proplist functions on non-WMPropLists objects"
-msgstr "Une fonction proplist a été utilisée sur des objets non-WMPropList"
+msgstr "Une fonction Proplist a été utilisée sur des objets non-WMPropList"
 
 #: ../../WINGs/proplist.c:630
 msgid "unterminated PropList string"
@@ -81,52 +87,52 @@ msgstr "données PropList sans fin"
 msgid "unterminated PropList data (missing hexdigit)"
 msgstr "données PropList sans fin (il manque un chiffre hexadécimal)"
 
-#: ../../WINGs/proplist.c:690
+#: ../../WINGs/proplist.c:690 ../../WINGs/proplist.c:695
 msgid "non hexdigit character in PropList data"
 msgstr "caractère non-hexadécimal dans les données PropList"
 
-#: ../../WINGs/proplist.c:725
+#: ../../WINGs/proplist.c:729
 msgid "unterminated PropList array"
 msgstr "tableau PropList sans fin"
 
-#: ../../WINGs/proplist.c:733
+#: ../../WINGs/proplist.c:737
 msgid "missing or unterminated PropList array"
 msgstr "tableau PropList manquant ou sans fin"
 
-#: ../../WINGs/proplist.c:743
+#: ../../WINGs/proplist.c:747
 msgid "could not get PropList array element"
 msgstr "impossible de lire l'élément du tableau PropList"
 
-#: ../../WINGs/proplist.c:772
+#: ../../WINGs/proplist.c:776
 msgid "unterminated PropList dictionary"
 msgstr "dictionnaire PropList sans fin"
 
-#: ../../WINGs/proplist.c:789
+#: ../../WINGs/proplist.c:793
 msgid "missing PropList dictionary key"
 msgstr "clef du dictionnaire PropList manquante"
 
-#: ../../WINGs/proplist.c:791
+#: ../../WINGs/proplist.c:795
 msgid "missing PropList dictionary entry key or unterminated dictionary"
 msgstr "clef du dictionnaire PropList manquante ou dictionnaire sans fin"
 
-#: ../../WINGs/proplist.c:799
+#: ../../WINGs/proplist.c:803
 msgid "error parsing PropList dictionary key"
 msgstr "erreur lors de l'analyse de la clef de dictionnaire PropList"
 
-#: ../../WINGs/proplist.c:807
+#: ../../WINGs/proplist.c:811
 msgid "missing = in PropList dictionary entry"
 msgstr "signe '=' manquant dans l'entrée du dictionnaire PropList"
 
-#: ../../WINGs/proplist.c:815
+#: ../../WINGs/proplist.c:819
 msgid "error parsing PropList dictionary entry value"
 msgstr ""
 "erreur lors de l'analyse de la valeur de l'entrée du dictionnaire PropList"
 
-#: ../../WINGs/proplist.c:823
+#: ../../WINGs/proplist.c:827
 msgid "missing ; in PropList dictionary entry"
 msgstr "signe ';' manquant dans l'entrée du dictionnaire PropList"
 
-#: ../../WINGs/proplist.c:884
+#: ../../WINGs/proplist.c:888
 msgid ""
 "was expecting a string, data, array or dictionary. If it's a string, try "
 "enclosing it with \"."
@@ -134,52 +140,52 @@ msgstr ""
 "une chaine, des données, un tableau ou un dictionnaire étaient attendus. "
 "S'il s'agit d'une chaîne, essayez de la délimiter grâce à '\"'."
 
-#: ../../WINGs/proplist.c:888
+#: ../../WINGs/proplist.c:892
 msgid "Comments are not allowed inside WindowMaker owned domain files."
 msgstr ""
-"Les commentaires ne sont pas autorisés dans les fichiers appartenant au"
-"domaine de WindowMaker."
+"Les commentaires ne sont pas autorisés dans les fichiers appartenant au "
+"domaine de Window Maker."
 
-#: ../../WINGs/proplist.c:1559 ../../WINGs/proplist.c:1624
+#: ../../WINGs/proplist.c:1563 ../../WINGs/proplist.c:1628
 msgid "extra data after end of property list"
 msgstr "données excédentaires après la fin de la liste de propriétés"
 
-#: ../../WINGs/proplist.c:1602
+#: ../../WINGs/proplist.c:1606
 #, c-format
 msgid "could not get size for file '%s'"
 msgstr "impossible de déterminer la taille du fichier '%s'"
 
-#: ../../WINGs/proplist.c:1614
+#: ../../WINGs/proplist.c:1618
 #, c-format
 msgid "error reading from file '%s'"
 msgstr "erreur pendant la lecture du fichier '%s'"
 
-#: ../../WINGs/proplist.c:1665
+#: ../../WINGs/proplist.c:1669
 #, c-format
 msgid "mkstemp (%s) failed"
 msgstr "mkstemp (%s) a échoué"
 
-#: ../../WINGs/proplist.c:1676
+#: ../../WINGs/proplist.c:1680
 #, c-format
 msgid "mktemp (%s) failed"
 msgstr "mktemp (%s) a échoué"
 
-#: ../../WINGs/proplist.c:1687
+#: ../../WINGs/proplist.c:1691
 #, c-format
 msgid "open (%s) failed"
 msgstr "open (%s) a échoué"
 
-#: ../../WINGs/proplist.c:1694
+#: ../../WINGs/proplist.c:1698
 #, c-format
 msgid "writing to file: %s failed"
 msgstr "erreur pendant l'écriture dans le fichier '%s'"
 
-#: ../../WINGs/proplist.c:1702
+#: ../../WINGs/proplist.c:1706
 #, c-format
 msgid "fclose (%s) failed"
 msgstr "erreur lors de la fermeture du fichier '%s'"
 
-#: ../../WINGs/proplist.c:1711
+#: ../../WINGs/proplist.c:1715
 #, c-format
 msgid "rename ('%s' to '%s') failed"
 msgstr "impossible de renommer '%s' en '%s'"
@@ -246,11 +252,11 @@ msgstr "Bleu"
 
 #: ../../WINGs/wcolorpanel.c:807 ../../WINGs/wcolorpanel.c:808
 msgid "Cyan"
-msgstr ""
+msgstr "Cyan"
 
 #: ../../WINGs/wcolorpanel.c:841 ../../WINGs/wcolorpanel.c:842
 msgid "Magenta"
-msgstr ""
+msgstr "Magenta"
 
 #: ../../WINGs/wcolorpanel.c:875 ../../WINGs/wcolorpanel.c:876
 msgid "Yellow"
@@ -266,7 +272,7 @@ msgstr "Spectre"
 
 #: ../../WINGs/wcolorpanel.c:1021
 msgid "Palette"
-msgstr ""
+msgstr "Palette"
 
 #: ../../WINGs/wcolorpanel.c:1027
 msgid "New from File..."
@@ -288,7 +294,7 @@ msgstr "Copier"
 
 #: ../../WINGs/wcolorpanel.c:1031
 msgid "New from Clipboard"
-msgstr "Nouveau d'après le Presse-Papier"
+msgstr "Nouveau d'après le presse-papier"
 
 #: ../../WINGs/wcolorpanel.c:1052
 msgid "X11-Colors"
@@ -315,8 +321,8 @@ msgstr "Nouveau..."
 msgid ""
 "Color Panel: Could not create directory %s needed to store configurations"
 msgstr ""
-"Panneau de Sélection des Couleurs: impossible de créer le répertoire %s "
-"requis pour enregistrer les configurations"
+"Panneau de sélection des couleurs : impossible de créer le répertoire %s "
+"requis pour enregistrer les configurations."
 
 #. Delete the file, it doesn't belong here
 #: ../../WINGs/wcolorpanel.c:1237 ../../WINGs/wcolorpanel.c:3207
@@ -327,8 +333,8 @@ msgstr "Erreur de fichier"
 #: ../../WINGs/wcolorpanel.c:1238
 msgid "Could not create ColorPanel configuration directory"
 msgstr ""
-"Impossible de créer le répertoire de configuration pour le Panneau "
-"de configuration des couleurs"
+"Impossible de créer le répertoire pour la configuration du panneau de "
+"sélection des couleurs."
 
 #: ../../WINGs/wcolorpanel.c:1239 ../../WINGs/wcolorpanel.c:3208
 #: ../../WINGs/wcolorpanel.c:3213 ../../WINGs/wcolorpanel.c:3240
@@ -341,16 +347,16 @@ msgstr "OK"
 #: ../../WINGs/wcolorpanel.c:1245 ../../WINGs/wcolorpanel.c:1281
 #: ../../WINGs/wcolorpanel.c:1299
 msgid "Color Panel: Could not find file"
-msgstr "Panneau de Sélection des Couleurs: Impossible de trouver le fichier"
+msgstr "Panneau de sélection des couleurs : Impossible de trouver le fichier."
 
 #: ../../WINGs/wcolorpanel.c:1486 ../../WINGs/wcolorpanel.c:1551
 #: ../../WINGs/wcolorpanel.c:1615
 msgid "Color Panel: X failed request"
-msgstr "Panneau de Sélection des Couleurs: échec d'une requête X"
+msgstr "Panneau de sélection des couleurs : échec d'une requête X"
 
 #: ../../WINGs/wcolorpanel.c:2860
 msgid "Saturation"
-msgstr ""
+msgstr "Saturation"
 
 #: ../../WINGs/wcolorpanel.c:2896
 msgid "Hue"
@@ -362,12 +368,12 @@ msgstr "Ouvrir une palette"
 
 #: ../../WINGs/wcolorpanel.c:3208
 msgid "Invalid file format !"
-msgstr "Format de fichier invalide!"
+msgstr "Format de fichier invalide !"
 
 #: ../../WINGs/wcolorpanel.c:3210
 #, c-format
 msgid "can't remove file %s"
-msgstr "impossible de supprimer le fichier %s"
+msgstr "Impossible de supprimer le fichier %s."
 
 #: ../../WINGs/wcolorpanel.c:3212
 msgid "Couldn't remove file from Configuration Directory !"
@@ -412,11 +418,11 @@ msgstr "Oui"
 #: ../../WINGs/wcolorpanel.c:3289
 #, c-format
 msgid "Couldn't rename palette %s to %s\n"
-msgstr "Impossible de renommer la palette %s en %s\n"
+msgstr "Impossible de renommer la palette %s en %s.\n"
 
 #: ../../WINGs/wcolorpanel.c:3315
 msgid "This will permanently remove the palette "
-msgstr "Cela va détruire la palette irrécupérablement "
+msgstr "Ceci détruira définitivement la palette "
 
 #: ../../WINGs/wcolorpanel.c:3318
 msgid ""
@@ -426,31 +432,31 @@ msgid ""
 msgstr ""
 ".\n"
 "\n"
-"Êtes-vous sur de vouloir supprimer cette palette ?"
+"Êtes-vous sûr de vouloir supprimer cette palette ?"
 
 #: ../../WINGs/wcolorpanel.c:3343
 #, c-format
 msgid "Couldn't remove palette %s\n"
-msgstr "Impossible de détruire la palette %s\n"
+msgstr "Impossible de détruire la palette %s.\n"
 
 #: ../../WINGs/wcolorpanel.c:3648
 #, c-format
 msgid "Could not open %s"
-msgstr "Impossible d'ouvrir %s"
+msgstr "Impossible d'ouvrir %s."
 
 #: ../../WINGs/wcolorpanel.c:3655
 #, c-format
 msgid "Could not create %s"
-msgstr "Impossible de créer %s"
+msgstr "Impossible de créer %s."
 
 #: ../../WINGs/wcolorpanel.c:3666
 #, c-format
 msgid "Write error on file %s"
-msgstr "Erreur d'écriture dans le fichier %s"
+msgstr "Erreur d'écriture dans le fichier %s."
 
 #: ../../WINGs/wcolorpanel.c:3711
 msgid "Color Panel: Color unspecified"
-msgstr "Panneau de Sélection des Couleurs: couleur non spécifiée"
+msgstr "Panneau de sélection des couleurs: couleur non spécifiée."
 
 #: ../../WINGs/wfilepanel.c:235
 msgid "Name:"
@@ -462,17 +468,17 @@ msgstr "Ouvrir"
 
 #: ../../WINGs/wfilepanel.c:350 ../../WINGs/wfilepanel.c:402
 msgid "Save"
-msgstr "Sauvegarder"
+msgstr "Enregistrer"
 
 #: ../../WINGs/wfilepanel.c:562
 #, c-format
 msgid "WINGs: could not open directory %s\n"
-msgstr "WINGs: Impossible d'ouvrir le répertoire %s\n"
+msgstr "WINGs : Impossible d'ouvrir le répertoire %s.\n"
 
 #: ../../WINGs/wfilepanel.c:580
 #, c-format
 msgid "WINGs: could not stat %s\n"
-msgstr "WINGs: impossible de lire l'état du fichier %s\n"
+msgstr "WINGs : impossible de lire l'état du fichier %s.\n"
 
 #: ../../WINGs/wfilepanel.c:647 ../../WINGs/wfilepanel.c:970
 #: ../../WINGs/wfontpanel.c:708
@@ -538,8 +544,8 @@ msgstr "Le répertoire '%s' n'existe pas."
 
 #: ../../WINGs/wfilepanel.c:771
 #, c-format
-msgid "Le répertoire '%s' n'est pas vide."
-msgstr "Verzeichnis '%s' ist nicht leer."
+msgid "Directory '%s' is not empty."
+msgstr "Le répertoire '%s' n'est pas vide."
 
 #: ../../WINGs/wfilepanel.c:774
 #, c-format
@@ -568,37 +574,41 @@ msgstr "Le fichier n'existe pas."
 #: ../../WINGs/wfont.c:129
 #, c-format
 msgid "the following character sets are missing in %s:"
-msgstr "les jeux de caractères suivants manquent dans %s:"
+msgstr "Les jeux de caractères suivants manquent dans %s :"
 
 #: ../../WINGs/wfont.c:136
 #, c-format
 msgid ""
 "the string \"%s\" will be used in place of any characters from those sets."
 msgstr ""
-"la chaîne \"%s\" sera utilisée à la place de tous les caractères de ces jeux."
+"La chaîne \"%s\" sera utilisée à la place de tous les caractères de ces jeux."
 
-#: ../../WINGs/wfont.c:287 ../../WINGs/wfont.c:323
+#: ../../WINGs/wfont.c:300 ../../WINGs/wfont.c:336
 #, c-format
 msgid "could not load font set %s. Trying fixed."
-msgstr "impossible de charger le jeu de fontes %s, essai du jeu 'fixed'."
+msgstr ""
+"Impossible de charger la famille de polices %s, essai de la famille "
+"« fixed »."
 
-#: ../../WINGs/wfont.c:293 ../../WINGs/wfont.c:329
+#: ../../WINGs/wfont.c:306 ../../WINGs/wfont.c:342
 #, c-format
 msgid "could not load font %s. Trying fixed."
-msgstr "impossible de charger la fonte %s, essai de la fonte 'fixed'."
+msgstr ""
+"Impossible de charger la police de caractères %s, essai de la police "
+"« fixed »."
 
-#: ../../WINGs/wfont.c:297 ../../WINGs/wfont.c:333
+#: ../../WINGs/wfont.c:310 ../../WINGs/wfont.c:346
 msgid "could not load fixed font!"
-msgstr "impossible de charger la fonte 'fixed' !"
+msgstr "Impossible de charger la police de caractères « fixed » !"
 
-#: ../../WINGs/wfont.c:428
+#: ../../WINGs/wfont.c:441
 #, c-format
 msgid "font description %s is too large."
-msgstr "description de fonte %s trop grosse"
+msgstr "La description de la police de caractères %s est trop volumineuse."
 
 #: ../../WINGs/wfontpanel.c:205
 msgid "Test!!!"
-msgstr ""
+msgstr "Test !"
 
 #: ../../WINGs/wfontpanel.c:211
 msgid "Family"
@@ -606,7 +616,7 @@ msgstr "Famille"
 
 #: ../../WINGs/wfontpanel.c:222
 msgid "Typeface"
-msgstr ""
+msgstr "Caractère"
 
 #: ../../WINGs/wfontpanel.c:233
 msgid "Size"
@@ -614,7 +624,7 @@ msgstr "Taille"
 
 #: ../../WINGs/wfontpanel.c:252
 msgid "Set"
-msgstr ""
+msgstr "Famille"
 
 #: ../../WINGs/wfontpanel.c:257
 msgid "Revert"
@@ -622,13 +632,13 @@ msgstr "Revenir"
 
 #: ../../WINGs/wfontpanel.c:709
 msgid "Could not retrieve font list"
-msgstr "Impossible de lire la liste des fontes"
+msgstr "Impossible de lire la liste des polices de caractères."
 
 #: ../../WINGs/wfontpanel.c:721
 #, c-format
 msgid "font name %s is longer than 256, which is invalid."
 msgstr ""
-"Le nom de fonte %s a plus de 256 caractères et est par conséquent invalide."
+"Le nom de police %s a plus de 256 caractères et est par conséquent invalide."
 
 #: ../../WINGs/wfontpanel.c:868
 msgid "Roman"
@@ -640,15 +650,15 @@ msgstr "Italique"
 
 #: ../../WINGs/wfontpanel.c:873
 msgid "Oblique"
-msgstr ""
+msgstr "Penché"
 
 #: ../../WINGs/wfontpanel.c:875
 msgid "Rev Italic"
-msgstr ""
+msgstr "Italique inverse"
 
 #: ../../WINGs/wfontpanel.c:877
 msgid "Rev Oblique"
-msgstr ""
+msgstr "Penché inverse"
 
 #: ../../WINGs/wfontpanel.c:883
 msgid "Normal"
@@ -657,15 +667,15 @@ msgstr "Normal"
 #: ../../WINGs/widgets.c:415
 #, c-format
 msgid "WINGs: could not load widget images file: %s"
-msgstr "WINGs: impossible de charger le fichier d'images de widget '%s'."
+msgstr "WINGs : impossible de charger le fichier d'images de widget '%s'."
 
 #: ../../WINGs/widgets.c:763
 msgid ""
-"could not load any fonts. Make sure your font installationand locale "
+"could not load any fonts. Make sure your font installation and locale "
 "settings are correct."
 msgstr ""
-"Aucune fonte n'a pu être chargée. Veuillez vérifier que votre installation "
-"et vos paramètres d'installation sont corrects."
+"Aucune police n'a pu être chargée. Veuillez vérifier que vos polices sont "
+"correctement installées et que votre langue est bien configurée."
 
 #: ../../WINGs/wruler.c:189
 msgid "0   inches"
