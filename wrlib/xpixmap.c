@@ -45,6 +45,12 @@ get_shifts(unsigned long mask)
     return i;
 }
 
+#define NORMALIZE_RED(pixel)	((rshift>0) ? ((pixel) & rmask) >> rshift \
+					: ((pixel) & rmask) << -rshift)
+#define NORMALIZE_GREEN(pixel)	((gshift>0) ? ((pixel) & gmask) >> gshift \
+					: ((pixel) & gmask) << -gshift)
+#define NORMALIZE_BLUE(pixel)	((bshift>0) ? ((pixel) & bmask) >> bshift \
+					: ((pixel) & bmask) << -bshift)
 
 RImage*
 RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
@@ -59,12 +65,12 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
     assert(image!=NULL);
     assert(image->format==ZPixmap);
     assert(!mask || mask->format==ZPixmap);
-    
+
     img = RCreateImage(image->width, image->height, mask!=NULL);
     if (!img) {
-	return NULL;
+        return NULL;
     }
-      
+
 
     /* I don't know why, but XGetImage() for pixmaps don't set the
      * {red,green,blue}_mask values correctly. 
@@ -86,59 +92,86 @@ RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask)
 
     data = img->data;
 
-#define NORMALIZE_RED(pixel)	((rshift>0) ? ((pixel) & rmask) >> rshift \
-					: ((pixel) & rmask) << -rshift)
-#define NORMALIZE_GREEN(pixel)	((gshift>0) ? ((pixel) & gmask) >> gshift \
-					: ((pixel) & gmask) << -gshift)
-#define NORMALIZE_BLUE(pixel)	((bshift>0) ? ((pixel) & bmask) >> bshift \
-					: ((pixel) & bmask) << -bshift)
-
     if (image->depth==1) {
-	for (y = 0; y < image->height; y++) {
-	    for (x = 0; x < image->width; x++) {
-		pixel = XGetPixel(image, x, y);
-		if (pixel) {
-		    *data++ = 0;
-		    *data++ = 0;
-		    *data++ = 0;
-		} else {
-		    *data++ = 0xff;
-		    *data++ = 0xff;
-		    *data++ = 0xff;
-		}
-		if (mask)
-		    *data++ = 0;
-	    }
-	}
+        if (mask) {
+            for (y = 0; y < image->height; y++) {
+                for (x = 0; x < image->width; x++) {
+                    pixel = XGetPixel(image, x, y);
+                    if (pixel) {
+                        *data++ = 0;
+                        *data++ = 0;
+                        *data++ = 0;
+                    } else {
+                        *data++ = 0xff;
+                        *data++ = 0xff;
+                        *data++ = 0xff;
+                    }
+                    data++;
+                }
+            }
+        } else {
+            for (y = 0; y < image->height; y++) {
+                for (x = 0; x < image->width; x++) {
+                    pixel = XGetPixel(image, x, y);
+                    if (pixel) {
+                        *data++ = 0;
+                        *data++ = 0;
+                        *data++ = 0;
+                    } else {
+                        *data++ = 0xff;
+                        *data++ = 0xff;
+                        *data++ = 0xff;
+                    }
+                }
+            }
+        }
     } else {
-	for (y = 0; y < image->height; y++) {
-	    for (x = 0; x < image->width; x++) {
-		pixel = XGetPixel(image, x, y);
-		*(data++) = NORMALIZE_RED(pixel);
-		*(data++) = NORMALIZE_GREEN(pixel);
-		*(data++) = NORMALIZE_BLUE(pixel);
-		if (mask)
-		    *(data++) = 0;
-	    }
-	}
+        if (mask) {
+            for (y = 0; y < image->height; y++) {
+                for (x = 0; x < image->width; x++) {
+                    pixel = XGetPixel(image, x, y);
+                    *(data++) = NORMALIZE_RED(pixel);
+                    *(data++) = NORMALIZE_GREEN(pixel);
+                    *(data++) = NORMALIZE_BLUE(pixel);
+                    data++;
+                }
+            }
+        } else {
+            for (y = 0; y < image->height; y++) {
+                for (x = 0; x < image->width; x++) {
+                    pixel = XGetPixel(image, x, y);
+                    *(data++) = NORMALIZE_RED(pixel);
+                    *(data++) = NORMALIZE_GREEN(pixel);
+                    *(data++) = NORMALIZE_BLUE(pixel);
+                }
+            }
+        }
     }
-
-    data = img->data;
 
 #define MIN(a,b) ((a)<(b)?(a):(b))
     if (mask) {
-	for (y = 0; y < MIN(mask->height, image->height); y++) {
-	    for (x = 0; x < image->width; x++) {
-
-		data += 3;	/* Skip R, G & B */
-
-		if (mask->width <= image->width && XGetPixel(mask, x, y)) {
-		    *(data++) = 0xff;
-		} else {
-		    *(data++) = 0;
-		}
-	    }
-	}
+        data = img->data;
+        data += 3;	/* Skip R, G & B */
+        for (y = 0; y < MIN(mask->height, image->height); y++) {
+            for (x = 0; x < MIN(mask->width, image->width); x++) {
+                if (mask->width <= image->width && XGetPixel(mask, x, y)) {
+                    *data = 0xff;
+                } else {
+                    *data = 0;
+                }
+                data += 4;
+            }
+            for (; x < image->width; x++) {
+                *data = 0;
+                data += 4;
+            }
+        }
+        for (; y < image->height; y++) {
+            for (x = 0; x < image->width; x++) {
+                *data = 0;
+                data += 4;
+            }
+        }
     }
     return img;
 }
