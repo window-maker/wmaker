@@ -13,6 +13,9 @@ restart, dock bug fixes
 Andrea Arcangeli <arcangeli@mbox.queen.it>
 Fix for cascade window placement
 
+Dmitry Astapov <adept@dimail.alpline.mao.kiev.ua>
+Fix and some additions on XKB lock language status.
+
 Peter Bentley <pete@sorted.org>
 fixed WM_STATE handling bug, fixed some memory leaks, made application menus
 be mapped near the windows for non-click-to-focus modes, timer bug
