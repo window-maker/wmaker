@@ -102,12 +102,13 @@ Summary of Contents:
      5.11 Window Maker breaks scilab
      5.12 Netscape icons show up in black and white
      5.13 Snow flakes from xsnow don't acumulate on titlebars!
+     5.14 I'm using RedHat 6.0 and Netscape dies without reason.
 
 6 - Programming 
      6.1 How do I get a normal X application to produce an appicon? 
      6.2 How do I get my tcl/tk application to produce an appicon? 
      6.3 What is WINGs? 
-     6.4 Where can I get more information about WINGs? 
+     6.4 Where can I get more information about WINGs?
 
 7 - Miscellaneous Questions 
      7.1 Is there a pager for Window Maker? 
@@ -1317,6 +1318,15 @@ Because of the way xsnow is coded, it seems that it can't "see"
 windows with the SaveUnder attribute turned on. So, if snow
 accumulation on windows is vital for you, disable SaveUnders in
 WPrefs, in the advanced options section.
+
+
+5.14 I'm using RedHat 6.0 and Netscape dies without reason.
+----------------------------------
+
+Er... well, I don't know why you're looking in this Window Maker FAQ 
+for a RedHat/Netscape problem, but anyway, the answer is in:
+
+http://www.redhat.com/cgi-bin/support?solution&11-990511-0082&100-926468988&14-0&15-0&25-&3-&30-
 
 
 -=-=-=-=-=-=-

@@ -42,6 +42,7 @@ Never: (so, dont even bother to ask)
 with 2 CPUs ;). 
 - anything that requires the mouse pointer to be jumped by WindowMaker to
 somewhere. This is *terrible* behaviour. And it's not just IMO.
+- rewrite to use Gtk... I wont even explain why...
 
 
 - ICCCM 2.0: ICCCM 2.0 (not 1.0, which is what everybody supports so so) is

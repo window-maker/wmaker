@@ -59,12 +59,10 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 host_alias = @host_alias@
 host_triplet = @host@
-AS = @AS@
 CC = @CC@
 CPP_PATH = @CPP_PATH@
 DFLAGS = @DFLAGS@
 DLLIBS = @DLLIBS@
-DLLTOOL = @DLLTOOL@
 GFXLIBS = @GFXLIBS@
 HEADER_SEARCH_PATH = @HEADER_SEARCH_PATH@
 ICONEXT = @ICONEXT@
@@ -79,7 +77,6 @@ MAKEINFO = @MAKEINFO@
 MOFILES = @MOFILES@
 NLSDIR = @NLSDIR@
 NM = @NM@
-OBJDUMP = @OBJDUMP@
 PACKAGE = @PACKAGE@
 RANLIB = @RANLIB@
 VERSION = @VERSION@
@@ -95,7 +92,7 @@ wprefsdir = @wprefsdir@
 SUBDIRS = wrlib WINGs src util po WindowMaker wmlib test WPrefs.app doc 	contrib
 
 
-EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N MIRRORS COPYING.OPL 	Install acconfig.h 	mkpatch README.KDE README.GNOME WindowMaker.lsm.in 	docklib-0.2.tar.gz libwmfun-0.0.1.tar.gz 
+EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N MIRRORS COPYING.OPL 	Install acconfig.h INSTALL.pt 	mkpatch README.KDE README.GNOME WindowMaker.lsm.in 	docklib-0.2.tar.gz libwmfun-0.0.2.tar.gz 
 
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 mkinstalldirs = $(SHELL) $(top_srcdir)/mkinstalldirs
@@ -109,7 +106,7 @@ mkinstalldirs src/config.h.in src/stamp-h.in
 
 DISTFILES = $(DIST_COMMON) $(SOURCES) $(HEADERS) $(TEXINFOS) $(EXTRA_DIST)
 
-TAR = tar
+TAR = gtar
 GZIP_ENV = --best
 all: all-redirect
 .SUFFIXES:

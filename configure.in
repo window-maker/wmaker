@@ -10,7 +10,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.60.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.61.0)
 
 AM_PROG_LIBTOOL
 
@@ -26,6 +26,8 @@ case ${host} in
     chmod 755 libtool
   ;;
 esac
+
+W_SYSTEM=`uname -s`
 
 
 
@@ -74,7 +76,7 @@ dnl
 dnl Check for RedHat bugs
 dnl =====================
 
-WM_CHECK_REDCRAP_BUGS($prefix,$_bindir,$_libdir)
+dnl WM_CHECK_REDCRAP_BUGS($prefix,$_bindir,$_libdir)
 
 
 dnl
@@ -216,7 +218,7 @@ dnl ==================
 dnl List of supported locales
 dnl -------------------------
 supported_locales="cs de es fr gl it ja ko nl no pt ru se tr fi hr el pl ro da zh_TW.Big5 zh_CN sk"
-supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5 es zh_CN fi it ru"
+supported_wprefs_locales="pt hr fr ko ja cs zh_TW.Big5 es zh_CN fi it ru de"
 
 for lang in $LINGUAS; do
 	ok=0
@@ -433,6 +435,10 @@ if test "x$LIBPL" = "x"; then
    echo "         Window Maker requires libPropList to build."
    echo "         Please read INSTALL to find where you can find libPropList,"
    echo "         and install it first."
+   if test x$W_SYSTEM = xLinux; then
+   echo "         If you're using some prepackaged version of libPropList,"
+   echo "         make sure you install it's \"development\" package as well."
+   fi
    echo "         If you already have it installed, try using the"
    if test "x$ac_cv_lib_PropList_PLGetString" != xyes; then
    echo "         --with-libs-from flag to tell configure where the library"
@@ -684,7 +690,7 @@ pkgdatadir=`eval echo $datadir`
 AC_DEFINE_UNQUOTED(PKGDATADIR, "$pkgdatadir/WindowMaker")
 
 _sysconfdir=`eval echo $sysconfdir`
-AC_DEFINE_UNQUOTED(SYSCONFDIR, "$_sysconfdir/WindowMaker")
+AC_DEFINE_UNQUOTED(SYSCONFDIR, "$_sysconfdir")
 
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
@@ -853,7 +859,7 @@ if test "x$MOFILES" != "x"; then
 	echo "Installation path of translated messages: $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"
 fi
 
-WM_PRINT_REDCRAP_BUG_STATUS
+dnl WM_PRINT_REDCRAP_BUG_STATUS
 
 if test "x$ac_cv_header_jpeglib_h" != xyes; then
 echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"
@@ -863,7 +869,8 @@ echo "not installed correctly or was not found. Background images"
 echo "from themes will not display as they usually are JPEG files."
 echo
 echo "To fix, download and install the jpeg library and/or make sure you"
-echo "installed all jpeg related packages, like jpeg-devel."
+echo "installed all jpeg related packages, SPECIALLY the development packages"
+echo "like jpeg-devel (if you use some prepackaged version of libjpeg)."
 echo
 echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"
 fi

@@ -17,3 +17,7 @@
 - mouse grab being done in client window (in wWindowResetMouseGrabs())
   instead of the frame window. If grab is done in frame, titlebar buttons
   dont work well
+
+- mysterious crash with WM_COLORMAP_WINDOWS
+- mysterious mess in dock icons (specially netscape)
+- PPosition handling

@@ -1,0 +1,566 @@
+		Instruções de Instalação do Window Maker
+
+
+PLATAFORMAS SUPORTADAS
+======================
+(obs: fiquei sabendo que conseguiram compilar nesses sistemas...)
+
+- Intel GNU/Linux Slackware 3.5 (plataforma primária)
+- outras distribuições do Intel GNU/Linux 
+- Sparc GNU/Linux RedHat 5.1
+- PowerPC GNU/MkLinux
+- Alpha GNU/Linux RedHat 5.1
+- FreeBSD
+- NetBSD
+- OpenBSD
+- BSDI 4.0
+- Solaris 2.5.1, 2.5.2
+- Solaris 2.6.0
+- Solaris 2.7beta
+- SCO Unix
+- SGI Irix 5.x, 6.5
+- OSF/1
+- HP-UX
+- AIX 3.2.5
+- AIX 4.1.4 / IBM PowerPC
+- AIX 4.3.1 / IBM CC compiler
+- AIX 4.3.2 / IBM PowerPC
+- AIX 5.3
+- DEC Alpha/Digital UNIX 4.x
+- XFree86 / OS/2
+- Corel NetWinder
+- SunOS 4.x
+- PowerMac / Power MachTen 4.1.1 em MacOS
+- Amiga 3000 rodando RedHat Linux 5.1 (Rawhide)
+
+Patches que possibilitem a execução em outras plataformas serão bem-vindos.
+
+Se a última versão não funcionou para você, tente a 0.53.0,
+que é conhecida por ser bastante estável em várias plataformas.
+
+
+REQUERIMENTOS
+=============
+
+Os softwares a seguir são necessários para o uso do Window Maker:
+
+- X11R6.x	
+	O Window Maker pode ser compilado em versões mais antigas do X, como X11R5
+	(Solaris) ou X11R4 (OpenWindows) mas não funcionará 100% corretamente. Em
+	tais servidores não existirão ícones de aplicações e você terá problemas
+	usando o dock. Fazer upgrades das bibliotecas (Xlib Xt etc) ajudará se você
+	não pode fazer upgrade do servidor.
+	
+Para compilar o Window Maker você precisará do seguinte:
+
+- Requerimentos básicos e óbvios
+	Se você vai compilar o Window Maker, tenha certeza de que você possui o gcc
+	(ou outro compilador ANSI) e os arquivos headers do X. Especialmente para
+	os iniciantes em Linux: você deve instalar todos os pacotes de desenvolvimento
+	do X e a suite gcc. Do contrário você não será capaz de compilar nenhum
+	programa X, incluindo o Window Maker.
+
+- libPropList 
+	Você pode achar esta biblioteca em ftp://ftp.windowmaker.org/pub/libs ou
+	ftp://ftp.gnome.org/pub/libPropList. Você deve instalar corretamente
+	esta biblioteca antes de instalar o Window Maker.
+
+- autoconf, automake and libtool
+	Estes pacotes não são necessários, mas se você tiver um ou mais deles instalados,
+	verifique se todos eles são das seguintes versões:
+		autoconf 2.13
+		automake 1.4
+		libtool 1.3
+	Se você possui uma versão diferente, desative-os mudando os nomes dos arquivos
+	para outra coisa ou removendo-os do seu sistema. Se você não desenvolve
+	software você não precisa deles, logo, você pode desinstalá-los com segurança.
+
+- lex (ou flex) e yacc (ou bison)
+	São usados pelo libPropList. O lex não seria necessário, já que	o seu 
+	arquivo de saída é incluído, mas como ou eu ou o automake é um pouco
+	burro, o script de configuração para o libPropList simplesmente
+	abortará sem motivo caso o lex não seja achado.
+
+
+OPCIONAL:
+=========
+Estas bibliotecas não são necessárias para que o Window Maker funcione, mas elas
+são suportadas caso você deseje usá-las. Os números das versões são os que eu
+possuo (e portanto quase certamente funcionarão), mas outras versões devem funcionar
+também.
+
+
+- libXPM 4.7 ou mais atual
+	Versões antigas podem não funcionar.
+	Disponível em ftp://sunsite.unc.edu/pub/Linux/libs/X/
+	Há suporte nativo para arquivos XPM, mas ele não carregará imagens em
+	algumas formatos incomuns.
+
+- libpng 0.96 ou mais atual e zlib
+	Para suporte a imagens PNG.
+
+- libtiff 3.4 ou mais atual
+	Para suporte a imagens TIFF. Você pode baixar o libtiff em
+	ftp://ftp.sgi.com/graphics/tiff.
+
+- libjpeg 6.0.1 ou mais atual
+	Para suporte a imagens JPEG.
+
+- libgif 2.2 ou libungif
+	Para suporte a imagens tipo GIF.
+
+- GNU xgettext
+	Se você deseja usar mensagens traduzidas, será necessário o GNU gettext. Outras
+	versões do gettext não são compatíveis e não funcionarão. Baixe a versão
+	GNU através do site ftp://ftp.gnu.org
+
+A maioria dos pacotes citados pode ser encontrado em ftp.uu.net/pub/graphics
+
+
+
+OPÇÕES DE CONFIGURAÇÃO
+======================
+
+Estas opções podem ser passadas ao script de configuração para ativar/desativar algumas
+opções do Window Maker. Exemplo:
+
+./configure --enable-kde --enable-gnome
+
+irá configurar o Window Maker para que seja compilado com suporte ao KDE e GNOME.
+
+
+Para obter uma lista com outras opcoes, execute ./configure --help:
+
+--with-libs-from
+	Especifica diretórios (paths) adicionais onde se deve achar as bibliotecas.
+	A flag -L deve preceder cada caminho, tal como:
+     	--with-libs-from="-L/opt/libs -L/usr/local/lib"
+
+--with-incs-from
+	Especifica diretórios adicionais para os arquivos de cabeçalho (header files)
+	que serão procurados. A flag -l deve preceder cada caminho descrito, tal como:
+	--with-incs-from="-I/opt/headers -I/usr/local/include"
+
+--enable-single-icon
+	Permite o agrupamento de todas as aplicações com a mesma WM_CLASS+WM_INSTANCE em
+	uma só.	Esta opção não é suportada por todos os desenvolvedores. Se você tiver algum
+	problema com essa opção, escreva para o seu autor: Christopher Seawood
+	<cls@seawood.org>
+
+--disable-shm
+	Desativa o uso da extensão de memória compartilhada do MIT. Isto reduzirá
+	um pouco a geração de texturas, mas em alguns casos se mostrará necessário
+	em virtude de um bug que se manifesta quando manipulam-se ícones e texturas.
+
+--disable-motif
+	Desativa compatibilidade com gerenciador de janelas mwm.
+
+--enable-openlook
+	Ativa compatibilidade com gerenciador de janelas OPEN LOOK(tm).
+
+--enable-gnome
+	Ativa compatibilidade com gerenciador de janelas GNOME.
+
+--enable-kde
+	Ativa compatibilidade com gerenciador de janelas kde/kwm.
+
+--enable-lite
+	Remove coisas que já são suportadas em ambientes desktops como o KDE
+	e o GNOME. As opções desativadas são: lista de janelas (window list), menu de
+	aplicações root (root applications menu), seleção múltipla de janelas
+	(multiple window selection). Note que não será mais possível sair do Window
+	Maker de dentro; você terá que usar o kill com o sinal SIGTERM ou sair do KDE.
+	Não é aconselhado ativar essa opção.
+
+--enable-modelock
+	Suporte ao bloqueio de status de linguagem do XKB. Se você não sabe o que
+	é isto, você provavelmente não precisa.
+
+--enable-sound
+	Ativa o suporte ao módulo de efeitos sonoros.
+
+--disable-xpm
+	Desativa o uso da biblioteca XPM mesmo se esta estiver disponível no seu sistema.
+
+--disable-png
+	Desativa o uso da biblioteca PNG
+
+--disable-tiff
+	Desativa o uso da biblioteca TIFF
+
+--disable-gif
+	Desativa o uso da biblioteca GIF
+
+--disable-jpeg
+	Desativa o uso da biblioteca JPEG
+
+--disable-shape
+	Desativa o uso das shaped windows (para oclock, xeyes etc.).
+
+--enable-debug
+	Não use esta opção a não ser que saiba realmente o que está fazendo
+
+
+
+NOTAS ESPECÍFICAS PARA AS PLATAFORMAS
+=====================================
+
+- máquinas DEC/Alpha
+	Você provavelmente precisará usar a flag --disable-shm para configurar,
+	como ./configure --disable-shm
+
+- SCO Unix - execute o configure tal como
+	CFLAGS="-belf -DANSICPP" ./configure
+
+- SunOS, Solaris
+	Se você possui o gcc instalado, execute o configure como abaixo:
+	CPP_PATH="gcc -E -x c" ./configure
+	O cpp da Sun não possui agumas funções necessárias ao Window Maker e pode
+	causar problemas quando analisados os arquivos de configuração.
+	Você pode ainda precisar usar --with-libs-from e --with-incs-from
+	para fornecer o diretório onde a libtiff está localizada.
+	Alguem me mandou um email dizendo que você precisará deixar o /usr/local/lib
+	como primeiro caminho (path) no LD_LIBRARY_PATH para que funcione.
+	
+	Se você tem uma Ultra Creator 3D ou outra máquina com gráficos high-end,
+	certifique-se de iniciar o servidor X com o visual padrão definido em 24bpp
+	ou você poderá ter problemas com cores desfiguaradas. Isto é um bug do
+	wmaker e será consertado.
+
+- GNU/Linux em geral
+	Confira se você possui /etc/local/lib no /etc/ld.so.conf e rode ldconfig
+	após a instalação.
+	Remova qualquer versão em pacote do Window Maker antes de instalar uma versão
+	mais atual.
+
+- RedHat GNU/Linux
+	Os sistemas RedHat apresentam vários incômodos. Se você usa, certifique-se
+	de seguir os passos abaixo ou o Window Maker não funcionará:
+
+	* se você instalou o Window Maker que vem junto com o Red Hat, desinstale-o
+	antes de instalar uma versão mais atual.
+
+	* certifique-se de que você não possui as variáveis de ambiente LANG e LINGUAS
+	configuradas como en_RN;
+
+	* certifique-se de que você possui /usr/local/bin na variável PATH;
+
+	* certifique-se de que você tem /usr/local/lib no /etc/ld.conf.so antes de
+	executar o ldconfig;
+
+	* se você tiver problemas que mencionem uma mensagem de erro com o
+	--no-reexec, remova a libtool-1.2b e instale a libtool-1.3. A libtool-1.3
+	pode ser encontrada em ftp.gnu.org. Também leia a seção TROUBLESHOOTING;
+
+	* se você instalou o pacote Window Maker do RedHat e está instalando uma
+	nova versão na mão (você mesmo está compilando), remova o pacote Window
+	Maker do seu sistema RedHat antes.
+
+	* certifique-se de que você possua o vínculo simbólico do /usr/include/X11
+	ao /usr/X11R6/include/X11 (se não, digite ln -s /usr/X11R6/include/X11
+	/usr/include/X11)
+
+	* certifique-se de que você tem o /lib/cpp apontando para o programa cpp.
+
+	Se você possui alguma dúvida quanto a realizar qualquer uma das tarefas acima,
+	por favor não hesite em contatar o suporte ao usuário RedHat. Eles gentilmente
+	irão responder a todas as suas dúvidas relacionadas ao sistema. Eles sabem
+	muito mais sobre o sistema deles do que nós (nós não usamos RedHat).
+
+- PowerPC MkLinux
+	Você terá que possuir a última versão do Xpmac. Versões mais antigas
+	parecem ter bugs que fazem com que o sistema trave.
+
+- Debian GNU/Linux
+	Se você deseja suporte a JPEG e TIFF, certifique-se que no seu sistema estão
+	instaladas as bibliotecas libtiff-dev e libjpeg-dev.
+
+- SuSE GNU/Linux
+	Se você instalou o pacote Window Maker do SuSE, certifique-se de
+	removê-lo do seu sistema antes de compilar o wmaker ou você poderá
+	ter problemas.
+
+- MetroX (versão desconhecida)
+	O MetroX possui uma falha que corrompe os pixmaps que são definidos
+	como backgrounds de janelas. Se você usa MetroX e está tendo problemas
+	estranhos com texturas, não use texturas nas titlebars. Ou use
+	um servidor X diferente.
+
+INSTALAÇÃO:
+===========
+
+Desempacote o WindowMaker-extra-<numero-da-versao>.tar.gz no /usr/local/share. 
+
+Você pode pegar o arquivo no site ftp://ftp.windowmaker.org. Este arquivo
+é opcional e possui alguns ícones e temas. Procure pelo último <número-da-versão>
+disponível.
+Ainda há o WindowMaker-extra.readme para instruí-lo sobre onde o pacote deve ir.
+
+
+Compilando o Window Maker
+-------------------------
+	Se você quer fazer de modo rápido e simples, digite o seguinte no seu prompt:
+
+	./configure
+	make
+
+depois entre como root e digite:
+
+	make install
+	ldconfig
+
+ou se você quiser remover os símbolos de depuração dos seus binários para
+que eles se tornem menores, você pode digitar:
+
+	make install-strip
+	ldconfig
+
+Estes comandos irão compilar e instalar o Window Maker com parâmetros padrões. 
+
+Se você deseja configurar algumas opções de compilação, você pode fazer o seguinte:
+
+	1.(opcional) Olhe na seção OPÇÕES DE CONFIGURAÇÃO acima para ver as
+	opções disponíveis. Execute também:
+
+	./configure --help
+
+	para obter uma lista completa das outras opções.
+
+	2. Rode o configure com as opções que você deseja. Por exemplo, se
+	deseja usar a opção --enable-kde, você deve digitar:
+
+	./configure --enable-kde
+
+	3. (opcional) Edite o arquivo src/wconfig.h com seu editor de texto
+	preferido e procure por alguma opção que deseja mudar
+
+	4. Compile. Só digite:
+
+	make
+
+	5. Entre como root (se você não pode fazer isso, leia a seção "Eu não tenho a
+	senha de root") e instale o Window Maker no seu sistema:
+
+		su root
+		make install
+
+
+Configurações Específicas
+-------------------------
+
+Estas instruções não precisam ser seguidas quando for feito o upgrade do
+Window Maker em cima de uma versão antiga, a menos que o arquivo NEWS diga
+algo diferente.
+
+Todo usuário no seu sistema que desejar rodar o Window Maker deverá fazer o seguinte:
+
+	1. Instalar os arquivos de configuração do Window Maker no diretório home.
+Digite:
+	wmaker.inst
+
+	wmaker.inst vai instalar os arquivos de configuração do Window Maker e fazer
+	com que o X rode o Window Maker quando executado.
+
+	É isso!
+
+	Você pode digitar "man wmaker" para ver uma ajuda geral sobre configuração
+e outras coisas.
+
+Leia o Manual do Usuário para explicações mais profundas sobre o Window Maker.
+
+Você deve dar uma olhada no FAQ também.
+
+
+
+Eu não tenho a senha de root
+----------------------------
+
+Se você não pode obter privilégios de super-usuário (não pode ser root) você
+pode instalar o wmaker no seu diretório home. Para isso, forneça a opção
+--prefix quando for rodar o configure, como explicado no passo 2 da seção
+Compilando o Window Maker.
+Você ainda precisará fornecer a opção --with-appspath, para especificar o
+caminho do WPrefs.app. Exemplo:
+
+./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Apps
+
+Depois faça com que /home/jshome/bin seja incluído na variável PATH, adicione
+/home/jshome/lib na variável de ambiente LD_LIBRARY_PATH e rode bin/wmaker.inst
+
+É claro, substitua /home/jshome com o seu diretório home.
+
+
+UPGRADE
+=======
+
+Se você está fazendo um upgrade de uma versão antiga do Window maker:
+	
+	1. Configure e compile o Window Maker como sempre
+	2. Instale o Window Maker (mas não rode o wmaker.inst)
+	3. Leia o arquivo NEWS e atualize seus arquivos de configuração,
+	se necessário.
+
+TROUBLESHOOTING
+===============
+
+Quando você tiver problemas na configuração (enquanto roda o configure),
+tal como não conseguir usar uma biblioteca de gráficos que você acha que tem
+instalada, olhe no arquivo config.log para obter dicas sobre o que pode estar
+errado.
+
+== Erro ao carregar as fontes, mesmo quando elas existem
+
+Tente reconstruir sem suporte NLS.
+
+== Erro ao configurar
+
+ltconfig: unrecognized option `--no-reexec'
+Try `ltconfig --help' for more information.
+configure: error: libtool configure failed
+
+remova a opção --no-reexec do aclocal.m4 e da libPropList/aclocal.m4
+e reconfigure.
+Também verifique se as versões do autoconf e do automake que você tem
+instaladas são:
+autoconf 2.13
+automake 1.4
+libtool 1.3
+
+Note que não deve ser libtool 1.2b, deve ser libtool 1.3.
+
+== Não acha a proplist.h ou libPropList.algumacoisa
+
+Baixe e instale a libPropList dos sites já citados neste arquivo.
+
+== o configure não detecta a libtiff, ou outras bibliotecas gráficas.
+
+Delete o config.cache, depois rode de novo o configure adicionando as
+seguintes opções ao configure (e as outras opções que você usa):
+--with-libs-from="-L/usr/local/lib"
+--with-incs-from="-I/usr/local/include -I/usr/local/include/tiff"
+Substitua o caminho para onde estão localizadas as suas bibliotecas gráficas
+e os correspondentes arquivos de cabeçalho. Você pode colocar caminhos múltiplos
+em qualquer uma dessas opções, como no exemplo do --with-incs-from. Só ponha um
+espaço entre eles.
+
+== o configure não detecta libXpm. 
+
+* Confira se você possui um vínculo simbólico da libXpm.so.4.9 para libXpm.so
+
+
+== Segmentation fault na inicialização
+
+* Confira se a versão da libXPM é a 4.7 ou mais atual
+
+* Confira se você tem uma versão atualizada do ~/GNUstep/Defaults/WindowMaker
+
+Se você não tem certeza, tente renomear ~/GNUstep para ~/GNUtmp e depois rode
+o wmaker.inst
+
+== "...: your machine is misconfigured. gethostname() returned (none)"
+
+* o hostname da sua máquina está definido incorretamente. Execute um man hostname
+para obter informações de como resolver isto.
+
+== O menu do root possui só 2 entradas. ("XTerm" e "Exit...")
+
+* O Window Maker não está achando o cpp (o pré-processador C). Se o seu cpp
+não está localizado em /lib/cpp, edite src/config.h e corrija o caminho
+no CPP_PATH.
+
+== checking lex output file root... configure: error: cannot find output from
+true; giving up
+
+* Leia a seção REQUERIMENTOS deste arquivo.
+
+
+LOCALES/INTERNACIONALIZAÇÃO
+===========================
+
+o Window Maker tem suporte a linguagem nacional. Para ativar esse suporte,
+você precisa compilar o Window Maker com parâmetros adicionais.
+
+0 - Você deve Ter o pacote do GNU gettext instalado. Este pode ser obtido
+pelo ftp://prep.ai.mit.edu/pub/gnu/gettext-nnn.tar.gz
+
+Os passos 1,2 e 3 podem ser pulados se você usa o script Install.
+
+1 - Você deve selecionar as linguagens que deseja suportar. Defina a LINGUAS
+para a lista dos locales que você deseja. O Inglês é sempre suportado. Exemplo:
+
+setenv LINGUAS "pt ja de"
+na csh
+
+ou
+
+export LINGUAS;LINGUAS="pt ja de"
+na sh
+
+A lista dos locales suportados pode ser achado no arquivo po/README.
+O inglês é a língua oficial.
+
+Leia o arquivo po/README se você deseja traduzir e manter os arquivos 
+locales para outras linguagens.
+
+2 - Adicionalmente, se a sua linguagem usa caracteres multi-bytes, tais 
+como as línguas japonesas e koreanas, você deve definir a opção MultiByteText
+para YES nos arquivos ~/GNUstep/Defaults/WMGLOBAL e ~/GNUstep/Defaults/WindowMaker
+
+3 - Configure, compile e instale o Window Maker normalmente.
+
+4 - Para selecionar um locale particular você deve definir a variável de
+ambiente LANG para o locale que você quer. Por exemplo, se você quer definir o
+locale português, você deve rodar
+
+setenv LANG pt
+
+na csh ou
+
+export LANG; LANG=pt
+
+nas Bourne sh e similares
+
+Nota: Se você tem a variável de ambiente LC_CTYPE definida, você deve
+indefiní-la antes de rodar o wmaker.
+
+O Window Maker procura os arquivos de definições de menu na seguinte
+ordem (para o português brasileiro, neste caso):
+
+menu.pt_BR
+menu.pt
+menu
+
+
+5 -  Se você escolheu uma linguagem que usa caracteres multi-bytes, você
+deve configurar as fontes adequadamente. Leia a página de manual para o
+XcreateFontSet para obter mais detalhes sobre isto. Você deve mudar o arquivo
+~/G/D/WindowMaker para as fontes usadas nas barras de título, menus e
+outras coisas. Para as fontes usadas nas janelas de diálogo, mude o arquivo
+~/G/D/WMGLOBAL. O %d no font names não deve ser removido. Você pode ainda usar
+o wsetfont script para esta tarefa. Leia o próprio script para maiores instruções.
+
+Por exemplo, você pode especificar o seguinte no ~/G/D/WindowMaker:
+
+WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
+MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
+MenuTextFont = "-*-helvetica-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-14-*";
+IconTitleFont = "-*-helvetica-medium-r-normal-*-8-*,-*-*-medium-r-normal-*-12-*";
+ClipTitleFont = "-*-helvetica-bold-r-normal-*-10-*,-*-*-medium-r-normal-*-12-*";
+DisplayFont = "-*-helvetica-medium-r-normal-*-12-*,-*-*-medium-r-normal-*-12-*";
+
+e no ~/G/D/WMGLOBAL:
+
+SystemFont = "-*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*";
+BoldSystemFont = "-*-*-medium-r-normal-*-%d-*-*-*-*-*-*-*";
+
+
+As duas fontes acima são usadas somente por aplicações que
+usem WINGs (o Window Maker e WPrefs.app)
+
+O script wsetfont que é fornecido vai permitir com que você mude as
+definições de fonte do modo mais fácil. Dê uma olhada no script para maiores
+detalhes sobre o uso.
+
+
+
+Traduzido por Ricardo Sartori <sartori@inf.ufsc.br>

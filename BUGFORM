@@ -70,6 +70,8 @@ X Server Vendor: ...................... Color Depth: .................
 WindowMaker Version (run "wmaker -version"): .........................
 
 
-11. backtrace if the bug made Window Maker crash. The README file 
-has instructions to make one.
+11. backtrace if the bug made Window Maker crash. PLEASE SEND THE
+BACKTRACE. Your bug report might be of not much use without one.
+strace/truss outputs are usually not usefull for crashes, so you can
+skip it. The README file has instructions to make one.
 
