@@ -80,7 +80,7 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 	return;
 
     icon = RCreateImageFromDrawable(scr->rcontext, win, None);
-    if (!icon) 
+    if (!icon)
 	return;
 
     XUnmapWindow(dpy, win);
@@ -93,6 +93,8 @@ DoKaboom(WScreen *scr, Window win, int x, int y)
 	RDestroyImage(icon);
 	return;
     }
+
+    XSetClipMask(dpy, scr->copy_gc, None);
 
     for (i=0; i<DEMATERIALIZE_STEPS; i++) {
 	XEvent foo;

@@ -139,8 +139,11 @@ wMenuCreate(WScreen *screen, char *title, int main_menu)
     }
 
     menu->frame->flags.justification = WTJ_LEFT;
-    
+
+#ifndef NEWSTUFF
+    /* XXX */
     menu->frame->rbutton_image = screen->b_pixmaps[WBUT_CLOSE];
+#endif
 
     menu->entry_no = 0;
     menu->alloced_entries = 0;

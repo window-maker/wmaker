@@ -37,6 +37,14 @@
  *--------------------------------------------------------------------
  */
 
+
+/*
+ * #undefine if you dont want texture plugin support or your system have
+ * some sort of problem with them.
+ */
+#define TEXTURE_PLUGIN
+
+
 /* undefine WEENDOZE_CYCLING to remove all Windoze style Alt-Tab cycling
  * If define, windoze cycling must still be enabled with the 
  * WindozeCycling = YES and FinishedCyclingKey = Meta_L options
@@ -158,7 +166,7 @@
  * define HIDDENDOT if you want a dot to be shown in the application icon
  * of applications that are hidden.
  */
-#undef HIDDENDOT
+#define HIDDENDOT
 
 
 /*
@@ -166,10 +174,11 @@
  * programs that have buggy implementations of such hint and place
  * themselves in strange locations.
  */
-#undef IGNORE_NOPPOSITION
+#undef IGNORE_PPOSITION
 
 
 #define SILLYNESS
+
 
 /*
  *..........................................................................
@@ -236,6 +245,12 @@
 #define DEF_EXIT_SCRIPT "exitscript"
 
 #define DEFAULTS_DIR "Defaults"
+
+#ifdef USE_TIFF
+#define DEF_BUTTON_IMAGES PKGDATADIR"/buttons.tiff"
+#else
+#define DEF_BUTTON_IMAGES PKGDATADIR"/buttons.xpm"
+#endif
 
 /* the file of the system wide submenu to be forced into the main menu */
 /* remove the comments if you want it */

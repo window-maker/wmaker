@@ -155,6 +155,7 @@ alreadyRunningError(Display *dpy, XErrorEvent *error)
  * not be freed by anybody.
  *---------------------------------------------------------------------- 
  */
+#ifndef NEWSTUFF
 static void
 allocButtonPixmaps(WScreen *scr)
 {
@@ -181,6 +182,7 @@ allocButtonPixmaps(WScreen *scr)
       pix->shared = 1;
     scr->b_pixmaps[WBUT_KILL] = pix;
 }
+#endif
 
 
 
@@ -447,8 +449,10 @@ createPixmaps(WScreen *scr)
 	scr->dock_dots = make3Dots(scr);
     }
 
+#ifndef NEWSTUFF
     /* titlebar button pixmaps */
     allocButtonPixmaps(scr);
+#endif
 }
 
 

@@ -45,7 +45,7 @@ void wKWMInitStuff(WScreen *scr);
 
 Bool wKWMGetUsableArea(WScreen *scr, WArea *area);
 
-void wKWMCheckClientHints(WWindow *wwin, int *workspace);
+void wKWMCheckClientHints(WWindow *wwin, int *layer, int *workspace);
 
 Bool wKWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event);
 

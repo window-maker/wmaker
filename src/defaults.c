@@ -130,7 +130,9 @@ static int getFont();
 static int getColor();
 static int getKeybind();
 static int getModMask();
-
+#ifdef NEWSTUFF
+static int getRImage();
+#endif
 
 /* value setting functions */
 static int setJustify();
@@ -167,6 +169,10 @@ static int setIconPosition();
 
 static int setClipTitleFont();
 static int setClipTitleColor();
+
+#ifdef NEWSTUFF
+static int setButtonImages();
+#endif
 
 static int updateUsableArea();
 
@@ -448,9 +454,15 @@ WDefaultEntry optionList[] = {
     },
 #endif /* WEENDOZE_CYCLE */
       /* style options */
+#ifdef NEWSTUFF
+    {"WindowButtonImages", DEF_BUTTON_IMAGES, 	NULL,
+	  &wPreferences.button_images,	getRImage,	setButtonImages
+    },
+#else
     {"WidgetColor",	"(solid, gray)",	NULL,
 	  NULL,				getTexture,	setWidgetColor,
     },
+#endif
     {"WorkspaceSpecificBack","()",	NULL,
 	  NULL,		getWSSpecificBackground, setWorkspaceSpecificBack
     },
@@ -535,7 +547,6 @@ WDefaultEntry optionList[] = {
     {"IconTitleBack",	"black",       		NULL,
 	  NULL,				getColor,	setIconTitleBack
     },
-
 	/* keybindings */
 #ifndef LITE
     {"RootMenuKey",	"None",			(void*)WKBD_ROOTMENU,
@@ -1036,6 +1047,8 @@ wDefaultsCheckDomains(void *foo)
 #define REFRESH_ICON_FONT	(1<<7)
 #define REFRESH_WORKSPACE_BACK	(1<<8)
 
+#define REFRESH_BUTTON_IMAGES   (1<<9)
+
 static void 
 refreshMenus(WScreen *scr, int flags)
 {
@@ -1202,6 +1215,37 @@ wReadDefaults(WScreen *scr, proplist_t new_dict)
         if (needs_refresh & REFRESH_ICON_TILE)
             refreshAppIcons(scr, needs_refresh);
 
+#ifdef NEWSTUFF
+	if ((needs_refresh & REFRESH_BUTTON_IMAGES)
+	    && wPreferences.button_images) {
+
+	    int w, h;
+	    RImage *image = wPreferences.button_images;
+	    RImage *tmp;
+	    int theight;
+
+	    w = wPreferences.button_images->width / 2;
+	    h = wPreferences.button_images->height / PRED_BPIXMAPS;
+
+	    theight = scr->title_font->height + TITLEBAR_EXTRA_HEIGHT - 3;
+
+	    for (i = 0; i < PRED_BPIXMAPS; i++) {
+		tmp = RGetSubImage(image, 0, i * h, w, h);
+		if (scr->button_images[0][i])
+		    RDestroyImage(scr->button_images[0][i]);
+
+		scr->button_images[0][i] = RScaleImage(tmp, theight, theight);
+		RDestroyImage(tmp);
+
+		tmp = RGetSubImage(image, w, i * h, image->width - w, h);
+		if (scr->button_images[1][i])
+		    RDestroyImage(scr->button_images[1][i]);
+
+		scr->button_images[1][i] = RScaleImage(tmp, theight, theight);
+		RDestroyImage(tmp);
+	    }
+	}
+#endif /* NEWSTUFF */
         wRefreshDesktop(scr);
     }
 }
@@ -2100,11 +2144,11 @@ getFont(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 {
     static WFont *font;
     char *val;
-    
+
     STRINGP("Font");
-    
+
     val = PLGetString(value);
-    
+
     font = wLoadFont(val);
     if (!font) {
 	wfatal(_("could not load any usable font!!!"));
@@ -2113,10 +2157,9 @@ getFont(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 
     if (ret)
       *ret = font;
-    
-    if (addr) {
-	wwarning("BUG:can't assign font value outside update function");
-    }
+
+    /* can't assign font value outside update function */
+    wassertrv(addr == NULL, True);
     
     return True;
 }
@@ -2238,7 +2281,7 @@ getModMask(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
     str = PLGetString(value);
     if (!str)
 	return False;
-    
+
     mask = wXModifierFromKey(str);
     if (mask < 0) {
 	wwarning(_("%s: modifier key %s is not valid"), entry->key, str);
@@ -2248,13 +2291,53 @@ getModMask(WScreen *scr, WDefaultEntry *entry, proplist_t value, void *addr,
 
     if (addr)
 	*(unsigned int*)addr = mask;
-    
+
     if (ret)
 	*ret = &mask;
-    
+
     return True;
 }
 
+
+#ifdef NEWSTUFF
+static int
+getRImages(WScreen *scr, WDefaultEntry *entry, proplist_t value,
+	   void *addr, void **ret)
+{
+    unsigned int mask;
+    char *str;
+    RImage *image;
+    int i, n;
+    int w, h;
+
+    STRINGP("Image File Path");
+
+    str = PLGetString(value);
+    if (!str)
+	return False;
+
+    image = RLoadImage(scr->rcontext, str, 0);
+    if (!image) {
+	wwarning(_("could not load image in option %s: %s"), entry->key,
+		 RMessageForError(RErrorCode));
+	return False;
+    }
+
+    if (*(RImage**)addr) {
+	RDestroyImage(*(RImage**)addr);
+    }
+    if (addr)
+	*(RImage**)addr = image;
+
+    assert(ret == NULL);
+    /*
+    if (ret)
+	*(RImage**)ret = image;
+     */
+
+    return True;
+}
+#endif
 
 
 /* ---------------- value setting functions --------------- */
@@ -2383,7 +2466,7 @@ setWinTitleFont(WScreen *scr, WDefaultEntry *entry, WFont *font, void *foo)
     XSetFont(dpy, scr->window_title_gc, font->font->fid);
 #endif
     
-    return REFRESH_WINDOW_FONT;
+    return REFRESH_WINDOW_FONT|REFRESH_BUTTON_IMAGES;
 }
 
 
@@ -2916,6 +2999,13 @@ updateUsableArea(WScreen *scr, WDefaultEntry *entry, void *bar, void *foo)
 
 
 
+static int
+setButtonImages(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
+{
+    return REFRESH_BUTTON_IMAGES;
+}
+
+
 /*
  * Very ugly kluge.
  * Need access to the double click variables, so that all widgets in
@@ -2936,6 +3026,4 @@ setDoubleClick(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
     
     return 0;
 }
-
-
 

@@ -200,7 +200,9 @@ typedef struct _WScreen {
     GC icon_select_gc;
     GC draw_gc;			       /* gc for drawing misc things */
 
+#ifndef NEWSTUFF
     struct WPixmap *b_pixmaps[PRED_BPIXMAPS]; /* internal pixmaps for buttons*/
+#endif
     struct WPixmap *menu_radio_indicator;/* left menu indicator */
     struct WPixmap *menu_check_indicator;/* left menu indicator for checkmark */
     struct WPixmap *menu_mini_indicator;   /* for miniwindow */
@@ -245,8 +247,12 @@ typedef struct _WScreen {
 
     Pixmap def_icon_pixmap;	       /* default icons */
     Pixmap def_ticon_pixmap;
-    
+
     struct WDialogData *dialog_data;
+
+#ifdef NEWSTUFF
+    struct RImage *button_images[2][PRED_BPIXMAPS];/* scaled tbar btn images */
+#endif
 
     /* state and other informations */
     short cascade_index;	       /* for cascade window placement */

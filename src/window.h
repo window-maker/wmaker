@@ -271,6 +271,7 @@ typedef struct WWindow {
 #ifdef KWM_HINTS
 	unsigned int kwm_hidden_for_modules:1;
 	unsigned int kwm_managed:1;
+	unsigned int kwm_menubar:1;
 #endif
 #ifdef OLWM_HINTS
 	unsigned int olwm_push_pin_out:1;/* emulate pushpin behaviour */

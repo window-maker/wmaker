@@ -714,13 +714,10 @@ wClientGetNormalHints(WWindow *wwin, XWindowAttributes *wattribs, Bool geometry,
 	wwin->normal_hints->min_width = wwin->normal_hints->max_width;
     }
 
-    if (pre_icccm && !wwin->screen_ptr->flags.startup && geometry) {
-#ifdef DEBUG
-	printf("PRE ICCCM\n");	
-#endif	
 #ifdef IGNORE_PPOSITION
-	wwin->normal_hints->flags &= ~PPosition;
+    wwin->normal_hints->flags &= ~PPosition;
 #endif
+    if (pre_icccm && !wwin->screen_ptr->flags.startup && geometry) {
 	if (wwin->normal_hints->flags & (USPosition|PPosition)) {
 	    *x = wwin->normal_hints->x;
 	    *y = wwin->normal_hints->y;

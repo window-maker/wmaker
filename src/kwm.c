@@ -212,9 +212,12 @@ static KWMModuleList *KWMDockWindows = NULL;
 /* window decoration types */
 enum {
     KWMnoDecoration = 0, 
-	KWMnormalDecoration = 1, 
-	KWMtinyDecoration = 2,
-	KWMnoFocus = 256
+    KWMnormalDecoration = 1, 
+    KWMtinyDecoration = 2,
+    KWMnoFocus = 256,
+    KWMstandaloneMenuBar = 512, 
+    KWMdesktopIcon = 1024,
+    KWMstaysOnTop = 2048
 };
 
 
@@ -716,7 +719,7 @@ wKWMShutdown(WScreen *scr, Bool closeModules)
 
 
 void
-wKWMCheckClientHints(WWindow *wwin, int *workspace)
+wKWMCheckClientHints(WWindow *wwin, int *layer, int *workspace)
 {
     long val;
 
@@ -736,6 +739,21 @@ wKWMCheckClientHints(WWindow *wwin, int *workspace)
 	    break;
 	 case KWMtinyDecoration:
 	    wwin->client_flags.no_resizebar = 1;
+	    break;
+	 case KWMstandaloneMenuBar:
+	    wwin->client_flags.no_titlebar = 1;
+	    wwin->client_flags.no_resizebar = 1;
+	    wwin->client_flags.no_resizable = 1;
+	    wwin->client_flags.skip_window_list = 1;
+	    wwin->client_flags.no_hide_others = 1;
+	    wwin->flags.kwm_menubar = 1;
+	    *layer = WMMainMenuLevel;
+	    break;
+	 case KWMdesktopIcon:
+	    *layer = WMDesktopLevel;
+	    break;
+	 case KWMstaysOnTop:
+	    *layer = WMFloatingLevel;
 	    break;
 	 case KWMnormalDecoration:
 	 default:
@@ -757,13 +775,11 @@ wKWMCheckClientInitialState(WWindow *wwin)
 
 	wwin->client_flags.omnipresent = 1;
     }
-    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED, &val) 
-	&& val) {
+    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_ICONIFIED, &val) && val) {
 
 	wwin->flags.miniaturized = 1;
     }
-    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &val) 
-	&& val) {
+    if (getSimpleHint(wwin->client_win, _XA_KWM_WIN_MAXIMIZED, &val) && val) {
 
 	wwin->flags.maximized = MAX_VERTICAL|MAX_HORIZONTAL;
     }
@@ -801,7 +817,7 @@ wKWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 	printf("got KDE sticky change\n");
 #endif
 	flag = !getSimpleHint(wwin->client_win, _XA_KWM_WIN_STICKY, 
-			     &value) || value;
+			      &value) || value;
 
 	if (flag != wwin->client_flags.omnipresent) {
 
@@ -1393,12 +1409,26 @@ void
 wKWMUpdateActiveWindowHint(WScreen *scr)
 {
     long val;
+    WWindow *wwin, *tmp;
 
     if (!scr->focused_window || !scr->focused_window->flags.focused)
 	val = None;
-    else
+    else {
 	val = (long)(scr->focused_window->client_win);
 
+	/* raise the menubar thing */
+	wwin = scr->focused_window;
+	tmp = wwin->prev;
+	while (tmp) {
+	    if (tmp->flags.kwm_menubar 
+		&& tmp->transient_for == wwin->client_win) {
+		wRaiseFrame(tmp->frame->core);
+		break;
+	    }
+	    tmp = tmp->prev;
+	}
+    }
+    
     XChangeProperty(dpy, scr->root_win, _XA_KWM_ACTIVE_WINDOW,
 		    _XA_KWM_ACTIVE_WINDOW, 32, PropModeReplace, 
 		    (unsigned char*)&val, 1);
