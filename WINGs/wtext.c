@@ -3,6 +3,7 @@
 
 
 #include "WINGsP.h"
+#include <ctype.h>
 #include <X11/keysym.h>
 #include <X11/Xatom.h>
 
@@ -1956,7 +1957,7 @@ insertTextInteractively(Text *tPtr, char *text, int len)
 {
     TextBlock *tb;
     char *newline = NULL;
-    
+
     if (!tPtr->flags.editable) {
         XBell(tPtr->view->screen->display, 0);
         return;
@@ -2272,7 +2273,7 @@ R_imaGFX:      if(tb->next) {
     }
 
     if (!control_pressed && tPtr->flags.ownsSelection) 
-        releaseSelection(tPtr);
+        ;//releaseSelection(tPtr);
 }
 
 static void
@@ -3854,14 +3855,39 @@ WMThawText(WMText *tPtr)
 
 }
 
+/* find first occurence of a string */
+static char *
+mystrstr(char *haystack, char *needle, unsigned short len, char *end,
+    Bool caseSensitive)
+{
+    char *ptr;
 
+    if(!haystack || !needle || !end)
+        return NULL;
+
+    for (ptr = haystack; ptr < end; ptr++) {
+        if(caseSensitive) { 
+            if (*ptr == *needle && !strncmp(ptr, needle, len))
+                return ptr;
+
+        } else {
+            if (tolower(*ptr) == tolower(*needle) && 
+                !strncasecmp(ptr, needle, len))
+                return ptr;
+             
+        }
+    }
+    return NULL;
+}
+
+/* find last occurence of a string */
 static char *
 mystrrstr(char *haystack, char *needle, unsigned short len, char *end,
     Bool caseSensitive)
 {
     char *ptr;
 
-    if(!haystack || !needle)
+    if(!haystack || !needle || !end)
         return NULL;
 
     for (ptr = haystack-2; ptr > end; ptr--) {
@@ -3870,7 +3896,7 @@ mystrrstr(char *haystack, char *needle, unsigned short len, char *end,
                 return ptr;
         } else {
             if (tolower(*ptr) == tolower(*needle) && 
-                strncasecmp(ptr, needle, len))
+                !strncasecmp(ptr, needle, len))
                 return ptr;
              
         }
@@ -3884,12 +3910,13 @@ WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
     Bool caseSensitive)
 {
     TextBlock *tb;
-    char *mark;
+    char *mark=NULL;
     unsigned short pos;
 
     if (!tPtr || !needle)
         return False;
 
+#if 0
     if (! (tb = tPtr->currentTextBlock)) {
         if (! (tb = ( (direction > 0) ?
                  tPtr->firstTextBlock : tPtr->lastTextBlock) ) ){
@@ -3901,31 +3928,45 @@ WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
         if(tb !=  tPtr->lastTextBlock)
             tb = tb->prior;
     }
+#endif
+    tb = tPtr->currentTextBlock;
+    pos = tPtr->tpos;
    
 
     while(tb) {
         if (!tb->graphic) { 
-            pos = tPtr->tpos;
-            if(pos+1 < tb->used)
-                pos++;
 
-            if(tb->used - pos> 0 && pos > 0) { 
-                char tmp = tb->text[tb->used];
-                tb->text[tb->used] = 0;
+            if(direction > 0) { 
+                if(pos+1 < tb->used)
+                    pos++;
 
-output(&tb->text[pos], tb->used - pos);
-                if(direction > 0) 
-                     mark = strstr(&tb->text[pos], needle);
-                else
-                     mark = mystrrstr(&tb->text[pos], needle, 
-                        strlen(needle), tb->text, caseSensitive);
+                if(tb->used - pos> 0 && pos > 0) { 
+                     mark = mystrstr(&tb->text[pos], needle, 
+                        strlen(needle), &tb->text[tb->used], caseSensitive);
 
-                tb->text[tb->used] = tmp;
+                } else {
+                    tb = tb->next;
+                    pos = 0;
+                    continue;
+                }
 
             } else {
-                return False;
-            }
-                
+                if(pos-1 > 0)
+                    pos--;
+
+                if(pos > 0) { 
+                     mark = mystrrstr(&tb->text[pos], needle, 
+                        strlen(needle), tb->text, caseSensitive);
+                } else {
+                    tb = tb->prior;
+                    if(!tb)
+                        return False;
+                    pos = tb->used;
+                    continue;
+               }
+            }   
+
+
             if(mark) { 
                 WMFont *font = tPtr->flags.monoFont?tPtr->dFont:tb->d.font;
 
@@ -3946,7 +3987,9 @@ output(&tb->text[pos], tb->used - pos);
 
         }   
         tb = (direction>0) ? tb->next : tb->prior;
-        pos = 0;
+        if(tb) { 
+            pos = (direction>0) ? 0 : tb->used;
+        }
     }
 
     return False;
