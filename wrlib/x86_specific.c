@@ -37,7 +37,7 @@ x86_check_mmx()
     result = 0;
 
     asm volatile
-        ("pushal		\n" // please don't forget this in any asm
+        ("pushal		\n" // please dont forget this in any asm
          "pushfl		\n" // check whether cpuid supported
 	 "pop %%eax		\n"
 	 "movl %%eax, %%ebx	\n"
@@ -80,7 +80,6 @@ x86_check_mmx()
  * 
  * - try to align stack (local variable space) into quadword boundary
  */
-
 
 
 
@@ -190,19 +189,25 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image, // 8
 
 	 "movzwl -24(%ebp), %ecx	\n" // ecx = pixel.red
 	 "movl 24(%ebp), %edi		\n" // edi = rtable
+	 //agi
 	 "leal (%edi, %ecx, 2), %eax	\n" // eax = &rtable[pixel.red]
+	 // agi
 	 "movw (%eax), %dx		\n" // dx = rtable[pixel.red]
 	 "movw %dx, -16(%ebp)		\n" // save rr
 
 	 "movzwl -22(%ebp), %ecx	\n" // ecx = pixel.green
 	 "movl 28(%ebp), %edi		\n" // edi = gtable
+	 //agi
 	 "leal (%edi, %ecx, 2), %eax	\n" // eax = &gtable[pixel.green]
+	 //agi
 	 "movw (%eax), %dx		\n" // dx = gtable[pixel.green]
 	 "movw %dx, -14(%ebp)		\n" // save gg
 
 	 "movzwl -20(%ebp), %ecx	\n" // ecx = pixel.blue
 	 "movl 32(%ebp), %edi		\n" // ebx = btable
+	 //agi
 	 "leal (%edi, %ecx, 2), %eax	\n" // eax = &btable[pixel.blue]
+	 //agi
 	 "movw (%eax), %dx		\n" // dx = btable[pixel.blue]
 	 "movw %dx, -12(%ebp)		\n" // save bb
 
@@ -300,12 +305,127 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image, // 8
 }
 
 
+
+
+
+
+void
+x86_mmx_TrueColor_24_to_16(unsigned char *image, // 8
+			   unsigned short *ximage, // 12
+			   short *err, // 16
+			   short *nerr, // 20
+			   short *rtable, // 24
+			   short *gtable, // 28
+			   short *btable, // 32
+			   int dr, // 36
+			   int dg, // 40
+			   int db, // 44
+			   unsigned int roffs, // 48
+			   unsigned int goffs, // 52
+			   unsigned int boffs, // 56
+			   int width, // 60
+			   int height, // 64
+			   int line_offset) // 68
+{
+    /*
+     int x; //-4
+     long long rrggbbaa;// -16
+     long long pixel; //-24
+     short *tmp_err; //-32
+     short *tmp_nerr; //-36
+     * 
+     int w1; // -64
+     int w2; // -68
+     */
+
+    asm volatile
+	(
+	 "subl $128, %esp		\n" // alloc some more stack
+
+	 "pushal       			\n"
+	 
+	 "movl 60(%ebp), %eax		\n" // eax = width
+	 "movl %eax, %ebx		\n"
+	 "shrl $2, %eax			\n"
+	 "movl %eax, -64(%ebp)		\n" // w1 = width / 4
+	 "andl $3, %ebx			\n"
+	 "movl %ebx, -68(%ebp)		\n" // w2 = width % 4
+
+	 
+".LoopYc:				\n"
+	 "movl 60(%ebp), %eax		\n"
+	 "movl %eax, -4(%ebp)		\n" // x = width
+
+	 "decl 64(%ebp)			\n" // height--
+	 "js .Endc			\n" // if height < 0 then end
+
+	 "movl 64(%ebp), %eax		\n"
+	 "decl %eax			\n" // y--
+	 "movl %eax, 64(%ebp)		\n"
+	 "js .Endc			\n" // if y < 0, goto end
+	 "andl $1, %eax			\n"
+	 "jz .LoopY_1c			\n" // if (y&1) goto LoopY_1
+
+".LoopY_0c:				\n"
+
+	 "movl 16(%ebp), %ebx		\n" // ebx = err
+	 "movl %ebx, -36(%ebp)		\n" // [-36] = err
+	 "movl 20(%ebp), %eax		\n" //
+	 "movl %eax, -32(%ebp)		\n" // [-32] = nerr
+
+	 "jmp .LoopX_1c			\n"
+
+".LoopY_1c:				\n"
+
+	 "movl 20(%ebp), %ebx		\n" // ebx = nerr
+	 "movl %ebx, -36(%ebp)		\n" // [-36] = nerr
+	 "movl 16(%ebp), %eax		\n" //
+	 "movl %eax, -32(%ebp)		\n" // [-32] = eerr
+
+	 ".align 16			\n"
+
+	 "movl %eax, -4(%ebp)		\n" // x = w1
+".LoopX_1c:				\n"
+	 "decl -4(%ebp)			\n" // x--
+	 "js .Xend1_c			\n" // if x < 0 then end
+	 
+	 // do conversion of 4 pixels
+	 "movq 16(%ebp), %mm0		\n" // mm0 = err
+
+
+
+	 
+	 "jmp .LoopX_1c			\n"
+".Xend1_c:				\n"
+	 
+	 "movl -68(%ebp), %eax		\n"
+	 "movl %eax, -4(%ebp)		\n" // x = w2	 
+".LoopX_2c:				\n"
+	 "decl -4(%ebp)			\n" // x--
+	 "js .Xend2_c			\n" //
+	 // do conversion
+	 "jmp .LoopX_2c			\n"
+".Xend2_c:				\n"
+
+	 "movl -64(%ebp), %eax		\n"
+	 "jmp .LoopYc			\n"
+
+".Endc:					\n" // THE END
+	 
+	 "emms				\n"
+
+	 "popal				\n"
+	 );
+}
+
+
+
 #endif /* ASM_X86_MMX */
 
 
 
 void
-x86_PseudoColor_to_8(unsigned char *image, // 8
+x86_PseudoColor_32_to_8(unsigned char *image, // 8
 		     unsigned char *ximage, // 12
 		     char *err, // 16
 		     char *nerr, // 20
@@ -364,7 +484,7 @@ x86_PseudoColor_to_8(unsigned char *image, // 8
 ".LoopY_0b:				\n"
 
 	 "movl 16(%ebp), %ebx		\n" // ebx = err
-//	 "movl %ebx, -36(%ebp)		\n" // [-36] = err
+//useless "movl %ebx, -36(%ebp)		\n" // [-36] = err
 	 "movl 20(%ebp), %ecx		\n" //
 	 "movl %ecx, -32(%ebp)		\n" // [-32] = nerr
 
@@ -375,7 +495,7 @@ x86_PseudoColor_to_8(unsigned char *image, // 8
 ".LoopY_1b:				\n"
 
 	 "movl 20(%ebp), %ebx		\n" // ebx = nerr
-//	 "movl %ebx, -36(%ebp)		\n" // [-36] = nerr
+//useless "movl %ebx, -36(%ebp)		\n" // [-36] = nerr
 	 "movl 16(%ebp), %ecx		\n" //
 	 "movl %ecx, -32(%ebp)		\n" // [-32] = err
 
@@ -404,7 +524,9 @@ x86_PseudoColor_to_8(unsigned char *image, // 8
 ".NEGRb:				\n"
 	 "xorw %dx, %dx			\n"
 ".OKRb:					\n"
+	 //partial reg
 	 "leal (%edi, %edx, 2), %ecx	\n" // ecx = &ctable[pixel.red]
+	 //agi
 	 "movl (%ecx), %eax		\n" // ax = ctable[pixel.red]
 	 "movw %ax, -12(%ebp)		\n" // save rr
 
@@ -448,7 +570,9 @@ x86_PseudoColor_to_8(unsigned char *image, // 8
 ".NEGGb:				\n"
 	 "xorw %dx, %dx			\n"
 ".OKGb:					\n"
+	 // partial reg
 	 "leal (%edi, %edx, 2), %ecx	\n" // ecx = &ctable[pixel.grn]
+	 //agi
 	 "movw (%ecx), %ax		\n" // ax = ctable[pixel.grn]
 	 "movw %ax, -16(%ebp)		\n" // save gg
 
@@ -493,7 +617,9 @@ x86_PseudoColor_to_8(unsigned char *image, // 8
 ".NEGBb:				\n"
 	 "xorw %dx, %dx			\n"
 ".OKBb:					\n"
+	 //partial reg
 	 "leal (%edi, %edx, 2), %ecx	\n" // ecx = &ctable[pixel.blu]
+	 //agi
 	 "movw (%ecx), %ax		\n" // ax = ctable[pixel.blu]
 	 "movw %ax, -20(%ebp)		\n" // save bb
 
@@ -532,7 +658,9 @@ x86_PseudoColor_to_8(unsigned char *image, // 8
 	 "addw -20(%ebp), %ax		\n" // ax = cpcpc*rr + cpc*gg + bb
 
 	 "movl 40(%ebp), %ecx		\n"
+	 //agi
 	 "leal (%ecx, %eax, 4), %edx	\n"
+	 //agi
 	 "movb (%edx), %cl		\n" // cl = pixels[ax]
 
 	 // store the pixel

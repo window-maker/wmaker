@@ -493,14 +493,19 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
 
 
     for(k = 0; k < tmp->height; ++k) {
+	CONTRIB *pp;
+
 	sp = src->data + src->width*k*sch;
-	
+
 	for(i = 0; i < tmp->width; ++i) {
 	    rweight = gweight = bweight = 0.0;
+	    
+	    pp = contrib[i].p;
+	    
 	    for(j = 0; j < contrib[i].n; ++j) {
-		rweight += sp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
-		gweight += sp[contrib[i].p[j].pixel+1] * contrib[i].p[j].weight;
-		bweight += sp[contrib[i].p[j].pixel+2] * contrib[i].p[j].weight;
+		rweight += sp[pp[j].pixel] * pp[j].weight;
+		gweight += sp[pp[j].pixel+1] * pp[j].weight;
+		bweight += sp[pp[j].pixel+2] * pp[j].weight;
 	    }
 	    *p++ = CLAMP(rweight, 0, 255);
 	    *p++ = CLAMP(gweight, 0, 255);
@@ -570,6 +575,8 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
     sp = malloc(tmp->height*3);
 
     for(k = 0; k < new_width; ++k) {
+	CONTRIB *pp;
+	
 	p = dst->data + k*3;
 
 	/* copy a column into a row */
@@ -587,10 +594,13 @@ RSmoothScaleImage(RImage *src, unsigned new_width, unsigned new_height)
 	}
 	for(i = 0; i < new_height; ++i) {
 	    rweight = gweight = bweight = 0.0;
+	    
+ 	    pp = contrib[i].p;
+	    
 	    for(j = 0; j < contrib[i].n; ++j) {
-		rweight += sp[contrib[i].p[j].pixel] * contrib[i].p[j].weight;
-		gweight += sp[contrib[i].p[j].pixel+1] * contrib[i].p[j].weight;
-		bweight += sp[contrib[i].p[j].pixel+2] * contrib[i].p[j].weight;
+		rweight += sp[pp[j].pixel] * pp[j].weight;
+		gweight += sp[pp[j].pixel+1] * pp[j].weight;
+		bweight += sp[pp[j].pixel+2] * pp[j].weight;
 	    }
 	    *p = CLAMP(rweight, 0, 255);
 	    *(p+1) = CLAMP(gweight, 0, 255);

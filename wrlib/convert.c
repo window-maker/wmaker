@@ -42,7 +42,7 @@ extern Pixmap R_CreateXImageMappedPixmap(RContext *context, RXImage *ximage);
 
 
 #ifdef ASM_X86
-extern void x86_PseudoColor_to_8(unsigned char *image,
+extern void x86_PseudoColor_32_to_8(unsigned char *image,
 				 unsigned char *ximage, 
 				 char *err, char *nerr,
 				 short *ctable,
@@ -307,7 +307,7 @@ image2TrueColor(RContext *ctx, RImage *image)
 #endif
 
 #ifdef ASM_X86_MMX
-	if (ctx->depth == 16 && image->format == RRGBAFormat 
+	if (ctx->depth == 16 && image->format == RRGBAFormat
 	    && x86_check_mmx()) {
 	    short *err;
 	    short *nerr;
@@ -324,7 +324,6 @@ image2TrueColor(RContext *ctx, RImage *image)
 	    memset(err, 0, 8*(image->width+3));
 	    memset(nerr, 0, 8*(image->width+3));
 
-	    puts("USING MMX");
 	    x86_mmx_TrueColor_32_to_16(image->data, 
 				       (unsigned short*)ximg->image->data, 
 				       err+8, nerr+8,
@@ -527,7 +526,7 @@ image2PseudoColor(RContext *ctx, RImage *image)
 	memset(nerr, 0, 4*(image->width+3));
 
 #ifdef ASM_X86
-	x86_PseudoColor_to_8(image->data, ximg->image->data,
+	x86_PseudoColor_32_to_8(image->data, ximg->image->data,
 			     err+4, nerr+4,
 			     rtable,
 			     dr, dg, db, ctx->pixels, cpc,

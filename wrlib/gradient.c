@@ -149,6 +149,8 @@ renderHGradient(unsigned width, unsigned height, int r0, int g0, int b0,
     return image;
 }
 
+
+
 /*
  *----------------------------------------------------------------------
  * renderVGradient--
@@ -178,7 +180,7 @@ renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 	return NULL;
     }    
     iptr = (unsigned int*)ptr = image->data;
-    
+
     r = r0<<16;
     g = g0<<16;
     b = b0<<16;
@@ -186,22 +188,29 @@ renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0,
     dr = ((rf-r0)<<16)/(int)height;
     dg = ((gf-g0)<<16)/(int)height;
     db = ((bf-b0)<<16)/(int)height;
-    
 
     for (i=0; i<height; i++) {
 	rr = r>>16;
 	gg = g>>16;
 	bb = b>>16;
-	for (j=0; j<width/4; j++) {
-	    *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	    *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	    *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	    *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+	for (j=0; j<width/8; j++) {
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	    *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
 	}
-	switch (width%4) {
-	 case 3: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	 case 2: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
-	 case 1: *ptr++ = rr; *ptr++ = gg; *ptr++ = bb;
+	switch (width%8) {
+	 case 7: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 6: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 5: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 4: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 3: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 2: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
+	 case 1: *(ptr++) = rr; *(ptr++) = gg; *(ptr++) = bb;
 	}
         r+=dr;
         g+=dg;
@@ -231,8 +240,8 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
 		int rf, int gf, int bf)
 {
     RImage *image, *tmp;
-    int i, j, offset;
-    float a;
+    int j;
+    float a, offset;
     char *ptr;
 
     if (width == 1)
@@ -257,9 +266,9 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
     width = width * 3;
 
     /* copy the first line to the other lines with corresponding offset */
-    for (i=0, j=0, offset=0; i<height; i++, j += width) {
-        offset = (int)(a*i+0.5)*3;
-	memcpy(&(image->data[j]), &ptr[offset], width);
+    for (j=0, offset=0.0; j<width*height; j += width) {
+	memcpy(&(image->data[j]), &ptr[3*(int)offset], width);
+        offset += a;
     }
 
     RDestroyImage(tmp);
@@ -431,8 +440,8 @@ static RImage*
 renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
 {
     RImage *image, *tmp;
-    float a;
-    int i, offset, j;
+    float a, offset;
+    int j;
     unsigned char *ptr;
 
     assert(count > 2);
@@ -470,9 +479,9 @@ renderMDGradient(unsigned width, unsigned height, RColor **colors, int count)
     width = width * 3;
 
     /* copy the first line to the other lines with corresponding offset */
-    for (i=0, j=0, offset=0; i<height; i++, j += width) {
-        offset = (int)(a*i+0.5)*3;
-	memcpy(&(image->data[j]), &ptr[offset], width);
+    for (j=0, offset=0; j<width*height; j += width) {
+	memcpy(&(image->data[j]), &ptr[3*(int)offset], width);
+        offset += a;
     }
     RDestroyImage(tmp);
     return image;

@@ -30,7 +30,7 @@ print_help()
     puts(" -v <vis-id>	visual id to use");
 }
 
-
+#include "bench.h"
 int main(int argc, char **argv)
 {
     RContextAttributes attr;
@@ -190,9 +190,15 @@ int main(int argc, char **argv)
     printf("average time per convertion %f sec\n", rt/i);
     printf("------------------------------------------\n");
 #else
+    cycle_bench(1);
     imgh = RRenderMultiGradient(250, 250, colors, RGRD_HORIZONTAL);
+    cycle_bench(0);
+    cycle_bench(1);
     imgv = RRenderMultiGradient(250, 250, colors, RGRD_VERTICAL);
+    cycle_bench(0);
+    cycle_bench(1);
     imgd = RRenderMultiGradient(250, 250, colors, RGRD_DIAGONAL);
+    cycle_bench(0);
     RConvertImage(ctx, imgh, &pix);
     XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 0, 0);
 
