@@ -169,6 +169,7 @@ Exit(int status)
     exit(status);
 }
 
+
 void
 Restart(char *manager, Bool abortOnFailure)
 {

@@ -317,6 +317,7 @@ handleSig(int sig)
             XCloseDisplay(dpy);
         dpy = XOpenDisplay("");
         if (dpy) {
+	    XGrabServer(dpy);
             crashAction = wShowCrashingDialogPanel(sig);
             XCloseDisplay(dpy);
             dpy = NULL;

@@ -646,6 +646,7 @@ iconExpose(WObjDescriptor *desc, XEvent *event)
     wAppIconPaint(desc->parent);
 }
 
+
 static void
 iconDblClick(WObjDescriptor *desc, XEvent *event)
 {
@@ -676,17 +677,15 @@ iconDblClick(WObjDescriptor *desc, XEvent *event)
        return;
     }
 #endif /* REDUCE_APPICONS */
-    
-    printf("%i\n",wapp->refcount);
-    
+
     unhideHere = (event->xbutton.state & ShiftMask);
-    
+
     /* go to the last workspace that the user worked on the app */
-    if (!unhideHere)
+    if (!unhideHere && wapp->last_workspace != scr->current_workspace)
 	wWorkspaceChange(scr, wapp->last_workspace);
 
     wUnhideApplication(wapp, event->xbutton.button==Button2, unhideHere);
-    
+
     if (event->xbutton.state & MOD_MASK) {
 	wHideOtherApplications(aicon->icon->owner);
     }

@@ -236,7 +236,6 @@ static void
 hideWorkpaceName(void *data)
 {
     WScreen *scr = (WScreen*)data;
-    
 
     if (!scr->workspace_name_data || scr->workspace_name_data->count == 0) {
 	XUnmapWindow(dpy, scr->workspace_name);
@@ -253,6 +252,9 @@ hideWorkpaceName(void *data)
 	RImage *img = RCloneImage(scr->workspace_name_data->back);
 	Pixmap pix;
 
+	scr->workspace_name_timer = WMAddTimerHandler(30, hideWorkpaceName,
+						      scr);
+
 	RCombineImagesWithOpaqueness(img, scr->workspace_name_data->text,
 				     scr->workspace_name_data->count*255/10);
 
@@ -266,9 +268,6 @@ hideWorkpaceName(void *data)
 	XFlush(dpy);
 
 	scr->workspace_name_data->count--;
-
-	scr->workspace_name_timer = WMAddTimerHandler(40, hideWorkpaceName,
-						      scr);
     }
 }
 
@@ -375,7 +374,7 @@ showWorkspaceName(WScreen *scr, int workspace)
 
     scr->workspace_name_data = data;
 
-    scr->workspace_name_timer = WMAddTimerHandler(200, hideWorkpaceName, scr);
+    scr->workspace_name_timer = WMAddTimerHandler(300, hideWorkpaceName, scr);
 
     return;
 

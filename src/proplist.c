@@ -429,7 +429,7 @@ get_object(FILE *f)
 	    ungetc(c, f);
 	    pl = get_string(f);
 	} else {
-	    COMPLAIN(_("was expecting a string, dictionary, data or array."));
+	    COMPLAIN(_("was expecting a string, dictionary, data or array. If it's a string, try enclosing it with \"."));
 	    if (c=='#' || c=='/') {
 		wwarning(_("Comments are not allowed inside WindowMaker owned domain files."));
 	    }
