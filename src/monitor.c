@@ -131,6 +131,7 @@ int MonitorLoop(int argc, char **argv)
             (WTERMSIG(status) == SIGSEGV ||
              WTERMSIG(status) == SIGBUS ||
              WTERMSIG(status) == SIGILL ||
+             WTERMSIG(status) == SIGABRT ||
              WTERMSIG(status) == SIGFPE))
         {
             /* If so, we check when was the last restart.

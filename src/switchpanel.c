@@ -31,6 +31,78 @@
 #include "defaults.h"
 #include "switchpanel.h"
 #include "funcs.h"
+#include "xinerama.h"
+
+
+static char * tile_xpm[] = {
+"64 64 2 1",
+" 	c None",
+".	c #FFFFFF",
+"       .................................................        ",
+"     ......................................................     ",
+"   .........................................................    ",
+"  ...........................................................   ",
+"  ............................................................  ",
+" .............................................................. ",
+" .............................................................. ",
+"............................................................... ",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+"................................................................",
+" .............................................................. ",
+" .............................................................. ",
+" .............................................................. ",
+"  ............................................................  ",
+"   ..........................................................   ",
+"    ........................................................    ",
+"     ......................................................     ",
+"        ................................................        "};
+
 
 struct SwitchPanel {
   WScreen *scr;
@@ -38,64 +110,57 @@ struct SwitchPanel {
   WMBox *hbox;
   WMLabel *label;
   WMArray *icons;
+  WMArray *images;
   WMArray *windows;
   int current;
   
   WMColor *normalColor;
   WMColor *selectColor;
   
-  WMPixmap *defIcon;
+  RImage *defIcon;
+  
+  RImage *tile;
 };
+
+
+
 
 
 extern WPreferences wPreferences;
 
-#define ICON_IDEAL_SIZE 64
-#define ICON_EXTRASPACE 4
+#define ICON_IDEAL_SIZE 48
+#define ICON_EXTRASPACE 16
 
-static void addIconForWindow(WSwitchPanel *panel, WWindow *wwin, int iconWidth)
+static void changeImage(WSwitchPanel *panel, int index, int selected)
 {
-  WMLabel *label= WMCreateLabel(panel->hbox);
-  WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(label), False, True, iconWidth + ICON_EXTRASPACE, 0, 0);
-  RImage *image = NULL;
-  WMPixmap *pixmap;
+  WMPixmap *pixmap= NULL;
+  WMLabel *label = WMGetFromArray(panel->icons, index);
+  RImage *image= WMGetFromArray(panel->images, index);
   WMScreen *wscr = WMWidgetScreen(label);
-  
-  if (!WFLAGP(wwin, always_user_icon) && wwin->net_icon_image)
-      image = RRetainImage(wwin->net_icon_image);
-  if (!image)
-    image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class);
 
-  if (image && (abs(image->width - iconWidth) > 2 || abs(image->height - iconWidth) > 2)) {
-    RImage *nimage;
-    nimage= RScaleImage(image, iconWidth, (image->height * iconWidth / image->width));
-    RReleaseImage(image);
-    image= nimage;
-  }
-  
   if (image) {
-    pixmap= WMCreatePixmapFromRImage(wscr, image, 100);
-    RReleaseImage(image);
-  } else {
-    if (!panel->defIcon)
-    {
-      char *file = wDefaultGetIconFile(panel->scr, NULL, NULL, False);
-      if (file) {
-        char *path = FindImage(wPreferences.icon_path, file);
-        if (path) {
-          image = RLoadImage(panel->scr->rcontext, path, 0);
-          wfree(path);
-          
-          panel->defIcon= WMCreatePixmapFromRImage(wscr, image, 100);
-          RReleaseImage(image);
-        }
-      }
-    }
+    RColor bgColor;
+    RImage *back;
 
-    if (panel->defIcon)
-      pixmap= WMRetainPixmap(panel->defIcon);
-    else
-      pixmap= NULL;
+    if (selected) {
+      back= RCloneImage(panel->tile);
+      RCombineArea(back, image, 0, 0, image->width, image->height,
+                   (back->width - image->width)/2, (back->height - image->height)/2);
+      
+      pixmap= WMCreatePixmapFromRImage(wscr, back, -1);
+      RReleaseImage(back);
+    } else {
+      bgColor.alpha= 100;
+      bgColor.red = WMRedComponentOfColor(WMGrayColor(wscr))>>8;
+      bgColor.green = WMGreenComponentOfColor(WMGrayColor(wscr))>>8;
+      bgColor.blue = WMBlueComponentOfColor(WMGrayColor(wscr))>>8;
+
+      image= RCloneImage(image);
+      RCombineImageWithColor(image, &bgColor);
+      
+      pixmap= WMCreatePixmapFromRImage(wscr, image, -1);
+      RReleaseImage(image);
+    }
   }
 
   if (pixmap) {
@@ -103,7 +168,42 @@ static void addIconForWindow(WSwitchPanel *panel, WWindow *wwin, int iconWidth)
     WMSetLabelImagePosition(label, WIPImageOnly);
     WMReleasePixmap(pixmap);
   }
+}
 
+
+static void addIconForWindow(WSwitchPanel *panel, WWindow *wwin, int iconWidth)
+{
+  WMLabel *label= WMCreateLabel(panel->hbox);
+  WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(label), False, True, iconWidth + ICON_EXTRASPACE, 0, 0);
+  RImage *image = NULL;
+
+  if (!WFLAGP(wwin, always_user_icon) && wwin->net_icon_image)
+      image = RRetainImage(wwin->net_icon_image);
+  if (!image)
+      image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class);
+
+  if (!image && !panel->defIcon)
+  {
+    char *file = wDefaultGetIconFile(panel->scr, NULL, NULL, False);
+    if (file) {
+      char *path = FindImage(wPreferences.icon_path, file);
+      if (path) {
+        image = RLoadImage(panel->scr->rcontext, path, 0);
+        wfree(path);
+      }
+    }
+  }
+  if (!image && panel->defIcon)
+    image= RRetainImage(panel->defIcon);
+
+  if (image && (abs(image->width - iconWidth) > 2 || abs(image->height - iconWidth) > 2)) {
+    RImage *nimage;
+    nimage= RScaleImage(image, iconWidth, (image->height * iconWidth / image->width));
+    RReleaseImage(image);
+    image= nimage;
+  }
+
+  WMAddToArray(panel->images, image);
   WMAddToArray(panel->icons, label);
 }
 
@@ -153,6 +253,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, int workspace)
   height= iconWidth + 20 + 10 + ICON_EXTRASPACE;
   
   panel->icons= WMCreateArray(WMGetArrayItemCount(panel->windows));
+  panel->images= WMCreateArray(WMGetArrayItemCount(panel->windows));
   
   panel->win = WMCreateWindow(scr->wmscreen, "");
   WMResizeWidget(panel->win, width + 10, height);
@@ -189,37 +290,73 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, int workspace)
     WMReleaseFont(boldFont);
   }
   
+  {
+    RImage *tmp= NULL;
+    RColor bgColor;
+    char *path = FindImage(wPreferences.pixmap_path, "swtile.png");
+    if (path) {
+      tmp = RLoadImage(panel->scr->rcontext, path, 0);
+      wfree(path);
+    }
+    
+    if (!tmp)
+      tmp= RGetImageFromXPMData(scr->rcontext, tile_xpm);
+
+    panel->tile = RScaleImage(tmp, iconWidth+ICON_EXTRASPACE, iconWidth+ICON_EXTRASPACE);
+
+    bgColor.alpha = 255;
+    bgColor.red = WMRedComponentOfColor(WMGrayColor(scr->wmscreen))>>8;
+    bgColor.green = WMGreenComponentOfColor(WMGrayColor(scr->wmscreen))>>8;
+    bgColor.blue = WMBlueComponentOfColor(WMGrayColor(scr->wmscreen))>>8;
+
+    RCombineImageWithColor(panel->tile, &bgColor);
+
+    RReleaseImage(tmp);
+  }
+  
   panel->hbox = WMCreateBox(vbox);
   WMSetBoxHorizontal(panel->hbox, True);
   WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->hbox), True, True, 20, 0, 2);
 
   WM_ITERATE_ARRAY(panel->windows, wwin, i) {
       addIconForWindow(panel, wwin, iconWidth);
+      changeImage(panel, i, 0);
   }
 
   WMMapSubwidgets(panel->win);
   WMRealizeWidget(panel->win);
   WMMapWidget(panel->win);
-  WMMoveWidget(panel->win,
-               (WMScreenWidth(scr->wmscreen) - (width+10))/2,
-               (WMScreenHeight(scr->wmscreen) - height)/2);
+  {
+      WMPoint center;
 
-  WMSetWidgetBackgroundColor(WMGetFromArray(panel->icons, 0),
-                             panel->selectColor);
+      center= wGetPointToCenterRectInHead(scr, wGetHeadForPointerLocation(scr),
+                                           width+10, height);
+      WMMoveWidget(panel->win, center.x, center.y);
+  }
 
+  changeImage(panel, 0, 1);
+  
   return panel;
 }
 
 
 void wSwitchPanelDestroy(WSwitchPanel *panel)
 {
+  int i;
+  RImage *image;
+  WM_ITERATE_ARRAY(panel->images, image, i) {
+    if (image)
+      RReleaseImage(image);
+  }
   WMDestroyWidget(panel->win);
   WMFreeArray(panel->icons);
   WMFreeArray(panel->windows);
+  WMFreeArray(panel->images);
   WMReleaseColor(panel->selectColor);
   WMReleaseColor(panel->normalColor);
   if (panel->defIcon)
-    WMReleasePixmap(panel->defIcon);
+    RReleaseImage(panel->defIcon);
+  RReleaseImage(panel->tile);
   wfree(panel);
 }
 
@@ -228,12 +365,9 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back)
 {
   WWindow *wwin;
   int count = WMGetArrayItemCount(panel->windows);
-  WMLabel *label;
-  
-  label= WMGetFromArray(panel->icons, panel->current);
-  WMSetWidgetBackgroundColor(label, panel->normalColor);
-  WMSetLabelRelief(label, WRFlat);
 
+  changeImage(panel, panel->current, 0);
+  
   if (!back)
     panel->current = (count + panel->current - 1) % count;
   else
@@ -243,9 +377,7 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back)
   
   WMSetLabelText(panel->label, wwin->frame->title);
 
-  label= WMGetFromArray(panel->icons, panel->current);
-  WMSetWidgetBackgroundColor(label, panel->selectColor);
-  WMSetLabelRelief(label, WRSimple);
+  changeImage(panel, panel->current, 1);
   
   return wwin;
 }
