@@ -469,7 +469,7 @@ int main(int argc, char **argv)
 {
     WMScreen *scr;
     WMPixmap *pixmap;
-
+    
     
     /* Initialize the application */
     WMInitializeApplication("Test", &argc, argv);

@@ -882,6 +882,8 @@ void WMSetTextFieldText(WMTextField *tPtr, char *text);
 
 void WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment);
 
+void WMSetTextFieldFont(WMTextField *tPtr, WMFont *font);
+
 void WMSetTextFieldBordered(WMTextField *tPtr, Bool bordered);
 
 void WMSetTextFieldBeveled(WMTextField *tPtr, Bool flag);

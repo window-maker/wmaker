@@ -5,6 +5,7 @@
 #include "WINGsP.h"
 #include "WUtil.h"
 
+#include <ctype.h>
 #include <strings.h>
 
 
@@ -12,7 +13,7 @@ typedef struct W_FontPanel {
     WMWindow *win;
 
     WMFrame *upperF;
-    WMLabel *sampleL;
+    WMTextField *sampleT;
     
     WMSplitView *split;
 
@@ -24,12 +25,6 @@ typedef struct W_FontPanel {
     WMLabel *sizL;
     WMTextField *sizT;
     WMList *sizLs;
-    
-    WMFrame *xlfdF;
-    WMTextField *xlfdT;
-
-    WMFrame *encF;
-    WMPopUpButton *encP;
 
     WMButton *revertB;
     WMButton *previewB;
@@ -45,26 +40,35 @@ typedef struct W_FontPanel {
 
 #define MAX_FONTS_TO_RETRIEVE	2000
 
+#define BUTTON_SPACE_HEIGHT 40
 
 #define MIN_WIDTH	250
-#define MIN_HEIGHT 	MIN_UPPER_HEIGHT+MIN_LOWER_HEIGHT+70
+#define MIN_HEIGHT 	(MIN_UPPER_HEIGHT+MIN_LOWER_HEIGHT+BUTTON_SPACE_HEIGHT)
 
-/*
-static char *scalableFontSizes[] = {
-    "8", 
-	"10",
-	"11",
-	"12",
-	"14",
-	"16",
-	"18",
-	"20",
-	"24",
-	"36",
-	"48",
-	"64"
+#define DEF_UPPER_HEIGHT 60
+#define DEF_LOWER_HEIGHT 310
+
+#define DEF_WIDTH	320
+#define DEF_HEIGHT	(DEF_UPPER_HEIGHT+DEF_LOWER_HEIGHT)
+
+
+
+
+static int scalableFontSizes[] = {
+    8, 
+	10,
+	11,
+	12,
+	14,
+	16,
+	18,
+	20,
+	24,
+	36,
+	48,
+	64
 };
-*/	
+
 	
 
 
@@ -76,13 +80,16 @@ static void typefaceClick(WMWidget *, void *);
 static void sizeClick(WMWidget *, void *);
 
 
+static void previewClick(WMWidget *w, void *data);
+
+
 static void listFamilies(WMScreen *scr, WMFontPanel *panel);
 
 static void
 splitViewConstrainCallback(WMSplitView *sPtr, int divIndex, int *min, int *max)
 {    
     *min = MIN_UPPER_HEIGHT;
-    *max = WMWidgetHeight(sPtr)-WMGetSplitViewDividerThickness(sPtr)-MIN_LOWER_HEIGHT;
+    *max = WMWidgetHeight(sPtr)-BUTTON_SPACE_HEIGHT-MIN_LOWER_HEIGHT;
 }
 
 
@@ -96,29 +103,35 @@ notificationObserver(void *self, WMNotification *notif)
 	if (object == WMWidgetView(panel->win)) {
 	    int h = WMWidgetHeight(panel->win);
 	    int w = WMWidgetWidth(panel->win);
-	    
-	    WMResizeWidget(panel->split, w, h-40);
 
-	    WMMoveWidget(panel->setB, w-80, h-35);
-	    WMMoveWidget(panel->previewB, w-160, h-35);
-	    WMMoveWidget(panel->revertB, w-240, h-35);
+	    WMResizeWidget(panel->split, w, h-BUTTON_SPACE_HEIGHT);
+
+	    WMMoveWidget(panel->setB, w-80, h-(BUTTON_SPACE_HEIGHT-5));
+	    WMMoveWidget(panel->previewB, w-160, h-(BUTTON_SPACE_HEIGHT-5));
+	    WMMoveWidget(panel->revertB, w-240, h-(BUTTON_SPACE_HEIGHT-5));
+
 	} else if (object == WMWidgetView(panel->upperF)) {
-	    WMResizeWidget(panel->sampleL, WMWidgetWidth(panel->upperF)-20,
-			   WMWidgetHeight(panel->upperF)-10);
+
+	    if (WMWidgetHeight(panel->upperF) < MIN_UPPER_HEIGHT) {
+		WMResizeWidget(panel->upperF, WMWidgetWidth(panel->upperF),
+			       MIN_UPPER_HEIGHT);
+	    } else {
+		WMResizeWidget(panel->sampleT, WMWidgetWidth(panel->upperF)-20,
+			       WMWidgetHeight(panel->upperF)-10);
+	    }
+
 	} else if (object == WMWidgetView(panel->lowerF)) {
 	    
 	    if (WMWidgetHeight(panel->lowerF) < MIN_LOWER_HEIGHT) {
-		int h;
-		
-		h =  WMWidgetHeight(panel->split)-MIN_LOWER_HEIGHT
-		    - WMGetSplitViewDividerThickness(panel->split);
-
-		WMResizeWidget(panel->upperF, WMWidgetWidth(panel->upperF), h);
+		WMResizeWidget(panel->upperF, WMWidgetWidth(panel->upperF), 
+			       MIN_UPPER_HEIGHT);
 
 		WMMoveWidget(panel->lowerF, 0, WMWidgetHeight(panel->upperF)
 			     + WMGetSplitViewDividerThickness(panel->split));
+
 		WMResizeWidget(panel->lowerF, WMWidgetWidth(panel->lowerF),
-			       MIN_LOWER_HEIGHT);
+			       WMWidgetWidth(panel->split) - MIN_UPPER_HEIGHT
+			       - WMGetSplitViewDividerThickness(panel->split));
 	    } else {
 		arrangeLowerFrame(panel);
 	    }
@@ -126,18 +139,6 @@ notificationObserver(void *self, WMNotification *notif)
     }
 }
 
-
-/*
-static void
-familyClick(WMWidget *w, void *data)
-{
-    WMList *lPtr = (WMList*)w;
-    FontPanel *panel = (FontPanel*)data;
-
-    
-    
-}
-*/
 
 WMFontPanel*
 WMGetFontPanel(WMScreen *scr)
@@ -155,12 +156,13 @@ WMGetFontPanel(WMScreen *scr)
     memset(panel, 0, sizeof(FontPanel));
     
     panel->win = WMCreateWindow(scr, "fontPanel");
-    WMResizeWidget(panel->win, 320, 370);
+//    WMSetWidgetBackgroundColor(panel->win, WMWhiteColor(scr));
+    WMResizeWidget(panel->win, DEF_WIDTH, DEF_HEIGHT);
     WMSetWindowMinSize(panel->win, MIN_WIDTH, MIN_HEIGHT);
     WMSetViewNotifySizeChanges(WMWidgetView(panel->win), True);
 
     panel->split = WMCreateSplitView(panel->win);
-    WMResizeWidget(panel->split, 320, 330);
+    WMResizeWidget(panel->split, DEF_WIDTH, DEF_HEIGHT - BUTTON_SPACE_HEIGHT);
     WMSetSplitViewConstrainProc(panel->split, splitViewConstrainCallback);
 
     divThickness = WMGetSplitViewDividerThickness(panel->split);
@@ -169,25 +171,26 @@ WMGetFontPanel(WMScreen *scr)
     WMSetFrameRelief(panel->upperF, WRFlat);
     WMSetViewNotifySizeChanges(WMWidgetView(panel->upperF), True);
     panel->lowerF = WMCreateFrame(panel->win);
+//    WMSetWidgetBackgroundColor(panel->lowerF, WMBlackColor(scr));
     WMSetFrameRelief(panel->lowerF, WRFlat);
     WMSetViewNotifySizeChanges(WMWidgetView(panel->lowerF), True);
 
     WMAddSplitViewSubview(panel->split, W_VIEW(panel->upperF));
     WMAddSplitViewSubview(panel->split, W_VIEW(panel->lowerF));
 
-    WMResizeWidget(panel->upperF, 320, 60);
-    WMResizeWidget(panel->lowerF, 320, 330-60-divThickness);
+    WMResizeWidget(panel->upperF, DEF_WIDTH, DEF_UPPER_HEIGHT);
+    
+    WMResizeWidget(panel->lowerF, DEF_WIDTH, DEF_LOWER_HEIGHT);
+
     WMMoveWidget(panel->lowerF, 0, 60+divThickness);
 
     white = WMWhiteColor(scr);
     dark = WMDarkGrayColor(scr);
 
-    panel->sampleL = WMCreateLabel(panel->upperF);
-    WMResizeWidget(panel->sampleL, 300, 50);
-    WMMoveWidget(panel->sampleL, 10, 10);
-    WMSetWidgetBackgroundColor(panel->sampleL, white);
-    WMSetLabelRelief(panel->sampleL, WRSunken);
-    WMSetLabelText(panel->sampleL, "It is not yet completed!!!");
+    panel->sampleT = WMCreateTextField(panel->upperF);
+    WMResizeWidget(panel->sampleT, DEF_WIDTH - 20, 50);
+    WMMoveWidget(panel->sampleT, 10, 10);
+    WMSetTextFieldText(panel->sampleT, "Test!!!");
 
     font = WMBoldSystemFontOfSize(scr, 12);
 
@@ -222,6 +225,7 @@ WMGetFontPanel(WMScreen *scr)
     WMSetLabelTextAlignment(panel->sizL, WACenter);
 
     panel->sizT = WMCreateTextField(panel->lowerF);
+/*    WMSetTextFieldAlignment(panel->sizT, WARight);*/
 
     panel->sizLs = WMCreateList(panel->lowerF);
     WMSetListAction(panel->sizLs, sizeClick, panel);
@@ -230,54 +234,39 @@ WMGetFontPanel(WMScreen *scr)
     WMReleaseColor(white);
     WMReleaseColor(dark);
     
-    panel->encF = WMCreateFrame(panel->lowerF);
-    WMSetFrameTitle(panel->encF, "Encoding");
-    WMResizeWidget(panel->encF, 130, 50);
-    
-    panel->encP = WMCreatePopUpButton(panel->encF);
-    WMMoveWidget(panel->encP, 10, 20);
-    WMResizeWidget(panel->encP, 112, 20);
-    
-    WMMapSubwidgets(panel->encF);
-    
-    panel->xlfdF = WMCreateFrame(panel->lowerF);
-    WMSetFrameTitle(panel->xlfdF, "Xtra Long Font Description");
-    
-    panel->xlfdT = WMCreateTextField(panel->xlfdF);
-    WMMoveWidget(panel->xlfdT, 10, 20);
-
-    WMMapSubwidgets(panel->xlfdF);
-
-    arrangeLowerFrame(panel);
-    
     panel->setB = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->setB, 70, 24);
-    WMMoveWidget(panel->setB, 240, 335);
+    WMMoveWidget(panel->setB, 240, DEF_HEIGHT - (BUTTON_SPACE_HEIGHT-5));
     WMSetButtonText(panel->setB, "Set");
 
     panel->previewB = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->previewB, 70, 24);
-    WMMoveWidget(panel->previewB, 160, 335);
+    WMMoveWidget(panel->previewB, 160, DEF_HEIGHT - (BUTTON_SPACE_HEIGHT-5));
     WMSetButtonText(panel->previewB, "Preview");
+    WMSetButtonAction(panel->previewB, previewClick, panel);
 
     panel->revertB = WMCreateCommandButton(panel->win);
     WMResizeWidget(panel->revertB, 70, 24);
-    WMMoveWidget(panel->revertB, 80, 335);
+    WMMoveWidget(panel->revertB, 80, DEF_HEIGHT - (BUTTON_SPACE_HEIGHT-5));
     WMSetButtonText(panel->revertB, "Revert");
 
     WMRealizeWidget(panel->win);
-    
+
     WMMapSubwidgets(panel->upperF);
     WMMapSubwidgets(panel->lowerF);
     WMMapSubwidgets(panel->split);
     WMMapSubwidgets(panel->win);
-    
+
+    WMUnmapWidget(panel->revertB);
+
+    arrangeLowerFrame(panel);
+
     scr->sharedFontPanel = panel;
 
-    
+
     /* register notification observers */
     WMAddNotificationObserver(notificationObserver, panel, 
-			      WMViewSizeDidChangeNotification, 
+			      WMViewSizeDidChangeNotification,
 			      WMWidgetView(panel->win));
     WMAddNotificationObserver(notificationObserver, panel, 
 			      WMViewSizeDidChangeNotification, 
@@ -347,47 +336,40 @@ static void
 arrangeLowerFrame(FontPanel *panel)
 {
     int width = WMWidgetWidth(panel->lowerF) - 55 - 30;
-    int height = WMWidgetHeight(panel->lowerF);
-    int oheight = 330-60-WMGetSplitViewDividerThickness(panel->split);
+    int height = WMWidgetHeight(panel->split) - WMWidgetHeight(panel->upperF);
     int fw, tw, sw;
-    int h;
 
-    height -= 20 + 3 + 10 + 50;
-    oheight -= 20 + 3 + 10 + 50;
+#define LABEL_HEIGHT 20
+
+    height -= WMGetSplitViewDividerThickness(panel->split);
     
+
+    height -= LABEL_HEIGHT + 8;
+
     fw = (125*width) / 235;
     tw = (110*width) / 235;
     sw = 55;
-    
-    h = (174*height) / oheight;
 
     WMMoveWidget(panel->famL, 10, 0);
-    WMResizeWidget(panel->famL, fw, 20);
+    WMResizeWidget(panel->famL, fw, LABEL_HEIGHT);
 
     WMMoveWidget(panel->famLs, 10, 23);
-    WMResizeWidget(panel->famLs, fw, h);
+    WMResizeWidget(panel->famLs, fw, height);
 
     WMMoveWidget(panel->typL, 10+fw+3, 0);
-    WMResizeWidget(panel->typL, tw, 20);
+    WMResizeWidget(panel->typL, tw, LABEL_HEIGHT);
 
     WMMoveWidget(panel->typLs, 10+fw+3, 23);
-    WMResizeWidget(panel->typLs, tw, h);
+    WMResizeWidget(panel->typLs, tw, height);
 
     WMMoveWidget(panel->sizL, 10+fw+3+tw+3, 0);
-    WMResizeWidget(panel->sizL, sw+4, 20);
+    WMResizeWidget(panel->sizL, sw+4, LABEL_HEIGHT);
 
     WMMoveWidget(panel->sizT, 10+fw+3+tw+3, 23);
     WMResizeWidget(panel->sizT, sw+4, 20);
 
     WMMoveWidget(panel->sizLs, 10+fw+3+tw+3, 46);
-    WMResizeWidget(panel->sizLs, sw+4, h-22);
-
-    WMMoveWidget(panel->encF, 10, WMWidgetHeight(panel->lowerF)-55);
-    
-    WMMoveWidget(panel->xlfdF, 145, WMWidgetHeight(panel->lowerF)-55);
-    WMResizeWidget(panel->xlfdF, WMWidgetWidth(panel->lowerF)-155, 50);
-
-    WMResizeWidget(panel->xlfdT, WMWidgetWidth(panel->lowerF)-155-20, 20);
+    WMResizeWidget(panel->sizLs, sw+4, height-23);
 }
 
 
@@ -413,7 +395,6 @@ arrangeLowerFrame(FontPanel *panel)
 #define NUM_FIELDS 14
 
 
-#if 1
 
 static Bool
 parseFont(char *font, char values[NUM_FIELDS][256])
@@ -491,6 +472,47 @@ typedef struct {
 
 
 
+
+static int
+compare_int(const void *a, const void *b)
+{
+    int i1 = *(int*)a;
+    int i2 = *(int*)b;
+
+    if (i1 < i2)
+	return -1;
+    else if (i1 > i2)
+	return 1;
+    else
+	return 0;
+}
+
+
+
+static void
+addSizeToTypeface(Typeface *face, int size)
+{
+    if (size == 0) {
+	int j;
+		
+	for (j = 0; j < sizeof(scalableFontSizes)/sizeof(int); j++) {
+	    size = scalableFontSizes[j];
+
+	    if (!WMCountInBag(face->sizes, (void*)size)) {
+		WMPutInBag(face->sizes, (void*)size);
+	    }
+	}
+	WMSortBag(face->sizes, compare_int);
+    } else {
+	if (!WMCountInBag(face->sizes, (void*)size)) {
+	    WMPutInBag(face->sizes, (void*)size);
+	    WMSortBag(face->sizes, compare_int);
+	}
+    }
+}
+
+
+
 static void
 addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 {
@@ -510,9 +532,10 @@ addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 		continue;
 	    }
 
-	    size = atoi(fontFields[POINT_SIZE]);
-	    WMPutInBag(face->sizes, (void*)size);
-	
+	    size = atoi(fontFields[PIXEL_SIZE]);
+
+	    addSizeToTypeface(face, size);
+
 	    return;
 	}
     } else {
@@ -528,8 +551,8 @@ addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
     face->addStyle = wstrdup(fontFields[ADD_STYLE]);
 
     face->sizes = WMCreateBag(4);
-    WMPutInBag(face->sizes, (void*)atoi(fontFields[POINT_SIZE]));
-    
+    addSizeToTypeface(face, atoi(fontFields[PIXEL_SIZE]));
+
     WMPutInBag(family->typefaces, face);
 }
 
@@ -666,7 +689,7 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
     char **fontList;
     int count;
     int i;
-    WMHashTable *families = WMCreateHashTable(WMStringHashCallbacks);
+    WMHashTable *families = WMCreateHashTable(WMStringPointerHashCallbacks);
     char fields[NUM_FIELDS][256];
     WMHashEnumerator enumer;
     WMBag *bag;
@@ -736,6 +759,7 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 
 
 
+
 static void 
 familyClick(WMWidget *w, void *data)
 {
@@ -745,42 +769,195 @@ familyClick(WMWidget *w, void *data)
     FontPanel *panel = (FontPanel*)data;
     Typeface *face;
     int i;
+    /* current typeface and size */
+    char *oface = NULL;
+    char *osize = NULL;
+    int facei = -1;
+    int sizei = -1;
+
+    /* must try to keep the same type face and size for the new family */
+    item = WMGetListSelectedItem(panel->typLs);
+    if (item)
+	oface = wstrdup(item->text);
+
+    osize = WMGetTextFieldText(panel->sizT);
+
 
     item = WMGetListSelectedItem(lPtr);
     family = (Family*)item->clientData;
 
     WMClearList(panel->typLs);
-    
 
     for (i = 0; i < WMGetBagItemCount(family->typefaces); i++) {
 	char buffer[256];
-	
+	int top;
+	WMListItem *fitem;
+
 	face = WMGetFromBag(family->typefaces, i);
 	
-	strcpy(buffer, face->weight);
-	strcat(buffer, " ");
-	strcat(buffer, face->slant);
-	
-	WMAddListItem(panel->typLs, buffer);
+	if (strcmp(face->weight, "medium") == 0) {
+	    buffer[0] = 0;
+	} else {
+	    if (*face->weight) {
+		strcpy(buffer, face->weight);
+		buffer[0] = toupper(buffer[0]);
+		strcat(buffer, " ");
+	    } else {
+		buffer[0] = 0;
+	    }
+	}
+
+	if (strcmp(face->slant, "r") == 0) {
+	    strcat(buffer, "Roman");
+	    top = 1;
+	} else if (strcmp(face->slant, "i") == 0) {
+	    strcat(buffer, "Italic");
+	} else if (strcmp(face->slant, "o") == 0) {
+	    strcat(buffer, "Oblique");
+	} else if (strcmp(face->slant, "ri") == 0) {
+	    strcat(buffer, "Rev Italic");
+	} else if (strcmp(face->slant, "ro") == 0) {
+	    strcat(buffer, "Rev Oblique");
+	} else {
+	    strcat(buffer, face->slant);
+	}
+
+	if (buffer[0] == 0) {
+	    strcpy(buffer, "Normal");
+	}
+
+	if (top)
+	    fitem = WMInsertListItem(panel->typLs, 0, buffer);
+	else
+	    fitem = WMAddListItem(panel->typLs, buffer);
+	fitem->clientData = face;
     }
+
+    if (oface) {
+	facei = WMFindRowOfListItemWithTitle(panel->typLs, oface);
+	free(oface);
+    }
+    if (facei < 0) {
+	facei = 0;
+    }
+    WMSelectListItem(panel->typLs, facei);
+    typefaceClick(panel->typLs, panel);
     
+    if (osize) {
+	sizei = WMFindRowOfListItemWithTitle(panel->sizLs, osize);
+    }
+    if (sizei >= 0) {
+	WMSelectListItem(panel->sizLs, sizei);
+	sizeClick(panel->sizLs, panel);
+    }
+
+    if (osize)
+	free(osize);
 }
 
 
 static void 
 typefaceClick(WMWidget *w, void *data)
 {
-    WMList *lPtr = (WMList*)w;
     FontPanel *panel = (FontPanel*)data;
+    WMListItem *item;
+    Typeface *face;
+    int i;
+    char buffer[32];
+
+    char *osize = NULL;
+    int sizei = -1;
+
+    osize = WMGetTextFieldText(panel->sizT);
+
+
+    item = WMGetListSelectedItem(panel->typLs);
+    face = (Typeface*)item->clientData;
+    
+    WMClearList(panel->sizLs);
+
+    for (i = 0; i < WMGetBagItemCount(face->sizes); i++) {
+	int size;
+
+	size = (int)WMGetFromBag(face->sizes, i);
+	
+	if (size != 0) {
+	    sprintf(buffer, "%i", size);
+
+	    WMAddListItem(panel->sizLs, buffer);
+	}
+    }
+
+    if (osize) {
+	sizei = WMFindRowOfListItemWithTitle(panel->sizLs, osize);
+    }
+    if (sizei < 0) {
+	sizei = WMFindRowOfListItemWithTitle(panel->sizLs, "12");
+    }
+    if (sizei < 0) {
+	sizei = 0;
+    }
+    WMSelectListItem(panel->sizLs, sizei);
+    WMSetListPosition(panel->sizLs, sizei);
+    sizeClick(panel->sizLs, panel);
+
+    if (osize)
+	free(osize);
 }
 
 
 static void 
 sizeClick(WMWidget *w, void *data)
 {
-    WMList *lPtr = (WMList*)w;
     FontPanel *panel = (FontPanel*)data;
+    WMListItem *item;
+    
+    item = WMGetListSelectedItem(panel->sizLs);
+
+    WMSetTextFieldText(panel->sizT, item->text);
 }
 
 
-#endif
+static void
+previewClick(WMWidget *w, void *data)
+{
+    FontPanel *panel = (FontPanel*)data;
+    char buffer[256];
+    WMListItem *item;
+    Family *family;
+    Typeface *face;
+    char *size;
+    WMFont *font;
+
+    
+    item = WMGetListSelectedItem(panel->famLs);
+    if (!item)
+	return;
+    family = (Family*)item->clientData;
+
+    item = WMGetListSelectedItem(panel->typLs);
+    if (!item)
+	return;
+    face = (Typeface*)item->clientData;
+
+    size = WMGetTextFieldText(panel->sizT);
+
+    sprintf(buffer, "-%s-%s-%s-%s-%s-%s-%s-*-*-*-*-*-%s-%s",
+	    family->foundry,
+	    family->name,
+	    face->weight,
+	    face->slant,
+	    face->setWidth,
+	    face->addStyle,
+	    size,
+	    family->registry,
+	    family->encoding);
+
+    font = WMCreateFont(WMWidgetScreen(w), buffer);
+    if (font) {
+	WMSetTextFieldFont(panel->sampleT, font);
+	WMReleaseFont(font);
+    }
+}
+
+    

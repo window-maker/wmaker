@@ -434,15 +434,6 @@ WMSetTextFieldText(WMTextField *tPtr, char *text)
 
 
 void
-WMSetTextFieldFont(WMTextField *tPtr, WMFont *font)
-{
-    /* TODO: update font change after field is mapped */
-    WMReleaseFont(tPtr->font);
-    tPtr->font = WMRetainFont(font);
-}
-
-
-void
 WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment)
 {
     tPtr->flags.alignment = alignment;
@@ -595,6 +586,23 @@ WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev)
     tPtr->view->prevFocusChain = prev->view;
     prev->view->nextFocusChain = tPtr->view;
 }
+
+
+void 
+WMSetTextFieldFont(WMTextField *tPtr, WMFont *font)
+{
+    if (tPtr->font)
+	WMReleaseFont(tPtr->font);
+    tPtr->font = WMRetainFont(font);
+  
+    tPtr->offsetWidth = 
+	WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font))/2, 1);
+
+    if (tPtr->view->flags.realized) {
+	paintTextField(tPtr);
+    }
+}
+
 
 
 static void 
