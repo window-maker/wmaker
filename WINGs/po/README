@@ -4,11 +4,11 @@ in the top of the WindowMaker source tree.
 
 File	Language	Note	Current Maintainer
 ------------------------------------------------------------------------------
+ca.po	Catalan			Ernest Adrogué <eadrogue@gmx.net>
 cs.po	Czech		1	Jiri Hnidek <Jiri.Hnidek@vslib.cz
 de.po	German		1	Guido Scholz <guido.scholz@bayernline.de>
-sk.po	Slovak		1	Jan 'judas' Tomka <judas@linux.sk>
 fr.po	French			Emmanuel Benoit <tseeker@neptune.fr>
-ca.po	Catalan			Ernest Adrogué <eadrogue@gmx.net>
+sk.po	Slovak		1	Jan 'judas' Tomka <judas@linux.sk>
 
 Notes
 -----
