@@ -1258,249 +1258,266 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
     ww=w;
     wh=h;
     while(1) {
-	/*
-	 looper.ox=off_x;
-	 looper.oy=off_y;
-	 */
-	WMMaskEvent(dpy, KeyPressMask | ButtonReleaseMask 
-		    | ButtonPressMask | ExposureMask, &event);
-    	if (wwin->flags.shaded || scr->selected_windows) {
-	    if(scr->selected_windows)
-	        drawFrames(wwin,scr->selected_windows,off_x,off_y);
-	    else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
-	    /*** I HATE EDGE RESISTANCE - ]d ***/
-	}
-	else {
-	    drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
-	}
-
-	if(ctrlmode)
-	    showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
-
-	XUngrabServer(dpy);
-	XSync(dpy, False);
-
-	switch (event.type) {
-     case KeyPress:
-        /* accelerate */
-        if (event.xkey.time - lastTime > 50) {
-            kspeed/=(1 + (event.xkey.time - lastTime)/100);
-        } else {
-            if (kspeed < 20) {
-                kspeed++;
+        /*
+           looper.ox=off_x;
+           looper.oy=off_y;
+         */
+        do {
+            WMMaskEvent(dpy, KeyPressMask | ButtonReleaseMask 
+                    | ButtonPressMask | ExposureMask, &event);
+            if (event.type == Expose) {
+                WMHandleEvent(&event);
             }
-        }
-        if (kspeed < _KS) kspeed = _KS;
-        lastTime = event.xkey.time;
+        } while (event.type == Expose);
 
-        if (event.xkey.state & ControlMask && !wwin->flags.shaded) {
-            ctrlmode=1;
-            wUnselectWindows(scr);
+
+        while (XCheckTypedEvent(dpy, Expose, &event)) {
+            WMHandleEvent(&event);
+        }
+        if (wwin->flags.shaded || scr->selected_windows) {
+            if(scr->selected_windows)
+                drawFrames(wwin,scr->selected_windows,off_x,off_y);
+            else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+            /*** I HATE EDGE RESISTANCE - ]d ***/
         }
         else {
-            ctrlmode=0;
+            drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
         }
-        if (event.xkey.keycode == shiftl || event.xkey.keycode == shiftr) {
-            if (ctrlmode)
-                cycleGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh, 0);
-            else
-                cyclePositionDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
-        }
-        else {
 
-            keysym = XLookupKeysym(&event.xkey, 0);
-            switch (keysym) {
-             case XK_Return:
-                done=2;
+        if(ctrlmode)
+            showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
+
+        XUngrabServer(dpy);
+        XSync(dpy, False);
+
+        switch (event.type) {
+            case KeyPress:
+                /* accelerate */
+                if (event.xkey.time - lastTime > 50) {
+                    kspeed/=(1 + (event.xkey.time - lastTime)/100);
+                } else {
+                    if (kspeed < 20) {
+                        kspeed++;
+                    }
+                }
+                if (kspeed < _KS) kspeed = _KS;
+                lastTime = event.xkey.time;
+
+                if (event.xkey.state & ControlMask && !wwin->flags.shaded) {
+                    ctrlmode=1;
+                    wUnselectWindows(scr);
+                }
+                else {
+                    ctrlmode=0;
+                }
+                if (event.xkey.keycode == shiftl || event.xkey.keycode == shiftr) {
+                    if (ctrlmode)
+                        cycleGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh, 0);
+                    else
+                        cyclePositionDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
+                }
+                else {
+
+                    keysym = XLookupKeysym(&event.xkey, 0);
+                    switch (keysym) {
+                        case XK_Return:
+                            done=2;
+                            break;
+                        case XK_Escape:
+                            done=1;
+                            break;
+                        case XK_Up:
+#ifdef XK_KP_Up
+                        case XK_KP_Up:
+#endif
+                        case XK_k:
+                            if (ctrlmode){
+                                if (moment != UP)
+                                    h = wh;
+                                h-=kspeed;
+                                moment = UP;
+                                if (h < 1) h = 1;
+                            }
+                            else off_y-=kspeed;
+                            break;
+                        case XK_Down:
+#ifdef XK_KP_Down
+                        case XK_KP_Down:
+#endif
+                        case XK_j:
+                            if (ctrlmode){
+                                if (moment != DOWN)
+                                    h = wh;
+                                h+=kspeed;
+                                moment = DOWN;
+                            }
+                            else off_y+=kspeed;
+                            break;
+                        case XK_Left:
+#ifdef XK_KP_Left
+                        case XK_KP_Left:
+#endif
+                        case XK_h:
+                            if (ctrlmode) {
+                                if (moment != LEFT)
+                                    w = ww;
+                                w-=kspeed;
+                                if (w < 1) w = 1;
+                                moment = LEFT;
+                            }
+                            else off_x-=kspeed;
+                            break;
+                        case XK_Right:
+#ifdef XK_KP_Right
+                        case XK_KP_Right:
+#endif
+                        case XK_l:
+                            if (ctrlmode) {
+                                if (moment != RIGHT)
+                                    w = ww;
+                                w+=kspeed;
+                                moment = RIGHT;
+                            }
+                            else off_x+=kspeed;
+                            break;
+                    }
+
+                    ww=w;wh=h;
+                    wh-=vert_border;
+                    wWindowConstrainSize(wwin, &ww, &wh);
+                    wh+=vert_border;
+
+                    if (wPreferences.ws_cycle){
+                        if (src_x + off_x + ww < 20){
+                            if(!scr->current_workspace) {
+                                wWorkspaceChange(scr, scr->workspace_count-1);
+                            }
+                            else wWorkspaceChange(scr, scr->current_workspace-1);
+                            off_x += scr_width;
+                        }
+                        else if (src_x + off_x + 20 > scr_width){
+                            if(scr->current_workspace == scr->workspace_count-1) {
+                                wWorkspaceChange(scr, 0);
+                            }
+                            else wWorkspaceChange(scr, scr->current_workspace+1);
+                            off_x -= scr_width;
+                        }
+                    }
+                    else {
+                        if (src_x + off_x + ww < 20)
+                            off_x = 20 - ww - src_x;
+                        else if (src_x + off_x + 20 > scr_width)
+                            off_x = scr_width - 20 - src_x;
+                    }
+
+                    if (src_y + off_y + wh < 20) {
+                        off_y = 20 - wh - src_y;
+                    }
+                    else if (src_y + off_y + 20 > scr_height) {
+                        off_y = scr_height - 20 - src_y;
+                    }
+                }
                 break;
-             case XK_Escape:
+            case ButtonPress:
+            case ButtonRelease:
                 done=1;
                 break;
-             case XK_Up:
-#ifdef XK_KP_Up
-             case XK_KP_Up:
-#endif
-             case XK_k:
-                if (ctrlmode){
-                if (moment != UP)
-                    h = wh;
-                h-=kspeed;
-                moment = UP;
-                if (h < 1) h = 1;
+            case Expose:
+                WMHandleEvent(&event);
+                while (XCheckTypedEvent(dpy, Expose, &event)) {
+                    WMHandleEvent(&event);
                 }
-                else off_y-=kspeed;
                 break;
-             case XK_Down:
-#ifdef XK_KP_Down
-             case XK_KP_Down:
-#endif
-             case XK_j:
-                if (ctrlmode){
-                if (moment != DOWN)
-                    h = wh;
-                h+=kspeed;
-                moment = DOWN;
-                }
-                else off_y+=kspeed;
-                break;
-             case XK_Left:
-#ifdef XK_KP_Left
-             case XK_KP_Left:
-#endif
-             case XK_h:
-                if (ctrlmode) {
-                if (moment != LEFT)
-                    w = ww;
-                w-=kspeed;
-                if (w < 1) w = 1;
-                moment = LEFT;
-                }
-                else off_x-=kspeed;
-                break;
-             case XK_Right:
-#ifdef XK_KP_Right
-             case XK_KP_Right:
-#endif
-             case XK_l:
-                if (ctrlmode) {
-                if (moment != RIGHT)
-                    w = ww;
-                w+=kspeed;
-                moment = RIGHT;
-                }
-                else off_x+=kspeed;
-                break;
-            }
 
-            ww=w;wh=h;
-            wh-=vert_border;
-            wWindowConstrainSize(wwin, &ww, &wh);
-            wh+=vert_border;
-        
-            if (wPreferences.ws_cycle){
-                if (src_x + off_x + ww < 20){
-                    if(!scr->current_workspace) {
-                        wWorkspaceChange(scr, scr->workspace_count-1);
-                    }
-                    else wWorkspaceChange(scr, scr->current_workspace-1);
-                    off_x += scr_width;
-                }
-                else if (src_x + off_x + 20 > scr_width){
-                    if(scr->current_workspace == scr->workspace_count-1) {
-                        wWorkspaceChange(scr, 0);
-                    }
-                    else wWorkspaceChange(scr, scr->current_workspace+1);
-                    off_x -= scr_width;
-                }
-            }
-            else {
-                if (src_x + off_x + ww < 20)
-                    off_x = 20 - ww - src_x;
-                else if (src_x + off_x + 20 > scr_width)
-                    off_x = scr_width - 20 - src_x;
-            }
-        
-            if (src_y + off_y + wh < 20) {
-                off_y = 20 - wh - src_y;
-            }
-            else if (src_y + off_y + 20 > scr_height) {
-                off_y = scr_height - 20 - src_y;
+            default:
+                WMHandleEvent(&event);
+                break;
+        }
+
+        XGrabServer(dpy);
+        /*xxx*/
+
+        if (wwin->flags.shaded && !scr->selected_windows){
+            moveGeometryDisplayCentered(scr, src_x+off_x + w/2, src_y+off_y + h/2);
+        } else {
+            if (ctrlmode) {
+                WMUnmapWidget(scr->gview);
+                mapGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
+            } else if(!scr->selected_windows) {
+                WMUnmapWidget(scr->gview);
+                mapPositionDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
             }
         }
-        break;
-	 case ButtonPress:
-	 case ButtonRelease:
-	    done=1;
-	    break;
-	 default:
-	    WMHandleEvent(&event);
-	    break;
-	}
 
-	XGrabServer(dpy);
-	/*xxx*/
+        if (wwin->flags.shaded || scr->selected_windows) {
+            if (scr->selected_windows)
+                drawFrames(wwin,scr->selected_windows,off_x,off_y);
+            else 
+                drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+        } else {
+            drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
+        }
 
-	if (wwin->flags.shaded && !scr->selected_windows){
-	    moveGeometryDisplayCentered(scr, src_x+off_x + w/2, src_y+off_y + h/2);
-	} else {
-	    if (ctrlmode) {
-		WMUnmapWidget(scr->gview);
-		mapGeometryDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
-	    } else if(!scr->selected_windows) {
-		WMUnmapWidget(scr->gview);
-		mapPositionDisplay(wwin, src_x+off_x, src_y+off_y, ww, wh);
-	    }
-	}
-	
-	if (wwin->flags.shaded || scr->selected_windows) {
-	    if (scr->selected_windows)
-		drawFrames(wwin,scr->selected_windows,off_x,off_y);
-	    else 
-		drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
-	} else {
-	    drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
-	}
-	
-	
-	if (ctrlmode) {
-	    showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
-	} else if(!scr->selected_windows)
-	    showPosition(wwin, src_x+off_x, src_y+off_y);
-	/**/
-	
-	if(done){
-	    scr->keymove_tick=0;
-	    /*
-	     WMDeleteTimerWithClientData(&looper);
-	     */
+
+        if (ctrlmode) {
+            showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
+        } else if(!scr->selected_windows)
+            showPosition(wwin, src_x+off_x, src_y+off_y);
+        /**/
+
+        if (done) {
+            scr->keymove_tick=0;
+            /*
+               WMDeleteTimerWithClientData(&looper);
+             */
             if (wwin->flags.shaded || scr->selected_windows) {
-	        if(scr->selected_windows)
-	            drawFrames(wwin,scr->selected_windows,off_x,off_y);
-	        else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
+                if(scr->selected_windows)
+                    drawFrames(wwin,scr->selected_windows,off_x,off_y);
+                else drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, w, h);
             }
             else {
                 drawTransparentFrame(wwin, src_x+off_x, src_y+off_y, ww, wh);
             }
 
-	    if (ctrlmode) {
-		showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
-		WMUnmapWidget(scr->gview);
-	    } else
-		WMUnmapWidget(scr->gview);
-	    
-	    XUngrabKeyboard(dpy, CurrentTime);
-	    XUngrabPointer(dpy, CurrentTime);
-	    XUngrabServer(dpy);
+            if (ctrlmode) {
+                showGeometry(wwin, src_x+off_x, src_y+off_y, src_x+off_x+ww, src_y+off_y+wh,0);
+                WMUnmapWidget(scr->gview);
+            } else
+                WMUnmapWidget(scr->gview);
 
-	    if(done==2) {
-		if (wwin->flags.shaded || scr->selected_windows) {
-		    if (!scr->selected_windows) {
-			wWindowMove(wwin, src_x+off_x, src_y+off_y);
-		        wWindowSynthConfigureNotify(wwin);
-		    } else {
-			int i;
-			WMBag *bag = scr->selected_windows;
-			doWindowMove(wwin,scr->selected_windows,off_x,off_y);
-			for (i = 0; i < WMGetBagItemCount(bag); i++) {
-			    wWindowSynthConfigureNotify(WMGetFromBag(bag, i));
-			}
-		    }
-		} else {
-		    if (wwin->client.width != ww)
-			wwin->flags.user_changed_width = 1;
-		    
-		    if (wwin->client.height != wh - vert_border)
-			wwin->flags.user_changed_height = 1;
-		    
-		    wWindowConfigure(wwin, src_x+off_x, src_y+off_y, 
-				     ww, wh - vert_border);
-		    wWindowSynthConfigureNotify(wwin);
-		}
-		wWindowChangeWorkspace(wwin, scr->current_workspace);
-		wSetFocusTo(scr, wwin);
-	    }
-	    return 1;
-	}
+            XUngrabKeyboard(dpy, CurrentTime);
+            XUngrabPointer(dpy, CurrentTime);
+            XUngrabServer(dpy);
+
+            if(done==2) {
+                if (wwin->flags.shaded || scr->selected_windows) {
+                    if (!scr->selected_windows) {
+                        wWindowMove(wwin, src_x+off_x, src_y+off_y);
+                        wWindowSynthConfigureNotify(wwin);
+                    } else {
+                        int i;
+                        WMBag *bag = scr->selected_windows;
+                        doWindowMove(wwin,scr->selected_windows,off_x,off_y);
+                        for (i = 0; i < WMGetBagItemCount(bag); i++) {
+                            wWindowSynthConfigureNotify(WMGetFromBag(bag, i));
+                        }
+                    }
+                } else {
+                    if (wwin->client.width != ww)
+                        wwin->flags.user_changed_width = 1;
+
+                    if (wwin->client.height != wh - vert_border)
+                        wwin->flags.user_changed_height = 1;
+
+                    wWindowConfigure(wwin, src_x+off_x, src_y+off_y, 
+                            ww, wh - vert_border);
+                    wWindowSynthConfigureNotify(wwin);
+                }
+                wWindowChangeWorkspace(wwin, scr->current_workspace);
+                wSetFocusTo(scr, wwin);
+            }
+            return 1;
+        }
     }
 }
 

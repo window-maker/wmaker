@@ -1,9 +1,9 @@
 /* workspace.c- Workspace management
- * 
+ *
  *  Window Maker window manager
- * 
+ *
  *  Copyright (c) 1997, 1998 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -16,7 +16,7 @@
  *
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
- *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, 
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  *  USA.
  */
 #include "wconfig.h"
@@ -72,7 +72,7 @@ make_keys()
 {
     if (dWorkspaces!=NULL)
 	return;
-    
+
     dWorkspaces = PLMakeString("Workspaces");
     dName = PLMakeString("Name");
     dClip = PLMakeString("Clip");
@@ -94,7 +94,7 @@ wWorkspaceNew(WScreen *scr)
 {
     WWorkspace *wspace, **list;
     int i;
-    
+
     if (scr->workspace_count < MAX_WORKSPACES) {
 	scr->workspace_count++;
 
@@ -178,7 +178,7 @@ wWorkspaceDelete(WScreen *scr, int workspace)
         wDockDestroy(scr->workspaces[workspace]->clip);
         scr->workspaces[workspace]->clip = NULL;
     }
-    
+
     list = wmalloc(sizeof(WWorkspace*)*(scr->workspace_count-1));
     j = 0;
     for (i=0; i<scr->workspace_count; i++) {
@@ -264,7 +264,7 @@ hideWorkpaceName(void *data)
 	RImage *img = RCloneImage(scr->workspace_name_data->back);
 	Pixmap pix;
 
-	scr->workspace_name_timer = 
+	scr->workspace_name_timer =
 	    WMAddTimerHandler(WORKSPACE_NAME_FADE_DELAY, hideWorkpaceName,
 			      scr);
 
@@ -373,7 +373,7 @@ showWorkspaceName(WScreen *scr, int workspace)
     }
 
     XSetForeground(dpy, scr->draw_gc, scr->white_pixel);
-    WMDrawString(scr->wmscreen, text, scr->draw_gc, scr->workspace_name_font, 
+    WMDrawString(scr->wmscreen, text, scr->draw_gc, scr->workspace_name_font,
 		 2, 2, scr->workspaces[workspace]->name,
 		 strlen(scr->workspaces[workspace]->name));
 #ifdef SHAPE
@@ -487,7 +487,7 @@ void
 wWorkspaceForceChange(WScreen *scr, int workspace)
 {
     WWindow *tmp, *foc=NULL, *foc2=NULL;
-    
+
     if (workspace >= MAX_WORKSPACES || workspace < 0)
 	return;
 
@@ -510,9 +510,9 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 	    || tmp->flags.changing_workspace) {
 	    foc = tmp;
 	}
- 
+
 	/* foc2 = tmp; will fix annoyance with gnome panel
-	 * but will create annoyance for every other application 
+	 * but will create annoyance for every other application
 	 */
 
 	while (tmp) {
@@ -521,11 +521,11 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 		if ((tmp->flags.mapped||tmp->flags.shaded)
 		    && !IS_OMNIPRESENT(tmp)
 		    && !tmp->flags.changing_workspace) {
-		    
+
 		    wWindowUnmap(tmp);
 		}
                 /* also unmap miniwindows not on this workspace */
-                if (tmp->flags.miniaturized && !IS_OMNIPRESENT(tmp) 
+                if (tmp->flags.miniaturized && !IS_OMNIPRESENT(tmp)
 		    && tmp->icon) {
                     if (!wPreferences.sticky_icons) {
                         XUnmapWindow(dpy, tmp->icon->core->window);
@@ -744,13 +744,30 @@ void updateWorkspaceGeometry(WScreen *scr, int workspace, int *view_x, int *view
 
 }
 
+typedef struct _delay_configure {
+    WWindow *wwin;
+    int delay_count;
+} _delay_configure;
+
+void _sendConfigureNotify (_delay_configure *delay) {
+    WWindow *wwin;
+
+    delay->delay_count--;
+    if (!delay->delay_count) {
+        for (wwin = delay->wwin; wwin; wwin = wwin->prev) {
+            wWindowSynthConfigureNotify(wwin);
+        }
+    }
+}
+
 Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
 {
     Bool adjust_flag = False;
     int diff_x, diff_y;
+    static _delay_configure delay_configure = {NULL, 0};
     WWindow *wwin;
 
-    printf("wWorkspaceSetViewPort %d %d\n", view_x, view_y);
+    /*printf("wWorkspaceSetViewPort %d %d\n", view_x, view_y);*/
 
     updateWorkspaceGeometry(scr, workspace, &view_x, &view_y);
 
@@ -780,11 +797,15 @@ Bool wWorkspaceSetViewPort(WScreen *scr, int workspace, int view_x, int view_y)
     scr->workspaces[workspace]->view_y = view_y;
 
 
-    for( wwin = scr->focused_window; wwin; wwin = wwin->prev) {
+    for (wwin = scr->focused_window; wwin; wwin = wwin->prev) {
         if (wwin->frame->workspace == workspace) {
             wWindowMove(wwin, wwin->frame_x + diff_x, wwin->frame_y + diff_y);
-            wWindowSynthConfigureNotify(wwin);
         }
+    }
+    if (1) { /* if delay*/
+        delay_configure.delay_count++;
+        delay_configure.wwin = scr->focused_window;
+        WMAddTimerHandler(200, (WMCallback *)_sendConfigureNotify, &delay_configure);
     }
 
     return adjust_flag;
@@ -808,7 +829,7 @@ switchWSCommand(WMenu *menu, WMenuEntry *entry)
 static void
 deleteWSCommand(WMenu *menu, WMenuEntry *entry)
 {
-    wWorkspaceDelete(menu->frame->screen_ptr, 
+    wWorkspaceDelete(menu->frame->screen_ptr,
 		     menu->frame->screen_ptr->workspace_count-1);
 }
 
@@ -823,14 +844,14 @@ newWSCommand(WMenu *menu, WMenuEntry *foo)
     /* autochange workspace*/
     if (ws>=0)
 	wWorkspaceChange(menu->frame->screen_ptr, ws);
-    
-    
+
+
     /*
     if (ws<9) {
 	int kcode;
 	if (wKeyBindings[WKBD_WORKSPACE1+ws]) {
 	    kcode = wKeyBindings[WKBD_WORKSPACE1+ws]->keycode;
-	    entry->rtext = 
+	    entry->rtext =
 	      wstrdup(XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0)));
 	}
     }*/
@@ -841,10 +862,10 @@ static char*
 cropline(char *line)
 {
     char *start, *end;
-    
+
     if (strlen(line)==0)
 	return line;
-    
+
     start = line;
     end = &(line[strlen(line)])-1;
     while (isspace(*line) && *line!=0) line++;
@@ -898,7 +919,7 @@ wWorkspaceRename(WScreen *scr, int workspace, char *name)
 
     if (scr->clip_icon)
         wClipIconPaint(scr->clip_icon);
-    
+
 #ifdef GNOME_STUFF
     wGNOMEUpdateWorkspaceNamesHint(scr);
 #endif
@@ -931,10 +952,10 @@ wWorkspaceMenuMake(WScreen *scr, Bool titled)
 	wwarning(_("could not create Workspace menu"));
 	return NULL;
     }
-    
+
     /* callback to be called when an entry is edited */
     wsmenu->on_edit = onMenuEntryEdited;
-    
+
     wMenuAddCallback(wsmenu, _("New"), newWSCommand, NULL);
     wMenuAddCallback(wsmenu, _("Destroy Last"), deleteWSCommand, NULL);
 
@@ -976,8 +997,8 @@ wWorkspaceMenuUpdate(WScreen *scr, WMenu *menu)
 	}
     }
     wMenuRealize(menu);
-    
-    for (i=0; i<scr->workspace_count; i++) {	
+
+    for (i=0; i<scr->workspace_count; i++) {
 	menu->entries[i+2]->flags.indicator_on = 0;
     }
     menu->entries[scr->current_workspace+2]->flags.indicator_on = 1;
@@ -993,7 +1014,7 @@ wWorkspaceMenuUpdate(WScreen *scr, WMenu *menu)
     /* if menu got unreachable, bring it to a visible place */
     if (menu->frame_x < tmp - (int)menu->frame->core->width)
 	wMenuMove(menu, tmp - (int)menu->frame->core->width, menu->frame_y, False);
-    
+
     wMenuPaint(menu);
 }
 
@@ -1046,7 +1067,7 @@ wWorkspaceRestoreState(WScreen *scr)
 
     if (!parr)
 	return;
-    
+
     wscount = scr->workspace_count;
     for (i=0; i < WMIN(PLGetNumberOfElements(parr), MAX_WORKSPACES); i++) {
         wks_state = PLGetArrayElement(parr, i);
