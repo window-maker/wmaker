@@ -25,7 +25,6 @@
 /*
  * TODO: rewrite, too dirty
  */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -70,7 +69,7 @@ int scrX, scrY;
 
 #ifdef XINERAMA
 XineramaScreenInfo *xine_screens;
-int	xine_count;
+int xine_count;
 #endif
 
 Bool smooth = False;
@@ -125,82 +124,86 @@ loadImage(RContext *rc, char *file)
 }
 
 
-void applyImage( RContext * rc, BackgroundTexture *texture, RImage *image, char type, int x, int y, int width, int height) {
-
+static void
+applyImage(RContext *rc, BackgroundTexture *texture, RImage *image, char type,
+           int x, int y, int width, int height)
+{
     int w, h;
     Bool fimage = False;
 
-    switch( toupper(type)) {
-	case 'S':
-	case 'M':
-	    if ( type == 'S') {
-		w = width;
-		h = height;
-	    } else {
-		if ( image->width*height > image->height*width) {
-		    w = width;
-		    h = (width*image->height) / image->width;
-		} else {
-		    w = (height*image->width) / image->height;
-		    h = height;
-		}
-	    }
+    switch (toupper(type)) {
+    case 'S':
+    case 'M':
+        if (type == 'S') {
+            w = width;
+            h = height;
+        } else {
+            if (image->width*height > image->height*width) {
+                w = width;
+                h = (width*image->height) / image->width;
+            } else {
+                w = (height*image->width) / image->height;
+                h = height;
+            }
+        }
 
-	    if ( w != image->width || h != image->height) {
-		RImage * simage;
+        if (w != image->width || h != image->height) {
+            RImage * simage;
 
-		if ( smooth) {
-		    simage = RSmoothScaleImage( image, w, h);
-		} else {
-		    simage = RScaleImage( image, w, h);
-		}
+            if (smooth) {
+                simage = RSmoothScaleImage(image, w, h);
+            } else {
+                simage = RScaleImage(image, w, h);
+            }
 
-		if ( !simage) {
-		    wwarning( "could not scale image:%s", RMessageForError(RErrorCode));
-		    return;
-		}
-		fimage = True;
-		image = simage;
-	    }
+            if (!simage) {
+                wwarning("could not scale image:%s", RMessageForError(RErrorCode));
+                return;
+            }
+            fimage = True;
+            image = simage;
+        }
 
-	    /* fall through */
-	case 'C':
-	    {
-		Pixmap pixmap;
+        /* fall through */
+    case 'C':
+        {
+            Pixmap pixmap;
 
-		if ( !RConvertImage(rc, image, &pixmap)) {
-		    wwarning( "could not convert texture:%s", RMessageForError(RErrorCode));
-		    return;
-		}
+            if (!RConvertImage(rc, image, &pixmap)) {
+                wwarning("could not convert texture:%s", RMessageForError(RErrorCode));
+                return;
+            }
 
-		if ( image->width != width || image->height != height) {
-		    int sx, sy, w, h;
+            if (image->width != width || image->height != height) {
+                int sx, sy, w, h;
 
-		    if ( image->height < height) {
-			h = image->height;
-			y += (height - h) / 2;
-			sy = 0;
-		    } else {
-			sy = (image->height - height) / 2;
-			h = height;
-		    }
-		    if ( image->width < width) {
-			w = image->width;
-			x += (width - w) / 2;
-			sx = 0;
-		    } else {
-			sx = (image->width - width) / 2;
-			w = width;
-		    }
+                if (image->height < height) {
+                    h = image->height;
+                    y += (height - h) / 2;
+                    sy = 0;
+                } else {
+                    sy = (image->height - height) / 2;
+                    h = height;
+                }
+                if (image->width < width) {
+                    w = image->width;
+                    x += (width - w) / 2;
+                    sx = 0;
+                } else {
+                    sx = (image->width - width) / 2;
+                    w = width;
+                }
 
-		    XCopyArea(dpy, pixmap, texture->pixmap, DefaultGC(dpy, scr), sx, sy, w, h, x, y);
-		} else 
-		    XCopyArea(dpy, pixmap, texture->pixmap, DefaultGC(dpy, scr), 0, 0, width, height, x, y);
+                XCopyArea(dpy, pixmap, texture->pixmap, DefaultGC(dpy, scr), sx, sy, w, h, x, y);
+            } else
+                XCopyArea(dpy, pixmap, texture->pixmap, DefaultGC(dpy, scr), 0, 0, width, height, x, y);
 
-		XFreePixmap(dpy, pixmap);
-		if ( fimage) RReleaseImage( image);
-	    }
-	    break;
+            XFreePixmap(dpy, pixmap);
+            if (fimage) {
+                RReleaseImage( image);
+            }
+        }
+        break;
     }
 }
 
@@ -588,18 +591,22 @@ parseTexture(RContext *rc, char *text)
 		texture->color = color;
 		texture->width = scrWidth;
 		texture->height = scrHeight;
-		    
-		if ( xine_count) {
-		    int i;
-		    for ( i=0; i<xine_count; ++i) {
-			applyImage( rc, texture, image, type[0], 
-				    xine_screens[i].x_org, xine_screens[i].y_org,
-				    xine_screens[i].width, xine_screens[i].height);
+
+#ifdef XINERAMA
+		if (xine_count) {
+                    int i;
+		    for (i=0; i<xine_count; ++i) {
+                        applyImage(rc, texture, image, type[0],
+                                   xine_screens[i].x_org, xine_screens[i].y_org,
+                                   xine_screens[i].width, xine_screens[i].height);
 		    }
 		} else {
-		    applyImage( rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
-		}
-		RReleaseImage( image);
+		    applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
+                }
+#else
+                applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
+#endif
+		RReleaseImage(image);
 	    }
 	    break;
 #endif

@@ -526,10 +526,10 @@ fi
 
 dnl XINERAMA support
 dnl ================
-xinerama=yes
-AC_ARG_ENABLE(xinerama, 
-[  --disable-xinerama     disable XInerama extension support],
-		xinerama=$enableval, xinerama=yes)
+xinerama=no
+AC_ARG_ENABLE(xinerama,
+[  --enable-xinerama       enable Xinerama extension support],
+		xinerama=$enableval, xinerama=no)
 
 if test "$xinerama" = yes; then
 	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, [XLIBS="-lXinerama $XLIBS"

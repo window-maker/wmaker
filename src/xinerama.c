@@ -35,18 +35,20 @@
 #include <X11/extensions/Xinerama.h>
 #endif
 
-void wInitXinerama(WScreen *scr)
+void
+wInitXinerama(WScreen *scr)
 {
-    scr->xine_screens = 0;
-    scr->xine_count = 0;
+    scr->xine_primary_head = 0;
 #ifdef XINERAMA
     scr->xine_screens = XineramaQueryScreens(dpy, &scr->xine_count);
+#else
+    scr->xine_count = 0;
 #endif
-    scr->xine_primary_head = 0;
 }
 
 
-int wGetRectPlacementInfo(WScreen *scr, WMRect rect, int *flags)
+int
+wGetRectPlacementInfo(WScreen *scr, WMRect rect, int *flags)
 {
     int best;
     unsigned long area, totalArea;
@@ -57,7 +59,7 @@ int wGetRectPlacementInfo(WScreen *scr, WMRect rect, int *flags)
     int rh = rect.size.height;
 
     wassertrv(flags!=NULL, 0);
-    
+
     best = -1;
     area = 0;
     totalArea = 0;
@@ -82,13 +84,13 @@ int wGetRectPlacementInfo(WScreen *scr, WMRect rect, int *flags)
 #ifdef XINERAMA
     for (i = 0; i < scr->xine_count; i++) {
 	unsigned long a;
-	
+
 	a = calcIntersectionArea(rx, ry, rw, rh,
 				 scr->xine_screens[i].x_org,
 				 scr->xine_screens[i].y_org,
 				 scr->xine_screens[i].width,
 				 scr->xine_screens[i].height);
-	    
+
 	totalArea += a;
 	if (a > area) {
 	    if ( best != -1)
@@ -111,8 +113,10 @@ int wGetRectPlacementInfo(WScreen *scr, WMRect rect, int *flags)
 
 
 /* get the head that covers most of the rectangle */
-int wGetHeadForRect(WScreen *scr, WMRect rect)
+int
+wGetHeadForRect(WScreen *scr, WMRect rect)
 {
+#ifdef XINERAMA
     int best;
     unsigned long area;
     int i;
@@ -126,17 +130,16 @@ int wGetHeadForRect(WScreen *scr, WMRect rect)
 
     best = -1;
     area = 0;
-    
-#ifdef XINERAMA    
+
     for (i = 0; i < scr->xine_count; i++) {
 	unsigned long a;
-	
+
 	a = calcIntersectionArea(rx, ry, rw, rh,
 				 scr->xine_screens[i].x_org,
 				 scr->xine_screens[i].y_org,
 				 scr->xine_screens[i].width,
 				 scr->xine_screens[i].height);
-	
+
 	if (a > area) {
 	    area = a;
 	    best = i;
@@ -156,7 +159,8 @@ int wGetHeadForRect(WScreen *scr, WMRect rect)
 }
 
 
-int wGetHeadForWindow(WWindow *wwin)
+int
+wGetHeadForWindow(WWindow *wwin)
 {
     WMRect rect;
 
@@ -209,7 +213,8 @@ int wGetHeadForPoint(WScreen *scr, WMPoint point, int *flags)
 
 
 
-int wGetHeadForPoint(WScreen *scr, WMPoint point)
+int
+wGetHeadForPoint(WScreen *scr, WMPoint point)
 {
 #ifdef XINERAMA
     int i;	
@@ -226,7 +231,8 @@ int wGetHeadForPoint(WScreen *scr, WMPoint point)
 }
 
 
-int wGetHeadForPointerLocation(WScreen *scr)
+int
+wGetHeadForPointerLocation(WScreen *scr)
 {
     WMPoint point;
     Window bla;
@@ -235,7 +241,7 @@ int wGetHeadForPointerLocation(WScreen *scr)
 
     if (!scr->xine_count)
 	return scr->xine_primary_head;
-    
+
     if (!XQueryPointer(dpy, scr->root_win, &bla, &bla,
 		       &point.x, &point.y,
 		       &ble, &ble,
@@ -256,7 +262,7 @@ wGetRectForHead(WScreen *scr, int head)
 	rect.pos.x = scr->xine_screens[head].x_org;
 	rect.pos.y = scr->xine_screens[head].y_org;
 	rect.size.width = scr->xine_screens[head].width;
-	rect.size.height = scr->xine_screens[head].height;	
+        rect.size.height = scr->xine_screens[head].height;
     } else
 #endif /* XINERAMA */
     {
@@ -271,7 +277,8 @@ wGetRectForHead(WScreen *scr, int head)
 
 
 
-WArea wGetUsableAreaForHead(WScreen *scr, int head, WArea *totalAreaPtr)
+WArea
+wGetUsableAreaForHead(WScreen *scr, int head, WArea *totalAreaPtr)
 {
     WArea totalArea, usableArea = scr->totalUsableArea;
     WMRect rect = wGetRectForHead(scr, head);
@@ -292,7 +299,8 @@ WArea wGetUsableAreaForHead(WScreen *scr, int head, WArea *totalAreaPtr)
 }
 
 
-WMPoint wGetPointToCenterRectInHead(WScreen *scr, int head, int width, int height)
+WMPoint
+wGetPointToCenterRectInHead(WScreen *scr, int head, int width, int height)
 {
     WMPoint p;
     WMRect rect = wGetRectForHead(scr, head);
