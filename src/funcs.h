@@ -106,8 +106,8 @@ void StartLogShell(WScreen *scr);
 
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
 
-WWindow *NextFocusWindow(WScreen *scr);
-WWindow *PrevFocusWindow(WScreen *scr);
+WWindow *NextToFocusAfter(WWindow *wwin);
+WWindow *NextToFocusBefore(WWindow *wwin);
 
 void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y);
 

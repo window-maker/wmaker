@@ -592,7 +592,6 @@ handleExpose(XEvent *event)
     }
 }
 
-
 /* bindable */
 static void
 handleButtonPress(XEvent *event)
@@ -610,8 +609,7 @@ handleButtonPress(XEvent *event)
 
     
 #ifndef LITE
-    if (event->xbutton.window==scr->root_win) {
-
+    if (event->xbutton.window==scr->root_win) {	
 	if (event->xbutton.button==wPreferences.menu_button) {
 	    OpenRootMenu(scr, event->xbutton.x_root,
                          event->xbutton.y_root, False);
@@ -1272,67 +1270,6 @@ windowUnderPointer(WScreen *scr)
 }
 
 
-#ifdef WEENDOZE_CYCLE
-
-static WWindow*
-nextToFocusAfter(WWindow *wwin)
-{
-    WWindow *tmp = wwin->prev;
-
-    while (tmp) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-
-	    return tmp;
-	}
-	tmp = tmp->prev;
-    }
-
-    tmp = wwin;
-    /* start over from the beginning of the list */
-    while (tmp->next)
-	tmp = tmp->next;
-
-    while (tmp && tmp != wwin) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-
-	    return tmp;
-	}
-	tmp = tmp->prev;
-    }
-
-    return wwin;
-}
-
-
-static WWindow*
-nextToFocusBefore(WWindow *wwin)
-{
-    WWindow *tmp = wwin->next;
-
-    while (tmp) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-
-	    return tmp;
-	}
-	tmp = tmp->next;
-    }
-
-    /* start over from the beginning of the list */
-    tmp = wwin;
-    while (tmp->prev)
-	tmp = tmp->prev;
-
-    while (tmp && tmp != wwin) {
-	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
-
-	    return tmp;
-	}
-	tmp = tmp->next;
-    }
-
-    return wwin;
-}
-
 
 
 static void
@@ -1356,30 +1293,32 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 		  CurrentTime);
 
     if (next) {
-	newFocused = nextToFocusAfter(wwin);
+	newFocused = NextToFocusAfter(wwin);
     } else {
-	newFocused = nextToFocusBefore(wwin); 
+	newFocused = NextToFocusBefore(wwin); 
     }
 
     scr->flags.doing_alt_tab = 1;
 
+
+    XRaiseWindow(dpy, newFocused->frame->core->window);
     wWindowFocus(newFocused, scr->focused_window);
     oldFocused = newFocused;
     if (wPreferences.circ_raise)
     	wRaiseFrame(newFocused->frame->core);
-
+#if 0
     if (wPreferences.popup_switchmenu && 
 	(!scr->switch_menu || !scr->switch_menu->flags.mapped)) {
 
 	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
 	openedSwitchMenu = True;
     }
-	
+#endif	
     while (!done) {
 	XEvent ev;
 
 	WMMaskEvent(dpy,KeyPressMask|KeyReleaseMask|ExposureMask, &ev);
-/*	WMNextEvent(dpy, &ev);*/
+
 	if (ev.type != KeyRelease && ev.type != KeyPress) {
 	    WMHandleEvent(&ev);
 	    continue;
@@ -1387,31 +1326,46 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
 	/* ignore CapsLock */
 	modifiers = ev.xkey.state & ValidModMask;
 
-	if (ev.type == KeyPress
-	    && wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
-	    && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers) {
+	if (ev.type == KeyPress) {
+	    if (wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
+		&& wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers) {
 
-	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
-	    newFocused = nextToFocusAfter(newFocused);
-	    wWindowFocus(newFocused, oldFocused);
-	    oldFocused = newFocused;
-	    if (wPreferences.circ_raise)
+		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
+		newFocused = NextToFocusAfter(newFocused);
+		wWindowFocus(newFocused, oldFocused);
+		oldFocused = newFocused;
+	    
+		/* restore order */
+		CommitStacking(scr);
+		XRaiseWindow(dpy, newFocused->frame->core->window);
+	    
+		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
+
+	    } else if (wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
+		       && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers) {
+
+		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
+		newFocused = NextToFocusBefore(newFocused);
+		wWindowFocus(newFocused, oldFocused);
+		oldFocused = newFocused;
+
+		/* restore order */
+		CommitStacking(scr);
+		XRaiseWindow(dpy, newFocused->frame->core->window);
+
+		UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
+
+	    } else if (wKeyBindings[WKBD_LOWER].keycode == ev.xkey.keycode
+		       && wKeyBindings[WKBD_LOWER].modifier == modifiers) {
+
+		wLowerFrame(newFocused->frame->core);
+
+	    } else if (wKeyBindings[WKBD_RAISE].keycode == ev.xkey.keycode
+		       && wKeyBindings[WKBD_RAISE].modifier == modifiers) {
+
 		wRaiseFrame(newFocused->frame->core);
-	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
-
-	} else if (ev.type == KeyPress
-		   && wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
-		   && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers) {
-
-	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
-	    newFocused = nextToFocusBefore(newFocused);
-	    wWindowFocus(newFocused, oldFocused);
-	    oldFocused = newFocused;
-	    if (wPreferences.circ_raise)
-		wRaiseFrame(newFocused->frame->core);
-	    UpdateSwitchMenu(scr, newFocused, ACTION_CHANGE_STATE);
-	}
-	if (ev.type == KeyRelease) {
+	    }
+	} else if (ev.type == KeyRelease) {
 	    int i;
 
 	    for (i = 0; i <= 8 * keymap->max_keypermod; i++) {
@@ -1426,15 +1380,19 @@ doWindozeCycle(WWindow *wwin, XEvent *event, Bool next)
     }
     XFree(keymap);
 
+    /* restore order */
+    CommitStacking(scr);
+
     XUngrabKeyboard(dpy, CurrentTime);
     wSetFocusTo(scr, newFocused);
-    scr->flags.doing_alt_tab = 0; 
+
+    if (wPreferences.circ_raise)
+	wRaiseFrame(newFocused->frame->core);
+
+    scr->flags.doing_alt_tab = 0;
     if (openedSwitchMenu) 
-	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);   
+	OpenSwitchMenu(scr, scr->scr_width/2, scr->scr_height/2, False);
 }
-
-
-#endif /* WEENDOZE_CYCLE */
 
 
 
@@ -1465,6 +1423,7 @@ handleKeyPress(XEvent *event)
 	    break;
 	}
     }
+        
     
     if (command < 0) {
 #ifdef LITE
@@ -1608,35 +1567,11 @@ handleKeyPress(XEvent *event)
 	}
         break;
      case WKBD_FOCUSNEXT:
-#ifdef WEENDOZE_CYCLE
-	if (wPreferences.windoze_cycling) {
-	    doWindozeCycle(wwin, event, True);
-	} else
-#endif /* WEENDOZE_CYCLE */
-	{
-	    wwin = NextFocusWindow(scr);
-	    if (wwin != NULL) {
-		wSetFocusTo(scr, wwin);
-		if (wPreferences.circ_raise)
-		    wRaiseFrame(wwin->frame->core);
-	    }
-	}
+	doWindozeCycle(wwin, event, True);
 	break;
 
      case WKBD_FOCUSPREV:
-#ifdef WEENDOZE_CYCLE
-	if (wPreferences.windoze_cycling) {
-	    doWindozeCycle(wwin, event, False);
-	} else 
-#endif /* WEENDOZE_CYCLE */
-	{
-	    wwin = PrevFocusWindow(scr);
-	    if (wwin != NULL) {
-		wSetFocusTo(scr, wwin);
-		if (wPreferences.circ_raise)
-		    wRaiseFrame(wwin->frame->core);
-	    }
-	}
+	doWindozeCycle(wwin, event, False);
 	break;
 
 #if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)

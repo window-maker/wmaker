@@ -293,7 +293,10 @@ ShowDockAppSettingsPanel(WAppIcon *aicon)
     font = WMBoldSystemFontOfSize(scr->wmscreen, 14);
     WMSetLabelFont(panel->nameLabel, font);
     WMReleaseFont(font);
-    WMSetLabelText(panel->nameLabel, aicon->wm_class);
+    if (aicon->wm_class && strcmp(aicon->wm_class, "DockApp")==0)
+	WMSetLabelText(panel->nameLabel, aicon->wm_instance);
+    else
+	WMSetLabelText(panel->nameLabel, aicon->wm_class);
 
     panel->autoLaunchBtn = WMCreateSwitchButton(panel->win);
     WMResizeWidget(panel->autoLaunchBtn, PWIDTH-30, 20);

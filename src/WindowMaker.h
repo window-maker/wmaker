@@ -399,10 +399,6 @@ typedef struct WPreferences {
     char appicon_balloon;
     char help_balloon;
         
-#ifdef WEENDOZE_CYCLE
-    char windoze_cycling;	       /* Windoze 95 style Alt+Tabbing */
-    char popup_switchmenu;	       /* Popup the switchmenu when Alt+Tabbing */
-#endif /* WEENDOZE_CYCLE */
     /* some constants */
     int dblclick_time;		       /* double click delay time in ms */
 

@@ -49,14 +49,6 @@
 #endif
 
 
-/* 
- * #define to enable WindozeCycling.  Set WindozeCycling = YES in 
- * your WindowMaker config file
- * WARNING: this still has some bugs
- */
-#undef WEENDOZE_CYCLE
-
-
 /* undefine ANIMATIONS if you don't want animations for iconification,
  * shading, icon arrangement etc. */
 #define ANIMATIONS

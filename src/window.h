@@ -248,6 +248,8 @@ typedef struct WWindow {
 #endif
 
 	/* info flags */
+	unsigned int is_gnustep:1;
+	
 	unsigned int buttons_dont_fit:1;
 	unsigned int rebuild_texture:1;/* the window was resized and 
 					* gradients should be re-rendered */

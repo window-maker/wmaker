@@ -53,6 +53,8 @@ extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_MENU;
 extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
+extern Atom _XA_WINDOWMAKER_ICON_TILE;
+extern Atom _XA_WINDOWMAKER_ICON_SIZE;
 
 int
 PropGetNormalHints(Window window, XSizeHints *size_hints, int *pre_iccm)
@@ -197,6 +199,59 @@ PropSetWMakerProtocols(Window root)
 
     XChangeProperty(dpy, root, _XA_WINDOWMAKER_WM_PROTOCOLS, XA_ATOM,
 		    32, PropModeReplace,  (unsigned char *)protocols, count);
+}
+
+
+void
+PropSetIconTileHint(WScreen *scr, RImage *image)
+{
+    static Atom imageAtom = 0;
+    unsigned char *tmp;
+    int x, y;
+    
+    if (scr->info_window == None)
+	return;
+    
+    if (!imageAtom) {
+	/*
+	 * WIDTH, HEIGHT (16 bits, MSB First)
+	 * array of R,G,B,A bytes
+	 */
+	imageAtom = XInternAtom(dpy, "_RGBA_IMAGE", False);
+    }
+    
+    tmp = malloc(image->width * image->height * 4 + 4);
+    if (!tmp) {
+	wwarning("could not allocate memory to set _WINDOWMAKER_ICON_TILE hint");
+	return;
+    }
+    
+    tmp[0] = image->width>>8;
+    tmp[1] = image->width&0xff;
+    tmp[2] = image->height>>8;
+    tmp[3] = image->height&0xff;
+    
+    if (image->format == RRGBAFormat) {
+	memcpy(image->data, &tmp[4], image->width*image->height*4);
+    } else {
+	char *ptr = tmp+4;
+	char *src = image->data;
+	
+	for (y = 0; y < image->height; y++) {
+	    for (x = 0; x < image->width; x++) {
+		*ptr++ = *src++;
+		*ptr++ = *src++;
+		*ptr++ = *src++;
+		*ptr++ = 255;
+	    }
+	}
+    }
+    
+    XChangeProperty(dpy, scr->info_window, _XA_WINDOWMAKER_ICON_TILE,
+		    imageAtom, 8, PropModeReplace, tmp, 
+		    image->width * image->height * 4 + 4);
+    free(tmp);
+    
 }
 
 

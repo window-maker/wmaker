@@ -377,7 +377,7 @@ wUnshadeWindow(WWindow  *wwin)
 		   + wwin->frame->bottom_width) {
 		XResizeWindow(dpy, wwin->frame->core->window, w, h);
 		XMoveWindow(dpy, wwin->client_win, 0, y);
-		XSync(dpy, 0);
+		XFlush(dpy);
                 if (SHADE_DELAY > 0)
                     wusleep(SHADE_DELAY*2000L/3);
 		h+=s;

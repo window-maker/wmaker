@@ -1677,7 +1677,7 @@ drawGNUstepLogo(Display *dpy, Drawable d, int width, int height,
 	"implementation of the OpenStep(tm) specification\n"\
 	"which is a object-oriented framework for\n"\
 	"creating advanced graphical, multi-platform\n"\
-	"applications. Aditionally, a development and\n"\
+	"applications. Additionally, a development and\n"\
 	"user desktop enviroment will be created on top\n"\
 	"of the framework. For more information about\n"\
 	"GNUstep, please visit: www.gnustep.org"

@@ -200,69 +200,64 @@ MakeCPPArgs(char *path)
 #endif /* USECPP */
 
 
-WWindow*
-NextFocusWindow(WScreen *scr)
-{
-    WWindow *tmp, *wwin, *closest, *min;
-    Window d;
 
-    if (!(wwin = scr->focused_window))
-        return NULL;
-    tmp = wwin->prev;
-    closest = NULL;
-    min = wwin;
-    d = 0xffffffff;
+
+
+WWindow*
+NextToFocusAfter(WWindow *wwin)
+{
+    WWindow *tmp = wwin->prev;
+
     while (tmp) {
-        if (wWindowCanReceiveFocus(tmp) 
-	    && (!WFLAGP(tmp, skip_window_list)|| tmp->flags.internal_window)) {
-	    if (min->client_win > tmp->client_win)
-	      min = tmp;
-	    if (tmp->client_win > wwin->client_win
-		&& (!closest
-		    || (tmp->client_win - wwin->client_win) < d)) {
-		closest = tmp;
-		d = tmp->client_win - wwin->client_win;
-	    }
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+	    return tmp;
 	}
 	tmp = tmp->prev;
     }
-    if (!closest||closest==wwin)
-      return min;
-    return closest;
+
+    tmp = wwin;
+    /* start over from the beginning of the list */
+    while (tmp->next)
+	tmp = tmp->next;
+
+    while (tmp && tmp != wwin) {
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+	    return tmp;
+	}
+	tmp = tmp->prev;
+    }
+
+    return wwin;
 }
 
 
 WWindow*
-PrevFocusWindow(WScreen *scr)
+NextToFocusBefore(WWindow *wwin)
 {
-    WWindow *tmp, *wwin, *closest, *max;
-    Window d;
-    
-    if (!(wwin = scr->focused_window))
-        return NULL;
-    tmp = wwin->prev;
-    closest = NULL;
-    max = wwin;
-    d = 0xffffffff;
-    while (tmp) {
-	if (wWindowCanReceiveFocus(tmp) &&
-            (!WFLAGP(tmp, skip_window_list) || tmp->flags.internal_window)) {
-	    if (max->client_win < tmp->client_win)
-	      max = tmp;
-	    if (tmp->client_win < wwin->client_win
-		&& (!closest
-		    || (wwin->client_win - tmp->client_win) < d)) {
-		closest = tmp;
-		d = wwin->client_win - tmp->client_win;
-	    }
-	}
-	tmp = tmp->prev;
-    }
-    if (!closest||closest==wwin)
-      return max;
-    return closest;
-}
+    WWindow *tmp = wwin->next;
 
+    while (tmp) {
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+	    return tmp;
+	}
+	tmp = tmp->next;
+    }
+
+    /* start over from the beginning of the list */
+    tmp = wwin;
+    while (tmp->prev)
+	tmp = tmp->prev;
+
+    while (tmp && tmp != wwin) {
+	if (wWindowCanReceiveFocus(tmp) && !WFLAGP(tmp, skip_window_list)) {
+
+	    return tmp;
+	}
+	tmp = tmp->next;
+    }
+
+    return wwin;
+}
 
 
 #if 0

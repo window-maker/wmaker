@@ -68,6 +68,7 @@
 #include "actions.h"
 #include "dock.h"
 #include "workspace.h"
+#include "properties.h"
 
 
 /*
@@ -85,6 +86,9 @@ extern WDDomain *WDWindowAttributes;
 extern WDDomain *WDRootMenu;
 
 extern int wScreenCount;
+
+extern Atom _XA_WINDOWMAKER_ICON_SIZE;
+extern Atom _XA_WINDOWMAKER_ICON_TILE;
 
 /*
 extern proplist_t wDomainName;
@@ -521,14 +525,6 @@ WDefaultEntry optionList[] = {
     {"DisableBlinking",	"NO",		NULL,
 	   &wPreferences.dont_blink,	getBool,	NULL
     },
-#ifdef WEENDOZE_CYCLE
-    {"WindozeCycling","NO", 			NULL,
-	    &wPreferences.windoze_cycling,	getBool, NULL
-    },
-    {"PopupSwitchMenu","YES",			NULL, 
-	    &wPreferences.popup_switchmenu,	getBool, NULL
-    },
-#endif /* WEENDOZE_CYCLE */
       /* style options */
     {"MenuStyle", 	"normal",  		seMenuStyles,
 	&wPreferences.menu_style, getEnum, 	setMenuStyle
@@ -2485,6 +2481,11 @@ setIconTile(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *foo)
     }
 
     scr->icon_tile = img;
+    
+    
+    /* put the icon in the noticeboard hint */
+    PropSetIconTileHint(scr, img);
+    
 
     if (!wPreferences.flags.noclip) {
 	if (scr->clip_tile) {

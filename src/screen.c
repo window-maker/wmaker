@@ -551,13 +551,6 @@ createInternalWindows(WScreen *scr)
       XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
 		    CopyFromParent, scr->w_visual, vmask, &attribs);
 
-    
-    /* for our window manager info notice board */
-    scr->info_window =
-      XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, CopyFromParent,
-		    CopyFromParent, CopyFromParent, CWOverrideRedirect,
-		    &attribs);
-
     /*
      * If the window is clicked without having ButtonPress selected, the
      * resulting event will have event.xbutton.window == root.
@@ -799,6 +792,13 @@ wScreenInit(int screen_number)
     /* create GCs with default values */
     allocGCs(scr);
 
+    
+    /* for our window manager info notice board. Need to
+     * create before reading the defaults, because it will be used there. 
+     */
+    scr->info_window = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 10, 10, 
+					   0, 0, 0);
+    
     /* read defaults for this screen */
     wReadDefaults(scr, WDWindowMaker->dictionary);
 
@@ -855,7 +855,6 @@ wScreenInit(int screen_number)
     WMRealizeWidget(scr->gview);
 
     wScreenUpdateUsableArea(scr);
-
 
     return scr;
 }

@@ -3441,6 +3441,13 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
         wMenuRealize(dock->menu);
     }
 
+    
+    if (aicon->icon->owner) {
+        wapp = wApplicationOf(aicon->icon->owner->main_window);
+    } else {
+	wapp = NULL;
+    }
+    
     /* launch */
     entry = dock->menu->entries[++index];
     entry->clientdata = aicon;
@@ -3449,17 +3456,18 @@ openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
     /* unhide here */
     entry = dock->menu->entries[++index];
     entry->clientdata = aicon;
+    if (wapp && wapp->flags.hidden) {
+	entry->text = _("Unhide Here");
+    } else {
+	entry->text = _("Bring Here");
+    }
     wMenuSetEnabled(dock->menu, index, appIsRunning);
 
     /* hide */
     entry = dock->menu->entries[++index];
     entry->clientdata = aicon;
-    if (aicon->icon->owner) {
-        wapp = wApplicationOf(aicon->icon->owner->main_window);
-    	if (wapp && wapp->flags.hidden)
-	    entry->text = _("Unhide");
-    	else
-	    entry->text = _("Hide");
+    if (wapp && wapp->flags.hidden) {
+	entry->text = _("Unhide");
     } else {
 	entry->text = _("Hide");
     }
