@@ -76,7 +76,8 @@ static int Aborting=0; /* if we're in the middle of an emergency exit */
 static WMHashTable *table = NULL;
 
 
-void *wmalloc(size_t size)
+void*
+wmalloc(size_t size)
 {
     void *tmp;
 
@@ -110,7 +111,8 @@ void *wmalloc(size_t size)
 }
 
 
-void *wrealloc(void *ptr, size_t newsize)
+void*
+wrealloc(void *ptr, size_t newsize)
 {
     void *nptr;
 
@@ -228,19 +230,35 @@ wstrdup(char *str)
 
 
 char*
-wstrconcat(char *dst, char *src)
+wstrconcat(char *str1, char *str2)
 {
     char *str;
-    
-    if (!dst)
-	return wstrdup(src);
-    else if (!src)
-	return wstrdup(dst);
-    
-    str = wmalloc(strlen(dst)+strlen(src)+1);
-    strcpy(str, dst);
-    strcat(str, src);
+
+    if (!str1)
+	return wstrdup(str2);
+    else if (!str2)
+	return wstrdup(str1);
+
+    str = wmalloc(strlen(str1)+strlen(str2)+1);
+    strcpy(str, str1);
+    strcat(str, str2);
 
     return str;
 }
+
+
+char*
+wstrappend(char *dst, char *src)
+{
+    if (!dst)
+	return wstrdup(src);
+    else if (!src || *src==0)
+	return dst;
+
+    dst = wrealloc(dst, strlen(dst)+strlen(src)+1);
+    strcat(dst, src);
+
+    return dst;
+}
+
 

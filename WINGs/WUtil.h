@@ -204,57 +204,69 @@ typedef void WMNotificationObserverAction(void *observerData,
 
 typedef void (waborthandler)(int);
 
-waborthandler *wsetabort(waborthandler*);
+waborthandler* wsetabort(waborthandler*);
 
 
 /* don't free the returned string */
-char *wstrerror(int errnum);
+char* wstrerror(int errnum);
 
 void wfatal(const char *msg, ...);
 void wwarning(const char *msg, ...);
 void wsyserror(const char *msg, ...);
 void wsyserrorwithcode(int error, const char *msg, ...);
 
-char *wfindfile(char *paths, char *file);
+char* wfindfile(char *paths, char *file);
 
-char *wfindfileinlist(char **path_list, char *file);
+char* wfindfileinlist(char **path_list, char *file);
 
-char *wfindfileinarray(proplist_t array, char *file);
-    
-char *wexpandpath(char *path);
+char* wfindfileinarray(proplist_t array, char *file);
+
+char* wexpandpath(char *path);
 
 /* don't free the returned string */
-char *wgethomedir();
+char* wgethomedir();
 
-void *wmalloc(size_t size);
-void *wrealloc(void *ptr, size_t newsize);
+void* wmalloc(size_t size);
+void* wrealloc(void *ptr, size_t newsize);
 void wfree(void *ptr);
 
 
 void wrelease(void *ptr);
-void *wretain(void *ptr);
+void* wretain(void *ptr);
 
-char *wstrdup(char *str);
+char* wstrdup(char *str);
 
-char *wstrconcat(char *dst, char *src);
+/* Concatenate str1 with str2 and return that in a newly malloc'ed string.
+ * str1 and str2 can be any strings including static and constant strings.
+ * str1 and str2 will not be modified.
+ * Free the returned string when you're done with it. */
+char* wstrconcat(char *str1, char *str2);
 
+/* This will append src to dst, and return dst. dst MUST be either NULL
+ * or a string that was a result of a dynamic allocation (malloc, realloc
+ * wmalloc, wrealloc, ...). dst CANNOT be a static or a constant string!
+ * Modifies dst (no new string is created except if dst==NULL in which case
+ * it is equivalent to calling wstrdup(src) ).
+ * The returned address may be different from the original address of dst,
+ * so always assign the returned address to avoid dangling pointers. */
+char* wstrappend(char *dst, char *src);
 
 
 void wtokensplit(char *command, char ***argv, int *argc);
 
-char *wtokennext(char *word, char **next);
+char* wtokennext(char *word, char **next);
 
-char *wtokenjoin(char **list, int count);
+char* wtokenjoin(char **list, int count);
 
 void wtokenfree(char **tokens, int count);
 
-char *wtrimspace(char *s);
+char* wtrimspace(char *s);
 
 
 
-char *wusergnusteppath();
+char* wusergnusteppath();
 
-char *wdefaultspathfordomain(char *domain);
+char* wdefaultspathfordomain(char *domain);
 
 void wusleep(unsigned int microsec);
 
@@ -275,24 +287,24 @@ void WHandleEvents();
 /*......................................................................*/
 
 
-WMHashTable *WMCreateHashTable(WMHashTableCallbacks callbacks);
+WMHashTable* WMCreateHashTable(WMHashTableCallbacks callbacks);
 
 void WMFreeHashTable(WMHashTable *table);
 
 void WMResetHashTable(WMHashTable *table);
 
-void *WMHashGet(WMHashTable *table, const void *key);
+void* WMHashGet(WMHashTable *table, const void *key);
 
 /* put data in table, replacing already existing data and returning
  * the old value */
-void *WMHashInsert(WMHashTable *table, void *key, void *data);
+void* WMHashInsert(WMHashTable *table, void *key, void *data);
 
 void WMHashRemove(WMHashTable *table, const void *key);
 
 /* warning: do not manipulate the table while using these functions */
 WMHashEnumerator WMEnumerateHashTable(WMHashTable *table);
 
-void *WMNextHashEnumeratorItem(WMHashEnumerator *enumerator);
+void* WMNextHashEnumeratorItem(WMHashEnumerator *enumerator);
 
 unsigned WMCountHashTable(WMHashTable *table);
 
@@ -558,17 +570,17 @@ unsigned WMGetDataFormat(WMData *aData);
 /*--------------------------------------------------------------------------*/
 
 
-WMNotification *WMCreateNotification(char *name, void *object, void *clientData);
+WMNotification* WMCreateNotification(char *name, void *object, void *clientData);
 
 void WMReleaseNotification(WMNotification *notification);
 
-WMNotification *WMRetainNotification(WMNotification *notification);
+WMNotification* WMRetainNotification(WMNotification *notification);
 
-void *WMGetNotificationClientData(WMNotification *notification);
+void* WMGetNotificationClientData(WMNotification *notification);
 
-void *WMGetNotificationObject(WMNotification *notification);
+void* WMGetNotificationObject(WMNotification *notification);
 
-char *WMGetNotificationName(WMNotification *notification);
+char* WMGetNotificationName(WMNotification *notification);
 
 
 void WMAddNotificationObserver(WMNotificationObserverAction *observerAction, 
@@ -583,9 +595,9 @@ void WMRemoveNotificationObserverWithName(void *observer, char *name,
 
 void WMPostNotificationName(char *name, void *object, void *clientData);
 
-WMNotificationQueue *WMGetDefaultNotificationQueue(void);
+WMNotificationQueue* WMGetDefaultNotificationQueue(void);
 
-WMNotificationQueue *WMCreateNotificationQueue(void);
+WMNotificationQueue* WMCreateNotificationQueue(void);
 
 void WMDequeueNotificationMatching(WMNotificationQueue *queue, 
 				   WMNotification *notification, 
@@ -603,9 +615,9 @@ void WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
 
 /*......................................................................*/
 
-WMUserDefaults *WMGetStandardUserDefaults(void);
+WMUserDefaults* WMGetStandardUserDefaults(void);
 
-WMUserDefaults *WMGetDefaultsFromPath(char *path);
+WMUserDefaults* WMGetDefaultsFromPath(char *path);
 
 void WMSynchronizeUserDefaults(WMUserDefaults *database);
 
@@ -625,7 +637,7 @@ void WMSetUDObjectForKey(WMUserDefaults *database, proplist_t object,
 
 void WMRemoveUDObjectForKey(WMUserDefaults *database, char *defaultName);
 
-char *WMGetUDStringForKey(WMUserDefaults *database, char *defaultName);
+char* WMGetUDStringForKey(WMUserDefaults *database, char *defaultName);
 
 int WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName);
 

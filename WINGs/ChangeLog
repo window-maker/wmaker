@@ -43,10 +43,17 @@ changes since wmaker 0.62.1:
 - added WMScrollerDidScrollNotification to scroller
 - added WMGetScrollViewVisibleRect()
 - fixed a mem leak in the browser code.
-- renamed wstrappend() to wstrconcat(). Be sure to rename all occurences of
-  wstrappend() in your own code with wstrconcat(), else weird things may
-  happen, because a new wstrappend() with different semantics is to be
-  implemented!
+- renamed wstrappend() to wstrconcat(). wstrconcat(str1, str2) concatenates
+  str1 with str2 and returns that in a newly malloc'ed string.
+  Be sure to rename wstrappend with wstrconcat in your code too, else
+  hazardous things can happen!
+- implemented a new wstrappend() function. wstrappend(dst, src) will append 
+  src to dst modifing dst and returning a pointer to it. No new string is 
+  generated, except if dst is NULL, in which case its the same as calling
+  wstrdup(src).
+  dst can ONLY be NULL or a dynamically allocated string (obtained from a
+  call to malloc, realloc, wmalloc, wrealloc, ...). dst CANNOT be a static
+  or a constant string!
 
 
 changes since wmaker 0.62.0:

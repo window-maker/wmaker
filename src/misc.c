@@ -1023,18 +1023,6 @@ keysymToString(KeySym keysym, unsigned int state)
 }
 #endif
 
-static char *
-appendrealloc(char *a, char *b)
-{
-    if (a == NULL)
-	return wstrdup(b);
-    else {
-	char *c = wstrconcat(a, b);
-	wfree(a);
-	return c;
-    }
-}
-
 
 char*
 GetShortcutString(char *text)
@@ -1061,39 +1049,39 @@ GetShortcutString(char *text)
 	modmask |= mod;
 	
 	if (strcasecmp(text, "Meta")==0) {
-	    buffer = appendrealloc(buffer, "M+");
+	    buffer = wstrappend(buffer, "M+");
 	} else if (strcasecmp(text, "Alt")==0) {
-	    buffer = appendrealloc(buffer, "A+");
+	    buffer = wstrappend(buffer, "A+");
 	} else if (strcasecmp(text, "Shift")==0) {
-	    buffer = appendrealloc(buffer, "Sh+");
+	    buffer = wstrappend(buffer, "Sh+");
 	} else if (strcasecmp(text, "Mod1")==0) {
-	    buffer = appendrealloc(buffer, "M1+"); 
+	    buffer = wstrappend(buffer, "M1+"); 
 	} else if (strcasecmp(text, "Mod2")==0) {
-	    buffer = appendrealloc(buffer, "M2+"); 
+	    buffer = wstrappend(buffer, "M2+"); 
 	} else if (strcasecmp(text, "Mod3")==0) {
-	    buffer = appendrealloc(buffer, "M3+");
+	    buffer = wstrappend(buffer, "M3+");
 	} else if (strcasecmp(text, "Mod4")==0) {
-	    buffer = appendrealloc(buffer, "M4+"); 
+	    buffer = wstrappend(buffer, "M4+"); 
 	} else if (strcasecmp(text, "Mod5")==0) {
-	    buffer = appendrealloc(buffer, "M5+"); 
+	    buffer = wstrappend(buffer, "M5+"); 
 	} else if (strcasecmp(text, "Control")==0) {
 	    control = 1;
 	} else {
-	    buffer = appendrealloc(buffer, text);
+	    buffer = wstrappend(buffer, text);
 	}
 	text = k+1;
     }
 
     if (control) {
-	buffer = appendrealloc(buffer, "^");
+	buffer = wstrappend(buffer, "^");
     }
-    buffer = appendrealloc(buffer, text);
+    buffer = wstrappend(buffer, text);
     
     /* get key */
 /*    ksym = XStringToKeysym(text);
     tmp = keysymToString(ksym, modmask);
     puts(tmp);
-    buffer = wstrconcat(buffer, tmp);
+    buffer = wstrappend(buffer, tmp);
 */
     wfree(tmp);
 
