@@ -1084,18 +1084,24 @@ wFrameWindowPaint(WFrameWindow *fwin)
 #ifdef DRAWSTRING_PLUGIN
 #define DRAWSTRING_CURRENT_STATE fwin->flags.state + fwin->drawstring_proc_offset
     if (scr->drawstring_func[DRAWSTRING_CURRENT_STATE]) {
-        void **p = wPluginPackData(4, 
-                *fwin->title_gc,
-                *fwin->font,
+        int tb = fwin->top_width;
+        void **p = wPluginPackData(6,
+                                    /* 0 number of argument, will be passed */
                 scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->data,
-                fwin->title_back[fwin->flags.state],
-                "extendable");
+                                    /* 1 plugin data, as it was initialized */
+                &fwin->title_back[fwin->flags.state],
+                                    /* 2 current background Pixmap */
+                fwin->title_gc,     /* 3 gc */
+                *fwin->font,        /* 4 WMFont** */
+                &fwin->titlebar->width,
+                                    /* 5 suggested width */
+                &tb                 /* 6 suggested height */
+                );
         scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->proc.drawString(
                 scr->drawstring_func[DRAWSTRING_CURRENT_STATE]->arg,
                 fwin->titlebar->window,
                 x, 0, 
-                fwin->titlebar->width, fwin->top_width,
-                fwin->title, p);
+                fwin->title, strlen(fwin->title), p);
         free(p);
     } else {
         WMDrawString(scr->wmscreen, fwin->titlebar->window, 

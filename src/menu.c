@@ -683,7 +683,7 @@ wMenuDestroy(WMenu *menu, int recurse)
 #define F_NONE		3
 
 static void
-drawFrame(WScreen *scr, Window win, int y, int w, int h, int type)
+drawFrame(WScreen *scr, Drawable win, int y, int w, int h, int type)
 {
     XSegment segs[2];
     int i;
@@ -762,10 +762,12 @@ paintEntry(WMenu *menu, int index, int selected)
 #ifdef DRAWSTRING_PLUGIN
 	if (scr->menu_item_texture->any.type == WTEX_SOLID) {
 	    XClearArea(dpy, win, 0, y + 1, w - 1, h - 3, False);
-	    /* draw the frame */
 	    drawFrame(scr, win, y, w, h, type);
 	} else {
-            /* if the function is there, it responses for clearing area */
+           /*
+            * if the function is there, it responses for clearing area
+            * to reduce flickering
+            */
         if (!scr->drawstring_func[W_STRING_MTEXT])
             XClearArea(dpy, win, 0, y, w, h, False);
 	}
@@ -799,45 +801,50 @@ paintEntry(WMenu *menu, int index, int selected)
 #ifdef DRAWSTRING_PLUGIN
     if (scr->drawstring_func[W_STRING_MTEXT]) {
         Pixmap tmp_bg;
+        Pixmap *texture_data;
         void **p;
         int _y;
+        int tb = menu->entry_height; /* convert short into int */
         
         _y = (wPreferences.menu_style == MS_NORMAL) ? 0 : y;
-        tmp_bg = XCreatePixmap(dpy, win, w, menu->entry_height, DefaultDepth(dpy, DefaultScreen(dpy)));
-        if (selected) {
-            if (menu->flags.brother) {
-                XCopyArea(dpy, menu->brother->menu_texture_data, tmp_bg, textGC,
-                        0, _y, w, menu->entry_height, 0, 0);
-            } else
-                XCopyArea(dpy, menu->menu_texture_data, tmp_bg, textGC,
-                        0, _y, w, menu->entry_height, 0, 0);
+        texture_data = menu->flags.brother ?
+            &menu->brother->menu_texture_data : &menu->menu_texture_data;
 
-            XSetForeground(dpy, scr->select_menu_gc, scr->select_pixel);
-            XFillRectangle(dpy, tmp_bg, scr->select_menu_gc, 1, 1, w-2, h-3);
-        } else { 
-            if (menu->flags.brother) {
-                XCopyArea(dpy, menu->brother->menu_texture_data, tmp_bg, textGC,
-                        0, _y, w, menu->entry_height, 0, 0);
-            }
-            else
-                XCopyArea(dpy, menu->menu_texture_data, tmp_bg, textGC,
-                        0, _y, w, menu->entry_height, 0, 0);
+        tmp_bg = XCreatePixmap(dpy, win, w, menu->entry_height,
+                DefaultDepth(dpy, DefaultScreen(dpy)));
+
+        if (scr->menu_item_texture->any.type == WTEX_SOLID) {
+            XFillRectangle(dpy, tmp_bg, scr->menu_item_texture->solid.normal_gc, 0, 0, w, h);
+            drawFrame(scr, tmp_bg, 0, w, h, type);
+
+        } else {
+            XCopyArea(dpy, *texture_data, tmp_bg, textGC,
+                    0, _y, w, menu->entry_height, 0, 0);
         }
 
-        p = wPluginPackData(4,
-                textGC,
-                scr->menu_entry_font,
+        if (selected) {
+            XSetForeground(dpy, scr->select_menu_gc, scr->select_pixel);
+            XFillRectangle(dpy, tmp_bg, scr->select_menu_gc, 1, 1, w-2, h-3);
+        }
+
+
+        p = wPluginPackData(6,
                 scr->drawstring_func[W_STRING_MTEXT]->data,
-                /*menu->menu_texture_data,*/
-                tmp_bg,
+                &tmp_bg,
+                &textGC,
+                scr->menu_entry_font,
+                &menu->frame->core->width,
+                &tb,
                 "extendable");
+
         scr->drawstring_func[W_STRING_MTEXT]->proc.drawString(
                 scr->drawstring_func[W_STRING_MTEXT]->arg,
                 win,
                 x, y,
-                menu->frame->core->width, menu->entry_height,
-                entry->text, p);
+                entry->text, strlen(entry->text), p);
+
         XFreePixmap(dpy, tmp_bg);
+
         free(p);
     } else {
         WMDrawString(scr->wmscreen, win, textGC, scr->menu_entry_font,

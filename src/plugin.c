@@ -53,8 +53,9 @@ wPluginPackData(int members, ...)
     int i;
     p = wmalloc(sizeof(void *) * (members + 1));
     memset(p, 0, sizeof(void *) * (members + 1));
+    p[0] = (void *)members;
     va_start(vp, members);
-    for(i=0;i<members;i++) {
+    for(i=1;i<members+1;i++) {
         p[i] = va_arg(vp, void *);
     }
     va_end(vp);
@@ -124,7 +125,7 @@ wPluginDestroyFunction(WFunction *function)
 
     if (function->data) {
         if (function->freeData)
-            function->freeData(function->arg, &function->data);
+            function->freeData(function->arg, function->data);
         wfree(function->data);
     }
     if (function->arg) PLRelease(function->arg);

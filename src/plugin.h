@@ -50,7 +50,7 @@ typedef void _DL_AnyProc(proplist_t);
 #define W_STRING_MTEXT  4
 #define W_STRING_MEMBERS 5
 
-typedef void _DL_DrawStringProc(proplist_t, Drawable, int, int, unsigned, unsigned, char*, void**);
+typedef void _DL_DrawStringProc(proplist_t, Drawable, int, int, char*, int, void**);
 #endif
 
 typedef void _DL_FreeDataProc(proplist_t pl, void *free_data);
