@@ -541,7 +541,7 @@ InitXThing(WScreen *scr)
 
     t = time(NULL);
     l = localtime(&t);
-    if ((l->tm_mon!=12||l->tm_mday<24||l->tm_mday>26)) {
+    if ((l->tm_mon!=11||l->tm_mday<24||l->tm_mday>26)) {
 	return False;
     }
 
