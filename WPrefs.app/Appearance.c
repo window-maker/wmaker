@@ -67,16 +67,20 @@ typedef struct _Panel {
     WMFrame *colF;
 
     WMPopUpButton *colP;
+    WMColor *colors[14];
 
     WMColorWell *colW;
 
-    WMColorWell *sampW[15];
+    WMColorWell *sampW[24];
 
     /* options */
     WMFrame *optF;
 
     WMFrame *mstyF;
     WMButton *mstyB[3];
+
+    WMFrame *taliF;
+    WMButton *taliB[3];
 
     /* */
 
@@ -93,8 +97,13 @@ typedef struct _Panel {
     WMPixmap *hand;
 
     int oldsection;
+    int oldcsection;
+
+    char oldTabItem;
 
     char menuStyle;
+
+    char titleAlignment;
 
     Pixmap preview;
 
@@ -115,12 +124,31 @@ typedef struct {
     unsigned ispixmap:1;
 } TextureListItem;
 
+static void updateColorPreviewBox(_Panel *panel, int elements);
 
 static void showData(_Panel *panel);
 
 static void changePage(WMWidget *w, void *data);
 
+static void changeColorPage(WMWidget *w, void *data);
+
 static void OpenExtractPanelFor(_Panel *panel, char *path);
+
+
+
+static void changedTabItem(struct WMTabViewDelegate *self, WMTabView *tabView,
+			   WMTabViewItem *item);
+
+
+
+static WMTabViewDelegate tabviewDelegate = {
+    NULL,
+	NULL, /* didChangeNumberOfItems */
+	changedTabItem, /* didSelectItem */
+	NULL, /* shouldSelectItem */
+	NULL /* willSelectItem */
+};
+
 
 #define ICON_FILE	"appearance"
 
@@ -241,16 +269,15 @@ static char * hand_xpm[] = {
 
 
 
-
-#define	FTITLE	(1<<0)
-#define UTITLE	(1<<1)
-#define OTITLE	(1<<2)
-#define RESIZEBAR (1<<3)
-#define MTITLE	(1<<4)
-#define MITEM	(1<<5)
-#define ICON	(1<<6)
-#define BACK	(1<<7)
-#define EVERYTHING	0xff
+static char *textureOptions[] = {
+    "FTitleBack", "(solid, black)", "[Focused]", 
+	"UTitleBack", "(solid, gray)", "[Unfocused]",
+	"PTitleBack", "(solid, \"#616161\")", "[Owner of Focused]",
+	"ResizebarBack", "(solid, gray)", "[Resizebar]",
+	"MenuTitleBack", "(solid, black)", "[Menu Title]",
+	"MenuTextBack", "(solid, gray)", "[Menu Item]",
+	"IconBack", "(solid, gray)", "[Icon]"
+};
 
 
 #define RESIZEBAR_BEVEL	-1
@@ -264,6 +291,72 @@ static char * hand_xpm[] = {
 #define MSTYLE_SINGLE	1
 #define MSTYLE_FLAT	2
 
+
+#define FTITLE_COL	(1<<0)
+#define UTITLE_COL	(1<<1)
+#define OTITLE_COL	(1<<2)
+#define MTITLE_COL	(1<<3)
+#define MITEM_COL	(1<<4)
+#define MDISAB_COL	(1<<5)
+#define MHIGH_COL	(1<<6)
+#define MHIGHT_COL	(1<<7)
+#define ICONT_COL	(1<<8)
+#define ICONB_COL	(1<<9)
+#define CLIP_COL	(1<<10)
+#define CCLIP_COL	(1<<11)
+
+
+static char *colorOptions[] = {
+    "FTitleColor", "white",
+	"UTitleColor", "black",
+	"PTitleColor", "white",
+	"MenuTitleColor", "white",
+	"MenuTextColor", "black",
+	"MenuDisabledColor", "#616161",
+	"HighlightColor", "white",
+	"HighlightTextColor", "black",
+	"IconTitleColor", "white",
+	"IconTitleBack", "black",
+	"ClipTitleColor", "black",
+	"CClipTitleColor", "#454045"
+};
+
+
+
+
+static WMRect previewPositions[] = {
+#define PFOCUSED	0
+    {{30,10},{190, 20}},
+#define PUNFOCUSED	1
+    {{30,40},{190,20}},
+#define POWNER		2
+    {{30,70},{190,20}},
+#define PRESIZEBAR	3
+    {{30,100},{190,9}},
+#define PMTITLE		4
+    {{30,120},{90,20}},
+#define PMITEM		5
+    {{30,140},{90,18*4}},
+#define PICON		6
+    {{155,130},{64,64}}
+};
+#define EVERYTHING	0xff
+
+
+static WMRect previewColorPositions[] = {
+    {{30,10},{190, 20}},
+    {{30,40},{190,20}},
+    {{30,70},{190,20}},
+    {{30,120},{90,20}},
+    {{30,140},{90,18}},
+    {{30,158},{90,18}},
+    {{30,176},{90,18}},
+    {{30,194},{90,18}},
+    {{155,130},{64,64}},
+    {{155,130},{64,64}},
+    {{155,130},{64,64}},
+    {{155,130},{64,64}}
+};
 
 
 
@@ -279,7 +372,6 @@ str2rcolor(RContext *rc, char *name, RColor *color)
     color->green = xcolor.green >> 8;
     color->blue = xcolor.blue >> 8;
 }
-
 
 
 static void
@@ -322,6 +414,8 @@ isPixmap(proplist_t prop)
 	return 0;
 }
 
+
+/**********************************************************************/
 
 static void
 drawResizebarBevel(RImage *img)
@@ -613,6 +707,32 @@ renderMenu(_Panel *panel, proplist_t texture, int width, int iheight)
 
 
 static void
+renderPreview(_Panel *panel, GC gc, int part, int relief)
+{
+    WMListItem *item;
+    TextureListItem *titem;
+    Pixmap pix;
+    WMScreen *scr = WMWidgetScreen(panel->frame);
+
+    item = WMGetListItem(panel->texLs, panel->textureIndex[part]);
+    titem = (TextureListItem*)item->clientData;
+
+    pix = renderTexture(scr, titem->prop, 
+			previewPositions[part].size.width,
+			previewPositions[part].size.height,
+			NULL, relief);
+
+    XCopyArea(WMScreenDisplay(scr), pix, panel->preview, gc, 0, 0, 
+	      previewPositions[part].size.width, 
+	      previewPositions[part].size.height,
+	      previewPositions[part].pos.x,
+	      previewPositions[part].pos.y);
+
+    XFreePixmap(WMScreenDisplay(scr), pix);
+}
+
+
+static void
 updatePreviewBox(_Panel *panel, int elements)
 {
     WMScreen *scr = WMWidgetScreen(panel->win);
@@ -623,11 +743,12 @@ updatePreviewBox(_Panel *panel, int elements)
     GC gc;
     WMListItem *item;
     TextureListItem *titem;
+    int colorUpdate = 0;
 
     gc = XCreateGC(dpy, WMWidgetXID(panel->win), 0, NULL);
 
 
-    if (!panel->preview) {
+    if (panel->preview == None) {
 	WMColor *color;
 
 	panel->preview = XCreatePixmap(dpy, WMWidgetXID(panel->win),
@@ -641,92 +762,70 @@ updatePreviewBox(_Panel *panel, int elements)
 	refresh = -1;
     }
 
-    if (elements & FTITLE) {
-	item = WMGetListItem(panel->texLs, panel->textureIndex[0]);
-	titem = (TextureListItem*)item->clientData;
 
-	pix = renderTexture(scr, titem->prop, 190, 20, NULL, RBEV_RAISED2);
-
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 10);
-
-	XFreePixmap(dpy, pix);
+    if (elements & (1<<PFOCUSED)) {
+	renderPreview(panel, gc, PFOCUSED, RBEV_RAISED2);
+	colorUpdate |= FTITLE_COL;
     }
-    if (elements & UTITLE) {
-	item = WMGetListItem(panel->texLs, panel->textureIndex[1]);
-	titem = (TextureListItem*)item->clientData;
-
-	pix = renderTexture(scr, titem->prop, 190, 20, NULL, RBEV_RAISED2);
-
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 40);
-
-	XFreePixmap(dpy, pix);
+    if (elements & (1<<PUNFOCUSED)) {
+	renderPreview(panel, gc, PUNFOCUSED, RBEV_RAISED2);
+	colorUpdate |= UTITLE_COL;
     }
-    if (elements & OTITLE) {
-	item = WMGetListItem(panel->texLs, panel->textureIndex[2]);
-	titem = (TextureListItem*)item->clientData;
-
-	pix = renderTexture(scr, titem->prop, 190, 20, NULL, RBEV_RAISED2);
-
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 70);
-
-	XFreePixmap(dpy, pix);
+    if (elements & (1<<POWNER)) {
+	renderPreview(panel, gc, POWNER, RBEV_RAISED2);
+	colorUpdate |= OTITLE_COL;
     }
-    if (elements & RESIZEBAR) {
-	item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
-	titem = (TextureListItem*)item->clientData;
-
-	pix = renderTexture(scr, titem->prop, 190, 9, NULL, RESIZEBAR_BEVEL);
-
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 210, 20, 30, 100);
-
-	XFreePixmap(dpy, pix);
+    if (elements & (1<<PRESIZEBAR)) {
+	renderPreview(panel, gc, PRESIZEBAR, RESIZEBAR_BEVEL);
     }
-    if (elements & MTITLE) {
-	item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
-	titem = (TextureListItem*)item->clientData;
-
-	pix = renderTexture(scr, titem->prop, 90, 20, NULL, RBEV_RAISED2);
-
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 90, 20, 30, 120);
-
-	XFreePixmap(dpy, pix);
+    if (elements & (1<<PMTITLE)) {
+	renderPreview(panel, gc, PMTITLE, RBEV_RAISED2);
+	colorUpdate |= MTITLE_COL;
     }
-    if (elements & MITEM) {
+    if (elements & (1<<PMITEM)) {
 	item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
 	titem = (TextureListItem*)item->clientData;
 
-	pix = renderMenu(panel, titem->prop, 90, 18);
+	pix = renderMenu(panel, titem->prop,
+			 previewPositions[PMITEM].size.width, 
+			 previewPositions[PMITEM].size.height/4);
 
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 90, 18*4, 30, 140);
+	XCopyArea(dpy, pix, panel->preview, gc, 0, 0,
+		  previewPositions[PMITEM].size.width, 
+		  previewPositions[PMITEM].size.height,
+		  previewPositions[PMITEM].pos.x,
+		  previewPositions[PMITEM].pos.y);
 
 	XFreePixmap(dpy, pix);
+
+	colorUpdate |= MITEM_COL|MDISAB_COL|MHIGH_COL|MHIGHT_COL;
     }
-    if (elements & (MITEM|MTITLE)) {
+    if (elements & (1<<PMITEM|1<<PMTITLE)) {
 	XDrawLine(dpy, panel->preview, gc, 29, 120, 29, 120+18*4+20);
 	XDrawLine(dpy, panel->preview, gc, 29, 119, 119, 119);
     }
+    if (elements & (1<<PICON)) {
+	renderPreview(panel, gc, PICON,
+		      titem->ispixmap ? 0 : RBEV_RAISED3);
 
-    if (elements & ICON) {
-	item = WMGetListItem(panel->texLs, panel->textureIndex[6]);
-	titem = (TextureListItem*)item->clientData;
-
-	pix = renderTexture(scr, titem->prop, 64, 64, NULL, 
-			    titem->ispixmap ? 0 : RBEV_RAISED3);
-
-	XCopyArea(dpy, pix, panel->preview, gc, 0, 0, 64, 64, 155, 130);
-
-	XFreePixmap(dpy, pix);
+	colorUpdate |= ICONT_COL|ICONB_COL|CLIP_COL|CCLIP_COL;
     }
-
     if (refresh < 0) {
 	WMPixmap *p;
+
 	p = WMCreatePixmapFromXPixmaps(scr, panel->preview, None,
 				       240-4, 215-4, WMScreenDepth(scr));
 
 	WMSetLabelImage(panel->prevL, p);
 	WMReleasePixmap(p);
+
+	if (colorUpdate)
+	    updateColorPreviewBox(panel, colorUpdate);
     } else {
-	WMRedisplayWidget(panel->prevL);
+	if (colorUpdate)
+	    updateColorPreviewBox(panel, colorUpdate);
+	else
+	    WMRedisplayWidget(panel->prevL);
     }
 
     XFreeGC(dpy, gc);
@@ -970,7 +1069,7 @@ changePage(WMWidget *w, void *data)
     int section;
     WMListItem *item;
     TextureListItem *titem;
-    WMScreen *scr = WMWidgetScreen(w);
+    WMScreen *scr = WMWidgetScreen(panel->frame);
     RContext *rc = WMScreenRContext(scr);
     static WMPoint positions[] = {
 	{5, 10},
@@ -982,29 +1081,31 @@ changePage(WMWidget *w, void *data)
 	{130, 150}
     };
 
-    section = WMGetPopUpButtonSelectedItem(panel->secP);
+    if (w) {
+	section = WMGetPopUpButtonSelectedItem(panel->secP);
 
-    WMSelectListItem(panel->texLs, panel->textureIndex[section]);
+	WMSelectListItem(panel->texLs, panel->textureIndex[section]);
 
-    WMSetListPosition(panel->texLs, panel->textureIndex[section] - 2);
+	WMSetListPosition(panel->texLs, panel->textureIndex[section] - 2);
 
-    item = WMGetListItem(panel->texLs, panel->textureIndex[section]);
+	item = WMGetListItem(panel->texLs, panel->textureIndex[section]);
 
-    titem = (TextureListItem*)item->clientData;
-
+	titem = (TextureListItem*)item->clientData;
+    }
     {
 	WMColor *color;
-	
+
 	color = WMGrayColor(scr);
 	XFillRectangle(rc->dpy, panel->preview, WMColorGC(color),
 		       positions[panel->oldsection].x, 
 		       positions[panel->oldsection].y, 22, 22);
 	WMReleaseColor(color);
     }
-    panel->oldsection = section;
-    WMDrawPixmap(panel->hand, panel->preview, positions[section].x, 
-		 positions[section].y);
-
+    if (w) {
+	panel->oldsection = section;
+	WMDrawPixmap(panel->hand, panel->preview, positions[section].x, 
+		     positions[section].y);
+    }
     WMRedisplayWidget(panel->prevL);
 }
 
@@ -1015,26 +1116,42 @@ previewClick(XEvent *event, void *clientData)
 {
     _Panel *panel = (_Panel*)clientData;
     int i;
-    static WMRect parts[] = {
-	{{30,10},{190, 20}},
-	{{30,40},{190,20}},
-	{{30,70},{190,20}},
-	{{30,100},{190,9}},
-	{{30,120},{90,20}},
-	{{30,140},{90,18*4}},
-	{{155,130},{64,64}}
-    };
 
-    for (i = 0; i < 7; i++) {
-	if (event->xbutton.x >= parts[i].pos.x
-	    && event->xbutton.y >= parts[i].pos.y
-	    && event->xbutton.x < parts[i].pos.x + parts[i].size.width
-	    && event->xbutton.y < parts[i].pos.y + parts[i].size.height) {
-	    
-	    WMSetPopUpButtonSelectedItem(panel->secP, i);
-	    changePage(panel->secP, panel);
-	    return;
+    switch (panel->oldTabItem) {
+     case 0:
+	for (i = 0; i < sizeof(previewPositions)/sizeof(WMRect); i++) {
+	    if (event->xbutton.x >= previewPositions[i].pos.x
+		&& event->xbutton.y >= previewPositions[i].pos.y
+		&& event->xbutton.x < previewPositions[i].pos.x 
+		+ previewPositions[i].size.width
+		&& event->xbutton.y < previewPositions[i].pos.y 
+		+ previewPositions[i].size.height) {
+		
+		WMSetPopUpButtonSelectedItem(panel->secP, i);
+		changePage(panel->secP, panel);
+		return;
+	    }
 	}
+	break;
+     case 1:
+	for (i = 0; i < WMGetPopUpButtonNumberOfItems(panel->colP); i++) {
+	    if (event->xbutton.x >= previewColorPositions[i].pos.x
+		&& event->xbutton.y >= previewColorPositions[i].pos.y
+		&& event->xbutton.x < previewColorPositions[i].pos.x 
+		+ previewColorPositions[i].size.width
+		&& event->xbutton.y < previewColorPositions[i].pos.y 
+		+ previewColorPositions[i].size.height) {
+		
+		/* yuck kluge */
+		if (i == 7)
+		    i = 4;
+		
+		WMSetPopUpButtonSelectedItem(panel->colP, i);
+		changeColorPage(panel->colP, panel);
+		return;
+	    }
+	}
+	break;
     }
 }
 
@@ -1095,7 +1212,6 @@ textureDoubleClick(WMWidget *w, void *data)
 
 
 
-
 static void
 paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state, 
 	      WMRect *rect)
@@ -1123,8 +1239,8 @@ paintListItem(WMList *lPtr, int index, Drawable d, char *text, int state,
     titem = (TextureListItem*)item->clientData;
 
     if (titem->preview)
-    XCopyArea(dpy, titem->preview, d, WMColorGC(black), 0, 0, TEXPREV_WIDTH,
-	      TEXPREV_HEIGHT, x + 5, y + 5);
+	XCopyArea(dpy, titem->preview, d, WMColorGC(black), 0, 0, TEXPREV_WIDTH,
+		  TEXPREV_HEIGHT, x + 5, y + 5);
 
     if ((1 << WMGetPopUpButtonSelectedItem(panel->secP)) & titem->selectedFor)
 	WMDrawPixmap(panel->onLed, d, x + TEXPREV_WIDTH + 10, y + 6);
@@ -1181,9 +1297,9 @@ fillTextureList(WMList *lPtr)
     proplist_t textureList;
     proplist_t texture;
     WMUserDefaults *udb = WMGetStandardUserDefaults();
-    int i;
     TextureListItem *titem;
     WMScreen *scr  = WMWidgetScreen(lPtr);
+    int i;
 
     textureList = WMGetUDObjectForKey(udb, "TextureList");
     if (!textureList)
@@ -1214,6 +1330,204 @@ fillTextureList(WMList *lPtr)
 }
 
 
+/*************************************************************************/
+
+
+static void
+changeColorPage(WMWidget *w, void *data)
+{
+    _Panel *panel = (_Panel*)data;
+    int section;
+    WMScreen *scr = WMWidgetScreen(panel->frame);
+    RContext *rc = WMScreenRContext(scr);
+    static WMPoint positions[] = {
+	{5, 10},
+	{5, 40},
+	{5, 70},
+	{5, 120},
+	{5, 140},
+	{5, 158},
+	{5, 176},
+	{5, 176},
+	{130, 140},
+	{130, 140},
+	{130, 140},
+	{130, 140}
+    };
+
+    if (panel->preview) {
+	WMColor *color;
+
+	color = WMGrayColor(scr);
+	XFillRectangle(rc->dpy, panel->preview, WMColorGC(color),
+		       positions[panel->oldcsection].x, 
+		       positions[panel->oldcsection].y, 22, 22);
+	WMReleaseColor(color);
+    }
+    if (w) {
+	section = WMGetPopUpButtonSelectedItem(panel->colP);
+
+	panel->oldcsection = section;
+	if (panel->preview)
+	    WMDrawPixmap(panel->hand, panel->preview, positions[section].x, 
+			 positions[section].y);
+
+	section = WMGetPopUpButtonSelectedItem(panel->colP);
+
+	WMSetColorWellColor(panel->colW, panel->colors[section]);
+    }
+    WMRedisplayWidget(panel->prevL);
+}
+
+
+static void
+paintText(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
+	  int x, int y, int w, int h, WMAlignment align, char *text)
+{
+    int l = strlen(text);
+
+    switch (align) {
+     case WALeft:
+	x += 5;
+	break;
+     case WARight:
+	x += w - 5 - WMWidthOfString(font, text, l);
+	break;
+     default:
+     case WACenter:
+	x += (w - WMWidthOfString(font, text, l))/2;
+	break;
+    }
+    WMDrawString(scr, d, WMColorGC(color), font, x,
+		 y + (h - WMFontHeight(font))/2, text, l);
+}
+
+
+
+static void
+updateColorPreviewBox(_Panel *panel, int elements)
+{
+    WMScreen *scr = WMWidgetScreen(panel->frame);
+    WMPixmap *pixmap;
+    Pixmap d;
+
+    pixmap = WMGetLabelImage(panel->prevL);
+    d = WMGetPixmapXID(pixmap);
+
+    if (elements & FTITLE_COL) {
+	paintText(scr, d, panel->colors[0], panel->boldFont, 30, 10, 190, 20,
+		  panel->titleAlignment, _("Focused Window"));
+    }
+    if (elements & UTITLE_COL) {
+	paintText(scr, d, panel->colors[1], panel->boldFont, 30, 40, 190, 20,
+		  panel->titleAlignment, _("Unfocused Window"));
+    }
+    if (elements & OTITLE_COL) {
+	paintText(scr, d, panel->colors[2], panel->boldFont, 30, 70, 190, 20,
+		  panel->titleAlignment, _("Owner of Focused Window"));
+    }
+    if (elements & MTITLE_COL) {
+	paintText(scr, d, panel->colors[3], panel->boldFont, 30, 120, 90, 20,
+		  WALeft, _("Menu Title"));
+    }
+    if (elements & MITEM_COL) {
+	paintText(scr, d, panel->colors[4], panel->normalFont, 30, 140, 90, 18,
+		  WALeft, _("Normal Item"));
+	paintText(scr, d, panel->colors[4], panel->normalFont, 30, 194, 90, 18,
+		  WALeft, _("Normal Item"));
+    }
+    if (elements & MDISAB_COL) {
+	paintText(scr, d, panel->colors[5], panel->normalFont, 30, 158, 90, 18,
+		  WALeft, _("Disabled Item"));
+    }
+    if (elements & MHIGH_COL) {
+	XFillRectangle(WMScreenDisplay(scr), d, WMColorGC(panel->colors[6]),
+		       31, 177, 87, 15);
+	elements |= MHIGHT_COL;
+    }
+    if (elements & MHIGHT_COL) {
+	paintText(scr, d, panel->colors[7], panel->normalFont, 30, 176, 90, 18,
+		  WALeft, _("Highlighted"));
+    }
+/*
+    if (elements & ICONT_COL) {
+	WRITE(_("Focused Window"), panel->colors[8], panel->boldFont, 
+	      155, 130, 64);
+    }
+    if (elements & ICONB_COL) {
+	WRITE(_("Focused Window"), panel->colors[9], panel->boldFont, 
+	      0, 0, 30);
+    }
+    if (elements & CLIP_COL) {
+	WRITE(_("Focused Window"), panel->colors[10], panel->boldFont, 
+	      0, 0, 30);
+    }
+    if (elements & CCLIP_COL) {
+	WRITE(_("Focused Window"), panel->colors[11], panel->boldFont, 
+	      0, 0, 30);
+    }
+ */
+    WMRedisplayWidget(panel->prevL);
+}
+
+
+static void
+colorWellObserver(void *self, WMNotification *n)
+{
+    _Panel *panel = (_Panel*)self;
+    int p;
+
+    p = WMGetPopUpButtonSelectedItem(panel->colP);
+
+    panel->colors[p] = WMGetColorWellColor(panel->colW);
+
+    updateColorPreviewBox(panel, 1<<p);
+}
+
+
+static void
+changedTabItem(struct WMTabViewDelegate *self, WMTabView *tabView,
+	       WMTabViewItem *item)
+{
+    _Panel *panel = self->data;
+    int i;
+
+    i = WMGetTabViewItemIdentifier(item); 
+    switch (i) {
+     case 0:
+	switch (panel->oldTabItem) {
+	 case 1:
+	    changeColorPage(NULL, panel);
+	    break;
+	}
+	changePage(panel->secP, panel);
+	break;
+     case 1:
+	switch (panel->oldTabItem) {
+	 case 0:
+	    changePage(NULL, panel);
+	    break;	    
+	}
+	changeColorPage(panel->colP, panel);
+	break;
+     case 2:
+	switch (panel->oldTabItem) {
+	 case 0:
+	    changePage(NULL, panel);
+	    break;
+	 case 1:
+	    changeColorPage(NULL, panel);
+	    break;
+	}
+	break;
+    }
+
+    panel->oldTabItem = i;
+}
+
+
+/*************************************************************************/
+
 static void
 menuStyleCallback(WMWidget *self, void *data)
 {
@@ -1221,15 +1535,35 @@ menuStyleCallback(WMWidget *self, void *data)
 
     if (self == panel->mstyB[0]) {
 	panel->menuStyle = MSTYLE_NORMAL;
-	updatePreviewBox(panel, MITEM);
+	updatePreviewBox(panel, 1<<PMITEM);
 
     } else if (self == panel->mstyB[1]) {
 	panel->menuStyle = MSTYLE_SINGLE;
-	updatePreviewBox(panel, MITEM);
+	updatePreviewBox(panel, 1<<PMITEM);
 
     } else if (self == panel->mstyB[2]) {
 	panel->menuStyle = MSTYLE_FLAT;
-	updatePreviewBox(panel, MITEM);
+	updatePreviewBox(panel, 1<<PMITEM);
+    }
+}
+
+
+static void
+titleAlignCallback(WMWidget *self, void *data)
+{
+    _Panel *panel = (_Panel*)data;
+
+    if (self == panel->taliB[0]) {
+	panel->titleAlignment = WALeft;
+	updatePreviewBox(panel, 1<<PFOCUSED|1<<PUNFOCUSED|1<<POWNER);
+
+    } else if (self == panel->taliB[1]) {
+	panel->titleAlignment = WACenter;
+	updatePreviewBox(panel, 1<<PFOCUSED|1<<PUNFOCUSED|1<<POWNER);
+
+    } else if (self == panel->taliB[2]) {
+	panel->titleAlignment = WARight;
+	updatePreviewBox(panel, 1<<PFOCUSED|1<<PUNFOCUSED|1<<POWNER);
     }
 }
 
@@ -1289,9 +1623,12 @@ createPanel(Panel *p)
 
     /* tabview */
 
+    tabviewDelegate.data = panel;
+
     panel->tabv = WMCreateTabView(panel->frame);
     WMResizeWidget(panel->tabv, 245, FRAME_HEIGHT - 20);
     WMMoveWidget(panel->tabv, 265, 10);
+    WMSetTabViewDelegate(panel->tabv, &tabviewDelegate);
 
     /*** texture list ***/
 
@@ -1401,27 +1738,42 @@ createPanel(Panel *p)
 
     WMAddItemInTabView(panel->tabv, item);
 
-
     panel->colP = WMCreatePopUpButton(panel->colF);
     WMResizeWidget(panel->colP, 228, 20);
     WMMoveWidget(panel->colP, 7, 7);
     WMSetPopUpButtonSelectedItem(panel->colP, 0);
     WMAddPopUpButtonItem(panel->colP, _("Focused Window Title"));
     WMAddPopUpButtonItem(panel->colP, _("Unfocused Window Title"));
+    WMAddPopUpButtonItem(panel->colP, _("Owner of Focused Window Title"));
+    WMAddPopUpButtonItem(panel->colP, _("Menu Title"));
+    WMAddPopUpButtonItem(panel->colP, _("Menu Item Text"));
+    WMAddPopUpButtonItem(panel->colP, _("Disabled Menu Item Text"));
+    WMAddPopUpButtonItem(panel->colP, _("Menu Highlight Color"));
+    WMAddPopUpButtonItem(panel->colP, _("Highlighted Menu Text Color"));
+    /*
+    WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title"));
+    WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title Back"));
+    WMAddPopUpButtonItem(panel->colP, _("Clip Title"));
+    WMAddPopUpButtonItem(panel->colP, _("Collapsed Clip Title"));
+     */
 
-/*    WMSetPopUpButtonAction(panel->colP, changePage, panel);
- */
-    
+    WMSetPopUpButtonSelectedItem(panel->colP, 0);
+
+    WMSetPopUpButtonAction(panel->colP, changeColorPage, panel);
+ 
+
     panel->colW = WMCreateColorWell(panel->colF);
     WMResizeWidget(panel->colW, 65, 50);
-    WMMoveWidget(panel->colW, 40, 75);
+    WMMoveWidget(panel->colW, 30, 75);
+    WMAddNotificationObserver(colorWellObserver, panel,
+			      WMColorWellDidChangeNotification, panel->colW);
 
-    for (i = 0; i < 3; i++) {
+    for (i = 0; i < 4; i++) {
 	int j;
-	for (j = 0; j < 5; j++) {
+	for (j = 0; j < 6; j++) {
 	    panel->sampW[i] = WMCreateColorWell(panel->colF);
-	    WMResizeWidget(panel->sampW[i], 28, 28);
-	    WMMoveWidget(panel->sampW[i], 140 + i*28, 40 + j*28);
+	    WMResizeWidget(panel->sampW[i], 22, 22);
+	    WMMoveWidget(panel->sampW[i], 130 + i*22, 40 + j*22);
 	    WSetColorWellBordered(panel->sampW[i], False);
 	}
     }
@@ -1479,6 +1831,34 @@ createPanel(Panel *p)
 
     WMMapSubwidgets(panel->mstyF);
 
+
+    panel->taliF = WMCreateFrame(panel->optF);
+    WMResizeWidget(panel->taliF, 110, 80);
+    WMMoveWidget(panel->taliF, 15, 100);
+    WMSetFrameTitle(panel->taliF, _("Title Alignment"));
+
+    for (i = 0; i < 3; i++) {
+	panel->taliB[i] = WMCreateRadioButton(panel->taliF);
+	WMSetButtonAction(panel->taliB[i], titleAlignCallback, panel);
+	switch (i) {
+	 case 0:
+	    WMSetButtonText(panel->taliB[i], _("Left"));
+	    break;
+	 case 1:
+	    WMSetButtonText(panel->taliB[i], _("Center"));
+	    break;
+	 case 2:
+	    WMSetButtonText(panel->taliB[i], _("Right"));
+	    break;
+	}
+	WMResizeWidget(panel->taliB[i], 90, 18);
+	WMMoveWidget(panel->taliB[i], 10, 15 + 20*i);
+    }
+    WMGroupButtons(panel->taliB[0], panel->taliB[1]);
+    WMGroupButtons(panel->taliB[0], panel->taliB[2]);
+
+    WMMapSubwidgets(panel->taliB);
+    
     WMMapSubwidgets(panel->optF);
 
     /**/
@@ -1534,7 +1914,7 @@ setupTextureFor(WMList *list, char *key, char *defValue, char *title,
 static void
 showData(_Panel *panel)
 {
-    int i = 0;
+    int i;
     char *str;
 
     str = GetStringForKey("MenuStyle");
@@ -1546,42 +1926,39 @@ showData(_Panel *panel)
 	panel->menuStyle = MSTYLE_NORMAL;
     }
 
-    setupTextureFor(panel->texLs, "FTitleBack", "(solid, black)", 
-		    "[Focused]", i);
-    panel->textureIndex[i] = i++;
+    str = GetStringForKey("TitleJustify");
+    if (str && strcasecmp(str, "left")==0) {
+	panel->titleAlignment = WALeft;
+    } else if (str && strcasecmp(str, "right")==0) {
+	panel->titleAlignment = WARight;
+    } else {
+	panel->titleAlignment = WACenter;
+    }
 
-    setupTextureFor(panel->texLs, "UTitleBack", "(solid, gray)", 
-		    "[Unfocused]", i);
-    panel->textureIndex[i] = i++;
+    for (i = 0; i < sizeof(colorOptions)/(2*sizeof(char*)); i++) {
+	WMColor *color;
 
-    setupTextureFor(panel->texLs, "PTitleBack", "(solid, \"#616161\")",
-		    "[Owner of Focused]", i);
-    panel->textureIndex[i] = i++;
+	str = GetStringForKey(colorOptions[i*2]);
+	if (!str)
+	    str = colorOptions[i*2+1];
 
-    setupTextureFor(panel->texLs, "ResizebarBack", "(solid, gray)",
-		    "[Resizebar]", i);
-    panel->textureIndex[i] = i++;
+	color = WMCreateNamedColor(WMWidgetScreen(panel->frame), str, False);
 
-    setupTextureFor(panel->texLs, "MenuTitleBack", "(solid, black)", 
-		    "[Menu Title]", i);
-    panel->textureIndex[i] = i++;
+	panel->colors[i] = color;
+    }
+    changeColorPage(panel->colP, panel);
 
-    setupTextureFor(panel->texLs, "MenuTextBack", "(solid, gray)", 
-		    "[Menu Item]", i);
-    panel->textureIndex[i] = i++;
-
-    setupTextureFor(panel->texLs, "IconBack", "(solid, gray)", "[Icon]", i);
-    panel->textureIndex[i] = i++;
-/*
-    setupTextureFor(panel->texLs, "WorkspaceBack", "(solid, black)", 
-		    "[Workspace]", i);
-    panel->textureIndex[i] = i++;
- */
-
+    for (i = 0; i < sizeof(textureOptions)/(3*sizeof(char*)); i++) {
+	setupTextureFor(panel->texLs, textureOptions[i*3],
+			textureOptions[i*3+1], textureOptions[i*3+2], i);
+	panel->textureIndex[i] = i;
+    }
     updatePreviewBox(panel, EVERYTHING);
+
 
     for (i = 0; i < 3; i++) {
 	WMSetButtonSelected(panel->mstyB[i], i==panel->menuStyle);
+	WMSetButtonSelected(panel->taliB[i], i==panel->titleAlignment);
     }
 }
 
@@ -1592,34 +1969,18 @@ storeData(_Panel *panel)
 {
     TextureListItem *titem;
     WMListItem *item;
+    int i;
+    
+    for (i = 0; i < sizeof(textureOptions)/(sizeof(char*)*3); i++) {
+	item = WMGetListItem(panel->texLs, panel->textureIndex[i]);
+	titem = (TextureListItem*)item->clientData;
+	SetObjectForKey(titem->prop, textureOptions[i*3]);
+    }
 
-    item = WMGetListItem(panel->texLs, panel->textureIndex[0]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "FTitleBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[1]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "UTitleBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[2]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "PTitleBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[3]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "ResizebarBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[4]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "MenuTitleBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[5]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "MenuTextBack");
-
-    item = WMGetListItem(panel->texLs, panel->textureIndex[6]);
-    titem = (TextureListItem*)item->clientData;
-    SetObjectForKey(titem->prop, "IconBack");
+    for (i = 0; i < 8; i++) {
+	SetStringForKey(WMGetColorRGBDescription(panel->colors[i]),
+			colorOptions[i]);
+    }
 
     switch (panel->menuStyle) {
      case MSTYLE_SINGLE:
@@ -1631,6 +1992,18 @@ storeData(_Panel *panel)
      default:
      case MSTYLE_NORMAL:
 	SetStringForKey("normal", "MenuStyle");
+	break;
+    }
+    switch (panel->titleAlignment) {
+     case WALeft:
+	SetStringForKey("left", "TitleJustify");
+	break;
+     case WARight:
+	SetStringForKey("right", "TitleJustify");
+	break;
+     default:
+     case WACenter:
+	SetStringForKey("center", "TitleJustify");
 	break;
     }
 }
