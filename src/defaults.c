@@ -2751,7 +2751,7 @@ setClearance(WScreen *scr, WDefaultEntry *entry, void *bar, void *foo)
 }
 
 static int
-setIfDockPresent(WScreen *scr, WDefaultEntry *entry, int *flag, long which)
+setIfDockPresent(WScreen *scr, WDefaultEntry *entry, char *flag, long which)
 {
     switch (which) {
     case WM_DOCK:
@@ -3424,7 +3424,7 @@ setDoubleClick(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
 
 
 static int
-setMultiByte(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
+setMultiByte(WScreen *scr, WDefaultEntry *entry, char *value, void *foo)
 {
     extern _WINGsConfiguration WINGsConfiguration;
 

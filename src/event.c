@@ -653,16 +653,13 @@ handleButtonPress(XEvent *event)
     }
 #endif /* !LITE */
 
+    desc = NULL;
     if (XFindContext(dpy, event->xbutton.subwindow, wWinContext,
 		     (XPointer *)&desc)==XCNOENT) {
 	if (XFindContext(dpy, event->xbutton.window, wWinContext,
 			 (XPointer *)&desc)==XCNOENT) {
 	    return;
 	}
-    }
-
-    if (desc->handle_mousedown!=NULL) {
-	(*desc->handle_mousedown)(desc, event);
     }
 
     if (desc->parent_type == WCLASS_WINDOW) {
@@ -687,6 +684,10 @@ handleButtonPress(XEvent *event)
 	    XAllowEvents(dpy, AsyncPointer, CurrentTime);
 	    XSync(dpy, 0);
 	}
+    }
+
+    if (desc->handle_mousedown!=NULL) {
+	(*desc->handle_mousedown)(desc, event);
     }
 
     /* save double-click information */
