@@ -24,6 +24,7 @@ changes since wmaker 0.62.1:
 - WMListSelectionDidChangeNotification passes NULL as the notification 
   client data (previously passed the selected item row).
 - WMRemoveListItem() returns an int : 1 success, 0 fail (previously was void).
+- added WMUnselectListItem(), WMSelectAllListItems(), WMUnselectAllListItems()
 
 
 changes since wmaker 0.62.0:

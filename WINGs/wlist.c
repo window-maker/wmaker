@@ -14,8 +14,6 @@ typedef struct W_List {
     WMArray *items; 	    /* list of WMListItem */
     WMArray *selectedItems; /* list of selected WMListItems */
 
-    //short selectedItem;
-
     short itemHeight;
 
     short topItem;	    /* index of first visible item */
@@ -129,8 +127,6 @@ WMCreateList(WMWidget *parent)
 
     W_ResizeView(lPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-    //lPtr->selectedItem = -1;
-
     return lPtr;
 }
 
@@ -188,11 +184,6 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
     memset(item, 0, sizeof(WMListItem));
     item->text = wstrdup(text);
 
-
-    //if (lPtr->selectedItem >= row && lPtr->selectedItem >= 0
-    //    && row >= 0)
-    //    lPtr->selectedItem++;
-
     row = WMIN(row, WMGetArrayItemCount(lPtr->items));
 
     if (row < 0)
@@ -228,13 +219,6 @@ WMRemoveListItem(WMList *lPtr, int row)
         //WMUnselectListItem(lPtr, row);
         selNotify = 1;
     }
-
-    //if (lPtr->selectedItem == row) {
-    //    lPtr->selectedItem = -1;
-    //    selNotify = 1;
-    //} else if (lPtr->selectedItem > row) {
-    //    lPtr->selectedItem--;
-    //}
 
     if (row <= lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll)
         lPtr->topItem--;
@@ -300,7 +284,6 @@ WMClearList(WMList *lPtr)
     WMEmptyArray(lPtr->items);
 
     lPtr->topItem = 0;
-    //lPtr->selectedItem = -1;
 
     if (!lPtr->idleID) {
         WMDeleteIdleHandler(lPtr->idleID);
@@ -448,43 +431,18 @@ vScrollCallBack(WMWidget *scroller, void *self)
 
     switch (WMGetScrollerHitPart((WMScroller*)scroller)) {
     case WSDecrementLine:
-        //if (lPtr->topItem > 0) {
-        //    lPtr->topItem--;
-        //
-        //    updateScroller(lPtr);
-        //}
         scrollByAmount(lPtr, -1);
         break;
 
     case WSIncrementLine:
-        //if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
-        //    lPtr->topItem++;
-        //
-        //    updateScroller(lPtr);
-        //}
         scrollByAmount(lPtr, 1);
         break;
 
     case WSDecrementPage:
-        //if (lPtr->topItem > 0) {
-        //    lPtr->topItem -= lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
-        //    if (lPtr->topItem < 0)
-        //        lPtr->topItem = 0;
-        //
-        //    updateScroller(lPtr);
-        //}
         scrollByAmount(lPtr, -lPtr->fullFitLines+(1-lPtr->flags.dontFitAll)+1);
         break;
 
     case WSIncrementPage:
-        //if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
-        //    lPtr->topItem += lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
-        //
-        //    if (lPtr->topItem + lPtr->fullFitLines > itemCount)
-        //        lPtr->topItem = itemCount - lPtr->fullFitLines;
-        //
-        //    updateScroller(lPtr);
-        //}
         scrollByAmount(lPtr, lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1);
         break;
 
@@ -711,9 +669,77 @@ WMSelectListItem(WMList *lPtr, int row)
                          lPtr->view->size.width, lPtr->view->size.height,
                          WRSunken);
     }
-    //lPtr->selectedItem = row;
 
     WMPostNotificationName(WMListSelectionDidChangeNotification, lPtr, NULL);
+}
+
+
+// make them return an int
+
+void
+WMUnselectListItem(WMList *lPtr, int row)
+{
+    WMListItem *item = WMGetFromArray(lPtr->items, row);
+
+    if (!item || !item->selected)
+        return;
+
+    // also add check for allowEmptySelection
+
+    item->selected = 0;
+    WMRemoveFromArray(lPtr->selectedItems, item);
+
+    if (lPtr->view->flags.mapped && row>=lPtr->topItem
+        && row<=lPtr->topItem+lPtr->fullFitLines) {
+        paintItem(lPtr, row);
+    }
+}
+
+
+void
+WMSelectAllListItems(WMList *lPtr)
+{
+    int i;
+    WMListItem *item;
+
+    if (!lPtr->flags.allowMultipleSelection)
+        return;
+
+    // implement some WMDuplicateArray() ?
+    for (i=0; i<WMGetArrayItemCount(lPtr->items); i++) {
+        item = WMGetFromArray(lPtr->items, i);
+        if (!item->selected) {
+            item->selected = 1;
+            WMAddToArray(lPtr->selectedItems, item);
+            if (lPtr->view->flags.mapped && i>=lPtr->topItem
+                && i<=lPtr->topItem+lPtr->fullFitLines) {
+                paintItem(lPtr, i);
+            }
+        }
+    }
+}
+
+
+void
+WMUnselectAllListItems(WMList *lPtr)
+{
+    int i;
+    WMListItem *item;
+
+    // check for allowEmptySelection
+
+    for (i=0; i<WMGetArrayItemCount(lPtr->items); i++) {
+        item = WMGetFromArray(lPtr->items, i);
+        if (item->selected) {
+            item->selected = 0;
+            if (lPtr->view->flags.mapped && i>=lPtr->topItem
+                && i<=lPtr->topItem+lPtr->fullFitLines) {
+                paintItem(lPtr, i);
+            }
+        }
+    }
+
+    WMEmptyArray(lPtr->selectedItems);
 }
 
 
@@ -737,6 +763,7 @@ handleActionEvents(XEvent *event, void *data)
     List *lPtr = (List*)data;
     int tmp;
     int topItem = lPtr->topItem;
+    static int oldClicked = -1;
 
     CHECK_CLASS(data, WC_List);
 
@@ -754,10 +781,12 @@ handleActionEvents(XEvent *event, void *data)
         lPtr->flags.buttonPressed = 0;
         tmp = getItemIndexAt(lPtr, event->xbutton.y);
 
-        if (tmp == lPtr->selectedItem && tmp >= 0) {
+        if (/*tmp == lPtr->selectedItem && */tmp >= 0) {
             if (lPtr->action)
                 (*lPtr->action)(lPtr, lPtr->clientData);
         }
+
+        oldClicked = tmp;
         break;
 
     case EnterNotify:
@@ -773,21 +802,10 @@ handleActionEvents(XEvent *event, void *data)
     case ButtonPress:
         if (event->xbutton.x > WMWidgetWidth(lPtr->vScroller)) {
 #ifdef CHECK_WHEEL_PATCH
-            int amount = 0;
+            if (event->xbutton.button == WINGsConfiguration.mouseWheelDown ||
+                event->xbutton.button == WINGsConfiguration.mouseWheelUp) {
+                int amount = 0;
 
-            // join them
-            if (event->xbutton.button == WINGsConfiguration.mouseWheelDown) {
-                /* Wheel down */
-                /*int itemCount = WMGetArrayItemCount(lPtr->items);
-                if (lPtr->topItem + lPtr->fullFitLines < itemCount) {
-                    int incr = lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
-                    lPtr->topItem += incr;
-
-                    if (lPtr->topItem + lPtr->fullFitLines > itemCount)
-                        lPtr->topItem = itemCount - lPtr->fullFitLines;
-
-                    updateScroller(lPtr);
-                }*/
                 if (event->xbutton.state & ShiftMask) {
                     amount = lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
                 } else if (event->xbutton.state & ControlMask) {
@@ -797,31 +815,8 @@ handleActionEvents(XEvent *event, void *data)
                     if (amount == 0)
                         amount++;
                 }
-
-                scrollByAmount(lPtr, amount);
-                break;
-            }
-
-            if (event->xbutton.button == WINGsConfiguration.mouseWheelUp) {
-                /* Wheel up */
-                /*if (lPtr->topItem > 0) {
-                    int decr = lPtr->fullFitLines-(1-lPtr->flags.dontFitAll)-1;
-                    lPtr->topItem -= decr;
-
-                    if (lPtr->topItem < 0)
-                        lPtr->topItem = 0;
-
-                    updateScroller(lPtr);
-                }*/
-                if (event->xbutton.state & ShiftMask) {
-                    amount = -lPtr->fullFitLines+(1-lPtr->flags.dontFitAll)+1;
-                } else if (event->xbutton.state & ControlMask) {
-                    amount = -1;
-                } else {
-                    amount = -(lPtr->fullFitLines / 3);
-                    if (amount == 0)
-                        amount--;
-                }
+                if (event->xbutton.button == WINGsConfiguration.mouseWheelUp)
+                    amount = -amount;
 
                 scrollByAmount(lPtr, amount);
                 break;
@@ -832,7 +827,7 @@ handleActionEvents(XEvent *event, void *data)
             lPtr->flags.buttonPressed = 1;
 
             if (tmp >= 0) {
-                if (tmp == lPtr->selectedItem && WMIsDoubleClick(event)) {
+                if (tmp == oldClicked && WMIsDoubleClick(event)) {
                     WMSelectListItem(lPtr, tmp);
                     if (lPtr->doubleAction)
                         (*lPtr->doubleAction)(lPtr, lPtr->doubleClientData);
@@ -840,13 +835,15 @@ handleActionEvents(XEvent *event, void *data)
                     WMSelectListItem(lPtr, tmp);
                 }
             }
+
+            oldClicked = tmp;
         }
         break;
 
     case MotionNotify:
         if (lPtr->flags.buttonPressed) {
             tmp = getItemIndexAt(lPtr, event->xmotion.y);
-            if (tmp>=0 && tmp != lPtr->selectedItem) {
+            if (tmp>=0 /*&& tmp != lPtr->selectedItem*/) {
                 WMSelectListItem(lPtr, tmp);
             }
         }

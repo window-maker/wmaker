@@ -1086,6 +1086,12 @@ int WMRemoveListItem(WMList *lPtr, int row);
 
 void WMSelectListItem(WMList *lPtr, int row);
 
+void WMUnselectListItem(WMList *lPtr, int row);
+
+void WMSelectAllListItems(WMList *lPtr);
+
+void WMUnselectAllListItems(WMList *lPtr);
+
 void WMSetListUserDrawProc(WMList *lPtr, WMListDrawProc *proc);
 
 void WMSetListUserDrawItemHeight(WMList *lPtr, unsigned short height);
