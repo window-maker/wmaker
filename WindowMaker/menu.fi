@@ -3,17 +3,24 @@
  *
  * Syntax is:
  *
- * <Title> <Command> <Parameters>
+ * <Title> [SHORTCUT <Shortcut>] <Command> <Parameters>
  *
  * <Title> is any string to be used as title. Must be enclosed with " if it
  * 	has spaces
+ * 
+ * SHORTCUT specifies a shortcut for that item. <Shortcut> has the
+ * same syntax of the shortcuts key options in the 
+ * $HOME/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
  *
+ * You can't specify a shortcut for a MENU or OPEN_MENU entry.
+ * 
  * <Command> one of the valid commands: 
  *	MENU - starts (sub)menu definition
+ *	END  - end (sub)menu definition
  *	OPEN_MENU - opens a menu from a file, pipe or directory(ies) contents
  *		    and eventually precede each with a command.
- *	END  - end (sub)menu definition
- *	WORKSPACE_MENU - adds a submenu for workspace operations
+ *	WORKSPACE_MENU - adds a submenu for workspace operations. Only one
+ *		    workspace_menu is allowed. 		
  *	EXEC <program> - executes an external program
  *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - exits the window manager
@@ -38,6 +45,7 @@
  *		       SAVE_SESSION or CLEAR_SESSION (see below).
  *	CLEAR_SESSION - clears any previous saved session. This will not have
  *		       any effect if SaveSessionOnExit is True.
+ *	INFO - shows the Info Panel
  *
  * OPEN_MENU syntax:
  *   1. File menu handling.
@@ -58,17 +66,20 @@
  *	// Opens one or more directories and construct menu with all
  *	// subdirectories and readable files in them sorted alphabetically,
  *	// preceding each of them with command.
- *	OPEN_MENU /some/dir [/some/other/dir ...] WITH command -options
- *
+ *	OPEN_MENU [options] /some/dir [/some/other/dir ...] WITH command -options
+ *		Options:
+ * 			-noext 	strip whatever is after the last dot in the
+ *				file name
  *
  * <Parameters> is the program to execute.
  *
  * ** Options for command line in EXEC:
  * %s - substitute with current selection
- * %a(message) - opens a input box with the message and do substitution with
- *		what you typed
+ * %a(title[,prompt]) - opens a input box with the specified title and the
+ *			optional prompt	and do substitution with what you typed
  * %w - substitute with XID for the current focused window
- *
+ * %W - substitute with the number of the current workspace
+ * 
  * You can override special characters (as % and ") with the \ character:
  * ex: xterm -T "\"Hello World\""
  *
@@ -85,7 +96,7 @@
  *		// some X11 apps in different directories
  *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// set some background images
- *	"Background" OPEN_MENU $HOME/images /usr/share/images WITH wmsetbg -u -t
+ *	"Background" OPEN_MENU -noext $HOME/images /usr/share/images WITH wmsetbg -u -t
  *		// inserts the style.menu in this entry
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -95,13 +106,14 @@
 
 "Sovellukset" MENU
 	"Tietoja" MENU
-		"Info Panel..." INFO_PANEL
-		"Legal" LEGAL_PANEL
-		"Järjestelmän konsoli" EXEC xconsole
-		"Järjestelmän kuorma" SHEXEC xosview || xload
-		"Prosessilista" EXEC xterm -e top
-		"Manuaalin selain" EXEC xman
-	"Info" END
+		"Tietoja..." INFO_PANEL
+		"Laillista" LEGAL_PANEL
+		"Järjestelmäkonsoli" EXEC xconsole
+		"Järjestelmän rasitus" SHEXEC xosview || xload
+		"Prosessiluettelo" EXEC xterm -e top
+		"Ohjeselain" EXEC xman
+	"Tietoja" END
+	"Käynnistä..." SHEXEC %a(Käynnistä,Kirjoita suoritettava komento:)
 	"XTerm" EXEC xterm -sb 
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Työtilat" WORKSPACE_MENU
@@ -112,12 +124,12 @@
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
 		"Grafiikka" END
-		"Xfm" EXEC xfm
-		"OffiX Files" EXEC files
+		"X Tiedostonhallinta" EXEC xfm
+		"OffiX Tiedostot" EXEC files
 		"LyX" EXEC lyx
 		"Netscape" EXEC netscape 
-  		"Ghostview" EXEC ghostview %a(Enter file to view)
-		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)
+  		"Ghostview" EXEC ghostview %a(GhostView,Kirjoita näytettävän tiedoston nimi:)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat,Kirjoita näytettävän PDF-tiedoston nimi)
   		"TkDesk" EXEC tkdesk
 	"Sovellukset" END
 	"Editorit" MENU
@@ -128,71 +140,78 @@
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
 	"Editorit" END
-	"Muut" MENU
+	"Sekalaiset" MENU
 		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
-	"Muut" END
-	"Työkalut" MENU
+	"Sekalaiset" END
+	"Apuohjelmat" MENU
 		"Laskin" EXEC xcalc
-		"Ikkunoiden asetukset" SHEXEC xprop | xmessage -center -title 'xprop' -file -
-		"Kirjasinlajin valitsin" EXEC xfontsel
-		"Pääte-emulaattori" EXEC xminicom
-		"Suurenuslasi" EXEC xmag
-		"Väripaletti" EXEC xcmap
+		"Ikkunan ominaisuudet" SHEXEC xprop | xmessage -center -title 'xprop' -file -
+		"Kirjasinlajivalitsin" EXEC xfontsel
+		"Pääte" EXEC xminicom
+		"Suurennuslasi" EXEC xmag
+		"Värikartta" EXEC xcmap
 		"XKill" EXEC xkill
-		"ASClock" EXEC asclock -shape
 		"Leikepöytä" EXEC xclipboard
-	"Työkalut" END
+	"Apuohjelmat" END
 
-	"Leikkaa-liimaa" MENU
+	"Valinta" MENU
 		"Kopioi" SHEXEC echo '%s' | wxcopy
-		"Lähetä sähköpostilla" EXEC xterm -name mail -T "Pine" -e pine %s
-		"Selaa" EXEC netscape %s
-		"Etsi manuaalista" SHEXEC MANUAL_SEARCH(%s)
-	"Leikkaa-liimaa" END
+		"Lähetä sähköpostina" EXEC xterm -name mail -T "Pine" -e pine %s
+		"Selaa selaimella" EXEC netscape %s
+		"Etsi ohjeista" SHEXEC MANUAL_SEARCH(%s)
+	"Valinta" END
 
-	"Työtilat" MENU
+	"Työtila" MENU
 		"Piilota muut" HIDE_OTHERS
-		"Näytä kaikki" SHOW_ALL
-		"Järjestele kuvakkeet" ARRANGE_ICONS
-		"Päivitä" REFRESH
-		"Lukitse" EXEC xlock -allowroot -usefirst
-		"Talleta istunto" SAVE_SESSION
-		"Tyhjennä talletettu istunto" CLEAR_SESSION
-	"Työtilat" END
+		"Näytä kaikki ikkunat" SHOW_ALL
+		"Järjestä kuvakkeet" ARRANGE_ICONS
+		"Virkistä ruutu" REFRESH
+		"Lukitse näyttö" EXEC xlock -allowroot -usefirst
+		"Tallenna istunto" SAVE_SESSION
+		"Tyhjennä istunto" CLEAR_SESSION
+	"Työtila" END
 
 	"Ulkonäkö" MENU
-		"Teemat" OPEN_MENU -noext  THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Tyylit" OPEN_MENU -noext  STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Kuvakeryhmät" OPEN_MENU -noext  ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Teemat" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Tyylit" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Kuvakkeet" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Taustat" MENU
-			"Taustaväri" MENU
+			"Yksivärinen" MENU
                         	"Musta" WS_BACK '(solid, black)'
                         	"Sininen"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Tumman Sininen" WS_BACK '(solid, "#224477")'
-                        	"Purppura" WS_BACK '(solid, "#554466")'
-                        	"Wheat"  WS_BACK '(solid, "wheat4")'
-                        	"Tumman harmaa"  WS_BACK '(solid, "#333340")'
-                        	"Viini" WS_BACK '(solid, "#400020")'
-			"Taustaväri" END
+				"Tummansininen" WS_BACK '(solid, "#224477")'
+                        	"Violetti" WS_BACK '(solid, "#554466")'
+                        	"Kellertävä"  WS_BACK '(solid, "wheat4")'
+                        	"Tummanharmaa"  WS_BACK '(solid, "#333340")'
+                        	"Viininpunainen" WS_BACK '(solid, "#400020")'
+			"Yksivärinen" END
 			"Liukuväri" MENU
-				"Lippu" WS_BACK '(mdgradient, green, red, white, green)'
+				"Auringonlasku" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
 				"Taivas" WS_BACK '(vgradient, blue4, white)'
+    				"Sinisen sävyjä" WS_BACK '(vgradient, "#7080a5", "#101020")'
+				"Indigon sävyjä" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
+			    	"Violetin sävyjä" WS_BACK '(vgradient, "#654c66", "#151426")'
+    				"Kellertävän sävyjä" WS_BACK '(vgradient, "#a09060", "#302010")'
+    				"Harmaan sävyjä" WS_BACK '(vgradient, "#636380", "#131318")'
+    				"Viininpunaisen sävyjä" WS_BACK '(vgradient, "#600040", "#180010")'
 			"Liukuväri" END
-			"Taustakuvat" OPEN_MENU -noext  BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+			"Kuvat" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Taustat" END
-		"Talleta teema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name)"
-		"Talleta kuvakeryhmät" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name)"
+		"Tallenna teema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Teeman nimi,Kirjoita teematiedoston nimi:)"
+		"Tallenna kuvakkeet" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Kuvakesetin nimi,Kirjoita tiedostonnimi:)"
+		"Asetukset" EXEC /usr/local/GNUstep/Apps/WPrefs.app/WPrefs
 	"Ulkonäkö" END
 
-	"Poistu"	MENU
-		"Uudelleen käynnistä" RESTART
-		"Käynnistä AfterStep" RESTART afterstep
-		"Kirjaudu ulos..."  EXIT
-		"Sammuta..." SHUTDOWN
-	"Poistu" END
+	"Lopeta"	MENU
+		"Käynnistä WM uudelleen" RESTART
+		"Käynnistä BlackBox" RESTART blackbox
+		"Käynnistä kwm" RESTART kwm
+		"Käynnistä IceWM" RESTART icewm
+		"Lopeta"  EXIT
+	"Lopeta" END
 "Sovellukset" END
 
 
