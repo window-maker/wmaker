@@ -49,8 +49,18 @@ RCreateImage(unsigned width, unsigned height, int alpha)
     
     /* detect overflow (gr33tz to ruda :D) */
     bla1 = width*height;
+    if (bla1 / height != width) {
+	RErrorCode = RERR_NOMEMORY;
+	return NULL;
+    }
+    
     bla2 = bla1*4;
-    if (bla1/height != width || bla2/4 != bla1 || bla2 > INT_MAX-32) {
+    if (bla2/4 != bla1) {
+	RErrorCode = RERR_NOMEMORY;
+	return NULL;
+    }
+
+    if (bla2 > INT_MAX - 4) {
 	RErrorCode = RERR_NOMEMORY;
 	return NULL;
     }
@@ -78,6 +88,7 @@ RCreateImage(unsigned width, unsigned height, int alpha)
     }
 
     return image;
+
 }
 
 
