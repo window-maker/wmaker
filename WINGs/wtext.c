@@ -3076,7 +3076,6 @@ WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w,
     unsigned short first, unsigned short extraInfo)
 {
     TextBlock *tb;
-    unsigned short len;
 
     if (!w || !description || !color) 
         return NULL;
@@ -3085,12 +3084,8 @@ WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w,
     if (!tb)
          return NULL;
 
-    len = strlen(description)+1;
-    tb->text = (char *)wmalloc(len);
-    memset(tb->text, 0, len);
-    memcpy(tb->text, description, len);
-    tb->used = len;
-    tb->text[tb->used] = 0;
+    tb->text = wstrdup(description);
+    tb->used = strlen(description);
     tb->blank = False;
     tb->d.widget = w;    
     tb->color = WMRetainColor(color);
@@ -3118,7 +3113,6 @@ WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p,
     unsigned short first, unsigned short extraInfo)
 {
     TextBlock *tb;
-    unsigned short len;
 
     if (!p || !description || !color) 
         return NULL;
@@ -3127,12 +3121,8 @@ WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p,
     if (!tb)
          return NULL;
 
-    len = strlen(description)+1;
-    tb->text = (char *)wmalloc(len);
-    memset(tb->text, 0, len);
-    memcpy(tb->text, description, len);
-    tb->used = len;
-    tb->text[tb->used] = 0;
+    tb->text = wstrdup(description);
+    tb->used = strlen(description);
     tb->blank = False;
     tb->d.pixmap = WMRetainPixmap(p);    
     tb->color = WMRetainColor(color);
