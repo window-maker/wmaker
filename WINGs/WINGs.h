@@ -435,11 +435,11 @@ typedef struct WMBrowserDelegate {
 typedef struct WMTextFieldDelegate {
     void *data;
 
-    void (*didBeginEditing)(struct WMTextFieldDelegate *self,
-			    WMNotification *notif);
-
     void (*didChange)(struct WMTextFieldDelegate *self, 
 		      WMNotification *notif);
+
+    void (*didBeginEditing)(struct WMTextFieldDelegate *self,
+			    WMNotification *notif);
 
     void (*didEndEditing)(struct WMTextFieldDelegate *self,
 			  WMNotification *notif);

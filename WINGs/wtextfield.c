@@ -230,7 +230,8 @@ requestHandler(WMWidget *w, Atom selection, Atom target, Atom *type,
 static void
 lostHandler(WMWidget *w, Atom selection)
 {
-    TextField *tPtr;
+    TextField *tPtr = (WMTextField*)w;
+
     tPtr->selection.count = 0;
     paintTextField(tPtr);
 }

@@ -146,7 +146,7 @@ browseForFile(WMWidget *w, void *data)
     WMSetFilePanelCanChooseFiles(filePanel, False);
 
     if (WMRunModalFilePanelForDirectory(filePanel, panel->win, "/",
-                                        _("Select path"), NULL) == True) {
+                                        _("Select directory"), NULL) == True) {
         char *str = WMGetFilePanelFileName(filePanel);
 
         if (str) {
