@@ -103,7 +103,7 @@ typedef enum {
 
 
 enum {
-    WBNotFound = INT_MAX /* element was not found in bag */
+    WBNotFound = INT_MIN /* element was not found in bag */
 };
 
 
@@ -153,6 +153,7 @@ typedef struct W_BagFunctions {
     int (*putInBag)(WMBag *self, void *item);
     int (*insertInBag)(WMBag *self, int index, void *item);
     int (*removeFromBag)(WMBag *bag, void *item);
+    int (*eraseFromBag)(WMBag *bag, int index);
     int (*deleteFromBag)(WMBag *bag, int index);
     void *(*getFromBag)(WMBag *bag, int index);
     int (*firstInBag)(WMBag *bag, void *item);
@@ -359,9 +360,16 @@ WMBag *WMCreateTreeBagWithDestructor(void (*destructor)(void*));
 
 #define WMPutInBag(bag, item) bag->func.putInBag(bag, item)
 
+/* insert will increment the index of elements after it by 1 */
 #define WMInsertInBag(bag, index, item) bag->func.insertInBag(bag, index, item)
 
 /* this is slow */
+/* erase will remove the element from the bag,
+ * but will keep the index of the other elements unchanged */
+#define WMEraseFromBag(bag, index) bag->func.deleteFromBag(bag, index)
+
+/* delete and remove will remove the elements and cause the elements
+ * after them to decrement their indexes by 1 */
 #define WMRemoveFromBag(bag, item) bag->func.removeFromBag(bag, item)
 
 #define WMDeleteFromBag(bag, index) bag->func.deleteFromBag(bag, index)
@@ -404,6 +412,17 @@ WMBag *WMCreateTreeBagWithDestructor(void (*destructor)(void*));
 
 #define WMBagIndexForIterator(bag, ptr) bag->func.indexForIterator(bag, ptr)
 
+    
+    
+#define WM_ITERATE_BAG(bag, var, i) \
+      	for (var = WMBagFirst(bag, &(i)); (i) != NULL; \
+		var = WMBagNext(bag, &(i)))
+
+#define WM_ETARETI_BAG(bag, var, i) \
+      	for (var = WMBagLast(bag, &(i)); (i) != NULL; \
+		var = WMBagPrevious(bag, &(i)))
+
+    
     
 /*-------------------------------------------------------------------------*/
 

@@ -431,13 +431,11 @@ void
 WMDequeueNotificationMatching(WMNotificationQueue *queue, 
 			      WMNotification *notification, unsigned mask)
 {
-    int i;
+    WMBagIterator i;
     WMNotification *tmp;
 
     if ((mask & WNCOnName) && (mask & WNCOnSender)) {
-	for (i = 0; i < WMGetBagItemCount(queue->asapQueue); i++) {
-	    tmp = WMGetFromBag(queue->asapQueue, i);
-
+	WM_ITERATE_BAG(queue->asapQueue, tmp, i) {
             if (notification->object == tmp->object &&
                 strcmp(notification->name, tmp->name) == 0) {
 		WMRemoveFromBag(queue->asapQueue, tmp);
@@ -445,9 +443,7 @@ WMDequeueNotificationMatching(WMNotificationQueue *queue,
 		break;
 	    }
 	}
-	for (i = 0; i < WMGetBagItemCount(queue->idleQueue); i++) {
-	    tmp = WMGetFromBag(queue->idleQueue, i);
-
+	WM_ITERATE_BAG(queue->idleQueue, tmp, i) {
             if (notification->object == tmp->object &&
                 strcmp(notification->name, tmp->name) == 0) {
 		WMRemoveFromBag(queue->idleQueue, tmp);
@@ -456,18 +452,14 @@ WMDequeueNotificationMatching(WMNotificationQueue *queue,
 	    }
 	}
     } else if (mask & WNCOnName) {
-	for (i = 0; i < WMGetBagItemCount(queue->asapQueue); i++) {
-	    tmp = WMGetFromBag(queue->asapQueue, i);
-
+	WM_ITERATE_BAG(queue->asapQueue, tmp, i) {
 	    if (strcmp(notification->name, tmp->name) == 0) {
 		WMRemoveFromBag(queue->asapQueue, tmp);
 		WMReleaseNotification(tmp);
 		break;
 	    }
 	}
-	for (i = 0; i < WMGetBagItemCount(queue->idleQueue); i++) {
-	    tmp = WMGetFromBag(queue->idleQueue, i);
-
+	WM_ITERATE_BAG(queue->idleQueue, tmp, i) {
 	    if (strcmp(notification->name, tmp->name) == 0) {
 		WMRemoveFromBag(queue->idleQueue, tmp);
 		WMReleaseNotification(tmp);
@@ -475,18 +467,14 @@ WMDequeueNotificationMatching(WMNotificationQueue *queue,
 	    }
 	}
     } else if (mask & WNCOnSender) {
-	for (i = 0; i < WMGetBagItemCount(queue->asapQueue); i++) {
-	    tmp = WMGetFromBag(queue->asapQueue, i);
-
+	WM_ITERATE_BAG(queue->asapQueue, tmp, i) {
 	    if (notification->object == tmp->object) {
 		WMRemoveFromBag(queue->asapQueue, tmp);
 		WMReleaseNotification(tmp);
 		break;
 	    }
 	}
-	for (i = 0; i < WMGetBagItemCount(queue->idleQueue); i++) {
-	    tmp = WMGetFromBag(queue->idleQueue, i);
-
+	WM_ITERATE_BAG(queue->idleQueue, tmp, i) {
 	    if (notification->object == tmp->object) {
 		WMRemoveFromBag(queue->idleQueue, tmp);
 		WMReleaseNotification(tmp);

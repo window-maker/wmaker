@@ -130,12 +130,12 @@ findChildInWindow(Display *dpy, Window toplevel, int x, int y)
     Window *children;
     unsigned nchildren;
     int i;
-    
+        
     if (!XQueryTree(dpy, toplevel, &foo, &bar,
 		    &children, &nchildren) || children == NULL) {
 	return None;
     }
-
+    
     /* first window that contains the point is the one */
     for (i = nchildren-1; i >= 0; i--) {
 	XWindowAttributes attr;
@@ -150,8 +150,8 @@ findChildInWindow(Display *dpy, Window toplevel, int x, int y)
 				      x - attr.x, y - attr.y);
 
 	    XFree(children);
-
-	    if (!child)
+	    
+	    if (child == None)
 		return toplevel;
 	    else
 		return child;
@@ -167,7 +167,7 @@ static WMView*
 findViewInToplevel(Display *dpy, Window toplevel, int x, int y)
 {
     Window child;
-    
+
     child = findChildInWindow(dpy, toplevel, x, y);
     
     if (child != None)
@@ -375,6 +375,16 @@ notifyDragEnter(WMScreen *scr, WMDraggingInfo *info)
     return 0;
 }
 
+
+static void
+translateCoordinates(WMScreen *scr, Window target, int fromX, int fromY,
+		     int *x, int *y)
+{
+    Window child;
+	
+    XTranslateCoordinates(scr->display, scr->rootWin, target,
+			  fromX, fromY, x, y, &child);
+}
 
 
 static void
@@ -912,10 +922,10 @@ getTypeList(Window window, XClientMessageEvent *event)
 	    types[i++] = event->data.l[3];
 	if (event->data.l[4] != None)
 	    types[i++] = event->data.l[4];
-	types[i] = NULL;
+	types[i] = 0;
     }
     
-    if (types[0] == NULL) {
+    if (types[0] == 0) {
 	wwarning("received invalid drag & drop type list");
 	//XXX	    return;
     }
@@ -924,16 +934,16 @@ getTypeList(Window window, XClientMessageEvent *event)
 }
 
 
-
 void
 W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 {
+#if 0
     WMScreen *scr = W_VIEW_SCREEN(toplevel);
-    WMView *view;
-    int operation;
+    WMView *oldView = NULL, *newView = NULL;
+    unsigned operation = 0;
+    int x, y;
 
     if (event->message_type == scr->xdndEnterAtom) {
-	Atom *types;
 	Window foo, bar;
 	int bla;
 	unsigned ble;
@@ -952,38 +962,54 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 	    return;
 	}
 	
-	info.protocolVersion = event->data.l[0] >> 24;
-	
-	info.sourceWindow = event->data.l[0];
-	info.destinationWindow = event->window;
+	scr->dragInfo.protocolVersion = event->data.l[1] >> 24;
+	scr->dragInfo.sourceWindow = event->data.l[0];
+	scr->dragInfo.destinationWindow = event->window;
 	
 	/* XXX */
-	info.image = NULL;
+	scr->dragInfo.image = NULL;
 	
 	XQueryPointer(scr->display, scr->rootWin, &foo, &bar,
-		      &event->location.x, &event->location.y,
+		      &scr->dragInfo.location.x, &scr->dragInfo.location.y,
 		      &bla, &bla, &ble);
 
-	view = findViewInToplevel(scr->display, 
-				  scr->dragInfo.destinationWindow,
-				  scr->dragInfo.location.x,
-				  scr->dragInfo.location.y);
+	translateCoordinates(scr, scr->dragInfo.destinationWindow,
+			     scr->dragInfo.location.x,
+			     scr->dragInfo.location.y, &x, &y);
+
+
+	newView = findViewInToplevel(scr->display,
+		 		  scr->dragInfo.destinationWindow, 
+				  x, y);
 	
 	if (IS_DROPPABLE(view)) {
+	    
+	    scr->dragInfo.destinationView = view;
+	    
 	    operation =
 		view->dragDestinationProcs->draggingEntered(view, 
 							    &scr->dragInfo);
-	} else {
-	    operation = 0;
 	}
-	
+	if (operation > 0) {
+	    Atom action;
+		
+	    switch (operation) {
+	     default:
+		action = 0;
+		break;
+	    }
+
+	    sendClientMessage(scr->display, scr->dragInfo.sourceWindow,
+			      scr->xdndStatusAtom,
+			      scr->dragInfo.destinationWindow,
+			      1, 0, 0, action);
+	}
 
     } else if (event->message_type == scr->xdndPositionAtom
 	       && scr->dragInfo.sourceWindow == event->data.l[0]) {
-	unsigned operation = 0;
 	
 	scr->dragInfo.location.x = event->data.l[2] >> 16;
-	scr->dragInfo.location.y = event->data.l[2] 0xffff;
+	scr->dragInfo.location.y = event->data.l[2] & 0xffff;
 	
 	if (scr->dragInfo.protocolVersion >= 1) {
 	    scr->dragInfo.timestamp = event->data.l[3];
@@ -992,25 +1018,36 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 	    scr->dragInfo.timestamp = CurrentTime;
 	    scr->dragInfo.sourceOperation = 0; /*XXX*/
 	}
+
+	translateCoordinates(scr, scr->dragInfo.destinationWindow,
+			     scr->dragInfo.location.x,
+			     scr->dragInfo.location.y, &x, &y);
+
+	view = findViewInToplevel(scr->display, 
+				  scr->dragInfo.destinationWindow,
+				  x, y);
 	
-	child = findChildInWindow(scr->display, scr->dragInfo.destinationWindow,
-				  scr->dragInfo.location.x,
-				  scr->dragInfo.location.y);
-	if (child != None) {
-	    view = W_GetViewForXWindow(scr->display, child);
-	} else {
-	    view = NULL;
+	if (scr->dragInfo.destinationView != view) {
+	    WMView *oldVIew = scr->dragInfo.destinationView;
+	    
+	    oldView->dragDestinationProcs->draggingExited(oldView,
+							  &scr->dragInfo);
+	    
+	    scr->dragInfo.destinationView = NULL;
 	}
 	
+
 	if (IS_DROPPABLE(view)) {
+	    
+	    
 	    operation =
-		view->dragDestinationProcs->draggingUpdated(view, 
+		view->dragDestinationProcs->draggingUpdated(view,
 							    &scr->dragInfo);
 	}
 	
 	if (operation == 0) {
-	    sendClientMessage(scr->display, scr->xdndStatusAtom,
-			      scr->dragInfo.sourceWindow,
+	    sendClientMessage(scr->display, scr->dragInfo.sourceWindow,
+			      scr->xdndStatusAtom,
 			      scr->dragInfo.destinationWindow,
 			      0, 0, 0, None);
 	} else {
@@ -1018,25 +1055,30 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 		
 	    switch (operation) {
 	     default:
-		action =;
+		action = 0;
 		break;
 	    }
-		
-	    sendClientMessage(scr->display, scr->xdndStatusAtom,
-			      scr->dragInfo.sourceWindow,
+
+	    sendClientMessage(scr->display, scr->dragInfo.sourceWindow,
+			      scr->xdndStatusAtom,
 			      scr->dragInfo.destinationWindow,
 			      1, 0, 0, action);
 	}
 	
-	puts("position");
+//	puts("position");
     } else if (event->message_type == scr->xdndLeaveAtom
 	       && scr->dragInfo.sourceWindow == event->data.l[0]) {
 
+	void (*draggingExited)(WMView *self, WMDraggingInfo *info);
+	
 	puts("leave");
     } else if (event->message_type == scr->xdndDropAtom
 	       && scr->dragInfo.sourceWindow == event->data.l[0]) {
 	
+	
+	
 	puts("drop");
     }
+#endif
 }
 

@@ -403,7 +403,7 @@ destroyView(W_View *view)
 
     W_CleanUpEvents(view);
     
- //   WMUnregisterViewDraggedTypes(view);
+    WMUnregisterViewDraggedTypes(view);
     
 #if 0    
     if (view->dragSourceProcs)

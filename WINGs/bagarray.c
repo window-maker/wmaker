@@ -7,7 +7,7 @@
 
 #include "WUtil.h"
 
-
+#if 0
 
 typedef struct W_ArrayBag {
     void **items;
@@ -50,6 +50,7 @@ static W_BagFunctions arrayFunctions = {
     insertInBag,
     removeFromBag,
     deleteFromBag,
+    deleteFromBag,
     getFromBag,
     firstInBag,
     countInBag,
@@ -81,7 +82,7 @@ WMCreateArrayBagWithDestructor(int initialSize, void (*destructor)(void*))
     W_ArrayBag *array;
     int size;
 
- 
+    assert(0&&"array bag is not working");
     bag = wmalloc(sizeof(WMBag));
     
     array = wmalloc(sizeof(W_ArrayBag));
@@ -414,3 +415,5 @@ indexForIterator(WMBag *bag, WMBagIterator ptr)
 {
     
 }
+
+#endif

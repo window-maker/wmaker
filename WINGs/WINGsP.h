@@ -102,8 +102,10 @@ struct W_DraggingInfo {
     WMPoint imageLocation;
     
     Time timestamp;
-    
+
     int protocolVersion;
+    
+    WMView *destView;
 
     /* only valid if in the same app.. should be treated as internal data */
 //    WMView *destination;

@@ -252,7 +252,7 @@ WMDeleteIdleHandler(WMHandlerID handlerID)
         return;
 
     pos = WMGetFirstInBag(idleHandler, handler);
-    if (pos >= 0) {
+    if (pos != WBNotFound) {
         wfree(handler);
         WMDeleteFromBag(idleHandler, pos);
     }
@@ -291,7 +291,7 @@ WMDeleteInputHandler(WMHandlerID handlerID)
 	return;
 
     pos = WMGetFirstInBag(inputHandler, handler);
-    if (pos >= 0) {
+    if (pos != WBNotFound) {
         wfree(handler);
         WMDeleteFromBag(inputHandler, pos);
     }
@@ -588,7 +588,7 @@ WMHandleEvent(XEvent *event)
 	
     } else if (event->type == ClientMessage) {
 	
-	//W_HandleDNDClientMessage(toplevel, &event->xclient);
+	W_HandleDNDClientMessage(toplevel, &event->xclient);
     }
 
     /* if it's a key event, redispatch it to the focused control */
@@ -786,7 +786,7 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 
             handler = WMGetFromBag(handlerCopy, i);
             /* check if the handler still exist or was removed by a callback */
-            if (WMGetFirstInBag(inputHandler, handler)<0)
+            if (WMGetFirstInBag(inputHandler, handler) == WBNotFound)
                 continue;
 
 	    mask = 0;
@@ -891,7 +891,7 @@ W_WaitForEvent(Display *dpy, unsigned long xeventmask)
 
             handler = WMGetFromBag(handlerCopy, i);
             /* check if the handler still exist or was removed by a callback */
-            if (WMGetFirstInBag(inputHandler, handler)<0)
+            if (WMGetFirstInBag(inputHandler, handler) == WBNotFound)
                 continue;
 
 	    mask = 0;

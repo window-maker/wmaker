@@ -34,6 +34,7 @@ static int appendBag(WMBag *self, WMBag *bag);
 static int putInBag(WMBag *self, void *item);
 static int insertInBag(WMBag *self, int index, void *item);
 static int removeFromBag(WMBag *bag, void *item);
+static int eraseFromBag(WMBag *bag, int index);
 static int deleteFromBag(WMBag *bag, int index);
 static void *getFromBag(WMBag *bag, int index);
 static int countInBag(WMBag *bag, void *item);
@@ -58,6 +59,7 @@ static W_BagFunctions bagFunctions = {
 	putInBag,
 	insertInBag,
 	removeFromBag,
+	eraseFromBag,
 	deleteFromBag,
 	getFromBag,
 	firstInBag,
@@ -503,7 +505,7 @@ static int putInBag(WMBag *self, void *item)
 static int insertInBag(WMBag *self, int index, void *item)
 {
     W_Node *ptr;
-    
+
     ptr = wmalloc(sizeof(W_Node));
 
     ptr->data = item;
@@ -514,7 +516,7 @@ static int insertInBag(WMBag *self, int index, void *item)
 
     rbTreeInsert(SELF, ptr);
     
-    while ((ptr = treeSuccessor(ptr, SELF->nil))) {
+    while ((ptr = treeSuccessor(ptr, SELF->nil)) != SELF->nil) {
 	ptr->index++;
     }
     
@@ -529,6 +531,32 @@ static int insertInBag(WMBag *self, int index, void *item)
 static int removeFromBag(WMBag *self, void *item)
 {
     W_Node *ptr = treeFind(SELF->root, SELF->nil, item);
+    
+    if (ptr != SELF->nil) {
+	W_Node *tmp;
+	
+	SELF->count--;
+	
+	tmp = treeSuccessor(ptr, SELF->nil);
+	while (tmp != SELF->nil) {
+	    tmp->index--;
+	    tmp = treeSuccessor(tmp, SELF->nil);
+	}
+	
+	ptr = rbTreeDelete(SELF, ptr);
+	free(ptr);
+
+	return 1;
+    } else {
+	return 0;
+    }
+}
+
+
+
+static int eraseFromBag(WMBag *self, int index)
+{
+    W_Node *ptr = treeSearch(SELF->root, SELF->nil, index);
     
     if (ptr != SELF->nil) {
 	
@@ -549,8 +577,15 @@ static int deleteFromBag(WMBag *self, int index)
     W_Node *ptr = treeSearch(SELF->root, SELF->nil, index);
     
     if (ptr != SELF->nil) {
+	W_Node *tmp;
 	
 	SELF->count--;
+	
+	tmp = treeSuccessor(ptr, SELF->nil);
+	while (tmp != SELF->nil) {
+	    tmp->index--;
+	    tmp = treeSuccessor(tmp, SELF->nil);
+	}
 	
 	ptr = rbTreeDelete(SELF, ptr);
 	free(ptr);
@@ -565,10 +600,7 @@ static int deleteFromBag(WMBag *self, int index)
 static void *getFromBag(WMBag *self, int index)
 {    
     W_Node *node;
-    
-    if (SELF->count>0)
-    assert(SELF->root != SELF->nil);
-    
+
     node = treeSearch(SELF->root, SELF->nil, index);
     if (node != SELF->nil)
 	return node->data;
@@ -627,12 +659,24 @@ static void *replaceInBag(WMBag *self, int index, void *item)
 	SELF->count--;
 	
 	ptr = rbTreeDelete(SELF, ptr);
-	free(ptr);	
+	free(ptr);
     } else if (ptr != SELF->nil) {
 	old = ptr->data;
 	ptr->data = item;
     } else {
-	insertInBag(self, index, item);
+	W_Node *ptr;
+
+	ptr = wmalloc(sizeof(W_Node));
+
+	ptr->data = item;
+	ptr->index = index;
+	ptr->left = SELF->nil;
+	ptr->right = SELF->nil;
+	ptr->parent = SELF->nil;
+
+	rbTreeInsert(SELF, ptr);
+
+	SELF->count++;
     }
     
     return old;

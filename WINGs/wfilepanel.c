@@ -104,19 +104,17 @@ closestListItem(WMList *list, char *text, Bool exact)
 {
     WMListItem *item;
     WMBag *items = WMGetListItems(list);
-    int i;
+    WMBagIterator i;
     int len = strlen(text);
 
     if (len==0)
 	return -1;
 
-    for (i = 0; i < WMGetBagItemCount(items); i++) {
-	item = WMGetFromBag(items, i);
-
+    WM_ITERATE_BAG(items, item, i) {
         if (strlen(item->text) >= len &&
             ((exact && strcmp(item->text, text)==0) ||
              (!exact && strncmp(item->text, text, len)==0))) {
-	    return i;
+	    return WMBagIndexForIterator(items, i);
 	}
     }
 

@@ -534,14 +534,14 @@ static void
 addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 {
     Typeface *face;
-    int i;
+    WMBagIterator i;
 
     if (family->typefaces) {
-	for (i = 0; i < WMGetBagItemCount(family->typefaces); i++) {
+	for (face = WMBagFirst(family->typefaces, &i);
+	     face != NULL;
+	     face = WMBagNext(family->typefaces, &i)) {
 	    int size;
-	    
-	    face = WMGetFromBag(family->typefaces, i);
-	    
+
 	    if (strcmp(face->weight, fontFields[WEIGHT]) != 0) {
 		continue;
 	    }
@@ -584,7 +584,7 @@ addTypefaceToFamily(Family *family, char fontFields[NUM_FIELDS][256])
 static void
 addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 {
-    int i;
+    WMBagIterator i;
     Family *fam;
     WMBag *family;
 
@@ -593,11 +593,11 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
     
     if (family) {
 	/* look for same encoding/registry and foundry */
-	for (i = 0; i < WMGetBagItemCount(family); i++) {
+	for (fam = WMBagFirst(family, &i);
+	     fam != NULL;
+	     fam = WMBagNext(family, &i)) {
 	    int enc, reg, found;
-	    
-	    fam = WMGetFromBag(family, i);
-	    
+
 	    enc = (strcmp(fam->encoding, fontFields[ENCODING]) == 0);
 	    reg = (strcmp(fam->registry, fontFields[REGISTRY]) == 0);
 	    found = (strcmp(fam->foundry, fontFields[FOUNDRY]) == 0);
@@ -608,10 +608,10 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 	    }
 	}
 	/* look for same encoding/registry */
-	for (i = 0; i < WMGetBagItemCount(family); i++) {
+	for (fam = WMBagFirst(family, &i);
+	     fam != NULL;
+	     fam = WMBagNext(family, &i)) {
 	    int enc, reg;
-	    
-	    fam = WMGetFromBag(family, i);
 	    
 	    enc = (strcmp(fam->encoding, fontFields[ENCODING]) == 0);
 	    reg = (strcmp(fam->registry, fontFields[REGISTRY]) == 0);
@@ -636,10 +636,10 @@ addFontToFamily(WMHashTable *families, char fontFields[NUM_FIELDS][256])
 	    }
 	}
 	/* look for same foundry */
-	for (i = 0; i < WMGetBagItemCount(family); i++) {
+	for (fam = WMBagFirst(family, &i);
+	     fam != NULL;
+	     fam = WMBagNext(family, &i)) {
 	    int found;
-	    
-	    fam = WMGetFromBag(family, i);
 	    
 	    found = (strcmp(fam->foundry, fontFields[FOUNDRY]) == 0);
 
@@ -740,13 +740,14 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
     enumer = WMEnumerateHashTable(families);
     
     while ((bag = WMNextHashEnumeratorItem(&enumer))) {
-	int i;
+	WMBagIterator i;
 	Family *fam;
 	char buffer[256];
 	WMListItem *item;
 
-	for (i = 0; i < WMGetBagItemCount(bag); i++) {
-	    fam = WMGetFromBag(bag, i);
+	for (fam = WMBagFirst(bag, &i);
+	     fam != NULL;
+	     fam = WMBagNext(bag, &i)) {
 	    
 	    strcpy(buffer, fam->name);
 
@@ -834,7 +835,7 @@ familyClick(WMWidget *w, void *data)
     Family *family;
     FontPanel *panel = (FontPanel*)data;
     Typeface *face;
-    int i;
+    WMBagIterator i;
     /* current typeface and size */
     char *oface = NULL;
     char *osize = NULL;
@@ -854,12 +855,13 @@ familyClick(WMWidget *w, void *data)
 
     WMClearList(panel->typLs);
 
-    for (i = 0; i < WMGetBagItemCount(family->typefaces); i++) {
+
+    for (face = WMBagFirst(family->typefaces, &i);
+	 face != NULL;
+	 face = WMBagNext(family->typefaces, &i)) {
 	char buffer[256];
 	int top=0;
 	WMListItem *fitem;
-
-	face = WMGetFromBag(family->typefaces, i);
 	
 	if (strcmp(face->weight, "medium") == 0) {
 	    buffer[0] = 0;
@@ -931,11 +933,12 @@ typefaceClick(WMWidget *w, void *data)
     FontPanel *panel = (FontPanel*)data;
     WMListItem *item;
     Typeface *face;
-    int i;
+    WMBagIterator i;
     char buffer[32];
 
     char *osize = NULL;
     int sizei = -1;
+    int size;
 
     osize = WMGetTextFieldText(panel->sizT);
 
@@ -945,11 +948,10 @@ typefaceClick(WMWidget *w, void *data)
     
     WMClearList(panel->sizLs);
 
-    for (i = 0; i < WMGetBagItemCount(face->sizes); i++) {
-	int size;
+    for (size = (int)WMBagFirst(face->sizes, &i);
+	 i != NULL;
+	 size = (int)WMBagNext(face->sizes, &i)) {
 
-	size = (int)WMGetFromBag(face->sizes, i);
-	
 	if (size != 0) {
 	    sprintf(buffer, "%i", size);
 

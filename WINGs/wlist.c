@@ -171,9 +171,9 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
 	lPtr->selectedItem++;
     
     if (row < 0)
-	row = WMGetBagItemCount(lPtr->items);
-
-    WMInsertInBag(lPtr->items, row, item);
+	WMPutInBag(lPtr->items, item);
+    else
+	WMInsertInBag(lPtr->items, row, item);
 
     /* update the scroller when idle, so that we don't waste time
      * updating it when another item is going to be added later */
@@ -589,18 +589,17 @@ int
 WMFindRowOfListItemWithTitle(WMList *lPtr, char *title)
 {
     WMListItem *item;
-    int i;
+    WMBagIterator i;
     int ok = 0;
     
-    for (i=0; i < WMGetBagItemCount(lPtr->items); i++) {
-	item = WMGetFromBag(lPtr->items, i);
+    WM_ITERATE_BAG(lPtr->items, item, i) {
 	if (strcmp(item->text, title)==0) {
 	    ok = 1;
 	    break;
 	}
     }
 
-    return ok ? i : -1;
+    return ok ? WMBagIndexForIterator(lPtr->items, i) : -1;
 }
 
 
@@ -781,14 +780,13 @@ static void
 destroyList(List *lPtr)
 {
     WMListItem *item;
-    int i;
+    WMBagIterator i;
     
     if (lPtr->idleID)
  	WMDeleteIdleHandler(lPtr->idleID);
     lPtr->idleID = NULL;
 
-    for (i = 0; i < WMGetBagItemCount(lPtr->items); i++) {
-	item = WMGetFromBag(lPtr->items, i);
+    WM_ITERATE_BAG(lPtr->items, item, i) {
 	wfree(item->text);
 	wfree(item);
     }

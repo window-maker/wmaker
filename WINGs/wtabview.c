@@ -32,9 +32,6 @@ typedef struct W_TabView {
 
 	unsigned tabbed:1;
 	unsigned dontFitAll:1;
-	
-	unsigned leftDown:1; // scrolling button state
-	unsigned rightDown:1;
     } flags;
 } TabView;
 

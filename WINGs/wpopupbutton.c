@@ -307,7 +307,7 @@ WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index)
 	return NULL;
     
     item = WMGetFromBag(bPtr->items, index);
-    if (!item)
+    if (item == NULL)
 	return NULL;
 
     return WMGetMenuItemTitle(item);
@@ -464,8 +464,9 @@ makeMenuPixmap(PopUpButton *bPtr)
 {
     Pixmap pixmap;
     W_Screen *scr = bPtr->view->screen;
-    int i;
-    int yo;
+    WMMenuItem *item;
+    WMBagIterator iter;
+    int yo, i;
     int width, height, itemHeight;
     
     itemHeight = bPtr->view->size.height;
@@ -479,12 +480,11 @@ makeMenuPixmap(PopUpButton *bPtr)
     XFillRectangle(scr->display, pixmap, WMColorGC(scr->gray), 0, 0,
 		   width, height);
 
-    for (i = 0; i < WMGetBagItemCount(bPtr->items); i++) {
+    i = 0;
+    WM_ITERATE_BAG(bPtr->items, item, iter) {
 	GC gc;
-	WMMenuItem *item;
 	char *text;
 
-	item = (WMMenuItem*)WMGetFromBag(bPtr->items, i);
 	text = WMGetMenuItemTitle(item);
 
 	W_DrawRelief(scr, pixmap, 0, i*itemHeight, width, itemHeight, 
@@ -506,6 +506,8 @@ makeMenuPixmap(PopUpButton *bPtr)
 		      width-scr->popUpIndicator->width-4,
 		      i*itemHeight+(itemHeight-scr->popUpIndicator->height)/2);
 	}
+	
+	i++;
     }
     
     return pixmap;
@@ -758,14 +760,13 @@ static void
 destroyPopUpButton(PopUpButton *bPtr)
 {
     WMMenuItem *item;
-    int i;
+    WMBagIterator i;
 
     if (bPtr->timer) {
 	WMDeleteTimerHandler(bPtr->timer);
     }
 
-    for (i = 0; i < WMGetBagItemCount(bPtr->items); i++) {
-	item = WMGetFromBag(bPtr->items, i);
+    WM_ITERATE_BAG(bPtr->items, item, i) {
 	WMDestroyMenuItem(item);
     }
     WMFreeBag(bPtr->items);

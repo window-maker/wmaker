@@ -353,8 +353,9 @@ WMCreateConnectionWithSocket(int sock, Bool closeOnRelease) /*FOLD00*/
     cPtr->wasNonBlocking = WMIsConnectionNonBlocking(cPtr);
     cPtr->isNonBlocking = cPtr->wasNonBlocking;
 
-    // some way to find out if it is connected, and binded. can't find
-    // if it listens though!!!
+    /* some way to find out if it is connected, and binded. can't find
+       if it listens though!!!
+    */  
 
     size = sizeof(clientname);
     n = getpeername(sock, (struct sockaddr*) &clientname, &size);
