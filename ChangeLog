@@ -98,6 +98,7 @@ Changes since version 0.80.2:
 - Icon arrangement that takes the new extended xinerama 'strut' into account
   (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - Fixed the 'KDE omnipresent' bug.
+- Fixed bug with focusing a deminiaturized window with sloppy focus mode
 
 
 Changes since version 0.80.1:
