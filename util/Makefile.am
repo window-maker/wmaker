@@ -3,10 +3,9 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 pkgdatadir  = $(datadir)/@PACKAGE@
 
-bin_PROGRAMS = wxcopy wxpaste wdwrite wdread getstyle setstyle convertfonts \
-	seticons geticonset wmsetbg wmsetup wmagnify
+bin_PROGRAMS = wxcopy wxpaste wdwrite wdread getstyle setstyle seticons geticonset wmsetbg wmsetup wmagnify
 
-bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont wmchlocale wkdemenu.pl \
+bin_SCRIPTS = wmaker.inst wm-oldmenu2new wsetfont wmchlocale wkdemenu.pl\
 	wcopy wpaste
 
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wsetfont directjpeg.c \
@@ -31,8 +30,6 @@ getstyle_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
 setstyle_LDADD = \
 	$(top_builddir)/WINGs/libWUtil.a \
 	@XLFLAGS@ @XLIBS@ $(liblist)
-
-convertfonts_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
 
 seticons_LDADD= $(top_builddir)/WINGs/libWUtil.a $(liblist)
 

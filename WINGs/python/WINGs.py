@@ -26,11 +26,10 @@ class WMTimer:
             self._o = wings.pyWMAddPersistentTimerHandler(milliseconds, (callback, cdata))
         else:
             self._o = wings.pyWMAddTimerHandler(milliseconds, (callback, cdata))
-        self.__WMDeleteTimerHandler = wings.pyWMDeleteTimerHandler
 
     def __del__(self):
-        self.__WMDeleteTimerHandler(self._o)
-
+        wings.pyWMDeleteTimerHandler(self._o)
+    #delete = __del__
 
 class WMPersistentTimer(WMTimer):
     def __init__(self, milliseconds, callback, cdata=None):
@@ -88,15 +87,14 @@ class WMView:
 
 class WMWidget(WMView):
     def __init__(self):
+        self._o = None
         if self.__class__ == WMWidget:
             raise Error, "a WMWidget can't be instantiated directly"
-        self._o = None
-        self.__WMDestroyWidget = wings.WMDestroyWidget
 
     def __del__(self):
-        if self._o is not None:
-            self.__WMDestroyWidget(self._o)
-
+        if (self._o != None):
+            wings.WMDestroyWidget(self._o)
+    
     def resize(self, width, height):
         wings.WMResizeWidget(self._o, width, height)
 

@@ -104,9 +104,7 @@ wmaker_SOURCES = 	\
 	text.h 
 
 
-AM_CPPFLAGS = $(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\"
-
-AM_CFLAGS = -fno-strict-aliasing
+AM_CPPFLAGS = @CPPFLAGS@ $(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\"
 
 
 INCLUDES = \

@@ -12,8 +12,6 @@
 #include <X11/keysym.h>
 #include <X11/cursorfont.h>
 
-#include <X11/Xlocale.h>
-
 /********** data ************/
 
 
@@ -593,7 +591,6 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
         "WM_STATE"
     };
     Atom atoms[sizeof(atomNames)/sizeof(char*)];
-    char *locale;
     int i;
 
     if (!initialized) {
@@ -759,20 +756,16 @@ WMCreateScreenWithRContext(Display *display, int screen, RContext *context)
     scrPtr->stipple = stipple;
 
     scrPtr->useMultiByte = WINGsConfiguration.useMultiByte;
-    scrPtr->useMultiByte = 0;
 
-    locale = setlocale(LC_CTYPE, NULL);
-    //printf("LC_CTYPE=%s\n", locale);
-    if (!locale || strcmp(locale, "C")==0 || strcmp(locale, "POSIX")==0)
-        scrPtr->useWideChar = 0;
-    else
-        scrPtr->useWideChar = 1;
+    scrPtr->useWideChar = 1;
 
     scrPtr->antialiasedText = WINGsConfiguration.antialiasedText;
 
-    scrPtr->normalFont = WMSystemFontOfSize(scrPtr, 0);
+    scrPtr->normalFont = WMSystemFontOfSize(scrPtr,
+                                            WINGsConfiguration.defaultFontSize);
 
-    scrPtr->boldFont = WMBoldSystemFontOfSize(scrPtr, 0);
+    scrPtr->boldFont = WMBoldSystemFontOfSize(scrPtr,
+                                              WINGsConfiguration.defaultFontSize);
 
     if (!scrPtr->boldFont)
         scrPtr->boldFont = scrPtr->normalFont;

@@ -108,9 +108,7 @@ libWUtil_a_SOURCES = 	\
 	wutil.c
 
 
-AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\"
-
-AM_CFLAGS = -fno-strict-aliasing
+AM_CPPFLAGS = @CPPFLAGS@ -DLOCALEDIR=\"$(NLSDIR)\"
 
 INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @XFTFLAGS@ @HEADER_SEARCH_PATH@ -DDEBUG

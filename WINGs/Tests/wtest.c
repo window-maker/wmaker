@@ -116,14 +116,14 @@ testFrame(WMScreen *scr)
 }
 
 
-/*static void
+static void
 resizedWindow(void *self, WMNotification *notif)
 {
     WMView *view = (WMView*)WMGetNotificationObject(notif);
     WMSize size = WMGetViewSize(view);
 
     WMResizeWidget((WMWidget*)self, size.width, size.height);
-}*/
+}
 
 void
 testBox(WMScreen *scr)
@@ -609,8 +609,7 @@ testText(WMScreen *scr)
         WMFont *font, *ifont;
 
         font = WMDefaultSystemFont(scr);
-        //ifont = WMCopyFontWithStyle(scr, font, WFSEmphasized);
-        ifont = WMCreateFont(scr, "verdana,sans:pixelsize=12:italic");
+        ifont = WMCopyFontWithStyle(scr, font, WFSEmphasized);
         if (ifont) {
             WMSetTextDefaultFont(text, ifont);
             WMReleaseFont(ifont);
@@ -620,7 +619,7 @@ testText(WMScreen *scr)
         WMReleaseFont(font);
     }
 
-    if (file) {
+    if(file) {
         char buf[1024];
 
         WMFreezeText(text);

@@ -349,7 +349,7 @@ smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height,
 		 WArea usableArea)
 {
-    //WScreen *scr = wwin->screen_ptr;
+    WScreen *scr = wwin->screen_ptr;
     int test_x = 0, test_y = Y_ORIGIN(scr);
     int from_x, to_x, from_y, to_y;
     int sx;

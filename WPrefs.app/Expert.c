@@ -84,7 +84,7 @@ createPanel(Panel *p)
     WMSetButtonText(panel->swi[7], _("Smooth font edges (needs restart)."));
 
     //if (!WMHasAntialiasingSupport(WMWidgetScreen(panel->box)))
-        WMSetButtonEnabled(panel->swi[7], True);
+        WMSetButtonEnabled(panel->swi[7], False);
 
     WMRealizeWidget(panel->box);
     WMMapSubwidgets(panel->box);

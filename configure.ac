@@ -15,7 +15,7 @@ AC_INIT(src/WindowMaker.h)
 
 
 
-AM_INIT_AUTOMAKE(WindowMaker, 0.85.0)
+AM_INIT_AUTOMAKE(WindowMaker, 0.90.0)
 
 AC_PROG_LIBTOOL
 
@@ -519,53 +519,34 @@ fi
 
 dnl Xft antialiased font support
 dnl ============================
-
 xft=yes
 XFTLIBS=""
+AC_ARG_ENABLE(xft, 
+[  --disable-xft           disable Xft antialiased font support],
+		xft=$enableval, xft=yes)
 
-if test "x$PKGCONFIG" != x -a "`$PKGCONFIG xft; echo $?`" = 0; then
-        XFTCONFIG="$PKGCONFIG xft"
-        pkgconfig_xft=yes
-else
-        AC_CHECK_PROG(XFTCONFIG, xft-config, xft-config)
+if test "$xft" = yes; then
+	if test "x$PKGCONFIG" != x -a "`$PKGCONFIG xft; echo $?`" = 0; then
+		XFTCONFIG="$PKGCONFIG xft"
+		pkgconfig_xft=yes
+	else
+		AC_CHECK_PROG(XFTCONFIG, xft-config, xft-config)
+	fi
+	AC_MSG_CHECKING([for the Xft2 library])
+	if test "x$XFTCONFIG" != x; then
+		XFTLIBS=`$XFTCONFIG --libs`
+		XFTFLAGS=`$XFTCONFIG --cflags`
+		AC_MSG_RESULT([found])
+	else
+		xft=no
+		AC_MSG_RESULT([not found])
+	fi
+	if test "$xft" = yes; then
+		AC_SUBST(XFTFLAGS)
+		AC_SUBST(XFTLIBS)
+		AC_DEFINE(XFT, 1, [define if you want support for antialiased fonts (set by configure)])
+	fi
 fi
-
-AC_MSG_CHECKING([for the Xft2 library])
-
-if test "x$XFTCONFIG" != x; then
-        XFTLIBS=`$XFTCONFIG --libs`
-        XFTFLAGS=`$XFTCONFIG --cflags`
-        AC_MSG_RESULT([found])
-else
-        AC_MSG_RESULT([not found])
-        echo
-        echo "ERROR!!! libXft2 is not installed or could not be found."
-        echo "         Xft2 is a requirement for building Window Maker."
-        echo "         Please install it (along with fontconfig) before continuing."
-        echo
-        exit 1
-fi
-
-minXFT="2.1.2"
-goodxft="no"
-
-dnl
-dnl The macro below will use $XFTFLAGS (defined above) to find Xft.h
-dnl
-WM_CHECK_XFT_VERSION($minXFT, goodxft=yes, goodxft=no)
-
-if test "$goodxft" = no; then
-        echo
-        echo "ERROR!!! libXft on this system is an old version."
-        echo "         Please consider upgrading to at least version ${minXFT}."
-        echo
-        exit 1
-fi
-
-AC_SUBST(XFTFLAGS)
-AC_SUBST(XFTLIBS)
-AC_DEFINE(XFT, 1, [define if you want support for antialiased fonts (set by configure)])
-
 
 dnl XINERAMA support
 dnl ================

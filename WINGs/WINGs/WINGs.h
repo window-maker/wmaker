@@ -1834,11 +1834,12 @@ void WMShowFontPanel(WMFontPanel *panel);
 
 void WMHideFontPanel(WMFontPanel *panel);
 
-void WMFreeFontPanel(WMFontPanel *panel);
-
 void WMSetFontPanelAction(WMFontPanel *panel, WMAction2 *action, void *data);
 
-void WMSetFontPanelFont(WMFontPanel *panel, char *fontName);
+void WMSetFontPanelFont(WMFontPanel *panel, WMFont *font);
+
+/* you can free the returned string */
+char* WMGetFontPanelFontName(WMFontPanel *panel);
 
 WMFont* WMGetFontPanelFont(WMFontPanel *panel);
 

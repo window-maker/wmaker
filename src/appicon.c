@@ -407,7 +407,7 @@ setIconCallback(WMenu *menu, WMenuEntry *entry)
     result = wIconChooserDialog(scr, &file, icon->wm_instance, icon->wm_class);
 
     if (result && !icon->destroyed) {
-	if (file && *file==0) {
+	if (file[0]==0) {
 	    wfree(file);
 	    file = NULL;
 	}

@@ -21,7 +21,6 @@
 
 #include <X11/Xlib.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "WMaker.h"
 #include "app.h"

@@ -23,7 +23,7 @@
 
 #include "WPrefs.h"
 #include <X11/Xlocale.h>
-#include <ctype.h>
+
 
 typedef struct _Panel {
     WMBox *box;
@@ -358,7 +358,7 @@ paintItems(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
     int l = strlen(text);
 	int x = previewPositions[part].pos.x;
 	int y = previewPositions[part].pos.y;
-	//int w = previewPositions[part].size.width;
+	int w = previewPositions[part].size.width;
 	int h = previewPositions[part].size.height/4;
 	int i;
 	for( i = 0; i < 4 ; i++) {
@@ -443,7 +443,7 @@ dumpRImage(char *path, RImage *image)
     }
 }
 
-/*static int
+static int
 isPixmap(WMPropList *prop)
 {
     WMPropList *p;
@@ -455,7 +455,7 @@ isPixmap(WMPropList *prop)
 	return 1;
     else
 	return 0;
-}*/
+}
 
 static Pixmap
 renderTexture(WMScreen *scr, WMPropList *texture, int width, int height,
@@ -669,7 +669,7 @@ renderMenu(_Panel *panel, WMPropList *texture, int width, int iheight)
     WMScreen *scr = WMWidgetScreen(panel->parent);
     Display *dpy = WMScreenDisplay(scr);
     Pixmap pix, tmp;
-    //RContext *rc = WMScreenRContext(scr);
+    RContext *rc = WMScreenRContext(scr);
     GC gc = XCreateGC(dpy, WMWidgetXID(panel->parent), 0, NULL);
     int i;
 
@@ -835,7 +835,7 @@ paintPreviewBox(Panel *panel, int elements)
 {
     WMScreen *scr = WMWidgetScreen(panel->parent);
     Display *dpy = WMScreenDisplay(scr);
-	//int refresh = 0;
+	int refresh = 0;
 	GC gc;
 	WMColor *black = WMBlackColor(scr);
 	Pixmap mitem;
@@ -926,7 +926,7 @@ static void
 paintTextField(void *data, int section)
 {
 	_Panel *panel = (_Panel*)data;
-	//char *sample = NULL;
+	char *sample = NULL;
 	int encoding;
 	encoding = WMGetPopUpButtonSelectedItem(panel->langP);
 	WMSetTextFieldFont(panel->fontT, getFontForPreview(panel, section));
@@ -1072,7 +1072,7 @@ refillFontSetList(void *data)
 	char *encoding = getFontEncoding(panel);
 	int section = WMGetPopUpButtonSelectedItem(panel->fontSel);
 	int i;
-	//int pos;
+	int pos;
 	WMClearList(panel->fsetLs);
 	if(!encoding) {
 	array = getCurrentFontProp(panel, section);
@@ -1259,7 +1259,7 @@ static void
 changeLanguageAction(WMWidget *w, void *data)
 {
     Panel *panel = (Panel*)data;
-    //WMScreen *scr = WMWidgetScreen(panel->box);
+    WMScreen *scr = WMWidgetScreen(panel->box);
 	int section;
 
 	section = WMGetPopUpButtonSelectedItem(w);
@@ -1314,7 +1314,7 @@ static char*
 getFontSampleString(void *data)
 {
 	_Panel *panel = (_Panel*)data;
-    //WMScreen *scr = WMWidgetScreen(panel->box);
+    WMScreen *scr = WMWidgetScreen(panel->box);
     WMMenuItem *mi;
     WMPropList *pl;
 	int section;
@@ -1336,7 +1336,7 @@ static char*
 getFontEncoding(void *data)
 {
 	_Panel *panel = (_Panel*)data;
-    //WMScreen *scr = WMWidgetScreen(panel->box);
+    WMScreen *scr = WMWidgetScreen(panel->box);
     WMMenuItem *mi;
     WMPropList *pl;
 	int section;
@@ -1358,7 +1358,7 @@ static Bool
 isEncodingMultiByte(void *data)
 {
 	_Panel *panel = (_Panel*)data;
-    //WMScreen *scr = WMWidgetScreen(panel->box);
+    WMScreen *scr = WMWidgetScreen(panel->box);
     WMMenuItem *mi;
     WMPropList *pl;
 	int section;
@@ -1473,20 +1473,26 @@ getDefaultSystemFont(void *data, int element)
 {
     _Panel *panel = (_Panel*)data;
     WMScreen *scr = WMWidgetScreen(panel->box);
-
-    switch(element) {
-    case 0:
-    case 2:
-        return WMBoldSystemFontOfSize(scr, 12);
-    case 1:
-        return WMBoldSystemFontOfSize(scr, 24);
-    case 4:
-    case 5:
-        return WMSystemFontOfSize(scr, 8);
-    case 3:
-    default:
-        return WMSystemFontOfSize(scr, 12);
-    }
+	switch(element) {
+		case 0:
+			return WMBoldSystemFontOfSize(scr, 12);
+			break;
+		case 1:
+			return WMBoldSystemFontOfSize(scr, 24);
+			break;
+		case 2:
+			return WMBoldSystemFontOfSize(scr, 12);
+			break;
+		case 3:
+			return WMSystemFontOfSize(scr, 12);
+			break;
+		case 4:
+			return WMSystemFontOfSize(scr, 8);
+			break;
+		case 5:
+			return WMSystemFontOfSize(scr, 8);
+			break;
+	}
 }
 
 static void
@@ -1509,7 +1515,7 @@ static void
 toggleAA(WMWidget *w, void *data)
 {
 	_Panel *panel = (_Panel*)data;
-	//int section;
+	int section;
 	if(panel->AntialiasedText)
 		panel->AntialiasedText = False;
 	else
@@ -1616,7 +1622,7 @@ addButtonAction(WMWidget *w, void *data)
 	array = getDefaultFontProp(panel, encoding, section);
 
 	WMHideFontPanel(panel->fontPanel);
-	chosenFont = WMGetFontName(WMGetFontPanelFont(panel->fontPanel));
+	chosenFont = WMGetFontPanelFontName(panel->fontPanel);
 	string = WMCreatePLString(chosenFont);
 	pos = WMGetListSelectedItemRow(panel->fsetLs);
 	WMInsertListItem(panel->fsetLs, pos+1, chosenFont);
@@ -1645,7 +1651,7 @@ changeButtonAction(WMWidget *w, void *data)
 
 	WMHideFontPanel(panel->fontPanel);
 
-	chosenFont = WMGetFontName(WMGetFontPanelFont(panel->fontPanel));
+	chosenFont = WMGetFontPanelFontName(panel->fontPanel);
 	string = WMCreatePLString(chosenFont);
 
 	pos = WMGetListSelectedItemRow(panel->fsetLs);
@@ -1714,7 +1720,7 @@ removeButtonClick(WMWidget *w, void *data)
 static void
 showData(_Panel *panel)
 {
-    //WMScreen *scr = WMWidgetScreen(panel->parent);
+    WMScreen *scr = WMWidgetScreen(panel->parent);
     char *str;
 	int i;
 

@@ -28,7 +28,6 @@
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
 #include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
 
 #include "WindowMaker.h"
@@ -43,14 +42,14 @@
 #endif
 
 
-#ifdef DEBUG
+#if 0
 #  define  ENTER(X)  fprintf(stderr,"Entering:  %s()\n", X);
 #  define  LEAVE(X)  fprintf(stderr,"Leaving:   %s()\n", X);
-#  define  PDEBUG(X)  fprintf(stderr,"debug:     %s()\n", X);
+#  define  DEBUG(X)  fprintf(stderr,"debug:     %s()\n", X);
 #else
 #  define  ENTER(X)
 #  define  LEAVE(X)
-#  define  PDEBUG(X)
+#  define  DEBUG(X)
 #endif
 
 extern Cursor wCursor[WCUR_LAST];
@@ -583,32 +582,32 @@ textEventHandler( WObjDescriptor *desc, XEvent *event )
        * text so we can wTextRefresh() */
       if( event->xmotion.state & (Button1Mask|Button3Mask|Button2Mask) )
       {
-      PDEBUG("MotionNotify");
+      DEBUG("MotionNotify");
       handled = True;
       wtext->text.endPos = textXtoPos( wtext, event->xmotion.x );
       }
       break;
 
     case ButtonPress:
-      PDEBUG("ButtonPress");
+      DEBUG("ButtonPress");
       handled = True;
       wtext->text.startPos = textXtoPos( wtext, event->xbutton.x );
       wtext->text.endPos   = wtext->text.startPos;
       break;
 
     case ButtonRelease:
-      PDEBUG("ButtonRelease");
+      DEBUG("ButtonRelease");
       handled = True;
       wtext->text.endPos = textXtoPos( wtext, event->xbutton.x );
       break;
 
     case KeyPress:
-      PDEBUG("KeyPress");
+      DEBUG("KeyPress");
       handled = handleKeyPress( wtext, &event->xkey );
       break;
 
     case EnterNotify:
-      PDEBUG("EnterNotify");
+      DEBUG("EnterNotify");
       handled = True;
 #if 0
       if (!wtext->magic) 
@@ -622,7 +621,7 @@ textEventHandler( WObjDescriptor *desc, XEvent *event )
       break;
 
     case LeaveNotify:
-      PDEBUG("LeaveNotify");
+      DEBUG("LeaveNotify");
       handled = True;
 #if 0
       wtext->blinking = 0;
