@@ -53,13 +53,13 @@
 # define SHUT_RDWR              2
 #endif
 
-/* for SunOS */
+/* For SunOS */
 #ifndef SA_RESTART
 # define SA_RESTART             0
 #endif
 
-/* For some Solaris systems */
-#if !defined(HAVE_INET_ATON) && !defined(INADDR_NONE)
+/* For Solaris */
+#ifndef INADDR_NONE
 # define INADDR_NONE  (-1)
 #endif
 
@@ -79,8 +79,6 @@
 
 int WCErrorCode = 0;
 
-
-
 static Bool SigInitialized = False;
 
 
@@ -89,7 +87,6 @@ typedef struct TimeoutData {
     unsigned timeout;
     WMHandlerID *handler;
 } TimeoutData;
-
 
 
 typedef struct W_Connection {

@@ -31,10 +31,13 @@
 #include "WUtil.h"
 
 
-/* For some Solaris systems */
-#if !defined(HAVE_INET_ATON) && !defined(INADDR_NONE)
+/* For Solaris */
+#ifndef INADDR_NONE
 # define INADDR_NONE  (-1)
 #endif
+
+/* Max hostname length (RFC  1123) */
+#define	W_MAXHOSTNAMELEN	255
 
 
 typedef struct W_Host {
@@ -48,11 +51,9 @@ typedef struct W_Host {
 
 
 static WMHashTable *hostCache = NULL;
+
 static Bool hostCacheEnabled = True;
 
-
-/* Max hostname length (RFC  1123) */
-#define	W_MAXHOSTNAMELEN	255
 
 
 static WMHost*
