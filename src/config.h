@@ -51,7 +51,7 @@
 /* #undef X_DISPLAY_MISSING */
 
 /* define to the path to cpp */
-#define CPP_PATH "/usr/bin/cpp"
+#define CPP_PATH "/lib/cpp"
 
 /* define if you want GNOME stuff support */
 /* #undef GNOME_STUFF */
@@ -115,7 +115,7 @@
 
 /* define if you want support for X window's X_LOCALE
  * set by configure */
-#define X_LOCALE 1
+/* #undef X_LOCALE */
 
 /* the place where shared data is stored
  * defined by configure */
@@ -159,13 +159,13 @@
 #define HAVE_LIMITS_H 1
 
 /* Define if you have the <poll.h> header file.  */
-/* #undef HAVE_POLL_H */
+#define HAVE_POLL_H 1
 
 /* Define if you have the <sys/ioctl.h> header file.  */
 #define HAVE_SYS_IOCTL_H 1
 
 /* Define if you have the <sys/select.h> header file.  */
-/* #undef HAVE_SYS_SELECT_H */
+#define HAVE_SYS_SELECT_H 1
 
 /* Define if you have the <sys/time.h> header file.  */
 #define HAVE_SYS_TIME_H 1

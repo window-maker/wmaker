@@ -778,7 +778,7 @@ handleUnmapNotify(XEvent *event)
 	
 	/* if the window was reparented, do not reparent it back to the
 	 * root window */
-//	wUnmanageWindow(wwin, !reparented, False);
+	wUnmanageWindow(wwin, !reparented, False);
     }
     XUngrabServer(dpy);
 }
