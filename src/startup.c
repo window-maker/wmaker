@@ -722,7 +722,7 @@ StartUp(Bool defaultScreenOnly)
     _XA_WINDOWMAKER_ICON_SIZE = atom[17];
     _XA_WINDOWMAKER_ICON_TILE = atom[18];
 
-    _XA_GNUSTEP_TITLEBAR_STATE = atom[99];
+    _XA_GNUSTEP_TITLEBAR_STATE = atom[19];
 
 #ifdef OFFIX_DND
     _XA_DND_SELECTION = XInternAtom(dpy, "DndSelection", False);

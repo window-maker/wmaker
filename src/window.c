@@ -1397,7 +1397,8 @@ wManageInternalWindow(WScreen *scr, Window window, Window owner,
 	wwin->prev = NULL;
     }
 
-    wFrameWindowChangeState(wwin->frame, WS_UNFOCUSED);
+    if (wwin->flags.is_gnustep == 0)
+      wFrameWindowChangeState(wwin->frame, WS_UNFOCUSED);
 
 /*    if (wPreferences.auto_focus)*/
 	wSetFocusTo(scr, wwin);
@@ -1583,7 +1584,8 @@ wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 
     if (wasFocused) {
 	if (newFocusedWindow != owner && owner) {
-	    wFrameWindowChangeState(owner->frame, WS_UNFOCUSED);
+	    if (wwin->flags.is_gnustep == 0)
+	      wFrameWindowChangeState(owner->frame, WS_UNFOCUSED);
 	}
 	wSetFocusTo(scr, newFocusedWindow);
     }
@@ -1638,7 +1640,8 @@ wWindowFocus(WWindow *wwin, WWindow *owin)
 
     wwin->flags.semi_focused = 0;
 
-    wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
+    if (wwin->flags.is_gnustep == 0)
+      wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
 
     wwin->flags.focused = 1;
 
@@ -1693,7 +1696,8 @@ wWindowUnfocus(WWindow *wwin)
 {
     CloseWindowMenu(wwin->screen_ptr);
 
-    wFrameWindowChangeState(wwin->frame, wwin->flags.semi_focused 
+    if (wwin->flags.is_gnustep == 0)
+      wFrameWindowChangeState(wwin->frame, wwin->flags.semi_focused 
 			    ? WS_PFOCUSED : WS_UNFOCUSED);
 
     if (wwin->transient_for!=None 
