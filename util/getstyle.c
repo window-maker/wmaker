@@ -21,7 +21,7 @@
  */
 
 
-#define PROG_VERSION "getstyle (Window Maker) 0.5"
+#define PROG_VERSION "getstyle (Window Maker) 0.6"
 
 
 
@@ -51,6 +51,9 @@ static char *options[] = {
     "IconTitleFont",
     "DisplayFont",
     "LargeDisplayFont",
+    "WindowTitleExtendSpace",
+    "MenuTitleExtendSpace",
+    "MenuTextExtendSpace",
     "HighlightColor",	
     "HighlightTextColor",
     "ClipTitleColor",

@@ -12,6 +12,12 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+/*
+ * TODO:
+ * - lens that shows where it's magnifying
+ * 
+ * 
+ */
 
 int refreshrate = 200;
 
@@ -23,15 +29,27 @@ typedef struct {
     unsigned long lastpixel;
     unsigned long *buffer;
     int width, height;
+    int rwidth, rheight; 	       /* size of window in real pixels */
     int magfactor;
+    int refreshrate;
 
     WMWindow *win;
     WMLabel *label;
     WMPixmap *pixmap;
-    
+
+    WMWindow *dlg;
+
+    WMSlider *speed;
+    WMSlider *magnify;
+    WMButton *okB;
+    WMButton *cancelB;
+    WMButton *newB;
+
     int x, y;
     Bool frozen;
-    
+    Bool firstDraw;
+    Bool markPointerHotspot;
+
     WMHandlerID tid;
 } BufferData;
 
@@ -46,6 +64,8 @@ int rectBufferSize = 32;
 Display *dpy;
 WMScreen *scr;
 unsigned int black;
+WMColor *cursorColor1;
+WMColor *cursorColor2;
 
 #ifndef __GNUC__
 #define inline
@@ -59,7 +79,14 @@ makeBufferData(WMWindow *win, WMLabel *label, int width, int height,
     BufferData *data;
     
     data = wmalloc(sizeof(BufferData));
+
+    data->rwidth = width;
+    data->rheight = height;
     
+    data->refreshrate = refreshrate;
+    
+    data->firstDraw = True;
+
     data->magfactor = magfactor;
     
     data->rects = wmalloc(sizeof(XRectangle)*rectBufferSize);
@@ -93,6 +120,9 @@ resizeBufferData(BufferData *data, int width, int height, int magfactor)
     int w = width/magfactor;
     int h = height/magfactor;
 
+    data->rwidth = width;
+    data->rheight = height;
+    data->firstDraw = True;
     data->magfactor = magfactor;
     data->buffer = wrealloc(data->buffer, sizeof(unsigned long)*w*h);
     data->width = w;
@@ -114,17 +144,19 @@ static int
 drawpoint(BufferData *data, unsigned long pixel, int x, int y)
 {
     static GC gc = NULL;
+    Bool flush = (x < 0);
 
-    if (data->buffer[x+data->width*y] == pixel)
-	return 0;
+    if (!flush) {
+	if (data->buffer[x+data->width*y] == pixel && !data->firstDraw)
+	    return 0;
     
-    data->buffer[x+data->width*y] = pixel;
-
+	data->buffer[x+data->width*y] = pixel;
+    }
     if (gc == NULL) {
 	gc = XCreateGC(dpy, DefaultRootWindow(dpy), 0, NULL);
     }
     
-    if (data->lastpixel == pixel && data->rectP < rectBufferSize) {
+    if (!flush && data->lastpixel == pixel && data->rectP < rectBufferSize) {
 	data->rects[data->rectP].x = x*data->magfactor;
 	data->rects[data->rectP].y = y*data->magfactor;
 	data->rects[data->rectP].width = data->magfactor;
@@ -206,12 +238,44 @@ updateImage(BufferData *data, int rx, int ry)
 		changedPixels++;
 	}
     }
+    /* flush the point cache */
+    drawpoint(data, 0, -1, -1);
 
     XDestroyImage(image);
+    
+    if (data->markPointerHotspot && !data->frozen) {
+	XRectangle rects[4];
+
+	rects[0].x = (data->width/2 - 3)*data->magfactor;
+	rects[0].y = (data->height/2)*data->magfactor;
+	rects[0].width = 2*data->magfactor;
+	rects[0].height = data->magfactor;
+
+	rects[1].x = (data->width/2 + 2)*data->magfactor;
+	rects[1].y = (data->height/2)*data->magfactor;
+	rects[1].width = 2*data->magfactor;
+	rects[1].height = data->magfactor;
+
+	XFillRectangles(dpy, data->d, WMColorGC(cursorColor1), rects, 2);
+
+	rects[2].y = (data->height/2 - 3)*data->magfactor;
+	rects[2].x = (data->width/2)*data->magfactor;
+	rects[2].height = 2*data->magfactor;
+	rects[2].width = data->magfactor;
+
+	rects[3].y = (data->height/2 + 2)*data->magfactor;
+	rects[3].x = (data->width/2)*data->magfactor;
+	rects[3].height = 2*data->magfactor;
+	rects[3].width = data->magfactor;
+
+	XFillRectangles(dpy, data->d, WMColorGC(cursorColor2), rects + 2, 2);
+    }
 
     if (changedPixels > 0) {
 	WMRedisplayWidget(data->label);
     }
+    
+    data->firstDraw = False;
 }
 
 
@@ -234,8 +298,9 @@ update(void *d)
     }
     updateImage(data, rx, ry);
 
-    data->tid = WMAddTimerHandler(refreshrate, update, data);
+    data->tid = WMAddTimerHandler(data->refreshrate, update, data);
 }
+
 
 void resizedWindow(void *d, WMNotification *notif)
 {
@@ -268,6 +333,25 @@ void closeWindow(WMWidget *w, void *d)
 }
 
 
+#if 0
+static void
+clickHandler(XEvent *event, void *d)
+{
+    BufferData *data = (BufferData*)d;
+    
+    data->win = WMCreateWindow(scr, "setup");
+    WMSetWindowTitle(data->win, "Magnify Options");
+    
+    data->speed = WMCreateSlider(data->win);
+    
+    data->magnify = WMCreateSlider(data->win);
+    
+    
+
+}
+#endif
+
+
 static void
 keyHandler(XEvent *event, void *d)
 {
@@ -283,6 +367,9 @@ keyHandler(XEvent *event, void *d)
 	switch (buf[0]) {
 	 case 'n':
 	    newWindow(data->magfactor);
+	    break;
+	 case 'm':
+	    data->markPointerHotspot = !data->markPointerHotspot;
 	    break;
 	 case 'f':
 	 case ' ':
@@ -401,11 +488,19 @@ int main(int argc, char **argv)
 	} else if (strcmp(argv[i], "-h")==0 
 		   || strcmp(argv[i], "--help")==0) {
 	help:
-	    printf("Syntax: %s [-display <display>] [-m <number>] [-r <number>]\n",
+
+	    printf("Syntax: %s [options]\n",
 		   argv[0]);
-	    puts("-display <display>	display that should be used");
-	    puts("-m <number>		change magnification factor (default 2)");
-	    puts("-r <number>		change refresh delay, in milliseconds (default 200)");
+	    puts("Options:");
+	    puts("  -display <display>	display that should be used");
+	    puts("  -m <number>		change magnification factor (default 2)");
+	    puts("  -r <number>		change refresh delay, in milliseconds (default 200)");
+	    puts("Keys:");
+	    puts("  1,2,3,4,5,6,7,8,9	change the magnification factor");
+	    puts("  <space>, f		freeze the 'camera', making it magnify only the current\n"
+		 "			position");
+	    puts("  n			create a new window");
+	    puts("  m			show/hide the pointer hotspot mark");
 	    exit(0);
 	}
     }
@@ -426,6 +521,9 @@ int main(int argc, char **argv)
 
     scr = WMCreateScreen(dpy, 0);
 
+    cursorColor1 = WMCreateNamedColor(scr, "#ff0000", False);
+    cursorColor2 = WMCreateNamedColor(scr, "#00ff00", False);
+    
     data = newWindow(magfactor);
 
     WMScreenMainLoop(scr);

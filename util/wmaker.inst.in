@@ -54,10 +54,7 @@ copy() {
 	target=$2
 	file=`basename $source`
 	rm -f $target
-	if [ "$file" = "WMRootMenu" ]; then
-		echo \"$GSDIR/Library/WindowMaker/menu\" > \
-			$target
-	elif [ "$file" = "WindowMaker" ]; then
+	if [ "$file" = "WindowMaker" ]; then
 		sed -e "s|~/GNUstep|$GSDIR|g" $source > $target
 	else
 		if test "x$GNUSTEP_USER_ROOT" = "x"; then
@@ -271,7 +268,7 @@ if test -z "#LITE#" ; then
  echo "There are menus in 2 different file formats. The plain text format and"
  echo "the property list format. The plain text format is more flexible, but"
  echo "the menu in the property list format can be edited graphically. The"
- echo "menu that will be used by default is the plain text. Read"
+ echo "menu that will be used by default is the property list one. Read"
  echo "$GSDIR/Library/WindowMaker/README for information on how to change it."
 else
  echo "Your copy of Window Maker is configured especially for KDE."
