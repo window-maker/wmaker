@@ -336,8 +336,9 @@ createPanel(Panel *p)
 	    WMSetButtonImage(panel->oldsB, icon);
 	    WMReleasePixmap(icon);
 	}
+	free(path);
     }
-    
+
     WMGroupButtons(panel->newsB, panel->oldsB);
     
     WMMapSubwidgets(panel->titlF);

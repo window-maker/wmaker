@@ -573,6 +573,21 @@ performCommand(WMWidget *w, void *data)
 	break;
     }
 
+
+    {
+	int i, j;
+	WMList *list;
+	
+	list = WMGetBrowserListInColumn(panel->browser, 0);
+	for (i = 0; i < WMGetListNumberOfRows(list); i++) {
+	    WMListItem *item =WMGetListItem(list, i);
+	    if (!item)
+		printf("%i empty\n", i);
+	    else
+		puts(item->text);
+	}
+	
+    }
     if (row>=0) row++;
     WMInsertBrowserItem(panel->browser, column, row, title, isMenu(menuItem));
     if (row<0)
@@ -580,6 +595,8 @@ performCommand(WMWidget *w, void *data)
     else
 	PLInsertArrayElement(menu, menuItem, row+1);
     free(title);
+    
+    
     panel->unsaved = 1;
     
     if (removed) {

@@ -170,6 +170,8 @@ WMInsertListItem(WMList *lPtr, int row, char *text)
 	&& row >= 0)
 	lPtr->selectedItem++;
     
+    row = WMIN(row, WMGetBagItemCount(lPtr->items));
+    
     if (row < 0)
 	WMPutInBag(lPtr->items, item);
     else
@@ -203,7 +205,7 @@ WMRemoveListItem(WMList *lPtr, int row)
     } else if (lPtr->selectedItem > row) {
         lPtr->selectedItem--;
     }
-    
+
     if (row <= lPtr->topItem+lPtr->fullFitLines+lPtr->flags.dontFitAll)
 	lPtr->topItem--;
     if (lPtr->topItem < 0)
@@ -455,9 +457,7 @@ paintItem(List *lPtr, int index)
     int width, height, x, y;
     WMListItem *itemPtr;
 
-
     itemPtr = WMGetFromBag(lPtr->items, index);
-    
 
     width = lPtr->view->size.width - 2 - 19;
     height = lPtr->itemHeight;
@@ -486,8 +486,8 @@ paintItem(List *lPtr, int index)
 			  &rect);
     } else {
 	if (itemPtr->selected)
-	    XFillRectangle(scr->display, view->window, WMColorGC(scr->white), x, y,
-			   width, height);
+	    XFillRectangle(scr->display, view->window, WMColorGC(scr->white), 
+			   x, y, width, height);
 	else
 	    XClearArea(scr->display, view->window, x, y, width, height, False);
 
@@ -620,6 +620,8 @@ WMSelectListItem(WMList *lPtr, int row)
     else
         notify = 1;
 
+    assert(lPtr->selectedItem < WMGetBagItemCount(lPtr->items));
+    
     if (!lPtr->flags.allowMultipleSelection) {
 	/* unselect previous selected item */
 	if (lPtr->selectedItem >= 0) {

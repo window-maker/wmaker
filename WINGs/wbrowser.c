@@ -457,7 +457,7 @@ WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text,
 
     if (column < 0 || column >= bPtr->columnCount)
 	return NULL;
-
+    
     item = WMInsertListItem(bPtr->columns[column], row, text);
     item->isBranch = isBranch;
 

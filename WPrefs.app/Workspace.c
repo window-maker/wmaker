@@ -320,6 +320,7 @@ createPanel(Panel *p)
 	    WMSetButtonAltImage(panel->clipB, icon1);
 	    WMReleasePixmap(icon1);
 	}
+	free(path);
     }
     WMSetBalloonTextForView(_("Disable/enable the Clip (that thing with\n"
 			      "a paper clip icon)."),
@@ -332,7 +333,7 @@ createPanel(Panel *p)
     
     WMRealizeWidget(panel->frame);
     WMMapSubwidgets(panel->frame);
-    
+
     showData(panel);
 }
 

@@ -366,7 +366,7 @@ WMBag *WMCreateTreeBagWithDestructor(void (*destructor)(void*));
 /* this is slow */
 /* erase will remove the element from the bag,
  * but will keep the index of the other elements unchanged */
-#define WMEraseFromBag(bag, index) bag->func.deleteFromBag(bag, index)
+#define WMEraseFromBag(bag, index) bag->func.eraseFromBag(bag, index)
 
 /* delete and remove will remove the elements and cause the elements
  * after them to decrement their indexes by 1 */

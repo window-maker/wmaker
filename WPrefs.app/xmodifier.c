@@ -228,6 +228,8 @@ x_reset_modifier_mapping (Display *display)
   AltIndex    = alt_bit;
   ModeIndex   = mode_bit;
 
+  if (x_modifier_keymap != NULL)
+	XFreeModifiermap(x_modifier_keymap);
 }
 
 
