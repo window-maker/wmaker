@@ -49,12 +49,9 @@ int main(int argc, char **argv)
 	img = RScaleImage(img, img->width*atof(argv[2]), 
 			  img->height*atof(argv[2]));
     }
-    {int i;
-    for (i=0; i<10;i++)
     if (!RConvertImage(ctx, img, &pix)) {
 	puts(RMessageForError(RErrorCode));
 	exit(1);
-    }
     }
     
     printf("%ix%i\n", img->width, img->height);
