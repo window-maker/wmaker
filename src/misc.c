@@ -1224,6 +1224,7 @@ GetCommandForPid(int pid, char ***argv, int *argc)
     char buf[1024];
     FILE *fPtr;
     int count, i, j;
+    Bool ok= False;
 
     sprintf(buf, "/proc/%d/cmdline", pid);
     fPtr = fopen(buf, "r");
@@ -1238,25 +1239,24 @@ GetCommandForPid(int pid, char ***argv, int *argc)
             }
             if ((*argc) == 0) {
                 *argv = NULL;
-                return False;
-            }
-            *argv = (char**) wmalloc(sizeof(char*) * (*argc));
-            (*argv)[0] = buf;
-            for (i=0, j=1; i<count; i++) {
-                if (buf[i] != 0)
-                    continue;
-                if (i < count-1) {
-                    (*argv)[j++] = &buf[i+1];
+                ok= False;
+            } else {
+                *argv = (char**) wmalloc(sizeof(char*) * (*argc));
+                (*argv)[0] = buf;
+                for (i=0, j=1; i<count; i++) {
+                    if (buf[i] != 0)
+                      continue;
+                    if (i < count-1) {
+                        (*argv)[j++] = &buf[i+1];
+                    }
                 }
+                ok= True;
             }
-
-            return True;
         }
-
         fclose(fPtr);
     }
 
-    return False;
+    return ok;
 }
 
 
