@@ -28,6 +28,7 @@ typedef struct W_FilePanel {
     
     WMButton *homeButton;
     WMButton *trashcanButton;
+    WMButton *disketteButton;
 
     WMView *accessoryView;
 
@@ -68,6 +69,8 @@ static void fillColumn(WMBrowserDelegate *self, WMBrowser *bPtr, int column,
 static void deleteFile();
 
 static void goHome();
+
+static void goFloppy();
 
 static void buttonClick();
 
@@ -254,8 +257,16 @@ makeFilePanel(WMScreen *scrPtr, char *name, char *title)
     WMSetButtonImagePosition(fPtr->trashcanButton, WIPImageOnly);
     WMSetButtonImage(fPtr->trashcanButton, scrPtr->trashcanIcon);
     WMSetButtonAltImage(fPtr->trashcanButton, scrPtr->altTrashcanIcon);
-
     WMSetButtonAction(fPtr->trashcanButton, deleteFile, fPtr);
+
+    fPtr->disketteButton = WMCreateCommandButton(fPtr->win);
+    WMMoveWidget(fPtr->disketteButton, 85, 325);
+    WMResizeWidget(fPtr->disketteButton, 28, 28);
+    WMSetButtonImagePosition(fPtr->disketteButton, WIPImageOnly);
+    WMSetButtonImage(fPtr->disketteButton, scrPtr->disketteIcon);
+    WMSetButtonAltImage(fPtr->disketteButton, scrPtr->altDisketteIcon);
+    WMSetButtonAction(fPtr->disketteButton, goFloppy, fPtr);
+
     /*xxxxxxxxxxxx***/
 
     WMRealizeWidget(fPtr->win);
@@ -586,7 +597,7 @@ browserClick(WMBrowser *bPtr, WMFilePanel *panel)
 #define ERROR_PANEL(s)  err_str = wmalloc(strlen(file)+strlen(s)); \
                         sprintf(err_str, s, file);  \
                         WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win, \
-                                "Error", err_str, "OK", NULL, NULL);
+                        "Error", err_str, "OK", NULL, NULL);
 
 static void
 deleteFile(WMButton *bPre, WMFilePanel *panel)
@@ -618,7 +629,7 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
                     ERROR_PANEL("%s does not exist.");
                     break;
                 case EACCES:
-                    ERROR_PANEL("Has no right to access %s.");
+                    ERROR_PANEL("Permission denied.");
                     break;
                 case ENOMEM:
                     ERROR_PANEL("Insufficient kernel memory was available.");
@@ -639,6 +650,26 @@ deleteFile(WMButton *bPre, WMFilePanel *panel)
     }
     free(buffer);
     free(file);
+}
+
+static void
+goFloppy(WMButton *bPtr, WMFilePanel *panel)
+{
+    char *file, *err_str;
+    struct stat filestat;
+
+    /* home is statically allocated. Don't free it! */
+    if (stat("/floppy",&filestat)) {
+        ERROR_PANEL("An error occured browsing /floppy.");
+        free(err_str);
+        return;
+    } else if (!S_ISDIR(filestat.st_mode)) {
+        ERROR_PANEL("/floppy is not a directory.");
+        free(err_str);
+        return;
+    }
+    
+    WMSetFilePanelDirectory(panel, "/floppy/");
 }
 
 static void

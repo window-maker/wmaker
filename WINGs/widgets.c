@@ -435,6 +435,15 @@ loadPixmaps(WMScreen *scr)
     RCombineImageWithColor(tmp, &white);
     scr->altTrashcanIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
     RDestroyImage(tmp);
+    /* diskette */
+    tmp = RGetSubImage(image, 105, 25, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->disketteIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
+    tmp = RGetSubImage(image, 105, 25, 24, 24);
+    RCombineImageWithColor(tmp, &white);
+    scr->altDisketteIcon = WMCreatePixmapFromRImage(scr, tmp, 128);
+    RDestroyImage(tmp);
 
 
     tmp = RGetSubImage(image, 0, 0, 24, 24);
