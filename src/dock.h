@@ -91,10 +91,6 @@ WAppIcon *wDockFindIconForWindow(WDock *dock, Window window);
 void wDockDoAutoLaunch(WDock *dock, int workspace);
 void wDockLaunchWithState(WDock *dock, WAppIcon *btn, WSavedState *state);
 
-#ifdef REDUCE_APPICONS
-void wDockSimulateLaunch(WDock *dock, WAppIcon *btn);
-#endif
-
 #ifdef OFFIX_DND
 int wDockReceiveDNDDrop(WScreen *scr, XEvent *event);
 #endif

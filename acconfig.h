@@ -44,12 +44,6 @@
  * set by configure */
 #undef PIXMAPDIR
 
-/*
- * define REDUCE_APPICONS if you want apps with the same WM_INSTANCE &&
- * WM_CLASS to share an appicon
- */
-#undef REDUCE_APPICONS
-
 /* Internationalization (I18N) support 
  * set by configure */
 #undef I18N
