@@ -70,6 +70,7 @@ Changes since version 0.80.2:
   a WINGs textfield widget.
 - Fixed small memory leak in WINGs' font panel code.
 - Fixed memory leak in WINGs' file panel code.
+- Updated Bulgarian translations (Anton Zinoviev <zinoviev@debian.org>)
 
 
 Changes since version 0.80.1:
