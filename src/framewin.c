@@ -1081,25 +1081,33 @@ wFrameWindowPaint(WFrameWindow *fwin)
             y = *fwin->title_clearance + TITLEBAR_EXTEND_SPACE;
             h = WMFontHeight(*fwin->font);
 
-            buf = XCreatePixmap(dpy, fwin->titlebar->window, w, h,
+            /* We use a w+2 buffer to have an extra pixel on the left and
+             * another one on the right. This is because for some odd reason,
+             * sometimes when using AA fonts (when libfreetype2 is compiled
+             * with bytecode interpreter turned off), some fonts are drawn
+             * starting from x = -1 not from 0 as requested. Observed with
+             * capital A letter on the bold 'trebuchet ms' font. -Dan
+             */
+            buf = XCreatePixmap(dpy, fwin->titlebar->window, w+2, h,
                                 scr->w_depth);
 
             XSetClipMask(dpy, scr->copy_gc, None);
 
             if (fwin->title_texture[state]->any.type!=WTEX_SOLID) {
                 XCopyArea(dpy, fwin->title_back[state], buf, scr->copy_gc,
-                          x, y, w, h, 0, 0);
+                          x-1, y, w+2, h, 0, 0);
             } else {
                 XSetForeground(dpy, scr->copy_gc,
                                fwin->title_texture[state]->solid.normal.pixel);
-                XFillRectangle(dpy, buf, scr->copy_gc, 0, 0, w, h);
+                XFillRectangle(dpy, buf, scr->copy_gc, 0, 0, w+2, h);
             }
 
+            /*XDrawRectangle(dpy, buf, WMColorGC(scr->white),1,0,w,h-1);*/
             WMDrawString(scr->wmscreen, buf, fwin->title_color[state],
-                         *fwin->font, 0, 0, title, titlelen);
+                         *fwin->font, 1, 0, title, titlelen);
 
             XCopyArea(dpy, buf, fwin->titlebar->window, scr->copy_gc,
-                      0, 0, w, h, x, y);
+                      0, 0, w+2, h, x-1, y);
 
             XFreePixmap(dpy, buf);
 
