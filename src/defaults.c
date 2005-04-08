@@ -659,8 +659,8 @@ WDefaultEntry optionList[] = {
     {"IconTitleBack",	"black",       		NULL,
     NULL,				getColor,	setIconTitleBack
     },
-    {"SwitchPanelImages", "(\"swtile.png\")",    &wPreferences,
-    NULL,                               getPropList,     setSwPOptions
+    {"SwitchPanelImages", "(swtile.png, swback.png, 30, 40)",  &wPreferences,
+    NULL,               getPropList,     setSwPOptions
     },
     /* keybindings */
 #ifndef LITE

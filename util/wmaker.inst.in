@@ -135,14 +135,6 @@ else
 fi
 
 
-if [ ! -d "$GSDIR/Library/WindowMaker/CachedPixmaps" ]; then
-	make_dir $GSDIR/WindowMaker/CachedPixmaps
-fi
-
-if [ ! -d "$GSDIR/Library/WindowMaker/WPrefs" ]; then
-	make_dir $GSDIR/WindowMaker/WPrefs
-fi
-
 if [ ! -d "$GSDIR/Defaults" ]; then
 	make_dir $GSDIR/Defaults
 fi
@@ -201,7 +193,6 @@ if [ ! -d "$GSDIR/Library/WindowMaker/Themes" ]; then
 fi
 
 
-
 if [ ! -d "$GSDIR/Library/WindowMaker/Backgrounds" ]; then
 	echo "Creating bg image library $GSDIR/Library/WindowMaker/Backgrounds"
 	make_dir  $GSDIR/Library/WindowMaker/Backgrounds
@@ -241,6 +232,14 @@ else
 	echo "Default SoundSets directory already exists. Skipping..."
 fi
 
+
+if [ ! -d "$GSDIR/Library/WindowMaker/CachedPixmaps" ]; then
+	make_dir $GSDIR/Library/WindowMaker/CachedPixmaps
+fi
+
+if [ ! -d "$GSDIR/Library/WindowMaker/WPrefs" ]; then
+	make_dir $GSDIR/Library/WindowMaker/WPrefs
+fi
 
 if test -z "#LITE#" ; then
 FILES=`(cd $GLOBALDIR; ls menu menu.* plmenu plmenu.?? wmmacros)`
