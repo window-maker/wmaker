@@ -771,6 +771,7 @@ animateResize(WScreen *scr, int x, int y, int w, int h,
     }
 
     k = (hiding ? 2 : 3);
+
     switch(style) {
     case WIS_TWIST:
         steps = (MINIATURIZE_ANIMATION_STEPS_T * k)/3;
@@ -1343,6 +1344,7 @@ wHideApplication(WApplication *wapp)
     WScreen *scr;
     WWindow *wlist;
     int hadfocus;
+    int animate;
 
     if (!wapp) {
         wwarning("trying to hide a non grouped window");
@@ -1362,15 +1364,19 @@ wHideApplication(WApplication *wapp)
         wapp->last_focused = wlist;
     else
         wapp->last_focused = NULL;
+
+    animate = !wapp->flags.skip_next_animation;
+
     while (wlist) {
         if (wlist->main_window == wapp->main_window) {
             if (wlist->flags.focused) {
                 hadfocus = 1;
             }
-            if (wapp->app_icon)
+            if (wapp->app_icon) {
                 hideWindow(wapp->app_icon->icon, wapp->app_icon->x_pos,
-                           wapp->app_icon->y_pos, wlist,
-                           !wapp->flags.skip_next_animation);
+                           wapp->app_icon->y_pos, wlist, animate);
+                animate = False;
+            }
         }
         wlist = wlist->prev;
     }
@@ -1449,6 +1455,7 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
     WWindow *wlist, *next;
     WWindow *focused=NULL;
     Bool shouldArrangeIcons = False;
+    int animate;
 
     if (!wapp)
         return;
@@ -1461,6 +1468,8 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
     /* goto beginning of list */
     while (wlist->prev)
         wlist = wlist->prev;
+
+    animate = !wapp->flags.skip_next_animation;
 
     while (wlist) {
         next = wlist->next;
@@ -1502,9 +1511,9 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
                 WMPostNotificationName(WMNChangedState, wlist, "hide");
             } else if (wlist->flags.hidden) {
                 unhideWindow(wapp->app_icon->icon, wapp->app_icon->x_pos,
-                             wapp->app_icon->y_pos, wlist,
-                             !wapp->flags.skip_next_animation,
+                             wapp->app_icon->y_pos, wlist, animate,
                              bringToCurrentWS);
+                animate = False;
             } else {
                 if (bringToCurrentWS
                     && wlist->frame->workspace != scr->current_workspace) {

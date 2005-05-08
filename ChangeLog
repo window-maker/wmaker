@@ -8,7 +8,7 @@ Changes since version 0.91.0:
 - fixed issues with compiling on Solaris with openwin
 - reduced minimum required version number for the Xft library to 2.1.0
 - fixed some compilation issues with gcc-2.9x
-- Removed --with-appsdir option and replaced it with --with-gnustepdir. Also,
+- removed --with-appsdir option and replaced it with --with-gnustepdir. Also,
   default installation path (for non GNUstep users) is now $(prefix)/bin
 - fixed bug with infinite loop in some circumstances in fitText() in WINGs
 - fixed to allow parallel builds on SMP systems using make -j
@@ -19,6 +19,9 @@ Changes since version 0.91.0:
   Window Maker starts to make transition transparent for users.
 - fixed issue with window being moved by 1 pixel up and left when the window
   move was initiated by the client
+- improved hide/unhide animation for applications with multiple windows
+  (only animate the active window hiding/unhiding, which makes Window Maker
+  faster and more responsive for such applications).
 
 
 Changes since version 0.90.0:
