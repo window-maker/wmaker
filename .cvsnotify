@@ -1,6 +1,0 @@
-#
-# You can add here extra email addresses (one per line) where notifications
-# should be sent on cvs commit.
-# This is easier than to modify CVSROOT/loginfo to add extra addresses there.
-# Lines that start with # or empty lines are ignored.
-#
