@@ -872,7 +872,7 @@ updateStateHint(WWindow *wwin, Bool changedWorkspace, Bool del) /* changeable */
             XDeleteProperty(dpy, wwin->client_win, net_wm_state);
         }
     } else {
-        Atom state[11]; /* nr of defined state atoms */
+        Atom state[15]; /* nr of defined state atoms */
         int i = 0;
 
         if(changedWorkspace || (wPreferences.sticky_icons && !IS_OMNIPRESENT(wwin)))
@@ -895,7 +895,7 @@ updateStateHint(WWindow *wwin, Bool changedWorkspace, Bool del) /* changeable */
             state[i++] = net_wm_state_skip_pager;
 
             if (wwin->flags.miniaturized && wPreferences.sticky_icons) {
-                if( !IS_OMNIPRESENT(wwin))
+                if (!IS_OMNIPRESENT(wwin))
                     updateWorkspaceHint(wwin, True, False);
                 state[i++] = net_wm_state_sticky;
             }
@@ -1057,7 +1057,7 @@ doStateAtom(WWindow *wwin, Atom state, int set, Bool init)
             set = !(wwin->flags.maximized & MAX_VERTICAL);
         }
         if (init) {
-            wwin->flags.maximized = set;
+            wwin->flags.maximized |= (set ? MAX_VERTICAL : 0);
         } else {
             if (set) {
                 wMaximizeWindow(wwin, wwin->flags.maximized | MAX_VERTICAL);
@@ -1070,7 +1070,7 @@ doStateAtom(WWindow *wwin, Atom state, int set, Bool init)
             set = !(wwin->flags.maximized & MAX_HORIZONTAL);
         }
         if (init) {
-            wwin->flags.maximized = set;
+            wwin->flags.maximized |= (set ? MAX_HORIZONTAL : 0);
         } else {
             if (set) {
                 wMaximizeWindow(wwin, wwin->flags.maximized | MAX_HORIZONTAL);

@@ -474,7 +474,7 @@ wMaximizeWindow(WWindow *wwin, int directions)
 void
 wUnmaximizeWindow(WWindow *wwin)
 {
-    int restore_x, restore_y;
+    int x, y, w, h;
 
     if (!wwin->flags.maximized)
         return;
@@ -483,13 +483,17 @@ wUnmaximizeWindow(WWindow *wwin)
         wwin->flags.skip_next_animation = 1;
         wUnshadeWindow(wwin);
     }
-    restore_x = (wwin->flags.maximized & MAX_HORIZONTAL) ?
+    x = ((wwin->flags.maximized & MAX_HORIZONTAL) && wwin->old_geometry.x) ?
         wwin->old_geometry.x : wwin->frame_x;
-    restore_y = (wwin->flags.maximized & MAX_VERTICAL) ?
+    y = ((wwin->flags.maximized & MAX_VERTICAL) && wwin->old_geometry.y) ?
         wwin->old_geometry.y : wwin->frame_y;
+    w = wwin->old_geometry.width ?
+        wwin->old_geometry.width : wwin->client.width;
+    h = wwin->old_geometry.height ?
+        wwin->old_geometry.height : wwin->client.height;
+
     wwin->flags.maximized = 0;
-    wWindowConfigure(wwin, restore_x, restore_y,
-                     wwin->old_geometry.width, wwin->old_geometry.height);
+    wWindowConfigure(wwin, x, y, w, h);
 
     WMPostNotificationName(WMNChangedState, wwin, "maximize");
 

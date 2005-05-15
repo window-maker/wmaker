@@ -21,7 +21,11 @@ Changes since version 0.91.0:
   move was initiated by the client
 - improved hide/unhide animation for applications with multiple windows
   (only animate the active window hiding/unhiding, which makes Window Maker
-  faster and more responsive for such applications).
+  faster and more responsive for such applications). This also makes the
+  restart operation much faster.
+- fixed bug with windows shrinking to very small sizes when Unmaximize was
+  used on them, after they were closed in a maximized state.
+- fixed bug with restoring maximized state from NetWM atoms.
 
 
 Changes since version 0.90.0:
