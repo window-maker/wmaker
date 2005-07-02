@@ -1548,7 +1548,6 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
 }
 
 
-
 void
 wShowAllWindows(WScreen *scr)
 {

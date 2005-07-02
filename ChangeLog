@@ -26,6 +26,8 @@ Changes since version 0.91.0:
 - fixed bug with windows shrinking to very small sizes when Unmaximize was
   used on them, after they were closed in a maximized state.
 - fixed bug with restoring maximized state from NetWM atoms.
+- fixed issue with GNUstep applications losing focus when all their windows
+  are closed and there remains only their menu (Matt Rice <ratmice@yahoo.com>)
 
 
 Changes since version 0.90.0:

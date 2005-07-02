@@ -340,17 +340,6 @@ setupGNUstepHints(WWindow *wwin, GNUstepWMAttributes *gs_hints)
         wwin->client_flags.no_appicon = 1;
     }
 
-    /* temporary solution to avoid GS menus in our window list.
-     * it's temporary because it's not the proper way: windows at the
-     * floating level are also skipped from the window list with this.
-     * Fix it -Dan */
-    if (gs_hints->flags & GSWindowLevelAttr) {
-        if (gs_hints->window_level == WMMainMenuWindowLevel ||
-            gs_hints->window_level == WMSubmenuWindowLevel) {
-            wwin->client_flags.skip_window_list = 1;
-        }
-    }
-
 }
 
 

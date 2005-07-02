@@ -231,8 +231,11 @@ UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action)
         char *t;
         int idx;
 
-        if (wwin->flags.internal_window || WFLAGP(wwin, skip_window_list))
+        if (wwin->flags.internal_window ||
+            WFLAGP(wwin, skip_window_list) ||
+            IS_GNUSTEP_MENU(wwin)) {
             return;
+        }
 
         if (wwin->frame->title)
             snprintf(title, len, "%s", wwin->frame->title);

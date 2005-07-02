@@ -334,6 +334,10 @@ typedef struct WWindow {
 
 #define WINDOW_LEVEL(w) ((w)->frame->core->stacking->window_level)
 
+#define IS_GNUSTEP_MENU(w) ((w)->wm_gnustep_attr && \
+    ((w)->wm_gnustep_attr->flags & GSWindowLevelAttr) && \
+    ((w)->wm_gnustep_attr->window_level==WMMainMenuWindowLevel || \
+     (w)->wm_gnustep_attr->window_level==WMSubmenuWindowLevel))
 
 
 /*
