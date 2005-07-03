@@ -807,7 +807,9 @@ wScreenInit(int screen_number)
 
     scr->info_text_font = WMBoldSystemFontOfSize(scr->wmscreen, 12);
 
-    scr->tech_draw_font= XLoadQueryFont(dpy, "-adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*");
+    scr->tech_draw_font = XLoadQueryFont(dpy, "-adobe-helvetica-bold-r-*-*-12-*-*-*-*-*-*-*");
+    if (!scr->tech_draw_font)
+        scr->tech_draw_font = XLoadQueryFont(dpy, "fixed");
 
     scr->gview = WCreateGeometryView(scr->wmscreen);
     WMRealizeWidget(scr->gview);

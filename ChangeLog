@@ -28,6 +28,8 @@ Changes since version 0.91.0:
 - fixed bug with restoring maximized state from NetWM atoms.
 - fixed issue with GNUstep applications losing focus when all their windows
   are closed and there remains only their menu (Matt Rice <ratmice@yahoo.com>)
+- try fixed font for the technical drawing font if helvetica-12 is not
+  available to avoid crashing (Timo Juhani Lindfors <timo.lindfors@iki.fi>)
 
 
 Changes since version 0.90.0:

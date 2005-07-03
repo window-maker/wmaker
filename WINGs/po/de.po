@@ -144,7 +144,7 @@ msgstr "zusätzliche Daten hinter dem Ende der Propertyliste"
 #: ../../WINGs/proplist.c:1602
 #, c-format
 msgid "could not get size for file '%s'"
-msgstr "konnte Dateigrösse von '%s' nicht ermitteln"
+msgstr "konnte Dateigröße von '%s' nicht ermitteln"
 
 #: ../../WINGs/proplist.c:1614
 #, c-format
@@ -185,7 +185,7 @@ msgstr "rename ('%s' to '%s') schlug fehl"
 #: ../../WINGs/userdefaults.c:192 ../../WINGs/userdefaults.c:208
 #, c-format
 msgid "cannot read domain from file '%s' when syncing"
-msgstr "Kannn bei der Synchronisation nicht aus Datei '%s' lesen"
+msgstr "Kann bei der Synchronisation nicht aus Datei '%s' lesen"
 
 #: ../../WINGs/wcolor.c:198 ../../WINGs/wcolor.c:211 ../../WINGs/wcolor.c:250
 #: ../../WINGs/wcolor.c:291
