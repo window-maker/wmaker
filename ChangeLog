@@ -30,6 +30,12 @@ Changes since version 0.91.0:
   are closed and there remains only their menu (Matt Rice <ratmice@yahoo.com>)
 - try fixed font for the technical drawing font if helvetica-12 is not
   available to avoid crashing (Timo Juhani Lindfors <timo.lindfors@iki.fi>)
+- new algorithm for placing miniwindows after unhiding the application they
+  belong to, that works without auto-arranging the icons, while still avoiding
+  multiple icons in the same spot by moving the miniwindows to a new slot if
+  their old slot was occupied in the meantime.
+- double clicking an appicon will also raise the miniwindows that belong to
+  that application to the front (along with the normal windows).
 
 
 Changes since version 0.90.0:

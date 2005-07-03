@@ -1458,7 +1458,6 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
     WScreen *scr;
     WWindow *wlist, *next;
     WWindow *focused=NULL;
-    Bool shouldArrangeIcons = False;
     int animate;
 
     if (!wapp)
@@ -1488,9 +1487,18 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
                 if (bringToCurrentWS || wPreferences.sticky_icons ||
                     wlist->frame->workspace == scr->current_workspace) {
                     if (wlist->icon && !wlist->icon->mapped) {
+                        int x, y;
+
+                        PlaceIcon(scr, &x, &y, wGetHeadForWindow(wlist));
+                        if (wlist->icon_x!=x || wlist->icon_y!=y) {
+                            XMoveWindow(dpy, wlist->icon->core->window, x, y);
+                        }
+                        wlist->icon_x = x;
+                        wlist->icon_y = y;
                         XMapWindow(dpy, wlist->icon->core->window);
                         wlist->icon->mapped = 1;
                     }
+                    wRaiseFrame(wlist->icon->core);
                 }
                 if (bringToCurrentWS)
                     wWindowChangeWorkspace(wlist, scr->current_workspace);
@@ -1499,7 +1507,6 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
                     wlist->frame->workspace == scr->current_workspace) {
                     wDeiconifyWindow(wlist);
                 }
-                shouldArrangeIcons = True;
                 WMPostNotificationName(WMNChangedState, wlist, "hide");
             } else if (wlist->flags.shaded) {
                 if (bringToCurrentWS)
@@ -1539,7 +1546,7 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
         wSetFocusTo(scr, focused);
     }
     wapp->last_focused = NULL;
-    if (shouldArrangeIcons || wPreferences.auto_arrange_icons) {
+    if (wPreferences.auto_arrange_icons) {
         wArrangeIcons(scr, True);
     }
 #ifdef HIDDENDOT
