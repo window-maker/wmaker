@@ -32,7 +32,8 @@ work now (except for kanji which will most likely not work, even though
 it wasn't tested).
 
 
---- 0.91.1
+Disabling the switch panel
+--------------------------
 
 To disable the panel shown during Alt-tabbing, you may put the following in
 ~/GNUstep/Defaults/WindowMaker
