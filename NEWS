@@ -23,6 +23,14 @@ the GNUstep path structure.
 Also WPrefs now stores internal data in ~/GNUstep/Library/WindowMaker/WPrefs
 (it was ~/GNUstep/.AppInfo/WPrefs before)
 
+X Input Methods support in WINGs
+--------------------------------
+
+Preliminary support for X Input Methods was added to textfield and text
+widgets in WINGs. Input for text in other languages than English should
+work now (except for kanji which will most likely not work, even though
+it wasn't tested).
+
 
 --- 0.91.1
 
