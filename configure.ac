@@ -831,7 +831,9 @@ dnl ==============================================
 AC_ARG_WITH(appspath,
 [  --with-gnustepdir=PATH  specify the directory for GNUstep applications])
 
-appspath=$with_gnustepdir
+if test "x`echo $with_gnustepdir | grep ^/`" != "x"; then
+    appspath=$with_gnustepdir
+fi
 
 if test "x$appspath$GNUSTEP_LOCAL_ROOT" = "x"; then
     wprefs_base_dir=${prefix}
