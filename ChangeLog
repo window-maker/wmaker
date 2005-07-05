@@ -1,3 +1,11 @@
+Changes since version 0.92.0:
+.............................
+
+- added check for --with-gnustepdir option to configure to verify that its
+  argument is an absolute path
+- updated german translations (Torsten Marek <shlomme@gmx.net>)
+
+
 Changes since version 0.91.0:
 .............................
 
