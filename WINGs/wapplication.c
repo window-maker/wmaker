@@ -181,7 +181,6 @@ WMPathForResourceOfType(char *resource, char *ext)
         return path;
     }
 
-
     if (getenv("GNUSTEP_SYSTEM_ROOT")) {
         path = checkFile(getenv("GNUSTEP_SYSTEM_ROOT"), appdir, ext, resource);
         if (path) {

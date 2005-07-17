@@ -100,7 +100,7 @@ main(int argc, char **argv)
 {
     Display *dpy;
     WMScreen *scr;
-    char *locale;
+    char *locale, *path;
     int i;
     char *display_name="";
 
@@ -109,6 +109,20 @@ main(int argc, char **argv)
     memset(DeadHandlers, 0, sizeof(DeadHandlers));
 
     WMInitializeApplication("WPrefs", &argc, argv);
+
+    WMSetResourcePath(RESOURCE_PATH);
+    path = WMPathForResourceOfType("WPrefs.tiff", NULL);
+    if (!path) {
+        /* maybe it is run directly from the source directory */
+        WMSetResourcePath(".");
+        path = WMPathForResourceOfType("WPrefs.tiff", NULL);
+        if (!path) {
+            WMSetResourcePath("..");
+        }
+    }
+    if (path) {
+        wfree(path);
+    }
 
     if (argc>1) {
         for (i=1; i<argc; i++) {

@@ -4,6 +4,7 @@ Changes since version 0.92.0:
 - added check for --with-gnustepdir option to configure to verify that its
   argument is an absolute path
 - updated german translations (Torsten Marek <shlomme@gmx.net>)
+- fixed WPrefs.app to find its icons when not installed under GNUstep paths
 
 
 Changes since version 0.91.0:

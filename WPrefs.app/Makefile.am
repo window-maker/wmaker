@@ -42,7 +42,7 @@ WPrefs_SOURCES = \
 	imagebrowser.h \
 	xmodifier.c
 
-AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\"
+AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" -DRESOURCE_PATH=\"$(wpdatadir)\"
 
 AM_CFLAGS = @NOSTRICTALIASING@
 
