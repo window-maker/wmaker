@@ -5,6 +5,8 @@ Changes since version 0.92.0:
   argument is an absolute path
 - updated german translations (Torsten Marek <shlomme@gmx.net>)
 - fixed WPrefs.app to find its icons when not installed under GNUstep paths
+- fixed gcc-4 compilation issues (Vladimir Nadvornik <nadvornik@suse.cz>)
+- fixed amd64 compilation issues (Vladimir Nadvornik <nadvornik@suse.cz>)
 
 
 Changes since version 0.91.0:

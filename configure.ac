@@ -197,7 +197,7 @@ if test "$ac_cv_prog_gcc" = yes; then
 
     AC_CACHE_CHECK(whether gcc supports x86 inline asm,
                    ac_cv_c_inline_asm,
-                   [AC_TRY_LINK(,[{int x; asm volatile("movl %%eax, %%ebx\n"::
+                   [AC_TRY_LINK(,[{int x; asm volatile("movl %%eax, %%ebx\n\t pushal\n\t popal"::
                           "m" (x),"m" (x),"m" (x),"m" (x),"m" (x),"m" (x),
                           "m" (x),"m" (x),"m" (x),"m" (x),"m" (x),"m" (x));}],
                    ac_cv_c_inline_asm=yes,
