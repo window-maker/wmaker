@@ -1471,7 +1471,7 @@ wKeyboardMoveResizeWindow(WWindow *wwin)
 
                 ww=w;wh=h;
                 wh-=vert_border;
-                wWindowConstrainSize(wwin, &ww, &wh);
+                wWindowConstrainSize(wwin, (unsigned int*)&ww, (unsigned int*)&wh);
                 wh+=vert_border;
 
                 if (wPreferences.ws_cycle){
@@ -2070,7 +2070,7 @@ wMouseResizeWindow(WWindow *wwin, XEvent *ev)
                 rh += dh;
                 fw = rw;
                 fh = rh - vert_border;
-                wWindowConstrainSize(wwin, &fw, &fh);
+                wWindowConstrainSize(wwin, (unsigned int*)&fw, (unsigned int*)&fh);
                 fh += vert_border;
                 if (res & LEFT)
                     fx = rx2 - fw + 1;

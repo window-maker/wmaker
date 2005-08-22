@@ -207,7 +207,7 @@ output(char *ptr, int len)
 
 #define STIPPLE_WIDTH 8
 #define STIPPLE_HEIGHT 8
-static unsigned char STIPPLE_BITS[] = {
+static char STIPPLE_BITS[] = {
     0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa
 };
 

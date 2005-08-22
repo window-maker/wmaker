@@ -27,7 +27,7 @@ xlfdToFcPattern(char *xlfd)
     /* Just skip old font names that contain %d in them.
      * We don't support that anymore. */
     if (strchr(xlfd, '%')!=NULL)
-        return FcNameParse(DEFAULT_FONT);
+        return FcNameParse((FcChar8*)DEFAULT_FONT);
 
     fname= wstrdup(xlfd);
     if ((ptr = strchr(fname, ','))) {
@@ -38,7 +38,7 @@ xlfdToFcPattern(char *xlfd)
 
     if (!pattern) {
         wwarning(_("invalid font: %s. Trying '%s'"), xlfd, DEFAULT_FONT);
-        pattern = FcNameParse(DEFAULT_FONT);
+        pattern = FcNameParse((FcChar8*)DEFAULT_FONT);
     }
 
     return pattern;
@@ -52,7 +52,7 @@ xlfdToFcName(char *xlfd)
     char *fname;
 
     pattern = xlfdToFcPattern(xlfd);
-    fname = FcNameUnparse(pattern);
+    fname = (char*)FcNameUnparse(pattern);
     FcPatternDestroy(pattern);
 
     return fname;
@@ -102,7 +102,7 @@ makeFontOfSize(char *font, int size, char *fallback)
     if (font[0]=='-') {
         pattern = xlfdToFcPattern(font);
     } else {
-        pattern = FcNameParse(font);
+        pattern = FcNameParse((FcChar8*)font);
     }
 
     /*FcPatternPrint(pattern);*/
@@ -116,12 +116,12 @@ makeFontOfSize(char *font, int size, char *fallback)
     }
 
     if (fallback && !hasPropertyWithStringValue(pattern, FC_FAMILY, fallback)) {
-        FcPatternAddString(pattern, FC_FAMILY, fallback);
+        FcPatternAddString(pattern, FC_FAMILY, (FcChar8*)fallback);
     }
 
     /*FcPatternPrint(pattern);*/
 
-    result = FcNameUnparse(pattern);
+    result = (char*)FcNameUnparse(pattern);
     FcPatternDestroy(pattern);
 
     return result;
@@ -366,7 +366,7 @@ WMCopyFontWithStyle(WMScreen *scrPtr, WMFont *font, WMFontStyle style)
      * return the closest match font to what we requested which is the
      * oblique font. Same goes for using bold for weight.
      */
-    pattern = FcNameParse(WMGetFontName(font));
+    pattern = FcNameParse((FcChar8*)WMGetFontName(font));
     switch (style) {
     case WFSNormal:
         FcPatternDel(pattern, FC_WEIGHT);
@@ -374,21 +374,21 @@ WMCopyFontWithStyle(WMScreen *scrPtr, WMFont *font, WMFontStyle style)
         break;
     case WFSBold:
         FcPatternDel(pattern, FC_WEIGHT);
-        FcPatternAddString(pattern, FC_WEIGHT, "bold");
+        FcPatternAddString(pattern, FC_WEIGHT, (FcChar8*)"bold");
         break;
     case WFSItalic:
         FcPatternDel(pattern, FC_SLANT);
-        FcPatternAddString(pattern, FC_SLANT, "italic");
+        FcPatternAddString(pattern, FC_SLANT,  (FcChar8*)"italic");
         break;
     case WFSBoldItalic:
         FcPatternDel(pattern, FC_WEIGHT);
         FcPatternDel(pattern, FC_SLANT);
-        FcPatternAddString(pattern, FC_WEIGHT, "bold");
-        FcPatternAddString(pattern, FC_SLANT, "italic");
+        FcPatternAddString(pattern, FC_WEIGHT, (FcChar8*)"bold");
+        FcPatternAddString(pattern, FC_SLANT,  (FcChar8*)"italic");
         break;
     }
 
-    name = FcNameUnparse(pattern);
+    name = (char*)FcNameUnparse(pattern);
     copy = WMCreateFont(scrPtr, name);
     FcPatternDestroy(pattern);
     wfree(name);

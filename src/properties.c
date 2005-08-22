@@ -234,8 +234,8 @@ PropSetIconTileHint(WScreen *scr, RImage *image)
     if (image->format == RRGBAFormat) {
         memcpy(&tmp[4], image->data, image->width*image->height*4);
     } else {
-        char *ptr = tmp+4;
-        char *src = image->data;
+        char *ptr = (char*)(tmp+4);
+        char *src = (char*)image->data;
 
         for (y = 0; y < image->height; y++) {
             for (x = 0; x < image->width; x++) {

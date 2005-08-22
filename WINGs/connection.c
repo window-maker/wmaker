@@ -201,7 +201,7 @@ inputHandler(int fd, int mask, void *clientData)
 
         if (cPtr->state == WCInProgress) {
             Bool failed;
-            int len = sizeof(result);
+            socklen_t len = sizeof(result);
 
             WCErrorCode = 0;
             if (getsockopt(cPtr->sock, SOL_SOCKET, SO_ERROR,
@@ -462,8 +462,8 @@ WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol)
 {
     WMConnection *cPtr;
     struct sockaddr_in *socketaddr;
+    socklen_t size;
     int sock, on;
-    int size;
 
     WCErrorCode = 0;
 
@@ -678,7 +678,7 @@ WMConnection*
 WMAcceptConnection(WMConnection *listener)
 {
     struct sockaddr_in clientname;
-    int size;
+    socklen_t size;
     int newSock;
     WMConnection *newConnection;
 

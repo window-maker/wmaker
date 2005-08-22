@@ -219,7 +219,7 @@ sourceOperationList(WMScreen *scr, Window sourceWin)
     }
 
     operationArray = WMCreateDragOperationArray(count);
-    description = descriptionList;
+    description = (char*)descriptionList;
 
     for (i=0; count > 0; i++) {
         size = strlen(description);

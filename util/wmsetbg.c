@@ -787,7 +787,7 @@ void
 freeTexture(BackgroundTexture *texture)
 {
     if (texture->solid) {
-        long pixel[1];
+        unsigned long pixel[1];
 
         pixel[0] = texture->color.pixel;
         /* dont free black/white pixels */
@@ -966,7 +966,7 @@ changeTexture(BackgroundTexture *texture)
 
 
 int
-readmsg(int fd, unsigned char *buffer, int size)
+readmsg(int fd, char *buffer, int size)
 {
     int count;
 
@@ -998,7 +998,7 @@ helperLoop(RContext *rc)
 {
     BackgroundTexture *textures[WORKSPACE_COUNT];
     int maxTextures = 0;
-    unsigned char buffer[2048], buf[8];
+    char buffer[2048], buf[8];
     int size;
     int errcount = 4;
 

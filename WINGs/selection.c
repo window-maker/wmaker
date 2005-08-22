@@ -279,7 +279,7 @@ getSelectionData(Display *dpy, Window win, Atom where)
     WMData *wdata;
     unsigned char *data;
     Atom rtype;
-    unsigned bits, bpi;
+    int bits, bpi;
     unsigned long len, bytes;
 
 

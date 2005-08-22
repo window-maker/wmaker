@@ -1128,7 +1128,7 @@ UnescapeWM_CLASS(char *str, char **name, char **class)
 void
 SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
 {
-    unsigned char *buffer;
+    char *buffer;
     int len;
     int i;
     char buf[16];

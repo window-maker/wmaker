@@ -85,9 +85,9 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image,
                            unsigned short *ximage,
                            short *err,
                            short *nerr,
-                           short *rtable,
-                           short *gtable,
-                           short *btable,
+                           unsigned short *rtable,
+                           unsigned short *gtable,
+                           unsigned short *btable,
                            int dr,
                            int dg,
                            int db,
@@ -99,13 +99,17 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image,
                            int line_offset)
 {
     union {
-	long long rrggbbaa;
-	struct {short int rr, gg, bb, aa;} words;
+        long long rrggbbaa;
+        struct {
+            short int rr, gg, bb, aa;
+        } words;
     } rrggbbaa;
-    
+
     union {
-	long long pixel;
-	struct {short int rr, gg, bb, aa;} words;
+        long long pixel;
+        struct {
+            short int rr, gg, bb, aa;
+        } words;
     } pixel;
 
     short *tmp_err;
@@ -114,7 +118,7 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image,
 
     asm volatile
         (
-         "pushl %%ebx                        \n\t"
+         "pushl %%ebx                   \n\t"
 
          // pack dr, dg and db into mm6
          "movl  %7, %%eax               \n\t"
@@ -227,7 +231,7 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image,
          "movq %%mm0, %%mm1             \n\t"
          "pmullw %%mm5, %%mm1           \n\t" // mm1 = mm1*7
          "psrlw %%mm7, %%mm1            \n\t" // mm1 = mm1/16
-         "paddw 8(%%ebx), %%mm1                \n\t"
+         "paddw 8(%%ebx), %%mm1         \n\t"
          "movq %%mm1, 8(%%ebx)          \n\t" // err[x+1,y] = rer*7/16
 
 
@@ -236,7 +240,7 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image,
          "movq %%mm0, %%mm1             \n\t"
          "pmullw %%mm4, %%mm1           \n\t" // mm1 = mm1*5
          "psrlw %%mm7, %%mm1            \n\t" // mm1 = mm1/16
-         "paddw -8(%%ebx), %%mm1                \n\t"
+         "paddw -8(%%ebx), %%mm1        \n\t"
          "movq %%mm1, -8(%%ebx)         \n\t" // err[x-1,y+1] += rer*3/16
 
          "movq %%mm0, %%mm1             \n\t"
@@ -282,7 +286,7 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image,
          // because, punpcklbw is used (which reads 8 bytes) and the last
          // pixel is only 4 bytes. This is no problem because the image data
          // was allocated with extra 4 bytes when created.
-         "addl $4, %%esi                        \n\t" // image->data += 4
+         "addl $4, %%esi                \n\t" // image->data += 4
 
 
          "decl %26                      \n\t" // x--
@@ -298,7 +302,7 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image,
 
 ".Enda:                                 \n\t" // THE END
          "emms                          \n\t"
-         "popl %%ebx                         \n\t"
+         "popl %%ebx                    \n\t"
          :
          :
          "m" (image),                      // %0
@@ -317,18 +321,18 @@ x86_mmx_TrueColor_32_to_16(unsigned char *image,
          "m" (width),                      // %13
          "m" (height),                     // %14
          "m" (line_offset),                // %15
-         "m" (rrggbbaa.rrggbbaa),          // %16 (access to rr)
+         "m" (rrggbbaa.words.rr),          // %16 (access to rr)
          "m" (rrggbbaa.words.gg),          // %17 (access to gg)
          "m" (rrggbbaa.words.bb),          // %18 (access to bb)
          "m" (rrggbbaa.words.aa),          // %19 (access to aa)
-         "m" (pixel.pixel),                // %20 (access to pixel.r)
+         "m" (pixel.words.rr),             // %20 (access to pixel.r)
          "m" (pixel.words.gg),             // %21 (access to pixel.g)
          "m" (pixel.words.bb),             // %22 (access to pixel.b)
          "m" (pixel.words.aa),             // %23 (access to pixel.a)
          "m" (tmp_err),                    // %24
          "m" (tmp_nerr),                   // %25
          "m" (x)                           // %26
-	 : "eax", "ecx", "edx", "esi", "edi"
+         : "eax", "ecx", "edx", "esi", "edi"
         );
 }
 
@@ -352,13 +356,17 @@ x86_mmx_TrueColor_24_to_16(unsigned char *image,
                            int line_offset)
 {
     union {
-	long long rrggbbaa;
-	struct {short int rr, gg, bb, aa;} words;
+        long long rrggbbaa;
+        struct {
+            short int rr, gg, bb, aa;
+        } words;
     } rrggbbaa;
     
     union {
-	long long pixel;
-	struct {short int rr, gg, bb, aa;} words;
+        long long pixel;
+        struct {
+            short int rr, gg, bb, aa;
+        } words;
     } pixel;
 
     short *tmp_err;
@@ -370,7 +378,7 @@ x86_mmx_TrueColor_24_to_16(unsigned char *image,
 
     asm volatile
         (
-         "pushl %%ebx                        \n\t"
+         "pushl %%ebx                   \n\t"
 
          "movl %13, %%eax               \n\t" // eax = width
          "movl %%eax, %%ebx             \n\t"
@@ -440,7 +448,7 @@ x86_mmx_TrueColor_24_to_16(unsigned char *image,
 
 ".Endc:                                 \n\t" // THE END
          "emms                          \n\t"
-         "popl %%ebx                         \n\t"
+         "popl %%ebx                    \n\t"
          :
          :
          "m" (image),                      // %0
@@ -459,11 +467,11 @@ x86_mmx_TrueColor_24_to_16(unsigned char *image,
          "m" (width),                      // %13
          "m" (height),                     // %14
          "m" (line_offset),                // %15
-         "m" (rrggbbaa.rrggbbaa),          // %16 (access to rr)
+         "m" (rrggbbaa.words.rr),          // %16 (access to rr)
          "m" (rrggbbaa.words.gg),          // %17 (access to gg)
          "m" (rrggbbaa.words.bb),          // %18 (access to bb)
          "m" (rrggbbaa.words.aa),          // %19 (access to aa)
-         "m" (pixel.pixel),                // %20 (access to pixel.r)
+         "m" (pixel.words.rr),             // %20 (access to pixel.r)
          "m" (pixel.words.gg),             // %21 (access to pixel.g)
          "m" (pixel.words.bb),             // %22 (access to pixel.b)
          "m" (pixel.words.aa),             // %23 (access to pixel.a)
@@ -472,7 +480,7 @@ x86_mmx_TrueColor_24_to_16(unsigned char *image,
          "m" (x),                          // %26
          "m" (w1),                         // %27
          "m" (w2)                          // %28
-	  : "eax", "ecx", "edx", "esi", "edi"
+         : "eax", "ecx", "edx", "esi", "edi"
         );
 }
 
@@ -670,7 +678,7 @@ x86_PseudoColor_32_to_8(unsigned char *image,
          "movw $0xff, %%dx              \n\t" // pixel.blu > 255
          "jmp .OKBb                     \n"
 ".NEGBb:                                \n\t"
-         "xorw %%dx, %%dx                       \n"
+         "xorw %%dx, %%dx               \n"
 ".OKBb:                                 \n\t"
          //partial reg
          "leal (%%edi, %%edx, 2), %%ecx \n\t" // ecx = &ctable[pixel.blu]

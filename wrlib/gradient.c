@@ -242,7 +242,7 @@ renderDGradient(unsigned width, unsigned height, int r0, int g0, int b0,
     RImage *image, *tmp;
     int j;
     float a, offset;
-    char *ptr;
+    unsigned char *ptr;
 
     if (width == 1)
         return renderVGradient(width, height, r0, g0, b0, rf, gf, bf);

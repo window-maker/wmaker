@@ -83,7 +83,7 @@ static int scalableFontSizes[] = {
 
 
 
-static void setFontPanelFontName(FontPanel *panel, FcChar8 *family, FcChar8 *style, double size);
+static void setFontPanelFontName(FontPanel *panel, char *family, char *style, double size);
 
 static int isXLFD(char *font, int *length_ret);
 
@@ -370,7 +370,7 @@ WMSetFontPanelFont(WMFontPanel *panel, char *fontName)
 
     if (!isXLFD(fontName, &fname_len)) {
         /* maybe its proper fontconfig and we can parse it */
-        pattern = FcNameParse(fontName);
+        pattern = FcNameParse((FcChar8*)fontName);
     } else {
         /* maybe its proper xlfd and we can convert it to an FcPattern */
         pattern = XftXlfdParse(fontName, False, False);
@@ -383,7 +383,7 @@ WMSetFontPanelFont(WMFontPanel *panel, char *fontName)
     if (FcPatternGetString(pattern, FC_FAMILY, 0, &family)==FcResultMatch)
         if (FcPatternGetString(pattern, FC_STYLE, 0, &style)==FcResultMatch)
             if (FcPatternGetDouble(pattern, "pixelsize", 0, &size)==FcResultMatch)
-                setFontPanelFontName(panel, family, style, size);
+                setFontPanelFontName(panel, (char*)family, (char*)style, size);
 
     FcPatternDestroy(pattern);
 }
@@ -603,7 +603,7 @@ listFamilies(WMScreen *scr, WMFontPanel *panel)
 
             if (FcPatternGetString(fs->fonts[i],FC_FAMILY,0,&family)==FcResultMatch)
                 if (FcPatternGetString(fs->fonts[i],FC_STYLE,0,&style)==FcResultMatch)
-                    addFontToXftFamily(families, family, style);
+                    addFontToXftFamily(families, (char*)family, (char*)style);
         }
         FcFontSetDestroy(fs);
     }
@@ -815,7 +815,7 @@ sizeClick(WMWidget *w, void *data)
 
 
 static void
-setFontPanelFontName(FontPanel *panel, FcChar8 *family, FcChar8 *style, double size)
+setFontPanelFontName(FontPanel *panel, char *family, char *style, double size)
 {
     int famrow;
     int stlrow;

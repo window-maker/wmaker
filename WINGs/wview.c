@@ -715,7 +715,8 @@ WMGetViewScreenPosition(WMView *view)
 {
     WMScreen *scr = W_VIEW_SCREEN(view);
     Window foo;
-    int x, y, topX, topY, bar;
+    int x, y, topX, topY;
+    unsigned int bar;
     WMView *topView;
 
     topView = view;

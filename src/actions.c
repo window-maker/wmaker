@@ -365,7 +365,8 @@ wUnshadeWindow(WWindow  *wwin)
 void
 wMaximizeWindow(WWindow *wwin, int directions)
 {
-    int new_width, new_height, new_x, new_y;
+    int new_x, new_y;
+    unsigned int new_width, new_height;
     int changed_h, changed_v, shrink_h, shrink_v;
     WArea usableArea, totalArea;
 

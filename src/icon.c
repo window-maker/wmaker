@@ -651,7 +651,7 @@ wIconUpdate(WIcon *icon)
     if (icon->icon_win!=None) {
         XWindowAttributes attr;
         int resize=0;
-        int width, height, depth;
+        unsigned int width, height, depth;
         int theight;
         Pixmap pixmap;
 

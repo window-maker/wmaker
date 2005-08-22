@@ -7,12 +7,12 @@
 
 #define LIGHT_STIPPLE_WIDTH 4
 #define LIGHT_STIPPLE_HEIGHT 4
-static unsigned char LIGHT_STIPPLE_BITS[] = {
+static char LIGHT_STIPPLE_BITS[] = {
     0x05, 0x0a, 0x05, 0x0a};
 
 #define DARK_STIPPLE_WIDTH 4
 #define DARK_STIPPLE_HEIGHT 4
-static unsigned char DARK_STIPPLE_BITS[] = {
+static char DARK_STIPPLE_BITS[] = {
     0x0a, 0x04, 0x0a, 0x01};
 
 

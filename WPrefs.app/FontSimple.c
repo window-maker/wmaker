@@ -231,11 +231,11 @@ lookup_available_fonts(_Panel *panel)
 
         for (i= 0; i < fonts->nfont; i++)
         {
-            FcChar8 *name;
+            char *name;
             int weight, slant, width;
             int j, found;
 
-            if (FcPatternGetString(fonts->fonts[i], FC_FAMILY, 0, &name) != FcResultMatch)
+            if (FcPatternGetString(fonts->fonts[i], FC_FAMILY, 0, (FcChar8**)&name) != FcResultMatch)
               continue;
 
             if (FcPatternGetInteger(fonts->fonts[i], FC_WEIGHT, 0, &weight) != FcResultMatch)
@@ -309,7 +309,7 @@ lookup_available_fonts(_Panel *panel)
 
 
 static char*
-getSelectedFont(_Panel *panel, char *curfont)
+getSelectedFont(_Panel *panel, FcChar8 *curfont)
 {
     WMListItem *item;
     FcPattern *pat= FcNameParse(curfont);
@@ -319,7 +319,7 @@ getSelectedFont(_Panel *panel, char *curfont)
     if (item)
     {
         FcPatternDel(pat, FC_FAMILY);
-        FcPatternAddString(pat, FC_FAMILY, item->text);
+        FcPatternAddString(pat, FC_FAMILY, (FcChar8*)item->text);
     }
 
     item= WMGetListSelectedItem(panel->styleL);
@@ -344,9 +344,9 @@ getSelectedFont(_Panel *panel, char *curfont)
         FcPatternAddDouble(pat, FC_PIXEL_SIZE, atoi(item->text));
     }
 
-    name= FcNameUnparse(pat);
+    name = (char*)FcNameUnparse(pat);
     FcPatternDestroy(pat);
-    
+
     return name;
 }
 
@@ -446,12 +446,13 @@ selectedFamily(WMWidget *w, void *data)
         {
             int index= WMGetPopUpButtonSelectedItem(panel->optionP);
             WMMenuItem *item= WMGetPopUpButtonMenuItem(panel->optionP, index);
-            char *ofont, *nfont;
+            FcChar8 *ofont;
+            char *nfont;
 
-            ofont= (char*)WMGetMenuItemRepresentedObject(item);
-            
+            ofont= (FcChar8*)WMGetMenuItemRepresentedObject(item);
             nfont= getSelectedFont(panel, ofont);
-            free(ofont);
+            wfree(ofont);
+
             WMSetMenuItemRepresentedObject(item, nfont);
         }
         updateSampleFont(panel);
@@ -465,12 +466,13 @@ selected(WMWidget *w, void *data)
     _Panel *panel= (_Panel*)data;
     int index= WMGetPopUpButtonSelectedItem(panel->optionP);
     WMMenuItem *item= WMGetPopUpButtonMenuItem(panel->optionP, index);
-    char *ofont, *nfont;
+    FcChar8 *ofont;
+    char *nfont;
 
-    ofont= (char*)WMGetMenuItemRepresentedObject(item);
-    
+    ofont = (FcChar8*)WMGetMenuItemRepresentedObject(item);
     nfont= getSelectedFont(panel, ofont);
-    free(ofont);
+    wfree(ofont);
+
     WMSetMenuItemRepresentedObject(item, nfont);
 
     updateSampleFont(panel);
@@ -490,10 +492,10 @@ selectedOption(WMWidget *w, void *data)
     {
         FcPattern *pat;
 
-        pat= FcNameParse(font);
+        pat= FcNameParse((FcChar8*)font);
         if (pat)
         {
-            FcChar8 *name;
+            char *name;
             int weight, slant, width;
             double size;
             int distance, closest, found;
@@ -501,7 +503,7 @@ selectedOption(WMWidget *w, void *data)
 
             FcDefaultSubstitute(pat);
 
-            if (FcPatternGetString(pat, FC_FAMILY, 0, &name) != FcResultMatch)
+            if (FcPatternGetString(pat, FC_FAMILY, 0, (FcChar8**)&name) != FcResultMatch)
                 name= "sans serif";
 
             found= 0;

@@ -43,8 +43,9 @@ load_graymap(char *file_name, FILE *file, int w, int h, int max, int raw)
 
     } else {
         if (max<256) {
+            unsigned char *ptr;
+            char *buf;
             int x, y;
-            char *buf, *ptr;
 
             buf = malloc(w+1);
             if (!buf) {
@@ -83,7 +84,7 @@ load_pixmap(char *file_name, FILE *file, int w, int h, int max, int raw)
     RImage *image;
     int i;
     char buf[3];
-    char *ptr;
+    unsigned char *ptr;
 
     image = RCreateImage(w, h, 0);
     if (!image) {

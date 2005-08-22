@@ -126,8 +126,8 @@ enqueueMessage(WMConnection *cPtr, char *message)
 }
 
 
-static unsigned char*
-findDelimiter(unsigned char *data, unsigned const char *endPtr)
+static char*
+findDelimiter(char *data, const char *endPtr)
 {
     wassertrv(data < endPtr, NULL);
 

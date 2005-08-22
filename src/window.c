@@ -2043,10 +2043,10 @@ wWindowUpdateName(WWindow *wwin, char *newTitle)
  *----------------------------------------------------------------------
  */
 void
-wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight)
+wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nheight)
 {
-    int width = *nwidth;
-    int height = *nheight;
+    int width = (int)*nwidth;
+    int height = (int)*nheight;
     int winc = 1;
     int hinc = 1;
     int minW = 1, minH = 1;
@@ -2143,8 +2143,8 @@ wWindowConstrainSize(WWindow *wwin, int *nwidth, int *nheight)
 
 
 void
-wWindowCropSize(WWindow *wwin, int maxW, int maxH,
-                int *width, int *height)
+wWindowCropSize(WWindow *wwin, unsigned int maxW, unsigned int maxH,
+                unsigned int *width, unsigned int *height)
 {
     int baseW = 0, baseH = 0;
     int winc = 1, hinc = 1;
