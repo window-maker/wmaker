@@ -35,6 +35,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#include <X11/Xarch.h>
 #include <string.h>
 
 #include "WindowMaker.h"
@@ -70,22 +71,22 @@ static Atom net_desktop_viewport;
 static Atom net_current_desktop;
 static Atom net_desktop_names;
 static Atom net_active_window;
-static Atom net_workarea;			    /* XXX: not xinerama compatible */
+static Atom net_workarea;                   /* XXX: not xinerama compatible */
 static Atom net_supporting_wm_check;
-static Atom net_virtual_roots;			    /* N/A */
-static Atom net_desktop_layout;			    /* XXX */
+static Atom net_virtual_roots;              /* N/A */
+static Atom net_desktop_layout;             /* XXX */
 static Atom net_showing_desktop;
 
 /* Other Root Window Messages */
 static Atom net_close_window;
-static Atom net_moveresize_window;		    /* TODO */
-static Atom net_wm_moveresize;			    /* TODO */
+static Atom net_moveresize_window;          /* TODO */
+static Atom net_wm_moveresize;              /* TODO */
 
 /* Application Window Properties */
 static Atom net_wm_name;
-static Atom net_wm_visible_name;		    /* TODO (unnecessary?) */
+static Atom net_wm_visible_name;            /* TODO (unnecessary?) */
 static Atom net_wm_icon_name;
-static Atom net_wm_visible_icon_name;		    /* TODO (unnecessary?) */
+static Atom net_wm_visible_icon_name;       /* TODO (unnecessary?) */
 static Atom net_wm_desktop;
 static Atom net_wm_window_type;
 static Atom net_wm_window_type_desktop;
@@ -97,7 +98,7 @@ static Atom net_wm_window_type_splash;
 static Atom net_wm_window_type_dialog;
 static Atom net_wm_window_type_normal;
 static Atom net_wm_state;
-static Atom net_wm_state_modal;			    /* XXX: what is this?!? */
+static Atom net_wm_state_modal;             /* XXX: what is this?!? */
 static Atom net_wm_state_sticky;
 static Atom net_wm_state_maximized_vert;
 static Atom net_wm_state_maximized_horz;
@@ -119,15 +120,15 @@ static Atom net_wm_action_maximize_vert;
 static Atom net_wm_action_fullscreen;
 static Atom net_wm_action_change_desktop;
 static Atom net_wm_action_close;
-static Atom net_wm_strut;			    /* XXX: see net_workarea */
-static Atom net_wm_strut_partial;		    /* TODO: doesn't really fit into the current strut scheme */
-static Atom net_wm_icon_geometry;		    /* FIXME: should work together with net_wm_handled_icons, gnome-panel-2.2.0.1 doesn't use _NET_WM_HANDLED_ICONS, thus present situation. */
+static Atom net_wm_strut;                   /* XXX: see net_workarea */
+static Atom net_wm_strut_partial;           /* TODO: doesn't really fit into the current strut scheme */
+static Atom net_wm_icon_geometry;           /* FIXME: should work together with net_wm_handled_icons, gnome-panel-2.2.0.1 doesn't use _NET_WM_HANDLED_ICONS, thus present situation. */
 static Atom net_wm_icon;
-static Atom net_wm_pid;				    /* TODO */
-static Atom net_wm_handled_icons;		    /* FIXME: see net_wm_icon_geometry */
+static Atom net_wm_pid;                     /* TODO */
+static Atom net_wm_handled_icons;           /* FIXME: see net_wm_icon_geometry */
 
 /* Window Manager Protocols */
-static Atom net_wm_ping;			    /* TODO */
+static Atom net_wm_ping;                    /* TODO */
 
 static Atom utf8_string;
 
@@ -322,15 +323,15 @@ setSupportedHints(WScreen *scr)
 void
 wNETWMUpdateDesktop(WScreen *scr)
 {
-    CARD32 *views, sizes[2];
+    long *views, sizes[2];
     int count, i;
 
     if (scr->workspace_count==0)
         return;
 
     count = scr->workspace_count * 2;
-    views = wmalloc(sizeof(CARD32) * count);
-    /*memset(views, 0, sizeof(CARD32) * count);*/
+    views = wmalloc(sizeof(long) * count);
+    /*memset(views, 0, sizeof(long) * count);*/
 
 #ifdef VIRTUAL_DESKTOP
     sizes[0] = scr->workspaces[scr->current_workspace]->width;
@@ -370,7 +371,7 @@ wNETWMGetCurrentDesktopFromHint(WScreen *scr)
                                0, 1, &count);
     if (prop)
     {
-        int desktop= *(CARD32*)prop;
+        int desktop= *(long*)prop;
         XFree(prop);
         return desktop;
     }
@@ -389,12 +390,12 @@ wNETWMGetCurrentDesktopFromHint(WScreen *scr)
  *
  * The logic can also be changed to accept bigger images and scale them down.
  */
-static CARD32*
-findBestIcon(CARD32 *data, unsigned long items)
+static unsigned long*
+findBestIcon(unsigned long *data, unsigned long items)
 {
     int size, wanted, d, distance;
     unsigned long i;
-    CARD32 *icon;
+    unsigned long *icon;
 
     /* better use only 75% of icon_size. For 64x64 this means 48x48
      * This leaves room around the icon for the miniwindow title and
@@ -418,12 +419,12 @@ findBestIcon(CARD32 *data, unsigned long items)
 
 
 static RImage*
-makeRImageFromARGBData(CARD32 *data)
+makeRImageFromARGBData(unsigned long *data)
 {
     int size, width, height, i;
     RImage *image;
     unsigned char *imgdata;
-    CARD32 pixel;
+    unsigned long pixel;
 
     width  = data[0];
     height = data[1];
@@ -436,10 +437,18 @@ makeRImageFromARGBData(CARD32 *data)
 
     for (imgdata=image->data, i=2; i<size+2; i++, imgdata+=4) {
         pixel = data[i];
+#if BYTE_ORDER == BIG_ENDIAN
+        imgdata[2] = (pixel >> 24) & 0xff; /* A */
+        imgdata[1] = (pixel >> 16) & 0xff; /* R */
+        imgdata[0] = (pixel >>  8) & 0xff; /* G */
+        imgdata[3] = (pixel >>  0) & 0xff; /* B */
+#else /* Little endian */
         imgdata[3] = (pixel >> 24) & 0xff; /* A */
         imgdata[0] = (pixel >> 16) & 0xff; /* R */
         imgdata[1] = (pixel >>  8) & 0xff; /* G */
         imgdata[2] = (pixel >>  0) & 0xff; /* B */
+#endif /* endianness */
+
     }
 
     return image;
@@ -449,7 +458,7 @@ makeRImageFromARGBData(CARD32 *data)
 static void
 updateIconImage(WScreen *scr, WWindow *wwin)
 {
-    CARD32 *property, *data;
+    unsigned long  *property, *data;
     unsigned long items, rest;
     Atom type;
     int format;
@@ -487,7 +496,7 @@ updateIconImage(WScreen *scr, WWindow *wwin)
 static void
 updateShowDesktop(WScreen * scr, Bool show)
 {
-    CARD32 foo;
+    long foo;
 
     foo = (show == True);
     XChangeProperty(dpy, scr->root_win, net_showing_desktop, XA_CARDINAL, 32,
@@ -660,7 +669,7 @@ wNETWMUpdateActions(WWindow *wwin, Bool del)
 void
 wNETWMUpdateWorkarea(WScreen *scr, WArea usableArea)
 {
-    CARD32 *area;
+    long *area;
     int count, i;
 
     /* XXX: not Xinerama compatible,
@@ -670,7 +679,7 @@ wNETWMUpdateWorkarea(WScreen *scr, WArea usableArea)
         return;
 
     count = scr->workspace_count * 4;
-    area = wmalloc(sizeof(CARD32) * count);
+    area = wmalloc(sizeof(long) * count);
     for (i=0; i<scr->workspace_count; i++) {
         area[4*i + 0] = usableArea.x1;
         area[4*i + 1] = usableArea.y1;
@@ -793,7 +802,7 @@ updateClientListStacking(WScreen *scr, WWindow *wwin_excl)
 static void
 updateWorkspaceCount(WScreen *scr) /* changeable */
 {
-    CARD32 count;
+    long count;
 
     count = scr->workspace_count;
 
@@ -805,7 +814,7 @@ updateWorkspaceCount(WScreen *scr) /* changeable */
 static void
 updateCurrentWorkspace(WScreen *scr) /* changeable */
 {
-    CARD32 count;
+    long count;
 
     count = scr->current_workspace;
 
@@ -852,7 +861,7 @@ updateFocusHint(WScreen *scr, WWindow *wwin) /* changeable */
 static void
 updateWorkspaceHint(WWindow *wwin, Bool fake, Bool del)
 {
-    CARD32 l;
+    long l;
 
     if (del) {
         XDeleteProperty(dpy, wwin->client_win, net_wm_desktop);
