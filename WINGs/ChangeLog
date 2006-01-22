@@ -1,3 +1,17 @@
+Changes since wmaker 0.92.0:
+............................
+
+- updated the XDND code in to work with GDK based applications.
+  WINGs based applications should now work with both KDE and GNOME
+  applications (Sylvain Reynal <sreynal@nerim.net>)
+- better check for the XDND protocol version when interoperating with other
+  applications. As it seems xdnd version 3 (which WINGs supports) and newer
+  are not backward compatible with xdnd version 1 and 2. This is why WINGs
+  applications cannot interoperate with GNUstep applications (which uses
+  xdnd version 2). Xdnd version 4 and 5 are backwards compatible with
+  version 3 though. (Sylvain Reynal <sreynal@nerim.net>)
+
+
 Changes since wmaker 0.80.1:
 ............................
 

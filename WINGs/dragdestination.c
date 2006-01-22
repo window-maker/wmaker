@@ -5,15 +5,16 @@
 
 #define XDND_SOURCE_RESPONSE_MAX_DELAY 3000
 
-#define VERSION_INFO(dragInfo) dragInfo->protocolVersion
-
 #define XDND_PROPERTY_FORMAT 32
 #define XDND_ACTION_DESCRIPTION_FORMAT 8
 
+#define XDND_SOURCE_VERSION(dragInfo) dragInfo->protocolVersion
 #define XDND_DEST_INFO(dragInfo) dragInfo->destInfo
+#define XDND_AWARE_VIEW(dragInfo) dragInfo->destInfo->xdndAwareView
 #define XDND_SOURCE_WIN(dragInfo) dragInfo->destInfo->sourceWindow
 #define XDND_DEST_VIEW(dragInfo) dragInfo->destInfo->destView
 #define XDND_DEST_STATE(dragInfo) dragInfo->destInfo->state
+#define XDND_SOURCE_ACTION_CHANGED(dragInfo) dragInfo->destInfo->sourceActionChanged
 #define XDND_SOURCE_TYPES(dragInfo) dragInfo->destInfo->sourceTypes
 #define XDND_TYPE_LIST_AVAILABLE(dragInfo) dragInfo->destInfo->typeListAvailable
 #define XDND_REQUIRED_TYPES(dragInfo) dragInfo->destInfo->requiredTypes
@@ -22,8 +23,8 @@
 #define XDND_SOURCE_OPERATIONS(dragInfo) dragInfo->destInfo->sourceOperations
 #define XDND_DROP_DATAS(dragInfo) dragInfo->destInfo->dropDatas
 #define XDND_DROP_DATA_COUNT(dragInfo) dragInfo->destInfo->dropDataCount
-#define XDND_DEST_VIEW_STORED(dragInfo) ((dragInfo->destInfo) != NULL)\
-    && ((dragInfo->destInfo->destView) != NULL)
+#define XDND_DEST_VIEW_IS_REGISTERED(dragInfo) ((dragInfo->destInfo) != NULL)\
+    && ((dragInfo->destInfo->destView->dragDestinationProcs) != NULL)
 
 
 static unsigned char XDNDversion = XDND_VERSION;
@@ -81,7 +82,6 @@ createDropDataArray(WMArray *requiredTypes)
 static WMArray*
 getTypesFromTypeList(WMScreen *scr, Window sourceWin)
 {
-    /* // WMDraggingInfo *info = &scr->dragInfo;*/
     Atom dataType;
     Atom* typeAtomList;
     WMArray* typeList;
@@ -138,21 +138,28 @@ storeRequiredTypeList(WMDraggingInfo *info)
     WMScreen *scr = W_VIEW_SCREEN(destView);
     WMArray *requiredTypes;
 
-    /* First, see if the 3 source types are enough for dest requirements */
+    /* First, see if the stored source types are enough for dest requirements */
     requiredTypes = destView->dragDestinationProcs->requiredDataTypes(
                                                                       destView,
                                                                       W_ActionToOperation(scr, XDND_SOURCE_ACTION(info)),
                                                                       XDND_SOURCE_TYPES(info));
 
     if (requiredTypes == NULL && XDND_TYPE_LIST_AVAILABLE(info)) {
-        /* None of the 3 source types fits, get the whole type list */
+        /* None of the stored source types fits, but the whole type list
+           hasn't been retrieved yet. */
+        WMFreeArray(XDND_SOURCE_TYPES(info));
+        XDND_SOURCE_TYPES(info) = getTypesFromTypeList(
+                                                       scr,
+                                                       XDND_SOURCE_WIN(info));
+        /* Don't retrieve the type list again */
+        XDND_TYPE_LIST_AVAILABLE(info) = False;
+
         requiredTypes =
             destView->dragDestinationProcs->requiredDataTypes(
                                                               destView,
                                                               W_ActionToOperation(scr, XDND_SOURCE_ACTION(info)),
-                                                              getTypesFromTypeList(scr, XDND_SOURCE_WIN(info)));
+                                                              XDND_SOURCE_TYPES(info));
     }
-
 
     XDND_REQUIRED_TYPES(info) = requiredTypes;
 }
@@ -249,47 +256,35 @@ updateSourceWindow(WMDraggingInfo *info, XClientMessageEvent *event)
 }
 
 
-static Window
-findChildInWindow(Display *dpy, Window toplevel, int x, int y)
+static WMView*
+findChildInView(WMView* parent, int x, int y)
 {
-    Window foo, bar;
-    Window *children;
-    unsigned nchildren;
-    int i;
+    if (parent->childrenList == NULL)
+        return parent;
+    else {
+        WMView* child = parent->childrenList;
 
-    if (!XQueryTree(dpy, toplevel, &foo, &bar,
-                    &children, &nchildren) || children == NULL) {
-        return None;
+        while (child != NULL
+               && (! child->flags.mapped
+                   || x < WMGetViewPosition(child).x
+                   || x > WMGetViewPosition(child).x + WMGetViewSize(child).width
+                   || y < WMGetViewPosition(child).y
+                   || y > WMGetViewPosition(child).y + WMGetViewSize(child).height))
+
+            child = child->nextSister;
+
+        if (child == NULL)
+            return parent;
+        else
+            return findChildInView(child,
+                                      x - WMGetViewPosition(child).x,
+                                      y - WMGetViewPosition(child).y);
     }
-
-    /* first window that contains the point is the one */
-    for (i = nchildren-1; i >= 0; i--) {
-        XWindowAttributes attr;
-
-        if (XGetWindowAttributes(dpy, children[i], &attr)
-            && attr.map_state == IsViewable
-            && x >= attr.x && y >= attr.y
-            && x < attr.x + attr.width && y < attr.y + attr.height) {
-            Window child, tmp;
-
-            tmp = children[i];
-            child = findChildInWindow(dpy, tmp, x - attr.x, y - attr.y);
-            XFree(children);
-
-            if (child == None)
-                return tmp;
-            else
-                return child;
-        }
-    }
-
-    XFree(children);
-    return None;
 }
 
 
 static WMView*
-findXdndViewInToplevel(WMView* toplevel, int x, int y)
+findDestinationViewInToplevel(WMView* toplevel, int x, int y)
 {
     WMScreen *scr = W_VIEW_SCREEN(toplevel);
     Window toplevelWin = WMViewXID(toplevel);
@@ -300,20 +295,7 @@ findXdndViewInToplevel(WMView* toplevel, int x, int y)
     XTranslateCoordinates(scr->display, scr->rootWin, toplevelWin,
                           x, y, &xInToplevel, &yInToplevel,
                           &foo);
-
-    child = findChildInWindow(scr->display, toplevelWin,
-                              xInToplevel, yInToplevel);
-
-    if (child != None) {
-        childView = W_GetViewForXWindow(scr->display, child);
-
-        /* if childView supports Xdnd, return childView */
-        if (childView != NULL
-            && childView->dragDestinationProcs != NULL)
-            return childView;
-    }
-
-    return NULL;
+    return findChildInView(toplevel, xInToplevel, yInToplevel);
 }
 
 
@@ -334,6 +316,7 @@ freeDestinationViewInfos(WMDraggingInfo *info)
     XDND_REQUIRED_TYPES(info) = NULL;
 }
 
+
 void
 W_DragDestinationInfoClear(WMDraggingInfo *info)
 {
@@ -347,15 +330,19 @@ W_DragDestinationInfoClear(WMDraggingInfo *info)
     }
 }
 
+
 static void
-initDestinationDragInfo(WMDraggingInfo *info)
+initDestinationDragInfo(WMDraggingInfo *info, WMView *destView)
 {
+    wassertr(destView != NULL);
+
     XDND_DEST_INFO(info) =
         (W_DragDestinationInfo*) wmalloc(sizeof(W_DragDestinationInfo));
 
     XDND_DEST_STATE(info) = idleState;
-    XDND_DEST_VIEW(info) = NULL;
+    XDND_DEST_VIEW(info) = destView;
 
+    XDND_SOURCE_ACTION_CHANGED(info) = False;
     XDND_SOURCE_TYPES(info) = NULL;
     XDND_REQUIRED_TYPES(info) = NULL;
     XDND_DROP_DATAS(info) = NULL;
@@ -369,13 +356,19 @@ W_DragDestinationStoreEnterMsgInfo(WMDraggingInfo *info,
     WMScreen *scr = W_VIEW_SCREEN(toplevel);
 
     if (XDND_DEST_INFO(info) == NULL)
-        initDestinationDragInfo(info);
+        initDestinationDragInfo(info, toplevel);
 
+    XDND_SOURCE_VERSION(info) = (event->data.l[1] >> 24);
+    XDND_AWARE_VIEW(info) = toplevel;
     updateSourceWindow(info, event);
 
-    /* store xdnd version for source */
-    info->protocolVersion = (event->data.l[1] >> 24);
-
+/*
+    if (event->data.l[1] & 1)
+        /* XdndTypeList property is available */
+/*        XDND_SOURCE_TYPES(info) = getTypesFromTypeList(scr, XDND_SOURCE_WIN(info));
+    else
+        XDND_SOURCE_TYPES(info) = getTypesFromThreeTypes(scr, event);
+*/
     XDND_SOURCE_TYPES(info) = getTypesFromThreeTypes(scr, event);
 
     /* to use if the 3 types are not enough */
@@ -383,45 +376,30 @@ W_DragDestinationStoreEnterMsgInfo(WMDraggingInfo *info,
 }
 
 
-static void
-cancelDrop(WMView *destView, WMDraggingInfo *info);
-
-static void
-suspendDropAuthorization(WMView *destView, WMDraggingInfo *info);
-
-
 void
-    W_DragDestinationStorePositionMsgInfo(WMDraggingInfo *info,
-                                          WMView *toplevel, XClientMessageEvent *event)
+W_DragDestinationStorePositionMsgInfo(WMDraggingInfo *info,
+                                      WMView *toplevel, XClientMessageEvent *event)
 {
     int x = event->data.l[2] >> 16;
     int y = event->data.l[2] & 0xffff;
-    WMView *oldDestView;
     WMView *newDestView;
 
-    newDestView = findXdndViewInToplevel(toplevel, x, y);
+    newDestView = findDestinationViewInToplevel(toplevel, x, y);
 
     if (XDND_DEST_INFO(info) == NULL) {
-        initDestinationDragInfo(info);
+        initDestinationDragInfo(info, newDestView);
+        XDND_AWARE_VIEW(info) = toplevel;
         updateSourceWindow(info, event);
-        XDND_DEST_VIEW(info) = newDestView;
-    }
-    else {
-        oldDestView = XDND_DEST_VIEW(info);
-
-        if (newDestView != oldDestView) {
-            if (oldDestView != NULL) {
-                suspendDropAuthorization(oldDestView, info);
-                XDND_DEST_STATE(info) = dropNotAllowedState;
-            }
-
+    } else {
+        if (newDestView != XDND_DEST_VIEW(info)) {
             updateSourceWindow(info, event);
             XDND_DEST_VIEW(info) = newDestView;
+            XDND_SOURCE_ACTION_CHANGED(info) = False;
 
-            if (newDestView != NULL) {
-                if (XDND_DEST_STATE(info) != waitEnterState)
-                    XDND_DEST_STATE(info) = idleState;
-            }
+            if (XDND_DEST_STATE(info) != waitEnterState)
+                XDND_DEST_STATE(info) = idleState;
+        } else {
+            XDND_SOURCE_ACTION_CHANGED(info) = (XDND_SOURCE_ACTION(info) != event->data.l[4]);
         }
     }
 
@@ -437,27 +415,62 @@ void
 
 /* send a DnD message to the source window */
 static void
-sendDnDClientMessage(WMView *destView, Atom message,
+sendDnDClientMessage(WMDraggingInfo *info, Atom message,
                      unsigned long data1,
                      unsigned long data2,
                      unsigned long data3,
                      unsigned long data4)
 {
-    WMScreen *scr = W_VIEW_SCREEN(destView);
-    WMDraggingInfo *info = &scr->dragInfo;
+    if (! W_SendDnDClientMessage(W_VIEW_SCREEN(XDND_AWARE_VIEW(info))->display,
+                                 XDND_SOURCE_WIN(info),
+                                 message,
+                                 WMViewXID(XDND_AWARE_VIEW(info)),
+                                 data1,
+                                 data2,
+                                 data3,
+                                 data4)) {
+        /* drop failed */
+        W_DragDestinationInfoClear(info);
+    }
+}
 
-    if (XDND_DEST_INFO(info) != NULL) {
-        if (! W_SendDnDClientMessage(scr->display,
-                                     XDND_SOURCE_WIN(info),
-                                     message,
-                                     WMViewXID(destView),
-                                     data1,
-                                     data2,
-                                     data3,
-                                     data4)) {
-            /* drop failed */
-            W_DragDestinationInfoClear(info);
-        }
+
+/* send a xdndStatus message to the source, with position and size
+   of the destination if it has no subwidget (requesting a position message
+   on every move otherwise) */
+static void
+sendStatusMessage(WMView *destView, WMDraggingInfo *info, Atom action)
+{
+    unsigned long data1;
+
+    data1 = (action == None) ? 0 : 1;
+
+    if (destView->childrenList == NULL) {
+        WMScreen *scr = W_VIEW_SCREEN(destView);
+        int destX, destY;
+        WMSize destSize = WMGetViewSize(destView);
+        Window foo;
+
+        XTranslateCoordinates(scr->display, WMViewXID(destView), scr->rootWin,
+                              0, 0, &destX, &destY,
+                              &foo);
+
+       sendDnDClientMessage(info,
+                             W_VIEW_SCREEN(destView)->xdndStatusAtom,
+                             data1,
+                             (destX << 16)|destY,
+                             (destSize.width << 16)|destSize.height,
+                             action);
+    } else {
+        /* set bit 1 to request explicitly position message on every move */
+        data1 = data1 | 2;
+
+        sendDnDClientMessage(info,
+                             W_VIEW_SCREEN(destView)->xdndStatusAtom,
+                             data1,
+                             0,
+                             0,
+                             action);
     }
 }
 
@@ -534,31 +547,26 @@ concludeDrop(WMView *destView)
 static void
 cancelDrop(WMView *destView, WMDraggingInfo *info)
 {
-    /* send XdndStatus with action None */
-    sendDnDClientMessage(destView,
-                         W_VIEW_SCREEN(destView)->xdndStatusAtom,
-                         0, 0, 0, None);
+    sendStatusMessage(destView, info, None);
     concludeDrop(destView);
     freeDestinationViewInfos(info);
 }
 
 
-/* suspend drop, when dragged icon enter an unaware subview of destView */
+/* suspend drop, when dragged icon enter an unregistered view
+   or a register view that doesn't accept the drop */
 static void
 suspendDropAuthorization(WMView *destView, WMDraggingInfo *info)
 {
-    /* free datas that depend on destination behaviour */
-    /* (in short: only keep source's types) */
+    sendStatusMessage(destView, info, None);
+
+    /* Free datas that depend on destination behaviour */
     if (XDND_DROP_DATAS(info) != NULL) {
         WMFreeArray(XDND_DROP_DATAS(info));
         XDND_DROP_DATAS(info) = NULL;
     }
-    XDND_REQUIRED_TYPES(info) = NULL;
 
-    /* send XdndStatus with action None */
-    sendDnDClientMessage(destView,
-                         W_VIEW_SCREEN(destView)->xdndStatusAtom,
-                         0, 0, 0, None);
+    XDND_REQUIRED_TYPES(info) = NULL;
 }
 
 
@@ -566,14 +574,10 @@ suspendDropAuthorization(WMView *destView, WMDraggingInfo *info)
 void
 W_DragDestinationCancelDropOnEnter(WMView *toplevel, WMDraggingInfo *info)
 {
-    if (XDND_DEST_VIEW_STORED(info))
+    if (XDND_DEST_VIEW_IS_REGISTERED(info))
         cancelDrop(XDND_DEST_VIEW(info), info);
-    else {
-        /* send XdndStatus with action None */
-        sendDnDClientMessage(toplevel,
-                             W_VIEW_SCREEN(toplevel)->xdndStatusAtom,
-                             0, 0, 0, None);
-    }
+    else
+        sendStatusMessage(toplevel, info, None);
 
     W_DragDestinationInfoClear(info);
 }
@@ -582,7 +586,7 @@ W_DragDestinationCancelDropOnEnter(WMView *toplevel, WMDraggingInfo *info)
 static void
 finishDrop(WMView *destView, WMDraggingInfo *info)
 {
-    sendDnDClientMessage(destView,
+    sendDnDClientMessage(info,
                          W_VIEW_SCREEN(destView)->xdndFinishedAtom,
                          0, 0, 0, 0);
     concludeDrop(destView);
@@ -603,31 +607,6 @@ getAllowedAction(WMView *destView, WMDraggingInfo *info)
 }
 
 
-/*  send the action that can be performed,
- and the limits outside wich the source must re-send
- its position and action */
-static void
-sendAllowedAction(WMView *destView, Atom action)
-{
-    WMScreen *scr = W_VIEW_SCREEN(destView);
-    /* // WMPoint destPos = WMGetViewScreenPosition(destView); */
-    WMSize destSize = WMGetViewSize(destView);
-    int destX, destY;
-    Window foo;
-
-    XTranslateCoordinates(scr->display, scr->rootWin, WMViewXID(destView),
-                          0, 0, &destX, &destY,
-                          &foo);
-
-    sendDnDClientMessage(destView,
-                         scr->xdndStatusAtom,
-                         1,
-                         (destX << 16)|destY,
-                         (destSize.width << 16)|destSize.height,
-                         action);
-}
-
-
 static void*
 checkActionAllowed(WMView *destView, WMDraggingInfo* info)
 {
@@ -639,9 +618,10 @@ checkActionAllowed(WMView *destView, WMDraggingInfo* info)
         return dropNotAllowedState;
     }
 
-    sendAllowedAction(destView, XDND_DEST_ACTION(info));
+    sendStatusMessage(destView, info, XDND_DEST_ACTION(info));
     return dropAllowedState;
 }
+
 
 static void*
 checkDropAllowed(WMView *destView, XClientMessageEvent *event,
@@ -670,6 +650,7 @@ checkDropAllowed(WMView *destView, XClientMessageEvent *event,
     return checkActionAllowed(destView, info);
 }
 
+
 static WMPoint*
 getDropLocationInView(WMView *view)
 {
@@ -689,6 +670,7 @@ getDropLocationInView(WMView *view)
 
     return location;
 }
+
 
 static void
 callPerformDragOperation(WMView *destView, WMDraggingInfo *info)
@@ -721,20 +703,16 @@ dragSourceResponseTimeOut(void *destView)
     WMDraggingInfo *info;
 
     wwarning("delay for drag source response expired");
-    if (view != NULL) {
-        info = &(W_VIEW_SCREEN(view)->dragInfo);
-        if (XDND_DEST_VIEW_STORED(info))
-            cancelDrop(view, info);
-        else {
-            /* send XdndStatus with action None */
-            sendDnDClientMessage(view,
-                                 W_VIEW_SCREEN(view)->xdndStatusAtom,
-                                 0, 0, 0, None);
-        }
-
-        W_DragDestinationInfoClear(info);
+    info = &(W_VIEW_SCREEN(view)->dragInfo);
+    if (XDND_DEST_VIEW_IS_REGISTERED(info))
+        cancelDrop(view, info);
+    else {
+        sendStatusMessage(view, info, None);
     }
+
+    W_DragDestinationInfoClear(info);
 }
+
 
 void
 W_DragDestinationStopTimer()
@@ -745,21 +723,17 @@ W_DragDestinationStopTimer()
     }
 }
 
+
 void
 W_DragDestinationStartTimer(WMDraggingInfo *info)
 {
     W_DragDestinationStopTimer();
 
-    if (XDND_DEST_STATE(info) != idleState
-        || XDND_DEST_VIEW(info) == NULL) {
-        /* note: info->destView == NULL means :
-         Enter message has been received, waiting for Position message */
-
+    if (XDND_DEST_STATE(info) != idleState)
         dndDestinationTimer = WMAddTimerHandler(
                                                 XDND_SOURCE_RESPONSE_MAX_DELAY,
                                                 dragSourceResponseTimeOut,
                                                 XDND_DEST_VIEW(info));
-    }
 }
 /* ----- End of Destination timer ----- */
 
@@ -795,6 +769,7 @@ stateName(W_DndState *state)
 }
 #endif
 
+
 static void*
 idleState(WMView *destView, XClientMessageEvent *event,
           WMDraggingInfo *info)
@@ -802,21 +777,24 @@ idleState(WMView *destView, XClientMessageEvent *event,
     WMScreen *scr;
     Atom sourceMsg;
 
-    scr = W_VIEW_SCREEN(destView);
-    sourceMsg = event->message_type;
+    if (destView->dragDestinationProcs != NULL) {
+        scr = W_VIEW_SCREEN(destView);
+        sourceMsg = event->message_type;
 
-    if (sourceMsg == scr->xdndPositionAtom) {
-        destView->dragDestinationProcs->prepareForDragOperation(destView);
+        if (sourceMsg == scr->xdndPositionAtom) {
+            destView->dragDestinationProcs->prepareForDragOperation(destView);
 
-        if (XDND_SOURCE_TYPES(info) != NULL) {
-            /* enter message infos are available */
-            return checkDropAllowed(destView, event, info);
+            if (XDND_SOURCE_TYPES(info) != NULL) {
+                /* enter message infos are available */
+                return checkDropAllowed(destView, event, info);
+            }
+
+            /* waiting for enter message */
+            return waitEnterState;
         }
-
-        /* waiting for enter message */
-        return waitEnterState;
     }
 
+    suspendDropAuthorization(destView, info);
     return idleState;
 }
 
@@ -881,6 +859,15 @@ dropNotAllowedState(WMView *destView, XClientMessageEvent *event,
         return idleState;
     }
 
+    if (sourceMsg == scr->xdndPositionAtom) {
+        if (XDND_SOURCE_ACTION_CHANGED(info)) {
+            return checkDropAllowed(destView, event, info);
+        } else {
+            sendStatusMessage(destView, info, None);
+            return dropNotAllowedState;
+        }
+    }
+
     return dropNotAllowedState;
 }
 
@@ -910,6 +897,15 @@ dropAllowedState(WMView *destView, XClientMessageEvent *event,
 
         finishDrop(destView, info);
         return idleState;
+    }
+
+    if (sourceMsg == scr->xdndPositionAtom) {
+        if (XDND_SOURCE_ACTION_CHANGED(info)) {
+            return checkDropAllowed(destView, event, info);
+        } else {
+            sendStatusMessage(destView, info, XDND_DEST_ACTION(info));
+            return dropAllowedState;
+        }
     }
 
     return dropAllowedState;
@@ -947,29 +943,30 @@ W_DragDestinationStateHandler(WMDraggingInfo *info, XClientMessageEvent *event)
     WMView *destView;
     W_DndState* newState;
 
-    if (XDND_DEST_VIEW_STORED(info)) {
-        destView = XDND_DEST_VIEW(info);
-        if (XDND_DEST_STATE(info) == NULL)
-            XDND_DEST_STATE(info) = idleState;
+    wassertr(XDND_DEST_INFO(info) != NULL);
+    wassertr(XDND_DEST_VIEW(info) != NULL);
+
+    destView = XDND_DEST_VIEW(info);
+    if (XDND_DEST_STATE(info) == NULL)
+        XDND_DEST_STATE(info) = idleState;
 
 #ifdef XDND_DEBUG
 
-        printf("current dest state: %s\n",
-               stateName(XDND_DEST_STATE(info)));
+    printf("current dest state: %s\n",
+           stateName(XDND_DEST_STATE(info)));
 #endif
 
-        newState = (W_DndState*) XDND_DEST_STATE(info)(destView, event, info);
+    newState = (W_DndState*) XDND_DEST_STATE(info)(destView, event, info);
 
 #ifdef XDND_DEBUG
 
-        printf("new dest state: %s\n", stateName(newState));
+    printf("new dest state: %s\n", stateName(newState));
 #endif
 
-        if (XDND_DEST_INFO(info) != NULL) {
-            XDND_DEST_STATE(info) = newState;
-            if (XDND_DEST_STATE(info) != idleState)
-                W_DragDestinationStartTimer(info);
-        }
+    if (XDND_DEST_INFO(info) != NULL) {
+        XDND_DEST_STATE(info) = newState;
+        if (XDND_DEST_STATE(info) != idleState)
+            W_DragDestinationStartTimer(info);
     }
 }
 
@@ -1104,7 +1101,7 @@ defPrepareForDragOperation(WMView *self)
  Process drop
  dropDatas: datas (WMData*) required by destination (self)
  (given in same order as returned by requiredDataTypes).
- A NULL data means it couldn't be retrivied.
+ A NULL data means it couldn't be retrieved.
  Destroyed when drop ends.
  operationList: if source operation is WDOperationAsk, contains
  operations (and associated texts) that can be asked

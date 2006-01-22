@@ -29,7 +29,7 @@ extern "C" {
 
 #define SCROLLER_WIDTH	20
 
-#define XDND_VERSION    4
+#define XDND_VERSION    3
 
 
 typedef struct W_Application {
@@ -78,7 +78,7 @@ typedef struct W_Color {
 
 typedef struct W_FocusInfo {
     struct W_View *toplevel;
-    struct W_View *focused;	       /* view that has the focus in this toplevel */
+    struct W_View *focused;    /* view that has the focus in this toplevel */
     struct W_FocusInfo *next;
 } W_FocusInfo;
 
@@ -110,8 +110,10 @@ typedef struct W_DragSourceInfo {
 
 typedef struct W_DragDestinationInfo {
     WMView *destView;
+    WMView *xdndAwareView;
     Window sourceWindow;
     W_DndState *state;
+    Bool sourceActionChanged;
     WMArray *sourceTypes;
     WMArray *requiredTypes;
     Bool typeListAvailable;
@@ -120,7 +122,7 @@ typedef struct W_DragDestinationInfo {
 
 
 struct W_DraggingInfo {
-    unsigned char protocolVersion;
+    unsigned char protocolVersion; /* version supported on the other side */
     Time timestamp;
 
     Atom sourceAction;
@@ -162,7 +164,7 @@ typedef struct W_Screen {
 
     struct W_Window *windowList;       /* list of windows in the app */
 
-    Window groupLeader;		       /* the leader of the application */
+    Window groupLeader;                /* the leader of the application */
                                        /* also used for other things */
 
     struct W_SelectionHandlers *selectionHandlerList;
@@ -195,11 +197,11 @@ typedef struct W_Screen {
     GC copyGC;
     GC clipGC;
 
-    GC monoGC;			       /* GC for 1bpp visuals */
+    GC monoGC;                         /* GC for 1bpp visuals */
 
     GC xorGC;
 
-    GC ixorGC;			       /* IncludeInferiors XOR */
+    GC ixorGC;                         /* IncludeInferiors XOR */
 
     GC drawStringGC;                   /* for WMDrawString() */
 
@@ -276,15 +278,15 @@ typedef struct W_Screen {
 
     Cursor invisibleCursor;
 
-    Atom attribsAtom;		       /* GNUstepWindowAttributes */
+    Atom attribsAtom;              /* GNUstepWindowAttributes */
 
-    Atom deleteWindowAtom;	       /* WM_DELETE_WINDOW */
+    Atom deleteWindowAtom;         /* WM_DELETE_WINDOW */
 
-    Atom protocolsAtom;		       /* _XA_WM_PROTOCOLS */
+    Atom protocolsAtom;            /* _XA_WM_PROTOCOLS */
 
-    Atom clipboardAtom;		       /* CLIPBOARD */
+    Atom clipboardAtom;            /* CLIPBOARD */
 
-    Atom xdndAwareAtom;		       /* XdndAware */
+    Atom xdndAwareAtom;            /* XdndAware */
     Atom xdndSelectionAtom;
     Atom xdndEnterAtom;
     Atom xdndLeaveAtom;
@@ -304,7 +306,7 @@ typedef struct W_Screen {
 
     Atom wmIconDragOffsetAtom;
 
-    Atom wmStateAtom;		       /* WM_STATE */
+    Atom wmStateAtom;              /* WM_STATE */
     
     Atom utf8String;
 
@@ -313,8 +315,8 @@ typedef struct W_Screen {
     Atom netwmIcon;
 
     /* stuff for detecting double-clicks */
-    Time lastClickTime;		       /* time of last mousedown event */
-    Window lastClickWindow;	       /* window of the last mousedown */
+    Time lastClickTime;            /* time of last mousedown event */
+    Window lastClickWindow;        /* window of the last mousedown */
 
     struct W_View *modalView;
     unsigned modalLoop:1;
@@ -341,8 +343,7 @@ typedef struct W_ViewDelegate {
 typedef struct W_View {
     struct W_Screen *screen;
 
-    WMWidget *self;		       /* must point to the widget the
-    * view belongs to */
+    WMWidget *self;     /* must point to the widget the view belongs to */
 
     W_ViewDelegate *delegate;
 
@@ -362,18 +363,18 @@ typedef struct W_View {
 
     struct W_View *nextResponder;      /* next to receive keyboard events */
 
-    struct W_View *parent;	       /* parent WMView */
+    struct W_View *parent;             /* parent WMView */
 
     struct W_View *childrenList;       /* first in list of child windows */
 
-    struct W_View *nextSister;	       /* next on parent's children list */
+    struct W_View *nextSister;         /* next on parent's children list */
 
-    WMArray *eventHandlers;	       /* event handlers for this window */
+    WMArray *eventHandlers;            /* event handlers for this window */
 
     unsigned long attribFlags;
     XSetWindowAttributes attribs;
 
-    void *hangedData;		       /* data holder for user program */
+    void *hangedData;                  /* data holder for user program */
 
     WMColor *backColor;
 
@@ -391,9 +392,9 @@ typedef struct W_View {
         unsigned int realized:1;
         unsigned int mapped:1;
         unsigned int parentDying:1;
-        unsigned int dying:1;	        /* the view is being destroyed */
+        unsigned int dying:1;           /* the view is being destroyed */
         unsigned int topLevel:1;        /* is a top level window */
-        unsigned int root:1;	        /* is the root window */
+        unsigned int root:1;            /* is the root window */
         unsigned int mapWhenRealized:1; /* map the view when it's realized */
         unsigned int alreadyDead:1;     /* view was freed */
 

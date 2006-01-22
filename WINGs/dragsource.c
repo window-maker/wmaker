@@ -16,10 +16,10 @@
 #define MIN_Y_MOVE_OFFSET 5
 #define MAX_SLIDEBACK_ITER 15
 
-#define VERSION_INFO(dragInfo) dragInfo->protocolVersion
 #define XDND_PROPERTY_FORMAT 32
 #define XDND_ACTION_DESCRIPTION_FORMAT 8
 
+#define XDND_DEST_VERSION(dragInfo) dragInfo->protocolVersion
 #define XDND_SOURCE_INFO(dragInfo) dragInfo->sourceInfo
 #define XDND_DEST_WIN(dragInfo) dragInfo->sourceInfo->destinationWindow
 #define XDND_SOURCE_ACTION(dragInfo) dragInfo->sourceAction
@@ -415,21 +415,25 @@ static Bool
 sendEnterMessage(WMDraggingInfo *info)
 {
     WMScreen *scr = sourceScreen(info);
-    unsigned long data1;
+    unsigned long version;
 
-    data1 = (VERSION_INFO(info) << 24)|1; /* 1: support of type list */
+    if (XDND_DEST_VERSION(info) > 2) {
+        if (XDND_DEST_VERSION(info) < XDND_VERSION)
+            version = XDND_DEST_VERSION(info);
+        else
+            version = XDND_VERSION;
+    } else {
+        version = 3;
+    }
 
     return sendDnDClientMessage(info, scr->xdndEnterAtom,
-                                data1,
+                                (version << 24) | 1, /* 1: support of type list */
                                 XDND_3_TYPES(info)[0],
                                 XDND_3_TYPES(info)[1],
                                 XDND_3_TYPES(info)[2]);
 }
 
 
-/*
-// this functon doesn't return something in all cases.
-// control reaches end of non-void function. fix this -Dan */
 static Bool
 sendPositionMessage(WMDraggingInfo *info, WMPoint *mousePos)
 {
@@ -440,7 +444,7 @@ sendPositionMessage(WMDraggingInfo *info, WMPoint *mousePos)
         if (mousePos->x < noPosZone->pos.x
             || mousePos->x > (noPosZone->pos.x + noPosZone->size.width)
             || mousePos->y < noPosZone->pos.y
-            || mousePos->y > (noPosZone->pos.y + noPosZone->size.width)) {
+            || mousePos->y > (noPosZone->pos.y + noPosZone->size.height)) {
             /* send position if out of zone defined by destination */
             return sendDnDClientMessage(info, scr->xdndPositionAtom,
                                         0,
@@ -448,14 +452,18 @@ sendPositionMessage(WMDraggingInfo *info, WMPoint *mousePos)
                                         XDND_TIMESTAMP(info),
                                         XDND_SOURCE_ACTION(info));
         }
-    } else {
-        /* send position on each move */
-        return sendDnDClientMessage(info, scr->xdndPositionAtom,
-                                    0,
-                                    mousePos->x<<16|mousePos->y,
-                                    XDND_TIMESTAMP(info),
-                                    XDND_SOURCE_ACTION(info));
+
+        /* Nothing to send, always succeed */
+        return True;
+
     }
+
+    /* send position on each move */
+    return sendDnDClientMessage(info, scr->xdndPositionAtom,
+                                0,
+                                mousePos->x<<16|mousePos->y,
+                                XDND_TIMESTAMP(info),
+                                XDND_SOURCE_ACTION(info));
 }
 
 
@@ -846,6 +854,30 @@ findDestination(WMDraggingInfo *info, WMPoint *mousePos)
 
 
 static void
+storeDestinationProtocolVersion(WMDraggingInfo *info)
+{
+    Atom type;
+    int format;
+    unsigned long count, remain;
+    unsigned char *winXdndVersion;
+    WMScreen *scr = W_VIEW_SCREEN(XDND_SOURCE_VIEW(info));
+
+    wassertr(XDND_DEST_WIN(info) != None);
+
+    if (XGetWindowProperty(scr->display, XDND_DEST_WIN(info),
+                           scr->xdndAwareAtom,
+                           0, 1, False, XA_ATOM, &type, &format,
+                           &count, &remain, &winXdndVersion) == Success) {
+        XDND_DEST_VERSION(info) = *winXdndVersion;
+        XFree(winXdndVersion);
+    } else {
+        XDND_DEST_VERSION(info) = 0;
+        wwarning("failed to read XDND version of drop target");
+    }
+}
+
+
+static void
 initMotionProcess(WMView *view, WMDraggingInfo *info,
                   XEvent *event, WMPoint *startLocation)
 {
@@ -878,9 +910,8 @@ initMotionProcess(WMView *view, WMDraggingInfo *info,
 
 
 static void
-processMotion(WMDraggingInfo *info, Window windowUnderDrag, WMPoint *mousePos)
+processMotion(WMDraggingInfo *info, WMPoint *mousePos)
 {
-    /* // WMScreen *scr = sourceScreen(info); */
     Window newDestination = findDestination(info, mousePos);
 
     W_DragSourceStopTimer();
@@ -894,20 +925,24 @@ processMotion(WMDraggingInfo *info, Window windowUnderDrag, WMPoint *mousePos)
         }
 
         XDND_DEST_WIN(info) = newDestination;
-        XDND_SOURCE_STATE(info) = idleState;
         XDND_DEST_ACTION(info) = None;
         XDND_NO_POS_ZONE(info).size.width = 0;
         XDND_NO_POS_ZONE(info).size.height = 0;
 
         if (newDestination != None) {
             /* entering a xdnd window */
+            XDND_SOURCE_STATE(info) = idleState;
+            storeDestinationProtocolVersion(info);
+
             if (! sendEnterMessage(info)) {
                 XDND_DEST_WIN(info) = None;
                 return;
             }
 
             W_DragSourceStartTimer(info);
-        }
+        } else {
+            XDND_SOURCE_STATE(info) = NULL;
+        } 
     } else {
         if (XDND_DEST_WIN(info) != None) {
             if (! sendPositionMessage(info, mousePos)) {
@@ -1010,9 +1045,7 @@ WMDragImageFromView(WMView *view, XEvent *event)
                         mouseLocation.y - XDND_MOUSE_OFFSET(info).y;
 
                     refreshDragImage(view, info);
-                    processMotion(info,
-                                  event->xmotion.window,
-                                  &mouseLocation);
+                    processMotion(info, &mouseLocation);
                 }
             }
         }
@@ -1041,7 +1074,7 @@ traceStatusMsg(Display *dpy, XClientMessageEvent *statusEvent)
     printf("Xdnd status message:\n");
 
     if (statusEvent->data.l[1] & 0x2UL)
-        printf("send position on every move\n");
+        printf("\tsend position on every move\n");
     else {
         int x, y, w, h;
         x = statusEvent->data.l[2] >> 16;
@@ -1049,15 +1082,15 @@ traceStatusMsg(Display *dpy, XClientMessageEvent *statusEvent)
         w = statusEvent->data.l[3] >> 16;
         h = statusEvent->data.l[3] & 0xFFFFL;
 
-        printf("send position out of ((%d,%d) , (%d,%d))\n",
+        printf("\tsend position out of ((%d,%d) , (%d,%d))\n",
                x, y, x+w, y+h);
     }
 
     if (statusEvent->data.l[1] & 0x1L)
-        printf("allowed action: %s\n",
+        printf("\tallowed action: %s\n",
                XGetAtomName(dpy, statusEvent->data.l[4]));
     else
-        printf("no action allowed\n");
+        printf("\tno action allowed\n");
 }
 #endif
 
@@ -1231,23 +1264,28 @@ W_DragSourceStateHandler(WMDraggingInfo *info, XClientMessageEvent *event)
     W_DndState* newState;
 
     if (XDND_SOURCE_VIEW_STORED(info)) {
-        view = XDND_SOURCE_VIEW(info);
+        if (XDND_SOURCE_STATE(info) != NULL) {
+            view = XDND_SOURCE_VIEW(info);
 #ifdef XDND_DEBUG
 
-        printf("current source state: %s\n",
-               stateName(XDND_SOURCE_STATE(info)));
+            printf("current source state: %s\n",
+                   stateName(XDND_SOURCE_STATE(info)));
 #endif
 
-        newState = (W_DndState*) XDND_SOURCE_STATE(info)(view, event, info);
+            newState = (W_DndState*) XDND_SOURCE_STATE(info)(view, event, info);
 
 #ifdef XDND_DEBUG
 
-        printf("new source state: %s\n", stateName(newState));
+            printf("new source state: %s\n", stateName(newState));
 #endif
 
-        if (newState != NULL)
-            XDND_SOURCE_STATE(info) = newState;
-        /* else drop finished, and info has been flushed */
+            if (newState != NULL)
+                XDND_SOURCE_STATE(info) = newState;
+            /* else drop finished, and info has been flushed */
+        }
+
+    } else {
+        wwarning("received DnD message without having a target");
     }
 }
 

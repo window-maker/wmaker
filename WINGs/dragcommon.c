@@ -2,11 +2,9 @@
 
 #include "WINGsP.h"
 
-#define VERSION_INFO(dragInfo) dragInfo->protocolVersion
+#define XDND_SOURCE_VERSION(dragInfo) dragInfo->protocolVersion
 #define XDND_DEST_INFO(dragInfo) dragInfo->destInfo
 #define XDND_DEST_VIEW(dragInfo) dragInfo->destInfo->destView
-#define XDND_DEST_VIEW_STORED(dragInfo) ((dragInfo->destInfo) != NULL)\
-    && ((dragInfo->destInfo->destView) != NULL)
 
 
 static Bool _WindowExists;
@@ -151,6 +149,13 @@ W_SendDnDClientMessage(Display *dpy, Window win, Atom message,
 {
     XEvent ev;
 
+#ifdef XDND_DEBUG
+    char* msgName = XGetAtomName(dpy, message);
+
+    printf("sending message %s ... ", msgName);
+    XFree(msgName);
+#endif
+
     if (! windowExists(dpy, win)) {
         wwarning("xdnd message target %d does no longer exist.", win);
         return False; /* message not sent */
@@ -170,6 +175,9 @@ W_SendDnDClientMessage(Display *dpy, Window win, Atom message,
     XSendEvent(dpy, win, False, 0, &ev);
     XFlush(dpy);
 
+#ifdef XDND_DEBUG
+    printf("sent\n");
+#endif
     return True; /* message sent */
 }
 
@@ -178,7 +186,9 @@ static void
 handleLeaveMessage(WMDraggingInfo *info)
 {
     if (XDND_DEST_INFO(info) != NULL) {
-        if (XDND_DEST_VIEW(info) != NULL) {
+        /* XDND_DEST_VIEW is never NULL (it's the xdnd aware view) */
+        wassertr(XDND_DEST_VIEW(info) != NULL);
+        if (XDND_DEST_VIEW(info)->dragDestinationProcs != NULL) {
             XDND_DEST_VIEW(info)->dragDestinationProcs->concludeDragOperation(
                                                                               XDND_DEST_VIEW(info));
         }
@@ -216,11 +226,15 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
 
     /* Messages from source to destination */
     if (messageType == scr->xdndEnterAtom) {
+        Bool positionSent = (XDND_DEST_INFO(info) != NULL);
+
         W_DragDestinationStopTimer();
         W_DragDestinationStoreEnterMsgInfo(info, toplevel, event);
 
-        if (VERSION_INFO(info) <= XDND_VERSION) {
-            if (XDND_DEST_VIEW_STORED(info)) {
+        /* Xdnd version 3 and up are not compatible with version 1 or 2 */
+        if (XDND_SOURCE_VERSION(info) > 2) {
+
+            if (positionSent) {
                 /* xdndPosition previously received on xdnd aware view */
                 W_DragDestinationStateHandler(info, event);
                 return;
@@ -230,7 +244,7 @@ W_HandleDNDClientMessage(WMView *toplevel, XClientMessageEvent *event)
             }
         } else {
             wwarning("received dnd enter msg with unsupported version %i",
-                     VERSION_INFO(info));
+                     XDND_SOURCE_VERSION(info));
             W_DragDestinationCancelDropOnEnter(toplevel, info);
             return;
         }
