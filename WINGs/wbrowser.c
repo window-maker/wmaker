@@ -188,7 +188,7 @@ WMSetBrowserMaxVisibleColumns(WMBrowser *bPtr, int columns)
     int curMaxVisibleColumns;
     int newFirstVisibleColumn = 0;
 
-    assert ((int) bPtr);
+    assert (bPtr != NULL);
 
     columns = (columns < MIN_VISIBLE_COLUMNS) ? MIN_VISIBLE_COLUMNS : columns;
     columns = (columns > MAX_VISIBLE_COLUMNS) ? MAX_VISIBLE_COLUMNS : columns;
@@ -324,7 +324,7 @@ removeColumn(WMBrowser *bPtr, int column)
     WMList **clist;
     char **tlist;
 
-    assert ((int) bPtr);
+    assert (bPtr != NULL);
 
     column = (column < 0) ? 0 : column;
     if (column >= bPtr->columnCount) {

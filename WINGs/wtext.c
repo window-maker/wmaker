@@ -1969,7 +1969,7 @@ deleteTextInteractively(Text *tPtr, KeySym ksym)
         } else if(tb->used == 0) {
             tb->blank = 1;
         } else if(tb->graphic) {
-            Bool hasNext = (Bool)(tb->next);
+            Bool hasNext = (tb->next != NULL);
 
             WMDestroyTextBlock(tPtr, WMRemoveTextBlock(tPtr));
             if(hasNext) {

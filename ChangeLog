@@ -8,6 +8,9 @@ Changes since version 0.92.0:
 - fixed gcc-4 compilation issues (Vladimir Nadvornik <nadvornik@suse.cz>)
 - fixed amd64 compilation issues (Vladimir Nadvornik <nadvornik@suse.cz>)
 - eliminated gcc-4 compilation warnings
+- small fix for compilation in a different directory than the source
+  (Balaton Zoltan <balaton@eik.bme.hu>)
+- fixed some warnings on 64bit platforms (Balaton Zoltan <balaton@eik.bme.hu>)
 
 
 Changes since version 0.91.0:
