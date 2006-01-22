@@ -450,6 +450,9 @@ destroyView(W_View *view)
 
     W_FreeViewXdndPart(view);
 
+    if (view->backColor)
+        WMReleaseColor(view->backColor);
+
     wfree(view);
 }
 

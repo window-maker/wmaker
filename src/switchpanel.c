@@ -501,6 +501,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
 
     if (!panel->bg) {
         WMFrame *frame = WMCreateFrame(panel->win);
+        WMColor *darkGray = WMDarkGrayColor(scr->wmscreen);
         WMSetFrameRelief(frame, WRSimple);
         WMSetViewExpandsToParent(WMWidgetView(frame), 0, 0, 0, 0);
         
@@ -508,10 +509,11 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
         WMResizeWidget(panel->label, width, LABEL_HEIGHT);
         WMMoveWidget(panel->label, BORDER_SPACE, BORDER_SPACE+ICON_TILE_SIZE+5);
         WMSetLabelRelief(panel->label, WRSimple);
-        WMSetWidgetBackgroundColor(panel->label, WMDarkGrayColor(scr->wmscreen));
+        WMSetWidgetBackgroundColor(panel->label, darkGray);
         WMSetLabelFont(panel->label, panel->font);
         WMSetLabelTextColor(panel->label, panel->white);
         
+        WMReleaseColor(darkGray);
         height+= 5;
     }
     
@@ -604,6 +606,8 @@ void wSwitchPanelDestroy(WSwitchPanel *panel)
       RReleaseImage(panel->bg);
     if (panel->font)
       WMReleaseFont(panel->font);
+    if (panel->white)
+      WMReleaseColor(panel->white);
     wfree(panel);
 }
 

@@ -15,6 +15,11 @@ Changes since version 0.92.0:
   on 64bit platforms (Max Loparyev <max@city.veganet.ru>)
 - fixed issue with icon colors on big endian platforms
   (Max Loparyev <max@city.veganet.ru>)
+- release colors to avoid issues with the reference count overflowing a
+  small integer and causing unexpected color releases that can crash
+  Window Maker (Martin Frydl <martin.frydl@systinet.com>)
+- fixed a small memory leak in WINGs/wview.c caused by not releasing the
+  background color of a view (Martin Frydl <martin.frydl@systinet.com>)
 
 
 Changes since version 0.91.0:
