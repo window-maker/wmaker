@@ -20,6 +20,7 @@ Changes since version 0.92.0:
   Window Maker (Martin Frydl <martin.frydl@systinet.com>)
 - fixed a small memory leak in WINGs/wview.c caused by not releasing the
   background color of a view (Martin Frydl <martin.frydl@systinet.com>)
+- updated estonian translation (Ivar Smolin <okul@linux.ee>)
 
 
 Changes since version 0.91.0:
