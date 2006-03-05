@@ -1532,8 +1532,8 @@ WAppIcon *wClipRestoreState(WScreen * scr, WMPropList * clip_state)
 
 	if (!clip_state)
 		return icon;
-	else
-		WMRetainPropList(clip_state);
+
+	WMRetainPropList(clip_state);
 
 	/* restore position */
 
@@ -1587,8 +1587,7 @@ WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
 	if (!dock_state)
 		return dock;
 
-	if (dock_state)
-		WMRetainPropList(dock_state);
+	WMRetainPropList(dock_state);
 
 	/* restore position */
 
@@ -1807,8 +1806,7 @@ WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
 	}
 
  finish:
-	if (dock_state)
-		WMReleasePropList(dock_state);
+	WMReleasePropList(dock_state);
 
 	return dock;
 }
