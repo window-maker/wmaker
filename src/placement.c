@@ -308,8 +308,8 @@ static int calcSumOfCoveredAreas(WWindow * wwin, int x, int y, int w, int h)
 		tx = test_window->frame_x;
 		ty = test_window->frame_y;
 
-		if (test_window->flags.mapped ||
-		    (test_window->flags.shaded &&
+		if (test_window->flags.mapped || (test_window->flags.shaded &&
+		     test_window->frame->workspace == wwin->screen_ptr->current_workspace &&
 		     !(test_window->flags.miniaturized || test_window->flags.hidden))) {
 			sum_isect += calcIntersectionArea(tx, ty, tw, th, x, y, w, h);
 		}
