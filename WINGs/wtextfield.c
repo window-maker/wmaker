@@ -30,15 +30,15 @@ typedef struct W_TextField {
 #endif
 
     char *text;
-    int textLen;		       /* size of text */
-    int bufferSize;		       /* memory allocated for text */
+    int textLen;                       /* size of text */
+    int bufferSize;                    /* memory allocated for text */
 
-    int viewPosition;		       /* position of text being shown */
+    int viewPosition;                  /* position of text being shown */
 
-    int cursorPosition;		       /* position of the insertion cursor */
+    int cursorPosition;                /* position of the insertion cursor */
 
     short usableWidth;
-    short offsetWidth;		       /* offset of text from border */
+    short offsetWidth;                 /* offset of text from border */
 
     WMRange selection;
 
@@ -47,7 +47,7 @@ typedef struct W_TextField {
     WMTextFieldDelegate *delegate;
 
 #if 0
-    WMHandlerID	timerID;	       /* for cursor blinking */
+    WMHandlerID timerID;               /* for cursor blinking */
 #endif
     struct {
         WMAlignment alignment:2;
@@ -62,7 +62,7 @@ typedef struct W_TextField {
 
         unsigned int cursorOn:1;
 
-        unsigned int secure:1;	       /* password entry style */
+        unsigned int secure:1;         /* password entry style */
 
         unsigned int pointerGrabbed:1;
 
@@ -77,7 +77,7 @@ typedef struct W_TextField {
 } TextField;
 
 
-#define NOTIFY(T,C,N,A)	{ WMNotification *notif = WMCreateNotification(N,T,A);\
+#define NOTIFY(T,C,N,A) { WMNotification *notif = WMCreateNotification(N,T,A);\
     if ((T)->delegate && (T)->delegate->C)\
     (*(T)->delegate->C)((T)->delegate,notif);\
     WMPostNotification(notif);\
@@ -136,11 +136,45 @@ static WMSelectionProcs selectionHandler = {
 };
 
 
-#define TEXT_WIDTH(tPtr, start)	(WMWidthOfString((tPtr)->font, \
-    &((tPtr)->text[(start)]), (tPtr)->textLen - (start) + 1))
+#define TEXT_WIDTH(tPtr, start) (WMWidthOfString((tPtr)->font, \
+    &((tPtr)->text[(start)]), (tPtr)->textLen - (start)))
 
 #define TEXT_WIDTH2(tPtr, start, end) (WMWidthOfString((tPtr)->font, \
-    &((tPtr)->text[(start)]), (end) - (start) + 1))
+    &((tPtr)->text[(start)]), (end) - (start)))
+
+
+static INLINE int
+oneUTF8CharBackward(char *str, int len)
+{
+    unsigned char* ustr = (unsigned char*) str;
+    int pos = 0;
+
+    while (len-- > 0 && ustr[--pos] >= 0x80 && ustr[pos] <= 0xbf);
+    return pos;
+}
+
+
+static INLINE int
+oneUTF8CharForward(char *str, int len)
+{
+    unsigned char* ustr = (unsigned char*) str;
+    int pos = 0;
+
+    while (len-- > 0 && ustr[++pos] >= 0x80 && ustr[pos] <= 0xbf);
+    return pos;
+}
+
+
+// find the beginning of the UTF8 char pointed by str
+static INLINE int
+seekUTF8CharStart(char *str, int len)
+{
+    unsigned char* ustr = (unsigned char*) str;
+    int pos = 0;
+
+    while (len-- > 0 && ustr[pos] >= 0x80 && ustr[pos] <= 0xbf) --pos;
+    return pos;
+}
 
 
 static void
@@ -177,6 +211,7 @@ normalizeRange(TextField *tPtr, WMRange *range)
         range->count = tPtr->textLen - range->position;
 }
 
+
 static void
 memmv(char *dest, char *src, int size)
 {
@@ -200,7 +235,8 @@ incrToFit(TextField *tPtr)
     int vp = tPtr->viewPosition;
 
     while (TEXT_WIDTH(tPtr, tPtr->viewPosition) > tPtr->usableWidth) {
-        tPtr->viewPosition++;
+        tPtr->viewPosition += oneUTF8CharForward(&tPtr->text[tPtr->viewPosition],
+                                                 tPtr->textLen - tPtr->viewPosition);
     }
     return vp!=tPtr->viewPosition;
 }
@@ -210,11 +246,11 @@ static int
 incrToFit2(TextField *tPtr)
 {
     int vp = tPtr->viewPosition;
+
     while (TEXT_WIDTH2(tPtr, tPtr->viewPosition, tPtr->cursorPosition)
            >= tPtr->usableWidth)
-        tPtr->viewPosition++;
-
-
+        tPtr->viewPosition += oneUTF8CharForward(&tPtr->text[tPtr->viewPosition],
+                                                 tPtr->cursorPosition - tPtr->viewPosition);
     return vp!=tPtr->viewPosition;
 }
 
@@ -222,14 +258,16 @@ incrToFit2(TextField *tPtr)
 static void
 decrToFit(TextField *tPtr)
 {
-    while (TEXT_WIDTH(tPtr, tPtr->viewPosition-1) < tPtr->usableWidth
-           && tPtr->viewPosition>0)
-        tPtr->viewPosition--;
+    int vp = tPtr->viewPosition;
+
+    while (vp > 0 && (vp += oneUTF8CharBackward(&tPtr->text[vp], vp),
+                      TEXT_WIDTH(tPtr, vp)) < tPtr->usableWidth) {
+        tPtr->viewPosition = vp;
+    }
 }
 
 #undef TEXT_WIDTH
 #undef TEXT_WIDTH2
-
 
 
 static WMData*
@@ -419,11 +457,9 @@ WMInsertTextFieldText(WMTextField *tPtr, char *text, int position)
     if (position < 0 || position >= tPtr->textLen) {
         /* append the text at the end */
         strcat(tPtr->text, text);
-
-        incrToFit(tPtr);
-
         tPtr->textLen += len;
         tPtr->cursorPosition += len;
+        incrToFit(tPtr);
     } else {
         /* insert text at position */
         memmv(&(tPtr->text[position+len]), &(tPtr->text[position]),
@@ -456,12 +492,11 @@ WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range)
     memmv(&(tPtr->text[range.position]), &(tPtr->text[range.position+range.count]),
           tPtr->textLen - (range.position+range.count) + 1);
 
+    /* better than nothing ;) */
+    if (tPtr->cursorPosition > range.position)
+        tPtr->viewPosition += oneUTF8CharBackward(&tPtr->text[tPtr->viewPosition],
+                                                  tPtr->viewPosition);
     tPtr->textLen -= range.count;
-
-    /* try to keep cursorPosition at the same place */
-    tPtr->viewPosition -= range.count;
-    if (tPtr->viewPosition < 0)
-        tPtr->viewPosition = 0;
     tPtr->cursorPosition = range.position;
 
     decrToFit(tPtr);
@@ -1096,16 +1131,18 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 #endif
     case XK_Left:
         if (tPtr->cursorPosition > 0) {
+            int i;
             paintCursor(tPtr);
-            if (controled) {
-                int i = tPtr->cursorPosition - 1;
 
+            i = tPtr->cursorPosition;
+            i += oneUTF8CharBackward(&tPtr->text[i], i);
+            if (controled) {
                 while (i > 0 && tPtr->text[i] != ' ') i--;
                 while (i > 0 && tPtr->text[i] == ' ') i--;
 
                 tPtr->cursorPosition = (i > 0) ? i + 1 : 0;
             } else
-                tPtr->cursorPosition--;
+                tPtr->cursorPosition = i;
 
             if (tPtr->cursorPosition < tPtr->viewPosition) {
                 tPtr->viewPosition = tPtr->cursorPosition;
@@ -1131,24 +1168,20 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 #endif
     case XK_Right:
         if (tPtr->cursorPosition < tPtr->textLen) {
+            int i;
             paintCursor(tPtr);
-            if (controled) {
-                int i = tPtr->cursorPosition;
 
+            i = tPtr->cursorPosition;
+            if (controled) {
                 while (tPtr->text[i] && tPtr->text[i] != ' ') i++;
                 while (tPtr->text[i] == ' ') i++;
-
-                tPtr->cursorPosition = i;
             } else {
-                tPtr->cursorPosition++;
+                i += oneUTF8CharForward(&tPtr->text[i], tPtr->textLen - i);
             }
-            while (WMWidthOfString(tPtr->font,
-                                   &(tPtr->text[tPtr->viewPosition]),
-                                   tPtr->cursorPosition-tPtr->viewPosition)
-                   > tPtr->usableWidth) {
-                tPtr->viewPosition++;
-                refresh = 1;
-            }
+            tPtr->cursorPosition = i;
+
+            refresh = incrToFit2(tPtr);
+
             if (!refresh)
                 paintCursor(tPtr);
         }
@@ -1201,13 +1234,9 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
                 paintCursor(tPtr);
                 tPtr->cursorPosition = tPtr->textLen;
                 tPtr->viewPosition = 0;
-                while (WMWidthOfString(tPtr->font,
-                                       &(tPtr->text[tPtr->viewPosition]),
-                                       tPtr->textLen-tPtr->viewPosition)
-                       > tPtr->usableWidth) {
-                    tPtr->viewPosition++;
-                    refresh = 1;
-                }
+
+                refresh = incrToFit(tPtr);
+
                 if (!refresh)
                     paintCursor(tPtr);
             }
@@ -1231,9 +1260,11 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
                 data = (void*)WMDeleteTextEvent;
                 textEvent = WMTextDidChangeNotification;
             } else if (tPtr->cursorPosition > 0) {
+                int i = oneUTF8CharBackward(&tPtr->text[tPtr->cursorPosition],
+                                            tPtr->cursorPosition);
                 WMRange range;
-                range.position = tPtr->cursorPosition - 1;
-                range.count = 1;
+                range.position = tPtr->cursorPosition + i;
+                range.count = -i;
                 WMDeleteTextFieldRange(tPtr, range);
                 data = (void*)WMDeleteTextEvent;
                 textEvent = WMTextDidChangeNotification;
@@ -1261,7 +1292,8 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
             } else if (tPtr->cursorPosition < tPtr->textLen) {
                 WMRange range;
                 range.position = tPtr->cursorPosition;
-                range.count = 1;
+                range.count = oneUTF8CharForward(&tPtr->text[tPtr->cursorPosition],
+                                                 tPtr->textLen - tPtr->cursorPosition);
                 WMDeleteTextFieldRange(tPtr, range);
                 data = (void*)WMDeleteTextEvent;
                 textEvent = WMTextDidChangeNotification;
@@ -1356,21 +1388,24 @@ pointToCursorPosition(TextField *tPtr, int x)
     a = tPtr->viewPosition;
     b = tPtr->textLen;
 
-    while (a < b && b-a>1) {
+    while (a < b) {
         mid = (a+b)/2;
+        mid += seekUTF8CharStart(&tPtr->text[mid], mid - a);
         tw = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
-                             mid - tPtr->viewPosition);
-        if (tw > x)
+                             mid - tPtr->viewPosition + 1);
+        if (tw > x) {
             b = mid;
-        else if (tw < x)
-            a = mid;
-        else
+        } else if (tw < x) {
+            if (a == mid)
+                a += oneUTF8CharForward(&tPtr->text[mid], b - a);
+            else
+                a = mid;
+        } else {
             return mid;
+        }
     }
-
-    return (a+b)/2;
+    return b;
 }
-
 
 
 static void
@@ -1447,11 +1482,13 @@ handleTextFieldActionEvents(XEvent *event, void *data)
                                     &(tPtr->text[tPtr->viewPosition]),
                                     tPtr->cursorPosition-tPtr->viewPosition)
                     > tPtr->usableWidth) {
-                    tPtr->viewPosition++;
+                    tPtr->viewPosition += oneUTF8CharForward(&tPtr->text[tPtr->viewPosition],
+                                                             tPtr->textLen - tPtr->viewPosition);
                 }
             } else if (tPtr->viewPosition > 0 && event->xmotion.x < 0) {
                 paintCursor(tPtr);
-                tPtr->viewPosition--;
+                tPtr->viewPosition += oneUTF8CharBackward(&tPtr->text[tPtr->viewPosition],
+                                                          tPtr->viewPosition);
             }
 
             tPtr->cursorPosition =

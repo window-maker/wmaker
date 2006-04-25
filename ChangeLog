@@ -33,6 +33,10 @@ Changes since version 0.92.0:
 - Improved Info panel layout and fonts.
 - Fixed missing library paths when linking some binaries on certain
   platforms with a recent pkg-config (debian unstable/sid for one)
+- Fixed buggy handling of UTF8 characters in textfields in WINGs.
+  (Stanislav Maslovski <stanislav.maslovski@gmail.com>)
+- Fixed segfault in WPrefs when some font description is missing from the 
+  configuration file (Stanislav Maslovski <stanislav.maslovski@gmail.com>)
 
 
 Changes since version 0.91.0:

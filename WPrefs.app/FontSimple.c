@@ -312,9 +312,14 @@ static char*
 getSelectedFont(_Panel *panel, FcChar8 *curfont)
 {
     WMListItem *item;
-    FcPattern *pat= FcNameParse(curfont);
+    FcPattern *pat;
     char *name;
     
+    if (curfont)
+        pat= FcNameParse(curfont);
+    else
+        pat= FcPatternCreate();
+
     item= WMGetListSelectedItem(panel->familyL);
     if (item)
     {
@@ -358,12 +363,13 @@ updateSampleFont(_Panel *panel)
     WMMenuItem *item= WMGetPopUpButtonMenuItem(panel->optionP,
                                            WMGetPopUpButtonSelectedItem(panel->optionP));
     char *fn= WMGetMenuItemRepresentedObject(item);
-    WMFont *font= WMCreateFont(WMWidgetScreen(panel->box), fn);
 
-    if (font)
-    {
-        WMSetTextFieldFont(panel->sampleT, font);
-        WMReleaseFont(font);
+    if (fn) {
+        WMFont *font= WMCreateFont(WMWidgetScreen(panel->box), fn);
+        if (font) {
+            WMSetTextFieldFont(panel->sampleT, font);
+            WMReleaseFont(font);
+        }
     }
 }
 
@@ -451,8 +457,8 @@ selectedFamily(WMWidget *w, void *data)
 
             ofont= (FcChar8*)WMGetMenuItemRepresentedObject(item);
             nfont= getSelectedFont(panel, ofont);
-            wfree(ofont);
-
+            if (ofont)
+                wfree(ofont);
             WMSetMenuItemRepresentedObject(item, nfont);
         }
         updateSampleFont(panel);
@@ -471,7 +477,8 @@ selected(WMWidget *w, void *data)
 
     ofont = (FcChar8*)WMGetMenuItemRepresentedObject(item);
     nfont= getSelectedFont(panel, ofont);
-    wfree(ofont);
+    if (ofont)
+        wfree(ofont);
 
     WMSetMenuItemRepresentedObject(item, nfont);
 
