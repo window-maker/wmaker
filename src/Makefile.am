@@ -119,6 +119,7 @@ INCLUDES = \
 wmaker_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a\
 	$(top_builddir)/wrlib/libwraster.la\
+	@XLFLAGS@ \
 	@XFTLIBS@ \
 	@XLIBS@ \
 	@INTLIBS@ \
@@ -127,6 +128,7 @@ wmaker_LDADD = \
 #wsmap_LDADD = \
 #	$(top_builddir)/WINGs/libWINGs.a\
 #	$(top_builddir)/wrlib/libwraster.la\
+#	@XLFLAGS@ \
 #	@XFTLIBS@ \
 #	@XLIBS@ \
 #	@INTLIBS@ \

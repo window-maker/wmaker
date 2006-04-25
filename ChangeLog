@@ -30,9 +30,9 @@ Changes since version 0.92.0:
   applications cannot interoperate with GNUstep applications (which uses
   xdnd version 2). Xdnd version 4 and 5 are backwards compatible with
   version 3 though. (Sylvain Reynal <sreynal@nerim.net>)
-- Improved Info panel display.
+- Improved Info panel layout and fonts.
 - Fixed missing library paths when linking some binaries on certain
-  platforms with a recent pkg-config
+  platforms with a recent pkg-config (debian unstable/sid for one)
 
 
 Changes since version 0.91.0:
