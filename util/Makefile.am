@@ -55,7 +55,7 @@ wmsetup_LDADD = \
 wmsetbg_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.a \
 	$(top_builddir)/wrlib/libwraster.la \
-	@XLIBS@ @XFTLIBS@ @INTLIBS@ @DLLIBS@
+	@XLFLAGS@ @XLIBS@ @XFTLIBS@ @INTLIBS@ @DLLIBS@
 
 CLEANFILES = wmaker.inst
 

@@ -862,8 +862,8 @@ typedef struct {
 
 
 #define COPYRIGHT_TEXT  \
-    "Copyright \xc2\xa9 1997-2005 Alfredo K. Kojima\n"\
-    "Copyright \xc2\xa9 1998-2005 Dan Pascu"
+    "Copyright \xc2\xa9 1997-2006 Alfredo K. Kojima\n"\
+    "Copyright \xc2\xa9 1998-2006 Dan Pascu"
 
 
 
@@ -1221,7 +1221,7 @@ wShowInfoPanel(WScreen *scr)
     Window parent;
     WWindow *wwin;
     char **strl;
-    int i, width=50, sepWidth;
+    int i, width=50, sepHeight;
     char *visuals[] = {
         "StaticGray",
         "GrayScale",
@@ -1266,13 +1266,13 @@ wShowInfoPanel(WScreen *scr)
         WMReleasePixmap(logo);
     }
 
-    sepWidth = 3;
+    sepHeight = 3;
     panel->name1L = WMCreateLabel(panel->win);
-    WMResizeWidget(panel->name1L, 240, 30 - sepWidth);
-    WMMoveWidget(panel->name1L, 100, 30);
+    WMResizeWidget(panel->name1L, 240, 30 + 2);
+    WMMoveWidget(panel->name1L, 100, 30 - 2 - sepHeight);
 
     name = "Lucida Sans,Comic Sans MS,URW Gothic L,Trebuchet MS"
-        ":bold:pixelsize=26:antialias=true";
+        ":italic:pixelsize=28:antialias=true";
     font = WMCreateFont(scr->wmscreen, name);
     strbuf = "Window Maker";
     if (font) {
@@ -1284,8 +1284,8 @@ wShowInfoPanel(WScreen *scr)
     WMSetLabelText(panel->name1L, strbuf);
 
     panel->lineF = WMCreateFrame(panel->win);
-    WMResizeWidget(panel->lineF, width, sepWidth);
-    WMMoveWidget(panel->lineF, 100+(240-width)/2, 60 - sepWidth);
+    WMResizeWidget(panel->lineF, width, sepHeight);
+    WMMoveWidget(panel->lineF, 100+(240-width)/2, 60 - sepHeight);
     WMSetFrameRelief(panel->lineF, WRSimple);
     WMSetWidgetBackgroundColor(panel->lineF, scr->black);
 
