@@ -4,7 +4,7 @@
 # kde2wmaker.pl:
 #
 #
-# This script, made for users of Window Maker (http://windowmaker.org) is to
+# This script, made for users of Window Maker (http://windowmaker.info) is to
 # be used along with KDE (http://www.kde.org).
 #
 #

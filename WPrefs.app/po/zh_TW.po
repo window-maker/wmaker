@@ -303,11 +303,11 @@ msgid ""
 "for actions like shading and closing a window.\n"
 "You will need a module distributed separately\n"
 "for this. You can get it at:\n"
-"http://largo.windowmaker.org/files.php#WSoundServer"
+"http://largo.windowmaker.info/files.php#WSoundServer"
 msgstr ""
 "停用/啟用遮蔽與關閉視窗動作時播放的音效支援。\n"
 "你需要分開發送的模組。你可以在這裡取得:\n"
-"http://largo.windowmaker.org/files.php#WSoundServer"
+"http://largo.windowmaker.info/files.php#WSoundServer"
 
 #: ../../WPrefs.app/Configurations.c:418
 msgid ""

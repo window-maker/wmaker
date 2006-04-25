@@ -471,10 +471,10 @@ msgstr "Window Maker vastaanotti signaalin %i."
 #: ../src/dialog.c:1707
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 " Tämä vakava virhe tapahtui luultavasti bugin johdosta. Ole hyvä ja täytä "
-"oheinen bugi-kaavake ja lähetä se osoitteeseen bugs@windowmaker.org."
+"oheinen bugi-kaavake ja lähetä se osoitteeseen bugs@windowmaker.info."
 
 #: ../src/dialog.c:1716
 msgid "What do you want to do now?"

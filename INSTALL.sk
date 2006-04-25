@@ -64,7 +64,7 @@ Nasledovné je potrebné k skompilovaniu Window Makera:
 	Window Maker.
 
 - libPropList
-	Túto kni¾nicu mo¾no nájs» na ftp://ftp.windowmaker.org/pub/libs alebo
+	Túto kni¾nicu mo¾no nájs» na ftp://ftp.windowmaker.info/pub/libs alebo
 	ftp://ftp.gnome.org/pub/libPropList. Nain¹talujte ju pred kompiláciou
 	Window Makera.
 
@@ -400,7 +400,7 @@ Installing the extras package
 
 Unpack WindowMaker-extra-<version-number>.tar.gz in /usr/local/share
         
-You can get the file at ftp://ftp.windowmaker.org. This file is optional
+You can get the file at ftp://ftp.windowmaker.info. This file is optional
 and only have a few icons, and themes. Look for the latest <version-number>
 available.
 Also there is a WindowMaker-extra.readme to instruct you where that package

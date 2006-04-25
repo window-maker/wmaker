@@ -3,8 +3,8 @@
 		            GNU Window Maker
                   	Gerenciador de Janelas X11
 	
-	  	   	  <http://windowmaker.org>
-		 	 <ftp://ftp.windowmaker.org>
+	  	   	  <http://windowmaker.info>
+		 	 <ftp://ftp.windowmaker.info>
 
 				     por
 
@@ -143,10 +143,10 @@ SOCORRO!!!
 ==========
 
 Há uma lista de discussão para debate de questões sobre o Window Maker
-no wm-user@windowmaker.org. Para inscrever-se, mande uma mensagem
+no wm-user@windowmaker.info. Para inscrever-se, mande uma mensagem
 contendo:
 	subscribe
-no campo de assunto da mensagem para wm-user-request@windowmaker.org
+no campo de assunto da mensagem para wm-user-request@windowmaker.info
 
 Se você tiver algum problema, pergunte lá (somente depois de ter lido os
 documentos, é claro). As pessoas da lista estão mais preparadas para 
@@ -332,9 +332,9 @@ qualquer aviso prévio.
 Autores
 =======
 
-Alfredo K. Kojima <kojima@windowmaker.org>
-Dan Pascu <dan@windowmaker.org>
-]d <id@windowmaker.org>
+Alfredo K. Kojima <kojima@windowmaker.info>
+Dan Pascu <dan@windowmaker.info>
+]d <id@windowmaker.info>
 
 Por favor não nos perguntem coisas antes de ler a documentação (o FAQ,
 este arquivo e os arquivos INSTALL), ou sobre coisas "legais" que você
@@ -345,7 +345,7 @@ O nome das pessoas que ajudaram com a tradução pode ser achado no po/README e
 Window Maker/README
 
 Se você tem algum comentário, correção ou deseja relatar bugs (junto com
-o BUGFORM) mande-os para developers@windowmaker.org
+o BUGFORM) mande-os para developers@windowmaker.info
 
 
 Traduzido por: Ricardo Sartori <sartori@inf.ufsc.br>

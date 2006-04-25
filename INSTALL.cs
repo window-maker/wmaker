@@ -411,7 +411,7 @@ Instalování speciálního balíèku
 
 Rozbalte WindowMaker-extra-<èíslo_verze>.tar.gz v adresáøi /usr/local/share
 
-Tento soubor si mù¾ete sehnat na adrese: ftp://ftp.windowmaker.org. Instalace
+Tento soubor si mù¾ete sehnat na adrese: ftp://ftp.windowmaker.info. Instalace
 tohoto souboru vùbec není nutná. tento balíèek obsahuje nìkolik ikon a témat.
 Hledejte poslední dostupnou verzi. V balíèku také naleznete soubor
 WindowMaker-extra.readme, který vám poradí, co máte udìlat.

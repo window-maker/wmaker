@@ -69,7 +69,7 @@ Lo siguiente se necesita para compilar Window Maker:
 	compilar ningún programa X, incluyendo Window Maker.
 
 - libPropList
-	Esta biblioteca se puede encontrar en ftp://ftp.windowmaker.org/pub/libs
+	Esta biblioteca se puede encontrar en ftp://ftp.windowmaker.info/pub/libs
 	o en ftp://ftp.gnome.org/pub/libPropList
 	Instálela antes de compilar Window Maker.
 

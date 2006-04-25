@@ -472,10 +472,10 @@ msgstr "Window Maker атрымаў сігнал %i."
 #: ../src/dialog.c:1822
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 " Гэты крытычны збой магчыма вызваны памылкамі ў WindowMaker."
-"Дашліце запоўненае паведамленне аб памылке (BUGFORM) на bugs@windowmaker.org"
+"Дашліце запоўненае паведамленне аб памылке (BUGFORM) на bugs@windowmaker.info"
 
 #: ../src/dialog.c:1831
 msgid "What do you want to do now?"

@@ -250,8 +250,8 @@ msgid "Window Maker received signal %i."
 msgstr "Window Maker egy %i jelzést vett."
 
 #: ../src/dialog.c:1450
-msgid " This fatal error occured probably due to a bug. Please fill the included BUGFORM and report it to bugs@windowmaker.org."
-msgstr " Ezt a végzetes hibát valószínűleg egy programozási hiba okozta. Légy szíves töltsd ki a mellékelt BUG-kérdőívet és küldd el a bugs@windowmaker.org e-mail címre. Köszi!"
+msgid " This fatal error occured probably due to a bug. Please fill the included BUGFORM and report it to bugs@windowmaker.info."
+msgstr " Ezt a végzetes hibát valószínűleg egy programozási hiba okozta. Légy szíves töltsd ki a mellékelt BUG-kérdőívet és küldd el a bugs@windowmaker.info e-mail címre. Köszi!"
 
 #: ../src/dialog.c:1458
 msgid "What do you want to do now?"

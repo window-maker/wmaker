@@ -4,8 +4,8 @@
 		       		GNU Window Maker
 		       	       X11 Window Manager
 
-	  	   	   <http://windowmaker.org>
-		 	 <ftp://ftp.windowmaker.org>
+	  	   	   <http://windowmaker.info>
+		 	 <ftp://ftp.windowmaker.info>
 
 				     by
 
@@ -150,9 +150,9 @@ HELP ME!!!
 ==========
 
 There is a mailing list for discussing Window Maker at
-wm-user@windowmaker.org To subscribe to it, send a message containing:
+wm-user@windowmaker.info To subscribe to it, send a message containing:
 	subscribe 
-in the subject of the message to wm-user-request@windowmaker.org
+in the subject of the message to wm-user-request@windowmaker.info
 
 If you got a problem, ask there (after reading the docs, of course). The
 people there is more likely to be able to answer your questions than we are.
@@ -335,9 +335,9 @@ notice.
 Authors
 =======
 
-Alfredo K. Kojima <kojima@windowmaker.org>
-Dan Pascu <dan@windowmaker.org>
-]d <id@windowmaker.org>
+Alfredo K. Kojima <kojima@windowmaker.info>
+Dan Pascu <dan@windowmaker.info>
+]d <id@windowmaker.info>
 
 Please don't ask us questions before reading the documentation (esp. the
 FAQ, this file and INSTALL files) and about "cool" things you see in
@@ -349,5 +349,5 @@ project. The name of people who have helped with localization (translation)
 can be found in po/README and Window Maker/README
 
 If you have any comments, fixes and bug reports (filled BUGFORMs) send them
-to developers@windowmaker.org
+to developers@windowmaker.info
 

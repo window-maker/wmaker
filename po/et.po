@@ -530,11 +530,11 @@ msgstr "Window Maker võttis vastu signaali %i."
 #: ../src/dialog.c:1769
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 " See fataalviga on arvatavasti põhjustatud programmi enese veast. Palun "
 "täida kaasasolev vigadest teatamise vorm (BUGFORM) ja saada see aadressil "
-"bugs@windowmaker.org."
+"bugs@windowmaker.info."
 
 #: ../src/dialog.c:1778
 msgid "What do you want to do now?"

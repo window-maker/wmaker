@@ -301,10 +301,10 @@ msgstr "Window Maker收到信号%i."
 #: ../src/dialog.c:1450
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 "发生一个致命错误,也许是因为一个 bug.请填写好软件中包含的 BUGFORM 并向"
-"bugs@windowmaker.org 报告 bug."
+"bugs@windowmaker.info 报告 bug."
 
 #: ../src/dialog.c:1458
 msgid "What do you want to do now?"

@@ -61,7 +61,7 @@ Para compilar o Window Maker você precisará do seguinte:
 	programa X, incluindo o Window Maker.
 
 - libPropList 
-	Você pode achar esta biblioteca em ftp://ftp.windowmaker.org/pub/libs ou
+	Você pode achar esta biblioteca em ftp://ftp.windowmaker.info/pub/libs ou
 	ftp://ftp.gnome.org/pub/libPropList. Você deve instalar corretamente
 	esta biblioteca antes de instalar o Window Maker.
 
@@ -282,7 +282,7 @@ INSTALAÇÃO:
 
 Desempacote o WindowMaker-extra-<numero-da-versao>.tar.gz no /usr/local/share. 
 
-Você pode pegar o arquivo no site ftp://ftp.windowmaker.org. Este arquivo
+Você pode pegar o arquivo no site ftp://ftp.windowmaker.info. Este arquivo
 é opcional e possui alguns ícones e temas. Procure pelo último <número-da-versão>
 disponível.
 Ainda há o WindowMaker-extra.readme para instruí-lo sobre onde o pacote deve ir.

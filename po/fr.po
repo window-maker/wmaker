@@ -481,10 +481,10 @@ msgstr "Window Maker a reçu le signal %i."
 #: ../src/dialog.c:1748
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 " Cette erreur est probablement due à un bogue. Remplissez le formulaire "
-"BUGFORM et envoyez-le à bugs@windowmaker.org."
+"BUGFORM et envoyez-le à bugs@windowmaker.info."
 
 #: ../src/dialog.c:1757
 msgid "What do you want to do now?"
@@ -1458,7 +1458,7 @@ msgid ""
 "BUGFORM and report it."
 msgstr ""
 "Erreur probablement due à un bogue. Merci de remplir le formulaire BUGFORM "
-"et de l'envoyer à bugs@windowmaker.org."
+"et de l'envoyer à bugs@windowmaker.info."
 
 #: ../src/startup.c:894
 #, c-format

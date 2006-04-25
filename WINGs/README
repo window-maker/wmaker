@@ -5,7 +5,7 @@
 
                           Alfredo Kengi Kojima 
                   
-                          kojima@windowmaker.org
+                          kojima@windowmaker.info
 
 
    WINGs is a small widget set with the N*XTSTEP look and feel. It's API
@@ -26,7 +26,7 @@ workaround some of it's limitations, although you'll probably be able to
 write something like a trivial tic-tac-toe game without knowing much Xlib.
 
    Some of it's functions are designed to support the Window Maker window
-manager (see http://windowmaker.org) In fact, it's primary role is to
+manager (see http://windowmaker.info) In fact, it's primary role is to
 support Window Maker. All other uses of it are just an added bonus.
 
    It will help you to understand the API if you read the ApplicationKit

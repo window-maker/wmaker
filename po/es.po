@@ -483,11 +483,11 @@ msgstr "Window Maker recibió la señal %i."
 #: ../src/dialog.c:1822
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 " Este error fatal ocurrió probablemente debido a un fallo.\n"
 " Por favor rellene el fichero BUGFORM adjunto y envíelo a\n"
-" bugs@windowmaker.org."
+" bugs@windowmaker.info."
 
 #: ../src/dialog.c:1831
 msgid "What do you want to do now?"

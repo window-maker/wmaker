@@ -500,12 +500,12 @@ msgstr "Window Maker prijal signál %i."
 #: ../src/dialog.c:1752
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 "Táto fatálna chyba sa vyskytla\n"
 "pravdepodobne kvôli chybe vo Window Makery.\n"
 "Prosím vyplňte priložený BUGFORM a\n"
-"pošlite ho na bugs@windowmaker.org."
+"pošlite ho na bugs@windowmaker.info."
 
 #: ../src/dialog.c:1761
 msgid "What do you want to do now?"

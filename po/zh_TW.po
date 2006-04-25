@@ -514,10 +514,10 @@ msgstr "Window Maker 收到訊號 %i。"
 #: ../src/dialog.c:1768
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 "這個嚴重錯誤可能是因為程式錯誤所致。請填寫附帶的 BUGFORM 並向 "
-"bugs@windowmaker.org 提出報告。"
+"bugs@windowmaker.info 提出報告。"
 
 #: ../src/dialog.c:1777
 msgid "What do you want to do now?"

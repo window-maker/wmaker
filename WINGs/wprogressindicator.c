@@ -1,6 +1,6 @@
 /*
  * Original idea and implementation by Frederik Schueler <fr.schueler@netsurf.de>
- * Rewritten by Pascal Hofstee <daeron@windowmaker.org>
+ * Rewritten by Pascal Hofstee <daeron@windowmaker.info>
  * - Added options to set min/max values
  * - centralized drawing into one pain function
  */

@@ -1,8 +1,8 @@
 /*
  * Dynamically Resized Array
  *
- * Authors: Alfredo K. Kojima <kojima@windowmaker.org>
- *          Dan Pascu         <dan@windowmaker.org>
+ * Authors: Alfredo K. Kojima <kojima@windowmaker.info>
+ *          Dan Pascu         <dan@windowmaker.info>
  *
  * This code is released to the Public Domain, but
  * proper credit is always appreciated :)

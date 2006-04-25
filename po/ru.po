@@ -487,11 +487,11 @@ msgstr "Window Maker: получен сигнал %i."
 #: ../src/dialog.c:1822
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 " Эта критическая ошибка, возможно, является результатом ошибки в программе. "
 "Пожалуйста, заполните форму в файле BUGFORM и отправьте по адресу "
-"bugs@windowmaker.org."
+"bugs@windowmaker.info."
 
 #: ../src/dialog.c:1831
 msgid "What do you want to do now?"

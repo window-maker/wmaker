@@ -143,7 +143,7 @@ here for example screenshots.
 1.2 Where can I get Window Maker? 
 ----------------------------------
 The official site to get new developmental versions from is
-ftp://ftp.windowmaker.org/pub/beta/srcs/. 
+ftp://ftp.windowmaker.info/pub/beta/srcs/. 
 
 NOTE: Also see http://wm.current.nu/downloads.html for the latest 
 Stable and Development versions. 
@@ -158,10 +158,10 @@ crash.
 
 1.3 Where are the mailing list archives? 
 ----------------------------------------
-Phillip Smith from Netplex, our wonderful provider of windowmaker.org, has set
-up some new lists from the domain.  Please read the information on the web
-pages at http://www.windowmaker.org/lists.html for information on how to
-subscribe, the posting guidelines, and how to access the web archives.
+Phillip Smith from Netplex, our wonderful provider of windowmaker.info, has
+set up some new lists from the domain.  Please read the information on the
+web pages at http://www.windowmaker.info/lists.html for information on how
+to subscribe, the posting guidelines, and how to access the web archives.
 
 Many thanks to Ed Orcutt who hosted the original lists from his own machine
 for many years and Caldera who graciously allowed Ed to continue hosting
@@ -172,7 +172,7 @@ valuable service for many years and we are sad to see him go.
 1.4 Where is more documentation on configuring Window Maker? 
 ----------------------------------
 Besides the mailing list archives, there are nice documents in
-ftp://ftp.windowmaker.org/pub/docs/, at
+ftp://ftp.windowmaker.info/pub/docs/, at
 http://wm.current.nu/downloads.html on my download page and at 
 http://wm.current.nu/user-guide/index.htm in the online user-guide. 
 
@@ -204,7 +204,7 @@ entries and only require a moderator approval before being posted.
 ----------------------------------
 You can look at the BUGFORM file in your tarball of Window Maker.
 Alternatively, you can use the Window Maker Bugtracker at
-http://windowmaker.org/cgi-bin/bugs. 
+http://windowmaker.info/cgi-bin/bugs. 
 
 
 1.8. Is there an anomymous cvs server? 
@@ -1192,10 +1192,10 @@ Several Nice applications are available:
      http://www.geocities.com/SiliconValley/Vista/2471/linux.htm#xapps 
 
      ascd,WMRack,asmixer,asmodem, and others
-     ftp://ftp.windowmaker.org/pub/wmaker/contrib/srcs/apps/ 
+     ftp://ftp.windowmaker.info/pub/wmaker/contrib/srcs/apps/ 
 
      wmavgload, wmmount, and wmload
-     ftp://ftp.windowmaker.org/pub/wmaker/contrib/srcs/utils/ 
+     ftp://ftp.windowmaker.info/pub/wmaker/contrib/srcs/utils/ 
 
      wmppp-wmifs, wmtime, wmmon and other nifty apps
      http://windowmaker.mezaway.org/ 

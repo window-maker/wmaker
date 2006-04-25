@@ -11,7 +11,7 @@ Serial:		%{serial}
 Copyright:	GPL
 Group:		User Interface/Desktops
 Vendor:		The Window Maker Team
-Url:		http://www.windowmaker.org
+Url:		http://www.windowmaker.info
 Source:		%{name}-%{version}.tar.gz
 Requires:	wmconfig, libPropList >= 0.10.1
 Obsoletes:	windowmaker, windowmaker-devel, windowmaker-libs, WindowMaker-devel

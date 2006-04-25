@@ -1768,7 +1768,7 @@ wShowCrashingDialogPanel(int whatSig)
     WMSetLabelText(panel->note2L,
                    _(" This fatal error occured probably due to a bug."
                      " Please fill the included BUGFORM and "
-                     "report it to bugs@windowmaker.org."));
+                     "report it to bugs@windowmaker.info."));
     WMSetLabelWraps(panel->note2L, True);
 
 

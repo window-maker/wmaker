@@ -360,10 +360,10 @@ msgstr "O Window Maker recibiu un sinal %i."
 #: ../src/dialog.c:1564
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 " Este erro grave ocorreu probablemente por mor dun erro do programa. Por "
-"favor, encha a BUGFORM incluída (en inglés) e envíea a bugs@windowmaker.org."
+"favor, encha a BUGFORM incluída (en inglés) e envíea a bugs@windowmaker.info."
 
 #: ../src/dialog.c:1572
 msgid "What do you want to do now?"

@@ -49,10 +49,10 @@ setup (# Distribution meta-data
         description = "A python interface to WINGs",
         long_description=long_description,
         author = "Dan Pascu",
-        author_email = "dan@windowmaker.org",
+        author_email = "dan@windowmaker.info",
         license = "GPL",
         platforms = "ALL",
-        url = "http://windowmaker.org/",
+        url = "http://windowmaker.info/",
 
         # Description of the modules and packages in the distribution
 

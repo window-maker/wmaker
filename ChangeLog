@@ -822,9 +822,9 @@ Changes since version 0.51.2:
 - fixed focus problem with unfocusable windows
 - fixed bug in WPrefs that changed EXIT to SHUTDOWN
 - fixed menu title messup bug in WPrefs
-- added a dot to mark hidden applications (compile time) (id@windowmaker.org)
-- enhancements to the modelock patch (id@windowmaker.org)
-- show kbd mode for modelock  (id@windowmaker.org)
+- added a dot to mark hidden applications (compile time) (id@windowmaker.info)
+- enhancements to the modelock patch (id@windowmaker.info)
+- show kbd mode for modelock  (id@windowmaker.info)
 - enhanced positioning of transient windows
 - added dynamically loadable texture renderer code
   from Tobias Gloth <gloth@online.de>
@@ -1665,7 +1665,7 @@ Changes since version 0.14.1:
   They are icons for dock, clip, defaultAppIcon, sound server and for xterm.
   All the rest needed for apps that can be started from menu, and have entries
   in WMWindowAttributes, are in WindowMaker-data.tar.gz which can be found on
-  http://windowmaker.org/ or ftp://ftp.windowmaker.org/pub/contrib/icons
+  http://windowmaker.info/ or ftp://ftp.windowmaker.info/pub/contrib/icons
 - Changed the SlideWindow() function to better adapt to slow machines. Also
   the animation constants are now run time. They are IconSlideDelay = 0;
   IconSlideStep = 5; and IconSlideSlowDown = 50; See NEWS for a more in depth
@@ -1733,7 +1733,7 @@ Changes since version 0.14.0:
   or exiting, while an Attribute Editor panel is open.
 - Put clip.tif, clip.png, clip.xpm, clip2.tif, clip2.xpm, Cone.xpm and
   Penguin.xpm in WindowMaker-data_tar.gz. These are icons intended for fiend.
-  It can be found on ftp://ftp.windowmaker.org/pub/wmaker/contrib/icons
+  It can be found on ftp://ftp.windowmaker.info/pub/wmaker/contrib/icons
 
 
 

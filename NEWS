@@ -777,7 +777,7 @@ Themes
 
 Removed all themes from the source tree, and moved them in a separate package.
 You can download the new package from the same place as this package:
-ftp://ftp.windowmaker.org/pub/beta/srcs/
+ftp://ftp.windowmaker.info/pub/beta/srcs/
 Look after WindowMaker-extra-<version-number>.tar.gz
 Also WindowMaker-extra pack include the old WindowMaker-data.tar.gz which only
 contained icons.
@@ -872,7 +872,7 @@ libPropList
 
 WARNING!!! libPropList was removed from the Window Maker distribution
 and is being distributed separately. If you dont have it installed yet,
-get it from ftp.windowmaker.org/pub/libs and install before building
+get it from ftp.windowmaker.info/pub/libs and install before building
 Window Maker.
 
 

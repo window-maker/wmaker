@@ -107,10 +107,10 @@ made autoarrange icons a runtime option, SHADOW_RESIZEBAR c-time option,
 no workspace switch to the same workspace, dashed icon selection,
 misclellaneous bug fixes, definable cursors, --no-polling command line option.
 
-The JED Text Editor <xjed@windowmaker.org>
+The JED Text Editor <xjed@windowmaker.info>
 Project maintainer
 
-Alfredo K. Kojima <kojima@windowmaker.org>
+Alfredo K. Kojima <kojima@windowmaker.info>
 The guy who types random keys to feed JED with the necessary entropy
 
 Jay Kominek <jkominek@xtn.net>
@@ -149,7 +149,7 @@ Fix for unassociated alpha tiff
 Craig Nellist <crn@ozemail.com.au>
 selection in textfield
 
-Dan Pascu <dan@windowmaker.org>
+Dan Pascu <dan@windowmaker.info>
 dock ghost (superfluous mode) fix, enhancement for scrollable menus,
 clip, numerous other stuff, project maintainer
 
@@ -217,7 +217,7 @@ FRBall <frb@umr.edu>
 dgradient fix
 
 
-"]d" <id@windowmaker.org>
+"]d" <id@windowmaker.info>
 Window list menu miniaturized/hidden hints, XDE support, XKB lock 
 language status, WINGs enhancements, bug fixes, window commands menu
 enhancement, window move/resize by keyboard. GNUstepGlow.tiff icon,

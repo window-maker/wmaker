@@ -481,10 +481,10 @@ msgstr "Window Maker přijal signál %i."
 #: ../src/dialog.c:1705
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 " Tato závažná chyba se vyskytla pravděpodobně v důsledku chyby v kódu Window "
-"Makeru. Prosím, vyplňte soubor BUGFORM a zašlete ho na bugs@windowmaker.org "
+"Makeru. Prosím, vyplňte soubor BUGFORM a zašlete ho na bugs@windowmaker.info "
 "(pouze anglicky)"
 
 #: ../src/dialog.c:1714

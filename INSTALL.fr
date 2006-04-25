@@ -429,7 +429,7 @@ Installation du paquetage additionnel
 
 Décompressez WindowMaker-extra-<version-number>.tar.gz dans /usr/local/share
 
-Vous trouverez le fichier sur ftp://ftp.windowmaker.org. Ce paquetage est optionnel,
+Vous trouverez le fichier sur ftp://ftp.windowmaker.info. Ce paquetage est optionnel,
 il contient des icônes et des thèmes supplémentaires. Vérifiez que vous avez
 bien la derniere version de ce paquetage.
 Il y a aussi un fichier WindowMaker-extra.readme qui indique comment procéder à

@@ -494,7 +494,7 @@ msgstr "Window Maker ha rebut un senyal %i."
 #: ../src/dialog.c:1752
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to bugs@windowmaker.info."
 msgstr ""
 " Aquest error fatal probablement ha estat causat per un \"bug\". Si us plau, "
 "ompliu el formulari d'error inclòs i envieu-lo a l'adreça bugs@windowmaker."
