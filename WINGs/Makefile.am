@@ -16,7 +16,7 @@ lib_LIBRARIES = libWINGs.a libWUtil.a
 LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @INTLIBS@
 
 
-EXTRA_DIST = BUGS python/Makefile python/README python/WINGs.i \
+EXTRA_DIST = BUGS make-rgb python/Makefile python/README python/WINGs.i \
 	python/WINGs.py python/setup.py python/test.py
 
 
@@ -40,6 +40,7 @@ libWINGs_a_SOURCES = 	\
 	misc.c \
 	notification.c \
 	proplist.c \
+	rgb.h \
 	selection.c \
 	snprintf.c \
 	string.c \
@@ -114,10 +115,6 @@ AM_CFLAGS = @NOSTRICTALIASING@
 
 INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	@XFTFLAGS@ @HEADER_SEARCH_PATH@
-
-
-wcolorpanel.o: wcolorpanel.c
-	$(COMPILE) -c -DRGBTXT="\"@X_LIBRARY_PATH@/X11/rgb.txt\"" $<
 
 DISTCLEANFILES = WINGs.pc
 

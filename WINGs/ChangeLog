@@ -10,6 +10,10 @@ Changes since wmaker 0.92.0:
   applications cannot interoperate with GNUstep applications (which uses
   xdnd version 2). Xdnd version 4 and 5 are backwards compatible with
   version 3 though. (Sylvain Reynal <sreynal@nerim.net>)
+- removed dependency on rgb.txt from X11 and issues with locating it on the
+  filesystem for different systems/distributions.
+- Removed dependency on rgb.txt (from X11) and issues with locating it on the
+  filesystem for different systems/distributions.
 
 
 Changes since wmaker 0.80.1:

@@ -26,6 +26,7 @@
 
 #include "wconfig.h"
 #include "WINGsP.h"
+#include "rgb.h"
 #include <math.h>
 #include <unistd.h>
 #include <ctype.h>
@@ -47,11 +48,6 @@
 
 #ifdef SHAPE
 # include <X11/extensions/shape.h>
-#endif
-
-
-#ifndef PATH_MAX
-# define PATH_MAX	1024
 #endif
 
 
@@ -258,25 +254,21 @@ enum {
 } colorListMenuItem;
 
 
-#define	PWIDTH			194
-#define	PHEIGHT			266
-#define	colorWheelSize		150
-#define	customPaletteWidth	182
-#define	customPaletteHeight	106
-#define	knobThickness		8
+#define	PWIDTH                  194
+#define	PHEIGHT                 266
+#define	colorWheelSize          150
+#define	customPaletteWidth      182
+#define	customPaletteHeight     106
+#define	knobThickness           8
 
-#define	SPECTRUM_WIDTH		511
-#define	SPECTRUM_HEIGHT		360
+#define	SPECTRUM_WIDTH          511
+#define	SPECTRUM_HEIGHT         360
 
-#define	COLORWHEEL_PART		1
-#define	CUSTOMPALETTE_PART	2
-#define	BUFSIZE			1024
+#define	COLORWHEEL_PART         1
+#define	CUSTOMPALETTE_PART      2
+#define	BUFSIZE                 1024
 
-#ifndef RGBTXT
-#define RGBTXT "/usr/X11R6/lib/X11/rgb.txt"
-#endif
-
-#define MAX_LENGTH  1024
+#define MAX_LENGTH              1024
 
 
 #ifndef M_PI
@@ -1267,42 +1259,19 @@ readConfiguration(W_ColorPanel *panel)
         }
         wfree(path);
     }
-    (void)closedir(dPtr);
+    closedir(dPtr);
 }
 
 
 static void
 readXColors(W_ColorPanel *panel)
 {
-    struct stat		stat_buf;
-    FILE		*rgbtxt;
-    char		line[MAX_LENGTH];
-    int			red, green, blue;
-    char		name[48];
-    RColor		*color;
-    WMListItem		*item;
+    WMListItem *item;
+    RGBColor *entry;
 
-    if (stat(RGBTXT, &stat_buf) != 0) {
-        wsyserror(_("Color Panel: Could not find file"), " %s", RGBTXT);
-        return;
-    }
-    else {
-        if ((rgbtxt = fopen(RGBTXT, "rb"))) {
-            while (fgets(line, MAX_LENGTH, rgbtxt)) {
-                if (sscanf(line, "%d%d%d %[^\n]", &red, &green, &blue, name)) {
-                    color = wmalloc(sizeof(RColor));
-                    color->red = (unsigned char)red;
-                    color->green = (unsigned char)green;
-                    color->blue = (unsigned char)blue;
-                    item = WMAddListItem(panel->colorListContentLst, name);
-                    item->clientData = (void *)color;
-                }
-            }
-            fclose(rgbtxt);
-        }
-        else {
-            wsyserror(_("Color Panel: Could not find file"), "%s", RGBTXT);
-        }
+    for (entry=rgbColors; entry->name!=NULL; entry++) {
+        item = WMAddListItem(panel->colorListContentLst, entry->name);
+        item->clientData = (void *)&(entry->color);
     }
 }
 
@@ -1310,7 +1279,7 @@ readXColors(W_ColorPanel *panel)
 void
 WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode)
 {
-    W_Screen	*scr = WMWidgetScreen(panel->win);
+    W_Screen *scr = WMWidgetScreen(panel->win);
 
     if (mode != WMWheelModeColorPanel) {
         WMUnmapWidget(panel->wheelFrm);
@@ -3426,7 +3395,7 @@ colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text,
     WMScreen *scr = WMWidgetScreen(lPtr);
     Display *dpy = WMScreenDisplay(scr);
     WMView *view = W_VIEW(lPtr);
-    RColor color = *((RColor *)WMGetListItem(lPtr, index)->clientData);
+    RColor *color = (RColor *)WMGetListItem(lPtr, index)->clientData;
     W_ColorPanel *panel = WMGetHangedData(lPtr);
     int	width, height, x, y;
     WMColor *fillColor;
@@ -3441,8 +3410,8 @@ colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text,
     else
         XFillRectangle(dpy, d, WMColorGC(view->backColor), x, y, width, height);
 
-    fillColor = WMCreateRGBColor(scr, color.red<<8, color.green<<8,
-                                 color.blue<<8, True);
+    fillColor = WMCreateRGBColor(scr, color->red<<8, color->green<<8,
+                                 color->blue<<8, True);
 
     XFillRectangle(dpy, d, WMColorGC(fillColor), x, y, 15, height);
     WMReleaseColor(fillColor);
@@ -3454,8 +3423,8 @@ colorListPaintItem(WMList *lPtr, int index, Drawable d, char *text,
 static void
 colorListSelect(WMWidget *w, void *data)
 {
-    W_ColorPanel	*panel = (W_ColorPanel *)data;
-    CPColor		cpColor;
+    W_ColorPanel *panel = (W_ColorPanel *)data;
+    CPColor cpColor;
 
     cpColor.rgb = *((RColor *)WMGetListSelectedItem(w)->clientData);
     cpColor.set = cpRGB;

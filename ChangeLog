@@ -37,6 +37,8 @@ Changes since version 0.92.0:
   (Stanislav Maslovski <stanislav.maslovski@gmail.com>)
 - Fixed segfault in WPrefs when some font description is missing from the 
   configuration file (Stanislav Maslovski <stanislav.maslovski@gmail.com>)
+- Removed WINGs' dependency on rgb.txt (from X11) and issues with locating it
+  on the filesystem for different systems/distributions.
 
 
 Changes since version 0.91.0:
