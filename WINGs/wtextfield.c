@@ -1375,35 +1375,53 @@ handleTextFieldKeyPress(TextField *tPtr, XEvent *event)
 static int
 pointToCursorPosition(TextField *tPtr, int x)
 {
-    int a, b, mid;
-    int tw;
+    int a, b, pos, prev, tw;
 
     if (tPtr->flags.bordered)
         x -= 2;
 
     if (WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
-                        tPtr->textLen - tPtr->viewPosition) < x)
+                        tPtr->textLen - tPtr->viewPosition) <= x)
         return tPtr->textLen;
 
     a = tPtr->viewPosition;
     b = tPtr->textLen;
 
-    while (a < b) {
-        mid = (a+b)/2;
-        mid += seekUTF8CharStart(&tPtr->text[mid], mid - a);
+    /* we halve the text until we get into a 10 byte vicinity of x */
+    while (b - a > 10) {
+        pos = (a+b)/2;
+        pos += seekUTF8CharStart(&tPtr->text[pos], pos - a);
         tw = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
-                             mid - tPtr->viewPosition + 1);
+                             pos - tPtr->viewPosition);
         if (tw > x) {
-            b = mid;
+            b = pos;
         } else if (tw < x) {
-            if (a == mid)
-                a += oneUTF8CharForward(&tPtr->text[mid], b - a);
-            else
-                a = mid;
+            a = pos;
         } else {
-            return mid;
+            return pos;
         }
     }
+
+    /* at this point x can be positioned on any glyph between 'a' and 'b-1'
+     * inclusive, with the exception of the left border of the 'a' glyph and
+     * the right border or the 'b-1' glyph
+     *
+     * ( <--- range for x's position ---> )
+     * a a+1 .......................... b-1 b
+     */
+    pos = prev = a;
+    while (pos <= b) {
+        tw = WMWidthOfString(tPtr->font, &(tPtr->text[tPtr->viewPosition]),
+                             pos - tPtr->viewPosition);
+        if (tw > x) {
+            return prev;
+        } else if (pos == b) {
+            break;
+        }
+        prev = pos;
+        pos += oneUTF8CharForward(&tPtr->text[pos], b - pos);
+    }
+
     return b;
 }
 

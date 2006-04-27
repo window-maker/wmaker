@@ -572,6 +572,7 @@ testTextField(WMScreen *scr)
     field = WMCreateTextField(win);
     WMResizeWidget(field, 200, 20);
     WMMoveWidget(field, 20, 20);
+    WMSetTextFieldText(field, "the little \xc2\xa9 sign");
 
     field2 = WMCreateTextField(win);
     WMResizeWidget(field2, 200, 20);
