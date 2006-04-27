@@ -39,6 +39,8 @@ Changes since version 0.92.0:
   configuration file (Stanislav Maslovski <stanislav.maslovski@gmail.com>)
 - Removed WINGs' dependency on rgb.txt (from X11) and issues with locating it
   on the filesystem for different systems/distributions.
+- Fixed segfault when unhiding an application in certain conditions (seen
+  with KDE applications with transient windows)
 
 
 Changes since version 0.91.0:

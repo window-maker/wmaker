@@ -1485,9 +1485,10 @@ wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
                 focused = wlist;
 
             if (wlist->flags.miniaturized) {
-                if (bringToCurrentWS || wPreferences.sticky_icons ||
-                    wlist->frame->workspace == scr->current_workspace) {
-                    if (wlist->icon && !wlist->icon->mapped) {
+                if ((bringToCurrentWS || wPreferences.sticky_icons ||
+                     wlist->frame->workspace == scr->current_workspace) &&
+                    wlist->icon) {
+                    if (!wlist->icon->mapped) {
                         int x, y;
 
                         PlaceIcon(scr, &x, &y, wGetHeadForWindow(wlist));
