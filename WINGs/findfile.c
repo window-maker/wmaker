@@ -22,6 +22,7 @@
 
 #include "WUtil.h"
 
+#include <errno.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -70,6 +71,7 @@ static char *getuserhomedir(char *username)
 
 char *wexpandpath(char *path)
 {
+	char *origpath = path;
 	char buffer2[PATH_MAX + 2];
 	char buffer[PATH_MAX + 2];
 	int i;
@@ -82,25 +84,29 @@ char *wexpandpath(char *path)
 		path++;
 		if (*path == '/' || *path == 0) {
 			home = wgethomedir();
+			if (strlen(home) > PATH_MAX)
+				goto error;
 			strcat(buffer, home);
 		} else {
 			int j;
 			j = 0;
 			while (*path != 0 && *path != '/') {
+				if (j > PATH_MAX)
+					goto error;
 				buffer2[j++] = *path;
 				buffer2[j] = 0;
 				path++;
 			}
 			home = getuserhomedir(buffer2);
-			if (!home)
-				return NULL;
+			if (!home || strlen(home) > PATH_MAX)
+				goto error;
 			strcat(buffer, home);
 		}
 	}
 
 	i = strlen(buffer);
 
-	while (*path != 0) {
+	while (*path != 0 && i <= PATH_MAX) {
 		char *tmp;
 
 		if (*path == '$') {
@@ -110,35 +116,50 @@ char *wexpandpath(char *path)
 			if (*path == '(') {
 				path++;
 				while (*path != 0 && *path != ')') {
+					if (j > PATH_MAX)
+						goto error;
 					buffer2[j++] = *(path++);
 					buffer2[j] = 0;
 				}
-				if (*path == ')')
+				if (*path == ')') {
 					path++;
-				tmp = getenv(buffer2);
+					tmp = getenv(buffer2);
+				} else {
+					tmp = NULL;
+				}
 				if (!tmp) {
+					if ((i += strlen(buffer2) + 2) > PATH_MAX)
+						goto error;
 					buffer[i] = 0;
 					strcat(buffer, "$(");
 					strcat(buffer, buffer2);
-					strcat(buffer, ")");
-					i += strlen(buffer2) + 3;
+					if (*(path-1)==')') {
+						if (++i > PATH_MAX)
+							goto error;
+						strcat(buffer, ")");
+					}
 				} else {
+					if ((i += strlen(tmp)) > PATH_MAX)
+						goto error;
 					strcat(buffer, tmp);
-					i += strlen(tmp);
 				}
 			} else {
 				while (*path != 0 && *path != '/') {
+					if (j > PATH_MAX)
+						goto error;
 					buffer2[j++] = *(path++);
 					buffer2[j] = 0;
 				}
 				tmp = getenv(buffer2);
 				if (!tmp) {
+					if ((i += strlen(buffer2) + 1) > PATH_MAX)
+						goto error;
 					strcat(buffer, "$");
 					strcat(buffer, buffer2);
-					i += strlen(buffer2) + 1;
 				} else {
+					if ((i += strlen(tmp)) > PATH_MAX)
+						goto error;
 					strcat(buffer, tmp);
-					i += strlen(tmp);
 				}
 			}
 		} else {
@@ -147,7 +168,16 @@ char *wexpandpath(char *path)
 		}
 	}
 
+	if (*path!=0)
+		goto error;
+
 	return wstrdup(buffer);
+
+error:
+	errno = ENAMETOOLONG;
+	wsyserror(_("could not expand %s"), origpath);
+	/* FIXME: too many functions handle a return value of NULL incorrectly */
+	exit(1);
 }
 
 /* return address of next char != tok or end of string whichever comes first */
