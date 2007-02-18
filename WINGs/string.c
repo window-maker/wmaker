@@ -140,7 +140,7 @@ char *wtokenjoin(char **list, int count)
 
 void wtokenfree(char **tokens, int count)
 {
-	while (--count)
+	while (count--)
 		wfree(tokens[count]);
 	wfree(tokens);
 }
