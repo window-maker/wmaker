@@ -16,44 +16,47 @@ INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
 
 liblist= @LIBRARY_SEARCH_PATH@ @INTLIBS@
 
-wdwrite_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
+wdwrite_LDADD = $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
-wdread_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
+wdread_LDADD = $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
 wxcopy_LDADD = @XLFLAGS@ @XLIBS@ 
 
 wxpaste_LDADD = @XLFLAGS@ @XLIBS@
 
-getstyle_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
+getstyle_LDADD = $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
 getstyle_SOURCES = getstyle.c fontconv.c
 
 setstyle_LDADD = \
-	$(top_builddir)/WINGs/libWUtil.a \
+	$(top_builddir)/WINGs/libWUtil.la \
 	@XLFLAGS@ @XLIBS@ $(liblist)
 
 setstyle_SOURCES = setstyle.c fontconv.c
 
-convertfonts_LDADD = $(top_builddir)/WINGs/libWUtil.a $(liblist)
+convertfonts_LDADD = $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
 convertfonts_SOURCES = convertfonts.c fontconv.c
 
-seticons_LDADD= $(top_builddir)/WINGs/libWUtil.a $(liblist)
+seticons_LDADD= $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
-geticonset_LDADD= $(top_builddir)/WINGs/libWUtil.a $(liblist)
+geticonset_LDADD= $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
 wmagnify_LDADD = \
-	$(top_builddir)/WINGs/libWINGs.a \
+	$(top_builddir)/WINGs/libWINGs.la \
+	$(top_builddir)/WINGs/libWUtil.la \
 	$(top_builddir)/wrlib/libwraster.la \
 	@XFTLIBS@ @INTLIBS@ @DLLIBS@
 
 wmsetup_LDADD = \
-	$(top_builddir)/WINGs/libWINGs.a \
+	$(top_builddir)/WINGs/libWINGs.la \
+	$(top_builddir)/WINGs/libWUtil.la \
 	$(top_builddir)/wrlib/libwraster.la \
 	@XFTLIBS@ @INTLIBS@ @DLLIBS@
 
 wmsetbg_LDADD = \
-	$(top_builddir)/WINGs/libWINGs.a \
+	$(top_builddir)/WINGs/libWINGs.la \
+	$(top_builddir)/WINGs/libWUtil.la \
 	$(top_builddir)/wrlib/libwraster.la \
 	@XLFLAGS@ @XLIBS@ @XFTLIBS@ @INTLIBS@ @DLLIBS@
 

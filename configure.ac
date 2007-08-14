@@ -987,7 +987,7 @@ cat <<EOF >get-wings-flags
 
 WCFLAGS="$inc_search_path"
 WLFLAGS="$lib_search_path"
-WLIBS="-lWINGs -lwraster $GFXLIBS $XFTLIBS $XLIBS -lm $NETLIBS $INTLIBS"
+WLIBS="-lWINGs -lWUtil -lwraster $GFXLIBS $XFTLIBS $XLIBS -lm $NETLIBS $INTLIBS"
 
 usage="Usage: get-wings-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
 

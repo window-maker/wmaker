@@ -4,13 +4,14 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 noinst_PROGRAMS = wtest wmquery wmfile testmywidget 
 
-LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
+LDADD= $(top_builddir)/WINGs/libWINGs.la $(top_builddir)/wrlib/libwraster.la \
+	$(top_builddir)/WINGs/libWUtil.la \
 	@XFTLIBS@ @INTLIBS@
 
 
 testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h 
 
-wtest_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
+wtest_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.la
 
 
 EXTRA_DIST = logo.xpm upbtn.xpm wm.html wm.png

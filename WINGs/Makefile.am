@@ -10,14 +10,15 @@ libWINGs_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
 
 libWUtil_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
 
-#libWINGs_la_LDFLAGS = -version-info 1:1:0
+libWINGs_la_LDFLAGS = -version-info 2:1:0
+libWUtil_la_LDFLAGS = -version-info 1:2:0
 
 bin_SCRIPTS = get-wings-flags get-wutil-flags
 
-lib_LIBRARIES = libWINGs.a libWUtil.a
+lib_LTLIBRARIES = libWINGs.la libWUtil.la
 
 
-LDADD= libWINGs.a $(top_builddir)/wrlib/libwraster.la @INTLIBS@
+LDADD= libWUtil.la libWINGs.la $(top_builddir)/wrlib/libwraster.la @INTLIBS@
 
 
 EXTRA_DIST = BUGS make-rgb python/Makefile python/README python/WINGs.i \
@@ -25,33 +26,12 @@ EXTRA_DIST = BUGS make-rgb python/Makefile python/README python/WINGs.i \
 
 
 # wbutton.c 
-libWINGs_a_SOURCES = 	\
-	array.c \
-	bagtree.c \
+libWINGs_la_SOURCES = 	\
 	configuration.c \
-	connection.c \
-	data.c \
 	dragcommon.c \
 	dragdestination.c \
 	dragsource.c \
-	error.c \
-	findfile.c \
-	handlers.c \
-	hashtable.c \
-	host.c \
-	international.c \
-	memory.c \
-	misc.c \
-	notification.c \
-	proplist.c \
-	rgb.h \
 	selection.c \
-	snprintf.c \
-	string.c \
-	tree.c \
-	userdefaults.c \
-	usleep.c \
-	wapplication.c \
 	wappresource.c \
 	wballoon.c \
 	wbox.c \
@@ -87,8 +67,7 @@ libWINGs_a_SOURCES = 	\
 	wview.c \
 	wwindow.c
 
-
-libWUtil_a_SOURCES = 	\
+libWUtil_la_SOURCES = 	\
 	array.c \
 	bagtree.c \
 	connection.c \

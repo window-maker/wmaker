@@ -6,23 +6,24 @@ AUTOMAKE_OPTIONS = no-dependencies
 noinst_PROGRAMS = connect server fontl puzzle colorpick
 
 
-LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
+LDADD= $(top_builddir)/WINGs/libWINGs.la $(top_builddir)/wrlib/libwraster.la \
+	$(top_builddir)/WINGs/libWUtil.la \
 	@XFTLIBS@ @INTLIBS@
 
-colorpick_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
+colorpick_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.la
 
-fontl_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
+fontl_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.la
 
-puzzle_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
+puzzle_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.la
 
-connect_DEPENDENCIES = $(top_builddir)/WINGs/libWUtil.a
+connect_DEPENDENCIES = $(top_builddir)/WINGs/libWUtil.la
 
-connect_LDADD = $(top_builddir)/WINGs/libWUtil.a @LIBRARY_SEARCH_PATH@ \
+connect_LDADD = $(top_builddir)/WINGs/libWUtil.la @LIBRARY_SEARCH_PATH@ \
 	@NETLIBS@ @INTLIBS@
 
-server_DEPENDENCIES = $(top_builddir)/WINGs/libWUtil.a
+server_DEPENDENCIES = $(top_builddir)/WINGs/libWUtil.la
 
-server_LDADD = $(top_builddir)/WINGs/libWUtil.a @LIBRARY_SEARCH_PATH@ \
+server_LDADD = $(top_builddir)/WINGs/libWUtil.la @LIBRARY_SEARCH_PATH@ \
 	@NETLIBS@ @INTLIBS@
 
 

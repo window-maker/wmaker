@@ -8,7 +8,7 @@ noinst_PROGRAMS = wtest
 
 wtest_SOURCES = wtest.c
 
-wtest_LDADD = $(top_builddir)/wmlib/libWMaker.a @XLFLAGS@ @XLIBS@ 
+wtest_LDADD = $(top_builddir)/wmlib/libWMaker.la @XLFLAGS@ @XLIBS@
 
 
 INCLUDES = -g -D_BSD_SOURCE @XCFLAGS@ -I$(top_srcdir)/wmlib 

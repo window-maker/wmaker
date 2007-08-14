@@ -48,10 +48,11 @@ AM_CFLAGS = @NOSTRICTALIASING@
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 
-WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.a
+WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.la
 
 WPrefs_LDADD = \
-	$(top_builddir)/WINGs/libWINGs.a\
+	$(top_builddir)/WINGs/libWINGs.la\
+	$(top_builddir)/WINGs/libWUtil.la\
 	$(top_builddir)/wrlib/libwraster.la \
 	@XFTLIBS@ \
 	@INTLIBS@

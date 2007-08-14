@@ -1,7 +1,8 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-lib_LIBRARIES = libWMaker.a
+libWMaker_la_LDFLAGS = -version-info 1:1:0
+lib_LTLIBRARIES = libWMaker.la
 
 include_HEADERS = WMaker.h
 
@@ -9,7 +10,7 @@ INCLUDES = $(DFLAGS) @XCFLAGS@
 
 libWMaker_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
 
-libWMaker_a_SOURCES = 	\
+libWMaker_la_SOURCES = 	\
 	menu.c 		\
 	app.c 		\
 	event.c 	\
