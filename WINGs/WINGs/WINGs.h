@@ -1125,6 +1125,8 @@ void WMSelectTextFieldRange(WMTextField *tPtr, WMRange range);
 
 void WMSetTextFieldCursorPosition(WMTextField *tPtr, unsigned int position);
 
+unsigned WMGetTextFieldCursorPosition(WMTextField *tPtr);
+
 void WMSetTextFieldNextTextField(WMTextField *tPtr, WMTextField *next);
 
 void WMSetTextFieldPrevTextField(WMTextField *tPtr, WMTextField *prev);

@@ -472,6 +472,7 @@ typedef struct WPreferences {
     unsigned int workspace_border_size; /* Size in pixels of the workspace border */
     char workspace_border_position;     /* Where to leave a workspace border */
     char single_click;                  /* single click to lauch applications */
+    int history_lines;                  /* history of "Run..." dialog */
 
     RImage *swtileImage;
     RImage *swbackImage[9];

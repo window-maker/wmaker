@@ -692,7 +692,9 @@ WDefaultEntry optionList[] = {
 	{"TextCursor", "(builtin, xterm)", (void *)WCUR_TEXT,
 	 NULL, getCursor, setCursor},
 	{"SelectCursor", "(builtin, cross)", (void *)WCUR_SELECT,
-	 NULL, getCursor, setCursor}
+	 NULL, getCursor, setCursor},
+	{"DialogHistoryLines", "500", NULL,
+	 &wPreferences.history_lines, getInt, NULL}
 };
 
 #if 0

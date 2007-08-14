@@ -578,6 +578,13 @@ void WMSetTextFieldCursorPosition(WMTextField * tPtr, unsigned int position)
 	}
 }
 
+unsigned WMGetTextFieldCursorPosition(WMTextField *tPtr)
+{
+	CHECK_CLASS(tPtr, WC_TextField);
+
+	return tPtr->cursorPosition;
+}
+
 void WMSetTextFieldNextTextField(WMTextField * tPtr, WMTextField * next)
 {
 	CHECK_CLASS(tPtr, WC_TextField);

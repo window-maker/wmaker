@@ -158,6 +158,308 @@ int wExitDialog(WScreen * scr, char *title, char *message, char *defBtn, char *a
 	return result;
 }
 
+typedef struct _WMInputPanelWithHistory {
+	WMInputPanel *panel;
+	WMArray *history;
+	int histpos;
+	char *prefix;
+	char *suffix;
+	char *rest;
+	WMArray *variants;
+	int varpos;
+} WMInputPanelWithHistory;
+
+static char *HistoryFileName(char *name)
+{
+	char *filename = NULL;
+
+	filename = wstrdup(wusergnusteppath());
+	filename = wstrappend(filename, "/.AppInfo/WindowMaker/History");
+	if (name && strlen(name)) {
+		filename = wstrappend(filename, ".");
+		filename = wstrappend(filename, name);
+	}
+	return filename;
+}
+
+static int matchString(void *str1, void *str2)
+{
+	return (strcmp((char *)str1, (char *)str2) == 0 ? 1 : 0);
+}
+
+static WMArray *LoadHistory(char *filename, int max)
+{
+	WMPropList *plhistory;
+	WMPropList *plitem;
+	WMArray *history;
+	int i, num;
+
+	history = WMCreateArrayWithDestructor(1, wfree);
+	WMAddToArray(history, wstrdup(""));
+
+	plhistory = WMReadPropListFromFile((char *)filename);
+
+	if (plhistory && WMIsPLArray(plhistory)) {
+		num = WMGetPropListItemCount(plhistory);
+		if (num > max)
+			num = max;
+
+		for (i = 0; i < num; ++i) {
+			plitem = WMGetFromPLArray(plhistory, i);
+			if (WMIsPLString(plitem) && WMFindInArray(history, matchString,
+								  WMGetFromPLString(plitem)) == WANotFound)
+				WMAddToArray(history, WMGetFromPLString(plitem));
+		}
+	}
+
+	return history;
+}
+
+static void SaveHistory(WMArray * history, char *filename)
+{
+	int i;
+	WMPropList *plhistory;
+
+	plhistory = WMCreatePLArray(NULL);
+
+	for (i = 0; i < WMGetArrayItemCount(history); ++i)
+		WMAddToPLArray(plhistory, WMCreatePLString(WMGetFromArray(history, i)));
+
+	WMWritePropListToFile(plhistory, (char *)filename, True);
+	WMReleasePropList(plhistory);
+}
+
+static int strmatch(const char *str1, const char *str2)
+{
+	return !strcmp(str1, str2);
+}
+
+static int pstrcmp(const char **str1, const char **str2)
+{
+	return strcmp(*str1, *str2);
+}
+
+static void
+ScanFiles(const char *dir, const char *prefix, unsigned acceptmask, unsigned declinemask, WMArray * result)
+{
+	int prefixlen;
+	DIR *d;
+	struct dirent *de;
+	struct stat sb;
+	char *fullfilename, *suffix;
+
+	prefixlen = strlen(prefix);
+	if ((d = opendir(dir)) != NULL) {
+		while ((de = readdir(d)) != NULL) {
+			if (strlen(de->d_name) > prefixlen &&
+			    !strncmp(prefix, de->d_name, prefixlen) &&
+			    strcmp(de->d_name, ".") != 0 && strcmp(de->d_name, "..")) {
+				fullfilename = wstrconcat((char *)dir, "/");
+				fullfilename = wstrappend(fullfilename, de->d_name);
+
+				if (stat(fullfilename, &sb) == 0 &&
+				    (sb.st_mode & acceptmask) &&
+				    !(sb.st_mode & declinemask) &&
+				    WMFindInArray(result, (WMMatchDataProc *) strmatch,
+						  de->d_name + prefixlen) == WANotFound) {
+					suffix = wstrdup(de->d_name + prefixlen);
+					WMAddToArray(result, suffix);
+				}
+				wfree(fullfilename);
+			}
+		}
+		closedir(d);
+	}
+}
+
+static WMArray *GenerateVariants(const char *complete)
+{
+	Bool firstWord = True;
+	WMArray *variants = NULL;
+	char *pos = NULL, *path = NULL, *tmp = NULL, *dir = NULL, *prefix = NULL;
+
+	variants = WMCreateArrayWithDestructor(0, wfree);
+
+	while (*complete == ' ')
+		++complete;
+
+	if ((pos = strrchr(complete, ' ')) != NULL) {
+		complete = pos + 1;
+		firstWord = False;
+	}
+
+	if ((pos = strrchr(complete, '/')) != NULL) {
+		tmp = wstrndup((char *)complete, pos - complete + 1);
+		if (*tmp == '~' && *(tmp + 1) == '/' && getenv("HOME")) {
+			dir = wstrdup(getenv("HOME"));
+			dir = wstrappend(dir, tmp + 1);
+			wfree(tmp);
+		} else {
+			dir = tmp;
+		}
+		prefix = wstrdup(pos + 1);
+		ScanFiles(dir, prefix, (unsigned)-1, 0, variants);
+		wfree(dir);
+		wfree(prefix);
+	} else if (*complete == '~') {
+		WMAddToArray(variants, wstrdup("/"));
+	} else if (firstWord) {
+		path = getenv("PATH");
+		while (path) {
+			pos = strchr(path, ':');
+			if (pos) {
+				tmp = wstrndup(path, pos - path);
+				path = pos + 1;
+			} else if (*path != '\0') {
+				tmp = wstrdup(path);
+				path = NULL;
+			} else
+				break;
+			ScanFiles(tmp, complete, S_IXOTH | S_IXGRP | S_IXUSR, S_IFDIR, variants);
+			wfree(tmp);
+		}
+	}
+
+	WMSortArray(variants, (WMCompareDataProc *) pstrcmp);
+	return variants;
+}
+
+static void handleHistoryKeyPress(XEvent * event, void *clientData)
+{
+	char *text;
+	unsigned pos;
+	WMInputPanelWithHistory *p = (WMInputPanelWithHistory *) clientData;
+	KeySym ksym;
+
+	ksym = XLookupKeysym(&event->xkey, 0);
+
+	switch (ksym) {
+	case XK_Up:
+		if (p->histpos < WMGetArrayItemCount(p->history) - 1) {
+			if (p->histpos == 0)
+				wfree(WMReplaceInArray(p->history, 0, WMGetTextFieldText(p->panel->text)));
+			p->histpos++;
+			WMSetTextFieldText(p->panel->text, WMGetFromArray(p->history, p->histpos));
+		}
+		break;
+	case XK_Down:
+		if (p->histpos > 0) {
+			p->histpos--;
+			WMSetTextFieldText(p->panel->text, WMGetFromArray(p->history, p->histpos));
+		}
+		break;
+	case XK_Tab:
+		if (!p->variants) {
+			text = WMGetTextFieldText(p->panel->text);
+			pos = WMGetTextFieldCursorPosition(p->panel->text);
+			p->prefix = wstrndup(text, pos);
+			p->suffix = wstrdup(text + pos);
+			wfree(text);
+			p->variants = GenerateVariants(p->prefix);
+			p->varpos = 0;
+			if (!p->variants) {
+				wfree(p->prefix);
+				wfree(p->suffix);
+				p->prefix = NULL;
+				p->suffix = NULL;
+			}
+		}
+		if (p->variants && p->prefix && p->suffix) {
+			p->varpos++;
+			if (p->varpos > WMGetArrayItemCount(p->variants))
+				p->varpos = 0;
+			if (p->varpos > 0)
+				text = wstrconcat(p->prefix, WMGetFromArray(p->variants, p->varpos - 1));
+			else
+				text = wstrdup(p->prefix);
+			pos = strlen(text);
+			text = wstrappend(text, p->suffix);
+			WMSetTextFieldText(p->panel->text, text);
+			WMSetTextFieldCursorPosition(p->panel->text, pos);
+			wfree(text);
+		}
+		break;
+	}
+	if (ksym != XK_Tab) {
+		if (p->prefix) {
+			wfree(p->prefix);
+			p->prefix = NULL;
+		}
+		if (p->suffix) {
+			wfree(p->suffix);
+			p->suffix = NULL;
+		}
+		if (p->variants) {
+			WMFreeArray(p->variants);
+			p->variants = NULL;
+		}
+	}
+}
+
+int wAdvancedInputDialog(WScreen * scr, char *title, char *message, char *name, char **text)
+{
+	WWindow *wwin;
+	Window parent;
+	char *result;
+	WMPoint center;
+	WMInputPanelWithHistory *p;
+	char *filename;
+
+	filename = HistoryFileName(name);
+	p = wmalloc(sizeof(WMInputPanelWithHistory));
+	p->panel = WMCreateInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
+	p->history = LoadHistory(filename, wPreferences.history_lines);
+	p->histpos = 0;
+	p->prefix = NULL;
+	p->suffix = NULL;
+	p->rest = NULL;
+	p->variants = NULL;
+	p->varpos = 0;
+	WMCreateEventHandler(WMWidgetView(p->panel->text), KeyPressMask, handleHistoryKeyPress, p);
+
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 320, 160, 0, 0, 0);
+	XSelectInput(dpy, parent, KeyPressMask | KeyReleaseMask);
+
+	XReparentWindow(dpy, WMWidgetXID(p->panel->win), parent, 0, 0);
+
+	center = getCenter(scr, 320, 160);
+	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, 320, 160);
+
+	wwin->client_leader = WMWidgetXID(p->panel->win);
+
+	WMMapWidget(p->panel->win);
+
+	wWindowMap(wwin);
+
+	WMRunModalLoop(WMWidgetScreen(p->panel->win), WMWidgetView(p->panel->win));
+
+	if (p->panel->result == WAPRDefault) {
+		result = WMGetTextFieldText(p->panel->text);
+		wfree(WMReplaceInArray(p->history, 0, wstrdup(result)));
+		SaveHistory(p->history, filename);
+	} else
+		result = NULL;
+
+	wUnmanageWindow(wwin, False, False);
+
+	WMDestroyInputPanel(p->panel);
+	WMFreeArray(p->history);
+	wfree(p);
+	wfree(filename);
+
+	XDestroyWindow(dpy, parent);
+
+	if (result == NULL)
+		return False;
+	else {
+		if (*text)
+			wfree(*text);
+		*text = result;
+
+		return True;
+	}
+}
+
 int wInputDialog(WScreen * scr, char *title, char *message, char **text)
 {
 	WWindow *wwin;

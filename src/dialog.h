@@ -33,6 +33,7 @@ enum {
 
 int wMessageDialog(WScreen *scr, char *title, char *message,
                    char *defBtn, char *altBtn, char *othBtn);
+int wAdvancedInputDialog(WScreen *scr, char *title, char *message, char *name, char **text);
 int wInputDialog(WScreen *scr, char *title, char *message, char **text);
 
 int wExitDialog(WScreen *scr, char *title, char *message, char *defBtn,
