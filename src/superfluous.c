@@ -500,14 +500,13 @@ Bool InitXThing(WScreen * scr)
 	struct tm *l;
 	static int i = 0;
 
-	if (i)
-		return True;
-
 	t = time(NULL);
 	l = localtime(&t);
-	if ((l->tm_mon != 11 || l->tm_mday < 24 || l->tm_mday > 26)) {
+	if ((l->tm_mon != 11 || l->tm_mday < 24 || l->tm_mday > 26))
 		return False;
-	}
+
+	if (i)
+		return True;
 
 	if (!loadData(scr))
 		return False;
