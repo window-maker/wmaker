@@ -312,7 +312,8 @@ void wSessionSaveState(WScreen * scr)
 		Window appId = wwin->orig_main_window;
 
 		if ((wwin->transient_for == None || wwin->transient_for == wwin->screen_ptr->root_win)
-		    && WMGetFirstInArray(wapp_list, (void *)appId) == WANotFound
+		    && (WMGetFirstInArray(wapp_list, (void *)appId) == WANotFound
+			|| WFLAGP(wwin, shared_appicon))
 		    && !WFLAGP(wwin, dont_save_session)) {
 			/* A entry for this application was not yet saved. Save one. */
 			if ((win_info = makeWindowState(wwin, wapp)) != NULL) {
