@@ -981,7 +981,6 @@ static ItemData *parseCommand(WMPropList * item)
 
 				for (i = 0, j = 0; i < tokn; i++) {
 					if (strcmp(tokens[i], "-noext") == 0) {
-						wfree(tokens[i]);
 						data->param.directory.stripExt = 1;
 					} else {
 						ctokens[j++] = tokens[i];
