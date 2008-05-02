@@ -1348,8 +1348,6 @@ wDefaultsCheckDomains(void *foo)
     }
 #endif /* !LITE */
 
-    if (!foo)
-        WMAddTimerHandler(DEFAULTS_CHECK_INTERVAL, wDefaultsCheckDomains, foo);
 }
 
 

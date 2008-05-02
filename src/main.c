@@ -19,6 +19,10 @@
  *  USA.
  */
 
+#define _GNU_SOURCE	/* needed to get the defines in glibc 2.2 */
+#include <fcntl.h>	/* this has the needed values defined */
+#include <signal.h>
+
 #include "wconfig.h"
 
 #include <stdio.h>
@@ -62,6 +66,7 @@ Display	*dpy;
 char *ProgName;
 
 unsigned int ValidModMask = 0xff;
+volatile int filesChanged;
 
 /* locale to use. NULL==POSIX or C */
 char *Locale=NULL;
@@ -451,7 +456,6 @@ print_help()
     puts(_(" --create-stdcmap	create the standard colormap hint in PseudoColor visuals"));
     puts(_(" --visual-id visualid	visual id of visual to use"));
     puts(_(" --static		do not update or save configurations"));
-    puts(_(" --no-polling		do not periodically check for configuration updates"));
 #ifdef DEBUG
     puts(_(" --synchronous		turn on synchronous display mode"));
 #endif
@@ -490,10 +494,34 @@ check_defaults()
 }
 
 
+/*
+ * This is the handler used to notify if configuration
+ * files have changed, using linux kernel'l dnotify
+ * mechanism (from Documentation/dnotify.txt)
+ */
+void handler(int sig, siginfo_t *si, void *data)
+{
+	filesChanged = si->si_fd;
+}
+
 static void
 execInitScript()
 {
-    char *file, *paths;
+	char *file, *path, *paths;
+	struct sigaction act;
+	volatile int fd;
+
+	path = wstrconcat(wusergnusteppath(), "/Defaults");
+
+	act.sa_sigaction = handler;
+	sigemptyset(&act.sa_mask);
+	act.sa_flags = SA_SIGINFO;
+	sigaction(SIGRTMIN + 1, &act, NULL);
+
+	fd = open(path, O_RDONLY);
+	fcntl(fd, F_SETSIG, SIGRTMIN + 1);
+	fcntl(fd, F_NOTIFY, DN_MODIFY|DN_MULTISHOT);
+	wfree(path);
 
     paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
     paths = wstrappend(paths, ":"DEF_CONFIG_PATHS);
@@ -746,10 +774,6 @@ real_main(int argc, char **argv)
                            || strcmp(argv[i], "--static")==0) {
 
                     wPreferences.flags.noupdates = 1;
-                } else if (strcmp(argv[i], "-nopolling")==0
-                           || strcmp(argv[i], "--no-polling")==0) {
-
-                    wPreferences.flags.nopolling = 1;
 #ifdef XSMP_ENABLED
                 } else if (strcmp(argv[i], "-clientid")==0
                            || strcmp(argv[i], "-restore")==0) {

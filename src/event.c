@@ -319,10 +319,22 @@ void
 EventLoop()
 {
     XEvent event;
+    extern volatile int filesChanged;
+    extern void wDefaultsCheckDomains();
 
     for(;;) {
         WMNextEvent(dpy, &event);
         WMHandleEvent(&event);
+
+	/*
+	 * If dnotify detects changes in configuration
+	 * files we have to read them again.
+	 */
+	if (filesChanged){
+		fprintf(stdout,"wmaker: reading config files in defaults database.\n");
+		wDefaultsCheckDomains(NULL);
+		filesChanged = 0;
+	}
     }
 }
 

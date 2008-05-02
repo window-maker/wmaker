@@ -695,8 +695,6 @@ StartUp(Bool defaultScreenOnly)
         XFreePixmap(dpy, cur);
     }
 
-    /* signal handler stuff that gets called when a signal is caught */
-    WMAddPersistentTimerHandler(500, delayedAction, NULL);
 
     /* emergency exit... */
     sig_action.sa_handler = handleSig;
@@ -886,10 +884,6 @@ StartUp(Bool defaultScreenOnly)
         Exit(1);
     }
 
-    if (!wPreferences.flags.nopolling && !wPreferences.flags.noupdates) {
-        /* setup defaults file polling */
-        WMAddTimerHandler(3000, wDefaultsCheckDomains, NULL);
-    }
 }
 
 

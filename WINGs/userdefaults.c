@@ -45,7 +45,6 @@ extern char *WMGetApplicationName();
 
 #define DEFAULTS_DIR "/Defaults"
 
-#define UD_SYNC_INTERVAL  2000
 
 
 
@@ -135,17 +134,6 @@ synchronizeUserDefaults(void *foo)
 }
 
 
-static void
-addSynchronizeTimerHandler(void)
-{
-    static Bool initialized = False;
-
-    if (!initialized) {
-        WMAddPersistentTimerHandler(UD_SYNC_INTERVAL, synchronizeUserDefaults,
-                                    NULL);
-        initialized = True;
-    }
-}
 
 
 void
@@ -335,7 +323,6 @@ WMGetStandardUserDefaults(void)
         defaults->next = sharedUserDefaults;
     sharedUserDefaults = defaults;
 
-    addSynchronizeTimerHandler();
     registerSaveOnExit();
 
     return defaults;
@@ -412,7 +399,6 @@ WMGetDefaultsFromPath(char *path)
         defaults->next = sharedUserDefaults;
     sharedUserDefaults = defaults;
 
-    addSynchronizeTimerHandler();
     registerSaveOnExit();
 
     return defaults;

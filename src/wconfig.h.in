@@ -457,8 +457,6 @@
 #define MAX_WINDOWLIST_WIDTH	160     /* max width of window title in
                                          * window list */
 
-#define DEFAULTS_CHECK_INTERVAL 2000	/* how often wmaker will check for
-                                         * changes in the config files */
 
 /* if your keyboard don't have arrow keys */
 #undef ARROWLESS_KBD
