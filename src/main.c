@@ -852,6 +852,16 @@ real_main(int argc, char **argv)
         exit(1);
     }
 
+    if (wVisualID < 0)
+	/*
+	 *   If unspecified, use default visual instead of waiting
+	 * for wrlib/context.c:bestContext() that may end up choosing
+	 * the "fake" 24 bits added by the Composite extension.
+	 *   This is required to avoid all sort of corruptions when
+	 * composite is enabled, and at a depth other than 24.
+	 */
+	wVisualID = (int)DefaultVisual(dpy, DefaultScreen(dpy))->visualid;
+
     /* check if the user specified a complete display name (with screen).
      * If so, only manage the specified screen */
     if (DisplayName)
