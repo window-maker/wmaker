@@ -194,8 +194,11 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 
 			for (i = 0; i < 8 * keymap->max_keypermod; i++) {
 
+				int mask = 1 << (i / keymap->max_keypermod);
+
 				if (keymap->modifiermap[i] == ev.xkey.keycode &&
-				    wKeyBindings[WKBD_FOCUSNEXT].modifier & 1 << (i / keymap->max_keypermod)) {
+				    ((wKeyBindings[WKBD_FOCUSNEXT].modifier & mask)
+				     || (wKeyBindings[WKBD_FOCUSPREV].modifier & mask))) {
 					done = True;
 					break;
 				}
