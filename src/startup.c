@@ -140,7 +140,7 @@ extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 extern Cursor wCursor[WCUR_LAST];
 
 /* special flags */
-extern char WDelayedActionSet;
+/*extern char WDelayedActionSet;*/
 
 /***** Local *****/
 
@@ -216,8 +216,10 @@ handleXIO(Display *xio_dpy)
  *----------------------------------------------------------------------
  * delayedAction-
  * 	Action to be executed after the signal() handler is exited.
+ * This was called every 500ms to 'clean up' signals. Not used now.
  *----------------------------------------------------------------------
  */
+#ifdef notused
 static void
 delayedAction(void *cdata)
 {
@@ -232,7 +234,7 @@ delayedAction(void *cdata)
      */
     DispatchEvent(NULL);
 }
-
+#endif
 
 /*
  *----------------------------------------------------------------------
@@ -256,10 +258,7 @@ handleExitSig(int sig)
 #endif
 
         SIG_WCHANGE_STATE(WSTATE_NEED_RESTART);
-        /* setup idle handler, so that this will be handled when
-         * the select() is returned becaused of the signal, even if
-         * there are no X events in the queue */
-        WDelayedActionSet++;
+
     } else if (sig == SIGUSR2) {
 #ifdef SYS_SIGLIST_DECLARED
         wwarning("got signal %i (%s) - rereading defaults\n", sig, sys_siglist[sig]);
@@ -268,10 +267,7 @@ handleExitSig(int sig)
 #endif
 
         SIG_WCHANGE_STATE(WSTATE_NEED_REREAD);
-        /* setup idle handler, so that this will be handled when
-         * the select() is returned becaused of the signal, even if
-         * there are no X events in the queue */
-        WDelayedActionSet++;
+
     } else if (sig==SIGTERM || sig==SIGINT || sig==SIGHUP) {
 #ifdef SYS_SIGLIST_DECLARED
         wwarning("got signal %i (%s) - exiting...\n", sig, sys_siglist[sig]);
@@ -281,10 +277,10 @@ handleExitSig(int sig)
 
         SIG_WCHANGE_STATE(WSTATE_NEED_EXIT);
 
-        WDelayedActionSet++;
     }
 
     sigprocmask(SIG_UNBLOCK, &sigs, NULL);
+    DispatchEvent(NULL); /* Dispatch events imediately.*/
 }
 
 /* Dummy signal handler */
@@ -347,8 +343,6 @@ buryChild(int foo)
     while ((pid=waitpid(-1, &status, WNOHANG))>0 || (pid<0 && errno==EINTR)) {
         NotifyDeadProcess(pid, WEXITSTATUS(status));
     }
-
-    WDelayedActionSet++;
 
     sigprocmask(SIG_UNBLOCK, &sigs, NULL);
 

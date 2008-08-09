@@ -120,6 +120,12 @@ might work too.
 CONFIGURE OPTIONS:
 ==================
 
+If you downloaded the cvs or git versions, type
+
+./autogen.sh
+
+to generate the config files.
+
 These options can be passed to the configure script to enable/disable
 some Window Maker features. Example:
 

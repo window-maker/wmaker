@@ -19,9 +19,7 @@
  *  USA.
  */
 
-#define _GNU_SOURCE	/* needed to get the defines in glibc 2.2 */
-#include <fcntl.h>	/* this has the needed values defined */
-#include <signal.h>
+#include <sys/inotify.h>
 
 #include "wconfig.h"
 
@@ -66,8 +64,9 @@ Display	*dpy;
 char *ProgName;
 
 unsigned int ValidModMask = 0xff;
-volatile int filesChanged;
 
+int inotifyFD;
+int inotifyWD;
 /* locale to use. NULL==POSIX or C */
 char *Locale=NULL;
 
@@ -495,33 +494,41 @@ check_defaults()
 
 
 /*
- * This is the handler used to notify if configuration
- * files have changed, using linux kernel'l dnotify
- * mechanism (from Documentation/dnotify.txt)
+ * Add watch here, used to notify if configuration
+ * files have changed, using linux kernel inotify mechanism
  */
-void handler(int sig, siginfo_t *si, void *data)
+
+static void
+inotifyWatchConfig()
 {
-	filesChanged = si->si_fd;
+    char *watchPath;
+    inotifyFD = inotify_init(); /* Initialise an inotify instance */
+    if (inotifyFD < 0) {
+         wwarning(_("could not initialise an inotify instance."
+                   " Changes to the defaults database will require"
+                   " a restart to take effect. Check your kernel!"));
+    } else {		
+         watchPath = wstrconcat(wusergnusteppath(), "/Defaults");
+         /* Add the watch; really we are only looking for modify events
+         * but we might want more in the future so check all events for now.
+         * The individual events are checked for in event.c.
+         */
+         inotifyWD = inotify_add_watch (inotifyFD, watchPath, IN_ALL_EVENTS);
+         if (inotifyWD < 0) {
+            wwarning(_("could not add an inotify watch on path\n."
+                        "%s\n"
+                        "Changes to the defaults database will require"
+                        " a restart to take effect."),watchPath);
+            close (inotifyFD);
+         }
+    }
+    wfree(watchPath);
 }
 
 static void
 execInitScript()
 {
-	char *file, *path, *paths;
-	struct sigaction act;
-	volatile int fd;
-
-	path = wstrconcat(wusergnusteppath(), "/Defaults");
-
-	act.sa_sigaction = handler;
-	sigemptyset(&act.sa_mask);
-	act.sa_flags = SA_SIGINFO;
-	sigaction(SIGRTMIN + 1, &act, NULL);
-
-	fd = open(path, O_RDONLY);
-	fcntl(fd, F_SETSIG, SIGRTMIN + 1);
-	fcntl(fd, F_NOTIFY, DN_MODIFY|DN_MULTISHOT);
-	wfree(path);
+    char *file, *paths;
 
     paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
     paths = wstrappend(paths, ":"DEF_CONFIG_PATHS);
@@ -897,7 +904,7 @@ real_main(int argc, char **argv)
         multiHead = False;
 
     execInitScript();
-
+    inotifyWatchConfig();
     EventLoop();
     return -1;
 }

@@ -20,7 +20,7 @@
  *  USA.
  */
 
-
+#include <sys/inotify.h>
 #include "wconfig.h"
 
 
@@ -100,11 +100,10 @@ extern int wXkbEventBase;
 #endif
 
 /* special flags */
-extern char WDelayedActionSet;
+/*extern char WDelayedActionSet;*/
 
 
 /************ Local stuff ***********/
-
 
 static void saveTimestamp(XEvent *event);
 static void handleColormapNotify();
@@ -302,6 +301,69 @@ DispatchEvent(XEvent *event)
     }
 }
 
+/*
+ *----------------------------------------------------------------------
+ * inotifyHandleEvents-
+ * 	Check for inotify events
+ *
+ * Returns:
+ * 	After reading events for the given file descriptor (fd) and
+ *     watch descriptor (wd)
+ *
+ * Side effects:
+ * 	Calls wDefaultsCheckDomains if config database is updated
+ *----------------------------------------------------------------------
+ */
+
+/* Allow for 1024 simultanious events */
+#define BUFF_SIZE ((sizeof(struct inotify_event)+FILENAME_MAX)*1024)
+void inotifyHandleEvents (int fd, int wd)
+{
+    ssize_t eventQLength, i = 0;
+    char buff[BUFF_SIZE] = {0};
+    extern void wDefaultsCheckDomains();
+    int oneShotFlag=0; /* Only check config once per read of the event queue */
+
+    /* Read off the queued events
+     * queue overflow is not checked (IN_Q_OVERFLOW). In practise this should
+     * not occur; the block is on Xevents, but a config file change will normally
+     * occur as a result of an Xevent - so the event queue should never have more than
+     * a few entries before a read().
+     */
+    eventQLength = read (fd, buff, BUFF_SIZE);
+    
+    /* check what events occured */
+    /* Should really check wd here too, but for now we only have one watch! */
+    while (i < eventQLength) {
+        struct inotify_event *pevent = (struct inotify_event *)&buff[i];
+       
+        /*
+         * see inotify.h for event types.
+         */
+        if (pevent->mask & IN_DELETE_SELF) {
+            wwarning(_("the defaults database has been deleted!"
+                       " Restart Window Maker to create the database"
+                       " with the default settings"));
+            close(fd);
+        }
+        if (pevent->mask & IN_UNMOUNT) {
+            wwarning(_("the unit containing the defaults database has"
+                       " been unmounted. Setting --static mode."
+                       " Any changes will not be saved."));
+            close(fd);
+            wPreferences.flags.noupdates=1;
+        }
+        if ((pevent->mask & IN_MODIFY) && oneShotFlag == 0) {
+	    fprintf(stdout,"wmaker: reading config files in defaults database.\n");
+            wDefaultsCheckDomains(NULL);
+        }
+        /* Check for filename (length of name (len) > 0) */
+        /* if (pevent->len) printf ("name=%s\n", pevent->name); */
+      
+         i += sizeof(struct inotify_event) + pevent->len; /* move to next event in the buffer */
+   }
+
+}  /* inotifyHandleEvents */
 
 /*
  *----------------------------------------------------------------------
@@ -313,31 +375,48 @@ DispatchEvent(XEvent *event)
  *
  * Side effects:
  * 	The LastTimestamp global variable is updated.
+ *      Calls inotifyGetEvents if defaults database changes.
  *----------------------------------------------------------------------
  */
 void
 EventLoop()
 {
     XEvent event;
-    extern volatile int filesChanged;
-    extern void wDefaultsCheckDomains();
+    extern int inotifyFD;
+    extern int inotifyWD;
+    struct timeval time;
+    fd_set rfds;
+    int retVal=0;
+    
+    if (inotifyFD < 0 || inotifyWD < 0)
+        retVal = -1;
 
     for(;;) {
-        WMNextEvent(dpy, &event);
-        WMHandleEvent(&event);
 
-	/*
-	 * If dnotify detects changes in configuration
-	 * files we have to read them again.
-	 */
-	if (filesChanged){
-		fprintf(stdout,"wmaker: reading config files in defaults database.\n");
-		wDefaultsCheckDomains(NULL);
-		filesChanged = 0;
-	}
+         WMNextEvent(dpy, &event); /* Blocks here */
+         WMHandleEvent(&event);
+
+         if (retVal != -1 ) {
+            time.tv_sec = 0;
+            time.tv_usec = 0;
+            FD_ZERO (&rfds);
+            FD_SET (inotifyFD, &rfds);
+
+            /* check for available read data from inotify - don't block! */
+            retVal = select (inotifyFD + 1, &rfds, NULL, NULL, &time);
+
+            if (retVal < 0) { /* an error has occured */
+                wwarning(_("select failed. The inotify instance will be closed."
+                           " Changes to the defaults database will require"
+                           " a restart to take effect."));
+                close(inotifyFD);
+                continue;
+            }
+            if (FD_ISSET (inotifyFD, &rfds))
+                  inotifyHandleEvents(inotifyFD,inotifyWD);
+         }
     }
 }
-
 
 /*
  *----------------------------------------------------------------------

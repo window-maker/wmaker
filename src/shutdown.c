@@ -59,6 +59,7 @@ void
 Shutdown(WShutdownMode mode)
 {
     int i;
+    extern int inotifyFD;
 
     switch (mode) {
     case WSLogoutMode:
@@ -85,6 +86,7 @@ Shutdown(WShutdownMode mode)
                 }
             }
 #endif
+        close(inotifyFD);
         for (i = 0; i < wScreenCount; i++) {
             WScreen *scr;
 
@@ -115,6 +117,7 @@ Shutdown(WShutdownMode mode)
         for (i=0; i<wScreenCount; i++) {
             WScreen *scr;
 
+            close(inotifyFD);
             scr = wScreenWithNumber(i);
             if (scr) {
                 if (scr->helper_pid)
