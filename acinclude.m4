@@ -3,7 +3,7 @@
 dnl
 dnl WM_CHECK_LIB(NAME, FUNCTION, EXTRALIBS)
 dnl
-AC_DEFUN(WM_CHECK_LIB,
+AC_DEFUN([WM_CHECK_LIB],
 [
 LDFLAGS_old="$LDFLAGS"
 LDFLAGS="$LDFLAGS $lib_search_path"
@@ -11,11 +11,10 @@ AC_CHECK_LIB([$1],[$2],yes=yes,no=no,[$3])
 LDFLAGS="$LDFLAGS_old"
 ])
 
-
 dnl
 dnl WM_CHECK_HEADER(NAME)
 dnl
-AC_DEFUN(WM_CHECK_HEADER,
+AC_DEFUN([WM_CHECK_HEADER],
 [
 CPPFLAGS_old="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $inc_search_path"
@@ -30,7 +29,7 @@ dnl
 dnl # $XFTFLAGS should be defined before calling this macro,
 dnl # else it will not be able to find Xft.h
 dnl
-AC_DEFUN(WM_CHECK_XFT_VERSION,
+AC_DEFUN([WM_CHECK_XFT_VERSION],
 [
 CPPFLAGS_old="$CPPFLAGS"
 CPPFLAGS="$CPPFLAGS $XFTFLAGS $inc_search_path"
@@ -64,7 +63,7 @@ CPPFLAGS="$CPPFLAGS_old"
 dnl
 dnl WM_CHECK_REDCRAP_BUGS(prefix,bindir,libdir)
 dnl
-AC_DEFUN(WM_CHECK_REDCRAP_BUGS,
+AC_DEFUN([WM_CHECK_REDCRAP_BUGS],
 [
 AC_MSG_CHECKING(for RedHat system)
 wm_check_flag='no :)'
@@ -188,7 +187,7 @@ fi
 dnl
 dnl WM_PRINT_REDCRAP_BUG_STATUS()
 dnl
-AC_DEFUN(WM_PRINT_REDCRAP_BUG_STATUS,
+AC_DEFUN([WM_PRINT_REDCRAP_BUG_STATUS],
 [
 if test "$rh_is_redhat" = yes; then
 if test "$mins_found" = yes -o "$bugs_found" = yes; then
