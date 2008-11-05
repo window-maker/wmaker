@@ -16,6 +16,8 @@ noinst_PROGRAMS = test
 
 EXTRA_DIST = 
 
+libExtraWINGs_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
+
 libExtraWINGs_a_SOURCES = 	\
 	wtableview.c \
 	wtabledelegates.c \
@@ -32,3 +34,13 @@ LDADD= $(top_builddir)/WINGs/libWINGs.a $(top_builddir)/wrlib/libwraster.la \
 
 test_LDADD = wtableview.o wtabledelegates.o $(LDADD)
 
+LIBTOOL = $(QUIET) $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
+
+.c.o:
+	$(QUIET)$(COMPILE) -c $<
+
+.c.obj:
+	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+	$(QUIET)$(LTCOMPILE) -c -o $@ $<

@@ -4,7 +4,11 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 SUBDIRS = WINGs . po Documentation Resources Examples Extras Tests
 
+LIBTOOL = $(QUIET) $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
 
+libWINGs_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
+
+libWUtil_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
 
 #libWINGs_la_LDFLAGS = -version-info 1:1:0
 
@@ -127,3 +131,12 @@ install-exec-local:
 	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
 	  else :; fi; \
 	done
+
+.c.o:
+	$(QUIET)$(COMPILE) -c $<
+
+.c.obj:
+	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+	$(QUIET)$(LTCOMPILE) -c -o $@ $<

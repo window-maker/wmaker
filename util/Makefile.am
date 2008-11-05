@@ -60,8 +60,8 @@ wmsetbg_LDADD = \
 CLEANFILES = wmaker.inst
 
 wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
-	-rm -f wmaker.inst
-	sed -e "s|#pkgdatadir#|$(pkgdatadir)|" \
+	@-rm -f wmaker.inst
+	@sed -e "s|#pkgdatadir#|$(pkgdatadir)|" \
 		-e "s|#sysconfdir#|$(sysconfdir)/WindowMaker|" \
 		-e "s|#version#|$(VERSION)|" \
 		-e "s|#bindir#|$(bindir)|" \
@@ -69,4 +69,14 @@ wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
 			$(srcdir)/wmaker.inst.in >wmaker.inst
 
 	chmod 755 wmaker.inst
+	
+LIBTOOL = $(QUIET) $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
 
+.c.o:
+	$(QUIET)$(COMPILE) -c $<
+
+.c.obj:
+	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+	$(QUIET)$(LTCOMPILE) -c -o $@ $<

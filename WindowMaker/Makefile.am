@@ -57,4 +57,11 @@ prefsdata_DATA =\
 
 EXTRA_DIST = $(prefsdata_DATA) mkMakefile
 
+.c.o:
+	$(QUIET)$(COMPILE) -c $<
 
+.c.obj:
+	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+	$(QUIET)$(LTCOMPILE) -c -o $@ $<

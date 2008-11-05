@@ -13,3 +13,13 @@ wtest_LDADD = $(top_builddir)/wmlib/libWMaker.a @XLFLAGS@ @XLIBS@
 
 INCLUDES = -g -D_BSD_SOURCE @XCFLAGS@ -I$(top_srcdir)/wmlib 
 
+LIBTOOL = $(QUIET) $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
+
+.c.o:
+	$(QUIET)$(COMPILE) -c $<
+
+.c.obj:
+	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+	$(QUIET)$(LTCOMPILE) -c -o $@ $<

@@ -56,3 +56,13 @@ WPrefs_LDADD = \
 	@XFTLIBS@ \
 	@INTLIBS@
 
+LIBTOOL = $(QUIET) $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
+
+.c.o:
+	$(QUIET)$(COMPILE) -c $<
+
+.c.obj:
+	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+	$(QUIET)$(LTCOMPILE) -c -o $@ $<

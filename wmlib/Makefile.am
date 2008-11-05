@@ -7,6 +7,8 @@ include_HEADERS = WMaker.h
 
 INCLUDES = $(DFLAGS) @XCFLAGS@
 
+libWMaker_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
+
 libWMaker_a_SOURCES = 	\
 	menu.c 		\
 	app.c 		\
@@ -19,10 +21,21 @@ DISTCLEANFILES = wmlib.pc
 
 install-exec-local:
 	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
+	@$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
 	@list='wmlib.pc'; for p in $$list; do \
 	  if test -f $$p; then \
-	    echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
+	    @echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
+	    @$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
 	  else :; fi; \
 	done
+
+LIBTOOL = $(QUIET) $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
+
+.c.o:
+	$(QUIET)$(COMPILE) -c $<
+
+.c.obj:
+	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+	$(QUIET)$(LTCOMPILE) -c -o $@ $<

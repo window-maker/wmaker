@@ -10,6 +10,8 @@ INCLUDES = -I$(srcdir)/.. $(DFLAGS) @HEADER_SEARCH_PATH@
 
 LIBLIST = $(top_builddir)/wrlib/libwraster.la
 
+LIBTOOL = $(QUIET)$(top_srcdir)/libtool --silent
+
 testdraw_SOURCES = testdraw.c
 testdraw_LDADD = $(LIBLIST)
 
@@ -22,3 +24,11 @@ testrot_LDADD = $(LIBLIST)
 view_SOURCES= view.c
 view_LDADD = $(LIBLIST)
 
+.c.o:
+	$(QUIET)$(COMPILE) -c $<
+
+.c.obj:
+	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
+
+.c.lo:
+	$(QUIET)$(LTCOMPILE) -c -o $@ $<

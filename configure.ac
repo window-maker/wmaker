@@ -384,6 +384,21 @@ AC_ARG_ENABLE(lite,
   fi])
 
 
+dnl
+dnl Beautify compilation messages
+dnl ---------------------------------------------
+AC_ARG_ENABLE(verbose-compile, AS_HELP_STRING([--disable-verbose-compile],
+			       [Streamline compilation messages (default off)]),
+  [
+	QUIET='@echo CC $@;'
+	QUIET_AR='@echo AR $@;'
+	LIBTOOL_ARG="--silent"
+	AC_SUBST(QUIET)
+	AC_SUBST(QUIET_AR)
+	AC_SUBST(LIBTOOL_ARG)
+])
+
+
 
 dnl
 dnl Networking stuff
