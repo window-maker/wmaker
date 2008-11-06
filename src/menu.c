@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <ctype.h>
 #if 0
@@ -109,7 +110,7 @@ static void
 appearanceObserver(void *self, WMNotification *notif)
 {
     WMenu *menu = (WMenu*)self;
-    int flags = (int)WMGetNotificationClientData(notif);
+    int flags = (int)(uintptr_t)WMGetNotificationClientData(notif);
 
     if (!menu->flags.realized)
         return;

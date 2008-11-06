@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -449,7 +450,7 @@ wsobserver(void *self, WMNotification *notif)
     void *data = WMGetNotificationClientData(notif);
 
     if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
-        UpdateSwitchMenuWorkspace(scr, (int)data);
+        UpdateSwitchMenuWorkspace(scr, (int)(uintptr_t)data);
     } else if (strcmp(name, WMNWorkspaceChanged) == 0) {
 
     }

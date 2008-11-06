@@ -8,6 +8,7 @@
 #include <dirent.h>
 #include <limits.h>
 #include <errno.h>
+#include <stdint.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX 1024
@@ -132,7 +133,7 @@ textChangedObserver(void *observerData, WMNotification *notification)
         return;
 
     text = WMGetTextFieldText(panel->fileField);
-    textEvent = (int)WMGetNotificationClientData(notification);
+    textEvent = (int)(uintptr_t)WMGetNotificationClientData(notification);
 
     if (panel->flags.autoCompletion && textEvent!=WMDeleteTextEvent)
         i = closestListItem(list, text, False);
@@ -168,7 +169,7 @@ textEditedObserver(void *observerData, WMNotification *notification)
 {
     W_FilePanel *panel = (W_FilePanel*)observerData;
 
-    if ((int)WMGetNotificationClientData(notification)==WMReturnTextMovement) {
+    if ((int)(uintptr_t)WMGetNotificationClientData(notification)==WMReturnTextMovement) {
         WMPerformButtonClick(panel->okButton);
     }
 }

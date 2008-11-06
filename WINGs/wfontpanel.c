@@ -8,6 +8,7 @@
 
 #include <ctype.h>
 #include <string.h>
+#include <stdint.h>
 
 #include <X11/Xft/Xft.h>
 #include <fontconfig/fontconfig.h>
@@ -496,14 +497,14 @@ addSizeToTypeface(Typeface *face, int size)
         for (j = 0; j < sizeof(scalableFontSizes)/sizeof(int); j++) {
             size = scalableFontSizes[j];
 
-            if (!WMCountInArray(face->sizes, (void*)size)) {
-                WMAddToArray(face->sizes, (void*)size);
+            if (!WMCountInArray(face->sizes, (void*)(uintptr_t)size)) {
+                WMAddToArray(face->sizes, (void*)(uintptr_t)size);
             }
         }
         WMSortArray(face->sizes, compare_int);
     } else {
-        if (!WMCountInArray(face->sizes, (void*)size)) {
-            WMAddToArray(face->sizes, (void*)size);
+        if (!WMCountInArray(face->sizes, (void*)(uintptr_t)size)) {
+            WMAddToArray(face->sizes, (void*)(uintptr_t)size);
             WMSortArray(face->sizes, compare_int);
         }
     }
@@ -773,8 +774,8 @@ typefaceClick(WMWidget *w, void *data)
     WMClearList(panel->sizLs);
 
     WM_ITERATE_ARRAY(face->sizes, size, i) {
-        if ((int)size != 0) {
-            sprintf(buffer, "%i", (int)size);
+        if ((int)(uintptr_t)size != 0) {
+            sprintf(buffer, "%i", (int)(uintptr_t)size);
 
             WMAddListItem(panel->sizLs, buffer);
         }
@@ -874,8 +875,8 @@ setFontPanelFontName(FontPanel *panel, char *family, char *style, double size)
 
     WM_ITERATE_ARRAY(face->sizes, vsize, i) {
         char buffer[32];
-        if ((int)vsize != 0) {
-            sprintf(buffer, "%i", (int)vsize);
+        if ((int)(uintptr_t)vsize != 0) {
+            sprintf(buffer, "%i", (int)(uintptr_t)vsize);
 
             WMAddListItem(panel->sizLs, buffer);
         }

@@ -24,6 +24,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <WINGs/WINGs.h>
 #include <WINGs/WUtil.h>
 
@@ -39,7 +40,8 @@ void show(WMWidget *self, void *data)
     void *d;
     WMLabel *l = (WMLabel*)data;
     d = WMGetHangedData(self);
-    sprintf(buf, "%i -  0x%x - 0%o", (int)d, (int)d, (int)d);
+    sprintf(buf, "%i -  0x%x - 0%o", (int)(uintptr_t)d, (int)(uintptr_t)d, 
+	    (int)(uintptr_t)d);
     WMSetLabelText(l, buf);
 }
 
@@ -87,7 +89,7 @@ main(int argc, char **argv)
             sprintf(buf, "%c", c);
             WMSetButtonText(lab, buf);
             WMSetButtonAction(lab, show, pos);
-            WMHangData(lab, (void*)c);
+            WMHangData(lab, (void*)(uintptr_t)c);
             if (c>0) {
                 WMGroupButtons(l0, lab);
             } else {

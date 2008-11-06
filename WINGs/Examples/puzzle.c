@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <WINGs/WINGs.h>
-
+#include <stdint.h>
 
 
 #define MAX_SIZE 	10*10
@@ -135,7 +135,7 @@ void buttonClick(WMWidget *w, void *ptr)
 {
     char buffer[300];
 
-    if (SlideButton((int)ptr)) {
+    if (SlideButton((int)(uintptr_t)ptr)) {
         MoveCount++;
 
         if (CheckWin()) {
@@ -222,7 +222,7 @@ int main(int argc, char **argv)
             Button[i] = WMCreateButton(win, WBTMomentaryLight);
             WMSetWidgetBackgroundColor(Button[i], color);
             WMReleaseColor(color);
-            WMSetButtonAction(Button[i], buttonClick, (void*)i);
+            WMSetButtonAction(Button[i], buttonClick, (void*)(uintptr_t)i);
             WMResizeWidget(Button[i], WinSize/Size, WinSize/Size);
             WMMoveWidget(Button[i], x*(WinSize/Size), y*(WinSize/Size));
             sprintf(buf, "%i", i+1);

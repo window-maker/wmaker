@@ -26,6 +26,7 @@
 #include <X11/Xutil.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <string.h>
 #include <unistd.h>
 #include <ctype.h>
@@ -64,7 +65,7 @@ static void
 appearanceObserver(void *self, WMNotification *notif)
 {
     WIcon *icon = (WIcon*)self;
-    int flags = (int)WMGetNotificationClientData(notif);
+    int flags = (int)(uintptr_t)WMGetNotificationClientData(notif);
 
     if (flags & WTextureSettings) {
         icon->force_paint = 1;

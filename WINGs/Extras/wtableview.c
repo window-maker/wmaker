@@ -2,6 +2,7 @@
 
 #include <WINGs/WINGsP.h>
 #include <X11/cursorfont.h>
+#include <stdint.h>
 
 #include "wtableview.h"
 
@@ -1028,7 +1029,7 @@ drawRow(WMTableView *table, int row, WMRect clipRect)
         if (!column->delegate || !column->delegate->drawCell)
             continue;
 
-        if (WMFindInArray(table->selectedRows, NULL, (void*)row) != WANotFound)
+        if (WMFindInArray(table->selectedRows, NULL, (void*)(uintptr_t)row) != WANotFound)
             (*column->delegate->drawSelectedCell)(column->delegate, column, row, d);
         else
             (*column->delegate->drawCell)(column->delegate, column, row, d);
@@ -1064,14 +1065,14 @@ setRowSelected(WMTableView *table, unsigned row, Bool flag)
 {
     int repaint = 0;
 
-    if (WMFindInArray(table->selectedRows, NULL, (void*)row) != WANotFound) {
+    if (WMFindInArray(table->selectedRows, NULL, (void*)(uintptr_t)row) != WANotFound) {
         if (!flag) {
-            WMRemoveFromArray(table->selectedRows, (void*)row);
+            WMRemoveFromArray(table->selectedRows, (void*)(uintptr_t)row);
             repaint = 1;
         }
     } else {
         if (flag) {
-            WMAddToArray(table->selectedRows, (void*)row);
+            WMAddToArray(table->selectedRows, (void*)(uintptr_t)row);
             repaint = 1;
         }
     }

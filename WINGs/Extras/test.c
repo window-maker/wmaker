@@ -2,6 +2,7 @@
 
 #include <WINGs/WINGs.h>
 #include <stdio.h>
+#include <stdint.h>
 #include "wtableview.h"
 #include "wtabledelegates.h"
 
@@ -41,10 +42,10 @@ valueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row)
             col2[i] = 0;
         }
     }
-    if ((int)WMGetTableColumnId(column) == 1)
+    if ((int)(uintptr_t)WMGetTableColumnId(column) == 1)
         return col1[row];
     else
-        return (void*)col2[row];
+        return (void*)(uintptr_t)col2[row];
 }
 
 
@@ -52,10 +53,10 @@ void
 setValueForCell(WMTableViewDelegate *self, WMTableColumn *column, int row,
                 void *data)
 {
-    if ((int)WMGetTableColumnId(column) == 1)
+    if ((int)(uintptr_t)WMGetTableColumnId(column) == 1)
         col1[row] = data;
     else
-        col2[row] = (int)data;
+        col2[row] = (int)(uintptr_t)data;
 }
 
 

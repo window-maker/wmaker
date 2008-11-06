@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stdint.h>
 
 /* For getting mouse wheel mappings from WINGs */
 #include <WINGs/WINGsP.h>
@@ -137,7 +138,7 @@ static void
 appearanceObserver(void *self, WMNotification *notif)
 {
     WWindow *wwin = (WWindow*)self;
-    int flags = (int)WMGetNotificationClientData(notif);
+    int flags = (int)(uintptr_t)WMGetNotificationClientData(notif);
 
     if (!wwin->frame || (!wwin->frame->titlebar && !wwin->frame->resizebar))
         return;
@@ -2214,7 +2215,7 @@ wWindowChangeWorkspace(WWindow *wwin, int workspace)
 
         wwin->frame->workspace = workspace;
 
-        WMPostNotificationName(WMNChangedWorkspace, wwin, (void*)oldWorkspace);
+        WMPostNotificationName(WMNChangedWorkspace, wwin, (void*)(uintptr_t)oldWorkspace);
     }
 
     if (unmap) {

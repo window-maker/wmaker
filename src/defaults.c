@@ -24,6 +24,7 @@
 #include "wconfig.h"
 
 #include <stdio.h>
+#include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -1443,7 +1444,7 @@ wReadDefaults(WScreen *scr, WMPropList *new_dict)
             foo |= WColorSettings;
         if (foo)
             WMPostNotificationName(WNMenuTitleAppearanceSettingsChanged, NULL,
-                                   (void*)foo);
+                                   (void*)(uintptr_t)foo);
 
         foo = 0;
         if (needs_refresh & REFRESH_MENU_TEXTURE)
@@ -1454,7 +1455,7 @@ wReadDefaults(WScreen *scr, WMPropList *new_dict)
             foo |= WColorSettings;
         if (foo)
             WMPostNotificationName(WNMenuAppearanceSettingsChanged, NULL,
-                                   (void*)foo);
+                                   (void*)(uintptr_t)foo);
 
         foo = 0;
         if (needs_refresh & REFRESH_WINDOW_FONT) {
@@ -1468,7 +1469,7 @@ wReadDefaults(WScreen *scr, WMPropList *new_dict)
         }
         if (foo)
             WMPostNotificationName(WNWindowAppearanceSettingsChanged, NULL,
-                                   (void*)foo);
+                                   (void*)(uintptr_t)foo);
 
         if (!(needs_refresh & REFRESH_ICON_TILE)) {
             foo = 0;
@@ -1483,7 +1484,7 @@ wReadDefaults(WScreen *scr, WMPropList *new_dict)
             }
             if (foo)
                 WMPostNotificationName(WNIconAppearanceSettingsChanged, NULL,
-                                       (void*)foo);
+                                       (void*)(uintptr_t)foo);
         }
         if (needs_refresh & REFRESH_ICON_TILE)
             WMPostNotificationName(WNIconTileSettingsChanged, NULL,  NULL);

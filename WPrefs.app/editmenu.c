@@ -24,6 +24,7 @@
 #include <WINGs/WINGsP.h>
 #include <WINGs/WUtil.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <assert.h>
 #include <ctype.h>
 
@@ -969,7 +970,7 @@ textEndedEditing(struct WMTextFieldDelegate *self, WMNotification *notif)
     if (!menu->flags.isEditing)
         return;
 
-    reason = (int)WMGetNotificationClientData(notif);
+    reason = (int)(uintptr_t)WMGetNotificationClientData(notif);
 
     switch (reason) {
     case WMEscapeTextMovement:

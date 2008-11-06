@@ -29,6 +29,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <ctype.h>
 #include <string.h>
@@ -132,7 +133,7 @@ wWorkspaceNew(WScreen *scr)
 #endif
 
         WMPostNotificationName(WMNWorkspaceCreated, scr,
-                               (void*)(scr->workspace_count-1));
+                               (void*)(uintptr_t)(scr->workspace_count-1));
         XFlush(dpy);
 
         return scr->workspace_count-1;
@@ -211,7 +212,7 @@ wWorkspaceDelete(WScreen *scr, int workspace)
 #endif
 
     WMPostNotificationName(WMNWorkspaceDestroyed, scr,
-                           (void*)(scr->workspace_count-1));
+                           (void*)(uintptr_t)(scr->workspace_count-1));
 
     if (scr->current_workspace >= scr->workspace_count)
         wWorkspaceChange(scr, scr->workspace_count-1);
@@ -631,7 +632,7 @@ wWorkspaceForceChange(WScreen *scr, int workspace)
 
     showWorkspaceName(scr, workspace);
 
-    WMPostNotificationName(WMNWorkspaceChanged, scr, (void*)workspace);
+    WMPostNotificationName(WMNWorkspaceChanged, scr, (void*)(uintptr_t)workspace);
 
     /*   XSync(dpy, False); */
 }
@@ -1327,7 +1328,7 @@ wWorkspaceRename(WScreen *scr, int workspace, char *name)
     if (scr->clip_icon)
         wClipIconPaint(scr->clip_icon);
 
-    WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void*)workspace);
+    WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void*)(uintptr_t)workspace);
 }
 
 
@@ -1511,7 +1512,7 @@ wWorkspaceRestoreState(WScreen *scr)
             }
         }
 
-        WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void*)i);
+        WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void*)(uintptr_t)i);
     }
 }
 

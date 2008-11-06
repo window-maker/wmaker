@@ -3,6 +3,7 @@
 #include "WINGsP.h"
 
 #include <X11/keysym.h>
+#include <stdint.h>
 
 
 
@@ -360,7 +361,7 @@ endedEditingObserver(void *observerData, WMNotification *notification)
 {
     WMInputPanel *panel = (WMInputPanel*)observerData;
 
-    switch ((int)WMGetNotificationClientData(notification)) {
+    switch ((int)(uintptr_t)WMGetNotificationClientData(notification)) {
     case WMReturnTextMovement:
         if (panel->defBtn)
             WMPerformButtonClick(panel->defBtn);
