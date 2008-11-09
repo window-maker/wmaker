@@ -55,7 +55,7 @@
 
 #include <WINGs/WUtil.h>
 
-
+#define MAX_SHORTCUT_LENGTH 32
 
 extern char *Locale;
 
@@ -513,11 +513,11 @@ addShortcut(char *file, char *shortcutDefinition, WMenu *menu,
     Shortcut *ptr;
     KeySym ksym;
     char *k;
-    char buf[128], *b;
+    char buf[MAX_SHORTCUT_LENGTH], *b;
 
     ptr = wmalloc(sizeof(Shortcut));
 
-    strcpy(buf, shortcutDefinition);
+    strncpy(buf, shortcutDefinition, MAX_SHORTCUT_LENGTH);
     b = (char*)buf;
 
     /* get modifiers */

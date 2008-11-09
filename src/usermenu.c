@@ -79,6 +79,7 @@
 
 #include "framewin.h"
 
+#define MAX_SHORTCUT_LENGTH 32
 
 /*** var ***/
 extern WPreferences wPreferences;
@@ -139,7 +140,7 @@ convertShortcuts(WScreen *scr, WMPropList *shortcut)
     KeySym ksym;
     char *k;
     char *buffer;
-    char buf[128], *b;
+    char buf[MAX_SHORTCUT_LENGTH], *b;
     int keycount,i,j,mod;
 
     if (WMIsPLString(shortcut)) {
@@ -163,9 +164,10 @@ convertShortcuts(WScreen *scr, WMPropList *shortcut)
     for (i=0,j=0;i<keycount;i++) {
         data->key[j].modifier = 0;
         if (WMIsPLArray(shortcut)) {
-            strcpy(buf, WMGetFromPLString(WMGetFromPLArray(shortcut, i)));
+            strncpy(buf, WMGetFromPLString(WMGetFromPLArray(shortcut, i)),
+		    MAX_SHORTCUT_LENGTH);
         } else {
-            strcpy(buf, WMGetFromPLString(shortcut));
+            strncpy(buf, WMGetFromPLString(shortcut), MAX_SHORTCUT_LENGTH);
         }
         b = (char*)buf;
 

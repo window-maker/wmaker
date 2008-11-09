@@ -69,7 +69,7 @@
 #include "workspace.h"
 #include "properties.h"
 
-
+#define MAX_SHORTCUT_LENGTH 32
 
 /***** Global *****/
 
@@ -2515,7 +2515,7 @@ getKeybind(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
     KeySym ksym;
     char *val;
     char *k;
-    char buf[128], *b;
+    char buf[MAX_SHORTCUT_LENGTH], *b;
 
 
     GET_STRING_OR_DEFAULT("Key spec", val);
@@ -2528,7 +2528,7 @@ getKeybind(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
         return True;
     }
 
-    strcpy(buf, val);
+    strncpy(buf, val, MAX_SHORTCUT_LENGTH);
 
     b = (char*)buf;
 
