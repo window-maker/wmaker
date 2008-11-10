@@ -977,7 +977,7 @@ static Bool
 fixupCachedPixmapsPaths(WMPropList *dict)
 {
     WMPropList *allApps, *app, *props, *iconkey, *icon, *newicon;
-    char *path, *fixedpath, *ptr, *search, *replace;
+    char *path, *fixedpath, *ptr, *search;
     int i, len, slen;
     Bool changed = False;
 

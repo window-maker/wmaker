@@ -501,7 +501,7 @@ check_defaults()
 static void
 inotifyWatchConfig()
 {
-    char *watchPath;
+    char *watchPath = NULL;
     inotifyFD = inotify_init(); /* Initialise an inotify instance */
     if (inotifyFD < 0) {
          wwarning(_("could not initialise an inotify instance."
