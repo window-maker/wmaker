@@ -1215,11 +1215,13 @@ static void updateWindowType(WWindow * wwin)
 		XFree(data);
 	}
 
-	ChangeStackingLevel(wwin->frame->core, layer);
-	wwin->frame->flags.need_texture_change = 1;
-	wWindowConfigureBorders(wwin);
-	wFrameWindowPaint(wwin->frame);
-	wNETWMUpdateActions(wwin, False);
+	if (wwin->frame != NULL) {
+		ChangeStackingLevel(wwin->frame->core, layer);
+		wwin->frame->flags.need_texture_change = 1;
+		wWindowConfigureBorders(wwin);
+		wFrameWindowPaint(wwin->frame);
+		wNETWMUpdateActions(wwin, False);
+	}
 }
 
 Bool wNETWMCheckClientHints(WWindow * wwin, int *layer, int *workspace)
