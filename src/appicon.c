@@ -383,6 +383,8 @@ static void killCallback(WMenu * menu, WMenuEntry * entry)
 	WApplication *wapp = (WApplication *) entry->clientdata;
 	WFakeGroupLeader *fPtr;
 	char *buffer;
+	char *shortname;
+	char *basename(const char *shortname);
 
 	if (!WCHECK_STATE(WSTATE_NORMAL))
 		return;
@@ -391,7 +393,9 @@ static void killCallback(WMenu * menu, WMenuEntry * entry)
 
 	assert(entry->clientdata != NULL);
 
-	buffer = wstrconcat(wapp->app_icon ? wapp->app_icon->wm_class : NULL,
+	shortname = basename(wapp->app_icon->wm_instance);
+
+	buffer = wstrconcat(wapp->app_icon ? shortname : NULL,
 			    _(" will be forcibly closed.\n"
 			      "Any unsaved changes will be lost.\n" "Please confirm."));
 
