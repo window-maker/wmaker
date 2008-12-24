@@ -1139,7 +1139,7 @@ SendHelperMessage(WScreen *scr, char type, int workspace, char *msg)
 
     len = (msg ? strlen(msg) : 0) + (workspace >=0 ? 4 : 0) + 1 ;
     buffer = wmalloc(len+5);
-    snprintf(buf, len, "%4i", len);
+    snprintf(buf, sizeof(buf), "%4i", len);
     memcpy(buffer, buf, 4);
     buffer[4] = type;
     i = 5;
