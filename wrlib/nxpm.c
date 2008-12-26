@@ -642,9 +642,9 @@ Bool RSaveXPM(RImage * image, char *filename)
 			if (!a || *a > 127) {
 				tmpc = lookfor(colormap, (unsigned)*r << 16 | (unsigned)*g << 8 | (unsigned)*b);
 
-				fprintf(file, index2str(buf, tmpc->index, charsPerPixel));
+				fprintf(file, "%s", index2str(buf, tmpc->index, charsPerPixel));
 			} else {
-				fprintf(file, transp);
+				fprintf(file, "%s", transp);
 			}
 
 			if (a) {
