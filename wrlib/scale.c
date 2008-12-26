@@ -234,8 +234,7 @@ RImage *RScaleImage(RImage * src, unsigned new_width, unsigned new_height)
 #if 0
 #define	filter_support		(1.0)
 
-static double filter(t)
-double t;
+static double filter(double t)
 {
 	/* f(t) = 2|t|^3 - 3|t|^2 + 1, -1 <= t <= 1 */
 	if (t < 0.0)
@@ -247,8 +246,7 @@ double t;
 #endif
 #define	box_support		(0.5)
 
-static double box_filter(t)
-double t;
+static double box_filter(double t)
 {
 	if ((t > -0.5) && (t <= 0.5))
 		return (1.0);
@@ -257,8 +255,7 @@ double t;
 
 #define	triangle_support	(1.0)
 
-static double triangle_filter(t)
-double t;
+static double triangle_filter(double t)
 {
 	if (t < 0.0)
 		t = -t;
@@ -269,8 +266,7 @@ double t;
 
 #define	bell_support		(1.5)
 
-static double bell_filter(t)	/* box (*) box (*) box */
-double t;
+static double bell_filter(double t)  /* box (*) box (*) box */
 {
 	if (t < 0)
 		t = -t;
@@ -285,8 +281,7 @@ double t;
 
 #define	B_spline_support	(2.0)
 
-static double B_spline_filter(t)	/* box (*) box (*) box (*) box */
-double t;
+static double B_spline_filter(double t)   /* box (*) box (*) box (*) box */
 {
 	double tt;
 
@@ -302,8 +297,7 @@ double t;
 	return (0.0);
 }
 
-static double sinc(x)
-double x;
+static double sinc(double x)
 {
 	x *= PI;
 	if (x != 0)
@@ -313,8 +307,7 @@ double x;
 
 #define	Lanczos3_support	(3.0)
 
-static double Lanczos3_filter(t)
-double t;
+static double Lanczos3_filter(double t)
 {
 	if (t < 0)
 		t = -t;
@@ -328,8 +321,7 @@ double t;
 #define	B	(1.0 / 3.0)
 #define	C	(1.0 / 3.0)
 
-static double Mitchell_filter(t)
-double t;
+static double Mitchell_filter(double t)
 {
 	double tt;
 
@@ -351,7 +343,7 @@ double t;
 	return (0.0);
 }
 
-static double (*filterf) () = Mitchell_filter;
+static double (*filterf)(double) = Mitchell_filter;
 static double fwidth = Mitchell_support;
 
 void _wraster_change_filter(int type)
