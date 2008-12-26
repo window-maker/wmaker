@@ -39,7 +39,7 @@
 #define RLRASTER_H_
 
 
-/* version of the header for the library: 0.21 */
+/* version of the header for the library */
 #define WRASTER_HEADER_VERSION	22
 
 
