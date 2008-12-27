@@ -393,8 +393,8 @@ wNETWMGetCurrentDesktopFromHint(WScreen *scr)
 static unsigned long*
 findBestIcon(unsigned long *data, unsigned long items)
 {
-    int size, wanted, d, distance;
-    unsigned long i;
+    int size, wanted, d;
+    unsigned long i, distance;
     unsigned long *icon;
 
     /* better use only 75% of icon_size. For 64x64 this means 48x48
