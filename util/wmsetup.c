@@ -20,6 +20,7 @@
 #if 1
 int main()
 {
+	return 0;
 }
 #else
 #define PROG_VERSION "wmsetup 0.0 (Window Maker)"

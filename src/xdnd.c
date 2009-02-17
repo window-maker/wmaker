@@ -178,7 +178,7 @@ Bool wXDNDProcessSelection(XEvent * event)
 		wfree(scr->xdestring);	/* this xdestring is not from Xlib (no XFree) */
 	}
 
-	/* why doesn't this function return anything ? -Dan */
+	return True;
 }
 
 Bool isAwareXDND(Window window)

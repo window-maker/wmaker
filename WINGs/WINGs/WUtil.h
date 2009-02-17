@@ -28,6 +28,9 @@
 # endif
 #endif
 
+#ifndef __GNUC__
+#define  __attribute__(x)  /*NOTHING*/
+#endif
 
 #ifdef NDEBUG
 
@@ -216,11 +219,11 @@ waborthandler* wsetabort(waborthandler* handler);
 /* don't free the returned string */
 char* wstrerror(int errnum);
 
-void wmessage(const char *msg, ...);
-void wwarning(const char *msg, ...);
-void wfatal(const char *msg, ...);
-void wsyserror(const char *msg, ...);
-void wsyserrorwithcode(int error, const char *msg, ...);
+void wmessage(const char *msg, ...) __attribute__((__format__(printf,1,2)));
+void wwarning(const char *msg, ...) __attribute__((__format__(printf,1,2)));
+void wfatal(const char *msg, ...) __attribute__((__format__(printf,1,2)));
+void wsyserror(const char *msg, ...) __attribute__((__format__(printf,1,2)));
+void wsyserrorwithcode(int error, const char *msg, ...) __attribute__((__format__(printf,2,3)));
 
 char* wfindfile(char *paths, char *file);
 

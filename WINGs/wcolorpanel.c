@@ -1160,7 +1160,7 @@ static void readConfiguration(W_ColorPanel * panel)
 	}
 
 	if (!(dPtr = opendir(panel->configurationPath))) {
-		wwarning(_("Color Panel: Could not find file"), "%s", panel->configurationPath);
+		wwarning("%s: %s", _("Color Panel: Could not find file"), panel->configurationPath);
 		return;
 	}
 
@@ -3439,6 +3439,7 @@ RColor ulongToRColor(WMScreen * scr, unsigned long value)
 		color.red = 0;
 		color.green = 0;
 		color.blue = 0;
+		color.alpha = 0;
 		return color;
 	}
 
@@ -3448,6 +3449,7 @@ RColor ulongToRColor(WMScreen * scr, unsigned long value)
 	color.red = xcolor->red >> 8;
 	color.green = xcolor->green >> 8;
 	color.blue = xcolor->blue >> 8;
+	color.alpha = 0;
 
 	wfree(xcolor);
 

@@ -8,7 +8,7 @@
 
 WMWindow *win;
 WMButton *Button[MAX_SIZE];
-char Map[MAX_SIZE];
+signed char Map[MAX_SIZE];
 int Size = 4;
 int MoveCount;
 
