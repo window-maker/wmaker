@@ -69,7 +69,7 @@ x86_specific.o: x86_specific.c
 
 INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
 
-libwraster_la_LIBADD = @ALLOCA@ @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
+libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
 
 DISTCLEANFILES = wrlib.pc
 

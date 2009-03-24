@@ -21,23 +21,6 @@
 
 #include <config.h>
 
-/* AIX requires this to be the first thing in the file.  */
-#ifdef __GNUC__
-# define alloca __builtin_alloca
-#else
-# if HAVE_ALLOCA_H
-#  include <alloca.h>
-# else
-#  ifdef _AIX
-#   pragma alloca
-#  else
-#   ifndef alloca		/* predefined by HP cc +Olibcalls */
-char *alloca();
-#   endif
-#  endif
-# endif
-#endif
-
 #ifdef USE_PNG
 
 #include <stdlib.h>
@@ -173,27 +156,25 @@ RImage *RLoadPNG(RContext * context, char *file, int index)
 		image->background.blue = bkcolor->blue >> 8;
 	}
 
-	png_rows = alloca(sizeof(char *) * height);
+	png_rows = calloc(height, sizeof(char *));
 	if (!png_rows) {
 		RErrorCode = RERR_NOMEMORY;
 		fclose(f);
 		RReleaseImage(image);
 		png_destroy_read_struct(&png, &pinfo, &einfo);
-#ifdef C_ALLOCA
-		alloca(0);
-#endif
 		return NULL;
 	}
 	for (y = 0; y < height; y++) {
-		png_rows[y] = alloca(png_get_rowbytes(png, pinfo));
+		png_rows[y] = malloc(png_get_rowbytes(png, pinfo));
 		if (!png_rows[y]) {
 			RErrorCode = RERR_NOMEMORY;
 			fclose(f);
 			RReleaseImage(image);
 			png_destroy_read_struct(&png, &pinfo, &einfo);
-#ifdef C_ALLOCA
-			alloca(0);
-#endif
+			while (y-- > 0)
+				if (png_rows[y])
+					free(png_rows[y]);
+			free(png_rows);
 			return NULL;
 		}
 	}
@@ -222,9 +203,10 @@ RImage *RLoadPNG(RContext * context, char *file, int index)
 			}
 		}
 	}
-#ifdef C_ALLOCA
-	alloca(0);
-#endif
+	for (y = 0; y < height; y++)
+		if (png_rows[y])
+			free(png_rows[y]);
+	free(png_rows);
 	return image;
 }
 

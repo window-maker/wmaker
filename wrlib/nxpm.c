@@ -21,23 +21,6 @@
 
 #include <config.h>
 
-/* AIX requires this to be the first thing in the file.  */
-#ifdef __GNUC__
-# define alloca __builtin_alloca
-#else
-# if HAVE_ALLOCA_H
-#  include <alloca.h>
-# else
-#  ifdef _AIX
-#   pragma alloca
-#  else
-#   ifndef alloca		/* predefined by HP cc +Olibcalls */
-char *alloca();
-#   endif
-#  endif
-# endif
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -72,8 +55,8 @@ char *alloca();
 RImage *RGetImageFromXPMData(RContext * context, char **data)
 {
 	RImage *image = NULL;
-	unsigned char *color_table[4];
-	unsigned short *symbol_table;
+	unsigned char *color_table[4] = { NULL, NULL, NULL, NULL };
+	unsigned short *symbol_table = NULL;
 	unsigned char *r, *g, *b, *a;
 	int i, j, k, line = 0;
 	int transp;
@@ -88,17 +71,26 @@ RImage *RGetImageFromXPMData(RContext * context, char **data)
 	if (csize != 1 && csize != 2)
 		goto bad_format;
 
-	color_table[0] = alloca(ccount);
-	color_table[1] = alloca(ccount);
-	color_table[2] = alloca(ccount);
-	color_table[3] = alloca(ccount);
-	symbol_table = alloca(ccount * sizeof(unsigned short));
+	color_table[0] = malloc(ccount);
+	color_table[1] = malloc(ccount);
+	color_table[2] = malloc(ccount);
+	color_table[3] = malloc(ccount);
+	symbol_table = malloc(ccount * sizeof(unsigned short));
 
 	bsize = csize * w + 16;
 
 	if (!color_table[0] || !color_table[1] || !color_table[2] || !color_table[3] || !symbol_table || !bsize) {
 		RErrorCode = RERR_NOMEMORY;
-		alloca(0);
+		if (color_table[0])
+			free(color_table[0]);
+		if (color_table[1])
+			free(color_table[1]);
+		if (color_table[2])
+			free(color_table[2]);
+		if (color_table[3])
+			free(color_table[3]);
+		if (symbol_table)
+			free(symbol_table);
 		return NULL;
 	}
 
@@ -147,7 +139,16 @@ RImage *RGetImageFromXPMData(RContext * context, char **data)
 
 	image = RCreateImage(w, h, transp);
 	if (!image) {
-		alloca(0);
+		if (color_table[0])
+			free(color_table[0]);
+		if (color_table[1])
+			free(color_table[1]);
+		if (color_table[2])
+			free(color_table[2]);
+		if (color_table[3])
+			free(color_table[3]);
+		if (symbol_table)
+			free(symbol_table);
 		return NULL;
 	}
 
@@ -217,16 +218,30 @@ RImage *RGetImageFromXPMData(RContext * context, char **data)
 		line++;
 	}
 
-#ifdef C_ALLOCA
-	alloca(0);
-#endif
+	if (color_table[0])
+		free(color_table[0]);
+	if (color_table[1])
+		free(color_table[1]);
+	if (color_table[2])
+		free(color_table[2]);
+	if (color_table[3])
+		free(color_table[3]);
+	if (symbol_table)
+		free(symbol_table);
 	return image;
 
  bad_format:
 	RErrorCode = RERR_BADIMAGEFILE;
-#ifdef C_ALLOCA
-	alloca(0);
-#endif
+	if (color_table[0])
+		free(color_table[0]);
+	if (color_table[1])
+		free(color_table[1]);
+	if (color_table[2])
+		free(color_table[2]);
+	if (color_table[3])
+		free(color_table[3]);
+	if (symbol_table)
+		free(symbol_table);
 	if (image)
 		RReleaseImage(image);
 	return NULL;
@@ -236,9 +251,9 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
 {
 	RImage *image = NULL;
 	char line[LINEWIDTH + 1];
-	char *buffer;
-	unsigned char *color_table[4];
-	unsigned short *symbol_table;
+	char *buffer = NULL;
+	unsigned char *color_table[4] = { NULL, NULL, NULL, NULL };
+	unsigned short *symbol_table = NULL;
 	unsigned char *r, *g, *b, *a;
 	int i, j, k;
 	int transp;
@@ -274,19 +289,31 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
 	if (csize != 1 && csize != 2)
 		goto bad_format;
 
-	color_table[0] = alloca(ccount);
-	color_table[1] = alloca(ccount);
-	color_table[2] = alloca(ccount);
-	color_table[3] = alloca(ccount);
-	symbol_table = alloca(ccount * sizeof(unsigned short));
+	color_table[0] = malloc(ccount);
+	color_table[1] = malloc(ccount);
+	color_table[2] = malloc(ccount);
+	color_table[3] = malloc(ccount);
+	symbol_table = malloc(ccount * sizeof(unsigned short));
 
 	bsize = csize * w + 16;
-	buffer = alloca(bsize);
+	buffer = malloc(bsize);
 
-	if (!color_table[0] || !color_table[1] || !color_table[2] || !color_table[3] || !symbol_table || !bsize) {
+	if (!color_table[0] || !color_table[1] || !color_table[2] ||
+	    !color_table[3] || !symbol_table || !bsize || !buffer) {
 		RErrorCode = RERR_NOMEMORY;
 		fclose(f);
-		alloca(0);
+		if (color_table[0])
+			free(color_table[0]);
+		if (color_table[1])
+			free(color_table[1]);
+		if (color_table[2])
+			free(color_table[2]);
+		if (color_table[3])
+			free(color_table[3]);
+		if (symbol_table)
+			free(symbol_table);
+		if (buffer)
+			free(buffer);
 		return NULL;
 	}
 
@@ -341,7 +368,18 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
 	image = RCreateImage(w, h, transp);
 	if (!image) {
 		fclose(f);
-		alloca(0);
+		if (color_table[0])
+			free(color_table[0]);
+		if (color_table[1])
+			free(color_table[1]);
+		if (color_table[2])
+			free(color_table[2]);
+		if (color_table[3])
+			free(color_table[3]);
+		if (symbol_table)
+			free(symbol_table);
+		if (buffer)
+			free(buffer);
 		return NULL;
 	}
 
@@ -418,17 +456,35 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
 	}
 
 	fclose(f);
-#ifdef C_ALLOCA
-	alloca(0);
-#endif
+	if (color_table[0])
+		free(color_table[0]);
+	if (color_table[1])
+		free(color_table[1]);
+	if (color_table[2])
+		free(color_table[2]);
+	if (color_table[3])
+		free(color_table[3]);
+	if (symbol_table)
+		free(symbol_table);
+	if (buffer)
+		free(buffer);
 	return image;
 
  bad_format:
 	RErrorCode = RERR_BADIMAGEFILE;
 	fclose(f);
-#ifdef C_ALLOCA
-	alloca(0);
-#endif
+	if (color_table[0])
+		free(color_table[0]);
+	if (color_table[1])
+		free(color_table[1]);
+	if (color_table[2])
+		free(color_table[2]);
+	if (color_table[3])
+		free(color_table[3]);
+	if (symbol_table)
+		free(symbol_table);
+	if (buffer)
+		free(buffer);
 	if (image)
 		RReleaseImage(image);
 	return NULL;
@@ -436,9 +492,18 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
  bad_file:
 	RErrorCode = RERR_BADIMAGEFILE;
 	fclose(f);
-#ifdef C_ALLOCA
-	alloca(0);
-#endif
+	if (color_table[0])
+		free(color_table[0]);
+	if (color_table[1])
+		free(color_table[1]);
+	if (color_table[2])
+		free(color_table[2]);
+	if (color_table[3])
+		free(color_table[3]);
+	if (symbol_table)
+		free(symbol_table);
+	if (buffer)
+		free(buffer);
 	if (image)
 		RReleaseImage(image);
 	return NULL;

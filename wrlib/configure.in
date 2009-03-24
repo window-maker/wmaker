@@ -20,7 +20,6 @@ dnl Checks for library functions.
 dnl ============================
 AC_PROG_GCC_TRADITIONAL
 AC_FUNC_MEMCMP
-AC_FUNC_ALLOCA
 AC_TYPE_SIGNAL
 AC_FUNC_VPRINTF
 
