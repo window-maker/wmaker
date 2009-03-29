@@ -1003,7 +1003,11 @@ static void smSaveYourselfPhase2Proc(SmcConn smc_conn, SmPointer client_data)
 	plState = WMCreatePLDictionary(WMCreatePLString("Version"),
 				       WMCreatePLString("1.0"), WMCreatePLString("Screens"), state, NULL);
 
-	WMWritePropListToFile(plState, statefile, False);
+	if (!WMWritePropListToFile(plState, statefile, True)) {
+		wwarning(_("error while saving session state"));
+		WMReleasePropList(plState);
+		goto fail;
+	}
 
 	WMReleasePropList(plState);
 
