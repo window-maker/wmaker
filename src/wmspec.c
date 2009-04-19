@@ -826,7 +826,7 @@ updateCurrentWorkspace(WScreen *scr) /* changeable */
 static void
 updateWorkspaceNames(WScreen *scr)
 {
-    char buf[1024], *pos;
+    char buf[MAX_WORKSPACES*(MAX_WORKSPACENAME_WIDTH+1)], *pos;
     unsigned int i, len, curr_size;
 
     pos = buf;
