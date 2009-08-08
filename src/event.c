@@ -965,7 +965,9 @@ handlePropertyNotify(XEvent *event)
 #ifdef DEBUG
     printf("got property notify\n");
 #endif
-    if ((wwin=wWindowFor(event->xproperty.window))) {
+
+    wwin = wWindowFor(event->xproperty.window);
+    if (wwin) {
         if (!XGetGeometry(dpy, wwin->client_win, &jr, &ji, &ji,
                           &ju, &ju, &ju, &ju)) {
             return;
