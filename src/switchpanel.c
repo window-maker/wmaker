@@ -464,7 +464,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
     iconsThatFitCount= count;
 
     if (width > rect.size.width) {
-        iconsThatFitCount = (WMScreenWidth(scr->wmscreen)-SCREEN_BORDER_SPACING)/ICON_TILE_SIZE;
+        iconsThatFitCount = (rect.size.width - SCREEN_BORDER_SPACING)/ICON_TILE_SIZE;
         width= iconsThatFitCount*ICON_TILE_SIZE;
     }
     
