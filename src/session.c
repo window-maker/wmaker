@@ -381,7 +381,7 @@ execCommand(WScreen *scr, char *command, char *host)
 
     wtokensplit(command, &argv, &argc);
 
-    if (argv==NULL) {
+    if (!argc) {
         return 0;
     }
 

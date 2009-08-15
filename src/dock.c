@@ -2977,7 +2977,7 @@ execCommand(WAppIcon *btn, char *command, WSavedState *state)
 
     wtokensplit(cmdline, &argv, &argc);
 
-    if (argv==NULL) {
+    if (!argc) {
         if (cmdline)
             wfree(cmdline);
         if (state)
