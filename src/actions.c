@@ -437,7 +437,9 @@ wMaximizeWindow(WWindow *wwin, int directions)
     wwin->flags.maximized = directions;
 
     if (directions & MAX_HORIZONTAL) {
-        new_width = (usableArea.x2-usableArea.x1)-FRAME_BORDER_WIDTH*2;
+        new_width = usableArea.x2 - usableArea.x1;
+        if (HAS_BORDER(wwin))
+                new_width -= FRAME_BORDER_WIDTH * 2;
         new_x = usableArea.x1;
     } else if (shrink_h) {
         new_x = wwin->old_geometry.x;
@@ -448,7 +450,9 @@ wMaximizeWindow(WWindow *wwin, int directions)
     }
 
     if (directions & MAX_VERTICAL) {
-        new_height = (usableArea.y2-usableArea.y1)-FRAME_BORDER_WIDTH*2;
+        new_height = usableArea.y2 - usableArea.y1;
+        if (HAS_BORDER(wwin))
+                new_height -= FRAME_BORDER_WIDTH * 2;
         new_y = usableArea.y1;
         if (WFLAGP(wwin, full_maximize)) {
             new_y -= wwin->frame->top_width;
