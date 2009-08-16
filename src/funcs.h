@@ -104,9 +104,6 @@ char *ExpandOptions(WScreen *scr, char *cmdline);
 
 void ExecuteShellCommand(WScreen *scr, char *command);
 
-void StartLogShell(WScreen *scr);
-
-
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
 
 WWindow *NextToFocusAfter(WWindow *wwin);
