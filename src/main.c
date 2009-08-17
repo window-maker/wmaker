@@ -177,10 +177,6 @@ extern int MonitorLoop(int argc, char **argv);
 
 static Bool multiHead = True;
 
-/* stdi/o for log shell */
-static int LogStdIn = -1, LogStdOut = -1, LogStdErr = -1;
-
-
 static int real_main(int argc, char **argv);
 
 void

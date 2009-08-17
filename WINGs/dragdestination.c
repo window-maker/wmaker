@@ -289,8 +289,7 @@ findDestinationViewInToplevel(WMView* toplevel, int x, int y)
     WMScreen *scr = W_VIEW_SCREEN(toplevel);
     Window toplevelWin = WMViewXID(toplevel);
     int xInToplevel, yInToplevel;
-    Window child, foo;
-    WMView *childView;
+    Window foo;
 
     XTranslateCoordinates(scr->display, scr->rootWin, toplevelWin,
                           x, y, &xInToplevel, &yInToplevel,

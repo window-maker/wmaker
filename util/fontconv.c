@@ -130,7 +130,7 @@ char*
 xlfdToFc(char *xlfd, char *useFamily, Bool keepXLFD)
 {
     str *tokens, *family, *weight, *slant;
-    char *name, buf[64], *slt;
+    char *name, buf[64];
     int size, pixelsize;
 
     tokens = getXLFDTokens(xlfd);
