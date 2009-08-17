@@ -593,7 +593,7 @@ static int
 real_main(int argc, char **argv)
 {
     int i, restart=0;
-    char *str, *pos;
+    char *pos;
     int d, s;
     int flag;
 #ifdef DEBUG
@@ -721,8 +721,7 @@ real_main(int argc, char **argv)
 
 
     if (Locale) {
-        /* return of wstrconcat should not be free-ed! read putenv man page */
-        putenv(wstrconcat("LANG=", Locale));
+        setenv("LANG", Locale, 1);
     } else {
         Locale = getenv("LC_ALL");
         if (!Locale) {
@@ -793,12 +792,7 @@ real_main(int argc, char **argv)
         multiHead = False;
 
     DisplayName = XDisplayName(DisplayName);
-    {
-        int len = strlen(DisplayName)+64;
-        str = wmalloc(len);
-        snprintf(str, len, "DISPLAY=%s", DisplayName);
-    }
-    putenv(str);
+    setenv("DISPLAY", DisplayName, 1);
 
 #ifdef DEBUG
     if (doSync)
