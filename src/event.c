@@ -315,28 +315,29 @@ DispatchEvent(XEvent *event)
  *----------------------------------------------------------------------
  */
 
-/* Allow for 1024 simultanious events */
-#define BUFF_SIZE ((sizeof(struct inotify_event)+FILENAME_MAX)*1024)
+#define BUFF_SIZE ((sizeof(struct inotify_event) + 16)*512)
 void inotifyHandleEvents (int fd, int wd)
 {
+    extern void wDefaultsCheckDomains();
     ssize_t eventQLength, i = 0;
     char buff[BUFF_SIZE] = {0};
-    extern void wDefaultsCheckDomains();
-    int oneShotFlag=0; /* Only check config once per read of the event queue */
+    /* Check config only once per read of the event queue */
+    int oneShotFlag = 0;
 
-    /* Read off the queued events
+    /*
+     * Read off the queued events
      * queue overflow is not checked (IN_Q_OVERFLOW). In practise this should
      * not occur; the block is on Xevents, but a config file change will normally
      * occur as a result of an Xevent - so the event queue should never have more than
      * a few entries before a read().
      */
-    eventQLength = read (fd, buff, BUFF_SIZE);
-    
+    eventQLength = read(fd, buff, BUFF_SIZE);
+
     /* check what events occured */
     /* Should really check wd here too, but for now we only have one watch! */
     while (i < eventQLength) {
         struct inotify_event *pevent = (struct inotify_event *)&buff[i];
-       
+
         /*
          * see inotify.h for event types.
          */
@@ -357,13 +358,11 @@ void inotifyHandleEvents (int fd, int wd)
 	    fprintf(stdout,"wmaker: reading config files in defaults database.\n");
             wDefaultsCheckDomains(NULL);
         }
-        /* Check for filename (length of name (len) > 0) */
-        /* if (pevent->len) printf ("name=%s\n", pevent->name); */
-      
-         i += sizeof(struct inotify_event) + pevent->len; /* move to next event in the buffer */
-   }
 
-}  /* inotifyHandleEvents */
+	 /* move to next event in the buffer */
+         i += sizeof(struct inotify_event) + pevent->len;
+   }
+}
 
 /*
  *----------------------------------------------------------------------
