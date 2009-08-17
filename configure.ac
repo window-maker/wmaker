@@ -393,9 +393,11 @@ AC_ARG_ENABLE(verbose-compile, AS_HELP_STRING([--disable-verbose-compile],
 	QUIET='@echo "     CC" $@;'
 	QUIET_AR='@echo "     AR" $@;'
 	LIBTOOL_ARG="--silent"
+	MAKEFLAGS="-s"
 	AC_SUBST(QUIET)
 	AC_SUBST(QUIET_AR)
 	AC_SUBST(LIBTOOL_ARG)
+	AC_SUBST(MAKEFLAGS)
 ])
 
 
