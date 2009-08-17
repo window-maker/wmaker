@@ -593,7 +593,7 @@ static int
 real_main(int argc, char **argv)
 {
     int i, restart=0;
-    char *str;
+    char *str, *pos;
     int d, s;
     int flag;
 #ifdef DEBUG
@@ -604,9 +604,7 @@ real_main(int argc, char **argv)
     wsetabort(wAbort);
 
     /* for telling WPrefs what's the name of the wmaker binary being ran */
-
-    str = wstrconcat("WMAKER_BIN_NAME=", argv[0]);
-    putenv(str);
+    setenv("WMAKER_BIN_NAME", argv[0], 1);
 
     flag= 0;
     ArgCount = argc;
@@ -787,11 +785,11 @@ real_main(int argc, char **argv)
     /* check if the user specified a complete display name (with screen).
      * If so, only manage the specified screen */
     if (DisplayName)
-        str = strchr(DisplayName, ':');
+        pos = strchr(DisplayName, ':');
     else
-        str = NULL;
+        pos = NULL;
 
-    if (str && sscanf(str, ":%i.%i", &d, &s)==2)
+    if (pos && sscanf(pos, ":%i.%i", &d, &s)==2)
         multiHead = False;
 
     DisplayName = XDisplayName(DisplayName);
