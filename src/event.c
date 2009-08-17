@@ -673,7 +673,7 @@ handleDestroyNotify(XEvent *event)
     WApplication *app;
     Window window = event->xdestroywindow.window;
     WScreen *scr = wScreenForRootWindow(event->xdestroywindow.event);
-    int index;
+    int widx;
 
 #ifdef DEBUG
     printf("got destroy notify\n");
@@ -684,11 +684,11 @@ handleDestroyNotify(XEvent *event)
     }
 
     if (scr != NULL) {
-        while ((index = WMFindInArray(scr->fakeGroupLeaders, matchWindow,
+        while ((widx = WMFindInArray(scr->fakeGroupLeaders, matchWindow,
                                       (void*)window)) != WANotFound) {
             WFakeGroupLeader *fPtr;
 
-            fPtr = WMGetFromArray(scr->fakeGroupLeaders, index);
+            fPtr = WMGetFromArray(scr->fakeGroupLeaders, widx);
             if (fPtr->retainCount > 0) {
                 fPtr->retainCount--;
                 if (fPtr->retainCount==0 && fPtr->leader!=None) {
@@ -1432,7 +1432,7 @@ handleKeyPress(XEvent *event)
     WWindow *wwin = scr->focused_window;
     int i;
     int modifiers;
-    int command=-1, index;
+    int command=-1, widx;
 #ifdef KEEP_XKB_LOCK_STATUS
     XkbStateRec staterec;
 #endif /*KEEP_XKB_LOCK_STATUS*/
@@ -1675,10 +1675,10 @@ handleKeyPress(XEvent *event)
     case WKBD_WINDOW9:
     case WKBD_WINDOW10:
 
-        index = command-WKBD_WINDOW1;
+        widx = command-WKBD_WINDOW1;
 
-        if (scr->shortcutWindows[index]) {
-            WMArray *list = scr->shortcutWindows[index];
+        if (scr->shortcutWindows[widx]) {
+            WMArray *list = scr->shortcutWindows[widx];
             int cw;
             int count = WMGetArrayItemCount(list);
             WWindow *twin;
@@ -1704,19 +1704,19 @@ handleKeyPress(XEvent *event)
             WMAddToArray(list, twin);
 
         } else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {
-            if (scr->shortcutWindows[index]) {
-                WMFreeArray(scr->shortcutWindows[index]);
-                scr->shortcutWindows[index] = NULL;
+            if (scr->shortcutWindows[widx]) {
+                WMFreeArray(scr->shortcutWindows[widx]);
+                scr->shortcutWindows[widx] = NULL;
             }
 
             if (wwin->flags.selected && scr->selected_windows) {
-                scr->shortcutWindows[index] =
+                scr->shortcutWindows[widx] =
                     WMDuplicateArray(scr->selected_windows);
                 /*WMRemoveFromArray(scr->shortcutWindows[index], wwin);
                  WMInsertInArray(scr->shortcutWindows[index], 0, wwin);*/
             } else {
-                scr->shortcutWindows[index] = WMCreateArray(4);
-                WMAddToArray(scr->shortcutWindows[index], wwin);
+                scr->shortcutWindows[widx] = WMCreateArray(4);
+                WMAddToArray(scr->shortcutWindows[widx], wwin);
             }
 
             wSelectWindow(wwin, !wwin->flags.selected);
@@ -1729,10 +1729,10 @@ handleKeyPress(XEvent *event)
                    && WMGetArrayItemCount(scr->selected_windows)) {
 
             if (wwin->flags.selected && scr->selected_windows) {
-                if (scr->shortcutWindows[index]) {
-                    WMFreeArray(scr->shortcutWindows[index]);
+                if (scr->shortcutWindows[widx]) {
+                    WMFreeArray(scr->shortcutWindows[widx]);
                 }
-                scr->shortcutWindows[index] =
+                scr->shortcutWindows[widx] =
                     WMDuplicateArray(scr->selected_windows);
             }
         }
