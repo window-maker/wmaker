@@ -145,18 +145,6 @@ downloadCallback(WMWidget *w, void *data)
 }
 
 
-
-static void
-updateThemeList(_Panel *panel)
-{
-    WMClearList(panel->list);
-
-
-
-}
-
-
-
 static void
 createPanel(Panel *p)
 {
