@@ -882,7 +882,7 @@ rereadDefaults(void)
 static void
 initDefaults()
 {
-    int i;
+    unsigned int i;
     WDefaultEntry *entry;
 
     WMPLSetCaseSensitive(False);
@@ -1179,7 +1179,7 @@ wReadStaticDefaults(WMPropList *dict)
 {
     WMPropList *plvalue;
     WDefaultEntry *entry;
-    int i;
+    unsigned int i;
     void *tdata;
 
 
@@ -1357,9 +1357,9 @@ wReadDefaults(WScreen *scr, WMPropList *new_dict)
 {
     WMPropList *plvalue, *old_value;
     WDefaultEntry *entry;
-    int i, must_update;
+    unsigned int i, must_update;
     int update_workspace_back = 0;	       /* kluge :/ */
-    int needs_refresh;
+    unsigned int needs_refresh;
     void *tdata;
     WMPropList *old_dict = (WDWindowMaker->dictionary!=new_dict
                             ? WDWindowMaker->dictionary : NULL);
