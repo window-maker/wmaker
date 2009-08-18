@@ -85,6 +85,7 @@ extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_COMMAND;
+extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 
 #ifdef SHAPE
 extern Bool wShapeSupported;
@@ -1008,6 +1009,11 @@ static void handleClientMessage(XEvent * event)
 			wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
 			break;
 		}
+	} else if (event->xclient.message_type == _XA_WM_IGNORE_FOCUS_EVENTS) {
+		WScreen *scr = wScreenSearchForRootWindow(event->xclient.window);
+		if (!scr)
+			return;
+		scr->flags.ignore_focus_events = event->xclient.data.l[0] ? 1 : 0;
 #ifdef NETWM_HINTS
 	} else if (wNETWMProcessClientMessage(&event->xclient)) {
 		/* do nothing */

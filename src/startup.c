@@ -135,6 +135,8 @@ extern Atom _XA_WINDOWMAKER_ICON_TILE;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 
+extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
+
 /* cursors */
 extern Cursor wCursor[WCUR_LAST];
 
@@ -535,7 +537,9 @@ static char *atomNames[] = {
 
 	GNUSTEP_WM_ATTR_NAME,
 	GNUSTEP_WM_MINIATURIZE_WINDOW,
-	GNUSTEP_TITLEBAR_STATE
+	GNUSTEP_TITLEBAR_STATE,
+
+	"WM_IGNORE_FOCUS_EVENTS"
 };
 
 /*
@@ -608,6 +612,8 @@ void StartUp(Bool defaultScreenOnly)
 	_XA_GNUSTEP_WM_ATTR = atom[17];
 	_XA_GNUSTEP_WM_MINIATURIZE_WINDOW = atom[18];
 	_XA_GNUSTEP_TITLEBAR_STATE = atom[19];
+
+	_XA_WM_IGNORE_FOCUS_EVENTS = atom[20];
 
 #ifdef XDND
 	wXDNDInitializeAtoms();

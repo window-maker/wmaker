@@ -134,7 +134,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 		int i;
 
 		WMMaskEvent(dpy, KeyPressMask | KeyReleaseMask | ExposureMask
-			    | PointerMotionMask | ButtonReleaseMask, &ev);
+			    | PointerMotionMask | ButtonReleaseMask | EnterWindowMask, &ev);
 
 		/* ignore CapsLock */
 		modifiers = ev.xkey.state & ValidModMask;
@@ -189,6 +189,10 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 					break;
 				}
 			}
+			break;
+
+		case EnterNotify:
+			/* ignore unwanted EnterNotify's */
 			break;
 
 		case LeaveNotify:

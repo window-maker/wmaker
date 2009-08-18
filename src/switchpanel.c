@@ -34,6 +34,9 @@
 #include "switchpanel.h"
 #include "funcs.h"
 #include "xinerama.h"
+#include "window.h"
+
+extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
@@ -546,8 +549,20 @@ void wSwitchPanelDestroy(WSwitchPanel * panel)
 	int i;
 	RImage *image;
 
-	if (panel->win)
+	if (panel->win) {
+		Window info_win = panel->scr->info_window;
+		XEvent ev;
+		ev.xclient.type = ClientMessage;
+		ev.xclient.message_type = _XA_WM_IGNORE_FOCUS_EVENTS;
+		ev.xclient.format = 32;
+		ev.xclient.data.l[0] = True;
+
+		XSendEvent(dpy, info_win, True, EnterWindowMask, &ev);
 		WMUnmapWidget(panel->win);
+
+		ev.xclient.data.l[0] = False;
+		XSendEvent(dpy, info_win, True, EnterWindowMask, &ev);
+	}
 
 	if (panel->images) {
 		WM_ITERATE_ARRAY(panel->images, image, i) {
