@@ -165,6 +165,8 @@ WMCreateFont(WMScreen *scrPtr, char *fontName)
 	font->font = XftFontOpenName(display, scrPtr->screen, DEFAULT_FONT);
 	if (!font->font) {
 	    printf("Unrecoverable font error! I must die!\n");
+	    wfree(font);
+	    wfree(fname);
 	    exit(1);
 	} else
 	   printf("Default font loading succeded.\n");
