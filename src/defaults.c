@@ -2574,7 +2574,7 @@ static int
 getModMask(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
            void **ret)
 {
-    static unsigned int mask;
+    static int mask;
     char *str;
 
     GET_STRING_OR_DEFAULT("Modifier Key", str);
@@ -2590,7 +2590,7 @@ getModMask(WScreen *scr, WDefaultEntry *entry, WMPropList *value, void *addr,
     }
 
     if (addr)
-        *(unsigned int*)addr = mask;
+        *(int *)addr = mask;
 
     if (ret)
         *ret = &mask;
