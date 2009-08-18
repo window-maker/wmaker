@@ -3133,15 +3133,15 @@ setHightlightText(WScreen *scr, WDefaultEntry *entry, XColor *color, void *foo)
 
 
 static int
-setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
+setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long widx)
 {
-    if (scr->clip_title_color[index])
-        WMReleaseColor(scr->clip_title_color[index]);
-    scr->clip_title_color[index] = WMCreateRGBColor(scr->wmscreen, color->red,
+    if (scr->clip_title_color[widx])
+        WMReleaseColor(scr->clip_title_color[widx]);
+    scr->clip_title_color[widx] = WMCreateRGBColor(scr->wmscreen, color->red,
                                                     color->green, color->blue,
                                                     True);
 #ifdef GRADIENT_CLIP_ARROW
-    if (index == CLIP_NORMAL) {
+    if (widx == CLIP_NORMAL) {
         RImage *image;
         RColor color1, color2;
         int pt = CLIP_BUTTON_SIZE*wPreferences.icon_size/64;
@@ -3170,12 +3170,12 @@ setClipTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 
 
 static int
-setWTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
+setWTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long widx)
 {
-    if (scr->window_title_color[index])
-        WMReleaseColor(scr->window_title_color[index]);
+    if (scr->window_title_color[widx])
+        WMReleaseColor(scr->window_title_color[widx]);
 
-    scr->window_title_color[index] =
+    scr->window_title_color[widx] =
         WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue,
                          True);
 
@@ -3186,7 +3186,7 @@ setWTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
 
 
 static int
-setMenuTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long index)
+setMenuTitleColor(WScreen *scr, WDefaultEntry *entry, XColor *color, long widx)
 {
     if (scr->menu_title_color[0])
         WMReleaseColor(scr->menu_title_color[0]);
@@ -3518,10 +3518,10 @@ setMenuTextBack(WScreen *scr, WDefaultEntry *entry, WTexture **texture, void *fo
 
 
 static int
-setKeyGrab(WScreen *scr, WDefaultEntry *entry, WShortKey *shortcut, long index)
+setKeyGrab(WScreen *scr, WDefaultEntry *entry, WShortKey *shortcut, long widx)
 {
     WWindow *wwin;
-    wKeyBindings[index] = *shortcut;
+    wKeyBindings[widx] = *shortcut;
 
     wwin = scr->focused_window;
 
@@ -3733,15 +3733,15 @@ setDoubleClick(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
 
 
 static int
-setCursor(WScreen *scr, WDefaultEntry *entry, Cursor *cursor, long index)
+setCursor(WScreen *scr, WDefaultEntry *entry, Cursor *cursor, long widx)
 {
-    if (wCursor[index] != None) {
-        XFreeCursor(dpy, wCursor[index]);
+    if (wCursor[widx] != None) {
+        XFreeCursor(dpy, wCursor[widx]);
     }
 
-    wCursor[index] = *cursor;
+    wCursor[widx] = *cursor;
 
-    if (index==WCUR_ROOT && *cursor!=None) {
+    if (widx == WCUR_ROOT && *cursor != None) {
         XDefineCursor(dpy, scr->root_win, *cursor);
     }
 
