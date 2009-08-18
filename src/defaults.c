@@ -1209,7 +1209,7 @@ wReadStaticDefaults(WMPropList *dict)
 
 
 void
-wDefaultsCheckDomains(void *foo)
+wDefaultsCheckDomains(void)
 {
     WScreen *scr;
     struct stat stbuf;

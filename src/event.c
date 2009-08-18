@@ -216,7 +216,7 @@ DispatchEvent(XEvent *event)
         Restart(NULL, True);
     } else if (WCHECK_STATE(WSTATE_NEED_REREAD)) {
         WCHANGE_STATE(WSTATE_NORMAL);
-        wDefaultsCheckDomains("bla");
+        wDefaultsCheckDomains();
     }
 
     /* for the case that all that is wanted to be dispatched is
@@ -356,7 +356,7 @@ void inotifyHandleEvents (int fd, int wd)
         }
         if ((pevent->mask & IN_MODIFY) && oneShotFlag == 0) {
 	    fprintf(stdout,"wmaker: reading config files in defaults database.\n");
-            wDefaultsCheckDomains(NULL);
+            wDefaultsCheckDomains();
         }
 
 	 /* move to next event in the buffer */
@@ -1013,7 +1013,7 @@ handleClientMessage(XEvent *event)
         }
     } else if (event->xclient.message_type == _XA_WINDOWMAKER_COMMAND) {
 
-        wDefaultsCheckDomains("bla");
+        wDefaultsCheckDomains();
 
     } else if (event->xclient.message_type == _XA_WINDOWMAKER_WM_FUNCTION) {
         WApplication *wapp;
