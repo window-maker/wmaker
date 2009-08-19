@@ -1430,9 +1430,9 @@ handleKeyPress(XEvent *event)
 {
     WScreen *scr = wScreenForRootWindow(event->xkey.root);
     WWindow *wwin = scr->focused_window;
-    int i;
+    short i, widx;
     int modifiers;
-    int command=-1, widx;
+    int command = -1;
 #ifdef KEEP_XKB_LOCK_STATUS
     XkbStateRec staterec;
 #endif /*KEEP_XKB_LOCK_STATUS*/
@@ -1634,30 +1634,13 @@ handleKeyPress(XEvent *event)
         StartWindozeCycle(wwin, event, False);
         break;
 
-#if (defined(__STDC__) && !defined(UNIXCPP)) || defined(ANSICPP)
-#define GOTOWORKS(wk)	case WKBD_WORKSPACE##wk:\
-    i = (scr->current_workspace/10)*10 + wk - 1;\
-    if (wPreferences.ws_advance || i<scr->workspace_count)\
-    wWorkspaceChange(scr, i);\
-    break
-#else
-#define GOTOWORKS(wk)	case WKBD_WORKSPACE/**/wk:\
-    i = (scr->current_workspace/10)*10 + wk - 1;\
-    if (wPreferences.ws_advance || i<scr->workspace_count)\
-    wWorkspaceChange(scr, i);\
-    break
-#endif
-        GOTOWORKS(1);
-        GOTOWORKS(2);
-        GOTOWORKS(3);
-        GOTOWORKS(4);
-        GOTOWORKS(5);
-        GOTOWORKS(6);
-        GOTOWORKS(7);
-        GOTOWORKS(8);
-        GOTOWORKS(9);
-        GOTOWORKS(10);
-#undef GOTOWORKS
+    case WKBD_WORKSPACE1 ... WKBD_WORKSPACE10:
+	widx = command - WKBD_WORKSPACE1;
+	i = (scr->current_workspace / 10) * 10 + widx;
+	if (wPreferences.ws_advance || i < scr->workspace_count)
+	    wWorkspaceChange(scr, i);
+	break;
+
     case WKBD_NEXTWORKSPACE:
         wWorkspaceRelativeChange(scr, 1);
         break;
