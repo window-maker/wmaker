@@ -23,7 +23,7 @@
 #define FOR_WPREFS
 
 #ifdef FOR_WPREFS
-# include "WPrefs.h" /* only for _() */
+# include "WPrefs.h"		/* only for _() */
 #else
 # define _(a) a
 #endif
@@ -36,145 +36,108 @@
 
 #include "imagebrowser.h"
 
-
-
 struct _ImageBrowser {
-    WMWindow *win;
+	WMWindow *win;
 
-    WMPopUpButton *pathP;
+	WMPopUpButton *pathP;
 
-    WMScrollView *sview;
-    WMFrame *frame;
+	WMScrollView *sview;
+	WMFrame *frame;
 
+	WMWidget *auxWidget;
 
-    WMWidget *auxWidget;
+	WMButton *viewBtn;
+	WMButton *okBtn;
+	WMButton *cancelBtn;
 
+	WMSize maxPreviewSize;
 
-    WMButton *viewBtn;
-    WMButton *okBtn;
-    WMButton *cancelBtn;
+	ImageBrowserDelegate *delegate;
 
-    WMSize maxPreviewSize;
-
-    ImageBrowserDelegate *delegate;
-
-    WMArray *previews;
+	WMArray *previews;
 };
-
-
-
-
 
 #define DEFAULT_WIDTH 300
 #define DEFAULT_HEIGHT 200
 
-
-ImageBrowser*
-CreateImageBrowser(WMScreen *scr, char *title, char **paths, int pathN,
-                   WMSize *maxSize, WMWidget *auxWidget)
+ImageBrowser *CreateImageBrowser(WMScreen * scr, char *title, char **paths, int pathN,
+				 WMSize * maxSize, WMWidget * auxWidget)
 {
-    ImageBrowser *br;
-    int i;
-    int h;
+	ImageBrowser *br;
+	int i;
+	int h;
 
-    br = wmalloc(sizeof(ImageBrowser));
+	br = wmalloc(sizeof(ImageBrowser));
 
-    br->win = WMCreateWindow(scr, "imageBrowser");
-    WMResizeWidget(br->win, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+	br->win = WMCreateWindow(scr, "imageBrowser");
+	WMResizeWidget(br->win, DEFAULT_WIDTH, DEFAULT_HEIGHT);
 
-    br->pathP = WMCreatePopUpButton(br->win);
-    WMMoveWidget(br->pathP, (DEFAULT_WIDTH - 80)/2, 10);
-    WMResizeWidget(br->pathP, DEFAULT_WIDTH - 80, 20);
+	br->pathP = WMCreatePopUpButton(br->win);
+	WMMoveWidget(br->pathP, (DEFAULT_WIDTH - 80) / 2, 10);
+	WMResizeWidget(br->pathP, DEFAULT_WIDTH - 80, 20);
 
-    for (i = 0; i < pathN; i++) {
-        WMAddPopUpButtonItem(br->pathP, paths[i]);
-    }
+	for (i = 0; i < pathN; i++) {
+		WMAddPopUpButtonItem(br->pathP, paths[i]);
+	}
 
+	br->viewBtn = WMCreateCommandButton(br->win);
+	WMSetButtonText(br->viewBtn, _("View"));
+	WMResizeWidget(br->viewBtn, 80, 24);
+	WMMoveWidget(br->viewBtn, 10, DEFAULT_HEIGHT - 29);
 
-    br->viewBtn = WMCreateCommandButton(br->win);
-    WMSetButtonText(br->viewBtn, _("View"));
-    WMResizeWidget(br->viewBtn, 80, 24);
-    WMMoveWidget(br->viewBtn, 10, DEFAULT_HEIGHT - 29);
+	br->cancelBtn = WMCreateCommandButton(br->win);
+	WMSetButtonText(br->cancelBtn, _("Cancel"));
+	WMResizeWidget(br->cancelBtn, 80, 24);
+	WMMoveWidget(br->cancelBtn, DEFAULT_WIDTH - 10 - 80, DEFAULT_HEIGHT - 29);
 
-    br->cancelBtn = WMCreateCommandButton(br->win);
-    WMSetButtonText(br->cancelBtn, _("Cancel"));
-    WMResizeWidget(br->cancelBtn, 80, 24);
-    WMMoveWidget(br->cancelBtn, DEFAULT_WIDTH - 10 - 80, DEFAULT_HEIGHT - 29);
+	br->okBtn = WMCreateCommandButton(br->win);
+	WMSetButtonText(br->okBtn, _("OK"));
+	WMResizeWidget(br->okBtn, 80, 24);
+	WMMoveWidget(br->okBtn, DEFAULT_WIDTH - 10 - 160 - 5, DEFAULT_HEIGHT - 29);
 
-    br->okBtn = WMCreateCommandButton(br->win);
-    WMSetButtonText(br->okBtn, _("OK"));
-    WMResizeWidget(br->okBtn, 80, 24);
-    WMMoveWidget(br->okBtn, DEFAULT_WIDTH - 10 - 160 - 5, DEFAULT_HEIGHT - 29);
+	br->auxWidget = auxWidget;
 
+	h = DEFAULT_HEIGHT - 20	/* top and bottom spacing */
+	    - 25		/* popup menu and spacing */
+	    - 29;		/* button row and spacing */
 
+	if (auxWidget != NULL) {
+		h -= WMWidgetHeight(auxWidget) + 5;
 
-    br->auxWidget = auxWidget;
+		W_ReparentView(WMWidgetView(auxWidget), WMWidgetView(br->win), 10, 10 + 25 + h + 5);
+	}
 
+	br->sview = WMCreateScrollView(br->win);
+	WMResizeWidget(br->sview, DEFAULT_WIDTH - 20, h);
+	WMMoveWidget(br->sview, 10, 5 + 20 + 5);
 
-    h = DEFAULT_HEIGHT
-        - 20 /* top and bottom spacing */
-        - 25 /* popup menu and spacing */
-        - 29; /* button row and spacing */
+	WMMapSubwidgets(br->win);
 
-    if (auxWidget != NULL) {
-        h -= WMWidgetHeight(auxWidget) + 5;
-
-        W_ReparentView(WMWidgetView(auxWidget),
-                       WMWidgetView(br->win),
-                       10, 10 + 25 + h + 5);
-    }
-
-    br->sview = WMCreateScrollView(br->win);
-    WMResizeWidget(br->sview, DEFAULT_WIDTH-20, h);
-    WMMoveWidget(br->sview, 10, 5 + 20 + 5);
-
-
-
-    WMMapSubwidgets(br->win);
-
-    return br;
+	return br;
 }
 
-
-void
-ShowImageBrowser(ImageBrowser *browser)
+void ShowImageBrowser(ImageBrowser * browser)
 {
-    WMMapWidget(browser->win);
+	WMMapWidget(browser->win);
 }
 
-void
-CloseImageBrowser(ImageBrowser *browser)
+void CloseImageBrowser(ImageBrowser * browser)
 {
-    WMUnmapWidget(browser->win);
+	WMUnmapWidget(browser->win);
 }
 
-
-void
-SetImageBrowserPathList(ImageBrowser *browser, char **paths, int pathN)
+void SetImageBrowserPathList(ImageBrowser * browser, char **paths, int pathN)
 {
 }
 
-
-void
-SetImageBrowserDelegate(ImageBrowser *browser,
-                        ImageBrowserDelegate *delegate)
+void SetImageBrowserDelegate(ImageBrowser * browser, ImageBrowserDelegate * delegate)
 {
 
 }
 
-
-
-
-
-void
-DestroyImageBrowser(ImageBrowser *browser)
+void DestroyImageBrowser(ImageBrowser * browser)
 {
-    WMDestroyWidget(browser->win);
+	WMDestroyWidget(browser->win);
 
-    /**/
-
-    wfree(browser);
+	 /**/ wfree(browser);
 }
-
-
-

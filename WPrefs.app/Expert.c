@@ -20,112 +20,101 @@
  *  USA.
  */
 
-
 #include "WPrefs.h"
 
 typedef struct _Panel {
-    WMBox *box;
-    char *sectionName;
+	WMBox *box;
+	char *sectionName;
 
-    char *description;
+	char *description;
 
-    CallbackRec callbacks;
+	CallbackRec callbacks;
 
-    WMWidget *parent;
+	WMWidget *parent;
 
-    WMButton *swi[8];
+	WMButton *swi[8];
 
 } _Panel;
 
-
-
 #define ICON_FILE	"expert"
 
-
-static void
-showData(_Panel *panel)
+static void showData(_Panel * panel)
 {
-    WMUserDefaults *udb = WMGetStandardUserDefaults();
+	WMUserDefaults *udb = WMGetStandardUserDefaults();
 
-    WMSetButtonSelected(panel->swi[0], GetBoolForKey("DisableMiniwindows"));
-    WMSetButtonSelected(panel->swi[1], WMGetUDBoolForKey(udb, "NoXSetStuff"));
-    WMSetButtonSelected(panel->swi[2], GetBoolForKey("SaveSessionOnExit"));
-    WMSetButtonSelected(panel->swi[3], GetBoolForKey("UseSaveUnders"));
-    WMSetButtonSelected(panel->swi[4], GetBoolForKey("DontConfirmKill"));
-    WMSetButtonSelected(panel->swi[5], GetBoolForKey("DisableBlinking"));
-    WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
+	WMSetButtonSelected(panel->swi[0], GetBoolForKey("DisableMiniwindows"));
+	WMSetButtonSelected(panel->swi[1], WMGetUDBoolForKey(udb, "NoXSetStuff"));
+	WMSetButtonSelected(panel->swi[2], GetBoolForKey("SaveSessionOnExit"));
+	WMSetButtonSelected(panel->swi[3], GetBoolForKey("UseSaveUnders"));
+	WMSetButtonSelected(panel->swi[4], GetBoolForKey("DontConfirmKill"));
+	WMSetButtonSelected(panel->swi[5], GetBoolForKey("DisableBlinking"));
+	WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
 }
 
-
-static void
-createPanel(Panel *p)
+static void createPanel(Panel * p)
 {
-    _Panel *panel = (_Panel*)p;
-    int i;
+	_Panel *panel = (_Panel *) p;
+	int i;
 
-    panel->box = WMCreateBox(panel->parent);
-    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
+	panel->box = WMCreateBox(panel->parent);
+	WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
 
-    for (i=0; i<7; i++) {
-        panel->swi[i] = WMCreateSwitchButton(panel->box);
-        WMResizeWidget(panel->swi[i], FRAME_WIDTH-40, 25);
-        WMMoveWidget(panel->swi[i], 20, 20+i*25);
-    }
+	for (i = 0; i < 7; i++) {
+		panel->swi[i] = WMCreateSwitchButton(panel->box);
+		WMResizeWidget(panel->swi[i], FRAME_WIDTH - 40, 25);
+		WMMoveWidget(panel->swi[i], 20, 20 + i * 25);
+	}
 
-    WMSetButtonText(panel->swi[0], _("Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."));
-    WMSetButtonText(panel->swi[1], _("Do not set non-WindowMaker specific parameters (do not use xset)."));
-    WMSetButtonText(panel->swi[2], _("Automatically save session when exiting Window Maker."));
-    WMSetButtonText(panel->swi[3], _("Use SaveUnder in window frames, icons, menus and other objects."));
-    WMSetButtonText(panel->swi[4], _("Disable confirmation panel for the Kill command."));
-    WMSetButtonText(panel->swi[5], _("Disable selection animation for selected icons."));
-    WMSetButtonText(panel->swi[6], _("Smooth font edges (needs restart)."));
+	WMSetButtonText(panel->swi[0],
+			_("Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."));
+	WMSetButtonText(panel->swi[1], _("Do not set non-WindowMaker specific parameters (do not use xset)."));
+	WMSetButtonText(panel->swi[2], _("Automatically save session when exiting Window Maker."));
+	WMSetButtonText(panel->swi[3], _("Use SaveUnder in window frames, icons, menus and other objects."));
+	WMSetButtonText(panel->swi[4], _("Disable confirmation panel for the Kill command."));
+	WMSetButtonText(panel->swi[5], _("Disable selection animation for selected icons."));
+	WMSetButtonText(panel->swi[6], _("Smooth font edges (needs restart)."));
 
-    WMSetButtonEnabled(panel->swi[6], True);
+	WMSetButtonEnabled(panel->swi[6], True);
 
-    WMRealizeWidget(panel->box);
-    WMMapSubwidgets(panel->box);
+	WMRealizeWidget(panel->box);
+	WMMapSubwidgets(panel->box);
 
-    showData(panel);
+	showData(panel);
 }
 
-
-static void
-storeDefaults(_Panel *panel)
+static void storeDefaults(_Panel * panel)
 {
-    WMUserDefaults *udb = WMGetStandardUserDefaults();
+	WMUserDefaults *udb = WMGetStandardUserDefaults();
 
-    SetBoolForKey(WMGetButtonSelected(panel->swi[0]), "DisableMiniwindows");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[0]), "DisableMiniwindows");
 
-    WMSetUDBoolForKey(udb, WMGetButtonSelected(panel->swi[1]), "NoXSetStuff");
+	WMSetUDBoolForKey(udb, WMGetButtonSelected(panel->swi[1]), "NoXSetStuff");
 
-    SetBoolForKey(WMGetButtonSelected(panel->swi[2]), "SaveSessionOnExit");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[3]), "UseSaveUnders");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "DontConfirmKill");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DisableBlinking");
-    SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "AntialiasedText");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[2]), "SaveSessionOnExit");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[3]), "UseSaveUnders");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "DontConfirmKill");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DisableBlinking");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "AntialiasedText");
 }
 
-
-Panel*
-InitExpert(WMScreen *scr, WMWidget *parent)
+Panel *InitExpert(WMScreen * scr, WMWidget * parent)
 {
-    _Panel *panel;
+	_Panel *panel;
 
-    panel = wmalloc(sizeof(_Panel));
-    memset(panel, 0, sizeof(_Panel));
+	panel = wmalloc(sizeof(_Panel));
+	memset(panel, 0, sizeof(_Panel));
 
-    panel->sectionName = _("Expert User Preferences");
+	panel->sectionName = _("Expert User Preferences");
 
-    panel->description = _("Options for people who know what they're doing...\n"
-                           "Also have some other misc. options.");
+	panel->description = _("Options for people who know what they're doing...\n"
+			       "Also have some other misc. options.");
 
-    panel->parent = parent;
+	panel->parent = parent;
 
-    panel->callbacks.createWidgets = createPanel;
-    panel->callbacks.updateDomain = storeDefaults;
+	panel->callbacks.createWidgets = createPanel;
+	panel->callbacks.updateDomain = storeDefaults;
 
-    AddSection(panel, ICON_FILE);
+	AddSection(panel, ICON_FILE);
 
-    return panel;
+	return panel;
 }
-

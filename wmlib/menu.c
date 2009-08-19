@@ -29,228 +29,210 @@
 #include "app.h"
 #include "menu.h"
 
-
-WMMenu*
-WMMenuCreate(WMAppContext *app, char *title)
+WMMenu *WMMenuCreate(WMAppContext * app, char *title)
 {
-    wmMenu *menu;
+	wmMenu *menu;
 
-    if (strlen(title)>255)
-        return NULL;
+	if (strlen(title) > 255)
+		return NULL;
 
-    menu = malloc(sizeof(wmMenu));
-    if (!menu)
-        return NULL;
+	menu = malloc(sizeof(wmMenu));
+	if (!menu)
+		return NULL;
 
-    menu->appcontext = app;
-    menu->parent = NULL;
-    menu->title = title;
-    menu->entries = NULL;
-    menu->first = NULL;
+	menu->appcontext = app;
+	menu->parent = NULL;
+	menu->title = title;
+	menu->entries = NULL;
+	menu->first = NULL;
 
-    menu->realized = False;
-    menu->code = app->last_menu_tag++;
+	menu->realized = False;
+	menu->code = app->last_menu_tag++;
 
-    menu->entryline = malloc(strlen(title)+32);
-    menu->entryline2 = malloc(32);
-    if (!menu->entryline || !menu->entryline2) {
-        if (menu->entryline)
-            free(menu->entryline);
-        free(menu);
-        return NULL;
-    }
-    sprintf(menu->entryline, "%i %i %s", wmBeginMenu, menu->code, title);
-    sprintf(menu->entryline2, "%i %i", wmEndMenu, menu->code);
-    return menu;
-}
-
-
-int
-WMMenuAddItem(WMMenu *menu, char *text, WMMenuAction action,
-              void *clientData, WMFreeFunction freedata, char *rtext)
-{
-    wmMenuEntry *entry;
-
-    /* max size of right side text */
-    if (rtext && strlen(rtext)>4)
-        return -1;
-
-    /* max size of menu text */
-    if (strlen(text)>255)
-        return -1;
-
-    entry = malloc(sizeof(wmMenuEntry));
-    if (!entry)
-        return -1;
-
-    entry->entryline = malloc(strlen(text)+100);
-    if (!entry->entryline) {
-        free(menu);
-        return -1;
-    }
-
-    if (menu->entries)
-        entry->order = menu->entries->order + 1;
-    else {
-        entry->order = 0;
-        menu->first = entry;
-    }
-    entry->next = NULL;
-    entry->prev = menu->entries;
-    if (menu->entries)
-        menu->entries->next = entry;
-    menu->entries = entry;
-
-    entry->menu = menu;
-    entry->text = text;
-    entry->shortcut = rtext;
-    entry->callback = action;
-    entry->clientData = clientData;
-    entry->free = freedata;
-    entry->tag = menu->appcontext->last_menu_tag++;
-    entry->cascade = NULL;
-    entry->enabled = True;
-
-
-    if (!rtext)
-        sprintf(entry->entryline, "%i %i %i %i %s", wmNormalItem,
-                menu->code, entry->tag, True, text);
-    else
-        sprintf(entry->entryline, "%i %i %i %i %s %s", wmDoubleItem,
-                menu->code, entry->tag, True, rtext, text);
-    return entry->tag;
-}
-
-
-
-int
-WMMenuAddSubmenu(WMMenu *menu, char *text, WMMenu *submenu)
-{
-    wmMenuEntry *entry;
-
-    /* max size of menu text */
-    if (strlen(text)>255)
-        return -1;
-
-    entry = malloc(sizeof(wmMenuEntry));
-    if (!entry)
-        return -1;
-
-    entry->entryline = malloc(strlen(text)+100);
-    if (!entry->entryline) {
-        free(menu);
-        return -1;
-    }
-
-    if (menu->entries)
-        entry->order = menu->entries->order + 1;
-    else {
-        entry->order = 0;
-        menu->first = entry;
-    }
-    entry->next = NULL;
-    entry->prev = menu->entries;
-    if (menu->entries)
-        menu->entries->next = entry;
-    menu->entries = entry;
-    entry->menu = menu;
-    entry->text = text;
-    entry->shortcut = NULL;
-    entry->callback = NULL;
-    entry->clientData = NULL;
-    entry->tag = menu->appcontext->last_menu_tag++;
-    entry->cascade = submenu;
-    entry->enabled = True;
-
-    sprintf(entry->entryline, "%i %i %i %i %i %s", wmSubmenuItem,
-            menu->code, entry->tag, True, submenu->code, text);
-    return entry->tag;
-}
-
-
-static int
-countItems(WMMenu *menu)
-{
-    wmMenuEntry *entry = menu->first;
-    int c;
-
-    c = 1;
-    while (entry) {
-        c++;
-        if (entry->cascade) {
-            c += countItems(entry->cascade);
-        }
-        entry = entry->next;
-    }
-    c++;
-    return c;
-}
-
-
-static void
-addItems(char **slist, int *index, WMMenu *menu)
-{
-    wmMenuEntry *entry = menu->first;
-
-    slist[(*index)++] = menu->entryline;
-    while (entry) {
-        slist[(*index)++] = entry->entryline;
-        if (entry->cascade) {
-            addItems(slist, index, entry->cascade);
-        }
-        entry = entry->next;
-    }
-    slist[(*index)++] = menu->entryline2;
-}
-
-
-static Atom
-getatom(Display *dpy)
-{
-    static Atom atom=0;
-
-    if (atom==0) {
-        atom = XInternAtom(dpy, WMMENU_PROPNAME, False);
-    }
-    return atom;
+	menu->entryline = malloc(strlen(title) + 32);
+	menu->entryline2 = malloc(32);
+	if (!menu->entryline || !menu->entryline2) {
+		if (menu->entryline)
+			free(menu->entryline);
+		free(menu);
+		return NULL;
+	}
+	sprintf(menu->entryline, "%i %i %s", wmBeginMenu, menu->code, title);
+	sprintf(menu->entryline2, "%i %i", wmEndMenu, menu->code);
+	return menu;
 }
 
 int
-WMRealizeMenus(WMAppContext *app)
+WMMenuAddItem(WMMenu * menu, char *text, WMMenuAction action,
+	      void *clientData, WMFreeFunction freedata, char *rtext)
 {
-    int i, count;
-    char **slist;
-    XTextProperty text_prop;
+	wmMenuEntry *entry;
 
-    if (!app->main_menu)
-        return False;
+	/* max size of right side text */
+	if (rtext && strlen(rtext) > 4)
+		return -1;
 
-    /* first count how many menu items there are */
-    count = countItems(app->main_menu);
-    if (count==0)
-        return True;
+	/* max size of menu text */
+	if (strlen(text) > 255)
+		return -1;
 
-    count++;
-    slist = malloc(count*sizeof(char*));
-    if (!slist) {
-        return False;
-    }
+	entry = malloc(sizeof(wmMenuEntry));
+	if (!entry)
+		return -1;
 
-    slist[0] = "WMMenu 0";
-    i = 1;
-    addItems(slist, &i, app->main_menu);
+	entry->entryline = malloc(strlen(text) + 100);
+	if (!entry->entryline) {
+		free(menu);
+		return -1;
+	}
 
-    if (!XStringListToTextProperty(slist, i, &text_prop)) {
-        free(slist);
-        return False;
-    }
-    free(slist);
-    XSetTextProperty(app->dpy, app->main_window, &text_prop,
-                     getatom(app->dpy));
+	if (menu->entries)
+		entry->order = menu->entries->order + 1;
+	else {
+		entry->order = 0;
+		menu->first = entry;
+	}
+	entry->next = NULL;
+	entry->prev = menu->entries;
+	if (menu->entries)
+		menu->entries->next = entry;
+	menu->entries = entry;
 
-    XFree(text_prop.value);
+	entry->menu = menu;
+	entry->text = text;
+	entry->shortcut = rtext;
+	entry->callback = action;
+	entry->clientData = clientData;
+	entry->free = freedata;
+	entry->tag = menu->appcontext->last_menu_tag++;
+	entry->cascade = NULL;
+	entry->enabled = True;
 
-    return True;
+	if (!rtext)
+		sprintf(entry->entryline, "%i %i %i %i %s", wmNormalItem, menu->code, entry->tag, True, text);
+	else
+		sprintf(entry->entryline, "%i %i %i %i %s %s", wmDoubleItem,
+			menu->code, entry->tag, True, rtext, text);
+	return entry->tag;
 }
 
+int WMMenuAddSubmenu(WMMenu * menu, char *text, WMMenu * submenu)
+{
+	wmMenuEntry *entry;
 
+	/* max size of menu text */
+	if (strlen(text) > 255)
+		return -1;
+
+	entry = malloc(sizeof(wmMenuEntry));
+	if (!entry)
+		return -1;
+
+	entry->entryline = malloc(strlen(text) + 100);
+	if (!entry->entryline) {
+		free(menu);
+		return -1;
+	}
+
+	if (menu->entries)
+		entry->order = menu->entries->order + 1;
+	else {
+		entry->order = 0;
+		menu->first = entry;
+	}
+	entry->next = NULL;
+	entry->prev = menu->entries;
+	if (menu->entries)
+		menu->entries->next = entry;
+	menu->entries = entry;
+	entry->menu = menu;
+	entry->text = text;
+	entry->shortcut = NULL;
+	entry->callback = NULL;
+	entry->clientData = NULL;
+	entry->tag = menu->appcontext->last_menu_tag++;
+	entry->cascade = submenu;
+	entry->enabled = True;
+
+	sprintf(entry->entryline, "%i %i %i %i %i %s", wmSubmenuItem,
+		menu->code, entry->tag, True, submenu->code, text);
+	return entry->tag;
+}
+
+static int countItems(WMMenu * menu)
+{
+	wmMenuEntry *entry = menu->first;
+	int c;
+
+	c = 1;
+	while (entry) {
+		c++;
+		if (entry->cascade) {
+			c += countItems(entry->cascade);
+		}
+		entry = entry->next;
+	}
+	c++;
+	return c;
+}
+
+static void addItems(char **slist, int *index, WMMenu * menu)
+{
+	wmMenuEntry *entry = menu->first;
+
+	slist[(*index)++] = menu->entryline;
+	while (entry) {
+		slist[(*index)++] = entry->entryline;
+		if (entry->cascade) {
+			addItems(slist, index, entry->cascade);
+		}
+		entry = entry->next;
+	}
+	slist[(*index)++] = menu->entryline2;
+}
+
+static Atom getatom(Display * dpy)
+{
+	static Atom atom = 0;
+
+	if (atom == 0) {
+		atom = XInternAtom(dpy, WMMENU_PROPNAME, False);
+	}
+	return atom;
+}
+
+int WMRealizeMenus(WMAppContext * app)
+{
+	int i, count;
+	char **slist;
+	XTextProperty text_prop;
+
+	if (!app->main_menu)
+		return False;
+
+	/* first count how many menu items there are */
+	count = countItems(app->main_menu);
+	if (count == 0)
+		return True;
+
+	count++;
+	slist = malloc(count * sizeof(char *));
+	if (!slist) {
+		return False;
+	}
+
+	slist[0] = "WMMenu 0";
+	i = 1;
+	addItems(slist, &i, app->main_menu);
+
+	if (!XStringListToTextProperty(slist, i, &text_prop)) {
+		free(slist);
+		return False;
+	}
+	free(slist);
+	XSetTextProperty(app->dpy, app->main_window, &text_prop, getatom(app->dpy));
+
+	XFree(text_prop.value);
+
+	return True;
+}

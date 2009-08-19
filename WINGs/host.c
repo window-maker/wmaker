@@ -18,7 +18,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-
 #include "wconfig.h"
 
 #include <unistd.h>
@@ -30,7 +29,6 @@
 
 #include "WUtil.h"
 
-
 /* For Solaris */
 #ifndef INADDR_NONE
 # define INADDR_NONE  (-1)
@@ -39,272 +37,229 @@
 /* Max hostname length (RFC  1123) */
 #define	W_MAXHOSTNAMELEN	255
 
-
 typedef struct W_Host {
-    char   *name;
+	char *name;
 
-    WMArray  *names;
-    WMArray  *addresses;
+	WMArray *names;
+	WMArray *addresses;
 
-    int    refCount;
+	int refCount;
 } W_Host;
-
 
 static WMHashTable *hostCache = NULL;
 
 static Bool hostCacheEnabled = True;
 
-
-
-static WMHost*
-getHostFromCache(char *name)
+static WMHost *getHostFromCache(char *name)
 {
-    if (!hostCache)
-        return NULL;
+	if (!hostCache)
+		return NULL;
 
-    return WMHashGet(hostCache, name);
+	return WMHashGet(hostCache, name);
 }
 
-
-static WMHost*
-getHostWithHostEntry(struct hostent *host, char *name)
+static WMHost *getHostWithHostEntry(struct hostent *host, char *name)
 {
-    WMHost *hPtr;
-    struct in_addr in;
-    int i;
+	WMHost *hPtr;
+	struct in_addr in;
+	int i;
 
-    hPtr = (WMHost*)wmalloc(sizeof(WMHost));
-    memset(hPtr, 0, sizeof(WMHost));
+	hPtr = (WMHost *) wmalloc(sizeof(WMHost));
+	memset(hPtr, 0, sizeof(WMHost));
 
-    hPtr->names = WMCreateArrayWithDestructor(1, wfree);
-    hPtr->addresses = WMCreateArrayWithDestructor(1, wfree);
+	hPtr->names = WMCreateArrayWithDestructor(1, wfree);
+	hPtr->addresses = WMCreateArrayWithDestructor(1, wfree);
 
-    WMAddToArray(hPtr->names, wstrdup(host->h_name));
+	WMAddToArray(hPtr->names, wstrdup(host->h_name));
 
-    for (i=0; host->h_aliases[i]!=NULL; i++) {
-        WMAddToArray(hPtr->names, wstrdup(host->h_aliases[i]));
-    }
+	for (i = 0; host->h_aliases[i] != NULL; i++) {
+		WMAddToArray(hPtr->names, wstrdup(host->h_aliases[i]));
+	}
 
-    for (i=0; host->h_addr_list[i]!=NULL; i++) {
-        memcpy((void*)&in.s_addr, (const void*)host->h_addr_list[i],
-               host->h_length);
-        WMAddToArray(hPtr->addresses, wstrdup(inet_ntoa(in)));
-    }
+	for (i = 0; host->h_addr_list[i] != NULL; i++) {
+		memcpy((void *)&in.s_addr, (const void *)host->h_addr_list[i], host->h_length);
+		WMAddToArray(hPtr->addresses, wstrdup(inet_ntoa(in)));
+	}
 
-    hPtr->refCount = 1;
+	hPtr->refCount = 1;
 
-    if (hostCacheEnabled) {
-        if (!hostCache)
-            hostCache = WMCreateHashTable(WMStringPointerHashCallbacks);
-        hPtr->name = wstrdup(name);
-        wassertr(WMHashInsert(hostCache, hPtr->name, hPtr)==NULL);
-        hPtr->refCount++;
-    }
+	if (hostCacheEnabled) {
+		if (!hostCache)
+			hostCache = WMCreateHashTable(WMStringPointerHashCallbacks);
+		hPtr->name = wstrdup(name);
+		wassertr(WMHashInsert(hostCache, hPtr->name, hPtr) == NULL);
+		hPtr->refCount++;
+	}
 
-    return hPtr;
+	return hPtr;
 }
 
-
-WMHost*
-WMGetCurrentHost()
+WMHost *WMGetCurrentHost()
 {
-    char name[W_MAXHOSTNAMELEN+1];
+	char name[W_MAXHOSTNAMELEN + 1];
 
-    if (gethostname(name, W_MAXHOSTNAMELEN) < 0) {
-        wsyserror(_("Cannot get current host name"));
-        return NULL;
-    }
+	if (gethostname(name, W_MAXHOSTNAMELEN) < 0) {
+		wsyserror(_("Cannot get current host name"));
+		return NULL;
+	}
 
-    name[W_MAXHOSTNAMELEN] = 0;
+	name[W_MAXHOSTNAMELEN] = 0;
 
-    return WMGetHostWithName(name);
+	return WMGetHostWithName(name);
 }
 
-
-WMHost*
-WMGetHostWithName(char *name)
+WMHost *WMGetHostWithName(char *name)
 {
-    struct hostent *host;
-    WMHost *hPtr;
+	struct hostent *host;
+	WMHost *hPtr;
 
-    wassertrv(name!=NULL, NULL);
+	wassertrv(name != NULL, NULL);
 
-    if (hostCacheEnabled) {
-        if ((hPtr = getHostFromCache(name)) != NULL) {
-            WMRetainHost(hPtr);
-            return hPtr;
-        }
-    }
+	if (hostCacheEnabled) {
+		if ((hPtr = getHostFromCache(name)) != NULL) {
+			WMRetainHost(hPtr);
+			return hPtr;
+		}
+	}
 
-    host = gethostbyname(name);
-    if (host == NULL) {
-        return NULL;
-    }
+	host = gethostbyname(name);
+	if (host == NULL) {
+		return NULL;
+	}
 
-    hPtr = getHostWithHostEntry(host, name);
+	hPtr = getHostWithHostEntry(host, name);
 
-    return hPtr;
+	return hPtr;
 }
 
-
-WMHost*
-WMGetHostWithAddress(char *address)
+WMHost *WMGetHostWithAddress(char *address)
 {
-    struct hostent *host;
-    struct in_addr in;
-    WMHost *hPtr;
+	struct hostent *host;
+	struct in_addr in;
+	WMHost *hPtr;
 
-    wassertrv(address!=NULL, NULL);
+	wassertrv(address != NULL, NULL);
 
-    if (hostCacheEnabled) {
-        if ((hPtr = getHostFromCache(address)) != NULL) {
-            WMRetainHost(hPtr);
-            return hPtr;
-        }
-    }
-
+	if (hostCacheEnabled) {
+		if ((hPtr = getHostFromCache(address)) != NULL) {
+			WMRetainHost(hPtr);
+			return hPtr;
+		}
+	}
 #ifndef	HAVE_INET_ATON
-    if ((in.s_addr = inet_addr(address)) == INADDR_NONE)
-        return NULL;
+	if ((in.s_addr = inet_addr(address)) == INADDR_NONE)
+		return NULL;
 #else
-    if (inet_aton(address, &in) == 0)
-        return NULL;
+	if (inet_aton(address, &in) == 0)
+		return NULL;
 #endif
 
-    host = gethostbyaddr((char*)&in, sizeof(in), AF_INET);
-    if (host == NULL) {
-        return NULL;
-    }
+	host = gethostbyaddr((char *)&in, sizeof(in), AF_INET);
+	if (host == NULL) {
+		return NULL;
+	}
 
-    hPtr = getHostWithHostEntry(host, address);
+	hPtr = getHostWithHostEntry(host, address);
 
-    return hPtr;
+	return hPtr;
 }
 
-
-WMHost*
-WMRetainHost(WMHost *hPtr)
+WMHost *WMRetainHost(WMHost * hPtr)
 {
-    hPtr->refCount++;
-    return hPtr;
+	hPtr->refCount++;
+	return hPtr;
 }
 
-
-void
-WMReleaseHost(WMHost *hPtr)
+void WMReleaseHost(WMHost * hPtr)
 {
-    hPtr->refCount--;
+	hPtr->refCount--;
 
-    if (hPtr->refCount > 0)
-        return;
+	if (hPtr->refCount > 0)
+		return;
 
-    WMFreeArray(hPtr->names);
-    WMFreeArray(hPtr->addresses);
+	WMFreeArray(hPtr->names);
+	WMFreeArray(hPtr->addresses);
 
-    if (hPtr->name) {
-        WMHashRemove(hostCache, hPtr->name);
-        wfree(hPtr->name);
-    }
+	if (hPtr->name) {
+		WMHashRemove(hostCache, hPtr->name);
+		wfree(hPtr->name);
+	}
 
-    wfree(hPtr);
+	wfree(hPtr);
 }
 
-
-void
-WMSetHostCacheEnabled(Bool flag)
+void WMSetHostCacheEnabled(Bool flag)
 {
-    hostCacheEnabled = ((flag==0) ? 0 : 1);
+	hostCacheEnabled = ((flag == 0) ? 0 : 1);
 }
 
-
-Bool
-WMIsHostCacheEnabled()
+Bool WMIsHostCacheEnabled()
 {
-    return hostCacheEnabled;
+	return hostCacheEnabled;
 }
 
-
-void
-WMFlushHostCache()
+void WMFlushHostCache()
 {
-    if (hostCache && WMCountHashTable(hostCache)>0) {
-        WMArray *hostArray = WMCreateArray(WMCountHashTable(hostCache));
-        WMHashEnumerator enumer = WMEnumerateHashTable(hostCache);
-        WMHost *hPtr;
-        int i;
+	if (hostCache && WMCountHashTable(hostCache) > 0) {
+		WMArray *hostArray = WMCreateArray(WMCountHashTable(hostCache));
+		WMHashEnumerator enumer = WMEnumerateHashTable(hostCache);
+		WMHost *hPtr;
+		int i;
 
-        while ((hPtr = WMNextHashEnumeratorItem(&enumer))) {
-            /* we can't release the host here, because we can't change the
-             * hash while using the enumerator functions. */
-            WMAddToArray(hostArray, hPtr);
-        }
-        for (i=0; i<WMGetArrayItemCount(hostArray); i++)
-            WMReleaseHost(WMGetFromArray(hostArray, i));
-        WMFreeArray(hostArray);
-        WMResetHashTable(hostCache);
-    }
+		while ((hPtr = WMNextHashEnumeratorItem(&enumer))) {
+			/* we can't release the host here, because we can't change the
+			 * hash while using the enumerator functions. */
+			WMAddToArray(hostArray, hPtr);
+		}
+		for (i = 0; i < WMGetArrayItemCount(hostArray); i++)
+			WMReleaseHost(WMGetFromArray(hostArray, i));
+		WMFreeArray(hostArray);
+		WMResetHashTable(hostCache);
+	}
 }
 
-
-static int
-matchAddress(void *item, void *cdata)
+static int matchAddress(void *item, void *cdata)
 {
-    return (strcmp((char*) item, (char*) cdata)==0);
+	return (strcmp((char *)item, (char *)cdata) == 0);
 }
 
-
-Bool
-WMIsHostEqualToHost(WMHost* hPtr, WMHost* aPtr)
+Bool WMIsHostEqualToHost(WMHost * hPtr, WMHost * aPtr)
 {
-    char *adr;
-    int i;
+	char *adr;
+	int i;
 
-    wassertrv(hPtr!=NULL && aPtr!=NULL, False);
+	wassertrv(hPtr != NULL && aPtr != NULL, False);
 
-    if (hPtr == aPtr)
-        return True;
+	if (hPtr == aPtr)
+		return True;
 
-    for (i=0; i<WMGetArrayItemCount(aPtr->addresses); i++) {
-        adr = WMGetFromArray(aPtr->addresses, i);
-        if (WMFindInArray(hPtr->addresses, matchAddress, adr) != WANotFound) {
-            return True;
-        }
-    }
+	for (i = 0; i < WMGetArrayItemCount(aPtr->addresses); i++) {
+		adr = WMGetFromArray(aPtr->addresses, i);
+		if (WMFindInArray(hPtr->addresses, matchAddress, adr) != WANotFound) {
+			return True;
+		}
+	}
 
-    return False;
+	return False;
 }
 
-
-char*
-WMGetHostName(WMHost *hPtr)
+char *WMGetHostName(WMHost * hPtr)
 {
-    return (WMGetArrayItemCount(hPtr->names) > 0 ?
-            WMGetFromArray(hPtr->names, 0) : NULL);
-    /*return WMGetFromArray(hPtr->names, 0);*/
+	return (WMGetArrayItemCount(hPtr->names) > 0 ? WMGetFromArray(hPtr->names, 0) : NULL);
+	/*return WMGetFromArray(hPtr->names, 0); */
 }
 
-
-WMArray*
-WMGetHostNames(WMHost *hPtr)
+WMArray *WMGetHostNames(WMHost * hPtr)
 {
-    return hPtr->names;
+	return hPtr->names;
 }
 
-
-char*
-WMGetHostAddress(WMHost *hPtr)
+char *WMGetHostAddress(WMHost * hPtr)
 {
-    return (WMGetArrayItemCount(hPtr->addresses) > 0 ?
-            WMGetFromArray(hPtr->addresses, 0) : NULL);
+	return (WMGetArrayItemCount(hPtr->addresses) > 0 ? WMGetFromArray(hPtr->addresses, 0) : NULL);
 }
 
-
-WMArray*
-WMGetHostAddresses(WMHost *hPtr)
+WMArray *WMGetHostAddresses(WMHost * hPtr)
 {
-    return hPtr->addresses;
+	return hPtr->addresses;
 }
-
-
-
-

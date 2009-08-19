@@ -8,16 +8,15 @@
 #include "WINGsP.h"
 
 typedef struct W_ProgressIndicator {
-    W_Class	widgetClass;
-    W_View	*view;
+	W_Class widgetClass;
+	W_View *view;
 
-    int	value;
-    int	minValue;
-    int	maxValue;
+	int value;
+	int minValue;
+	int maxValue;
 
-    void	*clientData;
+	void *clientData;
 } ProgressIndicator;
-
 
 #define DEFAULT_PROGRESS_INDICATOR_WIDTH	276
 #define DEFAULT_PROGRESS_INDICATOR_HEIGHT	16
@@ -25,259 +24,223 @@ typedef struct W_ProgressIndicator {
 /* define if only the ticks within the progress region should be displayed */
 #undef SHOW_PROGRESS_TICKS_ONLY
 
-
 static void didResizeProgressIndicator();
 
-
 W_ViewDelegate _ProgressIndicatorDelegate = {
-    NULL,
-    NULL,
-    didResizeProgressIndicator,
-    NULL,
-    NULL
+	NULL,
+	NULL,
+	didResizeProgressIndicator,
+	NULL,
+	NULL
 };
 
+static void destroyProgressIndicator(ProgressIndicator * pPtr);
+static void paintProgressIndicator(ProgressIndicator * pPtr);
+static void handleEvents(XEvent * event, void *data);
 
-static void destroyProgressIndicator(ProgressIndicator *pPtr);
-static void paintProgressIndicator(ProgressIndicator *pPtr);
-static void handleEvents(XEvent *event, void *data);
-
-
-
-WMProgressIndicator*
-WMCreateProgressIndicator(WMWidget *parent)
+WMProgressIndicator *WMCreateProgressIndicator(WMWidget * parent)
 {
-    ProgressIndicator *pPtr;
+	ProgressIndicator *pPtr;
 
-    pPtr = wmalloc(sizeof(ProgressIndicator));
-    memset(pPtr, 0, sizeof(ProgressIndicator));
+	pPtr = wmalloc(sizeof(ProgressIndicator));
+	memset(pPtr, 0, sizeof(ProgressIndicator));
 
-    pPtr->widgetClass = WC_ProgressIndicator;
+	pPtr->widgetClass = WC_ProgressIndicator;
 
-    pPtr->view = W_CreateView(W_VIEW(parent));
-    if (!pPtr->view) {
-        wfree(pPtr);
-        return NULL;
-    }
+	pPtr->view = W_CreateView(W_VIEW(parent));
+	if (!pPtr->view) {
+		wfree(pPtr);
+		return NULL;
+	}
 
-    pPtr->view->self = pPtr;
+	pPtr->view->self = pPtr;
 
-    pPtr->view->delegate = &_ProgressIndicatorDelegate;
+	pPtr->view->delegate = &_ProgressIndicatorDelegate;
 
-    WMCreateEventHandler(pPtr->view, ExposureMask|StructureNotifyMask,
-                         handleEvents, pPtr);
+	WMCreateEventHandler(pPtr->view, ExposureMask | StructureNotifyMask, handleEvents, pPtr);
 
+	W_ResizeView(pPtr->view, DEFAULT_PROGRESS_INDICATOR_WIDTH, DEFAULT_PROGRESS_INDICATOR_HEIGHT);
 
-    W_ResizeView(pPtr->view, DEFAULT_PROGRESS_INDICATOR_WIDTH,
-                 DEFAULT_PROGRESS_INDICATOR_HEIGHT);
+	/* Initialize ProgressIndicator Values */
+	pPtr->value = 0;
+	pPtr->minValue = 0;
+	pPtr->maxValue = 100;
 
-    /* Initialize ProgressIndicator Values */
-    pPtr->value = 0;
-    pPtr->minValue = 0;
-    pPtr->maxValue = 100;
-
-    return pPtr;
+	return pPtr;
 }
 
-
-void
-WMSetProgressIndicatorMinValue(WMProgressIndicator *progressindicator, int value)
+void WMSetProgressIndicatorMinValue(WMProgressIndicator * progressindicator, int value)
 {
-    CHECK_CLASS(progressindicator, WC_ProgressIndicator);
+	CHECK_CLASS(progressindicator, WC_ProgressIndicator);
 
-    progressindicator->minValue = value;
-    if (progressindicator->value < value) {
-        progressindicator->value = value;
-        if (progressindicator->view->flags.mapped) {
-            paintProgressIndicator(progressindicator);
-        }
-    }
+	progressindicator->minValue = value;
+	if (progressindicator->value < value) {
+		progressindicator->value = value;
+		if (progressindicator->view->flags.mapped) {
+			paintProgressIndicator(progressindicator);
+		}
+	}
 }
 
-
-void
-WMSetProgressIndicatorMaxValue(WMProgressIndicator *progressindicator, int value)
+void WMSetProgressIndicatorMaxValue(WMProgressIndicator * progressindicator, int value)
 {
-    CHECK_CLASS(progressindicator, WC_ProgressIndicator);
+	CHECK_CLASS(progressindicator, WC_ProgressIndicator);
 
-    progressindicator->maxValue = value;
-    if (progressindicator->value > value) {
-        progressindicator->value = value;
-        if (progressindicator->view->flags.mapped) {
-            paintProgressIndicator(progressindicator);
-        }
-    }
+	progressindicator->maxValue = value;
+	if (progressindicator->value > value) {
+		progressindicator->value = value;
+		if (progressindicator->view->flags.mapped) {
+			paintProgressIndicator(progressindicator);
+		}
+	}
 }
 
-
-void
-WMSetProgressIndicatorValue(WMProgressIndicator *progressindicator, int value)
+void WMSetProgressIndicatorValue(WMProgressIndicator * progressindicator, int value)
 {
-    CHECK_CLASS(progressindicator, WC_ProgressIndicator);
+	CHECK_CLASS(progressindicator, WC_ProgressIndicator);
 
-    progressindicator->value = value;
+	progressindicator->value = value;
 
-    /* Check if value is within min/max-range */
-    if (progressindicator->minValue > value)
-        progressindicator->value = progressindicator->minValue;
+	/* Check if value is within min/max-range */
+	if (progressindicator->minValue > value)
+		progressindicator->value = progressindicator->minValue;
 
-    if (progressindicator->maxValue < value)
-        progressindicator->value = progressindicator->maxValue;
+	if (progressindicator->maxValue < value)
+		progressindicator->value = progressindicator->maxValue;
 
-
-    if (progressindicator->view->flags.mapped) {
-        paintProgressIndicator(progressindicator);
-    }
+	if (progressindicator->view->flags.mapped) {
+		paintProgressIndicator(progressindicator);
+	}
 }
 
-
-int
-WMGetProgressIndicatorMinValue(WMProgressIndicator *progressindicator)
+int WMGetProgressIndicatorMinValue(WMProgressIndicator * progressindicator)
 {
-    CHECK_CLASS(progressindicator, WC_ProgressIndicator);
+	CHECK_CLASS(progressindicator, WC_ProgressIndicator);
 
-    return progressindicator->minValue;
+	return progressindicator->minValue;
 }
 
-
-int
-WMGetProgressIndicatorMaxValue(WMProgressIndicator *progressindicator)
+int WMGetProgressIndicatorMaxValue(WMProgressIndicator * progressindicator)
 {
-    CHECK_CLASS(progressindicator, WC_ProgressIndicator);
+	CHECK_CLASS(progressindicator, WC_ProgressIndicator);
 
-    return progressindicator->maxValue;
+	return progressindicator->maxValue;
 }
 
-
-int
-WMGetProgressIndicatorValue(WMProgressIndicator *progressindicator)
+int WMGetProgressIndicatorValue(WMProgressIndicator * progressindicator)
 {
-    CHECK_CLASS(progressindicator, WC_ProgressIndicator);
+	CHECK_CLASS(progressindicator, WC_ProgressIndicator);
 
-    return progressindicator->value;
+	return progressindicator->value;
 }
 
-
-static void
-didResizeProgressIndicator(W_ViewDelegate *self, WMView *view)
+static void didResizeProgressIndicator(W_ViewDelegate * self, WMView * view)
 {
-    WMProgressIndicator *pPtr = (WMProgressIndicator*)view->self;
-    int width = pPtr->view->size.width;
-    int height = pPtr->view->size.height;
+	WMProgressIndicator *pPtr = (WMProgressIndicator *) view->self;
+	int width = pPtr->view->size.width;
+	int height = pPtr->view->size.height;
 
-    assert(width > 0);
-    assert(height > 0);
+	assert(width > 0);
+	assert(height > 0);
 }
 
-
-static void
-paintProgressIndicator(ProgressIndicator *pPtr)
+static void paintProgressIndicator(ProgressIndicator * pPtr)
 {
-    W_Screen *scr = pPtr->view->screen;
-    GC bgc;
-    GC wgc;
-    GC lgc;
-    GC dgc;
-    WMSize size = pPtr->view->size;
-    int perc, w, h;
-    double unit, i;
-    Pixmap buffer;
+	W_Screen *scr = pPtr->view->screen;
+	GC bgc;
+	GC wgc;
+	GC lgc;
+	GC dgc;
+	WMSize size = pPtr->view->size;
+	int perc, w, h;
+	double unit, i;
+	Pixmap buffer;
 
-    bgc = WMColorGC(scr->black);
-    wgc = WMColorGC(scr->white);
-    lgc = WMColorGC(scr->gray);
-    dgc = WMColorGC(scr->darkGray);
+	bgc = WMColorGC(scr->black);
+	wgc = WMColorGC(scr->white);
+	lgc = WMColorGC(scr->gray);
+	dgc = WMColorGC(scr->darkGray);
 
-    unit = (double)(size.width - 3.0) / 100;
+	unit = (double)(size.width - 3.0) / 100;
 
-    buffer = XCreatePixmap(scr->display, pPtr->view->window,
-                           size.width, size.height, scr->depth);
+	buffer = XCreatePixmap(scr->display, pPtr->view->window, size.width, size.height, scr->depth);
 
-    XFillRectangle(scr->display, buffer, lgc, 0, 0, size.width, size.height);
+	XFillRectangle(scr->display, buffer, lgc, 0, 0, size.width, size.height);
 
-    /* Calculate size of Progress to draw and paint ticks*/
-    perc = (pPtr->value - pPtr->minValue) * 100 / (pPtr->maxValue - pPtr->minValue);
+	/* Calculate size of Progress to draw and paint ticks */
+	perc = (pPtr->value - pPtr->minValue) * 100 / (pPtr->maxValue - pPtr->minValue);
 
-    w = (int)((double)(perc * unit));
-    h = size.height - 2;
+	w = (int)((double)(perc * unit));
+	h = size.height - 2;
 
-    if (w > (size.width - 3))
-        w = size.width - 3;
+	if (w > (size.width - 3))
+		w = size.width - 3;
 
-    if (w > 0) {
-        XFillRectangle(scr->display, buffer, lgc, 2, 1, w, h);
-        XFillRectangle(scr->display, buffer, scr->stippleGC, 2, 1, w, h);
-        W_DrawRelief(scr, buffer, 2, 1, w, h, WRFlat);
+	if (w > 0) {
+		XFillRectangle(scr->display, buffer, lgc, 2, 1, w, h);
+		XFillRectangle(scr->display, buffer, scr->stippleGC, 2, 1, w, h);
+		W_DrawRelief(scr, buffer, 2, 1, w, h, WRFlat);
 
-        /* Draw Progress Marks */
-        i=(5.0*unit);
+		/* Draw Progress Marks */
+		i = (5.0 * unit);
 
 #ifdef SHOW_PROGRESS_TICKS_ONLY
-        while((int)i<w+5) {
+		while ((int)i < w + 5) {
 #else
-        while ((int)i < (size.width - 3)) {
+		while ((int)i < (size.width - 3)) {
 #endif
-            XDrawLine(scr->display, buffer, dgc, (int)i+2, h-1, i+2, h-3);
+			XDrawLine(scr->display, buffer, dgc, (int)i + 2, h - 1, i + 2, h - 3);
 
-            i+=(5.0*unit);
+			i += (5.0 * unit);
 
 #ifdef SHOW_PROGRESS_TICKS_ONLY
-            if((int)i>=w)
-                break;
+			if ((int)i >= w)
+				break;
 #endif
 
-            XDrawLine(scr->display, buffer, dgc, (int)i+2, h-1, i+2, h-6);
+			XDrawLine(scr->display, buffer, dgc, (int)i + 2, h - 1, i + 2, h - 6);
 
-            i+=(5.0*unit);
-        }
-    }
+			i += (5.0 * unit);
+		}
+	}
 
-    XDrawLine(scr->display, buffer, bgc, w+2, 1, w+2, h+1);
-    XDrawLine(scr->display, buffer, lgc, 2, h, w+2, h);
+	XDrawLine(scr->display, buffer, bgc, w + 2, 1, w + 2, h + 1);
+	XDrawLine(scr->display, buffer, lgc, 2, h, w + 2, h);
 
+	XDrawLine(scr->display, buffer, dgc, 0, 0, 0, size.height - 1);
+	XDrawLine(scr->display, buffer, dgc, 0, 0, size.width, 0);
+	XDrawLine(scr->display, buffer, bgc, 1, 1, 1, size.height - 1);
+	XDrawLine(scr->display, buffer, bgc, 1, 1, size.width - 1, 1);
 
-    XDrawLine(scr->display, buffer, dgc, 0, 0, 0, size.height-1);
-    XDrawLine(scr->display, buffer, dgc, 0, 0, size.width, 0);
-    XDrawLine(scr->display, buffer, bgc, 1, 1, 1, size.height-1);
-    XDrawLine(scr->display, buffer, bgc, 1, 1, size.width-1, 1);
+	XDrawLine(scr->display, buffer, wgc, size.width - 1, 0, size.width - 1, size.height - 1);
+	XDrawLine(scr->display, buffer, wgc, 0, size.height - 1, size.width - 1, size.height - 1);
 
-    XDrawLine(scr->display, buffer, wgc, size.width-1, 0,
-              size.width-1, size.height-1);
-    XDrawLine(scr->display, buffer, wgc, 0, size.height-1,
-              size.width-1, size.height-1);
+	XCopyArea(scr->display, buffer, pPtr->view->window, scr->copyGC, 0, 0, size.width, size.height, 0, 0);
 
-    XCopyArea(scr->display, buffer, pPtr->view->window, scr->copyGC, 0, 0,
-              size.width, size.height, 0, 0);
-
-    XFreePixmap(scr->display, buffer);
+	XFreePixmap(scr->display, buffer);
 }
 
-
-static void
-handleEvents(XEvent *event, void *data)
+static void handleEvents(XEvent * event, void *data)
 {
-    ProgressIndicator *pPtr = (ProgressIndicator*)data;
+	ProgressIndicator *pPtr = (ProgressIndicator *) data;
 
-    CHECK_CLASS(data, WC_ProgressIndicator);
+	CHECK_CLASS(data, WC_ProgressIndicator);
 
-    switch (event->type) {
-    case Expose:
-        if (event->xexpose.count!=0)
-            break;
-        paintProgressIndicator(pPtr);
-        break;
-    case DestroyNotify:
-        destroyProgressIndicator(pPtr);
-        break;
-    }
+	switch (event->type) {
+	case Expose:
+		if (event->xexpose.count != 0)
+			break;
+		paintProgressIndicator(pPtr);
+		break;
+	case DestroyNotify:
+		destroyProgressIndicator(pPtr);
+		break;
+	}
 }
 
-
-static void
-destroyProgressIndicator(ProgressIndicator *pPtr)
+static void destroyProgressIndicator(ProgressIndicator * pPtr)
 {
-    WMRemoveNotificationObserver(pPtr);
+	WMRemoveNotificationObserver(pPtr);
 
-    wfree(pPtr);
+	wfree(pPtr);
 }
-

@@ -34,7 +34,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-
 /* Xlocale.h and locale.h are the same if X_LOCALE is undefind in wconfig.h,
  * and if X_LOCALE is defined, X's locale emulating functions will be used.
  * See Xlocale.h for more information.
@@ -59,7 +58,7 @@
 
 /* general info */
 
-Display	*dpy;
+Display *dpy;
 
 char *ProgName;
 
@@ -68,12 +67,11 @@ unsigned int ValidModMask = 0xff;
 int inotifyFD;
 int inotifyWD;
 /* locale to use. NULL==POSIX or C */
-char *Locale=NULL;
+char *Locale = NULL;
 
-int wScreenCount=0;
+int wScreenCount = 0;
 
 WPreferences wPreferences;
-
 
 WMPropList *wDomainName;
 WMPropList *wAttributeDomainName;
@@ -118,7 +116,6 @@ Atom _XA_WINDOWMAKER_COMMAND;
 Atom _XA_WINDOWMAKER_ICON_SIZE;
 Atom _XA_WINDOWMAKER_ICON_TILE;
 
-
 /* cursors */
 Cursor wCursor[WCUR_LAST];
 
@@ -142,10 +139,8 @@ char WProgramSigState = 0;
 char WProgramState = WSTATE_NORMAL;
 char WDelayedActionSet = 0;
 
-
 /* temporary stuff */
 int wVisualID = -1;
-
 
 /* notifications */
 const char *WMNManaged = "WMNManaged";
@@ -179,150 +174,136 @@ static Bool multiHead = True;
 
 static int real_main(int argc, char **argv);
 
-void
-Exit(int status)
+void Exit(int status)
 {
 #ifdef XSMP_ENABLED
-    wSessionDisconnectManager();
+	wSessionDisconnectManager();
 #endif
-    if (dpy)
-        XCloseDisplay(dpy);
+	if (dpy)
+		XCloseDisplay(dpy);
 
-    exit(status);
+	exit(status);
 }
 
-
-void
-Restart(char *manager, Bool abortOnFailure)
+void Restart(char *manager, Bool abortOnFailure)
 {
-    char *prog=NULL;
-    char *argv[MAX_RESTART_ARGS];
-    int i;
+	char *prog = NULL;
+	char *argv[MAX_RESTART_ARGS];
+	int i;
 
-    if (manager && manager[0]!=0) {
-        prog = argv[0] = strtok(manager, " ");
-        for (i=1; i<MAX_RESTART_ARGS; i++) {
-            argv[i]=strtok(NULL, " ");
-            if (argv[i]==NULL) {
-                break;
-            }
-        }
-    }
-    if (dpy) {
+	if (manager && manager[0] != 0) {
+		prog = argv[0] = strtok(manager, " ");
+		for (i = 1; i < MAX_RESTART_ARGS; i++) {
+			argv[i] = strtok(NULL, " ");
+			if (argv[i] == NULL) {
+				break;
+			}
+		}
+	}
+	if (dpy) {
 #ifdef XSMP_ENABLED
-        wSessionDisconnectManager();
+		wSessionDisconnectManager();
 #endif
-        XCloseDisplay(dpy);
-        dpy = NULL;
-    }
-    if (!prog) {
-        execvp(Arguments[0], Arguments);
-        wfatal(_("failed to restart Window Maker."));
-    } else {
-        execvp(prog, argv);
-        wsyserror(_("could not exec %s"), prog);
-    }
-    if (abortOnFailure)
-        exit(7);
+		XCloseDisplay(dpy);
+		dpy = NULL;
+	}
+	if (!prog) {
+		execvp(Arguments[0], Arguments);
+		wfatal(_("failed to restart Window Maker."));
+	} else {
+		execvp(prog, argv);
+		wsyserror(_("could not exec %s"), prog);
+	}
+	if (abortOnFailure)
+		exit(7);
 }
 
-
-
-void
-SetupEnvironment(WScreen *scr)
+void SetupEnvironment(WScreen * scr)
 {
-    char *tmp, *ptr;
-    char buf[16];
+	char *tmp, *ptr;
+	char buf[16];
 
-    if (multiHead) {
-        int len = strlen(DisplayName)+64;
-        tmp = wmalloc(len);
-        snprintf(tmp, len, "DISPLAY=%s", XDisplayName(DisplayName));
-        ptr = strchr(strchr(tmp, ':'), '.');
-        if (ptr)
-            *ptr = 0;
-        snprintf(buf, sizeof(buf), ".%i", scr->screen);
-        strcat(tmp, buf);
-        putenv(tmp);
-    }
-    tmp = wmalloc(60);
-    snprintf(tmp, 60, "WRASTER_COLOR_RESOLUTION%i=%i", scr->screen,
-             scr->rcontext->attribs->colors_per_channel);
-    putenv(tmp);
+	if (multiHead) {
+		int len = strlen(DisplayName) + 64;
+		tmp = wmalloc(len);
+		snprintf(tmp, len, "DISPLAY=%s", XDisplayName(DisplayName));
+		ptr = strchr(strchr(tmp, ':'), '.');
+		if (ptr)
+			*ptr = 0;
+		snprintf(buf, sizeof(buf), ".%i", scr->screen);
+		strcat(tmp, buf);
+		putenv(tmp);
+	}
+	tmp = wmalloc(60);
+	snprintf(tmp, 60, "WRASTER_COLOR_RESOLUTION%i=%i", scr->screen,
+		 scr->rcontext->attribs->colors_per_channel);
+	putenv(tmp);
 }
-
-
-
 
 typedef struct {
-    WScreen *scr;
-    char *command;
+	WScreen *scr;
+	char *command;
 } _tuple;
 
-
-static void
-shellCommandHandler(pid_t pid, unsigned char status, _tuple *data)
+static void shellCommandHandler(pid_t pid, unsigned char status, _tuple * data)
 {
-    if (status == 127) {
-        char *buffer;
+	if (status == 127) {
+		char *buffer;
 
-        buffer = wstrconcat(_("Could not execute command: "), data->command);
+		buffer = wstrconcat(_("Could not execute command: "), data->command);
 
-        wMessageDialog(data->scr, _("Error"), buffer, _("OK"), NULL, NULL);
-        wfree(buffer);
-    } else if (status != 127) {
-        /*
-         printf("%s: %i\n", data->command, status);
-         */
-    }
+		wMessageDialog(data->scr, _("Error"), buffer, _("OK"), NULL, NULL);
+		wfree(buffer);
+	} else if (status != 127) {
+		/*
+		   printf("%s: %i\n", data->command, status);
+		 */
+	}
 
-    wfree(data->command);
-    wfree(data);
+	wfree(data->command);
+	wfree(data);
 }
 
-
-void
-ExecuteShellCommand(WScreen *scr, char *command)
+void ExecuteShellCommand(WScreen * scr, char *command)
 {
-    static char *shell = NULL;
-    pid_t pid;
+	static char *shell = NULL;
+	pid_t pid;
 
-    /*
-     * This have a problem: if the shell is tcsh (not sure about others)
-     * and ~/.tcshrc have /bin/stty erase ^H somewhere on it, the shell
-     * will block and the command will not be executed.
-     if (!shell) {
-     shell = getenv("SHELL");
-     if (!shell)
-     shell = "/bin/sh";
-     }
-     */
-    shell = "/bin/sh";
+	/*
+	 * This have a problem: if the shell is tcsh (not sure about others)
+	 * and ~/.tcshrc have /bin/stty erase ^H somewhere on it, the shell
+	 * will block and the command will not be executed.
+	 if (!shell) {
+	 shell = getenv("SHELL");
+	 if (!shell)
+	 shell = "/bin/sh";
+	 }
+	 */
+	shell = "/bin/sh";
 
-    pid = fork();
+	pid = fork();
 
-    if (pid==0) {
+	if (pid == 0) {
 
-        SetupEnvironment(scr);
+		SetupEnvironment(scr);
 
 #ifdef HAVE_SETSID
-        setsid();
+		setsid();
 #endif
-        execl(shell, shell, "-c", command, NULL);
-        wsyserror("could not execute %s -c %s", shell, command);
-        Exit(-1);
-    } else if (pid < 0) {
-        wsyserror("cannot fork a new process");
-    } else {
-        _tuple *data = wmalloc(sizeof(_tuple));
+		execl(shell, shell, "-c", command, NULL);
+		wsyserror("could not execute %s -c %s", shell, command);
+		Exit(-1);
+	} else if (pid < 0) {
+		wsyserror("cannot fork a new process");
+	} else {
+		_tuple *data = wmalloc(sizeof(_tuple));
 
-        data->scr = scr;
-        data->command = wstrdup(command);
+		data->scr = scr;
+		data->command = wstrdup(command);
 
-        wAddDeathHandler(pid, (WDeathHandler*)shellCommandHandler, data);
-    }
+		wAddDeathHandler(pid, (WDeathHandler *) shellCommandHandler, data);
+	}
 }
-
 
 /*
  *---------------------------------------------------------------------
@@ -331,488 +312,451 @@ ExecuteShellCommand(WScreen *scr, char *command)
  *
  *----------------------------------------------------------------------
  */
-void
-wAbort(Bool dumpCore)
+void wAbort(Bool dumpCore)
 {
-    int i;
-    WScreen *scr;
+	int i;
+	WScreen *scr;
 
-    for (i=0; i<wScreenCount; i++) {
-        scr = wScreenWithNumber(i);
-        if (scr)
-            RestoreDesktop(scr);
-    }
-    printf(_("%s aborted.\n"), ProgName);
-    if (dumpCore)
-        abort();
-    else
-        exit(1);
+	for (i = 0; i < wScreenCount; i++) {
+		scr = wScreenWithNumber(i);
+		if (scr)
+			RestoreDesktop(scr);
+	}
+	printf(_("%s aborted.\n"), ProgName);
+	if (dumpCore)
+		abort();
+	else
+		exit(1);
 }
 
-
-void
-print_help()
+void print_help()
 {
-    printf(_("Usage: %s [options]\n"), ProgName);
-    puts(_("The Window Maker window manager for the X window system"));
-    puts("");
-    puts(_(" -display host:dpy	display to use"));
+	printf(_("Usage: %s [options]\n"), ProgName);
+	puts(_("The Window Maker window manager for the X window system"));
+	puts("");
+	puts(_(" -display host:dpy	display to use"));
 #ifdef USECPP
-    puts(_(" --no-cpp 		disable preprocessing of configuration files"));
+	puts(_(" --no-cpp 		disable preprocessing of configuration files"));
 #endif
-    puts(_(" --no-dock		do not open the application Dock"));
-    puts(_(" --no-clip		do not open the workspace Clip"));
-    puts(_(" --no-autolaunch	do not autolaunch applications"));
-    puts(_(" --dont-restore		do not restore saved session"));
+	puts(_(" --no-dock		do not open the application Dock"));
+	puts(_(" --no-clip		do not open the workspace Clip"));
+	puts(_(" --no-autolaunch	do not autolaunch applications"));
+	puts(_(" --dont-restore		do not restore saved session"));
 
-    puts(_(" --locale locale	locale to use"));
+	puts(_(" --locale locale	locale to use"));
 
-    puts(_(" --create-stdcmap	create the standard colormap hint in PseudoColor visuals"));
-    puts(_(" --visual-id visualid	visual id of visual to use"));
-    puts(_(" --static		do not update or save configurations"));
+	puts(_(" --create-stdcmap	create the standard colormap hint in PseudoColor visuals"));
+	puts(_(" --visual-id visualid	visual id of visual to use"));
+	puts(_(" --static		do not update or save configurations"));
 #ifdef DEBUG
-    puts(_(" --synchronous		turn on synchronous display mode"));
+	puts(_(" --synchronous		turn on synchronous display mode"));
 #endif
-    puts(_(" --version		print version and exit"));
-    puts(_(" --help			show this message"));
+	puts(_(" --version		print version and exit"));
+	puts(_(" --help			show this message"));
 }
 
-
-
-void
-check_defaults()
+void check_defaults()
 {
-    char *path;
+	char *path;
 
-    path = wdefaultspathfordomain("WindowMaker");
+	path = wdefaultspathfordomain("WindowMaker");
 
-    if (access(path, R_OK)!=0) {
+	if (access(path, R_OK) != 0) {
 #if 0
-        wfatal(_("could not find user GNUstep directory (%s).\n"
-                 "Make sure you have installed Window Maker correctly and run wmaker.inst"),
-               path);
-        exit(1);
+		wfatal(_("could not find user GNUstep directory (%s).\n"
+			 "Make sure you have installed Window Maker correctly and run wmaker.inst"), path);
+		exit(1);
 #else
-        wwarning(_("could not find user GNUstep directory (%s)."), path);
+		wwarning(_("could not find user GNUstep directory (%s)."), path);
 
-        if (system("wmaker.inst --batch") != 0) {
-            wwarning(_("There was an error while creating GNUstep directory, please "
-                       "make sure you have installed Window Maker correctly and run wmaker.inst"));
-        } else {
-            wwarning(_("%s directory created with default configuration."), path);
-        }
+		if (system("wmaker.inst --batch") != 0) {
+			wwarning(_("There was an error while creating GNUstep directory, please "
+				   "make sure you have installed Window Maker correctly and run wmaker.inst"));
+		} else {
+			wwarning(_("%s directory created with default configuration."), path);
+		}
 #endif
-    }
+	}
 
-    wfree(path);
+	wfree(path);
 }
-
 
 /*
  * Add watch here, used to notify if configuration
  * files have changed, using linux kernel inotify mechanism
  */
 
-static void
-inotifyWatchConfig()
+static void inotifyWatchConfig()
 {
-    char *watchPath = NULL;
-    inotifyFD = inotify_init(); /* Initialise an inotify instance */
-    if (inotifyFD < 0) {
-         wwarning(_("could not initialise an inotify instance."
-                   " Changes to the defaults database will require"
-                   " a restart to take effect. Check your kernel!"));
-    } else {		
-         watchPath = wstrconcat(wusergnusteppath(), "/Defaults");
-         /* Add the watch; really we are only looking for modify events
-         * but we might want more in the future so check all events for now.
-         * The individual events are checked for in event.c.
-         */
-         inotifyWD = inotify_add_watch (inotifyFD, watchPath, IN_ALL_EVENTS);
-         if (inotifyWD < 0) {
-            wwarning(_("could not add an inotify watch on path\n."
-                        "%s\n"
-                        "Changes to the defaults database will require"
-                        " a restart to take effect."),watchPath);
-            close (inotifyFD);
-         }
-    }
-    wfree(watchPath);
+	char *watchPath = NULL;
+	inotifyFD = inotify_init();	/* Initialise an inotify instance */
+	if (inotifyFD < 0) {
+		wwarning(_("could not initialise an inotify instance."
+			   " Changes to the defaults database will require"
+			   " a restart to take effect. Check your kernel!"));
+	} else {
+		watchPath = wstrconcat(wusergnusteppath(), "/Defaults");
+		/* Add the watch; really we are only looking for modify events
+		 * but we might want more in the future so check all events for now.
+		 * The individual events are checked for in event.c.
+		 */
+		inotifyWD = inotify_add_watch(inotifyFD, watchPath, IN_ALL_EVENTS);
+		if (inotifyWD < 0) {
+			wwarning(_("could not add an inotify watch on path\n."
+				   "%s\n"
+				   "Changes to the defaults database will require"
+				   " a restart to take effect."), watchPath);
+			close(inotifyFD);
+		}
+	}
+	wfree(watchPath);
 }
 
-static void
-execInitScript()
+static void execInitScript()
 {
-    char *file, *paths;
+	char *file, *paths;
 
-    paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
-    paths = wstrappend(paths, ":"DEF_CONFIG_PATHS);
+	paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
+	paths = wstrappend(paths, ":" DEF_CONFIG_PATHS);
 
-    file = wfindfile(paths, DEF_INIT_SCRIPT);
-    wfree(paths);
+	file = wfindfile(paths, DEF_INIT_SCRIPT);
+	wfree(paths);
 
-    if (file) {
-        if (system(file) != 0) {
-            wsyserror(_("%s:could not execute initialization script"), file);
-        }
+	if (file) {
+		if (system(file) != 0) {
+			wsyserror(_("%s:could not execute initialization script"), file);
+		}
 #if 0
-        if (fork()==0) {
-            execl("/bin/sh", "/bin/sh", "-c", file, NULL);
-            wsyserror(_("%s:could not execute initialization script"), file);
-            exit(1);
-        }
+		if (fork() == 0) {
+			execl("/bin/sh", "/bin/sh", "-c", file, NULL);
+			wsyserror(_("%s:could not execute initialization script"), file);
+			exit(1);
+		}
 #endif
-        wfree(file);
-    }
+		wfree(file);
+	}
 }
 
-
-void
-ExecExitScript()
+void ExecExitScript()
 {
-    char *file, *paths;
+	char *file, *paths;
 
-    paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
-    paths = wstrappend(paths, ":"DEF_CONFIG_PATHS);
+	paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
+	paths = wstrappend(paths, ":" DEF_CONFIG_PATHS);
 
-    file = wfindfile(paths, DEF_EXIT_SCRIPT);
-    wfree(paths);
+	file = wfindfile(paths, DEF_EXIT_SCRIPT);
+	wfree(paths);
 
-    if (file) {
-        if (system(file) != 0) {
-            wsyserror(_("%s:could not execute exit script"), file);
-        }
+	if (file) {
+		if (system(file) != 0) {
+			wsyserror(_("%s:could not execute exit script"), file);
+		}
 #if 0
-        if (fork()==0) {
-            execl("/bin/sh", "/bin/sh", "-c", file, NULL);
-            wsyserror(_("%s:could not execute exit script"), file);
-            exit(1);
-        }
+		if (fork() == 0) {
+			execl("/bin/sh", "/bin/sh", "-c", file, NULL);
+			wsyserror(_("%s:could not execute exit script"), file);
+			exit(1);
+		}
 #endif
-        wfree(file);
-    }
+		wfree(file);
+	}
 }
 
 #if 0
-char*
-getFullPath(char *path)
+char *getFullPath(char *path)
 {
-    char buffer[1024];
-    char *tmp;
-    char *basep = (char*)buffer;
+	char buffer[1024];
+	char *tmp;
+	char *basep = (char *)buffer;
 
-    if (*path != '/' && getcwd(buffer, 1023)) {
+	if (*path != '/' && getcwd(buffer, 1023)) {
 
-        for (;;) {
-            if (strncmp(path, "../", 3)==0) {
-                path += 3;
-                basep = strchr(basep, '/');
-                if (!basep || *path==0)
-                    break;
-            }
-        }
-        if (*path == '/' || strncmp(path, "./",2)==0) {
-            tmp =
-        }
+		for (;;) {
+			if (strncmp(path, "../", 3) == 0) {
+				path += 3;
+				basep = strchr(basep, '/');
+				if (!basep || *path == 0)
+					break;
+			}
+		}
+		if (*path == '/' || strncmp(path, "./", 2) == 0) {
+		tmp =}
 
-        /*
-         * path
-         * ./path
-         * ../path
-         * ../../path
-         */
+		/*
+		 * path
+		 * ./path
+		 * ../path
+		 * ../../path
+		 */
 
+	} else {
+		return wstrconcat(path);
+	}
 
-    } else {
-        return wstrconcat(path);
-    }
-
-    return tmp;
+	return tmp;
 }
 #endif
 
-
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-    int i_am_the_monitor, i, len;
-    char *str, *alt;
+	int i_am_the_monitor, i, len;
+	char *str, *alt;
 
-    /* setup common stuff for the monitor and wmaker itself */
-    WMInitializeApplication("WindowMaker", &argc, argv);
+	/* setup common stuff for the monitor and wmaker itself */
+	WMInitializeApplication("WindowMaker", &argc, argv);
 
-    memset(&wPreferences, 0, sizeof(WPreferences));
+	memset(&wPreferences, 0, sizeof(WPreferences));
 
-    wPreferences.fallbackWMs = WMCreateArray(8);
-    alt = getenv("WINDOWMAKER_ALT_WM");
-    if (alt != NULL)
-        WMAddToArray(wPreferences.fallbackWMs, wstrdup(alt));
+	wPreferences.fallbackWMs = WMCreateArray(8);
+	alt = getenv("WINDOWMAKER_ALT_WM");
+	if (alt != NULL)
+		WMAddToArray(wPreferences.fallbackWMs, wstrdup(alt));
 
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("blackbox"));
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("metacity"));
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("fvwm"));
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("twm"));
-    WMAddToArray(wPreferences.fallbackWMs, NULL);
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("rxvt"));
-    WMAddToArray(wPreferences.fallbackWMs, wstrdup("xterm"));
+	WMAddToArray(wPreferences.fallbackWMs, wstrdup("blackbox"));
+	WMAddToArray(wPreferences.fallbackWMs, wstrdup("metacity"));
+	WMAddToArray(wPreferences.fallbackWMs, wstrdup("fvwm"));
+	WMAddToArray(wPreferences.fallbackWMs, wstrdup("twm"));
+	WMAddToArray(wPreferences.fallbackWMs, NULL);
+	WMAddToArray(wPreferences.fallbackWMs, wstrdup("rxvt"));
+	WMAddToArray(wPreferences.fallbackWMs, wstrdup("xterm"));
 
-    i_am_the_monitor= 1;
+	i_am_the_monitor = 1;
 
-    for (i= 1; i < argc; i++)
-    {
-        if (strncmp(argv[i], "--for-real", strlen("--for-real"))==0)
-        {
-            i_am_the_monitor= 0;
-            break;
-        }
-        else if (strcmp(argv[i], "-display")==0 || strcmp(argv[i], "--display")==0)
-        {
-            i++;
-            if (i>=argc) {
-                wwarning(_("too few arguments for %s"), argv[i-1]);
-                exit(0);
-            }
-            DisplayName = argv[i];
-        }
-    }
+	for (i = 1; i < argc; i++) {
+		if (strncmp(argv[i], "--for-real", strlen("--for-real")) == 0) {
+			i_am_the_monitor = 0;
+			break;
+		} else if (strcmp(argv[i], "-display") == 0 || strcmp(argv[i], "--display") == 0) {
+			i++;
+			if (i >= argc) {
+				wwarning(_("too few arguments for %s"), argv[i - 1]);
+				exit(0);
+			}
+			DisplayName = argv[i];
+		}
+	}
 
-    DisplayName = XDisplayName(DisplayName);
-    len = strlen(DisplayName)+64;
-    str = wmalloc(len);
-    snprintf(str, len, "DISPLAY=%s", DisplayName);
-    putenv(str);
+	DisplayName = XDisplayName(DisplayName);
+	len = strlen(DisplayName) + 64;
+	str = wmalloc(len);
+	snprintf(str, len, "DISPLAY=%s", DisplayName);
+	putenv(str);
 
-    if (i_am_the_monitor)
-      return MonitorLoop(argc, argv);
-    else
-      return real_main(argc, argv);
+	if (i_am_the_monitor)
+		return MonitorLoop(argc, argv);
+	else
+		return real_main(argc, argv);
 }
 
-
-static int
-real_main(int argc, char **argv)
+static int real_main(int argc, char **argv)
 {
-    int i, restart=0;
-    char *pos;
-    int d, s;
-    int flag;
+	int i, restart = 0;
+	char *pos;
+	int d, s;
+	int flag;
 #ifdef DEBUG
-    Bool doSync = False;
+	Bool doSync = False;
 #endif
-    setlocale(LC_ALL, "");
+	setlocale(LC_ALL, "");
 
-    wsetabort(wAbort);
+	wsetabort(wAbort);
 
-    /* for telling WPrefs what's the name of the wmaker binary being ran */
-    setenv("WMAKER_BIN_NAME", argv[0], 1);
+	/* for telling WPrefs what's the name of the wmaker binary being ran */
+	setenv("WMAKER_BIN_NAME", argv[0], 1);
 
-    flag= 0;
-    ArgCount = argc;
-    Arguments = wmalloc(sizeof(char*)*(ArgCount+1));
-    for (i= 0; i < argc; i++)
-    {
-        Arguments[i]= argv[i];
-    }
-    /* add the extra option to signal that we're just restarting wmaker */
-    Arguments[argc-1]= "--for-real=";
-    Arguments[argc]= NULL;
+	flag = 0;
+	ArgCount = argc;
+	Arguments = wmalloc(sizeof(char *) * (ArgCount + 1));
+	for (i = 0; i < argc; i++) {
+		Arguments[i] = argv[i];
+	}
+	/* add the extra option to signal that we're just restarting wmaker */
+	Arguments[argc - 1] = "--for-real=";
+	Arguments[argc] = NULL;
 
-    ProgName = strrchr(argv[0],'/');
-    if (!ProgName)
-        ProgName = argv[0];
-    else
-        ProgName++;
+	ProgName = strrchr(argv[0], '/');
+	if (!ProgName)
+		ProgName = argv[0];
+	else
+		ProgName++;
 
+	restart = 0;
 
-    restart = 0;
-
-    if (argc>1) {
-        for (i=1; i<argc; i++) {
+	if (argc > 1) {
+		for (i = 1; i < argc; i++) {
 #ifdef USECPP
-            if (strcmp(argv[i], "-nocpp")==0
-                || strcmp(argv[i], "--no-cpp")==0) {
-                wPreferences.flags.nocpp=1;
-            } else
+			if (strcmp(argv[i], "-nocpp") == 0 || strcmp(argv[i], "--no-cpp") == 0) {
+				wPreferences.flags.nocpp = 1;
+			} else
 #endif
-                if (strcmp(argv[i], "--for-real")==0) {
-                    wPreferences.flags.restarting = 0;
-                } else if (strcmp(argv[i], "--for-real=")==0) {
-                    wPreferences.flags.restarting = 1;
-                } else if (strcmp(argv[i], "--for-real-")==0) {
-                    wPreferences.flags.restarting = 2;
-                } else if (strcmp(argv[i], "-no-autolaunch")==0
-                    || strcmp(argv[i], "--no-autolaunch")==0) {
-                    wPreferences.flags.noautolaunch = 1;
-                } else if (strcmp(argv[i], "-dont-restore")==0
-                           || strcmp(argv[i], "--dont-restore")==0) {
-                    wPreferences.flags.norestore = 1;
-                } else if (strcmp(argv[i], "-nodock")==0
-                           || strcmp(argv[i], "--no-dock")==0) {
-                    wPreferences.flags.nodock=1;
-                } else if (strcmp(argv[i], "-noclip")==0
-                           || strcmp(argv[i], "--no-clip")==0) {
-                    wPreferences.flags.noclip=1;
-                } else if (strcmp(argv[i], "-version")==0
-                           || strcmp(argv[i], "--version")==0) {
-                    printf("Window Maker %s\n", VERSION);
-                    exit(0);
-                } else if (strcmp(argv[i], "--global_defaults_path")==0) {
-                    printf("%s/WindowMaker\n", SYSCONFDIR);
-                    exit(0);
+			if (strcmp(argv[i], "--for-real") == 0) {
+				wPreferences.flags.restarting = 0;
+			} else if (strcmp(argv[i], "--for-real=") == 0) {
+				wPreferences.flags.restarting = 1;
+			} else if (strcmp(argv[i], "--for-real-") == 0) {
+				wPreferences.flags.restarting = 2;
+			} else if (strcmp(argv[i], "-no-autolaunch") == 0
+				   || strcmp(argv[i], "--no-autolaunch") == 0) {
+				wPreferences.flags.noautolaunch = 1;
+			} else if (strcmp(argv[i], "-dont-restore") == 0 || strcmp(argv[i], "--dont-restore") == 0) {
+				wPreferences.flags.norestore = 1;
+			} else if (strcmp(argv[i], "-nodock") == 0 || strcmp(argv[i], "--no-dock") == 0) {
+				wPreferences.flags.nodock = 1;
+			} else if (strcmp(argv[i], "-noclip") == 0 || strcmp(argv[i], "--no-clip") == 0) {
+				wPreferences.flags.noclip = 1;
+			} else if (strcmp(argv[i], "-version") == 0 || strcmp(argv[i], "--version") == 0) {
+				printf("Window Maker %s\n", VERSION);
+				exit(0);
+			} else if (strcmp(argv[i], "--global_defaults_path") == 0) {
+				printf("%s/WindowMaker\n", SYSCONFDIR);
+				exit(0);
 #ifdef DEBUG
-                } else if (strcmp(argv[i], "--synchronous")==0) {
-                    doSync = 1;
+			} else if (strcmp(argv[i], "--synchronous") == 0) {
+				doSync = 1;
 #endif
-                } else if (strcmp(argv[i], "-locale")==0
-                           || strcmp(argv[i], "--locale")==0) {
-                    i++;
-                    if (i>=argc) {
-                        wwarning(_("too few arguments for %s"), argv[i-1]);
-                        exit(0);
-                    }
-                    Locale = argv[i];
-                } else if (strcmp(argv[i], "-display")==0
-                           || strcmp(argv[i], "--display")==0) {
-                    i++;
-                    if (i>=argc) {
-                        wwarning(_("too few arguments for %s"), argv[i-1]);
-                        exit(0);
-                    }
-                    DisplayName = argv[i];
-                } else if (strcmp(argv[i], "-visualid")==0
-                           || strcmp(argv[i], "--visual-id")==0) {
-                    i++;
-                    if (i>=argc) {
-                        wwarning(_("too few arguments for %s"), argv[i-1]);
-                        exit(0);
-                    }
-                    if (sscanf(argv[i], "%i", &wVisualID)!=1) {
-                        wwarning(_("bad value for visualid: \"%s\""), argv[i]);
-                        exit(0);
-                    }
-                } else if (strcmp(argv[i], "-static")==0
-                           || strcmp(argv[i], "--static")==0) {
+			} else if (strcmp(argv[i], "-locale") == 0 || strcmp(argv[i], "--locale") == 0) {
+				i++;
+				if (i >= argc) {
+					wwarning(_("too few arguments for %s"), argv[i - 1]);
+					exit(0);
+				}
+				Locale = argv[i];
+			} else if (strcmp(argv[i], "-display") == 0 || strcmp(argv[i], "--display") == 0) {
+				i++;
+				if (i >= argc) {
+					wwarning(_("too few arguments for %s"), argv[i - 1]);
+					exit(0);
+				}
+				DisplayName = argv[i];
+			} else if (strcmp(argv[i], "-visualid") == 0 || strcmp(argv[i], "--visual-id") == 0) {
+				i++;
+				if (i >= argc) {
+					wwarning(_("too few arguments for %s"), argv[i - 1]);
+					exit(0);
+				}
+				if (sscanf(argv[i], "%i", &wVisualID) != 1) {
+					wwarning(_("bad value for visualid: \"%s\""), argv[i]);
+					exit(0);
+				}
+			} else if (strcmp(argv[i], "-static") == 0 || strcmp(argv[i], "--static") == 0) {
 
-                    wPreferences.flags.noupdates = 1;
+				wPreferences.flags.noupdates = 1;
 #ifdef XSMP_ENABLED
-                } else if (strcmp(argv[i], "-clientid")==0
-                           || strcmp(argv[i], "-restore")==0) {
-                    i++;
-                    if (i>=argc) {
-                        wwarning(_("too few arguments for %s"), argv[i-1]);
-                        exit(0);
-                    }
+			} else if (strcmp(argv[i], "-clientid") == 0 || strcmp(argv[i], "-restore") == 0) {
+				i++;
+				if (i >= argc) {
+					wwarning(_("too few arguments for %s"), argv[i - 1]);
+					exit(0);
+				}
 #endif
-                } else if (strcmp(argv[i], "--help")==0) {
-                    print_help();
-                    exit(0);
-                } else {
-                    printf(_("%s: invalid argument '%s'\n"), argv[0], argv[i]);
-                    printf(_("Try '%s --help' for more information\n"), argv[0]);
-                    exit(1);
-                }
-        }
-    }
+			} else if (strcmp(argv[i], "--help") == 0) {
+				print_help();
+				exit(0);
+			} else {
+				printf(_("%s: invalid argument '%s'\n"), argv[0], argv[i]);
+				printf(_("Try '%s --help' for more information\n"), argv[0]);
+				exit(1);
+			}
+		}
+	}
 
-    if (!wPreferences.flags.noupdates) {
-        /* check existence of Defaults DB directory */
-        check_defaults();
-    }
+	if (!wPreferences.flags.noupdates) {
+		/* check existence of Defaults DB directory */
+		check_defaults();
+	}
 
+	if (Locale) {
+		setenv("LANG", Locale, 1);
+	} else {
+		Locale = getenv("LC_ALL");
+		if (!Locale) {
+			Locale = getenv("LANG");
+		}
+	}
 
-    if (Locale) {
-        setenv("LANG", Locale, 1);
-    } else {
-        Locale = getenv("LC_ALL");
-        if (!Locale) {
-            Locale = getenv("LANG");
-        }
-    }
+	setlocale(LC_ALL, "");
 
-    setlocale(LC_ALL, "");
-
-    if (!Locale || strcmp(Locale, "C")==0 || strcmp(Locale, "POSIX")==0)
-        Locale = NULL;
+	if (!Locale || strcmp(Locale, "C") == 0 || strcmp(Locale, "POSIX") == 0)
+		Locale = NULL;
 #ifdef I18N
-    if (getenv("NLSPATH"))
-        bindtextdomain("WindowMaker", getenv("NLSPATH"));
-    else
-        bindtextdomain("WindowMaker", LOCALEDIR);
-    bind_textdomain_codeset("WindowMaker", "UTF-8");
-    textdomain("WindowMaker");
+	if (getenv("NLSPATH"))
+		bindtextdomain("WindowMaker", getenv("NLSPATH"));
+	else
+		bindtextdomain("WindowMaker", LOCALEDIR);
+	bind_textdomain_codeset("WindowMaker", "UTF-8");
+	textdomain("WindowMaker");
 
-    if (!XSupportsLocale()) {
-        wwarning(_("X server does not support locale"));
-    }
+	if (!XSupportsLocale()) {
+		wwarning(_("X server does not support locale"));
+	}
 
-    if (XSetLocaleModifiers("") == NULL) {
-        wwarning(_("cannot set locale modifiers"));
-    }
+	if (XSetLocaleModifiers("") == NULL) {
+		wwarning(_("cannot set locale modifiers"));
+	}
 #endif
 
-    if (Locale) {
-        char *ptr;
+	if (Locale) {
+		char *ptr;
 
-        Locale = wstrdup(Locale);
-        ptr = strchr(Locale, '.');
-        if (ptr)
-            *ptr = 0;
-    }
+		Locale = wstrdup(Locale);
+		ptr = strchr(Locale, '.');
+		if (ptr)
+			*ptr = 0;
+	}
 
-    /* open display */
-    dpy = XOpenDisplay(DisplayName);
-    if (dpy == NULL) {
-        wfatal(_("could not open display \"%s\""), XDisplayName(DisplayName));
-        exit(1);
-    }
+	/* open display */
+	dpy = XOpenDisplay(DisplayName);
+	if (dpy == NULL) {
+		wfatal(_("could not open display \"%s\""), XDisplayName(DisplayName));
+		exit(1);
+	}
 
-    if (fcntl(ConnectionNumber(dpy), F_SETFD, FD_CLOEXEC) < 0) {
-        wsyserror("error setting close-on-exec flag for X connection");
-        exit(1);
-    }
+	if (fcntl(ConnectionNumber(dpy), F_SETFD, FD_CLOEXEC) < 0) {
+		wsyserror("error setting close-on-exec flag for X connection");
+		exit(1);
+	}
 
-    if (wVisualID < 0)
-	/*
-	 *   If unspecified, use default visual instead of waiting
-	 * for wrlib/context.c:bestContext() that may end up choosing
-	 * the "fake" 24 bits added by the Composite extension.
-	 *   This is required to avoid all sort of corruptions when
-	 * composite is enabled, and at a depth other than 24.
-	 */
-	wVisualID = (int)DefaultVisual(dpy, DefaultScreen(dpy))->visualid;
+	if (wVisualID < 0)
+		/*
+		 *   If unspecified, use default visual instead of waiting
+		 * for wrlib/context.c:bestContext() that may end up choosing
+		 * the "fake" 24 bits added by the Composite extension.
+		 *   This is required to avoid all sort of corruptions when
+		 * composite is enabled, and at a depth other than 24.
+		 */
+		wVisualID = (int)DefaultVisual(dpy, DefaultScreen(dpy))->visualid;
 
-    /* check if the user specified a complete display name (with screen).
-     * If so, only manage the specified screen */
-    if (DisplayName)
-        pos = strchr(DisplayName, ':');
-    else
-        pos = NULL;
+	/* check if the user specified a complete display name (with screen).
+	 * If so, only manage the specified screen */
+	if (DisplayName)
+		pos = strchr(DisplayName, ':');
+	else
+		pos = NULL;
 
-    if (pos && sscanf(pos, ":%i.%i", &d, &s)==2)
-        multiHead = False;
+	if (pos && sscanf(pos, ":%i.%i", &d, &s) == 2)
+		multiHead = False;
 
-    DisplayName = XDisplayName(DisplayName);
-    setenv("DISPLAY", DisplayName, 1);
+	DisplayName = XDisplayName(DisplayName);
+	setenv("DISPLAY", DisplayName, 1);
 
 #ifdef DEBUG
-    if (doSync)
-        XSynchronize(dpy, True);
+	if (doSync)
+		XSynchronize(dpy, True);
 #endif
 
-    wXModifierInitialize();
+	wXModifierInitialize();
 
 #ifdef XSMP_ENABLED
-    wSessionConnectManager(argv, argc);
+	wSessionConnectManager(argv, argc);
 #endif
 
-    StartUp(!multiHead);
+	StartUp(!multiHead);
 
-    if (wScreenCount==1)
-        multiHead = False;
+	if (wScreenCount == 1)
+		multiHead = False;
 
-    execInitScript();
-    inotifyWatchConfig();
-    EventLoop();
-    return -1;
+	execInitScript();
+	inotifyWatchConfig();
+	EventLoop();
+	return -1;
 }
-

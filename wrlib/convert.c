@@ -26,7 +26,6 @@
 
 #include <config.h>
 
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdlib.h>
@@ -35,7 +34,6 @@
 
 #include <assert.h>
 
-
 #ifdef BENCH
 #include "bench.h"
 #endif
@@ -43,1108 +41,1075 @@
 #include "wraster.h"
 
 #ifdef XSHM
-extern Pixmap R_CreateXImageMappedPixmap(RContext *context, RXImage *ximage);
+extern Pixmap R_CreateXImageMappedPixmap(RContext * context, RXImage * ximage);
 
 #endif
 
-
 #ifdef ASM_X86
 extern void x86_PseudoColor_32_to_8(unsigned char *image,
-                                    unsigned char *ximage,
-                                    char *err, char *nerr,
-                                    short *ctable,
-                                    int dr, int dg, int db,
-                                    unsigned long *pixels,
-                                    int cpc,
-                                    int width, int height,
-                                    int bytesPerPixel,
-                                    int line_offset);
-#endif /* ASM_X86 */
+				    unsigned char *ximage,
+				    char *err, char *nerr,
+				    short *ctable,
+				    int dr, int dg, int db,
+				    unsigned long *pixels,
+				    int cpc, int width, int height, int bytesPerPixel, int line_offset);
+#endif				/* ASM_X86 */
 
 #ifdef ASM_X86_MMX
 
 extern int x86_check_mmx();
 
 extern void x86_mmx_TrueColor_32_to_16(unsigned char *image,
-                                       unsigned short *ximage,
-                                       short *err, short *nerr,
-                                       const unsigned short *rtable,
-                                       const unsigned short *gtable,
-                                       const unsigned short *btable,
-                                       int dr, int dg, int db,
-                                       unsigned int roffs,
-                                       unsigned int goffs,
-                                       unsigned int boffs,
-                                       int width, int height,
-                                       int line_offset);
+				       unsigned short *ximage,
+				       short *err, short *nerr,
+				       const unsigned short *rtable,
+				       const unsigned short *gtable,
+				       const unsigned short *btable,
+				       int dr, int dg, int db,
+				       unsigned int roffs,
+				       unsigned int goffs,
+				       unsigned int boffs, int width, int height, int line_offset);
 
-
-
-#endif /* ASM_X86_MMX */
+#endif				/* ASM_X86_MMX */
 
 #define NFREE(n)  if (n) free(n)
 
 #define HAS_ALPHA(I)	((I)->format == RRGBAFormat)
 
-
 typedef struct RConversionTable {
-    unsigned short table[256];
-    unsigned short index;
+	unsigned short table[256];
+	unsigned short index;
 
-    struct RConversionTable *next;
+	struct RConversionTable *next;
 } RConversionTable;
 
-
 typedef struct RStdConversionTable {
-    unsigned int table[256];
+	unsigned int table[256];
 
-    unsigned short mult;
-    unsigned short max;
+	unsigned short mult;
+	unsigned short max;
 
-    struct RStdConversionTable *next;
+	struct RStdConversionTable *next;
 } RStdConversionTable;
-
-
 
 static RConversionTable *conversionTable = NULL;
 static RStdConversionTable *stdConversionTable = NULL;
 
-
-static unsigned short*
-computeTable(unsigned short mask)
+static unsigned short *computeTable(unsigned short mask)
 {
-    RConversionTable *tmp = conversionTable;
-    int i;
+	RConversionTable *tmp = conversionTable;
+	int i;
 
-    while (tmp) {
-        if (tmp->index == mask)
-            break;
-        tmp = tmp->next;
-    }
+	while (tmp) {
+		if (tmp->index == mask)
+			break;
+		tmp = tmp->next;
+	}
 
-    if (tmp)
-        return tmp->table;
+	if (tmp)
+		return tmp->table;
 
-    tmp = (RConversionTable *)malloc(sizeof(RConversionTable));
-    if (tmp == NULL)
-        return NULL;
+	tmp = (RConversionTable *) malloc(sizeof(RConversionTable));
+	if (tmp == NULL)
+		return NULL;
 
-    for (i=0;i<256;i++)
-        tmp->table[i] = (i*mask + 0x7f)/0xff;
+	for (i = 0; i < 256; i++)
+		tmp->table[i] = (i * mask + 0x7f) / 0xff;
 
-    tmp->index = mask;
-    tmp->next = conversionTable;
-    conversionTable = tmp;
-    return tmp->table;
+	tmp->index = mask;
+	tmp->next = conversionTable;
+	conversionTable = tmp;
+	return tmp->table;
 }
 
-
-static unsigned int*
-computeStdTable(unsigned int mult, unsigned int max)
+static unsigned int *computeStdTable(unsigned int mult, unsigned int max)
 {
-    RStdConversionTable *tmp = stdConversionTable;
-    unsigned int i;
+	RStdConversionTable *tmp = stdConversionTable;
+	unsigned int i;
 
-    while (tmp) {
-        if (tmp->mult == mult && tmp->max == max)
-            break;
-        tmp = tmp->next;
-    }
+	while (tmp) {
+		if (tmp->mult == mult && tmp->max == max)
+			break;
+		tmp = tmp->next;
+	}
 
-    if (tmp)
-        return tmp->table;
+	if (tmp)
+		return tmp->table;
 
-    tmp = (RStdConversionTable *)malloc(sizeof(RStdConversionTable));
-    if (tmp == NULL)
-        return NULL;
+	tmp = (RStdConversionTable *) malloc(sizeof(RStdConversionTable));
+	if (tmp == NULL)
+		return NULL;
 
-    for (i=0; i<256; i++) {
-        tmp->table[i] = (i*max)/0xff * mult;
-    }
-    tmp->mult = mult;
-    tmp->max = max;
+	for (i = 0; i < 256; i++) {
+		tmp->table[i] = (i * max) / 0xff * mult;
+	}
+	tmp->mult = mult;
+	tmp->max = max;
 
-    tmp->next = stdConversionTable;
-    stdConversionTable = tmp;
+	tmp->next = stdConversionTable;
+	stdConversionTable = tmp;
 
-    return tmp->table;
+	return tmp->table;
 }
 
 /***************************************************************************/
 
-
 static void
-convertTrueColor_generic(RXImage *ximg, RImage *image,
-                         signed char *err, signed char *nerr,
-                         const unsigned short *rtable,
-                         const unsigned short *gtable,
-                         const unsigned short *btable,
-                         const int dr, const int dg, const int db,
-                         const unsigned short roffs,
-                         const unsigned short goffs,
-                         const unsigned short boffs)
+convertTrueColor_generic(RXImage * ximg, RImage * image,
+			 signed char *err, signed char *nerr,
+			 const unsigned short *rtable,
+			 const unsigned short *gtable,
+			 const unsigned short *btable,
+			 const int dr, const int dg, const int db,
+			 const unsigned short roffs, const unsigned short goffs, const unsigned short boffs)
 {
-    signed char *terr;
-    int x, y, r, g, b;
-    int pixel;
-    int rer, ger, ber;
-    unsigned char *ptr = image->data;
-    int channels = (HAS_ALPHA(image) ? 4 : 3);
+	signed char *terr;
+	int x, y, r, g, b;
+	int pixel;
+	int rer, ger, ber;
+	unsigned char *ptr = image->data;
+	int channels = (HAS_ALPHA(image) ? 4 : 3);
 
-    /* convert and dither the image to XImage */
-    for (y=0; y<image->height; y++) {
-        nerr[0] = 0;
-        nerr[1] = 0;
-        nerr[2] = 0;
-        for (x=0; x<image->width; x++, ptr+=channels) {
+	/* convert and dither the image to XImage */
+	for (y = 0; y < image->height; y++) {
+		nerr[0] = 0;
+		nerr[1] = 0;
+		nerr[2] = 0;
+		for (x = 0; x < image->width; x++, ptr += channels) {
 
-            /* reduce pixel */
-            pixel = *ptr + err[x];
-            if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-            r = rtable[pixel];
-            /* calc error */
-            rer = pixel - r*dr;
+			/* reduce pixel */
+			pixel = *ptr + err[x];
+			if (pixel < 0)
+				pixel = 0;
+			else if (pixel > 0xff)
+				pixel = 0xff;
+			r = rtable[pixel];
+			/* calc error */
+			rer = pixel - r * dr;
 
-            /* reduce pixel */
-            pixel = *(ptr+1) + err[x+1];
-            if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-            g = gtable[pixel];
-            /* calc error */
-            ger = pixel - g*dg;
+			/* reduce pixel */
+			pixel = *(ptr + 1) + err[x + 1];
+			if (pixel < 0)
+				pixel = 0;
+			else if (pixel > 0xff)
+				pixel = 0xff;
+			g = gtable[pixel];
+			/* calc error */
+			ger = pixel - g * dg;
 
-            /* reduce pixel */
-            pixel = *(ptr+2) + err[x+2];
-            if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-            b = btable[pixel];
-            /* calc error */
-            ber = pixel - b*db;
+			/* reduce pixel */
+			pixel = *(ptr + 2) + err[x + 2];
+			if (pixel < 0)
+				pixel = 0;
+			else if (pixel > 0xff)
+				pixel = 0xff;
+			b = btable[pixel];
+			/* calc error */
+			ber = pixel - b * db;
 
+			pixel = (r << roffs) | (g << goffs) | (b << boffs);
+			XPutPixel(ximg->image, x, y, pixel);
 
-            pixel = (r<<roffs) | (g<<goffs) | (b<<boffs);
-            XPutPixel(ximg->image, x, y, pixel);
+			/* distribute error */
+			r = (rer * 3) / 8;
+			g = (ger * 3) / 8;
+			b = (ber * 3) / 8;
+			/* x+1, y */
+			err[x + 3 * 1] += r;
+			err[x + 1 + 3 * 1] += g;
+			err[x + 2 + 3 * 1] += b;
+			/* x, y+1 */
+			nerr[x] += r;
+			nerr[x + 1] += g;
+			nerr[x + 2] += b;
+			/* x+1, y+1 */
+			nerr[x + 3 * 1] = rer - 2 * r;
+			nerr[x + 1 + 3 * 1] = ger - 2 * g;
+			nerr[x + 2 + 3 * 1] = ber - 2 * b;
+		}
+		/* skip to next line */
+		terr = err;
+		err = nerr;
+		nerr = terr;
+	}
 
-            /* distribute error */
-            r = (rer*3)/8;
-            g = (ger*3)/8;
-            b = (ber*3)/8;
-            /* x+1, y */
-            err[x+3*1]+=r;
-            err[x+1+3*1]+=g;
-            err[x+2+3*1]+=b;
-            /* x, y+1 */
-            nerr[x]+=r;
-            nerr[x+1]+=g;
-            nerr[x+2]+=b;
-            /* x+1, y+1 */
-            nerr[x+3*1]=rer-2*r;
-            nerr[x+1+3*1]=ger-2*g;
-            nerr[x+2+3*1]=ber-2*b;
-        }
-        /* skip to next line */
-        terr = err;
-        err = nerr;
-        nerr = terr;
-    }
+	/* redither the 1st line to distribute error better */
+	ptr = image->data;
+	y = 0;
+	nerr[0] = 0;
+	nerr[1] = 0;
+	nerr[2] = 0;
+	for (x = 0; x < image->width; x++, ptr += channels) {
 
-    /* redither the 1st line to distribute error better */
-    ptr=image->data;
-    y=0;
-    nerr[0] = 0;
-    nerr[1] = 0;
-    nerr[2] = 0;
-    for (x=0; x<image->width; x++, ptr+=channels) {
+		/* reduce pixel */
+		pixel = *ptr + err[x];
+		if (pixel < 0)
+			pixel = 0;
+		else if (pixel > 0xff)
+			pixel = 0xff;
+		r = rtable[pixel];
+		/* calc error */
+		rer = pixel - r * dr;
 
-        /* reduce pixel */
-        pixel = *ptr + err[x];
-        if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-        r = rtable[pixel];
-        /* calc error */
-        rer = pixel - r*dr;
+		/* reduce pixel */
+		pixel = *(ptr + 1) + err[x + 1];
+		if (pixel < 0)
+			pixel = 0;
+		else if (pixel > 0xff)
+			pixel = 0xff;
+		g = gtable[pixel];
+		/* calc error */
+		ger = pixel - g * dg;
 
-        /* reduce pixel */
-        pixel = *(ptr+1) + err[x+1];
-        if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-        g = gtable[pixel];
-        /* calc error */
-        ger = pixel - g*dg;
+		/* reduce pixel */
+		pixel = *(ptr + 2) + err[x + 2];
+		if (pixel < 0)
+			pixel = 0;
+		else if (pixel > 0xff)
+			pixel = 0xff;
+		b = btable[pixel];
+		/* calc error */
+		ber = pixel - b * db;
 
-        /* reduce pixel */
-        pixel = *(ptr+2) + err[x+2];
-        if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-        b = btable[pixel];
-        /* calc error */
-        ber = pixel - b*db;
+		pixel = (r << roffs) | (g << goffs) | (b << boffs);
+		XPutPixel(ximg->image, x, y, pixel);
 
-
-        pixel = (r<<roffs) | (g<<goffs) | (b<<boffs);
-        XPutPixel(ximg->image, x, y, pixel);
-
-        /* distribute error */
-        r = (rer*3)/8;
-        g = (ger*3)/8;
-        b = (ber*3)/8;
-        /* x+1, y */
-        err[x+3*1]+=r;
-        err[x+1+3*1]+=g;
-        err[x+2+3*1]+=b;
-        /* x, y+1 */
-        nerr[x]+=r;
-        nerr[x+1]+=g;
-        nerr[x+2]+=b;
-        /* x+1, y+1 */
-        nerr[x+3*1]=rer-2*r;
-        nerr[x+1+3*1]=ger-2*g;
-        nerr[x+2+3*1]=ber-2*b;
-    }
+		/* distribute error */
+		r = (rer * 3) / 8;
+		g = (ger * 3) / 8;
+		b = (ber * 3) / 8;
+		/* x+1, y */
+		err[x + 3 * 1] += r;
+		err[x + 1 + 3 * 1] += g;
+		err[x + 2 + 3 * 1] += b;
+		/* x, y+1 */
+		nerr[x] += r;
+		nerr[x + 1] += g;
+		nerr[x + 2] += b;
+		/* x+1, y+1 */
+		nerr[x + 3 * 1] = rer - 2 * r;
+		nerr[x + 1 + 3 * 1] = ger - 2 * g;
+		nerr[x + 2 + 3 * 1] = ber - 2 * b;
+	}
 }
 
-
-
-
-static RXImage*
-image2TrueColor(RContext *ctx, RImage *image)
+static RXImage *image2TrueColor(RContext * ctx, RImage * image)
 {
-    RXImage *ximg;
-    unsigned short rmask, gmask, bmask;
-    unsigned short roffs, goffs, boffs;
-    unsigned short *rtable, *gtable, *btable;
-    int channels = (HAS_ALPHA(image) ? 4 : 3);
+	RXImage *ximg;
+	unsigned short rmask, gmask, bmask;
+	unsigned short roffs, goffs, boffs;
+	unsigned short *rtable, *gtable, *btable;
+	int channels = (HAS_ALPHA(image) ? 4 : 3);
 
-    ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
-    if (!ximg) {
-        return NULL;
-    }
+	ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
+	if (!ximg) {
+		return NULL;
+	}
 
-    roffs = ctx->red_offset;
-    goffs = ctx->green_offset;
-    boffs = ctx->blue_offset;
+	roffs = ctx->red_offset;
+	goffs = ctx->green_offset;
+	boffs = ctx->blue_offset;
 
-    rmask = ctx->visual->red_mask >> roffs;
-    gmask = ctx->visual->green_mask >> goffs;
-    bmask = ctx->visual->blue_mask >> boffs;
+	rmask = ctx->visual->red_mask >> roffs;
+	gmask = ctx->visual->green_mask >> goffs;
+	bmask = ctx->visual->blue_mask >> boffs;
 
-    rtable = computeTable(rmask);
-    gtable = computeTable(gmask);
-    btable = computeTable(bmask);
+	rtable = computeTable(rmask);
+	gtable = computeTable(gmask);
+	btable = computeTable(bmask);
 
-    if (rtable==NULL || gtable==NULL || btable==NULL) {
-        RErrorCode = RERR_NOMEMORY;
-        RDestroyXImage(ctx, ximg);
-        return NULL;
-    }
-
+	if (rtable == NULL || gtable == NULL || btable == NULL) {
+		RErrorCode = RERR_NOMEMORY;
+		RDestroyXImage(ctx, ximg);
+		return NULL;
+	}
 
 #ifdef BENCH
-    cycle_bench(1);
+	cycle_bench(1);
 #endif
 
-    if (ctx->attribs->render_mode==RBestMatchRendering) {
-        int ofs, r, g, b;
-        int x, y;
-        unsigned long pixel;
-        unsigned char *ptr = image->data;
+	if (ctx->attribs->render_mode == RBestMatchRendering) {
+		int ofs, r, g, b;
+		int x, y;
+		unsigned long pixel;
+		unsigned char *ptr = image->data;
 
-        /* fake match */
+		/* fake match */
 #ifdef DEBUG
-        puts("true color match");
+		puts("true color match");
 #endif
-        if (rmask==0xff && gmask==0xff && bmask==0xff) {
-            for (y=0; y < image->height; y++) {
-                for (x=0; x < image->width; x++, ptr+=channels) {
-                    /* reduce pixel */
-                    pixel = (*(ptr)<<roffs) | (*(ptr+1)<<goffs) | (*(ptr+2)<<boffs);
-                    XPutPixel(ximg->image, x, y, pixel);
-                }
-            }
-        } else {
-            for (y=0, ofs=0; y < image->height; y++) {
-                for (x=0; x < image->width; x++, ofs+=channels-3) {
-                    /* reduce pixel */
-                    r = rtable[ptr[ofs++]];
-                    g = gtable[ptr[ofs++]];
-                    b = btable[ptr[ofs++]];
-                    pixel = (r<<roffs) | (g<<goffs) | (b<<boffs);
-                    XPutPixel(ximg->image, x, y, pixel);
-                }
-            }
-        }
-    } else {
-        /* dither */
-        const int dr=0xff/rmask;
-        const int dg=0xff/gmask;
-        const int db=0xff/bmask;
+		if (rmask == 0xff && gmask == 0xff && bmask == 0xff) {
+			for (y = 0; y < image->height; y++) {
+				for (x = 0; x < image->width; x++, ptr += channels) {
+					/* reduce pixel */
+					pixel = (*(ptr) << roffs) | (*(ptr + 1) << goffs) | (*(ptr + 2) << boffs);
+					XPutPixel(ximg->image, x, y, pixel);
+				}
+			}
+		} else {
+			for (y = 0, ofs = 0; y < image->height; y++) {
+				for (x = 0; x < image->width; x++, ofs += channels - 3) {
+					/* reduce pixel */
+					r = rtable[ptr[ofs++]];
+					g = gtable[ptr[ofs++]];
+					b = btable[ptr[ofs++]];
+					pixel = (r << roffs) | (g << goffs) | (b << boffs);
+					XPutPixel(ximg->image, x, y, pixel);
+				}
+			}
+		}
+	} else {
+		/* dither */
+		const int dr = 0xff / rmask;
+		const int dg = 0xff / gmask;
+		const int db = 0xff / bmask;
 
 #ifdef DEBUG
-        puts("true color dither");
+		puts("true color dither");
 #endif
 
 #ifdef ASM_X86_MMX
-        if (ctx->depth==16 && HAS_ALPHA(image) && x86_check_mmx()) {
-            short *err;
-            short *nerr;
+		if (ctx->depth == 16 && HAS_ALPHA(image) && x86_check_mmx()) {
+			short *err;
+			short *nerr;
 
-            err = malloc(8*(image->width+3));
-            nerr = malloc(8*(image->width+3));
-            if (!err || !nerr) {
-                NFREE(err);
-                NFREE(nerr);
-                RErrorCode = RERR_NOMEMORY;
-                RDestroyXImage(ctx, ximg);
-                return NULL;
-            }
-            memset(err, 0, 8*(image->width+3));
-            memset(nerr, 0, 8*(image->width+3));
+			err = malloc(8 * (image->width + 3));
+			nerr = malloc(8 * (image->width + 3));
+			if (!err || !nerr) {
+				NFREE(err);
+				NFREE(nerr);
+				RErrorCode = RERR_NOMEMORY;
+				RDestroyXImage(ctx, ximg);
+				return NULL;
+			}
+			memset(err, 0, 8 * (image->width + 3));
+			memset(nerr, 0, 8 * (image->width + 3));
 
-            x86_mmx_TrueColor_32_to_16(image->data,
-                                       (unsigned short*)ximg->image->data,
-                                       err+8, nerr+8,
-                                       rtable, gtable, btable,
-                                       dr, dg, db,
-                                       roffs, goffs, boffs,
-                                       image->width, image->height,
-                                       ximg->image->bytes_per_line - 2*image->width);
+			x86_mmx_TrueColor_32_to_16(image->data,
+						   (unsigned short *)ximg->image->data,
+						   err + 8, nerr + 8,
+						   rtable, gtable, btable,
+						   dr, dg, db,
+						   roffs, goffs, boffs,
+						   image->width, image->height,
+						   ximg->image->bytes_per_line - 2 * image->width);
 
-            free(err);
-            free(nerr);
-        } else
-#endif /* ASM_X86_MMX */
-        {
-            signed char *err;
-            signed char *nerr;
-            int ch = (HAS_ALPHA(image) ? 4 : 3);
+			free(err);
+			free(nerr);
+		} else
+#endif				/* ASM_X86_MMX */
+		{
+			signed char *err;
+			signed char *nerr;
+			int ch = (HAS_ALPHA(image) ? 4 : 3);
 
-            err = malloc(ch*(image->width+2));
-            nerr = malloc(ch*(image->width+2));
-            if (!err || !nerr) {
-                NFREE(err);
-                NFREE(nerr);
-                RErrorCode = RERR_NOMEMORY;
-                RDestroyXImage(ctx, ximg);
-                return NULL;
-            }
+			err = malloc(ch * (image->width + 2));
+			nerr = malloc(ch * (image->width + 2));
+			if (!err || !nerr) {
+				NFREE(err);
+				NFREE(nerr);
+				RErrorCode = RERR_NOMEMORY;
+				RDestroyXImage(ctx, ximg);
+				return NULL;
+			}
 
-            memset(err, 0, ch*(image->width+2));
-            memset(nerr, 0, ch*(image->width+2));
+			memset(err, 0, ch * (image->width + 2));
+			memset(nerr, 0, ch * (image->width + 2));
 
-            convertTrueColor_generic(ximg, image, err, nerr,
-                                     rtable, gtable, btable,
-                                     dr, dg, db, roffs, goffs, boffs);
-            free(err);
-            free(nerr);
-        }
+			convertTrueColor_generic(ximg, image, err, nerr,
+						 rtable, gtable, btable, dr, dg, db, roffs, goffs, boffs);
+			free(err);
+			free(nerr);
+		}
 
-    }
+	}
 
 #ifdef BENCH
-    cycle_bench(0);
+	cycle_bench(0);
 #endif
 
-    return ximg;
+	return ximg;
 }
-
 
 /***************************************************************************/
 
 static void
-convertPseudoColor_to_8(RXImage *ximg, RImage *image,
-                        signed char *err, signed char *nerr,
-                        const unsigned short *rtable,
-                        const unsigned short *gtable,
-                        const unsigned short *btable,
-                        const int dr, const int dg, const int db,
-                        unsigned long *pixels,
-                        int cpc)
+convertPseudoColor_to_8(RXImage * ximg, RImage * image,
+			signed char *err, signed char *nerr,
+			const unsigned short *rtable,
+			const unsigned short *gtable,
+			const unsigned short *btable,
+			const int dr, const int dg, const int db, unsigned long *pixels, int cpc)
 {
-    signed char *terr;
-    int x, y, r, g, b;
-    int pixel;
-    int rer, ger, ber;
-    unsigned char *ptr = image->data;
-    unsigned char *optr = (unsigned char*)ximg->image->data;
-    int channels = (HAS_ALPHA(image) ? 4 : 3);
-    int cpcpc = cpc*cpc;
+	signed char *terr;
+	int x, y, r, g, b;
+	int pixel;
+	int rer, ger, ber;
+	unsigned char *ptr = image->data;
+	unsigned char *optr = (unsigned char *)ximg->image->data;
+	int channels = (HAS_ALPHA(image) ? 4 : 3);
+	int cpcpc = cpc * cpc;
 
-    /* convert and dither the image to XImage */
-    for (y=0; y<image->height; y++) {
-        nerr[0] = 0;
-        nerr[1] = 0;
-        nerr[2] = 0;
-        for (x=0; x<image->width*3; x+=3, ptr+=channels) {
+	/* convert and dither the image to XImage */
+	for (y = 0; y < image->height; y++) {
+		nerr[0] = 0;
+		nerr[1] = 0;
+		nerr[2] = 0;
+		for (x = 0; x < image->width * 3; x += 3, ptr += channels) {
 
-            /* reduce pixel */
-            pixel = *ptr + err[x];
-            if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-            r = rtable[pixel];
-            /* calc error */
-            rer = pixel - r*dr;
+			/* reduce pixel */
+			pixel = *ptr + err[x];
+			if (pixel < 0)
+				pixel = 0;
+			else if (pixel > 0xff)
+				pixel = 0xff;
+			r = rtable[pixel];
+			/* calc error */
+			rer = pixel - r * dr;
 
-            /* reduce pixel */
-            pixel = *(ptr+1) + err[x+1];
-            if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-            g = gtable[pixel];
-            /* calc error */
-            ger = pixel - g*dg;
+			/* reduce pixel */
+			pixel = *(ptr + 1) + err[x + 1];
+			if (pixel < 0)
+				pixel = 0;
+			else if (pixel > 0xff)
+				pixel = 0xff;
+			g = gtable[pixel];
+			/* calc error */
+			ger = pixel - g * dg;
 
-            /* reduce pixel */
-            pixel = *(ptr+2) + err[x+2];
-            if (pixel<0) pixel=0; else if (pixel>0xff) pixel=0xff;
-            b = btable[pixel];
-            /* calc error */
-            ber = pixel - b*db;
+			/* reduce pixel */
+			pixel = *(ptr + 2) + err[x + 2];
+			if (pixel < 0)
+				pixel = 0;
+			else if (pixel > 0xff)
+				pixel = 0xff;
+			b = btable[pixel];
+			/* calc error */
+			ber = pixel - b * db;
 
-            *optr++ = pixels[r*cpcpc + g*cpc + b];
+			*optr++ = pixels[r * cpcpc + g * cpc + b];
 
-            /* distribute error */
-            r = (rer*3)/8;
-            g = (ger*3)/8;
-            b = (ber*3)/8;
+			/* distribute error */
+			r = (rer * 3) / 8;
+			g = (ger * 3) / 8;
+			b = (ber * 3) / 8;
 
-            /* x+1, y */
-            err[x+3*1]+=r;
-            err[x+1+3*1]+=g;
-            err[x+2+3*1]+=b;
-            /* x, y+1 */
-            nerr[x]+=r;
-            nerr[x+1]+=g;
-            nerr[x+2]+=b;
-            /* x+1, y+1 */
-            nerr[x+3*1]=rer-2*r;
-            nerr[x+1+3*1]=ger-2*g;
-            nerr[x+2+3*1]=ber-2*b;
-        }
-        /* skip to next line */
-        terr = err;
-        err = nerr;
-        nerr = terr;
+			/* x+1, y */
+			err[x + 3 * 1] += r;
+			err[x + 1 + 3 * 1] += g;
+			err[x + 2 + 3 * 1] += b;
+			/* x, y+1 */
+			nerr[x] += r;
+			nerr[x + 1] += g;
+			nerr[x + 2] += b;
+			/* x+1, y+1 */
+			nerr[x + 3 * 1] = rer - 2 * r;
+			nerr[x + 1 + 3 * 1] = ger - 2 * g;
+			nerr[x + 2 + 3 * 1] = ber - 2 * b;
+		}
+		/* skip to next line */
+		terr = err;
+		err = nerr;
+		nerr = terr;
 
-        optr += ximg->image->bytes_per_line - image->width;
-    }
+		optr += ximg->image->bytes_per_line - image->width;
+	}
 }
 
-
-
-static RXImage*
-image2PseudoColor(RContext *ctx, RImage *image)
+static RXImage *image2PseudoColor(RContext * ctx, RImage * image)
 {
-    RXImage *ximg;
-    register int x, y, r, g, b;
-    unsigned char *ptr;
-    unsigned long pixel;
-    const int cpc=ctx->attribs->colors_per_channel;
-    const unsigned short rmask = cpc-1; /* different sizes could be used */
-    const unsigned short gmask = rmask; /* for r,g,b */
-    const unsigned short bmask = rmask;
-    unsigned short *rtable, *gtable, *btable;
-    const int cpccpc = cpc*cpc;
-    int channels = (HAS_ALPHA(image) ? 4 : 3);
+	RXImage *ximg;
+	register int x, y, r, g, b;
+	unsigned char *ptr;
+	unsigned long pixel;
+	const int cpc = ctx->attribs->colors_per_channel;
+	const unsigned short rmask = cpc - 1;	/* different sizes could be used */
+	const unsigned short gmask = rmask;	/* for r,g,b */
+	const unsigned short bmask = rmask;
+	unsigned short *rtable, *gtable, *btable;
+	const int cpccpc = cpc * cpc;
+	int channels = (HAS_ALPHA(image) ? 4 : 3);
 
-    ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
-    if (!ximg) {
-        return NULL;
-    }
+	ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
+	if (!ximg) {
+		return NULL;
+	}
 
-    ptr = image->data;
+	ptr = image->data;
 
-    /* Tables are same at the moment because rmask==gmask==bmask. */
-    rtable = computeTable(rmask);
-    gtable = computeTable(gmask);
-    btable = computeTable(bmask);
+	/* Tables are same at the moment because rmask==gmask==bmask. */
+	rtable = computeTable(rmask);
+	gtable = computeTable(gmask);
+	btable = computeTable(bmask);
 
-    if (rtable==NULL || gtable==NULL || btable==NULL) {
-        RErrorCode = RERR_NOMEMORY;
-        RDestroyXImage(ctx, ximg);
-        return NULL;
-    }
+	if (rtable == NULL || gtable == NULL || btable == NULL) {
+		RErrorCode = RERR_NOMEMORY;
+		RDestroyXImage(ctx, ximg);
+		return NULL;
+	}
 
-    if (ctx->attribs->render_mode == RBestMatchRendering) {
-        /* fake match */
+	if (ctx->attribs->render_mode == RBestMatchRendering) {
+		/* fake match */
 #ifdef DEBUG
-        printf("pseudo color match with %d colors per channel\n", cpc);
+		printf("pseudo color match with %d colors per channel\n", cpc);
 #endif
-        for (y=0; y<image->height; y++) {
-            for (x=0; x<image->width; x++, ptr+=channels-3) {
-                /* reduce pixel */
-                r = rtable[*ptr++];
-                g = gtable[*ptr++];
-                b = btable[*ptr++];
-                pixel = r*cpccpc + g*cpc + b;
-                /*data[ofs] = ctx->colors[pixel].pixel;*/
-                XPutPixel(ximg->image, x, y, ctx->colors[pixel].pixel);
-            }
-        }
-    } else {
-        /* dither */
-        signed char *err;
-        signed char *nerr;
-        const int dr=0xff/rmask;
-        const int dg=0xff/gmask;
-        const int db=0xff/bmask;
-
+		for (y = 0; y < image->height; y++) {
+			for (x = 0; x < image->width; x++, ptr += channels - 3) {
+				/* reduce pixel */
+				r = rtable[*ptr++];
+				g = gtable[*ptr++];
+				b = btable[*ptr++];
+				pixel = r * cpccpc + g * cpc + b;
+				/*data[ofs] = ctx->colors[pixel].pixel; */
+				XPutPixel(ximg->image, x, y, ctx->colors[pixel].pixel);
+			}
+		}
+	} else {
+		/* dither */
+		signed char *err;
+		signed char *nerr;
+		const int dr = 0xff / rmask;
+		const int dg = 0xff / gmask;
+		const int db = 0xff / bmask;
 
 #ifdef DEBUG
-        printf("pseudo color dithering with %d colors per channel\n", cpc);
+		printf("pseudo color dithering with %d colors per channel\n", cpc);
 #endif
-        err = malloc(4*(image->width+3));
-        nerr = malloc(4*(image->width+3));
-        if (!err || !nerr) {
-            NFREE(err);
-            NFREE(nerr);
-            RErrorCode = RERR_NOMEMORY;
-            RDestroyXImage(ctx, ximg);
-            return NULL;
-        }
-        memset(err, 0, 4*(image->width+3));
-        memset(nerr, 0, 4*(image->width+3));
+		err = malloc(4 * (image->width + 3));
+		nerr = malloc(4 * (image->width + 3));
+		if (!err || !nerr) {
+			NFREE(err);
+			NFREE(nerr);
+			RErrorCode = RERR_NOMEMORY;
+			RDestroyXImage(ctx, ximg);
+			return NULL;
+		}
+		memset(err, 0, 4 * (image->width + 3));
+		memset(nerr, 0, 4 * (image->width + 3));
 
-        /*#ifdef ASM_X86*/
+		/*#ifdef ASM_X86 */
 #if 0
-        x86_PseudoColor_32_to_8(image->data, ximg->image->data,
-                                err+4, nerr+4,
-                                rtable,
-                                dr, dg, db, ctx->pixels, cpc,
-                                image->width, image->height,
-                                channels,
-                                ximg->image->bytes_per_line - image->width);
+		x86_PseudoColor_32_to_8(image->data, ximg->image->data,
+					err + 4, nerr + 4,
+					rtable,
+					dr, dg, db, ctx->pixels, cpc,
+					image->width, image->height,
+					channels, ximg->image->bytes_per_line - image->width);
 #else
-        convertPseudoColor_to_8(ximg, image, err+4, nerr+4,
-                                rtable,	gtable,	btable,
-                                dr, dg, db, ctx->pixels, cpc);
+		convertPseudoColor_to_8(ximg, image, err + 4, nerr + 4,
+					rtable, gtable, btable, dr, dg, db, ctx->pixels, cpc);
 #endif
 
-        free(err);
-        free(nerr);
-    }
+		free(err);
+		free(nerr);
+	}
 
-    return ximg;
+	return ximg;
 }
-
 
 /*
  * For standard colormap
  */
-static RXImage*
-image2StandardPseudoColor(RContext *ctx, RImage *image)
+static RXImage *image2StandardPseudoColor(RContext * ctx, RImage * image)
 {
-    RXImage *ximg;
-    register int x, y, r, g, b;
-    unsigned char *ptr;
-    unsigned long pixel;
-    unsigned char *data;
-    unsigned int *rtable, *gtable, *btable;
-    unsigned int base_pixel = ctx->std_rgb_map->base_pixel;
-    int channels = (HAS_ALPHA(image) ? 4 : 3);
+	RXImage *ximg;
+	register int x, y, r, g, b;
+	unsigned char *ptr;
+	unsigned long pixel;
+	unsigned char *data;
+	unsigned int *rtable, *gtable, *btable;
+	unsigned int base_pixel = ctx->std_rgb_map->base_pixel;
+	int channels = (HAS_ALPHA(image) ? 4 : 3);
 
+	ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
+	if (!ximg) {
+		return NULL;
+	}
 
-    ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
-    if (!ximg) {
-        return NULL;
-    }
+	ptr = image->data;
 
-    ptr = image->data;
+	data = (unsigned char *)ximg->image->data;
 
-    data = (unsigned char *)ximg->image->data;
+	rtable = computeStdTable(ctx->std_rgb_map->red_mult, ctx->std_rgb_map->red_max);
 
+	gtable = computeStdTable(ctx->std_rgb_map->green_mult, ctx->std_rgb_map->green_max);
 
-    rtable = computeStdTable(ctx->std_rgb_map->red_mult,
-                             ctx->std_rgb_map->red_max);
+	btable = computeStdTable(ctx->std_rgb_map->blue_mult, ctx->std_rgb_map->blue_max);
 
-    gtable = computeStdTable(ctx->std_rgb_map->green_mult,
-                             ctx->std_rgb_map->green_max);
+	if (rtable == NULL || gtable == NULL || btable == NULL) {
+		RErrorCode = RERR_NOMEMORY;
+		RDestroyXImage(ctx, ximg);
+		return NULL;
+	}
 
-    btable = computeStdTable(ctx->std_rgb_map->blue_mult,
-                             ctx->std_rgb_map->blue_max);
+	if (ctx->attribs->render_mode == RBestMatchRendering) {
+		for (y = 0; y < image->height; y++) {
+			for (x = 0; x < image->width; x++, ptr += channels) {
+				/* reduce pixel */
+				pixel = (rtable[*ptr] + gtable[*(ptr + 1)]
+					 + btable[*(ptr + 2)] + base_pixel) & 0xffffffff;
 
-    if (rtable==NULL || gtable==NULL || btable==NULL) {
-        RErrorCode = RERR_NOMEMORY;
-        RDestroyXImage(ctx, ximg);
-        return NULL;
-    }
-
-
-    if (ctx->attribs->render_mode == RBestMatchRendering) {
-        for (y=0; y<image->height; y++) {
-            for (x=0; x<image->width; x++, ptr+=channels) {
-                /* reduce pixel */
-                pixel = (rtable[*ptr] + gtable[*(ptr+1)]
-                         + btable[*(ptr+2)] + base_pixel) & 0xffffffff;
-
-                XPutPixel(ximg->image, x, y, pixel);
-            }
-        }
-    } else {
-        /* dither */
-        signed short *err, *nerr;
-        signed short *terr;
-        int rer, ger, ber;
-        int x1, ofs;
+				XPutPixel(ximg->image, x, y, pixel);
+			}
+		}
+	} else {
+		/* dither */
+		signed short *err, *nerr;
+		signed short *terr;
+		int rer, ger, ber;
+		int x1, ofs;
 
 #ifdef DEBUG
-        printf("pseudo color dithering with %d colors per channel\n",
-               ctx->attribs->colors_per_channel);
+		printf("pseudo color dithering with %d colors per channel\n", ctx->attribs->colors_per_channel);
 #endif
-        err = (short*)malloc(3*(image->width+2)*sizeof(short));
-        nerr = (short*)malloc(3*(image->width+2)*sizeof(short));
-        if (!err || !nerr) {
-            NFREE(err);
-            NFREE(nerr);
-            RErrorCode = RERR_NOMEMORY;
-            RDestroyXImage(ctx, ximg);
-            return NULL;
-        }
-        for (x=0, x1=0; x<image->width*3; x1+=channels-3) {
-            err[x++] = ptr[x1++];
-            err[x++] = ptr[x1++];
-            err[x++] = ptr[x1++];
-        }
-        err[x] = err[x+1] = err[x+2] = 0;
-        /* convert and dither the image to XImage */
-        for (y=0, ofs=0; y<image->height; y++) {
-            if (y<image->height-1) {
-                int x1;
-                for (x=0, x1=(y+1)*image->width*channels;
-                     x<image->width*3;
-                     x1+=channels-3) {
-                    nerr[x++] = ptr[x1++];
-                    nerr[x++] = ptr[x1++];
-                    nerr[x++] = ptr[x1++];
-                }
-                /* last column */
-                x1-=channels;
-                nerr[x++] = ptr[x1++];
-                nerr[x++] = ptr[x1++];
-                nerr[x++] = ptr[x1++];
-            }
-            for (x=0; x<image->width*3; x+=3, ofs++) {
-                /* reduce pixel */
-                if (err[x]>0xff) err[x]=0xff; else if (err[x]<0) err[x]=0;
-                if (err[x+1]>0xff) err[x+1]=0xff; else if (err[x+1]<0) err[x+1]=0;
-                if (err[x+2]>0xff) err[x+2]=0xff; else if (err[x+2]<0) err[x+2]=0;
+		err = (short *)malloc(3 * (image->width + 2) * sizeof(short));
+		nerr = (short *)malloc(3 * (image->width + 2) * sizeof(short));
+		if (!err || !nerr) {
+			NFREE(err);
+			NFREE(nerr);
+			RErrorCode = RERR_NOMEMORY;
+			RDestroyXImage(ctx, ximg);
+			return NULL;
+		}
+		for (x = 0, x1 = 0; x < image->width * 3; x1 += channels - 3) {
+			err[x++] = ptr[x1++];
+			err[x++] = ptr[x1++];
+			err[x++] = ptr[x1++];
+		}
+		err[x] = err[x + 1] = err[x + 2] = 0;
+		/* convert and dither the image to XImage */
+		for (y = 0, ofs = 0; y < image->height; y++) {
+			if (y < image->height - 1) {
+				int x1;
+				for (x = 0, x1 = (y + 1) * image->width * channels;
+				     x < image->width * 3; x1 += channels - 3) {
+					nerr[x++] = ptr[x1++];
+					nerr[x++] = ptr[x1++];
+					nerr[x++] = ptr[x1++];
+				}
+				/* last column */
+				x1 -= channels;
+				nerr[x++] = ptr[x1++];
+				nerr[x++] = ptr[x1++];
+				nerr[x++] = ptr[x1++];
+			}
+			for (x = 0; x < image->width * 3; x += 3, ofs++) {
+				/* reduce pixel */
+				if (err[x] > 0xff)
+					err[x] = 0xff;
+				else if (err[x] < 0)
+					err[x] = 0;
+				if (err[x + 1] > 0xff)
+					err[x + 1] = 0xff;
+				else if (err[x + 1] < 0)
+					err[x + 1] = 0;
+				if (err[x + 2] > 0xff)
+					err[x + 2] = 0xff;
+				else if (err[x + 2] < 0)
+					err[x + 2] = 0;
 
-                r = rtable[err[x]];
-                g = gtable[err[x+1]];
-                b = btable[err[x+2]];
+				r = rtable[err[x]];
+				g = gtable[err[x + 1]];
+				b = btable[err[x + 2]];
 
-                pixel = r + g + b;
+				pixel = r + g + b;
 
-                data[ofs] = base_pixel + pixel;
+				data[ofs] = base_pixel + pixel;
 
-                /* calc error */
-                rer = err[x] - (ctx->colors[pixel].red>>8);
-                ger = err[x+1] - (ctx->colors[pixel].green>>8);
-                ber = err[x+2] - (ctx->colors[pixel].blue>>8);
+				/* calc error */
+				rer = err[x] - (ctx->colors[pixel].red >> 8);
+				ger = err[x + 1] - (ctx->colors[pixel].green >> 8);
+				ber = err[x + 2] - (ctx->colors[pixel].blue >> 8);
 
-                /* distribute error */
-                err[x+3*1]+=(rer*7)/16;
-                err[x+1+3*1]+=(ger*7)/16;
-                err[x+2+3*1]+=(ber*7)/16;
+				/* distribute error */
+				err[x + 3 * 1] += (rer * 7) / 16;
+				err[x + 1 + 3 * 1] += (ger * 7) / 16;
+				err[x + 2 + 3 * 1] += (ber * 7) / 16;
 
-                nerr[x]+=(rer*5)/16;
-                nerr[x+1]+=(ger*5)/16;
-                nerr[x+2]+=(ber*5)/16;
+				nerr[x] += (rer * 5) / 16;
+				nerr[x + 1] += (ger * 5) / 16;
+				nerr[x + 2] += (ber * 5) / 16;
 
-                if (x>0) {
-                    nerr[x-3*1]+=(rer*3)/16;
-                    nerr[x-3*1+1]+=(ger*3)/16;
-                    nerr[x-3*1+2]+=(ber*3)/16;
-                }
+				if (x > 0) {
+					nerr[x - 3 * 1] += (rer * 3) / 16;
+					nerr[x - 3 * 1 + 1] += (ger * 3) / 16;
+					nerr[x - 3 * 1 + 2] += (ber * 3) / 16;
+				}
 
-                nerr[x+3*1]+=rer/16;
-                nerr[x+1+3*1]+=ger/16;
-                nerr[x+2+3*1]+=ber/16;
-            }
-            /* skip to next line */
-            terr = err;
-            err = nerr;
-            nerr = terr;
+				nerr[x + 3 * 1] += rer / 16;
+				nerr[x + 1 + 3 * 1] += ger / 16;
+				nerr[x + 2 + 3 * 1] += ber / 16;
+			}
+			/* skip to next line */
+			terr = err;
+			err = nerr;
+			nerr = terr;
 
-            ofs += ximg->image->bytes_per_line - image->width;
-        }
-        free(err);
-        free(nerr);
-    }
-    ximg->image->data = (char*)data;
+			ofs += ximg->image->bytes_per_line - image->width;
+		}
+		free(err);
+		free(nerr);
+	}
+	ximg->image->data = (char *)data;
 
-    return ximg;
+	return ximg;
 }
 
-
-
-static RXImage*
-image2GrayScale(RContext *ctx, RImage *image)
+static RXImage *image2GrayScale(RContext * ctx, RImage * image)
 {
-    RXImage *ximg;
-    register int x, y, g;
-    unsigned char *ptr;
-    const int cpc=ctx->attribs->colors_per_channel;
-    unsigned short gmask;
-    unsigned short *table;
-    unsigned char *data;
-    int channels = (HAS_ALPHA(image) ? 4 : 3);
+	RXImage *ximg;
+	register int x, y, g;
+	unsigned char *ptr;
+	const int cpc = ctx->attribs->colors_per_channel;
+	unsigned short gmask;
+	unsigned short *table;
+	unsigned char *data;
+	int channels = (HAS_ALPHA(image) ? 4 : 3);
 
+	ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
+	if (!ximg) {
+		return NULL;
+	}
 
-    ximg = RCreateXImage(ctx, ctx->depth, image->width, image->height);
-    if (!ximg) {
-        return NULL;
-    }
+	ptr = image->data;
 
-    ptr = image->data;
+	data = (unsigned char *)ximg->image->data;
 
-    data = (unsigned char *)ximg->image->data;
+	if (ctx->vclass == StaticGray)
+		gmask = (1 << ctx->depth) - 1;	/* use all grays */
+	else
+		gmask = cpc * cpc * cpc - 1;
 
-    if (ctx->vclass == StaticGray)
-        gmask = (1<<ctx->depth) - 1; /* use all grays */
-    else
-        gmask  = cpc*cpc*cpc-1;
+	table = computeTable(gmask);
 
-    table = computeTable(gmask);
+	if (table == NULL) {
+		RErrorCode = RERR_NOMEMORY;
+		RDestroyXImage(ctx, ximg);
+		return NULL;
+	}
 
-    if (table==NULL) {
-        RErrorCode = RERR_NOMEMORY;
-        RDestroyXImage(ctx, ximg);
-        return NULL;
-    }
-
-    if (ctx->attribs->render_mode == RBestMatchRendering) {
-        /* fake match */
+	if (ctx->attribs->render_mode == RBestMatchRendering) {
+		/* fake match */
 #ifdef DEBUG
-        printf("grayscale match with %d colors per channel\n", cpc);
+		printf("grayscale match with %d colors per channel\n", cpc);
 #endif
-        for (y=0; y<image->height; y++) {
-            for (x=0; x<image->width; x++) {
-                /* reduce pixel */
-                g = table[(*ptr * 30 + *(ptr+1) * 59 + *(ptr+2) * 11)/100];
-                ptr += channels;
-                /*data[ofs] = ctx->colors[g].pixel;*/
-                XPutPixel(ximg->image, x, y, ctx->colors[g].pixel);
-            }
-        }
-    } else {
-        /* dither */
-        short *gerr;
-        short *ngerr;
-        short *terr;
-        int ger;
-        const int dg=0xff/gmask;
+		for (y = 0; y < image->height; y++) {
+			for (x = 0; x < image->width; x++) {
+				/* reduce pixel */
+				g = table[(*ptr * 30 + *(ptr + 1) * 59 + *(ptr + 2) * 11) / 100];
+				ptr += channels;
+				/*data[ofs] = ctx->colors[g].pixel; */
+				XPutPixel(ximg->image, x, y, ctx->colors[g].pixel);
+			}
+		}
+	} else {
+		/* dither */
+		short *gerr;
+		short *ngerr;
+		short *terr;
+		int ger;
+		const int dg = 0xff / gmask;
 
 #ifdef DEBUG
-        printf("grayscale dither with %d colors per channel\n", cpc);
+		printf("grayscale dither with %d colors per channel\n", cpc);
 #endif
-        gerr = (short*)malloc((image->width+2)*sizeof(short));
-        ngerr = (short*)malloc((image->width+2)*sizeof(short));
-        if (!gerr || !ngerr) {
-            NFREE(gerr);
-            NFREE(ngerr);
-            RErrorCode = RERR_NOMEMORY;
-            RDestroyXImage(ctx, ximg);
-            return NULL;
-        }
-        for (x=0, y=0; x<image->width; x++, y+=channels) {
-            gerr[x] = (ptr[y]*30 + ptr[y+1]*59 + ptr[y+2]*11)/100;
-        }
-        gerr[x] = 0;
-        /* convert and dither the image to XImage */
-        for (y=0; y<image->height; y++) {
-            if (y<image->height-1) {
-                int x1;
-                for (x=0, x1=(y+1)*image->width*channels; x<image->width; x++, x1+=channels) {
-                    ngerr[x] = (ptr[x1]*30 + ptr[x1+1]*59 + ptr[x1+2]*11)/100;
-                }
-                /* last column */
-                x1-=channels;
-                ngerr[x] = (ptr[x1]*30 + ptr[x1+1]*59 + ptr[x1+2]*11)/100;
-            }
-            for (x=0; x<image->width; x++) {
-                /* reduce pixel */
-                if (gerr[x]>0xff) gerr[x]=0xff; else if (gerr[x]<0) gerr[x]=0;
+		gerr = (short *)malloc((image->width + 2) * sizeof(short));
+		ngerr = (short *)malloc((image->width + 2) * sizeof(short));
+		if (!gerr || !ngerr) {
+			NFREE(gerr);
+			NFREE(ngerr);
+			RErrorCode = RERR_NOMEMORY;
+			RDestroyXImage(ctx, ximg);
+			return NULL;
+		}
+		for (x = 0, y = 0; x < image->width; x++, y += channels) {
+			gerr[x] = (ptr[y] * 30 + ptr[y + 1] * 59 + ptr[y + 2] * 11) / 100;
+		}
+		gerr[x] = 0;
+		/* convert and dither the image to XImage */
+		for (y = 0; y < image->height; y++) {
+			if (y < image->height - 1) {
+				int x1;
+				for (x = 0, x1 = (y + 1) * image->width * channels; x < image->width;
+				     x++, x1 += channels) {
+					ngerr[x] = (ptr[x1] * 30 + ptr[x1 + 1] * 59 + ptr[x1 + 2] * 11) / 100;
+				}
+				/* last column */
+				x1 -= channels;
+				ngerr[x] = (ptr[x1] * 30 + ptr[x1 + 1] * 59 + ptr[x1 + 2] * 11) / 100;
+			}
+			for (x = 0; x < image->width; x++) {
+				/* reduce pixel */
+				if (gerr[x] > 0xff)
+					gerr[x] = 0xff;
+				else if (gerr[x] < 0)
+					gerr[x] = 0;
 
-                g = table[gerr[x]];
+				g = table[gerr[x]];
 
-                /*data[ofs] = ctx->colors[g].pixel;*/
-                XPutPixel(ximg->image, x, y, ctx->colors[g].pixel);
-                /* calc error */
-                ger = gerr[x] - g*dg;
+				/*data[ofs] = ctx->colors[g].pixel; */
+				XPutPixel(ximg->image, x, y, ctx->colors[g].pixel);
+				/* calc error */
+				ger = gerr[x] - g * dg;
 
-                /* distribute error */
-                g = (ger*3)/8;
-                /* x+1, y */
-                gerr[x+1]+=g;
-                /* x, y+1 */
-                ngerr[x]+=g;
-                /* x+1, y+1 */
-                ngerr[x+1]+=ger-2*g;
-            }
-            /* skip to next line */
-            terr = gerr;
-            gerr = ngerr;
-            ngerr = terr;
-        }
-        free(gerr);
-        free(ngerr);
-    }
-    ximg->image->data = (char*)data;
+				/* distribute error */
+				g = (ger * 3) / 8;
+				/* x+1, y */
+				gerr[x + 1] += g;
+				/* x, y+1 */
+				ngerr[x] += g;
+				/* x+1, y+1 */
+				ngerr[x + 1] += ger - 2 * g;
+			}
+			/* skip to next line */
+			terr = gerr;
+			gerr = ngerr;
+			ngerr = terr;
+		}
+		free(gerr);
+		free(ngerr);
+	}
+	ximg->image->data = (char *)data;
 
-    return ximg;
+	return ximg;
 }
 
-
-static RXImage*
-image2Bitmap(RContext *ctx, RImage *image, int threshold)
+static RXImage *image2Bitmap(RContext * ctx, RImage * image, int threshold)
 {
-    RXImage *ximg;
-    unsigned char *alpha;
-    int x, y;
+	RXImage *ximg;
+	unsigned char *alpha;
+	int x, y;
 
-    ximg = RCreateXImage(ctx, 1, image->width, image->height);
-    if (!ximg) {
-        return NULL;
-    }
-    alpha = image->data+3;
+	ximg = RCreateXImage(ctx, 1, image->width, image->height);
+	if (!ximg) {
+		return NULL;
+	}
+	alpha = image->data + 3;
 
-    for (y = 0; y < image->height; y++) {
-        for (x = 0; x < image->width; x++) {
-            XPutPixel(ximg->image, x, y, (*alpha <= threshold ? 0 : 1));
-            alpha+=4;
-        }
-    }
+	for (y = 0; y < image->height; y++) {
+		for (x = 0; x < image->width; x++) {
+			XPutPixel(ximg->image, x, y, (*alpha <= threshold ? 0 : 1));
+			alpha += 4;
+		}
+	}
 
-    return ximg;
+	return ximg;
 }
 
-
-int
-RConvertImage(RContext *context, RImage *image, Pixmap *pixmap)
+int RConvertImage(RContext * context, RImage * image, Pixmap * pixmap)
 {
-    RXImage *ximg=NULL;
+	RXImage *ximg = NULL;
 #ifdef XSHM
-    Pixmap tmp;
+	Pixmap tmp;
 #endif
 
-    assert(context!=NULL);
-    assert(image!=NULL);
-    assert(pixmap!=NULL);
+	assert(context != NULL);
+	assert(image != NULL);
+	assert(pixmap != NULL);
 
-    switch (context->vclass) {
-    case TrueColor:
+	switch (context->vclass) {
+	case TrueColor:
 #ifdef BENCH
-        cycle_bench(1);
+		cycle_bench(1);
 #endif
-        ximg = image2TrueColor(context, image);
+		ximg = image2TrueColor(context, image);
 #ifdef BENCH
-        cycle_bench(0);
+		cycle_bench(0);
 #endif
-        break;
+		break;
 
-    case PseudoColor:
-    case StaticColor:
+	case PseudoColor:
+	case StaticColor:
 #ifdef BENCH
-        cycle_bench(1);
+		cycle_bench(1);
 #endif
-        if (context->attribs->standard_colormap_mode != RIgnoreStdColormap)
-            ximg = image2StandardPseudoColor(context, image);
-        else
-            ximg = image2PseudoColor(context, image);
+		if (context->attribs->standard_colormap_mode != RIgnoreStdColormap)
+			ximg = image2StandardPseudoColor(context, image);
+		else
+			ximg = image2PseudoColor(context, image);
 #ifdef BENCH
-        cycle_bench(0);
+		cycle_bench(0);
 #endif
-        break;
+		break;
 
-    case GrayScale:
-    case StaticGray:
-        ximg = image2GrayScale(context, image);
-        break;
-    }
+	case GrayScale:
+	case StaticGray:
+		ximg = image2GrayScale(context, image);
+		break;
+	}
 
+	if (!ximg) {
+		return False;
+	}
 
-    if (!ximg) {
-        return False;
-    }
-
-    *pixmap = XCreatePixmap(context->dpy, context->drawable, image->width,
-                            image->height, context->depth);
+	*pixmap = XCreatePixmap(context->dpy, context->drawable, image->width, image->height, context->depth);
 
 #ifdef XSHM
-    if (context->flags.use_shared_pixmap && ximg->is_shared)
-        tmp = R_CreateXImageMappedPixmap(context, ximg);
-    else
-        tmp = None;
-    if (tmp) {
-        /*
-         * We have to copy the shm Pixmap into a normal Pixmap because
-         * otherwise, we would have to control when Pixmaps are freed so
-         * that we can detach their shm segments. This is a problem if the
-         * program crash, leaving stale shared memory segments in the
-         * system (lots of them). But with some work, we can optimize
-         * things and remove this XCopyArea. This will require
-         * explicitly freeing all pixmaps when exiting or restarting
-         * wmaker.
-         */
-        XCopyArea(context->dpy, tmp, *pixmap, context->copy_gc, 0, 0,
-                  image->width, image->height, 0, 0);
-        XFreePixmap(context->dpy, tmp);
-    } else {
-        RPutXImage(context, *pixmap, context->copy_gc, ximg, 0, 0, 0, 0,
-                   image->width, image->height);
-    }
-#else /* !XSHM */
-    RPutXImage(context, *pixmap, context->copy_gc, ximg, 0, 0, 0, 0,
-               image->width, image->height);
-#endif /* !XSHM */
+	if (context->flags.use_shared_pixmap && ximg->is_shared)
+		tmp = R_CreateXImageMappedPixmap(context, ximg);
+	else
+		tmp = None;
+	if (tmp) {
+		/*
+		 * We have to copy the shm Pixmap into a normal Pixmap because
+		 * otherwise, we would have to control when Pixmaps are freed so
+		 * that we can detach their shm segments. This is a problem if the
+		 * program crash, leaving stale shared memory segments in the
+		 * system (lots of them). But with some work, we can optimize
+		 * things and remove this XCopyArea. This will require
+		 * explicitly freeing all pixmaps when exiting or restarting
+		 * wmaker.
+		 */
+		XCopyArea(context->dpy, tmp, *pixmap, context->copy_gc, 0, 0, image->width, image->height, 0, 0);
+		XFreePixmap(context->dpy, tmp);
+	} else {
+		RPutXImage(context, *pixmap, context->copy_gc, ximg, 0, 0, 0, 0, image->width, image->height);
+	}
+#else				/* !XSHM */
+	RPutXImage(context, *pixmap, context->copy_gc, ximg, 0, 0, 0, 0, image->width, image->height);
+#endif				/* !XSHM */
 
-    RDestroyXImage(context, ximg);
+	RDestroyXImage(context, ximg);
 
-    return True;
+	return True;
 }
-
 
 /* make the gc permanent (create with context creation).
  * GC creation is very expensive. altering its properties is not. -Dan
  */
-int
-RConvertImageMask(RContext *context, RImage *image, Pixmap *pixmap,
-                  Pixmap *mask, int threshold)
+int RConvertImageMask(RContext * context, RImage * image, Pixmap * pixmap, Pixmap * mask, int threshold)
 {
-    GC gc;
-    XGCValues gcv;
-    RXImage *ximg=NULL;
+	GC gc;
+	XGCValues gcv;
+	RXImage *ximg = NULL;
 
-    assert(context!=NULL);
-    assert(image!=NULL);
-    assert(pixmap!=NULL);
-    assert(mask!=NULL);
+	assert(context != NULL);
+	assert(image != NULL);
+	assert(pixmap != NULL);
+	assert(mask != NULL);
 
-    if (!RConvertImage(context, image, pixmap))
-        return False;
+	if (!RConvertImage(context, image, pixmap))
+		return False;
 
-    if (image->format==RRGBFormat) {
-        *mask = None;
-        return True;
-    }
+	if (image->format == RRGBFormat) {
+		*mask = None;
+		return True;
+	}
 
-    ximg = image2Bitmap(context, image, threshold);
+	ximg = image2Bitmap(context, image, threshold);
 
-    if (!ximg) {
-        return False;
-    }
-    *mask = XCreatePixmap(context->dpy, context->drawable, image->width,
-                          image->height, 1);
-    gcv.foreground = context->black;
-    gcv.background = context->white;
-    gcv.graphics_exposures = False;
-    gc = XCreateGC(context->dpy, *mask, GCForeground|GCBackground
-                   |GCGraphicsExposures, &gcv);
-    RPutXImage(context, *mask, gc, ximg, 0, 0, 0, 0,
-               image->width, image->height);
-    RDestroyXImage(context, ximg);
-    XFreeGC(context->dpy, gc);
+	if (!ximg) {
+		return False;
+	}
+	*mask = XCreatePixmap(context->dpy, context->drawable, image->width, image->height, 1);
+	gcv.foreground = context->black;
+	gcv.background = context->white;
+	gcv.graphics_exposures = False;
+	gc = XCreateGC(context->dpy, *mask, GCForeground | GCBackground | GCGraphicsExposures, &gcv);
+	RPutXImage(context, *mask, gc, ximg, 0, 0, 0, 0, image->width, image->height);
+	RDestroyXImage(context, ximg);
+	XFreeGC(context->dpy, gc);
 
-    return True;
+	return True;
 }
 
-
-Bool
-RGetClosestXColor(RContext *context, RColor *color, XColor *retColor)
+Bool RGetClosestXColor(RContext * context, RColor * color, XColor * retColor)
 {
-    if (context->vclass == TrueColor) {
-        unsigned short rmask, gmask, bmask;
-        unsigned short roffs, goffs, boffs;
-        unsigned short *rtable, *gtable, *btable;
+	if (context->vclass == TrueColor) {
+		unsigned short rmask, gmask, bmask;
+		unsigned short roffs, goffs, boffs;
+		unsigned short *rtable, *gtable, *btable;
 
-        roffs = context->red_offset;
-        goffs = context->green_offset;
-        boffs = context->blue_offset;
+		roffs = context->red_offset;
+		goffs = context->green_offset;
+		boffs = context->blue_offset;
 
-        rmask = context->visual->red_mask >> roffs;
-        gmask = context->visual->green_mask >> goffs;
-        bmask = context->visual->blue_mask >> boffs;
+		rmask = context->visual->red_mask >> roffs;
+		gmask = context->visual->green_mask >> goffs;
+		bmask = context->visual->blue_mask >> boffs;
 
-        rtable = computeTable(rmask);
-        gtable = computeTable(gmask);
-        btable = computeTable(bmask);
+		rtable = computeTable(rmask);
+		gtable = computeTable(gmask);
+		btable = computeTable(bmask);
 
-        retColor->pixel = (rtable[color->red]<<roffs) |
-            (gtable[color->green]<<goffs) | (btable[color->blue]<<boffs);
+		retColor->pixel = (rtable[color->red] << roffs) |
+		    (gtable[color->green] << goffs) | (btable[color->blue] << boffs);
 
-        retColor->red = color->red << 8;
-        retColor->green = color->green << 8;
-        retColor->blue = color->blue << 8;
-        retColor->flags = DoRed|DoGreen|DoBlue;
+		retColor->red = color->red << 8;
+		retColor->green = color->green << 8;
+		retColor->blue = color->blue << 8;
+		retColor->flags = DoRed | DoGreen | DoBlue;
 
-    } else if (context->vclass == PseudoColor
-               || context->vclass == StaticColor) {
+	} else if (context->vclass == PseudoColor || context->vclass == StaticColor) {
 
-        if (context->attribs->standard_colormap_mode != RIgnoreStdColormap) {
-            unsigned int *rtable, *gtable, *btable;
+		if (context->attribs->standard_colormap_mode != RIgnoreStdColormap) {
+			unsigned int *rtable, *gtable, *btable;
 
-            rtable = computeStdTable(context->std_rgb_map->red_mult,
-                                     context->std_rgb_map->red_max);
+			rtable = computeStdTable(context->std_rgb_map->red_mult, context->std_rgb_map->red_max);
 
-            gtable = computeStdTable(context->std_rgb_map->green_mult,
-                                     context->std_rgb_map->green_max);
+			gtable = computeStdTable(context->std_rgb_map->green_mult,
+						 context->std_rgb_map->green_max);
 
-            btable = computeStdTable(context->std_rgb_map->blue_mult,
-                                     context->std_rgb_map->blue_max);
+			btable = computeStdTable(context->std_rgb_map->blue_mult, context->std_rgb_map->blue_max);
 
-            if (rtable==NULL || gtable==NULL || btable==NULL) {
-                RErrorCode = RERR_NOMEMORY;
-                return False;
-            }
+			if (rtable == NULL || gtable == NULL || btable == NULL) {
+				RErrorCode = RERR_NOMEMORY;
+				return False;
+			}
 
-            retColor->pixel = (rtable[color->red]
-                               + gtable[color->green]
-                               + btable[color->blue]
-                               + context->std_rgb_map->base_pixel) & 0xffffffff;
-            retColor->red = color->red<<8;
-            retColor->green = color->green<<8;
-            retColor->blue = color->blue<<8;
-            retColor->flags = DoRed|DoGreen|DoBlue;
+			retColor->pixel = (rtable[color->red]
+					   + gtable[color->green]
+					   + btable[color->blue]
+					   + context->std_rgb_map->base_pixel) & 0xffffffff;
+			retColor->red = color->red << 8;
+			retColor->green = color->green << 8;
+			retColor->blue = color->blue << 8;
+			retColor->flags = DoRed | DoGreen | DoBlue;
 
-        } else {
-            const int cpc=context->attribs->colors_per_channel;
-            const unsigned short rmask = cpc-1; /* different sizes could be used */
-            const unsigned short gmask = rmask; /* for r,g,b */
-            const unsigned short bmask = rmask;
-            unsigned short *rtable, *gtable, *btable;
-            const int cpccpc = cpc*cpc;
-            int index;
+		} else {
+			const int cpc = context->attribs->colors_per_channel;
+			const unsigned short rmask = cpc - 1;	/* different sizes could be used */
+			const unsigned short gmask = rmask;	/* for r,g,b */
+			const unsigned short bmask = rmask;
+			unsigned short *rtable, *gtable, *btable;
+			const int cpccpc = cpc * cpc;
+			int index;
 
-            rtable = computeTable(rmask);
-            gtable = computeTable(gmask);
-            btable = computeTable(bmask);
+			rtable = computeTable(rmask);
+			gtable = computeTable(gmask);
+			btable = computeTable(bmask);
 
-            if (rtable==NULL || gtable==NULL || btable==NULL) {
-                RErrorCode = RERR_NOMEMORY;
-                return False;
-            }
-            index = rtable[color->red]*cpccpc + gtable[color->green]*cpc
-                + btable[color->blue];
-            *retColor = context->colors[index];
-        }
+			if (rtable == NULL || gtable == NULL || btable == NULL) {
+				RErrorCode = RERR_NOMEMORY;
+				return False;
+			}
+			index = rtable[color->red] * cpccpc + gtable[color->green] * cpc + btable[color->blue];
+			*retColor = context->colors[index];
+		}
 
-    } else if (context->vclass == GrayScale || context->vclass == StaticGray) {
+	} else if (context->vclass == GrayScale || context->vclass == StaticGray) {
 
-        const int cpc = context->attribs->colors_per_channel;
-        unsigned short gmask;
-        unsigned short *table;
-        int index;
+		const int cpc = context->attribs->colors_per_channel;
+		unsigned short gmask;
+		unsigned short *table;
+		int index;
 
-        if (context->vclass == StaticGray)
-            gmask = (1<<context->depth) - 1; /* use all grays */
-        else
-            gmask  = cpc*cpc*cpc-1;
+		if (context->vclass == StaticGray)
+			gmask = (1 << context->depth) - 1;	/* use all grays */
+		else
+			gmask = cpc * cpc * cpc - 1;
 
-        table = computeTable(gmask);
-        if (!table)
-            return False;
+		table = computeTable(gmask);
+		if (!table)
+			return False;
 
-        index = table[(color->red*30 + color->green*59 + color->blue*11)/100];
+		index = table[(color->red * 30 + color->green * 59 + color->blue * 11) / 100];
 
-        *retColor = context->colors[index];
-    } else {
-        RErrorCode = RERR_INTERNAL;
-        return False;
-    }
+		*retColor = context->colors[index];
+	} else {
+		RErrorCode = RERR_INTERNAL;
+		return False;
+	}
 
-    return True;
+	return True;
 }
-
-

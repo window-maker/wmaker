@@ -3,16 +3,12 @@
 
 #include "WINGsP.h"
 
-
-WMRange
-wmkrange(int start, int count)
+WMRange wmkrange(int start, int count)
 {
-    WMRange range;
+	WMRange range;
 
-    range.position = start;
-    range.count = count;
+	range.position = start;
+	range.count = count;
 
-    return range;
+	return range;
 }
-
-

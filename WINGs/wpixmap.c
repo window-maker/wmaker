@@ -3,265 +3,230 @@
 
 #include <wraster.h>
 
-
-WMPixmap*
-WMRetainPixmap(WMPixmap *pixmap)
+WMPixmap *WMRetainPixmap(WMPixmap * pixmap)
 {
-    if (pixmap)
-        pixmap->refCount++;
+	if (pixmap)
+		pixmap->refCount++;
 
-    return pixmap;
+	return pixmap;
 }
 
-
-void
-WMReleasePixmap(WMPixmap *pixmap)
+void WMReleasePixmap(WMPixmap * pixmap)
 {
-    wassertr(pixmap!=NULL);
+	wassertr(pixmap != NULL);
 
-    pixmap->refCount--;
+	pixmap->refCount--;
 
-    if (pixmap->refCount<1) {
-        if (pixmap->pixmap)
-            XFreePixmap(pixmap->screen->display, pixmap->pixmap);
-        if (pixmap->mask)
-            XFreePixmap(pixmap->screen->display, pixmap->mask);
-        wfree(pixmap);
-    }
+	if (pixmap->refCount < 1) {
+		if (pixmap->pixmap)
+			XFreePixmap(pixmap->screen->display, pixmap->pixmap);
+		if (pixmap->mask)
+			XFreePixmap(pixmap->screen->display, pixmap->mask);
+		wfree(pixmap);
+	}
 }
 
-
-WMPixmap*
-WMCreatePixmap(WMScreen *scrPtr, int width, int height, int depth, Bool masked)
+WMPixmap *WMCreatePixmap(WMScreen * scrPtr, int width, int height, int depth, Bool masked)
 {
-    WMPixmap *pixPtr;
+	WMPixmap *pixPtr;
 
-    pixPtr = wmalloc(sizeof(WMPixmap));
-    pixPtr->screen = scrPtr;
-    pixPtr->width = width;
-    pixPtr->height = height;
-    pixPtr->depth = depth;
-    pixPtr->refCount = 1;
+	pixPtr = wmalloc(sizeof(WMPixmap));
+	pixPtr->screen = scrPtr;
+	pixPtr->width = width;
+	pixPtr->height = height;
+	pixPtr->depth = depth;
+	pixPtr->refCount = 1;
 
-    pixPtr->pixmap = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr),
-                                   width, height, depth);
-    if (masked) {
-        pixPtr->mask = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr),
-                                     width, height, 1);
-    } else {
-        pixPtr->mask = None;
-    }
+	pixPtr->pixmap = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr), width, height, depth);
+	if (masked) {
+		pixPtr->mask = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr), width, height, 1);
+	} else {
+		pixPtr->mask = None;
+	}
 
-    return pixPtr;
+	return pixPtr;
 }
 
-
-WMPixmap*
-WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap, Pixmap mask,
-                           int width, int height, int depth)
+WMPixmap *WMCreatePixmapFromXPixmaps(WMScreen * scrPtr, Pixmap pixmap, Pixmap mask,
+				     int width, int height, int depth)
 {
-    WMPixmap *pixPtr;
+	WMPixmap *pixPtr;
 
-    pixPtr = wmalloc(sizeof(WMPixmap));
-    pixPtr->screen = scrPtr;
-    pixPtr->pixmap = pixmap;
-    pixPtr->mask = mask;
-    pixPtr->width = width;
-    pixPtr->height = height;
-    pixPtr->depth = depth;
-    pixPtr->refCount = 1;
+	pixPtr = wmalloc(sizeof(WMPixmap));
+	pixPtr->screen = scrPtr;
+	pixPtr->pixmap = pixmap;
+	pixPtr->mask = mask;
+	pixPtr->width = width;
+	pixPtr->height = height;
+	pixPtr->depth = depth;
+	pixPtr->refCount = 1;
 
-    return pixPtr;
+	return pixPtr;
 }
 
-
-WMPixmap*
-WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName)
+WMPixmap *WMCreatePixmapFromFile(WMScreen * scrPtr, char *fileName)
 {
-    WMPixmap *pixPtr;
-    RImage *image;
+	WMPixmap *pixPtr;
+	RImage *image;
 
-    image = RLoadImage(scrPtr->rcontext, fileName, 0);
-    if (!image)
-        return NULL;
+	image = RLoadImage(scrPtr->rcontext, fileName, 0);
+	if (!image)
+		return NULL;
 
-    pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 127);
+	pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 127);
 
-    RReleaseImage(image);
+	RReleaseImage(image);
 
-    return pixPtr;
+	return pixPtr;
 }
 
-
-WMPixmap*
-WMCreatePixmapFromRImage(WMScreen *scrPtr, RImage *image, int threshold)
+WMPixmap *WMCreatePixmapFromRImage(WMScreen * scrPtr, RImage * image, int threshold)
 {
-    WMPixmap *pixPtr;
-    Pixmap pixmap, mask;
+	WMPixmap *pixPtr;
+	Pixmap pixmap, mask;
 
-    if (!RConvertImageMask(scrPtr->rcontext, image, &pixmap, &mask,
-                           threshold)) {
-        return NULL;
-    }
+	if (!RConvertImageMask(scrPtr->rcontext, image, &pixmap, &mask, threshold)) {
+		return NULL;
+	}
 
-    pixPtr = wmalloc(sizeof(WMPixmap));
-    pixPtr->screen = scrPtr;
-    pixPtr->pixmap = pixmap;
-    pixPtr->mask = mask;
-    pixPtr->width = image->width;
-    pixPtr->height = image->height;
-    pixPtr->depth = scrPtr->depth;
-    pixPtr->refCount = 1;
+	pixPtr = wmalloc(sizeof(WMPixmap));
+	pixPtr->screen = scrPtr;
+	pixPtr->pixmap = pixmap;
+	pixPtr->mask = mask;
+	pixPtr->width = image->width;
+	pixPtr->height = image->height;
+	pixPtr->depth = scrPtr->depth;
+	pixPtr->refCount = 1;
 
-    return pixPtr;
+	return pixPtr;
 }
 
-
-WMPixmap*
-WMCreateBlendedPixmapFromRImage(WMScreen *scrPtr, RImage *image, RColor *color)
+WMPixmap *WMCreateBlendedPixmapFromRImage(WMScreen * scrPtr, RImage * image, RColor * color)
 {
-    WMPixmap *pixPtr;
-    RImage *copy;
+	WMPixmap *pixPtr;
+	RImage *copy;
 
-    copy = RCloneImage(image);
-    if (!copy)
-        return NULL;
+	copy = RCloneImage(image);
+	if (!copy)
+		return NULL;
 
-    RCombineImageWithColor(copy, color);
-    pixPtr = WMCreatePixmapFromRImage(scrPtr, copy, 0);
-    RReleaseImage(copy);
+	RCombineImageWithColor(copy, color);
+	pixPtr = WMCreatePixmapFromRImage(scrPtr, copy, 0);
+	RReleaseImage(copy);
 
-    return pixPtr;
+	return pixPtr;
 }
 
-
-WMPixmap*
-WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName, RColor *color)
+WMPixmap *WMCreateBlendedPixmapFromFile(WMScreen * scrPtr, char *fileName, RColor * color)
 {
-    WMPixmap *pixPtr;
-    RImage *image;
+	WMPixmap *pixPtr;
+	RImage *image;
 
+	image = RLoadImage(scrPtr->rcontext, fileName, 0);
+	if (!image)
+		return NULL;
 
-    image = RLoadImage(scrPtr->rcontext, fileName, 0);
-    if (!image)
-        return NULL;
+	RCombineImageWithColor(image, color);
 
-    RCombineImageWithColor(image, color);
+	pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 0);
 
-    pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 0);
+	RReleaseImage(image);
 
-    RReleaseImage(image);
-
-    return pixPtr;
+	return pixPtr;
 }
 
-
-WMPixmap*
-WMCreatePixmapFromXPMData(WMScreen *scrPtr, char **data)
+WMPixmap *WMCreatePixmapFromXPMData(WMScreen * scrPtr, char **data)
 {
-    WMPixmap *pixPtr;
-    RImage *image;
+	WMPixmap *pixPtr;
+	RImage *image;
 
-    image = RGetImageFromXPMData(scrPtr->rcontext, data);
-    if (!image)
-        return NULL;
+	image = RGetImageFromXPMData(scrPtr->rcontext, data);
+	if (!image)
+		return NULL;
 
-    pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 127);
+	pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 127);
 
-    RReleaseImage(image);
+	RReleaseImage(image);
 
-    return pixPtr;
+	return pixPtr;
 }
 
-
-Pixmap
-WMGetPixmapXID(WMPixmap *pixmap)
+Pixmap WMGetPixmapXID(WMPixmap * pixmap)
 {
-    wassertrv(pixmap != NULL, None);
+	wassertrv(pixmap != NULL, None);
 
-    return pixmap->pixmap;
+	return pixmap->pixmap;
 }
 
-
-Pixmap
-WMGetPixmapMaskXID(WMPixmap *pixmap)
+Pixmap WMGetPixmapMaskXID(WMPixmap * pixmap)
 {
-    wassertrv(pixmap != NULL, None);
+	wassertrv(pixmap != NULL, None);
 
-    return pixmap->mask;
+	return pixmap->mask;
 }
 
-
-WMSize
-WMGetPixmapSize(WMPixmap *pixmap)
+WMSize WMGetPixmapSize(WMPixmap * pixmap)
 {
-    WMSize size = {0,0};
+	WMSize size = { 0, 0 };
 
-    wassertrv(pixmap != NULL, size);
+	wassertrv(pixmap != NULL, size);
 
-    size.width = pixmap->width;
-    size.height = pixmap->height;
+	size.width = pixmap->width;
+	size.height = pixmap->height;
 
-    return size;
+	return size;
 }
 
-
-WMPixmap*
-WMGetSystemPixmap(WMScreen *scr, int image)
+WMPixmap *WMGetSystemPixmap(WMScreen * scr, int image)
 {
-    switch (image) {
-    case WSIReturnArrow:
-        return WMRetainPixmap(scr->buttonArrow);
+	switch (image) {
+	case WSIReturnArrow:
+		return WMRetainPixmap(scr->buttonArrow);
 
-    case WSIHighlightedReturnArrow:
-        return WMRetainPixmap(scr->pushedButtonArrow);
+	case WSIHighlightedReturnArrow:
+		return WMRetainPixmap(scr->pushedButtonArrow);
 
-    case WSIScrollerDimple:
-        return WMRetainPixmap(scr->scrollerDimple);
+	case WSIScrollerDimple:
+		return WMRetainPixmap(scr->scrollerDimple);
 
-    case WSIArrowLeft:
-        return WMRetainPixmap(scr->leftArrow);
+	case WSIArrowLeft:
+		return WMRetainPixmap(scr->leftArrow);
 
-    case WSIHighlightedArrowLeft:
-        return WMRetainPixmap(scr->hiLeftArrow);
+	case WSIHighlightedArrowLeft:
+		return WMRetainPixmap(scr->hiLeftArrow);
 
-    case WSIArrowRight:
-        return WMRetainPixmap(scr->rightArrow);
+	case WSIArrowRight:
+		return WMRetainPixmap(scr->rightArrow);
 
-    case WSIHighlightedArrowRight:
-        return WMRetainPixmap(scr->hiRightArrow);
+	case WSIHighlightedArrowRight:
+		return WMRetainPixmap(scr->hiRightArrow);
 
-    case WSIArrowUp:
-        return WMRetainPixmap(scr->upArrow);
+	case WSIArrowUp:
+		return WMRetainPixmap(scr->upArrow);
 
-    case WSIHighlightedArrowUp:
-        return WMRetainPixmap(scr->hiUpArrow);
+	case WSIHighlightedArrowUp:
+		return WMRetainPixmap(scr->hiUpArrow);
 
-    case WSIArrowDown:
-        return WMRetainPixmap(scr->downArrow);
+	case WSIArrowDown:
+		return WMRetainPixmap(scr->downArrow);
 
-    case WSIHighlightedArrowDown:
-        return WMRetainPixmap(scr->hiDownArrow);
+	case WSIHighlightedArrowDown:
+		return WMRetainPixmap(scr->hiDownArrow);
 
-    case WSICheckMark:
-        return WMRetainPixmap(scr->checkMark);
+	case WSICheckMark:
+		return WMRetainPixmap(scr->checkMark);
 
-    default:
-        return NULL;
-    }
+	default:
+		return NULL;
+	}
 }
 
-
-
-void
-WMDrawPixmap(WMPixmap *pixmap, Drawable d, int x, int y)
+void WMDrawPixmap(WMPixmap * pixmap, Drawable d, int x, int y)
 {
-    WMScreen *scr = pixmap->screen;
+	WMScreen *scr = pixmap->screen;
 
-    XSetClipMask(scr->display, scr->clipGC, pixmap->mask);
-    XSetClipOrigin(scr->display, scr->clipGC, x, y);
+	XSetClipMask(scr->display, scr->clipGC, pixmap->mask);
+	XSetClipOrigin(scr->display, scr->clipGC, x, y);
 
-    XCopyArea(scr->display, pixmap->pixmap, d, scr->clipGC, 0, 0,
-              pixmap->width, pixmap->height, x, y);
+	XCopyArea(scr->display, pixmap->pixmap, d, scr->clipGC, 0, 0, pixmap->width, pixmap->height, x, y);
 }
-

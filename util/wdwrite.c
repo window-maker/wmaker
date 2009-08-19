@@ -22,11 +22,9 @@
 
 #define PROG_VERSION	"wdwrite (Window Maker) 0.2"
 
-
 /*
  * WindowMaker defaults DB writer
  */
-
 
 #include "../src/wconfig.h"
 
@@ -39,102 +37,95 @@
 
 #include <pwd.h>
 
-
 char *ProgName;
 
-char*
-gethomedir()
+char *gethomedir()
 {
-    char *home = getenv("HOME");
-    struct passwd *user;
+	char *home = getenv("HOME");
+	struct passwd *user;
 
-    if (home)
-        return home;
+	if (home)
+		return home;
 
-    user = getpwuid(getuid());
-    if (!user) {
-        perror(ProgName);
-        return "/";
-    }
-    if (!user->pw_dir) {
-        return "/";
-    } else {
-        return user->pw_dir;
-    }
+	user = getpwuid(getuid());
+	if (!user) {
+		perror(ProgName);
+		return "/";
+	}
+	if (!user->pw_dir) {
+		return "/";
+	} else {
+		return user->pw_dir;
+	}
 }
-
-
 
 void wAbort()
 {
-    exit(0);
+	exit(0);
 }
 
 void help()
 {
-    printf("Syntax:\n%s [OPTIONS] <domain> <option> <value>\n", ProgName);
-    puts("");
-    puts("  --help		display this help message");
-    puts("  --version		output version information and exit");
-    exit(1);
+	printf("Syntax:\n%s [OPTIONS] <domain> <option> <value>\n", ProgName);
+	puts("");
+	puts("  --help		display this help message");
+	puts("  --version		output version information and exit");
+	exit(1);
 }
-
 
 int main(int argc, char **argv)
 {
-    char *path;
-    WMPropList *dom, *key, *value, *dict;
-    char *gsdir;
-    int i;
+	char *path;
+	WMPropList *dom, *key, *value, *dict;
+	char *gsdir;
+	int i;
 
-    ProgName = argv[0];
+	ProgName = argv[0];
 
-    for (i = 1; i < argc; i++) {
-        if (strcmp("--help", argv[i])==0) {
-            help();
-            exit(0);
-        } else if (strcmp("--version", argv[i])==0) {
-            puts(PROG_VERSION);
-            exit(0);
-        }
-    }
+	for (i = 1; i < argc; i++) {
+		if (strcmp("--help", argv[i]) == 0) {
+			help();
+			exit(0);
+		} else if (strcmp("--version", argv[i]) == 0) {
+			puts(PROG_VERSION);
+			exit(0);
+		}
+	}
 
-    if (argc<4) {
-        printf("%s: invalid argument format\n", ProgName);
-        printf("Try '%s --help' for more information\n", ProgName);
-        exit(1);
-    }
+	if (argc < 4) {
+		printf("%s: invalid argument format\n", ProgName);
+		printf("Try '%s --help' for more information\n", ProgName);
+		exit(1);
+	}
 
-    dom = WMCreatePLString(argv[1]);
-    key = WMCreatePLString(argv[2]);
-    value = WMCreatePropListFromDescription(argv[3]);
-    if (!value) {
-        printf("%s:syntax error in value \"%s\"", ProgName, argv[3]);
-        exit(1);
-    }
-    gsdir = getenv("GNUSTEP_USER_ROOT");
-    if (gsdir) {
-        path = wstrdup(gsdir);
-    } else {
-        path = wstrdup(gethomedir());
-        path = wstrappend(path, "/GNUstep");
-    }
-    path = wstrappend(path, "/");
-    path = wstrappend(path, DEFAULTS_DIR);
-    path = wstrappend(path, "/");
-    path = wstrappend(path, argv[1]);
+	dom = WMCreatePLString(argv[1]);
+	key = WMCreatePLString(argv[2]);
+	value = WMCreatePropListFromDescription(argv[3]);
+	if (!value) {
+		printf("%s:syntax error in value \"%s\"", ProgName, argv[3]);
+		exit(1);
+	}
+	gsdir = getenv("GNUSTEP_USER_ROOT");
+	if (gsdir) {
+		path = wstrdup(gsdir);
+	} else {
+		path = wstrdup(gethomedir());
+		path = wstrappend(path, "/GNUstep");
+	}
+	path = wstrappend(path, "/");
+	path = wstrappend(path, DEFAULTS_DIR);
+	path = wstrappend(path, "/");
+	path = wstrappend(path, argv[1]);
 
-    dict = WMReadPropListFromFile(path);
-    if (!dict) {
-        dict = WMCreatePLDictionary(key, value, NULL);
-    } else {
-        WMPutInPLDictionary(dict, key, value);
-    }
+	dict = WMReadPropListFromFile(path);
+	if (!dict) {
+		dict = WMCreatePLDictionary(key, value, NULL);
+	} else {
+		WMPutInPLDictionary(dict, key, value);
+	}
 
-    WMWritePropListToFile(dict, path, True);
-    wfree(path);
+	WMWritePropListToFile(dict, path, True);
+	wfree(path);
 
-    return 0;
+	return 0;
 }
-
-

@@ -18,7 +18,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-
 #include "wconfig.h"
 #include "WUtil.h"
 
@@ -41,194 +40,169 @@
 # define True 1
 #endif
 
-
-static void
-defaultHandler(int bla)
+static void defaultHandler(int bla)
 {
-    if (bla)
-        kill(getpid(), SIGABRT);
-    else
-        exit(1);
+	if (bla)
+		kill(getpid(), SIGABRT);
+	else
+		exit(1);
 }
 
-
-static waborthandler *aborthandler = (waborthandler*)defaultHandler;
+static waborthandler *aborthandler = (waborthandler *) defaultHandler;
 
 #define wAbort(a) (*aborthandler)(a)
 
-
-waborthandler*
-wsetabort(waborthandler *handler)
+waborthandler *wsetabort(waborthandler * handler)
 {
-    waborthandler *old = aborthandler;
+	waborthandler *old = aborthandler;
 
-    aborthandler = handler;
+	aborthandler = handler;
 
-    return old;
+	return old;
 }
 
-
-
-static int Aborting=0; /* if we're in the middle of an emergency exit */
-
+static int Aborting = 0;	/* if we're in the middle of an emergency exit */
 
 static WMHashTable *table = NULL;
 
-
-void*
-wmalloc(size_t size)
+void *wmalloc(size_t size)
 {
-    void *tmp;
+	void *tmp;
 
-    assert(size > 0);
+	assert(size > 0);
 
 #ifdef TEST_WITH_GC
-    tmp = GC_malloc(size);
+	tmp = GC_malloc(size);
 #else
-    tmp = malloc(size);
+	tmp = malloc(size);
 #endif
-    if (tmp == NULL) {
-        wwarning("malloc() failed. Retrying after 2s.");
-        sleep(2);
+	if (tmp == NULL) {
+		wwarning("malloc() failed. Retrying after 2s.");
+		sleep(2);
 #ifdef TEST_WITH_GC
-        tmp = GC_malloc(size);
+		tmp = GC_malloc(size);
 #else
-        tmp = malloc(size);
+		tmp = malloc(size);
 #endif
-        if (tmp == NULL) {
-            if (Aborting) {
-                fputs("Really Bad Error: recursive malloc() failure.", stderr);
-                exit(-1);
-            } else {
-                wfatal("virtual memory exhausted");
-                Aborting=1;
-                wAbort(False);
-            }
-        }
-    }
-    return tmp;
+		if (tmp == NULL) {
+			if (Aborting) {
+				fputs("Really Bad Error: recursive malloc() failure.", stderr);
+				exit(-1);
+			} else {
+				wfatal("virtual memory exhausted");
+				Aborting = 1;
+				wAbort(False);
+			}
+		}
+	}
+	return tmp;
 }
 
-
-void*
-wmalloc0(size_t size)
+void *wmalloc0(size_t size)
 {
-    void *ptr= wmalloc(size);
-    if (!ptr)
-      return NULL;
+	void *ptr = wmalloc(size);
+	if (!ptr)
+		return NULL;
 
-    memset(ptr, 0, size);
+	memset(ptr, 0, size);
 
-    return ptr;
+	return ptr;
 }
 
-
-void*
-wrealloc(void *ptr, size_t newsize)
+void *wrealloc(void *ptr, size_t newsize)
 {
-    void *nptr;
+	void *nptr;
 
-    if (!ptr) {
-        nptr = wmalloc(newsize);
-    } else if (newsize==0) {
-        wfree(ptr);
-        nptr = NULL;
-    } else {
+	if (!ptr) {
+		nptr = wmalloc(newsize);
+	} else if (newsize == 0) {
+		wfree(ptr);
+		nptr = NULL;
+	} else {
 #ifdef TEST_WITH_GC
-        nptr = GC_realloc(ptr, newsize);
+		nptr = GC_realloc(ptr, newsize);
 #else
-        nptr = realloc(ptr, newsize);
+		nptr = realloc(ptr, newsize);
 #endif
-        if (nptr==NULL) {
-            wwarning("realloc() failed. Retrying after 2s.");
-            sleep(2);
+		if (nptr == NULL) {
+			wwarning("realloc() failed. Retrying after 2s.");
+			sleep(2);
 #ifdef TEST_WITH_GC
-            nptr = GC_realloc(ptr, newsize);
+			nptr = GC_realloc(ptr, newsize);
 #else
-            nptr = realloc(ptr, newsize);
+			nptr = realloc(ptr, newsize);
 #endif
-            if (nptr == NULL) {
-                if (Aborting) {
-                    fputs("Really Bad Error: recursive realloc() failure.",
-                          stderr);
-                    exit(-1);
-                } else {
-                    wfatal("virtual memory exhausted");
-                    Aborting=1;
-                    wAbort(False);
-                }
-            }
-        }
-    }
-    return nptr;
+			if (nptr == NULL) {
+				if (Aborting) {
+					fputs("Really Bad Error: recursive realloc() failure.", stderr);
+					exit(-1);
+				} else {
+					wfatal("virtual memory exhausted");
+					Aborting = 1;
+					wAbort(False);
+				}
+			}
+		}
+	}
+	return nptr;
 }
 
-
-void*
-wretain(void *ptr)
+void *wretain(void *ptr)
 {
-    int *refcount;
+	int *refcount;
 
-    if (!table) {
-        table = WMCreateHashTable(WMIntHashCallbacks);
-    }
+	if (!table) {
+		table = WMCreateHashTable(WMIntHashCallbacks);
+	}
 
-    refcount = WMHashGet(table, ptr);
-    if (!refcount) {
-        refcount = wmalloc(sizeof(int));
-        *refcount = 1;
-        WMHashInsert(table, ptr, refcount);
+	refcount = WMHashGet(table, ptr);
+	if (!refcount) {
+		refcount = wmalloc(sizeof(int));
+		*refcount = 1;
+		WMHashInsert(table, ptr, refcount);
 #ifdef VERBOSE
-        printf("== %i (%p)\n", *refcount, ptr);
+		printf("== %i (%p)\n", *refcount, ptr);
 #endif
-    } else {
-        (*refcount)++;
+	} else {
+		(*refcount)++;
 #ifdef VERBOSE
-        printf("+ %i (%p)\n", *refcount, ptr);
+		printf("+ %i (%p)\n", *refcount, ptr);
 #endif
-    }
+	}
 
-    return ptr;
+	return ptr;
 }
 
-
-
-void
-wfree(void *ptr)
+void wfree(void *ptr)
 {
 #ifdef TEST_WITH_GC
-    GC_free(ptr);
+	GC_free(ptr);
 #else
-    free(ptr);
+	free(ptr);
 #endif
 }
 
-
-
-void
-wrelease(void *ptr)
+void wrelease(void *ptr)
 {
-    int *refcount;
+	int *refcount;
 
-    refcount = WMHashGet(table, ptr);
-    if (!refcount) {
-        wwarning("trying to release unexisting data %p", ptr);
-    } else {
-        (*refcount)--;
-        if (*refcount < 1) {
+	refcount = WMHashGet(table, ptr);
+	if (!refcount) {
+		wwarning("trying to release unexisting data %p", ptr);
+	} else {
+		(*refcount)--;
+		if (*refcount < 1) {
 #ifdef VERBOSE
-            printf("RELEASING %p\n", ptr);
+			printf("RELEASING %p\n", ptr);
 #endif
-            WMHashRemove(table, ptr);
-            wfree(refcount);
-            wfree(ptr);
-        }
+			WMHashRemove(table, ptr);
+			wfree(refcount);
+			wfree(ptr);
+		}
 #ifdef VERBOSE
-        else {
-            printf("- %i (%p)\n", *refcount, ptr);
-        }
+		else {
+			printf("- %i (%p)\n", *refcount, ptr);
+		}
 #endif
-    }
+	}
 }
-
-

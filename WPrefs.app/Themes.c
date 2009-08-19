@@ -20,230 +20,204 @@
  *  USA.
  */
 
-
 #include "WPrefs.h"
 
 #include <unistd.h>
 
 typedef struct _Panel {
-    WMBox *box;
+	WMBox *box;
 
-    char *sectionName;
+	char *sectionName;
 
-    CallbackRec callbacks;
+	CallbackRec callbacks;
 
-    WMWidget *parent;
+	WMWidget *parent;
 
-    WMButton *saveB;
-    WMList *list;
-    WMButton *loadB;
-    WMButton *instB;
+	WMButton *saveB;
+	WMList *list;
+	WMButton *loadB;
+	WMButton *instB;
 
-    WMFrame *totF;
-    WMButton *totB;
-    WMLabel *totL;
+	WMFrame *totF;
+	WMButton *totB;
+	WMLabel *totL;
 
-    WMFrame *botF;
-    WMButton *botB;
-    WMLabel *botL;
+	WMFrame *botF;
+	WMButton *botB;
+	WMLabel *botL;
 
-    pid_t tilePID;
-    pid_t barPID;
+	pid_t tilePID;
+	pid_t barPID;
 } _Panel;
-
-
 
 #define ICON_FILE	"theme"
 
-
-static void
-showData(_Panel *panel)
+static void showData(_Panel * panel)
 {
 
 }
 
-
-static void
-finishedTileDownload(void *data)
+static void finishedTileDownload(void *data)
 {
-    _Panel *panel = (_Panel*)data;
+	_Panel *panel = (_Panel *) data;
 
-    WMSetButtonText(panel->totB, _("Set"));
-    panel->tilePID = 0;
+	WMSetButtonText(panel->totB, _("Set"));
+	panel->tilePID = 0;
 }
 
-
-
-static void
-finishedBarDownload(void *data)
+static void finishedBarDownload(void *data)
 {
-    _Panel *panel = (_Panel*)data;
+	_Panel *panel = (_Panel *) data;
 
-    WMSetButtonText(panel->botB, _("Set"));
-    panel->barPID = 0;
+	WMSetButtonText(panel->botB, _("Set"));
+	panel->barPID = 0;
 }
 
-
-static pid_t
-downloadFile(WMScreen *scr, _Panel *panel, char *file)
+static pid_t downloadFile(WMScreen * scr, _Panel * panel, char *file)
 {
-    pid_t pid;
+	pid_t pid;
 
-    pid = fork();
-    if (pid < 0) {
-        wsyserror("could not fork() process");
+	pid = fork();
+	if (pid < 0) {
+		wsyserror("could not fork() process");
 
-        WMRunAlertPanel(scr, GetWindow(panel), _("Error"),
-                        "Could not start download. fork() failed",
-                        _("OK"), NULL, NULL);
-        return -1;
-    }
-    if (pid != 0) {
-        return pid;
-    }
+		WMRunAlertPanel(scr, GetWindow(panel), _("Error"),
+				"Could not start download. fork() failed", _("OK"), NULL, NULL);
+		return -1;
+	}
+	if (pid != 0) {
+		return pid;
+	}
 
-    close(ConnectionNumber(WMScreenDisplay(scr)));
+	close(ConnectionNumber(WMScreenDisplay(scr)));
 
-
-
-    exit(1);
+	exit(1);
 }
 
-
-static void
-downloadCallback(WMWidget *w, void *data)
+static void downloadCallback(WMWidget * w, void *data)
 {
-    _Panel *panel = (_Panel*)data;
-    pid_t newPid;
-    WMButton *button = (WMButton*)w;
-    pid_t *pid;
+	_Panel *panel = (_Panel *) data;
+	pid_t newPid;
+	WMButton *button = (WMButton *) w;
+	pid_t *pid;
 
-    if (button == panel->totB) {
-        pid = &panel->tilePID;
-    } else {
-        pid = &panel->barPID;
-    }
+	if (button == panel->totB) {
+		pid = &panel->tilePID;
+	} else {
+		pid = &panel->barPID;
+	}
 
-    if (*pid == 0) {
-        newPid = downloadFile(WMWidgetScreen(w), panel, NULL);
-        if (newPid < 0) {
-            return;
-        }
-        WMSetButtonText(button, _("Stop"));
+	if (*pid == 0) {
+		newPid = downloadFile(WMWidgetScreen(w), panel, NULL);
+		if (newPid < 0) {
+			return;
+		}
+		WMSetButtonText(button, _("Stop"));
 
-        if (button == panel->totB) {
-            AddDeadChildHandler(newPid, finishedTileDownload, data);
-        } else {
-            AddDeadChildHandler(newPid, finishedBarDownload, data);
-        }
-        *pid = newPid;
-    } else {
-        *pid = 0;
+		if (button == panel->totB) {
+			AddDeadChildHandler(newPid, finishedTileDownload, data);
+		} else {
+			AddDeadChildHandler(newPid, finishedBarDownload, data);
+		}
+		*pid = newPid;
+	} else {
+		*pid = 0;
 
-        WMSetButtonText(button, _("Download"));
-    }
+		WMSetButtonText(button, _("Download"));
+	}
 }
 
-
-static void
-createPanel(Panel *p)
+static void createPanel(Panel * p)
 {
-    _Panel *panel = (_Panel*)p;
+	_Panel *panel = (_Panel *) p;
 
-    panel->box = WMCreateBox(panel->parent);
-    WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
+	panel->box = WMCreateBox(panel->parent);
+	WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
 
-    panel->saveB = WMCreateCommandButton(panel->box);
-    WMResizeWidget(panel->saveB, 154, 24);
-    WMMoveWidget(panel->saveB, 15, 10);
-    WMSetButtonText(panel->saveB, _("Save Current Theme"));
+	panel->saveB = WMCreateCommandButton(panel->box);
+	WMResizeWidget(panel->saveB, 154, 24);
+	WMMoveWidget(panel->saveB, 15, 10);
+	WMSetButtonText(panel->saveB, _("Save Current Theme"));
 
-    panel->list = WMCreateList(panel->box);
-    WMResizeWidget(panel->list, 154, 150);
-    WMMoveWidget(panel->list, 15, 40);
+	panel->list = WMCreateList(panel->box);
+	WMResizeWidget(panel->list, 154, 150);
+	WMMoveWidget(panel->list, 15, 40);
 
-    panel->loadB = WMCreateCommandButton(panel->box);
-    WMResizeWidget(panel->loadB, 74, 24);
-    WMMoveWidget(panel->loadB, 15, 200);
-    WMSetButtonText(panel->loadB, _("Load"));
+	panel->loadB = WMCreateCommandButton(panel->box);
+	WMResizeWidget(panel->loadB, 74, 24);
+	WMMoveWidget(panel->loadB, 15, 200);
+	WMSetButtonText(panel->loadB, _("Load"));
 
-    panel->instB = WMCreateCommandButton(panel->box);
-    WMResizeWidget(panel->instB, 74, 24);
-    WMMoveWidget(panel->instB, 95, 200);
-    WMSetButtonText(panel->instB, _("Install"));
-
+	panel->instB = WMCreateCommandButton(panel->box);
+	WMResizeWidget(panel->instB, 74, 24);
+	WMMoveWidget(panel->instB, 95, 200);
+	WMSetButtonText(panel->instB, _("Install"));
 
     /**************** Tile of the day ****************/
 
-    panel->totF = WMCreateFrame(panel->box);
-    WMResizeWidget(panel->totF, 210, 105);
-    WMMoveWidget(panel->totF, 240, 10);
-    WMSetFrameTitle(panel->totF, _("Tile of The Day"));
+	panel->totF = WMCreateFrame(panel->box);
+	WMResizeWidget(panel->totF, 210, 105);
+	WMMoveWidget(panel->totF, 240, 10);
+	WMSetFrameTitle(panel->totF, _("Tile of The Day"));
 
-    panel->totL = WMCreateLabel(panel->totF);
-    WMResizeWidget(panel->totL, 67, 67);
-    WMMoveWidget(panel->totL, 25, 25);
-    WMSetLabelRelief(panel->totL, WRSunken);
+	panel->totL = WMCreateLabel(panel->totF);
+	WMResizeWidget(panel->totL, 67, 67);
+	WMMoveWidget(panel->totL, 25, 25);
+	WMSetLabelRelief(panel->totL, WRSunken);
 
-    panel->totB = WMCreateCommandButton(panel->totF);
-    WMResizeWidget(panel->totB, 86, 24);
-    WMMoveWidget(panel->totB, 105, 45);
-    WMSetButtonText(panel->totB, _("Download"));
-    WMSetButtonAction(panel->totB, downloadCallback, panel);
+	panel->totB = WMCreateCommandButton(panel->totF);
+	WMResizeWidget(panel->totB, 86, 24);
+	WMMoveWidget(panel->totB, 105, 45);
+	WMSetButtonText(panel->totB, _("Download"));
+	WMSetButtonAction(panel->totB, downloadCallback, panel);
 
-    WMMapSubwidgets(panel->totF);
+	WMMapSubwidgets(panel->totF);
 
     /**************** Bar of the day ****************/
 
-    panel->botF = WMCreateFrame(panel->box);
-    WMResizeWidget(panel->botF, 315, 95);
-    WMMoveWidget(panel->botF, 190, 125);
-    WMSetFrameTitle(panel->botF, _("Bar of The Day"));
+	panel->botF = WMCreateFrame(panel->box);
+	WMResizeWidget(panel->botF, 315, 95);
+	WMMoveWidget(panel->botF, 190, 125);
+	WMSetFrameTitle(panel->botF, _("Bar of The Day"));
 
-    panel->botL = WMCreateLabel(panel->botF);
-    WMResizeWidget(panel->botL, 285, 32);
-    WMMoveWidget(panel->botL, 15, 20);
-    WMSetLabelRelief(panel->botL, WRSunken);
+	panel->botL = WMCreateLabel(panel->botF);
+	WMResizeWidget(panel->botL, 285, 32);
+	WMMoveWidget(panel->botL, 15, 20);
+	WMSetLabelRelief(panel->botL, WRSunken);
 
-    panel->botB = WMCreateCommandButton(panel->botF);
-    WMResizeWidget(panel->botB, 86, 24);
-    WMMoveWidget(panel->botB, 110, 60);
-    WMSetButtonText(panel->botB, _("Download"));
-    WMSetButtonAction(panel->botB, downloadCallback, panel);
+	panel->botB = WMCreateCommandButton(panel->botF);
+	WMResizeWidget(panel->botB, 86, 24);
+	WMMoveWidget(panel->botB, 110, 60);
+	WMSetButtonText(panel->botB, _("Download"));
+	WMSetButtonAction(panel->botB, downloadCallback, panel);
 
-    WMMapSubwidgets(panel->botF);
+	WMMapSubwidgets(panel->botF);
 
-    WMRealizeWidget(panel->box);
-    WMMapSubwidgets(panel->box);
+	WMRealizeWidget(panel->box);
+	WMMapSubwidgets(panel->box);
 
-    showData(panel);
+	showData(panel);
 }
 
-
-static void
-storeData(_Panel *panel)
+static void storeData(_Panel * panel)
 {
 }
 
-
-
-Panel*
-InitThemes(WMScreen *scr, WMWidget *parent)
+Panel *InitThemes(WMScreen * scr, WMWidget * parent)
 {
-    _Panel *panel;
+	_Panel *panel;
 
-    panel = wmalloc(sizeof(_Panel));
-    memset(panel, 0, sizeof(_Panel));
+	panel = wmalloc(sizeof(_Panel));
+	memset(panel, 0, sizeof(_Panel));
 
-    panel->sectionName = _("Themes");
+	panel->sectionName = _("Themes");
 
-    panel->parent = parent;
+	panel->parent = parent;
 
-    panel->callbacks.createWidgets = createPanel;
-    panel->callbacks.updateDomain = storeData;
+	panel->callbacks.createWidgets = createPanel;
+	panel->callbacks.updateDomain = storeData;
 
-    AddSection(panel, ICON_FILE);
+	AddSection(panel, ICON_FILE);
 
-    return panel;
+	return panel;
 }
-

@@ -20,10 +20,7 @@
  *  USA.
  */
 
-
 #define PROG_VERSION "getstyle (Window Maker) 0.6"
-
-
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -43,76 +40,74 @@
 
 /* table of style related options */
 static char *options[] = {
-    "TitleJustify",
-    "ClipTitleFont",
-    "WindowTitleFont",
-    "MenuTitleFont",
-    "MenuTextFont",
-    "IconTitleFont",
-    "DisplayFont",
-    "LargeDisplayFont",
-    "WindowTitleExtendSpace",
-    "MenuTitleExtendSpace",
-    "MenuTextExtendSpace",
-    "HighlightColor",
-    "HighlightTextColor",
-    "ClipTitleColor",
-    "CClipTitleColor",
-    "FTitleColor",
-    "PTitleColor",
-    "UTitleColor",
-    "FTitleBack",
-    "PTitleBack",
-    "UTitleBack",
-    "ResizebarBack",
-    "MenuTitleColor",
-    "MenuTextColor",
-    "MenuDisabledColor",
-    "MenuTitleBack",
-    "MenuTextBack",
-    "IconBack",
-    "IconTitleColor",
-    "IconTitleBack",
-    "MenuStyle",
-    "WindowTitleExtendSpace",
-    "MenuTitleExtendSpace",
-    "MenuTextExtendSpace",
-    NULL
+	"TitleJustify",
+	"ClipTitleFont",
+	"WindowTitleFont",
+	"MenuTitleFont",
+	"MenuTextFont",
+	"IconTitleFont",
+	"DisplayFont",
+	"LargeDisplayFont",
+	"WindowTitleExtendSpace",
+	"MenuTitleExtendSpace",
+	"MenuTextExtendSpace",
+	"HighlightColor",
+	"HighlightTextColor",
+	"ClipTitleColor",
+	"CClipTitleColor",
+	"FTitleColor",
+	"PTitleColor",
+	"UTitleColor",
+	"FTitleBack",
+	"PTitleBack",
+	"UTitleBack",
+	"ResizebarBack",
+	"MenuTitleColor",
+	"MenuTextColor",
+	"MenuDisabledColor",
+	"MenuTitleBack",
+	"MenuTextBack",
+	"IconBack",
+	"IconTitleColor",
+	"IconTitleBack",
+	"MenuStyle",
+	"WindowTitleExtendSpace",
+	"MenuTitleExtendSpace",
+	"MenuTextExtendSpace",
+	NULL
 };
-
 
 /* table of theme related options */
 static char *theme_options[] = {
-    "WorkspaceBack",
-    "NormalCursor",
-    "ArrowCursor",
-    "MoveCursor",
-    "ResizeCursor",
-    "TopLeftResizeCursor",
-    "TopRightResizeCursor",
-    "BottomLeftResizeCursor",
-    "BottomRightResizeCursor",
-    "VerticalResizeCursor",
-    "HorizontalResizeCursor",
-    "WaitCursor",
-    "QuestionCursor",
-    "TextCursor",
-    "SelectCursor",
-    NULL
+	"WorkspaceBack",
+	"NormalCursor",
+	"ArrowCursor",
+	"MoveCursor",
+	"ResizeCursor",
+	"TopLeftResizeCursor",
+	"TopRightResizeCursor",
+	"BottomLeftResizeCursor",
+	"BottomRightResizeCursor",
+	"VerticalResizeCursor",
+	"HorizontalResizeCursor",
+	"WaitCursor",
+	"QuestionCursor",
+	"TextCursor",
+	"SelectCursor",
+	NULL
 };
-
 
 /* table of style related fonts */
 
 static char *font_options[] = {
-    "ClipTitleFont",
-    "WindowTitleFont",
-    "MenuTitleFont",
-    "MenuTextFont",
-    "IconTitleFont",
-    "DisplayFont",
-    "LargeDisplayFont",
-    NULL
+	"ClipTitleFont",
+	"WindowTitleFont",
+	"MenuTitleFont",
+	"MenuTextFont",
+	"IconTitleFont",
+	"DisplayFont",
+	"LargeDisplayFont",
+	NULL
 };
 
 char *ProgName;
@@ -121,541 +116,506 @@ WMPropList *PixmapPath = NULL;
 
 char *ThemePath = NULL;
 
-extern char* convertFont(char *font, Bool keepXLFD);
+extern char *convertFont(char *font, Bool keepXLFD);
 
-
-void
-print_help()
+void print_help()
 {
-    printf("Usage: %s [OPTIONS] [FILE]\n", ProgName);
-    puts("Retrieves style/theme configuration and output to FILE or to stdout");
-    puts("");
-    puts("  -t, --theme-options	output theme related options when producing a style file");
-    puts("  -p, --pack		produce output as a theme pack");
-    puts("  --help		display this help and exit");
-    puts("  --version		output version information and exit");
+	printf("Usage: %s [OPTIONS] [FILE]\n", ProgName);
+	puts("Retrieves style/theme configuration and output to FILE or to stdout");
+	puts("");
+	puts("  -t, --theme-options	output theme related options when producing a style file");
+	puts("  -p, --pack		produce output as a theme pack");
+	puts("  --help		display this help and exit");
+	puts("  --version		output version information and exit");
 }
 
-
-char*
-globalDefaultsPathForDomain(char *domain)
+char *globalDefaultsPathForDomain(char *domain)
 {
-    static char path[1024];
+	static char path[1024];
 
-    sprintf(path, "%s/WindowMaker/%s", SYSCONFDIR, domain);
+	sprintf(path, "%s/WindowMaker/%s", SYSCONFDIR, domain);
 
-    return path;
+	return path;
 }
 
-
-char*
-defaultsPathForDomain(char *domain)
+char *defaultsPathForDomain(char *domain)
 {
-    static char path[1024];
-    char *gspath;
+	static char path[1024];
+	char *gspath;
 
-    gspath = getenv("GNUSTEP_USER_ROOT");
-    if (gspath) {
-        strcpy(path, gspath);
-        strcat(path, "/");
-    } else {
-        char *home;
+	gspath = getenv("GNUSTEP_USER_ROOT");
+	if (gspath) {
+		strcpy(path, gspath);
+		strcat(path, "/");
+	} else {
+		char *home;
 
-        home = getenv("HOME");
-        if (!home) {
-            printf("%s:could not get HOME environment variable!\n", ProgName);
-            exit(0);
-        }
-        strcpy(path, home);
-        strcat(path, "/GNUstep/");
-    }
-    strcat(path, DEFAULTS_DIR);
-    strcat(path, "/");
-    strcat(path, domain);
+		home = getenv("HOME");
+		if (!home) {
+			printf("%s:could not get HOME environment variable!\n", ProgName);
+			exit(0);
+		}
+		strcpy(path, home);
+		strcat(path, "/GNUstep/");
+	}
+	strcat(path, DEFAULTS_DIR);
+	strcat(path, "/");
+	strcat(path, domain);
 
-    return path;
+	return path;
 }
 
-
-void
-abortar(char *reason)
+void abortar(char *reason)
 {
-    char buffer[4000];
+	char buffer[4000];
 
-    printf("%s: %s\n", ProgName, reason);
+	printf("%s: %s\n", ProgName, reason);
 
-    if (ThemePath) {
-        printf("Removing unfinished theme pack\n");
-        sprintf(buffer, "/bin/rm -fr \"%s\"", ThemePath);
+	if (ThemePath) {
+		printf("Removing unfinished theme pack\n");
+		sprintf(buffer, "/bin/rm -fr \"%s\"", ThemePath);
 
-        if (system(buffer)!=0) {
-            printf("%s: could not execute command %s\n", ProgName, buffer);
-        }
-    }
-    exit(1);
+		if (system(buffer) != 0) {
+			printf("%s: could not execute command %s\n", ProgName, buffer);
+		}
+	}
+	exit(1);
 }
 
-
-
-
-char*
-wgethomedir()
+char *wgethomedir()
 {
-    char *home = getenv("HOME");
-    struct passwd *user;
+	char *home = getenv("HOME");
+	struct passwd *user;
 
-    if (home)
-        return home;
+	if (home)
+		return home;
 
-    user = getpwuid(getuid());
-    if (!user) {
-        char buffer[80];
+	user = getpwuid(getuid());
+	if (!user) {
+		char buffer[80];
 
-        sprintf(buffer, "could not get password entry for UID %i", getuid());
-        perror(buffer);
-        return "/";
-    }
-    if (!user->pw_dir) {
-        return "/";
-    } else {
-        return user->pw_dir;
-    }
+		sprintf(buffer, "could not get password entry for UID %i", getuid());
+		perror(buffer);
+		return "/";
+	}
+	if (!user->pw_dir) {
+		return "/";
+	} else {
+		return user->pw_dir;
+	}
 }
 
-
-static char*
-getuserhomedir(char *username)
+static char *getuserhomedir(char *username)
 {
-    struct passwd *user;
+	struct passwd *user;
 
-    user = getpwnam(username);
-    if (!user) {
-        char buffer[100];
+	user = getpwnam(username);
+	if (!user) {
+		char buffer[100];
 
-        sprintf(buffer,"could not get password entry for user %s", username);
-        perror(buffer);
-        return NULL;
-    }
-    if (!user->pw_dir) {
-        return "/";
-    } else {
-        return user->pw_dir;
-    }
+		sprintf(buffer, "could not get password entry for user %s", username);
+		perror(buffer);
+		return NULL;
+	}
+	if (!user->pw_dir) {
+		return "/";
+	} else {
+		return user->pw_dir;
+	}
 }
 
-
-char*
-wexpandpath(char *path)
+char *wexpandpath(char *path)
 {
-    char buffer2[PATH_MAX+2];
-    char buffer[PATH_MAX+2];
-    int i;
+	char buffer2[PATH_MAX + 2];
+	char buffer[PATH_MAX + 2];
+	int i;
 
-    memset(buffer, 0, PATH_MAX+2);
+	memset(buffer, 0, PATH_MAX + 2);
 
-    if (*path=='~') {
-        char *home;
+	if (*path == '~') {
+		char *home;
 
-        path++;
-        if (*path=='/' || *path==0) {
-            home = wgethomedir();
-            strcat(buffer, home);
-        } else {
-            int j;
-            j = 0;
-            while (*path!=0 && *path!='/') {
-                buffer2[j++] = *path;
-                buffer2[j] = 0;
-                path++;
-            }
-            home = getuserhomedir(buffer2);
-            if (!home)
-                return NULL;
-            strcat(buffer, home);
-        }
-    }
+		path++;
+		if (*path == '/' || *path == 0) {
+			home = wgethomedir();
+			strcat(buffer, home);
+		} else {
+			int j;
+			j = 0;
+			while (*path != 0 && *path != '/') {
+				buffer2[j++] = *path;
+				buffer2[j] = 0;
+				path++;
+			}
+			home = getuserhomedir(buffer2);
+			if (!home)
+				return NULL;
+			strcat(buffer, home);
+		}
+	}
 
-    i = strlen(buffer);
+	i = strlen(buffer);
 
-    while (*path!=0) {
-        char *tmp;
+	while (*path != 0) {
+		char *tmp;
 
-        if (*path=='$') {
-            int j = 0;
-            path++;
-            /* expand $(HOME) or $HOME style environment variables */
-            if (*path=='(') {
-                path++;
-                while (*path!=0 && *path!=')') {
-                    buffer2[j++] = *(path++);
-                    buffer2[j] = 0;
-                }
-                if (*path==')')
-                    path++;
-                tmp = getenv(buffer2);
-                if (!tmp) {
-                    buffer[i] = 0;
-                    strcat(buffer, "$(");
-                    strcat(buffer, buffer2);
-                    strcat(buffer, ")");
-                    i += strlen(buffer2)+3;
-                } else {
-                    strcat(buffer, tmp);
-                    i += strlen(tmp);
-                }
-            } else {
-                while (*path!=0 && *path!='/') {
-                    buffer2[j++] = *(path++);
-                    buffer2[j] = 0;
-                }
-                tmp = getenv(buffer2);
-                if (!tmp) {
-                    strcat(buffer, "$");
-                    strcat(buffer, buffer2);
-                    i += strlen(buffer2)+1;
-                } else {
-                    strcat(buffer, tmp);
-                    i += strlen(tmp);
-                }
-            }
-        } else {
-            buffer[i++] = *path;
-            path++;
-        }
-    }
+		if (*path == '$') {
+			int j = 0;
+			path++;
+			/* expand $(HOME) or $HOME style environment variables */
+			if (*path == '(') {
+				path++;
+				while (*path != 0 && *path != ')') {
+					buffer2[j++] = *(path++);
+					buffer2[j] = 0;
+				}
+				if (*path == ')')
+					path++;
+				tmp = getenv(buffer2);
+				if (!tmp) {
+					buffer[i] = 0;
+					strcat(buffer, "$(");
+					strcat(buffer, buffer2);
+					strcat(buffer, ")");
+					i += strlen(buffer2) + 3;
+				} else {
+					strcat(buffer, tmp);
+					i += strlen(tmp);
+				}
+			} else {
+				while (*path != 0 && *path != '/') {
+					buffer2[j++] = *(path++);
+					buffer2[j] = 0;
+				}
+				tmp = getenv(buffer2);
+				if (!tmp) {
+					strcat(buffer, "$");
+					strcat(buffer, buffer2);
+					i += strlen(buffer2) + 1;
+				} else {
+					strcat(buffer, tmp);
+					i += strlen(tmp);
+				}
+			}
+		} else {
+			buffer[i++] = *path;
+			path++;
+		}
+	}
 
-    return wstrdup(buffer);
+	return wstrdup(buffer);
 }
 
-
-
-char*
-wfindfileinarray(WMPropList *paths, char *file)
+char *wfindfileinarray(WMPropList * paths, char *file)
 {
-    int i;
-    char *path;
-    int len, flen;
-    char *fullpath;
+	int i;
+	char *path;
+	int len, flen;
+	char *fullpath;
 
-    if (!file)
-        return NULL;
+	if (!file)
+		return NULL;
 
-    if (*file=='/' || *file=='~' || !paths || !WMIsPLArray(paths)
-        || WMGetPropListItemCount(paths)==0) {
-        if (access(file, R_OK)<0) {
-            fullpath = wexpandpath(file);
-            if (!fullpath)
-                return NULL;
+	if (*file == '/' || *file == '~' || !paths || !WMIsPLArray(paths)
+	    || WMGetPropListItemCount(paths) == 0) {
+		if (access(file, R_OK) < 0) {
+			fullpath = wexpandpath(file);
+			if (!fullpath)
+				return NULL;
 
-            if (access(fullpath, R_OK)<0) {
-                free(fullpath);
-                return NULL;
-            } else {
-                return fullpath;
-            }
-        } else {
-            return wstrdup(file);
-        }
-    }
+			if (access(fullpath, R_OK) < 0) {
+				free(fullpath);
+				return NULL;
+			} else {
+				return fullpath;
+			}
+		} else {
+			return wstrdup(file);
+		}
+	}
 
-    flen = strlen(file);
-    for (i=0; i < WMGetPropListItemCount(paths); i++) {
-        WMPropList *tmp;
-        char *dir;
+	flen = strlen(file);
+	for (i = 0; i < WMGetPropListItemCount(paths); i++) {
+		WMPropList *tmp;
+		char *dir;
 
-        tmp = WMGetFromPLArray(paths, i);
-        if (!WMIsPLString(tmp) || !(dir = WMGetFromPLString(tmp)))
-            continue;
+		tmp = WMGetFromPLArray(paths, i);
+		if (!WMIsPLString(tmp) || !(dir = WMGetFromPLString(tmp)))
+			continue;
 
-        len = strlen(dir);
-        path = wmalloc(len+flen+2);
-        path = memcpy(path, dir, len);
-        path[len]=0;
-        strcat(path, "/");
-        strcat(path, file);
-        /* expand tilde */
-        fullpath = wexpandpath(path);
-        free(path);
-        if (fullpath) {
-            /* check if file is readable */
-            if (access(fullpath, R_OK)==0) {
-                return fullpath;
-            }
-            free(fullpath);
-        }
-    }
-    return NULL;
+		len = strlen(dir);
+		path = wmalloc(len + flen + 2);
+		path = memcpy(path, dir, len);
+		path[len] = 0;
+		strcat(path, "/");
+		strcat(path, file);
+		/* expand tilde */
+		fullpath = wexpandpath(path);
+		free(path);
+		if (fullpath) {
+			/* check if file is readable */
+			if (access(fullpath, R_OK) == 0) {
+				return fullpath;
+			}
+			free(fullpath);
+		}
+	}
+	return NULL;
 }
 
-
-static Bool
-isFontOption(char *option)
+static Bool isFontOption(char *option)
 {
-    int i;
+	int i;
 
-    for (i=0; font_options[i]!=NULL; i++) {
-        if (strcasecmp(option, font_options[i])==0) {
-            return True;
-        }
-    }
+	for (i = 0; font_options[i] != NULL; i++) {
+		if (strcasecmp(option, font_options[i]) == 0) {
+			return True;
+		}
+	}
 
-    return False;
+	return False;
 }
 
-
-void
-copyFile(char *dir, char *file)
+void copyFile(char *dir, char *file)
 {
-    char buffer[4000];
+	char buffer[4000];
 
-    sprintf(buffer, "/bin/cp \"%s\" \"%s\"", file, dir);
-    if (system(buffer)!=0) {
-        printf("%s: could not copy file %s\n", ProgName, file);
-    }
+	sprintf(buffer, "/bin/cp \"%s\" \"%s\"", file, dir);
+	if (system(buffer) != 0) {
+		printf("%s: could not copy file %s\n", ProgName, file);
+	}
 }
 
-
-void
-findCopyFile(char *dir, char *file)
+void findCopyFile(char *dir, char *file)
 {
-    char *fullPath;
+	char *fullPath;
 
-    fullPath = wfindfileinarray(PixmapPath, file);
-    if (!fullPath) {
-        char buffer[4000];
+	fullPath = wfindfileinarray(PixmapPath, file);
+	if (!fullPath) {
+		char buffer[4000];
 
-        sprintf(buffer, "could not find file %s", file);
-        abortar(buffer);
-    }
-    copyFile(dir, fullPath);
-    free(fullPath);
+		sprintf(buffer, "could not find file %s", file);
+		abortar(buffer);
+	}
+	copyFile(dir, fullPath);
+	free(fullPath);
 }
 
-
-char*
-makeThemePack(WMPropList *style, char *themeName)
+char *makeThemePack(WMPropList * style, char *themeName)
 {
-    WMPropList *keys;
-    WMPropList *key;
-    WMPropList *value;
-    int i;
-    char *themeDir;
+	WMPropList *keys;
+	WMPropList *key;
+	WMPropList *value;
+	int i;
+	char *themeDir;
 
-    themeDir = wmalloc(strlen(themeName)+50);
-    sprintf(themeDir, "%s.themed", themeName);
-    ThemePath = themeDir;
-    {
-        char *tmp;
+	themeDir = wmalloc(strlen(themeName) + 50);
+	sprintf(themeDir, "%s.themed", themeName);
+	ThemePath = themeDir;
+	{
+		char *tmp;
 
-        tmp = wmalloc(strlen(themeDir)+20);
-        sprintf(tmp, "/bin/mkdir \"%s\"", themeDir);
-        if (system(tmp)!=0) {
-            printf("%s: could not create directory %s. Probably there's already a theme with that name in this directory.\n", ProgName, themeDir);
-            exit(1);
-        }
-        free(tmp);
-    }
-    keys = WMGetPLDictionaryKeys(style);
+		tmp = wmalloc(strlen(themeDir) + 20);
+		sprintf(tmp, "/bin/mkdir \"%s\"", themeDir);
+		if (system(tmp) != 0) {
+			printf
+			    ("%s: could not create directory %s. Probably there's already a theme with that name in this directory.\n",
+			     ProgName, themeDir);
+			exit(1);
+		}
+		free(tmp);
+	}
+	keys = WMGetPLDictionaryKeys(style);
 
-    for (i = 0; i < WMGetPropListItemCount(keys); i++) {
-        key = WMGetFromPLArray(keys, i);
+	for (i = 0; i < WMGetPropListItemCount(keys); i++) {
+		key = WMGetFromPLArray(keys, i);
 
-        value = WMGetFromPLDictionary(style, key);
-        if (value && WMIsPLArray(value) && WMGetPropListItemCount(value) > 2) {
-            WMPropList *type;
-            char *t;
+		value = WMGetFromPLDictionary(style, key);
+		if (value && WMIsPLArray(value) && WMGetPropListItemCount(value) > 2) {
+			WMPropList *type;
+			char *t;
 
-            type = WMGetFromPLArray(value, 0);
-            t = WMGetFromPLString(type);
-            if (t == NULL)
-                continue;
+			type = WMGetFromPLArray(value, 0);
+			t = WMGetFromPLString(type);
+			if (t == NULL)
+				continue;
 
-            if (strcasecmp(t, "tpixmap")==0
-                || strcasecmp(t, "spixmap")==0
-                || strcasecmp(t, "cpixmap")==0
-                || strcasecmp(t, "mpixmap")==0
-                || strcasecmp(t, "tdgradient")==0
-                || strcasecmp(t, "tvgradient")==0
-                || strcasecmp(t, "thgradient")==0) {
-                WMPropList *file;
-                char *p;
-                char *newPath;
+			if (strcasecmp(t, "tpixmap") == 0
+			    || strcasecmp(t, "spixmap") == 0
+			    || strcasecmp(t, "cpixmap") == 0
+			    || strcasecmp(t, "mpixmap") == 0
+			    || strcasecmp(t, "tdgradient") == 0
+			    || strcasecmp(t, "tvgradient") == 0 || strcasecmp(t, "thgradient") == 0) {
+				WMPropList *file;
+				char *p;
+				char *newPath;
 
-                file = WMGetFromPLArray(value, 1);
+				file = WMGetFromPLArray(value, 1);
 
-                p = strrchr(WMGetFromPLString(file), '/');
-                if (p) {
-                    copyFile(themeDir, WMGetFromPLString(file));
+				p = strrchr(WMGetFromPLString(file), '/');
+				if (p) {
+					copyFile(themeDir, WMGetFromPLString(file));
 
-                    newPath = wstrdup(p+1);
-                    WMDeleteFromPLArray(value, 1);
-                    WMInsertInPLArray(value, 1, WMCreatePLString(newPath));
-                    free(newPath);
-                } else {
-                    findCopyFile(themeDir, WMGetFromPLString(file));
-                }
-            } else if (strcasecmp(t, "bitmap")==0) {
-                WMPropList *file;
-                char *p;
-                char *newPath;
+					newPath = wstrdup(p + 1);
+					WMDeleteFromPLArray(value, 1);
+					WMInsertInPLArray(value, 1, WMCreatePLString(newPath));
+					free(newPath);
+				} else {
+					findCopyFile(themeDir, WMGetFromPLString(file));
+				}
+			} else if (strcasecmp(t, "bitmap") == 0) {
+				WMPropList *file;
+				char *p;
+				char *newPath;
 
-                file = WMGetFromPLArray(value, 1);
+				file = WMGetFromPLArray(value, 1);
 
-                p = strrchr(WMGetFromPLString(file), '/');
-                if (p) {
-                    copyFile(themeDir, WMGetFromPLString(file));
+				p = strrchr(WMGetFromPLString(file), '/');
+				if (p) {
+					copyFile(themeDir, WMGetFromPLString(file));
 
-                    newPath = wstrdup(p+1);
-                    WMDeleteFromPLArray(value, 1);
-                    WMInsertInPLArray(value, 1, WMCreatePLString(newPath));
-                    free(newPath);
-                } else {
-                    findCopyFile(themeDir, WMGetFromPLString(file));
-                }
+					newPath = wstrdup(p + 1);
+					WMDeleteFromPLArray(value, 1);
+					WMInsertInPLArray(value, 1, WMCreatePLString(newPath));
+					free(newPath);
+				} else {
+					findCopyFile(themeDir, WMGetFromPLString(file));
+				}
 
+				file = WMGetFromPLArray(value, 2);
 
-                file = WMGetFromPLArray(value, 2);
+				p = strrchr(WMGetFromPLString(file), '/');
+				if (p) {
+					copyFile(themeDir, WMGetFromPLString(file));
 
-                p = strrchr(WMGetFromPLString(file), '/');
-                if (p) {
-                    copyFile(themeDir, WMGetFromPLString(file));
+					newPath = wstrdup(p + 1);
+					WMDeleteFromPLArray(value, 2);
+					WMInsertInPLArray(value, 2, WMCreatePLString(newPath));
+					free(newPath);
+				} else {
+					findCopyFile(themeDir, WMGetFromPLString(file));
+				}
+			}
+		}
+	}
 
-                    newPath = wstrdup(p+1);
-                    WMDeleteFromPLArray(value, 2);
-                    WMInsertInPLArray(value, 2, WMCreatePLString(newPath));
-                    free(newPath);
-                } else {
-                    findCopyFile(themeDir, WMGetFromPLString(file));
-                }
-            }
-        }
-    }
-
-    return themeDir;
+	return themeDir;
 }
 
-
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
-    WMPropList *prop, *style, *key, *val;
-    char *path;
-    int i, theme_too=0, make_pack=0;
-    char *style_file = NULL;
+	WMPropList *prop, *style, *key, *val;
+	char *path;
+	int i, theme_too = 0, make_pack = 0;
+	char *style_file = NULL;
 
+	ProgName = argv[0];
 
-    ProgName = argv[0];
+	if (argc > 1) {
+		for (i = 1; i < argc; i++) {
+			if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--pack") == 0) {
+				make_pack = 1;
+				theme_too = 1;
+			} else if (strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--theme-options") == 0) {
+				theme_too++;
+			} else if (strcmp(argv[i], "--help") == 0) {
+				print_help();
+				exit(0);
+			} else if (strcmp(argv[i], "--version") == 0) {
+				puts(PROG_VERSION);
+				exit(0);
+			} else {
+				if (style_file != NULL) {
+					printf("%s: invalid argument '%s'\n", argv[0],
+					       style_file[0] == '-' ? style_file : argv[i]);
+					printf("Try '%s --help' for more information\n", argv[0]);
+					exit(1);
+				}
+				style_file = argv[i];
+			}
+		}
+	}
 
-    if (argc>1) {
-        for (i=1; i<argc; i++) {
-            if (strcmp(argv[i], "-p")==0
-                || strcmp(argv[i], "--pack")==0) {
-                make_pack = 1;
-                theme_too = 1;
-            } else if (strcmp(argv[i], "-t")==0
-                       || strcmp(argv[i], "--theme-options")==0) {
-                theme_too++;
-            } else if (strcmp(argv[i], "--help")==0) {
-                print_help();
-                exit(0);
-            } else if (strcmp(argv[i], "--version")==0) {
-                puts(PROG_VERSION);
-                exit(0);
-            } else {
-                if (style_file!=NULL) {
-                    printf("%s: invalid argument '%s'\n", argv[0],
-                           style_file[0]=='-' ? style_file : argv[i]);
-                    printf("Try '%s --help' for more information\n", argv[0]);
-                    exit(1);
-                }
-                style_file = argv[i];
-            }
-        }
-    }
+	if (make_pack && !style_file) {
+		printf("%s: you must supply a name for the theme pack\n", ProgName);
+		exit(1);
+	}
 
-    if (make_pack && !style_file) {
-        printf("%s: you must supply a name for the theme pack\n", ProgName);
-        exit(1);
-    }
+	WMPLSetCaseSensitive(False);
 
-    WMPLSetCaseSensitive(False);
+	path = defaultsPathForDomain("WindowMaker");
 
-    path = defaultsPathForDomain("WindowMaker");
+	prop = WMReadPropListFromFile(path);
+	if (!prop) {
+		printf("%s:could not load WindowMaker configuration file \"%s\".\n", ProgName, path);
+		exit(1);
+	}
 
-    prop = WMReadPropListFromFile(path);
-    if (!prop) {
-        printf("%s:could not load WindowMaker configuration file \"%s\".\n",
-               ProgName, path);
-        exit(1);
-    }
+	/* get global value */
+	path = globalDefaultsPathForDomain("WindowMaker");
+	val = WMReadPropListFromFile(path);
+	if (val) {
+		WMMergePLDictionaries(val, prop, True);
+		WMReleasePropList(prop);
+		prop = val;
+	}
 
-    /* get global value */
-    path = globalDefaultsPathForDomain("WindowMaker");
-    val = WMReadPropListFromFile(path);
-    if (val) {
-        WMMergePLDictionaries(val, prop, True);
-        WMReleasePropList(prop);
-        prop = val;
-    }
+	style = WMCreatePLDictionary(NULL, NULL);
 
-    style = WMCreatePLDictionary(NULL, NULL);
+	for (i = 0; options[i] != NULL; i++) {
+		key = WMCreatePLString(options[i]);
 
-    for (i=0; options[i]!=NULL; i++) {
-        key = WMCreatePLString(options[i]);
+		val = WMGetFromPLDictionary(prop, key);
+		if (val) {
+			WMRetainPropList(val);
+			if (isFontOption(options[i])) {
+				char *newfont, *oldfont;
 
-        val = WMGetFromPLDictionary(prop, key);
-        if (val) {
-            WMRetainPropList(val);
-            if (isFontOption(options[i])) {
-                char *newfont, *oldfont;
+				oldfont = WMGetFromPLString(val);
+				newfont = convertFont(oldfont, False);
+				/* newfont is a reference to old if conversion is not needed */
+				if (newfont != oldfont) {
+					WMReleasePropList(val);
+					val = WMCreatePLString(newfont);
+					wfree(newfont);
+				}
+			}
+			WMPutInPLDictionary(style, key, val);
+			WMReleasePropList(val);
+		}
+		WMReleasePropList(key);
+	}
 
-                oldfont = WMGetFromPLString(val);
-                newfont = convertFont(oldfont, False);
-                /* newfont is a reference to old if conversion is not needed */
-                if (newfont != oldfont) {
-                    WMReleasePropList(val);
-                    val = WMCreatePLString(newfont);
-                    wfree(newfont);
-                }
-            }
-            WMPutInPLDictionary(style, key, val);
-            WMReleasePropList(val);
-        }
-        WMReleasePropList(key);
-    }
+	val = WMGetFromPLDictionary(prop, WMCreatePLString("PixmapPath"));
+	if (val)
+		PixmapPath = val;
 
-    val = WMGetFromPLDictionary(prop, WMCreatePLString("PixmapPath"));
-    if (val)
-        PixmapPath = val;
+	if (theme_too) {
+		for (i = 0; theme_options[i] != NULL; i++) {
+			key = WMCreatePLString(theme_options[i]);
 
-    if (theme_too) {
-        for (i=0; theme_options[i]!=NULL; i++) {
-            key = WMCreatePLString(theme_options[i]);
+			val = WMGetFromPLDictionary(prop, key);
+			if (val)
+				WMPutInPLDictionary(style, key, val);
+		}
+	}
 
-            val = WMGetFromPLDictionary(prop, key);
-            if (val)
-                WMPutInPLDictionary(style, key, val);
-        }
-    }
+	if (make_pack) {
+		char *path;
 
-    if (make_pack) {
-        char *path;
+		makeThemePack(style, style_file);
 
-        makeThemePack(style, style_file);
-
-        path = wmalloc(strlen(ThemePath)+32);
-        strcpy(path, ThemePath);
-        strcat(path, "/style");
-        WMWritePropListToFile(style, path, False);
-        wfree(path);
-    } else {
-        if (style_file) {
-            WMWritePropListToFile(style, style_file, False);
-        } else {
-            puts(WMGetPropListDescription(style, True));
-        }
-    }
-    exit(0);
+		path = wmalloc(strlen(ThemePath) + 32);
+		strcpy(path, ThemePath);
+		strcat(path, "/style");
+		WMWritePropListToFile(style, path, False);
+		wfree(path);
+	} else {
+		if (style_file) {
+			WMWritePropListToFile(style, style_file, False);
+		} else {
+			puts(WMGetPropListDescription(style, True));
+		}
+	}
+	exit(0);
 }
-
-

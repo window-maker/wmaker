@@ -3,40 +3,37 @@
 #include <stdio.h>
 #include <WINGs/WINGs.h>
 
-
-
 void showSelectedColor(void *self, void *cdata)
 {
-    WMColorPanel *panel= (WMColorPanel*)self;
+	WMColorPanel *panel = (WMColorPanel *) self;
 
-    printf("Selected Color: %s\n", WMGetColorRGBDescription(WMGetColorPanelColor(panel)));
+	printf("Selected Color: %s\n", WMGetColorRGBDescription(WMGetColorPanelColor(panel)));
 }
-
 
 int main(int argc, char **argv)
 {
-    Display *dpy;
-    WMScreen *scr;
+	Display *dpy;
+	WMScreen *scr;
 
-    WMInitializeApplication("wmcolorpick", &argc, argv);
+	WMInitializeApplication("wmcolorpick", &argc, argv);
 
-    dpy = XOpenDisplay("");
-    if (!dpy) {
-        printf("could not open display\n");
-        exit(1);
-    }
+	dpy = XOpenDisplay("");
+	if (!dpy) {
+		printf("could not open display\n");
+		exit(1);
+	}
 
-    scr = WMCreateScreen(dpy, DefaultScreen(dpy));
+	scr = WMCreateScreen(dpy, DefaultScreen(dpy));
 
-    {
-        WMColorPanel *panel= WMGetColorPanel(scr);
+	{
+		WMColorPanel *panel = WMGetColorPanel(scr);
 
-        WMSetColorPanelAction(panel, showSelectedColor, NULL);
+		WMSetColorPanelAction(panel, showSelectedColor, NULL);
 
-        WMShowColorPanel(panel);
-    }
+		WMShowColorPanel(panel);
+	}
 
-    WMScreenMainLoop(scr);
+	WMScreenMainLoop(scr);
 
-    return 0;
+	return 0;
 }

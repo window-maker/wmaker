@@ -39,7 +39,8 @@
 static Display *dpy = 0;
 static Colormap cmap;
 
-void initWindowMaker (Display *d, Colormap c) {
+void initWindowMaker(Display * d, Colormap c)
+{
 	if (!d) {
 		return;
 	}
@@ -47,17 +48,19 @@ void initWindowMaker (Display *d, Colormap c) {
 	cmap = c;
 }
 
-void error (const char *format, ...) {
+void error(const char *format, ...)
+{
 	va_list args;
-	va_start (args, format);
-	vfprintf (stderr, format, args);
-	va_end (args);
+	va_start(args, format);
+	vfprintf(stderr, format, args);
+	va_end(args);
 }
 
-int parse_color (const char *string, int *result) {
+int parse_color(const char *string, int *result)
+{
 	XColor color;
 
-	if (!XParseColor (dpy, cmap, string, &color)) {
+	if (!XParseColor(dpy, cmap, string, &color)) {
 		return 0;
 	}
 	result[0] = color.red >> 8;
@@ -67,50 +70,52 @@ int parse_color (const char *string, int *result) {
 	return 1;
 }
 
-int parse_xcolor (const char *string, XColor *xcolor) {
-	if (!XParseColor (dpy, cmap, string, xcolor)) {
-        return 0;
+int parse_xcolor(const char *string, XColor * xcolor)
+{
+	if (!XParseColor(dpy, cmap, string, xcolor)) {
+		return 0;
 	}
-    if (!XAllocColor (dpy, cmap, xcolor)) {
-        return 0;
-    }
+	if (!XAllocColor(dpy, cmap, xcolor)) {
+		return 0;
+	}
 
 	return 1;
 }
 
-void interpolate_color (int *t, const int *s0, const int *s1, int mix) {
+void interpolate_color(int *t, const int *s0, const int *s1, int mix)
+{
 	t[0] = (mix * s0[0] + (255 - mix) * s1[0]) >> 8;
 	t[1] = (mix * s0[1] + (255 - mix) * s1[1]) >> 8;
 	t[2] = (mix * s0[2] + (255 - mix) * s1[2]) >> 8;
 }
 
-int random_int (int range) {
+int random_int(int range)
+{
 	return rand() / (RAND_MAX / range + 1);
 }
 
-double random_double (double range) {
+double random_double(double range)
+{
 	return ((double)rand()) / (((double)RAND_MAX) / range);
 }
 
-int start_image (const char *name,
-	int argc, int argc_min, int argc_max,
-	int width, int height, RImage **image) {
+int start_image(const char *name, int argc, int argc_min, int argc_max, int width, int height, RImage ** image)
+{
 
 	if (!dpy) {
-		error ("%s: library not initialized\n", name);
+		error("%s: library not initialized\n", name);
 		return 0;
 	}
 
 	if ((argc < argc_min) || (argc >= argc_max)) {
-		error ("%s: invalid number of parameters: \n", name, argc);
+		error("%s: invalid number of parameters: \n", name, argc);
 		return 0;
 	}
 
-	*image = RCreateImage (width, height, 0);
+	*image = RCreateImage(width, height, 0);
 	if (!*image) {
-		error ("%s: can't create image\n", name);
+		error("%s: can't create image\n", name);
 		return 0;
 	}
 	return 1;
 }
-

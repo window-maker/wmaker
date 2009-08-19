@@ -21,7 +21,6 @@
 
 #include <config.h>
 
-
 #ifdef USE_GIF
 
 #include <stdlib.h>
@@ -32,201 +31,196 @@
 
 #include "wraster.h"
 
-
 static int InterlacedOffset[] = { 0, 4, 2, 1 };
 static int InterlacedJumps[] = { 8, 8, 4, 2 };
-
 
 /*
  * Partially based on code in gif2rgb from giflib, by Gershon Elber.
  */
-RImage*
-RLoadGIF(RContext *context, char *file, int index)
+RImage *RLoadGIF(RContext * context, char *file, int index)
 {
-    RImage *image = NULL;
-    unsigned char *cptr;
-    GifFileType *gif = NULL;
-    GifPixelType *buffer = NULL;
-    int i, j, k;
-    int width, height;
-    GifRecordType recType;
-    ColorMapObject *colormap;
-    unsigned char rmap[256];
-    unsigned char gmap[256];
-    unsigned char bmap[256];
+	RImage *image = NULL;
+	unsigned char *cptr;
+	GifFileType *gif = NULL;
+	GifPixelType *buffer = NULL;
+	int i, j, k;
+	int width, height;
+	GifRecordType recType;
+	ColorMapObject *colormap;
+	unsigned char rmap[256];
+	unsigned char gmap[256];
+	unsigned char bmap[256];
 
-    if (index < 0)
-        index = 0;
+	if (index < 0)
+		index = 0;
 
-    /* default error message */
-    RErrorCode = RERR_BADINDEX;
+	/* default error message */
+	RErrorCode = RERR_BADINDEX;
 
-    gif = DGifOpenFileName(file);
+	gif = DGifOpenFileName(file);
 
-    if (!gif) {
-        switch (GifLastError()) {
-        case D_GIF_ERR_OPEN_FAILED:
-            RErrorCode = RERR_OPEN;
-            break;
-        case D_GIF_ERR_READ_FAILED:
-            RErrorCode = RERR_READ;
-            break;
-        default:
-            RErrorCode = RERR_BADIMAGEFILE;
-            break;
-        }
-        return NULL;
-    }
+	if (!gif) {
+		switch (GifLastError()) {
+		case D_GIF_ERR_OPEN_FAILED:
+			RErrorCode = RERR_OPEN;
+			break;
+		case D_GIF_ERR_READ_FAILED:
+			RErrorCode = RERR_READ;
+			break;
+		default:
+			RErrorCode = RERR_BADIMAGEFILE;
+			break;
+		}
+		return NULL;
+	}
 
-    if (gif->SWidth<1 || gif->SHeight<1) {
-        DGifCloseFile(gif);
-        RErrorCode = RERR_BADIMAGEFILE;
-        return NULL;
-    }
+	if (gif->SWidth < 1 || gif->SHeight < 1) {
+		DGifCloseFile(gif);
+		RErrorCode = RERR_BADIMAGEFILE;
+		return NULL;
+	}
 
-    colormap = gif->SColorMap;
+	colormap = gif->SColorMap;
 
-    i = 0;
+	i = 0;
 
-    do {
-        int extCode;
-        GifByteType *extension;
+	do {
+		int extCode;
+		GifByteType *extension;
 
-        if (DGifGetRecordType(gif, &recType) == GIF_ERROR) {
-            goto giferr;
-        }
-        switch (recType) {
-        case IMAGE_DESC_RECORD_TYPE:
-            if (i++ != index)
-                break;
+		if (DGifGetRecordType(gif, &recType) == GIF_ERROR) {
+			goto giferr;
+		}
+		switch (recType) {
+		case IMAGE_DESC_RECORD_TYPE:
+			if (i++ != index)
+				break;
 
-            if (DGifGetImageDesc(gif)==GIF_ERROR) {
-                goto giferr;
-            }
+			if (DGifGetImageDesc(gif) == GIF_ERROR) {
+				goto giferr;
+			}
 
-            width = gif->Image.Width;
-            height = gif->Image.Height;
+			width = gif->Image.Width;
+			height = gif->Image.Height;
 
-            if (gif->Image.ColorMap)
-                colormap = gif->Image.ColorMap;
+			if (gif->Image.ColorMap)
+				colormap = gif->Image.ColorMap;
 
-            /* the gif specs talk about a default colormap, but it
-             * doesnt say what the heck is this default colormap */
-            if (!colormap) {
-                /*
-                 * Well, since the spec says the colormap can be anything,
-                 * lets just render it with whatever garbage the stack
-                 * has :)
-                 *
+			/* the gif specs talk about a default colormap, but it
+			 * doesnt say what the heck is this default colormap */
+			if (!colormap) {
+				/*
+				 * Well, since the spec says the colormap can be anything,
+				 * lets just render it with whatever garbage the stack
+				 * has :)
+				 *
 
-                 goto bye;
-                 */
-            } else {
-                for (j = 0; j < colormap->ColorCount; j++) {
-                    rmap[j] = colormap->Colors[j].Red;
-                    gmap[j] = colormap->Colors[j].Green;
-                    bmap[j] = colormap->Colors[j].Blue;
-                }
-            }
+				 goto bye;
+				 */
+			} else {
+				for (j = 0; j < colormap->ColorCount; j++) {
+					rmap[j] = colormap->Colors[j].Red;
+					gmap[j] = colormap->Colors[j].Green;
+					bmap[j] = colormap->Colors[j].Blue;
+				}
+			}
 
-            buffer = malloc(width * sizeof(GifColorType));
-            if (!buffer) {
-                RErrorCode = RERR_NOMEMORY;
-                goto bye;
-            }
+			buffer = malloc(width * sizeof(GifColorType));
+			if (!buffer) {
+				RErrorCode = RERR_NOMEMORY;
+				goto bye;
+			}
 
-            image = RCreateImage(width, height, False);
-            if (!image) {
-                goto bye;
-            }
+			image = RCreateImage(width, height, False);
+			if (!image) {
+				goto bye;
+			}
 
-            if (gif->Image.Interlace) {
-                int l;
-                int pelsPerLine;
+			if (gif->Image.Interlace) {
+				int l;
+				int pelsPerLine;
 
-                if (RRGBAFormat==image->format)
-                    pelsPerLine = width * 4;
-                else
-                    pelsPerLine = width * 3;
+				if (RRGBAFormat == image->format)
+					pelsPerLine = width * 4;
+				else
+					pelsPerLine = width * 3;
 
-                for (j = 0; j < 4; j++) {
-                    for (k = InterlacedOffset[j]; k < height;
-                         k += InterlacedJumps[j]) {
-                        if (DGifGetLine(gif, buffer, width)==GIF_ERROR) {
-                            goto giferr;
-                        }
-                        cptr = image->data + (k*pelsPerLine);
-                        for (l = 0; l < width; l++) {
-                            int pixel = buffer[l];
-                            *cptr++ = rmap[pixel];
-                            *cptr++ = gmap[pixel];
-                            *cptr++ = bmap[pixel];
-                        }
-                    }
-                }
-            } else {
-                cptr = image->data;
-                for (j = 0; j < height; j++) {
-                    if (DGifGetLine(gif, buffer, width)==GIF_ERROR) {
-                        goto giferr;
-                    }
-                    for (k = 0; k < width; k++) {
-                        int pixel = buffer[k];
-                        *cptr++ = rmap[pixel];
-                        *cptr++ = gmap[pixel];
-                        *cptr++ = bmap[pixel];
-                        if (RRGBAFormat==image->format)
-                            cptr++;
-                    }
-                }
-            }
-            break;
+				for (j = 0; j < 4; j++) {
+					for (k = InterlacedOffset[j]; k < height; k += InterlacedJumps[j]) {
+						if (DGifGetLine(gif, buffer, width) == GIF_ERROR) {
+							goto giferr;
+						}
+						cptr = image->data + (k * pelsPerLine);
+						for (l = 0; l < width; l++) {
+							int pixel = buffer[l];
+							*cptr++ = rmap[pixel];
+							*cptr++ = gmap[pixel];
+							*cptr++ = bmap[pixel];
+						}
+					}
+				}
+			} else {
+				cptr = image->data;
+				for (j = 0; j < height; j++) {
+					if (DGifGetLine(gif, buffer, width) == GIF_ERROR) {
+						goto giferr;
+					}
+					for (k = 0; k < width; k++) {
+						int pixel = buffer[k];
+						*cptr++ = rmap[pixel];
+						*cptr++ = gmap[pixel];
+						*cptr++ = bmap[pixel];
+						if (RRGBAFormat == image->format)
+							cptr++;
+					}
+				}
+			}
+			break;
 
-        case EXTENSION_RECORD_TYPE:
-            /* skip all extension blocks */
-            if (DGifGetExtension(gif, &extCode, &extension)==GIF_ERROR) {
-                goto giferr;
-            }
-            while (extension) {
-                if (DGifGetExtensionNext(gif, &extension)==GIF_ERROR) {
-                    goto giferr;
-                }
-            }
-            break;
+		case EXTENSION_RECORD_TYPE:
+			/* skip all extension blocks */
+			if (DGifGetExtension(gif, &extCode, &extension) == GIF_ERROR) {
+				goto giferr;
+			}
+			while (extension) {
+				if (DGifGetExtensionNext(gif, &extension) == GIF_ERROR) {
+					goto giferr;
+				}
+			}
+			break;
 
-        default:
-            break;
-        }
-    } while (recType != TERMINATE_RECORD_TYPE && i <= index);
+		default:
+			break;
+		}
+	} while (recType != TERMINATE_RECORD_TYPE && i <= index);
 
-    /* yuck! */
-    goto did_not_get_any_errors;
-giferr:
-    switch (GifLastError()) {
-    case D_GIF_ERR_OPEN_FAILED:
-        RErrorCode = RERR_OPEN;
-        break;
-    case D_GIF_ERR_READ_FAILED:
-        RErrorCode = RERR_READ;
-        break;
-    default:
-        RErrorCode = RERR_BADIMAGEFILE;
-        break;
-    }
-bye:
-    if (image)
-        RReleaseImage(image);
-    image = NULL;
-did_not_get_any_errors:
+	/* yuck! */
+	goto did_not_get_any_errors;
+ giferr:
+	switch (GifLastError()) {
+	case D_GIF_ERR_OPEN_FAILED:
+		RErrorCode = RERR_OPEN;
+		break;
+	case D_GIF_ERR_READ_FAILED:
+		RErrorCode = RERR_READ;
+		break;
+	default:
+		RErrorCode = RERR_BADIMAGEFILE;
+		break;
+	}
+ bye:
+	if (image)
+		RReleaseImage(image);
+	image = NULL;
+ did_not_get_any_errors:
 
-    if (buffer)
-        free(buffer);
+	if (buffer)
+		free(buffer);
 
-    if (gif)
-        DGifCloseFile(gif);
+	if (gif)
+		DGifCloseFile(gif);
 
-    return image;
+	return image;
 }
 
-#endif /* USE_GIF */
-
+#endif				/* USE_GIF */

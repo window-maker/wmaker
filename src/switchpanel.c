@@ -41,34 +41,29 @@
 extern Bool wShapeSupported;
 #endif
 
-
 struct SwitchPanel {
-    WScreen *scr;
-    WMWindow *win;
-    WMFrame *iconBox;
-    
-    WMArray *icons;
-    WMArray *images;
-    WMArray *windows;
-    RImage *bg;
-    int current;
-    int firstVisible;
-    int visibleCount;
+	WScreen *scr;
+	WMWindow *win;
+	WMFrame *iconBox;
 
-    WMLabel *label;
-    
-    RImage *defIcon;
-    
-    RImage *tileTmp;
-    RImage *tile;
-    
-    WMFont *font;
-    WMColor *white;
+	WMArray *icons;
+	WMArray *images;
+	WMArray *windows;
+	RImage *bg;
+	int current;
+	int firstVisible;
+	int visibleCount;
+
+	WMLabel *label;
+
+	RImage *defIcon;
+
+	RImage *tileTmp;
+	RImage *tile;
+
+	WMFont *font;
+	WMColor *white;
 };
-
-
-
-
 
 extern WPreferences wPreferences;
 
@@ -79,155 +74,146 @@ extern WPreferences wPreferences;
 #define SCREEN_BORDER_SPACING 2*20
 #define SCROLL_STEPS (ICON_TILE_SIZE/2)
 
-static int canReceiveFocus(WWindow *wwin)
+static int canReceiveFocus(WWindow * wwin)
 {
-  if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
-    return 0;
-  if (!wwin->flags.mapped)
-  {
-    if (!wwin->flags.shaded && !wwin->flags.miniaturized && !wwin->flags.hidden)
-      return 0;
-    else
-      return -1;
-  }
-  if (WFLAGP(wwin, no_focusable))
-    return 0;
-  return 1;
+	if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
+		return 0;
+	if (!wwin->flags.mapped) {
+		if (!wwin->flags.shaded && !wwin->flags.miniaturized && !wwin->flags.hidden)
+			return 0;
+		else
+			return -1;
+	}
+	if (WFLAGP(wwin, no_focusable))
+		return 0;
+	return 1;
 }
 
-
-static void changeImage(WSwitchPanel *panel, int idecks, int selected)
+static void changeImage(WSwitchPanel * panel, int idecks, int selected)
 {
-    WMFrame *icon = WMGetFromArray(panel->icons, idecks);
-    RImage *image= WMGetFromArray(panel->images, idecks);
+	WMFrame *icon = WMGetFromArray(panel->icons, idecks);
+	RImage *image = WMGetFromArray(panel->images, idecks);
 
-    if (!panel->bg && !panel->tile) {
-        if (!selected)
-          WMSetFrameRelief(icon, WRFlat);
-    }
+	if (!panel->bg && !panel->tile) {
+		if (!selected)
+			WMSetFrameRelief(icon, WRFlat);
+	}
 
-    if (image && icon) {
-        RImage *back;
-        int opaq= 255;
-        RImage *tile;
-        WMPoint pos;
-        Pixmap p;
+	if (image && icon) {
+		RImage *back;
+		int opaq = 255;
+		RImage *tile;
+		WMPoint pos;
+		Pixmap p;
 
-        if (canReceiveFocus(WMGetFromArray(panel->windows, idecks)) < 0)
-          opaq= 50;
+		if (canReceiveFocus(WMGetFromArray(panel->windows, idecks)) < 0)
+			opaq = 50;
 
-        pos= WMGetViewPosition(WMWidgetView(icon));
-        back= panel->tileTmp;
-        if (panel->bg)
-          RCopyArea(back, panel->bg,
-                    BORDER_SPACE+pos.x-panel->firstVisible*ICON_TILE_SIZE, BORDER_SPACE+pos.y,
-                    back->width, back->height,
-                    0, 0);
-        else
-        {
-            RColor color;
-            WMScreen *wscr= WMWidgetScreen(icon);
-            color.red= 255;
-            color.red = WMRedComponentOfColor(WMGrayColor(wscr))>>8;
-            color.green = WMGreenComponentOfColor(WMGrayColor(wscr))>>8;
-            color.blue = WMBlueComponentOfColor(WMGrayColor(wscr))>>8;
-            RFillImage(back, &color);
-        }
-        if (selected)
-        {
-            tile= panel->tile;
-            RCombineArea(back, tile, 0, 0, tile->width, tile->height,
-                         (back->width - tile->width)/2, (back->height - tile->height)/2);
-        }
-        RCombineAreaWithOpaqueness(back, image, 0, 0, image->width, image->height,
-                                   (back->width - image->width)/2, (back->height - image->height)/2,
-                                   opaq);
+		pos = WMGetViewPosition(WMWidgetView(icon));
+		back = panel->tileTmp;
+		if (panel->bg)
+			RCopyArea(back, panel->bg,
+				  BORDER_SPACE + pos.x - panel->firstVisible * ICON_TILE_SIZE,
+				  BORDER_SPACE + pos.y, back->width, back->height, 0, 0);
+		else {
+			RColor color;
+			WMScreen *wscr = WMWidgetScreen(icon);
+			color.red = 255;
+			color.red = WMRedComponentOfColor(WMGrayColor(wscr)) >> 8;
+			color.green = WMGreenComponentOfColor(WMGrayColor(wscr)) >> 8;
+			color.blue = WMBlueComponentOfColor(WMGrayColor(wscr)) >> 8;
+			RFillImage(back, &color);
+		}
+		if (selected) {
+			tile = panel->tile;
+			RCombineArea(back, tile, 0, 0, tile->width, tile->height,
+				     (back->width - tile->width) / 2, (back->height - tile->height) / 2);
+		}
+		RCombineAreaWithOpaqueness(back, image, 0, 0, image->width, image->height,
+					   (back->width - image->width) / 2, (back->height - image->height) / 2,
+					   opaq);
 
-        RConvertImage(panel->scr->rcontext, back, &p);
-        XSetWindowBackgroundPixmap(dpy, WMWidgetXID(icon), p);
-        XClearWindow(dpy, WMWidgetXID(icon));
-        XFreePixmap(dpy, p);
-    }
+		RConvertImage(panel->scr->rcontext, back, &p);
+		XSetWindowBackgroundPixmap(dpy, WMWidgetXID(icon), p);
+		XClearWindow(dpy, WMWidgetXID(icon));
+		XFreePixmap(dpy, p);
+	}
 
-    if (!panel->bg && !panel->tile) {
-        if (selected)
-          WMSetFrameRelief(icon, WRSimple);
-    }
+	if (!panel->bg && !panel->tile) {
+		if (selected)
+			WMSetFrameRelief(icon, WRSimple);
+	}
 }
 
-
-static RImage *scaleDownIfNeeded(RImage *image)
+static RImage *scaleDownIfNeeded(RImage * image)
 {
-    if (image && ((image->width - ICON_SIZE) > 2 || (image->height - ICON_SIZE) > 2)) {
-        RImage *nimage;
-        nimage= RScaleImage(image, ICON_SIZE, (image->height * ICON_SIZE / image->width));
-        RReleaseImage(image);
-        image= nimage;
-    }
-    return image;
+	if (image && ((image->width - ICON_SIZE) > 2 || (image->height - ICON_SIZE) > 2)) {
+		RImage *nimage;
+		nimage = RScaleImage(image, ICON_SIZE, (image->height * ICON_SIZE / image->width));
+		RReleaseImage(image);
+		image = nimage;
+	}
+	return image;
 }
 
-
-static void addIconForWindow(WSwitchPanel *panel, WMWidget *parent, WWindow *wwin,
-                             int x, int y)
+static void addIconForWindow(WSwitchPanel * panel, WMWidget * parent, WWindow * wwin, int x, int y)
 {
-    WMFrame *icon= WMCreateFrame(parent);
-    RImage *image = NULL;
+	WMFrame *icon = WMCreateFrame(parent);
+	RImage *image = NULL;
 
-    WMSetFrameRelief(icon, WRFlat);
-    WMResizeWidget(icon, ICON_TILE_SIZE, ICON_TILE_SIZE);
-    WMMoveWidget(icon, x, y);
-    
-    if (!WFLAGP(wwin, always_user_icon) && wwin->net_icon_image)
-      image = RRetainImage(wwin->net_icon_image);
-    
-    // Make this use a caching thing. When there are many windows,
-    // it's very likely that most of them are instances of the same thing,
-    // so caching them should get performance acceptable in these cases.
-    if (!image)
-      image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class);
-    
-    if (!image && !panel->defIcon) {
-        char *file = wDefaultGetIconFile(panel->scr, NULL, NULL, False);
-        if (file) {
-            char *path = FindImage(wPreferences.icon_path, file);
-            if (path) {
-                image = RLoadImage(panel->scr->rcontext, path, 0);
-                wfree(path);
-            }
-        }
-        if (image)
-          panel->defIcon= scaleDownIfNeeded(image);
-        image= NULL;
-    }
-    if (!image && panel->defIcon)
-      image= RRetainImage(panel->defIcon);
-    
-    image= scaleDownIfNeeded(image);
-    
-    WMAddToArray(panel->images, image);
-    WMAddToArray(panel->icons, icon);
+	WMSetFrameRelief(icon, WRFlat);
+	WMResizeWidget(icon, ICON_TILE_SIZE, ICON_TILE_SIZE);
+	WMMoveWidget(icon, x, y);
+
+	if (!WFLAGP(wwin, always_user_icon) && wwin->net_icon_image)
+		image = RRetainImage(wwin->net_icon_image);
+
+	// Make this use a caching thing. When there are many windows,
+	// it's very likely that most of them are instances of the same thing,
+	// so caching them should get performance acceptable in these cases.
+	if (!image)
+		image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class);
+
+	if (!image && !panel->defIcon) {
+		char *file = wDefaultGetIconFile(panel->scr, NULL, NULL, False);
+		if (file) {
+			char *path = FindImage(wPreferences.icon_path, file);
+			if (path) {
+				image = RLoadImage(panel->scr->rcontext, path, 0);
+				wfree(path);
+			}
+		}
+		if (image)
+			panel->defIcon = scaleDownIfNeeded(image);
+		image = NULL;
+	}
+	if (!image && panel->defIcon)
+		image = RRetainImage(panel->defIcon);
+
+	image = scaleDownIfNeeded(image);
+
+	WMAddToArray(panel->images, image);
+	WMAddToArray(panel->icons, icon);
 }
 
-
-static void scrollIcons(WSwitchPanel *panel, int delta)
+static void scrollIcons(WSwitchPanel * panel, int delta)
 {
-    int nfirst= panel->firstVisible + delta;
-    int i;
-    int count= WMGetArrayItemCount(panel->windows);
+	int nfirst = panel->firstVisible + delta;
+	int i;
+	int count = WMGetArrayItemCount(panel->windows);
 //    int nx, ox;
 //    struct timeval tv1, tv2;
 
-    if (count <= panel->visibleCount)
-      return;
+	if (count <= panel->visibleCount)
+		return;
 
-    if (nfirst < 0)
-      nfirst= 0;
-    else if (nfirst >= count-panel->visibleCount)
-      nfirst= count-panel->visibleCount;
+	if (nfirst < 0)
+		nfirst = 0;
+	else if (nfirst >= count - panel->visibleCount)
+		nfirst = count - panel->visibleCount;
 
-    if (nfirst == panel->firstVisible)
-      return;
+	if (nfirst == panel->firstVisible)
+		return;
 /*
     ox = -panel->firstVisible * ICON_TILE_SIZE;
     nx = -nfirst * ICON_TILE_SIZE;
@@ -241,494 +227,466 @@ static void scrollIcons(WSwitchPanel *panel, int delta)
         if (diff < 200)
           wusleep(300-diff);
     }
- */    
-    WMMoveWidget(panel->iconBox, -nfirst*ICON_TILE_SIZE, 0);
+ */
+	WMMoveWidget(panel->iconBox, -nfirst * ICON_TILE_SIZE, 0);
 
-    panel->firstVisible= nfirst;
-    
-    for (i= panel->firstVisible; i < panel->firstVisible+panel->visibleCount; i++) {
-        changeImage(panel, i, i == panel->current);
-    }
+	panel->firstVisible = nfirst;
+
+	for (i = panel->firstVisible; i < panel->firstVisible + panel->visibleCount; i++) {
+		changeImage(panel, i, i == panel->current);
+	}
 }
-
 
 /*
  * 0 1 2
  * 3 4 5
  * 6 7 8
  */
-static RImage *assemblePuzzleImage(RImage **images, int width, int height)
+static RImage *assemblePuzzleImage(RImage ** images, int width, int height)
 {
-    RImage *img= RCreateImage(width, height, 1);
-    RImage *tmp;
-    int tw, th;
-    RColor color;
-    if (!img)
-      return NULL;
+	RImage *img = RCreateImage(width, height, 1);
+	RImage *tmp;
+	int tw, th;
+	RColor color;
+	if (!img)
+		return NULL;
 
-    color.red= 0;
-    color.green= 0;
-    color.blue= 0;
-    color.alpha= 255;
+	color.red = 0;
+	color.green = 0;
+	color.blue = 0;
+	color.alpha = 255;
 
-    RFillImage(img, &color);
+	RFillImage(img, &color);
 
-    tw= width-images[0]->width-images[2]->width;
-    th= height-images[0]->height-images[6]->height;
+	tw = width - images[0]->width - images[2]->width;
+	th = height - images[0]->height - images[6]->height;
 
-    if (tw <= 0 || th <= 0) {
-        //XXX
-        return NULL;
-    }
+	if (tw <= 0 || th <= 0) {
+		//XXX
+		return NULL;
+	}
 
-    /* top */
-    if (tw > 0) {
-        tmp= RSmoothScaleImage(images[1], tw, images[1]->height);
-        RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height,
-                  images[0]->width, 0);
-        RReleaseImage(tmp);
-    }
-    /* bottom */
-    if (tw > 0) {
-        tmp= RSmoothScaleImage(images[7], tw, images[7]->height);
-        RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height,
-                  images[6]->width, height-images[6]->height);
-        RReleaseImage(tmp);
-    }
-    /* left */
-    if (th > 0) {
-        tmp= RSmoothScaleImage(images[3], images[3]->width, th);
-        RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height,
-                  0, images[0]->height);
-        RReleaseImage(tmp);
-    }
-    /* right */
-    if (th > 0) {
-        tmp= RSmoothScaleImage(images[5], images[5]->width, th);
-        RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height,
-                  width-images[5]->width, images[2]->height);
-        RReleaseImage(tmp);
-    }
-    /* center */
-    if (tw > 0 && th > 0) {
-        tmp= RSmoothScaleImage(images[4], tw, th);
-        RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height,
-                  images[0]->width, images[0]->height);
-        RReleaseImage(tmp);
-    }
+	/* top */
+	if (tw > 0) {
+		tmp = RSmoothScaleImage(images[1], tw, images[1]->height);
+		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, images[0]->width, 0);
+		RReleaseImage(tmp);
+	}
+	/* bottom */
+	if (tw > 0) {
+		tmp = RSmoothScaleImage(images[7], tw, images[7]->height);
+		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, images[6]->width, height - images[6]->height);
+		RReleaseImage(tmp);
+	}
+	/* left */
+	if (th > 0) {
+		tmp = RSmoothScaleImage(images[3], images[3]->width, th);
+		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, 0, images[0]->height);
+		RReleaseImage(tmp);
+	}
+	/* right */
+	if (th > 0) {
+		tmp = RSmoothScaleImage(images[5], images[5]->width, th);
+		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, width - images[5]->width, images[2]->height);
+		RReleaseImage(tmp);
+	}
+	/* center */
+	if (tw > 0 && th > 0) {
+		tmp = RSmoothScaleImage(images[4], tw, th);
+		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, images[0]->width, images[0]->height);
+		RReleaseImage(tmp);
+	}
 
-    /* corners */
-    RCopyArea(img, images[0], 0, 0, images[0]->width, images[0]->height,
-              0, 0);
+	/* corners */
+	RCopyArea(img, images[0], 0, 0, images[0]->width, images[0]->height, 0, 0);
 
-    RCopyArea(img, images[2], 0, 0, images[2]->width, images[2]->height,
-              width-images[2]->width, 0);
+	RCopyArea(img, images[2], 0, 0, images[2]->width, images[2]->height, width - images[2]->width, 0);
 
-    RCopyArea(img, images[6], 0, 0, images[6]->width, images[6]->height,
-              0, height-images[6]->height);
+	RCopyArea(img, images[6], 0, 0, images[6]->width, images[6]->height, 0, height - images[6]->height);
 
-    RCopyArea(img, images[8], 0, 0, images[8]->width, images[8]->height,
-              width-images[8]->width, height-images[8]->height);
+	RCopyArea(img, images[8], 0, 0, images[8]->width, images[8]->height,
+		  width - images[8]->width, height - images[8]->height);
 
-    return img;
+	return img;
 }
 
-static RImage *createBackImage(WScreen *scr, int width, int height)
+static RImage *createBackImage(WScreen * scr, int width, int height)
 {
-    return assemblePuzzleImage(wPreferences.swbackImage, width, height);
+	return assemblePuzzleImage(wPreferences.swbackImage, width, height);
 }
 
-
-static RImage *getTile(WSwitchPanel *panel)
+static RImage *getTile(WSwitchPanel * panel)
 {
-    RImage *stile;
+	RImage *stile;
 
-    if (!wPreferences.swtileImage)
-        return NULL;
+	if (!wPreferences.swtileImage)
+		return NULL;
 
-    stile = RScaleImage(wPreferences.swtileImage, ICON_TILE_SIZE, ICON_TILE_SIZE);
-    if (!stile)
-        return wPreferences.swtileImage;
-    
-    return stile;
+	stile = RScaleImage(wPreferences.swtileImage, ICON_TILE_SIZE, ICON_TILE_SIZE);
+	if (!stile)
+		return wPreferences.swtileImage;
+
+	return stile;
 }
 
-
-static void
-drawTitle(WSwitchPanel *panel, int idecks, char *title)
+static void drawTitle(WSwitchPanel * panel, int idecks, char *title)
 {
-    char *ntitle;
-    int width= WMWidgetWidth(panel->win);
-    int x;
+	char *ntitle;
+	int width = WMWidgetWidth(panel->win);
+	int x;
 
-    if (title)
-        ntitle= ShrinkString(panel->font, title, width-2*BORDER_SPACE);
-    else
-        ntitle= NULL;
+	if (title)
+		ntitle = ShrinkString(panel->font, title, width - 2 * BORDER_SPACE);
+	else
+		ntitle = NULL;
 
-    if (panel->bg) {
-        if (ntitle) {
-            if (strcmp(ntitle, title)!=0)
-              x= BORDER_SPACE;
-            else
-            {
-                int w= WMWidthOfString(panel->font, ntitle, strlen(ntitle));
-            
-                x= BORDER_SPACE+(idecks-panel->firstVisible)*ICON_TILE_SIZE + ICON_TILE_SIZE/2 - w/2;
-                if (x < BORDER_SPACE)
-                    x= BORDER_SPACE;
-                else if (x + w > width-BORDER_SPACE)
-                    x= width-BORDER_SPACE-w;
-            }
-        }       
-        XClearWindow(dpy, WMWidgetXID(panel->win));
-        if (ntitle)
-            WMDrawString(panel->scr->wmscreen, 
-                         WMWidgetXID(panel->win),
-                         panel->white, panel->font,
-                         x, WMWidgetHeight(panel->win) - BORDER_SPACE - LABEL_HEIGHT + WMFontHeight(panel->font)/2,
-                         ntitle, strlen(ntitle));
-    } else {
-        if (ntitle)
-            WMSetLabelText(panel->label, ntitle);
-    }
-    if (ntitle)
-        free(ntitle);
+	if (panel->bg) {
+		if (ntitle) {
+			if (strcmp(ntitle, title) != 0)
+				x = BORDER_SPACE;
+			else {
+				int w = WMWidthOfString(panel->font, ntitle, strlen(ntitle));
+
+				x = BORDER_SPACE + (idecks - panel->firstVisible) * ICON_TILE_SIZE +
+				    ICON_TILE_SIZE / 2 - w / 2;
+				if (x < BORDER_SPACE)
+					x = BORDER_SPACE;
+				else if (x + w > width - BORDER_SPACE)
+					x = width - BORDER_SPACE - w;
+			}
+		}
+		XClearWindow(dpy, WMWidgetXID(panel->win));
+		if (ntitle)
+			WMDrawString(panel->scr->wmscreen,
+				     WMWidgetXID(panel->win),
+				     panel->white, panel->font,
+				     x,
+				     WMWidgetHeight(panel->win) - BORDER_SPACE - LABEL_HEIGHT +
+				     WMFontHeight(panel->font) / 2, ntitle, strlen(ntitle));
+	} else {
+		if (ntitle)
+			WMSetLabelText(panel->label, ntitle);
+	}
+	if (ntitle)
+		free(ntitle);
 }
 
-
-
-static WMArray *makeWindowListArray(WScreen *scr, WWindow *curwin, int workspace,
-                                    int include_unmapped)
+static WMArray *makeWindowListArray(WScreen * scr, WWindow * curwin, int workspace, int include_unmapped)
 {
-    WMArray *windows= WMCreateArray(10);
-    int fl;
-    WWindow *wwin;
+	WMArray *windows = WMCreateArray(10);
+	int fl;
+	WWindow *wwin;
 
-    for (fl= 0; fl < 2; fl++) {
-        for (wwin= curwin; wwin; wwin= wwin->prev) {
-            if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-                (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
-                (wwin->flags.mapped || include_unmapped)) {
-                WMAddToArray(windows, wwin);
-            }
-        }
-        wwin = curwin;
-        /* start over from the beginning of the list */
-        while (wwin->next)
-          wwin = wwin->next;
-        
-        for (wwin= curwin; wwin && wwin != curwin; wwin= wwin->prev) {
-            if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-                (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
-                (wwin->flags.mapped || include_unmapped)) {
-                WMAddToArray(windows, wwin);
-            }
-        }
-    }
+	for (fl = 0; fl < 2; fl++) {
+		for (wwin = curwin; wwin; wwin = wwin->prev) {
+			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
+			    (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
+			    (wwin->flags.mapped || include_unmapped)) {
+				WMAddToArray(windows, wwin);
+			}
+		}
+		wwin = curwin;
+		/* start over from the beginning of the list */
+		while (wwin->next)
+			wwin = wwin->next;
 
-    return windows;
+		for (wwin = curwin; wwin && wwin != curwin; wwin = wwin->prev) {
+			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
+			    (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
+			    (wwin->flags.mapped || include_unmapped)) {
+				WMAddToArray(windows, wwin);
+			}
+		}
+	}
+
+	return windows;
 }
 
-
-
-
-
-WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace)
+WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, int workspace)
 {
-    WWindow *wwin;
-    WSwitchPanel *panel= wmalloc(sizeof(WSwitchPanel));
-    WMFrame *viewport;
-    int i;
-    int width, height;
-    int iconsThatFitCount;
-    int count;
-    WMRect rect;
-    rect= wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+	WWindow *wwin;
+	WSwitchPanel *panel = wmalloc(sizeof(WSwitchPanel));
+	WMFrame *viewport;
+	int i;
+	int width, height;
+	int iconsThatFitCount;
+	int count;
+	WMRect rect;
+	rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
 
-    memset(panel, 0, sizeof(WSwitchPanel));
+	memset(panel, 0, sizeof(WSwitchPanel));
 
-    panel->scr= scr;
+	panel->scr = scr;
 
-    panel->windows= makeWindowListArray(scr, curwin, workspace,
-                                        wPreferences.swtileImage!=0);
-    count= WMGetArrayItemCount(panel->windows);
-    
-    if (count == 0) {
-        WMFreeArray(panel->windows);
-        wfree(panel);
-        return NULL;
-    }
+	panel->windows = makeWindowListArray(scr, curwin, workspace, wPreferences.swtileImage != 0);
+	count = WMGetArrayItemCount(panel->windows);
 
-    width= ICON_TILE_SIZE*count;
-    iconsThatFitCount= count;
+	if (count == 0) {
+		WMFreeArray(panel->windows);
+		wfree(panel);
+		return NULL;
+	}
 
-    if (width > rect.size.width) {
-        iconsThatFitCount = (rect.size.width - SCREEN_BORDER_SPACING)/ICON_TILE_SIZE;
-        width= iconsThatFitCount*ICON_TILE_SIZE;
-    }
-    
-    panel->visibleCount= iconsThatFitCount;
+	width = ICON_TILE_SIZE * count;
+	iconsThatFitCount = count;
 
-    if (!wPreferences.swtileImage)
-        return panel;
+	if (width > rect.size.width) {
+		iconsThatFitCount = (rect.size.width - SCREEN_BORDER_SPACING) / ICON_TILE_SIZE;
+		width = iconsThatFitCount * ICON_TILE_SIZE;
+	}
 
-    height= LABEL_HEIGHT + ICON_TILE_SIZE;
+	panel->visibleCount = iconsThatFitCount;
 
-    panel->tileTmp= RCreateImage(ICON_TILE_SIZE, ICON_TILE_SIZE, 1);
-    panel->tile= getTile(panel);
-    if (panel->tile && wPreferences.swbackImage[8]) {
-        panel->bg= createBackImage(scr, width+2*BORDER_SPACE, height+2*BORDER_SPACE);
-    }
-    if (!panel->tileTmp || !panel->tile) {
-        if (panel->bg)
-          RReleaseImage(panel->bg);
-        panel->bg= NULL;
-        if (panel->tile)
-          RReleaseImage(panel->tile);
-        panel->tile= NULL;
-        if (panel->tileTmp)
-          RReleaseImage(panel->tileTmp);
-        panel->tileTmp= NULL;
-    }
+	if (!wPreferences.swtileImage)
+		return panel;
 
-    panel->white= WMWhiteColor(scr->wmscreen);
-    panel->font= WMBoldSystemFontOfSize(scr->wmscreen, 12);
-    panel->icons= WMCreateArray(count);
-    panel->images= WMCreateArray(count);
+	height = LABEL_HEIGHT + ICON_TILE_SIZE;
 
-    panel->win = WMCreateWindow(scr->wmscreen, "");
+	panel->tileTmp = RCreateImage(ICON_TILE_SIZE, ICON_TILE_SIZE, 1);
+	panel->tile = getTile(panel);
+	if (panel->tile && wPreferences.swbackImage[8]) {
+		panel->bg = createBackImage(scr, width + 2 * BORDER_SPACE, height + 2 * BORDER_SPACE);
+	}
+	if (!panel->tileTmp || !panel->tile) {
+		if (panel->bg)
+			RReleaseImage(panel->bg);
+		panel->bg = NULL;
+		if (panel->tile)
+			RReleaseImage(panel->tile);
+		panel->tile = NULL;
+		if (panel->tileTmp)
+			RReleaseImage(panel->tileTmp);
+		panel->tileTmp = NULL;
+	}
 
-    if (!panel->bg) {
-        WMFrame *frame = WMCreateFrame(panel->win);
-        WMColor *darkGray = WMDarkGrayColor(scr->wmscreen);
-        WMSetFrameRelief(frame, WRSimple);
-        WMSetViewExpandsToParent(WMWidgetView(frame), 0, 0, 0, 0);
-        
-        panel->label = WMCreateLabel(panel->win);
-        WMResizeWidget(panel->label, width, LABEL_HEIGHT);
-        WMMoveWidget(panel->label, BORDER_SPACE, BORDER_SPACE+ICON_TILE_SIZE+5);
-        WMSetLabelRelief(panel->label, WRSimple);
-        WMSetWidgetBackgroundColor(panel->label, darkGray);
-        WMSetLabelFont(panel->label, panel->font);
-        WMSetLabelTextColor(panel->label, panel->white);
-        
-        WMReleaseColor(darkGray);
-        height+= 5;
-    }
-    
-    WMResizeWidget(panel->win, width + 2*BORDER_SPACE, height + 2*BORDER_SPACE);
-    
-    viewport= WMCreateFrame(panel->win);
-    WMResizeWidget(viewport, width, ICON_TILE_SIZE);
-    WMMoveWidget(viewport, BORDER_SPACE, BORDER_SPACE);
-    WMSetFrameRelief(viewport, WRFlat);
-    
-    panel->iconBox= WMCreateFrame(viewport);
-    WMMoveWidget(panel->iconBox, 0, 0);
-    WMResizeWidget(panel->iconBox, ICON_TILE_SIZE*count, ICON_TILE_SIZE);
-    WMSetFrameRelief(panel->iconBox, WRFlat);
-    
-    WM_ITERATE_ARRAY(panel->windows, wwin, i) {
-        addIconForWindow(panel, panel->iconBox, wwin, i*ICON_TILE_SIZE, 0);
-    }
+	panel->white = WMWhiteColor(scr->wmscreen);
+	panel->font = WMBoldSystemFontOfSize(scr->wmscreen, 12);
+	panel->icons = WMCreateArray(count);
+	panel->images = WMCreateArray(count);
 
-    WMMapSubwidgets(panel->win);
-    WMRealizeWidget(panel->win);
-    
-    WM_ITERATE_ARRAY(panel->windows, wwin, i) {
-        changeImage(panel, i, 0);
-    }
-    
-    if (panel->bg) {
-        Pixmap pixmap, mask;
+	panel->win = WMCreateWindow(scr->wmscreen, "");
 
-        RConvertImageMask(scr->rcontext, panel->bg, &pixmap, &mask, 250);
+	if (!panel->bg) {
+		WMFrame *frame = WMCreateFrame(panel->win);
+		WMColor *darkGray = WMDarkGrayColor(scr->wmscreen);
+		WMSetFrameRelief(frame, WRSimple);
+		WMSetViewExpandsToParent(WMWidgetView(frame), 0, 0, 0, 0);
 
-        XSetWindowBackgroundPixmap(dpy, WMWidgetXID(panel->win), pixmap);
+		panel->label = WMCreateLabel(panel->win);
+		WMResizeWidget(panel->label, width, LABEL_HEIGHT);
+		WMMoveWidget(panel->label, BORDER_SPACE, BORDER_SPACE + ICON_TILE_SIZE + 5);
+		WMSetLabelRelief(panel->label, WRSimple);
+		WMSetWidgetBackgroundColor(panel->label, darkGray);
+		WMSetLabelFont(panel->label, panel->font);
+		WMSetLabelTextColor(panel->label, panel->white);
+
+		WMReleaseColor(darkGray);
+		height += 5;
+	}
+
+	WMResizeWidget(panel->win, width + 2 * BORDER_SPACE, height + 2 * BORDER_SPACE);
+
+	viewport = WMCreateFrame(panel->win);
+	WMResizeWidget(viewport, width, ICON_TILE_SIZE);
+	WMMoveWidget(viewport, BORDER_SPACE, BORDER_SPACE);
+	WMSetFrameRelief(viewport, WRFlat);
+
+	panel->iconBox = WMCreateFrame(viewport);
+	WMMoveWidget(panel->iconBox, 0, 0);
+	WMResizeWidget(panel->iconBox, ICON_TILE_SIZE * count, ICON_TILE_SIZE);
+	WMSetFrameRelief(panel->iconBox, WRFlat);
+
+	WM_ITERATE_ARRAY(panel->windows, wwin, i) {
+		addIconForWindow(panel, panel->iconBox, wwin, i * ICON_TILE_SIZE, 0);
+	}
+
+	WMMapSubwidgets(panel->win);
+	WMRealizeWidget(panel->win);
+
+	WM_ITERATE_ARRAY(panel->windows, wwin, i) {
+		changeImage(panel, i, 0);
+	}
+
+	if (panel->bg) {
+		Pixmap pixmap, mask;
+
+		RConvertImageMask(scr->rcontext, panel->bg, &pixmap, &mask, 250);
+
+		XSetWindowBackgroundPixmap(dpy, WMWidgetXID(panel->win), pixmap);
 
 #ifdef SHAPE
-        if (mask && wShapeSupported)
-          XShapeCombineMask(dpy, WMWidgetXID(panel->win),
-                            ShapeBounding, 0, 0, mask, ShapeSet);
+		if (mask && wShapeSupported)
+			XShapeCombineMask(dpy, WMWidgetXID(panel->win), ShapeBounding, 0, 0, mask, ShapeSet);
 #endif
-        
-        if (pixmap)
-          XFreePixmap(dpy, pixmap);
-        if (mask)
-          XFreePixmap(dpy, mask);
-    }
 
-    {
-        WMPoint center;
-        center= wGetPointToCenterRectInHead(scr, wGetHeadForPointerLocation(scr),
-                                            width+2*BORDER_SPACE, height+2*BORDER_SPACE);
-        WMMoveWidget(panel->win, center.x, center.y);
-    }
+		if (pixmap)
+			XFreePixmap(dpy, pixmap);
+		if (mask)
+			XFreePixmap(dpy, mask);
+	}
 
-    panel->current= WMGetFirstInArray(panel->windows, curwin);
-    if (panel->current >= 0)
-        changeImage(panel, panel->current, 1);
+	{
+		WMPoint center;
+		center = wGetPointToCenterRectInHead(scr, wGetHeadForPointerLocation(scr),
+						     width + 2 * BORDER_SPACE, height + 2 * BORDER_SPACE);
+		WMMoveWidget(panel->win, center.x, center.y);
+	}
 
-    WMMapWidget(panel->win);
+	panel->current = WMGetFirstInArray(panel->windows, curwin);
+	if (panel->current >= 0)
+		changeImage(panel, panel->current, 1);
 
-    return panel;
+	WMMapWidget(panel->win);
+
+	return panel;
 }
 
-
-void wSwitchPanelDestroy(WSwitchPanel *panel)
+void wSwitchPanelDestroy(WSwitchPanel * panel)
 {
-    int i;
-    RImage *image;
-    
-    if (panel->win)
-      WMUnmapWidget(panel->win);
+	int i;
+	RImage *image;
 
-    if (panel->images) {
-        WM_ITERATE_ARRAY(panel->images, image, i) {
-            if (image)
-              RReleaseImage(image);
-        }
-        WMFreeArray(panel->images);
-    }
-    if (panel->win)
-      WMDestroyWidget(panel->win);
-    if (panel->icons)
-      WMFreeArray(panel->icons);
-    WMFreeArray(panel->windows);
-    if (panel->defIcon)
-      RReleaseImage(panel->defIcon);
-    if (panel->tile)
-      RReleaseImage(panel->tile);
-    if (panel->tileTmp)
-      RReleaseImage(panel->tileTmp);
-    if (panel->bg)
-      RReleaseImage(panel->bg);
-    if (panel->font)
-      WMReleaseFont(panel->font);
-    if (panel->white)
-      WMReleaseColor(panel->white);
-    wfree(panel);
+	if (panel->win)
+		WMUnmapWidget(panel->win);
+
+	if (panel->images) {
+		WM_ITERATE_ARRAY(panel->images, image, i) {
+			if (image)
+				RReleaseImage(image);
+		}
+		WMFreeArray(panel->images);
+	}
+	if (panel->win)
+		WMDestroyWidget(panel->win);
+	if (panel->icons)
+		WMFreeArray(panel->icons);
+	WMFreeArray(panel->windows);
+	if (panel->defIcon)
+		RReleaseImage(panel->defIcon);
+	if (panel->tile)
+		RReleaseImage(panel->tile);
+	if (panel->tileTmp)
+		RReleaseImage(panel->tileTmp);
+	if (panel->bg)
+		RReleaseImage(panel->bg);
+	if (panel->font)
+		WMReleaseFont(panel->font);
+	if (panel->white)
+		WMReleaseColor(panel->white);
+	wfree(panel);
 }
 
-
-WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back)
+WWindow *wSwitchPanelSelectNext(WSwitchPanel * panel, int back)
 {
-    WWindow *wwin;
-    int count = WMGetArrayItemCount(panel->windows);
-    
-    if (count == 0)
-      return NULL;
-    
-    if (panel->win)
-      changeImage(panel, panel->current, 0);
-    
-    if (back)
-      panel->current--;
-    else
-      panel->current++;
+	WWindow *wwin;
+	int count = WMGetArrayItemCount(panel->windows);
 
-    wwin = WMGetFromArray(panel->windows, (count+panel->current)%count);
+	if (count == 0)
+		return NULL;
 
-    if (back)
-    {
-        if (panel->current < 0)
-          scrollIcons(panel, count);
-        else if (panel->current < panel->firstVisible)
-          scrollIcons(panel, -1);
-    }
-    else
-    {
-        if (panel->current >= count)
-          scrollIcons(panel, -count);
-        else if (panel->current - panel->firstVisible >= panel->visibleCount)
-          scrollIcons(panel, 1);
-    }
+	if (panel->win)
+		changeImage(panel, panel->current, 0);
 
-    panel->current= (count+panel->current)%count;
+	if (back)
+		panel->current--;
+	else
+		panel->current++;
 
-    if (panel->win) {
-        drawTitle(panel, panel->current, wwin->frame->title);
+	wwin = WMGetFromArray(panel->windows, (count + panel->current) % count);
 
-        changeImage(panel, panel->current, 1);
-    }
+	if (back) {
+		if (panel->current < 0)
+			scrollIcons(panel, count);
+		else if (panel->current < panel->firstVisible)
+			scrollIcons(panel, -1);
+	} else {
+		if (panel->current >= count)
+			scrollIcons(panel, -count);
+		else if (panel->current - panel->firstVisible >= panel->visibleCount)
+			scrollIcons(panel, 1);
+	}
 
-    return wwin;
+	panel->current = (count + panel->current) % count;
+
+	if (panel->win) {
+		drawTitle(panel, panel->current, wwin->frame->title);
+
+		changeImage(panel, panel->current, 1);
+	}
+
+	return wwin;
 }
 
-
-WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
+WWindow *wSwitchPanelSelectFirst(WSwitchPanel * panel, int back)
 {
-    WWindow *wwin;
-    int count = WMGetArrayItemCount(panel->windows);
+	WWindow *wwin;
+	int count = WMGetArrayItemCount(panel->windows);
 
-    if (count == 0)
-      return NULL;
+	if (count == 0)
+		return NULL;
 
-    if (panel->win)
-      changeImage(panel, panel->current, 0);
-    
-    if (back) {
-        panel->current = count-1;
-        scrollIcons(panel, count);
-    } else {
-        panel->current = 0;
-        scrollIcons(panel, -count);
-    }
-    
-    wwin = WMGetFromArray(panel->windows, panel->current);
-    
-    if (panel->win) {
-        drawTitle(panel, panel->current, wwin->frame->title);
+	if (panel->win)
+		changeImage(panel, panel->current, 0);
 
-        changeImage(panel, panel->current, 1);
-    }
-    return wwin;
+	if (back) {
+		panel->current = count - 1;
+		scrollIcons(panel, count);
+	} else {
+		panel->current = 0;
+		scrollIcons(panel, -count);
+	}
+
+	wwin = WMGetFromArray(panel->windows, panel->current);
+
+	if (panel->win) {
+		drawTitle(panel, panel->current, wwin->frame->title);
+
+		changeImage(panel, panel->current, 1);
+	}
+	return wwin;
 }
 
-
-WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
+WWindow *wSwitchPanelHandleEvent(WSwitchPanel * panel, XEvent * event)
 {
-    WMFrame *icon;
-    int i;
-    int focus= -1;
-    
-    if (!panel->win)
-      return NULL;
+	WMFrame *icon;
+	int i;
+	int focus = -1;
 
- /*   if (event->type == LeaveNotify) {
-        if (event->xcrossing.window == WMWidgetXID(panel->win))
-            focus= 0;
-    } else*/ if (event->type == MotionNotify) {
+	if (!panel->win)
+		return NULL;
 
-        WM_ITERATE_ARRAY(panel->icons, icon, i) {
-            if (WMWidgetXID(icon) == event->xmotion.window) {
-                focus= i;
-                break;
-            }
-        }
-    }  
-    if (focus >= 0 && panel->current != focus) {
-        WWindow *wwin;
-            
-        changeImage(panel, panel->current, 0);
-        changeImage(panel, focus, 1);
-        panel->current= focus;
-            
-        wwin= WMGetFromArray(panel->windows, focus);
-            
-        drawTitle(panel, panel->current, wwin->frame->title);
-            
-        return wwin;
-    }
+	/*   if (event->type == LeaveNotify) {
+	   if (event->xcrossing.window == WMWidgetXID(panel->win))
+	   focus= 0;
+	   } else */ if (event->type == MotionNotify) {
 
-    return NULL;
+		WM_ITERATE_ARRAY(panel->icons, icon, i) {
+			if (WMWidgetXID(icon) == event->xmotion.window) {
+				focus = i;
+				break;
+			}
+		}
+	}
+	if (focus >= 0 && panel->current != focus) {
+		WWindow *wwin;
+
+		changeImage(panel, panel->current, 0);
+		changeImage(panel, focus, 1);
+		panel->current = focus;
+
+		wwin = WMGetFromArray(panel->windows, focus);
+
+		drawTitle(panel, panel->current, wwin->frame->title);
+
+		return wwin;
+	}
+
+	return NULL;
 }
 
-
-Window wSwitchPanelGetWindow(WSwitchPanel *swpanel)
+Window wSwitchPanelGetWindow(WSwitchPanel * swpanel)
 {
-    if (!swpanel->win)
-      return None;
-    return WMWidgetXID(swpanel->win);
+	if (!swpanel->win)
+		return None;
+	return WMWidgetXID(swpanel->win);
 }

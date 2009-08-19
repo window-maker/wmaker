@@ -26,62 +26,54 @@
 #include "WMaker.h"
 #include "app.h"
 
-
-
-WMAppContext*
-WMAppCreateWithMain(Display *display, int screen_number, Window main_window)
+WMAppContext *WMAppCreateWithMain(Display * display, int screen_number, Window main_window)
 {
-    wmAppContext *ctx;
+	wmAppContext *ctx;
 
-    ctx = malloc(sizeof(wmAppContext));
-    if (!ctx)
-        return NULL;
+	ctx = malloc(sizeof(wmAppContext));
+	if (!ctx)
+		return NULL;
 
-    ctx->dpy = display;
-    ctx->screen_number = screen_number;
-    ctx->our_leader_hint = False;
-    ctx->main_window = main_window;
-    ctx->windows = malloc(sizeof(Window));
-    if (!ctx->windows) {
-        free(ctx);
-        return NULL;
-    }
-    ctx->win_count = 1;
-    ctx->windows[0] = main_window;
+	ctx->dpy = display;
+	ctx->screen_number = screen_number;
+	ctx->our_leader_hint = False;
+	ctx->main_window = main_window;
+	ctx->windows = malloc(sizeof(Window));
+	if (!ctx->windows) {
+		free(ctx);
+		return NULL;
+	}
+	ctx->win_count = 1;
+	ctx->windows[0] = main_window;
 
-    ctx->main_menu = NULL;
+	ctx->main_menu = NULL;
 
-    ctx->last_menu_tag = 100;
+	ctx->last_menu_tag = 100;
 
-    return ctx;
+	return ctx;
 }
 
-
-int
-WMAppAddWindow(WMAppContext *app, Window window)
+int WMAppAddWindow(WMAppContext * app, Window window)
 {
-    Window *win;
+	Window *win;
 
-    win = malloc(sizeof(Window)*(app->win_count+1));
-    if (!win)
-        return False;
+	win = malloc(sizeof(Window) * (app->win_count + 1));
+	if (!win)
+		return False;
 
-    memcpy(win, app->windows, sizeof(Window)*app->win_count);
+	memcpy(win, app->windows, sizeof(Window) * app->win_count);
 
-    free(app->windows);
+	free(app->windows);
 
-    win[app->win_count] = window;
-    app->windows = win;
-    app->win_count++;
+	win[app->win_count] = window;
+	app->windows = win;
+	app->win_count++;
 
-    return True;
+	return True;
 }
 
-
-int
-WMAppSetMainMenu(WMAppContext *app, WMMenu *menu)
+int WMAppSetMainMenu(WMAppContext * app, WMMenu * menu)
 {
-    app->main_menu = menu;
-    return True;
+	app->main_menu = menu;
+	return True;
 }
-

@@ -41,9 +41,7 @@ extern Atom _XA_WM_DELETE_WINDOW;
 extern Time LastTimestamp;
 extern int wScreenCount;
 
-
-static void wipeDesktop(WScreen *scr);
-
+static void wipeDesktop(WScreen * scr);
 
 /*
  *----------------------------------------------------------------------
@@ -55,120 +53,115 @@ static void wipeDesktop(WScreen *scr);
  *
  *----------------------------------------------------------------------
  */
-void
-Shutdown(WShutdownMode mode)
+void Shutdown(WShutdownMode mode)
 {
-    int i;
-    extern int inotifyFD;
+	int i;
+	extern int inotifyFD;
 
-    switch (mode) {
-    case WSLogoutMode:
+	switch (mode) {
+	case WSLogoutMode:
 #ifdef XSMP_ENABLED
-        wSessionRequestShutdown();
-        break;
+		wSessionRequestShutdown();
+		break;
 #else
-        /* fall through */
+		/* fall through */
 #endif
-    case WSKillMode:
-    case WSExitMode:
-        /* if there is no session manager, send SAVE_YOURSELF to
-         * the clients */
+	case WSKillMode:
+	case WSExitMode:
+		/* if there is no session manager, send SAVE_YOURSELF to
+		 * the clients */
 #if 0
 #ifdef XSMP_ENABLED
-        if (!wSessionIsManaged())
+		if (!wSessionIsManaged())
 #endif
-            for (i = 0; i < wScreenCount; i++) {
-                WScreen *scr;
+			for (i = 0; i < wScreenCount; i++) {
+				WScreen *scr;
 
-                scr = wScreenWithNumber(i);
-                if (scr) {
-                    wSessionSendSaveYourself(scr);
-                }
-            }
+				scr = wScreenWithNumber(i);
+				if (scr) {
+					wSessionSendSaveYourself(scr);
+				}
+			}
 #endif
-        close(inotifyFD);
-        for (i = 0; i < wScreenCount; i++) {
-            WScreen *scr;
+		close(inotifyFD);
+		for (i = 0; i < wScreenCount; i++) {
+			WScreen *scr;
 
-            scr = wScreenWithNumber(i);
-            if (scr) {
-                if (scr->helper_pid)
-                    kill(scr->helper_pid, SIGKILL);
+			scr = wScreenWithNumber(i);
+			if (scr) {
+				if (scr->helper_pid)
+					kill(scr->helper_pid, SIGKILL);
 
-                /* if the session is not being managed, save restart info */
+				/* if the session is not being managed, save restart info */
 #ifdef XSMP_ENABLED
-                if (!wSessionIsManaged())
+				if (!wSessionIsManaged())
 #endif
-                    wSessionSaveClients(scr);
+					wSessionSaveClients(scr);
 
-                wScreenSaveState(scr);
+				wScreenSaveState(scr);
 
-                if (mode == WSKillMode)
-                    wipeDesktop(scr);
-                else
-                    RestoreDesktop(scr);
-            }
-        }
-        ExecExitScript();
-        Exit(0);
-        break;
+				if (mode == WSKillMode)
+					wipeDesktop(scr);
+				else
+					RestoreDesktop(scr);
+			}
+		}
+		ExecExitScript();
+		Exit(0);
+		break;
 
-    case WSRestartPreparationMode:
-        for (i=0; i<wScreenCount; i++) {
-            WScreen *scr;
+	case WSRestartPreparationMode:
+		for (i = 0; i < wScreenCount; i++) {
+			WScreen *scr;
 
-            close(inotifyFD);
-            scr = wScreenWithNumber(i);
-            if (scr) {
-                if (scr->helper_pid)
-                    kill(scr->helper_pid, SIGKILL);
-                wScreenSaveState(scr);
-                RestoreDesktop(scr);
-            }
-        }
-        break;
-    }
+			close(inotifyFD);
+			scr = wScreenWithNumber(i);
+			if (scr) {
+				if (scr->helper_pid)
+					kill(scr->helper_pid, SIGKILL);
+				wScreenSaveState(scr);
+				RestoreDesktop(scr);
+			}
+		}
+		break;
+	}
 }
 
-
-static void
-restoreWindows(WMBag *bag, WMBagIterator iter)
+static void restoreWindows(WMBag * bag, WMBagIterator iter)
 {
-    WCoreWindow *next;
-    WCoreWindow *core;
-    WWindow *wwin;
+	WCoreWindow *next;
+	WCoreWindow *core;
+	WWindow *wwin;
 
+	if (iter == NULL) {
+		core = WMBagFirst(bag, &iter);
+	} else {
+		core = WMBagNext(bag, &iter);
+	}
 
-    if (iter == NULL) {
-        core = WMBagFirst(bag, &iter);
-    } else {
-        core = WMBagNext(bag, &iter);
-    }
+	if (core == NULL)
+		return;
 
-    if (core == NULL)
-        return;
+	restoreWindows(bag, iter);
 
-    restoreWindows(bag, iter);
+	/* go to the end of the list */
+	while (core->stacking->under)
+		core = core->stacking->under;
 
-    /* go to the end of the list */
-    while (core->stacking->under)
-        core = core->stacking->under;
+	while (core) {
+		next = core->stacking->above;
 
-    while (core) {
-        next = core->stacking->above;
+		if (core->descriptor.parent_type == WCLASS_WINDOW) {
+			Window window;
 
-        if (core->descriptor.parent_type==WCLASS_WINDOW) {
-            Window window;
-
-            wwin = core->descriptor.parent;
-            window = wwin->client_win;
-            wUnmanageWindow(wwin, !wwin->flags.internal_window, False);
-            XMapWindow(dpy, window);
-        }
-        core = next;
-    }
+			wwin = core->descriptor.parent;
+			window = wwin->client_win;
+			wUnmanageWindow(wwin, !wwin->flags.internal_window, False);
+			XMapWindow(dpy, window);
+		}
+		core = next;
+	}
 }
-
 
 /*
  *----------------------------------------------------------------------
@@ -182,28 +175,26 @@ restoreWindows(WMBag *bag, WMBagIterator iter)
  *
  *----------------------------------------------------------------------
  */
-void
-RestoreDesktop(WScreen *scr)
+void RestoreDesktop(WScreen * scr)
 {
-    if (scr->helper_pid > 0) {
-        kill(scr->helper_pid, SIGTERM);
-        scr->helper_pid = 0;
-    }
+	if (scr->helper_pid > 0) {
+		kill(scr->helper_pid, SIGTERM);
+		scr->helper_pid = 0;
+	}
 
-    XGrabServer(dpy);
-    wDestroyInspectorPanels();
+	XGrabServer(dpy);
+	wDestroyInspectorPanels();
 
-    /* reparent windows back to the root window, keeping the stacking order */
-    restoreWindows(scr->stacking_list, NULL);
+	/* reparent windows back to the root window, keeping the stacking order */
+	restoreWindows(scr->stacking_list, NULL);
 
-    XUngrabServer(dpy);
-    XSetInputFocus(dpy, PointerRoot, RevertToParent, CurrentTime);
-    wColormapInstallForWindow(scr, NULL);
-    PropCleanUp(scr->root_win);
-    wNETWMCleanup(scr);
-    XSync(dpy, 0);
+	XUngrabServer(dpy);
+	XSetInputFocus(dpy, PointerRoot, RevertToParent, CurrentTime);
+	wColormapInstallForWindow(scr, NULL);
+	PropCleanUp(scr->root_win);
+	wNETWMCleanup(scr);
+	XSync(dpy, 0);
 }
-
 
 /*
  *----------------------------------------------------------------------
@@ -217,19 +208,17 @@ RestoreDesktop(WScreen *scr)
  * TODO: change to XQueryTree()
  *----------------------------------------------------------------------
  */
-static void
-wipeDesktop(WScreen *scr)
+static void wipeDesktop(WScreen * scr)
 {
-    WWindow *wwin;
+	WWindow *wwin;
 
-    wwin = scr->focused_window;
-    while (wwin) {
-        if (wwin->protocols.DELETE_WINDOW)
-            wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
-        else
-            wClientKill(wwin);
-        wwin = wwin->prev;
-    }
-    XSync(dpy, False);
+	wwin = scr->focused_window;
+	while (wwin) {
+		if (wwin->protocols.DELETE_WINDOW)
+			wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+		else
+			wClientKill(wwin);
+		wwin = wwin->prev;
+	}
+	XSync(dpy, False);
 }
-

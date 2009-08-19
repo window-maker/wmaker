@@ -1,296 +1,224 @@
 
-
-
-
 #include "WINGsP.h"
 
-
-
 typedef struct W_MenuItem {
-    char *title;
+	char *title;
 
-    WMPixmap *image;
+	WMPixmap *image;
 
-    char *shortcutKey;
-    int shortcutModifierMask;
+	char *shortcutKey;
+	int shortcutModifierMask;
 
-    WMAction *action;
-    void *data;
+	WMAction *action;
+	void *data;
 
-    struct W_Menu *submenu;
+	struct W_Menu *submenu;
 
-    void *object;
+	void *object;
 
-    WMPixmap *onStateImage;
-    WMPixmap *offStateImage;
-    WMPixmap *mixedStateImage;
+	WMPixmap *onStateImage;
+	WMPixmap *offStateImage;
+	WMPixmap *mixedStateImage;
 
-    struct {
-        unsigned enabled:1;
-        unsigned state:2;
-    } flags;
+	struct {
+		unsigned enabled:1;
+		unsigned state:2;
+	} flags;
 } MenuItem;
 
-
-
-
-
-WMMenuItem*
-WMGetSeparatorMenuItem(void)
+WMMenuItem *WMGetSeparatorMenuItem(void)
 {
-    return NULL;
+	return NULL;
 }
 
-
-Bool
-WMMenuItemIsSeparator(WMMenuItem *item)
+Bool WMMenuItemIsSeparator(WMMenuItem * item)
 {
-    return False;
+	return False;
 }
 
-
-WMMenuItem*
-WMCreateMenuItem(void)
+WMMenuItem *WMCreateMenuItem(void)
 {
-    WMMenuItem *item;
+	WMMenuItem *item;
 
-    item = wmalloc(sizeof(MenuItem));
-    memset(item, 0, sizeof(MenuItem));
+	item = wmalloc(sizeof(MenuItem));
+	memset(item, 0, sizeof(MenuItem));
 
-    item->flags.enabled = 1;
+	item->flags.enabled = 1;
 
-    return item;
+	return item;
 }
 
-
-void
-WMDestroyMenuItem(WMMenuItem *item)
+void WMDestroyMenuItem(WMMenuItem * item)
 {
-    if (item->title)
-        wfree(item->title);
+	if (item->title)
+		wfree(item->title);
 
-    if (item->image)
-        WMReleasePixmap(item->image);
+	if (item->image)
+		WMReleasePixmap(item->image);
 
-    if (item->shortcutKey)
-        wfree(item->shortcutKey);
+	if (item->shortcutKey)
+		wfree(item->shortcutKey);
 
-    if (item->onStateImage)
-        WMReleasePixmap(item->onStateImage);
+	if (item->onStateImage)
+		WMReleasePixmap(item->onStateImage);
 
-    if (item->offStateImage)
-        WMReleasePixmap(item->offStateImage);
+	if (item->offStateImage)
+		WMReleasePixmap(item->offStateImage);
 
-    if (item->mixedStateImage)
-        WMReleasePixmap(item->mixedStateImage);
+	if (item->mixedStateImage)
+		WMReleasePixmap(item->mixedStateImage);
 }
 
-
-Bool
-WMGetMenuItemEnabled(WMMenuItem *item)
+Bool WMGetMenuItemEnabled(WMMenuItem * item)
 {
-    return item->flags.enabled;
+	return item->flags.enabled;
 }
 
-
-void
-WMSetMenuItemEnabled(WMMenuItem *item, Bool flag)
+void WMSetMenuItemEnabled(WMMenuItem * item, Bool flag)
 {
-    item->flags.enabled = ((flag==0) ? 0 : 1);
+	item->flags.enabled = ((flag == 0) ? 0 : 1);
 }
 
-
-char*
-WMGetMenuItemShortcut(WMMenuItem *item)
+char *WMGetMenuItemShortcut(WMMenuItem * item)
 {
-    return item->shortcutKey;
+	return item->shortcutKey;
 }
 
-
-unsigned
-WMGetMenuItemShortcutModifierMask(WMMenuItem *item)
+unsigned WMGetMenuItemShortcutModifierMask(WMMenuItem * item)
 {
-    return item->shortcutModifierMask;
+	return item->shortcutModifierMask;
 }
 
-
-
-void
-WMSetMenuItemShortcut(WMMenuItem *item, char *shortcut)
+void WMSetMenuItemShortcut(WMMenuItem * item, char *shortcut)
 {
-    if (item->shortcutKey)
-        wfree(item->shortcutKey);
+	if (item->shortcutKey)
+		wfree(item->shortcutKey);
 
-    item->shortcutKey = wstrdup(shortcut);
+	item->shortcutKey = wstrdup(shortcut);
 }
 
-
-void
-WMSetMenuItemShortcutModifierMask(WMMenuItem *item, unsigned mask)
+void WMSetMenuItemShortcutModifierMask(WMMenuItem * item, unsigned mask)
 {
-    item->shortcutModifierMask = mask;
+	item->shortcutModifierMask = mask;
 }
 
-
-void*
-WMGetMenuItemRepresentedObject(WMMenuItem *item)
+void *WMGetMenuItemRepresentedObject(WMMenuItem * item)
 {
-    return item->object;
+	return item->object;
 }
 
-
-void
-WMSetMenuItemRepresentedObject(WMMenuItem *item, void *object)
+void WMSetMenuItemRepresentedObject(WMMenuItem * item, void *object)
 {
-    item->object = object;
+	item->object = object;
 }
 
-
-void
-WMSetMenuItemAction(WMMenuItem *item, WMAction *action, void *data)
+void WMSetMenuItemAction(WMMenuItem * item, WMAction * action, void *data)
 {
-    item->action = action;
-    item->data = data;
+	item->action = action;
+	item->data = data;
 }
 
-
-WMAction*
-WMGetMenuItemAction(WMMenuItem *item)
+WMAction *WMGetMenuItemAction(WMMenuItem * item)
 {
-    return item->action;
+	return item->action;
 }
 
-
-void*
-WMGetMenuItemData(WMMenuItem *item)
+void *WMGetMenuItemData(WMMenuItem * item)
 {
-    return item->data;
+	return item->data;
 }
 
-
-void
-WMSetMenuItemTitle(WMMenuItem *item, char *title)
+void WMSetMenuItemTitle(WMMenuItem * item, char *title)
 {
-    if (item->title)
-        wfree(item->title);
+	if (item->title)
+		wfree(item->title);
 
-    if (title)
-        item->title = wstrdup(title);
-    else
-        item->title = NULL;
+	if (title)
+		item->title = wstrdup(title);
+	else
+		item->title = NULL;
 }
 
-
-char*
-WMGetMenuItemTitle(WMMenuItem *item)
+char *WMGetMenuItemTitle(WMMenuItem * item)
 {
-    return item->title;
+	return item->title;
 }
 
-
-void
-WMSetMenuItemState(WMMenuItem *item, int state)
+void WMSetMenuItemState(WMMenuItem * item, int state)
 {
-    item->flags.state = state;
+	item->flags.state = state;
 }
 
-
-int
-WMGetMenuItemState(WMMenuItem *item)
+int WMGetMenuItemState(WMMenuItem * item)
 {
-    return item->flags.state;
+	return item->flags.state;
 }
 
-
-void
-WMSetMenuItemPixmap(WMMenuItem *item, WMPixmap *pixmap)
+void WMSetMenuItemPixmap(WMMenuItem * item, WMPixmap * pixmap)
 {
-    if (item->image)
-        WMReleasePixmap(item->image);
+	if (item->image)
+		WMReleasePixmap(item->image);
 
-    item->image = WMRetainPixmap(pixmap);
+	item->image = WMRetainPixmap(pixmap);
 }
 
-
-WMPixmap*
-WMGetMenuItemPixmap(WMMenuItem *item)
+WMPixmap *WMGetMenuItemPixmap(WMMenuItem * item)
 {
-    return item->image;
+	return item->image;
 }
 
-
-void
-WMSetMenuItemOnStatePixmap(WMMenuItem *item, WMPixmap *pixmap)
+void WMSetMenuItemOnStatePixmap(WMMenuItem * item, WMPixmap * pixmap)
 {
-    if (item->onStateImage)
-        WMReleasePixmap(item->onStateImage);
+	if (item->onStateImage)
+		WMReleasePixmap(item->onStateImage);
 
-    item->onStateImage = WMRetainPixmap(pixmap);
+	item->onStateImage = WMRetainPixmap(pixmap);
 }
 
-
-WMPixmap*
-WMGetMenuItemOnStatePixmap(WMMenuItem *item)
+WMPixmap *WMGetMenuItemOnStatePixmap(WMMenuItem * item)
 {
-    return item->onStateImage;
+	return item->onStateImage;
 }
 
-
-void
-WMSetMenuItemOffStatePixmap(WMMenuItem *item, WMPixmap *pixmap)
+void WMSetMenuItemOffStatePixmap(WMMenuItem * item, WMPixmap * pixmap)
 {
-    if (item->offStateImage)
-        WMReleasePixmap(item->offStateImage);
+	if (item->offStateImage)
+		WMReleasePixmap(item->offStateImage);
 
-    item->offStateImage = WMRetainPixmap(pixmap);
+	item->offStateImage = WMRetainPixmap(pixmap);
 }
 
-
-WMPixmap*
-WMGetMenuItemOffStatePixmap(WMMenuItem *item)
+WMPixmap *WMGetMenuItemOffStatePixmap(WMMenuItem * item)
 {
-    return item->offStateImage;
+	return item->offStateImage;
 }
 
-
-
-void
-WMSetMenuItemMixedStatePixmap(WMMenuItem *item, WMPixmap *pixmap)
+void WMSetMenuItemMixedStatePixmap(WMMenuItem * item, WMPixmap * pixmap)
 {
-    if (item->mixedStateImage)
-        WMReleasePixmap(item->mixedStateImage);
+	if (item->mixedStateImage)
+		WMReleasePixmap(item->mixedStateImage);
 
-    item->mixedStateImage = WMRetainPixmap(pixmap);
+	item->mixedStateImage = WMRetainPixmap(pixmap);
 }
 
-
-WMPixmap*
-WMGetMenuItemMixedStatePixmap(WMMenuItem *item)
+WMPixmap *WMGetMenuItemMixedStatePixmap(WMMenuItem * item)
 {
-    return item->mixedStateImage;
+	return item->mixedStateImage;
 }
-
 
 #if 0
-void
-WMSetMenuItemSubmenu(WMMenuItem *item, WMMenu *submenu)
+void WMSetMenuItemSubmenu(WMMenuItem * item, WMMenu * submenu)
 {
-    item->submenu = submenu;
+	item->submenu = submenu;
 }
 
-
-WMMenu*
-WMGetMenuItemSubmenu(WMMenuItem *item)
+WMMenu *WMGetMenuItemSubmenu(WMMenuItem * item)
 {
-    return item->submenu;
+	return item->submenu;
 }
 
-
-
-Bool
-WMGetMenuItemHasSubmenu(WMMenuItem *item)
+Bool WMGetMenuItemHasSubmenu(WMMenuItem * item)
 {
-    return item->submenu != NULL;
+	return item->submenu != NULL;
 }
 #endif
-

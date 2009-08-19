@@ -25,61 +25,50 @@
 #include "WMaker.h"
 #include "app.h"
 
-static Atom
-getwmfunc(Display *dpy)
+static Atom getwmfunc(Display * dpy)
 {
-    return XInternAtom(dpy, "_WINDOWMAKER_WM_FUNCTION", False);
+	return XInternAtom(dpy, "_WINDOWMAKER_WM_FUNCTION", False);
 }
 
-void
-WMHideApplication(WMAppContext *app)
+void WMHideApplication(WMAppContext * app)
 {
-    XEvent event;
+	XEvent event;
 
-    event.xclient.type = ClientMessage;
-    event.xclient.message_type = getwmfunc(app->dpy);
-    event.xclient.format = 32;
-    event.xclient.display = app->dpy;
-    event.xclient.window = app->main_window;
-    event.xclient.data.l[0] = WMFHideApplication;
-    event.xclient.data.l[1] = 0;
-    event.xclient.data.l[2] = 0;
-    event.xclient.data.l[3] = 0;
-    XSendEvent(app->dpy, RootWindow(app->dpy, app->screen_number), False,
-               SubstructureNotifyMask|SubstructureRedirectMask, &event);
+	event.xclient.type = ClientMessage;
+	event.xclient.message_type = getwmfunc(app->dpy);
+	event.xclient.format = 32;
+	event.xclient.display = app->dpy;
+	event.xclient.window = app->main_window;
+	event.xclient.data.l[0] = WMFHideApplication;
+	event.xclient.data.l[1] = 0;
+	event.xclient.data.l[2] = 0;
+	event.xclient.data.l[3] = 0;
+	XSendEvent(app->dpy, RootWindow(app->dpy, app->screen_number), False,
+		   SubstructureNotifyMask | SubstructureRedirectMask, &event);
 }
 
-
-void
-WMHideOthers(WMAppContext *app)
+void WMHideOthers(WMAppContext * app)
 {
-    XEvent event;
+	XEvent event;
 
-    event.xclient.type = ClientMessage;
-    event.xclient.message_type = getwmfunc(app->dpy);
-    event.xclient.format = 32;
-    event.xclient.display = app->dpy;
-    event.xclient.window = app->main_window;
-    event.xclient.data.l[0] = WMFHideOtherApplications;
-    event.xclient.data.l[1] = 0;
-    event.xclient.data.l[2] = 0;
-    event.xclient.data.l[3] = 0;
-    XSendEvent(app->dpy, RootWindow(app->dpy, app->screen_number), False,
-               SubstructureNotifyMask|SubstructureRedirectMask, &event);
+	event.xclient.type = ClientMessage;
+	event.xclient.message_type = getwmfunc(app->dpy);
+	event.xclient.format = 32;
+	event.xclient.display = app->dpy;
+	event.xclient.window = app->main_window;
+	event.xclient.data.l[0] = WMFHideOtherApplications;
+	event.xclient.data.l[1] = 0;
+	event.xclient.data.l[2] = 0;
+	event.xclient.data.l[3] = 0;
+	XSendEvent(app->dpy, RootWindow(app->dpy, app->screen_number), False,
+		   SubstructureNotifyMask | SubstructureRedirectMask, &event);
 }
 
-
-
-
-void
-WMSetWindowAttributes(Display *dpy, Window window,
-                      GNUstepWMAttributes *attributes)
+void WMSetWindowAttributes(Display * dpy, Window window, GNUstepWMAttributes * attributes)
 {
-    Atom atom;
+	Atom atom;
 
-    atom = XInternAtom(dpy, "_GNUSTEP_WM_ATTR", False);
-    XChangeProperty(dpy, window, atom, atom, 32, PropModeReplace,
-                    (unsigned char *)attributes,
-                    sizeof(GNUstepWMAttributes)/sizeof(CARD32));
+	atom = XInternAtom(dpy, "_GNUSTEP_WM_ATTR", False);
+	XChangeProperty(dpy, window, atom, atom, 32, PropModeReplace,
+			(unsigned char *)attributes, sizeof(GNUstepWMAttributes) / sizeof(CARD32));
 }
-

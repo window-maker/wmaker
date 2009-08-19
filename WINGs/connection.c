@@ -18,7 +18,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-
 /*
  * TODO:
  * - decide if we want to support connections with external sockets, else
@@ -26,7 +25,6 @@
  * - decide what to do with all wwarning() calls that are still there.
  *
  */
-
 
 #include "wconfig.h"
 
@@ -47,7 +45,6 @@
 #endif
 
 #include "WINGs.h"
-
 
 /* Some older systems does not define this (linux libc5, maybe others too) */
 #ifndef SHUT_RDWR
@@ -77,9 +74,7 @@
 
 #define NETBUF_SIZE             4096
 
-#define DEF_TIMEOUT             600   /* 600 seconds == 10 minutes */
-
-
+#define DEF_TIMEOUT             600	/* 600 seconds == 10 minutes */
 
 int WCErrorCode = 0;
 
@@ -88,364 +83,338 @@ static Bool SigInitialized = False;
 static unsigned int DefaultTimeout = DEF_TIMEOUT;
 static unsigned int OpenTimeout = DEF_TIMEOUT;
 
-
-
 typedef struct TimeoutData {
-    unsigned timeout;
-    WMHandlerID *handler;
+	unsigned timeout;
+	WMHandlerID *handler;
 } TimeoutData;
 
-
 typedef struct W_Connection {
-    int sock;                     /* the socket we speak through */
+	int sock;		/* the socket we speak through */
 
-    struct {
-        WMHandlerID *read;        /* the input read handler */
-        WMHandlerID *write;       /* the input write handler */
-        WMHandlerID *exception;   /* the input exception handler */
-    } handler;
+	struct {
+		WMHandlerID *read;	/* the input read handler */
+		WMHandlerID *write;	/* the input write handler */
+		WMHandlerID *exception;	/* the input exception handler */
+	} handler;
 
-    ConnectionDelegate *delegate; /* client delegates */
-    void *clientData;             /* client data */
-    unsigned int uflags;          /* flags for the client */
+	ConnectionDelegate *delegate;	/* client delegates */
+	void *clientData;	/* client data */
+	unsigned int uflags;	/* flags for the client */
 
-    WMArray *outputQueue;
-    unsigned bufPos;
+	WMArray *outputQueue;
+	unsigned bufPos;
 
-    TimeoutData sendTimeout;
-    TimeoutData openTimeout;
+	TimeoutData sendTimeout;
+	TimeoutData openTimeout;
 
-    WMConnectionState state;
-    WMConnectionTimeoutState timeoutState;
+	WMConnectionState state;
+	WMConnectionTimeoutState timeoutState;
 
-    char *address;
-    char *service;
-    char *protocol;
+	char *address;
+	char *service;
+	char *protocol;
 
-    Bool closeOnRelease;
-    Bool shutdownOnClose;
-    Bool wasNonBlocking;
-    Bool isNonBlocking;
+	Bool closeOnRelease;
+	Bool shutdownOnClose;
+	Bool wasNonBlocking;
+	Bool isNonBlocking;
 
 } W_Connection;
 
-
-
-static void
-clearOutputQueue(WMConnection *cPtr)
+static void clearOutputQueue(WMConnection * cPtr)
 {
-    cPtr->bufPos = 0;
-    WMEmptyArray(cPtr->outputQueue);
+	cPtr->bufPos = 0;
+	WMEmptyArray(cPtr->outputQueue);
 }
 
-
-static void
-openTimeout(void *cdata)
+static void openTimeout(void *cdata)
 {
-    WMConnection *cPtr = (WMConnection*) cdata;
+	WMConnection *cPtr = (WMConnection *) cdata;
 
-    cPtr->openTimeout.handler = NULL;
-    if (cPtr->handler.write) {
-        WMDeleteInputHandler(cPtr->handler.write);
-        cPtr->handler.write = NULL;
-    }
-    if (cPtr->state != WCConnected) {
-        cPtr->state = WCTimedOut;
-        cPtr->timeoutState = WCTWhileOpening;
-        if (cPtr->delegate && cPtr->delegate->didTimeout) {
-            (*cPtr->delegate->didTimeout)(cPtr->delegate, cPtr);
-        } else {
-            WMCloseConnection(cPtr);
-            cPtr->state = WCTimedOut; /* the above set state to WCClosed */
-        }
-    }
+	cPtr->openTimeout.handler = NULL;
+	if (cPtr->handler.write) {
+		WMDeleteInputHandler(cPtr->handler.write);
+		cPtr->handler.write = NULL;
+	}
+	if (cPtr->state != WCConnected) {
+		cPtr->state = WCTimedOut;
+		cPtr->timeoutState = WCTWhileOpening;
+		if (cPtr->delegate && cPtr->delegate->didTimeout) {
+			(*cPtr->delegate->didTimeout) (cPtr->delegate, cPtr);
+		} else {
+			WMCloseConnection(cPtr);
+			cPtr->state = WCTimedOut;	/* the above set state to WCClosed */
+		}
+	}
 }
 
-
-static void
-sendTimeout(void *cdata)
+static void sendTimeout(void *cdata)
 {
-    WMConnection *cPtr = (WMConnection*) cdata;
+	WMConnection *cPtr = (WMConnection *) cdata;
 
-    cPtr->sendTimeout.handler = NULL;
-    if (cPtr->handler.write) {
-        WMDeleteInputHandler(cPtr->handler.write);
-        cPtr->handler.write = NULL;
-    }
-    if (WMGetArrayItemCount(cPtr->outputQueue)>0) {
-        clearOutputQueue(cPtr);
-        cPtr->state = WCTimedOut;
-        cPtr->timeoutState = WCTWhileSending;
-        /* // should we close it no matter what (after calling the didTimeout
-           // delegate)? -Dan */
-        if (cPtr->delegate && cPtr->delegate->didTimeout) {
-            (*cPtr->delegate->didTimeout)(cPtr->delegate, cPtr);
-        } else {
-            WMCloseConnection(cPtr);
-            cPtr->state = WCTimedOut; /* the above set state to WCClosed */
-        }
-    }
+	cPtr->sendTimeout.handler = NULL;
+	if (cPtr->handler.write) {
+		WMDeleteInputHandler(cPtr->handler.write);
+		cPtr->handler.write = NULL;
+	}
+	if (WMGetArrayItemCount(cPtr->outputQueue) > 0) {
+		clearOutputQueue(cPtr);
+		cPtr->state = WCTimedOut;
+		cPtr->timeoutState = WCTWhileSending;
+		/* // should we close it no matter what (after calling the didTimeout
+		   // delegate)? -Dan */
+		if (cPtr->delegate && cPtr->delegate->didTimeout) {
+			(*cPtr->delegate->didTimeout) (cPtr->delegate, cPtr);
+		} else {
+			WMCloseConnection(cPtr);
+			cPtr->state = WCTimedOut;	/* the above set state to WCClosed */
+		}
+	}
 }
 
-
-static void
-inputHandler(int fd, int mask, void *clientData)
+static void inputHandler(int fd, int mask, void *clientData)
 {
-    WMConnection *cPtr = (WMConnection*)clientData;
+	WMConnection *cPtr = (WMConnection *) clientData;
 
-    if (cPtr->state==WCClosed || cPtr->state==WCDied)
-        return;
+	if (cPtr->state == WCClosed || cPtr->state == WCDied)
+		return;
 
-    if ((mask & WIWriteMask)) {
-        int result;
+	if ((mask & WIWriteMask)) {
+		int result;
 
-        if (cPtr->state == WCInProgress) {
-            Bool failed;
-            socklen_t len = sizeof(result);
+		if (cPtr->state == WCInProgress) {
+			Bool failed;
+			socklen_t len = sizeof(result);
 
-            WCErrorCode = 0;
-            if (getsockopt(cPtr->sock, SOL_SOCKET, SO_ERROR,
-                           (void*)&result, &len) == 0 && result != 0) {
-                cPtr->state = WCFailed;
-                WCErrorCode = result;
-                failed = True;
-                /* should call wsyserrorwithcode(result, ...) here? */
-            } else {
-                cPtr->state = WCConnected;
-                failed = False;
-            }
+			WCErrorCode = 0;
+			if (getsockopt(cPtr->sock, SOL_SOCKET, SO_ERROR,
+				       (void *)&result, &len) == 0 && result != 0) {
+				cPtr->state = WCFailed;
+				WCErrorCode = result;
+				failed = True;
+				/* should call wsyserrorwithcode(result, ...) here? */
+			} else {
+				cPtr->state = WCConnected;
+				failed = False;
+			}
 
-            if (cPtr->handler.write) {
-                WMDeleteInputHandler(cPtr->handler.write);
-                cPtr->handler.write = NULL;
-            }
+			if (cPtr->handler.write) {
+				WMDeleteInputHandler(cPtr->handler.write);
+				cPtr->handler.write = NULL;
+			}
 
-            if (cPtr->openTimeout.handler) {
-                WMDeleteTimerHandler(cPtr->openTimeout.handler);
-                cPtr->openTimeout.handler = NULL;
-            }
+			if (cPtr->openTimeout.handler) {
+				WMDeleteTimerHandler(cPtr->openTimeout.handler);
+				cPtr->openTimeout.handler = NULL;
+			}
 
-            if (cPtr->delegate && cPtr->delegate->didInitialize)
-                (*cPtr->delegate->didInitialize)(cPtr->delegate, cPtr);
+			if (cPtr->delegate && cPtr->delegate->didInitialize)
+				(*cPtr->delegate->didInitialize) (cPtr->delegate, cPtr);
 
-            /* we use failed and not cPtr->state here, because cPtr may be
-             * destroyed by the delegate called above if the connection failed
-             */
-            if (failed)
-                return;
-        } else if (cPtr->state == WCConnected) {
-            result = WMFlushConnection(cPtr);
-            if (result>0 && cPtr->delegate && cPtr->delegate->canResumeSending) {
-                (*cPtr->delegate->canResumeSending)(cPtr->delegate, cPtr);
-            }
-        }
-    }
+			/* we use failed and not cPtr->state here, because cPtr may be
+			 * destroyed by the delegate called above if the connection failed
+			 */
+			if (failed)
+				return;
+		} else if (cPtr->state == WCConnected) {
+			result = WMFlushConnection(cPtr);
+			if (result > 0 && cPtr->delegate && cPtr->delegate->canResumeSending) {
+				(*cPtr->delegate->canResumeSending) (cPtr->delegate, cPtr);
+			}
+		}
+	}
 
-    if (!cPtr->delegate)
-        return;
+	if (!cPtr->delegate)
+		return;
 
-    /* if the connection died, may get destroyed in the delegate, so retain */
-    wretain(cPtr);
+	/* if the connection died, may get destroyed in the delegate, so retain */
+	wretain(cPtr);
 
-    if ((mask & WIReadMask) && cPtr->delegate->didReceiveInput)
-        (*cPtr->delegate->didReceiveInput)(cPtr->delegate, cPtr);
+	if ((mask & WIReadMask) && cPtr->delegate->didReceiveInput)
+		(*cPtr->delegate->didReceiveInput) (cPtr->delegate, cPtr);
 
-    if ((mask & WIExceptMask) && cPtr->delegate->didCatchException)
-        (*cPtr->delegate->didCatchException)(cPtr->delegate, cPtr);
+	if ((mask & WIExceptMask) && cPtr->delegate->didCatchException)
+		(*cPtr->delegate->didCatchException) (cPtr->delegate, cPtr);
 
-    wrelease(cPtr);
+	wrelease(cPtr);
 }
 
-
-static Bool
-setSocketNonBlocking(int sock, Bool flag)
+static Bool setSocketNonBlocking(int sock, Bool flag)
 {
-    int state;
-    Bool isNonBlock;
+	int state;
+	Bool isNonBlock;
 
-    state = fcntl(sock, F_GETFL, 0);
+	state = fcntl(sock, F_GETFL, 0);
 
-    if (state < 0) {
-        /* set WCErrorCode here? -Dan*/
-        return False;
-    }
+	if (state < 0) {
+		/* set WCErrorCode here? -Dan */
+		return False;
+	}
 
-    isNonBlock = (state & NONBLOCK_OPT) != 0;
+	isNonBlock = (state & NONBLOCK_OPT) != 0;
 
-    if (flag) {
-        if (isNonBlock)
-            return True;
-        state |= NONBLOCK_OPT;
-    } else {
-        if (!isNonBlock)
-            return True;
-        state &= ~NONBLOCK_OPT;
-    }
+	if (flag) {
+		if (isNonBlock)
+			return True;
+		state |= NONBLOCK_OPT;
+	} else {
+		if (!isNonBlock)
+			return True;
+		state &= ~NONBLOCK_OPT;
+	}
 
-    if (fcntl(sock, F_SETFL, state) < 0) {
-        /* set WCErrorCode here? -Dan*/
-        return False;
-    }
+	if (fcntl(sock, F_SETFL, state) < 0) {
+		/* set WCErrorCode here? -Dan */
+		return False;
+	}
 
-    return True;
+	return True;
 }
 
-
-static void
-setConnectionAddress(WMConnection *cPtr, struct sockaddr_in *socketaddr)
+static void setConnectionAddress(WMConnection * cPtr, struct sockaddr_in *socketaddr)
 {
-    wassertr(cPtr->address==NULL);
+	wassertr(cPtr->address == NULL);
 
-    cPtr->address = wstrdup(inet_ntoa(socketaddr->sin_addr));
-    cPtr->service = wmalloc(16);
-    sprintf(cPtr->service, "%hu", ntohs(socketaddr->sin_port));
-    cPtr->protocol = wstrdup("tcp");
+	cPtr->address = wstrdup(inet_ntoa(socketaddr->sin_addr));
+	cPtr->service = wmalloc(16);
+	sprintf(cPtr->service, "%hu", ntohs(socketaddr->sin_port));
+	cPtr->protocol = wstrdup("tcp");
 }
 
-
-static struct sockaddr_in*
-getSocketAddress(char* name, char* service, char* protocol)
+static struct sockaddr_in *getSocketAddress(char *name, char *service, char *protocol)
 {
-    static struct sockaddr_in socketaddr;
-    struct servent *sp;
+	static struct sockaddr_in socketaddr;
+	struct servent *sp;
 
-    if (!protocol || protocol[0]==0)
-        protocol = "tcp";
+	if (!protocol || protocol[0] == 0)
+		protocol = "tcp";
 
-    memset(&socketaddr, 0, sizeof(struct sockaddr_in));
-    socketaddr.sin_family = AF_INET;
+	memset(&socketaddr, 0, sizeof(struct sockaddr_in));
+	socketaddr.sin_family = AF_INET;
 
-    /*
-     * If we were given a hostname, we use any address for that host.
-     * Otherwise we expect the given name to be an address unless it is
-     * NULL (any address).
-     */
-    if (name && name[0]!=0) {
-        WMHost *host = WMGetHostWithName(name);
+	/*
+	 * If we were given a hostname, we use any address for that host.
+	 * Otherwise we expect the given name to be an address unless it is
+	 * NULL (any address).
+	 */
+	if (name && name[0] != 0) {
+		WMHost *host = WMGetHostWithName(name);
 
-        if (!host)
-            return NULL; /* name is not a hostname nor a number and dot adr */
+		if (!host)
+			return NULL;	/* name is not a hostname nor a number and dot adr */
 
-        name = WMGetHostAddress(host);
+		name = WMGetHostAddress(host);
 #ifndef	HAVE_INET_ATON
-        if ((socketaddr.sin_addr.s_addr = inet_addr(name)) == INADDR_NONE) {
+		if ((socketaddr.sin_addr.s_addr = inet_addr(name)) == INADDR_NONE) {
 #else
-            if (inet_aton(name, &socketaddr.sin_addr) == 0) {
+		if (inet_aton(name, &socketaddr.sin_addr) == 0) {
 #endif
-            WMReleaseHost(host);
-            return NULL;
-        }
-        WMReleaseHost(host);
-    } else {
-        socketaddr.sin_addr.s_addr = htonl(INADDR_ANY);
-    }
+			WMReleaseHost(host);
+			return NULL;
+		}
+		WMReleaseHost(host);
+	} else {
+		socketaddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	}
 
-    if (!service || service[0]==0) {
-        socketaddr.sin_port = 0;
-    } else if ((sp = getservbyname(service, protocol))==0) {
-        char *endptr;
-        unsigned portNumber;
+	if (!service || service[0] == 0) {
+		socketaddr.sin_port = 0;
+	} else if ((sp = getservbyname(service, protocol)) == 0) {
+		char *endptr;
+		unsigned portNumber;
 
-        portNumber = strtoul(service, &endptr, 10);
+		portNumber = strtoul(service, &endptr, 10);
 
-        if (service[0]!=0 && *endptr==0 && portNumber<65536) {
-            socketaddr.sin_port = htons(portNumber);
-        } else {
-            return NULL;
-        }
-    } else {
-        socketaddr.sin_port = sp->s_port;
-    }
+		if (service[0] != 0 && *endptr == 0 && portNumber < 65536) {
+			socketaddr.sin_port = htons(portNumber);
+		} else {
+			return NULL;
+		}
+	} else {
+		socketaddr.sin_port = sp->s_port;
+	}
 
-    return &socketaddr;
+	return &socketaddr;
 }
 
-
-static void
-dummyHandler(int signum)
+static void dummyHandler(int signum)
 {
 }
 
-
-static WMConnection*
-createConnectionWithSocket(int sock, Bool closeOnRelease)
+static WMConnection *createConnectionWithSocket(int sock, Bool closeOnRelease)
 {
-    WMConnection *cPtr;
-    struct sigaction sig_action;
+	WMConnection *cPtr;
+	struct sigaction sig_action;
 
-    cPtr = wmalloc(sizeof(WMConnection));
-    wretain(cPtr);
-    memset(cPtr, 0, sizeof(WMConnection));
+	cPtr = wmalloc(sizeof(WMConnection));
+	wretain(cPtr);
+	memset(cPtr, 0, sizeof(WMConnection));
 
-    fcntl(sock, F_SETFD, FD_CLOEXEC); /* by default close on exec */
+	fcntl(sock, F_SETFD, FD_CLOEXEC);	/* by default close on exec */
 
-    cPtr->sock = sock;
-    cPtr->openTimeout.timeout = OpenTimeout;
-    cPtr->openTimeout.handler = NULL;
-    cPtr->sendTimeout.timeout = DefaultTimeout;
-    cPtr->sendTimeout.handler = NULL;
-    cPtr->closeOnRelease = closeOnRelease;
-    cPtr->shutdownOnClose = 1;
-    cPtr->outputQueue =
-        WMCreateArrayWithDestructor(16, (WMFreeDataProc*)WMReleaseData);
-    cPtr->state = WCNotConnected;
-    cPtr->timeoutState = WCTNone;
+	cPtr->sock = sock;
+	cPtr->openTimeout.timeout = OpenTimeout;
+	cPtr->openTimeout.handler = NULL;
+	cPtr->sendTimeout.timeout = DefaultTimeout;
+	cPtr->sendTimeout.handler = NULL;
+	cPtr->closeOnRelease = closeOnRelease;
+	cPtr->shutdownOnClose = 1;
+	cPtr->outputQueue = WMCreateArrayWithDestructor(16, (WMFreeDataProc *) WMReleaseData);
+	cPtr->state = WCNotConnected;
+	cPtr->timeoutState = WCTNone;
 
-    /* ignore dead pipe */
-    if (!SigInitialized) {
-        /* Because POSIX mandates that only signal with handlers are reset
-         * accross an exec*(), we do not want to propagate ignoring SIGPIPEs
-         * to children. Hence the dummy handler. Philippe Troin <phil@fifi.org>
-         */
-        sig_action.sa_handler = &dummyHandler;
-        sig_action.sa_flags = SA_RESTART;
-        sigaction(SIGPIPE, &sig_action, NULL);
-        SigInitialized = True;
-    }
+	/* ignore dead pipe */
+	if (!SigInitialized) {
+		/* Because POSIX mandates that only signal with handlers are reset
+		 * accross an exec*(), we do not want to propagate ignoring SIGPIPEs
+		 * to children. Hence the dummy handler. Philippe Troin <phil@fifi.org>
+		 */
+		sig_action.sa_handler = &dummyHandler;
+		sig_action.sa_flags = SA_RESTART;
+		sigaction(SIGPIPE, &sig_action, NULL);
+		SigInitialized = True;
+	}
 
-    return cPtr;
+	return cPtr;
 }
-
 
 #if 0
-WMConnection*
-WMCreateConnectionWithSocket(int sock, Bool closeOnRelease)
+WMConnection *WMCreateConnectionWithSocket(int sock, Bool closeOnRelease)
 {
-    WMConnection *cPtr;
-    struct sockaddr_in clientname;
-    int size;
-    int n;
+	WMConnection *cPtr;
+	struct sockaddr_in clientname;
+	int size;
+	int n;
 
-    cPtr = createConnectionWithSocket(sock, closeOnRelease);
-    cPtr->wasNonBlocking = WMIsConnectionNonBlocking(cPtr);
-    cPtr->isNonBlocking = cPtr->wasNonBlocking;
+	cPtr = createConnectionWithSocket(sock, closeOnRelease);
+	cPtr->wasNonBlocking = WMIsConnectionNonBlocking(cPtr);
+	cPtr->isNonBlocking = cPtr->wasNonBlocking;
 
-    /* some way to find out if it is connected, and binded. can't find
-     if it listens though!!!
-     */
+	/* some way to find out if it is connected, and binded. can't find
+	   if it listens though!!!
+	 */
 
-    size = sizeof(clientname);
-    n = getpeername(sock, (struct sockaddr*) &clientname, &size);
-    if (n==0) {
-        /* Since we have a peer, it means we are connected */
-        cPtr->state = WCConnected;
-    } else {
-        size = sizeof(clientname);
-        n = getsockname(sock, (struct sockaddr*) &clientname, &size);
-        if (n==0) {
-            /* We don't have a peer, but we are binded to an address.
-             * Assume we are listening on it (we don't know that for sure!)
-             */
-            cPtr->state = WCListening;
-        } else {
-            cPtr->state = WCNotConnected;
-        }
-    }
+	size = sizeof(clientname);
+	n = getpeername(sock, (struct sockaddr *)&clientname, &size);
+	if (n == 0) {
+		/* Since we have a peer, it means we are connected */
+		cPtr->state = WCConnected;
+	} else {
+		size = sizeof(clientname);
+		n = getsockname(sock, (struct sockaddr *)&clientname, &size);
+		if (n == 0) {
+			/* We don't have a peer, but we are binded to an address.
+			 * Assume we are listening on it (we don't know that for sure!)
+			 */
+			cPtr->state = WCListening;
+		} else {
+			cPtr->state = WCNotConnected;
+		}
+	}
 
-    return cPtr;
+	return cPtr;
 }
 #endif
-
 
 /*
  * host     is the name on which we want to listen for incoming connections,
@@ -457,305 +426,275 @@ WMCreateConnectionWithSocket(int sock, Bool closeOnRelease)
  * protocol is one of "tcp" or "udp". If NULL, "tcp" will be used by default.
  *          currently only "tcp" is supported.
  */
-WMConnection*
-WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol)
+WMConnection *WMCreateConnectionAsServerAtAddress(char *host, char *service, char *protocol)
 {
-    WMConnection *cPtr;
-    struct sockaddr_in *socketaddr;
-    socklen_t size;
-    int sock, on;
+	WMConnection *cPtr;
+	struct sockaddr_in *socketaddr;
+	socklen_t size;
+	int sock, on;
 
-    WCErrorCode = 0;
+	WCErrorCode = 0;
 
-    if ((socketaddr = getSocketAddress(host, service, protocol)) == NULL) {
-        wwarning(_("Bad address-service-protocol combination"));
-        return NULL;
-    }
+	if ((socketaddr = getSocketAddress(host, service, protocol)) == NULL) {
+		wwarning(_("Bad address-service-protocol combination"));
+		return NULL;
+	}
 
-    /* Create the actual socket */
-    sock = socket(PF_INET, SOCK_STREAM, 0);
-    if (sock<0) {
-        WCErrorCode = errno;
-        return NULL;
-    }
+	/* Create the actual socket */
+	sock = socket(PF_INET, SOCK_STREAM, 0);
+	if (sock < 0) {
+		WCErrorCode = errno;
+		return NULL;
+	}
 
-    /*
-     * Set socket options. We try to make the port reusable and have it
-     * close as fast as possible without waiting in unnecessary wait states
-     * on close.
-     */
-    on = 1;
-    setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (void *)&on, sizeof(on));
+	/*
+	 * Set socket options. We try to make the port reusable and have it
+	 * close as fast as possible without waiting in unnecessary wait states
+	 * on close.
+	 */
+	on = 1;
+	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (void *)&on, sizeof(on));
 
-    if (bind(sock, (struct sockaddr *)socketaddr, sizeof(*socketaddr)) < 0) {
-        WCErrorCode = errno;
-        close(sock);
-        return NULL;
-    }
+	if (bind(sock, (struct sockaddr *)socketaddr, sizeof(*socketaddr)) < 0) {
+		WCErrorCode = errno;
+		close(sock);
+		return NULL;
+	}
 
-    if (listen(sock, 10) < 0) {
-        WCErrorCode = errno;
-        close(sock);
-        return NULL;
-    }
+	if (listen(sock, 10) < 0) {
+		WCErrorCode = errno;
+		close(sock);
+		return NULL;
+	}
 
-    /* Find out what is the address/service/protocol we get */
-    /* In case some of address/service/protocol were NULL */
-    size = sizeof(*socketaddr);
-    if (getsockname(sock, (struct sockaddr*)socketaddr, &size) < 0) {
-        WCErrorCode = errno;
-        close(sock);
-        return NULL;
-    }
+	/* Find out what is the address/service/protocol we get */
+	/* In case some of address/service/protocol were NULL */
+	size = sizeof(*socketaddr);
+	if (getsockname(sock, (struct sockaddr *)socketaddr, &size) < 0) {
+		WCErrorCode = errno;
+		close(sock);
+		return NULL;
+	}
 
-    cPtr = createConnectionWithSocket(sock, True);
-    cPtr->state = WCListening;
-    WMSetConnectionNonBlocking(cPtr, True);
+	cPtr = createConnectionWithSocket(sock, True);
+	cPtr->state = WCListening;
+	WMSetConnectionNonBlocking(cPtr, True);
 
-    setConnectionAddress(cPtr, socketaddr);
+	setConnectionAddress(cPtr, socketaddr);
 
-    return cPtr;
+	return cPtr;
 }
 
-
-WMConnection*
-WMCreateConnectionToAddress(char *host, char *service, char *protocol)
+WMConnection *WMCreateConnectionToAddress(char *host, char *service, char *protocol)
 {
-    WMConnection *cPtr;
-    struct sockaddr_in *socketaddr;
-    int sock;
+	WMConnection *cPtr;
+	struct sockaddr_in *socketaddr;
+	int sock;
 
-    WCErrorCode = 0;
+	WCErrorCode = 0;
 
-    wassertrv(service!=NULL && service[0]!=0, NULL);
+	wassertrv(service != NULL && service[0] != 0, NULL);
 
-    if (host==NULL || host[0]==0)
-        host = "localhost";
+	if (host == NULL || host[0] == 0)
+		host = "localhost";
 
-    if ((socketaddr = getSocketAddress(host, service, protocol)) == NULL) {
-        wwarning(_("Bad address-service-protocol combination"));
-        return NULL;
-    }
+	if ((socketaddr = getSocketAddress(host, service, protocol)) == NULL) {
+		wwarning(_("Bad address-service-protocol combination"));
+		return NULL;
+	}
 
-    /* Create the actual socket */
-    sock = socket(PF_INET, SOCK_STREAM, 0);
-    if (sock<0) {
-        WCErrorCode = errno;
-        return NULL;
-    }
-    /* make socket blocking while we connect. */
-    setSocketNonBlocking(sock, False);
-    if (connect(sock, (struct sockaddr*)socketaddr, sizeof(*socketaddr)) < 0) {
-        WCErrorCode = errno;
-        close(sock);
-        return NULL;
-    }
+	/* Create the actual socket */
+	sock = socket(PF_INET, SOCK_STREAM, 0);
+	if (sock < 0) {
+		WCErrorCode = errno;
+		return NULL;
+	}
+	/* make socket blocking while we connect. */
+	setSocketNonBlocking(sock, False);
+	if (connect(sock, (struct sockaddr *)socketaddr, sizeof(*socketaddr)) < 0) {
+		WCErrorCode = errno;
+		close(sock);
+		return NULL;
+	}
 
-    cPtr = createConnectionWithSocket(sock, True);
-    cPtr->state = WCConnected;
-    WMSetConnectionNonBlocking(cPtr, True);
-    setConnectionAddress(cPtr, socketaddr);
+	cPtr = createConnectionWithSocket(sock, True);
+	cPtr->state = WCConnected;
+	WMSetConnectionNonBlocking(cPtr, True);
+	setConnectionAddress(cPtr, socketaddr);
 
-    return cPtr;
+	return cPtr;
 }
 
-
-WMConnection*
-WMCreateConnectionToAddressAndNotify(char *host, char *service, char *protocol)
+WMConnection *WMCreateConnectionToAddressAndNotify(char *host, char *service, char *protocol)
 {
-    WMConnection *cPtr;
-    struct sockaddr_in *socketaddr;
-    int sock;
-    Bool isNonBlocking;
+	WMConnection *cPtr;
+	struct sockaddr_in *socketaddr;
+	int sock;
+	Bool isNonBlocking;
 
-    WCErrorCode = 0;
+	WCErrorCode = 0;
 
-    wassertrv(service!=NULL && service[0]!=0, NULL);
+	wassertrv(service != NULL && service[0] != 0, NULL);
 
-    if (host==NULL || host[0]==0)
-        host = "localhost";
+	if (host == NULL || host[0] == 0)
+		host = "localhost";
 
-    if ((socketaddr = getSocketAddress(host, service, protocol)) == NULL) {
-        wwarning(_("Bad address-service-protocol combination"));
-        return NULL;
-    }
+	if ((socketaddr = getSocketAddress(host, service, protocol)) == NULL) {
+		wwarning(_("Bad address-service-protocol combination"));
+		return NULL;
+	}
 
-    /* Create the actual socket */
-    sock = socket(PF_INET, SOCK_STREAM, 0);
-    if (sock<0) {
-        WCErrorCode = errno;
-        return NULL;
-    }
-    isNonBlocking = setSocketNonBlocking(sock, True);
-    if (connect(sock, (struct sockaddr*)socketaddr, sizeof(*socketaddr)) < 0) {
-        if (errno!=EINPROGRESS) {
-            WCErrorCode = errno;
-            close(sock);
-            return NULL;
-        }
-    }
+	/* Create the actual socket */
+	sock = socket(PF_INET, SOCK_STREAM, 0);
+	if (sock < 0) {
+		WCErrorCode = errno;
+		return NULL;
+	}
+	isNonBlocking = setSocketNonBlocking(sock, True);
+	if (connect(sock, (struct sockaddr *)socketaddr, sizeof(*socketaddr)) < 0) {
+		if (errno != EINPROGRESS) {
+			WCErrorCode = errno;
+			close(sock);
+			return NULL;
+		}
+	}
 
-    cPtr = createConnectionWithSocket(sock, True);
-    cPtr->state = WCInProgress;
-    cPtr->isNonBlocking = isNonBlocking;
+	cPtr = createConnectionWithSocket(sock, True);
+	cPtr->state = WCInProgress;
+	cPtr->isNonBlocking = isNonBlocking;
 
-    cPtr->handler.write = WMAddInputHandler(cPtr->sock, WIWriteMask,
-                                            inputHandler, cPtr);
+	cPtr->handler.write = WMAddInputHandler(cPtr->sock, WIWriteMask, inputHandler, cPtr);
 
-    cPtr->openTimeout.handler =
-        WMAddTimerHandler(cPtr->openTimeout.timeout*1000, openTimeout, cPtr);
+	cPtr->openTimeout.handler = WMAddTimerHandler(cPtr->openTimeout.timeout * 1000, openTimeout, cPtr);
 
-    setConnectionAddress(cPtr, socketaddr);
+	setConnectionAddress(cPtr, socketaddr);
 
-    return cPtr;
+	return cPtr;
 }
 
-
-static void
-removeAllHandlers(WMConnection *cPtr)
+static void removeAllHandlers(WMConnection * cPtr)
 {
-    if (cPtr->handler.read)
-        WMDeleteInputHandler(cPtr->handler.read);
-    if (cPtr->handler.write)
-        WMDeleteInputHandler(cPtr->handler.write);
-    if (cPtr->handler.exception)
-        WMDeleteInputHandler(cPtr->handler.exception);
-    if (cPtr->openTimeout.handler)
-        WMDeleteTimerHandler(cPtr->openTimeout.handler);
-    if (cPtr->sendTimeout.handler)
-        WMDeleteTimerHandler(cPtr->sendTimeout.handler);
+	if (cPtr->handler.read)
+		WMDeleteInputHandler(cPtr->handler.read);
+	if (cPtr->handler.write)
+		WMDeleteInputHandler(cPtr->handler.write);
+	if (cPtr->handler.exception)
+		WMDeleteInputHandler(cPtr->handler.exception);
+	if (cPtr->openTimeout.handler)
+		WMDeleteTimerHandler(cPtr->openTimeout.handler);
+	if (cPtr->sendTimeout.handler)
+		WMDeleteTimerHandler(cPtr->sendTimeout.handler);
 
-    cPtr->handler.read = NULL;
-    cPtr->handler.write = NULL;
-    cPtr->handler.exception = NULL;
-    cPtr->openTimeout.handler = NULL;
-    cPtr->sendTimeout.handler = NULL;
+	cPtr->handler.read = NULL;
+	cPtr->handler.write = NULL;
+	cPtr->handler.exception = NULL;
+	cPtr->openTimeout.handler = NULL;
+	cPtr->sendTimeout.handler = NULL;
 }
 
-
-void
-WMDestroyConnection(WMConnection *cPtr)
+void WMDestroyConnection(WMConnection * cPtr)
 {
-    if (cPtr->closeOnRelease && cPtr->sock>=0) {
-        if (cPtr->shutdownOnClose) {
-            shutdown(cPtr->sock, SHUT_RDWR);
-        }
-        close(cPtr->sock);
-    }
+	if (cPtr->closeOnRelease && cPtr->sock >= 0) {
+		if (cPtr->shutdownOnClose) {
+			shutdown(cPtr->sock, SHUT_RDWR);
+		}
+		close(cPtr->sock);
+	}
 
-    removeAllHandlers(cPtr);
-    WMFreeArray(cPtr->outputQueue); /* will also free the items with the destructor */
+	removeAllHandlers(cPtr);
+	WMFreeArray(cPtr->outputQueue);	/* will also free the items with the destructor */
 
-    if (cPtr->address) {
-        wfree(cPtr->address);
-        wfree(cPtr->service);
-        wfree(cPtr->protocol);
-    }
+	if (cPtr->address) {
+		wfree(cPtr->address);
+		wfree(cPtr->service);
+		wfree(cPtr->protocol);
+	}
 
-    wrelease(cPtr);
+	wrelease(cPtr);
 }
 
-
-void
-WMCloseConnection(WMConnection *cPtr)
+void WMCloseConnection(WMConnection * cPtr)
 {
-    if (cPtr->sock>=0) {
-        if (cPtr->shutdownOnClose) {
-            shutdown(cPtr->sock, SHUT_RDWR);
-        }
-        close(cPtr->sock);
-        cPtr->sock = -1;
-    }
+	if (cPtr->sock >= 0) {
+		if (cPtr->shutdownOnClose) {
+			shutdown(cPtr->sock, SHUT_RDWR);
+		}
+		close(cPtr->sock);
+		cPtr->sock = -1;
+	}
 
-    removeAllHandlers(cPtr);
-    clearOutputQueue(cPtr);
+	removeAllHandlers(cPtr);
+	clearOutputQueue(cPtr);
 
-    cPtr->state = WCClosed;
+	cPtr->state = WCClosed;
 }
 
-
-WMConnection*
-WMAcceptConnection(WMConnection *listener)
+WMConnection *WMAcceptConnection(WMConnection * listener)
 {
-    struct sockaddr_in clientname;
-    socklen_t size;
-    int newSock;
-    WMConnection *newConnection;
+	struct sockaddr_in clientname;
+	socklen_t size;
+	int newSock;
+	WMConnection *newConnection;
 
-    WCErrorCode = 0;
-    wassertrv(listener && listener->state==WCListening, NULL);
+	WCErrorCode = 0;
+	wassertrv(listener && listener->state == WCListening, NULL);
 
-    size = sizeof(clientname);
-    newSock = accept(listener->sock, (struct sockaddr*) &clientname, &size);
-    if (newSock<0) {
-        WCErrorCode = ((errno!=EAGAIN && errno!=EWOULDBLOCK) ? errno : 0);
-        return NULL;
-    }
+	size = sizeof(clientname);
+	newSock = accept(listener->sock, (struct sockaddr *)&clientname, &size);
+	if (newSock < 0) {
+		WCErrorCode = ((errno != EAGAIN && errno != EWOULDBLOCK) ? errno : 0);
+		return NULL;
+	}
 
-    newConnection = createConnectionWithSocket(newSock, True);
-    WMSetConnectionNonBlocking(newConnection, True);
-    newConnection->state = WCConnected;
-    setConnectionAddress(newConnection, &clientname);
+	newConnection = createConnectionWithSocket(newSock, True);
+	WMSetConnectionNonBlocking(newConnection, True);
+	newConnection->state = WCConnected;
+	setConnectionAddress(newConnection, &clientname);
 
-    return newConnection;
+	return newConnection;
 }
 
-
-char*
-WMGetConnectionAddress(WMConnection *cPtr)
+char *WMGetConnectionAddress(WMConnection * cPtr)
 {
-    return cPtr->address;
+	return cPtr->address;
 }
 
-
-char*
-WMGetConnectionService(WMConnection *cPtr)
+char *WMGetConnectionService(WMConnection * cPtr)
 {
-    return cPtr->service;
+	return cPtr->service;
 }
 
-
-char*
-WMGetConnectionProtocol(WMConnection *cPtr)
+char *WMGetConnectionProtocol(WMConnection * cPtr)
 {
-    return cPtr->protocol;
+	return cPtr->protocol;
 }
 
-
-int
-WMGetConnectionSocket(WMConnection *cPtr)
+int WMGetConnectionSocket(WMConnection * cPtr)
 {
-    return cPtr->sock;
+	return cPtr->sock;
 }
 
-
-WMConnectionState
-WMGetConnectionState(WMConnection *cPtr)
+WMConnectionState WMGetConnectionState(WMConnection * cPtr)
 {
-    return cPtr->state;
+	return cPtr->state;
 }
 
-
-WMConnectionTimeoutState
-WMGetConnectionTimeoutState(WMConnection *cPtr)
+WMConnectionTimeoutState WMGetConnectionTimeoutState(WMConnection * cPtr)
 {
-    return cPtr->timeoutState;
+	return cPtr->timeoutState;
 }
 
-
-Bool
-WMEnqueueConnectionData(WMConnection *cPtr, WMData *data)
+Bool WMEnqueueConnectionData(WMConnection * cPtr, WMData * data)
 {
-    wassertrv(cPtr->state!=WCNotConnected && cPtr->state!=WCListening, False);
-    wassertrv(cPtr->state!=WCInProgress && cPtr->state!=WCFailed, False);
+	wassertrv(cPtr->state != WCNotConnected && cPtr->state != WCListening, False);
+	wassertrv(cPtr->state != WCInProgress && cPtr->state != WCFailed, False);
 
-    if (cPtr->state!=WCConnected)
-        return False;
+	if (cPtr->state != WCConnected)
+		return False;
 
-    WMAddToArray(cPtr->outputQueue, WMRetainData(data));
-    return True;
+	WMAddToArray(cPtr->outputQueue, WMRetainData(data));
+	return True;
 }
-
 
 /*
  * Return value:
@@ -765,86 +704,83 @@ WMEnqueueConnectionData(WMConnection *cPtr, WMData *data)
  *      callback will be called.
  *  1 - data was succesfully sent
  */
-int
-WMSendConnectionData(WMConnection *cPtr, WMData *data)
+int WMSendConnectionData(WMConnection * cPtr, WMData * data)
 {
-    int bytes, pos, len;
-    TimeoutData *tPtr = &cPtr->sendTimeout;
-    const unsigned char *dataBytes;
+	int bytes, pos, len;
+	TimeoutData *tPtr = &cPtr->sendTimeout;
+	const unsigned char *dataBytes;
 
-    wassertrv(cPtr->state!=WCNotConnected && cPtr->state!=WCListening, -1);
-    wassertrv(cPtr->state!=WCInProgress && cPtr->state!=WCFailed, -1);
+	wassertrv(cPtr->state != WCNotConnected && cPtr->state != WCListening, -1);
+	wassertrv(cPtr->state != WCInProgress && cPtr->state != WCFailed, -1);
 
-    if (cPtr->state!=WCConnected)
-        return -1;
+	if (cPtr->state != WCConnected)
+		return -1;
 
-    /* If we have no data just flush the queue, else try to send data */
-    if (data && WMGetDataLength(data)>0) {
-        WMAddToArray(cPtr->outputQueue, WMRetainData(data));
-        /* If there already was something in queue, and also a write input
-         * handler is established, it means we were unable to send, so
-         * return and let the write handler notify us when we can send.
-         */
-        if (WMGetArrayItemCount(cPtr->outputQueue)>1 && cPtr->handler.write)
-            return 0;
-    }
+	/* If we have no data just flush the queue, else try to send data */
+	if (data && WMGetDataLength(data) > 0) {
+		WMAddToArray(cPtr->outputQueue, WMRetainData(data));
+		/* If there already was something in queue, and also a write input
+		 * handler is established, it means we were unable to send, so
+		 * return and let the write handler notify us when we can send.
+		 */
+		if (WMGetArrayItemCount(cPtr->outputQueue) > 1 && cPtr->handler.write)
+			return 0;
+	}
 
-    while (WMGetArrayItemCount(cPtr->outputQueue) > 0) {
-        data = WMGetFromArray(cPtr->outputQueue, 0);
-        dataBytes = (const unsigned char *)WMDataBytes(data);
-        len = WMGetDataLength(data);
-        pos = cPtr->bufPos; /* where we're left last time */
-        while(pos < len) {
-        again:
-            bytes = write(cPtr->sock, dataBytes+pos, len - pos);
-            if(bytes<0) {
-                switch (errno) {
-                case EINTR:
-                    goto again;
-                case EWOULDBLOCK:
-                    /* save the position where we're left and add a timeout */
-                    cPtr->bufPos = pos;
-                    if (!tPtr->handler) {
-                        tPtr->handler = WMAddTimerHandler(tPtr->timeout*1000,
-                                                          sendTimeout, cPtr);
-                    }
-                    if (!cPtr->handler.write) {
-                        cPtr->handler.write =
-                            WMAddInputHandler(cPtr->sock, WIWriteMask,
-                                              inputHandler, cPtr);
-                    }
-                    return 0;
-                default:
-                    WCErrorCode = errno;
-                    cPtr->state = WCDied;
-                    removeAllHandlers(cPtr);
-                    if (cPtr->delegate && cPtr->delegate->didDie)
-                        (*cPtr->delegate->didDie)(cPtr->delegate, cPtr);
-                    return -1;
-                }
-            }
-            pos += bytes;
-        }
-        WMDeleteFromArray(cPtr->outputQueue, 0);
-        cPtr->bufPos = 0;
-        if (tPtr->handler) {
-            WMDeleteTimerHandler(tPtr->handler);
-            tPtr->handler = NULL;
-        }
-        /*if (cPtr->handler.write) {
-         WMDeleteInputHandler(cPtr->handler.write);
-         cPtr->handler.write = NULL;
-         }*/
-    }
+	while (WMGetArrayItemCount(cPtr->outputQueue) > 0) {
+		data = WMGetFromArray(cPtr->outputQueue, 0);
+		dataBytes = (const unsigned char *)WMDataBytes(data);
+		len = WMGetDataLength(data);
+		pos = cPtr->bufPos;	/* where we're left last time */
+		while (pos < len) {
+ again:
+			bytes = write(cPtr->sock, dataBytes + pos, len - pos);
+			if (bytes < 0) {
+				switch (errno) {
+				case EINTR:
+					goto again;
+				case EWOULDBLOCK:
+					/* save the position where we're left and add a timeout */
+					cPtr->bufPos = pos;
+					if (!tPtr->handler) {
+						tPtr->handler = WMAddTimerHandler(tPtr->timeout * 1000,
+										  sendTimeout, cPtr);
+					}
+					if (!cPtr->handler.write) {
+						cPtr->handler.write =
+						    WMAddInputHandler(cPtr->sock, WIWriteMask, inputHandler, cPtr);
+					}
+					return 0;
+				default:
+					WCErrorCode = errno;
+					cPtr->state = WCDied;
+					removeAllHandlers(cPtr);
+					if (cPtr->delegate && cPtr->delegate->didDie)
+						(*cPtr->delegate->didDie) (cPtr->delegate, cPtr);
+					return -1;
+				}
+			}
+			pos += bytes;
+		}
+		WMDeleteFromArray(cPtr->outputQueue, 0);
+		cPtr->bufPos = 0;
+		if (tPtr->handler) {
+			WMDeleteTimerHandler(tPtr->handler);
+			tPtr->handler = NULL;
+		}
+		/*if (cPtr->handler.write) {
+		   WMDeleteInputHandler(cPtr->handler.write);
+		   cPtr->handler.write = NULL;
+		   } */
+	}
 
-    if (cPtr->handler.write) {
-        WMDeleteInputHandler(cPtr->handler.write);
-        cPtr->handler.write = NULL;
-    }
+	if (cPtr->handler.write) {
+		WMDeleteInputHandler(cPtr->handler.write);
+		cPtr->handler.write = NULL;
+	}
 
-    return 1;
+	return 1;
 }
-
 
 /*
  * WMGetConnectionAvailableData(connection):
@@ -858,196 +794,165 @@ WMSendConnectionData(WMConnection *cPtr, WMData *data)
  * Also trying to read from an already died or closed connection is
  * considered to be an error condition, and will return NULL.
  */
-WMData*
-WMGetConnectionAvailableData(WMConnection *cPtr)
+WMData *WMGetConnectionAvailableData(WMConnection * cPtr)
 {
-    char buffer[NETBUF_SIZE];
-    int nbytes;
-    WMData *aData;
+	char buffer[NETBUF_SIZE];
+	int nbytes;
+	WMData *aData;
 
-    wassertrv(cPtr->state!=WCNotConnected && cPtr->state!=WCListening, NULL);
-    wassertrv(cPtr->state!=WCInProgress && cPtr->state!=WCFailed, NULL);
+	wassertrv(cPtr->state != WCNotConnected && cPtr->state != WCListening, NULL);
+	wassertrv(cPtr->state != WCInProgress && cPtr->state != WCFailed, NULL);
 
-    if (cPtr->state!=WCConnected)
-        return NULL;
+	if (cPtr->state != WCConnected)
+		return NULL;
 
-    aData = NULL;
+	aData = NULL;
 
-again:
-    nbytes = read(cPtr->sock, buffer, NETBUF_SIZE);
-    if (nbytes<0) {
-        switch (errno) {
-        case EINTR:
-            goto again;
-        case EWOULDBLOCK:
-            aData = WMCreateDataWithCapacity(0);
-            break;
-        default:
-            WCErrorCode = errno;
-            cPtr->state = WCDied;
-            removeAllHandlers(cPtr);
-            if (cPtr->delegate && cPtr->delegate->didDie)
-                (*cPtr->delegate->didDie)(cPtr->delegate, cPtr);
-            break;
-        }
-    } else if (nbytes==0) {      /* the other side has closed connection */
-        cPtr->state = WCClosed;
-        removeAllHandlers(cPtr);
-        if (cPtr->delegate && cPtr->delegate->didDie)
-            (*cPtr->delegate->didDie)(cPtr->delegate, cPtr);
-    } else {
-        aData = WMCreateDataWithBytes(buffer, nbytes);
-    }
+ again:
+	nbytes = read(cPtr->sock, buffer, NETBUF_SIZE);
+	if (nbytes < 0) {
+		switch (errno) {
+		case EINTR:
+			goto again;
+		case EWOULDBLOCK:
+			aData = WMCreateDataWithCapacity(0);
+			break;
+		default:
+			WCErrorCode = errno;
+			cPtr->state = WCDied;
+			removeAllHandlers(cPtr);
+			if (cPtr->delegate && cPtr->delegate->didDie)
+				(*cPtr->delegate->didDie) (cPtr->delegate, cPtr);
+			break;
+		}
+	} else if (nbytes == 0) {	/* the other side has closed connection */
+		cPtr->state = WCClosed;
+		removeAllHandlers(cPtr);
+		if (cPtr->delegate && cPtr->delegate->didDie)
+			(*cPtr->delegate->didDie) (cPtr->delegate, cPtr);
+	} else {
+		aData = WMCreateDataWithBytes(buffer, nbytes);
+	}
 
-    return aData;
+	return aData;
 }
 
-
-void
-WMSetConnectionDelegate(WMConnection *cPtr, ConnectionDelegate *delegate)
+void WMSetConnectionDelegate(WMConnection * cPtr, ConnectionDelegate * delegate)
 {
-    wassertr(cPtr->sock >= 0);
-    /* Don't try to set the delegate multiple times */
-    wassertr(cPtr->delegate == NULL);
+	wassertr(cPtr->sock >= 0);
+	/* Don't try to set the delegate multiple times */
+	wassertr(cPtr->delegate == NULL);
 
-    cPtr->delegate = delegate;
-    if (delegate && delegate->didReceiveInput && !cPtr->handler.read)
-        cPtr->handler.read = WMAddInputHandler(cPtr->sock, WIReadMask,
-                                               inputHandler, cPtr);
-    if (delegate && delegate->didCatchException && !cPtr->handler.exception)
-        cPtr->handler.exception = WMAddInputHandler(cPtr->sock, WIExceptMask,
-                                                    inputHandler, cPtr);
+	cPtr->delegate = delegate;
+	if (delegate && delegate->didReceiveInput && !cPtr->handler.read)
+		cPtr->handler.read = WMAddInputHandler(cPtr->sock, WIReadMask, inputHandler, cPtr);
+	if (delegate && delegate->didCatchException && !cPtr->handler.exception)
+		cPtr->handler.exception = WMAddInputHandler(cPtr->sock, WIExceptMask, inputHandler, cPtr);
 }
-
 
 #if 0
-Bool
-WMIsConnectionNonBlocking(WMConnection *cPtr)
+Bool WMIsConnectionNonBlocking(WMConnection * cPtr)
 {
 #if 1
-    int state;
+	int state;
 
-    state = fcntl(cPtr->sock, F_GETFL, 0);
+	state = fcntl(cPtr->sock, F_GETFL, 0);
 
-    if (state < 0) {
-        /* If we can't use fcntl on socket, this probably also means we could
-         * not use fcntl to set non-blocking mode, and since a socket defaults
-         * to blocking when created, return False as the best assumption */
-        return False;
-    }
+	if (state < 0) {
+		/* If we can't use fcntl on socket, this probably also means we could
+		 * not use fcntl to set non-blocking mode, and since a socket defaults
+		 * to blocking when created, return False as the best assumption */
+		return False;
+	}
 
-    return ((state & NONBLOCK_OPT)!=0);
+	return ((state & NONBLOCK_OPT) != 0);
 #else
-    return cPtr->isNonBlocking;
+	return cPtr->isNonBlocking;
 #endif
 }
 #endif
 
-
-Bool
-WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag)
+Bool WMSetConnectionNonBlocking(WMConnection * cPtr, Bool flag)
 {
-    wassertrv(cPtr!=NULL && cPtr->sock>=0, False);
+	wassertrv(cPtr != NULL && cPtr->sock >= 0, False);
 
-    flag = ((flag==0) ? 0 : 1);
+	flag = ((flag == 0) ? 0 : 1);
 
-    if (cPtr->isNonBlocking == flag)
-        return True;
+	if (cPtr->isNonBlocking == flag)
+		return True;
 
-    if (setSocketNonBlocking(cPtr->sock, flag)==True) {
-        cPtr->isNonBlocking = flag;
-        return True;
-    }
+	if (setSocketNonBlocking(cPtr->sock, flag) == True) {
+		cPtr->isNonBlocking = flag;
+		return True;
+	}
 
-    return False;
+	return False;
 }
 
-
-Bool
-WMSetConnectionCloseOnExec(WMConnection *cPtr, Bool flag)
+Bool WMSetConnectionCloseOnExec(WMConnection * cPtr, Bool flag)
 {
-    wassertrv(cPtr!=NULL && cPtr->sock>=0, False);
+	wassertrv(cPtr != NULL && cPtr->sock >= 0, False);
 
-    if (fcntl(cPtr->sock, F_SETFD, ((flag==0) ? 0 : FD_CLOEXEC)) < 0) {
-        return False;
-    }
+	if (fcntl(cPtr->sock, F_SETFD, ((flag == 0) ? 0 : FD_CLOEXEC)) < 0) {
+		return False;
+	}
 
-    return True;
+	return True;
 }
 
-
-void
-WMSetConnectionShutdownOnClose(WMConnection *cPtr, Bool flag)
+void WMSetConnectionShutdownOnClose(WMConnection * cPtr, Bool flag)
 {
-    cPtr->shutdownOnClose = ((flag==0) ? 0 : 1);
+	cPtr->shutdownOnClose = ((flag == 0) ? 0 : 1);
 }
 
-
-void*
-WMGetConnectionClientData(WMConnection *cPtr)
+void *WMGetConnectionClientData(WMConnection * cPtr)
 {
-    return cPtr->clientData;
+	return cPtr->clientData;
 }
 
-
-void
-WMSetConnectionClientData(WMConnection *cPtr, void *data)
+void WMSetConnectionClientData(WMConnection * cPtr, void *data)
 {
-    cPtr->clientData = data;
+	cPtr->clientData = data;
 }
 
-
-unsigned int
-WMGetConnectionFlags(WMConnection *cPtr)
+unsigned int WMGetConnectionFlags(WMConnection * cPtr)
 {
-    return cPtr->uflags;
+	return cPtr->uflags;
 }
 
-
-void
-WMSetConnectionFlags(WMConnection *cPtr, unsigned int flags)
+void WMSetConnectionFlags(WMConnection * cPtr, unsigned int flags)
 {
-    cPtr->uflags = flags;
+	cPtr->uflags = flags;
 }
 
-
-WMArray*
-WMGetConnectionUnsentData(WMConnection *cPtr)
+WMArray *WMGetConnectionUnsentData(WMConnection * cPtr)
 {
-    return cPtr->outputQueue;
+	return cPtr->outputQueue;
 }
 
-
-void
-WMSetConnectionDefaultTimeout(unsigned int timeout)
+void WMSetConnectionDefaultTimeout(unsigned int timeout)
 {
-    if (timeout == 0) {
-        DefaultTimeout = DEF_TIMEOUT;
-    } else {
-        DefaultTimeout = timeout;
-    }
+	if (timeout == 0) {
+		DefaultTimeout = DEF_TIMEOUT;
+	} else {
+		DefaultTimeout = timeout;
+	}
 }
 
-
-void
-WMSetConnectionOpenTimeout(unsigned int timeout)
+void WMSetConnectionOpenTimeout(unsigned int timeout)
 {
-    if (timeout == 0) {
-        OpenTimeout = DefaultTimeout;
-    } else {
-        OpenTimeout = timeout;
-    }
+	if (timeout == 0) {
+		OpenTimeout = DefaultTimeout;
+	} else {
+		OpenTimeout = timeout;
+	}
 }
 
-
-void
-WMSetConnectionSendTimeout(WMConnection *cPtr, unsigned int timeout)
+void WMSetConnectionSendTimeout(WMConnection * cPtr, unsigned int timeout)
 {
-    if (timeout == 0) {
-        cPtr->sendTimeout.timeout = DefaultTimeout;
-    } else {
-        cPtr->sendTimeout.timeout = timeout;
-    }
+	if (timeout == 0) {
+		cPtr->sendTimeout.timeout = DefaultTimeout;
+	} else {
+		cPtr->sendTimeout.timeout = timeout;
+	}
 }
-
-
