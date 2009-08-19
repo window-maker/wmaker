@@ -428,7 +428,7 @@ listIconPaths(WMList *lPtr)
 }
 
 
-void
+static void
 drawIconProc(WMList *lPtr, int index, Drawable d, char *text, int state,
              WMRect *rect)
 {
