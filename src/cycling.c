@@ -86,6 +86,8 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 	KeyCode         endKey         = XKeysymToKeycode(dpy, XK_End);
 	KeyCode         shiftLKey      = XKeysymToKeycode(dpy, XK_Shift_L);
 	KeyCode         shiftRKey      = XKeysymToKeycode(dpy, XK_Shift_R);
+	KeyCode         escapeKey      = XKeysymToKeycode(dpy, XK_Escape);
+	Bool            esc_cancel     = False;
 	Bool            somethingElse  = False;
 	Bool            done           = False;
 	Bool            hasModifier;
@@ -164,6 +166,14 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 				newFocused = wSwitchPanelSelectFirst(swpanel, ev.xkey.keycode != homeKey);
 				if (newFocused)
 					oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr);
+			} else if (ev.xkey.keycode == escapeKey) {
+				/* Focus the first window of the swpanel, despite the 'False' */
+				newFocused = wSwitchPanelSelectFirst(swpanel, False);
+				if (newFocused) {
+					oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr);
+				esc_cancel = True;
+				done = True;
+				}
 			} else if (ev.xkey.keycode != shiftLKey && ev.xkey.keycode != shiftRKey) {
 
 				somethingElse = True;
@@ -215,7 +225,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 	if (swpanel)
 		wSwitchPanelDestroy(swpanel);
 
-	if (newFocused) {
+	if (newFocused && !esc_cancel) {
 		wRaiseFrame(newFocused->frame->core);
 		CommitStacking(scr);
 		if (!newFocused->flags.mapped)
