@@ -63,27 +63,27 @@ static void raiseWindow(WSwitchPanel * swpanel, WWindow * wwin)
 
 void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 {
-	WScreen *scr = wScreenForRootWindow(event->xkey.root);
-	Bool done = False;
-	WWindow *newFocused;
-	WWindow *oldFocused;
-	int modifiers;
-	XModifierKeymap *keymap = NULL;
-	Bool hasModifier;
-	Bool somethingElse = False;
-	XEvent ev;
-	WSwitchPanel *swpanel = NULL;
-	KeyCode leftKey, rightKey, homeKey, endKey, shiftLKey, shiftRKey;
+
+	XModifierKeymap *keymap        = NULL;
+	WSwitchPanel    *swpanel       = NULL;
+	WScreen         *scr           = wScreenForRootWindow(event->xkey.root);
+	KeyCode         leftKey        = XKeysymToKeycode(dpy, XK_Left);
+	KeyCode         rightKey       = XKeysymToKeycode(dpy, XK_Right);
+	KeyCode         homeKey        = XKeysymToKeycode(dpy, XK_Home);
+	KeyCode         endKey         = XKeysymToKeycode(dpy, XK_End);
+	KeyCode         shiftLKey      = XKeysymToKeycode(dpy, XK_Shift_L);
+	KeyCode         shiftRKey      = XKeysymToKeycode(dpy, XK_Shift_R);
+	Bool            somethingElse  = False;
+	Bool            done           = False;
+	Bool            hasModifier;
+	int             modifiers;
+	WWindow         *newFocused;
+	WWindow         *oldFocused;
+	XEvent          ev;
+
 
 	if (!wwin)
 		return;
-
-	leftKey = XKeysymToKeycode(dpy, XK_Left);
-	rightKey = XKeysymToKeycode(dpy, XK_Right);
-	homeKey = XKeysymToKeycode(dpy, XK_Home);
-	endKey = XKeysymToKeycode(dpy, XK_End);
-	shiftLKey = XKeysymToKeycode(dpy, XK_Shift_L);
-	shiftRKey = XKeysymToKeycode(dpy, XK_Shift_R);
 
 	if (next)
 		hasModifier = (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0);
