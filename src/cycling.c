@@ -61,6 +61,19 @@ static void raiseWindow(WSwitchPanel * swpanel, WWindow * wwin)
 	}
 }
 
+static WWindow *change_focus_and_raise(WWindow *newFocused, WWindow *oldFocused,
+				       WSwitchPanel *swpanel, WScreen *scr)
+{
+	wWindowFocus(newFocused, oldFocused);
+	oldFocused = newFocused;
+
+	if (wPreferences.circ_raise) {
+		CommitStacking(scr);
+		raiseWindow(swpanel, newFocused);
+	}
+	return oldFocused;
+}
+
 void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 {
 
@@ -106,13 +119,8 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 
 	if (swpanel) {
 		newFocused = wSwitchPanelSelectNext(swpanel, !next);
-		if (newFocused) {
-			wWindowFocus(newFocused, oldFocused);
-			oldFocused = newFocused;
-
-			if (wPreferences.circ_raise)
-				raiseWindow(swpanel, newFocused);
-		}
+		if (newFocused)
+			oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr);
 	} else {
 		if (wwin->frame->workspace == scr->current_workspace)
 			newFocused = wwin;
@@ -142,41 +150,20 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 			    || ev.xkey.keycode == rightKey) {
 
 				newFocused = wSwitchPanelSelectNext(swpanel, False);
-				if (newFocused) {
-					wWindowFocus(newFocused, oldFocused);
-					oldFocused = newFocused;
-
-					if (wPreferences.circ_raise) {
-						CommitStacking(scr);
-						raiseWindow(swpanel, newFocused);
-					}
-				}
+				if (newFocused)
+					oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr);
 			} else if ((wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
 				    && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers)
 				   || ev.xkey.keycode == leftKey) {
 
 				newFocused = wSwitchPanelSelectNext(swpanel, True);
-				if (newFocused) {
-					wWindowFocus(newFocused, oldFocused);
-					oldFocused = newFocused;
-
-					if (wPreferences.circ_raise) {
-						CommitStacking(scr);
-						raiseWindow(swpanel, newFocused);
-					}
-				}
+				if (newFocused)
+					oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr);
 			} else if (ev.xkey.keycode == homeKey || ev.xkey.keycode == endKey) {
 
 				newFocused = wSwitchPanelSelectFirst(swpanel, ev.xkey.keycode != homeKey);
-				if (newFocused) {
-					wWindowFocus(newFocused, oldFocused);
-					oldFocused = newFocused;
-
-					if (wPreferences.circ_raise) {
-						CommitStacking(scr);
-						raiseWindow(swpanel, newFocused);
-					}
-				}
+				if (newFocused)
+					oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr);
 			} else if (ev.xkey.keycode != shiftLKey && ev.xkey.keycode != shiftRKey) {
 
 				somethingElse = True;
@@ -203,13 +190,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 					tmp = wSwitchPanelHandleEvent(swpanel, &ev);
 					if (tmp) {
 						newFocused = tmp;
-						wWindowFocus(newFocused, oldFocused);
-						oldFocused = newFocused;
-
-						if (wPreferences.circ_raise) {
-							CommitStacking(scr);
-							raiseWindow(swpanel, newFocused);
-						}
+						oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr);
 
 						if (ev.type == ButtonRelease)
 							done = True;
