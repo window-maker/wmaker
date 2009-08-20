@@ -131,66 +131,60 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 
 		switch (ev.type) {
 		case KeyPress:
-#ifdef DEBUG
-			printf("Got key press\n");
-#endif
+
+			if (!swpanel) {
+				done = True;
+				break;
+			}
+
 			if ((wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
 			     && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers)
 			    || ev.xkey.keycode == rightKey) {
 
-				if (swpanel) {
-					newFocused = wSwitchPanelSelectNext(swpanel, False);
-					if (newFocused) {
-						wWindowFocus(newFocused, oldFocused);
-						oldFocused = newFocused;
+				newFocused = wSwitchPanelSelectNext(swpanel, False);
+				if (newFocused) {
+					wWindowFocus(newFocused, oldFocused);
+					oldFocused = newFocused;
 
-						if (wPreferences.circ_raise) {
-							CommitStacking(scr);
-							raiseWindow(swpanel, newFocused);
-						}
+					if (wPreferences.circ_raise) {
+						CommitStacking(scr);
+						raiseWindow(swpanel, newFocused);
 					}
 				}
 			} else if ((wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
 				    && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers)
 				   || ev.xkey.keycode == leftKey) {
 
-				if (swpanel) {
-					newFocused = wSwitchPanelSelectNext(swpanel, True);
-					if (newFocused) {
-						wWindowFocus(newFocused, oldFocused);
-						oldFocused = newFocused;
+				newFocused = wSwitchPanelSelectNext(swpanel, True);
+				if (newFocused) {
+					wWindowFocus(newFocused, oldFocused);
+					oldFocused = newFocused;
 
-						if (wPreferences.circ_raise) {
-							CommitStacking(scr);
-							raiseWindow(swpanel, newFocused);
-						}
+					if (wPreferences.circ_raise) {
+						CommitStacking(scr);
+						raiseWindow(swpanel, newFocused);
 					}
 				}
 			} else if (ev.xkey.keycode == homeKey || ev.xkey.keycode == endKey) {
-				if (swpanel) {
-					newFocused = wSwitchPanelSelectFirst(swpanel, ev.xkey.keycode != homeKey);
-					if (newFocused) {
-						wWindowFocus(newFocused, oldFocused);
-						oldFocused = newFocused;
 
-						if (wPreferences.circ_raise) {
-							CommitStacking(scr);
-							raiseWindow(swpanel, newFocused);
-						}
+				newFocused = wSwitchPanelSelectFirst(swpanel, ev.xkey.keycode != homeKey);
+				if (newFocused) {
+					wWindowFocus(newFocused, oldFocused);
+					oldFocused = newFocused;
+
+					if (wPreferences.circ_raise) {
+						CommitStacking(scr);
+						raiseWindow(swpanel, newFocused);
 					}
 				}
 			} else if (ev.xkey.keycode != shiftLKey && ev.xkey.keycode != shiftRKey) {
-#ifdef DEBUG
-				printf("Got something else\n");
-#endif
+
 				somethingElse = True;
 				done = True;
 			}
 			break;
 		case KeyRelease:
-#ifdef DEBUG
-			printf("Got key release\n");
-#endif
+
 			for (i = 0; i < 8 * keymap->max_keypermod; i++) {
 				if (keymap->modifiermap[i] == ev.xkey.keycode &&
 				    wKeyBindings[WKBD_FOCUSNEXT].modifier & 1 << (i / keymap->max_keypermod)) {
@@ -233,9 +227,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 		XFreeModifiermap(keymap);
 
 	if (hasModifier) {
-#ifdef DEBUG
-		printf("Ungrabbing keyboard\n");
-#endif
+
 		XUngrabKeyboard(dpy, CurrentTime);
 	}
 
