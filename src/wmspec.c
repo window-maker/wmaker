@@ -390,7 +390,7 @@ static unsigned long *findBestIcon(unsigned long *data, unsigned long items)
 	 * results in better overall aesthetics -Dan */
 	wanted = wPreferences.icon_size * wPreferences.icon_size;
 
-	for (icon = NULL, distance = LONG_MAX, i = 0L; i < items - 1;) {
+	for (icon = NULL, distance = wanted, i = 0L; i < items - 1;) {
 		size = data[i] * data[i + 1];
 		if (size == 0)
 			break;
