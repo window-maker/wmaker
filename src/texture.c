@@ -380,6 +380,8 @@ WTexFunction *wTextureMakeFunction(WScreen * scr, char *lib, char *func, int arg
 	WTexFunction *texture;
 
 	texture = wmalloc(sizeof(WTexture));
+	memset(&fallbackColor, 0, sizeof(fallbackColor));
+
 	texture->type = WTEX_FUNCTION;
 	texture->handle = NULL;
 	texture->render = 0;
