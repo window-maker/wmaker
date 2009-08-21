@@ -1,6 +1,6 @@
 {
-  SystemFont = "Trebuchet MS,Luxi Sans";
-  BoldSystemFont = "Trebuchet MS,Luxi Sans:bold";
+  SystemFont = "Sans";
+  BoldSystemFont = "Sans:bold";
   DefaultFontSize = 11;
   AntialiasedText = Yes;
   FloppyPath = "/floppy";
