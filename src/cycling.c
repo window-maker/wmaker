@@ -142,13 +142,12 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 		/* ignore CapsLock */
 		modifiers = ev.xkey.state & ValidModMask;
 
-		switch (ev.type) {
-		case KeyPress:
+		if (!swpanel)
+			done = True;
 
-			if (!swpanel) {
-				done = True;
-				break;
-			}
+		switch (ev.type) {
+
+		case KeyPress:
 
 			if ((wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
 			     && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers)
@@ -197,19 +196,20 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 			break;
 
 		case EnterNotify:
+
 			/* ignore unwanted EnterNotify's */
 			break;
 
 		case LeaveNotify:
 		case MotionNotify:
-		case ButtonRelease:
-			if (swpanel) {
-				newFocused = wSwitchPanelHandleEvent(swpanel, &ev);
-				oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr);
 
-				if (ev.type == ButtonRelease)
-					done = True;
-			}
+		case ButtonRelease:
+
+			newFocused = wSwitchPanelHandleEvent(swpanel, &ev);
+			oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr);
+
+			if (ev.type == ButtonRelease)
+				done = True;
 			break;
 
 		default:
