@@ -126,7 +126,12 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 	oldFocused = wwin;
 
 	if (swpanel) {
-		newFocused = wSwitchPanelSelectNext(swpanel, !next);
+
+		if (wwin->flags.mapped)
+			newFocused = wSwitchPanelSelectNext(swpanel, !next);
+		else
+			newFocused = wSwitchPanelSelectFirst(swpanel, False);
+
 		oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr, False);
 	} else {
 		if (wwin->frame->workspace == scr->current_workspace)
