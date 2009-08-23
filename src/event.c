@@ -101,27 +101,27 @@ extern int wXkbEventBase;
 
 /************ Local stuff ***********/
 
-static void saveTimestamp(XEvent * event);
-static void handleColormapNotify();
-static void handleMapNotify();
-static void handleUnmapNotify();
-static void handleButtonPress();
-static void handleExpose();
-static void handleDestroyNotify();
-static void handleConfigureRequest();
-static void handleMapRequest();
-static void handlePropertyNotify();
-static void handleEnterNotify();
-static void handleLeaveNotify();
-static void handleExtensions();
-static void handleClientMessage();
-static void handleKeyPress();
-static void handleFocusIn();
-static void handleMotionNotify();
-static void handleVisibilityNotify();
+static void saveTimestamp(XEvent *event);
+static void handleColormapNotify(XEvent *event);
+static void handleMapNotify(XEvent *event);
+static void handleUnmapNotify(XEvent *event);
+static void handleButtonPress(XEvent *event);
+static void handleExpose(XEvent *event);
+static void handleDestroyNotify(XEvent *event);
+static void handleConfigureRequest(XEvent *event);
+static void handleMapRequest(XEvent *event);
+static void handlePropertyNotify(XEvent *event);
+static void handleEnterNotify(XEvent *event);
+static void handleLeaveNotify(XEvent *event);
+static void handleExtensions(XEvent *event);
+static void handleClientMessage(XEvent *event);
+static void handleKeyPress(XEvent *event);
+static void handleFocusIn(XEvent *event);
+static void handleMotionNotify(XEvent *event);
+static void handleVisibilityNotify(XEvent *event);
 
 #ifdef SHAPE
-static void handleShapeNotify();
+static void handleShapeNotify(XEvent *event);
 #endif
 
 /* called from the signal handler */
@@ -302,7 +302,7 @@ void DispatchEvent(XEvent * event)
 #define BUFF_SIZE ((sizeof(struct inotify_event) + 16)*512)
 void inotifyHandleEvents(int fd, int wd)
 {
-	extern void wDefaultsCheckDomains();
+	extern void wDefaultsCheckDomains(void);
 	ssize_t eventQLength, i = 0;
 	char buff[BUFF_SIZE] = { 0 };
 	/* Check config only once per read of the event queue */
@@ -359,7 +359,7 @@ void inotifyHandleEvents(int fd, int wd)
  *      Calls inotifyGetEvents if defaults database changes.
  *----------------------------------------------------------------------
  */
-void EventLoop()
+void EventLoop(void)
 {
 	XEvent event;
 	extern int inotifyFD;
@@ -413,7 +413,7 @@ void EventLoop()
  *
  *----------------------------------------------------------------------
  */
-void ProcessPendingEvents()
+void ProcessPendingEvents(void)
 {
 	XEvent event;
 	int count;
