@@ -1536,7 +1536,7 @@ static void handleKeyPress(XEvent * event)
 		StartWindozeCycle(wwin, event, False);
 		break;
 
-	case WKBD_WORKSPACE1...WKBD_WORKSPACE10:
+	case WKBD_WORKSPACE1 ... WKBD_WORKSPACE10:
 		widx = command - WKBD_WORKSPACE1;
 		i = (scr->current_workspace / 10) * 10 + widx;
 		if (wPreferences.ws_advance || i < scr->workspace_count)
@@ -1549,6 +1549,7 @@ static void handleKeyPress(XEvent * event)
 	case WKBD_PREVWORKSPACE:
 		wWorkspaceRelativeChange(scr, -1);
 		break;
+
 	case WKBD_WINDOW1:
 	case WKBD_WINDOW2:
 	case WKBD_WINDOW3:
