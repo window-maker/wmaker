@@ -2123,7 +2123,6 @@ void wUnselectWindows(WScreen * scr)
 	scr->selected_windows = NULL;
 }
 
-#ifndef LITE
 static void selectWindowsInside(WScreen * scr, int x1, int y1, int x2, int y2)
 {
 	WWindow *tmpw;
@@ -2212,7 +2211,6 @@ void wSelectWindows(WScreen * scr, XEvent * ev)
 		}
 	}
 }
-#endif				/* !LITE */
 
 void InteractivePlaceWindow(WWindow * wwin, int *x_ret, int *y_ret, unsigned width, unsigned height)
 {

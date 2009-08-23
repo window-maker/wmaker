@@ -32,9 +32,7 @@
 #include <stdint.h>
 #include <unistd.h>
 #include <ctype.h>
-#if 0
-#include <nana.h>
-#endif
+
 #include "WindowMaker.h"
 #include "wcore.h"
 #include "framewin.h"
@@ -81,19 +79,12 @@ MENU_SCROLL_STEPS_US, MENU_SCROLL_DELAY_US}};
 
 static void menuMouseDown(WObjDescriptor * desc, XEvent * event);
 static void menuExpose(WObjDescriptor * desc, XEvent * event);
-
 static void menuTitleDoubleClick(WCoreWindow * sender, void *data, XEvent * event);
 static void menuTitleMouseDown(WCoreWindow * sender, void *data, XEvent * event);
-
 static void menuCloseClick(WCoreWindow * sender, void *data, XEvent * event);
-
 static void updateTexture(WMenu * menu);
-
-#ifndef LITE
 static int saveMenuRecurs(WMPropList * menus, WScreen * scr, WMenu * menu);
 static int restoreMenuRecurs(WScreen * scr, WMPropList * menus, WMenu * menu, char *path);
-#endif				/* !LITE */
-
 static void selectEntry(WMenu * menu, int entry_no);
 static void closeCascade(WMenu * menu);
 
@@ -2332,7 +2323,6 @@ void wMenuSaveState(WScreen * scr)
 
 	menus = WMCreatePLDictionary(NULL, NULL);
 
-#ifndef LITE
 	if (scr->switch_menu && scr->switch_menu->flags.buttoned) {
 		key = WMCreatePLString("SwitchMenu");
 		saveMenuInfo(menus, scr->switch_menu, key);
@@ -2343,7 +2333,6 @@ void wMenuSaveState(WScreen * scr)
 	if (saveMenuRecurs(menus, scr, scr->root_menu))
 		save_menus = 1;
 
-#endif				/* !LITE */
 	if (scr->workspace_menu && scr->workspace_menu->flags.buttoned) {
 		key = WMCreatePLString("WorkspaceMenu");
 		saveMenuInfo(menus, scr->workspace_menu, key);
@@ -2358,8 +2347,6 @@ void wMenuSaveState(WScreen * scr)
 	}
 	WMReleasePropList(menus);
 }
-
-#ifndef LITE
 
 static Bool getMenuPath(WMenu * menu, char *buffer, int bufSize)
 {
@@ -2416,7 +2403,6 @@ static Bool saveMenuRecurs(WMPropList * menus, WScreen * scr, WMenu * menu)
 	}
 	return save_menus;
 }
-#endif				/* !LITE */
 
 #define COMPLAIN(key) wwarning(_("bad value in menus state info: %s"), key)
 
@@ -2461,12 +2447,10 @@ static int restoreMenu(WScreen * scr, WMPropList * menu, int which)
 	if (!getMenuInfo(menu, &x, &y, &lowered))
 		return False;
 
-#ifndef LITE
 	if (which & WSS_SWITCHMENU) {
 		OpenSwitchMenu(scr, x, y, False);
 		pmenu = scr->switch_menu;
 	}
-#endif				/* !LITE */
 
 	if (pmenu) {
 		int width = MENUW(pmenu);
@@ -2494,7 +2478,6 @@ static int restoreMenu(WScreen * scr, WMPropList * menu, int which)
 	return False;
 }
 
-#ifndef LITE
 static int restoreMenuRecurs(WScreen * scr, WMPropList * menus, WMenu * menu, char *path)
 {
 	WMPropList *key, *entry;
@@ -2557,7 +2540,6 @@ static int restoreMenuRecurs(WScreen * scr, WMPropList * menus, WMenu * menu, ch
 
 	return res;
 }
-#endif				/* !LITE */
 
 void wMenuRestoreState(WScreen * scr)
 {
@@ -2581,13 +2563,11 @@ void wMenuRestoreState(WScreen * scr)
 	WMReleasePropList(skey);
 	restoreMenu(scr, menu, WSS_SWITCHMENU);
 
-#ifndef LITE
 	if (!scr->root_menu) {
 		OpenRootMenu(scr, scr->scr_width * 2, 0, False);
 		wMenuUnmap(scr->root_menu);
 	}
 	restoreMenuRecurs(scr, menus, scr->root_menu, "");
-#endif				/* !LITE */
 }
 
 void OpenWorkspaceMenu(WScreen * scr, int x, int y)
@@ -2595,12 +2575,11 @@ void OpenWorkspaceMenu(WScreen * scr, int x, int y)
 	WMenu *menu, *parent;
 	WMenuEntry *entry;
 
-#ifndef LITE
 	if (!scr->root_menu) {
 		OpenRootMenu(scr, scr->scr_width * 2, 0, False);
 		wMenuUnmap(scr->root_menu);
 	}
-#endif
+
 	menu = scr->workspace_menu;
 	if (menu) {
 		if (menu->flags.mapped) {

@@ -744,7 +744,6 @@ static void handleButtonPress(XEvent * event)
 	wBalloonHide(scr);
 #endif
 
-#ifndef LITE
 	if (event->xbutton.window == scr->root_win) {
 		if (event->xbutton.button == Button1 && wPreferences.mouse_button1 != WA_NONE) {
 			executeButtonAction(scr, event, wPreferences.mouse_button1);
@@ -758,7 +757,6 @@ static void handleButtonPress(XEvent * event)
 			wWorkspaceRelativeChange(scr, -1);
 		}
 	}
-#endif				/* !LITE */
 
 	desc = NULL;
 	if (XFindContext(dpy, event->xbutton.subwindow, wWinContext, (XPointer *) & desc) == XCNOENT) {
@@ -1360,14 +1358,8 @@ static void handleKeyPress(XEvent * event)
 	}
 
 	if (command < 0) {
-#ifdef LITE
-		{
-#if 0
-		}
-#endif
-#else
+
 		if (!wRootMenuPerformShortcut(event)) {
-#endif
 			static int dontLoop = 0;
 
 			if (dontLoop > 10) {
@@ -1390,7 +1382,7 @@ static void handleKeyPress(XEvent * event)
 #define ISFOCUSED(w) ((w) && (w)->flags.focused)
 
 	switch (command) {
-#ifndef LITE
+
 	case WKBD_ROOTMENU:
 		/*OpenRootMenu(scr, event->xkey.x_root, event->xkey.y_root, True); */
 		if (!CheckFullScreenWindowFocused(scr)) {
@@ -1406,7 +1398,7 @@ static void handleKeyPress(XEvent * event)
 				       True);
 		}
 		break;
-#endif				/* !LITE */
+
 	case WKBD_WINDOWMENU:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin))
 			OpenWindowMenu(wwin, wwin->frame_x, wwin->frame_y + wwin->frame->top_width, True);

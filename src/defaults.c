@@ -547,12 +547,10 @@ WDefaultEntry optionList[] = {
 	{"SwitchPanelImages", "(swtile.png, swback.png, 30, 40)", &wPreferences,
 	 NULL, getPropList, setSwPOptions},
 	/* keybindings */
-#ifndef LITE
 	{"RootMenuKey", "None", (void *)WKBD_ROOTMENU,
 	 NULL, getKeybind, setKeyGrab},
 	{"WindowListKey", "None", (void *)WKBD_WINDOWLIST,
 	 NULL, getKeybind, setKeyGrab},
-#endif				/* LITE */
 	{"WindowMenuKey", "None", (void *)WKBD_WINDOWMENU,
 	 NULL, getKeybind, setKeyGrab},
 	{"ClipLowerKey", "None", (void *)WKBD_CLIPLOWER,
@@ -1104,7 +1102,7 @@ void wDefaultsCheckDomains(void)
 			WMReleasePropList(shared_dict);
 		}
 	}
-#ifndef LITE
+
 	if (stat(WDRootMenu->path, &stbuf) >= 0 && WDRootMenu->timestamp < stbuf.st_mtime) {
 		dict = WMReadPropListFromFile(WDRootMenu->path);
 #ifdef HEARTBEAT
@@ -1128,8 +1126,6 @@ void wDefaultsCheckDomains(void)
 		}
 		WDRootMenu->timestamp = stbuf.st_mtime;
 	}
-#endif				/* !LITE */
-
 }
 
 void wReadDefaults(WScreen * scr, WMPropList * new_dict)

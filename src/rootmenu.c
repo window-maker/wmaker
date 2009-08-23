@@ -23,8 +23,6 @@
 
 #include "wconfig.h"
 
-#ifndef LITE
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -1771,5 +1769,3 @@ void OpenRootMenu(WScreen * scr, int x, int y, int keyboard)
 	if (scr->flags.root_menu_changed_shortcuts)
 		rebindKeygrabs(scr);
 }
-
-#endif				/* !LITE */

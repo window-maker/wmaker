@@ -28,7 +28,6 @@
 
 #include <WINGs/WUtil.h>
 
-
 #define WTB_LEFT	0
 #define WTB_RIGHT	1
 
@@ -36,7 +35,6 @@
 #define WTB_UNFOCUSED	2
 #define WTB_PFOCUSED	4
 #define WTB_MENU 6
-
 
 
 typedef struct {
@@ -216,10 +214,8 @@ typedef struct _WScreen {
     struct WPixmap *menu_shade_indicator;  /* for shaded window */
     int app_menu_x, app_menu_y;	       /* position for application menus */
 
-#ifndef LITE
     struct WMenu *root_menu;	       /* root window menu */
     struct WMenu *switch_menu;	       /* window list menu */
-#endif
     struct WMenu *workspace_menu;      /* workspace operation */
     struct WMenu *window_menu;	       /* window command menu */
     struct WMenu *icon_menu;	       /* icon/appicon menu */

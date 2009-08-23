@@ -65,7 +65,6 @@ wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
 		-e "s|#sysconfdir#|$(sysconfdir)/WindowMaker|" \
 		-e "s|#version#|$(VERSION)|" \
 		-e "s|#bindir#|$(bindir)|" \
-		-e "s|#LITE#|@LITE@|" \
 			$(srcdir)/wmaker.inst.in >wmaker.inst
 
 	chmod 755 wmaker.inst

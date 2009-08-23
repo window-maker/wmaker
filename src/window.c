@@ -2653,9 +2653,7 @@ void wWindowSetKeyGrabs(WWindow * wwin)
 			 wwin->frame->core->window, True, GrabModeAsync, GrabModeAsync);
 	}
 
-#ifndef LITE
 	wRootMenuBindShortcuts(wwin->frame->core->window);
-#endif
 }
 
 void wWindowResetMouseGrabs(WWindow * wwin)

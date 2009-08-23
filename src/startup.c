@@ -776,9 +776,7 @@ void StartUp(Bool defaultScreenOnly)
 		wScreenCount++;
 	}
 
-#ifndef LITE
 	InitializeSwitchMenu();
-#endif
 
 	/* initialize/restore state for the screens */
 	for (j = 0; j < wScreenCount; j++) {

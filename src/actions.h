@@ -42,9 +42,7 @@ void wUnshadeWindow(WWindow *wwin);
 void wIconifyWindow(WWindow *wwin);
 void wDeiconifyWindow(WWindow *wwin);
 
-#ifndef LITE
 void wSelectWindows(WScreen *scr, XEvent *ev);
-#endif
 
 void wSelectWindow(WWindow *wwin, Bool flag);
 void wUnselectWindows(WScreen *scr);

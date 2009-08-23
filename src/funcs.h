@@ -44,9 +44,6 @@ void SetupEnvironment(WScreen *scr);
 
 void DispatchEvent(XEvent *event);
 
-#ifdef LITE
-#define UpdateSwitchMenu(a,b,c)
-#else
 void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
 
 Bool wRootMenuPerformShortcut(XEvent *event);
@@ -58,10 +55,6 @@ void OpenRootMenu(WScreen *scr, int x, int y, int keyboard);
 void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
 
 void InitializeSwitchMenu(void);
-
-#endif /* !LITE */
-
-
 
 void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard);
 

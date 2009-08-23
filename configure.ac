@@ -373,18 +373,6 @@ dnl  fi])
 
 
 dnl
-dnl Disable some stuff that are duplicated in kde
-dnl ---------------------------------------------
-AC_ARG_ENABLE(lite,
-  [  --enable-lite           disable some stuff (dont use it) ],
-  [if test x$enableval = xyes; then
-        LITE=yes
-	AC_DEFINE(LITE, 1, [define if you want the 'lite' version])
-        AC_SUBST(LITE)
-  fi])
-
-
-dnl
 dnl Beautify compilation messages
 dnl ---------------------------------------------
 AC_ARG_ENABLE(verbose-compile, AS_HELP_STRING([--disable-verbose-compile],

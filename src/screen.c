@@ -63,19 +63,12 @@
 
 #include "defaults.h"
 
-#ifdef LITE
-#define EVENT_MASK (LeaveWindowMask|EnterWindowMask|PropertyChangeMask\
-    |SubstructureNotifyMask|PointerMotionMask \
-    |SubstructureRedirectMask|KeyPressMask|KeyReleaseMask)
-#else
 #define EVENT_MASK (LeaveWindowMask|EnterWindowMask|PropertyChangeMask\
     |SubstructureNotifyMask|PointerMotionMask \
     |SubstructureRedirectMask|ButtonPressMask|ButtonReleaseMask\
     |KeyPressMask|KeyReleaseMask)
-#endif
 
 /**** Global variables ****/
-
 extern Cursor wCursor[WCUR_LAST];
 extern WPreferences wPreferences;
 extern Atom _XA_WINDOWMAKER_STATE;
@@ -90,7 +83,6 @@ extern int wXkbSupported;
 extern WDDomain *WDWindowMaker;
 
 /**** Local ****/
-
 #define STIPPLE_WIDTH 2
 #define STIPPLE_HEIGHT 2
 static char STIPPLE_DATA[] = { 0x02, 0x01 };
@@ -960,10 +952,8 @@ void wScreenRestoreState(WScreen * scr)
 	WMPropList *state;
 	char *path;
 
-#ifndef LITE
 	OpenRootMenu(scr, -10000, -10000, False);
 	wMenuUnmap(scr->root_menu);
-#endif
 
 	make_keys();
 

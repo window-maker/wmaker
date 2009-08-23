@@ -22,8 +22,6 @@
 
 #include "wconfig.h"
 
-#ifndef LITE
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -424,5 +422,3 @@ static void wsobserver(void *self, WMNotification * notif)
 
 	}
 }
-
-#endif				/* !LITE */
