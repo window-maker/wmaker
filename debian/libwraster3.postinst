@@ -1,0 +1,20 @@
+#! /bin/sh -e
+
+case "$1" in
+  configure)
+    ldconfig
+  ;;
+
+  abort-upgrade|abort-deconfigure|abort-remove)
+    # how did we got here? Force a non-zero exit code
+    exit 1
+  ;;
+
+  *)
+    echo "postinst called with unknown argument: \$1" >&2
+  ;;
+esac
+
+#DEBHELPER#
+
+exit 0

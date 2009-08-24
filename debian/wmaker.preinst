@@ -1,0 +1,69 @@
+#! /bin/sh
+
+# set some variables to make the thing a bit more readable...
+
+remove_diversion ()
+{
+  real_file=$1
+  temp_file=$1.wmaker-tmp
+  diversion=$2
+
+  if [ -e ${real_file} ] ; then
+    mv ${real_file} ${temp_file}
+  fi
+  dpkg-divert --remove --rename --quiet --package wmaker \
+    --divert ${diversion} ${real_file}
+  if [ -e ${temp_file} ] ; then
+    mv ${temp_file} ${real_file}
+  fi
+}
+
+# asclock's location and its diversion
+
+asclock=/usr/X11R6/bin/asclock
+asclock_divert_to=/usr/X11R6/bin/asclock.afterstep
+
+# asclock's manpage and its diversions
+
+asclock_man=/usr/X11R6/man/man1/asclock.1x.gz
+asclock_man_divert_to=/usr/X11R6/man/man1/asclock.afterstep.1x.gz
+old_asclock_man_divert_to=/usr/X11R6/man/man1/asclock.1x.afterstep.gz
+
+# are the diversions present?
+
+asclock_diversion=$(dpkg-divert --list | grep 'asclock .*by wmaker')
+asclock_man_diversion=$(dpkg-divert --list | grep 'asclock\.afterstep\.1x.*by wmaker')
+old_man_diversion=$(dpkg-divert --list | grep 'asclock\.1x\.afterstep.*by wmaker')
+
+# ... and set a safety net in case something goes really wrong
+
+set -e
+
+case "$1" in
+  upgrade|install)
+    if [ "$old_man_diversion" ] ; then
+      echo "Removing really old diversion of asclock manpage by wmaker..."
+      remove_diversion ${asclock_man} ${old_asclock_man_divert_to} 
+    fi
+
+    if [ "$asclock_diversion" ] ; then
+      echo "Removing diversion of asclock to asclock.afterstep..."
+      remove_diversion ${asclock} ${asclock_divert_to}
+    fi
+
+    if [ "$asclock_man_diversion" ] ; then
+      echo "Removing diversion of asclock.1x to asclock.afterstep.1x..."
+      remove_diversion ${asclock_man} ${asclock_man_divert_to}
+    fi
+
+    exit 0
+  ;;
+  abort-upgrade)
+    # the postrm has failed; preinst is only called like this after
+    # a failed upgrade and the current postrm also fails. Now,
+    # in what situation does this happen? Force non-zero exit code.
+    exit 1
+  ;;
+esac
+
+#DEBHELPER#

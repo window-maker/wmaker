@@ -1,0 +1,60 @@
+#!/bin/sh
+
+set -e
+
+inst="/etc/menu-methods/wmaker /etc/menu-methods/wmappearance"
+asclock="/usr/X11R6/bin/asclock"
+asclock_diversion="/usr/X11R6/bin/asclock.afterstep"
+asclock_man="/usr/X11R6/man/man1/asclock.1x.gz"
+asclock_man_diversion="/usr/X11R6/man/man1/asclock.afterstep.1x.gz"
+old_asclock_man_diversion="/usr/X11R6/man/man1/asclock.1x.afterstep.gz"
+
+case "$1" in
+  remove)
+    for file in $inst ; do
+      if [ -f $file ] ; then
+        chmod a-x $file
+      fi
+    done
+  ;;
+  purge)
+    if [ -x /usr/sbin/register-window-manager ]; then
+      register-window-manager --remove wmaker
+    fi
+
+    if [ -x /usr/bin/update-menus ] ; then
+      update-menus
+      rm -f /etc/X11/WindowMaker/menu.hook /etc/X11/WindowMaker/plmenu.hook
+    fi
+
+    # Hmmm...
+    rmdir -p /etc/GNUstep/Defaults /etc/X11/WindowMaker || true
+  ;;
+  upgrade|abort-install|disappear)
+    # nothing to do
+  ;;
+  failed-upgrade)
+    # this is an upgrade, and it has failed. What can fail?
+    exit 1
+  ;;
+  abort-upgrade)
+    # preinst failed, leave things like they were
+    if dpkg --compare-versions $2 eq 0.6.3-1 ; then
+      # reinstall the removed diversions
+      dpkg-divert --quiet --rename --package wmaker \
+        --divert $asclock_man_diversion --remove $asclock_man
+      dpkg-divert --quiet --rename --package wmaker \
+        --divert $old_asclock_man_diversion --add $asclock_man
+      dpkg-divert --quiet --rename --package wmaker \
+        --divert $asclock_diversion --add $asclock
+    fi
+  ;;
+  *)
+    echo "postrm called with unknown argument \`$1'" >&2
+    exit 1
+  ;;
+esac
+
+#DEBHELPER#
+
+exit 0

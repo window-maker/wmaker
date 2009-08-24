@@ -1,0 +1,9 @@
+etc/GNUstep/Defaults
+etc/X11/WindowMaker
+etc/menu-methods
+usr/bin
+usr/sbin
+usr/share/doc/wmaker
+usr/lib/menu
+usr/share/xsessions
+usr/lib/WindowMaker

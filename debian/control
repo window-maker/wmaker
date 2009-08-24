@@ -1,0 +1,63 @@
+Source: wmaker
+Section: x11
+Priority: optional
+Maintainer: John H. Robinson, IV <jaqque@debian.org>
+Standards-Version: 3.8.0.1
+Build-Depends: debhelper (>= 4), automake1.4, gettext, dctrl-tools, libfontconfig1-dev, libjpeg62-dev, libpng12-dev, libsm-dev, libtiff4-dev, libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev, libxkbfile-dev, libxpm-dev, libxt-dev, libxrender-dev, sharutils
+
+Package: wmaker
+Architecture: any
+Section: x11
+Priority: optional
+Depends: ${shlibs:Depends}, cpp
+Provides: x-window-manager
+Suggests: wmaker-data, menu, x11-apps, xosview, wterm | x-terminal-emulator
+Description: NeXTSTEP-like window manager for X
+ Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
+ very closely, and it is now an official GNU project. Window Maker is not
+ overloaded with features, and it is easier to configure than most other window
+ managers. Its final goal is to produce a window manager that doesn't require
+ editing of configuration files. Window Maker is fast and doesn't require tons
+ of memory to run.
+ .
+  Homepage: http://www.windowmaker.info/
+
+Package: libwmaker0-dev
+Architecture: any
+Section: libdevel
+Priority: optional
+Depends: libc6-dev, libx11-dev
+Description: Static libraries and headers for Window Maker applications
+ Contains libWMaker and header files, for building Window Maker aware
+ applications.
+
+Package: libwraster3-dev
+Architecture: any
+Section: libdevel
+Priority: optional
+Depends: libwraster3 (= ${Source-Version}), libc6-dev, libx11-dev, libxext-dev, libxpm-dev, libjpeg62-dev, libpng12-0-dev, libgif-dev, libtiff4-dev
+Provides: libwraster-dev
+Description: Static libraries and headers of Window Maker rasterizer
+ Contains libwraster and header files, for manipulating and
+ rasterizing images.
+
+Package: libwraster3
+Architecture: any
+Section: libs
+Priority: optional
+Depends: ${shlibs:Depends}
+Description: Shared libraries of Window Maker rasterizer
+ Contains libwraster, for manipulating and rasterizing images.
+
+Package: libwings-dev
+Architecture: any
+Section: libdevel
+Priority: optional
+Depends: libc6-dev, libx11-dev, libxext-dev, libwraster3-dev, libxft-dev, libfontconfig1-dev
+Description: Window Maker's own widget set
+ WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
+ look and feel. Its API is inspired in OpenSTEP and its
+ implementation borrows some ideas from Tk. It has a reasonable set of
+ widgets, sufficient for building small applications like a CDPlayer
+ or hacking something like rxvt. It is used for basic widgets in
+ the WindowMaker window manager.
