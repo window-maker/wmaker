@@ -38,6 +38,10 @@
 
 #include "../src/wconfig.h"
 
+#ifndef GLOBAL_DEFAULTS_SUBDIR
+#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
+#endif
+
 /* table of style related options */
 static char *options[] = {
 	"TitleJustify",
@@ -133,7 +137,7 @@ char *globalDefaultsPathForDomain(char *domain)
 {
 	static char path[1024];
 
-	sprintf(path, "%s/WindowMaker/%s", SYSCONFDIR, domain);
+	sprintf(path, "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domain);
 
 	return path;
 }

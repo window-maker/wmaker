@@ -24,8 +24,8 @@ install-exec-local:
 	@$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
 	@list='wmlib.pc'; for p in $$list; do \
 	  if test -f $$p; then \
-	    @echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
-	    @$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
+	    echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
+	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
 	  else :; fi; \
 	done
 

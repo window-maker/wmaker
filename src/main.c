@@ -54,6 +54,10 @@
 
 #include <WINGs/WUtil.h>
 
+#ifndef GLOBAL_DEFAULTS_SUBDIR
+#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
+#endif
+
 /****** Global Variables ******/
 
 /* general info */
@@ -610,7 +614,7 @@ static int real_main(int argc, char **argv)
 				printf("Window Maker %s\n", VERSION);
 				exit(0);
 			} else if (strcmp(argv[i], "--global_defaults_path") == 0) {
-				printf("%s/WindowMaker\n", SYSCONFDIR);
+			  printf("%s/%s\n", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR);
 				exit(0);
 #ifdef DEBUG
 			} else if (strcmp(argv[i], "--synchronous") == 0) {

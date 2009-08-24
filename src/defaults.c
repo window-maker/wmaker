@@ -69,6 +69,10 @@
 
 #define MAX_SHORTCUT_LENGTH 32
 
+#ifndef GLOBAL_DEFAULTS_SUBDIR
+#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
+#endif
+
 /***** Global *****/
 
 extern WDDomain *WDWindowMaker;
@@ -738,7 +742,7 @@ static WMPropList *readGlobalDomain(char *domainName, Bool requireDictionary)
 	char path[PATH_MAX];
 	struct stat stbuf;
 
-	snprintf(path, sizeof(path), "%s/WindowMaker/%s", SYSCONFDIR, domainName);
+	snprintf(path, sizeof(path), "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domainName);
 	if (stat(path, &stbuf) >= 0) {
 		globalDict = WMReadPropListFromFile(path);
 		if (globalDict && requireDictionary && !WMIsPLDictionary(globalDict)) {
@@ -833,7 +837,7 @@ void wDefaultsMergeGlobalMenus(WDDomain * menuDomain)
 		return;
 
 #ifdef GLOBAL_PREAMBLE_MENU_FILE
-	submenu = WMReadPropListFromFile(SYSCONFDIR "/WindowMaker/" GLOBAL_PREAMBLE_MENU_FILE);
+	submenu = WMReadPropListFromFile(SYSCONFDIR "/" GLOBAL_DEFAULTS_SUBDIR "/" GLOBAL_PREAMBLE_MENU_FILE);
 
 	if (submenu && !WMIsPLArray(submenu)) {
 		wwarning(_("invalid global menu file %s"), GLOBAL_PREAMBLE_MENU_FILE);
@@ -847,7 +851,7 @@ void wDefaultsMergeGlobalMenus(WDDomain * menuDomain)
 #endif
 
 #ifdef GLOBAL_EPILOGUE_MENU_FILE
-	submenu = WMReadPropListFromFile(SYSCONFDIR "/WindowMaker/" GLOBAL_EPILOGUE_MENU_FILE);
+	submenu = WMReadPropListFromFile(SYSCONFDIR "/" GLOBAL_DEFAULTS_SUBDIR "/" GLOBAL_EPILOGUE_MENU_FILE);
 
 	if (submenu && !WMIsPLArray(submenu)) {
 		wwarning(_("invalid global menu file %s"), GLOBAL_EPILOGUE_MENU_FILE);
@@ -934,7 +938,7 @@ WDDomain *wDefaultsInitDomain(char *domain, Bool requireDictionary)
 	}
 
 	/* global system dictionary */
-	snprintf(path, sizeof(path), "%s/WindowMaker/%s", SYSCONFDIR, domain);
+	snprintf(path, sizeof(path), "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domain);
 	if (stat(path, &stbuf) >= 0) {
 		shared_dict = WMReadPropListFromFile(path);
 		if (shared_dict) {

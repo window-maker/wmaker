@@ -53,6 +53,10 @@
 
 #include "../src/wconfig.h"
 
+#ifndef GLOBAL_DEFAULTS_SUBDIR
+#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
+#endif
+
 #include <WINGs/WINGs.h>
 #include <wraster.h>
 
@@ -1054,7 +1058,7 @@ char *globalDefaultsPathForDomain(char *domain)
 {
 	char path[1024];
 
-	sprintf(path, "%s/WindowMaker/%s", SYSCONFDIR, domain);
+	sprintf(path, "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domain);
 
 	return wstrdup(path);
 }
