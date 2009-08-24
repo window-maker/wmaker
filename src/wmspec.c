@@ -1446,7 +1446,13 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 	if (!wwin)
 		return False;
 
-	if (event->message_type == net_active_window) {
+	/*
+	 * Firefox with multiple tabs sends aditional 'net_active_window'
+	 * signals on startup, which causes unnecessary workspace switching
+	 * if its initial workspace is different from the current
+	 */
+	if (event->message_type == net_active_window &&
+	    wwin->frame->workspace == wwin->screen_ptr->current_workspace) {
 		wNETWMShowingDesktop(scr, False);
 		wMakeWindowVisible(wwin);
 	} else if (event->message_type == net_close_window) {
