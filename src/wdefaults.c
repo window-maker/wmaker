@@ -78,6 +78,7 @@ static WMPropList *AStartMaximized;
 static WMPropList *AStartHidden;	/* app */
 static WMPropList *ADontSaveSession;	/* app */
 static WMPropList *AEmulateAppIcon;
+static WMPropList *ADontFocusAcrossWorkspace;
 static WMPropList *AFullMaximize;
 static WMPropList *ASharedAppIcon;	/* app */
 #ifdef XKB_BUTTON_HINT
@@ -116,6 +117,7 @@ static void init_wdefaults(WScreen * scr)
 	AStartMaximized = WMCreatePLString("StartMaximized");
 	ADontSaveSession = WMCreatePLString("DontSaveSession");
 	AEmulateAppIcon = WMCreatePLString("EmulateAppIcon");
+	ADontFocusAcrossWorkspace = WMCreatePLString("DontFocusAcrossWorkspace");
 	AFullMaximize = WMCreatePLString("FullMaximize");
 	ASharedAppIcon = WMCreatePLString("SharedAppIcon");
 #ifdef XKB_BUTTON_HINT
@@ -303,6 +305,9 @@ wDefaultFillAttributes(WScreen * scr, char *instance, char *class,
 
 	value = get_value(dw, dc, dn, da, AEmulateAppIcon, No, useGlobalDefault);
 	APPLY_VAL(value, emulate_appicon, AEmulateAppIcon);
+
+	value = get_value(dw, dc, dn, da, ADontFocusAcrossWorkspace, No, useGlobalDefault);
+	APPLY_VAL(value, dont_focus_across_wksp, ADontFocusAcrossWorkspace);
 
 	value = get_value(dw, dc, dn, da, AFullMaximize, No, useGlobalDefault);
 	APPLY_VAL(value, full_maximize, AFullMaximize);

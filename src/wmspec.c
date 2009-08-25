@@ -1448,15 +1448,19 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 	if (!wwin)
 		return False;
 
-	/*
-	 * Firefox with multiple tabs sends aditional 'net_active_window'
-	 * signals on startup, which causes unnecessary workspace switching
-	 * if its initial workspace is different from the current
-	 */
-	if (event->message_type == net_active_window &&
-	    wwin->frame->workspace == wwin->screen_ptr->current_workspace) {
-		wNETWMShowingDesktop(scr, False);
-		wMakeWindowVisible(wwin);
+	if (event->message_type == net_active_window) {
+		/*
+		 * Firefox sends aditional 'net_active_window' signals on startup if
+		 * multiple tabs are open. That causes unnecessary workspace switching if
+		 * those signals come from other workspaces. Therefore we also check if
+		 * we should ignore these spurious focus across workspaces requests (but
+		 * allow the switching if it comes from a pager).
+		 */
+		if (wwin->frame->workspace == wwin->screen_ptr->current_workspace
+		    || !WFLAGP(wwin, dont_focus_across_wksp) || event->data.l[0] == 2) {
+			wNETWMShowingDesktop(scr, False);
+			wMakeWindowVisible(wwin);
+		}
 	} else if (event->message_type == net_close_window) {
 		if (!WFLAGP(wwin, no_closable)) {
 			if (wwin->protocols.DELETE_WINDOW)

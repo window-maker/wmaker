@@ -93,9 +93,9 @@ typedef struct InspectorPanel {
 	/* 3rd page. more attributes */
 	WMFrame *moreFrm;
 #ifdef XKB_BUTTON_HINT
-	WMButton *moreChk[9];
+	WMButton *moreChk[10];
 #else
-	WMButton *moreChk[8];
+	WMButton *moreChk[9];
 #endif
 
 	/* 4th page. icon and workspace */
@@ -144,6 +144,7 @@ static WMPropList *AOmnipresent;
 static WMPropList *ASkipWindowList;
 static WMPropList *AKeepInsideScreen;
 static WMPropList *AUnfocusable;
+static WMPropList *ADontFocusAcrossWorkspace;
 static WMPropList *AAlwaysUserIcon;
 static WMPropList *AStartMiniaturized;
 static WMPropList *AStartMaximized;
@@ -198,6 +199,7 @@ static void make_keys()
 	ASkipWindowList = WMCreatePLString("SkipWindowList");
 	AKeepInsideScreen = WMCreatePLString("KeepInsideScreen");
 	AUnfocusable = WMCreatePLString("Unfocusable");
+	ADontFocusAcrossWorkspace = WMCreatePLString("DontFocusAcrossWorkspace");
 	AAlwaysUserIcon = WMCreatePLString("AlwaysUserIcon");
 	AStartMiniaturized = WMCreatePLString("StartMiniaturized");
 	AStartMaximized = WMCreatePLString("StartMaximized");
@@ -598,8 +600,11 @@ static void saveSettings(WMButton * button, InspectorPanel * panel)
 	value = (WMGetButtonSelected(panel->moreChk[7]) != 0) ? Yes : No;
 	different |= insertAttribute(dict, winDic, AEmulateAppIcon, value, flags);
 
-#ifdef XKB_BUTTON_HINT
 	value = (WMGetButtonSelected(panel->moreChk[8]) != 0) ? Yes : No;
+	different |= insertAttribute(dict, winDic, ADontFocusAcrossWorkspace, value, flags);
+
+#ifdef XKB_BUTTON_HINT
+	value = (WMGetButtonSelected(panel->moreChk[9]) != 0) ? Yes : No;
 	different |= insertAttribute(dict, winDic, ANoLanguageButton, value, flags);
 #endif
 
@@ -751,6 +756,7 @@ static void applySettings(WMButton * button, InspectorPanel * panel)
 
 	showIconFor(WMWidgetScreen(button), panel, NULL, NULL, USE_TEXT_FIELD);
 
+	/* Attributes... --> Window Attributes */
 	WSETUFLAG(wwin, no_titlebar, WMGetButtonSelected(panel->attrChk[0]));
 	WSETUFLAG(wwin, no_resizebar, WMGetButtonSelected(panel->attrChk[1]));
 	WSETUFLAG(wwin, no_close_button, WMGetButtonSelected(panel->attrChk[2]));
@@ -763,6 +769,7 @@ static void applySettings(WMButton * button, InspectorPanel * panel)
 	WSETUFLAG(wwin, start_maximized, WMGetButtonSelected(panel->attrChk[9]));
 	WSETUFLAG(wwin, full_maximize, WMGetButtonSelected(panel->attrChk[10]));
 
+	/* Attributes... --> Advanced Options */
 	WSETUFLAG(wwin, no_bind_keys, WMGetButtonSelected(panel->moreChk[0]));
 	WSETUFLAG(wwin, no_bind_mouse, WMGetButtonSelected(panel->moreChk[1]));
 	skip_window_list = WMGetButtonSelected(panel->moreChk[2]);
@@ -771,8 +778,9 @@ static void applySettings(WMButton * button, InspectorPanel * panel)
 	WSETUFLAG(wwin, no_hide_others, WMGetButtonSelected(panel->moreChk[5]));
 	WSETUFLAG(wwin, dont_save_session, WMGetButtonSelected(panel->moreChk[6]));
 	WSETUFLAG(wwin, emulate_appicon, WMGetButtonSelected(panel->moreChk[7]));
+	WSETUFLAG(wwin, dont_focus_across_wksp, WMGetButtonSelected(panel->moreChk[8]));
 #ifdef XKB_BUTTON_HINT
-	WSETUFLAG(wwin, no_language_button, WMGetButtonSelected(panel->moreChk[8]));
+	WSETUFLAG(wwin, no_language_button, WMGetButtonSelected(panel->moreChk[9]));
 #endif
 	WSETUFLAG(wwin, always_user_icon, WMGetButtonSelected(panel->alwChk));
 
@@ -919,7 +927,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 		}
 		WMSetButtonSelected(panel->attrChk[i], flag);
 	}
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < 9; i++) {
 		int flag = 0;
 
 		switch (i) {
@@ -947,8 +955,11 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 		case 7:
 			flag = WFLAGP(wwin, emulate_appicon);
 			break;
-#ifdef XKB_BUTTON_HINT
 		case 8:
+			flag = WFLAGP(wwin, dont_focus_across_wksp);
+			break;
+#ifdef XKB_BUTTON_HINT
+		case 9:
 			flag = WFLAGP(wwin, no_language_button);
 			break;
 #endif
@@ -1323,9 +1334,9 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 
 	for (i = 0;
 #ifdef XKB_BUTTON_HINT
-	     i < 9;
+	     i < 10;
 #else
-	     i < 8;
+	     i < 9;
 #endif
 	     i++) {
 		char *caption = NULL;
@@ -1382,8 +1393,15 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 				  "enough information to Window Maker for a dockable\n"
 				  "application icon to be created.");
 			break;
-#ifdef XKB_BUTTON_HINT
 		case 8:
+			caption = _("Don't focus across workspaces");
+			flag = WFLAGP(wwin, dont_focus_across_wksp);
+			descr = _("Do not allow Window Maker to switch workspace to satisfy\n"
+				  "a focus request (useful e.g. in the case of a multiple-tab\n"
+				  "firefox opening in a different workspace).");
+			break;
+#ifdef XKB_BUTTON_HINT
+		case 9:
 			caption = _("Disable language button");
 			flag = WFLAGP(wwin, no_language_button);
 			descr = _("Remove the `toggle language' button of the window.");

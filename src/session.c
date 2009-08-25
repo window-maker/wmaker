@@ -803,7 +803,7 @@ static WMPropList *makeAttributeState(WWindow * wwin)
     ? (wwin)->user_flags.FLAG : -1)
 
 	snprintf(buffer, sizeof(buffer),
-		 "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
+		 "%i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i %i",
 		 W_FLAG(no_titlebar),
 		 W_FLAG(no_resizable),
 		 W_FLAG(no_closable),
@@ -827,7 +827,8 @@ static WMPropList *makeAttributeState(WWindow * wwin)
 		 W_FLAG(always_user_icon),
 		 W_FLAG(start_miniaturized),
 		 W_FLAG(start_hidden),
-		 W_FLAG(start_maximized), W_FLAG(dont_save_session), W_FLAG(emulate_appicon));
+		 W_FLAG(start_maximized),
+		 W_FLAG(dont_save_session), W_FLAG(dont_focus_across_wksp), W_FLAG(emulate_appicon));
 
 	return WMCreatePLString(buffer);
 }
