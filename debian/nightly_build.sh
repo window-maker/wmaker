@@ -5,7 +5,7 @@ BASEVERSION="0.93.0"
 REPOVERSION="git-`date +%Y%m%d-%H%M`"
 
 CHANGELOG="Automatic build from the GIT on `date`"
-BUILDLOG="${HOME}/log/wmaker-nightly.log"
+BUILDLOG="${HOME}/log/wmaker-testing-nightly.log"
 
 STATUSCMD="git log -1 --pretty=oneline"
 PULLCMD="git pull"
@@ -24,7 +24,7 @@ if [ $# -gt 0 ]; then
 fi
 
 cleanup() {
-  mv ${CHLOGBKP} debian/changelog 
+  test -f ${CHLOGBKP} && mv ${CHLOGBKP} debian/changelog 
 }
 
 errorExit() {
