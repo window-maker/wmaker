@@ -394,7 +394,7 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 		wUnshadeWindow(wwin);
 	}
 	/* Only save directions, not kbd or xinerama hints */
-	directions &= (MAX_HORIZONTAL | MAX_VERTICAL);
+	directions &= (MAX_HORIZONTAL|MAX_VERTICAL|MAX_LEFTHALF|MAX_RIGHTHALF);
 
 	changed_h = ((wwin->flags.maximized ^ directions) & MAX_HORIZONTAL);
 	changed_v = ((wwin->flags.maximized ^ directions) & MAX_VERTICAL);
@@ -407,7 +407,7 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 		 * allow succesive maximizations in different directions without
 		 * the need to first do an un-maximize (to avoid flicker).
 		 */
-		if (!(wwin->flags.maximized & MAX_HORIZONTAL)) {
+		if (!(wwin->flags.maximized & (MAX_HORIZONTAL|MAX_LEFTHALF|MAX_RIGHTHALF))) {
 			wwin->old_geometry.x = wwin->frame_x;
 		}
 		if (!(wwin->flags.maximized & MAX_VERTICAL)) {
@@ -426,6 +426,16 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 		if (HAS_BORDER(wwin))
 			new_width -= FRAME_BORDER_WIDTH * 2;
 		new_x = usableArea.x1;
+	} else if (directions & MAX_LEFTHALF) {
+		new_width = (usableArea.x2 - usableArea.x1)/2;
+		if (HAS_BORDER(wwin))
+			new_width -= FRAME_BORDER_WIDTH * 2;
+		new_x = usableArea.x1;
+	} else if (directions & MAX_RIGHTHALF) {
+		new_width = (usableArea.x2 - usableArea.x1)/2;
+		if (HAS_BORDER(wwin))
+			new_width -= FRAME_BORDER_WIDTH * 2;
+		new_x = usableArea.x1+((usableArea.x2 - usableArea.x1)/2);
 	} else if (shrink_h) {
 		new_x = wwin->old_geometry.x;
 		new_width = wwin->old_geometry.width;
@@ -478,7 +488,7 @@ void wUnmaximizeWindow(WWindow * wwin)
 		wwin->flags.skip_next_animation = 1;
 		wUnshadeWindow(wwin);
 	}
-	x = ((wwin->flags.maximized & MAX_HORIZONTAL) && wwin->old_geometry.x) ?
+	x = ((wwin->flags.maximized & (MAX_HORIZONTAL|MAX_LEFTHALF|MAX_RIGHTHALF)) && wwin->old_geometry.x) ?
 	    wwin->old_geometry.x : wwin->frame_x;
 	y = ((wwin->flags.maximized & MAX_VERTICAL) && wwin->old_geometry.y) ?
 	    wwin->old_geometry.y : wwin->frame_y;

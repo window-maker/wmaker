@@ -32,57 +32,59 @@
 #define WKBD_MAXIMIZE           6
 #define WKBD_VMAXIMIZE          7
 #define WKBD_HMAXIMIZE          8
-#define WKBD_SELECT             9
+#define WKBD_LHMAXIMIZE	        9
+#define WKBD_RHMAXIMIZE	        10
+#define WKBD_SELECT             11
 /* Clip */
-#define WKBD_CLIPLOWER          10
-#define WKBD_CLIPRAISE		11
-#define WKBD_CLIPRAISELOWER	12
+#define WKBD_CLIPLOWER          12
+#define WKBD_CLIPRAISE		13
+#define WKBD_CLIPRAISELOWER	14
 /* window */
-#define WKBD_RAISE		13
-#define WKBD_LOWER		14
-#define WKBD_RAISELOWER		15
-#define WKBD_MOVERESIZE		16
-#define WKBD_SHADE		17
+#define WKBD_RAISE		15
+#define WKBD_LOWER		16
+#define WKBD_RAISELOWER		17
+#define WKBD_MOVERESIZE		18
+#define WKBD_SHADE		19
 /* window, menu */
-#define WKBD_CLOSE		18
+#define WKBD_CLOSE		20
 /* window */
-#define WKBD_FOCUSNEXT		19
-#define WKBD_FOCUSPREV          20
+#define WKBD_FOCUSNEXT		21
+#define WKBD_FOCUSPREV          22
 
-#define WKBD_WORKSPACE1		21
-#define WKBD_WORKSPACE2		22
-#define WKBD_WORKSPACE3		23
-#define WKBD_WORKSPACE4		24
-#define WKBD_WORKSPACE5		25
-#define WKBD_WORKSPACE6		26
-#define WKBD_WORKSPACE7		27
-#define WKBD_WORKSPACE8		28
-#define WKBD_WORKSPACE9		29
-#define WKBD_WORKSPACE10	30
-#define WKBD_NEXTWORKSPACE	31
-#define WKBD_PREVWORKSPACE	32
-#define WKBD_NEXTWSLAYER	33
-#define WKBD_PREVWSLAYER	34
+#define WKBD_WORKSPACE1		23
+#define WKBD_WORKSPACE2		24
+#define WKBD_WORKSPACE3		25
+#define WKBD_WORKSPACE4		26
+#define WKBD_WORKSPACE5		27
+#define WKBD_WORKSPACE6		28
+#define WKBD_WORKSPACE7		29
+#define WKBD_WORKSPACE8		30
+#define WKBD_WORKSPACE9		31
+#define WKBD_WORKSPACE10	32
+#define WKBD_NEXTWORKSPACE	33
+#define WKBD_PREVWORKSPACE	34
+#define WKBD_NEXTWSLAYER	35
+#define WKBD_PREVWSLAYER	36
 
 /* window shortcuts */
-#define WKBD_WINDOW1		35
-#define WKBD_WINDOW2		36
-#define WKBD_WINDOW3		37
-#define WKBD_WINDOW4		38
-#define WKBD_WINDOW5		39
-#define WKBD_WINDOW6		40
-#define WKBD_WINDOW7		41
-#define WKBD_WINDOW8		42
-#define WKBD_WINDOW9		43
-#define WKBD_WINDOW10		44
+#define WKBD_WINDOW1		37
+#define WKBD_WINDOW2		38
+#define WKBD_WINDOW3		39
+#define WKBD_WINDOW4		40
+#define WKBD_WINDOW5		41
+#define WKBD_WINDOW6		42
+#define WKBD_WINDOW7		43
+#define WKBD_WINDOW8		44
+#define WKBD_WINDOW9		45
+#define WKBD_WINDOW10		46
 
-#define WKBD_SWITCH_SCREEN      45
+#define WKBD_SWITCH_SCREEN      47
 
 #ifdef KEEP_XKB_LOCK_STATUS
-# define WKBD_TOGGLE		46
-# define WKBD_TMP		47
+# define WKBD_TOGGLE		48
+# define WKBD_TMP		49
 #else
-# define WKBD_TMP		46
+# define WKBD_TMP		48
 #endif
 
 #ifdef VIRTUAL_DESKTOP

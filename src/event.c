@@ -1471,6 +1471,32 @@ static void handleKeyPress(XEvent * event)
 			}
 		}
 		break;
+	case WKBD_LHMAXIMIZE:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
+			int newdir = (MAX_VERTICAL|MAX_LEFTHALF);
+
+			CloseWindowMenu(scr);
+
+			if (wwin->flags.maximized == newdir) {
+				wUnmaximizeWindow(wwin);
+			} else {
+				wMaximizeWindow(wwin, newdir|MAX_KEYBOARD);
+			}
+		}
+		break;
+	case WKBD_RHMAXIMIZE:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
+			int newdir = (MAX_VERTICAL|MAX_RIGHTHALF);
+
+			CloseWindowMenu(scr);
+
+			if (wwin->flags.maximized == newdir) {
+				wUnmaximizeWindow(wwin);
+			} else {
+				wMaximizeWindow(wwin, newdir|MAX_KEYBOARD);
+			}
+		}
+		break;
 	case WKBD_RAISE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
 			CloseWindowMenu(scr);

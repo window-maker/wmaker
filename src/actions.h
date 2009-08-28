@@ -26,8 +26,10 @@
 
 #define MAX_HORIZONTAL 	1
 #define MAX_VERTICAL 	2
-#define MAX_IGNORE_XINERAMA 4
-#define MAX_KEYBOARD 8
+#define MAX_LEFTHALF	4
+#define MAX_RIGHTHALF	8
+#define MAX_IGNORE_XINERAMA 16
+#define MAX_KEYBOARD 32
 
 void wSetFocusTo(WScreen *scr, WWindow *wwin);
 

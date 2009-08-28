@@ -72,6 +72,8 @@ static char *keyOptions[] = {
 	"MaximizeKey",
 	"VMaximizeKey",
 	"HMaximizeKey",
+	"LHMaximizeKey",
+	"RHMaximizeKey",
 	"RaiseKey",
 	"LowerKey",
 	"RaiseLowerKey",
@@ -473,6 +475,8 @@ static void createPanel(Panel * p)
 	WMAddListItem(panel->actLs, _("Maximize active window"));
 	WMAddListItem(panel->actLs, _("Maximize active window vertically"));
 	WMAddListItem(panel->actLs, _("Maximize active window horizontally"));
+	WMAddListItem(panel->actLs, _("Maximize active window left half"));
+	WMAddListItem(panel->actLs, _("Maximize active window right half"));
 	WMAddListItem(panel->actLs, _("Raise active window"));
 	WMAddListItem(panel->actLs, _("Lower active window"));
 	WMAddListItem(panel->actLs, _("Raise/Lower window under mouse pointer"));
