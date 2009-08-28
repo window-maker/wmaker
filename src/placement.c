@@ -324,7 +324,7 @@ static void set_width_height(WWindow *wwin, unsigned int *width, unsigned int *h
 		*height += wwin->frame->top_width + wwin->frame->bottom_width;
 	} else {
 		if (HAS_TITLEBAR(wwin))
-			*height += 18;
+			*height += TITLEBAR_HEIGHT;
 		if (HAS_RESIZEBAR(wwin))
 			*height += RESIZEBAR_HEIGHT;
 	}
