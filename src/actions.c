@@ -291,7 +291,7 @@ void wUnshadeWindow(WWindow *wwin)
 void wMaximizeWindow(WWindow * wwin, int directions)
 {
 	int new_x, new_y;
-	unsigned int new_width, new_height;
+	unsigned int new_width, new_height, half_scr_width;
 	int changed_h, changed_v, shrink_h, shrink_v;
 	WArea usableArea, totalArea;
 
@@ -303,6 +303,7 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 	totalArea.x2 = wwin->screen_ptr->scr_width;
 	totalArea.y2 = wwin->screen_ptr->scr_height;
 	usableArea = totalArea;
+	half_scr_width = (usableArea.x2 - usableArea.x1)/2;
 
 	if (!(directions & MAX_IGNORE_XINERAMA)) {
 		WScreen *scr = wwin->screen_ptr;
@@ -358,15 +359,15 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 			new_width -= FRAME_BORDER_WIDTH * 2;
 		new_x = usableArea.x1;
 	} else if (directions & MAX_LEFTHALF) {
-		new_width = (usableArea.x2 - usableArea.x1)/2;
+		new_width = half_scr_width;
 		if (HAS_BORDER(wwin))
 			new_width -= FRAME_BORDER_WIDTH * 2;
 		new_x = usableArea.x1;
 	} else if (directions & MAX_RIGHTHALF) {
-		new_width = (usableArea.x2 - usableArea.x1)/2;
+		new_width = half_scr_width;
 		if (HAS_BORDER(wwin))
 			new_width -= FRAME_BORDER_WIDTH * 2;
-		new_x = usableArea.x1+((usableArea.x2 - usableArea.x1)/2);
+		new_x = usableArea.x1 + half_scr_width;
 	} else if (shrink_h) {
 		new_x = wwin->old_geometry.x;
 		new_width = wwin->old_geometry.width;
