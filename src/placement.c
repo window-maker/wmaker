@@ -49,17 +49,14 @@ extern WPreferences wPreferences;
 #define Y_ORIGIN WMAX(usableArea.y1,\
     wPreferences.window_place_origin.y)
 
-/*
- * interactive window placement is in moveres.c
- */
+/* interactive window placement is in moveres.c */
+extern void InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
+				   unsigned width, unsigned height);
 
-extern void InteractivePlaceWindow(WWindow * wwin, int *x_ret, int *y_ret, unsigned width, unsigned height);
-
-/*
- * Returns True if it is an icon and is in this workspace.
- */
+/* Returns True if it is an icon and is in this workspace */
 static Bool
-iconPosition(WCoreWindow * wcore, int sx1, int sy1, int sx2, int sy2, int workspace, int *retX, int *retY)
+iconPosition(WCoreWindow *wcore, int sx1, int sy1, int sx2, int sy2,
+	     int workspace, int *retX, int *retY)
 {
 	void *parent;
 	int ok = 0;
@@ -92,9 +89,7 @@ iconPosition(WCoreWindow * wcore, int sx1, int sy1, int sx2, int sy2, int worksp
 		ok = 1;
 	}
 
-	/*
-	 * Check if it is inside the screen.
-	 */
+	/* Check if it is inside the screen */
 	if (ok) {
 		if (*retX < sx1 - wPreferences.icon_size)
 			ok = 0;
@@ -110,7 +105,7 @@ iconPosition(WCoreWindow * wcore, int sx1, int sy1, int sx2, int sy2, int worksp
 	return ok;
 }
 
-void PlaceIcon(WScreen * scr, int *x_ret, int *y_ret, int head)
+void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head)
 {
 	int pf;			/* primary axis */
 	int sf;			/* secondary axis */
@@ -132,7 +127,6 @@ void PlaceIcon(WScreen * scr, int *x_ret, int *y_ret, int head)
 	/* Find out screen boundaries. */
 
 	/* Allows each head to have miniwindows */
-
 	sx1 = area.x1;
 	sy1 = area.y1;
 	sx2 = area.x2;
@@ -211,15 +205,11 @@ void PlaceIcon(WScreen * scr, int *x_ret, int *y_ret, int head)
 			obj = obj->stacking->under;
 		}
 	}
-	/*
-	 * Default position
-	 */
+	/* Default position */
 	*x_ret = 0;
 	*y_ret = 0;
 
-	/*
-	 * Look for an empty slot
-	 */
+	/* Look for an empty slot */
 	for (si = 0; si < sf; si++) {
 		for (pi = 0; pi < pf; pi++) {
 			if (wPreferences.icon_yard & IY_VERT) {
@@ -243,10 +233,7 @@ void PlaceIcon(WScreen * scr, int *x_ret, int *y_ret, int head)
 	wfree(map);
 }
 
-/*
- * This function calculates the length of the intersection of two
- * line sections. (Hey, is that english?)
- */
+/* Computes the intersecting length of two line sections */
 static int calcIntersectionLength(int p1, int l1, int p2, int l2)
 {
 	int isect;
@@ -271,17 +258,14 @@ static int calcIntersectionLength(int p1, int l1, int p2, int l2)
 	return isect;
 }
 
-/*
- * This function calculates the area of the intersection of two rectangles.
- */
-
+/* Computes the intersecting area of two rectangles */
 int calcIntersectionArea(int x1, int y1, int w1, int h1, int x2, int y2, int w2, int h2)
 {
 	return calcIntersectionLength(x1, w1, x2, w2)
 	    * calcIntersectionLength(y1, h1, y2, h2);
 }
 
-static int calcSumOfCoveredAreas(WWindow * wwin, int x, int y, int w, int h)
+static int calcSumOfCoveredAreas(WWindow *wwin, int x, int y, int w, int h)
 {
 	int sum_isect = 0;
 	WWindow *test_window;
@@ -335,7 +319,8 @@ static void set_width_height(WWindow *wwin, unsigned int *width, unsigned int *h
 }
 
 static void
-smartPlaceWindow(WWindow * wwin, int *x_ret, int *y_ret, unsigned int width, unsigned int height, WArea usableArea)
+smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned int width,
+		 unsigned int height, WArea usableArea)
 {
 	int test_x = 0, test_y = Y_ORIGIN;
 	int from_x, to_x, from_y, to_y;
@@ -395,7 +380,7 @@ smartPlaceWindow(WWindow * wwin, int *x_ret, int *y_ret, unsigned int width, uns
 }
 
 static Bool
-autoPlaceWindow(WWindow * wwin, int *x_ret, int *y_ret,
+autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 		unsigned int width, unsigned int height, int tryCount, WArea usableArea)
 {
 	WScreen *scr = wwin->screen_ptr;
@@ -496,7 +481,7 @@ autoPlaceWindow(WWindow * wwin, int *x_ret, int *y_ret,
 }
 
 static void
-cascadeWindow(WScreen * scr, WWindow * wwin, int *x_ret, int *y_ret,
+cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
 	      unsigned int width, unsigned int height, int h, WArea usableArea)
 {
 	set_width_height(wwin, &width, &height);
@@ -512,7 +497,7 @@ cascadeWindow(WScreen * scr, WWindow * wwin, int *x_ret, int *y_ret,
 }
 
 static void
-randomPlaceWindow(WScreen * scr, WWindow * wwin, int *x_ret, int *y_ret,
+randomPlaceWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
 		  unsigned int width, unsigned int height, WArea usableArea)
 {
 	int w, h;
@@ -529,12 +514,12 @@ randomPlaceWindow(WScreen * scr, WWindow * wwin, int *x_ret, int *y_ret,
 	*y_ret = Y_ORIGIN + rand() % h;
 }
 
-void PlaceWindow(WWindow * wwin, int *x_ret, int *y_ret, unsigned width, unsigned height)
+void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned height)
 {
 	WScreen *scr = wwin->screen_ptr;
-	int h = WMFontHeight(scr->title_font) + (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
-	WArea usableArea = wGetUsableAreaForHead(scr,
-						 wGetHeadForPointerLocation(scr),
+	int h = WMFontHeight(scr->title_font)
+		+ (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
+	WArea usableArea = wGetUsableAreaForHead(scr, wGetHeadForPointerLocation(scr),
 						 NULL, True);
 
 	switch (wPreferences.window_placement) {
