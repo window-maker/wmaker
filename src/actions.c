@@ -73,6 +73,8 @@ static struct {
 	SHADE_STEPS_S, SHADE_DELAY_S}, {
 SHADE_STEPS_US, SHADE_DELAY_US}};
 
+#define UNSHADE         0
+#define SHADE           1
 #define SHADE_STEPS	shadePars[(int)wPreferences.shade_speed].steps
 #define SHADE_DELAY	shadePars[(int)wPreferences.shade_speed].delay
 
@@ -217,50 +219,15 @@ void wSetFocusTo(WScreen * scr, WWindow * wwin)
 	old_scr = scr;
 }
 
-void wShadeWindow(WWindow * wwin)
+void wShadeWindow(WWindow *wwin)
 {
-	time_t time0;
-#ifdef ANIMATIONS
-	int y, s, w, h;
-#endif
 
 	if (wwin->flags.shaded)
 		return;
 
-	time0 = time(NULL);
-
 	XLowerWindow(dpy, wwin->client_win);
-
 	wSoundPlay(WSOUND_SHADE);
-
-#ifdef ANIMATIONS
-	if (!wwin->screen_ptr->flags.startup && !wwin->flags.skip_next_animation && !wPreferences.no_animations) {
-		/* do the shading animation */
-		h = wwin->frame->core->height;
-		s = h / SHADE_STEPS;
-		if (s < 1)
-			s = 1;
-		w = wwin->frame->core->width;
-		y = wwin->frame->top_width;
-		while (h > wwin->frame->top_width + 1) {
-			XMoveWindow(dpy, wwin->client_win, 0, y);
-			XResizeWindow(dpy, wwin->frame->core->window, w, h);
-			XFlush(dpy);
-
-			if (time(NULL) - time0 > MAX_ANIMATION_TIME)
-				break;
-
-			if (SHADE_DELAY > 0) {
-				wusleep(SHADE_DELAY * 1000L);
-			} else {
-				wusleep(10);
-			}
-			h -= s;
-			y -= s;
-		}
-		XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
-	}
-#endif				/* ANIMATIONS */
+	shade_animate(wwin, SHADE);
 
 	wwin->flags.skip_next_animation = 0;
 	wwin->flags.shaded = 1;
@@ -290,54 +257,18 @@ void wShadeWindow(WWindow * wwin)
 #endif
 }
 
-void wUnshadeWindow(WWindow * wwin)
+void wUnshadeWindow(WWindow *wwin)
 {
-	time_t time0;
-#ifdef ANIMATIONS
-	int y, s, w, h;
-#endif				/* ANIMATIONS */
 
 	if (!wwin->flags.shaded)
 		return;
-
-	time0 = time(NULL);
 
 	wwin->flags.shaded = 0;
 	wwin->flags.mapped = 1;
 	XMapWindow(dpy, wwin->client_win);
 
 	wSoundPlay(WSOUND_UNSHADE);
-
-#ifdef ANIMATIONS
-	if (!wPreferences.no_animations && !wwin->flags.skip_next_animation) {
-		/* do the shading animation */
-		h = wwin->frame->top_width + wwin->frame->bottom_width;
-		y = wwin->frame->top_width - wwin->client.height;
-		s = abs(y) / SHADE_STEPS;
-		if (s < 1)
-			s = 1;
-		w = wwin->frame->core->width;
-		XMoveWindow(dpy, wwin->client_win, 0, y);
-		if (s > 0) {
-			while (h < wwin->client.height + wwin->frame->top_width + wwin->frame->bottom_width) {
-				XResizeWindow(dpy, wwin->frame->core->window, w, h);
-				XMoveWindow(dpy, wwin->client_win, 0, y);
-				XFlush(dpy);
-				if (SHADE_DELAY > 0) {
-					wusleep(SHADE_DELAY * 2000L / 3);
-				} else {
-					wusleep(10);
-				}
-				h += s;
-				y += s;
-
-				if (time(NULL) - time0 > MAX_ANIMATION_TIME)
-					break;
-			}
-		}
-		XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
-	}
-#endif				/* ANIMATIONS */
+	shade_animate(wwin, UNSHADE);
 
 	wwin->flags.skip_next_animation = 0;
 	wFrameWindowResize(wwin->frame, wwin->frame->core->width,
@@ -1905,3 +1836,79 @@ void wMakeWindowVisible(WWindow * wwin)
 		wRaiseFrame(wwin->frame->core);
 	}
 }
+
+/*
+ * Do the animation while shading (called with what = SHADE)
+ * or unshading (what = UNSHADE).
+ */
+#ifdef ANIMATIONS
+static void shade_animate(WWindow *wwin, Bool what)
+{
+	int y, s, w, h;
+	time_t time0 = time(NULL);
+
+	if (wwin->flags.skip_next_animation && wPreferences.no_animations)
+		return;
+
+	switch(what) {
+	case SHADE:
+		if (!wwin->screen_ptr->flags.startup) {
+			/* do the shading animation */
+			h = wwin->frame->core->height;
+			s = h / SHADE_STEPS;
+			if (s < 1)
+				s = 1;
+			w = wwin->frame->core->width;
+			y = wwin->frame->top_width;
+			while (h > wwin->frame->top_width + 1) {
+				XMoveWindow(dpy, wwin->client_win, 0, y);
+				XResizeWindow(dpy, wwin->frame->core->window, w, h);
+				XFlush(dpy);
+
+				if (time(NULL) - time0 > MAX_ANIMATION_TIME)
+					break;
+
+				if (SHADE_DELAY > 0) {
+				wusleep(SHADE_DELAY * 1000L);
+				} else {
+					wusleep(10);
+				}
+				h -= s;
+			y -= s;
+			}
+			XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
+		}
+		break;
+
+	case UNSHADE:
+		h = wwin->frame->top_width + wwin->frame->bottom_width;
+		y = wwin->frame->top_width - wwin->client.height;
+		s = abs(y) / SHADE_STEPS;
+		if (s < 1)
+			s = 1;
+		w = wwin->frame->core->width;
+		XMoveWindow(dpy, wwin->client_win, 0, y);
+		if (s > 0) {
+			while (h < wwin->client.height + wwin->frame->top_width + wwin->frame->bottom_width) {
+				XResizeWindow(dpy, wwin->frame->core->window, w, h);
+				XMoveWindow(dpy, wwin->client_win, 0, y);
+				XFlush(dpy);
+				if (SHADE_DELAY > 0) {
+					wusleep(SHADE_DELAY * 2000L / 3);
+				} else {
+					wusleep(10);
+				}
+				h += s;
+				y += s;
+
+				if (time(NULL) - time0 > MAX_ANIMATION_TIME)
+					break;
+			}
+		}
+		XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
+		break;
+	}
+}
+#else
+static void shade_animate(WWindow *wwin, Bool what) { return; }
+#endif /* ANIMATIONS */
