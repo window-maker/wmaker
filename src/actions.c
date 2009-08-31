@@ -303,7 +303,6 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 	totalArea.x2 = wwin->screen_ptr->scr_width;
 	totalArea.y2 = wwin->screen_ptr->scr_height;
 	usableArea = totalArea;
-	half_scr_width = (usableArea.x2 - usableArea.x1)/2;
 
 	if (!(directions & MAX_IGNORE_XINERAMA)) {
 		WScreen *scr = wwin->screen_ptr;
@@ -320,6 +319,7 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 	if (WFLAGP(wwin, full_maximize)) {
 		usableArea = totalArea;
 	}
+	half_scr_width = (usableArea.x2 - usableArea.x1)/2;
 
 	if (wwin->flags.shaded) {
 		wwin->flags.skip_next_animation = 1;
