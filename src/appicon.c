@@ -597,11 +597,18 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 
 	while (!done) {
 		WMMaskEvent(dpy, PointerMotionMask | ButtonReleaseMask | ButtonPressMask
-			    | ButtonMotionMask | ExposureMask, &ev);
+			    | ButtonMotionMask | ExposureMask | EnterWindowMask, &ev);
 		switch (ev.type) {
 		case Expose:
 			WMHandleEvent(&ev);
 			break;
+
+                case EnterNotify:
+                        /* It means the cursor moved so fast that it entered
+                         * something else (if moving slowly, it would have
+                         * stayed in the appIcon that is being moved. Ignore
+                         * such "spurious" EnterNotifiy's */
+                        break;
 
 		case MotionNotify:
 			if (!grabbed) {
