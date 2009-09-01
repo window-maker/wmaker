@@ -1434,80 +1434,62 @@ static void handleKeyPress(XEvent * event)
 		break;
 	case WKBD_MAXIMIZE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
-			int newdir = (MAX_VERTICAL | MAX_HORIZONTAL);
-
 			CloseWindowMenu(scr);
 
-			if (wwin->flags.maximized == newdir) {
+			if (wwin->flags.maximized == (MAX_VERTICAL | MAX_HORIZONTAL))
 				wUnmaximizeWindow(wwin);
-			} else {
-				wMaximizeWindow(wwin, newdir | MAX_KEYBOARD);
-			}
+			else
+				wMaximizeWindow(wwin, MAX_VERTICAL | MAX_HORIZONTAL | MAX_KEYBOARD);
 		}
 		break;
 	case WKBD_VMAXIMIZE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
-			int newdir = (MAX_VERTICAL ^ wwin->flags.maximized);
-
 			CloseWindowMenu(scr);
 
-			if (newdir) {
-				wMaximizeWindow(wwin, newdir | MAX_KEYBOARD);
-			} else {
+			if (wwin->flags.maximized == MAX_VERTICAL)
 				wUnmaximizeWindow(wwin);
-			}
+			else
+				wMaximizeWindow(wwin, MAX_VERTICAL | MAX_KEYBOARD);
 		}
 		break;
 	case WKBD_HMAXIMIZE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
-			int newdir = (MAX_HORIZONTAL ^ wwin->flags.maximized);
-
 			CloseWindowMenu(scr);
 
-			if (newdir) {
-				wMaximizeWindow(wwin, newdir | MAX_KEYBOARD);
-			} else {
+			if (wwin->flags.maximized == MAX_HORIZONTAL)
 				wUnmaximizeWindow(wwin);
-			}
+			else
+				wMaximizeWindow(wwin, MAX_HORIZONTAL | MAX_KEYBOARD);
 		}
 		break;
 	case WKBD_LHMAXIMIZE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
-			int newdir = (MAX_VERTICAL|MAX_LEFTHALF);
-
 			CloseWindowMenu(scr);
 
-			if (wwin->flags.maximized == newdir) {
+			if (wwin->flags.maximized == MAX_VERTICAL | MAX_LEFTHALF)
 				wUnmaximizeWindow(wwin);
-			} else {
-				wMaximizeWindow(wwin, newdir|MAX_KEYBOARD);
-			}
+			else
+				wMaximizeWindow(wwin, MAX_VERTICAL | MAX_LEFTHALF | MAX_KEYBOARD);
 		}
 		break;
 	case WKBD_RHMAXIMIZE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
-			int newdir = (MAX_VERTICAL|MAX_RIGHTHALF);
-
 			CloseWindowMenu(scr);
 
-			if (wwin->flags.maximized == newdir) {
+			if (wwin->flags.maximized == MAX_VERTICAL | MAX_RIGHTHALF)
 				wUnmaximizeWindow(wwin);
-			} else {
-				wMaximizeWindow(wwin, newdir|MAX_KEYBOARD);
-			}
+			else
+				wMaximizeWindow(wwin, MAX_VERTICAL | MAX_RIGHTHALF | MAX_KEYBOARD);
 		}
 		break;
 	case WKBD_MAXIMUS:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
-			int newdir = MAX_MAXIMUS;
-
 			CloseWindowMenu(scr);
 
-			if (wwin->flags.maximized == newdir) {
+			if (wwin->flags.maximized == MAX_MAXIMUS)
 				wUnmaximizeWindow(wwin);
-			} else {
-				wMaximizeWindow(wwin, newdir|MAX_KEYBOARD);
-			}
+			else
+				wMaximizeWindow(wwin, MAX_MAXIMUS | MAX_KEYBOARD);
 		}
 		break;
 	case WKBD_RAISE:
