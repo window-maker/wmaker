@@ -1387,6 +1387,7 @@ void wWorkspaceRestoreState(WScreen * scr)
 		wfree(scr->workspaces[i]->name);
 		scr->workspaces[i]->name = wstrdup(WMGetFromPLString(pstr));
 		if (!wPreferences.flags.noclip) {
+			int added_omnipresent_icons = 0;
 			clip_state = WMGetFromPLDictionary(wks_state, dClip);
 			if (scr->workspaces[i]->clip)
 				wDockDestroy(scr->workspaces[i]->clip);
@@ -1401,13 +1402,32 @@ void wWorkspaceRestoreState(WScreen * scr)
 			 */
 			for (j = 0; j < scr->workspaces[i]->clip->max_icons; j++) {
 				WAppIcon *aicon = scr->workspaces[i]->clip->icon_array[j];
+				int k;
 
-				if (aicon && aicon->omnipresent) {
-					aicon->omnipresent = 0;
-					wClipMakeIconOmnipresent(aicon, True);
-					XMapWindow(dpy, aicon->icon->core->window);
-				}
+				if (!aicon || !aicon->omnipresent)
+					continue;
+				aicon->omnipresent = 0;
+				if (wClipMakeIconOmnipresent(aicon, True) != WO_SUCCESS)
+					continue;
+				if (i == 0)
+					continue;
+
+				/* Move this appicon from workspace i to workspace 0 */
+				scr->workspaces[i]->clip->icon_array[j] = NULL;
+				scr->workspaces[i]->clip->icon_count--;
+
+				added_omnipresent_icons++;
+				/* If there are too many omnipresent appicons, we are in trouble */
+				assert(scr->workspaces[0]->clip->icon_count + added_omnipresent_icons
+				       <= scr->workspaces[0]->clip->max_icons);
+				/* Find first free spot on workspace 0 */
+				for (k = 0; k < scr->workspaces[0]->clip->max_icons; k++)
+					if (scr->workspaces[0]->clip->icon_array[k] == NULL)
+						break;
+				scr->workspaces[0]->clip->icon_array[k] = aicon;
+				aicon->dock = scr->workspaces[0]->clip;
 			}
+			scr->workspaces[0]->clip->icon_count += added_omnipresent_icons;
 		}
 
 		WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void *)(uintptr_t) i);
