@@ -1497,6 +1497,19 @@ static void handleKeyPress(XEvent * event)
 			}
 		}
 		break;
+	case WKBD_MAXIMUS:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
+			int newdir = MAX_MAXIMUS;
+
+			CloseWindowMenu(scr);
+
+			if (wwin->flags.maximized == newdir) {
+				wUnmaximizeWindow(wwin);
+			} else {
+				wMaximizeWindow(wwin, newdir|MAX_KEYBOARD);
+			}
+		}
+		break;
 	case WKBD_RAISE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
 			CloseWindowMenu(scr);

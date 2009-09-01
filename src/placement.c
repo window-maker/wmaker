@@ -234,7 +234,7 @@ void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head)
 }
 
 /* Computes the intersecting length of two line sections */
-static int calcIntersectionLength(int p1, int l1, int p2, int l2)
+int calcIntersectionLength(int p1, int l1, int p2, int l2)
 {
 	int isect;
 	int tmp;

@@ -24,12 +24,13 @@
 
 #include "window.h"
 
-#define MAX_HORIZONTAL 	1
-#define MAX_VERTICAL 	2
-#define MAX_LEFTHALF	4
-#define MAX_RIGHTHALF	8
-#define MAX_IGNORE_XINERAMA 16
-#define MAX_KEYBOARD 32
+#define MAX_HORIZONTAL         (1 << 0)
+#define MAX_VERTICAL           (1 << 1)
+#define MAX_LEFTHALF           (1 << 2)
+#define MAX_RIGHTHALF          (1 << 3)
+#define MAX_MAXIMUS            (1 << 4)
+#define MAX_IGNORE_XINERAMA    (1 << 5)
+#define MAX_KEYBOARD           (1 << 6)
 
 void wSetFocusTo(WScreen *scr, WWindow *wwin);
 
