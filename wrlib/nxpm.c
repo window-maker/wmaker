@@ -52,6 +52,21 @@
 
 #ifndef USE_XPM
 
+static void free_color_symbol_table(unsigned char *color_table[],
+				     unsigned short *symbol_table)
+{
+	if (color_table[0])
+		free(color_table[0]);
+	if (color_table[1])
+		free(color_table[1]);
+	if (color_table[2])
+		free(color_table[2]);
+	if (color_table[3])
+		free(color_table[3]);
+	if (symbol_table)
+		free(symbol_table);
+}
+
 RImage *RGetImageFromXPMData(RContext * context, char **data)
 {
 	RImage *image = NULL;
@@ -81,16 +96,7 @@ RImage *RGetImageFromXPMData(RContext * context, char **data)
 
 	if (!color_table[0] || !color_table[1] || !color_table[2] || !color_table[3] || !symbol_table || !bsize) {
 		RErrorCode = RERR_NOMEMORY;
-		if (color_table[0])
-			free(color_table[0]);
-		if (color_table[1])
-			free(color_table[1]);
-		if (color_table[2])
-			free(color_table[2]);
-		if (color_table[3])
-			free(color_table[3]);
-		if (symbol_table)
-			free(symbol_table);
+		free_color_symbol_table(color_table[], symbol_table);
 		return NULL;
 	}
 
@@ -139,16 +145,7 @@ RImage *RGetImageFromXPMData(RContext * context, char **data)
 
 	image = RCreateImage(w, h, transp);
 	if (!image) {
-		if (color_table[0])
-			free(color_table[0]);
-		if (color_table[1])
-			free(color_table[1]);
-		if (color_table[2])
-			free(color_table[2]);
-		if (color_table[3])
-			free(color_table[3]);
-		if (symbol_table)
-			free(symbol_table);
+		free_color_symbol_table(color_table[], symbol_table);
 		return NULL;
 	}
 
@@ -218,30 +215,12 @@ RImage *RGetImageFromXPMData(RContext * context, char **data)
 		line++;
 	}
 
-	if (color_table[0])
-		free(color_table[0]);
-	if (color_table[1])
-		free(color_table[1]);
-	if (color_table[2])
-		free(color_table[2]);
-	if (color_table[3])
-		free(color_table[3]);
-	if (symbol_table)
-		free(symbol_table);
+	free_color_symbol_table(color_table[], symbol_table);
 	return image;
 
  bad_format:
 	RErrorCode = RERR_BADIMAGEFILE;
-	if (color_table[0])
-		free(color_table[0]);
-	if (color_table[1])
-		free(color_table[1]);
-	if (color_table[2])
-		free(color_table[2]);
-	if (color_table[3])
-		free(color_table[3]);
-	if (symbol_table)
-		free(symbol_table);
+	free_color_symbol_table(color_table[], symbol_table);
 	if (image)
 		RReleaseImage(image);
 	return NULL;
@@ -302,16 +281,7 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
 	    !color_table[3] || !symbol_table || !bsize || !buffer) {
 		RErrorCode = RERR_NOMEMORY;
 		fclose(f);
-		if (color_table[0])
-			free(color_table[0]);
-		if (color_table[1])
-			free(color_table[1]);
-		if (color_table[2])
-			free(color_table[2]);
-		if (color_table[3])
-			free(color_table[3]);
-		if (symbol_table)
-			free(symbol_table);
+		free_color_symbol_table(color_table[], symbol_table);
 		if (buffer)
 			free(buffer);
 		return NULL;
@@ -368,16 +338,7 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
 	image = RCreateImage(w, h, transp);
 	if (!image) {
 		fclose(f);
-		if (color_table[0])
-			free(color_table[0]);
-		if (color_table[1])
-			free(color_table[1]);
-		if (color_table[2])
-			free(color_table[2]);
-		if (color_table[3])
-			free(color_table[3]);
-		if (symbol_table)
-			free(symbol_table);
+		free_color_symbol_table(color_table[], symbol_table);
 		if (buffer)
 			free(buffer);
 		return NULL;
@@ -456,16 +417,7 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
 	}
 
 	fclose(f);
-	if (color_table[0])
-		free(color_table[0]);
-	if (color_table[1])
-		free(color_table[1]);
-	if (color_table[2])
-		free(color_table[2]);
-	if (color_table[3])
-		free(color_table[3]);
-	if (symbol_table)
-		free(symbol_table);
+	free_color_symbol_table(color_table[], symbol_table);
 	if (buffer)
 		free(buffer);
 	return image;
@@ -473,16 +425,7 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
  bad_format:
 	RErrorCode = RERR_BADIMAGEFILE;
 	fclose(f);
-	if (color_table[0])
-		free(color_table[0]);
-	if (color_table[1])
-		free(color_table[1]);
-	if (color_table[2])
-		free(color_table[2]);
-	if (color_table[3])
-		free(color_table[3]);
-	if (symbol_table)
-		free(symbol_table);
+	free_color_symbol_table(color_table[], symbol_table);
 	if (buffer)
 		free(buffer);
 	if (image)
@@ -492,16 +435,7 @@ RImage *RLoadXPM(RContext * context, char *file, int index)
  bad_file:
 	RErrorCode = RERR_BADIMAGEFILE;
 	fclose(f);
-	if (color_table[0])
-		free(color_table[0]);
-	if (color_table[1])
-		free(color_table[1]);
-	if (color_table[2])
-		free(color_table[2]);
-	if (color_table[3])
-		free(color_table[3]);
-	if (symbol_table)
-		free(symbol_table);
+	free_color_symbol_table(color_table[], symbol_table);
 	if (buffer)
 		free(buffer);
 	if (image)
