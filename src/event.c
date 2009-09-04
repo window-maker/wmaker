@@ -298,8 +298,8 @@ void DispatchEvent(XEvent * event)
  * 	Calls wDefaultsCheckDomains if config database is updated
  *----------------------------------------------------------------------
  */
-
-#define BUFF_SIZE ((sizeof(struct inotify_event) + 16)*512)
+/* allow 5 simultaneous events, with path + filenames up to 64 chars */
+#define BUFF_SIZE ((sizeof(struct inotify_event) + 64)*5)
 void inotifyHandleEvents(int fd, int wd)
 {
 	extern void wDefaultsCheckDomains(void);
