@@ -1097,6 +1097,9 @@ void wIconifyWindow(WWindow * wwin)
 		wIconSelect(wwin->icon);
 
 	WMPostNotificationName(WMNChangedState, wwin, "iconify");
+
+	if (wPreferences.auto_arrange_icons)
+		wArrangeIcons(wwin->screen_ptr, True);
 }
 
 void wDeiconifyWindow(WWindow * wwin)
