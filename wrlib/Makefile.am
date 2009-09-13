@@ -15,12 +15,6 @@ bin_SCRIPTS = get-wraster-flags
 include_HEADERS = wraster.h
 
 libwraster_la_SOURCES = 	\
-	LookupCmap.c	\
-	StdCmap.c	\
-	StdCmap.h	\
-	CrCmap.c	\
-	DelCmap.c	\
-	CmapAlloc.c	\
 	raster.c 	\
 	draw.c		\
 	color.c		\

@@ -428,7 +428,7 @@ XCFLAGS="$X_CFLAGS"
 
 XLFLAGS="$X_LIBS"
 
-XLIBS="-lX11 $X_EXTRA_LIBS"
+XLIBS="-lX11 -lXmu $X_EXTRA_LIBS"
 
 
 lib_search_path="$lib_search_path $XLFLAGS"

@@ -24,6 +24,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
+#include <X11/Xmu/StdCmap.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,8 +32,6 @@
 #include <assert.h>
 
 #include <math.h>
-
-#include "StdCmap.h"
 
 #include "wraster.h"
 
