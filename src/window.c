@@ -2134,10 +2134,14 @@ void wWindowSynthConfigureNotify(WWindow * wwin)
 
 /*
  *----------------------------------------------------------------------
- * wWindowConfigure--
- * 	Configures the frame, decorations and client window to the
- * specified geometry. The geometry is not checked for validity,
- * wWindowConstrainSize() must be used for that.
+ * wWindowConfigure()
+ *
+ * req_x, req_y: new requested positions for the frame
+ * req_width, req_height: new requested sizes for the client
+ *
+ * Configures the frame, decorations and client window to the specified
+ * geometry, whose validity is not checked --  wWindowConstrainSize()
+ * must be used for that.
  * 	The size parameters are for the client window, but the position is
  * for the frame.
  * 	The client window receives a ConfigureNotify event, according
@@ -2151,10 +2155,7 @@ void wWindowSynthConfigureNotify(WWindow * wwin)
  * a ConfigureNotify event.
  *----------------------------------------------------------------------
  */
-void wWindowConfigure(wwin, req_x, req_y, req_width, req_height)
-WWindow *wwin;
-int req_x, req_y;		/* new position of the frame */
-int req_width, req_height;	/* new size of the client */
+void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int req_height)
 {
 	int synth_notify = False;
 	int resize;
