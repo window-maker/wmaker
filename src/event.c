@@ -1466,7 +1466,7 @@ static void handleKeyPress(XEvent * event)
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
 			CloseWindowMenu(scr);
 
-			if (wwin->flags.maximized == MAX_VERTICAL | MAX_LEFTHALF)
+			if (wwin->flags.maximized == (MAX_VERTICAL | MAX_LEFTHALF))
 				wUnmaximizeWindow(wwin);
 			else
 				wMaximizeWindow(wwin, MAX_VERTICAL | MAX_LEFTHALF | MAX_KEYBOARD);
@@ -1476,7 +1476,7 @@ static void handleKeyPress(XEvent * event)
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
 			CloseWindowMenu(scr);
 
-			if (wwin->flags.maximized == MAX_VERTICAL | MAX_RIGHTHALF)
+			if (wwin->flags.maximized == (MAX_VERTICAL | MAX_RIGHTHALF))
 				wUnmaximizeWindow(wwin);
 			else
 				wMaximizeWindow(wwin, MAX_VERTICAL | MAX_RIGHTHALF | MAX_KEYBOARD);
