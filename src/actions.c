@@ -62,10 +62,6 @@ extern Atom _XA_WM_TAKE_FOCUS;
 extern void ProcessPendingEvents();
 extern int calcIntersectionLength(int p1, int l1, int p2, int l2);
 
-static void save_old_geometry(WWindow *wwin);
-static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x,
-				  int *new_y, int *new_width, int *new_height);
-
 /******* Local Variables *******/
 static struct {
 	int steps;
@@ -407,7 +403,7 @@ void wMaximizeWindow(WWindow * wwin, int directions)
  * while the windows which will stop the maximization of w_0 are denoted by w_j.
  */
 static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, int *new_y,
-				  int *new_width, int *new_height)
+				  unsigned int *new_width, unsigned int *new_height)
 {
 	WWindow *tmp;
 	int x_0            = wwin->frame_x;
