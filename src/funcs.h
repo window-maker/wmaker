@@ -85,7 +85,7 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height);
 
 
-void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next);
+void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only);
 
 #ifdef USECPP
 char *MakeCPPArgs(char *path);

@@ -374,7 +374,7 @@ static void drawTitle(WSwitchPanel * panel, int idecks, char *title)
 		free(ntitle);
 }
 
-static WMArray *makeWindowListArray(WScreen * scr, WWindow * curwin, int workspace, int include_unmapped)
+static WMArray *makeWindowListArray(WScreen * scr, WWindow * curwin, int workspace, int include_unmapped, Bool class_only)
 {
 	WMArray *windows = WMCreateArray(10);
 	int fl;
@@ -385,6 +385,12 @@ static WMArray *makeWindowListArray(WScreen * scr, WWindow * curwin, int workspa
 			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
 			    (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
 			    (wwin->flags.mapped || include_unmapped)) {
+				if (class_only) {
+				    if (!wwin->wm_class || !curwin->wm_class)
+					continue;
+				    if (strcmp(wwin->wm_class, curwin->wm_class))
+					continue;
+				}
 				WMAddToArray(windows, wwin);
 			}
 		}
@@ -397,6 +403,12 @@ static WMArray *makeWindowListArray(WScreen * scr, WWindow * curwin, int workspa
 			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
 			    (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
 			    (wwin->flags.mapped || include_unmapped)) {
+				if (class_only) {
+				    if (!wwin->wm_class || !curwin->wm_class)
+					continue;
+				    if (strcmp(wwin->wm_class, curwin->wm_class))
+					continue;
+				}
 				WMAddToArray(windows, wwin);
 			}
 		}
@@ -405,7 +417,7 @@ static WMArray *makeWindowListArray(WScreen * scr, WWindow * curwin, int workspa
 	return windows;
 }
 
-WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, int workspace)
+WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, int workspace, Bool class_only)
 {
 	WWindow *wwin;
 	WSwitchPanel *panel = wmalloc(sizeof(WSwitchPanel));
@@ -421,7 +433,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, int workspace)
 
 	panel->scr = scr;
 
-	panel->windows = makeWindowListArray(scr, curwin, workspace, wPreferences.swtileImage != 0);
+	panel->windows = makeWindowListArray(scr, curwin, workspace, wPreferences.swtileImage != 0, class_only);
 	count = WMGetArrayItemCount(panel->windows);
 
 	if (count == 0) {

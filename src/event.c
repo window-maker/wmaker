@@ -1542,11 +1542,19 @@ static void handleKeyPress(XEvent * event)
 		}
 		break;
 	case WKBD_FOCUSNEXT:
-		StartWindozeCycle(wwin, event, True);
+		StartWindozeCycle(wwin, event, True, False);
 		break;
 
 	case WKBD_FOCUSPREV:
-		StartWindozeCycle(wwin, event, False);
+		StartWindozeCycle(wwin, event, False, False);
+		break;
+
+	case WKBD_GROUPNEXT:
+		StartWindozeCycle(wwin, event, True, True);
+		break;
+
+	case WKBD_GROUPPREV:
+		StartWindozeCycle(wwin, event, False, True);
 		break;
 
 	case WKBD_WORKSPACE1 ... WKBD_WORKSPACE10:

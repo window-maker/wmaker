@@ -83,6 +83,8 @@ static char *keyOptions[] = {
 	"SelectKey",
 	"FocusNextKey",
 	"FocusPrevKey",
+	"GroupNextKey",
+	"GroupPrevKey",
 	"NextWorkspaceKey",
 	"PrevWorkspaceKey",
 	"NextWorkspaceLayerKey",
@@ -487,6 +489,8 @@ static void createPanel(Panel * p)
 	WMAddListItem(panel->actLs, _("Select active window"));
 	WMAddListItem(panel->actLs, _("Focus next window"));
 	WMAddListItem(panel->actLs, _("Focus previous window"));
+	WMAddListItem(panel->actLs, _("Focus next group window"));
+	WMAddListItem(panel->actLs, _("Focus previous group window"));
 	WMAddListItem(panel->actLs, _("Switch to next workspace"));
 	WMAddListItem(panel->actLs, _("Switch to previous workspace"));
 	WMAddListItem(panel->actLs, _("Switch to next ten workspaces"));

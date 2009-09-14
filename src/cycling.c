@@ -81,7 +81,7 @@ static WWindow *change_focus_and_raise(WWindow *newFocused, WWindow *oldFocused,
 	return oldFocused;
 }
 
-void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
+void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_only)
 {
 
 	XModifierKeymap *keymap        = NULL;
@@ -123,7 +123,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 
 	scr->flags.doing_alt_tab = 1;
 
-	swpanel = wInitSwitchPanel(scr, wwin, scr->current_workspace);
+	swpanel = wInitSwitchPanel(scr, wwin, scr->current_workspace, class_only);
 	oldFocused = wwin;
 
 	if (swpanel) {
@@ -159,6 +159,8 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 
 			if ((wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
 			     && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers)
+			    || (wKeyBindings[WKBD_GROUPNEXT].keycode == ev.xkey.keycode
+			    && wKeyBindings[WKBD_GROUPNEXT].modifier == modifiers)
 			    || ev.xkey.keycode == rightKey) {
 
 				newFocused = wSwitchPanelSelectNext(swpanel, False);
@@ -166,6 +168,8 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 
 			} else if ((wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
 				    && wKeyBindings[WKBD_FOCUSPREV].modifier == modifiers)
+			    || (wKeyBindings[WKBD_GROUPPREV].keycode == ev.xkey.keycode
+			    && wKeyBindings[WKBD_GROUPPREV].modifier == modifiers)
 				   || ev.xkey.keycode == leftKey) {
 
 				newFocused = wSwitchPanelSelectNext(swpanel, True);
@@ -199,7 +203,9 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next)
 
 				if (keymap->modifiermap[i] == ev.xkey.keycode &&
 				    ((wKeyBindings[WKBD_FOCUSNEXT].modifier & mask)
-				     || (wKeyBindings[WKBD_FOCUSPREV].modifier & mask))) {
+				     || (wKeyBindings[WKBD_FOCUSPREV].modifier & mask)
+				     || (wKeyBindings[WKBD_GROUPNEXT].modifier & mask)
+				     || (wKeyBindings[WKBD_GROUPPREV].modifier & mask))) {
 					done = True;
 					break;
 				}
