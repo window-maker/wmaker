@@ -118,13 +118,14 @@ static void textChangedObserver(void *observerData, WMNotification * notificatio
 	char *text;
 	WMList *list;
 	int col = WMGetBrowserNumberOfColumns(panel->browser) - 1;
-	int i, textEvent;
+	int i;
+	uintptr_t textEvent;
 
 	if (!(list = WMGetBrowserListInColumn(panel->browser, col)))
 		return;
 
 	text = WMGetTextFieldText(panel->fileField);
-	textEvent = (int)(uintptr_t) WMGetNotificationClientData(notification);
+	textEvent = (uintptr_t)WMGetNotificationClientData(notification);
 
 	if (panel->flags.autoCompletion && textEvent != WMDeleteTextEvent)
 		i = closestListItem(list, text, False);
@@ -157,7 +158,7 @@ static void textEditedObserver(void *observerData, WMNotification * notification
 {
 	W_FilePanel *panel = (W_FilePanel *) observerData;
 
-	if ((int)(uintptr_t) WMGetNotificationClientData(notification) == WMReturnTextMovement) {
+	if ((uintptr_t)WMGetNotificationClientData(notification) == WMReturnTextMovement) {
 		WMPerformButtonClick(panel->okButton);
 	}
 }

@@ -829,14 +829,14 @@ static void stopEditItem(WEditMenu * menu, Bool apply)
 static void textEndedEditing(struct WMTextFieldDelegate *self, WMNotification * notif)
 {
 	WEditMenu *menu = (WEditMenu *) self->data;
-	int reason;
+	uintptr_t reason;
 	int i;
 	WEditMenuItem *item;
 
 	if (!menu->flags.isEditing)
 		return;
 
-	reason = (int)(uintptr_t) WMGetNotificationClientData(notif);
+	reason = (uintptr_t)WMGetNotificationClientData(notif);
 
 	switch (reason) {
 	case WMEscapeTextMovement:

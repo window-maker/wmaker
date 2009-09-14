@@ -62,7 +62,7 @@ static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
 static void appearanceObserver(void *self, WMNotification * notif)
 {
 	WIcon *icon = (WIcon *) self;
-	int flags = (int)(uintptr_t) WMGetNotificationClientData(notif);
+	uintptr_t flags = (uintptr_t)WMGetNotificationClientData(notif);
 
 	if (flags & WTextureSettings) {
 		icon->force_paint = 1;

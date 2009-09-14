@@ -192,7 +192,7 @@ static void ESCellPainter(WMTableColumnDelegate * self, WMTableColumn * column, 
 {
 	EnumSelectorData *strdata = (EnumSelectorData *) self->data;
 	WMTableView *table = WMGetTableColumnTableView(column);
-	int i = (int)(uintptr_t) WMTableViewDataForCell(table, column, row);
+	uintptr_t i = (uintptr_t)WMTableViewDataForCell(table, column, row);
 
 	stringDraw(WMWidgetScreen(table), d,
 		   strdata->gc, strdata->selGC, strdata->textColor, strdata->font,
@@ -203,7 +203,7 @@ static void selectedESCellPainter(WMTableColumnDelegate * self, WMTableColumn * 
 {
 	EnumSelectorData *strdata = (EnumSelectorData *) self->data;
 	WMTableView *table = WMGetTableColumnTableView(column);
-	int i = (int)(uintptr_t) WMTableViewDataForCell(table, column, row);
+	uintptr_t i = (uintptr_t)WMTableViewDataForCell(table, column, row);
 
 	stringDraw(WMWidgetScreen(table), d,
 		   strdata->gc, strdata->selGC, strdata->textColor, strdata->font,
@@ -214,7 +214,7 @@ static void beginESCellEdit(WMTableColumnDelegate * self, WMTableColumn * column
 {
 	EnumSelectorData *strdata = (EnumSelectorData *) self->data;
 	WMRect rect = WMTableViewRectForCell(strdata->table, column, row);
-	int data = (int)(uintptr_t) WMTableViewDataForCell(strdata->table, column, row);
+	uintptr_t data = (uintptr_t)WMTableViewDataForCell(strdata->table, column, row);
 
 	wassertr(data < strdata->count);
 
@@ -285,7 +285,7 @@ static void BSCellPainter(WMTableColumnDelegate * self, WMTableColumn * column, 
 {
 	BooleanSwitchData *strdata = (BooleanSwitchData *) self->data;
 	WMTableView *table = WMGetTableColumnTableView(column);
-	int i = (int)(uintptr_t) WMTableViewDataForCell(table, column, row);
+	uintptr_t i = (uintptr_t)WMTableViewDataForCell(table, column, row);
 	WMScreen *scr = WMWidgetScreen(table);
 
 	if (i) {
@@ -302,7 +302,7 @@ static void selectedBSCellPainter(WMTableColumnDelegate * self, WMTableColumn * 
 {
 	BooleanSwitchData *strdata = (BooleanSwitchData *) self->data;
 	WMTableView *table = WMGetTableColumnTableView(column);
-	int i = (int)(uintptr_t) WMTableViewDataForCell(table, column, row);
+	uintptr_t i = (uintptr_t)WMTableViewDataForCell(table, column, row);
 	WMScreen *scr = WMWidgetScreen(table);
 
 	if (i) {
@@ -319,7 +319,7 @@ static void beginBSCellEdit(WMTableColumnDelegate * self, WMTableColumn * column
 {
 	BooleanSwitchData *strdata = (BooleanSwitchData *) self->data;
 	WMRect rect = WMTableViewRectForCell(strdata->table, column, row);
-	int data = (int)(uintptr_t) WMTableViewDataForCell(strdata->table, column, row);
+	uintptr_t data = (uintptr_t)WMTableViewDataForCell(strdata->table, column, row);
 
 	WMSetButtonSelected(strdata->widget, data);
 	WMMoveWidget(strdata->widget, rect.pos.x + 1, rect.pos.y + 1);

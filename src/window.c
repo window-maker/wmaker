@@ -129,7 +129,7 @@ static void resizebarMouseDown(WCoreWindow * sender, void *data, XEvent * event)
 static void appearanceObserver(void *self, WMNotification * notif)
 {
 	WWindow *wwin = (WWindow *) self;
-	int flags = (int)(uintptr_t) WMGetNotificationClientData(notif);
+	uintptr_t flags = (uintptr_t)WMGetNotificationClientData(notif);
 
 	if (!wwin->frame || (!wwin->frame->titlebar && !wwin->frame->resizebar))
 		return;

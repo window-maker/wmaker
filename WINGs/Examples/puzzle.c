@@ -134,7 +134,7 @@ void buttonClick(WMWidget * w, void *ptr)
 {
 	char buffer[300];
 
-	if (SlideButton((int)(uintptr_t) ptr)) {
+	if (SlideButton((uintptr_t)ptr)) {
 		MoveCount++;
 
 		if (CheckWin()) {

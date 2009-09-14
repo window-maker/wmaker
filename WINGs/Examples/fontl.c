@@ -36,7 +36,7 @@ void show(WMWidget * self, void *data)
 	void *d;
 	WMLabel *l = (WMLabel *) data;
 	d = WMGetHangedData(self);
-	sprintf(buf, "%i -  0x%x - 0%o", (int)(uintptr_t) d, (int)(uintptr_t) d, (int)(uintptr_t) d);
+	sprintf(buf, "%i -  0x%x - 0%o", (int)d, (int)d, (int)d);
 	WMSetLabelText(l, buf);
 }
 

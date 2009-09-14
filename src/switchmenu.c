@@ -417,7 +417,7 @@ static void wsobserver(void *self, WMNotification * notif)
 	void *data = WMGetNotificationClientData(notif);
 
 	if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
-		UpdateSwitchMenuWorkspace(scr, (int)(uintptr_t) data);
+		UpdateSwitchMenuWorkspace(scr, (uintptr_t)data);
 	} else if (strcmp(name, WMNWorkspaceChanged) == 0) {
 
 	}

@@ -93,7 +93,7 @@ static void closeCascade(WMenu * menu);
 static void appearanceObserver(void *self, WMNotification * notif)
 {
 	WMenu *menu = (WMenu *) self;
-	int flags = (int)(uintptr_t) WMGetNotificationClientData(notif);
+	uintptr_t flags = (uintptr_t)WMGetNotificationClientData(notif);
 
 	if (!menu->flags.realized)
 		return;

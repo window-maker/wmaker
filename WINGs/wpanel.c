@@ -317,7 +317,7 @@ static void endedEditingObserver(void *observerData, WMNotification * notificati
 {
 	WMInputPanel *panel = (WMInputPanel *) observerData;
 
-	switch ((int)(uintptr_t) WMGetNotificationClientData(notification)) {
+	switch ((uintptr_t)WMGetNotificationClientData(notification)) {
 	case WMReturnTextMovement:
 		if (panel->defBtn)
 			WMPerformButtonClick(panel->defBtn);

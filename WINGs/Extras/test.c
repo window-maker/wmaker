@@ -36,7 +36,7 @@ void *valueForCell(WMTableViewDelegate * self, WMTableColumn * column, int row)
 			col2[i] = 0;
 		}
 	}
-	if ((int)(uintptr_t) WMGetTableColumnId(column) == 1)
+	if ((uintptr_t)WMGetTableColumnId(column) == 1)
 		return col1[row];
 	else
 		return (void *)(uintptr_t) col2[row];
@@ -44,10 +44,10 @@ void *valueForCell(WMTableViewDelegate * self, WMTableColumn * column, int row)
 
 void setValueForCell(WMTableViewDelegate * self, WMTableColumn * column, int row, void *data)
 {
-	if ((int)(uintptr_t) WMGetTableColumnId(column) == 1)
+	if ((uintptr_t)WMGetTableColumnId(column) == 1)
 		col1[row] = data;
 	else
-		col2[row] = (int)(uintptr_t) data;
+		col2[row] = (uintptr_t) data;
 }
 
 static WMTableViewDelegate delegate = {
