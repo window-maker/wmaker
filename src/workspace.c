@@ -55,6 +55,7 @@
 #include "xinerama.h"
 
 #define MAX_SHORTCUT_LENGTH 32
+#define WORKSPACE_NAME_DISPLAY_PADDING 32
 
 extern WPreferences wPreferences;
 extern XContext wWinContext;
@@ -295,12 +296,12 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	head = wGetHeadForPointerLocation(scr);
 	rect = wGetRectForHead(scr, head);
 	if (scr->xine_info.count) {
-		xx = rect.pos.x + (scr->xine_info.screens[head].size.width - (w+4))/2;
-		yy = rect.pos.y + (scr->xine_info.screens[head].size.height - (h+4))/2;
+		xx = rect.pos.x + (scr->xine_info.screens[head].size.width - (w + 4)) / 2;
+		yy = rect.pos.y + (scr->xine_info.screens[head].size.height - (h + 4)) / 2;
 	}
 	else {
-		xx = (scr->scr_width - (w+4))/2;
-		yy = (scr->scr_height - (h+4))/2;
+		xx = (scr->scr_width - (w + 4)) / 2;
+		yy = (scr->scr_height - (h + 4)) / 2;
 	}
 #endif
 
@@ -311,7 +312,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 #else
 		px = (scr->scr_width - (w + 4)) / 2;
 #endif
-		py = 0;
+		py = WORKSPACE_NAME_DISPLAY_PADDING;
 		break;
 	case WD_BOTTOM:
 #ifdef XINERAMA
@@ -319,23 +320,23 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 #else
 		px = (scr->scr_width - (w + 4)) / 2;
 #endif
-		py = scr->scr_height - (h + 4);
+		py = scr->scr_height - (h + 4 + WORKSPACE_NAME_DISPLAY_PADDING);
 		break;
 	case WD_TOPLEFT:
-		px = 0;
-		py = 0;
+		px = WORKSPACE_NAME_DISPLAY_PADDING;
+		py = WORKSPACE_NAME_DISPLAY_PADDING;
 		break;
 	case WD_TOPRIGHT:
-		px = scr->scr_width - (w + 4);
-		py = 0;
+		px = scr->scr_width - (w + 4 + WORKSPACE_NAME_DISPLAY_PADDING);
+		py = WORKSPACE_NAME_DISPLAY_PADDING;
 		break;
 	case WD_BOTTOMLEFT:
-		px = 0;
-		py = scr->scr_height - (h + 4);
+		px = WORKSPACE_NAME_DISPLAY_PADDING;
+		py = scr->scr_height - (h + 4 + WORKSPACE_NAME_DISPLAY_PADDING);
 		break;
 	case WD_BOTTOMRIGHT:
-		px = scr->scr_width - (w + 4);
-		py = scr->scr_height - (h + 4);
+		px = scr->scr_width - (w + 4 + WORKSPACE_NAME_DISPLAY_PADDING);
+		py = scr->scr_height - (h + 4 + WORKSPACE_NAME_DISPLAY_PADDING);
 		break;
 	case WD_CENTER:
 	default:
