@@ -189,7 +189,17 @@ dnl -----------------------
 # until we fix it, leave it disabled
 asm_support=no
 mmx_support=no
-if test "$ac_cv_prog_gcc" = yes; then
+
+check_for_mmx_support=yes
+AC_ARG_ENABLE(mmx,
+   [  --disable-mmx          disable compilation of MMX inline assembly ],
+   [if test x$enableval != xyes; then
+    check_for_mmx_support=no
+    fi])
+
+if test "$ac_cv_prog_gcc" = yes -a "$check_for_mmx_support" = yes; then
+case $host_cpu in
+*i?86*)
 
     # gcc-3.3 or newer complains about some of our stuff without this
     NOSTRICTALIASING="-fno-strict-aliasing"
@@ -217,6 +227,8 @@ if test "$ac_cv_prog_gcc" = yes; then
           mmx_support=yes
        fi
     fi
+    ;;
+esac
 fi
 AC_SUBST(NOSTRICTALIASING)
 
