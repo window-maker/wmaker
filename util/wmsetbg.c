@@ -80,6 +80,9 @@ int scrX, scrY;
 WXineramaInfo xineInfo;
 
 Bool smooth = False;
+#ifdef XINERAMA
+Bool xineStretch = False;
+#endif
 
 Pixmap CurrentPixmap = None;
 char *PixmapPath = NULL;
@@ -543,7 +546,7 @@ BackgroundTexture *parseTexture(RContext * rc, char *text)
 				texture->height = scrHeight;
 
 #ifdef XINERAMA
-				if (xineInfo.count) {
+				if (xineInfo.count && ! xineStretch) {
 					int i;
 					for (i = 0; i < xineInfo.count; ++i) {
 						applyImage(rc, texture, image, type[0],
@@ -1214,6 +1217,9 @@ void print_help(char *ProgName)
 	P(" -d, --dither	 		dither image");
 	P(" -m, --match			match  colors");
 	P(" -S, --smooth			smooth scaled image");
+#ifdef XINERAMA
+	P(" -X, --xinerama			stretch image across Xinerama heads");
+#endif
 	P(" -b, --back-color <color>	background color");
 	P(" -t, --tile			tile   image");
 	P(" -e, --center			center image");
@@ -1319,6 +1325,10 @@ int main(int argc, char **argv)
 			obey_user++;
 		} else if (strcmp(argv[i], "-S") == 0 || strcmp(argv[i], "--smooth") == 0) {
 			smooth = True;
+#ifdef XINERAMA
+		} else if (strcmp(argv[i], "-X") == 0 || strcmp(argv[i], "--xinerama") == 0) {
+			xineStretch = True;
+#endif
 		} else if (strcmp(argv[i], "-u") == 0 || strcmp(argv[i], "--update-wmaker") == 0) {
 			update++;
 		} else if (strcmp(argv[i], "-D") == 0 || strcmp(argv[i], "--update-domain") == 0) {
