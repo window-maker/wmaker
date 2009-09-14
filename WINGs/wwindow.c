@@ -213,7 +213,7 @@ static void setMiniwindowTitle(WMWindow * win, const char *title)
 			PropModeReplace, (unsigned char *)title, strlen(title));
 }
 
-static void setMiniwindow(WMWindow * win, RImage * image)
+static void setMiniwindow(WMWindow *win, RImage *image)
 {
 	WMScreen *scr = win->view->screen;
 	CARD32 *data;
@@ -235,15 +235,11 @@ static void setMiniwindow(WMWindow * win, RImage * image)
 			int offs = (x + y * image->width);
 
 			if (image->format == RRGBFormat)
-				pixel =
-				    image->data[offs * 3] << 16 | image->data[offs * 3 +
-									      1] << 8 | image->data[offs * 3 + 2];
+				pixel = image->data[offs * 3] << 16 | image->data[offs * 3 + 1] << 8
+				        | image->data[offs * 3 + 2];
 			else
-				pixel =
-				    image->data[offs * 4] << 16 | image->data[offs * 4 +
-									      1] << 8 | image->data[offs * 4 +
-												    2] | image->
-				    data[offs * 4 + 3] << 24;
+				pixel = image->data[offs * 4] << 16 | image->data[offs * 4 + 1] << 8
+				        | image->data[offs * 4 + 2] | image->data[offs * 4 + 3] << 24;
 
 			data[o++] = pixel;
 		}
