@@ -437,17 +437,13 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 						      10 * WORKSPACE_NAME_FADE_DELAY, hideWorkspaceName, scr);
 }
 
-void wWorkspaceChange(WScreen * scr, int workspace)
+void wWorkspaceChange(WScreen *scr, int workspace)
 {
-	if (scr->flags.startup || scr->flags.startup2) {
+	if (scr->flags.startup || scr->flags.startup2)
 		return;
-	}
 
-	if (workspace != scr->current_workspace) {
+	if (workspace != scr->current_workspace)
 		wWorkspaceForceChange(scr, workspace);
-	}			/*else {
-				   showWorkspaceName(scr, workspace);
-				   } */
 }
 
 void wWorkspaceRelativeChange(WScreen * scr, int amount)
