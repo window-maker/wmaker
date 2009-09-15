@@ -216,14 +216,14 @@ static void setMiniwindowTitle(WMWindow * win, const char *title)
 static void setMiniwindow(WMWindow *win, RImage *image)
 {
 	WMScreen *scr = win->view->screen;
-	CARD32 *data;
+	long *data;
 	int x, y;
 	int o;
 
 	if (!image)
 		return;
 
-	data = wmalloc((image->width * image->height + 2) * sizeof(CARD32));
+	data = wmalloc((image->width * image->height + 2) * sizeof(long));
 
 	o = 0;
 	data[o++] = image->width;
@@ -231,7 +231,7 @@ static void setMiniwindow(WMWindow *win, RImage *image)
 
 	for (y = 0; y < image->height; y++) {
 		for (x = 0; x < image->width; x++) {
-			CARD32 pixel;
+			long pixel;
 			int offs = (x + y * image->width);
 
 			if (image->format == RRGBFormat)
