@@ -474,6 +474,26 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 				new_botton_0 = top_j;
 			}
 		}
+	}
+
+	tmp = wwin;
+	while (tmp->prev) {
+		/* ignore windows in other workspaces or minimized */
+		if (tmp->prev->frame->workspace != wwin->screen_ptr->current_workspace
+		    || tmp->prev->flags.miniaturized) {
+			tmp = tmp->prev;
+			continue;
+		}
+		tmp = tmp->prev;
+
+		/* set the w_j window coordinates */
+		x_j = tmp->frame_x;
+		y_j = tmp->frame_y;
+		width_j = tmp->frame->core->width;
+		height_j = tmp->frame->core->height;
+		botton_j = y_j + height_j;
+		top_j = y_j;
+		right_border_j = x_j + width_j;
 
 		/*
 		 * Use the updated y coordinates from the above step to account
