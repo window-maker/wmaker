@@ -303,9 +303,17 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 	int new_x, new_y;
 	unsigned int new_width, new_height, half_scr_width;
 	WArea usableArea, totalArea;
+	Bool has_border = 1;
+	int adj_size;
 
 	if (!IS_RESIZABLE(wwin))
 		return;
+
+	if (!HAS_BORDER(wwin))
+		has_border = 0;
+
+	/* the size to adjust the geometry */
+	adj_size = FRAME_BORDER_WIDTH * 2 * has_border;
 
 	/* save old coordinates before we change the current values */
 	save_old_geometry(wwin);
@@ -342,19 +350,13 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 	}
 
 	if (directions & MAX_HORIZONTAL) {
-		new_width = usableArea.x2 - usableArea.x1;
-		if (HAS_BORDER(wwin))
-			new_width -= FRAME_BORDER_WIDTH * 2;
+		new_width = usableArea.x2 - usableArea.x1 - adj_size;
 		new_x = usableArea.x1;
 	} else if (directions & MAX_LEFTHALF) {
-		new_width = half_scr_width;
-		if (HAS_BORDER(wwin))
-			new_width -= FRAME_BORDER_WIDTH * 2;
+		new_width = half_scr_width - adj_size;
 		new_x = usableArea.x1;
 	} else if (directions & MAX_RIGHTHALF) {
-		new_width = half_scr_width;
-		if (HAS_BORDER(wwin))
-			new_width -= FRAME_BORDER_WIDTH * 2;
+		new_width = half_scr_width - adj_size;
 		new_x = usableArea.x1 + half_scr_width;
 	} else {
 		new_x = wwin->frame_x;
@@ -362,9 +364,7 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 	}
 
 	if (directions & MAX_VERTICAL) {
-		new_height = usableArea.y2 - usableArea.y1;
-		if (HAS_BORDER(wwin))
-			new_height -= FRAME_BORDER_WIDTH * 2;
+		new_height = usableArea.y2 - usableArea.y1 - adj_size;
 		new_y = usableArea.y1;
 		if (WFLAGP(wwin, full_maximize)) {
 			new_y -= wwin->frame->top_width;
