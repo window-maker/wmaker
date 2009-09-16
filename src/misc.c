@@ -305,6 +305,7 @@ void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 	time_t time0 = time(NULL);
 	float dx, dy, x = from_x, y = from_y, sx, sy, px, py;
 	int dx_is_bigger = 0;
+	int slide_delay, slide_steps, slide_slowdown;
 
 	/* animation parameters */
 	static struct {
@@ -312,12 +313,16 @@ void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 		int steps;
 		int slowdown;
 	} apars[5] = {
-		{
-		ICON_SLIDE_DELAY_UF, ICON_SLIDE_STEPS_UF, ICON_SLIDE_SLOWDOWN_UF}, {
-		ICON_SLIDE_DELAY_F, ICON_SLIDE_STEPS_F, ICON_SLIDE_SLOWDOWN_F}, {
-		ICON_SLIDE_DELAY_M, ICON_SLIDE_STEPS_M, ICON_SLIDE_SLOWDOWN_M}, {
-		ICON_SLIDE_DELAY_S, ICON_SLIDE_STEPS_S, ICON_SLIDE_SLOWDOWN_S}, {
-	ICON_SLIDE_DELAY_US, ICON_SLIDE_STEPS_US, ICON_SLIDE_SLOWDOWN_US}};
+		{ICON_SLIDE_DELAY_UF, ICON_SLIDE_STEPS_UF, ICON_SLIDE_SLOWDOWN_UF},
+		{ICON_SLIDE_DELAY_F,  ICON_SLIDE_STEPS_F,  ICON_SLIDE_SLOWDOWN_F},
+		{ICON_SLIDE_DELAY_M,  ICON_SLIDE_STEPS_M,  ICON_SLIDE_SLOWDOWN_M},
+		{ICON_SLIDE_DELAY_S,  ICON_SLIDE_STEPS_S,  ICON_SLIDE_SLOWDOWN_S},
+		{ICON_SLIDE_DELAY_US, ICON_SLIDE_STEPS_US, ICON_SLIDE_SLOWDOWN_US}
+	};
+
+	slide_slowdown = apars[(int)wPreferences.icon_slide_speed].slowdown;
+	slide_steps = apars[(int)wPreferences.icon_slide_speed].steps;
+	slide_delay = apars[(int)wPreferences.icon_slide_speed].delay;
 
 	dx = (float)(to_x - from_x);
 	dy = (float)(to_y - from_y);
@@ -329,18 +334,18 @@ void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 	}
 
 	if (dx_is_bigger) {
-		px = dx / apars[(int)wPreferences.icon_slide_speed].slowdown;
-		if (px < apars[(int)wPreferences.icon_slide_speed].steps && px > 0)
-			px = apars[(int)wPreferences.icon_slide_speed].steps;
-		else if (px > -apars[(int)wPreferences.icon_slide_speed].steps && px < 0)
-			px = -apars[(int)wPreferences.icon_slide_speed].steps;
+		px = dx / slide_slowdown;
+		if (px < slide_steps && px > 0)
+			px = slide_steps;
+		else if (px > -slide_steps && px < 0)
+			px = -slide_steps;
 		py = (sx == 0 ? 0 : px * dy / dx);
 	} else {
-		py = dy / apars[(int)wPreferences.icon_slide_speed].slowdown;
-		if (py < apars[(int)wPreferences.icon_slide_speed].steps && py > 0)
-			py = apars[(int)wPreferences.icon_slide_speed].steps;
-		else if (py > -apars[(int)wPreferences.icon_slide_speed].steps && py < 0)
-			py = -apars[(int)wPreferences.icon_slide_speed].steps;
+		py = dy / slide_slowdown;
+		if (py < slide_steps && py > 0)
+			py = slide_steps;
+		else if (py > -slide_steps && py < 0)
+			py = -slide_steps;
 		px = (sy == 0 ? 0 : py * dx / dy);
 	}
 
@@ -353,25 +358,25 @@ void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 			y = (float)to_y;
 
 		if (dx_is_bigger) {
-			px = px * (1.0 - 1 / (float)apars[(int)wPreferences.icon_slide_speed].slowdown);
-			if (px < apars[(int)wPreferences.icon_slide_speed].steps && px > 0)
-				px = apars[(int)wPreferences.icon_slide_speed].steps;
-			else if (px > -apars[(int)wPreferences.icon_slide_speed].steps && px < 0)
-				px = -apars[(int)wPreferences.icon_slide_speed].steps;
+			px = px * (1.0 - 1 / (float)slide_slowdown);
+			if (px < slide_steps && px > 0)
+				px = slide_steps;
+			else if (px > -slide_steps && px < 0)
+				px = -slide_steps;
 			py = (sx == 0 ? 0 : px * dy / dx);
 		} else {
-			py = py * (1.0 - 1 / (float)apars[(int)wPreferences.icon_slide_speed].slowdown);
-			if (py < apars[(int)wPreferences.icon_slide_speed].steps && py > 0)
-				py = apars[(int)wPreferences.icon_slide_speed].steps;
-			else if (py > -apars[(int)wPreferences.icon_slide_speed].steps && py < 0)
-				py = -apars[(int)wPreferences.icon_slide_speed].steps;
+			py = py * (1.0 - 1 / (float)slide_slowdown);
+			if (py < slide_steps && py > 0)
+				py = slide_steps;
+			else if (py > -slide_steps && py < 0)
+				py = -slide_steps;
 			px = (sy == 0 ? 0 : py * dx / dy);
 		}
 
 		XMoveWindow(dpy, win, (int)x, (int)y);
 		XFlush(dpy);
-		if (apars[(int)wPreferences.icon_slide_speed].delay > 0) {
-			wusleep(apars[(int)wPreferences.icon_slide_speed].delay * 1000L);
+		if (slide_delay > 0) {
+			wusleep(slide_delay * 1000L);
 		} else {
 			wusleep(10);
 		}
