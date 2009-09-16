@@ -379,8 +379,13 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 		new_height -= wwin->frame->top_width + wwin->frame->bottom_width;
 	}
 
-	if (directions & MAX_MAXIMUS)
+	if (directions & MAX_MAXIMUS) {
 		find_Maximus_geometry(wwin, usableArea, &new_x, &new_y, &new_width, &new_height);
+		if (WFLAGP(wwin, full_maximize) && new_y == 0) {
+			new_y -= wwin->frame->top_width;
+			new_height += wwin->frame->top_width - 1;
+		}
+	}
 
 	wWindowConstrainSize(wwin, &new_width, &new_height);
 
