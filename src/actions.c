@@ -420,9 +420,9 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 	int new_x_0, new_y_0, new_botton_0, new_right_border_0, new_height_0;
 	int x_j,  y_j, width_j, height_j, botton_j, top_j, right_border_j;
 	int x_intsect, y_intsect;
-	/* Assume that the window w_0 has titlebar etc */
-	int has_titlebar = 1, has_resizebar = 1, has_border = 1;
-	int adjust_height, adjust_width;
+	short int tbar_height_0 = 0, rbar_height_0 = 0;
+	short int bd_width_0 = 0, bd_width_j = 0;
+	short int adjust_height;
 
 	/* Try to fully maximize first, then readjust later */
 	new_x_0            = usableArea.x1;
@@ -430,41 +430,50 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 	new_botton_0       = usableArea.y2;
 	new_right_border_0 = usableArea.x2;
 
-	if (!HAS_TITLEBAR(wwin))
-		has_titlebar = 0;
-	if (!HAS_RESIZEBAR(wwin))
-		has_resizebar = 0;
-	if (!HAS_BORDER(wwin))
-		has_border = 0;
+	if (HAS_TITLEBAR(wwin))
+		tbar_height_0 = TITLEBAR_HEIGHT;
+	if (HAS_RESIZEBAR(wwin))
+		rbar_height_0 = RESIZEBAR_HEIGHT;
+	if (HAS_BORDER(wwin))
+		bd_width_0 = FRAME_BORDER_WIDTH;
 
 	/* the lengths to be subtracted if w_0 has titlebar, etc */
-	adjust_height = TITLEBAR_HEIGHT * has_titlebar
-		+ 2 * FRAME_BORDER_WIDTH * has_border + RESIZEBAR_HEIGHT * has_resizebar;
-	adjust_width = 2 * FRAME_BORDER_WIDTH * has_border;
+	adjust_height = tbar_height_0 + 2 * bd_width_0 + rbar_height_0;
 
 	tmp = wwin;
-	/* TODO: Is the focused window always the last in the list? */
+	/* The focused window is always the last in the list */
 	while (tmp->prev) {
-		/* ignore windows in other workspaces or minimized */
+		/* ignore windows in other workspaces etc */
 		if (tmp->prev->frame->workspace != wwin->screen_ptr->current_workspace
-		    || tmp->prev->flags.miniaturized) {
+		    || tmp->prev->flags.miniaturized || tmp->prev->flags.hidden) {
 			tmp = tmp->prev;
 			continue;
 		}
 		tmp = tmp->prev;
 
-		/* set the w_j window coordinates */
-		x_j = tmp->frame_x;
-		y_j = tmp->frame_y;
+		if (HAS_BORDER(tmp))
+			bd_width_j = FRAME_BORDER_WIDTH;
+		else
+			bd_width_j = 0;
+
+		/*
+		 * Set the w_j window coordinates. It is convenient
+		 * to not use "corrected" sizes for width and height,
+		 * otherwise bottom_j and right_border_j would be
+		 * incorrect.
+		 */
+		x_j = tmp->frame_x - bd_width_j;
+		y_j = tmp->frame_y - bd_width_j;
 		width_j = tmp->frame->core->width;
 		height_j = tmp->frame->core->height;
-		botton_j = y_j + height_j;
-		top_j = y_j;
-		right_border_j = x_j + width_j;
+		botton_j = y_j + height_j + bd_width_j;
+		top_j = y_j - bd_width_j;
+		right_border_j = x_j + width_j + bd_width_j;
 
 		/* Try to maximize in the y direction first */
 		x_intsect = calcIntersectionLength(x_0, width_0, x_j, width_j);
 		if (x_intsect != 0) {
+			/* TODO: Consider the case when coords are equal */
 			if (botton_j < y_0 && botton_j > new_y_0) {
 				/* w_0 is below the botton of w_j */
 				new_y_0 = botton_j;
@@ -478,22 +487,26 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 
 	tmp = wwin;
 	while (tmp->prev) {
-		/* ignore windows in other workspaces or minimized */
 		if (tmp->prev->frame->workspace != wwin->screen_ptr->current_workspace
-		    || tmp->prev->flags.miniaturized) {
+		    || tmp->prev->flags.miniaturized || tmp->prev->flags.hidden) {
 			tmp = tmp->prev;
 			continue;
 		}
 		tmp = tmp->prev;
 
+		if (HAS_BORDER(tmp))
+			bd_width_j = FRAME_BORDER_WIDTH;
+		else
+			bd_width_j = 0;
+
 		/* set the w_j window coordinates */
-		x_j = tmp->frame_x;
-		y_j = tmp->frame_y;
+		x_j = tmp->frame_x - bd_width_j;
+		y_j = tmp->frame_y - bd_width_j;
 		width_j = tmp->frame->core->width;
 		height_j = tmp->frame->core->height;
-		botton_j = y_j + height_j;
-		top_j = y_j;
-		right_border_j = x_j + width_j;
+		botton_j = y_j + height_j + bd_width_j;
+		top_j = y_j - bd_width_j;
+		right_border_j = x_j + width_j + bd_width_j;
 
 		/*
 		 * Use the updated y coordinates from the above step to account
@@ -505,11 +518,11 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 		if (y_intsect != 0) {
 			if (right_border_j < x_0 && right_border_j > new_x_0) {
 				/* w_0 is completely to the right of w_j */
-				new_x_0 = right_border_j;
+				new_x_0 = right_border_j + 1;
 			}
 			if (right_border_0 < x_j && x_j < new_right_border_0) {
 				/* w_0 is completely to the left of w_j */
-				new_right_border_0 = x_j;
+				new_right_border_0 = x_j - 1;
 			}
 		}
 	}
@@ -518,7 +531,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 	*new_x = new_x_0;
 	*new_y = new_y_0;
 	*new_height = new_height_0;
-	*new_width = new_right_border_0 - new_x_0 - adjust_width;
+	*new_width = new_right_border_0 - new_x_0;
 }
 
 void wUnmaximizeWindow(WWindow * wwin)
