@@ -22,7 +22,7 @@ DISTCLEANFILES = wmlib.pc
 
 install-exec-local:
 	@$(NORMAL_INSTALL)
-	@$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
+	$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
 	@list='wmlib.pc'; for p in $$list; do \
 	  if test -f $$p; then \
 	    echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
@@ -30,7 +30,7 @@ install-exec-local:
 	  else :; fi; \
 	done
 
-LIBTOOL = $(QUIET) $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
+LIBTOOL = $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
 
 .c.o:
 	$(QUIET)$(COMPILE) -c $<

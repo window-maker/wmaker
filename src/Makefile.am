@@ -135,7 +135,7 @@ wmaker_LDADD = \
 #	@INTLIBS@ \
 #	@DLLIBS@
 
-LIBTOOL = $(QUIET) $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
+LIBTOOL = $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
 
 .c.o:
 	$(QUIET)$(COMPILE) -c $<

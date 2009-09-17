@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 SUBDIRS = WINGs . po Documentation Resources Examples Extras Tests
 
-LIBTOOL = $(QUIET) $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
+LIBTOOL = $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
 
 libWINGs_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
 
