@@ -221,12 +221,17 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 		case MotionNotify:
 
 		case ButtonRelease:
+			{
+				WWindow *tmp;
+				tmp = wSwitchPanelHandleEvent(swpanel, &ev);
+				if (tmp) {
+					newFocused = tmp;
+					oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr, False);
 
-			newFocused = wSwitchPanelHandleEvent(swpanel, &ev);
-			oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr, False);
-
-			if (ev.type == ButtonRelease)
-				done = True;
+					if (ev.type == ButtonRelease)
+						done = True;
+				}
+			}
 			break;
 
 		default:
