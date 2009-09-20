@@ -208,14 +208,8 @@ static Bool isBelow(WWindow * win1, WWindow * win2)
 }
 #endif
 
-/*
- *  XFetchName Wrapper
- *
- */
-Bool wFetchName(dpy, win, winname)
-Display *dpy;
-Window win;
-char **winname;
+/* XFetchName Wrapper */
+Bool wFetchName(Display *dpy, Window win, char **winname)
 {
 	XTextProperty text_prop;
 	char **list;
@@ -251,15 +245,8 @@ char **winname;
 	}
 }
 
-/*
- *  XGetIconName Wrapper
- *
- */
-
-Bool wGetIconName(dpy, win, iconname)
-Display *dpy;
-Window win;
-char **iconname;
+/* XGetIconName Wrapper */
+Bool wGetIconName(Display *dpy, Window win, char **iconname)
 {
 	XTextProperty text_prop;
 	char **list;
