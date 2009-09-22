@@ -682,7 +682,7 @@ msgstr "Ներմուծեք ծրագիրը աշխատացնող հրամանը"
 #: ../src/dock.c:954
 #, c-format
 msgid "could not launch application %s\n"
-msgstr "հնարավոր չէ աշխատացնել %s ծրագիրը"
+msgstr "հնարավոր չէ աշխատացնել %s ծրագիրը\n"
 
 #: ../src/dock.c:1010
 msgid "could not create workspace submenu for Clip menu"
