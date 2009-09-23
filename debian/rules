@@ -388,7 +388,7 @@ debian/$(LIBWMAKER)-dev.files: build
 debian/libwings-dev.files: build
 	( find $(DEBTMPDIR)/$(INCLUDEDIR) $(DEBTMPDIR)/$(LIBDIR) \
 		    -name '*WINGs*'   \
-		 -o -name '*WUtil*' ; \
+		 -o -name '*WUtil*' | grep -v '\.so\.[0-9]' ; \
 	  cd $(DEBTMPDIR) && \
 		find usr -name get-wutil-flags -o -name get-wings-flags \
 	) | sed -e 's:$(DEBTMPDIR)/*::'> $@
