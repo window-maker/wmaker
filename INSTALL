@@ -372,11 +372,10 @@ Installing the extras package
 
 Unpack WindowMaker-extra-<version-number>.tar.gz in /usr/local/share
         
-You can get the file at ftp://ftp.windowmaker.info. This file is optional
-and only have a few icons, and themes. Look for the latest <version-number>
-available.
-Also there is a WindowMaker-extra.readme to instruct you where that package
-should go.
+You can get the file at http://windowmaker.org/pub/source/release/. This file
+is optional and only have a few icons, and themes. Look for the latest
+<version-number> available.  Also there is a WindowMaker-extra.readme to
+instruct you where that package should go.
 
 
 

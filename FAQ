@@ -143,10 +143,9 @@ here for example screenshots.
 1.2 Where can I get Window Maker? 
 ----------------------------------
 The official site to get new developmental versions from is
-ftp://ftp.windowmaker.info/pub/beta/srcs/. 
+http://windowmaker.org/pub/source/beta/
 
-NOTE: Also see http://wm.current.nu/downloads.html for the latest 
-Stable and Development versions. 
+The mercurial repository is available at https://hg.windowmaker.org/wmaker
 
 The development versions are usually very stable themselves, so if you
 want to have all the newest features, you can rather safetly go with the
@@ -158,23 +157,15 @@ crash.
 
 1.3 Where are the mailing list archives? 
 ----------------------------------------
-Phillip Smith from Netplex, our wonderful provider of windowmaker.info, has
-set up some new lists from the domain.  Please read the information on the
-web pages at http://www.windowmaker.info/lists.html for information on how
-to subscribe, the posting guidelines, and how to access the web archives.
-
-Many thanks to Ed Orcutt who hosted the original lists from his own machine
-for many years and Caldera who graciously allowed Ed to continue hosting
-from them when he moved to his new position with them.  Ed provided a very
-valuable service for many years and we are sad to see him go.
+Please read the information on the web pages at http://lists.windowmaker.org/
+for information on how to subscribe, the posting guidelines, and how to access
+the web archives.
 
 
 1.4 Where is more documentation on configuring Window Maker? 
 ----------------------------------
 Besides the mailing list archives, there are nice documents in
-ftp://ftp.windowmaker.info/pub/docs/, at
-http://wm.current.nu/downloads.html on my download page and at 
-http://wm.current.nu/user-guide/index.htm in the online user-guide. 
+http://windowmaker.org/documentation.php
 
 
 1.5 What is an appicon? 
@@ -182,52 +173,34 @@ http://wm.current.nu/user-guide/index.htm in the online user-guide.
 An appicon is the icon (without the tiny titlebar a minimized application icon
 has) produced by most applications that initially is in the bottom left corner
 of the screen while an application is running. For an example, run xterm and
-notice the icon in the corner. (Make sure that you use xterm and not a
-default older rxvt because older versions of rxvt do not properly set their
-window attributes.) 
+notice the icon in the corner.
 
 
 1.6. How can I get a question added to the FAQ? 
 ----------------------------------
-Right now, the only method is to mail Chris Green <sprout@dok.org> or
-myself <largo@current.nu> the question or post it on the Window Maker
-Mailing list, and see if enough people have the same problem. 
+Ask on the mailing list, or send your request to faqs@windowmaker.org
 
-If you are a developer and would like to be able to edit the official FAQ on
-Chris's site, let him know at <sprout@dok.org>
-
-He is currently pondering writing a front end that allows everyone to add
-entries and only require a moderator approval before being posted. 
+Other avenues are the Window Maker wiki
+  http://bugs.windowmaker.org/projects/wmaker/wiki
+and the forums
+  http://bugs.windowmaker.org/projects/wmaker/boards
 
 
 1.7. How do I report bugs? 
 ----------------------------------
 You can look at the BUGFORM file in your tarball of Window Maker.
 Alternatively, you can use the Window Maker Bugtracker at
-http://windowmaker.info/cgi-bin/bugs. 
+http://bugs.windowmaker.org/projects/wmaker/issues
 
 
-1.8. Is there an anomymous cvs server? 
+1.8. Is there a public source code repository?
 ----------------------------------
-Yes there is. To check out from cvs, first 
+Yes there is. To check out from mercurial use:
+  hg clone http://hg.windowmaker.org/wmaker wmaker
 
-            export CVSROOT=":pserver:anoncvs@cvs.net-community.com:/gnustep"
-            cvs login
+To update your source tree, cd to the wmaker directory and type
+  hg pull
           
-'anoncvs' is the password. 
-
-Then issue the command. "wm" is the name of the module. 
-
-            cvs -z3 checkout -d WindowMaker wm
-          
-
-To update your source tree, cd to the WindowMaker directory and type 
-
-            cvs -z3 update 
-          
-inside the WindowMaker directory. 
-
-
 
 
 -=-=-=-=-=-=-
