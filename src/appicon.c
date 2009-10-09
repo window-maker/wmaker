@@ -47,7 +47,6 @@
 #ifdef XDND
 #include "xdnd.h"
 #endif
-#include "wsound.h"
 
 /*
  * icon_file for the dock is got from the preferences file by
@@ -718,8 +717,6 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 					 * position */
 					SlideWindow(icon->core->window, x, y, oldX, oldY);
 				}
-
-				wSoundPlay(WSOUND_DOCK);
 			} else {
 				if (movingSingle) {
 					/* move back to its place */

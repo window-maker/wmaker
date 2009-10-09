@@ -46,7 +46,6 @@
 #include "appmenu.h"
 #include "winspector.h"
 #include "workspace.h"
-#include "wsound.h"
 #include "xinerama.h"
 
 /****** Global Variables ******/
@@ -227,7 +226,6 @@ void wShadeWindow(WWindow *wwin)
 		return;
 
 	XLowerWindow(dpy, wwin->client_win);
-	wSoundPlay(WSOUND_SHADE);
 	shade_animate(wwin, SHADE);
 
 	wwin->flags.skip_next_animation = 0;
@@ -268,7 +266,6 @@ void wUnshadeWindow(WWindow *wwin)
 	wwin->flags.mapped = 1;
 	XMapWindow(dpy, wwin->client_win);
 
-	wSoundPlay(WSOUND_UNSHADE);
 	shade_animate(wwin, UNSHADE);
 
 	wwin->flags.skip_next_animation = 0;
@@ -396,7 +393,6 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 
 	WMPostNotificationName(WMNChangedState, wwin, "maximize");
 
-	wSoundPlay(WSOUND_MAXIMIZE);
 	/* set maximization state */
 	wwin->flags.maximized = directions;
 }
@@ -561,8 +557,6 @@ void wUnmaximizeWindow(WWindow * wwin)
 	wWindowConfigure(wwin, x, y, w, h);
 
 	WMPostNotificationName(WMNChangedState, wwin, "maximize");
-
-	wSoundPlay(WSOUND_UNMAXIMIZE);
 }
 
 void wFullscreenWindow(WWindow * wwin)
@@ -1015,8 +1009,6 @@ void wIconifyWindow(WWindow * wwin)
 	unmapTransientsFor(wwin);
 
 	if (present) {
-		wSoundPlay(WSOUND_ICONIFY);
-
 		XUngrabPointer(dpy, CurrentTime);
 		wWindowUnmap(wwin);
 		/* let all Expose events arrive so that we can repaint
@@ -1191,9 +1183,6 @@ void wDeiconifyWindow(WWindow * wwin)
 		}
 	}
 
-	if (!netwm_hidden)
-		wSoundPlay(WSOUND_DEICONIFY);
-
 	/* if the window is in another workspace, do it silently */
 	if (!netwm_hidden) {
 #ifdef ANIMATIONS
@@ -1308,7 +1297,7 @@ static void hideWindow(WIcon * icon, int icon_x, int icon_y, WWindow * wwin, int
 
 	wClientSetState(wwin, IconicState, icon->icon_win);
 	flushExpose();
-	wSoundPlay(WSOUND_HIDE);
+
 #ifdef ANIMATIONS
 	if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations &&
 	    !wwin->flags.skip_next_animation && animate) {
@@ -1440,7 +1429,6 @@ static void unhideWindow(WIcon * icon, int icon_x, int icon_y, WWindow * wwin, i
 
 	wwin->flags.hidden = 0;
 
-	wSoundPlay(WSOUND_UNHIDE);
 #ifdef ANIMATIONS
 	if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations && animate) {
 		animateResize(wwin->screen_ptr, icon_x, icon_y,

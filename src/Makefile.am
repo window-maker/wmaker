@@ -100,10 +100,8 @@ wmaker_SOURCES = 	\
 	wmspec.c \
 	workspace.c \
 	workspace.h \
-	wsound.c \
-	wsound.h \
 	text.c \
-	text.h 
+	text.h
 
 
 AM_CPPFLAGS = $(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\"

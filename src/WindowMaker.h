@@ -375,7 +375,6 @@ typedef struct WPreferences {
 
     char no_dithering;		       /* use dithering or not */
 
-    char no_sound;		       /* enable/disable sound */
     char no_animations;		       /* enable/disable animations */
 
     char no_autowrap;		       /* wrap workspace when window is moved

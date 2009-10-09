@@ -52,7 +52,6 @@
 #include "workspace.h"
 #include "framewin.h"
 #include "superfluous.h"
-#include "wsound.h"
 #include "xinerama.h"
 
 /**** Local variables ****/
@@ -3681,13 +3680,8 @@ static Bool handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 						if (aicon->icon->selected)
 							wIconSelect(aicon->icon);
 
-						wSoundPlay(WSOUND_KABOOM);
 						DoKaboom(scr, aicon->icon->core->window, x, y);
-					} else {
-						wSoundPlay(WSOUND_UNDOCK);
 					}
-				} else {
-					wSoundPlay(WSOUND_UNDOCK);
 				}
 				if (clip && clip->auto_raise_lower)
 					wDockLower(clip);

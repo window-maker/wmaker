@@ -48,7 +48,6 @@
 #include "defaults.h"
 #include "workspace.h"
 #include "dock.h"
-#include "wsound.h"
 
 #include "xinerama.h"
 
@@ -401,7 +400,6 @@ WApplication *wApplicationCreate(WWindow * wwin)
 			extractClientIcon(wapp->app_icon);
 	}
 
-	wSoundPlay(WSOUND_APPSTART);
 
 #ifdef DEBUG
 	printf("Created application for %x\n", (unsigned)main_window);
@@ -473,6 +471,4 @@ void wApplicationDestroy(WApplication * wapp)
 	if (wPreferences.auto_arrange_icons) {
 		wArrangeIcons(scr, True);
 	}
-
-	wSoundPlay(WSOUND_APPEXIT);
 }

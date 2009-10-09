@@ -440,8 +440,6 @@ WDefaultEntry optionList[] = {
 	 &wPreferences.use_saveunders, getBool, NULL},
 	{"OpaqueMove", "NO", NULL,
 	 &wPreferences.opaque_move, getBool, NULL},
-	{"DisableSound", "NO", NULL,
-	 &wPreferences.no_sound, getBool, NULL},
 	{"DisableAnimations", "NO", NULL,
 	 &wPreferences.no_animations, getBool, NULL},
 	{"DontLinkWorkspaces", "NO", NULL,

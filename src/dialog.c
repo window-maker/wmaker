@@ -1624,12 +1624,6 @@ void wShowInfoPanel(WScreen * scr)
 		strbuf = wstrappend(strbuf, buf);
 	}
 
-	if (wPreferences.no_sound) {
-		strbuf = wstrappend(strbuf, _("\nSound disabled"));
-	} else {
-		strbuf = wstrappend(strbuf, _("\nSound enabled"));
-	}
-
 #ifdef VIRTUAL_DESKTOP
 	if (wPreferences.vdesk_enable)
 		strbuf = wstrappend(strbuf, _(", VirtualDesktop enabled"));
