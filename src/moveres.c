@@ -1576,9 +1576,6 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 	int head = ((wPreferences.auto_arrange_icons && wXineramaHeads(scr) > 1)
 		    ? wGetHeadForWindow(wwin)
 		    : scr->xine_info.primary_head);
-#ifdef GHOST_WINDOW_MOVE
-	RImage *rimg = InitGhostWindowMove(scr);
-#endif
 
 	if (!IS_MOVABLE(wwin))
 		return False;
