@@ -44,21 +44,6 @@
 
 extern WPreferences wPreferences;
 
-#ifdef SPEAKER_SOUND
-static void play(Display * dpy, int pitch, int delay)
-{
-	XKeyboardControl kc;
-
-	kc.bell_pitch = pitch;
-	kc.bell_percent = 50;
-	kc.bell_duration = delay;
-	XChangeKeyboardControl(dpy, KBBellPitch | KBBellDuration | KBBellPercent, &kc);
-	XBell(dpy, 50);
-	XFlush(dpy);
-	wusleep(delay);
-}
-#endif
-
 #ifdef DEMATERIALIZE_ICON
 void DoKaboom(WScreen * scr, Window win, int x, int y)
 {
@@ -256,12 +241,9 @@ void DoKaboom(WScreen * scr, Window win, int x, int y)
 		}
 
 		XFlush(dpy);
-#ifdef SPEAKER_SOUND
-		play(dpy, 100 + rand() % 250, 12);
-#else
-# if (MINIATURIZE_ANIMATION_DELAY_Z > 0)
+
+#if (MINIATURIZE_ANIMATION_DELAY_Z > 0)
 		wusleep(MINIATURIZE_ANIMATION_DELAY_Z * 2);
-# endif
 #endif
 	}
 
