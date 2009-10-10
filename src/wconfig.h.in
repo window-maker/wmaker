@@ -145,10 +145,9 @@
 
 /*
  * #define if you want the window creation animation when superfluous
- * is enabled. Only enable one of them.
+ * is enabled.
  */
-#undef WINDOW_BIRTH_ZOOM
-#undef WINDOW_BIRTH_ZOOM2
+#define WINDOW_BIRTH_ZOOM
 
 /* whether arrow drawing in clip buttons should be gradiented */
 #undef GRADIENT_CLIP_ARROWS
@@ -323,9 +322,6 @@
 
 #define WORKSPACE_NAME_DELAY     400
 
-/* window birth animation steps (DO NOT MAKE IT RUN-TIME) */
-#define WINDOW_BIRTH_STEPS       20
-
 /* number of steps for icon dematerialization. */
 #define DEMATERIALIZE_STEPS      16
 
@@ -336,8 +332,8 @@
 #define ICON_KABOOM_PIECE_SIZE  4
 
 /*
- * Position increment for smart placement: >= 1  
- * Raise these values if it's too slow for you 
+ * Position increment for smart placement: >= 1
+ * Raise these values if it's too slow for you
  */
 #define PLACETEST_HSTEP	        8
 #define PLACETEST_VSTEP	        8

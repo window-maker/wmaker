@@ -352,51 +352,10 @@ Pixmap MakeGhostIcon(WScreen * scr, Drawable drawable)
 }
 
 #ifdef WINDOW_BIRTH_ZOOM
-void DoWindowBirth(WWindow * wwin)
-{
-	int width = wwin->frame->core->width;
-	int height = wwin->frame->core->height;
-	int w = WMIN(width, 20);
-	int h = WMIN(height, 20);
-	int x, y;
-	int dw, dh;
-	int i;
-	time_t time0 = time(NULL);
-
-	dw = (width - w) / WINDOW_BIRTH_STEPS;
-	dh = (height - h) / WINDOW_BIRTH_STEPS;
-
-	x = wwin->frame_x + (width - w) / 2;
-	y = wwin->frame_y + (height - h) / 2;
-
-	XMoveResizeWindow(dpy, wwin->frame->core->window, x, y, w, h);
-
-	XMapWindow(dpy, wwin->frame->core->window);
-
-	XFlush(dpy);
-	for (i = 0; i < WINDOW_BIRTH_STEPS; i++) {
-		x -= dw / 2 + dw % 2;
-		y -= dh / 2 + dh % 2;
-		w += dw;
-		h += dh;
-		XMoveResizeWindow(dpy, wwin->frame->core->window, x, y, w, h);
-		XFlush(dpy);
-		/* a timeout */
-		if (time(NULL) - time0 > MAX_ANIMATION_TIME)
-			break;
-	}
-
-	XMoveResizeWindow(dpy, wwin->frame->core->window, wwin->frame_x, wwin->frame_y, width, height);
-	XFlush(dpy);
-}
-#else
-#ifdef WINDOW_BIRTH_ZOOM2
 extern void animateResize();
 
-void DoWindowBirth(WWindow * wwin)
+void DoWindowBirth(WWindow *wwin)
 {
-	/* dummy stub */
-
 	int center_x, center_y;
 	int width = wwin->frame->core->width;
 	int height = wwin->frame->core->height;
@@ -410,11 +369,10 @@ void DoWindowBirth(WWindow * wwin)
 	animateResize(scr, center_x, center_y, 1, 1, wwin->frame_x, wwin->frame_y, width, height, 0);
 }
 #else
-void DoWindowBirth(WWindow * wwin)
+void DoWindowBirth(WWindow *wwin)
 {
 	/* dummy stub */
 }
-#endif
 #endif
 
 #ifdef SILLYNESS
