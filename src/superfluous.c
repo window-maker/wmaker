@@ -41,6 +41,7 @@
 #include "window.h"
 #include "icon.h"
 #include "appicon.h"
+#include "actions.h"
 
 extern WPreferences wPreferences;
 
@@ -352,7 +353,6 @@ Pixmap MakeGhostIcon(WScreen * scr, Drawable drawable)
 }
 
 #ifdef WINDOW_BIRTH_ZOOM
-extern void animateResize();
 
 void DoWindowBirth(WWindow *wwin)
 {

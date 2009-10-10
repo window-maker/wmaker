@@ -69,9 +69,8 @@ void wMakeWindowVisible(WWindow *wwin);
 
 void wFullscreenWindow(WWindow *wwin);
 void wUnfullscreenWindow(WWindow *wwin);
-static void save_old_geometry(WWindow *wwin);
-static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x,
-				  int *new_y, unsigned int *new_width,
-				  unsigned int *new_height);
+
+void animateResize(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh);
+
 #endif
 
