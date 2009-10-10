@@ -662,11 +662,7 @@ static void animateResizeFlip(WScreen * scr, int x, int y, int w, int h, int fx,
 		XGrabServer(dpy);
 		XDrawLines(dpy, scr->root_win, scr->frame_gc, points, 5, CoordModeOrigin);
 		XFlush(dpy);
-#if (MINIATURIZE_ANIMATION_DELAY_F > 0)
 		wusleep(MINIATURIZE_ANIMATION_DELAY_F);
-#else
-		wusleep(10);
-#endif
 
 		XDrawLines(dpy, scr->root_win, scr->frame_gc, points, 5, CoordModeOrigin);
 		XUngrabServer(dpy);
@@ -729,11 +725,7 @@ animateResizeTwist(WScreen * scr, int x, int y, int w, int h, int fx, int fy, in
 		XGrabServer(dpy);
 		XDrawLines(dpy, scr->root_win, scr->frame_gc, points, 5, CoordModeOrigin);
 		XFlush(dpy);
-#if (MINIATURIZE_ANIMATION_DELAY_T > 0)
 		wusleep(MINIATURIZE_ANIMATION_DELAY_T);
-#else
-		wusleep(10);
-#endif
 
 		XDrawLines(dpy, scr->root_win, scr->frame_gc, points, 5, CoordModeOrigin);
 		XUngrabServer(dpy);
@@ -775,11 +767,8 @@ static void animateResizeZoom(WScreen * scr, int x, int y, int w, int h, int fx,
 				       (int)cx[j], (int)cy[j], (int)cw[j], (int)ch[j]);
 		}
 		XFlush(dpy);
-#if (MINIATURIZE_ANIMATION_DELAY_Z > 0)
 		wusleep(MINIATURIZE_ANIMATION_DELAY_Z);
-#else
-		wusleep(10);
-#endif
+
 		for (j = 0; j < FRAMES; j++) {
 			XDrawRectangle(dpy, scr->root_win, scr->frame_gc,
 				       (int)cx[j], (int)cy[j], (int)cw[j], (int)ch[j]);
@@ -801,11 +790,8 @@ static void animateResizeZoom(WScreen * scr, int x, int y, int w, int h, int fx,
 		XDrawRectangle(dpy, scr->root_win, scr->frame_gc, (int)cx[j], (int)cy[j], (int)cw[j], (int)ch[j]);
 	}
 	XFlush(dpy);
-#if (MINIATURIZE_ANIMATION_DELAY_Z > 0)
 	wusleep(MINIATURIZE_ANIMATION_DELAY_Z);
-#else
-	wusleep(10);
-#endif
+
 	for (j = 0; j < FRAMES; j++) {
 		XDrawRectangle(dpy, scr->root_win, scr->frame_gc, (int)cx[j], (int)cy[j], (int)cw[j], (int)ch[j]);
 	}

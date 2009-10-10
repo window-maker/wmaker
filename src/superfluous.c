@@ -242,10 +242,7 @@ void DoKaboom(WScreen * scr, Window win, int x, int y)
 		}
 
 		XFlush(dpy);
-
-#if (MINIATURIZE_ANIMATION_DELAY_Z > 0)
 		wusleep(MINIATURIZE_ANIMATION_DELAY_Z * 2);
-#endif
 	}
 
 	XFreePixmap(dpy, tmp);
