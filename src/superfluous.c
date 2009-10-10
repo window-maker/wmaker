@@ -366,7 +366,7 @@ void DoWindowBirth(WWindow *wwin)
 	center_x = wwin->frame_x + (width - w) / 2;
 	center_y = wwin->frame_y + (height - h) / 2;
 
-	animateResize(scr, center_x, center_y, 1, 1, wwin->frame_x, wwin->frame_y, width, height, 0);
+	animateResize(scr, center_x, center_y, 1, 1, wwin->frame_x, wwin->frame_y, width, height);
 }
 #else
 void DoWindowBirth(WWindow *wwin)

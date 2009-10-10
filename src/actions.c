@@ -811,10 +811,10 @@ static void animateResizeZoom(WScreen * scr, int x, int y, int w, int h, int fx,
 
 #undef FRAMES
 
-void animateResize(WScreen * scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh, int hiding)
+void animateResize(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh)
 {
 	int style = wPreferences.iconification_style;	/* Catch the value */
-	int steps, k;
+	int steps;
 
 	if (style == WIS_NONE)
 		return;
@@ -823,22 +823,20 @@ void animateResize(WScreen * scr, int x, int y, int w, int h, int fx, int fy, in
 		style = rand() % 3;
 	}
 
-	k = (hiding ? 2 : 3);
-
 	switch (style) {
 	case WIS_TWIST:
-		steps = (MINIATURIZE_ANIMATION_STEPS_T * k) / 3;
+		steps = MINIATURIZE_ANIMATION_STEPS_T;
 		if (steps > 0)
 			animateResizeTwist(scr, x, y, w, h, fx, fy, fw, fh, steps);
 		break;
 	case WIS_FLIP:
-		steps = (MINIATURIZE_ANIMATION_STEPS_F * k) / 3;
+		steps = MINIATURIZE_ANIMATION_STEPS_F;
 		if (steps > 0)
 			animateResizeFlip(scr, x, y, w, h, fx, fy, fw, fh, steps);
 		break;
 	case WIS_ZOOM:
 	default:
-		steps = (MINIATURIZE_ANIMATION_STEPS_Z * k) / 3;
+		steps = MINIATURIZE_ANIMATION_STEPS_Z;
 		if (steps > 0)
 			animateResizeZoom(scr, x, y, w, h, fx, fy, fw, fh, steps);
 		break;
@@ -1056,7 +1054,7 @@ void wIconifyWindow(WWindow * wwin)
 				}
 			}
 			animateResize(wwin->screen_ptr, wwin->frame_x, wwin->frame_y,
-				      wwin->frame->core->width, wwin->frame->core->height, ix, iy, iw, ih, False);
+				      wwin->frame->core->width, wwin->frame->core->height, ix, iy, iw, ih);
 		}
 #endif
 	}
@@ -1217,7 +1215,7 @@ void wDeiconifyWindow(WWindow * wwin)
 			}
 			animateResize(wwin->screen_ptr, ix, iy, iw, ih,
 				      wwin->frame_x, wwin->frame_y,
-				      wwin->frame->core->width, wwin->frame->core->height, False);
+				      wwin->frame->core->width, wwin->frame->core->height);
 		}
 #endif				/* ANIMATIONS */
 		wwin->flags.skip_next_animation = 0;
@@ -1303,7 +1301,7 @@ static void hideWindow(WIcon * icon, int icon_x, int icon_y, WWindow * wwin, int
 	    !wwin->flags.skip_next_animation && animate) {
 		animateResize(wwin->screen_ptr, wwin->frame_x, wwin->frame_y,
 			      wwin->frame->core->width, wwin->frame->core->height,
-			      icon_x, icon_y, icon->core->width, icon->core->height, True);
+			      icon_x, icon_y, icon->core->width, icon->core->height);
 	}
 #endif
 	wwin->flags.skip_next_animation = 0;
@@ -1434,7 +1432,7 @@ static void unhideWindow(WIcon * icon, int icon_x, int icon_y, WWindow * wwin, i
 		animateResize(wwin->screen_ptr, icon_x, icon_y,
 			      icon->core->width, icon->core->height,
 			      wwin->frame_x, wwin->frame_y,
-			      wwin->frame->core->width, wwin->frame->core->height, True);
+			      wwin->frame->core->width, wwin->frame->core->height);
 	}
 #endif
 	wwin->flags.skip_next_animation = 0;

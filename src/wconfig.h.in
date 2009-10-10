@@ -251,8 +251,6 @@
 #define MINIATURIZE_ANIMATION_DELAY_F    20000
 #define MINIATURIZE_ANIMATION_TWIST_F    0.5
 
-#define HIDE_ANIMATION_STEPS (MINIATURIZE_ANIMATION_STEPS*2/3)
-
 /* delays in ms...*/
 #define BALLOON_DELAY           1000 /* ...before balloon is shown */
 #define MENU_SELECT_DELAY       200  /* ...for menu item selection hysteresis */
