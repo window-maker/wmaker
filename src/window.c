@@ -59,9 +59,7 @@
 #ifdef MWM_HINTS
 # include "motif.h"
 #endif
-#ifdef NETWM_HINTS
-# include "wmspec.h"
-#endif
+#include "wmspec.h"
 
 #define MOD_MASK wPreferences.modifier_mask
 
@@ -245,10 +243,8 @@ void wWindowDestroy(WWindow *wwin)
 		if (wPreferences.auto_arrange_icons)
 			wArrangeIcons(wwin->screen_ptr, True);
 	}
-#ifdef NETWM_HINTS
 	if (wwin->net_icon_image)
 		RReleaseImage(wwin->net_icon_image);
-#endif
 
 	wrelease(wwin);
 }
@@ -387,10 +383,8 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 		wMWMCheckClientHints(wwin);
 #endif				/* MWM_HINTS */
 
-#ifdef NETWM_HINTS
 		if (!check)
 			check = wNETWMCheckClientHints(wwin, &tmp_level, &tmp_workspace);
-#endif
 
 		/* window levels are between INT_MIN+1 and INT_MAX, so if we still
 		 * have INT_MIN that means that no window level was requested. -Dan
@@ -883,9 +877,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	if (WFLAGP(wwin, start_maximized) && IS_RESIZABLE(wwin))
 		wwin->flags.maximized = MAX_VERTICAL | MAX_HORIZONTAL;
 
-#ifdef NETWM_HINTS
 	wNETWMCheckInitialClientState(wwin);
-#endif
 
 	/* apply previous state if it exists and we're in startup */
 	if (scr->flags.startup && wm_state >= 0) {
@@ -1152,9 +1144,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			wScreenBringInside(scr, &x, &y, width, height);
 	}
 
-#ifdef NETWM_HINTS
 	wNETWMPositionSplash(wwin, &x, &y, width, height);
-#endif
 
 	if (wwin->flags.urgent) {
 		if (!IS_OMNIPRESENT(wwin))

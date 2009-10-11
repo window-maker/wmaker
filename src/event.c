@@ -56,10 +56,7 @@
 #include "properties.h"
 #include "balloon.h"
 #include "xinerama.h"
-
-#ifdef NETWM_HINTS
-# include "wmspec.h"
-#endif
+#include "wmspec.h"
 
 /******** Global Variables **********/
 extern XContext wWinContext;
@@ -1012,10 +1009,8 @@ static void handleClientMessage(XEvent * event)
 		if (!scr)
 			return;
 		scr->flags.ignore_focus_events = event->xclient.data.l[0] ? 1 : 0;
-#ifdef NETWM_HINTS
 	} else if (wNETWMProcessClientMessage(&event->xclient)) {
 		/* do nothing */
-#endif
 #ifdef XDND
 	} else if (wXDNDProcessClientMessage(&event->xclient)) {
 		/* do nothing */

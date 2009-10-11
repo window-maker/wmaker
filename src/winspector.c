@@ -46,11 +46,7 @@
 #include "winspector.h"
 #include "dock.h"
 #include "client.h"
-
-#ifdef NETWM_HINTS
 #include "wmspec.h"
-#endif
-
 #include "xinerama.h"
 
 #include <WINGs/WUtil.h>
@@ -828,14 +824,11 @@ static void applySettings(WMButton * button, InspectorPanel * panel)
 	wwin->frame->flags.need_texture_change = 1;
 	wWindowConfigureBorders(wwin);
 	wFrameWindowPaint(wwin->frame);
-#ifdef NETWM_HINTS
 	wNETWMUpdateActions(wwin, False);
-#endif
 
 	/*
 	 * Can't apply emulate_appicon because it will probably cause problems.
 	 */
-
 	if (wapp) {
 		/* do application wide stuff */
 		WSETUFLAG(wapp->main_window_desc, start_hidden, WMGetButtonSelected(panel->appChk[0]));

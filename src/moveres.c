@@ -1532,7 +1532,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 				wArrangeIcons(scr, True);
 			}
 
-#if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
+#if defined(VIRTUAL_DESKTOP)
 			wWorkspaceResizeViewport(scr, scr->current_workspace);
 #endif
 
@@ -1803,7 +1803,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 	    head != wGetHeadForWindow(wwin)) {
 		wArrangeIcons(scr, True);
 	}
-#if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
+#if defined(VIRTUAL_DESKTOP)
 	if (started)
 		wWorkspaceResizeViewport(scr, scr->current_workspace);
 #endif
@@ -2096,7 +2096,7 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 	if (wPreferences.auto_arrange_icons && wXineramaHeads(scr) > 1 && head != wGetHeadForWindow(wwin)) {
 		wArrangeIcons(scr, True);
 	}
-#if defined(NETWM_HINTS) && defined(VIRTUAL_DESKTOP)
+#if defined(VIRTUAL_DESKTOP)
 	wWorkspaceResizeViewport(scr, scr->current_workspace);
 #endif
 }

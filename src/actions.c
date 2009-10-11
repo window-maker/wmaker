@@ -976,11 +976,7 @@ void wIconifyWindow(WWindow * wwin)
 			     GrabModeAsync, None, None, CurrentTime);
 	}
 
-	if (!wPreferences.disable_miniwindows
-#ifdef NETWM_HINTS
-	    && !wwin->flags.net_handle_icon
-#endif
-	    ) {
+	if (!wPreferences.disable_miniwindows && !wwin->flags.net_handle_icon) {
 		if (!wwin->flags.icon_moved) {
 			PlaceIcon(wwin->screen_ptr, &wwin->icon_x, &wwin->icon_y, wGetHeadForWindow(wwin));
 		}
@@ -1003,11 +999,7 @@ void wIconifyWindow(WWindow * wwin)
 		 * something before the animation starts (and the server is grabbed) */
 		XSync(dpy, 0);
 
-		if (wPreferences.disable_miniwindows
-#ifdef NETWM_HINTS
-		    || wwin->flags.net_handle_icon
-#endif
-		    )
+		if (wPreferences.disable_miniwindows || wwin->flags.net_handle_icon)
 			wClientSetState(wwin, IconicState, None);
 		else
 			wClientSetState(wwin, IconicState, wwin->icon->icon_win);
@@ -1018,25 +1010,18 @@ void wIconifyWindow(WWindow * wwin)
 		    && !wPreferences.no_animations) {
 			int ix, iy, iw, ih;
 
-			if (!wPreferences.disable_miniwindows
-#ifdef NETWM_HINTS
-			    && !wwin->flags.net_handle_icon
-#endif
-			    ) {
+			if (!wPreferences.disable_miniwindows && !wwin->flags.net_handle_icon) {
 				ix = wwin->icon_x;
 				iy = wwin->icon_y;
 				iw = wwin->icon->core->width;
 				ih = wwin->icon->core->height;
 			} else {
-#ifdef NETWM_HINTS
 				if (wwin->flags.net_handle_icon) {
 					ix = wwin->icon_x;
 					iy = wwin->icon_y;
 					iw = wwin->icon_w;
 					ih = wwin->icon_h;
-				} else
-#endif
-				{
+				} else {
 					ix = 0;
 					iy = 0;
 					iw = wwin->screen_ptr->scr_width;
@@ -1051,12 +1036,7 @@ void wIconifyWindow(WWindow * wwin)
 
 	wwin->flags.skip_next_animation = 0;
 
-	if (!wPreferences.disable_miniwindows
-#ifdef NETWM_HINTS
-	    && !wwin->flags.net_handle_icon
-#endif
-	    ) {
-
+	if (!wPreferences.disable_miniwindows && !wwin->flags.net_handle_icon) {
 		if (wwin->screen_ptr->current_workspace == wwin->frame->workspace ||
 		    IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)
 
@@ -1110,10 +1090,7 @@ void wIconifyWindow(WWindow * wwin)
 	 * it seems to me we might break behaviour this way.
 	 */
 	if (wwin->flags.selected && !wPreferences.disable_miniwindows
-#ifdef NETWM_HINTS
-	    && !wwin->flags.net_handle_icon
-#endif
-	    )
+	    && !wwin->flags.net_handle_icon)
 		wIconSelect(wwin->icon);
 
 	WMPostNotificationName(WMNChangedState, wwin, "iconify");
@@ -1124,13 +1101,9 @@ void wIconifyWindow(WWindow * wwin)
 
 void wDeiconifyWindow(WWindow * wwin)
 {
-#ifdef NETWM_HINTS
 	/* we're hiding for show_desktop */
 	int netwm_hidden = wwin->flags.net_show_desktop &&
 	    wwin->frame->workspace != wwin->screen_ptr->current_workspace;
-#else
-	int netwm_hidden = False;
-#endif
 
 	if (!netwm_hidden)
 		wWindowChangeWorkspace(wwin, wwin->screen_ptr->current_workspace);
@@ -1159,10 +1132,7 @@ void wDeiconifyWindow(WWindow * wwin)
 		/* maybe we want to do this regardless of net_handle_icon
 		 * it seems to me we might break behaviour this way.
 		 */
-		if (!wPreferences.disable_miniwindows
-#ifdef NETWM_HINTS
-		    && !wwin->flags.net_handle_icon
-#endif
+		if (!wPreferences.disable_miniwindows && !wwin->flags.net_handle_icon
 		    && wwin->icon != NULL) {
 			if (wwin->icon->selected)
 				wIconSelect(wwin->icon);
@@ -1179,24 +1149,18 @@ void wDeiconifyWindow(WWindow * wwin)
 			int ix, iy, iw, ih;
 
 			if (!wPreferences.disable_miniwindows
-#ifdef NETWM_HINTS
-			    && !wwin->flags.net_handle_icon
-#endif
-			    ) {
+			    && !wwin->flags.net_handle_icon) {
 				ix = wwin->icon_x;
 				iy = wwin->icon_y;
 				iw = wwin->icon->core->width;
 				ih = wwin->icon->core->height;
 			} else {
-#ifdef NETWM_HINTS
 				if (wwin->flags.net_handle_icon) {
 					ix = wwin->icon_x;
 					iy = wwin->icon_y;
 					iw = wwin->icon_w;
 					ih = wwin->icon_h;
-				} else
-#endif
-				{
+				} else {
 					ix = 0;
 					iy = 0;
 					iw = wwin->screen_ptr->scr_width;
@@ -1207,7 +1171,7 @@ void wDeiconifyWindow(WWindow * wwin)
 				      wwin->frame_x, wwin->frame_y,
 				      wwin->frame->core->width, wwin->frame->core->height);
 		}
-#endif				/* ANIMATIONS */
+#endif	/* ANIMATIONS */
 		wwin->flags.skip_next_animation = 0;
 		XGrabServer(dpy);
 		if (!wwin->flags.shaded) {
@@ -1222,10 +1186,7 @@ void wDeiconifyWindow(WWindow * wwin)
 	}
 
 	if (!wPreferences.disable_miniwindows && wwin->icon != NULL
-#ifdef NETWM_HINTS
-	    && !wwin->flags.net_handle_icon
-#endif
-	    ) {
+	    && !wwin->flags.net_handle_icon) {
 		RemoveFromStackList(wwin->icon->core);
 		/*    removeIconGrabs(wwin->icon); */
 		wIconDestroy(wwin->icon);

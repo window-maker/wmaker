@@ -155,11 +155,9 @@ WIcon *wIconCreate(WWindow * wwin)
 #else
 	icon->show_title = 1;
 #endif
-#ifdef NETWM_HINTS
 	if (!icon->image && !WFLAGP(wwin, always_user_icon))
 		icon->image = RRetainImage(wwin->net_icon_image);
 	if (!icon->image)
-#endif
 		icon->image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class);
 
 	file = wDefaultGetIconFile(scr, wwin->wm_instance, wwin->wm_class, False);
@@ -583,11 +581,7 @@ void wIconUpdate(WIcon * icon)
 		XFreePixmap(dpy, icon->pixmap);
 	icon->pixmap = None;
 
-	if (wwin && (WFLAGP(wwin, always_user_icon)
-#ifdef NETWM_HINTS
-		     || wwin->net_icon_image
-#endif
-	    ))
+	if (wwin && (WFLAGP(wwin, always_user_icon) || wwin->net_icon_image))
 		goto user_icon;
 
 	/* use client specified icon window */

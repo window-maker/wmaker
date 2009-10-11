@@ -43,9 +43,7 @@
 #include "stacking.h"
 #include "appicon.h"
 #include "appmenu.h"
-#ifdef NETWM_HINTS
-# include "wmspec.h"
-#endif
+#include "wmspec.h"
 
 /****** Global Variables ******/
 
@@ -643,9 +641,7 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 
 			XFree(attr);
 		} else {
-#ifdef NETWM_HINTS
 			wNETWMCheckClientHintChange(wwin, event);
-#endif
 		}
 	}
 }

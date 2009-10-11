@@ -291,9 +291,7 @@ typedef struct _WScreen {
     char *xdestring;
 #endif
 
-#ifdef NETWM_HINTS
     struct NetData *netdata;
-#endif
 
     int helper_fd;
     pid_t helper_pid;

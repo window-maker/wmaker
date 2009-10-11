@@ -53,9 +53,7 @@
 #include "session.h"
 #include "balloon.h"
 #include "geomview.h"
-#ifdef NETWM_HINTS
-# include "wmspec.h"
-#endif
+#include "wmspec.h"
 
 #include "xinerama.h"
 
@@ -704,9 +702,7 @@ WScreen *wScreenInit(int screen_number)
 
 	createInternalWindows(scr);
 
-#ifdef NETWM_HINTS
 	wNETWMInitStuff(scr);
-#endif
 
 	/* create initial workspace */
 	wWorkspaceNew(scr);
@@ -789,7 +785,7 @@ void wScreenUpdateUsableArea(WScreen * scr)
 				scr->totalUsableArea[i].x1 += offset;
 			}
 		}
-#ifdef NETWM_HINTS
+
 		{
 			WArea area;
 			if (wNETWMGetUsableArea(scr, i, &area)) {
@@ -799,7 +795,6 @@ void wScreenUpdateUsableArea(WScreen * scr)
 				scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
 			}
 		}
-#endif
 
 		scr->usableArea[i] = scr->totalUsableArea[i];
 
@@ -859,13 +854,10 @@ void wScreenUpdateUsableArea(WScreen * scr)
 		}
 	}
 
-#ifdef NETWM_HINTS
 	wNETWMUpdateWorkarea(scr, area);
-#endif
 
-	if (wPreferences.auto_arrange_icons) {
+	if (wPreferences.auto_arrange_icons)
 		wArrangeIcons(scr, True);
-	}
 }
 
 #if 0

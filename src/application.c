@@ -275,9 +275,7 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	}
 
 	wapp->main_window_desc->fake_group = wwin->fake_group;
-#ifdef NETWM_HINTS
 	wapp->main_window_desc->net_icon_image = RRetainImage(wwin->net_icon_image);
-#endif
 
 	extractIcon(wapp->main_window_desc);
 

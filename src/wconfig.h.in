@@ -49,8 +49,6 @@
 
 /* #define CPP_PATH @CPP_PATH@ */
 
-#define NETWM_HINTS
-
 /* support for XDND drop in the Dock. Experimental */
 /*#define XDND*/
 

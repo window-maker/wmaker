@@ -1604,9 +1604,7 @@ void wShowInfoPanel(WScreen * scr)
 		char buf[80];
 		int j = 0;
 
-#ifdef NETWM_HINTS
 		list[j++] = "WMSPEC";
-#endif
 #ifdef MWM_HINTS
 		list[j++] = "MWM";
 #endif

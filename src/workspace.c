@@ -48,10 +48,7 @@
 #include "actions.h"
 #include "workspace.h"
 #include "appicon.h"
-#ifdef NETWM_HINTS
 #include "wmspec.h"
-#endif
-
 #include "xinerama.h"
 
 #define MAX_SHORTCUT_LENGTH 32
@@ -122,10 +119,7 @@ int wWorkspaceNew(WScreen * scr)
 		wspace->height = scr->scr_height;
 		wspace->width = scr->scr_width;
 #endif
-#ifdef NETWM_HINTS
 		wNETWMUpdateDesktop(scr);
-#endif
-
 		WMPostNotificationName(WMNWorkspaceCreated, scr, (void *)(uintptr_t) (scr->workspace_count - 1));
 		XFlush(dpy);
 
@@ -196,10 +190,7 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 			wMenuRemoveItem(menu, --i);
 		wMenuRealize(menu);
 	}
-#ifdef NETWM_HINTS
 	wNETWMUpdateDesktop(scr);
-#endif
-
 	WMPostNotificationName(WMNWorkspaceDestroyed, scr, (void *)(uintptr_t) (scr->workspace_count - 1));
 
 	if (scr->current_workspace >= scr->workspace_count)
@@ -616,11 +607,8 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 			wClipIconPaint(scr->clip_icon);
 		}
 	}
-#ifdef NETWM_HINTS
 	wScreenUpdateUsableArea(scr);
 	wNETWMUpdateDesktop(scr);
-#endif
-
 	showWorkspaceName(scr, workspace);
 
 	WMPostNotificationName(WMNWorkspaceChanged, scr, (void *)(uintptr_t) workspace);
@@ -1159,9 +1147,7 @@ Bool wWorkspaceSetViewport(WScreen * scr, int workspace, int view_x, int view_y)
 	wptr->view_x = view_x;
 	wptr->view_y = view_y;
 
-#ifdef NETWM_HINTS
 	wNETWMUpdateDesktop(scr);
-#endif
 
 	for (wwin = scr->focused_window; wwin; wwin = wwin->prev) {
 		if (wwin->frame->workspace == workspace && !IS_VSTUCK(wwin)) {

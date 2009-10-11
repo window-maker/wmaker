@@ -31,8 +31,6 @@
 
 #include "wconfig.h"
 
-#ifdef NETWM_HINTS
-
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xarch.h>
@@ -1646,5 +1644,3 @@ static void wsobserver(void *self, WMNotification * notif)
 		updateWorkspaceNames(scr);
 	}
 }
-
-#endif				/* NETWM_HINTS */
