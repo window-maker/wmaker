@@ -2966,6 +2966,11 @@ static void titlebarDblClick(WCoreWindow * sender, void *data, XEvent * event)
 static void frameMouseDown(WObjDescriptor * desc, XEvent * event)
 {
 	WWindow *wwin = desc->parent;
+	unsigned int new_width;
+	unsigned int new_height;
+	unsigned int resize_increment;
+
+	resize_increment = wPreferences.resize_increment;
 
 	event->xbutton.state &= ValidModMask;
 
@@ -2990,10 +2995,21 @@ static void frameMouseDown(WObjDescriptor * desc, XEvent * event)
 #endif
 			return;
 		}
-		if (event->xbutton.button == Button3)
+		if (event->xbutton.button == Button3) {
 			wMouseResizeWindow(wwin, event);
-		else if (event->xbutton.button == Button1 || event->xbutton.button == Button2)
+		} else if (event->xbutton.button == Button4) {
+			new_width = wwin->client.width - resize_increment;
+			new_height = wwin->client.height - resize_increment;
+			//wWindowConstrainSize(wwin, &new_width,&new_height);
+			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, new_width, new_height);
+		} else if (event->xbutton.button == Button5) {
+			new_width = wwin->client.width + resize_increment;
+			new_height = wwin->client.height + resize_increment;
+			//wWindowConstrainSize(wwin, &new_width,&new_height);
+			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, new_width, new_height);
+		} else if (event->xbutton.button == Button1 || event->xbutton.button == Button2) {
 			wMouseMoveWindow(wwin, event);
+		}
 		XUngrabPointer(dpy, CurrentTime);
 	}
 }

@@ -53,6 +53,10 @@ typedef struct _Panel {
 	WMButton *miconB;
 	WMButton *mdockB;
 
+	WMLabel *resizeL;
+	WMLabel *resizeTextL;
+	WMSlider *resizeS;
+
 	WMFrame *opaqF;
 	WMButton *opaqB;
 
@@ -111,6 +115,22 @@ static void resistanceCallback(WMWidget * w, void *data)
 	}
 }
 
+static void resizeCallback(WMWidget * w, void *data)
+{
+	_Panel *panel = (_Panel *) data;
+	char buffer[64];
+	int i;
+
+	i = WMGetSliderValue(panel->resizeS);
+
+	if (i == 0)
+		WMSetLabelText(panel->resizeL, "OFF");
+	else {
+		sprintf(buffer, "%i", i);
+		WMSetLabelText(panel->resizeL, buffer);
+	}
+}
+
 static int getPlacement(char *str)
 {
 	if (!str)
@@ -163,6 +183,10 @@ static void showData(_Panel * panel)
 	WMSetSliderValue(panel->resS, x);
 	resistanceCallback(NULL, panel);
 
+	x = GetIntegerForKey("ResizeIncrement");
+	WMSetSliderValue(panel->resizeS, x);
+	resizeCallback(NULL, panel);
+
 	WMSetButtonSelected(panel->tranB, GetBoolForKey("OpenTransientOnOwnerWorkspace"));
 
 	WMSetButtonSelected(panel->opaqB, GetBoolForKey("OpaqueMove"));
@@ -192,6 +216,7 @@ static void storeData(_Panel * panel)
 	arr = WMCreatePLArray(WMCreatePLString(x), WMCreatePLString(y), NULL);
 	SetObjectForKey(arr, "WindowPlaceOrigin");
 	SetIntegerForKey(WMGetSliderValue(panel->resS), "EdgeResistance");
+	SetIntegerForKey(WMGetSliderValue(panel->resizeS), "ResizeIncrement");
 	SetBoolForKey(WMGetButtonSelected(panel->resrB), "Attraction");
 	WMReleasePropList(arr);
 }
@@ -341,14 +366,30 @@ static void createPanel(Panel * p)
 
 	panel->miconB = WMCreateSwitchButton(panel->maxiF);
 	WMResizeWidget(panel->miconB, 190, 30);
-	WMMoveWidget(panel->miconB, 10, 18);
+	WMMoveWidget(panel->miconB, 10, 12);
 	WMSetButtonText(panel->miconB, _("...do not cover icons"));
 
 	panel->mdockB = WMCreateSwitchButton(panel->maxiF);
 	WMResizeWidget(panel->mdockB, 190, 30);
-	WMMoveWidget(panel->mdockB, 10, 53);
+	WMMoveWidget(panel->mdockB, 10, 35);
 
 	WMSetButtonText(panel->mdockB, _("...do not cover dock"));
+
+	panel->resizeS = WMCreateSlider(panel->maxiF);
+	WMResizeWidget(panel->resizeS, 50, 15);
+	WMMoveWidget(panel->resizeS, 10, 70);
+	WMSetSliderMinValue(panel->resizeS, 0);
+	WMSetSliderMaxValue(panel->resizeS, 100);
+	WMSetSliderAction(panel->resizeS, resizeCallback, panel);
+
+	panel->resizeL = WMCreateLabel(panel->maxiF);
+	WMResizeWidget(panel->resizeL, 30, 15);
+	WMMoveWidget(panel->resizeL, 60, 70);
+
+	panel->resizeTextL = WMCreateLabel(panel->maxiF);
+	WMSetLabelText(panel->resizeTextL, "Mod+Wheel\nresize increment");
+	WMResizeWidget(panel->resizeTextL, 110, 30);
+	WMMoveWidget(panel->resizeTextL, 90, 62);
 
 	WMMapSubwidgets(panel->maxiF);
 

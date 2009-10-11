@@ -466,6 +466,7 @@ typedef struct WPreferences {
     signed char shade_speed;
 
     int edge_resistance;
+    int resize_increment;
     char attract;
 
     unsigned int workspace_border_size; /* Size in pixels of the workspace border */
