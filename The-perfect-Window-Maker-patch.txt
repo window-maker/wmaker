@@ -1,0 +1,86 @@
+____________
+Introduction
+------------
+
+This short tutorial is meant to help you help me in the task
+of having a maintainable and bug-free Window Maker.
+
+It assumes you have 'git' correctly installed and you have set
+the most basic configuration options via 'git config' (or by
+editing the $HOME/.gitconfig file yourself). See the end
+of this file for an example .gitconfig (which is the one
+I use).
+
+You should probably by now have already cloned my repository,
+but here is how you can do it just in case:
+
+# this is the preferred method (ie faster, native implementation)
+git clone git://repo.or.cz/wmaker-crm.git
+
+# use the http method only if are behind a firewall which blocks git://
+git clone http://repo.or.cz/r/wmaker-crm.git
+
+__________________________________
+How to submit patches the git way
+----------------------------------
+
+Suppose you have a working copy of the git repo and you found
+a bug in Window Maker and you know how to fix it. This is
+what you can do to submit your patch in a way which will allow
+me to apply it quickly.
+
+# Optional: Create a new branch (just to be safe in case you screw up)
+git checkout -b my-new-branch
+
+Now you edit and save the files to fix the bug...
+
+# Optional: Check what you did, review etc
+git diff
+
+# if it looks good, commit your changes
+git commit -a
+
+# git will pop up the editor which you configured in .gitconfig so
+# that you will be able to write a commit log. It will use the 'vi'
+# editor otherwise.
+
+(write a _good_ and succinct commit log, explaining what you fixed etc)
+
+# Prepare the patch to submit to the mailing-list. This step will create
+# a file named 0001-subject-of-your-patch.patch from the last commit
+# (use HEAD~2 if you want patches for the last 2 commits etc)
+git format-patch HEAD~1
+
+After the above steps, you are ready to send the created .patch file
+to the mailing-list! Just send it as-is, and I will be able to apply
+it with
+
+# this is how I am going to apply your patch
+git am 0001-subject-of-your-patch.patch
+
+and it will automatically append your commit to the repo, with the
+proper authorship, date, subject, commit log etc.
+
+___________________
+Example .gitconfig
+-------------------
+
+[user]
+        name = Erwin Schrodinger
+        email = schrodinger@gmail.com
+[core]
+        editor = xjed
+[status]
+        showUntrackedFiles = no
+[color]
+        branch = auto
+        status = auto
+        diff = auto
+        ui = auto
+[apply]
+        whitespace = fix
+	
+
+
+
+
