@@ -34,6 +34,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <math.h>
 
 /* For getting mouse wheel mappings from WINGs */
 #include <WINGs/WINGsP.h>
@@ -2858,14 +2859,16 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 {
 	WWindow *wwin = desc->parent;
-	unsigned int new_width;
-	unsigned int new_height;
+	unsigned int new_width, w_scale;
+	unsigned int new_height, h_scale;
 	unsigned int resize_width_increment = 0;
 	unsigned int resize_height_increment = 0;
 
 	if (wwin->normal_hints) {
-		resize_width_increment = wwin->normal_hints->width_inc;
-		resize_height_increment = wwin->normal_hints->height_inc;
+		w_scale = ceil(wPreferences.resize_increment / wwin->normal_hints->width_inc);
+		h_scale = ceil(wPreferences.resize_increment / wwin->normal_hints->height_inc);
+		resize_width_increment = wwin->normal_hints->width_inc * w_scale;
+		resize_height_increment = wwin->normal_hints->height_inc * h_scale;
 	}
 	if (resize_width_increment <= 1 && resize_height_increment <= 1) {
 		resize_width_increment = wPreferences.resize_increment;
