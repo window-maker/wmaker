@@ -62,50 +62,38 @@ typedef struct _Panel {
 } _Panel;
 
 #define ICON_FILE	"configs"
-
 #define OLDS_IMAGE	"oldstyle"
 #define NEWS_IMAGE	"newstyle"
-
 #define ANIM_IMAGE	"animations"
 #define SUPERF_IMAGE	"moreanim"
 #define SOUND_IMAGE	"sound"
 #define SMOOTH_IMAGE	"smooth"
-
 #define SPEED_IMAGE 	"speed%i"
 #define SPEED_IMAGE_S 	"speed%is"
-
 #define ARQUIVO_XIS	"xis"
 
-static void updateLabel(WMWidget * self, void *data);
+static void updateLabel(WMWidget *self, void *data);
 
-static void showData(_Panel * panel)
+static void showData(_Panel *panel)
 {
 	WMPerformButtonClick(panel->icoB[GetSpeedForKey("IconSlideSpeed")]);
-
 	WMPerformButtonClick(panel->shaB[GetSpeedForKey("ShadeSpeed")]);
 
-	if (GetBoolForKey("NewStyle")) {
+	if (GetBoolForKey("NewStyle"))
 		WMPerformButtonClick(panel->newsB);
-	} else {
+	else
 		WMPerformButtonClick(panel->oldsB);
-	}
 
 	WMSetButtonSelected(panel->animB, !GetBoolForKey("DisableAnimations"));
-
 	WMSetButtonSelected(panel->supB, GetBoolForKey("Superfluous"));
-
 	WMSetButtonSelected(panel->sfxB, !GetBoolForKey("DisableSound"));
-
 	WMSetButtonSelected(panel->smoB, GetBoolForKey("SmoothWorkspaceBack"));
-
 	WMSetButtonSelected(panel->dithB, GetBoolForKey("DisableDithering"));
-
 	WMSetSliderValue(panel->dithS, GetIntegerForKey("ColormapSize"));
-
 	updateLabel(panel->dithS, panel);
 }
 
-static void updateLabel(WMWidget * self, void *data)
+static void updateLabel(WMWidget *self, void *data)
 {
 	WMSlider *sPtr = (WMSlider *) self;
 	_Panel *panel = (_Panel *) data;
@@ -113,7 +101,6 @@ static void updateLabel(WMWidget * self, void *data)
 	float fl;
 
 	fl = WMGetSliderValue(sPtr);
-
 	panel->cmapSize = (int)fl;
 
 	sprintf(buffer, "%i", panel->cmapSize * panel->cmapSize * panel->cmapSize);
@@ -121,7 +108,8 @@ static void updateLabel(WMWidget * self, void *data)
 }
 
 static void
-createImages(WMScreen * scr, RContext * rc, RImage * xis, char *file, WMPixmap ** icon1, WMPixmap ** icon2)
+createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
+	     WMPixmap **icon1, WMPixmap **icon2)
 {
 	RImage *icon;
 	char *path;
@@ -131,9 +119,8 @@ createImages(WMScreen * scr, RContext * rc, RImage * xis, char *file, WMPixmap *
 	*icon2 = NULL;
 
 	path = LocateImage(file);
-	if (!path) {
+	if (!path)
 		return;
-	}
 
 	*icon1 = WMCreatePixmapFromFile(scr, path);
 	if (!*icon1) {
@@ -157,7 +144,7 @@ createImages(WMScreen * scr, RContext * rc, RImage * xis, char *file, WMPixmap *
 	wfree(path);
 }
 
-static void createPanel(Panel * p)
+static void createPanel(Panel *p)
 {
 	_Panel *panel = (_Panel *) p;
 	WMScreen *scr = WMWidgetScreen(panel->parent);
@@ -172,9 +159,8 @@ static void createPanel(Panel * p)
 	path = LocateImage(ARQUIVO_XIS);
 	if (path) {
 		xis = RLoadImage(rc, path, 0);
-		if (!xis) {
+		if (!xis)
 			wwarning(_("could not load image file %s"), path);
-		}
 		wfree(path);
 	}
 
@@ -182,7 +168,6 @@ static void createPanel(Panel * p)
 	WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
 
     /*********** Icon Slide Speed **********/
-
 	panel->icoF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->icoF, 230, 45);
 	WMMoveWidget(panel->icoF, 15, 10);
@@ -326,7 +311,6 @@ static void createPanel(Panel * p)
 	WMMapSubwidgets(panel->titlF);
 
     /**************** Features ******************/
-
 	panel->animF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->animF, 255, 115);
 	WMMoveWidget(panel->animF, 255, 10);
@@ -453,11 +437,10 @@ static void createPanel(Panel * p)
 	if (xis)
 		RReleaseImage(xis);
 	WMReleaseFont(font);
-
 	showData(panel);
 }
 
-static void storeData(_Panel * panel)
+static void storeData(_Panel *panel)
 {
 	int i;
 
@@ -474,18 +457,15 @@ static void storeData(_Panel * panel)
 	SetSpeedForKey(i, "ShadeSpeed");
 
 	SetBoolForKey(WMGetButtonSelected(panel->newsB), "NewStyle");
-
 	SetBoolForKey(!WMGetButtonSelected(panel->animB), "DisableAnimations");
 	SetBoolForKey(WMGetButtonSelected(panel->supB), "Superfluous");
 	SetBoolForKey(!WMGetButtonSelected(panel->sfxB), "DisableSound");
-
 	SetBoolForKey(WMGetButtonSelected(panel->smoB), "SmoothWorkspaceBack");
-
 	SetBoolForKey(WMGetButtonSelected(panel->dithB), "DisableDithering");
 	SetIntegerForKey(WMGetSliderValue(panel->dithS), "ColormapSize");
 }
 
-Panel *InitConfigurations(WMScreen * scr, WMWidget * parent)
+Panel *InitConfigurations(WMScreen *scr, WMWidget *parent)
 {
 	_Panel *panel;
 
@@ -493,12 +473,10 @@ Panel *InitConfigurations(WMScreen * scr, WMWidget * parent)
 	memset(panel, 0, sizeof(_Panel));
 
 	panel->sectionName = _("Other Configurations");
-
 	panel->description = _("Animation speeds, titlebar styles, various option\n"
 			       "toggling and number of colors to reserve for\n" "Window Maker on 8bit displays.");
 
 	panel->parent = parent;
-
 	panel->callbacks.createWidgets = createPanel;
 	panel->callbacks.updateDomain = storeData;
 
