@@ -2860,9 +2860,17 @@ static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 	WWindow *wwin = desc->parent;
 	unsigned int new_width;
 	unsigned int new_height;
-	unsigned int resize_increment;
+	unsigned int resize_width_increment = 0;
+	unsigned int resize_height_increment = 0;
 
-	resize_increment = wPreferences.resize_increment;
+	if (wwin->normal_hints) {
+		resize_width_increment = wwin->normal_hints->width_inc;
+		resize_height_increment = wwin->normal_hints->height_inc;
+	}
+	if (resize_width_increment <= 1 && resize_height_increment <= 1) {
+		resize_width_increment = wPreferences.resize_increment;
+		resize_height_increment = wPreferences.resize_increment;
+	}
 
 	event->xbutton.state &= ValidModMask;
 
@@ -2887,14 +2895,14 @@ static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 		if (event->xbutton.button == Button3) {
 			wMouseResizeWindow(wwin, event);
 		} else if (event->xbutton.button == Button4) {
-			new_width = wwin->client.width - resize_increment;
-			new_height = wwin->client.height - resize_increment;
-			//wWindowConstrainSize(wwin, &new_width,&new_height);
+			new_width = wwin->client.width - resize_width_increment;
+			new_height = wwin->client.height - resize_height_increment;
+			wWindowConstrainSize(wwin, &new_width,&new_height);
 			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, new_width, new_height);
 		} else if (event->xbutton.button == Button5) {
-			new_width = wwin->client.width + resize_increment;
-			new_height = wwin->client.height + resize_increment;
-			//wWindowConstrainSize(wwin, &new_width,&new_height);
+			new_width = wwin->client.width + resize_width_increment;
+			new_height = wwin->client.height + resize_height_increment;
+			wWindowConstrainSize(wwin, &new_width,&new_height);
 			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, new_width, new_height);
 		} else if (event->xbutton.button == Button1 || event->xbutton.button == Button2) {
 			wMouseMoveWindow(wwin, event);
