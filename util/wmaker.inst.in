@@ -217,22 +217,6 @@ else
 fi
 
 
-if [ ! -d "$GSDIR/Library/WindowMaker/Sounds" ]; then
-	echo "Creating sound library $GSDIR/Library/WindowMaker/Sounds"
-	make_dir  $GSDIR/Library/WindowMaker/Sounds
-else
-	echo "Default Sounds directory already exists. Skipping..."
-fi
-
-
-if [ ! -d "$GSDIR/Library/WindowMaker/SoundSets" ]; then
-	echo "Creating sound set library $GSDIR/Library/WindowMaker/SoundSets"
-	make_dir  $GSDIR/Library/WindowMaker/SoundSets
-else
-	echo "Default SoundSets directory already exists. Skipping..."
-fi
-
-
 if [ ! -d "$GSDIR/Library/WindowMaker/CachedPixmaps" ]; then
 	make_dir $GSDIR/Library/WindowMaker/CachedPixmaps
 fi

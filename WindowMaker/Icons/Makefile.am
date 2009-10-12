@@ -35,7 +35,6 @@ defsdata_DATA = \
 	ps.tiff\
 	real.tiff\
 	sgiterm.tiff\
-	sound.tiff\
 	staroffice2.tiff\
 	timer.tiff\
 	wilber.tiff\
@@ -61,7 +60,6 @@ defsdata_DATA = \
 	ps.xpm\
 	real.xpm\
 	sgiterm.xpm\
-	sound.xpm\
 	staroffice2.xpm\
 	timer.xpm\
 	wilber.xpm\

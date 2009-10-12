@@ -32,7 +32,6 @@ EXTRA_DIST = \
 	opaque.tiff \
 	paths.tiff \
 	smooth.tiff \
-	sound.tiff \
 	speed0.tiff \
 	speed0s.tiff \
 	speed1.tiff \

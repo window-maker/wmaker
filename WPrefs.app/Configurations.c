@@ -45,7 +45,6 @@ typedef struct _Panel {
 	WMFrame *animF;
 	WMButton *animB;
 	WMButton *supB;
-	WMButton *sfxB;
 	WMLabel *noteL;
 
 	WMFrame *smoF;
@@ -66,7 +65,6 @@ typedef struct _Panel {
 #define NEWS_IMAGE	"newstyle"
 #define ANIM_IMAGE	"animations"
 #define SUPERF_IMAGE	"moreanim"
-#define SOUND_IMAGE	"sound"
 #define SMOOTH_IMAGE	"smooth"
 #define SPEED_IMAGE 	"speed%i"
 #define SPEED_IMAGE_S 	"speed%is"
@@ -86,7 +84,6 @@ static void showData(_Panel *panel)
 
 	WMSetButtonSelected(panel->animB, !GetBoolForKey("DisableAnimations"));
 	WMSetButtonSelected(panel->supB, GetBoolForKey("Superfluous"));
-	WMSetButtonSelected(panel->sfxB, !GetBoolForKey("DisableSound"));
 	WMSetButtonSelected(panel->smoB, GetBoolForKey("SmoothWorkspaceBack"));
 	WMSetButtonSelected(panel->dithB, GetBoolForKey("DisableDithering"));
 	WMSetSliderValue(panel->dithS, GetIntegerForKey("ColormapSize"));
@@ -314,7 +311,7 @@ static void createPanel(Panel *p)
 	panel->animF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->animF, 255, 115);
 	WMMoveWidget(panel->animF, 255, 10);
-	WMSetFrameTitle(panel->animF, _("Animations and Sound"));
+	WMSetFrameTitle(panel->animF, _("Animations"));
 
 	panel->animB = WMCreateButton(panel->animF, WBTToggle);
 	WMResizeWidget(panel->animB, 64, 64);
@@ -353,34 +350,6 @@ static void createPanel(Panel *p)
 				  "animations. These include the `ghosting' of the\n"
 				  "dock when it's being moved to another side and\n"
 				  "the explosion animation when undocking icons."), WMWidgetView(panel->supB));
-
-	panel->sfxB = WMCreateButton(panel->animF, WBTToggle);
-	WMResizeWidget(panel->sfxB, 64, 64);
-	WMMoveWidget(panel->sfxB, 175, 20);
-	WMSetButtonFont(panel->sfxB, font);
-	WMSetButtonText(panel->sfxB, _("Sounds"));
-	WMSetButtonImagePosition(panel->sfxB, WIPAbove);
-	createImages(scr, rc, xis, SOUND_IMAGE, &altIcon, &icon);
-	if (icon) {
-		WMSetButtonImage(panel->sfxB, icon);
-		WMReleasePixmap(icon);
-	}
-	if (altIcon) {
-		WMSetButtonAltImage(panel->sfxB, altIcon);
-		WMReleasePixmap(altIcon);
-	}
-	WMSetBalloonTextForView(_("Disable/enable support for sound effects played\n"
-				  "for actions like shading and closing a window.\n"
-				  "You will need a module distributed separately\n"
-				  "for this. You can get it at:\n"
-				  "http://largo.windowmaker.info/files.php#WSoundServer"),
-				WMWidgetView(panel->sfxB));
-
-	panel->noteL = WMCreateLabel(panel->animF);
-	WMResizeWidget(panel->noteL, 235, 28);
-	WMMoveWidget(panel->noteL, 10, 85);
-	WMSetLabelFont(panel->noteL, font);
-	WMSetLabelText(panel->noteL, _("Note: sound requires a module distributed\nseparately"));
 
 	WMMapSubwidgets(panel->animF);
 
@@ -459,7 +428,6 @@ static void storeData(_Panel *panel)
 	SetBoolForKey(WMGetButtonSelected(panel->newsB), "NewStyle");
 	SetBoolForKey(!WMGetButtonSelected(panel->animB), "DisableAnimations");
 	SetBoolForKey(WMGetButtonSelected(panel->supB), "Superfluous");
-	SetBoolForKey(!WMGetButtonSelected(panel->sfxB), "DisableSound");
 	SetBoolForKey(WMGetButtonSelected(panel->smoB), "SmoothWorkspaceBack");
 	SetBoolForKey(WMGetButtonSelected(panel->dithB), "DisableDithering");
 	SetIntegerForKey(WMGetSliderValue(panel->dithS), "ColormapSize");

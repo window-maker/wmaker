@@ -4,7 +4,6 @@
   Logo.WMClip = {Icon = clip.#extension#;};
   Dockit = {Icon = GNUstep.#extension#;};
   DockApp = {NoAppIcon = NO;};
-  WSoundServer = {Icon = sound.#extension#;};
   panel.Panel = {NoAppIcon = YES;};
   gmc.Gmc = {NoAppIcon = YES;};
   XTerm = {Icon = Terminal.#extension#;};

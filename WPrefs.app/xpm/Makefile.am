@@ -33,7 +33,6 @@ EXTRA_DIST = \
 	opaque.xpm \
 	paths.xpm \
 	smooth.xpm \
-	sound.xpm \
 	speed0.xpm \
 	speed0s.xpm \
 	speed1.xpm \
