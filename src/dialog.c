@@ -1954,11 +1954,7 @@ int wShowCrashingDialogPanel(int whatSig)
 	WMResizeWidget(panel->noteL, PWIDTH - 20, 40);
 	WMMoveWidget(panel->noteL, 10, 90);
 	WMSetLabelTextAlignment(panel->noteL, WAJustified);
-#ifdef SYS_SIGLIST_DECLARED
-	snprintf(buf, sizeof(buf), _("Window Maker received signal %i\n(%s)."), whatSig, sys_siglist[whatSig]);
-#else
 	snprintf(buf, sizeof(buf), _("Window Maker received signal %i."), whatSig);
-#endif
 	WMSetLabelText(panel->noteL, buf);
 
 	panel->note2L = WMCreateLabel(panel->win);

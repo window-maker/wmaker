@@ -66,12 +66,6 @@
 
 #include "xutil.h"
 
-#if 0
-#ifdef SYS_SIGLIST_DECLARED
-extern const char *const sys_siglist[];
-#endif
-#endif
-
 /* for SunOS */
 #ifndef SA_RESTART
 # define SA_RESTART 0
@@ -240,32 +234,14 @@ static RETSIGTYPE handleExitSig(int sig)
 	sigprocmask(SIG_BLOCK, &sigs, NULL);
 
 	if (sig == SIGUSR1) {
-#ifdef SYS_SIGLIST_DECLARED
-		wwarning("got signal %i (%s) - restarting\n", sig, sys_siglist[sig]);
-#else
 		wwarning("got signal %i - restarting\n", sig);
-#endif
-
 		SIG_WCHANGE_STATE(WSTATE_NEED_RESTART);
-
 	} else if (sig == SIGUSR2) {
-#ifdef SYS_SIGLIST_DECLARED
-		wwarning("got signal %i (%s) - rereading defaults\n", sig, sys_siglist[sig]);
-#else
 		wwarning("got signal %i - rereading defaults\n", sig);
-#endif
-
 		SIG_WCHANGE_STATE(WSTATE_NEED_REREAD);
-
 	} else if (sig == SIGTERM || sig == SIGINT || sig == SIGHUP) {
-#ifdef SYS_SIGLIST_DECLARED
-		wwarning("got signal %i (%s) - exiting...\n", sig, sys_siglist[sig]);
-#else
 		wwarning("got signal %i - exiting...\n", sig);
-#endif
-
 		SIG_WCHANGE_STATE(WSTATE_NEED_EXIT);
-
 	}
 
 	sigprocmask(SIG_UNBLOCK, &sigs, NULL);
@@ -285,11 +261,7 @@ static void dummyHandler(int sig)
  */
 static RETSIGTYPE handleSig(int sig)
 {
-#ifdef SYS_SIGLIST_DECLARED
-	wfatal("got signal %i (%s)\n", sig, sys_siglist[sig]);
-#else
 	wfatal("got signal %i\n", sig);
-#endif
 
 	/* Setting the signal behaviour back to default and then reraising the
 	 * signal is a cleaner way to make program exit and core dump than calling
