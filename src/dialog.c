@@ -1078,32 +1078,15 @@ Bool wIconChooserDialog(WScreen * scr, char **file, char *instance, char *class)
 
 typedef struct {
 	WScreen *scr;
-
 	WWindow *wwin;
-
 	WMWindow *win;
-
 	WMLabel *logoL;
 	WMLabel *name1L;
 	WMFrame *lineF;
 	WMLabel *name2L;
-
 	WMLabel *versionL;
-
 	WMLabel *infoL;
-
 	WMLabel *copyrL;
-
-#ifdef SILLYNESS
-	WMHandlerID timer;
-	int cycle;
-	RImage *icon;
-	RImage *pic;
-	WMPixmap *oldPix;
-	WMFont *oldFont;
-	char *str;
-	int x;
-#endif
 } InfoPanel;
 
 #define COPYRIGHT_TEXT  \
@@ -1112,340 +1095,14 @@ typedef struct {
 
 static InfoPanel *thePanel = NULL;
 
-static void destroyInfoPanel(WCoreWindow * foo, void *data, XEvent * event)
+static void destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 {
-#ifdef SILLYNESS
-	if (thePanel->timer) {
-		WMDeleteTimerHandler(thePanel->timer);
-	}
-	if (thePanel->oldPix) {
-		WMReleasePixmap(thePanel->oldPix);
-	}
-	if (thePanel->oldFont) {
-		WMReleaseFont(thePanel->oldFont);
-	}
-	if (thePanel->icon) {
-		RReleaseImage(thePanel->icon);
-	}
-	if (thePanel->pic) {
-		RReleaseImage(thePanel->pic);
-	}
-#endif				/* SILLYNESS */
 	WMUnmapWidget(thePanel);
-
 	wUnmanageWindow(thePanel->wwin, False, False);
-
 	WMDestroyWidget(thePanel->win);
-
 	wfree(thePanel);
-
 	thePanel = NULL;
 }
-
-#ifdef SILLYNESS
-
-extern WMPixmap *DoXThing();
-extern Bool InitXThing();
-
-static void logoPushCallback(void *data)
-{
-	InfoPanel *panel = (InfoPanel *) data;
-	char buffer[512];
-	int i;
-	static int oldi = 0;
-	int len;
-	static int jingobeu[] = {
-		329, 150, -1, 100, 329, 150, -1, 100, 329, 300, -1, 250,
-		329, 150, -1, 100, 329, 150, -1, 100, 329, 300, -1, 250,
-		329, 150, 392, 150, 261, 150, 293, 150, 329, 400, -1, 400, 0
-	};
-	static int c = 0;
-
-	if (panel->x) {
-		XKeyboardControl kc;
-		XKeyboardState ksave;
-		unsigned long mask = KBBellPitch | KBBellDuration | KBBellPercent;
-
-		XGetKeyboardControl(dpy, &ksave);
-
-		if (panel->x > 0) {
-			if (jingobeu[panel->x - 1] == 0) {
-				panel->x = -1;
-			} else if (jingobeu[panel->x - 1] < 0) {
-				panel->x++;
-				c = jingobeu[panel->x - 1] / 50;
-				panel->x++;
-			} else if (c == 0) {
-				kc.bell_percent = 50;
-				kc.bell_pitch = jingobeu[panel->x - 1];
-				panel->x++;
-				kc.bell_duration = jingobeu[panel->x - 1];
-				c = jingobeu[panel->x - 1] / 50;
-				panel->x++;
-				XChangeKeyboardControl(dpy, mask, &kc);
-				XBell(dpy, 50);
-				XFlush(dpy);
-			} else {
-				c--;
-			}
-		}
-		if (!(panel->cycle % 4)) {
-			WMPixmap *p;
-
-			p = DoXThing(panel->wwin);
-			WMSetLabelImage(panel->logoL, p);
-		}
-		kc.bell_pitch = ksave.bell_pitch;
-		kc.bell_percent = ksave.bell_percent;
-		kc.bell_duration = ksave.bell_duration;
-		XChangeKeyboardControl(dpy, mask, &kc);
-	} else if (panel->cycle < 30) {
-		RImage *image;
-		WMPixmap *pix;
-		RColor gray;
-
-		gray.red = 0xae;
-		gray.green = 0xaa;
-		gray.blue = 0xae;
-		gray.alpha = 0;
-
-		image = RScaleImage(panel->icon, panel->pic->width, panel->pic->height);
-		RCombineImagesWithOpaqueness(image, panel->pic, panel->cycle * 255 / 30);
-		pix = WMCreateBlendedPixmapFromRImage(panel->scr->wmscreen, image, &gray);
-		RReleaseImage(image);
-		WMSetLabelImage(panel->logoL, pix);
-		WMReleasePixmap(pix);
-	}
-
-	/* slow down text a little */
-	i = (int)(panel->cycle * 50.0 / 85.0) % 200;
-
-	if (i != oldi) {
-		len = strlen(panel->str);
-
-		strncpy(buffer, panel->str, i < len ? i : len);
-		if (i >= len)
-			memset(&buffer[len], ' ', i - len);
-
-		strncpy(buffer, panel->str, i < len ? i : len);
-		if (i >= len)
-			memset(&buffer[len], ' ', i - len);
-		buffer[i] = 0;
-
-		WMSetLabelText(panel->versionL, buffer);
-
-		XFlush(WMScreenDisplay(WMWidgetScreen(panel->versionL)));
-
-		oldi = i;
-	}
-
-	panel->timer = WMAddTimerHandler(50, logoPushCallback, panel);
-	panel->cycle++;
-}
-
-static void handleLogoPush(XEvent * event, void *data)
-{
-	InfoPanel *panel = (InfoPanel *) data;
-	static int broken = 0;
-	static int clicks = 0;
-	static char *pic_data[] = {
-		"45 45 57 1",
-		" 	c None",
-		".	c #000000",
-		"X	c #383C00",
-		"o	c #515500",
-		"O	c #616100",
-		"+	c #616900",
-		"@	c #696D00",
-		"#	c #697100",
-		"$	c #495100",
-		"%	c #202800",
-		"&	c #969600",
-		"*	c #CFCF00",
-		"=	c #D7DB00",
-		"-	c #D7D700",
-		";	c #C7CB00",
-		":	c #A6AA00",
-		">	c #494900",
-		",	c #8E8E00",
-		"<	c #DFE700",
-		"1	c #F7FF00",
-		"2	c #FFFF00",
-		"3	c #E7EB00",
-		"4	c #B6B600",
-		"5	c #595900",
-		"6	c #717500",
-		"7	c #AEB200",
-		"8	c #CFD300",
-		"9	c #E7EF00",
-		"0	c #EFF300",
-		"q	c #9EA200",
-		"w	c #F7FB00",
-		"e	c #F7F700",
-		"r	c #BEBE00",
-		"t	c #8E9200",
-		"y	c #EFF700",
-		"u	c #969A00",
-		"i	c #414500",
-		"p	c #595D00",
-		"a	c #E7E700",
-		"s	c #C7C700",
-		"d	c #797D00",
-		"f	c #BEC300",
-		"g	c #DFE300",
-		"h	c #868600",
-		"j	c #EFEF00",
-		"k	c #9E9E00",
-		"l	c #616500",
-		"z	c #DFDF00",
-		"x	c #868A00",
-		"c	c #969200",
-		"v	c #B6BA00",
-		"b	c #A6A600",
-		"n	c #8E8A00",
-		"m	c #717100",
-		"M	c #AEAE00",
-		"N	c #AEAA00",
-		"B	c #868200",
-		"               ...............               ",
-		"             ....XoO+@##+O$%....             ",
-		"           ...%X&*========-;;:o...           ",
-		"         ...>.>,<122222222222134@...         ",
-		"        ..>5678912222222222222220q%..        ",
-		"       ..$.&-w2222222222222222222er>..       ",
-		"      ..O.t31222222222222222222222y4>..      ",
-		"    ...O5u3222222222222222222222222yri...    ",
-		"    ..>p&a22222222222222222222222222wso..    ",
-		"   ..ids91222222222222222222222222222wfi..   ",
-		"  ..X.7w222222wgs-w2222222213=g0222222<hi..  ",
-		"  ..Xuj2222222<@X5=222222229k@l:022222y4i..  ",
-		"  .Xdz22222222*X%.s22222222axo%$-222222<c>.. ",
-		" ..o7y22222222v...r222222223hX.i82222221si.. ",
-		"..io*222222222&...u22222222yt..%*22222220:%. ",
-		"..>k02222222227...f222222222v..X=222222229t. ",
-		"..dz12222222220ui:y2222222223d%qw222222221g. ",
-		".%vw222222222221y2222222222219*y2222222222wd.",
-		".X;2222222222222222222222222222222222222222b.",
-		".i*2222222222222222222222222222222222222222v.",
-		".i*2222222222222222222222222222222222222222;.",
-		".i*22222222222222222222222222222222222222228.",
-		".>*2222222222222222222222222222222222222222=.",
-		".i*22222222222222222222222222222222222222228.",
-		".i*2222222222222222222222222222222222222222;.",
-		".X*222222222222222222222222222222we12222222r.",
-		".Xs12222222w3aw22222222222222222y8s0222222wk.",
-		".Xq02222222a,na22222222222222222zm6zwy2222gi.",
-		"..>*22222y<:Xcj22222222222222222-o$k;;02228..",
-		"..i7y2220rhX.:y22222222222222222jtiXd,a220,..",
-		" .X@z222a,do%kj2222222222222222wMX5q;gw228%..",
-		" ..58222wagsh6ry222222222222221;>Of0w222y:...",
-		" ...:e2222218mdz22222222222222a&$vw222220@...",
-		" ...O-122222y:.u02222222222229q$uj222221r... ",
-		"  ..%&a1222223&573w2222222219NOxz122221z>... ",
-		"   ...t3222221-l$nr8ay1222yzbo,=12222w-5...  ",
-		"    ..X:022222w-k+>o,7s**s7xOn=12221<f5...   ",
-		"     ..o:9222221j8:&Bl>>>>ihv<12221=dX...    ",
-		"      ..Xb9122222109g-****;<y22221zn%...     ",
-		"       ..X&801222222222222222222w-h....      ",
-		"        ...o:=022222222222222221=lX...       ",
-		"          ..X@:;3w2222222222210fO...         ",
-		"           ...XX&v8<30000003-N@...           ",
-		"             .....XmnbN:q&Bo....             ",
-		"                 ............                "
-	};
-	static char *msgs[] = {
-		"Have a nice day!",
-		"Focus follow mouse users will burn in hell!!!",
-		"Mooo Canada!!!!",
-		"Hi! My name is bobby...",
-		"AHH! The neurotic monkeys are after me!",
-		"WE GET SIGNAL",
-		"HOW ARE YOU GENTLEMEN?",
-		"WHAT YOU SAY??",
-		"SOMEBODY SET UP US THE BOMB",
-		"ALL YOUR BASE ARE BELONG TO US!",
-		"Oh My God!!! Larry is back!",
-		"Alex Perez is aliveeeeeeee!!!"
-	};
-
-	clicks++;
-
-	if (!panel->timer && !broken && clicks > 0) {
-		WMFont *font;
-
-		panel->x = 0;
-		clicks = 0;
-		if (!panel->icon) {
-			panel->icon = WMGetApplicationIconImage(panel->scr->wmscreen);
-			if (!panel->icon) {
-				broken = 1;
-				return;
-			} else {
-				RColor color;
-
-				color.red = 0xae;
-				color.green = 0xaa;
-				color.blue = 0xae;
-				color.alpha = 0;
-
-				panel->icon = RCloneImage(panel->icon);
-				RCombineImageWithColor(panel->icon, &color);
-			}
-		}
-		if (!panel->pic) {
-			panel->pic = RGetImageFromXPMData(panel->scr->rcontext, pic_data);
-			if (!panel->pic) {
-				broken = 1;
-				RReleaseImage(panel->icon);
-				panel->icon = NULL;
-				return;
-			}
-		}
-
-		panel->str = msgs[rand() % (sizeof(msgs) / sizeof(char *))];
-
-		panel->timer = WMAddTimerHandler(50, logoPushCallback, panel);
-		panel->cycle = 0;
-		panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
-		/* If we don't use a fixed font, scrolling will be jumpy */
-		/* Alternatively we can draw text in a pixmap and scroll it smoothly */
-		if ((panel->oldFont = WMGetLabelFont(panel->versionL)) != NULL)
-			WMRetainFont(panel->oldFont);
-		font = WMCreateFont(WMWidgetScreen(panel->versionL),
-				    "Lucida Console,Courier New,monospace:pixelsize=12");
-		if (font) {
-			WMSetLabelFont(panel->versionL, font);
-			WMReleaseFont(font);
-		}
-		WMSetLabelText(panel->versionL, "");
-	} else if (panel->timer) {
-		char version[20];
-
-		panel->x = 0;
-		clicks = 0;
-		WMSetLabelImage(panel->logoL, panel->oldPix);
-		WMReleasePixmap(panel->oldPix);
-		panel->oldPix = NULL;
-
-		WMDeleteTimerHandler(panel->timer);
-		panel->timer = NULL;
-
-		WMSetLabelFont(panel->versionL, panel->oldFont);
-		if (panel->oldFont) {
-			WMReleaseFont(panel->oldFont);
-			panel->oldFont = NULL;
-		}
-		snprintf(version, sizeof(version), _("Version %s"), VERSION);
-		WMSetLabelText(panel->versionL, version);
-		XFlush(WMScreenDisplay(WMWidgetScreen(panel->versionL)));
-	}
-
-	{
-		XEvent ev;
-		while (XCheckTypedWindowEvent(dpy, WMWidgetXID(panel->versionL), ButtonPress, &ev)) ;
-	}
-}
-#endif				/* SILLYNESS */
 
 void wShowInfoPanel(WScreen * scr)
 {
@@ -1496,9 +1153,6 @@ void wShowInfoPanel(WScreen * scr)
 		WMMoveWidget(panel->logoL, 30, 20);
 		WMSetLabelImagePosition(panel->logoL, WIPImageOnly);
 		WMSetLabelImage(panel->logoL, logo);
-#ifdef SILLYNESS
-		WMCreateEventHandler(WMWidgetView(panel->logoL), ButtonPressMask, handleLogoPush, panel);
-#endif
 		WMReleasePixmap(logo);
 	}
 
@@ -1681,17 +1335,7 @@ void wShowInfoPanel(WScreen * scr)
 	wWindowMap(wwin);
 
 	panel->wwin = wwin;
-
 	thePanel = panel;
-#ifdef SILLYNESS
-	if (InitXThing(panel->scr)) {
-		panel->timer = WMAddTimerHandler(100, logoPushCallback, panel);
-		panel->cycle = 0;
-		panel->x = 1;
-		panel->str = _("Merry Christmas!");
-		panel->oldPix = WMRetainPixmap(WMGetLabelImage(panel->logoL));
-	}
-#endif
 }
 
 /*
