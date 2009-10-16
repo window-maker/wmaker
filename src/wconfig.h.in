@@ -125,14 +125,7 @@
  */
 #undef SHADOW_RESIZEBAR
 
-/*
- * Define DEMATERIALIZE_ICON if you want the undocked icon animation
- * to be a progressive disaparison animation.
- * This will cause all application icons to be created with Save Under
- * enable.
- */
-#undef DEMATERIALIZE_ICON
-
+#define NORMAL_ICON_KABOOM
 /*
  * Define ICON_KABOOM_EXTRA if you want extra fancy icon undocking
  * explosion animation.
@@ -316,9 +309,6 @@
 
 #define WORKSPACE_NAME_DELAY     400
 
-/* number of steps for icon dematerialization. */
-#define DEMATERIALIZE_STEPS      16
-
 /* Delay when cycling colors of selected icons. */
 #define COLOR_CYCLE_DELAY        200
 
@@ -435,10 +425,6 @@
 #define XKB_BUTTON_HINT
 #undef  LANGUAGE_TH
 #undef  LANGUAGE_SK
-#endif
-
-#ifndef  DEMATERIALIZE_ICON
-#define  NORMAL_ICON_KABOOM
 #endif
 
 #if defined(HAVE_LIBINTL_H) && defined(I18N)

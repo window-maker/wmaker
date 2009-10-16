@@ -106,14 +106,6 @@ WAppIcon *wAppIconCreateForDock(WScreen * scr, char *command, char *wm_instance,
 	wXDNDMakeAwareness(dicon->icon->core->window);
 #endif
 
-#ifdef DEMATERIALIZE_ICON
-	{
-		XSetWindowAttributes attribs;
-		attribs.save_under = True;
-		XChangeWindowAttributes(dpy, dicon->icon->core->window, CWSaveUnder, &attribs);
-	}
-#endif
-
 	/* will be overriden by dock */
 	dicon->icon->core->descriptor.handle_mousedown = appIconMouseDown;
 	dicon->icon->core->descriptor.handle_expose = iconExpose;
@@ -149,13 +141,6 @@ WAppIcon *wAppIconCreate(WWindow * leader_win)
 		aicon->wm_instance = wstrdup(leader_win->wm_instance);
 
 	aicon->icon = wIconCreate(leader_win);
-#ifdef DEMATERIALIZE_ICON
-	{
-		XSetWindowAttributes attribs;
-		attribs.save_under = True;
-		XChangeWindowAttributes(dpy, aicon->icon->core->window, CWSaveUnder, &attribs);
-	}
-#endif
 #ifdef XDND
 	wXDNDMakeAwareness(aicon->icon->core->window);
 #endif
