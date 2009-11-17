@@ -2277,6 +2277,7 @@ void wWindowConfigureBorders(WWindow *wwin)
 		flags = WFF_LEFT_BUTTON | WFF_RIGHT_BUTTON;
 
 #ifdef XKB_BUTTON_HINT
+	if (wPreferences.modelock)
 		flags |= WFF_LANGUAGE_BUTTON;
 #endif
 
