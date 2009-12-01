@@ -76,7 +76,7 @@ msgstr "Symbol wählen..."
 #: ../src/appicon.c:487 ../src/dock.c:1176 ../src/rootmenu.c:248
 #: ../src/rootmenu.c:264 ../src/winmenu.c:508
 msgid "Kill"
-msgstr "Töten"
+msgstr "Beenden"
 
 #: ../src/appicon.c:508 ../src/dock.c:3511
 msgid "Unhide"
