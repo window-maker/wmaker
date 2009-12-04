@@ -1366,8 +1366,28 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	if (!wwin->flags.miniaturized && workspace == scr->current_workspace && !wwin->flags.hidden) {
 		if (((transientOwner && transientOwner->flags.focused)
-		     || wPreferences.auto_focus) && !WFLAGP(wwin, no_focusable))
-			wSetFocusTo(scr, wwin);
+		     || wPreferences.auto_focus) && !WFLAGP(wwin, no_focusable)) {
+
+			/* only auto_focus if on same screen as mouse
+			 * (and same head for xinerama mode)
+			 * TODO: make it an option */
+
+			/*TODO add checking the head of the window, is it available? */
+			short same_screen = 0, same_head = 1;
+
+			int foo;
+			unsigned int bar;
+			Window dummy;
+
+			if (XQueryPointer(dpy, scr->root_win, &dummy, &dummy,
+					  &foo, &foo, &foo, &foo, &bar) != False) {
+				same_screen = 1;
+			}
+
+			if (same_screen == 1 && same_head == 1) {
+				wSetFocusTo(scr, wwin);
+			}
+		}
 	}
 	wWindowResetMouseGrabs(wwin);
 
