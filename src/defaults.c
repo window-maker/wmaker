@@ -2988,7 +2988,6 @@ static int setWorkspaceBack(WScreen * scr, WDefaultEntry * entry, WMPropList * v
 		char *dither;
 		int len;
 
-		SetupEnvironment(scr);
 		text = WMGetPropListDescription(value, False);
 		len = strlen(text) + 40;
 		command = wmalloc(len);
@@ -2998,7 +2997,7 @@ static int setWorkspaceBack(WScreen * scr, WDefaultEntry * entry, WMPropList * v
 		else
 			snprintf(command, len, "wmsetbg %s -p '%s' &", dither, text);
 		wfree(text);
-		system(command);
+		ExecuteShellCommand(scr, command);
 		wfree(command);
 	}
 	WMReleasePropList(value);
