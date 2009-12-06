@@ -215,9 +215,6 @@ static void updateWorkspaceMenu(WMenu * menu)
 	char title[MAX_WORKSPACENAME_WIDTH + 1];
 	int i;
 
-	if (!menu)
-		return;
-
 	for (i = 0; i < scr->workspace_count; i++) {
 		if (i < menu->entry_no) {
 			if (strcmp(menu->entries[i]->text, scr->workspaces[i]->name) != 0) {
