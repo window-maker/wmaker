@@ -37,9 +37,6 @@
  * some sort of problem with them.
  */
 #define TEXTURE_PLUGIN
-#ifdef  TEXTURE_PLUGIN
-#undef  DRAWSTRING_PLUGIN
-#endif
 
 /* If you want animations for iconification, shading, icon arrangement etc. */
 #define ANIMATIONS
