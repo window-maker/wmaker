@@ -2301,41 +2301,6 @@ static int getModMask(WScreen * scr, WDefaultEntry * entry, WMPropList * value, 
 	return True;
 }
 
-#ifdef NEWSTUFF
-static int getRImages(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
-{
-	unsigned int mask;
-	char *str;
-	RImage *image;
-	int i, n;
-	int w, h;
-
-	GET_STRING_OR_DEFAULT("Image File Path", str);
-	if (!str)
-		return False;
-
-	image = RLoadImage(scr->rcontext, str, 0);
-	if (!image) {
-		wwarning(_("could not load image in option %s: %s"), entry->key, RMessageForError(RErrorCode));
-		return False;
-	}
-
-	if (*(RImage **) addr) {
-		RReleaseImage(*(RImage **) addr);
-	}
-	if (addr)
-		*(RImage **) addr = image;
-
-	assert(ret == NULL);
-	/*
-	   if (ret)
-	   *(RImage**)ret = image;
-	 */
-
-	return True;
-}
-#endif
-
 # include <X11/cursorfont.h>
 typedef struct {
 	char *name;
