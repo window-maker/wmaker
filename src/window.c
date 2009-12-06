@@ -304,24 +304,6 @@ static void setupGNUstepHints(WWindow *wwin, GNUstepWMAttributes *gs_hints)
 		wwin->client_flags.no_appicon = 1;
 }
 
-void wWindowCheckAttributeSanity(WWindow *wwin, WWindowAttributes *wflags, WWindowAttributes *mask)
-{
-	if (wflags->no_appicon && mask->no_appicon)
-		wflags->emulate_appicon = 0;
-
-	if (wwin->main_window != None) {
-		WApplication *wapp = wApplicationOf(wwin->main_window);
-		if (wapp && !wapp->flags.emulated)
-			wflags->emulate_appicon = 0;
-	}
-
-	if (wwin->transient_for != None && wwin->transient_for != wwin->screen_ptr->root_win)
-		wflags->emulate_appicon = 0;
-
-	if (wflags->sunken && mask->sunken && wflags->floating && mask->floating)
-		wflags->sunken = 0;
-}
-
 void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 {
 	WScreen *scr = wwin->screen_ptr;
