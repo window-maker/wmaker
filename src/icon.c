@@ -519,10 +519,6 @@ char *wIconStore(WIcon * icon)
 	return path;
 }
 
-/*
-void wIconChangeIconWindow(WIcon *icon, Window new_window);
-*/
-
 static void cycleColor(void *data)
 {
 	WIcon *icon = (WIcon *) data;
@@ -536,16 +532,6 @@ static void cycleColor(void *data)
 	XDrawRectangle(dpy, icon->core->window, scr->icon_select_gc, 0, 0,
 		       icon->core->width - 1, icon->core->height - 1);
 	icon->handlerID = WMAddTimerHandler(COLOR_CYCLE_DELAY, cycleColor, icon);
-}
-
-void wIconSetHighlited(WIcon * icon, Bool flag)
-{
-	if (icon->highlighted == flag) {
-		return;
-	}
-
-	icon->highlighted = flag;
-	wIconPaint(icon);
 }
 
 void wIconSelect(WIcon * icon)
