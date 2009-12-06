@@ -413,18 +413,6 @@ wHackedGrabButton(unsigned int button, unsigned int modifiers,
 #endif				/* NUMLOCK_HACK */
 }
 
-#ifdef notused
-void wHackedUngrabButton(unsigned int button, unsigned int modifiers, Window grab_window)
-{
-	XUngrabButton(dpy, button, modifiers | _NumLockMask, grab_window);
-	XUngrabButton(dpy, button, modifiers | _ScrollLockMask, grab_window);
-	XUngrabButton(dpy, button, modifiers | _NumLockMask | _ScrollLockMask, grab_window);
-	XUngrabButton(dpy, button, modifiers | _NumLockMask | LockMask, grab_window);
-	XUngrabButton(dpy, button, modifiers | _ScrollLockMask | LockMask, grab_window);
-	XUngrabButton(dpy, button, modifiers | _NumLockMask | _ScrollLockMask | LockMask, grab_window);
-}
-#endif
-
 WScreen *wScreenWithNumber(int i)
 {
 	assert(i < wScreenCount);
