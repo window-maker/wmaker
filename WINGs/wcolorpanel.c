@@ -3370,6 +3370,8 @@ static int fetchFile(char *toPath, char *srcFile, char *destFile)
 		}
 	}
 
+	close(src);
+	close(dest);
 	return 0;
 }
 
