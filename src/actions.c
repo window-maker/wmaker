@@ -382,6 +382,8 @@ void wMaximizeWindow(WWindow * wwin, int directions)
 
 	if (directions & MAX_MAXIMUS) {
 		find_Maximus_geometry(wwin, usableArea, &new_x, &new_y, &new_width, &new_height);
+		new_width -= adj_size;
+		new_height -= adj_size;
 		if (WFLAGP(wwin, full_maximize) && new_y == 0) {
 			new_y -= wwin->frame->top_width;
 			new_height += wwin->frame->top_width - 1;
