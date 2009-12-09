@@ -39,7 +39,6 @@ int wKeyboardMoveResizeWindow(WWindow *wwin);
 
 void wMouseResizeWindow(WWindow *wwin, XEvent *ev);
 
-static void shade_animate(WWindow *wwin, Bool what);
 void wShadeWindow(WWindow *wwin);
 void wUnshadeWindow(WWindow *wwin);
 

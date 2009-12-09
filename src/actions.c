@@ -91,6 +91,12 @@ static int compareTimes(Time t1, Time t2)
 	return (diff < 60000) ? 1 : -1;
 }
 
+#ifdef ANIMATIONS
+static void shade_animate(WWindow *wwin, Bool what);
+#else
+static void shade_animate(WWindow *wwin, Bool what) { }
+#endif
+
 /*
  *----------------------------------------------------------------------
  * wSetFocusTo--
@@ -1834,6 +1840,4 @@ static void shade_animate(WWindow *wwin, Bool what)
 		break;
 	}
 }
-#else
-static void shade_animate(WWindow *wwin, Bool what) { return; }
-#endif /* ANIMATIONS */
+#endif
