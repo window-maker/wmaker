@@ -496,8 +496,7 @@ cascadeWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
 	}
 }
 
-static void
-randomPlaceWindow(WScreen *scr, WWindow *wwin, int *x_ret, int *y_ret,
+static void randomPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 		  unsigned int width, unsigned int height, WArea usableArea)
 {
 	int w, h;
@@ -552,7 +551,7 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 		break;
 
 	case WPM_RANDOM:
-		randomPlaceWindow(scr, wwin, x_ret, y_ret, width, height, usableArea);
+		randomPlaceWindow(wwin, x_ret, y_ret, width, height, usableArea);
 		break;
 
 #ifdef DEBUG
