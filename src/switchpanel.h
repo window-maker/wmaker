@@ -24,7 +24,7 @@
 
 typedef struct SwitchPanel WSwitchPanel;
 
-WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, int workspace, Bool class_only);
+WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only);
 
 void wSwitchPanelDestroy(WSwitchPanel *panel);
 

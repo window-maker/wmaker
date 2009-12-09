@@ -313,12 +313,12 @@ static RImage *assemblePuzzleImage(RImage ** images, int width, int height)
 	return img;
 }
 
-static RImage *createBackImage(WScreen * scr, int width, int height)
+static RImage *createBackImage(int width, int height)
 {
 	return assemblePuzzleImage(wPreferences.swbackImage, width, height);
 }
 
-static RImage *getTile(WSwitchPanel * panel)
+static RImage *getTile(void)
 {
 	RImage *stile;
 
@@ -374,7 +374,7 @@ static void drawTitle(WSwitchPanel * panel, int idecks, char *title)
 		free(ntitle);
 }
 
-static WMArray *makeWindowListArray(WScreen * scr, WWindow * curwin, int workspace, int include_unmapped, Bool class_only)
+static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool class_only)
 {
 	WMArray *windows = WMCreateArray(10);
 	int fl;
@@ -417,7 +417,7 @@ static WMArray *makeWindowListArray(WScreen * scr, WWindow * curwin, int workspa
 	return windows;
 }
 
-WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, int workspace, Bool class_only)
+WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, Bool class_only)
 {
 	WWindow *wwin;
 	WSwitchPanel *panel = wmalloc(sizeof(WSwitchPanel));
@@ -433,7 +433,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, int workspace, B
 
 	panel->scr = scr;
 
-	panel->windows = makeWindowListArray(scr, curwin, workspace, wPreferences.swtileImage != 0, class_only);
+	panel->windows = makeWindowListArray(curwin, wPreferences.swtileImage != 0, class_only);
 	count = WMGetArrayItemCount(panel->windows);
 
 	if (count == 0) {
@@ -458,9 +458,9 @@ WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, int workspace, B
 	height = LABEL_HEIGHT + ICON_TILE_SIZE;
 
 	panel->tileTmp = RCreateImage(ICON_TILE_SIZE, ICON_TILE_SIZE, 1);
-	panel->tile = getTile(panel);
+	panel->tile = getTile();
 	if (panel->tile && wPreferences.swbackImage[8]) {
-		panel->bg = createBackImage(scr, width + 2 * BORDER_SPACE, height + 2 * BORDER_SPACE);
+		panel->bg = createBackImage(width + 2 * BORDER_SPACE, height + 2 * BORDER_SPACE);
 	}
 	if (!panel->tileTmp || !panel->tile) {
 		if (panel->bg)

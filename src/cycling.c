@@ -123,7 +123,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 
 	scr->flags.doing_alt_tab = 1;
 
-	swpanel = wInitSwitchPanel(scr, wwin, scr->current_workspace, class_only);
+	swpanel = wInitSwitchPanel(scr, wwin, class_only);
 	oldFocused = wwin;
 
 	if (swpanel) {
