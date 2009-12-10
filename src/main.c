@@ -145,9 +145,6 @@ char WProgramSigState = 0;
 char WProgramState = WSTATE_NORMAL;
 char WDelayedActionSet = 0;
 
-/* temporary stuff */
-int wVisualID = -1;
-
 /* notifications */
 const char *WMNManaged = "WMNManaged";
 const char *WMNUnmanaged = "WMNUnmanaged";
@@ -178,7 +175,99 @@ extern int MonitorLoop(int argc, char **argv);
 
 static Bool multiHead = True;
 
+static int *wVisualID = NULL;
+static int wVisualID_len = 0;
+
 static int real_main(int argc, char **argv);
+
+int getWVisualID(int screen)
+{
+        if (wVisualID == NULL)
+		return -1;
+        if (screen < 0 || screen >= wVisualID_len)
+		return -1;
+
+        return wVisualID[screen];
+}
+
+static void setWVisualID(int screen, int val)
+{
+        int i;
+
+        if (screen < 0)
+		return;
+
+        if (wVisualID == NULL) {
+		/* no array at all, alloc space for screen + 1 entries
+		 * and init with default value */
+		wVisualID_len = screen + 1;
+		wVisualID = (int *)malloc(wVisualID_len * sizeof(int));
+		for (i = 0; i < wVisualID_len; i++) {
+			wVisualID[i] = -1;
+		}
+	} else if (screen >= wVisualID_len) {
+		/* larger screen number than previously allocated
+		 so enlarge array */
+		int oldlen = wVisualID_len;
+
+		wVisualID_len = screen + 1;
+		wVisualID = (int *)realloc(wVisualID, wVisualID_len * sizeof(int));
+		for (i = oldlen; i < wVisualID_len; i++) {
+			wVisualID[i] = -1;
+		}
+	}
+
+	wVisualID[screen] = val;
+}
+
+/*
+ * this function splits a given string at the comma into tokens
+ * and set the wVisualID variable to each parsed number
+ */
+static int initWVisualID(const char *user_str)
+{
+	char *mystr = strdup(user_str);
+	int cur_in_pos = 0;
+	int cur_out_pos = 0;
+	int cur_screen = 0;
+	int error_found = 0;
+
+	for (;;) {
+		/* check for delimiter */
+		if (user_str[cur_in_pos] == '\0' || user_str[cur_in_pos] == ',') {
+			int v;
+
+			mystr[cur_out_pos] = '\0';
+
+			if (sscanf(mystr, "%i", &v) != 1) {
+				error_found = 1;
+				break;
+			}
+
+			setWVisualID(cur_screen, v);
+
+			cur_screen++;
+			cur_out_pos = 0;
+		}
+
+		/* break in case last char has been consumed */
+		if (user_str[cur_in_pos] == '\0')
+			break;
+
+                /* if the current char is no delimiter put it into mystr */
+		if (user_str[cur_in_pos] != ',') {
+			mystr[cur_out_pos++] = user_str[cur_in_pos];
+		}
+		cur_in_pos++;
+	}
+
+	free(mystr);
+
+	if (cur_screen == 0||error_found != 0)
+		return 1;
+
+	return 0;
+}
 
 void Exit(int status)
 {
@@ -640,7 +729,7 @@ static int real_main(int argc, char **argv)
 					wwarning(_("too few arguments for %s"), argv[i - 1]);
 					exit(0);
 				}
-				if (sscanf(argv[i], "%i", &wVisualID) != 1) {
+				if (initWVisualID(argv[i]) != 0) {
 					wwarning(_("bad value for visualid: \"%s\""), argv[i]);
 					exit(0);
 				}
@@ -722,7 +811,8 @@ static int real_main(int argc, char **argv)
 		exit(1);
 	}
 
-	if (wVisualID < 0)
+
+	if (getWVisualID(0) < 0) {
 		/*
 		 *   If unspecified, use default visual instead of waiting
 		 * for wrlib/context.c:bestContext() that may end up choosing
@@ -730,7 +820,8 @@ static int real_main(int argc, char **argv)
 		 *   This is required to avoid all sort of corruptions when
 		 * composite is enabled, and at a depth other than 24.
 		 */
-		wVisualID = (int)DefaultVisual(dpy, DefaultScreen(dpy))->visualid;
+		setWVisualID(0, (int)DefaultVisual(dpy, DefaultScreen(dpy))->visualid);
+        }
 
 	/* check if the user specified a complete display name (with screen).
 	 * If so, only manage the specified screen */

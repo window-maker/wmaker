@@ -148,4 +148,6 @@ char* GetProgramNameForWindow(Window win);
 
 Bool GetCommandForPid(int pid, char ***argv, int *argc);
 
+int getWVisualID(int screen);
+
 #endif

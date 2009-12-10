@@ -538,7 +538,6 @@ WScreen *wScreenInit(int screen_number)
 	WScreen *scr;
 	XIconSize icon_size[1];
 	RContextAttributes rattr;
-	extern int wVisualID;
 	long event_mask;
 	XErrorHandler oldHandler;
 	int i;
@@ -625,9 +624,9 @@ WScreen *wScreenInit(int screen_number)
 		rattr.standard_colormap_mode = RUseStdColormap;
 	}
 
-	if (wVisualID >= 0) {
+	if (getWVisualID(screen_number) >= 0) {
 		rattr.flags |= RC_VisualID;
-		rattr.visualid = wVisualID;
+		rattr.visualid = getWVisualID(screen_number);
 	}
 
 	scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
