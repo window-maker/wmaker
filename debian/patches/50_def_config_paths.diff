@@ -1,0 +1,15 @@
+Index: src/wconfig.h.in
+===================================================================
+diff --git a/src/wconfig.h.in b/src/wconfig.h.in
+index cab2bd0..e0dc434 100644
+--- src/wconfig.h.in
++++ src/wconfig.h.in
+@@ -146,7 +146,7 @@
+  */
+
+ /* list of paths to look for the config files, searched in order of appearance */
+-#define DEF_CONFIG_PATHS "~/GNUstep/Library/WindowMaker:"PKGDATADIR
++#define DEF_CONFIG_PATHS "~/GNUstep/Library/WindowMaker:/etc/X11/WindowMaker:"PKGDATADIR
+ #define DEF_MENU_FILE	 "menu"
+
+ /* name of the script to execute at startup */
