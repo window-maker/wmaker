@@ -347,19 +347,6 @@ static char *getLocalizedMenuFile(char *menu)
 	return NULL;
 }
 
-static void raiseMenus(WMenu * menu)
-{
-	int i;
-
-	if (menu->flags.mapped) {
-		wRaiseFrame(menu->frame->core);
-	}
-	for (i = 0; i < menu->cascade_no; i++) {
-		if (menu->cascades[i])
-			raiseMenus(menu->cascades[i]);
-	}
-}
-
 Bool wRootMenuPerformShortcut(XEvent * event)
 {
 	WScreen *scr = wScreenForRootWindow(event->xkey.root);
