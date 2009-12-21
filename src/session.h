@@ -57,17 +57,6 @@ void wSessionRestoreState(WScreen *scr);
 
 void wSessionRestoreLastWorkspace(WScreen *scr);
 
-#ifdef XSMP_ENABLED
-void wSessionConnectManager(char **argv, int argc);
-
-void wSessionDisconnectManager(void);
-
-void wSessionRequestShutdown(void);
-
-Bool  wSessionIsManaged(void);
-
-#endif
-
 Bool wSessionGetStateFor(WWindow *wwin, WSessionData *state);
 
 #endif

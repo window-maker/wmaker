@@ -39,10 +39,6 @@ extern Atom _XA_WM_CLIENT_LEADER;
 extern Atom _XA_WM_TAKE_FOCUS;
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_WM_SAVE_YOURSELF;
-#ifdef XSMP_ENABLED
-extern Atom _XA_WM_WINDOW_ROLE;
-extern Atom _XA_SM_CLIENT_ID;
-#endif
 
 extern Atom _XA_GNUSTEP_WM_ATTR;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
@@ -251,52 +247,6 @@ Window PropGetClientLeader(Window window)
 	return leader;
 }
 
-#ifdef XSMP_ENABLED
-char *PropGetClientID(Window window)
-{
-	XTextProperty txprop;
-
-	txprop.value = NULL;
-
-	if (XGetTextProperty(dpy, window, &txprop, _XA_SM_CLIENT_ID) != Success) {
-		return NULL;
-	}
-
-	if (txprop.encoding == XA_STRING && txprop.format == 8 && txprop.nitems > 0) {
-
-		return (char *)txprop.value;
-	} else {
-
-		if (txprop.value)
-			XFree(txprop.value);
-
-		return NULL;
-	}
-}
-
-char *PropGetWindowRole(Window window)
-{
-	XTextProperty txprop;
-
-	txprop.value = NULL;
-
-	if (XGetTextProperty(dpy, window, &txprop, _XA_WM_WINDOW_ROLE) != Success) {
-		return NULL;
-	}
-
-	if (txprop.encoding == XA_STRING && txprop.format == 8 && txprop.nitems > 0) {
-
-		return (char *)txprop.value;
-	} else {
-
-		if (txprop.value)
-			XFree(txprop.value);
-
-		return NULL;
-	}
-}
-#endif				/* XSMP_ENABLED */
-
 void PropWriteGNUstepWMAttr(Window window, GNUstepWMAttributes * attr)
 {
 	unsigned long data[9];
@@ -334,8 +284,6 @@ int PropGetWindowState(Window window)
 void PropCleanUp(Window root)
 {
 	XDeleteProperty(dpy, root, _XA_WINDOWMAKER_WM_PROTOCOLS);
-
 	XDeleteProperty(dpy, root, _XA_WINDOWMAKER_NOTICEBOARD);
-
 	XDeleteProperty(dpy, root, XA_WM_ICON_SIZE);
 }

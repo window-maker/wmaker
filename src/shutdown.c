@@ -60,29 +60,10 @@ void Shutdown(WShutdownMode mode)
 
 	switch (mode) {
 	case WSLogoutMode:
-#ifdef XSMP_ENABLED
-		wSessionRequestShutdown();
-		break;
-#else
-		/* fall through */
-#endif
 	case WSKillMode:
 	case WSExitMode:
 		/* if there is no session manager, send SAVE_YOURSELF to
 		 * the clients */
-#if 0
-#ifdef XSMP_ENABLED
-		if (!wSessionIsManaged())
-#endif
-			for (i = 0; i < wScreenCount; i++) {
-				WScreen *scr;
-
-				scr = wScreenWithNumber(i);
-				if (scr) {
-					wSessionSendSaveYourself(scr);
-				}
-			}
-#endif
 		close(inotifyFD);
 		for (i = 0; i < wScreenCount; i++) {
 			WScreen *scr;
@@ -93,9 +74,6 @@ void Shutdown(WShutdownMode mode)
 					kill(scr->helper_pid, SIGKILL);
 
 				/* if the session is not being managed, save restart info */
-#ifdef XSMP_ENABLED
-				if (!wSessionIsManaged())
-#endif
 					wSessionSaveClients(scr);
 
 				wScreenSaveState(scr);

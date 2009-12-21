@@ -42,9 +42,4 @@ void PropSetIconTileHint(WScreen *scr, RImage *image);
 
 Window PropGetClientLeader(Window window);
 
-#ifdef XSMP_ENABLED
-char *PropGetClientID(Window window);
-#endif
-
-
 #endif

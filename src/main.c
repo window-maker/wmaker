@@ -271,9 +271,6 @@ static int initWVisualID(const char *user_str)
 
 void Exit(int status)
 {
-#ifdef XSMP_ENABLED
-	wSessionDisconnectManager();
-#endif
 	if (dpy)
 		XCloseDisplay(dpy);
 
@@ -296,9 +293,6 @@ void Restart(char *manager, Bool abortOnFailure)
 		}
 	}
 	if (dpy) {
-#ifdef XSMP_ENABLED
-		wSessionDisconnectManager();
-#endif
 		XCloseDisplay(dpy);
 		dpy = NULL;
 	}
@@ -734,16 +728,7 @@ static int real_main(int argc, char **argv)
 					exit(0);
 				}
 			} else if (strcmp(argv[i], "-static") == 0 || strcmp(argv[i], "--static") == 0) {
-
 				wPreferences.flags.noupdates = 1;
-#ifdef XSMP_ENABLED
-			} else if (strcmp(argv[i], "-clientid") == 0 || strcmp(argv[i], "-restore") == 0) {
-				i++;
-				if (i >= argc) {
-					wwarning(_("too few arguments for %s"), argv[i - 1]);
-					exit(0);
-				}
-#endif
 			} else if (strcmp(argv[i], "--help") == 0) {
 				print_help();
 				exit(0);
@@ -842,11 +827,6 @@ static int real_main(int argc, char **argv)
 #endif
 
 	wXModifierInitialize();
-
-#ifdef XSMP_ENABLED
-	wSessionConnectManager(argv, argc);
-#endif
-
 	StartUp(!multiHead);
 
 	if (wScreenCount == 1)

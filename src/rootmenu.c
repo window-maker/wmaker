@@ -222,21 +222,6 @@ static void shutdownCommand(WMenu * menu, WMenuEntry * entry)
 	if ((long)entry->clientdata == M_QUICK)
 		result = R_CLOSE;
 	else {
-#ifdef XSMP_ENABLED
-		if (wSessionIsManaged()) {
-			int r;
-
-			r = wMessageDialog(menu->frame->screen_ptr,
-					   _("Close X session"),
-					   _("Close Window System session?\n"
-					     "Kill might close applications with unsaved data."),
-					   _("Close"), _("Kill"), _("Cancel"));
-			if (r == WAPRDefault)
-				result = R_CLOSE;
-			else if (r == WAPRAlternate)
-				result = R_KILL;
-		} else
-#endif
 		{
 			int r, oldSaveSessionFlag;
 
@@ -257,11 +242,6 @@ static void shutdownCommand(WMenu * menu, WMenuEntry * entry)
 	}
 
 	if (result != R_CANCEL) {
-#ifdef XSMP_ENABLED
-		if (result == R_CLOSE) {
-			Shutdown(WSLogoutMode);
-		} else
-#endif				/* XSMP_ENABLED */
 		{
 			Shutdown(WSKillMode);
 		}
