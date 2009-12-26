@@ -49,6 +49,8 @@
 #include "xinerama.h"
 
 /****** Global Variables ******/
+
+int ignore_wks_change = 0;
 extern Time LastTimestamp;
 extern Time LastFocusChange;
 
@@ -1109,6 +1111,9 @@ void wIconifyWindow(WWindow * wwin)
 
 void wDeiconifyWindow(WWindow * wwin)
 {
+	/* Let's avoid changing workspace while deiconifying */
+	ignore_wks_change = 1;
+
 	/* we're hiding for show_desktop */
 	int netwm_hidden = wwin->flags.net_show_desktop &&
 	    wwin->frame->workspace != wwin->screen_ptr->current_workspace;
@@ -1230,6 +1235,8 @@ void wDeiconifyWindow(WWindow * wwin)
 	/* In case we were shaded and iconified, also unshade */
 	if (!netwm_hidden)
 		wUnshadeWindow(wwin);
+
+	ignore_wks_change = 0;
 }
 
 static void hideWindow(WIcon * icon, int icon_x, int icon_y, WWindow * wwin, int animate)

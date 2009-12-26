@@ -54,6 +54,7 @@
 #define MAX_SHORTCUT_LENGTH 32
 #define WORKSPACE_NAME_DISPLAY_PADDING 32
 
+extern int ignore_wks_change;
 extern WPreferences wPreferences;
 extern XContext wWinContext;
 extern XContext wVEdgeContext;
@@ -440,6 +441,13 @@ void wWorkspaceChange(WScreen *scr, int workspace)
 void wWorkspaceRelativeChange(WScreen * scr, int amount)
 {
 	int w;
+
+	/* While the deiconify animation is going on the window is
+	 * still "flying" to its final position and we don't want to
+	 * change workspace before the animation finishes, otherwise
+	 * the window will land in the new workspace */
+	if (ignore_wks_change)
+		return;
 
 	w = scr->current_workspace + amount;
 
