@@ -1,6 +1,6 @@
 ## automake input file for wrlib
 
-SUBDIRS = . tests
+SUBDIRS = .
 
 AUTOMAKE_OPTIONS = no-dependencies
 
