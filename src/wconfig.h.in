@@ -133,7 +133,7 @@
  * #define if you want the window creation animation when superfluous
  * is enabled.
  */
-#define WINDOW_BIRTH_ZOOM
+#undef WINDOW_BIRTH_ZOOM
 
 /* whether arrow drawing in clip buttons should be gradiented */
 #undef GRADIENT_CLIP_ARROWS
