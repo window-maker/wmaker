@@ -559,6 +559,8 @@ WDefaultEntry optionList[] = {
 	 NULL, getKeybind, setKeyGrab},
 	{"WindowMenuKey", "None", (void *)WKBD_WINDOWMENU,
 	 NULL, getKeybind, setKeyGrab},
+	{"DockRaiseLowerKey", "None", (void*)WKBD_DOCKRAISELOWER,
+	 NULL, getKeybind, setKeyGrab},
 	{"ClipLowerKey", "None", (void *)WKBD_CLIPLOWER,
 	 NULL, getKeybind, setKeyGrab},
 	{"ClipRaiseKey", "None", (void *)WKBD_CLIPRAISE,

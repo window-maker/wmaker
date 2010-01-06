@@ -102,6 +102,7 @@
   ClipLowerKey = None;
   ClipRaiseKey = None;
   ConstrainWindowSize = NO;
+  DockRaiseLowerKey = None;
   ClipRaiseLowerKey = None;
   TitleJustify = center;
   WindowTitleFont = "Sans:bold:pixelsize=12";

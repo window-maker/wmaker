@@ -116,6 +116,7 @@ static char *keyOptions[] = {
 	"VirtualEdgeUpKey",
 	"VirtualEdgeDownKey",
 #endif
+	"DockRaiseLowerKey",
 	"ClipRaiseKey",
 	"ClipLowerKey",
 #ifndef XKB_MODELOCK
@@ -522,6 +523,7 @@ static void createPanel(Panel * p)
 	WMAddListItem(panel->actLs, _("Move VirtualDesktop to next top edge"));
 	WMAddListItem(panel->actLs, _("Move VirtualDesktop to next bottom edge"));
 #endif
+	WMAddListItem(panel->actLs, _("Raise/Lower Dock"));
 	WMAddListItem(panel->actLs, _("Raise Clip"));
 	WMAddListItem(panel->actLs, _("Lower Clip"));
 	WMAddListItem(panel->actLs, _("Raise/Lower Clip"));

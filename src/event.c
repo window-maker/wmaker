@@ -1690,6 +1690,10 @@ static void handleKeyPress(XEvent * event)
 		if (!wPreferences.flags.noclip)
 			wDockRaiseLower(scr->workspaces[scr->current_workspace]->clip);
 		break;
+	case WKBD_DOCKRAISELOWER:
+		if (!wPreferences.flags.nodock)
+			wDockRaiseLower(scr->dock);
+		break;
 #ifdef KEEP_XKB_LOCK_STATUS
 	case WKBD_TOGGLE:
 		if (wPreferences.modelock) {

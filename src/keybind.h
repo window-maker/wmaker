@@ -50,6 +50,9 @@ enum {
 	/* window, menu */
 	WKBD_CLOSE,
 
+	/* Dock */
+	WKBD_DOCKRAISELOWER,
+
 	/* Clip */
 	WKBD_CLIPLOWER,
 	WKBD_CLIPRAISE,
