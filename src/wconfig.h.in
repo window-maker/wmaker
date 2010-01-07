@@ -123,11 +123,6 @@
 #undef SHADOW_RESIZEBAR
 
 #define NORMAL_ICON_KABOOM
-/*
- * Define ICON_KABOOM_EXTRA if you want extra fancy icon undocking
- * explosion animation.
- */
-#undef ICON_KABOOM_EXTRA
 
 /*
  * #define if you want the window creation animation when superfluous

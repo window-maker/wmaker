@@ -50,10 +50,6 @@ void DoKaboom(WScreen * scr, Window win, int x, int y)
 #define KAB_PRECISION	4
 	int px[PIECES];
 	short py[PIECES];
-#ifdef ICON_KABOOM_EXTRA
-	short ptx[2][PIECES], pty[2][PIECES];
-	int ll;
-#endif
 	char pvx[PIECES], pvy[PIECES];
 	/* in MkLinux/PPC gcc seems to think that char is unsigned? */
 	signed char ax[PIECES], ay[PIECES];
@@ -86,12 +82,6 @@ void DoKaboom(WScreen * scr, Window win, int x, int y)
 				py[k] = y + j * ICON_KABOOM_PIECE_SIZE;
 				pvx[k] = rand() % (1 << (KAB_PRECISION + 3)) - (1 << (KAB_PRECISION + 3)) / 2;
 				pvy[k] = -15 - rand() % 7;
-#ifdef ICON_KABOOM_EXTRA
-				for (ll = 0; ll < 2; ll++) {
-					ptx[ll][k] = px[k];
-					pty[ll][k] = py[k];
-				}
-#endif
 				k++;
 			} else {
 				ax[k] = -1;
@@ -114,50 +104,15 @@ void DoKaboom(WScreen * scr, Window win, int x, int y)
 		for (i = 0; i < j; i++) {
 			if (ax[i] >= 0) {
 				int _px = px[i] >> KAB_PRECISION;
-#ifdef ICON_KABOOM_EXTRA
-				XClearArea(dpy, scr->root_win, ptx[1][i], pty[1][i],
-					   ICON_KABOOM_PIECE_SIZE, ICON_KABOOM_PIECE_SIZE, False);
-
-				ptx[1][i] = ptx[0][i];
-				pty[1][i] = pty[0][i];
-				ptx[0][i] = _px;
-				pty[0][i] = py[i];
-#else
 				XClearArea(dpy, scr->root_win, _px, py[i],
 					   ICON_KABOOM_PIECE_SIZE, ICON_KABOOM_PIECE_SIZE, False);
-#endif
 				px[i] += pvx[i];
 				py[i] += pvy[i];
 				_px = px[i] >> KAB_PRECISION;
 				pvy[i]++;
 				if (_px < -wPreferences.icon_size || _px > sw || py[i] >= sh) {
-#ifdef ICON_KABOOM_EXTRA
-					if (py[i] > sh && _px < sw && _px > 0) {
-						pvy[i] = -(pvy[i] / 2);
-						if (abs(pvy[i]) > 3) {
-							py[i] = sh - ICON_KABOOM_PIECE_SIZE;
-							XCopyArea(dpy, tmp, scr->root_win, scr->copy_gc,
-								  ax[i] * ICON_KABOOM_PIECE_SIZE,
-								  ay[i] * ICON_KABOOM_PIECE_SIZE,
-								  ICON_KABOOM_PIECE_SIZE,
-								  ICON_KABOOM_PIECE_SIZE, _px, py[i]);
-						} else {
-							ax[i] = -1;
-						}
-					} else {
-						ax[i] = -1;
-					}
-					if (ax[i] < 0) {
-						for (ll = 0; ll < 2; ll++)
-							XClearArea(dpy, scr->root_win, ptx[ll][i], pty[ll][i],
-								   ICON_KABOOM_PIECE_SIZE,
-								   ICON_KABOOM_PIECE_SIZE, False);
-						k--;
-					}
-#else				/* !ICON_KABOOM_EXTRA */
 					ax[i] = -1;
 					k--;
-#endif				/* !ICON_KABOOM_EXTRA */
 				} else {
 					XCopyArea(dpy, tmp, scr->root_win, scr->copy_gc,
 						  ax[i] * ICON_KABOOM_PIECE_SIZE, ay[i] * ICON_KABOOM_PIECE_SIZE,
@@ -172,7 +127,7 @@ void DoKaboom(WScreen * scr, Window win, int x, int y)
 
 	XFreePixmap(dpy, tmp);
 }
-#endif				/* NORMAL_ICON_KABOOM */
+#endif	/* NORMAL_ICON_KABOOM */
 
 Pixmap MakeGhostDock(WDock * dock, int sx, int dx, int y)
 {
