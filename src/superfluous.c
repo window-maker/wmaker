@@ -36,11 +36,8 @@
 #include "screen.h"
 #include "superfluous.h"
 #include "dock.h"
-#include "wcore.h"
 #include "framewin.h"
 #include "window.h"
-#include "icon.h"
-#include "appicon.h"
 #include "actions.h"
 
 extern WPreferences wPreferences;
