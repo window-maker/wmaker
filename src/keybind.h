@@ -54,8 +54,6 @@ enum {
 	WKBD_DOCKRAISELOWER,
 
 	/* Clip */
-	WKBD_CLIPLOWER,
-	WKBD_CLIPRAISE,
 	WKBD_CLIPRAISELOWER,
 
 	/* workspace */

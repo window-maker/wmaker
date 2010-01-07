@@ -60,7 +60,10 @@ typedef struct _Panel {
 
 #define ICON_FILE	"keyshortcuts"
 
-/* must be in the same order as the corresponding items in actions list */
+/*
+ * Must be in the same order as the corresponding items in
+ * "actions list" in createPanel()
+ */
 static char *keyOptions[] = {
 	"RootMenuKey",
 	"WindowListKey",
@@ -117,8 +120,6 @@ static char *keyOptions[] = {
 	"VirtualEdgeDownKey",
 #endif
 	"DockRaiseLowerKey",
-	"ClipRaiseKey",
-	"ClipLowerKey",
 #ifndef XKB_MODELOCK
 	"ClipRaiseLowerKey"
 #else
@@ -524,8 +525,6 @@ static void createPanel(Panel * p)
 	WMAddListItem(panel->actLs, _("Move VirtualDesktop to next bottom edge"));
 #endif
 	WMAddListItem(panel->actLs, _("Raise/Lower Dock"));
-	WMAddListItem(panel->actLs, _("Raise Clip"));
-	WMAddListItem(panel->actLs, _("Lower Clip"));
 	WMAddListItem(panel->actLs, _("Raise/Lower Clip"));
 #ifdef XKB_MODELOCK
 	WMAddListItem(panel->actLs, _("Toggle keyboard language"));

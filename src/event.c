@@ -1678,14 +1678,6 @@ static void handleKeyPress(XEvent * event)
 			}
 		}
 		break;
-	case WKBD_CLIPLOWER:
-		if (!wPreferences.flags.noclip)
-			wDockLower(scr->workspaces[scr->current_workspace]->clip);
-		break;
-	case WKBD_CLIPRAISE:
-		if (!wPreferences.flags.noclip)
-			wDockRaise(scr->workspaces[scr->current_workspace]->clip);
-		break;
 	case WKBD_CLIPRAISELOWER:
 		if (!wPreferences.flags.noclip)
 			wDockRaiseLower(scr->workspaces[scr->current_workspace]->clip);

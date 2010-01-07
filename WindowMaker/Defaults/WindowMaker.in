@@ -99,8 +99,6 @@
   MiniaturizeKey = "Mod1+M";
   NextWorkspaceLayerKey = None;
   PrevWorkspaceLayerKey = None;
-  ClipLowerKey = None;
-  ClipRaiseKey = None;
   ConstrainWindowSize = NO;
   DockRaiseLowerKey = None;
   ClipRaiseLowerKey = None;
