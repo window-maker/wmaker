@@ -8,12 +8,12 @@ CHANGELOG="Automatic build from the GIT on `date`"
 BUILDLOG="${HOME}/log/wmaker-testing-nightly.log"
 
 STATUSCMD="git log -1 --pretty=oneline"
-PULLCMD1="git fetch"
-PULLCMD2="git checkout origin/master"
+PULLCMD1="git pull"
+#PULLCMD2="git checkout origin/master"
 if [ -n "${WMAKER_DISTRO}" ]; then
   case ${WMAKER_DISTRO} in
     unstable)
-      PULLCMD2="git checkout origin/next"
+      #PULLCMD2="git checkout next"
       BUILDLOG="${HOME}/log/wmaker-unstable-nightly.log"
       ;;
   esac
@@ -47,7 +47,7 @@ doPull() {
   RC="1"
   LATEST="`$STATUSCMD`"
   $PULLCMD1 >>$BUILDLOG 2>&1 || errorExit "Error pulling from the repo"
-  $PULLCMD2 >>$BUILDLOG 2>&1 || errorExit "Error pulling from the repo"
+  #$PULLCMD2 >>$BUILDLOG 2>&1 || errorExit "Error pulling from the repo"
   CURRENT="`$STATUSCMD`"
   if [ "$FORCE" = "1" -o "$LATEST" != "$CURRENT" ]; then
     echo "last revision: $LATEST" >>$BUILDLOG 
