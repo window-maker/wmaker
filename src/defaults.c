@@ -156,9 +156,6 @@ static int setUTitleBack();
 static int setResizebarBack();
 static int setWorkspaceBack();
 static int setWorkspaceSpecificBack();
-#ifdef VIRTUAL_DESKTOP
-static int setVirtualDeskEnable();
-#endif
 static int setMenuTitleColor();
 static int setMenuTextColor();
 static int setMenuDisabledColor();
@@ -389,28 +386,6 @@ WDefaultEntry optionList[] = {
 	 &wPreferences.workspace_border_position, getEnum, updateUsableArea},
 	{"WorkspaceBorderSize", "0", NULL,
 	 &wPreferences.workspace_border_size, getInt, updateUsableArea},
-#ifdef VIRTUAL_DESKTOP
-	{"EnableVirtualDesktop", "NO", NULL,
-	 &wPreferences.vdesk_enable, getBool, setVirtualDeskEnable},
-	{"VirtualEdgeExtendSpace", "0", NULL,
-	 &wPreferences.vedge_bordersize, getInt, NULL},
-	{"VirtualEdgeHorizonScrollSpeed", "30", NULL,
-	 &wPreferences.vedge_hscrollspeed, getInt, NULL},
-	{"VirtualEdgeVerticalScrollSpeed", "30", NULL,
-	 &wPreferences.vedge_vscrollspeed, getInt, NULL},
-	{"VirtualEdgeResistance", "30", NULL,
-	 &wPreferences.vedge_resistance, getInt, NULL},
-	{"VirtualEdgeAttraction", "30", NULL,
-	 &wPreferences.vedge_attraction, getInt, NULL},
-	{"VirtualEdgeLeftKey", "None", (void *)WKBD_VDESK_LEFT,
-	 NULL, getKeybind, setKeyGrab},
-	{"VirtualEdgeRightKey", "None", (void *)WKBD_VDESK_RIGHT,
-	 NULL, getKeybind, setKeyGrab},
-	{"VirtualEdgeUpKey", "None", (void *)WKBD_VDESK_UP,
-	 NULL, getKeybind, setKeyGrab},
-	{"VirtualEdgeDownKey", "None", (void *)WKBD_VDESK_DOWN,
-	 NULL, getKeybind, setKeyGrab},
-#endif
 	{"StickyIcons", "NO", NULL,
 	 &wPreferences.sticky_icons, getBool, setStickyIcons},
 	{"SaveSessionOnExit", "NO", NULL,
@@ -3002,14 +2977,6 @@ static int setWorkspaceBack(WScreen * scr, WDefaultEntry * entry, WMPropList * v
 
 	return 0;
 }
-
-#ifdef VIRTUAL_DESKTOP
-static int setVirtualDeskEnable(WScreen * scr, WDefaultEntry * entry, void *foo, void *bar)
-{
-	wWorkspaceUpdateEdge(scr);
-	return 0;
-}
-#endif
 
 static int setWidgetColor(WScreen * scr, WDefaultEntry * entry, WTexture ** texture, void *foo)
 {

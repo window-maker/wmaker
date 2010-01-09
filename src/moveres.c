@@ -164,13 +164,7 @@ static void showPosition(WWindow * wwin, int x, int y)
 		XDrawLine(dpy, scr->root_win, lgc, x + width + 2, 0, x + width + 2, scr->scr_height);
 #endif
 	} else {
-#ifdef VIRTUAL_DESKTOP
-		WSetGeometryViewShownPosition(scr->gview,
-					      x + scr->workspaces[scr->current_workspace]->view_x,
-					      y + scr->workspaces[scr->current_workspace]->view_y);
-#else
 		WSetGeometryViewShownPosition(scr->gview, x, y);
-#endif
 	}
 }
 
@@ -1532,10 +1526,6 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 				wArrangeIcons(scr, True);
 			}
 
-#if defined(VIRTUAL_DESKTOP)
-			wWorkspaceResizeViewport(scr, scr->current_workspace);
-#endif
-
 			return 1;
 		}
 	}
@@ -1803,11 +1793,6 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 	    head != wGetHeadForWindow(wwin)) {
 		wArrangeIcons(scr, True);
 	}
-#if defined(VIRTUAL_DESKTOP)
-	if (started)
-		wWorkspaceResizeViewport(scr, scr->current_workspace);
-#endif
-
 	return started;
 }
 
@@ -2096,9 +2081,6 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 	if (wPreferences.auto_arrange_icons && wXineramaHeads(scr) > 1 && head != wGetHeadForWindow(wwin)) {
 		wArrangeIcons(scr, True);
 	}
-#if defined(VIRTUAL_DESKTOP)
-	wWorkspaceResizeViewport(scr, scr->current_workspace);
-#endif
 }
 
 #undef LEFT

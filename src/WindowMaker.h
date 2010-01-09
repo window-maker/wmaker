@@ -319,122 +319,73 @@ typedef struct WCoord {
 } WCoord;
 
 typedef struct WPreferences {
-    char *pixmap_path;		       /* : separate list of */
-    /* paths to find pixmaps */
-    char *icon_path;		       /* : separated list of */
-    /* paths to find icons */
+    char *pixmap_path;		       /* : separated list of paths to find pixmaps */
+    char *icon_path;		       /* : separated list of paths to find icons */
     WMArray *fallbackWMs;              /* fallback window manager list */
-
     char *logger_shell;		       /* shell to log child stdi/o */
-
     RImage *button_images;	       /* titlebar button images */
-
     char smooth_workspace_back;
-    signed char size_display;		       /* display type for resize geometry */
-    signed char move_display;		       /* display type for move geometry */
-    signed char window_placement;	       /* window placement mode */
-    signed char colormap_mode;		       /* colormap focus mode */
-    signed char focus_mode;		       /* window focusing mode */
+    signed char size_display;	       /* display type for resize geometry */
+    signed char move_display;	       /* display type for move geometry */
+    signed char window_placement;      /* window placement mode */
+    signed char colormap_mode;	       /* colormap focus mode */
+    signed char focus_mode;	       /* window focusing mode */
 
-    char opaque_move;		       /* update window position during */
-    /* move */
-
+    char opaque_move;		       /* update window position during move */
     char wrap_menus;		       /* wrap menus at edge of screen */
     char scrollable_menus;	       /* let them be scrolled */
     char align_menus;		       /* align menu with their parents */
-
-    char use_saveunders;	       /* turn on SaveUnders for menus,
-    * icons etc. */
+    char use_saveunders;	       /* turn on SaveUnders for menus, icons etc. */
     char no_window_over_dock;
-
     char no_window_over_icons;
+    WCoord window_place_origin;	       /* Offset for windows placed on screen */
 
-    WCoord window_place_origin;	       /* Offset for windows placed on
-    * screen */
-
-    char constrain_window_size;	       /* don't let windows get bigger than
-    * screen */
-
+    char constrain_window_size;	       /* don't let windows get bigger than screen */
     char windows_cycling;	       /* windoze cycling */
     char circ_raise;		       /* raise window after Alt-tabbing */
-
     char ignore_focus_click;
-
-    char open_transients_with_parent;  /* open transient window in
-    same workspace as parent */
-    signed char title_justification;	       /* titlebar text alignment */
-
+    char open_transients_with_parent;  /* open transient window in same workspace as parent */
+    signed char title_justification;   /* titlebar text alignment */
     int window_title_clearance;
     int menu_title_clearance;
     int menu_text_clearance;
-
     char multi_byte_text;
 #ifdef KEEP_XKB_LOCK_STATUS
     char modelock;
 #endif
-
     char no_dithering;		       /* use dithering or not */
-
     char no_animations;		       /* enable/disable animations */
-
     char no_autowrap;		       /* wrap workspace when window is moved
     * to the edge */
 
     char auto_arrange_icons;	       /* automagically arrange icons */
-
     char icon_box_position;	       /* position to place icons */
-
     signed char iconification_style;          /* position to place icons */
-
     char disable_root_mouse;	       /* disable button events in root window */
-
     char auto_focus;		       /* focus window when it's mapped */
-
-
     char *icon_back_file;	       /* background image for icons */
 
     WCoord *root_menu_pos;	       /* initial position of the root menu*/
     WCoord *app_menu_pos;
-
     WCoord *win_menu_pos;
 
-    signed char icon_yard;		       /* aka iconbox */
+    signed char icon_yard;	       /* aka iconbox */
 
     int raise_delay;		       /* delay for autoraise. 0 is disabled */
-
-    int cmap_size;		       /* size of dithering colormap in colors
-    * per channel */
+    int cmap_size;		       /* size of dithering colormap in colors per channel */
 
     int icon_size;		       /* size of the icon */
-
     signed char menu_style;	       /* menu decoration style */
-
     signed char workspace_name_display_position;
-
     unsigned int modifier_mask;	       /* mask to use as kbd modifier */
 
 
     char ws_advance;                   /* Create new workspace and advance */
-
-#ifdef VIRTUAL_DESKTOP
-    unsigned int vdesk_enable;
-    unsigned int vedge_bordersize;
-    unsigned int vedge_hscrollspeed;
-    unsigned int vedge_vscrollspeed;
-    unsigned int vedge_resistance;
-    unsigned int vedge_attraction;
-#endif
-
     char ws_cycle;                     /* Cycle existing workspaces */
-
     char save_session_on_exit;	       /* automatically save session on exit */
-
     char sticky_icons;		       /* If miniwindows will be onmipresent */
-
     char dont_confirm_kill;	       /* do not confirm Kill application */
-
     char disable_miniwindows;
-
     char dont_blink;		       /* do not blink icon selection */
 
     /* Appearance options */

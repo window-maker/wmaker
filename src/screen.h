@@ -64,20 +64,10 @@ typedef struct WAppIconChain {
  */
 typedef struct _WScreen {
     int	screen;			       /* screen number */
-
-#if 0
-    Atom managerAtom;		       /* WM_Sn atom for manager selection */
-    Window managerWindow;	       /* window for manager selection */
-#endif
     Window info_window;		       /* for our window manager info stuff */
 
     int scr_width;		       /* size of the screen */
     int scr_height;
-
-#ifdef VIRTUAL_DESKTOP
-    int virtual_nr_edges;
-    Window * virtual_edges;
-#endif
 
     Window root_win;		       /* root window of screen */
     int  depth;			       /* depth of the default visual */

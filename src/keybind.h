@@ -90,13 +90,6 @@ enum {
 #ifdef KEEP_XKB_LOCK_STATUS
 	WKBD_TOGGLE,
 #endif
-
-#ifdef VIRTUAL_DESKTOP
-	WKBD_VDESK_LEFT,
-	WKBD_VDESK_RIGHT,
-	WKBD_VDESK_UP,
-	WKBD_VDESK_DOWN,
-#endif
 	/* keep this last */
 	WKBD_LAST
 };

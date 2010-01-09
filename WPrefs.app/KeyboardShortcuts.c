@@ -113,12 +113,6 @@ static char *keyOptions[] = {
 	"WindowShortcut9Key",
 	"WindowShortcut10Key",
 	"ScreenSwitchKey",
-#ifdef VIRTUAL_DESKTOP
-	"VirtualEdgeLeftKey",
-	"VirtualEdgeRightKey",
-	"VirtualEdgeUpKey",
-	"VirtualEdgeDownKey",
-#endif
 	"DockRaiseLowerKey",
 #ifndef XKB_MODELOCK
 	"ClipRaiseLowerKey"
@@ -518,12 +512,6 @@ static void createPanel(Panel * p)
 	WMAddListItem(panel->actLs, _("Shortcut for window 9"));
 	WMAddListItem(panel->actLs, _("Shortcut for window 10"));
 	WMAddListItem(panel->actLs, _("Switch to Next Screen/Monitor"));
-#ifdef VIRTUAL_DESKTOP
-	WMAddListItem(panel->actLs, _("Move VirtualDesktop to next left edge"));
-	WMAddListItem(panel->actLs, _("Move VirtualDesktop to next right edge"));
-	WMAddListItem(panel->actLs, _("Move VirtualDesktop to next top edge"));
-	WMAddListItem(panel->actLs, _("Move VirtualDesktop to next bottom edge"));
-#endif
 	WMAddListItem(panel->actLs, _("Raise/Lower Dock"));
 	WMAddListItem(panel->actLs, _("Raise/Lower Clip"));
 #ifdef XKB_MODELOCK

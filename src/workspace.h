@@ -27,10 +27,6 @@
 
 typedef struct WWorkspace {
     char *name;
-#ifdef VIRTUAL_DESKTOP
-    int width, height;
-    int view_x, view_y;
-#endif
     struct WDock *clip;
 } WWorkspace;
 
@@ -39,32 +35,12 @@ int wWorkspaceNew(WScreen *scr);
 Bool wWorkspaceDelete(WScreen *scr, int workspace);
 void wWorkspaceChange(WScreen *scr, int workspace);
 void wWorkspaceForceChange(WScreen *scr, int workspace);
-#ifdef VIRTUAL_DESKTOP
-void wWorkspaceUpdateEdge(WScreen *scr);
-void wWorkspaceRaiseEdge(WScreen *scr);
-void wWorkspaceLowerEdge(WScreen *scr);
-void wWorkspaceResizeViewport(WScreen *scr, int workspace);
-Bool wWorkspaceSetViewport(WScreen *scr, int workspace, int view_x, int view_y);
-void wWorkspaceKeyboardMoveDesktop(WScreen *scr, WMPoint direction);
-
-#define VEC_LEFT    wmkpoint(-1,0)
-#define VEC_RIGHT   wmkpoint(1,0)
-#define VEC_UP	    wmkpoint(0,-1)
-#define VEC_DOWN    wmkpoint(0,1)
-
-#endif
-
-
 WMenu *wWorkspaceMenuMake(WScreen *scr, Bool titled);
 void wWorkspaceMenuUpdate(WScreen *scr, WMenu *menu);
-
 void wWorkspaceMenuEdit(WScreen *scr);
-
 void wWorkspaceSaveState(WScreen *scr, WMPropList *old_state);
 void wWorkspaceRestoreState(WScreen *scr);
-
 void wWorkspaceRename(WScreen *scr, int workspace, char *name);
-
 void wWorkspaceRelativeChange(WScreen *scr, int amount);
 
 #endif

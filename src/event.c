@@ -1060,19 +1060,10 @@ static void handleEnterNotify(XEvent * event)
 {
 	WWindow *wwin;
 	WObjDescriptor *desc = NULL;
-#ifdef VIRTUAL_DESKTOP
-	void (*vdHandler) (XEvent * event);
-#endif
 	XEvent ev;
 	WScreen *scr = wScreenForRootWindow(event->xcrossing.root);
 #ifdef DEBUG
 	printf("got enter notify\n");
-#endif
-
-#ifdef VIRTUAL_DESKTOP
-	if (XFindContext(dpy, event->xcrossing.window, wVEdgeContext, (XPointer *) & vdHandler) != XCNOENT) {
-		(*vdHandler) (event);
-	}
 #endif
 
 	if (XCheckTypedWindowEvent(dpy, event->xcrossing.window, LeaveNotify, &ev)) {
@@ -1704,25 +1695,7 @@ static void handleKeyPress(XEvent * event)
 			}
 		}
 		break;
-#endif				/* KEEP_XKB_LOCK_STATUS */
-#ifdef VIRTUAL_DESKTOP
-	case WKBD_VDESK_LEFT:
-		wWorkspaceKeyboardMoveDesktop(scr, VEC_LEFT);
-		break;
-
-	case WKBD_VDESK_RIGHT:
-		wWorkspaceKeyboardMoveDesktop(scr, VEC_RIGHT);
-		break;
-
-	case WKBD_VDESK_UP:
-		wWorkspaceKeyboardMoveDesktop(scr, VEC_UP);
-		break;
-
-	case WKBD_VDESK_DOWN:
-		wWorkspaceKeyboardMoveDesktop(scr, VEC_DOWN);
-		break;
-#endif
-
+#endif	/* KEEP_XKB_LOCK_STATUS */
 	}
 }
 

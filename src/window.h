@@ -137,11 +137,6 @@ typedef struct {
     unsigned int dont_save_session:1;  /* do not save app's state in session */
 
     unsigned int full_maximize:1;
-
-#ifdef VIRTUAL_DESKTOP
-    unsigned int virtual_stick:1;
-#endif
-
     /*
      * emulate_app_icon must be automatically disabled for apps that can
      * generate their own appicons and for apps that have no_appicon=1
@@ -321,10 +316,6 @@ typedef struct WWindow {
 #define HAS_BORDER(w)	    (!(WFLAGP((w), no_border) || (w)->flags.fullscreen))
 #define IS_MOVABLE(w)	    (!(WFLAGP((w), no_movable) || (w)->flags.fullscreen))
 #define IS_RESIZABLE(w)    (!(WFLAGP((w), no_resizable) || (w)->flags.fullscreen))
-
-#ifdef VIRTUAL_DESKTOP
-# define IS_VSTUCK(w)	    (WFLAGP((w), virtual_stick) || (w)->flags.fullscreen)
-#endif
 
 /* XXX: CHECK THIS,.. IT SEEMED WEIRD TO ME!!! */
 #define IS_OMNIPRESENT(w) ((w)->flags.omnipresent | WFLAGP(w, omnipresent))

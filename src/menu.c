@@ -1582,11 +1582,7 @@ static void scrollMenuCallback(void *data)
 	int hamount = 0;	/* amount to scroll */
 	int vamount = 0;
 
-#ifdef VIRTUAL_DESKTOP
-	/* don't scroll if it is in vdesk mode */
-	if (!wPreferences.vdesk_enable)
-#endif
-		getScrollAmount(menu, &hamount, &vamount);
+	getScrollAmount(menu, &hamount, &vamount);
 
 	if (hamount != 0 || vamount != 0) {
 		wMenuMove(parent, parent->frame_x + hamount, parent->frame_y + vamount, True);
@@ -1868,11 +1864,6 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 				dragScrollMenuCallback(menu);
 		}
 	}
-#ifdef VIRTUAL_DESKTOP
-	if (wPreferences.vdesk_enable) {
-		wWorkspaceLowerEdge(scr);
-	}
-#endif
 
 	prevx = bev->x_root;
 	prevy = bev->y_root;
@@ -2013,12 +2004,6 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 
 		case Expose:
 			WMHandleEvent(&ev);
-#ifdef VIRTUAL_DESKTOP
-			/* since expose will raise edge up.. I need another ugly hack here */
-			if (wPreferences.vdesk_enable) {
-				wWorkspaceLowerEdge(scr);
-			}
-#endif
 			break;
 		}
 	}
@@ -2092,9 +2077,6 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 	}
 
 	((WMenu *) desc->parent)->flags.inside_handler = 0;
-#ifdef VIRTUAL_DESKTOP
-	wWorkspaceRaiseEdge(scr);
-#endif
 }
 
 void wMenuMove(WMenu * menu, int x, int y, int submenus)

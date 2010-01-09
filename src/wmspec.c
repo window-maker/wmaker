@@ -324,23 +324,12 @@ void wNETWMUpdateDesktop(WScreen * scr)
 	count = scr->workspace_count * 2;
 	views = wmalloc(sizeof(long) * count);
 	/*memset(views, 0, sizeof(long) * count); */
-
-#ifdef VIRTUAL_DESKTOP
-	sizes[0] = scr->workspaces[scr->current_workspace]->width;
-	sizes[1] = scr->workspaces[scr->current_workspace]->height;
-#else
 	sizes[0] = scr->scr_width;
 	sizes[1] = scr->scr_height;
-#endif
 
 	for (i = 0; i < scr->workspace_count; i++) {
-#ifdef VIRTUAL_DESKTOP
-		views[2 * i + 0] = scr->workspaces[i]->view_x;
-		views[2 * i + 1] = scr->workspaces[i]->view_y;
-#else
 		views[2 * i + 0] = 0;
 		views[2 * i + 1] = 0;
-#endif
 	}
 
 	XChangeProperty(dpy, scr->root_win, net_desktop_geometry, XA_CARDINAL, 32,
@@ -904,10 +893,6 @@ static Bool updateStrut(WWindow * wwin, Bool adding)
 
 			XFree(data);
 			hasState = True;
-#ifdef VIRTUAL_DESKTOP
-			/* just in case wm_window_type didn't set it already */
-			wwin->client_flags.virtual_stick = 1;
-#endif
 		}
 
 	} else {
@@ -1117,9 +1102,6 @@ static Bool handleWindowType(WWindow * wwin, Atom type, int *layer)
 		wwin->flags.net_skip_pager = 1;
 		wwin->frame_x = 0;
 		wwin->frame_y = 0;
-#ifdef VIRTUAL_DESKTOP
-		wwin->client_flags.virtual_stick = 1;
-#endif
 	} else if (type == net_wm_window_type_dock) {
 		wwin->client_flags.no_titlebar = 1;
 		wwin->client_flags.no_resizable = 1;
@@ -1132,9 +1114,6 @@ static Bool handleWindowType(WWindow * wwin, Atom type, int *layer)
 		wwin->client_flags.skip_window_list = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->flags.net_skip_pager = 1;
-#ifdef VIRTUAL_DESKTOP
-		wwin->client_flags.virtual_stick = 1;
-#endif
 	} else if (type == net_wm_window_type_toolbar) {
 		wwin->client_flags.no_titlebar = 1;
 		wwin->client_flags.no_resizable = 1;
@@ -1426,10 +1405,6 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 			}
 		} else if (event->message_type == net_showing_desktop) {
 			wNETWMShowingDesktop(scr, event->data.l[0]);
-#ifdef VIRTUAL_DESKTOP
-		} else if (event->message_type == net_desktop_viewport) {
-			wWorkspaceSetViewport(scr, scr->current_workspace, event->data.l[0], event->data.l[1]);
-#endif
 		} else if (event->message_type == net_desktop_names) {
 			handleDesktopNames(event, scr);
 		} else {

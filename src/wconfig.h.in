@@ -292,13 +292,6 @@
 
 /* workspace name on switch display */
 #define WORKSPACE_NAME_FADE_DELAY 30
-
-#ifdef VIRTUAL_DESKTOP
-/* workspace virtual edge speed */
-#define VIRTUALEDGE_SCROLL_VSTEP 30
-#define VIRTUALEDGE_SCROLL_HSTEP 30
-#endif
-
 #define WORKSPACE_NAME_DELAY     400
 
 /* Delay when cycling colors of selected icons. */

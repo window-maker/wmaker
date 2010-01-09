@@ -373,16 +373,6 @@ AC_SUBST(supported_locales)
 dnl Support for various hint things
 dnl ===============================
 
-dnl vdesktop_on="no"
-
-dnl AC_ARG_ENABLE(vdesktop,
-dnl  [  --enable-vdesktop       enable virtual desktop],
-dnl  [if test x$enableval = xyes; then
-dnl    AC_DEFINE(VIRTUAL_DESKTOP, 1, [define if you want virtual desktop support])
-dnl    vdesktop_on=yes
-dnl  fi])
-
-
 dnl
 dnl Beautify compilation messages
 dnl ---------------------------------------------

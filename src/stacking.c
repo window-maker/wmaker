@@ -146,11 +146,6 @@ void CommitStacking(WScreen * scr)
 	}
 	XRestackWindows(dpy, windows, i);
 	wfree(windows);
-
-#ifdef VIRTUAL_DESKTOP
-	wWorkspaceRaiseEdge(scr);
-#endif
-
 	WMPostNotificationName(WMNResetStacking, scr, NULL);
 }
 
@@ -253,10 +248,6 @@ void wRaiseFrame(WCoreWindow * frame)
 	}
 
 	notifyStackChange(frame, "raise");
-
-#ifdef VIRTUAL_DESKTOP
-	wWorkspaceRaiseEdge(scr);
-#endif
 }
 
 void wRaiseLowerFrame(WCoreWindow * frame)
@@ -367,10 +358,6 @@ void wLowerFrame(WCoreWindow * frame)
 	}
 
 	notifyStackChange(frame, "lower");
-
-#ifdef VIRTUAL_DESKTOP
-	wWorkspaceRaiseEdge(scr);
-#endif
 }
 
 /*
@@ -500,10 +487,6 @@ void MoveInStackListAbove(WCoreWindow * next, WCoreWindow * frame)
 	}
 
 	WMPostNotificationName(WMNResetStacking, scr, NULL);
-
-#ifdef VIRTUAL_DESKTOP
-	wWorkspaceRaiseEdge(scr);
-#endif
 }
 
 /*

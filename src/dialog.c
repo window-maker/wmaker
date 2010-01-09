@@ -1276,13 +1276,6 @@ void wShowInfoPanel(WScreen * scr)
 		strbuf = wstrappend(strbuf, buf);
 	}
 
-#ifdef VIRTUAL_DESKTOP
-	if (wPreferences.vdesk_enable)
-		strbuf = wstrappend(strbuf, _(", VirtualDesktop enabled"));
-	else
-		strbuf = wstrappend(strbuf, _(", VirtualDesktop disabled"));
-#endif
-
 #ifdef XINERAMA
 	strbuf = wstrappend(strbuf, _("\n"));
 #ifdef SOLARIS_XINERAMA
