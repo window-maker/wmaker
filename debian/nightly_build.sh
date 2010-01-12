@@ -8,12 +8,10 @@ CHANGELOG="Automatic build from the GIT on `date`"
 BUILDLOG="${HOME}/log/wmaker-testing-nightly.log"
 
 STATUSCMD="git log -1 --pretty=oneline"
-PULLCMD1="git pull"
-#PULLCMD2="git checkout origin/master"
+PULLCMD="git pull"
 if [ -n "${WMAKER_DISTRO}" ]; then
   case ${WMAKER_DISTRO} in
     unstable)
-      #PULLCMD2="git checkout next"
       BUILDLOG="${HOME}/log/wmaker-unstable-nightly.log"
       ;;
   esac
@@ -46,8 +44,7 @@ errorExit() {
 doPull() {
   RC="1"
   LATEST="`$STATUSCMD`"
-  $PULLCMD1 >>$BUILDLOG 2>&1 || errorExit "Error pulling from the repo"
-  #$PULLCMD2 >>$BUILDLOG 2>&1 || errorExit "Error pulling from the repo"
+  $PULLCMD >>$BUILDLOG 2>&1 || errorExit "Error pulling from the repo"
   CURRENT="`$STATUSCMD`"
   if [ "$FORCE" = "1" -o "$LATEST" != "$CURRENT" ]; then
     echo "last revision: $LATEST" >>$BUILDLOG 
@@ -87,6 +84,7 @@ trap 'cleanup; exit 2' 15
 
 test -d debian || errorExit "This script must be called from the toplevel source dir, ./debian must exist."
 
+git status | grep modified: | awk '{ print $3 }' | xargs git checkout
 RC=0
 if doPull ; then
   doEnv
