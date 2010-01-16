@@ -1700,14 +1700,16 @@ msgstr ""
 
 #: ../src/winspector.c:1390
 msgid "Don't focus across workspaces"
-msgstr ""
+msgstr "Kein Arbeitsflächenwechsel bei Fokus"
 
 #: ../src/winspector.c:1392
 msgid ""
 "Do not allow Window Maker to switch workspace to satisfy\n"
 "a focus request (useful e.g. in the case of a multiple-tab\n"
 "firefox opening in a different workspace)."
-msgstr ""
+msgstr "Window Maker nicht erlauben, die Arbeitsfläche zu wechseln,\n"
+"um einen Fokus Anforderung zu erfüllen (nützlich z.B. beim Öffnen\n"
+"einer Firefox Anwendung mit mehreren Tabs in einer anderer Arbeitfläche)."
 
 #: ../src/winspector.c:1398
 msgid "Disable language button"
