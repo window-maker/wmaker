@@ -37,6 +37,7 @@ static unsigned getButtonWithName(const char *name, unsigned defaultButton)
 void W_ReadConfigurations(void)
 {
 	WMUserDefaults *defaults;
+	Bool aaIsSet = False;
 
 	memset(&WINGsConfiguration, 0, sizeof(_WINGsConfiguration));
 
@@ -44,13 +45,19 @@ void W_ReadConfigurations(void)
 
 	if (defaults) {
 		char *buttonName;
+		WMPropList *val;
 		unsigned button;
 
 		WINGsConfiguration.systemFont = WMGetUDStringForKey(defaults, "SystemFont");
 
 		WINGsConfiguration.boldSystemFont = WMGetUDStringForKey(defaults, "BoldSystemFont");
 
-		WINGsConfiguration.antialiasedText = WMGetUDBoolForKey(defaults, "AntialiasedText");
+		val = WMGetUDObjectForKey(defaults, "AntialiasedText");
+		if (val && WMIsPLString(val) && WMGetFromPLString(val)) {
+			aaIsSet = True;
+			WINGsConfiguration.antialiasedText =
+				WMGetUDBoolForKey(defaults, "AntialiasedText");
+		}
 
 		WINGsConfiguration.doubleClickDelay = WMGetUDIntegerForKey(defaults, "DoubleClickTime");
 
@@ -90,6 +97,9 @@ void W_ReadConfigurations(void)
 	}
 	if (WINGsConfiguration.defaultFontSize == 0) {
 		WINGsConfiguration.defaultFontSize = DEFAULT_FONT_SIZE;
+	}
+	if (!aaIsSet) {
+		WINGsConfiguration.antialiasedText = True;
 	}
 	if (!WINGsConfiguration.floppyPath) {
 		WINGsConfiguration.floppyPath = FLOPPY_PATH;
