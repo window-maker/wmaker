@@ -1,14 +1,17 @@
+SUBDIRS = po
 
 AUTOMAKE_OPTIONS = no-dependencies
 
 pkgdatadir  = $(datadir)/@PACKAGE@
 
 bin_PROGRAMS = wxcopy wxpaste wdwrite wdread getstyle setstyle convertfonts \
-	seticons geticonset wmsetbg wmsetup wmagnify
+	seticons geticonset wmsetbg wmsetup wmagnify wmgenmenu
 
 bin_SCRIPTS = wmaker.inst wm-oldmenu2new wkdemenu.pl
 
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new directjpeg.c wkdemenu.pl
+
+AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\"
 
 INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
 	@HEADER_SEARCH_PATH@ \
@@ -59,6 +62,10 @@ wmsetbg_LDADD = \
 	$(top_builddir)/WINGs/libWUtil.la \
 	$(top_builddir)/wrlib/libwraster.la \
 	@XLFLAGS@ @XLIBS@ @XFTLIBS@ @INTLIBS@ @DLLIBS@
+
+wmgenmenu_LDADD = \
+	$(top_builddir)/WINGs/libWUtil.la \
+	@INTLIBS@
 
 CLEANFILES = wmaker.inst
 

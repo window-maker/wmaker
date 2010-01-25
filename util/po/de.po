@@ -1,0 +1,256 @@
+# wmgenmenu German translation
+# Copyright (C) 2010 Carlos R. Mafra
+# This file is distributed under the same license as the Window Maker package.
+# Carlos R. Mafra <crmafra@gmail.com>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wmgenmenu\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2010-01-28 11:36+0100\n"
+"PO-Revision-Date: 2010-01-27 12:57+0100\n"
+"Last-Translator: Carlos R. Mafra <crmafra@gmail.com>\n"
+"Language-Team: German \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../util/wmgenmenu.c:52
+#, c-format
+msgid "Applications"
+msgstr "Anwendungen"
+
+#: ../../util/wmgenmenu.c:57
+#, c-format
+msgid "Terminals"
+msgstr "Terminals"
+
+#: ../../util/wmgenmenu.c:62
+#, c-format
+msgid "Internet"
+msgstr "Internet"
+
+#: ../../util/wmgenmenu.c:67
+#, c-format
+msgid "Email"
+msgstr "Mitteilung"
+
+#: ../../util/wmgenmenu.c:72
+#, c-format
+msgid "Mathematics"
+msgstr "Mathematiks"
+
+#: ../../util/wmgenmenu.c:77
+#, c-format
+msgid "File Managers"
+msgstr "Dateimanagers"
+
+#: ../../util/wmgenmenu.c:82
+#, c-format
+msgid "Graphics"
+msgstr "Abbildungen"
+
+#: ../../util/wmgenmenu.c:87
+#, c-format
+msgid "Multimedia"
+msgstr "Multimedia"
+
+#: ../../util/wmgenmenu.c:92
+#, c-format
+msgid "Editors"
+msgstr "Text-Editoren"
+
+#: ../../util/wmgenmenu.c:97
+#, c-format
+msgid "Development"
+msgstr "Entwicklung"
+
+#: ../../util/wmgenmenu.c:102
+#, c-format
+msgid "Window Maker"
+msgstr "Window Maker"
+
+#: ../../util/wmgenmenu.c:107
+#, c-format
+msgid "Office"
+msgstr "Büro"
+
+#: ../../util/wmgenmenu.c:112
+#, c-format
+msgid "Astronomy"
+msgstr "Astronomie"
+
+#: ../../util/wmgenmenu.c:117
+#, c-format
+msgid "Sound"
+msgstr "Klang"
+
+#: ../../util/wmgenmenu.c:122
+#, c-format
+msgid "Comics"
+msgstr "Comics"
+
+#: ../../util/wmgenmenu.c:127
+#, c-format
+msgid "Viewers"
+msgstr ""
+
+#: ../../util/wmgenmenu.c:132
+#, c-format
+msgid "Utilities"
+msgstr "Betriebstoffe"
+
+#: ../../util/wmgenmenu.c:137
+#, c-format
+msgid "System"
+msgstr ""
+
+#: ../../util/wmgenmenu.c:142
+#, c-format
+msgid "Video"
+msgstr "Video"
+
+#: ../../util/wmgenmenu.c:147
+#, c-format
+msgid "Chat and Talk"
+msgstr "Chat und Besprechung"
+
+#: ../../util/wmgenmenu.c:152
+#, c-format
+msgid "P2P-Network"
+msgstr "P2P-Netzwerk"
+
+#: ../../util/wmgenmenu.c:157
+#, c-format
+msgid "Games"
+msgstr "Bildschirmspiele"
+
+#: ../../util/wmgenmenu.c:162
+#, c-format
+msgid "OpenSUSE"
+msgstr ""
+
+#: ../../util/wmgenmenu.c:167
+#, c-format
+msgid "Mandriva"
+msgstr ""
+
+#: ../../util/wmgenmenu.c:181
+#, c-format
+msgid "Info Panel"
+msgstr "Info-Panel"
+
+#: ../../util/wmgenmenu.c:185
+#, c-format
+msgid "Restart"
+msgstr "Neustart"
+
+#: ../../util/wmgenmenu.c:192
+#, c-format
+msgid "Exit..."
+msgstr "Beenden..."
+
+#: ../../util/wmgenmenu.c:229
+#, c-format
+msgid "Config wmaker..."
+msgstr "Einstellungen..."
+
+#: ../../util/wmgenmenu.c:237
+#, c-format
+msgid "Workspaces"
+msgstr "Arbeitsflächen"
+
+#: ../../util/wmgenmenu.c:241
+#, c-format
+msgid "Workspace"
+msgstr "Arbeitsfläche"
+
+#: ../../util/wmgenmenu.c:245
+#, c-format
+msgid "Hide others"
+msgstr "Ändere verstecken"
+
+#: ../../util/wmgenmenu.c:249
+#, c-format
+msgid "Show all"
+msgstr "Alle anzeigen"
+
+#: ../../util/wmgenmenu.c:253
+#, c-format
+msgid "Arrange Icons"
+msgstr "Icons anordnen"
+
+#: ../../util/wmgenmenu.c:257
+#, c-format
+msgid "Refresh"
+msgstr "Neuzeichen"
+
+#: ../../util/wmgenmenu.c:261
+#, c-format
+msgid "Save Session"
+msgstr "Arbeitsplatz sichern"
+
+#: ../../util/wmgenmenu.c:265
+#, c-format
+msgid "Clear Session"
+msgstr "X Sitzung leeren"
+
+#: ../../util/wmgenmenu.c:278
+#, c-format
+msgid "Lock Screen"
+msgstr "Bildschirm speeren"
+
+#: ../../util/wmgenmenu.c:290
+#, c-format
+msgid "Other Window Managers"
+msgstr "Ändere Fenstermanagers"
+
+#: ../../util/wmgenmenu.c:298
+#, c-format
+msgid "Start %s"
+msgstr "%s starten"
+
+#: ../../util/wmgenmenu.c:311
+#, c-format
+msgid "Workspace Appearance"
+msgstr "Erscheinungsbild"
+
+#: ../../util/wmgenmenu.c:315
+#, c-format
+msgid "Themes"
+msgstr "Themen"
+
+#: ../../util/wmgenmenu.c:319
+#, c-format
+msgid "Styles"
+msgstr "Stile"
+
+#: ../../util/wmgenmenu.c:323
+#, c-format
+msgid "Icons"
+msgstr "Iconsätze"
+
+#: ../../util/wmgenmenu.c:327
+#, c-format
+msgid "Background"
+msgstr "Hintergrund"
+
+#: ../../util/wmgenmenu.c:331
+#, c-format
+msgid "Save Theme"
+msgstr "Thema speichern"
+
+#: ../../util/wmgenmenu.c:335
+#, c-format
+msgid "Save Icons"
+msgstr "Iconsatz speichern"
+
+#: ../../util/wmgenmenu.c:348
+#, c-format
+msgid "Run..."
+msgstr "Ausführen..."
+
+#: ../../util/wmgenmenu.c:350
+#, c-format
+msgid "Run, Type command:"
+msgstr "Ausführen, Befehl zum Ausführen eingeben:"

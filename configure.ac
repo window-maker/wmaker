@@ -283,6 +283,7 @@ else
     	INTLIBS=""
 	MOFILES=""
 	WPMOFILES=""
+	UTILMOFILES=""
 	PO=""
 fi
 
@@ -295,6 +296,7 @@ dnl -------------------------
 supported_locales="be bg bs ca cs da de el es et fi fr gl hr hu hy it ja ko ms nl no pl pt ro ru sk sv tr zh_CN zh_TW"
 supported_wprefs_locales="bg ca cs de es et fi fr hr hu it ja ko pt ru sk zh_CN zh_TW"
 supported_wings_locales="bg ca cs de fr sk"
+supported_util_locales="de"
 
 for lang in $LINGUAS; do
 	ok=0
@@ -318,6 +320,16 @@ for lang in $LINGUAS; do
 	done
 	if test "$ok" = 1; then
 		WPMOFILES="$WPMOFILES $lang.mo"
+	fi
+	ok=0
+	for l in $supported_util_locales; do
+		if test "$l" = "$lang"; then
+			ok=1
+			break
+		fi
+	done
+	if test "$ok" = 1; then
+		UTILMOFILES="$UTILMOFILES $lang.mo"
 	fi
 	ok=0
 	for l in $supported_wings_locales; do
@@ -365,6 +377,7 @@ AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
 AC_SUBST(MOFILES)
 AC_SUBST(WPMOFILES)
+AC_SUBST(UTILMOFILES)
 AC_SUBST(WINGSMOFILES)
 AC_SUBST(supported_locales)
 
@@ -898,7 +911,7 @@ dnl AC_CHECK_PROG(TEXI2HTML, texi2html, texi2html, ,$PATH)
   
 dnl AC_SUBST(DOCTYPES)
 
-AC_OUTPUT(Makefile po/Makefile util/Makefile test/Makefile \
+AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile test/Makefile \
 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
 	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
 	WINGs/Extras/Makefile WINGs/po/Makefile \
