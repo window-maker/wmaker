@@ -1,4 +1,4 @@
-# translation of wprefsneu.po to 
+# translation of wprefsneu.po to
 #
 # German Message Catalog for WPrefs.app
 #
@@ -8,20 +8,21 @@
 #
 # Fully retranslated and updated for newer versions
 #   Torsten Marek <shlomme@gmx.net>
-# , 2004.
 #
+# Carlos R. Mafra <crmafra@gmail.com>, 2010.
 msgid ""
 msgstr ""
 "Project-Id-Version: wprefsneu\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2010-02-02 10:34+0100\n"
-"PO-Revision-Date: 2004-11-14 13:15+0100\n"
-"Last-Translator: \n"
-"Language-Team:  <en@li.org>\n"
+"PO-Revision-Date: 2010-02-02 10:49+0100\n"
+"Last-Translator: Carlos R. Mafra <crmafra@gmail.com>\n"
+"Language-Team: German <>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.9.1\n"
+"X-Generator: Lokalize 1.0\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
 #: ../../WPrefs.app/Appearance.c:1051
 msgid "Select File"
@@ -384,6 +385,8 @@ msgstr "Geglättete Schriftarten (Neustart erforderlich)."
 #: ../../WPrefs.app/Expert.c:77
 msgid "Launch applications and restore windows with a single click."
 msgstr ""
+"Mit einem einzelnen Mausklick Anwendungen ausführen und "
+"Fenster wiederherstellen."
 
 #: ../../WPrefs.app/Expert.c:110
 msgid "Expert User Preferences"
@@ -656,18 +659,16 @@ msgid "Maximize active window horizontally"
 msgstr "Aktives Fenster horizontal maximieren"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:477
-#, fuzzy
 msgid "Maximize active window left half"
-msgstr "Aktives Fenster vertikal maximieren"
+msgstr "Aktives Fenster zur linken Hälfte maximieren"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:478
-#, fuzzy
 msgid "Maximize active window right half"
-msgstr "Aktives Fenster horizontal maximieren"
+msgstr "Aktives Fenster zur rechten Hälfte maximieren"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:479
 msgid "Maximus: Tiled maximization "
-msgstr ""
+msgstr "Maximus: Kachel-Maximierung"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:480
 msgid "Raise active window"
@@ -812,9 +813,8 @@ msgid "Switch to Next Screen/Monitor"
 msgstr "Springe zu nächstem Bildschirm"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:515
-#, fuzzy
 msgid "Raise/Lower Dock"
-msgstr "Clip in den Vor-/Hintergrund"
+msgstr "Dock in den Vor-/Hintergrund"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:516
 msgid "Raise/Lower Clip"
