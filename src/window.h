@@ -156,9 +156,6 @@ typedef struct {
     unsigned int SAVE_YOURSELF:1;
     /* WindowMaker specific */
     unsigned int MINIATURIZE_WINDOW:1;
-#ifdef MONITOR_HEARTBEAT
-    unsigned int HEARTBEAT:1;
-#endif
 } WProtocols;
 
 
@@ -243,9 +240,6 @@ typedef struct WWindow {
 
     long event_mask;		       /* the event mask thats selected */
 
-#ifdef MONITOR_HEARTBEAT
-    time_t last_beat;
-#endif
     struct {
         /* state flags */
         unsigned int mapped:1;

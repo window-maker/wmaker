@@ -906,13 +906,7 @@ void wDefaultsCheckDomains(void)
 	WMPropList *dict;
 	int i;
 
-#ifdef HEARTBEAT
-	puts("Checking domains...");
-#endif
 	if (stat(WDWindowMaker->path, &stbuf) >= 0 && WDWindowMaker->timestamp < stbuf.st_mtime) {
-#ifdef HEARTBEAT
-		puts("Checking WindowMaker domain");
-#endif
 		WDWindowMaker->timestamp = stbuf.st_mtime;
 
 		/* global dictionary */
@@ -951,9 +945,6 @@ void wDefaultsCheckDomains(void)
 	}
 
 	if (stat(WDWindowAttributes->path, &stbuf) >= 0 && WDWindowAttributes->timestamp < stbuf.st_mtime) {
-#ifdef HEARTBEAT
-		puts("Checking WMWindowAttributes domain");
-#endif
 		/* global dictionary */
 		shared_dict = readGlobalDomain("WMWindowAttributes", True);
 		/* user dictionary */
@@ -1008,9 +999,6 @@ void wDefaultsCheckDomains(void)
 
 	if (stat(WDRootMenu->path, &stbuf) >= 0 && WDRootMenu->timestamp < stbuf.st_mtime) {
 		dict = WMReadPropListFromFile(WDRootMenu->path);
-#ifdef HEARTBEAT
-		puts("Checking WMRootMenu domain");
-#endif
 		if (dict) {
 			if (!WMIsPLArray(dict) && !WMIsPLString(dict)) {
 				WMReleasePropList(dict);
