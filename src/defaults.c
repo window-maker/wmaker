@@ -84,10 +84,6 @@ extern int wScreenCount;
 extern Atom _XA_WINDOWMAKER_ICON_SIZE;
 extern Atom _XA_WINDOWMAKER_ICON_TILE;
 
-/*
- extern WMPropList *wDomainName;
- extern WMPropList *wAttributeDomainName;
- */
 extern WPreferences wPreferences;
 
 extern WShortKey wKeyBindings[WKBD_LAST];
@@ -114,10 +110,6 @@ typedef struct {
 static int getBool();
 static int getInt();
 static int getCoord();
-#if 0
-/* this is not used yet */
-static int getString();
-#endif
 static int getPathList();
 static int getEnum();
 static int getTexture();
@@ -137,9 +129,6 @@ static int setJustify();
 static int setClearance();
 static int setIfDockPresent();
 static int setStickyIcons();
-/*
- static int setPositive();
- */
 static int setWidgetColor();
 static int setIconTile();
 static int setWinTitleFont();
@@ -675,10 +664,6 @@ WDefaultEntry optionList[] = {
 };
 
 #if 0
-static void rereadDefaults(void);
-#endif
-
-#if 0
 static void rereadDefaults(void)
 {
 	/* must defer the update because accessing X data from a
@@ -808,25 +793,6 @@ void wDefaultsMergeGlobalMenus(WDDomain * menuDomain)
 
 	menuDomain->dictionary = menu;
 }
-
-#if 0
-WMPropList *wDefaultsInit(int screen_number)
-{
-	static int defaults_inited = 0;
-	WMPropList *dict;
-
-	if (!defaults_inited) {
-		initDefaults();
-	}
-
-	dict = PLGetDomain(wDomainName);
-	if (!dict) {
-		wwarning(_("could not read domain \"%s\" from defaults database"), WMGetFromPLString(wDomainName));
-	}
-
-	return dict;
-}
-#endif
 
 void wDefaultsDestroyDomain(WDDomain * domain)
 {
@@ -1441,29 +1407,6 @@ static int getPropList(WScreen * scr, WDefaultEntry * entry, WMPropList * value,
 
 	return True;
 }
-
-#if 0
-/* This function is not used at the moment. */
-static int getString(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
-{
-	static char *data;
-
-	GET_STRING_OR_DEFAULT("String", data);
-
-	if (!data) {
-		data = WMGetFromPLString(entry->plvalue);
-		if (!data)
-			return False;
-	}
-
-	if (ret)
-		*ret = &data;
-	if (addr)
-		*(char **)addr = wstrdup(data);
-
-	return True;
-}
-#endif
 
 static int getPathList(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
 {
@@ -2508,16 +2451,6 @@ static int setStickyIcons(WScreen * scr, WDefaultEntry * entry, void *bar, void 
 	return 0;
 }
 
-#if not_used
-static int setPositive(WScreen * scr, WDefaultEntry * entry, int *value, void *foo)
-{
-	if (*value <= 0)
-		*(int *)foo = 1;
-
-	return 0;
-}
-#endif
-
 static int setIconTile(WScreen * scr, WDefaultEntry * entry, WTexture ** texture, void *foo)
 {
 	Pixmap pixmap;
@@ -3162,14 +3095,6 @@ static int setSwPOptions(WScreen * scr, WDefaultEntry * entry, WMPropList * arra
 
 	return 0;
 }
-
-/*
- static int
- setButtonImages(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
- {
- return REFRESH_BUTTON_IMAGES;
- }
- */
 
 /*
  * Very ugly kluge.
