@@ -3,7 +3,7 @@ Section: x11
 Priority: optional
 Maintainer: John H. Robinson, IV <jaqque@debian.org>
 Standards-Version: 3.8.0.1
-Build-Depends: debhelper (>= 4), automake1.4, gettext, dctrl-tools, libfontconfig1-dev, libjpeg62-dev, libpng12-dev, libsm-dev, libtiff4-dev, libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev, libxkbfile-dev, libxpm-dev, libxt-dev, libxrender-dev, sharutils
+Build-Depends: debhelper (>= 4), automake1.4, gettext, dctrl-tools, libfontconfig1-dev, libjpeg-dev, libpng12-dev, libsm-dev, libtiff4-dev, libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev, libxkbfile-dev, libxpm-dev, libxt-dev, libxrender-dev, sharutils
 
 Package: wmaker
 Architecture: any
@@ -35,7 +35,7 @@ Package: libwraster3-dev
 Architecture: any
 Section: libdevel
 Priority: optional
-Depends: libwraster3 (= ${Source-Version}), libc6-dev, libx11-dev, libxext-dev, libxpm-dev, libjpeg62-dev, libpng12-0-dev, libgif-dev, libtiff4-dev
+Depends: libwraster3 (= ${Source-Version}), libc6-dev, libx11-dev, libxext-dev, libxpm-dev, libjpeg-dev, libpng12-0-dev, libgif-dev, libtiff4-dev
 Provides: libwraster-dev
 Description: Static libraries and headers of Window Maker rasterizer
  Contains libwraster and header files, for manipulating and
