@@ -327,7 +327,7 @@ RImage *RSmoothScaleImage(RImage * src, unsigned new_width, unsigned new_height)
 		fscale = 1.0 / xscale;
 		for (i = 0; i < new_width; ++i) {
 			contrib[i].n = 0;
-			contrib[i].p = (CONTRIB *) calloc((int)(width * 2 + 1), sizeof(CONTRIB));
+			contrib[i].p = (CONTRIB *) calloc((int) ceil(width * 2 + 1), sizeof(CONTRIB));
 			center = (double)i / xscale;
 			left = ceil(center - width);
 			right = floor(center + width);
@@ -350,7 +350,7 @@ RImage *RSmoothScaleImage(RImage * src, unsigned new_width, unsigned new_height)
 
 		for (i = 0; i < new_width; ++i) {
 			contrib[i].n = 0;
-			contrib[i].p = (CONTRIB *) calloc((int)(fwidth * 2 + 1), sizeof(CONTRIB));
+			contrib[i].p = (CONTRIB *) calloc((int) ceil(fwidth * 2 + 1), sizeof(CONTRIB));
 			center = (double)i / xscale;
 			left = ceil(center - fwidth);
 			right = floor(center + fwidth);
@@ -408,7 +408,7 @@ RImage *RSmoothScaleImage(RImage * src, unsigned new_width, unsigned new_height)
 		fscale = 1.0 / yscale;
 		for (i = 0; i < dst->height; ++i) {
 			contrib[i].n = 0;
-			contrib[i].p = (CONTRIB *) calloc((int)(width * 2 + 1), sizeof(CONTRIB));
+			contrib[i].p = (CONTRIB *) calloc((int) ceil(width * 2 + 1), sizeof(CONTRIB));
 			center = (double)i / yscale;
 			left = ceil(center - width);
 			right = floor(center + width);
@@ -430,7 +430,7 @@ RImage *RSmoothScaleImage(RImage * src, unsigned new_width, unsigned new_height)
 	} else {
 		for (i = 0; i < dst->height; ++i) {
 			contrib[i].n = 0;
-			contrib[i].p = (CONTRIB *) calloc((int)(fwidth * 2 + 1), sizeof(CONTRIB));
+			contrib[i].p = (CONTRIB *) calloc((int) ceil(fwidth * 2 + 1), sizeof(CONTRIB));
 			center = (double)i / yscale;
 			left = ceil(center - fwidth);
 			right = floor(center + fwidth);
