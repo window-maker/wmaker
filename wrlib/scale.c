@@ -45,7 +45,6 @@
  *
  *----------------------------------------------------------------------
  */
-#ifndef broken_code
 RImage *RScaleImage(RImage * image, unsigned new_width, unsigned new_height)
 {
 	int ox;
@@ -124,103 +123,6 @@ RImage *RScaleImage(RImage * image, unsigned new_width, unsigned new_height)
 
 	return img;
 }
-
-#else
-RImage *RScaleImage(RImage * src, unsigned new_width, unsigned new_height)
-{
-	int ddy, ee;
-	int h2;
-	int yd;
-	int xd, xs;
-	RImage *dst;
-	int e, xd2;
-	unsigned char *sr, *sg, *sb, *sa;
-	unsigned char *dr, *dg, *db, *da;
-	int ys = 0;
-
-	dst = RCreateImage(new_width, new_height, src->data[3] != NULL);
-
-	ddy = src->height / 2;
-	ee = (ddy / 2) - dst->height;
-	h2 = new_height / 2;
-
-	xd = dst->width;
-	xs = src->width / 2;
-	e = (src->width / 2) - xd;
-	xd2 = xd / 2;
-
-	sr = src->data[0];
-	sg = src->data[1];
-	sb = src->data[2];
-	sa = src->data[3];
-
-	dr = dst->data[0];
-	dg = dst->data[1];
-	db = dst->data[2];
-	da = dst->data[3];
-
-	if (sa == NULL) {
-		for (yd = 0; yd < new_height; yd++) {
-			int x;
-
-			sr = src->data[0] + ys * src->width;
-			sg = src->data[1] + ys * src->width;
-			sb = src->data[2] + ys * src->width;
-
-			for (x = 0; x < xd; x++) {
-				*(dr++) = *sr;
-				*(dg++) = *sg;
-				*(db++) = *sb;
-
-				while (e >= 0) {
-					sr++;
-					sg++;
-					sb++;
-					e -= xd2;
-				}
-				e += xs;
-			}
-			while (ee >= 0) {
-				ys++;
-				ee -= h2;
-			}
-			ee += ddy;
-		}
-	} else {
-		for (yd = 0; yd < new_height; yd++) {
-			int x;
-
-			sr = src->data[0] + ys * src->width;
-			sg = src->data[1] + ys * src->width;
-			sb = src->data[2] + ys * src->width;
-			sa = src->data[3] + ys * src->width;
-
-			for (x = 0; x < xd; x++) {
-				*(dr++) = *sr;
-				*(dg++) = *sg;
-				*(db++) = *sb;
-				*(da++) = *sa;
-
-				while (e >= 0) {
-					sr++;
-					sg++;
-					sb++;
-					sa++;
-					e -= xd2;
-				}
-				e += xs;
-			}
-			while (ee >= 0) {
-				ys++;
-				ee -= h2;
-			}
-			ee += ddy;
-		}
-	}
-
-	return dst;
-}
-#endif
 
 /*
  * Filtered Image Rescaling code copy/pasted from
