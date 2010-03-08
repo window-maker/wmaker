@@ -263,6 +263,8 @@ ScanFiles(const char *dir, const char *prefix, unsigned acceptmask, unsigned dec
 				    WMFindInArray(result, (WMMatchDataProc *) strmatch,
 						  de->d_name + prefixlen) == WANotFound) {
 					suffix = wstrdup(de->d_name + prefixlen);
+					if (sb.st_mode & S_IFDIR)
+						wstrappend(suffix,"/");
 					WMAddToArray(result, suffix);
 				}
 				wfree(fullfilename);
