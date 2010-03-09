@@ -332,9 +332,6 @@ install-wmaker-stamp: build-wmaker-stamp
 # This has the new default Debian theme settings.
 	cp debian/WindowMaker.default $(DEBTMPDIR)/$(DEFAULTSDIR)/WindowMaker
 
-# Merry Christmas
-#	-mv $(DEBTMPDIR)/$(WMCONFDIR)/xtree.dat $(DEBTMPDIR)/$(WMSHAREDIR)
-
 # Overrides lintian warnings
 	dh_installdirs usr/share/lintian/overrides
 	cp debian/wmaker.overrides debian/wmaker/usr/share/lintian/overrides/wmaker
