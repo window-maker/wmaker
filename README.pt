@@ -23,84 +23,84 @@
 
 
 
-		ParabÈns! VocÍ acabou de adquirir um dispositivo muito
+		Parab√©ns! Voc√™ acabou de adquirir um dispositivo muito
       bom que lhe proporcionaria milhares de anos de uso sem problemas,
-      exceto por que, vocÍ, com vai certeza destruÌ-lo com algum procedimento
-      idiota tÌpico dos consumidores. Por isso nÛs pedimos POR FAVOR,
-      PELO AMOR DE DEUS LEIA O MANUAL DO DONO COM MUITA ATEN«√O ANTES
-      DE DESEMBRULHAR O DISPOSITIVO. VOC  J¡ O DESEMPACOTOU, N√O FOI?
-      VOC  DESEMPACOTOU-O, CONECTOU-O, LIGOU-O E ENCHEU-O DE COISAS,
-      E AGORA A SUA CRIAN«A, A MESMA CRIAN«A QUE UMA VEZ ENFIOU UMA
+      exceto por que, voc√™, com vai certeza destru√≠-lo com algum procedimento
+      idiota t√≠pico dos consumidores. Por isso n√≥s pedimos POR FAVOR,
+      PELO AMOR DE DEUS LEIA O MANUAL DO DONO COM MUITA ATEN√á√ÉO ANTES
+      DE DESEMBRULHAR O DISPOSITIVO. VOC√ä J√Å O DESEMPACOTOU, N√ÉO FOI?
+      VOC√ä DESEMPACOTOU-O, CONECTOU-O, LIGOU-O E ENCHEU-O DE COISAS,
+      E AGORA A SUA CRIAN√áA, A MESMA CRIAN√áA QUE UMA VEZ ENFIOU UMA
       SALSICHA NO SEU VIDEOCASSETE E APERTOU NO "FAST FORWARD", ESTA
-      CRIAN«A EST¡ BRINCANDO COM OS BOT’ES TAMB…M CERTO? E S” AGORA VOC 
-      EST¡ COME«ANDO A LER AS INSTRU«’ES CERTO??? N”S PODEMOS ENT√O QUEBRAR 
-      ESTES DISPOSITIVOS NA F¡BRICA ANTES DE DESPACH¡-LOS, VOC 
+      CRIAN√áA EST√Å BRINCANDO COM OS BOT√ïES TAMB√âM CERTO? E S√ì AGORA VOC√ä
+      EST√Å COME√áANDO A LER AS INSTRU√á√ïES CERTO??? N√ìS PODEMOS ENT√ÉO QUEBRAR 
+      ESTES DISPOSITIVOS NA F√ÅBRICA ANTES DE DESPACH√Å-LOS, VOC√ä
       SABIA DISSO?
 				-- Dave	Barry, "Read This First!"
 
 
-DescriÁ„o
+Descri√ß√£o
 =========
 
-O Window Maker È o gerenciador de janelas GNU para o X Window System. Ele foi
-desenvolvido para emular o visual e a sensaÁ„o de parte da GUI NEXTSTEP(tm).
-Procura ser relativamente r·pido e pequeno, rico em opÁıes, f·cil de 
-configurar e usar, com uma aparÍncia simples e elegante emprestada do
+O Window Maker √© o gerenciador de janelas GNU para o X Window System. Ele foi
+desenvolvido para emular o visual e a sensa√ß√£o de parte da GUI NEXTSTEP(tm).
+Procura ser relativamente r√°pido e pequeno, rico em op√ß√µes, f√°cil de 
+configurar e usar, com uma apar√™ncia simples e elegante emprestada do
 NEXTSTEP(tm).
 
-O Window Maker foi projetado tendo em mente a integraÁ„o com o GNUStep e
-È o gerenciador de janelas "oficial" dele. … ainda parte do projeto GNU
+O Window Maker foi projetado tendo em mente a integra√ß√£o com o GNUStep e
+√© o gerenciador de janelas "oficial" dele. √â ainda parte do projeto GNU
 (www.gnu.org).
 Leia mais sobre o GNUstep neste arquivo.
 
-Hints (informaÁıes dadas pelas aplicaÁıes para que se integrem bem com o 
-gerenciador de janelas) para Motif(tm), OPEN LOOK(tm), KDE e GNOME tambÈm
-s„o suportados. Logo, vocÍ pode substituir os gerenciadores de janela desses
-ambientes pelo Window Maker e manter muito, sen„o toda a funcionalidade do 
+Hints (informa√ß√µes dadas pelas aplica√ß√µes para que se integrem bem com o 
+gerenciador de janelas) para Motif(tm), OPEN LOOK(tm), KDE e GNOME tamb√©m
+s√£o suportados. Logo, voc√™ pode substituir os gerenciadores de janela desses
+ambientes pelo Window Maker e manter muito, sen√£o toda a funcionalidade do 
 gerenciador de janelas nativo.
 
 O Window Maker antes se chamava WindowMaker.
 
-O Window Maker n„o tem relaÁ„o com o Windowmaker, o software para construÁ„o
+O Window Maker n√£o tem rela√ß√£o com o Windowmaker, o software para constru√ß√£o
 de janelas e portas.
 
 
-DocumentaÁ„o
+Documenta√ß√£o
 ============
 
 Leia antes de perguntar.
 
-* Os arquivos README distribuÌdos por toda a ·rvore dos fontes contÍm
-  informaÁıes relacionadas ao conte˙do dos diretÛrios.
+* Os arquivos README distribu√≠dos por toda a √°rvore dos fontes cont√™m
+  informa√ß√µes relacionadas ao conte√∫do dos diret√≥rios.
 
-* O INSTALL possui instruÁıes para instalaÁ„o e algumas dicas quando h· 
-  algum problema. VocÍ deveria lÍ-lo antes da instalaÁ„o. Ele n„o foi escrito
-  somente para ocupar espaÁo no pacote...
+* O INSTALL possui instru√ß√µes para instala√ß√£o e algumas dicas quando h√° 
+  algum problema. Voc√™ deveria l√™-lo antes da instala√ß√£o. Ele n√£o foi escrito
+  somente para ocupar espa√ßo no pacote...
 
-* FAQ: Frequently Asked Questions. LEIA! O FAQ.I18N È sobre questıes 
-  relacionadas ‡ internacionalizaÁ„o.
+* FAQ: Frequently Asked Questions. LEIA! O FAQ.I18N √© sobre quest√µes 
+  relacionadas √† internacionaliza√ß√£o.
 
-* NEWS: lista as mudanÁas de uma vers„o para outra e que s„o visÌveis ao
-  usu·rio. Leia-o se vocÍ estiver fazendo uma atualizaÁ„o.
+* NEWS: lista as mudan√ßas de uma vers√£o para outra e que s√£o vis√≠veis ao
+  usu√°rio. Leia-o se voc√™ estiver fazendo uma atualiza√ß√£o.
 
-* MIRRORS: alguns locais alternativos onde vocÍ pode pegar o Window Maker, 
-  incluindo pacotes do Window Maker especÌficos para certas plataformas.
+* MIRRORS: alguns locais alternativos onde voc√™ pode pegar o Window Maker, 
+  incluindo pacotes do Window Maker espec√≠ficos para certas plataformas.
 
 * BUGFORM: use-o para enviar relatos de bug. Use-o por favor.
 
-* ChangeLog: o que foi mudado a partir da ˙ltima vers„o?
+* ChangeLog: o que foi mudado a partir da √∫ltima vers√£o?
 
 * BUGS: lista dos bugs conhecidos
 
 
-*** Guia do Usu·rio
+*** Guia do Usu√°rio
 
-O Guia do Usu·rio Window Maker pode ser baixado do ftp oficial ou por 
+O Guia do Usu√°rio Window Maker pode ser baixado do ftp oficial ou por 
 sites web. Pode ser visto ainda no formato HTML no:
 http://people.delphi.com/crc3419/WMUserGuide/index.htm
 
-O Guia do Usu·rio explica como usar o Window Maker, fala sobre os 
-arquivos de configuraÁ„o e as opÁıes.
+O Guia do Usu√°rio explica como usar o Window Maker, fala sobre os 
+arquivos de configura√ß√£o e as op√ß√µes.
 
 *** man pages
 
@@ -108,59 +108,59 @@ Digite "man wmaker" no prompt da shell para obter uma ajuda geral sobre
 o Window Maker.
 
 
-DiretÛrios & Arquivos na ¡rvore dos Fontes
+Diret√≥rios & Arquivos na √Årvore dos Fontes
 ==========================================
 
-* O Install È um script para configurar e compilar o Window Maker de 
-  um modo f·cil (n„o que o modo normal seja difÌcil, mas...).
+* O Install √© um script para configurar e compilar o Window Maker de 
+  um modo f√°cil (n√£o que o modo normal seja dif√≠cil, mas...).
 
-* AUTHORS: os crÈditos
+* AUTHORS: os cr√©ditos
 
 * TODO: planos para o futuro
 
-* O contrib/ possui alguns patches enviados e que n„o foram suportados 
+* O contrib/ possui alguns patches enviados e que n√£o foram suportados 
   pelo Window Maker por entrarem em conflito com a filosofia de projeto dos 
   desenvolvedores ou por algum outro motivo.
 
-* O util/ possui v·rios programas utilit·rios.
+* O util/ possui v√°rios programas utilit√°rios.
 
-* O WPrefs.app/ È o programa de configuraÁ„o. 
+* O WPrefs.app/ √© o programa de configura√ß√£o. 
 
-* O src/wconfig.h possui opÁıes de compilaÁ„o que vocÍ pode mudar para 
-  selecionar algumas opÁıes/aspectos e outras coisas mais.
+* O src/wconfig.h possui op√ß√µes de compila√ß√£o que voc√™ pode mudar para 
+  selecionar algumas op√ß√µes/aspectos e outras coisas mais.
 
-* O WINGs/ È a biblioteca de widget NEXTSTEP lookalike
+* O WINGs/ √© a biblioteca de widget NEXTSTEP lookalike
 
-* A wrlib/ È a biblioteca de processamento de imagens
+* A wrlib/ √© a biblioteca de processamento de imagens
 
-* O po/ possui cat·logos de mensagens, que s„o versıes traduzidas das 
+* O po/ possui cat√°logos de mensagens, que s√£o vers√µes traduzidas das 
   mensagens mostradas pelo Window Maker
 
-* A docklib-x.x.tar.gz È a biblioteca para desenvolvimento de dockapps
+* A docklib-x.x.tar.gz √© a biblioteca para desenvolvimento de dockapps
 
 
 SOCORRO!!!
 ==========
 
-H· uma lista de discuss„o para debate de questıes sobre o Window Maker
+H√° uma lista de discuss√£o para debate de quest√µes sobre o Window Maker
 no wm-user@windowmaker.info. Para inscrever-se, mande uma mensagem
 contendo:
 	subscribe
 no campo de assunto da mensagem para wm-user-request@windowmaker.info
 
-Se vocÍ tiver algum problema, pergunte l· (somente depois de ter lido os
-documentos, È claro). As pessoas da lista est„o mais preparadas para 
-resolver o seu problema do que nÛs. Para relatar BUGS, use o BUGFORM.
+Se voc√™ tiver algum problema, pergunte l√° (somente depois de ter lido os
+documentos, √© claro). As pessoas da lista est√£o mais preparadas para 
+resolver o seu problema do que n√≥s. Para relatar BUGS, use o BUGFORM.
 
-Se vocÍ tiver problemas com uma vers„o prÈ-compilada do Window
+Se voc√™ tiver problemas com uma vers√£o pr√©-compilada do Window
 Maker (rpm, deb etc), primeiro questione a pessoa que criou o pacote.
 
-NOTA IMPORTANTE: quando for pedir ajuda (seja na lista de discuss„o ou 
-diretamente aos desenvolvedores) *sempre* envie informaÁıes sobre o sistema
-que vocÍ est· usando. VocÍ pode usar a seÁ„o system information no final
-do BUGFORM como guia. Outra coisa: n„o mande mensagens em HTML.
+NOTA IMPORTANTE: quando for pedir ajuda (seja na lista de discuss√£o ou 
+diretamente aos desenvolvedores) *sempre* envie informa√ß√µes sobre o sistema
+que voc√™ est√° usando. Voc√™ pode usar a se√ß√£o system information no final
+do BUGFORM como guia. Outra coisa: n√£o mande mensagens em HTML.
 
-H· ainda o canal de IRC #windowmaker na EFNET. Para entrar l·, conecte
+H√° ainda o canal de IRC #windowmaker na EFNET. Para entrar l√°, conecte
 seu cliente de irc no irc.concentric.net, irc.prison.net ou outro 
 servidor dessa rede.
 
@@ -168,102 +168,102 @@ servidor dessa rede.
 GNUstep
 =======
 
-O GNUstep È um completo sistema de desenvolvimento orientado a objetos,
-baseado na especificaÁ„o OpenStep lanÁada pela NeXT(tm) (agora Apple(tm) e
-Sun(tm)). Ele ir· fornecer tudo que È necess·rio para desenvolver aplicaÁıes
-orientadas a objetos,  gr·ficas (e n„o gr·ficas), cross-platform; fornecendo,
+O GNUstep √© um completo sistema de desenvolvimento orientado a objetos,
+baseado na especifica√ß√£o OpenStep lan√ßada pela NeXT(tm) (agora Apple(tm) e
+Sun(tm)). Ele ir√° fornecer tudo que √© necess√°rio para desenvolver aplica√ß√µes
+orientadas a objetos,  gr√°ficas (e n√£o gr√°ficas), cross-platform; fornecendo,
 dentre outras coisas, bibliotecas bases do sistema, uma estrutura de alto
-nÌvel para aplicaÁıes GUI que usa um modelo de imagens do tipo Display
+n√≠vel para aplica√ß√µes GUI que usa um modelo de imagens do tipo Display
 PostScript(tm), objetos para acesso a bancos de dados relacional, objetos
-distribuÌdos e um ambiente de desenvolvimento gr·fico, com ferramentas como
+distribu√≠dos e um ambiente de desenvolvimento gr√°fico, com ferramentas como
 um modelador de interfaces, um projeto de gerenciamento de sistema (central
 de projetos) e outras ferramentas.
 
-O sistema de desenvolvimento GNUstep ser· usado para criar um ambiente
-de usu·rio, com tudo necess·rio para uma interface gr·fica, tais como
-visualizador de arquivos, editores de texto e outras aplicaÁıes. Note que o
-ambiente do usu·rio (ou "ambiente desktop") È somente uma pequena parte de
-todo o projeto GNUstep e n„o "compete" com projetos como o KDE e o GNOME,
-simplesmente por que eles s„o coisas completamente diferentes.
+O sistema de desenvolvimento GNUstep ser√° usado para criar um ambiente
+de usu√°rio, com tudo necess√°rio para uma interface gr√°fica, tais como
+visualizador de arquivos, editores de texto e outras aplica√ß√µes. Note que o
+ambiente do usu√°rio (ou "ambiente desktop") √© somente uma pequena parte de
+todo o projeto GNUstep e n√£o "compete" com projetos como o KDE e o GNOME,
+simplesmente por que eles s√£o coisas completamente diferentes.
 
-Para mais informaÁ„o sobre o projeto GNUstep, visite http://www.gnustep.org
+Para mais informa√ß√£o sobre o projeto GNUstep, visite http://www.gnustep.org
 e http://gnustep.current.nu
 
 
-Executando m˙ltiplas inst‚ncias do Window Maker
+Executando m√∫ltiplas inst√¢ncias do Window Maker
 ===============================================
 
-N„o È uma boa idÈia rodar mais de uma inst‚ncia do Window Maker sob
-um mesmo usu·rio ao mesmo tempo (j· que o wmaker usa os mesmos arquivos 
-de configuraÁ„o). VocÍ pode obter comportamentos inesperados quando o 
-Window Maker atualizar os seus arquivos de configuraÁ„o.
+N√£o √© uma boa id√©ia rodar mais de uma inst√¢ncia do Window Maker sob
+um mesmo usu√°rio ao mesmo tempo (j√° que o wmaker usa os mesmos arquivos 
+de configura√ß√£o). Voc√™ pode obter comportamentos inesperados quando o 
+Window Maker atualizar os seus arquivos de configura√ß√£o.
 
 
 Suporte para som
 ================
 
-O Som È suportado nos sistemas Linux e FreeBSD com o uso de mÛdulos
-distribuÌdos separadamente. VocÍ pode baix·-los no: 
+O Som √© suportado nos sistemas Linux e FreeBSD com o uso de m√≥dulos
+distribu√≠dos separadamente. Voc√™ pode baix√°-los no: 
 http://www.frontiernet.net/~southgat/wmsound
 
-Observe que vocÍ deve compilar o Window Maker usando o configure com a
-flag --enable-sound e definindo a opÁ„o DisableSound para NO.
+Observe que voc√™ deve compilar o Window Maker usando o configure com a
+flag --enable-sound e definindo a op√ß√£o DisableSound para NO.
 
 
 Ajuste da Performance
 ====================
 
-Se vocÍ deseja diminuir o uso de memÛria pelo Window Maker, aumentar a 
-performance, e ainda manter uma boa aparÍncia e funcionalidade, siga os
+Se voc√™ deseja diminuir o uso de mem√≥ria pelo Window Maker, aumentar a 
+performance, e ainda manter uma boa apar√™ncia e funcionalidade, siga os
 itens abaixo:
 
-- use texturas sÛlidas para tudo, barras de tÌtulos e menus. Se vocÍ quer
+- use texturas s√≥lidas para tudo, barras de t√≠tulos e menus. Se voc√™ quer
   um desktop com um belo visual, use o estilo "Traditional".
 - desligue o "NewStyle" e o "Superfluous"
-- n„o vincule muitos atalhos ao seu menu e guarde somente coisas essenciais
+- n√£o vincule muitos atalhos ao seu menu e guarde somente coisas essenciais
   no menu
 - ative o "DisableClip"
-- edite o wconfig.h e desative o NUMLOCK_HACK e as opÁıes que vocÍ n„o
-  usa mesmo (tenha em mente que alguns dos #defines podem n„o funcionar,
-  j· que eles n„o est„o completamente suportados). Certifique-se de sempre
+- edite o wconfig.h e desative o NUMLOCK_HACK e as op√ß√µes que voc√™ n√£o
+  usa mesmo (tenha em mente que alguns dos #defines podem n√£o funcionar,
+  j√° que eles n√£o est√£o completamente suportados). Certifique-se de sempre
   manter o NumLock e o ScrollLock desligados.
-- ligue a opÁ„o "DisableAnimations". VocÍ pode tambÈm usar o #undefine
+- ligue a op√ß√£o "DisableAnimations". Voc√™ pode tamb√©m usar o #undefine
   ANIMATIONS no arquivo config.h
-- verifique as entradas padr„o "IconPath" e "PixmapPath" para que contenham
-  somente os paths que vocÍ realmente possua no seu sistema.
-- n„o use imagens grandes no seu background root
-- remova o suporte para formatos de imagens que vocÍ n„o usa
-- para reduzir o uso de memÛria, desative o cache de Ìcones, definindo a
-  vari·vel de ambiente RIMAGE_CACHE para 0. Se vocÍ deseja melhorar o
-  desempenho perdendo sÛ um pouco de memÛria, defina essa vari·vel para
-  o valor correspondente ao n˙mero de Ìcones que vocÍ usa.
+- verifique as entradas padr√£o "IconPath" e "PixmapPath" para que contenham
+  somente os paths que voc√™ realmente possua no seu sistema.
+- n√£o use imagens grandes no seu background root
+- remova o suporte para formatos de imagens que voc√™ n√£o usa
+- para reduzir o uso de mem√≥ria, desative o cache de √≠cones, definindo a
+  vari√°vel de ambiente RIMAGE_CACHE para 0. Se voc√™ deseja melhorar o
+  desempenho perdendo s√≥ um pouco de mem√≥ria, defina essa vari√°vel para
+  o valor correspondente ao n√∫mero de √≠cones que voc√™ usa.
 
 
 Controle de Mouse pelo Teclado
 ==============================
 
 Muitas pessoas perguntam sobre adicionar o controle do mouse pelo teclado,
-como no fvwm, mas o Window Maker n„o possui tal opÁ„o. A extens„o XKB
-suporta a simulaÁ„o do mouse pelo teclado, de uma maneira muito mais 
-poderosa do que qualquer outra simulaÁ„o realizada por um gerenciador de 
+como no fvwm, mas o Window Maker n√£o possui tal op√ß√£o. A extens√£o XKB
+suporta a simula√ß√£o do mouse pelo teclado, de uma maneira muito mais 
+poderosa do que qualquer outra simula√ß√£o realizada por um gerenciador de 
 janelas.
 
-Para ativ·-la, aperte a combinaÁ„o Control+Shift+NumLock ou Shift+NumLock.
-VocÍ deve ent„o ouvir um beep. Para desativ·-la, faÁa a mesma coisa.
+Para ativ√°-la, aperte a combina√ß√£o Control+Shift+NumLock ou Shift+NumLock.
+Voc√™ deve ent√£o ouvir um beep. Para desativ√°-la, fa√ßa a mesma coisa.
 
 Para controlar com o mouse, use as seguintes teclas do keypad:
 - 4 (seta esquerda), 7 (Home), 8 (seta para cima), 9 (PgUp), 6 (seta direita), 
-3 (PgDn), 2 (seta para baixo) e 1 (End) move o mouse para as direÁıes
+3 (PgDn), 2 (seta para baixo) e 1 (End) move o mouse para as dire√ß√µes
 correspondentes;
 - segurar as teclas acima e depois segurar a tecla 5 vai fazer o ponteiro
-se mover mais r·pido;
-- / vai selecionar o primeiro bot„o do mouse (bot„o esquerdo);
-- * vai selecionar o segundo bot„o do mouse (bot„o do meio);
-- - vai selecionar o terceiro bot„o do mouse (bot„o direito);
-- 5 vai fazer um clique com o bot„o do mouse que foi selecionado;
-- + vai fazer um duplo-clique com o bot„o do mouse que foi selecionado;
-- 0 (Ins) vai clicar e segurar o bot„o do mouse selecionado;
-- . (Del) vai liberar o bot„o do mouse selecionado que foi previamente
+se mover mais r√°pido;
+- / vai selecionar o primeiro bot√£o do mouse (bot√£o esquerdo);
+- * vai selecionar o segundo bot√£o do mouse (bot√£o do meio);
+- - vai selecionar o terceiro bot√£o do mouse (bot√£o direito);
+- 5 vai fazer um clique com o bot√£o do mouse que foi selecionado;
+- + vai fazer um duplo-clique com o bot√£o do mouse que foi selecionado;
+- 0 (Ins) vai clicar e segurar o bot√£o do mouse selecionado;
+- . (Del) vai liberar o bot√£o do mouse selecionado que foi previamente
 clicado com a tecla 0 (Ins).
 
 Os valores das teclas acima funcionam com um servidor X XFree86 3.2 (X11R6.1)
@@ -274,13 +274,13 @@ Como fazer um backtrace com o gdb
 =================================
 
 Os backtraces nos ajudam a arrumar bugs que fazem com que o Window Maker
-trave. Se vocÍ achar um bug que trave o Window Maker, por favor envie o
+trave. Se voc√™ achar um bug que trave o Window Maker, por favor envie o
 backtrace com o relato do bug.
 
-Para fazer um backtrace ˙til, vocÍ precisa de um arquivo core
-com informaÁıes de depuraÁ„o produzidas pelo Window Maker quando ele
-travar.  O padr„o do Window Maker È iniciar um outro gerenciador
-de janelas quando ele travar, o que n„o gerar· um arquivo core. VocÍ
+Para fazer um backtrace √∫til, voc√™ precisa de um arquivo core
+com informa√ß√µes de depura√ß√£o produzidas pelo Window Maker quando ele
+travar.  O padr√£o do Window Maker √© iniciar um outro gerenciador
+de janelas quando ele travar, o que n√£o gerar√° um arquivo core. Voc√™
 precisa editar o arquivo src/wconfig.h *depois* de ter rodado o configure
 e mudar a linha que se parece com o seguinte:
 
@@ -290,7 +290,7 @@ para:
 
 #define NO_EMERGENCY_AUTORESTART
 
-Depois, no diretÛrio src, digite:
+Depois, no diret√≥rio src, digite:
 make clean
 make CFLAGS=-g
 make install
@@ -298,8 +298,8 @@ make install
 e espere o Window Maker ser instalado.
 
 Depois de instalado o Window Maker, inicie o X e reproduza o bug fazendo
-com que o Window Maker trave. Quando ele travar, v· atÈ o diretÛrio
-onde vocÍ compilou o wmaker e digite o seguinte comando na sua shell:
+com que o Window Maker trave. Quando ele travar, v√° at√© o diret√≥rio
+onde voc√™ compilou o wmaker e digite o seguinte comando na sua shell:
 
 script
 cd src
@@ -308,25 +308,25 @@ gdb .libs/wmaker path_ao_arquivo_core
 Depois, no prompt do gdb, digite "bt". Saia do gdb digitando "quit"
 e depois no prompt da shell, digite "exit".
 
-O arquivo chamado typescript conter· o backtrace.
+O arquivo chamado typescript conter√° o backtrace.
 
 
 
 Direitos Autorais & Disclaimers
 ===============================
 
-O Window Maker È registrado por Alfredo K. Kojima e È licenciado pela LicenÁa
-P˙blica Geral GNU. Leia o arquivo COPYING para ler a licenÁa completa.
+O Window Maker √© registrado por Alfredo K. Kojima e √© licenciado pela Licen√ßa
+P√∫blica Geral GNU. Leia o arquivo COPYING para ler a licen√ßa completa.
 
-Os Ìcones que s„o distribuÌdos com esse programa foram criados por Marco
-van Hylckama Vlieg s„o licenciados pela OpenContent License. Leia o
-arquivo COPYING.OPL para a licenÁa completa.
+Os √≠cones que s√£o distribu√≠dos com esse programa foram criados por Marco
+van Hylckama Vlieg s√£o licenciados pela OpenContent License. Leia o
+arquivo COPYING.OPL para a licen√ßa completa. 
 
-NeXT, OpenStep e NEXTSTEP s„o marcas da NeXT Computer, Inc.
-Todas as outras marcas s„o propriedade dos respectivos donos.
+NeXT, OpenStep e NEXTSTEP s√£o marcas da NeXT Computer, Inc.
+Todas as outras marcas s√£o propriedade dos respectivos donos.
 
-Os autores se reservam no direito de fazer alteraÁıes no software sem
-qualquer aviso prÈvio.
+Os autores se reservam no direito de fazer altera√ß√µes no software sem
+qualquer aviso pr√©vio.
 
 
 Autores
@@ -336,15 +336,15 @@ Alfredo K. Kojima <kojima@windowmaker.info>
 Dan Pascu <dan@windowmaker.info>
 ]d <id@windowmaker.info>
 
-Por favor n„o nos perguntem coisas antes de ler a documentaÁ„o (o FAQ,
-este arquivo e os arquivos INSTALL), ou sobre coisas "legais" que vocÍ
+Por favor n√£o nos perguntem coisas antes de ler a documenta√ß√£o (o FAQ,
+este arquivo e os arquivos INSTALL), ou sobre coisas "legais" que voc√™
 viu em screenshots de desktops.
 
-O arquivo AUTHORS contem uma lista de pessoas que contribuÌram com o projeto.
-O nome das pessoas que ajudaram com a traduÁ„o pode ser achado no po/README e
+O arquivo AUTHORS contem uma lista de pessoas que contribu√≠ram com o projeto.
+O nome das pessoas que ajudaram com a tradu√ß√£o pode ser achado no po/README e
 Window Maker/README
 
-Se vocÍ tem algum coment·rio, correÁ„o ou deseja relatar bugs (junto com
+Se voc√™ tem algum coment√°rio, corre√ß√£o ou deseja relatar bugs (junto com
 o BUGFORM) mande-os para developers@windowmaker.info
 
 
