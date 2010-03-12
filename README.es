@@ -204,19 +204,6 @@ Si de verdad desea hacer esto, intente ejecutar Window Maker con la opción
 de linea de comando --static ya que así no actualizará o cambiará ninguno de los
 archivos de configuración.
 
-Soporte para Sonido
-===================
-
-El sonido es soportado por los sistemas Linux y FreeBSD con el uso de 
-un módulo distribuido separadamente llamado WSoundServer. Hay también 
-una herramienta de configuracion gráfica para definir sus sonidos llamada
-WSoundPref.
-Puede bajar esto en:
-http://shadowmere.student.utwente.nl/
-
-Note que debe compilar Window Maker con el parámetro --enable-sound
-y definir la opción DisableSound a NO.
-
 
 Ajuste de Rendimiento.
 =====================
