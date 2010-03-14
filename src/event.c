@@ -765,7 +765,7 @@ static void handleButtonPress(XEvent * event)
 	if (desc->parent_type == WCLASS_WINDOW) {
 		XSync(dpy, 0);
 
-		if (event->xbutton.state & MOD_MASK) {
+		if (event->xbutton.state & ( MOD_MASK | ControlMask )) {
 			XAllowEvents(dpy, AsyncPointer, CurrentTime);
 		}
 

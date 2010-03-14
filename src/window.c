@@ -2573,6 +2573,13 @@ void wWindowResetMouseGrabs(WWindow * wwin)
 		wHackedGrabButton(AnyButton, MOD_MASK, wwin->client_win,
 				  True, ButtonPressMask | ButtonReleaseMask,
 				  GrabModeSync, GrabModeAsync, None, None);
+		// for CTRL + Wheel to Scroll Horiz, we have to grab CTRL as well
+		wHackedGrabButton(AnyButton, ControlMask, wwin->client_win,
+				  True, ButtonPressMask | ButtonReleaseMask,
+				  GrabModeSync, GrabModeAsync, None, None);
+		wHackedGrabButton(AnyButton, MOD_MASK | ControlMask, wwin->client_win,
+				  True, ButtonPressMask | ButtonReleaseMask,
+				  GrabModeSync, GrabModeAsync, None, None);
 	}
 
 	if (!wwin->flags.focused && !WFLAGP(wwin, no_focusable)
@@ -2888,6 +2895,31 @@ static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 	if (event->xbutton.button == Button1)
 		wRaiseFrame(wwin->frame->core);
 
+	if (event->xbutton.state & ControlMask) {
+		if (event->xbutton.button == Button1) {
+			if (wwin->screen_ptr->current_workspace > 0) {
+				wWindowChangeWorkspace(wwin,wwin->screen_ptr->current_workspace - 1);
+				wWorkspaceRelativeChange(wwin->screen_ptr,-1);
+			}
+		}
+		if (event->xbutton.button == Button3) {
+			if (wwin->screen_ptr->current_workspace < (wwin->screen_ptr->workspace_count - 1) ) {
+				wWindowChangeWorkspace(wwin,wwin->screen_ptr->current_workspace + 1);
+				wWorkspaceRelativeChange(wwin->screen_ptr,1);
+			}
+		}
+		if (event->xbutton.button == Button4) {
+			new_width = wwin->client.width - resize_width_increment;
+			wWindowConstrainSize(wwin, &new_width, &wwin->client.height);
+			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, new_width, wwin->client.height);
+		}
+		if (event->xbutton.button == Button5) {
+			new_width = wwin->client.width + resize_width_increment;
+			wWindowConstrainSize(wwin, &new_width, &wwin->client.height);
+			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, new_width, wwin->client.height);
+		}
+	}
+
 	if (event->xbutton.state & MOD_MASK) {
 		/* move the window */
 		if (XGrabPointer(dpy, wwin->client_win, False,
@@ -2901,15 +2933,13 @@ static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 		if (event->xbutton.button == Button3) {
 			wMouseResizeWindow(wwin, event);
 		} else if (event->xbutton.button == Button4) {
-			new_width = wwin->client.width - resize_width_increment;
 			new_height = wwin->client.height - resize_height_increment;
-			wWindowConstrainSize(wwin, &new_width,&new_height);
-			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, new_width, new_height);
+			wWindowConstrainSize(wwin, &wwin->client.width, &new_height);
+			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, wwin->client.width, new_height);
 		} else if (event->xbutton.button == Button5) {
-			new_width = wwin->client.width + resize_width_increment;
 			new_height = wwin->client.height + resize_height_increment;
-			wWindowConstrainSize(wwin, &new_width,&new_height);
-			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, new_width, new_height);
+			wWindowConstrainSize(wwin, &wwin->client.width, &new_height);
+			wWindowConfigure(wwin, wwin->frame_x, wwin->frame_y, wwin->client.width, new_height);
 		} else if (event->xbutton.button == Button1 || event->xbutton.button == Button2) {
 			wMouseMoveWindow(wwin, event);
 		}
