@@ -2573,11 +2573,22 @@ void wWindowResetMouseGrabs(WWindow * wwin)
 		wHackedGrabButton(AnyButton, MOD_MASK, wwin->client_win,
 				  True, ButtonPressMask | ButtonReleaseMask,
 				  GrabModeSync, GrabModeAsync, None, None);
-		// for CTRL + Wheel to Scroll Horiz, we have to grab CTRL as well
-		wHackedGrabButton(AnyButton, ControlMask, wwin->client_win,
+
+		/* for CTRL+Wheel to Scroll Horiz, we have to grab CTRL as well
+		 * but we only grab it for Button4 and Button 5 since a lot of apps
+		 * use CTRL+Button1-3 for app related functionality
+		 */
+		wHackedGrabButton(Button4, ControlMask, wwin->client_win,
 				  True, ButtonPressMask | ButtonReleaseMask,
 				  GrabModeSync, GrabModeAsync, None, None);
-		wHackedGrabButton(AnyButton, MOD_MASK | ControlMask, wwin->client_win,
+		wHackedGrabButton(Button5, ControlMask, wwin->client_win,
+				  True, ButtonPressMask | ButtonReleaseMask,
+				  GrabModeSync, GrabModeAsync, None, None);
+
+		wHackedGrabButton(Button4, MOD_MASK | ControlMask, wwin->client_win,
+				  True, ButtonPressMask | ButtonReleaseMask,
+				  GrabModeSync, GrabModeAsync, None, None);
+		wHackedGrabButton(Button5, MOD_MASK | ControlMask, wwin->client_win,
 				  True, ButtonPressMask | ButtonReleaseMask,
 				  GrabModeSync, GrabModeAsync, None, None);
 	}
@@ -2896,18 +2907,6 @@ static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 		wRaiseFrame(wwin->frame->core);
 
 	if (event->xbutton.state & ControlMask) {
-		if (event->xbutton.button == Button1) {
-			if (wwin->screen_ptr->current_workspace > 0) {
-				wWindowChangeWorkspace(wwin,wwin->screen_ptr->current_workspace - 1);
-				wWorkspaceRelativeChange(wwin->screen_ptr,-1);
-			}
-		}
-		if (event->xbutton.button == Button3) {
-			if (wwin->screen_ptr->current_workspace < (wwin->screen_ptr->workspace_count - 1) ) {
-				wWindowChangeWorkspace(wwin,wwin->screen_ptr->current_workspace + 1);
-				wWorkspaceRelativeChange(wwin->screen_ptr,1);
-			}
-		}
 		if (event->xbutton.button == Button4) {
 			new_width = wwin->client.width - resize_width_increment;
 			wWindowConstrainSize(wwin, &new_width, &wwin->client.height);
