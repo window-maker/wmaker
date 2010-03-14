@@ -2,6 +2,43 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.94.0-crm
+
+New Resizing functionality
+--------------------------
+
+You can now use the mouse wheel and modifier keys to resize windows.
+MOD+Wheel will resize windows vertically and CTRL+Wheel will resize
+windows horizontally. MOD+CTRL+Wheel will resize both at the same time.
+The resize step, or increment can be set in WPrefs in the "Window Handling"
+page, or in the config file with "ResizeIncrement". If this intrudes into
+a specific application's functionality, you can disable it on an application-
+by-application basis by setting the "Do not bind mouse clicks" attribute in
+"Advanced Options".
+
+New Maximize functionality
+--------------------------
+
+Maximus/Maximumize. A new tiled maximization, configured with a keyboard
+shortcut. Using it will maximize the window to the greatest area such that it
+will not overlap any other window of the same workspace. This can be configured
+in WPrefs in the "Keyboard Shortcuts" page, or in the config file with
+"MaximusKey".
+
+Left/right maximization. Now wmaker supports maximizing a window to the
+left or right half of the screen, making it occupy 50% of the area. This is
+useful on widescreen displays where you want to bring up two windows side-by-
+side. The shortcut keys for this can be configured in WPrefs in the "Keyboard
+Shortcuts" page, or in the config file with "LHMaximizeKey" and "RHMaximizeKey"
+
+AutoComplete in the run dialog
+------------------------------
+
+The "Run" (%A) dialog now autocompletes executables in your path. It can also
+complete folder names if you start the complete with a "/"
+
+
+
 --- 0.92.0
 
 GNUstep Installation Directory
