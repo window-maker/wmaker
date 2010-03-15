@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 	}
 
 	if (argc == 2) {
-		WMWritePropListToFile(iconset, argv[1], False);
+		WMWritePropListToFile(iconset, argv[1]);
 	} else {
 		puts(WMGetPropListDescription(iconset, True));
 	}

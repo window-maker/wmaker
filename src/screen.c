@@ -967,7 +967,7 @@ void wScreenSaveState(WScreen * scr)
 		snprintf(buf, sizeof(buf), "WMState.%i", scr->screen);
 		str = wdefaultspathfordomain(buf);
 	}
-	if (!WMWritePropListToFile(scr->session_state, str, True)) {
+	if (!WMWritePropListToFile(scr->session_state, str)) {
 		wsyserror(_("could not save session state in %s"), str);
 	}
 	wfree(str);

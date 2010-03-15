@@ -225,7 +225,7 @@ static void SaveHistory(WMArray * history, char *filename)
 	for (i = 0; i < WMGetArrayItemCount(history); ++i)
 		WMAddToPLArray(plhistory, WMCreatePLString(WMGetFromArray(history, i)));
 
-	WMWritePropListToFile(plhistory, (char *)filename, True);
+	WMWritePropListToFile(plhistory, (char *)filename);
 	WMReleasePropList(plhistory);
 }
 

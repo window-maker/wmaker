@@ -1677,7 +1677,7 @@ static void storeData(_Panel * panel)
 
 	menu = buildPLFromMenu(panel);
 
-	WMWritePropListToFile(menu, panel->menuPath, True);
+	WMWritePropListToFile(menu, panel->menuPath);
 
 	WMReleasePropList(menu);
 }

@@ -149,7 +149,7 @@ static void save(WMWidget * w, void *data)
 	WMReleasePropList(keyList);
 	/*    puts("storing data"); */
 
-	WMWritePropListToFile(WindowMakerDB, WindowMakerDBPath, True);
+	WMWritePropListToFile(WindowMakerDB, WindowMakerDBPath);
 
 	memset(&ev, 0, sizeof(XEvent));
 

@@ -837,7 +837,7 @@ char* WMGetPropListDescription(WMPropList *plist, Bool indented);
 
 WMPropList* WMReadPropListFromFile(char *file);
 
-Bool WMWritePropListToFile(WMPropList *plist, char *path, Bool atomically);
+Bool WMWritePropListToFile(WMPropList *plist, char *path);
 
 /*......................................................................*/
 

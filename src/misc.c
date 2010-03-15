@@ -1080,7 +1080,7 @@ Bool UpdateDomainFile(WDDomain * domain)
 		}
 	}
 
-	result = WMWritePropListToFile(dict, domain->path, True);
+	result = WMWritePropListToFile(dict, domain->path);
 
 	if (freeDict) {
 		WMReleasePropList(dict);

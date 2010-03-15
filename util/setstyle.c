@@ -536,7 +536,7 @@ int main(int argc, char **argv)
 
 	WMMergePLDictionaries(prop, style, True);
 
-	WMWritePropListToFile(prop, path, True);
+	WMWritePropListToFile(prop, path);
 	{
 		XEvent ev;
 

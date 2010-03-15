@@ -152,10 +152,10 @@ void WMSynchronizeUserDefaults(WMUserDefaults * database)
 			} else {
 				/* something happened with the file. just overwrite it */
 				wwarning(_("cannot read domain from file '%s' when syncing"), path);
-				WMWritePropListToFile(database->appDomain, path, True);
+				WMWritePropListToFile(database->appDomain, path);
 			}
 		} else if (database->dirty) {
-			WMWritePropListToFile(database->appDomain, path, True);
+			WMWritePropListToFile(database->appDomain, path);
 		} else if (fileIsNewer) {
 			plF = WMReadPropListFromFile(path);
 			if (plF) {
@@ -167,7 +167,7 @@ void WMSynchronizeUserDefaults(WMUserDefaults * database)
 			} else {
 				/* something happened with the file. just overwrite it */
 				wwarning(_("cannot read domain from file '%s' when syncing"), path);
-				WMWritePropListToFile(database->appDomain, path, True);
+				WMWritePropListToFile(database->appDomain, path);
 			}
 		}
 
@@ -199,7 +199,7 @@ void WMSaveUserDefaults(WMUserDefaults * database)
 		} else {
 			path = database->path;
 		}
-		WMWritePropListToFile(database->appDomain, path, True);
+		WMWritePropListToFile(database->appDomain, path);
 		database->dirty = 0;
 		if (stat(path, &stbuf) >= 0)
 			database->timestamp = stbuf.st_mtime;

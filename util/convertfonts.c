@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 		WMReleasePropList(key);
 	}
 
-	WMWritePropListToFile(style, file, True);
+	WMWritePropListToFile(style, file);
 
 	exit(0);
 }

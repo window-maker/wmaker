@@ -612,11 +612,11 @@ int main(int argc, char **argv)
 		path = wmalloc(strlen(ThemePath) + 32);
 		strcpy(path, ThemePath);
 		strcat(path, "/style");
-		WMWritePropListToFile(style, path, False);
+		WMWritePropListToFile(style, path);
 		wfree(path);
 	} else {
 		if (style_file) {
-			WMWritePropListToFile(style, style_file, False);
+			WMWritePropListToFile(style, style_file);
 		} else {
 			puts(WMGetPropListDescription(style, True));
 		}

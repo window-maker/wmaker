@@ -115,7 +115,7 @@ typedef WMPropList* proplist_t;
 #define PLGetDataDescription(pl) WMGetPropListDescription(pl, False)
 
 #define PLGetProplistWithPath(file) WMReadPropListFromFile(file)
-#define PLSave(pl, file, atm) WMWritePropListToFile(pl, file, atm)
+#define PLSave(pl, file, atm) WMWritePropListToFile(pl, file)
 
 
 /* Unsupported functions. Do not ask for them. They're evil :P */

@@ -124,7 +124,7 @@ int main(int argc, char **argv)
 		WMPutInPLDictionary(dict, key, value);
 	}
 
-	WMWritePropListToFile(dict, path, True);
+	WMWritePropListToFile(dict, path);
 	wfree(path);
 
 	return 0;

@@ -135,7 +135,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	WMWritePropListToFile(all_windows, path, True);
+	WMWritePropListToFile(all_windows, path);
 
 	exit(0);
 }

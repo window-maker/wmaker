@@ -1551,47 +1551,41 @@ WMPropList *WMReadPropListFromFile(char *file)
 
 /* TODO: review this function's code */
 
-Bool WMWritePropListToFile(WMPropList * plist, char *path, Bool atomically)
+Bool WMWritePropListToFile(WMPropList * plist, char *path)
 {
 	char *thePath = NULL;
 	char *desc;
 	FILE *theFile;
+#ifdef	HAVE_MKSTEMP
+	int fd, mask;
+#endif
 
 	if (!WMMkDirHier(path))
 		return False;
 
-	if (atomically) {
-#ifdef	HAVE_MKSTEMP
-		int fd, mask;
-#endif
-
-		/* Use the path name of the destination file as a prefix for the
-		 * mkstemp() call so that we can be sure that both files are on
-		 * the same filesystem and the subsequent rename() will work. */
-		thePath = wstrconcat(path, ".XXXXXX");
+	/* Use the path name of the destination file as a prefix for the
+	 * mkstemp() call so that we can be sure that both files are on
+	 * the same filesystem and the subsequent rename() will work. */
+	thePath = wstrconcat(path, ".XXXXXX");
 
 #ifdef  HAVE_MKSTEMP
-		if ((fd = mkstemp(thePath)) < 0) {
-			wsyserror(_("mkstemp (%s) failed"), thePath);
-			goto failure;
-		}
-		mask = umask(0);
-		umask(mask);
-		fchmod(fd, 0644 & ~mask);
-		if ((theFile = fdopen(fd, "wb")) == NULL) {
-			close(fd);
-		}
-#else
-		if (mktemp(thePath) == NULL) {
-			wsyserror(_("mktemp (%s) failed"), thePath);
-			goto failure;
-		}
-		theFile = fopen(thePath, "wb");
-#endif
-	} else {
-		thePath = wstrdup(path);
-		theFile = fopen(thePath, "wb");
+	if ((fd = mkstemp(thePath)) < 0) {
+		wsyserror(_("mkstemp (%s) failed"), thePath);
+		goto failure;
 	}
+	mask = umask(0);
+	umask(mask);
+	fchmod(fd, 0644 & ~mask);
+	if ((theFile = fdopen(fd, "wb")) == NULL) {
+		close(fd);
+	}
+#else
+	if (mktemp(thePath) == NULL) {
+		wsyserror(_("mktemp (%s) failed"), thePath);
+		goto failure;
+	}
+	theFile = fopen(thePath, "wb");
+#endif
 
 	if (theFile == NULL) {
 		wsyserror(_("open (%s) failed"), thePath);
@@ -1616,22 +1610,17 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path, Bool atomically)
 	/* If we used a temporary file, we still need to rename() it be the
 	 * real file.  Also, we need to try to retain the file attributes of
 	 * the original file we are overwriting (if we are) */
-	if (atomically) {
-		if (rename(thePath, path) != 0) {
-			wsyserror(_("rename ('%s' to '%s') failed"), thePath, path);
-			goto failure;
-		}
+	if (rename(thePath, path) != 0) {
+		wsyserror(_("rename ('%s' to '%s') failed"), thePath, path);
+		goto failure;
 	}
 
 	wfree(thePath);
 	return True;
 
  failure:
-	if (atomically) {
-		unlink(thePath);
-		wfree(thePath);
-	}
-
+	unlink(thePath);
+	wfree(thePath);
 	return False;
 }
 
