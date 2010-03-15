@@ -136,15 +136,10 @@ void wSetFocusTo(WScreen * scr, WWindow * wwin)
 
 	if (wwin == NULL) {
 		XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, CurrentTime);
-		if (old_focused) {
+		if (old_focused)
 			wWindowUnfocus(old_focused);
-		}
-		if (oapp) {
+		if (oapp)
 			wAppMenuUnmap(oapp->menu);
-#ifdef NEWAPPICON
-			wApplicationDeactivate(oapp);
-#endif
-		}
 
 		WMPostNotificationName(WMNChangedFocus, NULL, (void *)True);
 		return;
@@ -205,12 +200,8 @@ void wSetFocusTo(WScreen * scr, WWindow * wwin)
 		wwin->next = NULL;
 		scr->focused_window = wwin;
 
-		if (oapp && oapp != napp) {
+		if (oapp && oapp != napp)
 			wAppMenuUnmap(oapp->menu);
-#ifdef NEWAPPICON
-			wApplicationDeactivate(oapp);
-#endif
-		}
 	}
 
 	wWindowFocus(wwin, focused);
@@ -222,9 +213,6 @@ void wSetFocusTo(WScreen * scr, WWindow * wwin)
 
 		if (wwin->flags.mapped)
 			wAppMenuMap(napp->menu, wwin);
-#ifdef NEWAPPICON
-		wApplicationActivate(napp);
-#endif
 	}
 
 	XFlush(dpy);

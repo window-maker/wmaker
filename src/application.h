@@ -57,18 +57,5 @@ WApplication *wApplicationOf(Window window);
 
 void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance,
                                     char *wm_class);
-
-#ifdef NEWAPPICON
-
-# define wApplicationActivate(wapp)	{\
-    wapp->main_window_desc->flags.focused=1; \
-    wAppIconPaint(wapp->app_icon);\
-    }
-#define wApplicationDeactivate(wapp)	{\
-    wapp->main_window_desc->flags.focused=0;\
-    wAppIconPaint(wapp->app_icon);\
-    }
-#endif
-
 #endif
 

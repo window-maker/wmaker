@@ -189,28 +189,6 @@ void wAppIconDestroy(WAppIcon * aicon)
 	wrelease(aicon);
 }
 
-#ifdef NEWAPPICON
-static void drawCorner(WIcon * icon, WWindow * wwin, int active)
-{
-	WScreen *scr = wwin->screen_ptr;
-	XPoint points[3];
-	GC gc;
-
-	points[0].x = 2;
-	points[0].y = 2;
-	points[1].x = 12;
-	points[1].y = 2;
-	points[2].x = 2;
-	points[2].y = 12;
-	if (active) {
-		gc = scr->focused_texture->any.gc;
-	} else {
-		gc = scr->unfocused_texture->any.gc;
-	}
-	XFillPolygon(dpy, icon->core->window, gc, points, 3, Convex, CoordModeOrigin);
-}
-#endif				/* NEWAPPICON */
-
 static void drawCorner(WIcon * icon)
 {
 	WScreen *scr = icon->core->screen_ptr;
