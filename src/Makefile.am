@@ -4,11 +4,7 @@ BUILT_SOURCES = wconfig.h
 
 bin_PROGRAMS = wmaker
 
-#noinst_PROGRAMS = wsmap
-
 EXTRA_DIST = 
-
-#wsmap_SOURCES= wsmap.c
 
 wmaker_SOURCES = 	\
 	GNUstep.h \
@@ -123,15 +119,6 @@ wmaker_LDADD = \
 	@XLIBS@ \
 	@INTLIBS@ \
 	@DLLIBS@
-
-#wsmap_LDADD = \
-#	$(top_builddir)/WINGs/libWINGs.a\
-#	$(top_builddir)/wrlib/libwraster.la\
-#	@XLFLAGS@ \
-#	@XFTLIBS@ \
-#	@XLIBS@ \
-#	@INTLIBS@ \
-#	@DLLIBS@
 
 LIBTOOL = $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
 
