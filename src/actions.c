@@ -112,7 +112,7 @@ static void shade_animate(WWindow *wwin, Bool what) { }
  *
  *----------------------------------------------------------------------
  */
-void wSetFocusTo(WScreen * scr, WWindow * wwin)
+void wSetFocusTo(WScreen *scr, WWindow *wwin)
 {
 	static WScreen *old_scr = NULL;
 
@@ -275,9 +275,6 @@ void wUnshadeWindow(WWindow *wwin)
 	wwin->client.y = wwin->frame_y + wwin->frame->top_width;
 	wWindowSynthConfigureNotify(wwin);
 
-	/*
-	   wClientSetState(wwin, NormalState, None);
-	 */
 	/* if the window is focused, set the focus again as it was disabled during
 	 * shading */
 	if (wwin->flags.focused)
@@ -295,7 +292,7 @@ static void save_old_geometry(WWindow *wwin)
 	wwin->old_geometry.y = wwin->frame_y;
 }
 
-void wMaximizeWindow(WWindow * wwin, int directions)
+void wMaximizeWindow(WWindow *wwin, int directions)
 {
 	int new_x, new_y;
 	unsigned int new_width, new_height, half_scr_width;
@@ -413,10 +410,10 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 	int y_0            = wwin->frame_y;
 	int width_0        = wwin->frame->core->width;
 	int height_0       = wwin->frame->core->height;
-	int botton_0       = y_0 + height_0;
+	int bottom_0       = y_0 + height_0;
 	int right_border_0 = x_0 + width_0;
-	int new_x_0, new_y_0, new_botton_0, new_right_border_0, new_height_0;
-	int x_j,  y_j, width_j, height_j, botton_j, top_j, right_border_j;
+	int new_x_0, new_y_0, new_bottom_0, new_right_border_0, new_height_0;
+	int x_j,  y_j, width_j, height_j, bottom_j, top_j, right_border_j;
 	int x_intsect, y_intsect;
 	short int tbar_height_0 = 0, rbar_height_0 = 0;
 	short int bd_width_0 = 0;
@@ -425,7 +422,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 	/* Try to fully maximize first, then readjust later */
 	new_x_0            = usableArea.x1;
 	new_y_0            = usableArea.y1;
-	new_botton_0       = usableArea.y2;
+	new_bottom_0       = usableArea.y2;
 	new_right_border_0 = usableArea.x2;
 
 	if (HAS_TITLEBAR(wwin))
@@ -459,7 +456,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 		y_j = tmp->frame_y;
 		width_j = tmp->frame->core->width;
 		height_j = tmp->frame->core->height;
-		botton_j = y_j + height_j;
+		bottom_j = y_j + height_j;
 		top_j = y_j;
 		right_border_j = x_j + width_j;
 
@@ -467,11 +464,10 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 		x_intsect = calcIntersectionLength(x_0, width_0, x_j, width_j);
 		if (x_intsect != 0) {
 			/* TODO: Consider the case when coords are equal */
-			if (botton_j < y_0 && botton_j > new_y_0) {
-				/* w_0 is below the botton of w_j */
-				new_y_0 = botton_j + 1;
+			if (bottom_j < y_0 && bottom_j > new_y_0) {
+				/* w_0 is below the bottom of w_j */
+				new_y_0 = bottom_j + 1;
 			}
-
 			if (bottom_0 < top_j && top_j < new_bottom_0) {
 				/* The bottom of w_0 is above the top of w_j */
 				new_bottom_0 = top_j - 1;
@@ -493,7 +489,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 		y_j = tmp->frame_y;
 		width_j = tmp->frame->core->width;
 		height_j = tmp->frame->core->height;
-		botton_j = y_j + height_j;
+		bottom_j = y_j + height_j;
 		top_j = y_j;
 		right_border_j = x_j + width_j;
 
@@ -502,7 +498,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 		 * the possibility that the new value of y_0 will have different
 		 * intersections with w_j
 		 */
-		new_height_0 = new_botton_0 - new_y_0 - adjust_height;
+		new_height_0 = new_bottom_0 - new_y_0 - adjust_height;
 		y_intsect = calcIntersectionLength(new_y_0, new_height_0, y_j, height_j);
 		if (y_intsect != 0) {
 			if (right_border_j < x_0 && right_border_j > new_x_0) {
@@ -524,7 +520,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 	*new_width = new_right_border_0 - new_x_0;
 }
 
-void wUnmaximizeWindow(WWindow * wwin)
+void wUnmaximizeWindow(WWindow *wwin)
 {
 	int x, y, w, h;
         WMRect old_geom_rect;
@@ -553,7 +549,7 @@ void wUnmaximizeWindow(WWindow * wwin)
 	WMPostNotificationName(WMNChangedState, wwin, "maximize");
 }
 
-void wFullscreenWindow(WWindow * wwin)
+void wFullscreenWindow(WWindow *wwin)
 {
 	int head;
 	WMRect rect;
@@ -579,7 +575,7 @@ void wFullscreenWindow(WWindow * wwin)
 	WMPostNotificationName(WMNChangedState, wwin, "fullscreen");
 }
 
-void wUnfullscreenWindow(WWindow * wwin)
+void wUnfullscreenWindow(WWindow *wwin)
 {
 	if (!wwin->flags.fullscreen)
 		return;
@@ -609,7 +605,7 @@ void wUnfullscreenWindow(WWindow * wwin)
 }
 
 #ifdef ANIMATIONS
-static void animateResizeFlip(WScreen * scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh, int steps)
+static void animateResizeFlip(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh, int steps)
 {
 #define FRAMES (MINIATURIZE_ANIMATION_FRAMES_F)
 	float cx, cy, cw, ch;
@@ -670,7 +666,7 @@ static void animateResizeFlip(WScreen * scr, int x, int y, int w, int h, int fx,
 #undef FRAMES
 
 static void
-animateResizeTwist(WScreen * scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh, int steps)
+animateResizeTwist(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh, int steps)
 {
 #define FRAMES (MINIATURIZE_ANIMATION_FRAMES_T)
 	float cx, cy, cw, ch;
@@ -732,7 +728,7 @@ animateResizeTwist(WScreen * scr, int x, int y, int w, int h, int fx, int fy, in
 
 #undef FRAMES
 
-static void animateResizeZoom(WScreen * scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh, int steps)
+static void animateResizeZoom(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh, int steps)
 {
 #define FRAMES (MINIATURIZE_ANIMATION_FRAMES_Z)
 	float cx[FRAMES], cy[FRAMES], cw[FRAMES], ch[FRAMES];
@@ -833,7 +829,7 @@ static void flushExpose()
 	XSync(dpy, 0);
 }
 
-static void unmapTransientsFor(WWindow * wwin)
+static void unmapTransientsFor(WWindow *wwin)
 {
 	WWindow *tmp;
 
@@ -860,7 +856,7 @@ static void unmapTransientsFor(WWindow * wwin)
 	}
 }
 
-static void mapTransientsFor(WWindow * wwin)
+static void mapTransientsFor(WWindow *wwin)
 {
 	WWindow *tmp;
 
@@ -888,20 +884,6 @@ static void mapTransientsFor(WWindow * wwin)
 	}
 }
 
-#if 0
-static void setupIconGrabs(WIcon * icon)
-{
-	/* setup passive grabs on the icon */
-	XGrabButton(dpy, Button1, AnyModifier, icon->core->window, True,
-		    ButtonPressMask, GrabModeSync, GrabModeAsync, None, None);
-	XGrabButton(dpy, Button2, AnyModifier, icon->core->window, True,
-		    ButtonPressMask, GrabModeSync, GrabModeAsync, None, None);
-	XGrabButton(dpy, Button3, AnyModifier, icon->core->window, True,
-		    ButtonPressMask, GrabModeSync, GrabModeAsync, None, None);
-	XSync(dpy, 0);
-}
-#endif
-
 static WWindow *recursiveTransientFor(WWindow * wwin)
 {
 	int i;
@@ -923,17 +905,6 @@ static WWindow *recursiveTransientFor(WWindow * wwin)
 
 	return wwin;
 }
-
-#if 0
-static void removeIconGrabs(WIcon * icon)
-{
-	/* remove passive grabs on the icon */
-	XUngrabButton(dpy, Button1, AnyModifier, icon->core->window);
-	XUngrabButton(dpy, Button2, AnyModifier, icon->core->window);
-	XUngrabButton(dpy, Button3, AnyModifier, icon->core->window);
-	XSync(dpy, 0);
-}
-#endif
 
 void wIconifyWindow(WWindow * wwin)
 {
@@ -1089,7 +1060,7 @@ void wIconifyWindow(WWindow * wwin)
 		wArrangeIcons(wwin->screen_ptr, True);
 }
 
-void wDeiconifyWindow(WWindow * wwin)
+void wDeiconifyWindow(WWindow *wwin)
 {
 	/* Let's avoid changing workspace while deiconifying */
 	ignore_wks_change = 1;
@@ -1219,7 +1190,7 @@ void wDeiconifyWindow(WWindow * wwin)
 	ignore_wks_change = 0;
 }
 
-static void hideWindow(WIcon * icon, int icon_x, int icon_y, WWindow * wwin, int animate)
+static void hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
 {
 	if (wwin->flags.miniaturized) {
 		if (wwin->icon) {
@@ -1255,7 +1226,7 @@ static void hideWindow(WIcon * icon, int icon_x, int icon_y, WWindow * wwin, int
 	WMPostNotificationName(WMNChangedState, wwin, "hide");
 }
 
-void wHideOtherApplications(WWindow * awin)
+void wHideOtherApplications(WWindow *awin)
 {
 	WWindow *wwin;
 	WApplication *tapp;
@@ -1296,7 +1267,7 @@ void wHideOtherApplications(WWindow * awin)
 	 */
 }
 
-void wHideApplication(WApplication * wapp)
+void wHideApplication(WApplication *wapp)
 {
 	WScreen *scr;
 	WWindow *wlist;
@@ -1366,7 +1337,7 @@ void wHideApplication(WApplication * wapp)
 #endif
 }
 
-static void unhideWindow(WIcon * icon, int icon_x, int icon_y, WWindow * wwin, int animate, int bringToCurrentWS)
+static void unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate, int bringToCurrentWS)
 {
 	if (bringToCurrentWS)
 		wWindowChangeWorkspace(wwin, wwin->screen_ptr->current_workspace);
@@ -1396,7 +1367,7 @@ static void unhideWindow(WIcon * icon, int icon_x, int icon_y, WWindow * wwin, i
 	WMPostNotificationName(WMNChangedState, wwin, "hide");
 }
 
-void wUnhideApplication(WApplication * wapp, Bool miniwindows, Bool bringToCurrentWS)
+void wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurrentWS)
 {
 	WScreen *scr;
 	WWindow *wlist, *next;
@@ -1494,7 +1465,7 @@ void wUnhideApplication(WApplication * wapp, Bool miniwindows, Bool bringToCurre
 #endif
 }
 
-void wShowAllWindows(WScreen * scr)
+void wShowAllWindows(WScreen *scr)
 {
 	WWindow *wwin, *old_foc;
 	WApplication *wapp;
@@ -1522,7 +1493,7 @@ void wShowAllWindows(WScreen * scr)
 	/*wRaiseFrame(old_foc->frame->core); */
 }
 
-void wRefreshDesktop(WScreen * scr)
+void wRefreshDesktop(WScreen *scr)
 {
 	Window win;
 	XSetWindowAttributes attr;
@@ -1537,7 +1508,7 @@ void wRefreshDesktop(WScreen * scr)
 	XFlush(dpy);
 }
 
-void wArrangeIcons(WScreen * scr, Bool arrangeAll)
+void wArrangeIcons(WScreen *scr, Bool arrangeAll)
 {
 	WWindow *wwin;
 	WAppIcon *aicon;
@@ -1562,13 +1533,8 @@ void wArrangeIcons(WScreen * scr, Bool arrangeAll)
 	vars = (struct HeadVars *)wmalloc(sizeof(struct HeadVars) * heads);
 
 	for (head = 0; head < heads; ++head) {
-#if 0
-		WMRect rect = wGetRectForHead(scr, head);
-#else
 		WArea area = wGetUsableAreaForHead(scr, head, NULL, False);
 		WMRect rect = wmkrect(area.x1, area.y1, area.x2 - area.x1, area.y2 - area.y1);
-#endif
-
 		vars[head].pi = vars[head].si = 0;
 		vars[head].sx1 = rect.pos.x;
 		vars[head].sy1 = rect.pos.y;
@@ -1576,16 +1542,6 @@ void wArrangeIcons(WScreen * scr, Bool arrangeAll)
 		vars[head].sh = rect.size.height;
 		vars[head].sx2 = vars[head].sx1 + vars[head].sw;
 		vars[head].sy2 = vars[head].sy1 + vars[head].sh;
-
-#if 0
-		if (scr->dock) {
-			if (scr->dock->on_right_side)
-				vars[head].sx2 -= isize + DOCK_EXTRA_SPACE;
-			else
-				vars[head].sx1 += isize + DOCK_EXTRA_SPACE;
-		}
-#endif
-
 		vars[head].sw = isize * (vars[head].sw / isize);
 		vars[head].sh = isize * (vars[head].sh / isize);
 		vars[head].fullW = (vars[head].sx2 - vars[head].sx1) / isize;
@@ -1699,7 +1655,7 @@ void wArrangeIcons(WScreen * scr, Bool arrangeAll)
 	wfree(vars);
 }
 
-void wSelectWindow(WWindow * wwin, Bool flag)
+void wSelectWindow(WWindow *wwin, Bool flag)
 {
 	WScreen *scr = wwin->screen_ptr;
 
@@ -1728,7 +1684,7 @@ void wSelectWindow(WWindow * wwin, Bool flag)
 	}
 }
 
-void wMakeWindowVisible(WWindow * wwin)
+void wMakeWindowVisible(WWindow *wwin)
 {
 	if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
 		wWorkspaceChange(wwin->screen_ptr, wwin->frame->workspace);
