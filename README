@@ -79,9 +79,6 @@ internationalization related questions.
 * NEWS: list user visible changes from the previous version. Read it if
 you are upgrading.
 
-* MIRRORS: some alternative places where you can get Window Maker,
-including platform specific packages of Window Maker.
-
 * BUGFORM: use it to send bug reports. Please do use it.
 
 * ChangeLog: what changed from the previous version?
@@ -145,7 +142,7 @@ HELP ME!!!
 ==========
 
 There is a mailing list for discussing Window Maker at
-wmaker-user@ilists.windowmaker.org To subscribe to it, send a message to
+wmaker-user@lists.windowmaker.org To subscribe to it, send a message to
 wmaker-user-subscribe@lists.windowmaker.info
 
 If you got a problem, ask there (after reading the docs, of course). The people

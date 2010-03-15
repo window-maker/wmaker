@@ -31,12 +31,39 @@ useful on widescreen displays where you want to bring up two windows side-by-
 side. The shortcut keys for this can be configured in WPrefs in the "Keyboard
 Shortcuts" page, or in the config file with "LHMaximizeKey" and "RHMaximizeKey"
 
-AutoComplete in the run dialog
-------------------------------
+History and AutoComplete in the run dialog
+------------------------------------------
 
-The "Run" (%A) dialog now autocompletes executables in your path. It can also
-complete folder names if you start the complete with a "/"
+The "Run..." dialog now autocompletes executables in your path (triggered by
+the TAB key) and records the history of past commands (last 500 by default).
+It can also complete folder names if you start the complete with a "/"
+To use it replace %a with %A in the "Run..." entry in your WMRootMenu file.
+See commit 05720d97076ffc1569e5 for more details.
 
+Automatic menu generator (wmgenmenu)
+-----------------------------------
+
+There is now a new utility to generate the Window Maker menu automatically,
+called wmgenmenu. It searches from a list of pre-defined applications the
+ones which exist in your $PATH and adds them to the corresponding submenus
+("Internet", "Terminals", "Editors" etc) of your WM menu. It also supports
+localization (currently English and German). You can use it like:
+
+$ wmgenmenu > WMRootMenu-new
+$ cp WMRootMenu-new $HOME/GNUstep/Defaults/WMRootMenu
+
+and WM will automatically detect the new menu file and use it without
+restarting wmaker (made possible by the 'inotify' mechanism)
+
+Automatic detection of menu changes (via inotify)
+-------------------------------------------------
+
+Window Maker now uses the 'inotify' mechanism from the linux kernel
+to automatically detect changes in the WMRootMenu file. So the
+--no-polling option is now gone and Window Maker does not wake up
+your CPU unnecessarily (0 wakeups when idle, instead of 4).
+So if you edit the WMRootMenu file by hand (or by using 'wmgenmenu'),
+there is no need to restart wmaker for the changes to take effect.
 
 
 --- 0.92.0

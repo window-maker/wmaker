@@ -1,50 +1,16 @@
 
 		Installation Instructions for Window Maker
 
+The latest version of Window Maker (-crm) can be found in the
+git repository at
+
+http://repo.or.cz/w/wmaker-crm.git
 
 
 SUPPORTED PLATFORMS
 ===================
-(ie: I've heard someone has compiled it on...)
 
-- Intel GNU/Linux Conectiva 5.9 (beta)
-- Intel GNU/Linux Slackware
-- Intel GNU/Linux Debian
-- Intel GNU/Linux other distributions
-- Sparc GNU/Linux RedHat 5.1
-- PowerPC GNU/MkLinux
-- Alpha GNU/Linux RedHat 5.1
-- FreeBSD
-- NetBSD
-- OpenBSD
-- BSDI 4.0
-- Solaris 2.5.1, 2.5.2
-- Solaris 2.6.0
-- Solaris 2.7beta
-- Solaris 2.8 on Ultra Sparc 10 and E450
-- SCO Unix
-- SGI Irix 5.x, 6.5
-- OSF/1
-- HP-UX
-- AIX 3.2.5
-- AIX 4.1.4 / IBM PowerPC
-- AIX 4.3.1 / IBM CC compiler
-- AIX 4.3.2 / IBM PowerPC
-- AIX 5.3
-- DEC Alpha/Digital UNIX 4.x
-- XFree86 / OS/2
-- Corel NetWinder
-- SunOS 4.x
-- PowerMac / Power MachTen 4.1.1 over MacOS
-- Amiga 3000 running RedHat Linux 5.1 (Rawhide)
-- IBM S/390 running Linux
-- IBM S/390 running Conectiva Linux (experimental)
-- iBook running Darwin
-- Darwin PPC / Macos X
-- Windows NT with Cygwin/XFree86
-- Sony PlayStation2 running Linux
-
-All registered trademarks are registered by their owners. (duh)
+- Intel GNU/Linux Systems in general
 
 Patches to make it work on other platforms are welcome. 
 
@@ -154,14 +120,6 @@ To get a list of other options, run ./configure --help
 --disable-motif 
 	disable support for mwm window manager hints
 
---enable-lite
-	remove things that are already supported in desktop environments,
-	like KDE and GNOME. Disabled things are: window list, root
-	applications menu, multiple window selection. Note that you will not
-	be able to exit Window Maker from itself anymore; you will have to
-	use kill with the SIGTERM signal or exit it from KDE. It is not
-	advisable to enable it.
-
 --enable-modelock
 	XKB language status lock support. If you don't know what it is you
 	probably don't need it.
@@ -188,65 +146,6 @@ To get a list of other options, run ./configure --help
 
 PLATFORM SPECIFIC NOTES:
 ========================
-
-- DEC/Alpha machines
-
-#>>>>>>>>>>>
-From: Anton Ivanov <aivanov@eu.level3.net>
-To: Marcelo E. Magallon <mmagallo@debian.org>
-Subject: Re: Is the WindowMaker package working ok on Alpha?
-
-> Hi,
-> 
->  I was reading some docs on the WindowMaker tarball, and found this:
-> 
->  | - DEC/Alpha machines
->  |         You might need to pass the --disable-shm flag to configure,
->  |         like ./configure --disable-shm
-> 
->  is anyone having problems with WindowMaker on Alpha?  Can someone
->  please test this?  Should the flag be passed when building on Alpha?
-
-Disclaimer: alphas under my command have never run X and are least likely to 
-suddenly start running it anytime soon.
-
-        Alpha used to have some ridiculously low amount of shared memory
-configured. 
-So quite a lot of apps used to barf. Namely - cdrecord, mysql server, etc.
-
-        Check where is yours at the moment and raise it to a more appropriate
-value by either catting to the appropriate /proc entry or changing the
-/usr/src/linux/include/asm/shmparam.h.
-
-        Otherwise the shared memory on alpha should be fully functional and I
-see no reason to disable it. Mine are bumped up to 32 or more on most
-machines.
-
-        And If I recall correctly the comments in that file are actually
-wrong. Value is not bytes, but in machine size word. For alpha *8.
-
-        As I said - I do not run X on them so all #include "stdisclaimer.h"
-apply.
-#<<<<<<<<<<<<
-
-
-- SCO Unix - run configure like
-	CFLAGS="-belf -DANSICPP" ./configure 
-
-- SunOS, Solaris 
-	If you have gcc installed, run configure as:
-	CPP_PATH="gcc -E -x c" ./configure
-	Sun's cpp lacks some features needed by Window Maker and it can
-	cause problems when parsing the config files.
-	You also might need to use the --with-libs-from and --with-incs-from
-	to supply the directory where libtiff is located.
-	Someone mailed me that you also must make /usr/local/lib be the
-	first path in LD_LIBRARY_PATH to make it work.
-
-	If you have a Ultra Creator 3D or some other machine with high-end
-	graphics, be sure to start the X server with the default visual
-	set to 24bpp or you might experience problems with mangled colors.
-	This is a wmaker bug and will be fixed.
 
 - GNU/Linux in general
 	Make sure you have /usr/local/lib in /etc/ld.so.conf and that you
