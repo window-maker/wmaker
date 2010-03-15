@@ -1,4 +1,5 @@
 
+#include <errno.h>
 #include <string.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -50,6 +51,7 @@ static WMPropList *getPLData(PLData * pldata);
 static WMPropList *getPLArray(PLData * pldata);
 static WMPropList *getPLDictionary(PLData * pldata);
 static WMPropList *getPropList(PLData * pldata);
+static int WMMkDirHier(const char *path);
 
 typedef unsigned (*hashFunc) (const void *);
 typedef Bool(*isEqualFunc) (const void *, const void *);
@@ -1555,6 +1557,9 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path, Bool atomically)
 	char *desc;
 	FILE *theFile;
 
+	if (!WMMkDirHier(path))
+		return False;
+
 	if (atomically) {
 #ifdef	HAVE_MKSTEMP
 		int fd, mask;
@@ -1628,4 +1633,71 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path, Bool atomically)
 	}
 
 	return False;
+}
+
+/*
+ * create a directory hierarchy
+ *
+ * if the last octet of `path' is `/', the full path is
+ * assumed to be a directory; otherwise path is assumed to be a
+ * file, and the last component is stripped off. the rest is the
+ * the hierarchy to be created.
+ *
+ * refuses to create anything outside $GNUSTEP_USER_ROOT
+ *
+ * returns 1 on success, 0 on failure
+ */
+static int WMMkDirHier(const char *path)
+{
+	char *t, *thePath = NULL, buf[1024];
+	size_t p, plen;
+	struct stat st;
+
+	/* Only create directories under $GNUSTEP_USER_ROOT */
+	if ((t = wusergnusteppath()) == NULL)
+		return 0;
+	if (strncmp(path, t, strlen(t)) != 0)
+		return 0;
+
+	thePath = wstrdup(path);
+	/* Strip the trailing component if it is a file */
+	p = strlen(thePath);
+	while (p && thePath[p] != '/')
+		thePath[p--] = '\0';
+
+	thePath[p] = '\0';
+
+	/* Shortcut if it already exists */
+	if (stat(thePath, &st) == 0) {
+		wfree(thePath);
+		if (S_ISDIR(st.st_mode)) {
+			/* Is a directory alright */
+			return 1;
+		} else {
+			/* Exists, but not a directory, the caller
+			 * might just as well abort now */
+			return 0;
+		}
+	}
+
+	memset(buf, 0, sizeof(buf));
+	strncpy(buf, t, sizeof(buf) - 1);
+	p = strlen(buf);
+	plen = strlen(thePath);
+
+	do {
+		while (p++ < plen && thePath[p] != '/')
+			;
+
+		strncpy(buf, thePath, p);
+		if (mkdir(buf, 0777) == -1 && errno == EEXIST &&
+		    stat(buf, &st) == 0 && !S_ISDIR(st.st_mode)) {
+			wsyserror(_("Could not create component %s"), buf);
+			wfree(thePath);
+			return 0;
+		}
+	} while (p < plen);
+
+	wfree(thePath);
+	return 1;
 }
