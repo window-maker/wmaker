@@ -13,7 +13,7 @@ static char *terminals[MAX_NR_APPS] = {
 };
 
 char *file_managers[MAX_NR_APPS] = {
-	"dolphin", "thunar", "rox", "GWorkspace",
+	"dolphin", "thunar", "rox", "GWorkspace", "mc !",
 	"xftree", "konqueror", "nautilus --no-desktop", "fsviewer", "xfe"
 };
 
