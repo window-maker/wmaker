@@ -245,7 +245,7 @@ void wfree(void *ptr);
 void wrelease(void *ptr);
 void* wretain(void *ptr);
 
-char* wstrdup(char *str);
+char *wstrdup(const char *str);
 char* wstrndup(char *str, size_t len);
 
 /* Concatenate str1 with str2 and return that in a newly malloc'ed string.

@@ -163,7 +163,7 @@ char *wtrimspace(char *s)
 	return c;
 }
 
-char *wstrdup(char *str)
+char *wstrdup(const char *str)
 {
 	assert(str != NULL);
 
