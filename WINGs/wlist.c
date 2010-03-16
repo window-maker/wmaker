@@ -638,7 +638,7 @@ static void handleEvents(XEvent * event, void *data)
 	}
 }
 
-static int matchTitle(void *item, void *title)
+static int matchTitle(const void *item, const void *title)
 {
 	return (strcmp(((WMListItem *) item)->text, (char *)title) == 0 ? 1 : 0);
 }

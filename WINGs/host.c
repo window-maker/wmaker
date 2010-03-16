@@ -218,7 +218,7 @@ void WMFlushHostCache()
 	}
 }
 
-static int matchAddress(void *item, void *cdata)
+static int matchAddress(const void *item, const void *cdata)
 {
 	return (strcmp((char *)item, (char *)cdata) == 0);
 }

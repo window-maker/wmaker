@@ -142,7 +142,7 @@ typedef int WMCompareDataProc(const void *item1, const void *item2);
 typedef void WMFreeDataProc(void *data);
 
 /* Used by WMBag or WMArray for matching data */
-typedef int WMMatchDataProc(void *item, void *cdata);
+typedef int WMMatchDataProc(const void *item, const void *cdata);
 
 
 

@@ -125,7 +125,7 @@ void WMDeleteLeafForTreeNode(WMTreeNode * aNode, int index)
 	WMDeleteFromArray(aNode->leaves, index);
 }
 
-static int sameData(void *item, void *data)
+static int sameData(const void *item, const void *data)
 {
 	return (((WMTreeNode *) item)->data == data);
 }

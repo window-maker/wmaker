@@ -384,17 +384,17 @@ void WMEnqueueNotification(WMNotificationQueue * queue, WMNotification * notific
 #define NOTIF ((WMNotification*)cdata)
 #define ITEM  ((WMNotification*)item)
 
-static int matchSenderAndName(void *item, void *cdata)
+static int matchSenderAndName(const void *item, const void *cdata)
 {
 	return (NOTIF->object == ITEM->object && strcmp(NOTIF->name, ITEM->name) == 0);
 }
 
-static int matchSender(void *item, void *cdata)
+static int matchSender(const void *item, const void *cdata)
 {
 	return (NOTIF->object == ITEM->object);
 }
 
-static int matchName(void *item, void *cdata)
+static int matchName(const void *item, const void *cdata)
 {
 	return (strcmp(NOTIF->name, ITEM->name) == 0);
 }

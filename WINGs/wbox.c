@@ -194,7 +194,7 @@ void WMAddBoxSubviewAtEnd(WMBox * bPtr, WMView * view, Bool expand, Bool fill, i
 	rearrange(bPtr);
 }
 
-static int matchView(void *item, void *cdata)
+static int matchView(const void *item, const void *cdata)
 {
 	return (((SubviewItem *) item)->view == (WMView *) cdata);
 }

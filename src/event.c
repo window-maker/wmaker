@@ -529,7 +529,7 @@ static void saveTimestamp(XEvent * event)
 	}
 }
 
-static int matchWindow(void *item, void *cdata)
+static int matchWindow(const void *item, const void *cdata)
 {
 	return (((WFakeGroupLeader *) item)->origLeader == (Window) cdata);
 }

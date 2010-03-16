@@ -78,7 +78,7 @@ void WMCreateEventHandler(WMView * view, unsigned long mask, WMEventProc * event
 	WMAddToArray(view->eventHandlers, hPtr);
 }
 
-static int matchHandler(void *item, void *cdata)
+static int matchHandler(const void *item, const void *cdata)
 {
 #define H1 ((W_EventHandler*)item)
 #define H2 ((W_EventHandler*)cdata)

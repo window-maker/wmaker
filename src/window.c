@@ -564,7 +564,7 @@ static Window createFakeWindowGroupLeader(WScreen *scr, Window win, char *instan
 	return leader;
 }
 
-static int matchIdentifier(void *item, void *cdata)
+static int matchIdentifier(const void *item, const void *cdata)
 {
 	return (strcmp(((WFakeGroupLeader *) item)->identifier, (char *)cdata) == 0);
 }
