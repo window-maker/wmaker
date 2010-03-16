@@ -51,7 +51,6 @@
 #include <wraster.h>
 
 #include "WindowMaker.h"
-#include "wcore.h"
 #include "framewin.h"
 #include "window.h"
 #include "texture.h"

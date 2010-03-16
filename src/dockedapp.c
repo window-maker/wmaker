@@ -28,7 +28,6 @@
 #include <string.h>
 
 #include "WindowMaker.h"
-#include "wcore.h"
 #include "window.h"
 #include "icon.h"
 #include "appicon.h"

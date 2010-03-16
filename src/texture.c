@@ -37,7 +37,6 @@
 #include <wraster.h>
 
 #include "WindowMaker.h"
-#include "wcore.h"
 #include "texture.h"
 #include "funcs.h"
 

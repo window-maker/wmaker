@@ -26,7 +26,6 @@
 
 #include <wraster.h>
 
-#include "wcore.h"
 #include "window.h"
 #include "icon.h"
 #include "application.h"

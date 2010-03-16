@@ -37,7 +37,6 @@
 #include "WindowMaker.h"
 #include "screen.h"
 #include "texture.h"
-#include "wcore.h"
 #include "framewin.h"
 #include "icon.h"
 #include "appicon.h"

@@ -48,7 +48,6 @@
 #include "menu.h"
 #include "keybind.h"
 #include "xmodifier.h"
-#include "defaults.h"
 #include "session.h"
 #include "dialog.h"
 

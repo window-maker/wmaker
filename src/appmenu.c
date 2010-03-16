@@ -32,7 +32,6 @@
 #include <unistd.h>
 
 #include "WindowMaker.h"
-#include "wcore.h"
 #include "menu.h"
 #include "actions.h"
 #include "funcs.h"

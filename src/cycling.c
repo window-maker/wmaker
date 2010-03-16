@@ -30,7 +30,6 @@
 #include "WindowMaker.h"
 #include "GNUstep.h"
 #include "screen.h"
-#include "wcore.h"
 #include "window.h"
 #include "framewin.h"
 #include "keybind.h"

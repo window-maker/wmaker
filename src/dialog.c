@@ -58,7 +58,6 @@
 #include "framewin.h"
 #include "window.h"
 #include "actions.h"
-#include "defaults.h"
 #include "xinerama.h"
 
 extern WPreferences wPreferences;

@@ -44,7 +44,6 @@
 #include "window.h"
 #include "framewin.h"
 #include "funcs.h"
-#include "defaults.h"
 #include "dialog.h"
 #include "xutil.h"
 #include "xmodifier.h"

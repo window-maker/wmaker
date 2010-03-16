@@ -27,7 +27,6 @@
 
 #include "WindowMaker.h"
 #include "screen.h"
-#include "wcore.h"
 #include "framewin.h"
 #include "window.h"
 #include "defaults.h"

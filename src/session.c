@@ -74,7 +74,6 @@
 #include "window.h"
 #include "client.h"
 #include "session.h"
-#include "wcore.h"
 #include "framewin.h"
 #include "workspace.h"
 #include "funcs.h"

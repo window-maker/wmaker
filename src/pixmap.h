@@ -21,7 +21,7 @@
 #ifndef WMPIXMAP_H_
 #define WMPIXMAP_H_
 
-
+#include "screen.h"
 
 typedef struct WPixmap {
     Pixmap image;		       /* icon image */

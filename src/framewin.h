@@ -22,6 +22,8 @@
 #ifndef WMFRAMEWINDOW_H_
 #define WMFRAMEWINDOW_H_
 
+#include "wcore.h"
+#include "pixmap.h"
 
 #define BORDER_TOP	1
 #define BORDER_BOTTOM	2

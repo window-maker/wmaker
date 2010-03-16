@@ -26,7 +26,6 @@
 #include "screen.h"
 #include "window.h"
 #include "framewin.h"
-#include "wcore.h"
 #include "funcs.h"
 
 #ifdef XINERAMA

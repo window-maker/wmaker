@@ -34,7 +34,6 @@
 #include "WindowMaker.h"
 #include "texture.h"
 #include "screen.h"
-#include "pixmap.h"
 
 int wGetColor(WScreen * scr, char *color_name, XColor * color)
 {

@@ -43,7 +43,6 @@ typedef struct _WCoreWindow {
 } WCoreWindow;
 
 
-#include "pixmap.h"
 WCoreWindow *wCoreCreateTopLevel(WScreen *screen, int x, int y, int width,
                                  int height, int bwidth);
 
