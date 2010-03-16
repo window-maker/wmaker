@@ -77,7 +77,6 @@ libWUtil_la_SOURCES = 	\
 	handlers.c \
 	hashtable.c \
 	host.c \
-	international.c \
 	memory.c \
 	misc.c \
 	notification.c \
