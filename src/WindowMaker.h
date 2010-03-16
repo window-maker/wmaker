@@ -23,20 +23,9 @@
 #define WINDOWMAKER_H_
 
 #include "wconfig.h"
-
 #include <assert.h>
 #include <limits.h>
-
 #include <WINGs/WINGs.h>
-
-#if defined(HAVE_LIBINTL_H) && defined(I18N)
-# include <libintl.h>
-# define _(text) gettext(text)
-#else
-# define _(text) (text)
-#endif
-
-
 
 
 /* class codes */
