@@ -181,9 +181,9 @@ static char *HistoryFileName(char *name)
 	return filename;
 }
 
-static int matchString(void *str1, void *str2)
+static int strmatch(const void *str1, const void *str2)
 {
-	return (strcmp((char *)str1, (char *)str2) == 0 ? 1 : 0);
+	return !strcmp((const char *)str1, (const char *)str2);
 }
 
 static WMArray *LoadHistory(char *filename, int max)
@@ -205,7 +205,7 @@ static WMArray *LoadHistory(char *filename, int max)
 
 		for (i = 0; i < num; ++i) {
 			plitem = WMGetFromPLArray(plhistory, i);
-			if (WMIsPLString(plitem) && WMFindInArray(history, matchString,
+			if (WMIsPLString(plitem) && WMFindInArray(history, strmatch,
 								  WMGetFromPLString(plitem)) == WANotFound)
 				WMAddToArray(history, WMGetFromPLString(plitem));
 		}
@@ -226,11 +226,6 @@ static void SaveHistory(WMArray * history, char *filename)
 
 	WMWritePropListToFile(plhistory, (char *)filename);
 	WMReleasePropList(plhistory);
-}
-
-static int strmatch(const char *str1, const char *str2)
-{
-	return !strcmp(str1, str2);
 }
 
 static int pstrcmp(const char **str1, const char **str2)
