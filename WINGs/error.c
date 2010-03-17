@@ -26,6 +26,8 @@
 #include <string.h>
 #include <errno.h>
 
+#include <WUtil.h>
+
 extern char *_WINGS_progname;
 
 #define MAXLINE	1024
@@ -57,130 +59,47 @@ char *wstrerror(int errnum)
 #endif
 }
 
-/*********************************************************************
- * Prints a message with variable arguments
- *
- * msg - message to print with optional formatting
- * ... - arguments to use on formatting
- *********************************************************************/
-void wmessage(const char *msg, ...)
+void __wmessage(int type, void *extra, const char *msg, ...)
 {
 	va_list args;
 	char buf[MAXLINE];
 
+	fflush(stdout);
+	/* message format: <wings_progname>: <qualifier>: <message>[: <extra info>]"\n" */
+	snprintf(buf, sizeof(buf), "%s: ", _WINGS_progname ? _WINGS_progname : "WINGs");
 	va_start(args, msg);
-
-	vsnprintf(buf, MAXLINE - 3, msg, args);
-	strcat(buf, "\n");
-	fflush(stdout);
-	fputs(_WINGS_progname ? _WINGS_progname : "WINGs", stderr);
-	fputs(": ", stderr);
-	fputs(buf, stderr);
-	fflush(stdout);
-	fflush(stderr);
-
+	switch (type) {
+		case WMESSAGE_TYPE_WARNING:
+			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
+				_("warning: "));
+			vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
+				msg, args);
+		break;
+		case WMESSAGE_TYPE_FATAL:
+			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
+				_("fatal error: "));
+			vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
+				msg, args);
+		break;
+		case WMESSAGE_TYPE_WSYSERROR:
+		case WMESSAGE_TYPE_WSYSERRORWITHCODE:
+			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
+				_("error: "));
+			vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
+				msg, args);
+			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
+				": %s", type == WMESSAGE_TYPE_WSYSERROR ?
+				    wstrerror(errno) : wstrerror(*(int *)extra));
+		break;
+		case WMESSAGE_TYPE_MESSAGE:
+			/* FALLTHROUGH */
+		default:
+			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), ": ");
+			vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf), msg, args);
+		break;
+	}
 	va_end(args);
+	strncat(buf + strlen(buf), "\n", sizeof(buf) - strlen(buf) - 1);
+	fputs(buf, stderr);
 }
 
-/*********************************************************************
- * Prints a warning message with variable arguments
- *
- * msg - message to print with optional formatting
- * ... - arguments to use on formatting
- *********************************************************************/
-void wwarning(const char *msg, ...)
-{
-	va_list args;
-	char buf[MAXLINE];
-
-	va_start(args, msg);
-
-	vsnprintf(buf, MAXLINE - 3, msg, args);
-	strcat(buf, "\n");
-	fflush(stdout);
-	fputs(_WINGS_progname ? _WINGS_progname : "WINGs", stderr);
-	fputs(_(" warning: "), stderr);
-	fputs(buf, stderr);
-	fflush(stdout);
-	fflush(stderr);
-
-	va_end(args);
-}
-
-/**************************************************************************
- * Prints a fatal error message with variable arguments and terminates
- *
- * msg - message to print with optional formatting
- * ... - arguments to use on formatting
- **************************************************************************/
-void wfatal(const char *msg, ...)
-{
-	va_list args;
-	char buf[MAXLINE];
-
-	va_start(args, msg);
-
-	vsnprintf(buf, MAXLINE - 3, msg, args);
-	strcat(buf, "\n");
-	fflush(stdout);
-	fputs(_WINGS_progname ? _WINGS_progname : "WINGs", stderr);
-	fputs(_(" fatal error: "), stderr);
-	fputs(buf, stderr);
-	fflush(stdout);
-	fflush(stderr);
-
-	va_end(args);
-}
-
-/*********************************************************************
- * Prints a system error message with variable arguments
- *
- * msg - message to print with optional formatting
- * ... - arguments to use on formatting
- *********************************************************************/
-void wsyserror(const char *msg, ...)
-{
-	va_list args;
-	char buf[MAXLINE];
-	int error = errno;
-
-	va_start(args, msg);
-	vsnprintf(buf, MAXLINE - 3, msg, args);
-	fflush(stdout);
-	fputs(_WINGS_progname ? _WINGS_progname : "WINGs", stderr);
-	fputs(_(" error: "), stderr);
-	fputs(buf, stderr);
-	fputs(": ", stderr);
-	fputs(wstrerror(error), stderr);
-	fputs("\n", stderr);
-	fflush(stderr);
-	fflush(stdout);
-	va_end(args);
-}
-
-/*********************************************************************
- * Prints a system error message with variable arguments, being given
- * the error code.
- *
- * error - the error code foe which to print the message
- * msg   - message to print with optional formatting
- * ...   - arguments to use on formatting
- *********************************************************************/
-void wsyserrorwithcode(int error, const char *msg, ...)
-{
-	va_list args;
-	char buf[MAXLINE];
-
-	va_start(args, msg);
-	vsnprintf(buf, MAXLINE - 3, msg, args);
-	fflush(stdout);
-	fputs(_WINGS_progname ? _WINGS_progname : "WINGs", stderr);
-	fputs(_(" error: "), stderr);
-	fputs(buf, stderr);
-	fputs(": ", stderr);
-	fputs(wstrerror(error), stderr);
-	fputs("\n", stderr);
-	fflush(stderr);
-	fflush(stdout);
-	va_end(args);
-}
