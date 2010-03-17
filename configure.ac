@@ -925,7 +925,6 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile test/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
 	WPrefs.app/po/Makefile \
 	contrib/Makefile contrib/WindowMaker.spec )
-#	plugins/Makefile plugins/libwmfun/Makefile)
 
 
 
