@@ -134,15 +134,6 @@ void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head)
 	sw = sx2 - sx1;
 	sh = sy2 - sy1;
 
-#if 0
-	if (scr->dock) {
-		if (scr->dock->on_right_side)
-			sx2 -= isize + DOCK_EXTRA_SPACE;
-		else
-			sx1 += isize + DOCK_EXTRA_SPACE;
-	}
-#endif
-
 	sw = isize * (sw / isize);
 	sh = isize * (sh / isize);
 	fullW = (sx2 - sx1) / isize;
@@ -279,16 +270,9 @@ static int calcSumOfCoveredAreas(WWindow *wwin, int x, int y, int w, int h)
 		if (test_window->frame->core->stacking->window_level < WMNormalLevel) {
 			continue;
 		}
-#if 0
-		tw = test_window->client.width;
-		if (test_window->flags.shaded)
-			th = test_window->frame->top_width;
-		else
-			th = test_window->client.height + extra_height;
-#else
+
 		tw = test_window->frame->core->width;
 		th = test_window->frame->core->height;
-#endif
 		tx = test_window->frame_x;
 		ty = test_window->frame_y;
 
@@ -409,16 +393,8 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 					test_window = test_window->next;
 					continue;
 				}
-#if 0
-				tw = test_window->client.width;
-				if (test_window->flags.shaded)
-					th = test_window->frame->top_width;
-				else
-					th = test_window->client.height + extra_height;
-#else
 				tw = test_window->frame->core->width;
 				th = test_window->frame->core->height;
-#endif
 				tx = test_window->frame_x;
 				ty = test_window->frame_y;
 
@@ -443,16 +419,8 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 					test_window = test_window->prev;
 					continue;
 				}
-#if 0
-				tw = test_window->client.width;
-				if (test_window->flags.shaded)
-					th = test_window->frame->top_width;
-				else
-					th = test_window->client.height + extra_height;
-#else
 				tw = test_window->frame->core->width;
 				th = test_window->frame->core->height;
-#endif
 				tx = test_window->frame_x;
 				ty = test_window->frame_y;
 
@@ -553,13 +521,6 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 	case WPM_RANDOM:
 		randomPlaceWindow(wwin, x_ret, y_ret, width, height, usableArea);
 		break;
-
-#ifdef DEBUG
-	default:
-		puts("Invalid window placement!!!");
-		*x_ret = 0;
-		*y_ret = 0;
-#endif
 	}
 
 	/*

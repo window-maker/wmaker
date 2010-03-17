@@ -231,12 +231,8 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	WApplication *wapp;
 	WWindow *leader;
 
-	if (main_window == None || main_window == scr->root_win) {
-#ifdef DEBUG0
-		wwarning("trying to create application for %x", (unsigned)main_window);
-#endif
+	if (main_window == None || main_window == scr->root_win)
 		return NULL;
-	}
 
 	{
 		Window root;
@@ -397,11 +393,6 @@ WApplication *wApplicationCreate(WWindow * wwin)
 		if (!tmp)
 			extractClientIcon(wapp->app_icon);
 	}
-
-
-#ifdef DEBUG
-	printf("Created application for %x\n", (unsigned)main_window);
-#endif
 	return wapp;
 }
 
@@ -463,10 +454,6 @@ void wApplicationDestroy(WApplication * wapp)
 	}
 	wfree(wapp);
 
-#ifdef DEBUG
-	printf("Destroyed application for %x\n", (unsigned)main_window);
-#endif
-	if (wPreferences.auto_arrange_icons) {
+	if (wPreferences.auto_arrange_icons)
 		wArrangeIcons(scr, True);
-	}
 }

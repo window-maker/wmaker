@@ -42,16 +42,6 @@
     (((KeySym)(keysym) >= 0x11000000) && ((KeySym)(keysym) <= 0x1100FFFF))
 #endif
 
-#ifdef DEBUG
-#  define  ENTER(X)  fprintf(stderr,"Entering:  %s()\n", X);
-#  define  LEAVE(X)  fprintf(stderr,"Leaving:   %s()\n", X);
-#  define  PDEBUG(X)  fprintf(stderr,"debug:     %s()\n", X);
-#else
-#  define  ENTER(X)
-#  define  LEAVE(X)
-#  define  PDEBUG(X)
-#endif
-
 extern Cursor wCursor[WCUR_LAST];
 
 /********************************************************************
@@ -62,9 +52,6 @@ static void textEventHandler(WObjDescriptor * desc, XEvent * event);
 static void handleExpose(WObjDescriptor * desc, XEvent * event);
 
 static void textInsert(WTextInput * wtext, char *txt);
-#if 0
-static void blink(void *data);
-#endif
 
 /********************************************************************
  * handleKeyPress                                                   *
@@ -189,8 +176,6 @@ WTextInput *wTextCreate(WCoreWindow * core, int x, int y, int width, int height)
 {
 	WTextInput *wtext;
 
-	ENTER("wTextCreate");
-
 	wtext = wmalloc(sizeof(WTextInput));
 	wtext->core = wCoreCreate(core, x, y, width, height);
 	wtext->core->descriptor.handle_anything = &textEventHandler;
@@ -248,9 +233,6 @@ WTextInput *wTextCreate(WCoreWindow * core, int x, int y, int width, int height)
 				 * hits "Return" key             */
 
 	XMapRaised(dpy, wtext->core->window);
-
-	LEAVE("wTextCreate");
-
 	return wtext;
 }
 
@@ -263,20 +245,12 @@ WTextInput *wTextCreate(WCoreWindow * core, int x, int y, int width, int height)
  ********************************************************************/
 void wTextDestroy(WTextInput * wtext)
 {
-	ENTER("wTextDestroy")
-#if 0
-	    if (wtext->magic)
-		wDeleteTimerHandler(wtext->magic);
-	wtext->magic = NULL;
-#endif
 	XFreeGC(dpy, wtext->gc);
 	XFreeGC(dpy, wtext->regGC);
 	XFreeGC(dpy, wtext->invGC);
 	wfree(wtext->text.txt);
 	wCoreDestroy(wtext->core);
 	wfree(wtext);
-
-	LEAVE("wTextDestroy");
 }
 
 /* The text-field consists of a frame drawn around the outside,
@@ -361,15 +335,12 @@ static void textRefresh(WTextInput * wtext)
  ********************************************************************/
 void wTextPaint(WTextInput * wtext)
 {
-	ENTER("wTextPaint");
-
 	/* refresh */
 	textRefresh(wtext);
 
 	/* Draw box */
-	XDrawRectangle(dpy, wtext->core->window, wtext->gc, 0, 0, wtext->core->width - 1, wtext->core->height - 1);
-
-	LEAVE("wTextPaint");
+	XDrawRectangle(dpy, wtext->core->window, wtext->gc, 0, 0,
+		       wtext->core->width - 1, wtext->core->height - 1);
 }
 
 /********************************************************************
@@ -495,30 +466,6 @@ void wTextSelect(WTextInput * wtext, int start, int end)
 	wtext->text.startPos = start;
 }
 
-#if 0
-static void blink(void *data)
-{
-	int x;
-	WTextInput *wtext = (WTextInput *) data;
-	GC gc;
-
-	/* And draw a quick little line for the cursor position */
-	if (wtext->blink_on) {
-		gc = wtext->regGC;
-		wtext->blink_on = 0;
-	} else {
-		gc = wtext->invGC;
-		wtext->blink_on = 1;
-	}
-	x = WMWidthOfString(wtext->font, wtext->text.txt, wtext->text.endPos)
-	    + wtext->xOffset;
-	XDrawLine(dpy, wtext->core->window, gc, x, 2, x, wtext->core->height - 3);
-
-	if (wtext->blinking)
-		wtext->magic = wAddTimerHandler(CURSOR_BLINK_RATE, blink, data);
-}
-#endif
-
 /********************************************************************
  * textEventHandler -- handles and dispatches all the events that   *
  *   the text field class supports                                  *
@@ -538,54 +485,32 @@ static void textEventHandler(WObjDescriptor * desc, XEvent * event)
 		 * event, but otherwise we want to adjust the selected
 		 * text so we can wTextRefresh() */
 		if (event->xmotion.state & (Button1Mask | Button3Mask | Button2Mask)) {
-			PDEBUG("MotionNotify");
 			handled = True;
 			wtext->text.endPos = textXtoPos(wtext, event->xmotion.x);
 		}
 		break;
 
 	case ButtonPress:
-		PDEBUG("ButtonPress");
 		handled = True;
 		wtext->text.startPos = textXtoPos(wtext, event->xbutton.x);
 		wtext->text.endPos = wtext->text.startPos;
 		break;
 
 	case ButtonRelease:
-		PDEBUG("ButtonRelease");
 		handled = True;
 		wtext->text.endPos = textXtoPos(wtext, event->xbutton.x);
 		break;
 
 	case KeyPress:
-		PDEBUG("KeyPress");
 		handled = handleKeyPress(wtext, &event->xkey);
 		break;
 
 	case EnterNotify:
-		PDEBUG("EnterNotify");
 		handled = True;
-#if 0
-		if (!wtext->magic) {
-			wtext->magic = wAddTimerHandler(CURSOR_BLINK_RATE, blink, wtext);
-			wtext->blink_on = !wtext->blink_on;
-			blink(wtext);
-			wtext->blinking = 1;
-		}
-#endif
 		break;
 
 	case LeaveNotify:
-		PDEBUG("LeaveNotify");
 		handled = True;
-#if 0
-		wtext->blinking = 0;
-		if (wtext->blink_on)
-			blink(wtext);
-		if (wtext->magic)
-			wDeleteTimerHandler(wtext->magic);
-		wtext->magic = NULL;
-#endif
 		break;
 
 	default:

@@ -134,9 +134,6 @@ extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 /* cursors */
 extern Cursor wCursor[WCUR_LAST];
 
-/* special flags */
-/*extern char WDelayedActionSet;*/
-
 /***** Local *****/
 
 static WScreen **wScreen = NULL;
@@ -170,14 +167,7 @@ static int catchXError(Display * dpy, XErrorEvent * error)
 		   || error->request_code == X_ConfigureWindow))
 		 */
 		|| (error->request_code == X_InstallColormap))) {
-#ifndef DEBUG
-
 		return 0;
-#else
-		printf("got X error %x %x %x\n", error->request_code,
-		       error->error_code, (unsigned)error->resourceid);
-		return 0;
-#endif
 	}
 	FormatXError(dpy, error, buffer, MAXLINE);
 	wwarning(_("internal X error: %s\n"), buffer);
@@ -196,29 +186,6 @@ static int handleXIO(Display * xio_dpy)
 	Exit(0);
 	return 0;
 }
-
-/*
- *----------------------------------------------------------------------
- * delayedAction-
- * 	Action to be executed after the signal() handler is exited.
- * This was called every 500ms to 'clean up' signals. Not used now.
- *----------------------------------------------------------------------
- */
-#ifdef notused
-static void delayedAction(void *cdata)
-{
-	if (WDelayedActionSet == 0) {
-		return;
-	}
-	WDelayedActionSet--;
-	/*
-	 * Make the event dispatcher do whatever it needs to do,
-	 * including handling zombie processes, restart and exit
-	 * signals.
-	 */
-	DispatchEvent(NULL);
-}
-#endif
 
 /*
  *----------------------------------------------------------------------

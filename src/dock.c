@@ -3358,9 +3358,6 @@ static void handleDockMove(WDock * dock, WAppIcon * aicon, XEvent * event)
 	Pixmap ghost = None;
 	int superfluous = wPreferences.superfluous;	/* we catch it to avoid problems */
 
-#ifdef DEBUG
-	puts("moving dock");
-#endif
 	if (XGrabPointer(dpy, aicon->icon->core->window, True, ButtonMotionMask
 			 | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
 			 GrabModeAsync, None, None, CurrentTime) != GrabSuccess) {
@@ -3495,9 +3492,6 @@ static void handleDockMove(WDock * dock, WAppIcon * aicon, XEvent * event)
 			XFreePixmap(dpy, ghost);
 		XSetWindowBackground(dpy, scr->dock_shadow, scr->white_pixel);
 	}
-#ifdef DEBUG
-	puts("End dock move");
-#endif
 }
 
 static Bool handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
@@ -3525,9 +3519,6 @@ static Bool handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 	if (XGrabPointer(dpy, icon->core->window, True, ButtonMotionMask
 			 | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
 			 GrabModeAsync, None, None, CurrentTime) != GrabSuccess) {
-#ifdef DEBUG0
-		wwarning("pointer grab failed for icon move");
-#endif
 	}
 
 	if (!(event->xbutton.state & MOD_MASK))
@@ -3705,9 +3696,6 @@ static Bool handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 					wDockHideIcons(scr->workspaces[i]->clip);
 				}
 			}
-#ifdef DEBUG
-			puts("End icon move");
-#endif
 			return hasMoved;;
 		}
 	}
@@ -3818,9 +3806,6 @@ static void iconMouseDown(WObjDescriptor * desc, XEvent * event)
 		XUnmapWindow(dpy, scr->clip_balloon);
 		scr->flags.clip_balloon_mapped = 0;
 	}
-#ifdef DEBUG
-	puts("handling dock");
-#endif
 	if (event->xbutton.button == Button1) {
 		if (event->xbutton.state & MOD_MASK)
 			wDockLower(dock);

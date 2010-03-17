@@ -171,41 +171,9 @@ char *MakeCPPArgs(char *path)
 	} while ((buf = strtok(NULL, ":")) != NULL);
 
 #undef arg
-#ifdef DEBUG
-	puts("CPP ARGS");
-	puts(line);
-#endif
 	return line;
 }
 #endif				/* USECPP */
-
-#if 0
-/*
- * Is win2 below win1?
- */
-static Bool isBelow(WWindow * win1, WWindow * win2)
-{
-	int i;
-	WCoreWindow *tmp;
-
-	tmp = win1->frame->core->stacking->under;
-	while (tmp) {
-		if (tmp == win2->frame->core)
-			return True;
-		tmp = tmp->stacking->under;
-	}
-
-	for (i = win1->frame->core->stacking->window_level - 1; i >= 0; i--) {
-		tmp = win1->screen_ptr->stacking_list[i];
-		while (tmp) {
-			if (tmp == win2->frame->core)
-				return True;
-			tmp = tmp->stacking->under;
-		}
-	}
-	return True;
-}
-#endif
 
 /* XFetchName Wrapper */
 Bool wFetchName(Display *dpy, Window win, char **winname)

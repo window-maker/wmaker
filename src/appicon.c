@@ -453,13 +453,6 @@ static void iconDblClick(WObjDescriptor * desc, XEvent * event)
 	assert(aicon->icon->owner != NULL);
 
 	wapp = wApplicationOf(aicon->icon->owner->main_window);
-#ifdef DEBUG0
-	if (!wapp) {
-		wwarning("could not find application descriptor for app icon!!");
-		return;
-	}
-#endif
-
 	unhideHere = (event->xbutton.state & ShiftMask);
 
 	/* go to the last workspace that the user worked on the app */
@@ -526,9 +519,7 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 		(*desc->handle_mousedown) (desc, event);
 		return;
 	}
-#ifdef DEBUG
-	puts("Moving icon");
-#endif
+
 	if (event->xbutton.state & MOD_MASK)
 		wLowerFrame(icon->core);
 	else
@@ -713,8 +704,4 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 			break;
 		}
 	}
-#ifdef DEBUG
-	puts("End icon move");
-#endif
-
 }

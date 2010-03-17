@@ -644,10 +644,6 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	XSaveContext(dpy, window, wWinContext, (XPointer) & wwin->client_descriptor);
 
-#ifdef DEBUG
-	printf("managing window %x\n", (unsigned)window);
-#endif
-
 #ifdef SHAPE
 	if (wShapeSupported) {
 		int junk;
@@ -1678,10 +1674,6 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 
 	if (!wwin->flags.internal_window)
 		WMPostNotificationName(WMNUnmanaged, wwin, NULL);
-#ifdef DEBUG
-	printf("destroying window %x frame %x\n", (unsigned)wwin->client_win, (unsigned)frame->window);
-#endif
-
 	if (wasFocused) {
 		if (newFocusedWindow != owner && owner) {
 			if (wwin->flags.is_gnustep == 0)
@@ -2634,10 +2626,6 @@ WMagicNumber wWindowAddSavedState(char *instance, char *class, char *command, pi
 	wstate->next = windowState;
 	windowState = wstate;
 
-#ifdef DEBUG
-	printf("Added WindowState with ID %p, for %s.%s : \"%s\"\n", wstate, instance, class, command);
-#endif
-
 	return wstate;
 }
 
@@ -2667,10 +2655,6 @@ WMagicNumber wWindowGetSavedState(Window win)
 		wstate = NULL;
 	}
 
-#ifdef DEBUG
-	printf("Read WindowState with ID %p, for %s.%s : \"%s\"\n", wstate, instance, class, command);
-#endif
-
 	if (command)
 		wfree(command);
 	if (instance)
@@ -2691,10 +2675,6 @@ void wWindowDeleteSavedState(WMagicNumber id)
 	tmp = windowState;
 	if (tmp == wstate) {
 		windowState = wstate->next;
-#ifdef DEBUG
-		printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
-		       wstate, wstate->instance, wstate->class, wstate->command);
-#endif
 		if (wstate->instance)
 			wfree(wstate->instance);
 		if (wstate->class)
@@ -2707,10 +2687,6 @@ void wWindowDeleteSavedState(WMagicNumber id)
 		while (tmp->next) {
 			if (tmp->next == wstate) {
 				tmp->next = wstate->next;
-#ifdef DEBUG
-				printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
-				       wstate, wstate->instance, wstate->class, wstate->command);
-#endif
 				if (wstate->instance)
 					wfree(wstate->instance);
 				if (wstate->class)
@@ -2737,10 +2713,6 @@ void wWindowDeleteSavedStatesForPID(pid_t pid)
 	if (tmp->pid == pid) {
 		wstate = windowState;
 		windowState = tmp->next;
-#ifdef DEBUG
-		printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
-		       wstate, wstate->instance, wstate->class, wstate->command);
-#endif
 		if (wstate->instance)
 			wfree(wstate->instance);
 		if (wstate->class)
@@ -2754,10 +2726,6 @@ void wWindowDeleteSavedStatesForPID(pid_t pid)
 			if (tmp->next->pid == pid) {
 				wstate = tmp->next;
 				tmp->next = wstate->next;
-#ifdef DEBUG
-				printf("Deleted WindowState with ID %p, for %s.%s : \"%s\"\n",
-				       wstate, wstate->instance, wstate->class, wstate->command);
-#endif
 				if (wstate->instance)
 					wfree(wstate->instance);
 				if (wstate->class)
@@ -2810,9 +2778,6 @@ static void resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 		if (XGrabPointer(dpy, wwin->frame->resizebar->window, True,
 				 ButtonMotionMask | ButtonReleaseMask | ButtonPressMask,
 				 GrabModeAsync, GrabModeAsync, None, None, CurrentTime) != GrabSuccess) {
-#ifdef DEBUG0
-			wwarning("pointer grab failed for window move");
-#endif
 			return;
 		}
 	}
@@ -2924,9 +2889,6 @@ static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 		if (XGrabPointer(dpy, wwin->client_win, False,
 				 ButtonMotionMask | ButtonReleaseMask | ButtonPressMask,
 				 GrabModeAsync, GrabModeAsync, None, None, CurrentTime) != GrabSuccess) {
-#ifdef DEBUG0
-			wwarning("pointer grab failed for window move");
-#endif
 			return;
 		}
 		if (event->xbutton.button == Button3) {
@@ -2984,9 +2946,6 @@ static void titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 		    && XGrabPointer(dpy, wwin->frame->titlebar->window, False,
 				    ButtonMotionMask | ButtonReleaseMask | ButtonPressMask,
 				    GrabModeAsync, GrabModeAsync, None, None, CurrentTime) != GrabSuccess) {
-#ifdef DEBUG0
-			wwarning("pointer grab failed for window move");
-#endif
 			return;
 		}
 
@@ -3002,9 +2961,6 @@ static void titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 		    && XGrabPointer(dpy, wwin->frame->titlebar->window, False,
 				    ButtonMotionMask | ButtonReleaseMask | ButtonPressMask,
 				    GrabModeAsync, GrabModeAsync, None, None, CurrentTime) != GrabSuccess) {
-#ifdef DEBUG0
-			wwarning("pointer grab failed for window move");
-#endif
 			return;
 		}
 

@@ -97,11 +97,6 @@ void RemakeStackList(WScreen * scr)
 			WMSetInBag(scr->stacking_list, level, frame);
 		}
 		XFree(windows);
-#ifdef DEBUG
-		if (c != scr->window_count) {
-			puts("Found different number of windows than in window lists!!!");
-		}
-#endif
 		scr->window_count = c;
 	}
 
@@ -132,14 +127,6 @@ void CommitStacking(WScreen * scr)
 	i = 0;
 	WM_ETARETI_BAG(scr->stacking_list, tmp, iter) {
 		while (tmp) {
-#ifdef DEBUG
-			if (i >= nwindows) {
-				puts("Internal inconsistency! window_count is incorrect!!!");
-				printf("window_count says %i windows\n", nwindows);
-				wfree(windows);
-				return;
-			}
-#endif
 			windows[i++] = tmp->window;
 			tmp = tmp->stacking->under;
 		}

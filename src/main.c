@@ -436,9 +436,6 @@ void print_help()
 	puts(_(" --create-stdcmap	create the standard colormap hint in PseudoColor visuals"));
 	puts(_(" --visual-id visualid	visual id of visual to use"));
 	puts(_(" --static		do not update or save configurations"));
-#ifdef DEBUG
-	puts(_(" --synchronous		turn on synchronous display mode"));
-#endif
 	puts(_(" --version		print version and exit"));
 	puts(_(" --help			show this message"));
 }
@@ -450,11 +447,6 @@ void check_defaults()
 	path = wdefaultspathfordomain("WindowMaker");
 
 	if (access(path, R_OK) != 0) {
-#if 0
-		wfatal(_("could not find user GNUstep directory (%s).\n"
-			 "Make sure you have installed Window Maker correctly and run wmaker.inst"), path);
-		exit(1);
-#else
 		wwarning(_("could not find user GNUstep directory (%s)."), path);
 
 		if (system("wmaker.inst --batch") != 0) {
@@ -463,7 +455,6 @@ void check_defaults()
 		} else {
 			wwarning(_("%s directory created with default configuration."), path);
 		}
-#endif
 	}
 
 	wfree(path);
@@ -514,13 +505,6 @@ static void execInitScript()
 		if (system(file) != 0) {
 			wsyserror(_("%s:could not execute initialization script"), file);
 		}
-#if 0
-		if (fork() == 0) {
-			execl("/bin/sh", "/bin/sh", "-c", file, NULL);
-			wsyserror(_("%s:could not execute initialization script"), file);
-			exit(1);
-		}
-#endif
 		wfree(file);
 	}
 }
@@ -539,51 +523,9 @@ void ExecExitScript()
 		if (system(file) != 0) {
 			wsyserror(_("%s:could not execute exit script"), file);
 		}
-#if 0
-		if (fork() == 0) {
-			execl("/bin/sh", "/bin/sh", "-c", file, NULL);
-			wsyserror(_("%s:could not execute exit script"), file);
-			exit(1);
-		}
-#endif
 		wfree(file);
 	}
 }
-
-#if 0
-char *getFullPath(char *path)
-{
-	char buffer[1024];
-	char *tmp;
-	char *basep = (char *)buffer;
-
-	if (*path != '/' && getcwd(buffer, 1023)) {
-
-		for (;;) {
-			if (strncmp(path, "../", 3) == 0) {
-				path += 3;
-				basep = strchr(basep, '/');
-				if (!basep || *path == 0)
-					break;
-			}
-		}
-		if (*path == '/' || strncmp(path, "./", 2) == 0) {
-		tmp =}
-
-		/*
-		 * path
-		 * ./path
-		 * ../path
-		 * ../../path
-		 */
-
-	} else {
-		return wstrconcat(path);
-	}
-
-	return tmp;
-}
-#endif
 
 int main(int argc, char **argv)
 {
@@ -642,11 +584,8 @@ static int real_main(int argc, char **argv)
 	char *pos;
 	int d, s;
 	int flag;
-#ifdef DEBUG
-	Bool doSync = False;
-#endif
-	setlocale(LC_ALL, "");
 
+	setlocale(LC_ALL, "");
 	wsetabort(wAbort);
 
 	/* for telling WPrefs what's the name of the wmaker binary being ran */
@@ -698,10 +637,6 @@ static int real_main(int argc, char **argv)
 			} else if (strcmp(argv[i], "--global_defaults_path") == 0) {
 			  printf("%s/%s\n", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR);
 				exit(0);
-#ifdef DEBUG
-			} else if (strcmp(argv[i], "--synchronous") == 0) {
-				doSync = 1;
-#endif
 			} else if (strcmp(argv[i], "-locale") == 0 || strcmp(argv[i], "--locale") == 0) {
 				i++;
 				if (i >= argc) {
@@ -819,11 +754,6 @@ static int real_main(int argc, char **argv)
 
 	DisplayName = XDisplayName(DisplayName);
 	setenv("DISPLAY", DisplayName, 1);
-
-#ifdef DEBUG
-	if (doSync)
-		XSynchronize(dpy, True);
-#endif
 
 	wXModifierInitialize();
 	StartUp(!multiHead);

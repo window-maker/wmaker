@@ -113,10 +113,6 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 
 	if (hasModifier) {
 		keymap = XGetModifierMapping(dpy);
-
-#ifdef DEBUG
-		printf("Grabbing keyboard\n");
-#endif
 		XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, CurrentTime);
 	}
 

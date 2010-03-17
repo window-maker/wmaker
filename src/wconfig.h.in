@@ -393,8 +393,6 @@
 # define DEFAULT_PATH_MAX         512
 #endif
 
-#define DEBUG0
-
 /* some rules */
 #ifndef SHAPE
 #undef SHAPED_BALLOON

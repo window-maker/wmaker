@@ -380,20 +380,6 @@ RImage *wIconValidateIconSize(WScreen * scr, RImage * icon)
 		icon = tmp;
 	}
 #endif
-#if 0
-	if (icon->width > wPreferences.icon_size || icon->height > wPreferences.icon_size) {
-		if (icon->width > icon->height) {
-			w = wPreferences.icon_size - 4;
-			h = w * icon->height / icon->width;
-		} else {
-			h = wPreferences.icon_size - 4;
-			w = h * icon->width / icon->height;
-		}
-		tmp = RScaleImage(icon, w, h);
-		RReleaseImage(icon);
-		icon = tmp;
-	}
-#endif
 
 	return icon;
 }
@@ -803,9 +789,7 @@ static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event)
 		miniwindowDblClick(desc, event);
 		return;
 	}
-#ifdef DEBUG
-	puts("Moving miniwindow");
-#endif
+
 	if (event->xbutton.button == Button1) {
 		if (event->xbutton.state & MOD_MASK)
 			wLowerFrame(icon->core);
@@ -831,9 +815,6 @@ static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event)
 	if (XGrabPointer(dpy, icon->core->window, False, ButtonMotionMask
 			 | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
 			 GrabModeAsync, None, None, CurrentTime) != GrabSuccess) {
-#ifdef DEBUG0
-		wwarning("pointer grab failed for icon move");
-#endif
 	}
 	while (1) {
 		WMMaskEvent(dpy, PointerMotionMask | ButtonReleaseMask | ButtonPressMask
@@ -875,9 +856,6 @@ static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event)
 
 			wwin->icon_x = x;
 			wwin->icon_y = y;
-#ifdef DEBUG
-			puts("End miniwindow move");
-#endif
 			XUngrabPointer(dpy, CurrentTime);
 
 			if (wPreferences.auto_arrange_icons)

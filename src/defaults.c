@@ -1070,9 +1070,6 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 		}
 
 		if (plvalue) {
-#ifdef DEBUG
-			printf("Updating %s to %s\n", entry->key, WMGetPropListDescription(plvalue, False));
-#endif
 			/* convert data */
 			if ((*entry->convert) (scr, entry, plvalue, entry->addr, &tdata)) {
 				/*

@@ -1585,9 +1585,6 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 		/* this window is not selected, unselect others and move only wwin */
 		wUnselectWindows(scr);
 	}
-#ifdef DEBUG
-	puts("Moving window");
-#endif
 	shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
 	shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
 	while (!done) {
@@ -1755,9 +1752,6 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 					WMUnmapWidget(scr->gview);
 				}
 			}
-#ifdef DEBUG
-			puts("End move window");
-#endif
 			done = True;
 			break;
 
@@ -1883,10 +1877,6 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 	orig_y = ev->xbutton.y_root;
 
 	started = 0;
-#ifdef DEBUG
-	puts("Resizing window");
-#endif
-
 	wUnselectWindows(scr);
 	rx1 = fx;
 	rx2 = fx + fw - 1;
@@ -2067,9 +2057,6 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 
 				wWindowConfigure(wwin, fx, fy, fw, fh - vert_border);
 			}
-#ifdef DEBUG
-			puts("End resize window");
-#endif
 			return;
 
 		default:
@@ -2138,9 +2125,6 @@ void wSelectWindows(WScreen * scr, XEvent * ev)
 	int w = 0, h = 0;
 	int x = xp, y = yp;
 
-#ifdef DEBUG
-	puts("Selecting windows");
-#endif
 	if (XGrabPointer(dpy, scr->root_win, False, ButtonMotionMask
 			 | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
 			 GrabModeAsync, None, wCursor[WCUR_DEFAULT], CurrentTime) != Success) {
@@ -2185,10 +2169,6 @@ void wSelectWindows(WScreen * scr, XEvent * ev)
 			XUngrabServer(dpy);
 			XUngrabPointer(dpy, CurrentTime);
 			selectWindowsInside(scr, x, y, x + w, y + h);
-
-#ifdef DEBUG
-			puts("End window selection");
-#endif
 			return;
 
 		default:

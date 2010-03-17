@@ -466,11 +466,6 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 		case 7:
 			break;
 		}
-#ifdef DEBUG
-		if (i) {
-			printf("window leader update caused state transition %i\n", i);
-		}
-#endif
 
 		if (wwin->wm_hints) {
 			/* update icon */

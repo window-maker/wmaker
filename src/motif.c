@@ -26,20 +26,17 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 
 #include "WindowMaker.h"
-
 #include "framewin.h"
 #include "window.h"
 #include "properties.h"
 #include "icon.h"
 #include "client.h"
 #include "funcs.h"
-
 #include "motif.h"
 
 /* Motif window hints */
@@ -47,12 +44,12 @@
 #define MWM_HINTS_DECORATIONS         (1L << 1)
 
 /* bit definitions for MwmHints.functions */
-#define MWM_FUNC_ALL            (1L << 0)
-#define MWM_FUNC_RESIZE         (1L << 1)
-#define MWM_FUNC_MOVE           (1L << 2)
-#define MWM_FUNC_MINIMIZE       (1L << 3)
-#define MWM_FUNC_MAXIMIZE       (1L << 4)
-#define MWM_FUNC_CLOSE          (1L << 5)
+#define MWM_FUNC_ALL                  (1L << 0)
+#define MWM_FUNC_RESIZE               (1L << 1)
+#define MWM_FUNC_MOVE                 (1L << 2)
+#define MWM_FUNC_MINIMIZE             (1L << 3)
+#define MWM_FUNC_MAXIMIZE             (1L << 4)
+#define MWM_FUNC_CLOSE                (1L << 5)
 
 /* bit definitions for MwmHints.decorations */
 #define MWM_DECOR_ALL                 (1L << 0)
@@ -62,8 +59,6 @@
 #define MWM_DECOR_MENU                (1L << 4)
 #define MWM_DECOR_MINIMIZE            (1L << 5)
 #define MWM_DECOR_MAXIMIZE            (1L << 6)
-
-#define PROP_MWM_HINTS_ELEMENTS       5
 
 /* Motif  window hints */
 typedef struct {
@@ -76,7 +71,7 @@ typedef struct {
 
 static Atom _XA_MOTIF_WM_HINTS;
 
-static void setupMWMHints(WWindow * wwin, MWMHints * mwm_hints)
+static void setupMWMHints(WWindow *wwin, MWMHints *mwm_hints)
 {
 	/*
 	 * We will ignore all decoration hints that have an equivalent as
@@ -84,18 +79,12 @@ static void setupMWMHints(WWindow * wwin, MWMHints * mwm_hints)
 	 */
 
 	if (mwm_hints->flags & MWM_HINTS_DECORATIONS) {
-# ifdef DEBUG
-		fprintf(stderr, "has decor hints [ ");
-# endif
 		WSETUFLAG(wwin, no_titlebar, 1);
 		WSETUFLAG(wwin, no_close_button, 1);
 		WSETUFLAG(wwin, no_miniaturize_button, 1);
 		WSETUFLAG(wwin, no_resizebar, 1);
 
 		if (mwm_hints->decorations & MWM_DECOR_ALL) {
-# ifdef DEBUG
-			fprintf(stderr, "ALL ");
-# endif
 			WSETUFLAG(wwin, no_titlebar, 0);
 			WSETUFLAG(wwin, no_close_button, 0);
 			WSETUFLAG(wwin, no_closable, 0);
@@ -104,118 +93,54 @@ static void setupMWMHints(WWindow * wwin, MWMHints * mwm_hints)
 			WSETUFLAG(wwin, no_resizebar, 0);
 			WSETUFLAG(wwin, no_resizable, 0);
 		}
-		/*
-		   if (mwm_hints->decorations & MWM_DECOR_BORDER) {
-		   # ifdef DEBUG
-		   fprintf(stderr,"(BORDER) ");
-		   # endif
-		   }
-		 */
 
-		if (mwm_hints->decorations & MWM_DECOR_RESIZEH) {
-# ifdef DEBUG
-			fprintf(stderr, "RESIZEH ");
-# endif
+		if (mwm_hints->decorations & MWM_DECOR_RESIZEH)
 			WSETUFLAG(wwin, no_resizebar, 0);
-		}
 
 		if (mwm_hints->decorations & MWM_DECOR_TITLE) {
-# ifdef DEBUG
-			fprintf(stderr, "TITLE+close ");
-# endif
 			WSETUFLAG(wwin, no_titlebar, 0);
 			WSETUFLAG(wwin, no_close_button, 0);
 			WSETUFLAG(wwin, no_closable, 0);
 		}
-		/*
-		   if (mwm_hints->decorations & MWM_DECOR_MENU) {
-		   # ifdef DEBUG
-		   fprintf(stderr,"(MENU) ");
-		   # endif
-		   }
-		 */
 
 		if (mwm_hints->decorations & MWM_DECOR_MINIMIZE) {
-# ifdef DEBUG
-			fprintf(stderr, "MINIMIZE ");
-# endif
 			WSETUFLAG(wwin, no_miniaturize_button, 0);
 			WSETUFLAG(wwin, no_miniaturizable, 0);
 		}
-		/*
-		   if (mwm_hints->decorations & MWM_DECOR_MAXIMIZE) {
-		   # ifdef DEBUG
-		   fprintf(stderr,"(MAXIMIZE) ");
-		   # endif
-		   }
-		 */
-# ifdef DEBUG
-		fprintf(stderr, "]\n");
-# endif
 	}
 
 	if (mwm_hints->flags & MWM_HINTS_FUNCTIONS) {
-# ifdef DEBUG
-		fprintf(stderr, "has function hints [ ");
-# endif
 		WSETUFLAG(wwin, no_closable, 1);
 		WSETUFLAG(wwin, no_miniaturizable, 1);
 		WSETUFLAG(wwin, no_resizable, 1);
 
 		if (mwm_hints->functions & MWM_FUNC_ALL) {
-# ifdef DEBUG
-			fprintf(stderr, "ALL ");
-# endif
 			WSETUFLAG(wwin, no_closable, 0);
 			WSETUFLAG(wwin, no_miniaturizable, 0);
 			WSETUFLAG(wwin, no_resizable, 0);
 		}
-		if (mwm_hints->functions & MWM_FUNC_RESIZE) {
-# ifdef DEBUG
-			fprintf(stderr, "RESIZE ");
-# endif
+		if (mwm_hints->functions & MWM_FUNC_RESIZE)
 			WSETUFLAG(wwin, no_resizable, 0);
-		}
-		/*
-		   if (mwm_hints->functions & MWM_FUNC_MOVE) {
-		   # ifdef DEBUG
-		   fprintf(stderr,"(MOVE) ");
-		   # endif
-		   }
-		 */
-		if (mwm_hints->functions & MWM_FUNC_MINIMIZE) {
-# ifdef DEBUG
-			fprintf(stderr, "MINIMIZE ");
-# endif
+
+		if (mwm_hints->functions & MWM_FUNC_MINIMIZE)
 			WSETUFLAG(wwin, no_miniaturizable, 0);
-		}
+
 		if (mwm_hints->functions & MWM_FUNC_MAXIMIZE) {
-# ifdef DEBUG
-			fprintf(stderr, "MAXIMIZE ");
 			/* a window must be resizable to be maximizable */
 			WSETUFLAG(wwin, no_resizable, 0);
-# endif
 		}
-		if (mwm_hints->functions & MWM_FUNC_CLOSE) {
-# ifdef DEBUG
-			fprintf(stderr, "CLOSE ");
-# endif
+		if (mwm_hints->functions & MWM_FUNC_CLOSE)
 			WSETUFLAG(wwin, no_closable, 0);
-		}
-# ifdef DEBUG
-		fprintf(stderr, "]\n");
-# endif
 	}
 }
 
-static int getMWMHints(Window window, MWMHints * mwmhints)
+static int getMWMHints(Window window, MWMHints *mwmhints)
 {
 	unsigned long *data;
 	int count;
 
-	if (!_XA_MOTIF_WM_HINTS) {
+	if (!_XA_MOTIF_WM_HINTS)
 		_XA_MOTIF_WM_HINTS = XInternAtom(dpy, "_MOTIF_WM_HINTS", False);
-	}
 
 	data = (unsigned long *)PropGetCheckProperty(window, _XA_MOTIF_WM_HINTS,
 						     _XA_MOTIF_WM_HINTS, 32, 0, &count);
@@ -236,13 +161,12 @@ static int getMWMHints(Window window, MWMHints * mwmhints)
 	return 1;
 }
 
-void wMWMCheckClientHints(WWindow * wwin)
+void wMWMCheckClientHints(WWindow *wwin)
 {
 	MWMHints hints;
 
-	if (getMWMHints(wwin->client_win, &hints)) {
+	if (getMWMHints(wwin->client_win, &hints))
 		setupMWMHints(wwin, &hints);
-	}
 }
 
-#endif				/* MWM_HINTS */
+#endif	/* MWM_HINTS */

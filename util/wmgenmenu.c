@@ -26,7 +26,6 @@ char *path;
 
 int main(int argc, char *argv[])
 {
-	int fd;
 	char *locale;
 	extern char *path;
 

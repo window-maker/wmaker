@@ -116,9 +116,6 @@ WTexSolid *wTextureMakeSolid(WScreen * scr, XColor * color)
 
 static int dummyErrorHandler(Display * foo, XErrorEvent * bar)
 {
-#ifdef DEBUG
-	wwarning("your server is buggy. Tell the author if some error related to color occurs");
-#endif
 	return 0;
 }
 
@@ -127,13 +124,6 @@ void wTextureDestroy(WScreen * scr, WTexture * texture)
 	int i;
 	int count = 0;
 	unsigned long colors[8];
-
-#ifdef DEBUG
-	if (texture == NULL) {
-		printf("BUG: trying to free NULL texture\n");
-		return;
-	}
-#endif
 
 	/*
 	 * some stupid servers don't like white or black being freed...
@@ -672,24 +662,5 @@ void wDrawBevel(Drawable d, unsigned width, unsigned height, WTexSolid * texture
 			XDrawSegments(dpy, d, light, segs, 2);
 		}
 		break;
-#ifdef unused
-	case WREL_SUNKEN:
-		segs[0].x1 = 0;
-		segs[0].x2 = width - 1;
-		segs[0].y2 = segs[0].y1 = 0;
-		segs[1].x1 = segs[1].x2 = 0;
-		segs[1].y1 = 0;
-		segs[1].y2 = height - 1;
-		XDrawSegments(dpy, d, dark, segs, 2);
-
-		segs[0].x1 = 0;
-		segs[0].y1 = segs[0].y2 = height - 1;
-		segs[0].x2 = width - 1;
-		segs[1].x2 = segs[1].x1 = width - 1;
-		segs[1].y1 = 1;
-		segs[1].y2 = height - 1;
-		XDrawSegments(dpy, d, light, segs, 2);
-		break;
-#endif
 	}
 }

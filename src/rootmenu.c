@@ -193,12 +193,9 @@ static void exitCommand(WMenu * menu, WMenuEntry * entry)
 			wPreferences.save_session_on_exit = oldSaveSessionFlag;
 		}
 	}
-	if (result == R_EXIT) {
-#ifdef DEBUG
-		printf("Exiting WindowMaker.\n");
-#endif
+	if (result == R_EXIT)
 		Shutdown(WSExitMode);
-	}
+
 #undef R_EXIT
 #undef R_CANCEL
 	inside = 0;
