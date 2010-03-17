@@ -352,7 +352,7 @@ void makeThemePack(WMPropList * style, char *themeName)
 int main(int argc, char **argv)
 {
 	WMPropList *prop, *style, *key, *val;
-	char *path;
+	char *path, *p;
 	int i, theme_too = 0, make_pack = 0;
 	char *style_file = NULL;
 
@@ -379,6 +379,8 @@ int main(int argc, char **argv)
 					exit(1);
 				}
 				style_file = argv[i];
+				while ((p = strchr(style_file, '/')) != NULL)
+					*p = '_';
 			}
 		}
 	}
