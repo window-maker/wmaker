@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS = no-dependencies
 pkgdatadir  = $(datadir)/@PACKAGE@
 
 bin_PROGRAMS = wxcopy wxpaste wdwrite wdread getstyle setstyle convertfonts \
-	seticons geticonset wmsetbg wmsetup wmagnify wmgenmenu
+	seticons geticonset wmsetbg wmagnify wmgenmenu
 
 bin_SCRIPTS = wmaker.inst wm-oldmenu2new wkdemenu.pl
 
@@ -46,12 +46,6 @@ seticons_LDADD= $(top_builddir)/WINGs/libWUtil.la $(liblist)
 geticonset_LDADD= $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
 wmagnify_LDADD = \
-	$(top_builddir)/WINGs/libWINGs.la \
-	$(top_builddir)/WINGs/libWUtil.la \
-	$(top_builddir)/wrlib/libwraster.la \
-	@XFTLIBS@ @INTLIBS@ @DLLIBS@
-
-wmsetup_LDADD = \
 	$(top_builddir)/WINGs/libWINGs.la \
 	$(top_builddir)/WINGs/libWUtil.la \
 	$(top_builddir)/wrlib/libwraster.la \
