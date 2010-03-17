@@ -9,6 +9,8 @@
 #include <unistd.h>
 #include <ctype.h>
 
+#include <fts.h>
+
 #include "WUtil.h"
 #include "wconfig.h"
 
@@ -51,7 +53,6 @@ static WMPropList *getPLData(PLData * pldata);
 static WMPropList *getPLArray(PLData * pldata);
 static WMPropList *getPLDictionary(PLData * pldata);
 static WMPropList *getPropList(PLData * pldata);
-static int WMMkDirHier(const char *path);
 
 typedef unsigned (*hashFunc) (const void *);
 typedef Bool(*isEqualFunc) (const void *, const void *);
@@ -1560,7 +1561,7 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path)
 	int fd, mask;
 #endif
 
-	if (!WMMkDirHier(path))
+	if (!wmkdirhier(path))
 		return False;
 
 	/* Use the path name of the destination file as a prefix for the
@@ -1636,7 +1637,7 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path)
  *
  * returns 1 on success, 0 on failure
  */
-static int WMMkDirHier(const char *path)
+int wmkdirhier(const char *path)
 {
 	char *t, *thePath = NULL, buf[1024];
 	size_t p, plen;
@@ -1689,4 +1690,59 @@ static int WMMkDirHier(const char *path)
 
 	wfree(thePath);
 	return 1;
+}
+
+/*
+ * remove a directory hierarchy
+ *
+ * refuses to remove anything outside $GNUSTEP_USER_ROOT
+ *
+ * returns 1 on success, 0 on failure
+ *
+ * TODO: revisit what's error and what's not
+ *
+ * with inspirations from OpenBSD's bin/rm/rm.c
+ */
+int wrmdirhier(const char *path)
+{
+	FTS *fts;
+	FTSENT *p;
+	char *t;
+	struct stat st;
+	char *ptree[2];
+
+	/* Only remove directories under $GNUSTEP_USER_ROOT */
+	if ((t = wusergnusteppath()) == NULL)
+		return 0;
+	if (strncmp(path, t, strlen(t)) != 0)
+		return 0;
+
+	/* Shortcut if it doesn't exist to begin with */
+	if (stat(path, &st) == -1)
+		return 0;
+
+	ptree[0] = (char *)path;
+	ptree[1] = NULL;
+
+	if (!(fts = fts_open(ptree, FTS_PHYSICAL, NULL)))
+		return 0;
+
+	while ((p = fts_read(fts)) != NULL) {
+		switch(p->fts_info) {
+			case FTS_D:
+				continue;
+			break;
+			case FTS_DP:
+				rmdir(p->fts_path);
+				continue;
+			break;
+			case FTS_F:
+				unlink(p->fts_path);
+				continue;
+			break;
+				default: continue;
+		}
+
+	}
+
 }

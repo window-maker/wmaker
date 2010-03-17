@@ -158,7 +158,6 @@ char *MakeCPPArgs(char *path)
 		if (buf[0] != '~') {
 			strcpy(fullpath, buf);
 		} else {
-			char *wgethomedir();
 			/* home is statically allocated. Don't free it! */
 			char *home = wgethomedir();
 

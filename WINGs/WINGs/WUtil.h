@@ -244,6 +244,9 @@ char* wfindfileinarray(WMPropList* array, char *file);
 
 char* wexpandpath(char *path);
 
+int wmkdirhier(const char *path);
+int wrmdirhier(const char *path);
+
 /* don't free the returned string */
 char* wgethomedir();
 

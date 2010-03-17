@@ -22,6 +22,10 @@
 
 #define PROG_VERSION "getstyle (Window Maker) 0.6"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,6 +34,7 @@
 #include <pwd.h>
 #include <limits.h>
 #include <assert.h>
+#include <libgen.h>
 #include <WINGs/WUtil.h>
 
 #ifndef PATH_MAX
@@ -171,200 +176,12 @@ char *defaultsPathForDomain(char *domain)
 
 void abortar(char *reason)
 {
-	char buffer[4000];
-
 	printf("%s: %s\n", ProgName, reason);
-
 	if (ThemePath) {
 		printf("Removing unfinished theme pack\n");
-		sprintf(buffer, "/bin/rm -fr \"%s\"", ThemePath);
-
-		if (system(buffer) != 0) {
-			printf("%s: could not execute command %s\n", ProgName, buffer);
-		}
+		(void)wrmdirhier(ThemePath);
 	}
 	exit(1);
-}
-
-char *wgethomedir()
-{
-	char *home = getenv("HOME");
-	struct passwd *user;
-
-	if (home)
-		return home;
-
-	user = getpwuid(getuid());
-	if (!user) {
-		char buffer[80];
-
-		sprintf(buffer, "could not get password entry for UID %i", getuid());
-		perror(buffer);
-		return "/";
-	}
-	if (!user->pw_dir) {
-		return "/";
-	} else {
-		return user->pw_dir;
-	}
-}
-
-static char *getuserhomedir(char *username)
-{
-	struct passwd *user;
-
-	user = getpwnam(username);
-	if (!user) {
-		char buffer[100];
-
-		sprintf(buffer, "could not get password entry for user %s", username);
-		perror(buffer);
-		return NULL;
-	}
-	if (!user->pw_dir) {
-		return "/";
-	} else {
-		return user->pw_dir;
-	}
-}
-
-char *wexpandpath(char *path)
-{
-	char buffer2[PATH_MAX + 2];
-	char buffer[PATH_MAX + 2];
-	int i;
-
-	memset(buffer, 0, PATH_MAX + 2);
-
-	if (*path == '~') {
-		char *home;
-
-		path++;
-		if (*path == '/' || *path == 0) {
-			home = wgethomedir();
-			strcat(buffer, home);
-		} else {
-			int j;
-			j = 0;
-			while (*path != 0 && *path != '/') {
-				buffer2[j++] = *path;
-				buffer2[j] = 0;
-				path++;
-			}
-			home = getuserhomedir(buffer2);
-			if (!home)
-				return NULL;
-			strcat(buffer, home);
-		}
-	}
-
-	i = strlen(buffer);
-
-	while (*path != 0) {
-		char *tmp;
-
-		if (*path == '$') {
-			int j = 0;
-			path++;
-			/* expand $(HOME) or $HOME style environment variables */
-			if (*path == '(') {
-				path++;
-				while (*path != 0 && *path != ')') {
-					buffer2[j++] = *(path++);
-					buffer2[j] = 0;
-				}
-				if (*path == ')')
-					path++;
-				tmp = getenv(buffer2);
-				if (!tmp) {
-					buffer[i] = 0;
-					strcat(buffer, "$(");
-					strcat(buffer, buffer2);
-					strcat(buffer, ")");
-					i += strlen(buffer2) + 3;
-				} else {
-					strcat(buffer, tmp);
-					i += strlen(tmp);
-				}
-			} else {
-				while (*path != 0 && *path != '/') {
-					buffer2[j++] = *(path++);
-					buffer2[j] = 0;
-				}
-				tmp = getenv(buffer2);
-				if (!tmp) {
-					strcat(buffer, "$");
-					strcat(buffer, buffer2);
-					i += strlen(buffer2) + 1;
-				} else {
-					strcat(buffer, tmp);
-					i += strlen(tmp);
-				}
-			}
-		} else {
-			buffer[i++] = *path;
-			path++;
-		}
-	}
-
-	return wstrdup(buffer);
-}
-
-char *wfindfileinarray(WMPropList * paths, char *file)
-{
-	int i;
-	char *path;
-	int len, flen;
-	char *fullpath;
-
-	if (!file)
-		return NULL;
-
-	if (*file == '/' || *file == '~' || !paths || !WMIsPLArray(paths)
-	    || WMGetPropListItemCount(paths) == 0) {
-		if (access(file, R_OK) < 0) {
-			fullpath = wexpandpath(file);
-			if (!fullpath)
-				return NULL;
-
-			if (access(fullpath, R_OK) < 0) {
-				free(fullpath);
-				return NULL;
-			} else {
-				return fullpath;
-			}
-		} else {
-			return wstrdup(file);
-		}
-	}
-
-	flen = strlen(file);
-	for (i = 0; i < WMGetPropListItemCount(paths); i++) {
-		WMPropList *tmp;
-		char *dir;
-
-		tmp = WMGetFromPLArray(paths, i);
-		if (!WMIsPLString(tmp) || !(dir = WMGetFromPLString(tmp)))
-			continue;
-
-		len = strlen(dir);
-		path = wmalloc(len + flen + 2);
-		path = memcpy(path, dir, len);
-		path[len] = 0;
-		strcat(path, "/");
-		strcat(path, file);
-		/* expand tilde */
-		fullpath = wexpandpath(path);
-		free(path);
-		if (fullpath) {
-			/* check if file is readable */
-			if (access(fullpath, R_OK) == 0) {
-				return fullpath;
-			}
-			free(fullpath);
-		}
-	}
-	return NULL;
 }
 
 static Bool isFontOption(char *option)
@@ -380,14 +197,48 @@ static Bool isFontOption(char *option)
 	return False;
 }
 
+/*
+ * it is more or less assumed that this function will only
+ * copy reasonably-sized files
+ */
 void copyFile(char *dir, char *file)
 {
-	char buffer[4000];
+	int from_fd, to_fd;
+	size_t block, len;
+	char buf[4096];
+	struct stat st;
+	char *dst;
 
-	sprintf(buffer, "/bin/cp \"%s\" \"%s\"", file, dir);
-	if (system(buffer) != 0) {
-		printf("%s: could not copy file %s\n", ProgName, file);
+	/* only to a directory */
+	if (stat(dir, &st) != 0 || !S_ISDIR(st.st_mode))
+		return;
+	/* only copy files */
+	if (stat(file, &st) != 0 || !S_ISREG(st.st_mode))
+		return;
+
+	len = strlen(dir) + 1 /* / */ + strlen(file) + 1 /* '\0' */;
+	dst = wmalloc(len);
+	snprintf(dst, len, "%s/%s", dir, basename(file));
+	buf[len] = '\0';
+
+	if ((to_fd = open(dst, O_RDWR|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1) {
+		wfree(dst);
+		return;
 	}
+	wfree(dst);
+	if ((from_fd = open(file, O_RDONLY)) == -1) {
+		(void)close(to_fd);
+		return;
+	}
+
+	/* XXX: signal handling */
+	while ((block = read(from_fd, &buf, sizeof(buf))) > 0)
+		write(to_fd, &buf, block);
+
+	(void)fsync(to_fd);
+	(void)fchmod(to_fd, st.st_mode);
+	(void)close(to_fd);
+	(void)close(from_fd);
 }
 
 void findCopyFile(char *dir, char *file)
@@ -405,30 +256,24 @@ void findCopyFile(char *dir, char *file)
 	free(fullPath);
 }
 
-char *makeThemePack(WMPropList * style, char *themeName)
+void makeThemePack(WMPropList * style, char *themeName)
 {
 	WMPropList *keys;
 	WMPropList *key;
 	WMPropList *value;
 	int i;
-	char *themeDir;
+	size_t themeNameLen;
+	char *themeDir, *t;
 
-	themeDir = wmalloc(strlen(themeName) + 50);
-	sprintf(themeDir, "%s.themed", themeName);
+	if ((t = wusergnusteppath()) == NULL)
+		return;
+	themeNameLen = strlen(t) + 1 /* / */ + strlen(themeName) + 8 /* ".themed/" */ + 1 /* '\0' */;
+	themeDir = wmalloc(themeNameLen);
+	snprintf(themeDir, themeNameLen, "%s/%s.themed/", t, themeName);
 	ThemePath = themeDir;
-	{
-		char *tmp;
+	if (!wmkdirhier(themeDir))
+		return;
 
-		tmp = wmalloc(strlen(themeDir) + 20);
-		sprintf(tmp, "/bin/mkdir \"%s\"", themeDir);
-		if (system(tmp) != 0) {
-			printf
-			    ("%s: could not create directory %s. Probably there's already a theme with that name in this directory.\n",
-			     ProgName, themeDir);
-			exit(1);
-		}
-		free(tmp);
-	}
 	keys = WMGetPLDictionaryKeys(style);
 
 	for (i = 0; i < WMGetPropListItemCount(keys); i++) {
@@ -502,8 +347,6 @@ char *makeThemePack(WMPropList * style, char *themeName)
 			}
 		}
 	}
-
-	return themeDir;
 }
 
 int main(int argc, char **argv)

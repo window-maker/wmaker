@@ -53,7 +53,7 @@ char *wgethomedir()
 	}
 }
 
-static char *getuserhomedir(char *username)
+static char *getuserhomedir(const char *username)
 {
 	struct passwd *user;
 
