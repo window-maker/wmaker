@@ -145,22 +145,20 @@ void wtokenfree(char **tokens, int count)
 	wfree(tokens);
 }
 
-char *wtrimspace(char *s)
+char *wtrimspace(const char *s)
 {
 	char *t;
-	char *c;
+
+	if (s == NULL)
+		return NULL;
 
 	while (isspace(*s) && *s)
 		s++;
-	t = s + strlen(s) - 1;
+	t = (char *)s + strlen(s) - 1;
 	while (t > s && isspace(*t))
 		t--;
 
-	c = wmalloc(t - s + 2);
-	memcpy(c, s, t - s + 1);
-	c[t - s + 1] = 0;
-
-	return c;
+	return wstrndup(s, t - s + 1);
 }
 
 char *wstrdup(const char *str)
@@ -170,7 +168,7 @@ char *wstrdup(const char *str)
 	return strcpy(wmalloc(strlen(str) + 1), str);
 }
 
-char *wstrndup(char *str, size_t len)
+char *wstrndup(const char *str, size_t len)
 {
 	char *copy;
 

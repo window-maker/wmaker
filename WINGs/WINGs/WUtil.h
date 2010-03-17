@@ -257,7 +257,7 @@ void wrelease(void *ptr);
 void* wretain(void *ptr);
 
 char *wstrdup(const char *str);
-char* wstrndup(char *str, size_t len);
+char* wstrndup(const char *str, size_t len);
 
 /* Concatenate str1 with str2 and return that in a newly malloc'ed string.
  * str1 and str2 can be any strings including static and constant strings.
@@ -283,7 +283,7 @@ char* wtokenjoin(char **list, int count);
 
 void wtokenfree(char **tokens, int count);
 
-char* wtrimspace(char *s);
+char* wtrimspace(const char *s);
 
 
 WMRange wmkrange(int start, int count);
