@@ -306,21 +306,6 @@ void closeWindow(WMWidget * w, void *d)
 	}
 }
 
-#if 0
-static void clickHandler(XEvent * event, void *d)
-{
-	BufferData *data = (BufferData *) d;
-
-	data->win = WMCreateWindow(scr, "setup");
-	WMSetWindowTitle(data->win, "Magnify Options");
-
-	data->speed = WMCreateSlider(data->win);
-
-	data->magnify = WMCreateSlider(data->win);
-
-}
-#endif
-
 static void keyHandler(XEvent * event, void *d)
 {
 	BufferData *data = (BufferData *) d;
@@ -417,9 +402,7 @@ int main(int argc, char **argv)
 	char *display = "";
 	char *vdisplay = NULL;
 	int magfactor = 2;
-#if 0
-	WMButton *radio, *tradio;
-#endif
+
 	WMInitializeApplication("Magnify", &argc, argv);
 
 	for (i = 1; i < argc; i++) {
