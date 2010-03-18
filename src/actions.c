@@ -395,34 +395,50 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 	wwin->flags.maximized = directions;
 }
 
+/* the window boundary coordinates */
+typedef struct {
+	int left;
+	int right;
+	int bottom;
+	int top;
+	int width;
+	int height;
+} win_coords;
+
+static void set_window_coords(WWindow *wwin, win_coords *obs)
+{
+	obs->left = wwin->frame_x;
+	obs->top = wwin->frame_y;
+	obs->width = wwin->frame->core->width;
+	obs->height = wwin->frame->core->height;
+	obs->bottom = obs->top + obs->height;
+	obs->right = obs->left + obs->width;
+}
+
 /*
  * Maximus: tiled maximization (maximize without overlapping other windows)
  *
- * The window to be maximized will be denoted by w_0 (sub-index zero)
- * while the windows which will stop the maximization of w_0 are denoted by w_j.
+ * The original window 'orig' will be maximized to new coordinates 'new'.
+ * The windows obstructing the maximization of 'orig' are denoted 'obs'.
  */
 static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, int *new_y,
 				  unsigned int *new_width, unsigned int *new_height)
 {
 	WWindow *tmp;
-	int x_0            = wwin->frame_x;
-	int y_0            = wwin->frame_y;
-	int width_0        = wwin->frame->core->width;
-	int height_0       = wwin->frame->core->height;
-	int bottom_0       = y_0 + height_0;
-	int right_border_0 = x_0 + width_0;
-	int new_x_0, new_y_0, new_bottom_0, new_right_border_0, new_height_0;
-	int x_j,  y_j, width_j, height_j, bottom_j, top_j, right_border_j;
-	int x_intsect, y_intsect;
-	short int tbar_height_0 = 0, rbar_height_0 = 0;
-	short int bd_width_0 = 0;
+	short int tbar_height_0 = 0, rbar_height_0 = 0, bd_width_0 = 0;
 	short int adjust_height;
+	int x_intsect, y_intsect;
+	/* the obstructing, original and new windows */
+	win_coords obs, orig, new;
+
+	/* set the original coordinate positions of the window to be Maximumized */
+	set_window_coords(wwin, &orig);
 
 	/* Try to fully maximize first, then readjust later */
-	new_x_0            = usableArea.x1;
-	new_y_0            = usableArea.y1;
-	new_bottom_0       = usableArea.y2;
-	new_right_border_0 = usableArea.x2;
+	new.left    = usableArea.x1;
+	new.right   = usableArea.x2;
+	new.top     = usableArea.y1;
+	new.bottom  = usableArea.y2;
 
 	if (HAS_TITLEBAR(wwin))
 		tbar_height_0 = TITLEBAR_HEIGHT;
@@ -431,7 +447,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 	if (HAS_BORDER(wwin))
 		bd_width_0 = FRAME_BORDER_WIDTH;
 
-	/* the length to be subtracted if w_0 has titlebar, etc */
+	/* the length to be subtracted if the window has titlebar, etc */
 	adjust_height = tbar_height_0 + 2 * bd_width_0 + rbar_height_0;
 
 	tmp = wwin;
@@ -445,31 +461,20 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 		}
 		tmp = tmp->prev;
 
-		/*
-		 * Set the w_j window coordinates. It is convenient
-		 * to not use "corrected" sizes for width and height,
-		 * otherwise bottom_j and right_border_j would be
-		 * incorrect.
-		 */
-		x_j = tmp->frame_x;
-		y_j = tmp->frame_y;
-		width_j = tmp->frame->core->width;
-		height_j = tmp->frame->core->height;
-		bottom_j = y_j + height_j;
-		top_j = y_j;
-		right_border_j = x_j + width_j;
+		/* Set the coordinates of obstructing window */
+		set_window_coords(tmp, &obs);
 
 		/* Try to maximize in the y direction first */
-		x_intsect = calcIntersectionLength(x_0, width_0, x_j, width_j);
+		x_intsect = calcIntersectionLength(orig.left, orig.width, obs.left, obs.width);
 		if (x_intsect != 0) {
 			/* TODO: Consider the case when coords are equal */
-			if (bottom_j < y_0 && bottom_j > new_y_0) {
+			if (obs.bottom < orig.top && obs.bottom > new.top) {
 				/* w_0 is below the bottom of w_j */
-				new_y_0 = bottom_j + 1;
+				new.top = obs.bottom + 1;
 			}
-			if (bottom_0 < top_j && top_j < new_bottom_0) {
+			if (orig.bottom < obs.top && obs.top < new.bottom) {
 				/* The bottom of w_0 is above the top of w_j */
-				new_bottom_0 = top_j - 1;
+				new.bottom = obs.top - 1;
 			}
 		}
 	}
@@ -483,40 +488,31 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 		}
 		tmp = tmp->prev;
 
-		/* set the w_j window coordinates */
-		x_j = tmp->frame_x;
-		y_j = tmp->frame_y;
-		width_j = tmp->frame->core->width;
-		height_j = tmp->frame->core->height;
-		bottom_j = y_j + height_j;
-		top_j = y_j;
-		right_border_j = x_j + width_j;
+		set_window_coords(tmp, &obs);
 
 		/*
-		 * Use the updated y coordinates from the above step to account
-		 * the possibility that the new value of y_0 will have different
-		 * intersections with w_j
+		 * Use the new.top and new.height instead of original values
+		 * as they may have different intersections with the obstructing windows
 		 */
-		new_height_0 = new_bottom_0 - new_y_0 - adjust_height;
-		y_intsect = calcIntersectionLength(new_y_0, new_height_0, y_j, height_j);
+		new.height = new.bottom - new.top - adjust_height;
+		y_intsect = calcIntersectionLength(new.top, new.height, obs.top, obs.height);
 		if (y_intsect != 0) {
-			if (right_border_j < x_0 && right_border_j > new_x_0) {
+			if (obs.right < orig.left && obs.right > new.left) {
 				/* w_0 is completely to the right of w_j */
-				new_x_0 = right_border_j + 1;
+				new.left = obs.right + 1;
 			}
-			if (right_border_0 < x_j && x_j < new_right_border_0) {
+			if (orig.right < obs.left && obs.left < new.right) {
 				/* w_0 is completely to the left of w_j */
-				new_right_border_0 = x_j - 1;
+				new.right = obs.left - 1;
 			}
 		}
 	}
 
+	*new_x = new.left;
+	*new_y = new.top;
 	/* xcalc needs -7 here, but other apps don't */
-	new_height_0 = new_bottom_0 - new_y_0 - adjust_height - 1;
-	*new_x = new_x_0;
-	*new_y = new_y_0;
-	*new_height = new_height_0;
-	*new_width = new_right_border_0 - new_x_0;
+	*new_height = new.bottom - new.top - adjust_height - 1;;
+	*new_width = new.right - new.left;
 }
 
 void wUnmaximizeWindow(WWindow *wwin)
