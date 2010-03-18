@@ -46,7 +46,7 @@ void wDefaultUpdateIcons(WScreen *scr);
 
 void wReadStaticDefaults(WMPropList *dict);
 
-void wDefaultsCheckDomains(void);
+void wDefaultsCheckDomains(void *arg);
 
 void wSaveDefaults(WScreen *scr);
 

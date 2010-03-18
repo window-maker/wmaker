@@ -897,7 +897,7 @@ void wReadStaticDefaults(WMPropList * dict)
 	}
 }
 
-void wDefaultsCheckDomains(void)
+void wDefaultsCheckDomains(void* arg)
 {
 	WScreen *scr;
 	struct stat stbuf;
@@ -1016,6 +1016,10 @@ void wDefaultsCheckDomains(void)
 		}
 		WDRootMenu->timestamp = stbuf.st_mtime;
 	}
+#ifndef HAVE_INOTIFY
+	if (!arg)
+		WMAddTimerHandler(DEFAULTS_CHECK_INTERVAL, wDefaultsCheckDomains, arg);
+#endif
 }
 
 void wReadDefaults(WScreen * scr, WMPropList * new_dict)

@@ -20,8 +20,11 @@
  *  USA.
  */
 
-#include <sys/inotify.h>
 #include "wconfig.h"
+
+#ifdef HAVE_INOTIFY
+#include <sys/inotify.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -198,7 +201,7 @@ void DispatchEvent(XEvent * event)
 		Restart(NULL, True);
 	} else if (WCHECK_STATE(WSTATE_NEED_REREAD)) {
 		WCHANGE_STATE(WSTATE_NORMAL);
-		wDefaultsCheckDomains();
+		wDefaultsCheckDomains(NULL);
 	}
 
 	/* for the case that all that is wanted to be dispatched is
@@ -282,6 +285,7 @@ void DispatchEvent(XEvent * event)
 	}
 }
 
+#ifdef HAVE_INOTIFY
 /*
  *----------------------------------------------------------------------
  * inotifyHandleEvents-
@@ -299,7 +303,7 @@ void DispatchEvent(XEvent * event)
 #define BUFF_SIZE ((sizeof(struct inotify_event) + 64)*5)
 void inotifyHandleEvents(int fd, int wd)
 {
-	extern void wDefaultsCheckDomains(void);
+	extern void wDefaultsCheckDomains(void *);
 	ssize_t eventQLength, i = 0;
 	char buff[BUFF_SIZE] = { 0 };
 	/* Check config only once per read of the event queue */
@@ -335,13 +339,14 @@ void inotifyHandleEvents(int fd, int wd)
 		}
 		if ((pevent->mask & IN_MODIFY) && oneShotFlag == 0) {
 			fprintf(stdout, "wmaker: reading config files in defaults database.\n");
-			wDefaultsCheckDomains();
+			wDefaultsCheckDomains(NULL);
 		}
 
 		/* move to next event in the buffer */
 		i += sizeof(struct inotify_event) + pevent->len;
 	}
 }
+#endif /* HAVE_INOTIFY */
 
 /*
  *----------------------------------------------------------------------
@@ -359,6 +364,7 @@ void inotifyHandleEvents(int fd, int wd)
 void EventLoop(void)
 {
 	XEvent event;
+#ifdef HAVE_INOTIFY
 	extern int inotifyFD;
 	extern int inotifyWD;
 	struct timeval time;
@@ -367,12 +373,13 @@ void EventLoop(void)
 
 	if (inotifyFD < 0 || inotifyWD < 0)
 		retVal = -1;
+#endif
 
 	for (;;) {
 
 		WMNextEvent(dpy, &event);	/* Blocks here */
 		WMHandleEvent(&event);
-
+#ifdef HAVE_INOTIFY
 		if (retVal != -1) {
 			time.tv_sec = 0;
 			time.tv_usec = 0;
@@ -392,6 +399,7 @@ void EventLoop(void)
 			if (FD_ISSET(inotifyFD, &rfds))
 				inotifyHandleEvents(inotifyFD, inotifyWD);
 		}
+#endif
 	}
 }
 
@@ -918,7 +926,7 @@ static void handleClientMessage(XEvent * event)
 		}
 	} else if (event->xclient.message_type == _XA_WINDOWMAKER_COMMAND) {
 
-		wDefaultsCheckDomains();
+		wDefaultsCheckDomains(NULL);
 
 	} else if (event->xclient.message_type == _XA_WINDOWMAKER_WM_FUNCTION) {
 		WApplication *wapp;

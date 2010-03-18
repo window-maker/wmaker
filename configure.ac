@@ -128,7 +128,9 @@ if test "x$HAVEDL" = xyes; then
     AC_CHECK_HEADERS(dlfcn.h)
 fi
 
-
+dnl Check for inotify
+dnl =================
+AC_CHECK_HEADERS(sys/inotify.h, AC_DEFINE(HAVE_INOTIFY, 1, Check for inotify))
 
 dnl Check CPP
 dnl =========

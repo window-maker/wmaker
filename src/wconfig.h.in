@@ -347,6 +347,11 @@
 /* max width of window title in window list */
 #define MAX_WINDOWLIST_WIDTH	160
 
+#ifndef HAVE_INOTIFY
+/* Check defaults database for changes every this many milliseconds */
+#define DEFAULTS_CHECK_INTERVAL	2000
+#endif
+
 #define KEY_CONTROL_WINDOW_WEIGHT 1
 
 /* if your keyboard don't have arrow keys */

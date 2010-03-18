@@ -39,6 +39,11 @@ static void synchronizeUserDefaults(void *foo);
 extern char *WMGetApplicationName();
 
 #define DEFAULTS_DIR "/Defaults"
+#ifndef HAVE_INOTIFY
+/* Check defaults database for changes every this many milliseconds */
+/* XXX: this is shared with src/ stuff, put it in some common header */
+#define UD_SYNC_INTERVAL	2000
+#endif
 
 char *wusergnusteppath()
 {
@@ -132,6 +137,19 @@ static void synchronizeUserDefaults(void *foo)
 		database = database->next;
 	}
 }
+
+#ifndef HAVE_INOTIFY
+static void addSynchronizeTimerHandler(void)
+{
+	static Bool initialized = False;
+
+	if (!initialized) {
+		WMAddPersistentTimerHandler(UD_SYNC_INTERVAL,
+		    synchronizeUserDefaults, NULL);
+		initialized = True;
+	}
+}
+#endif
 
 void WMEnableUDPeriodicSynchronization(WMUserDefaults * database, Bool enable)
 {
@@ -309,6 +327,9 @@ WMUserDefaults *WMGetStandardUserDefaults(void)
 		defaults->next = sharedUserDefaults;
 	sharedUserDefaults = defaults;
 
+#ifndef HAVE_INOTIFY
+	addSynchronizeTimerHandler();
+#endif
 	registerSaveOnExit();
 
 	return defaults;
@@ -382,6 +403,9 @@ WMUserDefaults *WMGetDefaultsFromPath(char *path)
 		defaults->next = sharedUserDefaults;
 	sharedUserDefaults = defaults;
 
+#ifndef HAVE_INOTIFY
+	addSynchronizeTimerHandler();
+#endif
 	registerSaveOnExit();
 
 	return defaults;

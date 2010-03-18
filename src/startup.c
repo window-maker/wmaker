@@ -134,6 +134,11 @@ extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 /* cursors */
 extern Cursor wCursor[WCUR_LAST];
 
+#ifndef HAVE_INOTIFY
+/* special flags */
+extern char WDelayedActionSet;
+#endif
+
 /***** Local *****/
 
 static WScreen **wScreen = NULL;
@@ -186,6 +191,28 @@ static int handleXIO(Display * xio_dpy)
 	Exit(0);
 	return 0;
 }
+
+#ifndef HAVE_INOTIFY
+/*
+ *----------------------------------------------------------------------
+ * delayedAction-
+ *      Action to be executed after the signal() handler is exited.
+ *----------------------------------------------------------------------
+ */
+static void delayedAction(void *cdata)
+{
+	if (WDelayedActionSet == 0)
+		return;
+
+	WDelayedActionSet--;
+	/*
+	 * Make the event dispatcher do whatever it needs to do,
+	 * including handling zombie processes, restart and exit
+	 * signals.
+	 */
+	DispatchEvent(NULL);
+}
+#endif
 
 /*
  *----------------------------------------------------------------------
@@ -574,6 +601,11 @@ void StartUp(Bool defaultScreenOnly)
 		XFreePixmap(dpy, cur);
 	}
 
+#ifndef HAVE_INOTIFY
+	/* signal handler stuff that gets called when a signal is caught */
+	WMAddPersistentTimerHandler(500, delayedAction, NULL);
+#endif
+
 	/* emergency exit... */
 	sig_action.sa_handler = handleSig;
 	sigemptyset(&sig_action.sa_mask);
@@ -756,6 +788,13 @@ void StartUp(Bool defaultScreenOnly)
 		wfatal(_("could not manage any screen"));
 		Exit(1);
 	}
+
+#ifndef HAVE_INOTIFY
+	if (!wPreferences.flags.nopolling && !wPreferences.flags.noupdates) {
+		/* setup defaults file polling */
+		WMAddTimerHandler(3000, wDefaultsCheckDomains, NULL);
+	}
+#endif
 
 }
 

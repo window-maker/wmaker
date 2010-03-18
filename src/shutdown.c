@@ -56,7 +56,9 @@ static void wipeDesktop(WScreen * scr);
 void Shutdown(WShutdownMode mode)
 {
 	int i;
+#ifdef HAVE_INOTIFY
 	extern int inotifyFD;
+#endif
 
 	switch (mode) {
 	case WSLogoutMode:
@@ -64,7 +66,9 @@ void Shutdown(WShutdownMode mode)
 	case WSExitMode:
 		/* if there is no session manager, send SAVE_YOURSELF to
 		 * the clients */
+#ifdef HAVE_INOTIFY
 		close(inotifyFD);
+#endif
 		for (i = 0; i < wScreenCount; i++) {
 			WScreen *scr;
 
@@ -92,7 +96,9 @@ void Shutdown(WShutdownMode mode)
 		for (i = 0; i < wScreenCount; i++) {
 			WScreen *scr;
 
+#ifdef HAVE_INOTIFY
 			close(inotifyFD);
+#endif
 			scr = wScreenWithNumber(i);
 			if (scr) {
 				if (scr->helper_pid)

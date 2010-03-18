@@ -19,9 +19,11 @@
  *  USA.
  */
 
-#include <sys/inotify.h>
-
 #include "wconfig.h"
+
+#ifdef HAVE_INOTIFY
+#include <sys/inotify.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -67,8 +69,10 @@ char *ProgName;
 
 unsigned int ValidModMask = 0xff;
 
+#ifdef HAVE_INOTIFY
 int inotifyFD;
 int inotifyWD;
+#endif
 /* locale to use. NULL==POSIX or C */
 char *Locale = NULL;
 
@@ -436,6 +440,9 @@ void print_help()
 	puts(_(" --create-stdcmap	create the standard colormap hint in PseudoColor visuals"));
 	puts(_(" --visual-id visualid	visual id of visual to use"));
 	puts(_(" --static		do not update or save configurations"));
+#ifndef HAVE_INOTIFY
+	puts(_(" --no-polling		do not periodically check for configuration updates"));
+#endif
 	puts(_(" --version		print version and exit"));
 	puts(_(" --help			show this message"));
 }
@@ -460,6 +467,7 @@ void check_defaults()
 	wfree(path);
 }
 
+#ifdef HAVE_INOTIFY
 /*
  * Add watch here, used to notify if configuration
  * files have changed, using linux kernel inotify mechanism
@@ -490,6 +498,7 @@ static void inotifyWatchConfig()
 	}
 	wfree(watchPath);
 }
+#endif /* HAVE_INOTIFY */
 
 static void execInitScript()
 {
@@ -661,7 +670,11 @@ static int real_main(int argc, char **argv)
 					wwarning(_("bad value for visualid: \"%s\""), argv[i]);
 					exit(0);
 				}
-			} else if (strcmp(argv[i], "-static") == 0 || strcmp(argv[i], "--static") == 0) {
+			} else if (strcmp(argv[i], "-static") == 0 || strcmp(argv[i], "--static") == 0
+#ifndef HAVE_INOTIFY
+				    || strcmp(argv[i], "--no-polling") == 0
+#endif
+				    ) {
 				wPreferences.flags.noupdates = 1;
 			} else if (strcmp(argv[i], "--help") == 0) {
 				print_help();
@@ -762,7 +775,9 @@ static int real_main(int argc, char **argv)
 		multiHead = False;
 
 	execInitScript();
+#ifdef HAVE_INOTIFY
 	inotifyWatchConfig();
+#endif
 	EventLoop();
 	return -1;
 }
