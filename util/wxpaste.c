@@ -36,17 +36,18 @@
 
 #define MAXDATA		(4*1024*1024)
 
-void help(char *progn)
+extern char *__progname;
+
+void print_help()
 {
-	printf("Usage: %s [OPTIONS] [FILE]\n", progn);
+	printf("Usage: %s [OPTIONS] [FILE]\n", __progname);
 	puts("Copies data from X selection or cutbuffer to FILE or stdout.");
 	puts("");
-	puts("  -display display		display to use");
-	puts("  --cutbuffer number		cutbuffer number to get data from");
-	puts("  --selection [selection]	reads data from named selection instead of\n"
-	     "				cutbuffer");
-	puts("  --help			display this help and exit");
-	puts("  --version			output version information and exit");
+	puts("  -display display         display to use");
+	puts("  --cutbuffer number       cutbuffer number to get data from");
+	puts("  --selection [selection]  reads data from named selection instead of cutbuffer");
+	puts("  -h, --help               display this help and exit");
+	puts("  -v, --version            output version information and exit");
 }
 
 Time getTimestamp(Display * dpy, Window win)
@@ -160,9 +161,9 @@ int main(int argc, char **argv)
 	for (i = 1; i < argc; i++) {
 		if (argv[i][0] == '-') {
 			if (argv[i][1] == 'h' || strcmp(argv[i], "--help") == 0) {
-				help(argv[0]);
+				print_help();
 				exit(0);
-			} else if (strcmp(argv[i], "--version") == 0) {
+			} else if (argv[i][1] == 'v' || strcmp(argv[i], "--version") == 0) {
 				puts(PROG_VERSION);
 				exit(0);
 			} else if (strcmp(argv[i], "-selection") == 0 || strcmp(argv[i], "--selection") == 0) {
@@ -175,7 +176,7 @@ int main(int argc, char **argv)
 				if (i < argc - 1) {
 					display_name = argv[++i];
 				} else {
-					help(argv[0]);
+					print_help();
 					exit(0);
 				}
 			} else if (strcmp(argv[i], "-cutbuffer") == 0 || strcmp(argv[i], "--cutbuffer") == 0) {
@@ -183,33 +184,33 @@ int main(int argc, char **argv)
 					i++;
 					if (sscanf(argv[i], "%i", &buffer) != 1) {
 						fprintf(stderr, "%s: could not convert \"%s\" to int\n",
-							argv[0], argv[i]);
+							__progname, argv[i]);
 						exit(1);
 					}
 					if (buffer < 0 || buffer > 7) {
-						fprintf(stderr, "%s: invalid buffer number %i\n", argv[0], buffer);
+						fprintf(stderr, "%s: invalid buffer number %i\n", __progname, buffer);
 						exit(1);
 					}
 				} else {
-					fprintf(stderr, "%s: invalid argument '%s'\n", argv[0], argv[i]);
-					fprintf(stderr, "Try '%s --help' for more information.\n", argv[0]);
+					fprintf(stderr, "%s: invalid argument '%s'\n", __progname, argv[i]);
+					fprintf(stderr, "Try '%s --help' for more information.\n", __progname);
 					exit(1);
 				}
 			}
 		} else {
-			fprintf(stderr, "%s: invalid argument '%s'\n", argv[0], argv[i]);
-			fprintf(stderr, "Try '%s --help' for more information.\n", argv[0]);
+			fprintf(stderr, "%s: invalid argument '%s'\n", __progname, argv[i]);
+			fprintf(stderr, "Try '%s --help' for more information.\n", __progname);
 			exit(1);
 		}
 	}
 	dpy = XOpenDisplay(display_name);
 	if (!dpy) {
-		fprintf(stderr, "%s: could not open display \"%s\"\n", argv[0], XDisplayName(display_name));
+		fprintf(stderr, "%s: could not open display \"%s\"\n", __progname, XDisplayName(display_name));
 		exit(1);
 	}
 
 	if (selection_name) {
-		buf = fetchSelection(dpy, selection_name, argv[0]);
+		buf = fetchSelection(dpy, selection_name, __progname);
 	} else {
 		buf = NULL;
 	}

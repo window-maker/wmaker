@@ -80,6 +80,22 @@ char *wdefaultspathfordomain(char *domain)
 	return path;
 }
 
+/* XXX: doesn't quite belong to *user*defaults.c */
+#ifndef GLOBAL_DEFAULTS_SUBDIR
+#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
+#endif
+char *wglobaldefaultspathfordomain(const char *domain)
+{
+	char *t = NULL;
+	size_t len;
+
+	len = strlen( SYSCONFDIR ) + strlen( GLOBAL_DEFAULTS_SUBDIR ) + strlen(domain) + 3;
+	t = wmalloc(len);
+	snprintf(t, len, "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domain);
+
+	return t;
+}
+
 static void
 #ifdef HAVE_ATEXIT
 saveDefaultsChanges(void)

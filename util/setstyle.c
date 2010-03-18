@@ -63,15 +63,13 @@ char *CursorOptions[] = {
 	NULL
 };
 
-char *ProgName;
+extern char *__progname;
 int ignoreFonts = 0;
 int ignoreCursors = 0;
 
 Display *dpy;
 
 extern char *convertFont(char *font, Bool keepXLFD);
-
-WMPropList *readBlackBoxStyle(char *path);
 
 static Bool isCursorOption(char *option)
 {
@@ -97,34 +95,6 @@ static Bool isFontOption(char *option)
 	}
 
 	return False;
-}
-
-char *defaultsPathForDomain(char *domain)
-{
-	static char path[1024];
-	char *gspath;
-
-	gspath = getenv("GNUSTEP_USER_ROOT");
-	if (gspath) {
-		strcpy(path, gspath);
-		strcat(path, "/");
-	} else {
-		char *home;
-
-		home = getenv("HOME");
-		if (!home) {
-			printf("%s:could not get HOME environment variable!\n", ProgName);
-			exit(0);
-		}
-
-		strcpy(path, home);
-		strcat(path, "/GNUstep/");
-	}
-	strcat(path, DEFAULTS_DIR);
-	strcat(path, "/");
-	strcat(path, domain);
-
-	return path;
 }
 
 void hackPathInTexture(WMPropList * texture, char *prefix)
@@ -366,14 +336,14 @@ void hackStyle(WMPropList * style)
 
 void print_help()
 {
-	printf("Usage: %s [OPTIONS] FILE\n", ProgName);
+	printf("Usage: %s [OPTIONS] FILE\n", __progname);
 	puts("Reads style/theme configuration from FILE and updates Window Maker.");
 	puts("");
 	puts("  --no-fonts          ignore font related options");
 	puts("  --no-cursors        ignore cursor related options");
 	puts("  --ignore <option>   ignore changes in the specified option");
-	puts("  --help              display this help and exit");
-	puts("  --version           output version information and exit");
+	puts("  -h, --help          display this help and exit");
+	puts("  -v, --version       output version information and exit");
 }
 
 int main(int argc, char **argv)
@@ -388,11 +358,9 @@ int main(int argc, char **argv)
 
 	dpy = XOpenDisplay("");
 
-	ProgName = argv[0];
-
 	if (argc < 2) {
-		printf("%s: missing argument\n", ProgName);
-		printf("Try '%s --help' for more information\n", ProgName);
+		printf("%s: missing argument\n", __progname);
+		printf("Try '%s --help' for more information\n", __progname);
 		exit(1);
 	}
 
@@ -400,7 +368,7 @@ int main(int argc, char **argv)
 		if (strcmp("--ignore", argv[i]) == 0) {
 			i++;
 			if (i == argc) {
-				printf("%s: missing argument for option --ignore\n", ProgName);
+				printf("%s: missing argument for option --ignore\n", __progname);
 				exit(1);
 			}
 			ignoreList[ignoreCount++] = argv[i];
@@ -409,16 +377,16 @@ int main(int argc, char **argv)
 			ignoreFonts = 1;
 		} else if (strcmp("--no-cursors", argv[i]) == 0) {
 			ignoreCursors = 1;
-		} else if (strcmp("--version", argv[i]) == 0) {
+		} else if (strcmp("-v", argv[i]) == 0 || strcmp("--version", argv[i]) == 0) {
 			puts(PROG_VERSION);
 			exit(0);
-		} else if (strcmp("--help", argv[i]) == 0) {
+		} else if (strcmp("-h", argv[i]) == 0 || strcmp("--help", argv[i]) == 0) {
 			print_help();
 			exit(0);
 		} else {
 			if (file) {
-				printf("%s: invalid argument '%s'\n", ProgName, argv[i]);
-				printf("Try '%s --help' for more information\n", ProgName);
+				printf("%s: invalid argument '%s'\n", __progname, argv[i]);
+				printf("Try '%s --help' for more information\n", __progname);
 				exit(1);
 			}
 			file = argv[i];
@@ -427,12 +395,12 @@ int main(int argc, char **argv)
 
 	WMPLSetCaseSensitive(False);
 
-	path = defaultsPathForDomain("WindowMaker");
+	path = wdefaultspathfordomain("WindowMaker");
 
 	prop = WMReadPropListFromFile(path);
 	if (!prop) {
 		perror(path);
-		printf("%s:could not load WindowMaker configuration file.\n", ProgName);
+		printf("%s: could not load WindowMaker configuration file.\n", __progname);
 		exit(1);
 	}
 
@@ -447,11 +415,11 @@ int main(int argc, char **argv)
 
 		if (*argv[argc - 1] != '/') {
 			if (!getcwd(buffer, 4000)) {
-				printf("%s: complete path for %s is too long\n", ProgName, file);
+				printf("%s: complete path for %s is too long\n", __progname, file);
 				exit(1);
 			}
 			if (strlen(buffer) + strlen(file) > 4000) {
-				printf("%s: complete path for %s is too long\n", ProgName, file);
+				printf("%s: complete path for %s is too long\n", __progname, file);
 				exit(1);
 			}
 			strcat(buffer, "/");
@@ -462,7 +430,7 @@ int main(int argc, char **argv)
 
 		prefix = malloc(strlen(buffer) + 10);
 		if (!prefix) {
-			printf("%s: out of memory\n", ProgName);
+			printf("%s: out of memory\n", __progname);
 			exit(1);
 		}
 		strcpy(prefix, buffer);
@@ -472,7 +440,7 @@ int main(int argc, char **argv)
 		style = WMReadPropListFromFile(buffer);
 		if (!style) {
 			perror(buffer);
-			printf("%s:could not load style file.\n", ProgName);
+			printf("%s: could not load style file.\n", __progname);
 			exit(1);
 		}
 
@@ -484,13 +452,13 @@ int main(int argc, char **argv)
 		style = WMReadPropListFromFile(file);
 		if (!style) {
 			perror(file);
-			printf("%s:could not load style file.\n", ProgName);
+			printf("%s:could not load style file.\n", __progname);
 			exit(1);
 		}
 	}
 
 	if (!WMIsPLDictionary(style)) {
-		printf("%s: '%s' is not a style file/theme\n", ProgName, file);
+		printf("%s: '%s' is not a style file/theme\n", __progname, file);
 		exit(1);
 	}
 

@@ -437,7 +437,7 @@ int main(int argc, char **argv)
 		} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
  help:
 
-			printf("Syntax: %s [options]\n", argv[0]);
+			printf("Usage: %s [options]\n", argv[0]);
 			puts("Options:");
 			puts("  -display <display>	display that should be used");
 			puts("  -m <number>		change magnification factor (default 2)");
@@ -454,14 +454,14 @@ int main(int argc, char **argv)
 
 	dpy = XOpenDisplay(display);
 	if (!dpy) {
-		puts("couldnt open display");
+		puts("could not open display");
 		exit(1);
 	}
 
 	if (vdisplay) {
 		vdpy = XOpenDisplay(vdisplay);
 		if (!vdpy) {
-			puts("couldnt open display to be viewed");
+			puts("could not open display to be viewed");
 			exit(1);
 		}
 	} else {

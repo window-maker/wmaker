@@ -298,6 +298,7 @@ WMRange wmkrange(int start, int count);
 char* wusergnusteppath();
 
 char* wdefaultspathfordomain(char *domain);
+char* wglobaldefaultspathfordomain(const char *domain);
 
 void wusleep(unsigned int microsec);
 

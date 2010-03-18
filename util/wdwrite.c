@@ -37,64 +37,41 @@
 
 #include <pwd.h>
 
-char *ProgName;
-
-char *gethomedir()
-{
-	char *home = getenv("HOME");
-	struct passwd *user;
-
-	if (home)
-		return home;
-
-	user = getpwuid(getuid());
-	if (!user) {
-		perror(ProgName);
-		return "/";
-	}
-	if (!user->pw_dir) {
-		return "/";
-	} else {
-		return user->pw_dir;
-	}
-}
+extern char *__progname;
 
 void wAbort()
 {
 	exit(0);
 }
 
-void help()
+void print_help()
 {
-	printf("Syntax:\n%s [OPTIONS] <domain> <option> <value>\n", ProgName);
+	printf("Usage: %s [OPTIONS] <domain> <option> <value>\n", __progname);
 	puts("");
-	puts("  --help		display this help message");
-	puts("  --version		output version information and exit");
+	puts("  -h, --help        display this help message");
+	puts("  -v, --version     output version information and exit");
 	exit(1);
 }
 
 int main(int argc, char **argv)
 {
-	char *path;
+	char path[256];
 	WMPropList *dom, *key, *value, *dict;
-	char *gsdir;
 	int i;
 
-	ProgName = argv[0];
-
 	for (i = 1; i < argc; i++) {
-		if (strcmp("--help", argv[i]) == 0) {
-			help();
+		if (strcmp("-h", argv[i]) == 0 || strcmp("--help", argv[i]) == 0) {
+			print_help();
 			exit(0);
-		} else if (strcmp("--version", argv[i]) == 0) {
+		} else if (strcmp("-v", argv[i]) == 0 || strcmp("--version", argv[i]) == 0) {
 			puts(PROG_VERSION);
 			exit(0);
 		}
 	}
 
 	if (argc < 4) {
-		printf("%s: invalid argument format\n", ProgName);
-		printf("Try '%s --help' for more information\n", ProgName);
+		printf("%s: invalid argument format\n", __progname);
+		printf("Try '%s --help' for more information\n", __progname);
 		exit(1);
 	}
 
@@ -102,20 +79,11 @@ int main(int argc, char **argv)
 	key = WMCreatePLString(argv[2]);
 	value = WMCreatePropListFromDescription(argv[3]);
 	if (!value) {
-		printf("%s:syntax error in value \"%s\"", ProgName, argv[3]);
+		printf("%s: syntax error in value \"%s\"", __progname, argv[3]);
 		exit(1);
 	}
-	gsdir = getenv("GNUSTEP_USER_ROOT");
-	if (gsdir) {
-		path = wstrdup(gsdir);
-	} else {
-		path = wstrdup(gethomedir());
-		path = wstrappend(path, "/GNUstep");
-	}
-	path = wstrappend(path, "/");
-	path = wstrappend(path, DEFAULTS_DIR);
-	path = wstrappend(path, "/");
-	path = wstrappend(path, argv[1]);
+
+	snprintf(path, sizeof(path), wdefaultspathfordomain(argv[1]));
 
 	dict = WMReadPropListFromFile(path);
 	if (!dict) {
@@ -125,7 +93,6 @@ int main(int argc, char **argv)
 	}
 
 	WMWritePropListToFile(dict, path);
-	wfree(path);
 
 	return 0;
 }

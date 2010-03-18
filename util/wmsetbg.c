@@ -88,6 +88,7 @@ Pixmap CurrentPixmap = None;
 char *PixmapPath = NULL;
 
 extern Pixmap LoadJPEG(RContext * rc, char *file_name, int *width, int *height);
+extern char *__progname;
 
 typedef struct BackgroundTexture {
 	int refcount;
@@ -1057,15 +1058,6 @@ void updateDomain(char *domain, char *key, char *texture)
 	wwarning("warning could not run \"%s\"", program);
 }
 
-char *globalDefaultsPathForDomain(char *domain)
-{
-	char path[1024];
-
-	sprintf(path, "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domain);
-
-	return wstrdup(path);
-}
-
 static WMPropList *getValueForKey(char *domain, char *keyName)
 {
 	char *path;
@@ -1092,7 +1084,7 @@ static WMPropList *getValueForKey(char *domain, char *keyName)
 	}
 	/* try to find PixmapPath in global defaults */
 	if (!val) {
-		path = globalDefaultsPathForDomain(domain);
+		path = wglobaldefaultspathfordomain(domain);
 		if (!path) {
 			wwarning("could not locate file for domain %s", domain);
 			d = NULL;
@@ -1207,32 +1199,31 @@ void wAbort()
 	exit(1);
 }
 
-void print_help(char *ProgName)
+void print_help()
 {
-	printf("Usage: %s [options] [image]\n", ProgName);
-	puts("Sets the workspace background to the specified image or a texture and optionally update Window Maker configuration");
+	printf("Usage: %s [options] [image]\n", __progname);
+	puts("Sets the workspace background to the specified image or a texture and");
+	puts("optionally update Window Maker configuration");
 	puts("");
-#define P(m) puts(m)
-	P(" -display	 		display to use");
-	P(" -d, --dither	 		dither image");
-	P(" -m, --match			match  colors");
-	P(" -S, --smooth			smooth scaled image");
+	puts(" -display                         display to use");
+	puts(" -d, --dither                     dither image");
+	puts(" -m, --match                      match  colors");
+	puts(" -S, --smooth                     smooth scaled image");
 #ifdef XINERAMA
-	P(" -X, --xinerama			stretch image across Xinerama heads");
+	puts(" -X, --xinerama                   stretch image across Xinerama heads");
 #endif
-	P(" -b, --back-color <color>	background color");
-	P(" -t, --tile			tile   image");
-	P(" -e, --center			center image");
-	P(" -s, --scale			scale  image (default)");
-	P(" -a, --maxscale			scale  image and keep aspect ratio");
-	P(" -u, --update-wmaker		update WindowMaker domain database");
-	P(" -D, --update-domain <domain>	update <domain> database");
-	P(" -c, --colors <cpc>		colors per channel to use");
-	P(" -p, --parse <texture>		proplist style texture specification");
-	P(" -w, --workspace <workspace>	update background for the specified workspace");
-	P("     --version 			show version of wmsetbg and exit");
-	P("     --help 			show this help and exit");
-#undef P
+	puts(" -b, --back-color <color>         background color");
+	puts(" -t, --tile                       tile   image");
+	puts(" -e, --center                     center image");
+	puts(" -s, --scale                      scale  image (default)");
+	puts(" -a, --maxscale                   scale  image and keep aspect ratio");
+	puts(" -u, --update-wmaker              update WindowMaker domain database");
+	puts(" -D, --update-domain <domain>     update <domain> database");
+	puts(" -c, --colors <cpc>               colors per channel to use");
+	puts(" -p, --parse <texture>            proplist style texture specification");
+	puts(" -w, --workspace <workspace>      update background for the specified workspace");
+	puts(" -v, --version                    show version of wmsetbg and exit");
+	puts(" -h, --help                       show this help and exit");
 }
 
 void changeTextureForWorkspace(char *domain, char *texture, int workspace)
@@ -1373,31 +1364,30 @@ int main(int argc, char **argv)
 				wfatal("bad value for workspace number: \"%s\"", argv[i]);
 				exit(1);
 			}
-		} else if (strcmp(argv[i], "--version") == 0) {
-
+		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
 			printf(PROG_VERSION);
 			exit(0);
-
-		} else if (strcmp(argv[i], "--help") == 0) {
-			print_help(argv[0]);
+		} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+			print_help();
 			exit(0);
 		} else if (argv[i][0] != '-') {
 			image_name = argv[i];
 		} else {
-			printf("%s: invalid argument '%s'\n", argv[0], argv[i]);
-			printf("Try '%s --help' for more information\n", argv[0]);
+			printf("%s: invalid argument '%s'\n", __progname, argv[i]);
+			printf("Try '%s --help' for more information\n", __progname);
 			exit(1);
 		}
 	}
 	if (!image_name && !texture && !helperMode) {
-		printf("%s: you must specify a image file name or a texture\n", argv[0]);
-		printf("Try '%s --help' for more information\n", argv[0]);
+		printf("%s: you must specify a image file name or a texture\n", __progname);
+		printf("Try '%s --help' for more information\n", __progname);
 		exit(1);
 	}
 
 	PixmapPath = getPixmapPath(domain);
 	if (!smooth) {
 		WMPropList *val;
+		/* carlos, don't remove this */
 #if 0				/* some problem with Alpha... TODO: check if its right */
 		val = WMGetFromPLDictionary(domain, WMCreatePLString("SmoothWorkspaceBack"));
 #else

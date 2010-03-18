@@ -30,42 +30,15 @@
 
 #include "../src/wconfig.h"
 
-char *ProgName;
-
-char *defaultsPathForDomain(char *domain)
-{
-	static char path[1024];
-	char *gspath;
-
-	gspath = getenv("GNUSTEP_USER_ROOT");
-	if (gspath) {
-		strcpy(path, gspath);
-		strcat(path, "/");
-	} else {
-		char *home;
-
-		home = getenv("HOME");
-		if (!home) {
-			printf("%s:could not get HOME environment variable!\n", ProgName);
-			exit(0);
-		}
-		strcpy(path, home);
-		strcat(path, "/GNUstep/");
-	}
-	strcat(path, DEFAULTS_DIR);
-	strcat(path, "/");
-	strcat(path, domain);
-
-	return path;
-}
+extern char *__progname;
 
 void print_help()
 {
-	printf("Usage: %s [OPTIONS] [FILE]\n", ProgName);
+	printf("Usage: %s [OPTIONS] [FILE]\n", __progname);
 	puts("Retrieves program icon configuration and output to FILE or to stdout");
 	puts("");
-	puts("  --help	display this help and exit");
-	puts("  --version	output version information and exit");
+	puts("  -h, --help      display this help and exit");
+	puts("  -v, --version   output version information and exit");
 }
 
 int main(int argc, char **argv)
@@ -75,23 +48,21 @@ int main(int argc, char **argv)
 	char *path;
 	int i;
 
-	ProgName = argv[0];
-
 	for (i = 1; i < argc; i++) {
 		if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
 			print_help();
 			exit(0);
-		} else if (strcmp(argv[i], "--version") == 0) {
+		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
 			puts(PROG_VERSION);
 			exit(0);
 		}
 	}
 
-	path = defaultsPathForDomain("WMWindowAttributes");
+	path = wdefaultspathfordomain("WMWindowAttributes");
 
 	all_windows = WMReadPropListFromFile(path);
 	if (!all_windows) {
-		printf("%s:could not load WindowMaker configuration file \"%s\".\n", ProgName, path);
+		printf("%s: could not load WindowMaker configuration file \"%s\".\n", __progname, path);
 		exit(1);
 	}
 

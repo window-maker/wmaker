@@ -119,7 +119,7 @@ static char *font_options[] = {
 	NULL
 };
 
-char *ProgName;
+extern char *__progname;
 
 WMPropList *PixmapPath = NULL;
 
@@ -129,54 +129,18 @@ extern char *convertFont(char *font, Bool keepXLFD);
 
 void print_help()
 {
-	printf("Usage: %s [OPTIONS] [FILE]\n", ProgName);
+	printf("Usage: %s [OPTIONS] [FILE]\n", __progname);
 	puts("Retrieves style/theme configuration and output to FILE or to stdout");
 	puts("");
-	puts("  -t, --theme-options	output theme related options when producing a style file");
-	puts("  -p, --pack		produce output as a theme pack");
-	puts("  --help		display this help and exit");
-	puts("  --version		output version information and exit");
-}
-
-char *globalDefaultsPathForDomain(char *domain)
-{
-	static char path[1024];
-
-	sprintf(path, "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domain);
-
-	return path;
-}
-
-char *defaultsPathForDomain(char *domain)
-{
-	static char path[1024];
-	char *gspath;
-
-	gspath = getenv("GNUSTEP_USER_ROOT");
-	if (gspath) {
-		strcpy(path, gspath);
-		strcat(path, "/");
-	} else {
-		char *home;
-
-		home = getenv("HOME");
-		if (!home) {
-			printf("%s:could not get HOME environment variable!\n", ProgName);
-			exit(0);
-		}
-		strcpy(path, home);
-		strcat(path, "/GNUstep/");
-	}
-	strcat(path, DEFAULTS_DIR);
-	strcat(path, "/");
-	strcat(path, domain);
-
-	return path;
+	puts("  -t, --theme-options     output theme related options when producing a style file");
+	puts("  -p, --pack              produce output as a theme pack");
+	puts("  -h, --help              display this help and exit");
+	puts("  -v, --version           output version information and exit");
 }
 
 void abortar(char *reason)
 {
-	printf("%s: %s\n", ProgName, reason);
+	printf("%s: %s\n", __progname, reason);
 	if (ThemePath) {
 		printf("Removing unfinished theme pack\n");
 		(void)wrmdirhier(ThemePath);
@@ -356,26 +320,24 @@ int main(int argc, char **argv)
 	int i, theme_too = 0, make_pack = 0;
 	char *style_file = NULL;
 
-	ProgName = argv[0];
-
 	if (argc > 1) {
 		for (i = 1; i < argc; i++) {
 			if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--pack") == 0) {
 				make_pack = 1;
 				theme_too = 1;
 			} else if (strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--theme-options") == 0) {
-				theme_too++;
-			} else if (strcmp(argv[i], "--help") == 0) {
+				theme_too = 1;
+			} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
 				print_help();
 				exit(0);
-			} else if (strcmp(argv[i], "--version") == 0) {
+			} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
 				puts(PROG_VERSION);
 				exit(0);
 			} else {
 				if (style_file != NULL) {
-					printf("%s: invalid argument '%s'\n", argv[0],
+					printf("%s: invalid argument '%s'\n", __progname,
 					       style_file[0] == '-' ? style_file : argv[i]);
-					printf("Try '%s --help' for more information\n", argv[0]);
+					printf("Try '%s --help' for more information\n", __progname);
 					exit(1);
 				}
 				style_file = argv[i];
@@ -385,23 +347,29 @@ int main(int argc, char **argv)
 		}
 	}
 
+	if (style_file && !make_pack) {
+		print_help();
+		exit(1);
+	}
+
 	if (make_pack && !style_file) {
-		printf("%s: you must supply a name for the theme pack\n", ProgName);
+		printf("%s: you must supply a name for the theme pack\n", __progname);
 		exit(1);
 	}
 
 	WMPLSetCaseSensitive(False);
 
-	path = defaultsPathForDomain("WindowMaker");
+	path = wdefaultspathfordomain("WindowMaker");
 
 	prop = WMReadPropListFromFile(path);
 	if (!prop) {
-		printf("%s:could not load WindowMaker configuration file \"%s\".\n", ProgName, path);
+		printf("%s: could not load WindowMaker configuration file \"%s\".\n", __progname, path);
 		exit(1);
 	}
 
 	/* get global value */
-	path = globalDefaultsPathForDomain("WindowMaker");
+	path = wglobaldefaultspathfordomain("WindowMaker");
+
 	val = WMReadPropListFromFile(path);
 	if (val) {
 		WMMergePLDictionaries(val, prop, True);

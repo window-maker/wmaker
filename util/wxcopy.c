@@ -30,17 +30,19 @@
 #define LINESIZE	(4*1024)
 #define MAXDATA		(64*1024)
 
-void help(char *progn)
+extern char *__progname;
+
+void print_help()
 {
-	printf("Usage: %s [OPTIONS] [FILE]\n", progn);
+	printf("Usage: %s [OPTIONS] [FILE]\n", __progname);
 	puts("Copies data from FILE or stdin into X cut buffer.");
 	puts("");
-	puts("  -display <display>		display to use");
-	puts("  --cutbuffer <number>		cutbuffer number to put data");
-	puts("  --no-limit			do not limit size of input data");
-	puts("  --clear-selection		clears the current PRIMARY selection");
-	puts("  --help			display this help and exit");
-	puts("  --version			output version information and exit");
+	puts("  -display <display>              display to use");
+	puts("  --cutbuffer <number>            cutbuffer number to put data");
+	puts("  --no-limit                      do not limit size of input data");
+	puts("  --clear-selection               clears the current PRIMARY selection");
+	puts("  -h, --help                      display this help and exit");
+	puts("  -v, --version                   output version information and exit");
 }
 
 static int errorHandler(Display * dpy, XErrorEvent * err)
@@ -65,10 +67,10 @@ int main(int argc, char **argv)
 
 	for (i = 1; i < argc; i++) {
 		if (argv[i][0] == '-') {
-			if (strcmp(argv[i], "--help") == 0) {
-				help(argv[0]);
+			if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
+				print_help();
 				exit(0);
-			} else if (strcmp(argv[i], "--version") == 0) {
+			} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
 				puts(PROG_VERSION);
 				exit(0);
 			} else if (strcmp(argv[i], "-cutbuffer") == 0 || strcmp(argv[i], "--cutbuffer") == 0) {
@@ -76,24 +78,24 @@ int main(int argc, char **argv)
 					i++;
 					if (sscanf(argv[i], "%i", &buffer) != 1) {
 						fprintf(stderr, "%s: could not convert '%s' to int\n",
-							argv[0], argv[i]);
+							__progname, argv[i]);
 						exit(1);
 					}
 					if (buffer < 0 || buffer > 7) {
-						fprintf(stderr, "%s: invalid buffer number %i\n", argv[0], buffer);
+						fprintf(stderr, "%s: invalid buffer number %i\n", __progname, buffer);
 						exit(1);
 					}
 				} else {
-					printf("%s: missing argument for '%s'\n", argv[0], argv[i]);
-					printf("Try '%s --help' for more information\n", argv[0]);
+					printf("%s: missing argument for '%s'\n", __progname, argv[i]);
+					printf("Try '%s --help' for more information\n", __progname);
 					exit(1);
 				}
 			} else if (strcmp(argv[i], "-display") == 0) {
 				if (i < argc - 1) {
 					display_name = argv[++i];
 				} else {
-					printf("%s: missing argument for '%s'\n", argv[0], argv[i]);
-					printf("Try '%s --help' for more information\n", argv[0]);
+					printf("%s: missing argument for '%s'\n", __progname, argv[i]);
+					printf("Try '%s --help' for more information\n", __progname);
 					exit(1);
 				}
 			} else if (strcmp(argv[i], "-clearselection") == 0
@@ -102,8 +104,8 @@ int main(int argc, char **argv)
 			} else if (strcmp(argv[i], "-nolimit") == 0 || strcmp(argv[i], "--no-limit") == 0) {
 				limit_check = 0;
 			} else {
-				printf("%s: invalid argument '%s'\n", argv[0], argv[i]);
-				printf("Try '%s --help' for more information\n", argv[0]);
+				printf("%s: invalid argument '%s'\n", __progname, argv[i]);
+				printf("Try '%s --help' for more information\n", __progname);
 				exit(1);
 			}
 		} else {
@@ -114,7 +116,7 @@ int main(int argc, char **argv)
 		file = fopen(filename, "rb");
 		if (!file) {
 			char line[1024];
-			sprintf(line, "%s: could not open \"%s\"", argv[0], filename);
+			sprintf(line, "%s: could not open \"%s\"", __progname, filename);
 			perror(line);
 			exit(1);
 		}
@@ -123,7 +125,7 @@ int main(int argc, char **argv)
 	dpy = XOpenDisplay(display_name);
 	XSetErrorHandler(errorHandler);
 	if (!dpy) {
-		fprintf(stderr, "%s: could not open display \"%s\"\n", argv[0], XDisplayName(display_name));
+		fprintf(stderr, "%s: could not open display \"%s\"\n", __progname, XDisplayName(display_name));
 		exit(1);
 	}
 
@@ -208,7 +210,7 @@ int main(int argc, char **argv)
 			nbuf = buf;
 		}
 		if (!nbuf) {
-			fprintf(stderr, "%s: out of memory\n", argv[0]);
+			fprintf(stderr, "%s: out of memory\n", __progname);
 			exit(1);
 		}
 		buf = nbuf;
@@ -222,7 +224,7 @@ int main(int argc, char **argv)
 			fprintf
 			    (stderr,
 			     "%s: too much data in input - more than %d bytes\n"
-			     "  use the -nolimit argument to remove the limit check.\n", argv[0], MAXDATA);
+			     "  use the -nolimit argument to remove the limit check.\n", __progname, MAXDATA);
 			exit(1);
 		}
 	}
