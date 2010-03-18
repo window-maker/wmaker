@@ -72,8 +72,8 @@ int PropGetWMClass(Window window, char **wm_class, char **wm_instance)
 
 	class_hint = XAllocClassHint();
 	if (XGetClassHint(dpy, window, class_hint) == 0) {
-		*wm_class = NULL;
-		*wm_instance = NULL;
+		*wm_class = strdup("default");
+		*wm_instance = strdup("default");
 		XFree(class_hint);
 		return False;
 	}
