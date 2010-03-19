@@ -1073,51 +1073,6 @@ char *StrConcatDot(char *a, char *b)
 	return str;
 }
 
-#define MAX_CMD_SIZE 4096
-
-Bool GetCommandForPid(int pid, char ***argv, int *argc)
-{
-	static char buf[MAX_CMD_SIZE];
-	FILE *fPtr;
-	int count, i, j;
-	Bool ok = False;
-
-	sprintf(buf, "/proc/%d/cmdline", pid);
-	fPtr = fopen(buf, "r");
-	if (fPtr) {
-		count = read(fileno(fPtr), buf, MAX_CMD_SIZE);
-		if (count > 0) {
-			buf[count - 1] = 0;
-			for (i = 0, *argc = 0; i < count; i++) {
-				if (buf[i] == 0) {
-					(*argc)++;
-				}
-			}
-			if ((*argc) == 0) {
-				*argv = NULL;
-				ok = False;
-			} else {
-				*argv = (char **)wmalloc(sizeof(char *) * (*argc));
-				(*argv)[0] = buf;
-				for (i = 0, j = 1; i < count; i++) {
-					if (buf[i] != 0)
-						continue;
-					if (i < count - 1) {
-						(*argv)[j++] = &buf[i + 1];
-					}
-					if (j == *argc) {
-						break;
-					}
-				}
-				ok = True;
-			}
-		}
-		fclose(fPtr);
-	}
-
-	return ok;
-}
-
 static char *getCommandForWindow(Window win, int elements)
 {
 	char **argv, *command = NULL;
