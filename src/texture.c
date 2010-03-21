@@ -24,12 +24,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#ifdef TEXTURE_PLUGIN
-# ifdef HAVE_DLFCN_H
-#  include <dlfcn.h>
-# endif
-#endif
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -160,21 +154,8 @@ void wTextureDestroy(WScreen * scr, WTexture * texture)
 	case WTEX_TDGRADIENT:
 		RReleaseImage(texture->tgradient.pixmap);
 		break;
-
-#ifdef TEXTURE_PLUGIN
-	case WTEX_FUNCTION:
-#ifdef HAVE_DLFCN_H
-		if (texture->function.handle) {
-			dlclose(texture->function.handle);
-		}
-#endif
-		for (i = 0; i < texture->function.argc; i++) {
-			wfree(texture->function.argv[i]);
-		}
-		wfree(texture->function.argv);
-		break;
-#endif				/* TEXTURE_PLUGIN */
 	}
+
 	if (CANFREE(texture->any.color.pixel))
 		colors[count++] = texture->any.color.pixel;
 	if (count > 0) {
@@ -361,58 +342,6 @@ WTexTGradient *wTextureMakeTGradient(WScreen * scr, int style, RColor * from, RC
 	return texture;
 }
 
-#ifdef TEXTURE_PLUGIN
-WTexFunction *wTextureMakeFunction(WScreen * scr, char *lib, char *func, int argc, char **argv)
-{
-	XColor fallbackColor;
-	XGCValues gcv;
-	WTexFunction *texture;
-
-	texture = wmalloc(sizeof(WTexture));
-	memset(&fallbackColor, 0, sizeof(fallbackColor));
-
-	texture->type = WTEX_FUNCTION;
-	texture->handle = NULL;
-	texture->render = 0;
-	texture->argc = argc;
-	texture->argv = argv;
-
-	fallbackColor.red = 0x8000;
-	fallbackColor.green = 0x8000;
-	fallbackColor.blue = 0x8000;
-
-	gcv.background = gcv.foreground = fallbackColor.pixel;
-	gcv.graphics_exposures = False;
-	texture->normal_gc = XCreateGC(dpy, scr->w_win, GCForeground | GCBackground | GCGraphicsExposures, &gcv);
-
-# ifdef HAVE_DLFCN_H
-	/* open the library */
-	texture->handle = dlopen(lib, RTLD_LAZY);
-	if (!texture->handle) {
-		wwarning(_("library \"%s\" cound not be opened."), lib);
-		wfree(argv);
-		wfree(texture);
-		return NULL;
-	}
-
-	/* find the function */
-	texture->render = dlsym(texture->handle, func);
-	if (!texture->render) {
-		wwarning(_("function \"%s\" not found in library \"%s\""), func, lib);
-		wfree(argv);
-		dlclose(texture->handle);
-		wfree(texture);
-		return NULL;
-	}
-# else
-	wwarning(_("function textures not supported on this system, sorry."));
-# endif
-
-	/* success! */
-	return texture;
-}
-#endif				/* TEXTURE_PLUGIN */
-
 RImage *wTextureRenderImage(WTexture * texture, int width, int height, int relief)
 {
 	RImage *image = NULL;
@@ -513,21 +442,6 @@ RImage *wTextureRenderImage(WTexture * texture, int width, int height, int relie
 			RReleaseImage(grad);
 		}
 		break;
-
-#ifdef TEXTURE_PLUGIN
-	case WTEX_FUNCTION:
-#ifdef HAVE_DLFCN_H
-		if (texture->function.render) {
-			image = texture->function.render(texture->function.argc, texture->function.argv,
-							 width, height, relief);
-		}
-#endif
-		if (!image) {
-			RErrorCode = RERR_INTERNAL;
-		}
-		break;
-#endif				/* TEXTURE_PLUGIN */
-
 	default:
 		puts("ERROR in wTextureRenderImage()");
 		image = NULL;

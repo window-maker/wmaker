@@ -32,12 +32,6 @@
  * Also check the features you can enable through configure.
  */
 
-/*
- * #undefine if you dont want texture plugin support or your system have
- * some sort of problem with them.
- */
-#define TEXTURE_PLUGIN
-
 /* If you want animations for iconification, shading, icon arrangement etc. */
 #define ANIMATIONS
 

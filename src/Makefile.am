@@ -117,8 +117,7 @@ wmaker_LDADD = \
 	@XLFLAGS@ \
 	@XFTLIBS@ \
 	@XLIBS@ \
-	@INTLIBS@ \
-	@DLLIBS@
+	@INTLIBS@
 
 LIBTOOL = $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
 

@@ -36,10 +36,6 @@
 #include <limits.h>
 #include <signal.h>
 
-#ifdef HAVE_DLFCN_H
-# include <dlfcn.h>
-#endif
-
 #ifndef PATH_MAX
 #define PATH_MAX DEFAULT_PATH_MAX
 #endif
@@ -1792,64 +1788,12 @@ static WTexture *parse_texture(WScreen * scr, WMPropList * pl)
 		val = WMGetFromPLString(elem);
 
 		texture = (WTexture *) wTextureMakeTGradient(scr, style, &color1, &color2, val, opacity);
-	}
-#ifdef TEXTURE_PLUGIN
-	else if (strcasecmp(val, "function") == 0) {
-		WTexFunction *function;
-		void (*initFunc) (Display *, Colormap);
-		char *lib, *func, **argv;
-		int i, argc;
-
-		if (nelem < 3)
-			return NULL;
-
-		/* get the library name */
-		elem = WMGetFromPLArray(pl, 1);
-		if (!elem || !WMIsPLString(elem)) {
-			return NULL;
-		}
-		lib = WMGetFromPLString(elem);
-
-		/* get the function name */
-		elem = WMGetFromPLArray(pl, 2);
-		if (!elem || !WMIsPLString(elem)) {
-			return NULL;
-		}
-		func = WMGetFromPLString(elem);
-
-		argc = nelem - 2;
-		argv = (char **)wmalloc(argc * sizeof(char *));
-
-		/* get the parameters */
-		argv[0] = wstrdup(func);
-		for (i = 0; i < argc - 1; i++) {
-			elem = WMGetFromPLArray(pl, 3 + i);
-			if (!elem || !WMIsPLString(elem)) {
-				wfree(argv);
-
-				return NULL;
-			}
-			argv[i + 1] = wstrdup(WMGetFromPLString(elem));
-		}
-
-		function = wTextureMakeFunction(scr, lib, func, argc, argv);
-
-#ifdef HAVE_DLFCN_H
-		if (function) {
-			initFunc = dlsym(function->handle, "initWindowMaker");
-			if (initFunc) {
-				initFunc(dpy, scr->w_colormap);
-			} else {
-				wwarning(_("could not initialize library %s"), lib);
-			}
-		} else {
-			wwarning(_("could not find function %s::%s"), lib, func);
-		}
-#endif				/* HAVE_DLFCN_H */
-		texture = (WTexture *) function;
-	}
-#endif				/* TEXTURE_PLUGIN */
-	else {
+	} else if (strcasecmp(val, "function") == 0) {
+		/* Leave this in to handle the unlikely case of
+		 * someone actually having function textures configured */
+		wwarning("function texture support has been removed");
+		return NULL;
+	} else {
 		wwarning(_("invalid texture type %s"), val);
 		return NULL;
 	}

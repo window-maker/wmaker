@@ -47,10 +47,6 @@
 # endif
 #endif
 
-#ifdef HAVE_DLFCN_H
-#include <dlfcn.h>
-#endif
-
 #include "../src/wconfig.h"
 
 #ifndef GLOBAL_DEFAULTS_SUBDIR
@@ -663,84 +659,10 @@ BackgroundTexture *parseTexture(RContext * rc, char *text)
 
 		texture->pixmap = pixmap;
 	} else if (strcasecmp(type, "function") == 0) {
-#ifdef HAVE_DLFCN_H
-		void (*initFunc) (Display *, Colormap);
-		RImage *(*mainFunc) (int, char **, int, int, int);
-		Pixmap pixmap;
-		RImage *image = 0;
-		int success = 0;
-		char *lib, *func, **argv = 0;
-		void *handle = 0;
-		int i, argc;
-
-		if (count < 3)
-			goto function_cleanup;
-
-		/* get the library name */
-		GETSTRORGOTO(val, lib, 1, function_cleanup);
-
-		/* get the function name */
-		GETSTRORGOTO(val, func, 2, function_cleanup);
-
-		argc = count - 2;
-		argv = (char **)wmalloc(argc * sizeof(char *));
-
-		/* get the parameters */
-		argv[0] = func;
-		for (i = 0; i < argc - 1; i++) {
-			GETSTRORGOTO(val, tmp, 3 + i, function_cleanup);
-			argv[i + 1] = wstrdup(tmp);
-		}
-
-		handle = dlopen(lib, RTLD_LAZY);
-		if (!handle) {
-			wwarning("could not find library %s", lib);
-			goto function_cleanup;
-		}
-
-		initFunc = dlsym(handle, "initWindowMaker");
-		if (!initFunc) {
-			wwarning("could not initialize library %s", lib);
-			goto function_cleanup;
-		}
-		initFunc(dpy, DefaultColormap(dpy, scr));
-
-		mainFunc = dlsym(handle, func);
-		if (!mainFunc) {
-			wwarning("could not find function %s::%s", lib, func);
-			goto function_cleanup;
-		}
-		image = mainFunc(argc, argv, scrWidth, scrHeight, 0);
-
-		if (!RConvertImage(rc, image, &pixmap)) {
-			wwarning("could not convert texture:%s", RMessageForError(RErrorCode));
-			goto function_cleanup;
-		}
-		texture->width = scrWidth;
-		texture->height = scrHeight;
-		texture->pixmap = pixmap;
-		success = 1;
-
- function_cleanup:
-		if (argv) {
-			int i;
-			for (i = 0; i < argc; i++) {
-				wfree(argv[i]);
-			}
-		}
-		if (handle) {
-			dlclose(handle);
-		}
-		if (image) {
-			RReleaseImage(image);
-		}
-		if (!success) {
-			goto error;
-		}
-#else
-		wwarning("function textures not supported");
+		/* Leave this in to handle the unlikely case of
+		 * someone actually having function textures configured */
+		wwarning("function texture support has been removed");
 		goto error;
-#endif
 	} else {
 		wwarning("invalid texture type %s", text);
 		goto error;

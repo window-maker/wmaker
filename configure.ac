@@ -116,18 +116,6 @@ if test x"$_cv_HAVE_C99_VSNPRINTF" = x"yes"; then
     AC_DEFINE(HAVE_C99_VSNPRINTF, 1, [define if you have vsnprintf with C99 semantics (set by configure)])
 fi
 
-dnl Loading of dynamic libraries at runtime
-dnl =======================================
-DLLIBS=""
-
-AC_CHECK_FUNC(dlopen, [HAVEDL="yes"], 
-	AC_CHECK_LIB(dl, dlopen, [DLLIBS="-ldl" HAVEDL="yes"],
-			 DLLIBS="" ))
-
-if test "x$HAVEDL" = xyes; then
-    AC_CHECK_HEADERS(dlfcn.h)
-fi
-
 dnl Check for inotify
 dnl =================
 AC_CHECK_HEADERS(sys/inotify.h, AC_DEFINE(HAVE_INOTIFY, 1, Check for inotify))
@@ -374,7 +362,6 @@ fi
 
 
 
-AC_SUBST(DLLIBS)
 AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
 AC_SUBST(MOFILES)
