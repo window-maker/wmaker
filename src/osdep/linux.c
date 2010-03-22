@@ -17,7 +17,9 @@
  * copy argc and argv for an existing process identified by `pid'
  * into suitable storage given in ***argv and *argc.
  *
- * returns 0 for failure, in which case argc := 0 and arv := NULL
+ * subsequent calls use the same static area for argv and argc.
+ *
+ * returns 0 for failure, in which case argc := 0 and argv := NULL
  * returns 1 for success
  */
 Bool GetCommandForPid(int pid, char ***argv, int *argc)
@@ -31,16 +33,27 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 
 	/* cmdline is a flattened series of null-terminated strings */
 	snprintf(buf, sizeof(buf), "/proc/%d/cmdline", pid);
-	if ((fd = open(buf, O_RDONLY)) == -1)
-		return False;
-
-	/* XXX: read/close errors */
-	if ((count = read(fd, buf, sizeof(buf))) == -1) {
-		close(fd);
+	while (1) {
+		if ((fd = open(buf, O_RDONLY)) != -1)
+			break;
+		if (errno == EINTR)
+			continue;
 		return False;
 	}
-	close(fd);
 
+	while (1) {
+		if ((count = read(fd, buf, sizeof(buf))) != -1)
+			break;
+		if (errno == EINTR)
+			continue;
+		return False;
+	}
+
+	do {
+		close(fd);
+	} while (errno == EINTR);
+
+	/* count args */
 	for (i = 0; i < count; i++)
 		if (buf[i] == '\0')
 			(*argc)++;
@@ -48,7 +61,7 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 	if (*argc == 0)
 		return False;
 
-	*argv = (char **)wmalloc(sizeof(char *) * *argc);
+	*argv = (char **)wmalloc(sizeof(char *) * (*argc + 1 /* term. null ptr */));
 	(*argv)[0] = buf;
 
 	/* go through buf, set argv[$next] to the beginning of each string */
@@ -61,5 +74,7 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 			break;
 	}
 
+	/* the list of arguments must be terminated by a null pointer */
+	(*argv)[j] = NULL;
 	return True;
 }
