@@ -84,7 +84,8 @@ trap 'cleanup; exit 2' 15
 
 test -d debian || errorExit "This script must be called from the toplevel source dir, ./debian must exist."
 
-git status | grep modified: | awk '{ print $3 }' | xargs git checkout
+#git status | grep modified: | awk '{ print $3 }' | xargs git checkout
+git checkout -f  >/dev/null
 RC=0
 if doPull ; then
   doEnv
