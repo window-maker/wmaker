@@ -37,6 +37,41 @@ dnl AC_PROG_INSTALL -- already done by AM_INIT_AUTOMAKE
 AC_PROG_LN_S
 AC_PROG_GCC_TRADITIONAL
 
+dnl Platform-specific Makefile setup
+dnl ================================
+
+case "${host}" in
+	*-*-linux*)
+		WM_OSDEP="linux"
+	;;
+	*-*-freebsd*)
+		WM_OSDEP="bsd"
+		CFLAGS="$CFLAGS -DFREEBSD"
+	;;
+	*-*-netbsd*)
+		WM_OSDEP="bsd"
+		CFLAGS="$CFLAGS -DNETBSD"
+	;;
+	*-*-openbsd*)
+		WM_OSDEP="bsd"
+	CFLAGS="$CFLAGS -DOPENBSD"
+	;;
+	*-*-dragonfly*)
+		WM_OSDEP="bsd"
+		CFLAGS="$CFLAGS -DDRAGONFLYBSD"
+	;;
+	*-apple-darwin*)
+		WM_OSDEP="darwin"
+	;;
+	*-*-solaris*)
+		WM_OSDEP="stub"		# solaris.c when done
+	;;
+	*)
+		WM_OSDEP="stub"
+	;;
+esac
+AC_SUBST(WM_OSDEP)
+
 
 dnl the prefix
 dnl ==========

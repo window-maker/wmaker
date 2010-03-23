@@ -45,7 +45,7 @@ wmaker_SOURCES = 	\
 	menu.c \
 	menu.h \
 	misc.c \
-	osdep/linux.c \
+	osdep_@WM_OSDEP@.c \
 	monitor.c \
 	motif.c \
 	motif.h \

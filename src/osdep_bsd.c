@@ -24,7 +24,7 @@
 
 #include <WINGs/WUtil.h>
 
-#include "../wconfig.h"
+#include "wconfig.h"
 
 /*
  * copy argc and argv for an existing process identified by `pid'

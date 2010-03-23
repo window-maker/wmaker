@@ -6,6 +6,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include <WINGs/WUtil.h>
+
+#include "wconfig.h"
+
 /*
  * copy argc and argv for an existing process identified by `pid'
  * into suitable storage given in ***argv and *argc.
