@@ -29,7 +29,6 @@ LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 XLOCALE           := --disable-locale
 MODELOCK          := --enable-modelock
 
-VDESKTOP	  := --enable-vdesktop
 XINERAMA	  := --enable-xinerama
 
 # USERMENU	  := --enable-usermenu
@@ -43,7 +42,7 @@ XINERAMA	  := --enable-xinerama
 # USE_GIF	  := --disable-gif
 # USE_TIFF	  := --disable-tiff
 
-WMAKER_OPTIONS := $(XLOCALE) $(MODELOCK) $(VDESKTOP) $(XINERAMA) \
+WMAKER_OPTIONS := $(XLOCALE) $(MODELOCK) $(XINERAMA) \
 	$(USERMENU) $(SHAPE_EXT) $(USE_SHM) \
 	$(USE_XPM) $(USE_PNG) $(USE_JPEG) $(USE_GIF) $(USE_TIFF)
 

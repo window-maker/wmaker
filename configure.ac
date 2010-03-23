@@ -256,13 +256,6 @@ if test "$LINGUAS" != ""; then
     if test "$XGETTEXT" != "" -a "$HAVEGETTEXT" != ""; then
         AC_DEFINE(I18N, 1, [Internationalization (I18N) support (set by configure)])
         PO=""
-#       if test "$LINGUAS" = ""; then
-#   	    ling=` (cd src/po; /bin/ls *.po) `
-#    	    for l in $ling; do
-#	        lcode=`basename $l .po`
-#	        LINGUAS="$LINGUAS $lcode"
-#           done
-#       fi
         echo "xgettext and gettext() exist; will build i18n support for $LINGUAS"
     else
         LINGUAS=""
@@ -875,31 +868,6 @@ fi
 )
 
 
-dnl
-dnl Nicolai:  Program tests for Documentation Section
-dnl =================================================
-dnl DOCTYPES=""
-dnl AC_CHECK_PROG(MAKEINFO, makeinfo, makeinfo, ,$PATH)
-dnl if test "x$MAKEINFO" != "x" ; then
-dnl       DOCTYPES="$DOCTYPES info_doc"
-dnl fi
-dnl AC_CHECK_PROG(TEX, tex, tex, ,$PATH)
-dnl if test "x$TEX" != "x" ; then
-dnl       DOCTYPES="$DOCTYPES dvi_doc"
-dnl fi
-dnl AC_CHECK_PROG(DVIPS, dvips, dvips, ,$PATH)
-dnl if test "x$DVIPS" != "x" ; then
-dnl       DOCTYPES="$DOCTYPES ps_doc"
-dnl fi
-dnl AC_CHECK_PROG(PERL, perl, perl, ,$PATH)
-dnl if test "x$PERL" != "x" ; then
-dnl       DOCTYPES="$DOCTYPES html_doc"
-dnl fi
-dnl AC_PATH_PROG(PERL_PATH, perl, perl, ,$PATH)
-dnl AC_CHECK_PROG(TEXI2HTML, texi2html, texi2html, ,$PATH)
-  
-dnl AC_SUBST(DOCTYPES)
-
 AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile test/Makefile \
 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
 	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
@@ -1101,7 +1069,6 @@ echo "Use assembly routines for wrlib     : $asm_support"
 echo "Use inline MMX(tm) x86 assembly     : $mmx_support"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Xinerama extension support          : $xinerama"
-dnl echo "Virtual desktop support             : $vdesktop_on"
 echo "Translated message files to install : $mof"
 dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then

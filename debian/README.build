@@ -61,7 +61,6 @@ Building Window Maker for Debian
 	XLOCALE  := --disable-locale
 	MODELOCK := --enable-modelock
 
-	VDESKTOP := --enable-vdesktop
 	XINERAMA := --enable-xinerama
 
 	(*) These are not used by default
