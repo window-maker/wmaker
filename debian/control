@@ -22,15 +22,6 @@ Description: NeXTSTEP-like window manager for X
  .
   Homepage: http://www.windowmaker.info/
 
-Package: libwmaker0-dev
-Architecture: any
-Section: libdevel
-Priority: optional
-Depends: libc6-dev, libx11-dev
-Description: Static libraries and headers for Window Maker applications
- Contains libWMaker and header files, for building Window Maker aware
- applications.
-
 Package: libwraster3-dev
 Architecture: any
 Section: libdevel

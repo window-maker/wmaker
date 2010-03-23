@@ -84,7 +84,6 @@ WINGSSRCDIR       := $(TOPSRCDIR)/WINGs
 
 LIBWRASTER        := libwraster3
 LIBWRASTER_TMP    := $(DEBTMPDIR)/../$(LIBWRASTER)
-LIBWMAKER         := libwmaker0
 LIBWINGS          := libwings-dev
 LIBWINGS_TMP      := $(DEBTMPDIR)/../$(LIBWINGS)
 
@@ -214,7 +213,6 @@ binary-arch: build
 	debian/rules install-wmaker-stamp
 	debian/rules debian/$(LIBWRASTER)-dev.files
 	debian/rules debian/$(LIBWRASTER).files
-	debian/rules debian/$(LIBWMAKER)-dev.files
 	debian/rules debian/$(LIBWINGS).files
 	dh_movefiles -a --sourcedir=debian/wmaker
 # Remove cruft
@@ -371,14 +369,6 @@ debian/$(LIBWRASTER)-dev.files: build
 debian/$(LIBWRASTER).files: build
 	( find $(DEBTMPDIR)/$(INCLUDEDIR) $(DEBTMPDIR)/$(LIBDIR) \
 		   -name '*wraster*.so.*' \
-	) | sed -e 's:$(DEBTMPDIR)/*::'> $@
-
-debian/$(LIBWMAKER)-dev.files: build
-	( find $(DEBTMPDIR)/$(INCLUDEDIR) $(DEBTMPDIR)/$(LIBDIR) \
-		   -name '*WM*.h' \
-		-o -name '*WM*.a' \
-		-o -name '*WM*.la' \
-		-o -name '*WM*.so' \
 	) | sed -e 's:$(DEBTMPDIR)/*::'> $@
 
 debian/libwings-dev.files: build
