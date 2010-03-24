@@ -855,6 +855,7 @@ static void paintTextField(TextField * tPtr)
 	if (tPtr->flags.bordered) {
 		drawRelief(&viewbuffer, tPtr->flags.beveled);
 	}
+#if 0 //XXX
 
 	if (tPtr->flags.secure)
 		wfree(text);
@@ -971,6 +972,7 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 							     tPtr->view->prevFocusChain);
 					tPtr->flags.notIllegalMovement = 1;
 				}
+#endif
 				data = (void *)WMBacktabTextMovement;
 			} else {
 				if (tPtr->view->nextFocusChain) {

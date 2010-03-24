@@ -37,7 +37,7 @@ void testOpenFilePanel(WMScreen * scr)
 	WMOpenPanel *panel;
 
 	/* windowCount++; */
-
+#if 0
 	/* get the shared Open File panel */
 	panel = WMGetOpenPanel(scr);
 
@@ -997,6 +997,6 @@ int main(int argc, char **argv)
 	 *
 	 */
 	WMScreenMainLoop(scr);
-
+#endif
 	return 0;
 }

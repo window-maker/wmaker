@@ -3,7 +3,6 @@
 
 #include "wconfig.h"
 
-#include <wraster.h>
 
 #define LIGHT_STIPPLE_WIDTH 4
 #define LIGHT_STIPPLE_HEIGHT 4
@@ -30,31 +29,7 @@ static WMColor *createRGBAColor(WMScreen * scr, unsigned short red,
 static WMColor *findCloseColor(WMScreen * scr, unsigned short red, unsigned short green,
 			       unsigned short blue, unsigned short alpha)
 {
-	WMColor *color;
-	XColor xcolor;
-	RColor rcolor;
-
-	rcolor.red = red >> 8;
-	rcolor.green = green >> 8;
-	rcolor.blue = blue >> 8;
-	rcolor.alpha = alpha >> 8;
-
-	if (!RGetClosestXColor(scr->rcontext, &rcolor, &xcolor))
-		return NULL;
-
-	if (!XAllocColor(scr->display, scr->colormap, &xcolor))
-		return NULL;
-
-	color = wmalloc(sizeof(WMColor));
-
-	color->screen = scr;
-	color->refCount = 1;
-	color->color = xcolor;
-	color->alpha = alpha;
-	color->flags.exact = 1;
-	color->gc = NULL;
-
-	return color;
+	return createRGBAColor(scr, red, green, blue, alpha);
 }
 
 static WMColor *createRGBAColor(WMScreen * scr, unsigned short red, unsigned short green,
@@ -96,16 +71,26 @@ WMColor *WMCreateRGBColor(WMScreen * scr, unsigned short red, unsigned short gre
 	return color;
 }
 
-RColor WMGetRColorFromColor(WMColor * color)
+WMColor* WMCreateColorWithSpec(WMScreen *scr, WMColorSpec *spec)
 {
-	RColor rcolor;
+	WMColor *color = NULL;
 
-	rcolor.red = color->color.red >> 8;
-	rcolor.green = color->color.green >> 8;
-	rcolor.blue = color->color.blue >> 8;
-	rcolor.alpha = color->alpha >> 8;
+	if (!(color=createRGBAColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff)))
+		color = findCloseColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff);
 
-	return rcolor;
+	if (!color)
+		color = WMBlackColor(scr);
+
+	return color;
+}
+
+
+void WMGetComponentsFromColor(WMColor *color, unsigned short *r, unsigned short *g, unsigned short *b, unsigned short *a)
+{
+	*r= color->color.red;
+	*g= color->color.green;
+	*b= color->color.blue;
+	*a= color->alpha;
 }
 
 WMColor *WMCreateRGBAColor(WMScreen * scr, unsigned short red, unsigned short green,
@@ -177,6 +162,7 @@ WMPixel WMColorPixel(WMColor * color)
 
 GC WMColorGC(WMColor * color)
 {
+#ifdef obsolete
 	if (!color->gc) {
 		XGCValues gcv;
 		WMScreen *scr = color->screen;
@@ -186,13 +172,15 @@ GC WMColorGC(WMColor * color)
 		color->gc = XCreateGC(scr->display, scr->rcontext->drawable,
 				      GCForeground | GCGraphicsExposures, &gcv);
 	}
-
+#endif
 	return color->gc;
 }
 
 void WMSetColorInGC(WMColor * color, GC gc)
 {
+#ifdef obsolete
 	XSetForeground(color->screen->display, gc, color->color.pixel);
+#endif
 }
 
 /* "system" colors */
@@ -205,6 +193,7 @@ WMColor *WMWhiteColor(WMScreen * scr)
 	}
 	return WMRetainColor(scr->white);
 }
+#ifdef obsolete
 
 WMColor *WMBlackColor(WMScreen * scr)
 {
@@ -215,7 +204,7 @@ WMColor *WMBlackColor(WMScreen * scr)
 	}
 	return WMRetainColor(scr->black);
 }
-
+#endif
 WMColor *WMGrayColor(WMScreen * scr)
 {
 	if (!scr->gray) {
@@ -256,6 +245,7 @@ WMColor *WMGrayColor(WMScreen * scr)
 
 WMColor *WMDarkGrayColor(WMScreen * scr)
 {
+#ifdef obsolete
 	if (!scr->darkGray) {
 		WMColor *color;
 
@@ -290,6 +280,9 @@ WMColor *WMDarkGrayColor(WMScreen * scr)
 		scr->darkGray = color;
 	}
 	return WMRetainColor(scr->darkGray);
+#endif
+	if (!scr->darkGray)
+		return NULL;
 }
 
 unsigned short WMRedComponentOfColor(WMColor * color)
@@ -297,6 +290,7 @@ unsigned short WMRedComponentOfColor(WMColor * color)
 	return color->color.red;
 }
 
+#ifdef obsolete
 unsigned short WMGreenComponentOfColor(WMColor * color)
 {
 	return color->color.green;
@@ -319,4 +313,38 @@ char *WMGetColorRGBDescription(WMColor * color)
 	sprintf(str, "#%02x%02x%02x", color->color.red >> 8, color->color.green >> 8, color->color.blue >> 8);
 
 	return str;
+}
+#endif
+void WMColorSpecSet(cairo_t *cairo, WMColorSpec *color)
+{
+	cairo_set_source_rgba(cairo,
+			color->red/255.0,
+			color->green/255.0,
+			color->blue/255.0,
+			color->alpha/255.0);
+}
+
+WMColorSpec WMBlackColorSpec()
+{
+	WMColorSpec spec= {0, 0, 0, 255};
+	return spec;
+}
+
+
+WMColorSpec WMGrayColorSpec()
+{
+	WMColorSpec spec= {0xae, 0xaa, 0xae, 0xff};
+	return spec;
+}
+
+WMColorSpec WMWhiteColorSpec()
+{
+	WMColorSpec spec= {255, 255, 255, 255};
+	return spec;
+}
+
+WMColorSpec WMDarkGrayColorSpec()
+{
+	WMColorSpec spec= {0x51, 0x55, 0x51, 0xff};
+	return spec;
 }

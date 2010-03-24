@@ -3,9 +3,9 @@
 #ifndef _WINGS_H_
 #define _WINGS_H_
 
-#include <wraster.h>
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
+#include <cairo.h>
 
 #define WINGS_H_VERSION  20041030
 
@@ -35,7 +35,6 @@ typedef struct {
     WMPoint pos;
     WMSize size;
 } WMRect;
-
 
 
 
@@ -321,6 +320,15 @@ typedef struct W_WidgetType {
 #define WMWidgetClass(widget)  	(((W_WidgetType*)(widget))->widgetClass)
 #define WMWidgetView(widget)   	(((W_WidgetType*)(widget))->view)
 
+
+typedef struct {
+    unsigned char red;
+    unsigned char green;
+    unsigned char blue;
+    unsigned char alpha;
+} WMColorSpec;
+
+typedef cairo_surface_t WMImage;
 
 /* widgets */
 
@@ -621,9 +629,6 @@ char* WMPathForResourceOfType(char *resource, char *ext);
 
 WMScreen* WMOpenScreen(const char *display);
 
-WMScreen* WMCreateScreenWithRContext(Display *display, int screen,
-                                     RContext *context);
-
 WMScreen* WMCreateScreen(Display *display, int screen);
 
 WMScreen* WMCreateSimpleApplicationScreen(Display *display);
@@ -634,24 +639,22 @@ void WMBreakModalLoop(WMScreen *scr);
 
 void WMRunModalLoop(WMScreen *scr, WMView *view);
 
-RContext* WMScreenRContext(WMScreen *scr);
-
 Display* WMScreenDisplay(WMScreen *scr);
 
 int WMScreenDepth(WMScreen *scr);
 
 
 
-void WMSetApplicationIconImage(WMScreen *app, RImage *image);
+void WMSetApplicationIconImage(WMScreen *app, cairo_surface_t *image);
 
-RImage* WMGetApplicationIconImage(WMScreen *app);
+cairo_surface_t* WMGetApplicationIconImage(WMScreen *app);
 
 void WMSetApplicationIconPixmap(WMScreen *app, WMPixmap *icon);
 
 WMPixmap* WMGetApplicationIconPixmap(WMScreen *app);
 
 /* If color==NULL it will use the default color for panels: ae/aa/ae */
-WMPixmap* WMCreateApplicationIconBlendedPixmap(WMScreen *scr, RColor *color);
+WMPixmap* WMCreateApplicationIconBlendedPixmap(WMScreen *scr, cairo_pattern_t *color);
 
 void WMSetApplicationIconWindow(WMScreen *scr, Window window);
 
@@ -773,7 +776,7 @@ WMPixmap* WMCreatePixmapFromXPixmaps(WMScreen *scrPtr, Pixmap pixmap,
                                      Pixmap mask, int width, int height,
                                      int depth);
 
-WMPixmap* WMCreatePixmapFromRImage(WMScreen *scrPtr, RImage *image,
+WMPixmap* WMCreatePixmapFromCairo(WMScreen *scrPtr, cairo_surface_t *image,
                                    int threshold);
 
 WMPixmap* WMCreatePixmapFromXPMData(WMScreen *scrPtr, char **data);
@@ -782,11 +785,11 @@ WMSize WMGetPixmapSize(WMPixmap *pixmap);
 
 WMPixmap* WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName);
 
-WMPixmap* WMCreateBlendedPixmapFromRImage(WMScreen *scrPtr, RImage *image,
-                                          RColor *color);
+WMPixmap* WMCreateBlendedPixmapFromCairo(WMScreen *scrPtr, cairo_surface_t *image,
+                                         cairo_pattern_t *color);
 
 WMPixmap* WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName,
-                                        RColor *color);
+                                        cairo_pattern_t *color);
 
 void WMDrawPixmap(WMPixmap *pixmap, Drawable d, int x, int y);
 
@@ -820,6 +823,8 @@ void WMReleaseColor(WMColor *color);
 
 WMColor* WMRetainColor(WMColor *color);
 
+WMColor* WMCreateColorWithSpec(WMScreen *scr, WMColorSpec *spec);
+
 WMColor* WMCreateRGBColor(WMScreen *scr, unsigned short red,
                           unsigned short green, unsigned short blue,
                           Bool exact);
@@ -830,7 +835,9 @@ WMColor* WMCreateRGBAColor(WMScreen *scr, unsigned short red,
 
 WMColor* WMCreateNamedColor(WMScreen *scr, char *name, Bool exact);
 
-RColor WMGetRColorFromColor(WMColor *color);
+void WMGetComponentsFromColor(WMColor *color,
+                              unsigned short *r, unsigned short *g,
+                              unsigned short *b, unsigned short *a);
 
 void WMSetColorAlpha(WMColor *color, unsigned short alpha);
 
@@ -844,17 +851,22 @@ unsigned short WMGetColorAlpha(WMColor *color);
 
 char* WMGetColorRGBDescription(WMColor *color);
 
+
+void WMColorSpecSet(cairo_t *cairo, WMColorSpec *color);
+
+WMColorSpec WMBlackColorSpec();
+WMColorSpec WMGrayColorSpec();
+WMColorSpec WMWhiteColorSpec();
+WMColorSpec WMDarkGrayColorSpec();
+
+
 /* ....................................................................... */
 
 
-void WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
-                  int x, int y, char *text, int length);
+void WMDrawString(cairo_t *cairo, WMColorSpec *color, WMFont *font,
+                  int x, int y, char *text);
 
-void WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color,
-                       WMColor *background, WMFont *font, int x, int y,
-                       char *text, int length);
-
-int WMWidthOfString(WMFont *font, char *text, int length);
+int WMWidthOfString(WMFont *font, char *text);
 
 
 
@@ -880,9 +892,9 @@ void WMMoveWidget(WMWidget *w, int x, int y);
 
 void WMResizeWidget(WMWidget *w, unsigned int width, unsigned int height);
 
-void WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color);
+void WMSetWidgetBackgroundColor(WMWidget *w, WMColorSpec *color);
 
-WMColor* WMGetWidgetBackgroundColor(WMWidget *w);
+WMColorSpec WMGetWidgetBackgroundColor(WMWidget *w);
 
 void WMMapSubwidgets(WMWidget *w);
 
@@ -965,7 +977,7 @@ void WMSetWindowTitle(WMWindow *wPtr, char *title);
 
 void WMSetWindowMiniwindowTitle(WMWindow *win, char *title);
 
-void WMSetWindowMiniwindowImage(WMWindow *win, RImage *image);
+void WMSetWindowMiniwindowImage(WMWindow *win, cairo_surface_t *image);
 
 void WMSetWindowMiniwindowPixmap(WMWindow *win, WMPixmap *pixmap);
 
@@ -1014,9 +1026,9 @@ WMButton* WMCreateCustomButton(WMWidget *parent, int behaviourMask);
 
 void WMSetButtonImageDefault(WMButton *bPtr);
 
-void WMSetButtonImage(WMButton *bPtr, WMPixmap *image);
+void WMSetButtonImage(WMButton *bPtr, WMImage *image);
 
-void WMSetButtonAltImage(WMButton *bPtr, WMPixmap *image);
+void WMSetButtonAltImage(WMButton *bPtr, WMImage *image);
 
 void WMSetButtonImagePosition(WMButton *bPtr, WMImagePosition position);
 
@@ -1028,11 +1040,11 @@ void WMSetButtonText(WMButton *bPtr, char *text);
 
 void WMSetButtonAltText(WMButton *bPtr, char *text);
 
-void WMSetButtonTextColor(WMButton *bPtr, WMColor *color);
+void WMSetButtonTextColor(WMButton *bPtr, WMColorSpec *color);
 
-void WMSetButtonAltTextColor(WMButton *bPtr, WMColor *color);
+void WMSetButtonAltTextColor(WMButton *bPtr, WMColorSpec *color);
 
-void WMSetButtonDisabledTextColor(WMButton *bPtr, WMColor *color);
+void WMSetButtonDisabledTextColor(WMButton *bPtr, WMColorSpec *color);
 
 void WMSetButtonSelected(WMButton *bPtr, int isSelected);
 
@@ -1062,9 +1074,9 @@ WMLabel* WMCreateLabel(WMWidget *parent);
 
 void WMSetLabelWraps(WMLabel *lPtr, Bool flag);
 
-void WMSetLabelImage(WMLabel *lPtr, WMPixmap *image);
+void WMSetLabelImage(WMLabel *lPtr, WMImage *image);
 
-WMPixmap* WMGetLabelImage(WMLabel *lPtr);
+WMImage* WMGetLabelImage(WMLabel *lPtr);
 
 char* WMGetLabelText(WMLabel *lPtr);
 
@@ -1080,7 +1092,7 @@ WMFont* WMGetLabelFont(WMLabel *lPtr);
 
 void WMSetLabelFont(WMLabel *lPtr, WMFont *font);
 
-void WMSetLabelTextColor(WMLabel *lPtr, WMColor *color);
+void WMSetLabelTextColor(WMLabel *lPtr, WMColorSpec *color);
 
 /* ....................................................................... */
 
@@ -1802,6 +1814,13 @@ void WMDestroyInputPanel(WMInputPanel *panel);
 
 void WMDestroyGenericPanel(WMGenericPanel *panel);
 
+/* ....................................................................... */
+
+WMImage *WMRetainImage(WMImage *image);
+void WMDestroyImage(WMImage *image);
+
+unsigned int WMGetImageWidth(WMImage *image);
+unsigned int WMGetImageHeight(WMImage *image);
 /* ....................................................................... */
 
 /* only 1 instance per WMScreen */

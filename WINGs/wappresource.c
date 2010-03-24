@@ -25,7 +25,7 @@ void WMSetApplicationIconWindow(WMScreen * scr, Window window)
 	}
 }
 
-void WMSetApplicationIconImage(WMScreen * scr, RImage * image)
+void WMSetApplicationIconImage(WMScreen * scr, cairo_surface_t *image)
 {
 	WMPixmap *icon;
 
@@ -33,18 +33,18 @@ void WMSetApplicationIconImage(WMScreen * scr, RImage * image)
 		return;
 
 	if (scr->applicationIconImage)
-		RReleaseImage(scr->applicationIconImage);
+        cairo_surface_destroy(scr->applicationIconImage);
 
-	scr->applicationIconImage = RRetainImage(image);
+	scr->applicationIconImage = cairo_surface_reference(image);
 
 	/* TODO: check whether we should set the pixmap only if there's none yet */
-	if (image != NULL && (icon = WMCreatePixmapFromRImage(scr, image, 128)) != NULL) {
+	if (image != NULL && (icon = WMCreatePixmapFromCairo(scr, image, 128)) != NULL) {
 		WMSetApplicationIconPixmap(scr, icon);
 		WMReleasePixmap(icon);
 	}
 }
 
-RImage *WMGetApplicationIconImage(WMScreen * scr)
+cairo_surface_t *WMGetApplicationIconImage(WMScreen * scr)
 {
 	return scr->applicationIconImage;
 }
@@ -77,22 +77,22 @@ WMPixmap *WMGetApplicationIconPixmap(WMScreen * scr)
 	return scr->applicationIconPixmap;
 }
 
-WMPixmap *WMCreateApplicationIconBlendedPixmap(WMScreen * scr, RColor * color)
+WMPixmap *WMCreateApplicationIconBlendedPixmap(WMScreen * scr, cairo_pattern_t *color)
 {
 	WMPixmap *pix;
 
 	if (scr->applicationIconImage) {
-		RColor gray;
+        int release = 0;
 
-		gray.red = 0xae;
-		gray.green = 0xaa;
-		gray.blue = 0xae;
-		gray.alpha = 0xff;
+		if (!color) {
+            release = 1;
+			color = cairo_pattern_create_rgb(0xae/255.0, 0xaa/255.0, 0xae/255.0);
+        }
 
-		if (!color)
-			color = &gray;
+		pix = WMCreateBlendedPixmapFromCairo(scr, scr->applicationIconImage, color);
 
-		pix = WMCreateBlendedPixmapFromRImage(scr, scr->applicationIconImage, color);
+        if (release)
+            cairo_pattern_destroy(color);
 	} else {
 		pix = NULL;
 	}

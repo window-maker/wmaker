@@ -1,92 +1,212 @@
 
 #include "WINGsP.h"
 
-#include <wraster.h>
 #include <ctype.h>
 
-void
-W_DrawRelief(W_Screen * scr, Drawable d, int x, int y, unsigned int width,
-	     unsigned int height, WMReliefType relief)
+static void curve_rectangle(cairo_t *cr,
+		double x0, double y0, double rect_width, double rect_height,
+		double radius)
 {
-	W_DrawReliefWithGC(scr, d, x, y, width, height, relief,
-			   WMColorGC(scr->black), WMColorGC(scr->darkGray),
-			   WMColorGC(scr->gray), WMColorGC(scr->white));
+	double x1,y1;
+
+	x1=x0+rect_width;
+	y1=y0+rect_height;
+	if (!rect_width || !rect_height)
+		return;
+	if (rect_width/2<radius) {
+		if (rect_height/2<radius) {
+			cairo_move_to  (cr, x0, (y0 + y1)/2);
+			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
+			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
+			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
+			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
+		} else {
+			cairo_move_to  (cr, x0, y0 + radius);
+			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
+			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
+			cairo_line_to (cr, x1 , y1 - radius);
+			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
+			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
+		}
+	} else {
+		if (rect_height/2<radius) {
+			cairo_move_to  (cr, x0, (y0 + y1)/2);
+			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
+			cairo_line_to (cr, x1 - radius, y0);
+			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
+			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
+			cairo_line_to (cr, x0 + radius, y1);
+			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
+		} else {
+			cairo_move_to  (cr, x0, y0 + radius);
+			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
+			cairo_line_to (cr, x1 - radius, y0);
+			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
+			cairo_line_to (cr, x1 , y1 - radius);
+			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
+			cairo_line_to (cr, x0 + radius, y1);
+			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
+		}
+	}
+	cairo_close_path (cr);
 }
 
-void
-W_DrawReliefWithGC(W_Screen * scr, Drawable d, int x, int y, unsigned int width,
-		   unsigned int height, WMReliefType relief, GC black, GC dark, GC light, GC white)
+void W_DrawButtonRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width, unsigned int height,
+		WMReliefType relief)
 {
-	Display *dpy = scr->display;
-	GC bgc;
-	GC wgc;
-	GC lgc;
-	GC dgc;
+	unsigned char border[4]= {0x00, 0x00, 0x00, 0x70};
+	//unsigned char color1[4]= {0x8c, 0xb1, 0xbc, 0xff};
+	//unsigned char color2[4]= {0xcb, 0xf3, 0xff, 0xff};
+	unsigned char color1[4]= {0x0, 0x0, 0x0, 0xff};
+	unsigned char color2[4]= {0xcf, 0xcf, 0xcf, 0xff};
+	unsigned char scolor1[4]= {0xff, 0xff, 0xff, 0xe5};
+	unsigned char scolor2[4]= {0xff, 0xff, 0xff, 0x70};
+	cairo_pattern_t *shine;
+	cairo_pattern_t *base;
+
+	x+=1;
+	y+=1;
+	width-=2;
+	height-=2;
+
+	cairo_save(cairo);
+
+	shine= cairo_pattern_create_linear(0, 0, 0, height*2/5);
+	cairo_pattern_add_color_stop_rgba(shine, 0,
+			scolor1[0]/255.0, scolor1[1]/255.0, scolor1[2]/255.0,
+			scolor1[3]/255.0);
+	cairo_pattern_add_color_stop_rgba(shine, 1,
+			scolor2[0]/255.0, scolor2[1]/255.0, scolor2[2]/255.0,
+			scolor2[3]/255.0);
+
+	base= cairo_pattern_create_linear(0, 0, 0, height-1);
+	cairo_pattern_add_color_stop_rgba(base, 0,
+			color1[0]/255.0, color1[1]/255.0, color1[2]/255.0,
+			color1[3]/255.0);
+	cairo_pattern_add_color_stop_rgba(base, 1,
+			color2[0]/255.0, color2[1]/255.0, color2[2]/255.0,
+			color2[3]/255.0);
+
+
+	curve_rectangle(cairo, x, y, width-1, height-1, height*2/3);
+	cairo_set_source(cairo, base);
+	cairo_fill_preserve(cairo);
+	cairo_clip(cairo);
+
+	curve_rectangle(cairo, x, y, width-1, height*2/5, width);
+	cairo_set_source(cairo, shine);
+	cairo_fill(cairo);
+
+	curve_rectangle(cairo, x, y, width-1, height-1, height*2/3);
+	cairo_set_source_rgba(cairo, border[0]/255.0, border[1]/255.0, border[2]/255.0, border[3]/255.0);
+	cairo_set_line_width(cairo, 2.0);
+	cairo_stroke(cairo);
+
+	cairo_pattern_destroy(shine);
+	cairo_pattern_destroy(base);
+
+	cairo_restore(cairo);
+}
+
+void W_DrawRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width, unsigned int height,
+		WMReliefType relief)
+{
+	WMColorSpec b;
+	WMColorSpec w;
+	WMColorSpec d;
+	WMColorSpec l;
 
 	switch (relief) {
-	case WRSimple:
-		XDrawRectangle(dpy, d, black, x, y, width - 1, height - 1);
-		return;
+		case WRSimple:
+			WMColorSpecSet(cairo, &b);
+			cairo_rectangle(cairo, x, y, width-1, height-1);
+			cairo_stroke(cairo);
+			return;
 
-	case WRRaised:
-		bgc = black;
-		dgc = dark;
-		wgc = white;
-		lgc = light;
-		break;
+		case WRRaised:
+			b= WMBlackColorSpec();
+			w= WMWhiteColorSpec();
+			d= WMDarkGrayColorSpec();
+			l= WMGrayColorSpec();
+			break;
 
-	case WRSunken:
-		wgc = dark;
-		lgc = black;
-		bgc = white;
-		dgc = light;
-		break;
+		case WRSunken:
+			l= WMBlackColorSpec();
+			b= WMWhiteColorSpec();
+			w= WMDarkGrayColorSpec();
+			d= WMGrayColorSpec();
+			break;
 
-	case WRPushed:
-		lgc = wgc = black;
-		dgc = bgc = white;
-		break;
+		case WRPushed:
+			l= w= WMBlackColorSpec();
+			d= b= WMWhiteColorSpec();
+			break;
 
-	case WRRidge:
-		lgc = bgc = dark;
-		dgc = wgc = white;
-		break;
+		case WRRidge:
+			l= b= WMDarkGrayColorSpec();
+			d= w= WMWhiteColorSpec();
+			break;
 
-	case WRGroove:
-		wgc = dgc = dark;
-		lgc = bgc = white;
-		break;
+		case WRGroove:
+			w= d= WMDarkGrayColorSpec();
+			l= b= WMWhiteColorSpec();
+			break;
 
-	default:
-		return;
+		default:
+			return;
 	}
 	/* top left */
-	XDrawLine(dpy, d, wgc, x, y, x + width - 1, y);
-	if (width > 2 && relief != WRRaised && relief != WRPushed) {
-		XDrawLine(dpy, d, lgc, x + 1, y + 1, x + width - 3, y + 1);
+	WMColorSpecSet(cairo, &w);
+	cairo_move_to(cairo, x, y);
+	cairo_line_to(cairo, x+width-1, y);
+	cairo_stroke(cairo);
+	if (width > 2 && relief != WRRaised && relief!=WRPushed) {
+		WMColorSpecSet(cairo, &l);
+		cairo_move_to(cairo, x+1, y+1);
+		cairo_line_to(cairo, x+width-3, y+1);
+		cairo_stroke(cairo);
 	}
 
-	XDrawLine(dpy, d, wgc, x, y, x, y + height - 1);
-	if (height > 2 && relief != WRRaised && relief != WRPushed) {
-		XDrawLine(dpy, d, lgc, x + 1, y + 1, x + 1, y + height - 3);
+	WMColorSpecSet(cairo, &w);
+	cairo_move_to(cairo, x, y);
+	cairo_line_to(cairo, x, y+height-1);
+	cairo_stroke(cairo);
+	if (height > 2 && relief != WRRaised && relief!=WRPushed) {
+		WMColorSpecSet(cairo, &l);
+		cairo_move_to(cairo, x+1, y+1);
+		cairo_line_to(cairo, x+1, y+height-3);
+		cairo_stroke(cairo);
 	}
 
 	/* bottom right */
-	XDrawLine(dpy, d, bgc, x, y + height - 1, x + width - 1, y + height - 1);
-	if (width > 2 && relief != WRPushed) {
-		XDrawLine(dpy, d, dgc, x + 1, y + height - 2, x + width - 2, y + height - 2);
+	WMColorSpecSet(cairo, &b);
+	cairo_move_to(cairo, x, y+height-1);
+	cairo_line_to(cairo, x+width-1, y+height-1);
+	cairo_stroke(cairo);
+	if (width > 2 && relief!=WRPushed) {
+		WMColorSpecSet(cairo, &d);
+		cairo_move_to(cairo, x+1, y+height-2);
+		cairo_line_to(cairo, x+width-2, y+height-2);
+		cairo_stroke(cairo);
 	}
 
-	XDrawLine(dpy, d, bgc, x + width - 1, y, x + width - 1, y + height - 1);
-	if (height > 2 && relief != WRPushed) {
-		XDrawLine(dpy, d, dgc, x + width - 2, y + 1, x + width - 2, y + height - 2);
+	WMColorSpecSet(cairo, &b);
+	cairo_move_to(cairo, x+width-1, y);
+	cairo_line_to(cairo, x+width-1, y+height-1);
+	cairo_stroke(cairo);
+	if (height > 2 && relief!=WRPushed) {
+		WMColorSpecSet(cairo, &d);
+		cairo_move_to(cairo, x+width-2, y+1);
+		cairo_line_to(cairo, x+width-2, y+height-2);
+		cairo_stroke(cairo);
 	}
 }
 
-static int findNextWord(char *text, int limit)
+static int findNextWord(const char *text, int limit)
 {
 	int pos, len;
 
+	//XXX this is broken
 	len = strcspn(text, " \t\n\r");
 	pos = len + strspn(text + len, " \t\n\r");
 	if (pos > limit)
@@ -95,7 +215,7 @@ static int findNextWord(char *text, int limit)
 	return pos;
 }
 
-static int fitText(char *text, WMFont * font, int width, int wrap)
+static int fitText(const char *text, WMFont * font, int width, int wrap)
 {
 	int i, w, beforecrlf, word1, word2;
 
@@ -105,7 +225,7 @@ static int fitText(char *text, WMFont * font, int width, int wrap)
 	if (!wrap || beforecrlf == 0)
 		return beforecrlf;
 
-	w = WMWidthOfString(font, text, beforecrlf);
+	//XXX w = WMWidthOfString(font, text, beforecrlf);
 	if (w <= width) {
 		/* text up to first crlf fits */
 		return beforecrlf;
@@ -116,14 +236,14 @@ static int fitText(char *text, WMFont * font, int width, int wrap)
 		word2 = word1 + findNextWord(text + word1, beforecrlf - word1);
 		if (word2 >= beforecrlf)
 			break;
-		w = WMWidthOfString(font, text, word2);
+		//XXXw = WMWidthOfString(font, text, word2);
 		if (w > width)
 			break;
 		word1 = word2;
 	}
 
 	for (i = word1; i < word2; i++) {
-		w = WMWidthOfString(font, text, i);
+		//XXXw = WMWidthOfString(font, text, i);
 		if (w > width) {
 			break;
 		}
@@ -177,9 +297,9 @@ static int fitText(char *text, WMFont * font, int width, int wrap)
 }
 #endif
 
-int W_GetTextHeight(WMFont * font, char *text, int width, int wrap)
+int W_GetTextHeight(cairo_t *cairo, WMFont *font, const char *text, int width, int wrap)
 {
-	char *ptr = text;
+	const char *ptr = text;
 	int count;
 	int length = strlen(text);
 	int h;
@@ -200,20 +320,25 @@ int W_GetTextHeight(WMFont * font, char *text, int width, int wrap)
 	return h;
 }
 
-void
-W_PaintText(W_View * view, Drawable d, WMFont * font, int x, int y,
-	    int width, WMAlignment alignment, WMColor * color, int wrap, char *text, int length)
+void W_PaintText(cairo_t *cairo, WMFont *font,  int x, int y,
+		int width, WMAlignment alignment, WMColorSpec *color,
+		int wrap, const char *text)
 {
-	char *ptr = text;
+	const char *ptr = text;
+	int length= strlen(ptr);
 	int line_width;
-	int line_x;
+	int line_x= 0;
 	int count;
 	int fheight = WMFontHeight(font);
+
+	line_x= x + (width - WMWidthOfString(font, ptr))/2;
+	WMDrawString(cairo, color, font, line_x, y, ptr);
+	return;
 
 	while (length > 0) {
 		count = fitText(ptr, font, width, wrap);
 
-		line_width = WMWidthOfString(font, ptr, count);
+		//XXX        line_width = WMWidthOfString(font, ptr, count);
 		if (alignment == WALeft)
 			line_x = x;
 		else if (alignment == WARight)
@@ -221,7 +346,7 @@ W_PaintText(W_View * view, Drawable d, WMFont * font, int x, int y,
 		else
 			line_x = x + (width - line_width) / 2;
 
-		WMDrawString(view->screen, d, color, font, line_x, y, ptr, count);
+		WMDrawString(cairo, color, font, line_x, y, ptr);
 
 		if (wrap && ptr[count] != '\n')
 			y += fheight;
@@ -236,34 +361,22 @@ W_PaintText(W_View * view, Drawable d, WMFont * font, int x, int y,
 	}
 }
 
-void
-W_PaintTextAndImage(W_View * view, int wrap, WMColor * textColor, W_Font * font,
-		    WMReliefType relief, char *text,
-		    WMAlignment alignment, W_Pixmap * image,
-		    WMImagePosition position, WMColor * backColor, int ofs)
+void W_PaintTextAndImage(W_Screen *screen, cairo_t *cairo, W_View *view, int wrap, WMColorSpec *textColor, W_Font *font,
+		WMReliefType relief, const char *text,
+		WMAlignment alignment,  WMImage *image,
+		WMImagePosition position, WMColorSpec *backColor, int ofs)
 {
-	W_Screen *screen = view->screen;
 	int ix, iy;
 	int x, y, w, h;
-	Drawable d = view->window;
 
-#ifdef DOUBLE_BUFFER
-	d = XCreatePixmap(screen->display, view->window, view->size.width, view->size.height, screen->depth);
-#endif
+	cairo_save(cairo);
 
-	/* background */
-	if (backColor) {
-		XFillRectangle(screen->display, d, WMColorGC(backColor),
-			       0, 0, view->size.width, view->size.height);
-	} else {
-#ifndef DOUBLE_BUFFER
-		XClearWindow(screen->display, d);
-#else
-		XSetForeground(screen->display, screen->copyGC, view->attribs.background_pixel);
-		XFillRectangle(screen->display, d, screen->copyGC, 0, 0, view->size.width, view->size.height);
-#endif
+	if (backColor)
+	{
+		cairo_rectangle(cairo, 0, 0, view->size.width, view->size.height);
+		WMColorSpecSet(cairo, backColor);
+		cairo_fill(cairo);
 	}
-
 	if (relief == WRFlat) {
 		x = 0;
 		y = 0;
@@ -281,8 +394,8 @@ W_PaintTextAndImage(W_View * view, int wrap, WMColor * textColor, W_Font * font,
 		switch (position) {
 		case WIPOverlaps:
 		case WIPImageOnly:
-			ix = (view->size.width - image->width) / 2;
-			iy = (view->size.height - image->height) / 2;
+			ix = (view->size.width - WMGetImageWidth(image)) / 2;
+			iy = (view->size.height - WMGetImageHeight(image)) / 2;
 			/*
 			   x = 2;
 			   y = 0;
@@ -291,65 +404,60 @@ W_PaintTextAndImage(W_View * view, int wrap, WMColor * textColor, W_Font * font,
 
 		case WIPLeft:
 			ix = x;
-			iy = y + (h - image->height) / 2;
-			x = x + image->width + 5;
+			iy = y + (h - WMGetImageHeight(image)) / 2;
+			x = x + WMGetImageWidth(image) + 5;
 			y = 0;
-			w -= image->width + 5;
+			w -= WMGetImageWidth(image) + 5;
 			break;
 
 		case WIPRight:
-			ix = view->size.width - image->width - x;
-			iy = y + (h - image->height) / 2;
-			w -= image->width + 5;
+			ix = view->size.width - WMGetImageWidth(image) - x;
+			iy = y + (h - WMGetImageHeight(image)) / 2;
+			w -= WMGetImageWidth(image) + 5;
 			break;
 
 		case WIPBelow:
-			ix = (view->size.width - image->width) / 2;
-			iy = h - image->height;
+			ix = (view->size.width - WMGetImageWidth(image)) / 2;
+			iy = h - WMGetImageHeight(image);
 			y = 0;
-			h -= image->height;
+			h -= WMGetImageHeight(image);
 			break;
 
 		default:
 		case WIPAbove:
-			ix = (view->size.width - image->width) / 2;
+			ix = (view->size.width - WMGetImageWidth(image)) / 2;
 			iy = y;
-			y = image->height;
-			h -= image->height;
+			y = WMGetImageHeight(image);
+			h -= WMGetImageHeight(image);
 			break;
 		}
 
 		ix += ofs;
 		iy += ofs;
 
-		XSetClipOrigin(screen->display, screen->clipGC, ix, iy);
-		XSetClipMask(screen->display, screen->clipGC, image->mask);
-
-		if (image->depth == 1)
-			XCopyPlane(screen->display, image->pixmap, d, screen->clipGC,
-				   0, 0, image->width, image->height, ix, iy, 1);
-		else
-			XCopyArea(screen->display, image->pixmap, d, screen->clipGC,
-				  0, 0, image->width, image->height, ix, iy);
+		//XXX        XSetClipOrigin(screen->display, screen->clipGC, ix, iy);
+		//XXX        XSetClipMask(screen->display, screen->clipGC, image->mask);
+		/*XXX
+		  if (image->depth==1)
+		  XCopyPlane(screen->display, image->pixmap, d, screen->clipGC,
+		  0, 0, WMGetImageWidth(image), WMGetImageHeight(image), ix, iy, 1);
+		  else
+		  XCopyArea(screen->display, image->pixmap, d, screen->clipGC,
+		  0, 0, WMGetImageWidth(image), WMGetImageHeight(image), ix, iy);
+		  */
 	}
 
 	/* draw text */
-	if (position != WIPImageOnly && text != NULL) {
+	if (position != WIPImageOnly && text!=NULL) {
 		int textHeight;
 
-		textHeight = W_GetTextHeight(font, text, w - 8, wrap);
-		W_PaintText(view, d, font, x + ofs + 4, y + ofs + (h - textHeight) / 2, w - 8,
-			    alignment, textColor, wrap, text, strlen(text));
+		textHeight = W_GetTextHeight(cairo, font, text, w-8, wrap);
+		W_PaintText(cairo, font, x+ofs+4, y+ofs + (h-textHeight)/2, w-8,
+				alignment, textColor, wrap, text);
 	}
 
 	/* draw relief */
-	W_DrawRelief(screen, d, 0, 0, view->size.width, view->size.height, relief);
-
-#ifdef DOUBLE_BUFFER
-	XCopyArea(screen->display, d, view->window, screen->copyGC, 0, 0,
-		  view->size.width, view->size.height, 0, 0);
-	XFreePixmap(screen->display, d);
-#endif
+	W_DrawRelief(screen, cairo, 0, 0, view->size.width, view->size.height, relief);
 }
 
 WMPoint wmkpoint(int x, int y)

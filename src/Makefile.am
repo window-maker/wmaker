@@ -1,4 +1,3 @@
-AUTOMAKE_OPTIONS = no-dependencies
 
 BUILT_SOURCES = wconfig.h
 
@@ -110,7 +109,8 @@ AM_CFLAGS = @NOSTRICTALIASING@
 
 INCLUDES = \
 	-I$(top_srcdir)/wrlib \
-	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
+	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ \
+	@CAIRO_CFLAGS@
 
 
 wmaker_LDADD = \
@@ -120,7 +120,9 @@ wmaker_LDADD = \
 	@XLFLAGS@ \
 	@XFTLIBS@ \
 	@XLIBS@ \
-	@INTLIBS@
+	@INTLIBS@ \
+	@DLLIBS@ \
+	@CAIRO_LIBS@
 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool $(LIBTOOL_ARG)
 

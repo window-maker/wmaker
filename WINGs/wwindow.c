@@ -192,7 +192,7 @@ static void setWindowTitle(WMWindow * win, const char *title)
 			PropModeReplace, (unsigned char *)title, strlen(title));
 }
 
-static void setMiniwindowTitle(WMWindow * win, const char *title)
+static void setMiniwindowTitle(WMWindow *win, const char *title)
 {
 	WMScreen *scr = win->view->screen;
 	XTextProperty property;
@@ -213,46 +213,38 @@ static void setMiniwindowTitle(WMWindow * win, const char *title)
 			PropModeReplace, (unsigned char *)title, strlen(title));
 }
 
-static void setMiniwindow(WMWindow *win, RImage *image)
+static void setMiniwindow(WMWindow *win, cairo_surface_t *image)
 {
-	WMScreen *scr = win->view->screen;
+	WMScreen *scr= win->view->screen;
 	long *data;
 	int x, y;
 	int o;
+	int w, h;
+	cairo_surface_t *buffer;
 
 	if (!image)
 		return;
 
-	data = wmalloc((image->width * image->height + 2) * sizeof(long));
+	w= cairo_image_surface_get_width(image);
+	h= cairo_image_surface_get_height(image);
 
-	o = 0;
-	data[o++] = image->width;
-	data[o++] = image->height;
+	data= wmalloc((w * h + 2) * sizeof(long));
 
-	for (y = 0; y < image->height; y++) {
-		for (x = 0; x < image->width; x++) {
-			long pixel;
-			int offs = (x + y * image->width);
+	data[0] = w;
+	data[1] = h;
 
-			if (image->format == RRGBFormat)
-				pixel = image->data[offs * 3] << 16 | image->data[offs * 3 + 1] << 8
-				        | image->data[offs * 3 + 2];
-			else
-				pixel = image->data[offs * 4] << 16 | image->data[offs * 4 + 1] << 8
-				        | image->data[offs * 4 + 2] | image->data[offs * 4 + 3] << 24;
-
-			data[o++] = pixel;
-		}
-	}
+	buffer= cairo_image_surface_create_for_data((unsigned char *)(data + 2), CAIRO_FORMAT_ARGB32,
+						    w, h, w*4);
 
 	XChangeProperty(scr->display, win->view->window, scr->netwmIcon,
 			XA_CARDINAL, 32, PropModeReplace,
-			(unsigned char *)data, (image->width * image->height + 2));
+			(unsigned char *)data, (w * h + 2));
 
+	cairo_surface_destroy(buffer);
 	wfree(data);
 }
 
-void WMSetWindowTitle(WMWindow * win, char *title)
+void WMSetWindowTitle(WMWindow *win, char *title)
 {
 	if (win->title != NULL)
 		wfree(win->title);
@@ -266,7 +258,7 @@ void WMSetWindowTitle(WMWindow * win, char *title)
 	}
 }
 
-void WMSetWindowCloseAction(WMWindow * win, WMAction * action, void *clientData)
+void WMSetWindowCloseAction(WMWindow *win, WMAction *action, void *clientData)
 {
 	Atom *atoms = NULL;
 	Atom *newAtoms;
@@ -557,7 +549,7 @@ void WMSetWindowDocumentEdited(WMWindow * win, Bool flag)
 	}
 }
 
-void WMSetWindowMiniwindowImage(WMWindow * win, RImage * image)
+void WMSetWindowMiniwindowImage(WMWindow * win, cairo_surface_t * image)
 {
 	if (win->view->flags.realized)
 		setMiniwindow(win, image);

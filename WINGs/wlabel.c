@@ -7,10 +7,10 @@ typedef struct W_Label {
 
 	char *caption;
 
-	WMColor *textColor;
+	WMColorSpec textColor;
 	WMFont *font;		/* if NULL, use default */
 
-	W_Pixmap *image;
+	WMImage *image;
 
 	struct {
 		WMReliefType relief:3;
@@ -50,7 +50,7 @@ WMLabel *WMCreateLabel(WMWidget * parent)
 	}
 	lPtr->view->self = lPtr;
 
-	lPtr->textColor = WMRetainColor(lPtr->view->screen->black);
+	lPtr->textColor = WMBlackColorSpec();
 
 	WMCreateEventHandler(lPtr->view, ExposureMask | StructureNotifyMask, handleEvents, lPtr);
 
@@ -63,13 +63,13 @@ WMLabel *WMCreateLabel(WMWidget * parent)
 	return lPtr;
 }
 
-void WMSetLabelImage(WMLabel * lPtr, WMPixmap * image)
+void WMSetLabelImage(WMLabel * lPtr, WMImage * image)
 {
 	if (lPtr->image != NULL)
-		WMReleasePixmap(lPtr->image);
+		WMDestroyImage(lPtr->image);
 
 	if (image)
-		lPtr->image = WMRetainPixmap(image);
+		lPtr->image = cairo_surface_reference(image);
 	else
 		lPtr->image = NULL;
 
@@ -78,7 +78,7 @@ void WMSetLabelImage(WMLabel * lPtr, WMPixmap * image)
 	}
 }
 
-WMPixmap *WMGetLabelImage(WMLabel * lPtr)
+WMImage *WMGetLabelImage(WMLabel * lPtr)
 {
 	return lPtr->image;
 }
@@ -146,12 +146,9 @@ void WMSetLabelFont(WMLabel * lPtr, WMFont * font)
 	}
 }
 
-void WMSetLabelTextColor(WMLabel * lPtr, WMColor * color)
+void WMSetLabelTextColor(WMLabel *lPtr, WMColorSpec *color)
 {
-	if (lPtr->textColor)
-		WMReleaseColor(lPtr->textColor);
-	lPtr->textColor = WMRetainColor(color);
-
+	lPtr->textColor = *color;
 	if (lPtr->view->flags.realized) {
 		paintLabel(lPtr);
 	}
@@ -170,12 +167,23 @@ void WMSetLabelWraps(WMLabel * lPtr, Bool flag)
 static void paintLabel(Label * lPtr)
 {
 	W_Screen *scrPtr = lPtr->view->screen;
+	cairo_t *cairo= W_CreateCairoForView(lPtr->view);
 
-	W_PaintTextAndImage(lPtr->view, !lPtr->flags.noWrap,
-			    lPtr->textColor ? lPtr->textColor : scrPtr->black,
-			    (lPtr->font != NULL ? lPtr->font : scrPtr->normalFont),
-			    lPtr->flags.relief, lPtr->caption,
-			    lPtr->flags.alignment, lPtr->image, lPtr->flags.imagePosition, NULL, 0);
+	WMColorSpecSet(cairo, &lPtr->view->backColor);
+
+	cairo_rectangle(cairo, 0, 0, WMWidgetWidth(lPtr), WMWidgetHeight(lPtr));
+	cairo_fill(cairo);
+
+	WMColorSpecSet(cairo, &lPtr->textColor);
+
+	W_PaintTextAndImage(scrPtr, cairo, lPtr->view, !lPtr->flags.noWrap, &lPtr->textColor,
+			(lPtr->font!=NULL ? lPtr->font : scrPtr->normalFont),
+			lPtr->flags.relief, lPtr->caption,
+			lPtr->flags.alignment, lPtr->image,
+			lPtr->flags.imagePosition, NULL, 0);
+
+	cairo_destroy(cairo);
+
 }
 
 static void handleEvents(XEvent * event, void *data)
@@ -199,17 +207,11 @@ static void handleEvents(XEvent * event, void *data)
 
 static void destroyLabel(Label * lPtr)
 {
-	if (lPtr->textColor)
-		WMReleaseColor(lPtr->textColor);
-
 	if (lPtr->caption)
 		wfree(lPtr->caption);
 
 	if (lPtr->font)
 		WMReleaseFont(lPtr->font);
-
-	if (lPtr->image)
-		WMReleasePixmap(lPtr->image);
 
 	wfree(lPtr);
 }

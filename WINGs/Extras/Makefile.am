@@ -1,8 +1,5 @@
 ## automake input file for WINGs
 
-AUTOMAKE_OPTIONS = no-dependencies
-
-
 
 # is this a kluge? if so, how should i do it?
 includedir = @includedir@/WINGs
@@ -31,7 +28,7 @@ INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs \
 
 LDADD= $(top_builddir)/WINGs/libWINGs.la $(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/WINGs/libWUtil.la \
-	@XFTLIBS@ @INTLIBS@
+	@XFTLIBS@ @INTLIBS@ @CAIRO_LIBS@
 
 test_LDADD = wtableview.o wtabledelegates.o $(LDADD)
 

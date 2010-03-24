@@ -123,7 +123,7 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 	WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
 	WMMapWidget(panel->iLbl);
 	WMAddBoxSubview(hbox, WMWidgetView(panel->iLbl), False, True, 64, 0, 10);
-	icon = WMCreateApplicationIconBlendedPixmap(scrPtr, (RColor *) NULL);
+	icon = WMCreateApplicationIconBlendedPixmap(scrPtr, NULL);
 	if (icon) {
 		WMSetLabelImage(panel->iLbl, icon);
 		WMReleasePixmap(icon);
@@ -493,7 +493,7 @@ WMGenericPanel *WMCreateGenericPanel(WMScreen * scrPtr, WMWindow * owner,
 	WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
 	WMMapWidget(panel->iLbl);
 	WMAddBoxSubview(hbox, WMWidgetView(panel->iLbl), False, True, 64, 0, 10);
-	icon = WMCreateApplicationIconBlendedPixmap(scrPtr, (RColor *) NULL);
+	icon = WMCreateApplicationIconBlendedPixmap(scrPtr, NULL);
 	if (icon) {
 		WMSetLabelImage(panel->iLbl, icon);
 		WMReleasePixmap(icon);

@@ -99,8 +99,8 @@ void W_CreateIC(WMView * view)
 
 		// this really needs to be changed, but I don't know how yet -Dan
 		// it used to be like this with fontsets, but no longer applies to xft
-		preedit_attr = XVaCreateNestedList(0, XNSpotLocation, &spot,
-						   XNArea, &rect, XNFontInfo, scr->normalFont->font, NULL);
+		//XXXpreedit_attr = XVaCreateNestedList(0, XNSpotLocation, &spot,
+		//XXX				   XNArea, &rect, XNFontInfo, scr->normalFont->font, NULL);
 	}
 
 	view->xic = XCreateIC(scr->imctx->xim, XNInputStyle, scr->imctx->ximstyle,

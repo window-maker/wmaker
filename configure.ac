@@ -513,6 +513,7 @@ fi
 minXFT="2.1.0"
 goodxft="no"
 
+
 dnl
 dnl The macro below will use $XFTFLAGS (defined above) to find Xft.h
 dnl
@@ -528,6 +529,15 @@ fi
 
 AC_SUBST(XFTFLAGS)
 AC_SUBST(XFTLIBS)
+
+
+dnl glib2
+dnl =====
+PKG_CHECK_MODULES(GLIB, [glib-2.0 > 2.6.0])
+
+dnl Cairo
+dnl =====
+PKG_CHECK_MODULES(CAIRO, [cairo])
 
 
 dnl XINERAMA support

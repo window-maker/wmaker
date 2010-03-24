@@ -11,14 +11,12 @@ typedef struct W_Button {
 
 	WMFont *font;
 
-	WMColor *textColor;
-	WMColor *altTextColor;
-	WMColor *disTextColor;
+	WMColorSpec textColor;
+	WMColorSpec altTextColor;
+	WMColorSpec disTextColor;
 
-	W_Pixmap *image;
-	W_Pixmap *altImage;
-
-	W_Pixmap *dimage;
+	WMImage *image;
+	WMImage *altImage;
 
 	void *clientData;
 	WMAction *action;
@@ -133,6 +131,10 @@ WMButton *WMCreateCustomButton(WMWidget * parent, int behaviourMask)
 	bPtr->flags.enabled = 1;
 	bPtr->flags.dimsWhenDisabled = 1;
 
+	bPtr->textColor= WMBlackColorSpec();
+	bPtr->altTextColor= WMBlackColorSpec();
+	bPtr->disTextColor= WMDarkGrayColorSpec();
+
 	WMCreateEventHandler(bPtr->view, ExposureMask | StructureNotifyMask, handleEvents, bPtr);
 
 	WMCreateEventHandler(bPtr->view, ButtonPressMask | ButtonReleaseMask
@@ -174,15 +176,15 @@ WMButton *WMCreateButton(WMWidget * parent, WMButtonType type)
 	case WBTSwitch:
 		bPtr = WMCreateCustomButton(parent, WBBStateChangeMask);
 		bPtr->flags.bordered = 0;
-		bPtr->image = WMRetainPixmap(scrPtr->checkButtonImageOff);
-		bPtr->altImage = WMRetainPixmap(scrPtr->checkButtonImageOn);
+		bPtr->image = WMRetainImage(scrPtr->checkButtonImageOff);
+		bPtr->altImage = WMRetainImage(scrPtr->checkButtonImageOn);
 		break;
 
 	case WBTRadio:
 		bPtr = WMCreateCustomButton(parent, WBBStateChangeMask);
 		bPtr->flags.bordered = 0;
-		bPtr->image = WMRetainPixmap(scrPtr->radioButtonImageOff);
-		bPtr->altImage = WMRetainPixmap(scrPtr->radioButtonImageOn);
+		bPtr->image = WMRetainImage(scrPtr->radioButtonImageOff);
+		bPtr->altImage = WMRetainImage(scrPtr->radioButtonImageOn);
 		break;
 
 	default:
@@ -209,83 +211,28 @@ WMButton *WMCreateButton(WMWidget * parent, WMButtonType type)
 	return bPtr;
 }
 
-static void updateDisabledMask(WMButton * bPtr)
-{
-	WMScreen *scr = WMWidgetScreen(bPtr);
-	Display *dpy = scr->display;
-
-	if (bPtr->image) {
-		XGCValues gcv;
-
-		if (bPtr->dimage->mask) {
-			XFreePixmap(dpy, bPtr->dimage->mask);
-			bPtr->dimage->mask = None;
-		}
-
-		if (bPtr->flags.dimsWhenDisabled) {
-			bPtr->dimage->mask = XCreatePixmap(dpy, scr->stipple,
-							   bPtr->dimage->width, bPtr->dimage->height, 1);
-
-			XSetForeground(dpy, scr->monoGC, 0);
-			XFillRectangle(dpy, bPtr->dimage->mask, scr->monoGC, 0, 0,
-				       bPtr->dimage->width, bPtr->dimage->height);
-
-			gcv.foreground = 1;
-			gcv.background = 0;
-			gcv.stipple = scr->stipple;
-			gcv.fill_style = FillStippled;
-			gcv.clip_mask = bPtr->image->mask;
-			gcv.clip_x_origin = 0;
-			gcv.clip_y_origin = 0;
-
-			XChangeGC(dpy, scr->monoGC, GCForeground | GCBackground | GCStipple
-				  | GCFillStyle | GCClipMask | GCClipXOrigin | GCClipYOrigin, &gcv);
-
-			XFillRectangle(dpy, bPtr->dimage->mask, scr->monoGC, 0, 0,
-				       bPtr->dimage->width, bPtr->dimage->height);
-
-			gcv.fill_style = FillSolid;
-			gcv.clip_mask = None;
-			XChangeGC(dpy, scr->monoGC, GCFillStyle | GCClipMask, &gcv);
-		}
-	}
-}
-
 void WMSetButtonImageDefault(WMButton * bPtr)
 {
 	WMSetButtonImage(bPtr, WMWidgetScreen(bPtr)->buttonArrow);
 	WMSetButtonAltImage(bPtr, WMWidgetScreen(bPtr)->pushedButtonArrow);
 }
 
-void WMSetButtonImage(WMButton * bPtr, WMPixmap * image)
+void WMSetButtonImage(WMButton *bPtr, WMImage *image)
 {
 	if (bPtr->image != NULL)
-		WMReleasePixmap(bPtr->image);
-	bPtr->image = WMRetainPixmap(image);
-
-	if (bPtr->dimage) {
-		bPtr->dimage->pixmap = None;
-		WMReleasePixmap(bPtr->dimage);
-		bPtr->dimage = NULL;
-	}
-
-	if (image) {
-		bPtr->dimage = WMCreatePixmapFromXPixmaps(WMWidgetScreen(bPtr),
-							  image->pixmap, None,
-							  image->width, image->height, image->depth);
-		updateDisabledMask(bPtr);
-	}
+		WMDestroyImage(bPtr->image);
+	bPtr->image = WMRetainImage(image);
 
 	if (bPtr->view->flags.realized) {
 		paintButton(bPtr);
 	}
 }
 
-void WMSetButtonAltImage(WMButton * bPtr, WMPixmap * image)
+void WMSetButtonAltImage(WMButton * bPtr, WMImage * image)
 {
 	if (bPtr->altImage != NULL)
-		WMReleasePixmap(bPtr->altImage);
-	bPtr->altImage = WMRetainPixmap(image);
+		WMDestroyImage(bPtr->altImage);
+	bPtr->altImage = WMRetainImage(image);
 
 	if (bPtr->view->flags.realized) {
 		paintButton(bPtr);
@@ -342,28 +289,19 @@ void WMSetButtonAltText(WMButton * bPtr, char *text)
 	}
 }
 
-void WMSetButtonTextColor(WMButton * bPtr, WMColor * color)
+void WMSetButtonTextColor(WMButton *bPtr, WMColorSpec *color)
 {
-	if (bPtr->textColor)
-		WMReleaseColor(bPtr->textColor);
-
-	bPtr->textColor = WMRetainColor(color);
+	bPtr->textColor = *color;
 }
 
-void WMSetButtonAltTextColor(WMButton * bPtr, WMColor * color)
+void WMSetButtonAltTextColor(WMButton *bPtr, WMColorSpec *color)
 {
-	if (bPtr->altTextColor)
-		WMReleaseColor(bPtr->altTextColor);
-
-	bPtr->altTextColor = WMRetainColor(color);
+	bPtr->altTextColor = *color;
 }
 
-void WMSetButtonDisabledTextColor(WMButton * bPtr, WMColor * color)
+void WMSetButtonDisabledTextColor(WMButton *bPtr, WMColorSpec *color)
 {
-	if (bPtr->disTextColor)
-		WMReleaseColor(bPtr->disTextColor);
-
-	bPtr->disTextColor = WMRetainColor(color);
+	bPtr->disTextColor = *color;
 }
 
 void WMSetButtonSelected(WMButton * bPtr, int isSelected)
@@ -420,8 +358,6 @@ int WMGetButtonEnabled(WMButton * bPtr)
 void WMSetButtonImageDimsWhenDisabled(WMButton * bPtr, Bool flag)
 {
 	bPtr->flags.dimsWhenDisabled = ((flag == 0) ? 0 : 1);
-
-	updateDisabledMask(bPtr);
 }
 
 void WMSetButtonTag(WMButton * bPtr, int tag)
@@ -519,27 +455,31 @@ void WMSetButtonPeriodicDelay(WMButton * bPtr, float delay, float interval)
 
 static void paintButton(Button * bPtr)
 {
+	cairo_t *cr= W_CreateCairoForView(W_VIEW(bPtr));
 	W_Screen *scrPtr = bPtr->view->screen;
 	WMReliefType relief;
 	int offset;
-	char *caption;
-	WMPixmap *image;
-	WMColor *textColor;
-	WMColor *backColor;
+	const char *caption;
+	WMImage *image;
+	WMColorSpec textColor;
+	WMColorSpec backColor;
 
-	backColor = NULL;
+	backColor = bPtr->view->backColor;
 	caption = bPtr->caption;
 
 	if (bPtr->flags.enabled) {
-		textColor = (bPtr->textColor != NULL ? bPtr->textColor : scrPtr->black);
+		textColor = bPtr->textColor;
 	} else {
-		textColor = (bPtr->disTextColor != NULL ? bPtr->disTextColor : scrPtr->darkGray);
+		textColor = bPtr->disTextColor;
 	}
 
-	if (bPtr->flags.enabled || !bPtr->dimage)
-		image = bPtr->image;
+	if (bPtr->flags.enabled || !bPtr->flags.dimsWhenDisabled)
+		image = WMRetainImage(bPtr->image);
 	else
-		image = bPtr->dimage;
+	{
+		//XXX make dimmited image
+		image = bPtr->image;
+	}
 	offset = 0;
 	if (bPtr->flags.bordered)
 		relief = WRRaised;
@@ -548,8 +488,8 @@ static void paintButton(Button * bPtr)
 
 	if (bPtr->flags.selected) {
 		if (bPtr->flags.stateLight) {
-			backColor = scrPtr->white;
-			textColor = scrPtr->black;
+			backColor = WMWhiteColorSpec();
+			textColor = WMBlackColorSpec();
 		}
 
 		if (bPtr->flags.stateChange) {
@@ -557,8 +497,7 @@ static void paintButton(Button * bPtr)
 				caption = bPtr->altCaption;
 			if (bPtr->altImage)
 				image = bPtr->altImage;
-			if (bPtr->altTextColor)
-				textColor = bPtr->altTextColor;
+			textColor = bPtr->altTextColor;
 		}
 
 		if (bPtr->flags.statePush && bPtr->flags.bordered) {
@@ -573,8 +512,8 @@ static void paintButton(Button * bPtr)
 			offset = 1;
 		}
 		if (bPtr->flags.pushLight) {
-			backColor = scrPtr->white;
-			textColor = scrPtr->black;
+			backColor = WMWhiteColorSpec();
+			textColor = WMBlackColorSpec();
 		}
 
 		if (bPtr->flags.pushChange) {
@@ -582,15 +521,26 @@ static void paintButton(Button * bPtr)
 				caption = bPtr->altCaption;
 			if (bPtr->altImage)
 				image = bPtr->altImage;
-			if (bPtr->altTextColor)
-				textColor = bPtr->altTextColor;
+			textColor = bPtr->altTextColor;
 		}
 	}
 
-	W_PaintTextAndImage(bPtr->view, True, textColor,
-			    (bPtr->font != NULL ? bPtr->font : scrPtr->normalFont),
-			    relief, caption, bPtr->flags.alignment, image,
-			    bPtr->flags.imagePosition, backColor, offset);
+
+	W_DrawButtonRelief(scrPtr, cr, 0, 0,
+			bPtr->view->size.width, bPtr->view->size.height,
+			relief);
+
+	relief= WRFlat;
+	W_PaintTextAndImage(scrPtr, cr, bPtr->view, True, &textColor,
+						(bPtr->font!=NULL ? bPtr->font : scrPtr->normalFont),
+						relief, caption, bPtr->flags.alignment, image,
+						bPtr->flags.imagePosition, NULL, offset);
+
+	if (image)
+		WMDestroyImage(image);
+
+	cairo_destroy(cr);
+
 }
 
 static void handleEvents(XEvent * event, void *data)
@@ -724,26 +674,11 @@ static void destroyButton(Button * bPtr)
 	if (bPtr->altCaption)
 		wfree(bPtr->altCaption);
 
-	if (bPtr->textColor)
-		WMReleaseColor(bPtr->textColor);
-
-	if (bPtr->altTextColor)
-		WMReleaseColor(bPtr->altTextColor);
-
-	if (bPtr->disTextColor)
-		WMReleaseColor(bPtr->disTextColor);
-
 	if (bPtr->image)
-		WMReleasePixmap(bPtr->image);
+		WMDestroyImage(bPtr->image);
 
-	if (bPtr->dimage) {
-		/* yuck.. kluge */
-		bPtr->dimage->pixmap = None;
-
-		WMReleasePixmap(bPtr->dimage);
-	}
 	if (bPtr->altImage)
-		WMReleasePixmap(bPtr->altImage);
+		WMDestroyImage(bPtr->altImage);
 
 	wfree(bPtr);
 }

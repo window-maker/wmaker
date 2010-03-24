@@ -1,7 +1,6 @@
 
 #include "WINGsP.h"
-
-#include <wraster.h>
+#include <cairo-xlib.h>
 
 WMPixmap *WMRetainPixmap(WMPixmap * pixmap)
 {
@@ -37,9 +36,11 @@ WMPixmap *WMCreatePixmap(WMScreen * scrPtr, int width, int height, int depth, Bo
 	pixPtr->depth = depth;
 	pixPtr->refCount = 1;
 
-	pixPtr->pixmap = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr), width, height, depth);
+	pixPtr->pixmap = XCreatePixmap(scrPtr->display, DefaultRootWindow(scrPtr->display),
+			width, height, depth);
 	if (masked) {
-		pixPtr->mask = XCreatePixmap(scrPtr->display, W_DRAWABLE(scrPtr), width, height, 1);
+		pixPtr->mask = XCreatePixmap(scrPtr->display, DefaultRootWindow(scrPtr->display),
+				width, height, 1);
 	} else {
 		pixPtr->mask = None;
 	}
@@ -64,79 +65,107 @@ WMPixmap *WMCreatePixmapFromXPixmaps(WMScreen * scrPtr, Pixmap pixmap, Pixmap ma
 	return pixPtr;
 }
 
-WMPixmap *WMCreatePixmapFromFile(WMScreen * scrPtr, char *fileName)
+WMPixmap* WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName)
 {
-	WMPixmap *pixPtr;
-	RImage *image;
-
-	image = RLoadImage(scrPtr->rcontext, fileName, 0);
-	if (!image)
-		return NULL;
-
-	pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 127);
-
-	RReleaseImage(image);
-
-	return pixPtr;
+	return WMCreateBlendedPixmapFromFile(scrPtr, fileName, NULL);
 }
 
-WMPixmap *WMCreatePixmapFromRImage(WMScreen * scrPtr, RImage * image, int threshold)
+WMPixmap* WMCreatePixmapFromCairo(WMScreen *scrPtr, cairo_surface_t *image, int threshold)
 {
 	WMPixmap *pixPtr;
 	Pixmap pixmap, mask;
+	cairo_t *cairo;
+	cairo_surface_t *surface;
 
-	if (!RConvertImageMask(scrPtr->rcontext, image, &pixmap, &mask, threshold)) {
-		return NULL;
-	}
+	pixmap = XCreatePixmap(scrPtr->display,
+			DefaultRootWindow(scrPtr->display),
+			cairo_image_surface_get_width(image),
+			cairo_image_surface_get_height(image),
+			scrPtr->depth);
+
+	mask = XCreatePixmap(scrPtr->display, DefaultRootWindow(scrPtr->display),
+			cairo_image_surface_get_width(image),
+			cairo_image_surface_get_height(image),
+			1);
+
+
+	surface= cairo_xlib_surface_create(scrPtr->display,
+			pixmap,
+			scrPtr->visual,
+			cairo_image_surface_get_width(image),
+			cairo_image_surface_get_height(image));
+	cairo= cairo_create(surface);
+
+	cairo_set_source_surface(cairo, image, 0, 0);
+	cairo_rectangle(cairo, 0, 0,
+			cairo_image_surface_get_width(image),
+			cairo_image_surface_get_height(image));
+	cairo_fill(cairo);
+
+	cairo_destroy(cairo);
+	cairo_surface_destroy(surface);
+
+
+	surface= cairo_xlib_surface_create_for_bitmap(scrPtr->display,
+			mask,
+			ScreenOfDisplay(scrPtr->display, scrPtr->screen),
+			cairo_image_surface_get_width(image),
+			cairo_image_surface_get_height(image));
+	cairo= cairo_create(surface);
+
+	cairo_set_source_surface(cairo, image, 0, 0);
+	cairo_rectangle(cairo, 0, 0,
+			cairo_image_surface_get_width(image),
+			cairo_image_surface_get_height(image));
+	//XXX create a buffer rendering version of the image and apply the
+	// threshold there. then render it to the bitmap
+	cairo_fill(cairo);
+
+	cairo_destroy(cairo);
+	cairo_surface_destroy(surface);
+
 
 	pixPtr = wmalloc(sizeof(WMPixmap));
 	pixPtr->screen = scrPtr;
 	pixPtr->pixmap = pixmap;
 	pixPtr->mask = mask;
-	pixPtr->width = image->width;
-	pixPtr->height = image->height;
+	pixPtr->width = cairo_image_surface_get_width(image);
+	pixPtr->height = cairo_image_surface_get_height(image);
 	pixPtr->depth = scrPtr->depth;
 	pixPtr->refCount = 1;
 
 	return pixPtr;
 }
 
-WMPixmap *WMCreateBlendedPixmapFromRImage(WMScreen * scrPtr, RImage * image, RColor * color)
+WMPixmap* WMCreateBlendedPixmapFromCairo(WMScreen *scrPtr, cairo_surface_t *image, cairo_pattern_t *color)
 {
-	WMPixmap *pixPtr;
-	RImage *copy;
-
-	copy = RCloneImage(image);
-	if (!copy)
-		return NULL;
-
-	RCombineImageWithColor(copy, color);
-	pixPtr = WMCreatePixmapFromRImage(scrPtr, copy, 0);
-	RReleaseImage(copy);
-
-	return pixPtr;
+	return NULL;
 }
 
-WMPixmap *WMCreateBlendedPixmapFromFile(WMScreen * scrPtr, char *fileName, RColor * color)
+
+WMPixmap* WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName, cairo_pattern_t *color)
 {
 	WMPixmap *pixPtr;
-	RImage *image;
+	cairo_surface_t *surf = cairo_image_surface_create_from_png(fileName);
 
-	image = RLoadImage(scrPtr->rcontext, fileName, 0);
-	if (!image)
+	if (cairo_surface_status(surf) != CAIRO_STATUS_SUCCESS)
+	{
+		cairo_surface_destroy(surf);
 		return NULL;
+	}
 
-	RCombineImageWithColor(image, color);
+	//XXX apply color
 
-	pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 0);
+	pixPtr = WMCreatePixmapFromCairo(scrPtr, surf, 127);
 
-	RReleaseImage(image);
+	cairo_surface_destroy(surf);
 
 	return pixPtr;
 }
 
 WMPixmap *WMCreatePixmapFromXPMData(WMScreen * scrPtr, char **data)
 {
+#if 0 //TODO
 	WMPixmap *pixPtr;
 	RImage *image;
 
@@ -149,6 +178,8 @@ WMPixmap *WMCreatePixmapFromXPMData(WMScreen * scrPtr, char **data)
 	RReleaseImage(image);
 
 	return pixPtr;
+#endif
+	return NULL;
 }
 
 Pixmap WMGetPixmapXID(WMPixmap * pixmap)

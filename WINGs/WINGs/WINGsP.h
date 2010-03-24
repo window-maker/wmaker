@@ -18,6 +18,8 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <cairo.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -41,14 +43,13 @@ typedef struct W_Application {
 
 
 typedef struct W_Font {
-    struct W_Screen *screen;
+    cairo_font_face_t *cfont;
+    cairo_scaled_font_t *metrics;
 
-    struct _XftFont *font;
-
-    short height;
-    short y;
-    short refCount;
     char *name;
+
+    short ascent;
+    short refCount;
 } W_Font;
 
 
@@ -148,17 +149,13 @@ typedef struct W_Screen {
 
     struct W_View *rootView;
 
-    RContext *rcontext;
-
     struct W_IMContext *imctx;
-
-    struct _XftDraw *xftdraw;          /* shared XftDraw */
 
     /* application related */
 
     W_FocusInfo *focusInfo;
 
-    RImage *applicationIconImage;      /* image (can have alpha channel) */
+    cairo_surface_t *applicationIconImage;  /* image (can have alpha channel) */
     struct W_Pixmap *applicationIconPixmap; /* pixmap - no alpha channel */
     Window applicationIconWindow;
 
@@ -211,8 +208,6 @@ typedef struct W_Screen {
 
     W_Font *boldFont;
 
-    WMHashTable *fontCache;
-
     Bool antialiasedText;
 
     unsigned int ignoredModifierMask; /* modifiers to ignore when typing txt */
@@ -220,57 +215,57 @@ typedef struct W_Screen {
     struct W_Balloon *balloon;
 
 
-    struct W_Pixmap *checkButtonImageOn;
-    struct W_Pixmap *checkButtonImageOff;
+    WMImage *checkButtonImageOn;
+    WMImage *checkButtonImageOff;
 
-    struct W_Pixmap *radioButtonImageOn;
-    struct W_Pixmap *radioButtonImageOff;
+    WMImage *radioButtonImageOn;
+    WMImage *radioButtonImageOff;
 
-    struct W_Pixmap *buttonArrow;
-    struct W_Pixmap *pushedButtonArrow;
+    WMImage *buttonArrow;
+    WMImage *pushedButtonArrow;
 
-    struct W_Pixmap *scrollerDimple;
+    WMImage *scrollerDimple;
 
-    struct W_Pixmap *upArrow;
-    struct W_Pixmap *downArrow;
-    struct W_Pixmap *leftArrow;
-    struct W_Pixmap *rightArrow;
+    WMImage *upArrow;
+    WMImage *downArrow;
+    WMImage *leftArrow;
+    WMImage *rightArrow;
 
-    struct W_Pixmap *hiUpArrow;
-    struct W_Pixmap *hiDownArrow;
-    struct W_Pixmap *hiLeftArrow;
-    struct W_Pixmap *hiRightArrow;
+    WMImage *hiUpArrow;
+    WMImage *hiDownArrow;
+    WMImage *hiLeftArrow;
+    WMImage *hiRightArrow;
 
-    struct W_Pixmap *pullDownIndicator;
-    struct W_Pixmap *popUpIndicator;
+    WMImage *pullDownIndicator;
+    WMImage *popUpIndicator;
 
-    struct W_Pixmap *checkMark;
+    WMImage *checkMark;
 
-    struct W_Pixmap *homeIcon;
-    struct W_Pixmap *altHomeIcon;
+    WMImage *homeIcon;
+    WMImage *altHomeIcon;
 
-    struct W_Pixmap *trashcanIcon;
-    struct W_Pixmap *altTrashcanIcon;
+    WMImage *trashcanIcon;
+    WMImage *altTrashcanIcon;
 
-    struct W_Pixmap *createDirIcon;
-    struct W_Pixmap *altCreateDirIcon;
+    WMImage *createDirIcon;
+    WMImage *altCreateDirIcon;
 
-    struct W_Pixmap *disketteIcon;
-    struct W_Pixmap *altDisketteIcon;
-    struct W_Pixmap *unmountIcon;
-    struct W_Pixmap *altUnmountIcon;
+    WMImage *disketteIcon;
+    WMImage *altDisketteIcon;
+    WMImage *unmountIcon;
+    WMImage *altUnmountIcon;
 
-    struct W_Pixmap *magnifyIcon;
-    /*struct W_Pixmap *altMagnifyIcon;*/
-    struct W_Pixmap *wheelIcon;
-    struct W_Pixmap *grayIcon;
-    struct W_Pixmap *rgbIcon;
-    struct W_Pixmap *cmykIcon;
-    struct W_Pixmap *hsbIcon;
-    struct W_Pixmap *customPaletteIcon;
-    struct W_Pixmap *colorListIcon;
+    WMImage *magnifyIcon;
+    /*WMImage *altMagnifyIcon;*/
+    WMImage *wheelIcon;
+    WMImage *grayIcon;
+    WMImage *rgbIcon;
+    WMImage *cmykIcon;
+    WMImage *hsbIcon;
+    WMImage *customPaletteIcon;
+    WMImage *colorListIcon;
 
-    struct W_Pixmap *defaultObjectIcon;
+    WMImage *defaultObjectIcon;
 
     Cursor defaultCursor;
 
@@ -376,7 +371,7 @@ typedef struct W_View {
 
     void *hangedData;                  /* data holder for user program */
 
-    WMColor *backColor;
+    WMColorSpec backColor;
 
     Cursor cursor;
 
@@ -463,8 +458,6 @@ extern _WINGsConfiguration WINGsConfiguration;
 
 #define W_FONTID(f)		(f)->font->fid
 
-#define W_DRAWABLE(scr)		(scr)->rcontext->drawable
-
 
 
 W_View *W_GetViewForXWindow(Display *display, Window window);
@@ -488,6 +481,7 @@ void W_RaiseView(W_View *view);
 
 void W_LowerView(W_View *view);
 
+cairo_t *W_CreateCairoForView(W_View *view);
 
 void W_MapView(W_View *view);
 
@@ -503,33 +497,30 @@ void W_MoveView(W_View *view, int x, int y);
 
 void W_ResizeView(W_View *view, unsigned int width, unsigned int height);
 
-void W_SetViewBackgroundColor(W_View *view, WMColor *color);
+void W_SetViewBackgroundColor(W_View *view, WMColorSpec *color);
 
 void W_SetViewCursor(W_View *view, Cursor cursor);
 
-void W_DrawRelief(W_Screen *scr, Drawable d, int x, int y, unsigned int width,
+void W_DrawRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width,
                   unsigned int height, WMReliefType relief);
-
-void W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y,
-                        unsigned int width, unsigned int height,
-                        WMReliefType relief,
-                        GC black, GC dark, GC light, GC white);
+void W_DrawButtonRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width, unsigned int height,
+                        WMReliefType relief);
 
 void W_CallDestroyHandlers(W_View *view);
 
-void W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor,
-                         W_Font *font, WMReliefType relief, char *text,
-                         WMAlignment alignment, W_Pixmap *image,
-                         WMImagePosition position, WMColor *backColor, int ofs);
+void W_PaintTextAndImage(W_Screen *scr, cairo_t *cairo, W_View *view, int wrap, WMColorSpec *textColor,
+                         W_Font *font, WMReliefType relief, const char *text,
+                         WMAlignment alignment, WMImage *image,
+                         WMImagePosition position, WMColorSpec *backColor, int ofs);
 
-void W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
-                 int width, WMAlignment alignment, WMColor *color,
-                 int wrap, char *text, int length);
+void W_PaintText(cairo_t *cairo, WMFont *font,  int x, int y,
+                 int width, WMAlignment alignment, WMColorSpec *color,
+                 int wrap, const char *text);
 
-int W_GetTextHeight(WMFont *font, char *text, int width, int wrap);
+int W_GetTextHeight(cairo_t *cairo, WMFont *font, const char *text, int width, int wrap);
 
 
-int W_TextWidth(WMFont *font, char *text, int length);
+int W_TextWidth(WMFont *font, const char *text, int length);
 
 
 void W_BroadcastMessage(W_View *targetParent, XEvent *event);

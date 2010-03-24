@@ -129,7 +129,7 @@ static void paintFrame(Frame * fPtr)
 	}
 
 	if (tlen > 0 && fPtr->flags.titlePosition != WTPNoTitle) {
-		tw = WMWidthOfString(font, fPtr->caption, tlen);
+		//XXXtw = WMWidthOfString(font, fPtr->caption, tlen);
 
 		tx = (view->size.width - tw) / 2;
 
@@ -187,13 +187,13 @@ static void paintFrame(Frame * fPtr)
 			Drawable d;
 
 			d = XCreatePixmap(display, view->window, tw, th, scrPtr->depth);
-			XFillRectangle(display, d, WMColorGC(view->backColor), 0, 0, tw, th);
+			//XXXXFillRectangle(display, d, WMColorGC(view->backColor), 0, 0, tw, th);
 
-			WMDrawString(scrPtr, d, scrPtr->black, font, 0, 0, fPtr->caption, tlen);
+			//XXXWMDrawString(scrPtr, d, scrPtr->black, font, 0, 0, fPtr->caption, tlen);
 			XCopyArea(display, d, view->window, scrPtr->copyGC, 0, 0, tw, th, tx, ty);
 			XFreePixmap(display, d);
 		} else {
-			WMDrawString(scrPtr, view->window, scrPtr->black, font, tx, ty, fPtr->caption, tlen);
+			//XXXWMDrawString(scrPtr, view->window, scrPtr->black, font, tx, ty, fPtr->caption, tlen);
 		}
 	}
 }

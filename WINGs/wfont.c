@@ -5,19 +5,21 @@
 
 #include "WINGsP.h"
 
-#include <wraster.h>
 #include <assert.h>
 #include <X11/Xlocale.h>
 
-#include <X11/Xft/Xft.h>
+#include <cairo-ft.h>
 #include <fontconfig/fontconfig.h>
 
 #define DEFAULT_FONT "sans serif:pixelsize=12"
 
 #define DEFAULT_SIZE WINGsConfiguration.defaultFontSize
 
+static WMHashTable *_fontCache= NULL;
+
 static FcPattern *xlfdToFcPattern(char *xlfd)
 {
+
 	FcPattern *pattern;
 	char *fname, *ptr;
 
@@ -30,7 +32,7 @@ static FcPattern *xlfdToFcPattern(char *xlfd)
 	if ((ptr = strchr(fname, ','))) {
 		*ptr = 0;
 	}
-	pattern = XftXlfdParse(fname, False, False);
+	//XXX pattern = XftXlfdParse(fname, False, False);
 	wfree(fname);
 
 	if (!pattern) {
@@ -120,6 +122,16 @@ WMFont *WMCreateFont(WMScreen * scrPtr, char *fontName)
 	Display *display = scrPtr->display;
 	WMFont *font;
 	char *fname;
+	FcPattern *pattern, *theFont;
+	cairo_font_extents_t extents;
+	cairo_matrix_t matrix;
+	cairo_font_options_t *options;
+	double size;
+
+	if (!_fontCache)
+	{
+		_fontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
+	}
 
 	if (fontName[0] == '-') {
 		fname = xlfdToFcName(fontName);
@@ -131,41 +143,55 @@ WMFont *WMCreateFont(WMScreen * scrPtr, char *fontName)
 		fname = wstrappend(fname, ":antialias=false");
 	}
 
-	font = WMHashGet(scrPtr->fontCache, fname);
+	font = WMHashGet(_fontCache, fname);
+
 	if (font) {
 		WMRetainFont(font);
 		wfree(fname);
 		return font;
 	}
 
+	pattern= FcNameParse((FcChar8*)fname);
+	if (!pattern)
+		return NULL;
+
+	FcConfigSubstitute(NULL, pattern, FcMatchPattern);
+	FcDefaultSubstitute(pattern);
+	theFont= FcFontMatch(NULL, pattern, NULL);
+
+	FcPatternGetDouble(pattern, FC_PIXEL_SIZE, 0, &size);
+
+	FcPatternDestroy(pattern);
+	if (!theFont)
+		return NULL;
+
 	font = wmalloc(sizeof(WMFont));
 	memset(font, 0, sizeof(WMFont));
 
-	font->screen = scrPtr;
+	font->cfont = cairo_ft_font_face_create_for_pattern(theFont);
+	FcPatternDestroy(theFont);
 
-	font->font = XftFontOpenName(display, scrPtr->screen, fname);
-	if (!font->font) {
-		printf("Font named %s doesn't exist.\n", fname);
-		printf("Please check your system configuration.\n");
-		printf("Will try default font %s.\n", DEFAULT_FONT);
-		font->font = XftFontOpenName(display, scrPtr->screen, DEFAULT_FONT);
-		if (!font->font) {
-			printf("Unrecoverable font error! I must die!\n");
-			wfree(font);
-			wfree(fname);
-			exit(1);
-		} else
-			printf("Default font loading succeded.\n");
+	if (cairo_font_face_status(font->cfont) != CAIRO_STATUS_SUCCESS)
+	{
+		cairo_font_face_destroy(font->cfont);
+		wfree(font);
+		wfree(fname);
+		exit(1);
 	}
 
-	font->height = font->font->ascent + font->font->descent;
-	font->y = font->font->ascent;
+	cairo_matrix_init_scale(&matrix, size, size);
 
+	options= cairo_font_options_create();
+	font->metrics = cairo_scaled_font_create(font->cfont, &matrix, &matrix, options);
+	cairo_font_options_destroy(options);
+
+	cairo_scaled_font_extents(font->metrics, &extents);
+
+	font->ascent = extents.ascent;
 	font->refCount = 1;
+	font->name= fname;
 
-	font->name = fname;
-
-	assert(WMHashInsert(scrPtr->fontCache, font->name, font) == NULL);
+	assert(WMHashInsert(_fontCache, fname, font)==NULL);
 
 	return font;
 }
@@ -185,27 +211,32 @@ void WMReleaseFont(WMFont * font)
 
 	font->refCount--;
 	if (font->refCount < 1) {
-		XftFontClose(font->screen->display, font->font);
 		if (font->name) {
-			WMHashRemove(font->screen->fontCache, font->name);
+			WMHashRemove(_fontCache, font->name);
 			wfree(font->name);
 		}
+		cairo_font_face_destroy(font->cfont);
+		cairo_scaled_font_destroy(font->metrics);
 		wfree(font);
 	}
 }
 
 Bool WMIsAntialiasingEnabled(WMScreen * scrPtr)
 {
-	return scrPtr->antialiasedText;
+	return True;
 }
 
 unsigned int WMFontHeight(WMFont * font)
 {
-	wassertrv(font != NULL, 0);
+	cairo_font_extents_t extents;
 
-	return font->height;
+	wassertrv(font!=NULL, 0);
+
+	cairo_scaled_font_extents(font->metrics, &extents);
+
+	return extents.height;
+
 }
-
 char *WMGetFontName(WMFont * font)
 {
 	wassertrv(font != NULL, NULL);
@@ -259,61 +290,45 @@ WMFont *WMBoldSystemFontOfSize(WMScreen * scrPtr, int size)
 	return font;
 }
 
-int WMWidthOfString(WMFont * font, char *text, int length)
+int WMWidthOfString(WMFont *font, char *text)
 {
-	XGlyphInfo extents;
+	cairo_text_extents_t extents;
 
-	wassertrv(font != NULL && text != NULL, 0);
+	wassertrv(font!=NULL && text!=NULL, 0);
 
-	XftTextExtentsUtf8(font->screen->display, font->font, (XftChar8 *) text, length, &extents);
+	cairo_scaled_font_text_extents(font->metrics, text, &extents);
 
-	return extents.xOff;	/* don't ask :P */
+	return extents.x_advance;
 }
 
-void WMDrawString(WMScreen * scr, Drawable d, WMColor * color, WMFont * font, int x, int y, char *text, int length)
+
+void WMFontSet(cairo_t *cairo, WMFont *font)
 {
-	XftColor xftcolor;
-
-	wassertr(font != NULL);
-
-	xftcolor.color.red = color->color.red;
-	xftcolor.color.green = color->color.green;
-	xftcolor.color.blue = color->color.blue;
-	xftcolor.color.alpha = color->alpha;;
-	xftcolor.pixel = W_PIXEL(color);
-
-	XftDrawChange(scr->xftdraw, d);
-
-	XftDrawStringUtf8(scr->xftdraw, &xftcolor, font->font, x, y + font->y, (XftChar8 *) text, length);
+	cairo_set_scaled_font(cairo, font->metrics);
 }
 
-void
-WMDrawImageString(WMScreen * scr, Drawable d, WMColor * color, WMColor * background,
-		  WMFont * font, int x, int y, char *text, int length)
+
+void WMDrawString(cairo_t *cairo, WMColorSpec *color, WMFont *font,
+		int x, int y, char *text)
 {
-	XftColor textColor;
-	XftColor bgColor;
+	cairo_text_extents_t extents;
 
-	wassertr(font != NULL);
+	wassertr(font!=NULL);
 
-	textColor.color.red = color->color.red;
-	textColor.color.green = color->color.green;
-	textColor.color.blue = color->color.blue;
-	textColor.color.alpha = color->alpha;;
-	textColor.pixel = W_PIXEL(color);
+	cairo_save(cairo);
 
-	bgColor.color.red = background->color.red;
-	bgColor.color.green = background->color.green;
-	bgColor.color.blue = background->color.blue;
-	bgColor.color.alpha = background->alpha;;
-	bgColor.pixel = W_PIXEL(background);
+	WMColorSpecSet(cairo, color);
+	WMFontSet(cairo, font);
 
-	XftDrawChange(scr->xftdraw, d);
+	cairo_scaled_font_text_extents(font->metrics, text, &extents);
 
-	XftDrawRect(scr->xftdraw, &bgColor, x, y, WMWidthOfString(font, text, length), font->height);
+	cairo_move_to(cairo, x - extents.x_bearing, y + font->ascent);
 
-	XftDrawStringUtf8(scr->xftdraw, &textColor, font->font, x, y + font->y, (XftChar8 *) text, length);
+	cairo_show_text(cairo, text);
+
+	cairo_restore(cairo);
 }
+
 
 WMFont *WMCopyFontWithStyle(WMScreen * scrPtr, WMFont * font, WMFontStyle style)
 {

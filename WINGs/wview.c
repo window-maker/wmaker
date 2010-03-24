@@ -1,6 +1,8 @@
 
 #include "WINGsP.h"
 
+#include <cairo-xlib.h>
+
 #include <X11/Xresource.h>
 
 /* the notifications about views */
@@ -97,17 +99,21 @@ static W_View *createView(W_Screen * screen, W_View * parent)
 
 	view->screen = screen;
 
-	if (parent != NULL) {
+	view->backColor= WMWhiteColorSpec();
+
+	if (parent!=NULL) {
+		WMColor *xcolor= WMCreateColorWithSpec(screen, &view->backColor);
+
 		/* attributes are not valid for root window */
-		view->attribFlags = CWEventMask | CWBitGravity;
+		view->attribFlags = CWEventMask|CWBitGravity;
 		view->attribs = defAtts;
 
-		view->attribFlags |= CWBackPixel | CWColormap | CWBorderPixel;
-		view->attribs.background_pixel = W_PIXEL(screen->gray);
-		view->attribs.border_pixel = W_PIXEL(screen->black);
+		view->attribFlags |= CWBackPixel|CWColormap|CWBorderPixel;
+		view->attribs.background_pixel = W_PIXEL(xcolor);
+		view->attribs.border_pixel = 0;
 		view->attribs.colormap = screen->colormap;
 
-		view->backColor = WMRetainColor(screen->gray);
+		WMReleaseColor(xcolor);
 
 		adoptChildView(parent, view);
 	}
@@ -225,7 +231,6 @@ void W_ReparentView(W_View * view, W_View * newParent, int x, int y)
 
 	unparentView(view);
 	adoptChildView(newParent, view);
-
 	if (view->flags.realized) {
 		if (newParent->flags.realized) {
 			XReparentWindow(dpy, view->window, newParent->window, x, y);
@@ -369,6 +374,25 @@ static void destroyView(W_View * view)
 		if (ptr == view->childrenList) {
 			view->childrenList = ptr->nextSister;
 			ptr->parent = NULL;
+cairo_t*
+W_CreateCairoForView(W_View *view)
+{
+    cairo_surface_t *surface;
+    cairo_t *cairo;
+
+    surface= cairo_xlib_surface_create(W_VIEW_DISPLAY(view),
+                                       W_VIEW_DRAWABLE(view),
+                                       W_VIEW_SCREEN(view)->visual,
+                                       W_VIEW_WIDTH(view),
+                                       W_VIEW_HEIGHT(view));
+    cairo= cairo_create(surface);
+    cairo_surface_destroy(surface);
+    cairo_translate(cairo, 0.5, 0.5);
+    cairo_set_line_width(cairo, 1.0);
+
+    return cairo;
+}
+
 		}
 	}
 
@@ -392,9 +416,6 @@ static void destroyView(W_View * view)
 	WMRemoveNotificationObserver(view);
 
 	W_FreeViewXdndPart(view);
-
-	if (view->backColor)
-		WMReleaseColor(view->backColor);
 
 	wfree(view);
 }
@@ -478,18 +499,20 @@ void W_RedisplayView(W_View * view)
 	WMHandleEvent(&ev);
 }
 
-void W_SetViewBackgroundColor(W_View * view, WMColor * color)
+void W_SetViewBackgroundColor(W_View *view, WMColorSpec *color)
 {
-	if (view->backColor)
-		WMReleaseColor(view->backColor);
-	view->backColor = WMRetainColor(color);
+	WMColor *xcolor= WMCreateColorWithSpec(view->screen, color);
+
+	view->backColor = *color;
 
 	view->attribFlags |= CWBackPixel;
-	view->attribs.background_pixel = W_PIXEL(color);
+	view->attribs.background_pixel = W_PIXEL(xcolor);
 	if (view->flags.realized) {
-		XSetWindowBackground(view->screen->display, view->window, W_PIXEL(color));
+		XSetWindowBackground(view->screen->display, view->window,
+				W_PIXEL(xcolor));
 		XClearWindow(view->screen->display, view->window);
 	}
+	WMReleaseColor(xcolor);
 }
 
 void W_SetViewCursor(W_View * view, Cursor cursor)

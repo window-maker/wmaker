@@ -1,7 +1,5 @@
 ## automake input file for WINGs
 
-AUTOMAKE_OPTIONS = no-dependencies
-
 SUBDIRS = WINGs . po Documentation Resources
 
 LIBTOOL = $(SHELL) $(top_builddir)/libtool $(LIBTOOL_ARG)
@@ -18,7 +16,8 @@ bin_SCRIPTS = get-wings-flags get-wutil-flags
 lib_LTLIBRARIES = libWINGs.la libWUtil.la
 
 
-LDADD= libWUtil.la libWINGs.la $(top_builddir)/wrlib/libwraster.la @INTLIBS@
+LDADD= libWINGs.a \
+	   @INTLIBS@ @GLIB_LIBS@ @CAIRO_LIBS@
 
 
 EXTRA_DIST = BUGS make-rgb Examples Extras Tests
@@ -35,10 +34,8 @@ libWINGs_la_SOURCES = 	\
 	wappresource.c \
 	wballoon.c \
 	wbox.c \
-	wbrowser.c \
 	wbutton.c \
 	wcolor.c \
-	wcolorpanel.c \
 	wcolorwell.c \
 	wconfig.h \
 	wevent.c \
@@ -47,23 +44,13 @@ libWINGs_la_SOURCES = 	\
 	wfont.c \
 	wfontpanel.c \
 	widgets.c \
+	wimage.c \
 	winputmethod.c \
 	wlabel.c \
-	wlist.c \
 	wmenuitem.c \
 	wmisc.c \
-	wpanel.c \
 	wpixmap.c \
-	wpopupbutton.c \
 	wprogressindicator.c \
-	wruler.c \
-	wscroller.c \
-	wscrollview.c \
-	wslider.c \
-	wsplitview.c \
-	wtabview.c \
-	wtext.c \
-	wtextfield.c \
 	wview.c \
 	wwindow.c
 
@@ -93,8 +80,8 @@ AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" -DRESOURCE_PATH=\"$(datadir)/WINGs\" -DD
 
 AM_CFLAGS = @NOSTRICTALIASING@
 
-INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
-	@XFTFLAGS@ @HEADER_SEARCH_PATH@
+INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/src \
+	@XFTFLAGS@ @HEADER_SEARCH_PATH@ @GLIB_CFLAGS@ @CAIRO_CFLAGS@
 
 DISTCLEANFILES = WINGs.pc
 

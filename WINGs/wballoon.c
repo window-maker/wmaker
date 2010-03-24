@@ -59,7 +59,7 @@ struct W_Balloon *W_CreateBalloon(WMScreen * scr)
 	}
 	bPtr->view->self = bPtr;
 
-	bPtr->textColor = WMRetainColor(bPtr->view->screen->black);
+//XXX	bPtr->textColor = WMRetainColor(bPtr->view->screen->black);
 
 	WMCreateEventHandler(bPtr->view, StructureNotifyMask, handleEvents, bPtr);
 
@@ -385,9 +385,9 @@ static void showText(Balloon * bPtr, int x, int y, int w, int h, char *text)
 		while (ptr && ptr2) {
 			ptr2 = strchr(ptr, '\n');
 			if (ptr2) {
-				w = WMWidthOfString(font, ptr, ptr2 - ptr);
+				//XXXw = WMWidthOfString(font, ptr, ptr2 - ptr);
 			} else {
-				w = WMWidthOfString(font, ptr, strlen(ptr));
+				//XXXw = WMWidthOfString(font, ptr, strlen(ptr));
 			}
 			if (w > width)
 				width = w;
@@ -397,7 +397,7 @@ static void showText(Balloon * bPtr, int x, int y, int w, int h, char *text)
 
 	width += 16;
 
-	textHeight = W_GetTextHeight(font, text, width, False);
+	//XXXtextHeight = W_GetTextHeight(font, text, width, False);
 
 	height = textHeight + 4;
 
@@ -429,9 +429,10 @@ static void showText(Balloon * bPtr, int x, int y, int w, int h, char *text)
 	}
 	pixmap = makePixmap(scr, width, height, side, &mask);
 
-	W_PaintText(bPtr->view, pixmap, font, 8, ty + (height - textHeight) / 2,
+	/*W_PaintText(bPtr->view, pixmap, font, 8, ty + (height - textHeight) / 2,
 		    width, bPtr->flags.alignment,
 		    bPtr->textColor ? bPtr->textColor : scr->black, False, text, strlen(text));
+    */
 
 	XSetWindowBackgroundPixmap(dpy, bPtr->view->window, pixmap);
 

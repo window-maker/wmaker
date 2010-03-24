@@ -98,7 +98,7 @@ static int getMaxStringWidth(WMFont * font, char *text)
 
 	while (*p) {
 		if (*p == '\n') {
-			wt = WMWidthOfString(font, pb, pos);
+			wt = WMWidthOfString(font, p);//pb, pos);
 			if (wt > w)
 				w = wt;
 			pos = 0;
@@ -109,7 +109,7 @@ static int getMaxStringWidth(WMFont * font, char *text)
 		p++;
 	}
 	if (pos > 0) {
-		wt = WMWidthOfString(font, pb, pos);
+		wt = WMWidthOfString(font, p);// pb, pos);
 		if (wt > w)
 			w = wt;
 	}

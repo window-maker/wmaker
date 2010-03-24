@@ -4,10 +4,8 @@
 #ifndef RGB_H_
 #define RGB_H_
 
-#include <wraster.h>
-
 typedef struct RGBColor {
-    RColor color;
+    unsigned char color[4];
     char *name;
 } RGBColor;
 

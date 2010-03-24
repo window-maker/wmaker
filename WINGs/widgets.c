@@ -2,7 +2,7 @@
 #include "WINGsP.h"
 #include "wconfig.h"
 
-#include <X11/Xft/Xft.h>
+#include <cairo-xlib.h>
 
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
@@ -304,64 +304,63 @@ static int userWidgetCount = 0;
 
 /*****  end data  ******/
 
-static void renderPixmap(W_Screen * screen, Pixmap d, Pixmap mask, char **data, int width, int height)
+static void renderImage(W_Screen *screen, cairo_surface_t *image, char **data,
+		int width, int height)
 {
-	int x, y;
-	GC whiteGC = WMColorGC(screen->white);
-	GC blackGC = WMColorGC(screen->black);
-	GC lightGC = WMColorGC(screen->gray);
-	GC darkGC = WMColorGC(screen->darkGray);
+	int x, y, stride, offs;
+	unsigned char *buffer= cairo_image_surface_get_data(image);
+	WMColorSpec white= WMWhiteColorSpec();
+	WMColorSpec black= WMBlackColorSpec();
+	WMColorSpec light= WMGrayColorSpec();
+	WMColorSpec dark= WMDarkGrayColorSpec();
+	WMColorSpec trans= {0, 0, 0, 0};
 
-	if (mask)
-		XSetForeground(screen->display, screen->monoGC, 0);
+#define PUTPIXEL(buffer, offs, color)\
+	buffer[offs++]= color.alpha, buffer[offs]= color.red, buffer[offs++]= color.green, buffer[offs++]= color.blue
 
+	stride= cairo_image_surface_get_stride(image);
+	offs= 0;
 	for (y = 0; y < height; y++) {
+		offs= height * stride;
 		for (x = 0; x < width; x++) {
 			switch (data[y][x]) {
-			case ' ':
-			case 'w':
-				XDrawPoint(screen->display, d, whiteGC, x, y);
-				break;
+				case ' ':
+				case 'w':
+					PUTPIXEL(buffer, offs, white);
+					break;
 
-			case '=':
-				if (mask)
-					XDrawPoint(screen->display, mask, screen->monoGC, x, y);
+				case '=':
+					PUTPIXEL(buffer, offs, trans);
+					break;
+				case '.':
+				case 'l':
+					PUTPIXEL(buffer, offs, light);
+					break;
 
-			case '.':
-			case 'l':
-				XDrawPoint(screen->display, d, lightGC, x, y);
-				break;
+				case '%':
+				case 'd':
+					PUTPIXEL(buffer, offs, dark);
+					break;
 
-			case '%':
-			case 'd':
-				XDrawPoint(screen->display, d, darkGC, x, y);
-				break;
-
-			case '#':
-			case 'b':
-			default:
-				XDrawPoint(screen->display, d, blackGC, x, y);
-				break;
+				case '#':
+				case 'b':
+				default:
+					PUTPIXEL(buffer, offs, black);
+					break;
 			}
 		}
 	}
 }
 
-static WMPixmap *makePixmap(W_Screen * sPtr, char **data, int width, int height, int masked)
+static WMImage* makeImage(W_Screen *sPtr, char **data, int width, int height, int masked)
 {
-	Pixmap pixmap, mask = None;
+	cairo_surface_t *image;
 
-	pixmap = XCreatePixmap(sPtr->display, W_DRAWABLE(sPtr), width, height, sPtr->depth);
+	image= cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 
-	if (masked) {
-		mask = XCreatePixmap(sPtr->display, W_DRAWABLE(sPtr), width, height, 1);
-		XSetForeground(sPtr->display, sPtr->monoGC, 1);
-		XFillRectangle(sPtr->display, mask, sPtr->monoGC, 0, 0, width, height);
-	}
+	renderImage(sPtr, image, data, width, height);
 
-	renderPixmap(sPtr, pixmap, mask, data, width, height);
-
-	return WMCreatePixmapFromXPixmaps(sPtr, pixmap, mask, width, height, sPtr->depth);
+	return image;
 }
 
 #define T_WINGS_IMAGES_FILE  RESOURCE_PATH"/Images.tiff"
@@ -372,6 +371,7 @@ static WMPixmap *makePixmap(W_Screen * sPtr, char **data, int width, int height,
 
 static Bool loadPixmaps(WMScreen * scr)
 {
+#ifdef obsolete
 	RImage *image, *tmp;
 	RColor gray;
 	RColor white;
@@ -475,6 +475,7 @@ static Bool loadPixmaps(WMScreen * scr)
 	RReleaseImage(tmp);
 
 	RReleaseImage(image);
+#endif
 
 #if 0
 	scr->defaultObjectIcon = WMCreatePixmapFromFile(scr, T_DEFAULT_OBJECT_ICON_FILE);
@@ -514,11 +515,6 @@ WMScreen *WMCreateSimpleApplicationScreen(Display * display)
 }
 
 WMScreen *WMCreateScreen(Display * display, int screen)
-{
-	return WMCreateScreenWithRContext(display, screen, RCreateContext(display, screen, NULL));
-}
-
-WMScreen *WMCreateScreenWithRContext(Display * display, int screen, RContext * context)
 {
 	W_Screen *scrPtr;
 	XGCValues gcv;
@@ -573,20 +569,16 @@ WMScreen *WMCreateScreenWithRContext(Display * display, int screen, RContext * c
 
 	scrPtr->display = display;
 	scrPtr->screen = screen;
-	scrPtr->rcontext = context;
 
-	scrPtr->depth = context->depth;
+	//XXX may want to check if there's a better visual than the default
+	scrPtr->depth = DefaultDepth(display, screen);
+	scrPtr->visual = DefaultVisual(display, screen);
 
-	scrPtr->visual = context->visual;
 	scrPtr->lastEventTime = 0;
 
-	scrPtr->colormap = context->cmap;
+	scrPtr->colormap = DefaultColormap(display, screen);
 
 	scrPtr->rootWin = RootWindow(display, screen);
-
-	scrPtr->fontCache = WMCreateHashTable(WMStringPointerHashCallbacks);
-
-	scrPtr->xftdraw = XftDrawCreate(scrPtr->display, W_DRAWABLE(scrPtr), scrPtr->visual, scrPtr->colormap);
 
 	/* Create missing CUT_BUFFERs */
 	{
@@ -670,43 +662,49 @@ WMScreen *WMCreateScreenWithRContext(Display * display, int screen, RContext * c
 		scrPtr->ignoredModifierMask = numLockMask | scrollLockMask | LockMask;
 	}
 
+#ifdef obsolete //XXX
 	/* initially allocate some colors */
 	WMWhiteColor(scrPtr);
 	WMBlackColor(scrPtr);
 	WMGrayColor(scrPtr);
 	WMDarkGrayColor(scrPtr);
-
+#endif
 	gcv.graphics_exposures = False;
 
 	gcv.function = GXxor;
-	gcv.foreground = W_PIXEL(scrPtr->white);
-	if (gcv.foreground == 0)
-		gcv.foreground = 1;
-	scrPtr->xorGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction
-				  | GCGraphicsExposures | GCForeground, &gcv);
+	//    gcv.foreground = W_PIXEL(scrPtr->white);
+	if (gcv.foreground == 0) gcv.foreground = 1;
+	scrPtr->xorGC = XCreateGC(display, DefaultRootWindow(scrPtr->display), GCFunction
+			|GCGraphicsExposures|GCForeground, &gcv);
 
 	gcv.function = GXxor;
-	gcv.foreground = W_PIXEL(scrPtr->gray);
+	//    gcv.foreground = W_PIXEL(scrPtr->gray);
 	gcv.subwindow_mode = IncludeInferiors;
-	scrPtr->ixorGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction
-				   | GCGraphicsExposures | GCForeground | GCSubwindowMode, &gcv);
+	scrPtr->ixorGC = XCreateGC(display, DefaultRootWindow(scrPtr->display), GCFunction
+			|GCGraphicsExposures|GCForeground
+			|GCSubwindowMode, &gcv);
 
 	gcv.function = GXcopy;
-	scrPtr->copyGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction | GCGraphicsExposures, &gcv);
+	scrPtr->copyGC = XCreateGC(display, DefaultRootWindow(scrPtr->display), GCFunction
+			|GCGraphicsExposures, &gcv);
 
-	scrPtr->clipGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCFunction | GCGraphicsExposures, &gcv);
+	scrPtr->clipGC = XCreateGC(display, DefaultRootWindow(scrPtr->display), GCFunction
+			|GCGraphicsExposures, &gcv);
 
-	stipple = XCreateBitmapFromData(display, W_DRAWABLE(scrPtr), STIPPLE_BITS, STIPPLE_WIDTH, STIPPLE_HEIGHT);
-	gcv.foreground = W_PIXEL(scrPtr->darkGray);
-	gcv.background = W_PIXEL(scrPtr->gray);
+	stipple = XCreateBitmapFromData(display, DefaultRootWindow(scrPtr->display),
+			STIPPLE_BITS, STIPPLE_WIDTH, STIPPLE_HEIGHT);
+	//    gcv.foreground = W_PIXEL(scrPtr->darkGray);
+	//    gcv.background = W_PIXEL(scrPtr->gray);
 	gcv.fill_style = FillStippled;
 	gcv.stipple = stipple;
-	scrPtr->stippleGC = XCreateGC(display, W_DRAWABLE(scrPtr),
-				      GCForeground | GCBackground | GCStipple
-				      | GCFillStyle | GCGraphicsExposures, &gcv);
+	scrPtr->stippleGC = XCreateGC(display, DefaultRootWindow(scrPtr->display),
+			GCForeground|GCBackground|GCStipple
+			|GCFillStyle|GCGraphicsExposures, &gcv);
 
-	scrPtr->drawStringGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCGraphicsExposures, &gcv);
-	scrPtr->drawImStringGC = XCreateGC(display, W_DRAWABLE(scrPtr), GCGraphicsExposures, &gcv);
+	scrPtr->drawStringGC   = XCreateGC(display, DefaultRootWindow(scrPtr->display),
+			GCGraphicsExposures, &gcv);
+	scrPtr->drawImStringGC = XCreateGC(display, DefaultRootWindow(scrPtr->display),
+			GCGraphicsExposures, &gcv);
 
 	/* we need a 1bpp drawable for the monoGC, so borrow this one */
 	scrPtr->monoGC = XCreateGC(display, stipple, 0, NULL);
@@ -732,57 +730,79 @@ WMScreen *WMCreateScreenWithRContext(Display * display, int screen, RContext * c
 	/* create input method stuff */
 	W_InitIM(scrPtr);
 
-	scrPtr->checkButtonImageOn = makePixmap(scrPtr, CHECK_BUTTON_ON,
-						CHECK_BUTTON_ON_WIDTH, CHECK_BUTTON_ON_HEIGHT, False);
+	scrPtr->checkButtonImageOn = makeImage(scrPtr, CHECK_BUTTON_ON,
+			CHECK_BUTTON_ON_WIDTH,
+			CHECK_BUTTON_ON_HEIGHT, False);
 
-	scrPtr->checkButtonImageOff = makePixmap(scrPtr, CHECK_BUTTON_OFF,
-						 CHECK_BUTTON_OFF_WIDTH, CHECK_BUTTON_OFF_HEIGHT, False);
+	scrPtr->checkButtonImageOff = makeImage(scrPtr, CHECK_BUTTON_OFF,
+			CHECK_BUTTON_OFF_WIDTH,
+			CHECK_BUTTON_OFF_HEIGHT, False);
 
-	scrPtr->radioButtonImageOn = makePixmap(scrPtr, RADIO_BUTTON_ON,
-						RADIO_BUTTON_ON_WIDTH, RADIO_BUTTON_ON_HEIGHT, False);
+	scrPtr->radioButtonImageOn = makeImage(scrPtr, RADIO_BUTTON_ON,
+			RADIO_BUTTON_ON_WIDTH,
+			RADIO_BUTTON_ON_HEIGHT, False);
 
-	scrPtr->radioButtonImageOff = makePixmap(scrPtr, RADIO_BUTTON_OFF,
-						 RADIO_BUTTON_OFF_WIDTH, RADIO_BUTTON_OFF_HEIGHT, False);
+	scrPtr->radioButtonImageOff = makeImage(scrPtr, RADIO_BUTTON_OFF,
+			RADIO_BUTTON_OFF_WIDTH,
+			RADIO_BUTTON_OFF_HEIGHT, False);
 
-	scrPtr->buttonArrow = makePixmap(scrPtr, BUTTON_ARROW, BUTTON_ARROW_WIDTH, BUTTON_ARROW_HEIGHT, False);
+	scrPtr->buttonArrow = makeImage(scrPtr, BUTTON_ARROW,
+			BUTTON_ARROW_WIDTH, BUTTON_ARROW_HEIGHT,
+			False);
 
-	scrPtr->pushedButtonArrow = makePixmap(scrPtr, BUTTON_ARROW2,
-					       BUTTON_ARROW2_WIDTH, BUTTON_ARROW2_HEIGHT, False);
+	scrPtr->pushedButtonArrow = makeImage(scrPtr, BUTTON_ARROW2,
+			BUTTON_ARROW2_WIDTH, BUTTON_ARROW2_HEIGHT,
+			False);
 
-	scrPtr->scrollerDimple = makePixmap(scrPtr, SCROLLER_DIMPLE,
-					    SCROLLER_DIMPLE_WIDTH, SCROLLER_DIMPLE_HEIGHT, False);
 
-	scrPtr->upArrow = makePixmap(scrPtr, SCROLLER_ARROW_UP,
-				     SCROLLER_ARROW_UP_WIDTH, SCROLLER_ARROW_UP_HEIGHT, True);
+	scrPtr->scrollerDimple = makeImage(scrPtr, SCROLLER_DIMPLE,
+			SCROLLER_DIMPLE_WIDTH,
+			SCROLLER_DIMPLE_HEIGHT, False);
 
-	scrPtr->downArrow = makePixmap(scrPtr, SCROLLER_ARROW_DOWN,
-				       SCROLLER_ARROW_DOWN_WIDTH, SCROLLER_ARROW_DOWN_HEIGHT, True);
 
-	scrPtr->leftArrow = makePixmap(scrPtr, SCROLLER_ARROW_LEFT,
-				       SCROLLER_ARROW_LEFT_WIDTH, SCROLLER_ARROW_LEFT_HEIGHT, True);
+	scrPtr->upArrow = makeImage(scrPtr, SCROLLER_ARROW_UP,
+			SCROLLER_ARROW_UP_WIDTH,
+			SCROLLER_ARROW_UP_HEIGHT, True);
 
-	scrPtr->rightArrow = makePixmap(scrPtr, SCROLLER_ARROW_RIGHT,
-					SCROLLER_ARROW_RIGHT_WIDTH, SCROLLER_ARROW_RIGHT_HEIGHT, True);
+	scrPtr->downArrow = makeImage(scrPtr, SCROLLER_ARROW_DOWN,
+			SCROLLER_ARROW_DOWN_WIDTH,
+			SCROLLER_ARROW_DOWN_HEIGHT, True);
 
-	scrPtr->hiUpArrow = makePixmap(scrPtr, HI_SCROLLER_ARROW_UP,
-				       SCROLLER_ARROW_UP_WIDTH, SCROLLER_ARROW_UP_HEIGHT, True);
+	scrPtr->leftArrow = makeImage(scrPtr, SCROLLER_ARROW_LEFT,
+			SCROLLER_ARROW_LEFT_WIDTH,
+			SCROLLER_ARROW_LEFT_HEIGHT, True);
 
-	scrPtr->hiDownArrow = makePixmap(scrPtr, HI_SCROLLER_ARROW_DOWN,
-					 SCROLLER_ARROW_DOWN_WIDTH, SCROLLER_ARROW_DOWN_HEIGHT, True);
+	scrPtr->rightArrow = makeImage(scrPtr, SCROLLER_ARROW_RIGHT,
+			SCROLLER_ARROW_RIGHT_WIDTH,
+			SCROLLER_ARROW_RIGHT_HEIGHT, True);
 
-	scrPtr->hiLeftArrow = makePixmap(scrPtr, HI_SCROLLER_ARROW_LEFT,
-					 SCROLLER_ARROW_LEFT_WIDTH, SCROLLER_ARROW_LEFT_HEIGHT, True);
+	scrPtr->hiUpArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_UP,
+			SCROLLER_ARROW_UP_WIDTH,
+			SCROLLER_ARROW_UP_HEIGHT, True);
 
-	scrPtr->hiRightArrow = makePixmap(scrPtr, HI_SCROLLER_ARROW_RIGHT,
-					  SCROLLER_ARROW_RIGHT_WIDTH, SCROLLER_ARROW_RIGHT_HEIGHT, True);
+	scrPtr->hiDownArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_DOWN,
+			SCROLLER_ARROW_DOWN_WIDTH,
+			SCROLLER_ARROW_DOWN_HEIGHT, True);
 
-	scrPtr->popUpIndicator = makePixmap(scrPtr, POPUP_INDICATOR,
-					    POPUP_INDICATOR_WIDTH, POPUP_INDICATOR_HEIGHT, True);
+	scrPtr->hiLeftArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_LEFT,
+			SCROLLER_ARROW_LEFT_WIDTH,
+			SCROLLER_ARROW_LEFT_HEIGHT, True);
 
-	scrPtr->pullDownIndicator = makePixmap(scrPtr, PULLDOWN_INDICATOR,
-					       PULLDOWN_INDICATOR_WIDTH, PULLDOWN_INDICATOR_HEIGHT, True);
+	scrPtr->hiRightArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_RIGHT,
+			SCROLLER_ARROW_RIGHT_WIDTH,
+			SCROLLER_ARROW_RIGHT_HEIGHT, True);
 
-	scrPtr->checkMark = makePixmap(scrPtr, CHECK_MARK, CHECK_MARK_WIDTH, CHECK_MARK_HEIGHT, True);
+	scrPtr->popUpIndicator = makeImage(scrPtr, POPUP_INDICATOR,
+			POPUP_INDICATOR_WIDTH,
+			POPUP_INDICATOR_HEIGHT, True);
+
+	scrPtr->pullDownIndicator = makeImage(scrPtr, PULLDOWN_INDICATOR,
+			PULLDOWN_INDICATOR_WIDTH,
+			PULLDOWN_INDICATOR_HEIGHT, True);
+
+	scrPtr->checkMark = makeImage(scrPtr, CHECK_MARK,
+			CHECK_MARK_WIDTH,
+			CHECK_MARK_HEIGHT, True);
 
 	loadPixmaps(scrPtr);
 
@@ -950,14 +970,14 @@ Bool WMWidgetIsMapped(WMWidget * w)
 	return W_VIEW(w)->flags.mapped;
 }
 
-void WMSetWidgetBackgroundColor(WMWidget * w, WMColor * color)
+void WMSetWidgetBackgroundColor(WMWidget * w, WMColorSpec * color)
 {
 	W_SetViewBackgroundColor(W_VIEW(w), color);
 	if (W_VIEW(w)->flags.mapped)
 		WMRedisplayWidget(w);
 }
 
-WMColor *WMGetWidgetBackgroundColor(WMWidget * w)
+WMColorSpec WMGetWidgetBackgroundColor(WMWidget * w)
 {
 	return W_VIEW(w)->backColor;
 }
@@ -987,11 +1007,6 @@ W_Class W_RegisterUserWidget(void)
 	userWidgetCount++;
 
 	return userWidgetCount + WC_UserWidget - 1;
-}
-
-RContext *WMScreenRContext(WMScreen * scr)
-{
-	return scr->rcontext;
 }
 
 unsigned int WMWidgetWidth(WMWidget * w)

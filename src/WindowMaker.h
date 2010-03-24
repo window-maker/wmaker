@@ -312,7 +312,7 @@ typedef struct WPreferences {
     char *icon_path;		       /* : separated list of paths to find icons */
     WMArray *fallbackWMs;              /* fallback window manager list */
     char *logger_shell;		       /* shell to log child stdi/o */
-    RImage *button_images;	       /* titlebar button images */
+    //RImage *button_images;	       /* titlebar button images */
     char smooth_workspace_back;
     signed char size_display;	       /* display type for resize geometry */
     signed char move_display;	       /* display type for move geometry */
@@ -415,8 +415,8 @@ typedef struct WPreferences {
     int history_lines;                  /* history of "Run..." dialog */
     char cycle_active_head_only;        /* Cycle only windows on the active head */
 
-    RImage *swtileImage;
-    RImage *swbackImage[9];
+    //RImage *swtileImage;
+    //RImage *swbackImage[9];
 
     struct {
         unsigned int nodock:1;	       /* don't display the dock */
