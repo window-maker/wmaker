@@ -362,18 +362,6 @@ for lang in $LINGUAS; do
 done
 
 
-dnl Kanji Characters support
-dnl ========================
-
-case $host_os in
-	freebsd*)
-		AC_CHECK_LIB(xpg4, setlocale, [LIBS="$LIBS -lxpg4"]);;
-	*)
-	;;
-esac
-
-
-
 dnl Added by Oliver - Support for NLSDIR option,   Hi Oliver!
 dnl ===========================================
 AC_ARG_WITH(nlsdir, 
