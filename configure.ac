@@ -94,14 +94,6 @@ lib_search_path="-L$_libdir"
 inc_search_path=`eval echo $includedir`
 inc_search_path="-I`eval echo $inc_search_path`"
 
-
-dnl
-dnl Check for RedHat bugs
-dnl =====================
-
-dnl WM_CHECK_REDCRAP_BUGS($prefix,$_bindir,$_libdir)
-
-
 dnl
 dnl Specify paths to look for libraries and headers
 dnl ===============================================
