@@ -420,28 +420,6 @@ AC_ARG_ENABLE(verbose-compile, AS_HELP_STRING([--disable-verbose-compile],
 ])
 
 
-
-dnl
-dnl Networking stuff
-dnl
-
-NETLIBS=""
-
-AC_CHECK_FUNC(connect,,
-	AC_CHECK_LIB(socket, connect, NETLIBS="$NETLIBS -lsocket"))
-
-AC_CHECK_FUNC(gethostbyname,,
-	AC_CHECK_LIB(nsl, gethostbyname, NETLIBS="$NETLIBS -lnsl"))
-
-AC_CHECK_FUNC(inet_aton, AC_DEFINE(HAVE_INET_ATON, 1, [define if you have then inet_aton function (set by configure)]),
-     for lib in resolv socket inet bsd; do
-	AC_CHECK_LIB($lib, inet_aton, [AC_DEFINE(HAVE_INET_ATON)
-	             NETLIBS="$NETLIBS -l$lib"; break],, $NETLIBS)
-     done)
-
-AC_SUBST(NETLIBS)
-
-
 dnl ===========================================
 dnl 		Stuff that uses X
 dnl ===========================================
@@ -977,7 +955,7 @@ cat <<EOF >get-wings-flags
 
 WCFLAGS="$inc_search_path"
 WLFLAGS="$lib_search_path"
-WLIBS="-lWINGs -lWUtil -lwraster $GFXLIBS $XFTLIBS $XLIBS -lm $NETLIBS $INTLIBS"
+WLIBS="-lWINGs -lWUtil -lwraster $GFXLIBS $XFTLIBS $XLIBS -lm $INTLIBS"
 
 usage="Usage: get-wings-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
 
@@ -1013,7 +991,7 @@ Name: WINGs
 Description: Small widget set with the NeXTStep(TM) look and feel
 Version: $VERSION
 Requires: wrlib
-Libs: $lib_search_path -lWINGs $XFTLIBS $XLIBS -lm $NETLIBS $INTLIBS
+Libs: $lib_search_path -lWINGs $XFTLIBS $XLIBS -lm $INTLIBS
 Cflags: $inc_search_path
 EOF
 
@@ -1022,7 +1000,7 @@ cat <<EOF >get-wutil-flags
 
 WCFLAGS="-I`eval echo ${includedir}`"
 WLFLAGS="-L${_libdir}"
-WLIBS="-lWUtil $NETLIBS $INTLIBS"
+WLIBS="-lWUtil $INTLIBS"
 
 usage="Usage: get-wutil-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
 

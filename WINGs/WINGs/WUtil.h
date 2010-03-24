@@ -86,27 +86,6 @@ typedef enum {
 } WMNotificationCoalescing;
 
 
-/* The possible states for connections */
-typedef enum {
-    WCNotConnected=0,
-    WCListening,
-    WCInProgress,
-    WCFailed,
-    WCConnected,
-    WCTimedOut,
-    WCDied,
-    WCClosed
-} WMConnectionState;
-
-
-/* The possible states for connection timeouts */
-typedef enum {
-    WCTNone=0,
-    WCTWhileOpening,
-    WCTWhileSending
-} WMConnectionTimeoutState;
-
-
 
 enum {
     WBNotFound = INT_MIN, /* element was not found in WMBag   */
@@ -184,24 +163,6 @@ typedef struct {
 } WMSEscapes;
 #endif
 
-
-/* The connection callbacks */
-typedef struct ConnectionDelegate {
-    void *data;
-
-    void (*canResumeSending)(struct ConnectionDelegate *self, WMConnection *cPtr);
-
-    void (*didCatchException)(struct ConnectionDelegate *self, WMConnection *cPtr);
-
-    void (*didDie)(struct ConnectionDelegate *self, WMConnection *cPtr);
-
-    void (*didInitialize)(struct ConnectionDelegate *self, WMConnection *cPtr);
-
-    void (*didReceiveInput)(struct ConnectionDelegate *self, WMConnection *cPtr);
-
-    void (*didTimeout)(struct ConnectionDelegate *self, WMConnection *cPtr);
-
-} ConnectionDelegate;
 
 
 typedef void WMNotificationObserverAction(void *observerData,
@@ -906,135 +867,6 @@ extern char *WMUserDefaultsDidChangeNotification;
 
 
 /*-------------------------------------------------------------------------*/
-
-/* WMHost: host handling */
-
-WMHost* WMGetCurrentHost();
-
-WMHost* WMGetHostWithName(char* name);
-
-WMHost* WMGetHostWithAddress(char* address);
-
-WMHost* WMRetainHost(WMHost *hPtr);
-
-void WMReleaseHost(WMHost *hPtr);
-
-/*
- * Host cache management
- * If enabled, only one object representing each host will be created, and
- * a shared instance will be returned by all methods that return a host.
- * Enabled by default.
- */
-void WMSetHostCacheEnabled(Bool flag);
-
-Bool WMIsHostCacheEnabled();
-
-void WMFlushHostCache();
-
-/*
- * Compare hosts: Hosts are equal if they share at least one address
- */
-Bool WMIsHostEqualToHost(WMHost* hPtr, WMHost* anotherHost);
-
-/*
- * Host names.
- * WMGetHostName() will return first name (official) if a host has several.
- * WMGetHostNames() will return a R/O WMArray with all the names of the host.
- */
-char* WMGetHostName(WMHost* hPtr);
-
-/* The returned array is R/O. Do not modify it, and do not free it! */
-WMArray* WMGetHostNames(WMHost* hPtr);
-
-/*
- * Host addresses.
- * Addresses are represented as "Dotted Decimal" strings, e.g. "192.42.172.1"
- * WMGetHostAddress() will return an arbitrary address if a host has several.
- * WMGetHostAddresses() will return a R/O WMArray with all addresses of the host.
- */
-char* WMGetHostAddress(WMHost* hPtr);
-
-/* The returned array is R/O. Do not modify it, and do not free it! */
-WMArray* WMGetHostAddresses(WMHost* hPtr);
-
-
-/*-------------------------------------------------------------------------*/
-
-/* WMConnection functions */
-
-WMConnection* WMCreateConnectionAsServerAtAddress(char *host, char *service,
-                                                  char *protocol);
-
-WMConnection* WMCreateConnectionToAddress(char *host, char *service,
-                                          char *protocol);
-
-WMConnection* WMCreateConnectionToAddressAndNotify(char *host, char *service,
-                                                   char *protocol);
-
-void WMCloseConnection(WMConnection *cPtr);
-
-void WMDestroyConnection(WMConnection *cPtr);
-
-WMConnection* WMAcceptConnection(WMConnection *listener);
-
-/* Release the returned data! */
-WMData* WMGetConnectionAvailableData(WMConnection *cPtr);
-
-int WMSendConnectionData(WMConnection *cPtr, WMData *data);
-
-Bool WMEnqueueConnectionData(WMConnection *cPtr, WMData *data);
-
-#define WMFlushConnection(cPtr)  WMSendConnectionData((cPtr), NULL)
-
-void WMSetConnectionDelegate(WMConnection *cPtr, ConnectionDelegate *delegate);
-
-/* Connection info */
-
-char* WMGetConnectionAddress(WMConnection *cPtr);
-
-char* WMGetConnectionService(WMConnection *cPtr);
-
-char* WMGetConnectionProtocol(WMConnection *cPtr);
-
-Bool WMSetConnectionNonBlocking(WMConnection *cPtr, Bool flag);
-
-Bool WMSetConnectionCloseOnExec(WMConnection *cPtr, Bool flag);
-
-void WMSetConnectionShutdownOnClose(WMConnection *cPtr, Bool flag);
-
-void* WMGetConnectionClientData(WMConnection *cPtr);
-
-void WMSetConnectionClientData(WMConnection *cPtr, void *data);
-
-unsigned int WMGetConnectionFlags(WMConnection *cPtr);
-
-void WMSetConnectionFlags(WMConnection *cPtr, unsigned int flags);
-
-int WMGetConnectionSocket(WMConnection *cPtr);
-
-WMConnectionState WMGetConnectionState(WMConnection *cPtr);
-
-WMConnectionTimeoutState WMGetConnectionTimeoutState(WMConnection *cPtr);
-
-WMArray* WMGetConnectionUnsentData(WMConnection *cPtr);
-
-#define WMGetConnectionQueuedData(cPtr) WMGetConnectionUnsentData(cPtr)
-
-
-/*
- * Passing timeout==0 in the SetTimeout functions below, will reset that
- * timeout to its default value.
- */
-
-/* The default timeout inherited by all WMConnection operations, if none set */
-void WMSetConnectionDefaultTimeout(unsigned int timeout);
-
-/* Global timeout for all WMConnection objects, for opening a new connection */
-void WMSetConnectionOpenTimeout(unsigned int timeout);
-
-/* Connection specific timeout for sending out data */
-void WMSetConnectionSendTimeout(WMConnection *cPtr, unsigned int timeout);
-
 
 /* Global variables */
 

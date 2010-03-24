@@ -69,13 +69,11 @@ libWINGs_la_SOURCES = 	\
 libWUtil_la_SOURCES = 	\
 	array.c \
 	bagtree.c \
-	connection.c \
 	data.c \
 	error.c \
 	findfile.c \
 	handlers.c \
 	hashtable.c \
-	host.c \
 	memory.c \
 	misc.c \
 	notification.c \

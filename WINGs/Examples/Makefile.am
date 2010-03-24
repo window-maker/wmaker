@@ -18,13 +18,11 @@ puzzle_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.la
 
 connect_DEPENDENCIES = $(top_builddir)/WINGs/libWUtil.la
 
-connect_LDADD = $(top_builddir)/WINGs/libWUtil.la @LIBRARY_SEARCH_PATH@ \
-	@NETLIBS@ @INTLIBS@
+connect_LDADD = $(top_builddir)/WINGs/libWUtil.la @LIBRARY_SEARCH_PATH@ @INTLIBS@
 
 server_DEPENDENCIES = $(top_builddir)/WINGs/libWUtil.la
 
-server_LDADD = $(top_builddir)/WINGs/libWUtil.la @LIBRARY_SEARCH_PATH@ \
-	@NETLIBS@ @INTLIBS@
+server_LDADD = $(top_builddir)/WINGs/libWUtil.la @LIBRARY_SEARCH_PATH@ @INTLIBS@
 
 
 INCLUDES = -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \

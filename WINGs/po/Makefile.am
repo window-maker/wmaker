@@ -7,10 +7,8 @@ CLEANFILES = $(CATALOGS) WINGs.pot
 EXTRA_DIST = bg.po ca.po cs.po de.po fr.po sk.po
 
 POTFILES  = \
-	$(top_builddir)/WINGs/connection.c \
 	$(top_builddir)/WINGs/error.c \
 	$(top_builddir)/WINGs/findfile.c \
-	$(top_builddir)/WINGs/host.c \
 	$(top_builddir)/WINGs/proplist.c \
 	$(top_builddir)/WINGs/userdefaults.c \
 	$(top_builddir)/WINGs/wcolor.c \
