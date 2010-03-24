@@ -32,7 +32,6 @@
 #include <pwd.h>
 #include <math.h>
 #include <time.h>
-#include <libintl.h>
 
 #include <WINGs/WUtil.h>
 #include <wraster.h>
@@ -561,13 +560,13 @@ getuserinput(WScreen *scr, char *line, int *ptr, Bool advanced)
 
     if(advanced)
         rv = wAdvancedInputDialog(scr,
-		title ? gettext(title):_("Program Arguments"),
-		prompt ? gettext(prompt):_("Enter command arguments:"),
+		title ? _(title):_("Program Arguments"),
+		prompt ? _(prompt):_("Enter command arguments:"),
 		name, &ret);
     else
         rv = wInputDialog(scr,
-		title ? gettext(title):_("Program Arguments"),
-		prompt ? gettext(prompt):_("Enter command arguments:"),
+		title ? _(title):_("Program Arguments"),
+		prompt ? _(prompt):_("Enter command arguments:"),
 		&ret);
 
     if(title) wfree(title);

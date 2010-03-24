@@ -4,8 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <locale.h>
-#include <libintl.h>
-#define _(text) gettext(text)
+
+#include "../src/wconfig.h"
 
 #include <WINGs/WUtil.h>
 
@@ -33,6 +33,7 @@ int main(int argc, char *argv[])
 	locale = getenv("LANG");
 	setlocale(LC_ALL, "");
 
+#if HAVE_LIBINTL_H && I18N
 	if (getenv("NLSPATH"))
 		bindtextdomain("wmgenmenu", getenv("NLSPATH"));
 	else
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
 
 	bind_textdomain_codeset("wmgenmenu", "UTF-8");
 	textdomain("wmgenmenu");
+#endif
 
 	printf("\(\"Window Maker\",\n");
 
