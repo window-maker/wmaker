@@ -32,12 +32,12 @@ void closeAction(WMWidget * self, void *data)
 		exit(0);
 }
 
+#if 0
 void testOpenFilePanel(WMScreen * scr)
 {
 	WMOpenPanel *panel;
 
 	/* windowCount++; */
-#if 0
 	/* get the shared Open File panel */
 	panel = WMGetOpenPanel(scr);
 
@@ -289,7 +289,9 @@ void testButton(WMScreen * scr)
 	WMMapSubwidgets(win);
 	WMMapWidget(win);
 }
+#endif
 
+#ifdef obsolete
 void testGradientButtons(WMScreen * scr)
 {
 	WMWindow *win;
@@ -380,7 +382,9 @@ void testGradientButtons(WMScreen * scr)
 	WMMapSubwidgets(win);
 	WMMapWidget(win);
 }
+#endif
 
+#if 0
 void testScrollView(WMScreen * scr)
 {
 	WMWindow *win;
@@ -512,7 +516,44 @@ void testSlider(WMScreen * scr)
 	WMMapSubwidgets(win);
 	WMMapWidget(win);
 }
+#endif
 
+void testStuff(WMScreen *scr)
+{
+	WMWindow *win;
+	WMLabel *label;
+	WMButton *button;
+
+	windowCount++;
+
+	win = WMCreateWindow(scr, "testTextField");
+	WMResizeWidget(win, 400, 300);
+
+	WMSetWindowCloseAction(win, closeAction, NULL);
+
+
+	label= WMCreateLabel(win);
+	WMSetLabelText(label, "HELLO");
+	WMResizeWidget(label, 100, 20);
+	WMMoveWidget(label, 10, 100);
+
+	button= WMCreateCommandButton(win);
+	WMSetButtonText(button, "OK");
+	WMResizeWidget(button, 80, 24);
+	WMMoveWidget(button, 400-80-12, 300-24-12);
+
+	button= WMCreateCommandButton(win);
+	WMSetButtonText(button, "Cancel");
+	WMResizeWidget(button, 80, 24);
+	WMMoveWidget(button, 400-80-12-80-12, 300-24-12);
+
+
+	WMRealizeWidget(win);
+	WMMapSubwidgets(win);
+	WMMapWidget(win);
+}
+
+#if 0
 void testTextField(WMScreen * scr)
 {
 	WMWindow *win;
@@ -914,6 +955,7 @@ void testUD()
 	WMSetUDStringForKey(defs, str, "testKey");
 	puts(str);
 }
+#endif
 
 int main(int argc, char **argv)
 {
@@ -923,7 +965,7 @@ int main(int argc, char **argv)
 	/* Initialize the application */
 	WMInitializeApplication("Test@eqweq_ewq$eqw", &argc, argv);
 
-	testUD();
+	//XXXtestUD();
 
 	/*
 	 * Open connection to the X display.
@@ -956,8 +998,8 @@ int main(int argc, char **argv)
 	 * Makes the logo be used in standard dialog panels.
 	 */
 	if (pixmap) {
-		WMSetApplicationIconPixmap(scr, pixmap);
-		WMReleasePixmap(pixmap);
+		//XXXWMSetApplicationIconPixmap(scr, pixmap);
+		//XXXWMReleasePixmap(pixmap);
 	}
 
 	/*
@@ -965,15 +1007,15 @@ int main(int argc, char **argv)
 	 *
 	 * Put the testSomething() function you want to test here.
 	 */
+	testStuff(scr);
 
+#if 0
 	testText(scr);
 	testFontPanel(scr);
 
 	testColorPanel(scr);
 
 	testTextField(scr);
-
-#if 0
 
 	testBox(scr);
 	testButton(scr);
@@ -997,6 +1039,5 @@ int main(int argc, char **argv)
 	 *
 	 */
 	WMScreenMainLoop(scr);
-#endif
 	return 0;
 }

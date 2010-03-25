@@ -57,6 +57,7 @@ static WMColor *createRGBAColor(WMScreen * scr, unsigned short red, unsigned sho
 	return color;
 }
 
+#ifdef obsolete
 WMColor *WMCreateRGBColor(WMScreen * scr, unsigned short red, unsigned short green,
 			  unsigned short blue, Bool exact)
 {
@@ -70,6 +71,7 @@ WMColor *WMCreateRGBColor(WMScreen * scr, unsigned short red, unsigned short gre
 
 	return color;
 }
+#endif
 
 WMColor* WMCreateColorWithSpec(WMScreen *scr, WMColorSpec *spec)
 {
@@ -79,7 +81,7 @@ WMColor* WMCreateColorWithSpec(WMScreen *scr, WMColorSpec *spec)
 		color = findCloseColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff);
 
 	if (!color)
-		color = WMBlackColor(scr);
+		createRGBAColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff);
 
 	return color;
 }
@@ -102,7 +104,7 @@ WMColor *WMCreateRGBAColor(WMScreen * scr, unsigned short red, unsigned short gr
 		color = findCloseColor(scr, red, green, blue, alpha);
 	}
 	if (!color)
-		color = WMBlackColor(scr);
+		color = createRGBAColor(scr, 0,0,0,0);
 
 	return color;
 }
@@ -184,6 +186,8 @@ void WMSetColorInGC(WMColor * color, GC gc)
 }
 
 /* "system" colors */
+#ifdef obsolete
+
 WMColor *WMWhiteColor(WMScreen * scr)
 {
 	if (!scr->white) {
@@ -193,7 +197,6 @@ WMColor *WMWhiteColor(WMScreen * scr)
 	}
 	return WMRetainColor(scr->white);
 }
-#ifdef obsolete
 
 WMColor *WMBlackColor(WMScreen * scr)
 {
@@ -204,7 +207,7 @@ WMColor *WMBlackColor(WMScreen * scr)
 	}
 	return WMRetainColor(scr->black);
 }
-#endif
+
 WMColor *WMGrayColor(WMScreen * scr)
 {
 	if (!scr->gray) {
@@ -213,7 +216,7 @@ WMColor *WMGrayColor(WMScreen * scr)
 		if (scr->depth == 1) {
 			Pixmap stipple;
 			WMColor *white = WMWhiteColor(scr);
-			WMColor *black = WMBlackColor(scr);
+			WMColor *black = WMBlackColorSpec(scr);
 			XGCValues gcv;
 
 			stipple = XCreateBitmapFromData(scr->display, W_DRAWABLE(scr),
@@ -242,6 +245,7 @@ WMColor *WMGrayColor(WMScreen * scr)
 	}
 	return WMRetainColor(scr->gray);
 }
+#endif
 
 WMColor *WMDarkGrayColor(WMScreen * scr)
 {

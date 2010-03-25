@@ -102,18 +102,16 @@ static W_View *createView(W_Screen * screen, W_View * parent)
 	view->backColor= WMWhiteColorSpec();
 
 	if (parent!=NULL) {
-		WMColor *xcolor= WMCreateColorWithSpec(screen, &view->backColor);
+		//XXXWMColor *xcolor= WMCreateColorWithSpec(screen, &view->backColor);
 
 		/* attributes are not valid for root window */
 		view->attribFlags = CWEventMask|CWBitGravity;
 		view->attribs = defAtts;
 
 		view->attribFlags |= CWBackPixel|CWColormap|CWBorderPixel;
-		view->attribs.background_pixel = W_PIXEL(xcolor);
+		view->attribs.background_pixel = WMCreateRGBAColor(screen,0,0,0,0,0);
 		view->attribs.border_pixel = 0;
 		view->attribs.colormap = screen->colormap;
-
-		WMReleaseColor(xcolor);
 
 		adoptChildView(parent, view);
 	}
@@ -374,24 +372,6 @@ static void destroyView(W_View * view)
 		if (ptr == view->childrenList) {
 			view->childrenList = ptr->nextSister;
 			ptr->parent = NULL;
-cairo_t*
-W_CreateCairoForView(W_View *view)
-{
-    cairo_surface_t *surface;
-    cairo_t *cairo;
-
-    surface= cairo_xlib_surface_create(W_VIEW_DISPLAY(view),
-                                       W_VIEW_DRAWABLE(view),
-                                       W_VIEW_SCREEN(view)->visual,
-                                       W_VIEW_WIDTH(view),
-                                       W_VIEW_HEIGHT(view));
-    cairo= cairo_create(surface);
-    cairo_surface_destroy(surface);
-    cairo_translate(cairo, 0.5, 0.5);
-    cairo_set_line_width(cairo, 1.0);
-
-    return cairo;
-}
 
 		}
 	}
@@ -418,6 +398,24 @@ W_CreateCairoForView(W_View *view)
 	W_FreeViewXdndPart(view);
 
 	wfree(view);
+}
+
+cairo_t* W_CreateCairoForView(W_View *view)
+{
+	cairo_surface_t *surface;
+	cairo_t *cairo;
+
+	surface= cairo_xlib_surface_create(W_VIEW_DISPLAY(view),
+			W_VIEW_DRAWABLE(view),
+			W_VIEW_SCREEN(view)->visual,
+			W_VIEW_WIDTH(view),
+			W_VIEW_HEIGHT(view));
+	cairo= cairo_create(surface);
+	cairo_surface_destroy(surface);
+	cairo_translate(cairo, 0.5, 0.5);
+	cairo_set_line_width(cairo, 1.0);
+
+	return cairo;
 }
 
 void W_DestroyView(W_View * view)

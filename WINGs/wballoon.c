@@ -240,10 +240,11 @@ void W_BalloonHandleEnterView(WMView * view)
 static void drawBalloon(WMScreen * scr, Pixmap bitmap, Pixmap pix, int x, int y, int w, int h, int side)
 {
 	Display *dpy = scr->display;
-	WMColor *white = WMWhiteColor(scr);
-	WMColor *black = WMBlackColor(scr);
+	//XXXWMColor *white = WMWhiteColor(scr);
+	//XXXWMColor *black = WMBlackColor(scr);
 	GC bgc = scr->monoGC;
-	GC gc = WMColorGC(white);
+	//XXXGC gc = WMColorGC(white);
+	GC gc = scr->monoGC;
 	int rad = h * 3 / 10;
 	XPoint pt[3], ipt[3];
 	int w1;
@@ -315,7 +316,7 @@ static void drawBalloon(WMScreen * scr, Pixmap bitmap, Pixmap pix, int x, int y,
 	XFillPolygon(dpy, pix, gc, ipt, 3, Convex, CoordModeOrigin);
 
 	/* fix outline */
-	XDrawLines(dpy, pix, WMColorGC(black), pt, 3, CoordModeOrigin);
+	//XDrawLines(dpy, pix, WMColorGC(black), pt, 3, CoordModeOrigin);
 	if (side & RIGHT) {
 		pt[0].x++;
 		pt[2].x--;
@@ -323,10 +324,10 @@ static void drawBalloon(WMScreen * scr, Pixmap bitmap, Pixmap pix, int x, int y,
 		pt[0].x--;
 		pt[2].x++;
 	}
-	XDrawLines(dpy, pix, WMColorGC(black), pt, 3, CoordModeOrigin);
+	//XDrawLines(dpy, pix, WMColorGC(black), pt, 3, CoordModeOrigin);
 
-	WMReleaseColor(white);
-	WMReleaseColor(black);
+	//WMReleaseColor(white);
+	//WMReleaseColor(black);
 }
 
 static Pixmap makePixmap(WMScreen * scr, int width, int height, int side, Pixmap * mask)
@@ -335,7 +336,7 @@ static Pixmap makePixmap(WMScreen * scr, int width, int height, int side, Pixmap
 	Pixmap bitmap;
 	Pixmap pixmap;
 	int x, y;
-	WMColor *black = WMBlackColor(scr);
+	//WMColor *black = WMBlackColor(scr);
 
 	bitmap = XCreatePixmap(dpy, scr->rootWin, width + SPACE, height + SPACE, 1);
 
@@ -344,7 +345,7 @@ static Pixmap makePixmap(WMScreen * scr, int width, int height, int side, Pixmap
 
 	pixmap = XCreatePixmap(dpy, scr->rootWin, width + SPACE, height + SPACE, scr->depth);
 
-	XFillRectangle(dpy, pixmap, WMColorGC(black), 0, 0, width + SPACE, height + SPACE);
+	//XFillRectangle(dpy, pixmap, WMColorGC(black), 0, 0, width + SPACE, height + SPACE);
 
 	if (side & BOTTOM) {
 		y = 0;
@@ -357,7 +358,7 @@ static Pixmap makePixmap(WMScreen * scr, int width, int height, int side, Pixmap
 
 	*mask = bitmap;
 
-	WMReleaseColor(black);
+	//WMReleaseColor(black);
 
 	return pixmap;
 }

@@ -79,12 +79,13 @@ int main(int argc, char **argv)
 
 	pixmap = WMCreatePixmapFromXPMData(scr, GNUSTEP_XPM);
 
-	WMSetApplicationIconPixmap(scr, pixmap);
-	WMReleasePixmap(pixmap);
+	//XXXWMSetApplicationIconPixmap(scr, pixmap);
+	//XXXWMReleasePixmap(pixmap);
 
-	if ((result = WMRunInputPanel(scr, NULL, title, prompt, initial, "OK", "Cancel")) != NULL)
-		printf("%s\n", result);
-	else
-		printf("\n");
-	return 0;
+	//XXXif ((result = WMRunInputPanel(scr, NULL, title, prompt, initial, "OK", "Cancel")) != NULL)
+	//XXX	printf("%s\n", result);
+	//XXXelse
+	//XXX	printf("\n");
+	//XXXreturn 0;
+    return 0;
 }
