@@ -40,7 +40,7 @@ cycle_bench(int start)
 
 
 #if 0
-// seems linux doesnt allow user progs to exec rdpcm..
+// seems linux doesnt allow user progs to exec rdpmc
 inline static void
 cache_bench(int start)
 {

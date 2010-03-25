@@ -588,17 +588,8 @@ static RXImage *image2PseudoColor(RContext * ctx, RImage * image)
 		memset(nerr, 0, 4 * (image->width + 3));
 
 		/*#ifdef ASM_X86 */
-#if 0
-		x86_PseudoColor_32_to_8(image->data, ximg->image->data,
-					err + 4, nerr + 4,
-					rtable,
-					dr, dg, db, ctx->pixels, cpc,
-					image->width, image->height,
-					channels, ximg->image->bytes_per_line - image->width);
-#else
 		convertPseudoColor_to_8(ximg, image, err + 4, nerr + 4,
 					rtable, gtable, btable, dr, dg, db, ctx->pixels, cpc);
-#endif
 
 		free(err);
 		free(nerr);

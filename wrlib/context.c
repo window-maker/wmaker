@@ -629,7 +629,6 @@ RContext *RCreateContext(Display * dpy, int screen_number, RContextAttributes * 
 			context->drawable =
 			    XCreateWindow(dpy, RootWindow(dpy, screen_number), 1, 1,
 					  1, 1, 0, context->depth, CopyFromParent, context->visual, mask, &attr);
-			/*          XSetWindowColormap(dpy, context->drawable, attr.colormap); */
 		}
 		XFree(vinfo);
 	}
@@ -718,22 +717,6 @@ static Bool bestContext(Display * dpy, int screen_number, RContext * context)
 				best = i;
 		}
 	}
-#if 0
-	if (best == -1) {	/* look for a DirectColor, 24-bit or more (pref 24) */
-		rvinfo.class = DirectColor;
-		if (vinfo)
-			XFree((char *)vinfo);
-		vinfo = XGetVisualInfo(dpy, flags, &rvinfo, &numvis);
-		if (vinfo) {
-			for (i = 0, best = -1; i < numvis; i++) {
-				if (vinfo[i].depth == 24)
-					best = i;
-				else if (vinfo[i].depth > 24 && best < 0)
-					best = i;
-			}
-		}
-	}
-#endif
 	if (best > -1) {
 		context->visual = vinfo[best].visual;
 		context->depth = vinfo[best].depth;
@@ -747,7 +730,6 @@ static Bool bestContext(Display * dpy, int screen_number, RContext * context)
 				  1, 1, 1, 1, 0, context->depth,
 				  CopyFromParent, context->visual,
 				  CWBorderPixel | CWColormap | CWOverrideRedirect, &attr);
-		/*      XSetWindowColormap(dpy, context->drawable, context->cmap); */
 	}
 	if (vinfo)
 		XFree((char *)vinfo);
