@@ -41,6 +41,7 @@ dnl Platform-specific Makefile setup
 dnl ================================
 
 case "${host}" in
+	*-*-cygwin*)
 	*-*-linux*)
 		WM_OSDEP="linux"
 	;;
@@ -68,6 +69,7 @@ case "${host}" in
 	;;
 	*)
 		WM_OSDEP="stub"
+		CFLAGS="-DSTUB_HINT=\\\"${host}\\\""
 	;;
 esac
 AC_SUBST(WM_OSDEP)

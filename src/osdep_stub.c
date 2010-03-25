@@ -3,6 +3,10 @@
 
 #include "wconfig.h"
 
+#ifndef STUB_HINT
+#define STUB_HINT	"(unknown)"
+#endif
+
 Bool GetCommandForPid(int pid, char ***argv, int *argc)
 {
 	*argv = NULL;
@@ -11,7 +15,8 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 
 	if (!notified) {
 		wwarning(_("%s is not implemented on this platform; "
-		    "notify wmaker-dev@lists.windowmaker.info"), __FUNCTION__);
+		    "tell wmaker-dev@lists.windowmaker.info you are running \"%s\""),
+		    __FUNCTION__, STUB_HINT);
 		notified = 1;
 	}
 
