@@ -41,8 +41,7 @@ dnl Platform-specific Makefile setup
 dnl ================================
 
 case "${host}" in
-	*-*-cygwin*)
-	*-*-linux*)
+	*-*-linux*|*-*-cygwin*)
 		WM_OSDEP="linux"
 	;;
 	*-*-freebsd*)

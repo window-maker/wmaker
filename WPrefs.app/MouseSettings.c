@@ -699,6 +699,7 @@ static void storeCommandInScript(char *cmd, char *line)
 			fputs(line, fo);
 			fputs("\n", fo);
 		}
+		fsync(fileno(fo));
 		fclose(fo);
 
 		if (rename(tmppath, path) != 0) {
@@ -711,8 +712,10 @@ static void storeCommandInScript(char *cmd, char *line)
 
  end:
 	wfree(path);
-	if (f)
+	if (f) {
+		fsync(fileno(f));	/* this may be rw */
 		fclose(f);
+	}
 }
 
 static void storeData(_Panel * panel)

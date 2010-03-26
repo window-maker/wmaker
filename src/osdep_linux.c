@@ -13,6 +13,10 @@
 
 #include "wconfig.h"
 
+#define	RETRY( x )	do {				\
+				x;			\
+			} while (errno == EINTR);
+
 /*
  * copy argc and argv for an existing process identified by `pid'
  * into suitable storage given in ***argv and *argc.
@@ -34,6 +38,8 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 	/* cmdline is a flattened series of null-terminated strings */
 	snprintf(buf, sizeof(buf), "/proc/%d/cmdline", pid);
 	while (1) {
+		/* not switching this to stdio yet, as this does not need
+		 * to be portable, and i'm lazy */
 		if ((fd = open(buf, O_RDONLY)) != -1)
 			break;
 		if (errno == EINTR)
@@ -46,12 +52,10 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 			break;
 		if (errno == EINTR)
 			continue;
+		RETRY( close(fd) )
 		return False;
 	}
-
-	do {
-		close(fd);
-	} while (errno == EINTR);
+	RETRY( close(fd) )
 
 	/* count args */
 	for (i = 0; i < count; i++)

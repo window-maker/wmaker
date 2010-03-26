@@ -25,6 +25,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <errno.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -36,6 +37,10 @@
 #include <assert.h>
 #include <libgen.h>
 #include <WINGs/WUtil.h>
+
+#define	RETRY( x )	do {				\
+				x;			\
+			} while (errno == EINTR);
 
 #ifndef PATH_MAX
 #define PATH_MAX  1024
@@ -162,16 +167,20 @@ static Bool isFontOption(char *option)
 }
 
 /*
+ * copy a file specified by `file' into `directory'. name stays.
+ */
+/*
  * it is more or less assumed that this function will only
  * copy reasonably-sized files
  */
+/* XXX: is almost like WINGs/wcolodpanel.c:fetchFile() */
 void copyFile(char *dir, char *file)
 {
-	int from_fd, to_fd;
-	size_t block, len;
+	FILE *src, *dst;
+	size_t nread, nwritten, len;
 	char buf[4096];
 	struct stat st;
-	char *dst;
+	char *dstpath;
 
 	/* only to a directory */
 	if (stat(dir, &st) != 0 || !S_ISDIR(st.st_mode))
@@ -181,28 +190,44 @@ void copyFile(char *dir, char *file)
 		return;
 
 	len = strlen(dir) + 1 /* / */ + strlen(file) + 1 /* '\0' */;
-	dst = wmalloc(len);
-	snprintf(dst, len, "%s/%s", dir, basename(file));
+	dstpath = wmalloc(len);
+	snprintf(dstpath, len, "%s/%s", dir, basename(file));
 	buf[len] = '\0';
 
-	if ((to_fd = open(dst, O_RDWR|O_CREAT|O_TRUNC, S_IRUSR|S_IWUSR|S_IRGRP|S_IROTH)) == -1) {
-		wfree(dst);
-		return;
-	}
-	wfree(dst);
-	if ((from_fd = open(file, O_RDONLY)) == -1) {
-		(void)close(to_fd);
-		return;
+	RETRY( dst = fopen(dstpath, "wb") )
+	if (dst == NULL) {
+		wsyserror(_("Could not create %s"), dstpath);
+		goto err;
 	}
 
-	/* XXX: signal handling */
-	while ((block = read(from_fd, &buf, sizeof(buf))) > 0)
-		write(to_fd, &buf, block);
+	RETRY( src = fopen(file, "rb") )
+	if (src == NULL) {
+		wsyserror(_("Could not open %s"), file);
+		goto err;
+	}
 
-	(void)fsync(to_fd);
-	(void)fchmod(to_fd, st.st_mode);
-	(void)close(to_fd);
-	(void)close(from_fd);
+	do {
+		RETRY( nread = fread(buf, 1, sizeof(buf), src) )
+		if (ferror(src))
+			break;
+
+		RETRY( nwritten = fwrite(buf, 1, nread, dst) )
+		if (ferror(dst) || feof(src))
+			break;
+
+	} while (1);
+
+	if (ferror(src) || ferror(dst))
+		unlink(dstpath);
+
+	fchmod(fileno(dst), st.st_mode);
+	fsync(fileno(dst));
+	RETRY( fclose(dst) )
+
+err:
+	RETRY( fclose(src) )
+	wfree(dstpath);
+	return;
 }
 
 void findCopyFile(char *dir, char *file)

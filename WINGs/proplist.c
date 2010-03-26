@@ -1603,6 +1603,7 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path)
 
 	wfree(desc);
 
+	(void)fsync(fileno(theFile));
 	if (fclose(theFile) != 0) {
 		wsyserror(_("fclose (%s) failed"), thePath);
 		goto failure;

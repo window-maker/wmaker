@@ -21,6 +21,7 @@
 
 #include <config.h>
 
+#include <errno.h>
 #include <X11/Xlib.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -37,10 +38,9 @@
 
 #include "wraster.h"
 
-/* Silly hack for Windows systems with cygwin */
-#ifndef O_BINARY
-# define O_BINARY 0
-#endif
+#define	RETRY( x )	do {				\
+				x;			\
+			} while (errno == EINTR);
 
 typedef struct RCachedImage {
 	RImage *image;
@@ -299,22 +299,25 @@ char *RGetImageFileFormat(char *file)
 
 static int identFile(char *path)
 {
-	int fd;
+	FILE *file;
 	unsigned char buffer[32];
+	size_t nread;
 
 	assert(path != NULL);
 
-	fd = open(path, O_RDONLY | O_BINARY);
-	if (fd < 0) {
+	RETRY( file = fopen(path, "rb") )
+	if (file == NULL) {
 		RErrorCode = RERR_OPEN;
 		return IM_ERROR;
 	}
-	if (read(fd, buffer, 32) < 1) {
-		close(fd);
+
+	RETRY( nread = fread(buffer, 1, sizeof(buffer), file) )
+	if (nread < sizeof(buffer) || ferror(file)) {
+		RETRY( fclose(file) )
 		RErrorCode = RERR_READ;
 		return IM_ERROR;
 	}
-	close(fd);
+	RETRY( fclose(file) )
 
 	/* check for XPM */
 	if (strncmp((char *)buffer, "/* XPM */", 9) == 0)

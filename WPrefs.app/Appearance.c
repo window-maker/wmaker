@@ -402,6 +402,7 @@ static void dumpRImage(char *path, RImage * image)
 
 	fwrite(image->data, 1, image->width * image->height * channels, f);
 
+	fsync(fileno(f));
 	if (fclose(f) < 0) {
 		wsyserror(path);
 	}

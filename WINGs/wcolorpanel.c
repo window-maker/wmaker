@@ -26,6 +26,8 @@
 #include "wconfig.h"
 #include "WINGsP.h"
 #include "rgb.h"
+
+#include <errno.h>
 #include <math.h>
 #include <unistd.h>
 #include <ctype.h>
@@ -33,7 +35,10 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <dirent.h>
-#include <errno.h>
+
+#define	RETRY( x )	do {				\
+				x;			\
+			} while (errno == EINTR);
 
 /* BUG There's something fishy with shaped windows */
 /* Whithout shape extension the magnified image is completely broken -Dan */
@@ -268,11 +273,6 @@ enum {
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
-#endif
-
-/* Silly hack for Windows systems with cygwin */
-#ifndef O_BINARY
-# define O_BINARY 0
 #endif
 
 static int fetchFile(char *toPath, char *imageSrcFile, char *imageDestFileName);
@@ -3343,35 +3343,45 @@ static void hsbInit(W_ColorPanel * panel)
 
 static int fetchFile(char *toPath, char *srcFile, char *destFile)
 {
-	int src, dest;
-	int n;
-	char *tmp;
+	FILE *src, *dst;
+	size_t nread, nwritten;
+	char *dstpath;
 	char buf[BUFSIZE];
 
-	if ((src = open(srcFile, O_RDONLY | O_BINARY)) == 0) {
+	RETRY( src = fopen(srcFile, "rb") )
+	if (src == NULL) {
 		wsyserror(_("Could not open %s"), srcFile);
 		return -1;
 	}
 
-	tmp = wstrconcat(toPath, destFile);
-	if ((dest = open(tmp, O_RDWR | O_CREAT | O_BINARY, S_IRUSR | S_IWUSR | S_IRGRP | S_IROTH))
-	    == 0) {
-		wsyserror(_("Could not create %s"), tmp);
-		wfree(tmp);
+	dstpath = wstrconcat(toPath, destFile);
+	RETRY( dst = fopen(dstpath, "wb") )
+	if (dst == NULL) {
+		wsyserror(_("Could not create %s"), dstpath);
+		wfree(dstpath);
+		RETRY( fclose(src) )
 		return -1;
 	}
-	wfree(tmp);
 
-	/* Copy the file */
-	while ((n = read(src, buf, BUFSIZE)) > 0) {
-		if (write(dest, buf, n) != n) {
-			wsyserror(_("Write error on file %s"), destFile);
-			return -1;
-		}
-	}
+	do {
+		RETRY( nread = fread(buf, 1, sizeof(buf), src) )
+		if (ferror(src))
+			break;
 
-	close(src);
-	close(dest);
+		RETRY( nwritten = fwrite(buf, 1, nread, dst) )
+		if (ferror(dst) || feof(src))
+			break;
+
+	} while (1);
+
+	if (ferror(src) || ferror(dst))
+		unlink(dstpath);
+
+	RETRY( fclose(src) )
+	fsync(fileno(dst));
+	RETRY( fclose(dst) )
+
+	wfree(dstpath);
 	return 0;
 }
 
