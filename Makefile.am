@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = wrlib WINGs src util po WindowMaker WPrefs.app doc
+SUBDIRS = wrlib WINGs src util po WindowMaker WPrefs.app doc test/cairo
 
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N FAQ.I18N.cs FAQ.I18N.sk \
 	INSTALL-WMAKER INSTALL-WMAKER.cs INSTALL-WMAKER.fr INSTALL-WMAKER.es \

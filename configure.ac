@@ -878,7 +878,8 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile \
 	WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile \
 	WindowMaker/Styles/Makefile WindowMaker/Themes/Makefile \
 	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
-	WPrefs.app/po/Makefile )
+	WPrefs.app/po/Makefile \
+	test/cairo/Makefile )
 
 
 
