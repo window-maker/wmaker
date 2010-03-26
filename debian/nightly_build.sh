@@ -8,7 +8,7 @@ CHANGELOG="Automatic build from the GIT on `date`"
 BUILDLOG="${HOME}/log/wmaker-testing-nightly.log"
 
 STATUSCMD="git log -1 --pretty=oneline"
-PULLCMD="git pull"
+PULLCMD="git pull --rebase"
 if [ -n "${WMAKER_DISTRO}" ]; then
   case ${WMAKER_DISTRO} in
     unstable)
