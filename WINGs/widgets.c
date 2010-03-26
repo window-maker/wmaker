@@ -730,97 +730,93 @@ WMScreen *WMCreateScreen(Display * display, int screen)
 	/* create input method stuff */
 	W_InitIM(scrPtr);
 
-	scrPtr->checkButtonImageOn = makeImage(scrPtr, CHECK_BUTTON_ON,
-			CHECK_BUTTON_ON_WIDTH,
-			CHECK_BUTTON_ON_HEIGHT, False);
+//XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
+//FIXME
+//makeImage seems to cause apps to segfault if I uncomment the lines below.
+//I think it is because the data are allocated on the stack and it gets blown
+//I have traced the segfault to cairo_image_surface_create which works when
+//stuff gets allocated on the heap
+//
+//
+//	scrPtr->checkButtonImageOn = makeImage(scrPtr, CHECK_BUTTON_ON,
+//			CHECK_BUTTON_ON_WIDTH,
+//			CHECK_BUTTON_ON_HEIGHT, False);
+//
+//	scrPtr->checkButtonImageOff = makeImage(scrPtr, CHECK_BUTTON_OFF,
+//			CHECK_BUTTON_OFF_WIDTH,
+//			CHECK_BUTTON_OFF_HEIGHT, False);
 
-	scrPtr->checkButtonImageOff = makeImage(scrPtr, CHECK_BUTTON_OFF,
-			CHECK_BUTTON_OFF_WIDTH,
-			CHECK_BUTTON_OFF_HEIGHT, False);
-
-	scrPtr->radioButtonImageOn = makeImage(scrPtr, RADIO_BUTTON_ON,
-			RADIO_BUTTON_ON_WIDTH,
-			RADIO_BUTTON_ON_HEIGHT, False);
-
-	scrPtr->radioButtonImageOff = makeImage(scrPtr, RADIO_BUTTON_OFF,
-			RADIO_BUTTON_OFF_WIDTH,
-			RADIO_BUTTON_OFF_HEIGHT, False);
-
-	scrPtr->buttonArrow = makeImage(scrPtr, BUTTON_ARROW,
-			BUTTON_ARROW_WIDTH, BUTTON_ARROW_HEIGHT,
-			False);
-
-	scrPtr->pushedButtonArrow = makeImage(scrPtr, BUTTON_ARROW2,
-			BUTTON_ARROW2_WIDTH, BUTTON_ARROW2_HEIGHT,
-			False);
-
-
-	scrPtr->scrollerDimple = makeImage(scrPtr, SCROLLER_DIMPLE,
-			SCROLLER_DIMPLE_WIDTH,
-			SCROLLER_DIMPLE_HEIGHT, False);
-
-
-	scrPtr->upArrow = makeImage(scrPtr, SCROLLER_ARROW_UP,
-			SCROLLER_ARROW_UP_WIDTH,
-			SCROLLER_ARROW_UP_HEIGHT, True);
-
-	scrPtr->downArrow = makeImage(scrPtr, SCROLLER_ARROW_DOWN,
-			SCROLLER_ARROW_DOWN_WIDTH,
-			SCROLLER_ARROW_DOWN_HEIGHT, True);
-
-	scrPtr->leftArrow = makeImage(scrPtr, SCROLLER_ARROW_LEFT,
-			SCROLLER_ARROW_LEFT_WIDTH,
-			SCROLLER_ARROW_LEFT_HEIGHT, True);
-
-	scrPtr->rightArrow = makeImage(scrPtr, SCROLLER_ARROW_RIGHT,
-			SCROLLER_ARROW_RIGHT_WIDTH,
-			SCROLLER_ARROW_RIGHT_HEIGHT, True);
-
-	scrPtr->hiUpArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_UP,
-			SCROLLER_ARROW_UP_WIDTH,
-			SCROLLER_ARROW_UP_HEIGHT, True);
-
-	scrPtr->hiDownArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_DOWN,
-			SCROLLER_ARROW_DOWN_WIDTH,
-			SCROLLER_ARROW_DOWN_HEIGHT, True);
-
-	scrPtr->hiLeftArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_LEFT,
-			SCROLLER_ARROW_LEFT_WIDTH,
-			SCROLLER_ARROW_LEFT_HEIGHT, True);
-
-	scrPtr->hiRightArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_RIGHT,
-			SCROLLER_ARROW_RIGHT_WIDTH,
-			SCROLLER_ARROW_RIGHT_HEIGHT, True);
-
-	scrPtr->popUpIndicator = makeImage(scrPtr, POPUP_INDICATOR,
-			POPUP_INDICATOR_WIDTH,
-			POPUP_INDICATOR_HEIGHT, True);
-
-	scrPtr->pullDownIndicator = makeImage(scrPtr, PULLDOWN_INDICATOR,
-			PULLDOWN_INDICATOR_WIDTH,
-			PULLDOWN_INDICATOR_HEIGHT, True);
-
-	scrPtr->checkMark = makeImage(scrPtr, CHECK_MARK,
-			CHECK_MARK_WIDTH,
-			CHECK_MARK_HEIGHT, True);
-
-	loadPixmaps(scrPtr);
+//	scrPtr->radioButtonImageOn = makeImage(scrPtr, RADIO_BUTTON_ON,
+//			RADIO_BUTTON_ON_WIDTH,
+//			RADIO_BUTTON_ON_HEIGHT, False);
+//
+//	scrPtr->radioButtonImageOff = makeImage(scrPtr, RADIO_BUTTON_OFF,
+//			RADIO_BUTTON_OFF_WIDTH,
+//			RADIO_BUTTON_OFF_HEIGHT, False);
+//
+//	scrPtr->buttonArrow = makeImage(scrPtr, BUTTON_ARROW,
+//			BUTTON_ARROW_WIDTH, BUTTON_ARROW_HEIGHT,
+//			False);
+//
+//	scrPtr->pushedButtonArrow = makeImage(scrPtr, BUTTON_ARROW2,
+//			BUTTON_ARROW2_WIDTH, BUTTON_ARROW2_HEIGHT,
+//			False);
+//
+//
+//	scrPtr->scrollerDimple = makeImage(scrPtr, SCROLLER_DIMPLE,
+//			SCROLLER_DIMPLE_WIDTH,
+//			SCROLLER_DIMPLE_HEIGHT, False);
+//
+//
+//	scrPtr->upArrow = makeImage(scrPtr, SCROLLER_ARROW_UP,
+//			SCROLLER_ARROW_UP_WIDTH,
+//			SCROLLER_ARROW_UP_HEIGHT, True);
+//
+//	scrPtr->downArrow = makeImage(scrPtr, SCROLLER_ARROW_DOWN,
+//			SCROLLER_ARROW_DOWN_WIDTH,
+//			SCROLLER_ARROW_DOWN_HEIGHT, True);
+//
+//	scrPtr->leftArrow = makeImage(scrPtr, SCROLLER_ARROW_LEFT,
+//			SCROLLER_ARROW_LEFT_WIDTH,
+//			SCROLLER_ARROW_LEFT_HEIGHT, True);
+//
+//	scrPtr->rightArrow = makeImage(scrPtr, SCROLLER_ARROW_RIGHT,
+//			SCROLLER_ARROW_RIGHT_WIDTH,
+//			SCROLLER_ARROW_RIGHT_HEIGHT, True);
+//
+//	scrPtr->hiUpArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_UP,
+//			SCROLLER_ARROW_UP_WIDTH,
+//			SCROLLER_ARROW_UP_HEIGHT, True);
+//
+//	scrPtr->hiDownArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_DOWN,
+//			SCROLLER_ARROW_DOWN_WIDTH,
+//			SCROLLER_ARROW_DOWN_HEIGHT, True);
+//
+//	scrPtr->hiLeftArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_LEFT,
+//			SCROLLER_ARROW_LEFT_WIDTH,
+//			SCROLLER_ARROW_LEFT_HEIGHT, True);
+//
+//	scrPtr->hiRightArrow = makeImage(scrPtr, HI_SCROLLER_ARROW_RIGHT,
+//			SCROLLER_ARROW_RIGHT_WIDTH,
+//			SCROLLER_ARROW_RIGHT_HEIGHT, True);
+//
+//	scrPtr->popUpIndicator = makeImage(scrPtr, POPUP_INDICATOR,
+//			POPUP_INDICATOR_WIDTH,
+//			POPUP_INDICATOR_HEIGHT, True);
+//
+//	scrPtr->pullDownIndicator = makeImage(scrPtr, PULLDOWN_INDICATOR,
+//			PULLDOWN_INDICATOR_WIDTH,
+//			PULLDOWN_INDICATOR_HEIGHT, True);
+//
+//	scrPtr->checkMark = makeImage(scrPtr, CHECK_MARK,
+//			CHECK_MARK_WIDTH,
+//			CHECK_MARK_HEIGHT, True);
+//
+//	loadPixmaps(scrPtr);
 
 	scrPtr->defaultCursor = XCreateFontCursor(display, XC_left_ptr);
 
 	scrPtr->textCursor = XCreateFontCursor(display, XC_xterm);
-
-	{
-		XColor bla;
-		Pixmap blank;
-
-		blank = XCreatePixmap(display, scrPtr->stipple, 1, 1, 1);
-		XSetForeground(display, scrPtr->monoGC, 0);
-		XFillRectangle(display, blank, scrPtr->monoGC, 0, 0, 1, 1);
-
-		scrPtr->invisibleCursor = XCreatePixmapCursor(display, blank, blank, &bla, &bla, 0, 0);
-		XFreePixmap(display, blank);
-	}
 
 #ifdef HAVE_XINTERNATOMS
 	XInternAtoms(display, atomNames, sizeof(atomNames) / sizeof(char *), False, atoms);
