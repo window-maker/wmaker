@@ -2302,10 +2302,10 @@ void wWindowConfigureBorders(WWindow *wwin)
 
 void wWindowSaveState(WWindow * wwin)
 {
-	CARD32 data[10];
+	long data[10];
 	int i;
 
-	memset(data, 0, sizeof(CARD32) * 10);
+	memset(data, 0, sizeof(long) * 10);
 	data[0] = wwin->frame->workspace;
 	data[1] = wwin->flags.miniaturized;
 	data[2] = wwin->flags.shaded;

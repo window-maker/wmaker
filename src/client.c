@@ -105,7 +105,7 @@ void wClientRestore(WWindow * wwin)
  */
 void wClientSetState(WWindow * wwin, int state, Window icon_win)
 {
-	CARD32 data[2];
+	long data[2];
 
 	wwin->state = state;
 
