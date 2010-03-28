@@ -783,25 +783,11 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 									   instance, class);
 			}
 			fPtr->retainCount++;
-#undef method2
 			if (fPtr->origLeader == None) {
-#ifdef method2
-				if (ADEQUATE(wwin->group_id)) {
-					fPtr->retainCount++;
-					fPtr->origLeader = wwin->group_id;
-				} else if (ADEQUATE(wwin->client_leader)) {
-					fPtr->retainCount++;
-					fPtr->origLeader = wwin->client_leader;
-				} else if (ADEQUATE(wwin->main_window)) {
-					fPtr->retainCount++;
-					fPtr->origLeader = wwin->main_window;
-				}
-#else
 				if (ADEQUATE(wwin->main_window)) {
 					fPtr->retainCount++;
 					fPtr->origLeader = wwin->main_window;
 				}
-#endif
 			}
 			wwin->fake_group = fPtr;
 			/*wwin->group_id = fPtr->leader; */
@@ -817,23 +803,10 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 			WMAddToArray(scr->fakeGroupLeaders, fPtr);
 
-#ifdef method2
-			if (ADEQUATE(wwin->group_id)) {
-				fPtr->retainCount++;
-				fPtr->origLeader = wwin->group_id;
-			} else if (ADEQUATE(wwin->client_leader)) {
-				fPtr->retainCount++;
-				fPtr->origLeader = wwin->client_leader;
-			} else if (ADEQUATE(wwin->main_window)) {
-				fPtr->retainCount++;
-				fPtr->origLeader = wwin->main_window;
-			}
-#else
 			if (ADEQUATE(wwin->main_window)) {
 				fPtr->retainCount++;
 				fPtr->origLeader = wwin->main_window;
 			}
-#endif
 			wwin->fake_group = fPtr;
 			/*wwin->group_id = fPtr->leader; */
 			wwin->main_window = fPtr->leader;
@@ -842,8 +815,6 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			XFree(instance);
 		if (class)
 			XFree(class);
-
-#undef method2
 #undef ADEQUATE
 	}
 
@@ -1061,17 +1032,6 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			 * OverrideRedirect, which means we can't do anything about
 			 * them. -alfredo
 			 */
-#if 0
-			printf("xinerama PPosition: x: %d %d\n", x, (scr->scr_width - width) / 2);
-			printf("xinerama PPosition: y: %d %d\n", y, (scr->scr_height - height) / 2);
-
-			if ((unsigned)(x + (width - scr->scr_width) / 2 + 10) < 20 &&
-			    (unsigned)(y + (height - scr->scr_height) / 2 + 10) < 20) {
-
-				reposition = 1;
-
-			} else
-#endif
 			{
 				/*
 				 * xinerama checks for: across head and dead space
