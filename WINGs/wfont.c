@@ -290,7 +290,7 @@ WMFont *WMBoldSystemFontOfSize(WMScreen * scrPtr, int size)
 	return font;
 }
 
-int WMWidthOfString(WMFont *font, char *text)
+int WMWidthOfString(WMFont *font, const char *text)
 {
 	cairo_text_extents_t extents;
 

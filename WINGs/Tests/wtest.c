@@ -253,6 +253,7 @@ void testList(WMScreen * scr)
 	WMMapSubwidgets(win);
 	WMMapWidget(win);
 }
+#endif
 
 void testButton(WMScreen * scr)
 {
@@ -289,7 +290,6 @@ void testButton(WMScreen * scr)
 	WMMapSubwidgets(win);
 	WMMapWidget(win);
 }
-#endif
 
 #ifdef obsolete
 void testGradientButtons(WMScreen * scr)
@@ -540,7 +540,7 @@ void testStuff(WMScreen *scr)
 	button= WMCreateCommandButton(win);
 	WMSetButtonText(button, "OK");
 	WMResizeWidget(button, 80, 24);
-	WMMoveWidget(button, 400-80-12, 300-24-12);
+	WMMoveWidget(button, 400-80-12, 200-24-12);
 
 	button= WMCreateCommandButton(win);
 	WMSetButtonText(button, "Cancel");
@@ -1008,6 +1008,7 @@ int main(int argc, char **argv)
 	 * Put the testSomething() function you want to test here.
 	 */
 	testStuff(scr);
+	testButton(scr);
 
 #if 0
 	testText(scr);

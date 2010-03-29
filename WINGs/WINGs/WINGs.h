@@ -866,7 +866,7 @@ WMColorSpec WMDarkGrayColorSpec();
 void WMDrawString(cairo_t *cairo, WMColorSpec *color, WMFont *font,
                   int x, int y, char *text);
 
-int WMWidthOfString(WMFont *font, char *text);
+int WMWidthOfString(WMFont *font, const char *text);
 
 
 

@@ -497,7 +497,7 @@ static void paintButton(Button * bPtr)
 				caption = bPtr->altCaption;
 			if (bPtr->altImage)
 				image = bPtr->altImage;
-			textColor = bPtr->altTextColor;
+				textColor = bPtr->altTextColor;
 		}
 
 		if (bPtr->flags.statePush && bPtr->flags.bordered) {
@@ -521,7 +521,7 @@ static void paintButton(Button * bPtr)
 				caption = bPtr->altCaption;
 			if (bPtr->altImage)
 				image = bPtr->altImage;
-			textColor = bPtr->altTextColor;
+				textColor = bPtr->altTextColor;
 		}
 	}
 

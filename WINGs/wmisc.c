@@ -331,14 +331,15 @@ void W_PaintText(cairo_t *cairo, WMFont *font,  int x, int y,
 	int count;
 	int fheight = WMFontHeight(font);
 
-	line_x= x + (width - WMWidthOfString(font, ptr))/2;
-	WMDrawString(cairo, color, font, line_x, y, ptr);
-	return;
+	//line_x= x + (width - WMWidthOfString(font, ptr))/2;
+	//WMDrawString(cairo, color, font, line_x, y, ptr);
+	//return;
 
 	while (length > 0) {
 		count = fitText(ptr, font, width, wrap);
 
-		//XXX        line_width = WMWidthOfString(font, ptr, count);
+		line_width = WMWidthOfString(font, text);
+
 		if (alignment == WALeft)
 			line_x = x;
 		else if (alignment == WARight)
