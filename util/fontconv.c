@@ -37,7 +37,7 @@ static str *getXLFDTokens(char *xlfd)
 	int i, len, size;
 	char *ptr;
 
-	if (!xlfd || *xlfd != '-' || countChar(xlfd, '-') < XLFD_TOKENS)
+	if (!xlfd || *xlfd != '-' || countChar(xlfd, '-') != XLFD_TOKENS)
 		return NULL;
 
 	memset(tokens, 0, sizeof(str) * XLFD_TOKENS);
