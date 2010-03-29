@@ -330,7 +330,7 @@ static int identFile(char *path)
 
 #ifdef USE_PNG
 	/* check for PNG */
-	if (png_check_sig(buffer, 8))
+	if (!png_sig_cmp(buffer, 0, 8))
 		return IM_PNG;
 #endif
 
