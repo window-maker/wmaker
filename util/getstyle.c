@@ -22,20 +22,25 @@
 
 #define PROG_VERSION "getstyle (Window Maker) 0.6"
 
+#ifdef __GLIBC__
+#define _GNU_SOURCE		/* getopt_long */
+#endif
+
 #include <sys/types.h>
 #include <sys/stat.h>
 
+#include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
-#include <stdlib.h>
+#include <getopt.h>
+#include <libgen.h>
+#include <limits.h>
+#include <pwd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include <string.h>
-#include <pwd.h>
-#include <limits.h>
-#include <assert.h>
-#include <libgen.h>
+
 #include <WINGs/WUtil.h>
 
 #define	RETRY( x )	do {				\
@@ -132,15 +137,18 @@ char *ThemePath = NULL;
 
 extern char *convertFont(char *font, Bool keepXLFD);
 
-void print_help()
+void print_help(int print_usage, int exitval)
 {
-	printf("Usage: %s [OPTIONS] [FILE]\n", __progname);
-	puts("Retrieves style/theme configuration and output to FILE or to stdout");
-	puts("");
-	puts("  -t, --theme-options     output theme related options when producing a style file");
-	puts("  -p, --pack              produce output as a theme pack");
-	puts("  -h, --help              display this help and exit");
-	puts("  -v, --version           output version information and exit");
+	printf("Usage: %s [-t] [-p] [-h] [-v] [file]\n", __progname);
+	if (print_usage) {
+		puts("Retrieves style/theme configuration and output to FILE or to stdout");
+		puts("");
+		puts("  -h, --help           display this help and exit");
+		puts("  -v, --version        output version information and exit");
+		puts("  -t, --theme-options  output theme related options when producing a style file");
+		puts("  -p, --pack           produce output as a theme pack");
+	}
+	exit(exitval);
 }
 
 void abortar(char *reason)
@@ -342,44 +350,55 @@ int main(int argc, char **argv)
 {
 	WMPropList *prop, *style, *key, *val;
 	char *path, *p;
-	int i, theme_too = 0, make_pack = 0;
+	int i, ch, theme_too = 0, make_pack = 0;
 	char *style_file = NULL;
 
-	if (argc > 1) {
-		for (i = 1; i < argc; i++) {
-			if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--pack") == 0) {
+	struct option longopts[] = {
+		{ "pack",		no_argument,	NULL,	'p' },
+		{ "theme-options",	no_argument,	NULL,	't' },
+		{ "version",		no_argument,	NULL,	'v' },
+		{ "help",		no_argument,	NULL,	'h' },
+		{ NULL,			0,		NULL,	0 }
+	};
+
+	while ((ch = getopt_long(argc, argv, "ptvh", longopts, NULL)) != -1)
+		switch(ch) {
+			case 'v':
+				puts(PROG_VERSION);
+				return 0;
+				/* NOTREACHED */
+			case 'h':
+				print_help(1, 0);
+				/* NOTREACHED */
+			case 'p':
 				make_pack = 1;
 				theme_too = 1;
-			} else if (strcmp(argv[i], "-t") == 0 || strcmp(argv[i], "--theme-options") == 0) {
+				break;
+			case 't':
 				theme_too = 1;
-			} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-				print_help();
-				exit(0);
-			} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
-				puts(PROG_VERSION);
-				exit(0);
-			} else {
-				if (style_file != NULL) {
-					printf("%s: invalid argument '%s'\n", __progname,
-					       style_file[0] == '-' ? style_file : argv[i]);
-					printf("Try '%s --help' for more information\n", __progname);
-					exit(1);
-				}
-				style_file = argv[i];
-				while ((p = strchr(style_file, '/')) != NULL)
-					*p = '_';
-			}
+			case 0:
+				break;
+			default:
+				print_help(0, 1);
+				/* NOTREACHED */
 		}
-	}
 
-	if (style_file && !make_pack) {
-		print_help();
-		exit(1);
-	}
+	argc -= optind;
+	argv += optind;
+
+	if (argc != 1)
+		print_help(0, 1);
+
+	style_file = argv[0];
+	while ((p = strchr(style_file, '/')) != NULL)
+		*p = '_';
+
+	if (style_file && !make_pack)	/* what's this? */
+		print_help(0, 1);
 
 	if (make_pack && !style_file) {
 		printf("%s: you must supply a name for the theme pack\n", __progname);
-		exit(1);
+		return 1;
 	}
 
 	WMPLSetCaseSensitive(False);
@@ -389,7 +408,7 @@ int main(int argc, char **argv)
 	prop = WMReadPropListFromFile(path);
 	if (!prop) {
 		printf("%s: could not load WindowMaker configuration file \"%s\".\n", __progname, path);
-		exit(1);
+		return 1;
 	}
 
 	/* get global value */
@@ -459,5 +478,5 @@ int main(int argc, char **argv)
 			puts(WMGetPropListDescription(style, True));
 		}
 	}
-	exit(0);
+	return 0;
 }

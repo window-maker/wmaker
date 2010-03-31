@@ -22,11 +22,18 @@
 
 #define PROG_VERSION "convertfonts (Window Maker) 1.0"
 
-#include <stdlib.h>
-#include <stdio.h>
+#ifdef __GLIBC__
+#define _GNU_SOURCE		/* getopt_long */
+#endif
+
 #include <sys/stat.h>
-#include <string.h>
+
+#include <getopt.h>
 #include <locale.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include <WINGs/WUtil.h>
 
 #include "../src/wconfig.h"
@@ -48,73 +55,89 @@ extern char *__progname;
 
 extern char *convertFont(char *font, Bool keepXLFD);
 
-void print_help()
+void print_help(int print_usage, int exitval)
 {
-	printf("\nUsage: %s <style_file>\n\n", __progname);
-	puts("Converts fonts in a style file into fontconfig format");
-	puts("");
-	puts("  -h, --help     display this help and exit");
-	puts("  -v, --version  output version information and exit");
-	puts("  --keep-xlfd    preserve the original xlfd by appending a ':xlfd=<xlfd>' hint");
-	puts("                 to the font name. This property is not used by the fontconfig");
-	puts("                 matching engine to find the font, but it is useful as a hint");
-	puts("                 about what the original font was to allow hand tuning the");
-	puts("                 result or restoring the xlfd. The default is to not add it");
-	puts("                 as it results in long, unreadable and confusing names.");
-	puts("");
+	printf("Usage: %s [-h] [-v] [--keep-xlfd] <style_file>\n", __progname);
+	if (print_usage) {
+		puts("Converts fonts in a style file into fontconfig format");
+		puts("");
+		puts("  -h, --help     display this help and exit");
+		puts("  -v, --version  output version information and exit");
+		puts("  --keep-xlfd    preserve the original xlfd by appending a ':xlfd=<xlfd>' hint");
+		puts("                 to the font name. This property is not used by the fontconfig");
+		puts("                 matching engine to find the font, but it is useful as a hint");
+		puts("                 about what the original font was to allow hand tuning the");
+		puts("                 result or restoring the xlfd. The default is to not add it");
+		puts("                 as it results in long, unreadable and confusing names.");
+	}
+	exit(exitval);
 }
 
 int main(int argc, char **argv)
 {
 	WMPropList *style, *key, *val;
 	char *file = NULL, *oldfont, *newfont;
-	struct stat statbuf;
+	struct stat st;
 	Bool keepXLFD = False;
-	int i;
+	int i, ch;
 
-	if (argc < 2) {
-		print_help();
-		exit(0);
+	struct option longopts[] = {
+		{ "version",	no_argument,	NULL,		'v' },
+		{ "help",	no_argument,	NULL,		'h' },
+		{ "keep-xlfd",	no_argument,	&keepXLFD,	True },
+		{ NULL,		0,		NULL,		0 }
+	};
+
+	while ((ch = getopt_long(argc, argv, "hv", longopts, NULL)) != -1)
+		switch(ch) {
+			case 'v':
+				puts(PROG_VERSION);
+				return 0;
+				/* NOTREACHED */
+			case 'h':
+				print_help(1, 0);
+				/* NOTREACHED */
+			case 0:
+				break;
+			default:
+				print_help(0, 1);
+				/* NOTREACHED */
+		}
+
+	argc -= optind;
+	argv += optind;
+
+	if (argc != 1)
+		print_help(0, 1);
+
+	file = argv[0];
+
+	if (stat(file, &st) != 0) {
+		perror(file);
+		return 1;
 	}
 
-	for (i = 1; i < argc; i++) {
-		if (strcmp("-v", argv[i]) == 0 || strcmp("--version", argv[i]) == 0) {
-			puts(PROG_VERSION);
-			exit(0);
-		} else if (strcmp("-h", argv[i]) == 0 || strcmp("--help", argv[i]) == 0) {
-			print_help();
-			exit(0);
-		} else if (strcmp("--keep-xlfd", argv[i]) == 0) {
-			keepXLFD = True;;
-		} else if (argv[i][0] == '-') {
-			printf("%s: invalid argument '%s'\n", __progname, argv[i]);
-			printf("Try '%s --help' for more information\n", __progname);
-			exit(1);
-		} else {
-			file = argv[i];
-		}
+	if (!S_ISREG(st.st_mode)) {		/* maybe symlink too? */
+		fprintf(stderr, "%s: `%s' is not a regular file\n", __progname, file);
+		return 1;
 	}
 
 	/* we need this in order for MB_CUR_MAX to work */
+	/* this contradicts big time with getstyle */
 	setlocale(LC_ALL, "");
 
 	WMPLSetCaseSensitive(False);
 
-	if (stat(file, &statbuf) < 0) {
-		perror(file);
-		exit(1);
-	}
-
 	style = WMReadPropListFromFile(file);
 	if (!style) {
 		perror(file);
-		printf("%s: could not load style file.\n", __progname);
-		exit(1);
+		printf("%s: could not load style file\n", __progname);
+		return 1;
 	}
 
 	if (!WMIsPLDictionary(style)) {
 		printf("%s: '%s' is not a well formatted style file\n", __progname, file);
-		exit(1);
+		return 1;
 	}
 
 	for (i = 0; FontOptions[i] != NULL; i++) {
@@ -135,5 +158,5 @@ int main(int argc, char **argv)
 
 	WMWritePropListToFile(style, file);
 
-	exit(0);
+	return 0;
 }

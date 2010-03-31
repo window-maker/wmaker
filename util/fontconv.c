@@ -1,12 +1,31 @@
 
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include <WINGs/WUtil.h>
 
 #include "../src/wconfig.h"
 
 #define DEFAULT_FONT "sans serif:pixelsize=12"
+
+/* X Font Name Suffix field names */
+enum {
+	FOUNDRY,
+	FAMILY_NAME,
+	WEIGHT_NAME,
+	SLANT,
+	SETWIDTH_NAME,
+	ADD_STYLE_NAME,
+	PIXEL_SIZE,
+	POINT_SIZE,
+	RESOLUTION_X,
+	RESOLUTION_Y,
+	SPACING,
+	AVERAGE_WIDTH,
+	CHARSET_REGISTRY,
+	CHARSET_ENCODING
+};
 
 static int countChar(char *str, char c)
 {
@@ -26,7 +45,7 @@ static int countChar(char *str, char c)
 
 typedef struct str {
 	char *str;
-	int len;
+	size_t len;
 } str;
 
 #define XLFD_TOKENS 14
@@ -37,6 +56,7 @@ static str *getXLFDTokens(char *xlfd)
 	int i, len, size;
 	char *ptr;
 
+	/* XXX: why does this assume there can't ever be XFNextPrefix? */
 	if (!xlfd || *xlfd != '-' || countChar(xlfd, '-') != XLFD_TOKENS)
 		return NULL;
 
@@ -62,26 +82,25 @@ static str *getXLFDTokens(char *xlfd)
 
 static int strToInt(str * token)
 {
-	int res = 0, pos, c;
+	static char buf[32]; /* enough for an Incredibly Big Number */
 
-	if (token->len == 0 || token->str[0] == '*') {
+	if (token->len == 0 ||
+	    token->str[0] == '*' ||
+	    token->len >= sizeof(buf))
 		return -1;
-	} else {
-		for (res = 0, pos = 0; pos < token->len; pos++) {
-			c = token->str[pos] - '0';
-			if (c < 0 || c > 9)
-				break;
-			res = res * 10 + c;
-		}
-	}
-	return res;
+
+	memset(buf, 0, sizeof(buf));
+	strncpy(buf, token->str, token->len);
+
+	/* the code using this will gracefully handle overflows */
+	return (int)strtol(buf, NULL, 10);
 }
 
 static char *mapWeightToName(str * weight)
 {
 	char *normalNames[] = { "medium", "normal", "regular" };
 	static char buf[32];
-	int i;
+	size_t i;
 
 	if (weight->len == 0)
 		return "";
@@ -123,11 +142,11 @@ char *xlfdToFc(char *xlfd, char *useFamily, Bool keepXLFD)
 	if (!tokens)
 		return wstrdup(DEFAULT_FONT);
 
-	family = &(tokens[1]);
-	weight = &(tokens[2]);
-	slant = &(tokens[3]);
-	pixelsize = strToInt(&tokens[6]);
-	size = strToInt(&tokens[7]);
+	family = &(tokens[FAMILY_NAME]);
+	weight = &(tokens[WEIGHT_NAME]);
+	slant = &(tokens[SLANT]);
+	pixelsize = strToInt(&tokens[PIXEL_SIZE]);
+	size = strToInt(&tokens[POINT_SIZE]);
 
 	if (useFamily) {
 		name = wstrdup(useFamily);

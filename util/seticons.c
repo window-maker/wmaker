@@ -22,53 +22,67 @@
 
 #define PROG_VERSION "seticons (Window Maker) 0.1"
 
-#include <stdlib.h>
+#ifdef __GLIBC__
+#define _GNU_SOURCE		/* getopt_long */
+#endif
+
+#include <getopt.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+
 #include <WINGs/WUtil.h>
 
 #include "../src/wconfig.h"
 
 extern char *__progname;
 
-void print_help()
+void print_help(int print_usage, int exitval)
 {
-	printf("Usage: %s [OPTIONS] FILE\n", __progname);
-	puts("Reads icon configuration from FILE and updates Window Maker.");
-	puts("");
-	puts("  -h, --help      display this help and exit");
-	puts("  -v, --version   output version information and exit");
+	printf("Usage: %s [-h] [-v] [file]\n", __progname);
+	if (print_usage) {
+		puts("Reads icon configuration from FILE and updates Window Maker.");
+		puts("");
+		puts("  -h, --help     display this help and exit");
+		puts("  -v, --version  output version information and exit");
+	}
+	exit(exitval);
 }
 
 int main(int argc, char **argv)
 {
 	WMPropList *window_name, *icon_key, *window_attrs, *icon_value;
 	WMPropList *all_windows, *iconset, *keylist;
-	int i;
+	int i, ch;
 	char *path = NULL;
 
-	if (argc < 2) {
-		printf("%s: missing argument\n", __progname);
-		printf("Try '%s --help' for more information\n", __progname);
-		exit(1);
-	}
+	struct option longopts[] = {
+		{ "version",	no_argument,	NULL,		'v' },
+		{ "help",	no_argument,	NULL,		'h' },
+		{ NULL,		0,		NULL,		0 }
+	};
 
-	for (i = 1; i < argc; i++) {
-		if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
-			print_help();
-			exit(0);
-		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
-			puts(PROG_VERSION);
-			exit(0);
-		} else {
-			if (path) {
-				printf("%s: invalid argument '%s'\n", __progname, argv[i]);
-				printf("Try '%s --help' for more information\n", __progname);
-				exit(1);
-			}
-			path = argv[i];
+	while ((ch = getopt_long(argc, argv, "hv", longopts, NULL)) != -1)
+		switch(ch) {
+			case 'v':
+				puts(PROG_VERSION);
+				return 0;
+				/* NOTREACHED */
+			case 'h':
+				print_help(1, 0);
+				/* NOTREACHED */
+			case 0:
+				break;
+			default:
+				print_help(0, 1);
+				/* NOTREACHED */
 		}
-	}
+
+	argc -= optind;
+	argv += optind;
+
+	if (argc != 1)
+		print_help(0, 1);
 
 	path = wdefaultspathfordomain("WMWindowAttributes");
 
@@ -78,9 +92,9 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	iconset = WMReadPropListFromFile(argv[1]);
+	iconset = WMReadPropListFromFile(argv[0]);
 	if (!iconset) {
-		printf("%s: could not load icon set file \"%s\".\n", __progname, argv[1]);
+		printf("%s: could not load icon set file \"%s\".\n", __progname, argv[0]);
 		exit(1);
 	}
 
