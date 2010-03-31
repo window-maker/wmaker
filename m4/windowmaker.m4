@@ -44,8 +44,8 @@ AC_CACHE_VAL(ac_cv_lib_xft_version_ok,
 #if !defined(XFT_VERSION) || XFT_VERSION < $xft_major_version*10000 + $xft_minor_version*100 + $xft_micro_version
 #error libXft on this system is too old. Consider upgrading to at least $1
 #endif
-], [], 
-eval "ac_cv_lib_xft_version_ok=yes", 
+], [],
+eval "ac_cv_lib_xft_version_ok=yes",
 eval "ac_cv_lib_xft_version_ok=no")])
 if eval "test \"`echo '$ac_cv_lib_xft_version_ok'`\" = yes"; then
   AC_MSG_RESULT(yes)
@@ -56,4 +56,3 @@ else
 fi
 CPPFLAGS="$CPPFLAGS_old"
 ])
-

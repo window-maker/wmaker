@@ -35,8 +35,8 @@ fi
 
 echo "  libtoolize --copy --force --automake"
 libtoolize --copy --force --automake
-echo "  aclocal -I . $ACLOCAL_FLAGS"
-aclocal -I . $ACLOCAL_FLAGS
+echo "  aclocal -I m4 $ACLOCAL_FLAGS"
+aclocal -I m4 $ACLOCAL_FLAGS
 echo "  autoheader"
 autoheader
 echo "  automake --add-missing --gnu --include-deps"

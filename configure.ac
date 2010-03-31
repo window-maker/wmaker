@@ -37,6 +37,9 @@ dnl AC_PROG_INSTALL -- already done by AM_INIT_AUTOMAKE
 AC_PROG_LN_S
 AC_PROG_GCC_TRADITIONAL
 
+AX_CFLAGS_GCC_OPTION(-Wall)
+AX_CFLAGS_GCC_OPTION(-Wextra)
+
 dnl Platform-specific Makefile setup
 dnl ================================
 

@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+ACLOCAL_AMFLAGS = -I m4
+
 SUBDIRS = wrlib WINGs src util po WindowMaker WPrefs.app doc
 
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N FAQ.I18N.cs FAQ.I18N.sk \
