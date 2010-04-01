@@ -1,19 +1,25 @@
 /* Copyright (C) 2010 Carlos R. Mafra */
 
+#ifdef __GLIBC__
+#define _GNU_SOURCE		/* getopt_long */
+#endif
+
+#include <getopt.h>
+#include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <locale.h>
-
-#include "../src/wconfig.h"
 
 #include <WINGs/WUtil.h>
 
+#include "../src/wconfig.h"
+
 #define MAX_NR_APPS 50  /* Maximum number of entries in each apps list */
 #define MAX_WMS 10      /* Maximum number of other window managers to check */
+
 #include "wmgenmenu.h"
 
-static void find_and_write(char **list);
+static void find_and_write(char *group, char **list);
 static inline void workspaces(void);
 static inline void lock_screen(void);
 static inline void wmaker_config(void);
@@ -21,13 +27,43 @@ static inline void run_command(void);
 static void other_window_managers(char **other_wm);
 static inline void wm_visual(void);
 static inline void write_first_line(int count);
+static void print_help(int print_usage, int exitval);
+
+extern char *__progname;
 
 char *path;
+int first_group = 1;
 
 int main(int argc, char *argv[])
 {
 	char *locale;
-	extern char *path;
+	int ch;
+
+	struct option longopts[] = {
+		{ "version",		no_argument,	NULL,	'v' },
+		{ "help",		no_argument,	NULL,	'h' },
+		{ NULL,			0,		NULL,	0 }
+	};
+
+	while ((ch = getopt_long(argc, argv, "hv", longopts, NULL)) != -1)
+		switch (ch) {
+		case 'v':
+			printf("%s (Window Maker %s)\n", __progname, VERSION);
+			return 0;
+			/* NOTREACHED */
+		case 'h':
+			print_help(1, 0);
+			/* NOTREACHED */
+		default:
+			print_help(0, 1);
+			/* NOTREACHED */
+		}
+
+	argc -= optind;
+	argv += optind;
+
+	if (argc != 0)
+		print_help(0, 1);
 
 	path = getenv("PATH");
 	locale = getenv("LANG");
@@ -45,129 +81,38 @@ int main(int argc, char *argv[])
 
 	printf("\(\"Window Maker\",\n");
 
-	printf("     \(\"");
+	printf("  \(\"");
 	printf(_("Applications"));
 	printf("\",\n");
 
-	/* This "first" printf is different from the others! */
-	printf("     \(\"");
-	printf(_("Terminals"));
-	printf("\"");
-	find_and_write(terminals);
+	find_and_write(_("Terminals"), terminals);
+	find_and_write(_("Internet"), internet);
+	find_and_write(_("Email"), email);
+	find_and_write(_("Mathematics"), Mathematiks);
+	find_and_write(_("File Managers"), file_managers);
+	find_and_write(_("Graphics"), Graphics);
+	find_and_write(_("Multimedia"), Multimedia);
+	find_and_write(_("Editors"), Editors);
+	find_and_write(_("Development"), development);
+	find_and_write(_("Window Maker"), WindowMaker);
+	find_and_write(_("Office"), Office);
+	find_and_write(_("Astronomy"), Astronomie);
+	find_and_write(_("Sound"), Sound);
+	find_and_write(_("Comics"), Comics);
+	find_and_write(_("Viewers"), Viewers);
+	find_and_write(_("Utilities"), Utilities);
+	find_and_write(_("System"), System);
+	find_and_write(_("Video"), Video);
+	find_and_write(_("Chat and Talk"), Chat);
+	find_and_write(_("P2P-Network"), P2P);
+	find_and_write(_("Games"), Games);
+	find_and_write(_("OpenSUSE"), OpenSUSE);
+	find_and_write(_("Mandriva"), Mandriva);
 
-	printf("\n     ),\n     \(\"");
-	printf(_("Internet"));
-	printf("\"");
-	find_and_write(internet);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Email"));
-	printf("\"");
-	find_and_write(email);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Mathematics"));
-	printf("\"");
-	find_and_write(Mathematiks);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("File Managers"));
-	printf("\"");
-	find_and_write(file_managers);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Graphics"));
-	printf("\"");
-	find_and_write(Graphics);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Multimedia"));
-	printf("\"");
-	find_and_write(Multimedia);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Editors"));
-	printf("\"");
-	find_and_write(Editors);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Development"));
-	printf("\"");
-	find_and_write(development);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Window Maker"));
-	printf("\"");
-	find_and_write(WindowMaker);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Office"));
-	printf("\"");
-	find_and_write(Office);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Astronomy"));
-	printf("\"");
-	find_and_write(Astronomie);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Sound"));
-	printf("\"");
-	find_and_write(Sound);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Comics"));
-	printf("\"");
-	find_and_write(Comics);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Viewers"));
-	printf("\"");
-	find_and_write(Viewers);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Utilities"));
-	printf("\"");
-	find_and_write(Utilities);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("System"));
-	printf("\"");
-	find_and_write(System);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Video"));
-	printf("\"");
-	find_and_write(Video);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Chat and Talk"));
-	printf("\"");
-	find_and_write(Chat);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("P2P-Network"));
-	printf("\"");
-	find_and_write(P2P);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Games"));
-	printf("\"");
-	find_and_write(Games);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("OpenSUSE"));
-	printf("\"");
-	find_and_write(OpenSUSE);
-
-	printf("\n     ),\n     \(\"");
-	printf(_("Mandriva"));
-	printf("\"");
-	find_and_write(Mandriva);
 
 	/* This must be after the last entry */
 	printf("\n     )\n");
-	printf("     ),\n");
+	printf("  ),\n");
 
 	run_command();
 	wm_visual();
@@ -195,32 +140,51 @@ int main(int argc, char *argv[])
 	exit(EXIT_SUCCESS);
 }
 
-static void find_and_write(char **list)
+static void find_and_write(char *group, char **list)
 {
-	int i, argc;
+	int i, argc, found;
 	char *location, **argv;
 	extern char *path;
+	static char buf[2048];	/* any single group must fit in this; just increase if not enough */
+	static char buf2[512];	/* single items' holding cell */
 
-	for (i = 0; i <= MAX_NR_APPS; i++) {
-		if (list[i]) {
-			/* Before checking if app exists, split its options */
-			wtokensplit(list[i], &argv, &argc);
-			location = wfindfile(path, argv[0]);
-			if (location) {
-				/* check whether it is to be executed in a terminal */
-				if (strcmp("!", argv[argc - 1]) < 0)
-					printf(",\n       \(\"%s\", EXEC, \"%s\")", argv[0], list[i]);
-				else {
-					char comm[50], *ptr[1];
+	i = 0;
+	found = 0;
+	memset(buf, 0, sizeof(buf));
+	memset(buf2, 0, sizeof(buf2));
+	while (list[i]) {
+		/* Before checking if app exists, split its options */
+		wtokensplit(list[i], &argv, &argc);
+		location = wfindfile(path, argv[0]);
+		if (location) {
+			found = 1;
+			/* check whether it is to be executed in a terminal */
+			if (strcmp("!", argv[argc - 1]) < 0)
+				snprintf(buf2, sizeof(buf2), ",\n       \(\"%s\", EXEC, \"%s\")", argv[0], list[i]);
+			else {
+				char comm[50], *ptr;
 
-					strcpy(comm, list[i]);
-					/* ugly hack to delete character ! from list[i] */
-					ptr[0] = strchr(comm,'!');
-					*ptr[0] = ' ';
-					printf(",\n       \(\"%s\", EXEC, \"xterm -e %s\")", argv[0], comm);
-				}
+				strcpy(comm, list[i]);
+				/* ugly hack to delete character ! from list[i] */
+				ptr = strchr(comm, '!');
+				while (ptr >= comm && (*ptr == '!' || isspace(*ptr)))
+					*ptr-- = '\0';
+				snprintf(buf2, sizeof(buf2), ",\n       \(\"%s\", EXEC, \"xterm -e %s\")", argv[0], comm);
 			}
+			strncat(buf, buf2, sizeof(buf) - strlen(buf) - 1);
 		}
+	i++;
+	}
+	if (found) {
+		/* This "first" printf is different from the others! */
+		if (!first_group) {
+			printf("\n     ),\n");
+		} else {
+			first_group = 0;
+		}
+
+		printf("     \(\"%s\"", group);
+		printf("%s", buf);
 	}
 }
 
@@ -344,10 +308,6 @@ static void wm_visual(void)
 
 static inline void run_command(void)
 {
-	/*
-	 * %A below requires Voinov's "Add dialog history" (which
-	 * is included in wmaker-crm), otherwise it should be %a
-	 */
 	printf("\(\"");
 	printf(_("Run..."));
 	printf("\", SHEXEC, \"%%A(");
@@ -367,4 +327,16 @@ static inline void write_first_line(int count)
 	else {
 		printf(",\n (\"");
 	}
+}
+
+void print_help(int print_usage, int exitval)
+{
+	printf("Usage: %s [-h] [-v]\n", __progname);
+	if (print_usage) {
+		puts("Writes a menu structure usable as ~/GNUstep/Defaults/WMRootMenu to stdout");
+		puts("");
+		puts("  -h, --help           display this help and exit");
+		puts("  -v, --version        output version information and exit");
+	}
+	exit(exitval);
 }

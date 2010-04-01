@@ -6,7 +6,7 @@
  * "mutt !"
  */
 
-static char *terminals[MAX_NR_APPS] = {
+char *terminals[MAX_NR_APPS] = {
 	"mrxvt -rv -shade 00 -vb +sb +sm -tr -sl 2000 -trt -itabbg black -hb -tabfg yellow -fn 10x20 -cr yellow",
 	"xterm -bg black -fg white +sb +sm -fn 10x20 -sl 4000 -cr yellow",
 	"konsole"
