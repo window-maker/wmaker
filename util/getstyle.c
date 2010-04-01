@@ -29,7 +29,6 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#include <assert.h>
 #include <errno.h>
 #include <fcntl.h>
 #include <getopt.h>
@@ -286,12 +285,14 @@ void makeThemePack(WMPropList * style, char *themeName)
 			if (t == NULL)
 				continue;
 
-			if (strcasecmp(t, "tpixmap") == 0
-			    || strcasecmp(t, "spixmap") == 0
-			    || strcasecmp(t, "cpixmap") == 0
-			    || strcasecmp(t, "mpixmap") == 0
-			    || strcasecmp(t, "tdgradient") == 0
-			    || strcasecmp(t, "tvgradient") == 0 || strcasecmp(t, "thgradient") == 0) {
+			if (strcasecmp(t, "tpixmap") == 0 ||
+			    strcasecmp(t, "spixmap") == 0 ||
+			    strcasecmp(t, "cpixmap") == 0 ||
+			    strcasecmp(t, "mpixmap") == 0 ||
+			    strcasecmp(t, "tdgradient") == 0 ||
+			    strcasecmp(t, "tvgradient") == 0 ||
+			    strcasecmp(t, "thgradient") == 0) {
+
 				WMPropList *file;
 				char *p;
 				char *newPath;
@@ -310,6 +311,7 @@ void makeThemePack(WMPropList * style, char *themeName)
 					findCopyFile(themeDir, WMGetFromPLString(file));
 				}
 			} else if (strcasecmp(t, "bitmap") == 0) {
+
 				WMPropList *file;
 				char *p;
 				char *newPath;

@@ -22,68 +22,83 @@
 
 #define PROG_VERSION	"wdwrite (Window Maker) 0.2"
 
+#ifdef __GLIBC__
+#define _GNU_SOURCE		/* getopt_long */
+#endif
+
 /*
  * WindowMaker defaults DB writer
  */
 
-#include "../src/wconfig.h"
 
+#include <getopt.h>
+#include <limits.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdio.h>
 #include <unistd.h>
 
 #include <WINGs/WUtil.h>
 
-#include <pwd.h>
+#include "../src/wconfig.h"
 
 extern char *__progname;
 
-void wAbort()
+void print_help(int print_usage, int exitval)
 {
-	exit(0);
-}
-
-void print_help()
-{
-	printf("Usage: %s [OPTIONS] <domain> <option> <value>\n", __progname);
-	puts("");
-	puts("  -h, --help        display this help message");
-	puts("  -v, --version     output version information and exit");
-	exit(1);
+	printf("Usage: %s [OPTIONS] <domain> <key> <value>\n", __progname);
+	if (print_usage) {
+		puts("Write <value> for <key> in <domain>'s database");
+		puts("");
+		puts("  -h, --help        display this help message");
+		puts("  -v, --version     output version information and exit");
+	}
+	exit(exitval);
 }
 
 int main(int argc, char **argv)
 {
-	char path[256];
+	char path[PATH_MAX];
 	WMPropList *dom, *key, *value, *dict;
-	int i;
+	int ch;
 
-	for (i = 1; i < argc; i++) {
-		if (strcmp("-h", argv[i]) == 0 || strcmp("--help", argv[i]) == 0) {
-			print_help();
-			exit(0);
-		} else if (strcmp("-v", argv[i]) == 0 || strcmp("--version", argv[i]) == 0) {
-			puts(PROG_VERSION);
-			exit(0);
+	struct option longopts[] = {
+		{ "version",	no_argument,		NULL,			'v' },
+		{ "help",	no_argument,		NULL,			'h' },
+		{ NULL,		0,			NULL,			0 }
+	};
+
+	while ((ch = getopt_long(argc, argv, "hv", longopts, NULL)) != -1)
+		switch(ch) {
+			case 'v':
+				puts(PROG_VERSION);
+				return 0;
+				/* NOTREACHED */
+			case 'h':
+				print_help(1, 0);
+				/* NOTREACHED */
+			case 0:
+				break;
+			default:
+				print_help(0, 1);
+				/* NOTREACHED */
 		}
-	}
 
-	if (argc < 4) {
-		printf("%s: invalid argument format\n", __progname);
-		printf("Try '%s --help' for more information\n", __progname);
-		exit(1);
-	}
+	argc -= optind;
+	argv += optind;
 
-	dom = WMCreatePLString(argv[1]);
-	key = WMCreatePLString(argv[2]);
-	value = WMCreatePropListFromDescription(argv[3]);
+	if (argc != 3)
+		print_help(0, 1);
+
+	dom = WMCreatePLString(argv[0]);
+	key = WMCreatePLString(argv[1]);
+	value = WMCreatePropListFromDescription(argv[2]);
 	if (!value) {
-		printf("%s: syntax error in value \"%s\"", __progname, argv[3]);
-		exit(1);
+		printf("%s: syntax error in value \"%s\"", __progname, argv[2]);
+		return 1;
 	}
 
-	snprintf(path, sizeof(path), wdefaultspathfordomain(argv[1]));
+	snprintf(path, sizeof(path), "%s", wdefaultspathfordomain(argv[0]));
 
 	dict = WMReadPropListFromFile(path);
 	if (!dict) {

@@ -89,13 +89,13 @@ int main(int argc, char **argv)
 	all_windows = WMReadPropListFromFile(path);
 	if (!all_windows) {
 		printf("%s: could not load WindowMaker configuration file \"%s\".\n", __progname, path);
-		exit(1);
+		return 1;
 	}
 
 	iconset = WMReadPropListFromFile(argv[0]);
 	if (!iconset) {
 		printf("%s: could not load icon set file \"%s\".\n", __progname, argv[0]);
-		exit(1);
+		return 1;
 	}
 
 	keylist = WMGetPLDictionaryKeys(iconset);
@@ -122,5 +122,5 @@ int main(int argc, char **argv)
 
 	WMWritePropListToFile(all_windows, path);
 
-	exit(0);
+	return 0;
 }
