@@ -22,12 +22,20 @@
 
 #define PROG_VERSION "setstyle (Window Maker) 0.6"
 
-#include <stdlib.h>
-#include <stdio.h>
+#ifdef __GLIBC__
+#define _GNU_SOURCE		/* getopt_long */
+#endif
+
 #include <sys/stat.h>
-#include <unistd.h>
+
+#include <getopt.h>
+#include <limits.h>
+#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <X11/Xlib.h>
+
 #include <WINGs/WUtil.h>
 
 #include "../src/wconfig.h"
@@ -97,6 +105,12 @@ static Bool isFontOption(char *option)
 	return False;
 }
 
+/*
+ * finds elements in `texture' that reference external files,
+ * prepends `prefix' to these files. `prefix' is a path component
+ * that qualifies the external references to be absolute, possibly
+ * pending further expansion
+ */
 void hackPathInTexture(WMPropList * texture, char *prefix)
 {
 	WMPropList *type;
@@ -107,12 +121,14 @@ void hackPathInTexture(WMPropList * texture, char *prefix)
 	t = WMGetFromPLString(type);
 	if (t == NULL)
 		return;
-	if (strcasecmp(t, "tpixmap") == 0
-	    || strcasecmp(t, "spixmap") == 0
-	    || strcasecmp(t, "mpixmap") == 0
-	    || strcasecmp(t, "cpixmap") == 0
-	    || strcasecmp(t, "tvgradient") == 0
-	    || strcasecmp(t, "thgradient") == 0 || strcasecmp(t, "tdgradient") == 0) {
+
+	if (strcasecmp(t, "tpixmap") == 0 ||
+	    strcasecmp(t, "spixmap") == 0 ||
+	    strcasecmp(t, "mpixmap") == 0 ||
+	    strcasecmp(t, "cpixmap") == 0 ||
+	    strcasecmp(t, "tvgradient") == 0 ||
+	    strcasecmp(t, "thgradient") == 0 ||
+	    strcasecmp(t, "tdgradient") == 0) {
 		WMPropList *file;
 		char buffer[4018];
 
@@ -122,6 +138,7 @@ void hackPathInTexture(WMPropList * texture, char *prefix)
 		/* replace path with full path */
 		WMDeleteFromPLArray(texture, 1);
 		WMInsertInPLArray(texture, 1, WMCreatePLString(buffer));
+
 	} else if (strcasecmp(t, "bitmap") == 0) {
 		WMPropList *file;
 		char buffer[4018];
@@ -334,16 +351,19 @@ void hackStyle(WMPropList * style)
 	}
 }
 
-void print_help()
+void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [OPTIONS] FILE\n", __progname);
-	puts("Reads style/theme configuration from FILE and updates Window Maker.");
-	puts("");
-	puts("  --no-fonts          ignore font related options");
-	puts("  --no-cursors        ignore cursor related options");
-	puts("  --ignore <option>   ignore changes in the specified option");
-	puts("  -h, --help          display this help and exit");
-	puts("  -v, --version       output version information and exit");
+	if (print_usage) {
+		puts("Reads style/theme configuration from FILE and updates Window Maker.");
+		puts("");
+		puts("  --no-fonts          ignore font related options");
+		puts("  --no-cursors        ignore cursor related options");
+		puts("  --ignore <option>   ignore changes in the specified option");
+		puts("  -h, --help          display this help and exit");
+		puts("  -v, --version       output version information and exit");
+	}
+	exit(exitval);
 }
 
 int main(int argc, char **argv)
@@ -351,47 +371,52 @@ int main(int argc, char **argv)
 	WMPropList *prop, *style;
 	char *path;
 	char *file = NULL;
-	struct stat statbuf;
-	int i;
+	struct stat st;
+	int i, ch, ignflag = 0;
 	int ignoreCount = 0;
 	char *ignoreList[MAX_OPTIONS];
+	XEvent ev;
 
-	dpy = XOpenDisplay("");
+	struct option longopts[] = {
+		{ "version",	no_argument,		NULL,			'v' },
+		{ "help",	no_argument,		NULL,			'h' },
+		{ "no-fonts",	no_argument,		&ignoreFonts,		1 },
+		{ "no-cursors",	no_argument,		&ignoreCursors,		1 },
+		{ "ignore",	required_argument,	&ignflag,		1 },
+		{ NULL,		0,			NULL,			0 }
+	};
 
-	if (argc < 2) {
-		printf("%s: missing argument\n", __progname);
-		printf("Try '%s --help' for more information\n", __progname);
-		exit(1);
-	}
-
-	for (i = 1; i < argc; i++) {
-		if (strcmp("--ignore", argv[i]) == 0) {
-			i++;
-			if (i == argc) {
-				printf("%s: missing argument for option --ignore\n", __progname);
-				exit(1);
-			}
-			ignoreList[ignoreCount++] = argv[i];
-
-		} else if (strcmp("--no-fonts", argv[i]) == 0) {
-			ignoreFonts = 1;
-		} else if (strcmp("--no-cursors", argv[i]) == 0) {
-			ignoreCursors = 1;
-		} else if (strcmp("-v", argv[i]) == 0 || strcmp("--version", argv[i]) == 0) {
-			puts(PROG_VERSION);
-			exit(0);
-		} else if (strcmp("-h", argv[i]) == 0 || strcmp("--help", argv[i]) == 0) {
-			print_help();
-			exit(0);
-		} else {
-			if (file) {
-				printf("%s: invalid argument '%s'\n", __progname, argv[i]);
-				printf("Try '%s --help' for more information\n", __progname);
-				exit(1);
-			}
-			file = argv[i];
+	while ((ch = getopt_long(argc, argv, "hv", longopts, NULL)) != -1)
+		switch(ch) {
+			case 'v':
+				puts(PROG_VERSION);
+				return 0;
+				/* NOTREACHED */
+			case 'h':
+				print_help(1, 0);
+				/* NOTREACHED */
+			case 0:
+				if (ignflag) {
+					if (ignoreCount >= MAX_OPTIONS) {
+						printf("Maximum %d `ignore' arguments\n", MAX_OPTIONS);
+						return 1;
+					}
+					ignoreList[ignoreCount++] = optarg;
+					ignflag = 0;
+				};
+				break;
+			default:
+				print_help(0, 1);
+				/* NOTREACHED */
 		}
-	}
+
+	argc -= optind;
+	argv += optind;
+
+	if (argc != 1)
+		print_help(0, 1);
+
+	file = argv[0];
 
 	WMPLSetCaseSensitive(False);
 
@@ -401,65 +426,62 @@ int main(int argc, char **argv)
 	if (!prop) {
 		perror(path);
 		printf("%s: could not load WindowMaker configuration file.\n", __progname);
-		exit(1);
+		return 1;
 	}
 
-	if (stat(file, &statbuf) < 0) {
+	if (stat(file, &st) < 0) {
 		perror(file);
-		exit(1);
+		return 1;
 	}
-	if (S_ISDIR(statbuf.st_mode)) {
-		char buffer[4018];
-		char *prefix;
-		/* theme pack */
+	if (S_ISDIR(st.st_mode)) {		/* theme pack */
+		char buf[PATH_MAX];
+		char *homedir;
 
-		if (*argv[argc - 1] != '/') {
-			if (!getcwd(buffer, 4000)) {
-				printf("%s: complete path for %s is too long\n", __progname, file);
-				exit(1);
-			}
-			if (strlen(buffer) + strlen(file) > 4000) {
-				printf("%s: complete path for %s is too long\n", __progname, file);
-				exit(1);
-			}
-			strcat(buffer, "/");
-		} else {
-			buffer[0] = 0;
+		if (realpath(file, buf) == NULL) {
+			perror(file);
+			return 1;
 		}
-		strcat(buffer, file);
+		strncat(buf, "/style", sizeof(buf) - strlen(buf) - 1);
 
-		prefix = malloc(strlen(buffer) + 10);
-		if (!prefix) {
-			printf("%s: out of memory\n", __progname);
-			exit(1);
+		if (stat(buf, &st) != 0 || !S_ISREG(st.st_mode)) {	/* maybe symlink too? */
+			printf("%s: %s: style file not found or not a file\n", __progname, buf);
+			return 1;
 		}
-		strcpy(prefix, buffer);
 
-		strcat(buffer, "/style");
-
-		style = WMReadPropListFromFile(buffer);
+		style = WMReadPropListFromFile(buf);
 		if (!style) {
-			perror(buffer);
+			perror(buf);
 			printf("%s: could not load style file.\n", __progname);
-			exit(1);
+			return 1;
 		}
 
-		hackPaths(style, prefix);
-		free(prefix);
-	} else {
-		/* normal style file */
+		buf[strlen(buf) - 6 /* strlen("/style") */] = '\0';
+		homedir = wstrdup(wgethomedir());
+		if (strlen(homedir) > 1	&&	/* this is insane, wgethomedir() returns `/' on error */
+		    strncmp(homedir, buf, strlen(homedir)) == 0) {
+			/* theme pack is under ${HOME}; exchange ${HOME} part
+			 * for `~' so it gets portable references to the user home dir */
+			*buf = '~';
+			memmove(buf + 1, buf + strlen(homedir), strlen(buf) - strlen(homedir) + 1);
+		}
+		wfree(homedir);
+
+		hackPaths(style, buf);		/* this will prefix pixmaps in the style
+						 * with absolute(ish) references */
+
+	} else {				/* normal style file */
 
 		style = WMReadPropListFromFile(file);
 		if (!style) {
 			perror(file);
 			printf("%s:could not load style file.\n", __progname);
-			exit(1);
+			return 1;
 		}
 	}
 
 	if (!WMIsPLDictionary(style)) {
 		printf("%s: '%s' is not a style file/theme\n", __progname, file);
-		exit(1);
+		return 1;
 	}
 
 	hackStyle(style);
@@ -473,27 +495,20 @@ int main(int argc, char **argv)
 	WMMergePLDictionaries(prop, style, True);
 
 	WMWritePropListToFile(prop, path);
-	{
-		XEvent ev;
 
-		if (dpy) {
-			int i;
-			char *msg = "Reconfigure";
+	dpy = XOpenDisplay("");
+	if (dpy) {
+		memset(&ev, 0, sizeof(XEvent));
 
-			memset(&ev, 0, sizeof(XEvent));
+		ev.xclient.type = ClientMessage;
+		ev.xclient.message_type = XInternAtom(dpy, "_WINDOWMAKER_COMMAND", False);
+		ev.xclient.window = DefaultRootWindow(dpy);
+		ev.xclient.format = 8;
+		strncpy(ev.xclient.data.b, "Reconfigure", sizeof(ev.xclient.data.b));
 
-			ev.xclient.type = ClientMessage;
-			ev.xclient.message_type = XInternAtom(dpy, "_WINDOWMAKER_COMMAND", False);
-			ev.xclient.window = DefaultRootWindow(dpy);
-			ev.xclient.format = 8;
-
-			for (i = 0; i <= strlen(msg); i++) {
-				ev.xclient.data.b[i] = msg[i];
-			}
-			XSendEvent(dpy, DefaultRootWindow(dpy), False, SubstructureRedirectMask, &ev);
-			XFlush(dpy);
-		}
+		XSendEvent(dpy, DefaultRootWindow(dpy), False, SubstructureRedirectMask, &ev);
+		XFlush(dpy);
 	}
 
-	exit(0);
+	return 0;
 }
