@@ -17,8 +17,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#define PROG_VERSION "wxpaste (Window Maker) 0.3"
-
 #include "../src/config.h"
 
 #include <stdio.h>
@@ -164,7 +162,7 @@ int main(int argc, char **argv)
 				print_help();
 				exit(0);
 			} else if (argv[i][1] == 'v' || strcmp(argv[i], "--version") == 0) {
-				puts(PROG_VERSION);
+				printf("%s (Window Maker %s)\n", __progname, VERSION);
 				exit(0);
 			} else if (strcmp(argv[i], "-selection") == 0 || strcmp(argv[i], "--selection") == 0) {
 				if (i < argc - 1) {

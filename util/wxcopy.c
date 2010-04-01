@@ -17,8 +17,6 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
-#define PROG_VERSION "wxcopy 0.3"
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -26,6 +24,8 @@
 #include <errno.h>
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+
+#include "../src/wconfig.h"
 
 #define LINESIZE	(4*1024)
 #define MAXDATA		(64*1024)
@@ -71,7 +71,7 @@ int main(int argc, char **argv)
 				print_help();
 				exit(0);
 			} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
-				puts(PROG_VERSION);
+				printf("%s (Window Maker %s)\n", __progname, VERSION);
 				exit(0);
 			} else if (strcmp(argv[i], "-cutbuffer") == 0 || strcmp(argv[i], "--cutbuffer") == 0) {
 				if (i < argc - 1) {

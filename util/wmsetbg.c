@@ -61,8 +61,6 @@ typedef struct {
 	int count;		/* screen count, 0 = inactive */
 } WXineramaInfo;
 
-#define PROG_VERSION	"wmsetbg (Window Maker) 2.8"
-
 #define WORKSPACE_COUNT (MAX_WORKSPACES+1)
 
 Display *dpy;
@@ -1287,7 +1285,7 @@ int main(int argc, char **argv)
 				exit(1);
 			}
 		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
-			printf(PROG_VERSION);
+			printf("%s (Window Maker %s)\n", __progname, VERSION);
 			exit(0);
 		} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
 			print_help();

@@ -20,8 +20,6 @@
  *  USA.
  */
 
-#define PROG_VERSION "seticons (Window Maker) 0.1"
-
 #ifdef __GLIBC__
 #define _GNU_SOURCE		/* getopt_long */
 #endif
@@ -65,7 +63,7 @@ int main(int argc, char **argv)
 	while ((ch = getopt_long(argc, argv, "hv", longopts, NULL)) != -1)
 		switch(ch) {
 			case 'v':
-				puts(PROG_VERSION);
+				printf("%s (Window Maker %s)\n", __progname, VERSION);
 				return 0;
 				/* NOTREACHED */
 			case 'h':
