@@ -926,7 +926,22 @@ static void handleClientMessage(XEvent * event)
 		}
 	} else if (event->xclient.message_type == _XA_WINDOWMAKER_COMMAND) {
 
-		wDefaultsCheckDomains(NULL);
+		char *command;
+		size_t len;
+
+		len = sizeof(event->xclient.data.b) + 1;
+		command = wmalloc(len);
+		memset(command, 0, len);
+		strncpy(command, event->xclient.data.b, sizeof(event->xclient.data.b));
+
+		if (strncmp(command, "Reconfigure", sizeof("Reconfigure")) == 0) {
+			wwarning(_("Got Reconfigure command"));
+			wDefaultsCheckDomains(NULL);
+		} else {
+			wwarning(_("Got unknown command %s"), command);
+		}
+
+		wfree(command);
 
 	} else if (event->xclient.message_type == _XA_WINDOWMAKER_WM_FUNCTION) {
 		WApplication *wapp;

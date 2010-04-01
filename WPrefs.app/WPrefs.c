@@ -116,7 +116,6 @@ static void save(WMWidget * w, void *data)
 	WMPropList *p1, *p2;
 	WMPropList *keyList;
 	WMPropList *key;
-	char *msg = "Reconfigure";
 	XEvent ev;
 
 	/*    puts("gathering data"); */
@@ -157,10 +156,8 @@ static void save(WMWidget * w, void *data)
 	ev.xclient.message_type = XInternAtom(WMScreenDisplay(WMWidgetScreen(w)), "_WINDOWMAKER_COMMAND", False);
 	ev.xclient.window = DefaultRootWindow(WMScreenDisplay(WMWidgetScreen(w)));
 	ev.xclient.format = 8;
+	strncpy(ev.xclient.data.b, "Reconfigure", sizeof(ev.xclient.data.b));
 
-	for (i = 0; i <= strlen(msg); i++) {
-		ev.xclient.data.b[i] = msg[i];
-	}
 	XSendEvent(WMScreenDisplay(WMWidgetScreen(w)),
 		   DefaultRootWindow(WMScreenDisplay(WMWidgetScreen(w))), False, SubstructureRedirectMask, &ev);
 	XFlush(WMScreenDisplay(WMWidgetScreen(w)));
