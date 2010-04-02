@@ -413,6 +413,7 @@ typedef struct WPreferences {
     char workspace_border_position;     /* Where to leave a workspace border */
     char single_click;                  /* single click to lauch applications */
     int history_lines;                  /* history of "Run..." dialog */
+    char cycle_active_head_only;        /* Cycle only windows on the active head */
 
     RImage *swtileImage;
     RImage *swbackImage[9];

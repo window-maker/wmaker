@@ -80,6 +80,11 @@ static int canReceiveFocus(WWindow * wwin)
 {
 	if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
 		return 0;
+
+	if (wPreferences.cycle_active_head_only &&
+	    wGetHeadForWindow(wwin) != wGetHeadForPointerLocation(wwin->screen_ptr))
+		return 0;
+
 	if (!wwin->flags.mapped) {
 		if (!wwin->flags.shaded && !wwin->flags.miniaturized && !wwin->flags.hidden)
 			return 0;

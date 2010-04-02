@@ -32,7 +32,7 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMButton *swi[8];
+	WMButton *swi[9];
 
 } _Panel;
 
@@ -50,6 +50,7 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->swi[5], GetBoolForKey("DisableBlinking"));
 	WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
 	WMSetButtonSelected(panel->swi[7], GetBoolForKey("SingleClickLaunch"));
+	WMSetButtonSelected(panel->swi[8], GetBoolForKey("CycleActiveHeadOnly"));
 }
 
 static void createPanel(Panel * p)
@@ -60,11 +61,13 @@ static void createPanel(Panel * p)
 	panel->box = WMCreateBox(panel->parent);
 	WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
 
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < 9; i++) {
 		panel->swi[i] = WMCreateSwitchButton(panel->box);
 		WMResizeWidget(panel->swi[i], FRAME_WIDTH - 40, 25);
 		WMMoveWidget(panel->swi[i], 20, 20 + i * 25);
 	}
+
+	/* XXX: it would be HIGHLY desireable if this could scroll vertically */
 
 	WMSetButtonText(panel->swi[0],
 			_("Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."));
@@ -75,6 +78,7 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->swi[5], _("Disable selection animation for selected icons."));
 	WMSetButtonText(panel->swi[6], _("Smooth font edges (needs restart)."));
 	WMSetButtonText(panel->swi[7], _("Launch applications and restore windows with a single click."));
+	WMSetButtonText(panel->swi[8], _("Cycle windows only on the active head."));
 
 	WMSetButtonEnabled(panel->swi[6], True);
 
@@ -98,6 +102,7 @@ static void storeDefaults(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DisableBlinking");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "AntialiasedText");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "SingleClickLaunch");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[8]), "CycleActiveHeadOnly");
 }
 
 Panel *InitExpert(WMScreen * scr, WMWidget * parent)

@@ -655,7 +655,9 @@ WDefaultEntry optionList[] = {
 	{"SelectCursor", "(builtin, cross)", (void *)WCUR_SELECT,
 	 NULL, getCursor, setCursor},
 	{"DialogHistoryLines", "500", NULL,
-	 &wPreferences.history_lines, getInt, NULL}
+	 &wPreferences.history_lines, getInt, NULL},
+	{"CycleActiveHeadOnly", "NO", NULL,
+	 &wPreferences.cycle_active_head_only, getBool, NULL}
 };
 
 #if 0
