@@ -56,18 +56,29 @@ static void showData(_Panel * panel)
 static void createPanel(Panel * p)
 {
 	_Panel *panel = (_Panel *) p;
+	WMScrollView *sv;
+	WMFrame *f;
 	int i;
 
 	panel->box = WMCreateBox(panel->parent);
 	WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
 
-	for (i = 0; i < 9; i++) {
-		panel->swi[i] = WMCreateSwitchButton(panel->box);
-		WMResizeWidget(panel->swi[i], FRAME_WIDTH - 40, 25);
-		WMMoveWidget(panel->swi[i], 20, 20 + i * 25);
-	}
+	sv = WMCreateScrollView(panel->box);
+	WMResizeWidget(sv, 500, 215);
+	WMMoveWidget(sv, 12, 10);
+	WMSetScrollViewRelief(sv, WRSunken);
+	WMSetScrollViewHasVerticalScroller(sv, True);
+	WMSetScrollViewHasHorizontalScroller(sv, False);
 
-	/* XXX: it would be HIGHLY desireable if this could scroll vertically */
+	f = WMCreateFrame(panel->box);
+	WMResizeWidget(f, 495, sizeof(panel->swi) / sizeof(char *) * 25 + 8);
+	WMSetFrameRelief(f, WRFlat);
+
+	for (i = 0; i < sizeof(panel->swi) / sizeof(char *); i++) {
+		panel->swi[i] = WMCreateSwitchButton(f);
+		WMResizeWidget(panel->swi[i], FRAME_WIDTH - 40, 25);
+		WMMoveWidget(panel->swi[i], 5, 5 + i * 25);
+	}
 
 	WMSetButtonText(panel->swi[0],
 			_("Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."));
@@ -82,8 +93,9 @@ static void createPanel(Panel * p)
 
 	WMSetButtonEnabled(panel->swi[6], True);
 
-	WMRealizeWidget(panel->box);
 	WMMapSubwidgets(panel->box);
+	WMSetScrollViewContentView(sv, WMWidgetView(f));
+	WMRealizeWidget(panel->box);
 
 	showData(panel);
 }
