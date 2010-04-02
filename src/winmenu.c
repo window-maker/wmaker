@@ -44,6 +44,7 @@
 #include "dialog.h"
 #include "stacking.h"
 #include "icon.h"
+#include "xinerama.h"
 
 #define MC_MAXIMIZE	0
 #define MC_MINIATURIZE	1
@@ -589,6 +590,7 @@ void OpenWindowMenu(WWindow * wwin, int x, int y, int keyboard)
 {
 	WMenu *menu;
 	WScreen *scr = wwin->screen_ptr;
+	WMRect rect;
 
 	wwin->flags.menu_open_for_me = 1;
 
@@ -618,6 +620,13 @@ void OpenWindowMenu(WWindow * wwin, int x, int y, int keyboard)
 		x = wwin->frame_x + wwin->frame->core->width - menu->frame->core->width;
 	if (x < wwin->frame_x)
 		x = wwin->frame_x;
+
+	rect = wGetRectForHead(menu->frame->screen_ptr,
+			       wGetHeadForPointerLocation(menu->frame->screen_ptr));
+	if (x < rect.pos.x - menu->frame->core->width / 2)
+		x = rect.pos.x - menu->frame->core->width / 2;
+	if (y < rect.pos.y)
+		y = rect.pos.y;
 
 	if (!wwin->flags.internal_window)
 		wMenuMapAt(menu, x, y, keyboard);

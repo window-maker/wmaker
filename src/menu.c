@@ -1078,8 +1078,8 @@ void wMenuMapAt(WMenu * menu, int x, int y, int keyboard)
 		}
 
 		XMoveWindow(dpy, menu->frame->core->window, x, y);
-		menu->frame_x = (x < 0) ? 0 : x;
-		menu->frame_y = (y < 0) ? 0 : y;
+		menu->frame_x = x;
+		menu->frame_y = y;
 		XMapWindow(dpy, menu->frame->core->window);
 		wRaiseFrame(menu->frame->core);
 		menu->flags.mapped = 1;
