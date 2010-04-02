@@ -30,7 +30,7 @@ char *Graphics[MAX_NR_APPS] = {
 	"gimp", "sodipodi", "killustrator", "krayon", "kpovmodeler",
 	"bitmap", "xpaint", "xfig", "kpaint", "blender", "ksnapshot",
 	"gphoto", "dia", "compupic", "gqview", "kview", "pixie",
-	"display", "ee", "xv", "eog", "qiv !"
+	"display", "xv", "eog", "qiv !"
 };
 
 char *Multimedia[MAX_NR_APPS] = {
@@ -134,5 +134,5 @@ char *WindowMaker[MAX_NR_APPS] = {
 };
 
 char *other_wm[MAX_WMS] = {
-		"icewm", "kwin", "twm", "fluxbox", "blackbox", "ion"
+		"icewm", "kwin", "twm", "fluxbox", "blackbox", "ion", "mwm"
 };

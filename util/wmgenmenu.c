@@ -5,6 +5,7 @@
 #endif
 
 #include <getopt.h>
+#include <limits.h>
 #include <locale.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,23 +21,18 @@
 #include "wmgenmenu.h"
 
 static void find_and_write(char *group, char **list);
-static inline void workspaces(void);
-static inline void lock_screen(void);
-static inline void wmaker_config(void);
-static inline void run_command(void);
-static void other_window_managers(char **other_wm);
-static inline void wm_visual(void);
-static inline void write_first_line(int count);
+static void other_window_managers(void);
 static void print_help(int print_usage, int exitval);
 
 extern char *__progname;
 
 char *path;
-int first_group = 1;
+
+WMPropList *MenuRoot, *MenuGroup, *MenuItem;
 
 int main(int argc, char *argv[])
 {
-	char *locale;
+	char *t, *locale;
 	int ch;
 
 	struct option longopts[] = {
@@ -79,12 +75,10 @@ int main(int argc, char *argv[])
 	textdomain("wmgenmenu");
 #endif
 
-	printf("\(\"Window Maker\",\n");
+	MenuRoot = WMCreatePLArray(WMCreatePLString(_("Window Maker")), NULL);
+	MenuGroup = WMCreatePLArray(WMCreatePLString(_("Applications")), NULL);
 
-	printf("  \(\"");
-	printf(_("Applications"));
-	printf("\",\n");
-
+	/* Submenus in Applications */
 	find_and_write(_("Terminals"), terminals);
 	find_and_write(_("Internet"), internet);
 	find_and_write(_("Email"), email);
@@ -109,58 +103,180 @@ int main(int argc, char *argv[])
 	find_and_write(_("OpenSUSE"), OpenSUSE);
 	find_and_write(_("Mandriva"), Mandriva);
 
+	WMAddToPLArray(MenuRoot, MenuGroup);
 
-	/* This must be after the last entry */
-	printf("\n     )\n");
-	printf("  ),\n");
+	/* `Run' dialog */
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Run...")),
+		WMCreatePLString("SHEXEC"),
+		WMCreatePLString(_("%A(Run, Type command:)")),
+		NULL
+	);
+	WMAddToPLArray(MenuRoot, MenuItem);
 
-	run_command();
-	wm_visual();
-	workspaces();
-	wmaker_config();
+	/* Appearance-related items */
+	MenuGroup = WMCreatePLArray(WMCreatePLString(_("Appearance")), NULL);
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Themes")),
+		WMCreatePLString("OPEN_MENU"),
+		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
 
-	printf("(\"");
-	printf(_("Info Panel"));
-	printf("\", INFO_PANEL),\n");
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Icons")),
+		WMCreatePLString("OPEN_MENU"),
+		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
 
-	printf("(\"");
-	printf(_("Restart"));
-	printf("\", RESTART),\n");
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Background")),
+		WMCreatePLString("OPEN_MENU"),
+		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t"),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
 
-	other_window_managers(other_wm);
-	lock_screen();
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Save Theme")),
+		WMCreatePLString("SHEXEC"),
+		WMCreatePLString("getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%%a(Theme name)\""),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
 
-	printf("(\"");
-	printf(_("Exit..."));
-	printf("\", EXIT)\n");
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Save Icons")),
+		WMCreatePLString("SHEXEC"),
+		WMCreatePLString("geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%%a(IconSet name)\""),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
+	WMAddToPLArray(MenuRoot, MenuGroup);
 
-	/* Final closing parenthesis */
-	printf(")\n");
+	/* Workspace-related items */
+	MenuGroup = WMCreatePLArray(
+		WMCreatePLString(_("Workspaces")),
+		WMCreatePLString("WORKSPACE_MENU"),
+		NULL
+	);
+	WMAddToPLArray(MenuRoot, MenuGroup);
 
-	exit(EXIT_SUCCESS);
+	MenuGroup = WMCreatePLArray(WMCreatePLString(_("Workspace")), NULL);
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Hide Others")),
+		WMCreatePLString("HIDE_OTHERS"),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Show All")),
+		WMCreatePLString("SHOW_ALL"),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Arrange Icons")),
+		WMCreatePLString("ARRANGE_ICONS"),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
+
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Refresh")),
+		WMCreatePLString("REFRESH"),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Save Session")),
+		WMCreatePLString("SAVE_SESSION"),
+		NULL
+	);
+	WMAddToPLArray(MenuGroup, MenuItem);
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Clear Session")),
+		WMCreatePLString("CLEAR_SESSION"),
+		NULL
+	);
+	WMAddToPLArray(MenuRoot, MenuGroup);
+
+	/* Configuration-related items */
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Configure Window Maker")),
+		WMCreatePLString("EXEC"),
+		WMCreatePLString("WPrefs"),
+		NULL
+	);
+	WMAddToPLArray(MenuRoot, MenuItem);
+
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Info Panel")),
+		WMCreatePLString("INFO_PANEL"),
+		NULL
+	);
+	WMAddToPLArray(MenuRoot, MenuItem);
+
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Restart")),
+		WMCreatePLString("RESTART"),
+		NULL
+	);
+	WMAddToPLArray(MenuRoot, MenuItem);
+
+	/* Other window managers */
+	other_window_managers();
+
+	/* XLock */
+	t = wfindfile(path, "xlock");
+	if (t) {
+		MenuItem = WMCreatePLArray(
+			WMCreatePLString(_("Lock Screen")),
+			WMCreatePLString("EXEC"),
+			WMCreatePLString("xlock -allowroot -usefirst -mode matrix"),
+			NULL
+		);
+		WMAddToPLArray(MenuRoot, MenuItem);
+		wfree(t);
+	}
+
+	/* Exit */
+	MenuItem = WMCreatePLArray(
+		WMCreatePLString(_("Exit Window Maker")),
+		WMCreatePLString("EXIT"),
+		NULL
+	);
+	WMAddToPLArray(MenuRoot, MenuItem);
+
+	printf("%s", WMGetPropListDescription(MenuRoot, True));
+
+	return 0;
 }
 
 static void find_and_write(char *group, char **list)
 {
-	int i, argc, found;
-	char *location, **argv;
+	int i, argc;
+	char *t, **argv, buf[PATH_MAX];
 	extern char *path;
-	static char buf[2048];	/* any single group must fit in this; just increase if not enough */
-	static char buf2[512];	/* single items' holding cell */
+	WMPropList *SubGroup = NULL, *SubGroupItem = NULL;
 
 	i = 0;
-	found = 0;
-	memset(buf, 0, sizeof(buf));
-	memset(buf2, 0, sizeof(buf2));
 	while (list[i]) {
 		/* Before checking if app exists, split its options */
 		wtokensplit(list[i], &argv, &argc);
-		location = wfindfile(path, argv[0]);
-		if (location) {
-			found = 1;
+		t = wfindfile(path, argv[0]);
+		if (t) {
 			/* check whether it is to be executed in a terminal */
 			if (strcmp("!", argv[argc - 1]) < 0)
-				snprintf(buf2, sizeof(buf2), ",\n       \(\"%s\", EXEC, \"%s\")", argv[0], list[i]);
+				SubGroupItem = WMCreatePLArray(
+					WMCreatePLString(argv[0]),
+					WMCreatePLString("EXEC"),
+					WMCreatePLString(list[i]),
+					NULL
+				);
 			else {
 				char comm[50], *ptr;
 
@@ -169,164 +285,51 @@ static void find_and_write(char *group, char **list)
 				ptr = strchr(comm, '!');
 				while (ptr >= comm && (*ptr == '!' || isspace(*ptr)))
 					*ptr-- = '\0';
-				snprintf(buf2, sizeof(buf2), ",\n       \(\"%s\", EXEC, \"xterm -e %s\")", argv[0], comm);
+				snprintf(buf, sizeof(buf), "xterm -e %s", comm);
+				SubGroupItem = WMCreatePLArray(
+					WMCreatePLString(argv[0]),
+					WMCreatePLString("EXEC"),
+					WMCreatePLString(comm),
+					NULL
+				);
 			}
-			strncat(buf, buf2, sizeof(buf) - strlen(buf) - 1);
+			if (!SubGroup)
+				SubGroup = WMCreatePLArray(WMCreatePLString(group), NULL);
+			WMAddToPLArray(SubGroup, SubGroupItem);
+			wfree(t);
 		}
-	i++;
+		i++;
 	}
-	if (found) {
-		/* This "first" printf is different from the others! */
-		if (!first_group) {
-			printf("\n     ),\n");
-		} else {
-			first_group = 0;
-		}
-
-		printf("     \(\"%s\"", group);
-		printf("%s", buf);
-	}
+	if (SubGroup)
+		WMAddToPLArray(MenuGroup, SubGroup);
 }
 
-static inline void wmaker_config(void)
+static void other_window_managers(void)
 {
-	char *location = wfindfile(path, "WPrefs");
-
-	if (location) {
-		printf("(\"");
-		printf(_("Config wmaker..."));
-		printf("\", EXEC, \"WPrefs\"),\n");
-	}
-}
-
-static inline void workspaces(void)
-{
-	printf("(\"");
-	printf(_("Workspaces"));
-	printf("\", WORKSPACE_MENU),\n");
-
-	printf("  (\"");
-	printf(_("Workspace"));
-	printf("\",\n");
-
-	printf("     (\"");
-	printf(_("Hide others"));
-	printf("\", HIDE_OTHERS),\n");
-
-	printf("     (\"");
-	printf(_("Show all"));
-	printf("\", SHOW_ALL),\n");
-
-	printf("     (\"");
-	printf(_("Arrange Icons"));
-	printf("\", ARRANGE_ICONS),\n");
-
-	printf("     (\"");
-	printf(_("Refresh"));
-	printf("\", REFRESH),\n");
-
-	printf("     (\"");
-	printf(_("Save Session"));
-	printf("\", SAVE_SESSION),\n");
-
-	printf("     (\"");
-	printf(_("Clear Session"));
-	printf("\", CLEAR_SESSION)\n");
-
-	printf("  ),\n");
-}
-
-static inline void lock_screen(void)
-{
-	char *location;
-
-	location = wfindfile(path, "xlock");
-	if (location) {
-		printf("(\"");
-		printf(_("Lock Screen"));
-		printf("\", EXEC, \"xlock -allowroot -usefirst -mode matrix\"),\n");
-	}
-}
-
-static void other_window_managers(char **other_wm)
-{
-	int count = 0;
-	char *location;
 	int i;
+	char *t, buf[PATH_MAX];
+	WMPropList *SubGroup = NULL, *SubGroupItem = NULL;
 
-	printf("(\"");
-	printf(_("Other Window Managers"));
-	printf("\",\n");
-
-	for (i = 0; i <= MAX_WMS; i++) {
-		if (other_wm[i]) {
-			location = wfindfile(path, other_wm[i]);
-			if (location) {
-				write_first_line(count);
-				printf(_("Start %s"), other_wm[i]);
-				printf("\", RESTART, \"%s\")", other_wm[i]);
-				count++;
-			}
+	i = 0;
+	while (other_wm[i]) {
+		t = wfindfile(path, other_wm[i]);
+		if (t) {
+			snprintf(buf, sizeof(buf), _("Start %s"), other_wm[i]);
+			SubGroupItem = WMCreatePLArray(
+				WMCreatePLString(buf),
+				WMCreatePLString("RESTART"),
+				WMCreatePLString(other_wm[i]),
+				NULL
+			);
+			if (!SubGroup)
+				SubGroup = WMCreatePLArray(WMCreatePLString(_("Other Window Managers")), NULL);
+			WMAddToPLArray(SubGroup, SubGroupItem);
+			wfree(t);
 		}
+		i++;
 	}
-	printf("\n),\n");
-}
-
-static void wm_visual(void)
-{
-	/* TODO: add more pre-defined dirs to Themes etc */
-	printf("(\"");
-	printf(_("Workspace Appearance"));
-	printf("\",\n");
-
-	printf("(\"");
-	printf(_("Themes"));
-	printf("\", OPEN_MENU, \"-noext $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle\"),\n");
-
-	printf("(\"");
-	printf(_("Styles"));
-	printf("\", OPEN_MENU, \"-noext $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle\"),\n");
-
-	printf("(\"");
-	printf(_("Icons"));
-	printf("\", OPEN_MENU, \"-noext $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons\"),\n");
-
-	printf("(\"");
-	printf(_("Background"));
-	printf("\", OPEN_MENU, \"-noext $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t\"),\n");
-
-	printf("(\"");
-	printf(_("Save Theme"));
-	printf("\", SHEXEC, \"getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\\\"%%a(Theme name)\\\"\"),\n");
-
-	printf("(\"");
-	printf(_("Save Icons"));
-	printf("\", SHEXEC, \"geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\\\"%%a(IconSet name)\\\"\")\n");
-	printf("),\n");
-
-}
-
-static inline void run_command(void)
-{
-	printf("\(\"");
-	printf(_("Run..."));
-	printf("\", SHEXEC, \"%%A(");
-	printf(_("Run, Type command:"));
-	printf(")\"),\n");
-}
-
-static inline void write_first_line(int count)
-{
-	/* All lines inside a menu must end with a comma, except for
-	 * the last one. To cope with this let's check if there is a
-	 * previous entry before writing the "start of the line", and
-	 * write the trailing comma if there is.
-	 */
-	if (count == 0)
-		printf(" (\"");
-	else {
-		printf(",\n (\"");
-	}
+	if (SubGroup)
+		WMAddToPLArray(MenuRoot, SubGroup);
 }
 
 void print_help(int print_usage, int exitval)
