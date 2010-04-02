@@ -251,14 +251,14 @@ static void createPanel(Panel * p)
 
     /***************** Balloon Text ****************/
 	panel->ballF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->ballF, 235, 125);
+	WMResizeWidget(panel->ballF, 235, 113);
 	WMMoveWidget(panel->ballF, 270, 10);
 	WMSetFrameTitle(panel->ballF, _("Show balloon text for..."));
 
 	for (i = 0; i < 4; i++) {
 		panel->ballB[i] = WMCreateSwitchButton(panel->ballF);
 		WMResizeWidget(panel->ballB[i], 205, 20);
-		WMMoveWidget(panel->ballB[i], 15, 20 + i * 25);
+		WMMoveWidget(panel->ballB[i], 15, 20 + i * 22);
 	}
 	WMSetButtonText(panel->ballB[0], _("incomplete window titles"));
 	WMSetButtonText(panel->ballB[1], _("miniwindow titles"));
@@ -269,18 +269,18 @@ static void createPanel(Panel * p)
 
     /***************** Options ****************/
 	panel->optF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->optF, 235, 75);
-	WMMoveWidget(panel->optF, 270, 145);
+	WMResizeWidget(panel->optF, 235, 97);
+	WMMoveWidget(panel->optF, 270, 128);
 
 	panel->raisB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->raisB, 210, 30);
-	WMMoveWidget(panel->raisB, 15, 7);
+	WMResizeWidget(panel->raisB, 210, 36);
+	WMMoveWidget(panel->raisB, 15, 5);
 	WMSetButtonText(panel->raisB, _("Raise window when switching\nfocus with keyboard."));
 
 #ifdef XKB_MODELOCK
 	panel->modeB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->modeB, 210, 30);
-	WMMoveWidget(panel->modeB, 15, 40);
+	WMResizeWidget(panel->modeB, 210, 40);
+	WMMoveWidget(panel->modeB, 15, 44);
 	WMSetButtonText(panel->modeB, _("Enable keyboard language\nswitch button in window titlebars."));
 #endif
 
@@ -288,7 +288,7 @@ static void createPanel(Panel * p)
 
     /***************** Workspace border ****************/
 	panel->borderF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->borderF, 240, 75);
+	WMResizeWidget(panel->borderF, 240, 80);
 	WMMoveWidget(panel->borderF, 20, 145);
 	WMSetFrameTitle(panel->borderF, _("Workspace border"));
 
