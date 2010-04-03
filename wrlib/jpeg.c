@@ -89,7 +89,7 @@ static void my_error_exit(j_common_ptr cinfo)
 	longjmp(myerr->setjmp_buffer, 1);
 }
 
-RImage *RLoadJPEG(RContext * context, char *file_name, int index)
+RImage *RLoadJPEG(RContext * context, char *file_name)
 {
 	RImage *image = NULL;
 	struct jpeg_decompress_struct cinfo;

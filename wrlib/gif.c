@@ -37,7 +37,7 @@ static int InterlacedJumps[] = { 8, 8, 4, 2 };
 /*
  * Partially based on code in gif2rgb from giflib, by Gershon Elber.
  */
-RImage *RLoadGIF(RContext * context, char *file, int index)
+RImage *RLoadGIF(char *file, int index)
 {
 	RImage *image = NULL;
 	unsigned char *cptr;

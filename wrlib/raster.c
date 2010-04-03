@@ -292,7 +292,7 @@ void RCombineImagesWithOpaqueness(RImage * image, RImage * src, int opaqueness)
 }
 
 int
-calculateCombineArea(RImage * des, RImage * src, int *sx, int *sy,
+calculateCombineArea(RImage * des, int *sx, int *sy,
 		     unsigned int *swidth, unsigned int *sheight, int *dx, int *dy)
 {
 	int width = (int)*swidth, height = (int)*sheight;
@@ -333,7 +333,7 @@ void RCombineArea(RImage * image, RImage * src, int sx, int sy, unsigned width, 
 	unsigned char *s;
 	int alpha, calpha;
 
-	if (!calculateCombineArea(image, src, &sx, &sy, &width, &height, &dx, &dy))
+	if (!calculateCombineArea(image, &sx, &sy, &width, &height, &dx, &dy))
 		return;
 
 	if (!HAS_ALPHA(src)) {
@@ -409,7 +409,7 @@ void RCopyArea(RImage * image, RImage * src, int sx, int sy, unsigned width, uns
 	unsigned char *d;
 	unsigned char *s;
 
-	if (!calculateCombineArea(image, src, &sx, &sy, &width, &height, &dx, &dy))
+	if (!calculateCombineArea(image, &sx, &sy, &width, &height, &dx, &dy))
 		return;
 
 	if (!HAS_ALPHA(src)) {
@@ -487,7 +487,7 @@ RCombineAreaWithOpaqueness(RImage * image, RImage * src, int sx, int sy,
 	int dalpha = HAS_ALPHA(image);
 	int dch = (dalpha ? 4 : 3);
 
-	if (!calculateCombineArea(image, src, &sx, &sy, &width, &height, &dx, &dy))
+	if (!calculateCombineArea(image, &sx, &sy, &width, &height, &dx, &dy))
 		return;
 
 	d = image->data + (dy * image->width + dx) * dch;

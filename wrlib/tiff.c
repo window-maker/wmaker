@@ -32,7 +32,7 @@
 
 #include "wraster.h"
 
-RImage *RLoadTIFF(RContext * context, char *file, int index)
+RImage *RLoadTIFF(char *file, int index)
 {
 	RImage *image = NULL;
 	TIFF *tif;

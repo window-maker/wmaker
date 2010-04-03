@@ -31,7 +31,7 @@
 
 #include "wraster.h"
 
-RImage *RLoadPNG(RContext * context, char *file, int index)
+RImage *RLoadPNG(RContext * context, char *file)
 {
 	char *tmp;
 	RImage *image = NULL;

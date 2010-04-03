@@ -79,21 +79,21 @@ static RCachedImage *RImageCache;
 
 static int identFile(char *path);
 
-extern RImage *RLoadPPM(RContext * context, char *file_name, int index);
+extern RImage *RLoadPPM(char *file_name);
 
-extern RImage *RLoadXPM(RContext * context, char *file, int index);
+extern RImage *RLoadXPM(RContext * context, char *file);
 
 #ifdef USE_TIFF
-extern RImage *RLoadTIFF(RContext * context, char *file, int index);
+extern RImage *RLoadTIFF(char *file, int index);
 #endif
 #ifdef USE_PNG
-extern RImage *RLoadPNG(RContext * context, char *file, int index);
+extern RImage *RLoadPNG(RContext * context, char *file);
 #endif
 #ifdef USE_JPEG
-extern RImage *RLoadJPEG(RContext * context, char *file_name, int index);
+extern RImage *RLoadJPEG(RContext * context, char *file_name);
 #endif
 #ifdef USE_GIF
-extern RImage *RLoadGIF(RContext * context, char *file_name, int index);
+extern RImage *RLoadGIF(char *file_name, int index);
 #endif
 
 char **RSupportedFileFormats(void)
@@ -188,35 +188,35 @@ RImage *RLoadImage(RContext * context, char *file, int index)
 		return NULL;
 
 	case IM_XPM:
-		image = RLoadXPM(context, file, index);
+		image = RLoadXPM(context, file);
 		break;
 
 #ifdef USE_TIFF
 	case IM_TIFF:
-		image = RLoadTIFF(context, file, index);
+		image = RLoadTIFF(file, index);
 		break;
 #endif				/* USE_TIFF */
 
 #ifdef USE_PNG
 	case IM_PNG:
-		image = RLoadPNG(context, file, index);
+		image = RLoadPNG(context, file);
 		break;
 #endif				/* USE_PNG */
 
 #ifdef USE_JPEG
 	case IM_JPEG:
-		image = RLoadJPEG(context, file, index);
+		image = RLoadJPEG(context, file);
 		break;
 #endif				/* USE_JPEG */
 
 #ifdef USE_GIF
 	case IM_GIF:
-		image = RLoadGIF(context, file, index);
+		image = RLoadGIF(file, index);
 		break;
 #endif				/* USE_GIF */
 
 	case IM_PPM:
-		image = RLoadPPM(context, file, index);
+		image = RLoadPPM(file);
 		break;
 
 	default:

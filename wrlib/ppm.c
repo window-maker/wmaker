@@ -28,7 +28,7 @@
 
 #include "wraster.h"
 
-static RImage *load_graymap(char *file_name, FILE * file, int w, int h, int max, int raw)
+static RImage *load_graymap(FILE * file, int w, int h, int max, int raw)
 {
 	RImage *image;
 
@@ -74,7 +74,7 @@ static RImage *load_graymap(char *file_name, FILE * file, int w, int h, int max,
 	return NULL;
 }
 
-static RImage *load_pixmap(char *file_name, FILE * file, int w, int h, int max, int raw)
+static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
 {
 	RImage *image;
 	int i;
@@ -111,7 +111,7 @@ static RImage *load_pixmap(char *file_name, FILE * file, int w, int h, int max, 
 	return NULL;
 }
 
-RImage *RLoadPPM(RContext * context, char *file_name, int index)
+RImage *RLoadPPM(char *file_name)
 {
 	FILE *file;
 	RImage *image = NULL;
@@ -156,9 +156,9 @@ RImage *RLoadPPM(RContext * context, char *file_name, int index)
 		goto bad_file;
 
 	if (type == '5')
-		image = load_graymap(file_name, file, w, h, m, type == '5');
+		image = load_graymap(file, w, h, m, type == '5');
 	else if (type == '6')
-		image = load_pixmap(file_name, file, w, h, m, type == '6');
+		image = load_pixmap(file, w, h, m, type == '6');
 
 	fclose(file);
 	return image;
