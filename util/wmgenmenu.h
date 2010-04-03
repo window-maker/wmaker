@@ -2,8 +2,7 @@
 
 /*
  * If the program should run from inside a terminal it has
- * to finish with a space followed by '!', e.g.
- * "mutt !"
+ * to end with a space followed by '!', e.g.  "mutt !"
  */
 
 char *terminals[MAX_NR_APPS] = {
