@@ -1,48 +1,8 @@
 #!/bin/sh
-# Run this to generate all the initial makefiles, etc.
 
-DIE=0
+autoreconf -vfi -I m4
 
-echo "Generating configuration files for WindowMaker, please wait...."
-
-(autoconf --version) < /dev/null > /dev/null 2>&1 || {
-	echo
-        echo "You must have autoconf installed to compile WindowMaker."
-        echo "Download the appropriate package for your distribution,"
-        echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
-        DIE=1
-}
-
-(libtool --version) < /dev/null > /dev/null 2>&1 || {
-        echo
-        echo "You must have libtool installed to compile WindowMaker."
-        echo "Download the appropriate package for your distribution,"
-        echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
-        DIE=1
-}
-
-(automake --version) < /dev/null > /dev/null 2>&1 || {
-        echo
-        echo "You must have automake installed to compile WindowMaker."
-        echo "Download the appropriate package for your distribution,"
-        echo "or get the source tarball at ftp://ftp.gnu.org/pub/gnu/"
-        DIE=1
-}
-
-if test "$DIE" -eq 1; then
-        exit 1
-fi
-
-echo "  libtoolize --copy --force --automake"
-libtoolize --copy --force --automake
-echo "  aclocal -I m4 $ACLOCAL_FLAGS"
-aclocal -I m4 $ACLOCAL_FLAGS
-echo "  autoheader"
-autoheader
-echo "  automake --add-missing --gnu --include-deps"
-automake --add-missing --gnu --include-deps
-echo "  autoconf"
-autoconf
+exit 0
 
 if [ -x config.status -a -z "$*" ]; then
   ./config.status --recheck

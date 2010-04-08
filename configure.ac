@@ -14,11 +14,8 @@ dnl
 AC_INIT(src/WindowMaker.h)
 
 
-
+AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE(WindowMaker, 0.94.0-crm)
-
-AC_PROG_LIBTOOL
-
 AM_CONFIG_HEADER(src/config.h)
 
 
@@ -31,11 +28,9 @@ dnl Checks for programs.
 dnl ===================
 AC_ISC_POSIX
 AC_PROG_CC
-dnl AC_PROG_MAKE_SET -- already done by AM_INIT_AUTOMAKE
-#AC_PROG_RANLIB
-dnl AC_PROG_INSTALL -- already done by AM_INIT_AUTOMAKE
 AC_PROG_LN_S
 AC_PROG_GCC_TRADITIONAL
+AC_PROG_LIBTOOL
 
 AX_CFLAGS_GCC_OPTION(-Wall)
 AX_CFLAGS_GCC_OPTION(-Wextra)

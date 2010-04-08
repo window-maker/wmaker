@@ -73,7 +73,7 @@ wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
 
 	chmod 755 wmaker.inst
 	
-LIBTOOL = $(SHELL) $(top_srcdir)/libtool $(LIBTOOL_ARG)
+LIBTOOL = $(SHELL) $(top_builddir)/libtool $(LIBTOOL_ARG)
 
 .c.o:
 	$(QUIET)$(COMPILE) -c $<
