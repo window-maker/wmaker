@@ -45,7 +45,7 @@ static int countChar(char *str, char c)
 
 typedef struct str {
 	char *str;
-	size_t len;
+	int len;
 } str;
 
 #define XLFD_TOKENS 14
