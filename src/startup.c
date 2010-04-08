@@ -42,6 +42,9 @@
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
 #endif
+#ifdef KEEP_XKB_LOCK_STATUS
+#include <X11/XKBlib.h>
+#endif
 
 #include "WindowMaker.h"
 #include "GNUstep.h"

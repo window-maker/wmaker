@@ -2980,7 +2980,6 @@ static void windowLanguageClick(WCoreWindow *sender, void *data, XEvent *event)
 	WWindow *wwin = data;
 	WFrameWindow *fwin = wwin->frame;
 	WScreen *scr = fwin->screen_ptr;
-	XkbStateRec staterec;
 	int tl;
 
 	if (event->xbutton.button != Button1 && event->xbutton.button != Button3)

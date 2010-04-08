@@ -124,6 +124,10 @@ static void handleVisibilityNotify(XEvent *event);
 static void handleShapeNotify(XEvent *event);
 #endif
 
+#ifdef KEEP_XKB_LOCK_STATUS
+static void handleXkbIndicatorStateNotify(XEvent *event);
+#endif
+
 /* called from the signal handler */
 void NotifyDeadProcess(pid_t pid, unsigned char status);
 
@@ -1194,7 +1198,7 @@ static void handleShapeNotify(XEvent * event)
 
 #ifdef KEEP_XKB_LOCK_STATUS
 /* please help ]d if you know what to do */
-handleXkbIndicatorStateNotify(XEvent * event)
+static void handleXkbIndicatorStateNotify(XEvent *event)
 {
 	WWindow *wwin;
 	WScreen *scr;

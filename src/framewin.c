@@ -146,13 +146,14 @@ void wFrameWindowUpdateBorders(WFrameWindow * fwin, int flags)
 					wCoreConfigure(fwin->left_button, 0, 0, bsize, bsize);
 				}
 #ifdef XKB_BUTTON_HINT
-				if (fwin->language_button)
+				if (fwin->language_button) {
 					if (fwin->flags.hide_left_button || !fwin->left_button
 					    || fwin->flags.lbutton_dont_fit) {
 						wCoreConfigure(fwin->language_button, 0, 0, bsize, bsize);
 					} else {
 						wCoreConfigure(fwin->language_button, bsize, 0, bsize, bsize);
 					}
+				}
 #endif
 
 				if (fwin->right_button) {
