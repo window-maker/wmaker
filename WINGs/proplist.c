@@ -1746,5 +1746,6 @@ int wrmdirhier(const char *path)
 
 	}
 
+	fts_close(fts);
 	return 1;
 }
