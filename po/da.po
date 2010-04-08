@@ -908,8 +908,8 @@ msgstr "løb tør for hukommelse da GNOME hints blev opdateret"
 # ../src/icon.c:229 ../src/wdefaults.c:430
 #: ../src/icon.c:229 ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "fejl ved åbning af billedfil \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "fejl ved åbning af billedfil \"%s\": %s"
 
 # ../src/icon.c:477 ../src/icon.c:486
 #: ../src/icon.c:491 ../src/icon.c:500

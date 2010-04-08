@@ -979,8 +979,8 @@ msgstr "изчерпана памет при актуализиране на GNO
 # ../src/icon.c:229 ../src/wdefaults.c:435
 #: ../src/icon.c:229 ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "грешка при зареждане на файла с картинка \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "грешка при зареждане на файла с картинка \"%s\": %s"
 
 # 
 # ../src/icon.c:488 ../src/icon.c:497

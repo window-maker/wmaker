@@ -574,8 +574,8 @@ msgstr "显示图像时出错: %s"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:427
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "载入图像文件\"%s\"时出错"
+msgid "error loading image file \"%s\": %s"
+msgstr "载入图像文件\"%s\"时出错: %s"
 
 #: ../src/icon.c:477 ../src/icon.c:486
 #, c-format

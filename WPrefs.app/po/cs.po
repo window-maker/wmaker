@@ -234,8 +234,8 @@ msgstr "nelze načíst ikonu %s"
 
 #: ../Configurations.c:164 ../Workspace.c:109
 #, c-format
-msgid "could not process icon %s:"
-msgstr "nelze zpracovat ikonu %s:"
+msgid "could not process icon %s: %s"
+msgstr "nelze zpracovat ikonu %s: %s"
 
 #: ../Configurations.c:189 ../Workspace.c:164
 #, c-format

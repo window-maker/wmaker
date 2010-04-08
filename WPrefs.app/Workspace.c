@@ -99,7 +99,7 @@ createImages(WMScreen * scr, RContext * rc, RImage * xis, char *file, WMPixmap *
 	if (xis) {
 		RCombineImagesWithOpaqueness(icon, xis, 180);
 		if (!(*icon2 = WMCreatePixmapFromRImage(scr, icon, 127))) {
-			wwarning(_("could not process icon %s:"), file, RMessageForError(RErrorCode));
+			wwarning(_("could not process icon %s: %s"), file, RMessageForError(RErrorCode));
 			*icon2 = NULL;
 		}
 	}

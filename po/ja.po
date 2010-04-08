@@ -813,8 +813,8 @@ msgstr "画像のレンダリングエラー: %s"
 
 #: ../src/icon.c:239 ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "画像ファイル\"%s\"のロードエラー"
+msgid "error loading image file \"%s\": %s"
+msgstr "画像ファイル\"%s\"のロードエラー: %s"
 
 #: ../src/icon.c:503 ../src/icon.c:512
 #, c-format

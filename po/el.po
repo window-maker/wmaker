@@ -586,8 +586,8 @@ msgstr ""
 
 #: ../src/icon.c:229 ../src/wdefaults.c:427
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "σφάλμα στην φόρτωση της εικόνας στο αρχείο \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "σφάλμα στην φόρτωση της εικόνας στο αρχείο \"%s\": %s"
 
 #: ../src/icon.c:477 ../src/icon.c:486
 #, c-format

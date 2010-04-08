@@ -825,8 +825,8 @@ msgstr "errore nella generazione dell'immagine: %s"
 
 #: ../src/icon.c:239 ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "errore nel caricamento del file \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "errore nel caricamento del file \"%s\": %s"
 
 #: ../src/icon.c:503 ../src/icon.c:512
 #, c-format

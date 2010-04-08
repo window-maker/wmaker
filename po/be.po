@@ -777,8 +777,8 @@ msgstr "не хапіла памяці падчас абноўлення пад�
 
 #: ../src/icon.c:229 ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "памылка загрузкі файла выявы \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "памылка загрузкі файла выявы \"%s\": %s"
 
 #: ../src/icon.c:493 ../src/icon.c:502
 #, c-format

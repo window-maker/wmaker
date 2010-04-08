@@ -18,8 +18,8 @@ msgid "could not load icon %s"
 msgstr "ne mogu učitati ikonu %s"
 
 #: ../../WPrefs/Configurations.c:156 ../../WPrefs/Workspace.c:85
-msgid "could not process icon %s:"
-msgstr "ne mogu procesirati ikonu %s"
+msgid "could not process icon %s: %s"
+msgstr "ne mogu procesirati ikonu %s: %s"
 
 #: ../../WPrefs/Configurations.c:181 ../../WPrefs/Workspace.c:124
 msgid "could not load image file %s"

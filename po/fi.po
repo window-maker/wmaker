@@ -759,8 +759,8 @@ msgstr "virhe piirrettäessä kuvaa: %s"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:440
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "virhe ladattaessa kuvaa \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "virhe ladattaessa kuvaa \"%s\": %s"
 
 #: ../src/icon.c:491 ../src/icon.c:500
 #, c-format

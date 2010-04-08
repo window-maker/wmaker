@@ -782,8 +782,8 @@ msgstr ""
 
 #: ../src/icon.c:229 ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "error al cargar el fichero de imagen \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "error al cargar el fichero de imagen \"%s\": %s"
 
 #: ../src/icon.c:493 ../src/icon.c:502
 #, c-format

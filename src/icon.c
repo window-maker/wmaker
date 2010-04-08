@@ -216,7 +216,7 @@ WIcon *wIconCreateWithIconFile(WScreen * scr, char *iconfile, int tile)
 	if (iconfile) {
 		icon->image = RLoadImage(scr->rcontext, iconfile, 0);
 		if (!icon->image) {
-			wwarning(_("error loading image file \"%s\""), iconfile, RMessageForError(RErrorCode));
+			wwarning(_("error loading image file \"%s\": %s"), iconfile, RMessageForError(RErrorCode));
 		}
 
 		icon->image = wIconValidateIconSize(scr, icon->image);

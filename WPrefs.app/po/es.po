@@ -231,8 +231,8 @@ msgstr "no puedo cargar el icono %s"
 
 #: ../../WPrefs.app/Configurations.c:164 ../../WPrefs.app/Workspace.c:109
 #, c-format
-msgid "could not process icon %s:"
-msgstr "no puedo procesar el icono %s:"
+msgid "could not process icon %s: %s"
+msgstr "no puedo procesar el icono %s: %s"
 
 #: ../../WPrefs.app/Configurations.c:189 ../../WPrefs.app/Workspace.c:164
 #, c-format

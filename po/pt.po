@@ -620,8 +620,8 @@ msgstr "erro na apresentação de imagem:%s"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:435
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "erro ao carregar arquivo de imagens \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "erro ao carregar arquivo de imagens \"%s\": %s"
 
 #: ../src/icon.c:488 ../src/icon.c:497
 #, c-format

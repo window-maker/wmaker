@@ -811,8 +811,8 @@ msgstr "nedostatok pamäti pri obnovovaní príznakov GNOME"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "chyba pri čítaní obrázku zo súboru \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "chyba pri čítaní obrázku zo súboru \"%s\": %s"
 
 #: ../src/icon.c:493 ../src/icon.c:502
 #, c-format

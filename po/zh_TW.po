@@ -805,8 +805,8 @@ msgstr "表現影像錯誤: %s"
 
 #: ../src/icon.c:239 ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "載入影像檔錯誤 \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "載入影像檔錯誤 \"%s\": %s"
 
 #: ../src/icon.c:503 ../src/icon.c:512
 #, c-format

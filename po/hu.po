@@ -487,8 +487,8 @@ msgid "error rendering image: %s"
 msgstr "hiba a %s kép leképezésekor"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:427
-msgid "error loading image file \"%s\""
-msgstr "hiba a \"%s\" kép betöltése közben"
+msgid "error loading image file \"%s\": %s"
+msgstr "hiba a \"%s\" kép betöltése közben: %s"
 
 #: ../src/icon.c:477 ../src/icon.c:486
 msgid "could not create directory %s"

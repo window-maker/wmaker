@@ -758,8 +758,8 @@ msgstr "tak cukup memori bila mengemaskini petua GNOME"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "ralat memuatkan fail imej \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "ralat memuatkan fail imej \"%s\": %s"
 
 #: ../src/icon.c:491 ../src/icon.c:500
 #, c-format

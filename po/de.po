@@ -775,8 +775,8 @@ msgstr "Fehler beim Anzeigen des Bildes: %s"
 
 #: ../src/icon.c:219 ../src/wdefaults.c:423
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "Fehler beim Laden der Bilddatei \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "Fehler beim Laden der Bilddatei \"%s\": %s"
 
 #: ../src/icon.c:458 ../src/icon.c:467
 #, c-format

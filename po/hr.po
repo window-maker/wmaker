@@ -404,8 +404,8 @@ msgid "error rendering image:%s"
 msgstr "greška pri rednderiranju slike: %s"
 
 #: ../src/icon.c:182 ../src/wdefaults.c:402
-msgid "error loading image file \"%s\""
-msgstr "greška pri učitavanju image datoteke \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "greška pri učitavanju image datoteke \"%s\": %s"
 
 #: ../src/icon.c:428 ../src/icon.c:437
 msgid "could not create directory %s"

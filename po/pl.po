@@ -441,8 +441,8 @@ msgstr "błąd podczas pokazywania obrazka:%s"
 
 #: ../src/icon.c:182 ../src/wdefaults.c:411
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "błąd podczas ładowania pliku z obrazkiem \"%s\""
+msgid "error loading image file \"%s\": %s"
+msgstr "błąd podczas ładowania pliku z obrazkiem \"%s\": %s"
 
 #: ../src/icon.c:430 ../src/icon.c:439
 #, c-format

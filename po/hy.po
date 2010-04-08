@@ -901,7 +901,7 @@ msgstr ""
 #: ../src/icon.c:239
 #: ../src/wdefaults.c:443
 #, c-format
-msgid "error loading image file \"%s\""
+msgid "error loading image file \"%s\": %s"
 msgstr ""
 
 #: ../src/icon.c:503

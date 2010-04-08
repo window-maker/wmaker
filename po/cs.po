@@ -783,8 +783,8 @@ msgstr "nedostatek paměti při obnovování pokynů pro GNOME"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:438
 #, c-format
-msgid "error loading image file \"%s\""
-msgstr "ze souboru \"%s\" nelze načíst obrázek"
+msgid "error loading image file \"%s\": %s"
+msgstr "ze souboru \"%s\" nelze načíst obrázek: %s"
 
 #: ../src/icon.c:491 ../src/icon.c:500
 #, c-format
