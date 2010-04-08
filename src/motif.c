@@ -148,6 +148,7 @@ static int getMWMHints(Window window, MWMHints *mwmhints)
 	if (!data)
 		return 0;
 
+	mwmhints->flags = 0;
 	if (count >= 4) {
 		mwmhints->flags = data[0];
 		mwmhints->functions = data[1];

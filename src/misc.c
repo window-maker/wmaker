@@ -404,7 +404,7 @@ char *ShrinkString(WMFont * font, char *string, int width)
 
 char *FindImage(char *paths, char *file)
 {
-	char *tmp, *path;
+	char *tmp, *path = NULL;
 
 	tmp = strrchr(file, ':');
 	if (tmp) {

@@ -22,6 +22,7 @@
 
 #include "WPrefs.h"
 #include <unistd.h>
+#include <assert.h>
 
 typedef struct _Panel {
 	WMBox *box;
@@ -131,6 +132,8 @@ static void browseForFile(WMWidget * w, void *data)
 	_Panel *panel = (_Panel *) data;
 	WMFilePanel *filePanel;
 
+	assert(w == panel->icoaB || w == panel->pixaB);
+
 	filePanel = WMGetOpenPanel(WMWidgetScreen(w));
 
 	WMSetFilePanelCanChooseFiles(filePanel, False);
@@ -147,7 +150,7 @@ static void browseForFile(WMWidget * w, void *data)
 				len--;
 			}
 			if (len > 0) {
-				WMList *lPtr;
+				WMList *lPtr = NULL;
 				int i;
 
 				if (w == panel->icoaB)

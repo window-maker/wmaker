@@ -181,7 +181,7 @@ static Bool isFontOption(char *option)
 /* XXX: is almost like WINGs/wcolodpanel.c:fetchFile() */
 void copyFile(char *dir, char *file)
 {
-	FILE *src, *dst;
+	FILE *src = NULL, *dst = NULL;
 	size_t nread, nwritten, len;
 	char buf[4096];
 	struct stat st;
@@ -230,7 +230,9 @@ void copyFile(char *dir, char *file)
 	RETRY( fclose(dst) )
 
 err:
-	RETRY( fclose(src) )
+	if (src) {
+		RETRY( fclose(src) )
+	}
 	wfree(dstpath);
 	return;
 }

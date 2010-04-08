@@ -544,7 +544,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 		int style;
 		RColor rcolor2;
 		int i;
-		RImage *grad, *timage;
+		RImage *grad, *timage = NULL;
 		char *path;
 
 		switch (toupper(type[1])) {

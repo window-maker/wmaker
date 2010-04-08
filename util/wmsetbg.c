@@ -471,7 +471,7 @@ BackgroundTexture *parseTexture(RContext * rc, char *text)
 		XColor color;
 		Pixmap pixmap = None;
 		RImage *image = NULL;
-		int iwidth, iheight;
+		int iwidth = 0, iheight = 0;
 		RColor rcolor;
 
 		GETSTRORGOTO(val, tmp, 1, error);
@@ -879,7 +879,7 @@ void helperLoop(RContext * rc)
 	memset(textures, 0, WORKSPACE_COUNT * sizeof(BackgroundTexture *));
 
 	while (1) {
-		int workspace;
+		int workspace = -1;
 
 		/* get length of message */
 		if (readmsg(0, buffer, 4) < 0) {
