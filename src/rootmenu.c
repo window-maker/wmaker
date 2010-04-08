@@ -1212,7 +1212,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 		separateline(line, title, command, params, shortcut);
 
 		if (!command[0]) {
-			wwarning(_("%s:missing command in menu config: %s"), file_name, line);
+			wwarning(_("%s:missing command in menu config: %s"), filename, line);
 			break;
 		}
 		if (strcasecmp(command, "MENU") == 0) {

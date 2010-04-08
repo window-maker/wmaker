@@ -1746,4 +1746,5 @@ int wrmdirhier(const char *path)
 
 	}
 
+	return 1;
 }

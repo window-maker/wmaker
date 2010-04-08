@@ -96,11 +96,11 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 	char rtext[300];
 
 	if (strlen(slist[*index]) > 300) {
-		wwarning("appmenu: menu command size exceeded in window %x", win);
+		wwarning("appmenu: menu command size exceeded in window %lx", win);
 		return NULL;
 	}
 	if (sscanf(slist[*index], "%i %i %n", &command, &code, &pos) < 2 || command != wmBeginMenu) {
-		wwarning("appmenu: bad menu entry \"%s\" in window %x", slist[*index], win);
+		wwarning("appmenu: bad menu entry \"%s\" in window %lx", slist[*index], win);
 		return NULL;
 	}
 	strcpy(title, &slist[*index][pos]);
@@ -113,7 +113,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 
 		if (sscanf(slist[*index], "%i", &command) != 1) {
 			wMenuDestroy(menu, True);
-			wwarning("appmenu: bad menu entry \"%s\" in window %x", slist[*index], win);
+			wwarning("appmenu: bad menu entry \"%s\" in window %lx", slist[*index], win);
 			return NULL;
 		}
 
@@ -129,7 +129,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 				if (sscanf(slist[*index], "%i %i %i %i %n",
 					   &command, &ecode, &etag, &enab, &pos) != 4 || ecode != code) {
 					wMenuDestroy(menu, True);
-					wwarning("appmenu: bad menu entry \"%s\" in window %x",
+					wwarning("appmenu: bad menu entry \"%s\" in window %lx",
 						 slist[*index], win);
 					return NULL;
 				}
@@ -139,14 +139,14 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 				if (sscanf(slist[*index], "%i %i %i %i %s %n",
 					   &command, &ecode, &etag, &enab, rtext, &pos) != 5 || ecode != code) {
 					wMenuDestroy(menu, True);
-					wwarning("appmenu: bad menu entry \"%s\" in window %x",
+					wwarning("appmenu: bad menu entry \"%s\" in window %lx",
 						 slist[*index], win);
 					return NULL;
 				}
 				strcpy(title, &slist[*index][pos]);
 			}
 			if (!(data = malloc(sizeof(WAppMenuData)))) {
-				wwarning("appmenu: out of memory making menu for window %x", win);
+				wwarning("appmenu: out of memory making menu for window %lx", win);
 				wMenuDestroy(menu, True);
 				return NULL;
 			}
@@ -156,7 +156,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 			entry = wMenuAddCallback(menu, title, notifyClient, data);
 			if (!entry) {
 				wMenuDestroy(menu, True);
-				wwarning("appmenu: out of memory creating menu for window %x", slist[*index], win);
+				wwarning("appmenu: out of memory creating menu for window %lx", win);
 				wfree(data);
 				return NULL;
 			}
@@ -175,7 +175,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 			if (sscanf(slist[*index], "%i %i %i %i %i %n",
 				   &command, &ecode, &etag, &enab, &ncode, &pos) != 5 || ecode != code) {
 				wMenuDestroy(menu, True);
-				wwarning("appmenu: bad menu entry \"%s\" in window %x", slist[*index], win);
+				wwarning("appmenu: bad menu entry \"%s\" in window %lx", slist[*index], win);
 
 				return NULL;
 			}
@@ -189,7 +189,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 			if (!entry) {
 				wMenuDestroy(menu, True);
 				wMenuDestroy(submenu, True);
-				wwarning("appmenu: out of memory creating menu for window %x", slist[*index], win);
+				wwarning("appmenu: out of memory creating menu for window %lx", win);
 				return NULL;
 			}
 
@@ -197,7 +197,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 
 		} else {
 			wMenuDestroy(menu, True);
-			wwarning("appmenu: bad menu entry \"%s\" in window %x", slist[*index], win);
+			wwarning("appmenu: bad menu entry \"%s\" in window %lx", slist[*index], win);
 			return NULL;
 		}
 	}
@@ -221,7 +221,7 @@ WMenu *wAppMenuGet(WScreen * scr, Window window)
 	}
 	XFree(text_prop.value);
 	if (strcmp(slist[0], "WMMenu 0") != 0) {
-		wwarning("appmenu: unknown version of WMMenu in window %x: %s", window, slist[0]);
+		wwarning("appmenu: unknown version of WMMenu in window %lx: %s", window, slist[0]);
 		XFreeStringList(slist);
 		return NULL;
 	}

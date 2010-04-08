@@ -135,7 +135,7 @@ W_SendDnDClientMessage(Display * dpy, Window win, Atom message,
 #endif
 
 	if (!windowExists(dpy, win)) {
-		wwarning("xdnd message target %d does no longer exist.", win);
+		wwarning("xdnd message target %lu does no longer exist.", win);
 		return False;	/* message not sent */
 	}
 

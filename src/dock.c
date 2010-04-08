@@ -3514,7 +3514,7 @@ static Bool handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 	Bool hasMoved = False;
 
 	if (wPreferences.flags.noupdates)
-		return;
+		return hasMoved;
 
 	if (XGrabPointer(dpy, icon->core->window, True, ButtonMotionMask
 			 | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,

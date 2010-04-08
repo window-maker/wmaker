@@ -25,6 +25,7 @@
 
 #include <X11/Xutil.h>
 
+#include <unistd.h>
 #include <math.h>
 
 /* double-click tester */
