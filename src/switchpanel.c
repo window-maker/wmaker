@@ -387,7 +387,6 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 	for (fl = 0; fl < 2; fl++) {
 		for (wwin = curwin; wwin; wwin = wwin->prev) {
 			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-			    (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
 			    (wwin->flags.mapped || include_unmapped)) {
 				if (class_only) {
 				    if (!wwin->wm_class || !curwin->wm_class)
@@ -405,7 +404,6 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 
 		for (wwin = curwin; wwin && wwin != curwin; wwin = wwin->prev) {
 			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-			    (!WFLAGP(wwin, skip_window_list) || wwin->flags.internal_window) &&
 			    (wwin->flags.mapped || include_unmapped)) {
 				if (class_only) {
 				    if (!wwin->wm_class || !curwin->wm_class)
