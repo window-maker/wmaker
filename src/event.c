@@ -1159,16 +1159,17 @@ static void handleShapeNotify(XEvent * event)
 {
 	XShapeEvent *shev = (XShapeEvent *) event;
 	WWindow *wwin;
-	XEvent ev;
+	union {
+		XEvent xevent;
+		XShapeEvent xshape;
+	} ev;
 
-	while (XCheckTypedWindowEvent(dpy, shev->window, event->type, &ev)) {
-		XShapeEvent *sev = (XShapeEvent *) & ev;
-
-		if (sev->kind == ShapeBounding) {
-			if (sev->shaped == shev->shaped) {
-				*shev = *sev;
+	while (XCheckTypedWindowEvent(dpy, shev->window, event->type, &ev.xevent)) {
+		if (ev.xshape.kind == ShapeBounding) {
+			if (ev.xshape.shaped == shev->shaped) {
+				*shev = ev.xshape;
 			} else {
-				XPutBackEvent(dpy, &ev);
+				XPutBackEvent(dpy, &ev.xevent);
 				break;
 			}
 		}
