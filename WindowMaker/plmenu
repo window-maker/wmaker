@@ -34,7 +34,7 @@
    ("Xedit", EXEC, "xedit")
   ),
   ("Multimedia",
-   ("XMMS", 
+   ("XMMS",
     ("XMMS", EXEC, "xmms"),
     ("XMMS play/pause", EXEC, "xmms -t"),
     ("XMMS stop", EXEC, "xmms -s")
@@ -90,11 +90,11 @@
 	("Wine Shades",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
    ),
    ("Images", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
-   ),   
+   ),
    ("Save Theme", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
    ("Save IconSet", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\""),
    ("Preferences Utility", EXEC, "/usr/local/GNUstep/Applications/WPrefs.app/WPrefs")
-   ), 
+   ),
    ("Session",
     ("Save Session", SAVE_SESSION),
     ("Clear Session", CLEAR_SESSION),

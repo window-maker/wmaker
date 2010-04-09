@@ -33,7 +33,7 @@ msgid "Owner of Focused Window"
 msgstr "Собственик на нефокусиран"
 
 # Изненада: използва се на две места, трябва ни "Име на меню", но на
-# едното място не се побира.  
+# едното място не се побира.
 # ../../WPrefs.app/Appearance.c:1518 ../../WPrefs.app/Appearance.c:1836
 #: ../../WPrefs.app/Appearance.c:1545 ../../WPrefs.app/Appearance.c:1862
 msgid "Menu Title"

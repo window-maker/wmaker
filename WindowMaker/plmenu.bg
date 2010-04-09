@@ -91,11 +91,11 @@
     ("Винени сенки",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
    ("Изображения", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
-   ),   
+   ),
   ("Запази темата", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
   ("Запази колекцията иконки", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\""),
   ("Пособие за настройки", EXEC, "/usr/local/GNUstep/Applications/WPrefs.app/WPrefs")
-  ), 
+  ),
  ("Изход",
   ("Рестартиране", RESTART),
   ("Стартирай BlackBox", RESTART, blackbox),

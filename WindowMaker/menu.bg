@@ -8,15 +8,15 @@
  * <Заглавие> е какъв да е низ, който ще се използва като название на
  * съответния елемент от менюто. Ако включва интервали, трябва да се
  * огради с ".
- * 
+ *
  * SHORTCUT определя клавишна комбинация ("бърз клавиш") за този
  * елемент на менюто. <комбинация> има същия синтаксис, както клавишните
  * комбинации във файла $HOME/GNUstep/Defaults/WindowMaker,
  * напр. RootMenuKey или MiniaturizeKey.
  *
  * Не може да се посочва клавишна комбинация за MENU и OPEN_MENU.
- * 
- * <Command> може да бъде: 
+ *
+ * <Command> може да бъде:
  *	MENU - започва дефиниция на (под)меню
  *	END  - завършва дефиницията на (под)меню
  *	OPEN_MENU - чете менюто от файл, програмен канал или
@@ -47,7 +47,7 @@
  *                     конфигурационната база-данни на Window Maker,
  *                     то при всяко излизане от WindowMaker
  *                     състоянието на сесията автоматично ще бъде
- *                     запазено. 
+ *                     запазено.
  *	CLEAR_SESSION - изтрива данните за по-рано запазена
  *                      сесия. Това няма никакъв ефект, ако
  *                      SaveSessionOnExit = Yes.
@@ -65,7 +65,7 @@
  *   3. Меню от директория:
  *	// Отваря едната или повече директории и прави сортирано
  *      // азбучно меню за всички изпълними файлове и поддиректории в
- *      // тях. 
+ *      // тях.
  *	OPEN_MENU директория1 [директория2 ...]
  *   4. Меню от директория с команда
  *	// Отваря едната или повече директории и прави сортирано
@@ -85,7 +85,7 @@
  *                      замества с въведеното.
  * %w - замества се с XID (номера) на прозореца с фокус.
  * %W - замества се с номера на текущото работно място.
- * 
+ *
  * Преди специалните символи (като % и ") може да поставяте \ за да
  * загубят специалното си значение:
  * пример: xterm -T "\"Hello World\""
@@ -121,7 +121,7 @@
 		"Ръководства" EXEC xman
 	"Инфо" END
 	"Стартирай..." SHEXEC %a(Run,Въведете команда, която да се стартира:)
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Работни места" WORKSPACE_MENU
 	"Приложения" MENU
@@ -134,15 +134,15 @@
 		"X File Manager" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
-  		"Ghostview" EXEC ghostview %a(GhostView,Enter file to view)
+		"Netscape" EXEC netscape
+		"Ghostview" EXEC ghostview %a(GhostView,Enter file to view)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobar,Enter PDF to view)
-  		"TkDesk" EXEC tkdesk
+		"TkDesk" EXEC tkdesk
 	"Приложения" END
 	"Редактори" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
@@ -186,24 +186,24 @@
 		"Колекции иконки" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
 		"Фон" MENU
 			"Плътен" MENU
-                        	"Черен" WS_BACK '(solid, black)'
-                        	"Син"  WS_BACK '(solid, "#505075")'
+				"Черен" WS_BACK '(solid, black)'
+				"Син"  WS_BACK '(solid, "#505075")'
 				"Тъмно виолетово" WS_BACK '(solid, "#243e6c")'
 				"Силно синьо" WS_BACK '(solid, "#180090")'
-                        	"Мораво" WS_BACK '(solid, "#554466")'
-                        	"Пшеничен"  WS_BACK '(solid, "wheat4")'
-                        	"Тъмно сив"  WS_BACK '(solid, "#333340")'
-                        	"Винен" WS_BACK '(solid, "#400020")'
+				"Мораво" WS_BACK '(solid, "#554466")'
+				"Пшеничен"  WS_BACK '(solid, "wheat4")'
+				"Тъмно сив"  WS_BACK '(solid, "#333340")'
+				"Винен" WS_BACK '(solid, "#400020")'
 			"Плътен" END
 			"Градиент" MENU
 				"Слънце" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
 				"Небе" WS_BACK '(vgradient, blue4, white)'
-    				"Сини сенки" WS_BACK '(vgradient, "#7080a5", "#101020")'
+				"Сини сенки" WS_BACK '(vgradient, "#7080a5", "#101020")'
 				"Виолетови сенки" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
-			    	"Морави сенки" WS_BACK '(vgradient, "#654c66", "#151426")'
-    				"Пшенични сенки" WS_BACK '(vgradient, "#a09060", "#302010")'
-    				"Сиви сенки" WS_BACK '(vgradient, "#636380", "#131318")'
-    				"Винени сенки" WS_BACK '(vgradient, "#600040", "#180010")'
+				"Морави сенки" WS_BACK '(vgradient, "#654c66", "#151426")'
+				"Пшенични сенки" WS_BACK '(vgradient, "#a09060", "#302010")'
+				"Сиви сенки" WS_BACK '(vgradient, "#636380", "#131318")'
+				"Винени сенки" WS_BACK '(vgradient, "#600040", "#180010")'
 			"Градиент" END
 			"Images" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
 		"Фон" END
