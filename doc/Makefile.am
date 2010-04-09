@@ -1,6 +1,6 @@
 ## Process this file with automake to produce Makefile.in
 
-SUBDIRS = sk
+SUBDIRS = sk cs
 
 man_MANS = \
 	geticonset.1x \

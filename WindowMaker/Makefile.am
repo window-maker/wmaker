@@ -3,9 +3,9 @@ SUBDIRS = Backgrounds Defaults IconSets Icons Pixmaps Styles Themes
 prefsdatadir = $(pkgdatadir)
 
 prefsdata_DATA =\
-	README\
-	README.themes\
+	appearance.menu\
 	autostart.sh\
+	background.menu\
 	exitscript.sh\
 	menu\
 	menu.bg\
@@ -52,15 +52,10 @@ prefsdata_DATA =\
 	plmenu.sk\
 	plmenu.zh_CN\
 	plmenu.zh_TW\
+	README\
+	README.themes\
 	wmmacros
 
 EXTRA_DIST = $(prefsdata_DATA) mkMakefile
 
-.c.o:
-	$(QUIET)$(COMPILE) -c $<
 
-.c.obj:
-	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-.c.lo:
-	$(QUIET)$(LTCOMPILE) -c -o $@ $<

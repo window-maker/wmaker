@@ -4,6 +4,8 @@ SUBDIRS = .
 
 AUTOMAKE_OPTIONS = no-dependencies
 
+EXTRA_DIST = tests
+
 lib_LTLIBRARIES = libwraster.la
 
 libwraster_la_LDFLAGS = -version-info 4:0:1
@@ -22,6 +24,7 @@ libwraster_la_SOURCES = 	\
 	save.c		\
 	gradient.c 	\
 	xpixmap.c	\
+	bench.h		\
 	convert.c 	\
 	x86_specific.c	\
 	context.c 	\

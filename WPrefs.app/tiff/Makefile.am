@@ -20,6 +20,7 @@ EXTRA_DIST = \
 	menualign2.tiff \
 	menuprefs.tiff \
 	menus.tiff \
+	miscprefs2.tiff \
 	moreanim.tiff \
 	mousesettings.tiff \
 	mousespeed.tiff \
@@ -32,6 +33,7 @@ EXTRA_DIST = \
 	opaque.tiff \
 	paths.tiff \
 	smooth.tiff \
+	sound.tiff \
 	speed0.tiff \
 	speed0s.tiff \
 	speed1.tiff \
@@ -44,6 +46,7 @@ EXTRA_DIST = \
 	speed4s.tiff \
 	tdel.tiff \
 	tedit.tiff \
+	temp.tiff \
 	textr.tiff \
 	theme.tiff \
 	timer0.tiff \

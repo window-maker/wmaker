@@ -2,5 +2,5 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-EXTRA_DIST = README.connection
+EXTRA_DIST =
 

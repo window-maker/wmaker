@@ -33,6 +33,7 @@ EXTRA_DIST = \
 	opaque.xpm \
 	paths.xpm \
 	smooth.xpm \
+	sound.xpm \
 	speed0.xpm \
 	speed0s.xpm \
 	speed1.xpm \
@@ -45,6 +46,7 @@ EXTRA_DIST = \
 	speed4s.xpm \
 	tdel.xpm \
 	tedit.xpm \
+	temp.xpm \
 	textr.xpm \
 	theme.xpm \
 	timer0.xpm \

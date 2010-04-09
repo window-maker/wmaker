@@ -21,7 +21,7 @@ lib_LTLIBRARIES = libWINGs.la libWUtil.la
 LDADD= libWUtil.la libWINGs.la $(top_builddir)/wrlib/libwraster.la @INTLIBS@
 
 
-EXTRA_DIST = BUGS make-rgb
+EXTRA_DIST = BUGS make-rgb Examples Extras Tests
 
 
 # wbutton.c 
@@ -30,6 +30,7 @@ libWINGs_la_SOURCES = 	\
 	dragcommon.c \
 	dragdestination.c \
 	dragsource.c \
+	rgb.h \
 	selection.c \
 	wappresource.c \
 	wballoon.c \

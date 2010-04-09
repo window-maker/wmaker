@@ -61,6 +61,8 @@ wmgenmenu_LDADD = \
 	$(top_builddir)/WINGs/libWUtil.la \
 	@INTLIBS@
 
+wmgenmenu_SOURCES = wmgenmenu.c wmgenmenu.h
+
 CLEANFILES = wmaker.inst
 
 wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile

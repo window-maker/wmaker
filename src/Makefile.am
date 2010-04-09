@@ -58,6 +58,7 @@ wmaker_SOURCES = 	\
 	resources.c \
 	resources.h \
 	rootmenu.c \
+	rootmenu.h \
 	screen.c \
 	screen.h \
 	session.h \
@@ -100,6 +101,7 @@ wmaker_SOURCES = 	\
 	text.c \
 	text.h
 
+EXTRA_wmaker_SOURCES = osdep_bsd.c osdep_darwin.c osdep_linux.c osdep_stub.c
 
 AM_CPPFLAGS = $(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\"
 
