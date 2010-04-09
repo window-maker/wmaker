@@ -24,8 +24,6 @@ endif
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 #LINGUAS           := $(filter-out zh_TW.Big5, $(LINGUAS))
 
-# Options, options and more options!!!
-
 XLOCALE           := --disable-locale
 MODELOCK          := --enable-modelock
 
@@ -87,10 +85,8 @@ LIBWRASTER_TMP    := $(DEBTMPDIR)/../$(LIBWRASTER)
 LIBWINGS          := libwings-dev
 LIBWINGS_TMP      := $(DEBTMPDIR)/../$(LIBWINGS)
 
-LTMAIN            := $(shell: find /usr/share/libtool/ -name ltmain.sh | head -1)
-
 RM		  := rm -f
-RMDIR	  := rmdir --ignore-fail-on-non-empty
+RMDIR		  := rmdir --ignore-fail-on-non-empty
 
 COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
                      --mandir=$(MANDIR)               \
@@ -101,11 +97,6 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
                      --with-pixmapdir=$(PIXMAPDIR)    \
                      --with-gnustepdir=$(GNUSTEPDIR)  \
                      --with-xft
-
-AUTOMAKE_FILES    := $(shell find -name Makefile.am)
-IN_MAKEFILES      := $(patsubst %.am,%.in,$(AUTOMAKE_FILES))
-IN_FILES          := $(filter-out $(IN_MAKEFILES),$(shell find -name \*.in))
-GEN_FILES         := $(patsubst %.in,%,$(IN_FILES))
 
 LIST_PATCHES      := find debian/patches -mindepth 1 -maxdepth 1 -name \*.diff -type f | sort
 RLIST_PATCHES     := find debian/patches -mindepth 1 -maxdepth 1 -name \*.diff -type f | sort -r
@@ -178,26 +169,12 @@ unpatch-wmaker:
 clean:
 	dh_testdir
 	dh_testroot
-	-$(MAKE) distclean
-	debian/rules unpatch-wmaker
-	$(RM) \
-	  config.log
-	$(RM) *-stamp \
-	  debian/*.files \
-	  libtool \
-	  src/config.h.in \
-	  debian/shlibs.local
-#	  debian/conffiles 
 	$(RM) -r $(WMAKER_BD)
-ifeq (skip,)
-	$(RM) \
-	  configure \
-	  config.guess \
-	  config.sub \
-	  aclocal.m4 \
-	  ltmain.sh
-	$(RM) $(IN_MAKEFILES) $(GEN_FILES)
-endif
+	$(RM) *-stamp \
+		debian/*.files \
+		debian/shlibs.local \
+		debian/conffiles
+	debian/rules unpatch-wmaker
 	dh_clean
 
 binary-indep: build
@@ -382,19 +359,7 @@ debian/libwings-dev.files: build
 debian/shlibs.local:
 	echo 'libwraster  $(patsubst libwraster%,%, $(LIBWRASTER))  $(LIBWRASTER) $(libwraster_deps)' > $@
 
-aclocal.m4: acinclude.m4 configure.ac
-	aclocal
-
-src/config.h.in: configure.ac
-	autoheader
-
-ltmain.sh: aclocal.m4 $(LTMAIN)
-	libtoolize --force --copy --automake
-
-$(IN_MAKEFILES): %.in: ltmain.sh %.am src/config.h.in
-	automake --add-missing --gnu --include-deps
-
-configure: $(IN_MAKEFILES) configure.ac
-	autoconf
+configure:	configure.ac
+	$(TOPSRCDIR)/autogen.sh
 
 .PHONY: binary binary-arch binary-indep binary-custom clean build unpatch-wmaker
