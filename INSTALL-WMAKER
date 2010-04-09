@@ -12,7 +12,7 @@ SUPPORTED PLATFORMS
 
 - Intel GNU/Linux Systems in general
 
-Patches to make it work on other platforms are welcome. 
+Patches to make it work on other platforms are welcome.
 
 
 REQUIREMENTS:
@@ -20,7 +20,7 @@ REQUIREMENTS:
 
 The following software is required to use Window Maker:
 
-- X11R6.x	
+- X11R6.x
 	Window Maker can be compiled in older versions of X, like X11R5
 	(Solaris) or X11R4 (OpenWindows) but it will not work 100% correctly.
 	In such servers there will not be application icons and you'll have
@@ -50,17 +50,17 @@ OPTIONAL:
 These libraries are not required to make Window Maker work, but they
 are supported in case you want to use them. Version numbers are those
 that I have (and therefore, guraranteed to work), but other versions
-might work too. 
+might work too.
 
 
 - libXPM 4.7 or newer
-	Older versions may not work!!! 
+	Older versions may not work!!!
 	Available at ftp://sunsite.unc.edu/pub/Linux/libs/X/
 
 	There is builtin support for XPM files, but it will not
 	load images in some uncommon encodings.
 
-- libpng 0.96 or newer and zlib     
+- libpng 0.96 or newer and zlib
 	For PNG image support.
 	http://www.cdrom.com/pub/png/
 
@@ -117,18 +117,18 @@ To get a list of other options, run ./configure --help
 	texture generation a little bit, but in some cases it seems to be
 	necessary due to a bug that manifests as messed icons and textures.
 
---disable-motif 
+--disable-motif
 	disable support for mwm window manager hints
 
 --enable-modelock
 	XKB language status lock support. If you don't know what it is you
 	probably don't need it.
 
---disable-xpm   
+--disable-xpm
 	disables use of the XPM library even if it is available on your
 	system.
 
---disable-png	
+--disable-png
 	disables use of PNG library
 
 --disable-tiff
@@ -151,10 +151,10 @@ PLATFORM SPECIFIC NOTES:
 	Make sure you have /usr/local/lib in /etc/ld.so.conf and that you
 	run ldconfig after installing.
 	Uninstall any packaged version of Window Maker before installing a new
-	version. 
+	version.
 
 - RedHat GNU/Linux
-	RedHat systems have several annoying problems. If you use it, 
+	RedHat systems have several annoying problems. If you use it,
 	be sure to follow the steps below or Window Maker will not work:
 
 	* if you installed the Window Maker that comes with RedHat, uninstall
@@ -174,7 +174,7 @@ PLATFORM SPECIFIC NOTES:
 	seem to have bugs that cause the system to hang.
 
 - Debian GNU/Linux
-	If you want JPEG and TIFF support, make sure you have libtiff-dev 
+	If you want JPEG and TIFF support, make sure you have libtiff-dev
 	and libjpeg-dev	installed.
 
 - SuSE GNU/Linux
@@ -212,11 +212,11 @@ smaller, you can instead type:
 This will build and install Window Maker with default parameters.
 
 If you want to customize some compile-time options, you can do the
-following. 
+following.
 
-	1. (optional) Look at the CONFIGURE OPTIONS section above for the 
+	1. (optional) Look at the CONFIGURE OPTIONS section above for the
 	options available. Also run:
- 
+
 	./configure --help
 
 	to get a complete listing of other options that are available.
@@ -226,14 +226,14 @@ following.
 
 	./configure --enable-modelock
 
-	3. (optional) Edit src/wconfig.h with your favorite text editor 
+	3. (optional) Edit src/wconfig.h with your favorite text editor
 	and browse through it for some options you might want to change.
 
 	4. Compile. Just type:
 
 	make
 
-	5. Login as root (if you can't do that, read the "I don't have the 
+	5. Login as root (if you can't do that, read the "I don't have the
 	root password :-(" section) and install Window Maker in your system:
 		su root
 		make install
@@ -255,8 +255,8 @@ Type:
 	wmaker.inst will install Window Maker configuration files and will
 setup X to automatically launch Window Maker at startup.
 
-	That's it! 
-	
+	That's it!
+
 	You can type "man wmaker" to get some general help for configuration
 and other stuff.
 
@@ -270,7 +270,7 @@ Installing the extras package
 -----------------------------
 
 Unpack WindowMaker-extra-<version-number>.tar.gz in /usr/local/share
-        
+
 You can get the file at http://windowmaker.org/pub/source/release/. This file
 is optional and only have a few icons, and themes. Look for the latest
 <version-number> available.  Also there is a WindowMaker-extra.readme to
@@ -291,7 +291,7 @@ WPrefs.app Example:
 
 
 Then make /home/jshmoe/bin be included in your search PATH, add
-/home/jshmoe/lib to your LD_LIBRARY_PATH environment variable and run 
+/home/jshmoe/lib to your LD_LIBRARY_PATH environment variable and run
 bin/wmaker.inst
 
 Of course, /home/jshmoe is supposed to be replaced with your actual home
@@ -333,7 +333,7 @@ autoconf 2.13
 automake 1.4
 libtool 1.3
 
-Note that it must not be libtool 1.2b, it must be libtool 1.3, 
+Note that it must not be libtool 1.2b, it must be libtool 1.3,
 from the GNU sites.
 
 == configure doesn't detect libtiff, or other graphic libraries.
@@ -347,7 +347,7 @@ located. You can put multiple paths in any of these options, as the example
 of --with-incs-from shows. Just put a space between them.
 
 
-== configure doesn't detect libXpm. 
+== configure doesn't detect libXpm.
 
 * Check if you have a symbolic link from libXpm.so.4.9 to libXpm.so
 
@@ -404,12 +404,12 @@ in sh
 The list of supported locales can be found in po/README.
 English is the default language.
 
-Read po/README if you wish to translate and maintain locale files 
+Read po/README if you wish to translate and maintain locale files
 for other languages.
 
 2 - Additionally, if your language uses multi-byte characters, such
 as Japanese or Korean, you must set the MultiByteText option to YES
-in ~/GNUstep/Defaults/WMGLOBAL 
+in ~/GNUstep/Defaults/WMGLOBAL
 
 3 - Configure, build and install Window Maker normally.
 
@@ -434,5 +434,3 @@ following order (for brazilian portuguese, in this case):
 menu.pt_BR
 menu.pt
 menu
-
-
