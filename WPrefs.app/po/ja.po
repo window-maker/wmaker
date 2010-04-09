@@ -238,7 +238,7 @@ msgstr "アイコン %s がロードできません"
 #: ../../WPrefs.app/Configurations.c:164 ../../WPrefs.app/Workspace.c:109
 #, c-format
 msgid "could not process icon %s: %s"
-msgstr "アイコン %s を処理できません"
+msgstr "アイコン %s を処理できません: %s"
 
 #: ../../WPrefs.app/Configurations.c:188 ../../WPrefs.app/Workspace.c:164
 #, c-format

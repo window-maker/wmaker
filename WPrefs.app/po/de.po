@@ -245,7 +245,7 @@ msgstr "Symboldatei %s konnte nicht geöffnet werden"
 #: ../../WPrefs.app/Configurations.c:138 ../../WPrefs.app/Workspace.c:102
 #, c-format
 msgid "could not process icon %s: %s"
-msgstr "Symboldatei %s konnte nicht verarbeitet werden"
+msgstr "Symboldatei %s konnte nicht verarbeitet werden: %s"
 
 #: ../../WPrefs.app/Configurations.c:160 ../../WPrefs.app/Workspace.c:151
 #, c-format
