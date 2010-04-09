@@ -10,7 +10,7 @@ lib_LTLIBRARIES = libwraster.la
 
 libwraster_la_LDFLAGS = -version-info 4:0:1
 
-LIBTOOL = $(QUIET) $(SHELL) $(top_builddir)/libtool $(LIBTOOL_ARG)
+LIBTOOL = $(SHELL) $(top_builddir)/libtool $(LIBTOOL_ARG)
 
 bin_SCRIPTS = get-wraster-flags
 
