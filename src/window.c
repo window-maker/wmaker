@@ -2338,12 +2338,12 @@ static int getSavedState(Window window, WSavedState ** state)
 	int fmt_ret;
 	unsigned long nitems_ret;
 	unsigned long bytes_after_ret;
-	CARD32 *data;
+	long *data;
 
 	if (XGetWindowProperty(dpy, window, _XA_WINDOWMAKER_STATE, 0, 10,
 			       True, _XA_WINDOWMAKER_STATE,
 			       &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
-			       (unsigned char **)&data) != Success || !data)
+			       (unsigned char **)&data) != Success || !data || nitems_ret < 10)
 		return 0;
 
 	*state = wmalloc(sizeof(WSavedState));
