@@ -20,7 +20,7 @@
 
 #include "wmgenmenu.h"
 
-static void find_and_write(char *group, char **list, int this_is_terminals);
+static void find_and_write(char *group, char *list[][2], int this_is_terminals);
 static void other_window_managers(void);
 static void print_help(int print_usage, int exitval);
 
@@ -98,18 +98,18 @@ int main(int argc, char *argv[])
 	L1Menu = WMCreatePLArray(WMCreatePLString(_("Applications")), NULL);
 
 	/* Submenus in Applications */
-	find_and_write(_("Terminals"), terminals, 1);	/* always keep terminals the top item */
-	find_and_write(_("Internet"), internet, 0);
-	find_and_write(_("Email"), email, 0);
-	find_and_write(_("Mathematics"), Mathematiks, 0);
-	find_and_write(_("File Managers"), file_managers, 0);
+	find_and_write(_("Terminals"), Terminals, 1);	/* always keep terminals the top item */
+	find_and_write(_("Internet"), Internet, 0);
+	find_and_write(_("Email"), Email, 0);
+	find_and_write(_("Mathematics"), Mathematics, 0);
+	find_and_write(_("File Managers"), File_managers, 0);
 	find_and_write(_("Graphics"), Graphics, 0);
 	find_and_write(_("Multimedia"), Multimedia, 0);
 	find_and_write(_("Editors"), Editors, 0);
-	find_and_write(_("Development"), development, 0);
+	find_and_write(_("Development"), Development, 0);
 	find_and_write(_("Window Maker"), WindowMaker, 0);
 	find_and_write(_("Office"), Office, 0);
-	find_and_write(_("Astronomy"), Astronomie, 0);
+	find_and_write(_("Astronomy"), Astronomy, 0);
 	find_and_write(_("Sound"), Sound, 0);
 	find_and_write(_("Comics"), Comics, 0);
 	find_and_write(_("Viewers"), Viewers, 0);
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
 	WMAddToPLArray(RMenu, L1Menu);
 
 	L1Menu = WMCreatePLArray(
-		WMCreatePLString(_("Restart")),
+		WMCreatePLString(_("Restart Window Maker")),
 		WMCreatePLString("RESTART"),
 		NULL
 	);
@@ -289,7 +289,7 @@ int main(int argc, char *argv[])
  * - make sure previous menus of these levels are
  *   attached to their parent before calling
  */
-static void find_and_write(char *group, char **list, int this_is_terminals)
+static void find_and_write(char *group, char *list[][2], int this_is_terminals)
 {
 	int i, argc;
 	char *t, **argv, buf[PATH_MAX];
@@ -300,32 +300,32 @@ static void find_and_write(char *group, char **list, int this_is_terminals)
 	L3Menu = NULL;
 
 	i = 0;
-	while (list[i]) {
+	while (list[i][0]) {
 		/* Before checking if app exists, split its options */
-		wtokensplit(list[i], &argv, &argc);
+		wtokensplit(list[i][1], &argv, &argc);
 		t = wfindfile(path, argv[0]);
 		if (t) {
 			/* find a terminal to be used for cmnds that need a terminal */
 			if (this_is_terminals && !terminal)
-				terminal = wstrdup(list[i]);
+				terminal = wstrdup(list[i][0]);
 			if (*(argv[argc-1]) != '!') {
 				L3Menu = WMCreatePLArray(
-					WMCreatePLString(argv[0]),
+					WMCreatePLString(list[i][0]),
 					WMCreatePLString("EXEC"),
-					WMCreatePLString(list[i]),
+					WMCreatePLString(list[i][1]),
 					NULL
 				);
 			} else {
 				char comm[PATH_MAX], *ptr;
 
-				strcpy(comm, list[i]);
+				strcpy(comm, list[i][1]);
 				/* delete character " !" from the command */
 				ptr = strchr(comm, '!');
 				while (ptr >= comm && (*ptr == '!' || isspace(*ptr)))
 					*ptr-- = '\0';
 				snprintf(buf, sizeof(buf), "%s -e %s", terminal ? terminal : "xterm" , comm);
 				L3Menu = WMCreatePLArray(
-					WMCreatePLString(argv[0]),
+					WMCreatePLString(list[i][0]),
 					WMCreatePLString("EXEC"),
 					WMCreatePLString(buf),
 					NULL
@@ -362,14 +362,14 @@ static void other_window_managers(void)
 	L2Menu = NULL;
 
 	i = 0;
-	while (other_wm[i]) {
-		t = wfindfile(path, other_wm[i]);
+	while (other_wm[i][0]) {
+		t = wfindfile(path, other_wm[i][1]);
 		if (t) {
-			snprintf(buf, sizeof(buf), _("Start %s"), other_wm[i]);
+			snprintf(buf, sizeof(buf), _("Start %s"), other_wm[i][0]);
 			L2Menu = WMCreatePLArray(
 				WMCreatePLString(buf),
 				WMCreatePLString("RESTART"),
-				WMCreatePLString(other_wm[i]),
+				WMCreatePLString(other_wm[i][1]),
 				NULL
 			);
 			if (!L1Menu)

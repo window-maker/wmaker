@@ -5,133 +5,385 @@
  * to end with a space followed by '!', e.g.  "mutt !"
  */
 
-char *terminals[MAX_NR_APPS] = {
-	"xterm -bg black -fg white +sb +sm -fn 10x20 -sl 4000 -cr yellow",
-	"mrxvt -rv -shade 00 -vb +sb +sm -tr -sl 2000 -trt -itabbg black -hb -tabfg yellow -fn 10x20 -cr yellow",
-	"konsole"
+char *Terminals[MAX_NR_APPS][2] = {
+	{ "xterm", "xterm -bg black -fg white +sb +sm -fn 10x20 -sl 4000 -cr yellow" },
+	{ "mrxvt", "mrxvt -rv -shade 00 -vb +sb +sm -tr -sl 2000 -trt -itabbg black -hb -tabfg yellow -fn 10x20 -cr yellow" },
+	{ "Konsole", "konsole" },
+	{ NULL, NULL }
 };
 
-char *file_managers[MAX_NR_APPS] = {
-	"dolphin", "thunar", "rox", "GWorkspace", "mc !",
-	"xftree", "konqueror", "nautilus --no-desktop", "fsviewer", "xfe"
+char *File_managers[MAX_NR_APPS][2] = {
+	{ "Dolphin", "dolphin" },
+	{ "Thunar", "thunar" },
+	{ "ROX filer", "rox" },
+	{ "GWorkspace", "GWorkspace" },
+	{ "Midnight Commander", "mc !" },
+	{ "XFTree", "xftree" },
+	{ "Konqueror", "konqueror" },
+	{ "Nautilus", "nautilus --no-desktop" },
+	{ "FSViewer", "fsviewer" },
+	{ "Xfe", "xfe" },
+	{ NULL, NULL }
 };
 
-char *Mathematiks[MAX_NR_APPS] = {
-	"xmaxima", "maple" , "scilab" "maxima !", "bc !",
-	"kcalc", "xcalc", "mathematica", "math"
+char *Mathematics[MAX_NR_APPS][2] = {
+	{ "Xmaxima", "xmaxima" },
+	{ "Maxima", "maxima !" },
+	{ "Maple", "maple" },
+	{ "Scilab", "scilab" },
+	{ "bc", "bc !" },
+	{ "KCalc", "kcalc" },
+	{ "XCalc", "xcalc" },
+	{ "Mathematica", "mathematica" },
+	{ "Math", "math" }, /* what's this? */
+	{ "Free42", "free42" },
+	{ "X48", "x48" },
+	{ NULL, NULL }
 };
 
-char *Astronomie[MAX_NR_APPS] = {
-	"xplns", "stellarium"
+char *Astronomy[MAX_NR_APPS][2] = {
+	{ "Xplns", "xplns" },
+	{ "Stellarium", "stellarium" },
+	{ NULL, NULL }
 };
 
-char *Graphics[MAX_NR_APPS] = {
-	"gimp", "sodipodi", "killustrator", "krayon", "kpovmodeler",
-	"bitmap", "xpaint", "xfig", "kpaint", "blender", "ksnapshot",
-	"gphoto", "dia", "compupic", "gqview", "kview", "pixie",
-	"display", "xv", "eog", "qiv !"
+char *Graphics[MAX_NR_APPS][2] = {
+	{ "GIMP", "gimp" },
+	{ "Sodipodi", "sodipodi" },
+	{ "Inkscape", "inkscape" },
+	{ "KIllustrator", "killustrator" },
+	{ "Krayon", "krayon" },
+	{ "KPovModeler", "kpovmodeler" },
+	{ "XBitmap", "bitmap" },
+	{ "XPaint", "xpaint" },
+	{ "XFig", "xfig" },
+	{ "KPaint", "kpaint" },
+	{ "Blender", "blender" },
+	{ "KSnapshot", "ksnapshot" },
+	{ "GPhoto", "gphoto" },
+	{ "Dia", "dia" },
+	{ "CompuPic", "compupic" },
+	{ "GQview", "gqview" },
+	{ "Geeqie", "geeqie" },
+	{ "KView", "kview" },
+	{ "Pixie", "pixie" },
+	{ "ImageMagick Display", "display" },
+	{ "XV", "xv" },
+	{ "Eye of GNOME", "eog" },
+	{ "Quick Image Viewer", "qiv" },
+	{ NULL, NULL },
 };
 
-char *Multimedia[MAX_NR_APPS] = {
-	"audacious2", "kaffeine", "audacity", "xmms", "k9copy", "acidrip",
-	"avidemux2_gtk", "gqmpeg", "freeamp", "realplay",
-	"kmid", "kmidi", "gtcd", "grip", "aviplay", "gtv", "gvlc", "sinek",
-	"xine", "aktion", "gcd", "xawtv", "xcdroast", "xplaycd"
+char *Multimedia[MAX_NR_APPS][2] = {
+	{ "Audacious", "audacious2" },
+	{ "Kaffeine", "kaffeine", },
+	{ "Audacity", "audacity" },
+	{ "XMMS", "xmms" },
+	{ "K9Copy", "k9copy" },
+	{ "AcidRip", "acidrip" },
+	{ "Avidemux", "avidemux2_gtk" },
+	{ "GQmpeg", "gqmpeg" },
+	{ "Freeamp", "freeamp" },
+	{ "RealPlayer", "realplay" },
+	{ "KMid", "kmid" },
+	{ "Kmidi", "kmidi" },
+	{ "Gtcd", "gtcd" },
+	{ "Grip", "grip" },
+	{ "AVIplay", "aviplay" },
+	{ "Gtv", "gtv" },
+	{ "VLC", "vlc" },
+	{ "Sinek", "sinek" },
+	{ "xine", "xine" },
+	{ "aKtion", "aktion" },
+	{ "Gcd", "gcd" },
+	{ "XawTV", "xawtv" },
+	{ "X-CD-Roast", "xcdroast" },
+	{ "XPlayCD", "xplaycd" },
+	{ NULL, NULL}
 };
 
-char *internet[MAX_NR_APPS] = {
-	"chromium", "google-chrome", "firefox",
-	"galeon", "skipstone", "konqueror",
-	"dillo", "epiphany", "opera", "midori", "seamonkey",
-	"kazehakase", "links !", "lynx !"
+char *Internet[MAX_NR_APPS][2] = {
+	{ "Chromium", "chromium" },
+	{ "Chromium", "chromium-browser" },
+	{ "Google Chrome", "google-chrome" },
+	{ "Mozilla Firefox", "firefox" },
+	{ "Galeon", "galeon" },
+	{ "SkipStone", "skipstone" },
+	{ "Konqueror", "konqueror" },
+	{ "Dillo", "dillo" },
+	{ "Epiphany", "epiphany" },
+	{ "Opera", "opera" },
+	{ "Midori", "midori" },
+	{ "Mozilla SeaMonkey", "seamonkey" },
+	{ "Kazehakase", "kazehakase" },
+	{ "Links", "links !" },
+	{ "Lynx", "lynx !" },
+	{ "W3M", "w3m !" },
+	{ NULL, NULL }
 };
 
-char *email[MAX_NR_APPS] = {
-	"thunderbird", "mutt !", "GNUMail", "evolution",
-	"kleopatra", "sylpheed", "spruce", "kmail", "exmh",
-	"pine !", "elm !"
+char *Email[MAX_NR_APPS][2] = {
+	{ "Mozilla Thunderbird", "thunderbird" },
+	{ "Mutt", "mutt !" },
+	{ "GNUMail", "GNUMail" },
+	{ "Evolution", "evolution" },
+	{ "Kleopatra", "kleopatra" },
+	{ "Sylpheed", "sylpheed" },
+	{ "Spruce", "spruce" },
+	{ "KMail", "kmail" },
+	{ "Exmh", "exmh" },
+	{ "Pine", "pine !" },
+	{ "ELM", "elm !" },
+	{ "Alpine", "alpine !" },
+	{ NULL, NULL }
 };
 
-char *Sound[MAX_NR_APPS] = {
-	"soundkonverter", "krecord", "grecord", "alsamixer !", "sndconfig !",
-	"aumix !", "gmix"
+char *Sound[MAX_NR_APPS][2] = {
+	{ "soundKonverter", "soundkonverter" },
+	{ "Krecord", "krecord" },
+	{ "Grecord", "grecord" },
+	{ "ALSA mixer", "alsamixer !" },
+	{ "Sound configuration", "sndconfig !" },
+	{ "aumix", "aumix !" },
+	{ "Gmix", "gmix" },
+	{ NULL, NULL }
 };
 
-char *Editors[MAX_NR_APPS] = {
-	"xjed", "jed !", "emacs", "xemacs", "gvim", "vi !", "vim !", "gedit",
-	"kedit", "xedit", "kwrite", "kate", "pico !", "nano !", "joe !"
+char *Editors[MAX_NR_APPS][2] = {
+	{ "XJed", "xjed" },
+	{ "Jed", "jed !" },
+	{ "Emacs", "emacs" },
+	{ "XEmacs", "xemacs" },
+	{ "gVIM", "gvim" },
+	{ "vi", "vi !" },
+	{ "VIM", "vim !" },
+	{ "gedit", "gedit" },
+	{ "KEdit", "kedit" },
+	{ "XEdit", "xedit" },
+	{ "KWrite", "kwrite" },
+	{ "Kate", "kate" },
+	{ "Pico", "pico !" },
+	{ "Nano", "nano !" },
+	{ "Joe", "joe !" },
+	{ NULL, NULL }
 };
 
-char *Comics[MAX_NR_APPS] = {
-	"omnia_data", "comix", "qcomicbook"
+char *Comics[MAX_NR_APPS][2] = {
+	{ "Omnia data", "omnia_data" },
+	{ "Comix", "comix" },
+	{ "QComicBook", "qcomicbook" },
+	{ NULL, NULL }
 };
 
-char *Viewers[MAX_NR_APPS] = {
-	"evince", "kghostview", "gv", "ggv", "xdvi", "kdvi", "xpdf",
-	"acroread", "gless"
+char *Viewers[MAX_NR_APPS][2] = {
+	{ "Evince", "evince" },
+	{ "KGhostView", "kghostview" },
+	{ "gv", "gv" },
+	{ "GGv", "ggv" },
+	{ "Xdvi", "xdvi" },
+	{ "KDVI", "kdvi" },
+	{ "Xpdf", "xpdf" },
+	{ "Adobe Reader", "acroread" },
+	{ "Gless", "gless" },
+	{ NULL, NULL }
 };
 
-char *Utilities[MAX_NR_APPS] = {
-	"gdlinux", "k3b", "gtkfind", "gdict", "gpsdrive", "wfcmgr", "switch",
-	"kaddressbook", "kab", "kfind", "oclock", "rclock", "xclock", "kppp"
+char *Utilities[MAX_NR_APPS][2] = {
+	{ "gdlinux", "gdlinux" },
+	{ "K3B", "k3b" },
+	{ "gtkfind", "gtkfind" },
+	{ "gdict", "gdict" },
+	{ "gpsdrive", "gpsdrive" },
+	{ "wfcmgr", "wfcmgr" },
+	{ "switch", "switch" },
+	{ "kaddressbook", "kaddressbook" },
+	{ "kab", "kab" },
+	{ "kfind", "kfind" },
+	{ "oclock", "oclock" },
+	{ "rclock", "rclock" },
+	{ "xclock", "xclock" },
+	{ "kppp", "kppp" },
+	{ NULL, NULL }
 };
 
-char *Video[MAX_NR_APPS] = {
-	"kaffeine", "gnomemeeting"
+char *Video[MAX_NR_APPS][2] = {
+	{ "kaffeine", "kaffeine" },
+	{ "gnomemeeting", "gnomemeeting" },
+	{ NULL, NULL }
 };
 
-char *Chat[MAX_NR_APPS] = {
-	"pidgin", "skype", "gizmo", "kopete", "xchat", "kvirc", "BitchX !",
-	"epic !", "epic4 !", "irssi !", "tinyirc !", "ksirc", "gtalk",
-	"gnome-icu", "licq", "amsn"
+char *Chat[MAX_NR_APPS][2] = {
+	{ "pidgin", "pidgin" },
+	{ "skype", "skype" },
+	{ "gizmo", "gizmo" },
+	{ "kopete", "kopete" },
+	{ "xchat", "xchat" },
+	{ "kvirc", "kvirc" },
+	{ "BitchX", "BitchX !" },
+	{ "epic", "epic !" },
+	{ "epic4", "epic4 !" },
+	{ "irssi", "irssi !" },
+	{ "tinyirc", "tinyirc !" },
+	{ "ksirc", "ksirc" },
+	{ "gtalk", "gtalk" },
+	{ "gnome-icu", "gnome-icu" },
+	{ "licq", "licq" },
+	{ "amsn", "amsn" },
+	{ NULL, NULL }
 };
 
-char *P2P[MAX_NR_APPS] = {
-	"amule", "gftp", "smb4k", "ktorrent", "bittorrent-gui",
-	"!ftp", "!sftp", "pavuk", "gtm","!gnut", "gtk-gnutella", "gnutmeg"
+char *P2P[MAX_NR_APPS][2] = {
+	{ "amule", "amule" },
+	{ "gftp", "gftp" },
+	{ "smb4k", "smb4k" },
+	{ "ktorrent", "ktorrent" },
+	{ "bittorrent-gui", "bittorrent-gui" },
+	{ "ftp", "ftp !" },
+	{ "sftp", "sftp !" },
+	{ "pavuk", "pavuk" },
+	{ "gtm", "gtm !" },
+	{ "gnut", "gnut !" },
+	{ "gtk-gnutella", "gtk-gnutella" },
+	{ "gnutmeg", "gnutmeg" },
+	{ NULL, NULL }
 };
 
-char *Games[MAX_NR_APPS] = {
-	"fgfs", "tremulous", "xboard", "gnome-chess", "quake2", "quake3",
-	"q3ut2", "sof", "rune", "tribes2", "unreal", "descent3", "myth2",
-	"rt2", "heretic2", "kohan", "xqf"
+char *Games[MAX_NR_APPS][2] = {
+	{ "fgfs", "fgfs" },
+	{ "tremulous", "tremulous" },
+	{ "xboard", "xboard" },
+	{ "gnome-chess", "gnome-chess" },
+	{ "quake2", "quake2" },
+	{ "quake3", "quake3" },
+	{ "q3ut2", "q3ut2" },
+	{ "sof", "sof" },
+	{ "rune", "rune" },
+	{ "tribes2", "tribes2" },
+	{ "unreal", "unreal" },
+	{ "descent3", "descent3" },
+	{ "myth2", "myth2" },
+	{ "rt2", "rt2" },
+	{ "heretic2", "heretic2" },
+	{ "kohan", "kohan" },
+	{ "xqf", "xqf" },
+	{ NULL, NULL }
 };
 
-char *Office[MAX_NR_APPS] = {
-	"oowriter", "oocalc", "ooconfigimport", "oodraw", "ooffice",
-	"ooimpress", "oomath", "ooregcomp", "abiword", "kword",
-	"smath", "swriterkpresenter", "lyx", "klyx", "gnucash", "gnumeric",
-	"kspread", "kchart","gnomecal", "gnomecard", "korganizer"
+char *Office[MAX_NR_APPS][2] = {
+	{ "OpenOffice.org Writer", "oowriter" },
+	{ "OpenOffice.org Calc", "oocalc" },
+	{ "ooconfigimport", "ooconfigimport" },
+	{ "OpenOffice.org Draw", "oodraw" },
+	{ "OpenOffice.org Impress", "ooimpress" },
+	{ "OpenOffice.org Math", "oomath" },
+	{ "OpenOffice.org", "ooffice" },
+	{ "AbiWord", "abiword" },
+	{ "KWord", "kword" },
+	{ "smath", "smath" },
+	{ "swriterkpresenter", "swriterkpresenter" },
+	{ "lyx", "lyx" },
+	{ "klyx", "klyx" },
+	{ "gnucash", "gnucash" },
+	{ "gnumeric", "gnumeric" },
+	{ "kspread", "kspread" },
+	{ "kchart", "kchart" },
+	{ "gnomecal", "gnomecal" },
+	{ "gnomecard", "gnomecard" },
+	{ "korganizer", "korganizer" },
+	{ NULL, NULL }
 };
 
-char *development[MAX_NR_APPS] = {
-	"gitk", "gitview", "qgit", "git-gui", "glimmer", "glade", "kdevelop",
-	"designer", "kbabel", "idle", "ghex", "hexedit !", "memprof", "tclsh !",
-	"gdb !", "xxgdb", "xev !"
+char *Development[MAX_NR_APPS][2] = {
+	{ "gitk", "gitk" },
+	{ "gitview", "gitview" },
+	{ "qgit", "qgit" },
+	{ "git-gui", "git-gui" },
+	{ "glimmer", "glimmer" },
+	{ "glade", "glade" },
+	{ "kdevelop", "kdevelop" },
+	{ "designer", "designer" },
+	{ "kbabel", "kbabel" },
+	{ "idle", "idle" },
+	{ "ghex", "ghex" },
+	{ "hexedit", "hexedit !" },
+	{ "memprof", "memprof" },
+	{ "tclsh", "tclsh !" },
+	{ "gdb", "gdb !" },
+	{ "xxgdb", "xxgdb" },
+	{ "xev", "xev !" },
+	{ NULL, NULL }
 };
 
-char *System[MAX_NR_APPS] = {
-	"iotop -d 4 --only !", "keybconf", "gtop", "top !", "kpm", "gw", "gnomecc", "gkrellm",
-	"tksysv", "ksysv", "gnome-ppp", "iostat -p -k 5 !"
+char *System[MAX_NR_APPS][2] = {
+	{ "iotop", "iotop -d 4 --only !" },
+	{ "keybconf", "keybconf" },
+	{ "gtop", "gtop" },
+	{ "top", "top !" },
+	{ "kpm", "kpm" },
+	{ "gw", "gw" },
+	{ "gnomecc", "gnomecc" },
+	{ "gkrellm", "gkrellm" },
+	{ "tksysv", "tksysv" },
+	{ "ksysv", "ksysv" },
+	{ "gnome-ppp", "gnome-ppp" },
+	{ "iostat", "iostat -p -k 5 !" },
+	{ NULL, NULL }
 };
 
-char *OpenSUSE[MAX_NR_APPS] = {
-	"yast2", "yast !", "systemsettings", "umtsmon"
+char *OpenSUSE[MAX_NR_APPS][2] = {
+	{ "yast2", "yast2" },
+	{ "yast", "yast !" },
+	{ "systemsettings", "systemsettings" },
+	{ "umtsmon", "umtsmon" },
+	{ NULL, NULL }
 };
 
-char *Mandriva[MAX_NR_APPS] = {
-	"draknetcenter", "rpmdrake", "harddrake", "drakconf",
-	 "MandrakeUpdate", "Xdrakres"
+char *Mandriva[MAX_NR_APPS][2] = {
+	{ "draknetcenter", "draknetcenter" },
+	{ "rpmdrake", "rpmdrake" },
+	{ "harddrake", "harddrake" },
+	{ "drakconf", "drakconf" },
+	{ "MandrakeUpdate", "MandrakeUpdate" },
+	{ "Xdrakres", "Xdrakres" },
+	{ NULL, NULL }
 };
 
-char *WindowMaker[MAX_NR_APPS] = {
-	"wmnet -d 100000 -Weth0", "wmpower", "wmlaptop2", "wmwifi -s", "wmifinfo",
-	"wmWeather", "wmstickynotes", "wmmixer++ -w", "wmWeather -m -s EDDB",
-	"wmcpuload", "wmcpufreq", "wmclockmon", "wmnd", "wmCalclock -S",
-	"wmtime", "wmdate", "wmmon", "wmsysmon", "wmSMPmon", "wmifs",
-	"wmnd", "wmbutton", "wmxmms", "wmpower", "wmagnify"
+char *WindowMaker[MAX_NR_APPS][2] = {
+	{ "wmnet", "wmnet -d 100000 -Weth0" },
+	{ "wmpower", "wmpower" },
+	{ "wmlaptop2", "wmlaptop2" },
+	{ "wmwifi", "wmwifi -s" },
+	{ "wmifinfo", "wmifinfo" },
+	{ "wmWeather", "wmWeather" },
+	{ "wmstickynotes", "wmstickynotes" },
+	{ "wmmixer++", "wmmixer++ -w" },
+	{ "wmWeather", "wmWeather -m -s EDDB" },
+	{ "wmcpuload", "wmcpuload" },
+	{ "wmcpufreq", "wmcpufreq" },
+	{ "wmclockmon", "wmclockmon" },
+	{ "wmnd", "wmnd" },
+	{ "wmCalclock", "wmCalclock -S" },
+	{ "wmtime", "wmtime" },
+	{ "wmdate", "wmdate" },
+	{ "wmmon", "wmmon" },
+	{ "wmsysmon", "wmsysmon" },
+	{ "wmSMPmon", "wmSMPmon" },
+	{ "wmifs", "wmifs" },
+	{ "wmnd", "wmnd" },
+	{ "wmbutton", "wmbutton" },
+	{ "wmxmms", "wmxmms" },
+	{ "wmpower", "wmpower" },
+	{ "wmagnify", "wmagnify" },
+	{ NULL, NULL }
 };
 
-char *other_wm[MAX_WMS] = {
-		"icewm", "kwin", "twm", "fluxbox", "blackbox", "ion", "mwm"
+char *other_wm[MAX_WMS][2] = {
+	{ "IceWM", "icewm" },
+	{ "KWin", "kwin" },
+	{ "twm", "twm" },
+	{ "Fluxbox", "fluxbox" },
+	{ "Blackbox", "blackbox" },
+	{ "ion", "ion" },
+	{ "MWM", "mwm" },
+	{ NULL, NULL }
 };
