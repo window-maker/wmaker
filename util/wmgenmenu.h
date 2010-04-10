@@ -189,7 +189,7 @@ char *Viewers[MAX_NR_APPS][2] = {
 };
 
 char *Utilities[MAX_NR_APPS][2] = {
-	{ "gdlinux", "gdlinux" },
+	{ "Google Desktop", "gdlinux" },
 	{ "K3B", "k3b" },
 	{ "gtkfind", "gtkfind" },
 	{ "gdict", "gdict" },
@@ -213,30 +213,30 @@ char *Video[MAX_NR_APPS][2] = {
 };
 
 char *Chat[MAX_NR_APPS][2] = {
-	{ "pidgin", "pidgin" },
-	{ "skype", "skype" },
-	{ "gizmo", "gizmo" },
-	{ "kopete", "kopete" },
-	{ "xchat", "xchat" },
-	{ "kvirc", "kvirc" },
+	{ "Pidgin", "pidgin" },
+	{ "Skype", "skype" },
+	{ "Gizmo", "gizmo" },
+	{ "Kopete", "kopete" },
+	{ "XChat", "xchat" },
+	{ "KVIrc", "kvirc" },
 	{ "BitchX", "BitchX !" },
-	{ "epic", "epic !" },
-	{ "epic4", "epic4 !" },
-	{ "irssi", "irssi !" },
-	{ "tinyirc", "tinyirc !" },
-	{ "ksirc", "ksirc" },
+	{ "EPIC", "epic !" },
+	{ "EPIC4", "epic4 !" },
+	{ "Irssi", "irssi !" },
+	{ "TinyIRC", "tinyirc !" },
+	{ "Ksirc", "ksirc" },
 	{ "gtalk", "gtalk" },
-	{ "gnome-icu", "gnome-icu" },
-	{ "licq", "licq" },
-	{ "amsn", "amsn" },
+	{ "GnomeICU", "gnome-icu" },
+	{ "Licq", "licq" },
+	{ "aMSN", "amsn" },
 	{ NULL, NULL }
 };
 
 char *P2P[MAX_NR_APPS][2] = {
-	{ "amule", "amule" },
-	{ "gftp", "gftp" },
-	{ "smb4k", "smb4k" },
-	{ "ktorrent", "ktorrent" },
+	{ "aMule", "amule" },
+	{ "gFTP", "gftp" },
+	{ "Smb4K", "smb4k" },
+	{ "KTorrent", "ktorrent" },
 	{ "bittorrent-gui", "bittorrent-gui" },
 	{ "ftp", "ftp !" },
 	{ "sftp", "sftp !" },
@@ -249,17 +249,17 @@ char *P2P[MAX_NR_APPS][2] = {
 };
 
 char *Games[MAX_NR_APPS][2] = {
-	{ "fgfs", "fgfs" },
-	{ "tremulous", "tremulous" },
+	{ "FlightGear Flight Simulator", "fgfs" },
+	{ "Tremulous", "tremulous" },
 	{ "xboard", "xboard" },
 	{ "gnome-chess", "gnome-chess" },
-	{ "quake2", "quake2" },
-	{ "quake3", "quake3" },
+	{ "Quake 2", "quake2" },
+	{ "Quake 3", "quake3" },
 	{ "q3ut2", "q3ut2" },
-	{ "sof", "sof" },
+	{ "Soldier of Fortune", "sof" },
 	{ "rune", "rune" },
 	{ "tribes2", "tribes2" },
-	{ "unreal", "unreal" },
+	{ "Unreal Tournament", "unreal" },
 	{ "descent3", "descent3" },
 	{ "myth2", "myth2" },
 	{ "rt2", "rt2" },
@@ -281,13 +281,13 @@ char *Office[MAX_NR_APPS][2] = {
 	{ "KWord", "kword" },
 	{ "smath", "smath" },
 	{ "swriterkpresenter", "swriterkpresenter" },
-	{ "lyx", "lyx" },
-	{ "klyx", "klyx" },
-	{ "gnucash", "gnucash" },
-	{ "gnumeric", "gnumeric" },
-	{ "kspread", "kspread" },
+	{ "LyX", "lyx" },
+	{ "Klyx", "klyx" },
+	{ "GnuCash", "gnucash" },
+	{ "Gnumeric", "gnumeric" },
+	{ "KSpread", "kspread" },
 	{ "kchart", "kchart" },
-	{ "gnomecal", "gnomecal" },
+	{ "GnomeCal", "gnomecal" },
 	{ "gnomecard", "gnomecard" },
 	{ "korganizer", "korganizer" },
 	{ NULL, NULL }
@@ -315,7 +315,8 @@ char *Development[MAX_NR_APPS][2] = {
 };
 
 char *System[MAX_NR_APPS][2] = {
-	{ "iotop", "iotop -d 4 --only !" },
+	{ "Iotop", "iotop -d 4 --only !" },
+	{ "iostat", "iostat -p -k 5 !" },
 	{ "keybconf", "keybconf" },
 	{ "gtop", "gtop" },
 	{ "top", "top !" },
@@ -326,7 +327,6 @@ char *System[MAX_NR_APPS][2] = {
 	{ "tksysv", "tksysv" },
 	{ "ksysv", "ksysv" },
 	{ "gnome-ppp", "gnome-ppp" },
-	{ "iostat", "iostat -p -k 5 !" },
 	{ NULL, NULL }
 };
 
