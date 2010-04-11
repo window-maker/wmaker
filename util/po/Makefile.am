@@ -7,7 +7,8 @@ CLEANFILES = wmgenmenu.pot $(CATALOGS)
 EXTRA_DIST = de.po
 
 POTFILES  = \
-	$(top_builddir)/util/wmgenmenu.c
+	$(top_srcdir)/util/wmgenmenu.c \
+	$(top_srcdir)/util/wmgenmenu.h
 
 SUFFIXES = .po .mo
 

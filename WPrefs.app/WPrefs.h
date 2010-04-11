@@ -112,24 +112,10 @@ void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 #define FRAME_WIDTH	524
 #define FRAME_HEIGHT	235
 
-
-
 /*
  * Needed for HAVE_LIBINTL_H
  */
-#include "../src/config.h"
+#include "../src/wconfig.h"
 
-#if HAVE_LIBINTL_H && I18N
-# include <libintl.h>
-# define _(text) gettext(text)
-# define N_(text) (text)
-#else
-# define _(text) (text)
-# define N_(text) (text)
-#endif
-
-#endif
-
-
-
+#endif /* WPREFS_H_ */
 

@@ -28,7 +28,7 @@ extern char *__progname;
 
 char *path, *terminal = NULL;
 
-WMPropList *RMenu, *L1Menu, *L2Menu, *L3Menu;
+WMPropList *RMenu, *L1Menu, *L2Menu, *L3Menu, *L4Menu;
 
 int main(int argc, char *argv[])
 {
@@ -75,29 +75,34 @@ int main(int argc, char *argv[])
 #endif
 
 	/*
-	 * The menu generated is a four-level hierarchy, of which the
+	 * The menu generated is a five-level hierarchy, of which the
 	 * top level (RMenu) is only used to hold the others (a single
 	 * PLString, which will be the title of the root menu)
 	 *
-	 * RMenu		Window Maker
-	 *   L1Menu		  Applications
-	 *     L2Menu		    Terminals
-	 *       L3Menu		      XTerm
-	 *       L3Menu		      RXVT
-	 *     L2Menu		    Internet
-	 *       L3Menu		      Firefox
-	 *     L2Menu		    E-mail
-	 *   L1Menu		  Appearance
-	 *     L2Menu		    Themes
-	 *   L1Menu		  Configure Window Maker
+	 * RMenu                Window Maker
+	 *   L1Menu               Applications
+	 *     L2Menu               Terminals
+	 *       L3Menu               XTerm
+	 *       L3Menu               RXVT
+	 *     L2Menu               Internet
+	 *       L3Menu               Firefox
+	 *     L2Menu               E-mail
+	 *   L1Menu               Appearance
+	 *     L2Menu               Themes
+	 *     L2Menu               Background
+	 *       L3Menu               Solid
+	 *         L4Menu               Indigo
+	 *   L1Menu               Configure Window Maker
 	 *
 	 */
 
+	/* Root */
 	RMenu = WMCreatePLArray(WMCreatePLString(_("Window Maker")), NULL);
 
+	/* Root -> Applications */
 	L1Menu = WMCreatePLArray(WMCreatePLString(_("Applications")), NULL);
 
-	/* Submenus in Applications */
+	/* Root -> Applications -> <category> */
 	find_and_write(_("Terminals"), Terminals, 1);	/* always keep terminals the top item */
 	find_and_write(_("Internet"), Internet, 0);
 	find_and_write(_("Email"), Email, 0);
@@ -117,14 +122,14 @@ int main(int argc, char *argv[])
 	find_and_write(_("System"), System, 0);
 	find_and_write(_("Video"), Video, 0);
 	find_and_write(_("Chat and Talk"), Chat, 0);
-	find_and_write(_("P2P-Network"), P2P, 0);
+	find_and_write(_("P2P Network"), P2P, 0);
 	find_and_write(_("Games"), Games, 0);
 	find_and_write(_("OpenSUSE"), OpenSUSE, 0);
 	find_and_write(_("Mandriva"), Mandriva, 0);
 
 	WMAddToPLArray(RMenu, L1Menu);
 
-	/* `Run' dialog */
+	/* Root -> `Run' dialog */
 	L1Menu = WMCreatePLArray(
 		WMCreatePLString(_("Run...")),
 		WMCreatePLString("SHEXEC"),
@@ -133,8 +138,10 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(RMenu, L1Menu);
 
-	/* Appearance-related items */
+	/* Root -> Appearance */
 	L1Menu = WMCreatePLArray(WMCreatePLString(_("Appearance")), NULL);
+
+	/* Root -> Appearance -> Themes */
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Themes")),
 		WMCreatePLString("OPEN_MENU"),
@@ -143,22 +150,95 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
 
+	/* Root -> Appearance -> Styles */
 	L2Menu = WMCreatePLArray(
-		WMCreatePLString(_("Icons")),
+		WMCreatePLString(_("Styles")),
+		WMCreatePLString("OPEN_MENU"),
+		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
+		NULL
+	);
+	WMAddToPLArray(L1Menu, L2Menu);
+
+	/* Root -> Appearance -> Icon Sets */
+	L2Menu = WMCreatePLArray(
+		WMCreatePLString(_("Icon Sets")),
 		WMCreatePLString("OPEN_MENU"),
 		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
 		NULL
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
 
-	L2Menu = WMCreatePLArray(
-		WMCreatePLString(_("Background")),
+	/* Root -> Appearance -> Background */
+	L2Menu = WMCreatePLArray(WMCreatePLString(_("Background")), NULL);
+
+	/* Root -> Appearance -> Background -> Solid */
+	L3Menu = WMCreatePLArray(WMCreatePLString(_("Solid")), NULL);
+
+#define SOLID_BACK(label, colorspec)									\
+	L4Menu = WMCreatePLArray(									\
+		WMCreatePLString(label),								\
+		WMCreatePLString("EXEC"),								\
+		WMCreatePLString("wdwrite WindowMaker WorkspaceBack '(solid, \"" colorspec "\")'"),	\
+		NULL											\
+	);												\
+	WMAddToPLArray(L3Menu, L4Menu)
+
+	/* Root -> Appearance -> Background -> Solid -> <color> */
+	SOLID_BACK(_("Black"), "black");
+	SOLID_BACK(_("Blue"), "#505075");
+	SOLID_BACK(_("Indigo"), "#243e6c");
+	SOLID_BACK(_("Bluemarine"), "#243e6c");
+	SOLID_BACK(_("Purple"), "#554466");
+	SOLID_BACK(_("Wheat"), "wheat4");
+	SOLID_BACK(_("Dark Gray"), "#333340");
+	SOLID_BACK(_("Wine"), "#400020");
+#undef SOLID_BACK
+	WMAddToPLArray(L2Menu, L3Menu);
+
+	/* Root -> Appearance -> Background -> Gradient */
+	L3Menu = WMCreatePLArray(WMCreatePLString(_("Gradient")), NULL);
+
+#define GRADIENT_BACK(label, fcolorspec, tcolorspec)							\
+	L4Menu = WMCreatePLArray(									\
+		WMCreatePLString(label),								\
+		WMCreatePLString("EXEC"),								\
+		WMCreatePLString("wdwrite WindowMaker WorkspaceBack '(vgradient, \"" 			\
+		    fcolorspec "\", \"" tcolorspec "\"'"),						\
+		NULL											\
+	);												\
+	WMAddToPLArray(L3Menu, L4Menu)
+
+	/* Root -> Appearance -> Background -> Gradient -> <color> */
+	L4Menu = WMCreatePLArray(
+		WMCreatePLString(_("Sunset")),
+		WMCreatePLString("EXEC"),
+		WMCreatePLString("wdwrite WindowMaker WorkspaceBack "
+		    "'(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'"),
+		NULL
+	);
+	WMAddToPLArray(L3Menu, L4Menu);
+	GRADIENT_BACK(_("Sky"), "blue4", "white");
+	GRADIENT_BACK(_("Blue Shades"), "#7080a5", "#101020");
+	GRADIENT_BACK(_("Indigo Shades"), "#746ebc", "#242e4c");
+	GRADIENT_BACK(_("Purple Shades"), "#654c66", "#151426");
+	GRADIENT_BACK(_("Wheat Shades"), "#a09060", "#302010");
+	GRADIENT_BACK(_("Grey Shades"), "#636380", "#131318");
+	GRADIENT_BACK(_("Wine Shades"), "#600040", "#180010");
+#undef GRADIENT_BACK
+	WMAddToPLArray(L2Menu, L3Menu);
+
+	/* Root -> Appearance -> Background -> Images */
+	L3Menu = WMCreatePLArray(
+		WMCreatePLString(_("Images")),
 		WMCreatePLString("OPEN_MENU"),
 		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t"),
 		NULL
 	);
+	WMAddToPLArray(L2Menu, L3Menu);
+
 	WMAddToPLArray(L1Menu, L2Menu);
 
+	/* Root -> Appearance -> Save Theme */
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Save Theme")),
 		WMCreatePLString("SHEXEC"),
@@ -168,8 +248,9 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
 
+	/* Root -> Appearance -> Save IconSet */
 	L2Menu = WMCreatePLArray(
-		WMCreatePLString(_("Save Icons")),
+		WMCreatePLString(_("Save IconSet")),
 		WMCreatePLString("SHEXEC"),
 		WMCreatePLString("geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"
 			"\"%a(IconSet name,Name to save icon set as)\""),
@@ -178,7 +259,7 @@ int main(int argc, char *argv[])
 	WMAddToPLArray(L1Menu, L2Menu);
 	WMAddToPLArray(RMenu, L1Menu);
 
-	/* Workspace-related items */
+	/* Root -> Workspaces */
 	L1Menu = WMCreatePLArray(
 		WMCreatePLString(_("Workspaces")),
 		WMCreatePLString("WORKSPACE_MENU"),
@@ -186,6 +267,7 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(RMenu, L1Menu);
 
+	/* Root -> Workspace */
 	L1Menu = WMCreatePLArray(WMCreatePLString(_("Workspace")), NULL);
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Hide Others")),
@@ -194,6 +276,7 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
 
+	/* Root -> Workspace -> Show All */
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Show All")),
 		WMCreatePLString("SHOW_ALL"),
@@ -201,6 +284,7 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
 
+	/* Root -> Workspace -> Arrange Icons */
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Arrange Icons")),
 		WMCreatePLString("ARRANGE_ICONS"),
@@ -208,6 +292,7 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
 
+	/* Root -> Workspace -> Refresh */
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Refresh")),
 		WMCreatePLString("REFRESH"),
@@ -215,6 +300,7 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
 
+	/* Root -> Workspace -> Save Session */
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Save Session")),
 		WMCreatePLString("SAVE_SESSION"),
@@ -222,6 +308,7 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
 
+	/* Root -> Workspace -> Clear Session */
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Clear Session")),
 		WMCreatePLString("CLEAR_SESSION"),
@@ -230,7 +317,7 @@ int main(int argc, char *argv[])
 	WMAddToPLArray(L1Menu, L2Menu);
 	WMAddToPLArray(RMenu, L1Menu);
 
-	/* Configuration-related items */
+	/* Root -> Configure Window Maker */
 	L1Menu = WMCreatePLArray(
 		WMCreatePLString(_("Configure Window Maker")),
 		WMCreatePLString("EXEC"),
@@ -239,6 +326,7 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(RMenu, L1Menu);
 
+	/* Root -> Info Panel */
 	L1Menu = WMCreatePLArray(
 		WMCreatePLString(_("Info Panel")),
 		WMCreatePLString("INFO_PANEL"),
@@ -246,6 +334,7 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(RMenu, L1Menu);
 
+	/* Root -> Restart Window Maker */
 	L1Menu = WMCreatePLArray(
 		WMCreatePLString(_("Restart Window Maker")),
 		WMCreatePLString("RESTART"),
@@ -253,10 +342,10 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(RMenu, L1Menu);
 
-	/* Other window managers */
+	/* Root -> Other Window Managers [-> <other window manager> ...] */
 	other_window_managers();
 
-	/* XLock */
+	/* Root -> Lock Screen */
 	t = wfindfile(path, "xlock");
 	if (t) {
 		L1Menu = WMCreatePLArray(
@@ -269,7 +358,7 @@ int main(int argc, char *argv[])
 		wfree(t);
 	}
 
-	/* Exit */
+	/* Root -> Exit Window Maker */
 	L1Menu = WMCreatePLArray(
 		WMCreatePLString(_("Exit Window Maker")),
 		WMCreatePLString("EXIT"),
@@ -307,10 +396,10 @@ static void find_and_write(char *group, char *list[][2], int this_is_terminals)
 		if (t) {
 			/* find a terminal to be used for cmnds that need a terminal */
 			if (this_is_terminals && !terminal)
-				terminal = wstrdup(list[i][0]);
+				terminal = wstrdup(list[i][1]);
 			if (*(argv[argc-1]) != '!') {
 				L3Menu = WMCreatePLArray(
-					WMCreatePLString(list[i][0]),
+					WMCreatePLString(_(list[i][0])),
 					WMCreatePLString("EXEC"),
 					WMCreatePLString(list[i][1]),
 					NULL
@@ -324,8 +413,9 @@ static void find_and_write(char *group, char *list[][2], int this_is_terminals)
 				while (ptr >= comm && (*ptr == '!' || isspace(*ptr)))
 					*ptr-- = '\0';
 				snprintf(buf, sizeof(buf), "%s -e %s", terminal ? terminal : "xterm" , comm);
+				/* Root -> Applications -> <category> -> <application> */
 				L3Menu = WMCreatePLArray(
-					WMCreatePLString(list[i][0]),
+					WMCreatePLString(_(list[i][0])),
 					WMCreatePLString("EXEC"),
 					WMCreatePLString(buf),
 					NULL
@@ -365,7 +455,8 @@ static void other_window_managers(void)
 	while (other_wm[i][0]) {
 		t = wfindfile(path, other_wm[i][1]);
 		if (t) {
-			snprintf(buf, sizeof(buf), _("Start %s"), other_wm[i][0]);
+			snprintf(buf, sizeof(buf), _("Start %s"), _(other_wm[i][0]));
+			/* Root -> Other Window Managers -> <other window manager> */
 			L2Menu = WMCreatePLArray(
 				WMCreatePLString(buf),
 				WMCreatePLString("RESTART"),
