@@ -129,7 +129,7 @@ static void clipAutoRaise(void *cdata);
 
 static void showClipBalloon(WDock * dock, int workspace);
 
-static void make_keys()
+static void make_keys(void)
 {
 	if (dCommand != NULL)
 		return;

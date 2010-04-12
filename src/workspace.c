@@ -63,7 +63,7 @@ extern void ProcessPendingEvents();
 static WMPropList *dWorkspaces = NULL;
 static WMPropList *dClip, *dName;
 
-static void make_keys()
+static void make_keys(void)
 {
 	if (dWorkspaces != NULL)
 		return;

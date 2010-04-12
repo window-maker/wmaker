@@ -25,8 +25,8 @@
 #ifndef _WMSPEC_H_
 #define _WMSPEC_H_
 
-#include <screen.h>
-#include <window.h>
+#include "screen.h"
+#include "window.h"
 #include <X11/Xlib.h>
 
 void wNETWMInitStuff(WScreen *scr);

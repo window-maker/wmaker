@@ -104,7 +104,7 @@ static WMPropList *sShortcutMask;
 static WMPropList *sDock;
 static WMPropList *sYes, *sNo;
 
-static void make_keys()
+static void make_keys(void)
 {
 	if (sApplications != NULL)
 		return;

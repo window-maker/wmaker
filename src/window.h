@@ -355,7 +355,7 @@ typedef void* WMagicNumber;
 
 
 void wWindowDestroy(WWindow *wwin);
-WWindow *wWindowCreate();
+WWindow *wWindowCreate(void);
 
 #ifdef SHAPE
 void wWindowSetShape(WWindow *wwin);

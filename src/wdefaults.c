@@ -43,20 +43,15 @@
 #include "icon.h"
 
 /* Global stuff */
-
 extern WPreferences wPreferences;
-
 extern WMPropList *wAttributeDomainName;
-
 extern WDDomain *WDWindowAttributes;
 
 /* Local stuff */
 
 /* type converters */
 static int getBool(WMPropList *, WMPropList *);
-
 static char *getString(WMPropList *, WMPropList *);
-
 static WMPropList *ANoTitlebar = NULL;
 static WMPropList *ANoResizebar;
 static WMPropList *ANoMiniaturizeButton;
@@ -84,11 +79,8 @@ static WMPropList *ASharedAppIcon;	/* app */
 #ifdef XKB_BUTTON_HINT
 static WMPropList *ANoLanguageButton;
 #endif
-
 static WMPropList *AStartWorkspace;
-
 static WMPropList *AIcon;
-
 static WMPropList *AnyWindow;
 static WMPropList *No;
 
@@ -321,7 +313,8 @@ wDefaultFillAttributes(WScreen * scr, char *instance, char *class,
 	WMPLSetCaseSensitive(False);
 }
 
-WMPropList *get_generic_value(WScreen * scr, char *instance, char *class, WMPropList * option, Bool noDefault)
+static WMPropList *get_generic_value(WScreen *scr, char *instance, char *class,
+				     WMPropList *option, Bool noDefault)
 {
 	WMPropList *value, *key, *dict;
 

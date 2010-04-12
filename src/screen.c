@@ -92,7 +92,7 @@ static WMPropList *dWorkspace;
 static WMPropList *dDock;
 static WMPropList *dClip;
 
-static void make_keys()
+static void make_keys(void)
 {
 	if (dApplications != NULL)
 		return;

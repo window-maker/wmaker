@@ -815,7 +815,7 @@ void animateResize(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int
 }
 #endif				/* ANIMATIONS */
 
-static void flushExpose()
+static void flushExpose(void)
 {
 	XEvent tmpev;
 

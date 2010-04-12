@@ -301,7 +301,7 @@ static RETSIGTYPE buryChild(int foo)
 	errno = save_errno;
 }
 
-static void getOffendingModifiers()
+static void getOffendingModifiers(void)
 {
 	int i;
 	XModifierKeymap *modmap;

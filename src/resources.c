@@ -33,6 +33,7 @@
 
 #include "WindowMaker.h"
 #include "texture.h"
+#include "resources.h"
 #include "screen.h"
 
 int wGetColor(WScreen * scr, char *color_name, XColor * color)

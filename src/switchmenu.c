@@ -81,7 +81,7 @@ static void focusWindow(WMenu * menu, WMenuEntry * entry)
 	}
 }
 
-void InitializeSwitchMenu()
+void InitializeSwitchMenu(void)
 {
 	if (!initialized) {
 		initialized = 1;
@@ -357,7 +357,7 @@ void UpdateSwitchMenu(WScreen * scr, WWindow * wwin, int action)
 	wMenuPaint(switchmenu);
 }
 
-void UpdateSwitchMenuWorkspace(WScreen * scr, int workspace)
+static void UpdateSwitchMenuWorkspace(WScreen *scr, int workspace)
 {
 	WMenu *menu = scr->switch_menu;
 	int i;

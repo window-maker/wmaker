@@ -72,7 +72,7 @@ static void putidef(char *line, char *name, int value)
 	strcat(line, tmp);
 }
 
-static char *username()
+static char *username(void)
 {
 	char *tmp;
 
@@ -235,7 +235,7 @@ Bool wGetIconName(Display *dpy, Window win, char **iconname)
 	return False;
 }
 
-static void eatExpose()
+static void eatExpose(void)
 {
 	XEvent event, foo;
 

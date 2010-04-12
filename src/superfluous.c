@@ -34,8 +34,8 @@
 
 #include "WindowMaker.h"
 #include "screen.h"
-#include "superfluous.h"
 #include "dock.h"
+#include "superfluous.h"
 #include "framewin.h"
 #include "window.h"
 #include "actions.h"

@@ -435,7 +435,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, Bool class_only)
 
 	panel->scr = scr;
 
-	panel->windows = makeWindowListArray(curwin, wPreferences.swtileImage != 0, class_only);
+	panel->windows = makeWindowListArray(curwin, wPreferences.swtileImage != NULL, class_only);
 	count = WMGetArrayItemCount(panel->windows);
 
 	if (count == 0) {

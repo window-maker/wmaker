@@ -874,7 +874,7 @@ static Bool updateStrut(WWindow * wwin, Bool adding)
 		int fmt_ret;
 		unsigned long nitems_ret;
 		unsigned long bytes_after_ret;
-		long *data = 0;
+		long *data = NULL;
 
 		if (XGetWindowProperty(dpy, wwin->client_win, net_wm_strut, 0, 4, False,
 				       XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
@@ -1177,7 +1177,7 @@ static void updateWindowType(WWindow * wwin)
 	int fmt_ret;
 	unsigned long nitems_ret;
 	unsigned long bytes_after_ret;
-	long *data = 0;
+	long *data = NULL;
 	int layer;
 	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_window_type, 0, 1,
 			       False, XA_ATOM, &type_ret, &fmt_ret, &nitems_ret,
@@ -1207,7 +1207,7 @@ Bool wNETWMCheckClientHints(WWindow * wwin, int *layer, int *workspace)
 	int fmt_ret;
 	unsigned long nitems_ret;
 	unsigned long bytes_after_ret;
-	long *data = 0;
+	long *data = NULL;
 	Bool hasState = False;
 	int i;
 
@@ -1268,7 +1268,7 @@ static Bool updateNetIconInfo(WWindow * wwin)
 	int fmt_ret;
 	unsigned long nitems_ret;
 	unsigned long bytes_after_ret;
-	long *data = 0;
+	long *data = NULL;
 	Bool hasState = False;
 	Bool old_state = wwin->flags.net_handle_icon;
 
@@ -1348,7 +1348,7 @@ static void handleDesktopNames(XClientMessageEvent * event, WScreen * scr)
 		return;
 	}
 
-	if (data == 0)
+	if (data == NULL)
 		return;
 
 	if (type_ret != utf8_string || fmt_ret != 8)
@@ -1516,7 +1516,7 @@ int wNETWMGetPidForWindow(Window window)
 	int fmt_ret;
 	unsigned long nitems_ret;
 	unsigned long bytes_after_ret;
-	long *data = 0;
+	long *data = NULL;
 	int pid;
 
 	if (XGetWindowProperty(dpy, window, net_wm_pid, 0, 1, False,

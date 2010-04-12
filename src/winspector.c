@@ -118,13 +118,10 @@ typedef struct InspectorPanel {
 } InspectorPanel;
 
 extern Cursor wCursor[WCUR_LAST];
-
 extern WDDomain *WDWindowAttributes;
-
-static InspectorPanel *panelList = NULL;
-
 extern WPreferences wPreferences;
 
+static InspectorPanel *panelList = NULL;
 static WMPropList *ANoTitlebar = NULL;
 static WMPropList *ANoResizebar;
 static WMPropList *ANoMiniaturizeButton;
@@ -151,14 +148,11 @@ static WMPropList *ASharedAppIcon;
 #ifdef XKB_BUTTON_HINT
 static WMPropList *ANoLanguageButton;
 #endif
-
 static WMPropList *AStartWorkspace;
-
 static WMPropList *AIcon;
 
 /* application wide options */
 static WMPropList *AStartHidden;
-
 static WMPropList *AnyWindow;
 static WMPropList *EmptyString;
 static WMPropList *Yes, *No;
@@ -167,14 +161,13 @@ static WMPropList *Yes, *No;
 #define PHEIGHT	350
 
 static char *spec_text;
-
 static void applySettings(WMButton * button, InspectorPanel * panel);
 
 #define UNDEFINED_POS 0xffffff
 
 static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int ypos, Bool showSelectPanel);
 
-static void make_keys()
+static void make_keys(void)
 {
 	if (ANoTitlebar != NULL)
 		return;
@@ -258,7 +251,7 @@ static void destroyInspector(WCoreWindow * foo, void *data, XEvent * event)
 	freeInspector(panel);
 }
 
-void wDestroyInspectorPanels()
+void wDestroyInspectorPanels(void)
 {
 	InspectorPanel *panel;
 

@@ -165,7 +165,7 @@ WWindow *wWindowFor(Window window)
 	return NULL;
 }
 
-WWindow *wWindowCreate()
+WWindow *wWindowCreate(void)
 {
 	WWindow *wwin;
 
@@ -675,7 +675,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	XSetWindowBorderWidth(dpy, window, 0);
 
 	/* get hints from GNUstep app */
-	if (wwin->wm_class != 0 && strcmp(wwin->wm_class, "GNUstep") == 0) {
+	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "GNUstep") == 0) {
 		wwin->flags.is_gnustep = 1;
 	}
 	if (!PropGetGNUstepWMAttr(window, &wwin->wm_gnustep_attr)) {
@@ -2571,7 +2571,7 @@ WMagicNumber wWindowAddSavedState(char *instance, char *class, char *command, pi
 
 	wstate = malloc(sizeof(WWindowState));
 	if (!wstate)
-		return 0;
+		return NULL;
 
 	memset(wstate, 0, sizeof(WWindowState));
 	wstate->pid = pid;

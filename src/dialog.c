@@ -104,7 +104,7 @@ int wMessageDialog(WScreen * scr, char *title, char *message, char *defBtn, char
 	return result;
 }
 
-void toggleSaveSession(WMWidget * w, void *data)
+static void toggleSaveSession(WMWidget *w, void *data)
 {
 	wPreferences.save_session_on_exit = WMGetButtonSelected((WMButton *) w);
 }

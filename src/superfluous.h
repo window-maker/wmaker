@@ -19,11 +19,12 @@
  *  USA.
  */
 
+#ifndef WMSUPERFLUOUS_H
+#define WMSUPERFLUOUS_H
+
 #define PIECES ((64/ICON_KABOOM_PIECE_SIZE)*(64/ICON_KABOOM_PIECE_SIZE))
 
-
-
-
-extern void DoKaboom();
-extern Pixmap MakeGhostDock();
-extern Pixmap MakeGhostIcon();
+extern void DoKaboom(WScreen *scr, Window win, int x, int y);
+extern Pixmap MakeGhostDock(WDock *dock, int sx, int dx, int y);
+extern Pixmap MakeGhostIcon(WScreen *scr, Drawable drawable);
+#endif /* WMSUPERFLUOUS_H */
