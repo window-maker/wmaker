@@ -110,7 +110,7 @@ createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
 {
 	RImage *icon;
 	char *path;
-	RColor gray = { 0xae, 0xaa, 0xae };
+	RColor gray = { 0xae, 0xaa, 0xae, 0 };
 
 	*icon1 = NULL;
 	*icon2 = NULL;

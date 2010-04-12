@@ -1600,8 +1600,8 @@ static Cursor magnifyGrabPointer(W_ColorPanel * panel)
 	W_Screen *scr = WMWidgetScreen(panel->win);
 	Pixmap magPixmap, magPixmap2;
 	Cursor magCursor;
-	XColor fgColor = { 0, 0, 0, 0, DoRed | DoGreen | DoBlue };
-	XColor bgColor = { 0, 0xbf00, 0xa000, 0x5000, DoRed | DoGreen | DoBlue };
+	XColor fgColor = { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 };
+	XColor bgColor = { 0, 0xbf00, 0xa000, 0x5000, DoRed | DoGreen | DoBlue, 0 };
 
 	/* Cursor creation stuff */
 	magPixmap = XCreatePixmapFromBitmapData(scr->display, W_DRAWABLE(scr),

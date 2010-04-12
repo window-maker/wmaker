@@ -1143,9 +1143,9 @@ static WEditMenu *duplicateMenu(WEditMenu * menu)
 
 static void dragItem(WEditMenu * menu, WEditMenuItem * item, Bool copy)
 {
-	static XColor black = { 0, 0, 0, 0, DoRed | DoGreen | DoBlue };
-	static XColor green = { 0x0045b045, 0x4500, 0xb000, 0x4500, DoRed | DoGreen | DoBlue };
-	static XColor back = { 0, 0xffff, 0xffff, 0xffff, DoRed | DoGreen | DoBlue };
+	static XColor black = { 0, 0, 0, 0, DoRed | DoGreen | DoBlue, 0 };
+	static XColor green = { 0x0045b045, 0x4500, 0xb000, 0x4500, DoRed | DoGreen | DoBlue, 0 };
+	static XColor back = { 0, 0xffff, 0xffff, 0xffff, DoRed | DoGreen | DoBlue, 0 };
 	Display *dpy = W_VIEW_DISPLAY(menu->view);
 	WMScreen *scr = W_VIEW_SCREEN(menu->view);
 	int x, y;

@@ -1759,6 +1759,7 @@ W_ViewDelegate _TextViewDelegate = {
 	NULL,
 	textDidResize,
 	NULL,
+	NULL
 };
 
 #define TEXT_BUFFER_INCR 8

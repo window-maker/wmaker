@@ -76,7 +76,7 @@ static void
 createImages(WMScreen * scr, RContext * rc, RImage * xis, char *file, WMPixmap ** icon1, WMPixmap ** icon2)
 {
 	RImage *icon;
-	RColor gray = { 0xae, 0xaa, 0xae };
+	RColor gray = { 0xae, 0xaa, 0xae, 0 };
 
 	*icon1 = WMCreatePixmapFromFile(scr, file);
 	if (!*icon1) {
