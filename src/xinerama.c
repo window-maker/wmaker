@@ -36,8 +36,6 @@
 # endif
 #endif
 
-extern WPreferences wPreferences;
-
 void wInitXinerama(WScreen * scr)
 {
 	scr->xine_info.primary_head = 0;

@@ -48,10 +48,7 @@
 #include "xmodifier.h"
 
 /**** global variables *****/
-
 extern WPreferences wPreferences;
-
-extern Time LastTimestamp;
 
 #ifdef USECPP
 static void putdef(char *line, char *name, char *value)

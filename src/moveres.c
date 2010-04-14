@@ -62,13 +62,8 @@
 #define HAS_BORDER_WITH_SELECT(w) ((w)->flags.selected || HAS_BORDER(w))
 
 /****** Global Variables ******/
-extern Time LastTimestamp;
-
 extern Cursor wCursor[WCUR_LAST];
-
 extern WPreferences wPreferences;
-
-extern Atom _XA_WM_PROTOCOLS;
 
 /*
  *----------------------------------------------------------------------

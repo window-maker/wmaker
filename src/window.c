@@ -74,14 +74,10 @@ extern Bool wShapeSupported;
 /* contexts */
 extern XContext wWinContext;
 
-/* cursors */
-extern Cursor wCursor[WCUR_LAST];
-
 /* protocol atoms */
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_STATE;
-
 extern WPreferences wPreferences;
 extern Time LastTimestamp;
 
@@ -90,7 +86,6 @@ extern void DoWindowBirth(WWindow *wwin);
 
 /***** Local Stuff *****/
 static WWindowState *windowState = NULL;
-
 static FocusMode getFocusMode(WWindow *wwin);
 static int getSavedState(Window window, WSavedState **state);
 static void setupGNUstepHints(WWindow *wwin, GNUstepWMAttributes *gs_hints);

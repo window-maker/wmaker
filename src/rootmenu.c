@@ -56,16 +56,9 @@
 #define MAX_SHORTCUT_LENGTH 32
 
 extern char *Locale;
-
 extern WDDomain *WDRootMenu;
-
 extern Cursor wCursor[WCUR_LAST];
-
-extern Time LastTimestamp;
-
 extern WPreferences wPreferences;
-
-extern int wScreenCount;
 
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen * scr, char *file_name);

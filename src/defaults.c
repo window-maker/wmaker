@@ -69,18 +69,11 @@
 #endif
 
 /***** Global *****/
-
 extern WDDomain *WDWindowMaker;
 extern WDDomain *WDWindowAttributes;
 extern WDDomain *WDRootMenu;
-
 extern int wScreenCount;
-
-extern Atom _XA_WINDOWMAKER_ICON_SIZE;
-extern Atom _XA_WINDOWMAKER_ICON_TILE;
-
 extern WPreferences wPreferences;
-
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 typedef struct {

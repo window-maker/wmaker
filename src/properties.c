@@ -33,22 +33,17 @@
 
 /* atoms */
 extern Atom _XA_WM_STATE;
-extern Atom _XA_WM_CHANGE_STATE;
-extern Atom _XA_WM_PROTOCOLS;
 extern Atom _XA_WM_CLIENT_LEADER;
 extern Atom _XA_WM_TAKE_FOCUS;
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_WM_SAVE_YOURSELF;
-
 extern Atom _XA_GNUSTEP_WM_ATTR;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
-
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_MENU;
 extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 extern Atom _XA_WINDOWMAKER_ICON_TILE;
-extern Atom _XA_WINDOWMAKER_ICON_SIZE;
 
 int PropGetNormalHints(Window window, XSizeHints * size_hints, int *pre_iccm)
 {

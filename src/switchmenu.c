@@ -41,10 +41,8 @@
 
 /********* Global Variables *******/
 extern WPreferences wPreferences;
-extern Time LastTimestamp;
 
 static int initialized = 0;
-
 static void observer(void *self, WMNotification * notif);
 static void wsobserver(void *self, WMNotification * notif);
 

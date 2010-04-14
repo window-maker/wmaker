@@ -40,9 +40,7 @@
 
 /******** Global Variables **********/
 extern Atom _XA_WINDOWMAKER_MENU;
-extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 extern Time LastTimestamp;
-
 extern WPreferences wPreferences;
 
 typedef struct {

@@ -55,9 +55,7 @@
 
 extern int ignore_wks_change;
 extern WPreferences wPreferences;
-extern XContext wWinContext;
 extern XContext wVEdgeContext;
-
 extern void ProcessPendingEvents();
 
 static WMPropList *dWorkspaces = NULL;

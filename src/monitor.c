@@ -41,10 +41,7 @@
 #include "funcs.h"
 
 /****** Global Variables ******/
-
 extern WPreferences wPreferences;
-
-extern int wScreenCount;
 
 int showCrashDialog(int sig)
 {

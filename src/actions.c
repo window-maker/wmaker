@@ -52,13 +52,8 @@
 int ignore_wks_change = 0;
 extern Time LastTimestamp;
 extern Time LastFocusChange;
-
-extern Cursor wCursor[WCUR_LAST];
-
 extern WPreferences wPreferences;
-
 extern Atom _XA_WM_TAKE_FOCUS;
-
 extern void ProcessPendingEvents();
 extern int calcIntersectionLength(int p1, int l1, int p2, int l2);
 

@@ -80,15 +80,11 @@
 #endif
 
 /****** Global Variables ******/
-
 extern WPreferences wPreferences;
-
 extern WDDomain *WDWindowMaker;
 extern WDDomain *WDRootMenu;
 extern WDDomain *WDWindowAttributes;
-
 extern WShortKey wKeyBindings[WKBD_LAST];
-
 extern int wScreenCount;
 
 #ifdef SHAPE
@@ -117,9 +113,7 @@ extern Atom _XA_WM_SAVE_YOURSELF;
 extern Atom _XA_WM_CLIENT_LEADER;
 extern Atom _XA_WM_COLORMAP_WINDOWS;
 extern Atom _XA_WM_COLORMAP_NOTIFY;
-
 extern Atom _XA_GNUSTEP_WM_ATTR;
-
 extern Atom _XA_WINDOWMAKER_MENU;
 extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 extern Atom _XA_WINDOWMAKER_STATE;
@@ -128,10 +122,8 @@ extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 extern Atom _XA_WINDOWMAKER_COMMAND;
 extern Atom _XA_WINDOWMAKER_ICON_SIZE;
 extern Atom _XA_WINDOWMAKER_ICON_TILE;
-
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
-
 extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 
 /* cursors */
@@ -142,16 +134,13 @@ extern Cursor wCursor[WCUR_LAST];
 extern char WDelayedActionSet;
 #endif
 
+extern void NotifyDeadProcess(pid_t pid, unsigned char status);
+
 /***** Local *****/
-
 static WScreen **wScreen = NULL;
-
 static unsigned int _NumLockMask = 0;
 static unsigned int _ScrollLockMask = 0;
-
 static void manageAllWindows(WScreen * scr, int crashed);
-
-extern void NotifyDeadProcess(pid_t pid, unsigned char status);
 
 static int catchXError(Display * dpy, XErrorEvent * error)
 {

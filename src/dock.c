@@ -63,21 +63,13 @@
 
 /* in dockedapp.c */
 extern void DestroyDockAppSettingsPanel();
-
 extern void ShowDockAppSettingsPanel(WAppIcon * aicon);
-
-extern XContext wWinContext;
-
 extern Cursor wCursor[WCUR_LAST];
-
 extern WPreferences wPreferences;
-
 extern XContext wWinContext;
+extern void appIconMouseDown(WObjDescriptor *desc, XEvent *event);
 
 #define MOD_MASK wPreferences.modifier_mask
-
-extern void appIconMouseDown(WObjDescriptor * desc, XEvent * event);
-
 #define ICON_SIZE wPreferences.icon_size
 
 /***** Local variables ****/
