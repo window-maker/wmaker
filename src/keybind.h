@@ -19,6 +19,8 @@
  *  USA.
  */
 
+#ifndef WMKEYBIND_H
+#define WMKEYBIND_H
 
 enum {
 	/* anywhere */
@@ -100,3 +102,5 @@ typedef struct WShortKey {
 } WShortKey;
 
 void wKeyboardInitialize();
+
+#endif /* WMKEYBIND_H */

@@ -20,6 +20,8 @@
  *  USA.
  */
 
+#ifndef WMROOTMENU_H
+#define WMROOTMENU_H
 
 #include "WindowMaker.h"
 
@@ -40,3 +42,4 @@ typedef struct _WRootMenuReader {
     void (*closeMenuFile)(WRootMenuData *data);
 } WRootMenuReader;
 
+#endif /* WMROOTMENU_H */
