@@ -1,3 +1,9 @@
+JH
+
+- change WM*ColorSpec to return a cairo_pattern if appropriate
+- make the PaintText* methods paint the bg using the cairo_pattern
+  this should make theming easy
+
 - move paint to idle handlers
 - check if its useful to add some WMBrowserSelectionDidChangeNotification
   (actually a pass-through for WMListSelectionDidChangeNotification).

@@ -334,6 +334,17 @@ WMColorSpec WMBlackColorSpec()
 	return spec;
 }
 
+WMColorSpec WMTransparentColorSpec()
+{
+	WMColorSpec spec= {0, 0, 0, 0};
+	return spec;
+}
+
+WMColorSpec WMLightGrayColorSpec()
+{
+	WMColorSpec spec= {194, 190, 194, 0xff};
+	return spec;
+}
 
 WMColorSpec WMGrayColorSpec()
 {

@@ -33,6 +33,8 @@ extern "C" {
 
 #define XDND_VERSION    3
 
+#define NEW_LOOK 1
+
 
 typedef struct W_Application {
     char *applicationName;
@@ -503,8 +505,8 @@ void W_SetViewCursor(W_View *view, Cursor cursor);
 
 void W_DrawRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width,
                   unsigned int height, WMReliefType relief);
-void W_DrawButtonRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width, unsigned int height,
-                        WMReliefType relief);
+//void W_DrawButtonRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width, unsigned int height,
+//                        WMReliefType relief, unsigned int pushLight);
 
 void W_CallDestroyHandlers(W_View *view);
 

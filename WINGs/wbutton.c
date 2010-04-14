@@ -1,5 +1,6 @@
 
 #include "WINGsP.h"
+#include "wtheme.h"
 
 typedef struct W_Button {
 	W_Class widgetClass;
@@ -453,14 +454,16 @@ void WMSetButtonPeriodicDelay(WMButton * bPtr, float delay, float interval)
 	bPtr->periodicDelay = delay;
 }
 
-static void paintButton(Button * bPtr)
+static void paintButton(WMButton * bPtr)
 {
-	cairo_t *cr= W_CreateCairoForView(W_VIEW(bPtr));
+	cairo_t *cr = W_CreateCairoForView(W_VIEW(bPtr));
 	W_Screen *scrPtr = bPtr->view->screen;
 	WMReliefType relief;
 	int offset;
 	const char *caption;
 	WMImage *image;
+	unsigned int lightbg = 0;
+
 	WMColorSpec textColor;
 	WMColorSpec backColor;
 
@@ -488,8 +491,7 @@ static void paintButton(Button * bPtr)
 
 	if (bPtr->flags.selected) {
 		if (bPtr->flags.stateLight) {
-			backColor = WMWhiteColorSpec();
-			textColor = WMBlackColorSpec();
+			lightbg = 1;
 		}
 
 		if (bPtr->flags.stateChange) {
@@ -512,8 +514,7 @@ static void paintButton(Button * bPtr)
 			offset = 1;
 		}
 		if (bPtr->flags.pushLight) {
-			backColor = WMWhiteColorSpec();
-			textColor = WMBlackColorSpec();
+			lightbg = 1;
 		}
 
 		if (bPtr->flags.pushChange) {
@@ -525,16 +526,18 @@ static void paintButton(Button * bPtr)
 		}
 	}
 
+	if (lightbg == 1) {
+		W_DrawButtonLightBack(cr, bPtr, bPtr->view->size.width, bPtr->view->size.height,relief);
+	} else {
+		W_DrawButtonDarkBack(cr, bPtr, bPtr->view->size.width, bPtr->view->size.height,relief);
+	}
 
-	W_DrawButtonRelief(scrPtr, cr, 0, 0,
-			bPtr->view->size.width, bPtr->view->size.height,
-			relief);
+	W_DrawButtonRelief(cr, bPtr->view->size.width, bPtr->view->size.height, relief);
 
-	relief= WRFlat;
 	W_PaintTextAndImage(scrPtr, cr, bPtr->view, True, &textColor,
 						(bPtr->font!=NULL ? bPtr->font : scrPtr->normalFont),
 						relief, caption, bPtr->flags.alignment, image,
-						bPtr->flags.imagePosition, NULL, offset);
+						bPtr->flags.imagePosition, &backColor, offset);
 
 	if (image)
 		WMDestroyImage(image);

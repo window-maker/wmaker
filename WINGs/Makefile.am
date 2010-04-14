@@ -52,7 +52,8 @@ libWINGs_la_SOURCES = 	\
 	wpixmap.c \
 	wprogressindicator.c \
 	wview.c \
-	wwindow.c
+	wwindow.c \
+	wtheme.c
 
 libWUtil_la_SOURCES = 	\
 	array.c \

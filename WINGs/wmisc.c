@@ -3,203 +3,262 @@
 
 #include <ctype.h>
 
-static void curve_rectangle(cairo_t *cr,
-		double x0, double y0, double rect_width, double rect_height,
-		double radius)
-{
-	double x1,y1;
-
-	x1=x0+rect_width;
-	y1=y0+rect_height;
-	if (!rect_width || !rect_height)
-		return;
-	if (rect_width/2<radius) {
-		if (rect_height/2<radius) {
-			cairo_move_to  (cr, x0, (y0 + y1)/2);
-			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
-			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
-			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
-			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
-		} else {
-			cairo_move_to  (cr, x0, y0 + radius);
-			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
-			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
-			cairo_line_to (cr, x1 , y1 - radius);
-			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
-			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
-		}
-	} else {
-		if (rect_height/2<radius) {
-			cairo_move_to  (cr, x0, (y0 + y1)/2);
-			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
-			cairo_line_to (cr, x1 - radius, y0);
-			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
-			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
-			cairo_line_to (cr, x0 + radius, y1);
-			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
-		} else {
-			cairo_move_to  (cr, x0, y0 + radius);
-			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
-			cairo_line_to (cr, x1 - radius, y0);
-			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
-			cairo_line_to (cr, x1 , y1 - radius);
-			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
-			cairo_line_to (cr, x0 + radius, y1);
-			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
-		}
-	}
-	cairo_close_path (cr);
-}
-
-void W_DrawButtonRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width, unsigned int height,
-		WMReliefType relief)
-{
-	unsigned char border[4]= {0x00, 0x00, 0x00, 0x70};
-	//unsigned char color1[4]= {0x8c, 0xb1, 0xbc, 0xff};
-	//unsigned char color2[4]= {0xcb, 0xf3, 0xff, 0xff};
-	unsigned char color1[4]= {0x0, 0x0, 0x0, 0xff};
-	unsigned char color2[4]= {0xcf, 0xcf, 0xcf, 0xff};
-	unsigned char scolor1[4]= {0xff, 0xff, 0xff, 0xe5};
-	unsigned char scolor2[4]= {0xff, 0xff, 0xff, 0x70};
-	cairo_pattern_t *shine;
-	cairo_pattern_t *base;
-
-	x+=1;
-	y+=1;
-	width-=2;
-	height-=2;
-
-	cairo_save(cairo);
-
-	shine= cairo_pattern_create_linear(0, 0, 0, height*2/5);
-	cairo_pattern_add_color_stop_rgba(shine, 0,
-			scolor1[0]/255.0, scolor1[1]/255.0, scolor1[2]/255.0,
-			scolor1[3]/255.0);
-	cairo_pattern_add_color_stop_rgba(shine, 1,
-			scolor2[0]/255.0, scolor2[1]/255.0, scolor2[2]/255.0,
-			scolor2[3]/255.0);
-
-	base= cairo_pattern_create_linear(0, 0, 0, height-1);
-	cairo_pattern_add_color_stop_rgba(base, 0,
-			color1[0]/255.0, color1[1]/255.0, color1[2]/255.0,
-			color1[3]/255.0);
-	cairo_pattern_add_color_stop_rgba(base, 1,
-			color2[0]/255.0, color2[1]/255.0, color2[2]/255.0,
-			color2[3]/255.0);
-
-
-	curve_rectangle(cairo, x, y, width-1, height-1, height*2/3);
-	cairo_set_source(cairo, base);
-	cairo_fill_preserve(cairo);
-	cairo_clip(cairo);
-
-	curve_rectangle(cairo, x, y, width-1, height*2/5, width);
-	cairo_set_source(cairo, shine);
-	cairo_fill(cairo);
-
-	curve_rectangle(cairo, x, y, width-1, height-1, height*2/3);
-	cairo_set_source_rgba(cairo, border[0]/255.0, border[1]/255.0, border[2]/255.0, border[3]/255.0);
-	cairo_set_line_width(cairo, 2.0);
-	cairo_stroke(cairo);
-
-	cairo_pattern_destroy(shine);
-	cairo_pattern_destroy(base);
-
-	cairo_restore(cairo);
-}
+//static void curve_rectangle(cairo_t *cr,
+//		double x0, double y0, double rect_width, double rect_height,
+//		double radius)
+//{
+//	double x1,y1;
+//
+//	x1=x0+rect_width;
+//	y1=y0+rect_height;
+//	if (!rect_width || !rect_height)
+//		return;
+//	if (rect_width/2<radius) {
+//		if (rect_height/2<radius) {
+//			cairo_move_to  (cr, x0, (y0 + y1)/2);
+//			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
+//			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
+//			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
+//			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
+//		} else {
+//			cairo_move_to  (cr, x0, y0 + radius);
+//			cairo_curve_to (cr, x0 ,y0, x0, y0, (x0 + x1)/2, y0);
+//			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
+//			cairo_line_to (cr, x1 , y1 - radius);
+//			cairo_curve_to (cr, x1, y1, x1, y1, (x1 + x0)/2, y1);
+//			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
+//		}
+//	} else {
+//		if (rect_height/2<radius) {
+//			cairo_move_to  (cr, x0, (y0 + y1)/2);
+//			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
+//			cairo_line_to (cr, x1 - radius, y0);
+//			cairo_curve_to (cr, x1, y0, x1, y0, x1, (y0 + y1)/2);
+//			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
+//			cairo_line_to (cr, x0 + radius, y1);
+//			cairo_curve_to (cr, x0, y1, x0, y1, x0, (y0 + y1)/2);
+//		} else {
+//			cairo_move_to  (cr, x0, y0 + radius);
+//			cairo_curve_to (cr, x0 , y0, x0 , y0, x0 + radius, y0);
+//			cairo_line_to (cr, x1 - radius, y0);
+//			cairo_curve_to (cr, x1, y0, x1, y0, x1, y0 + radius);
+//			cairo_line_to (cr, x1 , y1 - radius);
+//			cairo_curve_to (cr, x1, y1, x1, y1, x1 - radius, y1);
+//			cairo_line_to (cr, x0 + radius, y1);
+//			cairo_curve_to (cr, x0, y1, x0, y1, x0, y1- radius);
+//		}
+//	}
+//	cairo_close_path (cr);
+//}
+//
+//void W_DrawButtonRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width, unsigned int height,
+//		WMReliefType relief, unsigned int pushLight)
+//{
+//	cairo_save(cairo);
+//
+//	WMColorSpec outerlefttop;
+//	WMColorSpec innerlefttop;
+//	WMColorSpec outerbottomright;
+//	WMColorSpec innerbottomright;
+//
+//#define NEW_LOOK 1
+//#ifdef NEW_LOOK
+//#define TOPFILL WMLightGrayColorSpec()
+//#define BOTFILL WMGrayColorSpec()
+//#else
+//#define TOPFILL WMGrayColorSpec()
+//#define BOTFILL WMGrayColorSpec()
+//#endif
+//
+//	WMColorSpec topfill = TOPFILL;
+//	WMColorSpec bottomfill = BOTFILL;
+//
+//	//the highlight colors depend on the button relief
+//	switch (relief) {
+//		case WRSimple:
+//		{
+//			outerlefttop = WMBlackColorSpec();
+//			outerbottomright = WMBlackColorSpec();
+//			innerlefttop = WMTransparentColorSpec();
+//			innerbottomright = WMTransparentColorSpec();
+//			break;
+//		}
+//		case WRRaised:
+//		{
+//			outerlefttop = WMWhiteColorSpec();
+//			outerbottomright = WMBlackColorSpec();
+//			innerlefttop = WMTransparentColorSpec();
+//			innerbottomright = WMDarkGrayColorSpec();
+//			break;
+//		}
+//		case WRSunken:
+//		{
+//			outerlefttop = WMDarkGrayColorSpec();
+//			outerbottomright = WMWhiteColorSpec();
+//			innerlefttop = WMBlackColorSpec();
+//			innerbottomright = WMTransparentColorSpec();
+//			break;
+//		}
+//		case WRPushed:
+//		{
+//			if (pushLight) {
+//				topfill = WMWhiteColorSpec();
+//				bottomfill = WMWhiteColorSpec();
+//			}
+//			outerlefttop = WMBlackColorSpec();
+//			outerbottomright = WMWhiteColorSpec();
+//			innerlefttop = WMTransparentColorSpec();
+//			innerbottomright = WMTransparentColorSpec();
+//			break;
+//		}
+//		case WRRidge:
+//		{
+//			outerlefttop = WMWhiteColorSpec();
+//			outerbottomright = WMDarkGrayColorSpec();
+//			innerlefttop = WMTransparentColorSpec();
+//			innerbottomright = WMTransparentColorSpec();
+//			break;
+//		}
+//		case WRGroove:
+//		{
+//			outerlefttop = WMDarkGrayColorSpec();
+//			outerbottomright = WMDarkGrayColorSpec();
+//			innerlefttop = WMTransparentColorSpec();
+//			innerbottomright = WMTransparentColorSpec();
+//			break;
+//		}
+//	}
+//
+//	//draw main gradient
+//	cairo_pattern_t *linpat;
+//	linpat = cairo_pattern_create_linear(0, 0, 0, height);
+//	cairo_pattern_add_color_stop_rgba(linpat, 0, topfill.red/255.0, topfill.green/255.0, topfill.blue/255.0, topfill.alpha/255.0);
+//	cairo_pattern_add_color_stop_rgba(linpat, 0, bottomfill.red/255.0, bottomfill.green/255.0, bottomfill.blue/255.0, bottomfill.alpha/255.0);
+//	cairo_set_source(cairo, linpat);
+//	cairo_rectangle(cairo, 0, 0, width, height);
+//	cairo_fill(cairo);
+//	cairo_stroke(cairo);
+//
+//	//draw highlights
+//	cairo_set_line_width(cairo,1);
+//
+//	WMColorSpecSet(cairo,&outerlefttop);
+//	cairo_rectangle(cairo,0,0,width-1,0);
+//	cairo_rectangle(cairo,0,0,0,height-1);
+//	cairo_stroke(cairo);
+//
+//	WMColorSpecSet(cairo,&innerlefttop);
+//	cairo_rectangle(cairo,1,1,width-2,0);
+//	cairo_rectangle(cairo,1,1,0,height-2);
+//	cairo_stroke(cairo);
+//
+//	WMColorSpecSet(cairo,&innerbottomright);
+//	cairo_rectangle(cairo,1,height-2,width-1,1);
+//	cairo_rectangle(cairo,width-2,1,1,height-2);
+//	cairo_stroke(cairo);
+//
+//	WMColorSpecSet(cairo,&outerbottomright);
+//	cairo_rectangle(cairo,0,height-1,width,1);
+//	cairo_rectangle(cairo,width-1,0,1,height);
+//	cairo_stroke(cairo);
+//
+//	cairo_pattern_destroy(linpat);
+//
+//	cairo_restore(cairo);
+//}
 
 void W_DrawRelief(W_Screen *scr, cairo_t *cairo, int x, int y, unsigned int width, unsigned int height,
 		WMReliefType relief)
 {
-	WMColorSpec b;
-	WMColorSpec w;
-	WMColorSpec d;
-	WMColorSpec l;
-
-	switch (relief) {
-		case WRSimple:
-			WMColorSpecSet(cairo, &b);
-			cairo_rectangle(cairo, x, y, width-1, height-1);
-			cairo_stroke(cairo);
-			return;
-
-		case WRRaised:
-			b= WMBlackColorSpec();
-			w= WMWhiteColorSpec();
-			d= WMDarkGrayColorSpec();
-			l= WMGrayColorSpec();
-			break;
-
-		case WRSunken:
-			l= WMBlackColorSpec();
-			b= WMWhiteColorSpec();
-			w= WMDarkGrayColorSpec();
-			d= WMGrayColorSpec();
-			break;
-
-		case WRPushed:
-			l= w= WMBlackColorSpec();
-			d= b= WMWhiteColorSpec();
-			break;
-
-		case WRRidge:
-			l= b= WMDarkGrayColorSpec();
-			d= w= WMWhiteColorSpec();
-			break;
-
-		case WRGroove:
-			w= d= WMDarkGrayColorSpec();
-			l= b= WMWhiteColorSpec();
-			break;
-
-		default:
-			return;
-	}
-	/* top left */
-	WMColorSpecSet(cairo, &w);
-	cairo_move_to(cairo, x, y);
-	cairo_line_to(cairo, x+width-1, y);
-	cairo_stroke(cairo);
-	if (width > 2 && relief != WRRaised && relief!=WRPushed) {
-		WMColorSpecSet(cairo, &l);
-		cairo_move_to(cairo, x+1, y+1);
-		cairo_line_to(cairo, x+width-3, y+1);
-		cairo_stroke(cairo);
-	}
-
-	WMColorSpecSet(cairo, &w);
-	cairo_move_to(cairo, x, y);
-	cairo_line_to(cairo, x, y+height-1);
-	cairo_stroke(cairo);
-	if (height > 2 && relief != WRRaised && relief!=WRPushed) {
-		WMColorSpecSet(cairo, &l);
-		cairo_move_to(cairo, x+1, y+1);
-		cairo_line_to(cairo, x+1, y+height-3);
-		cairo_stroke(cairo);
-	}
-
-	/* bottom right */
-	WMColorSpecSet(cairo, &b);
-	cairo_move_to(cairo, x, y+height-1);
-	cairo_line_to(cairo, x+width-1, y+height-1);
-	cairo_stroke(cairo);
-	if (width > 2 && relief!=WRPushed) {
-		WMColorSpecSet(cairo, &d);
-		cairo_move_to(cairo, x+1, y+height-2);
-		cairo_line_to(cairo, x+width-2, y+height-2);
-		cairo_stroke(cairo);
-	}
-
-	WMColorSpecSet(cairo, &b);
-	cairo_move_to(cairo, x+width-1, y);
-	cairo_line_to(cairo, x+width-1, y+height-1);
-	cairo_stroke(cairo);
-	if (height > 2 && relief!=WRPushed) {
-		WMColorSpecSet(cairo, &d);
-		cairo_move_to(cairo, x+width-2, y+1);
-		cairo_line_to(cairo, x+width-2, y+height-2);
-		cairo_stroke(cairo);
-	}
+//	WMColorSpec b;
+//	WMColorSpec w;
+//	WMColorSpec d;
+//	WMColorSpec l;
+//
+//	switch (relief) {
+//		case WRSimple:
+//			WMColorSpecSet(cairo, &b);
+//			cairo_rectangle(cairo, x, y, width-1, height-1);
+//			cairo_stroke(cairo);
+//			return;
+//
+//		case WRRaised:
+//			b= WMBlackColorSpec();
+//			w= WMWhiteColorSpec();
+//			d= WMDarkGrayColorSpec();
+//			l= WMGrayColorSpec();
+//			break;
+//
+//		case WRSunken:
+//			l= WMBlackColorSpec();
+//			b= WMWhiteColorSpec();
+//			w= WMDarkGrayColorSpec();
+//			d= WMGrayColorSpec();
+//			break;
+//
+//		case WRPushed:
+//			l= w= WMBlackColorSpec();
+//			d= b= WMWhiteColorSpec();
+//			break;
+//
+//		case WRRidge:
+//			l= b= WMDarkGrayColorSpec();
+//			d= w= WMWhiteColorSpec();
+//			break;
+//
+//		case WRGroove:
+//			w= d= WMDarkGrayColorSpec();
+//			l= b= WMWhiteColorSpec();
+//			break;
+//
+//		default:
+//			return;
+//	}
+//	/* top left */
+//	WMColorSpecSet(cairo, &w);
+//	cairo_move_to(cairo, x, y);
+//	cairo_line_to(cairo, x+width-1, y);
+//	cairo_stroke(cairo);
+//	if (width > 2 && relief != WRRaised && relief!=WRPushed) {
+//		WMColorSpecSet(cairo, &l);
+//		cairo_move_to(cairo, x+1, y+1);
+//		cairo_line_to(cairo, x+width-3, y+1);
+//		cairo_stroke(cairo);
+//	}
+//
+//	WMColorSpecSet(cairo, &w);
+//	cairo_move_to(cairo, x, y);
+//	cairo_line_to(cairo, x, y+height-1);
+//	cairo_stroke(cairo);
+//	if (height > 2 && relief != WRRaised && relief!=WRPushed) {
+//		WMColorSpecSet(cairo, &l);
+//		cairo_move_to(cairo, x+1, y+1);
+//		cairo_line_to(cairo, x+1, y+height-3);
+//		cairo_stroke(cairo);
+//	}
+//
+//	/* bottom right */
+//	WMColorSpecSet(cairo, &b);
+//	cairo_move_to(cairo, x, y+height-1);
+//	cairo_line_to(cairo, x+width-1, y+height-1);
+//	cairo_stroke(cairo);
+//	if (width > 2 && relief!=WRPushed) {
+//		WMColorSpecSet(cairo, &d);
+//		cairo_move_to(cairo, x+1, y+height-2);
+//		cairo_line_to(cairo, x+width-2, y+height-2);
+//		cairo_stroke(cairo);
+//	}
+//
+//	WMColorSpecSet(cairo, &b);
+//	cairo_move_to(cairo, x+width-1, y);
+//	cairo_line_to(cairo, x+width-1, y+height-1);
+//	cairo_stroke(cairo);
+//	if (height > 2 && relief!=WRPushed) {
+//		WMColorSpecSet(cairo, &d);
+//		cairo_move_to(cairo, x+width-2, y+1);
+//		cairo_line_to(cairo, x+width-2, y+height-2);
+//		cairo_stroke(cairo);
+//	}
 }
 
 static int findNextWord(const char *text, int limit)
@@ -225,7 +284,7 @@ static int fitText(const char *text, WMFont * font, int width, int wrap)
 	if (!wrap || beforecrlf == 0)
 		return beforecrlf;
 
-	//XXX w = WMWidthOfString(font, text, beforecrlf);
+	w = WMWidthOfString(font, text);
 	if (w <= width) {
 		/* text up to first crlf fits */
 		return beforecrlf;
@@ -236,14 +295,14 @@ static int fitText(const char *text, WMFont * font, int width, int wrap)
 		word2 = word1 + findNextWord(text + word1, beforecrlf - word1);
 		if (word2 >= beforecrlf)
 			break;
-		//XXXw = WMWidthOfString(font, text, word2);
+		w = WMWidthOfString(font, text);
 		if (w > width)
 			break;
 		word1 = word2;
 	}
 
 	for (i = word1; i < word2; i++) {
-		//XXXw = WMWidthOfString(font, text, i);
+		w = WMWidthOfString(font, text);
 		if (w > width) {
 			break;
 		}
@@ -331,35 +390,35 @@ void W_PaintText(cairo_t *cairo, WMFont *font,  int x, int y,
 	int count;
 	int fheight = WMFontHeight(font);
 
-	//line_x= x + (width - WMWidthOfString(font, ptr))/2;
-	//WMDrawString(cairo, color, font, line_x, y, ptr);
-	//return;
+	line_x= x + (width - WMWidthOfString(font, ptr))/2;
+	WMDrawString(cairo, color, font, line_x, y, ptr);
+	return;
 
-	while (length > 0) {
-		count = fitText(ptr, font, width, wrap);
-
-		line_width = WMWidthOfString(font, text);
-
-		if (alignment == WALeft)
-			line_x = x;
-		else if (alignment == WARight)
-			line_x = x + width - line_width;
-		else
-			line_x = x + (width - line_width) / 2;
-
-		WMDrawString(cairo, color, font, line_x, y, ptr);
-
-		if (wrap && ptr[count] != '\n')
-			y += fheight;
-
-		while (ptr[count] && ptr[count] == '\n') {
-			y += fheight;
-			count++;
-		}
-
-		ptr += count;
-		length -= count;
-	}
+//	while (length > 0) {
+//		count = fitText(ptr, font, width, wrap);
+//
+//		line_width = WMWidthOfString(font, text);
+//
+//		if (alignment == WALeft)
+//			line_x = x;
+//		else if (alignment == WARight)
+//			line_x = x + width - line_width;
+//		else
+//			line_x = x + (width - line_width) / 2;
+//
+//		WMDrawString(cairo, color, font, line_x, y, ptr);
+//
+//		if (wrap && ptr[count] != '\n')
+//			y += fheight;
+//
+//		while (ptr[count] && ptr[count] == '\n') {
+//			y += fheight;
+//			count++;
+//		}
+//
+//		ptr += count;
+//		length -= count;
+//	}
 }
 
 void W_PaintTextAndImage(W_Screen *screen, cairo_t *cairo, W_View *view, int wrap, WMColorSpec *textColor, W_Font *font,
@@ -372,12 +431,6 @@ void W_PaintTextAndImage(W_Screen *screen, cairo_t *cairo, W_View *view, int wra
 
 	cairo_save(cairo);
 
-	if (backColor)
-	{
-		cairo_rectangle(cairo, 0, 0, view->size.width, view->size.height);
-		WMColorSpecSet(cairo, backColor);
-		cairo_fill(cairo);
-	}
 	if (relief == WRFlat) {
 		x = 0;
 		y = 0;
@@ -458,7 +511,7 @@ void W_PaintTextAndImage(W_Screen *screen, cairo_t *cairo, W_View *view, int wra
 	}
 
 	/* draw relief */
-	W_DrawRelief(screen, cairo, 0, 0, view->size.width, view->size.height, relief);
+	//W_DrawRelief(screen, cairo, 0, 0, view->size.width, view->size.height, relief);
 }
 
 WMPoint wmkpoint(int x, int y)

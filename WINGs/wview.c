@@ -109,7 +109,7 @@ static W_View *createView(W_Screen * screen, W_View * parent)
 		view->attribs = defAtts;
 
 		view->attribFlags |= CWBackPixel|CWColormap|CWBorderPixel;
-		view->attribs.background_pixel = WMCreateRGBAColor(screen,0,0,0,0,0);
+		view->attribs.background_pixel = WhitePixel(screen->display,screen->screen);
 		view->attribs.border_pixel = 0;
 		view->attribs.colormap = screen->colormap;
 
@@ -405,12 +405,12 @@ cairo_t* W_CreateCairoForView(W_View *view)
 	cairo_surface_t *surface;
 	cairo_t *cairo;
 
-	surface= cairo_xlib_surface_create(W_VIEW_DISPLAY(view),
+	surface = cairo_xlib_surface_create(W_VIEW_DISPLAY(view),
 			W_VIEW_DRAWABLE(view),
 			W_VIEW_SCREEN(view)->visual,
 			W_VIEW_WIDTH(view),
 			W_VIEW_HEIGHT(view));
-	cairo= cairo_create(surface);
+	cairo = cairo_create(surface);
 	cairo_surface_destroy(surface);
 	cairo_translate(cairo, 0.5, 0.5);
 	cairo_set_line_width(cairo, 1.0);

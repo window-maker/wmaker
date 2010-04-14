@@ -234,7 +234,7 @@ unsigned int WMFontHeight(WMFont * font)
 
 	cairo_scaled_font_extents(font->metrics, &extents);
 
-	return extents.height;
+	return (extents.ascent);
 
 }
 char *WMGetFontName(WMFont * font)

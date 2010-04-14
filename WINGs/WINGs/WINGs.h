@@ -8,6 +8,7 @@
 #include <cairo.h>
 
 #define WINGS_H_VERSION  20041030
+#define NEW_LOOK 1
 
 
 #ifdef __cplusplus
@@ -856,6 +857,8 @@ void WMColorSpecSet(cairo_t *cairo, WMColorSpec *color);
 
 WMColorSpec WMBlackColorSpec();
 WMColorSpec WMGrayColorSpec();
+WMColorSpec WMLightGrayColorSpec();
+WMColorSpec WMTransparentColorSpec();
 WMColorSpec WMWhiteColorSpec();
 WMColorSpec WMDarkGrayColorSpec();
 
