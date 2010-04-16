@@ -177,8 +177,8 @@ static char **Arguments;
 
 static int ArgCount;
 
-extern void EventLoop();
-extern void StartUp();
+extern void EventLoop(void);
+extern void StartUp(Bool defaultScreenOnly);
 extern int MonitorLoop(int argc, char **argv);
 
 static Bool multiHead = True;

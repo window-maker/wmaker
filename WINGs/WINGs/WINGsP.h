@@ -590,13 +590,13 @@ Bool W_SendDnDClientMessage(Display *dpy, Window win, Atom message,
 
 void W_DragSourceStartTimer(WMDraggingInfo *info);
 
-void W_DragSourceStopTimer();
+void W_DragSourceStopTimer(void);
 
 void W_DragSourceStateHandler(WMDraggingInfo *info, XClientMessageEvent *event);
 
 void W_DragDestinationStartTimer(WMDraggingInfo *info);
 
-void W_DragDestinationStopTimer();
+void W_DragDestinationStopTimer(void);
 
 void W_DragDestinationStoreEnterMsgInfo(WMDraggingInfo *info, WMView *toplevel,
                                         XClientMessageEvent *event);

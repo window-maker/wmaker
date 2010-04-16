@@ -613,7 +613,7 @@ void WMInitializeApplication(char *applicationName, int *argc, char **argv);
 void WMSetResourcePath(char *path);
 
 /* don't free the returned string */
-char* WMGetApplicationName();
+char* WMGetApplicationName(void);
 
 /* Try to locate resource file. ext may be NULL */
 char* WMPathForResourceOfType(char *resource, char *ext);

@@ -1,11 +1,9 @@
 
 #include <unistd.h>
+#include <X11/Xlocale.h>
 
 #include "WINGsP.h"
-
 #include "wconfig.h"
-
-#include "X11/Xlocale.h"
 
 extern void W_InitNotificationCenter(void);
 

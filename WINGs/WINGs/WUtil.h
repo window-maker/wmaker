@@ -209,7 +209,7 @@ int wmkdirhier(const char *path);
 int wrmdirhier(const char *path);
 
 /* don't free the returned string */
-char* wgethomedir();
+char* wgethomedir(void);
 
 void* wmalloc(size_t size);
 void* wrealloc(void *ptr, size_t newsize);
@@ -256,7 +256,7 @@ WMRange wmkrange(int start, int count);
 #endif
 
 
-char* wusergnusteppath();
+char* wusergnusteppath(void);
 
 char* wdefaultspathfordomain(char *domain);
 char* wglobaldefaultspathfordomain(const char *domain);
@@ -297,7 +297,7 @@ void WMDeleteInputHandler(WMHandlerID handlerID);
  * This function will handle all input/timer/idle events, then return.
  */
 
-void WHandleEvents();
+void WHandleEvents(void);
 
 /*......................................................................*/
 

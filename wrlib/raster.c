@@ -291,9 +291,8 @@ void RCombineImagesWithOpaqueness(RImage * image, RImage * src, int opaqueness)
 #undef COP
 }
 
-int
-calculateCombineArea(RImage * des, int *sx, int *sy,
-		     unsigned int *swidth, unsigned int *sheight, int *dx, int *dy)
+static int calculateCombineArea(RImage *des, int *sx, int *sy, unsigned int *swidth,
+				unsigned int *sheight, int *dx, int *dy)
 {
 	int width = (int)*swidth, height = (int)*sheight;
 
