@@ -194,9 +194,7 @@ typedef struct _WScreen {
     GC draw_gc;			       /* gc for drawing misc things */
     GC mono_gc;			       /* gc for 1 bit drawables */
 
-#ifndef NEWSTUFF
     struct WPixmap *b_pixmaps[PRED_BPIXMAPS]; /* internal pixmaps for buttons*/
-#endif
     struct WPixmap *menu_radio_indicator;/* left menu indicator */
     struct WPixmap *menu_check_indicator;/* left menu indicator for checkmark */
     struct WPixmap *menu_mini_indicator;   /* for miniwindow */
@@ -246,10 +244,6 @@ typedef struct _WScreen {
 
 
     struct W_GeometryView *gview;      /* size/position view */
-
-#ifdef NEWSTUFF
-    struct RImage *button_images[2][PRED_BPIXMAPS];/* scaled tbar btn images */
-#endif
 
     /* state and other informations */
     short cascade_index;	       /* for cascade window placement */

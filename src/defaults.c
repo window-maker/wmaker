@@ -107,9 +107,6 @@ static int getFont();
 static int getColor();
 static int getKeybind();
 static int getModMask();
-#ifdef NEWSTUFF
-static int getRImage();
-#endif
 static int getPropList();
 
 /* value setting functions */
