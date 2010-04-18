@@ -145,7 +145,7 @@ int main(int argc, char *argv[])
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Themes")),
 		WMCreatePLString("OPEN_MENU"),
-		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
+		WMCreatePLString("-noext /usr/local/share/WindowMaker/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
 		NULL
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Styles")),
 		WMCreatePLString("OPEN_MENU"),
-		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
+		WMCreatePLString("-noext /usr/local/share/WindowMaker/Styles $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
 		NULL
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
@@ -163,7 +163,7 @@ int main(int argc, char *argv[])
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Icon Sets")),
 		WMCreatePLString("OPEN_MENU"),
-		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+		WMCreatePLString("-noext /usr/local/share/WindowMaker/IconSets $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
 		NULL
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
