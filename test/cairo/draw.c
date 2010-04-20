@@ -14,41 +14,47 @@
 
 void draw(Display *dpy, Screen *scr, Visual *vis, Window win) {
 	cairo_surface_t *surf;
+	cairo_surface_t *imgsurf;
 	cairo_t *ct;
-	cairo_pattern_t *linpat;
-	int height = 35;
-	int width = 130;
 
 	surf = (cairo_surface_t *) cairo_xlib_surface_create(dpy, win, vis, 500, 500);
 	ct = cairo_create(surf);
 
-	//cairo_set_line_width(ct, 1);
-
-	linpat = cairo_pattern_create_linear(0,0,0,height);
-	cairo_pattern_add_color_stop_rgb(linpat, 0, 194.0/255, 190.0/255, 194.0/255);
-	cairo_pattern_add_color_stop_rgb(linpat, 1, 174.0/255, 170.0/255, 174.0/255);
-	cairo_set_source(ct,linpat);
-	cairo_rectangle(ct,0,0,width,height);
+	cairo_set_source_rgba(ct,0.5,0.5,0.5,1.0);
+	cairo_rectangle(ct,0,0,499,499);
 	cairo_fill(ct);
-
-	cairo_set_source_rgb(ct, 1, 1, 1);
-	cairo_rectangle(ct,0,0,1,height-1);
-	cairo_rectangle(ct,0,0,width-1,1);
-	cairo_fill(ct);
-
-	cairo_set_source_rgb(ct, 81.0/255, 85.0/255, 81.0/255);
-	cairo_rectangle(ct,1,height-2,width-1,1);
-	cairo_rectangle(ct,width-2,1,1,height-1);
-	cairo_fill(ct);
-
-	cairo_set_source_rgb(ct, 0, 0, 0);
-	cairo_rectangle(ct,0,height-1,width,1);
-	cairo_rectangle(ct,width-1,0,1,height);
-	cairo_fill(ct);
-
 	cairo_stroke(ct);
 
-	cairo_pattern_destroy(linpat);
+	imgsurf = cairo_image_surface_create(CAIRO_FORMAT_ARGB32,10,10);
+	char *buf = cairo_image_surface_get_data(imgsurf);
+	int stride = cairo_image_surface_get_stride(imgsurf);
+
+	int offs;
+	int i;
+	int j;
+	for (i=0; i < 10; i++) {
+		offs = i*stride;
+		for (j=0; j < 10; j++) {
+			//doesn't work, no black square
+			buf[offs++] = 0x00; //alpha
+			buf[offs++] = 0x00; //alpha
+			buf[offs++] = 0x00; //alpha
+			buf[offs++] = 0xff; //alpha
+
+
+			//works <- white square
+			//buf[offs++] = 0xff; //alpha
+			//buf[offs++] = 0xff; //red
+			//buf[offs++] = 0xff; //green
+			//buf[offs++] = 0xff; //blue
+		}
+	}
+
+	cairo_set_operator(ct,CAIRO_OPERATOR_SOURCE);
+	cairo_set_source_surface(ct,imgsurf,0,0);
+	cairo_mask_surface(ct,imgsurf,0,0);
+	cairo_stroke(ct);
+
 	cairo_destroy(ct);
 	cairo_surface_destroy(surf);
 }

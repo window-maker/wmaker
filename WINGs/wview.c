@@ -99,17 +99,22 @@ static W_View *createView(W_Screen * screen, W_View * parent)
 
 	view->screen = screen;
 
-	view->backColor= WMWhiteColorSpec();
+	view->backColor= WMGrayColorSpec();
 
 	if (parent!=NULL) {
-		//XXXWMColor *xcolor= WMCreateColorWithSpec(screen, &view->backColor);
+		XColor xcolor;
+		xcolor.red = view->backColor.red << 8;
+		xcolor.green = view->backColor.green << 8;
+		xcolor.blue = view->backColor.blue << 8;
+		xcolor.flags = DoRed | DoGreen | DoBlue;
+		XAllocColor(screen->display,screen->colormap,&xcolor);
 
 		/* attributes are not valid for root window */
 		view->attribFlags = CWEventMask|CWBitGravity;
 		view->attribs = defAtts;
 
 		view->attribFlags |= CWBackPixel|CWColormap|CWBorderPixel;
-		view->attribs.background_pixel = WhitePixel(screen->display,screen->screen);
+		view->attribs.background_pixel = xcolor.pixel;
 		view->attribs.border_pixel = 0;
 		view->attribs.colormap = screen->colormap;
 
@@ -499,18 +504,18 @@ void W_RedisplayView(W_View * view)
 
 void W_SetViewBackgroundColor(W_View *view, WMColorSpec *color)
 {
-	WMColor *xcolor= WMCreateColorWithSpec(view->screen, color);
-
-	view->backColor = *color;
-
-	view->attribFlags |= CWBackPixel;
-	view->attribs.background_pixel = W_PIXEL(xcolor);
-	if (view->flags.realized) {
-		XSetWindowBackground(view->screen->display, view->window,
-				W_PIXEL(xcolor));
-		XClearWindow(view->screen->display, view->window);
-	}
-	WMReleaseColor(xcolor);
+//	XColor xcolor= WMCreateColorWithSpec(view->screen, color);
+//
+//	view->backColor = *color;
+//
+//	view->attribFlags |= CWBackPixel;
+//	view->attribs.background_pixel = W_PIXEL(xcolor);
+//	if (view->flags.realized) {
+//		XSetWindowBackground(view->screen->display, view->window,
+//				W_PIXEL(xcolor));
+//		XClearWindow(view->screen->display, view->window);
+//	}
+//	WMReleaseColor(xcolor);
 }
 
 void W_SetViewCursor(W_View * view, Cursor cursor)

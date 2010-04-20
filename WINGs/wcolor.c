@@ -73,17 +73,23 @@ WMColor *WMCreateRGBColor(WMScreen * scr, unsigned short red, unsigned short gre
 }
 #endif
 
-WMColor* WMCreateColorWithSpec(WMScreen *scr, WMColorSpec *spec)
+XColor WMCreateColorWithSpec(WMScreen *scr, WMColorSpec *spec)
 {
-	WMColor *color = NULL;
+	XColor xcolor;
+//	WMColor *color = NULL;
+//
+//	if (!(color=createRGBAColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff)))
+//		color = findCloseColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff);
+//
+//	if (!color)
+//		createRGBAColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff);
 
-	if (!(color=createRGBAColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff)))
-		color = findCloseColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff);
+	xcolor.red = spec->red;
+	xcolor.green = spec->green;
+	xcolor.blue = spec->blue;
+	xcolor.flags = DoRed | DoGreen | DoBlue;
 
-	if (!color)
-		createRGBAColor(scr, spec->red<<8, spec->green<<8, spec->blue<<8, 0xffff);
-
-	return color;
+	return xcolor;
 }
 
 

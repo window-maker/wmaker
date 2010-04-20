@@ -390,7 +390,12 @@ void W_PaintText(cairo_t *cairo, WMFont *font,  int x, int y,
 	int count;
 	int fheight = WMFontHeight(font);
 
-	line_x= x + (width - WMWidthOfString(font, ptr))/2;
+	if (alignment == WALeft)
+		line_x = x;
+	else if (alignment == WARight)
+		line_x = x + width - WMWidthOfString(font,ptr);
+	else
+		line_x = x + (width - WMWidthOfString(font,ptr)) / 2;
 	WMDrawString(cairo, color, font, line_x, y, ptr);
 	return;
 
@@ -486,19 +491,14 @@ void W_PaintTextAndImage(W_Screen *screen, cairo_t *cairo, W_View *view, int wra
 			break;
 		}
 
+		cairo_set_operator(cairo,CAIRO_OPERATOR_SOURCE);
 		ix += ofs;
 		iy += ofs;
+		cairo_set_source_surface(cairo,image,ix+0.5,iy+0.5);
+		cairo_mask_surface(cairo,image,ix+0.5,iy+0.5);
+		cairo_stroke(cairo);
+		cairo_set_operator(cairo,CAIRO_OPERATOR_OVER);
 
-		//XXX        XSetClipOrigin(screen->display, screen->clipGC, ix, iy);
-		//XXX        XSetClipMask(screen->display, screen->clipGC, image->mask);
-		/*XXX
-		  if (image->depth==1)
-		  XCopyPlane(screen->display, image->pixmap, d, screen->clipGC,
-		  0, 0, WMGetImageWidth(image), WMGetImageHeight(image), ix, iy, 1);
-		  else
-		  XCopyArea(screen->display, image->pixmap, d, screen->clipGC,
-		  0, 0, WMGetImageWidth(image), WMGetImageHeight(image), ix, iy);
-		  */
 	}
 
 	/* draw text */
@@ -510,6 +510,7 @@ void W_PaintTextAndImage(W_Screen *screen, cairo_t *cairo, W_View *view, int wra
 				alignment, textColor, wrap, text);
 	}
 
+	cairo_restore(cairo);
 	/* draw relief */
 	//W_DrawRelief(screen, cairo, 0, 0, view->size.width, view->size.height, relief);
 }

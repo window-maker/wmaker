@@ -476,12 +476,11 @@ static void paintButton(WMButton * bPtr)
 		textColor = bPtr->disTextColor;
 	}
 
-	if (bPtr->flags.enabled || !bPtr->flags.dimsWhenDisabled)
+	if (bPtr->flags.enabled || !bPtr->flags.dimsWhenDisabled) {
 		image = WMRetainImage(bPtr->image);
-	else
-	{
+	} else {
 		//XXX make dimmited image
-		image = bPtr->image;
+		image = WMRetainImage(bPtr->image);
 	}
 	offset = 0;
 	if (bPtr->flags.bordered)
@@ -497,9 +496,11 @@ static void paintButton(WMButton * bPtr)
 		if (bPtr->flags.stateChange) {
 			if (bPtr->altCaption)
 				caption = bPtr->altCaption;
-			if (bPtr->altImage)
-				image = bPtr->altImage;
+			if (bPtr->altImage) {
+				WMDestroyImage(image);
+				image = WMRetainImage(bPtr->altImage);
 				textColor = bPtr->altTextColor;
+			}
 		}
 
 		if (bPtr->flags.statePush && bPtr->flags.bordered) {
@@ -520,9 +521,11 @@ static void paintButton(WMButton * bPtr)
 		if (bPtr->flags.pushChange) {
 			if (bPtr->altCaption)
 				caption = bPtr->altCaption;
-			if (bPtr->altImage)
-				image = bPtr->altImage;
+			if (bPtr->altImage) {
+				WMDestroyImage(image);
+				image = WMRetainImage(bPtr->altImage);
 				textColor = bPtr->altTextColor;
+			}
 		}
 	}
 
@@ -539,8 +542,9 @@ static void paintButton(WMButton * bPtr)
 						relief, caption, bPtr->flags.alignment, image,
 						bPtr->flags.imagePosition, &backColor, offset);
 
-	if (image)
+	if (image) {
 		WMDestroyImage(image);
+	}
 
 	cairo_destroy(cr);
 

@@ -824,7 +824,7 @@ void WMReleaseColor(WMColor *color);
 
 WMColor* WMRetainColor(WMColor *color);
 
-WMColor* WMCreateColorWithSpec(WMScreen *scr, WMColorSpec *spec);
+XColor WMCreateColorWithSpec(WMScreen *scr, WMColorSpec *spec);
 
 WMColor* WMCreateRGBColor(WMScreen *scr, unsigned short red,
                           unsigned short green, unsigned short blue,

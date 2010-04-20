@@ -308,20 +308,30 @@ static void renderImage(W_Screen *screen, cairo_surface_t *image, char **data,
 		int width, int height)
 {
 	int x, y, stride, offs;
-	unsigned char *buffer= cairo_image_surface_get_data(image);
-	WMColorSpec white= WMWhiteColorSpec();
-	WMColorSpec black= WMBlackColorSpec();
-	WMColorSpec light= WMGrayColorSpec();
-	WMColorSpec dark= WMDarkGrayColorSpec();
-	WMColorSpec trans= {0, 0, 0, 0};
+	unsigned char *buffer = cairo_image_surface_get_data(image);
+	if (buffer == NULL) {
+		printf("problem");
+		fflush(0);
+	}
+	WMColorSpec white = WMWhiteColorSpec();
+	WMColorSpec black = WMBlackColorSpec();
+	WMColorSpec light = WMGrayColorSpec();
+	WMColorSpec dark = WMDarkGrayColorSpec();
+	WMColorSpec trans = {0, 0, 0, 0};
 
+#ifdef __BIG_ENDIAN__
 #define PUTPIXEL(buffer, offs, color)\
-	buffer[offs++]= color.alpha, buffer[offs]= color.red, buffer[offs++]= color.green, buffer[offs++]= color.blue
+	buffer[offs++]= color.alpha, buffer[offs++]= color.red, buffer[offs++]= color.green, buffer[offs++]= color.blue
+#else
+#define PUTPIXEL(buffer, offs, color)\
+	buffer[offs++]= color.blue, buffer[offs++]= color.green, buffer[offs++]= color.red, buffer[offs++]= color.alpha
+#endif
 
-	stride= cairo_image_surface_get_stride(image);
-	offs= 0;
+	stride = cairo_image_surface_get_stride(image);
+	cairo_surface_flush(image);
+	offs = 0;
 	for (y = 0; y < height; y++) {
-		offs= height * stride;
+		offs = y * stride;
 		for (x = 0; x < width; x++) {
 			switch (data[y][x]) {
 				case ' ':
@@ -334,7 +344,7 @@ static void renderImage(W_Screen *screen, cairo_surface_t *image, char **data,
 					break;
 				case '.':
 				case 'l':
-					PUTPIXEL(buffer, offs, light);
+					PUTPIXEL(buffer, offs, trans);
 					break;
 
 				case '%':
@@ -344,19 +354,23 @@ static void renderImage(W_Screen *screen, cairo_surface_t *image, char **data,
 
 				case '#':
 				case 'b':
-				default:
 					PUTPIXEL(buffer, offs, black);
+					break;
+
+				default:
+					PUTPIXEL(buffer, offs, trans);
 					break;
 			}
 		}
 	}
+	cairo_surface_mark_dirty(image);
 }
 
 static WMImage* makeImage(W_Screen *sPtr, char **data, int width, int height, int masked)
 {
 	cairo_surface_t *image;
 
-	image= cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
+	image = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, width, height);
 
 	renderImage(sPtr, image, data, width, height);
 
@@ -738,21 +752,21 @@ WMScreen *WMCreateScreen(Display * display, int screen)
 //stuff gets allocated on the heap
 //
 //
-//	scrPtr->checkButtonImageOn = makeImage(scrPtr, CHECK_BUTTON_ON,
-//			CHECK_BUTTON_ON_WIDTH,
-//			CHECK_BUTTON_ON_HEIGHT, False);
-//
-//	scrPtr->checkButtonImageOff = makeImage(scrPtr, CHECK_BUTTON_OFF,
-//			CHECK_BUTTON_OFF_WIDTH,
-//			CHECK_BUTTON_OFF_HEIGHT, False);
+	scrPtr->checkButtonImageOn = makeImage(scrPtr, CHECK_BUTTON_ON,
+			CHECK_BUTTON_ON_WIDTH,
+			CHECK_BUTTON_ON_HEIGHT, False);
 
-//	scrPtr->radioButtonImageOn = makeImage(scrPtr, RADIO_BUTTON_ON,
-//			RADIO_BUTTON_ON_WIDTH,
-//			RADIO_BUTTON_ON_HEIGHT, False);
-//
-//	scrPtr->radioButtonImageOff = makeImage(scrPtr, RADIO_BUTTON_OFF,
-//			RADIO_BUTTON_OFF_WIDTH,
-//			RADIO_BUTTON_OFF_HEIGHT, False);
+	scrPtr->checkButtonImageOff = makeImage(scrPtr, CHECK_BUTTON_OFF,
+			CHECK_BUTTON_OFF_WIDTH,
+			CHECK_BUTTON_OFF_HEIGHT, False);
+
+	scrPtr->radioButtonImageOn = makeImage(scrPtr, RADIO_BUTTON_ON,
+			RADIO_BUTTON_ON_WIDTH,
+			RADIO_BUTTON_ON_HEIGHT, False);
+
+	scrPtr->radioButtonImageOff = makeImage(scrPtr, RADIO_BUTTON_OFF,
+			RADIO_BUTTON_OFF_WIDTH,
+			RADIO_BUTTON_OFF_HEIGHT, False);
 //
 //	scrPtr->buttonArrow = makeImage(scrPtr, BUTTON_ARROW,
 //			BUTTON_ARROW_WIDTH, BUTTON_ARROW_HEIGHT,
@@ -808,9 +822,9 @@ WMScreen *WMCreateScreen(Display * display, int screen)
 //			PULLDOWN_INDICATOR_WIDTH,
 //			PULLDOWN_INDICATOR_HEIGHT, True);
 //
-//	scrPtr->checkMark = makeImage(scrPtr, CHECK_MARK,
-//			CHECK_MARK_WIDTH,
-//			CHECK_MARK_HEIGHT, True);
+	scrPtr->checkMark = makeImage(scrPtr, CHECK_MARK,
+			CHECK_MARK_WIDTH,
+			CHECK_MARK_HEIGHT, True);
 //
 //	loadPixmaps(scrPtr);
 

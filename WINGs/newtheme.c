@@ -3,9 +3,16 @@
 void W_DrawButtonDarkBack(cairo_t *cairo, WMButton *bPtr, unsigned int width, unsigned int height, WMReliefType relief)
 {
 	cairo_save(cairo);
+	WMColorSpec topfill;
+	WMColorSpec bottomfill;
 
-	WMColorSpec topfill = WMLightGrayColorSpec();
-	WMColorSpec bottomfill = WMGrayColorSpec();
+	if (relief == WRFlat) {
+		topfill = WMGrayColorSpec();
+		bottomfill = WMGrayColorSpec();
+	} else {
+		topfill = WMLightGrayColorSpec();
+		bottomfill = WMGrayColorSpec();
+	}
 
 	//draw main gradient
 	cairo_pattern_t *linpat;
@@ -53,6 +60,14 @@ void W_DrawButtonRelief(cairo_t *cairo, unsigned int width, unsigned int height,
 	WMColorSpec innerbottomright;
 
 	switch (relief) {
+		case WRFlat:
+		{
+			outerlefttop = WMTransparentColorSpec();
+			outerbottomright = WMTransparentColorSpec();
+			innerlefttop = WMTransparentColorSpec();
+			innerbottomright = WMTransparentColorSpec();
+			break;
+		}
 		case WRSimple:
 		{
 			outerlefttop = WMBlackColorSpec();
