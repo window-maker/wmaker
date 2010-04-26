@@ -767,14 +767,14 @@ static void handleButtonPress(XEvent * event)
 
 		if (event->xbutton.state & ( MOD_MASK | ControlMask )) {
 			XAllowEvents(dpy, AsyncPointer, CurrentTime);
+		} else {
+			/*      if (wPreferences.focus_mode == WKF_CLICK) { */
+			if (wPreferences.ignore_focus_click) {
+				XAllowEvents(dpy, AsyncPointer, CurrentTime);
+			}
+			XAllowEvents(dpy, ReplayPointer, CurrentTime);
+			/*      } */
 		}
-
-		/*      if (wPreferences.focus_mode == WKF_CLICK) { */
-		if (wPreferences.ignore_focus_click) {
-			XAllowEvents(dpy, AsyncPointer, CurrentTime);
-		}
-		XAllowEvents(dpy, ReplayPointer, CurrentTime);
-		/*      } */
 		XSync(dpy, 0);
 	} else if (desc->parent_type == WCLASS_APPICON
 		   || desc->parent_type == WCLASS_MINIWINDOW || desc->parent_type == WCLASS_DOCK_ICON) {
