@@ -2808,8 +2808,8 @@ static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 	unsigned int resize_height_increment = 0;
 
 	if (wwin->normal_hints) {
-		w_scale = ceil(wPreferences.resize_increment / wwin->normal_hints->width_inc);
-		h_scale = ceil(wPreferences.resize_increment / wwin->normal_hints->height_inc);
+		w_scale = (wPreferences.resize_increment + wwin->normal_hints->width_inc - 1) / wwin->normal_hints->width_inc;
+		h_scale = (wPreferences.resize_increment + wwin->normal_hints->height_inc - 1) / wwin->normal_hints->height_inc;
 		resize_width_increment = wwin->normal_hints->width_inc * w_scale;
 		resize_height_increment = wwin->normal_hints->height_inc * h_scale;
 	}
