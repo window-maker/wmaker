@@ -2525,19 +2525,21 @@ void wWindowResetMouseGrabs(WWindow * wwin)
 		 * but we only grab it for Button4 and Button 5 since a lot of apps
 		 * use CTRL+Button1-3 for app related functionality
 		 */
-		wHackedGrabButton(Button4, ControlMask, wwin->client_win,
-				  True, ButtonPressMask | ButtonReleaseMask,
-				  GrabModeSync, GrabModeAsync, None, None);
-		wHackedGrabButton(Button5, ControlMask, wwin->client_win,
-				  True, ButtonPressMask | ButtonReleaseMask,
-				  GrabModeSync, GrabModeAsync, None, None);
+		if (wPreferences.resize_increment > 0) {
+			wHackedGrabButton(Button4, ControlMask, wwin->client_win,
+							  True, ButtonPressMask | ButtonReleaseMask,
+							  GrabModeSync, GrabModeAsync, None, None);
+			wHackedGrabButton(Button5, ControlMask, wwin->client_win,
+							  True, ButtonPressMask | ButtonReleaseMask,
+							  GrabModeSync, GrabModeAsync, None, None);
 
-		wHackedGrabButton(Button4, MOD_MASK | ControlMask, wwin->client_win,
-				  True, ButtonPressMask | ButtonReleaseMask,
-				  GrabModeSync, GrabModeAsync, None, None);
-		wHackedGrabButton(Button5, MOD_MASK | ControlMask, wwin->client_win,
-				  True, ButtonPressMask | ButtonReleaseMask,
-				  GrabModeSync, GrabModeAsync, None, None);
+			wHackedGrabButton(Button4, MOD_MASK | ControlMask, wwin->client_win,
+							  True, ButtonPressMask | ButtonReleaseMask,
+							  GrabModeSync, GrabModeAsync, None, None);
+			wHackedGrabButton(Button5, MOD_MASK | ControlMask, wwin->client_win,
+							  True, ButtonPressMask | ButtonReleaseMask,
+							  GrabModeSync, GrabModeAsync, None, None);
+		}
 	}
 
 	if (!wwin->flags.focused && !WFLAGP(wwin, no_focusable)
