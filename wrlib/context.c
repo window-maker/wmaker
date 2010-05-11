@@ -467,7 +467,7 @@ static char *mygetenv(char *var, int scr)
 	char *p;
 	char varname[64];
 
-	sprintf(varname, "%s%i", var, scr);
+	snprintf(varname, sizeof(varname), "%s%i", var, scr);
 	p = getenv(varname);
 	if (!p) {
 		p = getenv(var);
