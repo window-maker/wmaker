@@ -3,7 +3,7 @@
   BoldSystemFont = "Sans:bold";
   DefaultFontSize = 11;
   AntialiasedText = Yes;
-  FloppyPath = "/floppy";
+  FloppyPath = "/media/floppy";
   DoubleClickTime = 250;
   MouseWheelUp = Button4;
   MouseWheelDown = Button5;
