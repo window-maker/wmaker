@@ -15,11 +15,11 @@ libWUtil_la_LDFLAGS = -version-info 1:2:0
 
 bin_SCRIPTS = get-wings-flags get-wutil-flags
 
-lib_LTLIBRARIES = libWINGs.la libWUtil.la
+lib_LTLIBRARIES = libWUtil.la libWINGs.la
 
 
 LDADD= libWUtil.la libWINGs.la $(top_builddir)/wrlib/libwraster.la @INTLIBS@
-
+libWINGs_la_LIBADD = libWUtil.la
 
 EXTRA_DIST = BUGS make-rgb Examples Extras Tests
 
