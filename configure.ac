@@ -481,6 +481,19 @@ if test "$shape" = yes; then
 fi
 
 
+dnl
+dnl libWINGS uses FcPatternDel from libfontconfig
+dnl
+AC_MSG_CHECKING([for fontconfig library])
+FCLIBS=`$PKGCONFIG fontconfig --libs`
+if test "x$FCLIBS" = "x" ; then
+        AC_MSG_RESULT([not found])
+else
+        AC_MSG_RESULT([found])
+fi
+AC_SUBST(FCLIBS)
+
+
 dnl Xft2 antialiased font support
 dnl =============================
 
