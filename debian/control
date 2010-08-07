@@ -28,7 +28,7 @@ Package: libwraster3-dev
 Architecture: any
 Section: libdevel
 Priority: optional
-Depends: libwraster3 (= ${Source-Version}), libc6-dev, libx11-dev, libxext-dev, libxpm-dev, libjpeg-dev, libpng12-0-dev, libgif-dev, libtiff4-dev, ${misc:Depends}
+Depends: libwraster3 (= ${binary:Version}), libc6-dev, libx11-dev, libxext-dev, libxpm-dev, libjpeg-dev, libpng12-0-dev, libgif-dev, libtiff4-dev, ${misc:Depends}
 Provides: libwraster-dev
 Description: Static libraries and headers of Window Maker rasterizer
  Contains libwraster and header files, for manipulating and
