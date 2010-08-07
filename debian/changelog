@@ -6,6 +6,9 @@ wmaker (0.92.0-9) unstable; urgency=low
       debhelper-but-no-misc-depends)
     + [debian/control] Move homepage from description text to homepage
       field. (Lintian description-contains-homepage)
+    + Use dh_prep instead of "dh_clean -k" (dh-clean-k-is-deprecated). However
+      do not replace instances of dh_clean without -k option. Closes: #590244
+    + Build-Depend on debhelper 7.
   * Invoke ./configure mit correct --build argument, as per
      /usr/share/doc/autotools-dev/README.Debian.gz.
 

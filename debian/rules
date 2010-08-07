@@ -194,12 +194,12 @@ clean:
 binary-indep: build
 #	dh_testdir -i
 #	dh_testroot
-#	dh_clean -i -k
+#	dh_prep -i
 
 binary-arch: build
 	dh_testdir -a
 	dh_testroot
-	dh_clean -a -k
+	dh_prep -a
 	dh_installdirs -a
 	debian/rules install-wmaker-stamp
 	debian/rules debian/$(LIBWRASTER)-dev.files
