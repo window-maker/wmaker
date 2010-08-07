@@ -189,7 +189,7 @@ clean:
 		debian/shlibs.local \
 		debian/conffiles
 	debian/rules unpatch-wmaker
-	dh_clean
+	dh_clean libtool
 
 binary-indep: build
 #	dh_testdir -i
