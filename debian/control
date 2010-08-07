@@ -12,7 +12,7 @@ Package: wmaker
 Architecture: any
 Section: x11
 Priority: optional
-Depends: ${shlibs:Depends}, cpp
+Depends: ${shlibs:Depends}, cpp, ${misc:Depends}
 Provides: x-window-manager
 Suggests: wmaker-data, menu, x11-apps, xosview, wterm | x-terminal-emulator
 Description: NeXTSTEP-like window manager for X
@@ -29,7 +29,7 @@ Package: libwraster3-dev
 Architecture: any
 Section: libdevel
 Priority: optional
-Depends: libwraster3 (= ${Source-Version}), libc6-dev, libx11-dev, libxext-dev, libxpm-dev, libjpeg-dev, libpng12-0-dev, libgif-dev, libtiff4-dev
+Depends: libwraster3 (= ${Source-Version}), libc6-dev, libx11-dev, libxext-dev, libxpm-dev, libjpeg-dev, libpng12-0-dev, libgif-dev, libtiff4-dev, ${misc:Depends}
 Provides: libwraster-dev
 Description: Static libraries and headers of Window Maker rasterizer
  Contains libwraster and header files, for manipulating and
@@ -39,7 +39,7 @@ Package: libwraster3
 Architecture: any
 Section: libs
 Priority: optional
-Depends: ${shlibs:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Shared libraries of Window Maker rasterizer
  Contains libwraster, for manipulating and rasterizing images.
 
@@ -47,7 +47,7 @@ Package: libwings-dev
 Architecture: any
 Section: libdevel
 Priority: optional
-Depends: libc6-dev, libx11-dev, libxext-dev, libwraster3-dev, libxft-dev, libfontconfig1-dev
+Depends: libc6-dev, libx11-dev, libxext-dev, libwraster3-dev, libxft-dev, libfontconfig1-dev, ${misc:Depends}
 Description: Window Maker's own widget set
  WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
  look and feel. Its API is inspired in OpenSTEP and its
