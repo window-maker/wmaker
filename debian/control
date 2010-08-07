@@ -7,6 +7,7 @@ Build-Depends: debhelper (>= 4), automake1.4, gettext, dctrl-tools,
  libfontconfig1-dev, libjpeg-dev, libpng12-dev, libsm-dev, libtiff4-dev,
  libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev,
  libxkbfile-dev, libxpm-dev, libxt-dev, libxrender-dev, sharutils, libxmu-dev
+Homepage: http://www.windowmaker.info/
 
 Package: wmaker
 Architecture: any
@@ -22,8 +23,6 @@ Description: NeXTSTEP-like window manager for X
  managers. Its final goal is to produce a window manager that doesn't require
  editing of configuration files. Window Maker is fast and doesn't require tons
  of memory to run.
- .
-  Homepage: http://www.windowmaker.info/
 
 Package: libwraster3-dev
 Architecture: any
