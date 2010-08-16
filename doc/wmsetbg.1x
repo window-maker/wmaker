@@ -4,11 +4,11 @@
 wmsetbg \- sets the background on the X11 display
 .SH SYNOPSIS
 .B wmsetbg
-[-display] [--version] [--help] [{-b|--back-color} \fIcolor\fP]
-[{-t|--tile}|{-e|--center}|{-s|--scale}|{-a|--maxscale} \fIimage\fP]
-[{-d|--dither}|{-m|--match}] [-u|--update-wmaker]
-[{-D|--update-domain} \fIdomain\fP] [{-c|--colors} \fIcpc\fP]
-[{-p|--parse} \fItexture\fP] [{-w|--workspace} \fIworkspace\fP]
+[\-display] [\-\-version] [\-\-help] [{\-b|\-\-back\-color} \fIcolor\fP]
+[{\-t|\-\-tile}|{\-e|\-\-center}|{\-s|\-\-scale}|{\-a|\-\-maxscale} \fIimage\fP]
+[{\-d|\-\-dither}|{\-m|\-\-match}] [\-u|\-\-update\-wmaker]
+[{\-D|\-\-update\-domain} \fIdomain\fP] [{\-c|\-\-colors} \fIcpc\fP]
+[{\-p|\-\-parse} \fItexture\fP] [{\-w|\-\-workspace} \fIworkspace\fP]
 .SH DESCRIPTION
 .B wmsetbg
 reads the specified
@@ -19,10 +19,10 @@ window. Window Maker uses this command internally to set the root
 window image on start up.
 .SH OPTIONS
 .TP
-.B -a|--maxscale
+.B \-a|\-\-maxscale
 scales the specified \fIimage\fP preserving its aspect ratio
 .TP
-.B -b|--back-color
+.B \-b|\-\-back\-color
 the specified \fIcolor\fP is used as the background color for the
 \fItexture\fP.  Window Maker temporarely sets the background to this
 color while loading and processing the texture.  You can specify colors
@@ -30,34 +30,34 @@ using their X11 names or as an RGB tiplet (either as "rgb:RR/GG/BB" or
 "#RRGGBB") (reference to appropiate manpage should be here).  In the
 later case \fIcolor\fB is a quoted string.
 .TP
-.B -e|--center
+.B \-e|\-\-center
 centers the specified \fIimage\fP
 .TP
-.B -t|--tile
+.B \-t|\-\-tile
 tiles the specified \fIimage\fP
 .TP
-.B -s|--scale
+.B \-s|\-\-scale
 scales the specified \fIimage\fP (default)
 .TP
-.B -d|--dither
+.B \-d|\-\-dither
 dithers colors
 .TP
-.B -m|--match
+.B \-m|\-\-match
 matches colors
 .TP
-.B -u|--update-wmaker
+.B \-u|\-\-update\-wmaker
 updates the Window Maker defaults database
 .TP
-.B -D|--update-domain
+.B \-D|\-\-update\-domain
 updates the specifed \fIdomain\fP database
 .TP
-.B -c|--colors
+.B \-c|\-\-colors
 colors per channel to use
 .TP
-.B -p|--parse
+.B \-p|\-\-parse
 parses the specified \fItexture\fP as a \fIproplist style texture\fP
 .TP
-.B -w|--workspace
+.B \-w|\-\-workspace
 update background only for the specified \fIworkspace\fP
 .TP
 .B \-\-help

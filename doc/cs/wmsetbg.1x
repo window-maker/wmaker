@@ -4,11 +4,11 @@
 wmsetbg \- nastaví pozadí hlavního okna v X11
 .SH SYNTAXE
 .B wmsetbg
-[-display] [--version] [--help] [{-b|--back-color} \fIbarva\fP]
-[{-t|--tile}|{-e|--center}|{-s|--scale}|{-a|--maxscale} \fIobrázek\fP]
-[{-d|--dither}|{-m|--match}] [-u|--update-wmaker]
-[{-D|--update-domain} \fIdoména\fP] [{-c|--colors} \fIcpc\fP]
-[{-p|--parse} \fItextura\fP] [{-w|--workspace} \fIpracovní plocha\fP]
+[\-display] [\-\-version] [\-\-help] [{\-b|\-\-back\-color} \fIbarva\fP]
+[{\-t|\-\-tile}|{\-e|\-\-center}|{\-s|\-\-scale}|{\-a|\-\-maxscale} \fIobrázek\fP]
+[{\-d|\-\-dither}|{\-m|\-\-match}] [\-u|\-\-update\-wmaker]
+[{\-D|\-\-update\-domain} \fIdoména\fP] [{\-c|\-\-colors} \fIcpc\fP]
+[{\-p|\-\-parse} \fItextura\fP] [{\-w|\-\-workspace} \fIpracovní plocha\fP]
 .SH POPIS
 .B wmsetbg
 naèítá daný
@@ -18,37 +18,37 @@ zvìt¹it, nebo ho opakovat aby vyplnil hlavní okno. Window Maker pou¾íva
 tento pøíkaz internì na nastavení pozadí pøi startu.
 .SH VOLBY
 .TP
-.B -a|--maxscale
+.B \-a|\-\-maxscale
 zvìt¹í daný \fIobrázek\fP pøi dodr¾ení pomìru stran
 .TP
-.B -e|--center
+.B \-e|\-\-center
 vlo¾í \fIobrázek\fP do støedu okna
 .TP
-.B -t|--tile
+.B \-t|\-\-tile
 vytvoøí z \fIobrázku\fP dla¾dice
 .TP
-.B -s|--scale
+.B \-s|\-\-scale
 roztáhne daný \fIobrázek\fP (standartnì)
 .TP
-.B -d|--dither
+.B \-d|\-\-dither
 rezervuje barvy
 .TP
-.B -m|--match
+.B \-m|\-\-match
 shodné barvy
 .TP
-.B -u|--update-wmaker
+.B \-u|\-\-update\-wmaker
 zapí¹e zmìnu do databáze nastavení Window Makera
 .TP
-.B -D|--update-domain
+.B \-D|\-\-update\-domain
 zapí¹e zmìnu do databáze \fIdomény\fP
 .TP
-.B -c|--colors
+.B \-c|\-\-colors
 pou¾íje urèitý poèet barev na kanál
 .TP
-.B -p|--parse
+.B \-p|\-\-parse
 parsuje danou \fItexturu\fP jako \fIproplist stylu textur\fP
 .TP
-.B -w|--workspace
+.B \-w|\-\-workspace
 nastaví pozadí jen na dané \fIpracovní plo¹e\fP
 .TP
 .B \-\-help
