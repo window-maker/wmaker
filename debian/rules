@@ -267,14 +267,6 @@ install-wmaker-stamp: build-wmaker-stamp
 	perl -pi -e '/^WLIBS/ && s:=.*:="-lWINGs -lwraster -lXft":' `find $(DEBTMPDIR) -name get-wings-flags`
 	perl -pi -e '/^WLIBS/ && s:=.*:="-lWUtil -lX11":' `find $(DEBTMPDIR) -name get-wutil-flags`
 
-ifeq (skip,)
-	if [ -d $(DEBTMPDIR)/usr/include/WINGs ] ; then \
-	    mv $(DEBTMPDIR)/usr/include/WINGs/* \
-	       $(DEBTMPDIR)/usr/include ; \
-	    rmdir $(DEBTMPDIR)/usr/include/WINGs ; \
-	fi
-endif
-
 configure:	configure.ac
 	$(TOPSRCDIR)/autogen.sh
 
