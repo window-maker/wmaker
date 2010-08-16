@@ -35,7 +35,6 @@ endif
 
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
-#LINGUAS           := $(filter-out zh_TW.Big5, $(LINGUAS))
 
 XLOCALE           := --disable-locale
 MODELOCK          := --enable-modelock
