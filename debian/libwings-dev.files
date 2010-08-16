@@ -1,0 +1,10 @@
+usr/include/WINGs
+usr/lib/pkgconfig/WINGs.pc
+usr/lib/libWINGs.la
+usr/lib/libWINGs.a
+usr/lib/libWUtil.a
+usr/lib/libWUtil.so
+usr/lib/libWINGs.so
+usr/lib/libWUtil.la
+usr/bin/get-wings-flags
+usr/bin/get-wutil-flags

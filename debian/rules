@@ -141,7 +141,8 @@ clean:
 	dh_testroot
 	$(RM) -r $(WMAKER_BD)
 	$(RM) *-stamp \
-		debian/*.files
+		debian/files debian/libwraster3-dev.files \
+		debian/libwraster3.files
 	dh_clean libtool
 
 binary-indep: build
@@ -157,7 +158,6 @@ binary-arch: build
 	debian/rules install-wmaker-stamp
 	debian/rules debian/$(LIBWRASTER)-dev.files
 	debian/rules debian/$(LIBWRASTER).files
-	debian/rules debian/$(LIBWINGS).files
 	dh_movefiles -a --sourcedir=debian/wmaker
 # Remove cruft
 	$(RM) $(DEBTMPDIR)/usr/bin/wkdemenu.pl
@@ -313,14 +313,6 @@ debian/$(LIBWRASTER)-dev.files: build
 debian/$(LIBWRASTER).files: build
 	( find $(DEBTMPDIR)/$(INCLUDEDIR) $(DEBTMPDIR)/$(LIBDIR) \
 		   -name '*wraster*.so.*' \
-	) | sed -e 's:$(DEBTMPDIR)/*::'> $@
-
-debian/libwings-dev.files: build
-	( find $(DEBTMPDIR)/$(INCLUDEDIR) $(DEBTMPDIR)/$(LIBDIR) \
-		    -name '*WINGs*'   \
-		 -o -name '*WUtil*' | grep -v '\.so\.[0-9]' ; \
-	  cd $(DEBTMPDIR) && \
-		find usr -name get-wutil-flags -o -name get-wings-flags \
 	) | sed -e 's:$(DEBTMPDIR)/*::'> $@
 
 configure:	configure.ac
