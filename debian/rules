@@ -140,8 +140,7 @@ clean:
 	dh_testdir
 	dh_testroot
 	$(RM) -r $(WMAKER_BD)
-	$(RM) *-stamp \
-		debian/files
+	$(RM) *-stamp
 	dh_clean libtool
 
 binary-indep: build
