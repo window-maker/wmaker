@@ -184,10 +184,10 @@ binary-arch: build
 	dh_compress -a
 	dh_fixperms -a
 	cd debian && find -name \*.la -exec chmod a-X {} \;
-	dh_installdeb -a
 	#dh_makeshlibs -p$(LIBWRASTER) -V '$(LIBWRASTER) $(libwraster_deps)'
-	dh_makeshlibs
-	dh_shlibdeps
+	dh_makeshlibs -a
+	dh_installdeb -a
+	dh_shlibdeps -a
 	dh_gencontrol -a
 	dh_md5sums -a
 	find debian -type d -empty -print0 | xargs -0r rm -rf
