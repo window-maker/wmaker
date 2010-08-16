@@ -179,6 +179,7 @@ binary-arch: build
 	$(RM) $(DEBTMPDIR)/$(MAN1DIR)/convertstyle*
 	dh_installman -a
 	dh_installchangelogs -a ChangeLog
+	dh_link -a
 #	dh_strip -a
 	dh_lintian
 	dh_compress -a
@@ -208,7 +209,6 @@ install-wmaker-stamp: build-wmaker-stamp
 # First, provide a wrapper to compensate for Window Maker's funny first
 # start up requierements
 	mv $(DEBTMPDIR)/$(BINDIR)/wmaker $(DEBTMPDIR)/$(PKGLIBDIR)/WindowMaker
-	dh_link $(PKGLIBDIR)/WindowMaker $(BINDIR)/WindowMaker
 	$(install_prog) debian/wmaker.sh $(DEBTMPDIR)/$(BINDIR)/wmaker
 
 	-mv $(DEBTMPDIR)/$(BINDIR)/convertfonts $(DEBTMPDIR)/$(PKGLIBDIR)/
@@ -261,11 +261,6 @@ install-wmaker-stamp: build-wmaker-stamp
 # This has the new default Debian theme settings.
 	cp debian/WindowMaker.default $(DEBTMPDIR)/$(DEFAULTSDIR)/WindowMaker
 
-# WPrefs
-# fix the location of WPrefs
-	# mv $(DEBTMPDIR)/$(WPREFSAPPDIR)/WPrefs $(DEBTMPDIR)/$(BINDIR)
-	# dh_link $(BINDIR)/WPrefs $(WPREFSAPPDIR)/WPrefs
-	dh_link $(WPREFSAPPDIR)/WPrefs $(BINDIR)/WPrefs
 # libwraster is compiled with tiff support, we don't need the xpm version
 	$(RM) -r $(DEBTMPDIR)/$(WPREFSAPPDIR)/xpm
 	$(RM) $(patsubst %.tiff,%.xpm,$(wildcard $(DEBTMPDIR)/$(WMSHAREDIR)/Icons/*.tiff))
