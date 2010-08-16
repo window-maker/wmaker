@@ -16,6 +16,17 @@ wmaker (0.92.0-9) unstable; urgency=low
   * Remove ./libtool on clean, otherwise it is not possible build twice from
     the same unpacked sourcetree.
   * Use dpkg-source v3 instead of home-grown patch system.
+  * Polish build system:
+    + Drop dead code from debian/rules.
+    + Stop generating debian/*.files dynamically. (These  should not change
+      without notice.)
+    + Use dh_lintian.
+    + Move argument lists for dh_link and dh_installman to files in debian/*
+      instead of invoking dh_* multiple times with different arguments.
+    + Reorder dh_* invocation, dh_installdeb needs to run after dh_makeshlibs
+      (thanks, lintian).
+  * New upstream generates dynamic libraries of libWUtils and libWINGs, ship
+    them in two new binary packages. Make libwings-dev depend on them.
 
  -- Andreas Metzler <ametzler@debian.org>  Sat, 07 Aug 2010 10:56:00 +0200
 
