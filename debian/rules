@@ -216,9 +216,6 @@ install-wmaker-stamp: build-wmaker-stamp
 # place wm-oldmenu2new under a more appropiate directory
 	-mv $(DEBTMPDIR)/$(BINDIR)/wm-oldmenu2new $(DEBTMPDIR)/$(WMDOCDIR)
 
-# put a symlink in place because there's some hardcoded value that says
-# Defaults is under /usr/share/WindowMaker.
-	ln -s $(DEFAULTSDIR) $(DEBTMPDIR)/$(WMSHAREDIR)/Defaults
 # the next is stricly not necessary, because there's a symlink in place,
 # but I don't want to abuse it. Some dumb program uses that path and is a
 # PITA to modify it)

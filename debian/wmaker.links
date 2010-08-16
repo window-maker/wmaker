@@ -1,2 +1,3 @@
 usr/lib/WindowMaker/WindowMaker usr/bin/WindowMaker
 usr/lib/GNUstep/System/Applications/WPrefs.app/WPrefs usr/bin/WPrefs
+etc/GNUstep/Defaults usr/share/WindowMaker/Defaults
