@@ -177,11 +177,7 @@ binary-arch: build
 		$(LIBWRASTER_TMP)/$(DOCDIR)/$(LIBWRASTER)/README.wrlib
 	$(install_dir) $(DEBTMPDIR)/$(MAN1DIR)
 	$(RM) $(DEBTMPDIR)/$(MAN1DIR)/convertstyle*
-	dh_installman -pwmaker debian/manpages/*.1x
-	dh_installman -pwmaker debian/manpages/*.8
-	dh_installman -plibwraster3-dev debian/manpages/get-wraster-flags.1
-	dh_installman -plibwings-dev debian/manpages/get-wings-flags.1
-	dh_installman -plibwings-dev debian/manpages/get-wutil-flags.1
+	dh_installman -a
 	dh_installchangelogs -a ChangeLog
 #	dh_strip -a
 	dh_lintian
