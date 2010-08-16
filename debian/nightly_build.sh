@@ -65,7 +65,12 @@ doEnv() {
 
 doChlog() {
   cp debian/changelog ${CHLOGBKP}
-  debchange -v ${BASEVERSION}-${REPOVERSION} "${CHANGELOG}" || return 1
+  debchange -v ${BASEVERSION}-${REPOVERSION}-1 "${CHANGELOG}" || return 1
+}
+
+doTarball() {
+	echo tar -czf ../wmaker_${BASEVERSION}-${REPOVERSION}.orig.tar.gz .
+	tar -czf ../wmaker_${BASEVERSION}-${REPOVERSION}.orig.tar.gz .
 }
 
 doBuild() {
@@ -90,6 +95,7 @@ RC=0
 if doPull ; then
   doEnv
   doChlog || errorExit "Error adding new changelog entry."
+  doTarball || errorExit "Error building source tarball."
   doBuild || errorExit "Error during build of .deb package."
 else
   RC=1

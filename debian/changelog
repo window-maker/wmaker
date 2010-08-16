@@ -15,6 +15,7 @@ wmaker (0.92.0-9) unstable; urgency=low
      /usr/share/doc/autotools-dev/README.Debian.gz.
   * Remove ./libtool on clean, otherwise it is not possible build twice from
     the same unpacked sourcetree.
+  * Use dpkg-source v3 instead of home-grown patch system.
 
  -- Andreas Metzler <ametzler@debian.org>  Sat, 07 Aug 2010 10:56:00 +0200
 

@@ -111,9 +111,6 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
                      --with-gnustepdir=$(GNUSTEPDIR)  \
                      --with-xft
 
-LIST_PATCHES      := find debian/patches -mindepth 1 -maxdepth 1 -name \*.diff -type f | sort
-RLIST_PATCHES     := find debian/patches -mindepth 1 -maxdepth 1 -name \*.diff -type f | sort -r
-
 install_file      := install -p    -o root -g root -m 0644
 install_prog      := install -p    -o root -g root -m 0755
 install_dir       := install -p -d -o root -g root -m 0755
@@ -128,7 +125,7 @@ build-wmaker-stamp: config-wmaker-stamp
 	$(MAKE) -C $(WMAKER_BD)
 	touch $@
 
-config-wmaker-stamp: patch-wmaker-stamp configure
+config-wmaker-stamp: configure
 	dh_testdir
 	test -x config.guess || chmod +x config.guess
 	test -x config.sub || chmod +x config.sub
@@ -139,46 +136,6 @@ config-wmaker-stamp: patch-wmaker-stamp configure
 	 $(WMAKER_OPTIONS) CFLAGS="$(CFLAGS)"
 	touch $@
 
-patch-wmaker-stamp:
-	@$(LIST_PATCHES) | \
-	while read patch ; do \
-	    echo $$patch ; \
-	    if head -1 $$patch | grep -q ^Index: ; then \
-		patch -p0 < $$patch ; \
-	    else \
-		patch -p1 < $$patch ; \
-	    fi ; \
-	    echo ; \
-	done
-	touch $@
-
-test-patch-wmaker:
-	@$(LIST_PATCHES) | \
-	while read patch ; do \
-	    echo $$patch ; \
-	    if head -1 $$patch | grep -q ^Index: ; then \
-		patch --dry-run -p0 < $$patch ; \
-	    else \
-		patch --dry-run -p1 < $$patch ; \
-	    fi ; \
-	    echo ; \
-	done
-
-unpatch-wmaker:
-	@if [ -e patch-wmaker-stamp ] ; then \
-	    $(RLIST_PATCHES) | \
-	    while read patch ; do \
-		echo $$patch ; \
-		if head -1 $$patch | grep -q ^Index: ; then \
-		    patch -p0 -R < $$patch ; \
-		else \
-		    patch -p1 -R < $$patch ; \
-		fi ; \
-		echo ; \
-	    done ; \
-	    rm patch-wmaker-stamp ; \
-	fi
-
 clean:
 	dh_testdir
 	dh_testroot
@@ -187,7 +144,6 @@ clean:
 		debian/*.files \
 		debian/shlibs.local \
 		debian/conffiles
-	debian/rules unpatch-wmaker
 	dh_clean libtool
 
 binary-indep: build
@@ -375,4 +331,4 @@ debian/shlibs.local:
 configure:	configure.ac
 	$(TOPSRCDIR)/autogen.sh
 
-.PHONY: binary binary-arch binary-indep binary-custom clean build unpatch-wmaker
+.PHONY: binary binary-arch binary-indep binary-custom clean build

@@ -1,10 +1,8 @@
-Index: src/wconfig.h.in
-===================================================================
 diff --git a/src/wconfig.h.in b/src/wconfig.h.in
-index cab2bd0..e0dc434 100644
---- src/wconfig.h.in
-+++ src/wconfig.h.in
-@@ -146,7 +146,7 @@
+index c8bb947..cf06113 100644
+--- a/src/wconfig.h.in
++++ b/src/wconfig.h.in
+@@ -132,7 +132,7 @@
   */
 
  /* list of paths to look for the config files, searched in order of appearance */
