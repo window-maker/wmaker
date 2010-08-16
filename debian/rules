@@ -175,7 +175,6 @@ binary-arch: build
 		$(LIBWINGS_TMP)/$(DOCDIR)/$(LIBWINGS)/README.WINGs
 	$(install_file) $(WRASTERSRCDIR)/README \
 		$(LIBWRASTER_TMP)/$(DOCDIR)/$(LIBWRASTER)/README.wrlib
-	$(install_dir) $(DEBTMPDIR)/$(MAN1DIR)
 	$(RM) $(DEBTMPDIR)/$(MAN1DIR)/convertstyle*
 	dh_installman -a
 	dh_installchangelogs -a ChangeLog
