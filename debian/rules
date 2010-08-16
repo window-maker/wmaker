@@ -184,6 +184,7 @@ binary-arch: build
 	dh_installman -plibwings-dev debian/manpages/get-wutil-flags.1
 	dh_installchangelogs -a ChangeLog
 #	dh_strip -a
+	dh_lintian
 	dh_compress -a
 	dh_fixperms -a
 	cd debian && find -name \*.la -exec chmod a-X {} \;
@@ -263,10 +264,6 @@ install-wmaker-stamp: build-wmaker-stamp
 	    debian/debian.tiff.uu
 # This has the new default Debian theme settings.
 	cp debian/WindowMaker.default $(DEBTMPDIR)/$(DEFAULTSDIR)/WindowMaker
-
-# Overrides lintian warnings
-	dh_installdirs usr/share/lintian/overrides
-	cp debian/wmaker.overrides debian/wmaker/usr/share/lintian/overrides/wmaker
 
 # WPrefs
 # fix the location of WPrefs
