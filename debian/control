@@ -46,7 +46,9 @@ Package: libwings-dev
 Architecture: any
 Section: libdevel
 Priority: optional
-Depends: libc6-dev, libx11-dev, libxext-dev, libwraster3-dev, libxft-dev, libfontconfig1-dev, ${misc:Depends}
+Depends: libc6-dev, libx11-dev, libxext-dev, libwraster3-dev, libxft-dev,
+ libfontconfig1-dev, libwutil1 (= ${binary:Version}),
+ libwings2 (= ${binary:Version}), ${misc:Depends}
 Description: Window Maker's own widget set
  WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
  look and feel. Its API is inspired in OpenSTEP and its
@@ -54,3 +56,33 @@ Description: Window Maker's own widget set
  widgets, sufficient for building small applications like a CDPlayer
  or hacking something like rxvt. It is used for basic widgets in
  the WindowMaker window manager.
+
+Package: libwutil1
+Architecture: any
+Section: libs
+Priority: optional
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Window Maker's own widget set - utility library
+ WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
+ look and feel. Its API is inspired in OpenSTEP and its
+ implementation borrows some ideas from Tk. It has a reasonable set of
+ widgets, sufficient for building small applications like a CDPlayer
+ or hacking something like rxvt. It is used for basic widgets in
+ the WindowMaker window manager.
+ .
+ This package contains the libWUtils runtime library.
+
+Package: libwings2
+Architecture: any
+Section: libs
+Priority: optional
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Window Maker's own widget set - runtime library
+ WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
+ look and feel. Its API is inspired in OpenSTEP and its
+ implementation borrows some ideas from Tk. It has a reasonable set of
+ widgets, sufficient for building small applications like a CDPlayer
+ or hacking something like rxvt. It is used for basic widgets in
+ the WindowMaker window manager.
+ .
+ This package contains the libWINGs runtime library.

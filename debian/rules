@@ -185,7 +185,8 @@ binary-arch: build
 	dh_fixperms -a
 	cd debian && find -name \*.la -exec chmod a-X {} \;
 	dh_installdeb -a
-	dh_makeshlibs -p$(LIBWRASTER) -V '$(LIBWRASTER) $(libwraster_deps)'
+	#dh_makeshlibs -p$(LIBWRASTER) -V '$(LIBWRASTER) $(libwraster_deps)'
+	dh_makeshlibs
 	dh_shlibdeps
 	dh_gencontrol -a
 	dh_md5sums -a
