@@ -78,7 +78,7 @@ doBuild() {
   if [ -n "${WM_GPG_KEY}" ]; then
     ARGS="-k${WM_GPG_KEY}"
   fi
-  fakeroot dpkg-buildpackage $ARGS >>${BUILDLOG} 2>&1
+  dpkg-buildpackage -rfakeroot $ARGS >>${BUILDLOG} 2>&1
 }
 
 install -d `dirname $BUILDLOG`
