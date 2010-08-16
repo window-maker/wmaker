@@ -170,11 +170,6 @@ binary-arch: build
 	touch $(DEBTMPDIR)/$(WMCONFDIR)/menu.prehook
 	touch $(DEBTMPDIR)/$(WMCONFDIR)/menu.posthook
 	$(install_file) debian/wmaker.desktop $(DEBTMPDIR)/usr/share/xsessions
-# build a conffiles list AFTER installing the menus
-# the sed part is there because of policy
-#	-cd $(DEBTMPDIR) && \
-#		find etc ! -type d \
-#		| sed -e "s:^etc/:/etc/:" > ../conffiles
 	dh_installdocs -a
 	$(install_file) $(WINGSSRCDIR)/README \
 		$(LIBWINGS_TMP)/$(DOCDIR)/$(LIBWINGS)/README.WINGs
