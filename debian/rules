@@ -141,8 +141,7 @@ clean:
 	dh_testroot
 	$(RM) -r $(WMAKER_BD)
 	$(RM) *-stamp \
-		debian/files debian/libwraster3-dev.files \
-		debian/libwraster3.files
+		debian/files
 	dh_clean libtool
 
 binary-indep: build
@@ -156,8 +155,6 @@ binary-arch: build
 	dh_prep -a
 	dh_installdirs -a
 	debian/rules install-wmaker-stamp
-	debian/rules debian/$(LIBWRASTER)-dev.files
-	debian/rules debian/$(LIBWRASTER).files
 	dh_movefiles -a --sourcedir=debian/wmaker
 # Remove cruft
 	$(RM) $(DEBTMPDIR)/usr/bin/wkdemenu.pl
@@ -299,21 +296,6 @@ ifeq (skip,)
 	    rmdir $(DEBTMPDIR)/usr/include/WINGs ; \
 	fi
 endif
-
-debian/$(LIBWRASTER)-dev.files: build
-	( find $(DEBTMPDIR)/$(INCLUDEDIR) $(DEBTMPDIR)/$(LIBDIR) \
-		   -name '*wraster*.h' \
-		-o -name '*wraster*.a' \
-		-o -name '*wraster*.la' \
-		-o -name '*wraster*.so' ; \
-	  cd $(DEBTMPDIR) && \
-		find usr -name get-wraster-flags \
-	) | sed -e 's:$(DEBTMPDIR)/*::'> $@
-
-debian/$(LIBWRASTER).files: build
-	( find $(DEBTMPDIR)/$(INCLUDEDIR) $(DEBTMPDIR)/$(LIBDIR) \
-		   -name '*wraster*.so.*' \
-	) | sed -e 's:$(DEBTMPDIR)/*::'> $@
 
 configure:	configure.ac
 	$(TOPSRCDIR)/autogen.sh
