@@ -141,9 +141,7 @@ clean:
 	dh_testroot
 	$(RM) -r $(WMAKER_BD)
 	$(RM) *-stamp \
-		debian/*.files \
-		debian/shlibs.local \
-		debian/conffiles
+		debian/*.files
 	dh_clean libtool
 
 binary-indep: build
@@ -200,8 +198,8 @@ binary-arch: build
 	cd debian && find -name \*.la -exec chmod a-X {} \;
 	dh_installdeb -a
 	dh_makeshlibs -p$(LIBWRASTER) -V '$(LIBWRASTER) $(libwraster_deps)'
-	dh_shlibdeps -u-L$(LIBWRASTER_TMP)/DEBIAN/shlibs
-	dh_gencontrol -a -u-isp
+	dh_shlibdeps
+	dh_gencontrol -a
 	dh_md5sums -a
 	find debian -type d -empty -print0 | xargs -0r rm -rf
 	$(RMDIR) $(DEBTMPDIR)/$(INCLUDEDIR)
@@ -324,9 +322,6 @@ debian/libwings-dev.files: build
 	  cd $(DEBTMPDIR) && \
 		find usr -name get-wutil-flags -o -name get-wings-flags \
 	) | sed -e 's:$(DEBTMPDIR)/*::'> $@
-
-debian/shlibs.local:
-	echo 'libwraster  $(patsubst libwraster%,%, $(LIBWRASTER))  $(LIBWRASTER) $(libwraster_deps)' > $@
 
 configure:	configure.ac
 	$(TOPSRCDIR)/autogen.sh
