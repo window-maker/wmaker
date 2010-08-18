@@ -887,6 +887,7 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile \
 	wrlib/Makefile wrlib/tests/Makefile \
 	src/Makefile src/wconfig.h \
 	doc/Makefile doc/sk/Makefile doc/cs/Makefile \
+	doc/ru/Makefile \
 	WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
 	WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile \
 	WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile \
