@@ -27,6 +27,7 @@ wmaker (0.92.0-9) unstable; urgency=low
       (thanks, lintian).
   * New upstream generates dynamic libraries of libWUtils and libWINGs, ship
     them in two new binary packages. Make libwings-dev depend on them.
+  * Use latest automake (instead of automake1.4) for building. Closes: #549157
 
  -- Andreas Metzler <ametzler@debian.org>  Sat, 07 Aug 2010 10:56:00 +0200
 
