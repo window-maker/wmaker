@@ -44,6 +44,8 @@ errorExit() {
 doPull() {
   RC="1"
   LATEST="`$STATUSCMD`"
+  git reset --hard HEAD
+  git clean -f
   $PULLCMD >>$BUILDLOG 2>&1 || errorExit "Error pulling from the repo"
   CURRENT="`$STATUSCMD`"
   if [ "$FORCE" = "1" -o "$LATEST" != "$CURRENT" ]; then
