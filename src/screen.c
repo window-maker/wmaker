@@ -35,9 +35,11 @@
 #ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
 #endif				/* KEEP_XKB_LOCK_STATUS */
+#ifdef HAVE_XRANDR
+#include <X11/extensions/Xrandr.h>
+#endif
 
 #include <wraster.h>
-
 #include "WindowMaker.h"
 #include "def_pixmaps.h"
 #include "screen.h"
@@ -76,6 +78,9 @@ extern int wScreenCount;
 
 #ifdef KEEP_XKB_LOCK_STATUS
 extern int wXkbSupported;
+#endif
+#ifdef HAVE_XRANDR
+extern int has_randr;
 #endif
 
 extern WDDomain *WDWindowMaker;
@@ -597,6 +602,11 @@ WScreen *wScreenInit(int screen_number)
 		XkbSelectEvents(dpy, XkbUseCoreKbd, XkbStateNotifyMask, XkbStateNotifyMask);
 	}
 #endif				/* KEEP_XKB_LOCK_STATUS */
+
+#ifdef HAVE_XRANDR
+	if (has_randr)
+		XRRSelectInput(dpy, scr->root_win, RRScreenChangeNotifyMask);
+#endif
 
 	XSync(dpy, False);
 	XSetErrorHandler(oldHandler);

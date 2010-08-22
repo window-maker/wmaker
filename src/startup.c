@@ -45,6 +45,9 @@
 #ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
 #endif
+#ifdef HAVE_XRANDR
+#include <X11/extensions/Xrandr.h>
+#endif
 
 #include "WindowMaker.h"
 #include "GNUstep.h"
@@ -95,6 +98,11 @@ extern int wShapeEventBase;
 #ifdef KEEP_XKB_LOCK_STATUS
 extern Bool wXkbSupported;
 extern int wXkbEventBase;
+#endif
+
+#ifdef HAVE_XRANDR
+extern Bool has_randr;
+extern int randr_event_base;
 #endif
 
 /* contexts */
@@ -501,7 +509,7 @@ static char *atomNames[] = {
 void StartUp(Bool defaultScreenOnly)
 {
 	struct sigaction sig_action;
-	int j, max;
+	int j, max, dummy;
 	Atom atom[sizeof(atomNames) / sizeof(char *)];
 
 	/*
@@ -690,6 +698,12 @@ void StartUp(Bool defaultScreenOnly)
 #ifdef SHAPE
 	/* ignore j */
 	wShapeSupported = XShapeQueryExtension(dpy, &wShapeEventBase, &j);
+#endif
+
+#ifdef HAVE_XRANDR
+	has_randr = XRRQueryExtension(dpy, &randr_event_base, &dummy);
+#else
+	has_randr = false;
 #endif
 
 #ifdef KEEP_XKB_LOCK_STATUS

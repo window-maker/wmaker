@@ -143,6 +143,11 @@ Bool wXkbSupported;
 int wXkbEventBase;
 #endif
 
+#ifdef HAVE_XRANDR
+Bool has_randr;
+int randr_event_base;
+#endif
+
 /* special flags */
 char WProgramSigState = 0;
 char WProgramState = WSTATE_NORMAL;

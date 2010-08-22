@@ -480,6 +480,21 @@ if test "$shape" = yes; then
 		shape=no, $XLFLAGS $XLIBS)
 fi
 
+dnl XRandR support
+dnl =============
+xrandr=yes
+AC_ARG_ENABLE(XRandR,
+[  --disable-xrandr         disable XRandR window extension support],
+		xrandr=$enableval, xrandr=yes)
+
+added_xext=no
+
+if test "$xrandr" = yes; then
+	AC_CHECK_LIB(Xrandr, XRRQueryExtension, [XLIBS="-lXrandr $XLIBS"
+		added_xext=yes
+		AC_DEFINE(HAVE_XRANDR, 1, [define if you want support for XRandR (set by configure)])],
+		xrandr=no, $XLFLAGS $XLIBS)
+fi
 
 dnl
 dnl libWINGS uses math functions, check whether usage requires linking
@@ -1072,6 +1087,7 @@ echo "Use assembly routines for wrlib     : $asm_support"
 echo "Use inline MMX(tm) x86 assembly     : $mmx_support"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Xinerama extension support          : $xinerama"
+echo "XRandR extension support            : $xrandr"
 echo "Translated message files to install : $mof"
 dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then

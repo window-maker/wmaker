@@ -40,6 +40,10 @@
 #include "xdnd.h"
 #endif
 
+#ifdef HAVE_XRANDR
+#include <X11/extensions/Xrandr.h>
+#endif
+
 #ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
 #endif				/* KEEP_XKB_LOCK_STATUS */
@@ -94,6 +98,11 @@ extern int wShapeEventBase;
 
 #ifdef KEEP_XKB_LOCK_STATUS
 extern int wXkbEventBase;
+#endif
+
+#ifdef HAVE_XRANDR
+extern Bool has_randr;
+extern int randr_event_base;
 #endif
 
 /* special flags */
@@ -562,6 +571,10 @@ static void handleExtensions(XEvent * event)
 		handleXkbIndicatorStateNotify(event);
 	}
 #endif				/*KEEP_XKB_LOCK_STATUS */
+#ifdef HAVE_XRANDR
+	if (has_randr && event->type == (randr_event_base + RRScreenChangeNotify))
+		Restart(NULL,True);
+#endif
 }
 
 static void handleMapRequest(XEvent * ev)
