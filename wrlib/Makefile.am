@@ -10,8 +10,6 @@ lib_LTLIBRARIES = libwraster.la
 
 libwraster_la_LDFLAGS = -version-info 4:0:1
 
-LIBTOOL = $(SHELL) $(top_builddir)/libtool $(LIBTOOL_ARG)
-
 bin_SCRIPTS = get-wraster-flags
 
 include_HEADERS = wraster.h
@@ -42,26 +40,15 @@ libwraster_la_SOURCES = 	\
 	gif.c
 
 
-.c:
-	$(QUIET)$(COMPILE) -c $<
-
-.c.obj:
-	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-# This is the same as LTCOMPILE but without LIBTOOL
-LTCOMPILE1= --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-
-LTCOMPILE2=`echo $(LTCOMPILE1) | sed -e s/-fomit-frame-pointer//`
+LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
 COMPILE2=`echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`
 
 # cant compile asm stuff with optimizations
 x86_specific.lo: x86_specific.c
-	$(LIBTOOL) $(LTCOMPILE2) -O0 -c $<
+	$(LTCOMPILE2) -O0 -c $<
 
 x86_specific.o: x86_specific.c
-	$(QUIET)$(COMPILE2) -O0 -c $<
+	$(COMPILE2) -O0 -c $<
 
 
 INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@

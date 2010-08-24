@@ -15,6 +15,7 @@ AC_INIT(WindowMaker, 0.94.0-crm)
 AC_CONFIG_SRCDIR(src/WindowMaker.h)
 AC_CONFIG_MACRO_DIR([m4])
 AM_CONFIG_HEADER(src/config.h)
+AM_INIT_AUTOMAKE([1.11 silent-rules])
 
 dnl Checks for host/os name
 dnl =======================
@@ -360,25 +361,6 @@ AC_SUBST(WPMOFILES)
 AC_SUBST(UTILMOFILES)
 AC_SUBST(WINGSMOFILES)
 AC_SUBST(supported_locales)
-
-dnl Support for various hint things
-dnl ===============================
-
-dnl Beautify compilation messages
-dnl =============================
-AC_ARG_ENABLE(verbose-compile, AS_HELP_STRING([--disable-verbose-compile],
-			       [Streamline compilation messages]),
-  [
-	QUIET='@echo "     CC" $@;'
-	QUIET_AR='@echo "     AR" $@;'
-	LIBTOOL_ARG="--silent"
-	MAKEFLAGS="-s"
-	AC_SUBST(QUIET)
-	AC_SUBST(QUIET_AR)
-	AC_SUBST(LIBTOOL_ARG)
-	AC_SUBST(MAKEFLAGS)
-])
-
 
 dnl ===========================================
 dnl 		Stuff that uses X

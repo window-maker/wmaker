@@ -121,14 +121,3 @@ wmaker_LDADD = \
 	@XFTLIBS@ \
 	@XLIBS@ \
 	@INTLIBS@
-
-LIBTOOL = $(SHELL) $(top_builddir)/libtool $(LIBTOOL_ARG)
-
-.c.o:
-	$(QUIET)$(COMPILE) -c $<
-
-.c.obj:
-	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-.c.lo:
-	$(QUIET)$(LTCOMPILE) -c -o $@ $<

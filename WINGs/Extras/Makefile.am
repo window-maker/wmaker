@@ -2,8 +2,6 @@
 
 AUTOMAKE_OPTIONS = no-dependencies
 
-
-
 # is this a kluge? if so, how should i do it?
 includedir = @includedir@/WINGs
 
@@ -15,8 +13,6 @@ lib_LTLIBRARIES = libExtraWINGs.la
 noinst_PROGRAMS = test
 
 EXTRA_DIST = 
-
-libExtraWINGs_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
 
 libExtraWINGs_la_SOURCES = 	\
 	wtableview.c \
@@ -34,14 +30,3 @@ LDADD= $(top_builddir)/WINGs/libWINGs.la $(top_builddir)/wrlib/libwraster.la \
 	@XFTLIBS@ @INTLIBS@
 
 test_LDADD = wtableview.o wtabledelegates.o $(LDADD)
-
-LIBTOOL = $(SHELL) $(top_builddir)/libtool $(LIBTOOL_ARG)
-
-.c.o:
-	$(QUIET)$(COMPILE) -c $<
-
-.c.obj:
-	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-.c.lo:
-	$(QUIET)$(LTCOMPILE) -c -o $@ $<

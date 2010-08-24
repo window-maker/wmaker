@@ -66,8 +66,8 @@ wmgenmenu_SOURCES = wmgenmenu.c wmgenmenu.h
 CLEANFILES = wmaker.inst
 
 wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
-	@-rm -f wmaker.inst
-	@sed -e "s|#pkgdatadir#|$(pkgdatadir)|" \
+	-rm -f wmaker.inst
+	sed -e "s|#pkgdatadir#|$(pkgdatadir)|" \
 		-e "s|#sysconfdir#|$(sysconfdir)/WindowMaker|" \
 		-e "s|#version#|$(VERSION)|" \
 		-e "s|#bindir#|$(bindir)|" \
@@ -75,13 +75,3 @@ wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
 
 	chmod 755 wmaker.inst
 	
-LIBTOOL = $(SHELL) $(top_builddir)/libtool $(LIBTOOL_ARG)
-
-.c.o:
-	$(QUIET)$(COMPILE) -c $<
-
-.c.obj:
-	$(QUIET)$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-.c.lo:
-	$(QUIET)$(LTCOMPILE) -c -o $@ $<
