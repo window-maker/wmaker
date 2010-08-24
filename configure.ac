@@ -11,10 +11,9 @@ dnl
 dnl
 
 
-AC_INIT(src/WindowMaker.h)
-
+AC_INIT(WindowMaker, 0.94.0-crm)
+AC_CONFIG_SRCDIR(src/WindowMaker.h)
 AC_CONFIG_MACRO_DIR([m4])
-AM_INIT_AUTOMAKE(WindowMaker, 0.94.0-crm)
 AM_CONFIG_HEADER(src/config.h)
 
 dnl Checks for host/os name
