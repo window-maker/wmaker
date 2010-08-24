@@ -29,7 +29,7 @@ AC_PROG_GCC_TRADITIONAL
 AC_PROG_LIBTOOL
 
 AX_CFLAGS_GCC_OPTION(-Wall)
-AX_CFLAGS_GCC_OPTION(-Wextra)
+AX_CFLAGS_GCC_OPTION(-Wextra -Wno-sign-compare)
 
 dnl Platform-specific Makefile setup
 dnl ================================
