@@ -106,35 +106,7 @@ dnl not used anywhere
 dnl AC_FUNC_MEMCMP  
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname select poll strerror strcasecmp strncasecmp \
-	       setsid atexit mallinfo mkstemp snprintf vsnprintf asprintf \
-	       vasprintf)
-
-dnl ripped from samba
-dnl 
-AC_CACHE_CHECK([for C99 vsnprintf],_cv_HAVE_C99_VSNPRINTF,[
-AC_TRY_RUN([
-#include <sys/types.h>
-#include <stdarg.h>
-void foo(const char *format, ...) { 
-       va_list ap;
-       int len;
-       char buf[5];
-
-       va_start(ap, format);
-       len = vsnprintf(0, 0, format, ap);
-       va_end(ap);
-       if (len != 5) exit(1);
-
-       if (snprintf(buf, 3, "hello") != 5 || strcmp(buf, "he") != 0) exit(1);
-
-       exit(0);
-}
-main() { foo("hello"); }
-],
-_cv_HAVE_C99_VSNPRINTF=yes,_cv_HAVE_C99_VSNPRINTF=no,_cv_HAVE_C99_VSNPRINTF=cross)])
-if test x"$_cv_HAVE_C99_VSNPRINTF" = x"yes"; then
-    AC_DEFINE(HAVE_C99_VSNPRINTF, 1, [define if you have vsnprintf with C99 semantics (set by configure)])
-fi
+	       setsid atexit mallinfo mkstemp)
 
 dnl Check for inotify
 dnl =================
