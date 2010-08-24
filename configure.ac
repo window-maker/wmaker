@@ -13,16 +13,13 @@ dnl
 
 AC_INIT(src/WindowMaker.h)
 
-
 AC_CONFIG_MACRO_DIR([m4])
 AM_INIT_AUTOMAKE(WindowMaker, 0.94.0-crm)
 AM_CONFIG_HEADER(src/config.h)
 
-
 dnl Checks for host/os name
 dnl =======================
 dnl AC_CANONICAL_HOST -- already done by AC_PROG_LIBTOOL
-
 
 dnl Checks for programs.
 dnl ===================
@@ -93,20 +90,17 @@ lib_search_path="-L$_libdir"
 inc_search_path=`eval echo $includedir`
 inc_search_path="-I`eval echo $inc_search_path`"
 
-dnl
+dnl ===============================================
 dnl Specify paths to look for libraries and headers
 dnl ===============================================
-AC_ARG_WITH(libs-from,
-[  --with-libs-from        pass compiler flags to look for libraries],
+AC_ARG_WITH(libs-from, AS_HELP_STRING([--with-libs-from], [pass compiler flags to look for libraries]),
 	[lib_search_path="$withval $lib_search_path"])
 
-AC_ARG_WITH(incs-from,
-[  --with-incs-from        pass compiler flags to look for header files],
+AC_ARG_WITH(incs-from, AS_HELP_STRING([--with-incs-from], [pass compiler flags to look for header files]),
 	[inc_search_path="$withval $inc_search_path"])
 
-
-
-dnl Checks for library functions.
+dnl ============================
+dnl Checks for library functions
 dnl ============================
 dnl not used anywhere
 dnl AC_FUNC_MEMCMP  
@@ -207,8 +201,7 @@ asm_support=no
 mmx_support=no
 
 check_for_mmx_support=yes
-AC_ARG_ENABLE(mmx,
-   [  --disable-mmx          disable compilation of MMX inline assembly ],
+AC_ARG_ENABLE(mmx, AS_HELP_STRING([--disable-mmx], [disable compilation of MMX inline assembly]),
    [if test x$enableval != xyes; then
     check_for_mmx_support=no
     fi])
@@ -250,18 +243,14 @@ AC_SUBST(NOSTRICTALIASING)
 
 
 dnl pkg-config
-dnl ----------
+dnl ==========
 dnl AC_ARG_VAR(PKGCONFIG, [pkg-config command])
 AC_CHECK_PROG(PKGCONFIG, pkg-config, pkg-config) 
 
-
 dnl gettext
-dnl -------
-
+dnl =======
 
 dnl AM_GNU_GETTEXT
-
-
 
 INTLIBS=""
 
@@ -301,7 +290,7 @@ dnl The Tower of Babel
 dnl ==================
 
 dnl List of supported locales
-dnl -------------------------
+dnl =========================
 supported_locales="be bg bs ca cs da de el es et fi fr gl hr hu hy it ja ko ms nl no pl pt ro ru sk sv tr zh_CN zh_TW"
 supported_wprefs_locales="bg ca cs de es et fi fr hr hu it ja ko pt ru sk zh_CN zh_TW"
 supported_wings_locales="bg ca cs de fr sk"
@@ -353,11 +342,9 @@ for lang in $LINGUAS; do
 done
 
 
-dnl Added by Oliver - Support for NLSDIR option,   Hi Oliver!
+dnl Added by Oliver - Support for NLSDIR option
 dnl ===========================================
-AC_ARG_WITH(nlsdir, 
-	[  --with-nlsdir=PATH      specify where the locale stuff should go ])
-
+AC_ARG_WITH(nlsdir, AS_HELP_STRING([--with-nlsdir=PATH], [specify where the locale stuff should go]))
 
 if test "x$NLSDIR" = "x"; then
 	if test "x$with_nlsdir" != "x"; then
@@ -367,8 +354,6 @@ if test "x$NLSDIR" = "x"; then
 	fi
 fi
 
-
-
 AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
 AC_SUBST(MOFILES)
@@ -377,16 +362,13 @@ AC_SUBST(UTILMOFILES)
 AC_SUBST(WINGSMOFILES)
 AC_SUBST(supported_locales)
 
-
-
 dnl Support for various hint things
 dnl ===============================
 
-dnl
 dnl Beautify compilation messages
-dnl ---------------------------------------------
+dnl =============================
 AC_ARG_ENABLE(verbose-compile, AS_HELP_STRING([--disable-verbose-compile],
-			       [Streamline compilation messages (default off)]),
+			       [Streamline compilation messages]),
   [
 	QUIET='@echo "     CC" $@;'
 	QUIET_AR='@echo "     AR" $@;'
@@ -412,36 +394,27 @@ in Linux) installed.])
 fi
 
 X_LIBRARY_PATH=$x_libraries
-
 XCFLAGS="$X_CFLAGS"
-
 XLFLAGS="$X_LIBS"
-
 XLIBS="-lX11 -lXmu $X_EXTRA_LIBS"
-
 
 lib_search_path="$lib_search_path $XLFLAGS"
 inc_search_path="$inc_search_path $XCFLAGS"
 
-
 AC_SUBST(X_LIBRARY_PATH)
-
-
 
 dnl Decide which locale function to use, setlocale() or _Xsetlocale()
 dnl by MANOME Tomonori 
 dnl ===========================================
 use_locale=yes
-AC_ARG_ENABLE(locale, 
-[  --disable-locale        disable use of X locale support],
-		use_locale=no)
+AC_ARG_ENABLE(locale, AS_HELP_STRING([--disable-locale], [disable use of X locale support]),
+              use_locale=no)
 
 if test "$use_locale" = yes; then
 	AC_CHECK_LIB(X11, _Xsetlocale,
 		AC_DEFINE(X_LOCALE, 1, [define if you want support for X window's X_LOCALE (set by configure)]),,
 		$XLFLAGS $XLIBS)
 fi
-
 
 dnl Check whether XInternAtoms() exist
 dnl ==================================
@@ -455,22 +428,16 @@ AC_CHECK_LIB(X11, XConvertCase,
              AC_DEFINE(HAVE_XCONVERTCASE, 1, [define if your X server has XConvertCase() (set by configure)]),,
              $XLFLAGS $XLIBS)
 
-
 dnl XKB keyboard language status
 dnl ============================
-AC_ARG_ENABLE(modelock,
-[  --enable-modelock       XKB keyboard language status support],
+AC_ARG_ENABLE(modelock, AS_HELP_STRING([--enable-modelock], [XKB keyboard language status support]),
 		AC_DEFINE(XKB_MODELOCK, 1, [whether XKB language MODELOCK should be enabled]))
-
-
 
 dnl Shape support
 dnl =============
 shape=yes
-AC_ARG_ENABLE(shape, 
-[  --disable-shape         disable shaped window extension support],
+AC_ARG_ENABLE(shape, AS_HELP_STRING([--disable-shape], [disable shaped window extension support]),
 		shape=$enableval, shape=yes)
-
 added_xext=no
 
 if test "$shape" = yes; then
@@ -483,10 +450,8 @@ fi
 dnl XRandR support
 dnl =============
 xrandr=yes
-AC_ARG_ENABLE(XRandR,
-[  --disable-xrandr         disable XRandR window extension support],
+AC_ARG_ENABLE(XRandR, AS_HELP_STRING([--disable-xrandr], [disable XRandR window extension support]),
 		xrandr=$enableval, xrandr=yes)
-
 added_xext=no
 
 if test "$xrandr" = yes; then
@@ -572,8 +537,7 @@ AC_SUBST(XFTLIBS)
 dnl XINERAMA support
 dnl ================
 xinerama=no
-AC_ARG_ENABLE(xinerama,
-[  --enable-xinerama       enable Xinerama extension support],
+AC_ARG_ENABLE(xinerama, AS_HELP_STRING([--enable-xinerama], [enable Xinerama extension support]),
 		xinerama=$enableval, xinerama=no)
 
 if test "$xinerama" = yes; then
@@ -607,8 +571,7 @@ fi
 dnl MIT-SHM support
 dnl ===============
 shm=yes
-AC_ARG_ENABLE(shm,
-[  --disable-shm           disable usage of MIT-SHM extension],
+AC_ARG_ENABLE(shm, AS_HELP_STRING([--disable-shm], [disable usage of MIT-SHM extension]),
 		shm=$enableval, shm=yes)
 
 if test "$shm" = yes; then
@@ -641,15 +604,10 @@ dnl ==============================================
 dnl         Graphic Format Libraries
 dnl ==============================================
 
-
-
-
-
 dnl XPM Support
 dnl ===========
 xpm=yes
-AC_ARG_ENABLE(xpm, 
-[  --disable-xpm           disable use of XPM pixmaps through libXpm],
+AC_ARG_ENABLE(xpm, AS_HELP_STRING([--disable-xpm], [disable use of XPM pixmaps through libXpm]),
 	xpm=$enableval, xpm=yes)
 
 if test "$xpm" = yes; then
@@ -675,15 +633,11 @@ dnl ===============================================
 dnl 		End of stuff that uses X
 dnl ===============================================
 
-
-
 dnl PNG Support
 dnl ===========
 png=yes
-AC_ARG_ENABLE(png, 
-[  --disable-png           disable PNG support through libpng],
+AC_ARG_ENABLE(png, AS_HELP_STRING([--disable-png], [disable PNG support through libpng]),
 	png=$enableval, png=yes, png=no)
-
 
 if test "$png" = yes ; then
     WM_CHECK_LIB(png, png_get_valid, [-lz -lm])
@@ -703,8 +657,7 @@ dnl JPEG Support
 dnl ============
 jpeg=yes
 ljpeg=""
-AC_ARG_ENABLE(jpeg,
-[  --disable-jpeg          disable JPEG support through libjpeg],
+AC_ARG_ENABLE(jpeg, AS_HELP_STRING([--disable-jpeg], [disable JPEG support through libjpeg]),
 	jpeg=$enableval, jpeg=yes, jpeg=no)
 
 if test "$jpeg" = yes; then
@@ -727,8 +680,7 @@ fi
 dnl GIF Support
 dnl ============
 gif=yes
-AC_ARG_ENABLE(gif,
-[  --disable-gif           disable GIF support through libgif or libungif],
+AC_ARG_ENABLE(gif, AS_HELP_STRING([--disable-gif], [disable GIF support through libgif or libungif]),
 	gif=$enableval, gif=yes, gif=no)
 
 if test "$gif" = yes; then
@@ -762,7 +714,7 @@ fi
 dnl TIFF Support
 dnl ============
 AC_ARG_ENABLE(tiff, 
-[  --disable-tiff          disable use of TIFF images through libtiff],
+AS_HELP_STRING([--disable-tiff], [disable use of TIFF images through libtiff]),
 	tif=$enableval, tif=yes, tif=no)
 
 #
@@ -835,8 +787,7 @@ AC_CHECK_HEADERS(stdlib.h)
 
 dnl Support for PIXMAPDIR option
 dnl ============================
-AC_ARG_WITH(pixmapdir,
-[  --with-pixmapdir=PATH   specify where pixmaps are located [DATADIR/pixmaps]])
+AC_ARG_WITH(pixmapdir, AS_HELP_STRING([--with-pixmapdir=PATH], [specify where pixmaps are located [DATADIR/pixmaps]]))
 
 if test "x$with_pixmapdir" != "x"; then
 	pixmapdir=$with_pixmapdir
@@ -856,8 +807,7 @@ AC_DEFINE_UNQUOTED(SYSCONFDIR, "$_sysconfdir", [where the configuration is store
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
 dnl ==============================================
 
-AC_ARG_WITH(appspath,
-[  --with-gnustepdir=PATH  specify the directory for GNUstep applications])
+AC_ARG_WITH(appspath, AS_HELP_STRING([--with-gnustepdir=PATH], [specify the directory for GNUstep applications]))
 
 if test "x`echo $with_gnustepdir | grep ^/`" != "x"; then
     appspath=$with_gnustepdir
@@ -886,14 +836,11 @@ AC_SUBST(wprefs_bindir)
 
 dnl Enable User Defined Menu thing
 dnl ==================================
-AC_ARG_ENABLE(usermenu,
-[  --enable-usermenu       user defined menus for applications
-],
+AC_ARG_ENABLE(usermenu, AS_HELP_STRING([--enable-usermenu], [user defined menus for applications]),
 if test "$enableval" = yes; then
 	AC_DEFINE(USER_MENU, 1, [define if you want user defined menus for applications])
 fi
 )
-
 
 AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile \
 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
@@ -911,11 +858,8 @@ AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile \
 	WPrefs.app/po/Makefile )
 
 
-
-dnl
 dnl Output some helpful data for compiling wraster and WINGs/WUtil apps
 dnl ===================================================================
-dnl
 
 dnl echo "WFLAGS=\"$LIBPL_INC_PATH -I$prefix/include\"" > WINGs-flags
 dnl echo "WLIBS=\"-L$exec_prefix/lib -lWINGs -lwraster $LIBPL_LIBS $GFXLIBS -lm\""\
