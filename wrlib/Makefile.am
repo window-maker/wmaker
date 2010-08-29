@@ -10,6 +10,10 @@ lib_LTLIBRARIES = libwraster.la
 
 libwraster_la_LDFLAGS = -version-info @WRASTER_VERSION@
 
+if HAVE_LD_VERSION_SCRIPT
+libwraster_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libwraster.map
+endif
+
 bin_SCRIPTS = get-wraster-flags
 
 include_HEADERS = wraster.h

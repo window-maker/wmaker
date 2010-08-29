@@ -837,6 +837,8 @@ if test "$enableval" = yes; then
 fi
 )
 
+gl_LD_VERSION_SCRIPT
+
 AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile \
 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
 	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
