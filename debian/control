@@ -6,7 +6,8 @@ Standards-Version: 3.8.0.1
 Build-Depends: debhelper (>= 7.0.15), automake, gettext, dctrl-tools,
  libfontconfig1-dev, libjpeg-dev, libpng12-dev, libsm-dev, libtiff4-dev,
  libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev,
- libxkbfile-dev, libxpm-dev, libxt-dev, libxrender-dev, sharutils, libxmu-dev
+ libxkbfile-dev, libxpm-dev, libxt-dev, libxrender-dev, sharutils, libxmu-dev,
+ libxrandr-dev
 Homepage: http://www.windowmaker.info/
 
 Package: wmaker

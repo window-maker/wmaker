@@ -31,6 +31,8 @@ wmaker (0.92.0+git-0) unstable; urgency=low
   * Implement the switch from SelectWindowsMouseButton et al. to
     MouseLeftButtonAction = SelectWindows from WindowMaker 0.65 in Debian's
     customized defaults. Closes: #116963
+  * Add libxrandr-dev to build-depends, enabling automatic wmaker restart on
+    resolution changes.
   * Built from wmaker-crm fork.
     Includes these patches for these issues:
     + display corruption on non 24bpp displays. Closes: #514438
