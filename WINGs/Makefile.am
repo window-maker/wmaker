@@ -4,8 +4,8 @@ AUTOMAKE_OPTIONS = no-dependencies
 
 SUBDIRS = WINGs . po Documentation Resources
 
-libWINGs_la_LDFLAGS = -version-info 2:1:0
-libWUtil_la_LDFLAGS = -version-info 1:2:0
+libWINGs_la_LDFLAGS = -version-info @WINGS_VERSION@
+libWUtil_la_LDFLAGS = -version-info @WUTIL_VERSION@
 
 bin_SCRIPTS = get-wings-flags get-wutil-flags
 

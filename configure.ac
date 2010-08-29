@@ -17,6 +17,48 @@ AC_CONFIG_MACRO_DIR([m4])
 AM_CONFIG_HEADER(src/config.h)
 AM_INIT_AUTOMAKE([1.11 silent-rules])
 
+dnl libtool library versioning
+dnl =======================
+dnl
+dnl current
+dnl revision
+dnl age
+dnl
+dnl 1. Start with version information of ‘0:0:0’ for each libtool library.
+dnl 2. Update the version information only immediately before a public
+dnl release of your software. More frequent updates are unnecessary, and
+dnl only guarantee that the current interface number gets larger faster.
+dnl 3. If the library source code has changed at all since the last
+dnl update, then increment revision (‘c:r:a’ becomes ‘c:r+1:a’).
+dnl 4. If any interfaces have been added, removed, or changed since the
+dnl last update, increment current, and set revision to 0.
+dnl 5. If any interfaces have been added since the last public release,
+dnl then increment age.
+dnl 6. If any interfaces have been removed or changed since the last
+dnl public release, then set age to 0.
+dnl
+dnl libwraster
+WRASTER_CURRENT=4
+WRASTER_REVISION=0
+WRASTER_AGE=1
+WRASTER_VERSION=$WRASTER_CURRENT:$WRASTER_REVISION:$WRASTER_AGE
+AC_SUBST(WRASTER_VERSION)
+dnl
+dnl libWINGs
+WINGS_CURRENT=2
+WINGS_REVISION=1
+WINGS_AGE=0
+WINGS_VERSION=$WINGS_CURRENT:$WINGS_REVISION:$WINGS_AGE
+AC_SUBST(WINGS_VERSION)
+dnl
+dnl libWUtil
+WUTIL_CURRENT=1
+WUTIL_REVISION=2
+WUTIL_AGE=0
+WUTIL_VERSION=$WUTIL_CURRENT:$WUTIL_REVISION:$WUTIL_AGE
+AC_SUBST(WUTIL_VERSION)
+
+
 dnl Checks for host/os name
 dnl =======================
 dnl AC_CANONICAL_HOST -- already done by AC_PROG_LIBTOOL

@@ -8,7 +8,7 @@ EXTRA_DIST = tests
 
 lib_LTLIBRARIES = libwraster.la
 
-libwraster_la_LDFLAGS = -version-info 4:0:1
+libwraster_la_LDFLAGS = -version-info @WRASTER_VERSION@
 
 bin_SCRIPTS = get-wraster-flags
 
