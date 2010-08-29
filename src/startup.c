@@ -702,8 +702,6 @@ void StartUp(Bool defaultScreenOnly)
 
 #ifdef HAVE_XRANDR
 	has_randr = XRRQueryExtension(dpy, &randr_event_base, &dummy);
-#else
-	has_randr = false;
 #endif
 
 #ifdef KEEP_XKB_LOCK_STATUS
