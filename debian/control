@@ -87,3 +87,14 @@ Description: Window Maker's own widget set - runtime library
  the WindowMaker window manager.
  .
  This package contains the libWINGs runtime library.
+
+Package: wmaker-dbg
+Architecture: any
+Section: debug
+Priority: extra
+Depends: libwraster3 (= ${binary:Version}) | libwings2 (= ${binary:Version}) |
+ libwutil1 (= ${binary:Version}) | wmaker (= ${binary:Version}),
+ ${misc:Depends}
+Description: debugging symbols for WindowMaker packages
+ This package contains debugging symbols for Window Maker and its core
+ libraries (libWINGs, libWutils, libwraster).

@@ -179,7 +179,7 @@ binary-arch: build
 	dh_installman -a
 	dh_installchangelogs -a ChangeLog
 	dh_link -a
-#	dh_strip -a
+	dh_strip -a --dbg-package=wmaker-dbg
 	dh_lintian
 	dh_compress -a
 	dh_fixperms -a
