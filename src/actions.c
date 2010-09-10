@@ -1216,6 +1216,54 @@ static void hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int a
 	WMPostNotificationName(WMNChangedState, wwin, "hide");
 }
 
+void wHideAll(WScreen *scr)
+{
+	WWindow *wwin;
+	WWindow **windows;
+	Window FocusedWin;
+	WMenu *menu;
+	unsigned int wcount = 0;
+	int FocusState;
+	int i;
+
+	if (!scr)
+		return;
+
+	menu = scr->switch_menu;
+
+	windows = malloc(sizeof(WWindow *));
+
+	if (menu != NULL) {
+		for (i = 0; i < menu->entry_no; i++) {
+			windows[wcount] = (WWindow *) menu->entries[i]->clientdata;
+			wcount++;
+			windows = realloc(windows, sizeof(WWindow *) * (wcount+1));
+		}
+	} else {
+		wwin = scr->focused_window;
+
+		while (wwin) {
+			windows[wcount] = wwin;
+			wcount++;
+			windows = realloc(windows, sizeof(WWindow *) * (wcount+1));
+			wwin = wwin->prev;
+
+		}
+	}
+
+	for (i = 0; i < wcount; i++) {
+		wwin = windows[i];
+		if (wwin->frame->workspace == scr->current_workspace
+		    && !(wwin->flags.miniaturized || wwin->flags.hidden)
+		    && !wwin->flags.internal_window
+		    && !WFLAGP(wwin, no_miniaturizable)
+		   ) {
+			wwin->flags.skip_next_animation = 1;
+			wIconifyWindow(wwin);
+		}
+	}
+}
+
 void wHideOtherApplications(WWindow *awin)
 {
 	WWindow *wwin;

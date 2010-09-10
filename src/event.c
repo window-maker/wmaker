@@ -1402,6 +1402,10 @@ static void handleKeyPress(XEvent * event)
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin))
 			OpenWindowMenu(wwin, wwin->frame_x, wwin->frame_y + wwin->frame->top_width, True);
 		break;
+	case WKBD_MINIMIZEALL:
+		CloseWindowMenu(scr);
+		wHideAll(scr);
+		break;
 	case WKBD_MINIATURIZE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin)
 		    && !WFLAGP(wwin, no_miniaturizable)) {

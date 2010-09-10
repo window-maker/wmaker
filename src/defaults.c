@@ -516,6 +516,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"MiniaturizeKey", "None", (void *)WKBD_MINIATURIZE,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MinimizeAllKey", "None", (void *)WKBD_MINIMIZEALL,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL },
 	{"HideKey", "None", (void *)WKBD_HIDE,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"HideOthersKey", "None", (void *)WKBD_HIDE_OTHERS,
