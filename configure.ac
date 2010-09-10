@@ -368,6 +368,11 @@ if test "x$NLSDIR" = "x"; then
 	fi
 fi
 
+AC_ARG_WITH(menu-textdomain, AS_HELP_STRING([--with-menu-textdomain=DOMAIN], [specify gettext domain used for menu translations]),
+	[if test "x$withval" != "xno"; then
+	 AC_DEFINE_UNQUOTED([MENU_TEXTDOMAIN], ["$withval"], [gettext domain used for menu translations])
+	 fi])
+
 AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
 AC_SUBST(MOFILES)

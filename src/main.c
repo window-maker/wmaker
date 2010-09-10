@@ -711,11 +711,21 @@ static int real_main(int argc, char **argv)
 	if (!Locale || strcmp(Locale, "C") == 0 || strcmp(Locale, "POSIX") == 0)
 		Locale = NULL;
 #ifdef I18N
-	if (getenv("NLSPATH"))
+	if (getenv("NLSPATH")) {
 		bindtextdomain("WindowMaker", getenv("NLSPATH"));
-	else
+#if defined(MENU_TEXTDOMAIN)
+		bindtextdomain(MENU_TEXTDOMAIN, getenv("NLSPATH"));
+#endif
+	} else {
 		bindtextdomain("WindowMaker", LOCALEDIR);
+#if defined(MENU_TEXTDOMAIN)
+		bindtextdomain(MENU_TEXTDOMAIN, LOCALEDIR);
+#endif
+	}
 	bind_textdomain_codeset("WindowMaker", "UTF-8");
+#if defined(MENU_TEXTDOMAIN)
+	bind_textdomain_codeset(MENU_TEXTDOMAIN, "UTF-8");
+#endif
 	textdomain("WindowMaker");
 
 	if (!XSupportsLocale()) {
