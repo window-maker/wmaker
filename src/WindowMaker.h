@@ -228,6 +228,10 @@ typedef enum {
 #define WD_BOTTOMLEFT	6
 #define WD_BOTTOMRIGHT	7
 
+/* titlebar style */
+#define TS_NEW		0
+#define TS_OLD		1
+#define TS_NEXT		2
 
 /* workspace border position */
 #define	WB_NONE		0

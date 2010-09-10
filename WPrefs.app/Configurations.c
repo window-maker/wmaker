@@ -41,6 +41,7 @@ typedef struct _Panel {
 	WMFrame *titlF;
 	WMButton *oldsB;
 	WMButton *newsB;
+	WMButton *nextB;
 
 	WMFrame *animF;
 	WMButton *animB;
@@ -63,6 +64,7 @@ typedef struct _Panel {
 #define ICON_FILE	"configs"
 #define OLDS_IMAGE	"oldstyle"
 #define NEWS_IMAGE	"newstyle"
+#define NEXT_IMAGE	"nextstyle"
 #define ANIM_IMAGE	"animations"
 #define SUPERF_IMAGE	"moreanim"
 #define SMOOTH_IMAGE	"smooth"
@@ -74,13 +76,19 @@ static void updateLabel(WMWidget *self, void *data);
 
 static void showData(_Panel *panel)
 {
+	char *str;
+
 	WMPerformButtonClick(panel->icoB[GetSpeedForKey("IconSlideSpeed")]);
 	WMPerformButtonClick(panel->shaB[GetSpeedForKey("ShadeSpeed")]);
 
-	if (GetBoolForKey("NewStyle"))
-		WMPerformButtonClick(panel->newsB);
-	else
+	str = GetStringForKey("Newstyle");
+	if (str && strcasecmp(str, "next") == 0) {
+		WMPerformButtonClick(panel->nextB);
+	} else if (str && strcasecmp(str, "old") == 0) {
 		WMPerformButtonClick(panel->oldsB);
+	} else {
+		WMPerformButtonClick(panel->newsB);
+	}
 
 	WMSetButtonSelected(panel->animB, !GetBoolForKey("DisableAnimations"));
 	WMSetButtonSelected(panel->supB, GetBoolForKey("Superfluous"));
@@ -287,10 +295,11 @@ static void createPanel(Panel *p)
 			WMSetButtonImage(panel->newsB, icon);
 			WMReleasePixmap(icon);
 		}
+		wfree(path);
 	}
 
 	panel->oldsB = WMCreateButton(panel->titlF, WBTOnOff);
-	WMResizeWidget(panel->oldsB, 74, 40);
+    WMResizeWidget(panel->oldsB, 37, 40);
 	WMMoveWidget(panel->oldsB, 15, 60);
 	WMSetButtonImagePosition(panel->oldsB, WIPImageOnly);
 	path = LocateImage(OLDS_IMAGE);
@@ -303,7 +312,22 @@ static void createPanel(Panel *p)
 		wfree(path);
 	}
 
+	panel->nextB = WMCreateButton(panel->titlF, WBTOnOff);
+	WMResizeWidget(panel->nextB, 37, 40);
+	WMMoveWidget(panel->nextB, 52, 60);
+	WMSetButtonImagePosition(panel->nextB, WIPImageOnly);
+	path = LocateImage(NEXT_IMAGE);
+	if (path) {
+		icon = WMCreatePixmapFromFile(scr, path);
+		if (icon) {
+			WMSetButtonImage(panel->nextB, icon);
+			WMReleasePixmap(icon);
+		}
+		wfree(path);
+	}
+
 	WMGroupButtons(panel->newsB, panel->oldsB);
+	WMGroupButtons(panel->newsB, panel->nextB);
 
 	WMMapSubwidgets(panel->titlF);
 
@@ -425,7 +449,13 @@ static void storeData(_Panel *panel)
 	}
 	SetSpeedForKey(i, "ShadeSpeed");
 
-	SetBoolForKey(WMGetButtonSelected(panel->newsB), "NewStyle");
+	if (WMGetButtonSelected(panel->newsB)) {
+		SetStringForKey("new", "NewStyle");
+	} else if (WMGetButtonSelected(panel->oldsB)) {
+		SetStringForKey("old", "NewStyle");
+	} else {
+		SetStringForKey("next", "NewStyle");
+	}
 	SetBoolForKey(!WMGetButtonSelected(panel->animB), "DisableAnimations");
 	SetBoolForKey(WMGetButtonSelected(panel->supB), "Superfluous");
 	SetBoolForKey(WMGetButtonSelected(panel->smoB), "SmoothWorkspaceBack");

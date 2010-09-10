@@ -491,7 +491,7 @@ void wMenuRealize(WMenu * menu)
 	if (menu->flags.titled) {
 		twidth = WMWidthOfString(scr->menu_title_font, menu->frame->title, strlen(menu->frame->title));
 		theight = menu->frame->top_width;
-		twidth += theight + (wPreferences.new_style ? 16 : 8);
+		twidth += theight + (wPreferences.new_style == TS_NEW ? 16 : 8);
 	} else {
 		twidth = 0;
 		theight = 0;

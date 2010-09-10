@@ -148,40 +148,72 @@ static void allocButtonPixmaps(WScreen * scr)
 	WPixmap *pix;
 
 	/* create predefined pixmaps */
-	pix = wPixmapCreateFromXPMData(scr, PRED_CLOSE_XPM);
+	if (wPreferences.new_style == TS_NEXT) {
+		pix = wPixmapCreateFromXPMData(scr, NEXT_CLOSE_XPM);
+	} else {
+		pix = wPixmapCreateFromXPMData(scr, PRED_CLOSE_XPM);
+	}
 	if (pix)
 		pix->shared = 1;
 	scr->b_pixmaps[WBUT_CLOSE] = pix;
 
-	pix = wPixmapCreateFromXPMData(scr, PRED_BROKEN_CLOSE_XPM);
+	if (wPreferences.new_style == TS_NEXT) {
+		pix = wPixmapCreateFromXPMData(scr, NEXT_BROKEN_CLOSE_XPM);
+	} else {
+		pix = wPixmapCreateFromXPMData(scr, PRED_BROKEN_CLOSE_XPM);
+	}
 	if (pix)
 		pix->shared = 1;
 	scr->b_pixmaps[WBUT_BROKENCLOSE] = pix;
 
-	pix = wPixmapCreateFromXPMData(scr, PRED_ICONIFY_XPM);
+	if (wPreferences.new_style == TS_NEXT) {
+		pix = wPixmapCreateFromXPMData(scr, NEXT_ICONIFY_XPM);
+	} else {
+		pix = wPixmapCreateFromXPMData(scr, PRED_ICONIFY_XPM);
+	}
 	if (pix)
 		pix->shared = 1;
 	scr->b_pixmaps[WBUT_ICONIFY] = pix;
 #ifdef XKB_BUTTON_HINT
-	pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP1_XPM);
+	if (wPreferences.new_style == TS_NEXT) {
+		pix = wPixmapCreateFromXPMData(scr, NEXT_XKBGROUP1_XPM);
+	} else {
+		pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP1_XPM);
+	}
 	if (pix)
 		pix->shared = 1;
 	scr->b_pixmaps[WBUT_XKBGROUP1] = pix;
-	pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP2_XPM);
+	if (wPreferences.new_style == TS_NEXT) {
+		pix = wPixmapCreateFromXPMData(scr, NEXT_XKBGROUP2_XPM);
+	} else {
+		pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP2_XPM);
+	}
 	if (pix)
 		pix->shared = 1;
 	scr->b_pixmaps[WBUT_XKBGROUP2] = pix;
-	pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP3_XPM);
+	if (wPreferences.new_style == TS_NEXT) {
+		pix = wPixmapCreateFromXPMData(scr, NEXT_XKBGROUP3_XPM);
+	} else {
+		pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP3_XPM);
+	}
 	if (pix)
 		pix->shared = 1;
 	scr->b_pixmaps[WBUT_XKBGROUP3] = pix;
-	pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP4_XPM);
+	if (wPreferences.new_style == TS_NEXT) {
+		pix = wPixmapCreateFromXPMData(scr, NEXT_XKBGROUP4_XPM);
+	} else {
+		pix = wPixmapCreateFromXPMData(scr, PRED_XKBGROUP4_XPM);
+	}
 	if (pix)
 		pix->shared = 1;
 	scr->b_pixmaps[WBUT_XKBGROUP4] = pix;
 #endif
 
-	pix = wPixmapCreateFromXPMData(scr, PRED_KILL_XPM);
+	if (wPreferences.new_style == TS_NEXT) {
+		pix = wPixmapCreateFromXPMData(scr, NEXT_KILL_XPM);
+	} else {
+		pix = wPixmapCreateFromXPMData(scr, PRED_KILL_XPM);
+	}
 	if (pix)
 		pix->shared = 1;
 	scr->b_pixmaps[WBUT_KILL] = pix;

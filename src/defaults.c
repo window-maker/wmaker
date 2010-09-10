@@ -185,6 +185,11 @@ static WOptionEnumeration seFocusModes[] = {
 	{NULL, 0, 0}
 };
 
+static WOptionEnumeration seTitlebarModes[] = {
+	{"new", TS_NEW, 0}, {"old", TS_OLD, 0},
+	{"next", TS_NEXT, 0}, {NULL, 0, 0}
+};
+
 static WOptionEnumeration seColormapModes[] = {
 	{"Manual", WCM_CLICK, 0}, {"ClickToFocus", WCM_CLICK, 1},
 	{"Auto", WCM_POINTER, 0}, {"FocusFollowMouse", WCM_POINTER, 1},
@@ -311,8 +316,8 @@ WDefaultEntry staticOptionList[] = {
 	    &wPreferences.disable_root_mouse, getBool, NULL, NULL, NULL},
 	{"FocusMode", "manual", seFocusModes,				/* have a problem when switching from */
 	    &wPreferences.focus_mode, getEnum, NULL, NULL, NULL},	/* manual to sloppy without restart */
-	{"NewStyle", "NO", NULL,
-	    &wPreferences.new_style, getBool, NULL, NULL, NULL},
+	{"NewStyle", "new", seTitlebarModes,
+	    &wPreferences.new_style, getEnum, NULL, NULL, NULL},
 	{"DisableDock", "NO", (void *)WM_DOCK,
 	    NULL, getBool, setIfDockPresent, NULL, NULL},
 	{"DisableClip", "NO", (void *)WM_CLIP,

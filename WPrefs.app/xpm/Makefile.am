@@ -28,6 +28,7 @@ EXTRA_DIST = \
 	msty2.xpm \
 	msty3.xpm \
 	newstyle.xpm \
+	nextstyle.xpm \
 	nonopaque.xpm \
 	oldstyle.xpm \
 	opaque.xpm \

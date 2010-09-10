@@ -28,6 +28,7 @@ EXTRA_DIST = \
 	msty2.tiff \
 	msty3.tiff \
 	newstyle.tiff \
+	nextstyle.tiff \
 	nonopaque.tiff \
 	oldstyle.tiff \
 	opaque.tiff \
