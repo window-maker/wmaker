@@ -1200,6 +1200,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 					raise = True;
 				}
 			}
+			wAppBounce(app);
 		}
 	}
 

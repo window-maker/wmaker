@@ -39,6 +39,7 @@
 #include "framewin.h"
 #include "window.h"
 #include "actions.h"
+#include "xinerama.h"
 
 extern WPreferences wPreferences;
 
@@ -249,5 +250,156 @@ void DoWindowBirth(WWindow *wwin)
 void DoWindowBirth(WWindow *wwin)
 {
 	/* dummy stub */
+}
+#endif
+
+#ifdef BOUNCE_APP
+
+#define BOUNCE_HZ	25
+#define BOUNCE_DELAY	(1000/BOUNCE_HZ)
+#define BOUNCE_HEIGHT	24
+#define BOUNCE_LENGTH	0.3
+#define BOUNCE_DAMP	0.6
+
+typedef struct AppBouncerData {
+	WApplication *wapp;
+	int count;
+	int pow;
+	int dir;
+	WMHandlerID *timer;
+} AppBouncerData;
+
+static void doAppBounce(void *arg)
+{
+	AppBouncerData *data = (AppBouncerData*)arg;
+	WAppIcon *aicon = data->wapp->app_icon;
+
+reinit:
+	if (aicon && data->wapp->refcount > 1) {
+		const double ticks = BOUNCE_HZ * BOUNCE_LENGTH;
+		const double s = sqrt(BOUNCE_HEIGHT)/(ticks/2);
+		double h = BOUNCE_HEIGHT*pow(BOUNCE_DAMP, data->pow);
+		double sqrt_h = sqrt(h);
+		if (h > 3) {
+			double offset, x = s * data->count - sqrt_h;
+			if (x > sqrt_h) {
+				++data->pow;
+				data->count = 0;
+				goto reinit;
+			} else ++data->count;
+			offset = h - x*x;
+
+			switch (data->dir) {
+			case 0: /* left, bounce to right */
+				XMoveWindow(dpy, aicon->icon->core->window,
+					    aicon->x_pos + (int)offset, aicon->y_pos);
+				break;
+			case 1: /* right, bounce to left */
+				XMoveWindow(dpy, aicon->icon->core->window,
+					    aicon->x_pos - (int)offset, aicon->y_pos);
+				break;
+			case 2: /* top, bounce down */
+				XMoveWindow(dpy, aicon->icon->core->window,
+					    aicon->x_pos, aicon->y_pos + (int)offset);
+				break;
+			case 3: /* bottom, bounce up */
+				XMoveWindow(dpy, aicon->icon->core->window,
+					    aicon->x_pos, aicon->y_pos - (int)offset);
+				break;
+			}
+			return;
+		}
+		XMoveWindow(dpy, aicon->icon->core->window,
+			    aicon->x_pos, aicon->y_pos);
+	}
+
+	data->wapp->flags.bouncing = 0;
+	WMDeleteTimerHandler(data->timer);
+	wApplicationDestroy(data->wapp);
+	free(data);
+}
+
+static int bounceDirection(WAppIcon *aicon)
+{
+	enum { left_e = 1, right_e = 2, top_e = 4, bottom_e = 8 };
+
+	WScreen *scr = aicon->icon->core->screen_ptr;
+	WMRect rr, sr;
+	int l, r, t, b, h, v;
+	int dir = 0;
+
+	rr.pos.x = aicon->x_pos;
+	rr.pos.y = aicon->y_pos;
+	rr.size.width = rr.size.height = 64;
+
+	sr = wGetRectForHead(scr, wGetHeadForRect(scr, rr));
+
+	l = rr.pos.x - sr.pos.x;
+	r = sr.pos.x + sr.size.width - rr.pos.x - rr.size.width;
+	t = rr.pos.y - sr.pos.y;
+	b = sr.pos.y + sr.size.height - rr.pos.y - rr.size.height;
+
+	if (l < r) {
+		dir |= left_e;
+		h = l;
+	} else {
+		dir |= right_e;
+		h = r;
+	}
+
+	if (t < b) {
+		dir |= top_e;
+		v = t;
+	} else {
+		dir |= bottom_e;
+		v = b;
+	}
+
+	if (h < v) dir &= ~(top_e | bottom_e);
+	else dir &= ~(left_e | right_e);
+
+	switch (dir) {
+	case left_e:
+		dir = 0;
+		break;
+
+	case right_e:
+		dir = 1;
+		break;
+
+	case top_e:
+		dir = 2;
+		break;
+
+	case bottom_e:
+		dir = 3;
+		break;
+
+	default:
+		wwarning(_("Impossible direction: %d\n"), dir);
+		dir = 3;
+		break;
+	}
+
+	return dir;
+}
+
+void wAppBounce(WApplication *wapp)
+{
+	if (wapp->app_icon && !wapp->flags.bouncing) {
+		++wapp->refcount;
+		wapp->flags.bouncing = 1;
+
+		AppBouncerData *data = (AppBouncerData *)malloc(sizeof(AppBouncerData));
+		data->wapp = wapp;
+		data->count = data->pow = 0;
+		data->dir = bounceDirection(wapp->app_icon);
+		data->timer = WMAddPersistentTimerHandler(BOUNCE_DELAY, doAppBounce, data);
+	}
+}
+
+#else
+void wAppBounce(WApplication *wapp)
+{
 }
 #endif
