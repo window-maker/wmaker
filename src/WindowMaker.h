@@ -422,6 +422,8 @@ typedef struct WPreferences {
     RImage *swtileImage;
     RImage *swbackImage[9];
 
+    int show_clip_title;
+
     struct {
         unsigned int nodock:1;	       /* don't display the dock */
         unsigned int noclip:1;         /* don't display the clip */

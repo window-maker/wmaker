@@ -1181,7 +1181,8 @@ void wClipIconPaint(WAppIcon * aicon)
 
 	tx = CLIP_BUTTON_SIZE * ICON_SIZE / 64;
 
-	WMDrawString(scr->wmscreen, win, color, scr->clip_title_font, tx, ty, ws_name, length);
+	if(wPreferences.show_clip_title)
+		WMDrawString(scr->wmscreen, win, color, scr->clip_title_font, tx, ty, ws_name, length);
 	/*WMDrawString(scr->wmscreen, win, color, scr->clip_title_font, 4,
 	   2, ws_name, length); */
 

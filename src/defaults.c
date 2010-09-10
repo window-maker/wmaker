@@ -466,6 +466,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getFont, setIconTitleFont, NULL, NULL},
 	{"ClipTitleFont", DEF_CLIP_TITLE_FONT, NULL,
 	    NULL, getFont, setClipTitleFont, NULL, NULL},
+	{"ShowClipTitle", "YES", NULL,
+		&wPreferences.show_clip_title, getBool, NULL, NULL, NULL},
 	{"LargeDisplayFont", DEF_WORKSPACE_NAME_FONT, NULL,
 	    NULL, getFont, setLargeDisplayFont, NULL, NULL},
 	{"HighlightColor", "white", NULL,
