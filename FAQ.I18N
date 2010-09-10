@@ -51,7 +51,7 @@ If I18N support does not work for you, check these:
 
           However, please note that if your font is something like:
 
-          	"Trebuchet MS,Luxi Sans,sans:pixelsize=12"
+		"Trebuchet MS,sans serif:pixelsize=12"
 
 	  this will not be able to display asian languages if any of the
           previous fonts before sans are installed. This is because unlike

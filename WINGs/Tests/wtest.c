@@ -563,7 +563,7 @@ void testText(WMScreen * scr)
 	WMSetTextEditable(text, False);
 	WMSetTextIgnoresNewline(text, False);
 
-#define FNAME "Verdana,Luxi Sans:pixelsize=12"
+#define FNAME "Verdana,sans serif:pixelsize=12"
 #define MSG \
     "Window Maker is the GNU window manager for the " \
     "X Window System. It was designed to emulate the " \
