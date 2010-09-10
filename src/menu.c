@@ -1776,6 +1776,7 @@ static void delaySelection(void *data)
 
 static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 {
+	WWindow *wwin;
 	XButtonEvent *bev = &event->xbutton;
 	WMenu *menu = desc->parent;
 	WMenu *smenu;
@@ -1856,7 +1857,22 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 			}
 
 		} else if (!delayed_select) {
-			selectEntry(menu, entry_no);
+			if (menu == scr->switch_menu && event->xbutton.button == Button3) {
+				selectEntry(menu, entry_no);
+				OpenWindowMenu2((WWindow *)entry->clientdata,
+								event->xbutton.x_root,
+								event->xbutton.y_root, False);
+				wwin = (WWindow *)entry->clientdata;
+				desc = &wwin->screen_ptr->window_menu->menu->descriptor;
+				event->xany.send_event = True;
+				(*desc->handle_mousedown)(desc, event);
+
+				XUngrabPointer(dpy, CurrentTime);
+				selectEntry(menu, -1);
+				return;
+			} else {
+				selectEntry(menu, entry_no);
+			}
 		}
 
 		if (!wPreferences.wrap_menus && !wPreferences.scrollable_menus) {
