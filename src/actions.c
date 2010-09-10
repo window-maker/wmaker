@@ -1415,11 +1415,11 @@ void wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurren
 				if (bringToCurrentWS)
 					wWindowChangeWorkspace(wlist, scr->current_workspace);
 				wlist->flags.hidden = 0;
+				wRaiseFrame(wlist->frame->core);
 				if (wlist->frame->workspace == scr->current_workspace) {
 					XMapWindow(dpy, wlist->frame->core->window);
 					if (miniwindows) {
 						wUnshadeWindow(wlist);
-						wRaiseFrame(wlist->frame->core);
 					}
 				}
 				WMPostNotificationName(WMNChangedState, wlist, "hide");
