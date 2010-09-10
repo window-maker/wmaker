@@ -411,6 +411,8 @@ void RHSVtoRGB(RHSVColor *hsv, RColor *rgb);
  */
 void RClearImage(RImage *image, RColor *color);
 
+void RLightImage(RImage *image, RColor *color);
+
 void RFillImage(RImage *image, RColor *color);
 
 void RBevelImage(RImage *image, int bevel_type);

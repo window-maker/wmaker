@@ -140,7 +140,7 @@ void RClearImage(RImage * image, RColor * color)
 		}
 	} else {
 		int bytes = image->width * image->height;
-		int alpha, nalpha, r, g, b;
+		int alpha, nalpha, r, g, b, s;
 
 		alpha = color->alpha;
 		r = color->red * alpha;
@@ -148,16 +148,49 @@ void RClearImage(RImage * image, RColor * color)
 		b = color->blue * alpha;
 		nalpha = 255 - alpha;
 
-		for (i = 0; i < bytes; i++) {
-			*d = (((int)*d * nalpha) + r) / 256;
-			d++;
-			*d = (((int)*d * nalpha) + g) / 256;
-			d++;
-			*d = (((int)*d * nalpha) + b) / 256;
-			d++;
-			if (image->format == RRGBAFormat) {
-				d++;
-			}
+		s = (image->format == RRGBAFormat) ? 4 : 3;
+
+		for (i = 0; i < bytes; i++, d += s) {
+			d[0] = (((int)d[0] * nalpha) + r)/256;
+			d[1] = (((int)d[1] * nalpha) + g)/256;
+			d[2] = (((int)d[2] * nalpha) + b)/256;
+		}
+	}
+}
+
+static __inline__ unsigned char clip(int c)
+{
+	if (c > 255)
+		c = 255;
+	return (unsigned char)c;
+}
+
+void RLightImage(RImage *image, RColor *color)
+{
+	unsigned char *d = image->data;
+	unsigned char *dd;
+	int alpha, r, g, b, s;
+
+	s = (image->format == RRGBAFormat) ? 4 : 3;
+	dd = d + s*image->width*image->height;
+
+	r = color->red;
+	g = color->green;
+	b = color->blue;
+
+	alpha = color->alpha;
+
+	if (r == 0 && g == 0 && b == 0) {
+		for (; d < dd; d += s) {
+			d[0] = clip(((int)d[0] * alpha)/128);
+			d[1] = clip(((int)d[1] * alpha)/128);
+			d[2] = clip(((int)d[2] * alpha)/128);
+		}
+	} else {
+		for (; d < dd; d += s) {
+			d[0] = clip((((int)d[0] * alpha) + r)/128);
+			d[1] = clip((((int)d[1] * alpha) + g)/128);
+			d[2] = clip((((int)d[2] * alpha) + b)/128);
 		}
 	}
 }

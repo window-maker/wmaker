@@ -279,7 +279,7 @@ static void drawIconTitle(WScreen * scr, Pixmap pixmap, int height)
 		  wPreferences.icon_size - 1, 0, wPreferences.icon_size - 1, height + 1);
 }
 
-static Pixmap makeIcon(WScreen * scr, RImage * icon, int titled, int shadowed, int tileType)
+static Pixmap makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int tileType, int highlighted)
 {
 	RImage *tile;
 	Pixmap pixmap;
@@ -321,6 +321,13 @@ static Pixmap makeIcon(WScreen * scr, RImage * icon, int titled, int shadowed, i
 		color.blue = scr->icon_back_texture->light.blue >> 8;
 		color.alpha = 150;	/* about 60% */
 		RClearImage(tile, &color);
+	}
+	if (highlighted) {
+		RColor color;
+
+		color.red = color.green = color.blue = 0;
+		color.alpha = 160;
+		RLightImage(tile, &color);
 	}
 
 	if (!RConvertImage(scr->rcontext, tile, &pixmap)) {
@@ -520,6 +527,18 @@ static void cycleColor(void *data)
 	icon->handlerID = WMAddTimerHandler(COLOR_CYCLE_DELAY, cycleColor, icon);
 }
 
+#ifdef NEWAPPICON
+void wIconSetHighlited(WIcon *icon, Bool flag)
+{
+	if (icon->highlighted == flag)
+		return;
+
+	icon->highlighted = flag;
+	icon->force_paint = True;
+	wIconPaint(icon);
+}
+#endif
+
 void wIconSelect(WIcon * icon)
 {
 	WScreen *scr = icon->core->screen_ptr;
@@ -669,7 +688,7 @@ void wIconUpdate(WIcon * icon)
 
 		if (icon->image) {
 			icon->pixmap = makeIcon(scr, icon->image, icon->show_title,
-						icon->shadowed, icon->tile_type);
+						icon->shadowed, icon->tile_type, icon->highlighted);
 		} else {
 			/* make default icons */
 
@@ -696,8 +715,8 @@ void wIconUpdate(WIcon * icon)
  make_icons:
 
 				image = wIconValidateIconSize(scr, image);
-				scr->def_icon_pixmap = makeIcon(scr, image, False, False, icon->tile_type);
-				scr->def_ticon_pixmap = makeIcon(scr, image, True, False, icon->tile_type);
+				scr->def_icon_pixmap = makeIcon(scr, image, False, False, icon->tile_type, icon->highlighted);
+				scr->def_ticon_pixmap = makeIcon(scr, image, True, False, icon->tile_type, icon->highlighted);
 				if (image)
 					RReleaseImage(image);
 			}

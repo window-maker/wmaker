@@ -50,6 +50,7 @@ LIBWRASTER3
     RGetSubImage;
     RGetXImage;
     RHSVtoRGB;
+    RLightImage;
     RLoadImage;
     RMakeCenteredImage;
     RMakeTiledImage;

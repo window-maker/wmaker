@@ -434,6 +434,8 @@ void wApplicationDestroy(WApplication * wapp)
 
 	XDeleteContext(dpy, wapp->main_window, wAppWinContext);
 	wAppMenuDestroy(wapp->menu);
+	wApplicationDeactivate(wapp);
+
 	if (wapp->app_icon) {
 		if (wapp->app_icon->docked && !wapp->app_icon->attracted) {
 			wapp->app_icon->running = 0;

@@ -62,5 +62,23 @@ void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance,
                                     char *wm_class);
 
 void wAppBounce(WApplication *);
-#endif
 
+#ifdef NEWAPPICON
+#define wApplicationActivate(wapp) do { \
+		if (wapp->app_icon) { \
+			wIconSetHighlited(wapp->app_icon->icon, True); \
+			wAppIconPaint(wapp->app_icon);\
+		} \
+	} while (0)
+#define wApplicationDeactivate(wapp) do { \
+		if (wapp->app_icon) { \
+			wIconSetHighlited(wapp->app_icon->icon, False); \
+			wAppIconPaint(wapp->app_icon);\
+		} \
+	} while (0)
+#else
+#define wApplicationActivate(wapp) do { } while (0)
+#define wApplicationDeactivate(wapp) do { } while (0)
+#endif /* NEWAPPICON */
+
+#endif
