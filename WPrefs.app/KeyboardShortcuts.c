@@ -71,6 +71,7 @@ static char *keyOptions[] = {
 	"HideKey",
 	"HideOthersKey",
 	"MiniaturizeKey",
+	"MinimizeAllKey",
 	"CloseKey",
 	"MaximizeKey",
 	"VMaximizeKey",
@@ -470,6 +471,7 @@ static void createPanel(Panel * p)
 	WMAddListItem(panel->actLs, _("Hide active application"));
 	WMAddListItem(panel->actLs, _("Hide other applications"));
 	WMAddListItem(panel->actLs, _("Miniaturize active window"));
+	WMAddListItem(panel->actLs, _("Miniaturize all windows"));
 	WMAddListItem(panel->actLs, _("Close active window"));
 	WMAddListItem(panel->actLs, _("Maximize active window"));
 	WMAddListItem(panel->actLs, _("Maximize active window vertically"));
