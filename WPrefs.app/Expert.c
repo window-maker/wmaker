@@ -32,7 +32,7 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMButton *swi[9];
+	WMButton *swi[10];
 
 } _Panel;
 
@@ -51,6 +51,7 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
 	WMSetButtonSelected(panel->swi[7], GetBoolForKey("SingleClickLaunch"));
 	WMSetButtonSelected(panel->swi[8], GetBoolForKey("CycleActiveHeadOnly"));
+	WMSetButtonSelected(panel->swi[9], GetBoolForKey("ShowClipTitle"));
 }
 
 static void createPanel(Panel * p)
@@ -90,6 +91,7 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->swi[6], _("Smooth font edges (needs restart)."));
 	WMSetButtonText(panel->swi[7], _("Launch applications and restore windows with a single click."));
 	WMSetButtonText(panel->swi[8], _("Cycle windows only on the active head."));
+	WMSetButtonText(panel->swi[9], _("Show workspace title on Clip."));
 
 	WMSetButtonEnabled(panel->swi[6], True);
 
@@ -115,6 +117,7 @@ static void storeDefaults(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "AntialiasedText");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "SingleClickLaunch");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[8]), "CycleActiveHeadOnly");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[9]), "ShowClipTitle");
 }
 
 Panel *InitExpert(WMScreen * scr, WMWidget * parent)
