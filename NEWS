@@ -65,6 +65,15 @@ your CPU unnecessarily (0 wakeups when idle, instead of 4).
 So if you edit the WMRootMenu file by hand (or by using 'wmgenmenu'),
 there is no need to restart wmaker for the changes to take effect.
 
+DockApp recognition
+-------------------
+
+In addition to applications with only Withdrawn windows, Window Maker
+will now treat any application with its WM_CLASS res_class set as
+"DockApp". This provides an easy workaround for toolkits like gtk+ that
+do not allow creation of windows with the initial_state member of
+XWMHints set to WithdrawnState.
+
 
 --- 0.92.0
 

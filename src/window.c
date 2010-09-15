@@ -677,6 +677,11 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		wwin->wm_gnustep_attr = NULL;
 	}
 
+	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "DockApp") == 0) {
+		wwin->flags.is_dockapp = 1;
+		withdraw = True;
+	}
+
 	wwin->client_leader = PropGetClientLeader(window);
 	if (wwin->client_leader != None)
 		wwin->main_window = wwin->client_leader;
@@ -692,6 +697,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 			} else if (wwin->wm_hints->initial_state == WithdrawnState) {
 
+				wwin->flags.is_dockapp = 1;
 				withdraw = True;
 			}
 		}
@@ -758,6 +764,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			WSETUFLAG(wwin, shared_appicon, 0);
 		}
 	}
+
+	if (wwin->flags.is_dockapp)
+		WSETUFLAG(wwin, shared_appicon, 0);
 
 	if (!withdraw && wwin->main_window && WFLAGP(wwin, shared_appicon)) {
 		char *buffer, *instance, *class;
