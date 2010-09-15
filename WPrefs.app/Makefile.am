@@ -1,6 +1,6 @@
 SUBDIRS = xpm tiff po
 
-AUTOMAKE_OPTIONS = no-dependencies
+AUTOMAKE_OPTIONS =
 
 wpexecbindir = @wprefs_bindir@
 

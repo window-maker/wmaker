@@ -1,6 +1,6 @@
 ## automake input file for WINGs
 
-AUTOMAKE_OPTIONS = no-dependencies
+AUTOMAKE_OPTIONS =
 
 SUBDIRS = WINGs . po Documentation Resources
 

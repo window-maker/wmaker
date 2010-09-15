@@ -1,6 +1,6 @@
 ## automake input file for WINGs - Examples
 
-AUTOMAKE_OPTIONS = no-dependencies
+AUTOMAKE_OPTIONS =
 
 
 noinst_PROGRAMS = connect server fontl puzzle colorpick

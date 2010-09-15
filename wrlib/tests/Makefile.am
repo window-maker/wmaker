@@ -1,6 +1,6 @@
 ## automake input file for wrlib
 
-AUTOMAKE_OPTIONS = no-dependencies
+AUTOMAKE_OPTIONS =
 
 noinst_PROGRAMS = testdraw testgrad testrot view
 

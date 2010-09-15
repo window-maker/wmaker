@@ -2,7 +2,7 @@
 
 SUBDIRS = .
 
-AUTOMAKE_OPTIONS = no-dependencies
+AUTOMAKE_OPTIONS =
 
 EXTRA_DIST = tests
 

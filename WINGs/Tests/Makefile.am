@@ -1,6 +1,6 @@
 ## automake input file for WINGs - Tests
 
-AUTOMAKE_OPTIONS = no-dependencies
+AUTOMAKE_OPTIONS =
 
 noinst_PROGRAMS = wtest wmquery wmfile testmywidget 
 

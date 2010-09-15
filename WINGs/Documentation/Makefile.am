@@ -1,6 +1,6 @@
 ## automake input file for WINGs - Documentation
 
-AUTOMAKE_OPTIONS = no-dependencies
+AUTOMAKE_OPTIONS =
 
 EXTRA_DIST =
 

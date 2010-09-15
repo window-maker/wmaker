@@ -1,6 +1,6 @@
 SUBDIRS = po
 
-AUTOMAKE_OPTIONS = no-dependencies
+AUTOMAKE_OPTIONS =
 
 pkgdatadir  = $(datadir)/@PACKAGE@
 

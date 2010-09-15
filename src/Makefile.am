@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = no-dependencies
+AUTOMAKE_OPTIONS =
 
 BUILT_SOURCES = wconfig.h
 
