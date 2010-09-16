@@ -42,6 +42,7 @@ typedef struct WApplication {
 
     int last_workspace;		       /* last workspace used to work on the
                                         * app */
+    WMHandlerID *urgent_bounce_timer;
     struct {
         unsigned int skip_next_animation:1;
         unsigned int hidden:1;
@@ -60,6 +61,7 @@ void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance,
                                     char *wm_class);
 
 void wAppBounce(WApplication *);
+void wAppBounceWhileUrgent(WApplication *);
 
 #ifdef NEWAPPICON
 #define wApplicationActivate(wapp) do { \

@@ -710,8 +710,10 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			wwin->group_id = None;
 		}
 
-		if (wwin->wm_hints->flags & UrgencyHint)
+		if (wwin->wm_hints->flags & UrgencyHint) {
 			wwin->flags.urgent = 1;
+			wAppBounceWhileUrgent(wApplicationOf(wwin->main_window));
+		}
 	} else {
 		wwin->group_id = None;
 	}

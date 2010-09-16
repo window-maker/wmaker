@@ -486,8 +486,9 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 				wwin->flags.urgent = 1;
 			else
 				wwin->flags.urgent = 0;
-			/*} else if (wwin->fake_group!=NULL) {
-			   wwin->group_id = wwin->fake_group->leader; */
+			wAppBounceWhileUrgent(wApplicationOf(wwin->main_window));
+		/*} else if (wwin->fake_group!=NULL) {
+			wwin->group_id = wwin->fake_group->leader; */
 		} else {
 			wwin->group_id = None;
 		}

@@ -258,6 +258,7 @@ void DoWindowBirth(WWindow *wwin)
 #define BOUNCE_HEIGHT	24
 #define BOUNCE_LENGTH	0.3
 #define BOUNCE_DAMP	0.6
+#define URGENT_BOUNCE_DELAY	3000
 
 typedef struct AppBouncerData {
 	WApplication *wapp;
@@ -398,5 +399,58 @@ void wAppBounce(WApplication *wapp)
 		data->count = data->pow = 0;
 		data->dir = bounceDirection(wapp->app_icon);
 		data->timer = WMAddPersistentTimerHandler(BOUNCE_DELAY, doAppBounce, data);
+	}
+}
+
+static int appIsUrgent(WApplication *wapp)
+{
+	WScreen *scr;
+	WWindow *wlist;
+
+	if (!wapp->main_window_desc) {
+		wwarning("group leader not found for window group");
+		return 0;
+	}
+	scr = wapp->main_window_desc->screen_ptr;
+	wlist = scr->focused_window;
+	if (!wlist)
+		return 0;
+
+	while (wlist) {
+		if (wlist->main_window == wapp->main_window) {
+			if (wlist->flags.urgent)
+				return 1;
+		}
+		wlist = wlist->prev;
+	}
+
+	return 0;
+}
+
+static void doAppUrgentBounce(void *arg)
+{
+	WApplication *wapp = (WApplication *)arg;
+
+	if (appIsUrgent(wapp)) {
+		wAppBounce(wapp);
+	} else {
+		WMDeleteTimerHandler(wapp->urgent_bounce_timer);
+		wapp->urgent_bounce_timer = NULL;
+	}
+}
+
+void wAppBounceWhileUrgent(WApplication *wapp)
+{
+	if (!wapp) return;
+	if (appIsUrgent(wapp)) {
+		if (!wapp->urgent_bounce_timer) {
+			wapp->urgent_bounce_timer = WMAddPersistentTimerHandler(URGENT_BOUNCE_DELAY, doAppUrgentBounce, wapp);
+			doAppUrgentBounce(wapp);
+		}
+	} else {
+		if (wapp->urgent_bounce_timer) {
+			WMDeleteTimerHandler(wapp->urgent_bounce_timer);
+			wapp->urgent_bounce_timer = NULL;
+		}
 	}
 }

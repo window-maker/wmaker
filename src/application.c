@@ -260,6 +260,7 @@ WApplication *wApplicationCreate(WWindow * wwin)
 
 	wapp->refcount = 1;
 	wapp->last_focused = NULL;
+	wapp->urgent_bounce_timer = NULL;
 
 	wapp->last_workspace = 0;
 
@@ -409,6 +410,10 @@ void wApplicationDestroy(WApplication * wapp)
 	if (wapp->refcount > 0)
 		return;
 
+	if (wapp->urgent_bounce_timer) {
+		WMDeleteTimerHandler(wapp->urgent_bounce_timer);
+		wapp->urgent_bounce_timer = NULL;
+	}
 	if (wapp->flags.bouncing) {
 		/* event.c:handleDestroyNotify forced this destroy
 		   and thereby overlooked the bounce callback */
