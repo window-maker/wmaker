@@ -355,8 +355,13 @@ static int bounceDirection(WAppIcon *aicon)
 		v = b;
 	}
 
-	if (h < v) dir &= ~(top_e | bottom_e);
-	else dir &= ~(left_e | right_e);
+	if (aicon->dock && abs(aicon->xindex) != abs(aicon->yindex)) {
+		if (abs(aicon->xindex) < abs(aicon->yindex)) dir &= ~(top_e | bottom_e);
+		else dir &= ~(left_e | right_e);
+	} else {
+		if (h < v) dir &= ~(top_e | bottom_e);
+		else dir &= ~(left_e | right_e);
+	}
 
 	switch (dir) {
 	case left_e:
