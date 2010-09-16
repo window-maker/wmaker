@@ -253,8 +253,6 @@ void DoWindowBirth(WWindow *wwin)
 }
 #endif
 
-#ifdef BOUNCE_APP
-
 #define BOUNCE_HZ	25
 #define BOUNCE_DELAY	(1000/BOUNCE_HZ)
 #define BOUNCE_HEIGHT	24
@@ -402,9 +400,3 @@ void wAppBounce(WApplication *wapp)
 		data->timer = WMAddPersistentTimerHandler(BOUNCE_DELAY, doAppBounce, data);
 	}
 }
-
-#else
-void wAppBounce(WApplication *wapp)
-{
-}
-#endif

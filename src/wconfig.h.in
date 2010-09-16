@@ -38,9 +38,6 @@
 /* If you want the application icon to be highlighted when it has the focus */
 #define NEWAPPICON
 
-/* If you want the application icon to bounce when opening a dialog etc */
-#define BOUNCE_APP
-
 /* undefine it if you don't want your config files to be preprocessed by cpp */
 #define USECPP
 

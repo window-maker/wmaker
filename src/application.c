@@ -409,14 +409,12 @@ void wApplicationDestroy(WApplication * wapp)
 	if (wapp->refcount > 0)
 		return;
 
-#ifdef BOUNCE_APP
 	if (wapp->flags.bouncing) {
 		/* event.c:handleDestroyNotify forced this destroy
 		   and thereby overlooked the bounce callback */
 		wapp->refcount = 1;
 		return;
 	}
-#endif
 
 	scr = wapp->main_window_desc->screen_ptr;
 	main_window = wapp->main_window;

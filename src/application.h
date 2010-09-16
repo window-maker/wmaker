@@ -46,9 +46,7 @@ typedef struct WApplication {
         unsigned int skip_next_animation:1;
         unsigned int hidden:1;
         unsigned int emulated:1;
-#ifdef BOUNCE_APP
         unsigned int bouncing:1;
-#endif
     } flags;
 } WApplication;
 
