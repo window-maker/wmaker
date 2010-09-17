@@ -509,7 +509,7 @@ static void createPanel(_Panel * p)
 		data->param.exec.command = "eterm";
 
 		data = putNewItem(panel, pad, ExecInfo, _("Run..."));
-		data->param.exec.command = _("%a(Run,Type command to run)");
+		data->param.exec.command = _("%A(Run,Type command to run)");
 
 		data = putNewItem(panel, pad, ExecInfo, _("Netscape"));
 		data->param.exec.command = "netscape";
@@ -1030,7 +1030,8 @@ static ItemData *parseCommand(WMPropList * item)
 			cmd = 11;
 		} else {
 			wwarning(_("unknown command '%s' in menu"), command);
-			goto error;
+			wfree(data);
+			return NULL;
 		}
 
 		data->type = CommandInfo;
@@ -1043,11 +1044,6 @@ static ItemData *parseCommand(WMPropList * item)
 	}
 
 	return data;
-
- error:
-	wfree(data);
-
-	return NULL;
 }
 
 static void updateFrameTitle(_Panel * panel, char *title, InfoType type)
@@ -1396,13 +1392,22 @@ static WEditMenu *buildSubmenu(_Panel * panel, WMPropList * pl)
 		} else {
 			ItemData *data;
 
-			item = WAddMenuItemWithTitle(menu, title);
-
 			data = parseCommand(pi);
 
-			if (panel->markerPix[data->type])
-				WSetEditMenuItemImage(item, panel->markerPix[data->type]);
-			WSetEditMenuItemData(item, data, (WMCallback *) freeItemData);
+			if (data != NULL) {
+				item = WAddMenuItemWithTitle(menu, title);
+				if (panel->markerPix[data->type])
+					WSetEditMenuItemImage(item, panel->markerPix[data->type]);
+				WSetEditMenuItemData(item, data, (WMCallback *) freeItemData);
+			} else {
+				char *buf = wmalloc(1024);
+				snprintf(buf, 1024, _("Invalid menu command \"%s\" with label \"%s\" cleared"),
+					WMGetFromPLString(WMGetFromPLArray(pi, 1)),
+					WMGetFromPLString(WMGetFromPLArray(pi, 0)));
+				WMRunAlertPanel(scr, panel->parent, _("Warning"), buf, _("OK"), NULL, NULL);
+				wfree(buf);
+			}
+
 		}
 	}
 
@@ -1508,6 +1513,9 @@ static WMPropList *processData(char *title, ItemData * data)
 	static WMPropList *pscut = NULL;
 	static WMPropList *pomenu = NULL;
 	int i;
+
+	if (data == NULL)
+		return NULL;
 
 	if (!pscut) {
 		pscut = WMCreatePLString("SHORTCUT");
@@ -1638,7 +1646,7 @@ static WMPropList *processSubmenu(WEditMenu * menu)
 	pmenu = WMCreatePLArray(pl, NULL);
 
 	i = 0;
-	while ((item = WGetEditMenuItem(menu, i++))) {
+	while (item = WGetEditMenuItem(menu, i++)) {
 		WEditMenu *submenu;
 
 		s = WGetEditMenuItemTitle(item);
