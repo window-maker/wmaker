@@ -432,7 +432,7 @@ static void doAppUrgentBounce(void *arg)
 	WApplication *wapp = (WApplication *)arg;
 
 	if (appIsUrgent(wapp)) {
-		wAppBounce(wapp);
+		if(wPreferences.bounce_appicons_when_urgent) wAppBounce(wapp);
 	} else {
 		WMDeleteTimerHandler(wapp->urgent_bounce_timer);
 		wapp->urgent_bounce_timer = NULL;

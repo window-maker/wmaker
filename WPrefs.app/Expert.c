@@ -32,7 +32,7 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMButton *swi[10];
+	WMButton *swi[11];
 
 } _Panel;
 
@@ -52,6 +52,7 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->swi[7], GetBoolForKey("SingleClickLaunch"));
 	WMSetButtonSelected(panel->swi[8], GetBoolForKey("CycleActiveHeadOnly"));
 	WMSetButtonSelected(panel->swi[9], GetBoolForKey("ShowClipTitle"));
+	WMSetButtonSelected(panel->swi[10], GetBoolForKey("BounceAppIconsWhenUrgent"));
 }
 
 static void createPanel(Panel * p)
@@ -92,8 +93,12 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->swi[7], _("Launch applications and restore windows with a single click."));
 	WMSetButtonText(panel->swi[8], _("Cycle windows only on the active head."));
 	WMSetButtonText(panel->swi[9], _("Show workspace title on Clip."));
+	WMSetButtonText(panel->swi[10], _("Bounce AppIcons when the application wants attention."));
 
+        /* If the item is default true, enable the button here */
 	WMSetButtonEnabled(panel->swi[6], True);
+	WMSetButtonEnabled(panel->swi[9], True);
+	WMSetButtonEnabled(panel->swi[10], True);
 
 	WMMapSubwidgets(panel->box);
 	WMSetScrollViewContentView(sv, WMWidgetView(f));
@@ -118,6 +123,7 @@ static void storeDefaults(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "SingleClickLaunch");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[8]), "CycleActiveHeadOnly");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[9]), "ShowClipTitle");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[10]), "BounceAppIconsWhenUrgent");
 }
 
 Panel *InitExpert(WMScreen * scr, WMWidget * parent)

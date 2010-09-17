@@ -409,6 +409,9 @@ typedef struct WPreferences {
     /* shading animation */
     signed char shade_speed;
 
+    /* bouncing animation */
+    char bounce_appicons_when_urgent;
+
     int edge_resistance;
     int resize_increment;
     char attract;
