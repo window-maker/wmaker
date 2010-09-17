@@ -32,7 +32,7 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMButton *swi[11];
+	WMButton *swi[12];
 
 } _Panel;
 
@@ -53,6 +53,7 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->swi[8], GetBoolForKey("CycleActiveHeadOnly"));
 	WMSetButtonSelected(panel->swi[9], GetBoolForKey("ShowClipTitle"));
 	WMSetButtonSelected(panel->swi[10], GetBoolForKey("BounceAppIconsWhenUrgent"));
+	WMSetButtonSelected(panel->swi[11], GetBoolForKey("RaiseAppIconsWhenBouncing"));
 }
 
 static void createPanel(Panel * p)
@@ -94,8 +95,9 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->swi[8], _("Cycle windows only on the active head."));
 	WMSetButtonText(panel->swi[9], _("Show workspace title on Clip."));
 	WMSetButtonText(panel->swi[10], _("Bounce AppIcons when the application wants attention."));
+	WMSetButtonText(panel->swi[11], _("Raise AppIcons when bouncing."));
 
-        /* If the item is default true, enable the button here */
+	/* If the item is default true, enable the button here */
 	WMSetButtonEnabled(panel->swi[6], True);
 	WMSetButtonEnabled(panel->swi[9], True);
 	WMSetButtonEnabled(panel->swi[10], True);
@@ -124,6 +126,7 @@ static void storeDefaults(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->swi[8]), "CycleActiveHeadOnly");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[9]), "ShowClipTitle");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[10]), "BounceAppIconsWhenUrgent");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[11]), "RaiseAppIconsWhenBouncing");
 }
 
 Panel *InitExpert(WMScreen * scr, WMWidget * parent)

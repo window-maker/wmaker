@@ -159,6 +159,46 @@ static void moveFrameToUnder(WCoreWindow * under, WCoreWindow * frame)
 
 /*
  *----------------------------------------------------------------------
+ * CommitStackingForWindow--
+ * 	Reorders the stacking for the specified window, so that it has the
+ * stacking order in the internal window stacking lists.
+ *
+ * Side effects:
+ * 	Windows may be restacked.
+ *----------------------------------------------------------------------
+ */
+void CommitStackingForWindow(WCoreWindow * frame)
+{
+	int level = frame->stacking->window_level;
+	WScreen *scr = frame->screen_ptr;
+
+	if (frame->stacking->above == NULL) {
+		WMBagIterator iter;
+		WCoreWindow *above = WMBagLast(scr->stacking_list, &iter);
+		int i, last = above->stacking->window_level;
+
+		/* find the 1st level above us which has windows in it */
+		for (i = level + 1, above = NULL; i <= last; i++) {
+			above = WMGetFromBag(scr->stacking_list, i);
+			if (above != NULL)
+				break;
+		}
+
+		if (above != frame && above != NULL) {
+			while (above->stacking->under)
+				above = above->stacking->under;
+			moveFrameToUnder(above, frame);
+		} else {
+			/* no window above us */
+			XRaiseWindow(dpy, frame->window);
+		}
+	} else {
+		moveFrameToUnder(frame->stacking->above, frame);
+	}
+}
+
+/*
+ *----------------------------------------------------------------------
  * wRaiseFrame--
  * 	Raises a frame taking the window level into account.
  *

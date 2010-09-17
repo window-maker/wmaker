@@ -275,6 +275,9 @@ static void doAppBounce(void *arg)
 
 reinit:
 	if (aicon && data->wapp->refcount > 1) {
+		if (wPreferences.raise_appicons_when_bouncing)
+			XRaiseWindow(dpy, aicon->icon->core->window);
+
 		const double ticks = BOUNCE_HZ * BOUNCE_LENGTH;
 		const double s = sqrt(BOUNCE_HEIGHT)/(ticks/2);
 		double h = BOUNCE_HEIGHT*pow(BOUNCE_DAMP, data->pow);
@@ -312,6 +315,7 @@ reinit:
 			    aicon->x_pos, aicon->y_pos);
 	}
 
+	CommitStackingForWindow(aicon->icon->core);
 	data->wapp->flags.bouncing = 0;
 	WMDeleteTimerHandler(data->timer);
 	wApplicationDestroy(data->wapp);

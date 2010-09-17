@@ -411,6 +411,7 @@ typedef struct WPreferences {
 
     /* bouncing animation */
     char bounce_appicons_when_urgent;
+    char raise_appicons_when_bouncing;
 
     int edge_resistance;
     int resize_increment;

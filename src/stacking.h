@@ -42,4 +42,6 @@ void RemakeStackList(WScreen *scr);
 
 void CommitStacking(WScreen *scr);
 
+void CommitStackingForFrame(WCoreWindow *frame);
+
 #endif

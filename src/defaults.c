@@ -382,6 +382,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.shade_speed, getEnum, NULL, NULL, NULL},
 	{"BounceAppIconsWhenUrgent", "YES", NULL,
 	    &wPreferences.bounce_appicons_when_urgent, getBool, NULL, NULL, NULL},
+	{"RaiseAppIconsWhenBouncing", "NO", NULL,
+	    &wPreferences.raise_appicons_when_bouncing, getBool, NULL, NULL, NULL},
 	{"DoubleClickTime", "250", (void *)&wPreferences.dblclick_time,
 	    &wPreferences.dblclick_time, getInt, setDoubleClick, NULL, NULL},
 	{"AlignSubmenus", "NO", NULL,
