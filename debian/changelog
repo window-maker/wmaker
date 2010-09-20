@@ -42,6 +42,7 @@ wmaker (0.92.0+git-0) unstable; urgency=low
     + wmsetbg crashing on big png images. (Fixed by git
       2ccc8e4a79a3179454d82b9acc574135ea6369a4, switching from alloca to
       calloc - wrlib/png.c) Closes: #148370
+    + Fix compilation with LDFLAGS=-Wl,--no-add-needed  Closes: #556677
   * Provide detached debugging symbols in wmaker-dbg package.
 
  -- Andreas Metzler <ametzler@debian.org>  Sat, 07 Aug 2010 10:56:00 +0200

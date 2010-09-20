@@ -120,4 +120,5 @@ wmaker_LDADD = \
 	@XLFLAGS@ \
 	@XFTLIBS@ \
 	@XLIBS@ \
+	@LIBM@ \
 	@INTLIBS@
