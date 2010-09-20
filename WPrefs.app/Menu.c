@@ -511,8 +511,8 @@ static void createPanel(_Panel * p)
 		data = putNewItem(panel, pad, ExecInfo, _("Run..."));
 		data->param.exec.command = _("%A(Run,Type command to run)");
 
-		data = putNewItem(panel, pad, ExecInfo, _("Netscape"));
-		data->param.exec.command = "netscape";
+		data = putNewItem(panel, pad, ExecInfo, _("Firefox"));
+		data->param.exec.command = "firefox";
 
 		data = putNewItem(panel, pad, ExecInfo, _("gimp"));
 		data->param.exec.command = "gimp";
@@ -526,8 +526,8 @@ static void createPanel(_Panel * p)
 		data = putNewItem(panel, pad, ExecInfo, _("xv"));
 		data->param.exec.command = "xv";
 
-		data = putNewItem(panel, pad, ExecInfo, _("Acrobat Reader"));
-		data->param.exec.command = "acroread || /usr/local/Acrobat4/bin/acroread";
+		data = putNewItem(panel, pad, ExecInfo, _("Evince"));
+		data->param.exec.command = "evince";
 
 		data = putNewItem(panel, pad, ExecInfo, _("ghostview"));
 		data->param.exec.command = "gv";
