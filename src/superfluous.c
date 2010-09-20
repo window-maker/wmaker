@@ -40,6 +40,7 @@
 #include "window.h"
 #include "actions.h"
 #include "xinerama.h"
+#include "stacking.h"
 
 extern WPreferences wPreferences;
 

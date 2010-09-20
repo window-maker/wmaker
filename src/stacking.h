@@ -44,4 +44,6 @@ void CommitStacking(WScreen *scr);
 
 void CommitStackingForFrame(WCoreWindow *frame);
 
+void CommitStackingForWindow(WCoreWindow * frame);
+
 #endif
