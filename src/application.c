@@ -192,7 +192,7 @@ void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance
 			if (access(tmp, R_OK) == 0)
 				iconPath = tmp;
 		}
-		if (!path) {
+		if (!iconPath) {
 			strcpy(tmp, path);
 			strcat(tmp, ".xpm");
 			if (access(tmp, R_OK) == 0)
