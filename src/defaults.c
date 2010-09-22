@@ -1206,10 +1206,14 @@ static int string2index(WMPropList * key, WMPropList * val, char *def, WOptionEn
 		if (!v->is_alias) {
 			if (buffer[0] != 0)
 				strcat(buffer, ", ");
-			strcat(buffer, v->string);
+			snprintf(buffer+strlen(buffer),
+				sizeof(buffer)-strlen(buffer)-1, "\"%s\"", v->string);
 		}
 	}
-	wwarning(_("wrong option value for key \"%s\". Should be one of %s"), WMGetFromPLString(key), buffer);
+	wwarning(_("wrong option value for key \"%s\". Got \"%s\", should be one of %s"),
+		WMGetFromPLString(key),
+		WMIsPLString(val) ? WMGetFromPLString(val) : "(unknown)",
+		buffer);
 
 	if (def) {
 		return string2index(key, val, NULL, values);
