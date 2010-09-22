@@ -595,9 +595,7 @@ RContext *RCreateContext(Display * dpy, int screen_number, RContextAttributes * 
 
 	/* get configuration from environment variables */
 	gatherconfig(context, screen_number);
-#ifndef BENCH
 	_wraster_change_filter(context->attribs->scaling_filter);
-#endif
 	if ((context->attribs->flags & RC_VisualID)) {
 		XVisualInfo *vinfo, templ;
 		int nret;

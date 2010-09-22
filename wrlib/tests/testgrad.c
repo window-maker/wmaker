@@ -4,10 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#ifdef BENCH
-#include <sys/time.h>
-#include <time.h>
-#endif
 
 Display *dpy;
 Window win;
@@ -26,9 +22,6 @@ void print_help()
 	puts(" -v <vis-id>	visual id to use");
 }
 
-#ifdef BENCH
-#include "bench.h"
-#endif
 int main(int argc, char **argv)
 {
 	RContextAttributes attr;
@@ -38,10 +31,6 @@ int main(int argc, char **argv)
 	XColor color;
 	XSetWindowAttributes val;
 	int visualID = -1;
-#ifdef BENCH
-	double t1, t2, total, t, rt;
-	struct timeval timev;
-#endif
 
 	ProgName = strrchr(argv[0], '/');
 	if (!ProgName)
@@ -135,56 +124,12 @@ int main(int argc, char **argv)
 	val.background_pixel = ctx->black;
 	val.colormap = ctx->cmap;
 	val.backing_store = Always;
-#ifdef BENCH
-	win = XCreateWindow(dpy, DefaultRootWindow(dpy), 10, 10, 250, 250,
-			    0, ctx->depth, InputOutput, ctx->visual,
-			    CWColormap | CWBackPixel | CWBackingStore, &val);
-#else
 	win = XCreateWindow(dpy, DefaultRootWindow(dpy), 10, 10, 750, 250,
 			    0, ctx->depth, InputOutput, ctx->visual,
 			    CWColormap | CWBackPixel | CWBackingStore, &val);
-#endif
 	XMapRaised(dpy, win);
 	XFlush(dpy);
 
-#ifdef BENCH
-	rt = 0;
-	gettimeofday(&timev, NULL);
-	t = (double)timev.tv_sec + (((double)timev.tv_usec) / 1000000);
-	for (i = 0; i < 9; i++) {
-		if (i > 0)
-			printf("\nrepeating...\n\n");
-		gettimeofday(&timev, NULL);
-		t1 = (double)timev.tv_sec + (((double)timev.tv_usec) / 1000000);
-		if (i % 3 == 0)
-			imgh = RRenderMultiGradient(550, 550, colors, RGRD_HORIZONTAL);
-		else if (i % 3 == 1)
-			imgh = RRenderMultiGradient(550, 550, colors, RGRD_VERTICAL);
-		else
-			imgh = RRenderMultiGradient(550, 550, colors, RGRD_DIAGONAL);
-
-		gettimeofday(&timev, NULL);
-		t2 = (double)timev.tv_sec + (((double)timev.tv_usec) / 1000000);
-		total = t2 - t1;
-		printf("gradient rendered in %f sec\n", total);
-
-		RConvertImage(ctx, imgh, &pix);
-		gettimeofday(&timev, NULL);
-		t1 = (double)timev.tv_sec + (((double)timev.tv_usec) / 1000000);
-		total = t1 - t2;
-		rt += total;
-		printf("image converted in %f sec\n", total);
-
-		XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 0, 0);
-
-		XFlush(dpy);
-	}
-	t1 = (double)timev.tv_sec + (((double)timev.tv_usec) / 1000000);
-	printf("------------------------------------------\n");
-	printf("%i images processed in %f sec\n", i, t1 - t);
-	printf("average time per convertion %f sec\n", rt / i);
-	printf("------------------------------------------\n");
-#else
 	imgh = RRenderMultiGradient(250, 250, colors, RGRD_HORIZONTAL);
 	imgv = RRenderMultiGradient(250, 250, colors, RGRD_VERTICAL);
 	imgd = RRenderMultiGradient(250, 250, colors, RGRD_DIAGONAL);
@@ -198,7 +143,6 @@ int main(int argc, char **argv)
 	XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 500, 0);
 
 	XFlush(dpy);
-#endif
 
 	getchar();
 	return 0;

@@ -34,10 +34,6 @@
 
 #include <assert.h>
 
-#ifdef BENCH
-#include "bench.h"
-#endif
-
 #include "wraster.h"
 
 #ifdef XSHM
@@ -324,10 +320,6 @@ static RXImage *image2TrueColor(RContext * ctx, RImage * image)
 		return NULL;
 	}
 
-#ifdef BENCH
-	cycle_bench(1);
-#endif
-
 	if (ctx->attribs->render_mode == RBestMatchRendering) {
 		int ofs, r, g, b;
 		int x, y;
@@ -423,10 +415,6 @@ static RXImage *image2TrueColor(RContext * ctx, RImage * image)
 		}
 
 	}
-
-#ifdef BENCH
-	cycle_bench(0);
-#endif
 
 	return ximg;
 }
@@ -900,27 +888,15 @@ int RConvertImage(RContext * context, RImage * image, Pixmap * pixmap)
 
 	switch (context->vclass) {
 	case TrueColor:
-#ifdef BENCH
-		cycle_bench(1);
-#endif
 		ximg = image2TrueColor(context, image);
-#ifdef BENCH
-		cycle_bench(0);
-#endif
 		break;
 
 	case PseudoColor:
 	case StaticColor:
-#ifdef BENCH
-		cycle_bench(1);
-#endif
 		if (context->attribs->standard_colormap_mode != RIgnoreStdColormap)
 			ximg = image2StandardPseudoColor(context, image);
 		else
 			ximg = image2PseudoColor(context, image);
-#ifdef BENCH
-		cycle_bench(0);
-#endif
 		break;
 
 	case GrayScale:
