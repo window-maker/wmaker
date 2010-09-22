@@ -29,9 +29,12 @@
 #include <assert.h>
 #include <signal.h>
 
-#ifdef TEST_WITH_GC
+#ifdef USE_BOEHM_GC
+#ifndef GC_DEBUG
+#define GC_DEBUG
+#endif /* !GC_DEBUG */
 #include <gc/gc.h>
-#endif
+#endif /* USE_BOEHM_GC */
 
 #ifndef False
 # define False 0
@@ -71,16 +74,16 @@ void *wmalloc(size_t size)
 
 	assert(size > 0);
 
-#ifdef TEST_WITH_GC
-	tmp = GC_malloc(size);
+#ifdef USE_BOEHM_GC
+	tmp = GC_MALLOC(size);
 #else
 	tmp = malloc(size);
 #endif
 	if (tmp == NULL) {
 		wwarning("malloc() failed. Retrying after 2s.");
 		sleep(2);
-#ifdef TEST_WITH_GC
-		tmp = GC_malloc(size);
+#ifdef USE_BOEHM_GC
+		tmp = GC_MALLOC(size);
 #else
 		tmp = malloc(size);
 #endif
@@ -108,16 +111,16 @@ void *wrealloc(void *ptr, size_t newsize)
 		wfree(ptr);
 		nptr = NULL;
 	} else {
-#ifdef TEST_WITH_GC
-		nptr = GC_realloc(ptr, newsize);
+#ifdef USE_BOEHM_GC
+		nptr = GC_REALLOC(ptr, newsize);
 #else
 		nptr = realloc(ptr, newsize);
 #endif
 		if (nptr == NULL) {
 			wwarning("realloc() failed. Retrying after 2s.");
 			sleep(2);
-#ifdef TEST_WITH_GC
-			nptr = GC_realloc(ptr, newsize);
+#ifdef USE_BOEHM_GC
+			nptr = GC_REALLOC(ptr, newsize);
 #else
 			nptr = realloc(ptr, newsize);
 #endif
@@ -164,11 +167,23 @@ void *wretain(void *ptr)
 
 void wfree(void *ptr)
 {
-#ifdef TEST_WITH_GC
-	GC_free(ptr);
+	if (ptr)
+#ifdef USE_BOEHM_GC
+		/* This should eventually be removed, once the criss-cross
+		 * of wmalloc()d memory being free()d, malloc()d memory being
+		 * wfree()d, various misuses of calling wfree() on objects
+		 * allocated by libc malloc() and calling libc free() on
+		 * objects allocated by Boehm GC (think external libraries)
+		 * is cleaned up.
+		 */
+		if (GC_base(ptr) != 0)
+			GC_FREE(ptr);
+		else
+			free(ptr);
 #else
-	free(ptr);
+		free(ptr);
 #endif
+	ptr = NULL;
 }
 
 void wrelease(void *ptr)

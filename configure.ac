@@ -141,6 +141,22 @@ AC_ARG_WITH(libs-from, AS_HELP_STRING([--with-libs-from], [pass compiler flags t
 AC_ARG_WITH(incs-from, AS_HELP_STRING([--with-incs-from], [pass compiler flags to look for header files]),
 	[inc_search_path="$withval $inc_search_path"])
 
+
+dnl Boehm GC
+dnl ========
+with_boehm_gc=no
+AC_ARG_ENABLE([boehm-gc],
+    [AS_HELP_STRING([--enable-boehm-gc], [use Boehm GC instead of the default libc malloc() [default=no]])],
+    [with_boehm_gc=$enableval])
+
+AS_IF([test "x$with_boehm_gc" = "xyes"],
+    AC_SEARCH_LIBS([GC_malloc], [gc],
+        [AC_DEFINE(USE_BOEHM_GC, 1, [Define if Boehm GC is to be used])],
+        [AC_MSG_FAILURE([--enable-boehm-gc specified but test for libgc failed])]
+    )
+)
+
+dnl
 dnl ============================
 dnl Checks for library functions
 dnl ============================
