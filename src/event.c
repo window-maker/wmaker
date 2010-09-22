@@ -292,6 +292,15 @@ void DispatchEvent(XEvent * event)
 	case VisibilityNotify:
 		handleVisibilityNotify(event);
 		break;
+
+	case ConfigureNotify:
+		if (event->xconfigure.window == DefaultRootWindow(dpy)) {
+#ifdef HAVE_XRANDR
+		XRRUpdateConfiguration(event);
+#endif
+		}
+		break;
+
 	default:
 		handleExtensions(event);
 		break;
@@ -572,8 +581,15 @@ static void handleExtensions(XEvent * event)
 	}
 #endif				/*KEEP_XKB_LOCK_STATUS */
 #ifdef HAVE_XRANDR
-	if (has_randr && event->type == (randr_event_base + RRScreenChangeNotify))
+	if (has_randr && event->type == (randr_event_base + RRScreenChangeNotify)) {
+		/* From xrandr man page: "Clients must call back into Xlib using
+		 * XRRUpdateConfiguration when screen configuration change notify
+		 * events are generated */
+		XRRUpdateConfiguration(event);
+		WCHANGE_STATE(WSTATE_RESTARTING);
+		Shutdown(WSRestartPreparationMode);
 		Restart(NULL,True);
+	}
 #endif
 }
 
