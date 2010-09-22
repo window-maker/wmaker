@@ -263,8 +263,8 @@ static Bool allocatePseudoColor(RContext * ctx)
 					colors[i].flags = DoRed | DoGreen | DoBlue;
 					break;	/* succeeded, don't need to retry */
 				}
-#ifdef DEBUG
-				printf("close color allocation failed. Retrying...\n");
+#ifdef WRLIB_DEBUG
+				fputs("close color allocation failed. Retrying...\n", stderr);
 #endif
 			}
 		}
@@ -323,18 +323,18 @@ static XColor *allocateGrayScale(RContext * ctx)
 	}
 	/* try to allocate the colors */
 	for (i = 0; i < ncolors; i++) {
-#ifdef DEBUG
-		printf("trying:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
+#ifdef WRLIB_DEBUG
+		fprintf(stderr, "trying:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
 #endif
 		if (!XAllocColor(ctx->dpy, ctx->cmap, &(colors[i]))) {
 			colors[i].flags = 0;	/* failed */
-#ifdef DEBUG
-			printf("failed:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
+#ifdef WRLIB_DEBUG
+			fprintf(stderr, "failed:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
 #endif
 		} else {
 			colors[i].flags = DoRed | DoGreen | DoBlue;
-#ifdef DEBUG
-			printf("success:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
+#ifdef WRLIB_DEBUG
+			fprintf(stderr, "success:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
 #endif
 		}
 	}
@@ -367,10 +367,10 @@ static XColor *allocateGrayScale(RContext * ctx)
 					}
 				}
 				/* allocate closest color found */
-#ifdef DEBUG
-				printf("best match:%x,%x,%x => %x,%x,%x\n", colors[i].red, colors[i].green,
-				       colors[i].blue, avcolors[closest].red, avcolors[closest].green,
-				       avcolors[closest].blue);
+#ifdef WRLIB_DEBUG
+				fprintf(stderr, "best match:%x,%x,%x => %x,%x,%x\n",
+					colors[i].red, colors[i].green, colors[i].blue,
+					avcolors[closest].red, avcolors[closest].green, avcolors[closest].blue);
 #endif
 				colors[i].red = avcolors[closest].red;
 				colors[i].green = avcolors[closest].green;
@@ -379,8 +379,8 @@ static XColor *allocateGrayScale(RContext * ctx)
 					colors[i].flags = DoRed | DoGreen | DoBlue;
 					break;	/* succeeded, don't need to retry */
 				}
-#ifdef DEBUG
-				printf("close color allocation failed. Retrying...\n");
+#ifdef WRLIB_DEBUG
+				fputs("close color allocation failed. Retrying...\n", stderr);
 #endif
 			}
 		}

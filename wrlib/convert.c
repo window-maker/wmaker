@@ -327,8 +327,8 @@ static RXImage *image2TrueColor(RContext * ctx, RImage * image)
 		unsigned char *ptr = image->data;
 
 		/* fake match */
-#ifdef DEBUG
-		puts("true color match");
+#ifdef WRLIB_DEBUG
+		fputs("true color match\n", stderr);
 #endif
 		if (rmask == 0xff && gmask == 0xff && bmask == 0xff) {
 			for (y = 0; y < image->height; y++) {
@@ -356,8 +356,8 @@ static RXImage *image2TrueColor(RContext * ctx, RImage * image)
 		const int dg = 0xff / gmask;
 		const int db = 0xff / bmask;
 
-#ifdef DEBUG
-		puts("true color dither");
+#ifdef WRLIB_DEBUG
+		fputs("true color dither\n", stderr);
 #endif
 
 #ifdef ASM_X86_MMX
@@ -538,8 +538,8 @@ static RXImage *image2PseudoColor(RContext * ctx, RImage * image)
 
 	if (ctx->attribs->render_mode == RBestMatchRendering) {
 		/* fake match */
-#ifdef DEBUG
-		printf("pseudo color match with %d colors per channel\n", cpc);
+#ifdef WRLIB_DEBUG
+		fprintf(stderr, "pseudo color match with %d colors per channel\n", cpc);
 #endif
 		for (y = 0; y < image->height; y++) {
 			for (x = 0; x < image->width; x++, ptr += channels - 3) {
@@ -560,8 +560,8 @@ static RXImage *image2PseudoColor(RContext * ctx, RImage * image)
 		const int dg = 0xff / gmask;
 		const int db = 0xff / bmask;
 
-#ifdef DEBUG
-		printf("pseudo color dithering with %d colors per channel\n", cpc);
+#ifdef WRLIB_DEBUG
+		fprintf(stderr, "pseudo color dithering with %d colors per channel\n", cpc);
 #endif
 		err = malloc(4 * (image->width + 3));
 		nerr = malloc(4 * (image->width + 3));
@@ -638,8 +638,9 @@ static RXImage *image2StandardPseudoColor(RContext * ctx, RImage * image)
 		int rer, ger, ber;
 		int x1, ofs;
 
-#ifdef DEBUG
-		printf("pseudo color dithering with %d colors per channel\n", ctx->attribs->colors_per_channel);
+#ifdef WRLIB_DEBUG
+		fprintf(stderr, "pseudo color dithering with %d colors per channel\n",
+			ctx->attribs->colors_per_channel);
 #endif
 		err = (short *)malloc(3 * (image->width + 2) * sizeof(short));
 		nerr = (short *)malloc(3 * (image->width + 2) * sizeof(short));
@@ -769,8 +770,8 @@ static RXImage *image2GrayScale(RContext * ctx, RImage * image)
 
 	if (ctx->attribs->render_mode == RBestMatchRendering) {
 		/* fake match */
-#ifdef DEBUG
-		printf("grayscale match with %d colors per channel\n", cpc);
+#ifdef WRLIB_DEBUG
+		fprintf(stderr, "grayscale match with %d colors per channel\n", cpc);
 #endif
 		for (y = 0; y < image->height; y++) {
 			for (x = 0; x < image->width; x++) {
@@ -789,8 +790,8 @@ static RXImage *image2GrayScale(RContext * ctx, RImage * image)
 		int ger;
 		const int dg = 0xff / gmask;
 
-#ifdef DEBUG
-		printf("grayscale dither with %d colors per channel\n", cpc);
+#ifdef WRLIB_DEBUG
+		fprintf(stderr, "grayscale dither with %d colors per channel\n", cpc);
 #endif
 		gerr = (short *)malloc((image->width + 2) * sizeof(short));
 		ngerr = (short *)malloc((image->width + 2) * sizeof(short));
