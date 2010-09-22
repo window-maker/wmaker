@@ -807,7 +807,7 @@ AC_DEFINE_UNQUOTED(SYSCONFDIR, "$_sysconfdir", [where the configuration is store
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
 dnl ==============================================
 
-AC_ARG_WITH(appspath, AS_HELP_STRING([--with-gnustepdir=PATH], [specify the directory for GNUstep applications]))
+AC_ARG_WITH(gnustepdir, AS_HELP_STRING([--with-gnustepdir=PATH], [specify the directory for GNUstep applications]))
 
 if test "x`echo $with_gnustepdir | grep ^/`" != "x"; then
     appspath=$with_gnustepdir
