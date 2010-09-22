@@ -422,11 +422,11 @@ Nemám rootovské helso :-(
 Pokud nemáte superu¾ivatelská privilegia (nemù¾ete se pøihlásit jako root),
 tak nezoufejte, proto¾e mù¾ete nainstalovat Window Maker do va¹eho vlastního
 domovského adresáøe. K tomu musíte pou¾ít volbu --prefix pøi spu¹tìní
-./configure. Také musíte pou¾ít volbu --with-appspath, která specifikuje
+./configure. Také musíte pou¾ít volbu --with-gnustepdir, která specifikuje
 cestu pro WPrefs.app.
 Pøíklad:
 
-./configure --prefix=/home/karel --with-appspath=/home/karel/GNUstep/Applications
+./configure --prefix=/home/karel --with-gnustepdir=/home/karel/GNUstep/Applications
 
 Potom pøidejte adresáø /home/karel/bin do systémové promìnné PATH a adresáø
 /home/karel/lib do sytémové promìnné LD_LIBRARY_PATH a nakonec spus»te

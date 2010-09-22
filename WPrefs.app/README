@@ -72,8 +72,8 @@ By default, WPrefs.app will be installed in the GNUstep applications directory,
 which is /usr/local/GNUstep/Applications. If you want to install it somewhere 
 else, like in /some_weird_path/Applications, set the GNUSTEP_LOCAL_ROOT
 environment variable to some_weird_path before running configure for
-WindowMaker. You can also configure Window Maker supplying the --with-appspath
-option to configure, like ./configure --with-appspath=/usr/GNUstep/Applications
+WindowMaker. You can also configure Window Maker supplying the --with-gnustepdir
+option to configure, like ./configure --with-gnustepdir=/usr/GNUstep/Applications
 If you change your mind after installing, you can move the .app directory 
 to one of the following GNUstep/Applications directories:
 

@@ -370,10 +370,10 @@ Se você não pode obter privilégios de super-usuário (não pode ser root) você
 pode instalar o wmaker no seu diretório home. Para isso, forneça a opção
 --prefix quando for rodar o configure, como explicado no passo 2 da seção
 Compilando o Window Maker.
-Você ainda precisará fornecer a opção --with-appspath, para especificar o
+Você ainda precisará fornecer a opção --with-gnustepdir, para especificar o
 caminho do WPrefs.app. Exemplo:
 
-./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Applications
+./configure --prefix=/home/jshmoe --with-gnustepdir=/home/jshmoe/GNUstep/Applications
 
 Depois faça com que /home/jshome/bin seja incluído na variável PATH, adicione
 /home/jshome/lib na variável de ambiente LD_LIBRARY_PATH e rode bin/wmaker.inst

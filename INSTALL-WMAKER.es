@@ -410,10 +410,10 @@ No tengo la contraseña de root :(
 Si no puede obtener privilegios de superusuario (no puede ser root) puede 
 instalar wmaker en su propio directorio home. Para esto, proporcione la 
 opción --prefix al ejecutar configure en el paso 2 de compilando Window Maker. 
-También necesitará proporcionar la opción --with-appspath, para especificar la ruta
+También necesitará proporcionar la opción --with-gnustepdir, para especificar la ruta
 para WPrefs.app. Ejemplo:
 
-./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Applications
+./configure --prefix=/home/jshmoe --with-gnustepdir=/home/jshmoe/GNUstep/Applications
 
 Luego haga /home/jshmoe/bin para que se lo incluya en su ruta de búsqueda, agregue
 /home/jshmoe/lib a su variable de entorno LD_LIBRARY_PATH y ejecute bin/wmaker.inst

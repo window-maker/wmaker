@@ -444,10 +444,10 @@ Si vous n'avez pas acc-s aux privilèges du super-utilisateur (root), vous pouvez
 installer Window Maker dans votre répertoire personnel. Pour ce faire, ajoutez
 l'option --prefix correctement renseignée au moment de l'exécution de ./configure
 (étape 2 de la compilation de Window Maker).
-Il est aussi nécessaire d'utiliser l'option --with-appspath, afin de préciser
+Il est aussi nécessaire d'utiliser l'option --with-gnustepdir, afin de préciser
 le chemin d'accès à WPrefs.app. Par exemple :
 
-./configure --prefix=/home/jshmoe --with-appspath=/home/jshmoe/GNUstep/Applications
+./configure --prefix=/home/jshmoe --with-gnustepdir=/home/jshmoe/GNUstep/Applications
 
 
 Puis, faites en sorte que /home/jshmoe/bin soit inclus dans votre PATH, ajoutez
