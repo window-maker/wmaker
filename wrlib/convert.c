@@ -25,48 +25,18 @@
  */
 
 #include <config.h>
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
-
 #include <assert.h>
 
 #include "wraster.h"
 
 #ifdef XSHM
 extern Pixmap R_CreateXImageMappedPixmap(RContext * context, RXImage * ximage);
-
 #endif
-
-#ifdef ASM_X86
-extern void x86_PseudoColor_32_to_8(unsigned char *image,
-				    unsigned char *ximage,
-				    char *err, char *nerr,
-				    short *ctable,
-				    int dr, int dg, int db,
-				    unsigned long *pixels,
-				    int cpc, int width, int height, int bytesPerPixel, int line_offset);
-#endif				/* ASM_X86 */
-
-#ifdef ASM_X86_MMX
-
-extern int x86_check_mmx();
-
-extern void x86_mmx_TrueColor_32_to_16(unsigned char *image,
-				       unsigned short *ximage,
-				       short *err, short *nerr,
-				       const unsigned short *rtable,
-				       const unsigned short *gtable,
-				       const unsigned short *btable,
-				       int dr, int dg, int db,
-				       unsigned int roffs,
-				       unsigned int goffs,
-				       unsigned int boffs, int width, int height, int line_offset);
-
-#endif				/* ASM_X86_MMX */
 
 #define NFREE(n)  if (n) free(n)
 
@@ -360,36 +330,6 @@ static RXImage *image2TrueColor(RContext * ctx, RImage * image)
 		fputs("true color dither\n", stderr);
 #endif
 
-#ifdef ASM_X86_MMX
-		if (ctx->depth == 16 && HAS_ALPHA(image) && x86_check_mmx()) {
-			short *err;
-			short *nerr;
-
-			err = malloc(8 * (image->width + 3));
-			nerr = malloc(8 * (image->width + 3));
-			if (!err || !nerr) {
-				NFREE(err);
-				NFREE(nerr);
-				RErrorCode = RERR_NOMEMORY;
-				RDestroyXImage(ctx, ximg);
-				return NULL;
-			}
-			memset(err, 0, 8 * (image->width + 3));
-			memset(nerr, 0, 8 * (image->width + 3));
-
-			x86_mmx_TrueColor_32_to_16(image->data,
-						   (unsigned short *)ximg->image->data,
-						   err + 8, nerr + 8,
-						   rtable, gtable, btable,
-						   dr, dg, db,
-						   roffs, goffs, boffs,
-						   image->width, image->height,
-						   ximg->image->bytes_per_line - 2 * image->width);
-
-			free(err);
-			free(nerr);
-		} else
-#endif				/* ASM_X86_MMX */
 		{
 			signed char *err;
 			signed char *nerr;
@@ -575,7 +515,6 @@ static RXImage *image2PseudoColor(RContext * ctx, RImage * image)
 		memset(err, 0, 4 * (image->width + 3));
 		memset(nerr, 0, 4 * (image->width + 3));
 
-		/*#ifdef ASM_X86 */
 		convertPseudoColor_to_8(ximg, image, err + 4, nerr + 4,
 					rtable, gtable, btable, dr, dg, db, ctx->pixels, cpc);
 

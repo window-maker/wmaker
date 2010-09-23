@@ -83,8 +83,7 @@ libWUtil_la_SOURCES = 	\
 
 
 AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" -DRESOURCE_PATH=\"$(datadir)/WINGs\" -DDEBUG
-
-AM_CFLAGS = @NOSTRICTALIASING@
+AM_CFLAGS =
 
 INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	@XFTFLAGS@ @HEADER_SEARCH_PATH@

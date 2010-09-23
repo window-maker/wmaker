@@ -93,9 +93,5 @@ LIBWRASTER3
 # RSaveXPM
 # _wraster_change_filter
 # WRasterLibVersion
-# x86_check_mmx
-# x86_mmx_TrueColor_24_to_16
-# x86_mmx_TrueColor_32_to_16
-# x86_PseudoColor_32_to_8
     *;
 };

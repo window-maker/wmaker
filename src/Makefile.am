@@ -104,9 +104,7 @@ wmaker_SOURCES = 	\
 EXTRA_wmaker_SOURCES = osdep_bsd.c osdep_darwin.c osdep_linux.c osdep_stub.c
 
 AM_CPPFLAGS = $(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\"
-
-AM_CFLAGS = @NOSTRICTALIASING@
-
+AM_CFLAGS =
 
 INCLUDES = \
 	-I$(top_srcdir)/wrlib \

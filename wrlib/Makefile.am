@@ -28,7 +28,6 @@ libwraster_la_SOURCES = 	\
 	xpixmap.c	\
 	bench.h		\
 	convert.c 	\
-	x86_specific.c	\
 	context.c 	\
 	misc.c 		\
 	scale.c		\
@@ -46,14 +45,6 @@ libwraster_la_SOURCES = 	\
 
 LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
 COMPILE2=`echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`
-
-# cant compile asm stuff with optimizations
-x86_specific.lo: x86_specific.c
-	$(LTCOMPILE2) -O0 -c $<
-
-x86_specific.o: x86_specific.c
-	$(COMPILE2) -O0 -c $<
-
 
 INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
 

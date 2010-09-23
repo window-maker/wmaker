@@ -43,8 +43,7 @@ WPrefs_SOURCES = \
 	xmodifier.c
 
 AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" -DRESOURCE_PATH=\"$(wpdatadir)\"
-
-AM_CFLAGS = @NOSTRICTALIASING@
+AM_CFLAGS =
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 

@@ -218,60 +218,6 @@ AC_C_CONST
 AC_TYPE_SIGNAL
 
 
-
-dnl Compiler/architecture specific optimizations
-dnl ============================================
-
-
-dnl GCC/as with MMX support
-dnl -----------------------
-
-# until we fix it, leave it disabled
-asm_support=no
-mmx_support=no
-
-check_for_mmx_support=yes
-AC_ARG_ENABLE(mmx, AS_HELP_STRING([--disable-mmx], [disable compilation of MMX inline assembly]),
-   [if test x$enableval != xyes; then
-    check_for_mmx_support=no
-    fi])
-
-if test "$ac_cv_prog_gcc" = yes -a "$check_for_mmx_support" = yes; then
-case $host_cpu in
-*i?86*)
-
-    # gcc-3.3 or newer complains about some of our stuff without this
-    NOSTRICTALIASING="-fno-strict-aliasing"
-
-    AC_CACHE_CHECK(whether gcc supports x86 inline asm,
-                   ac_cv_c_inline_asm,
-                   [AC_TRY_LINK(,[{int x; asm volatile("movl %%eax, %%ebx\n\t pushal\n\t popal"::
-                          "m" (x),"m" (x),"m" (x),"m" (x),"m" (x),"m" (x),
-                          "m" (x),"m" (x),"m" (x),"m" (x),"m" (x),"m" (x));}],
-                   ac_cv_c_inline_asm=yes,
-                   ac_cv_c_inline_asm=no)])
-
-    if test "x$ac_cv_c_inline_asm" = xyes; then
-       AC_DEFINE(ASM_X86, 1, [define if processor is x86 (normally detected by configure)])
-       asm_support=yes
-
-       AC_CACHE_CHECK(whether gcc supports MMX(tm) inline asm,
-                      ac_cv_c_inline_mmx,
-                      [AC_TRY_LINK(,[asm ("movq %mm0, %mm1");],
-                      ac_cv_c_inline_mmx=yes,
-                      ac_cv_c_inline_mmx=no)])
-
-       if test "x$ac_cv_c_inline_mmx" = xyes; then
-          AC_DEFINE(ASM_X86_MMX, 1, [define if processor is x86 with MMX(tm) support (normally autodetected by configure)])
-          mmx_support=yes
-       fi
-    fi
-    ;;
-esac
-fi
-AC_SUBST(NOSTRICTALIASING)
-
-
 dnl pkg-config
 dnl ==========
 dnl AC_ARG_VAR(PKGCONFIG, [pkg-config command])
@@ -1045,8 +991,6 @@ echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
 echo "Installation path for WPrefs.app    : $wprefs_base_dir" | sed -e 's|\${prefix}|'"$prefix|"
 echo "Supported graphic format libraries  : $supported_gfx"
-echo "Use assembly routines for wrlib     : $asm_support"
-echo "Use inline MMX(tm) x86 assembly     : $mmx_support"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Xinerama extension support          : $xinerama"
 echo "XRandR extension support            : $xrandr"
