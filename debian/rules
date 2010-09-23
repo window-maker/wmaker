@@ -108,8 +108,7 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
                      --datadir=$(SHAREDIR)            \
                      --with-nlsdir=$(NLSDIR)          \
                      --with-pixmapdir=$(PIXMAPDIR)    \
-                     --with-gnustepdir=$(GNUSTEPDIR)  \
-                     --with-xft
+                     --with-gnustepdir=$(GNUSTEPDIR)
 
 install_file      := install -p    -o root -g root -m 0644
 install_prog      := install -p    -o root -g root -m 0755
