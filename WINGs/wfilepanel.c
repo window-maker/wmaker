@@ -67,9 +67,9 @@ static void browserDClick();
 
 static void fillColumn(WMBrowserDelegate * self, WMBrowser * bPtr, int column, WMList * list);
 
-static void deleteFile();
-
 static void normalizePath(char *s);
+
+static void deleteFile();
 
 static void createDir();
 
@@ -595,7 +595,8 @@ static void showError(WMScreen * scr, WMWindow * owner, char *s, char *file)
 
 static void createDir(WMButton * bPre, WMFilePanel * panel)
 {
-	char *dirName, *directory, *file, *s;
+	char *dirName, *directory, *file;
+	size_t slen;
 	WMScreen *scr = WMWidgetScreen(panel->win);
 
 	dirName = WMRunInputPanel(scr, panel->win, _("Create Directory"),
@@ -603,55 +604,43 @@ static void createDir(WMButton * bPre, WMFilePanel * panel)
 	if (!dirName)
 		return;
 
-	directory = getCurrentFileName(panel);
-	s = strrchr(directory, '/');
-	if (s)
-		s[1] = 0;
-
-	if (dirName[0] == '/') {
-		directory[0] = 0;
+	/* if `dirName' is an absolute path, don't mind `directory'.
+	 * normalize as needed (possibly not needed at all?) */
+	normalizePath(dirName);
+	if (*dirName != '/') {
+		directory = getCurrentFileName(panel);
+		normalizePath(directory);
 	} else {
-		while ((s = strstr(directory, "//"))) {
-			int i;
-			for (i = 2; s[i] == '/'; i++) ;
-			strcpy(s, &s[i - 1]);
-		}
-		if ((s = strrchr(directory, '/')) && !s[1])
-			s[0] = 0;
-	}
-	while ((s = strstr(dirName, "//"))) {
-		int i;
-		for (i = 2; s[i] == '/'; i++) ;
-		strcpy(s, &s[i - 1]);
-	}
-	if ((s = strrchr(dirName, '/')) && !s[1])
-		s[0] = 0;
-
-	file = wmalloc(strlen(dirName) + strlen(directory) + 4);
-	sprintf(file, "%s/%s", directory, dirName);
-	while ((s = strstr(file, "//"))) {
-		int i;
-		for (i = 2; s[i] == '/'; i++) ;
-		strcpy(s, &s[i - 1]);
+		directory = NULL;
 	}
 
-	if (mkdir(file, 0xfff) != 0) {
-		switch (errno) {
-		case EACCES:
-			showError(scr, panel->win, _("Permission denied."), NULL);
-			break;
-		case EEXIST:
-			showError(scr, panel->win, _("'%s' already exists."), file);
-			break;
-		case ENOENT:
-			showError(scr, panel->win, _("Path does not exist."), NULL);
-		}
-	} else
+	slen = strlen(dirName) + (directory ? strlen(directory) + 1 /* "/" */  : 0) + 1 /* NULL */;
+	file = wmalloc(slen);
+
+	if (directory) {
+		strncpy(file, directory, slen - 1);
+		strncat(file, "/", slen - strlen(file));
+	}
+
+	strncat(file, dirName, slen - strlen(file));
+
+	if (mkdir(file, 00777) != 0) {
+#define __msgbufsize__ 512
+		char *buffer = wmalloc(__msgbufsize__);
+		snprintf(buffer, __msgbufsize__, _("Can not create %s: %s"), file, strerror(errno));
+		showError(scr, panel->win, buffer, NULL);
+		wfree(buffer);
+#undef __msgbufsize__
+	} else {
 		WMSetFilePanelDirectory(panel, file);
+	}
 
-	wfree(dirName);
-	wfree(directory);
-	wfree(file);
+	if (dirName)
+		wfree(dirName);
+	if (directory)
+		wfree(directory);
+	if (file)
+		wfree(file);
 }
 
 /*
@@ -686,105 +675,44 @@ static void normalizePath(char *s)
 
 static void deleteFile(WMButton * bPre, WMFilePanel * panel)
 {
-	char *file;
-	char *buffer, *s;
+	char *file, *buffer;
 	struct stat filestat;
 	WMScreen *scr = WMWidgetScreen(panel->win);
+#define __msgbufsize__ 512
 
+	buffer = wmalloc(__msgbufsize__);
 	file = getCurrentFileName(panel);
+	normalizePath(file);
 
-	while ((s = strstr(file, "//"))) {
-		int i;
-		for (i = 2; s[i] == '/'; i++) ;
-		strcpy(s, &s[i - 1]);
+	if (stat(file, &filestat) == -1) {
+		snprintf(buffer, __msgbufsize__, _("Can not find %s: %s"), file, strerror(errno));
+		showError(scr, panel->win, buffer, NULL);
+		goto out;
 	}
-	if (strlen(file) > 1 && (s = strrchr(file, '/')) && !s[1])
-		s[0] = 0;
 
-	if (stat(file, &filestat)) {
-		switch (errno) {
-		case ENOENT:
-			showError(scr, panel->win, _("'%s' does not exist."), file);
-			break;
-		case EACCES:
-			showError(scr, panel->win, _("Permission denied."), NULL);
-			break;
-		case ENOMEM:
-			showError(scr, panel->win, _("Insufficient memory available."), NULL);
-			break;
-		case EROFS:
-			showError(scr, panel->win, _("'%s' is on a read-only filesystem."), file);
-			break;
-		default:
-			showError(scr, panel->win, _("Can not delete '%s'."), file);
-		}
-		wfree(file);
-		return;
-	} else if (S_ISDIR(filestat.st_mode)) {
-		int len = strlen(file) + 20;
-		buffer = wmalloc(len);
-		snprintf(buffer, len, _("Delete directory %s ?"), file);
-	} else {
-		int len = strlen(file) + 15;
-		buffer = wmalloc(len);
-		snprintf(buffer, len, _("Delete file %s ?"), file);
-	}
+	snprintf(buffer, __msgbufsize__, _("Delete %s %s?"),
+		S_ISDIR(filestat.st_mode) ? _("directory") : _("file"), file);
 
 	if (!WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
 			     _("Warning"), buffer, _("OK"), _("Cancel"), NULL)) {
-		if (S_ISDIR(filestat.st_mode)) {
-			if (rmdir(file) != 0) {
-				switch (errno) {
-				case EACCES:
-					showError(scr, panel->win, _("Permission denied."), NULL);
-					break;
-				case ENOENT:
-					showError(scr, panel->win, _("Directory '%s' does not exist."), file);
-					break;
-				case ENOTEMPTY:
-					showError(scr, panel->win, _("Directory '%s' is not empty."), file);
-					break;
-				case EBUSY:
-					showError(scr, panel->win, _("Directory '%s' is busy."), file);
-					break;
-				default:
-					showError(scr, panel->win, _("Can not delete '%s'."), file);
-				}
-			} else {
-				char *s = strrchr(file, '/');
-				if (s)
-					s[0] = 0;
-				WMSetFilePanelDirectory(panel, file);
-			}
-		} else if (remove(file) != 0) {
-			switch (errno) {
-			case EISDIR:
-				showError(scr, panel->win, _("'%s' is a directory."), file);
-				break;
-			case ENOENT:
-				showError(scr, panel->win, _("'%s' does not exist."), file);
-				break;
-			case EACCES:
-				showError(scr, panel->win, _("Permission denied."), NULL);
-				break;
-			case ENOMEM:
-				showError(scr, panel->win, _("Insufficient memory available."), NULL);
-				break;
-			case EROFS:
-				showError(scr, panel->win, _("'%s' is on a read-only filesystem."), file);
-				break;
-			default:
-				showError(scr, panel->win, _("Can not delete '%s'."), file);
-			}
+
+		if (remove(file) == -1) {
+			snprintf(buffer, __msgbufsize__, _("Removing %s failed: %s"), file, strerror(errno));
+			showError(scr, panel->win, buffer, NULL);
 		} else {
 			char *s = strrchr(file, '/');
 			if (s)
-				s[1] = 0;
+				s[0] = 0;
 			WMSetFilePanelDirectory(panel, file);
 		}
+
 	}
-	wfree(buffer);
-	wfree(file);
+out:
+	if (buffer)
+		wfree(buffer);
+	if (file)
+		wfree(file);
+#undef __msgbufsize__
 }
 
 static void goUnmount(WMButton * bPtr, WMFilePanel * panel)
