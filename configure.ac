@@ -164,7 +164,7 @@ dnl not used anywhere
 AC_FUNC_MEMCMP
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname select poll strcasecmp strncasecmp \
-	       setsid atexit mallinfo mkstemp)
+	       setsid atexit mallinfo mkstemp sysconf)
 
 dnl Check for strlcat/strlcpy
 dnl =========================

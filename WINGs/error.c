@@ -20,59 +20,81 @@
 
 #include "wconfig.h"
 
+#include <errno.h>
+#include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
 #include <string.h>
-#include <errno.h>
+#include <unistd.h>
 
 #include <WUtil.h>
 
 extern char *_WINGS_progname;
 
-#define MAXLINE	1024
-
 void __wmessage(int type, void *extra, const char *msg, ...)
 {
 	va_list args;
-	char buf[MAXLINE];
+	char *buf;
+	static int linemax = 0;
+
+	if (linemax == 0) {
+#ifdef HAVE_SYSCONF
+		linemax = sysconf(_SC_LINE_MAX);
+		if (linemax == -1) {
+			/* I'd like to know of this ever fires */
+			fprintf(stderr, "%s %d: sysconf(_SC_LINE_MAX) returned error\n",
+				__FILE__, __LINE__);
+			linemax = 512;
+		}
+#else /* !HAVE_SYSCONF */
+		fprintf(stderr, "%s %d: Your system does not have sysconf(3); "
+			"let wmaker-dev@windowmaker.org know.\n", __FILE__, __LINE__);
+		linemax = 512;
+#endif /* HAVE_SYSCONF */
+	}
+
+	buf = wmalloc(linemax);
 
 	fflush(stdout);
 	/* message format: <wings_progname>: <qualifier>: <message>[: <extra info>]"\n" */
-	snprintf(buf, sizeof(buf), "%s: ", _WINGS_progname ? _WINGS_progname : "WINGs");
+	snprintf(buf, linemax, "%s: ", _WINGS_progname ? _WINGS_progname : "WINGs");
 	va_start(args, msg);
 	switch (type) {
 		case WMESSAGE_TYPE_WARNING:
-			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1,
+			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
 				_("warning: "));
-			vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1,
+			vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
 				msg, args);
 		break;
 		case WMESSAGE_TYPE_FATAL:
-			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1,
+			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
 				_("fatal error: "));
-			vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1,
+			vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
 				msg, args);
 		break;
 		case WMESSAGE_TYPE_WSYSERROR:
 		case WMESSAGE_TYPE_WSYSERRORWITHCODE:
-			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1,
+			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
 				_("error: "));
-			vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1,
+			vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
 				msg, args);
-			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1,
+			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
 				": %s", type == WMESSAGE_TYPE_WSYSERROR ?
 				    strerror(errno) : strerror(*(int *)extra));
 		break;
 		case WMESSAGE_TYPE_MESSAGE:
 			/* FALLTHROUGH */
 		default:
-			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1, ": ");
-			vsnprintf(buf + strlen(buf), sizeof(buf) - strlen(buf) - 1, msg, args);
+			strncat(buf, ": ", linemax - strlen(buf));
+			vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1, msg, args);
 		break;
 	}
+
 	va_end(args);
-	strncat(buf + strlen(buf), "\n", sizeof(buf) - strlen(buf));
+
+	strncat(buf, "\n", linemax - strlen(buf));
 	fputs(buf, stderr);
+
+	wfree(buf);
 }
 
