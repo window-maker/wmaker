@@ -32,33 +32,6 @@ extern char *_WINGS_progname;
 
 #define MAXLINE	1024
 
-/*********************************************************************
- * Returns the system error message associated with error code 'errnum'
- *********************************************************************/
-char *wstrerror(int errnum)
-{
-#if defined(HAVE_STRERROR)
-	return strerror(errnum);
-#elif !defined(HAVE_STRERROR) && defined(BSD)
-	extern int errno, sys_nerr;
-#  ifndef __DECC
-	extern char *sys_errlist[];
-#  endif
-	static char buf[] = "Unknown error 12345678901234567890";
-
-	if (errno < sys_nerr)
-		return sys_errlist[errnum];
-
-	snprintf(buf, sizeof(buf), _("Unknown error %d"), errnum);
-	return buf;
-#else				/* no strerror() and no sys_errlist[] */
-	static char buf[] = "Error 12345678901234567890";
-
-	snprintf(buf, sizeof(buf), _("Error %d"), errnum);
-	return buf;
-#endif
-}
-
 void __wmessage(int type, void *extra, const char *msg, ...)
 {
 	va_list args;
@@ -89,7 +62,7 @@ void __wmessage(int type, void *extra, const char *msg, ...)
 				msg, args);
 			snprintf(buf + strlen(buf), sizeof(buf) - strlen(buf),
 				": %s", type == WMESSAGE_TYPE_WSYSERROR ?
-				    wstrerror(errno) : wstrerror(*(int *)extra));
+				    strerror(errno) : strerror(*(int *)extra));
 		break;
 		case WMESSAGE_TYPE_MESSAGE:
 			/* FALLTHROUGH */

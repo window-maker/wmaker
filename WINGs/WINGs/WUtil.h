@@ -176,10 +176,6 @@ typedef void waborthandler(int);
 
 waborthandler* wsetabort(waborthandler* handler);
 
-
-/* don't free the returned string */
-char* wstrerror(int errnum);
-
 enum {
 	WMESSAGE_TYPE_MESSAGE,
 	WMESSAGE_TYPE_WARNING,
