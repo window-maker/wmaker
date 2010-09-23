@@ -69,6 +69,8 @@ static void fillColumn(WMBrowserDelegate * self, WMBrowser * bPtr, int column, W
 
 static void deleteFile();
 
+static void normalizePath(char *s);
+
 static void createDir();
 
 static void goHome();
@@ -651,6 +653,36 @@ static void createDir(WMButton * bPre, WMFilePanel * panel)
 	wfree(directory);
 	wfree(file);
 }
+
+/*
+ *----------------------------------------------------------------------
+ * normalizePath--
+ *	Remove multiple consecutive and any trailing slashes from
+ *	a path.
+ *----------------------------------------------------------------------
+ */
+static void normalizePath(char *s)
+{
+	int i, j, found;
+
+	found = 0;
+	for (i = 0; s[i]; !found && i++) {
+		found = 0;
+		if (s[i] == '/' && s[i+1] == '/') {
+			int nslash = 1;
+			found = 1;
+			i++;
+			while (s[i+nslash] == '/')
+				nslash++;
+			for (j = 0; s[i+j+nslash]; j++)
+				s[i+j] = s[i+j+nslash];
+			s[i+j] = '\0';
+		}
+	}
+	if (i > 1 && s[--i] == '/')
+		s[i] = '\0';
+}
+
 
 static void deleteFile(WMButton * bPre, WMFilePanel * panel)
 {
