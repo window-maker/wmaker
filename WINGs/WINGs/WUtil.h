@@ -156,18 +156,8 @@ typedef int WMArrayIterator;
 typedef void *WMBagIterator;
 
 
-#if 0
-typedef struct {
-    char character;		       /* the escape character */
-    char *value;		       /* value to place */
-} WMSEscapes;
-#endif
-
-
-
 typedef void WMNotificationObserverAction(void *observerData,
                                           WMNotification *notification);
-
 
 
 /*......................................................................*/
@@ -211,8 +201,6 @@ void* wmalloc(size_t size);
 void* wrealloc(void *ptr, size_t newsize);
 void wfree(void *ptr);
 
-#define wnew(type, count) wmalloc(sizeof(type)*count)
-
 void wrelease(void *ptr);
 void* wretain(void *ptr);
 
@@ -247,9 +235,6 @@ char* wtrimspace(const char *s);
 
 
 WMRange wmkrange(int start, int count);
-#ifdef ANSI_C_DOESNT_LIKE_IT_THIS_WAY
-#define wmkrange(position, count) (WMRange){(position), (count)}
-#endif
 
 
 char* wusergnusteppath(void);
@@ -258,11 +243,6 @@ char* wdefaultspathfordomain(char *domain);
 char* wglobaldefaultspathfordomain(const char *domain);
 
 void wusleep(unsigned int microsec);
-
-#if 0
-int wsprintesc(char *buffer, int length, char *format, WMSEscapes **escapes,
-               int count);
-#endif
 
 /*......................................................................*/
 
@@ -391,8 +371,6 @@ void WMAppendArray(WMArray *array, WMArray *other);
 
 /* add will place the element at the end of the array */
 void WMAddToArray(WMArray *array, void *item);
-
-#define WMPushInArray(array, item) WMAddToArray(array, item)
 
 /* insert will increment the index of elements after it by 1 */
 void WMInsertInArray(WMArray *array, int index, void *item);
