@@ -93,14 +93,16 @@ static char *checkFile(char *path, char *folder, char *ext, char *resource)
 
 char *WMPathForResourceOfType(char *resource, char *ext)
 {
-	char *path = NULL;
-	char *tmp, *appdir;
+	char *path, *tmp, *appdir;
 	int i;
+	size_t slen;
+
+	path = tmp = appdir = NULL;
 
 	/*
 	 * Paths are searched in this order:
 	 * - resourcePath/ext
-	 * - argv[0]/ext
+	 * - dirname(argv[0])/ext
 	 * - GNUSTEP_USER_ROOT/Applications/ApplicationName.app/ext
 	 * - ~/GNUstep/Applications/ApplicationName.app/ext
 	 * - GNUSTEP_LOCAL_ROOT/Applications/ApplicationName.app/ext
@@ -112,7 +114,7 @@ char *WMPathForResourceOfType(char *resource, char *ext)
 	if (WMApplication.resourcePath) {
 		path = checkFile(WMApplication.resourcePath, NULL, ext, resource);
 		if (path)
-			return path;
+			goto out;
 	}
 
 	if (WMApplication.argv[0]) {
@@ -126,58 +128,42 @@ char *WMPathForResourceOfType(char *resource, char *ext)
 		} else {
 			path = NULL;
 		}
-		wfree(tmp);
-		if (path)
-			return path;
+		goto out;
 	}
 
-	appdir = wmalloc(strlen(WMApplication.applicationName) + 20);
-	sprintf(appdir, "Applications/%s.app", WMApplication.applicationName);
+	slen = strlen(WMApplication.applicationName) + sizeof("Applications/.app");
+	appdir = wmalloc(slen);
+	if (snprintf(appdir, slen, "Applications/%s.app", WMApplication.applicationName) >= slen)
+		goto out;
 
-	if (getenv("GNUSTEP_USER_ROOT")) {
-		path = checkFile(getenv("GNUSTEP_USER_ROOT"), appdir, ext, resource);
-		if (path) {
-			wfree(appdir);
-			return path;
-		}
-	}
+	path = checkFile(getenv("GNUSTEP_USER_ROOT"), appdir, ext, resource);
+	if (path)
+		goto out;
 
-	tmp = wusergnusteppath();
-	if (tmp) {
-		path = checkFile(tmp, appdir, ext, resource);
-		if (path) {
-			wfree(appdir);
-			return path;
-		}
-	}
+	path = checkFile(wusergnusteppath(), appdir, ext, resource);
+	if (path)
+		goto out;
 
-	if (getenv("GNUSTEP_LOCAL_ROOT")) {
-		path = checkFile(getenv("GNUSTEP_LOCAL_ROOT"), appdir, ext, resource);
-		if (path) {
-			wfree(appdir);
-			return path;
-		}
-	}
+	path = checkFile(getenv("GNUSTEP_LOCAL_ROOT"), appdir, ext, resource);
+	if (path)
+		goto out;
 
 	path = checkFile("/usr/local/GNUstep", appdir, ext, resource);
-	if (path) {
+	if (path)
+		goto out;
+
+	path = checkFile(getenv("GNUSTEP_SYSTEM_ROOT"), appdir, ext, resource);
+	if (path)
+		goto out;
+
+	path = checkFile("/usr/GNUstep", appdir, ext, resource); /* falls through */
+
+out:
+	if (tmp)
+		wfree(tmp);
+	if (appdir)
 		wfree(appdir);
-		return path;
-	}
 
-	if (getenv("GNUSTEP_SYSTEM_ROOT")) {
-		path = checkFile(getenv("GNUSTEP_SYSTEM_ROOT"), appdir, ext, resource);
-		if (path) {
-			wfree(appdir);
-			return path;
-		}
-	}
+	return path;
 
-	path = checkFile("/usr/GNUstep", appdir, ext, resource);
-	if (path) {
-		wfree(appdir);
-		return path;
-	}
-
-	return NULL;
 }
