@@ -891,7 +891,6 @@ WMPropList *WMCreatePLString(char *str)
 	wassertrv(str != NULL, NULL);
 
 	plist = (WMPropList *) wmalloc(sizeof(W_PropList));
-
 	plist->type = WPLString;
 	plist->d.string = wstrdup(str);
 	plist->retainCount = 1;
@@ -906,7 +905,6 @@ WMPropList *WMCreatePLData(WMData * data)
 	wassertrv(data != NULL, NULL);
 
 	plist = (WMPropList *) wmalloc(sizeof(W_PropList));
-
 	plist->type = WPLData;
 	plist->d.data = WMRetainData(data);
 	plist->retainCount = 1;
@@ -921,7 +919,6 @@ WMPropList *WMCreatePLDataWithBytes(unsigned char *bytes, unsigned int length)
 	wassertrv(bytes != NULL, NULL);
 
 	plist = (WMPropList *) wmalloc(sizeof(W_PropList));
-
 	plist->type = WPLData;
 	plist->d.data = WMCreateDataWithBytes(bytes, length);
 	plist->retainCount = 1;
@@ -936,7 +933,6 @@ WMPropList *WMCreatePLDataWithBytesNoCopy(unsigned char *bytes, unsigned int len
 	wassertrv(bytes != NULL, NULL);
 
 	plist = (WMPropList *) wmalloc(sizeof(W_PropList));
-
 	plist->type = WPLData;
 	plist->d.data = WMCreateDataWithBytesNoCopy(bytes, length, destructor);
 	plist->retainCount = 1;

@@ -44,7 +44,6 @@ WMBox *WMCreateBox(WMWidget * parent)
 	Box *bPtr;
 
 	bPtr = wmalloc(sizeof(Box));
-	memset(bPtr, 0, sizeof(Box));
 
 	bPtr->widgetClass = WC_Box;
 

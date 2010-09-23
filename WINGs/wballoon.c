@@ -50,7 +50,6 @@ struct W_Balloon *W_CreateBalloon(WMScreen * scr)
 	Balloon *bPtr;
 
 	bPtr = wmalloc(sizeof(Balloon));
-	memset(bPtr, 0, sizeof(Balloon));
 
 	bPtr->view = W_CreateUnmanagedTopView(scr);
 	if (!bPtr->view) {

@@ -93,8 +93,6 @@ static W_View *createView(W_Screen * screen, W_View * parent)
 		ViewContext = XUniqueContext();
 
 	view = wmalloc(sizeof(W_View));
-	memset(view, 0, sizeof(W_View));
-
 	view->screen = screen;
 
 	if (parent != NULL) {

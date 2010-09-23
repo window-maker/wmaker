@@ -84,8 +84,6 @@ WMScroller *WMCreateScroller(WMWidget * parent)
 	Scroller *sPtr;
 
 	sPtr = wmalloc(sizeof(Scroller));
-	memset(sPtr, 0, sizeof(Scroller));
-
 	sPtr->widgetClass = WC_Scroller;
 
 	sPtr->view = W_CreateView(W_VIEW(parent));

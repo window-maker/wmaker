@@ -41,7 +41,6 @@ WMMenuItem *WMCreateMenuItem(void)
 	WMMenuItem *item;
 
 	item = wmalloc(sizeof(MenuItem));
-	memset(item, 0, sizeof(MenuItem));
 
 	item->flags.enabled = 1;
 

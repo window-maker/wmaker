@@ -110,7 +110,6 @@ WMList *WMCreateList(WMWidget * parent)
 	W_Screen *scrPtr = W_VIEW(parent)->screen;
 
 	lPtr = wmalloc(sizeof(List));
-	memset(lPtr, 0, sizeof(List));
 
 	lPtr->widgetClass = WC_List;
 
@@ -187,7 +186,6 @@ WMListItem *WMInsertListItem(WMList * lPtr, int row, char *text)
 	CHECK_CLASS(lPtr, WC_List);
 
 	item = wmalloc(sizeof(WMListItem));
-	memset(item, 0, sizeof(WMListItem));
 	item->text = wstrdup(text);
 
 	row = WMIN(row, WMGetArrayItemCount(lPtr->items));

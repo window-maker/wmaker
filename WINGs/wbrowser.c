@@ -95,7 +95,6 @@ WMBrowser *WMCreateBrowser(WMWidget * parent)
 	wassertrv(parent, NULL);
 
 	bPtr = wmalloc(sizeof(WMBrowser));
-	memset(bPtr, 0, sizeof(WMBrowser));
 
 	bPtr->widgetClass = WC_Browser;
 

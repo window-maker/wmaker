@@ -135,8 +135,6 @@ WMWindow *WMCreateWindowWithStyle(WMScreen * screen, char *name, int style)
 	_Window *win;
 
 	win = wmalloc(sizeof(_Window));
-	memset(win, 0, sizeof(_Window));
-
 	win->widgetClass = WC_Window;
 
 	win->view = W_CreateTopView(screen);

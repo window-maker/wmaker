@@ -263,10 +263,7 @@ WMUserDefaults *WMGetStandardUserDefaults(void)
 
 	/* we didn't found the database we are looking for. Go read it. */
 	defaults = wmalloc(sizeof(WMUserDefaults));
-	memset(defaults, 0, sizeof(WMUserDefaults));
-
 	defaults->defaults = WMCreatePLDictionary(NULL, NULL);
-
 	defaults->searchList = wmalloc(sizeof(WMPropList *) * 3);
 
 	/* application domain */
@@ -355,12 +352,9 @@ WMUserDefaults *WMGetDefaultsFromPath(char *path)
 		}
 	}
 
-	/* we didn't found the database we are looking for. Go read it. */
+	/* we didn't found the database we are looking for. Go read it. XXX wtf? */
 	defaults = wmalloc(sizeof(WMUserDefaults));
-	memset(defaults, 0, sizeof(WMUserDefaults));
-
 	defaults->defaults = WMCreatePLDictionary(NULL, NULL);
-
 	defaults->searchList = wmalloc(sizeof(WMPropList *) * 2);
 
 	/* the domain we want, go in the first position */

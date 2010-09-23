@@ -221,7 +221,6 @@ WMFrame *WMCreateFrame(WMWidget * parent)
 	Frame *fPtr;
 
 	fPtr = wmalloc(sizeof(Frame));
-	memset(fPtr, 0, sizeof(Frame));
 
 	fPtr->widgetClass = WC_Frame;
 

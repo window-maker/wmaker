@@ -341,7 +341,6 @@ Bool WMCreateSelectionHandler(WMView * view, Atom selection, Time timestamp, WMS
 	/*//printf("created selection handler for %d\n", W_VIEW_DRAWABLE(view)); */
 
 	handler = wmalloc(sizeof(SelectionHandler));
-
 	handler->view = view;
 	handler->selection = selection;
 	handler->timestamp = timestamp;
@@ -373,14 +372,12 @@ WMRequestSelection(WMView * view, Atom selection, Atom target, Time timestamp,
 	}
 
 	handler = wmalloc(sizeof(SelectionCallback));
-
 	handler->view = view;
 	handler->selection = selection;
 	handler->target = target;
 	handler->timestamp = timestamp;
 	handler->callback = callback;
 	handler->data = cdata;
-	memset(&handler->flags, 0, sizeof(handler->flags));
 
 	if (selCallbacks == NULL) {
 		selCallbacks = WMCreateArrayWithDestructor(4, wfree);

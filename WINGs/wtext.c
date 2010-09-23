@@ -2935,7 +2935,6 @@ WMText *WMCreateTextForDocumentType(WMWidget * parent, WMAction * parser, WMActi
 	XGCValues gcv;
 
 	tPtr = wmalloc(sizeof(Text));
-	memset(tPtr, 0, sizeof(Text));
 	tPtr->widgetClass = WC_Text;
 	tPtr->view = W_CreateView(W_VIEW(parent));
 	if (!tPtr->view) {
@@ -3232,7 +3231,6 @@ void *WMCreateTextBlockWithText(WMText * tPtr, char *text, WMFont * font, WMColo
 
 	tb->allocated = reqBlockSize(len);
 	tb->text = (char *)wmalloc(tb->allocated);
-	memset(tb->text, 0, tb->allocated);
 
 	if (len < 1 || !text || (*text == '\n' && len == 1)) {
 		*tb->text = ' ';

@@ -44,8 +44,6 @@ WMScrollView *WMCreateScrollView(WMWidget * parent)
 	ScrollView *sPtr;
 
 	sPtr = wmalloc(sizeof(ScrollView));
-	memset(sPtr, 0, sizeof(ScrollView));
-
 	sPtr->widgetClass = WC_ScrollView;
 
 	sPtr->view = W_CreateView(W_VIEW(parent));

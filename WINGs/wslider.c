@@ -57,8 +57,6 @@ WMSlider *WMCreateSlider(WMWidget * parent)
 	Slider *sPtr;
 
 	sPtr = wmalloc(sizeof(Slider));
-	memset(sPtr, 0, sizeof(Slider));
-
 	sPtr->widgetClass = WC_Slider;
 
 	sPtr->view = W_CreateView(W_VIEW(parent));

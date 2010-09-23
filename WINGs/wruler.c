@@ -384,8 +384,6 @@ WMRuler *WMCreateRuler(WMWidget * parent)
 	Ruler *rPtr = wmalloc(sizeof(Ruler));
 	unsigned int w = WMWidgetWidth(parent);
 
-	memset(rPtr, 0, sizeof(Ruler));
-
 	rPtr->widgetClass = WC_Ruler;
 
 	rPtr->view = W_CreateView(W_VIEW(parent));

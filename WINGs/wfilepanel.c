@@ -170,7 +170,6 @@ static WMFilePanel *makeFilePanel(WMScreen * scrPtr, char *name, char *title)
 	WMPixmap *icon;
 
 	fPtr = wmalloc(sizeof(WMFilePanel));
-	memset(fPtr, 0, sizeof(WMFilePanel));
 
 	fPtr->win = WMCreateWindowWithStyle(scrPtr, name, WMTitledWindowMask | WMResizableWindowMask);
 	WMResizeWidget(fPtr->win, PWIDTH, PHEIGHT);

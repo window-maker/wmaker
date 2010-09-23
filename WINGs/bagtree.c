@@ -358,16 +358,10 @@ WMBag *WMCreateTreeBagWithDestructor(WMFreeDataProc * destructor)
 	WMBag *bag;
 
 	bag = wmalloc(sizeof(WMBag));
-
-	memset(bag, 0, sizeof(WMBag));
-
 	bag->nil = wmalloc(sizeof(W_Node));
-	memset(bag->nil, 0, sizeof(W_Node));
 	bag->nil->left = bag->nil->right = bag->nil->parent = bag->nil;
 	bag->nil->index = WBNotFound;
-
 	bag->root = bag->nil;
-
 	bag->destructor = destructor;
 
 	return bag;

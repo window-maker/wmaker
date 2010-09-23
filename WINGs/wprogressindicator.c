@@ -43,7 +43,6 @@ WMProgressIndicator *WMCreateProgressIndicator(WMWidget * parent)
 	ProgressIndicator *pPtr;
 
 	pPtr = wmalloc(sizeof(ProgressIndicator));
-	memset(pPtr, 0, sizeof(ProgressIndicator));
 
 	pPtr->widgetClass = WC_ProgressIndicator;
 

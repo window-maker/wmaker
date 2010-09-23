@@ -190,8 +190,6 @@ WMTabView *WMCreateTabView(WMWidget * parent)
 	WMScreen *scr = WMWidgetScreen(parent);
 
 	tPtr = wmalloc(sizeof(TabView));
-	memset(tPtr, 0, sizeof(TabView));
-
 	tPtr->widgetClass = WC_TabView;
 
 	tPtr->view = W_CreateView(W_VIEW(parent));
@@ -258,7 +256,7 @@ void WMInsertItemInTabView(WMTabView * tPtr, int index, WMTabViewItem * item)
 		WMTabViewItem **items;
 
 		items = wrealloc(tPtr->items, sizeof(WMTabViewItem *) * (tPtr->maxItems + 10));
-		memset(&items[tPtr->maxItems], 0, sizeof(WMTabViewItem *) * 10);
+		memset(&items[tPtr->maxItems], 0, sizeof(WMTabViewItem *) * 10); /* XXX */
 		tPtr->items = items;
 		tPtr->maxItems += 10;
 	}
@@ -819,10 +817,7 @@ WMTabViewItem *WMCreateTabViewItemWithIdentifier(int identifier)
 	WMTabViewItem *item;
 
 	item = wmalloc(sizeof(WMTabViewItem));
-	memset(item, 0, sizeof(WMTabViewItem));
-
 	item->identifier = identifier;
-
 	item->flags.enabled = 1;
 
 	return item;
@@ -833,10 +828,7 @@ WMTabViewItem *WMCreateTabViewItem(int identifier, char *label)
 	WMTabViewItem *item;
 
 	item = wmalloc(sizeof(WMTabViewItem));
-	memset(item, 0, sizeof(WMTabViewItem));
-
 	item->identifier = identifier;
-
 	item->flags.enabled = 1;
 
 	WMSetTabViewItemLabel(item, label);

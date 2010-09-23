@@ -138,7 +138,6 @@ WMColorWell *WMCreateColorWell(WMWidget * parent)
 	ColorWell *cPtr;
 
 	cPtr = wmalloc(sizeof(ColorWell));
-	memset(cPtr, 0, sizeof(ColorWell));
 
 	cPtr->widgetClass = WC_ColorWell;
 

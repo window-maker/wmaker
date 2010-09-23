@@ -39,7 +39,6 @@ WMLabel *WMCreateLabel(WMWidget * parent)
 	Label *lPtr;
 
 	lPtr = wmalloc(sizeof(Label));
-	memset(lPtr, 0, sizeof(Label));
 
 	lPtr->widgetClass = WC_Label;
 

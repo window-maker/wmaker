@@ -98,6 +98,7 @@ void *wmalloc(size_t size)
 			}
 		}
 	}
+	memset(tmp, 0, size);
 	return tmp;
 }
 

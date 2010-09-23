@@ -57,7 +57,6 @@ WMPopUpButton *WMCreatePopUpButton(WMWidget * parent)
 	W_Screen *scr = W_VIEW(parent)->screen;
 
 	bPtr = wmalloc(sizeof(PopUpButton));
-	memset(bPtr, 0, sizeof(PopUpButton));
 
 	bPtr->widgetClass = WC_PopUpButton;
 

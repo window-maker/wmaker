@@ -374,8 +374,6 @@ static WMColorPanel *makeColorPanel(WMScreen * scrPtr, char *name)
 	GC wgc = WMColorGC(scrPtr->white);
 
 	panel = wmalloc(sizeof(WMColorPanel));
-	memset(panel, 0, sizeof(WMColorPanel));
-
 	panel->color.rgb.red = 0;
 	panel->color.rgb.green = 0;
 	panel->color.rgb.blue = 0;
@@ -1842,7 +1840,6 @@ static wheelMatrix *wheelCreateMatrix(unsigned int width, unsigned int height)
 	assert((width > 0) && (height > 0));
 
 	matrix = wmalloc(sizeof(wheelMatrix));
-	memset(matrix, 0, sizeof(wheelMatrix));
 	matrix->width = width;
 	matrix->height = height;
 
@@ -3446,15 +3443,7 @@ RColor ulongToRColor(WMScreen * scr, unsigned long value)
 	RColor color;
 	XColor *xcolor = NULL;
 
-	if (!(xcolor = wmalloc(sizeof(XColor)))) {
-		wwarning(_("Color Panel: Could not allocate memory"));
-		color.red = 0;
-		color.green = 0;
-		color.blue = 0;
-		color.alpha = 0;
-		return color;
-	}
-
+	xcolor = wmalloc(sizeof(XColor));
 	xcolor->pixel = value;
 	XQueryColor(scr->display, scr->rcontext->cmap, xcolor);
 

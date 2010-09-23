@@ -607,8 +607,6 @@ WMSplitView *WMCreateSplitView(WMWidget * parent)
 	WMSplitView *sPtr;
 
 	sPtr = wmalloc(sizeof(WMSplitView));
-	memset(sPtr, 0, sizeof(WMSplitView));
-
 	sPtr->widgetClass = WC_SplitView;
 
 	sPtr->view = W_CreateView(W_VIEW(parent));

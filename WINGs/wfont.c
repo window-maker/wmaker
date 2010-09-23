@@ -139,7 +139,6 @@ WMFont *WMCreateFont(WMScreen * scrPtr, char *fontName)
 	}
 
 	font = wmalloc(sizeof(WMFont));
-	memset(font, 0, sizeof(WMFont));
 
 	font->screen = scrPtr;
 

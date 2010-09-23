@@ -165,7 +165,6 @@ WMFontPanel *WMGetFontPanel(WMScreen * scr)
 		return scr->sharedFontPanel;
 
 	panel = wmalloc(sizeof(FontPanel));
-	memset(panel, 0, sizeof(FontPanel));
 
 	panel->win = WMCreateWindow(scr, "fontPanel");
 	/*    WMSetWidgetBackgroundColor(panel->win, WMWhiteColor(scr)); */
@@ -461,7 +460,6 @@ static void addTypefaceToXftFamily(Family * fam, char *style)
 	}
 
 	face = wmalloc(sizeof(Typeface));
-	memset(face, 0, sizeof(Typeface));
 
 	face->typeface = wstrdup(style);
 	face->sizes = WMCreateArray(4);

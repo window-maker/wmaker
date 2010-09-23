@@ -316,8 +316,6 @@ WMTextField *WMCreateTextField(WMWidget * parent)
 	TextField *tPtr;
 
 	tPtr = wmalloc(sizeof(TextField));
-	memset(tPtr, 0, sizeof(TextField));
-
 	tPtr->widgetClass = WC_TextField;
 
 	tPtr->view = W_CreateView(W_VIEW(parent));
@@ -335,7 +333,6 @@ WMTextField *WMCreateTextField(WMWidget * parent)
 	W_SetViewBackgroundColor(tPtr->view, tPtr->view->screen->white);
 
 	tPtr->text = wmalloc(MIN_TEXT_BUFFER);
-	tPtr->text[0] = 0;
 	tPtr->textLen = 0;
 	tPtr->bufferSize = MIN_TEXT_BUFFER;
 

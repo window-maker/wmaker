@@ -35,11 +35,9 @@ WMNotification *WMCreateNotification(const char *name, void *object, void *clien
 	Notification *nPtr;
 
 	nPtr = wmalloc(sizeof(Notification));
-
 	nPtr->name = name;
 	nPtr->object = object;
 	nPtr->clientData = clientData;
-
 	nPtr->refCount = 1;
 
 	return nPtr;
@@ -89,11 +87,9 @@ static NotificationCenter *notificationCenter = NULL;
 void W_InitNotificationCenter(void)
 {
 	notificationCenter = wmalloc(sizeof(NotificationCenter));
-
 	notificationCenter->nameTable = WMCreateHashTable(WMStringPointerHashCallbacks);
 	notificationCenter->objectTable = WMCreateHashTable(WMIntHashCallbacks);
 	notificationCenter->nilList = NULL;
-
 	notificationCenter->observerTable = WMCreateHashTable(WMIntHashCallbacks);
 }
 
@@ -366,7 +362,6 @@ WMNotificationQueue *WMCreateNotificationQueue(void)
 	NotificationQueue *queue;
 
 	queue = wmalloc(sizeof(NotificationQueue));
-
 	queue->asapQueue = WMCreateArrayWithDestructor(8, (WMFreeDataProc *) WMReleaseNotification);
 	queue->idleQueue = WMCreateArrayWithDestructor(8, (WMFreeDataProc *) WMReleaseNotification);
 	queue->next = notificationQueueList;

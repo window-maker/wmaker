@@ -81,7 +81,6 @@ static void rebuildTable(WMHashTable * table)
 	newSize = table->size * 2;
 
 	table->table = wmalloc(sizeof(char *) * newSize);
-	memset(table->table, 0, sizeof(char *) * newSize);
 	table->size = newSize;
 
 	for (i = 0; i < oldSize; i++) {

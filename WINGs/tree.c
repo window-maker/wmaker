@@ -40,10 +40,7 @@ WMTreeNode *WMCreateTreeNodeWithDestructor(void *data, WMFreeDataProc * destruct
 	WMTreeNode *aNode;
 
 	aNode = (WMTreeNode *) wmalloc(sizeof(W_TreeNode));
-	memset(aNode, 0, sizeof(W_TreeNode));
-
 	aNode->destructor = destructor;
-
 	aNode->data = data;
 	aNode->parent = NULL;
 	aNode->depth = 0;

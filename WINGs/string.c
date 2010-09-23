@@ -41,7 +41,6 @@ char *wtokennext(char *word, char **next)
 	ptr = word;
 
 	state = 0;
-	*t = 0;
 	while (1) {
 		if (*ptr == 0)
 			ctype = PRC_EOS;
@@ -121,7 +120,6 @@ char *wtokenjoin(char **list, int count)
 
 	flat_string = wmalloc(j + count + 1);
 
-	*flat_string = 0;
 	for (i = 0; i < count; i++) {
 		if (list[i] != NULL && list[i][0] != 0) {
 			if (i > 0)

@@ -94,7 +94,6 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 	WMPixmap *icon;
 
 	panel = wmalloc(sizeof(WMAlertPanel));
-	memset(panel, 0, sizeof(WMAlertPanel));
 
 	if (owner) {
 		panel->win = WMCreatePanelWithStyleForWindow(owner, "alertPanel", WMTitledWindowMask);
@@ -342,7 +341,6 @@ WMInputPanel *WMCreateInputPanel(WMScreen * scrPtr, WMWindow * owner, char *titl
 	int x, dw = 0, aw = 0, w;
 
 	panel = wmalloc(sizeof(WMInputPanel));
-	memset(panel, 0, sizeof(WMInputPanel));
 
 	if (owner)
 		panel->win = WMCreatePanelWithStyleForWindow(owner, "inputPanel", WMTitledWindowMask);
@@ -464,7 +462,6 @@ WMGenericPanel *WMCreateGenericPanel(WMScreen * scrPtr, WMWindow * owner,
 	WMPixmap *icon;
 
 	panel = wmalloc(sizeof(WMGenericPanel));
-	memset(panel, 0, sizeof(WMGenericPanel));
 
 	if (owner) {
 		panel->win = WMCreatePanelWithStyleForWindow(owner, "genericPanel", WMTitledWindowMask);
