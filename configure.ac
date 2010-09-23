@@ -166,6 +166,14 @@ AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname select poll strcasecmp strncasecmp \
 	       setsid atexit mallinfo mkstemp)
 
+dnl Check for strlcat/strlcpy
+dnl =========================
+dnl XXX: A clean way to use libbsd-supplied equivalents should be come up
+dnl      with. This is a tricky-ish problem, as it will require a conditional
+dnl      inclusion of an extra header everywhere there is string.h included.
+AC_CHECK_FUNC(strlcat, AC_DEFINE(HAVE_STRLCAT, 1, Check for strlcat))
+AC_CHECK_FUNC(strlcpy, AC_DEFINE(HAVE_STRLCPY, 1, Check for strlcpy))
+
 dnl Check for inotify
 dnl =================
 AC_CHECK_HEADERS(sys/inotify.h, AC_DEFINE(HAVE_INOTIFY, 1, Check for inotify))
