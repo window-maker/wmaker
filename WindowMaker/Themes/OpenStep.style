@@ -1,5 +1,5 @@
 {
-  NewStyle = YES;
+  NewStyle = new;
   TitleJustify = left;
   WindowTitleFont = "Trebuchet MS,sans serif:bold:pixelsize=12";
   MenuTitleFont = "Trebuchet MS,sans serif:bold:pixelsize=12";

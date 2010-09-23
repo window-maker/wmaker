@@ -1210,7 +1210,7 @@ static int string2index(WMPropList * key, WMPropList * val, char *def, WOptionEn
 				sizeof(buffer)-strlen(buffer)-1, "\"%s\"", v->string);
 		}
 	}
-	wwarning(_("wrong option value for key \"%s\". Got \"%s\", should be one of %s"),
+	wwarning(_("wrong option value for key \"%s\"; got \"%s\", should be one of %s."),
 		WMGetFromPLString(key),
 		WMIsPLString(val) ? WMGetFromPLString(val) : "(unknown)",
 		buffer);

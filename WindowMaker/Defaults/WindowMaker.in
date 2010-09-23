@@ -38,7 +38,7 @@
   ColormapSize = 4;
   DisableDithering = NO;
   ModifierKey = Mod1;
-  NewStyle = YES;
+  NewStyle = "new";
   DisableDock = NO;
   DisableClip = NO;
   Superfluous = YES;

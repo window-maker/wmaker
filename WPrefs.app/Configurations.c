@@ -81,7 +81,7 @@ static void showData(_Panel *panel)
 	WMPerformButtonClick(panel->icoB[GetSpeedForKey("IconSlideSpeed")]);
 	WMPerformButtonClick(panel->shaB[GetSpeedForKey("ShadeSpeed")]);
 
-	str = GetStringForKey("Newstyle");
+	str = GetStringForKey("NewStyle");
 	if (str && strcasecmp(str, "next") == 0) {
 		WMPerformButtonClick(panel->nextB);
 	} else if (str && strcasecmp(str, "old") == 0) {
