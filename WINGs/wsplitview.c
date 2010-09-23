@@ -649,7 +649,8 @@ void WMAddSplitViewSubview(WMSplitView * sPtr, WMView * subview)
 
 	CHECK_CLASS(sPtr, WC_SplitView);
 
-	if (!(p = (W_SplitViewSubview *) wmalloc(sizeof(W_SplitViewSubview))))
+	p = (W_SplitViewSubview *) wmalloc(sizeof(W_SplitViewSubview));
+	if (!p)
 		return;
 
 	wasMapped = subview->flags.mapped;

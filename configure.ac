@@ -213,8 +213,8 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 dnl ==============================================================
 AC_DECL_SYS_SIGLIST
 AC_C_CONST
-#AC_TYPE_SIZE_T
-#AC_TYPE_PID_T
+AC_TYPE_SIZE_T
+AC_TYPE_PID_T
 AC_TYPE_SIGNAL
 
 
@@ -410,7 +410,7 @@ if test "$shape" = yes; then
 fi
 
 dnl XRandR support
-dnl =============
+dnl ==============
 xrandr=no
 AC_ARG_ENABLE(xrandr, AS_HELP_STRING([--enable-xrandr], [enable XRandR window extension support]),
 		xrandr=$enableval, xrandr=no)
@@ -797,7 +797,7 @@ AC_SUBST(wprefs_bindir)
 
 
 dnl Enable User Defined Menu thing
-dnl ==================================
+dnl ==============================
 AC_ARG_ENABLE(usermenu, AS_HELP_STRING([--enable-usermenu], [user defined menus for applications]),
 if test "$enableval" = yes; then
 	AC_DEFINE(USER_MENU, 1, [define if you want user defined menus for applications])

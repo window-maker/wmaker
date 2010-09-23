@@ -478,7 +478,7 @@ static void registerDescriptionList(WMScreen * scr, WMView * view, WMArray * ope
 
 	/* size of XA_STRING info */
 	for (i = 0; i < count; i++) {
-		size += strlen(WMGetDragOperationItemText(WMGetFromArray(operationArray, i))) + 1;	/* +1 = +NULL */
+		size += strlen(WMGetDragOperationItemText(WMGetFromArray(operationArray, i))) + 1 /* NULL */;
 	}
 
 	/* create text list */
