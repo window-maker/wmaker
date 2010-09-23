@@ -66,6 +66,9 @@ static char *checkFile(char *path, char *folder, char *ext, char *resource)
 	char *ret;
 	int extralen;
 
+	if (!path || !resource)
+		return NULL;
+
 	extralen = (ext ? strlen(ext) : 0) + (folder ? strlen(folder) : 0) + 4;
 	ret = wmalloc(strlen(path) + strlen(resource) + extralen + 8);
 	strcpy(ret, path);
