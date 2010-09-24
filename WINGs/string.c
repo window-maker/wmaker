@@ -4,6 +4,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#ifdef HAVE_BSD_STRING_H
+#include <bsd/string.h>
+#endif
 
 #include "WUtil.h"
 
@@ -209,7 +212,13 @@ char *wstrappend(char *dst, char *src)
 }
 
 
-#ifndef HAVE_STRLCAT
+#ifdef HAVE_STRLCAT
+size_t
+wstrlcat(char *dst, const char *src, size_t siz)
+{
+	return strlcat(dst, src, siz);
+}
+#else
 /*	$OpenBSD: strlcat.c,v 1.13 2005/08/08 08:05:37 espie Exp $	*/
 
 /*
@@ -236,7 +245,7 @@ char *wstrappend(char *dst, char *src)
  * If retval >= siz, truncation occurred.
  */
 size_t
-strlcat(char *dst, const char *src, size_t siz)
+wstrlcat(char *dst, const char *src, size_t siz)
 {
 	char *d = dst;
 	const char *s = src;
@@ -264,7 +273,13 @@ strlcat(char *dst, const char *src, size_t siz)
 }
 #endif /* HAVE_STRLCAT */
 
-#ifndef HAVE_STRLCPY
+#ifdef HAVE_STRLCPY
+size_t
+wstrlcpy(char *dst, const char *src, size_t siz)
+{
+	return strlcpy(dst, src, siz);
+}
+#else
 
 /*	$OpenBSD: strlcpy.c,v 1.11 2006/05/05 15:27:38 millert Exp $	*/
 
@@ -290,7 +305,7 @@ strlcat(char *dst, const char *src, size_t siz)
  * Returns strlen(src); if retval >= siz, truncation occurred.
  */
 size_t
-strlcpy(char *dst, const char *src, size_t siz)
+wstrlcpy(char *dst, const char *src, size_t siz)
 {
 	char *d = dst;
 	const char *s = src;

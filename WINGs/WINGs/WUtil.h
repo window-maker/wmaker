@@ -222,6 +222,9 @@ char* wstrconcat(char *str1, char *str2);
  * so always assign the returned address to avoid dangling pointers. */
 char* wstrappend(char *dst, char *src);
 
+size_t wstrlcpy(char *, const char *, size_t);
+size_t wstrlcat(char *, const char *, size_t);
+
 
 void wtokensplit(char *command, char ***argv, int *argc);
 
@@ -848,13 +851,6 @@ extern int WCErrorCode;
 
 
 /*-------------------------------------------------------------------------*/
-
-#ifndef HAVE_STRLCPY
-size_t strlcpy(char *, const char *, size_t);
-#endif
-#ifndef HAVE_STRLCAT
-size_t strlcat(char *, const char *, size_t);
-#endif
 
 #ifdef __cplusplus
 }

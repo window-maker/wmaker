@@ -168,11 +168,31 @@ AC_CHECK_FUNCS(gethostname select poll strcasecmp strncasecmp \
 
 dnl Check for strlcat/strlcpy
 dnl =========================
-dnl XXX: A clean way to use libbsd-supplied equivalents should be come up
-dnl      with. This is a tricky-ish problem, as it will require a conditional
-dnl      inclusion of an extra header everywhere there is string.h included.
-AC_CHECK_FUNC(strlcat, AC_DEFINE(HAVE_STRLCAT, 1, Check for strlcat))
-AC_CHECK_FUNC(strlcpy, AC_DEFINE(HAVE_STRLCPY, 1, Check for strlcpy))
+AC_ARG_WITH([libbsd],
+  [AS_HELP_STRING([--without-libbsd], [do not use libbsd for strlcat and strlcpy [default=check]])],
+  [AS_IF([test "x$with_libbsd" != "xno"],
+    [with_libbsd=bsd]
+    [with_libbsd=]
+  )],
+  [with_libbsd=bsd])
+
+tmp_libs=$LIBS
+AC_SEARCH_LIBS([strlcat],[$with_libbsd],
+  [AC_DEFINE(HAVE_STRLCAT, 1, [Define if strlcat is available])],
+  []
+)
+AC_SEARCH_LIBS([strlcpy],[$with_libbsd],
+  [AC_DEFINE(HAVE_STRLCAT, 1, [Define if strlcpy is available])],
+  []
+)
+LIBS=$tmp_libs
+
+LIBBSD=
+AS_IF([test "x$ac_cv_search_strlcat" = "x-lbsd" -o "x$ac_cv_search_strlcpy" = "x-lbsd"],
+  [LIBBSD=-lbsd
+   AC_CHECK_HEADERS([bsd/string.h])]
+)
+AC_SUBST(LIBBSD)
 
 dnl Check for inotify
 dnl =================
