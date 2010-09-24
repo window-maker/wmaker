@@ -386,7 +386,9 @@ fi
 X_LIBRARY_PATH=$x_libraries
 XCFLAGS="$X_CFLAGS"
 XLFLAGS="$X_LIBS"
-XLIBS="-lX11 -lXmu $X_EXTRA_LIBS"
+XLIBS="-lX11 $X_EXTRA_LIBS"
+LIBXMU="-lXmu"
+AC_SUBST(LIBXMU)
 
 lib_search_path="$lib_search_path $XLFLAGS"
 inc_search_path="$inc_search_path $XCFLAGS"
@@ -444,12 +446,14 @@ AC_ARG_ENABLE(xrandr, AS_HELP_STRING([--enable-xrandr], [enable XRandR window ex
 		xrandr=$enableval, xrandr=no)
 added_xext=no
 
+LIBXRANDR=
 if test "$xrandr" = yes; then
-	AC_CHECK_LIB(Xrandr, XRRQueryExtension, [XLIBS="-lXrandr $XLIBS"
+	AC_CHECK_LIB(Xrandr, XRRQueryExtension, [LIBXRANDR=-lXrandr
 		added_xext=yes
 		AC_DEFINE(HAVE_XRANDR, 1, [define if you want support for XRandR (set by configure)])],
 		xrandr=no, $XLFLAGS $XLIBS)
 fi
+AC_SUBST(LIBXRANDR)
 
 dnl
 dnl libWINGS uses math functions, check whether usage requires linking
@@ -530,9 +534,10 @@ xinerama=no
 AC_ARG_ENABLE(xinerama, AS_HELP_STRING([--enable-xinerama], [enable Xinerama extension support]),
 		xinerama=$enableval, xinerama=no)
 
+LIBXINERAMA=
 if test "$xinerama" = yes; then
 	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, 
-                [XLIBS="-lXinerama $XLIBS"
+                [LIBXINERAMA=-lXinerama
                 xfxine=yes],
 		xfxine=no, $XLFLAGS $XLIBS)
 
@@ -555,7 +560,7 @@ if test "$xinerama" = yes; then
 		[define if you want support for the XINERAMA extension (set by configure)])
 	fi
 fi
-
+AC_SUBST(LIBXINERAMA)
 
 
 dnl MIT-SHM support
@@ -630,12 +635,26 @@ AC_ARG_ENABLE(png, AS_HELP_STRING([--disable-png], [disable PNG support through 
 	png=$enableval, png=yes, png=no)
 
 if test "$png" = yes ; then
-    WM_CHECK_LIB(png, png_get_valid, [-lz -lm])
+    my_libname=""
+    WM_CHECK_LIB(png, png_get_valid, [-lm])
+    if test "x$ac_cv_lib_png_png_get_valid" = xyes; then
+	my_libname="-lpng"
+    fi
+dnl
+dnl Retry with zlib
+dnl
+    if test "x$my_libname" = x; then
+        unset ac_cv_lib_png_png_get_valid
+        WM_CHECK_LIB(png, png_get_valid, [-lz -lm])
+	if test "x$ac_cv_lib_png_png_get_valid" = xyes; then
+	    my_libname="-lpng -lz"
+	fi
+    fi
 
     if test "x$ac_cv_lib_png_png_get_valid" = xyes; then
     	WM_CHECK_HEADER(png.h)
 	if test "x$ac_cv_header_png_h" = xyes; then
-	    GFXLIBS="$GFXLIBS -lpng -lz" 
+	    GFXLIBS="$GFXLIBS $my_libname"
 	    supported_gfx="$supported_gfx PNG"
             AC_DEFINE(USE_PNG, 1, [define if PNG libraries are available (set by configure)])
 	fi

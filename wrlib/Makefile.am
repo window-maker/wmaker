@@ -48,7 +48,7 @@ COMPILE2=`echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`
 
 INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
 
-libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ -lm
+libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ @LIBXMU@ -lm
 
 DISTCLEANFILES = wrlib.pc
 
