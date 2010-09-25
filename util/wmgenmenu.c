@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 	 */
 
 	/* Root */
-	RMenu = WMCreatePLArray(WMCreatePLString(_("Window Maker")), NULL);
+	RMenu = WMCreatePLArray(WMCreatePLString("Window Maker"), NULL);
 
 	/* Root -> Applications */
 	L1Menu = WMCreatePLArray(WMCreatePLString(_("Applications")), NULL);
@@ -112,7 +112,7 @@ int main(int argc, char *argv[])
 	find_and_write(_("Multimedia"), Multimedia, 0);
 	find_and_write(_("Editors"), Editors, 0);
 	find_and_write(_("Development"), Development, 0);
-	find_and_write(_("Window Maker"), WindowMaker, 0);
+	find_and_write("Window Maker", WindowMaker, 0);
 	find_and_write(_("Office"), Office, 0);
 	find_and_write(_("Astronomy"), Astronomy, 0);
 	find_and_write(_("Sound"), Sound, 0);
@@ -124,8 +124,8 @@ int main(int argc, char *argv[])
 	find_and_write(_("Chat and Talk"), Chat, 0);
 	find_and_write(_("P2P Network"), P2P, 0);
 	find_and_write(_("Games"), Games, 0);
-	find_and_write(_("OpenSUSE"), OpenSUSE, 0);
-	find_and_write(_("Mandriva"), Mandriva, 0);
+	find_and_write("OpenSUSE", OpenSUSE, 0);
+	find_and_write("Mandriva", Mandriva, 0);
 
 	WMAddToPLArray(RMenu, L1Menu);
 
