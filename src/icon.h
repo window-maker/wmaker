@@ -72,4 +72,8 @@ RImage *wIconValidateIconSize(WScreen *scr, RImage *icon);
 
 char *wIconStore(WIcon *icon);
 
+#ifdef NEWAPPICON
+void wIconSetHighlited(WIcon *icon, Bool flag);
+#endif /* NEWAPPICON */
+
 #endif /* WMICON_H_ */
