@@ -44,6 +44,7 @@ wmaker (0.92.0+git-0) unstable; urgency=low
       calloc - wrlib/png.c) Closes: #148370
     + Fix compilation with LDFLAGS=-Wl,--no-add-needed  Closes: #556677
   * Provide detached debugging symbols in wmaker-dbg package.
+  * Build-depend on automake 1.11 or later.
 
  -- Andreas Metzler <ametzler@debian.org>  Sat, 07 Aug 2010 10:56:00 +0200
 
