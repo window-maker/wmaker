@@ -105,7 +105,6 @@ case "${host}" in
 	;;
 	*)
 		WM_OSDEP="stub"
-		CFLAGS="-DSTUB_HINT=\\\"${host}\\\""
 	;;
 esac
 AC_SUBST(WM_OSDEP)
