@@ -1,3 +1,77 @@
+** API and ABI modifications since wmaker 0.92.0
+
+** libWINGs **
+<WINGsP.h>
+struct W_DragDestinationInfo: new members added SIZE CHANGE
+
+<WINGs.h>
+WMGetTextFieldCursorPosition ADDED
+
+** libWutil **
+enum WMConnectionState REMOVED
+enum WMConnectionTimeoutState REMOVED
+struct ConnectionDelegate REMOVED
+__wmessage ADDED
+wstrerror REMOVED
+wmessage converted from function to wrapper macro
+wwarning converted from function to wrapper macro
+wfatal converted from function to wrapper macro
+wsyserror converted from function to wrapper macro
+wsyserrorwithcode converted from function to wrapper macro
+wmkdirhier ADDED
+wrmdirhier ADDED
+wmalloc0 REMOVED
+wnew REMOVED
+wnew0 REMOVED
+wstrlcpy ADDED
+wstrlcat ADDED
+WMPushInArray REMOVED
+WMWritePropListToFile NUMBER OF FUNCTION ARGUMENTS CHANGED
+WMGetCurrentHost
+WMGetHostWithName
+WMGetHostWithAddress
+WMRetainHost
+WMReleaseHost
+WMSetHostCacheEnabled
+WMIsHostCacheEnabled
+WMFlushHostCache
+WMIsHostEqualToHost
+WMGetHostName
+WMGetHostNames
+WMGetHostAddress
+WMCreateConnectionAsServerAtAddress REMOVED
+WMCreateConnectionToAddress REMOVED
+WMCreateConnectionToAddressAndNotify REMOVED
+WMCloseConnection REMOVED
+WMDestroyConnection REMOVED
+WMConnection* WMAcceptConnection REMOVED
+WMGetConnectionAvailableData REMOVED
+WMSendConnectionData REMOVED
+WMEnqueueConnectionData REMOVED
+WMFlushConnection REMOVED
+WMSetConnectionDelegate REMOVED
+WMGetConnectionService REMOVED
+WMGetConnectionProtocol REMOVED
+WMSetConnectionNonBlocking REMOVED
+WMSetConnectionCloseOnExec REMOVED
+WMSetConnectionShutdownOnClose REMOVED
+WMGetConnectionClientData REMOVED
+WMSetConnectionClientData REMOVED
+WMGetConnectionFlags REMOVED
+WMSetConnectionFlags REMOVED
+WMGetConnectionSocket REMOVED
+WMGetConnectionState REMOVED
+WMGetConnectionTimeoutState REMOVED
+WMGetConnectionUnsentData REMOVED
+WMGetConnectionQueuedData REMOVED
+WMSetConnectionDefaultTimeout REMOVED
+WMSetConnectionOpenTimeout REMOVED
+WMSetConnectionSendTimeout REMOVED
+
+
+
+----------------------------------------------------
+
 *** Mon Oct 14 19:42:42 EEST 2002 - Dan
 
 Double buffering
