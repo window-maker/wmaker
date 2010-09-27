@@ -675,7 +675,7 @@ static void loadConfigurations(WMScreen * scr, WMWindow * mainw)
 		wfree(command);
 	}
 	if (!file || !fgets(buffer, 1023, file)) {
-		wsyserror(_("could not extract version information from Window Maker"));
+		werror(_("could not extract version information from Window Maker"));
 		wfatal(_("Make sure wmaker is in your search path."));
 
 		WMRunAlertPanel(scr, mainw, _("Error"),
@@ -719,7 +719,7 @@ static void loadConfigurations(WMScreen * scr, WMWindow * mainw)
 		wfree(command);
 	}
 	if (!file || !fgets(buffer, 1023, file)) {
-		wsyserror(_("could not run \"%s --global_defaults_path\"."), path);
+		werror(_("could not run \"%s --global_defaults_path\"."), path);
 		exit(1);
 	} else {
 		char *ptr;

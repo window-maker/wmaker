@@ -1144,7 +1144,7 @@ static void readConfiguration(W_ColorPanel * panel)
 
 	if (stat(panel->configurationPath, &stat_buf) != 0) {
 		if (mkdir(panel->configurationPath, S_IRWXU | S_IRGRP | S_IROTH | S_IXGRP | S_IXOTH) != 0) {
-			wsyserror(_("Color Panel: Could not create directory %s needed"
+			werror(_("Color Panel: Could not create directory %s needed"
 				    " to store configurations"), panel->configurationPath);
 			WMSetPopUpButtonEnabled(panel->customPaletteMenuBtn, False);
 			WMSetPopUpButtonEnabled(panel->colorListColorMenuBtn, False);
@@ -2955,7 +2955,7 @@ static void customPaletteMenuNewFromFile(W_ColorPanel * panel)
 			WMRunAlertPanel(scr, panel->win, _("File Error"),
 					_("Invalid file format !"), _("OK"), NULL, NULL);
 			if (i != 0) {
-				wsyserror(_("can't remove file %s"), tmp);
+				werror(_("can't remove file %s"), tmp);
 				WMRunAlertPanel(scr, panel->win, _("File Error"),
 						_("Couldn't remove file from Configuration Directory !"),
 						_("OK"), NULL, NULL);
@@ -3031,7 +3031,7 @@ static void customPaletteMenuRename(W_ColorPanel * panel)
 		}
 
 		if (rename(fromPath, toPath) != 0)
-			wsyserror(_("Couldn't rename palette %s to %s\n"), fromName, toName);
+			werror(_("Couldn't rename palette %s to %s\n"), fromName, toName);
 		else {
 			WMRemovePopUpButtonItem(panel->customPaletteHistoryBtn, item);
 			WMInsertPopUpButtonItem(panel->customPaletteHistoryBtn, item, toName);
@@ -3078,7 +3078,7 @@ static void customPaletteMenuRemove(W_ColorPanel * panel)
 			WMRemovePopUpButtonItem(panel->customPaletteHistoryBtn, item);
 
 		} else {
-			wsyserror(_("Couldn't remove palette %s\n"), tmp);
+			werror(_("Couldn't remove palette %s\n"), tmp);
 		}
 
 		wfree(tmp);
@@ -3347,14 +3347,14 @@ static int fetchFile(char *toPath, char *srcFile, char *destFile)
 
 	RETRY( src = fopen(srcFile, "rb") )
 	if (src == NULL) {
-		wsyserror(_("Could not open %s"), srcFile);
+		werror(_("Could not open %s"), srcFile);
 		return -1;
 	}
 
 	dstpath = wstrconcat(toPath, destFile);
 	RETRY( dst = fopen(dstpath, "wb") )
 	if (dst == NULL) {
-		wsyserror(_("Could not create %s"), dstpath);
+		werror(_("Could not create %s"), dstpath);
 		wfree(dstpath);
 		RETRY( fclose(src) )
 		return -1;

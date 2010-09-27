@@ -56,7 +56,7 @@ int showCrashDialog(int sig)
 		XCloseDisplay(dpy);
 		dpy = NULL;
 	} else {
-		wsyserror(_("cannot open connection for crashing dialog panel. Aborting."));
+		werror(_("cannot open connection for crashing dialog panel. Aborting."));
 		crashAction = WMAbort;
 	}
 
@@ -98,16 +98,16 @@ int MonitorLoop(int argc, char **argv)
 		pid = fork();
 		if (pid == 0) {
 			execvp(child_argv[0], child_argv);
-			wsyserror(_("Error respawning Window Maker"));
+			werror(_("Error respawning Window Maker"));
 			exit(1);
 		} else if (pid < 0) {
-			wsyserror(_("Error respawning Window Maker"));
+			werror(_("Error respawning Window Maker"));
 			exit(1);
 		}
 
 		do {
 			if ((exited = waitpid(-1, &status, 0)) < 0) {
-				wsyserror(_("Error during monitoring of Window Maker process."));
+				werror(_("Error during monitoring of Window Maker process."));
 				error = True;
 				break;
 			}

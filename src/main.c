@@ -309,7 +309,7 @@ void Restart(char *manager, Bool abortOnFailure)
 		wfatal(_("failed to restart Window Maker."));
 	} else {
 		execvp(prog, argv);
-		wsyserror(_("could not exec %s"), prog);
+		werror(_("could not exec %s"), prog);
 	}
 	if (abortOnFailure)
 		exit(7);
@@ -388,10 +388,10 @@ void ExecuteShellCommand(WScreen * scr, char *command)
 		setsid();
 #endif
 		execl(shell, shell, "-c", command, NULL);
-		wsyserror("could not execute %s -c %s", shell, command);
+		werror("could not execute %s -c %s", shell, command);
 		Exit(-1);
 	} else if (pid < 0) {
-		wsyserror("cannot fork a new process");
+		werror("cannot fork a new process");
 	} else {
 		_tuple *data = wmalloc(sizeof(_tuple));
 
@@ -517,7 +517,7 @@ static void execInitScript()
 
 	if (file) {
 		if (system(file) != 0) {
-			wsyserror(_("%s:could not execute initialization script"), file);
+			werror(_("%s:could not execute initialization script"), file);
 		}
 		wfree(file);
 	}
@@ -535,7 +535,7 @@ void ExecExitScript()
 
 	if (file) {
 		if (system(file) != 0) {
-			wsyserror(_("%s:could not execute exit script"), file);
+			werror(_("%s:could not execute exit script"), file);
 		}
 		wfree(file);
 	}
@@ -754,7 +754,7 @@ static int real_main(int argc, char **argv)
 	}
 
 	if (fcntl(ConnectionNumber(dpy), F_SETFD, FD_CLOEXEC) < 0) {
-		wsyserror("error setting close-on-exec flag for X connection");
+		werror("error setting close-on-exec flag for X connection");
 		exit(1);
 	}
 

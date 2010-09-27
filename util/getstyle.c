@@ -201,13 +201,13 @@ void copyFile(char *dir, char *file)
 
 	RETRY( dst = fopen(dstpath, "wb") )
 	if (dst == NULL) {
-		wsyserror(_("Could not create %s"), dstpath);
+		werror(_("Could not create %s"), dstpath);
 		goto err;
 	}
 
 	RETRY( src = fopen(file, "rb") )
 	if (src == NULL) {
-		wsyserror(_("Could not open %s"), file);
+		werror(_("Could not open %s"), file);
 		goto err;
 	}
 

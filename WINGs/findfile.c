@@ -43,7 +43,7 @@ char *wgethomedir()
 
 	user = getpwuid(getuid());
 	if (!user) {
-		wsyserror(_("could not get password entry for UID %i"), getuid());
+		werror(_("could not get password entry for UID %i"), getuid());
 		return "/";
 	}
 	if (!user->pw_dir) {
@@ -59,7 +59,7 @@ static char *getuserhomedir(const char *username)
 
 	user = getpwnam(username);
 	if (!user) {
-		wsyserror(_("could not get password entry for user %s"), username);
+		werror(_("could not get password entry for user %s"), username);
 		return NULL;
 	}
 	if (!user->pw_dir) {
@@ -175,7 +175,7 @@ char *wexpandpath(char *path)
 
 error:
 	errno = ENAMETOOLONG;
-	wsyserror(_("could not expand %s"), origpath);
+	werror(_("could not expand %s"), origpath);
 	/* FIXME: too many functions handle a return value of NULL incorrectly */
 	exit(1);
 }

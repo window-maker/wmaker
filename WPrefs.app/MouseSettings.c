@@ -656,7 +656,7 @@ static void storeCommandInScript(char *cmd, char *line)
 	if (!f) {
 		f = fopen(path, "wb");
 		if (!f) {
-			wsyserror(_("could not create %s"), path);
+			werror(_("could not create %s"), path);
 			goto end;
 		}
 		fprintf(f, "#!/bin/sh\n");
@@ -671,7 +671,7 @@ static void storeCommandInScript(char *cmd, char *line)
 		tmppath = wstrconcat(wusergnusteppath(), "/Library/WindowMaker/autostart.tmp");
 		fo = fopen(tmppath, "wb");
 		if (!fo) {
-			wsyserror(_("could not create temporary file %s"), tmppath);
+			werror(_("could not create temporary file %s"), tmppath);
 			wfree(tmppath);
 			goto end;
 		}
@@ -704,7 +704,7 @@ static void storeCommandInScript(char *cmd, char *line)
 		fclose(fo);
 
 		if (rename(tmppath, path) != 0) {
-			wsyserror(_("could not rename file %s to %s\n"), tmppath, path);
+			werror(_("could not rename file %s to %s\n"), tmppath, path);
 		}
 		wfree(tmppath);
 	}

@@ -1496,14 +1496,14 @@ WMPropList *WMReadPropListFromFile(char *file)
 	f = fopen(file, "rb");
 	if (!f) {
 		/* let the user print the error message if he really needs to */
-		/*wsyserror(_("could not open domain file '%s' for reading"), file); */
+		/*werror(_("could not open domain file '%s' for reading"), file); */
 		return NULL;
 	}
 
 	if (stat(file, &stbuf) == 0) {
 		length = (size_t) stbuf.st_size;
 	} else {
-		wsyserror(_("could not get size for file '%s'"), file);
+		werror(_("could not get size for file '%s'"), file);
 		fclose(f);
 		return NULL;
 	}
@@ -1516,7 +1516,7 @@ WMPropList *WMReadPropListFromFile(char *file)
 
 	if (fread(pldata->ptr, length, 1, f) != 1) {
 		if (ferror(f)) {
-			wsyserror(_("error reading from file '%s'"), file);
+			werror(_("error reading from file '%s'"), file);
 		}
 		plist = NULL;
 		goto cleanup;
@@ -1567,7 +1567,7 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path)
 
 #ifdef  HAVE_MKSTEMP
 	if ((fd = mkstemp(thePath)) < 0) {
-		wsyserror(_("mkstemp (%s) failed"), thePath);
+		werror(_("mkstemp (%s) failed"), thePath);
 		goto failure;
 	}
 	mask = umask(0);
@@ -1578,21 +1578,21 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path)
 	}
 #else
 	if (mktemp(thePath) == NULL) {
-		wsyserror(_("mktemp (%s) failed"), thePath);
+		werror(_("mktemp (%s) failed"), thePath);
 		goto failure;
 	}
 	theFile = fopen(thePath, "wb");
 #endif
 
 	if (theFile == NULL) {
-		wsyserror(_("open (%s) failed"), thePath);
+		werror(_("open (%s) failed"), thePath);
 		goto failure;
 	}
 
 	desc = indentedDescription(plist, 0);
 
 	if (fprintf(theFile, "%s\n", desc) != strlen(desc) + 1) {
-		wsyserror(_("writing to file: %s failed"), thePath);
+		werror(_("writing to file: %s failed"), thePath);
 		wfree(desc);
 		goto failure;
 	}
@@ -1601,7 +1601,7 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path)
 
 	(void)fsync(fileno(theFile));
 	if (fclose(theFile) != 0) {
-		wsyserror(_("fclose (%s) failed"), thePath);
+		werror(_("fclose (%s) failed"), thePath);
 		goto failure;
 	}
 
@@ -1609,7 +1609,7 @@ Bool WMWritePropListToFile(WMPropList * plist, char *path)
 	 * real file.  Also, we need to try to retain the file attributes of
 	 * the original file we are overwriting (if we are) */
 	if (rename(thePath, path) != 0) {
-		wsyserror(_("rename ('%s' to '%s') failed"), thePath, path);
+		werror(_("rename ('%s' to '%s') failed"), thePath, path);
 		goto failure;
 	}
 
@@ -1679,7 +1679,7 @@ int wmkdirhier(const char *path)
 		strncpy(buf, thePath, p);
 		if (mkdir(buf, 0777) == -1 && errno == EEXIST &&
 		    stat(buf, &st) == 0 && !S_ISDIR(st.st_mode)) {
-			wsyserror(_("Could not create component %s"), buf);
+			werror(_("Could not create component %s"), buf);
 			wfree(thePath);
 			return 0;
 		}

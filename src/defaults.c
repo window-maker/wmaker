@@ -2667,7 +2667,7 @@ static int setWorkspaceSpecificBack(WScreen * scr, WDefaultEntry * entry, WMProp
 			return 0;
 
 		if (pipe(filedes) < 0) {
-			wsyserror("pipe() failed:can't set workspace specific background image");
+			werror("pipe() failed:can't set workspace specific background image");
 
 			WMReleasePropList(value);
 			return 0;
@@ -2675,11 +2675,11 @@ static int setWorkspaceSpecificBack(WScreen * scr, WDefaultEntry * entry, WMProp
 
 		pid = fork();
 		if (pid < 0) {
-			wsyserror("fork() failed:can't set workspace specific background image");
+			werror("fork() failed:can't set workspace specific background image");
 			if (close(filedes[0]) < 0)
-				wsyserror("could not close pipe");
+				werror("could not close pipe");
 			if (close(filedes[1]) < 0)
-				wsyserror("could not close pipe");
+				werror("could not close pipe");
 
 		} else if (pid == 0) {
 			char *dither;
@@ -2687,24 +2687,24 @@ static int setWorkspaceSpecificBack(WScreen * scr, WDefaultEntry * entry, WMProp
 			SetupEnvironment(scr);
 
 			if (close(0) < 0)
-				wsyserror("could not close pipe");
+				werror("could not close pipe");
 			if (dup(filedes[0]) < 0) {
-				wsyserror("dup() failed:can't set workspace specific background image");
+				werror("dup() failed:can't set workspace specific background image");
 			}
 			dither = wPreferences.no_dithering ? "-m" : "-d";
 			if (wPreferences.smooth_workspace_back)
 				execlp("wmsetbg", "wmsetbg", "-helper", "-S", dither, NULL);
 			else
 				execlp("wmsetbg", "wmsetbg", "-helper", dither, NULL);
-			wsyserror("could not execute wmsetbg");
+			werror("could not execute wmsetbg");
 			exit(1);
 		} else {
 
 			if (fcntl(filedes[0], F_SETFD, FD_CLOEXEC) < 0) {
-				wsyserror("error setting close-on-exec flag");
+				werror("error setting close-on-exec flag");
 			}
 			if (fcntl(filedes[1], F_SETFD, FD_CLOEXEC) < 0) {
-				wsyserror("error setting close-on-exec flag");
+				werror("error setting close-on-exec flag");
 			}
 
 			scr->helper_fd = filedes[1];

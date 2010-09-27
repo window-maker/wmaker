@@ -448,7 +448,7 @@ static char *getnameforicon(WWindow * wwin)
 
 	if (access(path, F_OK) != 0) {
 		if (mkdir(path, S_IRUSR | S_IWUSR | S_IXUSR)) {
-			wsyserror(_("could not create directory %s"), path);
+			werror(_("could not create directory %s"), path);
 			wfree(path);
 			wfree(suffix);
 			return NULL;
@@ -457,7 +457,7 @@ static char *getnameforicon(WWindow * wwin)
 	strcat(path, "/CachedPixmaps");
 	if (access(path, F_OK) != 0) {
 		if (mkdir(path, S_IRUSR | S_IWUSR | S_IXUSR) != 0) {
-			wsyserror(_("could not create directory %s"), path);
+			werror(_("could not create directory %s"), path);
 			wfree(path);
 			wfree(suffix);
 			return NULL;

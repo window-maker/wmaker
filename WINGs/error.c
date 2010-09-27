@@ -20,7 +20,6 @@
 
 #include "wconfig.h"
 
-#include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -31,7 +30,7 @@
 
 extern char *_WINGS_progname;
 
-void __wmessage(int type, void *extra, const char *msg, ...)
+void __wmessage(int type, const char *msg, ...)
 {
 	va_list args;
 	char *buf;
@@ -56,40 +55,28 @@ void __wmessage(int type, void *extra, const char *msg, ...)
 	buf = wmalloc(linemax);
 
 	fflush(stdout);
-	/* message format: <wings_progname>: <qualifier>: <message>[: <extra info>]"\n" */
+	/* message format: <wings_progname>: <qualifier>: <message>"\n" */
 	snprintf(buf, linemax, "%s: ", _WINGS_progname ? _WINGS_progname : "WINGs");
-	va_start(args, msg);
 	switch (type) {
-		case WMESSAGE_TYPE_WARNING:
-			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
-				_("warning: "));
-			vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
-				msg, args);
-		break;
 		case WMESSAGE_TYPE_FATAL:
-			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
-				_("fatal error: "));
-			vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
-				msg, args);
+			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1, _("fatal error: "));
 		break;
-		case WMESSAGE_TYPE_WSYSERROR:
-		case WMESSAGE_TYPE_WSYSERRORWITHCODE:
-			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
-				_("error: "));
-			vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
-				msg, args);
-			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1,
-				": %s", type == WMESSAGE_TYPE_WSYSERROR ?
-				    strerror(errno) : strerror(*(int *)extra));
+		case WMESSAGE_TYPE_ERROR:
+			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1, _("error: "));
+		break;
+		case WMESSAGE_TYPE_WARNING:
+			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1, _("warning: "));
+		break;
 		break;
 		case WMESSAGE_TYPE_MESSAGE:
 			/* FALLTHROUGH */
-		default:
+		default:	/* should not happen, but doesn't hurt either */
 			strncat(buf, ": ", linemax - strlen(buf));
-			vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1, msg, args);
 		break;
 	}
 
+	va_start(args, msg);
+	vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1, msg, args);
 	va_end(args);
 
 	strncat(buf, "\n", linemax - strlen(buf));

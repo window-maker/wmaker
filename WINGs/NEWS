@@ -17,7 +17,7 @@ wmessage converted from function to wrapper macro
 wwarning converted from function to wrapper macro
 wfatal converted from function to wrapper macro
 wsyserror converted from function to wrapper macro
-wsyserrorwithcode converted from function to wrapper macro
+wsyserrorwithcode removed
 wmkdirhier ADDED
 wrmdirhier ADDED
 wmalloc0 REMOVED

@@ -636,7 +636,7 @@ static void constructMenu(WMenu * menu, WMenuEntry * entry)
 				if (first < 0)
 					first = i;
 			} else {
-				wsyserror(_("%s:could not stat menu"), path[i]);
+				werror(_("%s:could not stat menu"), path[i]);
 				/*goto finish; */
 			}
 
@@ -644,7 +644,7 @@ static void constructMenu(WMenu * menu, WMenuEntry * entry)
 		}
 
 		if (first < 0) {
-			wsyserror(_("%s:could not stat menu:%s"), "OPEN_MENU", (char *)entry->clientdata);
+			werror(_("%s:could not stat menu:%s"), "OPEN_MENU", (char *)entry->clientdata);
 			goto finish;
 		}
 		stat(path[first], &stat_buf);
@@ -1082,7 +1082,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 			wfree(args);
 			file = popen(command, "r");
 			if (!file) {
-				wsyserror(_("%s:could not open/preprocess menu file"), file_name);
+				werror(_("%s:could not open/preprocess menu file"), file_name);
 			} else {
 				cpp = 1;
 			}
@@ -1093,7 +1093,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 	if (!file) {
 		file = fopen(file_name, "rb");
 		if (!file) {
-			wsyserror(_("%s:could not open menu file"), file_name);
+			werror(_("%s:could not open menu file"), file_name);
 			return NULL;
 		}
 	}
@@ -1127,7 +1127,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 #ifdef CPP
 	if (cpp) {
 		if (pclose(file) == -1) {
-			wsyserror(_("error reading preprocessed menu data"));
+			werror(_("error reading preprocessed menu data"));
 		}
 	} else {
 		fclose(file);
@@ -1178,7 +1178,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 			wfree(args);
 			file = popen(command, "r");
 			if (!file) {
-				wsyserror(_("%s:could not open/preprocess menu file"), filename);
+				werror(_("%s:could not open/preprocess menu file"), filename);
 			} else {
 				cpp = 1;
 			}
@@ -1190,7 +1190,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 		file = popen(filename, "rb");
 
 		if (!file) {
-			wsyserror(_("%s:could not open menu file"), filename);
+			werror(_("%s:could not open menu file"), filename);
 			return NULL;
 		}
 	}
@@ -1297,7 +1297,7 @@ static WMenu *readMenuDirectory(WScreen * scr, char *title, char **path, char *c
 
 			buffer = malloc(strlen(path[i]) + strlen(dentry->d_name) + 4);
 			if (!buffer) {
-				wsyserror(_("out of memory while constructing directory menu %s"), path[i]);
+				werror(_("out of memory while constructing directory menu %s"), path[i]);
 				break;
 			}
 
@@ -1306,7 +1306,7 @@ static WMenu *readMenuDirectory(WScreen * scr, char *title, char **path, char *c
 			strcat(buffer, dentry->d_name);
 
 			if (stat(buffer, &stat_buf) != 0) {
-				wsyserror(_("%s:could not stat file \"%s\" in menu directory"),
+				werror(_("%s:could not stat file \"%s\" in menu directory"),
 					  path[i], dentry->d_name);
 			} else {
 				Bool isFilePack = False;
@@ -1369,7 +1369,7 @@ static WMenu *readMenuDirectory(WScreen * scr, char *title, char **path, char *c
 			length += strlen(command) + 6;
 		buffer = malloc(length);
 		if (!buffer) {
-			wsyserror(_("out of memory while constructing directory menu %s"), path[data->index]);
+			werror(_("out of memory while constructing directory menu %s"), path[data->index]);
 			break;
 		}
 
@@ -1408,7 +1408,7 @@ static WMenu *readMenuDirectory(WScreen * scr, char *title, char **path, char *c
 
 		buffer = malloc(length);
 		if (!buffer) {
-			wsyserror(_("out of memory while constructing directory menu %s"), path[data->index]);
+			werror(_("out of memory while constructing directory menu %s"), path[data->index]);
 			break;
 		}
 
@@ -1501,13 +1501,13 @@ static WMenu *configureMenu(WScreen * scr, WMPropList * definition)
 		}
 
 		if (!path) {
-			wsyserror(_("could not find menu file \"%s\" referenced in WMRootMenu"), tmp);
+			werror(_("could not find menu file \"%s\" referenced in WMRootMenu"), tmp);
 			wfree(tmp);
 			return NULL;
 		}
 
 		if (stat(path, &stat_buf) < 0) {
-			wsyserror(_("could not access menu \"%s\" referenced in WMRootMenu"), path);
+			werror(_("could not access menu \"%s\" referenced in WMRootMenu"), path);
 			wfree(path);
 			wfree(tmp);
 			return NULL;

@@ -883,7 +883,7 @@ void helperLoop(RContext * rc)
 
 		/* get length of message */
 		if (readmsg(0, buffer, 4) < 0) {
-			wsyserror("error reading message from Window Maker");
+			werror("error reading message from Window Maker");
 			errcount--;
 			if (errcount == 0) {
 				wfatal("quitting");
@@ -897,7 +897,7 @@ void helperLoop(RContext * rc)
 
 		/* get message */
 		if (readmsg(0, buffer, size) < 0) {
-			wsyserror("error reading message from Window Maker");
+			werror("error reading message from Window Maker");
 			errcount--;
 			if (errcount == 0) {
 				wfatal("quitting");

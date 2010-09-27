@@ -1551,7 +1551,7 @@ int wShowCrashingDialogPanel(int whatSig)
 
 	scr = WMCreateScreen(dpy, screen_no);
 	if (!scr) {
-		wsyserror(_("cannot open connection for crashing dialog panel. Aborting."));
+		werror(_("cannot open connection for crashing dialog panel. Aborting."));
 		return WMAbort;
 	}
 

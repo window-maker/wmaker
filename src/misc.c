@@ -79,7 +79,7 @@ static char *username(void)
 
 		user = getpwuid(getuid());
 		if (!user) {
-			wsyserror(_("could not get password entry for UID %i"), getuid());
+			werror(_("could not get password entry for UID %i"), getuid());
 			return NULL;
 		}
 		if (!user->pw_name) {
@@ -1013,7 +1013,7 @@ void SendHelperMessage(WScreen * scr, char type, int workspace, char *msg)
 		strcpy(&buffer[i], msg);
 
 	if (write(scr->helper_fd, buffer, len + 4) < 0) {
-		wsyserror(_("could not send message to background image helper"));
+		werror(_("could not send message to background image helper"));
 	}
 	wfree(buffer);
 }

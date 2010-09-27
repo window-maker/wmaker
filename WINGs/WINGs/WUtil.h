@@ -169,19 +169,16 @@ waborthandler* wsetabort(waborthandler* handler);
 enum {
 	WMESSAGE_TYPE_MESSAGE,
 	WMESSAGE_TYPE_WARNING,
-	WMESSAGE_TYPE_FATAL,
-	WMESSAGE_TYPE_WSYSERROR,
-	WMESSAGE_TYPE_WSYSERRORWITHCODE
+	WMESSAGE_TYPE_ERROR,
+	WMESSAGE_TYPE_FATAL
 };
 
-#define wmessage(fmt, args...) __wmessage( WMESSAGE_TYPE_MESSAGE, NULL, fmt, ## args)
-#define wwarning(fmt, args...) __wmessage( WMESSAGE_TYPE_WARNING, NULL, fmt, ## args)
-#define wfatal(fmt, args...) __wmessage( WMESSAGE_TYPE_FATAL, NULL, fmt, ## args)
-#define wsyserror(fmt, args...) __wmessage( WMESSAGE_TYPE_WSYSERROR, NULL, fmt, ## args)
-#define wsyserrorwithcode(errno, fmt, args...) \
-	__wmessage( WMESSAGE_TYPE_WSYSERRORWITHCODE, &errno, fmt, ## args)
+#define wmessage(fmt, args...) __wmessage( WMESSAGE_TYPE_MESSAGE, fmt, ## args)
+#define wwarning(fmt, args...) __wmessage( WMESSAGE_TYPE_WARNING, fmt, ## args)
+#define werror(fmt, args...) __wmessage( WMESSAGE_TYPE_ERROR, fmt, ## args)
+#define wfatal(fmt, args...) __wmessage( WMESSAGE_TYPE_FATAL, fmt, ## args)
 
-void __wmessage(int type, void *extra, const char *msg, ...) __attribute__((__format__(printf,3,4)));
+void __wmessage(int type, const char *msg, ...) __attribute__((__format__(printf,2,3)));
 
 char* wfindfile(char *paths, char *file);
 

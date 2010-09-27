@@ -395,7 +395,7 @@ static void dumpRImage(char *path, RImage * image)
 
 	f = fopen(path, "wb");
 	if (!f) {
-		wsyserror(path);
+		werror(path);
 		return;
 	}
 	fprintf(f, "%02x%02x%1x", image->width, image->height, channels);
@@ -404,7 +404,7 @@ static void dumpRImage(char *path, RImage * image)
 
 	fsync(fileno(f));
 	if (fclose(f) < 0) {
-		wsyserror(path);
+		werror(path);
 	}
 }
 
@@ -1027,7 +1027,7 @@ static void deleteTexture(WMWidget * w, void *data)
 	WMReleasePropList(titem->prop);
 	if (titem->path) {
 		if (remove(titem->path) < 0 && errno != ENOENT) {
-			wsyserror("could not remove file %s", titem->path);
+			werror("could not remove file %s", titem->path);
 		}
 		wfree(titem->path);
 	}
@@ -1572,7 +1572,7 @@ static void createPanel(Panel * p)
 
 	if (access(panel->fprefix, F_OK) != 0) {
 		if (mkdir(panel->fprefix, 0755) < 0) {
-			wsyserror(panel->fprefix);
+			werror(panel->fprefix);
 			ok = False;
 		}
 	}
@@ -1582,7 +1582,7 @@ static void createPanel(Panel * p)
 		panel->fprefix = tmp;
 		if (access(panel->fprefix, F_OK) != 0) {
 			if (mkdir(panel->fprefix, 0755) < 0) {
-				wsyserror(panel->fprefix);
+				werror(panel->fprefix);
 			}
 		}
 	}
