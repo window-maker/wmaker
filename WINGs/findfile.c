@@ -176,8 +176,8 @@ char *wexpandpath(char *path)
 error:
 	errno = ENAMETOOLONG;
 	werror(_("could not expand %s"), origpath);
-	/* FIXME: too many functions handle a return value of NULL incorrectly */
-	exit(1);
+
+	return NULL;
 }
 
 /* return address of next char != tok or end of string whichever comes first */
