@@ -30,11 +30,12 @@
 
 extern char *_WINGS_progname;
 
-void __wmessage(int type, const char *msg, ...)
+void __wmessage(const char *func, const char *file, int line, int type, const char *msg, ...)
 {
 	va_list args;
 	char *buf;
 	static int linemax = 0;
+	int truncated = 0;
 
 	if (linemax == 0) {
 #ifdef HAVE_SYSCONF
@@ -55,32 +56,40 @@ void __wmessage(int type, const char *msg, ...)
 	buf = wmalloc(linemax);
 
 	fflush(stdout);
-	/* message format: <wings_progname>: <qualifier>: <message>"\n" */
-	snprintf(buf, linemax, "%s: ", _WINGS_progname ? _WINGS_progname : "WINGs");
+
+	/* message format: <wings_progname>(function(file:line): <type?>: <message>"\n" */
+	strncat(buf, _WINGS_progname ? _WINGS_progname : "WINGs", linemax - 1);
+	snprintf(buf + strlen(buf), linemax - strlen(buf), "(%s(%s:%d))", func, file, line);
+	strncat(buf, ": ", linemax - 1 - strlen(buf));
+
 	switch (type) {
 		case WMESSAGE_TYPE_FATAL:
-			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1, _("fatal error: "));
+			strncat(buf, _("fatal error: "), linemax - 1 - strlen(buf));
 		break;
 		case WMESSAGE_TYPE_ERROR:
-			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1, _("error: "));
+			strncat(buf, _("error: "), linemax - 1 - strlen(buf));
 		break;
 		case WMESSAGE_TYPE_WARNING:
-			snprintf(buf + strlen(buf), linemax - strlen(buf) - 1, _("warning: "));
-		break;
+			strncat(buf, _("warning: "), linemax - 1 - strlen(buf));
 		break;
 		case WMESSAGE_TYPE_MESSAGE:
 			/* FALLTHROUGH */
 		default:	/* should not happen, but doesn't hurt either */
-			strncat(buf, ": ", linemax - strlen(buf));
 		break;
 	}
 
 	va_start(args, msg);
-	vsnprintf(buf + strlen(buf), linemax - strlen(buf) - 1, msg, args);
+	if (vsnprintf(buf + strlen(buf), linemax - strlen(buf), msg, args) >= linemax - strlen(buf))
+		truncated = 1;
+
 	va_end(args);
 
-	strncat(buf, "\n", linemax - strlen(buf));
 	fputs(buf, stderr);
+
+	if (truncated)
+		fputs("*** message truncated ***", stderr);
+
+	fputs("\n", stderr);
 
 	wfree(buf);
 }
