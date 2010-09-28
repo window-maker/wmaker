@@ -38,8 +38,6 @@ WPrefs_SOURCES = \
 	double.h \
 	editmenu.c \
 	editmenu.h \
-	imagebrowser.c \
-	imagebrowser.h \
 	xmodifier.c
 
 AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" -DRESOURCE_PATH=\"$(wpdatadir)\"
