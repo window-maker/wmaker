@@ -36,14 +36,17 @@
 char *wgethomedir()
 {
 	static char *home = NULL;
+	char *tmp;
 	struct passwd *user;
 
 	if (home)
 		return home;
 
-	home = getenv("HOME");
-	if (home)
+	tmp = getenv("HOME");
+	if (tmp) {
+		home = wstrdup(tmp);
 		return home;
+	}
 
 	user = getpwuid(getuid());
 	if (!user) {
