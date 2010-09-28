@@ -51,20 +51,20 @@ char *wusergnusteppath()
 	char *gspath;
 	int pathlen;
 
-	if (!path) {
-		gspath = getenv("GNUSTEP_USER_ROOT");
+	gspath = getenv("GNUSTEP_USER_ROOT");
+	if (gspath) {
+		gspath = wexpandpath(gspath);
 		if (gspath) {
-			gspath = wexpandpath(gspath);
 			pathlen = strlen(gspath) + 4;
 			path = wmalloc(pathlen);
 			strcpy(path, gspath);
 			wfree(gspath);
-		} else {
-			pathlen = strlen(wgethomedir()) + 10;
-			path = wmalloc(pathlen);
-			strcpy(path, wgethomedir());
-			strcat(path, "/GNUstep");
 		}
+	} else {
+		pathlen = strlen(wgethomedir()) + 10;
+		path = wmalloc(pathlen);
+		strcpy(path, wgethomedir());
+		strcat(path, "/GNUstep");
 	}
 
 	return path;
