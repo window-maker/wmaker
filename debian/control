@@ -49,7 +49,7 @@ Architecture: any
 Section: libdevel
 Priority: optional
 Depends: libc6-dev, libx11-dev, libxext-dev, libwraster3-dev, libxft-dev,
- libfontconfig1-dev, libwutil1 (= ${binary:Version}),
+ libfontconfig1-dev, libwutil2 (= ${binary:Version}),
  libwings2 (= ${binary:Version}), ${misc:Depends}
 Description: Window Maker's own widget set
  WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
@@ -59,7 +59,7 @@ Description: Window Maker's own widget set
  or hacking something like rxvt. It is used for basic widgets in
  the WindowMaker window manager.
 
-Package: libwutil1
+Package: libwutil2
 Architecture: any
 Section: libs
 Priority: optional
@@ -94,7 +94,7 @@ Architecture: any
 Section: debug
 Priority: extra
 Depends: libwraster3 (= ${binary:Version}) | libwings2 (= ${binary:Version}) |
- libwutil1 (= ${binary:Version}) | wmaker (= ${binary:Version}),
+ libwutil2 (= ${binary:Version}) | wmaker (= ${binary:Version}),
  ${misc:Depends}
 Description: debugging symbols for WindowMaker packages
  This package contains debugging symbols for Window Maker and its core
