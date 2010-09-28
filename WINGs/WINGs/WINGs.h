@@ -575,7 +575,7 @@ typedef struct W_DragDestinationProcs {
 } WMDragDestinationProcs;
 
 
-/* ...................................................................... */
+/* ---[ WINGs/wmisc.c ]--------------------------------------------------- */
 
 
 WMPoint wmkpoint(int x, int y);
@@ -589,7 +589,7 @@ WMRect wmkrect(int x, int y, unsigned int width, unsigned int height);
 #define wmkpoint(x, y)         (WMPoint){(x), (y)}
 #endif
 
-/* ....................................................................... */
+/* ---[ WINGs/wapplication.c ]-------------------------------------------- */
 
 
 
@@ -603,6 +603,7 @@ char* WMGetApplicationName(void);
 /* Try to locate resource file. ext may be NULL */
 char* WMPathForResourceOfType(char *resource, char *ext);
 
+/* ---[ WINGs/widgets.c ]------------------------------------------------- */
 
 WMScreen* WMOpenScreen(const char *display);
 
@@ -625,7 +626,9 @@ Display* WMScreenDisplay(WMScreen *scr);
 
 int WMScreenDepth(WMScreen *scr);
 
+void WMSetFocusToWidget(WMWidget *widget);
 
+/* ---[ WINGs/wappresource.c ]-------------------------------------------- */
 
 void WMSetApplicationIconImage(WMScreen *app, RImage *image);
 
@@ -640,7 +643,7 @@ WMPixmap* WMCreateApplicationIconBlendedPixmap(WMScreen *scr, RColor *color);
 
 void WMSetApplicationIconWindow(WMScreen *scr, Window window);
 
-void WMSetFocusToWidget(WMWidget *widget);
+/* ---[ WINGs/wevent.c ]-------------------------------------------------- */
 
 WMEventHook* WMHookEventHandler(WMEventHook *handler);
 
@@ -662,8 +665,12 @@ void WMNextEvent(Display *dpy, XEvent *event);
 
 void WMMaskEvent(Display *dpy, long mask, XEvent *event);
 
+void WMSetViewNextResponder(WMView *view, WMView *responder);
 
-/* ....................................................................... */
+void WMRelayToNextResponder(WMView *view, XEvent *event);
+
+
+/* ---[ WINGs/selection.c ]----------------------------------------------- */
 
 
 Bool WMCreateSelectionHandler(WMView *view, Atom selection, Time timestamp,
@@ -678,7 +685,7 @@ Bool WMRequestSelection(WMView *view, Atom selection, Atom target,
 
 extern char *WMSelectionOwnerDidChangeNotification;
 
-/* ....................................................................... */
+/* ---[ WINGs/dragcommon.c ]---------------------------------------------- */
 
 WMArray* WMCreateDragOperationArray(int initialSize);
 
@@ -688,6 +695,8 @@ WMDragOperationItem* WMCreateDragOperationItem(WMDragOperationType type,
 WMDragOperationType WMGetDragOperationItemType(WMDragOperationItem* item);
 
 char* WMGetDragOperationItemText(WMDragOperationItem* item);
+
+/* ---[ WINGs/dragsource.c ]---------------------------------------------- */
 
 void WMSetViewDragImage(WMView* view, WMPixmap *dragImage);
 
@@ -709,17 +718,17 @@ void WMSetViewDraggable(WMView *view, WMDragSourceProcs *procs, WMPixmap *dragIm
 
 void WMUnsetViewDraggable(WMView *view);
 
+/* ---[ WINGs/dragdestination.c ]----------------------------------------- */
+
 void WMRegisterViewForDraggedTypes(WMView *view, WMArray *acceptedTypes);
 
 void WMUnregisterViewDraggedTypes(WMView *view);
 
 void WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs);
 
-/* ....................................................................... */
+/* ---[ WINGs/wfont.c ]--------------------------------------------------- */
 
 Bool WMIsAntialiasingEnabled(WMScreen *scrPtr);
-
-/* ....................................................................... */
 
 WMFont* WMCreateFont(WMScreen *scrPtr, char *fontName);
 
@@ -745,7 +754,16 @@ WMFont* WMSystemFontOfSize(WMScreen *scrPtr, int size);
 
 WMFont* WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 
-/* ....................................................................... */
+void WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
+                  int x, int y, char *text, int length);
+
+void WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color,
+                       WMColor *background, WMFont *font, int x, int y,
+                       char *text, int length);
+
+int WMWidthOfString(WMFont *font, char *text, int length);
+
+/* ---[ WINGs/wpixmap.c ]------------------------------------------------- */
 
 WMPixmap* WMRetainPixmap(WMPixmap *pixmap);
 
@@ -781,7 +799,7 @@ Pixmap WMGetPixmapMaskXID(WMPixmap *pixmap);
 
 WMPixmap* WMGetSystemPixmap(WMScreen *scr, int image);
 
-/* ....................................................................... */
+/* ---[ WINGs/wcolor.c ]-------------------------------------------------- */
 
 
 WMColor* WMDarkGrayColor(WMScreen *scr);
@@ -829,21 +847,7 @@ unsigned short WMGetColorAlpha(WMColor *color);
 
 char* WMGetColorRGBDescription(WMColor *color);
 
-/* ....................................................................... */
-
-
-void WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
-                  int x, int y, char *text, int length);
-
-void WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color,
-                       WMColor *background, WMFont *font, int x, int y,
-                       char *text, int length);
-
-int WMWidthOfString(WMFont *font, char *text, int length);
-
-
-
-/* ....................................................................... */
+/* ---[ WINGs/widgets.c ]------------------------------------------------- */
 
 WMScreen* WMWidgetScreen(WMWidget *w);
 
@@ -889,9 +893,11 @@ unsigned int WMWidgetHeight(WMWidget *w);
 
 Window WMWidgetXID(WMWidget *w);
 
-Window WMViewXID(WMView *view);
-
 void WMRedisplayWidget(WMWidget *w);
+
+/* ---[ WINGs/wview.c ]--------------------------------------------------- */
+
+Window WMViewXID(WMView *view);
 
 void WMSetViewNotifySizeChanges(WMView *view, Bool flag);
 
@@ -906,10 +912,6 @@ WMPoint WMGetViewScreenPosition(WMView *view);
 
 WMWidget* WMWidgetOfView(WMView *view);
 
-void WMSetViewNextResponder(WMView *view, WMView *responder);
-
-void WMRelayToNextResponder(WMView *view, XEvent *event);
-
 /* notifications */
 extern char *WMViewSizeDidChangeNotification;
 
@@ -917,8 +919,7 @@ extern char *WMViewFocusDidChangeNotification;
 
 extern char *WMViewRealizedNotification;
 
-
-/* ....................................................................... */
+/* ---[ WINGs/wballoon.c ]------------------------------------------------ */
 
 void WMSetBalloonTextForView(char *text, WMView *view);
 
@@ -933,7 +934,7 @@ void WMSetBalloonDelay(WMScreen *scr, int delay);
 void WMSetBalloonEnabled(WMScreen *scr, Bool flag);
 
 
-/* ....................................................................... */
+/* ---[ WINGs/wwindow.c ]------------------------------------------------- */
 
 WMWindow* WMCreateWindow(WMScreen *screen, char *name);
 
@@ -977,7 +978,7 @@ void WMSetWindowDocumentEdited(WMWindow *win, Bool flag);
 
 void WMCloseWindow(WMWindow *win);
 
-/* ....................................................................... */
+/* ---[ WINGs/wbutton.c ]------------------------------------------------- */
 
 void WMSetButtonAction(WMButton *bPtr, WMAction *action, void *clientData);
 
@@ -1041,7 +1042,7 @@ void WMSetButtonContinuous(WMButton *bPtr, Bool flag);
 
 void WMSetButtonPeriodicDelay(WMButton *bPtr, float delay, float interval);
 
-/* ....................................................................... */
+/* ---[ WINGs/wlabel.c ]-------------------------------------------------- */
 
 WMLabel* WMCreateLabel(WMWidget *parent);
 
@@ -1067,7 +1068,7 @@ void WMSetLabelFont(WMLabel *lPtr, WMFont *font);
 
 void WMSetLabelTextColor(WMLabel *lPtr, WMColor *color);
 
-/* ....................................................................... */
+/* ---[ WINGs/wframe.c ]-------------------------------------------------- */
 
 WMFrame* WMCreateFrame(WMWidget *parent);
 
@@ -1077,7 +1078,7 @@ void WMSetFrameRelief(WMFrame *fPtr, WMReliefType relief);
 
 void WMSetFrameTitle(WMFrame *fPtr, char *title);
 
-/* ....................................................................... */
+/* ---[ WINGs/wtextfield.c ]---------------------------------------------- */
 
 WMTextField* WMCreateTextField(WMWidget *parent);
 
@@ -1124,7 +1125,7 @@ extern char *WMTextDidChangeNotification;
 extern char *WMTextDidBeginEditingNotification;
 extern char *WMTextDidEndEditingNotification;
 
-/* ....................................................................... */
+/* ---[ WINGs/wscroller.c ]----------------------------------------------- */
 
 WMScroller* WMCreateScroller(WMWidget *parent);
 
@@ -1144,7 +1145,7 @@ void WMSetScrollerArrowsPosition(WMScroller *sPtr,
 
 extern char *WMScrollerDidScrollNotification;
 
-/* ....................................................................... */
+/* ---[ WINGs/wlist.c ]--------------------------------------------------- */
 
 WMList* WMCreateList(WMWidget *parent);
 
@@ -1224,7 +1225,7 @@ Bool WMListAllowsEmptySelection(WMList *lPtr);
 extern char *WMListDidScrollNotification;
 extern char *WMListSelectionDidChangeNotification;
 
-/* ....................................................................... */
+/* ---[ WINGs/wbrowser.c ]------------------------------------------------ */
 
 WMBrowser* WMCreateBrowser(WMWidget *parent);
 
@@ -1292,7 +1293,7 @@ Bool WMBrowserAllowsEmptySelection(WMBrowser *bPtr);
 
 void WMSetBrowserHasScroller(WMBrowser *bPtr, int hasScroller);
 
-/* ....................................................................... */
+/* ---[ WINGs/wmenuitem.c ]----------------------------------------------- */
 
 
 Bool WMMenuItemIsSeparator(WMMenuItem *item);
@@ -1355,7 +1356,7 @@ WMMenu* WMGetMenuItemSubmenu(WMMenuItem *item);
 Bool WMGetMenuItemHasSubmenu(WMMenuItem *item);
 */
 
-/* ....................................................................... */
+/* ---[ WINGs/wpopupbutton.c ]-------------------------------------------- */
 
 WMPopUpButton* WMCreatePopUpButton(WMWidget *parent);
 
@@ -1392,7 +1393,7 @@ void WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag);
 
 Bool WMGetPopUpButtonEnabled(WMPopUpButton *bPtr);
 
-/* ....................................................................... */
+/* ---[ WINGs/wcolorpanel.c ]--------------------------------------------- */
 
 WMColorPanel* WMGetColorPanel(WMScreen *scrPtr);
 
@@ -1412,7 +1413,7 @@ void WMSetColorPanelAction(WMColorPanel *panel, WMAction2 *action, void *data);
 
 extern char *WMColorPanelColorChangedNotification;
 
-/* ....................................................................... */
+/* ---[ WINGs/wcolorwell.c ]---------------------------------------------- */
 
 WMColorWell* WMCreateColorWell(WMWidget *parent);
 
@@ -1426,7 +1427,7 @@ void WSetColorWellBordered(WMColorWell *cPtr, Bool flag);
 extern char *WMColorWellDidChangeNotification;
 
 
-/* ...................................................................... */
+/* ---[ WINGs/wscrollview.c ]--------------------------------------------- */
 
 WMScrollView* WMCreateScrollView(WMWidget *parent);
 
@@ -1451,7 +1452,7 @@ void WMSetScrollViewLineScroll(WMScrollView *sPtr, int amount);
 
 void WMSetScrollViewPageScroll(WMScrollView *sPtr, int amount);
 
-/* ....................................................................... */
+/* ---[ WINGs/wslider.c ]------------------------------------------------- */
 
 WMSlider* WMCreateSlider(WMWidget *parent);
 
@@ -1475,7 +1476,7 @@ void WMSetSliderKnobThickness(WMSlider *sPtr, int thickness);
 
 void WMSetSliderImage(WMSlider *sPtr, WMPixmap *pixmap);
 
-/* ....................................................................... */
+/* ---[ WINGs/wsplitview.c ]---------------------------------------------- */
 
 
 WMSplitView* WMCreateSplitView(WMWidget *parent);
@@ -1508,7 +1509,7 @@ void WMSetSplitViewResizeSubviewsProc(WMSplitView *sPtr,
 
 int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
 
-/* ....................................................................... */
+/* ---[ WINGs/wtabview.c ]------------------------------------------------ */
 
 
 WMTabView* WMCreateTabView(WMWidget *parent);
@@ -1564,7 +1565,7 @@ WMView* WMGetTabViewItemView(WMTabViewItem *item);
 void WMDestroyTabViewItem(WMTabViewItem *item);
 
 
-/* ....................................................................... */
+/* ---[ WINGs/wbox.c ]---------------------------------------------------- */
 
 WMBox* WMCreateBox(WMWidget *parent);
 
@@ -1580,7 +1581,7 @@ void WMRemoveBoxSubview(WMBox *bPtr, WMView *view);
 
 void WMSetBoxHorizontal(WMBox *box, Bool flag);
 
-/* ....................................................................... */
+/* ---[ WINGs/wpanel.c ]-------------------------------------------------- */
 
 int WMRunAlertPanel(WMScreen *app, WMWindow *owner, char *title, char *msg,
                     char *defaultButton, char *alternateButton,
@@ -1609,7 +1610,7 @@ void WMDestroyInputPanel(WMInputPanel *panel);
 
 void WMDestroyGenericPanel(WMGenericPanel *panel);
 
-/* ....................................................................... */
+/* ---[ WINGs/wfilepanel.c ]---------------------------------------------- */
 
 /* only 1 instance per WMScreen */
 WMOpenPanel* WMGetOpenPanel(WMScreen *scrPtr);
@@ -1637,7 +1638,7 @@ void WMSetFilePanelAccessoryView(WMFilePanel *panel, WMView *view);
 WMView* WMGetFilePanelAccessoryView(WMFilePanel *panel);
 
 
-/* ...................................................................... */
+/* ---[ WINGs/wfontpanel.c ]---------------------------------------------- */
 
 /* only 1 instance per WMScreen */
 WMFontPanel* WMGetFontPanel(WMScreen *scr);

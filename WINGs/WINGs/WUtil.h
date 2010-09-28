@@ -160,11 +160,20 @@ typedef void WMNotificationObserverAction(void *observerData,
                                           WMNotification *notification);
 
 
-/*......................................................................*/
+/* ---[ WINGs/memory.c ]-------------------------------------------------- */
+
+void* wmalloc(size_t size);
+void* wrealloc(void *ptr, size_t newsize);
+void wfree(void *ptr);
+
+void wrelease(void *ptr);
+void* wretain(void *ptr);
 
 typedef void waborthandler(int);
 
 waborthandler* wsetabort(waborthandler* handler);
+
+/* ---[ WINGs/error.c ]--------------------------------------------------- */
 
 enum {
 	WMESSAGE_TYPE_MESSAGE,
@@ -181,6 +190,8 @@ enum {
 void __wmessage(const char *func, const char *file, int line, int type, const char *msg, ...)
 	__attribute__((__format__(printf,5,6)));
 
+/* ---[ WINGs/findfile.c ]------------------------------------------------ */
+
 char* wfindfile(char *paths, char *file);
 
 char* wfindfileinlist(char **path_list, char *file);
@@ -189,18 +200,15 @@ char* wfindfileinarray(WMPropList* array, char *file);
 
 char* wexpandpath(char *path);
 
-int wmkdirhier(const char *path);
-int wrmdirhier(const char *path);
-
 /* don't free the returned string */
 char* wgethomedir(void);
 
-void* wmalloc(size_t size);
-void* wrealloc(void *ptr, size_t newsize);
-void wfree(void *ptr);
+/* ---[ WINGs/proplist.c ]------------------------------------------------ */
 
-void wrelease(void *ptr);
-void* wretain(void *ptr);
+int wmkdirhier(const char *path);
+int wrmdirhier(const char *path);
+
+/* ---[ WINGs/string.c ]-------------------------------------------------- */
 
 char *wstrdup(const char *str);
 char* wstrndup(const char *str, size_t len);
@@ -234,18 +242,15 @@ void wtokenfree(char **tokens, int count);
 
 char* wtrimspace(const char *s);
 
+/* ---[ WINGs/wmisc.c ]--------------------------------------------------- */
 
 WMRange wmkrange(int start, int count);
 
-
-char* wusergnusteppath(void);
-
-char* wdefaultspathfordomain(char *domain);
-char* wglobaldefaultspathfordomain(const char *domain);
+/* ---[ WINGs/usleep.c ]-------------------------------------------------- */
 
 void wusleep(unsigned int microsec);
 
-/*......................................................................*/
+/* ---[ WINGs/handlers.c ]------------------------------------------------ */
 
 /* Event handlers: timer, idle, input */
 
@@ -276,7 +281,7 @@ void WMDeleteInputHandler(WMHandlerID handlerID);
 
 void WHandleEvents(void);
 
-/*......................................................................*/
+/* ---[ WINGs/hashtable.c ]----------------------------------------------- */
 
 
 WMHashTable* WMCreateHashTable(WMHashTableCallbacks callbacks);
@@ -337,7 +342,7 @@ extern const WMHashTableCallbacks WMStringPointerHashCallbacks;
 /* keys are strings, but they are not copied */
 
 
-/*......................................................................*/
+/* ---[ WINGs/array.c ]--------------------------------------------------- */
 
 /*
  * WMArray use an array to store the elements.
@@ -437,7 +442,7 @@ void* WMArrayPrevious(WMArray *array, WMArrayIterator *iter);
     for (var = WMArrayLast(array, &(i)); (i) != WANotFound; \
     var = WMArrayPrevious(array, &(i)))
 
-/*..........................................................................*/
+/* ---[ WINGs/bagtree.c ]------------------------------------------------- */
 
 /*
  * Tree bags use a red-black tree for storage.
@@ -529,7 +534,7 @@ int WMBagIndexForIterator(WMBag *bag, WMBagIterator ptr);
 
 
 
-/*-------------------------------------------------------------------------*/
+/* ---[ WINGs/data.c ]---------------------------------------------------- */
 
 /* WMData handling */
 
@@ -599,7 +604,7 @@ unsigned WMGetDataFormat(WMData *aData);
 /* Storing data */
 
 
-/*--------------------------------------------------------------------------*/
+/* ---[ WINGs/data.c ]---------------------------------------------------- */
 
 
 WMNotification* WMCreateNotification(const char *name, void *object, void *clientData);
@@ -645,7 +650,7 @@ void WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
                                    unsigned coalesceMask);
 
 
-/*......................................................................*/
+/* ---[ WINGs/proplist.c ]------------------------------------------------ */
 
 /* Property Lists handling */
 
@@ -747,7 +752,13 @@ WMPropList* WMReadPropListFromFile(char *file);
 
 Bool WMWritePropListToFile(WMPropList *plist, char *path);
 
-/*......................................................................*/
+/* ---[ WINGs/userdefaults.c ]-------------------------------------------- */
+
+char* wusergnusteppath(void);
+
+char* wdefaultspathfordomain(char *domain);
+
+char* wglobaldefaultspathfordomain(const char *domain);
 
 WMUserDefaults* WMGetStandardUserDefaults(void);
 
