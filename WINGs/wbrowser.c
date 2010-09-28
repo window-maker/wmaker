@@ -689,6 +689,7 @@ char *WMGetBrowserPathToColumn(WMBrowser * bPtr, int column)
 {
 	int i, size;
 	char *path;
+	size_t slen;
 	WMListItem *item;
 
 	if (column >= bPtr->usedColumnCount)
@@ -708,24 +709,34 @@ char *WMGetBrowserPathToColumn(WMBrowser * bPtr, int column)
 	}
 
 	/* get the path */
-	path = wmalloc(size + (column + 1) * strlen(bPtr->pathSeparator) + 1);
-	/* ignore first / */
-	*path = 0;
+	slen = size + (column + 1) * strlen(bPtr->pathSeparator) + 1;
+	path = wmalloc(slen);
+	/* ignore first `/' */
 	for (i = 0; i <= column; i++) {
-		strcat(path, bPtr->pathSeparator);
+		if (wstrlcat(path, bPtr->pathSeparator, slen) >= slen)
+			goto error;
+
 		item = WMGetListSelectedItem(bPtr->columns[i]);
 		if (!item)
 			break;
-		strcat(path, item->text);
+
+		if (wstrlcat(path, item->text, slen) >= slen)
+			goto error;
+
 	}
 
 	return path;
+
+error:
+	wfree(path);
+	return NULL;
 }
 
 WMArray *WMGetBrowserPaths(WMBrowser * bPtr)
 {
 	int column, i, k, size, selNo;
 	char *path;
+	size_t slen;
 	WMListItem *item, *lastItem;
 	WMArray *paths, *items;
 
@@ -760,11 +771,14 @@ WMArray *WMGetBrowserPaths(WMBrowser * bPtr)
 	for (k = 0; k < selNo; k++) {
 		/* get the path */
 		lastItem = WMGetFromArray(items, k);
-		path = wmalloc(size + (lastItem != NULL ? strlen(lastItem->text) : 0));
-		/* ignore first / */
-		*path = 0;
+		slen = size + (lastItem != NULL ? strlen(lastItem->text) : 0);
+		path = wmalloc(slen);
+		/* ignore first `/' */
 		for (i = 0; i <= column; i++) {
-			strcat(path, bPtr->pathSeparator);
+			if (wstrlcat(path, bPtr->pathSeparator, slen) >= slen) {
+				wfree(path);
+				return NULL;
+			}
 			if (i == column) {
 				item = lastItem;
 			} else {
@@ -772,7 +786,10 @@ WMArray *WMGetBrowserPaths(WMBrowser * bPtr)
 			}
 			if (!item)
 				break;
-			strcat(path, item->text);
+			if (wstrlcat(path, item->text, slen) >= slen) {
+				wfree(path);
+				return NULL;
+			}
 		}
 		WMAddToArray(paths, path);
 	}
@@ -1101,27 +1118,48 @@ static void destroyBrowser(WMBrowser * bPtr)
 
 static char *createTruncatedString(WMFont * font, char *text, int *textLen, int width)
 {
-	int dLen = WMWidthOfString(font, ".", 1);
-	char *textBuf = (char *)wmalloc((*textLen) + 4);
+	size_t slen;
+	int dLen;
+	char *textBuf;
+
+	dLen = WMWidthOfString(font, ".", 1);
+	slen = *textLen + 4;
+	textBuf = wmalloc(slen);
 
 	if (width >= 3 * dLen) {
-		int dddLen = 3 * dLen;
 		int tmpTextLen = *textLen;
 
-		strcpy(textBuf, text);
-		while (tmpTextLen && (WMWidthOfString(font, textBuf, tmpTextLen) + dddLen > width))
+		if (wstrlcpy(textBuf, text, slen) >= slen)
+			goto error;
+
+		while (tmpTextLen && (WMWidthOfString(font, textBuf, tmpTextLen) + 3 * dLen > width))
 			tmpTextLen--;
-		strcpy(textBuf + tmpTextLen, "...");
+
+		if (wstrlcpy(textBuf + tmpTextLen, "...", slen) >= slen)
+			goto error;
+
 		*textLen = tmpTextLen + 3;
+
 	} else if (width >= 2 * dLen) {
-		strcpy(textBuf, "..");
+		if (wstrlcpy(textBuf, "..", slen) >= slen)
+			goto error;
+
 		*textLen = 2;
+
 	} else if (width >= dLen) {
-		strcpy(textBuf, ".");
+		if (wstrlcpy(textBuf, ".", slen) >= slen)
+			goto error;
+
 		*textLen = 1;
+
 	} else {
 		*textBuf = '\0';
 		*textLen = 0;
 	}
+
 	return textBuf;
+
+error:
+	wfree(textBuf);
+	return NULL;
 }

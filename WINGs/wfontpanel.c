@@ -546,7 +546,7 @@ static void listFamilies(WMScreen * scr, WMFontPanel * panel)
 		WMListItem *item;
 
 		WM_ITERATE_ARRAY(array, fam, i) {
-			strcpy(buffer, fam->name);
+			wstrlcpy(buffer, fam->name, sizeof(buffer));
 			item = WMAddListItem(panel->famLs, buffer);
 
 			item->clientData = fam;
@@ -628,7 +628,7 @@ static void familyClick(WMWidget * w, void *data)
 		int top = 0;
 		WMListItem *fitem;
 
-		strcpy(buffer, face->typeface);
+		wstrlcpy(buffer, face->typeface, sizeof(buffer));
 		if (strcasecmp(face->typeface, "Roman") == 0)
 			top = 1;
 		if (strcasecmp(face->typeface, "Regular") == 0)
@@ -753,7 +753,7 @@ static void setFontPanelFontName(FontPanel * panel, char *family, char *style, d
 		int top = 0;
 		WMListItem *fitem;
 
-		strcpy(buffer, face->typeface);
+		wstrlcpy(buffer, face->typeface, sizeof(buffer));
 		if (strcasecmp(face->typeface, "Roman") == 0)
 			top = 1;
 		if (top)

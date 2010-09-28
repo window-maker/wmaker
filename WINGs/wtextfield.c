@@ -396,7 +396,7 @@ void WMInsertTextFieldText(WMTextField * tPtr, char *text, int position)
 
 	if (position < 0 || position >= tPtr->textLen) {
 		/* append the text at the end */
-		strcat(tPtr->text, text);
+		wstrlcat(tPtr->text, text, tPtr->bufferSize);
 		tPtr->textLen += len;
 		tPtr->cursorPosition += len;
 		incrToFit(tPtr);
@@ -465,7 +465,7 @@ void WMSetTextFieldText(WMTextField * tPtr, char *text)
 			tPtr->bufferSize = tPtr->textLen + TEXT_BUFFER_INCR;
 			tPtr->text = wrealloc(tPtr->text, tPtr->bufferSize);
 		}
-		strcpy(tPtr->text, text);
+		wstrlcpy(tPtr->text, text, tPtr->bufferSize);
 	}
 
 	tPtr->cursorPosition = tPtr->selection.position = tPtr->textLen;

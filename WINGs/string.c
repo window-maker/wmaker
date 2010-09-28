@@ -125,18 +125,31 @@ char *wtokenjoin(char **list, int count)
 
 	for (i = 0; i < count; i++) {
 		if (list[i] != NULL && list[i][0] != 0) {
-			if (i > 0)
-				strcat(flat_string, " ");
+			if (i > 0 &&
+			    wstrlcat(flat_string, " ", j + count + 1) >= j + count + 1)
+					goto error;
+
 			wspace = strpbrk(list[i], " \t");
-			if (wspace)
-				strcat(flat_string, "\"");
-			strcat(flat_string, list[i]);
-			if (wspace)
-				strcat(flat_string, "\"");
+
+			if (wspace &&
+			    wstrlcat(flat_string, "\"", j + count + 1) >= j + count + 1)
+					goto error;
+
+			if (wstrlcat(flat_string, list[i], j + count + 1) >= j + count + 1)
+				goto error;
+
+			if (wspace &&
+			    wstrlcat(flat_string, "\"", j + count + 1) >= j + count + 1)
+					goto error;
 		}
 	}
 
 	return flat_string;
+
+error:
+	wfree(flat_string);
+
+	return NULL;
 }
 
 void wtokenfree(char **tokens, int count)
@@ -185,28 +198,37 @@ char *wstrndup(const char *str, size_t len)
 char *wstrconcat(char *str1, char *str2)
 {
 	char *str;
+	size_t slen;
 
 	if (!str1)
 		return wstrdup(str2);
 	else if (!str2)
 		return wstrdup(str1);
 
-	str = wmalloc(strlen(str1) + strlen(str2) + 1);
-	strcpy(str, str1);
-	strcat(str, str2);
+	slen = strlen(str1) + strlen(str2) + 1;
+	str = wmalloc(slen);
+	if (wstrlcpy(str, str1, slen) >= slen ||
+	    wstrlcat(str, str2, slen) >= slen) {
+		wfree(str);
+		return NULL;
+	}
 
 	return str;
 }
 
 char *wstrappend(char *dst, char *src)
 {
+	size_t slen;
+
 	if (!dst)
 		return wstrdup(src);
 	else if (!src || *src == 0)
 		return dst;
 
-	dst = wrealloc(dst, strlen(dst) + strlen(src) + 1);
-	strcat(dst, src);
+	slen = strlen(dst) + strlen(src) + 1;
+	dst = wrealloc(dst, slen);
+	if (wstrlcat(dst, src, slen) >= slen)
+		return NULL;
 
 	return dst;
 }

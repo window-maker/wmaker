@@ -1,14 +1,15 @@
 
-#include "WINGsP.h"
-#include "wconfig.h"
-
 #include <sys/types.h>
 #include <sys/stat.h>
+
 #include <unistd.h>
 #include <dirent.h>
 #include <limits.h>
 #include <errno.h>
 #include <stdint.h>
+
+#include "WINGsP.h"
+#include "wconfig.h"
 
 #ifndef PATH_MAX
 #define PATH_MAX 1024
@@ -522,10 +523,13 @@ static void listDirectoryOnColumn(WMFilePanel * panel, int column, char *path)
 		if (strcmp(dentry->d_name, ".") == 0 || strcmp(dentry->d_name, "..") == 0)
 			continue;
 
-		strcpy(pbuf, path);
-		if (strcmp(path, "/") != 0)
-			strcat(pbuf, "/");
-		strcat(pbuf, dentry->d_name);
+		if (wstrlcpy(pbuf, path, sizeof(pbuf)) >= sizeof(pbuf))
+			goto out;
+		if (strcmp(path, "/") != 0 &&
+		    wstrlcat(pbuf, "/", sizeof(pbuf)) >= sizeof(pbuf))
+			goto out;
+		if (wstrlcat(pbuf, dentry->d_name, sizeof(pbuf)) >= sizeof(pbuf))
+			goto out;
 
 		if (stat(pbuf, &stat_buf) != 0) {
 #ifdef VERBOSE
@@ -543,6 +547,7 @@ static void listDirectoryOnColumn(WMFilePanel * panel, int column, char *path)
 	}
 	WMSortBrowserColumnWithComparer(bPtr, column, comparer);
 
+out:
 	closedir(dir);
 }
 
@@ -617,12 +622,13 @@ static void createDir(WMButton * bPre, WMFilePanel * panel)
 	slen = strlen(dirName) + (directory ? strlen(directory) + 1 /* "/" */  : 0) + 1 /* NULL */;
 	file = wmalloc(slen);
 
-	if (directory) {
-		strncpy(file, directory, slen - 1);
-		strncat(file, "/", slen - strlen(file));
-	}
+	if (directory &&
+		(wstrlcat(file, directory, slen) >= slen ||
+		 wstrlcat(file, "/", slen) >= slen))
+			goto out;
 
-	strncat(file, dirName, slen - strlen(file));
+	if (wstrlcat(file, dirName, slen) >= slen)
+		goto out;
 
 	if (mkdir(file, 00777) != 0) {
 #define __msgbufsize__ 512
@@ -635,6 +641,7 @@ static void createDir(WMButton * bPre, WMFilePanel * panel)
 		WMSetFilePanelDirectory(panel, file);
 	}
 
+out:
 	if (dirName)
 		wfree(dirName);
 	if (directory)
@@ -783,28 +790,40 @@ static char *getCurrentFileName(WMFilePanel * panel)
 {
 	char *path;
 	char *file;
-	char *tmp;
-	int len;
+	char *ret;
+	size_t slen;
 
 	path = WMGetBrowserPath(panel->browser);
 
-	len = strlen(path);
-	if (path[len - 1] == '/') {
-		file = WMGetTextFieldText(panel->fileField);
-		tmp = wmalloc(strlen(path) + strlen(file) + 8);
-		if (file[0] != '/') {
-			strcpy(tmp, path);
-			strcat(tmp, file);
-		} else
-			strcpy(tmp, file);
+	if (!path)
+		return NULL;
 
-		wfree(file);
-		wfree(path);
-		return tmp;
-	} else {
+	if (path[strlen(path) -1] != '/')
 		return path;
-	}
+
+	file = WMGetTextFieldText(panel->fileField);
+	slen = strlen(path) + strlen(file) + 1;
+	ret = wmalloc(slen);
+
+	if (*file != '/' &&
+	    wstrlcat(ret, path, slen) >= slen)
+		goto error;
+
+	if (wstrlcat(ret, file, slen) >= slen)
+		goto error;
+
+	wfree(file);
+	wfree(path);
+	return ret;
+
+error:
+	wfree(file);
+	wfree(path);
+	wfree(ret);
+
+	return NULL;
 }
+
 
 static Bool validOpenFile(WMFilePanel * panel)
 {

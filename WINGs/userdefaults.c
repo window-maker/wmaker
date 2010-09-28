@@ -57,14 +57,23 @@ char *wusergnusteppath()
 		if (gspath) {
 			pathlen = strlen(gspath) + 4;
 			path = wmalloc(pathlen);
-			strcpy(path, gspath);
+			if (wstrlcpy(path, gspath, pathlen) >= pathlen) {
+				wfree(gspath);
+				return NULL;
+			}
 			wfree(gspath);
 		}
 	} else {
-		pathlen = strlen(wgethomedir()) + 10;
+		char *h = wgethomedir();
+		if (!h)
+			return NULL;
+		pathlen = strlen(h) + 8 /* /GNUstep */ + 1;
 		path = wmalloc(pathlen);
-		strcpy(path, wgethomedir());
-		strcat(path, "/GNUstep");
+		if (wstrlcpy(path, h, pathlen) >= pathlen ||
+		    wstrlcat(path, "/GNUstep", pathlen) >= pathlen) {
+			wfree(path);
+			return NULL;
+		}
 	}
 
 	return path;
@@ -74,13 +83,19 @@ char *wdefaultspathfordomain(char *domain)
 {
 	char *path;
 	char *gspath;
+	size_t slen;
 
 	gspath = wusergnusteppath();
-	path = wmalloc(strlen(gspath) + strlen(DEFAULTS_DIR) + strlen(domain) + 4);
-	strcpy(path, gspath);
-	strcat(path, DEFAULTS_DIR);
-	strcat(path, "/");
-	strcat(path, domain);
+	slen = strlen(gspath) + strlen(DEFAULTS_DIR) + strlen(domain) + 4;
+	path = wmalloc(slen);
+
+	if (wstrlcpy(path, gspath, slen) >= slen ||
+	    wstrlcat(path, DEFAULTS_DIR, slen) >= slen ||
+	    wstrlcat(path, "/", slen) >= slen ||
+	    wstrlcat(path, domain, slen) >= slen) {
+		wfree(path);
+		return NULL;
+	}
 
 	return path;
 }
@@ -253,7 +268,7 @@ WMUserDefaults *WMGetStandardUserDefaults(void)
 		}
 	}
 
-	/* we didn't found the database we are looking for. Go read it. */
+	/* we didn't found the database we are looking for. Go read it. XXX: wtf? */
 	defaults = wmalloc(sizeof(WMUserDefaults));
 	defaults->defaults = WMCreatePLDictionary(NULL, NULL);
 	defaults->searchList = wmalloc(sizeof(WMPropList *) * 3);

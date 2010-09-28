@@ -59,7 +59,6 @@ char *wgethomedir()
 	else
 		home = wstrdup(user->pw_dir);
 
-out:
 	return home;
 }
 
@@ -99,9 +98,9 @@ char *wexpandpath(char *path)
 		path++;
 		if (*path == '/' || *path == 0) {
 			home = wgethomedir();
-			if (strlen(home) > PATH_MAX)
+			if (strlen(home) > PATH_MAX ||
+			    wstrlcpy(buffer, home, sizeof(buffer)) >= sizeof(buffer))
 				goto error;
-			strcat(buffer, home);
 		} else {
 			int j;
 			j = 0;
@@ -113,9 +112,8 @@ char *wexpandpath(char *path)
 				path++;
 			}
 			home = getuserhomedir(buffer2);
-			if (!home || strlen(home) > PATH_MAX)
+			if (!home || wstrlcat(buffer, home, sizeof(buffer)) >= sizeof(buffer))
 				goto error;
-			strcat(buffer, home);
 		}
 	}
 
@@ -146,17 +144,18 @@ char *wexpandpath(char *path)
 					if ((i += strlen(buffer2) + 2) > PATH_MAX)
 						goto error;
 					buffer[i] = 0;
-					strcat(buffer, "$(");
-					strcat(buffer, buffer2);
+					if (wstrlcat(buffer, "$(", sizeof(buffer)) >= sizeof(buffer) ||
+					    wstrlcat(buffer, buffer2, sizeof(buffer)) >= sizeof(buffer))
+						goto error;
 					if (*(path-1)==')') {
-						if (++i > PATH_MAX)
+						if (++i > PATH_MAX ||
+						    wstrlcat(buffer, ")", sizeof(buffer)) >= sizeof(buffer))
 							goto error;
-						strcat(buffer, ")");
 					}
 				} else {
-					if ((i += strlen(tmp)) > PATH_MAX)
+					if ((i += strlen(tmp)) > PATH_MAX ||
+					    wstrlcat(buffer, tmp, sizeof(buffer)) >= sizeof(buffer))
 						goto error;
-					strcat(buffer, tmp);
 				}
 			} else {
 				while (*path != 0 && *path != '/') {
@@ -167,14 +166,14 @@ char *wexpandpath(char *path)
 				}
 				tmp = getenv(buffer2);
 				if (!tmp) {
-					if ((i += strlen(buffer2) + 1) > PATH_MAX)
+					if ((i += strlen(buffer2) + 1) > PATH_MAX ||
+					    wstrlcat(buffer, "$", sizeof(buffer)) >= sizeof(buffer) ||
+					    wstrlcat(buffer, buffer2, sizeof(buffer)) >= sizeof(buffer))
 						goto error;
-					strcat(buffer, "$");
-					strcat(buffer, buffer2);
 				} else {
-					if ((i += strlen(tmp)) > PATH_MAX)
+					if ((i += strlen(tmp)) > PATH_MAX ||
+					    wstrlcat(buffer, tmp, sizeof(buffer)) >= sizeof(buffer))
 						goto error;
-					strcat(buffer, tmp);
 				}
 			}
 		} else {
@@ -266,11 +265,20 @@ char *wfindfile(char *paths, char *file)
 		path = wmalloc(len + flen + 2);
 		path = memcpy(path, tmp, len);
 		path[len] = 0;
-		if (path[len - 1] != '/')
-			strcat(path, "/");
-		strcat(path, file);
+		if (path[len - 1] != '/' &&
+		    wstrlcat(path, "/", len + flen + 2) >= len + flen + 2) {
+			wfree(path);
+			return NULL;
+		}
+
+		if (wstrlcat(path, file, len + flen + 2) >= len + flen + 2) {
+			wfree(path);
+			return NULL;
+		}
+
 		fullpath = wexpandpath(path);
 		wfree(path);
+
 		if (fullpath) {
 			if (access(fullpath, F_OK) == 0) {
 				return fullpath;
@@ -316,8 +324,11 @@ char *wfindfileinlist(char **path_list, char *file)
 		path = wmalloc(len + flen + 2);
 		path = memcpy(path, path_list[i], len);
 		path[len] = 0;
-		strcat(path, "/");
-		strcat(path, file);
+		if (wstrlcat(path, "/", len + flen + 2) >= len + flen + 2 ||
+		    wstrlcat(path, file, len + flen + 2) >= len + flen + 2) {
+			wfree(path);
+			return NULL;
+		}
 		/* expand tilde */
 		fullpath = wexpandpath(path);
 		wfree(path);
@@ -329,6 +340,7 @@ char *wfindfileinlist(char **path_list, char *file)
 			wfree(fullpath);
 		}
 	}
+
 	return NULL;
 }
 
@@ -373,8 +385,11 @@ char *wfindfileinarray(WMPropList * array, char *file)
 		path = wmalloc(len + flen + 2);
 		path = memcpy(path, p, len);
 		path[len] = 0;
-		strcat(path, "/");
-		strcat(path, file);
+		if (wstrlcat(path, "/", len + flen + 2) >= len + flen + 2 ||
+		    wstrlcat(path, file, len + flen + 2) >= len + flen + 2) {
+			wfree(path);
+			return NULL;
+		}
 		/* expand tilde */
 		fullpath = wexpandpath(path);
 		wfree(path);

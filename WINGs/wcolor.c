@@ -314,9 +314,13 @@ unsigned short WMGetColorAlpha(WMColor * color)
 
 char *WMGetColorRGBDescription(WMColor * color)
 {
-	char *str = wmalloc(32);
+	char *str = wmalloc(8);
 
-	sprintf(str, "#%02x%02x%02x", color->color.red >> 8, color->color.green >> 8, color->color.blue >> 8);
+	if (snprintf(str, 8, "#%02x%02x%02x",
+		     color->color.red >> 8, color->color.green >> 8, color->color.blue >> 8) >= 8) {
+		wfree(str);
+		return NULL;
+	}
 
 	return str;
 }

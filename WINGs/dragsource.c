@@ -487,7 +487,7 @@ static void registerDescriptionList(WMScreen * scr, WMView * view, WMArray * ope
 
 	for (i = 0; i < count; i++) {
 		text = WMGetDragOperationItemText(WMGetFromArray(operationArray, i));
-		strcpy(textListItem, text);
+		wstrlcpy(textListItem, text, size);
 
 		/* to next text offset */
 		textListItem = &(textListItem[strlen(textListItem) + 1]);

@@ -65,30 +65,41 @@ static char *checkFile(char *path, char *folder, char *ext, char *resource)
 {
 	char *ret;
 	int extralen;
+	size_t slen;
 
 	if (!path || !resource)
 		return NULL;
 
-	extralen = (ext ? strlen(ext) : 0) + (folder ? strlen(folder) : 0) + 4;
-	ret = wmalloc(strlen(path) + strlen(resource) + extralen + 8);
-	strcpy(ret, path);
-	if (folder) {
-		strcat(ret, "/");
-		strcat(ret, folder);
-	}
-	if (ext) {
-		strcat(ret, "/");
-		strcat(ret, ext);
-	}
-	strcat(ret, "/");
-	strcat(ret, resource);
+	extralen = (ext ? strlen(ext) + 1 : 0) + (folder ? strlen(folder) + 1 : 0) + 1;
+	slen = strlen(path) + strlen(resource) + 1 + extralen;
+	ret = wmalloc(slen);
 
-	if (access(ret, F_OK) != 0) {
-		wfree(ret);
-		ret = NULL;
-	}
+	if (strlcpy(ret, path, slen) >= slen)
+		goto error;
+
+	if (folder &&
+		(wstrlcat(ret, "/", slen) >= slen ||
+		 wstrlcat(ret, folder, slen) >= slen))
+			goto error;
+
+	if (ext &&
+		(wstrlcat(ret, "/", slen) >= slen ||
+		 wstrlcat(ret, ext, slen) >= slen))
+			goto error;
+
+	if (wstrlcat(ret, "/", slen) >= slen ||
+	    wstrlcat(ret, resource, slen) >= slen)
+		goto error;
+
+	if (access(ret, F_OK) != 0)
+		goto error;
 
 	return ret;
+
+error:
+	if (ret)
+		wfree(ret);
+	return NULL;
 }
 
 char *WMPathForResourceOfType(char *resource, char *ext)
