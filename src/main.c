@@ -494,8 +494,7 @@ static void inotifyWatchConfig()
 		 */
 		inotifyWD = inotify_add_watch(inotifyFD, watchPath, IN_ALL_EVENTS);
 		if (inotifyWD < 0) {
-			wwarning(_("could not add an inotify watch on path\n."
-				   "%s\n"
+			wwarning(_("could not add an inotify watch on path %s."
 				   "Changes to the defaults database will require"
 				   " a restart to take effect."), watchPath);
 			close(inotifyFD);

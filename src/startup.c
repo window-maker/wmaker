@@ -175,7 +175,7 @@ static int catchXError(Display * dpy, XErrorEvent * error)
 		return 0;
 	}
 	FormatXError(dpy, error, buffer, MAXLINE);
-	wwarning(_("internal X error: %s\n"), buffer);
+	wwarning(_("internal X error: %s"), buffer);
 	return -1;
 }
 
@@ -228,13 +228,13 @@ static RETSIGTYPE handleExitSig(int sig)
 	sigprocmask(SIG_BLOCK, &sigs, NULL);
 
 	if (sig == SIGUSR1) {
-		wwarning("got signal %i - restarting\n", sig);
+		wwarning("got signal %i - restarting", sig);
 		SIG_WCHANGE_STATE(WSTATE_NEED_RESTART);
 	} else if (sig == SIGUSR2) {
-		wwarning("got signal %i - rereading defaults\n", sig);
+		wwarning("got signal %i - rereading defaults", sig);
 		SIG_WCHANGE_STATE(WSTATE_NEED_REREAD);
 	} else if (sig == SIGTERM || sig == SIGINT || sig == SIGHUP) {
-		wwarning("got signal %i - exiting...\n", sig);
+		wwarning("got signal %i - exiting...", sig);
 		SIG_WCHANGE_STATE(WSTATE_NEED_EXIT);
 	}
 
@@ -255,7 +255,7 @@ static void dummyHandler(int sig)
  */
 static RETSIGTYPE handleSig(int sig)
 {
-	wfatal("got signal %i\n", sig);
+	wfatal("got signal %i", sig);
 
 	/* Setting the signal behaviour back to default and then reraising the
 	 * signal is a cleaner way to make program exit and core dump than calling
@@ -676,7 +676,7 @@ void StartUp(Bool defaultScreenOnly)
 
 	/* check sanity of some values */
 	if (wPreferences.icon_size < 16) {
-		wwarning(_("icon size is configured to %i, but it's too small. Using 16, instead\n"),
+		wwarning(_("icon size is configured to %i, but it's too small. Using 16 instead"),
 			 wPreferences.icon_size);
 		wPreferences.icon_size = 16;
 	}

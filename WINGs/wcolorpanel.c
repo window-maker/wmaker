@@ -3031,7 +3031,7 @@ static void customPaletteMenuRename(W_ColorPanel * panel)
 		}
 
 		if (rename(fromPath, toPath) != 0)
-			werror(_("Couldn't rename palette %s to %s\n"), fromName, toName);
+			werror(_("Couldn't rename palette %s to %s"), fromName, toName);
 		else {
 			WMRemovePopUpButtonItem(panel->customPaletteHistoryBtn, item);
 			WMInsertPopUpButtonItem(panel->customPaletteHistoryBtn, item, toName);
@@ -3078,7 +3078,7 @@ static void customPaletteMenuRemove(W_ColorPanel * panel)
 			WMRemovePopUpButtonItem(panel->customPaletteHistoryBtn, item);
 
 		} else {
-			werror(_("Couldn't remove palette %s\n"), tmp);
+			werror(_("Couldn't remove palette %s"), tmp);
 		}
 
 		wfree(tmp);

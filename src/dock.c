@@ -865,7 +865,7 @@ static void launchDockedApplication(WAppIcon * btn, Bool withSelection)
 				dockIconPaint(btn);
 			}
 		} else {
-			wwarning(_("could not launch application %s\n"), btn->command);
+			wwarning(_("could not launch application %s"), btn->command);
 			btn->launching = 0;
 			if (!btn->relaunching) {
 				btn->running = 0;

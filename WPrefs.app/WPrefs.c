@@ -387,7 +387,7 @@ char *LocateImage(char *name)
 	}
 	wfree(tmp);
 	if (!path) {
-		wwarning(_("could not locate image file %s\n"), name);
+		wwarning(_("could not locate image file %s"), name);
 	}
 
 	return path;
@@ -962,7 +962,7 @@ int GetSpeedForKey(char *defaultName)
 	else if (strcasecmp(str, "ultrafast") == 0)
 		i = 4;
 	else {
-		wwarning(_("bad speed value for option %s\n. Using default Medium"), defaultName);
+		wwarning(_("bad speed value for option %s; using default Medium"), defaultName);
 		i = 2;
 	}
 	return i;

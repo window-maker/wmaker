@@ -385,7 +385,7 @@ static int bounceDirection(WAppIcon *aicon)
 		break;
 
 	default:
-		wwarning(_("Impossible direction: %d\n"), dir);
+		wwarning(_("Impossible direction: %d"), dir);
 		dir = 3;
 		break;
 	}

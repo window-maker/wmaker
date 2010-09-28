@@ -2726,7 +2726,7 @@ static void resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 #ifndef NUMLOCK_HACK
 	if ((event->xbutton.state & ValidModMask)
 	    != (event->xbutton.state & ~LockMask)) {
-		wwarning(_("the NumLock, ScrollLock or similar key seems to be turned on.\n"
+		wwarning(_("The NumLock, ScrollLock or similar key seems to be turned on. "
 			   "Turn it off or some mouse actions and keyboard shortcuts will not work."));
 	}
 #endif
@@ -2884,7 +2884,7 @@ static void titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 #ifndef NUMLOCK_HACK
 	if ((event->xbutton.state & ValidModMask)
 	    != (event->xbutton.state & ~LockMask)) {
-		wwarning(_("the NumLock, ScrollLock or similar key seems to be turned on.\n"
+		wwarning(_("The NumLock, ScrollLock or similar key seems to be turned on. "
 			   "Turn it off or some mouse actions and keyboard shortcuts will not work."));
 	}
 #endif

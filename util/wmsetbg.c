@@ -492,7 +492,7 @@ BackgroundTexture *parseTexture(RContext * rc, char *text)
 		GETSTRORGOTO(val, tmp, 2, error);
 
 		if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
-			wwarning("could not parse color %s in texture %s\n", tmp, text);
+			wwarning("could not parse color %s in texture %s", tmp, text);
 			RReleaseImage(image);
 			goto error;
 		}
@@ -913,7 +913,7 @@ void helperLoop(RContext * rc)
 			buf[4] = 0;
 			workspace = atoi(buf);
 			if (workspace < 0 || workspace >= WORKSPACE_COUNT) {
-				wwarning("received message with invalid workspace number %i\n", workspace);
+				wwarning("received message with invalid workspace number %i", workspace);
 				continue;
 			}
 		}
@@ -1216,7 +1216,7 @@ int main(int argc, char **argv)
 		} else if (strcmp(argv[i], "-display") == 0) {
 			i++;
 			if (i >= argc) {
-				wfatal("too few arguments for %s\n", argv[i - 1]);
+				wfatal("too few arguments for %s", argv[i - 1]);
 				exit(1);
 			}
 			display = argv[i];
@@ -1246,38 +1246,38 @@ int main(int argc, char **argv)
 			update++;
 			i++;
 			if (i >= argc) {
-				wfatal("too few arguments for %s\n", argv[i - 1]);
+				wfatal("too few arguments for %s", argv[i - 1]);
 				exit(1);
 			}
 			domain = wstrdup(argv[i]);
 		} else if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--colors") == 0) {
 			i++;
 			if (i >= argc) {
-				wfatal("too few arguments for %s\n", argv[i - 1]);
+				wfatal("too few arguments for %s", argv[i - 1]);
 				exit(1);
 			}
 			if (sscanf(argv[i], "%i", &cpc) != 1) {
-				wfatal("bad value for colors per channel: \"%s\"\n", argv[i]);
+				wfatal("bad value for colors per channel: \"%s\"", argv[i]);
 				exit(1);
 			}
 		} else if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--back-color") == 0) {
 			i++;
 			if (i >= argc) {
-				wfatal("too few arguments for %s\n", argv[i - 1]);
+				wfatal("too few arguments for %s", argv[i - 1]);
 				exit(1);
 			}
 			back_color = argv[i];
 		} else if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--parse") == 0) {
 			i++;
 			if (i >= argc) {
-				wfatal("too few arguments for %s\n", argv[i - 1]);
+				wfatal("too few arguments for %s", argv[i - 1]);
 				exit(1);
 			}
 			texture = argv[i];
 		} else if (strcmp(argv[i], "-w") == 0 || strcmp(argv[i], "--workspace") == 0) {
 			i++;
 			if (i >= argc) {
-				wfatal("too few arguments for %s\n", argv[i - 1]);
+				wfatal("too few arguments for %s", argv[i - 1]);
 				exit(1);
 			}
 			if (sscanf(argv[i], "%i", &workspace) != 1) {

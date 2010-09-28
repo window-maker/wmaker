@@ -704,7 +704,7 @@ static void storeCommandInScript(char *cmd, char *line)
 		fclose(fo);
 
 		if (rename(tmppath, path) != 0) {
-			werror(_("could not rename file %s to %s\n"), tmppath, path);
+			werror(_("could not rename file %s to %s"), tmppath, path);
 		}
 		wfree(tmppath);
 	}
