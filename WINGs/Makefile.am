@@ -51,13 +51,11 @@ libWINGs_la_SOURCES = 	\
 	wpixmap.c \
 	wpopupbutton.c \
 	wprogressindicator.c \
-	wruler.c \
 	wscroller.c \
 	wscrollview.c \
 	wslider.c \
 	wsplitview.c \
 	wtabview.c \
-	wtext.c \
 	wtextfield.c \
 	wview.c \
 	wwindow.c
