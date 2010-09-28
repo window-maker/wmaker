@@ -102,11 +102,7 @@ char *wglobaldefaultspathfordomain(const char *domain)
 }
 
 static void
-#ifdef HAVE_ATEXIT
 saveDefaultsChanges(void)
-#else
-saveDefaultsChanges(int foo, void *bar)
-#endif
 {
 	/* save the user defaults databases */
 	synchronizeUserDefaults(NULL);
@@ -118,11 +114,7 @@ static void registerSaveOnExit(void)
 	static Bool registeredSaveOnExit = False;
 
 	if (!registeredSaveOnExit) {
-#ifdef HAVE_ATEXIT
 		atexit(saveDefaultsChanges);
-#else
-		on_exit(saveDefaultsChanges, (void *)NULL);
-#endif
 		registeredSaveOnExit = True;
 	}
 }
