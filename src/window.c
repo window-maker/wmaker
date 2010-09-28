@@ -770,6 +770,12 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	if (wwin->flags.is_dockapp)
 		WSETUFLAG(wwin, shared_appicon, 0);
 
+	if (wwin->main_window) {
+            WApplication *app = wApplicationOf(wwin->main_window);
+            if (app && app->app_icon)
+		WSETUFLAG(wwin, shared_appicon, 0);
+        }
+
 	if (!withdraw && wwin->main_window && WFLAGP(wwin, shared_appicon)) {
 		char *buffer, *instance, *class;
 		WFakeGroupLeader *fPtr;
