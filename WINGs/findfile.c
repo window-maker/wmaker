@@ -35,38 +35,50 @@
 
 char *wgethomedir()
 {
-	char *home = getenv("HOME");
+	static char *home = NULL;
 	struct passwd *user;
 
+	if (home)
+		return home;
+
+	home = getenv("HOME");
 	if (home)
 		return home;
 
 	user = getpwuid(getuid());
 	if (!user) {
 		werror(_("could not get password entry for UID %i"), getuid());
-		return "/";
+		home = "/";
 	}
-	if (!user->pw_dir) {
-		return "/";
-	} else {
-		return user->pw_dir;
-	}
+
+	if (!user->pw_dir)
+		home = "/";
+	else
+		home = wstrdup(user->pw_dir);
+
+out:
+	return home;
 }
 
 static char *getuserhomedir(const char *username)
 {
+	static char *home = NULL;
 	struct passwd *user;
+
+	if (home)
+		return home;
 
 	user = getpwnam(username);
 	if (!user) {
 		werror(_("could not get password entry for user %s"), username);
 		return NULL;
 	}
-	if (!user->pw_dir) {
-		return "/";
-	} else {
-		return user->pw_dir;
-	}
+	if (!user->pw_dir)
+		home = "/";
+	else
+		home = wstrdup(user->pw_dir);
+
+	return home;
 }
 
 char *wexpandpath(char *path)
