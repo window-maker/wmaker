@@ -1394,23 +1394,6 @@ Bool WMGetPopUpButtonEnabled(WMPopUpButton *bPtr);
 
 /* ....................................................................... */
 
-WMProgressIndicator* WMCreateProgressIndicator(WMWidget *parent);
-
-void WMSetProgressIndicatorMinValue(WMProgressIndicator *progressindicator, int value);
-
-void WMSetProgressIndicatorMaxValue(WMProgressIndicator *progressindicator, int value);
-
-void WMSetProgressIndicatorValue(WMProgressIndicator *progressindicator, int value);
-
-int WMGetProgressIndicatorMinValue(WMProgressIndicator *progressindicator);
-
-int WMGetProgressIndicatorMaxValue(WMProgressIndicator *progressindicator);
-
-int WMGetProgressIndicatorValue(WMProgressIndicator *progressindicator);
-
-
-/* ....................................................................... */
-
 WMColorPanel* WMGetColorPanel(WMScreen *scrPtr);
 
 void WMFreeColorPanel(WMColorPanel *panel);

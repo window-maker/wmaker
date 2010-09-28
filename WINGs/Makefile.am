@@ -50,7 +50,6 @@ libWINGs_la_SOURCES = 	\
 	wpanel.c \
 	wpixmap.c \
 	wpopupbutton.c \
-	wprogressindicator.c \
 	wscroller.c \
 	wscrollview.c \
 	wslider.c \
@@ -73,7 +72,6 @@ libWUtil_la_SOURCES = 	\
 	notification.c \
 	proplist.c \
 	string.c \
-	tree.c \
 	userdefaults.c \
 	usleep.c \
 	wapplication.c \
