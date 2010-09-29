@@ -4,7 +4,7 @@ SUBDIRS = .
 
 AUTOMAKE_OPTIONS =
 
-EXTRA_DIST = tests
+EXTRA_DIST = tests libwraster.map
 
 lib_LTLIBRARIES = libwraster.la
 
@@ -26,7 +26,6 @@ libwraster_la_SOURCES = 	\
 	save.c		\
 	gradient.c 	\
 	xpixmap.c	\
-	bench.h		\
 	convert.c 	\
 	context.c 	\
 	misc.c 		\
