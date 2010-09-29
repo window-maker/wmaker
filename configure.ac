@@ -14,8 +14,10 @@ dnl
 AC_INIT(WindowMaker, 0.94.0-crm, , WindowMaker, http://www.windowmaker.info/)
 AC_CONFIG_SRCDIR(src/WindowMaker.h)
 AC_CONFIG_MACRO_DIR([m4])
-AM_CONFIG_HEADER(src/config.h)
+AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE([1.11 silent-rules])
+
+AH_BOTTOM([#include "config-paths.h"])
 
 dnl libtool library versioning
 dnl =======================
@@ -124,12 +126,9 @@ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 _bindir=`eval echo $bindir`
 _bindir=`eval echo $_bindir`
 
-_libdir=`eval echo $libdir`
-_libdir=`eval echo $_libdir`
-lib_search_path="-L$_libdir"
+lib_search_path='-L${libdir}'
 
-inc_search_path=`eval echo $includedir`
-inc_search_path="-I`eval echo $inc_search_path`"
+inc_search_path='-I${includedir}'
 
 dnl ===============================================
 dnl Specify paths to look for libraries and headers
@@ -240,7 +239,6 @@ if test "$CPP_PATH" = "/usr/ccs/lib/cpp" -o "$CPP_PATH" = "notfound" ; then
 	fi
     fi
 fi
-AC_DEFINE_UNQUOTED(CPP_PATH, "$CPP_PATH", [define to the path to cpp])
 
 
 
@@ -373,10 +371,12 @@ if test "x$NLSDIR" = "x"; then
 	fi
 fi
 
+menutextdomain=
 AC_ARG_WITH(menu-textdomain, AS_HELP_STRING([--with-menu-textdomain=DOMAIN], [specify gettext domain used for menu translations]),
 	[if test "x$withval" != "xno"; then
-	 AC_DEFINE_UNQUOTED([MENU_TEXTDOMAIN], ["$withval"], [gettext domain used for menu translations])
+         menutextdomain=$withval
 	 fi])
+AC_SUBST(menutextdomain)
 
 AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
@@ -816,16 +816,12 @@ AC_ARG_WITH(pixmapdir, AS_HELP_STRING([--with-pixmapdir=PATH], [specify where pi
 if test "x$with_pixmapdir" != "x"; then
 	pixmapdir=$with_pixmapdir
 else
-	pixmapdir=`eval echo ${datadir}/pixmaps`
+	pixmapdir='${datadir}/pixmaps'
 fi
+AC_SUBST(pixmapdir)
 
-AC_DEFINE_UNQUOTED(PIXMAPDIR, "$pixmapdir", [define an extra path for pixmaps (set by configure)])
-
-pkgdatadir=`eval echo $datadir`
-AC_DEFINE_UNQUOTED(PKGDATADIR, "$pkgdatadir/WindowMaker", [where shared data is stored (defined by configure)])
-
-_sysconfdir=`eval echo $sysconfdir`
-AC_DEFINE_UNQUOTED(SYSCONFDIR, "$_sysconfdir", [where the configuration is stored (defined by configure)])
+pkgdatadir='${datadir}'
+AC_SUBST(pkgdatadir)
 
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
@@ -894,139 +890,8 @@ dnl 	| sed -e 's|\$(prefix)|'"$prefix|" >> WINGs-flags
 dnl The #lp# and #rp# stuff below is a hack because [ and ] get lost when
 dnl parsed by m4
 
-cat <<EOF >get-wraster-flags
-#!/bin/sh
-
-WCFLAGS="$inc_search_path"
-WLFLAGS="$lib_search_path"
-WLIBS="-lwraster $GFXLIBS $XLIBS -lm"
-
-usage="Usage: get-wraster-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
-
-if test \$# -eq 0; then
-      echo "\${usage}" 1>&2
-      exit 1
-fi
-
-while test \$# -gt 0; do
-  case \$1 in
-    --cflags)
-	echo \$WCFLAGS
-        ;;
-    --ldflags|--lflags)
-	echo \$WLFLAGS
-        ;;
-    --libs)
-	echo \$WLIBS
-        ;;
-    *)
-    	echo "\${usage}" 1>&2
-    	exit 1
-      	;;
-  esac
-  shift
-done
-
-
-EOF
-
-cat <<EOF > wrlib/wrlib.pc
-Name: wrlib
-Description: Image manipulation and conversion library
-Version: $VERSION
-Libs: $lib_search_path -lwraster $GFXLIBS $XLIBS -lm
-Cflags: $inc_search_path
-EOF
-
-cat <<EOF >get-wings-flags
-#!/bin/sh
-
-WCFLAGS="$inc_search_path"
-WLFLAGS="$lib_search_path"
-WLIBS="-lWINGs -lWUtil -lwraster $GFXLIBS $XFTLIBS $XLIBS -lm $INTLIBS"
-
-usage="Usage: get-wings-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
-
-if test \$# -eq 0; then
-      echo "\${usage}" 1>&2
-      exit 1
-fi
-
-while test \$# -gt 0; do
-  case \$1 in
-    --cflags)
-	echo \$WCFLAGS
-        ;;
-    --ldflags|--lflags)
-	echo \$WLFLAGS
-        ;;
-    --libs)
-	echo \$WLIBS
-        ;;
-    *)
-    	echo "\${usage}" 1>&2
-    	exit 1
-      	;;
-  esac
-  shift
-done
-
-
-EOF
-
-cat <<EOF > WINGs/WINGs.pc
-Name: WINGs
-Description: Small widget set with the NeXTStep(TM) look and feel
-Version: $VERSION
-Requires: wrlib
-Libs: $lib_search_path -lWINGs $XFTLIBS $XLIBS -lm $INTLIBS
-Cflags: $inc_search_path
-EOF
-
-cat <<EOF >get-wutil-flags
-#!/bin/sh
-
-WCFLAGS="-I`eval echo ${includedir}`"
-WLFLAGS="-L${_libdir}"
-WLIBS="-lWUtil $INTLIBS"
-
-usage="Usage: get-wutil-flags #lp#--cflags#rp# #lp#--ldflags#rp# #lp#--libs#rp#"
-
-if test \$# -eq 0; then
-      echo "\${usage}" 1>&2
-      exit 1
-fi
-
-while test \$# -gt 0; do
-  case \$1 in
-    --cflags)
-	echo \$WCFLAGS
-        ;;
-    --ldflags|--lflags)
-	echo \$WLFLAGS
-        ;;
-    --libs)
-	echo \$WLIBS
-        ;;
-    *)
-    	echo "\${usage}" 1>&2
-    	exit 1
-      	;;
-  esac
-  shift
-done
-
-
-EOF
-
-sed 's/#lp#/[/g' get-wraster-flags | sed 's/#rp#/]/g' > wrlib/get-wraster-flags
-sed 's/#lp#/[/g' get-wings-flags | sed 's/#rp#/]/g' > WINGs/get-wings-flags
-sed 's/#lp#/[/g' get-wutil-flags | sed 's/#rp#/]/g' > WINGs/get-wutil-flags
-
-chmod 755 wrlib/get-wraster-flags WINGs/get-wings-flags WINGs/get-wutil-flags
-
-rm -f get-wraster-flags get-wings-flags get-wutil-flags
-
+AC_SUBST(lib_search_path)
+AC_SUBST(inc_search_path)
 
 dnl
 dnl Spit out the configuration

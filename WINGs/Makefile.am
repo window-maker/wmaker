@@ -16,7 +16,7 @@ LDADD= libWUtil.la libWINGs.la $(top_builddir)/wrlib/libwraster.la @INTLIBS@
 libWINGs_la_LIBADD = libWUtil.la $(top_builddir)/wrlib/libwraster.la @XLIBS@ @XFTLIBS@ @FCLIBS@ @LIBM@
 libWUtil_la_LIBADD = @LIBBSD@
 
-EXTRA_DIST = BUGS make-rgb Examples Extras Tests
+EXTRA_DIST = BUGS make-rgb Examples Extras Tests get-wings-flags.in get-wutil-flags.in
 
 
 # wbutton.c 
@@ -85,7 +85,33 @@ AM_CFLAGS =
 INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	@XFTFLAGS@ @HEADER_SEARCH_PATH@
 
-DISTCLEANFILES = WINGs.pc
+DISTCLEANFILES = WINGs.pc get-wings-flags get-wutil-flags
+
+WINGs.pc: Makefile
+	@echo "Generating $@"
+	@echo 'Name: WINGs' > $@
+	@echo 'Description: Small widget set with the NeXTStep(TM) look and feel' >> $@
+	@echo 'Version: $(VERSION)' >> $@
+	@echo 'Requires: wrlib' >> $@
+	@echo 'Libs: $(lib_search_path) -lWINGs $(XFTLIBS) $(XLIBS) -lm $(INTLIBS)' >> $@
+	@echo 'Cflags: $(inc_search_path)' >> $@
+
+get-wings-flags: get-wings-flags.in Makefile
+	@echo "Generating $@"
+	@$(SED) -e 's#$${inc_search_path}#$(inc_search_path)#;' \
+	        -e 's#$${lib_search_path}#$(lib_search_path)#;' \
+	        -e 's#$${GFXLIBS}#$(GFXLIBS)#;' \
+	        -e 's#$${XFTLIBS}#$(XFTLIBS)#;' \
+	        -e 's#$${INTLIBS}#$(INTLIBS)#;' \
+	        -e 's#$${XLIBS}#$(XLIBS)#;' < $< > $@
+	@chmod 755 $@
+
+get-wutil-flags: get-wutil-flags.in Makefile
+	@echo "Generating $@"
+	@$(SED) -e 's#$${includedir}#$(includedir)#;' \
+	        -e 's#$${libdir}#$(libdir)#;' \
+	        -e 's#$${INTLIBS}#$(INTLIBS)#;' < $< > $@
+	@chmod 755 $@
 
 install-exec-local:
 	@$(NORMAL_INSTALL)

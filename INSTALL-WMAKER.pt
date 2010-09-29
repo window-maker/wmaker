@@ -456,7 +456,7 @@ para obter informações de como resolver isto.
 == O menu do root possui só 2 entradas. ("XTerm" e "Exit...")
 
 * O Window Maker não está achando o cpp (o pré-processador C). Se o seu cpp
-não está localizado em /lib/cpp, edite src/config.h e corrija o caminho
+não está localizado em /lib/cpp, edite config.h e corrija o caminho
 no CPP_PATH.
 
 == checking lex output file root... configure: error: cannot find output from

@@ -535,7 +535,7 @@ Si vous n'en êtes pas sûr, renommez ~/GNUstep en ~/GNUtmp et lancez wmaker.inst.
 == Le menu des applications ne contient que 2 entrées ("XTerm" et "Exit...")
 
 * Window Maker ne trouve pas cpp (le preprocesseur de C). Si votre cpp n'est pas situé
-dans /lib/cpp, editez src/config.h et modifiez le chemin d'accès dans CPP_PATH en conséquent.
+dans /lib/cpp, editez config.h et modifiez le chemin d'accès dans CPP_PATH en conséquent.
 
 == checking lex output file root... configure: error: cannot find output from true; giving up
 

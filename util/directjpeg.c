@@ -20,7 +20,7 @@
  *  USA.
  */
 
-#include "../src/config.h"
+#include "../config.h"
 
 #ifdef USE_JPEG
 

@@ -369,7 +369,7 @@ If you're not sure, try renaming ~/GNUstep to ~/GNUtmp and then run wmaker.inst
 == The root menu contains only 2 entries. ("XTerm" and "Exit...")
 
 * Window Maker is not finding cpp (the C preprocessor). If your cpp is
-not located in /lib/cpp, edit src/config.h and correct the path in
+not located in /lib/cpp, edit config.h and correct the path in
 CPP_PATH.
 
 == checking lex output file root... configure: error: cannot find output from true; giving up

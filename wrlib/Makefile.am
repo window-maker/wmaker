@@ -4,7 +4,7 @@ SUBDIRS = .
 
 AUTOMAKE_OPTIONS =
 
-EXTRA_DIST = tests libwraster.map
+EXTRA_DIST = tests libwraster.map get-wraster-flags.in
 
 lib_LTLIBRARIES = libwraster.la
 
@@ -49,7 +49,24 @@ INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
 
 libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ @LIBXMU@ -lm
 
-DISTCLEANFILES = wrlib.pc
+DISTCLEANFILES = wrlib.pc get-wraster-flags
+
+wrlib.pc: Makefile
+	@echo "Generating $@"
+	@echo 'Name: wrlib' > $@
+	@echo 'Description: Image manipulation and conversion library' >> $@
+	@echo 'Version: $(VERSION)' >> $@
+	@echo 'Libs: $(lib_search_path) -lwraster $(GFXLIBS) $(XLIBS) -lm' >> $@
+	@echo 'Cflags: $(inc_search_path)' >> $@
+
+get-wraster-flags: get-wraster-flags.in Makefile
+	@echo "Generating $@"
+	@$(SED) -e 's#$${inc_search_path}#$(inc_search_path)#;' \
+	        -e 's#$${lib_search_path}#$(lib_search_path)#;' \
+	        -e 's#$${GFXLIBS}#$(GFXLIBS)#;' \
+	        -e 's#$${XLIBS}#$(XLIBS)#;' < $< > $@
+	@chmod 755 $@
+
 
 install-exec-local:
 	@$(NORMAL_INSTALL)

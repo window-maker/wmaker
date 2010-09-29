@@ -3,7 +3,7 @@
 #ifndef WINGS_CONFIG_H_
 #define WINGS_CONFIG_H_
 
-#include "../src/config.h"
+#include "../config.h"
 
 #if defined(HAVE_LIBINTL_H) && defined(I18N)
 # include <libintl.h>

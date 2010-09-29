@@ -505,7 +505,7 @@ wmaker.inst
 == The root menu contains only 2 entries. ("XTerm" and "Exit...")
 
 * Window Maker nevie nájs» cpp (C preprocesor). Ak sa vá¹ cpp nenachádza
-v /lib/cpp, upravte src/config.h a vlo¾te správnu cestu do CPP_PATH.
+v /lib/cpp, upravte config.h a vlo¾te správnu cestu do CPP_PATH.
 
 
 == checking lex output file root... configure: error: cannot find output from true; giving up

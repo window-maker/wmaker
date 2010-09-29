@@ -506,7 +506,7 @@ mezerou.
 == The root menu contains only 2 entries. ("XTerm" and "Exit...")
 
 * Window Maker nemù¾e nalézt cpp (preprocesor jazyka C). Pokud se vá¹ cpp
-  nenachází v /lib/cpp, tak otevøte soubor src/config.h a nastavte správnì
+  nenachází v /lib/cpp, tak otevøte soubor config.h a nastavte správnì
   cestu CPP_PATH.
 
 == checking lex output file root... configure: error: cannot find output from true; giving up

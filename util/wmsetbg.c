@@ -37,7 +37,7 @@
 #include <sys/types.h>
 #include <ctype.h>
 
-#include "../src/config.h"
+#include "../config.h"
 
 #ifdef XINERAMA
 # ifdef SOLARIS_XINERAMA	/* sucks */
