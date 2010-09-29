@@ -155,6 +155,24 @@ AS_IF([test "x$with_boehm_gc" = "xyes"],
     )
 )
 
+dnl LCOV
+dnl ====
+AC_ARG_ENABLE([lcov],
+    [AS_HELP_STRING([--enable-lcov[=output-directory]], [enable coverage data generation using LCOV (GCC only) [default=no]])],
+    [],
+    [enable_lcov=no])
+
+AS_IF([test "x$enable_lcov" != "xno"],
+    [AX_CFLAGS_GCC_OPTION(-fprofile-arcs -ftest-coverage)
+    if test "x$enable_lcov" = "xyes"; then
+        lcov_output_directory="coverage-report"
+    else
+        lcov_output_directory="${enable_lcov}/coverage-report"
+    fi
+    AC_SUBST(lcov_output_directory)]
+)
+AM_CONDITIONAL([USE_LCOV], [test "x$enable_lcov" != "xno"])
+
 dnl
 dnl ============================
 dnl Checks for library functions
