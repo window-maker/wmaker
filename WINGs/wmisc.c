@@ -140,43 +140,6 @@ static int fitText(char *text, WMFont * font, int width, int wrap)
 	return i;
 }
 
-#ifdef OLD_CODE
-static int fitText(char *text, WMFont * font, int width, int wrap)
-{
-	int i, j;
-	int w;
-
-	if (text[0] == 0)
-		return 0;
-
-	i = 0;
-	if (wrap) {
-		if (text[0] == '\n')
-			return 0;
-
-		do {
-			i++;
-			w = WMWidthOfString(font, text, i);
-		} while (w < width && text[i] != '\n' && text[i] != 0);
-
-		if (text[i] == '\n')
-			return i;
-
-		/* keep words complete */
-		if (!isspace(text[i])) {
-			j = i;
-			while (j > 1 && !isspace(text[j]) && text[j] != 0)
-				j--;
-			if (j > 1)
-				i = j;
-		}
-	} else {
-		i = strcspn(text, "\n");
-	}
-	return i;
-}
-#endif
-
 int W_GetTextHeight(WMFont * font, char *text, int width, int wrap)
 {
 	char *ptr = text;
