@@ -395,7 +395,7 @@ static void dumpRImage(char *path, RImage * image)
 
 	f = fopen(path, "wb");
 	if (!f) {
-		werror(path);
+		werror("%s", path);
 		return;
 	}
 	fprintf(f, "%02x%02x%1x", image->width, image->height, channels);
@@ -404,7 +404,7 @@ static void dumpRImage(char *path, RImage * image)
 
 	fsync(fileno(f));
 	if (fclose(f) < 0) {
-		werror(path);
+		werror("%s", path);
 	}
 }
 
@@ -1572,7 +1572,7 @@ static void createPanel(Panel * p)
 
 	if (access(panel->fprefix, F_OK) != 0) {
 		if (mkdir(panel->fprefix, 0755) < 0) {
-			werror(panel->fprefix);
+			werror("%s", panel->fprefix);
 			ok = False;
 		}
 	}
@@ -1582,7 +1582,7 @@ static void createPanel(Panel * p)
 		panel->fprefix = tmp;
 		if (access(panel->fprefix, F_OK) != 0) {
 			if (mkdir(panel->fprefix, 0755) < 0) {
-				werror(panel->fprefix);
+				werror("%s", panel->fprefix);
 			}
 		}
 	}

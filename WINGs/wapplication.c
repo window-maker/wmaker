@@ -74,7 +74,7 @@ static char *checkFile(char *path, char *folder, char *ext, char *resource)
 	slen = strlen(path) + strlen(resource) + 1 + extralen;
 	ret = wmalloc(slen);
 
-	if (strlcpy(ret, path, slen) >= slen)
+	if (wstrlcpy(ret, path, slen) >= slen)
 		goto error;
 
 	if (folder &&

@@ -1646,7 +1646,7 @@ static WMPropList *processSubmenu(WEditMenu * menu)
 	pmenu = WMCreatePLArray(pl, NULL);
 
 	i = 0;
-	while (item = WGetEditMenuItem(menu, i++)) {
+	while ((item = WGetEditMenuItem(menu, i++))) {
 		WEditMenu *submenu;
 
 		s = WGetEditMenuItemTitle(item);

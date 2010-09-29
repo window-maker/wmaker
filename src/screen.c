@@ -674,7 +674,7 @@ WScreen *wScreenInit(int screen_number)
 	scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
 
 	if (!scr->rcontext && RErrorCode == RERR_STDCMAPFAIL) {
-		wwarning(RMessageForError(RErrorCode));
+		wwarning("%s", RMessageForError(RErrorCode));
 
 		rattr.flags &= ~RC_StandardColormap;
 		rattr.standard_colormap_mode = RUseStdColormap;
