@@ -248,7 +248,7 @@ WMRange wmkrange(int start, int count);
 
 /* ---[ WINGs/usleep.c ]-------------------------------------------------- */
 
-void wusleep(unsigned int microsec);
+void wusleep(unsigned int usec);
 
 /* ---[ WINGs/handlers.c ]------------------------------------------------ */
 

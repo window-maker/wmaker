@@ -230,10 +230,8 @@ dnl Checks for header files.
 dnl =======================
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
-AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h sys/time.h sys/types.h \
-		 libintl.h sys/select.h poll.h malloc.h ctype.h string.h \
-		 strings.h)
-
+AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h libintl.h poll.h malloc.h ctype.h \
+		 string.h strings.h)
 
 
 dnl Checks for typedefs, structures, and compiler characteristics.

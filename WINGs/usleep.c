@@ -1,46 +1,25 @@
 
+#include <errno.h>
+#include <time.h>
+
 #include "wconfig.h"
 
-#ifdef HAVE_SYS_TIME_H
-# include <sys/time.h>
-#endif
-
-#ifdef HAVE_SYS_TYPES_H
-# include <sys/types.h>
-#endif
-
-#include <unistd.h>
-#include <string.h>
-
-#if defined(HAVE_SELECT)
-
-#ifdef HAVE_SYS_SELECT_H
-# include <sys/select.h>
-#endif
-
-void wusleep(unsigned int microsecs)
+void wusleep(unsigned int usec)
 {
-	struct timeval tv;
-	fd_set rd, wr, ex;
-	FD_ZERO(&rd);
-	FD_ZERO(&wr);
-	FD_ZERO(&ex);
-	tv.tv_sec = microsecs / 1000000u;
-	tv.tv_usec = microsecs % 1000000u;
-	select(1, &rd, &wr, &ex, &tv);
+	struct timespec tm;
+
+	/* An arbitrary limit of 10 minutes -- in WM, if
+	 * somethings wants to sleep anything even close to
+	 * this, it's most likely an error.
+	 */
+	if (usec > 600000000)
+		return;
+
+	tm.tv_sec = usec / 1000000;
+	tm.tv_nsec = usec % 1000000;
+
+	while (nanosleep(&tm, &tm) == -1 && errno == EINTR)
+		;
+
 }
 
-#else				/* not HAVE_SELECT */
-
-# ifdef HAVE_POLL
-
-void wusleep(unsigned int microsecs)
-{
-	poll((struct poll *)0, (size_t) 0, microsecs / 1000);
-}
-
-# else				/* ! HAVE_POLL */
-
-oops !
-# endif				/* !HAVE_POLL */
-#endif				/* !HAVE_SELECT */
