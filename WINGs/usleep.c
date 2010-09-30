@@ -16,7 +16,7 @@ void wusleep(unsigned int usec)
 		return;
 
 	tm.tv_sec = usec / 1000000;
-	tm.tv_nsec = usec % 1000000;
+	tm.tv_nsec = (usec % 1000000) * 1000;
 
 	while (nanosleep(&tm, &tm) == -1 && errno == EINTR)
 		;
