@@ -63,6 +63,7 @@ extern WPreferences wPreferences;
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen * scr, char *file_name);
 static WMenu *readMenuDirectory(WScreen * scr, char *title, char **file_name, char *command);
+static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals);
 
 typedef struct Shortcut {
 	struct Shortcut *next;
@@ -575,6 +576,26 @@ static void separateCommand(char *line, char ***file, char **command)
 	WMFreeArray(array);
 }
 
+static WMenu *constructPLMenu(WScreen *screen, char *path)
+{
+	WMPropList *pl = NULL;
+	WMenu *menu = NULL;
+
+	if (!path)
+		return NULL;
+
+	pl = WMReadPropListFromFile(path);
+	if (!pl)
+		return NULL;
+
+	menu = configureMenu(screen, pl, False);
+	if (!menu)
+		return NULL;
+
+	menu->on_destroy = removeShortcutsForMenu;
+	return menu;
+}
+
 static void constructMenu(WMenu * menu, WMenuEntry * entry)
 {
 	WMenu *submenu;
@@ -610,67 +631,74 @@ static void constructMenu(WMenu * menu, WMenuEntry * entry)
 		}
 
 	} else {
-		i = 0;
-		while (path[i] != NULL) {
-			char *tmp;
 
-			if (strcmp(path[i], "-noext") == 0) {
+		/* try interpreting path as a proplist file */
+		submenu = constructPLMenu(menu->frame->screen_ptr, path[0]);
+		/* if unsuccessful, try it as an old-style file */
+		if (!submenu) {
+
+			i = 0;
+			while (path[i] != NULL) {
+				char *tmp;
+
+				if (strcmp(path[i], "-noext") == 0) {
+					i++;
+					continue;
+				}
+
+				tmp = wexpandpath(path[i]);
+				wfree(path[i]);
+				lpath = getLocalizedMenuFile(tmp);
+				if (lpath) {
+					wfree(tmp);
+					path[i] = lpath;
+					lpath = NULL;
+				} else {
+					path[i] = tmp;
+				}
+
+				if (stat(path[i], &stat_buf) == 0) {
+					if (last < stat_buf.st_mtime)
+						last = stat_buf.st_mtime;
+					if (first < 0)
+						first = i;
+				} else {
+					werror(_("%s:could not stat menu"), path[i]);
+					/*goto finish; */
+				}
+
 				i++;
-				continue;
 			}
 
-			tmp = wexpandpath(path[i]);
-			wfree(path[i]);
-			lpath = getLocalizedMenuFile(tmp);
-			if (lpath) {
-				wfree(tmp);
-				path[i] = lpath;
-				lpath = NULL;
-			} else {
-				path[i] = tmp;
+			if (first < 0) {
+				werror(_("%s:could not stat menu:%s"), "OPEN_MENU", (char *)entry->clientdata);
+				goto finish;
 			}
+			stat(path[first], &stat_buf);
+			if (!menu->cascades[entry->cascade]
+					|| menu->cascades[entry->cascade]->timestamp < last) {
 
-			if (stat(path[i], &stat_buf) == 0) {
-				if (last < stat_buf.st_mtime)
-					last = stat_buf.st_mtime;
-				if (first < 0)
-					first = i;
-			} else {
-				werror(_("%s:could not stat menu"), path[i]);
-				/*goto finish; */
-			}
+				if (S_ISDIR(stat_buf.st_mode)) {
+					/* menu directory */
+					submenu = readMenuDirectory(menu->frame->screen_ptr, entry->text, path, cmd);
+					if (submenu)
+						submenu->timestamp = last;
+				} else if (S_ISREG(stat_buf.st_mode)) {
+					/* menu file */
 
-			i++;
-		}
+					if (cmd || path[1])
+						wwarning(_("too many parameters in OPEN_MENU: %s"),
+								(char *)entry->clientdata);
 
-		if (first < 0) {
-			werror(_("%s:could not stat menu:%s"), "OPEN_MENU", (char *)entry->clientdata);
-			goto finish;
-		}
-		stat(path[first], &stat_buf);
-		if (!menu->cascades[entry->cascade]
-		    || menu->cascades[entry->cascade]->timestamp < last) {
-
-			if (S_ISDIR(stat_buf.st_mode)) {
-				/* menu directory */
-				submenu = readMenuDirectory(menu->frame->screen_ptr, entry->text, path, cmd);
-				if (submenu)
-					submenu->timestamp = last;
-			} else if (S_ISREG(stat_buf.st_mode)) {
-				/* menu file */
-
-				if (cmd || path[1])
-					wwarning(_("too many parameters in OPEN_MENU: %s"),
-						 (char *)entry->clientdata);
-
-				submenu = readMenuFile(menu->frame->screen_ptr, path[first]);
-				if (submenu)
-					submenu->timestamp = stat_buf.st_mtime;
+					submenu = readMenuFile(menu->frame->screen_ptr, path[first]);
+					if (submenu)
+						submenu->timestamp = stat_buf.st_mtime;
+				} else {
+					submenu = NULL;
+				}
 			} else {
 				submenu = NULL;
 			}
-		} else {
-			submenu = NULL;
 		}
 	}
 
@@ -1473,7 +1501,7 @@ static WMenu *makeDefaultMenu(WScreen * scr)
  *
  *----------------------------------------------------------------------
  */
-static WMenu *configureMenu(WScreen * scr, WMPropList * definition)
+static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals)
 {
 	WMenu *menu = NULL;
 	WMPropList *elem;
@@ -1552,7 +1580,7 @@ static WMenu *configureMenu(WScreen * scr, WMPropList * definition)
 	menu->on_destroy = removeShortcutsForMenu;
 
 #ifdef GLOBAL_SUBMENU_FILE
-	{
+	if (includeGlobals) {
 		WMenu *submenu;
 		WMenuEntry *mentry;
 
@@ -1583,7 +1611,7 @@ static WMenu *configureMenu(WScreen * scr, WMPropList * definition)
 			WMenuEntry *mentry;
 
 			/* submenu */
-			submenu = configureMenu(scr, elem);
+			submenu = configureMenu(scr, elem, True);
 			if (submenu) {
 				mentry = wMenuAddCallback(menu, submenu->frame->title, NULL, NULL);
 				wMenuEntrySetCascade(menu, mentry, submenu);
@@ -1678,14 +1706,14 @@ void OpenRootMenu(WScreen * scr, int x, int y, int keyboard)
 	if (definition) {
 		if (WMIsPLArray(definition)) {
 			if (!scr->root_menu || WDRootMenu->timestamp > scr->root_menu->timestamp) {
-				menu = configureMenu(scr, definition);
+				menu = configureMenu(scr, definition, True);
 				if (menu)
 					menu->timestamp = WDRootMenu->timestamp;
 
 			} else
 				menu = NULL;
 		} else {
-			menu = configureMenu(scr, definition);
+			menu = configureMenu(scr, definition, True);
 		}
 	}
 
