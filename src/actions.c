@@ -211,8 +211,9 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 
 		if (wwin->flags.mapped)
 			wAppMenuMap(napp->menu, wwin);
-		wApplicationActivate(napp);
 	}
+	if (napp)
+		wApplicationActivate(napp);
 
 	XFlush(dpy);
 	old_scr = scr;

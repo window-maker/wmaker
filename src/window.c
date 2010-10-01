@@ -56,6 +56,8 @@
 #include "defaults.h"
 #include "workspace.h"
 #include "xinerama.h"
+#include "appmenu.h"
+#include "appicon.h"
 
 #ifdef MWM_HINTS
 # include "motif.h"
@@ -1654,6 +1656,15 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 		}
 		wSetFocusTo(scr, newFocusedWindow);
 	}
+
+	/* Close menu and unhighlight */
+	WApplication *oapp = wApplicationOf(wwin->main_window);
+	WApplication *napp = scr->focused_window ? wApplicationOf(scr->focused_window->main_window) : NULL;
+	if (oapp && oapp != napp) {
+		wAppMenuUnmap(oapp->menu);
+		wApplicationDeactivate(oapp);
+	}
+
 	wWindowDestroy(wwin);
 	XFlush(dpy);
 }
