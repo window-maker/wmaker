@@ -6,6 +6,83 @@ struct W_DragDestinationInfo: new members added SIZE CHANGE
 
 <WINGs.h>
 WMGetTextFieldCursorPosition ADDED
+WC_Matrix REMOVED from enum.
+WMCreateProgressIndicator REMOVED
+WMSetProgressIndicatorMinValue REMOVED
+WMSetProgressIndicatorMaxValue REMOVED
+WMSetProgressIndicatorValue REMOVED
+WMGetProgressIndicatorMinValue REMOVED
+WMGetProgressIndicatorMaxValue REMOVED
+WMGetProgressIndicatorValue REMOVED
+typedef struct W_Ruler WMRuler REMOVED
+typedef struct WMRulerMargins REMOVED
+WMAppendTextBlock REMOVED
+WMAppendTextStream REMOVED
+WMCreateRuler  REMOVED
+WMCreateTextBlockWithObject REMOVED
+WMCreateTextBlockWithPixmap REMOVED
+WMCreateTextBlockWithText REMOVED
+WMCreateTextForDocumentType REMOVED
+WMDestroyTextBlock REMOVED
+WMFindInTextStream REMOVED
+WMFreezeText REMOVED
+WMGetGrabbedRulerMargin REMOVED
+WMGetReleasedRulerMargin REMOVED
+WMGetRulerMargins REMOVED
+WMGetRulerOffset REMOVED
+WMGetTextBlockProperties REMOVED
+WMGetTextDefaultColor REMOVED
+WMGetTextDefaultFont REMOVED
+WMGetTextEditable REMOVED
+WMGetTextIgnoresNewline REMOVED
+WMGetTextInsertType REMOVED
+WMGetTextObjects REMOVED
+WMGetTextRulerShown REMOVED
+WMGetTextSelectedObjects REMOVED
+WMGetTextSelectedStream REMOVED
+WMGetTextSelectionColor REMOVED
+WMGetTextSelectionFont REMOVED
+WMGetTextSelectionUnderlined REMOVED
+WMGetTextStream REMOVED
+WMGetTextUsesMonoFont REMOVED
+WMIsMarginEqualToMargin REMOVED
+WMPageText REMOVED
+WMPrependTextBlock REMOVED
+WMPrependTextStream REMOVED
+WMRemoveTextBlock REMOVED
+WMReplaceTextSelection REMOVED
+WMScrollText REMOVED
+WMSetRulerMargins REMOVED
+WMSetRulerMoveAction REMOVED
+WMSetRulerOffset REMOVED
+WMSetRulerReleaseAction REMOVED
+WMSetTextAlignment REMOVED
+WMSetTextBackgroundColor REMOVED
+WMSetTextBackgroundPixmap REMOVED
+WMSetTextBlockProperties REMOVED
+WMSetTextDefaultColor REMOVED
+WMSetTextDefaultFont REMOVED
+WMSetTextDelegate REMOVED
+WMSetTextEditable REMOVED
+WMSetTextForegroundColor REMOVED
+WMSetTextHasHorizontalScroller REMOVED
+WMSetTextHasRuler REMOVED
+WMSetTextHasVerticalScroller REMOVED
+WMSetTextIgnoresNewline REMOVED
+WMSetTextIndentNewLines REMOVED
+WMSetTextRelief REMOVED
+WMSetTextSelectionColor REMOVED
+WMSetTextSelectionFont REMOVED
+WMSetTextSelectionUnderlined REMOVED
+WMSetTextUsesMonoFont REMOVED
+WMShowTextRuler REMOVED
+WMThawText REMOVED
+WMRefreshText REMOVED
+WMCreateText REMOVED
+WMClearText REMOVED
+
+
+
 
 ** libWutil **
 enum WMConnectionState REMOVED
@@ -17,6 +94,8 @@ wmessage converted from function to wrapper macro
 wwarning converted from function to wrapper macro
 wfatal converted from function to wrapper macro
 wsyserror converted from function to wrapper macro
+wsyserror REMOVED (use werror instead)
+werror macro ADDED (replaces wsyserror)
 wsyserrorwithcode removed
 wmkdirhier ADDED
 wrmdirhier ADDED
@@ -67,6 +146,27 @@ WMGetConnectionQueuedData REMOVED
 WMSetConnectionDefaultTimeout REMOVED
 WMSetConnectionOpenTimeout REMOVED
 WMSetConnectionSendTimeout REMOVED
+WMCreateTreeNode REMOVED
+WMCreateTreeNodeWithDestructor REMOVED
+WMInsertItemInTree REMOVED
+WMAddItemToTree REMOVED
+WMInsertNodeInTree REMOVED
+WMAddNodeToTree REMOVED
+WMDestroyTreeNode REMOVED
+WMDeleteLeafForTreeNode REMOVED
+WMRemoveLeafForTreeNode REMOVED
+WMReplaceDataForTreeNode REMOVED
+WMGetDataForTreeNode REMOVED
+WMGetTreeNodeDepth REMOVED
+WMGetParentForTreeNode REMOVED
+WMSortLeavesForTreeNode REMOVED
+WMSortTree REMOVED
+WMFindInTree REMOVED
+WMGetFirstInTree REMOVED
+
+
+
+
 
 
 
