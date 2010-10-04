@@ -96,7 +96,6 @@ enum {
 typedef struct W_Array WMArray;
 typedef struct W_Bag WMBag;
 typedef struct W_Data WMData;
-typedef struct W_TreeNode WMTreeNode;
 typedef struct W_HashTable WMHashTable;
 typedef struct W_UserDefaults WMUserDefaults;
 typedef struct W_Notification WMNotification;
