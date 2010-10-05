@@ -462,6 +462,7 @@ static void fixLeaderProperties(WWindow *wwin)
 {
 	XClassHint *classHint;
 	XWMHints *hints, *clientHints;
+	XWindowAttributes attr;
 	Window leaders[2], window;
 	char **argv, *command;
 	int argc, i, pid;
@@ -515,6 +516,10 @@ static void fixLeaderProperties(WWindow *wwin)
 					XSetCommand(dpy, window, argv, argc);
 				}
 			}
+
+			/* Make sure we get notification when this window is destroyed */
+			if (XGetWindowAttributes(dpy, window, &attr))
+				XSelectInput(dpy, window, attr.your_event_mask | StructureNotifyMask);
 		}
 	}
 
