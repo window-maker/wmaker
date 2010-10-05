@@ -1,15 +1,22 @@
 
+#if __GLIBC__ && \
+    (_XOPEN_SOURCE && _XOPEN_SOURCE < 500) || \
+    !_XOPEN_SOURCE
+#define _XOPEN_SOURCE 500		/* nftw */
+#endif
+
+#include <sys/types.h>
+#include <sys/stat.h>
+
+#include <ctype.h>
 #include <errno.h>
-#include <string.h>
+#include <ftw.h>
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/types.h>
-#include <sys/stat.h>
+#include <string.h>
+#include <strings.h>
 #include <unistd.h>
-#include <ctype.h>
-
-#include <fts.h>
 
 #include "WUtil.h"
 #include "wconfig.h"
@@ -1689,6 +1696,31 @@ int wmkdirhier(const char *path)
 	return 1;
 }
 
+/* ARGSUSED2 */
+static int wrmdirhier_fn(const char *path, const struct stat *st,
+    int type, struct FTW *ftw)
+{
+	switch(type) {
+	case FTW_D:
+		break;
+	case FTW_DP:
+		return rmdir(path);
+		break;
+	case FTW_F:
+	case FTW_SL:
+	case FTW_SLN:
+		return unlink(path);
+		break;
+	case FTW_DNR:
+	case FTW_NS:
+	default:
+		return EPERM;
+	}
+
+	/* NOTREACHED */
+	return 0;
+}
+
 /*
  * remove a directory hierarchy
  *
@@ -1702,46 +1734,21 @@ int wmkdirhier(const char *path)
  */
 int wrmdirhier(const char *path)
 {
-	FTS *fts;
-	FTSENT *p;
-	char *t;
 	struct stat st;
-	char *ptree[2];
+	int error;
+	char *t;
 
 	/* Only remove directories under $GNUSTEP_USER_ROOT */
 	if ((t = wusergnusteppath()) == NULL)
-		return 0;
+		return EPERM;
 	if (strncmp(path, t, strlen(t)) != 0)
-		return 0;
+		return EPERM;
 
 	/* Shortcut if it doesn't exist to begin with */
 	if (stat(path, &st) == -1)
-		return 0;
+		return ENOENT;
 
-	ptree[0] = (char *)path;
-	ptree[1] = NULL;
+	error = nftw(path, wrmdirhier_fn, 1, FTW_PHYS);
 
-	if (!(fts = fts_open(ptree, FTS_PHYSICAL, NULL)))
-		return 0;
-
-	while ((p = fts_read(fts)) != NULL) {
-		switch(p->fts_info) {
-			case FTS_D:
-				continue;
-			break;
-			case FTS_DP:
-				rmdir(p->fts_path);
-				continue;
-			break;
-			case FTS_F:
-				unlink(p->fts_path);
-				continue;
-			break;
-				default: continue;
-		}
-
-	}
-
-	fts_close(fts);
-	return 1;
+	return error;
 }
