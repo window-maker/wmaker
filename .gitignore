@@ -38,6 +38,7 @@ util/wdwrite
 util/wmagnify
 util/wmaker.inst
 util/wmgenmenu
+util/wmmenugen
 util/wmsetbg
 util/wmsetup
 util/wxcopy
