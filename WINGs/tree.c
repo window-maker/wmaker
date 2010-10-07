@@ -196,27 +196,22 @@ void WMSortTree(WMTreeNode * aNode, WMCompareDataProc * comparer)
 	sortLeavesForNode(aNode, comparer);
 }
 
-static WMTreeNode *findNodeInTree(WMTreeNode * aNode, WMMatchDataProc * match, void *cdata)
+static WMTreeNode *findNodeInTree(WMTreeNode * aNode, WMMatchDataProc * match, void *cdata, int limit)
 {
-	if (match == NULL) {
-		if (aNode->data == cdata) {
-			return aNode;
-		}
-	} else {
-		if ((*match) (aNode->data, cdata)) {
-			return aNode;
-		}
-	}
+	if (match == NULL && aNode->data == cdata)
+		return aNode;
+	else if ((*match) (aNode->data, cdata))
+		return aNode;
 
-	if (aNode->leaves) {
+	if (aNode->leaves && limit != 0) {
 		WMTreeNode *leaf;
 		int i;
 
 		for (i = 0; i < WMGetArrayItemCount(aNode->leaves); i++) {
-			leaf = findNodeInTree(WMGetFromArray(aNode->leaves, i), match, cdata);
-			if (leaf) {
+			leaf = findNodeInTree(WMGetFromArray(aNode->leaves, i),
+					      match, cdata, limit > 0 ? limit - 1 : limit);
+			if (leaf)
 				return leaf;
-			}
 		}
 	}
 
@@ -227,5 +222,34 @@ WMTreeNode *WMFindInTree(WMTreeNode * aTree, WMMatchDataProc * match, void *cdat
 {
 	wassertrv(aTree != NULL, NULL);
 
-	return findNodeInTree(aTree, match, cdata);
+	return findNodeInTree(aTree, match, cdata, -1);
+}
+
+WMTreeNode *WMFindInTreeWithDepthLimit(WMTreeNode * aTree, WMMatchDataProc * match, void *cdata, int limit)
+{
+	wassertrv(aTree != NULL, NULL);
+	wassertrv(limit >= 0, NULL);
+
+	return findNodeInTree(aTree, match, cdata, limit);
+}
+
+void WMTreeWalk(WMTreeNode * aNode, WMTreeWalkProc * walk, void *data, Bool DepthFirst)
+{
+	int i;
+	WMTreeNode *leaf;
+
+	wassertr(aNode != NULL);
+
+	if (DepthFirst)
+		(*walk)(aNode, data);
+
+	if (aNode->leaves) {
+		for (i = 0; i < WMGetArrayItemCount(aNode->leaves); i++) {
+			leaf = (WMTreeNode *)WMGetFromArray(aNode->leaves, i);
+			WMTreeWalk(leaf, walk, data, DepthFirst);
+		}
+	}
+
+	if (!DepthFirst)
+		(*walk)(aNode, data);
 }

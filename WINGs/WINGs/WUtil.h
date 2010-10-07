@@ -117,6 +117,7 @@ typedef void WMInputProc(int fd, int mask, void *clientData);
 
 
 typedef int WMCompareDataProc(const void *item1, const void *item2);
+typedef void WMTreeWalkProc(WMTreeNode *aNode, void *data);
 
 typedef void WMFreeDataProc(void *data);
 
@@ -642,8 +643,15 @@ void WMSortTree(WMTreeNode *aNode, WMCompareDataProc *comparer);
 /* Returns the first node which matches node's data with cdata by 'match' */
 WMTreeNode* WMFindInTree(WMTreeNode *aTree, WMMatchDataProc *match, void *cdata);
 
+/* Returns the first node where node's data matches cdata by 'match' and node is
+ * at most `limit' depths down from `aTree'. */
+WMTreeNode *WMFindInTreeWithDepthLimit(WMTreeNode * aTree, WMMatchDataProc * match, void *cdata, int limit);
+
 /* Returns first tree node that has data == cdata */
 #define WMGetFirstInTree(aTree, cdata) WMFindInTree(aTree, NULL, cdata)
+
+/* Walk every node of aNode with `walk' */
+void WMTreeWalk(WMTreeNode *aNode, WMTreeWalkProc * walk, void *data, Bool DepthFirst);
 
 /* ---[ WINGs/data.c ]---------------------------------------------------- */
 
