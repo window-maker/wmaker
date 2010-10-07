@@ -449,9 +449,9 @@ fi
 
 dnl XRandR support
 dnl =============
-xrandr=yes
-AC_ARG_ENABLE(XRandR, AS_HELP_STRING([--disable-xrandr], [disable XRandR window extension support]),
-		xrandr=$enableval, xrandr=yes)
+xrandr=no
+AC_ARG_ENABLE(xrandr, AS_HELP_STRING([--enable-xrandr], [enable XRandR window extension support]),
+		xrandr=$enableval, xrandr=no)
 added_xext=no
 
 if test "$xrandr" = yes; then
