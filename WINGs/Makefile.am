@@ -72,6 +72,7 @@ libWUtil_la_SOURCES = 	\
 	notification.c \
 	proplist.c \
 	string.c \
+	tree.c \
 	userdefaults.c \
 	usleep.c \
 	wapplication.c \

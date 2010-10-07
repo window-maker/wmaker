@@ -96,6 +96,7 @@ enum {
 typedef struct W_Array WMArray;
 typedef struct W_Bag WMBag;
 typedef struct W_Data WMData;
+typedef struct W_TreeNode WMTreeNode;
 typedef struct W_HashTable WMHashTable;
 typedef struct W_UserDefaults WMUserDefaults;
 typedef struct W_Notification WMNotification;
@@ -602,6 +603,47 @@ void WMSetDataFormat(WMData *aData, unsigned format);
 unsigned WMGetDataFormat(WMData *aData);
 /* Storing data */
 
+/* ---[ WINGs/tree.c ]---------------------------------------------------- */
+
+/* Generic Tree and TreeNode */
+
+WMTreeNode* WMCreateTreeNode(void *data);
+
+WMTreeNode* WMCreateTreeNodeWithDestructor(void *data, WMFreeDataProc *destructor);
+
+WMTreeNode* WMInsertItemInTree(WMTreeNode *parent, int index, void *item);
+
+#define WMAddItemToTree(parent, item)  WMInsertItemInTree(parent, -1, item)
+
+WMTreeNode* WMInsertNodeInTree(WMTreeNode *parent, int index, WMTreeNode *aNode);
+
+#define WMAddNodeToTree(parent, aNode)  WMInsertNodeInTree(parent, -1, aNode)
+
+void WMDestroyTreeNode(WMTreeNode *aNode);
+
+void WMDeleteLeafForTreeNode(WMTreeNode *aNode, int index);
+
+void WMRemoveLeafForTreeNode(WMTreeNode *aNode, void *leaf);
+
+void* WMReplaceDataForTreeNode(WMTreeNode *aNode, void *newData);
+
+void* WMGetDataForTreeNode(WMTreeNode *aNode);
+
+int WMGetTreeNodeDepth(WMTreeNode *aNode);
+
+WMTreeNode* WMGetParentForTreeNode(WMTreeNode *aNode);
+
+/* Sort only the leaves of the passed node */
+void WMSortLeavesForTreeNode(WMTreeNode *aNode, WMCompareDataProc *comparer);
+
+/* Sort all tree recursively starting from the passed node */
+void WMSortTree(WMTreeNode *aNode, WMCompareDataProc *comparer);
+
+/* Returns the first node which matches node's data with cdata by 'match' */
+WMTreeNode* WMFindInTree(WMTreeNode *aTree, WMMatchDataProc *match, void *cdata);
+
+/* Returns first tree node that has data == cdata */
+#define WMGetFirstInTree(aTree, cdata) WMFindInTree(aTree, NULL, cdata)
 
 /* ---[ WINGs/data.c ]---------------------------------------------------- */
 
