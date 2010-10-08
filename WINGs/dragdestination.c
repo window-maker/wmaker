@@ -311,13 +311,13 @@ void W_DragDestinationStoreEnterMsgInfo(WMDraggingInfo * info, WMView * toplevel
 	XDND_AWARE_VIEW(info) = toplevel;
 	updateSourceWindow(info, event);
 
-/*
+#if 0
     if (event->data.l[1] & 1)
         /* XdndTypeList property is available */
-/*        XDND_SOURCE_TYPES(info) = getTypesFromTypeList(scr, XDND_SOURCE_WIN(info));
+        XDND_SOURCE_TYPES(info) = getTypesFromTypeList(scr, XDND_SOURCE_WIN(info));
     else
         XDND_SOURCE_TYPES(info) = getTypesFromThreeTypes(scr, event);
-*/
+#endif
 	XDND_SOURCE_TYPES(info) = getTypesFromThreeTypes(scr, event);
 
 	/* to use if the 3 types are not enough */

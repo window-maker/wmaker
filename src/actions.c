@@ -1225,10 +1225,8 @@ void wHideAll(WScreen *scr)
 {
 	WWindow *wwin;
 	WWindow **windows;
-	Window FocusedWin;
 	WMenu *menu;
 	unsigned int wcount = 0;
-	int FocusState;
 	int i;
 
 	if (!scr)

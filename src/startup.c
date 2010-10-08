@@ -508,7 +508,10 @@ static char *atomNames[] = {
 void StartUp(Bool defaultScreenOnly)
 {
 	struct sigaction sig_action;
-	int j, max, dummy;
+	int j, max;
+#ifdef HAVE_XRANDR
+	int dummy;
+#endif
 	Atom atom[sizeof(atomNames) / sizeof(char *)];
 
 	/*

@@ -662,7 +662,7 @@ static void normalizePath(char *s)
 	int i, j, found;
 
 	found = 0;
-	for (i = 0; s[i]; !found && i++) {
+	for (i = 0; s[i]; (void)(!found && i++)) {
 		found = 0;
 		if (s[i] == '/' && s[i+1] == '/') {
 			int nslash = 1;

@@ -55,8 +55,6 @@ RImage *RScaleImage(RImage * image, unsigned new_width, unsigned new_height)
 	unsigned char *d;
 	RImage *img;
 
-	assert(new_width >= 0 && new_height >= 0);
-
 	if (new_width == image->width && new_height == image->height)
 		return RCloneImage(image);
 

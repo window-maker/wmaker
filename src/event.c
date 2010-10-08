@@ -914,7 +914,6 @@ static void handlePropertyNotify(XEvent * event)
 	Window jr;
 	int ji;
 	unsigned int ju;
-	WScreen *scr;
 
 	wwin = wWindowFor(event->xproperty.window);
 	if (wwin) {
@@ -927,8 +926,6 @@ static void handlePropertyNotify(XEvent * event)
 	if (wapp) {
 		wClientCheckProperty(wapp->main_window_desc, &event->xproperty);
 	}
-
-	scr = wScreenForWindow(event->xproperty.window);
 }
 
 static void handleClientMessage(XEvent * event)

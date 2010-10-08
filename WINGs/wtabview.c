@@ -93,7 +93,7 @@ static int positionOfTab(WMTabView * tabView, int tab)
 	int i;
 	int offs;
 
-	if (tab < tabView->firstVisible)
+	if (tab < 0 || tab < tabView->firstVisible)
 		return -1;
 
 	if (tab > tabView->firstVisible + tabView->visibleTabs)
