@@ -58,6 +58,8 @@ WApplication *wApplicationOf(Window window);
 
 void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance,
                                     char *wm_class);
+void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance,
+		char *wm_class);
 
 void wAppBounce(WApplication *);
 void wAppBounceWhileUrgent(WApplication *);

@@ -575,6 +575,7 @@ static void keepIconsCallback(WMenu * menu, WMenuEntry * entry)
 				wAppIconPaint(aicon);
 			}
 		}
+		wAppIconSave(aicon);
 	}
 	WMFreeArray(selectedIcons);
 }
@@ -1207,8 +1208,10 @@ static void dockIconPaint(WAppIcon * btn)
 {
 	if (btn == btn->icon->core->screen_ptr->clip_icon)
 		wClipIconPaint(btn);
-	else
+	else {
 		wAppIconPaint(btn);
+		wAppIconSave(btn);
+	}
 }
 
 static WMPropList *make_icon_state(WAppIcon * btn)
@@ -2019,6 +2022,7 @@ Bool wDockAttachIcon(WDock * dock, WAppIcon * icon, int x, int y)
 	MoveInStackListUnder(dock->icon_array[index - 1]->icon->core, icon->icon->core);
 	wAppIconMove(icon, icon->x_pos, icon->y_pos);
 	wAppIconPaint(icon);
+	wAppIconSave(icon);
 
 	if (wPreferences.auto_arrange_icons)
 		wArrangeIcons(dock->screen_ptr, True);
@@ -2146,6 +2150,7 @@ Bool moveIconBetweenDocks(WDock * src, WDock * dest, WAppIcon * icon, int x, int
 			icon->icon->shadowed = 0;
 			icon->icon->force_paint = 1;
 		}
+		wAppIconSave(icon);
 	}
 
 	if (src->auto_collapse || src->auto_raise_lower)

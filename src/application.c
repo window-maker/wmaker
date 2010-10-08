@@ -121,7 +121,7 @@ static void extractIcon(WWindow * wwin)
 	}
 }
 
-static void saveIconNameFor(char *iconPath, char *wm_instance, char *wm_class)
+void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_class)
 {
 	WMPropList *dict = WDWindowAttributes->dictionary;
 	WMPropList *adict, *key, *iconk;
@@ -202,25 +202,10 @@ void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance
 	}
 
 	if (iconPath) {
-		saveIconNameFor(iconPath, wm_instance, wm_class);
+		wApplicationSaveIconPathFor(iconPath, wm_instance, wm_class);
 
 		wfree(iconPath);
 	}
-}
-
-static Bool extractClientIcon(WAppIcon * icon)
-{
-	char *path;
-
-	path = wIconStore(icon->icon);
-	if (!path)
-		return False;
-
-	saveIconNameFor(path, icon->wm_instance, icon->wm_class);
-
-	wfree(path);
-
-	return True;
 }
 
 WApplication *wApplicationCreate(WWindow * wwin)
@@ -324,6 +309,7 @@ WApplication *wApplicationCreate(WWindow * wwin)
 			if (mainw->wm_hints && (mainw->wm_hints->flags & IconWindowHint))
 				wapp->app_icon->icon->icon_win = mainw->wm_hints->icon_window;
 			wAppIconPaint(wapp->app_icon);
+			wAppIconSave(wapp->app_icon);
 		} else {
 			wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
 		}
@@ -381,8 +367,8 @@ WApplication *wApplicationCreate(WWindow * wwin)
 		}
 
 		/* if the displayed icon was supplied by the client, save the icon */
-		if (!tmp)
-			extractClientIcon(wapp->app_icon);
+		if (!tmp || strstr(tmp, "Library/WindowMaker/CachedPixmaps") != NULL)
+			wAppIconSave(wapp->app_icon);
 	}
 	return wapp;
 }

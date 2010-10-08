@@ -30,6 +30,7 @@
 #include "WindowMaker.h"
 #include "window.h"
 #include "icon.h"
+#include "application.h"
 #include "appicon.h"
 #include "actions.h"
 #include "stacking.h"
@@ -278,6 +279,22 @@ void wAppIconPaint(WAppIcon * aicon)
 		XFillRectangle(dpy, aicon->icon->core->window, scr->stipple_gc,
 			       0, 0, wPreferences.icon_size, wPreferences.icon_size);
 	}
+}
+
+Bool wAppIconSave(WAppIcon *aicon)
+{
+	char *path;
+
+	if (!aicon->docked || aicon->attracted) return True;
+
+	path = wIconStore(aicon->icon);
+	if (!path)
+		return False;
+
+	wApplicationSaveIconPathFor(path, aicon->wm_instance, aicon->wm_class);
+
+	wfree(path);
+	return True;
 }
 
 #define canBeDocked(wwin)  ((wwin) && ((wwin)->wm_class||(wwin)->wm_instance))
