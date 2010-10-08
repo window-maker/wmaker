@@ -426,13 +426,16 @@ static RImage *makeRImageFromARGBData(unsigned long *data)
 	return image;
 }
 
-static void updateIconImage(WScreen * scr, WWindow * wwin)
+static void updateIconImage(WWindow * wwin)
 {
 	unsigned long *property, *data;
 	unsigned long items, rest;
 	Atom type;
 	int format;
-	RImage *image;
+
+	if (wwin->net_icon_image)
+		RReleaseImage(wwin->net_icon_image);
+	wwin->net_icon_image = NULL;
 
 	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_icon, 0L, LONG_MAX,
 			       False, XA_CARDINAL, &type, &format, &items, &rest,
@@ -451,15 +454,11 @@ static void updateIconImage(WScreen * scr, WWindow * wwin)
 		return;
 	}
 
-	image = makeRImageFromARGBData(data);
-
-	if (image) {
-		if (wwin->net_icon_image)
-			RReleaseImage(wwin->net_icon_image);
-		wwin->net_icon_image = image;
-	}
+	wwin->net_icon_image = makeRImageFromARGBData(data);
 
 	XFree(property);
+
+	if (wwin->icon) wIconUpdate(wwin->icon);
 }
 
 static void updateShowDesktop(WScreen * scr, Bool show)
@@ -1329,7 +1328,7 @@ Bool wNETWMCheckInitialClientState(WWindow * wwin)
 
 	hasState |= updateNetIconInfo(wwin);
 
-	updateIconImage(wwin->screen_ptr, wwin);
+	updateIconImage(wwin);
 
 	return hasState;
 }
@@ -1443,7 +1442,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 		long set = event->data.l[0];
 
 #ifdef DEBUG_WMSPEC
-		printf("net_wm_state set %d a1 %s a2 %s\n", set,
+		printf("net_wm_state set %ld a1 %s a2 %s\n", set,
 		       XGetAtomName(dpy, event->data.l[1]), XGetAtomName(dpy, event->data.l[2]));
 #endif
 
@@ -1471,8 +1470,6 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 				wWindowSetOmnipresent(wwin, False);
 			wWindowChangeWorkspace(wwin, desktop);
 		}
-	} else if (event->message_type == net_wm_icon) {
-		updateIconImage(scr, wwin);
 	} else {
 		done = False;
 	}
@@ -1483,6 +1480,10 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 Bool wNETWMCheckClientHintChange(WWindow * wwin, XPropertyEvent * event)
 {
 	Bool ret = True;
+
+#ifdef DEBUG_WMSPEC
+	printf("clientHintChange type %s\n", XGetAtomName(dpy, event->atom));
+#endif
 
 	if (event->atom == net_wm_strut) {
 		updateStrut(wwin, False);
@@ -1502,6 +1503,8 @@ Bool wNETWMCheckClientHintChange(WWindow * wwin, XPropertyEvent * event)
 			char *name = wNETWMGetIconName(wwin->client_win);
 			wIconChangeTitle(wwin->icon, name);
 		}
+	} else if (event->atom == net_wm_icon) {
+		updateIconImage(wwin);
 	} else {
 		ret = False;
 	}
