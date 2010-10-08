@@ -14,10 +14,7 @@ fi
 # name of menu file we install (menu, plmenu)
 inst_menu=""
 
-LOCALE=$LANG
-if [ -z "$LOCALE" ]; then
-	LOCALE=$LC_ALL
-fi
+LOCALE="${LC_ALL-${LC_MESSAGES-$LANG}}"
 
 # directory where system wide configuration is stored
 GLOBALDIR="#pkgdatadir#"
