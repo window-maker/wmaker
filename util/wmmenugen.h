@@ -20,9 +20,13 @@
 
 #include <WINGs/WUtil.h>
 
+#include "../src/wconfig.h"
+
 /* flags attached to a particular WMMenuEntry */
 #define F_TERMINAL		(1 << 0)
-#define F_RESTART		(1 << 1)
+#define F_RESTART_SELF		(1 << 1)
+#define F_RESTART_OTHER		(1 << 2)
+#define F_QUIT			(1 << 3)
 
 
 /* a representation of a Window Maker menu entry. all menus are

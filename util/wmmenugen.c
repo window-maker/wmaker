@@ -46,12 +46,12 @@ static WMTreeNode *findPositionInMenu(char *submenu);
 static void (*parse)(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry));
 
 static WMArray *plMenuNodes;
+char *terminal;
 
 extern char *__progname;
 
 int main(int argc, char **argv)
 {
-	char *terminal;
 	struct stat st;
 	int i;
 	int *previousDepth;
@@ -91,7 +91,7 @@ int main(int argc, char **argv)
 #endif
 				parse = &parse_wmconfig;
 			} else {
-				fprintf(stderr, "%s: Unknown parser \"%s\"\n", __progname, argv[i] + 1);
+				fprintf(stderr, "%s: Unknown parser \"%s\"\n", __progname, argv[i] + 8);
 			}
 			continue;
 		}
@@ -210,12 +210,42 @@ static void assemblePLMenuFunc(WMTreeNode *aNode, void *data)
 		WMAddToArray(plMenuNodes, WMCreatePLArray(WMCreatePLString(wm->Name), NULL));
 	} else {					/* new menu item */
 		pl = WMPopFromArray(plMenuNodes);
-		WMAddToPLArray(pl, WMCreatePLArray(
-			WMCreatePLString(wm->Name),
-			WMCreatePLString(wm->Flags & F_RESTART ? "RESTART" : "SHEXEC"),
-			WMCreatePLString(wm->CmdLine),
-			NULL)
-		);
+		if (wm->Flags & F_RESTART_OTHER) {	/* RESTART, somewm */
+			char buf[1024];
+			memset(buf, 0, sizeof(buf));
+			snprintf(buf, sizeof(buf), "%s %s", _("Restart"), wm->Name);
+			WMAddToPLArray(pl, WMCreatePLArray(
+				WMCreatePLString(buf),
+				WMCreatePLString("RESTART"),
+				WMCreatePLString(wm->CmdLine),
+				NULL)
+			);
+		} else if (wm->Flags & F_RESTART_SELF) {/* RESTART */
+			WMAddToPLArray(pl, WMCreatePLArray(
+				WMCreatePLString(_("Restart Window Maker")),
+				WMCreatePLString("RESTART"),
+				NULL)
+			);
+		} else if (wm->Flags & F_QUIT) {	/* EXIT */
+			WMAddToPLArray(pl, WMCreatePLArray(
+				WMCreatePLString(_("Exit Window Maker")),
+				WMCreatePLString("EXIT"),
+				NULL)
+			);
+		} else {				/* plain simple command */
+			char buf[1024];
+			memset(buf, 0, sizeof(buf));
+			if (wm->Flags & F_TERMINAL)	/* XXX: quoting! */
+				snprintf(buf, sizeof(buf), "%s -e \"%s\"", terminal, wm->CmdLine);
+			else
+				snprintf(buf, sizeof(buf), "%s", wm->CmdLine);
+			WMAddToPLArray(pl, WMCreatePLArray(
+				WMCreatePLString(wm->Name),
+				WMCreatePLString("SHEXEC"),
+				WMCreatePLString(buf),
+				NULL)
+			);
+		}
 		WMAddToArray(plMenuNodes, pl);
 	}
 

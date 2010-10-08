@@ -35,11 +35,13 @@ typedef struct {
 	char	*Name;
 	char	*Exec;
 	char	*Category;
+	char	*Restart;
 	int	 Flags;
 } WMConfigMenuEntry;
 
 static Bool wmc_to_wm(WMConfigMenuEntry **wmc, WMMenuEntry **wm);
 static void parse_wmconfig_line(char **label, char **key, char **value, char *line);
+static void init_wmconfig_storage(WMConfigMenuEntry **wmc);
 
 void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry))
 {
@@ -63,6 +65,7 @@ void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry
 	wmc->Name = NULL;
 	wmc->Exec = NULL;
 	wmc->Category = NULL;
+	wmc->Restart = NULL;
 	wmc->Flags = 0;
 
 	wm = (WMMenuEntry *)wmalloc(sizeof(WMMenuEntry));
@@ -94,17 +97,11 @@ void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry
 			lastlabel = wstrdup(label);
 
 		if (strcmp(lastlabel, label) != 0) {
-			if (wmc->Name && wmc->Exec && wmc->Category &&
-			    wmc_to_wm(&wmc, &wm))
+			if (wmc_to_wm(&wmc, &wm)) {
 				(*addWMMenuEntryCallback)(wm);
+				init_wmconfig_storage(&wmc);
+			}
 
-			wfree(wmc->Name);
-			wmc->Name = NULL;
-			wfree(wmc->Exec);
-			wmc->Exec = NULL;
-			wfree(wmc->Category);
-			wmc->Category = NULL;
-			wmc->Flags = 0;
 			wfree(lastlabel);
 			lastlabel = wstrdup(label);
 		}
@@ -117,7 +114,7 @@ void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry
 			else if (strcmp(key, "group") == 0)
 				wmc->Category = value;
 			else if (strcmp(key, "restart") == 0)
-				wmc->Flags |= F_RESTART;
+				wmc->Restart = value;
 			else if (strcmp(key, "terminal") == 0)
 				wmc->Flags |= F_TERMINAL;
 		}
@@ -126,9 +123,10 @@ void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry
 
 	fclose(fp);
 
-	if (wmc_to_wm(&wmc, &wm))
+	if (wmc_to_wm(&wmc, &wm)) {
 		(*addWMMenuEntryCallback)(wm);
-
+		init_wmconfig_storage(&wmc);
+	}
 }
 
 /* get a line allocating label, key and value as necessary */
@@ -181,10 +179,51 @@ static void parse_wmconfig_line(char **label, char **key, char **value, char *li
 	*value = wstrndup(p + kstart, kend - kstart);
 }
 
+/* normalize and convert one wmconfig-format entry to wm format */
 static Bool wmc_to_wm(WMConfigMenuEntry **wmc, WMMenuEntry **wm)
 {
-	if (!*wmc || !(*wmc)->Name)
+	char *p;
+	size_t slen;
+
+	/* only Exec is mandatory */
+	if (!*wmc || !(*wmc)->Exec || !*(*wmc)->Exec)
 		return False;
+
+	/* normalize Exec: wmconfig tends to stuck an ampersand
+	 * at the end of everything, which we don't need */
+	slen = strlen((*wmc)->Exec) - 1;
+	p = (*wmc)->Exec;
+	while (slen > 0 && (isspace(*(p + slen)) || *(p + slen) == '&'))
+		*(p + slen--) = '\0';
+
+	/* if there's no Name, use the first word of Exec; still better
+	 * than nothing. i realize it's highly arguable whether `xterm' from
+	 * `xterm -e "ssh dev push-to-prod"' is helpful or not, but since
+	 * the alternative is to completely lose the entry, i opt for this.
+	 * you could just fix the descriptor file to have a label <G> */
+	if (!(*wmc)->Name) {
+		(*wmc)->Name = wstrdup((*wmc)->Exec);
+		p = strchr((*wmc)->Name, ' ');
+		if (p)
+			*p = '\0';
+	}
+
+	/* if there's no Category, use "Applications"; apparently "no category"
+	 * can manifest both as no `group' descriptor at all, or a group
+	 * descriptor of "" */
+	if (!(*wmc)->Category || !*(*wmc)->Category)
+		(*wmc)->Category = wstrdup("Applications");
+
+	/* the `restart' type is used for restart, restart other
+	 * wm and quit current wm too. separate these cases. */
+	if ((*wmc)->Restart) {
+		if (strcmp((*wmc)->Restart, "restart") == 0)
+			(*wmc)->Flags |= F_RESTART_SELF;
+		else if (strcmp((*wmc)->Restart, "quit") == 0)
+			(*wmc)->Flags |= F_QUIT;
+		else
+			(*wmc)->Flags |= F_RESTART_OTHER;
+	}
 
 	(*wm)->Name = (*wmc)->Name;
 	(*wm)->CmdLine = (*wmc)->Exec;
@@ -192,4 +231,18 @@ static Bool wmc_to_wm(WMConfigMenuEntry **wmc, WMMenuEntry **wm)
 	(*wm)->Flags = (*wmc)->Flags;
 
 	return True;
+}
+
+static void init_wmconfig_storage(WMConfigMenuEntry **wmc)
+{
+	if ((*wmc)->Category)
+		wfree((*wmc)->Category);
+	(*wmc)->Category = NULL;
+	if ((*wmc)->Name)
+		wfree((*wmc)->Name);
+	(*wmc)->Name = NULL;
+	if ((*wmc)->Restart)
+		wfree((*wmc)->Restart);
+	(*wmc)->Restart = NULL;
+	(*wmc)->Flags = 0;
 }
