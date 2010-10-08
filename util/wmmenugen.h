@@ -51,6 +51,7 @@ char *env_lang, *env_ctry, *env_enc, *env_mod;
  */
 void  parse_locale(const char *what, char **env_lang, char **env_ctry, char **env_enc, char **env_mod);
 char *find_terminal_emulator(void);
+Bool fileInPath(const char *file);
 
 /* implemented parsers
  */

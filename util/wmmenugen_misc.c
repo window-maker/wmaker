@@ -124,3 +124,48 @@ out:
 	return;
 
 }
+
+/* determine whether (first token of) given file is in $PATH
+ */
+Bool fileInPath(const char *file)
+{
+	char *p, *t;
+	static char *path = NULL;
+
+	if (!file || !*file)
+		return False;
+
+	/* if it's an absolute path spec, don't override the user.
+	 * s/he might just know better.
+	 */
+	if (*file == '/')
+		return True;
+
+	/* if it has a directory separator at random places,
+	 * we might know better.
+	 */
+	p = strchr(file, '/');
+	if (p)
+		return False;
+
+	if (!path) {
+		path = getenv("PATH");
+		if (!path)
+			return False;
+	}
+
+	p = wstrdup(file);
+	t = strpbrk(p, " \t");
+	if (t)
+		*t = '\0';
+
+	t = wfindfile(path, p);
+	wfree(p);
+
+	if (t) {
+		wfree(t);
+		return True;
+	}
+
+	return False;
+}

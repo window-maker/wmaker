@@ -185,8 +185,10 @@ static Bool wmc_to_wm(WMConfigMenuEntry **wmc, WMMenuEntry **wm)
 	char *p;
 	size_t slen;
 
-	/* only Exec is mandatory */
-	if (!*wmc || !(*wmc)->Exec || !*(*wmc)->Exec)
+	/* only Exec is mandatory, and it's better exist in a known place */
+	if (!*wmc ||
+	    !(*wmc)->Exec || !*(*wmc)->Exec ||
+	    !fileInPath((*wmc)->Exec))
 		return False;
 
 	/* normalize Exec: wmconfig tends to stuck an ampersand
