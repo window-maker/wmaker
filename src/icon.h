@@ -39,7 +39,7 @@ typedef struct WIcon {
     Window 		icon_win;      /* client suplied icon window */
 
     char		*file;	       /* the file with the icon image */
-    RImage 		*image;
+    RImage 		*file_image;   /* the image from the file */
 
     unsigned int 	tile_type:4;
     unsigned int 	show_title:1;
@@ -63,7 +63,6 @@ void wIconDestroy(WIcon *icon);
 void wIconPaint(WIcon *icon);
 void wIconUpdate(WIcon *icon);
 void wIconChangeTitle(WIcon *icon, char *new_title);
-void wIconChangeImage(WIcon *icon, RImage *new_image);
 Bool wIconChangeImageFile(WIcon *icon, char *file);
 void wIconSelect(WIcon *icon);
 

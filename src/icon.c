@@ -154,10 +154,7 @@ WIcon *wIconCreate(WWindow * wwin)
 #else
 	icon->show_title = 1;
 #endif
-	if (!icon->image && !WFLAGP(wwin, always_user_icon))
-		icon->image = RRetainImage(wwin->net_icon_image);
-	if (!icon->image)
-		icon->image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class);
+	icon->file_image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class);
 
 	file = wDefaultGetIconFile(scr, wwin->wm_instance, wwin->wm_class, False);
 	if (file) {
@@ -213,12 +210,12 @@ WIcon *wIconCreateWithIconFile(WScreen * scr, char *iconfile, int tile)
 	icon->core->stacking->child_of = NULL;
 
 	if (iconfile) {
-		icon->image = RLoadImage(scr->rcontext, iconfile, 0);
-		if (!icon->image) {
+		icon->file_image = RLoadImage(scr->rcontext, iconfile, 0);
+		if (!icon->file_image) {
 			wwarning(_("error loading image file \"%s\": %s"), iconfile, RMessageForError(RErrorCode));
 		}
 
-		icon->image = wIconValidateIconSize(scr, icon->image);
+		icon->file_image = wIconValidateIconSize(scr, icon->file_image);
 
 		icon->file = wstrdup(iconfile);
 	}
@@ -262,8 +259,8 @@ void wIconDestroy(WIcon * icon)
 	if (icon->file)
 		wfree(icon->file);
 
-	if (icon->image != NULL)
-		RReleaseImage(icon->image);
+	if (icon->file_image != NULL)
+		RReleaseImage(icon->file_image);
 
 	wCoreDestroy(icon->core);
 	wfree(icon);
@@ -357,18 +354,6 @@ void wIconChangeTitle(WIcon * icon, char *new_title)
 	wIconPaint(icon);
 }
 
-void wIconChangeImage(WIcon * icon, RImage * new_image)
-{
-	assert(icon != NULL);
-
-	if (icon->image)
-		RReleaseImage(icon->image);
-
-	icon->image = new_image;
-
-	wIconUpdate(icon);
-}
-
 RImage *wIconValidateIconSize(WScreen * scr, RImage * icon)
 {
 	RImage *tmp;
@@ -397,17 +382,20 @@ Bool wIconChangeImageFile(WIcon * icon, char *file)
 	char *path;
 	int error = 0;
 
+	if (icon->file_image)
+		RReleaseImage(icon->file_image);
+
 	if (!file) {
-		wIconChangeImage(icon, NULL);
+		icon->file_image = NULL;
+		wIconUpdate(icon);
 		return True;
 	}
 
 	path = FindImage(wPreferences.icon_path, file);
 
 	if (path && (image = RLoadImage(scr->rcontext, path, 0))) {
-		image = wIconValidateIconSize(icon->core->screen_ptr, image);
-
-		wIconChangeImage(icon, image);
+		icon->file_image = wIconValidateIconSize(icon->core->screen_ptr, image);
+		wIconUpdate(icon);
 	} else {
 		error = 1;
 	}
@@ -483,20 +471,23 @@ static char *getnameforicon(WWindow * wwin)
 char *wIconStore(WIcon * icon)
 {
 	char *path;
-	RImage *image;
+	RImage *image = NULL;
 	WWindow *wwin = icon->owner;
 
-	if (!wwin || !wwin->wm_hints || !(wwin->wm_hints->flags & IconPixmapHint)
-	    || wwin->wm_hints->icon_pixmap == None)
-		return NULL;
+	if (!wwin) return NULL;
 
 	path = getnameforicon(wwin);
 	if (!path)
 		return NULL;
 
-	image = RCreateImageFromDrawable(icon->core->screen_ptr->rcontext,
-					 wwin->wm_hints->icon_pixmap, (wwin->wm_hints->flags & IconMaskHint)
-					 ? wwin->wm_hints->icon_mask : None);
+	if (wwin->net_icon_image) {
+		image = RRetainImage(wwin->net_icon_image);
+	} else if (wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)
+	    && wwin->wm_hints->icon_pixmap != None) {
+		image = RCreateImageFromDrawable(icon->core->screen_ptr->rcontext,
+						 wwin->wm_hints->icon_pixmap, (wwin->wm_hints->flags & IconMaskHint)
+						 ? wwin->wm_hints->icon_mask : None);
+	}
 	if (!image) {
 		wfree(path);
 		return NULL;
@@ -571,11 +562,11 @@ void wIconUpdate(WIcon * icon)
 		XFreePixmap(dpy, icon->pixmap);
 	icon->pixmap = None;
 
-	if (wwin && (WFLAGP(wwin, always_user_icon) || wwin->net_icon_image))
+	if (wwin && WFLAGP(wwin, always_user_icon))
 		goto user_icon;
 
-	/* use client specified icon window */
 	if (icon->icon_win != None) {
+		/* use client specified icon window */
 		XWindowAttributes attr;
 		int resize = 0;
 		unsigned int width, height, depth;
@@ -626,6 +617,10 @@ void wIconUpdate(WIcon * icon)
 						  None, wCursor[WCUR_ARROW]);
 			}
 		}
+	} else if (wwin && wwin->net_icon_image) {
+		/* Use _NET_WM_ICON icon */
+		icon->pixmap = makeIcon(scr, wwin->net_icon_image, icon->show_title,
+						icon->shadowed, icon->tile_type, icon->highlighted);
 	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
 		int x, y;
 		unsigned int w, h;
@@ -685,8 +680,8 @@ void wIconUpdate(WIcon * icon)
 	} else {
  user_icon:
 
-		if (icon->image) {
-			icon->pixmap = makeIcon(scr, icon->image, icon->show_title,
+		if (icon->file_image) {
+			icon->pixmap = makeIcon(scr, icon->file_image, icon->show_title,
 						icon->shadowed, icon->tile_type, icon->highlighted);
 		} else {
 			/* make default icons */

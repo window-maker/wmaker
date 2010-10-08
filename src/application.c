@@ -364,7 +364,6 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	if (wapp->app_icon) {
 		char *tmp, *path;
 		struct stat dummy;
-		RImage *image;
 
 		tmp = wDefaultGetIconFile(scr, wapp->app_icon->wm_instance, wapp->app_icon->wm_class, True);
 
@@ -377,16 +376,8 @@ WApplication *wApplicationCreate(WWindow * wwin)
 			if (path) {
 				wfree(path);
 			}
-			image = wDefaultGetImage(scr, wapp->app_icon->wm_instance, wapp->app_icon->wm_class);
-			if (image) {
-				wIconChangeImage(wapp->app_icon->icon, image);
-				wAppIconPaint(wapp->app_icon);
-				/* TODO:
-				 * wIconChangeImage() should be rewriten to use retain/release
-				 * The way it is now is too confusing about where the icon is
-				 * finally released.  -Dan */
-				/* --this is wrong at the moment-- RReleaseImage(image); */
-			}
+			wIconUpdate(wapp->app_icon->icon);
+			wAppIconPaint(wapp->app_icon);
 		}
 
 		/* if the displayed icon was supplied by the client, save the icon */

@@ -1139,17 +1139,8 @@ void wDefaultUpdateIcons(WScreen * scr)
 		file = wDefaultGetIconFile(scr, aicon->wm_instance, aicon->wm_class, False);
 		if ((file && aicon->icon->file && strcmp(file, aicon->icon->file) != 0)
 		    || (file && !aicon->icon->file)) {
-			RImage *new_image;
-
-			if (aicon->icon->file)
-				wfree(aicon->icon->file);
-			aicon->icon->file = wstrdup(file);
-
-			new_image = wDefaultGetImage(scr, aicon->wm_instance, aicon->wm_class);
-			if (new_image) {
-				wIconChangeImage(aicon->icon, new_image);
-				wAppIconPaint(aicon);
-			}
+			wIconChangeImageFile(aicon->icon, file);
+			wAppIconPaint(aicon);
 		}
 		aicon = aicon->next;
 	}
@@ -1162,15 +1153,7 @@ void wDefaultUpdateIcons(WScreen * scr)
 			file = wDefaultGetIconFile(scr, wwin->wm_instance, wwin->wm_class, False);
 			if ((file && wwin->icon->file && strcmp(file, wwin->icon->file) != 0)
 			    || (file && !wwin->icon->file)) {
-				RImage *new_image;
-
-				if (wwin->icon->file)
-					wfree(wwin->icon->file);
-				wwin->icon->file = wstrdup(file);
-
-				new_image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class);
-				if (new_image)
-					wIconChangeImage(wwin->icon, new_image);
+				wIconChangeImageFile(wwin->icon, file);
 			}
 		}
 		wwin = wwin->prev;
