@@ -518,7 +518,7 @@ static void fixLeaderProperties(WWindow *wwin)
 
 			/* Make sure we get notification when this window is destroyed */
 			if (XGetWindowAttributes(dpy, window, &attr))
-				XSelectInput(dpy, window, attr.your_event_mask | StructureNotifyMask);
+				XSelectInput(dpy, window, attr.your_event_mask | StructureNotifyMask | PropertyChangeMask);
 		}
 	}
 
@@ -1543,7 +1543,13 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 		if (!wwin->flags.internal_window)
 			XRemoveFromSaveSet(dpy, wwin->client_win);
 
-		XSelectInput(dpy, wwin->client_win, NoEventMask);
+		/* If this is a leader window, we still need to listen for
+		 * DestroyNotify and PropertyNotify. */
+		if (wApplicationOf(wwin->client_win)) {
+			XSelectInput(dpy, wwin->client_win, StructureNotifyMask | PropertyChangeMask);
+		} else {
+			XSelectInput(dpy, wwin->client_win, NoEventMask);
+		}
 
 		XUngrabButton(dpy, AnyButton, AnyModifier, wwin->client_win);
 		XUngrabKey(dpy, AnyKey, AnyModifier, wwin->client_win);

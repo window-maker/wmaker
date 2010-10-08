@@ -42,6 +42,7 @@
 #include "framewin.h"
 #include "actions.h"
 #include "client.h"
+#include "appicon.h"
 #include "wmspec.h"
 #include "icon.h"
 #include "stacking.h"
@@ -459,6 +460,11 @@ static void updateIconImage(WWindow * wwin)
 	XFree(property);
 
 	if (wwin->icon) wIconUpdate(wwin->icon);
+	WApplication *app = wApplicationOf(wwin->main_window);
+	if (app && app->app_icon){
+		wIconUpdate(app->app_icon->icon);
+		wAppIconPaint(app->app_icon);
+	}
 }
 
 static void updateShowDesktop(WScreen * scr, Bool show)
