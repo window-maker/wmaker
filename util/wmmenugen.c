@@ -44,6 +44,7 @@ static int menuSortFunc(const void *left, const void *right);
 static int nodeFindSubMenuByNameFunc(const void *item, const void *cdata);
 static WMTreeNode *findPositionInMenu(char *submenu);
 static void (*parse)(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry));
+static Bool (*validateFilename)(const char *filename, const struct stat *st, int tflags, struct FTW *ftw);
 
 static WMArray *plMenuNodes;
 char *terminal;
@@ -59,6 +60,7 @@ int main(int argc, char **argv)
 	plMenuNodes = WMCreateArray(8); /* grows on demand */
 	menu = (WMTreeNode *)NULL;
 	parse = NULL;
+	validateFilename = NULL;
 
 	/* assemblePLMenuFunc passes this around */
 	previousDepth = (int *)wmalloc(sizeof(int));
@@ -90,6 +92,7 @@ int main(int argc, char **argv)
 				fputs("Using parser \"wmconfig\"\n", stderr);
 #endif
 				parse = &parse_wmconfig;
+				validateFilename = &wmconfig_validate_file;
 			} else {
 				fprintf(stderr, "%s: Unknown parser \"%s\"\n", __progname, argv[i] + 8);
 			}
@@ -141,6 +144,10 @@ static int dirParseFunc(const char *filename, const struct stat *st, int tflags,
 	(void)st;
 	(void)tflags;
 	(void)ftw;
+
+	if (validateFilename &&
+	    !validateFilename(filename, st, tflags, ftw))
+		return 0;
 
 	parse(filename, addWMMenuEntryCallback);
 	return 0;
@@ -196,7 +203,7 @@ static void assemblePLMenuFunc(WMTreeNode *aNode, void *data)
 	pDepth = *(int *)data;
 
 	if (pDepth > cDepth) {				/* just ascended out of a/several submenu(s) */
-		WMPropList *last, *but;			/* merge the differences */
+		WMPropList *last, *but;			/* merge the tail up to the current position */
 		int i;
 		for (i = pDepth - cDepth; i > 0; i--) {
 			last = WMPopFromArray(plMenuNodes);
@@ -239,12 +246,12 @@ static void assemblePLMenuFunc(WMTreeNode *aNode, void *data)
 				snprintf(buf, sizeof(buf), "%s -e \"%s\"", terminal, wm->CmdLine);
 			else
 				snprintf(buf, sizeof(buf), "%s", wm->CmdLine);
-			WMAddToPLArray(pl, WMCreatePLArray(
-				WMCreatePLString(wm->Name),
-				WMCreatePLString("SHEXEC"),
-				WMCreatePLString(buf),
-				NULL)
-			);
+				WMAddToPLArray(pl, WMCreatePLArray(
+					WMCreatePLString(wm->Name),
+					WMCreatePLString("SHEXEC"),
+					WMCreatePLString(buf),
+					NULL)
+				);
 		}
 		WMAddToArray(plMenuNodes, pl);
 	}

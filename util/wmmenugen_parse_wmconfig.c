@@ -20,14 +20,24 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#if __GLIBC__ && \
+    (_XOPEN_SOURCE && _XOPEN_SOURCE < 500) || \
+    !_XOPEN_SOURCE
+#define _XOPEN_SOURCE 500		/* nftw */
+#endif
+
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #include <ctype.h>
+#include <ftw.h>
 #if DEBUG
 #include <errno.h>
 #endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
 #include "wmmenugen.h"
 
@@ -127,6 +137,42 @@ void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry
 		(*addWMMenuEntryCallback)(wm);
 		init_wmconfig_storage(&wmc);
 	}
+}
+
+/* an example to illustrate validateFilename.
+ * with wmconfig, no special handling is needed
+ */
+Bool wmconfig_validate_file(const char *filename, const struct stat *st, int tflags, struct FTW *ftw)
+{
+	(void)filename;
+	(void)st;
+	(void)tflags;
+	(void)ftw;
+
+	return True;
+#if 0	/* not dead code, example */
+
+	/* or we could have gone intro extremes */
+	char *base_name;
+	Bool ret;
+
+	(void)tflags;
+
+	base_name = wstrdup(filename + ftw->base);
+	ret = True;
+
+	if (!S_ISREG(st->st_mode) ||				/* not a regular file */
+	    (st->st_uid != 0 && st->st_uid != getuid()) ||	/* bad guy injected this file */
+	    strpbrk(base_name, ".") ||				/* wmconfig typically has no extension */
+	    st->st_size >= 128 * 131072	||			/* noone writes wmconfig files > 128K */
+	    st->st_size == 0 ||					/* nor empty ones */
+	    ftw->level > 16)					/* how did we get this deep? */
+		ret = False;
+
+	wfree(base_name);
+
+	return ret;
+#endif
 }
 
 /* get a line allocating label, key and value as necessary */

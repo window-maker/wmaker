@@ -57,3 +57,5 @@ Bool fileInPath(const char *file);
  */
 void parse_xdg(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry));
 void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry));
+Bool wmconfig_validate_file(const char *filename, const struct stat *st, int tflags, struct FTW *ftw);
+
