@@ -22,14 +22,16 @@
 
 /*
  * http://standards.freedesktop.org/desktop-entry-spec/desktop-entry-spec-1.1.html
+ * http://standards.freedesktop.org/menu-spec/menu-spec-1.1.html
  *
  * We will only deal with Type == "Application" entries in [Desktop Entry]
  * groups. Since there is no passing of file name arguments or anything of
  * the sort to applications from the menu, execname is determined as follows:
  * - If `TryExec' is present, use that;
  * - else use `Exec' with any switches stripped
- * XXX: Only the first item of `Categories' is taken into consideration,
- * which will be used as the sole category to put the entry into.
+ *
+ * Only the (first, though there should not be more than one) `Main Category'
+ * is used to place the entry in a submenu.
  *
  * Basic validation of the .desktop file is done.
  */
@@ -77,6 +79,7 @@ static void  getKey(char **target, const char *line);
 static void  getStringValue(char **target, const char *line);
 static void  getLocalizedStringValue(char **target, const char *line, int *match_level);
 static int   getBooleanValue(const char *line);
+static void  getMenuHierarchyFor(char **xdgmenuspec);
 static int   compare_matchlevel(int *current_level, const char *found_locale);
 static Bool  xdg_to_wm(XDGMenuEntry **xdg, WMMenuEntry **wmentry);
 static void init_xdg_storage(XDGMenuEntry **xdg);
@@ -173,15 +176,8 @@ void parse_xdg(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEn
 			if (getBooleanValue(p))
 				xdg->Flags |= F_TERMINAL;
 		} else if (strcmp(key, "Categories") == 0) {
-			/* use only the first item */
-			getStringValue(&tmp, p);
-			if (tmp != NULL) {
-				tmp[strcspn(tmp, ";")] = '\0';
-				tmp[strcspn(tmp, "\t ")] = '\0';
-				xdg->Category = wstrdup(tmp);
-				wfree(tmp);
-				tmp = NULL;
-			}
+			getStringValue(&xdg->Category, p);
+			getMenuHierarchyFor(&xdg->Category);
 		}
 
 		wfree(key);
@@ -201,30 +197,36 @@ void parse_xdg(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEn
  */
 static Bool xdg_to_wm(XDGMenuEntry **xdg, WMMenuEntry **wm)
 {
-	if (!*xdg)
+	char *p;
+
+	/* Exec or TryExec is mandatory */
+	if (!((*xdg)->Exec || (*xdg)->TryExec))
 		return False;
 
-	if ((*xdg)->Exec || (*xdg)->TryExec) {
-		(*wm)->Flags = (*xdg)->Flags;
-		if ((*xdg)->Name) {
-			(*wm)->Name = (*xdg)->Name;
-		}
-		if ((*xdg)->Exec) {
-			if (!(*wm)->Name)
-				(*wm)->Name = (*xdg)->Exec;
-			(*wm)->CmdLine = (*xdg)->Exec;
-		}
-		if ((*xdg)->TryExec) {
-			if (!(*wm)->Name)
-				(*wm)->Name = (*xdg)->TryExec;
-			if (!(*wm)->CmdLine)
-				(*wm)->CmdLine = (*xdg)->TryExec;
-		}
-	}
-	if ((*wm)->Name && (*wm)->CmdLine)
-		return True;
+	/* if there's no Name, use the first word of Exec or TryExec
+	 */
+	if ((*xdg)->Name) {
+		(*wm)->Name = (*xdg)->Name;
+	} else  {
+		if ((*xdg)->Exec)
+			(*wm)->Name = wstrdup((*xdg)->Exec);
+		else /* (*xdg)->TryExec */
+			(*wm)->Name = wstrdup((*xdg)->TryExec);
 
-	return False;
+		p = strchr((*wm)->Name, ' ');
+		if (p)
+			*p = '\0';
+	}
+
+	if ((*xdg)->Exec)
+		(*wm)->CmdLine = (*xdg)->Exec;
+	else					/* (*xdg)->TryExec */
+		(*wm)->CmdLine = (*xdg)->TryExec;
+
+	(*wm)->SubMenu = (*xdg)->Category;
+	(*wm)->Flags = (*xdg)->Flags;
+
+	return True;
 }
 
 /* (re-)initialize a XDGMenuEntry storage
@@ -282,7 +284,7 @@ static void getKey(char **target, const char *line)
 
 	/* skip up until first whitespace or '[' (localestring) or '=' */
 	kend = kstart + 1;
-	while (!isspace(*(p + kend)) && *(p + kend) != '=' && *(p + kend) != '[')
+	while (*(p + kend) && !isspace(*(p + kend)) && *(p + kend) != '=' && *(p + kend) != '[')
 		kend++;
 
 	*target = wstrndup(p + kstart, kend - kstart);
@@ -298,12 +300,12 @@ static void getStringValue(char **target, const char *line)
 	kstart = 0;
 
 	/* skip until after '=' */
-	while (*(p + kstart) != '=')
+	while (*(p + kstart) && *(p + kstart) != '=')
 		kstart++;
 	kstart++;
 
 	/* skip whitespace */
-	while (isspace(*(p + kstart)))
+	while (*(p + kstart) && isspace(*(p + kstart)))
 		kstart++;
 
 	*target = wstrdup(p + kstart);
@@ -327,7 +329,7 @@ static void getLocalizedStringValue(char **target, const char *line, int *match_
 	locale = NULL;
 
 	/* skip until after '=', mark if '[' and ']' is found */
-	while (*(p + kstart) != '=') {
+	while (*(p + kstart) && *(p + kstart) != '=') {
 		switch (*(p + kstart)) {
 			case '[': sqbstart = kstart + 1;break;
 			case ']': sqbend = kstart;	break;
@@ -476,4 +478,67 @@ static Bool compare_matchlevel(int *current_level, const char *found_locale)
 	/* MATCH_DEFAULT is handled in getLocalizedStringValue */
 
 	return False;
+}
+
+/* get the (first) xdg main category from a list of categories
+ */
+static void  getMenuHierarchyFor(char **xdgmenuspec)
+{
+	char *category, *p;
+	char buf[1024];
+
+	if (!*xdgmenuspec || !**xdgmenuspec)
+		return;
+
+	category = wstrdup(*xdgmenuspec);
+	wfree(*xdgmenuspec);
+	memset(buf, 0, sizeof(buf));
+
+	p = strtok(category, ";");
+	while (p) {		/* get a known category */
+		if (strcmp(p, "AudioVideo") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Audio & Video"));
+			break;
+		} else if (strcmp(p, "Audio") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Audio"));
+			break;
+		} else if (strcmp(p, "Video") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Video"));
+			break;
+		} else if (strcmp(p, "Development") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Development"));
+			break;
+		} else if (strcmp(p, "Education") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Education"));
+			break;
+		} else if (strcmp(p, "Game") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Game"));
+			break;
+		} else if (strcmp(p, "Graphics") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Graphics"));
+			break;
+		} else if (strcmp(p, "Network") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Network"));
+			break;
+		} else if (strcmp(p, "Office") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Office"));
+			break;
+		} else if (strcmp(p, "Settings") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Settings"));
+			break;
+		} else if (strcmp(p, "System") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("System"));
+			break;
+		} else if (strcmp(p, "Utility") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Utility"));
+			break;
+		}
+		p = strtok(NULL, ";");
+	}
+
+
+	if (!*buf)		/* come up with something if nothing found */
+		snprintf(buf, sizeof(buf), "%s", _("Applications"));
+
+	*xdgmenuspec = wstrdup(buf);
 }

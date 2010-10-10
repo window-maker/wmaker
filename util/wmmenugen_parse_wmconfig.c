@@ -232,12 +232,12 @@ static Bool wmc_to_wm(WMConfigMenuEntry **wmc, WMMenuEntry **wm)
 	size_t slen;
 
 	/* only Exec is mandatory, and it's better exist in a known place */
-	if (!*wmc ||
-	    !(*wmc)->Exec || !*(*wmc)->Exec ||
-	    !fileInPath((*wmc)->Exec))
+	if (!((*wmc)->Exec &&
+	     *(*wmc)->Exec &&
+	     fileInPath((*wmc)->Exec)))
 		return False;
 
-	/* normalize Exec: wmconfig tends to stuck an ampersand
+	/* normalize Exec: wmconfig tends to stick an ampersand
 	 * at the end of everything, which we don't need */
 	slen = strlen((*wmc)->Exec) - 1;
 	p = (*wmc)->Exec;
