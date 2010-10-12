@@ -311,10 +311,10 @@ reinit:
 			}
 			return;
 		}
-		XMoveWindow(dpy, aicon->icon->core->window,
-			    aicon->x_pos, aicon->y_pos);
 	}
 
+	XMoveWindow(dpy, aicon->icon->core->window,
+			aicon->x_pos, aicon->y_pos);
 	CommitStackingForWindow(aicon->icon->core);
 	data->wapp->flags.bouncing = 0;
 	WMDeleteTimerHandler(data->timer);
