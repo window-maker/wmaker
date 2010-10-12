@@ -243,6 +243,12 @@ void wtokenfree(char **tokens, int count);
 
 char* wtrimspace(const char *s);
 
+/* transform `s' so that the result is safe to pass to the shell as an argument.
+ * returns a newly allocated string.
+ * with very heavy inspirations from NetBSD's shquote(3).
+ */
+char *wshellquote(const char *s);
+
 /* ---[ WINGs/wmisc.c ]--------------------------------------------------- */
 
 WMRange wmkrange(int start, int count);

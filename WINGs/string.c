@@ -352,3 +352,69 @@ wstrlcpy(char *dst, const char *src, size_t siz)
 	return(s - src - 1);	/* count does not include NUL */
 }
 #endif /* HAVE_STRLCPY */
+
+/* transform `s' so that the result is safe to pass to the shell as an argument.
+ * returns a newly allocated string.
+ * with very heavy inspirations from NetBSD's shquote(3).
+ */
+char *wshellquote(const char *s)
+{
+	char *p, *r, *last, *ret;
+	size_t slen;
+	int needs_quoting;
+
+	if (!s)
+		return NULL;
+
+	needs_quoting = !*s;			/* the empty string does need quoting */
+
+	/* do not quote if consists only of the following characters */
+	for (p = (char *)s; *p && !needs_quoting; p++) {
+		needs_quoting = !(isalnum(*p) || (*p == '+') || (*p == '/') ||
+				 (*p == '.') || (*p == ',') || (*p == '-'));
+	}
+
+	if (!needs_quoting)
+		return wstrdup(s);
+
+	for (slen = 0, p = (char *)s; *p; p++)		/* count space needed (worst case) */
+		slen += *p == '\'' ? 4 : 1;		/* every single ' becomes ''\' */
+
+	slen += 2 /* leading + trailing "'" */ + 1 /* NULL */;
+
+	ret = r = wmalloc(slen);
+	p = (char *)s;
+	last = p;
+
+	if (*p != '\'')					/* if string doesn't already begin with "'" */
+		*r++ ='\'';				/* start putting it in quotes */
+
+	while (*p) {
+		last = p;
+		if (*p == '\'') {			/* turn each ' into ''\' */
+			if (p != s)			/* except if it's the first ', in which case */
+				*r++ = '\'';		/* only escape it */
+			*r++ = '\\';
+			*r++ = '\'';
+			while (*++p && *p == '\'') {	/* keep turning each consecutive 's into \' */
+				*r++ = '\\';
+				*r++ = '\'';
+			}
+			if (*p)				/* if more input follows, terminate */
+				*r++ = '\'';		/* what we have so far */
+		} else {
+			*r++ = *p++;
+		}
+	}
+
+	if (*last != '\'')				/* if the last one isn't already a ' */
+		*r++ = '\'';				/* terminate the whole shebang */
+
+	*r = '\0';
+
+	return ret;					/* technically, we lose (but not leak) a couple of */
+							/* bytes (twice the number of consecutive 's in the */
+							/* input or so), but since these are relatively rare */
+							/* and short-lived strings, not sure if a trip to */
+							/* wstrdup+wfree worths the gain. */
+}
