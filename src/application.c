@@ -165,6 +165,8 @@ void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_cla
 		val = WMCreatePLString(iconPath);
 		WMPutInPLDictionary(adict, iconk, val);
 		WMReleasePropList(val);
+	} else {
+		val = NULL;
 	}
 	WMReleasePropList(key);
 	WMReleasePropList(iconk);
