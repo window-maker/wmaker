@@ -49,7 +49,10 @@ INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
 
 libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ @LIBXMU@ -lm
 
-DISTCLEANFILES = wrlib.pc get-wraster-flags
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = wrlib.pc
+
+DISTCLEANFILES = $(pkgconfig_DATA) get-wraster-flags
 
 wrlib.pc: Makefile
 	@echo "Generating $@"
@@ -66,16 +69,4 @@ get-wraster-flags: get-wraster-flags.in Makefile
 	        -e 's#$${GFXLIBS}#$(GFXLIBS)#;' \
 	        -e 's#$${XLIBS}#$(XLIBS)#;' < $< > $@
 	@chmod 755 $@
-
-
-install-exec-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
-	@list='wrlib.pc'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
-	  else :; fi; \
-	done
-
 

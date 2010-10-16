@@ -86,7 +86,10 @@ AM_CFLAGS =
 INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	@XFTFLAGS@ @HEADER_SEARCH_PATH@
 
-DISTCLEANFILES = WINGs.pc get-wings-flags get-wutil-flags
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = WINGs.pc
+
+DISTCLEANFILES = $(pkgconfig_DATA) get-wings-flags get-wutil-flags
 
 WINGs.pc: Makefile
 	@echo "Generating $@"
@@ -114,12 +117,3 @@ get-wutil-flags: get-wutil-flags.in Makefile
 	        -e 's#$${INTLIBS}#$(INTLIBS)#;' < $< > $@
 	@chmod 755 $@
 
-install-exec-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
-	@list='WINGs.pc'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
-	  else :; fi; \
-	done
