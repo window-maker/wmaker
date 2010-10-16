@@ -97,7 +97,8 @@ WINGs.pc: Makefile
 	@echo 'Description: Small widget set with the NeXTStep(TM) look and feel' >> $@
 	@echo 'Version: $(VERSION)' >> $@
 	@echo 'Requires: wrlib' >> $@
-	@echo 'Libs: $(lib_search_path) -lWINGs $(XFTLIBS) $(XLIBS) -lm $(INTLIBS)' >> $@
+	@echo 'Libs: $(lib_search_path) -lWINGs' >> $@
+	@echo 'Libs.private: $(XFTLIBS) $(XLIBS) -lm $(INTLIBS)' >> $@
 	@echo 'Cflags: $(inc_search_path)' >> $@
 
 get-wings-flags: get-wings-flags.in Makefile

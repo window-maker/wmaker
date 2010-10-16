@@ -59,7 +59,8 @@ wrlib.pc: Makefile
 	@echo 'Name: wrlib' > $@
 	@echo 'Description: Image manipulation and conversion library' >> $@
 	@echo 'Version: $(VERSION)' >> $@
-	@echo 'Libs: $(lib_search_path) -lwraster $(GFXLIBS) $(XLIBS) -lm' >> $@
+	@echo 'Libs: $(lib_search_path) -lwraster' >> $@
+	@echo 'Libs.private: $(GFXLIBS) $(XLIBS) -lm' >> $@
 	@echo 'Cflags: $(inc_search_path)' >> $@
 
 get-wraster-flags: get-wraster-flags.in Makefile
