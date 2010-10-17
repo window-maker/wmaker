@@ -820,9 +820,6 @@ else
 fi
 AC_SUBST(pixmapdir)
 
-pkgdatadir='${datadir}'
-AC_SUBST(pkgdatadir)
-
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
 dnl ==============================================

@@ -24,7 +24,7 @@ config-paths.h: Makefile
 	@echo '#define PIXMAPDIR "$(pixmapdir)"' >> $@
 	@echo '' >> $@
 	@echo '/* where shared data is stored */' >> $@
-	@echo '#define PKGDATADIR "$(pkgdatadir)/WindowMaker"' >> $@
+	@echo '#define PKGDATADIR "$(datadir)/WindowMaker"' >> $@
 	@echo '' >> $@
 	@echo '/* where the configuration is stored */' >> $@
 	@echo '#define SYSCONFDIR "$(sysconfdir)"' >> $@
