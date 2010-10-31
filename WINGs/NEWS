@@ -146,27 +146,10 @@ WMGetConnectionQueuedData REMOVED
 WMSetConnectionDefaultTimeout REMOVED
 WMSetConnectionOpenTimeout REMOVED
 WMSetConnectionSendTimeout REMOVED
-WMCreateTreeNode REMOVED
-WMCreateTreeNodeWithDestructor REMOVED
-WMInsertItemInTree REMOVED
-WMAddItemToTree REMOVED
-WMInsertNodeInTree REMOVED
-WMAddNodeToTree REMOVED
-WMDestroyTreeNode REMOVED
-WMDeleteLeafForTreeNode REMOVED
-WMRemoveLeafForTreeNode REMOVED
-WMReplaceDataForTreeNode REMOVED
-WMGetDataForTreeNode REMOVED
-WMGetTreeNodeDepth REMOVED
-WMGetParentForTreeNode REMOVED
-WMSortLeavesForTreeNode REMOVED
-WMSortTree REMOVED
-WMFindInTree REMOVED
-WMGetFirstInTree REMOVED
 
-
-
-
+WMTreeWalkProc ADDED
+WMTreeWalk ADDED
+wshellquote ADDED
 
 
 
