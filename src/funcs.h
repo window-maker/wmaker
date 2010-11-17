@@ -65,6 +65,8 @@ void OpenWorkspaceMenu(WScreen *scr, int x, int y);
 
 void CloseWindowMenu(WScreen *scr);
 
+void DestroyWindowMenu(WScreen *scr);
+
 WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 
 void wColormapInstallForWindow(WScreen *scr, WWindow *wwin);

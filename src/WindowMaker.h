@@ -370,6 +370,7 @@ typedef struct WPreferences {
     signed char menu_style;	       /* menu decoration style */
     signed char workspace_name_display_position;
     unsigned int modifier_mask;	       /* mask to use as kbd modifier */
+    char *modifier_labels[7];          /* Names of the modifiers */
 
 
     char ws_advance;                   /* Create new workspace and advance */

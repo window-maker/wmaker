@@ -238,6 +238,25 @@ static void updateWorkspaceMenu(WMenu * menu)
 		wMenuRealize(menu);
 }
 
+static char *getShortcutString(WShortKey key)
+{
+	char *tmp = NULL;
+	char *k = XKeysymToString(XKeycodeToKeysym(dpy, key.keycode, 0));
+	if (!k) return NULL;
+
+	char **m = wPreferences.modifier_labels;
+	if (key.modifier & ControlMask) tmp = wstrappend(tmp, m[1] ? m[1] : "Ctrl+");
+	if (key.modifier & ShiftMask)   tmp = wstrappend(tmp, m[0] ? m[0] : "Shift+");
+	if (key.modifier & Mod1Mask)    tmp = wstrappend(tmp, m[2] ? m[2] : "Mod1+");
+	if (key.modifier & Mod2Mask)    tmp = wstrappend(tmp, m[3] ? m[3] : "Mod2+");
+	if (key.modifier & Mod3Mask)    tmp = wstrappend(tmp, m[4] ? m[4] : "Mod3+");
+	if (key.modifier & Mod4Mask)    tmp = wstrappend(tmp, m[5] ? m[5] : "Mod4+");
+	if (key.modifier & Mod5Mask)    tmp = wstrappend(tmp, m[6] ? m[6] : "Mod5+");
+	tmp = wstrappend(tmp, k);
+
+	return tmp;
+}
+
 static void updateMakeShortcutMenu(WMenu * menu, WWindow * wwin)
 {
 	WMenu *smenu = menu->cascades[menu->entries[MC_SHORTCUT]->cascade];
@@ -279,11 +298,11 @@ static void updateMakeShortcutMenu(WMenu * menu, WWindow * wwin)
 		kcode = wKeyBindings[WKBD_WINDOW1 + shortcutNo].keycode;
 
 		if (kcode) {
-			if ((tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0)))
+			if ((tmp = getShortcutString(wKeyBindings[WKBD_WINDOW1 + shortcutNo]))
 			    && (!entry->rtext || strcmp(tmp, entry->rtext) != 0)) {
 				if (entry->rtext)
 					wfree(entry->rtext);
-				entry->rtext = wstrdup(tmp);
+				entry->rtext = tmp;
 				smenu->flags.realized = 0;
 			}
 			wMenuSetEnabled(smenu, i, True);
@@ -394,9 +413,7 @@ static WMenu *makeOptionsMenu(WScreen * scr)
 static WMenu *createWindowMenu(WScreen * scr)
 {
 	WMenu *menu;
-	KeyCode kcode;
 	WMenuEntry *entry;
-	char *tmp;
 
 	menu = wMenuCreate(scr, NULL, False);
 	/*
@@ -405,52 +422,22 @@ static WMenu *createWindowMenu(WScreen * scr)
 	 * this file.
 	 */
 	entry = wMenuAddCallback(menu, _("Maximize"), execMenuCommand, NULL);
-	if (wKeyBindings[WKBD_MAXIMIZE].keycode != 0) {
-		kcode = wKeyBindings[WKBD_MAXIMIZE].keycode;
-
-		if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
-			entry->rtext = wstrdup(tmp);
-	}
+	entry->rtext = getShortcutString(wKeyBindings[WKBD_MAXIMIZE]);
 
 	entry = wMenuAddCallback(menu, _("Miniaturize"), execMenuCommand, NULL);
-	if (wKeyBindings[WKBD_MINIATURIZE].keycode != 0) {
-		kcode = wKeyBindings[WKBD_MINIATURIZE].keycode;
-
-		if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
-			entry->rtext = wstrdup(tmp);
-	}
+	entry->rtext = getShortcutString(wKeyBindings[WKBD_MINIATURIZE]);
 
 	entry = wMenuAddCallback(menu, _("Shade"), execMenuCommand, NULL);
-	if (wKeyBindings[WKBD_SHADE].keycode != 0) {
-		kcode = wKeyBindings[WKBD_SHADE].keycode;
-
-		if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
-			entry->rtext = wstrdup(tmp);
-	}
+	entry->rtext = getShortcutString(wKeyBindings[WKBD_SHADE]);
 
 	entry = wMenuAddCallback(menu, _("Hide"), execMenuCommand, NULL);
-	if (wKeyBindings[WKBD_HIDE].keycode != 0) {
-		kcode = wKeyBindings[WKBD_HIDE].keycode;
-
-		if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
-			entry->rtext = wstrdup(tmp);
-	}
+	entry->rtext = getShortcutString(wKeyBindings[WKBD_HIDE]);
 
 	entry = wMenuAddCallback(menu, _("Resize/Move"), execMenuCommand, NULL);
-	if (wKeyBindings[WKBD_MOVERESIZE].keycode != 0) {
-		kcode = wKeyBindings[WKBD_MOVERESIZE].keycode;
-
-		if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
-			entry->rtext = wstrdup(tmp);
-	}
+	entry->rtext = getShortcutString(wKeyBindings[WKBD_MOVERESIZE]);
 
 	entry = wMenuAddCallback(menu, _("Select"), execMenuCommand, NULL);
-	if (wKeyBindings[WKBD_SELECT].keycode != 0) {
-		kcode = wKeyBindings[WKBD_SELECT].keycode;
-
-		if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
-			entry->rtext = wstrdup(tmp);
-	}
+	entry->rtext = getShortcutString(wKeyBindings[WKBD_SELECT]);
 
 	entry = wMenuAddCallback(menu, _("Move To"), NULL, NULL);
 	scr->workspace_submenu = makeWorkspaceMenu(scr);
@@ -468,11 +455,7 @@ static WMenu *createWindowMenu(WScreen * scr)
 	 */
 
 	entry = wMenuAddCallback(menu, _("Close"), execMenuCommand, NULL);
-	if (wKeyBindings[WKBD_CLOSE].keycode != 0) {
-		kcode = wKeyBindings[WKBD_CLOSE].keycode;
-		if (kcode && (tmp = XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0))))
-			entry->rtext = wstrdup(tmp);
-	}
+	entry->rtext = getShortcutString(wKeyBindings[WKBD_CLOSE]);
 
 	entry = wMenuAddCallback(menu, _("Kill"), execMenuCommand, NULL);
 
@@ -710,4 +693,15 @@ void OpenMiniwindowMenu(WWindow * wwin, int x, int y)
 	x -= menu->frame->core->width / 2;
 
 	wMenuMapAt(menu, x, y, False);
+}
+
+void DestroyWindowMenu(WScreen *scr)
+{
+	if (scr->window_menu) {
+		scr->window_menu->entries[MC_MINIATURIZE]->text = NULL;
+		scr->window_menu->entries[MC_MAXIMIZE]->text = NULL;
+		scr->window_menu->entries[MC_SHADE]->text = NULL;
+		wMenuDestroy(scr->window_menu, True);
+		scr->window_menu = NULL;
+	}
 }

@@ -147,6 +147,8 @@ static int setMenuStyle();
 static int setSwPOptions();
 static int updateUsableArea();
 
+static int setModifierKeyLabels();
+
 extern Cursor wCursor[WCUR_LAST];
 static int getCursor();
 static int setCursor();
@@ -511,6 +513,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getColor, setIconTitleBack, NULL, NULL},
 	{"SwitchPanelImages", "(swtile.png, swback.png, 30, 40)", &wPreferences,
 	    NULL, getPropList, setSwPOptions, NULL, NULL},
+	{"ModifierKeyLabels", "(\"Shift+\", \"Ctrl+\", \"Mod1+\", \"Mod2+\", \"Mod3+\", \"Mod4+\", \"Mod5+\")", &wPreferences,
+	    NULL, getPropList, setModifierKeyLabels, NULL, NULL},
 
 	/* keybindings */
 
@@ -2991,6 +2995,36 @@ static int setSwPOptions(WScreen * scr, WDefaultEntry * entry, WMPropList * arra
 	default:
 		wwarning(_("Invalid number of arguments for option \"%s\""), entry->key);
 		break;
+	}
+
+	WMReleasePropList(array);
+
+	return 0;
+}
+
+static int setModifierKeyLabels(WScreen * scr, WDefaultEntry * entry, WMPropList * array, void *foo)
+{
+	int i;
+	WPreferences *prefs = (WPreferences *) foo;
+
+	if (!WMIsPLArray(array) || WMGetPropListItemCount(array) != 7) {
+		wwarning(_("Value for option \"%s\" must be an array of 7 strings"), entry->key);
+		WMReleasePropList(array);
+		return 0;
+	}
+
+	DestroyWindowMenu(scr);
+
+	for (i = 0; i < 7; i++) {
+		if (prefs->modifier_labels[i])
+			wfree(prefs->modifier_labels[i]);
+
+		if (WMIsPLString(WMGetFromPLArray(array, i))) {
+			prefs->modifier_labels[i] = wstrdup(WMGetFromPLString(WMGetFromPLArray(array, i)));
+		} else {
+			wwarning(_("Invalid argument for option \"%s\" item %d"), entry->key, i);
+			prefs->modifier_labels[i] = NULL;
+		}
 	}
 
 	WMReleasePropList(array);
