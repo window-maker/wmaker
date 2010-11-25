@@ -32,7 +32,6 @@
 #include "switchpanel.h"
 #include "funcs.h"
 #include "xinerama.h"
-#include "window.h"
 
 extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 
