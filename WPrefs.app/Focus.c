@@ -330,10 +330,7 @@ Panel *InitFocus(WMScreen * scr, WMWindow * win)
 	memset(panel, 0, sizeof(_Panel));
 
 	panel->sectionName = _("Window Focus Preferences");
-
-	panel->description = _("Keyboard focus switching policy, colormap switching\n"
-			       "policy for 8bpp displays and other related options.");
-
+	panel->description = _("Keyboard focus switching policy and related options.");
 	panel->parent = win;
 
 	panel->callbacks.createWidgets = createPanel;
