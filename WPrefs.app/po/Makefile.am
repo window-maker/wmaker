@@ -26,7 +26,6 @@ POTFILES  = \
 	$(top_builddir)/WPrefs.app/WPrefs.c \
 	$(top_builddir)/WPrefs.app/WindowHandling.c \
 	$(top_builddir)/WPrefs.app/Workspace.c \
-	$(top_builddir)/WPrefs.app/imagebrowser.c \
 	$(top_builddir)/WPrefs.app/main.c
 
 SUFFIXES = .po .mo
