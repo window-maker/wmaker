@@ -4,7 +4,7 @@ nlsdir = $(NLSDIR)
 
 CLEANFILES = wmgenmenu.pot $(CATALOGS)
 
-EXTRA_DIST = de.po
+EXTRA_DIST = de.po es.po fr.po
 
 POTFILES  = \
 	$(top_srcdir)/util/wmgenmenu.c \
