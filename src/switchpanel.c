@@ -392,6 +392,8 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 				    if (strcmp(wwin->wm_class, curwin->wm_class))
 					continue;
 				}
+
+				if (!WFLAGP(wwin, skip_switchpanel))
 				WMAddToArray(windows, wwin);
 			}
 		}
@@ -409,6 +411,8 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 				    if (strcmp(wwin->wm_class, curwin->wm_class))
 					continue;
 				}
+
+				if (!WFLAGP(wwin, skip_switchpanel))
 				WMAddToArray(windows, wwin);
 			}
 		}

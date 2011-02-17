@@ -64,6 +64,7 @@ static WMPropList *AKeepOnTop;
 static WMPropList *AKeepOnBottom;
 static WMPropList *AOmnipresent;
 static WMPropList *ASkipWindowList;
+static WMPropList *ASkipSwitchPanel;
 static WMPropList *AKeepInsideScreen;
 static WMPropList *AUnfocusable;
 static WMPropList *AAlwaysUserIcon;
@@ -100,6 +101,7 @@ static void init_wdefaults(WScreen * scr)
 	AKeepOnBottom = WMCreatePLString("KeepOnBottom");
 	AOmnipresent = WMCreatePLString("Omnipresent");
 	ASkipWindowList = WMCreatePLString("SkipWindowList");
+	ASkipSwitchPanel = WMCreatePLString("SkipSwitchPanel");
 	AKeepInsideScreen = WMCreatePLString("KeepInsideScreen");
 	AUnfocusable = WMCreatePLString("Unfocusable");
 	AAlwaysUserIcon = WMCreatePLString("AlwaysUserIcon");
@@ -272,6 +274,9 @@ wDefaultFillAttributes(WScreen * scr, char *instance, char *class,
 
 	value = get_value(dw, dc, dn, da, ASkipWindowList, No, useGlobalDefault);
 	APPLY_VAL(value, skip_window_list, ASkipWindowList);
+
+	value = get_value(dw, dc, dn, da, ASkipSwitchPanel, No, useGlobalDefault);
+	APPLY_VAL(value, skip_switchpanel, ASkipSwitchPanel);
 
 	value = get_value(dw, dc, dn, da, AKeepInsideScreen, No, useGlobalDefault);
 	APPLY_VAL(value, dont_move_off, AKeepInsideScreen);

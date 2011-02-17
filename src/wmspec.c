@@ -1101,6 +1101,7 @@ static Bool handleWindowType(WWindow * wwin, Atom type, int *layer)
 		wwin->client_flags.no_movable = 1;
 		wwin->client_flags.omnipresent = 1;
 		wwin->client_flags.skip_window_list = 1;
+		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->client_flags.no_appicon = 1;
 		wwin->flags.net_skip_pager = 1;
@@ -1116,6 +1117,7 @@ static Bool handleWindowType(WWindow * wwin, Atom type, int *layer)
 		wwin->client_flags.no_movable = 1;
 		wwin->client_flags.omnipresent = 1;
 		wwin->client_flags.skip_window_list = 1;
+		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->flags.net_skip_pager = 1;
 	} else if (type == net_wm_window_type_toolbar) {
@@ -1125,6 +1127,7 @@ static Bool handleWindowType(WWindow * wwin, Atom type, int *layer)
 		wwin->client_flags.no_resizebar = 1;
 		wwin->client_flags.no_shadeable = 1;
 		wwin->client_flags.skip_window_list = 1;
+		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->client_flags.no_appicon = 1;
 	} else if (type == net_wm_window_type_menu) {
@@ -1134,6 +1137,7 @@ static Bool handleWindowType(WWindow * wwin, Atom type, int *layer)
 		wwin->client_flags.no_resizebar = 1;
 		wwin->client_flags.no_shadeable = 1;
 		wwin->client_flags.skip_window_list = 1;
+		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->client_flags.no_appicon = 1;
 	} else if (type == net_wm_window_type_utility) {
@@ -1146,6 +1150,7 @@ static Bool handleWindowType(WWindow * wwin, Atom type, int *layer)
 		wwin->client_flags.no_shadeable = 1;
 		wwin->client_flags.no_movable = 1;
 		wwin->client_flags.skip_window_list = 1;
+		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->client_flags.no_appicon = 1;
 		wwin->flags.net_skip_pager = 1;

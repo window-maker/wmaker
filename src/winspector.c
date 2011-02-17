@@ -88,9 +88,9 @@ typedef struct InspectorPanel {
 	/* 3rd page. more attributes */
 	WMFrame *moreFrm;
 #ifdef XKB_BUTTON_HINT
-	WMButton *moreChk[10];
+	WMButton *moreChk[11];
 #else
-	WMButton *moreChk[9];
+	WMButton *moreChk[10];
 #endif
 
 	/* 4th page. icon and workspace */
@@ -134,6 +134,7 @@ static WMPropList *AKeepOnTop;
 static WMPropList *AKeepOnBottom;
 static WMPropList *AOmnipresent;
 static WMPropList *ASkipWindowList;
+static WMPropList *ASkipSwitchPanel;
 static WMPropList *AKeepInsideScreen;
 static WMPropList *AUnfocusable;
 static WMPropList *ADontFocusAcrossWorkspace;
@@ -185,6 +186,7 @@ static void make_keys(void)
 	AKeepOnBottom = WMCreatePLString("KeepOnBottom");
 	AOmnipresent = WMCreatePLString("Omnipresent");
 	ASkipWindowList = WMCreatePLString("SkipWindowList");
+	ASkipSwitchPanel = WMCreatePLString("SkipSwitchPanel");
 	AKeepInsideScreen = WMCreatePLString("KeepInsideScreen");
 	AUnfocusable = WMCreatePLString("Unfocusable");
 	ADontFocusAcrossWorkspace = WMCreatePLString("DontFocusAcrossWorkspace");
@@ -574,25 +576,28 @@ static void saveSettings(WMButton * button, InspectorPanel * panel)
 	different |= insertAttribute(dict, winDic, ASkipWindowList, value, flags);
 
 	value = (WMGetButtonSelected(panel->moreChk[3]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, AUnfocusable, value, flags);
+	different |= insertAttribute(dict, winDic, ASkipSwitchPanel, value, flags);
 
 	value = (WMGetButtonSelected(panel->moreChk[4]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, AKeepInsideScreen, value, flags);
+	different |= insertAttribute(dict, winDic, AUnfocusable, value, flags);
 
 	value = (WMGetButtonSelected(panel->moreChk[5]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ANoHideOthers, value, flags);
+	different |= insertAttribute(dict, winDic, AKeepInsideScreen, value, flags);
 
 	value = (WMGetButtonSelected(panel->moreChk[6]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ADontSaveSession, value, flags);
+	different |= insertAttribute(dict, winDic, ANoHideOthers, value, flags);
 
 	value = (WMGetButtonSelected(panel->moreChk[7]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, AEmulateAppIcon, value, flags);
+	different |= insertAttribute(dict, winDic, ADontSaveSession, value, flags);
 
 	value = (WMGetButtonSelected(panel->moreChk[8]) != 0) ? Yes : No;
+	different |= insertAttribute(dict, winDic, AEmulateAppIcon, value, flags);
+
+	value = (WMGetButtonSelected(panel->moreChk[9]) != 0) ? Yes : No;
 	different |= insertAttribute(dict, winDic, ADontFocusAcrossWorkspace, value, flags);
 
 #ifdef XKB_BUTTON_HINT
-	value = (WMGetButtonSelected(panel->moreChk[9]) != 0) ? Yes : No;
+	value = (WMGetButtonSelected(panel->moreChk[10]) != 0) ? Yes : No;
 	different |= insertAttribute(dict, winDic, ANoLanguageButton, value, flags);
 #endif
 
@@ -761,14 +766,15 @@ static void applySettings(WMButton * button, InspectorPanel * panel)
 	WSETUFLAG(wwin, no_bind_keys, WMGetButtonSelected(panel->moreChk[0]));
 	WSETUFLAG(wwin, no_bind_mouse, WMGetButtonSelected(panel->moreChk[1]));
 	skip_window_list = WMGetButtonSelected(panel->moreChk[2]);
-	WSETUFLAG(wwin, no_focusable, WMGetButtonSelected(panel->moreChk[3]));
-	WSETUFLAG(wwin, dont_move_off, WMGetButtonSelected(panel->moreChk[4]));
-	WSETUFLAG(wwin, no_hide_others, WMGetButtonSelected(panel->moreChk[5]));
-	WSETUFLAG(wwin, dont_save_session, WMGetButtonSelected(panel->moreChk[6]));
-	WSETUFLAG(wwin, emulate_appicon, WMGetButtonSelected(panel->moreChk[7]));
-	WSETUFLAG(wwin, dont_focus_across_wksp, WMGetButtonSelected(panel->moreChk[8]));
+	WSETUFLAG(wwin, skip_switchpanel, WMGetButtonSelected(panel->moreChk[3]));
+	WSETUFLAG(wwin, no_focusable, WMGetButtonSelected(panel->moreChk[4]));
+	WSETUFLAG(wwin, dont_move_off, WMGetButtonSelected(panel->moreChk[5]));
+	WSETUFLAG(wwin, no_hide_others, WMGetButtonSelected(panel->moreChk[6]));
+	WSETUFLAG(wwin, dont_save_session, WMGetButtonSelected(panel->moreChk[7]));
+	WSETUFLAG(wwin, emulate_appicon, WMGetButtonSelected(panel->moreChk[8]));
+	WSETUFLAG(wwin, dont_focus_across_wksp, WMGetButtonSelected(panel->moreChk[9]));
 #ifdef XKB_BUTTON_HINT
-	WSETUFLAG(wwin, no_language_button, WMGetButtonSelected(panel->moreChk[9]));
+	WSETUFLAG(wwin, no_language_button, WMGetButtonSelected(panel->moreChk[10]));
 #endif
 	WSETUFLAG(wwin, always_user_icon, WMGetButtonSelected(panel->alwChk));
 
@@ -912,7 +918,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 		}
 		WMSetButtonSelected(panel->attrChk[i], flag);
 	}
-	for (i = 0; i < 9; i++) {
+	for (i = 0; i < 11; i++) {
 		int flag = 0;
 
 		switch (i) {
@@ -926,25 +932,28 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 			flag = WFLAGP(wwin, skip_window_list);
 			break;
 		case 3:
-			flag = WFLAGP(wwin, no_focusable);
+			flag = WFLAGP(wwin, skip_switchpanel);
 			break;
 		case 4:
-			flag = WFLAGP(wwin, dont_move_off);
+			flag = WFLAGP(wwin, no_focusable);
 			break;
 		case 5:
-			flag = WFLAGP(wwin, no_hide_others);
+			flag = WFLAGP(wwin, dont_move_off);
 			break;
 		case 6:
-			flag = WFLAGP(wwin, dont_save_session);
+			flag = WFLAGP(wwin, no_hide_others);
 			break;
 		case 7:
-			flag = WFLAGP(wwin, emulate_appicon);
+			flag = WFLAGP(wwin, dont_save_session);
 			break;
 		case 8:
+			flag = WFLAGP(wwin, emulate_appicon);
+			break;
+		case 9:
 			flag = WFLAGP(wwin, dont_focus_across_wksp);
 			break;
 #ifdef XKB_BUTTON_HINT
-		case 9:
+		case 10:
 			flag = WFLAGP(wwin, no_language_button);
 			break;
 #endif
@@ -952,7 +961,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 		WMSetButtonSelected(panel->moreChk[i], flag);
 	}
 	if (panel->appFrm && wapp) {
-		for (i = 0; i < 2; i++) {
+		for (i = 0; i < 3; i++) {
 			int flag = 0;
 
 			switch (i) {
@@ -1319,9 +1328,9 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 
 	for (i = 0;
 #ifdef XKB_BUTTON_HINT
-	     i < 10;
+	     i < 11;
 #else
-	     i < 9;
+	     i < 10;
 #endif
 	     i++) {
 		char *caption = NULL;
@@ -1349,36 +1358,41 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 			descr = _("Do not list the window in the window list menu.");
 			break;
 		case 3:
+			caption = _("Do not show in the switch panel");
+			flag = WFLAGP(wwin, skip_switchpanel);
+			descr = _("Do not include in switchpanel while alternating windows.");
+			break;
+		case 4:
 			caption = _("Do not let it take focus");
 			flag = WFLAGP(wwin, no_focusable);
 			descr = _("Do not let the window take keyboard focus when you\n" "click on it.");
 			break;
-		case 4:
+		case 5:
 			caption = _("Keep inside screen");
 			flag = WFLAGP(wwin, dont_move_off);
 			descr = _("Do not allow the window to move itself completely\n"
 				  "outside the screen. For bug compatibility.\n");
 			break;
-		case 5:
+		case 6:
 			caption = _("Ignore 'Hide Others'");
 			flag = WFLAGP(wwin, no_hide_others);
 			descr = _("Do not hide the window when issuing the\n" "`HideOthers' command.");
 			break;
-		case 6:
+		case 7:
 			caption = _("Ignore 'Save Session'");
 			flag = WFLAGP(wwin, dont_save_session);
 			descr = _("Do not save the associated application in the\n"
 				  "session's state, so that it won't be restarted\n"
 				  "together with other applications when Window Maker\n" "starts.");
 			break;
-		case 7:
+		case 8:
 			caption = _("Emulate application icon");
 			flag = WFLAGP(wwin, emulate_appicon);
 			descr = _("Make this window act as an application that provides\n"
 				  "enough information to Window Maker for a dockable\n"
 				  "application icon to be created.");
 			break;
-		case 8:
+		case 9:
 			caption = _("Don't focus across workspaces");
 			flag = WFLAGP(wwin, dont_focus_across_wksp);
 			descr = _("Do not allow Window Maker to switch workspace to satisfy\n"
@@ -1386,7 +1400,7 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 				  "firefox opening in a different workspace).");
 			break;
 #ifdef XKB_BUTTON_HINT
-		case 9:
+		case 10:
 			caption = _("Disable language button");
 			flag = WFLAGP(wwin, no_language_button);
 			descr = _("Remove the `toggle language' button of the window.");

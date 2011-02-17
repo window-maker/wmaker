@@ -32,11 +32,12 @@
 #define WA_FOCUSABLE  		(1<<6)
 #define WA_OMNIPRESENT 	 	(1<<7)
 #define WA_SKIP_WINDOW_LIST  	(1<<8)
-#define WA_FLOATING  		(1<<9)
-#define WA_IGNORE_KEYS 		(1<<10)
-#define WA_IGNORE_MOUSE  	(1<<11)
-#define WA_IGNORE_HIDE_OTHERS	(1<<12)
-#define WA_NOT_APPLICATION	(1<<13)
-#define WA_DONT_MOVE_OFF	(1<<14)
+#define WA_SKIP_SWITCHPANEL  	(1<<9)
+#define WA_FLOATING  		(1<<10)
+#define WA_IGNORE_KEYS 		(1<<11)
+#define WA_IGNORE_MOUSE  	(1<<12)
+#define WA_IGNORE_HIDE_OTHERS	(1<<13)
+#define WA_NOT_APPLICATION	(1<<14)
+#define WA_DONT_MOVE_OFF	(1<<15)
 
 #endif
