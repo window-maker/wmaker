@@ -108,13 +108,13 @@ get-wings-flags: get-wings-flags.in Makefile
 	        -e 's#$${GFXLIBS}#$(GFXLIBS)#;' \
 	        -e 's#$${XFTLIBS}#$(XFTLIBS)#;' \
 	        -e 's#$${INTLIBS}#$(INTLIBS)#;' \
-	        -e 's#$${XLIBS}#$(XLIBS)#;' < $< > $@
+	        -e 's#$${XLIBS}#$(XLIBS)#;' < get-wings-flags.in > $@
 	@chmod 755 $@
 
 get-wutil-flags: get-wutil-flags.in Makefile
 	@echo "Generating $@"
 	@$(SED) -e 's#$${includedir}#$(includedir)#;' \
 	        -e 's#$${libdir}#$(libdir)#;' \
-	        -e 's#$${INTLIBS}#$(INTLIBS)#;' < $< > $@
+	        -e 's#$${INTLIBS}#$(INTLIBS)#;' < get-wutil-flags.in > $@
 	@chmod 755 $@
 
