@@ -76,7 +76,11 @@ RImage *RLoadPNG(RContext * context, char *file)
 	}
 
 	RErrorCode = RERR_INTERNAL;
+#if PNG_LIBPNG_VER - 0 < 10400
 	if (setjmp(png->jmpbuf)) {
+#else
+	if (setjmp(png_jmpbuf(png))) {
+#endif
 		fclose(f);
 		png_destroy_read_struct(&png, &pinfo, &einfo);
 		if (image)
