@@ -56,7 +56,7 @@ void print_help(int print_usage, int exitval)
 int main(int argc, char **argv)
 {
 	char path[PATH_MAX];
-	WMPropList *dom, *key, *value, *dict;
+	WMPropList *key, *value, *dict;
 	int ch;
 
 	struct option longopts[] = {
@@ -87,7 +87,6 @@ int main(int argc, char **argv)
 	if (argc != 3)
 		print_help(0, 1);
 
-	dom = WMCreatePLString(argv[0]);
 	key = WMCreatePLString(argv[1]);
 	value = WMCreatePropListFromDescription(argv[2]);
 	if (!value) {

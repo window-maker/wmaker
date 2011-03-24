@@ -4,6 +4,7 @@
 #define _GNU_SOURCE		/* getopt_long */
 #endif
 
+#include <ctype.h>
 #include <getopt.h>
 #include <limits.h>
 #include <locale.h>

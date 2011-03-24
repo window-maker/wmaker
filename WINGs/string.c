@@ -1,3 +1,10 @@
+/*
+ * Until FreeBSD gets their act together;
+ * http://www.mail-archive.com/freebsd-hackers@freebsd.org/msg69469.html
+ */
+#if defined( FREEBSD )
+#   undef _XOPEN_SOURCE
+#endif
 
 #include "wconfig.h"
 
@@ -234,7 +241,7 @@ char *wstrappend(char *dst, char *src)
 }
 
 
-#ifdef HAVE_STRLCAT
+#if HAVE_STRLCAT
 size_t
 wstrlcat(char *dst, const char *src, size_t siz)
 {
@@ -295,7 +302,7 @@ wstrlcat(char *dst, const char *src, size_t siz)
 }
 #endif /* HAVE_STRLCAT */
 
-#ifdef HAVE_STRLCPY
+#if HAVE_STRLCPY
 size_t
 wstrlcpy(char *dst, const char *src, size_t siz)
 {

@@ -427,7 +427,6 @@ static void paintGradListItem(WMList * lPtr, int index, Drawable d, char *text, 
 	WMColor *white = WMWhiteColor(scr);
 	WMColor *black = WMBlackColor(scr);
 	WMColor *gray = WMGrayColor(scr);
-	WMListItem *item;
 	int width, height, x, y;
 	Display *dpy;
 
@@ -442,8 +441,6 @@ static void paintGradListItem(WMList * lPtr, int index, Drawable d, char *text, 
 		XFillRectangle(dpy, d, WMColorGC(white), x, y, width, height);
 	else
 		XFillRectangle(dpy, d, WMColorGC(gray), x, y, width, height);
-
-	item = WMGetListItem(lPtr, index);
 
 	if (panel->gimage) {
 		XCopyArea(WMScreenDisplay(scr), panel->gimage, d, WMColorGC(white),

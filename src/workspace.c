@@ -647,12 +647,11 @@ static void newWSCommand(WMenu * menu, WMenuEntry * foo)
 
 static char *cropline(char *line)
 {
-	char *start, *end;
+	char *end;
 
 	if (strlen(line) == 0)
 		return line;
 
-	start = line;
 	end = &(line[strlen(line)]) - 1;
 	while (isspace(*line) && *line != 0)
 		line++;
@@ -821,7 +820,7 @@ void wWorkspaceSaveState(WScreen * scr, WMPropList * old_state)
 void wWorkspaceRestoreState(WScreen * scr)
 {
 	WMPropList *parr, *pstr, *wks_state, *clip_state;
-	int i, j, wscount;
+	int i, j;
 
 	make_keys();
 
@@ -833,7 +832,6 @@ void wWorkspaceRestoreState(WScreen * scr)
 	if (!parr)
 		return;
 
-	wscount = scr->workspace_count;
 	for (i = 0; i < WMIN(WMGetPropListItemCount(parr), MAX_WORKSPACES); i++) {
 		wks_state = WMGetFromPLArray(parr, i);
 		if (WMIsPLDictionary(wks_state))

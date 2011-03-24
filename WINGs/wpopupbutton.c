@@ -330,7 +330,7 @@ static void paintMenuEntry(PopUpButton * bPtr, int index, int highlight)
 {
 	W_Screen *scr = bPtr->view->screen;
 	int yo;
-	int width, height, itemHeight, itemCount;
+	int width, itemHeight, itemCount;
 	char *title;
 
 	itemCount = WMGetArrayItemCount(bPtr->items);
@@ -339,7 +339,6 @@ static void paintMenuEntry(PopUpButton * bPtr, int index, int highlight)
 
 	itemHeight = bPtr->view->size.height;
 	width = bPtr->view->size.width;
-	height = itemHeight * itemCount;
 	yo = (itemHeight - WMFontHeight(scr->normalFont)) / 2;
 
 	if (!highlight) {

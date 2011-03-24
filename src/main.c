@@ -592,10 +592,9 @@ int main(int argc, char **argv)
 
 static int real_main(int argc, char **argv)
 {
-	int i, restart = 0;
+	int i;
 	char *pos;
 	int d, s;
-	int flag;
 
 	setlocale(LC_ALL, "");
 	wsetabort(wAbort);
@@ -603,7 +602,6 @@ static int real_main(int argc, char **argv)
 	/* for telling WPrefs what's the name of the wmaker binary being ran */
 	setenv("WMAKER_BIN_NAME", argv[0], 1);
 
-	flag = 0;
 	ArgCount = argc;
 	Arguments = wmalloc(sizeof(char *) * (ArgCount + 1));
 	for (i = 0; i < argc; i++) {
@@ -618,8 +616,6 @@ static int real_main(int argc, char **argv)
 		ProgName = argv[0];
 	else
 		ProgName++;
-
-	restart = 0;
 
 	if (argc > 1) {
 		for (i = 1; i < argc; i++) {

@@ -36,12 +36,6 @@
  * Basic validation of the .desktop file is done.
  */
 
-#if __GLIBC__ && \
-    (_XOPEN_SOURCE && _XOPEN_SOURCE < 500) || \
-    !_XOPEN_SOURCE
-#define _XOPEN_SOURCE 500		/* nftw */
-#endif
-
 #include <sys/types.h>
 #include <sys/stat.h>
 

@@ -2725,7 +2725,6 @@ static void customSetPalette(W_ColorPanel * panel)
 	W_Screen *scr = WMWidgetScreen(panel->win);
 	RImage *scaledImg;
 	Pixmap image;
-	int item;
 
 	image = XCreatePixmap(scr->display, W_DRAWABLE(scr), customPaletteWidth, customPaletteHeight, scr->depth);
 	scaledImg = RScaleImage(panel->customPaletteImg, customPaletteWidth, customPaletteHeight);
@@ -2751,7 +2750,7 @@ static void customSetPalette(W_ColorPanel * panel)
 	panel->palXRatio = (double)(panel->customPaletteImg->width) / (double)(customPaletteWidth);
 	panel->palYRatio = (double)(panel->customPaletteImg->height) / (double)(customPaletteHeight);
 
-	item = WMGetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn);
+	WMGetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn);
 }
 
 static void customPalettePositionSelection(W_ColorPanel * panel, int x, int y)
@@ -3366,7 +3365,7 @@ static int fetchFile(char *toPath, char *srcFile, char *destFile)
 			break;
 
 		RETRY( nwritten = fwrite(buf, 1, nread, dst) )
-		if (ferror(dst) || feof(src))
+		if (ferror(dst) || feof(src) || nread != nwritten)
 			break;
 
 	} while (1);

@@ -625,7 +625,7 @@ void wIconUpdate(WIcon * icon)
 		int x, y;
 		unsigned int w, h;
 		Window jw;
-		int ji, dotitle;
+		int ji;
 		unsigned int ju, d;
 		Pixmap pixmap;
 
@@ -646,7 +646,6 @@ void wIconUpdate(WIcon * icon)
 
 		if (icon->show_title && (title_height < wPreferences.icon_size)) {
 			drawIconTitle(scr, pixmap, title_height);
-			dotitle = 1;
 
 			if (h > wPreferences.icon_size - title_height - 2) {
 				h = wPreferences.icon_size - title_height - 2;
@@ -655,7 +654,6 @@ void wIconUpdate(WIcon * icon)
 				y = (wPreferences.icon_size - h - title_height) / 2 + title_height + 1;
 			}
 		} else {
-			dotitle = 0;
 			if (w > wPreferences.icon_size)
 				w = wPreferences.icon_size;
 			y = (wPreferences.icon_size - h) / 2;

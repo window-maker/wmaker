@@ -48,7 +48,7 @@ void print_help(int print_usage, int exitval)
 
 int main(int argc, char **argv)
 {
-	WMPropList *window_name, *icon_key, *window_attrs, *icon_value;
+	WMPropList *window_name, *window_attrs, *icon_value;
 	WMPropList *all_windows, *iconset, *keylist;
 	int i, ch;
 	char *path = NULL;
@@ -96,7 +96,6 @@ int main(int argc, char **argv)
 	}
 
 	keylist = WMGetPLDictionaryKeys(iconset);
-	icon_key = WMCreatePLString("Icon");
 
 	for (i = 0; i < WMGetPropListItemCount(keylist); i++) {
 		window_name = WMGetFromPLArray(keylist, i);

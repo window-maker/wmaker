@@ -377,7 +377,6 @@ WApplication *wApplicationCreate(WWindow * wwin)
 
 void wApplicationDestroy(WApplication * wapp)
 {
-	Window main_window;
 	WWindow *wwin;
 	WScreen *scr;
 
@@ -400,7 +399,6 @@ void wApplicationDestroy(WApplication * wapp)
 	}
 
 	scr = wapp->main_window_desc->screen_ptr;
-	main_window = wapp->main_window;
 
 	if (wapp == scr->wapp_list) {
 		if (wapp->next)

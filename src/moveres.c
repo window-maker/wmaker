@@ -902,13 +902,10 @@ updateWindowPosition(WWindow * wwin, MoveData * data, Bool doResistance,
 	int winL, winR, winT, winB;	/* requested new window position */
 	int newX, newY;		/* actual new window position */
 	Bool hresist, vresist;
-	Bool updateIndex;
 	Bool attract;
 
 	hresist = False;
 	vresist = False;
-
-	updateIndex = False;
 
 	/* check the direction of the movement */
 	dx = newMouseX - data->mouseX;
@@ -1211,7 +1208,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 	int done, off_x, off_y, ww, wh;
 	int kspeed = _KS;
 	Time lastTime = 0;
-	KeyCode shiftl, shiftr, ctrll, ctrlmode;
+	KeyCode shiftl, shiftr, ctrlmode;
 	KeySym keysym = NoSymbol;
 	int moment = 0;
 	int modes = ((IS_MOVABLE(wwin) ? MOVABLE_BIT : 0) | (IS_RESIZABLE(wwin) ? RESIZABLE_BIT : 0));
@@ -1221,7 +1218,6 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 
 	shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
 	shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
-	ctrll = XKeysymToKeycode(dpy, XK_Control_L);
 	ctrlmode = done = off_x = off_y = 0;
 
 	if (modes == RESIZABLE_BIT) {
@@ -1851,7 +1847,6 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 	int rx1, ry1, rx2, ry2;
 	int res = 0;
 	KeyCode shiftl, shiftr;
-	int h = 0;
 	int orig_fx = fx;
 	int orig_fy = fy;
 	int orig_fw = fw;
@@ -1878,11 +1873,7 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 	ry2 = fy + fh - 1;
 	shiftl = XKeysymToKeycode(dpy, XK_Shift_L);
 	shiftr = XKeysymToKeycode(dpy, XK_Shift_R);
-	if (HAS_TITLEBAR(wwin))
-		h = WMFontHeight(wwin->screen_ptr->title_font) + (wPreferences.window_title_clearance +
-								  TITLEBAR_EXTEND_SPACE) * 2;
-	else
-		h = 0;
+
 	while (1) {
 		WMMaskEvent(dpy, KeyPressMask | ButtonMotionMask
 			    | ButtonReleaseMask | PointerMotionHintMask | ButtonPressMask | ExposureMask, &event);

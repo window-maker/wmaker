@@ -466,20 +466,18 @@ static void createPanel(_Panel * p)
 
 	{
 		WEditMenu *pad;
-		WEditMenu *smenu;
-		ItemData *data;
 
 		pad = makeFactoryMenu(panel->box, 150);
 		WMMoveWidget(pad, 10, 40);
 
-		data = putNewItem(panel, pad, ExecInfo, _("Run Program"));
-		data = putNewItem(panel, pad, CommandInfo, _("Internal Command"));
-		smenu = putNewSubmenu(pad, _("Submenu"));
-		data = putNewItem(panel, pad, ExternalInfo, _("External Submenu"));
-		data = putNewItem(panel, pad, PipeInfo, _("Generated Submenu"));
-		data = putNewItem(panel, pad, DirectoryInfo, _("Directory Contents"));
-		data = putNewItem(panel, pad, WSMenuInfo, _("Workspace Menu"));
-		data = putNewItem(panel, pad, WWindowListInfo, _("Window List Menu"));
+		putNewItem(panel, pad, ExecInfo, _("Run Program"));
+		putNewItem(panel, pad, CommandInfo, _("Internal Command"));
+		putNewSubmenu(pad, _("Submenu"));
+		putNewItem(panel, pad, ExternalInfo, _("External Submenu"));
+		putNewItem(panel, pad, PipeInfo, _("Generated Submenu"));
+		putNewItem(panel, pad, DirectoryInfo, _("Directory Contents"));
+		putNewItem(panel, pad, WSMenuInfo, _("Workspace Menu"));
+		putNewItem(panel, pad, WWindowListInfo, _("Window List Menu"));
 
 		panel->itemPad[0] = pad;
 	}

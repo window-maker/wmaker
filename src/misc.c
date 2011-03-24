@@ -26,6 +26,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <strings.h>
 #include <unistd.h>
 #include <stdarg.h>
 #include <pwd.h>
@@ -92,14 +93,12 @@ static char *username(void)
 
 char *MakeCPPArgs(char *path)
 {
-	int i;
 	char buffer[MAXLINE], *buf, *line;
 	Visual *visual;
 	char *tmp;
 
 	line = wmalloc(MAXLINE);
 	*line = 0;
-	i = 1;
 	if ((buf = getenv("HOSTNAME")) != NULL) {
 		if (buf[0] == '(') {
 			wwarning(_("your machine is misconfigured. HOSTNAME is set to %s"), buf);

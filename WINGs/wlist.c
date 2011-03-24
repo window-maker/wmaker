@@ -390,11 +390,8 @@ static void scrollByAmount(WMList * lPtr, int amount)
 static void vScrollCallBack(WMWidget * scroller, void *self)
 {
 	WMList *lPtr = (WMList *) self;
-	int height;
 	int oldTopItem = lPtr->topItem;
 	int itemCount = WMGetArrayItemCount(lPtr->items);
-
-	height = lPtr->view->size.height - 4;
 
 	switch (WMGetScrollerHitPart((WMScroller *) scroller)) {
 	case WSDecrementLine:

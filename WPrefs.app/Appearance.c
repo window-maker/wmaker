@@ -1060,8 +1060,6 @@ static void changePage(WMWidget * w, void *data)
 {
 	_Panel *panel = (_Panel *) data;
 	int section;
-	WMListItem *item;
-	TextureListItem *titem;
 	WMScreen *scr = WMWidgetScreen(panel->box);
 	RContext *rc = WMScreenRContext(scr);
 	static WMPoint positions[] = {
@@ -1080,10 +1078,6 @@ static void changePage(WMWidget * w, void *data)
 		WMSelectListItem(panel->texLs, panel->textureIndex[section]);
 
 		WMSetListPosition(panel->texLs, panel->textureIndex[section] - 2);
-
-		item = WMGetListItem(panel->texLs, panel->textureIndex[section]);
-
-		titem = (TextureListItem *) item->clientData;
 	}
 	{
 		WMColor *color;

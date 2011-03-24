@@ -808,7 +808,6 @@ static void keyPressHandler(XEvent * event, void *data)
 {
 	IconPanel *panel = (IconPanel *) data;
 	char buffer[32];
-	int count;
 	KeySym ksym;
 	int iidx;
 	int didx;
@@ -819,7 +818,7 @@ static void keyPressHandler(XEvent * event, void *data)
 		return;
 
 	buffer[0] = 0;
-	count = XLookupString(&event->xkey, buffer, sizeof(buffer), &ksym, NULL);
+	XLookupString(&event->xkey, buffer, sizeof(buffer), &ksym, NULL);
 
 	iidx = WMGetListSelectedItemRow(panel->iconList);
 	didx = WMGetListSelectedItemRow(panel->dirList);
@@ -1103,7 +1102,6 @@ void wShowInfoPanel(WScreen * scr)
 {
 	InfoPanel *panel;
 	WMPixmap *logo;
-	WMSize size;
 	WMFont *font;
 	char *strbuf = NULL;
 	char buffer[256];
@@ -1142,7 +1140,6 @@ void wShowInfoPanel(WScreen * scr)
 		logo = WMRetainPixmap(WMGetApplicationIconPixmap(scr->wmscreen));
 	}
 	if (logo) {
-		size = WMGetPixmapSize(logo);
 		panel->logoL = WMCreateLabel(panel->win);
 		WMResizeWidget(panel->logoL, 64, 64);
 		WMMoveWidget(panel->logoL, 30, 20);

@@ -82,10 +82,11 @@ dnl ================================
 case "${host}" in
 	*-*-linux*|*-*-cygwin*)
 		WM_OSDEP="linux"
+		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600"
 	;;
 	*-*-freebsd*)
 		WM_OSDEP="bsd"
-		CFLAGS="$CFLAGS -DFREEBSD"
+		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600 -DFREEBSD"
 	;;
 	*-*-netbsd*)
 		WM_OSDEP="bsd"

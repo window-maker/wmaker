@@ -1,3 +1,10 @@
+/*
+ * Until FreeBSD gets their act together;
+ * http://www.mail-archive.com/freebsd-hackers@freebsd.org/msg69469.html
+ */
+#if defined( FREEBSD )
+#   undef _XOPEN_SOURCE
+#endif
 
 #if defined( FREEBSD ) || defined( DRAGONFLYBSD )
 #   include <sys/types.h>

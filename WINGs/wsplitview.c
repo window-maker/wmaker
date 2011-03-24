@@ -722,13 +722,10 @@ void WMRemoveSplitViewSubview(WMSplitView * sPtr, WMView * view)
 
 void WMRemoveSplitViewSubviewAt(WMSplitView * sPtr, int index)
 {
-	W_SplitViewSubview *p;
-
 	CHECK_CLASS(sPtr, WC_SplitView);
 
 	/* TODO: same about rewrite */
 	if (index >= 0 && index < _GetSubviewsCount()) {
-		p = _GetPSubviewStructAt(index);
 		WMDeleteFromArray(sPtr->subviews, index);
 		sPtr->flags.adjustOnPaint = 1;
 		paintSplitView(sPtr);

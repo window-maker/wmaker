@@ -35,6 +35,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <unistd.h>
 
 #include <WINGs/WUtil.h>
@@ -216,7 +217,7 @@ void copyFile(char *dir, char *file)
 			break;
 
 		RETRY( nwritten = fwrite(buf, 1, nread, dst) )
-		if (ferror(dst) || feof(src))
+		if (ferror(dst) || feof(src) || nread != nwritten)
 			break;
 
 	} while (1);

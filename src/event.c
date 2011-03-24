@@ -22,6 +22,7 @@
 #include "wconfig.h"
 
 #ifdef HAVE_INOTIFY
+#include <sys/select.h>
 #include <sys/inotify.h>
 #endif
 
@@ -29,6 +30,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <strings.h>
+#include <time.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>

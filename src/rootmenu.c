@@ -29,6 +29,7 @@
 #include <sys/wait.h>
 #include <sys/types.h>
 #include <string.h>
+#include <strings.h>
 #include <ctype.h>
 #include <time.h>
 #include <dirent.h>
@@ -1151,7 +1152,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 		}
 	}
 
-#ifdef CPP
+#ifdef USECPP
 	if (cpp) {
 		if (pclose(file) == -1) {
 			werror(_("error reading preprocessed menu data"));
@@ -1183,7 +1184,6 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	int i;
 #ifdef USECPP
 	char *args;
-	int cpp = 0;
 #endif
 
 	flat_file[0] = '\0';
@@ -1206,8 +1206,6 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 			file = popen(command, "r");
 			if (!file) {
 				werror(_("%s:could not open/preprocess menu file"), filename);
-			} else {
-				cpp = 1;
 			}
 		}
 	}

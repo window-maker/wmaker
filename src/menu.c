@@ -802,7 +802,7 @@ static void move_menus(WMenu * menu, int x, int y)
 static void makeVisible(WMenu * menu)
 {
 	WScreen *scr = menu->frame->screen_ptr;
-	int x1, y1, x2, y2, new_x, new_y, move;
+	int x1, y1, x2, y2, new_x, new_y;
 	WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
 
 	if (menu->entry_no < 0)
@@ -815,22 +815,17 @@ static void makeVisible(WMenu * menu)
 
 	new_x = x1;
 	new_y = y1;
-	move = 0;
 
 	if (x1 < rect.pos.x) {
 		new_x = rect.pos.x;
-		move = 1;
 	} else if (x2 >= rect.pos.x + rect.size.width) {
 		new_x = rect.pos.x + rect.size.width - MENUW(menu) - 1;
-		move = 1;
 	}
 
 	if (y1 < rect.pos.y) {
 		new_y = rect.pos.y;
-		move = 1;
 	} else if (y2 >= rect.pos.y + rect.size.height) {
 		new_y = rect.pos.y + rect.size.height - menu->entry_height - 1;
-		move = 1;
 	}
 
 	new_y = new_y - menu->frame->top_width - menu->selected_entry * menu->entry_height;

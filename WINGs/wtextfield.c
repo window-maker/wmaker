@@ -755,7 +755,7 @@ static void paintTextField(TextField * tPtr)
 	W_Screen *screen = tPtr->view->screen;
 	W_View *view = tPtr->view;
 	W_View viewbuffer;
-	int tx, ty, tw, th;
+	int tx, ty, tw;
 	int rx;
 	int bd;
 	int totalWidth;
@@ -791,8 +791,6 @@ static void paintTextField(TextField * tPtr)
 
 	if (tPtr->textLen > 0) {
 		tw = WMWidthOfString(tPtr->font, &(text[tPtr->viewPosition]), tPtr->textLen - tPtr->viewPosition);
-
-		th = WMFontHeight(tPtr->font);
 
 		ty = tPtr->offsetWidth;
 		switch (tPtr->flags.alignment) {
@@ -1334,7 +1332,6 @@ static void pasteText(WMView * view, Atom selection, Atom target, Time timestamp
 static void handleTextFieldActionEvents(XEvent * event, void *data)
 {
 	TextField *tPtr = (TextField *) data;
-	static int move = 0;
 	static Time lastButtonReleasedEvent = 0;
 	static Time lastButtonReleasedEvent2 = 0;
 	Display *dpy = event->xany.display;
@@ -1406,7 +1403,6 @@ static void handleTextFieldActionEvents(XEvent * event, void *data)
 			break;
 		}
 
-		move = 1;
 		switch (tPtr->flags.alignment) {
 			int textWidth;
 		case WARight:
@@ -1484,8 +1480,6 @@ static void handleTextFieldActionEvents(XEvent * event, void *data)
 
 			XStoreBuffer(dpy, &tPtr->text[start], count, 0);
 		}
-
-		move = 0;
 
 		if (!tPtr->flags.secure &&
 		    event->xbutton.time - lastButtonReleasedEvent <= WINGsConfiguration.doubleClickDelay) {

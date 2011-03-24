@@ -26,6 +26,7 @@
 #include <X11/Xutil.h>
 #include <stdlib.h>
 #include <string.h>
+#include <strings.h>
 #include <unistd.h>
 #include <math.h>
 #include <limits.h>
@@ -2262,10 +2263,9 @@ Bool wDockSnapIcon(WDock * dock, WAppIcon * icon, int req_x, int req_y, int *ret
 	int i, offset = ICON_SIZE / 2;
 	WAppIcon *aicon = NULL;
 	WAppIcon *nicon = NULL;
-	int max_y_icons, max_x_icons;
+	int max_y_icons;
 
 	/* TODO: XINERAMA, for these */
-	max_x_icons = scr->scr_width / ICON_SIZE;
 	max_y_icons = scr->scr_height / ICON_SIZE - 1;
 
 	if (wPreferences.flags.noupdates)

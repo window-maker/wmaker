@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <strings.h>
 #include <ctype.h>
 #include <time.h>
 #include <sys/types.h>
@@ -1009,13 +1010,11 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 {
 	WMPropList *plvalue, *old_value;
 	WDefaultEntry *entry;
-	unsigned int i, must_update;
+	unsigned int i;
 	int update_workspace_back = 0;	/* kluge :/ */
 	unsigned int needs_refresh;
 	void *tdata;
 	WMPropList *old_dict = (WDWindowMaker->dictionary != new_dict ? WDWindowMaker->dictionary : NULL);
-
-	must_update = 0;
 
 	needs_refresh = 0;
 
@@ -1037,7 +1036,6 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 			plvalue = entry->plvalue;
 			if (plvalue && new_dict) {
 				WMPutInPLDictionary(new_dict, entry->plkey, plvalue);
-				must_update = 1;
 			}
 		} else if (!plvalue) {
 			/* value was deleted from DB. Keep current value */

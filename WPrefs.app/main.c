@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 {
 	Display *dpy;
 	WMScreen *scr;
-	char *locale, *path;
+	char *path;
 	int i;
 	char *display_name = "";
 
@@ -131,7 +131,6 @@ int main(int argc, char **argv)
 		}
 	}
 
-	locale = getenv("LANG");
 	setlocale(LC_ALL, "");
 
 #ifdef I18N

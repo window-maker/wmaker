@@ -5,6 +5,7 @@
 
 #include <ctype.h>
 #include <string.h>
+#include <strings.h>
 #include <stdint.h>
 
 #include <X11/Xft/Xft.h>

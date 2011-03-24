@@ -31,6 +31,7 @@
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
 #include <string.h>
+#include <strings.h>
 #include <pwd.h>
 #include <signal.h>
 #include <sys/types.h>
