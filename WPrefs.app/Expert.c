@@ -31,7 +31,7 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMButton *swi[12];
+	WMButton *swi[13];
 
 } _Panel;
 
@@ -53,6 +53,7 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->swi[9], GetBoolForKey("ShowClipTitle"));
 	WMSetButtonSelected(panel->swi[10], GetBoolForKey("BounceAppIconsWhenUrgent"));
 	WMSetButtonSelected(panel->swi[11], GetBoolForKey("RaiseAppIconsWhenBouncing"));
+	WMSetButtonSelected(panel->swi[12], GetBoolForKey("OpaqueMoveResizeKeyboard"));
 }
 
 static void createPanel(Panel * p)
@@ -95,6 +96,7 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->swi[9], _("Show workspace title on Clip."));
 	WMSetButtonText(panel->swi[10], _("Bounce AppIcons when the application wants attention."));
 	WMSetButtonText(panel->swi[11], _("Raise AppIcons when bouncing."));
+	WMSetButtonText(panel->swi[12], _("Opaque Move,Resize with keyboard."));
 
 	/* If the item is default true, enable the button here */
 	WMSetButtonEnabled(panel->swi[6], True);
@@ -126,6 +128,7 @@ static void storeDefaults(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->swi[9]), "ShowClipTitle");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[10]), "BounceAppIconsWhenUrgent");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[11]), "RaiseAppIconsWhenBouncing");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[12]), "OpaqueMoveResizeKeyboard");
 }
 
 Panel *InitExpert(WMScreen * scr, WMWidget * parent)

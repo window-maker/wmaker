@@ -30,8 +30,10 @@ EXTRA_DIST = \
 	newstyle.tiff \
 	nextstyle.tiff \
 	nonopaque.tiff \
+	noopaqueresize.tiff \
 	oldstyle.tiff \
 	opaque.tiff \
+	opaqueresize.tiff \
 	paths.tiff \
 	smooth.tiff \
 	sound.tiff \

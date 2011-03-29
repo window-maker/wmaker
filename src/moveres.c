@@ -1207,6 +1207,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 	int src_y = wwin->frame_y;
 	int done, off_x, off_y, ww, wh;
 	int kspeed = _KS;
+	int opaqueMoveResize = wPreferences.opaque_move_resize_keyboard;
 	Time lastTime = 0;
 	KeyCode shiftl, shiftr, ctrlmode;
 	KeySym keysym = NoSymbol;
@@ -1236,15 +1237,21 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 		     | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
 		     GrabModeAsync, None, wCursor[WCUR_DEFAULT], CurrentTime);
 
-	if (wwin->flags.shaded || scr->selected_windows) {
-		if (scr->selected_windows)
-			drawFrames(wwin, scr->selected_windows, off_x, off_y);
-		else
+
+
+	if (!opaqueMoveResize) {
+		if (wwin->flags.shaded || scr->selected_windows) {
+			if (scr->selected_windows)
+				drawFrames(wwin, scr->selected_windows, off_x, off_y);
+			else
+				drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, w, h);
+		} else {
 			drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, w, h);
-		if (!scr->selected_windows)
-			mapPositionDisplay(wwin, src_x, src_y, w, h);
-	} else {
-		drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, w, h);
+		}
+	}
+	if ((wwin->flags.shaded || scr->selected_windows) && (!scr->selected_windows)) {
+		mapPositionDisplay(wwin, src_x, src_y, w, h);
+
 	}
 	ww = w;
 	wh = h;
@@ -1261,14 +1268,16 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 			}
 		} while (event.type == Expose);
 
-		if (wwin->flags.shaded || scr->selected_windows) {
-			if (scr->selected_windows)
-				drawFrames(wwin, scr->selected_windows, off_x, off_y);
-			else
-				drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, w, h);
-	    /*** I HATE EDGE RESISTANCE - ]d ***/
-		} else {
-			drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, ww, wh);
+		if (!opaqueMoveResize) {
+			if (wwin->flags.shaded || scr->selected_windows) {
+				if (scr->selected_windows)
+					drawFrames(wwin, scr->selected_windows, off_x, off_y);
+				else
+					drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, w, h);
+			/*** I HATE EDGE RESISTANCE - ]d ***/
+			} else {
+				drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, ww, wh);
+			}
 		}
 
 		if (ctrlmode)
@@ -1437,26 +1446,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 			}
 		}
 
-		if (wwin->flags.shaded || scr->selected_windows) {
-			if (scr->selected_windows)
-				drawFrames(wwin, scr->selected_windows, off_x, off_y);
-			else
-				drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, w, h);
-		} else {
-			drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, ww, wh);
-		}
-
-		if (ctrlmode) {
-			showGeometry(wwin, src_x + off_x, src_y + off_y, src_x + off_x + ww, src_y + off_y + wh,
-				     0);
-		} else if (!scr->selected_windows)
-			showPosition(wwin, src_x + off_x, src_y + off_y);
-
-		if (done) {
-			scr->keymove_tick = 0;
-			/*
-			   WMDeleteTimerWithClientData(&looper);
-			 */
+		if (!opaqueMoveResize) {
 			if (wwin->flags.shaded || scr->selected_windows) {
 				if (scr->selected_windows)
 					drawFrames(wwin, scr->selected_windows, off_x, off_y);
@@ -1465,6 +1455,35 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 			} else {
 				drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, ww, wh);
 			}
+		}
+
+		if (ctrlmode) {
+			showGeometry(wwin, src_x + off_x, src_y + off_y, src_x + off_x + ww, src_y + off_y + wh,
+				     0);
+		} else if (!scr->selected_windows)
+			showPosition(wwin, src_x + off_x, src_y + off_y);
+
+				if (opaqueMoveResize) {
+					XUngrabServer(dpy);
+					wwin->flags.user_changed_width = 1;
+					wWindowConfigure(wwin, src_x + off_x, src_y + off_y, ww, wh - vert_border);
+				};
+
+		if (done) {
+			scr->keymove_tick = 0;
+			/*
+			   WMDeleteTimerWithClientData(&looper);
+			 */
+			if (!opaqueMoveResize) {/*ctrlmode=> resize    */
+				if (wwin->flags.shaded || scr->selected_windows) {
+					if (scr->selected_windows)
+						drawFrames(wwin, scr->selected_windows, off_x, off_y);
+					else
+						drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, w, h);
+				} else {
+					drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, ww, wh);
+				}
+			};
 
 			if (ctrlmode) {
 				showGeometry(wwin, src_x + off_x, src_y + off_y, src_x + off_x + ww,
@@ -1854,6 +1873,7 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 	int head = ((wPreferences.auto_arrange_icons && wXineramaHeads(scr) > 1)
 		    ? wGetHeadForWindow(wwin)
 		    : scr->xine_info.primary_head);
+	int opaqueResize = wPreferences.opaque_resize;
 
 	if (!IS_RESIZABLE(wwin))
 		return;
@@ -1883,12 +1903,14 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 		switch (event.type) {
 		case KeyPress:
 			showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
-			if ((event.xkey.keycode == shiftl || event.xkey.keycode == shiftr)
-			    && started) {
-				drawTransparentFrame(wwin, fx, fy, fw, fh);
-				cycleGeometryDisplay(wwin, fx, fy, fw, fh, res);
-				drawTransparentFrame(wwin, fx, fy, fw, fh);
-			}
+			if (!opaqueResize) {
+				if ((event.xkey.keycode == shiftl || event.xkey.keycode == shiftr)
+					&& started) {
+					drawTransparentFrame(wwin, fx, fy, fw, fh);
+					cycleGeometryDisplay(wwin, fx, fy, fw, fh, res);
+					drawTransparentFrame(wwin, fx, fy, fw, fh);
+				}
+			};
 			showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
 			break;
 
@@ -1988,21 +2010,27 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 
 				/* Draw the resize frame for the first time. */
 				mapGeometryDisplay(wwin, fx, fy, fw, fh);
-
-				drawTransparentFrame(wwin, fx, fy, fw, fh);
-
+				if (!opaqueResize) {
+					drawTransparentFrame(wwin, fx, fy, fw, fh);
+				};
 				showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
 
 				started = 1;
 			}
 			if (started) {
 				if (wPreferences.size_display == WDIS_FRAME_CENTER) {
-					drawTransparentFrame(wwin, orig_fx, orig_fy, orig_fw, orig_fh);
+					if (!opaqueResize) {
+						drawTransparentFrame(wwin, orig_fx, orig_fy, orig_fw, orig_fh);
+					};
 					moveGeometryDisplayCentered(scr, fx + fw / 2, fy + fh / 2);
-					drawTransparentFrame(wwin, fx, fy, fw, fh);
+					if (!opaqueResize) {
+						drawTransparentFrame(wwin, fx, fy, fw, fh);
+					};
 				} else {
-					drawTransparentFrame(wwin, orig_fx, orig_fy, orig_fw, orig_fh);
-					drawTransparentFrame(wwin, fx, fy, fw, fh);
+					if (!opaqueResize) {
+						drawTransparentFrame(wwin, orig_fx, orig_fy, orig_fw, orig_fh);
+						drawTransparentFrame(wwin, fx, fy, fw, fh);
+					};
 				}
 				if (fh != orig_fh || fw != orig_fw) {
 					if (wPreferences.size_display == WDIS_NEW) {
@@ -2011,6 +2039,13 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 					}
 					showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
 				}
+				if (opaqueResize) {
+					XUngrabServer(dpy);
+					wwin->flags.user_changed_width = 1;
+					moveGeometryDisplayCentered(scr, fx + fw / 2, fy + fh / 2);
+					wWindowConfigure(wwin, fx, fy, fw, fh - vert_border);
+					showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
+				};
 			}
 			break;
 
@@ -2024,8 +2059,9 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 			if (started) {
 				showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
 
-				drawTransparentFrame(wwin, fx, fy, fw, fh);
-
+				if (!opaqueResize) {
+					drawTransparentFrame(wwin, fx, fy, fw, fh);
+				}
 				XUngrabKeyboard(dpy, CurrentTime);
 				WMUnmapWidget(scr->gview);
 				XUngrabServer(dpy);

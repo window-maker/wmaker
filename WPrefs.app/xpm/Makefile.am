@@ -30,8 +30,10 @@ EXTRA_DIST = \
 	newstyle.xpm \
 	nextstyle.xpm \
 	nonopaque.xpm \
+	noopaqueresize.xpm \
 	oldstyle.xpm \
 	opaque.xpm \
+	opaqueresize.xpm \
 	paths.xpm \
 	smooth.xpm \
 	sound.xpm \

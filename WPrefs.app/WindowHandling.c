@@ -59,6 +59,8 @@ typedef struct _Panel {
 	WMFrame *opaqF;
 	WMButton *opaqB;
 
+	WMButton *opaqresizeB;
+
 	WMFrame *tranF;
 	WMButton *tranB;
 } _Panel;
@@ -68,6 +70,10 @@ typedef struct _Panel {
 #define OPAQUE_MOVE_PIXMAP "opaque"
 
 #define NON_OPAQUE_MOVE_PIXMAP "nonopaque"
+
+#define OPAQUE_RESIZE_PIXMAP "opaqueresize"
+
+#define NON_OPAQUE_RESIZE_PIXMAP "noopaqueresize"
 
 #define THUMB_SIZE	16
 
@@ -190,6 +196,8 @@ static void showData(_Panel * panel)
 
 	WMSetButtonSelected(panel->opaqB, GetBoolForKey("OpaqueMove"));
 
+	WMSetButtonSelected(panel->opaqresizeB, GetBoolForKey("OpaqueResize"));
+
 	WMSetButtonSelected(panel->miconB, GetBoolForKey("NoWindowOverIcons"));
 
 	WMSetButtonSelected(panel->mdockB, GetBoolForKey("NoWindowOverDock"));
@@ -208,6 +216,7 @@ static void storeData(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->miconB), "NoWindowOverIcons");
 	SetBoolForKey(WMGetButtonSelected(panel->mdockB), "NoWindowOverDock");
 	SetBoolForKey(WMGetButtonSelected(panel->opaqB), "OpaqueMove");
+	SetBoolForKey(WMGetButtonSelected(panel->opaqresizeB), "OpaqueResize");
 	SetBoolForKey(WMGetButtonSelected(panel->tranB), "OpenTransientOnOwnerWorkspace");
 	SetStringForKey(placements[WMGetPopUpButtonSelectedItem(panel->placP)], "WindowPlacement");
 	sprintf(x, "%i", WMGetSliderValue(panel->hsli));
@@ -317,19 +326,19 @@ static void createPanel(Panel * p)
 
 	WMMapSubwidgets(panel->placF);
 
-    /************** Opaque Move ***************/
+    /************** Opaque Move, Resize ***************/
 	panel->opaqF = WMCreateFrame(hbox);
 	WMMapWidget(panel->opaqF);
-	WMAddBoxSubview(hbox, WMWidgetView(panel->opaqF), False, True, 110, 0, 0);
+	WMAddBoxSubview(hbox, WMWidgetView(panel->opaqF), False, True, 122, 0, 0);
 
-	WMSetFrameTitle(panel->opaqF, _("Opaque Move"));
-	WMSetBalloonTextForView(_("Whether the window contents should be moved\n"
-				  "when dragging windows aroung or if only a\n"
-				  "frame should be displayed.\n"), WMWidgetView(panel->opaqF));
+	WMSetFrameTitle(panel->opaqF, _("Opaque Move/Resize"));
+	WMSetBalloonTextForView(_("Whether the window contents or only a frame should\n"
+				  "be displayed during a move or resize.\n"),
+				WMWidgetView(panel->opaqF));
 
 	panel->opaqB = WMCreateButton(panel->opaqF, WBTToggle);
-	WMResizeWidget(panel->opaqB, 64, 64);
-	WMMoveWidget(panel->opaqB, 24, 25);
+	WMResizeWidget(panel->opaqB, 48,48);
+	WMMoveWidget(panel->opaqB, 7, 35);
 	WMSetButtonImagePosition(panel->opaqB, WIPImageOnly);
 
 	path = LocateImage(NON_OPAQUE_MOVE_PIXMAP);
@@ -355,7 +364,40 @@ static void createPanel(Panel * p)
 		}
 		wfree(path);
 	}
+
+
+
+	panel->opaqresizeB = WMCreateButton(panel->opaqF, WBTToggle);
+	WMResizeWidget(panel->opaqresizeB, 48,48);
+	WMMoveWidget(panel->opaqresizeB, 65, 35);
+	WMSetButtonImagePosition(panel->opaqresizeB, WIPImageOnly);
+
+	path = LocateImage(NON_OPAQUE_RESIZE_PIXMAP);
+	if (path) {
+		pixmap = WMCreatePixmapFromFile(scr, path);
+		if (pixmap) {
+			WMSetButtonImage(panel->opaqresizeB, pixmap);
+			WMReleasePixmap(pixmap);
+		} else {
+			wwarning(_("could not load icon %s"), path);
+		}
+		wfree(path);
+	}
+
+	path = LocateImage(OPAQUE_RESIZE_PIXMAP);
+	if (path) {
+		pixmap = WMCreatePixmapFromFile(scr, path);
+		if (pixmap) {
+			WMSetButtonAltImage(panel->opaqresizeB, pixmap);
+			WMReleasePixmap(pixmap);
+		} else {
+			wwarning(_("could not load icon %s"), path);
+		}
+		wfree(path);
+	}
+
 	WMMapSubwidgets(panel->opaqF);
+
 
     /**************** Account for Icon/Dock ***************/
 	panel->maxiF = WMCreateFrame(panel->box);
