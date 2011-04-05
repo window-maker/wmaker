@@ -2077,6 +2077,7 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 				}
 
 				wWindowConfigure(wwin, fx, fy, fw, fh - vert_border);
+				wWindowSynthConfigureNotify(wwin);
 			}
 			return;
 

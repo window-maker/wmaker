@@ -388,6 +388,7 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 			usableArea.y2 - usableArea.y1, &new_width, &new_height);
 
 	wWindowConfigure(wwin, new_x, new_y, new_width, new_height);
+	wWindowSynthConfigureNotify(wwin);
 
 	WMPostNotificationName(WMNChangedState, wwin, "maximize");
 
@@ -540,6 +541,7 @@ void wUnmaximizeWindow(WWindow *wwin)
 
 	wwin->flags.maximized = 0;
 	wWindowConfigure(wwin, x, y, w, h);
+	wWindowSynthConfigureNotify(wwin);
 
 	WMPostNotificationName(WMNChangedState, wwin, "maximize");
 }
