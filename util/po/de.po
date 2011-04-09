@@ -34,19 +34,19 @@ msgstr "Internet"
 
 #: ../../util/wmgenmenu.c:84
 msgid "Email"
-msgstr "Mitteilung"
+msgstr "E-Mail"
 
 #: ../../util/wmgenmenu.c:85
 msgid "Mathematics"
-msgstr "Mathematiks"
+msgstr "Mathematik"
 
 #: ../../util/wmgenmenu.c:86
 msgid "File Managers"
-msgstr "Dateimanagers"
+msgstr "Dateimanager"
 
 #: ../../util/wmgenmenu.c:87
 msgid "Graphics"
-msgstr "Abbildungen"
+msgstr "Grafik"
 
 #: ../../util/wmgenmenu.c:88
 msgid "Multimedia"
@@ -70,23 +70,23 @@ msgstr "Astronomie"
 
 #: ../../util/wmgenmenu.c:94
 msgid "Sound"
-msgstr "Klang"
+msgstr "Audio"
 
 #: ../../util/wmgenmenu.c:95
 msgid "Comics"
-msgstr "Comics"
+msgstr "Comic"
 
 #: ../../util/wmgenmenu.c:96
 msgid "Viewers"
-msgstr ""
+msgstr "Dokumentbetrachter"
 
 #: ../../util/wmgenmenu.c:97
 msgid "Utilities"
-msgstr "Betriebstoffe"
+msgstr "Hilfsprogramme"
 
 #: ../../util/wmgenmenu.c:98
 msgid "System"
-msgstr ""
+msgstr "System"
 
 #: ../../util/wmgenmenu.c:99
 msgid "Video"
@@ -102,7 +102,7 @@ msgstr "P2P-Netzwerk"
 
 #: ../../util/wmgenmenu.c:102
 msgid "Games"
-msgstr "Bildschirmspiele"
+msgstr "Spiele"
 
 #: ../../util/wmgenmenu.c:103
 msgid "OpenSUSE"
@@ -191,7 +191,7 @@ msgstr "Neustart"
 
 #: ../../util/wmgenmenu.c:237
 msgid "Lock Screen"
-msgstr "Bildschirm speeren"
+msgstr "Bildschirm sperren"
 
 #: ../../util/wmgenmenu.c:248
 msgid "Exit Window Maker"
@@ -204,4 +204,4 @@ msgstr "%s starten"
 
 #: ../../util/wmgenmenu.c:325
 msgid "Other Window Managers"
-msgstr "Ändere Fenstermanagers"
+msgstr "Andere Fenstermanager"
