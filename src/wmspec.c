@@ -68,7 +68,6 @@ static Atom net_desktop_viewport;
 static Atom net_current_desktop;
 static Atom net_desktop_names;
 static Atom net_active_window;
-static Atom net_workarea;	/* XXX: not xinerama compatible */
 static Atom net_supporting_wm_check;
 static Atom net_virtual_roots;	/* N/A */
 static Atom net_desktop_layout;	/* XXX */
@@ -144,7 +143,6 @@ static atomitem_t atomNames[] = {
 	{"_NET_CURRENT_DESKTOP", &net_current_desktop},
 	{"_NET_DESKTOP_NAMES", &net_desktop_names},
 	{"_NET_ACTIVE_WINDOW", &net_active_window},
-	{"_NET_WORKAREA", &net_workarea},
 	{"_NET_SUPPORTING_WM_CHECK", &net_supporting_wm_check},
 	{"_NET_VIRTUAL_ROOTS", &net_virtual_roots},
 	{"_NET_DESKTOP_LAYOUT", &net_desktop_layout},
@@ -253,7 +251,6 @@ static void setSupportedHints(WScreen * scr)
 	atom[i++] = net_current_desktop;
 	atom[i++] = net_desktop_names;
 	atom[i++] = net_active_window;
-	atom[i++] = net_workarea;
 	atom[i++] = net_supporting_wm_check;
 	atom[i++] = net_showing_desktop;
 #if 0
@@ -627,32 +624,6 @@ void wNETWMUpdateActions(WWindow * wwin, Bool del)
 
 	XChangeProperty(dpy, wwin->client_win, net_wm_allowed_actions,
 			XA_ATOM, 32, PropModeReplace, (unsigned char *)action, i);
-}
-
-void wNETWMUpdateWorkarea(WScreen * scr, WArea usableArea)
-{
-	long *area;
-	int count, i;
-
-	/* XXX: not Xinerama compatible,
-	   xinerama gets the largest available */
-
-	if (!scr->netdata || scr->workspace_count == 0)
-		return;
-
-	count = scr->workspace_count * 4;
-	area = wmalloc(sizeof(long) * count);
-	for (i = 0; i < scr->workspace_count; i++) {
-		area[4 * i + 0] = usableArea.x1;
-		area[4 * i + 1] = usableArea.y1;
-		area[4 * i + 2] = usableArea.x2 - usableArea.x1;
-		area[4 * i + 3] = usableArea.y2 - usableArea.y1;
-	}
-
-	XChangeProperty(dpy, scr->root_win, net_workarea, XA_CARDINAL, 32,
-			PropModeReplace, (unsigned char *)area, count);
-
-	wfree(area);
 }
 
 Bool wNETWMGetUsableArea(WScreen * scr, int head, WArea * area)

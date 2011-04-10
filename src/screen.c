@@ -795,10 +795,15 @@ void wScreenUpdateUsableArea(WScreen * scr)
 	 * border.
 	 */
 
-	int i;
-	unsigned long best_area = 0, tmp_area;
 	WArea area;
-	int dock_head = scr->xine_info.primary_head;
+	int i, dock_head;
+	unsigned long best_area, tmp_area;
+	unsigned int size, position;
+
+	dock_head = scr->xine_info.primary_head;
+	best_area = 0;
+	size = wPreferences.workspace_border_size;
+	position = wPreferences.workspace_border_position;
 
 	if (scr->dock) {
 		WMRect rect;
@@ -826,14 +831,11 @@ void wScreenUpdateUsableArea(WScreen * scr)
 			}
 		}
 
-		{
-			WArea area;
-			if (wNETWMGetUsableArea(scr, i, &area)) {
-				scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
-				scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
-				scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
-				scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
-			}
+		if (wNETWMGetUsableArea(scr, i, &area)) {
+			scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
+			scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
+			scr->totalUsableArea[i].x2 = WMIN(scr->totalUsableArea[i].x2, area.x2);
+			scr->totalUsableArea[i].y2 = WMIN(scr->totalUsableArea[i].y2, area.y2);
 		}
 
 		scr->usableArea[i] = scr->totalUsableArea[i];
@@ -842,7 +844,6 @@ void wScreenUpdateUsableArea(WScreen * scr)
 		printf("usableArea[%d]: %d %d %d %d\n", i,
 		       scr->usableArea[i].x1, scr->usableArea[i].x2, scr->usableArea[i].y1, scr->usableArea[i].y2);
 #endif
-
 		if (wPreferences.no_window_over_icons) {
 			if (wPreferences.icon_yard & IY_VERT) {
 				if (wPreferences.icon_yard & IY_RIGHT) {
@@ -877,24 +878,17 @@ void wScreenUpdateUsableArea(WScreen * scr)
 			area = scr->totalUsableArea[i];
 		}
 
-		{
-			unsigned size = wPreferences.workspace_border_size;
-			unsigned position = wPreferences.workspace_border_position;
-
-			if (size > 0 && position != WB_NONE) {
-				if (position & WB_LEFTRIGHT) {
-					scr->totalUsableArea[i].x1 += size;
-					scr->totalUsableArea[i].x2 -= size;
-				}
-				if (position & WB_TOPBOTTOM) {
-					scr->totalUsableArea[i].y1 += size;
-					scr->totalUsableArea[i].y2 -= size;
-				}
+		if (size > 0 && position != WB_NONE) {
+			if (position & WB_LEFTRIGHT) {
+				scr->totalUsableArea[i].x1 += size;
+				scr->totalUsableArea[i].x2 -= size;
+			}
+			if (position & WB_TOPBOTTOM) {
+				scr->totalUsableArea[i].y1 += size;
+				scr->totalUsableArea[i].y2 -= size;
 			}
 		}
 	}
-
-	wNETWMUpdateWorkarea(scr, area);
 
 	if (wPreferences.auto_arrange_icons)
 		wArrangeIcons(scr, True);
