@@ -16,7 +16,7 @@
 
 #include "../src/wconfig.h"
 
-#define MAX_NR_APPS 50  /* Maximum number of entries in each apps list */
+#define MAX_NR_APPS 128 /* Maximum number of entries in each apps list */
 #define MAX_WMS 10      /* Maximum number of other window managers to check */
 
 #include "wmgenmenu.h"
