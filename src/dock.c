@@ -3015,9 +3015,9 @@ void wDockTrackWindowLaunch(WDock * dock, Window window)
 		wfree(command);
 
 	if (wm_class)
-		XFree(wm_class);
+		free(wm_class);
 	if (wm_instance)
-		XFree(wm_instance);
+		free(wm_instance);
 }
 
 void wClipUpdateForWorkspaceChange(WScreen * scr, int workspace)

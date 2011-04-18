@@ -830,9 +830,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			wwin->main_window = fPtr->leader;
 		}
 		if (instance)
-			XFree(instance);
+			free(instance);
 		if (class)
-			XFree(class);
+			free(class);
 #undef ADEQUATE
 	}
 
@@ -2654,9 +2654,9 @@ WMagicNumber wWindowGetSavedState(Window win)
 	if (command)
 		wfree(command);
 	if (instance)
-		XFree(instance);
+		free(instance);
 	if (class)
-		XFree(class);
+		free(class);
 
 	return wstate;
 }

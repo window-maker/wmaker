@@ -71,10 +71,13 @@ int PropGetWMClass(Window window, char **wm_class, char **wm_instance)
 		XFree(class_hint);
 		return False;
 	}
-	*wm_instance = class_hint->res_name;
-	*wm_class = class_hint->res_class;
+	*wm_instance = strdup(class_hint->res_name);
+	*wm_class = strdup(class_hint->res_class);
 
+	XFree(class_hint->res_name);
+	XFree(class_hint->res_class);
 	XFree(class_hint);
+
 	return True;
 }
 

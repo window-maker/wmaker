@@ -257,9 +257,9 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 	}
 
 	if (instance)
-		XFree(instance);
+		free(instance);
 	if (class)
-		XFree(class);
+		free(class);
 	if (command)
 		wfree(command);
 
