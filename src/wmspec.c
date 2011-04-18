@@ -35,6 +35,7 @@
 #include <X11/Xarch.h>
 #include <string.h>
 
+#include <WINGs/WUtil.h>
 #include "WindowMaker.h"
 #include "window.h"
 #include "screen.h"
@@ -48,10 +49,6 @@
 #include "stacking.h"
 #include "xinerama.h"
 #include "properties.h"
-
-#ifdef DEBUG_WMSPEC
-#include <stdio.h>
-#endif
 
 /* Global variables */
 extern Atom _XA_WM_DELETE_WINDOW;
@@ -519,7 +516,7 @@ void wNETWMInitStuff(WScreen * scr)
 	int i;
 
 #ifdef DEBUG_WMSPEC
-	printf("wNETWMInitStuff\n");
+	wmessage("enter");
 #endif
 
 #ifdef HAVE_XINTERNATOMS
@@ -1041,7 +1038,7 @@ static void doStateAtom(WWindow * wwin, Atom state, int set, Bool init)
 
 	} else {
 #ifdef DEBUG_WMSPEC
-		printf("doStateAtom unknown atom %s set %d\n", XGetAtomName(dpy, state), set);
+		wmessage("doStateAtom unknown atom %s set %d\n", XGetAtomName(dpy, state), set);
 #endif
 	}
 }
@@ -1303,7 +1300,7 @@ Bool wNETWMCheckInitialClientState(WWindow * wwin)
 	Bool hasState = False;
 
 #ifdef DEBUG_WMSPEC
-	printf("CheckInitialClientState\n");
+	wmessage("enter");
 #endif
 
 	wNETWMShowingDesktop(wwin->screen_ptr, False);
@@ -1354,7 +1351,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 	Bool done = True;
 
 #ifdef DEBUG_WMSPEC
-	printf("processClientMessage type %s\n", XGetAtomName(dpy, event->message_type));
+	wmessage("processClientMessage type %s\n", XGetAtomName(dpy, event->message_type));
 #endif
 
 	scr = wScreenForWindow(event->window);
@@ -1403,16 +1400,17 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 
 	if (event->message_type == net_active_window) {
 		/*
-		 * Firefox sends aditional 'net_active_window' signals on startup if
-		 * multiple tabs are open. That causes unnecessary workspace switching if
-		 * those signals come from other workspaces. Therefore we also check if
-		 * we should ignore these spurious focus across workspaces requests (but
-		 * allow the switching if it comes from a pager).
+		 * Satisfy a client's focus request only if
+		 * - request comes from a pager, or
+		 * - it's explicitly allowed in Advanced Options, or
+		 * - giving the client the focus does not cause a change in
+		 *   the active workspace (XXX: or the active head if Xinerama)
 		 */
-		if (wwin->frame->workspace == wwin->screen_ptr->current_workspace
-		    || !WFLAGP(wwin, dont_focus_across_wksp) || event->data.l[0] == 2) {
-			wNETWMShowingDesktop(scr, False);
-			wMakeWindowVisible(wwin);
+		if (wwin->frame->workspace == wwin->screen_ptr->current_workspace /* No workspace change */
+		    || event->data.l[0] == 2 /* Requested by pager */
+		    || WFLAGP(wwin, focus_across_wksp) /* Explicitly allowed */) {
+				wNETWMShowingDesktop(scr, False);
+				wMakeWindowVisible(wwin);
 		}
 	} else if (event->message_type == net_close_window) {
 		if (!WFLAGP(wwin, no_closable)) {
@@ -1424,7 +1422,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 		long set = event->data.l[0];
 
 #ifdef DEBUG_WMSPEC
-		printf("net_wm_state set %ld a1 %s a2 %s\n", set,
+		wmessage("net_wm_state set %ld a1 %s a2 %s\n", set,
 		       XGetAtomName(dpy, event->data.l[1]), XGetAtomName(dpy, event->data.l[2]));
 #endif
 
@@ -1464,7 +1462,7 @@ Bool wNETWMCheckClientHintChange(WWindow * wwin, XPropertyEvent * event)
 	Bool ret = True;
 
 #ifdef DEBUG_WMSPEC
-	printf("clientHintChange type %s\n", XGetAtomName(dpy, event->atom));
+	wmessage("clientHintChange type %s\n", XGetAtomName(dpy, event->atom));
 #endif
 
 	if (event->atom == net_wm_strut) {

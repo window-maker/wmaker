@@ -138,7 +138,7 @@ static WMPropList *ASkipWindowList;
 static WMPropList *ASkipSwitchPanel;
 static WMPropList *AKeepInsideScreen;
 static WMPropList *AUnfocusable;
-static WMPropList *ADontFocusAcrossWorkspace;
+static WMPropList *AFocusAcrossWorkspace;
 static WMPropList *AAlwaysUserIcon;
 static WMPropList *AStartMiniaturized;
 static WMPropList *AStartMaximized;
@@ -190,7 +190,7 @@ static void make_keys(void)
 	ASkipSwitchPanel = WMCreatePLString("SkipSwitchPanel");
 	AKeepInsideScreen = WMCreatePLString("KeepInsideScreen");
 	AUnfocusable = WMCreatePLString("Unfocusable");
-	ADontFocusAcrossWorkspace = WMCreatePLString("DontFocusAcrossWorkspace");
+	AFocusAcrossWorkspace = WMCreatePLString("FocusAcrossWorkspace");
 	AAlwaysUserIcon = WMCreatePLString("AlwaysUserIcon");
 	AStartMiniaturized = WMCreatePLString("StartMiniaturized");
 	AStartMaximized = WMCreatePLString("StartMaximized");
@@ -595,7 +595,7 @@ static void saveSettings(WMButton * button, InspectorPanel * panel)
 	different |= insertAttribute(dict, winDic, AEmulateAppIcon, value, flags);
 
 	value = (WMGetButtonSelected(panel->moreChk[9]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ADontFocusAcrossWorkspace, value, flags);
+	different |= insertAttribute(dict, winDic, AFocusAcrossWorkspace, value, flags);
 
 #ifdef XKB_BUTTON_HINT
 	value = (WMGetButtonSelected(panel->moreChk[10]) != 0) ? Yes : No;
@@ -773,7 +773,7 @@ static void applySettings(WMButton * button, InspectorPanel * panel)
 	WSETUFLAG(wwin, no_hide_others, WMGetButtonSelected(panel->moreChk[6]));
 	WSETUFLAG(wwin, dont_save_session, WMGetButtonSelected(panel->moreChk[7]));
 	WSETUFLAG(wwin, emulate_appicon, WMGetButtonSelected(panel->moreChk[8]));
-	WSETUFLAG(wwin, dont_focus_across_wksp, WMGetButtonSelected(panel->moreChk[9]));
+	WSETUFLAG(wwin, focus_across_wksp, WMGetButtonSelected(panel->moreChk[9]));
 #ifdef XKB_BUTTON_HINT
 	WSETUFLAG(wwin, no_language_button, WMGetButtonSelected(panel->moreChk[10]));
 #endif
@@ -951,7 +951,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 			flag = WFLAGP(wwin, emulate_appicon);
 			break;
 		case 9:
-			flag = WFLAGP(wwin, dont_focus_across_wksp);
+			flag = WFLAGP(wwin, focus_across_wksp);
 			break;
 #ifdef XKB_BUTTON_HINT
 		case 10:
@@ -1394,11 +1394,10 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 				  "application icon to be created.");
 			break;
 		case 9:
-			caption = _("Don't focus across workspaces");
-			flag = WFLAGP(wwin, dont_focus_across_wksp);
-			descr = _("Do not allow Window Maker to switch workspace to satisfy\n"
-				  "a focus request (useful e.g. in the case of a multiple-tab\n"
-				  "firefox opening in a different workspace).");
+			caption = _("Focus across workspaces");
+			flag = WFLAGP(wwin, focus_across_wksp);
+			descr = _("Allow Window Maker to switch workspace to satisfy\n"
+				  "a focus request (annoying).");
 			break;
 #ifdef XKB_BUTTON_HINT
 		case 10:

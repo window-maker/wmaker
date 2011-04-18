@@ -125,8 +125,8 @@ typedef struct {
     unsigned int dont_move_off:1;
 
     unsigned int no_focusable:1;
-    unsigned int dont_focus_across_wksp:1; /* don't let wmaker switch workspace to follow
-					    * a focus request */
+    unsigned int focus_across_wksp:1;   /* let wmaker switch workspace to follow
+					 * a focus request */
 
     unsigned int always_user_icon:1;   /* ignore client IconPixmap or
                                         * IconWindow */
