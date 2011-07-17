@@ -52,8 +52,9 @@ git commit -a
 git format-patch HEAD~1
 
 After the above steps, you are ready to send the created .patch file
-to the mailing-list! Just send it as-is, and I will be able to apply
-it with
+to the mailing-list: wmaker-dev@lists.windowmaker.org
+
+Just send it as-is, and I will be able to apply it with
 
 # this is how I am going to apply your patch
 git am 0001-subject-of-your-patch.patch
