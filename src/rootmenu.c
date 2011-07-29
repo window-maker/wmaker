@@ -424,7 +424,7 @@ static Bool addShortcut(char *file, char *shortcutDefinition, WMenu * menu, WMen
 
 	ptr = wmalloc(sizeof(Shortcut));
 
-	strncpy(buf, shortcutDefinition, MAX_SHORTCUT_LENGTH);
+	wstrlcpy(buf, shortcutDefinition, MAX_SHORTCUT_LENGTH);
 	b = (char *)buf;
 
 	/* get modifiers */

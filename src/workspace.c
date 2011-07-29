@@ -749,7 +749,7 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 		i = scr->workspace_count - (menu->entry_no - 2);
 		ws = menu->entry_no - 2;
 		while (i > 0) {
-			strncpy(title, scr->workspaces[ws]->name, MAX_WORKSPACENAME_WIDTH);
+			wstrlcpy(title, scr->workspaces[ws]->name, MAX_WORKSPACENAME_WIDTH);
 
 			entry = wMenuAddCallback(menu, title, switchWSCommand, (void *)ws);
 			entry->flags.indicator = 1;

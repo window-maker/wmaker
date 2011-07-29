@@ -3400,9 +3400,8 @@ char *generateNewFilename(char *curName)
 
 	newName = wmalloc(baseLen + 16);
 	strncpy(newName, curName, baseLen);
-	newName[baseLen] = 0;
 
-	sprintf(&newName[baseLen], " {%i}", n + 1);
+	snprintf(&newName[baseLen], 16, " {%i}", n + 1);
 
 	return newName;
 }

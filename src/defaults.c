@@ -2005,7 +2005,7 @@ static int getKeybind(WScreen * scr, WDefaultEntry * entry, WMPropList * value, 
 		return True;
 	}
 
-	strncpy(buf, val, MAX_SHORTCUT_LENGTH);
+	wstrlcpy(buf, val, MAX_SHORTCUT_LENGTH);
 
 	b = (char *)buf;
 

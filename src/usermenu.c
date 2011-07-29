@@ -157,9 +157,9 @@ static WUserMenuData *convertShortcuts(WScreen * scr, WMPropList * shortcut)
 	for (i = 0, j = 0; i < keycount; i++) {
 		data->key[j].modifier = 0;
 		if (WMIsPLArray(shortcut)) {
-			strncpy(buf, WMGetFromPLString(WMGetFromPLArray(shortcut, i)), MAX_SHORTCUT_LENGTH);
+			wstrlcpy(buf, WMGetFromPLString(WMGetFromPLArray(shortcut, i)), MAX_SHORTCUT_LENGTH);
 		} else {
-			strncpy(buf, WMGetFromPLString(shortcut), MAX_SHORTCUT_LENGTH);
+			wstrlcpy(buf, WMGetFromPLString(shortcut), MAX_SHORTCUT_LENGTH);
 		}
 		b = (char *)buf;
 
