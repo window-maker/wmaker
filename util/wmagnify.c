@@ -397,6 +397,7 @@ static BufferData *newWindow(int magfactor)
 
 int main(int argc, char **argv)
 {
+	BufferData *data;
 	int i;
 	char *display = "";
 	char *vdisplay = NULL;
@@ -479,6 +480,8 @@ int main(int argc, char **argv)
 
 	cursorColor1 = WMCreateNamedColor(scr, "#ff0000", False);
 	cursorColor2 = WMCreateNamedColor(scr, "#00ff00", False);
+
+	data = newWindow(magfactor);
 
 	WMScreenMainLoop(scr);
 
