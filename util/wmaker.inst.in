@@ -61,24 +61,6 @@ copy() {
 	rm -f "$target"
 	if [ "$file" = "WindowMaker" ]; then
 		sed -e "s|~/GNUstep|$GSDIR|g" "$source" > "$target"
-	elif [ "$file" = "WMRootMenu" ]; then
-		if [ "$LOCALE" ]; then
-		    if [ -f "$GLOBALDIR/plmenu.$LOCALE" ]; then
-			source="$GLOBALDIR/plmenu.$LOCALE"
-		    elif [ -f "$GLOBALDIR/plmenu.${LOCALE%.*}" ]; then
-			source="$GLOBALDIR/plmenu.${LOCALE%.*}"
-		    elif [ -f "$GLOBALDIR/plmenu.${LOCALE%_*}" ]; then
-			source="$GLOBALDIR/plmenu.${LOCALE%_*}"
-		    elif [ -f "$GLOBALDIR/menu.${LOCALE%_*}" ]; then
-			source="$GLOBALDIR/menu.${LOCALE%_*}"
-		    else
-			source="$GLOBALDIR/plmenu"
-            	    fi
-        	else
-		    source="$GLOBALDIR/plmenu"
-        	fi
-		sed -e "s:#wmdatadir#:$GLOBALDIR:g" \
-			"$source" > "$GSDIR/Defaults/WMRootMenu"
 	else
 		if test "x$GNUSTEP_USER_ROOT" = "x"; then
 			sed -e "s:#wmdatadir#:$GLOBALDIR:g" \
@@ -91,7 +73,12 @@ copy() {
 	fi
 }
 
-
+#
+# Generate WMRootmenu
+#
+GenerateMenu() {
+	wmgenmenu > $GSDIR/Defaults/WMRootMenu
+}
 
 echo "Installing WindowMaker $VERSION for current user..."
 
@@ -160,6 +147,7 @@ for i in $FILES; do
 	fi
 done
 
+	GenerateMenu
 
 if [ ! -d "$GSDIR/Library/Icons/" ]; then
       echo "Creating icon library directory $GSDIR/Library/Icons"
