@@ -35,7 +35,6 @@ defsdata_DATA = \
 	mixer.xpm\
 	Mouth.png\
 	Mozilla.png\
-	Netscape.png\
 	notepad.tiff\
 	notepad.xpm\
 	pdf.tiff\
