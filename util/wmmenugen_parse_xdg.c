@@ -320,6 +320,7 @@ static void getLocalizedStringValue(char **target, const char *line, int *match_
 	p = line;
 	kstart = 0;
 	sqbstart = 0;
+	sqbend = 0;
 	locale = NULL;
 
 	/* skip until after '=', mark if '[' and ']' is found */

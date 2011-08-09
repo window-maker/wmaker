@@ -704,6 +704,8 @@ static Pixmap renderMenu(_Panel * panel, WMPropList * texture, int width, int ih
 	case MSTYLE_FLAT:
 		pix = renderTexture(scr, texture, width, iheight * 4, NULL, RBEV_RAISED2);
 		break;
+	default:
+		pix = None;
 	}
 	XFreeGC(dpy, gc);
 
