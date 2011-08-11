@@ -55,6 +55,7 @@ static char *getString(WMPropList *, WMPropList *);
 static WMPropList *ANoTitlebar = NULL;
 static WMPropList *ANoResizebar;
 static WMPropList *ANoMiniaturizeButton;
+static WMPropList *ANoMiniaturizable;
 static WMPropList *ANoCloseButton;
 static WMPropList *ANoBorder;
 static WMPropList *ANoHideOthers;
@@ -92,6 +93,7 @@ static void init_wdefaults(WScreen * scr)
 	ANoTitlebar = WMCreatePLString("NoTitlebar");
 	ANoResizebar = WMCreatePLString("NoResizebar");
 	ANoMiniaturizeButton = WMCreatePLString("NoMiniaturizeButton");
+	ANoMiniaturizable = WMCreatePLString("NoMiniaturizable");
 	ANoCloseButton = WMCreatePLString("NoCloseButton");
 	ANoBorder = WMCreatePLString("NoBorder");
 	ANoHideOthers = WMCreatePLString("NoHideOthers");
@@ -242,6 +244,9 @@ wDefaultFillAttributes(WScreen * scr, char *instance, char *class,
 
 	value = get_value(dw, dc, dn, da, ANoMiniaturizeButton, No, useGlobalDefault);
 	APPLY_VAL(value, no_miniaturize_button, ANoMiniaturizeButton);
+
+	value = get_value(dw, dc, dn, da, ANoMiniaturizable, No, useGlobalDefault);
+	APPLY_VAL(value, no_miniaturizable, ANoMiniaturizable);
 
 	value = get_value(dw, dc, dn, da, ANoCloseButton, No, useGlobalDefault);
 	APPLY_VAL(value, no_close_button, ANoCloseButton);

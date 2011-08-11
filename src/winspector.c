@@ -89,9 +89,9 @@ typedef struct InspectorPanel {
 	/* 3rd page. more attributes */
 	WMFrame *moreFrm;
 #ifdef XKB_BUTTON_HINT
-	WMButton *moreChk[11];
+	WMButton *moreChk[12];
 #else
-	WMButton *moreChk[10];
+	WMButton *moreChk[11];
 #endif
 
 	/* 4th page. icon and workspace */
@@ -146,6 +146,7 @@ static WMPropList *ADontSaveSession;
 static WMPropList *AEmulateAppIcon;
 static WMPropList *AFullMaximize;
 static WMPropList *ASharedAppIcon;
+static WMPropList *ANoMiniaturizable;
 #ifdef XKB_BUTTON_HINT
 static WMPropList *ANoLanguageButton;
 #endif
@@ -199,6 +200,7 @@ static void make_keys(void)
 	AEmulateAppIcon = WMCreatePLString("EmulateAppIcon");
 	AFullMaximize = WMCreatePLString("FullMaximize");
 	ASharedAppIcon = WMCreatePLString("SharedAppIcon");
+	ANoMiniaturizable = WMCreatePLString("NoMiniaturizable");
 #ifdef XKB_BUTTON_HINT
 	ANoLanguageButton = WMCreatePLString("NoLanguageButton");
 #endif
@@ -597,8 +599,11 @@ static void saveSettings(WMButton * button, InspectorPanel * panel)
 	value = (WMGetButtonSelected(panel->moreChk[9]) != 0) ? Yes : No;
 	different |= insertAttribute(dict, winDic, AFocusAcrossWorkspace, value, flags);
 
-#ifdef XKB_BUTTON_HINT
 	value = (WMGetButtonSelected(panel->moreChk[10]) != 0) ? Yes : No;
+	different |= insertAttribute(dict, winDic, ANoMiniaturizable, value, flags);
+
+#ifdef XKB_BUTTON_HINT
+	value = (WMGetButtonSelected(panel->moreChk[11]) != 0) ? Yes : No;
 	different |= insertAttribute(dict, winDic, ANoLanguageButton, value, flags);
 #endif
 
@@ -774,8 +779,9 @@ static void applySettings(WMButton * button, InspectorPanel * panel)
 	WSETUFLAG(wwin, dont_save_session, WMGetButtonSelected(panel->moreChk[7]));
 	WSETUFLAG(wwin, emulate_appicon, WMGetButtonSelected(panel->moreChk[8]));
 	WSETUFLAG(wwin, focus_across_wksp, WMGetButtonSelected(panel->moreChk[9]));
+	WSETUFLAG(wwin, no_miniaturizable, WMGetButtonSelected(panel->moreChk[10]));
 #ifdef XKB_BUTTON_HINT
-	WSETUFLAG(wwin, no_language_button, WMGetButtonSelected(panel->moreChk[10]));
+	WSETUFLAG(wwin, no_language_button, WMGetButtonSelected(panel->moreChk[11]));
 #endif
 	WSETUFLAG(wwin, always_user_icon, WMGetButtonSelected(panel->alwChk));
 
@@ -919,7 +925,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 		}
 		WMSetButtonSelected(panel->attrChk[i], flag);
 	}
-	for (i = 0; i < 11; i++) {
+	for (i = 0; i < 12; i++) {
 		int flag = 0;
 
 		switch (i) {
@@ -953,8 +959,11 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 		case 9:
 			flag = WFLAGP(wwin, focus_across_wksp);
 			break;
-#ifdef XKB_BUTTON_HINT
 		case 10:
+			flag = WFLAGP(wwin, no_miniaturizable);
+			break;
+#ifdef XKB_BUTTON_HINT
+		case 11:
 			flag = WFLAGP(wwin, no_language_button);
 			break;
 #endif
@@ -1329,9 +1338,9 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 
 	for (i = 0;
 #ifdef XKB_BUTTON_HINT
-	     i < 11;
+	     i < 12;
 #else
-	     i < 10;
+	     i < 11;
 #endif
 	     i++) {
 		char *caption = NULL;
@@ -1399,8 +1408,14 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 			descr = _("Allow Window Maker to switch workspace to satisfy\n"
 				  "a focus request (annoying).");
 			break;
-#ifdef XKB_BUTTON_HINT
 		case 10:
+			caption = _("Do not let it be minimized");
+			flag = WFLAGP(wwin, no_miniaturizable);
+			descr = _("Do not let the window of this application be\n"
+					  "minimized.\n");
+			break;
+#ifdef XKB_BUTTON_HINT
+		case 11:
 			caption = _("Disable language button");
 			flag = WFLAGP(wwin, no_language_button);
 			descr = _("Remove the `toggle language' button of the window.");
