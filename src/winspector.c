@@ -158,7 +158,7 @@ static WMPropList *AnyWindow;
 static WMPropList *EmptyString;
 static WMPropList *Yes, *No;
 
-#define PWIDTH	270
+#define PWIDTH	290
 #define PHEIGHT	350
 
 static char *spec_text;
