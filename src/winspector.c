@@ -160,7 +160,7 @@ static WMPropList *EmptyString;
 static WMPropList *Yes, *No;
 
 #define PWIDTH	290
-#define PHEIGHT	350
+#define PHEIGHT	360
 
 static char *spec_text;
 static void applySettings(WMButton * button, InspectorPanel * panel);
@@ -1143,7 +1143,7 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 	btn_width = (PWIDTH - (2 * 15) - (2 * 10)) / 3;
 	panel->saveBtn = WMCreateCommandButton(panel->win);
 	WMSetButtonAction(panel->saveBtn, (WMAction *) saveSettings, panel);
-	WMMoveWidget(panel->saveBtn, (2 * (btn_width + 10)) + 15, 310);
+	WMMoveWidget(panel->saveBtn, (2 * (btn_width + 10)) + 15, PHEIGHT - 40);
 	WMSetButtonText(panel->saveBtn, _("Save"));
 	WMResizeWidget(panel->saveBtn, btn_width, 28);
 	if (wPreferences.flags.noupdates || !(wwin->wm_class || wwin->wm_instance))
@@ -1151,13 +1151,13 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 
 	panel->applyBtn = WMCreateCommandButton(panel->win);
 	WMSetButtonAction(panel->applyBtn, (WMAction *) applySettings, panel);
-	WMMoveWidget(panel->applyBtn, btn_width + 10 + 15, 310);
+	WMMoveWidget(panel->applyBtn, btn_width + 10 + 15, PHEIGHT - 40);
 	WMSetButtonText(panel->applyBtn, _("Apply"));
 	WMResizeWidget(panel->applyBtn, btn_width, 28);
 
 	panel->revertBtn = WMCreateCommandButton(panel->win);
 	WMSetButtonAction(panel->revertBtn, (WMAction *) revertSettings, panel);
-	WMMoveWidget(panel->revertBtn, 15, 310);
+	WMMoveWidget(panel->revertBtn, 15, PHEIGHT - 40);
 	WMSetButtonText(panel->revertBtn, _("Reload"));
 	WMResizeWidget(panel->revertBtn, btn_width, 28);
 
@@ -1334,7 +1334,7 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 	panel->moreFrm = WMCreateFrame(panel->win);
 	WMSetFrameTitle(panel->moreFrm, _("Advanced"));
 	WMMoveWidget(panel->moreFrm, 15, 45);
-	WMResizeWidget(panel->moreFrm, frame_width, 250);
+	WMResizeWidget(panel->moreFrm, frame_width, 265);
 
 	for (i = 0;
 #ifdef XKB_BUTTON_HINT
