@@ -1,5 +1,5 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH Window\ Maker 1x "August 1998"
+.TH "Window Maker" 1x "January 1999"
 .SH NAME
 wmaker \- X11 window manager with a NEXTSTEP look
 .SH SYNOPSIS
@@ -11,15 +11,6 @@ emulate NeXT's look as much as possible, but it deviates from it as
 necessary.
 .SH "OPTIONS"
 .TP
-.B \-\-no\-cpp
-disable preprocessing of configuration files
-.TP
-.B \-\-no\-dock
-do not show the application Dock
-.TP
-.B \-\-no\-clip
-do not show the workspace Clip
-.TP
 .B \-display host:display.screen
 specify display to use.
 On multiheaded machines, Window Maker will automatically manage all screens.
@@ -29,6 +20,33 @@ the screen number you want to have managed with the
 command line argument. For example, if you want Window Maker to manage only
 screen 1, start it as:
 .B wmaker -display :0.1
+.TP
+.B \-\-no\-cpp
+disable preprocessing of configuration files
+.TP
+.B \-\-no\-dock
+do not show the application Dock
+.TP
+.B \-\-no\-clip
+do not show the workspace Clip
+.TP
+.B \-\-no\-autolaunch
+do not autolaunch applications
+.TP
+.B \-\-dont\-restore
+do not restore saved session
+.TP
+.B \-\-locale locale
+specify the locale to use
+.TP
+.B \-\-create-stdcmap
+create the standard colormap hint in PseudoColor visuals
+.TP
+.B \-\-visual\-id
+visual id of visual to use
+.TP
+.B \-\-static
+do not update or save configurations
 .TP
 .B \-\-version
 display version number and exit
@@ -86,7 +104,7 @@ The menu file indicated in WMRootMenu is looked for here...
 and here, in that order. Unless, the indicated path is an absolute path.
 .TP
 .B ~/GNUstep/Library/WindowMaker/Pixmaps/
-Window Maker looks for pixmaps here
+Window Maker looks for \fBpixmaps\fP here
 .TP
 .B ~/GNUstep/Library/WindowMaker/Backgrounds/
 Window Maker looks for backgrounds here
@@ -100,7 +118,7 @@ to keep things nicely ordered)
 Window Maker looks for theme files here (ibid)
 .TP
 .B /usr/share/WindowMaker/Pixmaps/
-System wide pixmaps are located here.
+System-wide (Window Maker-specific) pixmaps are located here
 .TP
 .B /usr/share/WindowMaker/Styles/
 System wide styles are here
@@ -141,5 +159,3 @@ Dan Pascu <dan@windowmaker.info> with contributions from many people around
 the Internet.
 .PP
 This manual page was written by Marcelo E. Magallon, <mmagallo@debian.org>.
-
-

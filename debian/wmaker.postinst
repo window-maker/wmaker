@@ -28,7 +28,7 @@ case "$1" in
 
     if [ -x /usr/bin/update-menus -a -x /usr/bin/install-menu ] ; then
         update-menus
-    fi		
+    fi
   ;;
 
   abort-upgrade|abort-deconfigure|abort-remove)

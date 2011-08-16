@@ -1,3 +1,14 @@
+wmaker (0.94.0-1) unstable; urgency=low
+
+  * New upstream version, now from git
+  * debian/patches are now DEP-3
+  * debian/copyright is now DEP-5
+  * Standard-Version is now 3.9.2
+  * manpages moved to upstream
+  * solved some problems with .la files (lintian clean)
+
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Mon, 8 Aug 2011 19:29:12 +0200
+
 wmaker (0.92.0+git-0) unstable; urgency=low
 
   * Add libxmu-dev to build-depends. (Martin Dietze)
@@ -49,6 +60,34 @@ wmaker (0.92.0+git-0) unstable; urgency=low
     abi/api changes
 
  -- Andreas Metzler <ametzler@debian.org>  Sat, 07 Aug 2010 10:56:00 +0200
+
+wmaker (0.92.0-8.2) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Fix "please depend on libjpeg-dev, not libjpeg62-dev": change
+    build-dependency and dependency. (Closes: #569245)
+  * Bump to standard version 3.8.4, adjusted following lintian warnings:
+    - debhelper-but-no-misc-depends
+    - dh-clean-k-is-deprecated
+    - package-lacks-versioned-build-depends-on-debhelper 7
+    - substvar-source-version-is-deprecated
+    - description-contains-homepage
+    Overridden the following lintian error:
+    - menu-method-should-include-menu-h
+
+ -- Karl Ferdinand Ebert <kfebert@gmail.com>  Tue, 23 Feb 2010 09:31:49 +0100
+
+wmaker (0.92.0-8.1) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Fix FTBFS with new libtool: update the path of libtool's ltmain.sh in
+    the prerequisite of the ltmain.sh rule in debian/rules, which moved
+    from /usr/share/libtool/ltmain.sh to /usr/share/libtool/config/ltmain.sh
+    and version the build dependency on libtool accordingly, making sure a
+    build can't be attempted against an older libtool: libtool (>= 2.2.6a).
+    Thanks to Daniel Schepler for reporting (Closes: #527511).
+
+ -- Cyril Brulebois <kibi@debian.org>  Wed, 01 Jul 2009 02:16:01 +0200
 
 wmaker (0.92.0-8) unstable; urgency=low
 

@@ -26,9 +26,6 @@ case "$1" in
       update-menus
       rm -f /etc/X11/WindowMaker/menu.hook /etc/X11/WindowMaker/plmenu.hook
     fi
-
-    # Hmmm...
-    rmdir -p /etc/GNUstep/Defaults /etc/X11/WindowMaker || true
   ;;
   upgrade|abort-install|disappear)
     # nothing to do

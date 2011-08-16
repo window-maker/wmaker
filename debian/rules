@@ -1,24 +1,21 @@
 #!/usr/bin/make -f
 # GNU Copyright 1997-2005 Marcelo Magallon <mmagallo@debian.org>
+export DH_VERBOSE=1
 
 package := wmaker
 version := $(shell dpkg-parsechangelog | grep-dctrl -ne -sVersion -FVersion .)
 
-# use '(>= some_version)' whenever version dependencies are needed
-# libwraster_deps := (>= 0.90.0-1)
-
 SHELL=/bin/sh
-
 CFLAGS = -g -Wall -DGLOBAL_DEFAULTS_SUBDIR="\\\"GNUstep/Defaults\\\""
 
 ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-CFLAGS += -O0
+	CFLAGS += -O0
 else
-CFLAGS += -O2
+	CFLAGS += -O2
 endif
 
 ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
-CFLAGS += -DDEBUG
+	CFLAGS += -DDEBUG
 endif
 
 # These are used for cross-compiling and for saving the configure script
@@ -32,20 +29,14 @@ else
 	HOSTSPEC := --build $(DEB_BUILD_GNU_TYPE) --host $(DEB_HOST_GNU_TYPE)
 endif
 
-
-
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
 XLOCALE           := --disable-locale
 MODELOCK          := --enable-modelock
-
 XINERAMA	  := --enable-xinerama
-
 # USERMENU	  := --enable-usermenu
-
 # SHAPE_EXT	  := --disable-shape
 # USE_SHM	  := --disable-shm
-
 # USE_XPM	  := --disable-xpm
 # USE_PNG	  := --disable-png
 # USE_JPEG	  := --disable-jpeg
@@ -58,15 +49,16 @@ WMAKER_OPTIONS := $(XLOCALE) $(MODELOCK) $(XINERAMA) \
 	$(HOSTSPEC)
 
 TOPSRCDIR         := $(shell pwd)
-DEBTMPDIR         := $(TOPSRCDIR)/debian/wmaker
 
 WMAKER            := wmaker
-WMAKER_BD         := $(TOPSRCDIR)/$(WMAKER)
-WMAKER_TMP        := $(DEBTMPDIR)
+WMAKER_COMMON     := wmaker-common
+WMAKER_DBG        := wmaker-dbg
+LIBWRASTER        := libwraster3
+LIBWRASTERDEV     := $(LIBWRASTER)-dev
+LIBWINGS          := libwings-dev
 
 # Be careful with the leading / because some of these values are going
 # to be hardcoded into the executables
-
 BASEDIR           := /usr
 CONFDIR           := /etc
 BINDIR            := $(BASEDIR)/bin
@@ -76,8 +68,8 @@ DOCDIR            := $(SHAREDIR)/doc
 MANDIR            := $(SHAREDIR)/man
 MAN1DIR           := $(MANDIR)/man1
 MAN8DIR           := $(MANDIR)/man8
-LIBDIR            := $(BASEDIR)/lib
-PKGLIBDIR         := $(BASEDIR)/lib/WindowMaker
+LIBDIR            := $(SHAREDIR)/lib
+PKGLIBDIR         := $(SHAREDIR)/lib/WindowMaker
 NLSDIR            := $(SHAREDIR)/locale
 WMCONFDIR         := $(CONFDIR)/X11/WindowMaker
 WMSHAREDIR        := $(SHAREDIR)/WindowMaker
@@ -93,13 +85,17 @@ WPREFSSRCDIR      := $(TOPSRCDIR)/WPrefs.app
 WRASTERSRCDIR     := $(TOPSRCDIR)/wrlib
 WINGSSRCDIR       := $(TOPSRCDIR)/WINGs
 
-LIBWRASTER        := libwraster3
-LIBWRASTER_TMP    := $(DEBTMPDIR)/../$(LIBWRASTER)
-LIBWINGS          := libwings-dev
-LIBWINGS_TMP      := $(DEBTMPDIR)/../$(LIBWINGS)
+DEBDIR            := $(TOPSRCDIR)/debian
+DEBDIR_TMP        := $(DEBDIR)/tmp
+
+WMAKER_TMP        := $(DEBDIR)/$(WMAKER)
+WMAKER_COMMON_TMP := $(DEBDIR)/$(WMAKER_COMMON)
+WMAKER_DBG_TMP    := $(DEBDIR)/$(WMAKER_DBG)
+LIBWRASTER_TMP    := $(DEBDIR)/$(LIBWRASTER)
+LIBWRASTERDEV_TMP := $(DEBDIR)/$(LIBWRASTERDEV)
+LIBWINGS_TMP      := $(DEBDIR)/$(LIBWINGS)
 
 RM		  := rm -f
-RMDIR		  := rmdir --ignore-fail-on-non-empty
 
 COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
                      --mandir=$(MANDIR)               \
@@ -110,164 +106,132 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
                      --with-pixmapdir=$(PIXMAPDIR)    \
                      --with-gnustepdir=$(GNUSTEPDIR)
 
-install_file      := install -p    -o root -g root -m 0644
-install_prog      := install -p    -o root -g root -m 0755
-install_dir       := install -p -d -o root -g root -m 0755
+install_file      := install -p -o root -g root -m 0644
+install_prog      := install -p -o root -g root -m 0755
 
-build: build-stamp
-build-stamp: build-wmaker-stamp
-	touch $@
+%:
+	dh $@
 
-build-wmaker-stamp: config-wmaker-stamp
-	$(RM) $(patsubst %.in,%,$(shell find WindowMaker -name \*.in ! -name Makefile.in))
-	test -x libtool || ln -sf $(WMAKER_BD)/libtool .
-	$(MAKE) -C $(WMAKER_BD)
-	touch $@
-
-config-wmaker-stamp: configure
-	dh_testdir
-	test -x config.guess || chmod +x config.guess
-	test -x config.sub || chmod +x config.sub
-	find -name \*.h.in | sed -e 's/\.in$$//' | xargs -r rm -f
-	mkdir -p $(WMAKER_BD)
-	cd $(WMAKER_BD) && \
+override_dh_auto_configure:
+	$(TOPSRCDIR)/autogen.sh
+ifneq "$(wildcard /usr/share/misc/config.sub)" ""
+	cp -f /usr/share/misc/config.sub config.sub
+endif
+ifneq "$(wildcard /usr/share/misc/config.guess)" ""
+	cp -f /usr/share/misc/config.guess config.guess
+endif
 	LINGUAS="$(LINGUAS)" $(TOPSRCDIR)/configure $(COMMON_OPTIONS) \
 	 $(WMAKER_OPTIONS) CFLAGS="$(CFLAGS)"
-	touch $@
 
-clean:
-	dh_testdir
-	dh_testroot
-	$(RM) -r $(WMAKER_BD)
-	$(RM) *-stamp
-	dh_clean libtool
+override_dh_clean:
+	dh_clean
+	# rm the file WMRootMenu, added by WindowMaker/Defaults/Makefile
+	$(RM) WindowMaker/Defaults/WMRootMenu
+	# quilt (I do not why is not automatically)
+	QUILT_PATCHES=debian/patches quilt pop -a -R || test $$? = 2
 
-binary-indep: build
-#	dh_testdir -i
-#	dh_testroot
-#	dh_prep -i
-
-binary-arch: build
-	dh_testdir -a
-	dh_testroot
-	dh_prep -a
-	dh_installdirs -a
-	debian/rules install-wmaker-stamp
-	dh_movefiles -a --sourcedir=debian/wmaker
-# Remove cruft
-	$(RM) $(DEBTMPDIR)/usr/bin/wkdemenu.pl
-# deal with menus
+override_dh_installmenu:
 	dh_installmenu -a --noscripts
-	$(install_prog) debian/appearance.menu-method \
-		$(DEBTMPDIR)/etc/menu-methods/wmappearance
-	$(install_file) WindowMaker/appearance.menu \
-		$(DEBTMPDIR)/$(WMCONFDIR)/
-	$(install_file) WindowMaker/background.menu \
-		$(DEBTMPDIR)/$(WMCONFDIR)/
-	$(install_file) WindowMaker/wmmacros \
-		$(DEBTMPDIR)/$(WMCONFDIR)/
-	touch $(DEBTMPDIR)/$(WMCONFDIR)/menu.prehook
-	touch $(DEBTMPDIR)/$(WMCONFDIR)/menu.posthook
-	$(install_file) debian/wmaker.desktop $(DEBTMPDIR)/usr/share/xsessions
+	$(install_prog) $(DEBDIR)/appearance.menu-method \
+		$(WMAKER_TMP)/etc/menu-methods/wmappearance
+	$(install_file) $(TOPSRCDIR)/WindowMaker/appearance.menu \
+		$(WMAKER_TMP)/$(WMCONFDIR)/
+	$(install_file) $(TOPSRCDIR)/WindowMaker/background.menu \
+		$(WMAKER_TMP)/$(WMCONFDIR)/
+	$(install_file) $(TOPSRCDIR)/WindowMaker/wmmacros \
+		$(WMAKER_TMP)/$(WMCONFDIR)/
+	touch $(WMAKER_TMP)/$(WMCONFDIR)/menu.prehook
+	touch $(WMAKER_TMP)/$(WMCONFDIR)/menu.posthook
+	chmod 755 $(WMAKER_TMP)/etc/menu-methods/wmaker
+
+override_dh_installdocs:
 	dh_installdocs -a
 	$(install_file) $(WINGSSRCDIR)/README \
 		$(LIBWINGS_TMP)/$(DOCDIR)/$(LIBWINGS)/README.WINGs
 	$(install_file) $(WRASTERSRCDIR)/README \
 		$(LIBWRASTER_TMP)/$(DOCDIR)/$(LIBWRASTER)/README.wrlib
-	$(RM) $(DEBTMPDIR)/$(MAN1DIR)/convertstyle*
-	dh_installman -a
-	dh_installchangelogs -a ChangeLog
-	dh_link -a
-	dh_strip -a --dbg-package=wmaker-dbg
-	dh_lintian
-	dh_compress -a
-	dh_fixperms -a
-	cd debian && find -name \*.la -exec chmod a-X {} \;
-	#dh_makeshlibs -p$(LIBWRASTER) -V '$(LIBWRASTER) $(libwraster_deps)'
-	dh_makeshlibs -a
-	dh_installdeb -a
-	dh_shlibdeps -a
-	dh_gencontrol -a
-	dh_md5sums -a
-	find debian -type d -empty -print0 | xargs -0r rm -rf
-	$(RMDIR) $(DEBTMPDIR)/$(INCLUDEDIR)
-	dh_builddeb -a
+# Why?
+	$(install_file) $(DEBDIR)/copyright \
+		$(WMAKER_COMMON_TMP)/$(DOCDIR)/$(WMAKER_COMMON)/
 
-binary:	binary-indep binary-arch
 
-install-wmaker-stamp: DH_OPTIONS=-pwmaker
-install-wmaker-stamp: build-wmaker-stamp
-	dh_testdir
-	dh_installdirs
-	$(MAKE) -C $(WMAKER_BD) install DESTDIR=$(DEBTMPDIR)/
-# Ugly hack, FIXME
-	mv $(DEBTMPDIR)/etc/WindowMaker/* $(DEBTMPDIR)/$(DEFAULTSDIR)/
+override_dh_installchangelogs:
+	dh_installchangelogs
+	dh_installchangelogs ChangeLog upstream
+
+override_dh_install:
+	dh_install
+	dh_strip -a --dbg-package=$(WMAKER_DBG)
+	mv $(DEBDIR_TMP)/etc/WindowMaker/* $(WMAKER_COMMON_TMP)/$(DEFAULTSDIR)/
+	rmdir $(DEBDIR_TMP)/etc/WindowMaker
 
 # Now begin fixing stuff
+	$(install_file) $(DEBDIR)/wmaker-common.desktop $(WMAKER_COMMON_TMP)/usr/share/xsessions
 
 # First, provide a wrapper to compensate for Window Maker's funny first
 # start up requierements
-	mv $(DEBTMPDIR)/$(BINDIR)/wmaker $(DEBTMPDIR)/$(PKGLIBDIR)/WindowMaker
-	$(install_prog) debian/wmaker.sh $(DEBTMPDIR)/$(BINDIR)/wmaker
 
-	-mv $(DEBTMPDIR)/$(BINDIR)/convertfonts $(DEBTMPDIR)/$(PKGLIBDIR)/
+# WMaker and WMaker debug
+	mv $(WMAKER_TMP)/$(BINDIR)/wmaker \
+		$(WMAKER_TMP)/usr/lib/WindowMaker/WindowMaker
+	mv $(WMAKER_DBG_TMP)/usr/lib/debug$(BINDIR)/wmaker \
+		$(WMAKER_DBG_TMP)/usr/lib/debug/usr/lib/WindowMaker/WindowMaker
+
+# convertfonts and convertfonts debug
+	mv $(WMAKER_TMP)/$(BINDIR)/convertfonts \
+		$(WMAKER_TMP)/usr/lib/WindowMaker/
+	mv $(WMAKER_DBG_TMP)/usr/lib/debug$(BINDIR)/convertfonts \
+		$(WMAKER_DBG_TMP)/usr/lib/debug/usr/lib/WindowMaker/
+
+# WPrefs
+	mv $(DEBDIR_TMP)/$(WPREFSAPPDIR)/WPrefs \
+		$(WMAKER_TMP)/usr/lib/GNUstep/System/Applications/WPrefs.app/WPrefs
+
+	$(install_prog) $(DEBDIR)/wmaker.sh $(WMAKER_COMMON_TMP)/$(BINDIR)/wmaker
 
 # place wm-oldmenu2new under a more appropiate directory
-	-mv $(DEBTMPDIR)/$(BINDIR)/wm-oldmenu2new $(DEBTMPDIR)/$(WMDOCDIR)
+	-mv $(DEBDIR_TMP)/$(BINDIR)/wm-oldmenu2new $(WMAKER_COMMON_TMP)/$(WMDOCDIR)
 
 # the next is stricly not necessary, because there's a symlink in place,
 # but I don't want to abuse it. Some dumb program uses that path and is a
 # PITA to modify it)
 	perl -pi -e 's:/$(WPREFSAPPDIR)/WPrefs:/$(BINDIR)/WPrefs:' \
-	   $(DEBTMPDIR)/$(DEFAULTSDIR)/WMState
-
-# Ditch this!
-	$(RM) $(DEBTMPDIR)/$(BINDIR)/wmaker.inst
-	$(RM) $(DEBTMPDIR)/$(BINDIR)/wmsetup
-# this copyright is located in /$(DOCDIR)/wmaker
-	$(RM) $(DEBTMPDIR)/$(WMCONFDIR)/Copyright
+	   $(WMAKER_COMMON_TMP)/$(DEFAULTSDIR)/WMState
 
 # Fix permissions
-	chmod +x $(DEBTMPDIR)/usr/share/WindowMaker/autostart.sh
-	chmod +x $(DEBTMPDIR)/usr/share/WindowMaker/exitscript.sh
+	chmod +x $(WMAKER_COMMON_TMP)/usr/share/WindowMaker/autostart.sh
+	chmod +x $(WMAKER_COMMON_TMP)/usr/share/WindowMaker/exitscript.sh
 
 # Install our transition script
-	$(install_prog) debian/upgrade-windowmaker-defaults \
-	  $(DEBTMPDIR)/usr/sbin/upgrade-windowmaker-defaults
+	$(install_prog) $(DEBDIR)/upgrade-windowmaker-defaults \
+	  $(WMAKER_COMMON_TMP)/usr/sbin/upgrade-windowmaker-defaults
 
 # This file qualifies as "unpatchable"
-	cp debian/WMWindowAttributes $(DEBTMPDIR)/$(DEFAULTSDIR)/
+	cp $(DEBDIR)/WMWindowAttributes $(WMAKER_COMMON_TMP)/$(DEFAULTSDIR)/
 # Need this file for start up
-	echo '"menu.hook"' > $(DEBTMPDIR)/$(DEFAULTSDIR)/WMRootMenu
+	echo '"menu.hook"' > $(WMAKER_COMMON_TMP)/$(DEFAULTSDIR)/WMRootMenu
 
 # the plethora of readmes
-	-cp $(TOPSRCDIR)/po/README \
-		$(DEBTMPDIR)/$(WMDOCDIR)/README.po
-	-cp $(TOPSRCDIR)/README.definable-cursor \
-		$(DEBTMPDIR)/$(WMDOCDIR)/README.definable-cursor
-	-cp $(WPREFSSRCDIR)/README \
-		$(DEBTMPDIR)/$(WMDOCDIR)/README.WPrefs
-	-cp $(WPREFSSRCDIR)/po/README \
-		$(DEBTMPDIR)/$(WMDOCDIR)/README.WPrefs.po
+	cp $(TOPSRCDIR)/po/README \
+		$(WMAKER_COMMON_TMP)/$(WMDOCDIR)/README.po
+	cp $(TOPSRCDIR)/README.definable-cursor \
+		$(WMAKER_COMMON_TMP)/$(WMDOCDIR)/README.definable-cursor
+	cp $(WPREFSSRCDIR)/README \
+		$(WMAKER_COMMON_TMP)/$(WMDOCDIR)/README.WPrefs
+	cp $(WPREFSSRCDIR)/po/README \
+		$(WMAKER_COMMON_TMP)/$(WMDOCDIR)/README.WPrefs.po
 
 # Copy in the Debian theme
-	cp debian/Debian.theme $(DEBTMPDIR)/$(WMSHAREDIR)/Themes/Debian
-	uudecode -o $(DEBTMPDIR)/$(WMSHAREDIR)/Backgrounds/debian.tiff \
-	    debian/debian.tiff.uu
+	cp $(DEBDIR)/Debian.theme $(WMAKER_COMMON_TMP)/$(WMSHAREDIR)/Themes/Debian
+	uudecode -o $(WMAKER_COMMON_TMP)/$(WMSHAREDIR)/Backgrounds/debian.tiff \
+	    $(DEBDIR)/debian.tiff.uu
 # This has the new default Debian theme settings.
-	cp debian/WindowMaker.default $(DEBTMPDIR)/$(DEFAULTSDIR)/WindowMaker
-
-# libwraster is compiled with tiff support, we don't need the xpm version
-	$(RM) -r $(DEBTMPDIR)/$(WPREFSAPPDIR)/xpm
-	$(RM) $(patsubst %.tiff,%.xpm,$(wildcard $(DEBTMPDIR)/$(WMSHAREDIR)/Icons/*.tiff))
+	cp $(DEBDIR)/WindowMaker.default $(WMAKER_COMMON_TMP)/$(DEFAULTSDIR)/WindowMaker
 
 # Fix the get-*-flags scripts
-	perl -pi -e '/^WCFLAGS/ && s:=.*:="-I/usr/X11R6/include":; /^WLFLAGS/ && s:=.*:="-L/usr/X11R6/lib":;' `find $(DEBTMPDIR) -name get-*-flags`
-	perl -pi -e '/^WLIBS/ && s:=.*:="-lwraster":' `find $(DEBTMPDIR) -name get-wraster-flags`
-	perl -pi -e '/^WLIBS/ && s:=.*:="-lWINGs -lwraster -lXft":' `find $(DEBTMPDIR) -name get-wings-flags`
-	perl -pi -e '/^WLIBS/ && s:=.*:="-lWUtil -lX11":' `find $(DEBTMPDIR) -name get-wutil-flags`
+	perl -pi -e '/^WCFLAGS/ && s:=.*:="-I/usr/X11R6/include":; /^WLFLAGS/ && s:=.*:="-L/usr/X11R6/lib":;' `find $(LIBWRASTERDEV_TMP) -name get-*-flags`
+	perl -pi -e '/^WCFLAGS/ && s:=.*:="-I/usr/X11R6/include":; /^WLFLAGS/ && s:=.*:="-L/usr/X11R6/lib":;' `find $(LIBWINGS_TMP) -name get-*-flags`
+	perl -pi -e '/^WLIBS/ && s:=.*:="-lwraster":' `find $(LIBWRASTERDEV_TMP) -name get-wraster-flags`
+	perl -pi -e '/^WLIBS/ && s:=.*:="-lWINGs -lwraster -lXft":' `find $(LIBWINGS_TMP) -name get-wings-flags`
+	perl -pi -e '/^WLIBS/ && s:=.*:="-lWUtil -lX11":' `find $(LIBWINGS_TMP) -name get-wutil-flags`
 
-configure:	configure.ac
-	$(TOPSRCDIR)/autogen.sh
-
-.PHONY: binary binary-arch binary-indep binary-custom clean build

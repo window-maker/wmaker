@@ -1,3 +1,6 @@
+Description: This patch changes the default config paths
+Author: Andreas Metzler <ametzler@debian.org>
+Last-Update: 2010-08-07
 diff --git a/src/wconfig.h.in b/src/wconfig.h.in
 index c8bb947..cf06113 100644
 --- a/src/wconfig.h.in

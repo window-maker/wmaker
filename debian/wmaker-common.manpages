@@ -1,0 +1,5 @@
+doc/*.1x
+doc/*.8
+doc/wmgenmenu.1
+doc/wdread.1
+doc/wmmenugen.1

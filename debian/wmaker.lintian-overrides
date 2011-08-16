@@ -1,4 +1,3 @@
-wmaker: image-file-in-usr-lib
 wmaker: menu-item-creates-new-root-section
 wmaker: menu-command-not-in-package
 wmaker: menu-item-contains-unknown-tag
