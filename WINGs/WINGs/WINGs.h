@@ -287,24 +287,26 @@ enum {
 typedef int W_Class;
 
 enum {
-    WC_Window,
-    WC_Frame,
-    WC_Label,
-    WC_Button,
-    WC_TextField,
-    WC_Scroller,
-    WC_ScrollView,
-    WC_List,
-    WC_Browser,
-    WC_PopUpButton,
-    WC_ColorWell,
-    WC_Slider,
-    WC_SplitView,
-    WC_TabView,
-    WC_ProgressIndicator,
-    WC_MenuView,
-    WC_Text,
-    WC_Box
+    WC_Window = 0,
+    WC_Frame = 1,
+    WC_Label = 2,
+    WC_Button = 3,
+    WC_TextField = 4,
+    WC_Scroller	= 5,
+    WC_ScrollView = 6,
+    WC_List = 7,
+    WC_Browser = 8,
+    WC_PopUpButton = 9,
+    WC_ColorWell = 10,
+    WC_Slider = 11,
+    WC_Matrix = 12,		       /* not ready */
+    WC_SplitView = 13,
+    WC_TabView = 14,
+    WC_ProgressIndicator = 15,
+    WC_MenuView = 16,
+    WC_Ruler = 17,
+    WC_Text = 18,
+    WC_Box = 19
 };
 
 /* All widgets must start with the following structure
@@ -348,6 +350,7 @@ typedef struct W_Slider WMSlider;
 typedef struct W_Matrix WMMatrix;      /* not ready */
 typedef struct W_SplitView WMSplitView;
 typedef struct W_TabView WMTabView;
+typedef struct W_Ruler WMRuler;
 typedef struct W_Text WMText;
 typedef struct W_Box WMBox;
 
@@ -431,6 +434,18 @@ typedef enum WMFontStyle {
     WFSItalic = 2,
     WFSBoldItalic = 3
 } WMFontStyle;
+
+
+/* WMRuler: */
+typedef struct {
+    WMArray  *tabs;             /* a growable array of tabstops */
+    unsigned short left;        /* left margin marker */
+    unsigned short right;       /* right margin marker */
+    unsigned short first;       /* indentation marker for first line only */
+    unsigned short body;        /* body indentation marker */
+    unsigned short retainCount;
+} WMRulerMargins;
+/* All indentation and tab markers are _relative_ to the left margin marker */
 
 
 typedef void WMEventProc(XEvent *event, void *clientData);
@@ -1509,8 +1524,168 @@ void WMSetSplitViewResizeSubviewsProc(WMSplitView *sPtr,
 
 int WMGetSplitViewDividerThickness(WMSplitView *sPtr);
 
-/* ---[ WINGs/wtabview.c ]------------------------------------------------ */
+/* ...................................................................... */
 
+WMRuler* WMCreateRuler (WMWidget *parent);
+
+WMRulerMargins* WMGetRulerMargins(WMRuler *rPtr);
+
+void WMSetRulerMargins(WMRuler *rPtr, WMRulerMargins margins);
+
+Bool WMIsMarginEqualToMargin(WMRulerMargins *aMargin, WMRulerMargins *anotherMargin);
+
+int WMGetGrabbedRulerMargin(WMRuler *rPtr);
+
+int WMGetReleasedRulerMargin(WMRuler *rPtr);
+
+int WMGetRulerOffset(WMRuler *rPtr);
+
+void WMSetRulerOffset(WMRuler *rPtr, int pixels);
+
+void WMSetRulerMoveAction(WMRuler *rPtr, WMAction *action, void *clientData);
+
+void WMSetRulerReleaseAction(WMRuler *rPtr, WMAction *action, void *clientData);
+
+/* ....................................................................... */
+
+
+#define WMCreateText(parent) WMCreateTextForDocumentType \
+    ((parent), (NULL), (NULL))
+
+WMText* WMCreateTextForDocumentType(WMWidget *parent, WMAction *parser,
+                                    WMAction *writer);
+
+void WMSetTextDelegate(WMText *tPtr, WMTextDelegate *delegate);
+
+void WMFreezeText(WMText *tPtr);
+
+#define WMRefreshText(tPtr) WMThawText((tPtr))
+
+void WMThawText(WMText *tPtr);
+
+int WMScrollText(WMText *tPtr, int amount);
+
+int WMPageText(WMText *tPtr, Bool direction);
+
+void WMSetTextHasHorizontalScroller(WMText *tPtr, Bool shouldhave);
+
+void WMSetTextHasVerticalScroller(WMText *tPtr, Bool shouldhave);
+
+void WMSetTextHasRuler(WMText *tPtr, Bool shouldhave);
+
+void WMShowTextRuler(WMText *tPtr, Bool show);
+
+int WMGetTextRulerShown(WMText *tPtr);
+
+void WMSetTextEditable(WMText *tPtr, Bool editable);
+
+int WMGetTextEditable(WMText *tPtr);
+
+void WMSetTextUsesMonoFont(WMText *tPtr, Bool mono);
+
+int WMGetTextUsesMonoFont(WMText *tPtr);
+
+void WMSetTextIndentNewLines(WMText *tPtr, Bool indent);
+
+void WMSetTextIgnoresNewline(WMText *tPtr, Bool ignore);
+
+int WMGetTextIgnoresNewline(WMText *tPtr);
+
+void WMSetTextDefaultFont(WMText *tPtr, WMFont *font);
+
+WMFont* WMGetTextDefaultFont(WMText *tPtr);
+
+void WMSetTextDefaultColor(WMText *tPtr, WMColor *color);
+
+WMColor* WMGetTextDefaultColor(WMText *tPtr);
+
+void WMSetTextRelief(WMText *tPtr, WMReliefType relief);
+
+void WMSetTextForegroundColor(WMText *tPtr, WMColor *color);
+
+void WMSetTextBackgroundColor(WMText *tPtr, WMColor *color);
+
+void WMSetTextBackgroundPixmap(WMText *tPtr, WMPixmap *pixmap);
+
+void WMPrependTextStream(WMText *tPtr, char *text);
+
+void WMAppendTextStream(WMText *tPtr, char *text);
+
+#define WMClearText(tPtr) WMAppendTextStream \
+    ((tPtr), (NULL))
+
+/* free the text */
+char* WMGetTextStream(WMText *tPtr);
+
+/* free the text */
+char* WMGetTextSelectedStream(WMText *tPtr);
+
+/* destroy the array */
+WMArray* WMGetTextObjects(WMText *tPtr);
+
+/* destroy the array */
+WMArray* WMGetTextSelectedObjects(WMText *tPtr);
+
+void WMSetTextSelectionColor(WMText *tPtr, WMColor *color);
+
+WMColor* WMGetTextSelectionColor(WMText *tPtr);
+
+void WMSetTextSelectionFont(WMText *tPtr, WMFont *font);
+
+WMFont* WMGetTextSelectionFont(WMText *tPtr);
+
+void WMSetTextSelectionUnderlined(WMText *tPtr, int underlined);
+
+int WMGetTextSelectionUnderlined(WMText *tPtr);
+
+void WMSetTextAlignment(WMText *tPtr, WMAlignment alignment);
+
+Bool WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
+                        Bool caseSensitive);
+
+Bool WMReplaceTextSelection(WMText *tPtr, char *replacement);
+
+
+/* parser related stuff... use only if implementing a new parser */
+
+void* WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, char *description,
+                                  WMColor *color, unsigned short first,
+                                  unsigned short extraInfo);
+
+void* WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, char *description,
+                                  WMColor *color, unsigned short first,
+                                  unsigned short extraInfo);
+
+void* WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font,
+                                WMColor *color, unsigned short first,
+                                unsigned short length);
+
+void WMSetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int first,
+                              unsigned int kanji, unsigned int underlined,
+                              int script, WMRulerMargins *margins);
+
+/* do NOT free the margins */
+void WMGetTextBlockProperties(WMText *tPtr, void *vtb, unsigned int *first,
+                              unsigned int *kanji, unsigned int *underlined,
+                              int *script, WMRulerMargins *margins);
+
+int WMGetTextInsertType(WMText *tPtr);
+
+/*int WMGetTextBlocks(WMText *tPtr);
+
+void WMSetCurrentTextBlock(WMText *tPtr, int current);
+
+int WMGetCurrentTextBlock(WMText *tPtr);*/
+
+void WMPrependTextBlock(WMText *tPtr, void *vtb);
+
+void WMAppendTextBlock(WMText *tPtr, void *vtb);
+
+void* WMRemoveTextBlock(WMText *tPtr);
+
+void WMDestroyTextBlock(WMText *tPtr, void *vtb);
+
+/* ---[ WINGs/wtabview.c ]------------------------------------------------ */
 
 WMTabView* WMCreateTabView(WMWidget *parent);
 
