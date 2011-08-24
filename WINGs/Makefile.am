@@ -50,6 +50,7 @@ libWINGs_la_SOURCES = 	\
 	wpanel.c \
 	wpixmap.c \
 	wpopupbutton.c \
+	wprogressindicator.c \
 	wruler.c \
 	wscroller.c \
 	wscrollview.c \
