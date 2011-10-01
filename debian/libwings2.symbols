@@ -8,6 +8,8 @@ libWINGs.so.2 libwings2 #MINVER#
  WMAddSplitViewSubview@Base 0.94.0-1~
  WMAddTabViewItemWithView@Base 0.94.0-1~
  WMAdjustSplitViewSubviews@Base 0.94.0-1~
+ WMAppendTextBlock@Base 0.94.0-1~
+ WMAppendTextStream@Base 0.94.0-1~
  WMBlackColor@Base 0.94.0-1~
  WMBlueComponentOfColor@Base 0.94.0-1~
  WMBoldSystemFontOfSize@Base 0.94.0-1~
@@ -52,8 +54,10 @@ libWINGs.so.2 libwings2 #MINVER#
  WMCreatePixmapFromXPMData@Base 0.94.0-1~
  WMCreatePixmapFromXPixmaps@Base 0.94.0-1~
  WMCreatePopUpButton@Base 0.94.0-1~
+ WMCreateProgressIndicator@Base 0.94.0-1~
  WMCreateRGBAColor@Base 0.94.0-1~
  WMCreateRGBColor@Base 0.94.0-1~
+ WMCreateRuler@Base 0.94.0-1~
  WMCreateScreen@Base 0.94.0-1~
  WMCreateScreenWithRContext@Base 0.94.0-1~
  WMCreateScrollView@Base 0.94.0-1~
@@ -65,7 +69,11 @@ libWINGs.so.2 libwings2 #MINVER#
  WMCreateTabView@Base 0.94.0-1~
  WMCreateTabViewItem@Base 0.94.0-1~
  WMCreateTabViewItemWithIdentifier@Base 0.94.0-1~
+ WMCreateTextBlockWithObject@Base 0.94.0-1~
+ WMCreateTextBlockWithPixmap@Base 0.94.0-1~
+ WMCreateTextBlockWithText@Base 0.94.0-1~
  WMCreateTextField@Base 0.94.0-1~
+ WMCreateTextForDocumentType@Base 0.94.0-1~
  WMCreateWindow@Base 0.94.0-1~
  WMCreateWindowWithStyle@Base 0.94.0-1~
  WMDarkGrayColor@Base 0.94.0-1~
@@ -81,17 +89,20 @@ libWINGs.so.2 libwings2 #MINVER#
  WMDestroyInputPanel@Base 0.94.0-1~
  WMDestroyMenuItem@Base 0.94.0-1~
  WMDestroyTabViewItem@Base 0.94.0-1~
+ WMDestroyTextBlock@Base 0.94.0-1~
  WMDestroyWidget@Base 0.94.0-1~
  WMDragImageFromView@Base 0.94.0-1~
  WMDrawImageString@Base 0.94.0-1~
  WMDrawPixmap@Base 0.94.0-1~
  WMDrawString@Base 0.94.0-1~
+ WMFindInTextStream@Base 0.94.0-1~
  WMFindRowOfListItemWithTitle@Base 0.94.0-1~
  WMFontHeight@Base 0.94.0-1~
  WMFontPanelFontChangedNotification@Base 0.94.0-1~
  WMFreeColorPanel@Base 0.94.0-1~
  WMFreeFilePanel@Base 0.94.0-1~
  WMFreeFontPanel@Base 0.94.0-1~
+ WMFreezeText@Base 0.94.0-1~
  WMGetApplicationIconImage@Base 0.94.0-1~
  WMGetApplicationIconPixmap@Base 0.94.0-1~
  WMGetBrowserFirstVisibleColumn@Base 0.94.0-1~
@@ -118,6 +129,7 @@ libWINGs.so.2 libwings2 #MINVER#
  WMGetFontName@Base 0.94.0-1~
  WMGetFontPanel@Base 0.94.0-1~
  WMGetFontPanelFont@Base 0.94.0-1~
+ WMGetGrabbedRulerMargin@Base 0.94.0-1~
  WMGetHangedData@Base 0.94.0-1~
  WMGetLabelFont@Base 0.94.0-1~
  WMGetLabelImage@Base 0.94.0-1~
@@ -152,7 +164,13 @@ libWINGs.so.2 libwings2 #MINVER#
  WMGetPopUpButtonMenuItem@Base 0.94.0-1~
  WMGetPopUpButtonNumberOfItems@Base 0.94.0-1~
  WMGetPopUpButtonSelectedItem@Base 0.94.0-1~
+ WMGetProgressIndicatorMaxValue@Base 0.94.0-1~
+ WMGetProgressIndicatorMinValue@Base 0.94.0-1~
+ WMGetProgressIndicatorValue@Base 0.94.0-1~
  WMGetRColorFromColor@Base 0.94.0-1~
+ WMGetReleasedRulerMargin@Base 0.94.0-1~
+ WMGetRulerMargins@Base 0.94.0-1~
+ WMGetRulerOffset@Base 0.94.0-1~
  WMGetSavePanel@Base 0.94.0-1~
  WMGetScrollViewHorizontalScroller@Base 0.94.0-1~
  WMGetScrollViewVerticalScroller@Base 0.94.0-1~
@@ -173,11 +191,26 @@ libWINGs.so.2 libwings2 #MINVER#
  WMGetTabViewItemIdentifier@Base 0.94.0-1~
  WMGetTabViewItemLabel@Base 0.94.0-1~
  WMGetTabViewItemView@Base 0.94.0-1~
+ WMGetTextBlockProperties@Base 0.94.0-1~
+ WMGetTextDefaultColor@Base 0.94.0-1~
+ WMGetTextDefaultFont@Base 0.94.0-1~
+ WMGetTextEditable@Base 0.94.0-1~
  WMGetTextFieldCursorPosition@Base 0.94.0-1~
  WMGetTextFieldDelegate@Base 0.94.0-1~
  WMGetTextFieldEditable@Base 0.94.0-1~
  WMGetTextFieldFont@Base 0.94.0-1~
  WMGetTextFieldText@Base 0.94.0-1~
+ WMGetTextIgnoresNewline@Base 0.94.0-1~
+ WMGetTextInsertType@Base 0.94.0-1~
+ WMGetTextObjects@Base 0.94.0-1~
+ WMGetTextRulerShown@Base 0.94.0-1~
+ WMGetTextSelectedObjects@Base 0.94.0-1~
+ WMGetTextSelectedStream@Base 0.94.0-1~
+ WMGetTextSelectionColor@Base 0.94.0-1~
+ WMGetTextSelectionFont@Base 0.94.0-1~
+ WMGetTextSelectionUnderlined@Base 0.94.0-1~
+ WMGetTextStream@Base 0.94.0-1~
+ WMGetTextUsesMonoFont@Base 0.94.0-1~
  WMGetViewPosition@Base 0.94.0-1~
  WMGetViewScreenPosition@Base 0.94.0-1~
  WMGetViewSize@Base 0.94.0-1~
@@ -197,6 +230,7 @@ libWINGs.so.2 libwings2 #MINVER#
  WMIsAntialiasingEnabled@Base 0.94.0-1~
  WMIsDoubleClick@Base 0.94.0-1~
  WMIsDraggingFromView@Base 0.94.0-1~
+ WMIsMarginEqualToMargin@Base 0.94.0-1~
  WMListAllowsEmptySelection@Base 0.94.0-1~
  WMListAllowsMultipleSelection@Base 0.94.0-1~
  WMListDidScrollNotification@Base 0.94.0-1~
@@ -210,8 +244,11 @@ libWINGs.so.2 libwings2 #MINVER#
  WMMoveWidget@Base 0.94.0-1~
  WMNextEvent@Base 0.94.0-1~
  WMOpenScreen@Base 0.94.0-1~
+ WMPageText@Base 0.94.0-1~
  WMPaintColorSwatch@Base 0.94.0-1~
  WMPerformButtonClick@Base 0.94.0-1~
+ WMPrependTextBlock@Base 0.94.0-1~
+ WMPrependTextStream@Base 0.94.0-1~
  WMRaiseWidget@Base 0.94.0-1~
  WMRealizeWidget@Base 0.94.0-1~
  WMRedComponentOfColor@Base 0.94.0-1~
@@ -229,7 +266,9 @@ libWINGs.so.2 libwings2 #MINVER#
  WMRemoveSplitViewSubview@Base 0.94.0-1~
  WMRemoveSplitViewSubviewAt@Base 0.94.0-1~
  WMRemoveTabViewItem@Base 0.94.0-1~
+ WMRemoveTextBlock@Base 0.94.0-1~
  WMReparentWidget@Base 0.94.0-1~
+ WMReplaceTextSelection@Base 0.94.0-1~
  WMRequestSelection@Base 0.94.0-1~
  WMResizeScrollViewContent@Base 0.94.0-1~
  WMResizeWidget@Base 0.94.0-1~
@@ -247,6 +286,7 @@ libWINGs.so.2 libwings2 #MINVER#
  WMScreenPending@Base 0.94.0-1~
  WMScreenRContext@Base 0.94.0-1~
  WMScreenWidth@Base 0.94.0-1~
+ WMScrollText@Base 0.94.0-1~
  WMScrollViewScrollPoint@Base 0.94.0-1~
  WMScrollerDidScrollNotification@Base 0.94.0-1~
  WMSelectAllListItems@Base 0.94.0-1~
@@ -353,6 +393,13 @@ libWINGs.so.2 libwings2 #MINVER#
  WMSetPopUpButtonPullsDown@Base 0.94.0-1~
  WMSetPopUpButtonSelectedItem@Base 0.94.0-1~
  WMSetPopUpButtonText@Base 0.94.0-1~
+ WMSetProgressIndicatorMaxValue@Base 0.94.0-1~
+ WMSetProgressIndicatorMinValue@Base 0.94.0-1~
+ WMSetProgressIndicatorValue@Base 0.94.0-1~
+ WMSetRulerMargins@Base 0.94.0-1~
+ WMSetRulerMoveAction@Base 0.94.0-1~
+ WMSetRulerOffset@Base 0.94.0-1~
+ WMSetRulerReleaseAction@Base 0.94.0-1~
  WMSetScrollViewContentView@Base 0.94.0-1~
  WMSetScrollViewHasHorizontalScroller@Base 0.94.0-1~
  WMSetScrollViewHasVerticalScroller@Base 0.94.0-1~
@@ -378,6 +425,14 @@ libWINGs.so.2 libwings2 #MINVER#
  WMSetTabViewItemLabel@Base 0.94.0-1~
  WMSetTabViewItemView@Base 0.94.0-1~
  WMSetTabViewType@Base 0.94.0-1~
+ WMSetTextAlignment@Base 0.94.0-1~
+ WMSetTextBackgroundColor@Base 0.94.0-1~
+ WMSetTextBackgroundPixmap@Base 0.94.0-1~
+ WMSetTextBlockProperties@Base 0.94.0-1~
+ WMSetTextDefaultColor@Base 0.94.0-1~
+ WMSetTextDefaultFont@Base 0.94.0-1~
+ WMSetTextDelegate@Base 0.94.0-1~
+ WMSetTextEditable@Base 0.94.0-1~
  WMSetTextFieldAlignment@Base 0.94.0-1~
  WMSetTextFieldBeveled@Base 0.94.0-1~
  WMSetTextFieldBordered@Base 0.94.0-1~
@@ -389,6 +444,17 @@ libWINGs.so.2 libwings2 #MINVER#
  WMSetTextFieldPrevTextField@Base 0.94.0-1~
  WMSetTextFieldSecure@Base 0.94.0-1~
  WMSetTextFieldText@Base 0.94.0-1~
+ WMSetTextForegroundColor@Base 0.94.0-1~
+ WMSetTextHasHorizontalScroller@Base 0.94.0-1~
+ WMSetTextHasRuler@Base 0.94.0-1~
+ WMSetTextHasVerticalScroller@Base 0.94.0-1~
+ WMSetTextIgnoresNewline@Base 0.94.0-1~
+ WMSetTextIndentNewLines@Base 0.94.0-1~
+ WMSetTextRelief@Base 0.94.0-1~
+ WMSetTextSelectionColor@Base 0.94.0-1~
+ WMSetTextSelectionFont@Base 0.94.0-1~
+ WMSetTextSelectionUnderlined@Base 0.94.0-1~
+ WMSetTextUsesMonoFont@Base 0.94.0-1~
  WMSetViewDragDestinationProcs@Base 0.94.0-1~
  WMSetViewDragImage@Base 0.94.0-1~
  WMSetViewDragSourceProcs@Base 0.94.0-1~
@@ -415,6 +481,7 @@ libWINGs.so.2 libwings2 #MINVER#
  WMSetWindowUserPosition@Base 0.94.0-1~
  WMShowColorPanel@Base 0.94.0-1~
  WMShowFontPanel@Base 0.94.0-1~
+ WMShowTextRuler@Base 0.94.0-1~
  WMSortBrowserColumn@Base 0.94.0-1~
  WMSortBrowserColumnWithComparer@Base 0.94.0-1~
  WMSortListItems@Base 0.94.0-1~
@@ -424,6 +491,7 @@ libWINGs.so.2 libwings2 #MINVER#
  WMTextDidBeginEditingNotification@Base 0.94.0-1~
  WMTextDidChangeNotification@Base 0.94.0-1~
  WMTextDidEndEditingNotification@Base 0.94.0-1~
+ WMThawText@Base 0.94.0-1~
  WMUnmapSubwidgets@Base 0.94.0-1~
  WMUnmapWidget@Base 0.94.0-1~
  WMUnregisterViewDraggedTypes@Base 0.94.0-1~
@@ -509,10 +577,13 @@ libWINGs.so.2 libwings2 #MINVER#
  _BrowserViewDelegate@Base 0.94.0-1~
  _ColorWellViewDelegate@Base 0.94.0-1~
  _ListViewDelegate@Base 0.94.0-1~
+ _ProgressIndicatorDelegate@Base 0.94.0-1~
+ _RulerViewDelegate@Base 0.94.0-1~
  _ScrollViewViewDelegate@Base 0.94.0-1~
  _ScrollerViewDelegate@Base 0.94.0-1~
  _SliderViewDelegate@Base 0.94.0-1~
  _TextFieldViewDelegate@Base 0.94.0-1~
+ _TextViewDelegate@Base 0.94.0-1~
  _WindowViewDelegate@Base 0.94.0-1~
  colorListMenuItem@Base 0.94.0-1~
  convertCPColor@Base 0.94.0-1~
@@ -520,9 +591,12 @@ libWINGs.so.2 libwings2 #MINVER#
  generateNewFilename@Base 0.94.0-1~
  getNextRequestedDataType@Base 0.94.0-1~
  getShift@Base 0.94.0-1~
+ getStream@Base 0.94.0-1~
+ getStreamObjects@Base 0.94.0-1~
  makeMenuPixmap@Base 0.94.0-1~
  requestDropData@Base 0.94.0-1~
  requestDropDataInSelection@Base 0.94.0-1~
+ requestHandler@Base 0.94.0-1~
  rgbColors@Base 0.94.0-1~
  sourceOperationList@Base 0.94.0-1~
  storeRequiredTypeList@Base 0.94.0-1~

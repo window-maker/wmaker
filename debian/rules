@@ -132,17 +132,24 @@ override_dh_clean:
 
 override_dh_installmenu:
 	dh_installmenu -a --noscripts
+	# Copy extra menu files to the WMCONFIG
 	$(install_prog) $(DEBDIR)/appearance.menu-method \
-		$(WMAKER_TMP)/etc/menu-methods/wmappearance
+		$(WMAKER_COMMON_TMP)/etc/menu-methods/wmappearance
 	$(install_file) $(TOPSRCDIR)/WindowMaker/appearance.menu \
-		$(WMAKER_TMP)/$(WMCONFDIR)/
+		$(WMAKER_COMMON_TMP)/$(WMCONFDIR)/
 	$(install_file) $(TOPSRCDIR)/WindowMaker/background.menu \
-		$(WMAKER_TMP)/$(WMCONFDIR)/
+		$(WMAKER_COMMON_TMP)/$(WMCONFDIR)/
 	$(install_file) $(TOPSRCDIR)/WindowMaker/wmmacros \
-		$(WMAKER_TMP)/$(WMCONFDIR)/
-	touch $(WMAKER_TMP)/$(WMCONFDIR)/menu.prehook
-	touch $(WMAKER_TMP)/$(WMCONFDIR)/menu.posthook
-	chmod 755 $(WMAKER_TMP)/etc/menu-methods/wmaker
+		$(WMAKER_COMMON_TMP)/$(WMCONFDIR)/
+	touch $(WMAKER_COMMON_TMP)/$(WMCONFDIR)/menu.prehook
+	touch $(WMAKER_COMMON_TMP)/$(WMCONFDIR)/menu.posthook
+	# Now, change the #wmdatadir# string to $(WMSHAREDIR)
+	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' $(WMAKER_COMMON_TMP)/$(WMCONFDIR)/wmmacros
+	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' $(WMAKER_COMMON_TMP)/$(WMSHAREDIR)/wmmacros
+	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' $(WMAKER_COMMON_TMP)/$(WMSHAREDIR)/plmenu
+	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' `find $(WMAKER_COMMON_TMP)/$(WMSHAREDIR) -name plmenu.*`
+	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' $(WMAKER_COMMON_TMP)/$(DEFAULTSDIR)/WMRootMenu
+	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' $(WMAKER_COMMON_TMP)/$(WMSHAREDIR)/Defaults/WMRootMenu
 
 override_dh_installdocs:
 	dh_installdocs -a
@@ -195,7 +202,7 @@ override_dh_install:
 # the next is stricly not necessary, because there's a symlink in place,
 # but I don't want to abuse it. Some dumb program uses that path and is a
 # PITA to modify it)
-	perl -pi -e 's:/$(WPREFSAPPDIR)/WPrefs:/$(BINDIR)/WPrefs:' \
+	perl -pi -e 's:$(WPREFSAPPDIR)/WPrefs:$(BINDIR)/WPrefs:' \
 	   $(WMAKER_COMMON_TMP)/$(DEFAULTSDIR)/WMState
 
 # Fix permissions

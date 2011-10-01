@@ -1,9 +1,10 @@
 #! /bin/sh -e
 #
 # Window Maker postinst.
-# 
+#
 # Marcelo Magallon <mmagallo@debian.org>
 
+inst="/etc/menu-methods/wmaker /etc/menu-methods/wmappearance"
 x_wm_link=/etc/alternatives/x-window-manager
 x_wm_man_link=/usr/share/man/man1/x-window-manager.1.gz
 
@@ -18,6 +19,12 @@ case "$1" in
         ln -sf /usr/bin/wmaker ${x_wm_link}
         ln -sf /usr/share/man/man1/wmaker.1x.gz ${x_wm_man_link}
     fi
+
+    for file in $inst ; do
+        if [ -f $file ] ; then
+            chmod a+x $file
+        fi
+    done
 
     if [ -x /usr/bin/update-menus -a -x /usr/bin/install-menu ] ; then
         update-menus

@@ -1,13 +1,26 @@
 wmaker (0.94.0-1) unstable; urgency=low
 
-  * New upstream version, now from git
+  * New maintainer [Closes: #632875]
+  * New upstream version, now from git. [Closes: #556677]
+  * New package wmaker-common (arch independent files)
+  * removed the asclock diversions from the wmaker scripts
+  * new package wmaker-common with the arch independent files
   * debian/patches are now DEP-3
   * debian/copyright is now DEP-5
   * Standard-Version is now 3.9.2
   * manpages moved to upstream
   * solved some problems with .la files (lintian clean)
 
- -- Rodolfo García Peñas (kix) <kix@kix.es>  Mon, 8 Aug 2011 19:29:12 +0200
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Mon, 28 Sep 2011 19:29:12 +0200
+
+wmaker (0.92.0-8.3) unstable; urgency=low
+
+  * Non-maintainer upload.
+  * Stop shipping la files. Closes: #633289.
+  * Use dh_clean instead of dh_prep in the clean target to stop shipping
+    temporary debhelper files.
+
+ -- Regis Boudin <regis@debian.org>  Tue, 20 Sep 2011 19:55:32 +0100
 
 wmaker (0.92.0+git-0) unstable; urgency=low
 

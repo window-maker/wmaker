@@ -1,4 +1,6 @@
+etc/menu-methods
 etc/GNUstep/Defaults
+etc/X11/WindowMaker
 usr/bin
 usr/sbin
 usr/share/doc/wmaker
