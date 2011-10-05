@@ -49,8 +49,9 @@ Description: Static libraries and headers for Window Maker applications
  This package contains libWMaker and header files, for building
  Window Maker aware applications.
  .
- This package is (now) an empty package and should have problems because
- is needed for other packages.
+ Static libraries and headers for Window Maker applications
+ Contains libWMaker and header files, for building Window Maker aware
+ applications.
 
 Package: libwraster3-dev
 Architecture: any

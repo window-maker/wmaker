@@ -10,6 +10,8 @@ wmaker (0.94.0-1) unstable; urgency=low
   * Standard-Version is now 3.9.2
   * manpages moved to upstream
   * solved some problems with .la files (lintian clean)
+  * libwmaker0-dev is not included in upstream version.
+    Now included as patch (52_libwmaker0dev.diff)
 
  -- Rodolfo García Peñas (kix) <kix@kix.es>  Mon, 28 Sep 2011 19:29:12 +0200
 
