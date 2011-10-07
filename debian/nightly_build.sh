@@ -1,7 +1,8 @@
 #!/bin/sh
 
 CHLOGBKP="/tmp/$$-chlog"
-BASEVERSION="0.93.0"
+#BASEVERSION="0.94.0"
+BASEVERSION="`head -1 debian/changelog | cut -d\( -f2 | cut -d\- -f1`"
 REPOVERSION="git-`date +%Y%m%d-%H%M`"
 
 CHANGELOG="Automatic build from the GIT on `date`"
