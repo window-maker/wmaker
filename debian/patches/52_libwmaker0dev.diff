@@ -6,7 +6,7 @@ Last-Update: 2011-10-05
 @@ -636,6 +636,9 @@
      fi
  fi
-
+ 
 +# for wmlib
 +AC_SUBST(XCFLAGS)
 +
@@ -14,14 +14,14 @@ Last-Update: 2011-10-05
  AC_SUBST(XLIBS)
  AC_SUBST(X_EXTRA_LIBS)
 @@ -866,7 +869,7 @@
-	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
-	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
-	WINGs/Extras/Makefile WINGs/po/Makefile \
+ 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
+ 	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
+ 	WINGs/Extras/Makefile WINGs/po/Makefile \
 -	wrlib/Makefile wrlib/tests/Makefile \
 +	wmlib/Makefile wrlib/Makefile wrlib/tests/Makefile \
-	src/Makefile src/wconfig.h \
-	doc/Makefile doc/sk/Makefile doc/cs/Makefile \
-	doc/ru/Makefile \
+ 	src/Makefile src/wconfig.h \
+ 	doc/Makefile doc/sk/Makefile doc/cs/Makefile \
+ 	doc/ru/Makefile \
 --- /dev/null
 +++ b/wmlib/app.c
 @@ -0,0 +1,79 @@
@@ -853,11 +853,11 @@ Last-Update: 2011-10-05
 --- a/Makefile.am
 +++ b/Makefile.am
 @@ -31,7 +31,7 @@
-
+ 
  ACLOCAL_AMFLAGS = -I m4
-
+ 
 -SUBDIRS = wrlib WINGs src util po WindowMaker WPrefs.app doc
 +SUBDIRS = wrlib WINGs src util po WindowMaker wmlib WPrefs.app doc
-
+ 
  EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N INSTALL \
-	INSTALL-WMAKER README.definable-cursor \
+ 	INSTALL-WMAKER README.definable-cursor \
