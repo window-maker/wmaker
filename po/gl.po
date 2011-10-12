@@ -1,7 +1,7 @@
 # Galician translation of WindowMaker.
-# Copyright (C) 1997 Xosé Vázquez
+# Copyright (C) 1997 Xose Vazquez Perez
 # Copyright (C) 2000 Jesús Bravo Álvarez
-# Xosé Vázquez <xose@arrakis.es>, 1997
+# Xose Vazquez Perez <xose.vazquez@gmail.com>, 1997
 # Jesús Bravo Álvarez <jba@pobox.com>, 2000
 #
 # Proxecto Trasno - Adaptación do software libre á lingua galega:  Se desexas
