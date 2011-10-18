@@ -1,3 +1,9 @@
+wmaker (0.95.0-1) unstable; urgency=low
+
+  * New upstream version 0.95.0
+
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Mon, 18 Oct 2011 10:08:35 +0200
+
 wmaker (0.94.0-1) unstable; urgency=low
 
   * New maintainer [Closes: #632875]
