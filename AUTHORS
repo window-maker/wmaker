@@ -197,7 +197,7 @@ many fixes and enhancements for move, resize and window placement code.
 Marco van Hylckama Vlieg <fatal@global.uibk.ac.at>
 house icon for WINGs file dialogs, defaultAppIcon and Clip xpm tchX.tiff
 Plus the following icons:
-DefaultAppIcon.tiff GNUterm.tiff clip2.tiff defaultterm.tiff draw.tiff
+GNUterm.tiff clip2.tiff defaultterm.tiff draw.tiff
 linuxterm.tiff mixer.tiff notepad.tiff pdf.tiff ps.tiff real.tiff sgiterm.tiff
 sound.tiff staroffice2.tiff timer.tiff wilber.tiff write.tiff xdvi.tiff
 xv.tiff

@@ -8,7 +8,6 @@ defsdata_DATA = \
 	clip.tiff\
 	clip.xpm\
 	defaultAppIcon.tiff\
-	DefaultAppIcon.tiff\
 	defaultAppIcon.xpm\
 	defaultterm.tiff\
 	defaultterm.xpm\

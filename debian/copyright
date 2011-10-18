@@ -14,7 +14,7 @@ Copyright: 1997, Neil A. Rubin <nar5@po.cwru.edu>
            2011, Rodolfo García Peñas (kix) <kix@kix.es>
 License: GPL-2+
 
-Files: WindowMaker/Icons/BitchX.tiff WindowMaker/Icons/DefaultAppIcon.tiff
+Files: WindowMaker/Icons/BitchX.tiff WindowMaker/Icons/defaultAppIcon.tiff
        WindowMaker/Icons/GNUterm.tiff WindowMaker/Icons/defaultterm.tiff
        WindowMaker/Icons/draw.tiff WindowMaker/Icons/linuxterm.tiff
        WindowMaker/Icons/mixer.tiff WindowMaker/Icons/notepad.tiff
