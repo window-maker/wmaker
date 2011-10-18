@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the Window Maker package.
 # Camille d'Alméras <camilledalmeras@yahoo.com>, 2011.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: wmgenmenu\n"
