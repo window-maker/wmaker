@@ -617,7 +617,7 @@ static void paintText(Text * tPtr)
 	TextBlock *tb;
 	WMFont *font;
 	char *text;
-	int len, y, c, s, done = False, prev_y = -23, dir /* 1 = down */ ;
+	int len, y, c, s, done = False, dir /* 1 = down */ ;
 	WMScreen *scr = tPtr->view->screen;
 	Display *dpy = tPtr->view->screen->display;
 	Window win = tPtr->view->window;
@@ -711,8 +711,6 @@ static void paintText(Text * tPtr)
 						       rect.x, rect.y, rect.width, rect.height);
 				}
 			}
-
-			prev_y = tb->sections[s]._y;
 
 			len = tb->sections[s].end - tb->sections[s].begin;
 			text = &(tb->text[tb->sections[s].begin]);
