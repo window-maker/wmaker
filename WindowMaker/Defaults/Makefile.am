@@ -7,7 +7,7 @@ wpexecbindir = @wprefs_bindir@
 
 EXTRA_DIST = WMGLOBAL WMWindowAttributes.in WindowMaker.in WMState.in
 
-CLEANFILES = WMWindowAttributes WindowMaker WMState
+CLEANFILES = WMWindowAttributes WindowMaker WMState WMRootMenu
 
 WMWindowAttributes: $(srcdir)/WMWindowAttributes.in
 	-rm -f WMWindowAttributes
