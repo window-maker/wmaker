@@ -80,11 +80,11 @@ dnl Platform-specific Makefile setup
 dnl ================================
 
 case "${host}" in
-	*-*-linux*|*-*-cygwin*)
+	*-*-linux*|*-*-cygwin*|*-gnu*)
 		WM_OSDEP="linux"
 		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600"
 	;;
-	*-*-freebsd*)
+	*-*-freebsd*|*-k*bsd-gnu*)
 		WM_OSDEP="bsd"
 		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600 -DFREEBSD"
 	;;
