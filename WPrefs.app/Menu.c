@@ -41,6 +41,7 @@ typedef enum {
 } InfoType;
 
 #define MAX_SECTION_SIZE 4
+#define PATH_LEN 256
 
 typedef struct _Panel {
 	WMBox *box;
@@ -1426,10 +1427,10 @@ static WMPropList *getDefaultMenu(_Panel * panel)
 	WMPropList *menu;
 	char *menuPath, *gspath;
 
-	gspath = wusergnusteppath();
+	gspath = wstrdup(WMAKER_RESOURCE_PATH);
 
 	menuPath = wmalloc(strlen(gspath) + 128);
-	sprintf(menuPath, "%s/Library/WindowMaker/plmenu", gspath);
+	sprintf(menuPath, "%s/plmenu", gspath);
 
 	menu = WMReadPropListFromFile(menuPath);
 
@@ -1444,6 +1445,7 @@ static WMPropList *getDefaultMenu(_Panel * panel)
 		wfree(buffer);
 	}
 
+	wfree(gspath);
 	wfree(menuPath);
 
 	return menu;
