@@ -325,8 +325,8 @@
  * Set this to zero if you want instant raise. */
 #define AUTO_RAISE_DELAY        600
 
-/* Max. number of icons the clip can have */
-#define CLIP_MAX_ICONS		32
+/* Max. number of icons the dock and clip can have */
+#define DOCK_MAX_ICONS		32
 
 /* blink interval when invoking a menu item */
 #define MENU_BLINK_DELAY	60000

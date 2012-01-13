@@ -1080,22 +1080,16 @@ WDock *wDockCreate(WScreen * scr, int type)
 {
 	WDock *dock;
 	WAppIcon *btn;
-	int icon_count;
 
 	make_keys();
 
 	dock = wmalloc(sizeof(WDock));
 	memset(dock, 0, sizeof(WDock));
 
-	if (type == WM_CLIP)
-		icon_count = CLIP_MAX_ICONS;
-	else
-		icon_count = scr->scr_height / wPreferences.icon_size;
+	dock->max_icons = DOCK_MAX_ICONS;
 
-	dock->icon_array = wmalloc(sizeof(WAppIcon *) * icon_count);
-	memset(dock->icon_array, 0, sizeof(WAppIcon *) * icon_count);
-
-	dock->max_icons = icon_count;
+	dock->icon_array = wmalloc(sizeof(WAppIcon *) * dock->max_icons);
+	memset(dock->icon_array, 0, sizeof(WAppIcon *) * dock->max_icons);
 
 	btn = mainIconCreate(scr, type);
 
