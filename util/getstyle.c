@@ -401,11 +401,7 @@ int main(int argc, char **argv)
 		WMWritePropListToFile(style, path);
 		wfree(path);
 	} else {
-		if (style_file) {
-			WMWritePropListToFile(style, style_file);
-		} else {
-			puts(WMGetPropListDescription(style, True));
-		}
+		puts(WMGetPropListDescription(style, True));
 	}
 	return 0;
 }
