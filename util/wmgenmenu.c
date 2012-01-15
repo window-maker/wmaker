@@ -243,8 +243,7 @@ int main(int argc, char *argv[])
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Save Theme")),
 		WMCreatePLString("SHEXEC"),
-		WMCreatePLString("getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"
-			"\"%a(Theme name, Name to save theme as)\""),
+		WMCreatePLString("getstyle -p \"%a(Theme name, Name to save theme as)\""),
 		NULL
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
