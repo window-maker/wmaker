@@ -3342,7 +3342,15 @@ static int fetchFile(char *toPath, char *srcFile, char *destFile)
 	FILE *src, *dst;
 	size_t nread, nwritten;
 	char *dstpath;
+	struct stat st;
 	char buf[BUFSIZE];
+
+	/* only to a directory */
+	if (stat(toPath, &st) != 0 || !S_ISDIR(st.st_mode))
+		return -1;
+	/* only copy files */
+	if (stat(srcFile, &st) != 0 || !S_ISREG(st.st_mode))
+		return -1;
 
 	RETRY( src = fopen(srcFile, "rb") )
 	if (src == NULL) {
@@ -3374,10 +3382,11 @@ static int fetchFile(char *toPath, char *srcFile, char *destFile)
 		unlink(dstpath);
 
 	RETRY( fclose(src) )
+	fchmod(fileno(dst), st.st_mode);
 	fsync(fileno(dst));
 	RETRY( fclose(dst) )
-
 	wfree(dstpath);
+
 	return 0;
 }
 
