@@ -148,16 +148,6 @@ void print_help(int print_usage, int exitval)
 	exit(exitval);
 }
 
-void abortar(char *reason)
-{
-	printf("%s: %s\n", __progname, reason);
-	if (ThemePath) {
-		printf("Removing unfinished theme pack\n");
-		(void)wrmdirhier(ThemePath);
-	}
-	exit(1);
-}
-
 static Bool isFontOption(char *option)
 {
 	int i;
@@ -177,10 +167,9 @@ void findCopyFile(char *dir, char *file)
 
 	fullPath = wfindfileinarray(PixmapPath, file);
 	if (!fullPath) {
-		char buffer[4000];
-
-		sprintf(buffer, "could not find file %s", file);
-		abortar(buffer);
+		wwarning("Could not find file %s", file);
+		if (ThemePath)
+			(void)wrmdirhier(ThemePath);
 	}
 	copy_file(dir, fullPath, fullPath);
 	free(fullPath);
