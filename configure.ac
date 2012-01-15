@@ -914,6 +914,7 @@ echo "Window Maker was configured as follows:"
 echo
 echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
+echo "Installation path for libraries     : $libdir"
 echo "Installation path for WPrefs.app    : $wprefs_base_dir" | sed -e 's|\${prefix}|'"$prefix|"
 echo "Supported graphic format libraries  : $supported_gfx"
 echo "Antialiased text support in WINGs   : $xft"
