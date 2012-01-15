@@ -275,7 +275,6 @@ enum {
 #define M_PI 3.14159265358979323846
 #endif
 
-static int fetchFile(char *toPath, char *imageSrcFile, char *imageDestFileName);
 char *generateNewFilename(char *curName);
 void convertCPColor(CPColor * color);
 RColor ulongToRColor(WMScreen * scr, unsigned long value);
@@ -2925,7 +2924,7 @@ static void customPaletteMenuNewFromFile(W_ColorPanel * panel)
 
 		/* Copy image to $(gnustepdir)/Library/Colors/ &
 		 * Add filename to history menu */
-		if (fetchFile(panel->configurationPath, filepath, filename) == 0) {
+		if (copy_file(panel->configurationPath, filepath, filename) == 0) {
 
 			/* filepath is a "local" path now the file has been copied */
 			wfree(filepath);
@@ -3336,59 +3335,6 @@ static void hsbInit(W_ColorPanel * panel)
 }
 
 /************************** Common utility functions ************************/
-
-static int fetchFile(char *toPath, char *srcFile, char *destFile)
-{
-	FILE *src, *dst;
-	size_t nread, nwritten;
-	char *dstpath;
-	struct stat st;
-	char buf[BUFSIZE];
-
-	/* only to a directory */
-	if (stat(toPath, &st) != 0 || !S_ISDIR(st.st_mode))
-		return -1;
-	/* only copy files */
-	if (stat(srcFile, &st) != 0 || !S_ISREG(st.st_mode))
-		return -1;
-
-	RETRY( src = fopen(srcFile, "rb") )
-	if (src == NULL) {
-		werror(_("Could not open %s"), srcFile);
-		return -1;
-	}
-
-	dstpath = wstrconcat(toPath, destFile);
-	RETRY( dst = fopen(dstpath, "wb") )
-	if (dst == NULL) {
-		werror(_("Could not create %s"), dstpath);
-		wfree(dstpath);
-		RETRY( fclose(src) )
-		return -1;
-	}
-
-	do {
-		RETRY( nread = fread(buf, 1, sizeof(buf), src) )
-		if (ferror(src))
-			break;
-
-		RETRY( nwritten = fwrite(buf, 1, nread, dst) )
-		if (ferror(dst) || feof(src) || nread != nwritten)
-			break;
-
-	} while (1);
-
-	if (ferror(src) || ferror(dst))
-		unlink(dstpath);
-
-	RETRY( fclose(src) )
-	fchmod(fileno(dst), st.st_mode);
-	fsync(fileno(dst));
-	RETRY( fclose(dst) )
-	wfree(dstpath);
-
-	return 0;
-}
 
 char *generateNewFilename(char *curName)
 {
