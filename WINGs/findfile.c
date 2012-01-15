@@ -22,7 +22,9 @@
 
 #include "WUtil.h"
 
+#include <sys/stat.h>
 #include <errno.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -32,6 +34,8 @@
 #ifndef PATH_MAX
 #define PATH_MAX  1024
 #endif
+
+#define RETRY( x ) do { x; } while (errno == EINTR);
 
 char *wgethomedir()
 {
@@ -402,4 +406,57 @@ char *wfindfileinarray(WMPropList * array, char *file)
 		}
 	}
 	return NULL;
+}
+
+int copy_file(char *dir, char *src_file, char *dest_file)
+{
+	FILE *src, *dst;
+	size_t nread, nwritten;
+	char *dstpath;
+	struct stat st;
+	char buf[4096];
+
+	/* only to a directory */
+	if (stat(dir, &st) != 0 || !S_ISDIR(st.st_mode))
+		return -1;
+	/* only copy files */
+	if (stat(src_file, &st) != 0 || !S_ISREG(st.st_mode))
+		return -1;
+
+	RETRY( src = fopen(src_file, "rb") )
+	if (src == NULL) {
+		werror(_("Could not open %s"), src_file);
+		return -1;
+	}
+
+	dstpath = wstrconcat(dir, dest_file);
+	RETRY( dst = fopen(dstpath, "wb") )
+	if (dst == NULL) {
+		werror(_("Could not create %s"), dstpath);
+		wfree(dstpath);
+		RETRY( fclose(src) )
+		return -1;
+	}
+
+	do {
+		RETRY( nread = fread(buf, 1, sizeof(buf), src) )
+		if (ferror(src))
+			break;
+
+		RETRY( nwritten = fwrite(buf, 1, nread, dst) )
+		if (ferror(dst) || feof(src) || nread != nwritten)
+			break;
+
+	} while (1);
+
+	if (ferror(src) || ferror(dst))
+		unlink(dstpath);
+
+	RETRY( fclose(src) )
+	fchmod(fileno(dst), st.st_mode);
+	fsync(fileno(dst));
+	RETRY( fclose(dst) )
+	wfree(dstpath);
+
+	return 0;
 }

@@ -201,6 +201,8 @@ char* wfindfileinarray(WMPropList* array, char *file);
 
 char* wexpandpath(char *path);
 
+int copy_file(char *toPath, char *srcFile, char *destFile);
+
 /* don't free the returned string */
 char* wgethomedir(void);
 
