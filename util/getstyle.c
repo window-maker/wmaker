@@ -138,7 +138,7 @@ void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [-t] [-p] [-h] [-v] [file]\n", __progname);
 	if (print_usage) {
-		puts("Retrieves style/theme configuration and output to FILE or to stdout");
+		puts("Retrieves style/theme configuration and outputs to ~/GNUstep/Library/WindowMaker/Themes/file.themed/style or to stdout");
 		puts("");
 		puts("  -h, --help           display this help and exit");
 		puts("  -v, --version        output version information and exit");
@@ -263,12 +263,15 @@ void makeThemePack(WMPropList * style, char *themeName)
 
 	if ((t = wusergnusteppath()) == NULL)
 		return;
-	themeNameLen = strlen(t) + 1 /* / */ + strlen(themeName) + 8 /* ".themed/" */ + 1 /* '\0' */;
+	themeNameLen = strlen(t) + strlen(themeName) + 50;
 	themeDir = wmalloc(themeNameLen);
-	snprintf(themeDir, themeNameLen, "%s/%s.themed/", t, themeName);
+	snprintf(themeDir, themeNameLen, "%s/Library/WindowMaker/Themes/%s.themed/", t, themeName);
 	ThemePath = themeDir;
-	if (!wmkdirhier(themeDir))
+
+	if (!wmkdirhier(themeDir)) {
+		wwarning("Could not make theme dir %s\n", themeDir);
 		return;
+	}
 
 	keys = WMGetPLDictionaryKeys(style);
 
