@@ -20,6 +20,7 @@ include_HEADERS = wraster.h
 
 libwraster_la_SOURCES = 	\
 	raster.c 	\
+	alpha_combine.c \
 	draw.c		\
 	color.c		\
 	load.c 		\

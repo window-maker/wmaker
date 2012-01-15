@@ -143,6 +143,7 @@ static void operatePixel(RImage * image, int ofs, int operation, RColor * color)
 			*sr = (((int)*sr * nalpha) + ((int)color->red * alpha)) / 256;
 			*sg = (((int)*sg * nalpha) + ((int)color->green * alpha)) / 256;
 			*sb = (((int)*sb * nalpha) + ((int)color->blue * alpha)) / 256;
+			*sa = alpha + ((int)*sa * nalpha) / 256;
 		}
 		break;
 	case RAddOperation:

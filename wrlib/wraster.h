@@ -356,6 +356,9 @@ void RCombineAreaWithOpaqueness(RImage *image, RImage *src, int sx, int sy,
                                 unsigned width, unsigned height, int dx, int dy,
                                 int opaqueness);
 
+void RCombineAlpha(unsigned char *d, unsigned char *s, int s_has_alpha,
+		   int width, int height, int dwi, int swi, int opacity);
+
 RImage *RScaleImage(RImage *image, unsigned new_width, unsigned new_height);
 
 RImage *RSmoothScaleImage(RImage *src, unsigned new_width,
