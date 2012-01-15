@@ -171,72 +171,6 @@ static Bool isFontOption(char *option)
 	return False;
 }
 
-/*
- * copy a file specified by `file' into `directory'. name stays.
- */
-/*
- * it is more or less assumed that this function will only
- * copy reasonably-sized files
- */
-/* XXX: is almost like WINGs/wcolodpanel.c:fetchFile() */
-void copyFile(char *dir, char *file)
-{
-	FILE *src = NULL, *dst = NULL;
-	size_t nread, nwritten, len;
-	char buf[4096];
-	struct stat st;
-	char *dstpath;
-
-	/* only to a directory */
-	if (stat(dir, &st) != 0 || !S_ISDIR(st.st_mode))
-		return;
-	/* only copy files */
-	if (stat(file, &st) != 0 || !S_ISREG(st.st_mode))
-		return;
-
-	len = strlen(dir) + 1 /* / */ + strlen(file) + 1 /* '\0' */;
-	dstpath = wmalloc(len);
-	snprintf(dstpath, len, "%s/%s", dir, basename(file));
-	buf[len] = '\0';
-
-	RETRY( dst = fopen(dstpath, "wb") )
-	if (dst == NULL) {
-		werror(_("Could not create %s"), dstpath);
-		goto err;
-	}
-
-	RETRY( src = fopen(file, "rb") )
-	if (src == NULL) {
-		werror(_("Could not open %s"), file);
-		goto err;
-	}
-
-	do {
-		RETRY( nread = fread(buf, 1, sizeof(buf), src) )
-		if (ferror(src))
-			break;
-
-		RETRY( nwritten = fwrite(buf, 1, nread, dst) )
-		if (ferror(dst) || feof(src) || nread != nwritten)
-			break;
-
-	} while (1);
-
-	if (ferror(src) || ferror(dst))
-		unlink(dstpath);
-
-	fchmod(fileno(dst), st.st_mode);
-	fsync(fileno(dst));
-	RETRY( fclose(dst) )
-
-err:
-	if (src) {
-		RETRY( fclose(src) )
-	}
-	wfree(dstpath);
-	return;
-}
-
 void findCopyFile(char *dir, char *file)
 {
 	char *fullPath;
@@ -248,7 +182,7 @@ void findCopyFile(char *dir, char *file)
 		sprintf(buffer, "could not find file %s", file);
 		abortar(buffer);
 	}
-	copyFile(dir, fullPath);
+	copy_file(dir, fullPath, fullPath);
 	free(fullPath);
 }
 
@@ -304,7 +238,7 @@ void makeThemePack(WMPropList * style, char *themeName)
 
 				p = strrchr(WMGetFromPLString(file), '/');
 				if (p) {
-					copyFile(themeDir, WMGetFromPLString(file));
+					copy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
 
 					newPath = wstrdup(p + 1);
 					WMDeleteFromPLArray(value, 1);
@@ -323,7 +257,7 @@ void makeThemePack(WMPropList * style, char *themeName)
 
 				p = strrchr(WMGetFromPLString(file), '/');
 				if (p) {
-					copyFile(themeDir, WMGetFromPLString(file));
+					copy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
 
 					newPath = wstrdup(p + 1);
 					WMDeleteFromPLArray(value, 1);
@@ -337,7 +271,7 @@ void makeThemePack(WMPropList * style, char *themeName)
 
 				p = strrchr(WMGetFromPLString(file), '/');
 				if (p) {
-					copyFile(themeDir, WMGetFromPLString(file));
+					copy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
 
 					newPath = wstrdup(p + 1);
 					WMDeleteFromPLArray(value, 2);
