@@ -385,17 +385,18 @@ int main(int argc, char **argv)
 				/* NOTREACHED */
 		}
 
-	argc -= optind;
-	argv += optind;
-
-	if (argc != 1)
+	/* At most one non-option ARGV-element is accepted (the theme name) */
+	if (argc - optind > 1)
 		print_help(0, 1);
 
-	style_file = argv[0];
-	while ((p = strchr(style_file, '/')) != NULL)
-		*p = '_';
+	if (argc - optind == 1) {
+		style_file = argv[argc - 1];
+		while ((p = strchr(style_file, '/')) != NULL)
+			*p = '_';
+	}
 
-	if (style_file && !make_pack)	/* what's this? */
+	/* A theme name was given but the option to create it (-p) was not */
+	if (style_file && !make_pack)
 		print_help(0, 1);
 
 	if (make_pack && !style_file) {
