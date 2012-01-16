@@ -42,6 +42,7 @@
 #include "text.h"
 #include "xinerama.h"
 #include "workspace.h"
+#include "dialog.h"
 
 /****** Global Variables ******/
 
@@ -1146,86 +1147,6 @@ void wMenuSetEnabled(WMenu * menu, int index, int enable)
 	paintEntry(menu->brother, index, index == menu->selected_entry);
 }
 
-/* ====================================================================== */
-
-static void editEntry(WMenu * menu, WMenuEntry * entry)
-{
-	WTextInput *text;
-	XEvent event;
-	WObjDescriptor *desc;
-	char *t;
-	int done = 0;
-	Window old_focus;
-	int old_revert;
-
-	menu->flags.editing = 1;
-
-	text = wTextCreate(menu->menu, 1, menu->entry_height * entry->order,
-			   menu->menu->width - 2, menu->entry_height - 1);
-
-	wTextPutText(text, entry->text);
-	XGetInputFocus(dpy, &old_focus, &old_revert);
-	XSetInputFocus(dpy, text->core->window, RevertToNone, CurrentTime);
-
-	if (XGrabKeyboard(dpy, text->core->window, True, GrabModeAsync, GrabModeAsync, CurrentTime) != GrabSuccess) {
-		wwarning(_("could not grab keyboard"));
-		wTextDestroy(text);
-
-		wSetFocusTo(menu->frame->screen_ptr, menu->frame->screen_ptr->focused_window);
-		return;
-	}
-
-	while (!done && !text->done) {
-		XSync(dpy, 0);
-		XAllowEvents(dpy, AsyncKeyboard | AsyncPointer, CurrentTime);
-		XSync(dpy, 0);
-		WMNextEvent(dpy, &event);
-
-		if (XFindContext(dpy, event.xany.window, wWinContext, (XPointer *) & desc) == XCNOENT)
-			desc = NULL;
-
-		if ((desc != NULL) && (desc->handle_anything != NULL)) {
-
-			(*desc->handle_anything) (desc, &event);
-
-		} else {
-			switch (event.type) {
-			case ButtonPress:
-				XAllowEvents(dpy, ReplayPointer, CurrentTime);
-				done = 1;
-
-			default:
-				WMHandleEvent(&event);
-				break;
-			}
-		}
-	}
-
-	XSetInputFocus(dpy, old_focus, old_revert, CurrentTime);
-
-	wSetFocusTo(menu->frame->screen_ptr, menu->frame->screen_ptr->focused_window);
-
-	t = wTextGetText(text);
-	/* if !t, the user has canceled editing */
-	if (t) {
-		if (entry->text)
-			wfree(entry->text);
-		entry->text = wstrdup(t);
-
-		menu->flags.realized = 0;
-	}
-	wTextDestroy(text);
-
-	XUngrabKeyboard(dpy, CurrentTime);
-
-	if (t && menu->on_edit)
-		(*menu->on_edit) (menu, entry);
-
-	menu->flags.editing = 0;
-
-	if (!menu->flags.realized)
-		wMenuRealize(menu);
-}
 
 static void selectEntry(WMenu * menu, int entry_no)
 {
@@ -1832,7 +1753,21 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 		entry = menu->entries[entry_no];
 
 		if (!close_on_exit && (bev->state & ControlMask) && smenu && entry->flags.editable) {
-			editEntry(smenu, entry);
+			char buffer[128];
+			char *name;
+			int number = entry_no - 2; /* Entries "New" and "Destroy Last" appear before workspaces */
+
+			name = wstrdup(scr->workspaces[number]->name);
+			snprintf(buffer, sizeof(buffer), _("Type the name for workspace %i:"), number + 1);
+
+			wMenuUnmap(scr->root_menu);
+
+			if (wInputDialog(scr, _("Rename Workspace"), buffer, &name))
+				wWorkspaceRename(scr, number, name);
+
+			if (name)
+				wfree(name);
+
 			goto byebye;
 		} else if (bev->state & ControlMask) {
 			goto byebye;
