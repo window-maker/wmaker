@@ -97,9 +97,7 @@ wmaker_SOURCES = 	\
 	wmspec.h \
 	wmspec.c \
 	workspace.c \
-	workspace.h \
-	text.c \
-	text.h
+	workspace.h
 
 EXTRA_wmaker_SOURCES = osdep_bsd.c osdep_darwin.c osdep_linux.c osdep_stub.c
 
