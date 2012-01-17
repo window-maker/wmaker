@@ -404,7 +404,7 @@ static RImage *makeRImageFromARGBData(unsigned long *data)
 
 	for (imgdata = image->data, i = 2; i < size + 2; i++, imgdata += 4) {
 		pixel = data[i];
-#if BYTE_ORDER == BIG_ENDIAN
+#if 0//BYTE_ORDER == BIG_ENDIAN
 		imgdata[2] = (pixel >> 24) & 0xff;	/* A */
 		imgdata[1] = (pixel >> 16) & 0xff;	/* R */
 		imgdata[0] = (pixel >> 8) & 0xff;	/* G */
