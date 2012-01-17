@@ -645,23 +645,6 @@ static void newWSCommand(WMenu * menu, WMenuEntry * foo)
 	   } */
 }
 
-static char *cropline(char *line)
-{
-	char *end;
-
-	if (strlen(line) == 0)
-		return line;
-
-	end = &(line[strlen(line)]) - 1;
-	while (isspace(*line) && *line != 0)
-		line++;
-	while (isspace(*end) && end != line) {
-		*end = 0;
-		end--;
-	}
-	return line;
-}
-
 void wWorkspaceRename(WScreen * scr, int workspace, char *name)
 {
 	char buf[MAX_WORKSPACENAME_WIDTH + 1];
@@ -671,7 +654,7 @@ void wWorkspaceRename(WScreen * scr, int workspace, char *name)
 		return;
 
 	/* trim white spaces */
-	tmp = cropline(name);
+	tmp = wtrimspace(name);
 
 	if (strlen(tmp) == 0) {
 		snprintf(buf, sizeof(buf), _("Workspace %i"), workspace + 1);

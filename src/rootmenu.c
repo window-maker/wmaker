@@ -473,25 +473,6 @@ static Bool addShortcut(char *file, char *shortcutDefinition, WMenu * menu, WMen
 	return True;
 }
 
-/*******************************/
-
-static char *cropline(char *line)
-{
-	char *end;
-
-	if (strlen(line) == 0)
-		return line;
-
-	end = &(line[strlen(line)]) - 1;
-	while (isspace(*line) && *line != 0)
-		line++;
-	while (end > line && isspace(*end)) {
-		*end = 0;
-		end--;
-	}
-	return line;
-}
-
 static char *next_token(char *line, char **next)
 {
 	char *tmp, c;
@@ -1020,14 +1001,14 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, FILE * file, char *file_
 
 		ok = 0;
 		fgets(linebuf, MAXLINE, file);
-		line = cropline(linebuf);
+		line = wtrimspace(linebuf);
 		lsize = strlen(line);
 		do {
 			if (line[lsize - 1] == '\\') {
 				char *line2;
 				int lsize2;
 				fgets(elinebuf, MAXLINE, file);
-				line2 = cropline(elinebuf);
+				line2 = wtrimspace(elinebuf);
 				lsize2 = strlen(line2);
 				if (lsize2 + lsize > MAXLINE) {
 					wwarning(_("%s:maximal line size exceeded in menu config: %s"),
@@ -1129,7 +1110,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 	while (!feof(file)) {
 		if (!fgets(linebuf, MAXLINE, file))
 			break;
-		line = cropline(linebuf);
+		line = wtrimspace(linebuf);
 		if (line[0] == 0 || line[0] == '#' || (line[0] == '/' && line[1] == '/'))
 			continue;
 
@@ -1223,7 +1204,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	while (!feof(file)) {
 		if (!fgets(linebuf, MAXLINE, file))
 			break;
-		line = cropline(linebuf);
+		line = wtrimspace(linebuf);
 		if (line[0] == 0 || line[0] == '#' || (line[0] == '/' && line[1] == '/'))
 			continue;
 
