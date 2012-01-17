@@ -52,7 +52,7 @@ typedef struct _Panel {
 	WMColor *gray;
 	WMFont *font;
 
-	 /**/ char capturing;
+	Bool capturing;
 	char **shortcuts;
 	int actionCount;
 } _Panel;
@@ -230,23 +230,27 @@ static void XConvertCase(register KeySym sym, KeySym * lower, KeySym * upper)
 }
 #endif
 
-static char *captureShortcut(Display * dpy, _Panel * panel)
+char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 {
 	XEvent ev;
 	KeySym ksym, lksym, uksym;
 	char buffer[64];
 	char *key = NULL;
 
-	while (panel->capturing) {
+	while (*capturing) {
 		XAllowEvents(dpy, AsyncKeyboard, CurrentTime);
 		WMNextEvent(dpy, &ev);
 		if (ev.type == KeyPress && ev.xkey.keycode != 0) {
 			ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
 			if (!IsModifierKey(ksym)) {
-				XConvertCase(ksym, &lksym, &uksym);
-				key = XKeysymToString(uksym);
+				if (convert_case) {
+					XConvertCase(ksym, &lksym, &uksym);
+					key = XKeysymToString(uksym);
+				} else {
+					key = XKeysymToString(ksym);
+				}
 
-				panel->capturing = 0;
+				*capturing = 0;
 				break;
 			}
 		}
@@ -296,7 +300,7 @@ static void captureClick(WMWidget * w, void *data)
 		WMSetLabelText(panel->instructionsL,
 			       _("Press the desired shortcut key(s) or click Cancel to stop capturing."));
 		XGrabKeyboard(dpy, WMWidgetXID(panel->parent), True, GrabModeAsync, GrabModeAsync, CurrentTime);
-		shortcut = captureShortcut(dpy, panel);
+		shortcut = capture_shortcut(dpy, &panel->capturing, 1);
 		if (shortcut) {
 			int row = WMGetListSelectedItemRow(panel->actLs);
 

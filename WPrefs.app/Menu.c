@@ -176,6 +176,8 @@ static Bool shouldRemoveItem(struct WEditMenuDelegate *delegate, WEditMenu * men
 
 static void freeItemData(ItemData * data);
 
+extern char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case);
+
 static WEditMenuDelegate menuDelegate = {
 	NULL,
 	menuItemCloned,
@@ -254,58 +256,6 @@ static void browseForFile(WMWidget * self, void *clientData)
 	wfree(oldprog);
 }
 
-static char *captureShortcut(Display * dpy, _Panel * panel)
-{
-	XEvent ev;
-	KeySym ksym;
-	char buffer[64];
-	char *key = NULL;
-
-	while (panel->capturing) {
-		XAllowEvents(dpy, AsyncKeyboard, CurrentTime);
-		WMNextEvent(dpy, &ev);
-		if (ev.type == KeyPress && ev.xkey.keycode != 0) {
-			ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
-			if (!IsModifierKey(ksym)) {
-				key = XKeysymToString(ksym);
-				panel->capturing = 0;
-				break;
-			}
-		}
-		WMHandleEvent(&ev);
-	}
-
-	if (!key)
-		return NULL;
-
-	buffer[0] = 0;
-
-	if (ev.xkey.state & ControlMask) {
-		strcat(buffer, "Control+");
-	}
-	if (ev.xkey.state & ShiftMask) {
-		strcat(buffer, "Shift+");
-	}
-	if (ev.xkey.state & Mod1Mask) {
-		strcat(buffer, "Mod1+");
-	}
-	if (ev.xkey.state & Mod2Mask) {
-		strcat(buffer, "Mod2+");
-	}
-	if (ev.xkey.state & Mod3Mask) {
-		strcat(buffer, "Mod3+");
-	}
-	if (ev.xkey.state & Mod4Mask) {
-		strcat(buffer, "Mod4+");
-	}
-	if (ev.xkey.state & Mod5Mask) {
-		strcat(buffer, "Mod5+");
-	}
-	strcat(buffer, key);
-
-	return wstrdup(buffer);
-}
-
 static void sgrabClicked(WMWidget * w, void *data)
 {
 	_Panel *panel = (_Panel *) data;
@@ -322,7 +272,7 @@ static void sgrabClicked(WMWidget * w, void *data)
 		panel->capturing = 1;
 		WMSetButtonText(w, _("Cancel"));
 		XGrabKeyboard(dpy, WMWidgetXID(panel->parent), True, GrabModeAsync, GrabModeAsync, CurrentTime);
-		shortcut = captureShortcut(dpy, panel);
+		shortcut = capture_shortcut(dpy, &panel->capturing, 0);
 		if (shortcut) {
 			WMSetTextFieldText(panel->shortT, shortcut);
 			updateMenuItem(panel, panel->currentItem, panel->shortT);
