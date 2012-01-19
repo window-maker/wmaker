@@ -359,23 +359,6 @@ static void listClick(WMWidget * w, void *data)
 	WMSetTextFieldText(panel->shoT, panel->shortcuts[row]);
 }
 
-static char *trimstr(char *str)
-{
-	char *p = str;
-	int i;
-
-	while (isspace(*p))
-		p++;
-	p = wstrdup(p);
-	i = strlen(p);
-	while (isspace(p[i]) && i > 0) {
-		p[i] = 0;
-		i--;
-	}
-
-	return p;
-}
-
 static void showData(_Panel * panel)
 {
 	char *str;
@@ -387,7 +370,7 @@ static void showData(_Panel * panel)
 		if (panel->shortcuts[i])
 			wfree(panel->shortcuts[i]);
 		if (str)
-			panel->shortcuts[i] = trimstr(str);
+			panel->shortcuts[i] = wtrimspace(str);
 		else
 			panel->shortcuts[i] = NULL;
 
@@ -574,7 +557,7 @@ static void storeData(_Panel * panel)
 	for (i = 0; i < panel->actionCount; i++) {
 		str = NULL;
 		if (panel->shortcuts[i]) {
-			str = trimstr(panel->shortcuts[i]);
+			str = wtrimspace(panel->shortcuts[i]);
 			if (strlen(str) == 0) {
 				wfree(str);
 				str = NULL;
