@@ -34,7 +34,7 @@
 
 #include <WINGs/WINGs.h>
 
-/* For EXTENDED_WINDOWSHORTCUT */
+/* Needed for HAVE_LIBINTL_H and EXTENDED_WINDOWSHORTCUT */
 #include "../src/wconfig.h"
 
 /****/
@@ -111,11 +111,5 @@ void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 #define FRAME_LEFT	-2
 #define FRAME_WIDTH	524
 #define FRAME_HEIGHT	235
-
-/*
- * Needed for HAVE_LIBINTL_H
- */
-#include "../src/wconfig.h"
-
 #endif /* WPREFS_H_ */
 
