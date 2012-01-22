@@ -362,7 +362,7 @@ void inotifyHandleEvents(int fd, int wd)
 			wPreferences.flags.noupdates = 1;
 		}
 		if ((pevent->mask & IN_MODIFY) && oneShotFlag == 0) {
-			fprintf(stdout, "wmaker: reading config files in defaults database.\n");
+			wwarning(_("Inotify: Reading config files in defaults database."));
 			wDefaultsCheckDomains(NULL);
 		}
 
