@@ -50,6 +50,7 @@
 #include "framewin.h"
 #include "session.h"
 #include "xmodifier.h"
+#include "rootmenu.h"
 
 #include <WINGs/WUtil.h>
 
@@ -63,7 +64,6 @@ extern WPreferences wPreferences;
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen * scr, char *file_name);
 static WMenu *readMenuDirectory(WScreen * scr, char *title, char **file_name, char *command);
-static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals);
 
 typedef struct Shortcut {
 	struct Shortcut *next;
@@ -379,7 +379,7 @@ void wRootMenuBindShortcuts(Window window)
 	}
 }
 
-static void rebindKeygrabs(WScreen * scr)
+void rebind_key_grabs(WScreen *scr)
 {
 	WWindow *wwin;
 
@@ -1479,7 +1479,7 @@ static WMenu *makeDefaultMenu(WScreen * scr)
  *
  *----------------------------------------------------------------------
  */
-static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals)
+WMenu *configureMenu(WScreen *scr, WMPropList *definition, Bool includeGlobals)
 {
 	WMenu *menu = NULL;
 	WMPropList *elem;
@@ -1730,5 +1730,5 @@ void OpenRootMenu(WScreen * scr, int x, int y, int keyboard)
 	}
 
 	if (scr->flags.root_menu_changed_shortcuts)
-		rebindKeygrabs(scr);
+		rebind_key_grabs(scr);
 }

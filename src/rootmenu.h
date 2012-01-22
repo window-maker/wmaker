@@ -23,10 +23,10 @@
 #define WMROOTMENU_H
 
 #include "WindowMaker.h"
-
+#include "screen.h"
+#include "menu.h"
 
 typedef void *WRootMenuData;
-
 
 typedef struct _WRootMenuReader {
     Bool (*checkMenuChange)(char *path, time_t lastAccessTime);
@@ -40,5 +40,8 @@ typedef struct _WRootMenuReader {
                         char **shortcut);
     void (*closeMenuFile)(WRootMenuData *data);
 } WRootMenuReader;
+
+void rebind_key_grabs(WScreen *scr);
+WMenu *configureMenu(WScreen *scr, WMPropList *definition, Bool includeGlobals);
 
 #endif /* WMROOTMENU_H */
