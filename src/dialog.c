@@ -1230,7 +1230,7 @@ void wShowInfoPanel(WScreen * scr)
 	{
 		struct mallinfo ma = mallinfo();
 		snprintf(buffer, sizeof(buffer),
-			 _("Total allocated memory: %i kB. Total memory in use: %i kB.\n"),
+			 _("Total memory allocated: %i kB (in use: %i kB).\n"),
 			 (ma.arena + ma.hblkhd) / 1024, (ma.uordblks + ma.hblkhd) / 1024);
 
 		strbuf = wstrappend(strbuf, buffer);
@@ -1244,29 +1244,10 @@ void wShowInfoPanel(WScreen * scr)
 		strbuf = wstrappend(strbuf, " ");
 	}
 
-	strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
-	{
-		char *list[9];
-		char buf[80];
-		int j = 0;
-
-		list[j++] = "WMSPEC";
+	strbuf = wstrappend(strbuf, _("\nAdditional support for: WMSPEC"));
 #ifdef MWM_HINTS
-		list[j++] = "MWM";
+	strbuf = wstrappend(strbuf, " and MWM");
 #endif
-
-		buf[0] = 0;
-		for (i = 0; i < j; i++) {
-			if (i > 0) {
-				if (i == j - 1)
-					strcat(buf, _(" and "));
-				else
-					strcat(buf, ", ");
-			}
-			strcat(buf, list[i]);
-		}
-		strbuf = wstrappend(strbuf, buf);
-	}
 
 #ifdef XINERAMA
 	strbuf = wstrappend(strbuf, _("\n"));
