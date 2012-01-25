@@ -445,7 +445,6 @@ typedef struct WPreferences {
 
 /****** Global Variables  ******/
 extern Display	*dpy;
-extern char *ProgName;
 extern unsigned int ValidModMask;
 extern char WProgramState;
 extern char WProgramSigState;
