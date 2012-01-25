@@ -79,9 +79,6 @@ int wScreenCount = 0;
 
 WPreferences wPreferences;
 
-WMPropList *wDomainName;
-WMPropList *wAttributeDomainName;
-
 WShortKey wKeyBindings[WKBD_LAST];
 
 /* defaults domains */

@@ -44,7 +44,6 @@
 
 /* Global stuff */
 extern WPreferences wPreferences;
-extern WMPropList *wAttributeDomainName;
 extern WDDomain *WDWindowAttributes;
 
 /* Local stuff */
@@ -124,10 +123,6 @@ static void init_wdefaults(WScreen * scr)
 
 	AnyWindow = WMCreatePLString("*");
 	No = WMCreatePLString("No");
-	/*
-	   if (!scr->wattribs) {
-	   scr->wattribs = PLGetDomain(wAttributeDomainName);
-	   } */
 }
 
 static WMPropList *get_value(WMPropList * dict_win, WMPropList * dict_class, WMPropList * dict_name,
