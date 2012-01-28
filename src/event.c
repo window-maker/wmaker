@@ -130,6 +130,9 @@ static void handleKeyPress(XEvent *event);
 static void handleFocusIn(XEvent *event);
 static void handleMotionNotify(XEvent *event);
 static void handleVisibilityNotify(XEvent *event);
+static void handle_inotify_events(int fd, int wd);
+static void wdelete_death_handler(WMagicNumber id);
+
 
 #ifdef SHAPE
 static void handleShapeNotify(XEvent *event);
@@ -182,7 +185,7 @@ WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler * callback, void *cdata)
 	return handler;
 }
 
-void wDeleteDeathHandler(WMagicNumber id)
+static void wdelete_death_handler(WMagicNumber id)
 {
 	DeathHandler *handler = (DeathHandler *) id;
 
@@ -312,7 +315,7 @@ void DispatchEvent(XEvent * event)
 #ifdef HAVE_INOTIFY
 /*
  *----------------------------------------------------------------------
- * inotifyHandleEvents-
+ * handle_inotify_events-
  * 	Check for inotify events
  *
  * Returns:
@@ -325,7 +328,7 @@ void DispatchEvent(XEvent * event)
  */
 /* allow 5 simultaneous events, with path + filenames up to 64 chars */
 #define BUFF_SIZE ((sizeof(struct inotify_event) + 64)*5)
-void inotifyHandleEvents(int fd, int wd)
+static void handle_inotify_events(int fd, int wd)
 {
 	extern void wDefaultsCheckDomains(void *);
 	ssize_t eventQLength, i = 0;
@@ -421,7 +424,7 @@ void EventLoop(void)
 				continue;
 			}
 			if (FD_ISSET(inotifyFD, &rfds))
-				inotifyHandleEvents(inotifyFD, inotifyWD);
+				handle_inotify_events(inotifyFD, inotifyWD);
 		}
 #endif
 	}
@@ -514,7 +517,7 @@ static void handleDeadProcess(void *foo)
 			if (tmp->pid == deadProcesses[deadProcessPtr].pid) {
 				(*tmp->callback) (tmp->pid,
 						  deadProcesses[deadProcessPtr].exit_status, tmp->client_data);
-				wDeleteDeathHandler(tmp);
+				wdelete_death_handler(tmp);
 			}
 		}
 	}
