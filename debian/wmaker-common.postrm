@@ -12,10 +12,6 @@ case "$1" in
     done
   ;;
   purge)
-    if [ -x /usr/sbin/register-window-manager ]; then
-      register-window-manager --remove wmaker
-    fi
-
     if [ -x /usr/bin/update-menus ] ; then
       update-menus
       rm -f /etc/X11/WindowMaker/menu.hook /etc/X11/WindowMaker/plmenu.hook

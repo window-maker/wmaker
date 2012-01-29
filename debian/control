@@ -4,20 +4,17 @@ Priority: optional
 Maintainer: Rodolfo García Peñas (kix) <kix@kix.es>
 Standards-Version: 3.9.2
 Build-Depends: debhelper (>= 7.0.50~), automake (>= 1:1.11), gettext,
- dctrl-tools, quilt,
- libfontconfig1-dev, libjpeg-dev, libpng12-dev, libsm-dev, libtiff4-dev,
+ libfontconfig1-dev, libjpeg-dev, libpng-dev, libsm-dev, libtiff4-dev,
  libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev,
  libxkbfile-dev, libxpm-dev, libxt-dev, libxrender-dev, sharutils, libxmu-dev,
- libxrandr-dev
-Homepage: http://www.windowmaker.info/
-Vcs-Git: git://repo.or.cz/wmaker-crm.git
-Vcs-Browser: http://repo.or.cz/r/wmaker-crm.git
+ libxrandr-dev, dctrl-tools, autotools-dev
+Homepage: http://windowmaker.org/
 
 Package: wmaker
 Architecture: any
-Depends: ${shlibs:Depends}, cpp, ${misc:Depends}, wmaker-common
+Depends: ${shlibs:Depends}, ${misc:Depends}, wmaker-common (>= 0.95.0+20111028-3)
 Provides: x-window-manager
-Suggests: wmaker-data, menu, x11-apps, xosview, wterm | x-terminal-emulator
+Suggests: wmaker-data, menu, x11-apps, xosview, x-terminal-emulator, desktop-base
 Description: NeXTSTEP-like window manager for X
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker is not
@@ -30,6 +27,8 @@ Package: wmaker-common
 Architecture: all
 Depends: ${misc:Depends}
 Suggests: wmaker
+Replaces: wmaker (<< 0.95.0+20111028-3)
+Breaks: wmaker (<< 0.95.0+20111028-3)
 Description: Window Maker - Architecture independent files
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker is not
@@ -40,24 +39,11 @@ Description: Window Maker - Architecture independent files
  .
  This package contains the architecture independent files.
 
-Package: libwmaker0-dev
-Architecture: any
-Section: libdevel
-Depends: libc6-dev, libx11-dev, ${misc:Depends}
-Description: Static libraries and headers for Window Maker applications
- Window Maker is a NeXTSTEP-like window manager for X.
- This package contains libWMaker and header files, for building
- Window Maker aware applications.
- .
- Static libraries and headers for Window Maker applications
- Contains libWMaker and header files, for building Window Maker aware
- applications.
-
 Package: libwraster3-dev
 Architecture: any
 Section: libdevel
 Depends: libwraster3 (= ${binary:Version}), libc6-dev, libx11-dev,
- libxext-dev, libxpm-dev, libjpeg-dev, libpng12-0-dev, libgif-dev,
+ libxext-dev, libxpm-dev, libjpeg-dev, libpng-dev, libgif-dev,
  libtiff4-dev, ${misc:Depends}
 Provides: libwraster-dev
 Description: Static libraries and headers of Window Maker rasterizer

@@ -1,5 +1,4 @@
 usr/include/WINGs/WUtil.h
-usr/include/WINGs/proplist-compat.h
 usr/include/WINGs/WINGs.h
 usr/include/WINGs/WINGsP.h
 usr/lib/pkgconfig/WINGs.pc

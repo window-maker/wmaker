@@ -6,4 +6,7 @@ README
 TODO
 FAQ
 FAQ.I18N
-debian/Debian.theme.txt
+debian/debianfiles/Theme/Debian.theme.txt
+debian/copyright
+# Place wm-oldmenu2new under a more appropiate directory
+util/wm-oldmenu2new

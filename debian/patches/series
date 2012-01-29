@@ -1,3 +1,4 @@
 50_def_config_paths.diff
 51_wmaker_man.diff
-52_libwmaker0dev.diff
+53_Debian_WMState.diff
+54_Debian_wmmacros.diff

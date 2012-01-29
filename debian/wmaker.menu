@@ -2,6 +2,9 @@
 	section="Window Managers" title="Window Maker" \
 	command="/usr/bin/wmaker"
 ?package(wmaker):needs="wmaker" \
+	section="/" title="Run..." \
+	command="SHEXEC \"%A(Run,Type Command:)\""
+?package(wmaker):needs="wmaker" \
 	section="/" title="Exit" sort="ZZ" \
         command="EXIT"
 ?package(wmaker):needs="wmaker" \

@@ -1,25 +1,87 @@
-wmaker (0.95.0-1) unstable; urgency=low
+wmaker (0.95.1-1) unstable; urgency=low
 
-  * New upstream version 0.95.0
+  * New upstream version 0.95.1
+  * Patch debian/52_architectures.diff is now included in upstream.
+    - The patch file was deleted.
+  * The WINGs's file proplist-compat.h is removed in upstream.
+    - Removed the line in debian/libwings-dev.install
+  * Updated debian/libwutil2.symbols with new symbol.
 
- -- Rodolfo García Peñas (kix) <kix@kix.es>  Mon, 18 Oct 2011 10:08:35 +0200
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Sun, 29 Jan 2012 16:16:15 +0100
 
-wmaker (0.94.0-1) unstable; urgency=low
+wmaker (0.95.0+20111028-4) unstable; urgency=low
 
-  * New maintainer [Closes: #632875]
-  * New upstream version, now from git. [Closes: #556677]
-  * New package wmaker-common (arch independent files)
-  * removed the asclock diversions from the wmaker scripts
-  * new package wmaker-common with the arch independent files
-  * debian/patches are now DEP-3
-  * debian/copyright is now DEP-5
-  * Standard-Version is now 3.9.2
-  * manpages moved to upstream
-  * solved some problems with .la files (lintian clean)
-  * libwmaker0-dev is not included in upstream version.
-    Now included as patch (52_libwmaker0dev.diff)
+  * libpng12-dev dependencies changed to libpng-dev. [Closes: #648123]
+  * wterm package suggestion removed. 
+  * Menu shows "Run..." option. [Closes: #165075]
+    Thanks to Andreas Tscharner for their patch.
+  * Menu shows the background files [Closes: #655122]
+    * Added patch 54_Debian_wmmacros.diff.
+      Based on changelog: Marcelo E. Magallon Tue, 17 Nov 1998
+  * Xterm and WMPrefs are now Debian specific.
+    * Added patch 53_Debian_WMState.diff.
+      Based on changelog: Marcelo E. Magallon Sun, 26 Nov 2000
 
- -- Rodolfo García Peñas (kix) <kix@kix.es>  Mon, 28 Sep 2011 19:29:12 +0200
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Thu, 7 Jan 2012 02:06:33 +0100
+
+wmaker (0.95.0+20111028-3) unstable; urgency=low
+
+  * Fix wmaker-common dependencies. [Closes: #654668]
+    * Manpages moved from wmaker-common to wmaker (Lintian problem).
+  * New patch 52_architectures: New architectures kfreebsd* and Hurd.
+    [Closes: #654715]
+  * Removed old stuff in wmaker.post* and wmaker-common.post* about
+    update-alternatives.
+
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Thu, 5 Jan 2012 01:02:21 +0100
+
+wmaker (0.95.0+20111028-2) unstable; urgency=low
+
+  * Fix to the FTBFS. [Closes: #654524]
+  * New debian/watch file
+
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Wed, 4 Jan 2012 00:03:22 +0100
+
+wmaker (0.95.0+20111028-1) unstable; urgency=low
+
+  * New upstream version 0.95.0, now from git. [Closes: #401900]
+    [Closes: #514438, #607550, #218110, #583734, #105351, #549157]
+    [Closes: #283610, #311563, #310285, #329783, #280819, #284048]
+    [Closes: #292391, #361241, #364290, #148370, #287459, #122076]
+    [Closes: #175503, #79598, #78088, #68381, #38184, #41434, #41434]
+    [Closes: #94960, #39543, #63265, #69499, #94446, #77488, #329783]
+    Thanks to Andreas Tscharner for their bug revision.
+    * This new version is based in wmaker-crm a wmaker fork, because
+      wmaker (original) is not updated.
+  * New debian/rules file. [Closes: #590244]
+    * Many many changes
+    * /usr/lib/WindowMaker/WindowMaker is now /usr/lib/WindowMaker/wmaker
+      * wmaker script launch now /usr/lib/WindowMaker/wmaker
+  * New maintainer. [Closes: #632875]
+  * New package wmaker-common (arch independent files).
+  * Removed the asclock diversions from the wmaker install scripts
+    wmaker.postrm and wmaker.preinst because asclock binary is not
+    included in wmaker package (see asclock package).
+  * New package wmaker-common with the arch independent files.
+  * debian/patches are now DEP-3.
+  * debian/copyright is now DEP-5.
+  * Bumped Standars-Version 3.9.2.
+  * Manpages moved to upstream.
+  * Solved problems with .la files (lintian clean).
+  * libwmaker0-dev isn't included, because was removed in upstream.
+
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Sun, 1 Jan 2012 20:24:32 +0100
+
+wmaker (0.92.0-9) unstable; urgency=low
+
+  * QA upload.
+  * Set maintainer to QA team.
+  * debian/patches/90_binutils_gold.diff
+    - Fix FTBFS from indirect linking to X11 in debian/control
+      (Closes: #556677)
+  * Debian S-V 3.9.2, no changes
+
+ -- Scott Howard <showard@debian.org>  Fri, 16 Dec 2011 19:30:17 -0500
 
 wmaker (0.92.0-8.3) unstable; urgency=low
 

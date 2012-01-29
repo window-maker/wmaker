@@ -122,42 +122,31 @@ usr/share/WINGs/defaultIcon.xpm
 usr/share/WINGs/defaultIcon.tiff
 usr/share/WINGs/Images.xpm
 usr/share/WINGs/Images.tiff
-usr/share/man/ru/man1/wxpaste.1x
-usr/share/man/ru/man1/geticonset.1x
-usr/share/man/ru/man1/seticons.1x
-usr/share/man/ru/man1/setstyle.1x
-usr/share/man/ru/man1/getstyle.1x
-usr/share/man/ru/man1/wdwrite.1x
-usr/share/man/ru/man1/wxcopy.1x
-usr/share/man/ru/man1/wmaker.1x
-usr/share/man/ru/man1/wmsetbg.1x
-usr/share/man/sk/man1/wxpaste.1x
-usr/share/man/sk/man1/geticonset.1x
-usr/share/man/sk/man1/seticons.1x
-usr/share/man/sk/man1/setstyle.1x
-usr/share/man/sk/man1/getstyle.1x
-usr/share/man/sk/man1/wdwrite.1x
-usr/share/man/sk/man1/wxcopy.1x
-usr/share/man/sk/man1/wmaker.1x
-usr/share/man/sk/man1/wmsetbg.1x
-usr/share/man/cs/man1/wxpaste.1x
-usr/share/man/cs/man1/geticonset.1x
-usr/share/man/cs/man1/seticons.1x
-usr/share/man/cs/man1/setstyle.1x
-usr/share/man/cs/man1/getstyle.1x
-usr/share/man/cs/man1/wdwrite.1x
-usr/share/man/cs/man1/wxcopy.1x
-usr/share/man/cs/man1/wmaker.1x
-usr/share/man/cs/man1/wmsetbg.1x
-usr/share/man/man1/wxpaste.1x
-usr/share/man/man1/geticonset.1x
-usr/share/man/man1/seticons.1x
-usr/share/man/man1/setstyle.1x
-usr/share/man/man1/getstyle.1x
-usr/share/man/man1/wdwrite.1x
-usr/share/man/man1/wxcopy.1x
-usr/share/man/man1/wmaker.1x
-usr/share/man/man1/wmsetbg.1x
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.xpm
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.tiff
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/tiff/*.tiff
+# Scripts
+debian/debianfiles/wmaker			usr/bin
+debian/debianfiles/upgrade-windowmaker-defaults usr/sbin
+# Theme
+debian/debianfiles/menu/menu.prehook		etc/X11/WindowMaker
+debian/debianfiles/menu/menu.posthook		etc/X11/WindowMaker
+debian/debianfiles/Theme/Debian			usr/share/WindowMaker/Themes
+debian/debianfiles/Theme/debian.tiff		usr/share/WindowMaker/Backgrounds
+# Configuration
+etc/WindowMaker/WMGLOBAL			etc/GNUstep/Defaults
+etc/WindowMaker/WMState				etc/GNUstep/Defaults
+debian/debianfiles/conf/WMWindowAttributes	etc/GNUstep/Defaults
+debian/debianfiles/conf/WMRootMenu		etc/GNUstep/Defaults
+debian/debianfiles/conf/WindowMaker		etc/GNUstep/Defaults
+debian/debianfiles/wmaker-common.desktop	usr/share/xsessions
+usr/share/WindowMaker/wmmacros			etc/X11/WindowMaker
+# Menu
+debian/debianfiles/menu/wmappearance		etc/menu-methods
+WindowMaker/appearance.menu			etc/X11/WindowMaker
+WindowMaker/background.menu			etc/X11/WindowMaker
+# READMES, from the temporal path (see README section in debian/rules)
+README.po					usr/share/doc/wmaker
+README.definable-cursor				usr/share/doc/wmaker
+README.WPrefs					usr/share/doc/wmaker
+README.WPrefs.po				usr/share/doc/wmaker

@@ -14,7 +14,7 @@ gs_icons="$gs_base/Library/Icons"
 wm_style="$wm_base/Style"
 wm_styles="$wm_base/Styles"
 wm_themes="$wm_base/Themes"
-WindowMaker=/usr/lib/WindowMaker/WindowMaker
+WindowMaker=/usr/lib/WindowMaker/wmaker
 convertfonts=/usr/lib/WindowMaker/convertfonts
 
 make_dir_if_needed ()

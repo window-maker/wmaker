@@ -1,25 +1,15 @@
-#! /bin/sh -e
-#
+#!/bin/sh
+set -e
+
 # Window Maker postinst.
 #
 # Marcelo Magallon <mmagallo@debian.org>
+# Rodolfo "kix" García <kix@kix.es>
 
 inst="/etc/menu-methods/wmaker /etc/menu-methods/wmappearance"
-x_wm_link=/etc/alternatives/x-window-manager
-x_wm_man_link=/usr/share/man/man1/x-window-manager.1.gz
 
 case "$1" in
   configure)
-    update-alternatives --install /usr/bin/x-window-manager \
-        x-window-manager /usr/bin/wmaker 50 \
-        --slave /usr/share/man/man1/x-window-manager.1.gz \
-        x-window-manager.1.gz /usr/share/man/man1/wmaker.1x.gz
-
-    if readlink ${x_wm_link} | grep wmaker > /dev/null ; then
-        ln -sf /usr/bin/wmaker ${x_wm_link}
-        ln -sf /usr/share/man/man1/wmaker.1x.gz ${x_wm_man_link}
-    fi
-
     for file in $inst ; do
         if [ -f $file ] ; then
             chmod a+x $file
