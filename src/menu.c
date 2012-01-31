@@ -39,7 +39,6 @@
 #include "actions.h"
 #include "funcs.h"
 #include "stacking.h"
-#include "text.h"
 #include "xinerama.h"
 #include "workspace.h"
 #include "dialog.h"
