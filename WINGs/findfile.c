@@ -408,7 +408,7 @@ char *wfindfileinarray(WMPropList * array, char *file)
 	return NULL;
 }
 
-int copy_file(char *dir, char *src_file, char *dest_file)
+int wcopy_file(char *dir, char *src_file, char *dest_file)
 {
 	FILE *src, *dst;
 	size_t nread, nwritten;

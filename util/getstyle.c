@@ -171,7 +171,7 @@ void findCopyFile(char *dir, char *file)
 		if (ThemePath)
 			(void)wrmdirhier(ThemePath);
 	}
-	copy_file(dir, fullPath, fullPath);
+	wcopy_file(dir, fullPath, fullPath);
 	free(fullPath);
 }
 
@@ -227,7 +227,7 @@ void makeThemePack(WMPropList * style, char *themeName)
 
 				p = strrchr(WMGetFromPLString(file), '/');
 				if (p) {
-					copy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
+					wcopy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
 
 					newPath = wstrdup(p + 1);
 					WMDeleteFromPLArray(value, 1);
@@ -246,7 +246,7 @@ void makeThemePack(WMPropList * style, char *themeName)
 
 				p = strrchr(WMGetFromPLString(file), '/');
 				if (p) {
-					copy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
+					wcopy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
 
 					newPath = wstrdup(p + 1);
 					WMDeleteFromPLArray(value, 1);
@@ -260,7 +260,7 @@ void makeThemePack(WMPropList * style, char *themeName)
 
 				p = strrchr(WMGetFromPLString(file), '/');
 				if (p) {
-					copy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
+					wcopy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
 
 					newPath = wstrdup(p + 1);
 					WMDeleteFromPLArray(value, 2);

@@ -2924,7 +2924,7 @@ static void customPaletteMenuNewFromFile(W_ColorPanel * panel)
 
 		/* Copy image to $(gnustepdir)/Library/Colors/ &
 		 * Add filename to history menu */
-		if (copy_file(panel->configurationPath, filepath, filename) == 0) {
+		if (wcopy_file(panel->configurationPath, filepath, filename) == 0) {
 
 			/* filepath is a "local" path now the file has been copied */
 			wfree(filepath);
