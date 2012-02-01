@@ -1,6 +1,6 @@
-wmaker (0.95.1-1) unstable; urgency=low
+wmaker (0.95.1+20120131-1) unstable; urgency=low
 
-  * New upstream version 0.95.1
+  * New upstream version 0.95.1 [Closes: #304480]
   * Patch debian/52_architectures.diff is now included in upstream.
     - The patch file was deleted.
   * The WINGs's file proplist-compat.h is removed in upstream.

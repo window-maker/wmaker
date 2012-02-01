@@ -197,7 +197,7 @@ libWUtil.so.2 libwutil2 #MINVER#
  W_InitNotificationCenter@Base 0.95.0
  _WINGS_progname@Base 0.95.0
  __wmessage@Base 0.95.0
- copy_file@Base 0.95.1
+ wcopy_file@Base 0.95.1
  destroyNode@Base 0.95.0
  wdefaultspathfordomain@Base 0.95.0
  wexpandpath@Base 0.95.0
