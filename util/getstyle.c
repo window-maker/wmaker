@@ -277,7 +277,7 @@ void makeThemePack(WMPropList * style, char *themeName)
 int main(int argc, char **argv)
 {
 	WMPropList *prop, *style, *key, *val;
-	char *path, *p;
+	char *path;
 	int i, ch, theme_too = 0, make_pack = 0;
 	char *style_file = NULL;
 
@@ -315,15 +315,8 @@ int main(int argc, char **argv)
 	if (argc - optind > 1)
 		print_help(0, 1);
 
-	if (argc - optind == 1) {
+	if (argc - optind == 1)
 		style_file = argv[argc - 1];
-		while ((p = strchr(style_file, '/')) != NULL)
-			*p = '_';
-	}
-
-	/* A theme name was given but the option to create it (-p) was not */
-	if (style_file && !make_pack)
-		print_help(0, 1);
 
 	if (make_pack && !style_file) {
 		printf("%s: you must supply a name for the theme pack\n", __progname);
