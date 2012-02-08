@@ -45,6 +45,7 @@ errorExit() {
 doPull() {
   RC="1"
   LATEST="`$STATUSCMD`"
+  dh_clean
   git reset --hard HEAD
   git clean -f
   $PULLCMD >>$BUILDLOG 2>&1 || errorExit "Error pulling from the repo"
