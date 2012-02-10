@@ -348,9 +348,6 @@
 
 #define KEY_CONTROL_WINDOW_WEIGHT 1
 
-/* if your keyboard don't have arrow keys */
-#undef ARROWLESS_KBD
-
 /* don't put titles in miniwindows */
 #undef NO_MINIWINDOW_TITLES
 

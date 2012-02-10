@@ -41,6 +41,7 @@ typedef struct _Panel {
 
 	WMFrame *optF;
 	WMButton *autoB;
+	WMButton *autoC;
 	WMButton *wrapB;
 
 } _Panel;
@@ -64,6 +65,8 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->wrapB, GetBoolForKey("WrapMenus"));
 
 	WMSetButtonSelected(panel->autoB, GetBoolForKey("ScrollableMenus"));
+
+	WMSetButtonSelected(panel->autoC, GetBoolForKey("ViKeyMenus"));
 }
 
 static void storeData(_Panel * panel)
@@ -80,6 +83,7 @@ static void storeData(_Panel * panel)
 
 	SetBoolForKey(WMGetButtonSelected(panel->wrapB), "WrapMenus");
 	SetBoolForKey(WMGetButtonSelected(panel->autoB), "ScrollableMenus");
+	SetBoolForKey(WMGetButtonSelected(panel->autoC), "ViKeyMenus");
 }
 
 static void createPanel(Panel * p)
@@ -184,8 +188,8 @@ static void createPanel(Panel * p)
 
     /***************** Options ****************/
 	panel->optF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->optF, 475, 80);
-	WMMoveWidget(panel->optF, 25, 130);
+	WMResizeWidget(panel->optF, 475, 96);
+	WMMoveWidget(panel->optF, 25, 120);
 
 	panel->wrapB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->wrapB, 440, 32);
@@ -196,8 +200,12 @@ static void createPanel(Panel * p)
 
 	panel->autoB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->autoB, 440, 32);
-	WMMoveWidget(panel->autoB, 25, 45);
+	WMMoveWidget(panel->autoB, 25, 34);
 	WMSetButtonText(panel->autoB, _("Scroll off-screen menus when pointer is moved over them."));
+	panel->autoC = WMCreateSwitchButton(panel->optF);
+	WMResizeWidget(panel->autoC, 440, 32);
+	WMMoveWidget(panel->autoC, 25, 58);
+	WMSetButtonText(panel->autoC, _("Use h/j/k/l keys to select menu options."));
 
 	WMMapSubwidgets(panel->optF);
 

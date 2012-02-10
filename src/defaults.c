@@ -391,6 +391,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.dblclick_time, getInt, setDoubleClick, NULL, NULL},
 	{"AlignSubmenus", "NO", NULL,
 	    &wPreferences.align_menus, getBool, NULL, NULL, NULL},
+	{"ViKeyMenus", "NO", NULL,
+	    &wPreferences.vi_key_menus, getBool, NULL, NULL, NULL},
 	{"OpenTransientOnOwnerWorkspace", "NO", NULL,
 	    &wPreferences.open_transients_with_parent, getBool, NULL, NULL, NULL},
 	{"WindowPlacement", "auto", sePlacements,

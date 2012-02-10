@@ -892,6 +892,26 @@ static int keyboardMenu(WMenu * menu)
 		switch (event.type) {
 		case KeyPress:
 			ksym = XLookupKeysym(&event.xkey, 0);
+			if (wPreferences.vi_key_menus) {
+				switch (ksym) {
+				case XK_h:
+					ksym = XK_Left;
+					break;
+
+				case XK_j:
+					ksym = XK_Down;
+					break;
+
+				case XK_k:
+					ksym = XK_Up;
+					break;
+
+				case XK_l:
+					ksym = XK_Right;
+					break;
+
+				}
+			}
 			switch (ksym) {
 			case XK_Escape:
 				done = 1;
@@ -914,9 +934,6 @@ static int keyboardMenu(WMenu * menu)
 				break;
 
 			case XK_Up:
-#ifdef ARROWLESS_KBD
-			case XK_k:
-#endif
 #ifdef XK_KP_Up
 			case XK_KP_Up:
 #endif
@@ -928,9 +945,6 @@ static int keyboardMenu(WMenu * menu)
 				break;
 
 			case XK_Down:
-#ifdef ARROWLESS_KBD
-			case XK_j:
-#endif
 #ifdef XK_KP_Down
 			case XK_KP_Down:
 #endif
@@ -944,9 +958,6 @@ static int keyboardMenu(WMenu * menu)
 				break;
 
 			case XK_Right:
-#ifdef ARROWLESS_KBD
-			case XK_l:
-#endif
 #ifdef XK_KP_Right
 			case XK_KP_Right:
 #endif
@@ -970,9 +981,6 @@ static int keyboardMenu(WMenu * menu)
 				break;
 
 			case XK_Left:
-#ifdef ARROWLESS_KBD
-			case XK_h:
-#endif
 #ifdef XK_KP_Left
 			case XK_KP_Left:
 #endif
