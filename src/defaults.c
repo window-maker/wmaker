@@ -2520,30 +2520,8 @@ static int setClipTitleColor(WScreen * scr, WDefaultEntry * entry, XColor * colo
 {
 	if (scr->clip_title_color[widx])
 		WMReleaseColor(scr->clip_title_color[widx]);
+
 	scr->clip_title_color[widx] = WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue, True);
-#ifdef GRADIENT_CLIP_ARROW
-	if (widx == CLIP_NORMAL) {
-		RImage *image;
-		RColor color1, color2;
-		int pt = CLIP_BUTTON_SIZE * wPreferences.icon_size / 64;
-		int as = pt - 15;	/* 15 = 5+5+5 */
-
-		FREE_PIXMAP(scr->clip_arrow_gradient);
-
-		color1.red = (color->red >> 8) * 6 / 10;
-		color1.green = (color->green >> 8) * 6 / 10;
-		color1.blue = (color->blue >> 8) * 6 / 10;
-
-		color2.red = WMIN((color->red >> 8) * 20 / 10, 255);
-		color2.green = WMIN((color->green >> 8) * 20 / 10, 255);
-		color2.blue = WMIN((color->blue >> 8) * 20 / 10, 255);
-
-		image = RRenderGradient(as + 1, as + 1, &color1, &color2, RDiagonalGradient);
-		RConvertImage(scr->rcontext, image, &scr->clip_arrow_gradient);
-		RReleaseImage(image);
-	}
-#endif				/* GRADIENT_CLIP_ARROW */
-
 	wFreeColor(scr, color->pixel);
 
 	return REFRESH_ICON_TITLE_COLOR;

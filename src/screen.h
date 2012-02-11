@@ -223,11 +223,6 @@ typedef struct _WScreen {
     Window clip_balloon;	       /* window for workspace name */
 
     int keymove_tick;
-
-#ifdef GRADIENT_CLIP_ARROW
-    Pixmap clip_arrow_gradient;
-#endif
-
     struct RContext *rcontext;	       /* wrlib context */
 
     WMScreen *wmscreen;		       /* for widget library */

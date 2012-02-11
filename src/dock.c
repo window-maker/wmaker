@@ -305,14 +305,7 @@ static void paintClipButtons(WAppIcon * clipIcon, Bool lpushed, Bool rpushed)
 	int as = pt - 15;	/* 15 = 5+5+5 */
 	GC gc = scr->draw_gc;	/* maybe use WMColorGC() instead here? */
 	WMColor *color;
-#ifdef GRADIENT_CLIP_ARROW
-	Bool collapsed = clipIcon->dock->collapsed;
-#endif
 
-	/*if (!clipIcon->dock->collapsed)
-	   color = scr->clip_title_color[CLIP_NORMAL];
-	   else
-	   color = scr->clip_title_color[CLIP_COLLAPSED]; */
 	color = scr->clip_title_color[CLIP_NORMAL];
 
 	XSetForeground(dpy, gc, WMColorPixel(color));
@@ -337,14 +330,6 @@ static void paintClipButtons(WAppIcon * clipIcon, Bool lpushed, Bool rpushed)
 		XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
 		XSetForeground(dpy, scr->draw_gc, scr->black_pixel);
 	}
-#ifdef GRADIENT_CLIP_ARROW
-	if (!collapsed) {
-		XSetFillStyle(dpy, scr->copy_gc, FillTiled);
-		XSetTile(dpy, scr->copy_gc, scr->clip_arrow_gradient);
-		XSetClipMask(dpy, scr->copy_gc, None);
-		gc = scr->copy_gc;
-	}
-#endif				/* GRADIENT_CLIP_ARROW */
 
 	/* top right arrow */
 	p[0].x = p[3].x = ICON_SIZE - 5 - as;
@@ -357,10 +342,6 @@ static void paintClipButtons(WAppIcon * clipIcon, Bool lpushed, Bool rpushed)
 		XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
 		XDrawLines(dpy, win, scr->draw_gc, p, 4, CoordModeOrigin);
 	} else {
-#ifdef GRADIENT_CLIP_ARROW
-		if (!collapsed)
-			XSetTSOrigin(dpy, gc, ICON_SIZE - 6 - as, 5);
-#endif
 		XFillPolygon(dpy, win, gc, p, 3, Convex, CoordModeOrigin);
 		XDrawLines(dpy, win, gc, p, 4, CoordModeOrigin);
 	}
@@ -376,17 +357,9 @@ static void paintClipButtons(WAppIcon * clipIcon, Bool lpushed, Bool rpushed)
 		XFillPolygon(dpy, win, scr->draw_gc, p, 3, Convex, CoordModeOrigin);
 		XDrawLines(dpy, win, scr->draw_gc, p, 4, CoordModeOrigin);
 	} else {
-#ifdef GRADIENT_CLIP_ARROW
-		if (!collapsed)
-			XSetTSOrigin(dpy, gc, 5, ICON_SIZE - 6 - as);
-#endif
 		XFillPolygon(dpy, win, gc, p, 3, Convex, CoordModeOrigin);
 		XDrawLines(dpy, win, gc, p, 4, CoordModeOrigin);
 	}
-#ifdef GRADIENT_CLIP_ARROW
-	if (!collapsed)
-		XSetFillStyle(dpy, scr->copy_gc, FillSolid);
-#endif
 }
 
 RImage *wClipMakeTile(WScreen * scr, RImage * normalTile)
