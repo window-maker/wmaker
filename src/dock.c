@@ -88,33 +88,33 @@ static WMPropList *dPosition, *dApplications, *dLowered, *dCollapsed;
 
 static WMPropList *dAutoCollapse, *dAutoRaiseLower, *dOmnipresent;
 
-static void dockIconPaint(WAppIcon * btn);
+static void dockIconPaint(WAppIcon *btn);
 
-static void iconMouseDown(WObjDescriptor * desc, XEvent * event);
+static void iconMouseDown(WObjDescriptor *desc, XEvent *event);
 
-static pid_t execCommand(WAppIcon * btn, char *command, WSavedState * state);
+static pid_t execCommand(WAppIcon *btn, char *command, WSavedState *state);
 
-static void trackDeadProcess(pid_t pid, unsigned char status, WDock * dock);
+static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock);
 
 static int getClipButton(int px, int py);
 
-static void toggleLowered(WDock * dock);
+static void toggleLowered(WDock *dock);
 
-static void toggleCollapsed(WDock * dock);
+static void toggleCollapsed(WDock *dock);
 
-static void clipIconExpose(WObjDescriptor * desc, XEvent * event);
+static void clipIconExpose(WObjDescriptor *desc, XEvent *event);
 
-static void clipLeave(WDock * dock);
+static void clipLeave(WDock *dock);
 
-static void handleClipChangeWorkspace(WScreen * scr, XEvent * event);
+static void handleClipChangeWorkspace(WScreen *scr, XEvent *event);
 
-Bool moveIconBetweenDocks(WDock * src, WDock * dest, WAppIcon * icon, int x, int y);
+Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y);
 
-static void clipEnterNotify(WObjDescriptor * desc, XEvent * event);
-static void clipLeaveNotify(WObjDescriptor * desc, XEvent * event);
+static void clipEnterNotify(WObjDescriptor *desc, XEvent *event);
+static void clipLeaveNotify(WObjDescriptor *desc, XEvent *event);
 static void clipAutoCollapse(void *cdata);
 static void clipAutoExpand(void *cdata);
-static void launchDockedApplication(WAppIcon * btn, Bool withSelection);
+static void launchDockedApplication(WAppIcon *btn, Bool withSelection);
 
 static void clipAutoLower(void *cdata);
 static void clipAutoRaise(void *cdata);
@@ -154,7 +154,7 @@ static void make_keys(void)
 	dClip = WMCreatePLString("Clip");
 }
 
-static void renameCallback(WMenu * menu, WMenuEntry * entry)
+static void renameCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WDock *dock = entry->clientdata;
 	char buffer[128];
@@ -176,7 +176,7 @@ static void renameCallback(WMenu * menu, WMenuEntry * entry)
 	}
 }
 
-static void toggleLoweredCallback(WMenu * menu, WMenuEntry * entry)
+static void toggleLoweredCallback(WMenu *menu, WMenuEntry *entry)
 {
 	assert(entry->clientdata != NULL);
 
@@ -192,7 +192,7 @@ static int matchWindow(const void *item, const void *cdata)
 	return (((WFakeGroupLeader *) item)->leader == (Window) cdata);
 }
 
-static void killCallback(WMenu * menu, WMenuEntry * entry)
+static void killCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WScreen *scr = menu->menu->screen_ptr;
 	WAppIcon *icon;
@@ -263,7 +263,7 @@ static void killCallback(WMenu * menu, WMenuEntry * entry)
 }
 
 /* TODO: replace this function with a member of the dock struct */
-static int numberOfSelectedIcons(WDock * dock)
+static int numberOfSelectedIcons(WDock *dock)
 {
 	WAppIcon *aicon;
 	int i, n;
@@ -279,7 +279,7 @@ static int numberOfSelectedIcons(WDock * dock)
 	return n;
 }
 
-static WMArray *getSelected(WDock * dock)
+static WMArray *getSelected(WDock *dock)
 {
 	WMArray *ret = WMCreateArray(8);
 	WAppIcon *btn;
@@ -295,7 +295,7 @@ static WMArray *getSelected(WDock * dock)
 	return ret;
 }
 
-static void paintClipButtons(WAppIcon * clipIcon, Bool lpushed, Bool rpushed)
+static void paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
 {
 	Window win = clipIcon->icon->core->window;
 	WScreen *scr = clipIcon->icon->core->screen_ptr;
@@ -362,7 +362,7 @@ static void paintClipButtons(WAppIcon * clipIcon, Bool lpushed, Bool rpushed)
 	}
 }
 
-RImage *wClipMakeTile(WScreen * scr, RImage * normalTile)
+RImage *wClipMakeTile(WScreen *scr, RImage *normalTile)
 {
 	RImage *tile = RCloneImage(normalTile);
 	RColor black;
@@ -407,7 +407,7 @@ RImage *wClipMakeTile(WScreen * scr, RImage * normalTile)
 	return tile;
 }
 
-static void omnipresentCallback(WMenu * menu, WMenuEntry * entry)
+static void omnipresentCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *clickedIcon = entry->clientdata;
 	WAppIcon *aicon;
@@ -451,7 +451,7 @@ static void omnipresentCallback(WMenu * menu, WMenuEntry * entry)
 	}
 }
 
-static void removeIconsCallback(WMenu * menu, WMenuEntry * entry)
+static void removeIconsCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *clickedIcon = (WAppIcon *) entry->clientdata;
 	WDock *dock;
@@ -499,7 +499,7 @@ static void removeIconsCallback(WMenu * menu, WMenuEntry * entry)
 		wArrangeIcons(dock->screen_ptr, True);
 }
 
-static void keepIconsCallback(WMenu * menu, WMenuEntry * entry)
+static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *clickedIcon = (WAppIcon *) entry->clientdata;
 	WDock *dock;
@@ -554,7 +554,7 @@ static void keepIconsCallback(WMenu * menu, WMenuEntry * entry)
 	WMFreeArray(selectedIcons);
 }
 
-static void toggleAutoAttractCallback(WMenu * menu, WMenuEntry * entry)
+static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WDock *dock = (WDock *) entry->clientdata;
 
@@ -569,7 +569,7 @@ static void toggleAutoAttractCallback(WMenu * menu, WMenuEntry * entry)
 	wMenuPaint(menu);
 }
 
-static void selectCallback(WMenu * menu, WMenuEntry * entry)
+static void selectCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *icon = (WAppIcon *) entry->clientdata;
 
@@ -580,7 +580,7 @@ static void selectCallback(WMenu * menu, WMenuEntry * entry)
 	wMenuPaint(menu);
 }
 
-static void colectIconsCallback(WMenu * menu, WMenuEntry * entry)
+static void colectIconsCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *clickedIcon = (WAppIcon *) entry->clientdata;
 	WDock *clip;
@@ -624,7 +624,7 @@ static void colectIconsCallback(WMenu * menu, WMenuEntry * entry)
 	}
 }
 
-static void selectIconsCallback(WMenu * menu, WMenuEntry * entry)
+static void selectIconsCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *clickedIcon = (WAppIcon *) entry->clientdata;
 	WDock *dock;
@@ -655,7 +655,7 @@ static void selectIconsCallback(WMenu * menu, WMenuEntry * entry)
 	wMenuPaint(menu);
 }
 
-static void toggleCollapsedCallback(WMenu * menu, WMenuEntry * entry)
+static void toggleCollapsedCallback(WMenu *menu, WMenuEntry *entry)
 {
 	assert(entry->clientdata != NULL);
 
@@ -666,7 +666,7 @@ static void toggleCollapsedCallback(WMenu * menu, WMenuEntry * entry)
 	wMenuPaint(menu);
 }
 
-static void toggleAutoCollapseCallback(WMenu * menu, WMenuEntry * entry)
+static void toggleAutoCollapseCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WDock *dock;
 	assert(entry->clientdata != NULL);
@@ -680,7 +680,7 @@ static void toggleAutoCollapseCallback(WMenu * menu, WMenuEntry * entry)
 	wMenuPaint(menu);
 }
 
-static void toggleAutoRaiseLowerCallback(WMenu * menu, WMenuEntry * entry)
+static void toggleAutoRaiseLowerCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WDock *dock;
 	assert(entry->clientdata != NULL);
@@ -694,14 +694,14 @@ static void toggleAutoRaiseLowerCallback(WMenu * menu, WMenuEntry * entry)
 	wMenuPaint(menu);
 }
 
-static void launchCallback(WMenu * menu, WMenuEntry * entry)
+static void launchCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *btn = (WAppIcon *) entry->clientdata;
 
 	launchDockedApplication(btn, False);
 }
 
-static void settingsCallback(WMenu * menu, WMenuEntry * entry)
+static void settingsCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *btn = (WAppIcon *) entry->clientdata;
 
@@ -710,7 +710,7 @@ static void settingsCallback(WMenu * menu, WMenuEntry * entry)
 	ShowDockAppSettingsPanel(btn);
 }
 
-static void hideCallback(WMenu * menu, WMenuEntry * entry)
+static void hideCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WApplication *wapp;
 	WAppIcon *btn = (WAppIcon *) entry->clientdata;
@@ -725,7 +725,7 @@ static void hideCallback(WMenu * menu, WMenuEntry * entry)
 	}
 }
 
-static void unhideHereCallback(WMenu * menu, WMenuEntry * entry)
+static void unhideHereCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WApplication *wapp;
 	WAppIcon *btn = (WAppIcon *) entry->clientdata;
@@ -735,7 +735,7 @@ static void unhideHereCallback(WMenu * menu, WMenuEntry * entry)
 	wUnhideApplication(wapp, False, True);
 }
 
-WAppIcon *mainIconCreate(WScreen * scr, int type)
+WAppIcon *mainIconCreate(WScreen *scr, int type)
 {
 	WAppIcon *btn;
 	int x_pos;
@@ -771,7 +771,7 @@ WAppIcon *mainIconCreate(WScreen * scr, int type)
 	return btn;
 }
 
-static void switchWSCommand(WMenu * menu, WMenuEntry * entry)
+static void switchWSCommand(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *btn, *icon = (WAppIcon *) entry->clientdata;
 	WScreen *scr = icon->icon->core->screen_ptr;
@@ -804,7 +804,7 @@ static void switchWSCommand(WMenu * menu, WMenuEntry * entry)
 	WMFreeArray(selectedIcons);
 }
 
-static void launchDockedApplication(WAppIcon * btn, Bool withSelection)
+static void launchDockedApplication(WAppIcon *btn, Bool withSelection)
 {
 	WScreen *scr = btn->icon->core->screen_ptr;
 
@@ -848,7 +848,7 @@ static void launchDockedApplication(WAppIcon * btn, Bool withSelection)
 	}
 }
 
-static void updateWorkspaceMenu(WMenu * menu, WAppIcon * icon)
+static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 {
 	WScreen *scr = menu->frame->screen_ptr;
 	char title[MAX_WORKSPACENAME_WIDTH + 1];
@@ -884,7 +884,7 @@ static void updateWorkspaceMenu(WMenu * menu, WAppIcon * icon)
 		wMenuRealize(menu);
 }
 
-static WMenu *makeWorkspaceMenu(WScreen * scr)
+static WMenu *makeWorkspaceMenu(WScreen *scr)
 {
 	WMenu *menu;
 
@@ -900,7 +900,7 @@ static WMenu *makeWorkspaceMenu(WScreen * scr)
 	return menu;
 }
 
-static void updateClipOptionsMenu(WMenu * menu, WDock * dock)
+static void updateClipOptionsMenu(WMenu *menu, WDock *dock)
 {
 	WMenuEntry *entry;
 	int index = 0;
@@ -938,7 +938,7 @@ static void updateClipOptionsMenu(WMenu * menu, WDock * dock)
 	wMenuRealize(menu);
 }
 
-static WMenu *makeClipOptionsMenu(WScreen * scr)
+static WMenu *makeClipOptionsMenu(WScreen *scr)
 {
 	WMenu *menu;
 	WMenuEntry *entry;
@@ -980,7 +980,7 @@ static WMenu *makeClipOptionsMenu(WScreen * scr)
 	return menu;
 }
 
-static WMenu *dockMenuCreate(WScreen * scr, int type)
+static WMenu *dockMenuCreate(WScreen *scr, int type)
 {
 	WMenu *menu;
 	WMenuEntry *entry;
@@ -1049,7 +1049,7 @@ static WMenu *dockMenuCreate(WScreen * scr, int type)
 	return menu;
 }
 
-WDock *wDockCreate(WScreen * scr, int type)
+WDock *wDockCreate(WScreen *scr, int type)
 {
 	WDock *dock;
 	WAppIcon *btn;
@@ -1092,7 +1092,7 @@ WDock *wDockCreate(WScreen * scr, int type)
 	return dock;
 }
 
-void wDockDestroy(WDock * dock)
+void wDockDestroy(WDock *dock)
 {
 	int i;
 	WAppIcon *aicon;
@@ -1122,7 +1122,7 @@ void wDockDestroy(WDock * dock)
 	wfree(dock);
 }
 
-void wClipIconPaint(WAppIcon * aicon)
+void wClipIconPaint(WAppIcon *aicon)
 {
 	WScreen *scr = aicon->icon->core->screen_ptr;
 	WWorkspace *workspace = scr->workspaces[scr->current_workspace];
@@ -1151,8 +1151,6 @@ void wClipIconPaint(WAppIcon * aicon)
 
 	if(wPreferences.show_clip_title)
 		WMDrawString(scr->wmscreen, win, color, scr->clip_title_font, tx, ty, ws_name, length);
-	/*WMDrawString(scr->wmscreen, win, color, scr->clip_title_font, 4,
-	   2, ws_name, length); */
 
 	tx = (ICON_SIZE / 2 - WMWidthOfString(scr->clip_title_font, ws_number, nlength)) / 2;
 
@@ -1167,12 +1165,12 @@ void wClipIconPaint(WAppIcon * aicon)
 	paintClipButtons(aicon, aicon->dock->lclip_button_pushed, aicon->dock->rclip_button_pushed);
 }
 
-static void clipIconExpose(WObjDescriptor * desc, XEvent * event)
+static void clipIconExpose(WObjDescriptor *desc, XEvent *event)
 {
 	wClipIconPaint(desc->parent);
 }
 
-static void dockIconPaint(WAppIcon * btn)
+static void dockIconPaint(WAppIcon *btn)
 {
 	if (btn == btn->icon->core->screen_ptr->clip_icon)
 		wClipIconPaint(btn);
@@ -1182,7 +1180,7 @@ static void dockIconPaint(WAppIcon * btn)
 	}
 }
 
-static WMPropList *make_icon_state(WAppIcon * btn)
+static WMPropList *make_icon_state(WAppIcon *btn)
 {
 	WMPropList *node = NULL;
 	WMPropList *command, *autolaunch, *lock, *name, *forced, *host;
@@ -1253,7 +1251,7 @@ static WMPropList *make_icon_state(WAppIcon * btn)
 	return node;
 }
 
-static WMPropList *dockSaveState(WDock * dock)
+static WMPropList *dockSaveState(WDock *dock)
 {
 	int i;
 	WMPropList *icon_info;
@@ -1310,7 +1308,7 @@ static WMPropList *dockSaveState(WDock * dock)
 	return dock_state;
 }
 
-void wDockSaveState(WScreen * scr, WMPropList * old_state)
+void wDockSaveState(WScreen *scr, WMPropList *old_state)
 {
 	WMPropList *dock_state;
 	WMPropList *keys;
@@ -1342,7 +1340,7 @@ void wDockSaveState(WScreen * scr, WMPropList * old_state)
 	WMReleasePropList(dock_state);
 }
 
-void wClipSaveState(WScreen * scr)
+void wClipSaveState(WScreen *scr)
 {
 	WMPropList *clip_state;
 
@@ -1353,12 +1351,12 @@ void wClipSaveState(WScreen * scr)
 	WMReleasePropList(clip_state);
 }
 
-WMPropList *wClipSaveWorkspaceState(WScreen * scr, int workspace)
+WMPropList *wClipSaveWorkspaceState(WScreen *scr, int workspace)
 {
 	return dockSaveState(scr->workspaces[workspace]->clip);
 }
 
-static Bool getBooleanDockValue(WMPropList * value, WMPropList * key)
+static Bool getBooleanDockValue(WMPropList *value, WMPropList *key)
 {
 	if (value) {
 		if (WMIsPLString(value)) {
@@ -1371,7 +1369,7 @@ static Bool getBooleanDockValue(WMPropList * value, WMPropList * key)
 	return False;
 }
 
-static WAppIcon *restore_icon_state(WScreen * scr, WMPropList * info, int type, int index)
+static WAppIcon *restore_icon_state(WScreen *scr, WMPropList *info, int type, int index)
 {
 	WAppIcon *aicon;
 	WMPropList *cmd, *value;
@@ -1493,7 +1491,7 @@ static WAppIcon *restore_icon_state(WScreen * scr, WMPropList * info, int type, 
 
 #define COMPLAIN(key) wwarning(_("bad value in dock state info:%s"), key)
 
-WAppIcon *wClipRestoreState(WScreen * scr, WMPropList * clip_state)
+WAppIcon *wClipRestoreState(WScreen *scr, WMPropList *clip_state)
 {
 	WAppIcon *icon;
 	WMPropList *value;
@@ -1544,7 +1542,7 @@ WAppIcon *wClipRestoreState(WScreen * scr, WMPropList * clip_state)
 	return icon;
 }
 
-WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
+WDock *wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
 {
 	WDock *dock;
 	WMPropList *apps;
@@ -1560,9 +1558,7 @@ WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
 	WMRetainPropList(dock_state);
 
 	/* restore position */
-
 	value = WMGetFromPLDictionary(dock_state, dPosition);
-
 	if (value) {
 		if (!WMIsPLString(value)) {
 			COMPLAIN("Position");
@@ -1604,11 +1600,9 @@ WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
 	}
 
 	/* restore lowered/raised state */
-
 	dock->lowered = 0;
 
 	value = WMGetFromPLDictionary(dock_state, dLowered);
-
 	if (value) {
 		if (!WMIsPLString(value)) {
 			COMPLAIN("Lowered");
@@ -1620,11 +1614,9 @@ WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
 	}
 
 	/* restore collapsed state */
-
 	dock->collapsed = 0;
 
 	value = WMGetFromPLDictionary(dock_state, dCollapsed);
-
 	if (value) {
 		if (!WMIsPLString(value)) {
 			COMPLAIN("Collapsed");
@@ -1636,9 +1628,7 @@ WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
 	}
 
 	/* restore auto-collapsed state */
-
 	value = WMGetFromPLDictionary(dock_state, dAutoCollapse);
-
 	if (value) {
 		if (!WMIsPLString(value)) {
 			COMPLAIN("AutoCollapse");
@@ -1651,32 +1641,26 @@ WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
 	}
 
 	/* restore auto-raise/lower state */
-
 	value = WMGetFromPLDictionary(dock_state, dAutoRaiseLower);
-
 	if (value) {
 		if (!WMIsPLString(value)) {
 			COMPLAIN("AutoRaiseLower");
 		} else {
-			if (strcasecmp(WMGetFromPLString(value), "YES") == 0) {
+			if (strcasecmp(WMGetFromPLString(value), "YES") == 0)
 				dock->auto_raise_lower = 1;
-			}
 		}
 	}
 
 	/* restore attract icons state */
-
 	dock->attract_icons = 0;
 
 	value = WMGetFromPLDictionary(dock_state, dAutoAttractIcons);
-
 	if (value) {
 		if (!WMIsPLString(value)) {
 			COMPLAIN("AutoAttractIcons");
 		} else {
-			if (strcasecmp(WMGetFromPLString(value), "YES") == 0) {
+			if (strcasecmp(WMGetFromPLString(value), "YES") == 0)
 				dock->attract_icons = 1;
-			}
 		}
 	}
 
@@ -1700,17 +1684,14 @@ WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
 		apps = WMGetFromPLDictionary(dock_state, tmp);
 		WMReleasePropList(tmp);
 
-		if (!apps) {
+		if (!apps)
 			apps = WMGetFromPLDictionary(dock_state, dApplications);
-		}
 	}
 
-	if (!apps) {
+	if (!apps)
 		goto finish;
-	}
 
 	count = WMGetPropListItemCount(apps);
-
 	if (count == 0)
 		goto finish;
 
@@ -1781,7 +1762,7 @@ WDock *wDockRestoreState(WScreen * scr, WMPropList * dock_state, int type)
 	return dock;
 }
 
-void wDockLaunchWithState(WDock * dock, WAppIcon * btn, WSavedState * state)
+void wDockLaunchWithState(WDock *dock, WAppIcon *btn, WSavedState *state)
 {
 	if (btn && btn->command && !btn->running && !btn->launching) {
 
@@ -1801,7 +1782,7 @@ void wDockLaunchWithState(WDock * dock, WAppIcon * btn, WSavedState * state)
 	}
 }
 
-void wDockDoAutoLaunch(WDock * dock, int workspace)
+void wDockDoAutoLaunch(WDock *dock, int workspace)
 {
 	WAppIcon *btn;
 	WSavedState *state;
@@ -1822,7 +1803,7 @@ void wDockDoAutoLaunch(WDock * dock, int workspace)
 }
 
 #ifdef XDND			/* was OFFIX */
-static WDock *findDock(WScreen * scr, XEvent * event, int *icon_pos)
+static WDock *findDock(WScreen *scr, XEvent *event, int *icon_pos)
 {
 	WDock *dock;
 	int i;
@@ -1851,7 +1832,7 @@ static WDock *findDock(WScreen * scr, XEvent * event, int *icon_pos)
 	return NULL;
 }
 
-int wDockReceiveDNDDrop(WScreen * scr, XEvent * event)
+int wDockReceiveDNDDrop(WScreen *scr, XEvent *event)
 {
 	WDock *dock;
 	WAppIcon *btn;
@@ -1907,7 +1888,7 @@ int wDockReceiveDNDDrop(WScreen * scr, XEvent * event)
 }
 #endif				/* XDND */
 
-Bool wDockAttachIcon(WDock * dock, WAppIcon * icon, int x, int y)
+Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 {
 	WWindow *wwin;
 	int index;
@@ -2012,7 +1993,7 @@ Bool wDockAttachIcon(WDock * dock, WAppIcon * icon, int x, int y)
 	return True;
 }
 
-void reattachIcon(WDock * dock, WAppIcon * icon, int x, int y)
+void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 {
 	int index;
 
@@ -2029,7 +2010,7 @@ void reattachIcon(WDock * dock, WAppIcon * icon, int x, int y)
 	icon->y_pos = dock->y_pos + y * ICON_SIZE;
 }
 
-Bool moveIconBetweenDocks(WDock * src, WDock * dest, WAppIcon * icon, int x, int y)
+Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
 {
 	WWindow *wwin;
 	char *command;
@@ -2138,7 +2119,7 @@ Bool moveIconBetweenDocks(WDock * src, WDock * dest, WAppIcon * icon, int x, int
 	return True;
 }
 
-void wDockDetach(WDock * dock, WAppIcon * icon)
+void wDockDetach(WDock *dock, WAppIcon *icon)
 {
 	int index;
 
@@ -2222,7 +2203,7 @@ void wDockDetach(WDock * dock, WAppIcon * icon)
  * Note: this function should NEVER alter ret_x or ret_y, unless it will
  * return True. -Dan
  */
-Bool wDockSnapIcon(WDock * dock, WAppIcon * icon, int req_x, int req_y, int *ret_x, int *ret_y, int redocking)
+Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x, int *ret_y, int redocking)
 {
 	WScreen *scr = dock->screen_ptr;
 	int dx, dy;
@@ -2395,7 +2376,7 @@ Bool wDockSnapIcon(WDock * dock, WAppIcon * icon, int req_x, int req_y, int *ret
 	return False;
 }
 
-static int onScreen(WScreen * scr, int x, int y, int sx, int ex, int sy, int ey)
+static int onScreen(WScreen *scr, int x, int y, int sx, int ex, int sy, int ey)
 {
 	WMRect rect = wmkrect(x, y, ICON_SIZE, ICON_SIZE);
 	int flags;
@@ -2410,7 +2391,7 @@ static int onScreen(WScreen * scr, int x, int y, int sx, int ex, int sy, int ey)
  * in which case it changes x_pos and y_pos accordingly.
  * Else returns false.
  */
-Bool wDockFindFreeSlot(WDock * dock, int *x_pos, int *y_pos)
+Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 {
 	WScreen *scr = dock->screen_ptr;
 	WAppIcon *btn;
@@ -2676,7 +2657,7 @@ Bool wDockFindFreeSlot(WDock * dock, int *x_pos, int *y_pos)
 	return done;
 }
 
-static void moveDock(WDock * dock, int new_x, int new_y)
+static void moveDock(WDock *dock, int new_x, int new_y)
 {
 	WAppIcon *btn;
 	int i;
@@ -2693,7 +2674,7 @@ static void moveDock(WDock * dock, int new_x, int new_y)
 	}
 }
 
-static void swapDock(WDock * dock)
+static void swapDock(WDock *dock)
 {
 	WScreen *scr = dock->screen_ptr;
 	WAppIcon *btn;
@@ -2716,7 +2697,7 @@ static void swapDock(WDock * dock)
 	wScreenUpdateUsableArea(scr);
 }
 
-static pid_t execCommand(WAppIcon * btn, char *command, WSavedState * state)
+static pid_t execCommand(WAppIcon *btn, char *command, WSavedState *state)
 {
 	WScreen *scr = btn->icon->core->screen_ptr;
 	pid_t pid;
@@ -2787,7 +2768,7 @@ static pid_t execCommand(WAppIcon * btn, char *command, WSavedState * state)
 	return pid;
 }
 
-void wDockHideIcons(WDock * dock)
+void wDockHideIcons(WDock *dock)
 {
 	int i;
 
@@ -2803,7 +2784,7 @@ void wDockHideIcons(WDock * dock)
 	dockIconPaint(dock->icon_array[0]);
 }
 
-void wDockShowIcons(WDock * dock)
+void wDockShowIcons(WDock *dock)
 {
 	int i, newlevel;
 	WAppIcon *btn;
@@ -2836,7 +2817,7 @@ void wDockShowIcons(WDock * dock)
 	dockIconPaint(btn);
 }
 
-void wDockLower(WDock * dock)
+void wDockLower(WDock *dock)
 {
 	int i;
 
@@ -2846,7 +2827,7 @@ void wDockLower(WDock * dock)
 	}
 }
 
-void wDockRaise(WDock * dock)
+void wDockRaise(WDock *dock)
 {
 	int i;
 
@@ -2856,7 +2837,7 @@ void wDockRaise(WDock * dock)
 	}
 }
 
-void wDockRaiseLower(WDock * dock)
+void wDockRaiseLower(WDock *dock)
 {
 	if (!dock->icon_array[0]->icon->core->stacking->above
 	    || (dock->icon_array[0]->icon->core->stacking->window_level
@@ -2866,14 +2847,14 @@ void wDockRaiseLower(WDock * dock)
 		wDockRaise(dock);
 }
 
-void wDockFinishLaunch(WDock * dock, WAppIcon * icon)
+void wDockFinishLaunch(WDock *dock, WAppIcon *icon)
 {
 	icon->launching = 0;
 	icon->relaunching = 0;
 	dockIconPaint(icon);
 }
 
-WAppIcon *wDockFindIconForWindow(WDock * dock, Window window)
+WAppIcon *wDockFindIconForWindow(WDock *dock, Window window)
 {
 	WAppIcon *icon;
 	int i;
@@ -2886,7 +2867,7 @@ WAppIcon *wDockFindIconForWindow(WDock * dock, Window window)
 	return NULL;
 }
 
-void wDockTrackWindowLaunch(WDock * dock, Window window)
+void wDockTrackWindowLaunch(WDock *dock, Window window)
 {
 	WAppIcon *icon;
 	char *wm_class, *wm_instance;
@@ -2987,7 +2968,7 @@ void wDockTrackWindowLaunch(WDock * dock, Window window)
 		free(wm_instance);
 }
 
-void wClipUpdateForWorkspaceChange(WScreen * scr, int workspace)
+void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 {
 	if (!wPreferences.flags.noclip) {
 		scr->clip_icon->dock = scr->workspaces[workspace]->clip;
@@ -3026,7 +3007,7 @@ void wClipUpdateForWorkspaceChange(WScreen * scr, int workspace)
 	}
 }
 
-static void trackDeadProcess(pid_t pid, unsigned char status, WDock * dock)
+static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock)
 {
 	WAppIcon *icon;
 	int i;
@@ -3066,7 +3047,7 @@ static void trackDeadProcess(pid_t pid, unsigned char status, WDock * dock)
 	}
 }
 
-static void toggleLowered(WDock * dock)
+static void toggleLowered(WDock *dock)
 {
 	WAppIcon *tmp;
 	int newlevel, i;
@@ -3094,7 +3075,7 @@ static void toggleLowered(WDock * dock)
 		wScreenUpdateUsableArea(dock->screen_ptr);
 }
 
-static void toggleCollapsed(WDock * dock)
+static void toggleCollapsed(WDock *dock)
 {
 	if (dock->collapsed) {
 		dock->collapsed = 0;
@@ -3105,7 +3086,7 @@ static void toggleCollapsed(WDock * dock)
 	}
 }
 
-static void openDockMenu(WDock * dock, WAppIcon * aicon, XEvent * event)
+static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 {
 	WScreen *scr = dock->screen_ptr;
 	WObjDescriptor *desc;
@@ -3266,7 +3247,7 @@ static void openDockMenu(WDock * dock, WAppIcon * aicon, XEvent * event)
 }
 
 /******************************************************************/
-static void iconDblClick(WObjDescriptor * desc, XEvent * event)
+static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 {
 	WAppIcon *btn = desc->parent;
 	WDock *dock = btn->dock;
@@ -3312,7 +3293,7 @@ static void iconDblClick(WObjDescriptor * desc, XEvent * event)
 	}
 }
 
-static void handleDockMove(WDock * dock, WAppIcon * aicon, XEvent * event)
+static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 {
 	WScreen *scr = dock->screen_ptr;
 	int ofs_x = event->xbutton.x, ofs_y = event->xbutton.y;
@@ -3681,7 +3662,7 @@ static int getClipButton(int px, int py)
 	return CLIP_IDLE;
 }
 
-static void handleClipChangeWorkspace(WScreen * scr, XEvent * event)
+static void handleClipChangeWorkspace(WScreen *scr, XEvent *event)
 {
 	XEvent ev;
 	int done, direction, new_ws;
@@ -3743,7 +3724,7 @@ static void handleClipChangeWorkspace(WScreen * scr, XEvent * event)
 	wClipIconPaint(scr->clip_icon);
 }
 
-static void iconMouseDown(WObjDescriptor * desc, XEvent * event)
+static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 {
 	WAppIcon *aicon = desc->parent;
 	WDock *dock = aicon->dock;
@@ -3875,7 +3856,7 @@ static void showClipBalloon(WDock * dock, int workspace)
 		     scr->clip_title_color[CLIP_NORMAL], scr->clip_title_font, 0, 0, text, strlen(text));
 }
 
-static void clipEnterNotify(WObjDescriptor * desc, XEvent * event)
+static void clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 {
 	WAppIcon *btn = (WAppIcon *) desc->parent;
 	WDock *dock;
@@ -3923,7 +3904,7 @@ static void clipEnterNotify(WObjDescriptor * desc, XEvent * event)
 	}
 }
 
-static void clipLeave(WDock * dock)
+static void clipLeave(WDock *dock)
 {
 	XEvent event;
 	WObjDescriptor *desc = NULL;
@@ -3964,7 +3945,7 @@ static void clipLeave(WDock * dock)
 	}
 }
 
-static void clipLeaveNotify(WObjDescriptor * desc, XEvent * event)
+static void clipLeaveNotify(WObjDescriptor *desc, XEvent *event)
 {
 	WAppIcon *btn = (WAppIcon *) desc->parent;
 
@@ -4034,7 +4015,7 @@ static void clipAutoRaise(void *cdata)
 	dock->auto_raise_magic = NULL;
 }
 
-static Bool iconCanBeOmnipresent(WAppIcon * aicon)
+static Bool iconCanBeOmnipresent(WAppIcon *aicon)
 {
 	WScreen *scr = aicon->icon->core->screen_ptr;
 	WDock *clip;
@@ -4060,7 +4041,7 @@ static Bool iconCanBeOmnipresent(WAppIcon * aicon)
 	return True;
 }
 
-int wClipMakeIconOmnipresent(WAppIcon * aicon, int omnipresent)
+int wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
 {
 	WScreen *scr = aicon->icon->core->screen_ptr;
 	WAppIconChain *new_entry, *tmp, *tmp1;
