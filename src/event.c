@@ -1155,19 +1155,6 @@ static void handleEnterNotify(XEvent * event)
 		}
 	}
 
-	/* a little kluge to hide the clip balloon */
-	if (!wPreferences.flags.noclip && scr->flags.clip_balloon_mapped) {
-		if (!desc) {
-			XUnmapWindow(dpy, scr->clip_balloon);
-			scr->flags.clip_balloon_mapped = 0;
-		} else {
-			if (desc->parent_type != WCLASS_DOCK_ICON || scr->clip_icon != desc->parent) {
-				XUnmapWindow(dpy, scr->clip_balloon);
-				scr->flags.clip_balloon_mapped = 0;
-			}
-		}
-	}
-
 	if (event->xcrossing.window == event->xcrossing.root
 	    && event->xcrossing.detail == NotifyNormal
 	    && event->xcrossing.detail != NotifyInferior && wPreferences.focus_mode != WKF_CLICK) {

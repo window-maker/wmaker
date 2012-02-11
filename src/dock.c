@@ -119,8 +119,6 @@ static void launchDockedApplication(WAppIcon *btn, Bool withSelection);
 static void clipAutoLower(void *cdata);
 static void clipAutoRaise(void *cdata);
 
-static void showClipBalloon(WDock * dock, int workspace);
-
 static void make_keys(void)
 {
 	if (dCommand != NULL)
@@ -3002,8 +3000,6 @@ void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 			}
 			wDockShowIcons(scr->workspaces[workspace]->clip);
 		}
-		if (scr->flags.clip_balloon_mapped)
-			showClipBalloon(scr->clip_icon->dock, workspace);
 	}
 }
 
@@ -3747,10 +3743,6 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 		}
 	}
 
-	if (dock->type == WM_CLIP && scr->flags.clip_balloon_mapped) {
-		XUnmapWindow(dpy, scr->clip_balloon);
-		scr->flags.clip_balloon_mapped = 0;
-	}
 	if (event->xbutton.button == Button1) {
 		if (event->xbutton.state & MOD_MASK)
 			wDockLower(dock);
@@ -3817,45 +3809,6 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 	}
 }
 
-static void showClipBalloon(WDock * dock, int workspace)
-{
-	int w, h;
-	int x, y;
-	WScreen *scr = dock->screen_ptr;
-	char *text;
-	Window stack[2];
-
-	scr->flags.clip_balloon_mapped = 1;
-	XMapWindow(dpy, scr->clip_balloon);
-
-	text = scr->workspaces[workspace]->name;
-
-	w = WMWidthOfString(scr->clip_title_font, text, strlen(text));
-
-	h = WMFontHeight(scr->clip_title_font);
-	XResizeWindow(dpy, scr->clip_balloon, w, h);
-
-	x = dock->x_pos + CLIP_BUTTON_SIZE * ICON_SIZE / 64;
-	y = dock->y_pos + ICON_SIZE - WMFontHeight(scr->clip_title_font) - 3;
-
-	if (x + w > scr->scr_width) {
-		x = scr->scr_width - w;
-		if (dock->y_pos + ICON_SIZE + h > scr->scr_height)
-			y = dock->y_pos - h - 1;
-		else
-			y = dock->y_pos + ICON_SIZE;
-		XRaiseWindow(dpy, scr->clip_balloon);
-	} else {
-		stack[0] = scr->clip_icon->icon->core->window;
-		stack[1] = scr->clip_balloon;
-		XRestackWindows(dpy, stack, 2);
-	}
-	XMoveWindow(dpy, scr->clip_balloon, x, y);
-	XClearWindow(dpy, scr->clip_balloon);
-	WMDrawString(scr->wmscreen, scr->clip_balloon,
-		     scr->clip_title_color[CLIP_NORMAL], scr->clip_title_font, 0, 0, text, strlen(text));
-}
-
 static void clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 {
 	WAppIcon *btn = (WAppIcon *) desc->parent;
@@ -3892,15 +3845,6 @@ static void clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 	}
 	if (dock->auto_collapse && !dock->auto_expand_magic) {
 		dock->auto_expand_magic = WMAddTimerHandler(AUTO_EXPAND_DELAY, clipAutoExpand, (void *)dock);
-	}
-
-	if (btn->xindex == 0 && btn->yindex == 0)
-		showClipBalloon(dock, dock->screen_ptr->current_workspace);
-	else {
-		if (dock->screen_ptr->flags.clip_balloon_mapped) {
-			XUnmapWindow(dpy, dock->screen_ptr->clip_balloon);
-			dock->screen_ptr->flags.clip_balloon_mapped = 0;
-		}
 	}
 }
 
@@ -4007,10 +3951,6 @@ static void clipAutoRaise(void *cdata)
 
 	if (dock->auto_raise_lower)
 		wDockRaise(dock);
-
-	if (dock->screen_ptr->flags.clip_balloon_mapped) {
-		showClipBalloon(dock, dock->screen_ptr->current_workspace);
-	}
 
 	dock->auto_raise_magic = NULL;
 }

@@ -283,7 +283,6 @@ typedef struct _WScreen {
         unsigned int added_windows_menu:1;
         unsigned int startup2:1;       /* startup phase 2 */
         unsigned int supports_tiff:1;
-        unsigned int clip_balloon_mapped:1;
         unsigned int next_click_is_not_double:1;
         unsigned int backimage_helper_launched:1;
         /* some client has issued a WM_COLORMAP_NOTIFY */
