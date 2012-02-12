@@ -439,7 +439,15 @@ static void appiconBalloon(WObjDescriptor * object)
 	WScreen *scr = aicon->icon->core->screen_ptr;
 	char *tmp;
 
-	if (aicon->command && aicon->wm_class) {
+	/* Show balloon if it is the Clip and the workspace name is > 5 chars */
+	if (object->parent == scr->clip_icon) {
+		if (strlen(scr->workspaces[scr->current_workspace]->name) > 5) {
+			scr->balloon->text = wstrdup(scr->workspaces[scr->current_workspace]->name);
+		} else {
+			wBalloonHide(scr);
+			return;
+		}
+	} else if (aicon->command && aicon->wm_class) {
 		int len = strlen(aicon->command) + strlen(aicon->wm_class) + 8;
 		tmp = wmalloc(len);
 		snprintf(tmp, len, "%s\n(%s)", aicon->wm_class, aicon->command);
@@ -510,24 +518,19 @@ void wBalloonEnteredObject(WScreen * scr, WObjDescriptor * object)
 		balloon->ignoreTimer = 0;
 		return;
 	}
+
 	switch (object->parent_type) {
 	case WCLASS_FRAME:
-		if (wPreferences.window_balloon) {
+		if (wPreferences.window_balloon)
 			frameBalloon(object);
-		}
 		break;
-
 	case WCLASS_DOCK_ICON:
-		if (object->parent != scr->clip_icon && wPreferences.appicon_balloon)
+		if (wPreferences.appicon_balloon)
 			appiconBalloon(object);
-		else
-			wBalloonHide(scr);
 		break;
-
 	case WCLASS_MINIWINDOW:
-		if (wPreferences.miniwin_balloon) {
+		if (wPreferences.miniwin_balloon)
 			miniwindowBalloon(object);
-		}
 		break;
 	case WCLASS_APPICON:
 		if (wPreferences.appicon_balloon)
