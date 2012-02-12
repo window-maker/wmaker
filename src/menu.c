@@ -2503,36 +2503,3 @@ void wMenuRestoreState(WScreen * scr)
 	}
 	restoreMenuRecurs(scr, menus, scr->root_menu, "");
 }
-
-void OpenWorkspaceMenu(WScreen * scr, int x, int y)
-{
-	WMenu *menu, *parent;
-	WMenuEntry *entry;
-
-	if (!scr->root_menu) {
-		OpenRootMenu(scr, scr->scr_width * 2, 0, False);
-		wMenuUnmap(scr->root_menu);
-	}
-
-	menu = scr->workspace_menu;
-	if (menu) {
-		if (menu->flags.mapped) {
-			if (!menu->flags.buttoned) {
-				wMenuUnmap(menu);
-				parent = menu->parent;
-				if (parent && parent->selected_entry >= 0) {
-					entry = parent->entries[parent->selected_entry];
-					if (parent->cascades[entry->cascade] == menu) {
-						selectEntry(parent, -1);
-						wMenuMapAt(menu, x, y, False);
-					}
-				}
-			} else {
-				wRaiseFrame(menu->frame->core);
-				wMenuMapCopyAt(menu, x, y);
-			}
-		} else {
-			wMenuMapAt(menu, x, y, False);
-		}
-	}
-}

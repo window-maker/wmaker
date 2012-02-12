@@ -61,8 +61,6 @@ void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard);
 
 void OpenMiniwindowMenu(WWindow *wwin, int x, int y);
 
-void OpenWorkspaceMenu(WScreen *scr, int x, int y);
-
 void CloseWindowMenu(WScreen *scr);
 
 void DestroyWindowMenu(WScreen *scr);
