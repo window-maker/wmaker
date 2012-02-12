@@ -108,7 +108,7 @@ static void clipLeave(WDock *dock);
 
 static void handleClipChangeWorkspace(WScreen *scr, XEvent *event);
 
-Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y);
+static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y);
 
 static void clipEnterNotify(WObjDescriptor *desc, XEvent *event);
 static void clipLeaveNotify(WObjDescriptor *desc, XEvent *event);
@@ -118,6 +118,8 @@ static void launchDockedApplication(WAppIcon *btn, Bool withSelection);
 
 static void clipAutoLower(void *cdata);
 static void clipAutoRaise(void *cdata);
+static void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y);
+static WAppIcon *mainIconCreate(WScreen *scr, int type);
 
 static void make_keys(void)
 {
@@ -733,7 +735,7 @@ static void unhideHereCallback(WMenu *menu, WMenuEntry *entry)
 	wUnhideApplication(wapp, False, True);
 }
 
-WAppIcon *mainIconCreate(WScreen *scr, int type)
+static WAppIcon *mainIconCreate(WScreen *scr, int type)
 {
 	WAppIcon *btn;
 	int x_pos;
@@ -1991,7 +1993,7 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 	return True;
 }
 
-void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y)
+static void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 {
 	int index;
 
@@ -2008,7 +2010,7 @@ void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 	icon->y_pos = dock->y_pos + y * ICON_SIZE;
 }
 
-Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
+static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
 {
 	WWindow *wwin;
 	char *command;
