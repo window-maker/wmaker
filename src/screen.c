@@ -402,7 +402,7 @@ static void createPixmaps(WScreen * scr)
 		pix->shared = 1;
 	scr->menu_shade_indicator = pix;
 
-	image = wDefaultGetImage(scr, "Logo", "WMPanel");
+	image = wDefaultGetImage(scr, "Logo", "WMPanel", wPreferences.icon_size);
 
 	if (!image) {
 		wwarning(_("could not load logo image for panels: %s"), RMessageForError(RErrorCode));

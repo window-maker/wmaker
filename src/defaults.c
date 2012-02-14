@@ -966,7 +966,7 @@ void wDefaultsCheckDomains(void* arg)
 						/* Update the panel image if changed */
 						/* Don't worry. If the image is the same these
 						 * functions will have no performance impact. */
-						image = wDefaultGetImage(scr, "Logo", "WMPanel");
+						image = wDefaultGetImage(scr, "Logo", "WMPanel", wPreferences.icon_size);
 
 						if (!image) {
 							wwarning(_("could not load logo image for panels: %s"),

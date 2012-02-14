@@ -399,7 +399,7 @@ char *wDefaultGetIconFile(WScreen * scr, char *instance, char *class, Bool noDef
 	return tmp;
 }
 
-RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass)
+RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_size)
 {
 	char *file_name;
 	char *path;
@@ -422,7 +422,7 @@ RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass)
 	}
 	wfree(path);
 
-	image = wIconValidateIconSize(scr, image);
+	image = wIconValidateIconSize(scr, image, max_size);
 
 	return image;
 }

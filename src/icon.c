@@ -154,7 +154,7 @@ WIcon *wIconCreate(WWindow * wwin)
 #else
 	icon->show_title = 1;
 #endif
-	icon->file_image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class);
+	icon->file_image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class, wPreferences.icon_size);
 
 	file = wDefaultGetIconFile(scr, wwin->wm_instance, wwin->wm_class, False);
 	if (file) {
@@ -215,7 +215,7 @@ WIcon *wIconCreateWithIconFile(WScreen * scr, char *iconfile, int tile)
 			wwarning(_("error loading image file \"%s\": %s"), iconfile, RMessageForError(RErrorCode));
 		}
 
-		icon->file_image = wIconValidateIconSize(scr, icon->file_image);
+		icon->file_image = wIconValidateIconSize(scr, icon->file_image, wPreferences.icon_size);
 
 		icon->file = wstrdup(iconfile);
 	}
@@ -354,7 +354,7 @@ void wIconChangeTitle(WIcon * icon, char *new_title)
 	wIconPaint(icon);
 }
 
-RImage *wIconValidateIconSize(WScreen * scr, RImage * icon)
+RImage *wIconValidateIconSize(WScreen * scr, RImage * icon, int max_size)
 {
 	RImage *tmp;
 	int w, h;
@@ -362,9 +362,9 @@ RImage *wIconValidateIconSize(WScreen * scr, RImage * icon)
 	if (!icon)
 		return NULL;
 #ifndef DONT_SCALE_ICONS
-	if (wPreferences.icon_size != 64) {
-		w = wPreferences.icon_size * icon->width / 64;
-		h = wPreferences.icon_size * icon->height / 64;
+	if (max_size != 64) {
+		w = max_size * icon->width / 64;
+		h = max_size * icon->height / 64;
 
 		tmp = RScaleImage(icon, w, h);
 		RReleaseImage(icon);
@@ -394,7 +394,7 @@ Bool wIconChangeImageFile(WIcon * icon, char *file)
 	path = FindImage(wPreferences.icon_path, file);
 
 	if (path && (image = RLoadImage(scr->rcontext, path, 0))) {
-		icon->file_image = wIconValidateIconSize(icon->core->screen_ptr, image);
+		icon->file_image = wIconValidateIconSize(icon->core->screen_ptr, image, wPreferences.icon_size);
 		wIconUpdate(icon);
 	} else {
 		error = 1;
@@ -706,7 +706,7 @@ void wIconUpdate(WIcon * icon)
 				}
  make_icons:
 
-				image = wIconValidateIconSize(scr, image);
+				image = wIconValidateIconSize(scr, image, wPreferences.icon_size);
 				scr->def_icon_pixmap = makeIcon(scr, image, False, False, icon->tile_type, icon->highlighted);
 				scr->def_ticon_pixmap = makeIcon(scr, image, True, False, icon->tile_type, icon->highlighted);
 				if (image)

@@ -52,7 +52,7 @@ void wSaveDefaults(WScreen *scr);
 char *wDefaultGetIconFile(WScreen *scr, char *instance, char *class,
                           Bool noDefault);
 
-RImage *wDefaultGetImage(WScreen *scr, char *winstance, char *wclass);
+RImage *wDefaultGetImage(WScreen *scr, char *winstance, char *wclass, int max_size);
 
 void wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
                             WWindowAttributes *attr, WWindowAttributes *mask,

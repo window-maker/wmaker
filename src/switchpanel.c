@@ -177,7 +177,7 @@ static void addIconForWindow(WSwitchPanel * panel, WMWidget * parent, WWindow * 
 	// it's very likely that most of them are instances of the same thing,
 	// so caching them should get performance acceptable in these cases.
 	if (!image)
-		image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class);
+		image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class, ICON_TILE_SIZE);
 
 	if (!image && !panel->defIcon) {
 		char *file = wDefaultGetIconFile(panel->scr, NULL, NULL, False);
