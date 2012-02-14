@@ -1,3 +1,10 @@
+wmaker (0.95.2) unstable; urgency=low
+
+  * New upstream version 0.95.2 [Closes: #69669, #486542, #270877]
+    [Closes: #283240, #48550, #297019, #108432, #72917]
+
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Tue, 14 Feb 2012 23:58:45 +0100
+
 wmaker (0.95.1+20120131-1) unstable; urgency=low
 
   * New upstream version 0.95.1 [Closes: #304480]
