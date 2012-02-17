@@ -1,4 +1,4 @@
-wmaker (0.95.2) unstable; urgency=low
+wmaker (0.95.2-1) unstable; urgency=low
 
   * New upstream version 0.95.2 [Closes: #69669, #486542, #270877]
     [Closes: #283240, #48550, #297019, #108432, #72917]
