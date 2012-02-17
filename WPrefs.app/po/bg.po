@@ -1305,13 +1305,13 @@ msgid ""
 "want to have listed in the menu. Ex:\n"
 "~/GNUstep/Library/WindowMaker/menu\n"
 "or\n"
-"/usr/X11R6/bin ~/xbin"
+"/usr/bin ~/xbin"
 msgstr ""
 "Въведете пътя на файл, съдържащ меню или\n"
 "списък от директории с програмите, които\n"
 "желаете да бъдат включени в менюто. Напр.:\n"
 "~/GNUstep/Library/WindowMaker/menu\n"
-"или /usr/X11R6/bin ~/xbin"
+"или /usr/bin ~/xbin"
 
 # ../../WPrefs.app/Menu.c:1186
 #: ../../WPrefs.app/Menu.c:736

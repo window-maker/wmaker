@@ -66,9 +66,9 @@
   ("Cancella Sessione salvata", CLEAR_SESSION)
   ),
  ("Visualizzazione",
-  ("Temi", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Themes ~/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
-  ("Stili", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Styles ~/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
-  ("Set di Icone", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/IconSets ~/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+  ("Temi", OPEN_MENU, "-noext /usr/share/WindowMaker/Themes ~/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
+  ("Stili", OPEN_MENU, "-noext /usr/share/WindowMaker/Styles ~/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
+  ("Set di Icone", OPEN_MENU, "-noext /usr/share/WindowMaker/IconSets ~/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
   ("Sfondo",
    ("Tinta unita",
     ("Nero", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
@@ -90,7 +90,7 @@
     ("Sfumature Grigie",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#636380\", \"#131318\")'"),
     ("Sfumature Vinaccia",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
-   ("Immagini", OPEN_MENU, "-noext /usr/X11R6/share/WindowMaker/Backgrounds ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
+   ("Immagini", OPEN_MENU, "-noext /usr/share/WindowMaker/Backgrounds ~/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
    ),   
   ("Salva il tema", EXEC, "getstyle -t ~/GNUstep/Library/WindowMaker/Themes/\"%a(Nome Tema)\""),
   ("Salva il set icone", EXEC, "geticonset ~/GNUstep/Library/WindowMaker/IconSets/\"%a(Nome IconSet)\"")

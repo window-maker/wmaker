@@ -615,7 +615,7 @@ static void createPanel(_Panel * p)
 	WMSetLabelText(label, _("Enter the path for a file containing a menu\n"
 				"or a list of directories with the programs you\n"
 				"want to have listed in the menu. Ex:\n"
-				"~/GNUstep/Library/WindowMaker/menu\n" "or\n" "/usr/X11R6/bin ~/xbin"));
+				"~/GNUstep/Library/WindowMaker/menu\n" "or\n" "/usr/bin ~/xbin"));
 
 	WMMapSubwidgets(panel->pathF);
 

@@ -12,7 +12,7 @@
     "~/GNUstep/Library/Icons",
     "#pkgdatadir#/Icons",
     "#pkgdatadir#/Pixmaps",
-    "/usr/X11R6/include/X11/pixmaps",
+    "/usr/include/X11/pixmaps",
     "~/GNUstep/Library/WindowMaker/Pixmaps",
     "/usr/share/icons",
     "/usr/local/share/pixmaps",
@@ -23,7 +23,7 @@
     "~/GNUstep/Library/WindowMaker/Backgrounds",
     "#pkgdatadir#/Pixmaps",
     "#pkgdatadir#/Backgrounds",
-    "/usr/X11R6/include/X11/pixmaps",
+    "/usr/include/X11/pixmaps",
     "/usr/local/share/pixmaps",
     "/usr/share/pixmaps"
   );
