@@ -2,12 +2,12 @@
   Dock = {
     Applications = (
       {
-        Command = "-";
+        Command = "#wprefs#";
         Name = Logo.WMDock;
         AutoLaunch = No;
         Forced = No;
         Position = "0,0";
-        DropCommand = "wmsetbg -u -t %d";
+        Lock = Yes;
       },
       {
 	Command = xterm;
@@ -15,14 +15,6 @@
 	AutoLaunch = No;
 	Forced = No;
 	Position = "0,1";
-      },
-      {
-	Command = "#wprefs#";
-	Name = groupLeader.WPrefs;
-	AutoLaunch = No;
-	Forced = No;
-	Position = "0,2";
-	Lock = Yes;
       }
     );
     Position = "-64,0";
