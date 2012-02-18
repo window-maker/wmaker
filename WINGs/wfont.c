@@ -144,17 +144,9 @@ WMFont *WMCreateFont(WMScreen * scrPtr, char *fontName)
 
 	font->font = XftFontOpenName(display, scrPtr->screen, fname);
 	if (!font->font) {
-		printf("Font named %s doesn't exist.\n", fname);
-		printf("Please check your system configuration.\n");
-		printf("Will try default font %s.\n", DEFAULT_FONT);
-		font->font = XftFontOpenName(display, scrPtr->screen, DEFAULT_FONT);
-		if (!font->font) {
-			printf("Unrecoverable font error! I must die!\n");
-			wfree(font);
-			wfree(fname);
-			exit(1);
-		} else
-			printf("Default font loading succeded.\n");
+		wfree(font);
+		wfree(fname);
+		return NULL;
 	}
 
 	font->height = font->font->ascent + font->font->descent;
