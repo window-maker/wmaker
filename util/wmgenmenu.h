@@ -37,7 +37,7 @@ char *Mathematics[MAX_NR_APPS][2] = {
 	{ N_("KCalc"), "kcalc" },
 	{ N_("XCalc"), "xcalc" },
 	{ N_("Mathematica"), "mathematica" },
-	{ N_("Math"), "math" },		/* command-line Mathematica */
+	{ N_("Math"), "math !" },   /* command-line Mathematica */
 	{ N_("Free42"), "free42" },
 	{ N_("X48"), "x48" },
 	{ NULL, NULL }
@@ -78,7 +78,7 @@ char *Graphics[MAX_NR_APPS][2] = {
 };
 
 char *Multimedia[MAX_NR_APPS][2] = {
-	{ N_("Audacious"), "audacious2" },
+	{ N_("Audacious"), "audacious" },
 	{ N_("Kaffeine"), "kaffeine", },
 	{ N_("Audacity"), "audacity" },
 	{ N_("Amarok"), "amarok" },
