@@ -41,11 +41,7 @@ int wExitDialog(WScreen *scr, char *title, char *message, char *defBtn,
 Bool wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class);
 
 void wShowInfoPanel(WScreen *scr);
-
 void wShowLegalPanel(WScreen *scr);
-
-void wShowGNUstepPanel(WScreen *scr);
-
 int wShowCrashingDialogPanel(int whatSig);
 
 

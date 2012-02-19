@@ -3281,11 +3281,8 @@ static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 				else
 					handleClipChangeWorkspace(dock->screen_ptr, event);
 			} else if (btn->command) {
-				if (!btn->launching && (!btn->running || (event->xbutton.state & ControlMask))) {
+				if (!btn->launching && (!btn->running || (event->xbutton.state & ControlMask)))
 					launchDockedApplication(btn, False);
-				}
-			} else if (btn->xindex == 0 && btn->yindex == 0 && btn->dock->type == WM_DOCK) {
-				wShowGNUstepPanel(dock->screen_ptr);
 			}
 		}
 	}
