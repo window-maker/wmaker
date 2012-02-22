@@ -129,8 +129,6 @@ usr/share/lib/GNUstep/System/Applications/WPrefs.app/tiff/*.tiff
 debian/debianfiles/wmaker			usr/bin
 debian/debianfiles/upgrade-windowmaker-defaults usr/sbin
 # Theme
-debian/debianfiles/menu/menu.prehook		etc/X11/WindowMaker
-debian/debianfiles/menu/menu.posthook		etc/X11/WindowMaker
 debian/debianfiles/Theme/Debian			usr/share/WindowMaker/Themes
 debian/debianfiles/Theme/debian.tiff		usr/share/WindowMaker/Backgrounds
 # Configuration
@@ -140,11 +138,8 @@ debian/debianfiles/conf/WMWindowAttributes	etc/GNUstep/Defaults
 debian/debianfiles/conf/WMRootMenu		etc/GNUstep/Defaults
 debian/debianfiles/conf/WindowMaker		etc/GNUstep/Defaults
 debian/debianfiles/wmaker-common.desktop	usr/share/xsessions
-usr/share/WindowMaker/wmmacros			etc/X11/WindowMaker
 # Menu
 debian/debianfiles/menu/wmappearance		etc/menu-methods
-WindowMaker/appearance.menu			etc/X11/WindowMaker
-WindowMaker/background.menu			etc/X11/WindowMaker
 # READMES, from the temporal path (see README section in debian/rules)
 README.po					usr/share/doc/wmaker
 README.definable-cursor				usr/share/doc/wmaker

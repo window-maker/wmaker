@@ -6,7 +6,7 @@ compat="menu-1"
 #!include menu.h
 
 genmenu="appearance.menu"
-rootprefix="/etc/X11/WindowMaker"
+rootprefix="/usr/share/WindowMaker"
 userprefix=shell("echo -n /${GNUSTEP_USER_ROOT-GNUstep}") "/Library/WindowMaker"
 treewalk=(M)
 

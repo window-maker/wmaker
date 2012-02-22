@@ -1,3 +1,16 @@
+wmaker (0.95.2-1+git-1) unstable; urgency=low
+
+  * Patch 53_Debian_WMState.diff changed, because the WMState file
+    in upstream is now different. Now, the dock launch WPrefs.
+  * Removed /etc/X11/WindowMaker files.
+    * Removed from debian/wmaker-common.dirs
+    * Removed (duplicated) files in debian/wmaker-common.install
+    * New path for menu.hook: /usr/share/WindowMaker
+      * Changed in the menu-method files (wmaker and wmappearance.
+    * Removed menu.posthook and menu.prehook.
+
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Tue, 21 Feb 2012 21:32:31 +0100
+
 wmaker (0.95.2-1) unstable; urgency=low
 
   * New upstream version 0.95.2 [Closes: #69669, #486542, #270877]

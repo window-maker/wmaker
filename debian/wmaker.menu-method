@@ -7,7 +7,7 @@ compat="menu-1";
 outputencoding="UTF-8"
 
 genmenu="menu.hook"
-rootprefix="/etc/X11/WindowMaker/"
+rootprefix="/usr/share/WindowMaker"
 userprefix=shell("echo -n /${GNUSTEP_USER_ROOT-GNUstep}") "/Library/WindowMaker/"
 treewalk="(M)"
 rootsection="/Debian"
@@ -34,12 +34,12 @@ startmenu= "\n" \
            ifelse( \
                 title(), \
                 "\"" mytitle() "\" MENU", \
-                "Debian MENU\n\n#include <menu.prehook>" \
+                "Debian MENU\n\n" \
            ) \
            "\n"
 endmenu=   ifelse( \
                 title(), \
                 "\"" mytitle() "\" END", \
-                "\n#include <menu.posthook>\n\nDebian END" \
+                "\n\nDebian END" \
            ) \
            "\n"

@@ -3,8 +3,17 @@ Author: Rodolfo García Peñas (kix) <kix@kix.es>
 Last-Update: 2012-01-09
 --- a/WindowMaker/Defaults/WMState.in
 +++ b/WindowMaker/Defaults/WMState.in
-@@ -10,14 +10,14 @@
-         DropCommand = "wmsetbg -u -t %d";
+@@ -2,7 +2,7 @@
+   Dock = {
+     Applications = (
+       {
+-        Command = "#wprefs#";
++        Command = "/usr/bin/WPrefs";
+         Name = Logo.WMDock;
+         AutoLaunch = No;
+         Forced = No;
+@@ -10,8 +10,8 @@
+         Lock = Yes;
        },
        {
 -	Command = xterm;
@@ -14,10 +23,3 @@ Last-Update: 2012-01-09
  	AutoLaunch = No;
  	Forced = No;
  	Position = "0,1";
-       },
-       {
--	Command = "#wprefs#";
-+	Command = "/usr/bin/WPrefs";
- 	Name = groupLeader.WPrefs;
- 	AutoLaunch = No;
- 	Forced = No;
