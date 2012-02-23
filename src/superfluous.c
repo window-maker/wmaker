@@ -394,7 +394,8 @@ static int bounceDirection(WAppIcon *aicon)
 
 void wAppBounce(WApplication *wapp)
 {
-	if (!wPreferences.no_animations && wapp->app_icon && !wapp->flags.bouncing) {
+	if (!wPreferences.no_animations && wapp->app_icon && !wapp->flags.bouncing
+		&& !wPreferences.do_not_make_appicons_bounce) {
 		++wapp->refcount;
 		wapp->flags.bouncing = 1;
 

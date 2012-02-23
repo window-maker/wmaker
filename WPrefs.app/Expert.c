@@ -31,7 +31,7 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMButton *swi[13];
+	WMButton *swi[14];
 
 } _Panel;
 
@@ -54,6 +54,7 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->swi[10], GetBoolForKey("BounceAppIconsWhenUrgent"));
 	WMSetButtonSelected(panel->swi[11], GetBoolForKey("RaiseAppIconsWhenBouncing"));
 	WMSetButtonSelected(panel->swi[12], GetBoolForKey("OpaqueMoveResizeKeyboard"));
+	WMSetButtonSelected(panel->swi[13], GetBoolForKey("DoNotMakeAppIconsBounce"));
 }
 
 static void createPanel(Panel * p)
@@ -97,6 +98,7 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->swi[10], _("Bounce AppIcons when the application wants attention."));
 	WMSetButtonText(panel->swi[11], _("Raise AppIcons when bouncing."));
 	WMSetButtonText(panel->swi[12], _("Opaque Move,Resize with keyboard."));
+	WMSetButtonText(panel->swi[13], _("Do not make AppIcons bounce."));
 
 	/* If the item is default true, enable the button here */
 	WMSetButtonEnabled(panel->swi[6], True);
@@ -129,6 +131,7 @@ static void storeDefaults(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->swi[10]), "BounceAppIconsWhenUrgent");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[11]), "RaiseAppIconsWhenBouncing");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[12]), "OpaqueMoveResizeKeyboard");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[13]), "DoNotMakeAppIconsBounce");
 }
 
 Panel *InitExpert(WMScreen * scr, WMWidget * parent)
