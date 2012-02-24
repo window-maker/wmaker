@@ -491,66 +491,6 @@ static void createInternalWindows(WScreen * scr)
 	XSelectInput(dpy, scr->clip_balloon, ButtonPressMask);
 }
 
-#if 0
-static Bool aquireManagerSelection(WScreen * scr)
-{
-	char buffer[32];
-	XEvent ev;
-	Time timestamp;
-
-	snprintf(buffer, sizeof(buffer), "WM_S%i", scr->screen);
-	scr->managerAtom = XInternAtom(dpy, buffer, False);
-
-	/* for race-conditions... */
-	XGrabServer(dpy);
-
-	/* if there is another manager running, don't try to replace it
-	 * (for now, at least) */
-	if (XGetSelectionOwner(dpy, scr->managerAtom) != None) {
-		XUngrabServer(dpy);
-		return False;
-	}
-
-	/* become the manager for this screen */
-
-	scr->managerWindow = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 1, 1, 0, 0, 0);
-
-	XSelectInput(dpy, scr->managerWindow, PropertyChangeMask);
-	/* get a timestamp */
-	XChangeProperty(dpy, scr->managerWindow, scr->managerAtom, XA_INTEGER, 32, PropModeAppend, NULL, 0);
-	while (1) {
-		XWindowEvent(dpy, scr->managerWindow, &ev);
-		if (ev.type == PropertyNotify) {
-			timestamp = ev.xproperty.time;
-			break;
-		}
-	}
-	XSelectInput(dpy, scr->managerWindow, NoEvents);
-	XDeleteProperty(dpy, scr->managerWindow, scr->managerAtom);
-
-	XSetSelectionOwner(dpy, scr->managerAtom, scr->managerWindow, CurrentTime);
-
-	XUngrabServer(dpy);
-
-	/* announce our arrival */
-
-	ev.xclient.type = ClientMessage;
-	ev.xclient.message_type = XInternAtom(dpy, "MANAGER", False);
-	ev.xclient.destination = scr->root_win;
-	ev.xclient.format = 32;
-	ev.xclient.data.l[0] = timestamp;
-	ev.xclient.data.l[1] = scr->managerAtom;
-	ev.xclient.data.l[2] = scr->managerWindow;
-	ev.xclient.data.l[3] = 0;
-	ev.xclient.data.l[4] = 0;
-
-	XSendEvent(dpy, scr->root_win, False, StructureNotify, &ev);
-	XSync(dpy, False);
-
-	return True;
-}
-#endif
-
 /*
  *----------------------------------------------------------------------
  * wScreenInit--
@@ -607,13 +547,6 @@ WScreen *wScreenInit(int screen_number)
 
 	scr->fakeGroupLeaders = WMCreateArray(16);
 
-#if 0
-	if (!aquireManagerSelection(scr)) {
-		wfree(scr);
-
-		return NULL;
-	}
-#endif
 	CantManageScreen = 0;
 	oldHandler = XSetErrorHandler((XErrorHandler) alreadyRunningError);
 
