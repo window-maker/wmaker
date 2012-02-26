@@ -636,6 +636,9 @@ if test "$xpm" = yes; then
     fi
 fi
 
+# for wmlib
+AC_SUBST(XCFLAGS)
+# for test
 AC_SUBST(XLFLAGS)
 AC_SUBST(XLIBS)
 AC_SUBST(X_EXTRA_LIBS)
@@ -862,11 +865,11 @@ fi
 
 gl_LD_VERSION_SCRIPT
 
-AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile \
+AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile test/Makefile \
 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
 	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
 	WINGs/Extras/Makefile WINGs/po/Makefile \
-	wrlib/Makefile wrlib/tests/Makefile \
+	wmlib/Makefile wrlib/Makefile wrlib/tests/Makefile \
 	src/Makefile src/wconfig.h \
 	doc/Makefile doc/sk/Makefile doc/cs/Makefile \
 	doc/ru/Makefile \
