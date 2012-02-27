@@ -23,7 +23,7 @@ char *File_managers[MAX_NR_APPS][2] = {
 	{ N_("XFTree"), "xftree" },
 	{ N_("Konqueror"), "konqueror" },
 	{ N_("Nautilus"), "nautilus --no-desktop" },
-	{ N_("FSViewer"), "fsviewer" },
+	{ N_("FSViewer"), "FSViewer" },
 	{ N_("Xfe"), "xfe" },
 	{ NULL, NULL }
 };
