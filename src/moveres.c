@@ -470,6 +470,12 @@ static void drawTransparentFrame(WWindow * wwin, int x, int y, int width, int he
 	if (HAS_TITLEBAR(wwin) && !wwin->flags.shaded) {
 		h = WMFontHeight(wwin->screen_ptr->title_font) + (wPreferences.window_title_clearance +
 								  TITLEBAR_EXTEND_SPACE) * 2;
+
+		if (h > wPreferences.window_title_max_height)
+			h = wPreferences.window_title_max_height;
+
+		if (h < wPreferences.window_title_min_height)
+			h = wPreferences.window_title_min_height;
 	}
 	if (HAS_RESIZEBAR(wwin) && !wwin->flags.shaded) {
 		/* Can't use wwin-frame->bottom_width because, in some cases
@@ -2219,6 +2225,13 @@ void InteractivePlaceWindow(WWindow * wwin, int *x_ret, int *y_ret, unsigned wid
 	if (HAS_TITLEBAR(wwin)) {
 		h = WMFontHeight(scr->title_font) + (wPreferences.window_title_clearance +
 						     TITLEBAR_EXTEND_SPACE) * 2;
+
+		if (h > wPreferences.window_title_max_height)
+			h = wPreferences.window_title_max_height;
+
+		if (h < wPreferences.window_title_min_height)
+			h = wPreferences.window_title_min_height;
+
 		height += h;
 	}
 	if (HAS_RESIZEBAR(wwin)) {

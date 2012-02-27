@@ -329,6 +329,9 @@ WDefaultEntry staticOptionList[] = {
 	    &wPreferences.disable_miniwindows, getBool, NULL, NULL, NULL}
 };
 
+#define NUM2STRING_(x) #x
+#define NUM2STRING(x) NUM2STRING_(x)
+
 WDefaultEntry optionList[] = {
 
 	/* dynamic options */
@@ -469,8 +472,16 @@ WDefaultEntry optionList[] = {
 	    NULL, getFont, setWinTitleFont, NULL, NULL},
 	{"WindowTitleExtendSpace", DEF_WINDOW_TITLE_EXTEND_SPACE, NULL,
 	    &wPreferences.window_title_clearance, getInt, setClearance, NULL, NULL},
+	{"WindowTitleMinHeight", "0", NULL,
+	    &wPreferences.window_title_min_height, getInt, setClearance, NULL, NULL},
+	{"WindowTitleMaxHeight", NUM2STRING(INT_MAX), NULL,
+	    &wPreferences.window_title_max_height, getInt, setClearance, NULL, NULL},
 	{"MenuTitleExtendSpace", DEF_MENU_TITLE_EXTEND_SPACE, NULL,
 	    &wPreferences.menu_title_clearance, getInt, setClearance, NULL, NULL},
+	{"MenuTitleMinHeight", "0", NULL,
+	    &wPreferences.menu_title_min_height, getInt, setClearance, NULL, NULL},
+	{"MenuTitleMaxHeight", NUM2STRING(INT_MAX), NULL,
+	    &wPreferences.menu_title_max_height, getInt, setClearance, NULL, NULL},
 	{"MenuTextExtendSpace", DEF_MENU_TEXT_EXTEND_SPACE, NULL,
 	    &wPreferences.menu_text_clearance, getInt, setClearance, NULL, NULL},
 	{"MenuTitleFont", DEF_MENU_TITLE_FONT, NULL,

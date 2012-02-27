@@ -484,6 +484,13 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 	WScreen *scr = wwin->screen_ptr;
 	int h = WMFontHeight(scr->title_font)
 		+ (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
+
+	if (h > wPreferences.window_title_max_height)
+		h = wPreferences.window_title_max_height;
+
+	if (h < wPreferences.window_title_min_height)
+		h = wPreferences.window_title_min_height;
+
 	WArea usableArea = wGetUsableAreaForHead(scr, wGetHeadForPointerLocation(scr),
 						 NULL, True);
 

@@ -2,7 +2,22 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
---- 0.94.0-crm
+--- 0.95.X
+
+Options to limit the window/menu title height
+---------------------------------------------
+
+You can now set the minimum and maximum titlebar heights.
+For example, to force all titlebars to 24 pixels execute
+the following commands:
+
+$ wdwrite WindowMaker WindowTitleMinHeight 24
+$ wdwrite WindowMaker WindowTitleMaxHeight 24
+$ wdwrite WindowMaker MenuTitleMinHeight 24
+$ wdwrite WindowMaker MenuTitleMaxHeight 24
+
+
+--- 0.95.2
 
 New Resizing functionality
 --------------------------

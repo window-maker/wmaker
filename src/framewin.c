@@ -59,7 +59,8 @@ static void paintButton(WCoreWindow * button, WTexture * texture,
 static void updateTitlebar(WFrameWindow * fwin);
 
 WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
-				 int width, int height, int *clearance, int flags,
+				 int width, int height, int *clearance,
+				 int *title_min, int *title_max, int flags,
 				 WTexture ** title_texture, WTexture ** resize_texture,
 				 WMColor ** color, WMFont ** font)
 {
@@ -76,6 +77,8 @@ WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
 	fwin->resizebar_texture = resize_texture;
 	fwin->title_color = color;
 	fwin->title_clearance = clearance;
+	fwin->title_min_height = title_min;
+	fwin->title_max_height = title_max;
 	fwin->font = font;
 #ifdef KEEP_XKB_LOCK_STATUS
 	fwin->languagemode = XkbGroup1Index;
@@ -121,9 +124,15 @@ void wFrameWindowUpdateBorders(WFrameWindow * fwin, int flags)
 	else
 		height = fwin->core->height - fwin->top_width - fwin->bottom_width;
 
-	if (flags & WFF_TITLEBAR)
+	if (flags & WFF_TITLEBAR) {
 		theight = WMFontHeight(*fwin->font) + (*fwin->title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
-	else
+
+		if (theight > *fwin->title_max_height)
+			theight = *fwin->title_max_height;
+
+		if (theight < *fwin->title_min_height)
+			theight = *fwin->title_min_height;
+	} else
 		theight = 0;
 
 	if (wPreferences.new_style == TS_NEW) {
@@ -461,6 +470,12 @@ static void updateTitlebar(WFrameWindow * fwin)
 	int theight;
 
 	theight = WMFontHeight(*fwin->font) + (*fwin->title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
+
+	if (theight > *fwin->title_max_height)
+		theight = *fwin->title_max_height;
+
+	if (theight < *fwin->title_min_height)
+		theight = *fwin->title_min_height;
 
 	x = 0;
 	w = fwin->core->width + 1;
@@ -1017,6 +1032,12 @@ void wFrameWindowPaint(WFrameWindow * fwin)
 
 			y = *fwin->title_clearance + TITLEBAR_EXTEND_SPACE;
 			h = WMFontHeight(*fwin->font);
+
+			if (y*2 + h > *fwin->title_max_height)
+				y = (*fwin->title_max_height - h) / 2;
+
+			if (y*2 + h < *fwin->title_min_height)
+				y = (*fwin->title_min_height - h) / 2;
 
 			/* We use a w+2 buffer to have an extra pixel on the left and
 			 * another one on the right. This is because for some odd reason,

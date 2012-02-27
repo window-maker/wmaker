@@ -338,7 +338,11 @@ typedef struct WPreferences {
     char open_transients_with_parent;  /* open transient window in same workspace as parent */
     signed char title_justification;   /* titlebar text alignment */
     int window_title_clearance;
+    int window_title_min_height;
+    int window_title_max_height;
     int menu_title_clearance;
+    int menu_title_min_height;
+    int menu_title_max_height;
     int menu_text_clearance;
     char multi_byte_text;
 #ifdef KEEP_XKB_LOCK_STATUS

@@ -1125,7 +1125,10 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	wwin->frame = wFrameWindowCreate(scr, window_level,
 					 x, y, width, height,
-					 &wPreferences.window_title_clearance, foo,
+					 &wPreferences.window_title_clearance,
+					 &wPreferences.window_title_min_height,
+					 &wPreferences.window_title_max_height,
+					 foo,
 					 scr->window_title_texture,
 					 scr->resizebar_texture, scr->window_title_color, &scr->title_font);
 
@@ -1428,7 +1431,10 @@ WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
 	wwin->frame = wFrameWindowCreate(scr, WMFloatingLevel,
 					 wwin->frame_x, wwin->frame_y,
 					 width, height,
-					 &wPreferences.window_title_clearance, foo,
+					 &wPreferences.window_title_clearance,
+					 &wPreferences.window_title_min_height,
+					 &wPreferences.window_title_max_height,
+					 foo,
 					 scr->window_title_texture,
 					 scr->resizebar_texture, scr->window_title_color, &scr->title_font);
 
