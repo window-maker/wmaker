@@ -75,23 +75,23 @@ WAppIcon *wAppIconCreateForDock(WScreen * scr, char *command, char *wm_instance,
 
 	dicon->prev = NULL;
 	dicon->next = scr->app_icon_list;
-	if (scr->app_icon_list) {
+	if (scr->app_icon_list)
 		scr->app_icon_list->prev = dicon;
-	}
+
 	scr->app_icon_list = dicon;
 
-	if (command) {
+	if (command)
 		dicon->command = wstrdup(command);
-	}
+
 	if (wm_class)
 		dicon->wm_class = wstrdup(wm_class);
+
 	if (wm_instance)
 		dicon->wm_instance = wstrdup(wm_instance);
 
 	path = wDefaultGetIconFile(scr, wm_instance, wm_class, True);
 	if (!path && command) {
 		wApplicationExtractDirPackIcon(scr, command, wm_instance, wm_class);
-
 		path = wDefaultGetIconFile(scr, wm_instance, wm_class, False);
 	}
 
@@ -129,13 +129,14 @@ WAppIcon *wAppIconCreate(WWindow * leader_win)
 
 	aicon->prev = NULL;
 	aicon->next = scr->app_icon_list;
-	if (scr->app_icon_list) {
+	if (scr->app_icon_list)
 		scr->app_icon_list->prev = aicon;
-	}
+
 	scr->app_icon_list = aicon;
 
 	if (leader_win->wm_class)
 		aicon->wm_class = wstrdup(leader_win->wm_class);
+
 	if (leader_win->wm_instance)
 		aicon->wm_instance = wstrdup(leader_win->wm_instance);
 
@@ -170,6 +171,7 @@ void wAppIconDestroy(WAppIcon * aicon)
 #endif
 	if (aicon->wm_instance)
 		wfree(aicon->wm_instance);
+
 	if (aicon->wm_class)
 		wfree(aicon->wm_class);
 
@@ -203,11 +205,6 @@ static void drawCorner(WIcon * icon)
 		     points, 3, Convex, CoordModeOrigin);
 	XDrawLine(dpy, icon->core->window, scr->icon_title_texture->light_gc, 0, 0, 0, 12);
 	XDrawLine(dpy, icon->core->window, scr->icon_title_texture->light_gc, 0, 0, 12, 0);
-	/* drawing the second line gives a weird concave look. -Dan */
-#if 0
-	XDrawLine(dpy, icon->core->window, scr->icon_title_texture->light_gc, 1, 1, 1, 11);
-	XDrawLine(dpy, icon->core->window, scr->icon_title_texture->light_gc, 1, 1, 11, 1);
-#endif
 }
 
 void wAppIconMove(WAppIcon * aicon, int x, int y)
@@ -275,10 +272,9 @@ void wAppIconPaint(WAppIcon * aicon)
 		drawCorner(aicon->icon);
 
 	XSetClipMask(dpy, scr->copy_gc, None);
-	if (aicon->launching) {
+	if (aicon->launching)
 		XFillRectangle(dpy, aicon->icon->core->window, scr->stipple_gc,
 			       0, 0, wPreferences.icon_size, wPreferences.icon_size);
-	}
 }
 
 Bool wAppIconSave(WAppIcon *aicon)
@@ -329,6 +325,7 @@ static void setIconCallback(WMenu * menu, WMenuEntry * entry)
 
 	if (icon->editing)
 		return;
+
 	icon->editing = 1;
 	scr = icon->icon->core->screen_ptr;
 
@@ -388,9 +385,8 @@ static void killCallback(WMenu * menu, WMenuEntry * entry)
 			wwin = wapp->main_window_desc->screen_ptr->focused_window;
 			while (wwin) {
 				twin = wwin->prev;
-				if (wwin->fake_group == fPtr) {
+				if (wwin->fake_group == fPtr)
 					wClientKill(wwin);
-				}
 				wwin = twin;
 			}
 		} else if (!wapp->main_window_desc->flags.destroyed) {
@@ -398,9 +394,7 @@ static void killCallback(WMenu * menu, WMenuEntry * entry)
 		}
 	}
 	wrelease(wapp->main_window_desc);
-
 	wfree(buffer);
-
 	WCHANGE_STATE(WSTATE_NORMAL);
 }
 
@@ -430,11 +424,10 @@ static void openApplicationMenu(WApplication * wapp, int x, int y)
 
 	menu = scr->icon_menu;
 
-	if (wapp->flags.hidden) {
+	if (wapp->flags.hidden)
 		menu->entries[1]->text = _("Unhide");
-	} else {
+	else
 		menu->entries[1]->text = _("Hide");
-	}
 
 	menu->flags.realized = 0;
 	wMenuRealize(menu);
@@ -442,13 +435,14 @@ static void openApplicationMenu(WApplication * wapp, int x, int y)
 	x -= menu->frame->core->width / 2;
 	if (x + menu->frame->core->width > scr->scr_width)
 		x = scr->scr_width - menu->frame->core->width;
+
 	if (x < 0)
 		x = 0;
 
 	/* set client data */
-	for (i = 0; i < menu->entry_no; i++) {
+	for (i = 0; i < menu->entry_no; i++)
 		menu->entries[i]->clientdata = wapp;
-	}
+
 	wMenuMapAt(menu, x, y, False);
 }
 
@@ -477,9 +471,8 @@ static void iconDblClick(WObjDescriptor * desc, XEvent * event)
 
 	wUnhideApplication(wapp, event->xbutton.button == Button2, unhideHere);
 
-	if (event->xbutton.state & MOD_MASK) {
+	if (event->xbutton.state & MOD_MASK)
 		wHideOtherApplications(aicon->icon->owner);
-	}
 }
 
 void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
@@ -543,9 +536,8 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 
 	if (XGrabPointer(dpy, icon->core->window, True, ButtonMotionMask
 			 | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
-			 GrabModeAsync, None, None, CurrentTime) != GrabSuccess) {
+			 GrabModeAsync, None, None, CurrentTime) != GrabSuccess)
 		wwarning("pointer grab failed for appicon move");
-	}
 
 	if (wPreferences.flags.nodock && wPreferences.flags.noclip)
 		dockable = 0;
@@ -595,11 +587,10 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 			x = ev.xmotion.x_root - dx;
 			y = ev.xmotion.y_root - dy;
 
-			if (movingSingle) {
+			if (movingSingle)
 				XMoveWindow(dpy, icon->core->window, x, y);
-			} else {
+			else
 				wAppIconMove(aicon, x, y);
-			}
 
 			if (dockable) {
 				if (scr->dock && wDockSnapIcon(scr->dock, aicon, x, y, &ix, &iy, False)) {
@@ -622,9 +613,9 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 					scr->last_dock = scr->dock;
 
 					XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
-					if (!docking) {
+					if (!docking)
 						XMapWindow(dpy, scr->dock_shadow);
-					}
+
 					docking = 1;
 				} else if (workspace->clip &&
 					   wDockSnapIcon(workspace->clip, aicon, x, y, &ix, &iy, False)) {
@@ -647,16 +638,15 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 					scr->last_dock = workspace->clip;
 
 					XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
-					if (!docking) {
+					if (!docking)
 						XMapWindow(dpy, scr->dock_shadow);
-					}
+
 					docking = 1;
 				} else if (docking) {
 					XUnmapWindow(dpy, scr->dock_shadow);
 					docking = 0;
 				}
 			}
-
 			break;
 
 		case ButtonPress:
@@ -674,9 +664,9 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 				SlideWindow(icon->core->window, x, y, shad_x, shad_y);
 				XUnmapWindow(dpy, scr->dock_shadow);
 				docked = wDockAttachIcon(scr->last_dock, aicon, ix, iy);
-				if (scr->last_dock->auto_collapse) {
+				if (scr->last_dock->auto_collapse)
 					collapsed = 0;
-				}
+
 				if (workspace->clip &&
 				    workspace->clip != scr->last_dock && workspace->clip->auto_raise_lower)
 					wDockLower(workspace->clip);

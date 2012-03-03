@@ -28,17 +28,11 @@ typedef struct WApplication {
     struct WApplication *prev;
 
     Window main_window;		       /* ID of the group leader */
-
     struct WWindow *main_window_desc;  /* main (leader) window descriptor */
-
     WMenu *menu;		       /* application menu */
-
     struct WAppIcon *app_icon;
-
     int refcount;
-
     struct WWindow *last_focused;      /* focused window before hide */
-
     int last_workspace;		       /* last workspace used to work on the
                                         * app */
     WMHandlerID *urgent_bounce_timer;
@@ -52,14 +46,12 @@ typedef struct WApplication {
 
 
 WApplication *wApplicationCreate(struct WWindow *wwin);
-void wApplicationDestroy(WApplication *wapp);
-
 WApplication *wApplicationOf(Window window);
-
+void wApplicationDestroy(WApplication *wapp);
 void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance,
                                     char *wm_class);
 void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance,
-		char *wm_class);
+				 char *wm_class);
 
 void wAppBounce(WApplication *);
 void wAppBounceWhileUrgent(WApplication *);

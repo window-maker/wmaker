@@ -123,14 +123,13 @@ static void appearanceObserver(void *self, WMNotification * notif)
 		wWindowConfigureBorders(wwin);
 		if (wwin->flags.shaded) {
 			wFrameWindowResize(wwin->frame, wwin->frame->core->width, wwin->frame->top_width - 1);
-
 			wwin->client.y = wwin->frame_y - wwin->client.height + wwin->frame->top_width;
 			wWindowSynthConfigureNotify(wwin);
 		}
 	}
-	if (flags & WTextureSettings) {
+	if (flags & WTextureSettings)
 		wwin->frame->flags.need_texture_remake = 1;
-	}
+
 	if (flags & (WTextureSettings | WColorSettings)) {
 		if (wwin->frame->titlebar)
 			XClearWindow(dpy, wwin->frame->titlebar->window);
@@ -480,12 +479,10 @@ static void fixLeaderProperties(WWindow *wwin)
 
 	if (haveCommand) {
 		command = GetCommandForWindow(wwin->client_win);
-		if (command) {
-			/* command already set. nothing to do. */
-			wfree(command);
-		} else {
+		if (command)
+			wfree(command); /* command already set. nothing to do. */
+		else
 			XSetCommand(dpy, wwin->client_win, argv, argc);
-		}
 	}
 
 	for (i = 0; i < 2; i++) {
@@ -508,12 +505,10 @@ static void fixLeaderProperties(WWindow *wwin)
 
 			if (haveCommand) {
 				command = GetCommandForWindow(window);
-				if (command) {
-					/* command already set. nothing to do. */
-					wfree(command);
-				} else {
+				if (command)
+					wfree(command); /* command already set. nothing to do. */
+				else
 					XSetCommand(dpy, window, argv, argc);
-				}
 			}
 
 			/* Make sure we get notification when this window is destroyed */
@@ -676,12 +671,11 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	XSetWindowBorderWidth(dpy, window, 0);
 
 	/* get hints from GNUstep app */
-	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "GNUstep") == 0) {
+	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "GNUstep") == 0)
 		wwin->flags.is_gnustep = 1;
-	}
-	if (!PropGetGNUstepWMAttr(window, &wwin->wm_gnustep_attr)) {
+
+	if (!PropGetGNUstepWMAttr(window, &wwin->wm_gnustep_attr))
 		wwin->wm_gnustep_attr = NULL;
-	}
 
 	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "DockApp") == 0) {
 		wwin->flags.is_dockapp = 1;
@@ -698,11 +692,8 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		if (wwin->wm_hints->flags & StateHint) {
 
 			if (wwin->wm_hints->initial_state == IconicState) {
-
 				wwin->flags.miniaturized = 1;
-
 			} else if (wwin->wm_hints->initial_state == WithdrawnState) {
-
 				wwin->flags.is_dockapp = 1;
 				withdraw = True;
 			}
@@ -768,9 +759,8 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		extern Atom _XA_WINDOWMAKER_MENU;
 		XTextProperty text_prop;
 
-		if (XGetTextProperty(dpy, wwin->main_window, &text_prop, _XA_WINDOWMAKER_MENU)) {
+		if (XGetTextProperty(dpy, wwin->main_window, &text_prop, _XA_WINDOWMAKER_MENU))
 			WSETUFLAG(wwin, shared_appicon, 0);
-		}
 	}
 
 	if (wwin->flags.is_dockapp)
@@ -849,13 +839,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	/* apply previous state if it exists and we're in startup */
 	if (scr->flags.startup && wm_state >= 0) {
-
 		if (wm_state == IconicState) {
-
 			wwin->flags.miniaturized = 1;
-
 		} else if (wm_state == WithdrawnState) {
-
 			withdraw = True;
 		}
 	}
@@ -874,9 +860,8 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		if (win_state->state->shaded > 0 && !WFLAGP(wwin, no_shadeable))
 			wwin->flags.shaded = win_state->state->shaded;
 
-		if (win_state->state->miniaturized > 0 && !WFLAGP(wwin, no_miniaturizable)) {
+		if (win_state->state->miniaturized > 0 && !WFLAGP(wwin, no_miniaturizable))
 			wwin->flags.miniaturized = win_state->state->miniaturized;
-		}
 
 		if (!IS_OMNIPRESENT(wwin)) {
 			int w = wDefaultGetStartWorkspace(scr, wwin->wm_instance,
@@ -951,27 +936,20 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	/* set workspace on which the window starts */
 	if (workspace >= 0) {
-		if (workspace > scr->workspace_count - 1) {
+		if (workspace > scr->workspace_count - 1)
 			workspace = workspace % scr->workspace_count;
-		}
 	} else {
 		int w;
 
 		w = wDefaultGetStartWorkspace(scr, wwin->wm_instance, wwin->wm_class);
 
 		if (w >= 0 && w < scr->workspace_count && !(IS_OMNIPRESENT(wwin))) {
-
 			workspace = w;
-
 		} else {
-			if (wPreferences.open_transients_with_parent && transientOwner) {
-
+			if (wPreferences.open_transients_with_parent && transientOwner)
 				workspace = transientOwner->frame->workspace;
-
-			} else {
-
+			else
 				workspace = scr->current_workspace;
-			}
 		}
 	}
 
@@ -1202,9 +1180,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		 * If this is the case, point the leader of this window to
 		 * itself */
 		leader = wWindowFor(wwin->main_window);
-		if (leader && leader->main_window == None) {
+		if (leader && leader->main_window == None)
 			leader->main_window = leader->client_win;
-		}
+
 		app = wApplicationCreate(wwin);
 		if (app) {
 			app->last_workspace = workspace;
@@ -1248,35 +1226,13 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		 * WM_STATE set before they get mapped. Else WM_STATE is set later,
 		 * after the return from this function.
 		 */
-		if (wwin->wm_hints && (wwin->wm_hints->flags & StateHint)) {
+		if (wwin->wm_hints && (wwin->wm_hints->flags & StateHint))
 			wClientSetState(wwin, wwin->wm_hints->initial_state, None);
-		} else {
+		else
 			wClientSetState(wwin, NormalState, None);
-		}
 
-#if 0
-		/* if not auto focus, then map the window under the currently
-		 * focused window */
-#define _WIDTH(w) (w)->frame->core->width
-#define _HEIGHT(w) (w)->frame->core->height
-		if (!wPreferences.auto_focus && scr->focused_window
-		    && !scr->flags.startup && !transientOwner && ((wWindowObscuresWindow(wwin, scr->focused_window)
-								   && (_WIDTH(wwin) >
-								       (_WIDTH(scr->focused_window) * 5) / 3
-								       || _HEIGHT(wwin) >
-								       (_HEIGHT(scr->focused_window) * 5) / 3)
-								   && WINDOW_LEVEL(scr->focused_window) ==
-								   WINDOW_LEVEL(wwin))
-								  || wwin->flags.maximized)) {
-			MoveInStackListUnder(scr->focused_window->frame->core, wwin->frame->core);
-		}
-#undef _WIDTH
-#undef _HEIGHT
-
-#endif
-
-		if (wPreferences.superfluous && !wPreferences.no_animations
-		    && !scr->flags.startup && (wwin->transient_for == None || wwin->transient_for == scr->root_win)
+		if (wPreferences.superfluous && !wPreferences.no_animations && !scr->flags.startup &&
+		    (wwin->transient_for == None || wwin->transient_for == scr->root_win) &&
 		    /*
 		     * The brain damaged idiotic non-click to focus modes will
 		     * have trouble with this because:
@@ -1293,19 +1249,17 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		     * and when it is processed, the client that owns that window
 		     * will reject the XSetInputFocus() for it.
 		     */
-		    && (wPreferences.focus_mode == WKF_CLICK || wPreferences.auto_focus)) {
+		    (wPreferences.focus_mode == WKF_CLICK || wPreferences.auto_focus))
 			DoWindowBirth(wwin);
-		}
 
 		wWindowMap(wwin);
 	}
 
 	/* setup stacking descriptor */
-	if (transientOwner) {
+	if (transientOwner)
 		wwin->frame->core->stacking->child_of = transientOwner->frame->core;
-	} else {
+	else
 		wwin->frame->core->stacking->child_of = NULL;
-	}
 
 	if (!scr->focused_window) {
 		/* first window on the list */
@@ -1326,9 +1280,8 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	/* raise is set to true if we un-hid the app when this window was born.
 	 * we raise, else old windows of this app will be above this new one. */
-	if (raise) {
+	if (raise)
 		wRaiseFrame(wwin->frame->core);
-	}
 
 	/* Update name must come after WApplication stuff is done */
 	wWindowUpdateName(wwin, title);
@@ -1358,13 +1311,11 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			Window dummy;
 
 			if (XQueryPointer(dpy, scr->root_win, &dummy, &dummy,
-					  &foo, &foo, &foo, &foo, &bar) != False) {
+					  &foo, &foo, &foo, &foo, &bar) != False)
 				same_screen = 1;
-			}
 
-			if (same_screen == 1 && same_head == 1) {
+			if (same_screen == 1 && same_head == 1)
 				wSetFocusTo(scr, wwin);
-			}
 		}
 	}
 	wWindowResetMouseGrabs(wwin);
@@ -1536,14 +1487,12 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 	WScreen *scr = wwin->screen_ptr;
 
 	/* First close attribute editor window if open */
-	if (wwin->flags.inspector_open) {
+	if (wwin->flags.inspector_open)
 		wCloseInspectorForWindow(wwin);
-	}
 
 	/* Close window menu if it's open for this window */
-	if (wwin->flags.menu_open_for_me) {
+	if (wwin->flags.menu_open_for_me)
 		CloseWindowMenu(scr);
-	}
 
 	if (!destroyed) {
 		if (!wwin->flags.internal_window)
@@ -1551,11 +1500,10 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 
 		/* If this is a leader window, we still need to listen for
 		 * DestroyNotify and PropertyNotify. */
-		if (wApplicationOf(wwin->client_win)) {
+		if (wApplicationOf(wwin->client_win))
 			XSelectInput(dpy, wwin->client_win, StructureNotifyMask | PropertyChangeMask);
-		} else {
+		else
 			XSelectInput(dpy, wwin->client_win, NoEventMask);
-		}
 
 		XUngrabButton(dpy, AnyButton, AnyModifier, wwin->client_win);
 		XUngrabKey(dpy, AnyKey, AnyModifier, wwin->client_win);
@@ -1582,11 +1530,10 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 	if (wwin->transient_for != scr->root_win) {
 		owner = wWindowFor(wwin->transient_for);
 		if (owner) {
-			if (!owner->flags.semi_focused) {
+			if (!owner->flags.semi_focused)
 				owner = NULL;
-			} else {
+			else
 				owner->flags.semi_focused = 0;
-			}
 		}
 	}
 
@@ -1602,6 +1549,7 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 
 		if (wwin->prev)
 			wwin->prev->next = wwin->next;
+
 		if (wwin->next)
 			wwin->next->prev = wwin->prev;
 		else {
@@ -1716,9 +1664,8 @@ void wWindowFocus(WWindow *wwin, WWindow *owin)
 	WWindow *oowner;
 
 #ifdef KEEP_XKB_LOCK_STATUS
-	if (wPreferences.modelock) {
+	if (wPreferences.modelock)
 		XkbLockGroup(dpy, XkbUseCoreKbd, wwin->frame->languagemode);
-	}
 #endif /* KEEP_XKB_LOCK_STATUS */
 
 	wwin->flags.semi_focused = 0;
@@ -1805,16 +1752,13 @@ void wWindowUpdateName(WWindow *wwin, char *newTitle)
 
 	wwin->flags.wm_name_changed = 1;
 
-	if (!newTitle) {
-		/* the hint was removed */
-		title = DEF_WINDOW_TITLE;
-	} else {
+	if (!newTitle)
+		title = DEF_WINDOW_TITLE; /* the hint was removed */
+	else
 		title = newTitle;
-	}
 
-	if (wFrameWindowChangeTitle(wwin->frame, title)) {
+	if (wFrameWindowChangeTitle(wwin->frame, title))
 		WMPostNotificationName(WMNChangedName, wwin, NULL);
-	}
 }
 
 /*
@@ -1963,9 +1907,9 @@ void wWindowChangeWorkspace(WWindow *wwin, int workspace)
 		    && !IS_OMNIPRESENT(wwin) && !wwin->flags.changing_workspace) {
 
 			wapp = wApplicationOf(wwin->main_window);
-			if (wapp) {
+			if (wapp)
 				wapp->last_workspace = workspace;
-			}
+
 			if (wwin->flags.miniaturized) {
 				if (wwin->icon) {
 					XUnmapWindow(dpy, wwin->icon->core->window);
@@ -1989,9 +1933,7 @@ void wWindowChangeWorkspace(WWindow *wwin, int workspace)
 	}
 	if (!IS_OMNIPRESENT(wwin)) {
 		int oldWorkspace = wwin->frame->workspace;
-
 		wwin->frame->workspace = workspace;
-
 		WMPostNotificationName(WMNChangedWorkspace, wwin, (void *)(uintptr_t) oldWorkspace);
 	}
 
@@ -2057,12 +1999,12 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 	 * if the window is being moved but not resized then
 	 * send a synthetic ConfigureNotify
 	 */
-	if ((req_x != wwin->frame_x || req_y != wwin->frame_y) && !resize) {
+	if ((req_x != wwin->frame_x || req_y != wwin->frame_y) && !resize)
 		synth_notify = True;
-	}
 
 	if (WFLAGP(wwin, dont_move_off))
 		wScreenBringInside(wwin->screen_ptr, &req_x, &req_y, req_width, req_height);
+
 	if (resize) {
 		if (req_width < MIN_WINDOW_SIZE)
 			req_width = MIN_WINDOW_SIZE;
@@ -2107,9 +2049,8 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 		wwin->client.y += FRAME_BORDER_WIDTH;
 	}
 #ifdef SHAPE
-	if (wShapeSupported && wwin->flags.shaped && resize) {
+	if (wShapeSupported && wwin->flags.shaped && resize)
 		wWindowSetShape(wwin);
-	}
 #endif
 
 	if (synth_notify)
@@ -2124,9 +2065,8 @@ void wWindowMove(WWindow *wwin, int req_x, int req_y)
 	int synth_notify = False;
 
 	/* Send a synthetic ConfigureNotify event for every window movement. */
-	if ((req_x != wwin->frame_x || req_y != wwin->frame_y)) {
+	if ((req_x != wwin->frame_x || req_y != wwin->frame_y))
 		synth_notify = True;
-	}
 #else
 	/* A single synthetic ConfigureNotify event is sent at the end of
 	 * a completed (opaque) movement in moveres.c */
@@ -2168,11 +2108,10 @@ void wWindowUpdateButtonImages(WWindow *wwin)
 		if (wwin->wm_gnustep_attr && wwin->wm_gnustep_attr->flags & GSMiniaturizePixmapAttr) {
 			pixmap = wwin->wm_gnustep_attr->miniaturize_pixmap;
 
-			if (wwin->wm_gnustep_attr->flags & GSMiniaturizeMaskAttr) {
+			if (wwin->wm_gnustep_attr->flags & GSMiniaturizeMaskAttr)
 				mask = wwin->wm_gnustep_attr->miniaturize_mask;
-			} else {
+			else
 				mask = None;
-			}
 
 			if (fwin->lbutton_image
 			    && (fwin->lbutton_image->image != pixmap || fwin->lbutton_image->mask != mask)) {
@@ -2186,17 +2125,17 @@ void wWindowUpdateButtonImages(WWindow *wwin)
 				fwin->lbutton_image->client_owned_mask = 1;
 			}
 		} else {
-			if (fwin->lbutton_image && !fwin->lbutton_image->shared) {
+			if (fwin->lbutton_image && !fwin->lbutton_image->shared)
 				wPixmapDestroy(fwin->lbutton_image);
-			}
+
 			fwin->lbutton_image = scr->b_pixmaps[WBUT_ICONIFY];
 		}
 	}
 #ifdef XKB_BUTTON_HINT
 	if (!WFLAGP(wwin, no_language_button)) {
-		if (fwin->languagebutton_image && !fwin->languagebutton_image->shared) {
+		if (fwin->languagebutton_image && !fwin->languagebutton_image->shared)
 			wPixmapDestroy(fwin->languagebutton_image);
-		}
+
 		fwin->languagebutton_image = scr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
 	}
 #endif
@@ -2228,21 +2167,18 @@ void wWindowUpdateButtonImages(WWindow *wwin)
 			}
 
 		} else if (WFLAGP(wwin, kill_close)) {
-
 			if (fwin->rbutton_image && !fwin->rbutton_image->shared)
 				wPixmapDestroy(fwin->rbutton_image);
 
 			fwin->rbutton_image = scr->b_pixmaps[WBUT_KILL];
 
 		} else if (MGFLAGP(wwin, broken_close)) {
-
 			if (fwin->rbutton_image && !fwin->rbutton_image->shared)
 				wPixmapDestroy(fwin->rbutton_image);
 
 			fwin->rbutton_image = scr->b_pixmaps[WBUT_BROKENCLOSE];
 
 		} else {
-
 			if (fwin->rbutton_image && !fwin->rbutton_image->shared)
 				wPixmapDestroy(fwin->rbutton_image);
 
@@ -2300,9 +2236,8 @@ void wWindowConfigureBorders(WWindow *wwin)
 
 #ifdef XKB_BUTTON_HINT
 		if (!WFLAGP(wwin, no_language_button)
-		    && wwin->frame->flags.hide_language_button) {
+		    && wwin->frame->flags.hide_language_button)
 			flags |= WFF_LANGUAGE_BUTTON;
-		}
 #endif
 
 		if (!WFLAGP(wwin, no_close_button)
@@ -2333,9 +2268,8 @@ void wWindowConfigureBorders(WWindow *wwin)
 			wFrameWindowHideButton(wwin->frame, flags);
 
 #ifdef SHAPE
-		if (wShapeSupported && wwin->flags.shaped) {
+		if (wShapeSupported && wwin->flags.shaped)
 			wWindowSetShape(wwin);
-		}
 #endif
 	}
 }
@@ -2425,15 +2359,13 @@ void wWindowSetShape(WWindow * wwin)
 	int ordering;
 
 	/* only shape is the client's */
-	if (!HAS_TITLEBAR(wwin) && !HAS_RESIZEBAR(wwin)) {
+	if (!HAS_TITLEBAR(wwin) && !HAS_RESIZEBAR(wwin))
 		goto alt_code;
-	}
 
 	/* Get array of rectangles describing the shape mask */
 	rects = XShapeGetRectangles(dpy, wwin->client_win, ShapeBounding, &count, &ordering);
-	if (!rects) {
+	if (!rects)
 		goto alt_code;
-	}
 
 	urec = malloc(sizeof(XRectangle) * (count + 2));
 	if (!urec) {
@@ -2832,9 +2764,8 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 			}
 		}
 	} else if (event->xbutton.button == Button3) {
-		if (event->xbutton.state & MOD_MASK) {
+		if (event->xbutton.state & MOD_MASK)
 			wHideOtherApplications(wwin);
-		}
 	} else if (event->xbutton.button == Button2) {
 		wSelectWindow(wwin, !wwin->flags.selected);
 	} else if (event->xbutton.button == WINGsConfiguration.mouseWheelUp) {
@@ -2915,29 +2846,25 @@ static void titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	WWindow *wwin = (WWindow *) data;
 
 #ifndef NUMLOCK_HACK
-	if ((event->xbutton.state & ValidModMask)
-	    != (event->xbutton.state & ~LockMask)) {
+	if ((event->xbutton.state & ValidModMask) != (event->xbutton.state & ~LockMask))
 		wwarning(_("The NumLock, ScrollLock or similar key seems to be turned on. "
 			   "Turn it off or some mouse actions and keyboard shortcuts will not work."));
-	}
 #endif
 	event->xbutton.state &= ValidModMask;
 
 	CloseWindowMenu(wwin->screen_ptr);
 
 	if (wPreferences.focus_mode == WKF_CLICK && !(event->xbutton.state & ControlMask)
-	    && !WFLAGP(wwin, no_focusable)) {
+	    && !WFLAGP(wwin, no_focusable))
 		wSetFocusTo(wwin->screen_ptr, wwin);
-	}
 
 	if (event->xbutton.button == Button1 || event->xbutton.button == Button2) {
 
 		if (event->xbutton.button == Button1) {
-			if (event->xbutton.state & MOD_MASK) {
+			if (event->xbutton.state & MOD_MASK)
 				wLowerFrame(wwin->frame->core);
-			} else {
+			else
 				wRaiseFrame(wwin->frame->core);
-			}
 		}
 		if ((event->xbutton.state & ShiftMask)
 		    && !(event->xbutton.state & ControlMask)) {
@@ -3009,11 +2936,10 @@ static void windowCloseDblClick(WCoreWindow *sender, void *data, XEvent *event)
 		return;
 
 	/* send delete message */
-	if (wwin->protocols.DELETE_WINDOW) {
+	if (wwin->protocols.DELETE_WINDOW)
 		wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
-	} else {
+	else
 		wClientKill(wwin);
-	}
 }
 
 #ifdef XKB_BUTTON_HINT
