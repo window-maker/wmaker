@@ -17,6 +17,11 @@ case "$1" in
     done
 
     if [ -x /usr/bin/update-menus -a -x /usr/bin/install-menu ] ; then
+# Remove the menu.hook from all the possible paths.
+      rm -f /etc/X11/WindowMaker/menu.hook
+      rm -f /usr/share/WindowMaker/menu.hook
+# Remove appearance.menu
+      rm -f /usr/share/WindowMaker/appearance.menu
         update-menus
     fi
   ;;

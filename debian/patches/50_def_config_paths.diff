@@ -10,7 +10,7 @@ index c8bb947..cf06113 100644
 
  /* list of paths to look for the config files, searched in order of appearance */
 -#define DEF_CONFIG_PATHS "~/GNUstep/Library/WindowMaker:"PKGDATADIR
-+#define DEF_CONFIG_PATHS "~/GNUstep/Library/WindowMaker:/etc/X11/WindowMaker:"PKGDATADIR
++#define DEF_CONFIG_PATHS "~/GNUstep/Library/WindowMaker:/etc/GNUstep/Defaults:"PKGDATADIR
  #define DEF_MENU_FILE	 "menu"
 
  /* name of the script to execute at startup */

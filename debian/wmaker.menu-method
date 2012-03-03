@@ -5,18 +5,18 @@
 !include menu.h
 compat="menu-1";
 outputencoding="UTF-8"
+outputlanguage="C"
 
 genmenu="menu.hook"
-rootprefix="/usr/share/WindowMaker"
+rootprefix="/etc/GNUstep/Defaults"
 userprefix=shell("echo -n /${GNUSTEP_USER_ROOT-GNUstep}") "/Library/WindowMaker/"
 treewalk="(M)"
 rootsection="/Debian"
 
-
 function mytitle()=replacewith(title(),"\"","'")
 
 function exec($action,$com)= \
-        "  \"" mytitle() "\" " ifnempty($shortcut, "SHORTCUT " $shortcut " ") $action " " esc($com,"*") "\n" 
+        "  \"" translate(,mytitle()) "\" " ifnempty($shortcut, "SHORTCUT " $shortcut " ") $action " " esc($com,"*") "\n"
 
 supported
 x11=	exec("SHEXEC",$command) 
@@ -33,13 +33,13 @@ submenutitle= ""
 startmenu= "\n" \
            ifelse( \
                 title(), \
-                "\"" mytitle() "\" MENU", \
+                ifneq(mytitle(), "Applications", "\"" translate(,mytitle()) "\" MENU"), \
                 "Debian MENU\n\n" \
            ) \
            "\n"
 endmenu=   ifelse( \
                 title(), \
-                "\"" mytitle() "\" END", \
+                ifneq(mytitle(), "Applications", "\"" translate(,mytitle()) "\" END"), \
                 "\n\nDebian END" \
            ) \
            "\n"
