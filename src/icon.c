@@ -574,15 +574,19 @@ void wIconUpdate(WIcon * icon)
 		icon->pixmap = makeIcon(scr, wwin->net_icon_image, icon->show_title,
 						icon->shadowed, icon->tile_type, icon->highlighted);
 	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
+		/* Get the Pixmap from the wm_hints, else, from the user */
 		if (get_pixmap_icon_from_wm_hints(scr, wwin, icon))
 			get_pixmap_icon_from_user_icon(scr, icon);
 	} else {
+		/* Get the Pixmap from the user */
 		get_pixmap_icon_from_user_icon(scr, icon);
 	}
 
+	/* No pixmap, set default background */
 	if (icon->pixmap != None)
 		XSetWindowBackgroundPixmap(dpy, icon->core->window, icon->pixmap);
 
+	/* Paint it */
 	XClearWindow(dpy, icon->core->window);
 	wIconPaint(icon);
 }
@@ -611,6 +615,7 @@ void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon)
 				} else {
 					wwarning(_("could not find default icon \"%s\""), file);
 				}
+				/* FIXME: Probably wfree(file) here! */
 			}
 
 			image = wIconValidateIconSize(scr, image, wPreferences.icon_size);
