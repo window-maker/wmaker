@@ -404,18 +404,10 @@ static RImage *makeRImageFromARGBData(unsigned long *data)
 
 	for (imgdata = image->data, i = 2; i < size + 2; i++, imgdata += 4) {
 		pixel = data[i];
-#if 0//BYTE_ORDER == BIG_ENDIAN
-		imgdata[2] = (pixel >> 24) & 0xff;	/* A */
-		imgdata[1] = (pixel >> 16) & 0xff;	/* R */
-		imgdata[0] = (pixel >> 8) & 0xff;	/* G */
-		imgdata[3] = (pixel >> 0) & 0xff;	/* B */
-#else				/* Little endian */
 		imgdata[3] = (pixel >> 24) & 0xff;	/* A */
 		imgdata[0] = (pixel >> 16) & 0xff;	/* R */
 		imgdata[1] = (pixel >> 8) & 0xff;	/* G */
 		imgdata[2] = (pixel >> 0) & 0xff;	/* B */
-#endif				/* endianness */
-
 	}
 
 	return image;
@@ -428,34 +420,41 @@ static void updateIconImage(WWindow * wwin)
 	Atom type;
 	int format;
 
+	/* Refresh icon image from X11 */
 	if (wwin->net_icon_image)
 		RReleaseImage(wwin->net_icon_image);
+
 	wwin->net_icon_image = NULL;
 
 	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_icon, 0L, LONG_MAX,
 			       False, XA_CARDINAL, &type, &format, &items, &rest,
-			       (unsigned char **)&property) != Success || !property) {
+			       (unsigned char **)&property) != Success || !property)
 		return;
-	}
 
 	if (type != XA_CARDINAL || format != 32 || items < 2) {
 		XFree(property);
 		return;
 	}
 
+	/* Find the best icon */
 	data = findBestIcon(property, items);
 	if (!data) {
 		XFree(property);
 		return;
 	}
 
+	/* Save the best icon in the X11 icon */
 	wwin->net_icon_image = makeRImageFromARGBData(data);
 
 	XFree(property);
 
-	if (wwin->icon) wIconUpdate(wwin->icon);
+	/* Refresh the Window Icon */
+	if (wwin->icon)
+		wIconUpdate(wwin->icon);
+
+	/* Refresh the application icon */
 	WApplication *app = wApplicationOf(wwin->main_window);
-	if (app && app->app_icon){
+	if (app && app->app_icon) {
 		wIconUpdate(app->app_icon->icon);
 		wAppIconPaint(app->app_icon);
 	}
