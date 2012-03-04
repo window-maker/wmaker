@@ -281,31 +281,29 @@ static Pixmap makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int
 	Pixmap pixmap;
 	int x, y, sx, sy;
 	unsigned w, h;
-	int theight = WMFontHeight(scr->icon_title_font);
+	int theight = 0;
 
-	if (tileType == TILE_NORMAL)
+	if (tileType == TILE_NORMAL) {
 		tile = RCloneImage(scr->icon_tile);
-	else {
+	} else {
 		assert(scr->clip_tile);
 		tile = RCloneImage(scr->clip_tile);
 	}
+
 	if (icon) {
 		w = (icon->width > wPreferences.icon_size)
 		    ? wPreferences.icon_size : icon->width;
 		x = (wPreferences.icon_size - w) / 2;
 		sx = (icon->width - w) / 2;
 
-		if (!titled) {
-			h = (icon->height > wPreferences.icon_size)
-			    ? wPreferences.icon_size : icon->height;
-			y = (wPreferences.icon_size - h) / 2;
-			sy = (icon->height - h) / 2;
-		} else {
-			h = (icon->height + theight > wPreferences.icon_size
-			     ? wPreferences.icon_size - theight : icon->height);
-			y = theight + ((int)wPreferences.icon_size - theight - h) / 2;
-			sy = (icon->height - h) / 2;
-		}
+		if (titled)
+			theight = WMFontHeight(scr->icon_title_font);
+
+		h = (icon->height + theight > wPreferences.icon_size
+		     ? wPreferences.icon_size - theight : icon->height);
+		y = theight + (wPreferences.icon_size - theight - h) / 2;
+		sy = (icon->height - h) / 2;
+
 		RCombineArea(tile, icon, sx, sy, w, h, x, y);
 	}
 
@@ -318,6 +316,7 @@ static Pixmap makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int
 		color.alpha = 150;	/* about 60% */
 		RClearImage(tile, &color);
 	}
+
 	if (highlighted) {
 		RColor color;
 
@@ -326,9 +325,9 @@ static Pixmap makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int
 		RLightImage(tile, &color);
 	}
 
-	if (!RConvertImage(scr->rcontext, tile, &pixmap)) {
+	if (!RConvertImage(scr->rcontext, tile, &pixmap))
 		wwarning(_("error rendering image:%s"), RMessageForError(RErrorCode));
-	}
+
 	RReleaseImage(tile);
 
 	if (titled)
@@ -611,11 +610,10 @@ void wIconUpdate(WIcon * icon)
 		icon->pixmap = pixmap;
 
 		if (XGetWindowAttributes(dpy, icon->icon_win, &attr)) {
-			if (attr.all_event_masks & ButtonPressMask) {
+			if (attr.all_event_masks & ButtonPressMask)
 				wHackedGrabButton(Button1, MOD_MASK, icon->core->window, True,
 						  ButtonPressMask, GrabModeSync, GrabModeAsync,
 						  None, wCursor[WCUR_ARROW]);
-			}
 		}
 	} else if (wwin && wwin->net_icon_image) {
 		/* Use _NET_WM_ICON icon */
@@ -677,13 +675,11 @@ void wIconUpdate(WIcon * icon)
 		icon->pixmap = pixmap;
 	} else {
  user_icon:
-
 		if (icon->file_image) {
 			icon->pixmap = makeIcon(scr, icon->file_image, icon->show_title,
 						icon->shadowed, icon->tile_type, icon->highlighted);
 		} else {
 			/* make default icons */
-
 			if (!scr->def_icon_pixmap) {
 				RImage *image = NULL;
 				char *path;
@@ -698,10 +694,9 @@ void wIconUpdate(WIcon * icon)
 					}
 
 					image = RLoadImage(scr->rcontext, path, 0);
-					if (!image) {
+					if (!image)
 						wwarning(_("could not load default icon \"%s\":%s"),
 							 file, RMessageForError(RErrorCode));
-					}
 					wfree(path);
 				}
  make_icons:
@@ -713,19 +708,18 @@ void wIconUpdate(WIcon * icon)
 					RReleaseImage(image);
 			}
 
-			if (icon->show_title) {
+			if (icon->show_title)
 				XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->def_ticon_pixmap);
-			} else {
+			else
 				XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->def_icon_pixmap);
-			}
+
 			icon->pixmap = None;
 		}
 	}
-	if (icon->pixmap != None) {
+	if (icon->pixmap != None)
 		XSetWindowBackgroundPixmap(dpy, icon->core->window, icon->pixmap);
-	}
-	XClearWindow(dpy, icon->core->window);
 
+	XClearWindow(dpy, icon->core->window);
 	wIconPaint(icon);
 }
 
