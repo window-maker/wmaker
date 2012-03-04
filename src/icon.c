@@ -56,6 +56,7 @@ static void miniwindowExpose(WObjDescriptor * desc, XEvent * event);
 static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event);
 static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
 
+void get_pixmap_icon_from_icon_win(WIcon *icon);
 /****** Notification Observers ******/
 
 static void appearanceObserver(void *self, WMNotification * notif)
@@ -565,56 +566,8 @@ void wIconUpdate(WIcon * icon)
 		goto user_icon;
 
 	if (icon->icon_win != None) {
-		/* use client specified icon window */
-		XWindowAttributes attr;
-		int resize = 0;
-		unsigned int width, height, depth;
-		int theight;
-		Pixmap pixmap;
-
-		getSize(icon->icon_win, &width, &height, &depth);
-
-		if (width > wPreferences.icon_size) {
-			resize = 1;
-			width = wPreferences.icon_size;
-		}
-		if (height > wPreferences.icon_size) {
-			resize = 1;
-			height = wPreferences.icon_size;
-		}
-		if (icon->show_title && (height + title_height < wPreferences.icon_size)) {
-			pixmap = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size,
-					       wPreferences.icon_size, scr->w_depth);
-			XSetClipMask(dpy, scr->copy_gc, None);
-			XCopyArea(dpy, scr->icon_tile_pixmap, pixmap, scr->copy_gc, 0, 0,
-				  wPreferences.icon_size, wPreferences.icon_size, 0, 0);
-			drawIconTitle(scr, pixmap, title_height);
-			theight = title_height;
-		} else {
-			pixmap = None;
-			theight = 0;
-			XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->icon_tile_pixmap);
-		}
-
-		XSetWindowBorderWidth(dpy, icon->icon_win, 0);
-		XReparentWindow(dpy, icon->icon_win, icon->core->window,
-				(wPreferences.icon_size - width) / 2,
-				theight + (wPreferences.icon_size - height - theight) / 2);
-		if (resize)
-			XResizeWindow(dpy, icon->icon_win, width, height);
-
-		XMapWindow(dpy, icon->icon_win);
-
-		XAddToSaveSet(dpy, icon->icon_win);
-
-		icon->pixmap = pixmap;
-
-		if (XGetWindowAttributes(dpy, icon->icon_win, &attr)) {
-			if (attr.all_event_masks & ButtonPressMask)
-				wHackedGrabButton(Button1, MOD_MASK, icon->core->window, True,
-						  ButtonPressMask, GrabModeSync, GrabModeAsync,
-						  None, wCursor[WCUR_ARROW]);
-		}
+		/* Get the Pixmap from the WIcon */
+		get_pixmap_icon_from_icon_win(icon);
 	} else if (wwin && wwin->net_icon_image) {
 		/* Use _NET_WM_ICON icon */
 		icon->pixmap = makeIcon(scr, wwin->net_icon_image, icon->show_title,
@@ -722,6 +675,64 @@ void wIconUpdate(WIcon * icon)
 	XClearWindow(dpy, icon->core->window);
 	wIconPaint(icon);
 }
+
+/* Get the Pixmap from the WIcon of the WWindow */
+void get_pixmap_icon_from_icon_win(WIcon * icon)
+{
+	XWindowAttributes attr;
+	WScreen *scr = icon->core->screen_ptr;
+	int title_height = WMFontHeight(scr->icon_title_font);
+	unsigned int width, height, depth;
+	int theight;
+	int resize = 0;
+	Pixmap pixmap;
+
+	getSize(icon->icon_win, &width, &height, &depth);
+
+	if (width > wPreferences.icon_size) {
+		resize = 1;
+		width = wPreferences.icon_size;
+	}
+
+	if (height > wPreferences.icon_size) {
+		resize = 1;
+		height = wPreferences.icon_size;
+	}
+
+	if (icon->show_title && (height + title_height < wPreferences.icon_size)) {
+		pixmap = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size,
+				       wPreferences.icon_size, scr->w_depth);
+		XSetClipMask(dpy, scr->copy_gc, None);
+		XCopyArea(dpy, scr->icon_tile_pixmap, pixmap, scr->copy_gc, 0, 0,
+			  wPreferences.icon_size, wPreferences.icon_size, 0, 0);
+		drawIconTitle(scr, pixmap, title_height);
+		theight = title_height;
+	} else {
+		pixmap = None;
+		theight = 0;
+		XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->icon_tile_pixmap);
+	}
+
+	XSetWindowBorderWidth(dpy, icon->icon_win, 0);
+	XReparentWindow(dpy, icon->icon_win, icon->core->window,
+			(wPreferences.icon_size - width) / 2,
+			theight + (wPreferences.icon_size - height - theight) / 2);
+	if (resize)
+		XResizeWindow(dpy, icon->icon_win, width, height);
+
+	XMapWindow(dpy, icon->icon_win);
+	XAddToSaveSet(dpy, icon->icon_win);
+
+	/* Save it */
+	icon->pixmap = pixmap;
+
+	if ((XGetWindowAttributes(dpy, icon->icon_win, &attr)) &&
+	    (attr.all_event_masks & ButtonPressMask))
+			wHackedGrabButton(Button1, MOD_MASK, icon->core->window, True,
+					  ButtonPressMask, GrabModeSync, GrabModeAsync,
+					  None, wCursor[WCUR_ARROW]);
+}
+
 
 void wIconPaint(WIcon * icon)
 {
