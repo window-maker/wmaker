@@ -58,6 +58,7 @@ static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
 
 void get_pixmap_icon_from_icon_win(WIcon *icon);
 int get_pixmap_icon_from_wm_hints(WScreen *scr, WWindow *wwin, WIcon *icon);
+void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon);
 /****** Notification Observers ******/
 
 static void appearanceObserver(void *self, WMNotification * notif)
@@ -562,10 +563,10 @@ void wIconUpdate(WIcon * icon)
 		XFreePixmap(dpy, icon->pixmap);
 	icon->pixmap = None;
 
-	if (wwin && WFLAGP(wwin, always_user_icon))
-		goto user_icon;
-
-	if (icon->icon_win != None) {
+	if (wwin && WFLAGP(wwin, always_user_icon)) {
+		/* Forced use user_icon */
+		get_pixmap_icon_from_user_icon(scr, icon);
+	} else if (icon->icon_win != None) {
 		/* Get the Pixmap from the WIcon */
 		get_pixmap_icon_from_icon_win(icon);
 	} else if (wwin && wwin->net_icon_image) {
@@ -574,55 +575,60 @@ void wIconUpdate(WIcon * icon)
 						icon->shadowed, icon->tile_type, icon->highlighted);
 	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
 		if (get_pixmap_icon_from_wm_hints(scr, wwin, icon))
-			goto user_icon;
+			get_pixmap_icon_from_user_icon(scr, icon);
 	} else {
- user_icon:
-		if (icon->file_image) {
-			icon->pixmap = makeIcon(scr, icon->file_image, icon->show_title,
-						icon->shadowed, icon->tile_type, icon->highlighted);
-		} else {
-			/* make default icons */
-			if (!scr->def_icon_pixmap) {
-				RImage *image = NULL;
-				char *path;
-				char *file;
-
-				file = wDefaultGetIconFile(scr, NULL, NULL, False);
-				if (file) {
-					path = FindImage(wPreferences.icon_path, file);
-					if (!path) {
-						wwarning(_("could not find default icon \"%s\""), file);
-						goto make_icons;
-					}
-
-					image = RLoadImage(scr->rcontext, path, 0);
-					if (!image)
-						wwarning(_("could not load default icon \"%s\":%s"),
-							 file, RMessageForError(RErrorCode));
-					wfree(path);
-				}
- make_icons:
-
-				image = wIconValidateIconSize(scr, image, wPreferences.icon_size);
-				scr->def_icon_pixmap = makeIcon(scr, image, False, False, icon->tile_type, icon->highlighted);
-				scr->def_ticon_pixmap = makeIcon(scr, image, True, False, icon->tile_type, icon->highlighted);
-				if (image)
-					RReleaseImage(image);
-			}
-
-			if (icon->show_title)
-				XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->def_ticon_pixmap);
-			else
-				XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->def_icon_pixmap);
-
-			icon->pixmap = None;
-		}
+		get_pixmap_icon_from_user_icon(scr, icon);
 	}
+
 	if (icon->pixmap != None)
 		XSetWindowBackgroundPixmap(dpy, icon->core->window, icon->pixmap);
 
 	XClearWindow(dpy, icon->core->window);
 	wIconPaint(icon);
+}
+
+void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon)
+{
+	if (icon->file_image) {
+		icon->pixmap = makeIcon(scr, icon->file_image, icon->show_title,
+					icon->shadowed, icon->tile_type, icon->highlighted);
+	} else {
+		/* make default icons */
+		if (!scr->def_icon_pixmap) {
+			RImage *image = NULL;
+			char *path;
+			char *file;
+
+			file = wDefaultGetIconFile(scr, NULL, NULL, False);
+			if (file) {
+				path = FindImage(wPreferences.icon_path, file);
+				if (!path) {
+					wwarning(_("could not find default icon \"%s\""), file);
+					goto make_icons;
+				}
+
+				image = RLoadImage(scr->rcontext, path, 0);
+				if (!image)
+					wwarning(_("could not load default icon \"%s\":%s"),
+						 file, RMessageForError(RErrorCode));
+				wfree(path);
+			}
+ make_icons:
+
+			image = wIconValidateIconSize(scr, image, wPreferences.icon_size);
+			scr->def_icon_pixmap = makeIcon(scr, image, False, False, icon->tile_type, icon->highlighted);
+			scr->def_ticon_pixmap = makeIcon(scr, image, True, False, icon->tile_type, icon->highlighted);
+			if (image)
+				RReleaseImage(image);
+		}
+
+		if (icon->show_title)
+			XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->def_ticon_pixmap);
+		else
+			XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->def_icon_pixmap);
+
+		icon->pixmap = None;
+	}
 }
 
 /* Get the Pixmap from the WIcon of the WWindow */
