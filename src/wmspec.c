@@ -413,40 +413,47 @@ static RImage *makeRImageFromARGBData(unsigned long *data)
 	return image;
 }
 
-static void updateIconImage(WWindow * wwin)
+static RImage *get_wwindow_image_from_x11(WWindow *wwin)
 {
-	unsigned long *property, *data;
-	unsigned long items, rest;
+	RImage *image;
 	Atom type;
 	int format;
+	unsigned long items, rest;
+	unsigned long *property, *data;
 
-	/* Refresh icon image from X11 */
-	if (wwin->net_icon_image)
-		RReleaseImage(wwin->net_icon_image);
-
-	wwin->net_icon_image = NULL;
-
+	/* Get the icon from X11 Window */
 	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_icon, 0L, LONG_MAX,
 			       False, XA_CARDINAL, &type, &format, &items, &rest,
 			       (unsigned char **)&property) != Success || !property)
-		return;
+		return NULL;
 
 	if (type != XA_CARDINAL || format != 32 || items < 2) {
 		XFree(property);
-		return;
+		return NULL;
 	}
 
 	/* Find the best icon */
 	data = findBestIcon(property, items);
 	if (!data) {
 		XFree(property);
-		return;
+		return NULL;
 	}
 
 	/* Save the best icon in the X11 icon */
-	wwin->net_icon_image = makeRImageFromARGBData(data);
+	image = makeRImageFromARGBData(data);
 
 	XFree(property);
+	return image;
+}
+
+static void updateIconImage(WWindow *wwin)
+{
+	/* Remove the icon image from X11 */
+	if (wwin->net_icon_image)
+		RReleaseImage(wwin->net_icon_image);
+
+	/* Save the icon in the X11 icon */
+	wwin->net_icon_image = get_wwindow_image_from_x11(wwin);
 
 	/* Refresh the Window Icon */
 	if (wwin->icon)
