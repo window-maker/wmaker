@@ -589,31 +589,29 @@ void wIconUpdate(WIcon * icon)
 
 void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon)
 {
+	RImage *image = NULL;
+	char *path;
+	char *file;
+
 	if (icon->file_image) {
 		icon->pixmap = makeIcon(scr, icon->file_image, icon->show_title,
 					icon->shadowed, icon->tile_type, icon->highlighted);
 	} else {
 		/* make default icons */
 		if (!scr->def_icon_pixmap) {
-			RImage *image = NULL;
-			char *path;
-			char *file;
-
 			file = wDefaultGetIconFile(scr, NULL, NULL, False);
 			if (file) {
 				path = FindImage(wPreferences.icon_path, file);
-				if (!path) {
+				if (path) {
+					image = RLoadImage(scr->rcontext, path, 0);
+					if (!image)
+						wwarning(_("could not load default icon \"%s\":%s"),
+							 file, RMessageForError(RErrorCode));
+					wfree(path);
+				} else {
 					wwarning(_("could not find default icon \"%s\""), file);
-					goto make_icons;
 				}
-
-				image = RLoadImage(scr->rcontext, path, 0);
-				if (!image)
-					wwarning(_("could not load default icon \"%s\":%s"),
-						 file, RMessageForError(RErrorCode));
-				wfree(path);
 			}
- make_icons:
 
 			image = wIconValidateIconSize(scr, image, wPreferences.icon_size);
 			scr->def_icon_pixmap = makeIcon(scr, image, False, False, icon->tile_type, icon->highlighted);
