@@ -2016,36 +2016,36 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 
 				/* Draw the resize frame for the first time. */
 				mapGeometryDisplay(wwin, fx, fy, fw, fh);
-				if (!opaqueResize) {
+
+				if (!opaqueResize)
 					drawTransparentFrame(wwin, fx, fy, fw, fh);
-				};
+
 				showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
 
 				started = 1;
 			}
 			if (started) {
-				if (wPreferences.size_display == WDIS_FRAME_CENTER) {
-					if (!opaqueResize) {
-						drawTransparentFrame(wwin, orig_fx, orig_fy, orig_fw, orig_fh);
-					};
+				if (!opaqueResize)
+					drawTransparentFrame(wwin, orig_fx, orig_fy, orig_fw, orig_fh);
+
+				if (wPreferences.size_display == WDIS_FRAME_CENTER)
 					moveGeometryDisplayCentered(scr, fx + fw / 2, fy + fh / 2);
-					if (!opaqueResize) {
-						drawTransparentFrame(wwin, fx, fy, fw, fh);
-					};
-				} else {
-					if (!opaqueResize) {
-						drawTransparentFrame(wwin, orig_fx, orig_fy, orig_fw, orig_fh);
-						drawTransparentFrame(wwin, fx, fy, fw, fh);
-					};
-				}
+
+				if (!opaqueResize)
+					drawTransparentFrame(wwin, fx, fy, fw, fh);
+
 				if (fh != orig_fh || fw != orig_fw) {
-					if (wPreferences.size_display == WDIS_NEW) {
+					if (wPreferences.size_display == WDIS_NEW)
 						showGeometry(wwin, orig_fx, orig_fy, orig_fx + orig_fw,
 							     orig_fy + orig_fh, res);
-					}
+
 					showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
 				}
+
 				if (opaqueResize) {
+					/* Fist clean the geometry line */
+					showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
+					/* Now, continue drawing */
 					XUngrabServer(dpy);
 					wwin->flags.user_changed_width = 1;
 					moveGeometryDisplayCentered(scr, fx + fw / 2, fy + fh / 2);
@@ -2065,9 +2065,9 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 			if (started) {
 				showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
 
-				if (!opaqueResize) {
+				if (!opaqueResize)
 					drawTransparentFrame(wwin, fx, fy, fw, fh);
-				}
+
 				XUngrabKeyboard(dpy, CurrentTime);
 				WMUnmapWidget(scr->gview);
 				XUngrabServer(dpy);
@@ -2092,9 +2092,8 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 		}
 	}
 
-	if (wPreferences.auto_arrange_icons && wXineramaHeads(scr) > 1 && head != wGetHeadForWindow(wwin)) {
+	if (wPreferences.auto_arrange_icons && wXineramaHeads(scr) > 1 && head != wGetHeadForWindow(wwin))
 		wArrangeIcons(scr, True);
-	}
 }
 
 #undef LEFT
