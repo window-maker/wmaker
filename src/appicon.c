@@ -295,6 +295,39 @@ Bool wAppIconSave(WAppIcon *aicon)
 
 #define canBeDocked(wwin)  ((wwin) && ((wwin)->wm_class||(wwin)->wm_instance))
 
+/* main_window may not have the full command line; try to find one which does */
+static void relaunchApplication(WApplication *wapp)
+{
+	WScreen *scr;
+	WWindow *wlist, *next;
+
+	scr = wapp->main_window_desc->screen_ptr;
+	wlist = scr->focused_window;
+	if (! wlist)
+		return;
+
+	while (wlist->prev)
+		wlist = wlist->prev;
+
+	while (wlist) {
+		next = wlist->next;
+
+		if (wlist->main_window == wapp->main_window) {
+			if (RelaunchWindow(wlist))
+				return;
+		}
+
+		wlist = next;
+	}
+}
+
+static void relaunchCallback(WMenu * menu, WMenuEntry * entry)
+{
+	WApplication *wapp = (WApplication *) entry->clientdata;
+
+	relaunchApplication(wapp);
+}
+
 static void hideCallback(WMenu * menu, WMenuEntry * entry)
 {
 	WApplication *wapp = (WApplication *) entry->clientdata;
@@ -403,6 +436,7 @@ static WMenu *createApplicationMenu(WScreen * scr)
 	WMenu *menu;
 
 	menu = wMenuCreate(scr, NULL, False);
+	wMenuAddCallback(menu, _("Launch"), relaunchCallback, NULL);
 	wMenuAddCallback(menu, _("Unhide Here"), unhideHereCallback, NULL);
 	wMenuAddCallback(menu, _("Hide"), hideCallback, NULL);
 	wMenuAddCallback(menu, _("Set Icon..."), setIconCallback, NULL);
@@ -502,6 +536,16 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 
 	if (IsDoubleClick(scr, event)) {
 		iconDblClick(desc, event);
+		return;
+	}
+
+	if (event->xbutton.button == Button2) {
+		WApplication *wapp = wApplicationOf(aicon->icon->owner->main_window);
+
+		if (!wapp)
+			return;
+
+		relaunchApplication(wapp);
 		return;
 	}
 
