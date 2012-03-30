@@ -83,14 +83,16 @@ static int canReceiveFocus(WWindow * wwin)
 	    wGetHeadForWindow(wwin) != wGetHeadForPointerLocation(wwin->screen_ptr))
 		return 0;
 
+	if (WFLAGP(wwin, no_focusable))
+		return 0;
+
 	if (!wwin->flags.mapped) {
 		if (!wwin->flags.shaded && !wwin->flags.miniaturized && !wwin->flags.hidden)
 			return 0;
 		else
 			return -1;
 	}
-	if (WFLAGP(wwin, no_focusable))
-		return 0;
+
 	return 1;
 }
 
