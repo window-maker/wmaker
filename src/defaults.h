@@ -63,4 +63,3 @@ int wDefaultGetStartWorkspace(WScreen *scr, char *instance, char *class);
 void wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file);
 
 #endif /* WMDEFAULTS_H_ */
-

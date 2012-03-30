@@ -387,14 +387,14 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
 			    (wwin->flags.mapped || include_unmapped)) {
 				if (class_only) {
-				    if (!wwin->wm_class || !curwin->wm_class)
-					continue;
-				    if (strcmp(wwin->wm_class, curwin->wm_class))
-					continue;
+					if (!wwin->wm_class || !curwin->wm_class)
+						continue;
+					if (strcmp(wwin->wm_class, curwin->wm_class))
+						continue;
 				}
 
 				if (!WFLAGP(wwin, skip_switchpanel))
-				WMAddToArray(windows, wwin);
+					WMAddToArray(windows, wwin);
 			}
 		}
 		wwin = curwin;

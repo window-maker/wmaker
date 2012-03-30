@@ -120,6 +120,7 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 
 	if (!old_scr)
 		old_scr = scr;
+
 	old_focused = old_scr->focused_window;
 
 	LastFocusChange = timestamp;
@@ -131,6 +132,7 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 		XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, CurrentTime);
 		if (old_focused)
 			wWindowUnfocus(old_focused);
+
 		if (oapp) {
 			wAppMenuUnmap(oapp->menu);
 			wApplicationDeactivate(oapp);
@@ -138,18 +140,17 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 
 		WMPostNotificationName(WMNChangedFocus, NULL, (void *)True);
 		return;
-	} else if (old_scr != scr && old_focused) {
-		wWindowUnfocus(old_focused);
 	}
+
+	if (old_scr != scr && old_focused)
+		wWindowUnfocus(old_focused);
 
 	wasfocused = wwin->flags.focused;
 	napp = wApplicationOf(wwin->main_window);
 
 	/* remember last workspace where the app has been */
-	if (napp) {
-		/*napp->last_workspace = wwin->screen_ptr->current_workspace; */
+	if (napp)
 		napp->last_workspace = wwin->frame->workspace;
-	}
 
 	if (wwin->flags.mapped && !WFLAGP(wwin, no_focusable)) {
 		/* install colormap if colormap mode is lock mode */
@@ -161,23 +162,23 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 		case WFM_NO_INPUT:
 			XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, CurrentTime);
 			break;
-
 		case WFM_PASSIVE:
 		case WFM_LOCALLY_ACTIVE:
 			XSetInputFocus(dpy, wwin->client_win, RevertToParent, CurrentTime);
 			break;
-
 		case WFM_GLOBALLY_ACTIVE:
 			break;
 		}
+
 		XFlush(dpy);
-		if (wwin->protocols.TAKE_FOCUS) {
+		if (wwin->protocols.TAKE_FOCUS)
 			wClientSendProtocol(wwin, _XA_WM_TAKE_FOCUS, timestamp);
-		}
+
 		XSync(dpy, False);
 	} else {
 		XSetInputFocus(dpy, scr->no_focus_win, RevertToParent, CurrentTime);
 	}
+
 	if (WFLAGP(wwin, no_focusable))
 		return;
 
@@ -206,7 +207,7 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 	if (napp && !wasfocused) {
 #ifdef USER_MENU
 		wUserMenuRefreshInstances(napp->menu, wwin);
-#endif				/* USER_MENU */
+#endif	/* USER_MENU */
 
 		if (wwin->flags.mapped)
 			wAppMenuMap(napp->menu, wwin);
@@ -908,14 +909,11 @@ void wIconifyWindow(WWindow * wwin)
 	XWindowAttributes attribs;
 	int present;
 
-	if (!XGetWindowAttributes(dpy, wwin->client_win, &attribs)) {
-		/* the window doesn't exist anymore */
-		return;
-	}
+	if (!XGetWindowAttributes(dpy, wwin->client_win, &attribs))
+		return; /* the window doesn't exist anymore */
 
-	if (wwin->flags.miniaturized) {
-		return;
-	}
+	if (wwin->flags.miniaturized)
+		return; /* already miniaturized */
 
 	if (wwin->transient_for != None && wwin->transient_for != wwin->screen_ptr->root_win) {
 		WWindow *owner = wWindowFor(wwin->transient_for);
@@ -935,11 +933,10 @@ void wIconifyWindow(WWindow * wwin)
 	}
 
 	if (!wPreferences.disable_miniwindows && !wwin->flags.net_handle_icon) {
-		if (!wwin->flags.icon_moved) {
+		if (!wwin->flags.icon_moved)
 			PlaceIcon(wwin->screen_ptr, &wwin->icon_x, &wwin->icon_y, wGetHeadForWindow(wwin));
-		}
-		wwin->icon = wIconCreate(wwin);
 
+		wwin->icon = wIconCreate(wwin);
 		wwin->icon->mapped = 1;
 	}
 
@@ -947,7 +944,6 @@ void wIconifyWindow(WWindow * wwin)
 	wwin->flags.mapped = 0;
 
 	/* unmap transients */
-
 	unmapTransientsFor(wwin);
 
 	if (present) {
@@ -997,11 +993,9 @@ void wIconifyWindow(WWindow * wwin)
 	if (!wPreferences.disable_miniwindows && !wwin->flags.net_handle_icon) {
 		if (wwin->screen_ptr->current_workspace == wwin->frame->workspace ||
 		    IS_OMNIPRESENT(wwin) || wPreferences.sticky_icons)
-
 			XMapWindow(dpy, wwin->icon->core->window);
 
 		AddToStackList(wwin->icon->core);
-
 		wLowerFrame(wwin->icon->core);
 	}
 
@@ -1085,9 +1079,8 @@ void wDeiconifyWindow(WWindow *wwin)
 
 	wwin->flags.miniaturized = 0;
 
-	if (!netwm_hidden && !wwin->flags.shaded) {
+	if (!netwm_hidden && !wwin->flags.shaded)
 		wwin->flags.mapped = 1;
-	}
 
 	if (!netwm_hidden || wPreferences.sticky_icons) {
 		/* maybe we want to do this regardless of net_handle_icon
@@ -1135,14 +1128,14 @@ void wDeiconifyWindow(WWindow *wwin)
 #endif	/* ANIMATIONS */
 		wwin->flags.skip_next_animation = 0;
 		XGrabServer(dpy);
-		if (!wwin->flags.shaded) {
+		if (!wwin->flags.shaded)
 			XMapWindow(dpy, wwin->client_win);
-		}
+
 		XMapWindow(dpy, wwin->frame->core->window);
 		wRaiseFrame(wwin->frame->core);
-		if (!wwin->flags.shaded) {
+		if (!wwin->flags.shaded)
 			wClientSetState(wwin, NormalState, None);
-		}
+
 		mapTransientsFor(wwin);
 	}
 
@@ -1167,16 +1160,14 @@ void wDeiconifyWindow(WWindow *wwin)
 			ProcessPendingEvents();
 
 			/* the window can disappear while ProcessPendingEvents() runs */
-			if (!wWindowFor(clientwin)) {
+			if (!wWindowFor(clientwin))
 				return;
-			}
 		}
 #endif
 	}
 
-	if (wPreferences.auto_arrange_icons) {
+	if (wPreferences.auto_arrange_icons)
 		wArrangeIcons(wwin->screen_ptr, True);
-	}
 
 	WMPostNotificationName(WMNChangedState, wwin, "iconify");
 

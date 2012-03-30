@@ -193,19 +193,20 @@ void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance
 			if (access(tmp, R_OK) == 0)
 				iconPath = tmp;
 		}
+
 		if (!iconPath) {
 			strcpy(tmp, path);
 			strcat(tmp, ".xpm");
 			if (access(tmp, R_OK) == 0)
 				iconPath = tmp;
 		}
+
 		if (!iconPath)
 			wfree(tmp);
 	}
 
 	if (iconPath) {
 		wApplicationSaveIconPathFor(iconPath, wm_instance, wm_class);
-
 		wfree(iconPath);
 	}
 }
@@ -263,20 +264,19 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	extractIcon(wapp->main_window_desc);
 
 	leader = wWindowFor(main_window);
-	if (leader) {
+	if (leader)
 		leader->main_window = main_window;
-	}
+
 	wapp->menu = wAppMenuGet(scr, main_window);
 #ifdef USER_MENU
 	if (!wapp->menu)
 		wapp->menu = wUserMenuGet(scr, wapp->main_window_desc);
-#endif				/* USER_MENU */
+#endif	/* USER_MENU */
 
 	/*
 	 * Set application wide attributes from the leader.
 	 */
 	wapp->flags.hidden = WFLAGP(wapp->main_window_desc, start_hidden);
-
 	wapp->flags.emulated = WFLAGP(wapp->main_window_desc, emulate_appicon);
 
 	/* application descriptor */
@@ -286,10 +286,11 @@ WApplication *wApplicationCreate(WWindow * wwin)
 		wapp->app_icon = NULL;
 		if (scr->last_dock)
 			wapp->app_icon = findDockIconFor(scr->last_dock, main_window);
+
 		/* check main dock if we did not find it in last dock */
-		if (!wapp->app_icon && scr->dock) {
+		if (!wapp->app_icon && scr->dock)
 			wapp->app_icon = findDockIconFor(scr->dock, main_window);
-		}
+
 		/* finally check clips */
 		if (!wapp->app_icon) {
 			int i;
@@ -319,9 +320,8 @@ WApplication *wApplicationCreate(WWindow * wwin)
 		wapp->app_icon = NULL;
 	}
 
-	if (wapp->app_icon) {
+	if (wapp->app_icon)
 		wapp->app_icon->main_window = main_window;
-	}
 
 	if (wapp->app_icon && !wapp->app_icon->docked) {
 		WIcon *icon = wapp->app_icon->icon;
@@ -341,13 +341,13 @@ WApplication *wApplicationCreate(WWindow * wwin)
 			wAppIconMove(wapp->app_icon, x, y);
 			wLowerFrame(icon->core);
 		}
+
 		if (!clip || !wapp->app_icon->attracted || !clip->collapsed)
 			XMapWindow(dpy, icon->core->window);
 	}
 
-	if (wPreferences.auto_arrange_icons && wapp->app_icon && !wapp->app_icon->attracted) {
+	if (wPreferences.auto_arrange_icons && wapp->app_icon && !wapp->app_icon->attracted)
 		wArrangeIcons(scr, True);
-	}
 
 	if (wapp->app_icon) {
 		char *tmp, *path;

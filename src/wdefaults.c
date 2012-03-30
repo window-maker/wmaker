@@ -199,9 +199,8 @@ wDefaultFillAttributes(WScreen * scr, char *instance, char *class,
 	else
 		key3 = NULL;
 
-	if (!ANoTitlebar) {
+	if (!ANoTitlebar)
 		init_wdefaults(scr);
-	}
 
 	WMPLSetCaseSensitive(True);
 
@@ -327,6 +326,7 @@ static WMPropList *get_generic_value(WScreen *scr, char *instance, char *class,
 
 	WMPLSetCaseSensitive(True);
 
+	/* Search the icon name using class and instance */
 	if (class && instance) {
 		char *buffer;
 
@@ -338,38 +338,39 @@ static WMPropList *get_generic_value(WScreen *scr, char *instance, char *class,
 		dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
 		WMReleasePropList(key);
 
-		if (dict) {
+		if (dict)
 			value = WMGetFromPLDictionary(dict, option);
-		}
 	}
 
+	/* Search the icon name using instance */
 	if (!value && instance) {
 		key = WMCreatePLString(instance);
 
 		dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
 		WMReleasePropList(key);
-		if (dict) {
+
+		if (dict)
 			value = WMGetFromPLDictionary(dict, option);
-		}
 	}
 
+	/* Search the icon name using class */
 	if (!value && class) {
 		key = WMCreatePLString(class);
 
 		dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
 		WMReleasePropList(key);
 
-		if (dict) {
+		if (dict)
 			value = WMGetFromPLDictionary(dict, option);
-		}
 	}
 
+	/* Search the default icon name - See noDefault argument! */
 	if (!value && !noDefault) {
+		/* AnyWindow is "*" - see wdefaults.c */
 		dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
 
-		if (dict) {
+		if (dict)
 			value = WMGetFromPLDictionary(dict, option);
-		}
 	}
 
 	WMPLSetCaseSensitive(False);
@@ -377,14 +378,14 @@ static WMPropList *get_generic_value(WScreen *scr, char *instance, char *class,
 	return value;
 }
 
+/* Get the name of the Icon File. If noDefault is False, then, default value included */
 char *wDefaultGetIconFile(WScreen * scr, char *instance, char *class, Bool noDefault)
 {
 	WMPropList *value;
 	char *tmp;
 
-	if (!ANoTitlebar) {
+	if (!ANoTitlebar)
 		init_wdefaults(scr);
-	}
 
 	if (!WDWindowAttributes->dictionary)
 		return NULL;
@@ -405,10 +406,12 @@ RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_s
 	char *path;
 	RImage *image;
 
+	/* Get the file name of the image, using instance and class */
 	file_name = wDefaultGetIconFile(scr, winstance, wclass, False);
 	if (!file_name)
 		return NULL;
 
+	/* Search the file image in the icon paths */
 	path = FindImage(wPreferences.icon_path, file_name);
 
 	if (!path) {
@@ -417,9 +420,9 @@ RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_s
 	}
 
 	image = RLoadImage(scr->rcontext, path, 0);
-	if (!image) {
+	if (!image)
 		wwarning(_("error loading image file \"%s\": %s"), path, RMessageForError(RErrorCode));
-	}
+
 	wfree(path);
 
 	image = wIconValidateIconSize(scr, image, max_size);
@@ -433,9 +436,8 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 	int w, i;
 	char *tmp;
 
-	if (!ANoTitlebar) {
+	if (!ANoTitlebar)
 		init_wdefaults(scr);
-	}
 
 	if (!WDWindowAttributes->dictionary)
 		return -1;
@@ -474,11 +476,10 @@ void wDefaultChangeIcon(WScreen * scr, char *instance, char *class, char *file)
 
 	if (!dict) {
 		dict = WMCreatePLDictionary(NULL, NULL);
-		if (dict) {
+		if (dict)
 			db->dictionary = dict;
-		} else {
+		else
 			return;
-		}
 	}
 
 	WMPLSetCaseSensitive(True);
@@ -502,9 +503,8 @@ void wDefaultChangeIcon(WScreen * scr, char *instance, char *class, char *file)
 		icon_value = WMCreatePLDictionary(AIcon, value, NULL);
 		WMReleasePropList(value);
 
-		if ((def_win = WMGetFromPLDictionary(dict, AnyWindow)) != NULL) {
+		if ((def_win = WMGetFromPLDictionary(dict, AnyWindow)) != NULL)
 			def_icon = WMGetFromPLDictionary(def_win, AIcon);
-		}
 
 		if (def_icon && !strcmp(WMGetFromPLString(def_icon), file))
 			same = 1;
@@ -520,9 +520,9 @@ void wDefaultChangeIcon(WScreen * scr, char *instance, char *class, char *file)
 	} else if (icon_value != NULL && !same) {
 		WMPutInPLDictionary(dict, key, icon_value);
 	}
-	if (!wPreferences.flags.noupdates) {
+
+	if (!wPreferences.flags.noupdates)
 		UpdateDomainFile(db);
-	}
 
 	WMReleasePropList(key);
 	if (icon_value)

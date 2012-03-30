@@ -160,9 +160,8 @@ WIcon *wIconCreate(WWindow * wwin)
 	icon->file_image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class, wPreferences.icon_size);
 
 	file = wDefaultGetIconFile(scr, wwin->wm_instance, wwin->wm_class, False);
-	if (file) {
+	if (file)
 		icon->file = wstrdup(file);
-	}
 
 	icon->icon_name = wNETWMGetIconName(wwin->client_win);
 	if (icon->icon_name)
@@ -476,7 +475,8 @@ char *wIconStore(WIcon * icon)
 	RImage *image = NULL;
 	WWindow *wwin = icon->owner;
 
-	if (!wwin) return NULL;
+	if (!wwin)
+		return NULL;
 
 	path = getnameforicon(wwin);
 	if (!path)
@@ -490,6 +490,7 @@ char *wIconStore(WIcon * icon)
 						 wwin->wm_hints->icon_pixmap, (wwin->wm_hints->flags & IconMaskHint)
 						 ? wwin->wm_hints->icon_mask : None);
 	}
+
 	if (!image) {
 		wfree(path);
 		return NULL;
@@ -499,6 +500,7 @@ char *wIconStore(WIcon * icon)
 		wfree(path);
 		path = NULL;
 	}
+
 	RReleaseImage(image);
 
 	return path;
@@ -561,6 +563,7 @@ void wIconUpdate(WIcon * icon)
 
 	if (icon->pixmap != None)
 		XFreePixmap(dpy, icon->pixmap);
+
 	icon->pixmap = None;
 
 	if (wwin && WFLAGP(wwin, always_user_icon)) {
