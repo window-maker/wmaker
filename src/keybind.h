@@ -86,6 +86,9 @@ enum {
 	WKBD_WINDOW9,
 	WKBD_WINDOW10,
 
+	/* launch a new instance of the active window */
+	WKBD_RELAUNCH,
+
 	/* screen */
 	WKBD_SWITCH_SCREEN,
 

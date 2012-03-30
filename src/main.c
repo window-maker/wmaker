@@ -400,6 +400,68 @@ void ExecuteShellCommand(WScreen * scr, char *command)
 
 /*
  *---------------------------------------------------------------------
+ * RelaunchWindow--
+ * 	Launch a new instance of the active window
+ *
+ *----------------------------------------------------------------------
+ */
+Bool RelaunchWindow(WWindow *wwin)
+{
+	if (! wwin || ! wwin->client_win) {
+		werror("no window to relaunch");
+		return False;
+	}
+
+	char **argv;
+	int argc;
+
+	if (! XGetCommand(dpy, wwin->client_win, &argv, &argc) || argc == 0 || argv == NULL) {
+		werror("cannot relaunch the application because no WM_COMMAND property is set");
+		return False;
+	}
+
+	pid_t pid = fork();
+
+	if (pid == 0) {
+		SetupEnvironment(wwin->screen_ptr);
+#ifdef HAVE_SETSID
+		setsid();
+#endif
+		/* argv is not null-terminated */
+		char **a = (char **) malloc(argc + 1);
+		if (! a) {
+			werror("out of memory trying to relaunch the application");
+			Exit(-1);
+		}
+
+		int i;
+		for (i = 0; i < argc; i++) a[i] = argv[i];
+		a[i] = NULL;
+
+		execvp(a[0], a);
+		Exit(-1);
+	} else if (pid < 0) {
+		werror("cannot fork a new process");
+
+		XFreeStringList(argv);
+		return False;
+	} else {
+		_tuple *data = wmalloc(sizeof(_tuple));
+
+		data->scr = wwin->screen_ptr;
+		data->command = wtokenjoin(argv, argc);
+
+		/* not actually a shell command */
+		wAddDeathHandler(pid, (WDeathHandler *) shellCommandHandler, data);
+
+		XFreeStringList(argv);
+		return True;
+	}
+
+}
+
+/*
+ *---------------------------------------------------------------------
  * wAbort--
  * 	Do a major cleanup and exit the program
  *

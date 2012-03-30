@@ -639,6 +639,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"WindowShortcut10Key", "None", (void *)WKBD_WINDOW10,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"WindowRelaunchKey", "None", (void *)WKBD_RELAUNCH,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"ScreenSwitchKey", "None", (void *)WKBD_SWITCH_SCREEN,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 

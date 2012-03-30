@@ -98,6 +98,8 @@ char *ExpandOptions(WScreen *scr, char *cmdline);
 
 void ExecuteShellCommand(WScreen *scr, char *command);
 
+Bool RelaunchWindow(WWindow *wwin);
+
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
 
 WWindow *NextToFocusAfter(WWindow *wwin);

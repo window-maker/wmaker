@@ -1651,6 +1651,12 @@ static void handleKeyPress(XEvent * event)
 
 		break;
 
+	case WKBD_RELAUNCH:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin))
+			(void) RelaunchWindow(wwin);
+
+		break;
+
 	case WKBD_SWITCH_SCREEN:
 		if (wScreenCount > 1) {
 			WScreen *scr2;
