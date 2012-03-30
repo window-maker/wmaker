@@ -55,9 +55,10 @@
 #define MC_PROPERTIES   7
 #define MC_OPTIONS      8
 #define MC_SHORTCUT     8
+#define MC_RELAUNCH     9
 
-#define MC_CLOSE        9
-#define MC_KILL         10
+#define MC_CLOSE        10
+#define MC_KILL         11
 
 #define WO_KEEP_ON_TOP		0
 #define WO_KEEP_AT_BOTTOM	1
@@ -165,6 +166,10 @@ static void execMenuCommand(WMenu * menu, WMenuEntry * entry)
 
 	case MC_PROPERTIES:
 		wShowInspectorForWindow(wwin);
+		break;
+
+	case MC_RELAUNCH:
+		(void) RelaunchWindow(wwin);
 		break;
 
 	case MC_HIDE:
@@ -453,6 +458,9 @@ static WMenu *createWindowMenu(WScreen * scr)
 	   entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
 	   wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
 	 */
+
+	entry = wMenuAddCallback(menu, _("Launch"), execMenuCommand, NULL);
+	entry->rtext = getShortcutString(wKeyBindings[WKBD_RELAUNCH]);
 
 	entry = wMenuAddCallback(menu, _("Close"), execMenuCommand, NULL);
 	entry->rtext = getShortcutString(wKeyBindings[WKBD_CLOSE]);
