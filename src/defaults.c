@@ -799,14 +799,6 @@ void wDefaultsMergeGlobalMenus(WDDomain * menuDomain)
 	menuDomain->dictionary = menu;
 }
 
-void wDefaultsDestroyDomain(WDDomain * domain)
-{
-	if (domain->dictionary)
-		WMReleasePropList(domain->dictionary);
-	wfree(domain->path);
-	wfree(domain);
-}
-
 WDDomain *wDefaultsInitDomain(char *domain, Bool requireDictionary)
 {
 	WDDomain *db;

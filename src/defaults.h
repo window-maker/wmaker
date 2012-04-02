@@ -37,8 +37,6 @@ WDDomain* wDefaultsInitDomain(char *domain, Bool requireDictionary);
 
 void wDefaultsMergeGlobalMenus(WDDomain *menuDomain);
 
-void wDefaultsDestroyDomain(WDDomain *domain);
-
 void wReadDefaults(WScreen *scr, WMPropList *new_dict);
 
 void wDefaultUpdateIcons(WScreen *scr);

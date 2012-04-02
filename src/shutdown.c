@@ -76,9 +76,6 @@ void Shutdown(WShutdownMode mode)
 				if (scr->helper_pid)
 					kill(scr->helper_pid, SIGKILL);
 
-				/* if the session is not being managed, save restart info */
-					wSessionSaveClients(scr);
-
 				wScreenSaveState(scr);
 
 				if (mode == WSKillMode)

@@ -84,11 +84,6 @@ void wXDNDMakeAwareness(Window window)
      */
 }
 
-void wXDNDClearAwareness(Window window)
-{
-	XDeleteProperty(dpy, window, _XA_XdndAware);
-}
-
 Bool wXDNDProcessSelection(XEvent * event)
 {
 	WScreen *scr = wScreenForWindow(event->xselection.requestor);

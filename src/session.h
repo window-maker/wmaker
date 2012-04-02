@@ -43,19 +43,9 @@ typedef struct {
     char user_changed_height;
 } WSessionData;
 
-
 void wSessionSaveState(WScreen *scr);
-
-void wSessionSaveClients(WScreen *scr);
-
-void wSessionSendSaveYourself(WScreen *scr);
-
 void wSessionClearState(WScreen *scr);
-
 void wSessionRestoreState(WScreen *scr);
-
 void wSessionRestoreLastWorkspace(WScreen *scr);
-
 Bool wSessionGetStateFor(WWindow *wwin, WSessionData *state);
-
 #endif

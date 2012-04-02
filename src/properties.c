@@ -244,24 +244,6 @@ Window PropGetClientLeader(Window window)
 	return leader;
 }
 
-void PropWriteGNUstepWMAttr(Window window, GNUstepWMAttributes * attr)
-{
-	unsigned long data[9];
-
-	data[0] = attr->flags;
-	data[1] = attr->window_style;
-	data[2] = attr->window_level;
-	data[3] = 0;		/* reserved */
-	/* The X protocol says XIDs are 32bit */
-	data[4] = attr->miniaturize_pixmap;
-	data[5] = attr->close_pixmap;
-	data[6] = attr->miniaturize_mask;
-	data[7] = attr->close_mask;
-	data[8] = attr->extra_flags;
-	XChangeProperty(dpy, window, _XA_GNUSTEP_WM_ATTR, _XA_GNUSTEP_WM_ATTR,
-			32, PropModeReplace, (unsigned char *)data, 9);
-}
-
 int PropGetWindowState(Window window)
 {
 	long *data;

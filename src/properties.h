@@ -33,7 +33,6 @@ int PropGetNormalHints(Window window, XSizeHints *size_hints, int *pre_iccm);
 void PropGetProtocols(Window window, WProtocols *prots);
 int PropGetWMClass(Window window, char **wm_class, char **wm_instance);
 int PropGetGNUstepWMAttr(Window window, GNUstepWMAttributes **attr);
-void PropWriteGNUstepWMAttr(Window window, GNUstepWMAttributes *attr);
 
 void PropSetWMakerProtocols(Window root);
 void PropCleanUp(Window root);
