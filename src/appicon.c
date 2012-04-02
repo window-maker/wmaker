@@ -497,8 +497,13 @@ static void iconDblClick(WObjDescriptor * desc, XEvent * event)
 	assert(aicon->icon->owner != NULL);
 
 	wapp = wApplicationOf(aicon->icon->owner->main_window);
-	unhideHere = (event->xbutton.state & ShiftMask);
 
+	if (event->xbutton.state & ControlMask) {
+		relaunchApplication(wapp);
+		return;
+	}
+
+	unhideHere = (event->xbutton.state & ShiftMask);
 	/* go to the last workspace that the user worked on the app */
 	if (!unhideHere && wapp->last_workspace != scr->current_workspace)
 		wWorkspaceChange(scr, wapp->last_workspace);
@@ -535,7 +540,9 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 		return;
 
 	if (IsDoubleClick(scr, event)) {
-		iconDblClick(desc, event);
+		/* Middle or right mouse actions were handled on first click */
+		if (event->xbutton.button == Button1)
+			iconDblClick(desc, event);
 		return;
 	}
 
