@@ -458,6 +458,8 @@ Bool RelaunchWindow(WWindow *wwin)
 		return True;
 	}
 
+	/* compiler food */
+	return True;
 }
 
 /*
