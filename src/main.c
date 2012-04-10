@@ -435,7 +435,8 @@ Bool RelaunchWindow(WWindow *wwin)
 		}
 
 		int i;
-		for (i = 0; i < argc; i++) a[i] = argv[i];
+		for (i = 0; i < argc; i++)
+			a[i] = argv[i];
 		a[i] = NULL;
 
 		execvp(a[0], a);
