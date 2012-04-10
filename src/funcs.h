@@ -35,7 +35,7 @@ void Shutdown(WShutdownMode mode);
 
 void RestoreDesktop(WScreen *scr);
 
-void Exit(int status);
+void Exit(int status) __attribute__((noreturn));
 
 void Restart(char *manager, Bool abortOnFailure);
 
