@@ -456,10 +456,8 @@ Bool RelaunchWindow(WWindow *wwin)
 		wAddDeathHandler(pid, (WDeathHandler *) shellCommandHandler, data);
 
 		XFreeStringList(argv);
-		return True;
 	}
 
-	/* compiler food */
 	return True;
 }
 
