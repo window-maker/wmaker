@@ -1183,7 +1183,7 @@ static void dockIconPaint(WAppIcon *btn)
 static WMPropList *make_icon_state(WAppIcon *btn)
 {
 	WMPropList *node = NULL;
-	WMPropList *command, *autolaunch, *lock, *name, *forced, *host;
+	WMPropList *command, *autolaunch, *lock, *name, *forced;
 	WMPropList *position, *buggy, *omnipresent;
 	char *tmp;
 	char buffer[64];
@@ -1239,12 +1239,6 @@ static WMPropList *make_icon_state(WAppIcon *btn)
 			command = WMCreatePLString(btn->paste_command);
 			WMPutInPLDictionary(node, dPasteCommand, command);
 			WMReleasePropList(command);
-		}
-
-		if (btn->client_machine && btn->remote_start) {
-			host = WMCreatePLString(btn->client_machine);
-			WMPutInPLDictionary(node, dHost, host);
-			WMReleasePropList(host);
 		}
 	}
 
