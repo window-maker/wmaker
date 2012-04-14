@@ -433,7 +433,7 @@ RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_s
 int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 {
 	WMPropList *value;
-	int w, i;
+	int w;
 	char *tmp;
 
 	if (!ANoTitlebar)
@@ -452,17 +452,10 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 	if (!tmp || strlen(tmp) == 0)
 		return -1;
 
-	if (sscanf(tmp, "%i", &w) != 1) {
-		w = -1;
-		for (i = 0; i < scr->workspace_count; i++) {
-			if (strcmp(scr->workspaces[i]->name, tmp) == 0) {
-				w = i;
-				break;
-			}
-		}
-	} else {
-		w--;
-	}
+	/* Get the workspace number for the workspace name */
+	w = wGetWorkspaceNumber(scr, tmp);
+
+	wfree(value);
 
 	return w;
 }

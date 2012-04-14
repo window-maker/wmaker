@@ -518,8 +518,8 @@ void wSessionRestoreState(WScreen * scr)
 void wSessionRestoreLastWorkspace(WScreen * scr)
 {
 	WMPropList *wks;
-	int w, i;
-	char *tmp;
+	int w;
+	char *value;
 
 	make_keys();
 
@@ -532,23 +532,18 @@ void wSessionRestoreLastWorkspace(WScreen * scr)
 	if (!wks || !WMIsPLString(wks))
 		return;
 
-	tmp = WMGetFromPLString(wks);
+	value = WMGetFromPLString(wks);
 
+	if (!value)
+		return;
 
 	/* clean up */
 	WMPLSetCaseSensitive(False);
 
-	if (sscanf(tmp, "%i", &w) != 1) {
-		w = -1;
-		for (i = 0; i < scr->workspace_count; i++) {
-			if (strcmp(scr->workspaces[i]->name, tmp) == 0) {
-				w = i;
-				break;
-			}
-		}
-	} else {
-		w--;
-	}
+	/* Get the workspace number for the workspace name */
+	w = wGetWorkspaceNumber(scr, value);
+
+	wfree(value);
 
 	if (w != scr->current_workspace && w < scr->workspace_count)
 		wWorkspaceChange(scr, w);

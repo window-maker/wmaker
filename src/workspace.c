@@ -877,3 +877,23 @@ void wWorkspaceRestoreState(WScreen * scr)
 		WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void *)(uintptr_t) i);
 	}
 }
+
+/* Returns the workspace number for a given workspace name */
+int wGetWorkspaceNumber(WScreen * scr, char * value)
+{
+        int w, i;
+
+	if (sscanf(value, "%i", &w) != 1) {
+		w = -1;
+		for (i = 0; i < scr->workspace_count; i++) {
+			if (strcmp(scr->workspaces[i]->name, value) == 0) {
+				w = i;
+				break;
+			}
+		}
+	} else {
+		w--;
+	}
+
+	return w;
+}
