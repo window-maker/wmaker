@@ -36,6 +36,7 @@
 extern WPreferences wPreferences;
 
 static void bevelImage(RImage * image, int relief);
+static RImage * get_texture_image(WScreen *scr, char *pixmap_file);
 
 WTexSolid *wTextureMakeSolid(WScreen * scr, XColor * color)
 {
@@ -265,20 +266,10 @@ WTexPixmap *wTextureMakePixmap(WScreen * scr, int style, char *pixmap_file, XCol
 	WTexPixmap *texture;
 	XGCValues gcv;
 	RImage *image;
-	char *file;
 
-	file = FindImage(wPreferences.pixmap_path, pixmap_file);
-	if (!file) {
-		wwarning(_("image file \"%s\" used as texture could not be found."), pixmap_file);
+	image = get_texture_image(scr, pixmap_file);
+	if (!image)
 		return NULL;
-	}
-	image = RLoadImage(scr->rcontext, file, 0);
-	if (!image) {
-		wwarning(_("could not load texture pixmap \"%s\":%s"), file, RMessageForError(RErrorCode));
-		wfree(file);
-		return NULL;
-	}
-	wfree(file);
 
 	texture = wmalloc(sizeof(WTexture));
 	memset(texture, 0, sizeof(WTexture));
@@ -303,20 +294,10 @@ WTexTGradient *wTextureMakeTGradient(WScreen * scr, int style, RColor * from, RC
 	WTexTGradient *texture;
 	XGCValues gcv;
 	RImage *image;
-	char *file;
 
-	file = FindImage(wPreferences.pixmap_path, pixmap_file);
-	if (!file) {
-		wwarning(_("image file \"%s\" used as texture could not be found."), pixmap_file);
+	image = get_texture_image(scr, pixmap_file);
+	if (!image)
 		return NULL;
-	}
-	image = RLoadImage(scr->rcontext, file, 0);
-	if (!image) {
-		wwarning(_("could not load texture pixmap \"%s\":%s"), file, RMessageForError(RErrorCode));
-		wfree(file);
-		return NULL;
-	}
-	wfree(file);
 
 	texture = wmalloc(sizeof(WTexture));
 	memset(texture, 0, sizeof(WTexture));
@@ -339,6 +320,27 @@ WTexTGradient *wTextureMakeTGradient(WScreen * scr, int style, RColor * from, RC
 	texture->pixmap = image;
 
 	return texture;
+}
+
+static RImage * get_texture_image(WScreen *scr, char *pixmap_file)
+{
+	char *file;
+	RImage *image;
+
+	file = FindImage(wPreferences.pixmap_path, pixmap_file);
+	if (!file) {
+		wwarning(_("image file \"%s\" used as texture could not be found."), pixmap_file);
+		return NULL;
+	}
+	image = RLoadImage(scr->rcontext, file, 0);
+	if (!image) {
+		wwarning(_("could not load texture pixmap \"%s\":%s"), file, RMessageForError(RErrorCode));
+		wfree(file);
+		return NULL;
+	}
+	wfree(file);
+
+	return image;
 }
 
 RImage *wTextureRenderImage(WTexture * texture, int width, int height, int relief)
