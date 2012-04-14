@@ -125,6 +125,7 @@ static void removeUserMenudata(void *menudata)
 	WUserMenuData *data = menudata;
 	if (data->key)
 		wfree(data->key);
+
 	wfree(data);
 }
 
@@ -132,22 +133,21 @@ static WUserMenuData *convertShortcuts(WScreen * scr, WMPropList * shortcut)
 {
 	WUserMenuData *data;
 	KeySym ksym;
-	char *k;
-	char *buffer;
-	char buf[MAX_SHORTCUT_LENGTH], *b;
+	char *k, *buffer, buf[MAX_SHORTCUT_LENGTH], *b;
 	int keycount, i, j, mod;
 
 	if (WMIsPLString(shortcut)) {
 		keycount = 1;
 	} else if (WMIsPLArray(shortcut)) {
 		keycount = WMGetPropListItemCount(shortcut);
-	} else
+	} else {
 		return NULL;
-	/*for (i=0;i<keycount;i++){ */
+	}
 
 	data = wmalloc(sizeof(WUserMenuData));
 	if (!data)
 		return NULL;
+
 	data->key = wmalloc(sizeof(WShortKey) * keycount);
 	if (!data->key) {
 		wfree(data);
@@ -156,32 +156,30 @@ static WUserMenuData *convertShortcuts(WScreen * scr, WMPropList * shortcut)
 
 	for (i = 0, j = 0; i < keycount; i++) {
 		data->key[j].modifier = 0;
-		if (WMIsPLArray(shortcut)) {
+		if (WMIsPLArray(shortcut))
 			wstrlcpy(buf, WMGetFromPLString(WMGetFromPLArray(shortcut, i)), MAX_SHORTCUT_LENGTH);
-		} else {
+		else
 			wstrlcpy(buf, WMGetFromPLString(shortcut), MAX_SHORTCUT_LENGTH);
-		}
+
 		b = (char *)buf;
 
 		while ((k = strchr(b, '+')) != NULL) {
 			*k = 0;
 			mod = wXModifierFromKey(b);
-			if (mod < 0) {
+			if (mod < 0)
 				break;
-			}
+
 			data->key[j].modifier |= mod;
 			b = k + 1;
 		}
 
 		ksym = XStringToKeysym(b);
-		if (ksym == NoSymbol) {
+		if (ksym == NoSymbol)
 			continue;
-		}
 
 		data->key[j].keycode = XKeysymToKeycode(dpy, ksym);
-		if (data->key[j].keycode) {
+		if (data->key[j].keycode)
 			j++;
-		}
 	}
 
  keyover:
@@ -209,18 +207,17 @@ static WMenu *configureUserMenu(WScreen * scr, WMPropList * plum)
 
 	if (!plum)
 		return NULL;
-	if (!WMIsPLArray(plum)) {
+
+	if (!WMIsPLArray(plum))
 		return NULL;
-	}
 
 	count = WMGetPropListItemCount(plum);
 	if (!count)
 		return NULL;
 
 	elem = WMGetFromPLArray(plum, 0);
-	if (!WMIsPLString(elem)) {
+	if (!WMIsPLString(elem))
 		return NULL;
-	}
 
 	mtitle = WMGetFromPLString(elem);
 
@@ -257,10 +254,10 @@ static WMenu *configureUserMenu(WScreen * scr, WMPropList * plum)
 								 notifyClient, data);
 
 					if (entry) {
-						if (WMIsPLString(params)) {
+						if (WMIsPLString(params))
 							entry->rtext =
 							    GetShortcutString(WMGetFromPLString(params));
-						}
+
 						entry->free_cdata = removeUserMenudata;
 
 						if (WMGetPropListItemCount(elem) >= 4) {
@@ -323,14 +320,11 @@ void wUserMenuRefreshInstances(WMenu * menu, WWindow * wwin)
 
 static WMenu *readUserMenuFile(WScreen * scr, char *file_name)
 {
-	WMenu *menu;
-	char *mtitle;
-	WMPropList *plum, *elem, *title, *command, *params;
-	int count, i;
+	WMenu *menu = NULL;
+	WMPropList *plum;
 
-	menu = NULL;
 	plum = WMReadPropListFromFile(file_name);
-	 /**/ if (plum) {
+	if (plum) {
 		menu = configureUserMenu(scr, plum);
 		WMReleasePropList(plum);
 	}
@@ -353,9 +347,8 @@ WMenu *wUserMenuGet(WScreen * scr, WWindow * wwin)
 		if (!path)
 			return NULL;
 
-		if (wwin) {
+		if (wwin)
 			menu = readUserMenuFile(scr, path);
-		}
 
 		wfree(path);
 	}

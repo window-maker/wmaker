@@ -214,9 +214,8 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 
 		for (mask = 0, i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
 			if (scr->shortcutWindows[i] != NULL &&
-			    WMGetFirstInArray(scr->shortcutWindows[i], wwin) != WANotFound) {
+			    WMGetFirstInArray(scr->shortcutWindows[i], wwin) != WANotFound)
 				mask |= 1 << i;
-			}
 		}
 
 		snprintf(buffer, sizeof(buffer), "%u", mask);
@@ -535,6 +534,7 @@ void wSessionRestoreLastWorkspace(WScreen * scr)
 
 	tmp = WMGetFromPLString(wks);
 
+
 	/* clean up */
 	WMPLSetCaseSensitive(False);
 
@@ -550,7 +550,6 @@ void wSessionRestoreLastWorkspace(WScreen * scr)
 		w--;
 	}
 
-	if (w != scr->current_workspace && w < scr->workspace_count) {
+	if (w != scr->current_workspace && w < scr->workspace_count)
 		wWorkspaceChange(scr, w);
-	}
 }

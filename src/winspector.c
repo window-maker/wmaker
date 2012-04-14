@@ -648,9 +648,8 @@ static void saveSettings(WMButton * button, InspectorPanel * panel)
 				different |= different2;
 			} else {
 				WMRemoveFromPLDictionary(dict, key2);
-				if (different2) {
+				if (different2)
 					WMPutInPLDictionary(dict, key2, appDic);
-				}
 			}
 			WMReleasePropList(key2);
 			WMReleasePropList(appDic);
@@ -1053,11 +1052,10 @@ static void selectSpecification(WMWidget * bPtr, void *data)
 	WWindow *wwin = panel->inspected;
 	int len;
 
-	if (bPtr == panel->defaultRb && (wwin->wm_instance || wwin->wm_class)) {
+	if (bPtr == panel->defaultRb && (wwin->wm_instance || wwin->wm_class))
 		WMSetButtonEnabled(panel->applyBtn, False);
-	} else {
+	else
 		WMSetButtonEnabled(panel->applyBtn, True);
-	}
 
 	len = 16 + strlen(wwin->wm_instance ? wwin->wm_instance : "?")
 	    + strlen(wwin->wm_class ? wwin->wm_class : "?");

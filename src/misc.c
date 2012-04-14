@@ -407,9 +407,8 @@ char *FindImage(char *paths, char *file)
 		path = wfindfile(paths, file);
 		*tmp = ':';
 	}
-	if (!tmp || !path) {
+	if (!tmp || !path)
 		path = wfindfile(paths, file);
-	}
 
 	return path;
 }

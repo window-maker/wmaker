@@ -540,9 +540,8 @@ void StartUp(Bool defaultScreenOnly)
 
 	{
 		int i;
-		for (i = 0; i < sizeof(atomNames) / sizeof(char *); i++) {
+		for (i = 0; i < sizeof(atomNames) / sizeof(char *); i++)
 			atom[i] = XInternAtom(dpy, atomNames[i], False);
-		}
 	}
 #endif
 
@@ -591,17 +590,17 @@ void StartUp(Bool defaultScreenOnly)
 	wCursor[WCUR_QUESTION] = XCreateFontCursor(dpy, XC_question_arrow);
 	wCursor[WCUR_TEXT] = XCreateFontCursor(dpy, XC_xterm);	/* odd name??? */
 	wCursor[WCUR_SELECT] = XCreateFontCursor(dpy, XC_cross);
-	{
-		Pixmap cur = XCreatePixmap(dpy, DefaultRootWindow(dpy), 16, 16, 1);
-		GC gc = XCreateGC(dpy, cur, 0, NULL);
-		XColor black;
-		memset(&black, 0, sizeof(XColor));
-		XSetForeground(dpy, gc, 0);
-		XFillRectangle(dpy, cur, gc, 0, 0, 16, 16);
-		XFreeGC(dpy, gc);
-		wCursor[WCUR_EMPTY] = XCreatePixmapCursor(dpy, cur, cur, &black, &black, 0, 0);
-		XFreePixmap(dpy, cur);
-	}
+
+	Pixmap cur = XCreatePixmap(dpy, DefaultRootWindow(dpy), 16, 16, 1);
+	GC gc = XCreateGC(dpy, cur, 0, NULL);
+	XColor black;
+	memset(&black, 0, sizeof(XColor));
+	XSetForeground(dpy, gc, 0);
+	XFillRectangle(dpy, cur, gc, 0, 0, 16, 16);
+	XFreeGC(dpy, gc);
+	wCursor[WCUR_EMPTY] = XCreatePixmapCursor(dpy, cur, cur, &black, &black, 0, 0);
+	XFreePixmap(dpy, cur);
+
 
 #ifndef HAVE_INOTIFY
 	/* signal handler stuff that gets called when a signal is caught */
@@ -668,9 +667,8 @@ void StartUp(Bool defaultScreenOnly)
 
 	/* initialize defaults stuff */
 	WDWindowMaker = wDefaultsInitDomain("WindowMaker", True);
-	if (!WDWindowMaker->dictionary) {
+	if (!WDWindowMaker->dictionary)
 		wwarning(_("could not read domain \"%s\" from defaults database"), "WindowMaker");
-	}
 
 	/* read defaults that don't change until a restart and are
 	 * screen independent */
@@ -685,15 +683,14 @@ void StartUp(Bool defaultScreenOnly)
 
 	/* init other domains */
 	WDRootMenu = wDefaultsInitDomain("WMRootMenu", False);
-	if (!WDRootMenu->dictionary) {
+	if (!WDRootMenu->dictionary)
 		wwarning(_("could not read domain \"%s\" from defaults database"), "WMRootMenu");
-	}
+
 	wDefaultsMergeGlobalMenus(WDRootMenu);
 
 	WDWindowAttributes = wDefaultsInitDomain("WMWindowAttributes", True);
-	if (!WDWindowAttributes->dictionary) {
+	if (!WDWindowAttributes->dictionary)
 		wwarning(_("could not read domain \"%s\" from defaults database"), "WMWindowAttributes");
-	}
 
 	XSetErrorHandler((XErrorHandler) catchXError);
 
@@ -714,11 +711,11 @@ void StartUp(Bool defaultScreenOnly)
 	}
 #endif
 
-	if (defaultScreenOnly) {
+	if (defaultScreenOnly)
 		max = 1;
-	} else {
+	else
 		max = ScreenCount(dpy);
-	}
+
 	wScreen = wmalloc(sizeof(WScreen *) * max);
 
 	wScreenCount = 0;
@@ -783,11 +780,10 @@ void StartUp(Bool defaultScreenOnly)
 		}
 
 		/* go to workspace where we were before restart */
-		if (lastDesktop >= 0) {
+		if (lastDesktop >= 0)
 			wWorkspaceForceChange(wScreen[j], lastDesktop);
-		} else {
+		else
 			wSessionRestoreLastWorkspace(wScreen[j]);
-		}
 	}
 
 	if (wScreenCount == 0) {
@@ -796,10 +792,9 @@ void StartUp(Bool defaultScreenOnly)
 	}
 
 #ifndef HAVE_INOTIFY
-	if (!wPreferences.flags.nopolling && !wPreferences.flags.noupdates) {
-		/* setup defaults file polling */
+	/* setup defaults file polling */
+	if (!wPreferences.flags.nopolling && !wPreferences.flags.noupdates)
 		WMAddTimerHandler(3000, wDefaultsCheckDomains, NULL);
-	}
 #endif
 
 }

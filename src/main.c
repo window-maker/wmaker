@@ -574,9 +574,9 @@ static void execInitScript()
 	wfree(paths);
 
 	if (file) {
-		if (system(file) != 0) {
+		if (system(file) != 0)
 			werror(_("%s:could not execute initialization script"), file);
-		}
+
 		wfree(file);
 	}
 }
@@ -592,9 +592,9 @@ void ExecExitScript()
 	wfree(paths);
 
 	if (file) {
-		if (system(file) != 0) {
+		if (system(file) != 0)
 			werror(_("%s:could not execute exit script"), file);
-		}
+
 		wfree(file);
 	}
 }

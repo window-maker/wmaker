@@ -786,10 +786,10 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		index = WMFindInArray(scr->fakeGroupLeaders, matchIdentifier, (void *)buffer);
 		if (index != WANotFound) {
 			fPtr = WMGetFromArray(scr->fakeGroupLeaders, index);
-			if (fPtr->retainCount == 0) {
+			if (fPtr->retainCount == 0)
 				fPtr->leader = createFakeWindowGroupLeader(scr, wwin->main_window,
 									   instance, class);
-			}
+
 			fPtr->retainCount++;
 			if (fPtr->origLeader == None) {
 				if (ADEQUATE(wwin->main_window)) {

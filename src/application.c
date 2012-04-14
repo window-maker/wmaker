@@ -114,8 +114,10 @@ static void extractIcon(WWindow * wwin)
 {
 	char *progname;
 
+	/* Get the application name */
 	progname = GetProgramNameForWindow(wwin->client_win);
 	if (progname) {
+		/* Save the icon path if the application is ".app" */
 		wApplicationExtractDirPackIcon(wwin->screen_ptr, progname, wwin->wm_instance, wwin->wm_class);
 		wfree(progname);
 	}
@@ -148,8 +150,8 @@ void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_cla
 
 	key = WMCreatePLString(tmp);
 	wfree(tmp);
-	adict = WMGetFromPLDictionary(dict, key);
 
+	adict = WMGetFromPLDictionary(dict, key);
 	iconk = WMCreatePLString("Icon");
 
 	if (adict) {
@@ -161,6 +163,7 @@ void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_cla
 		WMReleasePropList(adict);
 		val = NULL;
 	}
+
 	if (!val) {
 		val = WMCreatePLString(iconPath);
 		WMPutInPLDictionary(adict, iconk, val);
@@ -168,20 +171,20 @@ void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_cla
 	} else {
 		val = NULL;
 	}
+
 	WMReleasePropList(key);
 	WMReleasePropList(iconk);
 
-	if (val && !wPreferences.flags.noupdates) {
+	if (val && !wPreferences.flags.noupdates)
 		UpdateDomainFile(WDWindowAttributes);
-	}
 }
 
+/* This function is used if the application is a .app. It checks if it has an icon in it
+ * like for example /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
+ */
 void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance, char *wm_class)
 {
 	char *iconPath = NULL;
-	/* Maybe the app is a .app and it has an icon in it, like
-	 * /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
-	 */
 	if (strstr(path, ".app")) {
 		char *tmp;
 

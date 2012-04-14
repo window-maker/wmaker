@@ -296,7 +296,7 @@ static void legalPanelCommand(WMenu * menu, WMenuEntry * entry)
 
 /********************************************************************/
 
-static char *getLocalizedMenuFile(char *menu)
+static char * getLocalizedMenuFile(char *menu)
 {
 	char *buffer, *ptr, *locale;
 	int len;
@@ -309,9 +309,8 @@ static char *getLocalizedMenuFile(char *menu)
 
 	/* try menu.locale_name */
 	snprintf(buffer, len, "%s.%s", menu, Locale);
-	if (access(buffer, F_OK) == 0) {
+	if (access(buffer, F_OK) == 0)
 		return buffer;
-	}
 
 	/* position of locale in our buffer */
 	locale = buffer + strlen(menu) + 1;
@@ -320,17 +319,16 @@ static char *getLocalizedMenuFile(char *menu)
 	ptr = strchr(locale, '.');
 	if (ptr) {
 		*ptr = 0;
-		if (access(buffer, F_OK) == 0) {
+		if (access(buffer, F_OK) == 0)
 			return buffer;
-		}
 	}
+
 	/* now check for aa */
 	ptr = strchr(locale, '_');
 	if (ptr) {
 		*ptr = 0;
-		if (access(buffer, F_OK) == 0) {
+		if (access(buffer, F_OK) == 0)
 			return buffer;
-		}
 	}
 
 	wfree(buffer);

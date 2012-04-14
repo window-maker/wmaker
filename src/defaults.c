@@ -906,10 +906,12 @@ void wDefaultsCheckDomains(void* arg)
 	if (stat(WDWindowMaker->path, &stbuf) >= 0 && WDWindowMaker->timestamp < stbuf.st_mtime) {
 		WDWindowMaker->timestamp = stbuf.st_mtime;
 
-		/* global dictionary */
+		/* Global dictionary */
 		shared_dict = readGlobalDomain("WindowMaker", True);
-		/* user dictionary */
+
+		/* User dictionary */
 		dict = WMReadPropListFromFile(WDWindowMaker->path);
+
 		if (dict) {
 			if (!WMIsPLDictionary(dict)) {
 				WMReleasePropList(dict);
@@ -923,22 +925,25 @@ void wDefaultsCheckDomains(void* arg)
 					dict = shared_dict;
 					shared_dict = NULL;
 				}
+
 				for (i = 0; i < wScreenCount; i++) {
 					scr = wScreenWithNumber(i);
 					if (scr)
 						wReadDefaults(scr, dict);
 				}
-				if (WDWindowMaker->dictionary) {
+
+				if (WDWindowMaker->dictionary)
 					WMReleasePropList(WDWindowMaker->dictionary);
-				}
+
 				WDWindowMaker->dictionary = dict;
 			}
 		} else {
 			wwarning(_("could not load domain %s from user defaults database"), "WindowMaker");
 		}
-		if (shared_dict) {
+
+		if (shared_dict)
 			WMReleasePropList(shared_dict);
-		}
+
 	}
 
 	if (stat(WDWindowAttributes->path, &stbuf) >= 0 && WDWindowAttributes->timestamp < stbuf.st_mtime) {
@@ -1051,9 +1056,9 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 		if (!plvalue && !old_value) {
 			/* no default in  the DB. Use builtin default */
 			plvalue = entry->plvalue;
-			if (plvalue && new_dict) {
+			if (plvalue && new_dict)
 				WMPutInPLDictionary(new_dict, entry->plkey, plvalue);
-			}
+
 		} else if (!plvalue) {
 			/* value was deleted from DB. Keep current value */
 			continue;
@@ -1062,7 +1067,6 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 		} else if (!WMIsPropListEqualTo(plvalue, old_value)) {
 			/* value has changed */
 		} else {
-
 			if (strcmp(entry->key, "WorkspaceBack") == 0
 			    && update_workspace_back && scr->flags.backimage_helper_launched) {
 			} else {
@@ -1080,13 +1084,13 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 				 * sure to send the default background texture config
 				 * to the helper.
 				 */
-				if (strcmp(entry->key, "WorkspaceSpecificBack") == 0
-				    && !scr->flags.backimage_helper_launched) {
+				if (strcmp(entry->key, "WorkspaceSpecificBack") == 0 &&
+				    !scr->flags.backimage_helper_launched)
 					update_workspace_back = 1;
-				}
-				if (entry->update) {
+
+				if (entry->update)
 					needs_refresh |= (*entry->update) (scr, entry, tdata, entry->extra_data);
-				}
+
 			}
 		}
 	}
@@ -1116,29 +1120,23 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 			WMPostNotificationName(WNMenuAppearanceSettingsChanged, NULL, (void *)(uintptr_t) foo);
 
 		foo = 0;
-		if (needs_refresh & REFRESH_WINDOW_FONT) {
+		if (needs_refresh & REFRESH_WINDOW_FONT)
 			foo |= WFontSettings;
-		}
-		if (needs_refresh & REFRESH_WINDOW_TEXTURES) {
+		if (needs_refresh & REFRESH_WINDOW_TEXTURES)
 			foo |= WTextureSettings;
-		}
-		if (needs_refresh & REFRESH_WINDOW_TITLE_COLOR) {
+		if (needs_refresh & REFRESH_WINDOW_TITLE_COLOR)
 			foo |= WColorSettings;
-		}
 		if (foo)
 			WMPostNotificationName(WNWindowAppearanceSettingsChanged, NULL, (void *)(uintptr_t) foo);
 
 		if (!(needs_refresh & REFRESH_ICON_TILE)) {
 			foo = 0;
-			if (needs_refresh & REFRESH_ICON_FONT) {
+			if (needs_refresh & REFRESH_ICON_FONT)
 				foo |= WFontSettings;
-			}
-			if (needs_refresh & REFRESH_ICON_TITLE_COLOR) {
+			if (needs_refresh & REFRESH_ICON_TITLE_COLOR)
 				foo |= WTextureSettings;
-			}
-			if (needs_refresh & REFRESH_ICON_TITLE_BACK) {
+			if (needs_refresh & REFRESH_ICON_TITLE_BACK)
 				foo |= WTextureSettings;
-			}
 			if (foo)
 				WMPostNotificationName(WNIconAppearanceSettingsChanged, NULL,
 						       (void *)(uintptr_t) foo);
