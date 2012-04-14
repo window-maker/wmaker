@@ -56,6 +56,8 @@ static void miniwindowExpose(WObjDescriptor * desc, XEvent * event);
 static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event);
 static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
 
+static WIcon *wIconCreateCore(WScreen *scr, int coord_x, int coord_y);
+
 void get_pixmap_icon_from_icon_win(WIcon *icon);
 int get_pixmap_icon_from_wm_hints(WScreen *scr, WWindow *wwin, WIcon *icon);
 void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon);
@@ -110,35 +112,8 @@ WIcon *wIconCreate(WWindow * wwin)
 	WScreen *scr = wwin->screen_ptr;
 	WIcon *icon;
 	char *file;
-	unsigned long vmask = 0;
-	XSetWindowAttributes attribs;
 
-	icon = wmalloc(sizeof(WIcon));
-	memset(icon, 0, sizeof(WIcon));
-	icon->core = wCoreCreateTopLevel(scr, wwin->icon_x, wwin->icon_y,
-					 wPreferences.icon_size, wPreferences.icon_size, 0);
-
-	if (wPreferences.use_saveunders) {
-		vmask |= CWSaveUnder;
-		attribs.save_under = True;
-	}
-	/* a white border for selecting it */
-	vmask |= CWBorderPixel;
-	attribs.border_pixel = scr->white_pixel;
-
-	XChangeWindowAttributes(dpy, icon->core->window, vmask, &attribs);
-
-	/* will be overriden if this is an application icon */
-	icon->core->descriptor.handle_mousedown = miniwindowMouseDown;
-	icon->core->descriptor.handle_expose = miniwindowExpose;
-	icon->core->descriptor.parent_type = WCLASS_MINIWINDOW;
-	icon->core->descriptor.parent = icon;
-
-	icon->core->stacking = wmalloc(sizeof(WStacking));
-	icon->core->stacking->above = NULL;
-	icon->core->stacking->under = NULL;
-	icon->core->stacking->window_level = NORMAL_ICON_LEVEL;
-	icon->core->stacking->child_of = NULL;
+	icon = wIconCreateCore(scr, wwin->icon_x, wwin->icon_y);
 
 	icon->owner = wwin;
 	if (wwin->wm_hints && (wwin->wm_hints->flags & IconWindowHint)) {
@@ -183,33 +158,8 @@ WIcon *wIconCreate(WWindow * wwin)
 WIcon *wIconCreateWithIconFile(WScreen * scr, char *iconfile, int tile)
 {
 	WIcon *icon;
-	unsigned long vmask = 0;
-	XSetWindowAttributes attribs;
 
-	icon = wmalloc(sizeof(WIcon));
-	memset(icon, 0, sizeof(WIcon));
-	icon->core = wCoreCreateTopLevel(scr, 0, 0, wPreferences.icon_size, wPreferences.icon_size, 0);
-	if (wPreferences.use_saveunders) {
-		vmask = CWSaveUnder;
-		attribs.save_under = True;
-	}
-	/* a white border for selecting it */
-	vmask |= CWBorderPixel;
-	attribs.border_pixel = scr->white_pixel;
-
-	XChangeWindowAttributes(dpy, icon->core->window, vmask, &attribs);
-
-	/* will be overriden if this is a application icon */
-	icon->core->descriptor.handle_mousedown = miniwindowMouseDown;
-	icon->core->descriptor.handle_expose = miniwindowExpose;
-	icon->core->descriptor.parent_type = WCLASS_MINIWINDOW;
-	icon->core->descriptor.parent = icon;
-
-	icon->core->stacking = wmalloc(sizeof(WStacking));
-	icon->core->stacking->above = NULL;
-	icon->core->stacking->under = NULL;
-	icon->core->stacking->window_level = NORMAL_ICON_LEVEL;
-	icon->core->stacking->child_of = NULL;
+	icon = wIconCreateCore(scr, 0, 0);
 
 	if (iconfile) {
 		icon->file_image = RLoadImage(scr->rcontext, iconfile, 0);
@@ -228,6 +178,47 @@ WIcon *wIconCreateWithIconFile(WScreen * scr, char *iconfile, int tile)
 
 	WMAddNotificationObserver(appearanceObserver, icon, WNIconAppearanceSettingsChanged, icon);
 	WMAddNotificationObserver(tileObserver, icon, WNIconTileSettingsChanged, icon);
+
+	return icon;
+}
+
+static WIcon *wIconCreateCore(WScreen *scr, int coord_x, int coord_y)
+{
+	WIcon *icon;
+	unsigned long vmask = 0;
+	XSetWindowAttributes attribs;
+
+	icon = wmalloc(sizeof(WIcon));
+	memset(icon, 0, sizeof(WIcon));
+	icon->core = wCoreCreateTopLevel(scr,
+					 coord_x,
+					 coord_y,
+					 wPreferences.icon_size,
+					 wPreferences.icon_size,
+					 0);
+
+	if (wPreferences.use_saveunders) {
+		vmask = CWSaveUnder;
+		attribs.save_under = True;
+	}
+
+	/* a white border for selecting it */
+	vmask |= CWBorderPixel;
+	attribs.border_pixel = scr->white_pixel;
+
+	XChangeWindowAttributes(dpy, icon->core->window, vmask, &attribs);
+
+	/* will be overriden if this is a application icon */
+	icon->core->descriptor.handle_mousedown = miniwindowMouseDown;
+	icon->core->descriptor.handle_expose = miniwindowExpose;
+	icon->core->descriptor.parent_type = WCLASS_MINIWINDOW;
+	icon->core->descriptor.parent = icon;
+
+	icon->core->stacking = wmalloc(sizeof(WStacking));
+	icon->core->stacking->above = NULL;
+	icon->core->stacking->under = NULL;
+	icon->core->stacking->window_level = NORMAL_ICON_LEVEL;
+	icon->core->stacking->child_of = NULL;
 
 	return icon;
 }
