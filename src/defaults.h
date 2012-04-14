@@ -22,42 +22,32 @@
 #define WMDEFAULTS_H_
 
 typedef struct WDDomain {
-    char *domain_name;
-    WMPropList *dictionary;
-    char *path;
-    time_t timestamp;
+	char *domain_name;
+	WMPropList *dictionary;
+	char *path;
+	time_t timestamp;
 } WDDomain;
 
-#if 0
-WMPropList* wDefaultsInit(int screen_number);
-#endif
-
-
-WDDomain* wDefaultsInitDomain(char *domain, Bool requireDictionary);
+WDDomain * wDefaultsInitDomain(char *domain, Bool requireDictionary);
 
 void wDefaultsMergeGlobalMenus(WDDomain *menuDomain);
 
 void wReadDefaults(WScreen *scr, WMPropList *new_dict);
-
 void wDefaultUpdateIcons(WScreen *scr);
-
 void wReadStaticDefaults(WMPropList *dict);
-
 void wDefaultsCheckDomains(void *arg);
-
 void wSaveDefaults(WScreen *scr);
-
-char *wDefaultGetIconFile(WScreen *scr, char *instance, char *class,
-                          Bool noDefault);
-
-RImage *wDefaultGetImage(WScreen *scr, char *winstance, char *wclass, int max_size);
-
 void wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
                             WWindowAttributes *attr, WWindowAttributes *mask,
                             Bool useGlobalDefault);
 
+
+char * wDefaultGetIconFile(WScreen *scr, char *instance, char *class,
+                          Bool noDefault);
+
+RImage * wDefaultGetImage(WScreen *scr, char *winstance, char *wclass, int max_size);
+
+
 int wDefaultGetStartWorkspace(WScreen *scr, char *instance, char *class);
-
 void wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file);
-
 #endif /* WMDEFAULTS_H_ */

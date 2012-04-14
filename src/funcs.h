@@ -28,103 +28,75 @@
 #include "defaults.h"
 
 typedef void (WCallBack)(void *cdata);
-
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
 void Shutdown(WShutdownMode mode);
-
 void RestoreDesktop(WScreen *scr);
-
 void Exit(int status) __attribute__((noreturn));
-
 void Restart(char *manager, Bool abortOnFailure);
-
 void SetupEnvironment(WScreen *scr);
-
 void DispatchEvent(XEvent *event);
-
 void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
-
-Bool wRootMenuPerformShortcut(XEvent *event);
-
 void wRootMenuBindShortcuts(Window window);
-
 void OpenRootMenu(WScreen *scr, int x, int y, int keyboard);
-
 void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
-
 void InitializeSwitchMenu(void);
-
 void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard);
-
 void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard);
-
 void OpenMiniwindowMenu(WWindow *wwin, int x, int y);
-
 void CloseWindowMenu(WScreen *scr);
-
 void DestroyWindowMenu(WScreen *scr);
-
-WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
-
 void wColormapInstallForWindow(WScreen *scr, WWindow *wwin);
-
 void wColormapInstallRoot(WScreen *scr);
-
 void wColormapUninstallRoot(WScreen *scr);
-
 void wColormapAllowClientInstallation(WScreen *scr, Bool starting);
-
-Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
-
 void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head);
-
-int calcIntersectionArea(int x1, int y1, int w1, int h1,
-                         int x2, int y2, int w2, int h2);
-
+void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only);
+void SendHelperMessage(WScreen *scr, char type, int workspace, char *msg);
+void UnescapeWM_CLASS(char *str, char **name, char **class);
+void ExecuteShellCommand(WScreen *scr, char *command);
+void ExecExitScript();
 void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height);
 
+void ParseWindowName(WMPropList *value, char **winstance, char **wclass,
+                     char *where);
 
-void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only);
+void wHackedGrabButton(unsigned int button, unsigned int modifiers,
+                       Window grab_window, Bool owner_events,
+                       unsigned int event_mask, int pointer_mode,
+                       int keyboard_mode, Window confine_to, Cursor cursor);
+
+WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
+
+Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
+
+
+int calcIntersectionArea(int x1, int y1, int w1, int h1,
+                         int x2, int y2, int w2, int h2);
 
 #ifdef USECPP
 char *MakeCPPArgs(char *path);
 #endif
 
-char *StrConcatDot(char *a, char *b);
+char * StrConcatDot(char *a, char *b);
+char * ExpandOptions(WScreen *scr, char *cmdline);
+char * ShrinkString(WMFont *font, char *string, int width);
+char * FindImage(char *paths, char *file);
+char * GetShortcutString(char *text);
+char * EscapeWM_CLASS(char *name, char *class);
 
-char *ExpandOptions(WScreen *scr, char *cmdline);
-
-void ExecuteShellCommand(WScreen *scr, char *command);
-
+Bool wRootMenuPerformShortcut(XEvent *event);
 Bool RelaunchWindow(WWindow *wwin);
-
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
+Bool UpdateDomainFile(WDDomain *domain);
 
-WWindow *NextToFocusAfter(WWindow *wwin);
-WWindow *NextToFocusBefore(WWindow *wwin);
+WWindow * NextToFocusAfter(WWindow *wwin);
+WWindow * NextToFocusBefore(WWindow *wwin);
 
 void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y);
 
-char *ShrinkString(WMFont *font, char *string, int width);
-
-char *FindImage(char *paths, char *file);
-
-RImage*wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
-
-void ParseWindowName(WMPropList *value, char **winstance, char **wclass,
-                     char *where);
-
-void SendHelperMessage(WScreen *scr, char type, int workspace, char *msg);
-
-char *GetShortcutString(char *text);
-
-char *EscapeWM_CLASS(char *name, char *class);
-
-void UnescapeWM_CLASS(char *str, char **name, char **class);
-
-Bool UpdateDomainFile(WDDomain *domain);
+RImage * wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
 
 #ifdef NUMLOCK_HACK
 void wHackedGrabKey(int keycode, unsigned int modifiers,
@@ -132,25 +104,16 @@ void wHackedGrabKey(int keycode, unsigned int modifiers,
                     int keyboard_mode);
 #endif
 
-void wHackedGrabButton(unsigned int button, unsigned int modifiers,
-                       Window grab_window, Bool owner_events,
-                       unsigned int event_mask, int pointer_mode,
-                       int keyboard_mode, Window confine_to, Cursor cursor);
-
-
-void ExecExitScript();
-
 /****** I18N Wrapper for XFetchName,XGetIconName ******/
 
 Bool wFetchName(Display *dpy, Window win, char **winname);
 Bool wGetIconName(Display *dpy, Window win, char **iconname);
 
 /* Free returned string it when done. (applies to the next 2 functions) */
-char* GetCommandForWindow(Window win);
-char* GetProgramNameForWindow(Window win);
+char * GetCommandForWindow(Window win);
+char * GetProgramNameForWindow(Window win);
 
 Bool GetCommandForPid(int pid, char ***argv, int *argc);
 
 int getWVisualID(int screen);
-
 #endif

@@ -26,52 +26,50 @@
 #include "window.h"
 #include "funcs.h"
 
-
 #define TILE_NORMAL	0
 #define TILE_CLIP	1
 
-
 typedef struct WIcon {
-    WCoreWindow 	*core;
-    WWindow 		*owner;	       /* owner window */
-    char 		*icon_name;    /* the icon name hint */
+	WCoreWindow 	*core;
+	WWindow 	*owner;		/* owner window */
+	char 		*icon_name;	/* the icon name hint */
 
-    Window 		icon_win;      /* client suplied icon window */
+	Window 		icon_win;	/* client suplied icon window */
 
-    char		*file;	       /* the file with the icon image */
-    RImage 		*file_image;   /* the image from the file */
+	char		*file;		/* the file with the icon image */
+	RImage 		*file_image;	/* the image from the file */
 
-    unsigned int 	tile_type:4;
-    unsigned int 	show_title:1;
-    unsigned int 	has_titlebar:1;
-    unsigned int 	force_paint:1; /* True for icon update and repaint */
-    unsigned int 	selected:1;
-    unsigned int	step:3;	       /* selection cycle step */
-    unsigned int	shadowed:1;    /* If the icon is to be blured */
-    unsigned int 	mapped:1;
-    unsigned int	highlighted:1;
+	unsigned int 	tile_type:4;
+	unsigned int 	show_title:1;
+	unsigned int 	force_paint:1;	/* True for icon update and repaint */
+	unsigned int 	selected:1;
+	unsigned int	step:3;		/* selection cycle step */
+	unsigned int	shadowed:1;	/* If the icon is to be blured */
+	unsigned int 	mapped:1;
+	unsigned int	highlighted:1;
 
-    Pixmap 		pixmap;
+	Pixmap 		pixmap;
 
-    WMHandlerID		handlerID;     /* timer handler ID for cycling select
-                                        * color */
+	WMHandlerID	handlerID;	/* timer handler ID for cycling select
+					 * color */
 } WIcon;
 
-WIcon *wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile);
-WIcon *wIconCreate(WWindow *wwin);
+WIcon * wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile);
+WIcon * wIconCreate(WWindow *wwin);
+
 void wIconDestroy(WIcon *icon);
 void wIconPaint(WIcon *icon);
 void wIconUpdate(WIcon *icon);
-void wIconChangeTitle(WIcon *icon, char *new_title);
-Bool wIconChangeImageFile(WIcon *icon, char *file);
 void wIconSelect(WIcon *icon);
+void wIconChangeTitle(WIcon *icon, char *new_title);
 
-RImage *wIconValidateIconSize(WScreen *scr, RImage *icon, int max_size);
+Bool wIconChangeImageFile(WIcon *icon, char *file);
 
-char *wIconStore(WIcon *icon);
+RImage * wIconValidateIconSize(WScreen *scr, RImage *icon, int max_size);
+
+char * wIconStore(WIcon *icon);
 
 #ifdef NEWAPPICON
 void wIconSetHighlited(WIcon *icon, Bool flag);
 #endif /* NEWAPPICON */
-
 #endif /* WMICON_H_ */
