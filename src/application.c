@@ -185,9 +185,9 @@ void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_cla
 void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance, char *wm_class)
 {
 	char *iconPath = NULL;
-	if (strstr(path, ".app")) {
-		char *tmp;
+	char *tmp = NULL;
 
+	if (strstr(path, ".app")) {
 		tmp = wmalloc(strlen(path) + 16);
 
 		if (scr->flags.supports_tiff) {
@@ -206,11 +206,11 @@ void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance
 
 		if (!iconPath)
 			wfree(tmp);
-	}
 
-	if (iconPath) {
-		wApplicationSaveIconPathFor(iconPath, wm_instance, wm_class);
-		wfree(iconPath);
+		if (iconPath) {
+			wApplicationSaveIconPathFor(iconPath, wm_instance, wm_class);
+			wfree(iconPath);
+		}
 	}
 }
 
