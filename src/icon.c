@@ -473,6 +473,10 @@ char *wIconStore(WIcon * icon)
 	if (!path)
 		return NULL;
 
+	/* If icon exists, exit */
+	if (access(path, F_OK) == 0)
+                return path;
+
 	if (wwin->net_icon_image) {
 		image = RRetainImage(wwin->net_icon_image);
 	} else if (wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)
