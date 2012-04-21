@@ -122,7 +122,7 @@ typedef struct W_DragDestinationInfo {
 } W_DragDestinationInfo;
 
 
-struct W_DraggingInfo {
+typedef struct W_DraggingInfo {
     unsigned char protocolVersion; /* version supported on the other side */
     Time timestamp;
 
