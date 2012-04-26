@@ -455,8 +455,6 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 	/* Get the workspace number for the workspace name */
 	w = wGetWorkspaceNumber(scr, tmp);
 
-	wfree(value);
-
 	return w;
 }
 
