@@ -69,6 +69,6 @@ get-wraster-flags: get-wraster-flags.in Makefile
 	@$(SED) -e 's#$${inc_search_path}#$(inc_search_path)#;' \
 	        -e 's#$${lib_search_path}#$(lib_search_path)#;' \
 	        -e 's#$${GFXLIBS}#$(GFXLIBS)#;' \
-	        -e 's#$${XLIBS}#$(XLIBS)#;' < $(dir $<@)get-wraster-flags.in > $@
+	        -e 's#$${XLIBS}#$(XLIBS)#;' < $(abs_srcdir)/get-wraster-flags.in > $@
 	@chmod 755 $@
 
