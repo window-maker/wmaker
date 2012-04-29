@@ -106,11 +106,11 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 
 	procs = 0;
 	/* the process we are interested in */
-	if ((kp = kvm_getprocs(kd, KERN_PROC_PID, pid, &procs)) == NULL || procs == 0)
+	if ((kp = kvm_getprocs(kd, KERN_PROC_PID, pid, sizeof(*kp), &procs)) == NULL || procs == 0)
 		/* if kvm_getprocs() bombs out or does not find the process */
 		return False;
 
-	/* get it's argv */
+	/* get its argv */
 	if ((nargv = kvm_getargv(kd, kp, 0)) == NULL)
 		return False;
 
@@ -120,11 +120,11 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 	/*
 	 * must have this much free space in `args' in order for the current
 	 * iteration not to overflow it: we are at `count', and will append
-	 * the next ((*argc)+1) arg and a null (+1)
+	 * the next (*argc) arg and a nul (+1)
 	 * technically, overflow (or truncation, which isn't handled) can not
 	 * happen (should not, at least).
 	 */
-	#define ARGSPACE ( count + strlen(nargv[ (*argc) + 1 ] ) + 1 )
+	#define ARGSPACE ( count + strlen(nargv[ (*argc) ] ) + 1 )
 	while (nargv[*argc] && ARGSPACE < argmax ) {
 		memcpy(args + count, nargv[*argc], strlen(nargv[*argc]));
 		count += strlen(nargv[*argc]) + 1;
