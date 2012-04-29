@@ -10,6 +10,7 @@
 
 #include <string.h>
 #include <stdlib.h>
+#include <assert.h>
 #include <ctype.h>
 #ifdef HAVE_BSD_STRING_H
 #include <bsd/string.h>
