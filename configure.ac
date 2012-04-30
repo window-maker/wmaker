@@ -458,7 +458,7 @@ fi
 dnl XRandR support
 dnl ==============
 xrandr=no
-AC_ARG_ENABLE(xrandr, AS_HELP_STRING([--enable-xrandr], [enable XRandR window extension support]),
+AC_ARG_ENABLE(xrandr, AS_HELP_STRING([--enable-xrandr], [enable XRandR window extension support (NOT recommended, buggy)]),
 		xrandr=$enableval, xrandr=no)
 added_xext=no
 
