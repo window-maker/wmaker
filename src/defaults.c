@@ -61,7 +61,6 @@
 #include "dock.h"
 #include "workspace.h"
 #include "properties.h"
-#include "rootmenu.h"
 
 #define MAX_SHORTCUT_LENGTH 32
 
@@ -1013,9 +1012,6 @@ void wDefaultsCheckDomains(void* arg)
 				}
 				WDRootMenu->dictionary = dict;
 				wDefaultsMergeGlobalMenus(WDRootMenu);
-				scr = wScreenWithNumber(0);
-				configureMenu(scr, dict, True);
-				rebind_key_grabs(scr);
 			}
 		} else {
 			wwarning(_("could not load domain %s from user defaults database"), "WMRootMenu");
