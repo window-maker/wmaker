@@ -783,7 +783,7 @@ static WMenuEntry *addMenuEntry(WMenu * menu, char *title, char *shortcut, char 
 			dummy = wMenuCreate(scr, title, False);
 			dummy->on_destroy = removeShortcutsForMenu;
 			entry = wMenuAddCallback(menu, title, constructMenu, path);
-			entry->free_cdata = free;
+			entry->free_cdata = wfree;
 			wMenuEntrySetCascade(menu, entry, dummy);
 		}
 	} else if (strcmp(command, "EXEC") == 0) {
@@ -791,7 +791,7 @@ static WMenuEntry *addMenuEntry(WMenu * menu, char *title, char *shortcut, char 
 			wwarning(_("%s:missing parameter for menu command \"%s\""), file_name, command);
 		else {
 			entry = wMenuAddCallback(menu, title, execCommand, wstrconcat("exec ", params));
-			entry->free_cdata = free;
+			entry->free_cdata = wfree;
 			shortcutOk = True;
 		}
 	} else if (strcmp(command, "SHEXEC") == 0) {
@@ -799,7 +799,7 @@ static WMenuEntry *addMenuEntry(WMenu * menu, char *title, char *shortcut, char 
 			wwarning(_("%s:missing parameter for menu command \"%s\""), file_name, command);
 		else {
 			entry = wMenuAddCallback(menu, title, execCommand, wstrdup(params));
-			entry->free_cdata = free;
+			entry->free_cdata = wfree;
 			shortcutOk = True;
 		}
 	} else if (strcmp(command, "EXIT") == 0) {
@@ -844,7 +844,7 @@ static WMenuEntry *addMenuEntry(WMenu * menu, char *title, char *shortcut, char 
 		shortcutOk = True;
 	} else if (strcmp(command, "RESTART") == 0) {
 		entry = wMenuAddCallback(menu, title, restartCommand, params ? wstrdup(params) : NULL);
-		entry->free_cdata = free;
+		entry->free_cdata = wfree;
 		shortcutOk = True;
 	} else if (strcmp(command, "SAVE_SESSION") == 0) {
 		entry = wMenuAddCallback(menu, title, saveSessionCommand, NULL);
@@ -1344,7 +1344,7 @@ static WMenu *readMenuDirectory(WScreen * scr, char *title, char **path, char *c
 					}
 				}
 			}
-			wfree(buffer);
+			free(buffer);
 		}
 
 		closedir(dir);

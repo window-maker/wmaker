@@ -178,7 +178,7 @@ WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler * callback, void *cdata)
 	handler->client_data = cdata;
 
 	if (!deathHandlers)
-		deathHandlers = WMCreateArrayWithDestructor(8, wfree);
+		deathHandlers = WMCreateArrayWithDestructor(8, free);
 
 	WMAddToArray(deathHandlers, handler);
 
@@ -192,7 +192,7 @@ static void wdelete_death_handler(WMagicNumber id)
 	if (!handler || !deathHandlers)
 		return;
 
-	/* array destructor will call wfree(handler) */
+	/* array destructor will call free(handler) */
 	WMRemoveFromArray(deathHandlers, handler);
 }
 
