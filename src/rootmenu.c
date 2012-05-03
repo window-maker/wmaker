@@ -588,6 +588,8 @@ static void constructMenu(WMenu * menu, WMenuEntry * entry)
 	separateCommand((char *)entry->clientdata, &path, &cmd);
 	if (path == NULL || *path == NULL || **path == 0) {
 		wwarning(_("invalid OPEN_MENU specification: %s"), (char *)entry->clientdata);
+		if (cmd)
+			wfree(cmd);
 		return;
 	}
 
