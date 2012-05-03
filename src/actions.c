@@ -1227,13 +1227,13 @@ void wHideAll(WScreen *scr)
 
 	menu = scr->switch_menu;
 
-	windows = malloc(sizeof(WWindow *));
+	windows = wmalloc(sizeof(WWindow *));
 
 	if (menu != NULL) {
 		for (i = 0; i < menu->entry_no; i++) {
 			windows[wcount] = (WWindow *) menu->entries[i]->clientdata;
 			wcount++;
-			windows = realloc(windows, sizeof(WWindow *) * (wcount+1));
+			windows = wrealloc(windows, sizeof(WWindow *) * (wcount + 1));
 		}
 	} else {
 		wwin = scr->focused_window;
@@ -1241,7 +1241,7 @@ void wHideAll(WScreen *scr)
 		while (wwin) {
 			windows[wcount] = wwin;
 			wcount++;
-			windows = realloc(windows, sizeof(WWindow *) * (wcount+1));
+			windows = wrealloc(windows, sizeof(WWindow *) * (wcount + 1));
 			wwin = wwin->prev;
 
 		}
@@ -1258,6 +1258,8 @@ void wHideAll(WScreen *scr)
 			wIconifyWindow(wwin);
 		}
 	}
+
+	wfree(windows);
 }
 
 void wHideOtherApplications(WWindow *awin)
