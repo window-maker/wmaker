@@ -1507,7 +1507,7 @@ wmaker (0.20.2-2) frozen unstable; urgency=low
   * debian/rules: dockit is gone but manpage is still installed
   * debian/wmaker.postinst.tmpl: removed the code to add Window Maker to
     /etc/X11/window-managers and replaced with register-window-manager
-    (the interface provided by the the xbase package). This fixes #28841
+    (the interface provided by the xbase package). This fixes #28841
     partially (that's two bugs in one, this is the not-so-important part)
   * debian/wmaker.postrm: ditto for removal from /etc/X11/window-managers
   * On my system bug #26682 doesn't show up with this build and the new

@@ -857,7 +857,7 @@ badly coded for not setting the instance.class hints.
     program for that matter?) 
 ----------------------------------
 Right Click on the title bar and choose "Attributes". Click on Panel 2 and
-click the the "Disable titlebar" and "Disable resizebar" options. Click
+click the "Disable titlebar" and "Disable resizebar" options. Click
 "Save", "Apply" and then close the Attributes panel. 
 
 By Default, to get back to the attributes menu once you've removed the

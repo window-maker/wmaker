@@ -2166,7 +2166,7 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 	dock->icon_count--;
 
 	/* if the dock is not attached to an application or
-	 * the the application did not set the approriate hints yet,
+	 * the application did not set the appropriate hints yet,
 	 * destroy the icon */
 	if (!icon->running || !wApplicationOf(icon->main_window))
 		wAppIconDestroy(icon);
