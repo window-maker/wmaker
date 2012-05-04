@@ -519,7 +519,6 @@ WScreen *wScreenInit(int screen_number)
 	int i;
 
 	scr = wmalloc(sizeof(WScreen));
-	memset(scr, 0, sizeof(WScreen));
 
 	scr->stacking_list = WMCreateTreeBag();
 

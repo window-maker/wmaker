@@ -813,7 +813,6 @@ WDDomain *wDefaultsInitDomain(char *domain, Bool requireDictionary)
 	}
 
 	db = wmalloc(sizeof(WDDomain));
-	memset(db, 0, sizeof(WDDomain));
 	db->domain_name = domain;
 	db->path = wdefaultspathfordomain(domain);
 	the_path = db->path;

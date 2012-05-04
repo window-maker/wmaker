@@ -712,7 +712,6 @@ Panel *InitFontSimple(WMScreen * scr, WMWidget * parent)
 	_Panel *panel;
 
 	panel = wmalloc(sizeof(_Panel));
-	memset(panel, 0, sizeof(_Panel));
 
 	panel->sectionName = _("Font Configuration");
 

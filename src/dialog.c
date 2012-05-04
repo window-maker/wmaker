@@ -885,7 +885,6 @@ Bool wIconChooserDialog(WScreen * scr, char **file, char *instance, char *class)
 	Bool result;
 
 	panel = wmalloc(sizeof(IconPanel));
-	memset(panel, 0, sizeof(IconPanel));
 
 	panel->scr = scr;
 
@@ -1128,7 +1127,6 @@ void wShowInfoPanel(WScreen * scr)
 	}
 
 	panel = wmalloc(sizeof(InfoPanel));
-	memset(panel, 0, sizeof(InfoPanel));
 
 	panel->scr = scr;
 
@@ -1521,7 +1519,6 @@ int wShowCrashingDialogPanel(int whatSig)
 	char buf[256];
 
 	panel = wmalloc(sizeof(CrashPanel));
-	memset(panel, 0, sizeof(CrashPanel));
 
 	screen_no = DefaultScreen(dpy);
 	scr_width = WidthOfScreen(ScreenOfDisplay(dpy, screen_no));

@@ -53,7 +53,6 @@ WCoreWindow *wCoreCreateTopLevel(WScreen * screen, int x, int y, int width, int 
 	XSetWindowAttributes attribs;
 
 	core = wmalloc(sizeof(WCoreWindow));
-	memset(core, 0, sizeof(WCoreWindow));
 
 	/* don't set CWBackPixel so that transparent XRender windows
 	   are see-through */
@@ -109,7 +108,6 @@ WCoreWindow *wCoreCreate(WCoreWindow * parent, int x, int y, int width, int heig
 	XSetWindowAttributes attribs;
 
 	core = wmalloc(sizeof(WCoreWindow));
-	memset(core, 0, sizeof(WCoreWindow));
 
 	vmask = /*CWBackPixmap|CWBackPixel| */ CWBorderPixel | CWCursor | CWEventMask;
 	attribs.cursor = wCursor[WCUR_DEFAULT];

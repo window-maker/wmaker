@@ -325,7 +325,6 @@ Panel *InitPreferences(WMScreen * scr, WMWidget * parent)
 	_Panel *panel;
 
 	panel = wmalloc(sizeof(_Panel));
-	memset(panel, 0, sizeof(_Panel));
 
 	panel->sectionName = _("Miscellaneous Ergonomic Preferences");
 	panel->description = _("Various settings like balloon text, geometry\n" "displays etc.");

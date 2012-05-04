@@ -98,14 +98,12 @@ WMHashTable *WMCreateHashTable(WMHashTableCallbacks callbacks)
 	HashTable *table;
 
 	table = wmalloc(sizeof(HashTable));
-	memset(table, 0, sizeof(HashTable));
 
 	table->callbacks = callbacks;
 
 	table->size = INITIAL_CAPACITY;
 
 	table->table = wmalloc(sizeof(HashItem *) * table->size);
-	memset(table->table, 0, sizeof(HashItem *) * table->size);
 
 	return table;
 }
@@ -131,8 +129,9 @@ void WMResetHashTable(WMHashTable * table)
 		wfree(table->table);
 		table->size = INITIAL_CAPACITY;
 		table->table = wmalloc(sizeof(HashItem *) * table->size);
+	} else {
+		memset(table->table, 0, sizeof(HashItem *) * table->size);
 	}
-	memset(table->table, 0, sizeof(HashItem *) * table->size);
 }
 
 void WMFreeHashTable(WMHashTable * table)

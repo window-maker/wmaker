@@ -125,8 +125,6 @@ WEditMenuItem *WCreateEditMenuItem(WMWidget * parent, char *title, Bool isTitle)
 
 	iPtr = wmalloc(sizeof(WEditMenuItem));
 
-	memset(iPtr, 0, sizeof(WEditMenuItem));
-
 	iPtr->widgetClass = EditMenuItemClass;
 
 	iPtr->view = W_CreateView(W_VIEW(parent));
@@ -373,7 +371,6 @@ static WEditMenu *makeEditMenu(WMScreen * scr, WMWidget * parent, char *title)
 		InitEditMenu(scr);
 
 	mPtr = wmalloc(sizeof(WEditMenu));
-	memset(mPtr, 0, sizeof(WEditMenu));
 
 	mPtr->widgetClass = EditMenuClass;
 

@@ -60,7 +60,6 @@ WMData *WMCreateDataWithLength(unsigned length)
 
 	aData = WMCreateDataWithCapacity(length);
 	if (length > 0) {
-		memset(aData->bytes, 0, length);
 		aData->length = length;
 	}
 

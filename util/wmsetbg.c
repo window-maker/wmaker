@@ -277,7 +277,6 @@ BackgroundTexture *parseTexture(RContext * rc, char *text)
 	}
 
 	texture = wmalloc(sizeof(BackgroundTexture));
-	memset(texture, 0, sizeof(BackgroundTexture));
 
 	GETSTRORGOTO(val, type, 0, error);
 

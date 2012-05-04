@@ -105,7 +105,6 @@ WMButton *WMCreateCustomButton(WMWidget * parent, int behaviourMask)
 	Button *bPtr;
 
 	bPtr = wmalloc(sizeof(Button));
-	memset(bPtr, 0, sizeof(Button));
 
 	bPtr->widgetClass = WC_Button;
 

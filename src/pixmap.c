@@ -53,7 +53,6 @@ WPixmap *wPixmapCreateFromXPMData(WScreen * scr, char **data)
 		return NULL;
 
 	pix = wmalloc(sizeof(WPixmap));
-	memset(pix, 0, sizeof(WPixmap));
 
 	RConvertImageMask(scr->rcontext, image, &pix->image, &pix->mask, 128);
 
@@ -83,7 +82,6 @@ WPixmap *wPixmapCreateFromXBMData(WScreen * scr, char *data, char *mask,
 	WPixmap *pix;
 
 	pix = wmalloc(sizeof(WPixmap));
-	memset(pix, 0, sizeof(WPixmap));
 	pix->image = XCreatePixmapFromBitmapData(dpy, scr->w_win, data, width, height, fg, bg, scr->w_depth);
 	if (pix->image == None) {
 		wfree(pix);
@@ -108,7 +106,6 @@ WPixmap *wPixmapCreate(WScreen * scr, Pixmap image, Pixmap mask)
 	unsigned int width, height, depth, baz;
 
 	pix = wmalloc(sizeof(WPixmap));
-	memset(pix, 0, sizeof(WPixmap));
 	pix->image = image;
 	pix->mask = mask;
 	if (!XGetGeometry(dpy, image, &foo, &bar, &bar, &width, &height, &baz, &depth)) {

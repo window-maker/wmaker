@@ -895,7 +895,6 @@ static void okNewTexture(void *data)
 	WMScreen *scr = WMWidgetScreen(panel->parent);
 
 	titem = wmalloc(sizeof(TextureListItem));
-	memset(titem, 0, sizeof(TextureListItem));
 
 	HideTexturePanel(panel->texturePanel);
 
@@ -1275,7 +1274,6 @@ static void fillTextureList(WMList * lPtr)
 		texture = WMGetFromPLArray(textureList, i);
 
 		titem = wmalloc(sizeof(TextureListItem));
-		memset(titem, 0, sizeof(TextureListItem));
 
 		titem->title = wstrdup(WMGetFromPLString(WMGetFromPLArray(texture, 0)));
 		titem->prop = WMRetainPropList(WMGetFromPLArray(texture, 1));
@@ -1876,7 +1874,6 @@ static void setupTextureFor(WMList * list, char *key, char *defValue, char *titl
 	TextureListItem *titem;
 
 	titem = wmalloc(sizeof(TextureListItem));
-	memset(titem, 0, sizeof(TextureListItem));
 
 	titem->title = wstrdup(title);
 	titem->prop = GetObjectForKey(key);
@@ -2044,7 +2041,6 @@ Panel *InitAppearance(WMScreen * scr, WMWindow * win)
 	_Panel *panel;
 
 	panel = wmalloc(sizeof(_Panel));
-	memset(panel, 0, sizeof(_Panel));
 
 	panel->sectionName = _("Appearance Preferences");
 

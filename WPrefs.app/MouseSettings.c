@@ -790,7 +790,6 @@ Panel *InitMouseSettings(WMScreen * scr, WMWidget * parent)
 	wheelActions[1] = wstrdup(_("Switch Workspaces"));
 
 	panel = wmalloc(sizeof(_Panel));
-	memset(panel, 0, sizeof(_Panel));
 
 	panel->sectionName = _("Mouse Preferences");
 

@@ -167,8 +167,6 @@ WWindow *wWindowCreate(void)
 	wwin = wmalloc(sizeof(WWindow));
 	wretain(wwin);
 
-	memset(wwin, 0, sizeof(WWindow));
-
 	wwin->client_descriptor.handle_mousedown = frameMouseDown;
 	wwin->client_descriptor.parent = wwin;
 	wwin->client_descriptor.self = wwin;

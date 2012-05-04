@@ -492,7 +492,6 @@ static void addFontToXftFamily(WMHashTable * families, char *name, char *style)
 	array = WMCreateArray(8);
 
 	fam = wmalloc(sizeof(Family));
-	memset(fam, 0, sizeof(Family));
 
 	fam->name = wstrdup(name);
 

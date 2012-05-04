@@ -69,7 +69,6 @@ WAppIcon *wAppIconCreateForDock(WScreen * scr, char *command, char *wm_instance,
 
 	dicon = wmalloc(sizeof(WAppIcon));
 	wretain(dicon);
-	memset(dicon, 0, sizeof(WAppIcon));
 	dicon->yindex = -1;
 	dicon->xindex = -1;
 
@@ -122,7 +121,6 @@ WAppIcon *wAppIconCreate(WWindow * leader_win)
 
 	aicon = wmalloc(sizeof(WAppIcon));
 	wretain(aicon);
-	memset(aicon, 0, sizeof(WAppIcon));
 
 	aicon->yindex = -1;
 	aicon->xindex = -1;

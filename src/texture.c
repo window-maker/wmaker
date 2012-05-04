@@ -180,7 +180,6 @@ WTexGradient *wTextureMakeGradient(WScreen * scr, int style, RColor * from, RCol
 	XGCValues gcv;
 
 	texture = wmalloc(sizeof(WTexture));
-	memset(texture, 0, sizeof(WTexture));
 	texture->type = style;
 	texture->subtype = 0;
 
@@ -207,7 +206,6 @@ WTexIGradient *wTextureMakeIGradient(WScreen * scr, int thickness1, RColor color
 	int i;
 
 	texture = wmalloc(sizeof(WTexture));
-	memset(texture, 0, sizeof(WTexture));
 	texture->type = WTEX_IGRADIENT;
 	for (i = 0; i < 2; i++) {
 		texture->colors1[i] = colors1[i];
@@ -239,7 +237,6 @@ WTexMGradient *wTextureMakeMGradient(WScreen * scr, int style, RColor ** colors)
 	int i;
 
 	texture = wmalloc(sizeof(WTexture));
-	memset(texture, 0, sizeof(WTexture));
 	texture->type = style;
 	texture->subtype = 0;
 
@@ -272,7 +269,6 @@ WTexPixmap *wTextureMakePixmap(WScreen * scr, int style, char *pixmap_file, XCol
 		return NULL;
 
 	texture = wmalloc(sizeof(WTexture));
-	memset(texture, 0, sizeof(WTexture));
 	texture->type = WTEX_PIXMAP;
 	texture->subtype = style;
 
@@ -300,7 +296,6 @@ WTexTGradient *wTextureMakeTGradient(WScreen * scr, int style, RColor * from, RC
 		return NULL;
 
 	texture = wmalloc(sizeof(WTexture));
-	memset(texture, 0, sizeof(WTexture));
 	texture->type = style;
 
 	texture->opacity = opacity;

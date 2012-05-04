@@ -169,7 +169,6 @@ void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head)
 	 * but complexity is much better (faster) than it.
 	 */
 	map = wmalloc((sw + 2) * (sh + 2));
-	memset(map, 0, (sw + 2) * (sh + 2));
 
 #define INDEX(x,y)	(((y)+1)*(sw+2) + (x) + 1)
 

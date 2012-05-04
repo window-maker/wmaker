@@ -1057,12 +1057,10 @@ WDock *wDockCreate(WScreen *scr, int type)
 	make_keys();
 
 	dock = wmalloc(sizeof(WDock));
-	memset(dock, 0, sizeof(WDock));
 
 	dock->max_icons = DOCK_MAX_ICONS;
 
 	dock->icon_array = wmalloc(sizeof(WAppIcon *) * dock->max_icons);
-	memset(dock->icon_array, 0, sizeof(WAppIcon *) * dock->max_icons);
 
 	btn = mainIconCreate(scr, type);
 
@@ -1788,7 +1786,6 @@ void wDockDoAutoLaunch(WDock *dock, int workspace)
 			continue;
 
 		state = wmalloc(sizeof(WSavedState));
-		memset(state, 0, sizeof(WSavedState));
 		state->workspace = workspace;
 		/* TODO: this is klugy and is very difficult to understand
 		 * what's going on. Try to clean up */
@@ -2448,9 +2445,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 		hcount = WMIN(dock->max_icons, scr->scr_width / ICON_SIZE);
 		vcount = WMIN(dock->max_icons, scr->scr_height / ICON_SIZE);
 		hmap = wmalloc(hcount + 1);
-		memset(hmap, 0, hcount + 1);
 		vmap = wmalloc(vcount + 1);
-		memset(vmap, 0, vcount + 1);
 
 		/* mark used positions */
 		switch (corner) {
@@ -2582,7 +2577,6 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	r = (mwidth - 1) / 2;
 
 	slot_map = wmalloc(mwidth * mwidth);
-	memset(slot_map, 0, mwidth * mwidth);
 
 #define XY2OFS(x,y) (WMAX(abs(x),abs(y)) > r) ? 0 : (((y)+r)*(mwidth)+(x)+r)
 
@@ -2744,7 +2738,6 @@ static pid_t execCommand(WAppIcon *btn, char *command, WSavedState *state)
 	if (pid > 0) {
 		if (!state) {
 			state = wmalloc(sizeof(WSavedState));
-			memset(state, 0, sizeof(WSavedState));
 			state->hidden = -1;
 			state->miniaturized = -1;
 			state->shaded = -1;

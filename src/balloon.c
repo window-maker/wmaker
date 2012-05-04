@@ -479,7 +479,6 @@ void wBalloonInitialize(WScreen * scr)
 	unsigned long vmask;
 
 	bal = wmalloc(sizeof(WBalloon));
-	memset(bal, 0, sizeof(WBalloon));
 
 	scr->balloon = bal;
 

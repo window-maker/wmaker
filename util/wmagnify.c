@@ -99,7 +99,6 @@ static BufferData *makeBufferData(WMWindow * win, WMLabel * label, int width, in
 	width /= magfactor;
 	height /= magfactor;
 	data->buffer = wmalloc(sizeof(unsigned long) * width * height);
-	memset(data->buffer, 0, width * height * sizeof(unsigned long));
 	data->width = width;
 	data->height = height;
 

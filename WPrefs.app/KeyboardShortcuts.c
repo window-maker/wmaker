@@ -512,7 +512,6 @@ static void createPanel(Panel * p)
 
 	panel->actionCount = WMGetListNumberOfRows(panel->actLs);
 	panel->shortcuts = wmalloc(sizeof(char *) * panel->actionCount);
-	memset(panel->shortcuts, 0, sizeof(char *) * panel->actionCount);
 
     /***************** Shortcut ****************/
 
@@ -583,7 +582,6 @@ Panel *InitKeyboardShortcuts(WMScreen * scr, WMWidget * parent)
 	_Panel *panel;
 
 	panel = wmalloc(sizeof(_Panel));
-	memset(panel, 0, sizeof(_Panel));
 
 	panel->sectionName = _("Keyboard Shortcut Preferences");
 

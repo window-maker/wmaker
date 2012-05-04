@@ -370,7 +370,6 @@ static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
 	unsigned mask;
 	int i;
 
-	memset(state, 0, sizeof(WSavedState));
 	state->workspace = -1;
 	value = WMGetFromPLDictionary(win_state, sWorkspace);
 	if (value && WMIsPLString(value)) {

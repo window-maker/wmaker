@@ -67,7 +67,6 @@ WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
 	WFrameWindow *fwin;
 
 	fwin = wmalloc(sizeof(WFrameWindow));
-	memset(fwin, 0, sizeof(WFrameWindow));
 
 	fwin->screen_ptr = scr;
 

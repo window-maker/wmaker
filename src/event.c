@@ -966,7 +966,6 @@ static void handleClientMessage(XEvent * event)
 
 		len = sizeof(event->xclient.data.b) + 1;
 		command = wmalloc(len);
-		memset(command, 0, len);
 		strncpy(command, event->xclient.data.b, sizeof(event->xclient.data.b));
 
 		if (strncmp(command, "Reconfigure", sizeof("Reconfigure")) == 0) {

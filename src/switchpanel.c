@@ -435,8 +435,6 @@ WSwitchPanel *wInitSwitchPanel(WScreen * scr, WWindow * curwin, Bool class_only)
 	WMRect rect;
 	rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
 
-	memset(panel, 0, sizeof(WSwitchPanel));
-
 	panel->scr = scr;
 
 	panel->windows = makeWindowListArray(curwin, wPreferences.swtileImage != NULL, class_only);

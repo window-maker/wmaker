@@ -463,7 +463,6 @@ static void gradAddCallback(WMWidget * w, void *data)
 	row = WMGetListSelectedItemRow(panel->gcolL) + 1;
 	item = WMInsertListItem(panel->gcolL, row, "00,00,00");
 	rgb = wmalloc(sizeof(RColor));
-	memset(rgb, 0, sizeof(RColor));
 	item->clientData = rgb;
 
 	WMSelectListItem(panel->gcolL, row);
@@ -1120,7 +1119,6 @@ TexturePanel *CreateTexturePanel(WMWindow * keyWindow)
 	WMScreen *scr = WMWidgetScreen(keyWindow);
 
 	panel = wmalloc(sizeof(TexturePanel));
-	memset(panel, 0, sizeof(TexturePanel));
 
 	panel->listFont = WMSystemFontOfSize(scr, 12);
 

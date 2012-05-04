@@ -155,7 +155,7 @@ static char *commandNames[] = {
 	"LEGAL_PANEL"
 };
 
-#define NEW(type) memset(wmalloc(sizeof(type)), 0, sizeof(type))
+#define NEW(type) wmalloc(sizeof(type))
 
 #define ICON_FILE	"menus"
 
@@ -1656,7 +1656,6 @@ Panel *InitMenu(WMScreen * scr, WMWidget * parent)
 	_Panel *panel;
 
 	panel = wmalloc(sizeof(_Panel));
-	memset(panel, 0, sizeof(_Panel));
 
 	panel->sectionName = _("Applications Menu Definition");
 

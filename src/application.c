@@ -246,7 +246,6 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	}
 
 	wapp = wmalloc(sizeof(WApplication));
-	memset(wapp, 0, sizeof(WApplication));
 
 	wapp->refcount = 1;
 	wapp->last_focused = NULL;

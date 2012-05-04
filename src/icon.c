@@ -189,7 +189,6 @@ static WIcon *wIconCreateCore(WScreen *scr, int coord_x, int coord_y)
 	XSetWindowAttributes attribs;
 
 	icon = wmalloc(sizeof(WIcon));
-	memset(icon, 0, sizeof(WIcon));
 	icon->core = wCoreCreateTopLevel(scr,
 					 coord_x,
 					 coord_y,

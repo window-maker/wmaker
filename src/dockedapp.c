@@ -264,7 +264,6 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 	WMBox *vbox;
 
 	panel = wmalloc(sizeof(AppSettingsPanel));
-	memset(panel, 0, sizeof(AppSettingsPanel));
 
 	panel->editedIcon = aicon;
 

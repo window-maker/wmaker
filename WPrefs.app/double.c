@@ -55,8 +55,6 @@ DoubleTest *CreateDoubleTest(WMWidget * parent, char *text)
 
 	/* allocate some storage for our new widget instance */
 	dPtr = wmalloc(sizeof(DoubleTest));
-	/* initialize it */
-	memset(dPtr, 0, sizeof(DoubleTest));
 
 	/* set the class ID */
 	dPtr->widgetClass = DoubleTestClass;

@@ -146,8 +146,6 @@ WMenu *wMenuCreate(WScreen * screen, char *title, int main_menu)
 
 	menu = wmalloc(sizeof(WMenu));
 
-	memset(menu, 0, sizeof(WMenu));
-
 #ifdef SINGLE_MENULEVEL
 	tmp = WMSubmenuLevel;
 #else
@@ -274,7 +272,6 @@ WMenuEntry *wMenuInsertCallback(WMenu * menu, int index, char *text,
 		menu->brother->alloced_entries = menu->alloced_entries;
 	}
 	entry = wmalloc(sizeof(WMenuEntry));
-	memset(entry, 0, sizeof(WMenuEntry));
 	entry->flags.enabled = 1;
 	entry->text = wstrdup(text);
 	entry->cascade = -1;

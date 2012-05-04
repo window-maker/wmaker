@@ -1458,7 +1458,6 @@ WMPropList *WMCreatePropListFromDescription(char *desc)
 	PLData *pldata;
 
 	pldata = (PLData *) wmalloc(sizeof(PLData));
-	memset(pldata, 0, sizeof(PLData));
 	pldata->ptr = desc;
 	pldata->lineNumber = 1;
 
@@ -1510,7 +1509,6 @@ WMPropList *WMReadPropListFromFile(char *file)
 	}
 
 	pldata = (PLData *) wmalloc(sizeof(PLData));
-	memset(pldata, 0, sizeof(PLData));
 	pldata->ptr = (char *)wmalloc(length + 1);
 	pldata->filename = file;
 	pldata->lineNumber = 1;
