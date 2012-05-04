@@ -58,7 +58,7 @@ extern int calcIntersectionLength(int p1, int l1, int p2, int l2);
 
 static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, int *new_y,
 				  unsigned int *new_width, unsigned int *new_height);
-static void save_old_geometry(WWindow *wwin);
+static void save_old_geometry(WWindow *wwin, int directions);
 
 /******* Local Variables *******/
 static struct {
@@ -284,20 +284,43 @@ void wUnshadeWindow(WWindow *wwin)
 }
 
 /* Set the old coordinates using the current values */
-static void save_old_geometry(WWindow *wwin)
+static void save_old_geometry(WWindow *wwin, int directions)
 {
-	wwin->old_geometry.width = wwin->client.width;
-	wwin->old_geometry.height = wwin->client.height;
-	wwin->old_geometry.x = wwin->frame_x;
-	wwin->old_geometry.y = wwin->frame_y;
+	if (directions & MAX_HORIZONTAL || ! wwin->old_geometry.width) {
+		wwin->old_geometry.width = wwin->client.width;
+		wwin->old_geometry.x = wwin->frame_x;
+	}
+	if (directions & MAX_VERTICAL || ! wwin->old_geometry.height) {
+		wwin->old_geometry.height = wwin->client.height;
+		wwin->old_geometry.y = wwin->frame_y;
+	}
 }
 
+static void remember_geometry(WWindow *wwin, int *x, int *y, int *w, int *h)
+{
+	WMRect old_geom_rect;
+	int old_head;
+	Bool same_head;
+
+	old_geom_rect = wmkrect(wwin->old_geometry.x, wwin->old_geometry.y, wwin->old_geometry.width, wwin->old_geometry.height);
+	old_head = wGetHeadForRect(wwin->screen_ptr, old_geom_rect);
+	same_head = (wGetHeadForWindow(wwin) == old_head);
+	*x = (wwin->old_geometry.x && same_head) ? wwin->old_geometry.x : wwin->frame_x;
+	*y = (wwin->old_geometry.y && same_head) ? wwin->old_geometry.y : wwin->frame_y;
+	*w = wwin->old_geometry.width ? wwin->old_geometry.width : wwin->client.width;
+	*h = wwin->old_geometry.height ? wwin->old_geometry.height : wwin->client.height;
+}
+
+#define IS_MAX_HORIZONTALLY(directions) ((directions & MAX_HORIZONTAL) | (directions & MAX_LEFTHALF) | (directions & MAX_RIGHTHALF))
 void wMaximizeWindow(WWindow *wwin, int directions)
 {
 	int new_x, new_y;
 	unsigned int new_width, new_height, half_scr_width;
+	int maximus_x, maximus_y;
+	unsigned int maximus_width, maximus_height;
 	WArea usableArea, totalArea;
 	Bool has_border = 1;
+	int save_directions = 0;
 	int adj_size;
 
 	if (!IS_RESIZABLE(wwin))
@@ -309,8 +332,19 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 	/* the size to adjust the geometry */
 	adj_size = FRAME_BORDER_WIDTH * 2 * has_border;
 
-	/* save old coordinates before we change the current values */
-	save_old_geometry(wwin);
+	/* save old coordinates before we change the current values
+	 * but never if the window has been Maximusized */
+	if (!(wwin->flags.old_maximized & MAX_MAXIMUS)) {
+		if ((directions & MAX_VERTICAL) &&
+		    !(wwin->flags.maximized & MAX_VERTICAL))
+			save_directions |= MAX_VERTICAL;
+		if (IS_MAX_HORIZONTALLY(directions) &&
+		    !IS_MAX_HORIZONTALLY(wwin->flags.maximized))
+			save_directions |= MAX_HORIZONTAL;
+	}
+	if ((directions & MAX_MAXIMUS) && !wwin->flags.maximized)
+		save_directions |= MAX_VERTICAL | MAX_HORIZONTAL;
+	save_old_geometry(wwin, save_directions);
 
 	totalArea.x1 = 0;
 	totalArea.y1 = 0;
@@ -329,6 +363,10 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 
 		usableArea = wGetUsableAreaForHead(scr, head, &totalArea, True);
 	}
+
+	/* remember Maximus geometry if we'll need it later */
+	if ((wwin->flags.old_maximized & MAX_MAXIMUS) || (directions & MAX_MAXIMUS))
+		find_Maximus_geometry(wwin, usableArea, &maximus_x, &maximus_y, &maximus_width, &maximus_height);
 
 	/* Only save directions, not kbd or xinerama hints */
 	directions &= (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
@@ -349,10 +387,21 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 	} else if (directions & MAX_LEFTHALF) {
 		new_width = half_scr_width - adj_size;
 		new_x = usableArea.x1;
+		wwin->flags.old_maximized |= MAX_LEFTHALF;
+		wwin->flags.old_maximized &= ~MAX_RIGHTHALF;
 	} else if (directions & MAX_RIGHTHALF) {
 		new_width = half_scr_width - adj_size;
 		new_x = usableArea.x1 + half_scr_width;
+		wwin->flags.old_maximized |= MAX_RIGHTHALF;
+		wwin->flags.old_maximized &= ~MAX_LEFTHALF;
+	} else if (wwin->flags.old_maximized & MAX_MAXIMUS) {
+		new_x = maximus_x;
+		new_width = maximus_width - adj_size;
+	} else if (IS_MAX_HORIZONTALLY(wwin->flags.maximized)) {
+		new_x = (wwin->old_geometry.x) ? wwin->old_geometry.x : wwin->frame_x;
+		new_width = (wwin->old_geometry.width) ? wwin->old_geometry.width : wwin->frame->core->width;
 	} else {
+		wwin->flags.old_maximized &= ~(MAX_LEFTHALF | MAX_RIGHTHALF);
 		new_x = wwin->frame_x;
 		new_width = wwin->frame->core->width;
 	}
@@ -364,6 +413,17 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 			new_y -= wwin->frame->top_width;
 			new_height += wwin->frame->bottom_width - 1;
 		}
+	} else if (wwin->flags.old_maximized & MAX_MAXIMUS) {
+		new_y = maximus_y;
+		new_height = maximus_height - adj_size;
+		/* HACK: this will be subtracted again below */
+		new_height += wwin->frame->top_width + wwin->frame->bottom_width;
+	} else if (wwin->flags.maximized & MAX_VERTICAL) {
+		new_y = (wwin->old_geometry.y) ? wwin->old_geometry.y : wwin->frame_y;
+		new_height = (wwin->old_geometry.height) ? wwin->old_geometry.height : wwin->frame->core->height;
+		/* HACK: this will be subtracted again below */
+		new_height += wwin->frame->top_width + wwin->frame->bottom_width;
+		wwin->flags.old_maximized &= ~(MAX_LEFTHALF | MAX_RIGHTHALF);
 	} else {
 		new_y = wwin->frame_y;
 		new_height = wwin->frame->core->height;
@@ -374,13 +434,15 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 	}
 
 	if (directions & MAX_MAXIMUS) {
-		find_Maximus_geometry(wwin, usableArea, &new_x, &new_y, &new_width, &new_height);
-		new_width -= adj_size;
-		new_height -= adj_size;
+		new_x = maximus_x;
+		new_y = maximus_y;
+		new_width = maximus_width - adj_size;
+		new_height = maximus_height - adj_size;
 		if (WFLAGP(wwin, full_maximize) && new_y == 0) {
 			new_y -= wwin->frame->top_width;
 			new_height += wwin->frame->top_width - 1;
 		}
+		wwin->flags.old_maximized |= MAX_MAXIMUS;
 	}
 
 	wWindowConstrainSize(wwin, &new_width, &new_height);
@@ -395,6 +457,79 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 
 	/* set maximization state */
 	wwin->flags.maximized = directions;
+	if ((wwin->flags.old_maximized & MAX_MAXIMUS) && !wwin->flags.maximized)
+		wwin->flags.maximized = MAX_MAXIMUS;
+}
+
+/* generic (un)maximizer */
+void handleMaximize(WWindow *wwin, int directions)
+{
+	int current = wwin->flags.maximized;
+	int requested = directions & (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
+	int effective = requested ^ current;
+	int flags = directions & ~requested;
+
+	if (!effective) {
+		/* allow wMaximizeWindow to restore the Maximusized size */
+		if ((wwin->flags.old_maximized & MAX_MAXIMUS) &&
+		    !(requested & MAX_MAXIMUS))
+			wMaximizeWindow(wwin, flags);
+		else
+			wUnmaximizeWindow(wwin);
+	}
+	else {
+		/* MAX_MAXIMUS takes precedence */
+		effective &= ~MAX_MAXIMUS;
+		if (requested & MAX_MAXIMUS) {
+			/* window was previously Maximusized then maximized */
+			if ((wwin->flags.old_maximized & MAX_MAXIMUS) && !current) {
+				wUnmaximizeWindow(wwin);
+				return;
+			}
+			else
+				effective = MAX_MAXIMUS;
+		}
+		else if (requested == (MAX_HORIZONTAL | MAX_VERTICAL))
+			effective = requested;
+		else {
+			/* handle MAX_HORIZONTAL -> MAX_(LEFT|RIGHT)HALF */
+			if (IS_MAX_HORIZONTALLY(current)) {
+				if (IS_MAX_HORIZONTALLY(requested)) {
+					effective &= ~(MAX_HORIZONTAL | MAX_LEFTHALF | MAX_RIGHTHALF);
+					effective |= (requested & (MAX_HORIZONTAL | MAX_LEFTHALF | MAX_RIGHTHALF));
+					if (requested & MAX_HORIZONTAL) {
+						/* restore to half maximization */
+						if (wwin->flags.old_maximized & MAX_LEFTHALF)
+							effective |= MAX_LEFTHALF;
+						else if (wwin->flags.old_maximized & MAX_RIGHTHALF)
+							effective |= MAX_RIGHTHALF;
+					}
+					/* MAX_VERTICAL is implicit with MAX_(LEFT|RIGHT)HALF */
+					else
+						effective |= MAX_VERTICAL;
+				} else {
+					/* toggling MAX_VERTICAL */
+					if ((requested & MAX_VERTICAL) &&
+					    (current & MAX_VERTICAL)) {
+						effective &= ~(MAX_LEFTHALF | MAX_RIGHTHALF | MAX_VERTICAL);
+					}
+				}
+			}
+			/* handle MAX_VERTICAL -> MAX_(LEFT|RIGHT)HALF */
+			if (current & MAX_VERTICAL) {
+				if ((requested & MAX_LEFTHALF) ||
+				    (requested & MAX_RIGHTHALF)) {
+					effective |= MAX_VERTICAL;
+				}
+			}
+			/* toggling MAX_HORIZONTAL */
+			if ((requested & MAX_HORIZONTAL) &&
+			    (current & MAX_HORIZONTAL))
+				effective &= ~MAX_HORIZONTAL;
+		}
+		wMaximizeWindow(wwin, effective | flags);
+	}
+	return;
 }
 
 /* the window boundary coordinates */
@@ -434,7 +569,14 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 	win_coords obs, orig, new;
 
 	/* set the original coordinate positions of the window to be Maximumized */
-	set_window_coords(wwin, &orig);
+	if (wwin->flags.maximized) {
+		/* window is already maximized; consider original geometry */
+		remember_geometry(wwin, &orig.left, &orig.top, &orig.width, &orig.height);
+		orig.bottom = orig.top + orig.height;
+		orig.right = orig.left + orig.width;
+	}
+	else
+		set_window_coords(wwin, &orig);
 
 	/* Try to fully maximize first, then readjust later */
 	new.left    = usableArea.x1;
@@ -520,9 +662,6 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 void wUnmaximizeWindow(WWindow *wwin)
 {
 	int x, y, w, h;
-        WMRect old_geom_rect;
-        int old_head;
-	Bool same_head;
 
 	if (!wwin->flags.maximized)
 		return;
@@ -532,15 +671,10 @@ void wUnmaximizeWindow(WWindow *wwin)
 		wUnshadeWindow(wwin);
 	}
 	/* Use old coordinates if they are set, current values otherwise */
-        old_geom_rect = wmkrect(wwin->old_geometry.x, wwin->old_geometry.y, wwin->old_geometry.width, wwin->old_geometry.height);
-	old_head = wGetHeadForRect(wwin->screen_ptr, old_geom_rect);
-	same_head = (wGetHeadForWindow(wwin) == old_head);
-	x = (wwin->old_geometry.x && same_head) ? wwin->old_geometry.x : wwin->frame_x;
-	y = (wwin->old_geometry.y && same_head) ? wwin->old_geometry.y : wwin->frame_y;
-	w = wwin->old_geometry.width ? wwin->old_geometry.width : wwin->client.width;
-	h = wwin->old_geometry.height ? wwin->old_geometry.height : wwin->client.height;
+	remember_geometry(wwin, &x, &y, &w, &h);
 
 	wwin->flags.maximized = 0;
+	wwin->flags.old_maximized = 0;
 	wWindowConfigure(wwin, x, y, w, h);
 	wWindowSynthConfigureNotify(wwin);
 
