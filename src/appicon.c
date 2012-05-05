@@ -547,10 +547,9 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 	if (event->xbutton.button == Button2) {
 		WApplication *wapp = wApplicationOf(aicon->icon->owner->main_window);
 
-		if (!wapp)
-			return;
+		if (wapp)
+			relaunchApplication(wapp);
 
-		relaunchApplication(wapp);
 		return;
 	}
 
