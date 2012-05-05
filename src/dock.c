@@ -171,9 +171,8 @@ static void renameCallback(WMenu *menu, WMenuEntry *entry)
 	if (wInputDialog(dock->screen_ptr, _("Rename Workspace"), buffer, &name)) {
 		wWorkspaceRename(dock->screen_ptr, wspace, name);
 	}
-	if (name) {
-		wfree(name);
-	}
+
+	wfree(name);
 }
 
 static void toggleLoweredCallback(WMenu *menu, WMenuEntry *entry)
