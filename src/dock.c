@@ -2863,15 +2863,11 @@ void wDockTrackWindowLaunch(WDock *dock, Window window)
 	Bool found = False;
 	char *command = NULL;
 
-	command = GetCommandForWindow(window);
-
 	if (!PropGetWMClass(window, &wm_class, &wm_instance) || (!wm_class && !wm_instance)) {
-
-		if (command)
-			wfree(command);
 		return;
 	}
 
+	command = GetCommandForWindow(window);
  retry:
 	for (i = 0; i < dock->max_icons; i++) {
 		icon = dock->icon_array[i];
