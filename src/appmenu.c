@@ -92,7 +92,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 	char title[300];
 	char rtext[300];
 
-	if (strlen(slist[*index]) > 300) {
+	if (strlen(slist[*index]) > sizeof(title) - 1) {
 		wwarning("appmenu: menu command size exceeded in window %lx", win);
 		return NULL;
 	}
