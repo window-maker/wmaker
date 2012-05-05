@@ -213,29 +213,25 @@ static void shutdownCommand(WMenu * menu, WMenuEntry * entry)
 	if ((long)entry->clientdata == M_QUICK)
 		result = R_CLOSE;
 	else {
-		{
-			int r, oldSaveSessionFlag;
+		int r, oldSaveSessionFlag;
 
-			oldSaveSessionFlag = wPreferences.save_session_on_exit;
+		oldSaveSessionFlag = wPreferences.save_session_on_exit;
 
-			r = wExitDialog(menu->frame->screen_ptr,
-					_("Kill X session"),
-					_("Kill Window System session?\n"
-					  "(all applications will be closed)"), _("Kill"), _("Cancel"), NULL);
-			if (r == WAPRDefault) {
-				result = R_KILL;
-			} else if (r == WAPRAlternate) {
-				/* Don't modify the "save session on exit" flag if the
-				 * user canceled the operation. */
-				wPreferences.save_session_on_exit = oldSaveSessionFlag;
-			}
+		r = wExitDialog(menu->frame->screen_ptr,
+				_("Kill X session"),
+				_("Kill Window System session?\n"
+				  "(all applications will be closed)"), _("Kill"), _("Cancel"), NULL);
+		if (r == WAPRDefault) {
+			result = R_KILL;
+		} else if (r == WAPRAlternate) {
+			/* Don't modify the "save session on exit" flag if the
+			 * user canceled the operation. */
+			wPreferences.save_session_on_exit = oldSaveSessionFlag;
 		}
 	}
 
 	if (result != R_CANCEL) {
-		{
-			Shutdown(WSKillMode);
-		}
+		Shutdown(WSKillMode);
 	}
 #undef R_CLOSE
 #undef R_CANCEL
