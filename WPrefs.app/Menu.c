@@ -155,8 +155,6 @@ static char *commandNames[] = {
 	"LEGAL_PANEL"
 };
 
-#define NEW(type) wmalloc(sizeof(type))
-
 #define ICON_FILE	"menus"
 
 static void showData(_Panel * panel);
@@ -317,7 +315,7 @@ static ItemData *putNewItem(_Panel * panel, WEditMenu * menu, int type, char *ti
 
 	item = WAddMenuItemWithTitle(menu, title);
 
-	data = NEW(ItemData);
+	data = wmalloc(sizeof(ItemData));
 	data->type = type;
 	WSetEditMenuItemData(item, data, (WMCallback *) freeItemData);
 	WSetEditMenuItemImage(item, panel->markerPix[type]);
@@ -856,7 +854,7 @@ static void freeItemData(ItemData * data)
 
 static ItemData *parseCommand(WMPropList * item)
 {
-	ItemData *data = NEW(ItemData);
+	ItemData *data = wmalloc(sizeof(ItemData));
 	WMPropList *p;
 	char *command = NULL;
 	char *parameter = NULL;
@@ -1156,7 +1154,7 @@ menuItemCloned(WEditMenuDelegate * delegate, WEditMenu * menu, WEditMenuItem * o
 
 #define DUP(s) (s) ? wstrdup(s) : NULL
 
-	newData = NEW(ItemData);
+	newData = wmalloc(sizeof(ItemData));
 
 	newData->type = data->type;
 
