@@ -662,6 +662,7 @@ void wWorkspaceRename(WScreen * scr, int workspace, char *name)
 		strncpy(buf, tmp, MAX_WORKSPACENAME_WIDTH);
 	}
 	buf[MAX_WORKSPACENAME_WIDTH] = 0;
+	wfree(tmp);
 
 	/* update workspace */
 	wfree(scr->workspaces[workspace]->name);
