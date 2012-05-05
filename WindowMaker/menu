@@ -53,7 +53,7 @@
  *	// it in current position
  *	OPEN_MENU file.menu
  *   2. Pipe menu handling.
- *	// opens command and uses it's stdout to construct menu.
+ *	// opens command and uses its stdout to construct menu.
  *	// Command's output must be a valid menu description.
  *	// The space between '|' and command itself is optional.
  *      // Use '||' instead of '|' if you want the menu to always update
@@ -61,12 +61,12 @@
  *	OPEN_MENU | command
  *      OPEN_MENU || command
  *   3. Directory handling.
- *	// Opens one or more directories and construct a menu with all
+ *	// Opens one or more directories and constructs a menu with all
  *	// the subdirectories and executable files in them sorted
  *	// alphabetically.
  *	OPEN_MENU /some/dir [/some/other/dir ...]
  *   4. Directory handling with command.
- *	// Opens one or more directories and construct menu with all
+ *	// Opens one or more directories and constructs menu with all
  *	// subdirectories and readable files in them sorted alphabetically,
  *	// preceding each of them with command.
  *	OPEN_MENU [options] /some/dir [/some/other/dir ...] WITH command -options
@@ -78,7 +78,7 @@
  *
  * ** Options for command line in EXEC:
  * %s - substitute with current selection
- * %a(title[,prompt]) - opens a input box with the specified title and the
+ * %a(title[,prompt]) - opens an input box with the specified title and the
  *			optional prompt	and do substitution with what you typed
  * %w - substitute with XID for the current focused window
  * %W - substitute with the number of the current workspace
