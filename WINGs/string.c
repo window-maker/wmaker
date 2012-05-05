@@ -208,10 +208,12 @@ char *wstrconcat(char *str1, char *str2)
 	char *str;
 	size_t slen;
 
-	if (!str1)
+	if (!str1 && str2)
 		return wstrdup(str2);
-	else if (!str2)
+	else if (str1 && !str2)
 		return wstrdup(str1);
+	else if (!str1 && !str2)
+		return NULL;
 
 	slen = strlen(str1) + strlen(str2) + 1;
 	str = wmalloc(slen);
@@ -228,10 +230,10 @@ char *wstrappend(char *dst, char *src)
 {
 	size_t slen;
 
-	if (!dst)
-		return wstrdup(src);
-	else if (!src || *src == 0)
+	if (!src || *src == 0)
 		return dst;
+	else if (!dst)
+		return wstrdup(src);
 
 	slen = strlen(dst) + strlen(src) + 1;
 	dst = wrealloc(dst, slen);
