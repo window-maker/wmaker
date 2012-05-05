@@ -133,7 +133,7 @@ static WUserMenuData *convertShortcuts(WScreen * scr, WMPropList * shortcut)
 {
 	WUserMenuData *data;
 	KeySym ksym;
-	char *k, *buffer, buf[MAX_SHORTCUT_LENGTH], *b;
+	char *k, buf[MAX_SHORTCUT_LENGTH], *b;
 	int keycount, i, j, mod;
 
 	if (WMIsPLString(shortcut)) {
@@ -334,7 +334,6 @@ static WMenu *readUserMenuFile(WScreen * scr, char *file_name)
 WMenu *wUserMenuGet(WScreen * scr, WWindow * wwin)
 {
 	WMenu *menu = NULL;
-	char buffer[100];
 	char *path = NULL;
 	char *tmp;
 	if (wwin->wm_instance && wwin->wm_class) {
