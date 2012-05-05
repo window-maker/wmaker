@@ -882,152 +882,119 @@ static WMenuEntry *addMenuEntry(WMenu * menu, char *title, char *shortcut, char 
 
 /*******************   Menu Configuration From File   *******************/
 
-static void separateline(char *line, char *title, char *command, char *parameter, char *shortcut)
+static void freeline(char *title, char *command, char *parameter, char *shortcut)
 {
-	int l, i;
+	wfree(title);
+	wfree(command);
+	wfree(parameter);
+	wfree(shortcut);
+}
 
-	l = strlen(line);
+static void separateline(char *line, char **title, char **command, char **parameter, char **shortcut)
+{
+	char *suffix, *next = line;
 
-	*title = 0;
-	*command = 0;
-	*parameter = 0;
-	*shortcut = 0;
+	*title = NULL;
+	*command = NULL;
+	*parameter = NULL;
+	*shortcut = NULL;
+
 	/* get the title */
-	while (isspace(*line) && (*line != 0))
-		line++;
-	if (*line == '"') {
-		line++;
-		i = 0;
-		while (line[i] != '"' && (line[i] != 0))
-			i++;
-		if (line[i] != '"')
-			return;
-	} else {
-		i = 0;
-		while (!isspace(line[i]) && (line[i] != 0))
-			i++;
-	}
-	strncpy(title, line, i);
-	title[i++] = 0;
-	line += i;
+	*title = wtokennext(line, &next);
+	if (next == NULL)
+		return;
+	line = next;
 
 	/* get the command or shortcut keyword */
-	while (isspace(*line) && (*line != 0))
-		line++;
-	if (*line == 0)
+	*command = wtokennext(line, &next);
+	if (next == NULL)
 		return;
-	i = 0;
-	while (!isspace(line[i]) && (line[i] != 0))
-		i++;
-	strncpy(command, line, i);
-	command[i++] = 0;
-	line += i;
+	line = next;
 
-	if (strcmp(command, "SHORTCUT") == 0) {
-		/* get the shortcut key */
-		while (isspace(*line) && (*line != 0))
-			line++;
-		if (*line == '"') {
-			line++;
-			i = 0;
-			while (line[i] != '"' && (line[i] != 0))
-				i++;
-			if (line[i] != '"')
-				return;
-		} else {
-			i = 0;
-			while (!isspace(line[i]) && (line[i] != 0))
-				i++;
-		}
-		strncpy(shortcut, line, i);
-		shortcut[i++] = 0;
-		line += i;
-
-		*command = 0;
+	if (*command != NULL && strcmp(*command, "SHORTCUT") == 0) {
+		/* get the shortcut */
+		*shortcut = wtokennext(line, &next);
+		if (next == NULL)
+			return;
+		line = next;
 
 		/* get the command */
-		while (isspace(*line) && (*line != 0))
-			line++;
-		if (*line == 0)
+		*command = wtokennext(line, &next);
+		if (next == NULL)
 			return;
-		i = 0;
-		while (!isspace(line[i]) && (line[i] != 0))
-			i++;
-		strncpy(command, line, i);
-		command[i++] = 0;
-		line += i;
+		line = next;
 	}
 
 	/* get the parameters */
-	while (isspace(*line) && (*line != 0))
-		line++;
-	if (*line == 0)
-		return;
+	suffix = wtrimspace(line);
 
-	if (*line == '"') {
-		line++;
-		l = 0;
-		while (line[l] != 0 && line[l] != '"') {
-			parameter[l] = line[l];
-			l++;
+	/* should we keep this weird old behavior? */
+	if (suffix[0] == '"') {
+		*parameter = wtokennext(suffix, &next);
+		wfree(suffix);
+	} else {
+		*parameter = suffix;
+	}
+}
+
+static char *getLine(FILE * file, const char *file_name)
+{
+	char linebuf[MAXLINE];
+	char *line = NULL, *result = NULL;
+	size_t len;
+	int done;
+
+again:
+	done = 0;
+	while (!done && fgets(linebuf, sizeof(linebuf), file) != NULL) {
+		line = wtrimspace(linebuf);
+		len = strlen(line);
+
+		/* allow line wrapping */
+		if (len > 0 && line[len - 1] == '\\') {
+			line[len - 1] = '\0';
+		} else {
+			done = 1;
 		}
-		parameter[l] = 0;
-		return;
+
+		if (result == NULL) {
+			result = line;
+		} else {
+			if (strlen(result) < MAXLINE) {
+				result = wstrappend(result, line);
+			}
+			wfree(line);
+		}
+	}
+	if (!done || ferror(file)) {
+		wfree(result);
+		result = NULL;
+	} else if (result != NULL && (result[0] == 0 || result[0] == '#' ||
+		   (result[0] == '/' && result[1] == '/'))) {
+		wfree(result);
+		result = NULL;
+		goto again;
+	} else if (result != NULL && strlen(result) >= MAXLINE) {
+		wwarning(_("%s:maximal line size exceeded in menu config: %s"),
+			 file_name, line);
+		wfree(result);
+		result = NULL;
+		goto again;
 	}
 
-	l = strlen(line);
-	while (isspace(line[l]) && (l > 0))
-		l--;
-	strncpy(parameter, line, l);
-	parameter[l] = 0;
+	return result;
 }
 
 static WMenu *parseCascade(WScreen * scr, WMenu * menu, FILE * file, char *file_name)
 {
-	char linebuf[MAXLINE];
-	char elinebuf[MAXLINE];
-	char title[MAXLINE];
-	char command[MAXLINE];
-	char shortcut[MAXLINE];
-	char params[MAXLINE];
 	char *line;
+	char *command, *params, *shortcut, *title;
 
-	while (!feof(file)) {
-		int lsize, ok;
+	while ((line = getLine(file, file_name)) != NULL) {
+		separateline(line, &title, &command, &params, &shortcut);
 
-		ok = 0;
-		fgets(linebuf, MAXLINE, file);
-		line = wtrimspace(linebuf);
-		lsize = strlen(line);
-		do {
-			if (line[lsize - 1] == '\\') {
-				char *line2;
-				int lsize2;
-				fgets(elinebuf, MAXLINE, file);
-				line2 = wtrimspace(elinebuf);
-				lsize2 = strlen(line2);
-				if (lsize2 + lsize > MAXLINE) {
-					wwarning(_("%s:maximal line size exceeded in menu config: %s"),
-						 file_name, line);
-					ok = 2;
-				} else {
-					line[lsize - 1] = 0;
-					lsize += lsize2 - 1;
-					strcat(line, line2);
-				}
-			} else {
-				ok = 1;
-			}
-		} while (!ok && !feof(file));
-		if (ok == 2)
-			continue;
-
-		if (line[0] == 0 || line[0] == '#' || (line[0] == '/' && line[1] == '/'))
-			continue;
-
-		separateline(line, title, command, params, shortcut);
-
-		if (!command[0]) {
+		if (command == NULL || !command[0]) {
+			freeline(title, command, params, shortcut);
 			wwarning(_("%s:missing command in menu config: %s"), file_name, line);
 			goto error;
 		}
@@ -1046,32 +1013,28 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, FILE * file, char *file_
 			}
 		} else if (strcasecmp(command, "END") == 0) {
 			/* end of menu */
+			freeline(title, command, params, shortcut);
 			return menu;
-
 		} else {
 			/* normal items */
-			addMenuEntry(menu, M_(title), shortcut[0] ? shortcut : NULL, command,
-				     params[0] ? params : NULL, file_name);
+			addMenuEntry(menu, M_(title), shortcut, command, params, file_name);
 		}
+		freeline(title, command, params, shortcut);
 	}
 
 	wwarning(_("%s:syntax error in menu file:END declaration missing"), file_name);
-	return menu;
 
  error:
-	return menu;
+	return NULL;
 }
 
 static WMenu *readMenuFile(WScreen * scr, char *file_name)
 {
 	WMenu *menu = NULL;
 	FILE *file = NULL;
-	char linebuf[MAXLINE];
-	char title[MAXLINE];
-	char shortcut[MAXLINE];
-	char command[MAXLINE];
-	char params[MAXLINE];
 	char *line;
+	char *command, *params, *shortcut, *title;
+	char cmd[MAXLINE];
 #ifdef USECPP
 	char *args;
 	int cpp = 0;
@@ -1083,9 +1046,9 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 		if (!args) {
 			wwarning(_("could not make arguments for menu file preprocessor"));
 		} else {
-			snprintf(command, sizeof(command), "%s %s %s", CPP_PATH, args, file_name);
+			snprintf(cmd, sizeof(cmd), "%s %s %s", CPP_PATH, args, file_name);
 			wfree(args);
-			file = popen(command, "r");
+			file = popen(cmd, "r");
 			if (!file) {
 				werror(_("%s:could not open/preprocess menu file"), file_name);
 			} else {
@@ -1103,16 +1066,10 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 		}
 	}
 
-	while (!feof(file)) {
-		if (!fgets(linebuf, MAXLINE, file))
-			break;
-		line = wtrimspace(linebuf);
-		if (line[0] == 0 || line[0] == '#' || (line[0] == '/' && line[1] == '/'))
-			continue;
+	while ((line = getLine(file, file_name)) != NULL) {
+		separateline(line, &title, &command, &params, &shortcut);
 
-		separateline(line, title, command, params, shortcut);
-
-		if (!command[0]) {
+		if (command == NULL || !command[0]) {
 			wwarning(_("%s:missing command in menu config: %s"), file_name, line);
 			break;
 		}
@@ -1128,6 +1085,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 			break;
 		}
 	}
+	freeline(title, command, params, shortcut);
 
 #ifdef USECPP
 	if (cpp) {
@@ -1150,11 +1108,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 {
 	WMenu *menu = NULL;
 	FILE *file = NULL;
-	char linebuf[MAXLINE];
-	char title[MAXLINE];
-	char command[MAXLINE];
-	char params[MAXLINE];
-	char shortcut[MAXLINE];
+	char *command, *params, *shortcut, *title;
 	char *line;
 	char *filename;
 	char flat_file[MAXLINE];
@@ -1197,16 +1151,10 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 		}
 	}
 
-	while (!feof(file)) {
-		if (!fgets(linebuf, MAXLINE, file))
-			break;
-		line = wtrimspace(linebuf);
-		if (line[0] == 0 || line[0] == '#' || (line[0] == '/' && line[1] == '/'))
-			continue;
+	while ((line = getLine(file, filename)) != NULL) {
+		separateline(line, &title, &command, &params, &shortcut);
 
-		separateline(line, title, command, params, shortcut);
-
-		if (!command[0]) {
+		if (command == NULL || !command[0]) {
 			wwarning(_("%s:missing command in menu config: %s"), filename, line);
 			break;
 		}
@@ -1222,6 +1170,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 			break;
 		}
 	}
+	freeline(title, command, params, shortcut);
 
 	pclose(file);
 
