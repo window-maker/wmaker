@@ -11,7 +11,7 @@ dnl
 dnl
 
 
-AC_INIT(WindowMaker, 0.95.2, , WindowMaker, http://www.windowmaker.org/)
+AC_INIT(WindowMaker, 0.95.3, , WindowMaker, http://www.windowmaker.org/)
 AC_CONFIG_SRCDIR(src/WindowMaker.h)
 AC_CONFIG_MACRO_DIR([m4])
 AM_CONFIG_HEADER(config.h)
