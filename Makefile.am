@@ -31,7 +31,7 @@ config-paths.h: Makefile
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = wrlib WINGs src util po WindowMaker wmlib WPrefs.app doc
+SUBDIRS = wrlib WINGs src util po WindowMaker wmlib WPrefs.app doc test
 
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N INSTALL \
 	INSTALL-WMAKER README.definable-cursor \
