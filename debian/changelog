@@ -1,5 +1,13 @@
-wmaker (0.95.2-1+git-1) unstable; urgency=low
+wmaker (0.95.3-1) unstable; urgency=low
 
+  * New upstream release 0.95.3
+    * Removed debian/clean file. Upstream removes now the files.
+  * Bumped to standard version 3.9.3
+  * Important!: Removed symbol "W_DraggingInfo" in libwutil2 and
+    libwings2, because the struct W_DraggingInfo is now declared
+    as "typedef", therefore the struct is not included.
+    This change is included in upstream, see line 126 of the file
+    WINGs/WINGs/WINGsP.h
   * Patch 53_Debian_WMState.diff changed, because the WMState file
     in upstream is now different. Now, the dock launch WPrefs.
   * Removed /etc/X11/WindowMaker files.
@@ -8,8 +16,10 @@ wmaker (0.95.2-1+git-1) unstable; urgency=low
     * New path for menu.hook: /usr/share/WindowMaker
       * Changed in the menu-method files (wmaker and wmappearance.
     * Removed menu.posthook and menu.prehook.
+  * Changed the menu behaviour. Applications/* contents moved to
+    the root menu.
 
- -- Rodolfo García Peñas (kix) <kix@kix.es>  Tue, 21 Feb 2012 21:32:31 +0100
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Thu, 23 May 2012 21:32:22 +0200
 
 wmaker (0.95.2-1) unstable; urgency=low
 

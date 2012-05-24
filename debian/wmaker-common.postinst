@@ -22,7 +22,7 @@ case "$1" in
       rm -f /usr/share/WindowMaker/menu.hook
 # Remove appearance.menu
       rm -f /usr/share/WindowMaker/appearance.menu
-        update-menus
+      update-menus
     fi
   ;;
 

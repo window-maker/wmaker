@@ -190,7 +190,7 @@ libWUtil.so.2 libwutil2 #MINVER#
  W_ApplicationInitialized@Base 0.95.0
  W_CheckIdleHandlers@Base 0.95.0
  W_CheckTimerHandlers@Base 0.95.0
- W_DraggingInfo@Base 0.95.0
+#MISSING: 0.95.3-1# W_DraggingInfo@Base 0.95.0
  W_FlushASAPNotificationQueue@Base 0.95.0
  W_FlushIdleNotificationQueue@Base 0.95.0
  W_HandleInputEvents@Base 0.95.0

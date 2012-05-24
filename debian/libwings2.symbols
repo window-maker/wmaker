@@ -535,7 +535,7 @@ libWINGs.so.2 libwings2 #MINVER#
  W_DragSourceStartTimer@Base 0.95.0
  W_DragSourceStateHandler@Base 0.95.0
  W_DragSourceStopTimer@Base 0.95.0
- W_DraggingInfo@Base 0.95.0
+#MISSING: 0.95.3-1# W_DraggingInfo@Base 0.95.0
  W_DrawRelief@Base 0.95.0
  W_DrawReliefWithGC@Base 0.95.0
  W_FocusIC@Base 0.95.0
