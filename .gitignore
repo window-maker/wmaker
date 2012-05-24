@@ -75,3 +75,4 @@ WindowMaker/Defaults/WMState
 WindowMaker/Defaults/WMWindowAttributes
 WindowMaker/Defaults/WindowMaker
 WindowMaker/IconSets/Default.iconset
+wmlib/libWMaker.la
