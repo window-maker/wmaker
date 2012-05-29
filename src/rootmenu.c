@@ -994,8 +994,9 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, FILE * file, char *file_
 		separateline(line, &title, &command, &params, &shortcut);
 
 		if (command == NULL || !command[0]) {
-			freeline(title, command, params, shortcut);
 			wwarning(_("%s:missing command in menu config: %s"), file_name, line);
+			freeline(title, command, params, shortcut);
+			wfree(line);
 			goto error;
 		}
 
@@ -1006,7 +1007,7 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, FILE * file, char *file_
 
 			cascade = wMenuCreate(scr, M_(title), False);
 			cascade->on_destroy = removeShortcutsForMenu;
-			if (parseCascade(scr, cascade, file, file_name) == NULL) {
+			if (!parseCascade(scr, cascade, file, file_name)) {
 				wMenuDestroy(cascade, True);
 			} else {
 				wMenuEntrySetCascade(menu, wMenuAddCallback(menu, M_(title), NULL, NULL), cascade);
@@ -1014,12 +1015,14 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, FILE * file, char *file_
 		} else if (strcasecmp(command, "END") == 0) {
 			/* end of menu */
 			freeline(title, command, params, shortcut);
+			wfree(line);
 			return menu;
 		} else {
 			/* normal items */
 			addMenuEntry(menu, M_(title), shortcut, command, params, file_name);
 		}
 		freeline(title, command, params, shortcut);
+		wfree(line);
 	}
 
 	wwarning(_("%s:syntax error in menu file:END declaration missing"), file_name);
@@ -1071,6 +1074,8 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 
 		if (command == NULL || !command[0]) {
 			wwarning(_("%s:missing command in menu config: %s"), file_name, line);
+			freeline(title, command, params, shortcut);
+			wfree(line);
 			break;
 		}
 		if (strcasecmp(command, "MENU") == 0) {
@@ -1078,14 +1083,20 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 			menu->on_destroy = removeShortcutsForMenu;
 			if (!parseCascade(scr, menu, file, file_name)) {
 				wMenuDestroy(menu, True);
+				menu = NULL;
 			}
+			freeline(title, command, params, shortcut);
+			wfree(line);
 			break;
 		} else {
 			wwarning(_("%s:invalid menu file. MENU command is missing"), file_name);
+			freeline(title, command, params, shortcut);
+			wfree(line);
 			break;
 		}
+		freeline(title, command, params, shortcut);
+		wfree(line);
 	}
-	freeline(title, command, params, shortcut);
 
 #ifdef USECPP
 	if (cpp) {
@@ -1112,6 +1123,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	char *line;
 	char *filename;
 	char flat_file[MAXLINE];
+	char cmd[MAXLINE];
 	int i;
 #ifdef USECPP
 	char *args;
@@ -1131,10 +1143,10 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 		if (!args) {
 			wwarning(_("could not make arguments for menu file preprocessor"));
 		} else {
-			snprintf(command, sizeof(command), "%s | %s %s", filename, CPP_PATH, args);
+			snprintf(cmd, sizeof(cmd), "%s | %s %s", filename, CPP_PATH, args);
 
 			wfree(args);
-			file = popen(command, "r");
+			file = popen(cmd, "r");
 			if (!file) {
 				werror(_("%s:could not open/preprocess menu file"), filename);
 			}
@@ -1156,6 +1168,8 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 
 		if (command == NULL || !command[0]) {
 			wwarning(_("%s:missing command in menu config: %s"), filename, line);
+			freeline(title, command, params, shortcut);
+			wfree(line);
 			break;
 		}
 		if (strcasecmp(command, "MENU") == 0) {
@@ -1163,14 +1177,21 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 			menu->on_destroy = removeShortcutsForMenu;
 			if (!parseCascade(scr, menu, file, filename)) {
 				wMenuDestroy(menu, True);
+				menu = NULL;
 			}
+			freeline(title, command, params, shortcut);
+			wfree(line);
 			break;
 		} else {
 			wwarning(_("%s:no title given for the root menu"), filename);
+			freeline(title, command, params, shortcut);
+			wfree(line);
 			break;
 		}
+
+		freeline(title, command, params, shortcut);
+		wfree(line);
 	}
-	freeline(title, command, params, shortcut);
 
 	pclose(file);
 
