@@ -884,7 +884,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 
 	wWindowSetupInitialAttributes(wwin, &level, &workspace);
 
-	for (i = 0; i < 11; i++) {
+	for (i = 0; i < (sizeof(panel->attrChk) / sizeof(panel->attrChk[0])); i++) {
 		int flag = 0;
 
 		switch (i) {
@@ -924,7 +924,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 		}
 		WMSetButtonSelected(panel->attrChk[i], flag);
 	}
-	for (i = 0; i < 12; i++) {
+	for (i = 0; i < (sizeof(panel->moreChk) / sizeof(panel->moreChk[0])); i++) {
 		int flag = 0;
 
 		switch (i) {
@@ -970,7 +970,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 		WMSetButtonSelected(panel->moreChk[i], flag);
 	}
 	if (panel->appFrm && wapp) {
-		for (i = 0; i < 3; i++) {
+	for (i = 0; i < (sizeof(panel->appChk) / sizeof(panel->appChk[0])); i++) {
 			int flag = 0;
 
 			switch (i) {
@@ -1252,7 +1252,7 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 	WMMoveWidget(panel->attrFrm, 15, 45);
 	WMResizeWidget(panel->attrFrm, frame_width, 250);
 
-	for (i = 0; i < 11; i++) {
+	for (i = 0; i < (sizeof(panel->attrChk) / sizeof(panel->attrChk[0])); i++) {
 		char *caption = NULL;
 		int flag = 0;
 		char *descr = NULL;
@@ -1334,13 +1334,7 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 	WMMoveWidget(panel->moreFrm, 15, 45);
 	WMResizeWidget(panel->moreFrm, frame_width, 265);
 
-	for (i = 0;
-#ifdef XKB_BUTTON_HINT
-	     i < 12;
-#else
-	     i < 11;
-#endif
-	     i++) {
+	for (i = 0; i < (sizeof(panel->moreChk) / sizeof(panel->moreChk[0])); i++) {
 		char *caption = NULL;
 		int flag = 0;
 		char *descr = NULL;
@@ -1506,7 +1500,7 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 		WMMoveWidget(panel->appFrm, 15, 50);
 		WMResizeWidget(panel->appFrm, frame_width, 240);
 
-		for (i = 0; i < 3; i++) {
+		for (i = 0; i < (sizeof(panel->appChk) / sizeof(panel->appChk[0])); i++) {
 			char *caption = NULL;
 			int flag = 0;
 			char *descr = NULL;
