@@ -22,13 +22,8 @@
 
 #include <X11/Xlib.h>
 
-#include <stdlib.h>
 #include <string.h>
-
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <unistd.h>
-#include <errno.h>
 
 #include "WindowMaker.h"
 #include "menu.h"
@@ -36,15 +31,12 @@
 #ifdef USER_MENU
 #include "usermenu.h"
 #endif				/* USER_MENU */
-#include "icon.h"
 #include "appicon.h"
 #include "application.h"
 #include "appmenu.h"
 #include "properties.h"
-#include "funcs.h"
 #include "stacking.h"
 #include "actions.h"
-#include "defaults.h"
 #include "workspace.h"
 #include "dock.h"
 
@@ -349,29 +341,9 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	if (wPreferences.auto_arrange_icons && wapp->app_icon && !wapp->app_icon->attracted)
 		wArrangeIcons(scr, True);
 
-	if (wapp->app_icon) {
-		char *tmp, *path;
-		struct stat dummy;
+	/* Save the app_icon in a file */
+	save_app_icon(wwin, wapp);
 
-		tmp = wDefaultGetIconFile(scr, wapp->app_icon->wm_instance, wapp->app_icon->wm_class, True);
-
-		/* If the icon was saved by us from the client supplied icon, but is
-		 * missing, recreate it. */
-		if (tmp && strstr(tmp, "Library/WindowMaker/CachedPixmaps") != NULL &&
-		    stat(tmp, &dummy) != 0 && errno == ENOENT) {
-			wmessage(_("recreating missing icon '%s'"), tmp);
-			path = wIconStore(wapp->app_icon->icon);
-			if (path) {
-				wfree(path);
-			}
-			wIconUpdate(wapp->app_icon->icon);
-			wAppIconPaint(wapp->app_icon);
-		}
-
-		/* if the displayed icon was supplied by the client, save the icon */
-		if (!tmp || strstr(tmp, "Library/WindowMaker/CachedPixmaps") != NULL)
-			wAppIconSave(wapp->app_icon);
-	}
 	return wapp;
 }
 
