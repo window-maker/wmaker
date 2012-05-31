@@ -284,8 +284,8 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	/* application descriptor */
 	XSaveContext(dpy, main_window, wAppWinContext, (XPointer) wapp);
 
+	wapp->app_icon = NULL;
 	if (!WFLAGP(wapp->main_window_desc, no_appicon)) {
-		wapp->app_icon = NULL;
 		if (scr->last_dock)
 			wapp->app_icon = findDockIconFor(scr->last_dock, main_window);
 
@@ -318,8 +318,6 @@ WApplication *wApplicationCreate(WWindow * wwin)
 		} else {
 			wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
 		}
-	} else {
-		wapp->app_icon = NULL;
 	}
 
 	if (wapp->app_icon)
