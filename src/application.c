@@ -206,6 +206,46 @@ void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance
 	}
 }
 
+static void app_icon_create_from_docks(WWindow *wwin, WApplication *wapp, Window main_window)
+{
+	WScreen *scr = wwin->screen_ptr;
+
+	if (scr->last_dock)
+		wapp->app_icon = findDockIconFor(scr->last_dock, main_window);
+
+	/* check main dock if we did not find it in last dock */
+	if (!wapp->app_icon && scr->dock)
+		wapp->app_icon = findDockIconFor(scr->dock, main_window);
+
+	/* finally check clips */
+	if (!wapp->app_icon) {
+		int i;
+		for (i = 0; i < scr->workspace_count; i++) {
+			WDock *dock = scr->workspaces[i]->clip;
+			if (dock)
+				wapp->app_icon = findDockIconFor(dock, main_window);
+			if (wapp->app_icon)
+				break;
+		}
+	}
+
+	/* If created, then set some flags */
+	if (wapp->app_icon) {
+		WWindow *mainw = wapp->main_window_desc;
+
+		wapp->app_icon->running = 1;
+		wapp->app_icon->icon->force_paint = 1;
+		wapp->app_icon->icon->owner = mainw;
+		if (mainw->wm_hints && (mainw->wm_hints->flags & IconWindowHint))
+			wapp->app_icon->icon->icon_win = mainw->wm_hints->icon_window;
+
+		wAppIconPaint(wapp->app_icon);
+		wAppIconSave(wapp->app_icon);
+	} else {
+		wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
+	}
+}
+
 WApplication *wApplicationCreate(WWindow * wwin)
 {
 	WScreen *scr = wwin->screen_ptr;
@@ -277,40 +317,10 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	XSaveContext(dpy, main_window, wAppWinContext, (XPointer) wapp);
 
 	wapp->app_icon = NULL;
-	if (!WFLAGP(wapp->main_window_desc, no_appicon)) {
-		if (scr->last_dock)
-			wapp->app_icon = findDockIconFor(scr->last_dock, main_window);
 
-		/* check main dock if we did not find it in last dock */
-		if (!wapp->app_icon && scr->dock)
-			wapp->app_icon = findDockIconFor(scr->dock, main_window);
-
-		/* finally check clips */
-		if (!wapp->app_icon) {
-			int i;
-			for (i = 0; i < scr->workspace_count; i++) {
-				WDock *dock = scr->workspaces[i]->clip;
-				if (dock)
-					wapp->app_icon = findDockIconFor(dock, main_window);
-				if (wapp->app_icon)
-					break;
-			}
-		}
-
-		if (wapp->app_icon) {
-			WWindow *mainw = wapp->main_window_desc;
-
-			wapp->app_icon->running = 1;
-			wapp->app_icon->icon->force_paint = 1;
-			wapp->app_icon->icon->owner = mainw;
-			if (mainw->wm_hints && (mainw->wm_hints->flags & IconWindowHint))
-				wapp->app_icon->icon->icon_win = mainw->wm_hints->icon_window;
-			wAppIconPaint(wapp->app_icon);
-			wAppIconSave(wapp->app_icon);
-		} else {
-			wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
-		}
-	}
+	/* Create the application icon using the icon from docks */
+	if (!WFLAGP(wapp->main_window_desc, no_appicon))
+		app_icon_create_from_docks(wwin, wapp, main_window);
 
 	if (wapp->app_icon)
 		wapp->app_icon->main_window = main_window;
