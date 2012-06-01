@@ -119,8 +119,7 @@ WAppIcon *wAppIconCreateForDock(WScreen * scr, char *command, char *wm_instance,
 
 void makeAppIconFor(WApplication * wapp)
 {
-	WScreen *scr = wapp->main_window_desc->screen_ptr;
-
+	/* If app_icon, work is done, return */
 	if (wapp->app_icon)
 		return;
 
@@ -129,30 +128,45 @@ void makeAppIconFor(WApplication * wapp)
 	else
 		wapp->app_icon = NULL;
 
-	if (wapp->app_icon) {
-		WIcon *icon = wapp->app_icon->icon;
-		WDock *clip = scr->workspaces[scr->current_workspace]->clip;
-		int x = 0, y = 0;
+	/* Now, paint the icon */
+	paint_app_icon(wapp);
+}
 
-		wapp->app_icon->main_window = wapp->main_window;
+void paint_app_icon(WApplication *wapp)
+{
+	WIcon *icon;
+	WScreen *scr = wapp->main_window_desc->screen_ptr;
+	WDock *clip = scr->workspaces[scr->current_workspace]->clip;
+	int x = 0, y = 0;
 
-		if (clip && clip->attract_icons && wDockFindFreeSlot(clip, &x, &y)) {
-			wapp->app_icon->attracted = 1;
-			if (!wapp->app_icon->icon->shadowed) {
-				wapp->app_icon->icon->shadowed = 1;
-				wapp->app_icon->icon->force_paint = 1;
-			}
-			wDockAttachIcon(clip, wapp->app_icon, x, y);
-		} else {
-			PlaceIcon(scr, &x, &y, wGetHeadForWindow(wapp->main_window_desc));
-			wAppIconMove(wapp->app_icon, x, y);
+	if (!wapp || !wapp->app_icon)
+		return;
+
+	icon = wapp->app_icon->icon;
+	wapp->app_icon->main_window = wapp->main_window;
+
+	/* If the icon is docked, don't continue */
+	if (wapp->app_icon->docked)
+		return;
+
+	if (clip && clip->attract_icons && wDockFindFreeSlot(clip, &x, &y)) {
+		wapp->app_icon->attracted = 1;
+		if (!icon->shadowed) {
+			icon->shadowed = 1;
+			icon->force_paint = 1;
 		}
-		if (!clip || !wapp->app_icon->attracted || !clip->collapsed)
-			XMapWindow(dpy, icon->core->window);
-
-		if (wPreferences.auto_arrange_icons && !wapp->app_icon->attracted)
-			wArrangeIcons(wapp->main_window_desc->screen_ptr, True);
+		wDockAttachIcon(clip, wapp->app_icon, x, y);
+	} else {
+		PlaceIcon(scr, &x, &y, wGetHeadForWindow(wapp->main_window_desc));
+		wAppIconMove(wapp->app_icon, x, y);
+		wLowerFrame(icon->core);
 	}
+
+	if (!clip || !wapp->app_icon->attracted || !clip->collapsed)
+		XMapWindow(dpy, icon->core->window);
+
+	if (wPreferences.auto_arrange_icons && !wapp->app_icon->attracted)
+		wArrangeIcons(scr, True);
 }
 
 void removeAppIconFor(WApplication * wapp)
@@ -177,7 +191,9 @@ void removeAppIconFor(WApplication * wapp)
 	} else {
 		wAppIconDestroy(wapp->app_icon);
 	}
+
 	wapp->app_icon = NULL;
+
 	if (wPreferences.auto_arrange_icons)
 		wArrangeIcons(wapp->main_window_desc->screen_ptr, True);
 }

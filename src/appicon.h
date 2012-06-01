@@ -79,6 +79,7 @@ void wAppIconMove(WAppIcon *aicon, int x, int y);
 void makeAppIconFor(WApplication * wapp);
 void removeAppIconFor(WApplication * wapp);
 void save_app_icon(WWindow *wwin, WApplication *wapp);
+void paint_app_icon(WApplication *wapp);
 
 Bool wAppIconChangeImage(WAppIcon *icon, char *file);
 Bool wAppIconSave(WAppIcon *aicon);
