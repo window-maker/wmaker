@@ -365,25 +365,9 @@ void wApplicationDestroy(WApplication * wapp)
 	wAppMenuDestroy(wapp->menu);
 	wApplicationDeactivate(wapp);
 
-	if (wapp->app_icon) {
-		if (wapp->app_icon->docked && !wapp->app_icon->attracted) {
-			wapp->app_icon->running = 0;
-			/* since we keep it, we don't care if it was attracted or not */
-			wapp->app_icon->attracted = 0;
-			wapp->app_icon->icon->shadowed = 0;
-			wapp->app_icon->main_window = None;
-			wapp->app_icon->pid = 0;
-			wapp->app_icon->icon->owner = NULL;
-			wapp->app_icon->icon->icon_win = None;
-			wapp->app_icon->icon->force_paint = 1;
-			wAppIconPaint(wapp->app_icon);
-		} else if (wapp->app_icon->docked) {
-			wapp->app_icon->running = 0;
-			wDockDetach(wapp->app_icon->dock, wapp->app_icon);
-		} else {
-			wAppIconDestroy(wapp->app_icon);
-		}
-	}
+	/* Remove application icon */
+	removeAppIconFor(wapp);
+
 	wwin = wWindowFor(wapp->main_window_desc->client_win);
 
 	wWindowDestroy(wapp->main_window_desc);
@@ -393,9 +377,6 @@ void wApplicationDestroy(WApplication * wapp)
 		XSaveContext(dpy, wwin->client_win, wWinContext, (XPointer) & wwin->client_descriptor);
 	}
 	wfree(wapp);
-
-	if (wPreferences.auto_arrange_icons)
-		wArrangeIcons(scr, True);
 }
 
 void wApplicationActivate(WApplication *wapp)
