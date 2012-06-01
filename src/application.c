@@ -322,34 +322,8 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	if (!WFLAGP(wapp->main_window_desc, no_appicon))
 		app_icon_create_from_docks(wwin, wapp, main_window);
 
-	if (wapp->app_icon)
-		wapp->app_icon->main_window = main_window;
-
-	if (wapp->app_icon && !wapp->app_icon->docked) {
-		WIcon *icon = wapp->app_icon->icon;
-		WDock *clip = scr->workspaces[scr->current_workspace]->clip;
-		int x = 0, y = 0;
-
-		if (clip && clip->attract_icons && wDockFindFreeSlot(clip, &x, &y)) {
-			wapp->app_icon->attracted = 1;
-			if (!icon->shadowed) {
-				icon->shadowed = 1;
-				icon->force_paint = 1;
-				/* wAppIconPaint() is done in wDockAttachIcon() below */
-			}
-			wDockAttachIcon(clip, wapp->app_icon, x, y);
-		} else {
-			PlaceIcon(scr, &x, &y, wGetHeadForWindow(wapp->main_window_desc));
-			wAppIconMove(wapp->app_icon, x, y);
-			wLowerFrame(icon->core);
-		}
-
-		if (!clip || !wapp->app_icon->attracted || !clip->collapsed)
-			XMapWindow(dpy, icon->core->window);
-	}
-
-	if (wPreferences.auto_arrange_icons && wapp->app_icon && !wapp->app_icon->attracted)
-		wArrangeIcons(scr, True);
+	/* Now, paint the icon */
+	paint_app_icon(wapp);
 
 	/* Save the app_icon in a file */
 	save_app_icon(wwin, wapp);
