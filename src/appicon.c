@@ -44,6 +44,7 @@
 #include "menu.h"
 #include "framewin.h"
 #include "dialog.h"
+#include "xinerama.h"
 #include "client.h"
 #ifdef XDND
 #include "xdnd.h"
@@ -114,6 +115,71 @@ WAppIcon *wAppIconCreateForDock(WScreen * scr, char *command, char *wm_instance,
 	AddToStackList(dicon->icon->core);
 
 	return dicon;
+}
+
+void makeAppIconFor(WApplication * wapp)
+{
+	WScreen *scr = wapp->main_window_desc->screen_ptr;
+
+	if (wapp->app_icon)
+		return;
+
+	if (!WFLAGP(wapp->main_window_desc, no_appicon))
+		wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
+	else
+		wapp->app_icon = NULL;
+
+	if (wapp->app_icon) {
+		WIcon *icon = wapp->app_icon->icon;
+		WDock *clip = scr->workspaces[scr->current_workspace]->clip;
+		int x = 0, y = 0;
+
+		wapp->app_icon->main_window = wapp->main_window;
+
+		if (clip && clip->attract_icons && wDockFindFreeSlot(clip, &x, &y)) {
+			wapp->app_icon->attracted = 1;
+			if (!wapp->app_icon->icon->shadowed) {
+				wapp->app_icon->icon->shadowed = 1;
+				wapp->app_icon->icon->force_paint = 1;
+			}
+			wDockAttachIcon(clip, wapp->app_icon, x, y);
+		} else {
+			PlaceIcon(scr, &x, &y, wGetHeadForWindow(wapp->main_window_desc));
+			wAppIconMove(wapp->app_icon, x, y);
+		}
+		if (!clip || !wapp->app_icon->attracted || !clip->collapsed)
+			XMapWindow(dpy, icon->core->window);
+
+		if (wPreferences.auto_arrange_icons && !wapp->app_icon->attracted)
+			wArrangeIcons(wapp->main_window_desc->screen_ptr, True);
+	}
+}
+
+void removeAppIconFor(WApplication * wapp)
+{
+	if (!wapp->app_icon)
+		return;
+
+	if (wapp->app_icon->docked && !wapp->app_icon->attracted) {
+		wapp->app_icon->running = 0;
+		/* since we keep it, we don't care if it was attracted or not */
+		wapp->app_icon->attracted = 0;
+		wapp->app_icon->icon->shadowed = 0;
+		wapp->app_icon->main_window = None;
+		wapp->app_icon->pid = 0;
+		wapp->app_icon->icon->owner = NULL;
+		wapp->app_icon->icon->icon_win = None;
+		wapp->app_icon->icon->force_paint = 1;
+		wAppIconPaint(wapp->app_icon);
+	} else if (wapp->app_icon->docked) {
+		wapp->app_icon->running = 0;
+		wDockDetach(wapp->app_icon->dock, wapp->app_icon);
+	} else {
+		wAppIconDestroy(wapp->app_icon);
+	}
+	wapp->app_icon = NULL;
+	if (wPreferences.auto_arrange_icons)
+		wArrangeIcons(wapp->main_window_desc->screen_ptr, True);
 }
 
 WAppIcon *wAppIconCreate(WWindow * leader_win)
