@@ -316,17 +316,20 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	/* application descriptor */
 	XSaveContext(dpy, main_window, wAppWinContext, (XPointer) wapp);
 
+	/* Create the application icon */
 	wapp->app_icon = NULL;
-
-	/* Create the application icon using the icon from docks */
-	if (!WFLAGP(wapp->main_window_desc, no_appicon))
+	if (!WFLAGP(wapp->main_window_desc, no_appicon)) {
+		/* Create the application icon using the icon from docks
+		 * If not found in docks, create a new icon 
+		 * using the function wAppIconCreate() */
 		app_icon_create_from_docks(wwin, wapp, main_window);
 
-	/* Now, paint the icon */
-	paint_app_icon(wapp);
+		/* Now, paint the icon */
+		paint_app_icon(wapp);
 
-	/* Save the app_icon in a file */
-	save_app_icon(wwin, wapp);
+		/* Save the app_icon in a file */
+		save_app_icon(wwin, wapp);
+	}
 
 	return wapp;
 }
