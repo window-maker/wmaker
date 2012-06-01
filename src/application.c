@@ -40,14 +40,11 @@
 #include "workspace.h"
 #include "dock.h"
 
-#include "xinerama.h"
-
 /******** Global variables ********/
 
 extern XContext wAppWinContext;
 extern XContext wWinContext;
 extern WPreferences wPreferences;
-
 extern WDDomain *WDWindowAttributes;
 
 /******** Local variables ********/
@@ -57,19 +54,15 @@ static WWindow *makeMainWindow(WScreen * scr, Window window)
 	WWindow *wwin;
 	XWindowAttributes attr;
 
-	if (!XGetWindowAttributes(dpy, window, &attr)) {
+	if (!XGetWindowAttributes(dpy, window, &attr))
 		return NULL;
-	}
 
 	wwin = wWindowCreate();
 	wwin->screen_ptr = scr;
 	wwin->client_win = window;
 	wwin->main_window = window;
 	wwin->wm_hints = XGetWMHints(dpy, window);
-	/*    if (!MyXFetchName(dpy, window, &(wwin->frame->title))) {
-	   wwin->frame->title = NULL;
-	   }
-	 */
+
 	PropGetWMClass(window, &wwin->wm_class, &wwin->wm_instance);
 
 	wDefaultFillAttributes(scr, wwin->wm_instance, wwin->wm_class,
@@ -261,18 +254,16 @@ WApplication *wApplicationCreate(WWindow * wwin)
 		int foo;
 		unsigned int bar;
 		/* check if the window is valid */
-		if (!XGetGeometry(dpy, main_window, &root, &foo, &foo, &bar, &bar, &bar, &bar)) {
+		if (!XGetGeometry(dpy, main_window, &root, &foo, &foo, &bar, &bar, &bar, &bar))
 			return NULL;
-		}
 	}
 
 	wapp = wApplicationOf(main_window);
 	if (wapp) {
 		wapp->refcount++;
 		if (wapp->app_icon && wapp->app_icon->docked &&
-		    wapp->app_icon->relaunching && wapp->main_window_desc->fake_group) {
+		    wapp->app_icon->relaunching && wapp->main_window_desc->fake_group)
 			wDockFinishLaunch(wapp->app_icon->dock, wapp->app_icon);
-		}
 
 		return wapp;
 	}
