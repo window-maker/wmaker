@@ -162,11 +162,11 @@ static WMPropList *Yes, *No;
 #define PHEIGHT	360
 
 static char *spec_text;
-static void applySettings(WMButton * button, InspectorPanel * panel);
+static void applySettings(WMButton *button, InspectorPanel *panel);
 
 #define UNDEFINED_POS 0xffffff
 
-static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int ypos, Bool showSelectPanel);
+static InspectorPanel *createInspectorForWindow(WWindow *wwin, int xpos, int ypos, Bool showSelectPanel);
 
 static void make_keys(void)
 {
@@ -212,20 +212,19 @@ static void make_keys(void)
 	No = WMCreatePLString("No");
 }
 
-static void freeInspector(InspectorPanel * panel)
+static void freeInspector(InspectorPanel *panel)
 {
 	panel->destroyed = 1;
+
 	if (panel->choosingIcon)
 		return;
 
 	WMDestroyWidget(panel->win);
-
 	XDestroyWindow(dpy, panel->parent);
-
 	wfree(panel);
 }
 
-static void destroyInspector(WCoreWindow * foo, void *data, XEvent * event)
+static void destroyInspector(WCoreWindow *foo, void *data, XEvent *event)
 {
 	InspectorPanel *panel;
 	InspectorPanel *tmp;
@@ -271,7 +270,7 @@ void wDestroyInspectorPanels(void)
 	}
 }
 
-static void changePage(WMPopUpButton * bPtr, InspectorPanel * panel)
+static void changePage(WMPopUpButton *bPtr, InspectorPanel *panel)
 {
 	int page;
 
@@ -311,7 +310,7 @@ static void changePage(WMPopUpButton * bPtr, InspectorPanel * panel)
 #define UPDATE_TEXT_FIELD       2
 #define REVERT_TO_DEFAULT       4
 
-static int showIconFor(WMScreen * scrPtr, InspectorPanel * panel, char *wm_instance, char *wm_class, int flags)
+static int showIconFor(WMScreen *scrPtr, InspectorPanel *panel, char *wm_instance, char *wm_class, int flags)
 {
 	WMPixmap *pixmap = (WMPixmap *) NULL;
 	char *file = NULL, *path = NULL;
@@ -385,7 +384,7 @@ static void updateIcon(WMButton * button, InspectorPanel * panel)
 }
 #endif
 
-static int getBool(WMPropList * value)
+static int getBool(WMPropList *value)
 {
 	char *val;
 
@@ -424,7 +423,7 @@ static int getBool(WMPropList * value)
  */
 
 static int
-insertAttribute(WMPropList * dict, WMPropList * window, WMPropList * attr, WMPropList * value, int flags)
+insertAttribute(WMPropList *dict, WMPropList *window, WMPropList *attr, WMPropList *value, int flags)
 {
 	WMPropList *def_win, *def_value = NULL;
 	int update = 0;
@@ -456,7 +455,7 @@ insertAttribute(WMPropList * dict, WMPropList * window, WMPropList * attr, WMPro
 	return modified;
 }
 
-static void saveSettings(WMButton * button, InspectorPanel * panel)
+static void saveSettings(WMButton *button, InspectorPanel *panel)
 {
 	WWindow *wwin = panel->inspected;
 	WDDomain *db = WDWindowAttributes;
@@ -673,7 +672,7 @@ static void saveSettings(WMButton * button, InspectorPanel * panel)
 	WMPLSetCaseSensitive(False);
 }
 
-static void applySettings(WMButton * button, InspectorPanel * panel)
+static void applySettings(WMButton *button, InspectorPanel *panel)
 {
 	WWindow *wwin = panel->inspected;
 	WApplication *wapp = wApplicationOf(wwin->main_window);
@@ -795,7 +794,7 @@ static void applySettings(WMButton * button, InspectorPanel * panel)
 	}
 }
 
-static void revertSettings(WMButton * button, InspectorPanel * panel)
+static void revertSettings(WMButton *button, InspectorPanel *panel)
 {
 	WWindow *wwin = panel->inspected;
 	WApplication *wapp = wApplicationOf(wwin->main_window);
@@ -904,7 +903,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 		WMSetButtonSelected(panel->moreChk[i], flag);
 	}
 	if (panel->appFrm && wapp) {
-	for (i = 0; i < (sizeof(panel->appChk) / sizeof(panel->appChk[0])); i++) {
+		for (i = 0; i < (sizeof(panel->appChk) / sizeof(panel->appChk[0])); i++) {
 			int flag = 0;
 
 			switch (i) {
@@ -939,7 +938,7 @@ static void revertSettings(WMButton * button, InspectorPanel * panel)
 	applySettings(panel->applyBtn, panel);
 }
 
-static void chooseIconCallback(WMWidget * self, void *clientData)
+static void chooseIconCallback(WMWidget *self, void *clientData)
 {
 	char *file;
 	InspectorPanel *panel = (InspectorPanel *) clientData;
@@ -966,7 +965,7 @@ static void chooseIconCallback(WMWidget * self, void *clientData)
 	}
 }
 
-static void textEditedObserver(void *observerData, WMNotification * notification)
+static void textEditedObserver(void *observerData, WMNotification *notification)
 {
 	InspectorPanel *panel = (InspectorPanel *) observerData;
 
@@ -979,7 +978,7 @@ static void textEditedObserver(void *observerData, WMNotification * notification
 	 */
 }
 
-static void selectSpecification(WMWidget * bPtr, void *data)
+static void selectSpecification(WMWidget *bPtr, void *data)
 {
 	InspectorPanel *panel = (InspectorPanel *) data;
 	char *str;
@@ -1004,7 +1003,7 @@ static void selectSpecification(WMWidget * bPtr, void *data)
 	wfree(str);
 }
 
-static void selectWindow(WMWidget * bPtr, void *data)
+static void selectWindow(WMWidget *bPtr, void *data)
 {
 	InspectorPanel *panel = (InspectorPanel *) data;
 	WWindow *wwin = panel->inspected;
@@ -1038,7 +1037,7 @@ static void selectWindow(WMWidget * bPtr, void *data)
 	}
 }
 
-static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int ypos, Bool showSelectPanel)
+static InspectorPanel *createInspectorForWindow(WWindow *wwin, int xpos, int ypos, Bool showSelectPanel)
 {
 	WScreen *scr = wwin->screen_ptr;
 	InspectorPanel *panel;
@@ -1180,7 +1179,7 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 
 	WMSetLabelTextAlignment(panel->specLbl, WALeft);
 
-    /**** attributes ****/
+	/**** attributes ****/
 	panel->attrFrm = WMCreateFrame(panel->win);
 	WMSetFrameTitle(panel->attrFrm, _("Attributes"));
 	WMMoveWidget(panel->attrFrm, 15, 45);
@@ -1262,7 +1261,7 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 		WMSetBalloonTextForView(descr, WMWidgetView(panel->attrChk[i]));
 	}
 
-    /**** more attributes ****/
+	/**** more attributes ****/
 	panel->moreFrm = WMCreateFrame(panel->win);
 	WMSetFrameTitle(panel->moreFrm, _("Advanced"));
 	WMMoveWidget(panel->moreFrm, 15, 45);
@@ -1414,16 +1413,15 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 	WMMoveWidget(panel->wsP, 20, 30);
 	WMResizeWidget(panel->wsP, PWIDTH - (2 * 15) - (2 * 20), 20);
 	WMAddPopUpButtonItem(panel->wsP, _("Nowhere in particular"));
-	for (i = 0; i < wwin->screen_ptr->workspace_count; i++) {
+
+	for (i = 0; i < wwin->screen_ptr->workspace_count; i++)
 		WMAddPopUpButtonItem(panel->wsP, scr->workspaces[i]->name);
-	}
 
 	i = wDefaultGetStartWorkspace(wwin->screen_ptr, wwin->wm_instance, wwin->wm_class);
-	if (i >= 0 && i <= wwin->screen_ptr->workspace_count) {
+	if (i >= 0 && i <= wwin->screen_ptr->workspace_count)
 		WMSetPopUpButtonSelectedItem(panel->wsP, i + 1);
-	} else {
+	else
 		WMSetPopUpButtonSelectedItem(panel->wsP, 0);
-	}
 
 	/* application wide attributes */
 	if (wwin->main_window != None) {
@@ -1465,7 +1463,6 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 			WMResizeWidget(panel->appChk[i], 205, 20);
 			WMSetButtonSelected(panel->appChk[i], flag);
 			WMSetButtonText(panel->appChk[i], caption);
-
 			WMSetBalloonTextForView(descr, WMWidgetView(panel->appChk[i]));
 		}
 
@@ -1566,7 +1563,7 @@ static InspectorPanel *createInspectorForWindow(WWindow * wwin, int xpos, int yp
 	return panel;
 }
 
-void wShowInspectorForWindow(WWindow * wwin)
+void wShowInspectorForWindow(WWindow *wwin)
 {
 	if (wwin->flags.inspector_open)
 		return;
@@ -1578,7 +1575,7 @@ void wShowInspectorForWindow(WWindow * wwin)
 	wwin->inspector = createInspectorForWindow(wwin, UNDEFINED_POS, UNDEFINED_POS, False);
 }
 
-void wHideInspectorForWindow(WWindow * wwin)
+void wHideInspectorForWindow(WWindow *wwin)
 {
 	WWindow *pwin = wwin->inspector->frame;
 
@@ -1588,7 +1585,7 @@ void wHideInspectorForWindow(WWindow * wwin)
 	wClientSetState(pwin, IconicState, None);
 }
 
-void wUnhideInspectorForWindow(WWindow * wwin)
+void wUnhideInspectorForWindow(WWindow *wwin)
 {
 	WWindow *pwin = wwin->inspector->frame;
 
@@ -1599,7 +1596,7 @@ void wUnhideInspectorForWindow(WWindow * wwin)
 	wClientSetState(pwin, NormalState, None);
 }
 
-WWindow *wGetWindowOfInspectorForWindow(WWindow * wwin)
+WWindow *wGetWindowOfInspectorForWindow(WWindow *wwin)
 {
 	if (wwin->inspector) {
 		assert(wwin->flags.inspector_open != 0);
@@ -1609,7 +1606,7 @@ WWindow *wGetWindowOfInspectorForWindow(WWindow * wwin)
 		return NULL;
 }
 
-void wCloseInspectorForWindow(WWindow * wwin)
+void wCloseInspectorForWindow(WWindow *wwin)
 {
 	WWindow *pwin = wwin->inspector->frame;	/* the inspector window */
 
