@@ -969,22 +969,12 @@ void wDefaultsCheckDomains(void* arg)
 				for (i = 0; i < wScreenCount; i++) {
 					scr = wScreenWithNumber(i);
 					if (scr) {
-						RImage *image;
-
 						wDefaultUpdateIcons(scr);
 
 						/* Update the panel image if changed */
 						/* Don't worry. If the image is the same these
 						 * functions will have no performance impact. */
-						image = wDefaultGetImage(scr, "Logo", "WMPanel", wPreferences.icon_size);
-
-						if (!image) {
-							wwarning(_("could not load logo image for panels: %s"),
-								 RMessageForError(RErrorCode));
-						} else {
-							WMSetApplicationIconImage(scr->wmscreen, image);
-							RReleaseImage(image);
-						}
+						create_logo_image(scr);
 					}
 				}
 			}

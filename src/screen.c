@@ -359,7 +359,6 @@ static void allocGCs(WScreen * scr)
 static void createPixmaps(WScreen * scr)
 {
 	WPixmap *pix;
-	RImage *image;
 
 	/* load pixmaps */
 	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_RADIO_INDICATOR_XBM_DATA,
@@ -402,7 +401,17 @@ static void createPixmaps(WScreen * scr)
 		pix->shared = 1;
 	scr->menu_shade_indicator = pix;
 
-	image = wDefaultGetImage(scr, "Logo", "WMPanel", wPreferences.icon_size);
+	create_logo_image(scr);
+
+	scr->dock_dots = make3Dots(scr);
+
+	/* titlebar button pixmaps */
+	allocButtonPixmaps(scr);
+}
+
+void create_logo_image(WScreen *scr)
+{
+	RImage *image = wDefaultGetImage(scr, "Logo", "WMPanel", wPreferences.icon_size);
 
 	if (!image) {
 		wwarning(_("could not load logo image for panels: %s"), RMessageForError(RErrorCode));
@@ -410,11 +419,6 @@ static void createPixmaps(WScreen * scr)
 		WMSetApplicationIconImage(scr->wmscreen, image);
 		RReleaseImage(image);
 	}
-
-	scr->dock_dots = make3Dots(scr);
-
-	/* titlebar button pixmaps */
-	allocButtonPixmaps(scr);
 }
 
 /*
