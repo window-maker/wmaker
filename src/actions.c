@@ -45,6 +45,7 @@
 #include "winspector.h"
 #include "workspace.h"
 #include "xinerama.h"
+#include "usermenu.h"
 
 /****** Global Variables ******/
 
