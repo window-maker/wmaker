@@ -175,9 +175,18 @@ applyImage(RContext * rc, BackgroundTexture * texture, RImage * image, char type
 	switch (toupper(type)) {
 	case 'S':
 	case 'M':
+	case 'F':
 		if (toupper(type) == 'S') {
 			w = width;
 			h = height;
+		} else if(toupper(type) == 'F') {
+			if (image->width * height > image->height * width) {
+				w = (height * image->width) / image->height;
+				h = height;
+			} else {
+				w = width;
+				h = (width * image->height) / image->width;
+			}
 		} else {
 			if (image->width * height > image->height * width) {
 				w = width;
@@ -465,7 +474,7 @@ BackgroundTexture *parseTexture(RContext * rc, char *text)
 
 		texture->pixmap = pixmap;
 	} else if (strcasecmp(type, "cpixmap") == 0
-		   || strcasecmp(type, "spixmap") == 0
+		   || strcasecmp(type, "spixmap") == 0 || strcasecmp(type, "fpixmap") == 0
 		   || strcasecmp(type, "mpixmap") == 0 || strcasecmp(type, "tpixmap") == 0) {
 		XColor color;
 		Pixmap pixmap = None;
@@ -528,6 +537,7 @@ BackgroundTexture *parseTexture(RContext * rc, char *text)
 		case 'S':
 		case 'M':
 		case 'C':
+		case 'F':
 			{
 				Pixmap tpixmap =
 				    XCreatePixmap(dpy, root, scrWidth, scrHeight, DefaultDepth(dpy, scr));
@@ -1136,6 +1146,7 @@ void print_help()
 	puts(" -e, --center                     center image");
 	puts(" -s, --scale                      scale  image (default)");
 	puts(" -a, --maxscale                   scale  image and keep aspect ratio");
+	puts(" -f, --fillscale                  scale  image to fill screen and keep aspect ratio");
 	puts(" -u, --update-wmaker              update WindowMaker domain database");
 	puts(" -D, --update-domain <domain>     update <domain> database");
 	puts(" -c, --colors <cpc>               colors per channel to use");
@@ -1227,6 +1238,8 @@ int main(int argc, char **argv)
 			style = "cpixmap";
 		} else if (strcmp(argv[i], "-a") == 0 || strcmp(argv[i], "--maxscale") == 0) {
 			style = "mpixmap";
+		} else if (strcmp(argv[i], "-f") == 0 || strcmp(argv[i], "--fillscale") == 0) {
+			style = "fpixmap";
 		} else if (strcmp(argv[i], "-d") == 0 || strcmp(argv[i], "--dither") == 0) {
 			render_mode = RDitheredRendering;
 			obey_user++;
