@@ -114,25 +114,8 @@ void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_cla
 	WMPropList *adict, *key, *iconk;
 	WMPropList *val;
 	char *tmp;
-	int i;
 
-	i = 0;
-	if (wm_instance)
-		i += strlen(wm_instance);
-	if (wm_class)
-		i += strlen(wm_class);
-
-	tmp = wmalloc(i + 8);
-	*tmp = 0;
-	if (wm_class && wm_instance) {
-		sprintf(tmp, "%s.%s", wm_instance, wm_class);
-	} else {
-		if (wm_instance)
-			strcat(tmp, wm_instance);
-		if (wm_class)
-			strcat(tmp, wm_class);
-	}
-
+	tmp = get_name_for_instance_class(wm_instance, wm_class);
 	key = WMCreatePLString(tmp);
 	wfree(tmp);
 
