@@ -398,23 +398,28 @@ Bool wIconChangeImageFile(WIcon * icon, char *file)
 	return !error;
 }
 
-char *get_name_for_icon(WWindow *wwin)
+static char *get_name_for_wwin(WWindow *wwin)
+{
+	return get_name_for_instance_class(wwin->wm_instance, wwin->wm_class);
+}
+
+char *get_name_for_instance_class(char *wm_instance, char *wm_class)
 {
 	char *suffix;
 	int len;
 
-	if (wwin->wm_class && wwin->wm_instance) {
-		len = strlen(wwin->wm_class) + strlen(wwin->wm_instance) + 2;
+	if (wm_class && wm_instance) {
+		len = strlen(wm_class) + strlen(wm_instance) + 2;
 		suffix = wmalloc(len);
-		snprintf(suffix, len, "%s.%s", wwin->wm_instance, wwin->wm_class);
-	} else if (wwin->wm_class) {
-		len = strlen(wwin->wm_class) + 1;
+		snprintf(suffix, len, "%s.%s", wm_instance, wm_class);
+	} else if (wm_class) {
+		len = strlen(wm_class) + 1;
 		suffix = wmalloc(len);
-		snprintf(suffix, len, "%s", wwin->wm_class);
-	} else if (wwin->wm_instance) {
-		len = strlen(wwin->wm_instance) + 1;
+		snprintf(suffix, len, "%s", wm_class);
+	} else if (wm_instance) {
+		len = strlen(wm_instance) + 1;
 		suffix = wmalloc(len);
-		snprintf(suffix, len, "%s", wwin->wm_instance);
+		snprintf(suffix, len, "%s", wm_instance);
 	} else {
 		return NULL;
 	}
@@ -485,7 +490,7 @@ char *wIconStore(WIcon * icon)
 	if (!dir_path)
 		return NULL;
 
-	file = get_name_for_icon(wwin);
+	file = get_name_for_wwin(wwin);
 	if (!file) {
 		wfree(dir_path);
 		return NULL;
