@@ -803,7 +803,6 @@ WDDomain *wDefaultsInitDomain(char *domain, Bool requireDictionary)
 	WDDomain *db;
 	struct stat stbuf;
 	static int inited = 0;
-	char path[PATH_MAX];
 	char *the_path;
 	WMPropList *shared_dict = NULL;
 
@@ -832,32 +831,19 @@ WDDomain *wDefaultsInitDomain(char *domain, Bool requireDictionary)
 	}
 
 	/* global system dictionary */
-	snprintf(path, sizeof(path), "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domain);
-	if (stat(path, &stbuf) >= 0) {
-		shared_dict = WMReadPropListFromFile(path);
-		if (shared_dict) {
-			if (requireDictionary && !WMIsPLDictionary(shared_dict)) {
-				wwarning(_("Domain %s (%s) of global defaults database is corrupted!"),
-					 domain, path);
-				WMReleasePropList(shared_dict);
-				shared_dict = NULL;
-			} else {
-				if (db->dictionary && WMIsPLDictionary(shared_dict) &&
-				    WMIsPLDictionary(db->dictionary)) {
-					WMMergePLDictionaries(shared_dict, db->dictionary, True);
-					WMReleasePropList(db->dictionary);
-					db->dictionary = shared_dict;
-					if (stbuf.st_mtime > db->timestamp)
-						db->timestamp = stbuf.st_mtime;
-				} else if (!db->dictionary) {
-					db->dictionary = shared_dict;
-					if (stbuf.st_mtime > db->timestamp)
-						db->timestamp = stbuf.st_mtime;
-				}
-			}
-		} else {
-			wwarning(_("could not load domain %s from global defaults database (%s)"), domain, path);
-		}
+	shared_dict = readGlobalDomain(domain, requireDictionary);
+
+	if (shared_dict && db->dictionary && WMIsPLDictionary(shared_dict) &&
+	    WMIsPLDictionary(db->dictionary)) {
+		WMMergePLDictionaries(shared_dict, db->dictionary, True);
+		WMReleasePropList(db->dictionary);
+		db->dictionary = shared_dict;
+		if (stbuf.st_mtime > db->timestamp)
+			db->timestamp = stbuf.st_mtime;
+	} else if (!db->dictionary) {
+		db->dictionary = shared_dict;
+		if (stbuf.st_mtime > db->timestamp)
+			db->timestamp = stbuf.st_mtime;
 	}
 
 	return db;
