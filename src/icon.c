@@ -49,6 +49,7 @@
 extern WPreferences wPreferences;
 
 #define MOD_MASK wPreferences.modifier_mask
+#define CACHE_ICON_PATH "/Library/WindowMaker/CachedPixmaps"
 
 extern Cursor wCursor[WCUR_LAST];
 
@@ -397,7 +398,7 @@ Bool wIconChangeImageFile(WIcon * icon, char *file)
 	return !error;
 }
 
-static char *getnameforicon(WWindow * wwin)
+static char *get_name_for_icon(WWindow * wwin)
 {
 	char *prefix, *suffix;
 	char *path;
@@ -450,6 +451,46 @@ static char *getnameforicon(WWindow * wwin)
 	return path;
 }
 
+static char *get_icon_cache_path(void)
+{
+	char *prefix, *path;
+	int len, ret;
+
+	prefix = wusergnusteppath();
+	len = strlen(prefix) + strlen(CACHE_ICON_PATH) + 2;
+	path = wmalloc(len);
+	snprintf(path, len, "%s%s/", prefix, CACHE_ICON_PATH);
+
+	/* If the folder exists, exit */
+	if (access(path, F_OK) == 0)
+		return path;
+
+	/* Create the folder */
+	ret = wmkdirhier((const char *) path);
+
+	/* Exit 1 on success, 0 on failure */
+	if (ret == 1)
+		return path;
+
+	/* Fail */
+	wfree(path);
+	return NULL;
+}
+
+static RImage *get_wwindow_image_from_wmhints(WWindow *wwin, WIcon *icon)
+{
+	RImage *image = NULL;
+	XWMHints *hints = wwin->wm_hints;
+
+	if (hints && (hints->flags & IconPixmapHint) && hints->icon_pixmap != None)
+		image = RCreateImageFromDrawable(icon->core->screen_ptr->rcontext,
+						 hints->icon_pixmap,
+						 (hints->flags & IconMaskHint)
+						 ? hints->icon_mask : None);
+
+	return image;
+}
+
 /*
  * wIconStore--
  * 	Stores the client supplied icon at ~/GNUstep/Library/WindowMaker/CachedPixmaps
@@ -468,7 +509,7 @@ char *wIconStore(WIcon * icon)
 	if (!wwin)
 		return NULL;
 
-	path = getnameforicon(wwin);
+	path = get_name_for_icon(wwin);
 	if (!path)
 		return NULL;
 
@@ -476,14 +517,10 @@ char *wIconStore(WIcon * icon)
 	if (access(path, F_OK) == 0)
                 return path;
 
-	if (wwin->net_icon_image) {
+	if (wwin->net_icon_image)
 		image = RRetainImage(wwin->net_icon_image);
-	} else if (wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)
-	    && wwin->wm_hints->icon_pixmap != None) {
-		image = RCreateImageFromDrawable(icon->core->screen_ptr->rcontext,
-						 wwin->wm_hints->icon_pixmap, (wwin->wm_hints->flags & IconMaskHint)
-						 ? wwin->wm_hints->icon_mask : None);
-	}
+	else
+		image = get_wwindow_image_from_wmhints(wwin, icon);
 
 	if (!image) {
 		wfree(path);
