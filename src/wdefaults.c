@@ -42,6 +42,10 @@
 #include "defaults.h"
 #include "icon.h"
 
+#define APPLY_VAL(value, flag, attrib)	\
+    if (value) {attr->flag = getBool(attrib, value); \
+    if (mask) mask->flag = 1;}
+
 /* Global stuff */
 extern WPreferences wPreferences;
 extern WDDomain *WDWindowAttributes;
@@ -125,6 +129,7 @@ static void init_wdefaults(WScreen * scr)
 	No = WMCreatePLString("No");
 }
 
+/* Returns the correct WMPropList, using instance+class or instance, or class, or default */
 static WMPropList *get_value(WMPropList * dict_win, WMPropList * dict_class, WMPropList * dict_name,
 			     WMPropList * dict_any, WMPropList * option, WMPropList * default_value,
 			     Bool useGlobalDefault)
@@ -161,6 +166,28 @@ static WMPropList *get_value(WMPropList * dict_win, WMPropList * dict_class, WMP
 	return default_value;
 }
 
+static WMPropList *get_value_from_instanceclass(char *value)
+{
+	WMPropList *key, *val = NULL;
+
+	if (!value)
+		return NULL;
+
+	key = WMCreatePLString(value);
+
+	WMPLSetCaseSensitive(True);
+
+	if (WDWindowAttributes->dictionary)
+		val = key ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key) : NULL;
+
+	if (key)
+		WMReleasePropList(key);
+
+	WMPLSetCaseSensitive(False);
+
+	return val;
+}
+
 /*
  *----------------------------------------------------------------------
  * wDefaultFillAttributes--
@@ -176,58 +203,27 @@ void
 wDefaultFillAttributes(WScreen * scr, char *instance, char *class,
 		       WWindowAttributes * attr, WWindowAttributes * mask, Bool useGlobalDefault)
 {
-	WMPropList *value, *key1, *key2, *key3, *dw, *dc, *dn, *da;
+	WMPropList *value, *dw, *dc, *dn, *da;
+	char *buffer;
 
-	if (class && instance) {
-		char *buffer;
-
-		buffer = wmalloc(strlen(class) + strlen(instance) + 2);
-		sprintf(buffer, "%s.%s", instance, class);
-		key1 = WMCreatePLString(buffer);
-		wfree(buffer);
-	} else {
-		key1 = NULL;
-	}
-
-	if (instance)
-		key2 = WMCreatePLString(instance);
-	else
-		key2 = NULL;
-
-	if (class)
-		key3 = WMCreatePLString(class);
-	else
-		key3 = NULL;
+	dw = dc = dn = da = NULL;
 
 	if (!ANoTitlebar)
 		init_wdefaults(scr);
 
+	if (class && instance) {
+		buffer = StrConcatDot(instance, class);
+		dw = get_value_from_instanceclass(buffer);
+		wfree(buffer);
+	}
+
+	dn = get_value_from_instanceclass(instance);
+	dc = get_value_from_instanceclass(class);
+
 	WMPLSetCaseSensitive(True);
 
-	if (WDWindowAttributes->dictionary) {
-		dw = key1 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key1) : NULL;
-		dn = key2 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key2) : NULL;
-		dc = key3 ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key3) : NULL;
-		if (useGlobalDefault)
-			da = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
-		else
-			da = NULL;
-	} else {
-		dw = NULL;
-		dn = NULL;
-		dc = NULL;
-		da = NULL;
-	}
-	if (key1)
-		WMReleasePropList(key1);
-	if (key2)
-		WMReleasePropList(key2);
-	if (key3)
-		WMReleasePropList(key3);
-
-#define APPLY_VAL(value, flag, attrib)	\
-    if (value) {attr->flag = getBool(attrib, value); \
-    if (mask) mask->flag = 1;}
+	if ((WDWindowAttributes->dictionary) && (useGlobalDefault))
+		da = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
 
 	/* get the data */
 	value = get_value(dw, dc, dn, da, ANoTitlebar, No, useGlobalDefault);
@@ -477,8 +473,8 @@ void wDefaultChangeIcon(WScreen * scr, char *instance, char *class, char *file)
 
 	if (instance && class) {
 		char *buffer;
-		buffer = wmalloc(strlen(instance) + strlen(class) + 2);
-		sprintf(buffer, "%s.%s", instance, class);
+
+		buffer = StrConcatDot(instance, class);
 		key = WMCreatePLString(buffer);
 		wfree(buffer);
 	} else if (instance) {
