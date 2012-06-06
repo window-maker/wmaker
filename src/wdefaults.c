@@ -317,7 +317,7 @@ wDefaultFillAttributes(WScreen * scr, char *instance, char *class,
 	WMPLSetCaseSensitive(False);
 }
 
-static WMPropList *get_generic_value(WScreen *scr, char *instance, char *class,
+static WMPropList *get_generic_value(char *instance, char *class,
 				     WMPropList *option, Bool noDefault)
 {
 	WMPropList *value, *key, *dict;
@@ -378,28 +378,6 @@ static WMPropList *get_generic_value(WScreen *scr, char *instance, char *class,
 	return value;
 }
 
-/* Get the name of the Icon File. If noDefault is False, then, default value included */
-char *wDefaultGetIconFile(WScreen * scr, char *instance, char *class, Bool noDefault)
-{
-	WMPropList *value;
-	char *tmp;
-
-	if (!ANoTitlebar)
-		init_wdefaults(scr);
-
-	if (!WDWindowAttributes->dictionary)
-		return NULL;
-
-	value = get_generic_value(scr, instance, class, AIcon, noDefault);
-
-	if (!value)
-		return NULL;
-
-	tmp = getString(AIcon, value);
-
-	return tmp;
-}
-
 RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_size)
 {
 	char *file_name;
@@ -442,7 +420,7 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 	if (!WDWindowAttributes->dictionary)
 		return -1;
 
-	value = get_generic_value(scr, instance, class, AStartWorkspace, False);
+	value = get_generic_value(instance, class, AStartWorkspace, False);
 
 	if (!value)
 		return -1;
@@ -456,6 +434,28 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 	w = wGetWorkspaceNumber(scr, tmp);
 
 	return w;
+}
+
+/* Get the name of the Icon File. If noDefault is False, then, default value included */
+char *wDefaultGetIconFile(WScreen *scr, char *instance, char *class, Bool noDefault)
+{
+	WMPropList *value;
+	char *tmp;
+
+	if (!ANoTitlebar)
+		init_wdefaults(scr);
+
+	if (!WDWindowAttributes->dictionary)
+		return NULL;
+
+	value = get_generic_value(instance, class, AIcon, noDefault);
+
+	if (!value)
+		return NULL;
+
+	tmp = getString(AIcon, value);
+
+	return tmp;
 }
 
 void wDefaultChangeIcon(WScreen * scr, char *instance, char *class, char *file)
