@@ -398,57 +398,28 @@ Bool wIconChangeImageFile(WIcon * icon, char *file)
 	return !error;
 }
 
-static char *get_name_for_icon(WWindow * wwin)
+char *get_name_for_icon(WWindow *wwin)
 {
-	char *prefix, *suffix;
-	char *path;
+	char *suffix;
 	int len;
 
 	if (wwin->wm_class && wwin->wm_instance) {
-		int len = strlen(wwin->wm_class) + strlen(wwin->wm_instance) + 2;
+		len = strlen(wwin->wm_class) + strlen(wwin->wm_instance) + 2;
 		suffix = wmalloc(len);
 		snprintf(suffix, len, "%s.%s", wwin->wm_instance, wwin->wm_class);
 	} else if (wwin->wm_class) {
-		int len = strlen(wwin->wm_class) + 1;
+		len = strlen(wwin->wm_class) + 1;
 		suffix = wmalloc(len);
 		snprintf(suffix, len, "%s", wwin->wm_class);
 	} else if (wwin->wm_instance) {
-		int len = strlen(wwin->wm_instance) + 1;
+		len = strlen(wwin->wm_instance) + 1;
 		suffix = wmalloc(len);
 		snprintf(suffix, len, "%s", wwin->wm_instance);
 	} else {
 		return NULL;
 	}
 
-	prefix = wusergnusteppath();
-	len = strlen(prefix) + 64 + strlen(suffix);
-	path = wmalloc(len + 1);
-	snprintf(path, len, "%s/Library/WindowMaker", prefix);
-
-	if (access(path, F_OK) != 0) {
-		if (mkdir(path, S_IRUSR | S_IWUSR | S_IXUSR)) {
-			werror(_("could not create directory %s"), path);
-			wfree(path);
-			wfree(suffix);
-			return NULL;
-		}
-	}
-	strcat(path, "/CachedPixmaps");
-	if (access(path, F_OK) != 0) {
-		if (mkdir(path, S_IRUSR | S_IWUSR | S_IXUSR) != 0) {
-			werror(_("could not create directory %s"), path);
-			wfree(path);
-			wfree(suffix);
-			return NULL;
-		}
-	}
-
-	strcat(path, "/");
-	strcat(path, suffix);
-	strcat(path, ".xpm");
-	wfree(suffix);
-
-	return path;
+	return suffix;
 }
 
 static char *get_icon_cache_path(void)
@@ -502,20 +473,33 @@ static RImage *get_wwindow_image_from_wmhints(WWindow *wwin, WIcon *icon)
  */
 char *wIconStore(WIcon * icon)
 {
-	char *path;
+	char *path, *dir_path, *file;
+	int len = 0;
 	RImage *image = NULL;
 	WWindow *wwin = icon->owner;
 
 	if (!wwin)
 		return NULL;
 
-	path = get_name_for_icon(wwin);
-	if (!path)
+	dir_path = get_icon_cache_path();
+	if (!dir_path)
 		return NULL;
+
+	file = get_name_for_icon(wwin);
+	if (!file) {
+		wfree(dir_path);
+		return NULL;
+	}
+
+	len = strlen(dir_path) + strlen(file) + 5;
+	path = wmalloc(len);
+	snprintf(path, len, "%s%s.xpm", dir_path, file);
+	wfree(dir_path);
+	wfree(file);
 
 	/* If icon exists, exit */
 	if (access(path, F_OK) == 0)
-                return path;
+		return path;
 
 	if (wwin->net_icon_image)
 		image = RRetainImage(wwin->net_icon_image);
