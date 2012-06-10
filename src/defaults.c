@@ -204,6 +204,7 @@ static WOptionEnumeration sePlacements[] = {
 	{"Cascade", WPM_CASCADE, 0},
 	{"Random", WPM_RANDOM, 0},
 	{"Manual", WPM_MANUAL, 0},
+	{"Center", WPM_CENTER, 0},
 	{NULL, 0, 0}
 };
 

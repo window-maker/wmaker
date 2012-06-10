@@ -153,6 +153,7 @@ typedef enum {
 #define WPM_SMART	2
 #define WPM_RANDOM	3
 #define WPM_AUTO        4
+#define WPM_CENTER      5
 
 /* text justification */
 #define WTJ_CENTER	0

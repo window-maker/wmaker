@@ -82,7 +82,8 @@ static char *placements[] = {
 	"random",
 	"manual",
 	"cascade",
-	"smart"
+	"smart",
+	"center"
 };
 
 static void sliderCallback(WMWidget * w, void *data)
@@ -151,6 +152,8 @@ static int getPlacement(char *str)
 		return 3;
 	else if (strcasecmp(str, "smart") == 0)
 		return 4;
+	else if (strcasecmp(str, "center") == 0)
+		return 5;
 	else
 		wwarning(_("bad option value %s in WindowPlacement. Using default value"), str);
 	return 0;
@@ -266,6 +269,7 @@ static void createPanel(Panel * p)
 	WMAddPopUpButtonItem(panel->placP, _("Manual"));
 	WMAddPopUpButtonItem(panel->placP, _("Cascade"));
 	WMAddPopUpButtonItem(panel->placP, _("Smart"));
+	WMAddPopUpButtonItem(panel->placP, _("Center"));
 
 	panel->porigL = WMCreateLabel(panel->placF);
 	WMResizeWidget(panel->porigL, 120, 32);
