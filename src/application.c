@@ -151,10 +151,6 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	/* Save the app_icon in a file */
 	save_app_icon(wapp);
 
-	/* Now, paint the icon */
-	if (!WFLAGP(wapp->main_window_desc, no_appicon))
-		paint_app_icon(wapp);
-
 	return wapp;
 }
 

@@ -69,7 +69,6 @@ typedef struct WAppIcon {
 	unsigned int lock:1;		 /* do not allow to be destroyed */
 } WAppIcon;
 
-WAppIcon *wAppIconCreate(WWindow *leader_win);
 WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
 				char *wm_class, int tile);
 

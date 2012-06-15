@@ -67,6 +67,7 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event);
 static void iconDblClick(WObjDescriptor * desc, XEvent * event);
 static void iconExpose(WObjDescriptor * desc, XEvent * event);
 static void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_class);
+static WAppIcon *wAppIconCreate(WWindow * leader_win);
 
 /* This function is used if the application is a .app. It checks if it has an icon in it
  * like for example /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
@@ -161,13 +162,12 @@ void makeAppIconFor(WApplication * wapp)
 	if (wapp->app_icon)
 		return;
 
-	if (!WFLAGP(wapp->main_window_desc, no_appicon))
-		wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
-	else
-		wapp->app_icon = NULL;
+	/* Create the icon */
+	wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
 
 	/* Now, paint the icon */
-	paint_app_icon(wapp);
+	if (!WFLAGP(wapp->main_window_desc, no_appicon))
+		paint_app_icon(wapp);
 }
 
 void paint_app_icon(WApplication *wapp)
@@ -236,7 +236,7 @@ void removeAppIconFor(WApplication * wapp)
 		wArrangeIcons(wapp->main_window_desc->screen_ptr, True);
 }
 
-WAppIcon *wAppIconCreate(WWindow * leader_win)
+static WAppIcon *wAppIconCreate(WWindow * leader_win)
 {
 	WAppIcon *aicon;
 	WScreen *scr = leader_win->screen_ptr;
@@ -991,6 +991,6 @@ void app_icon_create_from_docks(WWindow *wwin, WApplication *wapp, Window main_w
 		wAppIconPaint(wapp->app_icon);
 		wAppIconSave(wapp->app_icon);
 	} else {
-		wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
+		makeAppIconFor(wapp);
 	}
 }
