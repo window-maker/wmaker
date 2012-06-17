@@ -872,7 +872,7 @@ extern char *WMUserDefaultsDidChangeNotification;
 typedef struct w_menu_parser *WMenuParser;
 
 
-WMenuParser WMenuParserCreate(const char *file_name, void *file);
+WMenuParser WMenuParserCreate(const char *file_name, void *file, const char *include_default_paths);
 
 void WMenuParserError(WMenuParser parser, const char *msg, ...)
 	__attribute__ ((format (printf, 2, 3)));

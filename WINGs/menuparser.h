@@ -28,8 +28,12 @@
  */
 
 #define MAXLINE              1024
+#define MAX_NESTED_INCLUDES  16  // To avoid infinite includes case
 
 struct w_menu_parser {
+	WMenuParser include_file;
+	WMenuParser parent_file;
+	const char *include_default_paths;
 	const char *file_name;
 	FILE *file_handle;
 	int line_number;

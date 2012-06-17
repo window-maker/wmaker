@@ -969,7 +969,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 			return NULL;
 		}
 	}
-	parser = WMenuParserCreate(file_name, file);
+	parser = WMenuParserCreate(file_name, file, DEF_CONFIG_PATHS);
 
 	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
@@ -1060,7 +1060,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 			return NULL;
 		}
 	}
-	parser = WMenuParserCreate(flat_file, file);
+	parser = WMenuParserCreate(flat_file, file, DEF_CONFIG_PATHS);
 
 	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
