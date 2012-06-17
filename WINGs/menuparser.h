@@ -37,4 +37,6 @@ struct w_menu_parser {
 	char line_buffer[MAXLINE];
 };
 
+Bool menu_parser_skip_spaces_and_comments(WMenuParser parser);
+
 #endif /* _MENUPARSER_H_INCLUDED */

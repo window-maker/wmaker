@@ -1,7 +1,7 @@
 /*
  *  Window Maker window manager
  *
- *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 2012 Christophe Curis
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -21,6 +21,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 #include <stdarg.h>
 
 #include <WINGs/WUtil.h>
@@ -28,7 +29,7 @@
 #include "menuparser.h"
 
 static WMenuParser menu_parser_create_new(const char *file_name, void *file);
-static void separateline(char *line, char **title, char **command, char **parameter, char **shortcut);
+static char *menu_parser_isolate_token(WMenuParser parser);
 
 
 /***** Constructor and Destructor for the Menu Parser object *****/
@@ -75,104 +76,186 @@ void WMenuParserError(WMenuParser parser, const char *msg, ...)
 }
 
 /***** Read one line from file and split content *****/
+/* The function returns False when the end of file is reached */
 Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, char **parameter, char **shortcut)
 {
 	WMenuParser cur_parser;
-	char *line = NULL, *result = NULL;
-	size_t len;
-	int done;
+	enum { GET_TITLE, GET_COMMAND, GET_PARAMETERS, GET_SHORTCUT } scanmode;
+	char *token;
+	char  lineparam[MAXLINE];
+	char *params = NULL;
 
+	lineparam[0] = '\0';
 	*title = NULL;
 	*command = NULL;
 	*parameter = NULL;
 	*shortcut = NULL;
+	scanmode = GET_TITLE;
 
 	cur_parser = top_parser;
 
-again:
-	done = 0;
-	while (!done && fgets(cur_parser->line_buffer, sizeof(cur_parser->line_buffer), cur_parser->file_handle) != NULL) {
-		line = wtrimspace(cur_parser->line_buffer);
-		len = strlen(line);
-		cur_parser->line_number++;
+ read_next_line:
+	if (fgets(cur_parser->line_buffer, sizeof(cur_parser->line_buffer), cur_parser->file_handle) == NULL) {
+		return False;
+	}
+	cur_parser->line_number++;
+	cur_parser->rd = cur_parser->line_buffer;
 
-		/* allow line wrapping */
-		if (len > 0 && line[len - 1] == '\\') {
-			line[len - 1] = '\0';
-		} else {
-			done = 1;
+	for (;;) {
+		if (!menu_parser_skip_spaces_and_comments(cur_parser)) {
+			/* We reached the end of line */
+			if (scanmode == GET_TITLE)
+				goto read_next_line; // Empty line -> skip
+			else
+				break; // Finished reading current line -> return it to caller
 		}
 
-		if (result == NULL) {
-			result = line;
-		} else {
-			if (strlen(result) < MAXLINE) {
-				result = wstrappend(result, line);
+		/* Found a word */
+		token = menu_parser_isolate_token(cur_parser);
+		switch (scanmode) {
+		case GET_TITLE:
+			*title = token;
+			scanmode = GET_COMMAND;
+			break;
+
+		case GET_COMMAND:
+			if (strcmp(token, "SHORTCUT") == 0) {
+				scanmode = GET_SHORTCUT;
+				wfree(token);
+			} else {
+				*command = token;
+				scanmode = GET_PARAMETERS;
 			}
-			wfree(line);
+			break;
+
+		case GET_SHORTCUT:
+			if (*shortcut != NULL) {
+				WMenuParserError(top_parser, _("multiple SHORTCUT definition not valid") );
+				wfree(*shortcut);
+			}
+			*shortcut = token;
+			scanmode = GET_COMMAND;
+			break;
+
+		case GET_PARAMETERS:
+			{
+				char *src;
+
+				if (params == NULL) {
+					params = lineparam;
+				} else {
+					if ((params - lineparam) < sizeof(lineparam)-1)
+						*params++ = ' ';
+				}
+				src = token;
+				while ((params - lineparam) < sizeof(lineparam)-1)
+					if ( (*params = *src++) == '\0')
+						break;
+					else
+						params++;
+				wfree(token);
+			}
+			break;
 		}
 	}
-	if (!done || ferror(cur_parser->file_handle)) {
-		wfree(result);
-		result = NULL;
-	} else if (result != NULL && (result[0] == 0 || result[0] == '#' ||
-		   (result[0] == '/' && result[1] == '/'))) {
-		wfree(result);
-		result = NULL;
-		goto again;
-	} else if (result != NULL && strlen(result) >= MAXLINE) {
-		WMenuParserError(cur_parser, _("maximal line size exceeded in menu config") );
-		wfree(result);
-		result = NULL;
-		goto again;
+
+	if (params != NULL) {
+		lineparam[sizeof(lineparam) - 1] = '\0';
+		*parameter = wstrdup(lineparam);
 	}
 
-	if (result == NULL)
-	  return False;
-
-	separateline(line, title, command, parameter, shortcut);
-	wfree(line);
 	return True;
 }
 
-static void separateline(char *line, char **title, char **command, char **parameter, char **shortcut)
+/* Return False when there's nothing left on the line,
+   otherwise increment parser's pointer to next token */
+Bool menu_parser_skip_spaces_and_comments(WMenuParser parser)
 {
-	char *suffix, *next = line;
+	for (;;) {
+		while (isspace(*parser->rd))
+			parser->rd++;
 
-	/* get the title */
-	*title = wtokennext(line, &next);
-	if (next == NULL)
-		return;
-	line = next;
+		if (*parser->rd == '\0')
+			return False; // Found the end of current line
 
-	/* get the command or shortcut keyword */
-	*command = wtokennext(line, &next);
-	if (next == NULL)
-		return;
-	line = next;
+		else if ((parser->rd[0] == '\\') &&
+					(parser->rd[1] == '\n') &&
+					(parser->rd[2] == '\0')) {
+			// Means that the current line is expected to be continued on next line
+			if (fgets(parser->line_buffer, sizeof(parser->line_buffer), parser->file_handle) == NULL) {
+				WMenuParserError(parser, _("premature end of file while expecting a new line after '\\'") );
+				return False;
+			}
+			parser->line_number++;
+			parser->rd = parser->line_buffer;
 
-	if (*command != NULL && strcmp(*command, "SHORTCUT") == 0) {
-		/* get the shortcut */
-		*shortcut = wtokennext(line, &next);
-		if (next == NULL)
-			return;
-		line = next;
+		} else if (parser->rd[0] == '/') {
+			if (parser->rd[1] == '/') // Single line C comment
+				return False; // Won't find anything more on this line
+			if (parser->rd[1] == '*') {
+				int start_line;
 
-		/* get the command */
-		*command = wtokennext(line, &next);
-		if (next == NULL)
-			return;
-		line = next;
+				start_line = parser->line_number;
+				parser->rd += 2;
+				for (;;) {
+					/* Search end-of-comment marker */
+					while (*parser->rd != '\0') {
+						if (parser->rd[0] == '*')
+							if (parser->rd[1] == '/')
+								goto found_end_of_comment;
+						parser->rd++;
+					}
+
+					/* Marker not found -> load next line */
+					if (fgets(parser->line_buffer, sizeof(parser->line_buffer), parser->file_handle) == NULL) {
+						WMenuParserError(parser, _("reached end of file while searching '*/' for comment started at line %d"), start_line);
+						return False;
+					}
+					parser->line_number++;
+					parser->rd = parser->line_buffer;
+				}
+
+			found_end_of_comment:
+				parser->rd += 2;  // Skip closing mark
+				continue; // Because there may be spaces after the comment
+			}
+			return True; // the '/' was not a comment, treat it as user data
+		} else
+			return True; // Found some data
 	}
+}
 
-	/* get the parameters */
-	suffix = wtrimspace(line);
+/* read a token (non-spaces suite of characters)
+   the result os wmalloc's, so it needs to be free'd */
+static char *menu_parser_isolate_token(WMenuParser parser)
+{
+	char *start;
+	char *token;
 
-	/* should we keep this weird old behavior? */
-	if (suffix[0] == '"') {
-		*parameter = wtokennext(suffix, &next);
-		wfree(suffix);
-	} else {
-		*parameter = suffix;
-	}
+	start = parser->rd;
+
+	while (*parser->rd != '\0')
+		if (isspace(*parser->rd))
+			break;
+		else if ((parser->rd[0] == '/') &&
+					((parser->rd[1] == '*') || (parser->rd[1] == '/')))
+			break;
+		else if ((parser->rd[0] == '\\') && (parser->rd[1] == '\n'))
+			break;
+		else if ((*parser->rd == '"' ) || (*parser->rd == '\'')) {
+			char eot = *parser->rd++;
+			while ((*parser->rd != '\0') && (*parser->rd != '\n'))
+				if (*parser->rd++ == eot)
+					goto found_end_quote;
+			WMenuParserError(parser, _("missing closing quote or double-quote before end-of-line") );
+		found_end_quote:
+			;
+		} else
+			parser->rd++;
+
+	token = wmalloc(parser->rd - start + 1);
+	strncpy(token, start, parser->rd - start);
+	token[parser->rd - start] = '\0';
+
+	return token;
 }
