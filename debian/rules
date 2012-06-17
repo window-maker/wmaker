@@ -1,17 +1,9 @@
 #!/usr/bin/make -f
 # export DH_VERBOSE=1
-
-CFLAGS = -g -Wall -DGLOBAL_DEFAULTS_SUBDIR="\\\"GNUstep/Defaults\\\""
-
-ifneq (,$(findstring noopt,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -O0
-else
-	CFLAGS += -O2
-endif
-
-ifneq (,$(findstring debug,$(DEB_BUILD_OPTIONS)))
-	CFLAGS += -DDEBUG
-endif
+export CFLAGS = `dpkg-buildflags --get CFLAGS`
+export DEB_CFLAGS_MAINT_APPEND += -Wall -DGLOBAL_DEFAULTS_SUBDIR="\\\"GNUstep/Defaults\\\""
+export LDFLAGS = `dpkg-buildflags --get LDFLAGS`
+export CPPFLAGS = `dpkg-buildflags --get CPPFLAGS`
 
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
@@ -65,7 +57,7 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
 override_dh_auto_configure:
 	./autogen.sh
 	LINGUAS="$(LINGUAS)" ./configure $(COMMON_OPTIONS) \
-	$(WMAKER_OPTIONS) CFLAGS="$(CFLAGS)"
+	$(WMAKER_OPTIONS) $(shell dpkg-buildflags --export=configure)
 
 override_dh_installmenu:
 	dh_installmenu -a --noscripts

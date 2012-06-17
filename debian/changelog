@@ -1,3 +1,10 @@
+wmaker (0.95.3-2) unstable; urgency=low
+
+  * Hardened. debian/rules changed.
+  * DM-Upload-Allowed set.
+
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Thu, 10 Jun 2012 23:35:31 +0200
+
 wmaker (0.95.3-1) unstable; urgency=low
 
   * New upstream release 0.95.3

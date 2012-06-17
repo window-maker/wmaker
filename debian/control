@@ -3,6 +3,7 @@ Section: x11
 Priority: optional
 Maintainer: Rodolfo García Peñas (kix) <kix@kix.es>
 Standards-Version: 3.9.3
+DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 7.0.50~), automake (>= 1:1.11), gettext,
  libfontconfig1-dev, libjpeg-dev, libpng-dev, libsm-dev, libtiff4-dev,
  libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev,
