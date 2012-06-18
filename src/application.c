@@ -21,9 +21,7 @@
 #include "wconfig.h"
 
 #include <X11/Xlib.h>
-
 #include <string.h>
-#include <unistd.h>
 
 #include "WindowMaker.h"
 #include "menu.h"
@@ -35,8 +33,6 @@
 #include "application.h"
 #include "appmenu.h"
 #include "properties.h"
-#include "stacking.h"
-#include "actions.h"
 #include "workspace.h"
 #include "dock.h"
 
@@ -44,8 +40,6 @@
 
 extern XContext wAppWinContext;
 extern XContext wWinContext;
-extern WPreferences wPreferences;
-extern WDDomain *WDWindowAttributes;
 
 /******** Local variables ********/
 
@@ -107,81 +101,6 @@ static void extractIcon(WWindow * wwin)
 		wfree(progname);
 	}
 }
-
-void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_class)
-{
-	WMPropList *dict = WDWindowAttributes->dictionary;
-	WMPropList *adict, *key, *iconk;
-	WMPropList *val;
-	char *tmp;
-
-	tmp = get_name_for_instance_class(wm_instance, wm_class);
-	key = WMCreatePLString(tmp);
-	wfree(tmp);
-
-	adict = WMGetFromPLDictionary(dict, key);
-	iconk = WMCreatePLString("Icon");
-
-	if (adict) {
-		val = WMGetFromPLDictionary(adict, iconk);
-	} else {
-		/* no dictionary for app, so create one */
-		adict = WMCreatePLDictionary(NULL, NULL);
-		WMPutInPLDictionary(dict, key, adict);
-		WMReleasePropList(adict);
-		val = NULL;
-	}
-
-	if (!val) {
-		val = WMCreatePLString(iconPath);
-		WMPutInPLDictionary(adict, iconk, val);
-		WMReleasePropList(val);
-	} else {
-		val = NULL;
-	}
-
-	WMReleasePropList(key);
-	WMReleasePropList(iconk);
-
-	if (val && !wPreferences.flags.noupdates)
-		UpdateDomainFile(WDWindowAttributes);
-}
-
-/* This function is used if the application is a .app. It checks if it has an icon in it
- * like for example /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
- */
-void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance, char *wm_class)
-{
-	char *iconPath = NULL;
-	char *tmp = NULL;
-
-	if (strstr(path, ".app")) {
-		tmp = wmalloc(strlen(path) + 16);
-
-		if (scr->flags.supports_tiff) {
-			strcpy(tmp, path);
-			strcat(tmp, ".tiff");
-			if (access(tmp, R_OK) == 0)
-				iconPath = tmp;
-		}
-
-		if (!iconPath) {
-			strcpy(tmp, path);
-			strcat(tmp, ".xpm");
-			if (access(tmp, R_OK) == 0)
-				iconPath = tmp;
-		}
-
-		if (!iconPath)
-			wfree(tmp);
-
-		if (iconPath) {
-			wApplicationSaveIconPathFor(iconPath, wm_instance, wm_class);
-			wfree(iconPath);
-		}
-	}
-}
-
 static void app_icon_create_from_docks(WWindow *wwin, WApplication *wapp, Window main_window)
 {
 	WScreen *scr = wwin->screen_ptr;
@@ -381,4 +300,3 @@ void wApplicationDeactivate(WApplication *wapp)
 	}
 #endif
 }
-

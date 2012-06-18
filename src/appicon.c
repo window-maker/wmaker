@@ -26,6 +26,7 @@
 #include <X11/Xutil.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/stat.h>
 #include <errno.h>
 
@@ -58,12 +59,48 @@
 /**** Global variables ****/
 extern Cursor wCursor[WCUR_LAST];
 extern WPreferences wPreferences;
+extern WDDomain *WDWindowAttributes;
 
 #define MOD_MASK       wPreferences.modifier_mask
 
 void appIconMouseDown(WObjDescriptor * desc, XEvent * event);
 static void iconDblClick(WObjDescriptor * desc, XEvent * event);
 static void iconExpose(WObjDescriptor * desc, XEvent * event);
+
+/* This function is used if the application is a .app. It checks if it has an icon in it
+ * like for example /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
+ */
+void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance, char *wm_class)
+{
+	char *iconPath = NULL;
+	char *tmp = NULL;
+
+	if (strstr(path, ".app")) {
+		tmp = wmalloc(strlen(path) + 16);
+
+		if (scr->flags.supports_tiff) {
+			strcpy(tmp, path);
+			strcat(tmp, ".tiff");
+			if (access(tmp, R_OK) == 0)
+				iconPath = tmp;
+		}
+
+		if (!iconPath) {
+			strcpy(tmp, path);
+			strcat(tmp, ".xpm");
+			if (access(tmp, R_OK) == 0)
+				iconPath = tmp;
+		}
+
+		if (!iconPath)
+			wfree(tmp);
+
+		if (iconPath) {
+			wApplicationSaveIconPathFor(iconPath, wm_instance, wm_class);
+			wfree(iconPath);
+		}
+	}
+}
 
 WAppIcon *wAppIconCreateForDock(WScreen * scr, char *command, char *wm_instance, char *wm_class, int tile)
 {
@@ -842,6 +879,46 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 			break;
 		}
 	}
+}
+
+/* This function save the application icon and store the path in the Dictionary */
+void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_class)
+{
+	WMPropList *dict = WDWindowAttributes->dictionary;
+	WMPropList *adict, *key, *iconk;
+	WMPropList *val;
+	char *tmp;
+
+	tmp = get_name_for_instance_class(wm_instance, wm_class);
+	key = WMCreatePLString(tmp);
+	wfree(tmp);
+
+	adict = WMGetFromPLDictionary(dict, key);
+	iconk = WMCreatePLString("Icon");
+
+	if (adict) {
+		val = WMGetFromPLDictionary(adict, iconk);
+	} else {
+		/* no dictionary for app, so create one */
+		adict = WMCreatePLDictionary(NULL, NULL);
+		WMPutInPLDictionary(dict, key, adict);
+		WMReleasePropList(adict);
+		val = NULL;
+	}
+
+	if (!val) {
+		val = WMCreatePLString(iconPath);
+		WMPutInPLDictionary(adict, iconk, val);
+		WMReleasePropList(val);
+	} else {
+		val = NULL;
+	}
+
+	WMReleasePropList(key);
+	WMReleasePropList(iconk);
+
+	if (val && !wPreferences.flags.noupdates)
+		UpdateDomainFile(WDWindowAttributes);
 }
 
 void save_app_icon(WWindow *wwin, WApplication *wapp)

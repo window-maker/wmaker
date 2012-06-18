@@ -48,10 +48,6 @@ typedef struct WApplication {
 WApplication *wApplicationCreate(struct WWindow *wwin);
 WApplication *wApplicationOf(Window window);
 void wApplicationDestroy(WApplication *wapp);
-void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance,
-                                    char *wm_class);
-void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance,
-				 char *wm_class);
 
 void wAppBounce(WApplication *);
 void wAppBounceWhileUrgent(WApplication *);
