@@ -1094,9 +1094,3 @@ char *GetCommandForWindow(Window win)
 {
 	return getCommandForWindow(win, 0);
 }
-
-/* Free result when done */
-char *GetProgramNameForWindow(Window win)
-{
-	return getCommandForWindow(win, 1);
-}

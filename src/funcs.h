@@ -111,7 +111,6 @@ Bool wGetIconName(Display *dpy, Window win, char **iconname);
 
 /* Free returned string it when done. (applies to the next 2 functions) */
 char * GetCommandForWindow(Window win);
-char * GetProgramNameForWindow(Window win);
 
 Bool GetCommandForPid(int pid, char ***argv, int *argc);
 
