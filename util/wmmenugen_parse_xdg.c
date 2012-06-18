@@ -119,13 +119,11 @@ void parse_xdg(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEn
 			continue;
 
 		if (strcmp(p, "[Desktop Entry]") == 0) {
-			if (InGroup) {
-				/* if currently processing a group, we've just hit the
-				 * end of its definition, try processing it
-				 */
-				if (xdg_to_wm(&xdg, &wm)) {
-					(*addWMMenuEntryCallback)(wm);
-				}
+			/* if currently processing a group, we've just hit the
+			 * end of its definition, try processing it
+			 */
+			if (InGroup && xdg_to_wm(&xdg, &wm)) {
+				(*addWMMenuEntryCallback)(wm);
 			}
 			init_xdg_storage(&xdg);
 			init_wm_storage(&wm);
@@ -180,8 +178,10 @@ void parse_xdg(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEn
 
 	fclose(fp);
 
-	/* at the end of the file, might as well try to menuize what we have */
-	if (xdg_to_wm(&xdg, &wm))
+	/* at the end of the file, might as well try to menuize what we have
+	 * unless there was no group at all or it was marked as hidden
+	 */
+	if (InGroup && xdg_to_wm(&xdg, &wm))
 		(*addWMMenuEntryCallback)(wm);
 
 }
