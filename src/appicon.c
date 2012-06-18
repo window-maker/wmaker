@@ -396,12 +396,10 @@ void wAppIconPaint(WAppIcon * aicon)
 			       0, 0, wPreferences.icon_size, wPreferences.icon_size);
 }
 
-void wAppIconSave(WAppIcon *aicon)
+/* Internal application to save the application icon */
+static void save_app_icon_core(WAppIcon *aicon)
 {
 	char *path;
-
-	if (!aicon->docked || aicon->attracted)
-		return;
 
 	path = wIconStore(aicon->icon);
 	if (!path)
@@ -410,7 +408,16 @@ void wAppIconSave(WAppIcon *aicon)
 	wApplicationSaveIconPathFor(path, aicon->wm_instance, aicon->wm_class);
 
 	wfree(path);
-	return;
+}
+
+/* Save the application icon */
+/* This function is used when the icon doesn't have window, like dock or clip */
+void wAppIconSave(WAppIcon *aicon)
+{
+	if (!aicon->docked || aicon->attracted)
+		return;
+
+	save_app_icon_core(aicon);
 }
 
 #define canBeDocked(wwin)  ((wwin) && ((wwin)->wm_class||(wwin)->wm_instance))
