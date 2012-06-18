@@ -469,7 +469,7 @@ static RImage *get_wwindow_image_from_wmhints(WWindow *wwin, WIcon *icon)
 
 /*
  * wIconStore--
- * 	Stores the client supplied icon at ~/GNUstep/Library/WindowMaker/CachedPixmaps
+ * 	Stores the client supplied icon at CACHE_ICON_PATH
  * and returns the path for that icon. Returns NULL if there is no
  * client supplied icon or on failure.
  *
