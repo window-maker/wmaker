@@ -929,34 +929,14 @@ void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_cla
 		UpdateDomainFile(WDWindowAttributes);
 }
 
+/* Save the application icon */
+/* This function is used by normal windows */
 void save_app_icon(WWindow *wwin, WApplication *wapp)
 {
-	char *tmp, *path;
-	struct stat dummy;
-	WScreen *scr = NULL;
-
 	if (!wapp->app_icon)
 		return;
 
-	scr = wwin->screen_ptr;
-	tmp = wDefaultGetIconFile(scr, wapp->app_icon->wm_instance, wapp->app_icon->wm_class, True);
-
-	/* If the icon was saved by us from the client supplied icon, but is
-	 * missing, recreate it. */
-	if (tmp && strstr(tmp, "Library/WindowMaker/CachedPixmaps") != NULL &&
-	    stat(tmp, &dummy) != 0 && errno == ENOENT) {
-		wmessage(_("recreating missing icon '%s'"), tmp);
-		path = wIconStore(wapp->app_icon->icon);
-		if (path)
-			wfree(path);
-
-		wIconUpdate(wapp->app_icon->icon);
-		wAppIconPaint(wapp->app_icon);
-	}
-
-	/* if the displayed icon was supplied by the client, save the icon */
-	if (!tmp || strstr(tmp, "Library/WindowMaker/CachedPixmaps") != NULL)
-		wAppIconSave(wapp->app_icon);
+	save_app_icon_core(wapp->app_icon);
 }
 
 static WAppIcon *findDockIconFor(WDock *dock, Window main_window)

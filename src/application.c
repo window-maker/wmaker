@@ -77,19 +77,6 @@ WApplication *wApplicationOf(Window window)
 	return wapp;
 }
 
-static void extractIcon(WWindow * wwin)
-{
-	char *progname;
-
-	/* Get the application name */
-	progname = GetProgramNameForWindow(wwin->client_win);
-	if (progname) {
-		/* Save the icon path if the application is ".app" */
-		wApplicationExtractDirPackIcon(wwin->screen_ptr, progname, wwin->wm_instance, wwin->wm_class);
-		wfree(progname);
-	}
-}
-
 WApplication *wApplicationCreate(WWindow * wwin)
 {
 	WScreen *scr = wwin->screen_ptr;
@@ -136,8 +123,6 @@ WApplication *wApplicationCreate(WWindow * wwin)
 
 	wapp->main_window_desc->fake_group = wwin->fake_group;
 	wapp->main_window_desc->net_icon_image = RRetainImage(wwin->net_icon_image);
-
-	extractIcon(wapp->main_window_desc);
 
 	leader = wWindowFor(main_window);
 	if (leader)
