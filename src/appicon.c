@@ -975,6 +975,9 @@ void app_icon_create_from_docks(WWindow *wwin, WApplication *wapp, Window main_w
 {
 	WScreen *scr = wwin->screen_ptr;
 
+	/* Create the application icon */
+	wapp->app_icon = NULL;
+
 	if (scr->last_dock)
 		wapp->app_icon = findDockIconFor(scr->last_dock, main_window);
 
