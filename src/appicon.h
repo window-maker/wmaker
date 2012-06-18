@@ -72,7 +72,7 @@ typedef struct WAppIcon {
 WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
 				char *wm_class, int tile);
 
-void app_icon_create_from_docks(WWindow *wwin, WApplication *wapp, Window main_window);
+void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_window);
 void wAppIconDestroy(WAppIcon *aicon);
 void wAppIconPaint(WAppIcon *aicon);
 void wAppIconMove(WAppIcon *aicon, int x, int y);

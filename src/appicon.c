@@ -952,7 +952,7 @@ static WAppIcon *findDockIconFor(WDock *dock, Window main_window)
 	return aicon;
 }
 
-void app_icon_create_from_docks(WWindow *wwin, WApplication *wapp, Window main_window)
+void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_window)
 {
 	WScreen *scr = wwin->screen_ptr;
 

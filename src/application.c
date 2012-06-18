@@ -146,7 +146,7 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	/* Create the application icon using the icon from docks
 	 * If not found in docks, create a new icon
 	 * using the function wAppIconCreate() */
-	app_icon_create_from_docks(wwin, wapp, main_window);
+	create_appicon_from_dock(wwin, wapp, main_window);
 
 	/* Save the app_icon in a file */
 	save_app_icon(wapp);
