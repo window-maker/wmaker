@@ -931,7 +931,7 @@ void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_cla
 
 /* Save the application icon */
 /* This function is used by normal windows */
-void save_app_icon(WWindow *wwin, WApplication *wapp)
+void save_app_icon(WApplication *wapp)
 {
 	if (!wapp->app_icon)
 		return;
