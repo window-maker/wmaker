@@ -70,8 +70,8 @@ typedef struct WAppIcon {
 } WAppIcon;
 
 WAppIcon *wAppIconCreate(WWindow *leader_win);
-WAppIcon * wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
-				 char *wm_class, int tile);
+WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
+				char *wm_class, int tile);
 
 void wAppIconDestroy(WAppIcon *aicon);
 void wAppIconPaint(WAppIcon *aicon);
@@ -84,7 +84,5 @@ void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance,
 				 char *wm_class);
 void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance,
                                     char *wm_class);
-
-Bool wAppIconChangeImage(WAppIcon *icon, char *file);
-Bool wAppIconSave(WAppIcon *aicon);
+void wAppIconSave(WAppIcon *aicon);
 #endif

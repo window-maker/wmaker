@@ -396,20 +396,21 @@ void wAppIconPaint(WAppIcon * aicon)
 			       0, 0, wPreferences.icon_size, wPreferences.icon_size);
 }
 
-Bool wAppIconSave(WAppIcon *aicon)
+void wAppIconSave(WAppIcon *aicon)
 {
 	char *path;
 
-	if (!aicon->docked || aicon->attracted) return True;
+	if (!aicon->docked || aicon->attracted)
+		return;
 
 	path = wIconStore(aicon->icon);
 	if (!path)
-		return False;
+		return;
 
 	wApplicationSaveIconPathFor(path, aicon->wm_instance, aicon->wm_class);
 
 	wfree(path);
-	return True;
+	return;
 }
 
 #define canBeDocked(wwin)  ((wwin) && ((wwin)->wm_class||(wwin)->wm_instance))
