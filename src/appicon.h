@@ -81,9 +81,5 @@ void makeAppIconFor(WApplication * wapp);
 void removeAppIconFor(WApplication * wapp);
 void save_app_icon(WApplication *wapp);
 void paint_app_icon(WApplication *wapp);
-void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance,
-				 char *wm_class);
-void wApplicationExtractDirPackIcon(WScreen *scr,char *path, char *wm_instance,
-                                    char *wm_class);
 void wAppIconSave(WAppIcon *aicon);
 #endif

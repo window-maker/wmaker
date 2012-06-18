@@ -66,11 +66,12 @@ extern WDDomain *WDWindowAttributes;
 void appIconMouseDown(WObjDescriptor * desc, XEvent * event);
 static void iconDblClick(WObjDescriptor * desc, XEvent * event);
 static void iconExpose(WObjDescriptor * desc, XEvent * event);
+static void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_class);
 
 /* This function is used if the application is a .app. It checks if it has an icon in it
  * like for example /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
  */
-void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance, char *wm_class)
+static void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance, char *wm_class)
 {
 	char *iconPath = NULL;
 	char *tmp = NULL;
@@ -890,7 +891,7 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 }
 
 /* This function save the application icon and store the path in the Dictionary */
-void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_class)
+static void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char *wm_class)
 {
 	WMPropList *dict = WDWindowAttributes->dictionary;
 	WMPropList *adict, *key, *iconk;
