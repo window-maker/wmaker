@@ -198,6 +198,9 @@ void *WMGetFromArray(WMArray * array, int index)
 
 void *WMPopFromArray(WMArray * array)
 {
+	if (array->itemCount <= 0)
+		return NULL;
+
 	array->itemCount--;
 
 	return array->items[array->itemCount];
