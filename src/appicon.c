@@ -955,8 +955,6 @@ static WAppIcon *findDockIconFor(WDock *dock, Window main_window)
 void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_window)
 {
 	WScreen *scr = wwin->screen_ptr;
-
-	/* Create the application icon */
 	wapp->app_icon = NULL;
 
 	if (scr->last_dock)
@@ -990,7 +988,5 @@ void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_win
 
 		wAppIconPaint(wapp->app_icon);
 		wAppIconSave(wapp->app_icon);
-	} else {
-		makeAppIconFor(wapp);
 	}
 }

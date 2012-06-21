@@ -132,21 +132,23 @@ WApplication *wApplicationCreate(WWindow * wwin)
 #ifdef USER_MENU
 	if (!wapp->menu)
 		wapp->menu = wUserMenuGet(scr, wapp->main_window_desc);
-#endif	/* USER_MENU */
+#endif
 
-	/*
-	 * Set application wide attributes from the leader.
-	 */
+	/* Set application wide attributes from the leader */
 	wapp->flags.hidden = WFLAGP(wapp->main_window_desc, start_hidden);
 	wapp->flags.emulated = WFLAGP(wapp->main_window_desc, emulate_appicon);
 
 	/* application descriptor */
 	XSaveContext(dpy, main_window, wAppWinContext, (XPointer) wapp);
 
-	/* Create the application icon using the icon from docks
-	 * If not found in docks, create a new icon
-	 * using the function wAppIconCreate() */
+	/* First try to create an icon from the dock or clip */
 	create_appicon_from_dock(wwin, wapp, main_window);
+
+	/*
+	 * In case it was not found in the dock, make it from scratch.
+	 * Note: makeAppIconFor() returns early if wapp->app_icon exists
+	 */
+	makeAppIconFor(wapp);
 
 	/* Save the app_icon in a file */
 	save_app_icon(wapp);
