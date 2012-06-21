@@ -78,7 +78,6 @@ void wAppIconPaint(WAppIcon *aicon);
 void wAppIconMove(WAppIcon *aicon, int x, int y);
 void makeAppIconFor(WApplication * wapp);
 void removeAppIconFor(WApplication * wapp);
-void save_app_icon(WApplication *wapp);
+void save_appicon(WAppIcon *aicon, Bool dock);
 void paint_app_icon(WApplication *wapp);
-void wAppIconSave(WAppIcon *aicon);
 #endif

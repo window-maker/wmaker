@@ -397,28 +397,23 @@ void wAppIconPaint(WAppIcon * aicon)
 			       0, 0, wPreferences.icon_size, wPreferences.icon_size);
 }
 
-/* Internal application to save the application icon */
-static void save_app_icon_core(WAppIcon *aicon)
+/* Save the application icon, if it's a dockapp then use it with dock = True */
+void save_appicon(WAppIcon *aicon, Bool dock)
 {
 	char *path;
+
+	if (!aicon)
+		return;
+
+	if (dock && (!aicon->docked || aicon->attracted))
+		return;
 
 	path = wIconStore(aicon->icon);
 	if (!path)
 		return;
 
 	wApplicationSaveIconPathFor(path, aicon->wm_instance, aicon->wm_class);
-
 	wfree(path);
-}
-
-/* Save the application icon */
-/* This function is used when the icon doesn't have window, like dock or clip */
-void wAppIconSave(WAppIcon *aicon)
-{
-	if (!aicon->docked || aicon->attracted)
-		return;
-
-	save_app_icon_core(aicon);
 }
 
 #define canBeDocked(wwin)  ((wwin) && ((wwin)->wm_class||(wwin)->wm_instance))
@@ -930,16 +925,6 @@ static void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char 
 		UpdateDomainFile(WDWindowAttributes);
 }
 
-/* Save the application icon */
-/* This function is used by normal windows */
-void save_app_icon(WApplication *wapp)
-{
-	if (!wapp->app_icon)
-		return;
-
-	save_app_icon_core(wapp->app_icon);
-}
-
 static WAppIcon *findDockIconFor(WDock *dock, Window main_window)
 {
 	WAppIcon *aicon = NULL;
@@ -987,6 +972,6 @@ void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_win
 			wapp->app_icon->icon->icon_win = mainw->wm_hints->icon_window;
 
 		wAppIconPaint(wapp->app_icon);
-		wAppIconSave(wapp->app_icon);
+		save_appicon(wapp->app_icon, True);
 	}
 }

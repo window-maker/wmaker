@@ -151,7 +151,7 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	makeAppIconFor(wapp);
 
 	/* Save the app_icon in a file */
-	save_app_icon(wapp);
+	save_appicon(wapp->app_icon, False);
 
 	return wapp;
 }
