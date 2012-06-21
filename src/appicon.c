@@ -247,12 +247,17 @@ static WAppIcon *wAppIconCreate(WWindow * leader_win)
 	aicon->yindex = -1;
 	aicon->xindex = -1;
 
-	aicon->prev = NULL;
-	aicon->next = scr->app_icon_list;
-	if (scr->app_icon_list)
-		scr->app_icon_list->prev = aicon;
+	/* When no_appicon is set we want to avoid having it on the list
+	 * because otherwise there will be a hole when the icons are
+	 * arranged with wArrangeIcons() */
+	if (!WFLAGP(leader_win, no_appicon)) {
+		aicon->prev = NULL;
+		aicon->next = scr->app_icon_list;
+		if (scr->app_icon_list)
+			scr->app_icon_list->prev = aicon;
 
-	scr->app_icon_list = aicon;
+		scr->app_icon_list = aicon;
+	}
 
 	if (leader_win->wm_class)
 		aicon->wm_class = wstrdup(leader_win->wm_class);
