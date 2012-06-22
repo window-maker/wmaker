@@ -247,6 +247,18 @@ static void eatExpose(void)
 	}
 }
 
+void move_window(Window win, int from_x, int from_y, int to_x, int to_y)
+{
+#ifdef ANIMATIONS
+	if (wPreferences.no_animations)
+		XMoveWindow(dpy, win, to_x, to_y);
+	else
+		SlideWindow(win, from_x, from_y, to_x, to_y);
+#else
+	XMoveWindow(dpy, win, to_x, to_y);
+#endif
+}
+
 void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 {
 	time_t time0 = time(NULL);

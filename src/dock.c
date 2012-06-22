@@ -592,18 +592,9 @@ static void colectIconsCallback(WMenu *menu, WMenuEntry *entry)
 		if (!aicon->docked && wDockFindFreeSlot(clip, &x, &y)) {
 			x_pos = clip->x_pos + x * ICON_SIZE;
 			y_pos = clip->y_pos + y * ICON_SIZE;
-			if (aicon->x_pos != x_pos || aicon->y_pos != y_pos) {
-#ifdef ANIMATIONS
-				if (wPreferences.no_animations) {
-					XMoveWindow(dpy, aicon->icon->core->window, x_pos, y_pos);
-				} else {
-					SlideWindow(aicon->icon->core->window,
-						    aicon->x_pos, aicon->y_pos, x_pos, y_pos);
-				}
-#else
-				XMoveWindow(dpy, aicon->icon->core->window, x_pos, y_pos);
-#endif				/* ANIMATIONS */
-			}
+			if (aicon->x_pos != x_pos || aicon->y_pos != y_pos)
+				move_window(aicon->icon->core->window, aicon->x_pos, aicon->y_pos, x_pos, y_pos);
+
 			aicon->attracted = 1;
 			if (!aicon->icon->shadowed) {
 				aicon->icon->shadowed = 1;
