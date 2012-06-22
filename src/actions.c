@@ -1892,7 +1892,7 @@ static void shade_animate(WWindow *wwin, Bool what)
 	int y, s, w, h;
 	time_t time0 = time(NULL);
 
-	if (wwin->flags.skip_next_animation && wPreferences.no_animations)
+	if (wwin->flags.skip_next_animation || wPreferences.no_animations)
 		return;
 
 	switch(what) {
