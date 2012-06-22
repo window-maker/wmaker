@@ -29,6 +29,12 @@
 
 #define MAXLINE              1024
 #define MAX_NESTED_INCLUDES  16  // To avoid infinite includes case
+#define MAX_NESTED_MACROS    24  // To avoid infinite loop inside macro expansions
+#define MAX_MACRO_ARG_COUNT  32  // Limited by design
+
+typedef struct w_parser_macro WParserMacro;
+
+typedef void WParserMacroFunction(WParserMacro *this, WMenuParser parser);
 
 struct w_menu_parser {
 	WMenuParser include_file;
@@ -37,10 +43,33 @@ struct w_menu_parser {
 	const char *file_name;
 	FILE *file_handle;
 	int line_number;
+	WParserMacro *macros;
 	char *rd;
 	char line_buffer[MAXLINE];
 };
 
+struct w_parser_macro {
+	WParserMacro *next;
+	char name[64];
+	WParserMacroFunction *function;
+	int arg_count;
+#ifdef DEBUG
+	int usage_count;
+#endif
+	unsigned char value[MAXLINE * 4];
+};
+
 Bool menu_parser_skip_spaces_and_comments(WMenuParser parser);
+
+void menu_parser_define_macro(WMenuParser parser);
+
+void menu_parser_free_macros(WMenuParser parser);
+
+WParserMacro *menu_parser_find_macro(WMenuParser parser, const char *name);
+
+void menu_parser_expand_macro(WMenuParser parser, WParserMacro *macro,
+										char *write_buf, int write_buf_size);
+
+int isnamechr(char ch); // Check if char is valid character for a macro name
 
 #endif /* _MENUPARSER_H_INCLUDED */

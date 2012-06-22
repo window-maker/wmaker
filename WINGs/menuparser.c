@@ -30,7 +30,7 @@
 
 static WMenuParser menu_parser_create_new(const char *file_name, void *file,
 										const char *include_default_paths);
-static char *menu_parser_isolate_token(WMenuParser parser);
+static char *menu_parser_isolate_token(WMenuParser parser, WParserMacro *list_macros);
 static void menu_parser_get_directive(WMenuParser parser);
 static Bool menu_parser_include_file(WMenuParser parser);
 
@@ -59,6 +59,10 @@ void WMenuParserDelete(WMenuParser parser)
 		wfree((char *) parser->include_file->file_name);
 		WMenuParserDelete(parser->include_file);
 	}
+
+	if (parser->macros)
+		menu_parser_free_macros(parser);
+
 	wfree(parser);
 }
 
@@ -156,7 +160,7 @@ Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, ch
 		}
 
 		/* Found a word */
-		token = menu_parser_isolate_token(cur_parser);
+		token = menu_parser_isolate_token(cur_parser, top_parser->macros);
 		switch (scanmode) {
 		case GET_TITLE:
 			*title = token;
@@ -272,12 +276,14 @@ Bool menu_parser_skip_spaces_and_comments(WMenuParser parser)
 
 /* read a token (non-spaces suite of characters)
    the result os wmalloc's, so it needs to be free'd */
-static char *menu_parser_isolate_token(WMenuParser parser)
+static char *menu_parser_isolate_token(WMenuParser parser, WParserMacro *list_macros)
 {
 	char *start;
 	char *token;
+	int limit = MAX_NESTED_MACROS;
 
 	start = parser->rd;
+ restart_token_split:
 
 	while (*parser->rd != '\0')
 		if (isspace(*parser->rd))
@@ -295,6 +301,41 @@ static char *menu_parser_isolate_token(WMenuParser parser)
 			WMenuParserError(parser, _("missing closing quote or double-quote before end-of-line") );
 		found_end_quote:
 			;
+		} else if (isnamechr(*parser->rd)) {
+			WParserMacro *macro;
+			char *start_macro;
+
+			start_macro = parser->rd;
+			while (isnamechr(*parser->rd))
+				parser->rd++;
+
+			macro = menu_parser_find_macro(parser, start_macro);
+			if (macro != NULL) {
+				char *expand_there;
+
+				/* Copy the chars before the macro to the beginning of the buffer to
+				   leave as much room as possible for expansion */
+				expand_there = parser->line_buffer;
+				if (start != parser->line_buffer)
+					while (start < start_macro)
+						*expand_there++ = *start++;
+				start = parser->line_buffer;
+
+				/* Macro expansion will take care to keep the rest of the line after
+				   the macro to the end of the line for future token extraction */
+				menu_parser_expand_macro(parser, macro, expand_there,
+										 sizeof(parser->line_buffer) - (start - parser->line_buffer) );
+
+				/* Restart parsing to allow expansion of sub macro calls */
+				parser->rd = expand_there;
+				if (limit-- > 0)
+					goto restart_token_split;
+				WMenuParserError(parser, _("too many nested macro expansion, breaking loop") );
+				while (isnamechr(*parser->rd))
+					parser->rd++;
+				break;
+			}
+			// else: the text was passed over so it will be counted in the token from 'start'
 		} else
 			parser->rd++;
 
@@ -322,6 +363,9 @@ static void menu_parser_get_directive(WMenuParser parser)
 
 	if (strcmp(command, "include") == 0) {
 		if (!menu_parser_include_file(parser)) return;
+
+	} else if (strcmp(command, "define") == 0) {
+		menu_parser_define_macro(parser);
 
 	} else {
 		WMenuParserError(parser, _("unknow directive '#%s'"), command);

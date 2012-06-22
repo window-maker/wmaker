@@ -73,6 +73,7 @@ libWUtil_la_SOURCES = 	\
 	memory.c \
 	menuparser.c \
 	menuparser.h \
+	menuparser_macros.c \
 	misc.c \
 	notification.c \
 	proplist.c \
