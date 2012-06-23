@@ -44,6 +44,16 @@ struct w_menu_parser {
 	FILE *file_handle;
 	int line_number;
 	WParserMacro *macros;
+	struct {
+		/* Conditional text parsing is implemented using a stack of the
+			skip states for each nested #if */
+		int depth;
+		struct {
+			Bool skip;
+			char name[8];
+			int line;
+		} stack[32];
+	} cond;
 	char *rd;
 	char line_buffer[MAXLINE];
 };

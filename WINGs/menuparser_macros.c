@@ -229,6 +229,14 @@ void menu_parser_define_macro(WMenuParser parser)
 	} else
 		macro->arg_count = -1; // Means no parenthesis at all to expect
 
+	/* If we're inside a #if sequence, we abort now, but not sooner in
+		order to keep the syntax check */
+	if (parser->cond.stack[0].skip) {
+		wfree(macro);
+		*parser->rd = '\0'; // Ignore macro content
+		return;
+	}
+
 	/* Get the macro's definition */
 	menu_parser_skip_spaces_and_comments(parser);
 	if (!menu_parser_read_macro_def(parser, macro, arg_name)) {

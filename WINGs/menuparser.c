@@ -33,6 +33,9 @@ static WMenuParser menu_parser_create_new(const char *file_name, void *file,
 static char *menu_parser_isolate_token(WMenuParser parser, WParserMacro *list_macros);
 static void menu_parser_get_directive(WMenuParser parser);
 static Bool menu_parser_include_file(WMenuParser parser);
+static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists);
+static void menu_parser_condition_else(WMenuParser parser);
+static void menu_parser_condition_end(WMenuParser parser);
 
 
 /***** Constructor and Destructor for the Menu Parser object *****/
@@ -131,6 +134,14 @@ Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, ch
 
  read_next_line:
 	if (fgets(cur_parser->line_buffer, sizeof(cur_parser->line_buffer), cur_parser->file_handle) == NULL) {
+		if (cur_parser->cond.depth > 0) {
+			int i;
+
+			for (i = 0; i < cur_parser->cond.depth; i++)
+				WMenuParserError(cur_parser, _("missing #endif to match #%s at line %d"),
+									  cur_parser->cond.stack[i].name, cur_parser->cond.stack[i].line);
+		}
+
 		if (cur_parser->parent_file == NULL)
 			/* Not inside an included file -> we have reached the end */
 			return False;
@@ -159,6 +170,8 @@ Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, ch
 			menu_parser_get_directive(cur_parser);
 			goto read_next_line_with_filechange;
 		}
+		if (cur_parser->cond.stack[0].skip)
+			goto read_next_line;
 
 		/* Found a word */
 		token = menu_parser_isolate_token(cur_parser, top_parser->macros);
@@ -368,6 +381,18 @@ static void menu_parser_get_directive(WMenuParser parser)
 	} else if (strcmp(command, "define") == 0) {
 		menu_parser_define_macro(parser);
 
+	} else if (strcmp(command, "ifdef") == 0) {
+		menu_parser_condition_ifmacro(parser, 1);
+
+	} else if (strcmp(command, "ifndef") == 0) {
+		menu_parser_condition_ifmacro(parser, 0);
+
+	} else if (strcmp(command, "else") == 0) {
+		menu_parser_condition_else(parser);
+
+	} else if (strcmp(command, "endif") == 0) {
+		menu_parser_condition_end(parser);
+
 	} else {
 		WMenuParserError(parser, _("unknow directive '#%s'"), command);
 		return;
@@ -408,6 +433,11 @@ static Bool menu_parser_include_file(WMenuParser parser)
 	WMenuParserError(parser, _("missing closing '%c' in filename specification"), eot);
 	return False;
  found_end_define_fname:
+
+	/* If we're inside a #if sequence, we abort now, but not sooner in
+		order to keep the syntax check */
+	if (parser->cond.stack[0].skip)
+		return False;
 
 	{ /* Check we are not nesting too many includes */
 		WMenuParser p;
@@ -474,4 +504,75 @@ static Bool menu_parser_include_file(WMenuParser parser)
 	parser->include_file = menu_parser_create_new(wstrdup(req_filename), fh, parser->include_default_paths);
 	parser->include_file->parent_file = parser;
 	return True;
+}
+
+/* Check wether a macro exists or not, and marks the parser to ignore the
+   following data accordingly */
+static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists)
+{
+	WParserMacro *macro;
+	int idx;
+	const char *cmd_name, *macro_name;
+
+	cmd_name = check_exists?"ifdef":"ifndef";
+	if (!menu_parser_skip_spaces_and_comments(parser)) {
+		WMenuParserError(parser, _("missing macro name argument to #%s"), cmd_name);
+		return;
+	}
+
+	/* jump to end of provided name for later checks that no extra stuff is following */
+	macro_name = parser->rd;
+	while (isnamechr(*parser->rd))
+		parser->rd++;
+
+	/* Add this condition to the stack of conditions */
+	if (parser->cond.depth >= sizeof(parser->cond.stack) / sizeof(parser->cond.stack[0])) {
+		WMenuParserError(parser, _("too many nested #if sequences") );
+		return;
+	}
+	for (idx = parser->cond.depth - 1; idx >= 0; idx--)
+		parser->cond.stack[idx + 1] = parser->cond.stack[idx];
+	parser->cond.depth++;
+
+	if (parser->cond.stack[1].skip)
+		parser->cond.stack[0].skip = True;
+	else {
+		macro = menu_parser_find_macro(parser, macro_name);
+		parser->cond.stack[0].skip =
+			((check_exists)  && (macro == NULL)) ||
+			((!check_exists) && (macro != NULL)) ;
+	}
+	strcpy(parser->cond.stack[0].name, cmd_name);
+	parser->cond.stack[0].line = parser->line_number;
+}
+
+/* Swap the 'data ignore' flag because a #else condition was found */
+static void menu_parser_condition_else(WMenuParser parser)
+{
+	if (parser->cond.depth <= 0) {
+		WMenuParserError(parser, _("found #%s but have no matching #if"), "else" );
+		return;
+	}
+	if ((parser->cond.depth > 1) && (parser->cond.stack[1].skip))
+		// The containing #if is false, so we continue skipping anyway
+		parser->cond.stack[0].skip = True;
+	else
+		parser->cond.stack[0].skip = !parser->cond.stack[0].skip;
+}
+
+/* Closes the current conditional, removing it from the stack */
+static void menu_parser_condition_end(WMenuParser parser)
+{
+	int idx;
+
+	if (parser->cond.depth <= 0) {
+		WMenuParserError(parser, _("found #%s but have no matching #if"), "endif" );
+		return;
+	}
+
+	if (--parser->cond.depth > 0)
+		for (idx = 0; idx < parser->cond.depth; idx++)
+			parser->cond.stack[idx] = parser->cond.stack[idx + 1];
+	else
+		parser->cond.stack[0].skip = False;
 }
