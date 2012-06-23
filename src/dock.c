@@ -43,6 +43,7 @@
 #include "actions.h"
 #include "stacking.h"
 #include "dock.h"
+#include "dockedapp.h"
 #include "dialog.h"
 #include "funcs.h"
 #include "properties.h"
@@ -60,10 +61,6 @@
 #define CLIP_FORWARD      2
 
 /**** Global variables ****/
-
-/* in dockedapp.c */
-extern void DestroyDockAppSettingsPanel();
-extern void ShowDockAppSettingsPanel(WAppIcon * aicon);
 extern Cursor wCursor[WCUR_LAST];
 extern WPreferences wPreferences;
 extern XContext wWinContext;

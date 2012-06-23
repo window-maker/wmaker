@@ -31,6 +31,7 @@
 #include "icon.h"
 #include "appicon.h"
 #include "dock.h"
+#include "dockedapp.h"
 #include "dialog.h"
 #include "funcs.h"
 #include "defaults.h"
@@ -39,45 +40,6 @@
 
 /**** Global variables ****/
 extern WPreferences wPreferences;
-
-typedef struct _AppSettingsPanel {
-	WMWindow *win;
-	WAppIcon *editedIcon;
-
-	WWindow *wwin;
-
-	WMLabel *iconLabel;
-	WMLabel *nameLabel;
-
-	WMFrame *commandFrame;
-	WMTextField *commandField;
-
-	WMFrame *dndCommandFrame;
-	WMTextField *dndCommandField;
-	WMLabel *dndCommandLabel;
-
-	WMFrame *pasteCommandFrame;
-	WMTextField *pasteCommandField;
-	WMLabel *pasteCommandLabel;
-
-	WMFrame *iconFrame;
-	WMTextField *iconField;
-	WMButton *browseBtn;
-
-	WMButton *autoLaunchBtn;
-	WMButton *lockBtn;
-
-	WMButton *okBtn;
-	WMButton *cancelBtn;
-
-	Window parent;
-
-	/* kluge */
-	unsigned int destroyed:1;
-	unsigned int choosingIcon:1;
-} AppSettingsPanel;
-
-void DestroyDockAppSettingsPanel(AppSettingsPanel * panel);
 
 static void updateCommand(WAppIcon * icon, char *command)
 {
