@@ -69,16 +69,8 @@ static void appearanceObserver(void *self, WMNotification * notif)
 	WIcon *icon = (WIcon *) self;
 	uintptr_t flags = (uintptr_t)WMGetNotificationClientData(notif);
 
-	if (flags & WTextureSettings) {
+	if ((flags & WTextureSettings) || (flags & WFontSettings))
 		icon->force_paint = 1;
-	}
-	if (flags & WFontSettings) {
-		icon->force_paint = 1;
-	}
-	/*
-	   if (flags & WColorSettings) {
-	   }
-	 */
 
 	wIconPaint(icon);
 
@@ -164,9 +156,8 @@ WIcon *wIconCreateWithIconFile(WScreen * scr, char *iconfile, int tile)
 
 	if (iconfile) {
 		icon->file_image = RLoadImage(scr->rcontext, iconfile, 0);
-		if (!icon->file_image) {
+		if (!icon->file_image)
 			wwarning(_("error loading image file \"%s\": %s"), iconfile, RMessageForError(RErrorCode));
-		}
 
 		icon->file_image = wIconValidateIconSize(scr, icon->file_image, wPreferences.icon_size);
 
@@ -638,7 +629,6 @@ void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon)
 				} else {
 					wwarning(_("could not find default icon \"%s\""), file);
 				}
-				/* FIXME: Probably wfree(file) here! */
 			}
 
 			image = wIconValidateIconSize(scr, image, wPreferences.icon_size);
@@ -725,7 +715,7 @@ int get_pixmap_icon_from_wm_hints(WScreen *scr, WWindow *wwin, WIcon *icon)
 
 	if (!XGetGeometry(dpy, wwin->wm_hints->icon_pixmap, &jw, &ji, &ji, &w, &h, &ju, &d)) {
 		icon->owner->wm_hints->flags &= ~IconPixmapHint;
-		return(1);
+		return 1;
 	}
 
 	pixmap = XCreatePixmap(dpy, icon->core->window, wPreferences.icon_size,
