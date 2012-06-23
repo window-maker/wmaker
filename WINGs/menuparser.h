@@ -61,6 +61,8 @@ struct w_parser_macro {
 
 Bool menu_parser_skip_spaces_and_comments(WMenuParser parser);
 
+void menu_parser_register_preset_macros(WMenuParser parser);
+
 void menu_parser_define_macro(WMenuParser parser);
 
 void menu_parser_free_macros(WMenuParser parser);

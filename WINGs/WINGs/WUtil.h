@@ -874,6 +874,8 @@ typedef struct w_menu_parser *WMenuParser;
 
 WMenuParser WMenuParserCreate(const char *file_name, void *file, const char *include_default_paths);
 
+void WMenuParserRegisterSimpleMacro(WMenuParser parser, const char *name, const char *value);
+
 void WMenuParserError(WMenuParser parser, const char *msg, ...)
 	__attribute__ ((format (printf, 2, 3)));
 

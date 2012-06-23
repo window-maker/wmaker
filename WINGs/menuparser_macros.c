@@ -23,6 +23,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
+#include <pwd.h>
 
 #include <WINGs/WUtil.h>
 
@@ -32,6 +34,7 @@
  This file contains the functions related to macros:
   - parse a macro being defined
   - handle single macro expansion
+  - pre-defined parser's macros
 
  Some design notes for macro internal storage:
 
@@ -56,6 +59,21 @@
   This structure allows to store any number and combination
    of text/parameter and still provide very fast generation
    at macro replacement time.
+
+ Predefined macros are using a call-back function mechanism
+   to generate the value on-demand. This value is generated
+   in the 'value' buffer of the structure.
+ Most of these call-backs will actually cache the value:
+   they generate it on the first use (inside a parser,
+   not globally) and reuse that value on next call(s).
+
+ Because none of these macros take parameters, the call-back
+   mechanism does not include passing of user arguments; the
+   complex storage mechanism for argument replacement being
+   not necessary the macro->value parameter is used as a
+   plain C string to be copied, this fact being recognised
+   by macro->function being non-null. It was chosen that the
+   call-back function would not have the possibility to fail.
 */
 
 static Bool menu_parser_read_macro_def(WMenuParser parser, WParserMacro *macro, char **argname);
@@ -511,4 +529,176 @@ static Bool menu_parser_read_macro_args(WMenuParser parser, WParserMacro *macro,
 		WMenuParserError(parser, _("too much data in parameter list of macro \"%s\", truncated"),
 							  macro->name);
 	return True;
+}
+
+/******************************************************************************/
+/* Definition of pre-defined macros */
+/******************************************************************************/
+
+void WMenuParserRegisterSimpleMacro(WMenuParser parser, const char *name, const char *value)
+{
+	WParserMacro *macro;
+	size_t len;
+	unsigned char *wr;
+
+	macro = wmalloc(sizeof(*macro));
+	strncpy(macro->name, name, sizeof(macro->name)-1);
+	macro->arg_count = -1;
+	len = strlen(value);
+	if (len > sizeof(macro->value) - 3) {
+		wwarning(_("size of value for macro '%s' is too big, truncated"), name);
+		len = sizeof(macro->value) - 3;
+	}
+	macro->value[0] = (len >> 8) & 0xFF;
+	macro->value[1] =  len       & 0xFF;
+	wr = &macro->value[2];
+	while (len-- > 0)
+		*wr++ = *value++;
+	*wr = 0xFF;
+	macro->next = parser->macros;
+	parser->macros = macro;
+}
+
+/* Name of the originally loaded file (before #includes) */
+static void mpm_base_file(WParserMacro *this, WMenuParser parser)
+{
+	unsigned char *src, *dst;
+
+	if (this->value[0] != '\0') return; // Value already evaluated, re-use previous
+
+	while (parser->parent_file != NULL)
+		parser = parser->parent_file;
+
+	dst = this->value;
+	src = (unsigned char *) parser->file_name;
+	*dst++ = '\"';
+	while (*src != '\0')
+		if (dst < this->value + sizeof(this->value) - 2)
+			*dst++ = *src++;
+		else
+			break;
+	*dst++ = '\"';
+	*dst   = '\0';
+}
+
+/* Number of #include currently nested */
+static void mpm_include_level(WParserMacro *this, WMenuParser parser)
+{
+	int level = 0;
+	while (parser->parent_file != NULL) {
+		parser = parser->parent_file;
+		level++;
+	}
+	snprintf((char *) this->value, sizeof(this->value), "%d", level);
+}
+
+/* Name of current file */
+static void mpm_current_file(WParserMacro *this, WMenuParser parser)
+{
+	unsigned char *src, *dst;
+
+	dst = this->value;
+	src = (unsigned char *) parser->file_name;
+	*dst++ = '\"';
+	while (*src != '\0')
+		if (dst < this->value + sizeof(this->value) - 2)
+			*dst++ = *src++;
+		else
+			break;
+	*dst++ = '\"';
+	*dst   = '\0';
+}
+
+/* Number of current line */
+static void mpm_current_line(WParserMacro *this, WMenuParser parser)
+{
+	snprintf((char *) this->value, sizeof(this->value), "%d", parser->line_number);
+}
+
+/* Name of host on which we are running, not necessarily displaying */
+static void mpm_get_hostname(WParserMacro *this, WMenuParser parser)
+{
+	char *h;
+
+	if (this->value[0] != '\0') return; // Value already evaluated, re-use previous
+
+	h = getenv("HOSTNAME");
+	if (h == NULL) {
+		h = getenv("HOST");
+		if (h == NULL) {
+			if (gethostname((char *) this->value, sizeof(this->value) ) != 0) {
+				WMenuParserError(parser, _("could not determine %s"), "HOSTNAME");
+				this->value[0] = '?';
+				this->value[1] = '?';
+				this->value[2] = '?';
+				this->value[3] = '\0';
+			}
+			return;
+		}
+	}
+	wstrlcpy((char *) this->value, h, sizeof(this->value) );
+}
+
+/* Name of the current user */
+static void mpm_get_user_name(WParserMacro *this, WMenuParser parser)
+{
+	char *user;
+
+	if (this->value[0] != '\0') return; // Value already evaluated, re-use previous
+
+	user = getlogin();
+	if (user == NULL) {
+		struct passwd *pw_user;
+
+		pw_user = getpwuid(getuid());
+		if (pw_user == NULL) {
+		error_no_username:
+			WMenuParserError(parser, _("could not determine %s"), "USER" );
+			/* Fall back on numeric id - better than nothing */
+			snprintf((char *) this->value, sizeof(this->value), "%d", getuid() );
+			return;
+		}
+		user = pw_user->pw_name;
+		if (user == NULL) goto error_no_username;
+	}
+	wstrlcpy((char *) this->value, user, sizeof(this->value) );
+}
+
+/* Number id of the user under which we are running */
+static void mpm_get_user_id(WParserMacro *this, WMenuParser parser)
+{
+	if (this->value[0] != '\0') return; // Already evaluated, re-use previous
+	snprintf((char *) this->value, sizeof(this->value), "%d", getuid() );
+}
+
+/* Small helper to automate creation of one pre-defined macro in the parser */
+static void w_create_macro(WMenuParser parser, const char *name, WParserMacroFunction *handler)
+{
+	WParserMacro *macro;
+
+	macro = wmalloc(sizeof(*macro));
+	strcpy(macro->name, name);
+	macro->function = handler;
+	macro->arg_count = -1;
+	macro->next = parser->macros;
+	parser->macros = macro;
+}
+
+/***** Register all the pre-defined macros in the parser *****/
+void menu_parser_register_preset_macros(WMenuParser parser)
+{
+	/* Defined by CPP: common predefined macros (GNU C extension) */
+	w_create_macro(parser, "__BASE_FILE__", mpm_base_file);
+	w_create_macro(parser, "__INCLUDE_LEVEL__", mpm_include_level);
+
+	/* Defined by CPP: standard predefined macros */
+	w_create_macro(parser, "__FILE__", mpm_current_file);
+	w_create_macro(parser, "__LINE__", mpm_current_line);
+	// w_create_macro(parser, "__DATE__", NULL);  [will be implemented only per user request]
+	// w_create_macro(parser, "__TIME__", NULL);  [will be implemented only per user request]
+
+	/* Historically defined by WindowMaker */
+	w_create_macro(parser, "HOST", mpm_get_hostname);
+	w_create_macro(parser, "UID", mpm_get_user_id);
+	w_create_macro(parser, "USER", mpm_get_user_name);
 }

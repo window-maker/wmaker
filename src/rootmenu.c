@@ -65,6 +65,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen * scr, char *file_name);
 static WMenu *readMenuDirectory(WScreen * scr, char *title, char **file_name, char *command);
 static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals);
+static void menu_parser_register_macros(WMenuParser parser);
 
 typedef struct Shortcut {
 	struct Shortcut *next;
@@ -970,6 +971,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 		}
 	}
 	parser = WMenuParserCreate(file_name, file, DEF_CONFIG_PATHS);
+	menu_parser_register_macros(parser);
 
 	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
@@ -1061,6 +1063,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 		}
 	}
 	parser = WMenuParserCreate(flat_file, file, DEF_CONFIG_PATHS);
+	menu_parser_register_macros(parser);
 
 	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
@@ -1104,6 +1107,34 @@ static int myCompare(const void *d1, const void *d2)
 	dir_data *p2 = *(dir_data **) d2;
 
 	return strcmp(p1->name, p2->name);
+}
+
+/***** Preset some macro for file parser *****/
+static void menu_parser_register_macros(WMenuParser parser)
+{
+	Visual *visual;
+	char buf[32];
+
+	// Used to return CPP verion, now returns wmaker's version
+	WMenuParserRegisterSimpleMacro(parser, "__VERSION__", VERSION);
+
+	// All macros below were historically defined by WindowMaker
+	visual = DefaultVisual(dpy, DefaultScreen(dpy));
+	snprintf(buf, sizeof(buf), "%d", visual->class);
+	WMenuParserRegisterSimpleMacro(parser, "VISUAL", buf);
+
+	snprintf(buf, sizeof(buf), "%d", DefaultDepth(dpy, DefaultScreen(dpy)) );
+	WMenuParserRegisterSimpleMacro(parser, "DEPTH", buf);
+
+	snprintf(buf, sizeof(buf), "%d", WidthOfScreen(DefaultScreenOfDisplay(dpy)) );
+	WMenuParserRegisterSimpleMacro(parser, "SCR_WIDTH", buf);
+
+	snprintf(buf, sizeof(buf), "%d", HeightOfScreen(DefaultScreenOfDisplay(dpy)) );
+	WMenuParserRegisterSimpleMacro(parser, "SCR_HEIGHT", buf);
+
+	WMenuParserRegisterSimpleMacro(parser, "DISPLAY", XDisplayName(DisplayString(dpy)) );
+
+	WMenuParserRegisterSimpleMacro(parser, "WM_VERSION", "\"" VERSION "\"");
 }
 
 /************  Menu Configuration From Directory   *************/

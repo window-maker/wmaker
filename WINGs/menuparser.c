@@ -42,6 +42,7 @@ WMenuParser WMenuParserCreate(const char *file_name, void *file,
 	WMenuParser parser;
 
 	parser = menu_parser_create_new(file_name, file, include_default_paths);
+	menu_parser_register_preset_macros(parser);
 	return parser;
 }
 
