@@ -317,8 +317,10 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 {
 	int new_x, new_y;
 	unsigned int new_width, new_height, half_scr_width;
-	int maximus_x, maximus_y;
-	unsigned int maximus_width, maximus_height;
+	int maximus_x = 0;
+	int maximus_y = 0;
+	unsigned int maximus_width = 0;
+	unsigned int maximus_height = 0;
 	WArea usableArea, totalArea;
 	Bool has_border = 1;
 	int save_directions = 0;
