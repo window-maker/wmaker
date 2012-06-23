@@ -215,33 +215,6 @@ dnl Check for inotify
 dnl =================
 AC_CHECK_HEADERS(sys/inotify.h, AC_DEFINE(HAVE_INOTIFY, 1, Check for inotify))
 
-dnl Check CPP
-dnl =========
-if test "x$CPP_PATH" = x; then
-    AC_PATH_PROG(CPP_PATH, cpp, notfound, 
-		$PATH:/lib:/usr/bin:/bin:/usr/lib:/usr/ccs/lib)
-fi
-
-dnl
-dnl Tell stupid Solaris cpp that the files it will process have C++ like syntax
-dnl RedHat 5.x is broken too, so it won't make a symlink from cpp to the
-dnl standard locations
-dnl
-if test "$CPP_PATH" = "/usr/ccs/lib/cpp" -o "$CPP_PATH" = "notfound" ; then
-    if test "$GCC" = "yes"; then
-	CPP_PATH="gcc -E -x c"
-    else 
-	if test "$CPP_PATH" = "/usr/ccs/lib/cpp"; then
-	    CPP_PATH="$CPP_PATH -B"
-	else
-	    echo "cpp, the C preprocessor was not found in your system."
-  	    echo "Create a symbolic link from it to /lib/cpp and rerun configure"
-  	    exit
-	fi
-    fi
-fi
-
-
 
 dnl Checks for header files.
 dnl =======================

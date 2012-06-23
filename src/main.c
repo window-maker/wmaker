@@ -491,9 +491,6 @@ static void print_help(void)
 	puts(_("The Window Maker window manager for the X window system"));
 	puts("");
 	puts(_(" -display host:dpy	display to use"));
-#ifdef USECPP
-	puts(_(" --no-cpp 		disable preprocessing of configuration files"));
-#endif
 	puts(_(" --no-dock		do not open the application Dock"));
 	puts(_(" --no-clip		do not open the workspace Clip"));
 	puts(_(" --no-autolaunch	do not autolaunch applications"));
@@ -679,12 +676,9 @@ static int real_main(int argc, char **argv)
 
 	if (argc > 1) {
 		for (i = 1; i < argc; i++) {
-#ifdef USECPP
 			if (strcmp(argv[i], "-nocpp") == 0 || strcmp(argv[i], "--no-cpp") == 0) {
-				wPreferences.flags.nocpp = 1;
-			} else
-#endif
-			if (strcmp(argv[i], "--for-real") == 0) {
+				wwarning(_("option \"%s\" is deprecated, please remove it from your script"), argv[i]);
+			} else if (strcmp(argv[i], "--for-real") == 0) {
 				wPreferences.flags.restarting = 0;
 			} else if (strcmp(argv[i], "--for-real=") == 0) {
 				wPreferences.flags.restarting = 1;

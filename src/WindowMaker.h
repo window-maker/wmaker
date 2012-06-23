@@ -436,7 +436,6 @@ typedef struct WPreferences {
     struct {
         unsigned int nodock:1;	       /* don't display the dock */
         unsigned int noclip:1;         /* don't display the clip */
-        unsigned int nocpp:1;	       /* don't use cpp */
         unsigned int noupdates:1;      /* don't require ~/GNUstep (-static) */
         unsigned int noautolaunch:1;   /* don't autolaunch apps */
         unsigned int norestore:1;      /* don't restore session */

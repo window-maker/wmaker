@@ -38,11 +38,6 @@
 /* If you want the application icon to be highlighted when it has the focus */
 #define NEWAPPICON
 
-/* undefine it if you don't want your config files to be preprocessed by cpp */
-#define USECPP
-
-/* #define CPP_PATH @CPP_PATH@ */
-
 /* support for XDND drop in the Dock. Experimental */
 /*#define XDND*/
 

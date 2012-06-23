@@ -64,10 +64,6 @@ Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
 int calcIntersectionArea(int x1, int y1, int w1, int h1,
                          int x2, int y2, int w2, int h2);
 
-#ifdef USECPP
-char *MakeCPPArgs(char *path);
-#endif
-
 char * StrConcatDot(char *a, char *b);
 char * ExpandOptions(WScreen *scr, char *cmdline);
 char * ShrinkString(WMFont *font, char *string, int width);

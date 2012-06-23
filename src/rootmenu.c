@@ -939,36 +939,11 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 	FILE *file = NULL;
 	WMenuParser parser;
 	char *command, *params, *shortcut, *title;
-	char cmd[MAXLINE];
-#ifdef USECPP
-	char *args;
-	int cpp = 0;
-#endif
 
-#ifdef USECPP
-	if (!wPreferences.flags.nocpp) {
-		args = MakeCPPArgs(file_name);
-		if (!args) {
-			wwarning(_("could not make arguments for menu file preprocessor"));
-		} else {
-			snprintf(cmd, sizeof(cmd), "%s %s %s", CPP_PATH, args, file_name);
-			wfree(args);
-			file = popen(cmd, "r");
-			if (!file) {
-				werror(_("%s:could not open/preprocess menu file"), file_name);
-			} else {
-				cpp = 1;
-			}
-		}
-	}
-#endif				/* USECPP */
-
+	file = fopen(file_name, "rb");
 	if (!file) {
-		file = fopen(file_name, "rb");
-		if (!file) {
-			werror(_("%s:could not open menu file"), file_name);
-			return NULL;
-		}
+		werror(_("%s:could not open menu file"), file_name);
+		return NULL;
 	}
 	parser = WMenuParserCreate(file_name, file, DEF_CONFIG_PATHS);
 	menu_parser_register_macros(parser);
@@ -998,17 +973,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 	}
 
 	WMenuParserDelete(parser);
-#ifdef USECPP
-	if (cpp) {
-		if (pclose(file) == -1) {
-			werror(_("error reading preprocessed menu data"));
-		}
-	} else {
-		fclose(file);
-	}
-#else
 	fclose(file);
-#endif
 
 	return menu;
 }
@@ -1023,11 +988,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	char *command, *params, *shortcut, *title;
 	char *filename;
 	char flat_file[MAXLINE];
-	char cmd[MAXLINE];
 	int i;
-#ifdef USECPP
-	char *args;
-#endif
 
 	flat_file[0] = '\0';
 
@@ -1037,30 +998,10 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	}
 	filename = flat_file + (flat_file[1] == '|' ? 2 : 1);
 
-#ifdef USECPP
-	if (!wPreferences.flags.nocpp) {
-		args = MakeCPPArgs(filename);
-		if (!args) {
-			wwarning(_("could not make arguments for menu file preprocessor"));
-		} else {
-			snprintf(cmd, sizeof(cmd), "%s | %s %s", filename, CPP_PATH, args);
-
-			wfree(args);
-			file = popen(cmd, "r");
-			if (!file) {
-				werror(_("%s:could not open/preprocess menu file"), filename);
-			}
-		}
-	}
-#endif				/* USECPP */
-
+	file = popen(filename, "rb");
 	if (!file) {
-		file = popen(filename, "rb");
-
-		if (!file) {
-			werror(_("%s:could not open menu file"), filename);
-			return NULL;
-		}
+		werror(_("%s:could not open menu file"), filename);
+		return NULL;
 	}
 	parser = WMenuParserCreate(flat_file, file, DEF_CONFIG_PATHS);
 	menu_parser_register_macros(parser);

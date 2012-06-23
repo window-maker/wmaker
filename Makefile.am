@@ -10,9 +10,6 @@ config.h: config-paths.h
 
 config-paths.h: Makefile
 	@echo "Generating $@"
-	@echo '/* define to the path to cpp */' > $@
-	@echo '#define CPP_PATH "$(CPP_PATH)"' >> $@
-	@echo '' >> $@
 	@echo '/* gettext domain used for menu translations */' >> $@
 	@if test -z "$(menutextdomain)"; then \
 	  echo '/* #undef MENU_TEXTDOMAIN "$(menutextdomain)" */' >> $@; \
