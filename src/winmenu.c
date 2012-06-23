@@ -576,11 +576,10 @@ static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 	wMenuRealize(menu);
 }
 
-void OpenWindowMenu(WWindow * wwin, int x, int y, int keyboard)
+static WMenu *open_window_menu_core(WWindow *wwin, int x, int y)
 {
-	WMenu *menu;
 	WScreen *scr = wwin->screen_ptr;
-	WMRect rect;
+	WMenu *menu;
 
 	wwin->flags.menu_open_for_me = 1;
 
@@ -598,18 +597,18 @@ void OpenWindowMenu(WWindow * wwin, int x, int y, int keyboard)
 	menu = scr->window_menu;
 	if (menu->flags.mapped) {
 		wMenuUnmap(menu);
-		if (menu->entries[0]->clientdata == wwin) {
-			return;
-		}
+		if (menu->entries[0]->clientdata == wwin)
+			return NULL;
 	}
 
 	updateMenuForWindow(menu, wwin);
 
-	x -= menu->frame->core->width / 2;
-	if (x + menu->frame->core->width > wwin->frame_x + wwin->frame->core->width)
-		x = wwin->frame_x + wwin->frame->core->width - menu->frame->core->width;
-	if (x < wwin->frame_x)
-		x = wwin->frame_x;
+	return menu;
+}
+
+static void prepare_menu_position(WMenu *menu, int x, int y)
+{
+	WMRect rect;
 
 	rect = wGetRectForHead(menu->frame->screen_ptr,
 			       wGetHeadForPointerLocation(menu->frame->screen_ptr));
@@ -617,6 +616,25 @@ void OpenWindowMenu(WWindow * wwin, int x, int y, int keyboard)
 		x = rect.pos.x - menu->frame->core->width / 2;
 	if (y < rect.pos.y)
 		y = rect.pos.y;
+}
+
+void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
+{
+	WMenu *menu;
+
+	menu = open_window_menu_core(wwin, x, y);
+	if (!menu)
+		return;
+
+	/* Specific menu position */
+	x -= menu->frame->core->width / 2;
+	if (x + menu->frame->core->width > wwin->frame_x + wwin->frame->core->width)
+		x = wwin->frame_x + wwin->frame->core->width - menu->frame->core->width;
+	if (x < wwin->frame_x)
+		x = wwin->frame_x;
+
+	/* Common menu position */
+	prepare_menu_position(menu, x, y);
 
 	if (!wwin->flags.internal_window)
 		wMenuMapAt(menu, x, y, keyboard);
@@ -627,31 +645,12 @@ void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard)
 	int i;
 	WMenu *menu;
 	WScreen *scr = wwin->screen_ptr;
-	WMRect rect;
 
-	wwin->flags.menu_open_for_me = 1;
+	menu = open_window_menu_core(wwin, x, y);
+	if (!menu)
+		return;
 
-	if (!scr->window_menu) {
-		scr->window_menu = createWindowMenu(scr);
-
-		/* hack to save some memory allocation/deallocation */
-		wfree(scr->window_menu->entries[MC_MINIATURIZE]->text);
-		wfree(scr->window_menu->entries[MC_MAXIMIZE]->text);
-		wfree(scr->window_menu->entries[MC_SHADE]->text);
-	} else {
-		updateWorkspaceMenu(scr->workspace_submenu);
-	}
-
-	menu = scr->window_menu;
-	if (menu->flags.mapped) {
-		wMenuUnmap(menu);
-		if (menu->entries[0]->clientdata == wwin) {
-			return;
-		}
-	}
-
-	updateMenuForWindow(menu, wwin);
-
+	/* Specific menu position */
 	for (i = 0; i < scr->workspace_submenu->entry_no; i++) {
 		scr->workspace_submenu->entries[i]->clientdata = wwin;
 		wMenuSetEnabled(scr->workspace_submenu, i, True);
@@ -659,12 +658,8 @@ void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard)
 
 	x -= menu->frame->core->width / 2;
 
-	rect = wGetRectForHead(menu->frame->screen_ptr,
-			       wGetHeadForPointerLocation(menu->frame->screen_ptr));
-	if (x < rect.pos.x - menu->frame->core->width / 2)
-		x = rect.pos.x - menu->frame->core->width / 2;
-	if (y < rect.pos.y)
-		y = rect.pos.y;
+	/* Common menu position */
+	prepare_menu_position(menu, x, y);
 
 	if (!wwin->flags.internal_window)
 		wMenuMapAt(menu, x, y, keyboard);
@@ -673,30 +668,10 @@ void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard)
 void OpenMiniwindowMenu(WWindow * wwin, int x, int y)
 {
 	WMenu *menu;
-	WScreen *scr = wwin->screen_ptr;
 
-	wwin->flags.menu_open_for_me = 1;
-
-	if (!scr->window_menu) {
-		scr->window_menu = createWindowMenu(scr);
-
-		/* hack to save some memory allocation/deallocation */
-		wfree(scr->window_menu->entries[MC_MINIATURIZE]->text);
-		wfree(scr->window_menu->entries[MC_MAXIMIZE]->text);
-		wfree(scr->window_menu->entries[MC_SHADE]->text);
-	} else {
-		updateWorkspaceMenu(scr->workspace_submenu);
-	}
-
-	menu = scr->window_menu;
-	if (menu->flags.mapped) {
-		wMenuUnmap(menu);
-		if (menu->entries[0]->clientdata == wwin) {
-			return;
-		}
-	}
-
-	updateMenuForWindow(menu, wwin);
+	menu = open_window_menu_core(wwin, x, y);
+	if (!menu)
+		return;
 
 	x -= menu->frame->core->width / 2;
 
