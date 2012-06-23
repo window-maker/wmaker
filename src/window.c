@@ -57,6 +57,7 @@
 #include "xinerama.h"
 #include "appmenu.h"
 #include "appicon.h"
+#include "superfluous.h"
 
 #ifdef MWM_HINTS
 # include "motif.h"
@@ -81,9 +82,6 @@ extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_STATE;
 extern WPreferences wPreferences;
 extern Time LastTimestamp;
-
-/* superfluous... */
-extern void DoWindowBirth(WWindow *wwin);
 
 /***** Local Stuff *****/
 static WWindowState *windowState = NULL;

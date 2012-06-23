@@ -33,7 +33,6 @@
 
 #include "WindowMaker.h"
 #include "screen.h"
-#include "dock.h"
 #include "superfluous.h"
 #include "framewin.h"
 #include "window.h"
@@ -41,14 +40,22 @@
 #include "xinerama.h"
 #include "stacking.h"
 
+#define PIECES ((64/ICON_KABOOM_PIECE_SIZE)*(64/ICON_KABOOM_PIECE_SIZE))
+#define KAB_PRECISION		4
+#define BOUNCE_HZ		25
+#define BOUNCE_DELAY		(1000/BOUNCE_HZ)
+#define BOUNCE_HEIGHT		24
+#define BOUNCE_LENGTH		0.3
+#define BOUNCE_DAMP		0.6
+#define URGENT_BOUNCE_DELAY	3000
+
 extern WPreferences wPreferences;
 
-#ifdef NORMAL_ICON_KABOOM
 void DoKaboom(WScreen * scr, Window win, int x, int y)
 {
+#ifdef NORMAL_ICON_KABOOM
 	int i, j, k;
 	int sw = scr->scr_width, sh = scr->scr_height;
-#define KAB_PRECISION	4
 	int px[PIECES];
 	short py[PIECES];
 	char pvx[PIECES], pvy[PIECES];
@@ -127,8 +134,8 @@ void DoKaboom(WScreen * scr, Window win, int x, int y)
 	}
 
 	XFreePixmap(dpy, tmp);
-}
 #endif	/* NORMAL_ICON_KABOOM */
+}
 
 Pixmap MakeGhostDock(WDock * dock, int sx, int dx, int y)
 {
@@ -230,10 +237,9 @@ Pixmap MakeGhostIcon(WScreen * scr, Drawable drawable)
 	return pixmap;
 }
 
-#ifdef WINDOW_BIRTH_ZOOM
-
 void DoWindowBirth(WWindow *wwin)
 {
+#ifdef WINDOW_BIRTH_ZOOM
 	int center_x, center_y;
 	int width = wwin->frame->core->width;
 	int height = wwin->frame->core->height;
@@ -245,20 +251,8 @@ void DoWindowBirth(WWindow *wwin)
 	center_y = wwin->frame_y + (height - h) / 2;
 
 	animateResize(scr, center_x, center_y, 1, 1, wwin->frame_x, wwin->frame_y, width, height);
-}
-#else
-void DoWindowBirth(WWindow *wwin)
-{
-	/* dummy stub */
-}
 #endif
-
-#define BOUNCE_HZ	25
-#define BOUNCE_DELAY	(1000/BOUNCE_HZ)
-#define BOUNCE_HEIGHT	24
-#define BOUNCE_LENGTH	0.3
-#define BOUNCE_DAMP	0.6
-#define URGENT_BOUNCE_DELAY	3000
+}
 
 typedef struct AppBouncerData {
 	WApplication *wapp;
