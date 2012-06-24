@@ -37,8 +37,6 @@ void Restart(char *manager, Bool abortOnFailure);
 void SetupEnvironment(WScreen *scr);
 void DispatchEvent(XEvent *event);
 void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
-void wRootMenuBindShortcuts(Window window);
-void OpenRootMenu(WScreen *scr, int x, int y, int keyboard);
 void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
 void InitializeSwitchMenu(void);
 void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard);
@@ -86,7 +84,6 @@ char * FindImage(char *paths, char *file);
 char * GetShortcutString(char *text);
 char * EscapeWM_CLASS(char *name, char *class);
 
-Bool wRootMenuPerformShortcut(XEvent *event);
 Bool RelaunchWindow(WWindow *wwin);
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
 Bool UpdateDomainFile(WDDomain *domain);

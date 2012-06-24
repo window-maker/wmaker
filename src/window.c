@@ -58,6 +58,7 @@
 #include "appmenu.h"
 #include "appicon.h"
 #include "superfluous.h"
+#include "rootmenu.h"
 
 #ifdef MWM_HINTS
 # include "motif.h"

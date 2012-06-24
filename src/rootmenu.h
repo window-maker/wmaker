@@ -22,23 +22,8 @@
 #ifndef WMROOTMENU_H
 #define WMROOTMENU_H
 
-#include "WindowMaker.h"
-
-
-typedef void *WRootMenuData;
-
-
-typedef struct _WRootMenuReader {
-    Bool (*checkMenuChange)(char *path, time_t lastAccessTime);
-
-    WRootMenuData (*openMenuFile)(char *path);
-    Bool (*hasMoreData)(WRootMenuData *data);
-    Bool (*nextCommand)(WRootMenuData *data,
-                        char **title,
-                        char **command,
-                        char **parameter,
-                        char **shortcut);
-    void (*closeMenuFile)(WRootMenuData *data);
-} WRootMenuReader;
+Bool wRootMenuPerformShortcut(XEvent * event);
+void wRootMenuBindShortcuts(Window window);
+void OpenRootMenu(WScreen * scr, int x, int y, int keyboard);
 
 #endif /* WMROOTMENU_H */

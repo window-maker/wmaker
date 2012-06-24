@@ -42,6 +42,7 @@
 #include "xinerama.h"
 #include "workspace.h"
 #include "dialog.h"
+#include "rootmenu.h"
 
 /****** Global Variables ******/
 

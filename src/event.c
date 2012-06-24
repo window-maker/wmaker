@@ -66,6 +66,7 @@
 #include "balloon.h"
 #include "xinerama.h"
 #include "wmspec.h"
+#include "rootmenu.h"
 
 /******** Global Variables **********/
 extern XContext wWinContext;
