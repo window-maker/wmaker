@@ -76,7 +76,7 @@
 #include "session.h"
 #include "framewin.h"
 #include "workspace.h"
-#include "funcs.h"
+#include "main.h"
 #include "properties.h"
 #include "application.h"
 #include "appicon.h"

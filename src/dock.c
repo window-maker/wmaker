@@ -45,7 +45,7 @@
 #include "dock.h"
 #include "dockedapp.h"
 #include "dialog.h"
-#include "funcs.h"
+#include "main.h"
 #include "properties.h"
 #include "menu.h"
 #include "client.h"

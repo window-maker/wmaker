@@ -32,9 +32,6 @@ typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
 void Shutdown(WShutdownMode mode);
 void RestoreDesktop(WScreen *scr);
-void Exit(int status) __attribute__((noreturn));
-void Restart(char *manager, Bool abortOnFailure);
-void SetupEnvironment(WScreen *scr);
 void DispatchEvent(XEvent *event);
 void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
 void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
@@ -52,8 +49,6 @@ void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head);
 void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only);
 void SendHelperMessage(WScreen *scr, char type, int workspace, char *msg);
 void UnescapeWM_CLASS(char *str, char **name, char **class);
-void ExecuteShellCommand(WScreen *scr, char *command);
-void ExecExitScript();
 void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
                  unsigned int width, unsigned int height);
 
@@ -84,7 +79,6 @@ char * FindImage(char *paths, char *file);
 char * GetShortcutString(char *text);
 char * EscapeWM_CLASS(char *name, char *class);
 
-Bool RelaunchWindow(WWindow *wwin);
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
 Bool UpdateDomainFile(WDDomain *domain);
 

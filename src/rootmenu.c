@@ -42,6 +42,7 @@
 #include "actions.h"
 #include "menu.h"
 #include "funcs.h"
+#include "main.h"
 #include "dialog.h"
 #include "keybind.h"
 #include "stacking.h"

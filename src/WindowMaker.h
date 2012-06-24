@@ -448,18 +448,11 @@ typedef struct WPreferences {
     } flags;			       /* internal flags */
 } WPreferences;
 
-
-
 /****** Global Variables  ******/
 extern Display	*dpy;
 extern unsigned int ValidModMask;
 extern char WProgramState;
 extern char WProgramSigState;
-
-
-/****** Global Functions ******/
-extern void wAbort(Bool dumpCore);
-
 
 /****** Notifications ******/
 extern const char *WMNManaged;
@@ -477,4 +470,3 @@ extern const char *WMNWorkspaceNameChanged;
 
 extern const char *WMNResetStacking;
 #endif
-

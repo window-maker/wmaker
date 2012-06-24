@@ -54,7 +54,7 @@
 #include "window.h"
 #include "actions.h"
 #include "client.h"
-#include "funcs.h"
+#include "main.h"
 #include "keybind.h"
 #include "application.h"
 #include "stacking.h"

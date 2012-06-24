@@ -46,6 +46,7 @@
 #include "pixmap.h"
 #include "menu.h"
 #include "funcs.h"
+#include "main.h"
 #include "actions.h"
 #include "properties.h"
 #include "dock.h"

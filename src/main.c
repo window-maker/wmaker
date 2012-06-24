@@ -485,7 +485,7 @@ void wAbort(Bool dumpCore)
 		exit(1);
 }
 
-void print_help()
+static void print_help(void)
 {
 	printf(_("Usage: %s [options]\n"), ProgName);
 	puts(_("The Window Maker window manager for the X window system"));
@@ -511,7 +511,7 @@ void print_help()
 	puts(_(" --help			show this message"));
 }
 
-void check_defaults()
+static void check_defaults(void)
 {
 	char *path;
 
@@ -537,7 +537,7 @@ void check_defaults()
  * files have changed, using linux kernel inotify mechanism
  */
 
-static void inotifyWatchConfig()
+static void inotifyWatchConfig(void)
 {
 	char *watchPath = NULL;
 	inotifyFD = inotify_init();	/* Initialise an inotify instance */
@@ -563,7 +563,7 @@ static void inotifyWatchConfig()
 }
 #endif /* HAVE_INOTIFY */
 
-static void execInitScript()
+static void execInitScript(void)
 {
 	char *file, *paths;
 
@@ -581,7 +581,7 @@ static void execInitScript()
 	}
 }
 
-void ExecExitScript()
+void ExecExitScript(void)
 {
 	char *file, *paths;
 

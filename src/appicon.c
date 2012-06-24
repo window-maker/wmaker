@@ -38,7 +38,7 @@
 #include "actions.h"
 #include "stacking.h"
 #include "dock.h"
-#include "funcs.h"
+#include "main.h"
 #include "defaults.h"
 #include "workspace.h"
 #include "superfluous.h"
