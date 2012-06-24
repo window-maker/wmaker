@@ -28,6 +28,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/XKBlib.h>
 
 #include "WindowMaker.h"
 #include "actions.h"
@@ -246,7 +247,7 @@ static void updateWorkspaceMenu(WMenu * menu)
 static char *getShortcutString(WShortKey key)
 {
 	char *tmp = NULL;
-	char *k = XKeysymToString(XKeycodeToKeysym(dpy, key.keycode, 0));
+	char *k = XKeysymToString(XkbKeycodeToKeysym(dpy, key.keycode, 0, 0));
 	if (!k) return NULL;
 
 	char **m = wPreferences.modifier_labels;
