@@ -264,11 +264,6 @@ typedef struct WWindow {
                                        app */
         unsigned int is_dockapp:1;  /* 1 if the window belongs to a DockApp */
 
-        unsigned int buttons_dont_fit:1;
-        unsigned int rebuild_texture:1;  /* the window was resized and
-                                          * gradients should be re-rendered */
-        unsigned int needs_full_repaint:1;/* does a full repaint of the
-                                           * window next time it's painted */
         unsigned int icon_moved:1;     /* icon for this window was moved
                                         * by the user */
         unsigned int selected:1;       /* multiple window selection */
@@ -279,14 +274,8 @@ typedef struct WWindow {
         unsigned int inspector_open:1; /* attrib inspector is already open */
 
         unsigned int destroyed:1;      /* window was already destroyed */
-
         unsigned int menu_open_for_me:1;   /* window commands menu */
-
-        unsigned int waiting_save_ack:1;   /* waiting for SAVE_YOURSELF ack */
-
         unsigned int obscured:1;       /* window is obscured */
-
-        unsigned int dragged_while_fmaximized;
 
         unsigned int net_skip_pager:1;
         unsigned int net_handle_icon:1;
@@ -337,7 +326,6 @@ typedef struct WSavedState {
     unsigned window_shortcuts; /* mask like 1<<shortcut_number */
 } WSavedState;
 
-
 typedef struct WWindowState {
     char *instance;
     char *class;
@@ -347,10 +335,7 @@ typedef struct WWindowState {
     struct WWindowState *next;
 } WWindowState;
 
-
 typedef void* WMagicNumber;
-
-
 
 void wWindowDestroy(WWindow *wwin);
 WWindow *wWindowCreate(void);
@@ -417,5 +402,4 @@ void wWindowDeleteSavedState(WMagicNumber id);
 Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured);
 
 void wWindowSetOmnipresent(WWindow *wwin, Bool flag);
-
 #endif
