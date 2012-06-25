@@ -92,26 +92,6 @@ void wColormapInstallForWindow(WScreen * scr, WWindow * wwin)
 	XSync(dpy, False);
 }
 
-void wColormapInstallRoot(WScreen * scr)
-{
-	if (scr->root_colormap_install_count == 0) {
-		wColormapInstallForWindow(scr, NULL);
-		scr->original_cmap_window = scr->cmap_window;
-	}
-	scr->root_colormap_install_count++;
-}
-
-void wColormapUninstallRoot(WScreen * scr)
-{
-	if (scr->root_colormap_install_count > 0)
-		scr->root_colormap_install_count--;
-
-	if (scr->root_colormap_install_count == 0) {
-		wColormapInstallForWindow(scr, scr->original_cmap_window);
-		scr->original_cmap_window = NULL;
-	}
-}
-
 void wColormapAllowClientInstallation(WScreen * scr, Bool starting)
 {
 	scr->flags.colormap_stuff_blocked = starting;

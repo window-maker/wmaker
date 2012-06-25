@@ -67,6 +67,7 @@
 #include "xinerama.h"
 #include "wmspec.h"
 #include "rootmenu.h"
+#include "colormap.h"
 
 /******** Global Variables **********/
 extern XContext wWinContext;

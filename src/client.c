@@ -37,7 +37,7 @@
 #include "actions.h"
 #include "icon.h"
 #include "client.h"
-#include "funcs.h"
+#include "colormap.h"
 #include "stacking.h"
 #include "appicon.h"
 #include "appmenu.h"

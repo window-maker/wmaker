@@ -35,7 +35,7 @@
 #include "window.h"
 #include "client.h"
 #include "icon.h"
-#include "funcs.h"
+#include "colormap.h"
 #include "application.h"
 #include "actions.h"
 #include "stacking.h"

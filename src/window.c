@@ -50,6 +50,7 @@
 #include "actions.h"
 #include "client.h"
 #include "funcs.h"
+#include "colormap.h"
 #include "keybind.h"
 #include "stacking.h"
 #include "defaults.h"
