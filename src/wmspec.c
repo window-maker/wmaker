@@ -795,9 +795,7 @@ static void updateWorkspaceHint(WWindow * wwin, Bool fake, Bool del)
 static void updateStateHint(WWindow * wwin, Bool changedWorkspace, Bool del)
 {				/* changeable */
 	if (del) {
-		if (!wwin->flags.net_state_from_client) {
-			XDeleteProperty(dpy, wwin->client_win, net_wm_state);
-		}
+		XDeleteProperty(dpy, wwin->client_win, net_wm_state);
 	} else {
 		Atom state[15];	/* nr of defined state atoms */
 		int i = 0;

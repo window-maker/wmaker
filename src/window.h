@@ -290,7 +290,6 @@ typedef struct WWindow {
 
         unsigned int user_changed_width:1;
         unsigned int user_changed_height:1;
-        unsigned int net_state_from_client:1; /* state hint was set by client */
         unsigned int net_skip_pager:1;
         unsigned int net_handle_icon:1;
         unsigned int net_show_desktop:1;
