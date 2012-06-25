@@ -22,27 +22,8 @@
 #ifndef WMSESSION_H_
 #define WMSESSION_H_
 
-
-typedef struct {
-    int x;
-    int y;
-    unsigned int w;		       /* client size */
-    unsigned int h;
-
-    int workspace;
-    unsigned shortcuts; /* mask like 1<<shortcut_number */
-
-    WWindowAttributes mflags;
-    WWindowAttributes flags;
-
-    char miniaturized;
-    char shaded;
-    char maximized;
-} WSessionData;
-
 void wSessionSaveState(WScreen *scr);
 void wSessionClearState(WScreen *scr);
 void wSessionRestoreState(WScreen *scr);
 void wSessionRestoreLastWorkspace(WScreen *scr);
-Bool wSessionGetStateFor(WWindow *wwin, WSessionData *state);
 #endif
