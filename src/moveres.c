@@ -1471,7 +1471,6 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 
 				if (opaqueMoveResize) {
 					XUngrabServer(dpy);
-					wwin->flags.user_changed_width = 1;
 					wWindowConfigure(wwin, src_x + off_x, src_y + off_y, ww, wh - vert_border);
 				};
 
@@ -1518,15 +1517,11 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 						}
 					}
 				} else {
-					if (wwin->client.width != ww) {
-						wwin->flags.user_changed_width = 1;
+					if (wwin->client.width != ww)
 						wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_MAXIMUS);
-					}
 
-					if (wwin->client.height != wh - vert_border) {
-						wwin->flags.user_changed_height = 1;
+					if (wwin->client.height != wh - vert_border)
 						wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
-					}
 
 					wWindowConfigure(wwin, src_x + off_x, src_y + off_y, ww, wh - vert_border);
 					wWindowSynthConfigureNotify(wwin);
@@ -2047,7 +2042,6 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 					showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
 					/* Now, continue drawing */
 					XUngrabServer(dpy);
-					wwin->flags.user_changed_width = 1;
 					moveGeometryDisplayCentered(scr, fx + fw / 2, fy + fh / 2);
 					wWindowConfigure(wwin, fx, fy, fw, fh - vert_border);
 					showGeometry(wwin, fx, fy, fx + fw, fy + fh, res);
@@ -2072,15 +2066,11 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 				WMUnmapWidget(scr->gview);
 				XUngrabServer(dpy);
 
-				if (wwin->client.width != fw) {
-					wwin->flags.user_changed_width = 1;
+				if (wwin->client.width != fw)
 					wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_MAXIMUS);
-				}
 
-				if (wwin->client.height != fh - vert_border) {
-					wwin->flags.user_changed_height = 1;
+				if (wwin->client.height != fh - vert_border)
 					wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
-				}
 
 				wWindowConfigure(wwin, fx, fy, fw, fh - vert_border);
 				wWindowSynthConfigureNotify(wwin);
