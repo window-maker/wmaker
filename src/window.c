@@ -1736,8 +1736,6 @@ void wWindowUpdateName(WWindow *wwin, char *newTitle)
 	if (!wwin->frame)
 		return;
 
-	wwin->flags.wm_name_changed = 1;
-
 	if (!newTitle)
 		title = DEF_WINDOW_TITLE; /* the hint was removed */
 	else
