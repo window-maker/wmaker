@@ -38,9 +38,6 @@ typedef struct {
     char miniaturized;
     char shaded;
     char maximized;
-
-    char user_changed_width;
-    char user_changed_height;
 } WSessionData;
 
 void wSessionSaveState(WScreen *scr);
