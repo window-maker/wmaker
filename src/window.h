@@ -409,8 +409,6 @@ void wWindowMap(WWindow *wwin);
 
 void wWindowUnmap(WWindow *wwin);
 
-Bool wWindowCanReceiveFocus(WWindow *wwin);
-
 void wWindowDeleteSavedStatesForPID(pid_t pid);
 
 WMagicNumber wWindowAddSavedState(char *instance, char *class, char *command,

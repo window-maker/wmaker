@@ -421,18 +421,6 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 		wwin->client_flags.no_focusable = 1;
 }
 
-Bool wWindowCanReceiveFocus(WWindow *wwin)
-{
-	if (!wwin->flags.mapped && (!wwin->flags.shaded || wwin->flags.hidden))
-		return False;
-	if (WFLAGP(wwin, no_focusable) || wwin->flags.miniaturized)
-		return False;
-	if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
-		return False;
-
-	return True;
-}
-
 Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured)
 {
 	int w1, h1, w2, h2;
