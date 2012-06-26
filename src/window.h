@@ -199,6 +199,9 @@ typedef struct WWindow {
         unsigned int width, height;    /* original geometry of the window */
     } bfs_geometry;		       /* (before fullscreen) */
 
+    int maximus_x;		       /* size after Maximusizing */
+    int maximus_y;
+
     /* client window info */
     short old_border_width;	       /* original border width of client_win*/
     Window client_win;		       /* the window we're managing */

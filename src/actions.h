@@ -31,6 +31,12 @@
 #define MAX_IGNORE_XINERAMA    (1 << 5)
 #define MAX_KEYBOARD           (1 << 6)
 
+#define SAVE_GEOMETRY_X        (1 << 0)
+#define SAVE_GEOMETRY_Y        (1 << 1)
+#define SAVE_GEOMETRY_WIDTH    (1 << 2)
+#define SAVE_GEOMETRY_HEIGHT   (1 << 3)
+#define SAVE_GEOMETRY_ALL      SAVE_GEOMETRY_X | SAVE_GEOMETRY_Y | SAVE_GEOMETRY_WIDTH | SAVE_GEOMETRY_HEIGHT
+
 void wSetFocusTo(WScreen *scr, WWindow *wwin);
 
 int wMouseMoveWindow(WWindow *wwin, XEvent *ev);
@@ -71,6 +77,7 @@ void wFullscreenWindow(WWindow *wwin);
 void wUnfullscreenWindow(WWindow *wwin);
 
 void animateResize(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh);
+void update_saved_geometry(WWindow *wwin);
 
 #endif
 

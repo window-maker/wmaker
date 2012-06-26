@@ -1535,6 +1535,8 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 				wArrangeIcons(scr, True);
 			}
 
+			update_saved_geometry(wwin);
+
 			return 1;
 		}
 	}
@@ -1796,6 +1798,10 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 	    head != wGetHeadForWindow(wwin)) {
 		wArrangeIcons(scr, True);
 	}
+
+	if (started)
+		update_saved_geometry(wwin);
+
 	return started;
 }
 

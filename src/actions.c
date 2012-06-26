@@ -287,14 +287,20 @@ void wUnshadeWindow(WWindow *wwin)
 /* Set the old coordinates using the current values */
 static void save_old_geometry(WWindow *wwin, int directions)
 {
-	if (directions & MAX_HORIZONTAL || ! wwin->old_geometry.width) {
-		wwin->old_geometry.width = wwin->client.width;
+	/* never been saved? */
+	if (! wwin->old_geometry.width)
+		directions |= SAVE_GEOMETRY_X | SAVE_GEOMETRY_WIDTH;
+	if (! wwin->old_geometry.height)
+		directions |= SAVE_GEOMETRY_Y | SAVE_GEOMETRY_HEIGHT;
+
+	if (directions & SAVE_GEOMETRY_X)
 		wwin->old_geometry.x = wwin->frame_x;
-	}
-	if (directions & MAX_VERTICAL || ! wwin->old_geometry.height) {
-		wwin->old_geometry.height = wwin->client.height;
+	if (directions & SAVE_GEOMETRY_Y)
 		wwin->old_geometry.y = wwin->frame_y;
-	}
+	if (directions & SAVE_GEOMETRY_WIDTH)
+		wwin->old_geometry.width = wwin->client.width;
+	if (directions & SAVE_GEOMETRY_HEIGHT)
+		wwin->old_geometry.height = wwin->client.height;
 }
 
 static void remember_geometry(WWindow *wwin, int *x, int *y, int *w, int *h)
@@ -310,6 +316,27 @@ static void remember_geometry(WWindow *wwin, int *x, int *y, int *w, int *h)
 	*y = (wwin->old_geometry.y && same_head) ? wwin->old_geometry.y : wwin->frame_y;
 	*w = wwin->old_geometry.width ? wwin->old_geometry.width : wwin->client.width;
 	*h = wwin->old_geometry.height ? wwin->old_geometry.height : wwin->client.height;
+}
+
+/* Remember geometry for unmaximizing */
+void update_saved_geometry(WWindow *wwin)
+{
+	/* NOT if we aren't already maximized
+	 * we'll save geometry when maximizing */
+	if (!wwin->flags.maximized)
+		return;
+
+	/* NOT if we are fully maximized */
+	if ((wwin->flags.maximized & MAX_MAXIMUS) ||
+	    ((wwin->flags.maximized & MAX_HORIZONTAL) &&
+	    (wwin->flags.maximized & MAX_VERTICAL)))
+		return;
+
+	/* save the co-ordinate in the axis in which we AREN'T maximized */
+	if (wwin->flags.maximized & MAX_HORIZONTAL)
+		save_old_geometry(wwin, SAVE_GEOMETRY_Y);
+	if (wwin->flags.maximized & MAX_VERTICAL)
+		save_old_geometry(wwin, SAVE_GEOMETRY_X);
 }
 
 #define IS_MAX_HORIZONTALLY(directions) ((directions & MAX_HORIZONTAL) | (directions & MAX_LEFTHALF) | (directions & MAX_RIGHTHALF))
@@ -336,17 +363,20 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 	adj_size = FRAME_BORDER_WIDTH * 2 * has_border;
 
 	/* save old coordinates before we change the current values
+	 * always if the window is not currently maximized at all
 	 * but never if the window has been Maximusized */
-	if (!(wwin->flags.old_maximized & MAX_MAXIMUS)) {
+	if (!wwin->flags.maximized)
+		save_directions |= SAVE_GEOMETRY_ALL;
+	else if (!(wwin->flags.old_maximized & MAX_MAXIMUS)) {
 		if ((directions & MAX_VERTICAL) &&
 		    !(wwin->flags.maximized & MAX_VERTICAL))
-			save_directions |= MAX_VERTICAL;
+			save_directions |= SAVE_GEOMETRY_Y | SAVE_GEOMETRY_HEIGHT;
 		if (IS_MAX_HORIZONTALLY(directions) &&
 		    !IS_MAX_HORIZONTALLY(wwin->flags.maximized))
-			save_directions |= MAX_HORIZONTAL;
+			save_directions |= SAVE_GEOMETRY_X | SAVE_GEOMETRY_WIDTH;
 	}
 	if ((directions & MAX_MAXIMUS) && !wwin->flags.maximized)
-		save_directions |= MAX_VERTICAL | MAX_HORIZONTAL;
+		save_directions |= SAVE_GEOMETRY_ALL;
 	save_old_geometry(wwin, save_directions);
 
 	totalArea.x1 = 0;
@@ -445,6 +475,8 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 			new_y -= wwin->frame->top_width;
 			new_height += wwin->frame->top_width - 1;
 		}
+		wwin->maximus_x = new_x;
+		wwin->maximus_y = new_y;
 		wwin->flags.old_maximized |= MAX_MAXIMUS;
 	}
 
@@ -673,8 +705,15 @@ void wUnmaximizeWindow(WWindow *wwin)
 		wwin->flags.skip_next_animation = 1;
 		wUnshadeWindow(wwin);
 	}
+
 	/* Use old coordinates if they are set, current values otherwise */
 	remember_geometry(wwin, &x, &y, &w, &h);
+
+	/* unMaximusize relative to original position */
+	if (wwin->flags.maximized & MAX_MAXIMUS) {
+		x += wwin->frame_x - wwin->maximus_x;
+		y += wwin->frame_y - wwin->maximus_y;
+	}
 
 	wwin->flags.maximized = 0;
 	wwin->flags.old_maximized = 0;
