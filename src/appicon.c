@@ -74,7 +74,7 @@ static void remove_from_appicon_list(WScreen *scr, WAppIcon *appicon);
 /* This function is used if the application is a .app. It checks if it has an icon in it
  * like for example /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
  */
-static void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance, char *wm_class)
+void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance, char *wm_class)
 {
 	char *iconPath = NULL;
 	char *tmp = NULL;

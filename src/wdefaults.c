@@ -36,6 +36,7 @@
 
 #include "WindowMaker.h"
 #include "window.h"
+#include "appicon.h"
 #include "screen.h"
 #include "funcs.h"
 #include "workspace.h"
@@ -374,34 +375,78 @@ static WMPropList *get_generic_value(char *instance, char *class,
 	return value;
 }
 
-RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_size)
+/* Get the file name of the image, using instance and class */
+char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
+				Bool noDefault)
 {
-	char *file_name;
-	char *path;
-	RImage *image;
+	char *file_name = NULL;
+	char *file_path = NULL;
 
 	/* Get the file name of the image, using instance and class */
-	file_name = wDefaultGetIconFile(winstance, wclass, False);
+	file_name = wDefaultGetIconFile(winstance, wclass, noDefault);
+
+	/* If the specific (or generic if noDefault is False) icon filename
+	 * is not found, and command is specified, then include the .app icons
+	 * and re-do the search, but now always including the default icon
+	 * so the icon is found always. The .app is selected before default */
+	if (!file_name && scr && command) {
+		wApplicationExtractDirPackIcon(scr, command, winstance, wclass);
+		file_name = wDefaultGetIconFile(winstance, wclass, False);
+	}
+
+	/* Get the full path for the image file */
+	if (file_name) {
+		file_path = FindImage(wPreferences.icon_path, file_name);
+
+		if (!file_path)
+			wwarning(_("could not find icon file \"%s\""), file_name);
+
+		/* FIXME: Here, if file_path don't exists, then the icon is in the
+		 * "icon database" (WDWindowAttributes->dictionary), but the icon
+		 * is not en disk. Therefore, we should remove it from the icon
+		 * database.
+		 * OTOH, probably the correct message should be "could not find the
+		 * icon file %s, please, check your configuration files", because
+		 * the icons are loaded in the icon database from the configuration
+		 * files
+		 */
+
+		/* Don't wfree(file_name) here, because is a pointer to the icon
+		 * dictionary (WDWindowAttributes->dictionary) value.
+		 */
+	}
+
+	return file_path;
+}
+
+/* This function returns the image picture for the file_name file */
+RImage *get_default_icon_rimage(WScreen *scr, char *file_name, int max_size)
+{
+	RImage *image = NULL;
+
 	if (!file_name)
 		return NULL;
 
-	/* Search the file image in the icon paths */
-	path = FindImage(wPreferences.icon_path, file_name);
-
-	if (!path) {
-		wwarning(_("could not find icon file \"%s\""), file_name);
-		return NULL;
-	}
-
-	image = RLoadImage(scr->rcontext, path, 0);
+	image = RLoadImage(scr->rcontext, file_name, 0);
 	if (!image)
-		wwarning(_("error loading image file \"%s\": %s"), path, RMessageForError(RErrorCode));
-
-	wfree(path);
+		wwarning(_("error loading image file \"%s\": %s"), file_name,
+			 RMessageForError(RErrorCode));
 
 	image = wIconValidateIconSize(scr, image, max_size);
 
 	return image;
+}
+
+RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_size)
+{
+	char *file_name = NULL;
+
+	/* Get the file name of the image, using instance and class */
+	file_name = get_default_icon_filename(scr, winstance, wclass, NULL, False);
+	if (!file_name)
+		return NULL;
+
+	return get_default_icon_rimage(scr, file_name, max_size);
 }
 
 int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
@@ -441,7 +486,7 @@ char *wDefaultGetIconFile(char *instance, char *class, Bool noDefault)
 	if (!ANoTitlebar)
 		init_wdefaults();
 
-	if (!WDWindowAttributes->dictionary)
+	if (!WDWindowAttributes || !WDWindowAttributes->dictionary)
 		return NULL;
 
 	value = get_generic_value(instance, class, AIcon, noDefault);
