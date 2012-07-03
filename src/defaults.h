@@ -41,9 +41,7 @@ void wDefaultFillAttributes(WScreen *scr, char *instance, char *class,
                             WWindowAttributes *attr, WWindowAttributes *mask,
                             Bool useGlobalDefault);
 
-
-char * wDefaultGetIconFile(WScreen *scr, char *instance, char *class,
-                          Bool noDefault);
+char *wDefaultGetIconFile(char *instance, char *class, Bool noDefault);
 
 RImage * wDefaultGetImage(WScreen *scr, char *winstance, char *wclass, int max_size);
 

@@ -320,7 +320,7 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 	panel->iconField = WMCreateTextField(panel->iconFrame);
 	WMResizeWidget(panel->iconField, 176, 20);
 	WMMoveWidget(panel->iconField, 10, 20);
-	WMSetTextFieldText(panel->iconField, wDefaultGetIconFile(scr, aicon->wm_instance, aicon->wm_class, True));
+	WMSetTextFieldText(panel->iconField, wDefaultGetIconFile(aicon->wm_instance, aicon->wm_class, True));
 
 	panel->browseBtn = WMCreateCommandButton(panel->iconFrame);
 	WMResizeWidget(panel->browseBtn, 70, 24);

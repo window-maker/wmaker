@@ -127,7 +127,7 @@ WIcon *wIconCreate(WWindow * wwin)
 #endif
 	icon->file_image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class, wPreferences.icon_size);
 
-	file = wDefaultGetIconFile(scr, wwin->wm_instance, wwin->wm_class, False);
+	file = wDefaultGetIconFile(wwin->wm_instance, wwin->wm_class, False);
 	if (file)
 		icon->file = wstrdup(file);
 
@@ -617,7 +617,7 @@ void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon)
 	} else {
 		/* make default icons */
 		if (!scr->def_icon_pixmap) {
-			file = wDefaultGetIconFile(scr, NULL, NULL, False);
+			file = wDefaultGetIconFile(NULL, NULL, False);
 			if (file) {
 				path = FindImage(wPreferences.icon_path, file);
 				if (path) {

@@ -182,7 +182,7 @@ static void addIconForWindow(WSwitchPanel * panel, WMWidget * parent, WWindow * 
 		image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class, ICON_TILE_SIZE);
 
 	if (!image && !panel->defIcon) {
-		char *file = wDefaultGetIconFile(panel->scr, NULL, NULL, False);
+		char *file = wDefaultGetIconFile(NULL, NULL, False);
 		if (file) {
 			char *path = FindImage(wPreferences.icon_path, file);
 			if (path) {

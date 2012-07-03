@@ -381,7 +381,7 @@ RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_s
 	RImage *image;
 
 	/* Get the file name of the image, using instance and class */
-	file_name = wDefaultGetIconFile(scr, winstance, wclass, False);
+	file_name = wDefaultGetIconFile(winstance, wclass, False);
 	if (!file_name)
 		return NULL;
 
@@ -433,7 +433,7 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 }
 
 /* Get the name of the Icon File. If noDefault is False, then, default value included */
-char *wDefaultGetIconFile(WScreen *scr, char *instance, char *class, Bool noDefault)
+char *wDefaultGetIconFile(char *instance, char *class, Bool noDefault)
 {
 	WMPropList *value;
 	char *tmp;

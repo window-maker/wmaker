@@ -127,10 +127,10 @@ WAppIcon *wAppIconCreateForDock(WScreen * scr, char *command, char *wm_instance,
 	if (wm_instance)
 		dicon->wm_instance = wstrdup(wm_instance);
 
-	path = wDefaultGetIconFile(scr, wm_instance, wm_class, True);
+	path = wDefaultGetIconFile(wm_instance, wm_class, True);
 	if (!path && command) {
 		wApplicationExtractDirPackIcon(scr, command, wm_instance, wm_class);
-		path = wDefaultGetIconFile(scr, wm_instance, wm_class, False);
+		path = wDefaultGetIconFile(wm_instance, wm_class, False);
 	}
 
 	if (path)

@@ -323,7 +323,7 @@ static int showIconFor(WMScreen *scrPtr, InspectorPanel *panel, char *wm_instanc
 			file = NULL;
 		}
 	} else {
-		db_icon = wDefaultGetIconFile(panel->inspected->screen_ptr, wm_instance, wm_class, False);
+		db_icon = wDefaultGetIconFile(wm_instance, wm_class, False);
 		if (db_icon != NULL)
 			file = wstrdup(db_icon);
 	}
