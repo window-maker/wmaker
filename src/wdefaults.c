@@ -89,7 +89,7 @@ static WMPropList *AIcon;
 static WMPropList *AnyWindow;
 static WMPropList *No;
 
-static void init_wdefaults(WScreen * scr)
+static void init_wdefaults(void)
 {
 	AIcon = WMCreatePLString("Icon");
 
@@ -209,7 +209,7 @@ wDefaultFillAttributes(WScreen * scr, char *instance, char *class,
 	dw = dc = dn = da = NULL;
 
 	if (!ANoTitlebar)
-		init_wdefaults(scr);
+		init_wdefaults();
 
 	if (class && instance) {
 		buffer = StrConcatDot(instance, class);
@@ -411,7 +411,7 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 	char *tmp;
 
 	if (!ANoTitlebar)
-		init_wdefaults(scr);
+		init_wdefaults();
 
 	if (!WDWindowAttributes->dictionary)
 		return -1;
@@ -439,7 +439,7 @@ char *wDefaultGetIconFile(WScreen *scr, char *instance, char *class, Bool noDefa
 	char *tmp;
 
 	if (!ANoTitlebar)
-		init_wdefaults(scr);
+		init_wdefaults();
 
 	if (!WDWindowAttributes->dictionary)
 		return NULL;
