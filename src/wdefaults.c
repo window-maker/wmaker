@@ -199,9 +199,9 @@ static WMPropList *get_value_from_instanceclass(char *value)
  *
  *----------------------------------------------------------------------
  */
-void
-wDefaultFillAttributes(WScreen * scr, char *instance, char *class,
-		       WWindowAttributes * attr, WWindowAttributes * mask, Bool useGlobalDefault)
+void wDefaultFillAttributes(char *instance, char *class,
+			    WWindowAttributes *attr, WWindowAttributes *mask,
+			    Bool useGlobalDefault)
 {
 	WMPropList *value, *dw, *dc, *dn, *da;
 	char *buffer;

@@ -59,8 +59,8 @@ static WWindow *makeMainWindow(WScreen * scr, Window window)
 
 	PropGetWMClass(window, &wwin->wm_class, &wwin->wm_instance);
 
-	wDefaultFillAttributes(scr, wwin->wm_instance, wwin->wm_class,
-			       &wwin->user_flags, &wwin->defined_user_flags, True);
+	wDefaultFillAttributes(wwin->wm_instance, wwin->wm_class, &wwin->user_flags,
+			       &wwin->defined_user_flags, True);
 
 	XSelectInput(dpy, window, attr.your_event_mask | PropertyChangeMask | StructureNotifyMask);
 	return wwin;

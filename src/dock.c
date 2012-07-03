@@ -804,7 +804,7 @@ static void launchDockedApplication(WAppIcon *btn, Bool withSelection)
 		if (btn->wm_instance || btn->wm_class) {
 			WWindowAttributes attr;
 			memset(&attr, 0, sizeof(WWindowAttributes));
-			wDefaultFillAttributes(scr, btn->wm_instance, btn->wm_class, &attr, NULL, True);
+			wDefaultFillAttributes(btn->wm_instance, btn->wm_class, &attr, NULL, True);
 
 			if (!attr.no_appicon && !btn->buggy_app)
 				btn->launching = 1;
@@ -1840,8 +1840,7 @@ int wDockReceiveDNDDrop(WScreen *scr, XEvent *event)
 		if (btn->wm_instance || btn->wm_class) {
 			WWindowAttributes attr;
 			memset(&attr, 0, sizeof(WWindowAttributes));
-			wDefaultFillAttributes(btn->icon->core->screen_ptr,
-					       btn->wm_instance, btn->wm_class, &attr, NULL, True);
+			wDefaultFillAttributes(btn->wm_instance, btn->wm_class, &attr, NULL, True);
 
 			if (!attr.no_appicon)
 				btn->launching = 1;

@@ -302,7 +302,7 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 	WScreen *scr = wwin->screen_ptr;
 
 	/* sets global default stuff */
-	wDefaultFillAttributes(scr, wwin->wm_instance, wwin->wm_class, &wwin->client_flags, NULL, True);
+	wDefaultFillAttributes(wwin->wm_instance, wwin->wm_class, &wwin->client_flags, NULL, True);
 	/*
 	 * Decoration setting is done in this precedence (lower to higher)
 	 * - use global default in the resource database
@@ -393,8 +393,8 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 	 * Set attributes specified only for that window/class.
 	 * This might do duplicate work with the 1st wDefaultFillAttributes().
 	 */
-	wDefaultFillAttributes(scr, wwin->wm_instance, wwin->wm_class,
-			       &wwin->user_flags, &wwin->defined_user_flags, False);
+	wDefaultFillAttributes(wwin->wm_instance, wwin->wm_class, &wwin->user_flags,
+			       &wwin->defined_user_flags, False);
 	/*
 	 * Sanity checks for attributes that depend on other attributes
 	 */
