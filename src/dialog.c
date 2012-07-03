@@ -1461,45 +1461,23 @@ static void setCrashAction(void *self, void *clientData)
 }
 
 /* Make this read the logo from a compiled in pixmap -Dan */
-static WMPixmap *getWindowMakerIconImage(WMScreen * scr)
+static WMPixmap *getWindowMakerIconImage(WMScreen *scr)
 {
-	WMPropList *dict, *key, *option, *value = NULL;
 	WMPixmap *pix = NULL;
-	char *path;
+	char *path = NULL;
 
-	if (!WDWindowAttributes || !WDWindowAttributes->dictionary)
-		return NULL;
+	path = get_default_icon_filename(NULL, "Logo", "WMPanel", NULL, True);
 
-	WMPLSetCaseSensitive(True);
+	if (path) {
+		RColor gray;
 
-	key = WMCreatePLString("Logo.WMPanel");
-	option = WMCreatePLString("Icon");
+		gray.red = 0xae;
+		gray.green = 0xaa;
+		gray.blue = 0xae;
+		gray.alpha = 0;
 
-	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
-
-	if (dict) {
-		value = WMGetFromPLDictionary(dict, option);
-	}
-
-	WMReleasePropList(key);
-	WMReleasePropList(option);
-
-	WMPLSetCaseSensitive(False);
-
-	if (value && WMIsPLString(value)) {
-		path = FindImage(wPreferences.icon_path, WMGetFromPLString(value));
-
-		if (path) {
-			RColor gray;
-
-			gray.red = 0xae;
-			gray.green = 0xaa;
-			gray.blue = 0xae;
-			gray.alpha = 0;
-
-			pix = WMCreateBlendedPixmapFromFile(scr, path, &gray);
-			wfree(path);
-		}
+		pix = WMCreateBlendedPixmapFromFile(scr, path, &gray);
+		wfree(path);
 	}
 
 	return pix;
