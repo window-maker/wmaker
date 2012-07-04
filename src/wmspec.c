@@ -120,6 +120,8 @@ static Atom net_wm_icon;
 static Atom net_wm_pid;		/* TODO */
 static Atom net_wm_handled_icons;	/* FIXME: see net_wm_icon_geometry */
 
+static Atom net_frame_extents;
+
 /* Window Manager Protocols */
 static Atom net_wm_ping;	/* TODO */
 
@@ -192,6 +194,8 @@ static atomitem_t atomNames[] = {
 	{"_NET_WM_ICON", &net_wm_icon},
 	{"_NET_WM_PID", &net_wm_pid},
 	{"_NET_WM_HANDLED_ICONS", &net_wm_handled_icons},
+
+	{"_NET_FRAME_EXTENTS", &net_frame_extents},
 
 	{"_NET_WM_PING", &net_wm_ping},
 
@@ -293,6 +297,8 @@ static void setSupportedHints(WScreen * scr)
 	atom[i++] = net_wm_icon_geometry;
 	atom[i++] = net_wm_icon;
 	atom[i++] = net_wm_handled_icons;
+
+	atom[i++] = net_frame_extents;
 
 	atom[i++] = net_wm_name;
 	atom[i++] = net_wm_icon_name;
@@ -1604,4 +1610,27 @@ static void wsobserver(void *self, WMNotification * notif)
 	} else if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
 		updateWorkspaceNames(scr);
 	}
+}
+
+void wNETFrameExtents(WWindow *wwin)
+{
+	long extents[4] = { 0, 0, 0, 0 };
+
+	/* The extents array describes dimensions which are not
+	 * part of the client window.  In our case that means
+	 * widths of the border and heights of the titlebar and resizebar.
+	 *
+	 * Index 0 = left
+	 *       1 = right
+	 *       2 = top
+	 *       3 = bottom
+	 */
+	if (!wwin->client_flags.no_border)
+		extents[0] = extents[1] = FRAME_BORDER_WIDTH;
+	if (wwin->frame->titlebar)
+		extents[2] = wwin->frame->titlebar->height;
+	if (wwin->frame->resizebar)
+		extents[3] = wwin->frame->resizebar->height;
+
+	XChangeProperty(dpy, wwin->client_win, net_frame_extents, XA_CARDINAL, 32, PropModeReplace, (unsigned char *) extents, 4);
 }

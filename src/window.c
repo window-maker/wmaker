@@ -2039,6 +2039,9 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 
 	if (synth_notify)
 		wWindowSynthConfigureNotify(wwin);
+
+	wNETFrameExtents(wwin);
+
 	XFlush(dpy);
 }
 

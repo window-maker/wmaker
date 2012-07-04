@@ -44,4 +44,5 @@ int wNETWMGetPidForWindow(Window window);
 int wNETWMGetCurrentDesktopFromHint(WScreen *scr);
 char *wNETWMGetIconName(Window window);
 char *wNETWMGetWindowName(Window window);
+void wNETFrameExtents(WWindow *wwin);
 #endif
