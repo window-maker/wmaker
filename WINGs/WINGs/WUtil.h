@@ -876,8 +876,7 @@ WMenuParser WMenuParserCreate(const char *file_name, void *file);
 
 const char *WMenuParserGetFilename(WMenuParser parser);
 
-char *getLine(WMenuParser parser);
-void separateline(char *line, char **title, char **command, char **parameter, char **shortcut);
+Bool WMenuParserGetLine(WMenuParser parser, char **title, char **command, char **parameter, char **shortcut);
 
 void WMenuParserDelete(WMenuParser parser);
 

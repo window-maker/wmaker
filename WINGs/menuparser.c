@@ -28,6 +28,7 @@
 #include "menuparser.h"
 
 static WMenuParser menu_parser_create_new(const char *file_name, void *file);
+static void separateline(char *line, char **title, char **command, char **parameter, char **shortcut);
 
 
 /***** Constructor and Destructor for the Menu Parser object *****/
@@ -62,18 +63,28 @@ const char *WMenuParserGetFilename(WMenuParser parser)
 	return parser->file_name;
 }
 
-char *getLine(WMenuParser parser)
+
+/***** Read one line from file and split content *****/
+Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, char **parameter, char **shortcut)
 {
-	char linebuf[MAXLINE];
+	WMenuParser cur_parser;
 	char *line = NULL, *result = NULL;
 	size_t len;
 	int done;
 
+	*title = NULL;
+	*command = NULL;
+	*parameter = NULL;
+	*shortcut = NULL;
+
+	cur_parser = top_parser;
+
 again:
 	done = 0;
-	while (!done && fgets(linebuf, sizeof(linebuf), parser->file_handle) != NULL) {
-		line = wtrimspace(linebuf);
+	while (!done && fgets(cur_parser->line_buffer, sizeof(cur_parser->line_buffer), cur_parser->file_handle) != NULL) {
+		line = wtrimspace(cur_parser->line_buffer);
 		len = strlen(line);
+		cur_parser->line_number++;
 
 		/* allow line wrapping */
 		if (len > 0 && line[len - 1] == '\\') {
@@ -91,7 +102,7 @@ again:
 			wfree(line);
 		}
 	}
-	if (!done || ferror(parser->file_handle)) {
+	if (!done || ferror(cur_parser->file_handle)) {
 		wfree(result);
 		result = NULL;
 	} else if (result != NULL && (result[0] == 0 || result[0] == '#' ||
@@ -101,23 +112,23 @@ again:
 		goto again;
 	} else if (result != NULL && strlen(result) >= MAXLINE) {
 		wwarning(_("%s:maximal line size exceeded in menu config: %s"),
-			 parser->file_name, line);
+			 cur_parser->file_name, line);
 		wfree(result);
 		result = NULL;
 		goto again;
 	}
 
-	return result;
+	if (result == NULL)
+	  return False;
+
+	separateline(line, title, command, parameter, shortcut);
+	wfree(line);
+	return True;
 }
 
-void separateline(char *line, char **title, char **command, char **parameter, char **shortcut)
+static void separateline(char *line, char **title, char **command, char **parameter, char **shortcut)
 {
 	char *suffix, *next = line;
-
-	*title = NULL;
-	*command = NULL;
-	*parameter = NULL;
-	*shortcut = NULL;
 
 	/* get the title */
 	*title = wtokennext(line, &next);

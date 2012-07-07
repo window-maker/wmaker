@@ -893,16 +893,13 @@ static void freeline(char *title, char *command, char *parameter, char *shortcut
 
 static WMenu *parseCascade(WScreen * scr, WMenu * menu, WMenuParser parser)
 {
-	char *line;
 	char *command, *params, *shortcut, *title;
 
-	while ((line = getLine(parser)) != NULL) {
-		separateline(line, &title, &command, &params, &shortcut);
+	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
 		if (command == NULL || !command[0]) {
-			wwarning(_("%s:missing command in menu config: %s"), WMenuParserGetFilename(parser), line);
+			wwarning(_("%s:missing command in menu config"), WMenuParserGetFilename(parser));
 			freeline(title, command, params, shortcut);
-			wfree(line);
 			goto error;
 		}
 
@@ -921,14 +918,12 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, WMenuParser parser)
 		} else if (strcasecmp(command, "END") == 0) {
 			/* end of menu */
 			freeline(title, command, params, shortcut);
-			wfree(line);
 			return menu;
 		} else {
 			/* normal items */
 			addMenuEntry(menu, M_(title), shortcut, command, params, WMenuParserGetFilename(parser));
 		}
 		freeline(title, command, params, shortcut);
-		wfree(line);
 	}
 
 	wwarning(_("%s:syntax error in menu file:END declaration missing"), WMenuParserGetFilename(parser));
@@ -942,7 +937,6 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 	WMenu *menu = NULL;
 	FILE *file = NULL;
 	WMenuParser parser;
-	char *line;
 	char *command, *params, *shortcut, *title;
 	char cmd[MAXLINE];
 #ifdef USECPP
@@ -977,13 +971,11 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 	}
 	parser = WMenuParserCreate(file_name, file);
 
-	while ((line = getLine(parser)) != NULL) {
-		separateline(line, &title, &command, &params, &shortcut);
+	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
 		if (command == NULL || !command[0]) {
-			wwarning(_("%s:missing command in menu config: %s"), file_name, line);
+			wwarning(_("%s:missing command in menu config"), file_name);
 			freeline(title, command, params, shortcut);
-			wfree(line);
 			break;
 		}
 		if (strcasecmp(command, "MENU") == 0) {
@@ -994,16 +986,13 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 				menu = NULL;
 			}
 			freeline(title, command, params, shortcut);
-			wfree(line);
 			break;
 		} else {
 			wwarning(_("%s:invalid menu file. MENU command is missing"), file_name);
 			freeline(title, command, params, shortcut);
-			wfree(line);
 			break;
 		}
 		freeline(title, command, params, shortcut);
-		wfree(line);
 	}
 
 	WMenuParserDelete(parser);
@@ -1030,7 +1019,6 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	FILE *file = NULL;
 	WMenuParser parser;
 	char *command, *params, *shortcut, *title;
-	char *line;
 	char *filename;
 	char flat_file[MAXLINE];
 	char cmd[MAXLINE];
@@ -1074,13 +1062,11 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	}
 	parser = WMenuParserCreate(flat_file, file);
 
-	while ((line = getLine(parser)) != NULL) {
-		separateline(line, &title, &command, &params, &shortcut);
+	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
 		if (command == NULL || !command[0]) {
-			wwarning(_("%s:missing command in menu config: %s"), filename, line);
+			wwarning(_("%s:missing command in menu config"), filename);
 			freeline(title, command, params, shortcut);
-			wfree(line);
 			break;
 		}
 		if (strcasecmp(command, "MENU") == 0) {
@@ -1091,17 +1077,14 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 				menu = NULL;
 			}
 			freeline(title, command, params, shortcut);
-			wfree(line);
 			break;
 		} else {
 			wwarning(_("%s:no title given for the root menu"), filename);
 			freeline(title, command, params, shortcut);
-			wfree(line);
 			break;
 		}
 
 		freeline(title, command, params, shortcut);
-		wfree(line);
 	}
 
 	WMenuParserDelete(parser);
