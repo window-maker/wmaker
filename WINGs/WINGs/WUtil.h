@@ -866,6 +866,13 @@ void WMSetUDSearchList(WMUserDefaults *database, WMPropList *list);
 extern char *WMUserDefaultsDidChangeNotification;
 
 
+/* ---[ WINGs/menuparser.c ]---------------------------------------------- */
+
+
+char *getLine(void * file, const char *file_name);
+void separateline(char *line, char **title, char **command, char **parameter, char **shortcut);
+
+
 /*-------------------------------------------------------------------------*/
 
 /* Global variables */

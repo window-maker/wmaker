@@ -71,6 +71,7 @@ libWUtil_la_SOURCES = 	\
 	handlers.c \
 	hashtable.c \
 	memory.c \
+	menuparser.c \
 	misc.c \
 	notification.c \
 	proplist.c \
