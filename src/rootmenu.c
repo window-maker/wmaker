@@ -410,7 +410,7 @@ static void removeShortcutsForMenu(WMenu * menu)
 	menu->menu->screen_ptr->flags.root_menu_changed_shortcuts = 1;
 }
 
-static Bool addShortcut(char *file, char *shortcutDefinition, WMenu * menu, WMenuEntry * entry)
+static Bool addShortcut(const char *file, char *shortcutDefinition, WMenu * menu, WMenuEntry * entry)
 {
 	Shortcut *ptr;
 	KeySym ksym;
@@ -759,7 +759,7 @@ static WMenuEntry *addWindowsMenu(WScreen * scr, WMenu * menu, char *title)
 }
 
 static WMenuEntry *addMenuEntry(WMenu * menu, char *title, char *shortcut, char *command,
-				char *params, char *file_name)
+				char *params, const char *file_name)
 {
 	WScreen *scr;
 	WMenuEntry *entry = NULL;
@@ -891,16 +891,16 @@ static void freeline(char *title, char *command, char *parameter, char *shortcut
 	wfree(shortcut);
 }
 
-static WMenu *parseCascade(WScreen * scr, WMenu * menu, FILE * file, char *file_name)
+static WMenu *parseCascade(WScreen * scr, WMenu * menu, WMenuParser parser)
 {
 	char *line;
 	char *command, *params, *shortcut, *title;
 
-	while ((line = getLine(file, file_name)) != NULL) {
+	while ((line = getLine(parser)) != NULL) {
 		separateline(line, &title, &command, &params, &shortcut);
 
 		if (command == NULL || !command[0]) {
-			wwarning(_("%s:missing command in menu config: %s"), file_name, line);
+			wwarning(_("%s:missing command in menu config: %s"), WMenuParserGetFilename(parser), line);
 			freeline(title, command, params, shortcut);
 			wfree(line);
 			goto error;
@@ -913,7 +913,7 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, FILE * file, char *file_
 
 			cascade = wMenuCreate(scr, M_(title), False);
 			cascade->on_destroy = removeShortcutsForMenu;
-			if (!parseCascade(scr, cascade, file, file_name)) {
+			if (!parseCascade(scr, cascade, parser)) {
 				wMenuDestroy(cascade, True);
 			} else {
 				wMenuEntrySetCascade(menu, wMenuAddCallback(menu, M_(title), NULL, NULL), cascade);
@@ -925,13 +925,13 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, FILE * file, char *file_
 			return menu;
 		} else {
 			/* normal items */
-			addMenuEntry(menu, M_(title), shortcut, command, params, file_name);
+			addMenuEntry(menu, M_(title), shortcut, command, params, WMenuParserGetFilename(parser));
 		}
 		freeline(title, command, params, shortcut);
 		wfree(line);
 	}
 
-	wwarning(_("%s:syntax error in menu file:END declaration missing"), file_name);
+	wwarning(_("%s:syntax error in menu file:END declaration missing"), WMenuParserGetFilename(parser));
 
  error:
 	return NULL;
@@ -941,6 +941,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 {
 	WMenu *menu = NULL;
 	FILE *file = NULL;
+	WMenuParser parser;
 	char *line;
 	char *command, *params, *shortcut, *title;
 	char cmd[MAXLINE];
@@ -974,8 +975,9 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 			return NULL;
 		}
 	}
+	parser = WMenuParserCreate(file_name, file);
 
-	while ((line = getLine(file, file_name)) != NULL) {
+	while ((line = getLine(parser)) != NULL) {
 		separateline(line, &title, &command, &params, &shortcut);
 
 		if (command == NULL || !command[0]) {
@@ -987,7 +989,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 		if (strcasecmp(command, "MENU") == 0) {
 			menu = wMenuCreate(scr, M_(title), True);
 			menu->on_destroy = removeShortcutsForMenu;
-			if (!parseCascade(scr, menu, file, file_name)) {
+			if (!parseCascade(scr, menu, parser)) {
 				wMenuDestroy(menu, True);
 				menu = NULL;
 			}
@@ -1004,6 +1006,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 		wfree(line);
 	}
 
+	WMenuParserDelete(parser);
 #ifdef USECPP
 	if (cpp) {
 		if (pclose(file) == -1) {
@@ -1025,6 +1028,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 {
 	WMenu *menu = NULL;
 	FILE *file = NULL;
+	WMenuParser parser;
 	char *command, *params, *shortcut, *title;
 	char *line;
 	char *filename;
@@ -1068,8 +1072,9 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 			return NULL;
 		}
 	}
+	parser = WMenuParserCreate(flat_file, file);
 
-	while ((line = getLine(file, filename)) != NULL) {
+	while ((line = getLine(parser)) != NULL) {
 		separateline(line, &title, &command, &params, &shortcut);
 
 		if (command == NULL || !command[0]) {
@@ -1081,7 +1086,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 		if (strcasecmp(command, "MENU") == 0) {
 			menu = wMenuCreate(scr, M_(title), True);
 			menu->on_destroy = removeShortcutsForMenu;
-			if (!parseCascade(scr, menu, file, filename)) {
+			if (!parseCascade(scr, menu, parser)) {
 				wMenuDestroy(menu, True);
 				menu = NULL;
 			}
@@ -1099,6 +1104,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 		wfree(line);
 	}
 
+	WMenuParserDelete(parser);
 	pclose(file);
 
 	return menu;

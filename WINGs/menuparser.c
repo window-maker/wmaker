@@ -25,10 +25,44 @@
 
 #include <WINGs/WUtil.h>
 
-#define MAXLINE  1024
+#include "menuparser.h"
+
+static WMenuParser menu_parser_create_new(const char *file_name, void *file);
 
 
-char *getLine(void * file, const char *file_name)
+/***** Constructor and Destructor for the Menu Parser object *****/
+WMenuParser WMenuParserCreate(const char *file_name, void *file)
+{
+	WMenuParser parser;
+
+	parser = menu_parser_create_new(file_name, file);
+	return parser;
+}
+
+void WMenuParserDelete(WMenuParser parser)
+{
+	wfree(parser);
+}
+
+static WMenuParser menu_parser_create_new(const char *file_name, void *file)
+{
+	WMenuParser parser;
+
+	parser = wmalloc(sizeof(*parser));
+	parser->file_name = file_name;
+	parser->file_handle = file;
+	parser->rd = parser->line_buffer;
+
+	return parser;
+}
+
+/***** To report helpfull messages to user *****/
+const char *WMenuParserGetFilename(WMenuParser parser)
+{
+	return parser->file_name;
+}
+
+char *getLine(WMenuParser parser)
 {
 	char linebuf[MAXLINE];
 	char *line = NULL, *result = NULL;
@@ -37,7 +71,7 @@ char *getLine(void * file, const char *file_name)
 
 again:
 	done = 0;
-	while (!done && fgets(linebuf, sizeof(linebuf), file) != NULL) {
+	while (!done && fgets(linebuf, sizeof(linebuf), parser->file_handle) != NULL) {
 		line = wtrimspace(linebuf);
 		len = strlen(line);
 
@@ -57,7 +91,7 @@ again:
 			wfree(line);
 		}
 	}
-	if (!done || ferror(file)) {
+	if (!done || ferror(parser->file_handle)) {
 		wfree(result);
 		result = NULL;
 	} else if (result != NULL && (result[0] == 0 || result[0] == '#' ||
@@ -67,7 +101,7 @@ again:
 		goto again;
 	} else if (result != NULL && strlen(result) >= MAXLINE) {
 		wwarning(_("%s:maximal line size exceeded in menu config: %s"),
-			 file_name, line);
+			 parser->file_name, line);
 		wfree(result);
 		result = NULL;
 		goto again;

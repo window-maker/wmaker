@@ -869,8 +869,17 @@ extern char *WMUserDefaultsDidChangeNotification;
 /* ---[ WINGs/menuparser.c ]---------------------------------------------- */
 
 
-char *getLine(void * file, const char *file_name);
+typedef struct w_menu_parser *WMenuParser;
+
+
+WMenuParser WMenuParserCreate(const char *file_name, void *file);
+
+const char *WMenuParserGetFilename(WMenuParser parser);
+
+char *getLine(WMenuParser parser);
 void separateline(char *line, char **title, char **command, char **parameter, char **shortcut);
+
+void WMenuParserDelete(WMenuParser parser);
 
 
 /*-------------------------------------------------------------------------*/
