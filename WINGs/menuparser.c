@@ -63,6 +63,16 @@ const char *WMenuParserGetFilename(WMenuParser parser)
 	return parser->file_name;
 }
 
+void WMenuParserError(WMenuParser parser, const char *msg, ...)
+{
+	char buf[MAXLINE];
+	va_list args;
+
+	va_start(args, msg);
+	vsnprintf(buf, sizeof(buf), msg, args);
+	va_end(args);
+	__wmessage("WMenuParser", parser->file_name, parser->line_number, WMESSAGE_TYPE_WARNING, buf);
+}
 
 /***** Read one line from file and split content *****/
 Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, char **parameter, char **shortcut)
@@ -111,8 +121,7 @@ again:
 		result = NULL;
 		goto again;
 	} else if (result != NULL && strlen(result) >= MAXLINE) {
-		wwarning(_("%s:maximal line size exceeded in menu config: %s"),
-			 cur_parser->file_name, line);
+		WMenuParserError(cur_parser, _("maximal line size exceeded in menu config") );
 		wfree(result);
 		result = NULL;
 		goto again;

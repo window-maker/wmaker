@@ -874,6 +874,9 @@ typedef struct w_menu_parser *WMenuParser;
 
 WMenuParser WMenuParserCreate(const char *file_name, void *file);
 
+void WMenuParserError(WMenuParser parser, const char *msg, ...)
+	__attribute__ ((format (printf, 2, 3)));
+
 const char *WMenuParserGetFilename(WMenuParser parser);
 
 Bool WMenuParserGetLine(WMenuParser parser, char **title, char **command, char **parameter, char **shortcut);

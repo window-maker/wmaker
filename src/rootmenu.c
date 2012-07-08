@@ -898,7 +898,7 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, WMenuParser parser)
 	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
 		if (command == NULL || !command[0]) {
-			wwarning(_("%s:missing command in menu config"), WMenuParserGetFilename(parser));
+			WMenuParserError(parser, _("missing command in menu config") );
 			freeline(title, command, params, shortcut);
 			goto error;
 		}
@@ -926,7 +926,7 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, WMenuParser parser)
 		freeline(title, command, params, shortcut);
 	}
 
-	wwarning(_("%s:syntax error in menu file:END declaration missing"), WMenuParserGetFilename(parser));
+	WMenuParserError(parser, _("syntax error in menu file: END declaration missing") );
 
  error:
 	return NULL;
@@ -974,7 +974,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
 		if (command == NULL || !command[0]) {
-			wwarning(_("%s:missing command in menu config"), file_name);
+			WMenuParserError(parser, _("missing command in menu config") );
 			freeline(title, command, params, shortcut);
 			break;
 		}
@@ -988,7 +988,7 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 			freeline(title, command, params, shortcut);
 			break;
 		} else {
-			wwarning(_("%s:invalid menu file. MENU command is missing"), file_name);
+			WMenuParserError(parser, _("invalid menu file, MENU command is missing") );
 			freeline(title, command, params, shortcut);
 			break;
 		}
@@ -1065,7 +1065,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
 
 		if (command == NULL || !command[0]) {
-			wwarning(_("%s:missing command in menu config"), filename);
+			WMenuParserError(parser, _("missing command in menu config") );
 			freeline(title, command, params, shortcut);
 			break;
 		}
@@ -1079,7 +1079,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 			freeline(title, command, params, shortcut);
 			break;
 		} else {
-			wwarning(_("%s:no title given for the root menu"), filename);
+			WMenuParserError(parser, _("no title given for the root menu") );
 			freeline(title, command, params, shortcut);
 			break;
 		}
