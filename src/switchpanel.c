@@ -162,6 +162,27 @@ static RImage *scaleDownIfNeeded(RImage *image)
 	return image;
 }
 
+/* This function sets the default icon (defIcon) in the switchpanel */
+static void create_default_icon(WSwitchPanel *panel)
+{
+	RImage *image = NULL;
+	char *path = NULL;
+	char *file = wDefaultGetIconFile(NULL, NULL, False);
+
+	if (file) {
+		path = FindImage(wPreferences.icon_path, file);
+		if (path) {
+			image = RLoadImage(panel->scr->rcontext, path, 0);
+			wfree(path);
+		}
+	}
+
+	if (image)
+		panel->defIcon = scaleDownIfNeeded(image);
+
+	image = NULL;
+}
+
 static void addIconForWindow(WSwitchPanel *panel, WMWidget *parent, WWindow *wwin, int x, int y)
 {
 	WMFrame *icon = WMCreateFrame(parent);
@@ -174,27 +195,14 @@ static void addIconForWindow(WSwitchPanel *panel, WMWidget *parent, WWindow *wwi
 	if (!WFLAGP(wwin, always_user_icon) && wwin->net_icon_image)
 		image = RRetainImage(wwin->net_icon_image);
 
-	// Make this use a caching thing. When there are many windows,
-	// it's very likely that most of them are instances of the same thing,
-	// so caching them should get performance acceptable in these cases.
 	if (!image)
 		image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class, ICON_TILE_SIZE);
 
-	if (!image && !panel->defIcon) {
-		char *file = wDefaultGetIconFile(NULL, NULL, False);
-		if (file) {
-			char *path = FindImage(wPreferences.icon_path, file);
-			if (path) {
-				image = RLoadImage(panel->scr->rcontext, path, 0);
-				wfree(path);
-			}
-		}
-
-		if (image)
-			panel->defIcon = scaleDownIfNeeded(image);
-
-		image = NULL;
-	}
+	// Make this use a caching thing. When there are many windows,
+	// it's very likely that most of them are instances of the same thing,
+	// so caching them should get performance acceptable in these cases.
+	if (!image && !panel->defIcon)
+		create_default_icon(panel);
 
 	if (!image && panel->defIcon)
 		image = RRetainImage(panel->defIcon);
