@@ -10,6 +10,8 @@ config.h: config-paths.h
 
 config-paths.h: Makefile
 	@echo "Generating $@"
+	@echo '/* this is a generated file - do not edit */' > $@
+	@echo '' >> $@
 	@echo '/* gettext domain used for menu translations */' >> $@
 	@if test -z "$(menutextdomain)"; then \
 	  echo '/* #undef MENU_TEXTDOMAIN "$(menutextdomain)" */' >> $@; \
