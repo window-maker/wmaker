@@ -65,7 +65,7 @@ void wIconChangeTitle(WIcon *icon, char *new_title);
 
 Bool wIconChangeImageFile(WIcon *icon, char *file);
 
-RImage * wIconValidateIconSize(WScreen *scr, RImage *icon, int max_size);
+RImage *wIconValidateIconSize(RImage *icon, int max_size);
 
 char *wIconStore(WIcon *icon);
 char *get_name_for_instance_class(char *wm_instance, char *wm_class);

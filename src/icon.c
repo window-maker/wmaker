@@ -149,7 +149,7 @@ WIcon *wIconCreate(WWindow * wwin)
 	return icon;
 }
 
-WIcon *wIconCreateWithIconFile(WScreen * scr, char *iconfile, int tile)
+WIcon *wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
 {
 	WIcon *icon;
 
@@ -160,8 +160,7 @@ WIcon *wIconCreateWithIconFile(WScreen * scr, char *iconfile, int tile)
 		if (!icon->file_image)
 			wwarning(_("error loading image file \"%s\": %s"), iconfile, RMessageForError(RErrorCode));
 
-		icon->file_image = wIconValidateIconSize(scr, icon->file_image, wPreferences.icon_size);
-
+		icon->file_image = wIconValidateIconSize(icon->file_image, wPreferences.icon_size);
 		icon->file = wstrdup(iconfile);
 	}
 
@@ -338,7 +337,7 @@ void wIconChangeTitle(WIcon * icon, char *new_title)
 	wIconPaint(icon);
 }
 
-RImage *wIconValidateIconSize(WScreen *scr, RImage *icon, int max_size)
+RImage *wIconValidateIconSize(RImage *icon, int max_size)
 {
 	RImage *nimage;
 
@@ -376,7 +375,7 @@ Bool wIconChangeImageFile(WIcon * icon, char *file)
 	path = FindImage(wPreferences.icon_path, file);
 
 	if (path && (image = RLoadImage(scr->rcontext, path, 0))) {
-		icon->file_image = wIconValidateIconSize(icon->core->screen_ptr, image, wPreferences.icon_size);
+		icon->file_image = wIconValidateIconSize(image, wPreferences.icon_size);
 		wIconUpdate(icon);
 	} else {
 		error = 1;
@@ -630,7 +629,7 @@ void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon)
 				}
 			}
 
-			image = wIconValidateIconSize(scr, image, wPreferences.icon_size);
+			image = wIconValidateIconSize(image, wPreferences.icon_size);
 			scr->def_icon_pixmap = makeIcon(scr, image, False, False, icon->tile_type, icon->highlighted);
 			scr->def_ticon_pixmap = makeIcon(scr, image, True, False, icon->tile_type, icon->highlighted);
 			if (image)

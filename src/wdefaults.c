@@ -432,7 +432,7 @@ RImage *get_default_icon_rimage(WScreen *scr, char *file_name, int max_size)
 		wwarning(_("error loading image file \"%s\": %s"), file_name,
 			 RMessageForError(RErrorCode));
 
-	image = wIconValidateIconSize(scr, image, max_size);
+	image = wIconValidateIconSize(image, max_size);
 
 	return image;
 }
