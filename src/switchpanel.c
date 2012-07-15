@@ -27,6 +27,7 @@
 #include "WindowMaker.h"
 #include "screen.h"
 #include "framewin.h"
+#include "icon.h"
 #include "window.h"
 #include "defaults.h"
 #include "switchpanel.h"
@@ -148,18 +149,6 @@ static void changeImage(WSwitchPanel *panel, int idecks, int selected)
 		WMSetFrameRelief(icon, WRSimple);
 }
 
-static RImage *scaleDownIfNeeded(RImage *image)
-{
-	if (image && ((image->width - ICON_SIZE) > 2 || (image->height - ICON_SIZE) > 2)) {
-		RImage *nimage;
-		nimage = RScaleImage(image, ICON_SIZE, (image->height * ICON_SIZE / image->width));
-		RReleaseImage(image);
-		image = nimage;
-	}
-
-	return image;
-}
-
 static void addIconForWindow(WSwitchPanel *panel, WMWidget *parent, WWindow *wwin, int x, int y)
 {
 	WMFrame *icon = WMCreateFrame(parent);
@@ -176,7 +165,8 @@ static void addIconForWindow(WSwitchPanel *panel, WMWidget *parent, WWindow *wwi
 	if (!image)
 		image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class, ICON_TILE_SIZE);
 
-	image = scaleDownIfNeeded(image);
+	/* We must resize the icon size (~64) to the switchpanel icon size (~48) */
+	image = wIconValidateIconSize(image, ICON_SIZE);
 
 	WMAddToArray(panel->images, image);
 	WMAddToArray(panel->icons, icon);
