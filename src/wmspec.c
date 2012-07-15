@@ -449,6 +449,10 @@ static RImage *get_wwindow_image_from_x11(WWindow *wwin)
 	image = makeRImageFromARGBData(data);
 
 	XFree(property);
+
+	/* Resize the image to the correct value */
+	image = wIconValidateIconSize(image, wPreferences.icon_size);
+
 	return image;
 }
 
