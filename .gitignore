@@ -28,6 +28,8 @@ src/wconfig.h
 # These files are compilation stuff
 *.lo
 *.o
+*.la
+*.a
 
 # These are compilation results
 src/wmaker
@@ -50,7 +52,6 @@ util/wxcopy
 util/wxpaste
 
 wrlib/get-wraster-flags
-wrlib/libwraster.la
 wrlib/tests/testdraw
 wrlib/tests/testgrad
 wrlib/tests/testrot
@@ -61,8 +62,6 @@ WINGs/Examples/connect
 WINGs/Examples/fontl
 WINGs/Examples/puzzle
 WINGs/Examples/server
-WINGs/Extras/libExtraWINGs.a
-WINGs/Extras/libExtraWINGs.la
 WINGs/Extras/test
 WINGs/Tests/testmywidget
 WINGs/Tests/wmfile
@@ -70,10 +69,6 @@ WINGs/Tests/wmquery
 WINGs/Tests/wtest
 WINGs/get-wings-flags
 WINGs/get-wutil-flags
-WINGs/libWINGs.a
-WINGs/libWINGs.la
-WINGs/libWUtil.a
-WINGs/libWUtil.la
 
 WPrefs.app/WPrefs
 
@@ -81,13 +76,11 @@ WPrefs.app/WPrefs
 wrlib/wrlib.pc
 WINGs/WINGs.pc
 
-contrib/WindowMaker.spec
 WindowMaker/Defaults/WMRootMenu
 WindowMaker/Defaults/WMState
 WindowMaker/Defaults/WMWindowAttributes
 WindowMaker/Defaults/WindowMaker
 WindowMaker/IconSets/Default.iconset
-wmlib/libWMaker.la
 
 # Some text editors generate backup files
-config.h.in~
+*~
