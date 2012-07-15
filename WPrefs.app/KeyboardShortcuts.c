@@ -25,6 +25,7 @@
 #include <ctype.h>
 
 #include <X11/keysym.h>
+#include <X11/XKBlib.h>
 
 typedef struct _Panel {
 	WMBox *box;
@@ -242,7 +243,7 @@ char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 		XAllowEvents(dpy, AsyncKeyboard, CurrentTime);
 		WMNextEvent(dpy, &ev);
 		if (ev.type == KeyPress && ev.xkey.keycode != 0) {
-			ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
+			ksym = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0);
 			if (!IsModifierKey(ksym)) {
 				if (convert_case) {
 					XConvertCase(ksym, &lksym, &uksym);

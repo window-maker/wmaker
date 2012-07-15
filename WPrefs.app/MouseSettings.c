@@ -23,6 +23,7 @@
 #include "WPrefs.h"
 
 #include <X11/Xutil.h>
+#include <X11/XKBlib.h>
 
 #include <unistd.h>
 #include <math.h>
@@ -361,7 +362,7 @@ static void fillModifierPopUp(WMPopUpButton * pop)
 			if (mapping->modifiermap[idx] != 0) {
 				int l;
 				for (l = 0; l < 4; l++) {
-					ksym = XKeycodeToKeysym(dpy, mapping->modifiermap[idx], l);
+					ksym = XkbKeycodeToKeysym(dpy, mapping->modifiermap[idx], 0, l);
 					if (ksym != NoSymbol)
 						break;
 				}
