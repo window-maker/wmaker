@@ -99,9 +99,6 @@
  */
 #undef IGNORE_PPOSITION
 
-/* Do not scale application icon and miniwindow icon images */
-#undef DONT_SCALE_ICONS
-
 /*
  * The following options WILL NOT BE MADE RUN-TIME. Please do not request.
  * They will only add unneeded bloat.

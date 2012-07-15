@@ -50,6 +50,7 @@ extern WPreferences wPreferences;
 
 #define MOD_MASK wPreferences.modifier_mask
 #define CACHE_ICON_PATH "/Library/WindowMaker/CachedPixmaps"
+#define ICON_BORDER 3
 
 extern Cursor wCursor[WCUR_LAST];
 
@@ -337,23 +338,21 @@ void wIconChangeTitle(WIcon * icon, char *new_title)
 	wIconPaint(icon);
 }
 
-RImage *wIconValidateIconSize(WScreen * scr, RImage * icon, int max_size)
+RImage *wIconValidateIconSize(WScreen *scr, RImage *icon, int max_size)
 {
-	RImage *tmp;
-	int w, h;
+	RImage *nimage;
 
 	if (!icon)
 		return NULL;
-#ifndef DONT_SCALE_ICONS
-	if (max_size != 64) {
-		w = max_size * icon->width / 64;
-		h = max_size * icon->height / 64;
 
-		tmp = RScaleImage(icon, w, h);
+	/* We should hold "ICON_BORDER" (~2) pixels to include the icon border */
+	if ((icon->width - max_size) > -ICON_BORDER ||
+	    (icon->height - max_size) > -ICON_BORDER) {
+		nimage = RScaleImage(icon, max_size - ICON_BORDER,
+				     (icon->height * (max_size - ICON_BORDER) / icon->width));
 		RReleaseImage(icon);
-		icon = tmp;
+		icon = nimage;
 	}
-#endif
 
 	return icon;
 }
