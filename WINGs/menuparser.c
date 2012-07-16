@@ -102,7 +102,7 @@ void WMenuParserError(WMenuParser parser, const char *msg, ...)
 	va_start(args, msg);
 	vsnprintf(buf, sizeof(buf), msg, args);
 	va_end(args);
-	__wmessage("WMenuParser", parser->file_name, parser->line_number, WMESSAGE_TYPE_WARNING, buf);
+	__wmessage("WMenuParser", parser->file_name, parser->line_number, WMESSAGE_TYPE_WARNING, "%s", buf);
 
 	for (parent = parser->parent_file; parent != NULL; parent = parent->parent_file)
 		__wmessage("WMenuParser", parser->file_name, parser->line_number, WMESSAGE_TYPE_WARNING,
