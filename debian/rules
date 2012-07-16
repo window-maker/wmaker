@@ -5,28 +5,14 @@ export DEB_CFLAGS_MAINT_APPEND += -Wall -DGLOBAL_DEFAULTS_SUBDIR="\\\"GNUstep/De
 export LDFLAGS = `dpkg-buildflags --get LDFLAGS`
 export CPPFLAGS = `dpkg-buildflags --get CPPFLAGS`
 
-# These are used for cross-compiling and for saving the configure script
-# from having to guess our platform (since we know it already)
-export DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
-export DEB_BUILD_GNU_TYPE  ?= $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
-
-ifeq ($(DEB_BUILD_GNU_TYPE),$(DEB_HOST_GNU_TYPE))
-	HOSTSPEC := --build $(DEB_HOST_GNU_TYPE)
-else
-	HOSTSPEC := --build $(DEB_BUILD_GNU_TYPE) --host $(DEB_HOST_GNU_TYPE)
-endif
-
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
-WMAKER_OPTIONS := --disable-locale --enable-modelock --enable-xinerama $(HOSTSPEC)
+WMAKER_OPTIONS := --disable-locale --enable-modelock --enable-xinerama 
 #not-enabled      --enable-usermenu --disable-shape --disable-shm --enable-xrandr
 #not-enabled      --disable-xpm --disable-png --disable-jpeg --disable-gif --disable-tiff
 
-# Debian packages destination folders
+# Debian packages destination folder
 DEBIAN_TMP        := debian/tmp
-DEBDIR_FILES      := debian/debianfiles
-LIBWRASTERDEV_TMP := debian/libwraster3-dev
-LIBWINGSDEV_TMP   := debian/libwings-dev
 
 # Be careful with the leading / because some of these values are going
 # to be hardcoded into the executables
@@ -34,13 +20,11 @@ BASEDIR           := /usr
 CONFDIR           := /etc
 INCLUDEDIR        := $(BASEDIR)/include
 SHAREDIR          := $(BASEDIR)/share
-BINDIR            := $(BASEDIR)/bin
 MANDIR            := $(SHAREDIR)/man
 NLSDIR            := $(SHAREDIR)/locale
 GNUSTEPDIR        := $(SHAREDIR)/lib/GNUstep/System
 WMSHAREDIR        := $(SHAREDIR)/WindowMaker
 PIXMAPDIR         := $(INCLUDEDIR)/X11/pixmaps
-WPREFSAPPDIR      := $(GNUSTEPDIR)/Applications/WPrefs.app/WPrefs
 
 COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
                      --mandir=$(MANDIR)               \
@@ -81,13 +65,6 @@ override_dh_install:
 
 	# Install files
 	dh_install
-
-	# Fix the get-*-flags scripts
-	perl -pi -e '/^WCFLAGS/ && s:=.*:="-I/usr/X11R6/include":; /^WLFLAGS/ && s:=.*:="-L/usr/X11R6/lib":;' `find $(LIBWRASTERDEV_TMP) -name get-*-flags`
-	perl -pi -e '/^WCFLAGS/ && s:=.*:="-I/usr/X11R6/include":; /^WLFLAGS/ && s:=.*:="-L/usr/X11R6/lib":;' `find $(LIBWINGSDEV_TMP) -name get-*-flags`
-	perl -pi -e '/^WLIBS/ && s:=.*:="-lwraster":' `find $(LIBWRASTERDEV_TMP) -name get-wraster-flags`
-	perl -pi -e '/^WLIBS/ && s:=.*:="-lWINGs -lwraster -lXft":' `find $(LIBWINGSDEV_TMP) -name get-wings-flags`
-	perl -pi -e '/^WLIBS/ && s:=.*:="-lWUtil -lX11":' `find $(LIBWINGSDEV_TMP) -name get-wutil-flags`
 
 override_dh_strip:
 	dh_strip --dbg-package=wmaker-dbg

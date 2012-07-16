@@ -187,6 +187,12 @@ libWUtil.so.2 libwutil2 #MINVER#
  WMTreeWalk@Base 0.95.0
  WMUserDefaultsDidChangeNotification@Base 0.95.0
  WMWritePropListToFile@Base 0.95.0
+ WMenuParserCreate@Base 0.95.3+20120825
+ WMenuParserDelete@Base 0.95.3+20120825
+ WMenuParserError@Base 0.95.3+20120825
+ WMenuParserGetFilename@Base 0.95.3+20120825
+ WMenuParserGetLine@Base 0.95.3+20120825
+ WMenuParserRegisterSimpleMacro@Base 0.95.3+20120825
  W_ApplicationInitialized@Base 0.95.0
  W_CheckIdleHandlers@Base 0.95.0
  W_CheckTimerHandlers@Base 0.95.0
@@ -199,6 +205,13 @@ libWUtil.so.2 libwutil2 #MINVER#
  __wmessage@Base 0.95.0
  wcopy_file@Base 0.95.1
  destroyNode@Base 0.95.0
+ isnamechr@Base 0.95.3+20120825-1
+ menu_parser_define_macro@Base 0.95.3+20120825
+ menu_parser_expand_macro@Base 0.95.3+20120825
+ menu_parser_find_macro@Base 0.95.3+20120825
+ menu_parser_free_macros@Base 0.95.3+20120825
+ menu_parser_register_preset_macros@Base 0.95.3+20120825
+ menu_parser_skip_spaces_and_comments@Base 0.95.3+20120825
  wdefaultspathfordomain@Base 0.95.0
  wexpandpath@Base 0.95.0
  wfindfile@Base 0.95.0

@@ -1,3 +1,25 @@
+wmaker (0.95.3+20120825-1) experimental; urgency=low
+
+  * THIS PACKAGE VERSION MUST NOT BE UPLOADED TO DEBIAN
+    - The debian/libwutil2.symbols must include a real version.
+  * New upstream version (git 20120825)
+    - Better icon management. [Closes: #35587, #404729]
+    - Now cpp is not needed. Updated the debian/README.Debian file
+    - New symbols in debian/libwutil2.symbols
+  * Updated some icon paths in debianfiles/conf/WindowMaker
+    - Removed ~/pixmap folder
+  * debian/control:
+    - Debconf version 9 (see debian/compat too).
+    - New debug scheme for multi-platform.
+      debian/wmaker-dbg.dirs not needed, deleted.
+    - Lintian override, because is experimental.
+      New file source/lintian-overrides
+  * debian/rules:
+    - Removed the get-*-flags scripts fix. Not needed (and was wrong).
+    - Removed the HOSTSPEC stuff. Not needed with debconf 9.
+
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Sun, 9 Sep 2012 11:07:21 +0200
+
 wmaker (0.95.3-2) unstable; urgency=low
 
   * Hardened. debian/rules changed.

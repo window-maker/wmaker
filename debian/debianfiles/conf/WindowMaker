@@ -10,25 +10,21 @@
   EdgeResistance = 30;
   IconificationStyle = Zoom;
   IconPath = (
-    "~/pixmaps",
     "~/GNUstep/Library/Icons",
     "/usr/local/share/WindowMaker/Icons",
     "/usr/share/WindowMaker/Icons",
     "/usr/local/share/icons",
     "/usr/share/icons",
-    "/usr/X11R6/include/X11/pixmaps"
   );
   PixmapPath = (
-    "~/pixmaps",
-    "~/GNUstep/Library/WindowMaker/Backgrounds",
     "~/GNUstep/Library/WindowMaker/Pixmaps",
-    "/usr/local/share/WindowMaker/Backgrounds",
+    "~/GNUstep/Library/WindowMaker/Backgrounds",
     "/usr/local/share/WindowMaker/Pixmaps",
+    "/usr/local/share/WindowMaker/Backgrounds",
     "/usr/share/WindowMaker/Backgrounds",
     "/usr/share/WindowMaker/Pixmaps",
     "/usr/local/share/pixmaps",
     "/usr/share/pixmaps",
-    "/usr/X11R6/include/X11/pixmaps"
   );
   WindowTitleBalloons = YES;
   IconSize = 64;
@@ -41,7 +37,7 @@
   ColormapSize = 4;
   DisableDithering = NO;
   ModifierKey = Mod1;
-  NewStyle = new;
+  NewStyle = "new";
   DisableDock = NO;
   DisableClip = NO;
   Superfluous = NO;
@@ -62,7 +58,7 @@
   ResizeDisplay = line;
   MoveDisplay = floating;
   OpaqueMove = YES;
-  IconPosition = blh;
+  IconPosition = "blh";
   WrapMenus = NO;
   ScrollableMenus = YES;
   MenuScrollSpeed = fast;
@@ -139,5 +135,3 @@
   ResizebarBack = (solid, "rgb:aa/aa/aa");
   MenuStyle = normal;
 }
-
-

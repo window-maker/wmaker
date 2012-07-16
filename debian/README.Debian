@@ -24,13 +24,13 @@ Other sources for documentation
 -------------------------------
 
 * The Window Maker web site
-  http://www.windowmaker.info/
+  http://www.windowmaker.org/
 
   You can find all sorts of information here. It's kept very up to
   date.
 
 * The Window Maker manual written by Alfredo Kojima
-  ftp://ftp.windowmaker.info/pub/wmaker/docs/
+  ftp://ftp.windowmaker.org/pub/wmaker/docs/
 
   Please note the manual documents version 0.10.x of Window Maker, and
   many features/changes have occured since then.  To find out what has
@@ -40,7 +40,7 @@ Other sources for documentation
   contact wm-user@windowmaker.info
 
 * The Window Maker mailing list
-  http://www.windowmaker.info/lists.html
+  http://www.windowmaker.org/lists.php
 
   There's a Window Maker mailing list.  There you can ask questions about
   Window Maker and *related* applications (s/n is _way_ low nowadays
@@ -119,41 +119,40 @@ Debian specific notes
 ---------------------
 
 Debian prepackaged version of Window Maker will search
-~/GNUstep/Library/WindowMaker and etc/X11/WindowMaker (in that order)
+~/GNUstep/Library/WindowMaker and /usr/share/WindowMaker (in that order)
 for its configuration files. It will read defaults from files in
 ~/GNUstep/Defaults and /etc/GNUstep/Defaults. The files in the
-WindowMaker directories are preprocessed using cpp. It will read both
-WindowMaker directories searching for #included files.
+WindowMaker directories have cpp-like format and are preprocessed by
+WindowMaker. It will read both WindowMaker directories searching for
+#included files.
 
 WindowMaker makes a (little) difference between Pixmaps and Icons, and
 there are two configurable options for setting the paths Window Maker
 would search Pixmaps and Icons in, namely, PixmapPath and
 IconPath. The compiled in defaults are:
 
-    PixmapPath = (
-      "~/pixmaps",
-      "~/GNUstep/Library/WindowMaker/Pixmaps",
-      "/usr/local/share/WindowMaker/Pixmaps",
-      "/usr/share/WindowMaker/Pixmaps",
-      "/usr/local/share/pixmaps",
-      "/usr/share/pixmaps",
-      "/usr/X11R6/include/X11/pixmaps"
-    );
-    
-    IconPath = (
-      "~/pixmaps",
-      "~/GNUstep/Library/Icons",
-      "/usr/local/share/WindowMaker/Icons",
-      "/usr/share/WindowMaker/Icons",
-      "/usr/local/share/icons",
-      "/usr/share/icons",
-      "/usr/X11R6/include/X11/pixmaps"
-    );
+  PixmapPath = (
+    "~/GNUstep/Library/WindowMaker/Pixmaps",
+    "~/GNUstep/Library/WindowMaker/Backgrounds",
+    "/usr/local/share/WindowMaker/Pixmaps",
+    "/usr/local/share/WindowMaker/Backgrounds",
+    "/usr/share/WindowMaker/Backgrounds",
+    "/usr/share/WindowMaker/Pixmaps",
+    "/usr/local/share/pixmaps",
+    "/usr/share/pixmaps",
+  );
+
+  IconPath = (
+    "~/GNUstep/Library/Icons",
+    "/usr/local/share/WindowMaker/Icons",
+    "/usr/share/WindowMaker/Icons",
+    "/usr/local/share/icons",
+    "/usr/share/icons",
+  );
 
 Please note that the internal default doesn't include the "Pixmaps"
 paths anymore, but you are free to modify your Window Maker file in any
-way you see fit.  Please note that the /usr/X11R6/include/X11/pixmaps
-is not going to be supported in future releases.
+way you see fit.
 
 Other Window Maker packages should put pixmaps in
 /usr/share/WindowMaker/Pixmaps and icons in
