@@ -493,6 +493,9 @@ static Bool menu_parser_include_file(WMenuParser parser)
 
 				fh = fopen(fullfilename, "rb");
 				if (fh != NULL) goto found_valid_file;
+
+				if (*src == ':')
+					src++;
 			}
 		}
 		WMenuParserError(parser, _("could not find file \"%s\" for include"), req_filename);
