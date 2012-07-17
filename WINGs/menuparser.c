@@ -222,6 +222,21 @@ Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, ch
 		}
 	}
 
+	if (title != NULL) {
+		char eot, *src, *dst;
+
+		src = *title;
+		eot = *src++;
+		if ((eot == '"') || (eot == '\'')) {
+			dst = *title;
+			while (*src != '\0')
+				*dst++ = *src++;
+			if ((dst > *title) && (dst[-1] == eot))
+				dst--;
+			*dst = '\0';
+		}
+	}
+
 	if (params != NULL) {
 		lineparam[sizeof(lineparam) - 1] = '\0';
 		*parameter = wstrdup(lineparam);
