@@ -1466,7 +1466,8 @@ static WMPixmap *getWindowMakerIconImage(WMScreen *scr)
 	WMPixmap *pix = NULL;
 	char *path = NULL;
 
-	path = get_default_icon_filename(NULL, "Logo", "WMPanel", NULL, True);
+	/* Get the Logo icon, without the default icon */
+	path = get_default_icon_filename(NULL, "Logo", "WMPanel", NULL, False);
 
 	if (path) {
 		RColor gray;

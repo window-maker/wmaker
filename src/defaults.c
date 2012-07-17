@@ -1125,7 +1125,8 @@ void wDefaultUpdateIcons(WScreen * scr)
 	char *file;
 
 	while (aicon) {
-		file = wDefaultGetIconFile(aicon->wm_instance, aicon->wm_class, False);
+		/* Get the application icon, default included */
+		file = wDefaultGetIconFile(aicon->wm_instance, aicon->wm_class, True);
 		if ((file && aicon->icon->file && strcmp(file, aicon->icon->file) != 0)
 		    || (file && !aicon->icon->file)) {
 			wIconChangeImageFile(aicon->icon, file);
@@ -1139,7 +1140,8 @@ void wDefaultUpdateIcons(WScreen * scr)
 
 	while (wwin) {
 		if (wwin->icon && wwin->flags.miniaturized) {
-			file = wDefaultGetIconFile(wwin->wm_instance, wwin->wm_class, False);
+			/* Get the application icon, default included */
+			file = wDefaultGetIconFile(wwin->wm_instance, wwin->wm_class, True);
 			if ((file && wwin->icon->file && strcmp(file, wwin->icon->file) != 0)
 			    || (file && !wwin->icon->file)) {
 				wIconChangeImageFile(wwin->icon, file);

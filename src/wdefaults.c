@@ -315,7 +315,7 @@ void wDefaultFillAttributes(char *instance, char *class,
 }
 
 static WMPropList *get_generic_value(char *instance, char *class,
-				     WMPropList *option, Bool noDefault)
+				     WMPropList *option, Bool default_icon)
 {
 	WMPropList *value, *key, *dict;
 
@@ -361,8 +361,8 @@ static WMPropList *get_generic_value(char *instance, char *class,
 			value = WMGetFromPLDictionary(dict, option);
 	}
 
-	/* Search the default icon name - See noDefault argument! */
-	if (!value && !noDefault) {
+	/* Search the default icon name - See default_icon argument! */
+	if (!value && default_icon) {
 		/* AnyWindow is "*" - see wdefaults.c */
 		dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
 
@@ -377,21 +377,21 @@ static WMPropList *get_generic_value(char *instance, char *class,
 
 /* Get the file name of the image, using instance and class */
 char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
-				Bool noDefault)
+				Bool default_icon)
 {
 	char *file_name = NULL;
 	char *file_path = NULL;
 
 	/* Get the file name of the image, using instance and class */
-	file_name = wDefaultGetIconFile(winstance, wclass, noDefault);
+	file_name = wDefaultGetIconFile(winstance, wclass, default_icon);
 
-	/* If the specific (or generic if noDefault is False) icon filename
+	/* If the specific (or generic if default_icon is True) icon filename
 	 * is not found, and command is specified, then include the .app icons
 	 * and re-do the search, but now always including the default icon
 	 * so the icon is found always. The .app is selected before default */
 	if (!file_name && scr && command) {
 		wApplicationExtractDirPackIcon(scr, command, winstance, wclass);
-		file_name = wDefaultGetIconFile(winstance, wclass, False);
+		file_name = wDefaultGetIconFile(winstance, wclass, True);
 	}
 
 	/* Get the full path for the image file */
@@ -442,7 +442,7 @@ RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_s
 	char *file_name = NULL;
 
 	/* Get the file name of the image, using instance and class */
-	file_name = get_default_icon_filename(scr, winstance, wclass, NULL, False);
+	file_name = get_default_icon_filename(scr, winstance, wclass, NULL, True);
 	if (!file_name)
 		return NULL;
 
@@ -461,7 +461,7 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 	if (!WDWindowAttributes->dictionary)
 		return -1;
 
-	value = get_generic_value(instance, class, AStartWorkspace, False);
+	value = get_generic_value(instance, class, AStartWorkspace, True);
 
 	if (!value)
 		return -1;
@@ -477,8 +477,8 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 	return w;
 }
 
-/* Get the name of the Icon File. If noDefault is False, then, default value included */
-char *wDefaultGetIconFile(char *instance, char *class, Bool noDefault)
+/* Get the name of the Icon File. If default_icon is True, then, default value included */
+char *wDefaultGetIconFile(char *instance, char *class, Bool default_icon)
 {
 	WMPropList *value;
 	char *tmp;
@@ -489,7 +489,7 @@ char *wDefaultGetIconFile(char *instance, char *class, Bool noDefault)
 	if (!WDWindowAttributes || !WDWindowAttributes->dictionary)
 		return NULL;
 
-	value = get_generic_value(instance, class, AIcon, noDefault);
+	value = get_generic_value(instance, class, AIcon, default_icon);
 
 	if (!value)
 		return NULL;
