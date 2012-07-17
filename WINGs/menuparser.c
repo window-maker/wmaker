@@ -474,22 +474,31 @@ static Bool menu_parser_include_file(WMenuParser parser)
 	if (fh == NULL) {
 		if (req_filename[0] != '/') {
 			const char *src;
+			int idx;
 
 			fullfilename = buffer;
 			src = parser->include_default_paths;
 			while (*src != '\0') {
-				p = buffer;
+				idx = 0;
 				if (*src == '~') {
 					char *home = wgethomedir();
-					while (*home != '\0')
-						*p++ = *home++;
+					while (*home != '\0') {
+						if (idx < sizeof(buffer) - 2)
+							buffer[idx++] = *home;
+						home++;
+					}
 					src++;
 				}
-				while ((*src != '\0') && (*src != ':'))
-					*p++ = *src++;
-				*p++ = '/';
-				strncpy(p, req_filename, sizeof(buffer) - (p - buffer - 1));
-				buffer[sizeof(buffer) - 1] = '\0';
+				while ((*src != '\0') && (*src != ':')) {
+					if (idx < sizeof(buffer) - 2)
+						buffer[idx++] = *src;
+					src++;
+				}
+				buffer[idx++] = '/';
+				for (p = req_filename; *p != '\0'; p++)
+					if (idx < sizeof(buffer) - 1)
+						buffer[idx++] = *p;
+				buffer[idx] = '\0';
 
 				fh = fopen(fullfilename, "rb");
 				if (fh != NULL) goto found_valid_file;
