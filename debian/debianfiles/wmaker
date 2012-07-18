@@ -63,7 +63,7 @@ if [ -x $convertfonts -a ! -e "$wm_base/.fonts_converted" ] ; then
     if [ -f "$gs_defaults/WMGLOBAL" ] ; then
         $convertfonts --keep-xlfd "$gs_defaults/WMGLOBAL"
     fi
-    find "$wm_styles" -type f -print0 -mindepth 1 -maxdepth 1 |
+    find "$wm_styles" -mindepth 1 -maxdepth 1 -type f -print0 |
     xargs -0 -r -n 1 $convertfonts --keep-xlfd
     touch "$wm_base/.fonts_converted"
 fi
