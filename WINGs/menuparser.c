@@ -29,8 +29,9 @@
 #include "menuparser.h"
 
 static WMenuParser menu_parser_create_new(const char *file_name, void *file,
-										const char *include_default_paths);
-static char *menu_parser_isolate_token(WMenuParser parser, WParserMacro *list_macros);
+					  const char *include_default_paths);
+static char *menu_parser_isolate_token(WMenuParser parser,
+				       WParserMacro *list_macros);
 static void menu_parser_get_directive(WMenuParser parser);
 static Bool menu_parser_include_file(WMenuParser parser);
 static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists);
@@ -38,9 +39,9 @@ static void menu_parser_condition_else(WMenuParser parser);
 static void menu_parser_condition_end(WMenuParser parser);
 
 
-/***** Constructor and Destructor for the Menu Parser object *****/
+/* Constructor and Destructor for the Menu Parser object */
 WMenuParser WMenuParserCreate(const char *file_name, void *file,
-										const char *include_default_paths)
+			      const char *include_default_paths)
 {
 	WMenuParser parser;
 
@@ -53,12 +54,12 @@ void WMenuParserDelete(WMenuParser parser)
 {
 	if (parser->include_file) {
 		/* Trick: the top parser's data are not wmalloc'd, we point on the
-			provided data so we do not wfree it; however for include files
-			we did wmalloc them.
-			This code should not be used as the wfree is done when we reach
-			the end of an include file; however this may not happen when an
-			early exit occurs (typically when 'readMenuFile' does not find
-			its expected command). */
+		 * provided data so we do not wfree it; however for include files
+		 * we did wmalloc them.
+		 * This code should not be used as the wfree is done when we reach
+		 * the end of an include file; however this may not happen when an
+		 * early exit occurs (typically when 'readMenuFile' does not find
+		 * its expected command). */
 		fclose(parser->include_file->file_handle);
 		wfree((char *) parser->include_file->file_name);
 		WMenuParserDelete(parser->include_file);
@@ -71,7 +72,7 @@ void WMenuParserDelete(WMenuParser parser)
 }
 
 static WMenuParser menu_parser_create_new(const char *file_name, void *file,
-										const char *include_default_paths)
+					  const char *include_default_paths)
 {
 	WMenuParser parser;
 
@@ -84,7 +85,7 @@ static WMenuParser menu_parser_create_new(const char *file_name, void *file,
 	return parser;
 }
 
-/***** To report helpfull messages to user *****/
+/* To report helpfull messages to user */
 const char *WMenuParserGetFilename(WMenuParser parser)
 {
 	return parser->file_name;
@@ -102,23 +103,24 @@ void WMenuParserError(WMenuParser parser, const char *msg, ...)
 	va_start(args, msg);
 	vsnprintf(buf, sizeof(buf), msg, args);
 	va_end(args);
-	__wmessage("WMenuParser", parser->file_name, parser->line_number, WMESSAGE_TYPE_WARNING, "%s", buf);
+	__wmessage("WMenuParser", parser->file_name, parser->line_number,
+		   WMESSAGE_TYPE_WARNING, "%s", buf);
 
 	for (parent = parser->parent_file; parent != NULL; parent = parent->parent_file)
-		__wmessage("WMenuParser", parser->file_name, parser->line_number, WMESSAGE_TYPE_WARNING,
-					  _("   included from file \"%s\" at line %d"),
-					  parent->file_name, parent->line_number);
+		__wmessage("WMenuParser", parser->file_name, parser->line_number,
+			   WMESSAGE_TYPE_WARNING, _("   included from file \"%s\" at line %d"),
+			   parent->file_name, parent->line_number);
 }
 
-/***** Read one line from file and split content *****/
-/* The function returns False when the end of file is reached */
-Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, char **parameter, char **shortcut)
+/* Read one line from file and split content
+ * The function returns False when the end of file is reached */
+Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command,
+			char **parameter, char **shortcut)
 {
 	WMenuParser cur_parser;
 	enum { GET_TITLE, GET_COMMAND, GET_PARAMETERS, GET_SHORTCUT } scanmode;
-	char *token;
-	char  lineparam[MAXLINE];
-	char *params = NULL;
+	char *token, *params = NULL;
+	char lineparam[MAXLINE];
 
 	lineparam[0] = '\0';
 	*title = NULL;
@@ -127,19 +129,19 @@ Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, ch
 	*shortcut = NULL;
 	scanmode = GET_TITLE;
 
- read_next_line_with_filechange:
+read_next_line_with_filechange:
 	cur_parser = top_parser;
 	while (cur_parser->include_file)
 		cur_parser = cur_parser->include_file;
 
- read_next_line:
+read_next_line:
 	if (fgets(cur_parser->line_buffer, sizeof(cur_parser->line_buffer), cur_parser->file_handle) == NULL) {
 		if (cur_parser->cond.depth > 0) {
 			int i;
 
 			for (i = 0; i < cur_parser->cond.depth; i++)
 				WMenuParserError(cur_parser, _("missing #endif to match #%s at line %d"),
-									  cur_parser->cond.stack[i].name, cur_parser->cond.stack[i].line);
+						 cur_parser->cond.stack[i].name, cur_parser->cond.stack[i].line);
 		}
 
 		if (cur_parser->parent_file == NULL)
@@ -154,6 +156,7 @@ Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, ch
 		cur_parser->include_file = NULL;
 		goto read_next_line_with_filechange;
 	}
+
 	cur_parser->line_number++;
 	cur_parser->rd = cur_parser->line_buffer;
 
@@ -161,15 +164,17 @@ Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, ch
 		if (!menu_parser_skip_spaces_and_comments(cur_parser)) {
 			/* We reached the end of line */
 			if (scanmode == GET_TITLE)
-				goto read_next_line; // Empty line -> skip
+				goto read_next_line;	/* Empty line -> skip */
 			else
-				break; // Finished reading current line -> return it to caller
+				break;			/* Finished reading current line -> return it to caller */
 		}
+
 		if ((scanmode == GET_TITLE) && (*cur_parser->rd == '#')) {
 			cur_parser->rd++;
 			menu_parser_get_directive(cur_parser);
 			goto read_next_line_with_filechange;
 		}
+
 		if (cur_parser->cond.stack[0].skip)
 			goto read_next_line;
 
@@ -207,11 +212,12 @@ Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, ch
 				if (params == NULL) {
 					params = lineparam;
 				} else {
-					if ((params - lineparam) < sizeof(lineparam)-1)
+					if ((params - lineparam) < sizeof(lineparam) - 1)
 						*params++ = ' ';
 				}
+
 				src = token;
-				while ((params - lineparam) < sizeof(lineparam)-1)
+				while ((params - lineparam) < sizeof(lineparam) - 1)
 					if ( (*params = *src++) == '\0')
 						break;
 					else
@@ -229,10 +235,13 @@ Bool WMenuParserGetLine(WMenuParser top_parser, char **title, char **command, ch
 		eot = *src++;
 		if ((eot == '"') || (eot == '\'')) {
 			dst = *title;
+
 			while (*src != '\0')
 				*dst++ = *src++;
+
 			if ((dst > *title) && (dst[-1] == eot))
 				dst--;
+
 			*dst = '\0';
 		}
 	}
@@ -253,13 +262,12 @@ Bool menu_parser_skip_spaces_and_comments(WMenuParser parser)
 		while (isspace(*parser->rd))
 			parser->rd++;
 
-		if (*parser->rd == '\0')
-			return False; // Found the end of current line
-
-		else if ((parser->rd[0] == '\\') &&
-					(parser->rd[1] == '\n') &&
-					(parser->rd[2] == '\0')) {
-			// Means that the current line is expected to be continued on next line
+		if (*parser->rd == '\0') {
+			return False; /* Found the end of current line */
+		} else if ((parser->rd[0] == '\\') &&
+			   (parser->rd[1] == '\n') &&
+			   (parser->rd[2] == '\0')) {
+			/* Means that the current line is expected to be continued on next line */
 			if (fgets(parser->line_buffer, sizeof(parser->line_buffer), parser->file_handle) == NULL) {
 				WMenuParserError(parser, _("premature end of file while expecting a new line after '\\'") );
 				return False;
@@ -268,8 +276,9 @@ Bool menu_parser_skip_spaces_and_comments(WMenuParser parser)
 			parser->rd = parser->line_buffer;
 
 		} else if (parser->rd[0] == '/') {
-			if (parser->rd[1] == '/') // Single line C comment
-				return False; // Won't find anything more on this line
+			if (parser->rd[1] == '/')	/* Single line C comment */
+				return False;		/* Won't find anything more on this line */
+
 			if (parser->rd[1] == '*') {
 				int start_line;
 
@@ -278,9 +287,9 @@ Bool menu_parser_skip_spaces_and_comments(WMenuParser parser)
 				for (;;) {
 					/* Search end-of-comment marker */
 					while (*parser->rd != '\0') {
-						if (parser->rd[0] == '*')
-							if (parser->rd[1] == '/')
-								goto found_end_of_comment;
+						if ((parser->rd[0] == '*') && (parser->rd[1] == '/'))
+							goto found_end_of_comment;
+
 						parser->rd++;
 					}
 
@@ -289,46 +298,54 @@ Bool menu_parser_skip_spaces_and_comments(WMenuParser parser)
 						WMenuParserError(parser, _("reached end of file while searching '*/' for comment started at line %d"), start_line);
 						return False;
 					}
+
 					parser->line_number++;
 					parser->rd = parser->line_buffer;
 				}
 
-			found_end_of_comment:
-				parser->rd += 2;  // Skip closing mark
-				continue; // Because there may be spaces after the comment
+found_end_of_comment:
+				parser->rd += 2;	/* Skip closing mark */
+				continue;		/* Because there may be spaces after the comment */
 			}
-			return True; // the '/' was not a comment, treat it as user data
-		} else
-			return True; // Found some data
+
+			return True;			/* the '/' was not a comment, treat it as user data */
+		} else {
+			return True;			/* Found some data */
+		}
 	}
 }
 
 /* read a token (non-spaces suite of characters)
-   the result os wmalloc's, so it needs to be free'd */
+ * the result is wmalloc's, so it needs to be free'd */
 static char *menu_parser_isolate_token(WMenuParser parser, WParserMacro *list_macros)
 {
-	char *start;
-	char *token;
+	char *start, *token;
 	int limit = MAX_NESTED_MACROS;
 
 	start = parser->rd;
- restart_token_split:
+restart_token_split:
 
 	while (*parser->rd != '\0')
-		if (isspace(*parser->rd))
+		if (isspace(*parser->rd)) {
 			break;
-		else if ((parser->rd[0] == '/') &&
-					((parser->rd[1] == '*') || (parser->rd[1] == '/')))
+
+		} else if ((parser->rd[0] == '/') &&
+			 ((parser->rd[1] == '*') || (parser->rd[1] == '/'))) {
 			break;
-		else if ((parser->rd[0] == '\\') && (parser->rd[1] == '\n'))
+
+		} else if ((parser->rd[0] == '\\') && (parser->rd[1] == '\n')) {
 			break;
-		else if ((*parser->rd == '"' ) || (*parser->rd == '\'')) {
+
+		} else if ((*parser->rd == '"' ) || (*parser->rd == '\'')) {
 			char eot = *parser->rd++;
+
 			while ((*parser->rd != '\0') && (*parser->rd != '\n'))
 				if (*parser->rd++ == eot)
 					goto found_end_quote;
+
 			WMenuParserError(parser, _("missing closing quote or double-quote before end-of-line") );
-		found_end_quote:
+
+found_end_quote:
 			;
 		} else if (isnamechr(*parser->rd)) {
 			WParserMacro *macro;
@@ -343,30 +360,35 @@ static char *menu_parser_isolate_token(WMenuParser parser, WParserMacro *list_ma
 				char *expand_there;
 
 				/* Copy the chars before the macro to the beginning of the buffer to
-				   leave as much room as possible for expansion */
+				 * leave as much room as possible for expansion */
 				expand_there = parser->line_buffer;
 				if (start != parser->line_buffer)
 					while (start < start_macro)
 						*expand_there++ = *start++;
+
 				start = parser->line_buffer;
 
 				/* Macro expansion will take care to keep the rest of the line after
-				   the macro to the end of the line for future token extraction */
+				 * the macro to the end of the line for future token extraction */
 				menu_parser_expand_macro(parser, macro, expand_there,
-										 sizeof(parser->line_buffer) - (start - parser->line_buffer) );
+							 sizeof(parser->line_buffer) - (start - parser->line_buffer) );
 
 				/* Restart parsing to allow expansion of sub macro calls */
 				parser->rd = expand_there;
 				if (limit-- > 0)
 					goto restart_token_split;
+
 				WMenuParserError(parser, _("too many nested macro expansion, breaking loop") );
+
 				while (isnamechr(*parser->rd))
 					parser->rd++;
+
 				break;
 			}
-			// else: the text was passed over so it will be counted in the token from 'start'
-		} else
+			/* else: the text was passed over so it will be counted in the token from 'start' */
+		} else {
 			parser->rd++;
+		}
 
 	token = wmalloc(parser->rd - start + 1);
 	strncpy(token, start, parser->rd - start);
@@ -375,7 +397,7 @@ static char *menu_parser_isolate_token(WMenuParser parser, WParserMacro *list_ma
 	return token;
 }
 
-/***** Processing of special # directives *****/
+/* Processing of special # directives */
 static void menu_parser_get_directive(WMenuParser parser)
 {
 	char *command;
@@ -383,15 +405,19 @@ static void menu_parser_get_directive(WMenuParser parser)
 	/* Isolate the command */
 	while (isspace(*parser->rd))
 		parser->rd++;
+
 	command = parser->rd;
 	while (*parser->rd)
 		if (isspace(*parser->rd)) {
 			*parser->rd++ = '\0';
 			break;
-		} else parser->rd++;
+		} else {
+			parser->rd++;
+		}
 
 	if (strcmp(command, "include") == 0) {
-		if (!menu_parser_include_file(parser)) return;
+		if (!menu_parser_include_file(parser))
+			return;
 
 	} else if (strcmp(command, "define") == 0) {
 		menu_parser_define_macro(parser);
@@ -415,12 +441,12 @@ static void menu_parser_get_directive(WMenuParser parser)
 
 	if (menu_parser_skip_spaces_and_comments(parser))
 		WMenuParserError(parser, _("extra text after '#' command is ignored: \"%.16s...\""),
-							  parser->rd);
+				 parser->rd);
 }
 
 /* Extract the file name, search for it in known directories
-	and create a sub-parser to handle it.
-	Returns False if the file could not be found */
+ * and create a sub-parser to handle it.
+ * Returns False if the file could not be found */
 static Bool menu_parser_include_file(WMenuParser parser)
 {
 	char buffer[MAXLINE];
@@ -432,25 +458,35 @@ static Bool menu_parser_include_file(WMenuParser parser)
 		WMenuParserError(parser, _("no file name found for #include") );
 		return False;
 	}
+
 	switch (*parser->rd++) {
-	case '<': eot = '>'; break;
-	case '"': eot = '"'; break;
+	case '<':
+		eot = '>';
+		break;
+	case '"':
+		eot = '"';
+		break;
 	default:
 		WMenuParserError(parser, _("file name must be enclosed in brackets or double-quotes for #define") );
 		return False;
 	}
+
 	req_filename = parser->rd;
-	while (*parser->rd)
+	while (*parser->rd) {
 		if (*parser->rd == eot) {
 			*parser->rd++ = '\0';
 			goto found_end_define_fname;
-		} else parser->rd++;
+		} else {
+			parser->rd++;
+		}
+	}
+
 	WMenuParserError(parser, _("missing closing '%c' in filename specification"), eot);
 	return False;
- found_end_define_fname:
 
+found_end_define_fname:
 	/* If we're inside a #if sequence, we abort now, but not sooner in
-		order to keep the syntax check */
+	 * order to keep the syntax check */
 	if (parser->cond.stack[0].skip)
 		return False;
 
@@ -461,6 +497,7 @@ static Bool menu_parser_include_file(WMenuParser parser)
 		count = 0;
 		for (p = parser; p->parent_file; p = p->parent_file)
 			count++;
+
 		if (count > MAX_NESTED_INCLUDES) {
 			WMenuParserError(parser, _("too many nested includes") );
 			return False;
@@ -476,7 +513,9 @@ static Bool menu_parser_include_file(WMenuParser parser)
 			int len;
 
 			len = p - parser->file_name + 1;
-			if (len > sizeof(buffer) - 1) len = sizeof(buffer) - 1;
+			if (len > sizeof(buffer) - 1)
+				len = sizeof(buffer) - 1;
+
 			strncpy(buffer, parser->file_name, len);
 			strncpy(buffer+len, req_filename, sizeof(buffer) - len - 1);
 			buffer[sizeof(buffer) - 1] = '\0';
@@ -504,11 +543,13 @@ static Bool menu_parser_include_file(WMenuParser parser)
 					}
 					src++;
 				}
+
 				while ((*src != '\0') && (*src != ':')) {
 					if (idx < sizeof(buffer) - 2)
 						buffer[idx++] = *src;
 					src++;
 				}
+
 				buffer[idx++] = '/';
 				for (p = req_filename; *p != '\0'; p++)
 					if (idx < sizeof(buffer) - 1)
@@ -516,7 +557,8 @@ static Bool menu_parser_include_file(WMenuParser parser)
 				buffer[idx] = '\0';
 
 				fh = fopen(fullfilename, "rb");
-				if (fh != NULL) goto found_valid_file;
+				if (fh != NULL)
+					goto found_valid_file;
 
 				if (*src == ':')
 					src++;
@@ -527,14 +569,14 @@ static Bool menu_parser_include_file(WMenuParser parser)
 	}
 
 	/* Found the file, make it our new source */
- found_valid_file:
+found_valid_file:
 	parser->include_file = menu_parser_create_new(wstrdup(req_filename), fh, parser->include_default_paths);
 	parser->include_file->parent_file = parser;
 	return True;
 }
 
 /* Check wether a macro exists or not, and marks the parser to ignore the
-   following data accordingly */
+ * following data accordingly */
 static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists)
 {
 	WParserMacro *macro;
@@ -557,18 +599,21 @@ static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists)
 		WMenuParserError(parser, _("too many nested #if sequences") );
 		return;
 	}
+
 	for (idx = parser->cond.depth - 1; idx >= 0; idx--)
 		parser->cond.stack[idx + 1] = parser->cond.stack[idx];
+
 	parser->cond.depth++;
 
-	if (parser->cond.stack[1].skip)
+	if (parser->cond.stack[1].skip) {
 		parser->cond.stack[0].skip = True;
-	else {
+	} else {
 		macro = menu_parser_find_macro(parser, macro_name);
 		parser->cond.stack[0].skip =
 			((check_exists)  && (macro == NULL)) ||
 			((!check_exists) && (macro != NULL)) ;
 	}
+
 	strcpy(parser->cond.stack[0].name, cmd_name);
 	parser->cond.stack[0].line = parser->line_number;
 }
@@ -580,8 +625,9 @@ static void menu_parser_condition_else(WMenuParser parser)
 		WMenuParserError(parser, _("found #%s but have no matching #if"), "else" );
 		return;
 	}
+
 	if ((parser->cond.depth > 1) && (parser->cond.stack[1].skip))
-		// The containing #if is false, so we continue skipping anyway
+		/* The containing #if is false, so we continue skipping anyway */
 		parser->cond.stack[0].skip = True;
 	else
 		parser->cond.stack[0].skip = !parser->cond.stack[0].skip;
