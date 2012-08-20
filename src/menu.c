@@ -164,7 +164,8 @@ WMenu *wMenuCreate(WScreen * screen, char *title, int main_menu)
 			       &wPreferences.menu_title_max_height,
 			       flags,
 			       screen->menu_title_texture, NULL,
-			       screen->menu_title_color, &screen->menu_title_font);
+			       screen->menu_title_color, &screen->menu_title_font,
+			       screen->w_depth, screen->w_visual, screen->w_colormap);
 
 	menu->frame->core->descriptor.parent = menu;
 	menu->frame->core->descriptor.parent_type = WCLASS_MENU;

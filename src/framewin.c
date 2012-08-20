@@ -62,7 +62,8 @@ WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
 				 int width, int height, int *clearance,
 				 int *title_min, int *title_max, int flags,
 				 WTexture ** title_texture, WTexture ** resize_texture,
-				 WMColor ** color, WMFont ** font)
+				 WMColor ** color, WMFont ** font,
+				 int depth, Visual *visual, Colormap colormap)
 {
 	WFrameWindow *fwin;
 
@@ -84,8 +85,12 @@ WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
 	fwin->last_languagemode = XkbGroup2Index;
 #endif
 
+	fwin->depth = depth;
+	fwin->visual = visual;
+	fwin->colormap = colormap;
+
 	fwin->core = wCoreCreateTopLevel(scr, x, y, width, height, (flags & WFF_BORDER)
-					 ? FRAME_BORDER_WIDTH : 0);
+					 ? FRAME_BORDER_WIDTH : 0, fwin->depth, fwin->visual, fwin->colormap);
 	if (wPreferences.use_saveunders) {
 		unsigned long vmask;
 		XSetWindowAttributes attribs;

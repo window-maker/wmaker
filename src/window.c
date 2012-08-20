@@ -1094,7 +1094,8 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 					 &wPreferences.window_title_max_height,
 					 foo,
 					 scr->window_title_texture,
-					 scr->resizebar_texture, scr->window_title_color, &scr->title_font);
+					 scr->resizebar_texture, scr->window_title_color, &scr->title_font,
+					 wattribs.depth, wattribs.visual, wattribs.colormap);
 
 	wwin->frame->flags.is_client_window_frame = 1;
 	wwin->frame->flags.justification = wPreferences.title_justification;
@@ -1373,7 +1374,8 @@ WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
 					 &wPreferences.window_title_max_height,
 					 foo,
 					 scr->window_title_texture,
-					 scr->resizebar_texture, scr->window_title_color, &scr->title_font);
+					 scr->resizebar_texture, scr->window_title_color, &scr->title_font,
+					 scr->w_depth, scr->w_visual, scr->w_colormap);
 
 	XSaveContext(dpy, window, wWinContext, (XPointer) & wwin->client_descriptor);
 

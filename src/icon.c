@@ -187,7 +187,7 @@ static WIcon *wIconCreateCore(WScreen *scr, int coord_x, int coord_y)
 					 coord_y,
 					 wPreferences.icon_size,
 					 wPreferences.icon_size,
-					 0);
+					 0, scr->w_depth, scr->w_visual, scr->w_colormap);
 
 	if (wPreferences.use_saveunders) {
 		vmask = CWSaveUnder;

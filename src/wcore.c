@@ -46,7 +46,7 @@ extern XContext wWinContext;
  * 	The created window.
  *----------------------------------------------------------------------
  */
-WCoreWindow *wCoreCreateTopLevel(WScreen * screen, int x, int y, int width, int height, int bwidth)
+WCoreWindow *wCoreCreateTopLevel(WScreen * screen, int x, int y, int width, int height, int bwidth, int depth, Visual *visual, Colormap colormap)
 {
 	WCoreWindow *core;
 	int vmask;
@@ -67,10 +67,10 @@ WCoreWindow *wCoreCreateTopLevel(WScreen * screen, int x, int y, int width, int 
 	    | ButtonReleaseMask | ButtonMotionMask | ExposureMask | EnterWindowMask | LeaveWindowMask;
 
 	vmask |= CWColormap;
-	attribs.colormap = screen->w_colormap;
+	attribs.colormap = colormap;
 
 	core->window = XCreateWindow(dpy, screen->root_win, x, y, width, height,
-				     bwidth, screen->w_depth, CopyFromParent, screen->w_visual, vmask, &attribs);
+				     bwidth, depth, CopyFromParent, visual, vmask, &attribs);
 	core->width = width;
 	core->height = height;
 	core->screen_ptr = screen;
@@ -115,10 +115,8 @@ WCoreWindow *wCoreCreate(WCoreWindow * parent, int x, int y, int width, int heig
 	attribs.background_pixel = parent->screen_ptr->black_pixel;
 	attribs.event_mask = KeyPressMask | KeyReleaseMask | ButtonPressMask
 	    | ButtonReleaseMask | ButtonMotionMask | ExposureMask | EnterWindowMask | LeaveWindowMask;
-	/*
-	   vmask |= CWColormap;
-	   attribs.colormap = parent->screen_ptr->w_colormap;
-	 */
+	vmask |= CWColormap;
+	attribs.colormap = parent->screen_ptr->w_colormap;
 	core->window =
 	    XCreateWindow(dpy, parent->window, x, y, width, height, 0,
 			  parent->screen_ptr->w_depth, CopyFromParent,

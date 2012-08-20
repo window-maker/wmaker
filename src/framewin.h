@@ -147,6 +147,9 @@ typedef struct WFrameWindow {
 
         unsigned int incomplete_title:1;
     } flags;
+    int depth;
+    Visual *visual;
+    Colormap colormap;
 } WFrameWindow;
 
 
@@ -156,7 +159,8 @@ wFrameWindowCreate(WScreen *scr, int wlevel, int x, int y,
                    int *title_min, int *title_max, int flags,
                    union WTexture **title_texture,
                    union WTexture **resize_texture,
-                   WMColor **color, WMFont **font);
+                   WMColor **color, WMFont **font,
+                   int depth, Visual *visual, Colormap colormap);
 
 void wFrameWindowUpdateBorders(WFrameWindow *fwin, int flags);
 

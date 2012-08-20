@@ -43,7 +43,8 @@ typedef struct _WCoreWindow {
 
 
 WCoreWindow *wCoreCreateTopLevel(WScreen *screen, int x, int y, int width,
-                                 int height, int bwidth);
+                                 int height, int bwidth,
+                                 int depth, Visual *visual, Colormap colormap);
 
 WCoreWindow *wCoreCreate(WCoreWindow *parent, int x, int y,
                          int width, int height);
