@@ -1629,12 +1629,16 @@ void wNETFrameExtents(WWindow *wwin)
 	 *       2 = top
 	 *       3 = bottom
 	 */
-	if (!wwin->client_flags.no_border)
-		extents[0] = extents[1] = FRAME_BORDER_WIDTH;
 	if (wwin->frame->titlebar)
 		extents[2] = wwin->frame->titlebar->height;
 	if (wwin->frame->resizebar)
 		extents[3] = wwin->frame->resizebar->height;
+	if (HAS_BORDER(wwin)) {
+		extents[0] += FRAME_BORDER_WIDTH;
+		extents[1] += FRAME_BORDER_WIDTH;
+		extents[2] += FRAME_BORDER_WIDTH;
+		extents[3] += FRAME_BORDER_WIDTH;
+	}
 
 	XChangeProperty(dpy, wwin->client_win, net_frame_extents, XA_CARDINAL, 32, PropModeReplace, (unsigned char *) extents, 4);
 }

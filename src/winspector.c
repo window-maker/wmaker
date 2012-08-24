@@ -793,6 +793,8 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 			wAppIconPaint(wapp->app_icon);
 		}
 	}
+
+  wNETFrameExtents(wwin);
 }
 
 static void revertSettings(WMButton *button, InspectorPanel *panel)
