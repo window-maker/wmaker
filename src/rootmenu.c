@@ -998,7 +998,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	}
 	filename = flat_file + (flat_file[1] == '|' ? 2 : 1);
 
-	file = popen(filename, "rb");
+	file = popen(filename, "r");
 	if (!file) {
 		werror(_("%s:could not open menu file"), filename);
 		return NULL;
