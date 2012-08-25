@@ -58,6 +58,27 @@ static void paintButton(WCoreWindow * button, WTexture * texture,
 
 static void updateTitlebar(WFrameWindow * fwin);
 
+static void allocFrameBorderPixel(Colormap colormap, char *color_name, unsigned long **pixel);
+
+static void allocFrameBorderPixel(Colormap colormap, char *color_name, unsigned long **pixel) {
+	XColor xcol;
+
+	*pixel = NULL;
+
+	if (!XParseColor(dpy, colormap, color_name, &xcol)) {
+		wwarning(_("could not parse color \"%s\""), color_name);
+		return;
+	}
+	if (!XAllocColor(dpy, colormap, &xcol)) {
+		wwarning(_("could not allocate color \"%s\""), color_name);
+		return;
+	}
+
+	*pixel = wmalloc(sizeof(unsigned long));
+	if (*pixel)
+		**pixel = xcol.pixel;
+}
+
 WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
 				 int width, int height, int *clearance,
 				 int *title_min, int *title_max, int flags,
@@ -88,6 +109,8 @@ WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
 	fwin->depth = depth;
 	fwin->visual = visual;
 	fwin->colormap = colormap;
+	allocFrameBorderPixel(fwin->colormap, FRAME_BORDER_COLOR, &fwin->border_pixel);
+	allocFrameBorderPixel(fwin->colormap, FRAME_SELECTED_BORDER_COLOR, &fwin->selected_border_pixel);
 
 	fwin->core = wCoreCreateTopLevel(scr, x, y, width, height, (flags & WFF_BORDER)
 					 ? FRAME_BORDER_WIDTH : 0, fwin->depth, fwin->visual, fwin->colormap);
@@ -413,6 +436,9 @@ void wFrameWindowUpdateBorders(WFrameWindow * fwin, int flags)
 	}
 
 	checkTitleSize(fwin);
+
+	if (fwin->border_pixel)
+		XSetWindowBorder(dpy, fwin->core->window, *fwin->border_pixel);
 }
 
 void wFrameWindowDestroy(WFrameWindow * fwin)

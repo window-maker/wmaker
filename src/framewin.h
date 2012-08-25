@@ -150,6 +150,8 @@ typedef struct WFrameWindow {
     int depth;
     Visual *visual;
     Colormap colormap;
+    unsigned long *border_pixel;
+    unsigned long *selected_border_pixel;
 } WFrameWindow;
 
 
