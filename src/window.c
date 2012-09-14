@@ -1617,6 +1617,8 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 		wApplicationDeactivate(oapp);
 	}
 
+	wNETCleanupFrameExtents(wwin);
+
 	wWindowDestroy(wwin);
 	XFlush(dpy);
 }

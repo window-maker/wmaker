@@ -1642,3 +1642,8 @@ void wNETFrameExtents(WWindow *wwin)
 
 	XChangeProperty(dpy, wwin->client_win, net_frame_extents, XA_CARDINAL, 32, PropModeReplace, (unsigned char *) extents, 4);
 }
+
+void wNETCleanupFrameExtents(WWindow *wwin)
+{
+	XDeleteProperty(dpy, wwin->client_win, net_frame_extents);
+}
