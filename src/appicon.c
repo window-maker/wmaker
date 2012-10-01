@@ -155,6 +155,7 @@ void makeAppIconFor(WApplication * wapp)
 
 	/* Create the icon */
 	wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
+	wIconUpdate(wapp->app_icon->icon);
 
 	/* Now, paint the icon */
 	if (!WFLAGP(wapp->main_window_desc, no_appicon))
@@ -262,7 +263,6 @@ static WAppIcon *wAppIconCreate(WWindow * leader_win)
 	aicon->icon->core->descriptor.parent = aicon;
 	AddToStackList(aicon->icon->core);
 	aicon->icon->show_title = 0;
-	wIconUpdate(aicon->icon);
 
 	return aicon;
 }
