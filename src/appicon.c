@@ -106,48 +106,48 @@ void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance
 	}
 }
 
-WAppIcon *wAppIconCreateForDock(WScreen * scr, char *command, char *wm_instance, char *wm_class, int tile)
+WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance, char *wm_class, int tile)
 {
-	WAppIcon *dicon;
+	WAppIcon *aicon;
 	char *path;
 
-	dicon = wmalloc(sizeof(WAppIcon));
-	wretain(dicon);
-	dicon->yindex = -1;
-	dicon->xindex = -1;
+	aicon = wmalloc(sizeof(WAppIcon));
+	wretain(aicon);
+	aicon->yindex = -1;
+	aicon->xindex = -1;
 
-	add_to_appicon_list(scr, dicon);
+	add_to_appicon_list(scr, aicon);
 
 	if (command)
-		dicon->command = wstrdup(command);
+		aicon->command = wstrdup(command);
 
 	if (wm_class)
-		dicon->wm_class = wstrdup(wm_class);
+		aicon->wm_class = wstrdup(wm_class);
 
 	if (wm_instance)
-		dicon->wm_instance = wstrdup(wm_instance);
+		aicon->wm_instance = wstrdup(wm_instance);
 
 	/* Search the icon using instance and class, without default icon */
 	path = get_default_icon_filename(scr, wm_instance, wm_class, command, False);
 
-	dicon->icon = wIconCreateWithIconFile(scr, path, tile);
+	aicon->icon = wIconCreateWithIconFile(scr, path, tile);
 	if (path)
 		wfree(path);
 #ifdef XDND
-	wXDNDMakeAwareness(dicon->icon->core->window);
+	wXDNDMakeAwareness(aicon->icon->core->window);
 #endif
 
 	/* will be overriden by dock */
-	dicon->icon->core->descriptor.handle_mousedown = appIconMouseDown;
-	dicon->icon->core->descriptor.handle_expose = iconExpose;
-	dicon->icon->core->descriptor.parent_type = WCLASS_APPICON;
-	dicon->icon->core->descriptor.parent = dicon;
-	AddToStackList(dicon->icon->core);
+	aicon->icon->core->descriptor.handle_mousedown = appIconMouseDown;
+	aicon->icon->core->descriptor.handle_expose = iconExpose;
+	aicon->icon->core->descriptor.parent_type = WCLASS_APPICON;
+	aicon->icon->core->descriptor.parent = aicon;
+	AddToStackList(aicon->icon->core);
 
-	return dicon;
+	return aicon;
 }
 
-void makeAppIconFor(WApplication * wapp)
+void makeAppIconFor(WApplication *wapp)
 {
 	/* If app_icon, work is done, return */
 	if (wapp->app_icon)
@@ -228,7 +228,7 @@ void removeAppIconFor(WApplication * wapp)
 		wArrangeIcons(wapp->main_window_desc->screen_ptr, True);
 }
 
-static WAppIcon *wAppIconCreate(WWindow * leader_win)
+static WAppIcon *wAppIconCreate(WWindow *leader_win)
 {
 	WAppIcon *aicon;
 	WScreen *scr = leader_win->screen_ptr;
