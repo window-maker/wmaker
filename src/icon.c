@@ -101,7 +101,7 @@ INLINE static void getSize(Drawable d, unsigned int *w, unsigned int *h, unsigne
 	XGetGeometry(dpy, d, &rjunk, &xjunk, &yjunk, w, h, &bjunk, dep);
 }
 
-WIcon *wIconCreate(WWindow * wwin)
+WIcon *wIconCreate(WWindow *wwin)
 {
 	WScreen *scr = wwin->screen_ptr;
 	WIcon *icon;
@@ -126,12 +126,13 @@ WIcon *wIconCreate(WWindow * wwin)
 #else
 	icon->show_title = 1;
 #endif
-	icon->file_image = wDefaultGetImage(scr, wwin->wm_instance, wwin->wm_class, wPreferences.icon_size);
 
 	/* Get the application icon, default included */
-	file = wDefaultGetIconFile(wwin->wm_instance, wwin->wm_class, True);
-	if (file)
+	file = get_default_icon_filename(scr, wwin->wm_instance, wwin->wm_class, NULL, True);
+	if (file) {
 		icon->file = wstrdup(file);
+		icon->file_image = get_default_icon_rimage(scr, icon->file, wPreferences.icon_size);
+	}
 
 	icon->icon_name = wNETWMGetIconName(wwin->client_win);
 	if (icon->icon_name)
@@ -205,6 +206,10 @@ static WIcon *wIconCreateCore(WScreen *scr, int coord_x, int coord_y)
 	icon->core->stacking->under = NULL;
 	icon->core->stacking->window_level = NORMAL_ICON_LEVEL;
 	icon->core->stacking->child_of = NULL;
+
+	/* Icon image */
+	icon->file = NULL;
+	icon->file_image = NULL;
 
 	return icon;
 }
