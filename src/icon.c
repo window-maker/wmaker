@@ -156,14 +156,8 @@ WIcon *wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
 
 	icon = wIconCreateCore(scr, 0, 0);
 
-	if (iconfile) {
-		icon->file_image = RLoadImage(scr->rcontext, iconfile, 0);
-		if (!icon->file_image)
-			wwarning(_("error loading image file \"%s\": %s"), iconfile, RMessageForError(RErrorCode));
-
-		icon->file_image = wIconValidateIconSize(icon->file_image, wPreferences.icon_size);
-		icon->file = wstrdup(iconfile);
-	}
+	icon->file_image = get_default_icon_rimage(scr, iconfile, wPreferences.icon_size);
+	icon->file = wstrdup(iconfile);
 
 	icon->tile_type = tile;
 
