@@ -58,7 +58,7 @@ static void miniwindowExpose(WObjDescriptor * desc, XEvent * event);
 static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event);
 static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
 
-static WIcon *wIconCreateCore(WScreen *scr, int coord_x, int coord_y);
+static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 
 void get_pixmap_icon_from_icon_win(WIcon *icon);
 int get_pixmap_icon_from_wm_hints(WScreen *scr, WWindow *wwin, WIcon *icon);
@@ -101,13 +101,13 @@ INLINE static void getSize(Drawable d, unsigned int *w, unsigned int *h, unsigne
 	XGetGeometry(dpy, d, &rjunk, &xjunk, &yjunk, w, h, &bjunk, dep);
 }
 
-WIcon *wIconCreate(WWindow *wwin)
+WIcon *icon_create_for_wwindow(WWindow *wwin)
 {
 	WScreen *scr = wwin->screen_ptr;
 	WIcon *icon;
 	char *file;
 
-	icon = wIconCreateCore(scr, wwin->icon_x, wwin->icon_y);
+	icon = icon_create_core(scr, wwin->icon_x, wwin->icon_y);
 
 	icon->owner = wwin;
 	if (wwin->wm_hints && (wwin->wm_hints->flags & IconWindowHint)) {
@@ -151,11 +151,11 @@ WIcon *wIconCreate(WWindow *wwin)
 	return icon;
 }
 
-WIcon *wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
+WIcon *icon_create_for_dock(WScreen *scr, char *iconfile, int tile)
 {
 	WIcon *icon;
 
-	icon = wIconCreateCore(scr, 0, 0);
+	icon = icon_create_core(scr, 0, 0);
 
 	icon->file_image = get_default_icon_rimage(scr, iconfile, wPreferences.icon_size);
 	icon->file = wstrdup(iconfile);
@@ -170,7 +170,7 @@ WIcon *wIconCreateWithIconFile(WScreen *scr, char *iconfile, int tile)
 	return icon;
 }
 
-static WIcon *wIconCreateCore(WScreen *scr, int coord_x, int coord_y)
+static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y)
 {
 	WIcon *icon;
 	unsigned long vmask = 0;

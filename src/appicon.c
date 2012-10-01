@@ -130,7 +130,7 @@ WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance, 
 	/* Search the icon using instance and class, without default icon */
 	path = get_default_icon_filename(scr, wm_instance, wm_class, command, False);
 
-	aicon->icon = wIconCreateWithIconFile(scr, path, tile);
+	aicon->icon = icon_create_for_dock(scr, path, tile);
 	if (path)
 		wfree(path);
 #ifdef XDND
@@ -235,7 +235,6 @@ static WAppIcon *wAppIconCreate(WWindow *leader_win)
 
 	aicon = wmalloc(sizeof(WAppIcon));
 	wretain(aicon);
-
 	aicon->yindex = -1;
 	aicon->xindex = -1;
 
@@ -251,7 +250,7 @@ static WAppIcon *wAppIconCreate(WWindow *leader_win)
 	if (leader_win->wm_instance)
 		aicon->wm_instance = wstrdup(leader_win->wm_instance);
 
-	aicon->icon = wIconCreate(leader_win);
+	aicon->icon = icon_create_for_wwindow(leader_win);
 #ifdef XDND
 	wXDNDMakeAwareness(aicon->icon->core->window);
 #endif

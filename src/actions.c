@@ -1112,7 +1112,7 @@ void wIconifyWindow(WWindow * wwin)
 		if (!wwin->flags.icon_moved)
 			PlaceIcon(wwin->screen_ptr, &wwin->icon_x, &wwin->icon_y, wGetHeadForWindow(wwin));
 
-		wwin->icon = wIconCreate(wwin);
+		wwin->icon = icon_create_for_wwindow(wwin);
 		wwin->icon->mapped = 1;
 	}
 
