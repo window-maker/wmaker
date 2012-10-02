@@ -109,7 +109,6 @@ void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance
 WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance, char *wm_class, int tile)
 {
 	WAppIcon *aicon;
-	char *path;
 
 	aicon = wmalloc(sizeof(WAppIcon));
 	wretain(aicon);
@@ -127,12 +126,8 @@ WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance, 
 	if (wm_instance)
 		aicon->wm_instance = wstrdup(wm_instance);
 
-	/* Search the icon using instance and class, without default icon */
-	path = get_default_icon_filename(scr, wm_instance, wm_class, command, False);
+	aicon->icon = icon_create_for_dock(scr, command, wm_instance, wm_class, tile);
 
-	aicon->icon = icon_create_for_dock(scr, path, tile);
-	if (path)
-		wfree(path);
 #ifdef XDND
 	wXDNDMakeAwareness(aicon->icon->core->window);
 #endif

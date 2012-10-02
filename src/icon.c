@@ -127,38 +127,44 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 	icon->show_title = 1;
 #endif
 
-	/* Get the application icon, default included */
-	file = get_default_icon_filename(scr, wwin->wm_instance, wwin->wm_class, NULL, True);
-	if (file) {
-		icon->file = wstrdup(file);
-		icon->file_image = get_default_icon_rimage(scr, icon->file, wPreferences.icon_size);
-	}
-
 	icon->icon_name = wNETWMGetIconName(wwin->client_win);
 	if (icon->icon_name)
 		wwin->flags.net_has_icon_title = 1;
 	else
 		wGetIconName(dpy, wwin->client_win, &icon->icon_name);
 
+	/* Get the application icon, default included */
+	file = get_default_icon_filename(scr, wwin->wm_instance, wwin->wm_class, NULL, True);
+	if (file) {
+		icon->file = wstrdup(file);
+		icon->file_image = get_default_icon_rimage(scr, icon->file, wPreferences.icon_size);
+		wfree(file);
+	}
+
 	icon->tile_type = TILE_NORMAL;
 
 	wIconUpdate(icon);
 
-	XFlush(dpy);
-
 	WMAddNotificationObserver(appearanceObserver, icon, WNIconAppearanceSettingsChanged, icon);
 	WMAddNotificationObserver(tileObserver, icon, WNIconTileSettingsChanged, icon);
+
 	return icon;
 }
 
-WIcon *icon_create_for_dock(WScreen *scr, char *iconfile, int tile)
+WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char *wm_class, int tile)
 {
 	WIcon *icon;
+	char *file = NULL;
 
 	icon = icon_create_core(scr, 0, 0);
 
-	icon->file_image = get_default_icon_rimage(scr, iconfile, wPreferences.icon_size);
-	icon->file = wstrdup(iconfile);
+	/* Search the icon using instance and class, without default icon */
+	file = get_default_icon_filename(scr, wm_instance, wm_class, command, False);
+	if (file) {
+		icon->file = wstrdup(file);
+		icon->file_image = get_default_icon_rimage(scr, icon->file, wPreferences.icon_size);
+		wfree(file);
+	}
 
 	icon->tile_type = tile;
 

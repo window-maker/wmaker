@@ -54,7 +54,7 @@ typedef struct WIcon {
 					 * color */
 } WIcon;
 
-WIcon *icon_create_for_dock(WScreen *scr, char *iconfile, int tile);
+WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char *wm_class, int tile);
 WIcon *icon_create_for_wwindow(WWindow *wwin);
 
 void wIconDestroy(WIcon *icon);
