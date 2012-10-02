@@ -1343,6 +1343,7 @@ static WAppIcon *restore_icon_state(WScreen *scr, WMPropList *info, int type, in
 {
 	WAppIcon *aicon;
 	WMPropList *cmd, *value;
+	char *wclass, *winstance, *command;
 
 	cmd = WMGetFromPLDictionary(info, dCommand);
 	if (!cmd || !WMIsPLString(cmd))
@@ -1353,41 +1354,35 @@ static WAppIcon *restore_icon_state(WScreen *scr, WMPropList *info, int type, in
 	if (!value)
 		return NULL;
 
-	{
-		char *wclass, *winstance;
-		char *command;
+	ParseWindowName(value, &winstance, &wclass, "dock");
 
-		ParseWindowName(value, &winstance, &wclass, "dock");
+	if (!winstance && !wclass)
+		return NULL;
 
-		if (!winstance && !wclass)
-			return NULL;
+	/* get commands */
+	if (cmd)
+		command = wstrdup(WMGetFromPLString(cmd));
+	else
+		command = NULL;
 
-		/* get commands */
-
-		if (cmd)
-			command = wstrdup(WMGetFromPLString(cmd));
-		else
-			command = NULL;
-
-		if (!command || strcmp(command, "-") == 0) {
-			if (command)
-				wfree(command);
-			if (wclass)
-				wfree(wclass);
-			if (winstance)
-				wfree(winstance);
-
-			return NULL;
-		}
-
-		aicon = wAppIconCreateForDock(scr, command, winstance, wclass, TILE_NORMAL);
+	if (!command || strcmp(command, "-") == 0) {
+		if (command)
+			wfree(command);
 		if (wclass)
 			wfree(wclass);
 		if (winstance)
 			wfree(winstance);
-		if (command)
-			wfree(command);
+
+		return NULL;
 	}
+
+	aicon = wAppIconCreateForDock(scr, command, winstance, wclass, TILE_NORMAL);
+	if (wclass)
+		wfree(wclass);
+	if (winstance)
+		wfree(winstance);
+	if (command)
+		wfree(command);
 
 	aicon->icon->core->descriptor.handle_mousedown = iconMouseDown;
 	if (type == WM_CLIP) {
