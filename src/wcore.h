@@ -25,32 +25,30 @@
 #include "screen.h"
 
 typedef struct WStacking {
-    struct _WCoreWindow *above;
-    struct _WCoreWindow *under;
-    short window_level;
-    struct _WCoreWindow *child_of;      /* owner for transient window */
+	struct _WCoreWindow *above;
+	struct _WCoreWindow *under;
+	short window_level;
+	struct _WCoreWindow *child_of;	/* owner for transient window */
 } WStacking;
 
 typedef struct _WCoreWindow {
-    Window window;
-    int width;		               /* size of the window */
-    int height;
-    WScreen *screen_ptr;	       /* ptr to screen of the window */
+	Window window;
+	int width;			/* size of the window */
+	int height;
+	WScreen *screen_ptr;		/* ptr to screen of the window */
 
-    WObjDescriptor descriptor;
-    WStacking *stacking;	       /* window stacking information */
+	WObjDescriptor descriptor;
+	WStacking *stacking;		/* window stacking information */
 } WCoreWindow;
 
-
 WCoreWindow *wCoreCreateTopLevel(WScreen *screen, int x, int y, int width,
-                                 int height, int bwidth,
-                                 int depth, Visual *visual, Colormap colormap);
+				 int height, int bwidth,
+				 int depth, Visual *visual, Colormap colormap);
 
 WCoreWindow *wCoreCreate(WCoreWindow *parent, int x, int y,
-                         int width, int height);
+			 int width, int height);
+
 void wCoreDestroy(WCoreWindow *core);
 void wCoreConfigure(WCoreWindow *core, int req_x, int req_y,
-                    int req_w, int req_h);
-
-
+		    int req_w, int req_h);
 #endif
