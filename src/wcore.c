@@ -51,7 +51,7 @@ WCoreWindow *wCoreCreateTopLevel(WScreen *screen, int x, int y, int width, int h
 
 	core = wmalloc(sizeof(WCoreWindow));
 
-	vmask = CWBorderPixel | CWCursor | CWEventMask | CWOverrideRedirect;
+	vmask = CWBorderPixel | CWCursor | CWEventMask | CWOverrideRedirect | CWColormap;
 	attribs.override_redirect = True;
 	attribs.cursor = wCursor[WCUR_DEFAULT];
 	attribs.background_pixmap = None;
@@ -61,7 +61,6 @@ WCoreWindow *wCoreCreateTopLevel(WScreen *screen, int x, int y, int width, int h
 			     ButtonReleaseMask | ButtonMotionMask |
 			     ExposureMask | EnterWindowMask | LeaveWindowMask;
 
-	vmask |= CWColormap;
 	attribs.colormap = colormap;
 
 	core->window = XCreateWindow(dpy, screen->root_win, x, y, width, height,
@@ -99,14 +98,13 @@ WCoreWindow *wCoreCreate(WCoreWindow *parent, int x, int y, int width, int heigh
 
 	core = wmalloc(sizeof(WCoreWindow));
 
-	vmask = CWBorderPixel | CWCursor | CWEventMask;
+	vmask = CWBorderPixel | CWCursor | CWEventMask | CWColormap;
 	attribs.cursor = wCursor[WCUR_DEFAULT];
 	attribs.background_pixmap = None;
 	attribs.background_pixel = parent->screen_ptr->black_pixel;
 	attribs.event_mask = KeyPressMask | KeyReleaseMask | ButtonPressMask |
 			     ButtonReleaseMask | ButtonMotionMask |
 			     ExposureMask | EnterWindowMask | LeaveWindowMask;
-	vmask |= CWColormap;
 	attribs.colormap = parent->screen_ptr->w_colormap;
 	core->window = XCreateWindow(dpy, parent->window, x, y, width, height, 0,
 			  parent->screen_ptr->w_depth, CopyFromParent,
