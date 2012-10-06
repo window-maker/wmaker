@@ -109,6 +109,8 @@ static void titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event);
 static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event);
 static void resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event);
 
+static void remove_wwindowstate(WWindowState *wstate);
+
 /****** Notification Observers ******/
 
 static void appearanceObserver(void *self, WMNotification * notif)
@@ -2600,26 +2602,12 @@ void wWindowDeleteSavedState(WMagicNumber id)
 	tmp = windowState;
 	if (tmp == wstate) {
 		windowState = wstate->next;
-		if (wstate->instance)
-			wfree(wstate->instance);
-		if (wstate->class)
-			wfree(wstate->class);
-		if (wstate->command)
-			wfree(wstate->command);
-		wfree(wstate->state);
-		wfree(wstate);
+		remove_wwindowstate(wstate);
 	} else {
 		while (tmp->next) {
 			if (tmp->next == wstate) {
 				tmp->next = wstate->next;
-				if (wstate->instance)
-					wfree(wstate->instance);
-				if (wstate->class)
-					wfree(wstate->class);
-				if (wstate->command)
-					wfree(wstate->command);
-				wfree(wstate->state);
-				wfree(wstate);
+				remove_wwindowstate(wstate);
 				break;
 			}
 			tmp = tmp->next;
@@ -2638,32 +2626,34 @@ void wWindowDeleteSavedStatesForPID(pid_t pid)
 	if (tmp->pid == pid) {
 		wstate = windowState;
 		windowState = tmp->next;
-		if (wstate->instance)
-			wfree(wstate->instance);
-		if (wstate->class)
-			wfree(wstate->class);
-		if (wstate->command)
-			wfree(wstate->command);
-		wfree(wstate->state);
-		wfree(wstate);
+
+		remove_wwindowstate(wstate);
 	} else {
 		while (tmp->next) {
 			if (tmp->next->pid == pid) {
 				wstate = tmp->next;
 				tmp->next = wstate->next;
-				if (wstate->instance)
-					wfree(wstate->instance);
-				if (wstate->class)
-					wfree(wstate->class);
-				if (wstate->command)
-					wfree(wstate->command);
-				wfree(wstate->state);
-				wfree(wstate);
+				remove_wwindowstate(wstate);
 				break;
 			}
 			tmp = tmp->next;
 		}
 	}
+}
+
+static void remove_wwindowstate(WWindowState *wstate)
+{
+	if (wstate->instance)
+		wfree(wstate->instance);
+
+	if (wstate->class)
+		wfree(wstate->class);
+
+	if (wstate->command)
+		wfree(wstate->command);
+
+	wfree(wstate->state);
+	wfree(wstate);
 }
 
 void wWindowSetOmnipresent(WWindow *wwin, Bool flag)
