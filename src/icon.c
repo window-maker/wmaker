@@ -369,11 +369,12 @@ Bool wIconChangeImageFile(WIcon * icon, char *file)
 	char *path;
 	int error = 0;
 
-	if (icon->file_image)
+	if (icon->file_image) {
 		RReleaseImage(icon->file_image);
+		icon->file_image = NULL;
+	}
 
 	if (!file) {
-		icon->file_image = NULL;
 		wIconUpdate(icon);
 		return True;
 	}
