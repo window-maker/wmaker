@@ -160,8 +160,8 @@ void makeAppIconFor(WApplication *wapp)
 void unpaint_app_icon(WApplication *wapp)
 {
 	WAppIcon *aicon;
-	WScreen *scr = wapp->main_window_desc->screen_ptr;
-	WDock *clip = scr->workspaces[scr->current_workspace]->clip;
+	WScreen *scr;
+	WDock *clip;
 
 	if (!wapp || !wapp->app_icon)
 		return;
@@ -171,6 +171,9 @@ void unpaint_app_icon(WApplication *wapp)
 	/* If the icon is docked, don't continue */
 	if (aicon->docked)
 		return;
+
+	scr = wapp->main_window_desc->screen_ptr;
+	clip = scr->workspaces[scr->current_workspace]->clip;
 
 	if (!clip || !aicon->attracted || !clip->collapsed)
 		XUnmapWindow(dpy, aicon->icon->core->window);
