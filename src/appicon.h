@@ -80,6 +80,7 @@ void makeAppIconFor(WApplication * wapp);
 void removeAppIconFor(WApplication * wapp);
 void save_appicon(WAppIcon *aicon, Bool dock);
 void paint_app_icon(WApplication *wapp);
+void unpaint_app_icon(WApplication *wapp);
 void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance,
 				    char *wm_class);
 #endif

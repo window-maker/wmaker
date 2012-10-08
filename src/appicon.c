@@ -157,6 +157,33 @@ void makeAppIconFor(WApplication *wapp)
 		paint_app_icon(wapp);
 }
 
+void unpaint_app_icon(WApplication *wapp)
+{
+	WAppIcon *aicon;
+	WScreen *scr = wapp->main_window_desc->screen_ptr;
+	WDock *clip = scr->workspaces[scr->current_workspace]->clip;
+
+	if (!wapp || !wapp->app_icon)
+		return;
+
+	aicon = wapp->app_icon;
+
+	/* If the icon is docked, don't continue */
+	if (aicon->docked)
+		return;
+
+	if (!clip || !aicon->attracted || !clip->collapsed)
+		XUnmapWindow(dpy, aicon->icon->core->window);
+
+	/* We want to avoid having it on the list  because otherwise
+	 * there will be a hole when the icons are arranged with
+	 * wArrangeIcons() */
+	remove_from_appicon_list(scr, aicon);
+
+	if (wPreferences.auto_arrange_icons && !aicon->attracted)
+		wArrangeIcons(scr, True);
+}
+
 void paint_app_icon(WApplication *wapp)
 {
 	WIcon *icon;
@@ -182,10 +209,22 @@ void paint_app_icon(WApplication *wapp)
 		}
 		wDockAttachIcon(clip, wapp->app_icon, x, y);
 	} else {
-		PlaceIcon(scr, &x, &y, wGetHeadForWindow(wapp->main_window_desc));
-		wAppIconMove(wapp->app_icon, x, y);
-		wLowerFrame(icon->core);
+		/* We must know if the icon is painted in the screen,
+		 * because if painted, then PlaceIcon will return the next
+		 * space on the screen, and the icon will move */
+		if (wapp->app_icon->next == NULL && wapp->app_icon->prev == NULL) {
+			PlaceIcon(scr, &x, &y, wGetHeadForWindow(wapp->main_window_desc));
+			wAppIconMove(wapp->app_icon, x, y);
+			wLowerFrame(icon->core);
+		}
 	}
+
+	/* If we want appicon (no_appicon is not set) and the icon is not
+	 * in the appicon_list, we must add it. Else, we want to avoid
+	 * having it on the list */
+	if (!WFLAGP(wapp->main_window_desc, no_appicon) &&
+	    wapp->app_icon->next == NULL && wapp->app_icon->prev == NULL)
+		add_to_appicon_list(scr, wapp->app_icon);
 
 	if (!clip || !wapp->app_icon->attracted || !clip->collapsed)
 		XMapWindow(dpy, icon->core->window);
@@ -226,18 +265,13 @@ void removeAppIconFor(WApplication * wapp)
 static WAppIcon *wAppIconCreate(WWindow *leader_win)
 {
 	WAppIcon *aicon;
-	WScreen *scr = leader_win->screen_ptr;
 
 	aicon = wmalloc(sizeof(WAppIcon));
 	wretain(aicon);
 	aicon->yindex = -1;
 	aicon->xindex = -1;
-
-	/* When no_appicon is set we want to avoid having it on the list
-	 * because otherwise there will be a hole when the icons are
-	 * arranged with wArrangeIcons() */
-	if (!WFLAGP(leader_win, no_appicon))
-		add_to_appicon_list(scr, aicon);
+	aicon->prev = NULL;
+	aicon->next = NULL;
 
 	if (leader_win->wm_class)
 		aicon->wm_class = wstrdup(leader_win->wm_class);
@@ -975,4 +1009,7 @@ static void remove_from_appicon_list(WScreen *scr, WAppIcon *appicon)
 		if (appicon->prev)
 			appicon->prev->next = appicon->next;
 	}
+
+	appicon->prev = NULL;
+	appicon->next = NULL;
 }

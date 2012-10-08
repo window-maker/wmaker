@@ -770,15 +770,13 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 	if (wapp) {
 		/* do application wide stuff */
 		WSETUFLAG(wapp->main_window_desc, start_hidden, WMGetButtonSelected(panel->appChk[0]));
-
 		WSETUFLAG(wapp->main_window_desc, no_appicon, WMGetButtonSelected(panel->appChk[1]));
-
 		WSETUFLAG(wapp->main_window_desc, shared_appicon, WMGetButtonSelected(panel->appChk[2]));
 
 		if (WFLAGP(wapp->main_window_desc, no_appicon))
-			removeAppIconFor(wapp);
+			unpaint_app_icon(wapp);
 		else
-			makeAppIconFor(wapp);
+			paint_app_icon(wapp);
 
 		if (wapp->app_icon && wapp->main_window == wwin->client_win) {
 			char *file = WMGetTextFieldText(panel->fileText);
