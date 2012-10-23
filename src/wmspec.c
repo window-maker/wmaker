@@ -229,6 +229,7 @@ static void updateClientListStacking(WScreen * scr, WWindow *);
 static void updateWorkspaceNames(WScreen * scr);
 static void updateCurrentWorkspace(WScreen * scr);
 static void updateWorkspaceCount(WScreen * scr);
+static void wNETWMShowingDesktop(WScreen *scr, Bool show);
 
 typedef struct NetData {
 	WScreen *scr;
@@ -486,7 +487,7 @@ static void updateShowDesktop(WScreen * scr, Bool show)
 			PropModeReplace, (unsigned char *)&foo, 1);
 }
 
-void wNETWMShowingDesktop(WScreen * scr, Bool show)
+static void wNETWMShowingDesktop(WScreen *scr, Bool show)
 {
 	if (show && scr->netdata->show_desktop == NULL) {
 		WWindow *tmp, **wins;

@@ -36,7 +36,6 @@ Bool wNETWMCheckInitialClientState(WWindow *wwin);
 Bool wNETWMProcessClientMessage(XClientMessageEvent *event);
 Bool wNETWMCheckClientHints(WWindow *wwin, int *layer, int *workspace);
 Bool wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event);
-void wNETWMShowingDesktop(WScreen *scr, Bool show);
 void wNETWMUpdateActions(WWindow *wwin, Bool del);
 void wNETWMUpdateDesktop(WScreen *scr);
 void wNETWMPositionSplash(WWindow *wwin, int *x, int *y, int width, int height);
