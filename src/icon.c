@@ -68,6 +68,8 @@ static Pixmap makeIcon(WScreen *scr, RImage *image,
 		       int titled, int shadowed,
 		       int tileType, int highlighted);
 static void icon_update_pixmap(WIcon *icon, RImage *image);
+
+static RImage *get_default_image(WScreen *scr);
 /****** Notification Observers ******/
 
 static void appearanceObserver(void *self, WMNotification * notif)
@@ -627,7 +629,6 @@ void wIconUpdate(WIcon *icon)
 static void get_pixmap_icon_from_user_icon(WIcon *icon)
 {
 	RImage *image = NULL;
-	char *path, *file;
 	WScreen *scr = icon->core->screen_ptr;
 
 	if (icon->file_image) {
@@ -635,22 +636,7 @@ static void get_pixmap_icon_from_user_icon(WIcon *icon)
 	} else {
 		/* make default icons */
 		if (!scr->def_icon_pixmap) {
-			/* Get the default icon */
-			file = wDefaultGetIconFile(NULL, NULL, True);
-			if (file) {
-				path = FindImage(wPreferences.icon_path, file);
-				if (path) {
-					image = RLoadImage(scr->rcontext, path, 0);
-					if (!image)
-						wwarning(_("could not load default icon \"%s\":%s"),
-							 file, RMessageForError(RErrorCode));
-					wfree(path);
-				} else {
-					wwarning(_("could not find default icon \"%s\""), file);
-				}
-			}
-
-			image = wIconValidateIconSize(image, wPreferences.icon_size);
+			image = get_default_image(scr);
 			scr->def_icon_pixmap = makeIcon(scr, image, False, False, icon->tile_type, icon->highlighted);
 			scr->def_ticon_pixmap = makeIcon(scr, image, True, False, icon->tile_type, icon->highlighted);
 			if (image)
@@ -664,6 +650,33 @@ static void get_pixmap_icon_from_user_icon(WIcon *icon)
 
 		icon->pixmap = None;
 	}
+}
+
+/* This function creates the RImage using the default icon */
+static RImage *get_default_image(WScreen *scr)
+{
+	RImage *image = NULL;
+	char *path, *file;
+
+	/* Get the default icon */
+	file = wDefaultGetIconFile(NULL, NULL, True);
+	if (file) {
+		path = FindImage(wPreferences.icon_path, file);
+		if (path) {
+			image = RLoadImage(scr->rcontext, path, 0);
+			if (!image)
+				wwarning(_("could not load default icon \"%s\":%s"),
+					 file, RMessageForError(RErrorCode));
+			wfree(path);
+		} else {
+			wwarning(_("could not find default icon \"%s\""), file);
+		}
+	}
+
+	/* Validate the icon size */
+	image = wIconValidateIconSize(image, wPreferences.icon_size);
+
+	return image;
 }
 
 /* Get the Pixmap from the WIcon of the WWindow */
