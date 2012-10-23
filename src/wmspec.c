@@ -1193,15 +1193,12 @@ static void updateWindowType(WWindow * wwin)
 	}
 }
 
-Bool wNETWMCheckClientHints(WWindow * wwin, int *layer, int *workspace)
+void wNETWMCheckClientHints(WWindow *wwin, int *layer, int *workspace)
 {
 	Atom type_ret;
-	int fmt_ret;
-	unsigned long nitems_ret;
-	unsigned long bytes_after_ret;
+	int fmt_ret, i;
+	unsigned long nitems_ret, bytes_after_ret;
 	long *data = NULL;
-	Bool hasState = False;
-	int i;
 
 	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_desktop, 0, 1, False,
 			       XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
@@ -1214,8 +1211,6 @@ Bool wNETWMCheckClientHints(WWindow * wwin, int *layer, int *workspace)
 			wwin->client_flags.omnipresent = 1;
 		else
 			*workspace = desktop;
-
-		hasState = True;
 	}
 
 	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_state, 0, 1, False,
@@ -1223,11 +1218,10 @@ Bool wNETWMCheckClientHints(WWindow * wwin, int *layer, int *workspace)
 			       &bytes_after_ret, (unsigned char **)&data) == Success && data) {
 
 		Atom *state = (Atom *) data;
-		for (i = 0; i < nitems_ret; ++i) {
+		for (i = 0; i < nitems_ret; ++i)
 			doStateAtom(wwin, state[i], _NET_WM_STATE_ADD, True);
-		}
+
 		XFree(data);
-		hasState = True;
 	}
 
 	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_window_type, 0, 1, False,
@@ -1240,17 +1234,13 @@ Bool wNETWMCheckClientHints(WWindow * wwin, int *layer, int *workspace)
 				break;
 		}
 		XFree(data);
-		hasState = True;
 	}
 
 	wNETWMUpdateActions(wwin, False);
 	updateStrut(wwin, False);
-	if (updateStrut(wwin, True)) {
-		hasState = True;
-	}
-	wScreenUpdateUsableArea(wwin->screen_ptr);
+	updateStrut(wwin, True);
 
-	return hasState;
+	wScreenUpdateUsableArea(wwin->screen_ptr);
 }
 
 static Bool updateNetIconInfo(WWindow * wwin)
