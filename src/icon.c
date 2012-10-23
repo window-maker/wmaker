@@ -61,7 +61,7 @@ static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
 static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 
 void get_pixmap_icon_from_icon_win(WIcon *icon);
-int get_pixmap_icon_from_wm_hints(WScreen *scr, WWindow *wwin, WIcon *icon);
+int get_pixmap_icon_from_wm_hints(WIcon *icon);
 void get_pixmap_icon_from_user_icon(WIcon *icon);
 /****** Notification Observers ******/
 
@@ -594,7 +594,7 @@ void wIconUpdate(WIcon *icon)
 						icon->shadowed, icon->tile_type, icon->highlighted);
 	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
 		/* Get the Pixmap from the wm_hints, else, from the user */
-		if (get_pixmap_icon_from_wm_hints(scr, wwin, icon))
+		if (get_pixmap_icon_from_wm_hints(icon))
 			get_pixmap_icon_from_user_icon(icon);
 	} else {
 		/* Get the Pixmap from the user */
@@ -711,12 +711,14 @@ void get_pixmap_icon_from_icon_win(WIcon * icon)
 }
 
 /* Get the Pixmap from the XWindow wm_hints */
-int get_pixmap_icon_from_wm_hints(WScreen *scr, WWindow *wwin, WIcon *icon)
+int get_pixmap_icon_from_wm_hints(WIcon *icon)
 {
 	Window jw;
 	Pixmap pixmap;
 	unsigned int w, h, ju, d;
 	int ji, x, y;
+	WWindow *wwin = icon->owner;
+	WScreen *scr = icon->core->screen_ptr;
 	int title_height = WMFontHeight(scr->icon_title_font);
 
 	if (!XGetGeometry(dpy, wwin->wm_hints->icon_pixmap, &jw, &ji, &ji, &w, &h, &ju, &d)) {
