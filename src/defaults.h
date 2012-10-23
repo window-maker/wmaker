@@ -50,5 +50,5 @@ int wDefaultGetStartWorkspace(WScreen *scr, char *instance, char *class);
 void wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file);
 char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
 				Bool default_icon);
-RImage *get_default_icon_rimage(WScreen *scr, char *file_name, int max_size);
+RImage *get_rimage_from_file(WScreen *scr, char *file_name, int max_size);
 #endif /* WMDEFAULTS_H_ */

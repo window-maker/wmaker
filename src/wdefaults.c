@@ -420,7 +420,7 @@ char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, cha
 }
 
 /* This function returns the image picture for the file_name file */
-RImage *get_default_icon_rimage(WScreen *scr, char *file_name, int max_size)
+RImage *get_rimage_from_file(WScreen *scr, char *file_name, int max_size)
 {
 	RImage *image = NULL;
 
@@ -446,7 +446,7 @@ RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_s
 	if (!file_name)
 		return NULL;
 
-	return get_default_icon_rimage(scr, file_name, max_size);
+	return get_rimage_from_file(scr, file_name, max_size);
 }
 
 int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)

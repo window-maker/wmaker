@@ -142,7 +142,7 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 	file = get_default_icon_filename(scr, wwin->wm_instance, wwin->wm_class, NULL, True);
 	if (file) {
 		icon->file = wstrdup(file);
-		icon->file_image = get_default_icon_rimage(scr, icon->file, wPreferences.icon_size);
+		icon->file_image = get_rimage_from_file(scr, icon->file, wPreferences.icon_size);
 		wfree(file);
 	}
 
@@ -167,7 +167,7 @@ WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char
 	file = get_default_icon_filename(scr, wm_instance, wm_class, command, False);
 	if (file) {
 		icon->file = wstrdup(file);
-		icon->file_image = get_default_icon_rimage(scr, icon->file, wPreferences.icon_size);
+		icon->file_image = get_rimage_from_file(scr, icon->file, wPreferences.icon_size);
 		wfree(file);
 	}
 
