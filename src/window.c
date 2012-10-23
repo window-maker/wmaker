@@ -353,16 +353,12 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 	} else {
 		int tmp_workspace = -1;
 		int tmp_level = INT_MIN;	/* INT_MIN is never used by the window levels */
-		Bool check;
-
-		check = False;
 
 #ifdef MWM_HINTS
 		wMWMCheckClientHints(wwin);
 #endif				/* MWM_HINTS */
 
-		if (!check)
-			check = wNETWMCheckClientHints(wwin, &tmp_level, &tmp_workspace);
+		wNETWMCheckClientHints(wwin, &tmp_level, &tmp_workspace);
 
 		/* window levels are between INT_MIN+1 and INT_MAX, so if we still
 		 * have INT_MIN that means that no window level was requested. -Dan
