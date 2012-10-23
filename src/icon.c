@@ -63,6 +63,7 @@ static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 static void get_pixmap_icon_from_icon_win(WIcon *icon);
 static int get_pixmap_icon_from_wm_hints(WIcon *icon);
 static void get_pixmap_icon_from_user_icon(WIcon *icon);
+static void get_pixmap_icon_from_default_icon(WIcon *icon);
 
 static void icon_update_pixmap(WIcon *icon, RImage *image);
 
@@ -617,13 +618,18 @@ void wIconUpdate(WIcon *icon)
 
 static void get_pixmap_icon_from_user_icon(WIcon *icon)
 {
-	WScreen *scr = icon->core->screen_ptr;
-
 	/* If the icon has image, update it and continue */
 	if (icon->file_image) {
 		icon_update_pixmap(icon, icon->file_image);
 		return;
 	}
+
+	get_pixmap_icon_from_default_icon(icon);
+}
+
+static void get_pixmap_icon_from_default_icon(WIcon *icon)
+{
+	WScreen *scr = icon->core->screen_ptr;
 
 	/* If the icon don't have image, we should use the default image. */
 	if (!scr->def_icon_rimage)
