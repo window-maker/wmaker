@@ -532,7 +532,7 @@ void wNETWMInitStuff(WScreen * scr)
 	int i;
 
 #ifdef DEBUG_WMSPEC
-	wmessage("enter");
+	wmessage("wNETWMInitStuff");
 #endif
 
 #ifdef HAVE_XINTERNATOMS
@@ -1314,7 +1314,7 @@ Bool wNETWMCheckInitialClientState(WWindow * wwin)
 	Bool hasState = False;
 
 #ifdef DEBUG_WMSPEC
-	wmessage("enter");
+	wmessage("wNETWMCheckInitialClientState");
 #endif
 
 	wNETWMShowingDesktop(wwin->screen_ptr, False);
