@@ -220,15 +220,15 @@ static atomitem_t atomNames[] = {
 #define _NET_WM_MOVERESIZE_SIZE_KEYBOARD     9	/* size via keyboard */
 #define _NET_WM_MOVERESIZE_MOVE_KEYBOARD    10	/* move via keyboard */
 
-static void observer(void *self, WMNotification * notif);
-static void wsobserver(void *self, WMNotification * notif);
+static void observer(void *self, WMNotification *notif);
+static void wsobserver(void *self, WMNotification *notif);
 
-static void updateClientList(WScreen * scr);
-static void updateClientListStacking(WScreen * scr, WWindow *);
+static void updateClientList(WScreen *scr);
+static void updateClientListStacking(WScreen *scr, WWindow *);
 
-static void updateWorkspaceNames(WScreen * scr);
-static void updateCurrentWorkspace(WScreen * scr);
-static void updateWorkspaceCount(WScreen * scr);
+static void updateWorkspaceNames(WScreen *scr);
+static void updateCurrentWorkspace(WScreen *scr);
+static void updateWorkspaceCount(WScreen *scr);
 static void wNETWMShowingDesktop(WScreen *scr, Bool show);
 
 typedef struct NetData {
@@ -237,7 +237,7 @@ typedef struct NetData {
 	WWindow **show_desktop;
 } NetData;
 
-static void setSupportedHints(WScreen * scr)
+static void setSupportedHints(WScreen *scr)
 {
 	Atom atom[atomNr];
 	int i = 0;
@@ -314,7 +314,7 @@ static void setSupportedHints(WScreen * scr)
 			32, PropModeReplace, (unsigned char *)&scr->info_window, 1);
 }
 
-void wNETWMUpdateDesktop(WScreen * scr)
+void wNETWMUpdateDesktop(WScreen *scr)
 {
 	long *views, sizes[2];
 	int count, i;
@@ -342,7 +342,7 @@ void wNETWMUpdateDesktop(WScreen * scr)
 	wfree(views);
 }
 
-int wNETWMGetCurrentDesktopFromHint(WScreen * scr)
+int wNETWMGetCurrentDesktopFromHint(WScreen *scr)
 {
 	int count;
 	unsigned char *prop;
@@ -478,7 +478,7 @@ static void updateIconImage(WWindow *wwin)
 	}
 }
 
-static void updateShowDesktop(WScreen * scr, Bool show)
+static void updateShowDesktop(WScreen *scr, Bool show)
 {
 	long foo;
 
@@ -527,7 +527,7 @@ static void wNETWMShowingDesktop(WScreen *scr, Bool show)
 	}
 }
 
-void wNETWMInitStuff(WScreen * scr)
+void wNETWMInitStuff(WScreen *scr)
 {
 	NetData *data;
 	int i;
@@ -541,18 +541,17 @@ void wNETWMInitStuff(WScreen * scr)
 		Atom atoms[atomNr];
 		char *names[atomNr];
 
-		for (i = 0; i < atomNr; ++i) {
+		for (i = 0; i < atomNr; ++i)
 			names[i] = atomNames[i].name;
-		}
+
 		XInternAtoms(dpy, &names[0], atomNr, False, atoms);
-		for (i = 0; i < atomNr; ++i) {
+		for (i = 0; i < atomNr; ++i)
 			*atomNames[i].atom = atoms[i];
-		}
+
 	}
 #else
-	for (i = 0; i < atomNr; i++) {
+	for (i = 0; i < atomNr; i++)
 		*atomNames[i].atom = XInternAtom(dpy, atomNames[i].name, False);
-	}
 #endif
 
 	data = wmalloc(sizeof(NetData));
@@ -586,7 +585,7 @@ void wNETWMInitStuff(WScreen * scr)
 	wScreenUpdateUsableArea(scr);
 }
 
-void wNETWMCleanup(WScreen * scr)
+void wNETWMCleanup(WScreen *scr)
 {
 	int i;
 
@@ -594,7 +593,7 @@ void wNETWMCleanup(WScreen * scr)
 		XDeleteProperty(dpy, scr->root_win, *atomNames[i].atom);
 }
 
-void wNETWMUpdateActions(WWindow * wwin, Bool del)
+void wNETWMUpdateActions(WWindow *wwin, Bool del)
 {
 	Atom action[10];	/* nr of actions atoms defined */
 	int i = 0;
@@ -640,7 +639,7 @@ void wNETWMUpdateActions(WWindow * wwin, Bool del)
 			XA_ATOM, 32, PropModeReplace, (unsigned char *)action, i);
 }
 
-Bool wNETWMGetUsableArea(WScreen * scr, int head, WArea * area)
+Bool wNETWMGetUsableArea(WScreen *scr, int head, WArea *area)
 {
 	WReservedArea *cur;
 	WMRect rect;
@@ -677,7 +676,7 @@ Bool wNETWMGetUsableArea(WScreen * scr, int head, WArea * area)
 	return True;
 }
 
-static void updateClientList(WScreen * scr)
+static void updateClientList(WScreen *scr)
 {
 	WWindow *wwin;
 	Window *windows;
@@ -698,15 +697,13 @@ static void updateClientList(WScreen * scr)
 	XFlush(dpy);
 }
 
-static void updateClientListStacking(WScreen * scr, WWindow * wwin_excl)
+static void updateClientListStacking(WScreen *scr, WWindow *wwin_excl)
 {
 	WWindow *wwin;
-	Window *client_list;
-	Window *client_list_reverse;
-	int client_count;
+	Window *client_list, *client_list_reverse;
+	int client_count, i;
 	WCoreWindow *tmp;
 	WMBagIterator iter;
-	int i;
 
 	/* update client list */
 	i = scr->window_count + 1;
@@ -739,7 +736,7 @@ static void updateClientListStacking(WScreen * scr, WWindow * wwin_excl)
 	XFlush(dpy);
 }
 
-static void updateWorkspaceCount(WScreen * scr)
+static void updateWorkspaceCount(WScreen *scr)
 {				/* changeable */
 	long count;
 
@@ -749,7 +746,7 @@ static void updateWorkspaceCount(WScreen * scr)
 			32, PropModeReplace, (unsigned char *)&count, 1);
 }
 
-static void updateCurrentWorkspace(WScreen * scr)
+static void updateCurrentWorkspace(WScreen *scr)
 {				/* changeable */
 	long count;
 
@@ -759,7 +756,7 @@ static void updateCurrentWorkspace(WScreen * scr)
 			PropModeReplace, (unsigned char *)&count, 1);
 }
 
-static void updateWorkspaceNames(WScreen * scr)
+static void updateWorkspaceNames(WScreen *scr)
 {
 	char buf[MAX_WORKSPACES * (MAX_WORKSPACENAME_WIDTH + 1)], *pos;
 	unsigned int i, len, curr_size;
@@ -777,7 +774,7 @@ static void updateWorkspaceNames(WScreen * scr)
 			PropModeReplace, (unsigned char *)buf, len);
 }
 
-static void updateFocusHint(WScreen * scr, WWindow * wwin)
+static void updateFocusHint(WScreen *scr, WWindow *wwin)
 {				/* changeable */
 	Window window;
 
@@ -790,7 +787,7 @@ static void updateFocusHint(WScreen * scr, WWindow * wwin)
 			PropModeReplace, (unsigned char *)&window, 1);
 }
 
-static void updateWorkspaceHint(WWindow * wwin, Bool fake, Bool del)
+static void updateWorkspaceHint(WWindow *wwin, Bool fake, Bool del)
 {
 	long l;
 
@@ -803,7 +800,7 @@ static void updateWorkspaceHint(WWindow * wwin, Bool fake, Bool del)
 	}
 }
 
-static void updateStateHint(WWindow * wwin, Bool changedWorkspace, Bool del)
+static void updateStateHint(WWindow *wwin, Bool changedWorkspace, Bool del)
 {				/* changeable */
 	if (del) {
 		XDeleteProperty(dpy, wwin->client_win, net_wm_state);
@@ -848,7 +845,7 @@ static void updateStateHint(WWindow * wwin, Bool changedWorkspace, Bool del)
 	}
 }
 
-static Bool updateStrut(WWindow * wwin, Bool adding)
+static Bool updateStrut(WWindow *wwin, Bool adding)
 {
 	WScreen *scr;
 	WReservedArea *area;
@@ -859,8 +856,7 @@ static Bool updateStrut(WWindow * wwin, Bool adding)
 	if (adding) {
 		Atom type_ret;
 		int fmt_ret;
-		unsigned long nitems_ret;
-		unsigned long bytes_after_ret;
+		unsigned long nitems_ret, bytes_after_ret;
 		long *data = NULL;
 
 		if (XGetWindowProperty(dpy, wwin->client_win, net_wm_strut, 0, 4, False,
@@ -881,7 +877,6 @@ static Bool updateStrut(WWindow * wwin, Bool adding)
 			XFree(data);
 			hasState = True;
 		}
-
 	} else {
 		/* deleting */
 		area = scr->netdata->strut;
@@ -911,7 +906,7 @@ static Bool updateStrut(WWindow * wwin, Bool adding)
 	return hasState;
 }
 
-static int getWindowLayer(WWindow * wwin)
+static int getWindowLayer(WWindow *wwin)
 {
 	int layer = WMNormalLevel;
 
@@ -928,9 +923,8 @@ static int getWindowLayer(WWindow * wwin)
 	} else if (wwin->type == net_wm_window_type_dialog) {
 		if (wwin->transient_for) {
 			WWindow *parent = wWindowFor(wwin->transient_for);
-			if (parent && parent->flags.fullscreen) {
+			if (parent && parent->flags.fullscreen)
 				layer = WMFullscreenLevel;
-			}
 		}
 		/* //layer = WMPopUpLevel; // this seems a bad idea -Dan */
 	} else if (wwin->type == net_wm_window_type_normal) {
@@ -944,95 +938,89 @@ static int getWindowLayer(WWindow * wwin)
 	return layer;
 }
 
-static void doStateAtom(WWindow * wwin, Atom state, int set, Bool init)
+static void doStateAtom(WWindow *wwin, Atom state, int set, Bool init)
 {
-
 	if (state == net_wm_state_sticky) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !IS_OMNIPRESENT(wwin);
-		}
-		if (set != wwin->flags.omnipresent) {
+
+		if (set != wwin->flags.omnipresent)
 			wWindowSetOmnipresent(wwin, set);
-		}
+
 	} else if (state == net_wm_state_shaded) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !wwin->flags.shaded;
-		}
+
 		if (init) {
 			wwin->flags.shaded = set;
 		} else {
-			if (set) {
+			if (set)
 				wShadeWindow(wwin);
-			} else {
+			else
 				wUnshadeWindow(wwin);
-			}
 		}
 	} else if (state == net_wm_state_skip_taskbar) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !wwin->client_flags.skip_window_list;
-		}
+
 		wwin->client_flags.skip_window_list = set;
 	} else if (state == net_wm_state_skip_pager) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !wwin->flags.net_skip_pager;
-		}
+
 		wwin->flags.net_skip_pager = set;
 	} else if (state == net_wm_state_maximized_vert) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !(wwin->flags.maximized & MAX_VERTICAL);
-		}
+
 		if (init) {
 			wwin->flags.maximized |= (set ? MAX_VERTICAL : 0);
 		} else {
-			if (set) {
+			if (set)
 				wMaximizeWindow(wwin, wwin->flags.maximized | MAX_VERTICAL);
-			} else {
+			else
 				wMaximizeWindow(wwin, wwin->flags.maximized & ~MAX_VERTICAL);
-			}
 		}
 	} else if (state == net_wm_state_maximized_horz) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !(wwin->flags.maximized & MAX_HORIZONTAL);
-		}
+
 		if (init) {
 			wwin->flags.maximized |= (set ? MAX_HORIZONTAL : 0);
 		} else {
-			if (set) {
+			if (set)
 				wMaximizeWindow(wwin, wwin->flags.maximized | MAX_HORIZONTAL);
-			} else {
+			else
 				wMaximizeWindow(wwin, wwin->flags.maximized & ~MAX_HORIZONTAL);
-			}
 		}
 	} else if (state == net_wm_state_hidden) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !(wwin->flags.miniaturized);
-		}
+
 		if (init) {
 			wwin->flags.miniaturized = set;
 		} else {
-			if (set) {
+			if (set)
 				wIconifyWindow(wwin);
-			} else {
+			else
 				wDeiconifyWindow(wwin);
-			}
 		}
 	} else if (state == net_wm_state_fullscreen) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !(wwin->flags.fullscreen);
-		}
+
 		if (init) {
 			wwin->flags.fullscreen = set;
 		} else {
-			if (set) {
+			if (set)
 				wFullscreenWindow(wwin);
-			} else {
+			else
 				wUnfullscreenWindow(wwin);
-			}
 		}
 	} else if (state == net_wm_state_above) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !(wwin->client_flags.floating);
-		}
+
 		if (init) {
 			wwin->client_flags.floating = set;
 		} else {
@@ -1041,9 +1029,9 @@ static void doStateAtom(WWindow * wwin, Atom state, int set, Bool init)
 		}
 
 	} else if (state == net_wm_state_below) {
-		if (set == _NET_WM_STATE_TOGGLE) {
+		if (set == _NET_WM_STATE_TOGGLE)
 			set = !(wwin->client_flags.sunken);
-		}
+
 		if (init) {
 			wwin->client_flags.sunken = set;
 		} else {
@@ -1058,7 +1046,7 @@ static void doStateAtom(WWindow * wwin, Atom state, int set, Bool init)
 	}
 }
 
-static void removeIcon(WWindow * wwin)
+static void removeIcon(WWindow *wwin)
 {
 	if (wwin->icon == NULL)
 		return;
@@ -1070,7 +1058,7 @@ static void removeIcon(WWindow * wwin)
 	}
 }
 
-static Bool handleWindowType(WWindow * wwin, Atom type, int *layer)
+static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 {
 	Bool ret = True;
 
@@ -1153,7 +1141,7 @@ static Bool handleWindowType(WWindow * wwin, Atom type, int *layer)
 	return ret;
 }
 
-void wNETWMPositionSplash(WWindow * wwin, int *x, int *y, int width, int height)
+void wNETWMPositionSplash(WWindow *wwin, int *x, int *y, int width, int height)
 {
 	if (wwin->type == net_wm_window_type_splash) {
 		WScreen *scr = wwin->screen_ptr;
@@ -1163,14 +1151,13 @@ void wNETWMPositionSplash(WWindow * wwin, int *x, int *y, int width, int height)
 	}
 }
 
-static void updateWindowType(WWindow * wwin)
+static void updateWindowType(WWindow *wwin)
 {
 	Atom type_ret;
-	int fmt_ret;
-	unsigned long nitems_ret;
-	unsigned long bytes_after_ret;
+	int fmt_ret, layer;
+	unsigned long nitems_ret, bytes_after_ret;
 	long *data = NULL;
-	int layer;
+
 	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_window_type, 0, 1,
 			       False, XA_ATOM, &type_ret, &fmt_ret, &nitems_ret,
 			       &bytes_after_ret, (unsigned char **)&data) == Success && data) {
@@ -1243,13 +1230,11 @@ void wNETWMCheckClientHints(WWindow *wwin, int *layer, int *workspace)
 	wScreenUpdateUsableArea(wwin->screen_ptr);
 }
 
-static Bool updateNetIconInfo(WWindow * wwin)
+static Bool updateNetIconInfo(WWindow *wwin)
 {
-
 	Atom type_ret;
 	int fmt_ret;
-	unsigned long nitems_ret;
-	unsigned long bytes_after_ret;
+	unsigned long nitems_ret, bytes_after_ret;
 	long *data = NULL;
 	Bool hasState = False;
 	Bool old_state = wwin->flags.net_handle_icon;
@@ -1262,8 +1247,9 @@ static Bool updateNetIconInfo(WWindow * wwin)
 		XFree(data);
 		hasState = True;
 
-	} else
+	} else {
 		wwin->flags.net_handle_icon = False;
+	}
 
 	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_icon_geometry, 0, 4, False,
 			       XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
@@ -1284,8 +1270,9 @@ static Bool updateNetIconInfo(WWindow * wwin)
 		XFree(data);
 		hasState = True;
 
-	} else
+	} else {
 		wwin->flags.net_handle_icon = False;
+	}
 
 	if (wwin->flags.miniaturized && old_state != wwin->flags.net_handle_icon) {
 		if (wwin->flags.net_handle_icon) {
@@ -1312,7 +1299,7 @@ void wNETWMCheckInitialClientState(WWindow *wwin)
 	updateIconImage(wwin);
 }
 
-static void handleDesktopNames(XClientMessageEvent * event, WScreen * scr)
+static void handleDesktopNames(XClientMessageEvent *event, WScreen *scr)
 {
 	unsigned long nitems_ret, bytes_after_ret;
 	char *data, *names[32];
@@ -1321,9 +1308,8 @@ static void handleDesktopNames(XClientMessageEvent * event, WScreen * scr)
 
 	if (XGetWindowProperty(dpy, scr->root_win, net_desktop_names, 0, 1, False,
 			       utf8_string, &type_ret, &fmt_ret, &nitems_ret,
-			       &bytes_after_ret, (unsigned char **)&data) != Success) {
+			       &bytes_after_ret, (unsigned char **)&data) != Success)
 		return;
-	}
 
 	if (data == NULL)
 		return;
@@ -1344,7 +1330,7 @@ static void handleDesktopNames(XClientMessageEvent * event, WScreen * scr)
 	}
 }
 
-Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
+Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 {
 	WScreen *scr;
 	WWindow *wwin;
@@ -1376,9 +1362,8 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 					}
 				}
 
-				if (rebuild) {
+				if (rebuild)
 					updateWorkspaceCount(scr);
-				}
 			}
 		} else if (event->message_type == net_showing_desktop) {
 			wNETWMShowingDesktop(scr, event->data.l[0]);
@@ -1490,15 +1475,13 @@ int wNETWMGetPidForWindow(Window window)
 {
 	Atom type_ret;
 	int fmt_ret;
-	unsigned long nitems_ret;
-	unsigned long bytes_after_ret;
+	unsigned long nitems_ret, bytes_after_ret;
 	long *data = NULL;
 	int pid;
 
 	if (XGetWindowProperty(dpy, window, net_wm_pid, 0, 1, False,
 			       XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
 			       &bytes_after_ret, (unsigned char **)&data) == Success && data) {
-
 		pid = *data;
 		XFree(data);
 	} else {
@@ -1518,8 +1501,10 @@ char *wNETWMGetWindowName(Window window)
 	if (name) {
 		ret = wstrndup(name, size);
 		XFree(name);
-	} else
+	} else {
 		ret = NULL;
+	}
+
 	return ret;
 }
 
@@ -1533,12 +1518,14 @@ char *wNETWMGetIconName(Window window)
 	if (name) {
 		ret = wstrndup(name, size);
 		XFree(name);
-	} else
+	} else {
 		ret = NULL;
+	}
+
 	return ret;
 }
 
-static void observer(void *self, WMNotification * notif)
+static void observer(void *self, WMNotification *notif)
 {
 	WWindow *wwin = (WWindow *) WMGetNotificationObject(notif);
 	const char *name = WMGetNotificationName(notif);
@@ -1578,7 +1565,7 @@ static void observer(void *self, WMNotification * notif)
 	}
 }
 
-static void wsobserver(void *self, WMNotification * notif)
+static void wsobserver(void *self, WMNotification *notif)
 {
 	WScreen *scr = (WScreen *) WMGetNotificationObject(notif);
 	const char *name = WMGetNotificationName(notif);
