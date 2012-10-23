@@ -229,13 +229,12 @@ typedef struct _WScreen {
 
     struct RImage *icon_tile;
     struct RImage *clip_tile;
-    Pixmap icon_tile_pixmap;	       /* for app supplied icons */
 
-    Pixmap def_icon_pixmap;	       /* default icons */
-    Pixmap def_ticon_pixmap;
+    Pixmap icon_tile_pixmap;		/* For app supplied icons */
+
+    struct RImage *def_icon_rimage;	/* Default RImage icon */
 
     struct WDialogData *dialog_data;
-
 
     struct W_GeometryView *gview;      /* size/position view */
 

@@ -628,28 +628,20 @@ void wIconUpdate(WIcon *icon)
 
 static void get_pixmap_icon_from_user_icon(WIcon *icon)
 {
-	RImage *image = NULL;
 	WScreen *scr = icon->core->screen_ptr;
 
+	/* If the icon has image, update it and continue */
 	if (icon->file_image) {
 		icon_update_pixmap(icon, icon->file_image);
-	} else {
-		/* make default icons */
-		if (!scr->def_icon_pixmap) {
-			image = get_default_image(scr);
-			scr->def_icon_pixmap = makeIcon(scr, image, False, False, icon->tile_type, icon->highlighted);
-			scr->def_ticon_pixmap = makeIcon(scr, image, True, False, icon->tile_type, icon->highlighted);
-			if (image)
-				RReleaseImage(image);
-		}
-
-		if (icon->show_title)
-			XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->def_ticon_pixmap);
-		else
-			XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->def_icon_pixmap);
-
-		icon->pixmap = None;
+		return;
 	}
+
+	/* If the icon don't have image, we should use the default image. */
+	if (!scr->def_icon_rimage)
+		scr->def_icon_rimage = get_default_image(scr);
+
+	/* Now, create the pixmap using the default (saved) image */
+	icon_update_pixmap(icon, scr->def_icon_rimage);
 }
 
 /* This function creates the RImage using the default icon */

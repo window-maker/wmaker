@@ -2381,18 +2381,14 @@ static int setIconTile(WScreen * scr, WDefaultEntry * entry, WTexture ** texture
 
 	scr->icon_tile_pixmap = pixmap;
 
-	if (scr->def_icon_pixmap) {
-		XFreePixmap(dpy, scr->def_icon_pixmap);
-		scr->def_icon_pixmap = None;
-	}
-	if (scr->def_ticon_pixmap) {
-		XFreePixmap(dpy, scr->def_ticon_pixmap);
-		scr->def_ticon_pixmap = None;
+	if (scr->def_icon_rimage) {
+		RReleaseImage(scr->def_icon_rimage);
+		scr->def_icon_rimage = NULL;
 	}
 
-	if (scr->icon_back_texture) {
+	if (scr->icon_back_texture)
 		wTextureDestroy(scr, (WTexture *) scr->icon_back_texture);
-	}
+
 	scr->icon_back_texture = wTextureMakeSolid(scr, &((*texture)->any.color));
 
 	if (scr->clip_balloon)
