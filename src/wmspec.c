@@ -1310,21 +1310,16 @@ static Bool updateNetIconInfo(WWindow * wwin)
 	return hasState;
 }
 
-Bool wNETWMCheckInitialClientState(WWindow * wwin)
+void wNETWMCheckInitialClientState(WWindow *wwin)
 {
-	Bool hasState = False;
-
 #ifdef DEBUG_WMSPEC
 	wmessage("wNETWMCheckInitialClientState");
 #endif
 
 	wNETWMShowingDesktop(wwin->screen_ptr, False);
 
-	hasState |= updateNetIconInfo(wwin);
-
+	updateNetIconInfo(wwin);
 	updateIconImage(wwin);
-
-	return hasState;
 }
 
 static void handleDesktopNames(XClientMessageEvent * event, WScreen * scr)
