@@ -60,9 +60,9 @@ static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
 
 static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 
-void get_pixmap_icon_from_icon_win(WIcon *icon);
-int get_pixmap_icon_from_wm_hints(WIcon *icon);
-void get_pixmap_icon_from_user_icon(WIcon *icon);
+static void get_pixmap_icon_from_icon_win(WIcon *icon);
+static int get_pixmap_icon_from_wm_hints(WIcon *icon);
+static void get_pixmap_icon_from_user_icon(WIcon *icon);
 
 static Pixmap makeIcon(WScreen *scr, RImage *image,
 		       int titled, int shadowed,
@@ -624,7 +624,7 @@ void wIconUpdate(WIcon *icon)
 	wIconPaint(icon);
 }
 
-void get_pixmap_icon_from_user_icon(WIcon *icon)
+static void get_pixmap_icon_from_user_icon(WIcon *icon)
 {
 	RImage *image = NULL;
 	char *path, *file;
@@ -667,7 +667,7 @@ void get_pixmap_icon_from_user_icon(WIcon *icon)
 }
 
 /* Get the Pixmap from the WIcon of the WWindow */
-void get_pixmap_icon_from_icon_win(WIcon * icon)
+static void get_pixmap_icon_from_icon_win(WIcon * icon)
 {
 	XWindowAttributes attr;
 	WScreen *scr = icon->core->screen_ptr;
@@ -724,7 +724,7 @@ void get_pixmap_icon_from_icon_win(WIcon * icon)
 }
 
 /* Get the Pixmap from the XWindow wm_hints */
-int get_pixmap_icon_from_wm_hints(WIcon *icon)
+static int get_pixmap_icon_from_wm_hints(WIcon *icon)
 {
 	Window jw;
 	Pixmap pixmap;
