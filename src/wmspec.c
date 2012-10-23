@@ -1457,10 +1457,8 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent * event)
 	return done;
 }
 
-Bool wNETWMCheckClientHintChange(WWindow * wwin, XPropertyEvent * event)
+void wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 {
-	Bool ret = True;
-
 #ifdef DEBUG_WMSPEC
 	wmessage("clientHintChange type %s\n", XGetAtomName(dpy, event->atom));
 #endif
@@ -1485,11 +1483,7 @@ Bool wNETWMCheckClientHintChange(WWindow * wwin, XPropertyEvent * event)
 		}
 	} else if (event->atom == net_wm_icon) {
 		updateIconImage(wwin);
-	} else {
-		ret = False;
 	}
-
-	return ret;
 }
 
 int wNETWMGetPidForWindow(Window window)
