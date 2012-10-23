@@ -63,6 +63,11 @@ static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 void get_pixmap_icon_from_icon_win(WIcon *icon);
 int get_pixmap_icon_from_wm_hints(WIcon *icon);
 void get_pixmap_icon_from_user_icon(WIcon *icon);
+
+static Pixmap makeIcon(WScreen *scr, RImage *image,
+		       int titled, int shadowed,
+		       int tileType, int highlighted);
+static void icon_update_pixmap(WIcon *icon, RImage *image);
 /****** Notification Observers ******/
 
 static void appearanceObserver(void *self, WMNotification * notif)
@@ -265,7 +270,17 @@ static void drawIconTitle(WScreen * scr, Pixmap pixmap, int height)
 		  wPreferences.icon_size - 1, 0, wPreferences.icon_size - 1, height + 1);
 }
 
-static Pixmap makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int tileType, int highlighted)
+static void icon_update_pixmap(WIcon *icon, RImage *image)
+{
+	WScreen *scr = icon->core->screen_ptr;
+
+	/* Update the WIcon pixmap */
+	icon->pixmap = makeIcon(scr, image,
+				icon->show_title, icon->shadowed,
+				icon->tile_type, icon->highlighted);
+}
+
+static Pixmap makeIcon(WScreen *scr, RImage *image, int titled, int shadowed, int tileType, int highlighted)
 {
 	RImage *tile;
 	Pixmap pixmap;
@@ -280,21 +295,21 @@ static Pixmap makeIcon(WScreen *scr, RImage *icon, int titled, int shadowed, int
 		tile = RCloneImage(scr->clip_tile);
 	}
 
-	if (icon) {
-		w = (icon->width > wPreferences.icon_size)
-		    ? wPreferences.icon_size : icon->width;
+	if (image) {
+		w = (image->width > wPreferences.icon_size)
+		    ? wPreferences.icon_size : image->width;
 		x = (wPreferences.icon_size - w) / 2;
-		sx = (icon->width - w) / 2;
+		sx = (image->width - w) / 2;
 
 		if (titled)
 			theight = WMFontHeight(scr->icon_title_font);
 
-		h = (icon->height + theight > wPreferences.icon_size
-		     ? wPreferences.icon_size - theight : icon->height);
+		h = (image->height + theight > wPreferences.icon_size
+		     ? wPreferences.icon_size - theight : image->height);
 		y = theight + (wPreferences.icon_size - theight - h) / 2;
-		sy = (icon->height - h) / 2;
+		sy = (image->height - h) / 2;
 
-		RCombineArea(tile, icon, sx, sy, w, h, x, y);
+		RCombineArea(tile, image, sx, sy, w, h, x, y);
 	}
 
 	if (shadowed) {
@@ -590,8 +605,7 @@ void wIconUpdate(WIcon *icon)
 		get_pixmap_icon_from_icon_win(icon);
 	} else if (wwin && wwin->net_icon_image) {
 		/* Use _NET_WM_ICON icon */
-		icon->pixmap = makeIcon(scr, wwin->net_icon_image, icon->show_title,
-						icon->shadowed, icon->tile_type, icon->highlighted);
+		icon_update_pixmap(icon, wwin->net_icon_image);
 	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
 		/* Get the Pixmap from the wm_hints, else, from the user */
 		if (get_pixmap_icon_from_wm_hints(icon))
@@ -617,8 +631,7 @@ void get_pixmap_icon_from_user_icon(WIcon *icon)
 	WScreen *scr = icon->core->screen_ptr;
 
 	if (icon->file_image) {
-		icon->pixmap = makeIcon(scr, icon->file_image, icon->show_title,
-					icon->shadowed, icon->tile_type, icon->highlighted);
+		icon_update_pixmap(icon, icon->file_image);
 	} else {
 		/* make default icons */
 		if (!scr->def_icon_pixmap) {
