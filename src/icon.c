@@ -64,9 +64,6 @@ static void get_pixmap_icon_from_icon_win(WIcon *icon);
 static int get_pixmap_icon_from_wm_hints(WIcon *icon);
 static void get_pixmap_icon_from_user_icon(WIcon *icon);
 
-static Pixmap makeIcon(WScreen *scr, RImage *image,
-		       int titled, int shadowed,
-		       int tileType, int highlighted);
 static void icon_update_pixmap(WIcon *icon, RImage *image);
 
 static RImage *get_default_image(WScreen *scr);
@@ -274,23 +271,15 @@ static void drawIconTitle(WScreen * scr, Pixmap pixmap, int height)
 
 static void icon_update_pixmap(WIcon *icon, RImage *image)
 {
-	WScreen *scr = icon->core->screen_ptr;
-
-	/* Update the WIcon pixmap */
-	icon->pixmap = makeIcon(scr, image,
-				icon->show_title, icon->shadowed,
-				icon->tile_type, icon->highlighted);
-}
-
-static Pixmap makeIcon(WScreen *scr, RImage *image, int titled, int shadowed, int tileType, int highlighted)
-{
 	RImage *tile;
 	Pixmap pixmap;
 	int x, y, sx, sy;
 	unsigned w, h;
 	int theight = 0;
+	WScreen *scr = icon->core->screen_ptr;
+	int titled = icon->show_title;
 
-	if (tileType == TILE_NORMAL) {
+	if (icon->tile_type == TILE_NORMAL) {
 		tile = RCloneImage(scr->icon_tile);
 	} else {
 		assert(scr->clip_tile);
@@ -314,7 +303,7 @@ static Pixmap makeIcon(WScreen *scr, RImage *image, int titled, int shadowed, in
 		RCombineArea(tile, image, sx, sy, w, h, x, y);
 	}
 
-	if (shadowed) {
+	if (icon->shadowed) {
 		RColor color;
 
 		color.red = scr->icon_back_texture->light.red >> 8;
@@ -324,7 +313,7 @@ static Pixmap makeIcon(WScreen *scr, RImage *image, int titled, int shadowed, in
 		RClearImage(tile, &color);
 	}
 
-	if (highlighted) {
+	if (icon->highlighted) {
 		RColor color;
 
 		color.red = color.green = color.blue = 0;
@@ -340,7 +329,7 @@ static Pixmap makeIcon(WScreen *scr, RImage *image, int titled, int shadowed, in
 	if (titled)
 		drawIconTitle(scr, pixmap, theight);
 
-	return pixmap;
+	icon->pixmap = pixmap;
 }
 
 void wIconChangeTitle(WIcon * icon, char *new_title)
