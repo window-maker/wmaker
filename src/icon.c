@@ -62,7 +62,7 @@ static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 
 void get_pixmap_icon_from_icon_win(WIcon *icon);
 int get_pixmap_icon_from_wm_hints(WScreen *scr, WWindow *wwin, WIcon *icon);
-void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon);
+void get_pixmap_icon_from_user_icon(WIcon *icon);
 /****** Notification Observers ******/
 
 static void appearanceObserver(void *self, WMNotification * notif)
@@ -570,7 +570,7 @@ void wIconSelect(WIcon * icon)
 	}
 }
 
-void wIconUpdate(WIcon * icon)
+void wIconUpdate(WIcon *icon)
 {
 	WScreen *scr = icon->core->screen_ptr;
 	WWindow *wwin = icon->owner;
@@ -584,7 +584,7 @@ void wIconUpdate(WIcon * icon)
 
 	if (wwin && WFLAGP(wwin, always_user_icon)) {
 		/* Forced use user_icon */
-		get_pixmap_icon_from_user_icon(scr, icon);
+		get_pixmap_icon_from_user_icon(icon);
 	} else if (icon->icon_win != None) {
 		/* Get the Pixmap from the WIcon */
 		get_pixmap_icon_from_icon_win(icon);
@@ -595,10 +595,10 @@ void wIconUpdate(WIcon * icon)
 	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
 		/* Get the Pixmap from the wm_hints, else, from the user */
 		if (get_pixmap_icon_from_wm_hints(scr, wwin, icon))
-			get_pixmap_icon_from_user_icon(scr, icon);
+			get_pixmap_icon_from_user_icon(icon);
 	} else {
 		/* Get the Pixmap from the user */
-		get_pixmap_icon_from_user_icon(scr, icon);
+		get_pixmap_icon_from_user_icon(icon);
 	}
 
 	/* No pixmap, set default background */
@@ -610,11 +610,11 @@ void wIconUpdate(WIcon * icon)
 	wIconPaint(icon);
 }
 
-void get_pixmap_icon_from_user_icon(WScreen *scr, WIcon * icon)
+void get_pixmap_icon_from_user_icon(WIcon *icon)
 {
 	RImage *image = NULL;
-	char *path;
-	char *file;
+	char *path, *file;
+	WScreen *scr = icon->core->screen_ptr;
 
 	if (icon->file_image) {
 		icon->pixmap = makeIcon(scr, icon->file_image, icon->show_title,
