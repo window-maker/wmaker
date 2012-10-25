@@ -14,7 +14,7 @@
     "/usr/local/share/WindowMaker/Icons",
     "/usr/share/WindowMaker/Icons",
     "/usr/local/share/icons",
-    "/usr/share/icons",
+    "/usr/share/icons"
   );
   PixmapPath = (
     "~/GNUstep/Library/WindowMaker/Pixmaps",
@@ -24,7 +24,7 @@
     "/usr/share/WindowMaker/Backgrounds",
     "/usr/share/WindowMaker/Pixmaps",
     "/usr/local/share/pixmaps",
-    "/usr/share/pixmaps",
+    "/usr/share/pixmaps"
   );
   WindowTitleBalloons = YES;
   IconSize = 64;
