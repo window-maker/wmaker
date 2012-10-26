@@ -859,10 +859,20 @@ static Bool updateStrut(WWindow *wwin, Bool adding)
 		unsigned long nitems_ret, bytes_after_ret;
 		long *data = NULL;
 
-		if (XGetWindowProperty(dpy, wwin->client_win, net_wm_strut, 0, 4, False,
+		if ((XGetWindowProperty(dpy, wwin->client_win, net_wm_strut, 0, 4, False,
 				       XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
-				       &bytes_after_ret, (unsigned char **)&data) == Success && data) {
+				       &bytes_after_ret, (unsigned char **)&data) == Success && data) ||
+		    ((XGetWindowProperty(dpy, wwin->client_win, net_wm_strut_partial, 0, 12, False,
+				       XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
+				       &bytes_after_ret, (unsigned char **)&data) == Success && data))) {
 
+			/* XXX: This is strictly incorrect in the case of net_wm_strut_partial...
+			 * Discard the start and end properties from the partial strut and treat it as
+			 * a (deprecated) strut.
+			 * This means we are marking the whole width or height of the screen as
+			 * reserved, which is not necessarily what the strut defines.  However for the
+			 * purposes of determining placement or maximization it's probably good enough.
+			 */
 			area = (WReservedArea *) wmalloc(sizeof(WReservedArea));
 			area->area.x1 = data[0];
 			area->area.x2 = data[1];
@@ -1448,7 +1458,7 @@ void wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 	wmessage("clientHintChange type %s\n", XGetAtomName(dpy, event->atom));
 #endif
 
-	if (event->atom == net_wm_strut) {
+	if (event->atom == net_wm_strut || event->atom == net_wm_strut_partial) {
 		updateStrut(wwin, False);
 		updateStrut(wwin, True);
 		wScreenUpdateUsableArea(wwin->screen_ptr);
