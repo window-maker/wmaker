@@ -201,6 +201,25 @@ Bool wWindowTouchesHead(WWindow * wwin, int head)
 	return (a != 0);
 }
 
+Bool wAppIconTouchesHead(WAppIcon * aicon, int head)
+{
+	WScreen *scr;
+	WMRect rect;
+	int a;
+
+	if (!aicon || !aicon->icon)
+		return False;
+
+	scr = aicon->icon->core->screen_ptr;
+	rect = wGetRectForHead(scr, head);
+	a = calcIntersectionArea(aicon->x_pos, aicon->y_pos,
+				 aicon->icon->core->width,
+				 aicon->icon->core->height,
+				 rect.pos.x, rect.pos.y, rect.size.width, rect.size.height);
+
+	return (a != 0);
+}
+
 int wGetHeadForWindow(WWindow * wwin)
 {
 	WMRect rect;

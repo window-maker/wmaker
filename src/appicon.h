@@ -83,4 +83,5 @@ void paint_app_icon(WApplication *wapp);
 void unpaint_app_icon(WApplication *wapp);
 void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance,
 				    char *wm_class);
+WAppIcon *wAppIconFor(Window window);
 #endif

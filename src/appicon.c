@@ -60,6 +60,7 @@
 extern Cursor wCursor[WCUR_LAST];
 extern WPreferences wPreferences;
 extern WDDomain *WDWindowAttributes;
+extern XContext wWinContext;
 
 #define MOD_MASK       wPreferences.modifier_mask
 
@@ -1015,4 +1016,20 @@ static void remove_from_appicon_list(WScreen *scr, WAppIcon *appicon)
 
 	appicon->prev = NULL;
 	appicon->next = NULL;
+}
+
+WAppIcon *wAppIconFor(Window window)
+{
+	WObjDescriptor *desc;
+
+	if (window == None)
+		return NULL;
+
+	if (XFindContext(dpy, window, wWinContext, (XPointer *) & desc) == XCNOENT)
+		return NULL;
+
+	if (desc->parent_type == WCLASS_APPICON || desc->parent_type == WCLASS_DOCK_ICON)
+		return desc->parent;
+
+	return NULL;
 }
