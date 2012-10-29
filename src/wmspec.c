@@ -845,13 +845,10 @@ static void updateStateHint(WWindow *wwin, Bool changedWorkspace, Bool del)
 	}
 }
 
-static Bool updateStrut(WWindow *wwin, Bool adding)
+static Bool updateStrut(WScreen *scr, Window w, Bool adding)
 {
-	WScreen *scr;
 	WReservedArea *area;
 	Bool hasState = False;
-
-	scr = wwin->screen_ptr;
 
 	if (adding) {
 		Atom type_ret;
@@ -859,10 +856,10 @@ static Bool updateStrut(WWindow *wwin, Bool adding)
 		unsigned long nitems_ret, bytes_after_ret;
 		long *data = NULL;
 
-		if ((XGetWindowProperty(dpy, wwin->client_win, net_wm_strut, 0, 4, False,
+		if ((XGetWindowProperty(dpy, w, net_wm_strut, 0, 4, False,
 				       XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
 				       &bytes_after_ret, (unsigned char **)&data) == Success && data) ||
-		    ((XGetWindowProperty(dpy, wwin->client_win, net_wm_strut_partial, 0, 12, False,
+		    ((XGetWindowProperty(dpy, w, net_wm_strut_partial, 0, 12, False,
 				       XA_CARDINAL, &type_ret, &fmt_ret, &nitems_ret,
 				       &bytes_after_ret, (unsigned char **)&data) == Success && data))) {
 
@@ -879,7 +876,7 @@ static Bool updateStrut(WWindow *wwin, Bool adding)
 			area->area.y1 = data[2];
 			area->area.y2 = data[3];
 
-			area->window = wwin->client_win;
+			area->window = w;
 
 			area->next = scr->netdata->strut;
 			scr->netdata->strut = area;
@@ -892,12 +889,12 @@ static Bool updateStrut(WWindow *wwin, Bool adding)
 		area = scr->netdata->strut;
 
 		if (area) {
-			if (area->window == wwin->client_win) {
+			if (area->window == w) {
 				scr->netdata->strut = area->next;
 				wfree(area);
 				hasState = True;
 			} else {
-				while (area->next && area->next->window != wwin->client_win)
+				while (area->next && area->next->window != w)
 					area = area->next;
 
 				if (area->next) {
@@ -1234,8 +1231,8 @@ void wNETWMCheckClientHints(WWindow *wwin, int *layer, int *workspace)
 	}
 
 	wNETWMUpdateActions(wwin, False);
-	updateStrut(wwin, False);
-	updateStrut(wwin, True);
+	updateStrut(wwin->screen_ptr, wwin->client_win, False);
+	updateStrut(wwin->screen_ptr, wwin->client_win, True);
 
 	wScreenUpdateUsableArea(wwin->screen_ptr);
 }
@@ -1459,8 +1456,8 @@ void wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 #endif
 
 	if (event->atom == net_wm_strut || event->atom == net_wm_strut_partial) {
-		updateStrut(wwin, False);
-		updateStrut(wwin, True);
+		updateStrut(wwin->screen_ptr, wwin->client_win, False);
+		updateStrut(wwin->screen_ptr, wwin->client_win, True);
 		wScreenUpdateUsableArea(wwin->screen_ptr);
 	} else if (event->atom == net_wm_handled_icons || event->atom == net_wm_icon_geometry) {
 		updateNetIconInfo(wwin);
@@ -1547,8 +1544,8 @@ static void observer(void *self, WMNotification *notif)
 		updateClientListStacking(wwin->screen_ptr, NULL);
 		updateStateHint(wwin, True, False);
 
-		updateStrut(wwin, False);
-		updateStrut(wwin, True);
+		updateStrut(wwin->screen_ptr, wwin->client_win, False);
+		updateStrut(wwin->screen_ptr, wwin->client_win, True);
 		wScreenUpdateUsableArea(wwin->screen_ptr);
 	} else if (strcmp(name, WMNUnmanaged) == 0 && wwin) {
 		updateClientList(wwin->screen_ptr);
@@ -1557,7 +1554,7 @@ static void observer(void *self, WMNotification *notif)
 		updateStateHint(wwin, False, True);
 		wNETWMUpdateActions(wwin, True);
 
-		updateStrut(wwin, False);
+		updateStrut(wwin->screen_ptr, wwin->client_win, False);
 		wScreenUpdateUsableArea(wwin->screen_ptr);
 	} else if (strcmp(name, WMNResetStacking) == 0 && wwin) {
 		updateClientListStacking(wwin->screen_ptr, NULL);
