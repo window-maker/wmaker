@@ -1018,6 +1018,7 @@ static void remove_from_appicon_list(WScreen *scr, WAppIcon *appicon)
 	appicon->next = NULL;
 }
 
+/* Return the AppIcon associated with a given (Xlib) Window. */
 WAppIcon *wAppIconFor(Window window)
 {
 	WObjDescriptor *desc;

@@ -141,6 +141,7 @@ static void appearanceObserver(void *self, WMNotification * notif)
 }
 
 
+/* Return the WWindow associated with a given (Xlib) Window. */
 WWindow *wWindowFor(Window window)
 {
 	WObjDescriptor *desc;
