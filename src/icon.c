@@ -373,30 +373,38 @@ Bool wIconChangeImageFile(WIcon *icon, char *file)
 {
 	WScreen *scr = icon->core->screen_ptr;
 	char *path;
+	RImage *image = NULL;
 	int error = 0;
 
+	/* If no new image, don't do nothing */
 	if (!file)
 		return True;
 
-	if (icon->file_image) {
-		RReleaseImage(icon->file_image);
-		icon->file_image = NULL;
-	}
-
+	/* Find the new image */
 	path = FindImage(wPreferences.icon_path, file);
-	if (path) {
-		icon->file_image = get_rimage_from_file(scr, path, wPreferences.icon_size);
+	if (path)
+		image = get_rimage_from_file(scr, path, wPreferences.icon_size);
+	else
+		error = 1;
+
+	/* New image! */
+	if (!error && image) {
+		/* Remove the old one */
 		if (icon->file_image) {
-			icon->file = wstrdup(path);
-			wIconUpdate(icon);
-		} else {
-			error = 1;
+			RReleaseImage(icon->file_image);
+			icon->file_image = NULL;
 		}
 
-		wfree(path);
+		/* Set the new image */
+		icon->file_image = image;
+		icon->file = wstrdup(path);
+		wIconUpdate(icon);
 	} else {
 		error = 1;
 	}
+
+	if (path)
+		wfree(path);
 
 	return !error;
 }
