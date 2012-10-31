@@ -376,14 +376,12 @@ Bool wIconChangeImageFile(WIcon * icon, char *file)
 	char *path;
 	int error = 0;
 
+	if (!file)
+		return True;
+
 	if (icon->file_image) {
 		RReleaseImage(icon->file_image);
 		icon->file_image = NULL;
-	}
-
-	if (!file) {
-		wIconUpdate(icon);
-		return True;
 	}
 
 	path = FindImage(wPreferences.icon_path, file);
