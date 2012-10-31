@@ -728,15 +728,14 @@ static void get_pixmap_icon_from_icon_win(WIcon * icon)
 /* Get the Pixmap from the XWindow wm_hints */
 static int get_pixmap_icon_from_wm_hints(WIcon *icon)
 {
-	Window jw;
 	Pixmap pixmap;
-	unsigned int w, h, ju, d;
-	int ji, x, y;
+	unsigned int w, h, d;
+	int x, y;
 	WWindow *wwin = icon->owner;
 	WScreen *scr = icon->core->screen_ptr;
 	int title_height = WMFontHeight(scr->icon_title_font);
 
-	if (!XGetGeometry(dpy, wwin->wm_hints->icon_pixmap, &jw, &ji, &ji, &w, &h, &ju, &d)) {
+	if (!getSize(wwin->wm_hints->icon_pixmap, &w, &h, &d)) {
 		icon->owner->wm_hints->flags &= ~IconPixmapHint;
 		return 1;
 	}
