@@ -369,10 +369,9 @@ RImage *wIconValidateIconSize(RImage *icon, int max_size)
 	return icon;
 }
 
-Bool wIconChangeImageFile(WIcon * icon, char *file)
+Bool wIconChangeImageFile(WIcon *icon, char *file)
 {
 	WScreen *scr = icon->core->screen_ptr;
-	RImage *image;
 	char *path;
 	int error = 0;
 
@@ -385,16 +384,19 @@ Bool wIconChangeImageFile(WIcon * icon, char *file)
 	}
 
 	path = FindImage(wPreferences.icon_path, file);
+	if (path) {
+		icon->file_image = get_rimage_from_file(scr, path, wPreferences.icon_size);
+		if (icon->file_image) {
+			icon->file = wstrdup(path);
+			wIconUpdate(icon);
+		} else {
+			error = 1;
+		}
 
-	if (path && (image = RLoadImage(scr->rcontext, path, 0))) {
-		icon->file_image = wIconValidateIconSize(image, wPreferences.icon_size);
-		wIconUpdate(icon);
+		wfree(path);
 	} else {
 		error = 1;
 	}
-
-	if (path)
-		wfree(path);
 
 	return !error;
 }
