@@ -97,13 +97,13 @@ static void tileObserver(void *self, WMNotification * notif)
 
 /************************************/
 
-INLINE static void getSize(Drawable d, unsigned int *w, unsigned int *h, unsigned int *dep)
+static int getSize(Drawable d, unsigned int *w, unsigned int *h, unsigned int *dep)
 {
 	Window rjunk;
 	int xjunk, yjunk;
 	unsigned int bjunk;
 
-	XGetGeometry(dpy, d, &rjunk, &xjunk, &yjunk, w, h, &bjunk, dep);
+	return XGetGeometry(dpy, d, &rjunk, &xjunk, &yjunk, w, h, &bjunk, dep);
 }
 
 WIcon *icon_create_for_wwindow(WWindow *wwin)
