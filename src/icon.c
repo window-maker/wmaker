@@ -649,19 +649,13 @@ static RImage *get_default_image(WScreen *scr)
 	file = wDefaultGetIconFile(NULL, NULL, True);
 	if (file) {
 		path = FindImage(wPreferences.icon_path, file);
-		if (path) {
-			image = RLoadImage(scr->rcontext, path, 0);
-			if (!image)
-				wwarning(_("could not load default icon \"%s\":%s"),
-					 file, RMessageForError(RErrorCode));
-			wfree(path);
-		} else {
-			wwarning(_("could not find default icon \"%s\""), file);
-		}
-	}
+		image = get_rimage_from_file(scr, path, wPreferences.icon_size);
 
-	/* Validate the icon size */
-	image = wIconValidateIconSize(image, wPreferences.icon_size);
+		if (!image)
+			wwarning(_("could not find default icon \"%s\""), file);
+
+		wfree(file);
+	}
 
 	return image;
 }
