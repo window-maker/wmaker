@@ -11,20 +11,25 @@
   IconificationStyle = Zoom;
   IconPath = (
     "~/GNUstep/Library/Icons",
-    "/usr/local/share/WindowMaker/Icons",
+    "~/GNUstep/Library/WindowMaker/Pixmaps",
+    "~/GNUstep/Library/WindowMaker/CachedPixmaps",
     "/usr/share/WindowMaker/Icons",
-    "/usr/local/share/icons",
-    "/usr/share/icons"
+    "/usr/share/WindowMaker/Pixmaps",
+    "/usr/share/icons",
+    "/usr/local/share/WindowMaker/Icons",
+    "/usr/local/share/WindowMaker/Pixmaps",
+    "/usr/local/share/icons"
   );
   PixmapPath = (
     "~/GNUstep/Library/WindowMaker/Pixmaps",
     "~/GNUstep/Library/WindowMaker/Backgrounds",
-    "/usr/local/share/WindowMaker/Pixmaps",
-    "/usr/local/share/WindowMaker/Backgrounds",
+    "~/GNUstep/Library/WindowMaker/CachedPixmaps",
     "/usr/share/WindowMaker/Backgrounds",
     "/usr/share/WindowMaker/Pixmaps",
-    "/usr/local/share/pixmaps",
-    "/usr/share/pixmaps"
+    "/usr/share/pixmaps",
+    "/usr/local/share/WindowMaker/Pixmaps",
+    "/usr/local/share/WindowMaker/Backgrounds",
+    "/usr/local/share/pixmaps"
   );
   WindowTitleBalloons = YES;
   IconSize = 64;

@@ -14,6 +14,7 @@
     "#pkgdatadir#/Pixmaps",
     "/usr/include/X11/pixmaps",
     "~/GNUstep/Library/WindowMaker/Pixmaps",
+    "~/GNUstep/Library/WindowMaker/CachedPixmaps",
     "/usr/share/icons",
     "/usr/local/share/pixmaps",
     "/usr/share/pixmaps"
@@ -21,6 +22,7 @@
   PixmapPath = (
     "~/GNUstep/Library/WindowMaker/Pixmaps",
     "~/GNUstep/Library/WindowMaker/Backgrounds",
+    "~/GNUstep/Library/WindowMaker/CachedPixmaps",
     "#pkgdatadir#/Pixmaps",
     "#pkgdatadir#/Backgrounds",
     "/usr/include/X11/pixmaps",
