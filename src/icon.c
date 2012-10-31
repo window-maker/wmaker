@@ -728,60 +728,22 @@ static void get_pixmap_icon_from_icon_win(WIcon * icon)
 /* Get the Pixmap from the XWindow wm_hints */
 static int get_pixmap_icon_from_wm_hints(WIcon *icon)
 {
-	Pixmap pixmap;
+	RImage *image = NULL;
 	unsigned int w, h, d;
-	int x, y;
 	WWindow *wwin = icon->owner;
-	WScreen *scr = icon->core->screen_ptr;
-	int title_height = WMFontHeight(scr->icon_title_font);
 
 	if (!getSize(wwin->wm_hints->icon_pixmap, &w, &h, &d)) {
 		icon->owner->wm_hints->flags &= ~IconPixmapHint;
 		return 1;
 	}
 
-	pixmap = XCreatePixmap(dpy, icon->core->window, wPreferences.icon_size,
-			       wPreferences.icon_size, scr->w_depth);
-	XSetClipMask(dpy, scr->copy_gc, None);
-	XCopyArea(dpy, scr->icon_tile_pixmap, pixmap, scr->copy_gc, 0, 0,
-		  wPreferences.icon_size, wPreferences.icon_size, 0, 0);
+	image = get_wwindow_image_from_wmhints(wwin, icon);
+	if (!image)
+		return 1;
 
-	if (w > wPreferences.icon_size)
-		w = wPreferences.icon_size;
-	x = (wPreferences.icon_size - w) / 2;
+	icon_update_pixmap(icon, image);
 
-	if (icon->show_title && (title_height < wPreferences.icon_size)) {
-		drawIconTitle(scr, pixmap, title_height);
-
-		if (h > wPreferences.icon_size - title_height - 2) {
-			h = wPreferences.icon_size - title_height - 2;
-			y = title_height + 1;
-		} else {
-			y = (wPreferences.icon_size - h - title_height) / 2 + title_height + 1;
-		}
-	} else {
-		if (w > wPreferences.icon_size)
-			w = wPreferences.icon_size;
-		y = (wPreferences.icon_size - h) / 2;
-	}
-
-	if (wwin->wm_hints->flags & IconMaskHint)
-		XSetClipMask(dpy, scr->copy_gc, wwin->wm_hints->icon_mask);
-
-	XSetClipOrigin(dpy, scr->copy_gc, x, y);
-
-	if (d != scr->w_depth) {
-		XSetForeground(dpy, scr->copy_gc, scr->black_pixel);
-		XSetBackground(dpy, scr->copy_gc, scr->white_pixel);
-		XCopyPlane(dpy, wwin->wm_hints->icon_pixmap, pixmap, scr->copy_gc, 0, 0, w, h, x, y, 1);
-	} else {
-		XCopyArea(dpy, wwin->wm_hints->icon_pixmap, pixmap, scr->copy_gc, 0, 0, w, h, x, y);
-	}
-
-	XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
-
-	icon->pixmap = pixmap;
-	return (0);
+	return  0;
 }
 
 void wIconPaint(WIcon * icon)
