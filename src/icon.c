@@ -67,6 +67,8 @@ static void get_pixmap_icon_from_user_icon(WIcon *icon);
 static void get_rimage_icon_from_user_icon(WIcon *icon);
 static void get_pixmap_icon_from_default_icon(WIcon *icon);
 static void get_rimage_icon_from_default_icon(WIcon *icon);
+static void get_pixmap_icon_from_x11(WIcon *icon);
+static void get_rimage_icon_from_x11(WIcon *icon);
 
 static void icon_update_pixmap(WIcon *icon, RImage *image);
 static void unset_icon_image(WIcon *icon);
@@ -611,7 +613,7 @@ void wIconUpdate(WIcon *icon)
 		get_pixmap_icon_from_icon_win(icon);
 	} else if (wwin && wwin->net_icon_image) {
 		/* Use _NET_WM_ICON icon */
-		icon_update_pixmap(icon, wwin->net_icon_image);
+		get_pixmap_icon_from_x11(icon);
 	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
 		/* Get the Pixmap from the wm_hints, else, from the user */
 		if (get_pixmap_icon_from_wm_hints(icon))
@@ -628,6 +630,25 @@ void wIconUpdate(WIcon *icon)
 	/* Paint it */
 	XClearWindow(dpy, icon->core->window);
 	wIconPaint(icon);
+}
+
+static void get_pixmap_icon_from_x11(WIcon *icon)
+{
+	/* Set the icon->file_image */
+	get_rimage_icon_from_x11(icon);
+
+	/* Update icon->pixmap */
+	icon_update_pixmap(icon, icon->file_image);
+}
+
+static void get_rimage_icon_from_x11(WIcon *icon)
+{
+	/* Remove the icon image */
+	unset_icon_image(icon);
+
+	/* Set the new icon image */
+	icon->file = NULL;
+	icon->file_image = RRetainImage(icon->owner->net_icon_image);
 }
 
 static void get_rimage_icon_from_user_icon(WIcon *icon)
