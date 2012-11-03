@@ -63,6 +63,7 @@ static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 static void get_pixmap_icon_from_icon_win(WIcon *icon);
 static int get_pixmap_icon_from_wm_hints(WIcon *icon);
 static void get_pixmap_icon_from_user_icon(WIcon *icon);
+static void get_rimage_icon_from_user_icon(WIcon *icon);
 static void get_pixmap_icon_from_default_icon(WIcon *icon);
 static void get_rimage_icon_from_default_icon(WIcon *icon);
 
@@ -628,15 +629,21 @@ void wIconUpdate(WIcon *icon)
 	wIconPaint(icon);
 }
 
+static void get_rimage_icon_from_user_icon(WIcon *icon)
+{
+	if (icon->file_image)
+		return;
+
+	get_rimage_icon_from_default_icon(icon);
+}
+
 static void get_pixmap_icon_from_user_icon(WIcon *icon)
 {
-	/* If the icon has image, update it and continue */
-	if (icon->file_image) {
-		icon_update_pixmap(icon, icon->file_image);
-		return;
-	}
+	/* Set the icon->file_image */
+	get_rimage_icon_from_user_icon(icon);
 
-	get_pixmap_icon_from_default_icon(icon);
+	/* Update icon->pixmap */
+	icon_update_pixmap(icon, icon->file_image);
 }
 
 static void get_rimage_icon_from_default_icon(WIcon *icon)
