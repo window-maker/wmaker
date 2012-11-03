@@ -62,6 +62,7 @@ static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 
 static void get_pixmap_icon_from_icon_win(WIcon *icon);
 static int get_pixmap_icon_from_wm_hints(WIcon *icon);
+static int get_rimage_icon_from_wm_hints(WIcon *icon);
 static void get_pixmap_icon_from_user_icon(WIcon *icon);
 static void get_rimage_icon_from_user_icon(WIcon *icon);
 static void get_pixmap_icon_from_default_icon(WIcon *icon);
@@ -749,8 +750,8 @@ static void get_pixmap_icon_from_icon_win(WIcon * icon)
 					  None, wCursor[WCUR_ARROW]);
 }
 
-/* Get the Pixmap from the XWindow wm_hints */
-static int get_pixmap_icon_from_wm_hints(WIcon *icon)
+/* Get the RImage from the XWindow wm_hints */
+static int get_rimage_icon_from_wm_hints(WIcon *icon)
 {
 	RImage *image = NULL;
 	unsigned int w, h, d;
@@ -765,9 +766,23 @@ static int get_pixmap_icon_from_wm_hints(WIcon *icon)
 	if (!image)
 		return 1;
 
-	icon_update_pixmap(icon, image);
+	/* FIXME: If unset_icon_image, pointer double free then crash 
+	unset_icon_image(icon); */
+	icon->file_image = image;
 
-	return  0;
+	return 0;
+}
+
+/* Get the Pixmap from the XWindow wm_hints */
+static int get_pixmap_icon_from_wm_hints(WIcon *icon)
+{
+	int ret;
+
+	ret = get_rimage_icon_from_wm_hints(icon);
+	if (ret == 0)
+		icon_update_pixmap(icon, icon->file_image);
+
+	return ret;
 }
 
 void wIconPaint(WIcon * icon)
