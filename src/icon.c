@@ -614,6 +614,11 @@ void wIconUpdate(WIcon *icon)
 		get_rimage_icon_from_user_icon(icon);
 	}
 
+	update_icon_pixmap(icon);
+}
+
+void update_icon_pixmap(WIcon *icon)
+{
 	if (icon->pixmap != None)
 		XFreePixmap(dpy, icon->pixmap);
 
