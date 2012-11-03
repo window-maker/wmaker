@@ -64,6 +64,7 @@ static void get_pixmap_icon_from_icon_win(WIcon *icon);
 static int get_pixmap_icon_from_wm_hints(WIcon *icon);
 static void get_pixmap_icon_from_user_icon(WIcon *icon);
 static void get_pixmap_icon_from_default_icon(WIcon *icon);
+static void get_rimage_icon_from_default_icon(WIcon *icon);
 
 static void icon_update_pixmap(WIcon *icon, RImage *image);
 static void unset_icon_image(WIcon *icon);
@@ -638,7 +639,7 @@ static void get_pixmap_icon_from_user_icon(WIcon *icon)
 	get_pixmap_icon_from_default_icon(icon);
 }
 
-static void get_pixmap_icon_from_default_icon(WIcon *icon)
+static void get_rimage_icon_from_default_icon(WIcon *icon)
 {
 	WScreen *scr = icon->core->screen_ptr;
 
@@ -646,8 +647,21 @@ static void get_pixmap_icon_from_default_icon(WIcon *icon)
 	if (!scr->def_icon_rimage)
 		scr->def_icon_rimage = get_default_image(scr);
 
+	/* Remove the icon image */
+	unset_icon_image(icon);
+
+	/* Set the new icon image */
+	icon->file = NULL;
+	icon->file_image = RRetainImage(scr->def_icon_rimage);
+}
+
+static void get_pixmap_icon_from_default_icon(WIcon *icon)
+{
+	/* Update icon->file image */
+	get_rimage_icon_from_default_icon(icon);
+
 	/* Now, create the pixmap using the default (saved) image */
-	icon_update_pixmap(icon, scr->def_icon_rimage);
+	icon_update_pixmap(icon, icon->file_image);
 }
 
 /* This function creates the RImage using the default icon */
