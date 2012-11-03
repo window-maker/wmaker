@@ -73,7 +73,6 @@ static void get_rimage_icon_from_x11(WIcon *icon);
 static void icon_update_pixmap(WIcon *icon, RImage *image);
 static void unset_icon_image(WIcon *icon);
 
-static RImage *get_default_image(WScreen *scr);
 /****** Notification Observers ******/
 
 static void appearanceObserver(void *self, WMNotification * notif)
@@ -691,27 +690,6 @@ static void get_pixmap_icon_from_default_icon(WIcon *icon)
 
 	/* Now, create the pixmap using the default (saved) image */
 	icon_update_pixmap(icon, icon->file_image);
-}
-
-/* This function creates the RImage using the default icon */
-static RImage *get_default_image(WScreen *scr)
-{
-	RImage *image = NULL;
-	char *path, *file;
-
-	/* Get the default icon */
-	file = wDefaultGetIconFile(NULL, NULL, True);
-	if (file) {
-		path = FindImage(wPreferences.icon_path, file);
-		image = get_rimage_from_file(scr, path, wPreferences.icon_size);
-
-		if (!image)
-			wwarning(_("could not find default icon \"%s\""), file);
-
-		wfree(file);
-	}
-
-	return image;
 }
 
 /* Get the Pixmap from the WIcon of the WWindow */

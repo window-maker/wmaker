@@ -385,11 +385,15 @@ char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, cha
 	/* Get the file name of the image, using instance and class */
 	file_name = wDefaultGetIconFile(winstance, wclass, default_icon);
 
+	/* Check if the file really exists in the disk */
+	if (file_name)
+		file_path = FindImage(wPreferences.icon_path, file_name);
+
 	/* If the specific (or generic if default_icon is True) icon filename
 	 * is not found, and command is specified, then include the .app icons
 	 * and re-do the search, but now always including the default icon
 	 * so the icon is found always. The .app is selected before default */
-	if (!file_name && scr && command) {
+	if ((!file_name || !file_path ) && scr && command) {
 		wApplicationExtractDirPackIcon(scr, command, winstance, wclass);
 		file_name = wDefaultGetIconFile(winstance, wclass, True);
 	}
@@ -416,6 +420,9 @@ char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, cha
 		 */
 	}
 
+	if (!file_path && default_icon)
+		file_path = get_default_image_path(scr);	
+
 	return file_path;
 }
 
@@ -437,14 +444,52 @@ RImage *get_rimage_from_file(WScreen *scr, char *file_name, int max_size)
 	return image;
 }
 
-RImage *wDefaultGetImage(WScreen * scr, char *winstance, char *wclass, int max_size)
+/* This function returns the default icon's full path
+ * If the path for an icon is not found, returns NULL */
+char *get_default_image_path(WScreen *scr)
+{
+	char *path = NULL, *file = NULL;
+
+	/* Get the default icon */
+	file = wDefaultGetIconFile(NULL, NULL, True);
+	if (file)
+		path = FindImage(wPreferences.icon_path, file);
+
+	return path;
+}
+
+/* This function creates the RImage using the default icon */
+RImage *get_default_image(WScreen *scr)
+{
+	RImage *image = NULL;
+	char *path = NULL;
+
+	/* Get the filename full path */
+	path = get_default_image_path(scr);
+	if (!path)
+		return NULL;
+
+	/* Get the default icon */
+	image = get_rimage_from_file(scr, path, wPreferences.icon_size);
+	if (!image)
+		wwarning(_("could not find default icon \"%s\""), path);
+
+	return image;
+}
+
+RImage *wDefaultGetImage(WScreen *scr, char *winstance, char *wclass, int max_size)
 {
 	char *file_name = NULL;
 
 	/* Get the file name of the image, using instance and class */
 	file_name = get_default_icon_filename(scr, winstance, wclass, NULL, True);
-	if (!file_name)
-		return NULL;
+
+	/* If no filename, is because the winstance and wclass in the database
+	 * returns a invalid icon (config file error), then should be removed FIXME! */
+	if (!file_name) {
+		wwarning(_("icon \"%s\" doesn't exist, check your config files"), file_name);
+		file_name = get_default_image_path(scr);
+	}
 
 	return get_rimage_from_file(scr, file_name, max_size);
 }
