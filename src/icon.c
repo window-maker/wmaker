@@ -715,60 +715,60 @@ static RImage *get_default_image(WScreen *scr)
 }
 
 /* Get the Pixmap from the WIcon of the WWindow */
-static void get_pixmap_icon_from_icon_win(WIcon * icon)
+static void get_pixmap_icon_from_icon_win(WIcon *icon)
 {
 	XWindowAttributes attr;
+	RImage *image;
 	WScreen *scr = icon->core->screen_ptr;
 	int title_height = WMFontHeight(scr->icon_title_font);
-	unsigned int width, height, depth;
-	int theight;
-	int resize = 0;
-	Pixmap pixmap;
+	unsigned int w, h, d;
+	int theight = 0;
 
-	getSize(icon->icon_win, &width, &height, &depth);
+	/* Create the new RImage */
+	image = get_window_image_from_x11(icon->icon_win);
 
-	if (width > wPreferences.icon_size) {
-		resize = 1;
-		width = wPreferences.icon_size;
-	}
+	/* Free the icon info */
+	unset_icon_image(icon);
 
-	if (height > wPreferences.icon_size) {
-		resize = 1;
-		height = wPreferences.icon_size;
-	}
+	/* Set the new info */
+	icon->file = NULL;
+	icon->file_image = image;
 
-	if (icon->show_title && (height + title_height < wPreferences.icon_size)) {
-		pixmap = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size,
-				       wPreferences.icon_size, scr->w_depth);
-		XSetClipMask(dpy, scr->copy_gc, None);
-		XCopyArea(dpy, scr->icon_tile_pixmap, pixmap, scr->copy_gc, 0, 0,
-			  wPreferences.icon_size, wPreferences.icon_size, 0, 0);
-		drawIconTitle(scr, pixmap, title_height);
+	/* Paint the image at the icon */
+	icon_update_pixmap(icon, image);
+
+	/* Reparent the dock application to the icon */
+
+	/* We need the application size to center it
+	 * and show in the correct position */
+	getSize(icon->icon_win, &w, &h, &d);
+
+	/* Set extra space for title */
+	if (icon->show_title && (h + title_height < wPreferences.icon_size)) {
 		theight = title_height;
+		drawIconTitle(scr, icon->pixmap, theight);
 	} else {
-		pixmap = None;
-		theight = 0;
-		XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->icon_tile_pixmap);
-	}
+                XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->icon_tile_pixmap);
+        }
 
+	/* Set the icon border */
 	XSetWindowBorderWidth(dpy, icon->icon_win, 0);
-	XReparentWindow(dpy, icon->icon_win, icon->core->window,
-			(wPreferences.icon_size - width) / 2,
-			theight + (wPreferences.icon_size - height - theight) / 2);
-	if (resize)
-		XResizeWindow(dpy, icon->icon_win, width, height);
 
+	/* Put the dock application in the icon */
+	XReparentWindow(dpy, icon->icon_win, icon->core->window,
+			(wPreferences.icon_size - w) / 2,
+			theight + (wPreferences.icon_size - h - theight) / 2);
+
+	/* Show it and save */
 	XMapWindow(dpy, icon->icon_win);
 	XAddToSaveSet(dpy, icon->icon_win);
 
-	/* Save it */
-	icon->pixmap = pixmap;
-
+	/* Needed to move the icon clicking on the application part */
 	if ((XGetWindowAttributes(dpy, icon->icon_win, &attr)) &&
 	    (attr.all_event_masks & ButtonPressMask))
-			wHackedGrabButton(Button1, MOD_MASK, icon->core->window, True,
-					  ButtonPressMask, GrabModeSync, GrabModeAsync,
-					  None, wCursor[WCUR_ARROW]);
+		wHackedGrabButton(Button1, MOD_MASK, icon->core->window, True,
+				  ButtonPressMask, GrabModeSync, GrabModeAsync,
+				  None, wCursor[WCUR_ARROW]);
 }
 
 /* Get the RImage from the XWindow wm_hints */
