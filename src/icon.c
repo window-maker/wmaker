@@ -72,15 +72,18 @@ static void unset_icon_image(WIcon *icon);
 
 /****** Notification Observers ******/
 
-static void appearanceObserver(void *self, WMNotification * notif)
+static void appearanceObserver(void *self, WMNotification *notif)
 {
 	WIcon *icon = (WIcon *) self;
 	uintptr_t flags = (uintptr_t)WMGetNotificationClientData(notif);
 
-	if ((flags & WTextureSettings) || (flags & WFontSettings))
-		icon->force_paint = 1;
-
-	wIconPaint(icon);
+	if ((flags & WTextureSettings) || (flags & WFontSettings)) {
+		/* If the rimage exists, update the icon, else create it */
+		if (icon->file_image)
+			update_icon_pixmap(icon);
+		else
+			wIconPaint(icon);
+	}
 
 	/* so that the appicon expose handlers will paint the appicon specific
 	 * stuff */
