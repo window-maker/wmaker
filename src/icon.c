@@ -60,7 +60,9 @@ static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
 
 static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 
+static void set_dockapp_in_icon(WIcon *icon);
 static void get_pixmap_icon_from_icon_win(WIcon *icon);
+static void get_rimage_icon_from_icon_win(WIcon *icon);
 static int get_pixmap_icon_from_wm_hints(WIcon *icon);
 static int get_rimage_icon_from_wm_hints(WIcon *icon);
 static void get_pixmap_icon_from_user_icon(WIcon *icon);
@@ -692,15 +694,10 @@ static void get_pixmap_icon_from_default_icon(WIcon *icon)
 	icon_update_pixmap(icon, icon->file_image);
 }
 
-/* Get the Pixmap from the WIcon of the WWindow */
-static void get_pixmap_icon_from_icon_win(WIcon *icon)
+/* Get the RImage from the WIcon of the WWindow */
+static void get_rimage_icon_from_icon_win(WIcon *icon)
 {
-	XWindowAttributes attr;
 	RImage *image;
-	WScreen *scr = icon->core->screen_ptr;
-	int title_height = WMFontHeight(scr->icon_title_font);
-	unsigned int w, h, d;
-	int theight = 0;
 
 	/* Create the new RImage */
 	image = get_window_image_from_x11(icon->icon_win);
@@ -711,9 +708,29 @@ static void get_pixmap_icon_from_icon_win(WIcon *icon)
 	/* Set the new info */
 	icon->file = NULL;
 	icon->file_image = image;
+}
+
+/* Get the Pixmap from the WIcon of the WWindow */
+static void get_pixmap_icon_from_icon_win(WIcon *icon)
+{
+	/* Get the RImage and set in icon->file_image */
+	get_rimage_icon_from_icon_win(icon);
 
 	/* Paint the image at the icon */
-	icon_update_pixmap(icon, image);
+	icon_update_pixmap(icon, icon->file_image);
+
+	/* Put the dockapp in the icon */
+	set_dockapp_in_icon(icon);
+}
+
+/* Set the dockapp in the WIcon */
+static void set_dockapp_in_icon(WIcon *icon)
+{
+	XWindowAttributes attr;
+	WScreen *scr = icon->core->screen_ptr;
+	int title_height = WMFontHeight(scr->icon_title_font);
+	unsigned int w, h, d;
+	int theight = 0;
 
 	/* Reparent the dock application to the icon */
 
