@@ -554,8 +554,7 @@ void wIconSetHighlited(WIcon *icon, Bool flag)
 		return;
 
 	icon->highlighted = flag;
-	icon->force_paint = True;
-	wIconPaint(icon);
+	update_icon_pixmap(icon);
 }
 #endif
 
