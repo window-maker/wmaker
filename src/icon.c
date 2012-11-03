@@ -66,6 +66,7 @@ static void get_pixmap_icon_from_user_icon(WIcon *icon);
 static void get_pixmap_icon_from_default_icon(WIcon *icon);
 
 static void icon_update_pixmap(WIcon *icon, RImage *image);
+static void unset_icon_image(WIcon *icon);
 
 static RImage *get_default_image(WScreen *scr);
 /****** Notification Observers ******/
@@ -251,11 +252,7 @@ void wIconDestroy(WIcon * icon)
 	if (icon->pixmap)
 		XFreePixmap(dpy, icon->pixmap);
 
-	if (icon->file)
-		wfree(icon->file);
-
-	if (icon->file_image != NULL)
-		RReleaseImage(icon->file_image);
+	unset_icon_image(icon);
 
 	wCoreDestroy(icon->core);
 	wfree(icon);
@@ -390,10 +387,7 @@ Bool wIconChangeImageFile(WIcon *icon, char *file)
 	/* New image! */
 	if (!error && image) {
 		/* Remove the old one */
-		if (icon->file_image) {
-			RReleaseImage(icon->file_image);
-			icon->file_image = NULL;
-		}
+		unset_icon_image(icon);
 
 		/* Set the new image */
 		icon->file_image = image;
@@ -583,6 +577,15 @@ void wIconSelect(WIcon * icon)
 		}
 		XClearArea(dpy, icon->core->window, 0, 0, icon->core->width, icon->core->height, True);
 	}
+}
+
+static void unset_icon_image(WIcon *icon)
+{
+	if (icon->file)
+		wfree(icon->file);
+
+	if (icon->file_image)
+		RReleaseImage(icon->file_image);
 }
 
 void wIconUpdate(WIcon *icon)
