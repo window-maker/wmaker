@@ -420,7 +420,7 @@ static RImage *makeRImageFromARGBData(unsigned long *data)
 	return image;
 }
 
-static RImage *get_wwindow_image_from_x11(WWindow *wwin)
+RImage *get_window_image_from_x11(Window window)
 {
 	RImage *image;
 	Atom type;
@@ -429,7 +429,7 @@ static RImage *get_wwindow_image_from_x11(WWindow *wwin)
 	unsigned long *property, *data;
 
 	/* Get the icon from X11 Window */
-	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_icon, 0L, LONG_MAX,
+	if (XGetWindowProperty(dpy, window, net_wm_icon, 0L, LONG_MAX,
 			       False, XA_CARDINAL, &type, &format, &items, &rest,
 			       (unsigned char **)&property) != Success || !property)
 		return NULL;
@@ -464,7 +464,7 @@ static void updateIconImage(WWindow *wwin)
 		RReleaseImage(wwin->net_icon_image);
 
 	/* Save the icon in the X11 icon */
-	wwin->net_icon_image = get_wwindow_image_from_x11(wwin);
+	wwin->net_icon_image = get_window_image_from_x11(wwin->client_win);
 
 	/* Refresh the Window Icon */
 	if (wwin->icon)

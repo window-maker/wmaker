@@ -45,4 +45,5 @@ char *wNETWMGetIconName(Window window);
 char *wNETWMGetWindowName(Window window);
 void wNETFrameExtents(WWindow *wwin);
 void wNETCleanupFrameExtents(WWindow *wwin);
+RImage *get_window_image_from_x11(Window window);
 #endif
