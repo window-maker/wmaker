@@ -61,15 +61,10 @@ static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
 static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 
 static void set_dockapp_in_icon(WIcon *icon);
-static void get_pixmap_icon_from_icon_win(WIcon *icon);
 static void get_rimage_icon_from_icon_win(WIcon *icon);
-static int get_pixmap_icon_from_wm_hints(WIcon *icon);
 static int get_rimage_icon_from_wm_hints(WIcon *icon);
-static void get_pixmap_icon_from_user_icon(WIcon *icon);
 static void get_rimage_icon_from_user_icon(WIcon *icon);
-static void get_pixmap_icon_from_default_icon(WIcon *icon);
 static void get_rimage_icon_from_default_icon(WIcon *icon);
-static void get_pixmap_icon_from_x11(WIcon *icon);
 static void get_rimage_icon_from_x11(WIcon *icon);
 
 static void icon_update_pixmap(WIcon *icon, RImage *image);
@@ -601,27 +596,38 @@ void wIconUpdate(WIcon *icon)
 
 	assert(scr->icon_tile != NULL);
 
+	if (wwin && WFLAGP(wwin, always_user_icon)) {
+		/* Forced use user_icon */
+		get_rimage_icon_from_user_icon(icon);
+	} else if (icon->icon_win != None) {
+		/* Get the Pixmap from the WIcon */
+		get_rimage_icon_from_icon_win(icon);
+	} else if (wwin && wwin->net_icon_image) {
+		/* Use _NET_WM_ICON icon */
+		get_rimage_icon_from_x11(icon);
+	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
+		/* Get the Pixmap from the wm_hints, else, from the user */
+		if (get_rimage_icon_from_wm_hints(icon))
+			get_rimage_icon_from_user_icon(icon);
+	} else {
+		/* Get the Pixmap from the user */
+		get_rimage_icon_from_user_icon(icon);
+	}
+
 	if (icon->pixmap != None)
 		XFreePixmap(dpy, icon->pixmap);
 
 	icon->pixmap = None;
+ 
+	/* Create the pixmap */
+	if (icon->file_image)
+		icon_update_pixmap(icon, icon->file_image);
 
-	if (wwin && WFLAGP(wwin, always_user_icon)) {
-		/* Forced use user_icon */
-		get_pixmap_icon_from_user_icon(icon);
-	} else if (icon->icon_win != None) {
-		/* Get the Pixmap from the WIcon */
-		get_pixmap_icon_from_icon_win(icon);
-	} else if (wwin && wwin->net_icon_image) {
-		/* Use _NET_WM_ICON icon */
-		get_pixmap_icon_from_x11(icon);
-	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
-		/* Get the Pixmap from the wm_hints, else, from the user */
-		if (get_pixmap_icon_from_wm_hints(icon))
-			get_pixmap_icon_from_user_icon(icon);
-	} else {
-		/* Get the Pixmap from the user */
-		get_pixmap_icon_from_user_icon(icon);
+	/* If dockapp, put inside the icon */
+	if (icon->icon_win != None) {
+		/* file_image is NULL, because is docked app */
+		icon_update_pixmap(icon, icon->file_image);
+		set_dockapp_in_icon(icon);
 	}
 
 	/* No pixmap, set default background */
@@ -631,15 +637,6 @@ void wIconUpdate(WIcon *icon)
 	/* Paint it */
 	XClearWindow(dpy, icon->core->window);
 	wIconPaint(icon);
-}
-
-static void get_pixmap_icon_from_x11(WIcon *icon)
-{
-	/* Set the icon->file_image */
-	get_rimage_icon_from_x11(icon);
-
-	/* Update icon->pixmap */
-	icon_update_pixmap(icon, icon->file_image);
 }
 
 static void get_rimage_icon_from_x11(WIcon *icon)
@@ -660,15 +657,6 @@ static void get_rimage_icon_from_user_icon(WIcon *icon)
 	get_rimage_icon_from_default_icon(icon);
 }
 
-static void get_pixmap_icon_from_user_icon(WIcon *icon)
-{
-	/* Set the icon->file_image */
-	get_rimage_icon_from_user_icon(icon);
-
-	/* Update icon->pixmap */
-	icon_update_pixmap(icon, icon->file_image);
-}
-
 static void get_rimage_icon_from_default_icon(WIcon *icon)
 {
 	WScreen *scr = icon->core->screen_ptr;
@@ -685,15 +673,6 @@ static void get_rimage_icon_from_default_icon(WIcon *icon)
 	icon->file_image = RRetainImage(scr->def_icon_rimage);
 }
 
-static void get_pixmap_icon_from_default_icon(WIcon *icon)
-{
-	/* Update icon->file image */
-	get_rimage_icon_from_default_icon(icon);
-
-	/* Now, create the pixmap using the default (saved) image */
-	icon_update_pixmap(icon, icon->file_image);
-}
-
 /* Get the RImage from the WIcon of the WWindow */
 static void get_rimage_icon_from_icon_win(WIcon *icon)
 {
@@ -708,19 +687,6 @@ static void get_rimage_icon_from_icon_win(WIcon *icon)
 	/* Set the new info */
 	icon->file = NULL;
 	icon->file_image = image;
-}
-
-/* Get the Pixmap from the WIcon of the WWindow */
-static void get_pixmap_icon_from_icon_win(WIcon *icon)
-{
-	/* Get the RImage and set in icon->file_image */
-	get_rimage_icon_from_icon_win(icon);
-
-	/* Paint the image at the icon */
-	icon_update_pixmap(icon, icon->file_image);
-
-	/* Put the dockapp in the icon */
-	set_dockapp_in_icon(icon);
 }
 
 /* Set the dockapp in the WIcon */
@@ -787,18 +753,6 @@ static int get_rimage_icon_from_wm_hints(WIcon *icon)
 	icon->file_image = image;
 
 	return 0;
-}
-
-/* Get the Pixmap from the XWindow wm_hints */
-static int get_pixmap_icon_from_wm_hints(WIcon *icon)
-{
-	int ret;
-
-	ret = get_rimage_icon_from_wm_hints(icon);
-	if (ret == 0)
-		icon_update_pixmap(icon, icon->file_image);
-
-	return ret;
 }
 
 void wIconPaint(WIcon * icon)
