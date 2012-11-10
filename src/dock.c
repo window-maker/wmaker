@@ -534,11 +534,17 @@ static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 	WM_ITERATE_ARRAY(selectedIcons, aicon, it) {
 		if (aicon->icon->selected)
 			wIconSelect(aicon->icon);
+
 		if (aicon && aicon->attracted && aicon->command) {
 			aicon->attracted = 0;
 			if (aicon->icon->shadowed) {
 				aicon->icon->shadowed = 0;
-				wAppIconPaint(aicon, True);
+
+				/* Update the icon images */
+				wIconUpdate(aicon->icon);
+
+				/* Paint it */
+				wAppIconPaint(aicon, False);
 			}
 		}
 		save_appicon(aicon, True);
@@ -1929,7 +1935,15 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon
 
 	MoveInStackListUnder(dock->icon_array[index - 1]->icon->core, icon->icon->core);
 	wAppIconMove(icon, icon->x_pos, icon->y_pos);
-	wAppIconPaint(icon, lupdate_icon);
+
+	/* Update the icon images */
+	if (lupdate_icon)
+		wIconUpdate(icon->icon);
+
+	/* Paint it */
+	wAppIconPaint(icon, False);
+
+	/* Save it */
 	save_appicon(icon, True);
 
 	if (wPreferences.auto_arrange_icons)
@@ -2072,7 +2086,13 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 	dest->icon_count++;
 
 	MoveInStackListUnder(dest->icon_array[index - 1]->icon->core, icon->icon->core);
-	wAppIconPaint(icon, update_icon);
+
+	/* Update the icon images */
+	if (update_icon)
+		wIconUpdate(icon->icon);
+
+	/* Paint it */
+	wAppIconPaint(icon, False);
 
 	return True;
 }
@@ -2144,7 +2164,13 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 
 		ChangeStackingLevel(icon->icon->core, NORMAL_ICON_LEVEL);
 
-		wAppIconPaint(icon, update_icon);
+		/* Update the icon images */
+		if (update_icon)
+			wIconUpdate(icon->icon);
+
+		/* Paint it */
+		wAppIconPaint(icon, False);
+
 		if (wPreferences.auto_arrange_icons)
 			wArrangeIcons(dock->screen_ptr, True);
 	}

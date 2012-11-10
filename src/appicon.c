@@ -252,7 +252,12 @@ void removeAppIconFor(WApplication *wapp)
 		wapp->app_icon->pid = 0;
 		wapp->app_icon->icon->owner = NULL;
 		wapp->app_icon->icon->icon_win = None;
-		wAppIconPaint(wapp->app_icon, True);
+
+		/* Update the icon images */
+		wIconUpdate(wapp->app_icon->icon);
+
+		/* Paint it */
+		wAppIconPaint(wapp->app_icon, False);
 	} else if (wapp->app_icon->docked) {
 		wapp->app_icon->running = 0;
 		wDockDetach(wapp->app_icon->dock, wapp->app_icon);
@@ -988,7 +993,11 @@ void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_win
 		if (mainw->wm_hints && (mainw->wm_hints->flags & IconWindowHint))
 			wapp->app_icon->icon->icon_win = mainw->wm_hints->icon_window;
 
-		wAppIconPaint(wapp->app_icon, True);
+		/* Update the icon images */
+		wIconUpdate(wapp->app_icon->icon);
+
+		/* Paint it */
+		wAppIconPaint(wapp->app_icon, False);
 		save_appicon(wapp->app_icon, True);
 	}
 }
