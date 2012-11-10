@@ -90,12 +90,11 @@ static void appearanceObserver(void *self, WMNotification *notif)
 	XClearArea(dpy, icon->core->window, 0, 0, icon->core->width, icon->core->height, True);
 }
 
-static void tileObserver(void *self, WMNotification * notif)
+static void tileObserver(void *self, WMNotification *notif)
 {
 	WIcon *icon = (WIcon *) self;
 
-	icon->force_paint = 1;
-	wIconPaint(icon);
+	wIconUpdate(icon);
 
 	XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);
 }
@@ -334,12 +333,12 @@ static void icon_update_pixmap(WIcon *icon, RImage *image)
 	icon->pixmap = pixmap;
 }
 
-void wIconChangeTitle(WIcon * icon, char *new_title)
+void wIconChangeTitle(WIcon *icon, char *new_title)
 {
 	int changed;
 
-	changed = (new_title == NULL && icon->icon_name != NULL)
-	    || (new_title != NULL && icon->icon_name == NULL);
+	changed = (new_title == NULL && icon->icon_name != NULL) ||
+		  (new_title != NULL && icon->icon_name == NULL);
 
 	if (icon->icon_name != NULL)
 		XFree(icon->icon_name);
@@ -347,8 +346,9 @@ void wIconChangeTitle(WIcon * icon, char *new_title)
 	icon->icon_name = new_title;
 
 	if (changed)
-		icon->force_paint = 1;
-	wIconPaint(icon);
+		wIconUpdate(icon);
+	else
+		wIconPaint(icon);
 }
 
 RImage *wIconValidateIconSize(RImage *icon, int max_size)
@@ -762,25 +762,16 @@ static int get_rimage_icon_from_wm_hints(WIcon *icon)
 	return 0;
 }
 
-void wIconPaint(WIcon * icon)
+void wIconPaint(WIcon *icon)
 {
 	WScreen *scr = icon->core->screen_ptr;
-	int x;
+	int x, l, w;
 	char *tmp;
-
-	if (icon->force_paint) {
-		icon->force_paint = 0;
-		wIconUpdate(icon);
-		return;
-	}
 
 	XClearWindow(dpy, icon->core->window);
 
 	/* draw the icon title */
 	if (icon->show_title && icon->icon_name != NULL) {
-		int l;
-		int w;
-
 		tmp = ShrinkString(scr->icon_title_font, icon->icon_name, wPreferences.icon_size - 4);
 		w = WMWidthOfString(scr->icon_title_font, tmp, l = strlen(tmp));
 

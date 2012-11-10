@@ -381,7 +381,7 @@ void wAppIconPaint(WAppIcon *aicon, Bool update_icon)
 		wapp = NULL;
 
 	if (update_icon)
-		aicon->icon->force_paint = 1;
+		wIconUpdate(aicon->icon);
 
 	wIconPaint(aicon->icon);
 

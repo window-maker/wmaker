@@ -41,7 +41,6 @@ typedef struct WIcon {
 
 	unsigned int 	tile_type:4;
 	unsigned int 	show_title:1;
-	unsigned int 	force_paint:1;	/* True for icon update and repaint */
 	unsigned int 	selected:1;
 	unsigned int	step:3;		/* selection cycle step */
 	unsigned int	shadowed:1;	/* If the icon is to be blured */
