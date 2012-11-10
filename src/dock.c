@@ -1854,10 +1854,10 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 	int index;
 
 	wwin = icon->icon->owner;
+	icon->editing = 0;
+
 	if (icon->command == NULL) {
 		char *command;
-
-		icon->editing = 0;
 
 		command = GetCommandForWindow(wwin->client_win);
 		if (command) {
@@ -1893,8 +1893,6 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 				}
 			}
 		}
-	} else {
-		icon->editing = 0;
 	}
 
 	for (index = 1; index < dock->max_icons; index++)
