@@ -376,8 +376,8 @@ static WMPropList *get_generic_value(char *instance, char *class,
 }
 
 /* Get the file name of the image, using instance and class */
-char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
-				Bool default_icon)
+char *get_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
+			Bool default_icon)
 {
 	char *file_name = NULL;
 	char *file_path = NULL;
@@ -389,13 +389,11 @@ char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, cha
 	if (file_name)
 		file_path = FindImage(wPreferences.icon_path, file_name);
 
-	/* If the specific (or generic if default_icon is True) icon filename
-	 * is not found, and command is specified, then include the .app icons
-	 * and re-do the search, but now always including the default icon
-	 * so the icon is found always. The .app is selected before default */
+	/* If the specific icon filename is not found, and command is specified,
+	 * then include the .app icons and re-do the search. */
 	if ((!file_name || !file_path ) && scr && command) {
 		wApplicationExtractDirPackIcon(scr, command, winstance, wclass);
-		file_name = wDefaultGetIconFile(winstance, wclass, True);
+		file_name = wDefaultGetIconFile(winstance, wclass, False);
 	}
 
 	/* Get the full path for the image file */
@@ -403,21 +401,15 @@ char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, cha
 		file_path = FindImage(wPreferences.icon_path, file_name);
 
 		if (!file_path)
-			wwarning(_("could not find icon file \"%s\""), file_name);
+			wwarning(_("icon \"%s\" doesn't exist, check your config files"), file_name);
 
 		/* FIXME: Here, if file_path don't exists, then the icon is in the
 		 * "icon database" (WDWindowAttributes->dictionary), but the icon
 		 * is not en disk. Therefore, we should remove it from the icon
-		 * database.
-		 * OTOH, probably the correct message should be "could not find the
-		 * icon file %s, please, check your configuration files", because
-		 * the icons are loaded in the icon database from the configuration
-		 * files
-		 */
+		 * database. Is possible to do that using wDefaultChangeIcon() */
 
 		/* Don't wfree(file_name) here, because is a pointer to the icon
-		 * dictionary (WDWindowAttributes->dictionary) value.
-		 */
+		 * dictionary (WDWindowAttributes->dictionary) value. */
 	}
 
 	if (!file_path && default_icon)
@@ -482,14 +474,7 @@ RImage *wDefaultGetImage(WScreen *scr, char *winstance, char *wclass, int max_si
 	char *file_name = NULL;
 
 	/* Get the file name of the image, using instance and class */
-	file_name = get_default_icon_filename(scr, winstance, wclass, NULL, True);
-
-	/* If no filename, is because the winstance and wclass in the database
-	 * returns a invalid icon (config file error), then should be removed FIXME! */
-	if (!file_name) {
-		wwarning(_("icon \"%s\" doesn't exist, check your config files"), file_name);
-		file_name = get_default_image_path(scr);
-	}
+	file_name = get_icon_filename(scr, winstance, wclass, NULL, True);
 
 	return get_rimage_from_file(scr, file_name, max_size);
 }

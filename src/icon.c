@@ -144,7 +144,7 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 		wGetIconName(dpy, wwin->client_win, &icon->icon_name);
 
 	/* Get the application icon, default included */
-	file = get_default_icon_filename(scr, wwin->wm_instance, wwin->wm_class, NULL, True);
+	file = get_icon_filename(scr, wwin->wm_instance, wwin->wm_class, NULL, True);
 	if (file) {
 		icon->file = wstrdup(file);
 		icon->file_image = get_rimage_from_file(scr, icon->file, wPreferences.icon_size);
@@ -169,7 +169,7 @@ WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char
 	icon = icon_create_core(scr, 0, 0);
 
 	/* Search the icon using instance and class, without default icon */
-	file = get_default_icon_filename(scr, wm_instance, wm_class, command, False);
+	file = get_icon_filename(scr, wm_instance, wm_class, command, False);
 	if (file) {
 		icon->file = wstrdup(file);
 		icon->file_image = get_rimage_from_file(scr, icon->file, wPreferences.icon_size);

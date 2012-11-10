@@ -50,7 +50,7 @@ RImage * wDefaultGetImage(WScreen *scr, char *winstance, char *wclass, int max_s
 int wDefaultGetStartWorkspace(WScreen *scr, char *instance, char *class);
 void wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file);
 RImage *get_default_image(WScreen *scr);
-char *get_default_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
-				Bool default_icon);
+char *get_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
+			Bool default_icon);
 RImage *get_rimage_from_file(WScreen *scr, char *file_name, int max_size);
 #endif /* WMDEFAULTS_H_ */
