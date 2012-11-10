@@ -577,6 +577,7 @@ static void colectIconsCallback(WMenu *menu, WMenuEntry *entry)
 	WDock *clip;
 	WAppIcon *aicon;
 	int x, y, x_pos, y_pos;
+	Bool update_icon = False;
 
 	assert(entry->clientdata != NULL);
 	clip = clickedIcon->dock;
@@ -593,12 +594,9 @@ static void colectIconsCallback(WMenu *menu, WMenuEntry *entry)
 			aicon->attracted = 1;
 			if (!aicon->icon->shadowed) {
 				aicon->icon->shadowed = 1;
-				aicon->icon->force_paint = 1;
-				/* We don't do an wAppIconPaint() here because it's in
-				 * wDockAttachIcon(). -Dan
-				 */
+				update_icon = True;
 			}
-			wDockAttachIcon(clip, aicon, x, y);
+			wDockAttachIcon(clip, aicon, x, y, update_icon);
 			if (clip->collapsed || !clip->mapped)
 				XUnmapWindow(dpy, aicon->icon->core->window);
 		}
@@ -1848,13 +1846,16 @@ int wDockReceiveDNDDrop(WScreen *scr, XEvent *event)
 }
 #endif				/* XDND */
 
-Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y)
+Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon)
 {
 	WWindow *wwin;
 	int index;
 
 	wwin = icon->icon->owner;
 	icon->editing = 0;
+
+	if (update_icon)
+		icon->icon->force_paint = 1;
 
 	if (icon->command == NULL) {
 		char *command;

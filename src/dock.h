@@ -79,7 +79,7 @@ void wDockRaise(WDock *dock);
 void wDockRaiseLower(WDock *dock);
 void wDockSaveState(WScreen *scr, WMPropList *old_state);
 
-Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y);
+Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon);
 Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
                    int *ret_x, int *ret_y, int redocking);
 Bool wDockFindFreeSlot(WDock *dock, int *req_x, int *req_y);

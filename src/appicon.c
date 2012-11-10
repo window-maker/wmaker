@@ -194,6 +194,7 @@ void paint_app_icon(WApplication *wapp)
 	WScreen *scr = wapp->main_window_desc->screen_ptr;
 	WDock *clip = scr->workspaces[scr->current_workspace]->clip;
 	int x = 0, y = 0;
+	Bool update_icon = False;
 
 	if (!wapp || !wapp->app_icon)
 		return;
@@ -209,9 +210,9 @@ void paint_app_icon(WApplication *wapp)
 		wapp->app_icon->attracted = 1;
 		if (!icon->shadowed) {
 			icon->shadowed = 1;
-			icon->force_paint = 1;
+			update_icon = True;
 		}
-		wDockAttachIcon(clip, wapp->app_icon, x, y);
+		wDockAttachIcon(clip, wapp->app_icon, x, y, update_icon);
 	} else {
 		/* We must know if the icon is painted in the screen,
 		 * because if painted, then PlaceIcon will return the next
@@ -849,7 +850,7 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 				/* icon is trying to be docked */
 				SlideWindow(icon->core->window, x, y, shad_x, shad_y);
 				XUnmapWindow(dpy, scr->dock_shadow);
-				docked = wDockAttachIcon(scr->last_dock, aicon, ix, iy);
+				docked = wDockAttachIcon(scr->last_dock, aicon, ix, iy, False);
 				if (scr->last_dock->auto_collapse)
 					collapsed = 0;
 
