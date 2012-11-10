@@ -594,7 +594,7 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 		wArrangeIcons(scr, False);
 
 	if (scr->dock)
-		wAppIconPaint(scr->dock->icon_array[0], False);
+		wAppIconPaint(scr->dock->icon_array[0]);
 
 	if (scr->clip_icon) {
 		if (scr->workspaces[workspace]->clip->auto_collapse ||

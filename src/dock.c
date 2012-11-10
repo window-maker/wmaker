@@ -544,7 +544,7 @@ static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 				wIconUpdate(aicon->icon);
 
 				/* Paint it */
-				wAppIconPaint(aicon, False);
+				wAppIconPaint(aicon);
 			}
 		}
 		save_appicon(aicon, True);
@@ -1154,7 +1154,7 @@ static void dockIconPaint(WAppIcon *btn)
 	if (btn == btn->icon->core->screen_ptr->clip_icon) {
 		wClipIconPaint(btn);
 	} else {
-		wAppIconPaint(btn, False);
+		wAppIconPaint(btn);
 		save_appicon(btn, True);
 	}
 }
@@ -1941,7 +1941,7 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon
 		wIconUpdate(icon->icon);
 
 	/* Paint it */
-	wAppIconPaint(icon, False);
+	wAppIconPaint(icon);
 
 	/* Save it */
 	save_appicon(icon, True);
@@ -2092,7 +2092,7 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 		wIconUpdate(icon->icon);
 
 	/* Paint it */
-	wAppIconPaint(icon, False);
+	wAppIconPaint(icon);
 
 	return True;
 }
@@ -2169,7 +2169,7 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 			wIconUpdate(icon->icon);
 
 		/* Paint it */
-		wAppIconPaint(icon, False);
+		wAppIconPaint(icon);
 
 		if (wPreferences.auto_arrange_icons)
 			wArrangeIcons(dock->screen_ptr, True);
@@ -2916,7 +2916,7 @@ void wDockTrackWindowLaunch(WDock *dock, Window window)
 					wLowerFrame(aicon->icon->core);
 				XMapWindow(dpy, aicon->icon->core->window);
 				aicon->launching = 1;
-				wAppIconPaint(aicon, False);
+				wAppIconPaint(aicon);
 				SlideWindow(aicon->icon->core->window, x0, y0, icon->x_pos, icon->y_pos);
 				XUnmapWindow(dpy, aicon->icon->core->window);
 				wAppIconDestroy(aicon);
@@ -3992,7 +3992,7 @@ int wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
 		}
 	}
 
-	wAppIconPaint(aicon, False);
+	wAppIconPaint(aicon);
 
 	return status;
 }

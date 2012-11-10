@@ -790,9 +790,7 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 			if (file)
 				wfree(file);
 
-			/* The image was updated in wIconChangeImageFile,
-			 * so we don't need udpate it at wAppIconPaint */
-			wAppIconPaint(wapp->app_icon, False);
+			wAppIconPaint(wapp->app_icon);
 		}
 	}
 

@@ -177,12 +177,10 @@ static void panelBtnCallback(WMWidget * self, void *data)
 		} else {
 			WAppIcon *aicon = panel->editedIcon;
 
-			/* The image was updated in wIconChangeImageFile,
-			 * so we don't need udpate it at wAppIconPaint */
 			if (aicon == aicon->icon->core->screen_ptr->clip_icon)
 				wClipIconPaint(aicon);
 			else
-				wAppIconPaint(aicon, False);
+				wAppIconPaint(aicon);
 
 			wDefaultChangeIcon(panel->wwin->screen_ptr, aicon->wm_instance, aicon->wm_class, text);
 		}

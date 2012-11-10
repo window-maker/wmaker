@@ -1130,9 +1130,7 @@ void wDefaultUpdateIcons(WScreen *scr)
 		if ((file && aicon->icon->file && strcmp(file, aicon->icon->file) != 0)
 		    || (file && !aicon->icon->file)) {
 			wIconChangeImageFile(aicon->icon, file);
-			/* The image was updated previously at wIconChangeImageFile,
-			 * so we don't need update it here again */
-			wAppIconPaint(aicon, False);
+			wAppIconPaint(aicon);
 		}
 		aicon = aicon->next;
 	}

@@ -215,7 +215,7 @@ void wApplicationActivate(WApplication *wapp)
 #ifdef NEWAPPICON
 	if (wapp->app_icon) {
 		wIconSetHighlited(wapp->app_icon->icon, True);
-		wAppIconPaint(wapp->app_icon, False);
+		wAppIconPaint(wapp->app_icon);
 	}
 #endif
 }
@@ -225,7 +225,7 @@ void wApplicationDeactivate(WApplication *wapp)
 #ifdef NEWAPPICON
 	if (wapp->app_icon) {
 		wIconSetHighlited(wapp->app_icon->icon, False);
-		wAppIconPaint(wapp->app_icon, False);
+		wAppIconPaint(wapp->app_icon);
 	}
 #endif
 }
