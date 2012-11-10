@@ -469,7 +469,7 @@ RImage *get_default_image(WScreen *scr)
 	return image;
 }
 
-RImage *wDefaultGetImage(WScreen *scr, char *winstance, char *wclass, int max_size)
+RImage *get_icon_image(WScreen *scr, char *winstance, char *wclass, int max_size)
 {
 	char *file_name = NULL;
 

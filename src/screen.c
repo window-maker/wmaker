@@ -413,7 +413,7 @@ static void createPixmaps(WScreen * scr)
 
 void create_logo_image(WScreen *scr)
 {
-	RImage *image = wDefaultGetImage(scr, "Logo", "WMPanel", wPreferences.icon_size);
+	RImage *image = get_icon_image(scr, "Logo", "WMPanel", wPreferences.icon_size);
 
 	if (!image) {
 		wwarning(_("could not load logo image for panels: %s"), RMessageForError(RErrorCode));

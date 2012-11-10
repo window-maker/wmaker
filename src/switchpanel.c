@@ -161,9 +161,9 @@ static void addIconForWindow(WSwitchPanel *panel, WMWidget *parent, WWindow *wwi
 	if (!WFLAGP(wwin, always_user_icon) && wwin->net_icon_image)
 		image = RRetainImage(wwin->net_icon_image);
 
-	/* wDefaultGetImage() includes the default icon image */
+	/* get_icon_image() includes the default icon image */
 	if (!image)
-		image = wDefaultGetImage(panel->scr, wwin->wm_instance, wwin->wm_class, ICON_TILE_SIZE);
+		image = get_icon_image(panel->scr, wwin->wm_instance, wwin->wm_class, ICON_TILE_SIZE);
 
 	/* We must resize the icon size (~64) to the switchpanel icon size (~48) */
 	image = wIconValidateIconSize(image, ICON_SIZE);

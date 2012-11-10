@@ -42,15 +42,16 @@ void wDefaultFillAttributes(char *instance, char *class,
                             Bool useGlobalDefault);
 
 char *get_default_image_path(WScreen *scr);
+RImage *get_default_image(WScreen *scr);
+
 char *wDefaultGetIconFile(char *instance, char *class, Bool default_icon);
 
-RImage * wDefaultGetImage(WScreen *scr, char *winstance, char *wclass, int max_size);
+RImage *get_icon_image(WScreen *scr, char *winstance, char *wclass, int max_size);
+char *get_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
+			Bool default_icon);
 
 
 int wDefaultGetStartWorkspace(WScreen *scr, char *instance, char *class);
 void wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file);
-RImage *get_default_image(WScreen *scr);
-char *get_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
-			Bool default_icon);
 RImage *get_rimage_from_file(WScreen *scr, char *file_name, int max_size);
 #endif /* WMDEFAULTS_H_ */
