@@ -238,7 +238,7 @@ void paint_app_icon(WApplication *wapp)
 		wArrangeIcons(scr, True);
 }
 
-void removeAppIconFor(WApplication * wapp)
+void removeAppIconFor(WApplication *wapp)
 {
 	if (!wapp->app_icon)
 		return;
@@ -252,8 +252,7 @@ void removeAppIconFor(WApplication * wapp)
 		wapp->app_icon->pid = 0;
 		wapp->app_icon->icon->owner = NULL;
 		wapp->app_icon->icon->icon_win = None;
-		wapp->app_icon->icon->force_paint = 1;
-		wAppIconPaint(wapp->app_icon);
+		wAppIconPaint(wapp->app_icon, True);
 	} else if (wapp->app_icon->docked) {
 		wapp->app_icon->running = 0;
 		wDockDetach(wapp->app_icon->dock, wapp->app_icon);
@@ -371,7 +370,7 @@ static void updateDockNumbers(WScreen * scr)
 }
 #endif				/* WS_INDICATOR */
 
-void wAppIconPaint(WAppIcon * aicon)
+void wAppIconPaint(WAppIcon *aicon, Bool update_icon)
 {
 	WApplication *wapp;
 	WScreen *scr = aicon->icon->core->screen_ptr;
@@ -380,6 +379,9 @@ void wAppIconPaint(WAppIcon * aicon)
 		wapp = wApplicationOf(aicon->icon->owner->main_window);
 	else
 		wapp = NULL;
+
+	if (update_icon)
+		aicon->icon->force_paint = 1;
 
 	wIconPaint(aicon->icon);
 
@@ -484,7 +486,7 @@ static void unhideHereCallback(WMenu * menu, WMenuEntry * entry)
 	wUnhideApplication(wapp, False, True);
 }
 
-static void setIconCallback(WMenu * menu, WMenuEntry * entry)
+static void setIconCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *icon = ((WApplication *) entry->clientdata)->app_icon;
 	char *file = NULL;
@@ -513,7 +515,9 @@ static void setIconCallback(WMenu * menu, WMenuEntry * entry)
 				       _("Could not open specified icon file"), _("OK"), NULL, NULL);
 		} else {
 			wDefaultChangeIcon(scr, icon->wm_instance, icon->wm_class, file);
-			wAppIconPaint(icon);
+			/* The image was updated previously at wIconChangeImageFile,
+			 * so we don't need update it here again */
+			wAppIconPaint(icon, False);
 		}
 		if (file)
 			wfree(file);
@@ -568,7 +572,7 @@ static void killCallback(WMenu * menu, WMenuEntry * entry)
 	WCHANGE_STATE(WSTATE_NORMAL);
 }
 
-static WMenu *createApplicationMenu(WScreen * scr)
+static WMenu *createApplicationMenu(WScreen *scr)
 {
 	WMenu *menu;
 
@@ -619,12 +623,12 @@ static void openApplicationMenu(WApplication * wapp, int x, int y)
 
 /******************************************************************/
 
-static void iconExpose(WObjDescriptor * desc, XEvent * event)
+static void iconExpose(WObjDescriptor *desc, XEvent *event)
 {
-	wAppIconPaint(desc->parent);
+	wAppIconPaint(desc->parent, False);
 }
 
-static void iconDblClick(WObjDescriptor * desc, XEvent * event)
+static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 {
 	WAppIcon *aicon = desc->parent;
 	WApplication *wapp;
@@ -980,12 +984,11 @@ void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_win
 		WWindow *mainw = wapp->main_window_desc;
 
 		wapp->app_icon->running = 1;
-		wapp->app_icon->icon->force_paint = 1;
 		wapp->app_icon->icon->owner = mainw;
 		if (mainw->wm_hints && (mainw->wm_hints->flags & IconWindowHint))
 			wapp->app_icon->icon->icon_win = mainw->wm_hints->icon_window;
 
-		wAppIconPaint(wapp->app_icon);
+		wAppIconPaint(wapp->app_icon, True);
 		save_appicon(wapp->app_icon, True);
 	}
 }

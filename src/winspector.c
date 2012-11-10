@@ -785,14 +785,18 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 				wfree(file);
 				file = NULL;
 			}
+
 			wIconChangeImageFile(wapp->app_icon->icon, file);
 			if (file)
 				wfree(file);
-			wAppIconPaint(wapp->app_icon);
+
+			/* The image was updated in wIconChangeImageFile,
+			 * so we don't need udpate it at wAppIconPaint */
+			wAppIconPaint(wapp->app_icon, False);
 		}
 	}
 
-  wNETFrameExtents(wwin);
+	wNETFrameExtents(wwin);
 }
 
 static void revertSettings(WMButton *button, InspectorPanel *panel)

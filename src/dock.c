@@ -538,8 +538,7 @@ static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 			aicon->attracted = 0;
 			if (aicon->icon->shadowed) {
 				aicon->icon->shadowed = 0;
-				aicon->icon->force_paint = 1;
-				wAppIconPaint(aicon);
+				wAppIconPaint(aicon, True);
 			}
 		}
 		save_appicon(aicon, True);
@@ -1149,7 +1148,7 @@ static void dockIconPaint(WAppIcon *btn)
 	if (btn == btn->icon->core->screen_ptr->clip_icon) {
 		wClipIconPaint(btn);
 	} else {
-		wAppIconPaint(btn);
+		wAppIconPaint(btn, False);
 		save_appicon(btn, True);
 	}
 }
@@ -1849,13 +1848,14 @@ int wDockReceiveDNDDrop(WScreen *scr, XEvent *event)
 Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon)
 {
 	WWindow *wwin;
+	Bool lupdate_icon = False;
 	int index;
 
 	wwin = icon->icon->owner;
 	icon->editing = 0;
 
 	if (update_icon)
-		icon->icon->force_paint = 1;
+		lupdate_icon = True;
 
 	if (icon->command == NULL) {
 		char *command;
@@ -1886,7 +1886,7 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon
 						icon->attracted = 1;
 						if (!icon->icon->shadowed) {
 							icon->icon->shadowed = 1;
-							icon->icon->force_paint = 1;
+							lupdate_icon = True;
 						}
 					} else {
 						return False;
@@ -1929,7 +1929,7 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon
 
 	MoveInStackListUnder(dock->icon_array[index - 1]->icon->core, icon->icon->core);
 	wAppIconMove(icon, icon->x_pos, icon->y_pos);
-	wAppIconPaint(icon);
+	wAppIconPaint(icon, lupdate_icon);
 	save_appicon(icon, True);
 
 	if (wPreferences.auto_arrange_icons)
@@ -1974,6 +1974,7 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 	WWindow *wwin;
 	char *command;
 	int index;
+	Bool update_icon = False;
 
 	if (src == dest)
 		return True;	/* No move needed, we're already there */
@@ -2054,7 +2055,7 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 		icon->attracted = 0;
 		if (icon->icon->shadowed) {
 			icon->icon->shadowed = 0;
-			icon->icon->force_paint = 1;
+			update_icon = True;
 		}
 		save_appicon(icon, True);
 	}
@@ -2071,7 +2072,7 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 	dest->icon_count++;
 
 	MoveInStackListUnder(dest->icon_array[index - 1]->icon->core, icon->icon->core);
-	wAppIconPaint(icon);
+	wAppIconPaint(icon, update_icon);
 
 	return True;
 }
@@ -2079,6 +2080,7 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 void wDockDetach(WDock *dock, WAppIcon *icon)
 {
 	int index;
+	Bool update_icon = False;
 
 	/* make the settings panel be closed */
 	if (icon->panel)
@@ -2095,7 +2097,7 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 	icon->auto_launch = 0;
 	if (icon->icon->shadowed) {
 		icon->icon->shadowed = 0;
-		icon->icon->force_paint = 1;
+		update_icon = True;
 	}
 
 	/* deselect the icon */
@@ -2142,7 +2144,7 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 
 		ChangeStackingLevel(icon->icon->core, NORMAL_ICON_LEVEL);
 
-		wAppIconPaint(icon);
+		wAppIconPaint(icon, update_icon);
 		if (wPreferences.auto_arrange_icons)
 			wArrangeIcons(dock->screen_ptr, True);
 	}
@@ -2888,7 +2890,7 @@ void wDockTrackWindowLaunch(WDock *dock, Window window)
 					wLowerFrame(aicon->icon->core);
 				XMapWindow(dpy, aicon->icon->core->window);
 				aicon->launching = 1;
-				wAppIconPaint(aicon);
+				wAppIconPaint(aicon, False);
 				SlideWindow(aicon->icon->core->window, x0, y0, icon->x_pos, icon->y_pos);
 				XUnmapWindow(dpy, aicon->icon->core->window);
 				wAppIconDestroy(aicon);
@@ -3964,7 +3966,7 @@ int wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
 		}
 	}
 
-	wAppIconPaint(aicon);
+	wAppIconPaint(aicon, False);
 
 	return status;
 }

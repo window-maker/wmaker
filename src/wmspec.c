@@ -474,7 +474,8 @@ static void updateIconImage(WWindow *wwin)
 	WApplication *app = wApplicationOf(wwin->main_window);
 	if (app && app->app_icon) {
 		wIconUpdate(app->app_icon->icon);
-		wAppIconPaint(app->app_icon);
+		/* Icon was updated in wIconUpdate, so we don't need update it again */
+		wAppIconPaint(app->app_icon, False);
 	}
 }
 

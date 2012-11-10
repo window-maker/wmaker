@@ -1540,12 +1540,12 @@ void wHideApplication(WApplication *wapp)
 
 	wapp->flags.hidden = 1;
 
-	if (wPreferences.auto_arrange_icons) {
+	if (wPreferences.auto_arrange_icons)
 		wArrangeIcons(scr, True);
-	}
+
 #ifdef HIDDENDOT
 	if (wapp->app_icon)
-		wAppIconPaint(wapp->app_icon);
+		wAppIconPaint(wapp->app_icon, False);
 #endif
 }
 
@@ -1669,11 +1669,11 @@ void wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurren
 		wSetFocusTo(scr, focused);
 	}
 	wapp->last_focused = NULL;
-	if (wPreferences.auto_arrange_icons) {
+	if (wPreferences.auto_arrange_icons)
 		wArrangeIcons(scr, True);
-	}
+
 #ifdef HIDDENDOT
-	wAppIconPaint(wapp->app_icon);
+	wAppIconPaint(wapp->app_icon, False);
 #endif
 }
 

@@ -478,7 +478,9 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 				wapp = wApplicationOf(wwin->main_window);
 				if (wapp && wapp->app_icon) {
 					wIconUpdate(wapp->app_icon->icon);
-					wAppIconPaint(wapp->app_icon);
+					/* The icon was updated in wIconUpdate, so we don't
+					 * need update it again here */
+					wAppIconPaint(wapp->app_icon, False);
 				}
 			}
 

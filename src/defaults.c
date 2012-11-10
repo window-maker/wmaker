@@ -1118,7 +1118,7 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 	}
 }
 
-void wDefaultUpdateIcons(WScreen * scr)
+void wDefaultUpdateIcons(WScreen *scr)
 {
 	WAppIcon *aicon = scr->app_icon_list;
 	WWindow *wwin = scr->focused_window;
@@ -1130,7 +1130,9 @@ void wDefaultUpdateIcons(WScreen * scr)
 		if ((file && aicon->icon->file && strcmp(file, aicon->icon->file) != 0)
 		    || (file && !aicon->icon->file)) {
 			wIconChangeImageFile(aicon->icon, file);
-			wAppIconPaint(aicon);
+			/* The image was updated previously at wIconChangeImageFile,
+			 * so we don't need update it here again */
+			wAppIconPaint(aicon, False);
 		}
 		aicon = aicon->next;
 	}
@@ -1143,9 +1145,8 @@ void wDefaultUpdateIcons(WScreen * scr)
 			/* Get the application icon, default included */
 			file = wDefaultGetIconFile(wwin->wm_instance, wwin->wm_class, True);
 			if ((file && wwin->icon->file && strcmp(file, wwin->icon->file) != 0)
-			    || (file && !wwin->icon->file)) {
+			    || (file && !wwin->icon->file))
 				wIconChangeImageFile(wwin->icon, file);
-			}
 		}
 		wwin = wwin->prev;
 	}

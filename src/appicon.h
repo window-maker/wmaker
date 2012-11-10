@@ -74,7 +74,7 @@ WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
 
 void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_window);
 void wAppIconDestroy(WAppIcon *aicon);
-void wAppIconPaint(WAppIcon *aicon);
+void wAppIconPaint(WAppIcon *aicon, Bool update_icon);
 void wAppIconMove(WAppIcon *aicon, int x, int y);
 void makeAppIconFor(WApplication * wapp);
 void removeAppIconFor(WApplication * wapp);
