@@ -413,7 +413,7 @@ char *get_icon_filename(WScreen *scr, char *winstance, char *wclass, char *comma
 	}
 
 	if (!file_path && default_icon)
-		file_path = get_default_image_path(scr);	
+		file_path = get_default_image_path();
 
 	return file_path;
 }
@@ -438,7 +438,7 @@ RImage *get_rimage_from_file(WScreen *scr, char *file_name, int max_size)
 
 /* This function returns the default icon's full path
  * If the path for an icon is not found, returns NULL */
-char *get_default_image_path(WScreen *scr)
+char *get_default_image_path(void)
 {
 	char *path = NULL, *file = NULL;
 
@@ -457,7 +457,7 @@ RImage *get_default_image(WScreen *scr)
 	char *path = NULL;
 
 	/* Get the filename full path */
-	path = get_default_image_path(scr);
+	path = get_default_image_path();
 	if (!path)
 		return NULL;
 

@@ -41,7 +41,7 @@ void wDefaultFillAttributes(char *instance, char *class,
                             WWindowAttributes *attr, WWindowAttributes *mask,
                             Bool useGlobalDefault);
 
-char *get_default_image_path(WScreen *scr);
+char *get_default_image_path(void);
 RImage *get_default_image(WScreen *scr);
 
 char *wDefaultGetIconFile(char *instance, char *class, Bool default_icon);
