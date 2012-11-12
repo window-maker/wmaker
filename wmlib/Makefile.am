@@ -8,8 +8,6 @@ include_HEADERS = WMaker.h
 
 INCLUDES = $(DFLAGS) @XCFLAGS@
 
-libWMaker_a_AR = $(QUIET_AR) $(AR) $(ARFLAGS)
-
 libWMaker_la_SOURCES = 	\
 	menu.c 		\
 	app.c 		\
