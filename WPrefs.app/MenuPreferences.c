@@ -194,9 +194,7 @@ static void createPanel(Panel * p)
 	panel->wrapB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->wrapB, 440, 32);
 	WMMoveWidget(panel->wrapB, 25, 8);
-	WMSetButtonText(panel->wrapB,
-			_
-			("Always open submenus inside the screen, instead of scrolling.\nNote: this is annoying."));
+	WMSetButtonText(panel->wrapB, _("Always open submenus inside the screen, instead of scrolling."));
 
 	panel->autoB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->autoB, 440, 32);
