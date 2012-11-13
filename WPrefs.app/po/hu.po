@@ -1101,11 +1101,9 @@ msgstr "Almenü elrendezése"
 
 #: ../../WPrefs.app/MenuPreferences.c:207
 msgid ""
-"Always open submenus inside the screen, instead of scrolling.\n"
-"Note: this can be an annoyance at some circumstances."
+"Always open submenus inside the screen, instead of scrolling."
 msgstr ""
-"Az almenük mindig a képernyő területén belül nyílnak meg.\n"
-"Megjegyzés: bizonyos körülmények között bosszúságot okozhat."
+"Az almenük görgetés helyett mindig a képernyőn belül nyílnak meg."
 
 #: ../../WPrefs.app/MenuPreferences.c:212
 msgid "Scroll off-screen menus when pointer is moved over them."

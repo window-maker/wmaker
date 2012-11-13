@@ -1239,11 +1239,9 @@ msgstr "Alinhamento de Submenus"
 
 #: ../../WPrefs.app/MenuPreferences.c:207
 msgid ""
-"Always open submenus inside the screen, instead of scrolling.\n"
-"Note: this is annoying."
+"Always open submenus inside the screen, instead of scrolling."
 msgstr ""
-"Sempre abrir submenus dentro da tela, ao invés de rolar.\n"
-"Nota: isso é um aborrecimento."
+"Sempre abrir submenus dentro da tela, ao invés de rolar."
 
 #: ../../WPrefs.app/MenuPreferences.c:212
 msgid "Scroll off-screen menus when pointer is moved over them."

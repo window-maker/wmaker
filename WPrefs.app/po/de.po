@@ -1276,11 +1276,9 @@ msgstr "Untermenü-Ausrichtung"
 
 #: ../../WPrefs.app/MenuPreferences.c:196
 msgid ""
-"Always open submenus inside the screen, instead of scrolling.\n"
-"Note: this is annoying."
+"Always open submenus inside the screen, instead of scrolling."
 msgstr ""
-"Untermenüs immer im Bildschirm öffnen anstatt zu Scrollen.\n"
-"Anmerkung: kann störend sein."
+"Untermenüs immer im Bildschirm öffnen anstatt zu Scrollen."
 
 #: ../../WPrefs.app/MenuPreferences.c:201
 msgid "Scroll off-screen menus when pointer is moved over them."
