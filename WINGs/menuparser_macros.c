@@ -381,8 +381,7 @@ static Bool menu_parser_read_macro_def(WMenuParser parser, WParserMacro *macro, 
 /* When a macro is being used in the file, this function will generate the
 	expanded value for the macro in the parser's work line.
 	It blindly supposes that the data generated in macro->value is valid */
-void menu_parser_expand_macro(WMenuParser parser, WParserMacro *macro,
-										char *write_buf, int write_buf_size)
+void menu_parser_expand_macro(WMenuParser parser, WParserMacro *macro)
 {
 	char save_buf[sizeof(parser->line_buffer)];
 	char arg_values_buf[MAXLINE];
@@ -390,7 +389,11 @@ void menu_parser_expand_macro(WMenuParser parser, WParserMacro *macro,
 	char *src, *dst;
 	unsigned char *rd;
 	unsigned int size;
-	int space_left;
+	int i, space_left;
+
+	/* Skip the name of the macro, this was not done by caller */
+	for (i = 0; macro->name[i] != '\0'; i++)
+		parser->rd++;
 
 	if (macro->arg_count >= 0) {
 		menu_parser_skip_spaces_and_comments(parser);
@@ -409,8 +412,9 @@ void menu_parser_expand_macro(WMenuParser parser, WParserMacro *macro,
 	while ((*dst++ = *parser->rd++) != '\0') ;
 
 	/* Generate expanded macro */
-	dst = write_buf;
-	space_left = write_buf_size - 1;
+	dst = parser->line_buffer;
+	parser->rd = dst;
+	space_left = sizeof(parser->line_buffer) - 1;
 	if (macro->function != NULL) {
         /* Parser's pre-defined macros actually proposes a function call to
 			  generate dynamic value for the expansion of the macro. In this case

@@ -228,24 +228,6 @@ read_next_line:
 		}
 	}
 
-	if (title != NULL) {
-		char eot, *src, *dst;
-
-		src = *title;
-		eot = *src++;
-		if ((eot == '"') || (eot == '\'')) {
-			dst = *title;
-
-			while (*src != '\0')
-				*dst++ = *src++;
-
-			if ((dst > *title) && (dst[-1] == eot))
-				dst--;
-
-			*dst = '\0';
-		}
-	}
-
 	if (params != NULL) {
 		lineparam[sizeof(lineparam) - 1] = '\0';
 		*parameter = wstrdup(lineparam);
@@ -319,10 +301,12 @@ found_end_of_comment:
  * the result is wmalloc's, so it needs to be free'd */
 static char *menu_parser_isolate_token(WMenuParser parser, WParserMacro *list_macros)
 {
-	char *start, *token;
+	char buffer_token[sizeof(parser->line_buffer)];
+	char *token;
 	int limit = MAX_NESTED_MACROS;
 
-	start = parser->rd;
+	token = buffer_token;
+
 restart_token_split:
 
 	while (*parser->rd != '\0')
@@ -333,48 +317,64 @@ restart_token_split:
 			 ((parser->rd[1] == '*') || (parser->rd[1] == '/'))) {
 			break;
 
-		} else if ((parser->rd[0] == '\\') && (parser->rd[1] == '\n')) {
-			break;
+		} else if (parser->rd[0] == '\\') {
+			if ((parser->rd[1] == '\n') || (parser->rd[1] == '\0'))
+				break;
 
-		} else if ((*parser->rd == '"' ) || (*parser->rd == '\'')) {
-			char eot = *parser->rd++;
+			parser->rd++;
+			*token++ = *parser->rd++;
 
-			while ((*parser->rd != '\0') && (*parser->rd != '\n'))
-				if (*parser->rd++ == eot)
-					goto found_end_quote;
+		} else if (*parser->rd == '"' ) {
+			char ch;
 
-			WMenuParserError(parser, _("missing closing quote or double-quote before end-of-line") );
+			/* Double-quoted string deserve special processing because macros are not expanded
+				inside. We also remove the double quotes. */
+			parser->rd++;
+			while ((*parser->rd != '\0') && (*parser->rd != '\n')) {
+				ch = *parser->rd++;
+				if (ch == '\\') {
+					if ((*parser->rd == '\0') || (*parser->rd == '\n'))
+						break;
+					*token++ = *parser->rd++;
+				} else if (ch == '"')
+					goto found_end_dquote;
+				else
+					*token++ = ch;
+			}
 
-found_end_quote:
+			WMenuParserError(parser, _("missing closing double-quote before end-of-line") );
+
+found_end_dquote:
 			;
+
+		} else if (*parser->rd == '\'') {
+			char ch;
+
+			/* Simple-quoted string deserve special processing because we keep their content
+				as-is, including the quotes and the \-escaped text */
+			*token++ = *parser->rd++;
+			while ((*parser->rd != '\0') && (*parser->rd != '\n')) {
+				ch = *parser->rd++;
+				*token++ = ch;
+				if (ch == '\'')
+					goto found_end_squote;
+			}
+
+			WMenuParserError(parser, _("missing closing simple-quote before end-of-line") );
+
+found_end_squote:
+			;
+
 		} else if (isnamechr(*parser->rd)) {
 			WParserMacro *macro;
-			char *start_macro;
 
-			start_macro = parser->rd;
-			while (isnamechr(*parser->rd))
-				parser->rd++;
-
-			macro = menu_parser_find_macro(parser, start_macro);
+			macro = menu_parser_find_macro(parser, parser->rd);
 			if (macro != NULL) {
-				char *expand_there;
-
-				/* Copy the chars before the macro to the beginning of the buffer to
-				 * leave as much room as possible for expansion */
-				expand_there = parser->line_buffer;
-				if (start != parser->line_buffer)
-					while (start < start_macro)
-						*expand_there++ = *start++;
-
-				start = parser->line_buffer;
-
-				/* Macro expansion will take care to keep the rest of the line after
-				 * the macro to the end of the line for future token extraction */
-				menu_parser_expand_macro(parser, macro, expand_there,
-							 sizeof(parser->line_buffer) - (start - parser->line_buffer) );
+				/* The expansion is done inside the parser's buffer
+					this is needed to allow sub macro calls */
+				menu_parser_expand_macro(parser, macro);
 
 				/* Restart parsing to allow expansion of sub macro calls */
-				parser->rd = expand_there;
 				if (limit-- > 0)
 					goto restart_token_split;
 
@@ -384,15 +384,17 @@ found_end_quote:
 					parser->rd++;
 
 				break;
+			} else {
+				while (isnamechr(*parser->rd))
+					*token++ = *parser->rd++;
 			}
-			/* else: the text was passed over so it will be counted in the token from 'start' */
 		} else {
-			parser->rd++;
+			*token++ = *parser->rd++;
 		}
 
-	token = wmalloc(parser->rd - start + 1);
-	strncpy(token, start, parser->rd - start);
-	token[parser->rd - start] = '\0';
+	*token++ = '\0';
+	token = wmalloc(token - buffer_token);
+	strcpy(token, buffer_token);
 
 	return token;
 }

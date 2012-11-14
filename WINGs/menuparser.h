@@ -79,8 +79,7 @@ void menu_parser_free_macros(WMenuParser parser);
 
 WParserMacro *menu_parser_find_macro(WMenuParser parser, const char *name);
 
-void menu_parser_expand_macro(WMenuParser parser, WParserMacro *macro,
-										char *write_buf, int write_buf_size);
+void menu_parser_expand_macro(WMenuParser parser, WParserMacro *macro);
 
 int isnamechr(char ch); // Check if char is valid character for a macro name
 
