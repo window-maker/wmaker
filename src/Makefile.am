@@ -22,6 +22,7 @@ wmaker_SOURCES = 	\
 	client.c \
 	client.h \
 	colormap.c \
+	colormap.h \
 	cycling.c \
 	def_pixmaps.h \
 	defaults.c \
@@ -30,6 +31,7 @@ wmaker_SOURCES = 	\
 	dialog.h \
 	dock.c \
 	dockedapp.c \
+	dockedapp.h \
 	dock.h \
 	event.c \
 	extend_pixmaps.h \
@@ -42,6 +44,7 @@ wmaker_SOURCES = 	\
 	icon.h \
 	keybind.h \
 	main.c \
+	main.h \
 	menu.c \
 	menu.h \
 	misc.c \
