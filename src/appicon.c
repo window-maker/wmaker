@@ -577,9 +577,9 @@ static WMenu *createApplicationMenu(WScreen *scr)
 	WMenu *menu;
 
 	menu = wMenuCreate(scr, NULL, False);
-	wMenuAddCallback(menu, _("Launch"), relaunchCallback, NULL);
 	wMenuAddCallback(menu, _("Unhide Here"), unhideHereCallback, NULL);
 	wMenuAddCallback(menu, _("Hide"), hideCallback, NULL);
+	wMenuAddCallback(menu, _("Launch"), relaunchCallback, NULL);
 	wMenuAddCallback(menu, _("Set Icon..."), setIconCallback, NULL);
 	wMenuAddCallback(menu, _("Kill"), killCallback, NULL);
 
