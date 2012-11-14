@@ -599,11 +599,14 @@ static void unset_icon_image(WIcon *icon)
 
 void wIconUpdate(WIcon *icon, RImage *image)
 {
-	WWindow *wwin = icon->owner;
+	WWindow *wwin = NULL;
 
 	if (image) {
 		icon->file_image = image;
 	} else {
+		if (icon && icon->owner)
+			wwin = icon->owner;
+
 		if (wwin && WFLAGP(wwin, always_user_icon)) {
 			/* Forced use user_icon */
 			get_rimage_icon_from_user_icon(icon);
