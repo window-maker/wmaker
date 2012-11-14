@@ -398,9 +398,8 @@ Bool wIconChangeImageFile(WIcon *icon, char *file)
 		unset_icon_image(icon);
 
 		/* Set the new image */
-		icon->file_image = image;
 		icon->file = wstrdup(path);
-		wIconUpdate(icon, NULL);
+		wIconUpdate(icon, image);
 	} else {
 		error = 1;
 	}
