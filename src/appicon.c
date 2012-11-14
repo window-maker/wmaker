@@ -151,7 +151,7 @@ void makeAppIconFor(WApplication *wapp)
 
 	/* Create the icon */
 	wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
-	wIconUpdate(wapp->app_icon->icon);
+	wIconUpdate(wapp->app_icon->icon, NULL);
 
 	/* Now, paint the icon */
 	if (!WFLAGP(wapp->main_window_desc, no_appicon))
@@ -256,7 +256,7 @@ void removeAppIconFor(WApplication *wapp)
 		wapp->app_icon->icon->icon_win = None;
 
 		/* Update the icon images */
-		wIconUpdate(wapp->app_icon->icon);
+		wIconUpdate(wapp->app_icon->icon, NULL);
 
 		/* Paint it */
 		wAppIconPaint(wapp->app_icon);
@@ -991,7 +991,7 @@ void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_win
 			wapp->app_icon->icon->icon_win = mainw->wm_hints->icon_window;
 
 		/* Update the icon images */
-		wIconUpdate(wapp->app_icon->icon);
+		wIconUpdate(wapp->app_icon->icon, NULL);
 
 		/* Paint it */
 		wAppIconPaint(wapp->app_icon);

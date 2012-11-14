@@ -468,12 +468,12 @@ static void updateIconImage(WWindow *wwin)
 
 	/* Refresh the Window Icon */
 	if (wwin->icon)
-		wIconUpdate(wwin->icon);
+		wIconUpdate(wwin->icon, NULL);
 
 	/* Refresh the application icon */
 	WApplication *app = wApplicationOf(wwin->main_window);
 	if (app && app->app_icon) {
-		wIconUpdate(app->app_icon->icon);
+		wIconUpdate(app->app_icon->icon, NULL);
 		wAppIconPaint(app->app_icon);
 	}
 }

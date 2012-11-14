@@ -94,7 +94,7 @@ static void tileObserver(void *self, WMNotification *notif)
 {
 	WIcon *icon = (WIcon *) self;
 
-	wIconUpdate(icon);
+	wIconUpdate(icon, NULL);
 
 	XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);
 }
@@ -152,7 +152,7 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 
 	icon->tile_type = TILE_NORMAL;
 
-	wIconUpdate(icon);
+	wIconUpdate(icon, NULL);
 
 	WMAddNotificationObserver(appearanceObserver, icon, WNIconAppearanceSettingsChanged, icon);
 	WMAddNotificationObserver(tileObserver, icon, WNIconTileSettingsChanged, icon);
@@ -177,7 +177,7 @@ WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char
 
 	icon->tile_type = tile;
 
-	wIconUpdate(icon);
+	wIconUpdate(icon, NULL);
 
 	WMAddNotificationObserver(appearanceObserver, icon, WNIconAppearanceSettingsChanged, icon);
 	WMAddNotificationObserver(tileObserver, icon, WNIconTileSettingsChanged, icon);
@@ -346,7 +346,7 @@ void wIconChangeTitle(WIcon *icon, char *new_title)
 	icon->icon_name = new_title;
 
 	if (changed)
-		wIconUpdate(icon);
+		wIconUpdate(icon, NULL);
 	else
 		wIconPaint(icon);
 }
@@ -400,7 +400,7 @@ Bool wIconChangeImageFile(WIcon *icon, char *file)
 		/* Set the new image */
 		icon->file_image = image;
 		icon->file = wstrdup(path);
-		wIconUpdate(icon);
+		wIconUpdate(icon, NULL);
 	} else {
 		error = 1;
 	}
@@ -597,26 +597,30 @@ static void unset_icon_image(WIcon *icon)
 	}
 }
 
-void wIconUpdate(WIcon *icon)
+void wIconUpdate(WIcon *icon, RImage *image)
 {
 	WWindow *wwin = icon->owner;
 
-	if (wwin && WFLAGP(wwin, always_user_icon)) {
-		/* Forced use user_icon */
-		get_rimage_icon_from_user_icon(icon);
-	} else if (icon->icon_win != None) {
-		/* Get the Pixmap from the WIcon */
-		get_rimage_icon_from_icon_win(icon);
-	} else if (wwin && wwin->net_icon_image) {
-		/* Use _NET_WM_ICON icon */
-		get_rimage_icon_from_x11(icon);
-	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
-		/* Get the Pixmap from the wm_hints, else, from the user */
-		if (get_rimage_icon_from_wm_hints(icon))
-			get_rimage_icon_from_user_icon(icon);
+	if (image) {
+		icon->file_image = image;
 	} else {
-		/* Get the Pixmap from the user */
-		get_rimage_icon_from_user_icon(icon);
+		if (wwin && WFLAGP(wwin, always_user_icon)) {
+			/* Forced use user_icon */
+			get_rimage_icon_from_user_icon(icon);
+		} else if (icon->icon_win != None) {
+			/* Get the Pixmap from the WIcon */
+			get_rimage_icon_from_icon_win(icon);
+		} else if (wwin && wwin->net_icon_image) {
+			/* Use _NET_WM_ICON icon */
+			get_rimage_icon_from_x11(icon);
+		} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
+			/* Get the Pixmap from the wm_hints, else, from the user */
+			if (get_rimage_icon_from_wm_hints(icon))
+				get_rimage_icon_from_user_icon(icon);
+		} else {
+			/* Get the Pixmap from the user */
+			get_rimage_icon_from_user_icon(icon);
+		}
 	}
 
 	update_icon_pixmap(icon);
