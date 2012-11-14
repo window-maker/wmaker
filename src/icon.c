@@ -756,6 +756,9 @@ static int get_rimage_icon_from_wm_hints(WIcon *icon)
 	if (!image)
 		return 1;
 
+	/* Resize the icon to the wPreferences.icon_size size */
+	image = wIconValidateIconSize(image, wPreferences.icon_size);
+
 	unset_icon_image(icon);
 	icon->file_image = image;
 
