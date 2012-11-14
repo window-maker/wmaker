@@ -656,7 +656,6 @@ static void get_rimage_icon_from_x11(WIcon *icon)
 	unset_icon_image(icon);
 
 	/* Set the new icon image */
-	icon->file = NULL;
 	icon->file_image = RRetainImage(icon->owner->net_icon_image);
 }
 
@@ -680,7 +679,6 @@ static void get_rimage_icon_from_default_icon(WIcon *icon)
 	unset_icon_image(icon);
 
 	/* Set the new icon image */
-	icon->file = NULL;
 	icon->file_image = RRetainImage(scr->def_icon_rimage);
 }
 
@@ -696,7 +694,6 @@ static void get_rimage_icon_from_icon_win(WIcon *icon)
 	unset_icon_image(icon);
 
 	/* Set the new info */
-	icon->file = NULL;
 	icon->file_image = image;
 }
 
