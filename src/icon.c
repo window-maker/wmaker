@@ -601,10 +601,7 @@ static void unset_icon_image(WIcon *icon)
 
 void wIconUpdate(WIcon *icon)
 {
-	WScreen *scr = icon->core->screen_ptr;
 	WWindow *wwin = icon->owner;
-
-	assert(scr->icon_tile != NULL);
 
 	if (wwin && WFLAGP(wwin, always_user_icon)) {
 		/* Forced use user_icon */
