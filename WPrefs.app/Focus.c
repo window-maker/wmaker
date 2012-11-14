@@ -47,6 +47,7 @@ typedef struct _Panel {
 	WMFrame *optF;
 	WMButton *ignB;
 	WMButton *newB;
+	WMButton *craisB;
 
 	char raiseDelaySelected;
 } _Panel;
@@ -112,6 +113,7 @@ static void showData(_Panel * panel)
 	 /**/ WMSetButtonSelected(panel->ignB, GetBoolForKey("IgnoreFocusClick"));
 
 	WMSetButtonSelected(panel->newB, GetBoolForKey("AutoFocus"));
+	WMSetButtonSelected(panel->craisB, GetBoolForKey("CirculateRaise"));
 }
 
 static void storeData(_Panel * panel)
@@ -139,6 +141,7 @@ static void storeData(_Panel * panel)
 
 	SetBoolForKey(WMGetButtonSelected(panel->ignB), "IgnoreFocusClick");
 	SetBoolForKey(WMGetButtonSelected(panel->newB), "AutoFocus");
+	SetBoolForKey(WMGetButtonSelected(panel->craisB), "CirculateRaise");
 }
 
 static void pushDelayButton(WMWidget * w, void *data)
@@ -306,13 +309,18 @@ static void createPanel(Panel * p)
 
 	panel->ignB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->ignB, 225, 50);
-	WMMoveWidget(panel->ignB, 10, 10);
+	WMMoveWidget(panel->ignB, 10, 4);
 	WMSetButtonText(panel->ignB, _("Do not let applications receive " "the click used to focus windows."));
 
 	panel->newB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->newB, 225, 35);
-	WMMoveWidget(panel->newB, 10, 70);
+	WMMoveWidget(panel->newB, 10, 44);
 	WMSetButtonText(panel->newB, _("Automatically focus new windows."));
+
+	panel->craisB = WMCreateSwitchButton(panel->optF);
+	WMResizeWidget(panel->craisB, 225, 36);
+	WMMoveWidget(panel->craisB, 10, 75);
+	WMSetButtonText(panel->craisB, _("Raise window when switching\nfocus with keyboard."));
 
 	WMMapSubwidgets(panel->optF);
 

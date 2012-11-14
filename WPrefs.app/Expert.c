@@ -21,6 +21,12 @@
 
 #include "WPrefs.h"
 
+#ifdef XKB_MODELOCK
+#define NUMITEMS  12
+#else
+#define NUMITEMS  11
+#endif
+
 typedef struct _Panel {
 	WMBox *box;
 	char *sectionName;
@@ -31,7 +37,7 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMButton *swi[14];
+	WMButton *swi[NUMITEMS];
 
 } _Panel;
 
@@ -51,10 +57,10 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->swi[7], GetBoolForKey("SingleClickLaunch"));
 	WMSetButtonSelected(panel->swi[8], GetBoolForKey("CycleActiveHeadOnly"));
 	WMSetButtonSelected(panel->swi[9], GetBoolForKey("ShowClipTitle"));
-	WMSetButtonSelected(panel->swi[10], GetBoolForKey("BounceAppIconsWhenUrgent"));
-	WMSetButtonSelected(panel->swi[11], GetBoolForKey("RaiseAppIconsWhenBouncing"));
-	WMSetButtonSelected(panel->swi[12], GetBoolForKey("OpaqueMoveResizeKeyboard"));
-	WMSetButtonSelected(panel->swi[13], GetBoolForKey("DoNotMakeAppIconsBounce"));
+	WMSetButtonSelected(panel->swi[10], GetBoolForKey("OpaqueMoveResizeKeyboard"));
+#ifdef XKB_MODELOCK
+	WMSetButtonSelected(panel->swi[11], GetBoolForKey("KbdModeLock"));
+#endif /* XKB_MODELOCK */
 }
 
 static void createPanel(Panel * p)
@@ -75,10 +81,10 @@ static void createPanel(Panel * p)
 	WMSetScrollViewHasHorizontalScroller(sv, False);
 
 	f = WMCreateFrame(panel->box);
-	WMResizeWidget(f, 495, sizeof(panel->swi) / sizeof(char *) * 25 + 8);
+	WMResizeWidget(f, 495, NUMITEMS * 25 + 8);
 	WMSetFrameRelief(f, WRFlat);
 
-	for (i = 0; i < sizeof(panel->swi) / sizeof(char *); i++) {
+	for (i = 0; i < NUMITEMS; i++) {
 		panel->swi[i] = WMCreateSwitchButton(f);
 		WMResizeWidget(panel->swi[i], FRAME_WIDTH - 40, 25);
 		WMMoveWidget(panel->swi[i], 5, 5 + i * 25);
@@ -95,15 +101,14 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->swi[7], _("Launch applications and restore windows with a single click."));
 	WMSetButtonText(panel->swi[8], _("Cycle windows only on the active head."));
 	WMSetButtonText(panel->swi[9], _("Show workspace title on Clip."));
-	WMSetButtonText(panel->swi[10], _("Bounce AppIcons when the application wants attention."));
-	WMSetButtonText(panel->swi[11], _("Raise AppIcons when bouncing."));
-	WMSetButtonText(panel->swi[12], _("Opaque Move,Resize with keyboard."));
-	WMSetButtonText(panel->swi[13], _("Do not make AppIcons bounce."));
+	WMSetButtonText(panel->swi[10], _("Opaque Move,Resize with keyboard."));
+#ifdef XKB_MODELOCK
+	WMSetButtonText(panel->swi[11], _("Enable keyboard language switch button in window titlebars."));
+#endif /* XKB_MODELOCK */
 
 	/* If the item is default true, enable the button here */
 	WMSetButtonEnabled(panel->swi[6], True);
 	WMSetButtonEnabled(panel->swi[9], True);
-	WMSetButtonEnabled(panel->swi[10], True);
 
 	WMMapSubwidgets(panel->box);
 	WMSetScrollViewContentView(sv, WMWidgetView(f));
@@ -128,10 +133,10 @@ static void storeDefaults(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "SingleClickLaunch");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[8]), "CycleActiveHeadOnly");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[9]), "ShowClipTitle");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[10]), "BounceAppIconsWhenUrgent");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[11]), "RaiseAppIconsWhenBouncing");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[12]), "OpaqueMoveResizeKeyboard");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[13]), "DoNotMakeAppIconsBounce");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[10]), "OpaqueMoveResizeKeyboard");
+#ifdef XKB_MODELOCK
+	SetBoolForKey(WMGetButtonSelected(panel->swi[11]), "KbdModeLock");
+#endif /* XKB_MODELOCK */
 }
 
 Panel *InitExpert(WMScreen * scr, WMWidget * parent)
@@ -143,7 +148,7 @@ Panel *InitExpert(WMScreen * scr, WMWidget * parent)
 	panel->sectionName = _("Expert User Preferences");
 
 	panel->description = _("Options for people who know what they're doing...\n"
-			       "Also have some other misc. options.");
+			       "Also has some other misc. options.");
 
 	panel->parent = parent;
 

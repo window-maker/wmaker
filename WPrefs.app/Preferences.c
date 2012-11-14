@@ -1,4 +1,4 @@
-/* Preferences.c- misc personal preferences
+/* Preferences.c- misc ergonomic preferences
  *
  *  WPrefs - Window Maker Preferences Program
  *
@@ -42,10 +42,9 @@ typedef struct _Panel {
 	WMButton *ballB[4];
 
 	WMFrame *optF;
-	WMButton *raisB;
-#ifdef XKB_MODELOCK
-	WMButton *modeB;
-#endif				/* XKB_MODELOCK */
+	WMButton *bounceB;
+	WMButton *bounceUrgB;
+	WMButton *bounceRaisB;
 
 	WMFrame *borderF;
 	WMSlider *borderS;
@@ -127,10 +126,9 @@ static void showData(_Panel * panel)
 		WMSetButtonSelected(panel->lrB, True);
 	}
 
-	WMSetButtonSelected(panel->raisB, GetBoolForKey("CirculateRaise"));
-#ifdef XKB_MODELOCK
-	WMSetButtonSelected(panel->modeB, GetBoolForKey("KbdModeLock"));
-#endif				/* XKB_MODELOCK */
+	WMSetButtonSelected(panel->bounceB, GetBoolForKey("DoNotMakeAppIconsBounce"));
+	WMSetButtonSelected(panel->bounceUrgB, GetBoolForKey("BounceAppIconsWhenUrgent"));
+	WMSetButtonSelected(panel->bounceRaisB, GetBoolForKey("RaiseAppIconsWhenBouncing"));
 
 	WMSetButtonSelected(panel->ballB[0], GetBoolForKey("WindowTitleBalloons"));
 	WMSetButtonSelected(panel->ballB[1], GetBoolForKey("MiniwindowTitleBalloons"));
@@ -191,10 +189,9 @@ static void storeData(_Panel * panel)
 	SetStringForKey(str, "WorkspaceBorder");
 	SetIntegerForKey(WMGetSliderValue(panel->borderS), "WorkspaceBorderSize");
 
-	SetBoolForKey(WMGetButtonSelected(panel->raisB), "CirculateRaise");
-#ifdef XKB_MODELOCK
-	SetBoolForKey(WMGetButtonSelected(panel->modeB), "KbdModeLock");
-#endif				/* XKB_MODELOCK */
+	SetBoolForKey(WMGetButtonSelected(panel->bounceB), "DoNotMakeAppIconsBounce");
+	SetBoolForKey(WMGetButtonSelected(panel->bounceUrgB), "BounceAppIconsWhenUrgent");
+	SetBoolForKey(WMGetButtonSelected(panel->bounceRaisB), "RaiseAppIconsWhenBouncing");
 	SetBoolForKey(WMGetButtonSelected(panel->ballB[0]), "WindowTitleBalloons");
 	SetBoolForKey(WMGetButtonSelected(panel->ballB[1]), "MiniwindowTitleBalloons");
 	SetBoolForKey(WMGetButtonSelected(panel->ballB[2]), "AppIconBalloons");
@@ -271,17 +268,21 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->optF, 235, 97);
 	WMMoveWidget(panel->optF, 270, 128);
 
-	panel->raisB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->raisB, 210, 36);
-	WMMoveWidget(panel->raisB, 15, 5);
-	WMSetButtonText(panel->raisB, _("Raise window when switching\nfocus with keyboard."));
+	panel->bounceB = WMCreateSwitchButton(panel->optF);
+	WMResizeWidget(panel->bounceB, 210, 25);
+	WMMoveWidget(panel->bounceB, 15, 8);
+	WMSetButtonText(panel->bounceB, _("Do not make AppIcons bounce."));
 
-#ifdef XKB_MODELOCK
-	panel->modeB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->modeB, 210, 40);
-	WMMoveWidget(panel->modeB, 15, 44);
-	WMSetButtonText(panel->modeB, _("Enable keyboard language\nswitch button in window titlebars."));
-#endif
+	panel->bounceUrgB = WMCreateSwitchButton(panel->optF);
+	WMResizeWidget(panel->bounceUrgB, 210, 30);
+	WMMoveWidget(panel->bounceUrgB, 15, 33);
+	WMSetButtonText(panel->bounceUrgB, _("Bounce AppIcons when the application wants attention."));
+	WMSetButtonEnabled(panel->bounceUrgB, True); /* defaults to true */
+
+	panel->bounceRaisB = WMCreateSwitchButton(panel->optF);
+	WMResizeWidget(panel->bounceRaisB, 210, 25);
+	WMMoveWidget(panel->bounceRaisB, 15, 64);
+	WMSetButtonText(panel->bounceRaisB, _("Raise AppIcons when bouncing."));
 
 	WMMapSubwidgets(panel->optF);
 
