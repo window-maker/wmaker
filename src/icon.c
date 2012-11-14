@@ -359,10 +359,14 @@ RImage *wIconValidateIconSize(RImage *icon, int max_size)
 		return NULL;
 
 	/* We should hold "ICON_BORDER" (~2) pixels to include the icon border */
-	if ((icon->width - max_size) > -ICON_BORDER ||
-	    (icon->height - max_size) > -ICON_BORDER) {
-		nimage = RScaleImage(icon, max_size - ICON_BORDER,
-				     (icon->height * (max_size - ICON_BORDER) / icon->width));
+	if (((max_size + ICON_BORDER) < icon->width) ||
+	    ((max_size + ICON_BORDER) < icon->height)) {
+		if (icon->width > icon->height)
+			nimage = RScaleImage(icon, max_size - ICON_BORDER,
+					     (icon->height * (max_size - ICON_BORDER) / icon->width));
+		else
+			nimage = RScaleImage(icon, (icon->width * (max_size - ICON_BORDER) / icon->height),
+					     max_size - ICON_BORDER);
 		RReleaseImage(icon);
 		icon = nimage;
 	}
