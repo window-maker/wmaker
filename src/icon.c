@@ -584,11 +584,15 @@ void wIconSelect(WIcon * icon)
 
 static void unset_icon_image(WIcon *icon)
 {
-	if (icon->file)
+	if (icon->file) {
 		wfree(icon->file);
+		icon->file = NULL;
+	}
 
-	if (icon->file_image)
+	if (icon->file_image) {
 		RReleaseImage(icon->file_image);
+		icon->file_image = NULL;
+	}
 }
 
 void wIconUpdate(WIcon *icon)
@@ -755,8 +759,7 @@ static int get_rimage_icon_from_wm_hints(WIcon *icon)
 	if (!image)
 		return 1;
 
-	/* FIXME: If unset_icon_image, pointer double free then crash 
-	unset_icon_image(icon); */
+	unset_icon_image(icon);
 	icon->file_image = image;
 
 	return 0;
