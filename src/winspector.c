@@ -778,20 +778,32 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 		else
 			paint_app_icon(wapp);
 
-		if (wapp->app_icon && wapp->main_window == wwin->client_win) {
-			char *file = WMGetTextFieldText(panel->fileText);
-
-			if (file[0] == 0) {
-				wfree(file);
-				file = NULL;
-			}
-
-			wIconChangeImageFile(wapp->app_icon->icon, file);
-			if (file)
-				wfree(file);
-
-			wAppIconPaint(wapp->app_icon);
+		char *file = WMGetTextFieldText(panel->fileText);
+		if (file[0] == 0) {
+			wfree(file);
+			file = NULL;
 		}
+
+		if (WFLAGP(wwin, always_user_icon)) {
+			/* Change icon image if the app is minimized */
+			if (wwin->icon)
+				wIconChangeImageFile(wwin->icon, file);
+
+			/* Change App Icon image */
+			if (wapp->app_icon)
+				wIconChangeImageFile(wapp->app_icon->icon, file);
+		} else {
+			/* Change App Icon image */
+			if (wapp->app_icon)
+				wIconUpdate(wapp->app_icon->icon, get_rimage_icon_from_wm_hints(wapp->app_icon->icon));
+
+			/* Change icon image if the app is minimized */
+			if (wwin->icon)
+				wIconUpdate(wwin->icon, get_rimage_icon_from_wm_hints(wwin->icon));
+		}
+
+		if (file)
+			wfree(file);
 	}
 
 	wNETFrameExtents(wwin);
