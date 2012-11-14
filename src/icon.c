@@ -62,7 +62,6 @@ static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 
 static void set_dockapp_in_icon(WIcon *icon);
 static void get_rimage_icon_from_icon_win(WIcon *icon);
-static int get_rimage_icon_from_wm_hints(WIcon *icon);
 static void get_rimage_icon_from_user_icon(WIcon *icon);
 static void get_rimage_icon_from_default_icon(WIcon *icon);
 static void get_rimage_icon_from_x11(WIcon *icon);
@@ -617,7 +616,9 @@ void wIconUpdate(WIcon *icon, RImage *image)
 			get_rimage_icon_from_x11(icon);
 		} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
 			/* Get the Pixmap from the wm_hints, else, from the user */
-			if (get_rimage_icon_from_wm_hints(icon))
+			unset_icon_image(icon);
+			icon->file_image = get_rimage_icon_from_wm_hints(icon);
+			if (!icon->file_image)
 				get_rimage_icon_from_user_icon(icon);
 		} else {
 			/* Get the Pixmap from the user */
@@ -746,7 +747,7 @@ static void set_dockapp_in_icon(WIcon *icon)
 }
 
 /* Get the RImage from the XWindow wm_hints */
-static int get_rimage_icon_from_wm_hints(WIcon *icon)
+RImage *get_rimage_icon_from_wm_hints(WIcon *icon)
 {
 	RImage *image = NULL;
 	unsigned int w, h, d;
@@ -754,20 +755,17 @@ static int get_rimage_icon_from_wm_hints(WIcon *icon)
 
 	if (!getSize(wwin->wm_hints->icon_pixmap, &w, &h, &d)) {
 		icon->owner->wm_hints->flags &= ~IconPixmapHint;
-		return 1;
+		return NULL;
 	}
 
 	image = get_wwindow_image_from_wmhints(wwin, icon);
 	if (!image)
-		return 1;
+		return NULL;
 
 	/* Resize the icon to the wPreferences.icon_size size */
 	image = wIconValidateIconSize(image, wPreferences.icon_size);
 
-	unset_icon_image(icon);
-	icon->file_image = image;
-
-	return 0;
+	return image;
 }
 
 void wIconPaint(WIcon *icon)

@@ -66,6 +66,7 @@ void update_icon_pixmap(WIcon *icon);
 Bool wIconChangeImageFile(WIcon *icon, char *file);
 
 RImage *wIconValidateIconSize(RImage *icon, int max_size);
+RImage *get_rimage_icon_from_wm_hints(WIcon *icon);
 
 char *wIconStore(WIcon *icon);
 char *get_name_for_instance_class(char *wm_instance, char *wm_class);
