@@ -278,14 +278,13 @@ typedef struct {
 	CONTRIB *p;		/* pointer to list of contributions */
 } CLIST;
 
-CLIST *contrib;			/* array of contribution lists */
-
 /* clamp the input to the specified range */
 #define CLAMP(v,l,h)    ((v)<(l) ? (l) : (v) > (h) ? (h) : v)
 
 /* return of calloc is not checked if NULL in the function below! */
 RImage *RSmoothScaleImage(RImage * src, unsigned new_width, unsigned new_height)
 {
+	CLIST *contrib;			/* array of contribution lists */
 	RImage *tmp;		/* intermediate image */
 	double xscale, yscale;	/* zoom scale factors */
 	int i, j, k;		/* loop variables */
@@ -381,7 +380,7 @@ RImage *RSmoothScaleImage(RImage * src, unsigned new_width, unsigned new_height)
 	}
 
 	/* free the memory allocated for horizontal filter weights */
-	for (i = 0; i < tmp->width; ++i) {
+	for (i = 0; i < new_width; ++i) {
 		free(contrib[i].p);
 	}
 	free(contrib);
