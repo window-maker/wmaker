@@ -209,7 +209,7 @@ static void createPanel(Panel * p)
     /***************** Size Display ****************/
 	panel->sizeF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->sizeF, 240, 60);
-	WMMoveWidget(panel->sizeF, 20, 10);
+	WMMoveWidget(panel->sizeF, 15, 10);
 	WMSetFrameTitle(panel->sizeF, _("Size Display"));
 
 	WMSetBalloonTextForView(_("The position or style of the window size\n"
@@ -217,7 +217,7 @@ static void createPanel(Panel * p)
 
 	panel->sizeP = WMCreatePopUpButton(panel->sizeF);
 	WMResizeWidget(panel->sizeP, 200, 20);
-	WMMoveWidget(panel->sizeP, 22, 24);
+	WMMoveWidget(panel->sizeP, 20, 24);
 	WMAddPopUpButtonItem(panel->sizeP, _("Corner of screen"));
 	WMAddPopUpButtonItem(panel->sizeP, _("Center of screen"));
 	WMAddPopUpButtonItem(panel->sizeP, _("Center of resized window"));
@@ -229,7 +229,7 @@ static void createPanel(Panel * p)
     /***************** Position Display ****************/
 	panel->posiF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->posiF, 240, 60);
-	WMMoveWidget(panel->posiF, 20, 75);
+	WMMoveWidget(panel->posiF, 15, 75);
 	WMSetFrameTitle(panel->posiF, _("Position Display"));
 
 	WMSetBalloonTextForView(_("The position or style of the window position\n"
@@ -237,7 +237,7 @@ static void createPanel(Panel * p)
 
 	panel->posiP = WMCreatePopUpButton(panel->posiF);
 	WMResizeWidget(panel->posiP, 200, 20);
-	WMMoveWidget(panel->posiP, 22, 24);
+	WMMoveWidget(panel->posiP, 20, 24);
 	WMAddPopUpButtonItem(panel->posiP, _("Corner of screen"));
 	WMAddPopUpButtonItem(panel->posiP, _("Center of screen"));
 	WMAddPopUpButtonItem(panel->posiP, _("Center of resized window"));
@@ -247,14 +247,14 @@ static void createPanel(Panel * p)
 
     /***************** Balloon Text ****************/
 	panel->ballF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->ballF, 235, 113);
-	WMMoveWidget(panel->ballF, 270, 10);
+	WMResizeWidget(panel->ballF, 240, 109);
+	WMMoveWidget(panel->ballF, 265, 10);
 	WMSetFrameTitle(panel->ballF, _("Show balloon text for..."));
 
 	for (i = 0; i < 4; i++) {
 		panel->ballB[i] = WMCreateSwitchButton(panel->ballF);
-		WMResizeWidget(panel->ballB[i], 205, 20);
-		WMMoveWidget(panel->ballB[i], 15, 20 + i * 22);
+		WMResizeWidget(panel->ballB[i], 210, 20);
+		WMMoveWidget(panel->ballB[i], 15, 16 + i * 22);
 	}
 	WMSetButtonText(panel->ballB[0], _("incomplete window titles"));
 	WMSetButtonText(panel->ballB[1], _("miniwindow titles"));
@@ -265,23 +265,24 @@ static void createPanel(Panel * p)
 
     /***************** Options ****************/
 	panel->optF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->optF, 235, 97);
-	WMMoveWidget(panel->optF, 270, 128);
+	WMResizeWidget(panel->optF, 240, 101);
+	WMMoveWidget(panel->optF, 265, 124);
+	WMSetFrameTitle(panel->optF, _("AppIcon bouncing"));
 
 	panel->bounceB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->bounceB, 210, 25);
-	WMMoveWidget(panel->bounceB, 15, 8);
-	WMSetButtonText(panel->bounceB, _("Do not make AppIcons bounce."));
+	WMMoveWidget(panel->bounceB, 15, 14);
+	WMSetButtonText(panel->bounceB, _("Disable AppIcon bounce."));
 
 	panel->bounceUrgB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->bounceUrgB, 210, 30);
-	WMMoveWidget(panel->bounceUrgB, 15, 33);
-	WMSetButtonText(panel->bounceUrgB, _("Bounce AppIcons when the application wants attention."));
+	WMMoveWidget(panel->bounceUrgB, 15, 39);
+	WMSetButtonText(panel->bounceUrgB, _("Bounce AppIcon when the application wants attention."));
 	WMSetButtonEnabled(panel->bounceUrgB, True); /* defaults to true */
 
 	panel->bounceRaisB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->bounceRaisB, 210, 25);
-	WMMoveWidget(panel->bounceRaisB, 15, 64);
+	WMMoveWidget(panel->bounceRaisB, 15, 70);
 	WMSetButtonText(panel->bounceRaisB, _("Raise AppIcons when bouncing."));
 
 	WMMapSubwidgets(panel->optF);
@@ -289,7 +290,7 @@ static void createPanel(Panel * p)
     /***************** Workspace border ****************/
 	panel->borderF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->borderF, 240, 80);
-	WMMoveWidget(panel->borderF, 20, 145);
+	WMMoveWidget(panel->borderF, 15, 145);
 	WMSetFrameTitle(panel->borderF, _("Workspace border"));
 
 	panel->borderS = WMCreateSlider(panel->borderF);

@@ -173,14 +173,14 @@ static void createPanel(Panel *p)
 
     /*********** Icon Slide Speed **********/
 	panel->icoF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->icoF, 230, 45);
+	WMResizeWidget(panel->icoF, 212, 45);
 	WMMoveWidget(panel->icoF, 15, 10);
 	WMSetFrameTitle(panel->icoF, _("Icon Slide Speed"));
 
     /*********** Shade Animation Speed **********/
 	panel->shaF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->shaF, 230, 45);
-	WMMoveWidget(panel->shaF, 15, 60);
+	WMResizeWidget(panel->shaF, 212, 45);
+	WMMoveWidget(panel->shaF, 15, 65);
 	WMSetFrameTitle(panel->shaF, _("Shade Animation Speed"));
 
 	buf1 = wmalloc(strlen(SPEED_IMAGE) + 1);
@@ -190,9 +190,9 @@ static void createPanel(Panel *p)
 		panel->icoB[i] = WMCreateCustomButton(panel->icoF, WBBStateChangeMask);
 		panel->shaB[i] = WMCreateCustomButton(panel->shaF, WBBStateChangeMask);
 		WMResizeWidget(panel->icoB[i], 40, 24);
-		WMMoveWidget(panel->icoB[i], 10 + (40 * i), 15);
+		WMMoveWidget(panel->icoB[i], 2 + (40 * i), 15);
 		WMResizeWidget(panel->shaB[i], 40, 24);
-		WMMoveWidget(panel->shaB[i], 10 + (40 * i), 15);
+		WMMoveWidget(panel->shaB[i], 2 + (40 * i), 15);
 		WMSetButtonBordered(panel->icoB[i], False);
 		WMSetButtonImagePosition(panel->icoB[i], WIPImageOnly);
 		if (i > 0) {
@@ -238,8 +238,8 @@ static void createPanel(Panel *p)
 
     /***************** Smoothed Scaling *****************/
 	panel->smoF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->smoF, 115, 110);
-	WMMoveWidget(panel->smoF, 18, 115);
+	WMResizeWidget(panel->smoF, 94, 100);
+	WMMoveWidget(panel->smoF, 420, 10);
 	WMSetFrameTitle(panel->smoF, _("Smooth Scaling"));
 	WMSetBalloonTextForView(_("Smooth scaled background images, neutralizing\n"
 				  "the `pixelization' effect. This will slow\n"
@@ -247,7 +247,7 @@ static void createPanel(Panel *p)
 
 	panel->smoB = WMCreateButton(panel->smoF, WBTToggle);
 	WMResizeWidget(panel->smoB, 64, 64);
-	WMMoveWidget(panel->smoB, 25, 25);
+	WMMoveWidget(panel->smoB, 15, 23);
 	WMSetButtonImagePosition(panel->smoB, WIPImageOnly);
 	path = LocateImage(SMOOTH_IMAGE);
 	if (path) {
@@ -279,27 +279,13 @@ static void createPanel(Panel *p)
 
     /***************** Titlebar Style Size ****************/
 	panel->titlF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->titlF, 105, 110);
-	WMMoveWidget(panel->titlF, 140, 115);
+	WMResizeWidget(panel->titlF, 212, 97);
+	WMMoveWidget(panel->titlF, 15, 120);
 	WMSetFrameTitle(panel->titlF, _("Titlebar Style"));
 
-	panel->newsB = WMCreateButton(panel->titlF, WBTOnOff);
-	WMResizeWidget(panel->newsB, 74, 40);
-	WMMoveWidget(panel->newsB, 15, 20);
-	WMSetButtonImagePosition(panel->newsB, WIPImageOnly);
-	path = LocateImage(NEWS_IMAGE);
-	if (path) {
-		icon = WMCreatePixmapFromFile(scr, path);
-		if (icon) {
-			WMSetButtonImage(panel->newsB, icon);
-			WMReleasePixmap(icon);
-		}
-		wfree(path);
-	}
-
 	panel->oldsB = WMCreateButton(panel->titlF, WBTOnOff);
-    WMResizeWidget(panel->oldsB, 37, 40);
-	WMMoveWidget(panel->oldsB, 15, 60);
+	WMResizeWidget(panel->oldsB, 60, 40);
+	WMMoveWidget(panel->oldsB, 16, 32);
 	WMSetButtonImagePosition(panel->oldsB, WIPImageOnly);
 	path = LocateImage(OLDS_IMAGE);
 	if (path) {
@@ -311,9 +297,23 @@ static void createPanel(Panel *p)
 		wfree(path);
 	}
 
+	panel->newsB = WMCreateButton(panel->titlF, WBTOnOff);
+	WMResizeWidget(panel->newsB, 60, 40);
+	WMMoveWidget(panel->newsB, 76, 32);
+	WMSetButtonImagePosition(panel->newsB, WIPImageOnly);
+	path = LocateImage(NEWS_IMAGE);
+	if (path) {
+		icon = WMCreatePixmapFromFile(scr, path);
+		if (icon) {
+			WMSetButtonImage(panel->newsB, icon);
+			WMReleasePixmap(icon);
+		}
+		wfree(path);
+	}
+
 	panel->nextB = WMCreateButton(panel->titlF, WBTOnOff);
-	WMResizeWidget(panel->nextB, 37, 40);
-	WMMoveWidget(panel->nextB, 52, 60);
+	WMResizeWidget(panel->nextB, 60, 40);
+	WMMoveWidget(panel->nextB, 136, 32);
 	WMSetButtonImagePosition(panel->nextB, WIPImageOnly);
 	path = LocateImage(NEXT_IMAGE);
 	if (path) {
@@ -332,13 +332,13 @@ static void createPanel(Panel *p)
 
     /**************** Features ******************/
 	panel->animF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->animF, 255, 115);
-	WMMoveWidget(panel->animF, 255, 10);
+	WMResizeWidget(panel->animF, 173, 100);
+	WMMoveWidget(panel->animF, 237, 10);
 	WMSetFrameTitle(panel->animF, _("Animations"));
 
 	panel->animB = WMCreateButton(panel->animF, WBTToggle);
 	WMResizeWidget(panel->animB, 64, 64);
-	WMMoveWidget(panel->animB, 15, 20);
+	WMMoveWidget(panel->animB, 15, 23);
 	WMSetButtonFont(panel->animB, font);
 	WMSetButtonText(panel->animB, _("Animations"));
 	WMSetButtonImagePosition(panel->animB, WIPAbove);
@@ -356,7 +356,7 @@ static void createPanel(Panel *p)
 
 	panel->supB = WMCreateButton(panel->animF, WBTToggle);
 	WMResizeWidget(panel->supB, 64, 64);
-	WMMoveWidget(panel->supB, 95, 20);
+	WMMoveWidget(panel->supB, 94, 23);
 	WMSetButtonFont(panel->supB, font);
 	WMSetButtonText(panel->supB, _("Superfluous"));
 	WMSetButtonImagePosition(panel->supB, WIPAbove);
@@ -380,8 +380,8 @@ static void createPanel(Panel *p)
 	panel->cmapSize = 4;
 
 	panel->dithF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->dithF, 255, 95);
-	WMMoveWidget(panel->dithF, 255, 130);
+	WMResizeWidget(panel->dithF, 277, 97);
+	WMMoveWidget(panel->dithF, 237, 120);
 	WMSetFrameTitle(panel->dithF, _("Dithering colormap for 8bpp"));
 
 	WMSetBalloonTextForView(_("Number of colors to reserve for Window Maker\n"
@@ -395,28 +395,28 @@ static void createPanel(Panel *p)
 
 	panel->dithL = WMCreateLabel(panel->dithF);
 	WMResizeWidget(panel->dithL, 75, 16);
-	WMMoveWidget(panel->dithL, 90, 50);
+	WMMoveWidget(panel->dithL, 98, 50);
 	WMSetLabelTextAlignment(panel->dithL, WACenter);
 	WMSetLabelText(panel->dithL, "64");
 
 	panel->dithS = WMCreateSlider(panel->dithF);
 	WMResizeWidget(panel->dithS, 95, 16);
-	WMMoveWidget(panel->dithS, 80, 65);
+	WMMoveWidget(panel->dithS, 90, 65);
 	WMSetSliderMinValue(panel->dithS, 2);
 	WMSetSliderMaxValue(panel->dithS, 6);
 	WMSetSliderContinuous(panel->dithS, True);
 	WMSetSliderAction(panel->dithS, updateLabel, panel);
 
 	panel->dith1L = WMCreateLabel(panel->dithF);
-	WMResizeWidget(panel->dith1L, 70, 35);
+	WMResizeWidget(panel->dith1L, 80, 35);
 	WMMoveWidget(panel->dith1L, 5, 50);
 	WMSetLabelTextAlignment(panel->dith1L, WACenter);
 	WMSetLabelFont(panel->dith1L, font);
 	WMSetLabelText(panel->dith1L, _("More colors for\napplications"));
 
 	panel->dith2L = WMCreateLabel(panel->dithF);
-	WMResizeWidget(panel->dith2L, 70, 35);
-	WMMoveWidget(panel->dith2L, 180, 50);
+	WMResizeWidget(panel->dith2L, 80, 35);
+	WMMoveWidget(panel->dith2L, 190, 50);
 	WMSetLabelTextAlignment(panel->dith2L, WACenter);
 	WMSetLabelFont(panel->dith2L, font);
 	WMSetLabelText(panel->dith2L, _("More colors for\nWindow Maker"));

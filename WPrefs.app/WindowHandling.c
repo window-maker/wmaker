@@ -58,8 +58,8 @@ typedef struct _Panel {
 
 	WMFrame *opaqF;
 	WMButton *opaqB;
-
 	WMButton *opaqresizeB;
+	WMButton *opaqkeybB;
 
 	WMFrame *tranF;
 	WMButton *tranB;
@@ -198,11 +198,10 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->tranB, GetBoolForKey("OpenTransientOnOwnerWorkspace"));
 
 	WMSetButtonSelected(panel->opaqB, GetBoolForKey("OpaqueMove"));
-
 	WMSetButtonSelected(panel->opaqresizeB, GetBoolForKey("OpaqueResize"));
+	WMSetButtonSelected(panel->opaqkeybB, GetBoolForKey("OpaqueMoveResizeKeyboard"));
 
 	WMSetButtonSelected(panel->miconB, GetBoolForKey("NoWindowOverIcons"));
-
 	WMSetButtonSelected(panel->mdockB, GetBoolForKey("NoWindowOverDock"));
 
 	if (GetBoolForKey("Attraction"))
@@ -218,17 +217,24 @@ static void storeData(_Panel * panel)
 
 	SetBoolForKey(WMGetButtonSelected(panel->miconB), "NoWindowOverIcons");
 	SetBoolForKey(WMGetButtonSelected(panel->mdockB), "NoWindowOverDock");
+
 	SetBoolForKey(WMGetButtonSelected(panel->opaqB), "OpaqueMove");
 	SetBoolForKey(WMGetButtonSelected(panel->opaqresizeB), "OpaqueResize");
+	SetBoolForKey(WMGetButtonSelected(panel->opaqkeybB), "OpaqueMoveResizeKeyboard");
+
 	SetBoolForKey(WMGetButtonSelected(panel->tranB), "OpenTransientOnOwnerWorkspace");
+
 	SetStringForKey(placements[WMGetPopUpButtonSelectedItem(panel->placP)], "WindowPlacement");
 	sprintf(x, "%i", WMGetSliderValue(panel->hsli));
 	sprintf(y, "%i", WMGetSliderValue(panel->vsli));
 	arr = WMCreatePLArray(WMCreatePLString(x), WMCreatePLString(y), NULL);
 	SetObjectForKey(arr, "WindowPlaceOrigin");
+
 	SetIntegerForKey(WMGetSliderValue(panel->resS), "EdgeResistance");
+
 	SetIntegerForKey(WMGetSliderValue(panel->resizeS), "ResizeIncrement");
 	SetBoolForKey(WMGetButtonSelected(panel->resrB), "Attraction");
+
 	WMReleasePropList(arr);
 }
 
@@ -263,7 +269,7 @@ static void createPanel(Panel * p)
 
 	panel->placP = WMCreatePopUpButton(panel->placF);
 	WMResizeWidget(panel->placP, 105, 20);
-	WMMoveWidget(panel->placP, 15, 20);
+	WMMoveWidget(panel->placP, 10, 20);
 	WMAddPopUpButtonItem(panel->placP, _("Automatic"));
 	WMAddPopUpButtonItem(panel->placP, _("Random"));
 	WMAddPopUpButtonItem(panel->placP, _("Manual"));
@@ -272,14 +278,14 @@ static void createPanel(Panel * p)
 	WMAddPopUpButtonItem(panel->placP, _("Center"));
 
 	panel->porigL = WMCreateLabel(panel->placF);
-	WMResizeWidget(panel->porigL, 120, 32);
-	WMMoveWidget(panel->porigL, 5, 45);
+	WMResizeWidget(panel->porigL, 110, 32);
+	WMMoveWidget(panel->porigL, 3, 45);
 	WMSetLabelTextAlignment(panel->porigL, WACenter);
 	WMSetLabelText(panel->porigL, _("Placement Origin"));
 
 	panel->porigvL = WMCreateLabel(panel->placF);
 	WMResizeWidget(panel->porigvL, 80, 20);
-	WMMoveWidget(panel->porigvL, 30, 75);
+	WMMoveWidget(panel->porigvL, 18, 75);
 	WMSetLabelTextAlignment(panel->porigvL, WACenter);
 
 	color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
@@ -292,20 +298,18 @@ static void createPanel(Panel * p)
 	sheight = HeightOfScreen(DefaultScreenOfDisplay(WMScreenDisplay(scr)));
 
 	if (sheight > swidth) {
-		height = 70;
 		width = 70 * swidth / sheight;
-		if (width > 240)
-			width = 240;
-		height = 240 * sheight / swidth;
+		if (width > 195)
+			width = 195;
+		height = 195 * sheight / swidth;
 	} else {
-		width = 240;
-		height = 240 * sheight / swidth;
+		height = 195 * sheight / swidth;
 		if (height > 70)
 			height = 70;
 		width = 70 * swidth / sheight;
 	}
 	WMResizeWidget(panel->porigF, width, height);
-	WMMoveWidget(panel->porigF, 130 + (240 - width) / 2, 20 + (70 - height) / 2);
+	WMMoveWidget(panel->porigF, 125 + (195 - width) / 2, 20 + (70 - height) / 2);
 
 	panel->porigW = WMCreateLabel(panel->porigF);
 	WMResizeWidget(panel->porigW, THUMB_SIZE, THUMB_SIZE);
@@ -314,14 +318,14 @@ static void createPanel(Panel * p)
 
 	panel->hsli = WMCreateSlider(panel->placF);
 	WMResizeWidget(panel->hsli, width, 12);
-	WMMoveWidget(panel->hsli, 130 + (240 - width) / 2, 20 + (70 - height) / 2 + height + 2);
+	WMMoveWidget(panel->hsli, 125 + (195 - width) / 2, 20 + (70 - height) / 2 + height + 2);
 	WMSetSliderAction(panel->hsli, sliderCallback, panel);
 	WMSetSliderMinValue(panel->hsli, 0);
 	WMSetSliderMaxValue(panel->hsli, swidth);
 
 	panel->vsli = WMCreateSlider(panel->placF);
 	WMResizeWidget(panel->vsli, 12, height);
-	WMMoveWidget(panel->vsli, 130 + (240 - width) / 2 + width + 2, 20 + (70 - height) / 2);
+	WMMoveWidget(panel->vsli, 125 + (195 - width) / 2 + width + 2, 20 + (70 - height) / 2);
 	WMSetSliderAction(panel->vsli, sliderCallback, panel);
 	WMSetSliderMinValue(panel->vsli, 0);
 	WMSetSliderMaxValue(panel->vsli, sheight);
@@ -333,7 +337,7 @@ static void createPanel(Panel * p)
     /************** Opaque Move, Resize ***************/
 	panel->opaqF = WMCreateFrame(hbox);
 	WMMapWidget(panel->opaqF);
-	WMAddBoxSubview(hbox, WMWidgetView(panel->opaqF), False, True, 122, 0, 0);
+	WMAddBoxSubview(hbox, WMWidgetView(panel->opaqF), False, True, 150, 0, 0);
 
 	WMSetFrameTitle(panel->opaqF, _("Opaque Move/Resize"));
 	WMSetBalloonTextForView(_("Whether the window contents or only a frame should\n"
@@ -342,7 +346,7 @@ static void createPanel(Panel * p)
 
 	panel->opaqB = WMCreateButton(panel->opaqF, WBTToggle);
 	WMResizeWidget(panel->opaqB, 48,48);
-	WMMoveWidget(panel->opaqB, 7, 35);
+	WMMoveWidget(panel->opaqB, 18, 20);
 	WMSetButtonImagePosition(panel->opaqB, WIPImageOnly);
 
 	path = LocateImage(NON_OPAQUE_MOVE_PIXMAP);
@@ -373,7 +377,7 @@ static void createPanel(Panel * p)
 
 	panel->opaqresizeB = WMCreateButton(panel->opaqF, WBTToggle);
 	WMResizeWidget(panel->opaqresizeB, 48,48);
-	WMMoveWidget(panel->opaqresizeB, 65, 35);
+	WMMoveWidget(panel->opaqresizeB, 86, 20);
 	WMSetButtonImagePosition(panel->opaqresizeB, WIPImageOnly);
 
 	path = LocateImage(NON_OPAQUE_RESIZE_PIXMAP);
@@ -400,48 +404,52 @@ static void createPanel(Panel * p)
 		wfree(path);
 	}
 
+	panel->opaqkeybB = WMCreateSwitchButton(panel->opaqF);
+	WMResizeWidget(panel->opaqkeybB, 100, 25);
+	WMMoveWidget(panel->opaqkeybB, 18, 76);
+	WMSetButtonText(panel->opaqkeybB, _("by keyboard"));
+
 	WMMapSubwidgets(panel->opaqF);
 
 
     /**************** Account for Icon/Dock ***************/
 	panel->maxiF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->maxiF, 205, 95);
-	WMMoveWidget(panel->maxiF, 305, 125);
+	WMResizeWidget(panel->maxiF, 205, 100);
+	WMMoveWidget(panel->maxiF, 307, 125);
 	WMSetFrameTitle(panel->maxiF, _("When maximizing..."));
 
 	panel->miconB = WMCreateSwitchButton(panel->maxiF);
 	WMResizeWidget(panel->miconB, 190, 30);
-	WMMoveWidget(panel->miconB, 10, 12);
+	WMMoveWidget(panel->miconB, 10, 14);
 	WMSetButtonText(panel->miconB, _("...do not cover icons"));
 
 	panel->mdockB = WMCreateSwitchButton(panel->maxiF);
 	WMResizeWidget(panel->mdockB, 190, 30);
-	WMMoveWidget(panel->mdockB, 10, 35);
+	WMMoveWidget(panel->mdockB, 10, 39);
 
 	WMSetButtonText(panel->mdockB, _("...do not cover dock"));
 
 	panel->resizeS = WMCreateSlider(panel->maxiF);
 	WMResizeWidget(panel->resizeS, 50, 15);
-	WMMoveWidget(panel->resizeS, 10, 70);
+	WMMoveWidget(panel->resizeS, 10, 74);
 	WMSetSliderMinValue(panel->resizeS, 0);
 	WMSetSliderMaxValue(panel->resizeS, 100);
 	WMSetSliderAction(panel->resizeS, resizeCallback, panel);
 
 	panel->resizeL = WMCreateLabel(panel->maxiF);
 	WMResizeWidget(panel->resizeL, 30, 15);
-	WMMoveWidget(panel->resizeL, 60, 70);
+	WMMoveWidget(panel->resizeL, 60, 74);
 
 	panel->resizeTextL = WMCreateLabel(panel->maxiF);
 	WMSetLabelText(panel->resizeTextL, "Mod+Wheel\nresize increment");
 	WMResizeWidget(panel->resizeTextL, 110, 30);
-	WMMoveWidget(panel->resizeTextL, 90, 62);
+	WMMoveWidget(panel->resizeTextL, 90, 66);
 
 	WMMapSubwidgets(panel->maxiF);
 
     /**************** Edge Resistance  ****************/
-
 	panel->resF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->resF, 285, 45);
+	WMResizeWidget(panel->resF, 289, 50);
 	WMMoveWidget(panel->resF, 8, 125);
 	WMSetFrameTitle(panel->resF, _("Edge Resistance"));
 
@@ -452,33 +460,32 @@ static void createPanel(Panel * p)
 
 	panel->resS = WMCreateSlider(panel->resF);
 	WMResizeWidget(panel->resS, 80, 15);
-	WMMoveWidget(panel->resS, 10, 20);
+	WMMoveWidget(panel->resS, 10, 22);
 	WMSetSliderMinValue(panel->resS, 0);
 	WMSetSliderMaxValue(panel->resS, 80);
 	WMSetSliderAction(panel->resS, resistanceCallback, panel);
 
 	panel->resL = WMCreateLabel(panel->resF);
 	WMResizeWidget(panel->resL, 30, 15);
-	WMMoveWidget(panel->resL, 95, 20);
+	WMMoveWidget(panel->resL, 95, 22);
 
 	panel->resaB = WMCreateRadioButton(panel->resF);
 	WMMoveWidget(panel->resaB, 130, 15);
-	WMResizeWidget(panel->resaB, 70, 25);
+	WMResizeWidget(panel->resaB, 70, 27);
 	WMSetButtonText(panel->resaB, _("Resist"));
 
 	panel->resrB = WMCreateRadioButton(panel->resF);
 	WMMoveWidget(panel->resrB, 200, 15);
-	WMResizeWidget(panel->resrB, 70, 25);
+	WMResizeWidget(panel->resrB, 70, 27);
 	WMSetButtonText(panel->resrB, _("Attract"));
 	WMGroupButtons(panel->resrB, panel->resaB);
 
 	WMMapSubwidgets(panel->resF);
 
     /**************** Transients on Parent Workspace ****************/
-
 	panel->tranF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->tranF, 285, 40);
-	WMMoveWidget(panel->tranF, 8, 180);
+	WMResizeWidget(panel->tranF, 289, 40);
+	WMMoveWidget(panel->tranF, 8, 185);
 
 	panel->tranB = WMCreateSwitchButton(panel->tranF);
 	WMMoveWidget(panel->tranB, 10, 5);

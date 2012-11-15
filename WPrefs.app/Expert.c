@@ -22,9 +22,9 @@
 #include "WPrefs.h"
 
 #ifdef XKB_MODELOCK
-#define NUMITEMS  12
+#define NUMITEMS  10
 #else
-#define NUMITEMS  11
+#define NUMITEMS  9
 #endif
 
 typedef struct _Panel {
@@ -54,12 +54,10 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->swi[4], GetBoolForKey("DontConfirmKill"));
 	WMSetButtonSelected(panel->swi[5], GetBoolForKey("DisableBlinking"));
 	WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
-	WMSetButtonSelected(panel->swi[7], GetBoolForKey("SingleClickLaunch"));
-	WMSetButtonSelected(panel->swi[8], GetBoolForKey("CycleActiveHeadOnly"));
-	WMSetButtonSelected(panel->swi[9], GetBoolForKey("ShowClipTitle"));
-	WMSetButtonSelected(panel->swi[10], GetBoolForKey("OpaqueMoveResizeKeyboard"));
+	WMSetButtonSelected(panel->swi[7], GetBoolForKey("CycleActiveHeadOnly"));
+	WMSetButtonSelected(panel->swi[8], GetBoolForKey("ShowClipTitle"));
 #ifdef XKB_MODELOCK
-	WMSetButtonSelected(panel->swi[11], GetBoolForKey("KbdModeLock"));
+	WMSetButtonSelected(panel->swi[9], GetBoolForKey("KbdModeLock"));
 #endif /* XKB_MODELOCK */
 }
 
@@ -98,17 +96,15 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->swi[4], _("Disable confirmation panel for the Kill command."));
 	WMSetButtonText(panel->swi[5], _("Disable selection animation for selected icons."));
 	WMSetButtonText(panel->swi[6], _("Smooth font edges (needs restart)."));
-	WMSetButtonText(panel->swi[7], _("Launch applications and restore windows with a single click."));
-	WMSetButtonText(panel->swi[8], _("Cycle windows only on the active head."));
-	WMSetButtonText(panel->swi[9], _("Show workspace title on Clip."));
-	WMSetButtonText(panel->swi[10], _("Opaque Move,Resize with keyboard."));
+	WMSetButtonText(panel->swi[7], _("Cycle windows only on the active head."));
+	WMSetButtonText(panel->swi[8], _("Show workspace title on Clip."));
 #ifdef XKB_MODELOCK
-	WMSetButtonText(panel->swi[11], _("Enable keyboard language switch button in window titlebars."));
+	WMSetButtonText(panel->swi[9], _("Enable keyboard language switch button in window titlebars."));
 #endif /* XKB_MODELOCK */
 
 	/* If the item is default true, enable the button here */
 	WMSetButtonEnabled(panel->swi[6], True);
-	WMSetButtonEnabled(panel->swi[9], True);
+	WMSetButtonEnabled(panel->swi[8], True);
 
 	WMMapSubwidgets(panel->box);
 	WMSetScrollViewContentView(sv, WMWidgetView(f));
@@ -130,12 +126,10 @@ static void storeDefaults(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "DontConfirmKill");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DisableBlinking");
 	SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "AntialiasedText");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "SingleClickLaunch");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[8]), "CycleActiveHeadOnly");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[9]), "ShowClipTitle");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[10]), "OpaqueMoveResizeKeyboard");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "CycleActiveHeadOnly");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[8]), "ShowClipTitle");
 #ifdef XKB_MODELOCK
-	SetBoolForKey(WMGetButtonSelected(panel->swi[11]), "KbdModeLock");
+	SetBoolForKey(WMGetButtonSelected(panel->swi[9]), "KbdModeLock");
 #endif /* XKB_MODELOCK */
 }
 
