@@ -70,7 +70,6 @@ RImage *wIconValidateIconSize(RImage *icon, int max_size);
 char *wIconStore(WIcon *icon);
 char *get_name_for_instance_class(char *wm_instance, char *wm_class);
 
-#ifdef NEWAPPICON
 void wIconSetHighlited(WIcon *icon, Bool flag);
-#endif /* NEWAPPICON */
+
 #endif /* WMICON_H_ */

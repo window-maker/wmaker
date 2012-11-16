@@ -35,9 +35,6 @@
 /* If you want animations for iconification, shading, icon arrangement etc. */
 #define ANIMATIONS
 
-/* If you want the application icon to be highlighted when it has the focus */
-#define NEWAPPICON
-
 /* support for XDND drop in the Dock. Experimental */
 /*#define XDND*/
 

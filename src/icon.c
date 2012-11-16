@@ -554,7 +554,6 @@ static void cycleColor(void *data)
 	icon->handlerID = WMAddTimerHandler(COLOR_CYCLE_DELAY, cycleColor, icon);
 }
 
-#ifdef NEWAPPICON
 void wIconSetHighlited(WIcon *icon, Bool flag)
 {
 	if (icon->highlighted == flag)
@@ -563,7 +562,6 @@ void wIconSetHighlited(WIcon *icon, Bool flag)
 	icon->highlighted = flag;
 	update_icon_pixmap(icon);
 }
-#endif
 
 void wIconSelect(WIcon * icon)
 {

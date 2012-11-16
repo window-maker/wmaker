@@ -1658,7 +1658,8 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 	WApplication *napp = scr->focused_window ? wApplicationOf(scr->focused_window->main_window) : NULL;
 	if (oapp && oapp != napp) {
 		wAppMenuUnmap(oapp->menu);
-		wApplicationDeactivate(oapp);
+		if (wPreferences.highlight_active_app)
+			wApplicationDeactivate(oapp);
 	}
 
 	wNETCleanupFrameExtents(wwin);

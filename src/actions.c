@@ -136,7 +136,8 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 
 		if (oapp) {
 			wAppMenuUnmap(oapp->menu);
-			wApplicationDeactivate(oapp);
+			if (wPreferences.highlight_active_app)
+				wApplicationDeactivate(oapp);
 		}
 
 		WMPostNotificationName(WMNChangedFocus, NULL, (void *)True);
@@ -199,7 +200,8 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 
 		if (oapp && oapp != napp) {
 			wAppMenuUnmap(oapp->menu);
-			wApplicationDeactivate(oapp);
+			if (wPreferences.highlight_active_app)
+				wApplicationDeactivate(oapp);
 		}
 	}
 
@@ -213,7 +215,7 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 		if (wwin->flags.mapped)
 			wAppMenuMap(napp->menu, wwin);
 	}
-	if (napp)
+	if (napp && wPreferences.highlight_active_app)
 		wApplicationActivate(napp);
 
 	XFlush(dpy);

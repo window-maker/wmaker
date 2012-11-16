@@ -194,7 +194,6 @@ void wApplicationDestroy(WApplication * wapp)
 
 	XDeleteContext(dpy, wapp->main_window, wAppWinContext);
 	wAppMenuDestroy(wapp->menu);
-	wApplicationDeactivate(wapp);
 
 	/* Remove application icon */
 	removeAppIconFor(wapp);
@@ -212,20 +211,16 @@ void wApplicationDestroy(WApplication * wapp)
 
 void wApplicationActivate(WApplication *wapp)
 {
-#ifdef NEWAPPICON
 	if (wapp->app_icon) {
 		wIconSetHighlited(wapp->app_icon->icon, True);
 		wAppIconPaint(wapp->app_icon);
 	}
-#endif
 }
 
 void wApplicationDeactivate(WApplication *wapp)
 {
-#ifdef NEWAPPICON
 	if (wapp->app_icon) {
 		wIconSetHighlited(wapp->app_icon->icon, False);
 		wAppIconPaint(wapp->app_icon);
 	}
-#endif
 }

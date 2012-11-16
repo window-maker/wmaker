@@ -351,12 +351,12 @@ typedef struct WPreferences {
 #endif
     char no_dithering;		       /* use dithering or not */
     char no_animations;		       /* enable/disable animations */
-    char no_autowrap;		       /* wrap workspace when window is moved
-    * to the edge */
+    char no_autowrap;		       /* wrap workspace when window is moved to the edge */
 
+    char highlight_active_app;         /* show the focused app by highlighting its icon */
     char auto_arrange_icons;	       /* automagically arrange icons */
     char icon_box_position;	       /* position to place icons */
-    signed char iconification_style;          /* position to place icons */
+    signed char iconification_style;   /* position to place icons */
     char disable_root_mouse;	       /* disable button events in root window */
     char auto_focus;		       /* focus window when it's mapped */
     char *icon_back_file;	       /* background image for icons */
