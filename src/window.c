@@ -1144,11 +1144,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			y -= wwin->frame->top_width + wwin->frame->bottom_width;
 	}
 
-	/* wWindowConfigure() will account for the window border
-	 * when placing so the window would be shifted without
-	 * the adjustment below
-	 */
-	if (HAS_BORDER(wwin)) {
+	{
 		WMRect rect;
 		WArea usableArea;
 		int head;
@@ -1161,10 +1157,24 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		head = wGetHeadForRect(scr, rect);
 		usableArea = wGetUsableAreaForHead(scr, head, NULL, True);
 
-		if (x >= usableArea.x1 + 2 * FRAME_BORDER_WIDTH)
-			x -= 2 * FRAME_BORDER_WIDTH;
-		if (y >= usableArea.y1 + 2 * FRAME_BORDER_WIDTH)
-			y -= 2 * FRAME_BORDER_WIDTH;
+		/* wWindowConfigure() will account for the frame
+		 * when placing so the window would be shifted without
+		 * the adjustment below
+		 */
+
+		if (y >= usableArea.y1 + wwin->frame->top_width)
+			y -= wwin->frame->top_width;
+
+		/* wWindowConfigure() will account for the window border
+		 * when placing so the window would be shifted without
+		 * the adjustment below
+		 */
+		if (HAS_BORDER(wwin)) {
+			if (x >= usableArea.x1 + FRAME_BORDER_WIDTH)
+				x -= FRAME_BORDER_WIDTH;
+			if (y >= usableArea.y1 + FRAME_BORDER_WIDTH)
+				y -= FRAME_BORDER_WIDTH;
+		}
 	}
 
 	/*
