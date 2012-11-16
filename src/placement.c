@@ -523,6 +523,7 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 	WScreen *scr = wwin->screen_ptr;
 	int h = WMFontHeight(scr->title_font)
 		+ (wPreferences.window_title_clearance + TITLEBAR_EXTEND_SPACE) * 2;
+	int border_width;
 
 	if (h > wPreferences.window_title_max_height)
 		h = wPreferences.window_title_max_height;
@@ -577,13 +578,14 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 	 * this will also take dock/clip etc.. into account
 	 * aswell as being xinerama friendly
 	 */
-	if (*x_ret + width > usableArea.x2)
-		*x_ret = usableArea.x2 - width;
+	border_width = (HAS_BORDER(wwin)) ? 2 * FRAME_BORDER_WIDTH : 0;
+	if (*x_ret + border_width + width > usableArea.x2)
+		*x_ret = usableArea.x2 - border_width - width;
 	if (*x_ret < usableArea.x1)
 		*x_ret = usableArea.x1;
 
-	if (*y_ret + height > usableArea.y2)
-		*y_ret = usableArea.y2 - height;
+	if (*y_ret + border_width + height > usableArea.y2)
+		*y_ret = usableArea.y2 - border_width - height;
 	if (*y_ret < usableArea.y1)
 		*y_ret = usableArea.y1;
 }

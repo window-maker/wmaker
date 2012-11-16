@@ -81,6 +81,13 @@ void wClientRestore(WWindow * wwin)
 	if (gy > 0)
 		wwin->frame_y += (wwin->frame->top_width + wwin->frame->bottom_width);
 #endif
+	/* account for titlebar and border */
+	wwin->frame_y += wwin->frame->top_width;
+	if (HAS_BORDER(wwin)) {
+		wwin->frame_x += FRAME_BORDER_WIDTH;
+		wwin->frame_y += FRAME_BORDER_WIDTH;
+	}
+
 	XSetWindowBorderWidth(dpy, wwin->client_win, wwin->old_border_width);
 	XReparentWindow(dpy, wwin->client_win, wwin->screen_ptr->root_win, wwin->frame_x, wwin->frame_y);
 
