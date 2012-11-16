@@ -53,10 +53,13 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->swi[3], GetBoolForKey("UseSaveUnders"));
 	WMSetButtonSelected(panel->swi[4], GetBoolForKey("DontConfirmKill"));
 	WMSetButtonSelected(panel->swi[5], GetBoolForKey("DisableBlinking"));
-	WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
+	if (GetStringForKey("AntialiasedText"))
+		WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
 	WMSetButtonSelected(panel->swi[7], GetBoolForKey("CycleActiveHeadOnly"));
-	WMSetButtonSelected(panel->swi[8], GetBoolForKey("ShowClipTitle"));
-	WMSetButtonSelected(panel->swi[9], GetBoolForKey("HighlightActiveApp"));
+	if (GetStringForKey("ShowClipTitle"))
+		WMSetButtonSelected(panel->swi[8], GetBoolForKey("ShowClipTitle"));
+	if (GetStringForKey("HighlightActiveApp"))
+		WMSetButtonSelected(panel->swi[9], GetBoolForKey("HighlightActiveApp"));
 #ifdef XKB_MODELOCK
 	WMSetButtonSelected(panel->swi[10], GetBoolForKey("KbdModeLock"));
 #endif /* XKB_MODELOCK */
@@ -104,10 +107,10 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->swi[10], _("Enable keyboard language switch button in window titlebars."));
 #endif /* XKB_MODELOCK */
 
-	/* If the item is default true, enable the button here */
-	WMSetButtonEnabled(panel->swi[6], True);
-	WMSetButtonEnabled(panel->swi[8], True);
-	WMSetButtonEnabled(panel->swi[9], True);
+	/* If the item is default true, switch it on here */
+	WMSetButtonSelected(panel->swi[6], True);
+	WMSetButtonSelected(panel->swi[8], True);
+	WMSetButtonSelected(panel->swi[9], True);
 
 	WMMapSubwidgets(panel->box);
 	WMSetScrollViewContentView(sv, WMWidgetView(f));

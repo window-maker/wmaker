@@ -127,7 +127,8 @@ static void showData(_Panel * panel)
 	}
 
 	WMSetButtonSelected(panel->bounceB, GetBoolForKey("DoNotMakeAppIconsBounce"));
-	WMSetButtonSelected(panel->bounceUrgB, GetBoolForKey("BounceAppIconsWhenUrgent"));
+	if (GetStringForKey("BounceAppIconsWhenUrgent"))
+		WMSetButtonSelected(panel->bounceUrgB, GetBoolForKey("BounceAppIconsWhenUrgent"));
 	WMSetButtonSelected(panel->bounceRaisB, GetBoolForKey("RaiseAppIconsWhenBouncing"));
 
 	WMSetButtonSelected(panel->ballB[0], GetBoolForKey("WindowTitleBalloons"));
@@ -278,7 +279,7 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->bounceUrgB, 210, 30);
 	WMMoveWidget(panel->bounceUrgB, 15, 39);
 	WMSetButtonText(panel->bounceUrgB, _("Bounce AppIcon when the application wants attention."));
-	WMSetButtonEnabled(panel->bounceUrgB, True); /* defaults to true */
+	WMSetButtonSelected(panel->bounceUrgB, True); /* defaults to true */
 
 	panel->bounceRaisB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->bounceRaisB, 210, 25);
