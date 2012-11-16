@@ -21,7 +21,7 @@ libExtraWINGs_la_SOURCES = 	\
 	wtabledelegates.h 
 
 INCLUDES = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs \
-	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@ -DDEBUG
+	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@
 
 LDADD= $(top_builddir)/WINGs/libWINGs.la $(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/WINGs/libWUtil.la \

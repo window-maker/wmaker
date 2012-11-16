@@ -73,6 +73,20 @@ AC_PROG_LN_S
 AC_PROG_GCC_TRADITIONAL
 AC_PROG_LIBTOOL
 
+
+dnl Debugging Options
+dnl =================
+AC_ARG_ENABLE(debug,
+    [AS_HELP_STRING([--enable-debug], [enable debugging options, @<:@default=no@:>@])],
+    [AS_CASE(["$enableval"],
+        [yes], [debug=yes],
+        [no],  [debug=no],
+        [AC_MSG_ERROR([bad value $enableval for --enable-debug])] )],
+    [debug=no])
+AS_IF([test "x$debug" = "xyes"],
+    [CFLAGS="-g -O0 -DDEBUG"])
+
+
 AX_CFLAGS_GCC_OPTION(-Wall)
 AX_CFLAGS_GCC_OPTION(-Wextra -Wno-sign-compare -Wno-unused-parameter)
 
@@ -94,7 +108,7 @@ case "${host}" in
 	;;
 	*-*-openbsd*)
 		WM_OSDEP="bsd"
-	CFLAGS="$CFLAGS -DOPENBSD"
+	        CFLAGS="$CFLAGS -DOPENBSD"
 	;;
 	*-*-dragonfly*)
 		WM_OSDEP="bsd"
@@ -901,6 +915,7 @@ dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then
 	echo "Installation path for translations  : $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"
 fi
+AS_IF([test "x$debug" = "xyes"], [echo "Debug information enabled           : $debug"])
 echo
 
 dnl WM_PRINT_REDCRAP_BUG_STATUS
