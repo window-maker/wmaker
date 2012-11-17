@@ -21,11 +21,60 @@
 
 #include "WPrefs.h"
 
+/* This structure containts the list of all the check-buttons to display in the
+ * expert tab of the window with the corresponding information for effect
+ */
+static const struct {
+	char *label; /* Text displayed to user */
+
+	int def_state;  /* True/False: the default value, if not defined in current config */
+
+	enum {
+		OPTION_WMAKER,
+		OPTION_USERDEF
+	} class;
+
+	char *op_name; /* The identifier for the option in the config file */
+
+} expert_options[] = {
+
+	{ N_("Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."),
+	  /* default: */ False, OPTION_WMAKER, "DisableMiniwindows" },
+
+	{ N_("Do not set non-WindowMaker specific parameters (do not use xset)."),
+	  /* default: */ False, OPTION_USERDEF, "NoXSetStuff" },
+
+	{ N_("Automatically save session when exiting Window Maker."),
+	  /* default: */ False, OPTION_WMAKER, "SaveSessionOnExit" },
+
+	{ N_("Use SaveUnder in window frames, icons, menus and other objects."),
+	  /* default: */ False, OPTION_WMAKER, "UseSaveUnders" },
+
+	{ N_("Disable confirmation panel for the Kill command."),
+	  /* default: */ False, OPTION_WMAKER, "DontConfirmKill" },
+
+	{ N_("Disable selection animation for selected icons."),
+	  /* default: */ False, OPTION_WMAKER, "DisableBlinking" },
+
+	{ N_("Smooth font edges (needs restart)."),
+	  /* default: */ True, OPTION_WMAKER, "AntialiasedText" },
+
+	{ N_("Cycle windows only on the active head."),
+	  /* default: */ False, OPTION_WMAKER, "CycleActiveHeadOnly" },
+
+	{ N_("Show workspace title on Clip."),
+	  /* default: */ True, OPTION_WMAKER, "ShowClipTitle" },
+
+	{ N_("Highlight the icon of the application when it has the focus."),
+	  /* default: */ True, OPTION_WMAKER, "HighlightActiveApp" },
+
 #ifdef XKB_MODELOCK
-#define NUMITEMS  11
-#else
-#define NUMITEMS  10
-#endif
+	{ N_("Enable keyboard language switch button in window titlebars."),
+	  /* default: */ False, OPTION_WMAKER, "KbdModeLock" }
+#endif /* XKB_MODELOCK */
+
+};
+
 
 typedef struct _Panel {
 	WMBox *box;
@@ -37,40 +86,20 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMButton *swi[NUMITEMS];
+	WMButton *swi[sizeof(expert_options) / sizeof(expert_options[0])];
 
 } _Panel;
 
 #define ICON_FILE	"expert"
 
-static void showData(_Panel * panel)
-{
-	WMUserDefaults *udb = WMGetStandardUserDefaults();
-
-	WMSetButtonSelected(panel->swi[0], GetBoolForKey("DisableMiniwindows"));
-	WMSetButtonSelected(panel->swi[1], WMGetUDBoolForKey(udb, "NoXSetStuff"));
-	WMSetButtonSelected(panel->swi[2], GetBoolForKey("SaveSessionOnExit"));
-	WMSetButtonSelected(panel->swi[3], GetBoolForKey("UseSaveUnders"));
-	WMSetButtonSelected(panel->swi[4], GetBoolForKey("DontConfirmKill"));
-	WMSetButtonSelected(panel->swi[5], GetBoolForKey("DisableBlinking"));
-	if (GetStringForKey("AntialiasedText"))
-		WMSetButtonSelected(panel->swi[6], GetBoolForKey("AntialiasedText"));
-	WMSetButtonSelected(panel->swi[7], GetBoolForKey("CycleActiveHeadOnly"));
-	if (GetStringForKey("ShowClipTitle"))
-		WMSetButtonSelected(panel->swi[8], GetBoolForKey("ShowClipTitle"));
-	if (GetStringForKey("HighlightActiveApp"))
-		WMSetButtonSelected(panel->swi[9], GetBoolForKey("HighlightActiveApp"));
-#ifdef XKB_MODELOCK
-	WMSetButtonSelected(panel->swi[10], GetBoolForKey("KbdModeLock"));
-#endif /* XKB_MODELOCK */
-}
 
 static void createPanel(Panel * p)
 {
 	_Panel *panel = (_Panel *) p;
 	WMScrollView *sv;
 	WMFrame *f;
-	int i;
+	WMUserDefaults *udb;
+	int i, state;
 
 	panel->box = WMCreateBox(panel->parent);
 	WMSetViewExpandsToParent(WMWidgetView(panel->box), 2, 2, 2, 2);
@@ -83,61 +112,54 @@ static void createPanel(Panel * p)
 	WMSetScrollViewHasHorizontalScroller(sv, False);
 
 	f = WMCreateFrame(panel->box);
-	WMResizeWidget(f, 495, NUMITEMS * 25 + 8);
+	WMResizeWidget(f, 495, (sizeof(expert_options) / sizeof(expert_options[0])) * 25 + 8);
 	WMSetFrameRelief(f, WRFlat);
 
-	for (i = 0; i < NUMITEMS; i++) {
+	udb = WMGetStandardUserDefaults();
+	for (i = 0; i < sizeof(expert_options) / sizeof(expert_options[0]); i++) {
 		panel->swi[i] = WMCreateSwitchButton(f);
 		WMResizeWidget(panel->swi[i], FRAME_WIDTH - 40, 25);
 		WMMoveWidget(panel->swi[i], 5, 5 + i * 25);
+
+		WMSetButtonText(panel->swi[i], _(expert_options[i].label));
+
+		switch (expert_options[i].class) {
+		case OPTION_WMAKER:
+			if (GetStringForKey(expert_options[i].op_name))
+				state = GetBoolForKey(expert_options[i].op_name);
+			else
+				state = expert_options[i].def_state;
+			break;
+
+		case OPTION_USERDEF:
+			state = WMGetUDBoolForKey(udb, expert_options[i].op_name);
+			break;
+
+		}
+		WMSetButtonSelected(panel->swi[i], state);
 	}
-
-	WMSetButtonText(panel->swi[0],
-			_("Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."));
-	WMSetButtonText(panel->swi[1], _("Do not set non-WindowMaker specific parameters (do not use xset)."));
-	WMSetButtonText(panel->swi[2], _("Automatically save session when exiting Window Maker."));
-	WMSetButtonText(panel->swi[3], _("Use SaveUnder in window frames, icons, menus and other objects."));
-	WMSetButtonText(panel->swi[4], _("Disable confirmation panel for the Kill command."));
-	WMSetButtonText(panel->swi[5], _("Disable selection animation for selected icons."));
-	WMSetButtonText(panel->swi[6], _("Smooth font edges (needs restart)."));
-	WMSetButtonText(panel->swi[7], _("Cycle windows only on the active head."));
-	WMSetButtonText(panel->swi[8], _("Show workspace title on Clip."));
-	WMSetButtonText(panel->swi[9], _("Highlight the icon of the application when it has the focus."));
-#ifdef XKB_MODELOCK
-	WMSetButtonText(panel->swi[10], _("Enable keyboard language switch button in window titlebars."));
-#endif /* XKB_MODELOCK */
-
-	/* If the item is default true, switch it on here */
-	WMSetButtonSelected(panel->swi[6], True);
-	WMSetButtonSelected(panel->swi[8], True);
-	WMSetButtonSelected(panel->swi[9], True);
 
 	WMMapSubwidgets(panel->box);
 	WMSetScrollViewContentView(sv, WMWidgetView(f));
 	WMRealizeWidget(panel->box);
-
-	showData(panel);
 }
 
 static void storeDefaults(_Panel * panel)
 {
 	WMUserDefaults *udb = WMGetStandardUserDefaults();
+	int i;
 
-	SetBoolForKey(WMGetButtonSelected(panel->swi[0]), "DisableMiniwindows");
+	for (i = 0; i < sizeof(expert_options) / sizeof(expert_options[0]); i++) {
+		switch (expert_options[i].class) {
+		case OPTION_WMAKER:
+			SetBoolForKey(WMGetButtonSelected(panel->swi[i]), expert_options[i].op_name);
+			break;
 
-	WMSetUDBoolForKey(udb, WMGetButtonSelected(panel->swi[1]), "NoXSetStuff");
-
-	SetBoolForKey(WMGetButtonSelected(panel->swi[2]), "SaveSessionOnExit");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[3]), "UseSaveUnders");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[4]), "DontConfirmKill");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[5]), "DisableBlinking");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[6]), "AntialiasedText");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[7]), "CycleActiveHeadOnly");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[8]), "ShowClipTitle");
-	SetBoolForKey(WMGetButtonSelected(panel->swi[9]), "HighlightActiveApp");
-#ifdef XKB_MODELOCK
-	SetBoolForKey(WMGetButtonSelected(panel->swi[10]), "KbdModeLock");
-#endif /* XKB_MODELOCK */
+		case OPTION_USERDEF:
+			WMSetUDBoolForKey(udb, WMGetButtonSelected(panel->swi[i]), expert_options[i].op_name);
+			break;
+		}
+	}
 }
 
 Panel *InitExpert(WMScreen * scr, WMWidget * parent)
