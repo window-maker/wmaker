@@ -1178,6 +1178,17 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		}
 	}
 
+	/* If this is a newly-mapped window which had a border,
+	 * the absolute co-ordinates reported to us are actually
+	 * the co-ordinates of the border.  We, however, track
+	 * the absolute co-ordinates of the client window, offset
+	 * by the title bar and frame border.  As a result
+	 * we need to offset placement of the client by the border
+	 * size so its position matches what we expect.
+	 */
+	x += wwin->old_border_width;
+	y += wwin->old_border_width;
+
 	/*
 	 * wWindowConfigure() will init the client window's size
 	 * (wwin->client.{width,height}) and all other geometry
@@ -2226,7 +2237,9 @@ void wWindowConfigureBorders(WWindow *wwin)
 {
 	if (wwin->frame) {
 		int flags;
-		int newy, oldh;
+		int newx, newy, oldh;
+		int border_width;
+		XWindowAttributes attr;
 
 		flags = WFF_LEFT_BUTTON | WFF_RIGHT_BUTTON;
 
@@ -2244,13 +2257,17 @@ void wWindowConfigureBorders(WWindow *wwin)
 		if (wwin->flags.shaded)
 			flags |= WFF_IS_SHADED;
 
-		oldh = wwin->frame->top_width;
+		if (!XGetWindowAttributes(dpy, wwin->frame->core->window, &attr))
+				attr.border_width = 0;
+		border_width = (flags & WFF_BORDER) ? FRAME_BORDER_WIDTH : 0;
+		oldh = wwin->frame->top_width + attr.border_width;
 		wFrameWindowUpdateBorders(wwin->frame, flags);
-		if (oldh != wwin->frame->top_width) {
-			newy = wwin->frame_y + oldh - wwin->frame->top_width;
+		if (oldh != wwin->frame->top_width + border_width) {
+			newx = wwin->frame_x + attr.border_width - border_width;
+			newy = wwin->frame_y + oldh - border_width - wwin->frame->top_width;
 
 			XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
-			wWindowConfigure(wwin, wwin->frame_x, newy, wwin->client.width, wwin->client.height);
+			wWindowConfigure(wwin, newx, newy, wwin->client.width, wwin->client.height);
 		}
 
 		flags = 0;

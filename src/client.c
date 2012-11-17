@@ -83,6 +83,8 @@ void wClientRestore(WWindow * wwin)
 #endif
 	/* account for titlebar and border */
 	wwin->frame_y += wwin->frame->top_width;
+	wwin->frame_x -= wwin->old_border_width;
+	wwin->frame_y -= wwin->old_border_width;
 	if (HAS_BORDER(wwin)) {
 		wwin->frame_x += FRAME_BORDER_WIDTH;
 		wwin->frame_y += FRAME_BORDER_WIDTH;
