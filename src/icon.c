@@ -640,7 +640,7 @@ void update_icon_pixmap(WIcon *icon)
 	/* If dockapp, put inside the icon */
 	if (icon->icon_win != None) {
 		/* file_image is NULL, because is docked app */
-		icon_update_pixmap(icon, icon->file_image);
+		icon_update_pixmap(icon, NULL);
 		set_dockapp_in_icon(icon);
 	}
 
