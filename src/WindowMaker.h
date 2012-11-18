@@ -439,7 +439,6 @@ typedef struct WPreferences {
         unsigned int noupdates:1;      /* don't require ~/GNUstep (-static) */
         unsigned int noautolaunch:1;   /* don't autolaunch apps */
         unsigned int norestore:1;      /* don't restore session */
-        unsigned int create_stdcmap:1; /* create std colormap */
 #ifndef HAVE_INOTIFY
 	unsigned int nopolling:1;      /* don't poll the defaults database for changes */
 #endif

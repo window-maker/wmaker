@@ -596,12 +596,8 @@ WScreen *wScreenInit(int screen_number)
 	if (rattr.colors_per_channel < 2)
 		rattr.colors_per_channel = 2;
 
-	/* will only be accounted for in PseudoColor */
-	if (wPreferences.flags.create_stdcmap) {
-		rattr.standard_colormap_mode = RCreateStdColormap;
-	} else {
-		rattr.standard_colormap_mode = RUseStdColormap;
-	}
+	/* Use standard colormap */
+	rattr.standard_colormap_mode = RUseStdColormap;
 
 	if (getWVisualID(screen_number) >= 0) {
 		rattr.flags |= RC_VisualID;
