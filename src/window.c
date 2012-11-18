@@ -596,6 +596,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	/* mutex. */
 	XGrabServer(dpy);
 	XSync(dpy, False);
+
 	/* make sure the window is still there */
 	if (!XGetWindowAttributes(dpy, window, &wattribs)) {
 		XUngrabServer(dpy);
@@ -621,7 +622,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	title = wNETWMGetWindowName(window);
 	if (title)
 		wwin->flags.net_has_title = 1;
-	if (!title && !wFetchName(dpy, window, &title))
+	else if (!wFetchName(dpy, window, &title))
 		title = NULL;
 
 	XSaveContext(dpy, window, wWinContext, (XPointer) & wwin->client_descriptor);
@@ -639,9 +640,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	}
 #endif
 
-	/*
-	 * Get hints and other information in properties
-	 */
+	/* Get hints and other information in properties */
 	PropGetWMClass(window, &wwin->wm_class, &wwin->wm_instance);
 
 	/* setup descriptor */
@@ -676,7 +675,6 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	if (wwin->wm_hints) {
 		if (wwin->wm_hints->flags & StateHint) {
-
 			if (wwin->wm_hints->initial_state == IconicState) {
 				wwin->flags.miniaturized = 1;
 			} else if (wwin->wm_hints->initial_state == WithdrawnState) {
@@ -784,7 +782,6 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 				}
 			}
 			wwin->fake_group = fPtr;
-			/*wwin->group_id = fPtr->leader; */
 			wwin->main_window = fPtr->leader;
 			wfree(buffer);
 		} else {
@@ -802,11 +799,12 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 				fPtr->origLeader = wwin->main_window;
 			}
 			wwin->fake_group = fPtr;
-			/*wwin->group_id = fPtr->leader; */
 			wwin->main_window = fPtr->leader;
 		}
+
 		if (instance)
 			free(instance);
+
 		if (class)
 			free(class);
 #undef ADEQUATE
@@ -825,11 +823,10 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	/* apply previous state if it exists and we're in startup */
 	if (scr->flags.startup && wm_state >= 0) {
-		if (wm_state == IconicState) {
+		if (wm_state == IconicState)
 			wwin->flags.miniaturized = 1;
-		} else if (wm_state == WithdrawnState) {
+		else if (wm_state == WithdrawnState)
 			withdraw = True;
-		}
 	}
 
 	/* if there is a saved state (from file), restore it */
@@ -909,6 +906,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 				}
 			}
 		}
+
 		if (wstate != NULL)
 			wfree(wstate);
 	}
@@ -944,6 +942,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		width = win_state->state->w;
 		height = win_state->state->h;
 	}
+
 	wWindowConstrainSize(wwin, &width, &height);
 
 	/* do not ask for window placement if the window is
@@ -972,9 +971,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 				y = transientOwner->frame_y +
 				    abs((transientOwner->frame->core->height - height) / 3) + offs;
 
-				/*
-				 * limit transient windows to be inside their parent's head
-				 */
+				/* limit transient windows to be inside their parent's head */
 				rect.pos.x = transientOwner->frame_x;
 				rect.pos.y = transientOwner->frame_y;
 				rect.size.width = transientOwner->frame->core->width;
@@ -997,28 +994,25 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 				PlaceWindow(wwin, &x, &y, width, height);
 				frame_adjustment = False;
 			}
-			if (wPreferences.window_placement == WPM_MANUAL) {
+
+			if (wPreferences.window_placement == WPM_MANUAL)
 				dontBring = True;
-			}
+
 		} else if (scr->xine_info.count && (wwin->normal_hints->flags & PPosition)) {
 			int head, flags;
 			WMRect rect;
 			int reposition = 0;
 
-			/*
-			 * Make spash screens come out in the center of a head
+			/* Make spash screens come out in the center of a head
 			 * trouble is that most splashies never get here
 			 * they are managed trough atoms but god knows where.
 			 * Dan, do you know ? -peter
 			 *
 			 * Most of them are not managed, they have set
 			 * OverrideRedirect, which means we can't do anything about
-			 * them. -alfredo
-			 */
+			 * them. -alfredo */
 			{
-				/*
-				 * xinerama checks for: across head and dead space
-				 */
+				/* xinerama checks for: across head and dead space */
 				rect.pos.x = x;
 				rect.pos.y = y;
 				rect.size.width = width;
@@ -1073,9 +1067,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			wwin->flags.omnipresent ^= 1;
 	}
 
-	/*
-	 * Create frame, borders and do reparenting
-	 */
+	/* Create frame, borders and do reparenting */
 	foo = WFF_LEFT_BUTTON | WFF_RIGHT_BUTTON;
 #ifdef XKB_BUTTON_HINT
 	if (wPreferences.modelock)
@@ -1083,8 +1075,10 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 #endif
 	if (HAS_TITLEBAR(wwin))
 		foo |= WFF_TITLEBAR;
+
 	if (HAS_RESIZEBAR(wwin))
 		foo |= WFF_RESIZEBAR;
+
 	if (HAS_BORDER(wwin))
 		foo |= WFF_BORDER;
 
@@ -1108,8 +1102,10 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	foo = 0;
 	if (WFLAGP(wwin, no_close_button))
 		foo |= WFF_RIGHT_BUTTON;
+
 	if (WFLAGP(wwin, no_miniaturize_button))
 		foo |= WFF_LEFT_BUTTON;
+
 #ifdef XKB_BUTTON_HINT
 	if (WFLAGP(wwin, no_language_button) || WFLAGP(wwin, no_focusable))
 		foo |= WFF_LANGUAGE_BUTTON;
@@ -1161,15 +1157,13 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 		/* wWindowConfigure() will account for the frame
 		 * when placing so the window would be shifted without
-		 * the adjustment below
-		 */
+		 * the adjustment below */
 		if (y >= usableArea.y1 + wwin->frame->top_width)
 			y -= wwin->frame->top_width;
 
 		/* wWindowConfigure() will account for the window border
 		 * when placing so the window would be shifted without
-		 * the adjustment below
-		 */
+		 * the adjustment below */
 		if (HAS_BORDER(wwin)) {
 			if (x >= usableArea.x1 + FRAME_BORDER_WIDTH)
 				x -= FRAME_BORDER_WIDTH;
@@ -1184,25 +1178,19 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	 * the absolute co-ordinates of the client window, offset
 	 * by the title bar and frame border.  As a result
 	 * we need to offset placement of the client by the border
-	 * size so its position matches what we expect.
-	 */
+	 * size so its position matches what we expect. */
 	x += wwin->old_border_width;
 	y += wwin->old_border_width;
 
-	/*
-	 * wWindowConfigure() will init the client window's size
+	/* wWindowConfigure() will init the client window's size
 	 * (wwin->client.{width,height}) and all other geometry
-	 * related variables (frame_x,frame_y)
-	 */
+	 * related variables (frame_x,frame_y) */
 	wWindowConfigure(wwin, x, y, width, height);
 
 	/* to make sure the window receives it's new position after reparenting */
 	wWindowSynthConfigureNotify(wwin);
 
-	/*
-	 * Setup descriptors and save window to internal
-	 * lists
-	 */
+	/* Setup descriptors and save window to internal lists */
 	if (wwin->main_window != None) {
 		WApplication *app;
 		WWindow *leader;
@@ -1218,10 +1206,8 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		if (app) {
 			app->last_workspace = workspace;
 
-			/*
-			 * Do application specific stuff, like setting application
-			 * wide attributes.
-			 */
+			/* Do application specific stuff, like setting application
+			 * wide attributes. */
 
 			if (wwin->flags.hidden) {
 				/* if the window was set to hidden because it was hidden
@@ -1255,8 +1241,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 		/* The following "if" is to avoid crashing of clients that expect
 		 * WM_STATE set before they get mapped. Else WM_STATE is set later,
-		 * after the return from this function.
-		 */
+		 * after the return from this function. */
 		if (wwin->wm_hints && (wwin->wm_hints->flags & StateHint))
 			wClientSetState(wwin, wwin->wm_hints->initial_state, None);
 		else
@@ -1304,6 +1289,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		tmp = scr->focused_window;
 		while (tmp->prev)
 			tmp = tmp->prev;
+
 		tmp->prev = wwin;
 		wwin->next = tmp;
 		wwin->prev = NULL;
@@ -1321,9 +1307,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	XUngrabServer(dpy);
 
-	/*
-	 * Final preparations before window is ready to go
-	 */
+	/* Final preparations before window is ready to go */
 	wFrameWindowChangeState(wwin->frame, WS_UNFOCUSED);
 
 	if (!wwin->flags.miniaturized && workspace == scr->current_workspace && !wwin->flags.hidden) {
