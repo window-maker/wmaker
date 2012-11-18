@@ -20,29 +20,16 @@
 
 #ifndef WMSTACKING_H_
 #define WMSTACKING_H_
-
 void wRaiseFrame(WCoreWindow *frame);
-
 void wLowerFrame(WCoreWindow *frame);
-
 void wRaiseLowerFrame(WCoreWindow *frame);
-
 void AddToStackList(WCoreWindow *frame);
-
 void MoveInStackListAbove(WCoreWindow *next, WCoreWindow *frame);
-
 void MoveInStackListUnder(WCoreWindow *prev, WCoreWindow *frame);
-
 void RemoveFromStackList(WCoreWindow *frame);
-
 void ChangeStackingLevel(WCoreWindow *frame, int new_level);
-
 void RemakeStackList(WScreen *scr);
-
 void CommitStacking(WScreen *scr);
-
 void CommitStackingForFrame(WCoreWindow *frame);
-
 void CommitStackingForWindow(WCoreWindow * frame);
-
 #endif
