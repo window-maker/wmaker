@@ -1855,18 +1855,21 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon
 {
 	WWindow *wwin;
 	Bool lupdate_icon = False;
+	char *command = NULL;
 	int index;
 
-	wwin = icon->icon->owner;
 	icon->editing = 0;
 
 	if (update_icon)
 		lupdate_icon = True;
 
 	if (icon->command == NULL) {
-		char *command;
+		/* If icon->owner exists, it means the application is running */
+		if (icon->icon->owner) {
+			wwin = icon->icon->owner;
+			command = GetCommandForWindow(wwin->client_win);
+		}
 
-		command = GetCommandForWindow(wwin->client_win);
 		if (command) {
 			icon->command = command;
 		} else {
@@ -1986,7 +1989,7 @@ static void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
 {
 	WWindow *wwin;
-	char *command;
+	char *command = NULL;
 	int index;
 	Bool update_icon = False;
 
@@ -1996,8 +1999,6 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 	if (dest == NULL)
 		return False;
 
-	wwin = icon->icon->owner;
-
 	/*
 	 * For the moment we can't do this if we move icons in Clip from one
 	 * workspace to other, because if we move two or more icons without
@@ -2005,7 +2006,12 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 	 * moved icons it applies. -Dan
 	 */
 	if ((dest->type == WM_DOCK /*|| dest->keep_attracted */ ) && icon->command == NULL) {
-		command = GetCommandForWindow(wwin->client_win);
+		/* If icon->owner exists, it means the application is running */
+		if (icon->icon->owner) {
+			wwin = icon->icon->owner;
+			command = GetCommandForWindow(wwin->client_win);
+		}
+
 		if (command) {
 			icon->command = command;
 		} else {
