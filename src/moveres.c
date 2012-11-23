@@ -1211,6 +1211,8 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 	int vert_border = wwin->frame->top_width + wwin->frame->bottom_width;
 	int src_x = wwin->frame_x;
 	int src_y = wwin->frame_y;
+	int original_w = w;
+	int original_h = h;
 	int done, off_x, off_y, ww, wh;
 	int kspeed = _KS;
 	int opaqueMoveResize = wPreferences.opaque_move_resize_keyboard;
@@ -1517,10 +1519,10 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 						}
 					}
 				} else {
-					if (wwin->client.width != ww)
+					if (ww != original_w)
 						wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_MAXIMUS);
 
-					if (wwin->client.height != wh - vert_border)
+					if (wh != original_h)
 						wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
 
 					wWindowConfigure(wwin, src_x + off_x, src_y + off_y, ww, wh - vert_border);
@@ -1877,6 +1879,8 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 	int orig_fy = fy;
 	int orig_fw = fw;
 	int orig_fh = fh;
+	int original_fw = fw;
+	int original_fh = fh;
 	int head = ((wPreferences.auto_arrange_icons && wXineramaHeads(scr) > 1)
 		    ? wGetHeadForWindow(wwin)
 		    : scr->xine_info.primary_head);
@@ -2072,10 +2076,10 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 				WMUnmapWidget(scr->gview);
 				XUngrabServer(dpy);
 
-				if (wwin->client.width != fw)
+				if (fw != original_fw)
 					wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_MAXIMUS);
 
-				if (wwin->client.height != fh - vert_border)
+				if (fh != original_fh)
 					wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
 
 				wWindowConfigure(wwin, fx, fy, fw, fh - vert_border);
