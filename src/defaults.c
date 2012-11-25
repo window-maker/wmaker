@@ -869,17 +869,15 @@ void wReadStaticDefaults(WMPropList * dict)
 		else
 			plvalue = NULL;
 
-		if (!plvalue) {
-			/* no default in the DB. Use builtin default */
+		/* no default in the DB. Use builtin default */
+		if (!plvalue)
 			plvalue = entry->plvalue;
-		}
 
 		if (plvalue) {
 			/* convert data */
 			(*entry->convert) (NULL, entry, plvalue, entry->addr, &tdata);
-			if (entry->update) {
+			if (entry->update)
 				(*entry->update) (NULL, entry, tdata, entry->extra_data);
-			}
 		}
 	}
 }
@@ -953,9 +951,10 @@ void wDefaultsCheckDomains(void* arg)
 					dict = shared_dict;
 					shared_dict = NULL;
 				}
-				if (WDWindowAttributes->dictionary) {
+
+				if (WDWindowAttributes->dictionary)
 					WMReleasePropList(WDWindowAttributes->dictionary);
-				}
+
 				WDWindowAttributes->dictionary = dict;
 				for (i = 0; i < wScreenCount; i++) {
 					scr = wScreenWithNumber(i);
@@ -972,10 +971,10 @@ void wDefaultsCheckDomains(void* arg)
 		} else {
 			wwarning(_("could not load domain %s from user defaults database"), "WMWindowAttributes");
 		}
+
 		WDWindowAttributes->timestamp = stbuf.st_mtime;
-		if (shared_dict) {
+		if (shared_dict)
 			WMReleasePropList(shared_dict);
-		}
 	}
 
 	if (stat(WDRootMenu->path, &stbuf) >= 0 && WDRootMenu->timestamp < stbuf.st_mtime) {
@@ -987,9 +986,9 @@ void wDefaultsCheckDomains(void* arg)
 				wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
 					 "WMRootMenu", WDRootMenu->path);
 			} else {
-				if (WDRootMenu->dictionary) {
+				if (WDRootMenu->dictionary)
 					WMReleasePropList(WDRootMenu->dictionary);
-				}
+
 				WDRootMenu->dictionary = dict;
 				wDefaultsMergeGlobalMenus(WDRootMenu);
 			}
