@@ -123,7 +123,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 	if (swpanel) {
 
 		if (wwin->flags.mapped)
-			newFocused = wSwitchPanelSelectNext(swpanel, !next);
+			newFocused = wSwitchPanelSelectNext(swpanel, !next, True);
 		else
 			newFocused = wSwitchPanelSelectFirst(swpanel, False);
 
@@ -157,7 +157,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 			    && wKeyBindings[WKBD_GROUPNEXT].modifier == modifiers)
 			    || ev.xkey.keycode == rightKey) {
 
-				newFocused = wSwitchPanelSelectNext(swpanel, False);
+				newFocused = wSwitchPanelSelectNext(swpanel, False, ev.xkey.keycode != rightKey);
 				oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr, False);
 
 			} else if ((wKeyBindings[WKBD_FOCUSPREV].keycode == ev.xkey.keycode
@@ -166,7 +166,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 			    && wKeyBindings[WKBD_GROUPPREV].modifier == modifiers)
 				   || ev.xkey.keycode == leftKey) {
 
-				newFocused = wSwitchPanelSelectNext(swpanel, True);
+				newFocused = wSwitchPanelSelectNext(swpanel, True, ev.xkey.keycode != leftKey);
 				oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr, False);
 
 			} else if (ev.xkey.keycode == homeKey || ev.xkey.keycode == endKey) {

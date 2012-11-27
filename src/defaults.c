@@ -684,7 +684,9 @@ WDefaultEntry optionList[] = {
 	{"DialogHistoryLines", "500", NULL,
 	    &wPreferences.history_lines, getInt, NULL, NULL, NULL},
 	{"CycleActiveHeadOnly", "NO", NULL,
-	    &wPreferences.cycle_active_head_only, getBool, NULL, NULL, NULL}
+	    &wPreferences.cycle_active_head_only, getBool, NULL, NULL, NULL},
+	{"CycleIgnoreMinimized", "NO", NULL,
+	    &wPreferences.cycle_ignore_minimized, getBool, NULL, NULL, NULL}
 };
 
 static void initDefaults()

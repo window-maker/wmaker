@@ -62,6 +62,9 @@ static const struct {
 	{ N_("Cycle windows only on the active head."),
 	  /* default: */ False, OPTION_WMAKER, "CycleActiveHeadOnly" },
 
+	{ N_("Ignore minimized windows when cycling."),
+	  /* default: */ False, OPTION_WMAKER, "CycleIgnoreMinimized" },
+
 	{ N_("Show workspace title on Clip."),
 	  /* default: */ True, OPTION_WMAKER, "ShowClipTitle" },
 

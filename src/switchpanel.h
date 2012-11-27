@@ -27,7 +27,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only);
 
 void wSwitchPanelDestroy(WSwitchPanel *panel);
 
-WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back);
+WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimized);
 WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back);
 
 WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event);

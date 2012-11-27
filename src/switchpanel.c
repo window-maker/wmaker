@@ -559,10 +559,11 @@ void wSwitchPanelDestroy(WSwitchPanel *panel)
 	wfree(panel);
 }
 
-WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back)
+WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimized)
 {
 	WWindow *wwin;
 	int count = WMGetArrayItemCount(panel->windows);
+	int orig = panel->current;
 
 	if (count == 0)
 		return NULL;
@@ -570,26 +571,26 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back)
 	if (panel->win)
 		changeImage(panel, panel->current, 0);
 
-	if (back)
-		panel->current--;
-	else
-		panel->current++;
+	if (!wPreferences.cycle_ignore_minimized)
+		ignore_minimized = False;
 
-	wwin = WMGetFromArray(panel->windows, (count + panel->current) % count);
+	if (ignore_minimized && canReceiveFocus(WMGetFromArray(panel->windows, (count + panel->current) % count)) < 0)
+		ignore_minimized = False;
 
-	if (back) {
-		if (panel->current < 0)
-			scrollIcons(panel, count);
-		else if (panel->current < panel->firstVisible)
-			scrollIcons(panel, -1);
-	} else {
-		if (panel->current >= count)
-			scrollIcons(panel, -count);
-		else if (panel->current - panel->firstVisible >= panel->visibleCount)
-			scrollIcons(panel, 1);
-	}
+	do {
+		if (back)
+			panel->current--;
+		else
+			panel->current++;
 
-	panel->current = (count + panel->current) % count;
+		panel->current= (count + panel->current) % count;
+		wwin = WMGetFromArray(panel->windows, panel->current);
+	} while (ignore_minimized && panel->current != orig && canReceiveFocus(wwin) < 0);
+
+	if (panel->current < panel->firstVisible)
+		scrollIcons(panel, panel->current - panel->firstVisible);
+	else if (panel->current - panel->firstVisible >= panel->visibleCount)
+		scrollIcons(panel, panel->current - panel->firstVisible - panel->visibleCount + 1);
 
 	if (panel->win) {
 		drawTitle(panel, panel->current, wwin->frame->title);
