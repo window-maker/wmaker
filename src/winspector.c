@@ -314,8 +314,8 @@ static int showIconFor(WMScreen *scrPtr, InspectorPanel *panel, char *wm_instanc
 			file = NULL;
 		}
 	} else {
-		/* Get the application icon, default included */
-		db_icon = wDefaultGetIconFile(wm_instance, wm_class, True);
+		/* Get the application icon, default NOT included */
+		db_icon = wDefaultGetIconFile(wm_instance, wm_class, False);
 		if (db_icon != NULL)
 			file = wstrdup(db_icon);
 	}
@@ -433,7 +433,7 @@ static void saveSettings(WMButton *button, InspectorPanel *panel)
 	WWindow *wwin = panel->inspected;
 	WDDomain *db = WDWindowAttributes;
 	WMPropList *dict = NULL;
-	WMPropList *winDic, *appDic, *value, *key = NULL, *key2;
+	WMPropList *winDic, *appDic, *value, *value1, *key = NULL, *key2;
 	char *icon_file, *buf1, *buf2;
 	int flags = 0, i = 0, different = 0, different2 = 0;
 
@@ -475,16 +475,29 @@ static void saveSettings(WMButton *button, InspectorPanel *panel)
 	winDic = WMCreatePLDictionary(NULL, NULL);
 	appDic = WMCreatePLDictionary(NULL, NULL);
 
-	/* Update icon for window */
-	icon_file = WMGetTextFieldText(panel->fileText);
-	if (icon_file) {
-		if (icon_file[0] != 0) {
-			value = WMCreatePLString(icon_file);
-			different |= insertAttribute(dict, winDic, AIcon, value, flags);
-			different2 |= insertAttribute(dict, appDic, AIcon, value, flags);
-			WMReleasePropList(value);
+	/* If the "Ignore client suplied icon is not selected" flag was not set,
+	 * then, don't save the icon filename. If saved, the application will use
+	 * that icon, even the flag is not set. */
+	if (WMGetButtonSelected(panel->alwChk) != 0) {
+		/* Update icon for window */
+		icon_file = WMGetTextFieldText(panel->fileText);
+		if (icon_file) {
+			if (icon_file[0] != 0) {
+				value = WMCreatePLString(icon_file);
+				different |= insertAttribute(dict, winDic, AIcon, value, flags);
+				different2 |= insertAttribute(dict, appDic, AIcon, value, flags);
+				WMReleasePropList(value);
+
+				/* Set the ckeck for AAlwaysUserIcon only if icon_file exists */
+				buf1 = wmalloc(4);
+				snprintf(buf1, 4, "%s", (WMGetButtonSelected(panel->alwChk) != 0) ? "Yes" : "No");
+				value1 = WMCreatePLString(buf1);
+				different |= insertAttribute(dict, winDic, AAlwaysUserIcon, value1, flags);
+				WMReleasePropList(value1);
+				wfree(buf1);
+			}
+			wfree(icon_file);
 		}
-		wfree(icon_file);
 	}
 
 	i = WMGetPopUpButtonSelectedItem(panel->wsP) - 1;
@@ -495,9 +508,6 @@ static void saveSettings(WMButton *button, InspectorPanel *panel)
 	}
 
 	flags |= IS_BOOLEAN;
-
-	value = (WMGetButtonSelected(panel->alwChk) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, AAlwaysUserIcon, value, flags);
 
 	value = (WMGetButtonSelected(panel->attrChk[0]) != 0) ? Yes : No;
 	different |= insertAttribute(dict, winDic, ANoTitlebar, value, flags);
