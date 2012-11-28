@@ -736,7 +736,9 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 			file = NULL;
 		}
 
-		if (WFLAGP(wwin, always_user_icon)) {
+		/* If file is NULL, the always_user_icon doesn't matter,
+		 * because we need to read the icon from the window */
+		if (file && WFLAGP(wwin, always_user_icon)) {
 			/* Change icon image if the app is minimized */
 			if (wwin->icon)
 				wIconChangeImageFile(wwin->icon, file);
