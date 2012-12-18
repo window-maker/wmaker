@@ -591,7 +591,6 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	char *title;
 	Bool withdraw = False;
 	Bool raise = False;
-	Bool frame_adjustment = True;
 
 	/* mutex. */
 	XGrabServer(dpy);
@@ -992,7 +991,6 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 			} else {
 				PlaceWindow(wwin, &x, &y, width, height);
-				frame_adjustment = False;
 			}
 
 			if (wPreferences.window_placement == WPM_MANUAL)
@@ -1142,7 +1140,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			y -= wwin->frame->top_width + wwin->frame->bottom_width;
 	}
 
-	if (frame_adjustment) {
+	{
 		WMRect rect;
 		WArea usableArea;
 		int head;
