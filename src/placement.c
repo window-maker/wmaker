@@ -364,10 +364,7 @@ static Bool
 center_place_window(WWindow *wwin, int *x_ret, int *y_ret,
 		 unsigned int width, unsigned int height, WArea usableArea)
 {
-	WScreen *scr = wwin->screen_ptr;
-	int try_x, try_y;
 	int swidth, sheight;
-	WWindow *win;
 
 	set_width_height(wwin, &width, &height);
 	swidth = usableArea.x2 - usableArea.x1;
@@ -376,26 +373,8 @@ center_place_window(WWindow *wwin, int *x_ret, int *y_ret,
 	if (width > swidth || height > sheight)
 		return False;
 
-	try_x = (usableArea.x1 + usableArea.x2 - width) / 2;
-	try_y = (usableArea.y1 + usableArea.y2 - height) / 2;
-
-	for (win = scr->focused_window; win != NULL; win = win->next) {
-		int w = win->frame->core->width;
-		int h = win->frame->core->height;
-		int x = win->frame_x;
-		int y = win->frame_y;
-
-		if ((x < (try_x + width)) && ((x + w) > try_x) &&
-		    (y < (try_y + height)) && ((y + h) > try_y) &&
-		    (win->flags.mapped ||
-		     (win->flags.shaded &&
-		      win->frame->workspace == scr->current_workspace &&
-		      !(win->flags.miniaturized || win->flags.hidden))))
-			return False;
-	}
-
-	*x_ret = try_x;
-	*y_ret = try_y;
+	*x_ret = (usableArea.x1 + usableArea.x2 - width) / 2;
+	*y_ret = (usableArea.y1 + usableArea.y2 - height) / 2;
 
 	return True;
 }
@@ -545,7 +524,6 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 	case WPM_CENTER:
 		if (center_place_window(wwin, x_ret, y_ret, width, height, usableArea))
 			break;
-		/* fall through to auto placement */
 
 	case WPM_AUTO:
 		if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 0, usableArea)) {
