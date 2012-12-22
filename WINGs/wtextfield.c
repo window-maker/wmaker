@@ -40,9 +40,8 @@ typedef struct W_TextField {
 
 	WMTextFieldDelegate *delegate;
 
-#if 0
 	WMHandlerID timerID;	/* for cursor blinking */
-#endif
+
 	struct {
 		WMAlignment alignment:2;
 
@@ -863,7 +862,6 @@ static void paintTextField(TextField * tPtr)
 	}
 }
 
-#if 0
 static void blinkCursor(void *data)
 {
 	TextField *tPtr = (TextField *) data;
@@ -876,7 +874,6 @@ static void blinkCursor(void *data)
 	paintCursor(tPtr);
 	tPtr->flags.cursorOn = !tPtr->flags.cursorOn;
 }
-#endif
 
 static void handleEvents(XEvent * event, void *data)
 {
@@ -890,11 +887,11 @@ static void handleEvents(XEvent * event, void *data)
 		if (W_FocusedViewOfToplevel(W_TopLevelOfView(tPtr->view)) != tPtr->view)
 			return;
 		tPtr->flags.focused = 1;
-#if 0
+
 		if (!tPtr->timerID) {
 			tPtr->timerID = WMAddTimerHandler(CURSOR_BLINK_ON_DELAY, blinkCursor, tPtr);
 		}
-#endif
+
 		paintTextField(tPtr);
 
 		NOTIFY(tPtr, didBeginEditing, WMTextDidBeginEditingNotification, NULL);
@@ -905,11 +902,10 @@ static void handleEvents(XEvent * event, void *data)
 	case FocusOut:
 		W_UnFocusIC(tPtr->view);
 		tPtr->flags.focused = 0;
-#if 0
+
 		if (tPtr->timerID)
 			WMDeleteTimerHandler(tPtr->timerID);
 		tPtr->timerID = NULL;
-#endif
 
 		paintTextField(tPtr);
 		if (!tPtr->flags.notIllegalMovement) {
@@ -1532,10 +1528,8 @@ static void handleTextFieldActionEvents(XEvent * event, void *data)
 
 static void destroyTextField(TextField * tPtr)
 {
-#if 0
 	if (tPtr->timerID)
 		WMDeleteTimerHandler(tPtr->timerID);
-#endif
 
 	W_DestroyIC(tPtr->view);
 
