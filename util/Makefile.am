@@ -11,9 +11,8 @@ bin_SCRIPTS = wmaker.inst wm-oldmenu2new wkdemenu.pl
 
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new directjpeg.c wkdemenu.pl
 
-AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\"
-
-INCLUDES = $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
+AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" \
+	 $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
 	@HEADER_SEARCH_PATH@ \
 	-DETCDIR=\"sysconfdir\" -DDATADIR=\"pkgdatadir\"
 
@@ -82,4 +81,4 @@ wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
 			$(srcdir)/wmaker.inst.in >wmaker.inst
 
 	chmod 755 wmaker.inst
-	
+

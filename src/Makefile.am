@@ -104,10 +104,10 @@ wmaker_SOURCES = 	\
 
 EXTRA_wmaker_SOURCES = osdep_bsd.c osdep_darwin.c osdep_linux.c osdep_stub.c
 
-AM_CPPFLAGS = $(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\"
 AM_CFLAGS =
 
-INCLUDES = \
+AM_CPPFLAGS = \
+	$(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\" \
 	-I$(top_srcdir)/wrlib \
 	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 

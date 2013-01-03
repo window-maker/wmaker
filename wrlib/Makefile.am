@@ -46,7 +46,7 @@ libwraster_la_SOURCES = 	\
 LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
 COMPILE2=`echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`
 
-INCLUDES = $(DFLAGS) @HEADER_SEARCH_PATH@
+AM_CPPFLAGS = $(DFLAGS) @HEADER_SEARCH_PATH@
 
 libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ @LIBXMU@ -lm
 

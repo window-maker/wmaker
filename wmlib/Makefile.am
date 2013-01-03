@@ -6,7 +6,7 @@ lib_LTLIBRARIES = libWMaker.la
 
 include_HEADERS = WMaker.h
 
-INCLUDES = $(DFLAGS) @XCFLAGS@
+AM_CPPFLAGS = $(DFLAGS) @XCFLAGS@
 
 libWMaker_la_SOURCES = 	\
 	menu.c 		\

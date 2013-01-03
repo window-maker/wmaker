@@ -86,10 +86,10 @@ libWUtil_la_SOURCES = 	\
 	wutil.c
 
 
-AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" -DRESOURCE_PATH=\"$(datadir)/WINGs\"
 AM_CFLAGS =
 
-INCLUDES = -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
+AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" -DRESOURCE_PATH=\"$(datadir)/WINGs\" \
+	 -I$(top_srcdir)/WINGs/WINGs -I$(top_srcdir)/wrlib -I$(top_srcdir)/src \
 	@XFTFLAGS@ @HEADER_SEARCH_PATH@
 
 pkgconfigdir = $(libdir)/pkgconfig
