@@ -183,7 +183,7 @@ theme.
 
 If you don't like the arrangement of the Appearance menu, you can put
 a file "appearance.menu" in ~/GNUstep/Library/WindowMaker, and it will
-override the default one. Look at /etc/X11/WindowMaker/appearance.menu
+override the default one. Look at /etc/GNUstep/Defaults/appearance.menu
 for an example.
 
 Shortcuts

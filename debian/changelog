@@ -1,8 +1,6 @@
-wmaker (0.95.3+20120825-1) experimental; urgency=low
+wmaker (0.95.4-1) experimental; urgency=low
 
-  * THIS PACKAGE VERSION MUST NOT BE UPLOADED TO DEBIAN
-    - The debian/libwutil2.symbols must include a real version.
-  * New upstream version (git 20120825)
+  * New upstream version 0.95.4.
     - Better icon management. [Closes: #35587, #404729]
     - Now cpp is not needed. Updated the debian/README.Debian file
     - New symbols in debian/libwutil2.symbols
@@ -17,8 +15,12 @@ wmaker (0.95.3+20120825-1) experimental; urgency=low
   * debian/rules:
     - Removed the get-*-flags scripts fix. Not needed (and was wrong).
     - Removed the HOSTSPEC stuff. Not needed with debconf 9.
+  * debian/README.Debian:
+    - Changed /etc path for appearance.menu.
+  * Removed debian/wmaker-dbg.dirs, because the path for debug files
+    is now using hashes (/usr/lib/debug/build-id).
 
- -- Rodolfo García Peñas (kix) <kix@kix.es>  Sun, 9 Sep 2012 11:07:21 +0200
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Wed, 3 Jan 2013 00:17:31 +0100
 
 wmaker (0.95.3-2) unstable; urgency=low
 
