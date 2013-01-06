@@ -442,7 +442,7 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.help_balloon, getBool, NULL, NULL, NULL},
 	{"EdgeResistance", "30", NULL,
 	    &wPreferences.edge_resistance, getInt, NULL, NULL, NULL},
-	{"ResizeIncrement", "32", NULL,
+	{"ResizeIncrement", "0", NULL,
 	    &wPreferences.resize_increment, getInt, NULL, NULL, NULL},
 	{"Attraction", "NO", NULL,
 	    &wPreferences.attract, getBool, NULL, NULL, NULL},
