@@ -453,8 +453,8 @@ msgid ""
 "\n"
 "    You should have received a copy of the GNU General Public\n"
 "License along with this program; if not, write to the Free Software\n"
-"Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA\n"
-"02111-1307, USA."
+"Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA\n"
+"02110-1301, USA."
 msgstr ""
 
 #: ../src/dialog.c:1621
