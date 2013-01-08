@@ -1830,6 +1830,10 @@ void WMSetFontPanelFont(WMFontPanel *panel, char *fontName);
 
 WMFont* WMGetFontPanelFont(WMFontPanel *panel);
 
+/* ---[ WINGs/configuration.c ]------------------------------------------- */
+unsigned W_getconf_mouseWheelUp(void);
+unsigned W_getconf_mouseWheelDown(void);
+
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */

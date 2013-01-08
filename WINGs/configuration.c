@@ -115,3 +115,13 @@ void W_ReadConfigurations(void)
 	}
 
 }
+
+unsigned W_getconf_mouseWheelUp(void)
+{
+	return WINGsConfiguration.mouseWheelUp;
+}
+
+unsigned W_getconf_mouseWheelDown(void)
+{
+	return WINGsConfiguration.mouseWheelDown;
+}
