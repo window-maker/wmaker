@@ -1833,6 +1833,7 @@ WMFont* WMGetFontPanelFont(WMFontPanel *panel);
 /* ---[ WINGs/configuration.c ]------------------------------------------- */
 unsigned W_getconf_mouseWheelUp(void);
 unsigned W_getconf_mouseWheelDown(void);
+void W_setconf_doubleClickDelay(int value);
 
 #ifdef __cplusplus
 }

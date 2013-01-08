@@ -2985,22 +2985,12 @@ static int setModifierKeyLabels(WScreen * scr, WDefaultEntry * entry, WMPropList
 	return 0;
 }
 
-/*
- * Very ugly kluge.
- * Need access to the double click variables, so that all widgets in
- * wmaker panels will have the same dbl-click values.
- * TODO: figure a better way of dealing with it.
- */
-#include <WINGs/WINGsP.h>
-
-static int setDoubleClick(WScreen * scr, WDefaultEntry * entry, int *value, void *foo)
+static int setDoubleClick(WScreen *scr, WDefaultEntry *entry, int *value, void *foo)
 {
-	extern _WINGsConfiguration WINGsConfiguration;
-
 	if (*value <= 0)
 		*(int *)foo = 1;
 
-	WINGsConfiguration.doubleClickDelay = *value;
+	W_setconf_doubleClickDelay(*value);
 
 	return 0;
 }

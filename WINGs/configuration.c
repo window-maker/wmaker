@@ -125,3 +125,8 @@ unsigned W_getconf_mouseWheelDown(void)
 {
 	return WINGsConfiguration.mouseWheelDown;
 }
+
+void W_setconf_doubleClickDelay(int value)
+{
+	WINGsConfiguration.doubleClickDelay = value;
+}
