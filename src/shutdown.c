@@ -37,6 +37,7 @@
 #include "winspector.h"
 #include "wmspec.h"
 #include "colormap.h"
+#include "shutdown.h"
 
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Time LastTimestamp;

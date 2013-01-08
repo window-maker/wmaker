@@ -50,6 +50,7 @@
 #include "keybind.h"
 #include "xmodifier.h"
 #include "session.h"
+#include "shutdown.h"
 #include "dialog.h"
 
 #include <WINGs/WUtil.h>

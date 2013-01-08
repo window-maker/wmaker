@@ -30,8 +30,6 @@
 typedef void (WCallBack)(void *cdata);
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
-void Shutdown(WShutdownMode mode);
-void RestoreDesktop(WScreen *scr);
 void DispatchEvent(XEvent *event);
 void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
 void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);

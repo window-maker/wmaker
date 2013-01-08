@@ -50,6 +50,7 @@
 #include "defaults.h"
 #include "framewin.h"
 #include "session.h"
+#include "shutdown.h"
 #include "xmodifier.h"
 
 #include <WINGs/WUtil.h>

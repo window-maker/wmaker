@@ -87,16 +87,6 @@ typedef struct WObjDescriptor {
     void *parent;		       /* parent object (WWindow or WMenu) */
 } WObjDescriptor;
 
-
-/* shutdown modes */
-typedef enum {
-    WSExitMode,
-    WSLogoutMode,
-    WSKillMode,
-    WSRestartPreparationMode
-} WShutdownMode;
-
-
 /* internal buttons */
 #define WBUT_CLOSE              0
 #define WBUT_BROKENCLOSE        1
