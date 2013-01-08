@@ -68,6 +68,7 @@
 #include "wmspec.h"
 #include "rootmenu.h"
 #include "colormap.h"
+#include "screen.h"
 
 /******** Global Variables **********/
 extern XContext wWinContext;
@@ -103,14 +104,6 @@ extern int wShapeEventBase;
 #ifdef KEEP_XKB_LOCK_STATUS
 extern int wXkbEventBase;
 #endif
-
-#ifdef HAVE_XRANDR
-extern Bool has_randr;
-extern int randr_event_base;
-#endif
-
-/* special flags */
-/*extern char WDelayedActionSet;*/
 
 /************ Local stuff ***********/
 
@@ -301,11 +294,10 @@ void DispatchEvent(XEvent * event)
 		break;
 
 	case ConfigureNotify:
-		if (event->xconfigure.window == DefaultRootWindow(dpy)) {
 #ifdef HAVE_XRANDR
-		XRRUpdateConfiguration(event);
+		if (event->xconfigure.window == DefaultRootWindow(dpy))
+			XRRUpdateConfiguration(event);
 #endif
-		}
 		break;
 
 	default:

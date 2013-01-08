@@ -80,9 +80,6 @@ extern int wScreenCount;
 #ifdef KEEP_XKB_LOCK_STATUS
 extern int wXkbSupported;
 #endif
-#ifdef HAVE_XRANDR
-extern int has_randr;
-#endif
 
 extern WDDomain *WDWindowMaker;
 

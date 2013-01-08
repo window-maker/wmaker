@@ -99,11 +99,6 @@ extern Bool wXkbSupported;
 extern int wXkbEventBase;
 #endif
 
-#ifdef HAVE_XRANDR
-extern Bool has_randr;
-extern int randr_event_base;
-#endif
-
 /* contexts */
 extern XContext wWinContext;
 extern XContext wAppWinContext;
