@@ -71,6 +71,7 @@ static void wApplicationSaveIconPathFor(char *iconPath, char *wm_instance, char 
 static WAppIcon *wAppIconCreate(WWindow * leader_win);
 static void add_to_appicon_list(WScreen *scr, WAppIcon *appicon);
 static void remove_from_appicon_list(WScreen *scr, WAppIcon *appicon);
+static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_window);
 
 /* This function is used if the application is a .app. It checks if it has an icon in it
  * like for example /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
@@ -143,19 +144,24 @@ WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance, 
 	return aicon;
 }
 
-void makeAppIconFor(WApplication *wapp)
+void create_appicon_for_application(WApplication *wapp, WWindow *wwin)
 {
-	/* If app_icon, work is done, return */
-	if (wapp->app_icon)
-		return;
+	/* Try to create an icon from the dock or clip */
+	create_appicon_from_dock(wwin, wapp, wapp->main_window);
 
-	/* Create the icon */
-	wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
-	wIconUpdate(wapp->app_icon->icon, NULL);
+	/* If app_icon was not found, create it */
+	if (!wapp->app_icon) {
+		/* Create the icon */
+		wapp->app_icon = wAppIconCreate(wapp->main_window_desc);
+		wIconUpdate(wapp->app_icon->icon, NULL);
 
-	/* Now, paint the icon */
-	if (!WFLAGP(wapp->main_window_desc, no_appicon))
-		paint_app_icon(wapp);
+		/* Now, paint the icon */
+		if (!WFLAGP(wapp->main_window_desc, no_appicon))
+			paint_app_icon(wapp);
+	}
+
+	/* Save the app_icon in a file */
+	save_appicon(wapp->app_icon, False);
 }
 
 void unpaint_app_icon(WApplication *wapp)
@@ -958,7 +964,7 @@ static WAppIcon *findDockIconFor(WDock *dock, Window main_window)
 	return aicon;
 }
 
-void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_window)
+static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_window)
 {
 	WScreen *scr = wwin->screen_ptr;
 	wapp->app_icon = NULL;

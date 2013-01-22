@@ -141,17 +141,7 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	/* application descriptor */
 	XSaveContext(dpy, main_window, wAppWinContext, (XPointer) wapp);
 
-	/* First try to create an icon from the dock or clip */
-	create_appicon_from_dock(wwin, wapp, main_window);
-
-	/*
-	 * In case it was not found in the dock, make it from scratch.
-	 * Note: makeAppIconFor() returns early if wapp->app_icon exists
-	 */
-	makeAppIconFor(wapp);
-
-	/* Save the app_icon in a file */
-	save_appicon(wapp->app_icon, False);
+	create_appicon_for_application(wapp, wwin);
 
 	return wapp;
 }
