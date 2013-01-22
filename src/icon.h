@@ -56,6 +56,7 @@ typedef struct WIcon {
 WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char *wm_class, int tile);
 WIcon *icon_create_for_wwindow(WWindow *wwin);
 
+void set_icon_image_from_database(WIcon *icon, char *wm_instance, char *wm_class, char *command);
 void wIconDestroy(WIcon *icon);
 void wIconPaint(WIcon *icon);
 void wIconUpdate(WIcon *icon, RImage *image);

@@ -113,7 +113,6 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 {
 	WScreen *scr = wwin->screen_ptr;
 	WIcon *icon;
-	char *file;
 
 	icon = icon_create_core(scr, wwin->icon_x, wwin->icon_y);
 
@@ -141,17 +140,9 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 	else
 		wGetIconName(dpy, wwin->client_win, &icon->icon_name);
 
-	/* Get the application icon, default included */
-	file = get_icon_filename(scr, wwin->wm_instance, wwin->wm_class, NULL, True);
-	if (file) {
-		icon->file = wstrdup(file);
-		icon->file_image = get_rimage_from_file(scr, icon->file, wPreferences.icon_size);
-		wfree(file);
-	}
-
 	icon->tile_type = TILE_NORMAL;
 
-	wIconUpdate(icon, NULL);
+	set_icon_image_from_database(icon, wwin->wm_instance, wwin->wm_class, NULL);
 
 	WMAddNotificationObserver(appearanceObserver, icon, WNIconAppearanceSettingsChanged, icon);
 	WMAddNotificationObserver(tileObserver, icon, WNIconTileSettingsChanged, icon);
@@ -162,21 +153,11 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char *wm_class, int tile)
 {
 	WIcon *icon;
-	char *file = NULL;
 
 	icon = icon_create_core(scr, 0, 0);
-
-	/* Search the icon using instance and class, without default icon */
-	file = get_icon_filename(scr, wm_instance, wm_class, command, False);
-	if (file) {
-		icon->file = wstrdup(file);
-		icon->file_image = get_rimage_from_file(scr, icon->file, wPreferences.icon_size);
-		wfree(file);
-	}
-
 	icon->tile_type = tile;
 
-	wIconUpdate(icon, NULL);
+	set_icon_image_from_database(icon, wm_instance, wm_class, command);
 
 	WMAddNotificationObserver(appearanceObserver, icon, WNIconAppearanceSettingsChanged, icon);
 	WMAddNotificationObserver(tileObserver, icon, WNIconTileSettingsChanged, icon);
@@ -907,4 +888,18 @@ static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event)
 
 		}
 	}
+}
+
+void set_icon_image_from_database(WIcon *icon, char *wm_instance, char *wm_class, char *command)
+{
+	char *file = NULL;
+
+	file = get_icon_filename(icon->core->screen_ptr, wm_instance, wm_class, command, False);
+	if (file) {
+		icon->file = wstrdup(file);
+		icon->file_image = get_rimage_from_file(icon->core->screen_ptr, icon->file, wPreferences.icon_size);
+		wfree(file);
+	}
+
+	wIconUpdate(icon, NULL);
 }

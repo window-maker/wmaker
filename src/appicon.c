@@ -240,8 +240,6 @@ void paint_app_icon(WApplication *wapp)
 
 void removeAppIconFor(WApplication *wapp)
 {
-	char *file = NULL;
-
 	if (!wapp->app_icon)
 		return;
 
@@ -257,16 +255,9 @@ void removeAppIconFor(WApplication *wapp)
 		wapp->app_icon->icon->owner = NULL;
 		wapp->app_icon->icon->icon_win = None;
 
-		/* Update the icon images */
-		/* Search the icon using instance and class, without default icon */
-		file = get_icon_filename(wapp->app_icon->icon->core->screen_ptr, wapp->app_icon->wm_instance, wapp->app_icon->wm_class, wapp->app_icon->command, False);
-		if (file) {
-			wapp->app_icon->icon->file = wstrdup(file);
-			wapp->app_icon->icon->file_image = get_rimage_from_file(wapp->app_icon->icon->core->screen_ptr, wapp->app_icon->icon->file, wPreferences.icon_size);
-			wfree(file);
-		}
-
-		wIconUpdate(wapp->app_icon->icon, NULL);
+		/* Set the icon image */
+		set_icon_image_from_database(wapp->app_icon->icon, wapp->app_icon->wm_instance,
+					     wapp->app_icon->wm_class, wapp->app_icon->command);
 
 		/* Paint it */
 		wAppIconPaint(wapp->app_icon);
