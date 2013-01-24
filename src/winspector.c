@@ -475,29 +475,23 @@ static void saveSettings(WMButton *button, InspectorPanel *panel)
 	winDic = WMCreatePLDictionary(NULL, NULL);
 	appDic = WMCreatePLDictionary(NULL, NULL);
 
-	/* If the "Ignore client suplied icon is not selected" flag was not set,
-	 * then, don't save the icon filename. If saved, the application will use
-	 * that icon, even the flag is not set. */
-	if (WMGetButtonSelected(panel->alwChk) != 0) {
-		/* Update icon for window */
-		icon_file = WMGetTextFieldText(panel->fileText);
-		if (icon_file) {
-			if (icon_file[0] != 0) {
-				value = WMCreatePLString(icon_file);
-				different |= insertAttribute(dict, winDic, AIcon, value, flags);
-				different2 |= insertAttribute(dict, appDic, AIcon, value, flags);
-				WMReleasePropList(value);
+	/* Save the icon info */
+	/* The flag "Ignore client suplied icon is not selected" */
+	buf1 = wmalloc(4);
+	snprintf(buf1, 4, "%s", (WMGetButtonSelected(panel->alwChk) != 0) ? "Yes" : "No");
+	value1 = WMCreatePLString(buf1);
+	different |= insertAttribute(dict, winDic, AAlwaysUserIcon, value1, flags);
+	WMReleasePropList(value1);
+	wfree(buf1);
 
-				/* Set the ckeck for AAlwaysUserIcon only if icon_file exists */
-				buf1 = wmalloc(4);
-				snprintf(buf1, 4, "%s", (WMGetButtonSelected(panel->alwChk) != 0) ? "Yes" : "No");
-				value1 = WMCreatePLString(buf1);
-				different |= insertAttribute(dict, winDic, AAlwaysUserIcon, value1, flags);
-				WMReleasePropList(value1);
-				wfree(buf1);
-			}
-			wfree(icon_file);
-		}
+	/* The icon filename (if exists) */
+	icon_file = WMGetTextFieldText(panel->fileText);
+	if ((icon_file) && (icon_file[0] != 0)) {
+		value = WMCreatePLString(icon_file);
+		different |= insertAttribute(dict, winDic, AIcon, value, flags);
+		different2 |= insertAttribute(dict, appDic, AIcon, value, flags);
+		WMReleasePropList(value);
+		wfree(icon_file);
 	}
 
 	i = WMGetPopUpButtonSelectedItem(panel->wsP) - 1;
@@ -746,24 +740,45 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 			file = NULL;
 		}
 
-		/* If file is NULL, the always_user_icon doesn't matter,
-		 * because we need to read the icon from the window */
-		if (file && WFLAGP(wwin, always_user_icon)) {
-			/* Change icon image if the app is minimized */
-			if (wwin->icon)
-				wIconChangeImageFile(wwin->icon, file);
+		/* If always_user_icon flag is set, but the user icon is not set
+		 * we use client supplied icon and we unset the flag */
+		if ((WFLAGP(wwin, always_user_icon) && (!file))) {
+			/* Show the warning */
+			char *buf;
+			int len = 100;
 
-			/* Change App Icon image */
+			buf = wmalloc(len);
+			snprintf(buf, len, _("Ignore client supplied icon is set, but icon filename textbox is empty. Using client supplied icon"));
+			wMessageDialog(panel->frame->screen_ptr, _("Warning"), buf, _("OK"), NULL, NULL);
+			wfree(buf);
+			wfree(file);
+
+			/* Change the flags */
+			WSETUFLAG(wwin, always_user_icon, 0);
+			WMSetButtonSelected(panel->alwChk, 0);
+		}
+
+		/* After test the always_user_icon flag value before,
+		 * the "else" block is used only if the flag is set and
+		 * the icon text box has an icon path */
+		if (!WFLAGP(wwin, always_user_icon)) {
+			/* Change App Icon image, using the icon provided by the client */
 			if (wapp->app_icon)
-				wIconChangeImageFile(wapp->app_icon->icon, file);
+				wIconUpdate(wapp->app_icon->icon,
+					    get_rimage_icon_from_wm_hints(wapp->app_icon->icon));
+
+			/* Change icon image if the app is minimized,
+			 * using the icon provided by the client */
+			if (wwin->icon)
+				wIconUpdate(wwin->icon, get_rimage_icon_from_wm_hints(wwin->icon));
 		} else {
 			/* Change App Icon image */
 			if (wapp->app_icon)
-				wIconUpdate(wapp->app_icon->icon, get_rimage_icon_from_wm_hints(wapp->app_icon->icon));
+				wIconChangeImageFile(wapp->app_icon->icon, file);
 
 			/* Change icon image if the app is minimized */
 			if (wwin->icon)
-				wIconUpdate(wwin->icon, get_rimage_icon_from_wm_hints(wwin->icon));
+				wIconChangeImageFile(wwin->icon, file);
 		}
 
 		if (file)
