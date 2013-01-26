@@ -165,7 +165,8 @@ AC_ARG_ENABLE([boehm-gc],
 AS_IF([test "x$with_boehm_gc" = "xyes"],
     AC_SEARCH_LIBS([GC_malloc], [gc],
         [AC_DEFINE(USE_BOEHM_GC, 1, [Define if Boehm GC is to be used])],
-        [AC_MSG_FAILURE([--enable-boehm-gc specified but test for libgc failed])]
+        [AC_MSG_FAILURE([--enable-boehm-gc specified but test for libgc failed])],
+        []
     )
 )
 
@@ -210,10 +211,12 @@ AC_ARG_WITH([libbsd],
 tmp_libs=$LIBS
 AC_SEARCH_LIBS([strlcat],[$with_libbsd],
   [AC_DEFINE(HAVE_STRLCAT, 1, [Define if strlcat is available])],
+  [],
   []
 )
 AC_SEARCH_LIBS([strlcpy],[$with_libbsd],
   [AC_DEFINE(HAVE_STRLCAT, 1, [Define if strlcpy is available])],
+  [],
   []
 )
 LIBS=$tmp_libs
