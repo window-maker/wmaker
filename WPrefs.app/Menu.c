@@ -34,6 +34,7 @@ typedef enum {
 	CommandInfo,
 	ExternalInfo,
 	PipeInfo,
+	PLPipeInfo,
 	DirectoryInfo,
 	WSMenuInfo,
 	WWindowListInfo,
@@ -81,6 +82,10 @@ typedef struct _Panel {
 	WMFrame *pipeF;
 	WMTextField *pipeT;
 	WMButton *pipeCacheB;
+
+	WMFrame *plpipeF;
+	WMTextField *plpipeT;
+	WMButton *plpipeCacheB;
 
 	WMFrame *dpathF;
 	WMTextField *dpathT;
@@ -391,6 +396,7 @@ static void createPanel(_Panel * p)
 
 		panel->markerPix[ExternalInfo] = pixm;
 		panel->markerPix[PipeInfo] = pixm;
+		panel->markerPix[PLPipeInfo] = pixm;
 		panel->markerPix[DirectoryInfo] = pixm;
 		panel->markerPix[WSMenuInfo] = pixm;
 		panel->markerPix[WWindowListInfo] = pixm;
@@ -424,6 +430,7 @@ static void createPanel(_Panel * p)
 		putNewSubmenu(pad, _("Submenu"));
 		putNewItem(panel, pad, ExternalInfo, _("External Submenu"));
 		putNewItem(panel, pad, PipeInfo, _("Generated Submenu"));
+		putNewItem(panel, pad, PLPipeInfo, _("Generated PL Menu"));
 		putNewItem(panel, pad, DirectoryInfo, _("Directory Contents"));
 		putNewItem(panel, pad, WSMenuInfo, _("Workspace Menu"));
 		putNewItem(panel, pad, WWindowListInfo, _("Window List Menu"));
@@ -642,6 +649,31 @@ static void createPanel(_Panel * p)
 
 	WMMapSubwidgets(panel->pipeF);
 
+	/* proplist pipe */
+
+	panel->plpipeF = WMCreateFrame(panel->optionsF);
+	WMResizeWidget(panel->plpipeF, width, 155);
+	WMMoveWidget(panel->plpipeF, 10, 30);
+	WMSetFrameTitle(panel->plpipeF, _("Command"));
+
+	panel->plpipeT = WMCreateTextField(panel->plpipeF);
+	WMResizeWidget(panel->plpipeT, width - 20, 20);
+	WMMoveWidget(panel->plpipeT, 10, 20);
+
+	WMAddNotificationObserver(dataChanged, panel, WMTextDidChangeNotification, panel->plpipeT);
+
+	label = WMCreateLabel(panel->plpipeF);
+	WMResizeWidget(label, width - 20, 40);
+	WMMoveWidget(label, 10, 50);
+	WMSetLabelText(label, _("Enter a command that outputs a proplist menu\n" "definition to stdout when invoked."));
+
+	panel->plpipeCacheB = WMCreateSwitchButton(panel->plpipeF);
+	WMResizeWidget(panel->plpipeCacheB, width - 20, 40);
+	WMMoveWidget(panel->plpipeCacheB, 10, 110);
+	WMSetButtonText(panel->plpipeCacheB, _("Cache menu contents after opening for\n" "the first time"));
+
+	WMMapSubwidgets(panel->plpipeF);
+
 	/* directory menu */
 
 	panel->dcommandF = WMCreateFrame(panel->optionsF);
@@ -790,6 +822,8 @@ static void createPanel(_Panel * p)
 
 	panel->sections[PipeInfo][0] = panel->pipeF;
 
+	panel->sections[PLPipeInfo][0] = panel->plpipeF;
+
 	panel->sections[DirectoryInfo][0] = panel->dpathF;
 	panel->sections[DirectoryInfo][1] = panel->dcommandF;
 
@@ -832,6 +866,10 @@ static void freeItemData(ItemData * data)
 		break;
 
 	case PipeInfo:
+		CFREE(data->param.pipe.command);
+		break;
+
+	case PLPipeInfo:
 		CFREE(data->param.pipe.command);
 		break;
 
@@ -941,6 +979,22 @@ static ItemData *parseCommand(WMPropList * item)
 				data->param.external.path = p;
 			}
 		}
+	} else if (strcmp(command, "OPEN_PLMENU") == 0) {
+		char *p;
+
+		p = parameter;
+		while (isspace(*p) && *p)
+			p++;
+		if (*p == '|') {
+			if (*(p + 1) == '|') {
+				p++;
+				data->param.pipe.cached = 0;
+			} else {
+				data->param.pipe.cached = 1;
+			}
+			data->type = PLPipeInfo;
+			data->param.pipe.command = wtrimspace(p + 1);
+		}
 	} else if (strcmp(command, "WORKSPACE_MENU") == 0) {
 		data->type = WSMenuInfo;
 	} else if (strcmp(command, "WINDOWS_MENU") == 0) {
@@ -1012,6 +1066,10 @@ static void updateFrameTitle(_Panel * panel, char *title, InfoType type)
 
 		case PipeInfo:
 			tmp = wstrconcat(title, _(": Program Generated Submenu"));
+			break;
+
+		case PLPipeInfo:
+			tmp = wstrconcat(title, _(": Program Generated Proplist Submenu"));
 			break;
 
 		case DirectoryInfo:
@@ -1117,6 +1175,15 @@ static void updateMenuItem(_Panel * panel, WEditMenuItem * item, WMWidget * chan
 		}
 		break;
 
+	case PLPipeInfo:
+		if (changedWidget == panel->plpipeT) {
+			REPLACE(data->param.pipe.command, WMGetTextFieldText(panel->plpipeT));
+		}
+		if (changedWidget == panel->plpipeCacheB) {
+			data->param.pipe.cached = WMGetButtonSelected(panel->plpipeCacheB);
+		}
+		break;
+
 	case ExternalInfo:
 		if (changedWidget == panel->pathT) {
 			REPLACE(data->param.external.path, WMGetTextFieldText(panel->pathT));
@@ -1171,6 +1238,11 @@ menuItemCloned(WEditMenuDelegate * delegate, WEditMenu * menu, WEditMenuItem * o
 		break;
 
 	case PipeInfo:
+		newData->param.pipe.command = DUP(data->param.pipe.command);
+		newData->param.pipe.cached = data->param.pipe.cached;
+		break;
+
+	case PLPipeInfo:
 		newData->param.pipe.command = DUP(data->param.pipe.command);
 		newData->param.pipe.cached = data->param.pipe.cached;
 		break;
@@ -1282,6 +1354,11 @@ static void menuItemSelected(WEditMenuDelegate * delegate, WEditMenu * menu, WEd
 		case PipeInfo:
 			WMSetTextFieldText(panel->pipeT, data->param.pipe.command);
 			WMSetButtonSelected(panel->pipeCacheB, data->param.pipe.cached);
+			break;
+
+		case PLPipeInfo:
+			WMSetTextFieldText(panel->plpipeT, data->param.pipe.command);
+			WMSetButtonSelected(panel->plpipeCacheB, data->param.pipe.cached);
 			break;
 
 		case ExternalInfo:
@@ -1459,6 +1536,7 @@ static WMPropList *processData(char *title, ItemData * data)
 	char *s1;
 	static WMPropList *pscut = NULL;
 	static WMPropList *pomenu = NULL;
+	static WMPropList *poplmenu = NULL;
 	int i;
 
 	if (data == NULL)
@@ -1467,6 +1545,7 @@ static WMPropList *processData(char *title, ItemData * data)
 	if (!pscut) {
 		pscut = WMCreatePLString("SHORTCUT");
 		pomenu = WMCreatePLString("OPEN_MENU");
+		poplmenu = WMCreatePLString("OPEN_PLMENU");
 	}
 
 	item = WMCreatePLArray(WMCreatePLString(title), NULL);
@@ -1522,9 +1601,14 @@ static WMPropList *processData(char *title, ItemData * data)
 		break;
 
 	case PipeInfo:
+	case PLPipeInfo:
 		if (!data->param.pipe.command)
 			return NULL;
-		WMAddToPLArray(item, pomenu);
+		if (data->type == PLPipeInfo)
+			WMAddToPLArray(item, poplmenu);
+		else
+			WMAddToPLArray(item, pomenu);
+
 		if (data->param.pipe.cached)
 			s1 = wstrconcat("| ", data->param.pipe.command);
 		else
