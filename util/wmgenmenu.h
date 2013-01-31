@@ -109,6 +109,7 @@ char *Multimedia[MAX_NR_APPS][2] = {
 	{ N_("Gcd"), "gcd" },
 	{ N_("XawTV"), "xawtv" },
 	{ N_("XPlayCD"), "xplaycd" },
+	{ N_("XBMC"), "xbmc" },
 	{ NULL, NULL}
 };
 
