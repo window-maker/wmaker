@@ -1545,6 +1545,60 @@ WMPropList *WMReadPropListFromFile(char *file)
 	return plist;
 }
 
+WMPropList *WMReadPropListFromPipe(char *command)
+{
+	FILE *file;
+	WMPropList *plist;
+	PLData *pldata;
+	char line[1024];
+
+	file = popen(command, "r");
+
+	if (!file) {
+		werror(_("%s:could not open menu file"), command);
+		return NULL;
+	}
+
+	pldata = (PLData *) wmalloc(sizeof(PLData));
+	pldata->ptr = NULL;
+	pldata->filename = command;
+	pldata->lineNumber = 1;
+
+	/* read from file till EOF or OOM and fill proplist buffer*/
+	while (fgets(line, sizeof(line), file) != NULL) {
+		if (pldata->ptr == NULL) {
+			pldata->ptr = wmalloc(strlen(line)+1);
+			pldata->ptr[0] = '\0';
+		} else {
+			pldata->ptr = wrealloc(pldata->ptr,
+			    strlen(line) + strlen(pldata->ptr) + 1);
+		}
+
+		pldata->ptr = strncat(pldata->ptr, line, strlen(line));
+	}
+
+	pclose(file);
+
+	plist = getPropList(pldata);
+
+	if (getNonSpaceChar(pldata) != 0 && plist) {
+		COMPLAIN(pldata, _("extra data after end of property list"));
+		/*
+		 * We can't just ignore garbage after the end of the description
+		 * (especially if the description was read from a file), because
+		 * the "garbage" can be the real data and the real garbage is in
+		 * fact in the beginning of the file (which is now inside plist)
+		 */
+		WMReleasePropList(plist);
+		plist = NULL;
+	}
+
+	wfree(pldata->ptr);
+	wfree(pldata);
+
+	return plist;
+}
+
 /* TODO: review this function's code */
 
 Bool WMWritePropListToFile(WMPropList * plist, char *path)

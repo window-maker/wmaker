@@ -807,6 +807,8 @@ char* WMGetPropListDescription(WMPropList *plist, Bool indented);
 
 WMPropList* WMReadPropListFromFile(char *file);
 
+WMPropList* WMReadPropListFromPipe(char *command);
+
 Bool WMWritePropListToFile(WMPropList *plist, char *path);
 
 /* ---[ WINGs/userdefaults.c ]-------------------------------------------- */
