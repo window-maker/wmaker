@@ -99,8 +99,8 @@ static void showData(_Panel * panel)
 	char *def = "blh";
 
 	WMSetButtonSelected(panel->arrB, GetBoolForKey("AutoArrangeIcons"));
-
 	WMSetButtonSelected(panel->omnB, GetBoolForKey("StickyIcons"));
+	WMSetButtonSelected(panel->sclB, GetBoolForKey("SingleClickLaunch"));
 
 	str = GetStringForKey("IconPosition");
 	if (!str)
@@ -287,6 +287,7 @@ static void storeData(_Panel * panel)
 
 	SetBoolForKey(WMGetButtonSelected(panel->arrB), "AutoArrangeIcons");
 	SetBoolForKey(WMGetButtonSelected(panel->omnB), "StickyIcons");
+	SetBoolForKey(WMGetButtonSelected(panel->sclB), "SingleClickLaunch");
 
 	SetIntegerForKey(WMGetPopUpButtonSelectedItem(panel->sizeP) * 8 + 24, "IconSize");
 
