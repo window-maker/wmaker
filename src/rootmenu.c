@@ -63,6 +63,7 @@ extern Cursor wCursor[WCUR_LAST];
 extern WPreferences wPreferences;
 
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
+static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen * scr, char *file_name);
 static WMenu *readMenuDirectory(WScreen * scr, char *title, char **file_name, char *command);
 static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals);
@@ -119,6 +120,12 @@ static Shortcut *shortcutList = NULL;
  *                command must be a valid menu description.
  *                The space between '|' and command is optional.
  *                || will do the same, but will not cache the contents.
+ * OPEN_PLMENU | command
+ *		- opens command and uses its stdout which must be in proplist
+ *		  fromat to construct and insert the resulting menu in current
+ *		  position.
+ *		  The space between '|' and command is optional.
+ *		  || will do the same, but will not cache the contents.
  * SAVE_SESSION - saves the current state of the desktop, which include
  *		  all running applications, all their hints (geometry,
  *		  position on screen, workspace they live on, the dock
@@ -574,6 +581,8 @@ static WMenu *constructPLMenu(WScreen *screen, char *path)
 	return menu;
 }
 
+
+
 static void constructMenu(WMenu * menu, WMenuEntry * entry)
 {
 	WMenu *submenu;
@@ -696,6 +705,53 @@ static void constructMenu(WMenu * menu, WMenuEntry * entry)
 		wfree(cmd);
 }
 
+static void constructPLMenuFromPipe(WMenu * menu, WMenuEntry * entry)
+{
+	WMenu *submenu = NULL;
+	char **path;
+	char *cmd;
+	int i;
+
+	separateCommand((char *)entry->clientdata, &path, &cmd);
+	if (path == NULL || *path == NULL || **path == 0) {
+		wwarning(_("invalid OPEN_PLMENU specification: %s"),
+		    (char *)entry->clientdata);
+		if (cmd)
+			wfree(cmd);
+		return;
+	}
+
+	if (path[0][0] == '|') {
+		/* pipe menu */
+
+		if (!menu->cascades[entry->cascade]
+		|| menu->cascades[entry->cascade]->timestamp == 0) {
+			/* parse pipe */
+			submenu = readPLMenuPipe(menu->frame->screen_ptr, path);
+
+			if (submenu != NULL) {
+				if (path[0][1] == '|')
+					submenu->timestamp = 0;
+				else
+					submenu->timestamp = 1;	/* there's no automatic reloading */
+			}
+		}
+	}
+
+	if (submenu) {
+		wMenuEntryRemoveCascade(menu, entry);
+		wMenuEntrySetCascade(menu, entry, submenu);
+	}
+
+	i = 0;
+	while (path[i] != NULL)
+		wfree(path[i++]);
+
+	wfree(path);
+	if (cmd)
+		wfree(cmd);
+
+}
 static void cleanupWorkspaceMenu(WMenu * menu)
 {
 	if (menu->frame->screen_ptr->workspace_menu == menu)
@@ -784,6 +840,23 @@ static WMenuEntry *addMenuEntry(WMenu * menu, char *title, char *shortcut, char 
 			dummy = wMenuCreate(scr, title, False);
 			dummy->on_destroy = removeShortcutsForMenu;
 			entry = wMenuAddCallback(menu, title, constructMenu, path);
+			entry->free_cdata = wfree;
+			wMenuEntrySetCascade(menu, entry, dummy);
+		}
+	} else if (strcmp(command, "OPEN_PLMENU") == 0) {
+		if (!params) {
+			wwarning(_("%s:missing parameter for menu command \"%s\""), file_name, command);
+		} else {
+			WMenu *dummy;
+			char *path;
+
+			path = wfindfile(DEF_CONFIG_PATHS, params);
+			if (!path)
+				path = wstrdup(params);
+
+			dummy = wMenuCreate(scr, title, False);
+			dummy->on_destroy = removeShortcutsForMenu;
+			entry = wMenuAddCallback(menu, title, constructPLMenuFromPipe, path);
 			entry->free_cdata = wfree;
 			wMenuEntrySetCascade(menu, entry, dummy);
 		}
@@ -980,6 +1053,34 @@ static WMenu *readMenuFile(WScreen * scr, char *file_name)
 }
 
 /************    Menu Configuration From Pipe      *************/
+static WMenu *readPLMenuPipe(WScreen * scr, char **file_name)
+{
+	WMPropList *plist = NULL;
+	WMenu *menu = NULL;
+	char *filename;
+	char flat_file[MAXLINE];
+	int i;
+
+	flat_file[0] = '\0';
+
+	for (i = 0; file_name[i] != NULL; i++) {
+		strcat(flat_file, file_name[i]);
+		strcat(flat_file, " ");
+	}
+	filename = flat_file + (flat_file[1] == '|' ? 2 : 1);
+
+	plist = WMReadPropListFromPipe(filename);
+
+	if (!plist)
+		return NULL;
+
+	menu = configureMenu(scr, plist, False);
+	if (!menu)
+		return NULL;
+
+	menu->on_destroy = removeShortcutsForMenu;
+	return menu;
+}
 
 static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 {
