@@ -621,7 +621,6 @@ void update_icon_pixmap(WIcon *icon)
 		XSetWindowBackgroundPixmap(dpy, icon->core->window, icon->pixmap);
 
 	/* Paint it */
-	XClearWindow(dpy, icon->core->window);
 	wIconPaint(icon);
 }
 
