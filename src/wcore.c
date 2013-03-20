@@ -43,7 +43,7 @@ extern XContext wWinContext;
  * Returns:
  * 	The created window.
  *--------------------------------------------------------------------- */
-WCoreWindow *wCoreCreateTopLevel(WScreen *screen, int x, int y, int width, int height, int bwidth, int depth, Visual *visual, Colormap colormap)
+WCoreWindow *wCoreCreateTopLevel(WScreen *screen, int x, int y, int width, int height, int bwidth, int depth, Visual *visual, Colormap colormap, WMPixel border_pixel)
 {
 	WCoreWindow *core;
 	int vmask;
@@ -56,12 +56,17 @@ WCoreWindow *wCoreCreateTopLevel(WScreen *screen, int x, int y, int width, int h
 	attribs.cursor = wCursor[WCUR_DEFAULT];
 	attribs.background_pixmap = None;
 	attribs.background_pixel = screen->black_pixel;
-	attribs.border_pixel = screen->frame_border_pixel;
+	attribs.border_pixel = border_pixel;
 	attribs.event_mask = SubstructureRedirectMask | ButtonPressMask |
 			     ButtonReleaseMask | ButtonMotionMask |
 			     ExposureMask | EnterWindowMask | LeaveWindowMask;
 
 	attribs.colormap = colormap;
+
+	if (wPreferences.use_saveunders) {
+		vmask |= CWSaveUnder;
+		attribs.save_under = True;
+	}
 
 	core->window = XCreateWindow(dpy, screen->root_win, x, y, width, height,
 				     bwidth, depth, CopyFromParent, visual, vmask, &attribs);

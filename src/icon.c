@@ -168,8 +168,6 @@ WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char
 static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y)
 {
 	WIcon *icon;
-	unsigned long vmask = 0;
-	XSetWindowAttributes attribs;
 
 	icon = wmalloc(sizeof(WIcon));
 	icon->core = wCoreCreateTopLevel(scr,
@@ -177,18 +175,8 @@ static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y)
 					 coord_y,
 					 wPreferences.icon_size,
 					 wPreferences.icon_size,
-					 0, scr->w_depth, scr->w_visual, scr->w_colormap);
-
-	if (wPreferences.use_saveunders) {
-		vmask = CWSaveUnder;
-		attribs.save_under = True;
-	}
-
-	/* a white border for selecting it */
-	vmask |= CWBorderPixel;
-	attribs.border_pixel = scr->white_pixel;
-
-	XChangeWindowAttributes(dpy, icon->core->window, vmask, &attribs);
+					 0, scr->w_depth, scr->w_visual, scr->w_colormap,
+					 scr->white_pixel);
 
 	/* will be overriden if this is a application icon */
 	icon->core->descriptor.handle_mousedown = miniwindowMouseDown;

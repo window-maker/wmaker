@@ -113,15 +113,7 @@ WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
 	allocFrameBorderPixel(fwin->colormap, FRAME_SELECTED_BORDER_COLOR, &fwin->selected_border_pixel);
 
 	fwin->core = wCoreCreateTopLevel(scr, x, y, width, height, (flags & WFF_BORDER)
-					 ? FRAME_BORDER_WIDTH : 0, fwin->depth, fwin->visual, fwin->colormap);
-	if (wPreferences.use_saveunders) {
-		unsigned long vmask;
-		XSetWindowAttributes attribs;
-
-		vmask = CWSaveUnder;
-		attribs.save_under = True;
-		XChangeWindowAttributes(dpy, fwin->core->window, vmask, &attribs);
-	}
+					 ? FRAME_BORDER_WIDTH : 0, fwin->depth, fwin->visual, fwin->colormap, scr->frame_border_pixel);
 
 	/* setup stacking information */
 	fwin->core->stacking = wmalloc(sizeof(WStacking));
