@@ -328,7 +328,7 @@ void wSessionClearState(WScreen * scr)
 	WMRemoveFromPLDictionary(scr->session_state, sWorkspace);
 }
 
-static pid_t execCommand(WScreen * scr, char *command, char *host)
+static pid_t execCommand(WScreen *scr, char *command)
 {
 	pid_t pid;
 	char **argv;
@@ -411,10 +411,10 @@ static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
 
 #define SAME(x, y) (((x) && (y) && !strcmp((x), (y))) || (!(x) && !(y)))
 
-void wSessionRestoreState(WScreen * scr)
+void wSessionRestoreState(WScreen *scr)
 {
 	WSavedState *state;
-	char *instance, *class, *command, *host;
+	char *instance, *class, *command;
 	WMPropList *win_info, *apps, *cmd, *value;
 	pid_t pid;
 	int i, count;
@@ -453,12 +453,6 @@ void wSessionRestoreState(WScreen * scr)
 		ParseWindowName(value, &instance, &class, "session");
 		if (!instance && !class)
 			continue;
-
-		value = WMGetFromPLDictionary(win_info, sHost);
-		if (value && WMIsPLString(value))
-			host = WMGetFromPLString(value);
-		else
-			host = NULL;
 
 		state = getWindowState(scr, win_info);
 
@@ -499,7 +493,7 @@ void wSessionRestoreState(WScreen * scr)
 
 		if (found) {
 			wDockLaunchWithState(dock, btn, state);
-		} else if ((pid = execCommand(scr, command, host)) > 0) {
+		} else if ((pid = execCommand(scr, command)) > 0) {
 			wWindowAddSavedState(instance, class, command, pid, state);
 		} else {
 			wfree(state);
