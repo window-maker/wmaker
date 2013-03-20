@@ -39,8 +39,6 @@ typedef struct WDock {
 
 #define WM_DOCK        0
 #define WM_CLIP        1
-#define NORMAL_DOCK    WM_DOCK
-#define EXTENDED_DOCK  WM_CLIP
     int type;
 
     WMagicNumber auto_expand_magic;
