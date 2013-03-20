@@ -78,7 +78,7 @@ void wWorkspaceMake(WScreen * scr, int count)
 	}
 }
 
-int wWorkspaceNew(WScreen * scr)
+int wWorkspaceNew(WScreen *scr)
 {
 	WWorkspace *wspace, **list;
 	int i;
@@ -101,12 +101,13 @@ int wWorkspaceNew(WScreen * scr)
 
 		list = wmalloc(sizeof(WWorkspace *) * scr->workspace_count);
 
-		for (i = 0; i < scr->workspace_count - 1; i++) {
+		for (i = 0; i < scr->workspace_count - 1; i++)
 			list[i] = scr->workspaces[i];
-		}
+
 		list[i] = wspace;
 		if (scr->workspaces)
 			wfree(scr->workspaces);
+
 		scr->workspaces = list;
 
 		wWorkspaceMenuUpdate(scr, scr->workspace_menu);
@@ -625,24 +626,15 @@ static void deleteWSCommand(WMenu * menu, WMenuEntry * entry)
 	wWorkspaceDelete(menu->frame->screen_ptr, menu->frame->screen_ptr->workspace_count - 1);
 }
 
-static void newWSCommand(WMenu * menu, WMenuEntry * foo)
+static void newWSCommand(WMenu *menu, WMenuEntry *foo)
 {
 	int ws;
 
 	ws = wWorkspaceNew(menu->frame->screen_ptr);
+
 	/* autochange workspace */
 	if (ws >= 0)
 		wWorkspaceChange(menu->frame->screen_ptr, ws);
-
-	/*
-	   if (ws<9) {
-	   int kcode;
-	   if (wKeyBindings[WKBD_WORKSPACE1+ws]) {
-	   kcode = wKeyBindings[WKBD_WORKSPACE1+ws]->keycode;
-	   entry->rtext =
-	   wstrdup(XKeysymToString(XKeycodeToKeysym(dpy, kcode, 0)));
-	   }
-	   } */
 }
 
 void wWorkspaceRename(WScreen * scr, int workspace, char *name)
@@ -801,7 +793,7 @@ void wWorkspaceSaveState(WScreen * scr, WMPropList * old_state)
 	WMReleasePropList(parr);
 }
 
-void wWorkspaceRestoreState(WScreen * scr)
+void wWorkspaceRestoreState(WScreen *scr)
 {
 	WMPropList *parr, *pstr, *wks_state, *clip_state;
 	int i, j;
@@ -822,20 +814,25 @@ void wWorkspaceRestoreState(WScreen * scr)
 			pstr = WMGetFromPLDictionary(wks_state, dName);
 		else
 			pstr = wks_state;
+
 		if (i >= scr->workspace_count)
 			wWorkspaceNew(scr);
+
 		if (scr->workspace_menu) {
 			wfree(scr->workspace_menu->entries[i + 2]->text);
 			scr->workspace_menu->entries[i + 2]->text = wstrdup(WMGetFromPLString(pstr));
 			scr->workspace_menu->flags.realized = 0;
 		}
+
 		wfree(scr->workspaces[i]->name);
 		scr->workspaces[i]->name = wstrdup(WMGetFromPLString(pstr));
 		if (!wPreferences.flags.noclip) {
 			int added_omnipresent_icons = 0;
+
 			clip_state = WMGetFromPLDictionary(wks_state, dClip);
 			if (scr->workspaces[i]->clip)
 				wDockDestroy(scr->workspaces[i]->clip);
+
 			scr->workspaces[i]->clip = wDockRestoreState(scr, clip_state, WM_CLIP);
 			if (i > 0)
 				wDockHideIcons(scr->workspaces[i]->clip);
