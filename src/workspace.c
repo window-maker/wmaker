@@ -88,16 +88,15 @@ int wWorkspaceNew(WScreen *scr)
 
 		wspace = wmalloc(sizeof(WWorkspace));
 		wspace->name = NULL;
+		wspace->clip = NULL;
 
 		if (!wspace->name) {
 			wspace->name = wmalloc(strlen(_("Workspace %i")) + 8);
 			sprintf(wspace->name, _("Workspace %i"), scr->workspace_count);
 		}
 
-		if (!wPreferences.flags.noclip) {
+		if (!wPreferences.flags.noclip)
 			wspace->clip = wDockCreate(scr, WM_CLIP);
-		} else
-			wspace->clip = NULL;
 
 		list = wmalloc(sizeof(WWorkspace *) * scr->workspace_count);
 
