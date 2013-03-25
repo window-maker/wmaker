@@ -34,6 +34,7 @@
 #include "WindowMaker.h"
 #include "GNUstep.h"
 #include "texture.h"
+#include "resources.h"
 #include "screen.h"
 #include "wcore.h"
 #include "framewin.h"
@@ -65,14 +66,8 @@ static void allocFrameBorderPixel(Colormap colormap, char *color_name, unsigned 
 
 	*pixel = NULL;
 
-	if (!XParseColor(dpy, colormap, color_name, &xcol)) {
-		wwarning(_("could not parse color \"%s\""), color_name);
+	if (! wGetColorForColormap(colormap, color_name, &xcol))
 		return;
-	}
-	if (!XAllocColor(dpy, colormap, &xcol)) {
-		wwarning(_("could not allocate color \"%s\""), color_name);
-		return;
-	}
 
 	*pixel = wmalloc(sizeof(unsigned long));
 	if (*pixel)
