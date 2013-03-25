@@ -40,6 +40,7 @@
 #ifdef XKB_BUTTON_HINT
 #define WFF_LANGUAGE_BUTTON	(1<<6)
 #endif
+#define WFF_SELECTED	(1<<7)
 
 
 #define WFF_IS_SHADED	(1<<16)

@@ -122,6 +122,8 @@ static int setMenuTextFont();
 static int setIconTitleFont();
 static int setIconTitleColor();
 static int setIconTitleBack();
+static int setFrameBorderColor();
+static int setFrameSelectedBorderColor();
 static int setLargeDisplayFont();
 static int setWTitleColor();
 static int setFTitleBack();
@@ -180,6 +182,8 @@ static int setCursor();
 
 #define REFRESH_ICON_TITLE_COLOR (1<<13)
 #define REFRESH_ICON_TITLE_BACK (1<<14)
+
+#define REFRESH_FRAME_BORDER REFRESH_MENU_FONT|REFRESH_WINDOW_FONT
 
 static WOptionEnumeration seFocusModes[] = {
 	{"Manual", WKF_CLICK, 0}, {"ClickToFocus", WKF_CLICK, 1},
@@ -538,6 +542,10 @@ WDefaultEntry optionList[] = {
 	    NULL, getPropList, setSwPOptions, NULL, NULL},
 	{"ModifierKeyLabels", "(\"Shift+\", \"Ctrl+\", \"Mod1+\", \"Mod2+\", \"Mod3+\", \"Mod4+\", \"Mod5+\")", &wPreferences,
 	    NULL, getPropList, setModifierKeyLabels, NULL, NULL},
+	{"FrameBorderColor", "black", NULL,
+	    NULL, getColor, setFrameBorderColor, NULL, NULL},
+	{"FrameSelectedBorderColor", "white", NULL,
+	    NULL, getColor, setFrameSelectedBorderColor, NULL, NULL},
 
 	/* keybindings */
 
@@ -2574,6 +2582,28 @@ static int setIconTitleBack(WScreen * scr, WDefaultEntry * entry, XColor * color
 	scr->icon_title_texture = wTextureMakeSolid(scr, color);
 
 	return REFRESH_ICON_TITLE_BACK;
+}
+
+static int setFrameBorderColor(WScreen * scr, WDefaultEntry * entry, XColor * color, void *foo)
+{
+	if (scr->frame_border_color)
+		WMReleaseColor(scr->frame_border_color);
+	scr->frame_border_color = WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue, True);
+
+	wFreeColor(scr, color->pixel);
+
+	return REFRESH_FRAME_BORDER;
+}
+
+static int setFrameSelectedBorderColor(WScreen * scr, WDefaultEntry * entry, XColor * color, void *foo)
+{
+	if (scr->frame_selected_border_color)
+		WMReleaseColor(scr->frame_selected_border_color);
+	scr->frame_selected_border_color = WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue, True);
+
+	wFreeColor(scr, color->pixel);
+
+	return REFRESH_FRAME_BORDER;
 }
 
 static void trackDeadProcess(pid_t pid, unsigned char status, WScreen * scr)

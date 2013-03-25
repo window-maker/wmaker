@@ -653,13 +653,6 @@ WScreen *wScreenInit(int screen_number)
 	scr->light_pixel = WMColorPixel(scr->gray);
 	scr->dark_pixel = WMColorPixel(scr->darkGray);
 
-	{
-		XColor xcol;
-		/* frame boder color */
-		wGetColor(scr, FRAME_BORDER_COLOR, &xcol);
-		scr->frame_border_pixel = xcol.pixel;
-	}
-
 	/* create GCs with default values */
 	allocGCs(scr);
 
@@ -670,6 +663,15 @@ WScreen *wScreenInit(int screen_number)
 
 	/* read defaults for this screen */
 	wReadDefaults(scr, WDWindowMaker->dictionary);
+
+	{
+		XColor xcol;
+		/* frame boder color */
+		wGetColor(scr, WMGetColorRGBDescription(scr->frame_border_color), &xcol);
+		scr->frame_border_pixel = xcol.pixel;
+		wGetColor(scr, WMGetColorRGBDescription(scr->frame_selected_border_color), &xcol);
+		scr->frame_selected_border_pixel = xcol.pixel;
+	}
 
 	createInternalWindows(scr);
 

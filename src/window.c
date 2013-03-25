@@ -2198,6 +2198,8 @@ void wWindowConfigureBorders(WWindow *wwin)
 			flags |= WFF_BORDER;
 		if (wwin->flags.shaded)
 			flags |= WFF_IS_SHADED;
+		if (wwin->flags.selected)
+			flags |= WFF_SELECTED;
 
 		oldh = wwin->frame->top_width;
 		wFrameWindowUpdateBorders(wwin->frame, flags);

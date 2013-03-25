@@ -341,9 +341,6 @@
 /* don't put titles in miniwindows */
 #undef NO_MINIWINDOW_TITLES
 
-#define FRAME_BORDER_COLOR "black"
-#define FRAME_SELECTED_BORDER_COLOR "white"
-
 /* for boxes with high mouse sampling rates (SGI) */
 #define DELAY_BETWEEN_MOUSE_SAMPLING  10
 
