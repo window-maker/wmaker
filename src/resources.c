@@ -35,17 +35,22 @@
 #include "resources.h"
 #include "screen.h"
 
-int wGetColor(WScreen * scr, char *color_name, XColor * color)
+int wGetColorForColormap(Colormap colormap, char *color_name, XColor * color)
 {
-	if (!XParseColor(dpy, scr->w_colormap, color_name, color)) {
+	if (!XParseColor(dpy, colormap, color_name, color)) {
 		wwarning(_("could not parse color \"%s\""), color_name);
 		return False;
 	}
-	if (!XAllocColor(dpy, scr->w_colormap, color)) {
+	if (!XAllocColor(dpy, colormap, color)) {
 		wwarning(_("could not allocate color \"%s\""), color_name);
 		return False;
 	}
 	return True;
+}
+
+int wGetColor(WScreen * scr, char *color_name, XColor * color)
+{
+	return wGetColorForColormap(scr->w_colormap, color_name, color);
 }
 
 void wFreeColor(WScreen * scr, unsigned long pixel)
