@@ -75,8 +75,8 @@ void wClientRestore(WWindow * wwin)
 
 	wClientGetGravityOffsets(wwin, &gx, &gy);
 	/* set the position of the frame on screen */
-	wwin->frame_x -= gx * FRAME_BORDER_WIDTH;
-	wwin->frame_y -= gy * FRAME_BORDER_WIDTH;
+	wwin->frame_x -= gx * wwin->screen_ptr->frame_border_width;
+	wwin->frame_y -= gy * wwin->screen_ptr->frame_border_width;
 	/* if gravity is to the south, account for the border sizes */
 	if (gy > 0)
 		wwin->frame_y += (wwin->frame->top_width + wwin->frame->bottom_width);
@@ -224,7 +224,7 @@ void wClientConfigure(WWindow * wwin, XConfigureRequestEvent * xcre)
 			nx = xcre->x;
 			/* Subtracting the border makes the window shift by 1 pixel -Dan */
 			/*if (HAS_BORDER(wwin)) {
-			   nx -= FRAME_BORDER_WIDTH;
+			   nx -= wwin->screen_ptr->frame_border_width;
 			   } */
 		} else {
 			nx = wwin->frame_x;
@@ -234,7 +234,7 @@ void wClientConfigure(WWindow * wwin, XConfigureRequestEvent * xcre)
 			ny = xcre->y - ((ofs_y < 0) ? 0 : wwin->frame->top_width);
 			/* Subtracting the border makes the window shift by 1 pixel -Dan */
 			/*if (HAS_BORDER(wwin)) {
-			   ny -= FRAME_BORDER_WIDTH;
+			   ny -= wwin->screen_ptr->frame_border_width;
 			   } */
 		} else {
 			ny = wwin->frame_y;

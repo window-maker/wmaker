@@ -362,7 +362,7 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 		has_border = 0;
 
 	/* the size to adjust the geometry */
-	adj_size = FRAME_BORDER_WIDTH * 2 * has_border;
+	adj_size = wwin->screen_ptr->frame_border_width * 2 * has_border;
 
 	/* save old coordinates before we change the current values
 	 * always if the window is not currently maximized at all
@@ -626,7 +626,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 	if (HAS_RESIZEBAR(wwin))
 		rbar_height_0 = RESIZEBAR_HEIGHT;
 	if (HAS_BORDER(wwin))
-		bd_width_0 = FRAME_BORDER_WIDTH;
+		bd_width_0 = wwin->screen_ptr->frame_border_width;
 
 	/* the length to be subtracted if the window has titlebar, etc */
 	adjust_height = tbar_height_0 + 2 * bd_width_0 + rbar_height_0;
@@ -1871,7 +1871,7 @@ void wSelectWindow(WWindow *wwin, Bool flag)
 			XSetWindowBorder(dpy, wwin->frame->core->window, scr->white_pixel);
 
 		if (!HAS_BORDER(wwin)) {
-			XSetWindowBorderWidth(dpy, wwin->frame->core->window, FRAME_BORDER_WIDTH);
+			XSetWindowBorderWidth(dpy, wwin->frame->core->window, wwin->screen_ptr->frame_border_width);
 		}
 
 		if (!scr->selected_windows)

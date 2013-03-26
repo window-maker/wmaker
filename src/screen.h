@@ -167,6 +167,7 @@ typedef struct _WScreen {
     WMColor *mtext_color;	       /* menu item text */
     WMColor *dtext_color;	       /* disabled menu item text */
 
+    int frame_border_width;
     WMColor *frame_border_color;
     WMColor *frame_selected_border_color;
 

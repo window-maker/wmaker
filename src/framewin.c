@@ -106,7 +106,7 @@ WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
 	fwin->colormap = colormap;
 
 	fwin->core = wCoreCreateTopLevel(scr, x, y, width, height, (flags & WFF_BORDER)
-					 ? FRAME_BORDER_WIDTH : 0, fwin->depth, fwin->visual, fwin->colormap, scr->frame_border_pixel);
+					 ? scr->frame_border_width : 0, fwin->depth, fwin->visual, fwin->colormap, scr->frame_border_pixel);
 
 	/* setup stacking information */
 	fwin->core->stacking = wmalloc(sizeof(WStacking));
@@ -369,7 +369,7 @@ void wFrameWindowUpdateBorders(WFrameWindow * fwin, int flags)
 		wFrameWindowResize(fwin, width, height + fwin->top_width + fwin->bottom_width);
 
 	if (flags & WFF_BORDER)
-		XSetWindowBorderWidth(dpy, fwin->core->window, FRAME_BORDER_WIDTH);
+		XSetWindowBorderWidth(dpy, fwin->core->window, scr->frame_border_width);
 	else
 		XSetWindowBorderWidth(dpy, fwin->core->window, 0);
 

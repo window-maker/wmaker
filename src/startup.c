@@ -876,7 +876,7 @@ static void manageAllWindows(WScreen * scr, int crashRecovery)
 			if (crashRecovery) {
 				int border;
 
-				border = (!HAS_BORDER(wwin) ? 0 : FRAME_BORDER_WIDTH);
+				border = (!HAS_BORDER(wwin) ? 0 : scr->frame_border_width);
 
 				wWindowMove(wwin, wwin->frame_x - border,
 					    wwin->frame_y - border -

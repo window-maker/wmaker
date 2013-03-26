@@ -2021,8 +2021,8 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 	wwin->frame_x = req_x;
 	wwin->frame_y = req_y;
 	if (HAS_BORDER(wwin)) {
-		wwin->client.x += FRAME_BORDER_WIDTH;
-		wwin->client.y += FRAME_BORDER_WIDTH;
+		wwin->client.x += wwin->screen_ptr->frame_border_width;
+		wwin->client.y += wwin->screen_ptr->frame_border_width;
 	}
 #ifdef SHAPE
 	if (wShapeSupported && wwin->flags.shaped && resize)
@@ -2058,8 +2058,8 @@ void wWindowMove(WWindow *wwin, int req_x, int req_y)
 	wwin->client.x = req_x;
 	wwin->client.y = req_y + wwin->frame->top_width;
 	if (HAS_BORDER(wwin)) {
-		wwin->client.x += FRAME_BORDER_WIDTH;
-		wwin->client.y += FRAME_BORDER_WIDTH;
+		wwin->client.x += wwin->screen_ptr->frame_border_width;
+		wwin->client.y += wwin->screen_ptr->frame_border_width;
 	}
 
 	XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);

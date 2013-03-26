@@ -57,8 +57,8 @@ extern WPreferences wPreferences;
 #define MENU_SCROLL_STEP  menuScrollParameters[(int)wPreferences.menu_scroll_speed].steps
 #define MENU_SCROLL_DELAY menuScrollParameters[(int)wPreferences.menu_scroll_speed].delay
 
-#define MENUW(m)	((m)->frame->core->width+2*FRAME_BORDER_WIDTH)
-#define MENUH(m)	((m)->frame->core->height+2*FRAME_BORDER_WIDTH)
+#define MENUW(m)	((m)->frame->core->width+2*(m)->frame->screen_ptr->frame_border_width)
+#define MENUH(m)	((m)->frame->core->height+2*(m)->frame->screen_ptr->frame_border_width)
 
 /***** Local Stuff ******/
 

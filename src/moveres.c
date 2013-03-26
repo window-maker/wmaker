@@ -228,10 +228,10 @@ static void showGeometry(WWindow * wwin, int x1, int y1, int x2, int y2, int dir
 	x2--;
 
 	if (HAS_BORDER_WITH_SELECT(wwin)) {
-		x1 += FRAME_BORDER_WIDTH;
-		x2 += FRAME_BORDER_WIDTH;
-		y1 += FRAME_BORDER_WIDTH;
-		y2 += FRAME_BORDER_WIDTH;
+		x1 += scr->frame_border_width;
+		x2 += scr->frame_border_width;
+		y1 += scr->frame_border_width;
+		y2 += scr->frame_border_width;
 	}
 
 	ty = y1 + wwin->frame->top_width;
@@ -463,8 +463,8 @@ static void drawTransparentFrame(WWindow * wwin, int x, int y, int width, int he
 	int bottom = 0;
 
 	if (HAS_BORDER_WITH_SELECT(wwin)) {
-		x += FRAME_BORDER_WIDTH;
-		y += FRAME_BORDER_WIDTH;
+		x += wwin->screen_ptr->frame_border_width;
+		y += wwin->screen_ptr->frame_border_width;
 	}
 
 	if (HAS_TITLEBAR(wwin) && !wwin->flags.shaded) {
@@ -596,9 +596,9 @@ typedef struct {
 #define WTOP(w) (w)->frame_y
 #define WLEFT(w) (w)->frame_x
 #define WRIGHT(w) ((w)->frame_x + (int)(w)->frame->core->width - 1 + \
-    (HAS_BORDER_WITH_SELECT(w) ? 2*FRAME_BORDER_WIDTH : 0))
+    (HAS_BORDER_WITH_SELECT(w) ? 2*(w)->screen_ptr->frame_border_width : 0))
 #define WBOTTOM(w) ((w)->frame_y + (int)(w)->frame->core->height - 1 + \
-    (HAS_BORDER_WITH_SELECT(w) ? 2*FRAME_BORDER_WIDTH : 0))
+    (HAS_BORDER_WITH_SELECT(w) ? 2*(w)->screen_ptr->frame_border_width : 0))
 
 static int compareWTop(const void *a, const void *b)
 {
@@ -830,8 +830,8 @@ static void initMoveData(WWindow * wwin, MoveData * data)
 	data->calcX = wwin->frame_x;
 	data->calcY = wwin->frame_y;
 
-	data->winWidth = wwin->frame->core->width + (HAS_BORDER_WITH_SELECT(wwin) ? 2 * FRAME_BORDER_WIDTH : 0);
-	data->winHeight = wwin->frame->core->height + (HAS_BORDER_WITH_SELECT(wwin) ? 2 * FRAME_BORDER_WIDTH : 0);
+	data->winWidth = wwin->frame->core->width + (HAS_BORDER_WITH_SELECT(wwin) ? 2 * wwin->screen_ptr->frame_border_width : 0);
+	data->winHeight = wwin->frame->core->height + (HAS_BORDER_WITH_SELECT(wwin) ? 2 * wwin->screen_ptr->frame_border_width : 0);
 }
 
 static Bool checkWorkspaceChange(WWindow * wwin, MoveData * data, Bool opaqueMove)
