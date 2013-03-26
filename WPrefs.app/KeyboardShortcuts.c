@@ -91,6 +91,7 @@ static char *keyOptions[] = {
 	"GroupPrevKey",
 	"NextWorkspaceKey",
 	"PrevWorkspaceKey",
+	"LastWorkspaceKey",
 	"NextWorkspaceLayerKey",
 	"PrevWorkspaceLayerKey",
 	"Workspace1Key",
@@ -479,6 +480,7 @@ static void createPanel(Panel * p)
 	WMAddListItem(panel->actLs, _("Focus previous group window"));
 	WMAddListItem(panel->actLs, _("Switch to next workspace"));
 	WMAddListItem(panel->actLs, _("Switch to previous workspace"));
+	WMAddListItem(panel->actLs, _("Switch to last used workspace"));
 	WMAddListItem(panel->actLs, _("Switch to next ten workspaces"));
 	WMAddListItem(panel->actLs, _("Switch to previous ten workspaces"));
 	WMAddListItem(panel->actLs, _("Switch to workspace 1"));
