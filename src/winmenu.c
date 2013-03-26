@@ -551,6 +551,20 @@ static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 	wMenuSetEnabled(menu, MC_SHADE, !WFLAGP(wwin, no_shadeable)
 			&& !wwin->flags.miniaturized);
 
+	if (wwin->flags.selected) {
+		static char *text = NULL;
+		if (!text)
+			text = _("Deselect");
+
+		menu->entries[MC_SELECT]->text = text;
+	} else {
+		static char *text = NULL;
+		if (!text)
+			text = _("Select");
+
+		menu->entries[MC_SELECT]->text = text;
+	}
+
 	wMenuSetEnabled(menu, MC_DUMMY_MOVETO, !IS_OMNIPRESENT(wwin));
 
 	if (!wwin->flags.inspector_open) {
@@ -591,6 +605,7 @@ static WMenu *open_window_menu_core(WWindow *wwin, int x, int y)
 		wfree(scr->window_menu->entries[MC_MINIATURIZE]->text);
 		wfree(scr->window_menu->entries[MC_MAXIMIZE]->text);
 		wfree(scr->window_menu->entries[MC_SHADE]->text);
+		wfree(scr->window_menu->entries[MC_SELECT]->text);
 	} else {
 		updateWorkspaceMenu(scr->workspace_submenu);
 	}
@@ -685,6 +700,7 @@ void DestroyWindowMenu(WScreen *scr)
 		scr->window_menu->entries[MC_MINIATURIZE]->text = NULL;
 		scr->window_menu->entries[MC_MAXIMIZE]->text = NULL;
 		scr->window_menu->entries[MC_SHADE]->text = NULL;
+		scr->window_menu->entries[MC_SELECT]->text = NULL;
 		wMenuDestroy(scr->window_menu, True);
 		scr->window_menu = NULL;
 	}
