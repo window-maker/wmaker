@@ -1554,6 +1554,9 @@ static void handleKeyPress(XEvent * event)
 	case WKBD_PREVWORKSPACE:
 		wWorkspaceRelativeChange(scr, -1);
 		break;
+	case WKBD_LASTWORKSPACE:
+		wWorkspaceChange(scr, scr->last_workspace);
+		break;
 
 	case WKBD_WINDOW1:
 	case WKBD_WINDOW2:

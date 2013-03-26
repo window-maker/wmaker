@@ -51,8 +51,9 @@
 
 #define MC_NEW          0
 #define MC_DESTROY_LAST 1
+#define MC_LAST_USED    2
 /* index of the first workspace menu entry */
-#define MC_WORKSPACE1   2
+#define MC_WORKSPACE1   3
 
 #define MAX_SHORTCUT_LENGTH 32
 #define WORKSPACE_NAME_DISPLAY_PADDING 32
@@ -193,6 +194,8 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 
 	if (scr->current_workspace >= scr->workspace_count)
 		wWorkspaceChange(scr, scr->workspace_count - 1);
+	if (scr->last_workspace >= scr->workspace_count)
+		scr->last_workspace = 0;
 
 	return True;
 }
@@ -480,6 +483,7 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	wClipUpdateForWorkspaceChange(scr, workspace);
 
+	scr->last_workspace = scr->current_workspace;
 	scr->current_workspace = workspace;
 
 	wWorkspaceMenuUpdate(scr, scr->workspace_menu);
@@ -626,6 +630,11 @@ static void switchWSCommand(WMenu * menu, WMenuEntry * entry)
 	wWorkspaceChange(menu->frame->screen_ptr, (long)entry->clientdata);
 }
 
+static void lastWSCommand(WMenu * menu, WMenuEntry * entry)
+{
+	wWorkspaceChange(menu->frame->screen_ptr, menu->frame->screen_ptr->last_workspace);
+}
+
 static void deleteWSCommand(WMenu * menu, WMenuEntry * entry)
 {
 	wWorkspaceDelete(menu->frame->screen_ptr, menu->frame->screen_ptr->workspace_count - 1);
@@ -698,6 +707,7 @@ static void onMenuEntryEdited(WMenu * menu, WMenuEntry * entry)
 WMenu *wWorkspaceMenuMake(WScreen * scr, Bool titled)
 {
 	WMenu *wsmenu;
+	WMenuEntry *entry;
 
 	wsmenu = wMenuCreate(scr, titled ? _("Workspaces") : NULL, False);
 	if (!wsmenu) {
@@ -710,6 +720,9 @@ WMenu *wWorkspaceMenuMake(WScreen * scr, Bool titled)
 
 	wMenuAddCallback(wsmenu, _("New"), newWSCommand, NULL);
 	wMenuAddCallback(wsmenu, _("Destroy Last"), deleteWSCommand, NULL);
+
+	entry = wMenuAddCallback(wsmenu, _("Last Used"), lastWSCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_LASTWORKSPACE]);
 
 	return wsmenu;
 }
@@ -764,6 +777,12 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 	} else {
 		wMenuSetEnabled(menu, MC_DESTROY_LAST, True);
 	}
+
+	/* back to last workspace */
+	if (scr->workspace_count && scr->last_workspace != scr->current_workspace)
+		wMenuSetEnabled(menu, MC_LAST_USED, True);
+	else
+		wMenuSetEnabled(menu, MC_LAST_USED, False);
 
 	tmp = menu->frame->top_width + 5;
 	/* if menu got unreachable, bring it to a visible place */

@@ -610,6 +610,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"PrevWorkspaceKey", "None", (void *)WKBD_PREVWORKSPACE,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"LastWorkspaceKey", "None", (void *)WKBD_LASTWORKSPACE,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"NextWorkspaceLayerKey", "None", (void *)WKBD_NEXTWSLAYER,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"PrevWorkspaceLayerKey", "None", (void *)WKBD_PREVWSLAYER,
@@ -2851,6 +2853,8 @@ static int setKeyGrab(WScreen * scr, WDefaultEntry * entry, WShortKey * shortcut
 
 	/* do we need to update window menus? */
 	if (widx >= WKBD_WORKSPACE1 && widx <= WKBD_WORKSPACE10)
+		return REFRESH_WORKSPACE_MENU;
+	if (widx == WKBD_LASTWORKSPACE)
 		return REFRESH_WORKSPACE_MENU;
 
 	return 0;

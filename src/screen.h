@@ -120,6 +120,7 @@ typedef struct _WScreen {
     struct WWorkspace **workspaces;    /* workspace array */
 
     int current_workspace;	       /* current workspace number */
+    int last_workspace;		       /* last used workspace number */
 
 
     WReservedArea *reservedAreas;      /* used to build totalUsableArea */
