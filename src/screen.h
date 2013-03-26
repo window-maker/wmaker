@@ -229,8 +229,6 @@ typedef struct _WScreen {
     WAppIconChain *global_icons;       /* for omnipresent icons chain in clip */
     int global_icon_count;	       /* How many global icons do we have */
 
-    Window clip_balloon;	       /* window for workspace name */
-
     int keymove_tick;
     struct RContext *rcontext;	       /* wrlib context */
 

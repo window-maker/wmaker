@@ -2394,12 +2394,7 @@ static int setIconTile(WScreen * scr, WDefaultEntry * entry, WTexture ** texture
 
 	scr->icon_back_texture = wTextureMakeSolid(scr, &((*texture)->any.color));
 
-	if (scr->clip_balloon)
-		XSetWindowBackground(dpy, scr->clip_balloon, (*texture)->any.color.pixel);
-
-	/*
-	 * Free the texture as nobody else will use it, nor refer to it.
-	 */
+	/* Free the texture as nobody else will use it, nor refer to it.  */
 	if (!entry->addr)
 		wTextureDestroy(scr, *texture);
 

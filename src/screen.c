@@ -465,17 +465,6 @@ static void createInternalWindows(WScreen * scr)
 	    XCreateWindow(dpy, scr->root_win, 0, 0, wPreferences.icon_size,
 			  wPreferences.icon_size, 0, scr->w_depth, CopyFromParent, scr->w_visual, vmask, &attribs);
 
-	/* workspace name balloon for clip */
-	vmask = CWBackPixel | CWSaveUnder | CWOverrideRedirect | CWColormap | CWBorderPixel;
-	attribs.save_under = True;
-	attribs.override_redirect = True;
-	attribs.colormap = scr->w_colormap;
-	attribs.background_pixel = scr->icon_back_texture->normal.pixel;
-	attribs.border_pixel = 0;	/* do not care */
-	scr->clip_balloon =
-	    XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
-			  CopyFromParent, scr->w_visual, vmask, &attribs);
-
 	/* workspace name */
 	vmask = CWBackPixel | CWSaveUnder | CWOverrideRedirect | CWColormap | CWBorderPixel;
 	attribs.save_under = True;
@@ -486,12 +475,6 @@ static void createInternalWindows(WScreen * scr)
 	scr->workspace_name =
 	    XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
 			  CopyFromParent, scr->w_visual, vmask, &attribs);
-
-	/*
-	 * If the window is clicked without having ButtonPress selected, the
-	 * resulting event will have event.xbutton.window == root.
-	 */
-	XSelectInput(dpy, scr->clip_balloon, ButtonPressMask);
 }
 
 /*
