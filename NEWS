@@ -35,6 +35,16 @@ $ wdwrite WindowMaker WindowTitleMaxHeight 24
 $ wdwrite WindowMaker MenuTitleMinHeight 24
 $ wdwrite WindowMaker MenuTitleMaxHeight 24
 
+Options to configure window/menu borders
+----------------------------------------
+
+You can now configure the width and color of window and menu borders.
+For example, the default settings could be configured as follows:
+
+$ wdwrite WindowMaker FrameBorderWidth 1
+$ wdwrite WindowMaker FrameBorderColor black
+$ wdwrite WindowMaker FrameSelectedBorderColor white
+
 
 --- 0.95.2
 
