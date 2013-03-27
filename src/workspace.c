@@ -49,6 +49,11 @@
 #include "wmspec.h"
 #include "xinerama.h"
 
+#define MC_NEW          0
+#define MC_DESTROY_LAST 1
+/* index of the first workspace menu entry */
+#define MC_WORKSPACE1   2
+
 #define MAX_SHORTCUT_LENGTH 32
 #define WORKSPACE_NAME_DISPLAY_PADDING 32
 
@@ -660,16 +665,16 @@ void wWorkspaceRename(WScreen * scr, int workspace, char *name)
 	scr->workspaces[workspace]->name = wstrdup(buf);
 
 	if (scr->clip_ws_menu) {
-		if (strcmp(scr->clip_ws_menu->entries[workspace + 2]->text, buf) != 0) {
-			wfree(scr->clip_ws_menu->entries[workspace + 2]->text);
-			scr->clip_ws_menu->entries[workspace + 2]->text = wstrdup(buf);
+		if (strcmp(scr->clip_ws_menu->entries[workspace + MC_WORKSPACE1]->text, buf) != 0) {
+			wfree(scr->clip_ws_menu->entries[workspace + MC_WORKSPACE1]->text);
+			scr->clip_ws_menu->entries[workspace + MC_WORKSPACE1]->text = wstrdup(buf);
 			wMenuRealize(scr->clip_ws_menu);
 		}
 	}
 	if (scr->workspace_menu) {
-		if (strcmp(scr->workspace_menu->entries[workspace + 2]->text, buf) != 0) {
-			wfree(scr->workspace_menu->entries[workspace + 2]->text);
-			scr->workspace_menu->entries[workspace + 2]->text = wstrdup(buf);
+		if (strcmp(scr->workspace_menu->entries[workspace + MC_WORKSPACE1]->text, buf) != 0) {
+			wfree(scr->workspace_menu->entries[workspace + MC_WORKSPACE1]->text);
+			scr->workspace_menu->entries[workspace + MC_WORKSPACE1]->text = wstrdup(buf);
 			wMenuRealize(scr->workspace_menu);
 		}
 	}
@@ -719,10 +724,10 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 	if (!menu)
 		return;
 
-	if (menu->entry_no < scr->workspace_count + 2) {
+	if (menu->entry_no < scr->workspace_count + MC_WORKSPACE1) {
 		/* new workspace(s) added */
-		i = scr->workspace_count - (menu->entry_no - 2);
-		ws = menu->entry_no - 2;
+		i = scr->workspace_count - (menu->entry_no - MC_WORKSPACE1);
+		ws = menu->entry_no - MC_WORKSPACE1;
 		while (i > 0) {
 			wstrlcpy(title, scr->workspaces[ws]->name, MAX_WORKSPACENAME_WIDTH);
 
@@ -733,24 +738,24 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 			i--;
 			ws++;
 		}
-	} else if (menu->entry_no > scr->workspace_count + 2) {
+	} else if (menu->entry_no > scr->workspace_count + MC_WORKSPACE1) {
 		/* removed workspace(s) */
-		for (i = menu->entry_no - 1; i >= scr->workspace_count + 2; i--) {
+		for (i = menu->entry_no - 1; i >= scr->workspace_count + MC_WORKSPACE1; i--) {
 			wMenuRemoveItem(menu, i);
 		}
 	}
 	wMenuRealize(menu);
 
 	for (i = 0; i < scr->workspace_count; i++) {
-		menu->entries[i + 2]->flags.indicator_on = 0;
+		menu->entries[i + MC_WORKSPACE1]->flags.indicator_on = 0;
 	}
-	menu->entries[scr->current_workspace + 2]->flags.indicator_on = 1;
+	menu->entries[scr->current_workspace + MC_WORKSPACE1]->flags.indicator_on = 1;
 
 	/* don't let user destroy current workspace */
 	if (scr->current_workspace == scr->workspace_count - 1) {
-		wMenuSetEnabled(menu, 1, False);
+		wMenuSetEnabled(menu, MC_DESTROY_LAST, False);
 	} else {
-		wMenuSetEnabled(menu, 1, True);
+		wMenuSetEnabled(menu, MC_DESTROY_LAST, True);
 	}
 
 	tmp = menu->frame->top_width + 5;
@@ -818,8 +823,8 @@ void wWorkspaceRestoreState(WScreen *scr)
 			wWorkspaceNew(scr);
 
 		if (scr->workspace_menu) {
-			wfree(scr->workspace_menu->entries[i + 2]->text);
-			scr->workspace_menu->entries[i + 2]->text = wstrdup(WMGetFromPLString(pstr));
+			wfree(scr->workspace_menu->entries[i + MC_WORKSPACE1]->text);
+			scr->workspace_menu->entries[i + MC_WORKSPACE1]->text = wstrdup(WMGetFromPLString(pstr));
 			scr->workspace_menu->flags.realized = 0;
 		}
 
