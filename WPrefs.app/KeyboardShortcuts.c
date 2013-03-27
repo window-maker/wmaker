@@ -104,6 +104,21 @@ static char *keyOptions[] = {
 	"Workspace8Key",
 	"Workspace9Key",
 	"Workspace10Key",
+	"MoveToNextWorkspaceKey",
+	"MoveToPrevWorkspaceKey",
+	"MoveToLastWorkspaceKey",
+	"MoveToNextWorkspaceLayerKey",
+	"MoveToPrevWorkspaceLayerKey",
+	"MoveToWorkspace1Key",
+	"MoveToWorkspace2Key",
+	"MoveToWorkspace3Key",
+	"MoveToWorkspace4Key",
+	"MoveToWorkspace5Key",
+	"MoveToWorkspace6Key",
+	"MoveToWorkspace7Key",
+	"MoveToWorkspace8Key",
+	"MoveToWorkspace9Key",
+	"MoveToWorkspace10Key",
 	"WindowShortcut1Key",
 	"WindowShortcut2Key",
 	"WindowShortcut3Key",
@@ -493,6 +508,21 @@ static void createPanel(Panel * p)
 	WMAddListItem(panel->actLs, _("Switch to workspace 8"));
 	WMAddListItem(panel->actLs, _("Switch to workspace 9"));
 	WMAddListItem(panel->actLs, _("Switch to workspace 10"));
+	WMAddListItem(panel->actLs, _("Move window to next workspace"));
+	WMAddListItem(panel->actLs, _("Move window to previous workspace"));
+	WMAddListItem(panel->actLs, _("Move window to last used workspace"));
+	WMAddListItem(panel->actLs, _("Move window to next ten workspaces"));
+	WMAddListItem(panel->actLs, _("Move window to previous ten workspaces"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 1"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 2"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 3"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 4"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 5"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 6"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 7"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 8"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 9"));
+	WMAddListItem(panel->actLs, _("Move window to workspace 10"));
 	WMAddListItem(panel->actLs, _("Shortcut for window 1"));
 	WMAddListItem(panel->actLs, _("Shortcut for window 2"));
 	WMAddListItem(panel->actLs, _("Shortcut for window 3"));
