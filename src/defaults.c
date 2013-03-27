@@ -184,6 +184,8 @@ static int setCursor();
 #define REFRESH_ICON_TITLE_COLOR (1<<13)
 #define REFRESH_ICON_TITLE_BACK (1<<14)
 
+#define REFRESH_WORKSPACE_MENU	(1<<15)
+
 #define REFRESH_FRAME_BORDER REFRESH_MENU_FONT|REFRESH_WINDOW_FONT
 
 static WOptionEnumeration seFocusModes[] = {
@@ -1129,6 +1131,13 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 		}
 		if (needs_refresh & REFRESH_ICON_TILE)
 			WMPostNotificationName(WNIconTileSettingsChanged, NULL, NULL);
+
+		if (needs_refresh & REFRESH_WORKSPACE_MENU) {
+			if (scr->workspace_menu)
+				wWorkspaceMenuUpdate(scr, scr->workspace_menu);
+			if (scr->clip_ws_menu)
+				wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
+		}
 	}
 }
 
@@ -2839,6 +2848,10 @@ static int setKeyGrab(WScreen * scr, WDefaultEntry * entry, WShortKey * shortcut
 		}
 		wwin = wwin->prev;
 	}
+
+	/* do we need to update window menus? */
+	if (widx >= WKBD_WORKSPACE1 && widx <= WKBD_WORKSPACE10)
+		return REFRESH_WORKSPACE_MENU;
 
 	return 0;
 }

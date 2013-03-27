@@ -61,6 +61,7 @@ extern int ignore_wks_change;
 extern WPreferences wPreferences;
 extern XContext wVEdgeContext;
 extern void ProcessPendingEvents();
+extern WShortKey wKeyBindings[WKBD_LAST];
 
 static WMPropList *dWorkspaces = NULL;
 static WMPropList *dClip, *dName;
@@ -744,12 +745,18 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 			wMenuRemoveItem(menu, i);
 		}
 	}
-	wMenuRealize(menu);
 
 	for (i = 0; i < scr->workspace_count; i++) {
+		/* workspace shortcut labels */
+		if (i / 10 == scr->current_workspace / 10)
+			menu->entries[i + MC_WORKSPACE1]->rtext = GetShortcutKey(wKeyBindings[WKBD_WORKSPACE1 + (i % 10)]);
+		else
+			menu->entries[i + MC_WORKSPACE1]->rtext = NULL;
+
 		menu->entries[i + MC_WORKSPACE1]->flags.indicator_on = 0;
 	}
 	menu->entries[scr->current_workspace + MC_WORKSPACE1]->flags.indicator_on = 1;
+	wMenuRealize(menu);
 
 	/* don't let user destroy current workspace */
 	if (scr->current_workspace == scr->workspace_count - 1) {
