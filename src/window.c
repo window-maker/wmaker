@@ -1917,6 +1917,30 @@ void wWindowChangeWorkspace(WWindow *wwin, int workspace)
 		wWindowUnmap(wwin);
 }
 
+void wWindowChangeWorkspaceRelative(WWindow *wwin, int amount)
+{
+	WScreen *scr = wwin->screen_ptr;
+	int w = scr->current_workspace + amount;
+
+	if (amount < 0) {
+		if (w >= 0) {
+			wWindowChangeWorkspace(wwin, w);
+		} else if (wPreferences.ws_cycle) {
+			wWindowChangeWorkspace(wwin, scr->workspace_count + w);
+		}
+	} else if (amount > 0) {
+		if (w < scr->workspace_count) {
+			wWindowChangeWorkspace(wwin, w);
+		} else if (wPreferences.ws_advance) {
+			int workspace = WMIN(w, MAX_WORKSPACES - 1);
+			wWorkspaceMake(scr, workspace);
+			wWindowChangeWorkspace(wwin, workspace);
+		} else if (wPreferences.ws_cycle) {
+			wWindowChangeWorkspace(wwin, w % scr->workspace_count);
+		}
+	}
+}
+
 void wWindowSynthConfigureNotify(WWindow *wwin)
 {
 	XEvent sevent;

@@ -220,25 +220,36 @@ static void updateWorkspaceMenu(WMenu * menu)
 {
 	WScreen *scr = menu->frame->screen_ptr;
 	char title[MAX_WORKSPACENAME_WIDTH + 1];
+	WMenuEntry *entry;
 	int i;
 
 	for (i = 0; i < scr->workspace_count; i++) {
 		if (i < menu->entry_no) {
-			if (strcmp(menu->entries[i]->text, scr->workspaces[i]->name) != 0) {
-				wfree(menu->entries[i]->text);
+
+			entry = menu->entries[i];
+			if (strcmp(entry->text, scr->workspaces[i]->name) != 0) {
+				wfree(entry->text);
 				strncpy(title, scr->workspaces[i]->name, MAX_WORKSPACENAME_WIDTH);
 				title[MAX_WORKSPACENAME_WIDTH] = 0;
 				menu->entries[i]->text = wstrdup(title);
+				menu->entries[i]->rtext = GetShortcutKey(wKeyBindings[WKBD_MOVE_WORKSPACE1 + i]);
 				menu->flags.realized = 0;
 			}
 		} else {
 			strncpy(title, scr->workspaces[i]->name, MAX_WORKSPACENAME_WIDTH);
 			title[MAX_WORKSPACENAME_WIDTH] = 0;
 
-			wMenuAddCallback(menu, title, switchWSCommand, NULL);
+			entry = wMenuAddCallback(menu, title, switchWSCommand, NULL);
+			entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MOVE_WORKSPACE1 + i]);
 
 			menu->flags.realized = 0;
 		}
+
+		/* workspace shortcut labels */
+		if (i / 10 == scr->current_workspace / 10)
+			entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MOVE_WORKSPACE1 + (i % 10)]);
+		else
+			entry->rtext = NULL;
 	}
 
 	if (!menu->flags.realized)

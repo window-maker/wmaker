@@ -1558,6 +1558,46 @@ static void handleKeyPress(XEvent * event)
 		wWorkspaceChange(scr, scr->last_workspace);
 		break;
 
+	case WKBD_MOVE_WORKSPACE1 ... WKBD_MOVE_WORKSPACE10:
+		widx = command - WKBD_MOVE_WORKSPACE1;
+		i = (scr->current_workspace / 10) * 10 + widx;
+		if (wwin && (wPreferences.ws_advance || i < scr->workspace_count))
+			wWindowChangeWorkspace(wwin, i);
+		break;
+
+	case WKBD_MOVE_NEXTWORKSPACE:
+		if (wwin)
+			wWindowChangeWorkspaceRelative(wwin, 1);
+		break;
+	case WKBD_MOVE_PREVWORKSPACE:
+		if (wwin)
+			wWindowChangeWorkspaceRelative(wwin, -1);
+		break;
+	case WKBD_MOVE_LASTWORKSPACE:
+		if (wwin)
+			wWindowChangeWorkspace(wwin, scr->last_workspace);
+		break;
+
+	case WKBD_MOVE_NEXTWSLAYER:
+	case WKBD_MOVE_PREVWSLAYER:
+		{
+			if (wwin) {
+				int row, column;
+
+				row = scr->current_workspace / 10;
+				column = scr->current_workspace % 10;
+
+				if (command == WKBD_MOVE_NEXTWSLAYER) {
+					if ((row + 1) * 10 < scr->workspace_count)
+						wWindowChangeWorkspace(wwin, column + (row + 1) * 10);
+				} else {
+					if (row > 0)
+						wWindowChangeWorkspace(wwin, column + (row - 1) * 10);
+				}
+			}
+		}
+		break;
+
 	case WKBD_WINDOW1:
 	case WKBD_WINDOW2:
 	case WKBD_WINDOW3:

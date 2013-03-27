@@ -364,6 +364,7 @@ void wWindowUpdateButtonImages(WWindow *wwin);
 void wWindowSaveState(WWindow *wwin);
 
 void wWindowChangeWorkspace(WWindow *wwin, int workspace);
+void wWindowChangeWorkspaceRelative(WWindow *wwin, int amount);
 
 void wWindowSetKeyGrabs(WWindow *wwin);
 

@@ -636,6 +636,36 @@ WDefaultEntry optionList[] = {
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"Workspace10Key", "None", (void *)WKBD_WORKSPACE10,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace1Key", "None", (void *)WKBD_MOVE_WORKSPACE1,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace2Key", "None", (void *)WKBD_MOVE_WORKSPACE2,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace3Key", "None", (void *)WKBD_MOVE_WORKSPACE3,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace4Key", "None", (void *)WKBD_MOVE_WORKSPACE4,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace5Key", "None", (void *)WKBD_MOVE_WORKSPACE5,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace6Key", "None", (void *)WKBD_MOVE_WORKSPACE6,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace7Key", "None", (void *)WKBD_MOVE_WORKSPACE7,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace8Key", "None", (void *)WKBD_MOVE_WORKSPACE8,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace9Key", "None", (void *)WKBD_MOVE_WORKSPACE9,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToWorkspace10Key", "None", (void *)WKBD_MOVE_WORKSPACE10,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToNextWorkspaceKey", "None", (void *)WKBD_MOVE_NEXTWORKSPACE,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToPrevWorkspaceKey", "None", (void *)WKBD_MOVE_PREVWORKSPACE,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToLastWorkspaceKey", "None", (void *)WKBD_MOVE_LASTWORKSPACE,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToNextWorkspaceLayerKey", "None", (void *)WKBD_MOVE_NEXTWSLAYER,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveToPrevWorkspaceLayerKey", "None", (void *)WKBD_MOVE_PREVWSLAYER,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"WindowShortcut1Key", "None", (void *)WKBD_WINDOW1,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"WindowShortcut2Key", "None", (void *)WKBD_WINDOW2,
@@ -1139,6 +1169,10 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 				wWorkspaceMenuUpdate(scr, scr->workspace_menu);
 			if (scr->clip_ws_menu)
 				wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
+			if (scr->workspace_submenu)
+				scr->workspace_submenu->flags.realized = 0;
+			if (scr->clip_submenu)
+				scr->clip_submenu->flags.realized = 0;
 		}
 	}
 }
@@ -2855,6 +2889,8 @@ static int setKeyGrab(WScreen * scr, WDefaultEntry * entry, WShortKey * shortcut
 	if (widx >= WKBD_WORKSPACE1 && widx <= WKBD_WORKSPACE10)
 		return REFRESH_WORKSPACE_MENU;
 	if (widx == WKBD_LASTWORKSPACE)
+		return REFRESH_WORKSPACE_MENU;
+	if (widx >= WKBD_MOVE_WORKSPACE1 && widx <= WKBD_MOVE_WORKSPACE10)
 		return REFRESH_WORKSPACE_MENU;
 
 	return 0;
