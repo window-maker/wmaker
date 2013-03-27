@@ -26,6 +26,7 @@
 
 #include "window.h"
 #include "defaults.h"
+#include "keybind.h"
 
 typedef void (WCallBack)(void *cdata);
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
@@ -67,6 +68,7 @@ char * ExpandOptions(WScreen *scr, char *cmdline);
 char * ShrinkString(WMFont *font, char *string, int width);
 char * FindImage(char *paths, char *file);
 char * GetShortcutString(char *text);
+char * GetShortcutKey(WShortKey key);
 char * EscapeWM_CLASS(char *name, char *class);
 
 Bool IsDoubleClick(WScreen *scr, XEvent *event);

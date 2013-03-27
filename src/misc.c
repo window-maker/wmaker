@@ -33,6 +33,8 @@
 #include <math.h>
 #include <time.h>
 
+#include <X11/XKBlib.h>
+
 #include <WINGs/WUtil.h>
 #include <wraster.h>
 
@@ -769,6 +771,25 @@ char *GetShortcutString(char *text)
 	wfree(tmp);
 
 	return buffer;
+}
+
+char *GetShortcutKey(WShortKey key)
+{
+	char *tmp = NULL;
+	char *k = XKeysymToString(XkbKeycodeToKeysym(dpy, key.keycode, 0, 0));
+	if (!k) return NULL;
+
+	char **m = wPreferences.modifier_labels;
+	if (key.modifier & ControlMask) tmp = wstrappend(tmp, m[1] ? m[1] : "Ctrl+");
+	if (key.modifier & ShiftMask)   tmp = wstrappend(tmp, m[0] ? m[0] : "Shift+");
+	if (key.modifier & Mod1Mask)    tmp = wstrappend(tmp, m[2] ? m[2] : "Mod1+");
+	if (key.modifier & Mod2Mask)    tmp = wstrappend(tmp, m[3] ? m[3] : "Mod2+");
+	if (key.modifier & Mod3Mask)    tmp = wstrappend(tmp, m[4] ? m[4] : "Mod3+");
+	if (key.modifier & Mod4Mask)    tmp = wstrappend(tmp, m[5] ? m[5] : "Mod4+");
+	if (key.modifier & Mod5Mask)    tmp = wstrappend(tmp, m[6] ? m[6] : "Mod5+");
+	tmp = wstrappend(tmp, k);
+
+	return GetShortcutString(tmp);
 }
 
 char *EscapeWM_CLASS(char *name, char *class)

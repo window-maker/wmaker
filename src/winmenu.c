@@ -38,6 +38,7 @@
 #include "client.h"
 #include "application.h"
 #include "keybind.h"
+#include "funcs.h"
 #include "framewin.h"
 #include "workspace.h"
 #include "winspector.h"
@@ -244,25 +245,6 @@ static void updateWorkspaceMenu(WMenu * menu)
 		wMenuRealize(menu);
 }
 
-static char *getShortcutString(WShortKey key)
-{
-	char *tmp = NULL;
-	char *k = XKeysymToString(XkbKeycodeToKeysym(dpy, key.keycode, 0, 0));
-	if (!k) return NULL;
-
-	char **m = wPreferences.modifier_labels;
-	if (key.modifier & ControlMask) tmp = wstrappend(tmp, m[1] ? m[1] : "Ctrl+");
-	if (key.modifier & ShiftMask)   tmp = wstrappend(tmp, m[0] ? m[0] : "Shift+");
-	if (key.modifier & Mod1Mask)    tmp = wstrappend(tmp, m[2] ? m[2] : "Mod1+");
-	if (key.modifier & Mod2Mask)    tmp = wstrappend(tmp, m[3] ? m[3] : "Mod2+");
-	if (key.modifier & Mod3Mask)    tmp = wstrappend(tmp, m[4] ? m[4] : "Mod3+");
-	if (key.modifier & Mod4Mask)    tmp = wstrappend(tmp, m[5] ? m[5] : "Mod4+");
-	if (key.modifier & Mod5Mask)    tmp = wstrappend(tmp, m[6] ? m[6] : "Mod5+");
-	tmp = wstrappend(tmp, k);
-
-	return tmp;
-}
-
 static void updateMakeShortcutMenu(WMenu * menu, WWindow * wwin)
 {
 	WMenu *smenu = menu->cascades[menu->entries[MC_SHORTCUT]->cascade];
@@ -304,7 +286,7 @@ static void updateMakeShortcutMenu(WMenu * menu, WWindow * wwin)
 		kcode = wKeyBindings[WKBD_WINDOW1 + shortcutNo].keycode;
 
 		if (kcode) {
-			if ((tmp = getShortcutString(wKeyBindings[WKBD_WINDOW1 + shortcutNo]))
+			if ((tmp = GetShortcutKey(wKeyBindings[WKBD_WINDOW1 + shortcutNo]))
 			    && (!entry->rtext || strcmp(tmp, entry->rtext) != 0)) {
 				if (entry->rtext)
 					wfree(entry->rtext);
@@ -428,22 +410,22 @@ static WMenu *createWindowMenu(WScreen * scr)
 	 * this file.
 	 */
 	entry = wMenuAddCallback(menu, _("Maximize"), execMenuCommand, NULL);
-	entry->rtext = getShortcutString(wKeyBindings[WKBD_MAXIMIZE]);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MAXIMIZE]);
 
 	entry = wMenuAddCallback(menu, _("Miniaturize"), execMenuCommand, NULL);
-	entry->rtext = getShortcutString(wKeyBindings[WKBD_MINIATURIZE]);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MINIATURIZE]);
 
 	entry = wMenuAddCallback(menu, _("Shade"), execMenuCommand, NULL);
-	entry->rtext = getShortcutString(wKeyBindings[WKBD_SHADE]);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_SHADE]);
 
 	entry = wMenuAddCallback(menu, _("Hide"), execMenuCommand, NULL);
-	entry->rtext = getShortcutString(wKeyBindings[WKBD_HIDE]);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_HIDE]);
 
 	entry = wMenuAddCallback(menu, _("Resize/Move"), execMenuCommand, NULL);
-	entry->rtext = getShortcutString(wKeyBindings[WKBD_MOVERESIZE]);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MOVERESIZE]);
 
 	entry = wMenuAddCallback(menu, _("Select"), execMenuCommand, NULL);
-	entry->rtext = getShortcutString(wKeyBindings[WKBD_SELECT]);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_SELECT]);
 
 	entry = wMenuAddCallback(menu, _("Move To"), NULL, NULL);
 	scr->workspace_submenu = makeWorkspaceMenu(scr);
@@ -461,10 +443,10 @@ static WMenu *createWindowMenu(WScreen * scr)
 	 */
 
 	entry = wMenuAddCallback(menu, _("Launch"), execMenuCommand, NULL);
-	entry->rtext = getShortcutString(wKeyBindings[WKBD_RELAUNCH]);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_RELAUNCH]);
 
 	entry = wMenuAddCallback(menu, _("Close"), execMenuCommand, NULL);
-	entry->rtext = getShortcutString(wKeyBindings[WKBD_CLOSE]);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_CLOSE]);
 
 	entry = wMenuAddCallback(menu, _("Kill"), execMenuCommand, NULL);
 
