@@ -45,6 +45,15 @@ $ wdwrite WindowMaker FrameBorderWidth 1
 $ wdwrite WindowMaker FrameBorderColor black
 $ wdwrite WindowMaker FrameSelectedBorderColor white
 
+Keyboard shortcuts to move windows between workspaces
+-----------------------------------------------------
+
+You can now bind keyboard shortcuts - or use the window dropdown menus -
+to move windows to other workspaces.  You can either move a window directly to
+a particular workspace or to the "next" or "previous" workspace.
+
+The new shortcuts can be configured in WPrefs.
+
 
 --- 0.95.2
 
