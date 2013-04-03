@@ -415,16 +415,12 @@ WScreen *wScreenForRootWindow(Window window)
 	if (wScreenCount == 1)
 		return wScreen[0];
 
-	/*
-	 * Since the number of heads will probably be small (normally 2),
+	/* Since the number of heads will probably be small (normally 2),
 	 * it should be faster to use this than a hash table, because
-	 * of the overhead.
-	 */
-	for (i = 0; i < wScreenCount; i++) {
-		if (wScreen[i]->root_win == window) {
+	 * of the overhead. */
+	for (i = 0; i < wScreenCount; i++)
+		if (wScreen[i]->root_win == window)
 			return wScreen[i];
-		}
-	}
 
 	return wScreenForWindow(window);
 }
@@ -436,9 +432,9 @@ WScreen *wScreenForWindow(Window window)
 	if (wScreenCount == 1)
 		return wScreen[0];
 
-	if (XGetWindowAttributes(dpy, window, &attr)) {
+	if (XGetWindowAttributes(dpy, window, &attr))
 		return wScreenForRootWindow(attr.root);
-	}
+
 	return NULL;
 }
 
