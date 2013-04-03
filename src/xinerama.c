@@ -25,7 +25,7 @@
 #include "screen.h"
 #include "window.h"
 #include "framewin.h"
-#include "funcs.h"
+#include "placement.h"
 
 #ifdef XINERAMA
 # ifdef SOLARIS_XINERAMA	/* sucks */

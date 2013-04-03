@@ -54,6 +54,7 @@
 #include "framewin.h"
 #include "superfluous.h"
 #include "xinerama.h"
+#include "placement.h"
 
 /**** Local variables ****/
 #define CLIP_REWIND       1

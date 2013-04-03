@@ -46,6 +46,7 @@
 #include "workspace.h"
 #include "xinerama.h"
 #include "usermenu.h"
+#include "placement.h"
 
 /****** Global Variables ******/
 
@@ -55,7 +56,6 @@ extern Time LastFocusChange;
 extern WPreferences wPreferences;
 extern Atom _XA_WM_TAKE_FOCUS;
 extern void ProcessPendingEvents();
-extern int calcIntersectionLength(int p1, int l1, int p2, int l2);
 
 static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, int *new_y,
 				  unsigned int *new_width, unsigned int *new_height);

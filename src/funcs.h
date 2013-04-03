@@ -40,12 +40,9 @@ void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard);
 void OpenMiniwindowMenu(WWindow *wwin, int x, int y);
 void CloseWindowMenu(WScreen *scr);
 void DestroyWindowMenu(WScreen *scr);
-void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head);
 void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only);
 void SendHelperMessage(WScreen *scr, char type, int workspace, char *msg);
 void UnescapeWM_CLASS(char *str, char **name, char **class);
-void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
-                 unsigned int width, unsigned int height);
 
 void ParseWindowName(WMPropList *value, char **winstance, char **wclass,
                      char *where);
@@ -59,9 +56,6 @@ WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 
 Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
 
-
-int calcIntersectionArea(int x1, int y1, int w1, int h1,
-                         int x2, int y2, int w2, int h2);
 
 char * StrConcatDot(char *a, char *b);
 char * ExpandOptions(WScreen *scr, char *cmdline);

@@ -60,6 +60,7 @@
 #include "appicon.h"
 #include "superfluous.h"
 #include "rootmenu.h"
+#include "placement.h"
 
 #ifdef MWM_HINTS
 # include "motif.h"

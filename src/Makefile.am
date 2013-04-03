@@ -56,6 +56,7 @@ wmaker_SOURCES = 	\
 	pixmap.c \
 	pixmap.h \
 	placement.c \
+	placement.h \
 	properties.c \
 	properties.h \
 	resources.c \
