@@ -1062,15 +1062,16 @@ static int keyboardMenu(WMenu * menu)
 
 void wMenuMapAt(WMenu * menu, int x, int y, int keyboard)
 {
-	WMRect rect = wGetRectForHead(menu->frame->screen_ptr,
-				      wGetHeadForPointerLocation(menu->frame->screen_ptr));
-
 	if (!menu->flags.realized) {
 		menu->flags.realized = 1;
 		wMenuRealize(menu);
 	}
+
 	if (!menu->flags.mapped) {
 		if (wPreferences.wrap_menus) {
+			WScreen *scr = menu->frame->screen_ptr;
+			WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
+
 			if (x < rect.pos.x)
 				x = rect.pos.x;
 			if (y < rect.pos.y)
