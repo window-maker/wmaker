@@ -944,7 +944,7 @@ static void handleClientMessage(XEvent * event)
 		if (!wwin->flags.miniaturized)
 			wIconifyWindow(wwin);
 	} else if (event->xclient.message_type == _XA_WM_COLORMAP_NOTIFY && event->xclient.format == 32) {
-		WScreen *scr = wScreenSearchForRootWindow(event->xclient.window);
+		WScreen *scr = wScreenForRootWindow(event->xclient.window);
 
 		if (!scr)
 			return;
@@ -1034,7 +1034,7 @@ static void handleClientMessage(XEvent * event)
 			break;
 		}
 	} else if (event->xclient.message_type == _XA_WM_IGNORE_FOCUS_EVENTS) {
-		WScreen *scr = wScreenSearchForRootWindow(event->xclient.window);
+		WScreen *scr = wScreenForRootWindow(event->xclient.window);
 		if (!scr)
 			return;
 		scr->flags.ignore_focus_events = event->xclient.data.l[0] ? 1 : 0;
