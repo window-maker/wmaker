@@ -755,6 +755,9 @@ static void update_icon_title(WIcon *icon)
 
 void wIconPaint(WIcon *icon)
 {
+	if (!icon || !icon->core || !icon->core->screen_ptr)
+		return;
+
 	WScreen *scr = icon->core->screen_ptr;
 
 	XClearWindow(dpy, icon->core->window);
