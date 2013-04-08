@@ -2177,9 +2177,12 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 
 		ChangeStackingLevel(icon->icon->core, NORMAL_ICON_LEVEL);
 
-		/* Update the icon images */
+		/*
+		 * Update icon pixmap, RImage doesn't change,
+		 * so call wIconUpdate is not needed
+		 */
 		if (update_icon)
-			wIconUpdate(icon->icon);
+			update_icon_pixmap(icon->icon);
 
 		/* Paint it */
 		wAppIconPaint(icon);
