@@ -681,9 +681,7 @@ static void set_dockapp_in_icon(WIcon *icon)
 {
 	XWindowAttributes attr;
 	WScreen *scr = icon->core->screen_ptr;
-	int title_height = WMFontHeight(scr->icon_title_font);
 	unsigned int w, h, d;
-	int theight = 0;
 
 	/* Reparent the dock application to the icon */
 
@@ -691,13 +689,8 @@ static void set_dockapp_in_icon(WIcon *icon)
 	 * and show in the correct position */
 	getSize(icon->icon_win, &w, &h, &d);
 
-	/* Set extra space for title */
-	if (icon->show_title && (h + title_height < wPreferences.icon_size)) {
-		theight = title_height;
-		drawIconTitle(scr, icon->pixmap, theight);
-	} else {
-                XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->icon_tile_pixmap);
-        }
+	/* Set the background pixmap */
+	XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->icon_tile_pixmap);
 
 	/* Set the icon border */
 	XSetWindowBorderWidth(dpy, icon->icon_win, 0);
@@ -705,7 +698,7 @@ static void set_dockapp_in_icon(WIcon *icon)
 	/* Put the dock application in the icon */
 	XReparentWindow(dpy, icon->icon_win, icon->core->window,
 			(wPreferences.icon_size - w) / 2,
-			theight + (wPreferences.icon_size - h - theight) / 2);
+			(wPreferences.icon_size - h) / 2);
 
 	/* Show it and save */
 	XMapWindow(dpy, icon->icon_win);
