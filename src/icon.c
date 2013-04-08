@@ -134,12 +134,7 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 	icon->show_title = 1;
 #endif
 
-	icon->icon_name = wNETWMGetIconName(wwin->client_win);
-	if (icon->icon_name)
-		wwin->flags.net_has_icon_title = 1;
-	else
-		wGetIconName(dpy, wwin->client_win, &icon->icon_name);
-
+	wIconChangeTitle(icon, wwin);
 	icon->tile_type = TILE_NORMAL;
 
 	set_icon_image_from_database(icon, wwin->wm_instance, wwin->wm_class, NULL);
@@ -305,13 +300,19 @@ static void icon_update_pixmap(WIcon *icon, RImage *image)
 	icon->pixmap = pixmap;
 }
 
-void wIconChangeTitle(WIcon *icon, char *new_title)
+void wIconChangeTitle(WIcon *icon, WWindow *wwin)
 {
+	if (!icon || !wwin)
+		return;
+
+	/* Remove the previous icon title */
 	if (icon->icon_name != NULL)
 		XFree(icon->icon_name);
 
-	icon->icon_name = new_title;
-	wIconPaint(icon);
+	/* Set the new one, using two methods */
+	icon->icon_name = wNETWMGetIconName(wwin->client_win);
+	if (!icon->icon_name)
+		wGetIconName(dpy, wwin->client_win, &icon->icon_name);
 }
 
 RImage *wIconValidateIconSize(RImage *icon, int max_size)

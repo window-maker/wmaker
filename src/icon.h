@@ -61,7 +61,7 @@ void wIconDestroy(WIcon *icon);
 void wIconPaint(WIcon *icon);
 void wIconUpdate(WIcon *icon);
 void wIconSelect(WIcon *icon);
-void wIconChangeTitle(WIcon *icon, char *new_title);
+void wIconChangeTitle(WIcon *icon, WWindow *wwin);
 void update_icon_pixmap(WIcon *icon);
 
 Bool wIconChangeImageFile(WIcon *icon, char *file);

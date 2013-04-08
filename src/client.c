@@ -322,16 +322,10 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 		break;
 
 	case XA_WM_ICON_NAME:
-		if (!wwin->flags.net_has_icon_title) {
-			if (!wwin->icon)
-				break;
-			else {
-				char *new_title;
-
-				/* icon title was changed */
-				wGetIconName(dpy, wwin->client_win, &new_title);
-				wIconChangeTitle(wwin->icon, new_title);
-			}
+		/* Title has changed, update the icon title */
+		if (wwin->icon) {
+			wIconChangeTitle(wwin->icon, wwin);
+			wIconPaint(wwin->icon);
 		}
 		break;
 

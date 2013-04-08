@@ -1470,8 +1470,8 @@ void wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 			wfree(name);
 	} else if (event->atom == net_wm_icon_name) {
 		if (wwin->icon) {
-			char *name = wNETWMGetIconName(wwin->client_win);
-			wIconChangeTitle(wwin->icon, name);
+			wIconChangeTitle(wwin->icon, wwin);
+			wIconPaint(wwin->icon);
 		}
 	} else if (event->atom == net_wm_icon) {
 		updateIconImage(wwin);
