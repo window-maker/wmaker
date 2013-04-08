@@ -93,7 +93,7 @@ static void tileObserver(void *self, WMNotification *notif)
 {
 	WIcon *icon = (WIcon *) self;
 
-	wIconUpdate(icon);
+	update_icon_pixmap(icon);
 
 	XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);
 }
