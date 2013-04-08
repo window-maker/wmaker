@@ -769,7 +769,7 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 					set_icon_image_from_image(wapp->app_icon->icon, image);
 					update_icon_pixmap(wapp->app_icon->icon);
 				} else {
-					wIconUpdate(wapp->app_icon->icon, NULL);
+					wIconUpdate(wapp->app_icon->icon);
 				}
 			}
 
@@ -781,7 +781,7 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 					set_icon_image_from_image(wwin->icon, image);
 					update_icon_pixmap(wwin->icon);
 				} else {
-					wIconUpdate(wwin->icon, NULL);
+					wIconUpdate(wwin->icon);
 				}
 			}
 		} else {

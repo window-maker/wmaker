@@ -542,7 +542,7 @@ static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 				aicon->icon->shadowed = 0;
 
 				/* Update the icon images */
-				wIconUpdate(aicon->icon, NULL);
+				wIconUpdate(aicon->icon);
 
 				/* Paint it */
 				wAppIconPaint(aicon);
@@ -1942,7 +1942,7 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon
 
 	/* Update the icon images */
 	if (lupdate_icon)
-		wIconUpdate(icon->icon, NULL);
+		wIconUpdate(icon->icon);
 
 	/* Paint it */
 	wAppIconPaint(icon);
@@ -2096,7 +2096,7 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 
 	/* Update the icon images */
 	if (update_icon)
-		wIconUpdate(icon->icon, NULL);
+		wIconUpdate(icon->icon);
 
 	/* Paint it */
 	wAppIconPaint(icon);
@@ -2173,7 +2173,7 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 
 		/* Update the icon images */
 		if (update_icon)
-			wIconUpdate(icon->icon, NULL);
+			wIconUpdate(icon->icon);
 
 		/* Paint it */
 		wAppIconPaint(icon);

@@ -93,7 +93,7 @@ static void tileObserver(void *self, WMNotification *notif)
 {
 	WIcon *icon = (WIcon *) self;
 
-	wIconUpdate(icon, NULL);
+	wIconUpdate(icon);
 
 	XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);
 }
@@ -314,7 +314,7 @@ void wIconChangeTitle(WIcon *icon, char *new_title)
 	icon->icon_name = new_title;
 
 	if (changed)
-		wIconUpdate(icon, NULL);
+		wIconUpdate(icon);
 	else
 		wIconPaint(icon);
 }
@@ -573,35 +573,31 @@ void set_icon_image_from_image(WIcon *icon, RImage *image)
 	icon->file_image = image;
 }
 
-void wIconUpdate(WIcon *icon, RImage *image)
+void wIconUpdate(WIcon *icon)
 {
 	WWindow *wwin = NULL;
 
-	if (image) {
-		icon->file_image = image;
-	} else {
-		if (icon && icon->owner)
-			wwin = icon->owner;
+	if (icon && icon->owner)
+		wwin = icon->owner;
 
-		if (wwin && WFLAGP(wwin, always_user_icon)) {
-			/* Forced use user_icon */
+	if (wwin && WFLAGP(wwin, always_user_icon)) {
+		/* Forced use user_icon */
+		get_rimage_icon_from_user_icon(icon);
+	} else if (icon->icon_win != None) {
+		/* Get the Pixmap from the WIcon */
+		get_rimage_icon_from_icon_win(icon);
+	} else if (wwin && wwin->net_icon_image) {
+		/* Use _NET_WM_ICON icon */
+		get_rimage_icon_from_x11(icon);
+	} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
+		/* Get the Pixmap from the wm_hints, else, from the user */
+		unset_icon_image(icon);
+		icon->file_image = get_rimage_icon_from_wm_hints(icon);
+		if (!icon->file_image)
 			get_rimage_icon_from_user_icon(icon);
-		} else if (icon->icon_win != None) {
-			/* Get the Pixmap from the WIcon */
-			get_rimage_icon_from_icon_win(icon);
-		} else if (wwin && wwin->net_icon_image) {
-			/* Use _NET_WM_ICON icon */
-			get_rimage_icon_from_x11(icon);
-		} else if (wwin && wwin->wm_hints && (wwin->wm_hints->flags & IconPixmapHint)) {
-			/* Get the Pixmap from the wm_hints, else, from the user */
-			unset_icon_image(icon);
-			icon->file_image = get_rimage_icon_from_wm_hints(icon);
-			if (!icon->file_image)
-				get_rimage_icon_from_user_icon(icon);
-		} else {
-			/* Get the Pixmap from the user */
-			get_rimage_icon_from_user_icon(icon);
-		}
+	} else {
+		/* Get the Pixmap from the user */
+		get_rimage_icon_from_user_icon(icon);
 	}
 
 	update_icon_pixmap(icon);
@@ -897,5 +893,5 @@ void set_icon_image_from_database(WIcon *icon, char *wm_instance, char *wm_class
 		wfree(file);
 	}
 
-	wIconUpdate(icon, NULL);
+	wIconUpdate(icon);
 }

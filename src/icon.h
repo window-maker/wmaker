@@ -59,7 +59,7 @@ WIcon *icon_create_for_wwindow(WWindow *wwin);
 void set_icon_image_from_database(WIcon *icon, char *wm_instance, char *wm_class, char *command);
 void wIconDestroy(WIcon *icon);
 void wIconPaint(WIcon *icon);
-void wIconUpdate(WIcon *icon, RImage *image);
+void wIconUpdate(WIcon *icon);
 void wIconSelect(WIcon *icon);
 void wIconChangeTitle(WIcon *icon, char *new_title);
 void update_icon_pixmap(WIcon *icon);
