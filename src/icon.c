@@ -229,7 +229,7 @@ void wIconDestroy(WIcon * icon)
 	wfree(icon);
 }
 
-static void drawIconTitle(WScreen * scr, Pixmap pixmap, int height)
+static void drawIconTitleBackground(WScreen *scr, Pixmap pixmap, int height)
 {
 	XFillRectangle(dpy, pixmap, scr->icon_title_texture->normal_gc, 0, 0, wPreferences.icon_size, height + 1);
 	XDrawLine(dpy, pixmap, scr->icon_title_texture->light_gc, 0, 0, wPreferences.icon_size, 0);
@@ -246,7 +246,6 @@ static void icon_update_pixmap(WIcon *icon, RImage *image)
 	unsigned w, h;
 	int theight = 0;
 	WScreen *scr = icon->core->screen_ptr;
-	int titled = icon->show_title;
 
 	if (icon->tile_type == TILE_NORMAL) {
 		tile = RCloneImage(scr->icon_tile);
@@ -261,7 +260,7 @@ static void icon_update_pixmap(WIcon *icon, RImage *image)
 		x = (wPreferences.icon_size - w) / 2;
 		sx = (image->width - w) / 2;
 
-		if (titled)
+		if (icon->show_title)
 			theight = WMFontHeight(scr->icon_title_font);
 
 		h = (image->height + theight > wPreferences.icon_size
@@ -295,8 +294,9 @@ static void icon_update_pixmap(WIcon *icon, RImage *image)
 
 	RReleaseImage(tile);
 
-	if (titled)
-		drawIconTitle(scr, pixmap, theight);
+	/* Draw the icon's title background (without text) */
+	if (icon->show_title)
+		drawIconTitleBackground(scr, pixmap, theight);
 
 	icon->pixmap = pixmap;
 }
