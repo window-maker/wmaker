@@ -2097,9 +2097,12 @@ static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x,
 
 	MoveInStackListUnder(dest->icon_array[index - 1]->icon->core, icon->icon->core);
 
-	/* Update the icon images */
+	/*
+	 * Update icon pixmap, RImage doesn't change,
+	 * so call wIconUpdate is not needed
+	 */
 	if (update_icon)
-		wIconUpdate(icon->icon);
+		update_icon_pixmap(icon->icon);
 
 	/* Paint it */
 	wAppIconPaint(icon);
