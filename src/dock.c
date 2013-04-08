@@ -541,8 +541,11 @@ static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 			if (aicon->icon->shadowed) {
 				aicon->icon->shadowed = 0;
 
-				/* Update the icon images */
-				wIconUpdate(aicon->icon);
+				/*
+				 * Update icon pixmap, RImage doesn't change,
+				 * so call wIconUpdate is not needed
+				 */
+				update_icon_pixmap(aicon->icon);
 
 				/* Paint it */
 				wAppIconPaint(aicon);
