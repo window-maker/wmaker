@@ -1943,9 +1943,12 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon
 	MoveInStackListUnder(dock->icon_array[index - 1]->icon->core, icon->icon->core);
 	wAppIconMove(icon, icon->x_pos, icon->y_pos);
 
-	/* Update the icon images */
+	/*
+	 * Update icon pixmap, RImage doesn't change,
+	 * so call wIconUpdate is not needed
+	 */
 	if (lupdate_icon)
-		wIconUpdate(icon->icon);
+		update_icon_pixmap(icon->icon);
 
 	/* Paint it */
 	wAppIconPaint(icon);
