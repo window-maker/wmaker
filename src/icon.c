@@ -143,6 +143,8 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 	icon->tile_type = TILE_NORMAL;
 
 	set_icon_image_from_database(icon, wwin->wm_instance, wwin->wm_class, NULL);
+	/* Update the icon, because icon could be NULL */
+	wIconUpdate(icon);
 
 	WMAddNotificationObserver(appearanceObserver, icon, WNIconAppearanceSettingsChanged, icon);
 	WMAddNotificationObserver(tileObserver, icon, WNIconTileSettingsChanged, icon);
@@ -158,6 +160,8 @@ WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char
 	icon->tile_type = tile;
 
 	set_icon_image_from_database(icon, wm_instance, wm_class, command);
+	/* Update the icon, because icon could be NULL */
+	wIconUpdate(icon);
 
 	WMAddNotificationObserver(appearanceObserver, icon, WNIconAppearanceSettingsChanged, icon);
 	WMAddNotificationObserver(tileObserver, icon, WNIconTileSettingsChanged, icon);
@@ -885,6 +889,4 @@ void set_icon_image_from_database(WIcon *icon, char *wm_instance, char *wm_class
 		icon->file_image = get_rimage_from_file(icon->core->screen_ptr, icon->file, wPreferences.icon_size);
 		wfree(file);
 	}
-
-	wIconUpdate(icon);
 }
