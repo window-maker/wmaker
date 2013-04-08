@@ -734,13 +734,12 @@ RImage *get_rimage_icon_from_wm_hints(WIcon *icon)
 	return image;
 }
 
-void wIconPaint(WIcon *icon)
+/* This function updates in the screen the icon title */
+static void update_icon_title(WIcon *icon)
 {
 	WScreen *scr = icon->core->screen_ptr;
 	int x, l, w;
 	char *tmp;
-
-	XClearWindow(dpy, icon->core->window);
 
 	/* draw the icon title */
 	if (icon->show_title && icon->icon_name != NULL) {
@@ -756,6 +755,16 @@ void wIconPaint(WIcon *icon)
 			     scr->icon_title_font, x, 1, tmp, l);
 		wfree(tmp);
 	}
+}
+
+
+void wIconPaint(WIcon *icon)
+{
+	WScreen *scr = icon->core->screen_ptr;
+
+	XClearWindow(dpy, icon->core->window);
+
+	update_icon_title(icon);
 
 	if (icon->selected)
 		XDrawRectangle(dpy, icon->core->window, scr->icon_select_gc, 0, 0,
