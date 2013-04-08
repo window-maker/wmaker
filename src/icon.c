@@ -362,12 +362,10 @@ Bool wIconChangeImageFile(WIcon *icon, char *file)
 
 	/* New image! */
 	if (!error && image) {
-		/* Remove the old one */
-		unset_icon_image(icon);
-
 		/* Set the new image */
+		set_icon_image_from_image(icon, image);
 		icon->file = wstrdup(path);
-		wIconUpdate(icon, image);
+		update_icon_pixmap(icon);
 	} else {
 		error = 1;
 	}
