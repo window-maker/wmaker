@@ -763,14 +763,27 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 		 * the icon text box has an icon path */
 		if (!WFLAGP(wwin, always_user_icon)) {
 			/* Change App Icon image, using the icon provided by the client */
-			if (wapp->app_icon)
-				wIconUpdate(wapp->app_icon->icon,
-					    get_rimage_icon_from_wm_hints(wapp->app_icon->icon));
+			if (wapp->app_icon) {
+				RImage *image = get_rimage_icon_from_wm_hints(wapp->app_icon->icon);
+				if (image) {
+					set_icon_image_from_image(wapp->app_icon->icon, image);
+					update_icon_pixmap(wapp->app_icon->icon);
+				} else {
+					wIconUpdate(wapp->app_icon->icon, NULL);
+				}
+			}
 
 			/* Change icon image if the app is minimized,
 			 * using the icon provided by the client */
-			if (wwin->icon)
-				wIconUpdate(wwin->icon, get_rimage_icon_from_wm_hints(wwin->icon));
+			if (wwin->icon) {
+				RImage *image = get_rimage_icon_from_wm_hints(wwin->icon);
+				if (image) {
+					set_icon_image_from_image(wwin->icon, image);
+					update_icon_pixmap(wwin->icon);
+				} else {
+					wIconUpdate(wwin->icon, NULL);
+				}
+			}
 		} else {
 			/* Change App Icon image */
 			if (wapp->app_icon)

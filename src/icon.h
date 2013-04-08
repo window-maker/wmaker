@@ -73,5 +73,6 @@ char *wIconStore(WIcon *icon);
 char *get_name_for_instance_class(char *wm_instance, char *wm_class);
 
 void wIconSetHighlited(WIcon *icon, Bool flag);
+void set_icon_image_from_image(WIcon *icon, RImage *image);
 
 #endif /* WMICON_H_ */

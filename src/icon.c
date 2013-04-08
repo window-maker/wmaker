@@ -564,6 +564,17 @@ static void unset_icon_image(WIcon *icon)
 	}
 }
 
+void set_icon_image_from_image(WIcon *icon, RImage *image)
+{
+	if (!icon)
+		return;
+
+	unset_icon_image(icon);
+
+	icon->file_image = NULL;
+	icon->file_image = image;
+}
+
 void wIconUpdate(WIcon *icon, RImage *image)
 {
 	WWindow *wwin = NULL;
