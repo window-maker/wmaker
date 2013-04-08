@@ -303,20 +303,11 @@ static void icon_update_pixmap(WIcon *icon, RImage *image)
 
 void wIconChangeTitle(WIcon *icon, char *new_title)
 {
-	int changed;
-
-	changed = (new_title == NULL && icon->icon_name != NULL) ||
-		  (new_title != NULL && icon->icon_name == NULL);
-
 	if (icon->icon_name != NULL)
 		XFree(icon->icon_name);
 
 	icon->icon_name = new_title;
-
-	if (changed)
-		wIconUpdate(icon);
-	else
-		wIconPaint(icon);
+	wIconPaint(icon);
 }
 
 RImage *wIconValidateIconSize(RImage *icon, int max_size)
