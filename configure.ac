@@ -228,6 +228,11 @@ AS_IF([test "x$ac_cv_search_strlcat" = "x-lbsd" -o "x$ac_cv_search_strlcpy" = "x
 )
 AC_SUBST(LIBBSD)
 
+dnl Check for OpenBSD kernel memory interface - kvm(3)
+dnl ==================================================
+AS_IF([test "x$WM_OSDEP" = "xbsd"],
+  AC_SEARCH_LIBS([kvm_openfiles], [kvm]) )
+
 dnl Check for inotify
 dnl =================
 AC_CHECK_HEADERS(sys/inotify.h, AC_DEFINE(HAVE_INOTIFY, 1, Check for inotify))
