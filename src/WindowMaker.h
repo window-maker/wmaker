@@ -419,6 +419,12 @@ typedef struct WPreferences {
     char cycle_active_head_only;        /* Cycle only windows on the active head */
     char cycle_ignore_minimized;        /* Ignore minimized windows when cycling */
 
+    /* All delays here are in ms. 0 means instant auto-action. */
+    int clip_auto_raise_delay;         /* Delay after which the clip will be raised when entered */
+    int clip_auto_lower_delay;         /* Delay after which the clip will be lowered when leaved */
+    int clip_auto_expand_delay;        /* Delay after which the clip will expand when entered */
+    int clip_auto_collapse_delay;      /* Delay after which the clip will collapse when leaved */
+
     RImage *swtileImage;
     RImage *swbackImage[9];
 

@@ -3792,7 +3792,7 @@ static void clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 		dock->auto_lower_magic = NULL;
 	}
 	if (dock->auto_raise_lower && !dock->auto_raise_magic)
-		dock->auto_raise_magic = WMAddTimerHandler(AUTO_RAISE_DELAY, clipAutoRaise, (void *)dock);
+		dock->auto_raise_magic = WMAddTimerHandler(wPreferences.clip_auto_raise_delay, clipAutoRaise, (void *)dock);
 
 	/* The auto expand/collapse code */
 	if (dock->auto_collapse_magic) {
@@ -3800,7 +3800,7 @@ static void clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 		dock->auto_collapse_magic = NULL;
 	}
 	if (dock->auto_collapse && !dock->auto_expand_magic)
-		dock->auto_expand_magic = WMAddTimerHandler(AUTO_EXPAND_DELAY, clipAutoExpand, (void *)dock);
+		dock->auto_expand_magic = WMAddTimerHandler(wPreferences.clip_auto_expand_delay, clipAutoExpand, (void *)dock);
 }
 
 static void clipLeave(WDock *dock)
@@ -3832,14 +3832,14 @@ static void clipLeave(WDock *dock)
 		dock->auto_raise_magic = NULL;
 	}
 	if (dock->auto_raise_lower && !dock->auto_lower_magic)
-		dock->auto_lower_magic = WMAddTimerHandler(AUTO_LOWER_DELAY, clipAutoLower, (void *)dock);
+		dock->auto_lower_magic = WMAddTimerHandler(wPreferences.clip_auto_lower_delay, clipAutoLower, (void *)dock);
 
 	if (dock->auto_expand_magic) {
 		WMDeleteTimerHandler(dock->auto_expand_magic);
 		dock->auto_expand_magic = NULL;
 	}
 	if (dock->auto_collapse && !dock->auto_collapse_magic)
-		dock->auto_collapse_magic = WMAddTimerHandler(AUTO_COLLAPSE_DELAY, clipAutoCollapse, (void *)dock);
+		dock->auto_collapse_magic = WMAddTimerHandler(wPreferences.clip_auto_collapse_delay, clipAutoCollapse, (void *)dock);
 }
 
 static void clipLeaveNotify(WObjDescriptor *desc, XEvent *event)
