@@ -597,6 +597,37 @@ void wDefaultChangeIcon(WScreen * scr, char *instance, char *class, char *file)
 	WMPLSetCaseSensitive(False);
 }
 
+void wDefaultPurgeInfo(WScreen *scr, char *instance, char *class)
+{
+	WMPropList *value, *key, *dict;
+	char *buffer;
+
+	if (!AIcon) { /* Unnecessary precaution */
+		init_wdefaults();
+	}
+
+	WMPLSetCaseSensitive(True);
+
+	buffer = wmalloc(strlen(class) + strlen(instance) + 2);
+	sprintf(buffer, "%s.%s", instance, class);
+	key = WMCreatePLString(buffer);
+
+	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+
+	if (dict) {
+		value = WMGetFromPLDictionary(dict, AIcon);
+		if (value) {
+			WMRemoveFromPLDictionary(dict, AIcon);
+		}
+		WMRemoveFromPLDictionary(WDWindowAttributes->dictionary, key);
+		UpdateDomainFile(WDWindowAttributes);
+	}
+
+	wfree(buffer);
+	WMReleasePropList(key);
+	WMPLSetCaseSensitive(False);
+}
+
 /* --------------------------- Local ----------------------- */
 
 static int getBool(WMPropList * key, WMPropList * value)
