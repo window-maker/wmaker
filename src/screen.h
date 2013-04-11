@@ -222,7 +222,7 @@ typedef struct _WScreen {
     struct WMenu *dock_pos_menu;       /* Dock position menu */
     struct WPixmap *dock_dots;	       /* 3 dots for the Dock */
     Window dock_shadow;		       /* shadow for dock buttons */
-    struct WAppIcon *clip_icon;        /* The clip main icon */
+    struct WAppIcon *clip_icon;        /* The clip main icon, or the dock's, if they are merged */
     struct WMenu *clip_menu;           /* Menu for clips */
     struct WMenu *clip_submenu;        /* Workspace list for clips */
     struct WMenu *clip_options;	       /* Options for Clip */
@@ -244,7 +244,7 @@ typedef struct _WScreen {
     WMScreen *wmscreen;		       /* for widget library */
 
     struct RImage *icon_tile;
-    struct RImage *clip_tile;
+    struct RImage *clip_tile;          /* tile with arrows to change workspace */
     struct RImage *drawer_tile;        /* tile for a drawer (tile + arrow) */
     Pixmap icon_tile_pixmap;		/* For app supplied icons */
 

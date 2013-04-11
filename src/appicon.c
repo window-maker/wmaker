@@ -129,6 +129,8 @@ WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance, 
 	if (wm_instance)
 		aicon->wm_instance = wstrdup(wm_instance);
 
+	if (strcmp(wm_class, "WMDock") == 0 && wPreferences.flags.clip_merged_in_dock)
+		tile = TILE_CLIP;
 	aicon->icon = icon_create_for_dock(scr, command, wm_instance, wm_class, tile);
 
 #ifdef XDND

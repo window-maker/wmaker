@@ -824,6 +824,8 @@ WAppIcon *mainIconCreate(WScreen *scr, int type, char *name)
 	case WM_DOCK:
 	default: /* to avoid a warning about btn and x_pos, basically */
 		btn = wAppIconCreateForDock(scr, NULL, "Logo", "WMDock", TILE_NORMAL);
+		if (wPreferences.flags.clip_merged_in_dock)
+			btn->icon->core->descriptor.handle_expose = clipIconExpose;
 		x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
 		break;
 	case WM_DRAWER:
@@ -846,7 +848,8 @@ WAppIcon *mainIconCreate(WScreen *scr, int type, char *name)
 	btn->x_pos = x_pos;
 	btn->y_pos = 0;
 	btn->docked = 1;
-	if (type == WM_CLIP)
+	if (type == WM_CLIP ||
+		(type == WM_DOCK && wPreferences.flags.clip_merged_in_dock))
 		scr->clip_icon = btn;
 
 	return btn;
@@ -1377,7 +1380,7 @@ void wClipIconPaint(WAppIcon *aicon)
 	snprintf(ws_number, sizeof(ws_number), "%i", scr->current_workspace + 1);
 	nlength = strlen(ws_number);
 
-	if (!workspace->clip->collapsed)
+	if (wPreferences.flags.noclip || !workspace->clip->collapsed)
 		color = scr->clip_title_color[CLIP_NORMAL];
 	else
 		color = scr->clip_title_color[CLIP_COLLAPSED];
@@ -1447,7 +1450,7 @@ static WMPropList *make_icon_state(WAppIcon *btn)
 
 		buggy = btn->buggy_app ? dYes : dNo;
 
-		if (btn == btn->icon->core->screen_ptr->clip_icon)
+		if (!wPreferences.flags.clip_merged_in_dock && btn == btn->icon->core->screen_ptr->clip_icon)
 			snprintf(buffer, sizeof(buffer), "%i,%i", btn->x_pos, btn->y_pos);
 		else
 			snprintf(buffer, sizeof(buffer), "%hi,%hi", btn->xindex, btn->yindex);
@@ -1958,7 +1961,7 @@ WDock *wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
 		 * incremented in the loop above.
 		 */
 	} else if (old_top != dock->icon_array[0]) {
-		if (old_top == scr->clip_icon)
+		if (old_top == scr->clip_icon) // TODO dande: understand the logic
 			scr->clip_icon = dock->icon_array[0];
 
 		wAppIconDestroy(old_top);
@@ -3592,10 +3595,22 @@ static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 				/* raise/lower dock */
 				toggleLowered(dock);
 			} else if (btn == dock->screen_ptr->clip_icon) {
-				if (getClipButton(event->xbutton.x, event->xbutton.y) == CLIP_IDLE)
-					toggleCollapsed(dock);
-				else
+				if (getClipButton(event->xbutton.x, event->xbutton.y) != CLIP_IDLE)
 					handleClipChangeWorkspace(dock->screen_ptr, event);
+				else if (wPreferences.flags.clip_merged_in_dock) {
+					// Is actually the dock
+					if (btn->command)
+					{
+						if (!btn->launching && (!btn->running || (event->xbutton.state & ControlMask)))
+							launchDockedApplication(btn, False);
+					}
+					else
+					{
+						wShowInfoPanel(dock->screen_ptr);
+					}
+				}
+				else
+					toggleCollapsed(dock);
 			} else if (wIsADrawer(dock->screen_ptr, btn)) {
 				toggleCollapsed(dock);
 			} else if (btn->command) {
@@ -3921,8 +3936,8 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 		}
 
 		if (aicon->yindex == 0 && aicon->xindex == 0) {
-			if (getClipButton(event->xbutton.x, event->xbutton.y) != CLIP_IDLE
-			    && dock->type == WM_CLIP)
+			if (getClipButton(event->xbutton.x, event->xbutton.y) != CLIP_IDLE &&
+				(dock->type == WM_CLIP || (dock->type == WM_DOCK && wPreferences.flags.clip_merged_in_dock)))
 				handleClipChangeWorkspace(scr, event);
 			else
 				handleDockMove(dock, aicon, event);
@@ -3931,7 +3946,7 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 			if (wPreferences.single_click && !hasMoved)
 				iconDblClick(desc, event);
 		}
-	} else if (event->xbutton.button == Button2 && dock->type == WM_CLIP && aicon == scr->clip_icon) {
+	} else if (event->xbutton.button == Button2 && aicon == scr->clip_icon) {
 		if (!scr->clip_ws_menu) {
 			scr->clip_ws_menu = wWorkspaceMenuMake(scr, False);
 		}

@@ -859,6 +859,8 @@ void wScreenRestoreState(WScreen * scr)
 	if (!wPreferences.flags.nodock) {
 		state = WMGetFromPLDictionary(scr->session_state, dDock);
 		scr->dock = wDockRestoreState(scr, state, WM_DOCK);
+		/* If clip_merged_in_dock, setting scr->clip_icon is done by
+		 * wDockRestoreState()->wDockCreate()->mainIconCreate() */
 	}
 
 	if (!wPreferences.flags.noclip) {

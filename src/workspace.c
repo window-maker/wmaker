@@ -613,15 +613,14 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 	if (scr->dock)
 		wAppIconPaint(scr->dock->icon_array[0]);
 
-	if (scr->clip_icon) {
-		if (scr->workspaces[workspace]->clip->auto_collapse ||
-		    scr->workspaces[workspace]->clip->auto_raise_lower) {
-			/* to handle enter notify. This will also */
-			XUnmapWindow(dpy, scr->clip_icon->icon->core->window);
-			XMapWindow(dpy, scr->clip_icon->icon->core->window);
-		} else {
-			wClipIconPaint(scr->clip_icon);
-		}
+	if (!wPreferences.flags.noclip && (scr->workspaces[workspace]->clip->auto_collapse ||
+						scr->workspaces[workspace]->clip->auto_raise_lower)) {
+		/* to handle enter notify. This will also */
+		XUnmapWindow(dpy, scr->clip_icon->icon->core->window);
+		XMapWindow(dpy, scr->clip_icon->icon->core->window);
+	}
+	else if (scr->clip_icon != NULL) {
+		wClipIconPaint(scr->clip_icon);
 	}
 	wScreenUpdateUsableArea(scr);
 	wNETWMUpdateDesktop(scr);

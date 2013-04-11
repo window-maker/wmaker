@@ -113,6 +113,7 @@ static int getPropList();
 static int setJustify();
 static int setClearance();
 static int setIfDockPresent();
+static int setClipMergedInDock();
 static int setWrapAppiconsInDock();
 static int setStickyIcons();
 static int setWidgetColor();
@@ -328,6 +329,8 @@ WDefaultEntry staticOptionList[] = {
 	    NULL, getBool, setIfDockPresent, NULL, NULL},
 	{"DisableDrawers", "NO", (void *)WM_DRAWER,
 	    NULL, getBool, setIfDockPresent, NULL, NULL},
+	{"ClipMergedInDock", "NO", NULL,
+	    NULL, getBool, setClipMergedInDock, NULL, NULL},
 	{"DisableMiniwindows", "NO", NULL,
 	    &wPreferences.disable_miniwindows, getBool, NULL, NULL, NULL}
 };
@@ -1147,7 +1150,7 @@ void wDefaultUpdateIcons(WScreen *scr)
 		aicon = aicon->next;
 	}
 
-	if (!wPreferences.flags.noclip)
+	if (!wPreferences.flags.noclip || wPreferences.flags.clip_merged_in_dock)
 		wClipIconPaint(scr->clip_icon);
 
 	for (dc = scr->drawers; dc != NULL; dc = dc->next)
@@ -2349,6 +2352,13 @@ static int setIfDockPresent(WScreen * scr, WDefaultEntry * entry, char *flag, lo
 	return 0;
 }
 
+static int setClipMergedInDock(WScreen *scr, WDefaultEntry *entry, char *flag, void *foo)
+{
+	wPreferences.flags.clip_merged_in_dock = *flag;
+	wPreferences.flags.noclip = wPreferences.flags.noclip || *flag;
+	return 0;
+}
+
 static int setWrapAppiconsInDock(WScreen *scr, WDefaultEntry *entry, char *flag, void *foo)
 {
 	wPreferences.flags.wrap_appicons_in_dock = *flag;
@@ -2392,7 +2402,7 @@ static int setIconTile(WScreen * scr, WDefaultEntry * entry, WTexture ** texture
 	/* put the icon in the noticeboard hint */
 	PropSetIconTileHint(scr, img);
 
-	if (!wPreferences.flags.noclip) {
+	if (!wPreferences.flags.noclip || wPreferences.flags.clip_merged_in_dock) {
 		if (scr->clip_tile) {
 			RReleaseImage(scr->clip_tile);
 		}
