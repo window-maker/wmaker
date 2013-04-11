@@ -113,6 +113,7 @@ static int getPropList();
 static int setJustify();
 static int setClearance();
 static int setIfDockPresent();
+static int setWrapAppiconsInDock();
 static int setStickyIcons();
 static int setWidgetColor();
 static int setIconTile();
@@ -404,6 +405,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.clip_auto_expand_delay, getInt, NULL, NULL, NULL},
 	{"ClipAutocollapseDelay", "1000", NULL,
 	    &wPreferences.clip_auto_collapse_delay, getInt, NULL, NULL, NULL},
+	{"WrapAppiconsInDock", "YES", NULL,
+	    NULL, getBool, setWrapAppiconsInDock, NULL, NULL},
 	{"AlignSubmenus", "NO", NULL,
 	    &wPreferences.align_menus, getBool, NULL, NULL, NULL},
 	{"ViKeyMenus", "NO", NULL,
@@ -2343,6 +2346,12 @@ static int setIfDockPresent(WScreen * scr, WDefaultEntry * entry, char *flag, lo
 	default:
 		break;
 	}
+	return 0;
+}
+
+static int setWrapAppiconsInDock(WScreen *scr, WDefaultEntry *entry, char *flag, void *foo)
+{
+	wPreferences.flags.wrap_appicons_in_dock = *flag;
 	return 0;
 }
 

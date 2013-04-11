@@ -2541,8 +2541,8 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 				sig = -sig;
 			}
 			if (done &&
-			    ((ex_y >= closest && ex_y - closest < DOCK_DETTACH_THRESHOLD + 1)
-			     || (ex_y < closest && closest - ex_y <= DOCK_DETTACH_THRESHOLD + 1))) {
+				((ex_y >= closest && ex_y - closest < DOCK_DETTACH_THRESHOLD + 1)
+					|| (ex_y < closest && closest - ex_y <= DOCK_DETTACH_THRESHOLD + 1))) {
 				*ret_x = 0;
 				*ret_y = closest;
 				return True;
@@ -3613,10 +3613,12 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 	WScreen *scr = dock->screen_ptr;
 	int ofs_x = event->xbutton.x, ofs_y = event->xbutton.y;
 	WIcon *icon = aicon->icon;
+	WAppIcon *tmpaicon;
+	WDrawerChain *dc;
 	int x = aicon->x_pos, y = aicon->y_pos;;
 	int shad_x = x, shad_y = y;
 	XEvent ev;
-	int grabbed = 0, done, previously_on_right, now_on_right, previous_x_pos;
+	int grabbed = 0, done, previously_on_right, now_on_right, previous_x_pos, i;
 	Pixmap ghost = None;
 	int superfluous = wPreferences.superfluous;	/* we catch it to avoid problems */
 
@@ -3700,6 +3702,57 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				// Also perform the vertical move
 				wScreenKeepInside(scr, &x, &y, ICON_SIZE, ICON_SIZE);
 				moveDock(dock, dock->x_pos, y);
+				if (wPreferences.flags.wrap_appicons_in_dock)
+				{
+					for (i = 0; i < dock->max_icons; i++) {
+						int new_y, new_index, j, ok;
+						if ((tmpaicon = dock->icon_array[i]) == NULL)
+							continue;
+						if (onScreen(scr, tmpaicon->x_pos, tmpaicon->y_pos))
+							continue;
+						new_y = (tmpaicon->y_pos + ICON_SIZE * dock->max_icons) % (ICON_SIZE * dock->max_icons);
+						new_index = (new_y - dock->y_pos) / ICON_SIZE;
+						if (!onScreen(scr, tmpaicon->x_pos, new_y))
+							continue;
+						ok = 1;
+						for (j = 0; j < dock->max_icons; j++)
+						{
+							if (dock->icon_array[j] != NULL &&
+								dock->icon_array[j]->yindex == new_index)
+							{
+								ok = 0;
+								break;
+							}
+						}
+						if (!ok || getDrawer(scr, new_index) != NULL)
+							continue;
+						wDockReattachIcon(dock, tmpaicon, tmpaicon->xindex, new_index);
+					}
+					for (dc = scr->drawers; dc != NULL; dc = dc->next)
+					{
+						int new_y, new_index, j, ok;
+						tmpaicon = dc->adrawer->icon_array[0];
+						if (onScreen(scr, tmpaicon->x_pos, tmpaicon->y_pos))
+							continue;
+						new_y = (tmpaicon->y_pos + ICON_SIZE * dock->max_icons) % (ICON_SIZE * dock->max_icons);
+						new_index = (new_y - dock->y_pos) / ICON_SIZE;
+						if (!onScreen(scr, tmpaicon->x_pos, new_y))
+							continue;
+						ok = 1;
+						for (j = 0; j < dock->max_icons; j++)
+						{
+							if (dock->icon_array[j] != NULL &&
+								dock->icon_array[j]->yindex == new_index)
+							{
+								ok = 0;
+								break;
+							}
+						}
+						if (!ok || getDrawer(scr, new_index) != NULL)
+							continue;
+						moveDock(dc->adrawer, tmpaicon->x_pos, new_y);
+					}
+				}
 				break;
 			case WM_DRAWER:
 			{
@@ -3728,14 +3781,12 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				break;
 			XUngrabPointer(dpy, CurrentTime);
 			if (dock->type == WM_DRAWER) {
-				int i;
 				Window *wins[dock->icon_count];
-				WAppIcon *aicon;
 
 				for (i = 0; i < dock->max_icons; i++) {
-					if ((aicon = dock->icon_array[i]) == NULL)
+					if ((tmpaicon = dock->icon_array[i]) == NULL)
 						continue;
-					wins[ aicon->xindex + (dock->on_right_side ? dock->icon_count - 1 : 0) ] = &aicon->icon->core->window;
+					wins[ tmpaicon->xindex + (dock->on_right_side ? dock->icon_count - 1 : 0) ] = &tmpaicon->icon->core->window;
 				}
 				SlideWindows(wins, dock->icon_count,
 					(dock->on_right_side ? x - (dock->icon_count - 1) * ICON_SIZE : x),
@@ -4219,30 +4270,45 @@ static void drawerIconExpose(WObjDescriptor *desc, XEvent *event)
 
 static int addADrawer(WScreen *scr)
 {
-	int i, y;
+	int i, y, sig, found_y;
 	WDock *drawer, *dock = scr->dock;
 	WDrawerChain *dc;
-	char can_be_here[dock->max_icons];
+	char can_be_here[2 * dock->max_icons - 1];
 
 	if (dock->icon_count + scr->drawer_count >= dock->max_icons)
 		return -1;
 
-	for (y = 0; y < dock->max_icons; y++) {
-		can_be_here[y] = True;
+	for (y = -dock->max_icons + 1; y < dock->max_icons; y++) {
+		can_be_here[y + dock->max_icons - 1] = True;
 	}
 	for (i = 0; i < dock->max_icons; i++) {
 		if (dock->icon_array[i] != NULL)
-			can_be_here[dock->icon_array[i]->yindex] = False;
+			can_be_here[dock->icon_array[i]->yindex + dock->max_icons - 1] = False;
 	}
 	for (dc = scr->drawers; dc != NULL; dc = dc->next) {
 		y = (int) ((dc->adrawer->y_pos - dock->y_pos) / ICON_SIZE);
-		can_be_here[y] = False;
+		can_be_here[y + dock->max_icons - 1] = False;
 	}
 
-	for (y = 0; y < dock->max_icons; y++) {
-		if (can_be_here[y])
-			break;
+	found_y = False;
+	for (sig = 1; !found_y && sig > -2; sig -= 2) // 1, then -1
+	{
+		for (y = sig; sig * y < dock->max_icons; y += sig)
+		{
+			if (can_be_here[y + dock->max_icons - 1] &&
+				onScreen(scr, dock->x_pos, dock->y_pos + y * ICON_SIZE))
+			{
+				found_y = True;
+				break;
+			}
+		}
 	}
+    
+	if (!found_y)
+		/* This can happen even when dock->icon_count + scr->drawer_count
+		 * < dock->max_icons when the dock is not aligned on an
+		 * ICON_SIZE multiple, as some space is lost above and under it */
+		return -1;
 
 	drawer = wDockCreate(scr, WM_DRAWER, NULL);
 	drawer->lowered = scr->dock->lowered;
