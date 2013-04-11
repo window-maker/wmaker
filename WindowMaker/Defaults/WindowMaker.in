@@ -43,6 +43,7 @@
   NewStyle = "new";
   DisableDock = NO;
   DisableClip = NO;
+  DisableDrawers = NO;
   Superfluous = YES;
   StickyIcons = NO;
   SaveSessionOnExit = NO;

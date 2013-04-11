@@ -28,6 +28,7 @@
 
 #define TILE_NORMAL	0
 #define TILE_CLIP	1
+#define TILE_DRAWER	2
 
 typedef struct WIcon {
 	WCoreWindow 	*core;

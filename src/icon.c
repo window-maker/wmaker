@@ -248,11 +248,21 @@ static void icon_update_pixmap(WIcon *icon, RImage *image)
 	WScreen *scr = icon->core->screen_ptr;
 	int titled = icon->show_title;
 
-	if (icon->tile_type == TILE_NORMAL) {
+	switch (icon->tile_type) {
+	case TILE_NORMAL:
 		tile = RCloneImage(scr->icon_tile);
-	} else {
+		break;
+	default:
+		wwarning("Unknown tileType: %d.\n", icon->tile_type);
+		// fallthrough to TILE_CLIP (emulate previous behaviour)
+	case TILE_CLIP:
 		assert(scr->clip_tile);
 		tile = RCloneImage(scr->clip_tile);
+		break;
+	case TILE_DRAWER:
+		assert(scr->drawer_tile);
+		tile = RCloneImage(scr->drawer_tile);
+		break;
 	}
 
 	if (image) {

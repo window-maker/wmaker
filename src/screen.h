@@ -62,6 +62,12 @@ typedef struct WAppIconChain {
 } WAppIconChain;
 
 
+/* Drawers, which are docks, really */
+typedef struct WDrawerChain {
+    struct WDock *adrawer;
+    struct WDrawerChain *next;
+} WDrawerChain;
+
 /*
  * each WScreen is saved into a context associated with it's root window
  */
@@ -213,6 +219,7 @@ typedef struct _WScreen {
     struct WMenu *workspace_submenu;   /* workspace list for window_menu */
 
     struct WDock *dock;		       /* the application dock */
+    struct WMenu *dock_pos_menu;       /* Dock position menu */
     struct WPixmap *dock_dots;	       /* 3 dots for the Dock */
     Window dock_shadow;		       /* shadow for dock buttons */
     struct WAppIcon *clip_icon;        /* The clip main icon */
@@ -220,9 +227,14 @@ typedef struct _WScreen {
     struct WMenu *clip_submenu;        /* Workspace list for clips */
     struct WMenu *clip_options;	       /* Options for Clip */
     struct WMenu *clip_ws_menu;	       /* workspace menu for clip */
+    struct WMenu *drawer_menu;         /* Menu for drawers */
     struct WDock *last_dock;
     WAppIconChain *global_icons;       /* for omnipresent icons chain in clip */
     int global_icon_count;	       /* How many global icons do we have */
+    WDrawerChain *drawers;             /* Chain of drawers */
+    /* Cache the following two informations, as they are used quite a lot */
+    int drawer_count;                  /* Nb of drawers that */
+    struct WDock *attracting_drawer;   /* The drawer that auto-attracts icons, or NULL */
 
     Window clip_balloon;	       /* window for workspace name */
 
@@ -233,7 +245,7 @@ typedef struct _WScreen {
 
     struct RImage *icon_tile;
     struct RImage *clip_tile;
-
+    struct RImage *drawer_tile;        /* tile for a drawer (tile + arrow) */
     Pixmap icon_tile_pixmap;		/* For app supplied icons */
 
     struct RImage *def_icon_rimage;	/* Default RImage icon */

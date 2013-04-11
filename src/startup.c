@@ -772,6 +772,14 @@ void StartUp(Bool defaultScreenOnly)
 					}
 				}
 			}
+			/* auto-launch apps in drawers */
+			if (!wPreferences.flags.nodrawer) {
+				WDrawerChain *dc;
+				for (dc = wScreen[j]->drawers; dc; dc = dc->next) {
+					wScreen[j]->last_dock = dc->adrawer;
+					wDockDoAutoLaunch(dc->adrawer, 0);
+				}
+			}
 		}
 
 		/* go to workspace where we were before restart */

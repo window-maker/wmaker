@@ -39,6 +39,7 @@ typedef struct WDock {
 
 #define WM_DOCK        0
 #define WM_CLIP        1
+#define WM_DRAWER      2
     int type;
 
     WMagicNumber auto_expand_magic;
@@ -66,7 +67,7 @@ typedef struct WDock {
 
 
 
-WDock *wDockCreate(WScreen *scr, int type);
+WDock *wDockCreate(WScreen *scr, int type, char *name);
 WDock *wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type);
 
 void wDockDestroy(WDock *dock);
@@ -85,6 +86,9 @@ void wDockDetach(WDock *dock, WAppIcon *icon);
 Bool wDockMoveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y);
 void wDockReattachIcon(WDock *dock, WAppIcon *icon, int x, int y);
 
+void wSlideAppicons(WAppIcon **appicons, int n, int to_the_left);
+void wDrawerFillTheGap(WDock *drawer, WAppIcon *aicon, Bool redocking);
+
 void wDockFinishLaunch(WDock *dock, WAppIcon *icon);
 void wDockTrackWindowLaunch(WDock *dock, Window window);
 WAppIcon *wDockFindIconForWindow(WDock *dock, Window window);
@@ -100,13 +104,26 @@ void wClipSaveState(WScreen *scr);
 WMPropList *wClipSaveWorkspaceState(WScreen *scr, int workspace);
 WAppIcon *wClipRestoreState(WScreen *scr, WMPropList *clip_state);
 
+void wDrawerIconPaint(WAppIcon *dicon);
+void wDrawersSaveState(WScreen *scr);
+void wDrawersRestoreState(WScreen *scr);
+int wIsADrawer(WScreen *scr, WAppIcon *aicon);
+
 void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace);
 
 RImage *wClipMakeTile(WScreen *scr, RImage *normalTile);
+RImage* wDrawerMakeTile(WScreen *scr, RImage *normalTile);
 
 #define WO_FAILED          0
 #define WO_NOT_APPLICABLE  1
 #define WO_SUCCESS         2
+
+typedef enum
+{
+	P_NORMAL = 0,
+	P_AUTO_RAISE_LOWER,
+	P_KEEP_ON_TOP,
+} dockPosition;
 
 int wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent);
 

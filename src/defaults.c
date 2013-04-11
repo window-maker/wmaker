@@ -325,6 +325,8 @@ WDefaultEntry staticOptionList[] = {
 	    NULL, getBool, setIfDockPresent, NULL, NULL},
 	{"DisableClip", "NO", (void *)WM_CLIP,
 	    NULL, getBool, setIfDockPresent, NULL, NULL},
+	{"DisableDrawers", "NO", (void *)WM_DRAWER,
+	    NULL, getBool, setIfDockPresent, NULL, NULL},
 	{"DisableMiniwindows", "NO", NULL,
 	    &wPreferences.disable_miniwindows, getBool, NULL, NULL, NULL}
 };
@@ -1132,6 +1134,7 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 void wDefaultUpdateIcons(WScreen *scr)
 {
 	WAppIcon *aicon = scr->app_icon_list;
+	WDrawerChain *dc;
 	WWindow *wwin = scr->focused_window;
 
 	while (aicon) {
@@ -1143,6 +1146,9 @@ void wDefaultUpdateIcons(WScreen *scr)
 
 	if (!wPreferences.flags.noclip)
 		wClipIconPaint(scr->clip_icon);
+
+	for (dc = scr->drawers; dc != NULL; dc = dc->next)
+		wDrawerIconPaint(dc->adrawer->icon_array[0]);
 
 	while (wwin) {
 		if (wwin->icon && wwin->flags.miniaturized)
@@ -2325,9 +2331,14 @@ static int setIfDockPresent(WScreen * scr, WDefaultEntry * entry, char *flag, lo
 	switch (which) {
 	case WM_DOCK:
 		wPreferences.flags.nodock = wPreferences.flags.nodock || *flag;
+		// Drawers require the dock
+		wPreferences.flags.nodrawer = wPreferences.flags.nodrawer || wPreferences.flags.nodock;
 		break;
 	case WM_CLIP:
 		wPreferences.flags.noclip = wPreferences.flags.noclip || *flag;
+		break;
+	case WM_DRAWER:
+		wPreferences.flags.nodrawer = wPreferences.flags.nodrawer || *flag;
 		break;
 	default:
 		break;
@@ -2377,6 +2388,13 @@ static int setIconTile(WScreen * scr, WDefaultEntry * entry, WTexture ** texture
 			RReleaseImage(scr->clip_tile);
 		}
 		scr->clip_tile = wClipMakeTile(scr, img);
+	}
+
+	if (!wPreferences.flags.nodrawer) {
+		if (scr->drawer_tile) {
+			RReleaseImage(scr->drawer_tile);
+		}
+		scr->drawer_tile = wDrawerMakeTile(scr, img);
 	}
 
 	scr->icon_tile_pixmap = pixmap;

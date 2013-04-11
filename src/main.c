@@ -686,8 +686,11 @@ static int real_main(int argc, char **argv)
 				wPreferences.flags.norestore = 1;
 			} else if (strcmp(argv[i], "-nodock") == 0 || strcmp(argv[i], "--no-dock") == 0) {
 				wPreferences.flags.nodock = 1;
+				wPreferences.flags.nodrawer = 1;
 			} else if (strcmp(argv[i], "-noclip") == 0 || strcmp(argv[i], "--no-clip") == 0) {
 				wPreferences.flags.noclip = 1;
+			} else if (strcmp(argv[i], "-nodrawer") == 0 || strcmp(argv[i], "--no-drawer") == 0) {
+				wPreferences.flags.nodrawer = 1;
 			} else if (strcmp(argv[i], "-version") == 0 || strcmp(argv[i], "--version") == 0) {
 				printf("Window Maker %s\n", VERSION);
 				exit(0);

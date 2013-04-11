@@ -96,7 +96,7 @@ int wWorkspaceNew(WScreen *scr)
 		}
 
 		if (!wPreferences.flags.noclip)
-			wspace->clip = wDockCreate(scr, WM_CLIP);
+			wspace->clip = wDockCreate(scr, WM_CLIP, NULL);
 
 		list = wmalloc(sizeof(WWorkspace *) * scr->workspace_count);
 

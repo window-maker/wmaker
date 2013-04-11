@@ -137,11 +137,40 @@ void DoKaboom(WScreen * scr, Window win, int x, int y)
 #endif	/* NORMAL_ICON_KABOOM */
 }
 
+static int addGhostTile(WScreen *scr, RImage *back, Pixmap which, int dy, int height,
+			unsigned long red_mask, unsigned long green_mask, unsigned long blue_mask)
+{
+	XImage *img;
+	RImage *dock_image;
+
+	img = XGetImage(dpy, which, 0, 0, wPreferences.icon_size, height, AllPlanes, ZPixmap);
+	if (!img) {
+		RReleaseImage(back);
+		return -1;
+	}
+	img->red_mask = red_mask;
+	img->green_mask = green_mask;
+	img->blue_mask = blue_mask;
+
+	dock_image = RCreateImageFromXImage(scr->rcontext, img, NULL);
+	XDestroyImage(img);
+	if (!dock_image) {
+		RReleaseImage(back);
+		return -1;
+	}
+	RCombineAreaWithOpaqueness(back, dock_image, 0, 0, wPreferences.icon_size,
+				height, 0, dy, 30 * 256 / 100);
+	RReleaseImage(dock_image);
+	return 0;
+}
+
 Pixmap MakeGhostDock(WDock * dock, int sx, int dx, int y)
 {
 	WScreen *scr = dock->screen_ptr;
+	WDrawerChain *dc;
+	WDock *drawer;
 	XImage *img;
-	RImage *back, *dock_image;
+	RImage *back;
 	Pixmap pixmap;
 	int i, virtual_tiles, h, j, n;
 	unsigned long red_mask, green_mask, blue_mask;
@@ -150,6 +179,10 @@ Pixmap MakeGhostDock(WDock * dock, int sx, int dx, int y)
 	for (i = 0; i < dock->max_icons; i++) {
 		if (dock->icon_array[i] != NULL && dock->icon_array[i]->yindex > virtual_tiles)
 			virtual_tiles = dock->icon_array[i]->yindex;
+	}
+	for (dc = scr->drawers; dc != NULL; dc = dc->next) {
+		if (dc->adrawer->y_pos - dock->y_pos > virtual_tiles * wPreferences.icon_size)
+			virtual_tiles = (dc->adrawer->y_pos - dock->y_pos) / wPreferences.icon_size;
 	}
 	virtual_tiles++;
 	h = virtual_tiles * wPreferences.icon_size;
@@ -181,27 +214,23 @@ Pixmap MakeGhostDock(WDock * dock, int sx, int dx, int y)
 				which = dock->icon_array[i]->icon->pixmap;
 			else
 				which = dock->icon_array[i]->icon->core->window;
-
-			img = XGetImage(dpy, which, 0, 0, wPreferences.icon_size, n, AllPlanes, ZPixmap);
-
-			if (!img) {
-				RReleaseImage(back);
-				return None;
-			}
-			img->red_mask = red_mask;
-			img->green_mask = green_mask;
-			img->blue_mask = blue_mask;
-
-			dock_image = RCreateImageFromXImage(scr->rcontext, img, NULL);
-			XDestroyImage(img);
-			if (!dock_image) {
-				RReleaseImage(back);
-				return None;
-			}
-			RCombineAreaWithOpaqueness(back, dock_image, 0, 0,
-						   wPreferences.icon_size, n, 0, j, 30 * 256 / 100);
-			RReleaseImage(dock_image);
+			if (addGhostTile(scr, back, which, j, n, red_mask, green_mask, blue_mask))
+				return None; /* back is released by addGhostTile */
 		}
+	}
+	for (dc = scr->drawers; dc != NULL; dc = dc->next) {
+		Pixmap which;
+		drawer = dc->adrawer;
+		if (drawer->y_pos >= scr->scr_height)
+			continue;
+		j = drawer->y_pos - dock->y_pos;
+		n = (h - j < wPreferences.icon_size) ? h - j : wPreferences.icon_size;
+		if (drawer->icon_array[0]->icon->pixmap)
+			which = drawer->icon_array[0]->icon->pixmap;
+		else
+			which = drawer->icon_array[0]->icon->core->window;
+		if (addGhostTile(scr, back, which, j, n, red_mask, green_mask, blue_mask))
+			return None; /* back is released by addGhostTile */
 	}
 
 	RConvertImage(scr->rcontext, back, &pixmap);
