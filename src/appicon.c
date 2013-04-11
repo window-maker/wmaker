@@ -764,12 +764,12 @@ void appIconMouseDown(WObjDescriptor * desc, XEvent * event)
 			WMHandleEvent(&ev);
 			break;
 
-                case EnterNotify:
-                        /* It means the cursor moved so fast that it entered
-                         * something else (if moving slowly, it would have
-                         * stayed in the appIcon that is being moved. Ignore
-                         * such "spurious" EnterNotifiy's */
-                        break;
+		case EnterNotify:
+			/* It means the cursor moved so fast that it entered
+			 * something else (if moving slowly, it would have
+			 * stayed in the appIcon that is being moved. Ignore
+			 * such "spurious" EnterNotifiy's */
+			break;
 
 		case MotionNotify:
 			hasMoved = True;
