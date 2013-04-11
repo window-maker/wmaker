@@ -1692,12 +1692,9 @@ static WAppIcon *restore_icon_state(WScreen *scr, WMPropList *info, int type, in
 			wwarning(_("bad value in docked icon state info %s"), WMGetFromPLString(dPosition));
 
 		/* check position sanity */
-		/* incomplete section! */
+		/* *Very* incomplete section! */
 		if (type == WM_DOCK) {
 			aicon->xindex = 0;
-			if (aicon->yindex < 0)
-				wwarning(_("bad value in docked icon position %i,%i"),
-					 aicon->xindex, aicon->yindex);
 		}
 	} else {
 		aicon->yindex = index;
@@ -2440,10 +2437,6 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 	int i, offset = ICON_SIZE / 2;
 	WAppIcon *aicon = NULL;
 	WAppIcon *nicon = NULL;
-	int max_y_icons;
-
-	/* TODO: XINERAMA, for these */
-	max_y_icons = scr->scr_height / ICON_SIZE - 1;
 
 	if (wPreferences.flags.noupdates)
 		return False;
@@ -2510,7 +2503,7 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 			if (abs(ex_x) > DOCK_DETTACH_THRESHOLD)
 				return False;
 
-			if (ex_y >= 0 && ex_y <= max_y_icons && (aicon == icon || !aicon)) {
+			if (aicon == icon || !aicon) {
 				*ret_x = 0;
 				*ret_y = ex_y;
 				return True;
@@ -2522,7 +2515,6 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 			else
 				sig = -1;
 
-			closest = -1;
 			done = 0;
 			/* look for closest free slot */
 			for (i = 0; i < (DOCK_DETTACH_THRESHOLD + 1) * 2 && !done; i++) {
@@ -2530,8 +2522,8 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 
 				done = 1;
 				closest = sig * (i / 2) + ex_y;
-				/* check if this slot is used */
-				if (closest >= 0) {
+				/* check if this slot is fully on the screen and not used */
+				if (onScreen(scr, dx, dy + closest * ICON_SIZE)) {
 					for (j = 0; j < dock->max_icons; j++) {
 						if (dock->icon_array[j]
 							&& dock->icon_array[j]->yindex == closest) {
@@ -2544,11 +2536,13 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 					/* slot is used by a drawer */
 					done = done && !getDrawer(scr, closest);
 				}
+				else // !onScreen
+					done = 0;
 				sig = -sig;
 			}
-			if (done && closest >= 0 && closest <= max_y_icons &&
-				((ex_y >= closest && ex_y - closest < DOCK_DETTACH_THRESHOLD + 1)
-					|| (ex_y < closest && closest - ex_y <= DOCK_DETTACH_THRESHOLD + 1))) {
+			if (done &&
+			    ((ex_y >= closest && ex_y - closest < DOCK_DETTACH_THRESHOLD + 1)
+			     || (ex_y < closest && closest - ex_y <= DOCK_DETTACH_THRESHOLD + 1))) {
 				*ret_x = 0;
 				*ret_y = closest;
 				return True;
@@ -2556,7 +2550,7 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 		} else {	/* !redocking */
 
 			/* if slot is free and the icon is close enough, return it */
-			if (!aicon && ex_x == 0 && ex_y >= 0 && ex_y <= max_y_icons) {
+			if (!aicon && ex_x == 0) {
 				*ret_x = 0;
 				*ret_y = ex_y;
 				return True;
