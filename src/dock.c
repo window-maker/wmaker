@@ -118,6 +118,8 @@ static void clipAutoRaise(void *cdata);
 static void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y);
 static WAppIcon *mainIconCreate(WScreen *scr, int type);
 
+static int onScreen(WScreen *scr, int x, int y);
+
 static void make_keys(void)
 {
 	if (dCommand != NULL)
@@ -1477,19 +1479,11 @@ WAppIcon *wClipRestoreState(WScreen *scr, WMPropList *clip_state)
 		if (!WMIsPLString(value)) {
 			COMPLAIN("Position");
 		} else {
-			WMRect rect;
-			int flags;
-
 			if (sscanf(WMGetFromPLString(value), "%i,%i", &icon->x_pos, &icon->y_pos) != 2)
 				COMPLAIN("Position");
 
 			/* check position sanity */
-			rect.pos.x = icon->x_pos;
-			rect.pos.y = icon->y_pos;
-			rect.size.width = rect.size.height = ICON_SIZE;
-
-			wGetRectPlacementInfo(scr, rect, &flags);
-			if (flags & (XFLAG_DEAD | XFLAG_PARTIAL))
+			if (!onScreen(scr, icon->x_pos, icon->y_pos))
 				wScreenKeepInside(scr, &icon->x_pos, &icon->y_pos, ICON_SIZE, ICON_SIZE);
 		}
 	}
@@ -1529,19 +1523,11 @@ WDock *wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
 		if (!WMIsPLString(value)) {
 			COMPLAIN("Position");
 		} else {
-			WMRect rect;
-			int flags;
-
 			if (sscanf(WMGetFromPLString(value), "%i,%i", &dock->x_pos, &dock->y_pos) != 2)
 				COMPLAIN("Position");
 
 			/* check position sanity */
-			rect.pos.x = dock->x_pos;
-			rect.pos.y = dock->y_pos;
-			rect.size.width = rect.size.height = ICON_SIZE;
-
-			wGetRectPlacementInfo(scr, rect, &flags);
-			if (flags & (XFLAG_DEAD | XFLAG_PARTIAL)) {
+			if (!onScreen(scr, dock->x_pos, dock->y_pos)) {
 				int x = dock->x_pos;
 				wScreenKeepInside(scr, &x, &dock->y_pos, ICON_SIZE, ICON_SIZE);
 			}
@@ -2228,18 +2214,8 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 		ex_x = (req_x + offset - dx) / ICON_SIZE;
 
 	/* check if the icon is outside the screen boundaries */
-	{
-		WMRect rect;
-		int flags;
-
-		rect.pos.x = dx + ex_x * ICON_SIZE;
-		rect.pos.y = dy + ex_y * ICON_SIZE;
-		rect.size.width = rect.size.height = ICON_SIZE;
-
-		wGetRectPlacementInfo(scr, rect, &flags);
-		if (flags & (XFLAG_DEAD | XFLAG_PARTIAL))
-			return False;
-	}
+	if (!onScreen(scr, dx + ex_x * ICON_SIZE, dy + ex_y * ICON_SIZE))
+		return False;
 
 	if (dock->type == WM_DOCK) {
 		if (icon->dock != dock && ex_x != 0)
@@ -2365,10 +2341,14 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 	return False;
 }
 
-static int onScreen(WScreen *scr, int x, int y, int sx, int ex, int sy, int ey)
+static int onScreen(WScreen *scr, int x, int y)
 {
-	WMRect rect = wmkrect(x, y, ICON_SIZE, ICON_SIZE);
+	WMRect rect;
 	int flags;
+
+	rect.pos.x = x;
+	rect.pos.y = y;
+	rect.size.width = rect.size.height = ICON_SIZE;
 
 	wGetRectPlacementInfo(scr, rect, &flags);
 
@@ -2391,7 +2371,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	int x, y;
 	int i, done = False;
 	int corner;
-	int sx = 0, sy = 0, ex = scr->scr_width, ey = scr->scr_height;
+	int sx = 0, ex = scr->scr_width, ey = scr->scr_height;
 	int extra_count = 0;
 
 	if (dock->type == WM_CLIP && dock != scr->workspaces[scr->current_workspace]->clip)
@@ -2603,7 +2583,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 			tx = dock->x_pos + x * ICON_SIZE;
 			y = -i;
 			ty = dock->y_pos + y * ICON_SIZE;
-			if (slot_map[XY2OFS(x, y)] == 0 && onScreen(scr, tx, ty, sx, ex, sy, ey)) {
+			if (slot_map[XY2OFS(x, y)] == 0 && onScreen(scr, tx, ty)) {
 				*x_pos = x;
 				*y_pos = y;
 				done = 1;
@@ -2611,7 +2591,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 			}
 			y = i;
 			ty = dock->y_pos + y * ICON_SIZE;
-			if (slot_map[XY2OFS(x, y)] == 0 && onScreen(scr, tx, ty, sx, ex, sy, ey)) {
+			if (slot_map[XY2OFS(x, y)] == 0 && onScreen(scr, tx, ty)) {
 				*x_pos = x;
 				*y_pos = y;
 				done = 1;
@@ -2623,7 +2603,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 			ty = dock->y_pos + y * ICON_SIZE;
 			x = -i;
 			tx = dock->x_pos + x * ICON_SIZE;
-			if (slot_map[XY2OFS(x, y)] == 0 && onScreen(scr, tx, ty, sx, ex, sy, ey)) {
+			if (slot_map[XY2OFS(x, y)] == 0 && onScreen(scr, tx, ty)) {
 				*x_pos = x;
 				*y_pos = y;
 				done = 1;
@@ -2631,7 +2611,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 			}
 			x = i;
 			tx = dock->x_pos + x * ICON_SIZE;
-			if (slot_map[XY2OFS(x, y)] == 0 && onScreen(scr, tx, ty, sx, ex, sy, ey)) {
+			if (slot_map[XY2OFS(x, y)] == 0 && onScreen(scr, tx, ty)) {
 				*x_pos = x;
 				*y_pos = y;
 				done = 1;
