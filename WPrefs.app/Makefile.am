@@ -18,6 +18,7 @@ WPrefs_SOURCES = \
 	WPrefs.h \
 	Appearance.c \
 	Configurations.c \
+	Docks.c \
 	Expert.c \
 	Focus.c \
 	FontSimple.c \

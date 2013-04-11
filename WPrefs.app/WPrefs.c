@@ -32,6 +32,8 @@ extern Panel *InitKeyboardShortcuts(WMScreen * scr, WMWidget * parent);
 
 extern Panel *InitWorkspace(WMScreen * scr, WMWidget * parent);
 
+extern Panel *InitDocks(WMScreen *scr, WMWidget *parent);
+
 extern Panel *InitFocus(WMScreen * scr, WMWidget * parent);
 
 extern Panel *InitPreferences(WMScreen * scr, WMWidget * parent);
@@ -663,6 +665,7 @@ void Initialize(WMScreen * scr)
 	InitPreferences(scr, WPrefs.banner);
 
 	InitPaths(scr, WPrefs.banner);
+	InitDocks(scr, WPrefs.banner);
 	InitWorkspace(scr, WPrefs.banner);
 	InitConfigurations(scr, WPrefs.banner);
 
