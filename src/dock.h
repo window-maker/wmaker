@@ -82,6 +82,8 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y,
                    int *ret_x, int *ret_y, int redocking);
 Bool wDockFindFreeSlot(WDock *dock, int *req_x, int *req_y);
 void wDockDetach(WDock *dock, WAppIcon *icon);
+Bool wDockMoveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y);
+void wDockReattachIcon(WDock *dock, WAppIcon *icon, int x, int y);
 
 void wDockFinishLaunch(WDock *dock, WAppIcon *icon);
 void wDockTrackWindowLaunch(WDock *dock, Window window);

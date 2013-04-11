@@ -105,8 +105,6 @@ static void clipLeave(WDock *dock);
 
 static void handleClipChangeWorkspace(WScreen *scr, XEvent *event);
 
-static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y);
-
 static void clipEnterNotify(WObjDescriptor *desc, XEvent *event);
 static void clipLeaveNotify(WObjDescriptor *desc, XEvent *event);
 static void clipAutoCollapse(void *cdata);
@@ -115,7 +113,6 @@ static void launchDockedApplication(WAppIcon *btn, Bool withSelection);
 
 static void clipAutoLower(void *cdata);
 static void clipAutoRaise(void *cdata);
-static void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y);
 static WAppIcon *mainIconCreate(WScreen *scr, int type);
 
 static int onScreen(WScreen *scr, int x, int y);
@@ -781,13 +778,13 @@ static void switchWSCommand(WMenu *menu, WMenuEntry *entry)
 
 		WM_ITERATE_ARRAY(selectedIcons, btn, iter) {
 			if (wDockFindFreeSlot(dest, &x, &y)) {
-				moveIconBetweenDocks(src, dest, btn, x, y);
+				wDockMoveIconBetweenDocks(src, dest, btn, x, y);
 				XUnmapWindow(dpy, btn->icon->core->window);
 			}
 		}
 	} else if (icon != scr->clip_icon) {
 		if (wDockFindFreeSlot(dest, &x, &y)) {
-			moveIconBetweenDocks(src, dest, icon, x, y);
+			wDockMoveIconBetweenDocks(src, dest, icon, x, y);
 			XUnmapWindow(dpy, icon->icon->core->window);
 		}
 	}
@@ -1961,7 +1958,7 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon
 	return True;
 }
 
-static void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y)
+void wDockReattachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 {
 	int index;
 
@@ -1978,7 +1975,7 @@ static void reattachIcon(WDock *dock, WAppIcon *icon, int x, int y)
 	icon->y_pos = dock->y_pos + y * ICON_SIZE;
 }
 
-static Bool moveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
+Bool wDockMoveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, int y)
 {
 	WWindow *wwin;
 	char *command = NULL;
@@ -2941,7 +2938,7 @@ void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 			WAppIconChain *chain = scr->global_icons;
 
 			while (chain) {
-				moveIconBetweenDocks(chain->aicon->dock,
+				wDockMoveIconBetweenDocks(chain->aicon->dock,
 						     scr->workspaces[workspace]->clip,
 						     chain->aicon, chain->aicon->xindex, chain->aicon->yindex);
 				if (scr->workspaces[workspace]->clip->collapsed)
@@ -3400,217 +3397,6 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 	}
 }
 
-static Bool handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
-{
-	WScreen *scr = dock->screen_ptr;
-	Window wins[2];
-	WIcon *icon = aicon->icon;
-	WDock *dock2 = NULL, *last_dock = dock, *clip = NULL;
-	int ondock, grabbed = 0, change_dock = 0, collapsed = 0;
-	XEvent ev;
-	int x = aicon->x_pos, y = aicon->y_pos;
-	int ofs_x = event->xbutton.x, ofs_y = event->xbutton.y;
-	int shad_x = x, shad_y = y;
-	int ix = aicon->xindex, iy = aicon->yindex;
-	int tmp;
-	Pixmap ghost = None;
-	Bool docked;
-	int superfluous = wPreferences.superfluous;	/* we catch it to avoid problems */
-	int omnipresent = aicon->omnipresent;	/* this must be cached!!! */
-	Bool showed_all_clips = False;
-	Bool hasMoved = False;
-
-	if (wPreferences.flags.noupdates)
-		return hasMoved;
-
-	if (XGrabPointer(dpy, icon->core->window, True, ButtonMotionMask
-			 | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
-			 GrabModeAsync, None, None, CurrentTime) != GrabSuccess) {
-	}
-
-	if (!(event->xbutton.state & MOD_MASK))
-		wRaiseFrame(icon->core);
-
-	if (!wPreferences.flags.noclip)
-		clip = scr->workspaces[scr->current_workspace]->clip;
-
-	if (dock == scr->dock && !wPreferences.flags.noclip)
-		dock2 = clip;
-	else if (dock != scr->dock && !wPreferences.flags.nodock)
-		dock2 = scr->dock;
-
-	wins[0] = icon->core->window;
-	wins[1] = scr->dock_shadow;
-	XRestackWindows(dpy, wins, 2);
-	XMoveResizeWindow(dpy, scr->dock_shadow, aicon->x_pos, aicon->y_pos, ICON_SIZE, ICON_SIZE);
-	if (superfluous) {
-		if (icon->pixmap != None)
-			ghost = MakeGhostIcon(scr, icon->pixmap);
-		else
-			ghost = MakeGhostIcon(scr, icon->core->window);
-
-		XSetWindowBackgroundPixmap(dpy, scr->dock_shadow, ghost);
-		XClearWindow(dpy, scr->dock_shadow);
-	}
-	XMapWindow(dpy, scr->dock_shadow);
-
-	ondock = 1;
-
-	while (1) {
-		XMaskEvent(dpy, PointerMotionMask | ButtonReleaseMask | ButtonPressMask
-			   | ButtonMotionMask | ExposureMask, &ev);
-		switch (ev.type) {
-		case Expose:
-			WMHandleEvent(&ev);
-			break;
-
-		case MotionNotify:
-			hasMoved = True;
-			if (!grabbed) {
-				if (abs(ofs_x - ev.xmotion.x) >= MOVE_THRESHOLD
-				    || abs(ofs_y - ev.xmotion.y) >= MOVE_THRESHOLD) {
-					XChangeActivePointerGrab(dpy, ButtonMotionMask
-								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_MOVE], CurrentTime);
-					grabbed = 1;
-				} else {
-					break;
-				}
-			}
-
-			if (omnipresent && !showed_all_clips) {
-				int i;
-				for (i = 0; i < scr->workspace_count; i++) {
-					if (i == scr->current_workspace)
-						continue;
-					wDockShowIcons(scr->workspaces[i]->clip);
-					/* Note: if dock is collapsed (for instance,
-					   because it auto-collapses), its icons
-					   still won't show up */
-				}
-				showed_all_clips = True; /* To prevent flickering */
-			}
-
-			x = ev.xmotion.x_root - ofs_x;
-			y = ev.xmotion.y_root - ofs_y;
-			tmp = wDockSnapIcon(dock, aicon, x, y, &ix, &iy, True);
-			if (tmp && dock2) {
-				change_dock = 0;
-				if (last_dock != dock && collapsed) {
-					last_dock->collapsed = 1;
-					wDockHideIcons(last_dock);
-					collapsed = 0;
-				}
-				if (!collapsed && (collapsed = dock->collapsed)) {
-					dock->collapsed = 0;
-					wDockShowIcons(dock);
-				}
-				if (dock->auto_raise_lower)
-					wDockRaise(dock);
-				last_dock = dock;
-			} else if (dock2) {
-				tmp = wDockSnapIcon(dock2, aicon, x, y, &ix, &iy, False);
-				if (tmp) {
-					change_dock = 1;
-					if (last_dock != dock2 && collapsed) {
-						last_dock->collapsed = 1;
-						wDockHideIcons(last_dock);
-						collapsed = 0;
-					}
-					if (!collapsed && (collapsed = dock2->collapsed)) {
-						dock2->collapsed = 0;
-						wDockShowIcons(dock2);
-					}
-					if (dock2->auto_raise_lower)
-						wDockRaise(dock2);
-					last_dock = dock2;
-				}
-			}
-			if (aicon->launching || aicon->lock || (aicon->running && !(ev.xmotion.state & MOD_MASK))
-			    || (!aicon->running && tmp)) {
-				shad_x = last_dock->x_pos + ix * wPreferences.icon_size;
-				shad_y = last_dock->y_pos + iy * wPreferences.icon_size;
-
-				XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
-
-				if (!ondock)
-					XMapWindow(dpy, scr->dock_shadow);
-
-				ondock = 1;
-			} else {
-				if (ondock)
-					XUnmapWindow(dpy, scr->dock_shadow);
-
-				ondock = 0;
-			}
-			XMoveWindow(dpy, icon->core->window, x, y);
-			break;
-
-		case ButtonPress:
-			break;
-
-		case ButtonRelease:
-			if (ev.xbutton.button != event->xbutton.button)
-				break;
-			XUngrabPointer(dpy, CurrentTime);
-			if (ondock) {
-				SlideWindow(icon->core->window, x, y, shad_x, shad_y);
-				XUnmapWindow(dpy, scr->dock_shadow);
-				if (!change_dock) {
-					reattachIcon(dock, aicon, ix, iy);
-					if (clip && dock != clip && clip->auto_raise_lower)
-						wDockLower(clip);
-				} else {
-					docked = moveIconBetweenDocks(dock, dock2, aicon, ix, iy);
-					if (!docked) {
-						/* Slide it back if dock rejected it */
-						SlideWindow(icon->core->window, x, y, aicon->x_pos, aicon->y_pos);
-						reattachIcon(dock, aicon, aicon->xindex, aicon->yindex);
-					}
-					if (last_dock->type == WM_CLIP && last_dock->auto_collapse)
-						collapsed = 0;
-				}
-			} else {
-				aicon->x_pos = x;
-				aicon->y_pos = y;
-				if (superfluous) {
-					if (!aicon->running && !wPreferences.no_animations) {
-						/* We need to deselect it, even if is deselected in
-						 * wDockDetach(), because else DoKaboom() will fail.
-						 */
-						if (aicon->icon->selected)
-							wIconSelect(aicon->icon);
-
-						DoKaboom(scr, aicon->icon->core->window, x, y);
-					}
-				}
-				if (clip && clip->auto_raise_lower)
-					wDockLower(clip);
-				wDockDetach(dock, aicon);
-			}
-			if (collapsed) {
-				last_dock->collapsed = 1;
-				wDockHideIcons(last_dock);
-				collapsed = 0;
-			}
-			if (superfluous) {
-				if (ghost != None)
-					XFreePixmap(dpy, ghost);
-				XSetWindowBackground(dpy, scr->dock_shadow, scr->white_pixel);
-			}
-			if (showed_all_clips) {
-				int i;
-				for (i = 0; i < scr->workspace_count; i++) {
-					if (i == scr->current_workspace)
-						continue;
-					wDockHideIcons(scr->workspaces[i]->clip);
-				}
-			}
-			return hasMoved;;
-		}
-	}
-	return False;  /* never reached */
-}
 
 static int getClipButton(int px, int py)
 {
@@ -3730,7 +3516,7 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 			else
 				handleDockMove(dock, aicon, event);
 		} else {
-			Bool hasMoved = handleIconMove(dock, aicon, event);
+			Bool hasMoved = wHandleAppIconMove(aicon, event);
 			if (wPreferences.single_click && !hasMoved)
 				iconDblClick(desc, event);
 		}
