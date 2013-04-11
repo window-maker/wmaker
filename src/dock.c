@@ -446,14 +446,35 @@ static void omnipresentCallback(WMenu *menu, WMenuEntry *entry)
 	}
 }
 
+static void removeIcons(WMArray *icons, WDock *dock)
+{
+	WAppIcon *aicon;
+	int keepit;
+	WMArrayIterator it;
+
+	WM_ITERATE_ARRAY(icons, aicon, it) {
+		keepit = aicon->running && wApplicationOf(aicon->main_window);
+		wDockDetach(dock, aicon);
+		if (keepit) {
+			/* XXX: can: aicon->icon == NULL ? */
+			PlaceIcon(dock->screen_ptr, &aicon->x_pos, &aicon->y_pos,
+				wGetHeadForWindow(aicon->icon->owner));
+			XMoveWindow(dpy, aicon->icon->core->window, aicon->x_pos, aicon->y_pos);
+			if (!dock->mapped || dock->collapsed)
+				XMapWindow(dpy, aicon->icon->core->window);
+		}
+	}
+	WMFreeArray(icons);
+
+	if (wPreferences.auto_arrange_icons)
+		wArrangeIcons(dock->screen_ptr, True);
+}
+
 static void removeIconsCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *clickedIcon = (WAppIcon *) entry->clientdata;
 	WDock *dock;
-	WAppIcon *aicon;
 	WMArray *selectedIcons;
-	int keepit;
-	WMArrayIterator it;
 
 	assert(clickedIcon != NULL);
 
@@ -476,22 +497,7 @@ static void removeIconsCallback(WMenu *menu, WMenuEntry *entry)
 		WMAddToArray(selectedIcons, clickedIcon);
 	}
 
-	WM_ITERATE_ARRAY(selectedIcons, aicon, it) {
-		keepit = aicon->running && wApplicationOf(aicon->main_window);
-		wDockDetach(dock, aicon);
-		if (keepit) {
-			/* XXX: can: aicon->icon == NULL ? */
-			PlaceIcon(dock->screen_ptr, &aicon->x_pos, &aicon->y_pos,
-				  wGetHeadForWindow(aicon->icon->owner));
-			XMoveWindow(dpy, aicon->icon->core->window, aicon->x_pos, aicon->y_pos);
-			if (!dock->mapped || dock->collapsed)
-				XMapWindow(dpy, aicon->icon->core->window);
-		}
-	}
-	WMFreeArray(selectedIcons);
-
-	if (wPreferences.auto_arrange_icons)
-		wArrangeIcons(dock->screen_ptr, True);
+	removeIcons(selectedIcons, dock);
 }
 
 static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
