@@ -462,6 +462,8 @@ void wWorkspaceRelativeChange(WScreen * scr, int amount)
 void wWorkspaceForceChange(WScreen * scr, int workspace)
 {
 	WWindow *tmp, *foc = NULL, *foc2 = NULL;
+	WWindow **toUnmap;
+	int toUnmapSize, toUnmapCount;
 
 	if (workspace >= MAX_WORKSPACES || workspace < 0)
 		return;
@@ -480,6 +482,10 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 
+	toUnmapSize = 16;
+	toUnmapCount = 0;
+	toUnmap = wmalloc(toUnmapSize * sizeof(WWindow *));
+
 	if ((tmp = scr->focused_window) != NULL) {
 		if ((IS_OMNIPRESENT(tmp) && (tmp->flags.mapped || tmp->flags.shaded) &&
 		     !WFLAGP(tmp, no_focusable)) || tmp->flags.changing_workspace) {
@@ -494,7 +500,12 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 				/* unmap windows not on this workspace */
 				if ((tmp->flags.mapped || tmp->flags.shaded) &&
 				    !IS_OMNIPRESENT(tmp) && !tmp->flags.changing_workspace) {
-					wWindowUnmap(tmp);
+					if (toUnmapCount == toUnmapSize)
+					{
+						toUnmapSize *= 2;
+						toUnmap = wrealloc(toUnmap, toUnmapSize * sizeof(WWindow *));
+					}
+					toUnmap[toUnmapCount++] = tmp;
 				}
 				/* also unmap miniwindows not on this workspace */
 				if (!wPreferences.sticky_icons && tmp->flags.miniaturized &&
@@ -542,6 +553,12 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 			}
 			tmp = tmp->prev;
 		}
+
+		while (toUnmapCount > 0)
+		{
+			wWindowUnmap(toUnmap[--toUnmapCount]);
+		}
+		wfree(toUnmap);
 
 		/* Gobble up events unleashed by our mapping & unmapping.
 		 * These may trigger various grab-initiated focus &
