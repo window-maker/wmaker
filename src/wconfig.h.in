@@ -315,7 +315,7 @@
 
 #define MAX_WORKSPACENAME_WIDTH	64
 /* max width of window title in window list */
-#define MAX_WINDOWLIST_WIDTH	160
+#define MAX_WINDOWLIST_WIDTH	400
 
 #ifndef HAVE_INOTIFY
 /* Check defaults database for changes every this many milliseconds */
