@@ -3622,7 +3622,7 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 	int x = aicon->x_pos, y = aicon->y_pos;;
 	int shad_x = x, shad_y = y;
 	XEvent ev;
-	int grabbed = 0, swapped = 0, done;
+	int grabbed = 0, done, previously_on_right, now_on_right, previous_x_pos;
 	Pixmap ghost = None;
 	int superfluous = wPreferences.superfluous;	/* we catch it to avoid problems */
 
@@ -3648,23 +3648,10 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 			XClearWindow(dpy, scr->dock_shadow);
 		}
 		XMapWindow(dpy, scr->dock_shadow);
-	} else {
-		int i;
-		WDrawerChain *dc;
-		/* Find out the actual height of the dock, to create its shadow */
-		y = 0;
-		for (i = 0; i < dock->max_icons; i++) {
-			if (dock->icon_array[i] != NULL && dock->icon_array[i]->yindex > y)
-				y = dock->icon_array[i]->yindex;
-		}
-		for (dc = scr->drawers; dc; dc = dc->next) {
-			if ((dc->adrawer->y_pos - dock->y_pos) / ICON_SIZE > y)
-				y = (dc->adrawer->y_pos - dock->y_pos) / ICON_SIZE;
-		}
-		y++;
-		XResizeWindow(dpy, scr->dock_shadow, ICON_SIZE, ICON_SIZE * y);
 	}
 
+	previously_on_right = now_on_right = dock->on_right_side;
+	previous_x_pos = dock->x_pos;
 	done = 0;
 	while (!done) {
 		WMMaskEvent(dpy, PointerMotionMask | ButtonReleaseMask | ButtonPressMask
@@ -3700,61 +3687,25 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				moveDock(dock, x, y);
 				break;
 			case WM_DOCK:
-				/* move vertically if pointer is inside the dock */
-				if ((dock->on_right_side && ev.xmotion.x_root >= dock->x_pos - ICON_SIZE)
-				    || (!dock->on_right_side && ev.xmotion.x_root <= dock->x_pos + ICON_SIZE * 2)) {
-
-					x = ev.xmotion.x_root - ofs_x;
-					y = ev.xmotion.y_root - ofs_y;
-					wScreenKeepInside(scr, &x, &y, ICON_SIZE, ICON_SIZE);
-					moveDock(dock, dock->x_pos, y);
-				}
-				/* move horizontally to change sides */
 				x = ev.xmotion.x_root - ofs_x;
-				if (!dock->on_right_side) {
-
-					/* is on left */
-					if (ev.xmotion.x_root > dock->x_pos + ICON_SIZE * 2) {
-						XMoveWindow(dpy, scr->dock_shadow, scr->scr_width - ICON_SIZE
-							    - DOCK_EXTRA_SPACE - 1, dock->y_pos);
-						if (superfluous && ghost == None) {
-							ghost = MakeGhostDock(dock, dock->x_pos,
-									      scr->scr_width - ICON_SIZE
-									      - DOCK_EXTRA_SPACE - 1, dock->y_pos);
-							XSetWindowBackgroundPixmap(dpy, scr->dock_shadow, ghost);
-							XClearWindow(dpy, scr->dock_shadow);
-						}
-						XMapRaised(dpy, scr->dock_shadow);
-						swapped = 1;
-					} else {
-						if (superfluous && ghost != None) {
-							XFreePixmap(dpy, ghost);
-							ghost = None;
-						}
-						XUnmapWindow(dpy, scr->dock_shadow);
-						swapped = 0;
-					}
-				} else {
-					/* is on right */
-					if (ev.xmotion.x_root < dock->x_pos - ICON_SIZE) {
-						XMoveWindow(dpy, scr->dock_shadow, DOCK_EXTRA_SPACE, dock->y_pos);
-						if (superfluous && ghost == None) {
-							ghost = MakeGhostDock(dock, dock->x_pos,
-									      DOCK_EXTRA_SPACE, dock->y_pos);
-							XSetWindowBackgroundPixmap(dpy, scr->dock_shadow, ghost);
-							XClearWindow(dpy, scr->dock_shadow);
-						}
-						XMapRaised(dpy, scr->dock_shadow);
-						swapped = -1;
-					} else {
-						XUnmapWindow(dpy, scr->dock_shadow);
-						swapped = 0;
-						if (superfluous && ghost != None) {
-							XFreePixmap(dpy, ghost);
-							ghost = None;
-						}
-					}
+				y = ev.xmotion.y_root - ofs_y;
+				if (previously_on_right)
+				{
+					now_on_right = (ev.xmotion.x_root >= previous_x_pos - ICON_SIZE);
 				}
+				else
+				{
+					now_on_right = (ev.xmotion.x_root > previous_x_pos + ICON_SIZE * 2);
+				}
+				if (now_on_right != dock->on_right_side)
+				{
+					dock->on_right_side = now_on_right;
+					swapDock(dock);
+					wArrangeIcons(scr, False);
+				}
+				// Also perform the vertical move
+				wScreenKeepInside(scr, &x, &y, ICON_SIZE, ICON_SIZE);
+				moveDock(dock, dock->x_pos, y);
 				break;
 			case WM_DRAWER:
 			{
@@ -3799,19 +3750,7 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 					shad_y);
 				XUnmapWindow(dpy, scr->dock_shadow);
 				moveDock(dock, shad_x, shad_y);
-			} else {
-				XUnmapWindow(dpy, scr->dock_shadow);
-			}
-			XResizeWindow(dpy, scr->dock_shadow, ICON_SIZE, ICON_SIZE);
-			if (dock->type == WM_DOCK) {
-				if (swapped != 0) {
-					if (swapped > 0)
-						dock->on_right_side = 1;
-					else
-						dock->on_right_side = 0;
-					swapDock(dock);
-					wArrangeIcons(scr, False);
-				}
+				XResizeWindow(dpy, scr->dock_shadow, ICON_SIZE, ICON_SIZE);
 			}
 			done = 1;
 			break;
@@ -4712,9 +4651,6 @@ static WDock * drawerRestoreState(WScreen *scr, WMPropList *drawer_state)
 			x = scr->dock->x_pos;
 		}
 		y_index = (y - scr->dock->y_pos) / ICON_SIZE;
-		if (y_index <= 0) {
-			y_index = 1;
-		}
 		if (y_index >= scr->dock->max_icons) {
 			/* Here we should do something more intelligent, since it
 			 * can happen even if the user hasn't hand-edited his
