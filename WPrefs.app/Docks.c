@@ -38,21 +38,20 @@ typedef struct _Panel {
 	WMTextField *autoDelayT[4];
 	
 	WMFrame *dockF;
-	WMButton *dockB;
-	WMButton *clipB;
+	WMButton *docksB[3];
 } _Panel;
 
-#define ICON_FILE	"dockclipsection"
+#define ICON_FILE	"dockclipdrawersection"
 
 #define ARQUIVO_XIS	"xis"
 #define DELAY_ICON "timer%i"
 #define DELAY_ICON_S "timer%is"
-#define DOCK_FILE	"dock"
-#define CLIP_FILE	"clip"
 
 static char *autoDelayStrings[4];
 static char *autoDelayKeys[4] = { "ClipAutoexpandDelay", "ClipAutocollapseDelay", "ClipAutoraiseDelay", "ClipAutolowerDelay" };
 static char *autoDelayPresetValues[5] = { "0", "100", "250", "600", "1000" };
+static char *dockDisablingKeys[3] = { "DisableDock", "DisableClip", "DisableDrawers" };
+static char *dockFiles[3] = { "dock", "clip", "drawer" };
 
 static void showData(_Panel *panel);
 static void storeData(_Panel *panel);
@@ -101,6 +100,22 @@ static void autoDelayChanged(void *observerData, WMNotification *notification)
 		char *value = WMGetTextFieldText(anAutoDelayT);
 		adjustButtonSelectionBasedOnValue(panel, row, value);
 		return;
+	}
+}
+
+static void pushDockButton(WMWidget *w, void *data)
+{
+	_Panel *panel = (_Panel *) data;
+	WMButton *button = (WMButton *) w;
+	if (button == panel->docksB[0] &&
+	    !WMGetButtonSelected(panel->docksB[0]))
+	{
+		WMSetButtonSelected(panel->docksB[2], False);
+	}
+	if (button == panel->docksB[2] &&
+	    WMGetButtonSelected(panel->docksB[2]))
+	{
+		WMSetButtonSelected(panel->docksB[0], True);
 	}
 }
 
@@ -188,44 +203,45 @@ static void createPanel(Panel *p)
 	wfree(buf1);
 	wfree(buf2);
 
-	/***************** Enable/disable clip/dock *****************/
+	/***************** Enable/disable clip/dock/drawers *****************/
 	panel->dockF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->dockF, 115, 210);
 	WMMoveWidget(panel->dockF, 390, 10);
-	WMSetFrameTitle(panel->dockF, _("Dock/Clip"));
+	WMSetFrameTitle(panel->dockF, _("Dock/Clip/Drawer"));
 
-	panel->dockB = WMCreateButton(panel->dockF, WBTToggle);
-	WMResizeWidget(panel->dockB, 64, 64);
-	WMMoveWidget(panel->dockB, 25, 35);
-	WMSetButtonImagePosition(panel->dockB, WIPImageOnly);
-	CreateImages(scr, rc, xis, DOCK_FILE, &icon1, &icon2);
-	if (icon2) {
-		WMSetButtonImage(panel->dockB, icon2);
-		WMReleasePixmap(icon2);
+	for (i = 0; i < 3; i++)
+	{
+		panel->docksB[i] = WMCreateButton(panel->dockF, WBTToggle);
+		WMResizeWidget(panel->docksB[i], 56, 56);
+		WMMoveWidget(panel->docksB[i], 30, 20 + 62 * i);
+		WMSetButtonImagePosition(panel->docksB[i], WIPImageOnly);
+		CreateImages(scr, rc, xis, dockFiles[i], &icon1, &icon2);
+		if (icon2) {
+			WMSetButtonImage(panel->docksB[i], icon2);
+			WMReleasePixmap(icon2);
+		}
+		if (icon1) {
+			WMSetButtonAltImage(panel->docksB[i], icon1);
+			WMReleasePixmap(icon1);
+		}
+		switch(i)
+		{
+		case 0:
+			WMSetBalloonTextForView(_("Disable/enable the application Dock (the\n"
+						  "vertical icon bar in the side of the screen)."), WMWidgetView(panel->docksB[i]));
+			break;
+		case 1:
+			WMSetBalloonTextForView(_("Disable/enable the Clip (that thing with\n"
+						  "a paper clip icon)."), WMWidgetView(panel->docksB[i]));
+			break;
+		case 2:
+			WMSetBalloonTextForView(_("Disable/enable Drawers (a dock that stores\n"
+						  "application icons horizontally). The dock is required."), WMWidgetView(panel->docksB[i]));
+			break;
+		}
+		WMSetButtonAction(panel->docksB[i], pushDockButton, panel);
 	}
-	if (icon1) {
-		WMSetButtonAltImage(panel->dockB, icon1);
-		WMReleasePixmap(icon1);
-	}
-	WMSetBalloonTextForView(_("Disable/enable the application Dock (the\n"
-				  "vertical icon bar in the side of the screen)."), WMWidgetView(panel->dockB));
-
-	panel->clipB = WMCreateButton(panel->dockF, WBTToggle);
-	WMResizeWidget(panel->clipB, 64, 64);
-	WMMoveWidget(panel->clipB, 25, 120);
-	WMSetButtonImagePosition(panel->clipB, WIPImageOnly);
-	CreateImages(scr, rc, xis, CLIP_FILE, &icon1, &icon2);
-	if (icon2) {
-		WMSetButtonImage(panel->clipB, icon2);
-		WMReleasePixmap(icon2);
-	}
-	if (icon1) {
-		WMSetButtonAltImage(panel->clipB, icon1);
-		WMReleasePixmap(icon1);
-	}
-	WMSetBalloonTextForView(_("Disable/enable the Clip (that thing with\n"
-				  "a paper clip icon)."), WMWidgetView(panel->clipB));
-
+	
 	WMMapSubwidgets(panel->dockF);
 
 	if (xis)
@@ -244,9 +260,10 @@ static void storeData(_Panel *panel)
 	{
 		SetStringForKey(WMGetTextFieldText(panel->autoDelayT[i]), autoDelayKeys[i]);
 	}
-
-	SetBoolForKey(!WMGetButtonSelected(panel->dockB), "DisableDock");
-	SetBoolForKey(!WMGetButtonSelected(panel->clipB), "DisableClip");
+	for (i = 0; i < 3; i++)
+	{
+		SetBoolForKey(!WMGetButtonSelected(panel->docksB[i]), dockDisablingKeys[i]);
+	}
 }
 
 static void showData(_Panel *panel)
@@ -259,9 +276,10 @@ static void showData(_Panel *panel)
 		WMSetTextFieldText(panel->autoDelayT[i], value);
 		adjustButtonSelectionBasedOnValue(panel, i, value);
 	}
-
-	WMSetButtonSelected(panel->dockB, !GetBoolForKey("DisableDock"));
-	WMSetButtonSelected(panel->clipB, !GetBoolForKey("DisableClip"));
+	for (i = 0; i < 3; i++)
+	{
+		WMSetButtonSelected(panel->docksB[i], !GetBoolForKey(dockDisablingKeys[i]));
+	}
 }
 
 Panel *InitDocks(WMScreen *scr, WMWidget *parent)
