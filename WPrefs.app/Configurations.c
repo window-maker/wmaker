@@ -111,43 +111,6 @@ static void updateLabel(WMWidget *self, void *data)
 	WMSetLabelText(panel->dithL, buffer);
 }
 
-static void
-createImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
-	     WMPixmap **icon1, WMPixmap **icon2)
-{
-	RImage *icon;
-	char *path;
-	RColor gray = { 0xae, 0xaa, 0xae, 0 };
-
-	*icon1 = NULL;
-	*icon2 = NULL;
-
-	path = LocateImage(file);
-	if (!path)
-		return;
-
-	*icon1 = WMCreatePixmapFromFile(scr, path);
-	if (!*icon1) {
-		wwarning(_("could not load icon %s"), path);
-		wfree(path);
-		return;
-	}
-	icon = RLoadImage(rc, path, 0);
-	if (!icon) {
-		wwarning(_("could not load icon %s"), path);
-		wfree(path);
-		return;
-	}
-	RCombineImageWithColor(icon, &gray);
-	if (xis) {
-		RCombineImagesWithOpaqueness(icon, xis, 180);
-		if (!(*icon2 = WMCreatePixmapFromRImage(scr, icon, 127)))
-			wwarning(_("could not process icon %s: %s"), file, RMessageForError(RErrorCode));
-	}
-	RReleaseImage(icon);
-	wfree(path);
-}
-
 static void createPanel(Panel *p)
 {
 	_Panel *panel = (_Panel *) p;
@@ -342,7 +305,7 @@ static void createPanel(Panel *p)
 	WMSetButtonFont(panel->animB, font);
 	WMSetButtonText(panel->animB, _("Animations"));
 	WMSetButtonImagePosition(panel->animB, WIPAbove);
-	createImages(scr, rc, xis, ANIM_IMAGE, &altIcon, &icon);
+	CreateImages(scr, rc, xis, ANIM_IMAGE, &altIcon, &icon);
 	if (icon) {
 		WMSetButtonImage(panel->animB, icon);
 		WMReleasePixmap(icon);
@@ -360,7 +323,7 @@ static void createPanel(Panel *p)
 	WMSetButtonFont(panel->supB, font);
 	WMSetButtonText(panel->supB, _("Superfluous"));
 	WMSetButtonImagePosition(panel->supB, WIPAbove);
-	createImages(scr, rc, xis, SUPERF_IMAGE, &altIcon, &icon);
+	CreateImages(scr, rc, xis, SUPERF_IMAGE, &altIcon, &icon);
 	if (icon) {
 		WMSetButtonImage(panel->supB, icon);
 		WMReleasePixmap(icon);

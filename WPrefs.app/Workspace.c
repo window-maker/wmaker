@@ -71,40 +71,6 @@ static char *WSNamePositions[] = {
 	"bottomright"
 };
 
-static void
-createImages(WMScreen * scr, RContext * rc, RImage * xis, char *file, WMPixmap ** icon1, WMPixmap ** icon2)
-{
-	RImage *icon;
-	RColor gray = { 0xae, 0xaa, 0xae, 0 };
-
-	*icon1 = WMCreatePixmapFromFile(scr, file);
-	if (!*icon1) {
-		wwarning(_("could not load icon %s"), file);
-		if (icon2)
-			*icon2 = NULL;
-		return;
-	}
-
-	if (!icon2)
-		return;
-
-	icon = RLoadImage(rc, file, 0);
-	if (!icon) {
-		wwarning(_("could not load icon %s"), file);
-		*icon2 = NULL;
-		return;
-	}
-	RCombineImageWithColor(icon, &gray);
-	if (xis) {
-		RCombineImagesWithOpaqueness(icon, xis, 180);
-		if (!(*icon2 = WMCreatePixmapFromRImage(scr, icon, 127))) {
-			wwarning(_("could not process icon %s: %s"), file, RMessageForError(RErrorCode));
-			*icon2 = NULL;
-		}
-	}
-	RReleaseImage(icon);
-}
-
 static void showData(_Panel * panel)
 {
 	int i, idx;
@@ -170,14 +136,11 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->cyclL, 60, 60);
 	WMMoveWidget(panel->cyclL, 10, 15);
 	WMSetLabelImagePosition(panel->cyclL, WIPImageOnly);
-	path = LocateImage(CYCLE_FILE);
-	if (path) {
-		createImages(scr, rc, xis, path, &icon1, NULL);
-		if (icon1) {
-			WMSetLabelImage(panel->cyclL, icon1);
-			WMReleasePixmap(icon1);
-		}
-		wfree(path);
+	CreateImages(scr, rc, xis, CYCLE_FILE, &icon1, NULL);
+	if (icon1)
+	{
+		WMSetLabelImage(panel->cyclL, icon1);
+		WMReleasePixmap(icon1);
 	}
 
 	/**/ panel->linkB = WMCreateSwitchButton(panel->navF);
@@ -189,14 +152,11 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->linkL, 60, 40);
 	WMMoveWidget(panel->linkL, 10, 80);
 	WMSetLabelImagePosition(panel->linkL, WIPImageOnly);
-	path = LocateImage(DONT_LINK_FILE);
-	if (path) {
-		createImages(scr, rc, xis, path, &icon1, NULL);
-		if (icon1) {
-			WMSetLabelImage(panel->linkL, icon1);
-			WMReleasePixmap(icon1);
-		}
-		wfree(path);
+	CreateImages(scr, rc, xis, DONT_LINK_FILE, &icon1, NULL);
+	if (icon1)
+	{
+		WMSetLabelImage(panel->linkL, icon1);
+		WMReleasePixmap(icon1);
 	}
 
 	/**/ panel->newB = WMCreateSwitchButton(panel->navF);
@@ -208,14 +168,11 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->newL, 60, 20);
 	WMMoveWidget(panel->newL, 10, 130);
 	WMSetLabelImagePosition(panel->newL, WIPImageOnly);
-	path = LocateImage(ADVANCE_FILE);
-	if (path) {
-		createImages(scr, rc, xis, path, &icon1, NULL);
-		if (icon1) {
-			WMSetLabelImage(panel->newL, icon1);
-			WMReleasePixmap(icon1);
-		}
-		wfree(path);
+	CreateImages(scr, rc, xis, ADVANCE_FILE, &icon1, NULL);
+	if (icon1)
+	{
+		WMSetLabelImage(panel->newL, icon1);
+		WMReleasePixmap(icon1);
 	}
 
 	/**/ panel->posL = WMCreateLabel(panel->navF);
@@ -228,14 +185,11 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->posiL, 60, 40);
 	WMMoveWidget(panel->posiL, 10, 160);
 	WMSetLabelImagePosition(panel->posiL, WIPImageOnly);
-	path = LocateImage(WSNAME_FILE);
-	if (path) {
-		createImages(scr, rc, xis, path, &icon1, NULL);
-		if (icon1) {
-			WMSetLabelImage(panel->posiL, icon1);
-			WMReleasePixmap(icon1);
-		}
-		wfree(path);
+	CreateImages(scr, rc, xis, WSNAME_FILE, &icon1, NULL);
+	if (icon1)
+	{
+		WMSetLabelImage(panel->posiL, icon1);
+		WMReleasePixmap(icon1);
 	}
 
 	panel->posP = WMCreatePopUpButton(panel->navF);
@@ -262,18 +216,14 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->dockB, 64, 64);
 	WMMoveWidget(panel->dockB, 25, 35);
 	WMSetButtonImagePosition(panel->dockB, WIPImageOnly);
-	path = LocateImage(DOCK_FILE);
-	if (path) {
-		createImages(scr, rc, xis, path, &icon1, &icon2);
-		if (icon2) {
-			WMSetButtonImage(panel->dockB, icon2);
-			WMReleasePixmap(icon2);
-		}
-		if (icon1) {
-			WMSetButtonAltImage(panel->dockB, icon1);
-			WMReleasePixmap(icon1);
-		}
-		wfree(path);
+	CreateImages(scr, rc, xis, DOCK_FILE, &icon1, &icon2);
+	if (icon2) {
+		WMSetButtonImage(panel->dockB, icon2);
+		WMReleasePixmap(icon2);
+	}
+	if (icon1) {
+		WMSetButtonAltImage(panel->dockB, icon1);
+		WMReleasePixmap(icon1);
 	}
 	WMSetBalloonTextForView(_("Disable/enable the application Dock (the\n"
 				  "vertical icon bar in the side of the screen)."), WMWidgetView(panel->dockB));
@@ -282,18 +232,14 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->clipB, 64, 64);
 	WMMoveWidget(panel->clipB, 25, 120);
 	WMSetButtonImagePosition(panel->clipB, WIPImageOnly);
-	path = LocateImage(CLIP_FILE);
-	if (path) {
-		createImages(scr, rc, xis, path, &icon1, &icon2);
-		if (icon2) {
-			WMSetButtonImage(panel->clipB, icon2);
-			WMReleasePixmap(icon2);
-		}
-		if (icon1) {
-			WMSetButtonAltImage(panel->clipB, icon1);
-			WMReleasePixmap(icon1);
-		}
-		wfree(path);
+	CreateImages(scr, rc, xis, CLIP_FILE, &icon1, &icon2);
+	if (icon2) {
+		WMSetButtonImage(panel->clipB, icon2);
+		WMReleasePixmap(icon2);
+	}
+	if (icon1) {
+		WMSetButtonAltImage(panel->clipB, icon1);
+		WMReleasePixmap(icon1);
 	}
 	WMSetBalloonTextForView(_("Disable/enable the Clip (that thing with\n"
 				  "a paper clip icon)."), WMWidgetView(panel->clipB));
