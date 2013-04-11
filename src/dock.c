@@ -3429,6 +3429,7 @@ static Bool handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 	Bool docked;
 	int superfluous = wPreferences.superfluous;	/* we catch it to avoid problems */
 	int omnipresent = aicon->omnipresent;	/* this must be cached!!! */
+	Bool showed_all_clips = False;
 	Bool hasMoved = False;
 
 	if (wPreferences.flags.noupdates)
@@ -3489,13 +3490,17 @@ static Bool handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				}
 			}
 
-			if (omnipresent) {
+			if (omnipresent && !showed_all_clips) {
 				int i;
 				for (i = 0; i < scr->workspace_count; i++) {
 					if (i == scr->current_workspace)
 						continue;
 					wDockShowIcons(scr->workspaces[i]->clip);
+					/* Note: if dock is collapsed (for instance,
+					   because it auto-collapses), its icons
+					   still won't show up */
 				}
+				showed_all_clips = True; /* To prevent flickering */
 			}
 
 			x = ev.xmotion.x_root - ofs_x;
@@ -3605,7 +3610,7 @@ static Bool handleIconMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 					XFreePixmap(dpy, ghost);
 				XSetWindowBackground(dpy, scr->dock_shadow, scr->white_pixel);
 			}
-			if (omnipresent) {
+			if (showed_all_clips) {
 				int i;
 				for (i = 0; i < scr->workspace_count; i++) {
 					if (i == scr->current_workspace)
