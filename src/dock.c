@@ -3242,6 +3242,8 @@ static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 			} else if (btn->command) {
 				if (!btn->launching && (!btn->running || (event->xbutton.state & ControlMask)))
 					launchDockedApplication(btn, False);
+			} else if (btn->xindex == 0 && btn->yindex == 0 && btn->dock->type == WM_DOCK) {
+				wShowInfoPanel(dock->screen_ptr);
 			}
 		}
 	}
