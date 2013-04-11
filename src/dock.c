@@ -3796,10 +3796,7 @@ static void clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 		return;
 
 	scr = btn->icon->core->screen_ptr;
-	if (!btn->omnipresent)
-		dock = btn->dock;
-	else
-		dock = scr->workspaces[scr->current_workspace]->clip;
+	dock = btn->dock;
 
 	if (!dock || dock->type != WM_CLIP)
 		return;
