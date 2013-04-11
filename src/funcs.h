@@ -77,6 +77,7 @@ WWindow * NextToFocusBefore(WWindow *wwin);
 
 void move_window(Window win, int from_x, int from_y, int to_x, int to_y);
 void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y);
+void SlideWindows(Window *wins[], int n, int from_x, int from_y, int to_x, int to_y);
 
 RImage * wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
 
