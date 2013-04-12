@@ -77,6 +77,10 @@ static void pushAutoDelayButton(WMWidget *w, void *data)
 static void adjustButtonSelectionBasedOnValue(_Panel *panel, int row, char *value)
 {
 	int j;
+
+	if (!value)
+		return;
+
 	for (j = 0; j < 5; j++)
 	{
 		int isThatOne = !strcmp(autoDelayPresetValues[j], value);
