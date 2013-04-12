@@ -94,7 +94,7 @@ static void createPanel(Panel * p)
 {
 	_Panel *panel = (_Panel *) p;
 	WMScreen *scr = WMWidgetScreen(panel->parent);
-	WMPixmap *icon1, *icon2;
+	WMPixmap *icon1;
 	RImage *xis = NULL;
 	RContext *rc = WMScreenRContext(scr);
 	char *path;
