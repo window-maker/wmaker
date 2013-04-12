@@ -103,7 +103,7 @@ int wWorkspaceNew(WScreen *scr)
 		}
 
 		if (!wPreferences.flags.noclip)
-			wspace->clip = wDockCreate(scr, WM_CLIP);
+			wspace->clip = wDockCreate(scr, WM_CLIP, NULL);
 
 		list = wmalloc(sizeof(WWorkspace *) * scr->workspace_count);
 
@@ -471,6 +471,8 @@ void wWorkspaceRelativeChange(WScreen * scr, int amount)
 void wWorkspaceForceChange(WScreen * scr, int workspace)
 {
 	WWindow *tmp, *foc = NULL, *foc2 = NULL;
+	WWindow **toUnmap;
+	int toUnmapSize, toUnmapCount;
 
 	if (workspace >= MAX_WORKSPACES || workspace < 0)
 		return;
@@ -490,6 +492,10 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 
+	toUnmapSize = 16;
+	toUnmapCount = 0;
+	toUnmap = wmalloc(toUnmapSize * sizeof(WWindow *));
+
 	if ((tmp = scr->focused_window) != NULL) {
 		if ((IS_OMNIPRESENT(tmp) && (tmp->flags.mapped || tmp->flags.shaded) &&
 		     !WFLAGP(tmp, no_focusable)) || tmp->flags.changing_workspace) {
@@ -504,7 +510,12 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 				/* unmap windows not on this workspace */
 				if ((tmp->flags.mapped || tmp->flags.shaded) &&
 				    !IS_OMNIPRESENT(tmp) && !tmp->flags.changing_workspace) {
-					wWindowUnmap(tmp);
+					if (toUnmapCount == toUnmapSize)
+					{
+						toUnmapSize *= 2;
+						toUnmap = wrealloc(toUnmap, toUnmapSize * sizeof(WWindow *));
+					}
+					toUnmap[toUnmapCount++] = tmp;
 				}
 				/* also unmap miniwindows not on this workspace */
 				if (!wPreferences.sticky_icons && tmp->flags.miniaturized &&
@@ -552,6 +563,12 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 			}
 			tmp = tmp->prev;
 		}
+
+		while (toUnmapCount > 0)
+		{
+			wWindowUnmap(toUnmap[--toUnmapCount]);
+		}
+		wfree(toUnmap);
 
 		/* Gobble up events unleashed by our mapping & unmapping.
 		 * These may trigger various grab-initiated focus &
@@ -606,15 +623,14 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 	if (scr->dock)
 		wAppIconPaint(scr->dock->icon_array[0]);
 
-	if (scr->clip_icon) {
-		if (scr->workspaces[workspace]->clip->auto_collapse ||
-		    scr->workspaces[workspace]->clip->auto_raise_lower) {
-			/* to handle enter notify. This will also */
-			XUnmapWindow(dpy, scr->clip_icon->icon->core->window);
-			XMapWindow(dpy, scr->clip_icon->icon->core->window);
-		} else {
-			wClipIconPaint(scr->clip_icon);
-		}
+	if (!wPreferences.flags.noclip && (scr->workspaces[workspace]->clip->auto_collapse ||
+						scr->workspaces[workspace]->clip->auto_raise_lower)) {
+		/* to handle enter notify. This will also */
+		XUnmapWindow(dpy, scr->clip_icon->icon->core->window);
+		XMapWindow(dpy, scr->clip_icon->icon->core->window);
+	}
+	else if (scr->clip_icon != NULL) {
+		wClipIconPaint(scr->clip_icon);
 	}
 	wScreenUpdateUsableArea(scr);
 	wNETWMUpdateDesktop(scr);

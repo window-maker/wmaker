@@ -51,6 +51,7 @@
 
 /**** global variables *****/
 extern WPreferences wPreferences;
+#define ICON_SIZE wPreferences.icon_size
 
 /* XFetchName Wrapper */
 Bool wFetchName(Display *dpy, Window win, char **winname)
@@ -145,10 +146,20 @@ void move_window(Window win, int from_x, int from_y, int to_x, int to_y)
 
 void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 {
+	Window *wins[1] = { &win };
+	SlideWindows(wins, 1, from_x, from_y, to_x, to_y);
+}
+
+/* wins is an array of Window, sorted from left to right, the first is
+ * going to be moved from (from_x,from_y) to (to_x,to_y) and the
+ * following windows are going to be offset by (ICON_SIZE*i,0) */
+void SlideWindows(Window *wins[], int n, int from_x, int from_y, int to_x, int to_y)
+{
 	time_t time0 = time(NULL);
 	float dx, dy, x = from_x, y = from_y, sx, sy, px, py;
 	int dx_is_bigger = 0;
 	int slide_delay, slide_steps, slide_slowdown;
+	int i;
 
 	/* animation parameters */
 	static struct {
@@ -216,7 +227,9 @@ void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 			px = (sy == 0 ? 0 : py * dx / dy);
 		}
 
-		XMoveWindow(dpy, win, (int)x, (int)y);
+		for (i = 0; i < n; i++) {
+			XMoveWindow(dpy, *wins[i], (int)x + i * ICON_SIZE, (int)y);
+		}
 		XFlush(dpy);
 		if (slide_delay > 0) {
 			wusleep(slide_delay * 1000L);
@@ -226,7 +239,9 @@ void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y)
 		if (time(NULL) - time0 > MAX_ANIMATION_TIME)
 			break;
 	}
-	XMoveWindow(dpy, win, to_x, to_y);
+	for (i = 0; i < n; i++) {
+		XMoveWindow(dpy, *wins[i], to_x + i * ICON_SIZE, to_y);
+	}
 
 	XSync(dpy, 0);
 	/* compress expose events */

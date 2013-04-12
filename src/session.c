@@ -236,16 +236,28 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 		WMReleasePropList(shortcut);
 		if (wapp && wapp->app_icon && wapp->app_icon->dock) {
 			int i;
-			char *name;
+			char *name = NULL;
 			if (wapp->app_icon->dock == scr->dock) {
 				name = "Dock";
-			} else {
+			}
+			if (name == NULL) // Try the clips
+			{
 				for (i = 0; i < scr->workspace_count; i++)
 					if (scr->workspaces[i]->clip == wapp->app_icon->dock)
 						break;
-				assert(i < scr->workspace_count);
-				/*n = i+1; */
-				name = scr->workspaces[i]->name;
+				if (i < scr->workspace_count)
+					name = scr->workspaces[i]->name;
+			}
+			if (name == NULL) // Try the drawers
+			{
+				WDrawerChain *dc;
+				for (dc = scr->drawers; dc != NULL; dc = dc->next)
+				{
+					if (dc->adrawer == wapp->app_icon->dock)
+						break;
+				}
+				assert(dc != NULL);
+				name = dc->adrawer->icon_array[0]->wm_instance;
 			}
 			dock = WMCreatePLString(name);
 			WMPutInPLDictionary(win_state, sDock, dock);
@@ -462,10 +474,24 @@ void wSessionRestoreState(WScreen *scr)
 			if (sscanf(tmp, "%i", &n) != 1) {
 				if (!strcasecmp(tmp, "DOCK")) {
 					dock = scr->dock;
-				} else {
+				}
+				if (dock == NULL) // Try the clips
+				{
 					for (j = 0; j < scr->workspace_count; j++) {
 						if (strcmp(scr->workspaces[j]->name, tmp) == 0) {
 							dock = scr->workspaces[j]->clip;
+							break;
+						}
+					}
+				}
+				if (dock == NULL) // Try the drawers
+				{
+					WDrawerChain *dc;
+					for (dc = scr->drawers; dc != NULL; dc = dc->next)
+					{
+						if (strcmp(dc->adrawer->icon_array[0]->wm_instance, tmp) == 0)
+						{
+							dock = dc->adrawer;
 							break;
 						}
 					}

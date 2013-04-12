@@ -32,6 +32,8 @@ extern Panel *InitKeyboardShortcuts(WMScreen * scr, WMWidget * parent);
 
 extern Panel *InitWorkspace(WMScreen * scr, WMWidget * parent);
 
+extern Panel *InitDocks(WMScreen *scr, WMWidget *parent);
+
 extern Panel *InitFocus(WMScreen * scr, WMWidget * parent);
 
 extern Panel *InitPreferences(WMScreen * scr, WMWidget * parent);
@@ -392,6 +394,61 @@ char *LocateImage(char *name)
 	return path;
 }
 
+void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
+		WMPixmap **icon_normal, WMPixmap **icon_greyed)
+{
+	RImage *icon;
+	char *path;
+	RColor gray = { 0xae, 0xaa, 0xae, 0 };
+
+	path = LocateImage(file);
+	if (!path)
+	{
+		*icon_normal = NULL;
+		if (icon_greyed)
+			*icon_greyed = NULL;
+		return;
+	}
+
+	*icon_normal = WMCreatePixmapFromFile(scr, path);
+	if (!*icon_normal)
+	{
+		wwarning(_("could not load icon %s"), path);
+		if (icon_greyed)
+			*icon_greyed = NULL;
+		wfree(path);
+		return;
+	}
+
+	if (!icon_greyed) // Greyed-out version not requested, we are done
+	{
+		wfree(path);
+		return;
+	}
+
+	icon = RLoadImage(rc, path, 0);
+	if (!icon)
+	{
+		wwarning(_("could not load icon %s"), path);
+		*icon_greyed = NULL;
+		wfree(path);
+		return;
+	}
+	RCombineImageWithColor(icon, &gray);
+	if (xis)
+	{
+		RCombineImagesWithOpaqueness(icon, xis, 180);
+	}
+	*icon_greyed = WMCreatePixmapFromRImage(scr, icon, 127);
+	if (!*icon_greyed)
+	{
+		wwarning(_("could not process icon %s: %s"), path, RMessageForError(RErrorCode));
+	}
+	RReleaseImage(icon);
+	wfree(path);
+}
+
+
 static WMPixmap *makeTitledIcon(WMScreen * scr, WMPixmap * icon, char *title1, char *title2)
 {
 	return WMRetainPixmap(icon);
@@ -608,6 +665,7 @@ void Initialize(WMScreen * scr)
 	InitPreferences(scr, WPrefs.banner);
 
 	InitPaths(scr, WPrefs.banner);
+	InitDocks(scr, WPrefs.banner);
 	InitWorkspace(scr, WPrefs.banner);
 	InitConfigurations(scr, WPrefs.banner);
 

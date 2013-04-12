@@ -113,6 +113,8 @@ static int getPropList();
 static int setJustify();
 static int setClearance();
 static int setIfDockPresent();
+static int setClipMergedInDock();
+static int setWrapAppiconsInDock();
 static int setStickyIcons();
 static int setWidgetColor();
 static int setIconTile();
@@ -332,6 +334,10 @@ WDefaultEntry staticOptionList[] = {
 	    NULL, getBool, setIfDockPresent, NULL, NULL},
 	{"DisableClip", "NO", (void *)WM_CLIP,
 	    NULL, getBool, setIfDockPresent, NULL, NULL},
+	{"DisableDrawers", "NO", (void *)WM_DRAWER,
+	    NULL, getBool, setIfDockPresent, NULL, NULL},
+	{"ClipMergedInDock", "NO", NULL,
+	    NULL, getBool, setClipMergedInDock, NULL, NULL},
 	{"DisableMiniwindows", "NO", NULL,
 	    &wPreferences.disable_miniwindows, getBool, NULL, NULL, NULL}
 };
@@ -401,6 +407,16 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.do_not_make_appicons_bounce, getBool, NULL, NULL, NULL},
 	{"DoubleClickTime", "250", (void *)&wPreferences.dblclick_time,
 	    &wPreferences.dblclick_time, getInt, setDoubleClick, NULL, NULL},
+	{"ClipAutoraiseDelay", "600", NULL,
+	     &wPreferences.clip_auto_raise_delay, getInt, NULL, NULL, NULL},
+	{"ClipAutolowerDelay", "1000", NULL,
+	    &wPreferences.clip_auto_lower_delay, getInt, NULL, NULL, NULL},
+	{"ClipAutoexpandDelay", "600", NULL,
+	    &wPreferences.clip_auto_expand_delay, getInt, NULL, NULL, NULL},
+	{"ClipAutocollapseDelay", "1000", NULL,
+	    &wPreferences.clip_auto_collapse_delay, getInt, NULL, NULL, NULL},
+	{"WrapAppiconsInDock", "YES", NULL,
+	    NULL, getBool, setWrapAppiconsInDock, NULL, NULL},
 	{"AlignSubmenus", "NO", NULL,
 	    &wPreferences.align_menus, getBool, NULL, NULL, NULL},
 	{"ViKeyMenus", "NO", NULL,
@@ -1180,6 +1196,7 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 void wDefaultUpdateIcons(WScreen *scr)
 {
 	WAppIcon *aicon = scr->app_icon_list;
+	WDrawerChain *dc;
 	WWindow *wwin = scr->focused_window;
 
 	while (aicon) {
@@ -1189,8 +1206,11 @@ void wDefaultUpdateIcons(WScreen *scr)
 		aicon = aicon->next;
 	}
 
-	if (!wPreferences.flags.noclip)
+	if (!wPreferences.flags.noclip || wPreferences.flags.clip_merged_in_dock)
 		wClipIconPaint(scr->clip_icon);
+
+	for (dc = scr->drawers; dc != NULL; dc = dc->next)
+		wDrawerIconPaint(dc->adrawer->icon_array[0]);
 
 	while (wwin) {
 		if (wwin->icon && wwin->flags.miniaturized)
@@ -2373,13 +2393,31 @@ static int setIfDockPresent(WScreen * scr, WDefaultEntry * entry, char *flag, lo
 	switch (which) {
 	case WM_DOCK:
 		wPreferences.flags.nodock = wPreferences.flags.nodock || *flag;
+		// Drawers require the dock
+		wPreferences.flags.nodrawer = wPreferences.flags.nodrawer || wPreferences.flags.nodock;
 		break;
 	case WM_CLIP:
 		wPreferences.flags.noclip = wPreferences.flags.noclip || *flag;
 		break;
+	case WM_DRAWER:
+		wPreferences.flags.nodrawer = wPreferences.flags.nodrawer || *flag;
+		break;
 	default:
 		break;
 	}
+	return 0;
+}
+
+static int setClipMergedInDock(WScreen *scr, WDefaultEntry *entry, char *flag, void *foo)
+{
+	wPreferences.flags.clip_merged_in_dock = *flag;
+	wPreferences.flags.noclip = wPreferences.flags.noclip || *flag;
+	return 0;
+}
+
+static int setWrapAppiconsInDock(WScreen *scr, WDefaultEntry *entry, char *flag, void *foo)
+{
+	wPreferences.flags.wrap_appicons_in_dock = *flag;
 	return 0;
 }
 
@@ -2420,11 +2458,18 @@ static int setIconTile(WScreen * scr, WDefaultEntry * entry, WTexture ** texture
 	/* put the icon in the noticeboard hint */
 	PropSetIconTileHint(scr, img);
 
-	if (!wPreferences.flags.noclip) {
+	if (!wPreferences.flags.noclip || wPreferences.flags.clip_merged_in_dock) {
 		if (scr->clip_tile) {
 			RReleaseImage(scr->clip_tile);
 		}
 		scr->clip_tile = wClipMakeTile(scr, img);
+	}
+
+	if (!wPreferences.flags.nodrawer) {
+		if (scr->drawer_tile) {
+			RReleaseImage(scr->drawer_tile);
+		}
+		scr->drawer_tile = wDrawerMakeTile(scr, img);
 	}
 
 	scr->icon_tile_pixmap = pixmap;

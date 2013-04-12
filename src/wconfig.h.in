@@ -301,20 +301,6 @@
  * a docked icon must be dragged out to detach it */
 #define DOCK_DETTACH_THRESHOLD	3
 
-/* Delay (in ms) after which the clip will autocollapse when leaved */
-#define AUTO_COLLAPSE_DELAY     1000
-
-/* Delay (in ms) after which the clip will autoexpand when entered.
- * Set this to zero if you want instant expanding. */
-#define AUTO_EXPAND_DELAY       600
-
-/* Delay (in ms) after which the clip will be lowered when leaved */
-#define AUTO_LOWER_DELAY        1000
-
-/* Delay (in ms) after which the clip will be raised when entered.
- * Set this to zero if you want instant raise. */
-#define AUTO_RAISE_DELAY        600
-
 /* Max. number of icons the dock and clip can have */
 #define DOCK_MAX_ICONS		32
 
@@ -329,7 +315,7 @@
 
 #define MAX_WORKSPACENAME_WIDTH	64
 /* max width of window title in window list */
-#define MAX_WINDOWLIST_WIDTH	160
+#define MAX_WINDOWLIST_WIDTH	400
 
 #ifndef HAVE_INOTIFY
 /* Check defaults database for changes every this many milliseconds */

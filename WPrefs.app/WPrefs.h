@@ -76,6 +76,13 @@ char *LocateImage(char *name);
 void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, char *file,
                          char *title1, char *title2);
 
+/* Loads `file' into `icon_normal'. If `icon_greyed' is not NULL,
+ * combine `icon_normal' with some grey and then optionally with image
+ * `xis', and store it in `icon_greyed' (typically to produce a
+ * greyed-out, red-crossed version of `icon_normal') */
+void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
+		WMPixmap **icon_normal, WMPixmap **icon_greyed);
+
 WMWindow *GetWindow(Panel *panel);
 
 /* manipulate the dictionary for the WindowMaker domain */

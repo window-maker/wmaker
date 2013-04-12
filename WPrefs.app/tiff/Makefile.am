@@ -8,6 +8,7 @@ EXTRA_DIST = \
 	configs.tiff \
 	cycleworkspaces.tiff \
 	dock.tiff \
+	dockclipdrawersection.tiff \
 	dontlinkworkspaces.tiff \
 	ergonomic.tiff \
 	expert.tiff \

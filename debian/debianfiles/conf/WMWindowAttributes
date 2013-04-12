@@ -3,6 +3,7 @@
   Logo.WMPanel = {Icon = GNUstep.tiff;};
   Tile.WMClip = {Icon = clip.tiff;};
   WPrefs = {Icon = "/usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.tiff";};
+  WMDrawer = { Icon = Drawer.png; };
   Dockit = {Icon = GNUstep.tiff;};
   WMSoundServer = {Icon = Sound.tiff;};
   "*" = {Icon = defaultAppIcon.tiff;};

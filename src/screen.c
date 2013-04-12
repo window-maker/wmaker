@@ -94,6 +94,7 @@ static WMPropList *dApplications = NULL;
 static WMPropList *dWorkspace;
 static WMPropList *dDock;
 static WMPropList *dClip;
+static WMPropList *dDrawers = NULL;
 
 static void make_keys(void)
 {
@@ -104,6 +105,7 @@ static void make_keys(void)
 	dWorkspace = WMCreatePLString("Workspace");
 	dDock = WMCreatePLString("Dock");
 	dClip = WMCreatePLString("Clip");
+	dDrawers = WMCreatePLString("Drawers");
 }
 
 /*
@@ -842,11 +844,17 @@ void wScreenRestoreState(WScreen * scr)
 	if (!wPreferences.flags.nodock) {
 		state = WMGetFromPLDictionary(scr->session_state, dDock);
 		scr->dock = wDockRestoreState(scr, state, WM_DOCK);
+		/* If clip_merged_in_dock, setting scr->clip_icon is done by
+		 * wDockRestoreState()->wDockCreate()->mainIconCreate() */
 	}
 
 	if (!wPreferences.flags.noclip) {
 		state = WMGetFromPLDictionary(scr->session_state, dClip);
 		scr->clip_icon = wClipRestoreState(scr, state);
+	}
+	
+	if (!wPreferences.flags.nodrawer) {
+		wDrawersRestoreState(scr);
 	}
 
 	wWorkspaceRestoreState(scr);
@@ -894,6 +902,15 @@ void wScreenSaveState(WScreen * scr)
 	}
 
 	wWorkspaceSaveState(scr, old_state);
+
+	if (!wPreferences.flags.nodrawer) {
+		wDrawersSaveState(scr);
+	} else {
+		if ((foo = WMGetFromPLDictionary(old_state, dDrawers)) != NULL) {
+			WMPutInPLDictionary(scr->session_state, dDrawers, foo);
+		}
+	}
+
 
 	if (wPreferences.save_session_on_exit) {
 		wSessionSaveState(scr);

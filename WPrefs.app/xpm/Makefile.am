@@ -9,6 +9,7 @@ EXTRA_DIST = \
 	configs.xpm \
 	cycleworkspaces.xpm \
 	dock.xpm \
+	dockclipdrawersection.xpm \
 	dontlinkworkspaces.xpm \
 	ergonomic.xpm \
 	expert.xpm \
