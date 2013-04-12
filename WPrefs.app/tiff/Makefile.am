@@ -10,6 +10,7 @@ EXTRA_DIST = \
 	dock.tiff \
 	dockclipdrawersection.tiff \
 	dontlinkworkspaces.tiff \
+	drawer.tiff \
 	ergonomic.tiff \
 	expert.tiff \
 	fonts.tiff \

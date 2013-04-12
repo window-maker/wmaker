@@ -11,6 +11,7 @@ EXTRA_DIST = \
 	dock.xpm \
 	dockclipdrawersection.xpm \
 	dontlinkworkspaces.xpm \
+	drawer.xpm \
 	ergonomic.xpm \
 	expert.xpm \
 	fonts.xpm \
