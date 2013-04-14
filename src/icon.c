@@ -38,12 +38,12 @@
 #include "window.h"
 #include "icon.h"
 #include "actions.h"
-#include "funcs.h"
 #include "stacking.h"
 #include "application.h"
 #include "defaults.h"
 #include "appicon.h"
 #include "wmspec.h"
+#include "misc.h"
 
 /**** Global varianebles ****/
 extern WPreferences wPreferences;

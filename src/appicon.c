@@ -48,6 +48,7 @@
 #include "xinerama.h"
 #include "client.h"
 #include "placement.h"
+#include "misc.h"
 #ifdef XDND
 #include "xdnd.h"
 #endif

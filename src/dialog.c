@@ -52,7 +52,7 @@
 #include "GNUstep.h"
 #include "screen.h"
 #include "dialog.h"
-#include "funcs.h"
+#include "misc.h"
 #include "stacking.h"
 #include "framewin.h"
 #include "window.h"

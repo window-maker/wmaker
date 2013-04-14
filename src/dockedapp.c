@@ -33,7 +33,7 @@
 #include "dock.h"
 #include "dockedapp.h"
 #include "dialog.h"
-#include "funcs.h"
+#include "misc.h"
 #include "defaults.h"
 #include "framewin.h"
 #include "xinerama.h"

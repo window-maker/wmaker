@@ -33,7 +33,7 @@
 #include "window.h"
 #include "actions.h"
 #include "client.h"
-#include "funcs.h"
+#include "misc.h"
 #include "stacking.h"
 #include "workspace.h"
 #include "framewin.h"

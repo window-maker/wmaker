@@ -42,6 +42,7 @@
 #include "appicon.h"
 #include "appmenu.h"
 #include "wmspec.h"
+#include "misc.h"
 
 /****** Global Variables ******/
 

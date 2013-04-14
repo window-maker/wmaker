@@ -35,7 +35,6 @@
 #include "framewin.h"
 #include "window.h"
 #include "workspace.h"
-#include "funcs.h"
 #include "defaults.h"
 #include "dialog.h"
 #include "icon.h"
@@ -47,6 +46,7 @@
 #include "dock.h"
 #include "client.h"
 #include "wmspec.h"
+#include "misc.h"
 
 #include <WINGs/WUtil.h>
 

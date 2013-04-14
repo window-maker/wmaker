@@ -61,6 +61,7 @@
 #include "dock.h"
 #include "workspace.h"
 #include "properties.h"
+#include "misc.h"
 
 #define MAX_SHORTCUT_LENGTH 32
 

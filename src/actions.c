@@ -47,6 +47,7 @@
 #include "xinerama.h"
 #include "usermenu.h"
 #include "placement.h"
+#include "misc.h"
 
 /****** Global Variables ******/
 

@@ -49,7 +49,6 @@
 #include "properties.h"
 #include "actions.h"
 #include "client.h"
-#include "funcs.h"
 #include "colormap.h"
 #include "keybind.h"
 #include "stacking.h"
@@ -61,6 +60,7 @@
 #include "superfluous.h"
 #include "rootmenu.h"
 #include "placement.h"
+#include "misc.h"
 
 #ifdef MWM_HINTS
 # include "motif.h"

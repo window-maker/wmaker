@@ -41,11 +41,6 @@ void OpenMiniwindowMenu(WWindow *wwin, int x, int y);
 void CloseWindowMenu(WScreen *scr);
 void DestroyWindowMenu(WScreen *scr);
 void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only);
-void SendHelperMessage(WScreen *scr, char type, int workspace, char *msg);
-void UnescapeWM_CLASS(char *str, char **name, char **class);
-
-void ParseWindowName(WMPropList *value, char **winstance, char **wclass,
-                     char *where);
 
 void wHackedGrabButton(unsigned int button, unsigned int modifiers,
                        Window grab_window, Bool owner_events,
@@ -57,23 +52,10 @@ WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
 
 
-char * StrConcatDot(char *a, char *b);
-char * ExpandOptions(WScreen *scr, char *cmdline);
-char * ShrinkString(WMFont *font, char *string, int width);
-char * FindImage(char *paths, char *file);
-char * GetShortcutString(char *text);
-char * GetShortcutKey(WShortKey key);
-char * EscapeWM_CLASS(char *name, char *class);
-
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
-Bool UpdateDomainFile(WDDomain *domain);
 
 WWindow * NextToFocusAfter(WWindow *wwin);
 WWindow * NextToFocusBefore(WWindow *wwin);
-
-void move_window(Window win, int from_x, int from_y, int to_x, int to_y);
-void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y);
-void SlideWindows(Window *wins[], int n, int from_x, int from_y, int to_x, int to_y);
 
 RImage * wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
 
@@ -82,14 +64,6 @@ void wHackedGrabKey(int keycode, unsigned int modifiers,
                     Window grab_window, Bool owner_events, int pointer_mode,
                     int keyboard_mode);
 #endif
-
-/****** I18N Wrapper for XFetchName,XGetIconName ******/
-
-Bool wFetchName(Display *dpy, Window win, char **winname);
-Bool wGetIconName(Display *dpy, Window win, char **iconname);
-
-/* Free returned string it when done. (applies to the next 2 functions) */
-char * GetCommandForWindow(Window win);
 
 Bool GetCommandForPid(int pid, char ***argv, int *argc);
 

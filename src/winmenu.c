@@ -38,7 +38,7 @@
 #include "client.h"
 #include "application.h"
 #include "keybind.h"
-#include "funcs.h"
+#include "misc.h"
 #include "framewin.h"
 #include "workspace.h"
 #include "winspector.h"

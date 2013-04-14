@@ -39,7 +39,7 @@
 #include "framewin.h"
 #include "window.h"
 #include "icon.h"
-#include "funcs.h"
+#include "misc.h"
 #include "menu.h"
 #include "application.h"
 #include "dock.h"

@@ -55,6 +55,7 @@
 #include "superfluous.h"
 #include "xinerama.h"
 #include "placement.h"
+#include "misc.h"
 
 /**** Local variables ****/
 #define CLIP_REWIND       1

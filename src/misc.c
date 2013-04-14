@@ -38,13 +38,13 @@
 #include <WINGs/WUtil.h>
 #include <wraster.h>
 
+#include "misc.h"
 #include "WindowMaker.h"
 #include "GNUstep.h"
 #include "screen.h"
 #include "wcore.h"
 #include "window.h"
 #include "framewin.h"
-#include "funcs.h"
 #include "dialog.h"
 #include "xutil.h"
 #include "xmodifier.h"
@@ -52,6 +52,9 @@
 /**** global variables *****/
 extern WPreferences wPreferences;
 #define ICON_SIZE wPreferences.icon_size
+
+/**** Local prototypes *****/
+static void UnescapeWM_CLASS(char *str, char **name, char **class);
 
 /* XFetchName Wrapper */
 Bool wFetchName(Display *dpy, Window win, char **winname)
@@ -862,7 +865,7 @@ char *EscapeWM_CLASS(char *name, char *class)
 	return ret;
 }
 
-void UnescapeWM_CLASS(char *str, char **name, char **class)
+static void UnescapeWM_CLASS(char *str, char **name, char **class)
 {
 	int i, j, k, dot;
 

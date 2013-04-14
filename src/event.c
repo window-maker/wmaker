@@ -70,6 +70,7 @@
 #include "colormap.h"
 #include "screen.h"
 #include "shutdown.h"
+#include "misc.h"
 
 /******** Global Variables **********/
 extern XContext wWinContext;

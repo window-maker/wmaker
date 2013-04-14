@@ -81,6 +81,7 @@
 #include "application.h"
 #include "appicon.h"
 #include "dock.h"
+#include "misc.h"
 
 #include <WINGs/WUtil.h>
 

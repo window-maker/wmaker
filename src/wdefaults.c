@@ -38,10 +38,10 @@
 #include "window.h"
 #include "appicon.h"
 #include "screen.h"
-#include "funcs.h"
 #include "workspace.h"
 #include "defaults.h"
 #include "icon.h"
+#include "misc.h"
 
 #define APPLY_VAL(value, flag, attrib)	\
     if (value) {attr->flag = getBool(attrib, value); \
