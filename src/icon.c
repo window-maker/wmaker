@@ -250,17 +250,20 @@ static void icon_update_pixmap(WIcon *icon, RImage *image)
 	case TILE_NORMAL:
 		tile = RCloneImage(scr->icon_tile);
 		break;
-	default:
-		wwarning("Unknown tileType: %d.\n", icon->tile_type);
-		// fallthrough to TILE_CLIP (emulate previous behaviour)
 	case TILE_CLIP:
-		assert(scr->clip_tile);
 		tile = RCloneImage(scr->clip_tile);
 		break;
 	case TILE_DRAWER:
-		assert(scr->drawer_tile);
 		tile = RCloneImage(scr->drawer_tile);
 		break;
+	default:
+		/*
+		 * The icon has always rigth value, this case is
+		 * only to avoid a compiler warning with "tile"
+		 * "may be used uninitialized"
+		 */
+		wwarning("Unknown tile type: %d.\n", icon->tile_type);
+		tile = RCloneImage(scr->icon_tile);
 	}
 
 	if (image) {
