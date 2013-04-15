@@ -1162,7 +1162,7 @@ WMPropList *WMMergePLDictionaries(WMPropList * dest, WMPropList * source, Bool r
 	WMPropList *key, *value, *dvalue;
 	WMHashEnumerator e;
 
-	wassertr(source->type == WPLDictionary && dest->type == WPLDictionary);
+	wassertrv(source->type == WPLDictionary && dest->type == WPLDictionary, NULL);
 
 	if (source == dest)
 		return dest;
@@ -1189,7 +1189,7 @@ WMPropList *WMSubtractPLDictionaries(WMPropList * dest, WMPropList * source, Boo
 	WMPropList *key, *value, *dvalue;
 	WMHashEnumerator e;
 
-	wassertr(source->type == WPLDictionary && dest->type == WPLDictionary);
+	wassertrv(source->type == WPLDictionary && dest->type == WPLDictionary, NULL);
 
 	if (source == dest) {
 		WMPropList *keys = WMGetPLDictionaryKeys(dest);
