@@ -314,8 +314,8 @@ static void remember_geometry(WWindow *wwin, int *x, int *y, int *w, int *h)
 	old_geom_rect = wmkrect(wwin->old_geometry.x, wwin->old_geometry.y, wwin->old_geometry.width, wwin->old_geometry.height);
 	old_head = wGetHeadForRect(wwin->screen_ptr, old_geom_rect);
 	same_head = (wGetHeadForWindow(wwin) == old_head);
-	*x = (wwin->old_geometry.x && same_head) ? wwin->old_geometry.x : wwin->frame_x;
-	*y = (wwin->old_geometry.y && same_head) ? wwin->old_geometry.y : wwin->frame_y;
+	*x = ((wwin->old_geometry.x || wwin->old_geometry.width) && same_head) ? wwin->old_geometry.x : wwin->frame_x;
+	*y = ((wwin->old_geometry.y || wwin->old_geometry.height) && same_head) ? wwin->old_geometry.y : wwin->frame_y;
 	*w = wwin->old_geometry.width ? wwin->old_geometry.width : wwin->client.width;
 	*h = wwin->old_geometry.height ? wwin->old_geometry.height : wwin->client.height;
 }
