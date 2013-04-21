@@ -509,64 +509,30 @@ void handleMaximize(WWindow *wwin, int directions)
 	if (!effective) {
 		/* allow wMaximizeWindow to restore the Maximusized size */
 		if ((wwin->flags.old_maximized & MAX_MAXIMUS) &&
-		    !(requested & MAX_MAXIMUS))
+				!(requested & MAX_MAXIMUS))
 			wMaximizeWindow(wwin, flags);
 		else
 			wUnmaximizeWindow(wwin);
-	}
+	/* these alone mean vertical toggle */
+	} else if ((effective == MAX_LEFTHALF) ||
+			(effective == MAX_RIGHTHALF))
+		wUnmaximizeWindow(wwin);
 	else {
-		/* MAX_MAXIMUS takes precedence */
-		effective &= ~MAX_MAXIMUS;
-		if (requested & MAX_MAXIMUS) {
-			/* window was previously Maximusized then maximized */
-			if ((wwin->flags.old_maximized & MAX_MAXIMUS) && !current) {
-				wUnmaximizeWindow(wwin);
-				return;
-			}
-			else
-				effective = MAX_MAXIMUS;
-		}
-		else if (requested == (MAX_HORIZONTAL | MAX_VERTICAL))
+		if ((requested == (MAX_HORIZONTAL | MAX_VERTICAL)) ||
+				(requested == MAX_MAXIMUS))
 			effective = requested;
 		else {
-			/* handle MAX_HORIZONTAL -> MAX_(LEFT|RIGHT)HALF */
-			if (IS_MAX_HORIZONTALLY(current)) {
-				if (IS_MAX_HORIZONTALLY(requested)) {
-					effective &= ~(MAX_HORIZONTAL | MAX_LEFTHALF | MAX_RIGHTHALF);
-					effective |= (requested & (MAX_HORIZONTAL | MAX_LEFTHALF | MAX_RIGHTHALF));
-					if (requested & MAX_HORIZONTAL) {
-						/* restore to half maximization */
-						if (wwin->flags.old_maximized & MAX_LEFTHALF)
-							effective |= MAX_LEFTHALF;
-						else if (wwin->flags.old_maximized & MAX_RIGHTHALF)
-							effective |= MAX_RIGHTHALF;
-					}
-					/* MAX_VERTICAL is implicit with MAX_(LEFT|RIGHT)HALF */
-					else
-						effective |= MAX_VERTICAL;
-				} else {
-					/* toggling MAX_VERTICAL */
-					if ((requested & MAX_VERTICAL) &&
-					    (current & MAX_VERTICAL)) {
-						effective &= ~(MAX_LEFTHALF | MAX_RIGHTHALF | MAX_VERTICAL);
-					}
-				}
+			if (requested & MAX_LEFTHALF) {
+				effective |= MAX_VERTICAL;
+				effective &= ~(MAX_HORIZONTAL | MAX_RIGHTHALF);
+			} else if (requested & MAX_RIGHTHALF) {
+				effective |= MAX_VERTICAL;
+				effective &= ~(MAX_HORIZONTAL | MAX_LEFTHALF);
 			}
-			/* handle MAX_VERTICAL -> MAX_(LEFT|RIGHT)HALF */
-			if (current & MAX_VERTICAL) {
-				if ((requested & MAX_LEFTHALF) ||
-				    (requested & MAX_RIGHTHALF)) {
-					effective |= MAX_VERTICAL;
-				}
-			}
-			/* toggling MAX_HORIZONTAL */
-			if ((requested & MAX_HORIZONTAL) &&
-			    (current & MAX_HORIZONTAL))
-				effective &= ~MAX_HORIZONTAL;
+			effective &= ~MAX_MAXIMUS;
 		}
 		wMaximizeWindow(wwin, effective | flags);
 	}
-	return;
 }
 
 /* the window boundary coordinates */
