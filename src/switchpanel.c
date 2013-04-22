@@ -562,9 +562,9 @@ void wSwitchPanelDestroy(WSwitchPanel *panel)
 	wfree(panel);
 }
 
-WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimized)
+WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimized, Bool class_only)
 {
-	WWindow *wwin;
+	WWindow *wwin, *curwin;
 	int count = WMGetArrayItemCount(panel->windows);
 	int orig = panel->current;
 
@@ -580,14 +580,22 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimi
 	if (ignore_minimized && canReceiveFocus(WMGetFromArray(panel->windows, (count + panel->current) % count)) < 0)
 		ignore_minimized = False;
 
+	curwin = WMGetFromArray(panel->windows, orig);
 	do {
-		if (back)
-			panel->current--;
-		else
-			panel->current++;
+		do {
+			if (back)
+				panel->current--;
+			else
+				panel->current++;
 
-		panel->current= (count + panel->current) % count;
-		wwin = WMGetFromArray(panel->windows, panel->current);
+			panel->current= (count + panel->current) % count;
+			wwin = WMGetFromArray(panel->windows, panel->current);
+
+			if (!class_only)
+				break;
+			if (panel->current == orig)
+				break;
+		} while (!sameWindowClass(wwin, curwin));
 	} while (ignore_minimized && panel->current != orig && canReceiveFocus(wwin) < 0);
 
 	if (panel->current < panel->firstVisible)
