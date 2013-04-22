@@ -474,7 +474,7 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.dont_blink, getBool, NULL, NULL, NULL},
 	{"SingleClickLaunch",	"NO",	NULL,
 	    &wPreferences.single_click, getBool, NULL, NULL, NULL},
-	{"StrictWindozeCycle",	"NO",	NULL,
+	{"StrictWindozeCycle",	"YES",	NULL,
 	    &wPreferences.strict_windoze_cycle, getBool, NULL, NULL, NULL},
 
 	/* style options */
