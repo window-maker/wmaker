@@ -191,6 +191,10 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 
 		case KeyRelease:
 
+			if (ev.xkey.keycode == shiftLKey || ev.xkey.keycode == shiftRKey)
+				if (wPreferences.strict_windoze_cycle)
+					break;
+
 			for (i = 0; i < 8 * keymap->max_keypermod; i++) {
 
 				int mask = 1 << (i / keymap->max_keypermod);

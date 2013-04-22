@@ -418,6 +418,7 @@ typedef struct WPreferences {
     int history_lines;                  /* history of "Run..." dialog */
     char cycle_active_head_only;        /* Cycle only windows on the active head */
     char cycle_ignore_minimized;        /* Ignore minimized windows when cycling */
+    char strict_windoze_cycle;          /* don't close switchpanel when shift is released */
 
     /* All delays here are in ms. 0 means instant auto-action. */
     int clip_auto_raise_delay;         /* Delay after which the clip will be raised when entered */
