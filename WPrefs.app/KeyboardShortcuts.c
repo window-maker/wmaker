@@ -82,6 +82,8 @@ static const struct {
 	{ "HMaximizeKey",   N_("Maximize active window horizontally") },
 	{ "LHMaximizeKey",  N_("Maximize active window left half") },
 	{ "RHMaximizeKey",  N_("Maximize active window right half") },
+	{ "THMaximizeKey",  N_("Maximize active window top half") },
+	{ "BHMaximizeKey",  N_("Maximize active window bottom half") },
 	{ "MaximusKey",     N_("Maximus: Tiled maximization ") },
 	{ "RaiseKey",       N_("Raise active window") },
 	{ "LowerKey",       N_("Lower active window") },
