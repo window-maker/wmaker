@@ -502,17 +502,29 @@ void handleMaximize(WWindow *wwin, int directions)
 			effective = requested;
 		else {
 			if (requested & MAX_LEFTHALF) {
-				effective |= MAX_VERTICAL;
+				if (!(requested & (MAX_TOPHALF | MAX_BOTTOMHALF)))
+					effective |= MAX_VERTICAL;
+				else
+					effective |= requested & (MAX_TOPHALF | MAX_BOTTOMHALF);
 				effective &= ~(MAX_HORIZONTAL | MAX_RIGHTHALF);
 			} else if (requested & MAX_RIGHTHALF) {
-				effective |= MAX_VERTICAL;
+				if (!(requested & (MAX_TOPHALF | MAX_BOTTOMHALF)))
+					effective |= MAX_VERTICAL;
+				else
+					effective |= requested & (MAX_TOPHALF | MAX_BOTTOMHALF);
 				effective &= ~(MAX_HORIZONTAL | MAX_LEFTHALF);
 			}
 			if (requested & MAX_TOPHALF) {
-				effective |= MAX_HORIZONTAL;
+				if (!(requested & (MAX_LEFTHALF | MAX_RIGHTHALF)))
+					effective |= MAX_HORIZONTAL;
+				else
+					effective |= requested & (MAX_LEFTHALF | MAX_RIGHTHALF);
 				effective &= ~(MAX_VERTICAL | MAX_BOTTOMHALF);
 			} else if (requested & MAX_BOTTOMHALF) {
-				effective |= MAX_HORIZONTAL;
+				if (!(requested & (MAX_LEFTHALF | MAX_RIGHTHALF)))
+					effective |= MAX_HORIZONTAL;
+				else
+					effective |= requested & (MAX_LEFTHALF | MAX_RIGHTHALF);
 				effective &= ~(MAX_VERTICAL | MAX_TOPHALF);
 			}
 			if (requested & MAX_HORIZONTAL)

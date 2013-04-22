@@ -1484,6 +1484,34 @@ static void handleKeyPress(XEvent * event)
 			handleMaximize(wwin, MAX_HORIZONTAL | MAX_BOTTOMHALF | MAX_KEYBOARD);
 		}
 		break;
+	case WKBD_LTCMAXIMIZE:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
+			CloseWindowMenu(scr);
+
+			handleMaximize(wwin, MAX_LEFTHALF | MAX_TOPHALF | MAX_KEYBOARD);
+		}
+		break;
+	case WKBD_RTCMAXIMIZE:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
+			CloseWindowMenu(scr);
+
+			handleMaximize(wwin, MAX_RIGHTHALF | MAX_TOPHALF | MAX_KEYBOARD);
+		}
+		break;
+	case WKBD_LBCMAXIMIZE:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
+			CloseWindowMenu(scr);
+
+			handleMaximize(wwin, MAX_LEFTHALF | MAX_BOTTOMHALF | MAX_KEYBOARD);
+		}
+		 break;
+	case WKBD_RBCMAXIMIZE:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
+			CloseWindowMenu(scr);
+
+			handleMaximize(wwin, MAX_RIGHTHALF | MAX_BOTTOMHALF | MAX_KEYBOARD);
+		}
+		break;
 	case WKBD_MAXIMUS:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
 			CloseWindowMenu(scr);
