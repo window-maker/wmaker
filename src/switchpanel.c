@@ -95,6 +95,16 @@ static int canReceiveFocus(WWindow *wwin)
 	return 1;
 }
 
+static Bool sameWindowClass(WWindow *wwin, WWindow *curwin)
+{
+	if (!wwin->wm_class || !curwin->wm_class)
+		return False;
+	if (strcmp(wwin->wm_class, curwin->wm_class))
+		return False;
+
+	return True;
+}
+
 static void changeImage(WSwitchPanel *panel, int idecks, int selected)
 {
 	WMFrame *icon = WMGetFromArray(panel->icons, idecks);
@@ -338,12 +348,9 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 		for (wwin = curwin; wwin; wwin = wwin->prev) {
 			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
 			    (wwin->flags.mapped || include_unmapped)) {
-				if (class_only) {
-					if (!wwin->wm_class || !curwin->wm_class)
+				if (class_only)
+					if (!sameWindowClass(wwin, curwin))
 						continue;
-					if (strcmp(wwin->wm_class, curwin->wm_class))
-						continue;
-				}
 
 				if (!WFLAGP(wwin, skip_switchpanel))
 					WMAddToArray(windows, wwin);
@@ -357,13 +364,9 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 		for (wwin = curwin; wwin && wwin != curwin; wwin = wwin->prev) {
 			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
 			    (wwin->flags.mapped || include_unmapped)) {
-				if (class_only) {
-				    if (!wwin->wm_class || !curwin->wm_class)
+				if (class_only)
+				    if (!sameWindowClass(wwin, curwin))
 					continue;
-				    if (strcmp(wwin->wm_class, curwin->wm_class))
-					continue;
-				}
-
 				if (!WFLAGP(wwin, skip_switchpanel))
 				WMAddToArray(windows, wwin);
 			}
