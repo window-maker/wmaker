@@ -105,10 +105,17 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 	if (!wwin)
 		return;
 
-	if (next)
-		hasModifier = (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0);
-	else
-		hasModifier = (wKeyBindings[WKBD_FOCUSPREV].modifier != 0);
+	if (next) {
+		if (class_only)
+			hasModifier = (wKeyBindings[WKBD_GROUPNEXT].modifier != 0);
+		else
+			hasModifier = (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0);
+	} else {
+		if (class_only)
+			hasModifier = (wKeyBindings[WKBD_GROUPPREV].modifier != 0);
+		else
+			hasModifier = (wKeyBindings[WKBD_FOCUSPREV].modifier != 0);
+	}
 
 	if (hasModifier) {
 		keymap = XGetModifierMapping(dpy);
