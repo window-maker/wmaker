@@ -487,7 +487,7 @@ void handleMaximize(WWindow *wwin, int directions)
 		/* allow wMaximizeWindow to restore the Maximusized size */
 		if ((wwin->flags.old_maximized & MAX_MAXIMUS) &&
 				!(requested & MAX_MAXIMUS))
-			wMaximizeWindow(wwin, flags);
+			wMaximizeWindow(wwin, MAX_MAXIMUS | flags);
 		else
 			wUnmaximizeWindow(wwin);
 	/* these alone mean vertical|horizontal toggle */
