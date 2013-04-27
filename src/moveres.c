@@ -1521,7 +1521,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 					}
 				} else {
 					if (ww != original_w)
-						wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_MAXIMUS);
+						wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
 
 					if (wh != original_h)
 						wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
@@ -2078,7 +2078,7 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 				XUngrabServer(dpy);
 
 				if (fw != original_fw)
-					wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_MAXIMUS);
+					wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
 
 				if (fh != original_fh)
 					wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);

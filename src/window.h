@@ -249,8 +249,8 @@ typedef struct WWindow {
 		unsigned int miniaturized:1;
 		unsigned int hidden:1;
 		unsigned int shaded:1;
-		unsigned int maximized:5;
-		unsigned int old_maximized:5;
+		unsigned int maximized:7;
+		unsigned int old_maximized:7;
 		unsigned int fullscreen:1;
 		unsigned int omnipresent:1;
 		unsigned int semi_focused:1;

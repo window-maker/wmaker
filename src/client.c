@@ -252,11 +252,11 @@ void wClientConfigure(WWindow * wwin, XConfigureRequestEvent * xcre)
 			nheight = wwin->frame->core->height - wwin->frame->top_width - wwin->frame->bottom_width;
 
 		if (nwidth != wwin->old_geometry.width)
-			wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_MAXIMUS);
-                if (nheight != wwin->old_geometry.height)
+			wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
+		if (nheight != wwin->old_geometry.height)
 			wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
 
-                wWindowConfigure(wwin, nx, ny, nwidth, nheight);
+		wWindowConfigure(wwin, nx, ny, nwidth, nheight);
 		wwin->old_geometry.x = nx;
 		wwin->old_geometry.y = ny;
 		wwin->old_geometry.width = nwidth;
