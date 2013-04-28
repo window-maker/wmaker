@@ -61,82 +61,94 @@ typedef struct _Panel {
 #define ICON_FILE	"keyshortcuts"
 
 /*
- * Must be in the same order as the corresponding items in
- * "actions list" in createPanel()
+ * List of user definable shortcut keys
+ * First parameter is the internal keyword known by WMaker
+ * Second is the text displayed to the user
  */
-static char *keyOptions[] = {
-	"RootMenuKey",
-	"WindowListKey",
-	"WindowMenuKey",
-	"HideKey",
-	"HideOthersKey",
-	"MiniaturizeKey",
-	"MinimizeAllKey",
-	"CloseKey",
-	"MaximizeKey",
-	"VMaximizeKey",
-	"HMaximizeKey",
-	"LHMaximizeKey",
-	"RHMaximizeKey",
-	"MaximusKey",
-	"RaiseKey",
-	"LowerKey",
-	"RaiseLowerKey",
-	"ShadeKey",
-	"MoveResizeKey",
-	"SelectKey",
-	"FocusNextKey",
-	"FocusPrevKey",
-	"GroupNextKey",
-	"GroupPrevKey",
-	"NextWorkspaceKey",
-	"PrevWorkspaceKey",
-	"LastWorkspaceKey",
-	"NextWorkspaceLayerKey",
-	"PrevWorkspaceLayerKey",
-	"Workspace1Key",
-	"Workspace2Key",
-	"Workspace3Key",
-	"Workspace4Key",
-	"Workspace5Key",
-	"Workspace6Key",
-	"Workspace7Key",
-	"Workspace8Key",
-	"Workspace9Key",
-	"Workspace10Key",
-	"MoveToNextWorkspaceKey",
-	"MoveToPrevWorkspaceKey",
-	"MoveToLastWorkspaceKey",
-	"MoveToNextWorkspaceLayerKey",
-	"MoveToPrevWorkspaceLayerKey",
-	"MoveToWorkspace1Key",
-	"MoveToWorkspace2Key",
-	"MoveToWorkspace3Key",
-	"MoveToWorkspace4Key",
-	"MoveToWorkspace5Key",
-	"MoveToWorkspace6Key",
-	"MoveToWorkspace7Key",
-	"MoveToWorkspace8Key",
-	"MoveToWorkspace9Key",
-	"MoveToWorkspace10Key",
-	"WindowShortcut1Key",
-	"WindowShortcut2Key",
-	"WindowShortcut3Key",
-	"WindowShortcut4Key",
-	"WindowShortcut5Key",
-	"WindowShortcut6Key",
-	"WindowShortcut7Key",
-	"WindowShortcut8Key",
-	"WindowShortcut9Key",
-	"WindowShortcut10Key",
-	"WindowRelaunchKey",
-	"ScreenSwitchKey",
-	"DockRaiseLowerKey",
-#ifndef XKB_MODELOCK
-	"ClipRaiseLowerKey"
-#else
-	"ClipRaiseLowerKey",
-	"ToggleKbdModeKey"
+static const struct {
+	/*
+	 * Fixme: these strings should be 'const', but 'GetStringForKey'
+	 *        and 'WMAddListItem' do not allow us to do so
+	 */
+	char *key;
+	char *title;
+} keyOptions[] = {
+	{ "RootMenuKey",    N_("Open applications menu") },
+	{ "WindowListKey",  N_("Open window list menu") },
+	{ "WindowMenuKey",  N_("Open window commands menu") },
+	{ "HideKey",        N_("Hide active application") },
+	{ "HideOthersKey",  N_("Hide other applications") },
+	{ "MiniaturizeKey", N_("Miniaturize active window") },
+	{ "MinimizeAllKey", N_("Miniaturize all windows") },
+	{ "CloseKey",       N_("Close active window") },
+	{ "MaximizeKey",    N_("Maximize active window") },
+	{ "VMaximizeKey",   N_("Maximize active window vertically") },
+	{ "HMaximizeKey",   N_("Maximize active window horizontally") },
+	{ "LHMaximizeKey",  N_("Maximize active window left half") },
+	{ "RHMaximizeKey",  N_("Maximize active window right half") },
+	{ "MaximusKey",     N_("Maximus: Tiled maximization ") },
+	{ "RaiseKey",       N_("Raise active window") },
+	{ "LowerKey",       N_("Lower active window") },
+	{ "RaiseLowerKey",  N_("Raise/Lower window under mouse pointer") },
+	{ "ShadeKey",       N_("Shade active window") },
+	{ "MoveResizeKey",  N_("Move/Resize active window") },
+	{ "SelectKey",      N_("Select active window") },
+	{ "FocusNextKey",   N_("Focus next window") },
+	{ "FocusPrevKey",   N_("Focus previous window") },
+	{ "GroupNextKey",   N_("Focus next group window") },
+	{ "GroupPrevKey",   N_("Focus previous group window") },
+
+	/* Workspace Related */
+	{ "NextWorkspaceKey", N_("Switch to next workspace") },
+	{ "PrevWorkspaceKey", N_("Switch to previous workspace") },
+	{ "LastWorkspaceKey", N_("Switch to last used workspace") },
+	{ "NextWorkspaceLayerKey", N_("Switch to next ten workspaces") },
+	{ "PrevWorkspaceLayerKey", N_("Switch to previous ten workspaces") },
+	{ "Workspace1Key",  N_("Switch to workspace 1") },
+	{ "Workspace2Key",  N_("Switch to workspace 2") },
+	{ "Workspace3Key",  N_("Switch to workspace 3") },
+	{ "Workspace4Key",  N_("Switch to workspace 4") },
+	{ "Workspace5Key",  N_("Switch to workspace 5") },
+	{ "Workspace6Key",  N_("Switch to workspace 6") },
+	{ "Workspace7Key",  N_("Switch to workspace 7") },
+	{ "Workspace8Key",  N_("Switch to workspace 8") },
+	{ "Workspace9Key",  N_("Switch to workspace 9") },
+	{ "Workspace10Key", N_("Switch to workspace 10") },
+	{ "MoveToNextWorkspaceKey",      N_("Move window to next workspace") },
+	{ "MoveToPrevWorkspaceKey",      N_("Move window to previous workspace") },
+	{ "MoveToLastWorkspaceKey",      N_("Move window to last used workspace") },
+	{ "MoveToNextWorkspaceLayerKey", N_("Move window to next ten workspaces") },
+	{ "MoveToPrevWorkspaceLayerKey", N_("Move window to previous ten workspaces") },
+	{ "MoveToWorkspace1Key",  N_("Move window to workspace 1") },
+	{ "MoveToWorkspace2Key",  N_("Move window to workspace 2") },
+	{ "MoveToWorkspace3Key",  N_("Move window to workspace 3") },
+	{ "MoveToWorkspace4Key",  N_("Move window to workspace 4") },
+	{ "MoveToWorkspace5Key",  N_("Move window to workspace 5") },
+	{ "MoveToWorkspace6Key",  N_("Move window to workspace 6") },
+	{ "MoveToWorkspace7Key",  N_("Move window to workspace 7") },
+	{ "MoveToWorkspace8Key",  N_("Move window to workspace 8") },
+	{ "MoveToWorkspace9Key",  N_("Move window to workspace 9") },
+	{ "MoveToWorkspace10Key", N_("Move window to workspace 10") },
+
+	/* Window Selection */
+	{ "WindowShortcut1Key",  N_("Shortcut for window 1") },
+	{ "WindowShortcut2Key",  N_("Shortcut for window 2") },
+	{ "WindowShortcut3Key",  N_("Shortcut for window 3") },
+	{ "WindowShortcut4Key",  N_("Shortcut for window 4") },
+	{ "WindowShortcut5Key",  N_("Shortcut for window 5") },
+	{ "WindowShortcut6Key",  N_("Shortcut for window 6") },
+	{ "WindowShortcut7Key",  N_("Shortcut for window 7") },
+	{ "WindowShortcut8Key",  N_("Shortcut for window 8") },
+	{ "WindowShortcut9Key",  N_("Shortcut for window 9") },
+	{ "WindowShortcut10Key", N_("Shortcut for window 10") },
+
+	/* Misc. */
+	{ "WindowRelaunchKey", N_("Launch new instance of application") },
+	{ "ScreenSwitchKey",   N_("Switch to Next Screen/Monitor") },
+	{ "DockRaiseLowerKey", N_("Raise/Lower Dock") },
+	{ "ClipRaiseLowerKey", N_("Raise/Lower Clip") }
+#ifdef XKB_MODELOCK
+	,{ "ToggleKbdModeKey", N_("Toggle keyboard language") }
 #endif				/* XKB_MODELOCK */
 };
 
@@ -388,7 +400,7 @@ static void showData(_Panel * panel)
 
 	for (i = 0; i < panel->actionCount; i++) {
 
-		str = GetStringForKey(keyOptions[i]);
+		str = GetStringForKey(keyOptions[i].key);
 		if (panel->shortcuts[i])
 			wfree(panel->shortcuts[i]);
 		if (str)
@@ -437,6 +449,7 @@ static void createPanel(Panel * p)
 	WMScreen *scr = WMWidgetScreen(panel->parent);
 	WMColor *color;
 	WMFont *boldFont;
+	int i;
 
 	panel->capturing = 0;
 
@@ -469,78 +482,9 @@ static void createPanel(Panel * p)
 	WMSetListUserDrawProc(panel->actLs, paintItem);
 	WMHangData(panel->actLs, panel);
 
-	WMAddListItem(panel->actLs, _("Open applications menu"));
-	WMAddListItem(panel->actLs, _("Open window list menu"));
-	WMAddListItem(panel->actLs, _("Open window commands menu"));
-	WMAddListItem(panel->actLs, _("Hide active application"));
-	WMAddListItem(panel->actLs, _("Hide other applications"));
-	WMAddListItem(panel->actLs, _("Miniaturize active window"));
-	WMAddListItem(panel->actLs, _("Miniaturize all windows"));
-	WMAddListItem(panel->actLs, _("Close active window"));
-	WMAddListItem(panel->actLs, _("Maximize active window"));
-	WMAddListItem(panel->actLs, _("Maximize active window vertically"));
-	WMAddListItem(panel->actLs, _("Maximize active window horizontally"));
-	WMAddListItem(panel->actLs, _("Maximize active window left half"));
-	WMAddListItem(panel->actLs, _("Maximize active window right half"));
-	WMAddListItem(panel->actLs, _("Maximus: Tiled maximization "));
-	WMAddListItem(panel->actLs, _("Raise active window"));
-	WMAddListItem(panel->actLs, _("Lower active window"));
-	WMAddListItem(panel->actLs, _("Raise/Lower window under mouse pointer"));
-	WMAddListItem(panel->actLs, _("Shade active window"));
-	WMAddListItem(panel->actLs, _("Move/Resize active window"));
-	WMAddListItem(panel->actLs, _("Select active window"));
-	WMAddListItem(panel->actLs, _("Focus next window"));
-	WMAddListItem(panel->actLs, _("Focus previous window"));
-	WMAddListItem(panel->actLs, _("Focus next group window"));
-	WMAddListItem(panel->actLs, _("Focus previous group window"));
-	WMAddListItem(panel->actLs, _("Switch to next workspace"));
-	WMAddListItem(panel->actLs, _("Switch to previous workspace"));
-	WMAddListItem(panel->actLs, _("Switch to last used workspace"));
-	WMAddListItem(panel->actLs, _("Switch to next ten workspaces"));
-	WMAddListItem(panel->actLs, _("Switch to previous ten workspaces"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 1"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 2"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 3"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 4"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 5"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 6"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 7"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 8"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 9"));
-	WMAddListItem(panel->actLs, _("Switch to workspace 10"));
-	WMAddListItem(panel->actLs, _("Move window to next workspace"));
-	WMAddListItem(panel->actLs, _("Move window to previous workspace"));
-	WMAddListItem(panel->actLs, _("Move window to last used workspace"));
-	WMAddListItem(panel->actLs, _("Move window to next ten workspaces"));
-	WMAddListItem(panel->actLs, _("Move window to previous ten workspaces"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 1"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 2"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 3"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 4"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 5"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 6"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 7"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 8"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 9"));
-	WMAddListItem(panel->actLs, _("Move window to workspace 10"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 1"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 2"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 3"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 4"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 5"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 6"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 7"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 8"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 9"));
-	WMAddListItem(panel->actLs, _("Shortcut for window 10"));
-	WMAddListItem(panel->actLs, _("Launch new instance of application"));
-	WMAddListItem(panel->actLs, _("Switch to Next Screen/Monitor"));
-	WMAddListItem(panel->actLs, _("Raise/Lower Dock"));
-	WMAddListItem(panel->actLs, _("Raise/Lower Clip"));
-#ifdef XKB_MODELOCK
-	WMAddListItem(panel->actLs, _("Toggle keyboard language"));
-#endif				/* XKB_MODELOCK */
-
+	for (i = 0; i < sizeof(keyOptions)/sizeof(keyOptions[0]); i++) {
+		WMAddListItem(panel->actLs, _(keyOptions[i].title));
+	}
 	WMSetListAction(panel->actLs, listClick, panel);
 
 	panel->actionCount = WMGetListNumberOfRows(panel->actLs);
@@ -602,10 +546,10 @@ static void storeData(_Panel * panel)
 			}
 		}
 		if (str) {
-			SetStringForKey(str, keyOptions[i]);
+			SetStringForKey(str, keyOptions[i].key);
 			wfree(str);
 		} else {
-			SetStringForKey("None", keyOptions[i]);
+			SetStringForKey("None", keyOptions[i].key);
 		}
 	}
 }
