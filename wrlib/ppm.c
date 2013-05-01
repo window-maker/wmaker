@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include "wraster.h"
+#include "imgformat.h"
 
 static RImage *load_graymap(FILE * file, int w, int h, int max, int raw)
 {

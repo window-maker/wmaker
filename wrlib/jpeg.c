@@ -34,6 +34,7 @@
 #include <jpeglib.h>
 
 #include "wraster.h"
+#include "imgformat.h"
 
 /*
  * <setjmp.h> is used for the optional error recovery mechanism shown in

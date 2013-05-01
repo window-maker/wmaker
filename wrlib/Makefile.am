@@ -19,6 +19,7 @@ bin_SCRIPTS = get-wraster-flags
 include_HEADERS = wraster.h
 
 libwraster_la_SOURCES = 	\
+	imgformat.h 	\
 	raster.c 	\
 	alpha_combine.c \
 	draw.c		\

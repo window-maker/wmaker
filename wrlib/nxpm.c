@@ -29,6 +29,7 @@
 #include <errno.h>
 
 #include "wraster.h"
+#include "imgformat.h"
 
 /*
  * Restricted support for XPM images.

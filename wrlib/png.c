@@ -31,6 +31,7 @@
 #include <png.h>
 
 #include "wraster.h"
+#include "imgformat.h"
 
 RImage *RLoadPNG(RContext * context, char *file)
 {

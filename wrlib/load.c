@@ -38,6 +38,7 @@
 #endif
 
 #include "wraster.h"
+#include "imgformat.h"
 
 #define	RETRY( x )	do {				\
 				x;			\
@@ -66,36 +67,9 @@ static int RImageCacheMaxImage = -1;	/* 0 = any size */
 
 static RCachedImage *RImageCache;
 
-#define IM_ERROR	-1
-#define IM_UNKNOWN	0
-#define IM_XPM		1
-#define IM_TIFF 	2
-#define IM_PNG		3
-#define IM_PPM		4
-#define IM_JPEG		5
-#define IM_GIF		6
-/* How many image types do we have. */
-/* Increase this when adding new image types! */
-#define IM_TYPES        6
 
 static int identFile(char *path);
 
-extern RImage *RLoadPPM(char *file_name);
-
-extern RImage *RLoadXPM(RContext * context, char *file);
-
-#ifdef USE_TIFF
-extern RImage *RLoadTIFF(char *file, int index);
-#endif
-#ifdef USE_PNG
-extern RImage *RLoadPNG(RContext * context, char *file);
-#endif
-#ifdef USE_JPEG
-extern RImage *RLoadJPEG(RContext * context, char *file_name);
-#endif
-#ifdef USE_GIF
-extern RImage *RLoadGIF(char *file_name, int index);
-#endif
 
 char **RSupportedFileFormats(void)
 {

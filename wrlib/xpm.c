@@ -31,6 +31,7 @@
 #include <X11/xpm.h>
 
 #include "wraster.h"
+#include "imgformat.h"
 
 RImage *RGetImageFromXPMData(RContext * context, char **xpmData)
 {

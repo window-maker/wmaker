@@ -32,6 +32,7 @@
 #include <tiffio.h>
 
 #include "wraster.h"
+#include "imgformat.h"
 
 RImage *RLoadTIFF(char *file, int index)
 {
