@@ -61,7 +61,7 @@ Bool RGetPixel(RImage * image, int x, int y, RColor * color)
 	return True;
 }
 
-void RPutPixel(RImage * image, int x, int y, RColor * color)
+void RPutPixel(RImage *image, int x, int y, const RColor *color)
 {
 	unsigned char *ptr;
 
@@ -104,7 +104,7 @@ void RPutPixel(RImage * image, int x, int y, RColor * color)
 	}
 }
 
-static void operatePixel(RImage * image, int ofs, int operation, RColor * color)
+static void operatePixel(RImage * image, int ofs, int operation, const RColor * color)
 {
 	unsigned char *sr, *sg, *sb, *sa;
 	register int alpha, nalpha, tmp;
@@ -170,7 +170,7 @@ static void operatePixel(RImage * image, int ofs, int operation, RColor * color)
 	}
 }
 
-void ROperatePixel(RImage * image, int operation, int x, int y, RColor * color)
+void ROperatePixel(RImage * image, int operation, int x, int y, const RColor * color)
 {
 	int ofs;
 
@@ -184,7 +184,7 @@ void ROperatePixel(RImage * image, int operation, int x, int y, RColor * color)
 	operatePixel(image, ofs, operation, color);
 }
 
-void RPutPixels(RImage * image, RPoint * points, int npoints, int mode, RColor * color)
+void RPutPixels(RImage * image, const RPoint * points, int npoints, int mode, const RColor * color)
 {
 	register int x, y, i;
 
@@ -205,7 +205,7 @@ void RPutPixels(RImage * image, RPoint * points, int npoints, int mode, RColor *
 	}
 }
 
-void ROperatePixels(RImage * image, int operation, RPoint * points, int npoints, int mode, RColor * color)
+void ROperatePixels(RImage * image, int operation, const RPoint * points, int npoints, int mode, const RColor * color)
 {
 	register int x, y, i;
 
@@ -287,7 +287,7 @@ static Bool clipLineInRectangle(int xmin, int ymin, int xmax, int ymax, int *x1,
  * This routine is a generic drawing routine, based on Bresenham's line
  * drawing algorithm.
  */
-static int genericLine(RImage * image, int x0, int y0, int x1, int y1, RColor * color, int operation, int polyline)
+static int genericLine(RImage * image, int x0, int y0, int x1, int y1, const RColor * color, int operation, int polyline)
 {
 	int i, err, du, dv, du2, dv2, uofs, vofs, last;
 
@@ -377,17 +377,17 @@ static int genericLine(RImage * image, int x0, int y0, int x1, int y1, RColor * 
 	return True;
 }
 
-int RDrawLine(RImage * image, int x0, int y0, int x1, int y1, RColor * color)
+int RDrawLine(RImage * image, int x0, int y0, int x1, int y1, const RColor * color)
 {
 	return genericLine(image, x0, y0, x1, y1, color, RNormalOperation, False);
 }
 
-int ROperateLine(RImage * image, int operation, int x0, int y0, int x1, int y1, RColor * color)
+int ROperateLine(RImage * image, int operation, int x0, int y0, int x1, int y1, const RColor * color)
 {
 	return genericLine(image, x0, y0, x1, y1, color, operation, False);
 }
 
-void RDrawLines(RImage * image, RPoint * points, int npoints, int mode, RColor * color)
+void RDrawLines(RImage * image, const RPoint * points, int npoints, int mode, const RColor * color)
 {
 	register int x1, y1, x2, y2, i;
 
@@ -425,7 +425,7 @@ void RDrawLines(RImage * image, RPoint * points, int npoints, int mode, RColor *
 	genericLine(image, x1, y1, x2, y2, color, RNormalOperation, i);
 }
 
-void ROperateLines(RImage * image, int operation, RPoint * points, int npoints, int mode, RColor * color)
+void ROperateLines(RImage * image, int operation, const RPoint * points, int npoints, int mode, const RColor * color)
 {
 	register int x1, y1, x2, y2, i;
 
@@ -463,7 +463,7 @@ void ROperateLines(RImage * image, int operation, RPoint * points, int npoints, 
 	genericLine(image, x1, y1, x2, y2, color, operation, i);
 }
 
-void RDrawSegments(RImage * image, RSegment * segs, int nsegs, RColor * color)
+void RDrawSegments(RImage * image, const RSegment * segs, int nsegs, const RColor * color)
 {
 	register int i;
 
@@ -475,7 +475,7 @@ void RDrawSegments(RImage * image, RSegment * segs, int nsegs, RColor * color)
 	}
 }
 
-void ROperateSegments(RImage * image, int operation, RSegment * segs, int nsegs, RColor * color)
+void ROperateSegments(RImage * image, int operation, const RSegment * segs, int nsegs, const RColor * color)
 {
 	register int i;
 

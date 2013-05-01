@@ -378,31 +378,31 @@ RImage* RMakeCenteredImage(RImage *image, unsigned width, unsigned height,
  */
 Bool RGetPixel(RImage *image, int x, int y, RColor *color);
 
-void RPutPixel(RImage *image, int x, int y, RColor *color);
+void RPutPixel(RImage *image, int x, int y, const RColor *color);
 
-void ROperatePixel(RImage *image, int operation, int x, int y, RColor *color);
+void ROperatePixel(RImage *image, int operation, int x, int y, const RColor *color);
 
-void RPutPixels(RImage *image, RPoint *points, int npoints, int mode,
-                RColor *color);
+void RPutPixels(RImage *image, const RPoint *points, int npoints, int mode,
+                const RColor *color);
 
-void ROperatePixels(RImage *image, int operation, RPoint *points,
-                    int npoints, int mode, RColor *color);
+void ROperatePixels(RImage *image, int operation, const RPoint *points,
+                    int npoints, int mode, const RColor *color);
 
-int RDrawLine(RImage *image, int x0, int y0, int x1, int y1, RColor *color);
+int RDrawLine(RImage *image, int x0, int y0, int x1, int y1, const RColor *color);
 
 int ROperateLine(RImage *image, int operation, int x0, int y0, int x1, int y1,
-                 RColor *color);
+                 const RColor *color);
 
-void RDrawLines(RImage *image, RPoint *points, int npoints, int mode,
-                RColor *color);
+void RDrawLines(RImage *image, const RPoint *points, int npoints, int mode,
+                const RColor *color);
 
-void ROperateLines(RImage *image, int operation, RPoint *points, int npoints,
-                   int mode, RColor *color);
+void ROperateLines(RImage *image, int operation, const RPoint *points, int npoints,
+                   int mode, const RColor *color);
 
-void RDrawSegments(RImage *image, RSegment *segs, int nsegs, RColor *color);
+void RDrawSegments(RImage *image, const RSegment *segs, int nsegs, const RColor *color);
 
-void ROperateSegments(RImage *image, int operation, RSegment *segs, int nsegs,
-                      RColor *color);
+void ROperateSegments(RImage *image, int operation, const RSegment *segs, int nsegs,
+                      const RColor *color);
 
 /*
  * Color convertion
@@ -413,11 +413,11 @@ void RHSVtoRGB(RHSVColor *hsv, RColor *rgb);
 /*
  * Painting
  */
-void RClearImage(RImage *image, RColor *color);
+void RClearImage(RImage *image, const RColor *color);
 
 void RLightImage(RImage *image, RColor *color);
 
-void RFillImage(RImage *image, RColor *color);
+void RFillImage(RImage *image, const RColor *color);
 
 void RBevelImage(RImage *image, int bevel_type);
 

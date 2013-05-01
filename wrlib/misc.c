@@ -80,7 +80,7 @@ void RBevelImage(RImage * image, int bevel_type)
 	}
 }
 
-void RFillImage(RImage * image, RColor * color)
+void RFillImage(RImage * image, const RColor * color)
 {
 	unsigned char *d = image->data;
 	unsigned lineSize;
@@ -110,7 +110,7 @@ void RFillImage(RImage * image, RColor * color)
 	}
 }
 
-void RClearImage(RImage * image, RColor * color)
+void RClearImage(RImage * image, const RColor * color)
 {
 	unsigned char *d = image->data;
 	unsigned lineSize;
