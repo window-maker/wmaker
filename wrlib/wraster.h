@@ -304,7 +304,7 @@ char *RGetImageFileFormat(const char *file);
  * Xlib contexts
  */
 RContext *RCreateContext(Display *dpy, int screen_number,
-                         RContextAttributes *attribs);
+                         const RContextAttributes *attribs);
 
 void RDestroyContext(RContext *context);
 
@@ -341,7 +341,7 @@ RImage *RCloneImage(RImage *image);
 RImage *RGetSubImage(RImage *image, int x, int y, unsigned width,
                      unsigned height);
 
-void RCombineImageWithColor(RImage *image, RColor *color);
+void RCombineImageWithColor(RImage *image, const RColor *color);
 
 void RCombineImages(RImage *image, RImage *src);
 
@@ -371,7 +371,7 @@ RImage *RRotateImage(RImage *image, float angle);
 RImage *RMakeTiledImage(RImage *tile, unsigned width, unsigned height);
 
 RImage* RMakeCenteredImage(RImage *image, unsigned width, unsigned height,
-                           RColor *color);
+                           const RColor *color);
 
 /*
  * Drawing
@@ -415,14 +415,14 @@ void RHSVtoRGB(const RHSVColor *hsv, RColor *rgb);
  */
 void RClearImage(RImage *image, const RColor *color);
 
-void RLightImage(RImage *image, RColor *color);
+void RLightImage(RImage *image, const RColor *color);
 
 void RFillImage(RImage *image, const RColor *color);
 
 void RBevelImage(RImage *image, int bevel_type);
 
-RImage *RRenderGradient(unsigned width, unsigned height, RColor *from,
-                        RColor *to, int style);
+RImage *RRenderGradient(unsigned width, unsigned height, const RColor *from,
+                        const RColor *to, int style);
 
 
 RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors,

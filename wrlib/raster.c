@@ -529,7 +529,7 @@ RCombineAreaWithOpaqueness(RImage * image, RImage * src, int sx, int sy,
 #undef COP
 }
 
-void RCombineImageWithColor(RImage * image, RColor * color)
+void RCombineImageWithColor(RImage * image, const RColor * color)
 {
 	register int i;
 	unsigned char *d;
@@ -602,7 +602,7 @@ RImage *RMakeTiledImage(RImage * tile, unsigned width, unsigned height)
 	return image;
 }
 
-RImage *RMakeCenteredImage(RImage * image, unsigned width, unsigned height, RColor * color)
+RImage *RMakeCenteredImage(RImage * image, unsigned width, unsigned height, const RColor * color)
 {
 	int x, y, w, h, sx, sy;
 	RImage *tmp;

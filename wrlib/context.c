@@ -558,7 +558,7 @@ static int count_offset(unsigned long mask)
 	return i;
 }
 
-RContext *RCreateContext(Display * dpy, int screen_number, RContextAttributes * attribs)
+RContext *RCreateContext(Display * dpy, int screen_number, const RContextAttributes * attribs)
 {
 	RContext *context;
 	XGCValues gcv;

@@ -65,7 +65,7 @@ RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor ** colors, 
 	return NULL;
 }
 
-RImage *RRenderGradient(unsigned width, unsigned height, RColor * from, RColor * to, int style)
+RImage *RRenderGradient(unsigned width, unsigned height, const RColor * from, const RColor * to, int style)
 {
 	switch (style) {
 	case RHorizontalGradient:

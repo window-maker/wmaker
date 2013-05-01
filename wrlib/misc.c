@@ -166,7 +166,7 @@ static __inline__ unsigned char clip(int c)
 	return (unsigned char)c;
 }
 
-void RLightImage(RImage *image, RColor *color)
+void RLightImage(RImage *image, const RColor *color)
 {
 	unsigned char *d = image->data;
 	unsigned char *dd;
