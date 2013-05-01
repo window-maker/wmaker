@@ -113,7 +113,7 @@ static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
 	return NULL;
 }
 
-RImage *RLoadPPM(char *file_name)
+RImage *RLoadPPM(const char *file_name)
 {
 	FILE *file;
 	RImage *image = NULL;

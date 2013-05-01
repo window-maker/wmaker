@@ -35,7 +35,7 @@
 #include "imgformat.h"
 
 
-Bool RSaveImage(RImage * image, char *filename, char *format)
+Bool RSaveImage(RImage * image, const char *filename, const char *format)
 {
 	if (strcmp(format, "XPM") != 0) {
 		RErrorCode = RERR_BADFORMAT;

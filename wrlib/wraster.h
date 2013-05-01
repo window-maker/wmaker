@@ -298,7 +298,7 @@ enum {
 char **RSupportedFileFormats(void);
 
 
-char *RGetImageFileFormat(char *file);
+char *RGetImageFileFormat(const char *file);
 
 /*
  * Xlib contexts
@@ -320,7 +320,7 @@ RImage *RCreateImageFromXImage(RContext *context, XImage *image, XImage *mask);
 RImage *RCreateImageFromDrawable(RContext *context, Drawable drawable,
                                  Pixmap mask);
 
-RImage *RLoadImage(RContext *context, char *file, int index);
+RImage *RLoadImage(RContext *context, const char *file, int index);
 
 RImage* RRetainImage(RImage *image);
 
@@ -331,7 +331,7 @@ RImage *RGetImageFromXPMData(RContext *context, char **xpmData);
 /*
  * RImage storing
  */
-Bool RSaveImage(RImage *image, char *filename, char *format);
+Bool RSaveImage(RImage *image, const char *filename, const char *format);
 
 /*
  * Area manipulation

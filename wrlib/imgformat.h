@@ -48,30 +48,30 @@ typedef enum {
 /*
  * Function for Loading in a specific format
  */
-RImage *RLoadPPM(char *file_name);
+RImage *RLoadPPM(const char *file);
 
-RImage *RLoadXPM(RContext *context, char *file);
+RImage *RLoadXPM(RContext *context, const char *file);
 
 #ifdef USE_TIFF
-RImage *RLoadTIFF(char *file, int index);
+RImage *RLoadTIFF(const char *file, int index);
 #endif
 
 #ifdef USE_PNG
-RImage *RLoadPNG(RContext *context, char *file);
+RImage *RLoadPNG(RContext *context, const char *file);
 #endif
 
 #ifdef USE_JPEG
-RImage *RLoadJPEG(RContext *context, char *file);
+RImage *RLoadJPEG(RContext *context, const char *file);
 #endif
 
 #ifdef USE_GIF
-RImage *RLoadGIF(char *file, int index);
+RImage *RLoadGIF(const char *file, int index);
 #endif
 
 /*
  * Function for Saving in a specific format
  */
-Bool RSaveXPM(RImage * image, char *filename);
+Bool RSaveXPM(RImage *image, const char *file);
 
 
 #endif

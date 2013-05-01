@@ -33,7 +33,7 @@
 #include "wraster.h"
 #include "imgformat.h"
 
-RImage *RLoadPNG(RContext * context, char *file)
+RImage *RLoadPNG(RContext *context, const char *file)
 {
 	char *tmp;
 	RImage *image = NULL;

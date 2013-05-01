@@ -551,7 +551,7 @@ static void freecolormap(XPMColor * colormap)
 }
 
 /* save routine is common to internal support and library support */
-Bool RSaveXPM(RImage * image, char *filename)
+Bool RSaveXPM(RImage * image, const char *filename)
 {
 	FILE *file;
 	int x, y;

@@ -153,7 +153,7 @@ RImage *RGetImageFromXPMData(RContext * context, char **xpmData)
 	return image;
 }
 
-RImage *RLoadXPM(RContext * context, char *file)
+RImage *RLoadXPM(RContext * context, const char *file)
 {
 	Display *dpy = context->dpy;
 	Colormap cmap = context->cmap;
@@ -164,7 +164,7 @@ RImage *RLoadXPM(RContext * context, char *file)
 	int *p;
 	int i;
 
-	i = XpmReadFileToXpmImage(file, &xpm, (XpmInfo *) NULL);
+	i = XpmReadFileToXpmImage((char *)file, &xpm, (XpmInfo *) NULL);
 	if (i != XpmSuccess) {
 		switch (i) {
 		case XpmOpenFailed:

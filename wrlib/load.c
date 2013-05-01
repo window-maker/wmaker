@@ -68,7 +68,7 @@ static int RImageCacheMaxImage = -1;	/* 0 = any size */
 static RCachedImage *RImageCache;
 
 
-static WRImgFormat identFile(char *path);
+static WRImgFormat identFile(const char *path);
 
 
 char **RSupportedFileFormats(void)
@@ -123,7 +123,7 @@ static void init_cache()
 	}
 }
 
-RImage *RLoadImage(RContext * context, char *file, int index)
+RImage *RLoadImage(RContext * context, const char *file, int index)
 {
 	RImage *image = NULL;
 	int i;
@@ -238,7 +238,7 @@ RImage *RLoadImage(RContext * context, char *file, int index)
 	return image;
 }
 
-char *RGetImageFileFormat(char *file)
+char *RGetImageFileFormat(const char *file)
 {
 	switch (identFile(file)) {
 	case IM_XPM:
@@ -272,7 +272,7 @@ char *RGetImageFileFormat(char *file)
 	}
 }
 
-static WRImgFormat identFile(char *path)
+static WRImgFormat identFile(const char *path)
 {
 	FILE *file;
 	unsigned char buffer[32];

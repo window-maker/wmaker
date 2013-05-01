@@ -34,7 +34,7 @@
 #include "wraster.h"
 #include "imgformat.h"
 
-RImage *RLoadTIFF(char *file, int index)
+RImage *RLoadTIFF(const char *file, int index)
 {
 	RImage *image = NULL;
 	TIFF *tif;
