@@ -66,5 +66,10 @@ RImage *RLoadJPEG(RContext *context, char *file);
 RImage *RLoadGIF(char *file, int index);
 #endif
 
+/*
+ * Function for Saving in a specific format
+ */
+Bool RSaveXPM(RImage * image, char *filename);
+
 
 #endif

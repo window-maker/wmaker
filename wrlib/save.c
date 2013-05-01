@@ -32,8 +32,8 @@
 #include <time.h>
 
 #include "wraster.h"
+#include "imgformat.h"
 
-extern Bool RSaveXPM(RImage * image, char *filename);
 
 Bool RSaveImage(RImage * image, char *filename, char *format)
 {
