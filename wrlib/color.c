@@ -37,7 +37,7 @@
 #define MIN3(a,b,c)	MIN(MIN(a,b), c)
 #define MAX3(a,b,c)	MAX(MAX(a,b), c)
 
-void RHSVtoRGB(RHSVColor * hsv, RColor * rgb)
+void RHSVtoRGB(const RHSVColor * hsv, RColor * rgb)
 {
 	int h = hsv->hue % 360;
 	int s = hsv->saturation;
@@ -89,7 +89,7 @@ void RHSVtoRGB(RHSVColor * hsv, RColor * rgb)
 	}
 }
 
-void RRGBtoHSV(RColor * rgb, RHSVColor * hsv)
+void RRGBtoHSV(const RColor * rgb, RHSVColor * hsv)
 {
 	int h, s, v;
 	int max = MAX3(rgb->red, rgb->green, rgb->blue);

@@ -921,7 +921,7 @@ int RConvertImageMask(RContext * context, RImage * image, Pixmap * pixmap, Pixma
 	return True;
 }
 
-Bool RGetClosestXColor(RContext * context, RColor * color, XColor * retColor)
+Bool RGetClosestXColor(RContext * context, const RColor * color, XColor * retColor)
 {
 	if (context->vclass == TrueColor) {
 		unsigned short rmask, gmask, bmask;

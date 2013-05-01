@@ -308,7 +308,7 @@ RContext *RCreateContext(Display *dpy, int screen_number,
 
 void RDestroyContext(RContext *context);
 
-Bool RGetClosestXColor(RContext *context, RColor *color, XColor *retColor);
+Bool RGetClosestXColor(RContext *context, const RColor *color, XColor *retColor);
 
 /*
  * RImage creation
@@ -407,8 +407,8 @@ void ROperateSegments(RImage *image, int operation, const RSegment *segs, int ns
 /*
  * Color convertion
  */
-void RRGBtoHSV(RColor *color, RHSVColor *hsv);
-void RHSVtoRGB(RHSVColor *hsv, RColor *rgb);
+void RRGBtoHSV(const RColor *color, RHSVColor *hsv);
+void RHSVtoRGB(const RHSVColor *hsv, RColor *rgb);
 
 /*
  * Painting
