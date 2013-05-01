@@ -68,7 +68,7 @@ static int RImageCacheMaxImage = -1;	/* 0 = any size */
 static RCachedImage *RImageCache;
 
 
-static int identFile(char *path);
+static WRImgFormat identFile(char *path);
 
 
 char **RSupportedFileFormats(void)
@@ -272,7 +272,7 @@ char *RGetImageFileFormat(char *file)
 	}
 }
 
-static int identFile(char *path)
+static WRImgFormat identFile(char *path)
 {
 	FILE *file;
 	unsigned char buffer[32];

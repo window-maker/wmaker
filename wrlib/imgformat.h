@@ -30,14 +30,16 @@
 #define IMGFORMAT_INTERNAL_H
 
 
-#define IM_ERROR   -1
-#define IM_UNKNOWN  0
-#define IM_XPM      1
-#define IM_TIFF     2
-#define IM_PNG      3
-#define IM_PPM      4
-#define IM_JPEG     5
-#define IM_GIF      6
+typedef enum {
+	IM_ERROR   = -1,
+	IM_UNKNOWN =  0,
+	IM_XPM     =  1,
+	IM_TIFF    =  2,
+	IM_PNG     =  3,
+	IM_PPM     =  4,
+	IM_JPEG    =  5,
+	IM_GIF     =  6
+} WRImgFormat;
 
 /* How many image types we have. */
 /* Increase this when adding new image types! */
