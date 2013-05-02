@@ -48,6 +48,7 @@ wmaker_SOURCES = 	\
 	menu.c \
 	menu.h \
 	misc.c \
+	misc.h \
 	osdep_@WM_OSDEP@.c \
 	monitor.c \
 	motif.c \
@@ -67,6 +68,7 @@ wmaker_SOURCES = 	\
 	screen.h \
 	session.h \
 	session.c \
+	shutdown.h \
 	shutdown.c \
 	switchpanel.c \
 	switchpanel.h \
