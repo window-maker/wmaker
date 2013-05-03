@@ -228,7 +228,7 @@ RImage *RGetImageFromXPMData(RContext * context, char **data)
 	return NULL;
 }
 
-RImage *RLoadXPM(RContext * context, char *file)
+RImage *RLoadXPM(RContext * context, const char *file)
 {
 	RImage *image = NULL;
 	char line[LINEWIDTH + 1];
