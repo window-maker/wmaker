@@ -193,6 +193,8 @@ void __wmessage(const char *func, const char *file, int line, int type, const ch
 
 /* ---[ WINGs/findfile.c ]------------------------------------------------ */
 
+/* For the 4 function below, you have to free the returned string when you no longer need it */
+
 char* wfindfile(const char *paths, const char *file);
 
 char* wfindfileinlist(char *const *path_list, const char *file);
@@ -813,10 +815,13 @@ Bool WMWritePropListToFile(WMPropList *plist, const char *path);
 
 /* ---[ WINGs/userdefaults.c ]-------------------------------------------- */
 
+/* don't free the returned string */
 char* wusergnusteppath(void);
 
+/* Free the returned string when you no longer need it */
 char* wdefaultspathfordomain(const char *domain);
 
+/* Free the returned string when you no longer need it */
 char* wglobaldefaultspathfordomain(const char *domain);
 
 WMUserDefaults* WMGetStandardUserDefaults(void);
@@ -841,6 +846,7 @@ void WMSetUDObjectForKey(WMUserDefaults *database, WMPropList *object,
 
 void WMRemoveUDObjectForKey(WMUserDefaults *database, const char *defaultName);
 
+/* Returns a reference. Do not free it! */
 char* WMGetUDStringForKey(WMUserDefaults *database, const char *defaultName);
 
 int WMGetUDIntegerForKey(WMUserDefaults *database, const char *defaultName);
