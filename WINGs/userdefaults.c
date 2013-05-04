@@ -340,13 +340,13 @@ WMUserDefaults *WMGetStandardUserDefaults(void)
 	return defaults;
 }
 
-WMUserDefaults *WMGetDefaultsFromPath(char *path)
+WMUserDefaults *WMGetDefaultsFromPath(const char *path)
 {
 	WMUserDefaults *defaults;
 	WMPropList *domain;
 	WMPropList *key;
 	struct stat stbuf;
-	char *name;
+	const char *name;
 	int i;
 
 	assert(path != NULL);
@@ -421,7 +421,7 @@ WMPropList *WMGetUDKeys(WMUserDefaults * database)
 	return WMGetPLDictionaryKeys(database->appDomain);
 }
 
-WMPropList *WMGetUDObjectForKey(WMUserDefaults * database, char *defaultName)
+WMPropList *WMGetUDObjectForKey(WMUserDefaults * database, const char *defaultName)
 {
 	WMPropList *domainName, *domain;
 	WMPropList *object = NULL;
@@ -441,7 +441,7 @@ WMPropList *WMGetUDObjectForKey(WMUserDefaults * database, char *defaultName)
 	return object;
 }
 
-void WMSetUDObjectForKey(WMUserDefaults * database, WMPropList * object, char *defaultName)
+void WMSetUDObjectForKey(WMUserDefaults * database, WMPropList * object, const char *defaultName)
 {
 	WMPropList *key = WMCreatePLString(defaultName);
 
@@ -451,7 +451,7 @@ void WMSetUDObjectForKey(WMUserDefaults * database, WMPropList * object, char *d
 	WMReleasePropList(key);
 }
 
-void WMRemoveUDObjectForKey(WMUserDefaults * database, char *defaultName)
+void WMRemoveUDObjectForKey(WMUserDefaults * database, const char *defaultName)
 {
 	WMPropList *key = WMCreatePLString(defaultName);
 
@@ -462,7 +462,7 @@ void WMRemoveUDObjectForKey(WMUserDefaults * database, char *defaultName)
 	WMReleasePropList(key);
 }
 
-char *WMGetUDStringForKey(WMUserDefaults * database, char *defaultName)
+char *WMGetUDStringForKey(WMUserDefaults * database, const char *defaultName)
 {
 	WMPropList *val;
 
@@ -477,7 +477,7 @@ char *WMGetUDStringForKey(WMUserDefaults * database, char *defaultName)
 	return WMGetFromPLString(val);
 }
 
-int WMGetUDIntegerForKey(WMUserDefaults * database, char *defaultName)
+int WMGetUDIntegerForKey(WMUserDefaults * database, const char *defaultName)
 {
 	WMPropList *val;
 	char *str;
@@ -501,7 +501,7 @@ int WMGetUDIntegerForKey(WMUserDefaults * database, char *defaultName)
 	return value;
 }
 
-float WMGetUDFloatForKey(WMUserDefaults * database, char *defaultName)
+float WMGetUDFloatForKey(WMUserDefaults * database, const char *defaultName)
 {
 	WMPropList *val;
 	char *str;
@@ -521,7 +521,7 @@ float WMGetUDFloatForKey(WMUserDefaults * database, char *defaultName)
 	return value;
 }
 
-Bool WMGetUDBoolForKey(WMUserDefaults * database, char *defaultName)
+Bool WMGetUDBoolForKey(WMUserDefaults * database, const char *defaultName)
 {
 	WMPropList *val;
 	int value;
@@ -551,7 +551,7 @@ Bool WMGetUDBoolForKey(WMUserDefaults * database, char *defaultName)
 	return False;
 }
 
-void WMSetUDIntegerForKey(WMUserDefaults * database, int value, char *defaultName)
+void WMSetUDIntegerForKey(WMUserDefaults * database, int value, const char *defaultName)
 {
 	WMPropList *object;
 	char buffer[128];
@@ -563,7 +563,7 @@ void WMSetUDIntegerForKey(WMUserDefaults * database, int value, char *defaultNam
 	WMReleasePropList(object);
 }
 
-void WMSetUDStringForKey(WMUserDefaults * database, char *value, char *defaultName)
+void WMSetUDStringForKey(WMUserDefaults * database, const char *value, const char *defaultName)
 {
 	WMPropList *object;
 
@@ -573,7 +573,7 @@ void WMSetUDStringForKey(WMUserDefaults * database, char *value, char *defaultNa
 	WMReleasePropList(object);
 }
 
-void WMSetUDFloatForKey(WMUserDefaults * database, float value, char *defaultName)
+void WMSetUDFloatForKey(WMUserDefaults * database, float value, const char *defaultName)
 {
 	WMPropList *object;
 	char buffer[128];
@@ -585,7 +585,7 @@ void WMSetUDFloatForKey(WMUserDefaults * database, float value, char *defaultNam
 	WMReleasePropList(object);
 }
 
-void WMSetUDBoolForKey(WMUserDefaults * database, Bool value, char *defaultName)
+void WMSetUDBoolForKey(WMUserDefaults * database, Bool value, const char *defaultName)
 {
 	static WMPropList *yes = NULL, *no = NULL;
 

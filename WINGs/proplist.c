@@ -885,7 +885,7 @@ void WMPLSetCaseSensitive(Bool caseSensitiveness)
 	caseSensitive = caseSensitiveness;
 }
 
-WMPropList *WMCreatePLString(char *str)
+WMPropList *WMCreatePLString(const char *str)
 {
 	WMPropList *plist;
 
@@ -913,7 +913,7 @@ WMPropList *WMCreatePLData(WMData * data)
 	return plist;
 }
 
-WMPropList *WMCreatePLDataWithBytes(unsigned char *bytes, unsigned int length)
+WMPropList *WMCreatePLDataWithBytes(const unsigned char *bytes, unsigned int length)
 {
 	WMPropList *plist;
 

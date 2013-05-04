@@ -67,7 +67,7 @@ WMData *WMCreateDataWithLength(unsigned length)
 	return aData;
 }
 
-WMData *WMCreateDataWithBytes(void *bytes, unsigned length)
+WMData *WMCreateDataWithBytes(const void *bytes, unsigned length)
 {
 	WMData *aData;
 
@@ -230,7 +230,7 @@ unsigned WMGetDataLength(WMData * aData)
 }
 
 /* Adding data */
-void WMAppendDataBytes(WMData * aData, void *bytes, unsigned length)
+void WMAppendDataBytes(WMData * aData, const void *bytes, unsigned length)
 {
 	unsigned oldLength = aData->length;
 	unsigned newLength = oldLength + length;
@@ -260,7 +260,7 @@ void WMAppendData(WMData * aData, WMData * anotherData)
 
 /* Modifying data */
 
-void WMReplaceDataBytesInRange(WMData * aData, WMRange aRange, void *bytes)
+void WMReplaceDataBytesInRange(WMData * aData, WMRange aRange, const void *bytes)
 {
 	wassertr(aRange.position < aData->length);
 	wassertr(aRange.count <= aData->length - aRange.position);

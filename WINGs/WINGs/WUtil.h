@@ -553,7 +553,7 @@ WMData* WMCreateDataWithCapacity(unsigned capacity);
 
 WMData* WMCreateDataWithLength(unsigned length);
 
-WMData* WMCreateDataWithBytes(void *bytes, unsigned length);
+WMData* WMCreateDataWithBytes(const void *bytes, unsigned length);
 
 /* destructor is a function called to free the data when releasing the data
  * object, or NULL if no freeing of data is necesary. */
@@ -594,13 +594,13 @@ unsigned WMGetDataLength(WMData *aData);
 
 /* Adding data */
 
-void WMAppendDataBytes(WMData *aData, void *bytes, unsigned length);
+void WMAppendDataBytes(WMData *aData, const void *bytes, unsigned length);
 
 void WMAppendData(WMData *aData, WMData *anotherData);
 
 /* Modifying data */
 
-void WMReplaceDataBytesInRange(WMData *aData, WMRange aRange, void *bytes);
+void WMReplaceDataBytesInRange(WMData *aData, WMRange aRange, const void *bytes);
 
 void WMResetDataBytesInRange(WMData *aData, WMRange aRange);
 
@@ -713,11 +713,11 @@ void WMEnqueueCoalesceNotification(WMNotificationQueue *queue,
 
 void WMPLSetCaseSensitive(Bool caseSensitive);
 
-WMPropList* WMCreatePLString(char *str);
+WMPropList* WMCreatePLString(const char *str);
 
 WMPropList* WMCreatePLData(WMData *data);
 
-WMPropList* WMCreatePLDataWithBytes(unsigned char *bytes, unsigned int length);
+WMPropList* WMCreatePLDataWithBytes(const unsigned char *bytes, unsigned int length);
 
 WMPropList* WMCreatePLDataWithBytesNoCopy(unsigned char *bytes,
                                           unsigned int length,
@@ -821,7 +821,7 @@ char* wglobaldefaultspathfordomain(const char *domain);
 
 WMUserDefaults* WMGetStandardUserDefaults(void);
 
-WMUserDefaults* WMGetDefaultsFromPath(char *path);
+WMUserDefaults* WMGetDefaultsFromPath(const char *path);
 
 void WMSynchronizeUserDefaults(WMUserDefaults *database);
 
@@ -834,32 +834,32 @@ void WMEnableUDPeriodicSynchronization(WMUserDefaults *database, Bool enable);
  * Keys in array are just retained references to the original keys */
 WMPropList* WMGetUDKeys(WMUserDefaults *database);
 
-WMPropList* WMGetUDObjectForKey(WMUserDefaults *database, char *defaultName);
+WMPropList* WMGetUDObjectForKey(WMUserDefaults *database, const char *defaultName);
 
 void WMSetUDObjectForKey(WMUserDefaults *database, WMPropList *object,
-                         char *defaultName);
+                         const char *defaultName);
 
-void WMRemoveUDObjectForKey(WMUserDefaults *database, char *defaultName);
+void WMRemoveUDObjectForKey(WMUserDefaults *database, const char *defaultName);
 
-char* WMGetUDStringForKey(WMUserDefaults *database, char *defaultName);
+char* WMGetUDStringForKey(WMUserDefaults *database, const char *defaultName);
 
-int WMGetUDIntegerForKey(WMUserDefaults *database, char *defaultName);
+int WMGetUDIntegerForKey(WMUserDefaults *database, const char *defaultName);
 
-float WMGetUDFloatForKey(WMUserDefaults *database, char *defaultName);
+float WMGetUDFloatForKey(WMUserDefaults *database, const char *defaultName);
 
-Bool WMGetUDBoolForKey(WMUserDefaults *database, char *defaultName);
+Bool WMGetUDBoolForKey(WMUserDefaults *database, const char *defaultName);
 
-void WMSetUDStringForKey(WMUserDefaults *database, char *value,
-                         char *defaultName);
+void WMSetUDStringForKey(WMUserDefaults *database, const char *value,
+                         const char *defaultName);
 
 void WMSetUDIntegerForKey(WMUserDefaults *database, int value,
-                          char *defaultName);
+                          const char *defaultName);
 
 void WMSetUDFloatForKey(WMUserDefaults *database, float value,
-                        char *defaultName);
+                        const char *defaultName);
 
 void WMSetUDBoolForKey(WMUserDefaults *database, Bool value,
-                       char *defaultName);
+                       const char *defaultName);
 
 WMPropList* WMGetUDSearchList(WMUserDefaults *database);
 
