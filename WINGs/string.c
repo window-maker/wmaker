@@ -78,19 +78,17 @@ char *wtokennext(char *word, char **next)
 		}
 	}
 
-	if (*ret == 0)
-		t = NULL;
-	else
-		t = wstrdup(ret);
-
-	wfree(ret);
+	if (*ret == 0) {
+		wfree(ret);
+		ret = NULL;
+	}
 
 	if (ctype == PRC_EOS)
 		*next = NULL;
 	else
 		*next = ptr;
 
-	return t;
+	return ret;
 }
 
 /* separate a string in tokens, taking " and ' into account */
