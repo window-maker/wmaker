@@ -48,34 +48,33 @@ extern char *WMGetApplicationName();
 
 const char *wusergnusteppath()
 {
+	static const char subdir[] = "/GNUstep";
 	static char *path = NULL;
-	char *gspath;
+	char *gspath, *h;
 	int pathlen;
+
+	if (path)
+		/* Value have been already computed, re-use it */
+		return path;
 
 	gspath = getenv("GNUSTEP_USER_ROOT");
 	if (gspath) {
 		gspath = wexpandpath(gspath);
 		if (gspath) {
-			pathlen = strlen(gspath) + 4;
-			path = wmalloc(pathlen);
-			if (wstrlcpy(path, gspath, pathlen) >= pathlen) {
-				wfree(gspath);
-				return NULL;
-			}
-			wfree(gspath);
+			path = gspath;
+			return path;
 		}
-	} else {
-		char *h = wgethomedir();
-		if (!h)
-			return NULL;
-		pathlen = strlen(h) + 8 /* /GNUstep */ + 1;
-		path = wmalloc(pathlen);
-		if (wstrlcpy(path, h, pathlen) >= pathlen ||
-		    wstrlcat(path, "/GNUstep", pathlen) >= pathlen) {
-			wfree(path);
-			return NULL;
-		}
+		wwarning(_("variable GNUSTEP_USER_ROOT defined with invalid path, not used"));
 	}
+
+	h = wgethomedir();
+	if (!h)
+		return NULL;
+
+	pathlen = strlen(h);
+	path = wmalloc(pathlen + sizeof(subdir));
+	strcpy(path, h);
+	strcpy(path + pathlen, subdir);
 
 	return path;
 }
