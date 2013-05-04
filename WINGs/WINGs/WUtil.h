@@ -805,11 +805,11 @@ WMPropList* WMCreatePropListFromDescription(char *desc);
 /* Free the returned string when you no longer need it */
 char* WMGetPropListDescription(WMPropList *plist, Bool indented);
 
-WMPropList* WMReadPropListFromFile(char *file);
+WMPropList* WMReadPropListFromFile(const char *file);
 
-WMPropList* WMReadPropListFromPipe(char *command);
+WMPropList* WMReadPropListFromPipe(const char *command);
 
-Bool WMWritePropListToFile(WMPropList *plist, char *path);
+Bool WMWritePropListToFile(WMPropList *plist, const char *path);
 
 /* ---[ WINGs/userdefaults.c ]-------------------------------------------- */
 

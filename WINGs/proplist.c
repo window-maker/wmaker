@@ -38,7 +38,7 @@ typedef struct W_PropList {
 typedef struct PLData {
 	char *ptr;
 	int pos;
-	char *filename;
+	const char *filename;
 	int lineNumber;
 } PLData;
 
@@ -1485,7 +1485,7 @@ char *WMGetPropListDescription(WMPropList * plist, Bool indented)
 	return (indented ? indentedDescription(plist, 0) : description(plist));
 }
 
-WMPropList *WMReadPropListFromFile(char *file)
+WMPropList *WMReadPropListFromFile(const char *file)
 {
 	WMPropList *plist = NULL;
 	PLData *pldata;
@@ -1545,7 +1545,7 @@ WMPropList *WMReadPropListFromFile(char *file)
 	return plist;
 }
 
-WMPropList *WMReadPropListFromPipe(char *command)
+WMPropList *WMReadPropListFromPipe(const char *command)
 {
 	FILE *file;
 	WMPropList *plist;
@@ -1601,7 +1601,7 @@ WMPropList *WMReadPropListFromPipe(char *command)
 
 /* TODO: review this function's code */
 
-Bool WMWritePropListToFile(WMPropList * plist, char *path)
+Bool WMWritePropListToFile(WMPropList * plist, const char *path)
 {
 	char *thePath = NULL;
 	char *desc;
