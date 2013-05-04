@@ -220,7 +220,7 @@ char* wstrndup(const char *str, size_t len);
  * str1 and str2 can be any strings including static and constant strings.
  * str1 and str2 will not be modified.
  * Free the returned string when you're done with it. */
-char* wstrconcat(char *str1, char *str2);
+char* wstrconcat(const char *str1, const char *str2);
 
 /* This will append src to dst, and return dst. dst MUST be either NULL
  * or a string that was a result of a dynamic allocation (malloc, realloc
@@ -229,7 +229,7 @@ char* wstrconcat(char *str1, char *str2);
  * it is equivalent to calling wstrdup(src) ).
  * The returned address may be different from the original address of dst,
  * so always assign the returned address to avoid dangling pointers. */
-char* wstrappend(char *dst, char *src);
+char* wstrappend(char *dst, const char *src);
 
 size_t wstrlcpy(char *, const char *, size_t);
 size_t wstrlcat(char *, const char *, size_t);
@@ -815,7 +815,7 @@ Bool WMWritePropListToFile(WMPropList *plist, char *path);
 
 char* wusergnusteppath(void);
 
-char* wdefaultspathfordomain(char *domain);
+char* wdefaultspathfordomain(const char *domain);
 
 char* wglobaldefaultspathfordomain(const char *domain);
 

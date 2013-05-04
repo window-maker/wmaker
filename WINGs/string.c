@@ -203,7 +203,7 @@ char *wstrndup(const char *str, size_t len)
 	return copy;
 }
 
-char *wstrconcat(char *str1, char *str2)
+char *wstrconcat(const char *str1, const char *str2)
 {
 	char *str;
 	size_t slen;
@@ -226,7 +226,7 @@ char *wstrconcat(char *str1, char *str2)
 	return str;
 }
 
-char *wstrappend(char *dst, char *src)
+char *wstrappend(char *dst, const char *src)
 {
 	size_t slen;
 

@@ -80,7 +80,7 @@ char *wusergnusteppath()
 	return path;
 }
 
-char *wdefaultspathfordomain(char *domain)
+char *wdefaultspathfordomain(const char *domain)
 {
 	char *path;
 	char *gspath;

@@ -502,22 +502,22 @@ static INLINE int getNonSpaceChar(PLData * pldata)
 	return c;
 }
 
-static char *unescapestr(char *src)
+static char *unescapestr(const char *src)
 {
 	char *dest = wmalloc(strlen(src) + 1);
-	char *sPtr, *dPtr;
+	char *dPtr;
 	char ch;
 
-	for (sPtr = src, dPtr = dest; *sPtr; sPtr++, dPtr++) {
-		if (*sPtr != '\\') {
-			*dPtr = *sPtr;
+	for (dPtr = dest; *src; src++, dPtr++) {
+		if (*src != '\\') {
+			*dPtr = *src;
 		} else {
-			ch = *(++sPtr);
+			ch = *(++src);
 			if ((ch >= '0') && (ch <= '3')) {
 				/* assume next 2 chars are octal too */
 				*dPtr = ((ch & 07) << 6);
-				*dPtr |= ((*(++sPtr) & 07) << 3);
-				*dPtr |= *(++sPtr) & 07;
+				*dPtr |= ((*(++src) & 07) << 3);
+				*dPtr |= *(++src) & 07;
 			} else {
 				switch (ch) {
 				case 'a':
@@ -542,7 +542,7 @@ static char *unescapestr(char *src)
 					*dPtr = '\f';
 					break;
 				default:
-					*dPtr = *sPtr;
+					*dPtr = *src;
 				}
 			}
 		}
