@@ -193,15 +193,15 @@ void __wmessage(const char *func, const char *file, int line, int type, const ch
 
 /* ---[ WINGs/findfile.c ]------------------------------------------------ */
 
-char* wfindfile(char *paths, char *file);
+char* wfindfile(const char *paths, const char *file);
 
-char* wfindfileinlist(char **path_list, char *file);
+char* wfindfileinlist(char *const *path_list, const char *file);
 
-char* wfindfileinarray(WMPropList* array, char *file);
+char* wfindfileinarray(WMPropList* array, const char *file);
 
-char* wexpandpath(char *path);
+char* wexpandpath(const char *path);
 
-int wcopy_file(char *toPath, char *srcFile, char *destFile);
+int wcopy_file(const char *toPath, const char *srcFile, const char *destFile);
 
 /* don't free the returned string */
 char* wgethomedir(void);

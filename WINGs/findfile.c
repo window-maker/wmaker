@@ -88,9 +88,9 @@ static char *getuserhomedir(const char *username)
 	return home;
 }
 
-char *wexpandpath(char *path)
+char *wexpandpath(const char *path)
 {
-	char *origpath = path;
+	const char *origpath = path;
 	char buffer2[PATH_MAX + 2];
 	char buffer[PATH_MAX + 2];
 	int i;
@@ -200,7 +200,7 @@ error:
 }
 
 /* return address of next char != tok or end of string whichever comes first */
-static char *skipchar(char *string, char tok)
+static const char *skipchar(const char *string, char tok)
 {
 	while (*string != 0 && *string == tok)
 		string++;
@@ -209,7 +209,7 @@ static char *skipchar(char *string, char tok)
 }
 
 /* return address of next char == tok or end of string whichever comes first */
-static char *nextchar(char *string, char tok)
+static const char *nextchar(const char *string, char tok)
 {
 	while (*string != 0 && *string != tok)
 		string++;
@@ -232,10 +232,10 @@ static char *nextchar(char *string, char tok)
  *
  *----------------------------------------------------------------------
  */
-char *wfindfile(char *paths, char *file)
+char *wfindfile(const char *paths, const char *file)
 {
 	char *path;
-	char *tmp, *tmp2;
+	const char *tmp, *tmp2;
 	int len, flen;
 	char *fullpath;
 
@@ -296,7 +296,7 @@ char *wfindfile(char *paths, char *file)
 	return NULL;
 }
 
-char *wfindfileinlist(char **path_list, char *file)
+char *wfindfileinlist(char *const *path_list, const char *file)
 {
 	int i;
 	char *path;
@@ -349,7 +349,7 @@ char *wfindfileinlist(char **path_list, char *file)
 	return NULL;
 }
 
-char *wfindfileinarray(WMPropList * array, char *file)
+char *wfindfileinarray(WMPropList *array, const char *file)
 {
 	int i;
 	char *path;
@@ -409,7 +409,7 @@ char *wfindfileinarray(WMPropList * array, char *file)
 	return NULL;
 }
 
-int wcopy_file(char *dir, char *src_file, char *dest_file)
+int wcopy_file(const char *dir, const char *src_file, const char *dest_file)
 {
 	FILE *src, *dst;
 	size_t nread, nwritten;
