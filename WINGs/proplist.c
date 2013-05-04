@@ -508,16 +508,33 @@ static char *unescapestr(const char *src)
 	char *dPtr;
 	char ch;
 
-	for (dPtr = dest; *src; src++, dPtr++) {
-		if (*src != '\\') {
-			*dPtr = *src;
-		} else {
-			ch = *(++src);
-			if ((ch >= '0') && (ch <= '3')) {
-				/* assume next 2 chars are octal too */
-				*dPtr = ((ch & 07) << 6);
-				*dPtr |= ((*(++src) & 07) << 3);
-				*dPtr |= *(++src) & 07;
+	for (dPtr = dest; ; dPtr++) {
+		ch = *src++;
+		if (ch == '\0')
+			break;
+		else if (ch != '\\')
+			*dPtr = ch;
+		else {
+			ch = *(src++);
+			if (ch == '\0') {
+				*dPtr = '\\';
+				break;
+			} else if ((ch >= '0') && (ch <= '7')) {
+				char wch;
+
+				/* Convert octal number to character */
+				wch = (ch & 07);
+				ch = *src;
+				if ((ch >= '0') && (ch <= '7')) {
+					src++;
+					wch = (wch << 3) | (ch & 07);
+					ch = *src;
+					if ((ch >= '0') && (ch <= '7')) {
+						src++;
+						wch = (wch << 3) | (ch & 07);
+					}
+				}
+				*dPtr = wch;
 			} else {
 				switch (ch) {
 				case 'a':
@@ -542,7 +559,7 @@ static char *unescapestr(const char *src)
 					*dPtr = '\f';
 					break;
 				default:
-					*dPtr = *src;
+					*dPtr = ch;
 				}
 			}
 		}
