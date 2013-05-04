@@ -167,14 +167,14 @@ void wtokenfree(char **tokens, int count)
 
 char *wtrimspace(const char *s)
 {
-	char *t;
+	const char *t;
 
 	if (s == NULL)
 		return NULL;
 
 	while (isspace(*s) && *s)
 		s++;
-	t = (char *)s + strlen(s) - 1;
+	t = s + strlen(s) - 1;
 	while (t > s && isspace(*t))
 		t--;
 
