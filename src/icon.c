@@ -416,7 +416,8 @@ char *get_name_for_instance_class(char *wm_instance, char *wm_class)
 
 static char *get_icon_cache_path(void)
 {
-	char *prefix, *path;
+	const char *prefix;
+	char *path;
 	int len, ret;
 
 	prefix = wusergnusteppath();

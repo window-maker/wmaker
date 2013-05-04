@@ -83,7 +83,7 @@ const char *wusergnusteppath()
 char *wdefaultspathfordomain(const char *domain)
 {
 	char *path;
-	char *gspath;
+	const char *gspath;
 	size_t slen;
 
 	gspath = wusergnusteppath();

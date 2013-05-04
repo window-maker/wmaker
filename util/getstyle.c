@@ -185,7 +185,8 @@ void makeThemePack(WMPropList * style, char *themeName)
 	WMPropList *value;
 	int i;
 	size_t themeNameLen;
-	char *themeDir, *t;
+	char *themeDir;
+	const char *t;
 
 	if ((t = wusergnusteppath()) == NULL)
 		return;

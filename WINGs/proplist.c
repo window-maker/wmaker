@@ -1706,7 +1706,8 @@ Bool WMWritePropListToFile(WMPropList * plist, const char *path)
  */
 int wmkdirhier(const char *path)
 {
-	char *t, *thePath = NULL, buf[1024];
+	const char *t;
+	char *thePath = NULL, buf[1024];
 	size_t p, plen;
 	struct stat st;
 
@@ -1799,7 +1800,7 @@ int wrmdirhier(const char *path)
 {
 	struct stat st;
 	int error;
-	char *t;
+	const char *t;
 
 	/* Only remove directories under $GNUSTEP_USER_ROOT */
 	if ((t = wusergnusteppath()) == NULL)

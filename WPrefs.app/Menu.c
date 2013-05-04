@@ -1478,7 +1478,7 @@ static WMPropList *getDefaultMenu(_Panel * panel)
 
 static void showData(_Panel * panel)
 {
-	char *gspath;
+	const char *gspath;
 	char *menuPath;
 	WMPropList *pmenu;
 

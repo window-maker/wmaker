@@ -61,7 +61,7 @@ char *WMGetApplicationName()
 	return WMApplication.applicationName;
 }
 
-static char *checkFile(char *path, char *folder, char *ext, char *resource)
+static char *checkFile(const char *path, const char *folder, const char *ext, const char *resource)
 {
 	char *ret;
 	int extralen;
