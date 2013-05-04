@@ -46,7 +46,7 @@ extern char *WMGetApplicationName();
 #define UD_SYNC_INTERVAL	2000
 #endif
 
-char *wusergnusteppath()
+const char *wusergnusteppath()
 {
 	static char *path = NULL;
 	char *gspath;

@@ -816,7 +816,7 @@ Bool WMWritePropListToFile(WMPropList *plist, const char *path);
 /* ---[ WINGs/userdefaults.c ]-------------------------------------------- */
 
 /* don't free the returned string */
-char* wusergnusteppath(void);
+const char* wusergnusteppath(void);
 
 /* Free the returned string when you no longer need it */
 char* wdefaultspathfordomain(const char *domain);
