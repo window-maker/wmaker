@@ -815,7 +815,7 @@ static void loadConfigurations(WMScreen * scr, WMWindow * mainw)
 	WindowMakerDB = db;
 }
 
-WMPropList *GetObjectForKey(char *defaultName)
+WMPropList *GetObjectForKey(const char *defaultName)
 {
 	WMPropList *object = NULL;
 	WMPropList *key = WMCreatePLString(defaultName);
@@ -829,7 +829,7 @@ WMPropList *GetObjectForKey(char *defaultName)
 	return object;
 }
 
-void SetObjectForKey(WMPropList * object, char *defaultName)
+void SetObjectForKey(WMPropList * object, const char *defaultName)
 {
 	WMPropList *key = WMCreatePLString(defaultName);
 
@@ -837,7 +837,7 @@ void SetObjectForKey(WMPropList * object, char *defaultName)
 	WMReleasePropList(key);
 }
 
-void RemoveObjectForKey(char *defaultName)
+void RemoveObjectForKey(const char *defaultName)
 {
 	WMPropList *key = WMCreatePLString(defaultName);
 
@@ -846,7 +846,7 @@ void RemoveObjectForKey(char *defaultName)
 	WMReleasePropList(key);
 }
 
-char *GetStringForKey(char *defaultName)
+char *GetStringForKey(const char *defaultName)
 {
 	WMPropList *val;
 
@@ -861,7 +861,7 @@ char *GetStringForKey(char *defaultName)
 	return WMGetFromPLString(val);
 }
 
-WMPropList *GetArrayForKey(char *defaultName)
+WMPropList *GetArrayForKey(const char *defaultName)
 {
 	WMPropList *val;
 
@@ -876,7 +876,7 @@ WMPropList *GetArrayForKey(char *defaultName)
 	return val;
 }
 
-WMPropList *GetDictionaryForKey(char *defaultName)
+WMPropList *GetDictionaryForKey(const char *defaultName)
 {
 	WMPropList *val;
 
@@ -891,7 +891,7 @@ WMPropList *GetDictionaryForKey(char *defaultName)
 	return val;
 }
 
-int GetIntegerForKey(char *defaultName)
+int GetIntegerForKey(const char *defaultName)
 {
 	WMPropList *val;
 	char *str;
@@ -915,7 +915,7 @@ int GetIntegerForKey(char *defaultName)
 	return value;
 }
 
-Bool GetBoolForKey(char *defaultName)
+Bool GetBoolForKey(const char *defaultName)
 {
 	int value;
 	char *str;
@@ -937,7 +937,7 @@ Bool GetBoolForKey(char *defaultName)
 	return False;
 }
 
-void SetIntegerForKey(int value, char *defaultName)
+void SetIntegerForKey(int value, const char *defaultName)
 {
 	WMPropList *object;
 	char buffer[128];
@@ -949,7 +949,7 @@ void SetIntegerForKey(int value, char *defaultName)
 	WMReleasePropList(object);
 }
 
-void SetStringForKey(char *value, char *defaultName)
+void SetStringForKey(char *value, const char *defaultName)
 {
 	WMPropList *object;
 
@@ -959,7 +959,7 @@ void SetStringForKey(char *value, char *defaultName)
 	WMReleasePropList(object);
 }
 
-void SetBoolForKey(Bool value, char *defaultName)
+void SetBoolForKey(Bool value, const char *defaultName)
 {
 	static WMPropList *yes = NULL, *no = NULL;
 
@@ -971,7 +971,7 @@ void SetBoolForKey(Bool value, char *defaultName)
 	SetObjectForKey(value ? yes : no, defaultName);
 }
 
-void SetSpeedForKey(int speed, char *defaultName)
+void SetSpeedForKey(int speed, const char *defaultName)
 {
 	char *str;
 
@@ -999,7 +999,7 @@ void SetSpeedForKey(int speed, char *defaultName)
 		SetStringForKey(str, defaultName);
 }
 
-int GetSpeedForKey(char *defaultName)
+int GetSpeedForKey(const char *defaultName)
 {
 	char *str;
 	int i;

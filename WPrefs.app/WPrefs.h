@@ -87,27 +87,27 @@ WMWindow *GetWindow(Panel *panel);
 
 /* manipulate the dictionary for the WindowMaker domain */
 
-WMPropList *GetObjectForKey(char *defaultName);
+WMPropList *GetObjectForKey(const char *defaultName);
 
-void SetObjectForKey(WMPropList *object, char *defaultName);
+void SetObjectForKey(WMPropList *object, const char *defaultName);
 
-void RemoveObjectForKey(char *defaultName);
+void RemoveObjectForKey(const char *defaultName);
 
-char *GetStringForKey(char *defaultName);
+char *GetStringForKey(const char *defaultName);
 
-int GetIntegerForKey(char *defaultName);
+int GetIntegerForKey(const char *defaultName);
 
-Bool GetBoolForKey(char *defaultName);
+Bool GetBoolForKey(const char *defaultName);
 
-int GetSpeedForKey(char *defaultName);
+int GetSpeedForKey(const char *defaultName);
 
-void SetIntegerForKey(int value, char *defaultName);
+void SetIntegerForKey(int value, const char *defaultName);
 
-void SetStringForKey(char *value, char *defaultName);
+void SetStringForKey(char *value, const char *defaultName);
 
-void SetBoolForKey(Bool value, char *defaultName);
+void SetBoolForKey(Bool value, const char *defaultName);
 
-void SetSpeedForKey(int speed, char *defaultName);
+void SetSpeedForKey(int speed, const char *defaultName);
 
 
 
