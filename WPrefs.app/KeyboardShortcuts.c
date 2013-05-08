@@ -66,11 +66,11 @@ typedef struct _Panel {
  * Second is the text displayed to the user
  */
 static const struct {
+	const char *key;
 	/*
-	 * Fixme: these strings should be 'const', but 'GetStringForKey'
-	 *        and 'WMAddListItem' do not allow us to do so
+	 * Fixme: this string should be 'const', but 'WMAddListItem'
+	 *        do not allow us to do so
 	 */
-	char *key;
 	char *title;
 } keyOptions[] = {
 	{ "RootMenuKey",    N_("Open applications menu") },

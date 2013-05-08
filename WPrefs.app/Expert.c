@@ -34,7 +34,7 @@ static const struct {
 		OPTION_USERDEF
 	} class;
 
-	char *op_name; /* The identifier for the option in the config file */
+	const char *op_name;  /* The identifier for the option in the config file */
 
 } expert_options[] = {
 
