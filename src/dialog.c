@@ -199,14 +199,15 @@ static WMArray *LoadHistory(const char *filename, int max)
 
 	if (plhistory && WMIsPLArray(plhistory)) {
 		num = WMGetPropListItemCount(plhistory);
-		if (num > max)
-			num = max;
 
 		for (i = 0; i < num; ++i) {
 			plitem = WMGetFromPLArray(plhistory, i);
 			if (WMIsPLString(plitem) && WMFindInArray(history, strmatch,
-								  WMGetFromPLString(plitem)) == WANotFound)
+								  WMGetFromPLString(plitem)) == WANotFound) {
 				WMAddToArray(history, WMGetFromPLString(plitem));
+				if (--max <= 0)
+					break;
+			}
 		}
 	}
 
