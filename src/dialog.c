@@ -167,7 +167,7 @@ typedef struct _WMInputPanelWithHistory {
 	int varpos;
 } WMInputPanelWithHistory;
 
-static char *HistoryFileName(char *name)
+static char *HistoryFileName(const char *name)
 {
 	char *filename = NULL;
 
@@ -185,7 +185,7 @@ static int strmatch(const void *str1, const void *str2)
 	return !strcmp((const char *)str1, (const char *)str2);
 }
 
-static WMArray *LoadHistory(char *filename, int max)
+static WMArray *LoadHistory(const char *filename, int max)
 {
 	WMPropList *plhistory;
 	WMPropList *plitem;
@@ -195,7 +195,7 @@ static WMArray *LoadHistory(char *filename, int max)
 	history = WMCreateArrayWithDestructor(1, wfree);
 	WMAddToArray(history, wstrdup(""));
 
-	plhistory = WMReadPropListFromFile((char *)filename);
+	plhistory = WMReadPropListFromFile(filename);
 
 	if (plhistory && WMIsPLArray(plhistory)) {
 		num = WMGetPropListItemCount(plhistory);
@@ -213,7 +213,7 @@ static WMArray *LoadHistory(char *filename, int max)
 	return history;
 }
 
-static void SaveHistory(WMArray * history, char *filename)
+static void SaveHistory(WMArray * history, const char *filename)
 {
 	int i;
 	WMPropList *plhistory;
@@ -223,7 +223,7 @@ static void SaveHistory(WMArray * history, char *filename)
 	for (i = 0; i < WMGetArrayItemCount(history); ++i)
 		WMAddToPLArray(plhistory, WMCreatePLString(WMGetFromArray(history, i)));
 
-	WMWritePropListToFile(plhistory, (char *)filename);
+	WMWritePropListToFile(plhistory, filename);
 	WMReleasePropList(plhistory);
 }
 
