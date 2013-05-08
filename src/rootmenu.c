@@ -574,6 +574,9 @@ static WMenu *constructPLMenu(WScreen *screen, char *path)
 		return NULL;
 
 	menu = configureMenu(screen, pl, False);
+
+	WMReleasePropList(pl);
+
 	if (!menu)
 		return NULL;
 
@@ -1075,6 +1078,9 @@ static WMenu *readPLMenuPipe(WScreen * scr, char **file_name)
 		return NULL;
 
 	menu = configureMenu(scr, plist, False);
+
+	WMReleasePropList(plist);
+
 	if (!menu)
 		return NULL;
 
