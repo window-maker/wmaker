@@ -275,10 +275,10 @@ enum {
 #define M_PI 3.14159265358979323846
 #endif
 
-char *generateNewFilename(const char *curName);
-void convertCPColor(CPColor * color);
-RColor ulongToRColor(WMScreen * scr, unsigned long value);
-unsigned char getShift(unsigned char value);
+static char *generateNewFilename(const char *curName);
+static void convertCPColor(CPColor * color);
+static RColor ulongToRColor(WMScreen * scr, unsigned long value);
+static unsigned char getShift(unsigned char value);
 
 static void modeButtonCallback(WMWidget * w, void *data);
 static int getPickerPart(W_ColorPanel * panel, int x, int y);
@@ -3336,7 +3336,7 @@ static void hsbInit(W_ColorPanel * panel)
 
 /************************** Common utility functions ************************/
 
-char *generateNewFilename(const char *curName)
+static char *generateNewFilename(const char *curName)
 {
 	int n;
 	char c;
@@ -3361,7 +3361,7 @@ char *generateNewFilename(const char *curName)
 	return newName;
 }
 
-void convertCPColor(CPColor * color)
+static void convertCPColor(CPColor * color)
 {
 	unsigned short old_hue = 0;
 
@@ -3391,7 +3391,7 @@ void convertCPColor(CPColor * color)
 #define ABS_SHIFT(val, shift) \
     (((shift) > 0) ? (val) >> (shift) : (val) << -(shift))
 
-RColor ulongToRColor(WMScreen * scr, unsigned long value)
+static RColor ulongToRColor(WMScreen * scr, unsigned long value)
 {
 	RColor color;
 	XColor *xcolor = NULL;
@@ -3410,7 +3410,7 @@ RColor ulongToRColor(WMScreen * scr, unsigned long value)
 	return color;
 }
 
-unsigned char getShift(unsigned char value)
+static unsigned char getShift(unsigned char value)
 {
 	unsigned char i = -1;
 
