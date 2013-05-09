@@ -309,7 +309,7 @@ void WMSetButtonTextAlignment(WMButton * bPtr, WMAlignment alignment)
 	}
 }
 
-void WMSetButtonText(WMButton * bPtr, char *text)
+void WMSetButtonText(WMButton * bPtr, const char *text)
 {
 	if (bPtr->caption)
 		wfree(bPtr->caption);
@@ -325,7 +325,7 @@ void WMSetButtonText(WMButton * bPtr, char *text)
 	}
 }
 
-void WMSetButtonAltText(WMButton * bPtr, char *text)
+void WMSetButtonAltText(WMButton * bPtr, const char *text)
 {
 	if (bPtr->altCaption)
 		wfree(bPtr->altCaption);

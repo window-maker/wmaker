@@ -111,7 +111,7 @@ void WMSetLabelRelief(WMLabel * lPtr, WMReliefType relief)
 	}
 }
 
-void WMSetLabelText(WMLabel * lPtr, char *text)
+void WMSetLabelText(WMLabel * lPtr, const char *text)
 {
 	if (lPtr->caption)
 		wfree(lPtr->caption);

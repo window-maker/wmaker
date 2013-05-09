@@ -40,7 +40,7 @@ void WMSetFrameRelief(WMFrame * fPtr, WMReliefType relief)
 	}
 }
 
-void WMSetFrameTitle(WMFrame * fPtr, char *title)
+void WMSetFrameTitle(WMFrame * fPtr, const char *title)
 {
 	if (fPtr->caption)
 		wfree(fPtr->caption);

@@ -179,7 +179,7 @@ void WMSortListItemsWithComparer(WMList * lPtr, WMCompareDataProc * func)
 	paintList(lPtr);
 }
 
-WMListItem *WMInsertListItem(WMList * lPtr, int row, char *text)
+WMListItem *WMInsertListItem(WMList * lPtr, int row, const char *text)
 {
 	WMListItem *item;
 
@@ -635,12 +635,18 @@ static void handleEvents(XEvent * event, void *data)
 
 static int matchTitle(const void *item, const void *title)
 {
-	return (strcmp(((WMListItem *) item)->text, (char *)title) == 0 ? 1 : 0);
+	return (strcmp(((WMListItem *) item)->text, (const char *)title) == 0 ? 1 : 0);
 }
 
-int WMFindRowOfListItemWithTitle(WMList * lPtr, char *title)
+int WMFindRowOfListItemWithTitle(WMList * lPtr, const char *title)
 {
-	return WMFindInArray(lPtr->items, matchTitle, title);
+	/*
+	 * We explicitely discard the 'const' attribute here because the
+	 * call-back function handler must not be made with a const
+	 * attribute, but our local call-back function (above) does have
+	 * it properly set, so we're consistent
+	 */
+	return WMFindInArray(lPtr->items, matchTitle, (char *) title);
 }
 
 void WMSelectListItem(WMList * lPtr, int row)

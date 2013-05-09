@@ -951,20 +951,20 @@ void WMSetBalloonEnabled(WMScreen *scr, Bool flag);
 
 /* ---[ WINGs/wwindow.c ]------------------------------------------------- */
 
-WMWindow* WMCreateWindow(WMScreen *screen, char *name);
+WMWindow* WMCreateWindow(WMScreen *screen, const char *name);
 
-WMWindow* WMCreateWindowWithStyle(WMScreen *screen, char *name, int style);
+WMWindow* WMCreateWindowWithStyle(WMScreen *screen, const char *name, int style);
 
-WMWindow* WMCreatePanelWithStyleForWindow(WMWindow *owner, char *name,
+WMWindow* WMCreatePanelWithStyleForWindow(WMWindow *owner, const char *name,
                                           int style);
 
-WMWindow* WMCreatePanelForWindow(WMWindow *owner, char *name);
+WMWindow* WMCreatePanelForWindow(WMWindow *owner, const char *name);
 
 void WMChangePanelOwner(WMWindow *win, WMWindow *newOwner);
 
-void WMSetWindowTitle(WMWindow *wPtr, char *title);
+void WMSetWindowTitle(WMWindow *wPtr, const char *title);
 
-void WMSetWindowMiniwindowTitle(WMWindow *win, char *title);
+void WMSetWindowMiniwindowTitle(WMWindow *win, const char *title);
 
 void WMSetWindowMiniwindowImage(WMWindow *win, RImage *image);
 
@@ -1025,9 +1025,9 @@ void WMSetButtonFont(WMButton *bPtr, WMFont *font);
 
 void WMSetButtonTextAlignment(WMButton *bPtr, WMAlignment alignment);
 
-void WMSetButtonText(WMButton *bPtr, char *text);
+void WMSetButtonText(WMButton *bPtr, const char *text);
 
-void WMSetButtonAltText(WMButton *bPtr, char *text);
+void WMSetButtonAltText(WMButton *bPtr, const char *text);
 
 void WMSetButtonTextColor(WMButton *bPtr, WMColor *color);
 
@@ -1075,7 +1075,7 @@ void WMSetLabelTextAlignment(WMLabel *lPtr, WMAlignment alignment);
 
 void WMSetLabelRelief(WMLabel *lPtr, WMReliefType relief);
 
-void WMSetLabelText(WMLabel *lPtr, char *text);
+void WMSetLabelText(WMLabel *lPtr, const char *text);
 
 WMFont* WMGetLabelFont(WMLabel *lPtr);
 
@@ -1091,7 +1091,7 @@ void WMSetFrameTitlePosition(WMFrame *fPtr, WMTitlePosition position);
 
 void WMSetFrameRelief(WMFrame *fPtr, WMReliefType relief);
 
-void WMSetFrameTitle(WMFrame *fPtr, char *title);
+void WMSetFrameTitle(WMFrame *fPtr, const char *title);
 
 /* ---[ WINGs/wtextfield.c ]---------------------------------------------- */
 
@@ -1170,13 +1170,13 @@ void WMSetListAllowEmptySelection(WMList *lPtr, Bool flag);
 
 #define WMAddListItem(lPtr, text) WMInsertListItem((lPtr), -1, (text))
 
-WMListItem* WMInsertListItem(WMList *lPtr, int row, char *text);
+WMListItem* WMInsertListItem(WMList *lPtr, int row, const char *text);
 
 void WMSortListItems(WMList *lPtr);
 
 void WMSortListItemsWithComparer(WMList *lPtr, WMCompareDataProc *func);
 
-int WMFindRowOfListItemWithTitle(WMList *lPtr, char *title);
+int WMFindRowOfListItemWithTitle(WMList *lPtr, const char *title);
 
 WMListItem* WMGetListItem(WMList *lPtr, int row);
 

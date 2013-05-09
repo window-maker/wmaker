@@ -98,7 +98,7 @@ static void realizeObserver(void *self, WMNotification * not)
 	realizeWindow(self);
 }
 
-WMWindow *WMCreatePanelWithStyleForWindow(WMWindow * owner, char *name, int style)
+WMWindow *WMCreatePanelWithStyleForWindow(WMWindow * owner, const char *name, int style)
 {
 	WMWindow *win;
 
@@ -108,7 +108,7 @@ WMWindow *WMCreatePanelWithStyleForWindow(WMWindow * owner, char *name, int styl
 	return win;
 }
 
-WMWindow *WMCreatePanelForWindow(WMWindow * owner, char *name)
+WMWindow *WMCreatePanelForWindow(WMWindow * owner, const char *name)
 {
 	return WMCreatePanelWithStyleForWindow(owner, name,
 					       WMTitledWindowMask | WMClosableWindowMask | WMResizableWindowMask);
@@ -123,14 +123,14 @@ void WMChangePanelOwner(WMWindow * win, WMWindow * newOwner)
 	}
 }
 
-WMWindow *WMCreateWindow(WMScreen * screen, char *name)
+WMWindow *WMCreateWindow(WMScreen * screen, const char *name)
 {
 	return WMCreateWindowWithStyle(screen, name, WMTitledWindowMask
 				       | WMClosableWindowMask
 				       | WMMiniaturizableWindowMask | WMResizableWindowMask);
 }
 
-WMWindow *WMCreateWindowWithStyle(WMScreen * screen, char *name, int style)
+WMWindow *WMCreateWindowWithStyle(WMScreen * screen, const char *name, int style)
 {
 	_Window *win;
 
@@ -250,7 +250,7 @@ static void setMiniwindow(WMWindow *win, RImage *image)
 	wfree(data);
 }
 
-void WMSetWindowTitle(WMWindow * win, char *title)
+void WMSetWindowTitle(WMWindow * win, const char *title)
 {
 	if (win->title != NULL)
 		wfree(win->title);
@@ -598,7 +598,7 @@ void WMSetWindowMiniwindowPixmap(WMWindow * win, WMPixmap * pixmap)
 	}
 }
 
-void WMSetWindowMiniwindowTitle(WMWindow * win, char *title)
+void WMSetWindowMiniwindowTitle(WMWindow * win, const char *title)
 {
 	if ((win->miniTitle && !title) || (!win->miniTitle && title)
 	    || (title && win->miniTitle && strcoll(title, win->miniTitle) != 0)) {
