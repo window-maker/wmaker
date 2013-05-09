@@ -802,7 +802,7 @@ WMPropList* WMShallowCopyPropList(WMPropList *plist);
 /* Makes a completely separate replica of the original proplist */
 WMPropList* WMDeepCopyPropList(WMPropList *plist);
 
-WMPropList* WMCreatePropListFromDescription(char *desc);
+WMPropList* WMCreatePropListFromDescription(const char *desc);
 
 /* Free the returned string when you no longer need it */
 char* WMGetPropListDescription(WMPropList *plist, Bool indented);

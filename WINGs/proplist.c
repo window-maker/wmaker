@@ -36,7 +36,7 @@ typedef struct W_PropList {
 } W_PropList;
 
 typedef struct PLData {
-	char *ptr;
+	const char *ptr;
 	int pos;
 	const char *filename;
 	int lineNumber;
@@ -1469,7 +1469,7 @@ WMPropList *WMDeepCopyPropList(WMPropList * plist)
 	return ret;
 }
 
-WMPropList *WMCreatePropListFromDescription(char *desc)
+WMPropList *WMCreatePropListFromDescription(const char *desc)
 {
 	WMPropList *plist = NULL;
 	PLData *pldata;
@@ -1506,6 +1506,7 @@ WMPropList *WMReadPropListFromFile(const char *file)
 {
 	WMPropList *plist = NULL;
 	PLData *pldata;
+	char *read_buf;
 	FILE *f;
 	struct stat stbuf;
 	size_t length;
@@ -1525,20 +1526,22 @@ WMPropList *WMReadPropListFromFile(const char *file)
 		return NULL;
 	}
 
-	pldata = (PLData *) wmalloc(sizeof(PLData));
-	pldata->ptr = (char *)wmalloc(length + 1);
-	pldata->filename = file;
-	pldata->lineNumber = 1;
-
-	if (fread(pldata->ptr, length, 1, f) != 1) {
+	read_buf = wmalloc(length + 1);
+	if (fread(read_buf, length, 1, f) != 1) {
 		if (ferror(f)) {
 			werror(_("error reading from file '%s'"), file);
 		}
-		plist = NULL;
-		goto cleanup;
+		fclose(f);
+		wfree(read_buf);
+		return NULL;
 	}
+	read_buf[length] = '\0';
+	fclose(f);
 
-	pldata->ptr[length] = 0;
+	pldata = (PLData *) wmalloc(sizeof(PLData));
+	pldata->ptr = read_buf;
+	pldata->filename = file;
+	pldata->lineNumber = 1;
 
 	plist = getPropList(pldata);
 
@@ -1554,10 +1557,8 @@ WMPropList *WMReadPropListFromFile(const char *file)
 		plist = NULL;
 	}
 
- cleanup:
-	wfree(pldata->ptr);
+	wfree(read_buf);
 	wfree(pldata);
-	fclose(f);
 
 	return plist;
 }
@@ -1568,6 +1569,7 @@ WMPropList *WMReadPropListFromPipe(const char *command)
 	WMPropList *plist;
 	PLData *pldata;
 	char line[1024];
+	char *read_buf;
 
 	file = popen(command, "r");
 
@@ -1582,17 +1584,19 @@ WMPropList *WMReadPropListFromPipe(const char *command)
 	pldata->lineNumber = 1;
 
 	/* read from file till EOF or OOM and fill proplist buffer*/
+	read_buf = NULL;
 	while (fgets(line, sizeof(line), file) != NULL) {
-		if (pldata->ptr == NULL) {
-			pldata->ptr = wmalloc(strlen(line)+1);
-			pldata->ptr[0] = '\0';
+		if (read_buf == NULL) {
+			read_buf = wmalloc(strlen(line)+1);
+			read_buf[0] = '\0';
 		} else {
-			pldata->ptr = wrealloc(pldata->ptr,
-			    strlen(line) + strlen(pldata->ptr) + 1);
+			read_buf = wrealloc(read_buf,
+			    strlen(line) + strlen(read_buf) + 1);
 		}
 
-		pldata->ptr = strncat(pldata->ptr, line, strlen(line));
+		read_buf = strncat(read_buf, line, strlen(line));
 	}
+	pldata->ptr = read_buf;
 
 	pclose(file);
 
@@ -1610,7 +1614,7 @@ WMPropList *WMReadPropListFromPipe(const char *command)
 		plist = NULL;
 	}
 
-	wfree(pldata->ptr);
+	wfree(read_buf);
 	wfree(pldata);
 
 	return plist;
