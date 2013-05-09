@@ -67,11 +67,7 @@ typedef struct _Panel {
  */
 static const struct {
 	const char *key;
-	/*
-	 * Fixme: this string should be 'const', but 'WMAddListItem'
-	 *        do not allow us to do so
-	 */
-	char *title;
+	const char *title;
 } keyOptions[] = {
 	{ "RootMenuKey",    N_("Open applications menu") },
 	{ "WindowListKey",  N_("Open window list menu") },

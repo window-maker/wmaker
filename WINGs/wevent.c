@@ -6,7 +6,7 @@
 #include "WINGsP.h"
 
 /* table to map event types to event masks */
-static unsigned long eventMasks[] = {
+static const unsigned long eventMasks[] = {
 	0,
 	0,
 	KeyPressMask,		/* KeyPress */

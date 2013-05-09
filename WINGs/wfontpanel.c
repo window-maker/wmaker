@@ -56,7 +56,7 @@ typedef struct W_FontPanel {
 #define DEF_WIDTH	320
 #define DEF_HEIGHT	(DEF_UPPER_HEIGHT+DEF_LOWER_HEIGHT)
 
-static int scalableFontSizes[] = {
+static const int scalableFontSizes[] = {
 	8,
 	10,
 	11,

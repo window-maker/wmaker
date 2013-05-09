@@ -25,7 +25,7 @@
  * expert tab of the window with the corresponding information for effect
  */
 static const struct {
-	char *label; /* Text displayed to user */
+	const char *label;  /* Text displayed to user */
 
 	int def_state;  /* True/False: the default value, if not defined in current config */
 
