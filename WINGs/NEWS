@@ -155,6 +155,23 @@ wshellquote ADDED
 
 ----------------------------------------------------
 
+*** Thu May  9 18:24:03 CEST 2013 - Christophe
+
+Const-correctness API changes for WRaster, WUtils and WINGs
+-----------------------------------------------------------
+
+The 3 libraries have been modified to include appropriate 'const' qualifier
+to the function parameters that are treated as such. This should provide
+some hints to the compiler for better optimisation.
+This change should have no impact on the binary interface, and will not
+impact existing source code.
+
+There is one exception however:
+   WUtil: wusergnusteppath()
+This function now returns 'const char *' because its result must *not* be
+modified, so it may generate a const related warning in old code.
+
+
 *** Mon Oct 14 19:42:42 EEST 2002 - Dan
 
 Double buffering
