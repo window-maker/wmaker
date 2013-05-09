@@ -589,7 +589,7 @@ static void showError(WMScreen * scr, WMWindow * owner, const char *s, const cha
 	char *errStr;
 
 	if (file) {
-		errStr = wmalloc(strlen(file) + strlen(s));
+		errStr = wmalloc(strlen(file) + strlen(s) + 1);
 		sprintf(errStr, s, file);
 	} else {
 		errStr = wstrdup(s);
