@@ -463,7 +463,7 @@ static Bool setupPseudoColorColormap(RContext * context)
 	return allocatePseudoColor(context);
 }
 
-static char *mygetenv(char *var, int scr)
+static char *mygetenv(const char *var, int scr)
 {
 	char *p;
 	char varname[64];
