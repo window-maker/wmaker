@@ -16,7 +16,7 @@ Bool W_ApplicationInitialized(void)
 	return _WINGS_progname != NULL;
 }
 
-void WMInitializeApplication(char *applicationName, int *argc, char **argv)
+void WMInitializeApplication(const char *applicationName, int *argc, char **argv)
 {
 	int i;
 
@@ -49,7 +49,7 @@ void WMInitializeApplication(char *applicationName, int *argc, char **argv)
 	W_InitNotificationCenter();
 }
 
-void WMSetResourcePath(char *path)
+void WMSetResourcePath(const char *path)
 {
 	if (WMApplication.resourcePath)
 		wfree(WMApplication.resourcePath);
@@ -102,7 +102,7 @@ error:
 	return NULL;
 }
 
-char *WMPathForResourceOfType(char *resource, char *ext)
+char *WMPathForResourceOfType(const char *resource, const char *ext)
 {
 	char *path, *tmp, *appdir;
 	int i;

@@ -608,15 +608,15 @@ WMRect wmkrect(int x, int y, unsigned int width, unsigned int height);
 
 
 
-void WMInitializeApplication(char *applicationName, int *argc, char **argv);
+void WMInitializeApplication(const char *applicationName, int *argc, char **argv);
 
-void WMSetResourcePath(char *path);
+void WMSetResourcePath(const char *path);
 
 /* don't free the returned string */
 char* WMGetApplicationName(void);
 
 /* Try to locate resource file. ext may be NULL */
-char* WMPathForResourceOfType(char *resource, char *ext);
+char* WMPathForResourceOfType(const char *resource, const char *ext);
 
 /* ---[ WINGs/widgets.c ]------------------------------------------------- */
 
@@ -654,7 +654,7 @@ void WMSetApplicationIconPixmap(WMScreen *app, WMPixmap *icon);
 WMPixmap* WMGetApplicationIconPixmap(WMScreen *app);
 
 /* If color==NULL it will use the default color for panels: ae/aa/ae */
-WMPixmap* WMCreateApplicationIconBlendedPixmap(WMScreen *scr, RColor *color);
+WMPixmap* WMCreateApplicationIconBlendedPixmap(WMScreen *scr, const RColor *color);
 
 void WMSetApplicationIconWindow(WMScreen *scr, Window window);
 
@@ -745,7 +745,7 @@ void WMSetViewDragDestinationProcs(WMView *view, WMDragDestinationProcs *procs);
 
 Bool WMIsAntialiasingEnabled(WMScreen *scrPtr);
 
-WMFont* WMCreateFont(WMScreen *scrPtr, char *fontName);
+WMFont* WMCreateFont(WMScreen *scrPtr, const char *fontName);
 
 WMFont* WMCopyFontWithStyle(WMScreen *scrPtr, WMFont *font, WMFontStyle style);
 
@@ -770,13 +770,13 @@ WMFont* WMSystemFontOfSize(WMScreen *scrPtr, int size);
 WMFont* WMBoldSystemFontOfSize(WMScreen *scrPtr, int size);
 
 void WMDrawString(WMScreen *scr, Drawable d, WMColor *color, WMFont *font,
-                  int x, int y, char *text, int length);
+                  int x, int y, const char *text, int length);
 
 void WMDrawImageString(WMScreen *scr, Drawable d, WMColor *color,
                        WMColor *background, WMFont *font, int x, int y,
-                       char *text, int length);
+                       const char *text, int length);
 
-int WMWidthOfString(WMFont *font, char *text, int length);
+int WMWidthOfString(WMFont *font, const char *text, int length);
 
 /* ---[ WINGs/wpixmap.c ]------------------------------------------------- */
 
@@ -798,13 +798,13 @@ WMPixmap* WMCreatePixmapFromXPMData(WMScreen *scrPtr, char **data);
 
 WMSize WMGetPixmapSize(WMPixmap *pixmap);
 
-WMPixmap* WMCreatePixmapFromFile(WMScreen *scrPtr, char *fileName);
+WMPixmap* WMCreatePixmapFromFile(WMScreen *scrPtr, const char *fileName);
 
 WMPixmap* WMCreateBlendedPixmapFromRImage(WMScreen *scrPtr, RImage *image,
-                                          RColor *color);
+                                          const RColor *color);
 
-WMPixmap* WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, char *fileName,
-                                        RColor *color);
+WMPixmap* WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, const char *fileName,
+                                        const RColor *color);
 
 void WMDrawPixmap(WMPixmap *pixmap, Drawable d, int x, int y);
 
@@ -846,7 +846,7 @@ WMColor* WMCreateRGBAColor(WMScreen *scr, unsigned short red,
                            unsigned short green, unsigned short blue,
                            unsigned short alpha, Bool exact);
 
-WMColor* WMCreateNamedColor(WMScreen *scr, char *name, Bool exact);
+WMColor* WMCreateNamedColor(WMScreen *scr, const char *name, Bool exact);
 
 RColor WMGetRColorFromColor(WMColor *color);
 

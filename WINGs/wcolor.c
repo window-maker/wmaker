@@ -122,7 +122,7 @@ WMColor *WMCreateRGBAColor(WMScreen * scr, unsigned short red, unsigned short gr
 	return color;
 }
 
-WMColor *WMCreateNamedColor(WMScreen * scr, char *name, Bool exact)
+WMColor *WMCreateNamedColor(WMScreen * scr, const char *name, Bool exact)
 {
 	WMColor *color;
 	XColor xcolor;

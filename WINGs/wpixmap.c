@@ -64,7 +64,7 @@ WMPixmap *WMCreatePixmapFromXPixmaps(WMScreen * scrPtr, Pixmap pixmap, Pixmap ma
 	return pixPtr;
 }
 
-WMPixmap *WMCreatePixmapFromFile(WMScreen * scrPtr, char *fileName)
+WMPixmap *WMCreatePixmapFromFile(WMScreen * scrPtr, const char *fileName)
 {
 	WMPixmap *pixPtr;
 	RImage *image;
@@ -101,7 +101,7 @@ WMPixmap *WMCreatePixmapFromRImage(WMScreen * scrPtr, RImage * image, int thresh
 	return pixPtr;
 }
 
-WMPixmap *WMCreateBlendedPixmapFromRImage(WMScreen * scrPtr, RImage * image, RColor * color)
+WMPixmap *WMCreateBlendedPixmapFromRImage(WMScreen * scrPtr, RImage * image, const RColor * color)
 {
 	WMPixmap *pixPtr;
 	RImage *copy;
@@ -117,7 +117,7 @@ WMPixmap *WMCreateBlendedPixmapFromRImage(WMScreen * scrPtr, RImage * image, RCo
 	return pixPtr;
 }
 
-WMPixmap *WMCreateBlendedPixmapFromFile(WMScreen * scrPtr, char *fileName, RColor * color)
+WMPixmap *WMCreateBlendedPixmapFromFile(WMScreen * scrPtr, const char *fileName, const RColor * color)
 {
 	WMPixmap *pixPtr;
 	RImage *image;

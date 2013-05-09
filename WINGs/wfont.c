@@ -16,7 +16,7 @@
 
 #define DEFAULT_SIZE WINGsConfiguration.defaultFontSize
 
-static FcPattern *xlfdToFcPattern(char *xlfd)
+static FcPattern *xlfdToFcPattern(const char *xlfd)
 {
 	FcPattern *pattern;
 	char *fname, *ptr;
@@ -41,7 +41,7 @@ static FcPattern *xlfdToFcPattern(char *xlfd)
 	return pattern;
 }
 
-static char *xlfdToFcName(char *xlfd)
+static char *xlfdToFcName(const char *xlfd)
 {
 	FcPattern *pattern;
 	char *fname;
@@ -64,7 +64,7 @@ static Bool hasProperty(FcPattern * pattern, const char *property)
 	return False;
 }
 
-static Bool hasPropertyWithStringValue(FcPattern * pattern, const char *object, char *value)
+static Bool hasPropertyWithStringValue(FcPattern * pattern, const char *object, const char *value)
 {
 	FcChar8 *str;
 	int id;
@@ -83,7 +83,7 @@ static Bool hasPropertyWithStringValue(FcPattern * pattern, const char *object, 
 	return False;
 }
 
-static char *makeFontOfSize(char *font, int size, char *fallback)
+static char *makeFontOfSize(const char *font, int size, const char *fallback)
 {
 	FcPattern *pattern;
 	char *result;
@@ -91,7 +91,7 @@ static char *makeFontOfSize(char *font, int size, char *fallback)
 	if (font[0] == '-') {
 		pattern = xlfdToFcPattern(font);
 	} else {
-		pattern = FcNameParse((FcChar8 *) font);
+		pattern = FcNameParse((const FcChar8 *) font);
 	}
 
 	/*FcPatternPrint(pattern); */
@@ -104,7 +104,7 @@ static char *makeFontOfSize(char *font, int size, char *fallback)
 	}
 
 	if (fallback && !hasPropertyWithStringValue(pattern, FC_FAMILY, fallback)) {
-		FcPatternAddString(pattern, FC_FAMILY, (FcChar8 *) fallback);
+		FcPatternAddString(pattern, FC_FAMILY, (const FcChar8 *) fallback);
 	}
 
 	/*FcPatternPrint(pattern); */
@@ -115,7 +115,7 @@ static char *makeFontOfSize(char *font, int size, char *fallback)
 	return result;
 }
 
-WMFont *WMCreateFont(WMScreen * scrPtr, char *fontName)
+WMFont *WMCreateFont(WMScreen * scrPtr, const char *fontName)
 {
 	Display *display = scrPtr->display;
 	WMFont *font;
@@ -250,7 +250,7 @@ WMFont *WMBoldSystemFontOfSize(WMScreen * scrPtr, int size)
 	return font;
 }
 
-int WMWidthOfString(WMFont * font, char *text, int length)
+int WMWidthOfString(WMFont * font, const char *text, int length)
 {
 	XGlyphInfo extents;
 
@@ -261,7 +261,7 @@ int WMWidthOfString(WMFont * font, char *text, int length)
 	return extents.xOff;	/* don't ask :P */
 }
 
-void WMDrawString(WMScreen * scr, Drawable d, WMColor * color, WMFont * font, int x, int y, char *text, int length)
+void WMDrawString(WMScreen * scr, Drawable d, WMColor * color, WMFont * font, int x, int y, const char *text, int length)
 {
 	XftColor xftcolor;
 
@@ -280,7 +280,7 @@ void WMDrawString(WMScreen * scr, Drawable d, WMColor * color, WMFont * font, in
 
 void
 WMDrawImageString(WMScreen * scr, Drawable d, WMColor * color, WMColor * background,
-		  WMFont * font, int x, int y, char *text, int length)
+		  WMFont * font, int x, int y, const char *text, int length)
 {
 	XftColor textColor;
 	XftColor bgColor;
