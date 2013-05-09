@@ -43,7 +43,7 @@ static void destroyBalloon(Balloon * bPtr);
 
 static void handleEvents(XEvent * event, void *data);
 
-static void showText(Balloon * bPtr, int x, int y, int w, int h, char *text);
+static void showText(Balloon * bPtr, int x, int y, int w, int h, const char *text);
 
 struct W_Balloon *W_CreateBalloon(WMScreen * scr)
 {
@@ -80,7 +80,7 @@ void WMSetBalloonTextAlignment(WMScreen * scr, WMAlignment alignment)
 
 }
 
-void WMSetBalloonTextForView(char *text, WMView * view)
+void WMSetBalloonTextForView(const char *text, WMView * view)
 {
 	char *oldText = NULL;
 	WMScreen *scr = view->screen;
@@ -361,7 +361,7 @@ static Pixmap makePixmap(WMScreen * scr, int width, int height, int side, Pixmap
 	return pixmap;
 }
 
-static void showText(Balloon * bPtr, int x, int y, int w, int h, char *text)
+static void showText(Balloon * bPtr, int x, int y, int w, int h, const char *text)
 {
 	WMScreen *scr = bPtr->view->screen;
 	Display *dpy = WMScreenDisplay(scr);
@@ -377,7 +377,7 @@ static void showText(Balloon * bPtr, int x, int y, int w, int h, char *text)
 
 	{
 		int w;
-		char *ptr, *ptr2;
+		const char *ptr, *ptr2;
 
 		ptr2 = ptr = text;
 		width = 0;

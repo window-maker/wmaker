@@ -936,7 +936,7 @@ extern char *WMViewRealizedNotification;
 
 /* ---[ WINGs/wballoon.c ]------------------------------------------------ */
 
-void WMSetBalloonTextForView(char *text, WMView *view);
+void WMSetBalloonTextForView(const char *text, WMView *view);
 
 void WMSetBalloonTextAlignment(WMScreen *scr, WMAlignment alignment);
 
@@ -1097,14 +1097,14 @@ void WMSetFrameTitle(WMFrame *fPtr, const char *title);
 
 WMTextField* WMCreateTextField(WMWidget *parent);
 
-void WMInsertTextFieldText(WMTextField *tPtr, char *text, int position);
+void WMInsertTextFieldText(WMTextField *tPtr, const char *text, int position);
 
 void WMDeleteTextFieldRange(WMTextField *tPtr, WMRange range);
 
 /* you can free the returned string */
 char* WMGetTextFieldText(WMTextField *tPtr);
 
-void WMSetTextFieldText(WMTextField *tPtr, char *text);
+void WMSetTextFieldText(WMTextField *tPtr, const char *text);
 
 void WMSetTextFieldAlignment(WMTextField *tPtr, WMAlignment alignment);
 
@@ -1325,7 +1325,7 @@ char* WMGetMenuItemShortcut(WMMenuItem *item);
 
 unsigned WMGetMenuItemShortcutModifierMask(WMMenuItem *item);
 
-void WMSetMenuItemShortcut(WMMenuItem *item, char *shortcut);
+void WMSetMenuItemShortcut(WMMenuItem *item, const char *shortcut);
 
 void WMSetMenuItemShortcutModifierMask(WMMenuItem *item, unsigned mask);
 
@@ -1339,7 +1339,7 @@ WMAction* WMGetMenuItemAction(WMMenuItem *item);
 
 void* WMGetMenuItemData(WMMenuItem *item);
 
-void WMSetMenuItemTitle(WMMenuItem *item, char *title);
+void WMSetMenuItemTitle(WMMenuItem *item, const char *title);
 
 char* WMGetMenuItemTitle(WMMenuItem *item);
 

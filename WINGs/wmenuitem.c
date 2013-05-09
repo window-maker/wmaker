@@ -88,7 +88,7 @@ unsigned WMGetMenuItemShortcutModifierMask(WMMenuItem * item)
 	return item->shortcutModifierMask;
 }
 
-void WMSetMenuItemShortcut(WMMenuItem * item, char *shortcut)
+void WMSetMenuItemShortcut(WMMenuItem * item, const char *shortcut)
 {
 	if (item->shortcutKey)
 		wfree(item->shortcutKey);
@@ -127,7 +127,7 @@ void *WMGetMenuItemData(WMMenuItem * item)
 	return item->data;
 }
 
-void WMSetMenuItemTitle(WMMenuItem * item, char *title)
+void WMSetMenuItemTitle(WMMenuItem * item, const char *title)
 {
 	if (item->title)
 		wfree(item->title);

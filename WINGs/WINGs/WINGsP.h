@@ -519,18 +519,18 @@ void W_DrawReliefWithGC(W_Screen *scr, Drawable d, int x, int y,
 void W_CallDestroyHandlers(W_View *view);
 
 void W_PaintTextAndImage(W_View *view, int wrap, WMColor *textColor,
-                         W_Font *font, WMReliefType relief, char *text,
+                         W_Font *font, WMReliefType relief, const char *text,
                          WMAlignment alignment, W_Pixmap *image,
                          WMImagePosition position, WMColor *backColor, int ofs);
 
 void W_PaintText(W_View *view, Drawable d, WMFont *font,  int x, int y,
                  int width, WMAlignment alignment, WMColor *color,
-                 int wrap, char *text, int length);
+                 int wrap, const char *text, int length);
 
-int W_GetTextHeight(WMFont *font, char *text, int width, int wrap);
+int W_GetTextHeight(WMFont *font, const char *text, int width, int wrap);
 
 
-int W_TextWidth(WMFont *font, char *text, int length);
+int W_TextWidth(WMFont *font, const char *text, int length);
 
 
 void W_BroadcastMessage(W_View *targetParent, XEvent *event);

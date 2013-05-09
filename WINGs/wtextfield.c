@@ -122,18 +122,18 @@ static WMSelectionProcs selectionHandler = {
 #define TEXT_WIDTH2(tPtr, start, end) (WMWidthOfString((tPtr)->font, \
     &((tPtr)->text[(start)]), (end) - (start)))
 
-static INLINE int oneUTF8CharBackward(char *str, int len)
+static INLINE int oneUTF8CharBackward(const char *str, int len)
 {
-	unsigned char *ustr = (unsigned char *)str;
+	const unsigned char *ustr = (const unsigned char *)str;
 	int pos = 0;
 
 	while (len-- > 0 && ustr[--pos] >= 0x80 && ustr[pos] <= 0xbf) ;
 	return pos;
 }
 
-static INLINE int oneUTF8CharForward(char *str, int len)
+static INLINE int oneUTF8CharForward(const char *str, int len)
 {
-	unsigned char *ustr = (unsigned char *)str;
+	const unsigned char *ustr = (const unsigned char *)str;
 	int pos = 0;
 
 	while (len-- > 0 && ustr[++pos] >= 0x80 && ustr[pos] <= 0xbf) ;
@@ -141,9 +141,9 @@ static INLINE int oneUTF8CharForward(char *str, int len)
 }
 
 // find the beginning of the UTF8 char pointed by str
-static INLINE int seekUTF8CharStart(char *str, int len)
+static INLINE int seekUTF8CharStart(const char *str, int len)
 {
-	unsigned char *ustr = (unsigned char *)str;
+	const unsigned char *ustr = (const unsigned char *)str;
 	int pos = 0;
 
 	while (len-- > 0 && ustr[pos] >= 0x80 && ustr[pos] <= 0xbf)
@@ -184,7 +184,7 @@ static void normalizeRange(TextField * tPtr, WMRange * range)
 		range->count = tPtr->textLen - range->position;
 }
 
-static void memmv(char *dest, char *src, int size)
+static void memmv(char *dest, const char *src, int size)
 {
 	int i;
 
@@ -376,7 +376,7 @@ WMTextFieldDelegate *WMGetTextFieldDelegate(WMTextField * tPtr)
 	return tPtr->delegate;
 }
 
-void WMInsertTextFieldText(WMTextField * tPtr, char *text, int position)
+void WMInsertTextFieldText(WMTextField * tPtr, const char *text, int position)
 {
 	int len;
 
@@ -447,7 +447,7 @@ char *WMGetTextFieldText(WMTextField * tPtr)
 	return wstrdup(tPtr->text);
 }
 
-void WMSetTextFieldText(WMTextField * tPtr, char *text)
+void WMSetTextFieldText(WMTextField * tPtr, const char *text)
 {
 	CHECK_CLASS(tPtr, WC_TextField);
 

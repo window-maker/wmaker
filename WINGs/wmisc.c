@@ -83,7 +83,7 @@ W_DrawReliefWithGC(W_Screen * scr, Drawable d, int x, int y, unsigned int width,
 	}
 }
 
-static int findNextWord(char *text, int limit)
+static int findNextWord(const char *text, int limit)
 {
 	int pos, len;
 
@@ -95,7 +95,7 @@ static int findNextWord(char *text, int limit)
 	return pos;
 }
 
-static int fitText(char *text, WMFont * font, int width, int wrap)
+static int fitText(const char *text, WMFont * font, int width, int wrap)
 {
 	int i, w, beforecrlf, word1, word2;
 
@@ -140,9 +140,9 @@ static int fitText(char *text, WMFont * font, int width, int wrap)
 	return i;
 }
 
-int W_GetTextHeight(WMFont * font, char *text, int width, int wrap)
+int W_GetTextHeight(WMFont * font, const char *text, int width, int wrap)
 {
-	char *ptr = text;
+	const char *ptr = text;
 	int count;
 	int length = strlen(text);
 	int h;
@@ -165,9 +165,10 @@ int W_GetTextHeight(WMFont * font, char *text, int width, int wrap)
 
 void
 W_PaintText(W_View * view, Drawable d, WMFont * font, int x, int y,
-	    int width, WMAlignment alignment, WMColor * color, int wrap, char *text, int length)
+	    int width, WMAlignment alignment, WMColor * color, int wrap,
+	    const char *text, int length)
 {
-	char *ptr = text;
+	const char *ptr = text;
 	int line_width;
 	int line_x;
 	int count;
@@ -201,7 +202,7 @@ W_PaintText(W_View * view, Drawable d, WMFont * font, int x, int y,
 
 void
 W_PaintTextAndImage(W_View * view, int wrap, WMColor * textColor, W_Font * font,
-		    WMReliefType relief, char *text,
+		    WMReliefType relief, const char *text,
 		    WMAlignment alignment, W_Pixmap * image,
 		    WMImagePosition position, WMColor * backColor, int ofs)
 {
