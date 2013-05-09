@@ -1248,7 +1248,7 @@ void WMSetBrowserAllowMultipleSelection(WMBrowser *bPtr, Bool flag);
 
 void WMSetBrowserAllowEmptySelection(WMBrowser *bPtr, Bool flag);
 
-void WMSetBrowserPathSeparator(WMBrowser *bPtr, char *separator);
+void WMSetBrowserPathSeparator(WMBrowser *bPtr, const char *separator);
 
 void WMSetBrowserTitled(WMBrowser *bPtr, Bool flag);
 
@@ -1260,9 +1260,9 @@ void WMRemoveBrowserItem(WMBrowser *bPtr, int column, int row);
 
 void WMSetBrowserMaxVisibleColumns(WMBrowser *bPtr, int columns);
 
-void WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, char *title);
+void WMSetBrowserColumnTitle(WMBrowser *bPtr, int column, const char *title);
 
-WMListItem* WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, char *text, Bool isBranch);
+WMListItem* WMInsertBrowserItem(WMBrowser *bPtr, int column, int row, const char *text, Bool isBranch);
 
 void WMSortBrowserColumn(WMBrowser *bPtr, int column);
 
@@ -1806,7 +1806,7 @@ char* WMGetFilePanelFileName(WMFilePanel *panel);
 void WMFreeFilePanel(WMFilePanel *panel);
 
 int WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
-                                    char *path, char *name, char **fileTypes);
+                                    char *path, const char *name, char **fileTypes);
 
 void WMSetFilePanelAccessoryView(WMFilePanel *panel, WMView *view);
 
@@ -1826,7 +1826,7 @@ void WMFreeFontPanel(WMFontPanel *panel);
 
 void WMSetFontPanelAction(WMFontPanel *panel, WMAction2 *action, void *data);
 
-void WMSetFontPanelFont(WMFontPanel *panel, char *fontName);
+void WMSetFontPanelFont(WMFontPanel *panel, const char *fontName);
 
 WMFont* WMGetFontPanelFont(WMFontPanel *panel);
 

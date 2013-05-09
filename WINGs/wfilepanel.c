@@ -62,7 +62,7 @@ typedef struct W_FilePanel {
 #define PWIDTH		330
 #define PHEIGHT 	360
 
-static void listDirectoryOnColumn(WMFilePanel * panel, int column, char *path);
+static void listDirectoryOnColumn(WMFilePanel * panel, int column, const char *path);
 static void browserClick();
 static void browserDClick();
 
@@ -94,7 +94,7 @@ static WMBrowserDelegate browserDelegate = {
 	NULL			/* willScroll */
 };
 
-static int closestListItem(WMList * list, char *text, Bool exact)
+static int closestListItem(WMList * list, const char *text, Bool exact)
 {
 	WMListItem *item;
 	WMArray *items = WMGetListItems(list);
@@ -166,7 +166,7 @@ static void textEditedObserver(void *observerData, WMNotification * notification
 	}
 }
 
-static WMFilePanel *makeFilePanel(WMScreen * scrPtr, char *name, char *title)
+static WMFilePanel *makeFilePanel(WMScreen * scrPtr, const char *name, const char *title)
 {
 	WMFilePanel *fPtr;
 	WMFont *largeFont;
@@ -348,7 +348,7 @@ void WMFreeFilePanel(WMFilePanel * panel)
 }
 
 int
-WMRunModalFilePanelForDirectory(WMFilePanel * panel, WMWindow * owner, char *path, char *name, char **fileTypes)
+WMRunModalFilePanelForDirectory(WMFilePanel * panel, WMWindow * owner, char *path, const char *name, char **fileTypes)
 {
 	WMScreen *scr = WMWidgetScreen(panel->win);
 
@@ -454,7 +454,7 @@ WMView *WMGetFilePanelAccessoryView(WMFilePanel * panel)
 	return panel->accessoryView;
 }
 
-static char *get_name_from_path(char *path)
+static char *get_name_from_path(const char *path)
 {
 	int size;
 
@@ -475,7 +475,7 @@ static char *get_name_from_path(char *path)
 	return wstrdup(&(path[size]));
 }
 
-static int filterFileName(WMFilePanel * panel, char *file, Bool isDirectory)
+static int filterFileName(WMFilePanel * panel, const char *file, Bool isDirectory)
 {
 	return True;
 }
@@ -492,7 +492,7 @@ static int comparer(const void *a, const void *b)
 
 #undef CAST
 
-static void listDirectoryOnColumn(WMFilePanel * panel, int column, char *path)
+static void listDirectoryOnColumn(WMFilePanel * panel, int column, const char *path)
 {
 	WMBrowser *bPtr = panel->browser;
 	struct dirent *dentry;
@@ -584,7 +584,7 @@ static void browserClick(WMBrowser * bPtr, WMFilePanel * panel)
 	}
 }
 
-static void showError(WMScreen * scr, WMWindow * owner, char *s, char *file)
+static void showError(WMScreen * scr, WMWindow * owner, const char *s, const char *file)
 {
 	char *errStr;
 

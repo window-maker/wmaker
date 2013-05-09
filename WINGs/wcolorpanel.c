@@ -275,7 +275,7 @@ enum {
 #define M_PI 3.14159265358979323846
 #endif
 
-char *generateNewFilename(char *curName);
+char *generateNewFilename(const char *curName);
 void convertCPColor(CPColor * color);
 RColor ulongToRColor(WMScreen * scr, unsigned long value);
 unsigned char getShift(unsigned char value);
@@ -360,7 +360,7 @@ void WMSetColorPanelAction(WMColorPanel * panel, WMAction2 * action, void *data)
 	panel->clientData = data;
 }
 
-static WMColorPanel *makeColorPanel(WMScreen * scrPtr, char *name)
+static WMColorPanel *makeColorPanel(WMScreen * scrPtr, const char *name)
 {
 	WMColorPanel *panel;
 	RImage *image;
@@ -3336,12 +3336,12 @@ static void hsbInit(W_ColorPanel * panel)
 
 /************************** Common utility functions ************************/
 
-char *generateNewFilename(char *curName)
+char *generateNewFilename(const char *curName)
 {
 	int n;
 	char c;
 	int baseLen;
-	char *ptr;
+	const char *ptr;
 	char *newName;
 
 	assert(curName);

@@ -75,7 +75,7 @@ static void loadColumn(WMBrowser * bPtr, int column);
 
 static void removeColumn(WMBrowser * bPtr, int column);
 
-static char *createTruncatedString(WMFont * font, char *text, int *textLen, int width);
+static char *createTruncatedString(WMFont * font, const char *text, int *textLen, int width);
 
 static void willResizeBrowser(W_ViewDelegate *, WMView *, unsigned int *, unsigned int *);
 
@@ -220,7 +220,7 @@ int WMGetBrowserNumberOfColumns(WMBrowser * bPtr)
 	return bPtr->usedColumnCount;
 }
 
-void WMSetBrowserPathSeparator(WMBrowser * bPtr, char *separator)
+void WMSetBrowserPathSeparator(WMBrowser * bPtr, const char *separator)
 {
 	if (bPtr->pathSeparator)
 		wfree(bPtr->pathSeparator);
@@ -350,7 +350,7 @@ int WMGetBrowserSelectedRowInColumn(WMBrowser * bPtr, int column)
 	}
 }
 
-void WMSetBrowserColumnTitle(WMBrowser * bPtr, int column, char *title)
+void WMSetBrowserColumnTitle(WMBrowser * bPtr, int column, const char *title)
 {
 	assert(column >= 0);
 	assert(column < bPtr->usedColumnCount);
@@ -414,7 +414,7 @@ void WMSortBrowserColumnWithComparer(WMBrowser * bPtr, int column, WMCompareData
 	WMSortListItemsWithComparer(bPtr->columns[column], func);
 }
 
-WMListItem *WMInsertBrowserItem(WMBrowser * bPtr, int column, int row, char *text, Bool isBranch)
+WMListItem *WMInsertBrowserItem(WMBrowser * bPtr, int column, int row, const char *text, Bool isBranch)
 {
 	WMListItem *item;
 
@@ -1116,7 +1116,7 @@ static void destroyBrowser(WMBrowser * bPtr)
 	wfree(bPtr);
 }
 
-static char *createTruncatedString(WMFont * font, char *text, int *textLen, int width)
+static char *createTruncatedString(WMFont * font, const char *text, int *textLen, int width)
 {
 	size_t slen;
 	int dLen;

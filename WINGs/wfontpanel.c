@@ -71,9 +71,9 @@ static int scalableFontSizes[] = {
 	64
 };
 
-static void setFontPanelFontName(FontPanel * panel, char *family, char *style, double size);
+static void setFontPanelFontName(FontPanel * panel, const char *family, const char *style, double size);
 
-static int isXLFD(char *font, int *length_ret);
+static int isXLFD(const char *font, int *length_ret);
 
 static void arrangeLowerFrame(FontPanel * panel);
 
@@ -313,7 +313,7 @@ WMFont *WMGetFontPanelFont(WMFontPanel * panel)
 	return WMGetTextFieldFont(panel->sampleT);
 }
 
-void WMSetFontPanelFont(WMFontPanel * panel, char *fontName)
+void WMSetFontPanelFont(WMFontPanel * panel, const char *fontName)
 {
 	int fname_len;
 	FcPattern *pattern;
@@ -322,7 +322,7 @@ void WMSetFontPanelFont(WMFontPanel * panel, char *fontName)
 
 	if (!isXLFD(fontName, &fname_len)) {
 		/* maybe its proper fontconfig and we can parse it */
-		pattern = FcNameParse((FcChar8 *) fontName);
+		pattern = FcNameParse((const FcChar8 *) fontName);
 	} else {
 		/* maybe its proper xlfd and we can convert it to an FcPattern */
 		pattern = XftXlfdParse(fontName, False, False);
@@ -386,7 +386,7 @@ static void arrangeLowerFrame(FontPanel * panel)
 
 #define NUM_FIELDS 14
 
-static int isXLFD(char *font, int *length_ret)
+static int isXLFD(const char *font, int *length_ret)
 {
 	int c = 0;
 
@@ -444,7 +444,7 @@ static void addSizeToTypeface(Typeface * face, int size)
 	}
 }
 
-static void addTypefaceToXftFamily(Family * fam, char *style)
+static void addTypefaceToXftFamily(Family * fam, const char *style)
 {
 	Typeface *face;
 	WMArrayIterator i;
@@ -474,7 +474,7 @@ static void addTypefaceToXftFamily(Family * fam, char *style)
  * 	registries (same family but different registries)
  *
  */
-static void addFontToXftFamily(WMHashTable * families, char *name, char *style)
+static void addFontToXftFamily(WMHashTable * families, const char *name, const char *style)
 {
 	WMArrayIterator i;
 	WMArray *array;
@@ -723,7 +723,7 @@ static void sizeClick(WMWidget * w, void *data)
 	preview(panel);
 }
 
-static void setFontPanelFontName(FontPanel * panel, char *family, char *style, double size)
+static void setFontPanelFontName(FontPanel * panel, const char *family, const char *style, double size)
 {
 	int famrow;
 	int stlrow;
