@@ -1607,9 +1607,9 @@ void WMSetTextBackgroundColor(WMText *tPtr, WMColor *color);
 
 void WMSetTextBackgroundPixmap(WMText *tPtr, WMPixmap *pixmap);
 
-void WMPrependTextStream(WMText *tPtr, char *text);
+void WMPrependTextStream(WMText *tPtr, const char *text);
 
-void WMAppendTextStream(WMText *tPtr, char *text);
+void WMAppendTextStream(WMText *tPtr, const char *text);
 
 #define WMClearText(tPtr) WMAppendTextStream \
     ((tPtr), (NULL))
@@ -1640,23 +1640,24 @@ int WMGetTextSelectionUnderlined(WMText *tPtr);
 
 void WMSetTextAlignment(WMText *tPtr, WMAlignment alignment);
 
-Bool WMFindInTextStream(WMText *tPtr, char *needle, Bool direction,
+Bool WMFindInTextStream(WMText *tPtr, const char *needle, Bool direction,
                         Bool caseSensitive);
 
+/* Warning: replacement can be modified by the function */
 Bool WMReplaceTextSelection(WMText *tPtr, char *replacement);
 
 
 /* parser related stuff... use only if implementing a new parser */
 
-void* WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, char *description,
+void* WMCreateTextBlockWithObject(WMText *tPtr, WMWidget *w, const char *description,
                                   WMColor *color, unsigned short first,
                                   unsigned short extraInfo);
 
-void* WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, char *description,
+void* WMCreateTextBlockWithPixmap(WMText *tPtr, WMPixmap *p, const char *description,
                                   WMColor *color, unsigned short first,
                                   unsigned short extraInfo);
 
-void* WMCreateTextBlockWithText(WMText *tPtr, char *text, WMFont *font,
+void* WMCreateTextBlockWithText(WMText *tPtr, const char *text, WMFont *font,
                                 WMColor *color, unsigned short first,
                                 unsigned short length);
 

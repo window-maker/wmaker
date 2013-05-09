@@ -616,7 +616,7 @@ static void paintText(Text * tPtr)
 {
 	TextBlock *tb;
 	WMFont *font;
-	char *text;
+	const char *text;
 	int len, y, c, s, done = False, dir /* 1 = down */ ;
 	WMScreen *scr = tPtr->view->screen;
 	Display *dpy = tPtr->view->screen->display;
@@ -960,7 +960,7 @@ static void cursorToTextPosition(Text * tPtr, int x, int y)
 {
 	TextBlock *tb = NULL;
 	int done = False, s, pos, len, _w, _y, dir = 1;	/* 1 == "down" */
-	char *text;
+	const char *text;
 
 	if (tPtr->flags.needsLayOut)
 		layOutDocument(tPtr);
@@ -1372,7 +1372,7 @@ static int layOutLine(Text * tPtr, myLineItems * items, int nitems, int x, int y
 {
 	int i, j = 0, lw = 0, line_height = 0, max_d = 0, len, n;
 	WMFont *font;
-	char *text;
+	const char *text;
 	TextBlock *tb, *tbsame = NULL;
 
 	if (!items || nitems == 0)
@@ -1472,7 +1472,7 @@ static void layOutDocument(Text * tPtr)
 	unsigned int itemsSize = 0, nitems = 0, begin, end;
 	WMFont *font;
 	unsigned int x, y = 0, lw = 0, width = 0, bmargin;
-	char *start = NULL, *mark = NULL;
+	const char *start = NULL, *mark = NULL;
 
 	if (tPtr->flags.frozen || (!(tb = tPtr->firstTextBlock)))
 		return;
@@ -2640,9 +2640,9 @@ static void handleEvents(XEvent * event, void *data)
 	}
 }
 
-static void insertPlainText(Text * tPtr, char *text)
+static void insertPlainText(Text * tPtr, const char *text)
 {
-	char *start, *mark;
+	const char *start, *mark;
 	void *tb = NULL;
 
 	start = text;
@@ -3060,7 +3060,7 @@ WMText *WMCreateTextForDocumentType(WMWidget * parent, WMAction * parser, WMActi
 	return tPtr;
 }
 
-void WMPrependTextStream(WMText * tPtr, char *text)
+void WMPrependTextStream(WMText * tPtr, const char *text)
 {
 	CHECK_CLASS(tPtr, WC_Text);
 
@@ -3085,7 +3085,7 @@ void WMPrependTextStream(WMText * tPtr, char *text)
 	}
 }
 
-void WMAppendTextStream(WMText * tPtr, char *text)
+void WMAppendTextStream(WMText * tPtr, const char *text)
 {
 	CHECK_CLASS(tPtr, WC_Text);
 
@@ -3152,7 +3152,7 @@ void WMSetTextDelegate(WMText * tPtr, WMTextDelegate * delegate)
 }
 
 void *WMCreateTextBlockWithObject(WMText * tPtr, WMWidget * w,
-				  char *description, WMColor * color,
+				  const char *description, WMColor * color,
 				  unsigned short first, unsigned short extraInfo)
 {
 	TextBlock *tb;
@@ -3185,7 +3185,7 @@ void *WMCreateTextBlockWithObject(WMText * tPtr, WMWidget * w,
 }
 
 void *WMCreateTextBlockWithPixmap(WMText * tPtr, WMPixmap * p,
-				  char *description, WMColor * color,
+				  const char *description, WMColor * color,
 				  unsigned short first, unsigned short extraInfo)
 {
 	TextBlock *tb;
@@ -3217,7 +3217,7 @@ void *WMCreateTextBlockWithPixmap(WMText * tPtr, WMPixmap * p,
 	return tb;
 }
 
-void *WMCreateTextBlockWithText(WMText * tPtr, char *text, WMFont * font, WMColor * color,
+void *WMCreateTextBlockWithText(WMText * tPtr, const char *text, WMFont * font, WMColor * color,
 				unsigned short first, unsigned short len)
 {
 	TextBlock *tb;
@@ -3814,9 +3814,9 @@ void WMThawText(WMText * tPtr)
 }
 
 /* find first occurence of a string */
-static char *mystrstr(char *haystack, char *needle, unsigned short len, char *end, Bool caseSensitive)
+static const char *mystrstr(const char *haystack, const char *needle, unsigned short len, const char *end, Bool caseSensitive)
 {
-	char *ptr;
+	const char *ptr;
 
 	if (!haystack || !needle || !end)
 		return NULL;
@@ -3836,9 +3836,9 @@ static char *mystrstr(char *haystack, char *needle, unsigned short len, char *en
 }
 
 /* find last occurence of a string */
-static char *mystrrstr(char *haystack, char *needle, unsigned short len, char *end, Bool caseSensitive)
+static const char *mystrrstr(const char *haystack, const char *needle, unsigned short len, const char *end, Bool caseSensitive)
 {
-	char *ptr;
+	const char *ptr;
 
 	if (!haystack || !needle || !end)
 		return NULL;
@@ -3856,10 +3856,10 @@ static char *mystrrstr(char *haystack, char *needle, unsigned short len, char *e
 	return NULL;
 }
 
-Bool WMFindInTextStream(WMText * tPtr, char *needle, Bool direction, Bool caseSensitive)
+Bool WMFindInTextStream(WMText * tPtr, const char *needle, Bool direction, Bool caseSensitive)
 {
 	TextBlock *tb;
-	char *mark = NULL;
+	const char *mark = NULL;
 	unsigned short pos;
 
 #if 0

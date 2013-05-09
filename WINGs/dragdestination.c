@@ -417,7 +417,7 @@ storeDropData(WMView * destView, Atom selection, Atom target, Time timestamp, vo
 	}
 }
 
-Bool requestDropDataInSelection(WMView * destView, char *type)
+Bool requestDropDataInSelection(WMView * destView, const char *type)
 {
 	WMScreen *scr = W_VIEW_SCREEN(destView);
 
