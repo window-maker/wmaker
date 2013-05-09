@@ -1380,10 +1380,10 @@ void WMSetPopUpButtonAction(WMPopUpButton *sPtr, WMAction *action,
 
 void WMSetPopUpButtonPullsDown(WMPopUpButton *bPtr, Bool flag);
 
-WMMenuItem* WMAddPopUpButtonItem(WMPopUpButton *bPtr, char *title);
+WMMenuItem* WMAddPopUpButtonItem(WMPopUpButton *bPtr, const char *title);
 
 WMMenuItem* WMInsertPopUpButtonItem(WMPopUpButton *bPtr, int index,
-                                    char *title);
+                                    const char *title);
 
 void WMRemovePopUpButtonItem(WMPopUpButton *bPtr, int index);
 
@@ -1395,7 +1395,7 @@ void WMSetPopUpButtonSelectedItem(WMPopUpButton *bPtr, int index);
 
 int WMGetPopUpButtonSelectedItem(WMPopUpButton *bPtr);
 
-void WMSetPopUpButtonText(WMPopUpButton *bPtr, char *text);
+void WMSetPopUpButtonText(WMPopUpButton *bPtr, const char *text);
 
 /* don't free the returned data */
 char* WMGetPopUpButtonItem(WMPopUpButton *bPtr, int index);
@@ -1702,7 +1702,7 @@ void WMInsertItemInTabView(WMTabView *tPtr, int index, WMTabViewItem *item);
 void WMRemoveTabViewItem(WMTabView *tPtr, WMTabViewItem *item);
 
 WMTabViewItem* WMAddTabViewItemWithView(WMTabView *tPtr, WMView *view,
-                                        int identifier, char *label);
+                                        int identifier, const char *label);
 
 WMTabViewItem* WMTabViewItemAtPoint(WMTabView *tPtr, int x, int y);
 
@@ -1729,7 +1729,7 @@ void WMSetTabViewItemEnabled(WMTabViewItem *tPtr, Bool flag);
 
 int WMGetTabViewItemIdentifier(WMTabViewItem *item);
 
-void WMSetTabViewItemLabel(WMTabViewItem *item, char *label);
+void WMSetTabViewItemLabel(WMTabViewItem *item, const char *label);
 
 char* WMGetTabViewItemLabel(WMTabViewItem *item);
 
@@ -1758,26 +1758,26 @@ void WMSetBoxHorizontal(WMBox *box, Bool flag);
 
 /* ---[ WINGs/wpanel.c ]-------------------------------------------------- */
 
-int WMRunAlertPanel(WMScreen *app, WMWindow *owner, char *title, char *msg,
-                    char *defaultButton, char *alternateButton,
-                    char *otherButton);
+int WMRunAlertPanel(WMScreen *app, WMWindow *owner, const char *title, const char *msg,
+                    const char *defaultButton, const char *alternateButton,
+                    const char *otherButton);
 
 /* you can free the returned string */
-char* WMRunInputPanel(WMScreen *app, WMWindow *owner, char *title, char *msg,
-                      char *defaultText, char *okButton, char *cancelButton);
+char* WMRunInputPanel(WMScreen *app, WMWindow *owner, const char *title, const char *msg,
+                      const char *defaultText, const char *okButton, const char *cancelButton);
 
-WMAlertPanel* WMCreateAlertPanel(WMScreen *app, WMWindow *owner, char *title,
-                                 char *msg, char *defaultButton,
-                                 char *alternateButton, char *otherButton);
+WMAlertPanel* WMCreateAlertPanel(WMScreen *app, WMWindow *owner, const char *title,
+                                 const char *msg, const char *defaultButton,
+                                 const char *alternateButton, const char *otherButton);
 
-WMInputPanel* WMCreateInputPanel(WMScreen *app, WMWindow *owner, char *title,
-                                 char *msg, char *defaultText, char *okButton,
-                                 char *cancelButton);
+WMInputPanel* WMCreateInputPanel(WMScreen *app, WMWindow *owner, const char *title,
+                                 const char *msg, const char *defaultText, const char *okButton,
+                                 const char *cancelButton);
 
 
 WMGenericPanel* WMCreateGenericPanel(WMScreen *scrPtr, WMWindow *owner,
-                                     char *title, char *defaultButton,
-                                     char *alternateButton);
+                                     const char *title, const char *defaultButton,
+                                     const char *alternateButton);
 
 void WMDestroyAlertPanel(WMAlertPanel *panel);
 

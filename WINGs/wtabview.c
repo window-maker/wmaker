@@ -224,7 +224,7 @@ void WMSetTabViewDelegate(WMTabView * tPtr, WMTabViewDelegate * delegate)
 	tPtr->delegate = delegate;
 }
 
-WMTabViewItem *WMAddTabViewItemWithView(WMTabView * tPtr, WMView * view, int identifier, char *label)
+WMTabViewItem *WMAddTabViewItemWithView(WMTabView * tPtr, WMView * view, int identifier, const char *label)
 {
 	WMTabViewItem *item;
 
@@ -823,7 +823,7 @@ WMTabViewItem *WMCreateTabViewItemWithIdentifier(int identifier)
 	return item;
 }
 
-WMTabViewItem *WMCreateTabViewItem(int identifier, char *label)
+WMTabViewItem *WMCreateTabViewItem(int identifier, const char *label)
 {
 	WMTabViewItem *item;
 
@@ -858,7 +858,7 @@ void WMSetTabViewFont(WMTabView * tPtr, WMFont * font)
 	recalcTabWidth(tPtr);
 }
 
-void WMSetTabViewItemLabel(WMTabViewItem * item, char *label)
+void WMSetTabViewItemLabel(WMTabViewItem * item, const char *label)
 {
 	if (item->label)
 		wfree(item->label);

@@ -39,7 +39,7 @@ static void handleKeyPress(XEvent * event, void *clientData)
 
 int
 WMRunAlertPanel(WMScreen * scrPtr, WMWindow * owner,
-		char *title, char *msg, char *defaultButton, char *alternateButton, char *otherButton)
+		const char *title, const char *msg, const char *defaultButton, const char *alternateButton, const char *otherButton)
 {
 	WMAlertPanel *panel;
 	int tmp;
@@ -85,8 +85,8 @@ void WMDestroyAlertPanel(WMAlertPanel * panel)
 }
 
 WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
-				 char *title, char *msg, char *defaultButton,
-				 char *alternateButton, char *otherButton)
+				 const char *title, const char *msg, const char *defaultButton,
+				 const char *alternateButton, const char *otherButton)
 {
 	WMAlertPanel *panel;
 	int dw = 0, aw = 0, ow = 0, w;
@@ -262,8 +262,8 @@ static void handleKeyPress2(XEvent * event, void *clientData)
 	}
 }
 
-char *WMRunInputPanel(WMScreen * scrPtr, WMWindow * owner, char *title,
-		      char *msg, char *defaultText, char *okButton, char *cancelButton)
+char *WMRunInputPanel(WMScreen * scrPtr, WMWindow * owner, const char *title,
+		      const char *msg, const char *defaultText, const char *okButton, const char *cancelButton)
 {
 	WMInputPanel *panel;
 	char *tmp;
@@ -334,8 +334,8 @@ static void endedEditingObserver(void *observerData, WMNotification * notificati
 	}
 }
 
-WMInputPanel *WMCreateInputPanel(WMScreen * scrPtr, WMWindow * owner, char *title, char *msg,
-				 char *defaultText, char *okButton, char *cancelButton)
+WMInputPanel *WMCreateInputPanel(WMScreen * scrPtr, WMWindow * owner, const char *title, const char *msg,
+				 const char *defaultText, const char *okButton, const char *cancelButton)
 {
 	WMInputPanel *panel;
 	int x, dw = 0, aw = 0, w;
@@ -454,7 +454,7 @@ void WMDestroyGenericPanel(WMGenericPanel * panel)
 }
 
 WMGenericPanel *WMCreateGenericPanel(WMScreen * scrPtr, WMWindow * owner,
-				     char *title, char *defaultButton, char *alternateButton)
+				     const char *title, const char *defaultButton, const char *alternateButton)
 {
 	WMGenericPanel *panel;
 	int dw = 0, aw = 0, w;

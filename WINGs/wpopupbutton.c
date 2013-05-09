@@ -101,7 +101,7 @@ void WMSetPopUpButtonAction(WMPopUpButton * bPtr, WMAction * action, void *clien
 	bPtr->clientData = clientData;
 }
 
-WMMenuItem *WMAddPopUpButtonItem(WMPopUpButton * bPtr, char *title)
+WMMenuItem *WMAddPopUpButtonItem(WMPopUpButton * bPtr, const char *title)
 {
 	WMMenuItem *item;
 
@@ -118,7 +118,7 @@ WMMenuItem *WMAddPopUpButtonItem(WMPopUpButton * bPtr, char *title)
 	return item;
 }
 
-WMMenuItem *WMInsertPopUpButtonItem(WMPopUpButton * bPtr, int index, char *title)
+WMMenuItem *WMInsertPopUpButtonItem(WMPopUpButton * bPtr, int index, const char *title)
 {
 	WMMenuItem *item;
 
@@ -198,7 +198,7 @@ int WMGetPopUpButtonSelectedItem(WMPopUpButton * bPtr)
 		return bPtr->selectedItemIndex;
 }
 
-void WMSetPopUpButtonText(WMPopUpButton * bPtr, char *text)
+void WMSetPopUpButtonText(WMPopUpButton * bPtr, const char *text)
 {
 	if (bPtr->caption)
 		wfree(bPtr->caption);
