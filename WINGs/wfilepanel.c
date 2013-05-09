@@ -475,7 +475,7 @@ static char *get_name_from_path(const char *path)
 	return wstrdup(&(path[size]));
 }
 
-static int filterFileName(WMFilePanel * panel, const char *file, Bool isDirectory)
+static Bool filterFileName(WMFilePanel * panel, const char *file, Bool isDirectory)
 {
 	return True;
 }
