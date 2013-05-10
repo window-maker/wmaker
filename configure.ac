@@ -84,7 +84,7 @@ AC_ARG_ENABLE(debug,
         [AC_MSG_ERROR([bad value $enableval for --enable-debug])] )],
     [debug=no])
 AS_IF([test "x$debug" = "xyes"],
-    [CFLAGS="-g -O0 -DDEBUG"])
+    [CFLAGS="-g -O0" ; CPPFLAGS="$CPPFLAGS -DDEBUG"])
 
 
 AX_CFLAGS_GCC_OPTION(-Wall)
@@ -93,11 +93,11 @@ AX_CFLAGS_GCC_OPTION(-Wextra -Wno-sign-compare -Wno-unused-parameter)
 dnl Platform-specific Makefile setup
 dnl ================================
 AS_CASE(["$host"],
-    [*-*-linux*|*-*-cygwin*|*-gnu*], [WM_OSDEP="linux" ; CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600"],
-    [*-*-freebsd*|*-k*bsd-gnu*],     [WM_OSDEP="bsd"   ; CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600 -DFREEBSD"],
-    [*-*-netbsd*],                   [WM_OSDEP="bsd"   ; CFLAGS="$CFLAGS -DNETBSD"],
-    [*-*-openbsd*],                  [WM_OSDEP="bsd"   ; CFLAGS="$CFLAGS -DOPENBSD"],
-    [*-*-dragonfly*],                [WM_OSDEP="bsd"   ; CFLAGS="$CFLAGS -DDRAGONFLYBSD"],
+    [*-*-linux*|*-*-cygwin*|*-gnu*], [WM_OSDEP="linux" ; CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=600"],
+    [*-*-freebsd*|*-k*bsd-gnu*],     [WM_OSDEP="bsd"   ; CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=600 -DFREEBSD"],
+    [*-*-netbsd*],                   [WM_OSDEP="bsd"   ; CPPFLAGS="$CPPFLAGS -DNETBSD"],
+    [*-*-openbsd*],                  [WM_OSDEP="bsd"   ; CPPFLAGS="$CPPFLAGS -DOPENBSD"],
+    [*-*-dragonfly*],                [WM_OSDEP="bsd"   ; CPPFLAGS="$CPPFLAGS -DDRAGONFLYBSD"],
     [*-apple-darwin*],               [WM_OSDEP="darwin"],
     [*-*-solaris*],                  [WM_OSDEP="stub"],  dnl  solaris.c when done
     [WM_OSDEP="stub"])
