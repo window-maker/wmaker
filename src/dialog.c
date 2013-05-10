@@ -1257,7 +1257,8 @@ void wShowInfoPanel(WScreen * scr)
 		strbuf = wstrappend(strbuf, " ");
 	}
 
-	strbuf = wstrappend(strbuf, _("\nAdditional support for: WMSPEC"));
+	strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
+	strbuf = wstrappend(strbuf, "WMSPEC");
 
 #ifdef HAVE_XRANDR
 	strbuf = wstrappend(strbuf, ", XRandR ");
@@ -1279,7 +1280,7 @@ void wShowInfoPanel(WScreen * scr)
 	strbuf = wstrappend(strbuf, _("Xinerama: "));
 	{
 		char tmp[128];
-		snprintf(tmp, sizeof(tmp) - 1, "%d heads found.", scr->xine_info.count);
+		snprintf(tmp, sizeof(tmp) - 1, _("%d heads found."), scr->xine_info.count);
 		strbuf = wstrappend(strbuf, tmp);
 	}
 #endif
