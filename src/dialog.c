@@ -1258,8 +1258,17 @@ void wShowInfoPanel(WScreen * scr)
 	}
 
 	strbuf = wstrappend(strbuf, _("\nAdditional support for: WMSPEC"));
+
+#ifdef HAVE_XRANDR
+	strbuf = wstrappend(strbuf, ", XRandR ");
+	if (has_randr)
+		strbuf = wstrappend(strbuf, _("(Supported)"));
+	else
+		strbuf = wstrappend(strbuf, _("(Unsupported)"));
+#endif
+
 #ifdef MWM_HINTS
-	strbuf = wstrappend(strbuf, " and MWM");
+	strbuf = wstrappend(strbuf, ", MWM");
 #endif
 
 #ifdef XINERAMA
