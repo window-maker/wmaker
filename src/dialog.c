@@ -1244,8 +1244,22 @@ void wShowInfoPanel(WScreen * scr)
 	{
 		struct mallinfo ma = mallinfo();
 		snprintf(buffer, sizeof(buffer),
-			 _("Total memory allocated: %i kB (in use: %i kB).\n"),
-			 (ma.arena + ma.hblkhd) / 1024, (ma.uordblks + ma.hblkhd) / 1024);
+#ifdef DEBUG
+					_("Total memory allocated: %i kB (in use: %i kB, %d free chunks).\n"),
+#else
+					_("Total memory allocated: %i kB (in use: %i kB).\n"),
+#endif
+					(ma.arena + ma.hblkhd) / 1024,
+					(ma.uordblks + ma.hblkhd) / 1024
+#ifdef DEBUG
+					/*
+					 * This information is representative of the memory
+					 * fragmentation. In ideal case it should be 1, but
+					 * that is never possible
+					 */
+					, ma.ordblks
+#endif
+					);
 
 		strbuf = wstrappend(strbuf, buffer);
 	}
