@@ -1450,15 +1450,9 @@ static void buildMenuFromPL(_Panel * panel, WMPropList * pl)
 static WMPropList *getDefaultMenu(_Panel * panel)
 {
 	WMPropList *menu;
-	char *menuPath, *gspath;
-
-	gspath = wstrdup(WMAKER_RESOURCE_PATH);
-
-	menuPath = wmalloc(strlen(gspath) + 128);
-	sprintf(menuPath, "%s/plmenu", gspath);
+	static const char menuPath[] = WMAKER_RESOURCE_PATH "/plmenu";
 
 	menu = WMReadPropListFromFile(menuPath);
-
 	if (!menu) {
 		char *buffer, *msg;
 
@@ -1469,9 +1463,6 @@ static WMPropList *getDefaultMenu(_Panel * panel)
 				_("Error"), buffer, _("OK"), NULL, NULL);
 		wfree(buffer);
 	}
-
-	wfree(gspath);
-	wfree(menuPath);
 
 	return menu;
 }
