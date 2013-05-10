@@ -111,10 +111,6 @@ Directories & Files in the Source Tree
 
 * TODO: plans for the future
 
-* contrib/ has some contributed patches that are not supported by Window Maker
-  because they conflict with design philosophies of the developers or some other
-  reason.
-
 * util/ has various utility programs.
 
 * WPrefs.app/ is the configuration program. 
