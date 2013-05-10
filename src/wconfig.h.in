@@ -397,11 +397,5 @@
 #define M_(text) (text)
 #endif
 
-#if defined(__GNUC__) && !defined(__STRICT_ANSI__)
-#define INLINE inline
-#else
-#define INLINE
-#endif
-
 #endif /* WMCONFIG_H_ */
 

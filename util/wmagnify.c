@@ -5,6 +5,7 @@
  *
  * This program is in the Public Domain.
  */
+#include <config.h>
 
 #include <X11/Xproto.h>
 
@@ -64,9 +65,6 @@ unsigned int black;
 WMColor *cursorColor1;
 WMColor *cursorColor2;
 
-#ifndef __GNUC__
-#define inline
-#endif
 
 static BufferData *makeBufferData(WMWindow * win, WMLabel * label, int width, int height, int magfactor)
 {

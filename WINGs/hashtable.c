@@ -1,3 +1,4 @@
+#include <config.h>
 
 #include <sys/types.h>
 #include <string.h>
@@ -8,11 +9,6 @@
 
 #define INITIAL_CAPACITY	23
 
-#if defined(__GNUC__) && !defined(__STRICT_ANSI__)
-# define INLINE inline
-#else
-# define INLINE
-#endif
 
 typedef struct HashItem {
 	const void *key;
@@ -39,7 +35,7 @@ typedef struct W_HashTable {
 #define RELKEY(table, key) if ((table)->callbacks.releaseKey) \
     (*(table)->callbacks.releaseKey)(key)
 
-static INLINE unsigned hashString(const char *key)
+static inline unsigned hashString(const char *key)
 {
 	unsigned ret = 0;
 	unsigned ctr = 0;
@@ -52,7 +48,7 @@ static INLINE unsigned hashString(const char *key)
 	return ret;
 }
 
-static INLINE unsigned hashPtr(const void *key)
+static inline unsigned hashPtr(const void *key)
 {
 	return ((size_t) key / sizeof(char *));
 }

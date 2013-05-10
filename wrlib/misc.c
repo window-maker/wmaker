@@ -159,7 +159,7 @@ void RClearImage(RImage * image, const RColor * color)
 	}
 }
 
-static __inline__ unsigned char clip(int c)
+static inline unsigned char clip(int c)
 {
 	if (c > 255)
 		c = 255;

@@ -122,7 +122,7 @@ static WMSelectionProcs selectionHandler = {
 #define TEXT_WIDTH2(tPtr, start, end) (WMWidthOfString((tPtr)->font, \
     &((tPtr)->text[(start)]), (end) - (start)))
 
-static INLINE int oneUTF8CharBackward(const char *str, int len)
+static inline int oneUTF8CharBackward(const char *str, int len)
 {
 	const unsigned char *ustr = (const unsigned char *)str;
 	int pos = 0;
@@ -131,7 +131,7 @@ static INLINE int oneUTF8CharBackward(const char *str, int len)
 	return pos;
 }
 
-static INLINE int oneUTF8CharForward(const char *str, int len)
+static inline int oneUTF8CharForward(const char *str, int len)
 {
 	const unsigned char *ustr = (const unsigned char *)str;
 	int pos = 0;
@@ -141,7 +141,7 @@ static INLINE int oneUTF8CharForward(const char *str, int len)
 }
 
 // find the beginning of the UTF8 char pointed by str
-static INLINE int seekUTF8CharStart(const char *str, int len)
+static inline int seekUTF8CharStart(const char *str, int len)
 {
 	const unsigned char *ustr = (const unsigned char *)str;
 	int pos = 0;

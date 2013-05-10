@@ -465,7 +465,7 @@ static char *indentedDescription(WMPropList * plist, int level)
 	return retstr;
 }
 
-static INLINE int getChar(PLData * pldata)
+static inline int getChar(PLData * pldata)
 {
 	int c;
 
@@ -482,7 +482,7 @@ static INLINE int getChar(PLData * pldata)
 	return c;
 }
 
-static INLINE int getNonSpaceChar(PLData * pldata)
+static inline int getNonSpaceChar(PLData * pldata)
 {
 	int c;
 

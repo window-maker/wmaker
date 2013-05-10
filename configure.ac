@@ -230,6 +230,7 @@ dnl Checks for typedefs, structures, and compiler characteristics.
 dnl ==============================================================
 AC_DECL_SYS_SIGLIST
 AC_C_CONST
+AC_C_INLINE
 AC_TYPE_SIZE_T
 AC_TYPE_PID_T
 AC_TYPE_SIGNAL
