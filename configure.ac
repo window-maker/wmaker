@@ -92,38 +92,15 @@ AX_CFLAGS_GCC_OPTION(-Wextra -Wno-sign-compare -Wno-unused-parameter)
 
 dnl Platform-specific Makefile setup
 dnl ================================
-
-case "${host}" in
-	*-*-linux*|*-*-cygwin*|*-gnu*)
-		WM_OSDEP="linux"
-		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600"
-	;;
-	*-*-freebsd*|*-k*bsd-gnu*)
-		WM_OSDEP="bsd"
-		CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600 -DFREEBSD"
-	;;
-	*-*-netbsd*)
-		WM_OSDEP="bsd"
-		CFLAGS="$CFLAGS -DNETBSD"
-	;;
-	*-*-openbsd*)
-		WM_OSDEP="bsd"
-	        CFLAGS="$CFLAGS -DOPENBSD"
-	;;
-	*-*-dragonfly*)
-		WM_OSDEP="bsd"
-		CFLAGS="$CFLAGS -DDRAGONFLYBSD"
-	;;
-	*-apple-darwin*)
-		WM_OSDEP="darwin"
-	;;
-	*-*-solaris*)
-		WM_OSDEP="stub"		# solaris.c when done
-	;;
-	*)
-		WM_OSDEP="stub"
-	;;
-esac
+AS_CASE(["$host"],
+    [*-*-linux*|*-*-cygwin*|*-gnu*], [WM_OSDEP="linux" ; CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600"],
+    [*-*-freebsd*|*-k*bsd-gnu*],     [WM_OSDEP="bsd"   ; CFLAGS="$CFLAGS -D_XOPEN_SOURCE=600 -DFREEBSD"],
+    [*-*-netbsd*],                   [WM_OSDEP="bsd"   ; CFLAGS="$CFLAGS -DNETBSD"],
+    [*-*-openbsd*],                  [WM_OSDEP="bsd"   ; CFLAGS="$CFLAGS -DOPENBSD"],
+    [*-*-dragonfly*],                [WM_OSDEP="bsd"   ; CFLAGS="$CFLAGS -DDRAGONFLYBSD"],
+    [*-apple-darwin*],               [WM_OSDEP="darwin"],
+    [*-*-solaris*],                  [WM_OSDEP="stub"],  dnl  solaris.c when done
+    [WM_OSDEP="stub"])
 AC_SUBST(WM_OSDEP)
 
 
