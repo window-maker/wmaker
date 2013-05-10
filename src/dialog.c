@@ -1118,6 +1118,7 @@ void wShowInfoPanel(WScreen * scr)
 	WMPixmap *logo;
 	WMFont *font;
 	char *strbuf = NULL;
+	const char *separator;
 	char buffer[256];
 	char *name;
 	Window parent;
@@ -1252,9 +1253,12 @@ void wShowInfoPanel(WScreen * scr)
 
 	strbuf = wstrappend(strbuf, _("Supported image formats: "));
 	strl = RSupportedFileFormats();
+	separator = NULL;
 	for (i = 0; strl[i] != NULL; i++) {
+		if (separator != NULL)
+			strbuf = wstrappend(strbuf, separator);
 		strbuf = wstrappend(strbuf, strl[i]);
-		strbuf = wstrappend(strbuf, " ");
+		separator = ", ";
 	}
 
 	strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
