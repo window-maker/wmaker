@@ -9,7 +9,7 @@ bin_PROGRAMS = wxcopy wxpaste wdwrite wdread getstyle setstyle convertfonts \
 
 bin_SCRIPTS = wmaker.inst wm-oldmenu2new wkdemenu.pl
 
-EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new directjpeg.c wkdemenu.pl
+EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wkdemenu.pl
 
 AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" \
 	 $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \

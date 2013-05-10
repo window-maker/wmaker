@@ -81,7 +81,6 @@ Bool xineStretch = False;
 Pixmap CurrentPixmap = None;
 char *PixmapPath = NULL;
 
-extern Pixmap LoadJPEG(RContext * rc, char *file_name, int *width, int *height);
 extern char *__progname;
 
 typedef struct BackgroundTexture {
