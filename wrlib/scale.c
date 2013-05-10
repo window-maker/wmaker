@@ -187,8 +187,20 @@ static double B_spline_filter(double t)   /* box (*) box (*) box (*) box */
 
 static double sinc(double x)
 {
+	/*
+	 * The original code did this:
+	 *   if (x != 0) ...
+	 * This code is unsafe, it should be:
+	 *   if (fabs(x) > EPSILON) ...
+	 *
+	 * But the call to fabs is already done in the *ONLY* function
+	 * that call sinc: 'Lanczos3_filter'
+	 *
+	 * The goal was to avoid a Divide-by-0 error, now we also
+	 * avoid a +/-inf result too
+	 */
 	x *= PI;
-	if (x != 0)
+	if (x > 1.0E-9)
 		return (sin(x) / x);
 	return (1.0);
 }

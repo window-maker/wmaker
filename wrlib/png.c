@@ -140,7 +140,7 @@ RImage *RLoadPNG(RContext *context, const char *file)
 		sgamma = (context->attribs->rgamma + context->attribs->ggamma + context->attribs->bgamma) / 3;
 	} else if ((tmp = getenv("DISPLAY_GAMMA")) != NULL) {
 		sgamma = atof(tmp);
-		if (sgamma == 0)
+		if (sgamma < 1.0E-3)
 			sgamma = 1;
 	} else {
 		/* blah */

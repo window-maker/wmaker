@@ -43,12 +43,23 @@ RImage *RRotateImage(RImage * image, float angle)
 	int x, y;
 	int bpp = image->format == RRGBAFormat ? 4 : 3;
 
+	/*
+	 * Angle steps below this value would represent a rotation
+	 * of less than 1 pixel for a 4k wide image, so not worth
+	 * bothering the difference. That makes it a perfect
+	 * candidate for an Epsilon when trying to compare angle
+	 * to known values
+	 */
+	static const float min_usable_angle = 0.00699;
+
 	angle = ((int)angle % 360) + (angle - (int)angle);
 
-	if (angle == 0.0) {
+	if (angle < min_usable_angle) {
+		/* Rotate by 0 degree */
 		return RCloneImage(image);
 
-	} else if (angle == 90.0) {
+	} else if ((angle > 90.0 - min_usable_angle) &&
+				  (angle < 90.0 + min_usable_angle)) {
 		nwidth = image->height;
 		nheight = image->width;
 
@@ -91,7 +102,8 @@ RImage *RRotateImage(RImage * image, float angle)
 				}
 			}
 		}
-	} else if (angle == 180.0) {
+	} else if ((angle > 180.0 - min_usable_angle) &&
+				  (angle < 180.0 + min_usable_angle)) {
 
 		nwidth = image->width;
 		nheight = image->height;
@@ -129,7 +141,8 @@ RImage *RRotateImage(RImage * image, float angle)
 				nptr--;
 			}
 		}
-	} else if (angle == 270.0) {
+	} else if ((angle > 270.0 - min_usable_angle) &&
+				  (angle < 270.0 + min_usable_angle)) {
 		nwidth = image->height;
 		nheight = image->width;
 
