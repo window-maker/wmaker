@@ -20,6 +20,9 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifndef PLACEMENT_H
+#define PLACEMENT_H
+
 void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head);
 
 /* Computes the intersecting length of two line sections */
@@ -32,3 +35,5 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 
 /* Set the points x and y inside the screen */
 void get_right_position_on_screen(WScreen *scr, int *x, int *y, int size_x, int size_y);
+
+#endif  /* PLACEMENT_H */

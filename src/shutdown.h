@@ -19,6 +19,9 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifndef SHUTDOWN_H
+#define SHUTDOWN_H
+
 /* shutdown modes */
 typedef enum {
     WSExitMode,
@@ -29,3 +32,5 @@ typedef enum {
 
 void Shutdown(WShutdownMode mode);
 void RestoreDesktop(WScreen *scr);
+
+#endif  /* SHUTDOWN_H */

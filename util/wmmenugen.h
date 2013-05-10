@@ -18,6 +18,9 @@
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#ifndef WMMENUGEN_H
+#define WMMENUGEN_H
+
 #include <WINGs/WUtil.h>
 
 #include "../src/wconfig.h"
@@ -59,3 +62,4 @@ void parse_xdg(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEn
 void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry));
 Bool wmconfig_validate_file(const char *filename, const struct stat *st, int tflags, struct FTW *ftw);
 
+#endif  /* WMMENUGEN_H */
