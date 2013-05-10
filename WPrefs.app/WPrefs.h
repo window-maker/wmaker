@@ -115,6 +115,10 @@ void SetSpeedForKey(int speed, const char *defaultName);
 void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 
 
+/* ---[ xmodifier.c ] ---------------------------------------------------- */
+int ModifierFromKey(Display * dpy, char *key);
+
+
 #define FRAME_TOP	105
 #define FRAME_LEFT	-2
 #define FRAME_WIDTH	524

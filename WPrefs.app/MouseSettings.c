@@ -95,7 +95,6 @@ static char *wheelActions[2];
 
 #define DELAY(i)		((i)*75+170)
 
-int ModifierFromKey(Display * dpy, char *key);
 
 static void setMouseAccel(WMScreen * scr, float accel, int threshold)
 {
