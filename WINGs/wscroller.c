@@ -154,6 +154,15 @@ void WMSetScrollerAction(WMScroller * sPtr, WMAction * action, void *clientData)
 
 void WMSetScrollerParameters(WMScroller * sPtr, float floatValue, float knobProportion)
 {
+	/*
+	 * This value represents 1 pixel on a 4k wide screen, it makes
+	 * a good minimum; this ensure a non-null value to avoid
+	 * potential division-by-0.
+	 * Please note that there is another size check when drawing
+	 * the knob to make sure it will remain selectable.
+	 */
+	static const float min_knob_proportion = 1.0 / 4096.0;
+
 	CHECK_CLASS(sPtr, WC_Scroller);
 
 	assert(!isnan(floatValue));
@@ -165,9 +174,9 @@ void WMSetScrollerParameters(WMScroller * sPtr, float floatValue, float knobProp
 	else
 		sPtr->floatValue = floatValue;
 
-	if (knobProportion <= 0.0) {
+	if (knobProportion <= min_knob_proportion) {
 
-		sPtr->knobProportion = 0.0;
+		sPtr->knobProportion = min_knob_proportion;
 		sPtr->flags.documentFullyVisible = 0;
 
 	} else if (knobProportion >= 1.0) {
