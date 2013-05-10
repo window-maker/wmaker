@@ -89,6 +89,22 @@ AS_IF([test "x$debug" = "xyes"],
 
 AX_CFLAGS_GCC_OPTION(-Wall)
 AX_CFLAGS_GCC_OPTION(-Wextra -Wno-sign-compare -Wno-unused-parameter)
+AS_IF([test "x$debug" = "xyes"],
+    [dnl When debug is enabled, we try to activate more checks from
+     dnl the compiler. They are on independant check because the
+     dnl macro checks all the options at once, but we may have cases
+     dnl where some options are not supported and we don't want to
+     dnl loose all of them.
+     dnl
+     dnl Floating-point comparison is not a good idea
+     AX_CFLAGS_GCC_OPTION([-Wfloat-equal])
+     dnl
+     dnl Try to report misuses of '&' versus '&&' and similar
+     AX_CFLAGS_GCC_OPTION([-Wlogical-op])
+     dnl
+     dnl Use of 'sizeof()' on inappropriate pointer types
+     AX_CFLAGS_GCC_OPTION([-Wpointer-arith])
+])
 
 dnl Platform-specific Makefile setup
 dnl ================================
