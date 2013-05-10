@@ -101,7 +101,10 @@ AS_CASE(["$host"],
     [*-apple-darwin*],               [WM_OSDEP="darwin"],
     [*-*-solaris*],                  [WM_OSDEP="stub"],  dnl  solaris.c when done
     [WM_OSDEP="stub"])
-AC_SUBST(WM_OSDEP)
+AM_CONDITIONAL([WM_OSDEP_LINUX],   [test "x$WM_OSDEP" = "xlinux"])
+AM_CONDITIONAL([WM_OSDEP_BSD],     [test "x$WM_OSDEP" = "xbsd"])
+AM_CONDITIONAL([WM_OSDEP_DARWIN],  [test "x$WM_OSDEP" = "xdarwin"])
+AM_CONDITIONAL([WM_OSDEP_GENERIC], [test "x$WM_OSDEP" = "xstub"])
 
 
 dnl the prefix

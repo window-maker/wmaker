@@ -49,7 +49,6 @@ wmaker_SOURCES = 	\
 	menu.h \
 	misc.c \
 	misc.h \
-	osdep_@WM_OSDEP@.c \
 	monitor.c \
 	motif.c \
 	motif.h \
@@ -105,7 +104,18 @@ wmaker_SOURCES = 	\
 	workspace.c \
 	workspace.h
 
-EXTRA_wmaker_SOURCES = osdep_bsd.c osdep_darwin.c osdep_linux.c osdep_stub.c
+if WM_OSDEP_BSD
+wmaker_SOURCES += osdep_bsd.c
+endif
+if WM_OSDEP_DARWIN
+wmaker_SOURCES += osdep_darwin.c
+endif
+if WM_OSDEP_LINUX
+wmaker_SOURCES += osdep_linux.c
+endif
+if WM_OSDEP_GENERIC
+wmaker_SOURCES += osdep_stub.c
+endif
 
 AM_CFLAGS =
 
