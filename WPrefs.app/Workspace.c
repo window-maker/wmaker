@@ -81,7 +81,7 @@ static void showData(_Panel * panel)
 		str = "center";
 
 	idx = 1;		/* center */
-	for (i = 0; i < sizeof(WSNamePositions) / sizeof(char *); i++) {
+	for (i = 0; i < sizeof(WSNamePositions) / sizeof(WSNamePositions[0]); i++) {
 		if (strcasecmp(WSNamePositions[i], str) == 0) {
 			idx = i;
 			break;

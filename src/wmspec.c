@@ -202,7 +202,7 @@ static atomitem_t atomNames[] = {
 	{"UTF8_STRING", &utf8_string},
 };
 
-#define atomNr (sizeof(atomNames)/sizeof(atomitem_t))
+#define atomNr (sizeof(atomNames)/sizeof(atomNames[0]))
 
 #define _NET_WM_STATE_REMOVE 0
 #define _NET_WM_STATE_ADD 1

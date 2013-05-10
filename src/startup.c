@@ -482,7 +482,7 @@ void StartUp(Bool defaultScreenOnly)
 #ifdef HAVE_XRANDR
 	int dummy;
 #endif
-	Atom atom[sizeof(atomNames) / sizeof(char *)];
+	Atom atom[sizeof(atomNames) / sizeof(atomNames[0])];
 
 	/*
 	 * Ignore CapsLock in modifiers
@@ -505,12 +505,12 @@ void StartUp(Bool defaultScreenOnly)
 	/*    _XA_VERSION = XInternAtom(dpy, "VERSION", False); */
 
 #ifdef HAVE_XINTERNATOMS
-	XInternAtoms(dpy, atomNames, sizeof(atomNames) / sizeof(char *), False, atom);
+	XInternAtoms(dpy, atomNames, sizeof(atomNames) / sizeof(atomNames[0]), False, atom);
 #else
 
 	{
 		int i;
-		for (i = 0; i < sizeof(atomNames) / sizeof(char *); i++)
+		for (i = 0; i < sizeof(atomNames) / sizeof(atomNames[0]); i++)
 			atom[i] = XInternAtom(dpy, atomNames[i], False);
 	}
 #endif

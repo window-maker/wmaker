@@ -428,7 +428,7 @@ static void addSizeToTypeface(Typeface * face, int size)
 	if (size == 0) {
 		int j;
 
-		for (j = 0; j < sizeof(scalableFontSizes) / sizeof(int); j++) {
+		for (j = 0; j < sizeof(scalableFontSizes) / sizeof(scalableFontSizes[0]); j++) {
 			size = scalableFontSizes[j];
 
 			if (!WMCountInArray(face->sizes, (void *)(uintptr_t) size)) {

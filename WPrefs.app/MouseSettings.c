@@ -608,13 +608,13 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->wheelP, 135, 20);
 	WMMoveWidget(panel->wheelP, 95, 129);
 
-	for (i = 0; i < sizeof(buttonActions) / sizeof(char *); i++) {
+	for (i = 0; i < sizeof(buttonActions) / sizeof(buttonActions[0]); i++) {
 		WMAddPopUpButtonItem(panel->button1P, buttonActions[i]);
 		WMAddPopUpButtonItem(panel->button2P, buttonActions[i]);
 		WMAddPopUpButtonItem(panel->button3P, buttonActions[i]);
 	}
 
-	for (i = 0; i < sizeof(wheelActions) / sizeof(char *); i++) {
+	for (i = 0; i < sizeof(wheelActions) / sizeof(wheelActions[0]); i++) {
 		WMAddPopUpButtonItem(panel->wheelP, wheelActions[i]);
 	}
 

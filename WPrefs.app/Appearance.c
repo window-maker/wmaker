@@ -1102,7 +1102,7 @@ static void previewClick(XEvent * event, void *clientData)
 
 	switch (panel->oldTabItem) {
 	case 0:
-		for (i = 0; i < sizeof(previewPositions) / sizeof(WMRect); i++) {
+		for (i = 0; i < sizeof(previewPositions) / sizeof(previewPositions[0]); i++) {
 			if (event->xbutton.x >= previewPositions[i].pos.x
 			    && event->xbutton.y >= previewPositions[i].pos.y
 			    && event->xbutton.x < previewPositions[i].pos.x
