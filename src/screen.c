@@ -81,6 +81,11 @@ extern int wScreenCount;
 extern int wXkbSupported;
 #endif
 
+#ifdef HAVE_XRANDR
+Bool has_randr;
+int randr_event_base;
+#endif
+
 extern WDDomain *WDWindowMaker;
 
 /**** Local ****/

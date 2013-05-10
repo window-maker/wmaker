@@ -45,6 +45,10 @@ char *terminal;
 
 extern char *__progname;
 
+/* Global Variables from wmmenugen.h */
+WMTreeNode *menu;
+char *env_lang, *env_ctry, *env_enc, *env_mod;
+
 int main(int argc, char **argv)
 {
 	struct stat st;

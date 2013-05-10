@@ -46,9 +46,9 @@ typedef struct {
 
 /* the abstract menu tree
  */
-WMTreeNode *menu;
+extern WMTreeNode *menu;
 
-char *env_lang, *env_ctry, *env_enc, *env_mod;
+extern char *env_lang, *env_ctry, *env_enc, *env_mod;
 
 /* wmmenu_misc.c
  */

@@ -36,8 +36,8 @@
 #define WTB_MENU 6
 
 #ifdef HAVE_XRANDR
-Bool has_randr;
-int randr_event_base;
+extern Bool has_randr;
+extern int randr_event_base;
 #endif
 
 typedef struct {
