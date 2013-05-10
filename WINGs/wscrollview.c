@@ -503,10 +503,10 @@ static void updateScrollerProportion(ScrollView * sPtr)
 
 		prop = (float)sPtr->viewport->size.width / (float)sPtr->contentView->size.width;
 
-		if (oldP == 1.0)
-			value = 0;
-		else
+		if (oldP < 1.0)
 			value = (prop * oldV) / oldP;
+		else
+			value = 0;
 		WMSetScrollerParameters(sPtr->hScroller, value, prop);
 	}
 	if (sPtr->flags.hasVScroller) {
@@ -515,10 +515,10 @@ static void updateScrollerProportion(ScrollView * sPtr)
 
 		prop = (float)sPtr->viewport->size.height / (float)sPtr->contentView->size.height;
 
-		if (oldP == 1.0)
-			value = 0;
-		else
+		if (oldP < 1.0)
 			value = (prop * oldV) / oldP;
+		else
+			value = 0;
 		WMSetScrollerParameters(sPtr->vScroller, value, prop);
 	}
 	applyScrollerValues(sPtr);
