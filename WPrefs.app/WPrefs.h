@@ -68,6 +68,7 @@ typedef struct PanelRec {
 } PanelRec;
 
 
+/* ---[ Wprefs.c ] ------------------------------------------------------- */
 
 void AddSection(Panel *panel, char *iconFile);
 
@@ -110,7 +111,7 @@ void SetBoolForKey(Bool value, const char *defaultName);
 void SetSpeedForKey(int speed, const char *defaultName);
 
 
-
+/* ---[ main.c ] --------------------------------------------------------- */
 void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 
 
