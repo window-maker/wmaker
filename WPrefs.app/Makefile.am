@@ -36,7 +36,6 @@ WPrefs_SOURCES = \
 	WindowHandling.c \
 	Workspace.c \
 	double.c \
-	double.h \
 	editmenu.c \
 	editmenu.h \
 	xmodifier.c

@@ -28,8 +28,6 @@
 #include <unistd.h>
 #include <math.h>
 
-/* double-click tester */
-#include "double.h"
 
 #define XSET	"xset"
 

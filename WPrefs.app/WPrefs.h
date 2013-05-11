@@ -111,6 +111,12 @@ void SetBoolForKey(Bool value, const char *defaultName);
 void SetSpeedForKey(int speed, const char *defaultName);
 
 
+/* ---[ double.c ] ------------------------------------------------------- */
+typedef struct W_DoubleTest DoubleTest;
+
+DoubleTest *CreateDoubleTest(WMWidget *parent, char *text);
+
+
 /* ---[ main.c ] --------------------------------------------------------- */
 void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 

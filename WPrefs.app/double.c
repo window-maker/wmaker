@@ -5,8 +5,8 @@
  */
 
 #include <WINGs/WINGsP.h>
+#include "WPrefs.h"
 
-#include "double.h"
 
 typedef struct W_DoubleTest {
 	W_Class widgetClass;
