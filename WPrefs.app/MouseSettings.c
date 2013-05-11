@@ -171,7 +171,7 @@ static void doubleClick(WMWidget * w, void *data)
 	WMSetTextFieldText(panel->ddelaT, buffer);
 }
 
-static int getButtonAction(char *str)
+static int getButtonAction(const char *str)
 {
 	if (!str)
 		return -2;
@@ -189,7 +189,7 @@ static int getButtonAction(char *str)
 
 }
 
-static int getWheelAction(char *str)
+static int getWheelAction(const char *str)
 {
 	if (!str)
 		return -2;
@@ -641,7 +641,7 @@ static void createPanel(Panel * p)
 	showData(panel);
 }
 
-static void storeCommandInScript(char *cmd, char *line)
+static void storeCommandInScript(const char *cmd, const char *line)
 {
 	char *path;
 	FILE *f;

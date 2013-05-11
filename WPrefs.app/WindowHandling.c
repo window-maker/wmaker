@@ -137,7 +137,7 @@ static void resizeCallback(WMWidget * w, void *data)
 	}
 }
 
-static int getPlacement(char *str)
+static int getPlacement(const char *str)
 {
 	if (!str)
 		return 0;

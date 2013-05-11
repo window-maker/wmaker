@@ -374,7 +374,7 @@ static void changeSection(WMWidget * self, void *data)
 	WPrefs.currentPanel = data;
 }
 
-char *LocateImage(char *name)
+char *LocateImage(const char *name)
 {
 	char *path;
 	char *tmp = wmalloc(strlen(name) + 8);
@@ -394,7 +394,7 @@ char *LocateImage(char *name)
 	return path;
 }
 
-void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
+void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, const char *file,
 		WMPixmap **icon_normal, WMPixmap **icon_greyed)
 {
 	RImage *icon;
@@ -449,7 +449,7 @@ void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
 }
 
 
-static WMPixmap *makeTitledIcon(WMScreen * scr, WMPixmap * icon, char *title1, char *title2)
+static WMPixmap *makeTitledIcon(WMScreen * scr, WMPixmap * icon, const char *title1, const char *title2)
 {
 	return WMRetainPixmap(icon);
 
@@ -516,7 +516,7 @@ static WMPixmap *makeTitledIcon(WMScreen * scr, WMPixmap * icon, char *title1, c
 #endif
 }
 
-void SetButtonAlphaImage(WMScreen * scr, WMButton * bPtr, char *file, char *title1, char *title2)
+void SetButtonAlphaImage(WMScreen * scr, WMButton * bPtr, const char *file, const char *title1, const char *title2)
 {
 	WMPixmap *icon;
 	WMPixmap *icon2;
@@ -571,7 +571,7 @@ void SetButtonAlphaImage(WMScreen * scr, WMButton * bPtr, char *file, char *titl
 		wfree(iconPath);
 }
 
-void AddSection(Panel * panel, char *iconFile)
+void AddSection(Panel * panel, const char *iconFile)
 {
 	WMButton *bPtr;
 
@@ -949,7 +949,7 @@ void SetIntegerForKey(int value, const char *defaultName)
 	WMReleasePropList(object);
 }
 
-void SetStringForKey(char *value, const char *defaultName)
+void SetStringForKey(const char *value, const const char *defaultName)
 {
 	WMPropList *object;
 

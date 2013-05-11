@@ -54,7 +54,7 @@ typedef struct _Panel {
 
 #define ICON_FILE	"paths"
 
-static void addPathToList(WMList * list, int index, char *path)
+static void addPathToList(WMList * list, int index, const char *path)
 {
 	char *fpath = wexpandpath(path);
 	WMListItem *item;

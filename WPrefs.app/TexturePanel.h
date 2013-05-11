@@ -35,7 +35,7 @@ void ShowTexturePanel(TexturePanel *panel);
 
 void HideTexturePanel(TexturePanel *panel);
 
-void SetTexturePanelTexture(TexturePanel *panel, char *name,
+void SetTexturePanelTexture(TexturePanel *panel, const char *name,
                             WMPropList *texture);
 
 

@@ -133,7 +133,7 @@ static void changePage(WMWidget * w, void *data);
 
 static void changeColorPage(WMWidget * w, void *data);
 
-static void OpenExtractPanelFor(_Panel * panel, char *path);
+static void OpenExtractPanelFor(_Panel * panel, const char *path);
 
 static void changedTabItem(struct WMTabViewDelegate *self, WMTabView * tabView, WMTabViewItem * item);
 
@@ -374,7 +374,7 @@ static WMRect previewColorPositions[] = {
 	{{155, 130}, {64, 64}}
 };
 
-static void str2rcolor(RContext * rc, char *name, RColor * color)
+static void str2rcolor(RContext * rc, const char *name, RColor * color)
 {
 	XColor xcolor;
 
@@ -386,7 +386,7 @@ static void str2rcolor(RContext * rc, char *name, RColor * color)
 	color->blue = xcolor.blue >> 8;
 }
 
-static void dumpRImage(char *path, RImage * image)
+static void dumpRImage(const char *path, RImage * image)
 {
 	FILE *f;
 	int channels = (image->format == RRGBAFormat ? 4 : 3);
@@ -477,7 +477,7 @@ static void drawMenuBevel(RImage * img)
 	}
 }
 
-static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int height, char *path, int border)
+static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int height, const char *path, int border)
 {
 	char *type;
 	RImage *image = NULL;
@@ -867,7 +867,7 @@ static void cancelNewTexture(void *data)
 	HideTexturePanel(panel->texturePanel);
 }
 
-static char *makeFileName(char *prefix)
+static char *makeFileName(const char *prefix)
 {
 	char *fname;
 
@@ -1232,7 +1232,7 @@ static void paintListItem(WMList * lPtr, int index, Drawable d, char *text, int 
 	WMReleaseColor(black);
 }
 
-static Pixmap loadRImage(WMScreen * scr, char *path)
+static Pixmap loadRImage(WMScreen * scr, const char *path)
 {
 	FILE *f;
 	RImage *image;
@@ -1868,7 +1868,7 @@ static void createPanel(Panel * p)
 	panel->texturePanel = CreateTexturePanel(panel->parent);
 }
 
-static void setupTextureFor(WMList * list, char *key, char *defValue, char *title, int index)
+static void setupTextureFor(WMList * list, const char *key, char *defValue, const char *title, int index)
 {
 	WMListItem *item;
 	TextureListItem *titem;
@@ -2069,7 +2069,7 @@ typedef struct ExtractPanel {
 	WMButton *extrB;
 } ExtractPanel;
 
-static void OpenExtractPanelFor(_Panel * panel, char *path)
+static void OpenExtractPanelFor(_Panel * panel, const char *path)
 {
 	ExtractPanel *epanel;
 	WMColor *color;

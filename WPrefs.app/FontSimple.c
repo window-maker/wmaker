@@ -541,7 +541,7 @@ static void selectedOption(WMWidget * w, void *data)
 	updateSampleFont(panel);
 }
 
-static WMLabel *createListLabel(WMScreen * scr, WMWidget * parent, char *text)
+static WMLabel *createListLabel(WMScreen * scr, WMWidget * parent, const char *text)
 {
 	WMLabel *label;
 	WMColor *color;

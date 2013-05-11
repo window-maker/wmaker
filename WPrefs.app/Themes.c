@@ -72,7 +72,7 @@ static void finishedBarDownload(void *data)
 	panel->barPID = 0;
 }
 
-static pid_t downloadFile(WMScreen * scr, _Panel * panel, char *file)
+static pid_t downloadFile(WMScreen * scr, _Panel * panel, const char *file)
 {
 	pid_t pid;
 

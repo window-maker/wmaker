@@ -46,7 +46,7 @@ W_Class InitDoubleTest(WMScreen * scr)
 /*
  * Our widget fabrication plant.
  */
-DoubleTest *CreateDoubleTest(WMWidget * parent, char *text)
+DoubleTest *CreateDoubleTest(WMWidget * parent, const char *text)
 {
 	DoubleTest *dPtr;
 

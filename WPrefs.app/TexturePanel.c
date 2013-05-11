@@ -536,7 +536,7 @@ static void opaqChangeCallback(WMWidget * w, void *data)
 
 /****************** Image ******************/
 
-static void updateImage(TexturePanel * panel, char *path)
+static void updateImage(TexturePanel * panel, const char *path)
 {
 	WMScreen *scr = WMWidgetScreen(panel->win);
 	RImage *image;
@@ -735,7 +735,7 @@ void SetTexturePanelCancelAction(TexturePanel * panel, WMCallback * action, void
 	panel->cancelData = clientData;
 }
 
-void SetTexturePanelTexture(TexturePanel * panel, char *name, WMPropList * texture)
+void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList * texture)
 {
 	WMScreen *scr = WMWidgetScreen(panel->win);
 	char *str, *type;

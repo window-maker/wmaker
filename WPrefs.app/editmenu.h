@@ -45,7 +45,7 @@ typedef struct WEditMenuDelegate {
 
 
 
-WEditMenuItem *WCreateEditMenuItem(WMWidget *parent, char *title,
+WEditMenuItem *WCreateEditMenuItem(WMWidget *parent, const char *title,
                                    Bool isTitle);
 
 
@@ -58,20 +58,20 @@ void WSetEditMenuItemData(WEditMenuItem *item, void *data,
 
 void WSetEditMenuItemImage(WEditMenuItem *item, WMPixmap *pixmap);
 
-WEditMenu *WCreateEditMenu(WMScreen *scr, char *title);
+WEditMenu *WCreateEditMenu(WMScreen *scr, const char *title);
 
 WEditMenu *WCreateEditMenuPad(WMWidget *parent);
 
 void WSetEditMenuDelegate(WEditMenu *mPtr, WEditMenuDelegate *delegate);
 
 WEditMenuItem *WInsertMenuItemWithTitle(WEditMenu *mPtr, int index,
-                                        char *title);
+                                        const char *title);
 
-WEditMenuItem *WAddMenuItemWithTitle(WEditMenu *mPtr, char *title);
+WEditMenuItem *WAddMenuItemWithTitle(WEditMenu *mPtr, const char *title);
 
 WEditMenuItem *WGetEditMenuItem(WEditMenu *mPtr, int index);
 
-void WSetEditMenuTitle(WEditMenu *mPtr, char *title);
+void WSetEditMenuTitle(WEditMenu *mPtr, const char *title);
 
 char *WGetEditMenuTitle(WEditMenu *mPtr);
 

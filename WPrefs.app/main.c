@@ -47,7 +47,7 @@ void wAbort(Bool foo)
 	exit(1);
 }
 
-static void print_help(char *progname)
+static void print_help(const char *progname)
 {
 	printf(_("usage: %s [options]\n"), progname);
 	puts(_("options:"));

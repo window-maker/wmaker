@@ -298,7 +298,7 @@ static void changedItemPad(WMWidget * w, void *data)
 	panel->currentPad = padn;
 }
 
-static WEditMenu *putNewSubmenu(WEditMenu * menu, char *title)
+static WEditMenu *putNewSubmenu(WEditMenu * menu, const char *title)
 {
 	WEditMenu *tmp;
 	WEditMenuItem *item;
@@ -313,7 +313,7 @@ static WEditMenu *putNewSubmenu(WEditMenu * menu, char *title)
 	return tmp;
 }
 
-static ItemData *putNewItem(_Panel * panel, WEditMenu * menu, int type, char *title)
+static ItemData *putNewItem(_Panel * panel, WEditMenu * menu, int type, const char *title)
 {
 	WEditMenuItem *item;
 	ItemData *data;
@@ -1046,7 +1046,7 @@ static ItemData *parseCommand(WMPropList * item)
 	return data;
 }
 
-static void updateFrameTitle(_Panel * panel, char *title, InfoType type)
+static void updateFrameTitle(_Panel * panel, const char *title, InfoType type)
 {
 	if (type != NoInfo) {
 		char *tmp;
@@ -1095,7 +1095,7 @@ static void updateFrameTitle(_Panel * panel, char *title, InfoType type)
 	}
 }
 
-static void changeInfoType(_Panel * panel, char *title, InfoType type)
+static void changeInfoType(_Panel * panel, const char *title, InfoType type)
 {
 	WMWidget **w;
 
@@ -1510,7 +1510,7 @@ static void showData(_Panel * panel)
 	WMReleasePropList(pmenu);
 }
 
-static Bool notblank(char *s)
+static Bool notblank(const char *s)
 {
 	if (s) {
 		while (*s++) {
@@ -1521,7 +1521,7 @@ static Bool notblank(char *s)
 	return False;
 }
 
-static WMPropList *processData(char *title, ItemData * data)
+static WMPropList *processData(const char *title, ItemData * data)
 {
 	WMPropList *item;
 	char *s1;

@@ -115,7 +115,7 @@ W_Class InitEditMenuItem(WMScreen * scr)
 	return EditMenuItemClass;
 }
 
-WEditMenuItem *WCreateEditMenuItem(WMWidget * parent, char *title, Bool isTitle)
+WEditMenuItem *WCreateEditMenuItem(WMWidget * parent, const char *title, Bool isTitle)
 {
 	WEditMenuItem *iPtr;
 	WMScreen *scr = WMWidgetScreen(parent);
@@ -362,7 +362,7 @@ static void itemSelectObserver(void *self, WMNotification * notif)
 	}
 }
 
-static WEditMenu *makeEditMenu(WMScreen * scr, WMWidget * parent, char *title)
+static WEditMenu *makeEditMenu(WMScreen * scr, WMWidget * parent, const char *title)
 {
 	WEditMenu *mPtr;
 	WEditMenuItem *item;
@@ -417,7 +417,7 @@ static WEditMenu *makeEditMenu(WMScreen * scr, WMWidget * parent, char *title)
 	return mPtr;
 }
 
-WEditMenu *WCreateEditMenu(WMScreen * scr, char *title)
+WEditMenu *WCreateEditMenu(WMScreen * scr, const char *title)
 {
 	return makeEditMenu(scr, NULL, title);
 }
@@ -432,7 +432,7 @@ void WSetEditMenuDelegate(WEditMenu * mPtr, WEditMenuDelegate * delegate)
 	mPtr->delegate = delegate;
 }
 
-WEditMenuItem *WInsertMenuItemWithTitle(WEditMenu * mPtr, int index, char *title)
+WEditMenuItem *WInsertMenuItemWithTitle(WEditMenu * mPtr, int index, const char *title)
 {
 	WEditMenuItem *item;
 
@@ -463,12 +463,12 @@ WEditMenuItem *WGetEditMenuItem(WEditMenu * mPtr, int index)
 	return WMGetFromArray(mPtr->items, index + (mPtr->flags.isTitled ? 1 : 0));
 }
 
-WEditMenuItem *WAddMenuItemWithTitle(WEditMenu * mPtr, char *title)
+WEditMenuItem *WAddMenuItemWithTitle(WEditMenu * mPtr, const char *title)
 {
 	return WInsertMenuItemWithTitle(mPtr, WMGetArrayItemCount(mPtr->items), title);
 }
 
-void WSetEditMenuTitle(WEditMenu * mPtr, char *title)
+void WSetEditMenuTitle(WEditMenu * mPtr, const char *title)
 {
 	WEditMenuItem *item;
 

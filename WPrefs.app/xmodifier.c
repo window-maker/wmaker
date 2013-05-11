@@ -262,7 +262,7 @@ static void x_reset_modifier_mapping(Display * display)
 		XFreeModifiermap(x_modifier_keymap);
 }
 
-int ModifierFromKey(Display * dpy, char *key)
+int ModifierFromKey(Display * dpy, const char *key)
 {
 	static int eqw = 0;
 

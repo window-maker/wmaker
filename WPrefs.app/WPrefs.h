@@ -70,18 +70,18 @@ typedef struct PanelRec {
 
 /* ---[ Wprefs.c ] ------------------------------------------------------- */
 
-void AddSection(Panel *panel, char *iconFile);
+void AddSection(Panel *panel, const char *iconFile);
 
-char *LocateImage(char *name);
+char *LocateImage(const char *name);
 
-void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, char *file,
-                         char *title1, char *title2);
+void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, const char *file,
+                         const char *title1, const char *title2);
 
 /* Loads `file' into `icon_normal'. If `icon_greyed' is not NULL,
  * combine `icon_normal' with some grey and then optionally with image
  * `xis', and store it in `icon_greyed' (typically to produce a
  * greyed-out, red-crossed version of `icon_normal') */
-void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, char *file,
+void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, const char *file,
 		WMPixmap **icon_normal, WMPixmap **icon_greyed);
 
 WMWindow *GetWindow(Panel *panel);
@@ -104,7 +104,7 @@ int GetSpeedForKey(const char *defaultName);
 
 void SetIntegerForKey(int value, const char *defaultName);
 
-void SetStringForKey(char *value, const char *defaultName);
+void SetStringForKey(const char *value, const char *defaultName);
 
 void SetBoolForKey(Bool value, const char *defaultName);
 
@@ -114,7 +114,7 @@ void SetSpeedForKey(int speed, const char *defaultName);
 /* ---[ double.c ] ------------------------------------------------------- */
 typedef struct W_DoubleTest DoubleTest;
 
-DoubleTest *CreateDoubleTest(WMWidget *parent, char *text);
+DoubleTest *CreateDoubleTest(WMWidget *parent, const char *text);
 
 
 /* ---[ main.c ] --------------------------------------------------------- */
@@ -122,7 +122,7 @@ void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 
 
 /* ---[ xmodifier.c ] ---------------------------------------------------- */
-int ModifierFromKey(Display * dpy, char *key);
+int ModifierFromKey(Display * dpy, const char *key);
 
 
 #define FRAME_TOP	105

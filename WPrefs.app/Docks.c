@@ -74,7 +74,7 @@ static void pushAutoDelayButton(WMWidget *w, void *data)
 	}
 }
 
-static void adjustButtonSelectionBasedOnValue(_Panel *panel, int row, char *value)
+static void adjustButtonSelectionBasedOnValue(_Panel *panel, int row, const char *value)
 {
 	int j;
 
