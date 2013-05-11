@@ -31,25 +31,35 @@
 typedef void (WCallBack)(void *cdata);
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
-void DispatchEvent(XEvent *event);
-void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
-void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
-void InitializeSwitchMenu(void);
-void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard);
-void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard);
-void OpenMiniwindowMenu(WWindow *wwin, int x, int y);
-void CloseWindowMenu(WScreen *scr);
-void DestroyWindowMenu(WScreen *scr);
+
+/* ---[ cycling.c ]------------------------------------------------------- */
+
 void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only);
+
+
+/* ---[ event.c ]--------------------------------------------------------- */
+
+void DispatchEvent(XEvent *event);
+WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
+Bool IsDoubleClick(WScreen *scr, XEvent *event);
+
+
+/* ---[ main.c ]---------------------------------------------------------- */
+
+int getWVisualID(int screen);
+
+
+/* ---[ osdep_*.c ]------------------------------------------------------- */
+
+Bool GetCommandForPid(int pid, char ***argv, int *argc);
+
+
+/* ---[ startup.c ]------------------------------------------------------- */
 
 void wHackedGrabButton(unsigned int button, unsigned int modifiers,
                        Window grab_window, Bool owner_events,
                        unsigned int event_mask, int pointer_mode,
                        int keyboard_mode, Window confine_to, Cursor cursor);
-
-WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
-
-Bool IsDoubleClick(WScreen *scr, XEvent *event);
 
 #ifdef NUMLOCK_HACK
 void wHackedGrabKey(int keycode, unsigned int modifiers,
@@ -57,7 +67,20 @@ void wHackedGrabKey(int keycode, unsigned int modifiers,
                     int keyboard_mode);
 #endif
 
-Bool GetCommandForPid(int pid, char ***argv, int *argc);
 
-int getWVisualID(int screen);
+/* ---[ switchmenu.c ]---------------------------------------------------- */
+
+void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
+void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
+void InitializeSwitchMenu(void);
+
+
+/* ---[ winmenu.c ]------------------------------------------------------- */
+
+void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard);
+void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard);
+void OpenMiniwindowMenu(WWindow *wwin, int x, int y);
+void CloseWindowMenu(WScreen *scr);
+void DestroyWindowMenu(WScreen *scr);
+
 #endif
