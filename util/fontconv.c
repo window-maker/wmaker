@@ -7,6 +7,9 @@
 
 #include "../src/wconfig.h"
 
+#include "common.h"
+
+
 #define DEFAULT_FONT "sans serif:pixelsize=12"
 
 /* X Font Name Suffix field names */

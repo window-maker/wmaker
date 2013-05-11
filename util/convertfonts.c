@@ -35,6 +35,9 @@
 
 #include "../src/wconfig.h"
 
+#include "common.h"
+
+
 char *FontOptions[] = {
 	"IconTitleFont",
 	"ClipTitleFont",
@@ -50,7 +53,6 @@ char *FontOptions[] = {
 
 extern char *__progname;
 
-extern char *convertFont(char *font, Bool keepXLFD);
 
 void print_help(int print_usage, int exitval)
 {

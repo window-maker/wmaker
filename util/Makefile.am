@@ -28,17 +28,17 @@ wxpaste_LDADD = @XLFLAGS@ @XLIBS@
 
 getstyle_LDADD = $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
-getstyle_SOURCES = getstyle.c fontconv.c
+getstyle_SOURCES = getstyle.c fontconv.c common.h
 
 setstyle_LDADD = \
 	$(top_builddir)/WINGs/libWUtil.la \
 	@XLFLAGS@ @XLIBS@ $(liblist)
 
-setstyle_SOURCES = setstyle.c fontconv.c
+setstyle_SOURCES = setstyle.c fontconv.c common.h
 
 convertfonts_LDADD = $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
-convertfonts_SOURCES = convertfonts.c fontconv.c
+convertfonts_SOURCES = convertfonts.c fontconv.c common.h
 
 seticons_LDADD= $(top_builddir)/WINGs/libWUtil.la $(liblist)
 

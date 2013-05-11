@@ -40,6 +40,8 @@
 
 #include <WINGs/WUtil.h>
 
+#include "common.h"
+
 #define	RETRY( x )	do {				\
 				x;			\
 			} while (errno == EINTR);
@@ -135,7 +137,6 @@ WMPropList *PixmapPath = NULL;
 
 char *ThemePath = NULL;
 
-extern char *convertFont(char *font, Bool keepXLFD);
 
 void print_help(int print_usage, int exitval)
 {

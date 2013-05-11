@@ -38,6 +38,8 @@
 
 #include "../src/wconfig.h"
 
+#include "common.h"
+
 #define MAX_OPTIONS 128
 
 char *FontOptions[] = {
@@ -75,7 +77,6 @@ int ignoreCursors = 0;
 
 Display *dpy;
 
-extern char *convertFont(char *font, Bool keepXLFD);
 
 static Bool isCursorOption(char *option)
 {
