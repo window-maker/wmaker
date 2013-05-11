@@ -56,6 +56,7 @@
 #include "actions.h"
 #include "client.h"
 #include "main.h"
+#include "funcs.h"
 #include "dock.h"
 #include "workspace.h"
 #include "keybind.h"

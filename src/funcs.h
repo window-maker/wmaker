@@ -39,6 +39,7 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 
 /* ---[ event.c ]--------------------------------------------------------- */
 
+void EventLoop(void);
 void DispatchEvent(XEvent *event);
 WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
@@ -49,12 +50,19 @@ Bool IsDoubleClick(WScreen *scr, XEvent *event);
 int getWVisualID(int screen);
 
 
+/* ---[ monitor.c ]------------------------------------------------------- */
+
+int MonitorLoop(int argc, char **argv);
+
+
 /* ---[ osdep_*.c ]------------------------------------------------------- */
 
 Bool GetCommandForPid(int pid, char ***argv, int *argc);
 
 
 /* ---[ startup.c ]------------------------------------------------------- */
+
+void StartUp(Bool defaultScreenOnly);
 
 void wHackedGrabButton(unsigned int button, unsigned int modifiers,
                        Window grab_window, Bool owner_events,

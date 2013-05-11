@@ -38,6 +38,7 @@
 #include "window.h"
 #include "dialog.h"
 #include "main.h"
+#include "funcs.h"
 
 /****** Global Variables ******/
 extern WPreferences wPreferences;
