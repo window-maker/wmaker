@@ -7,7 +7,6 @@
 
 #include "GNUstep.h"
 
-extern struct W_Application WMApplication;
 
 void WMSetApplicationIconWindow(WMScreen * scr, Window window)
 {

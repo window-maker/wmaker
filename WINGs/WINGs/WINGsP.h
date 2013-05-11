@@ -40,7 +40,9 @@ typedef struct _WINGsConfiguration {
     unsigned mouseWheelDown;
 } _WINGsConfiguration;
 
+extern char *_WINGS_progname;
 extern _WINGsConfiguration WINGsConfiguration;
+extern struct W_Application WMApplication;
 
 
 /* ---[ drag*.c ]--------------------------------------------------------- */

@@ -28,8 +28,8 @@
 #include <unistd.h>
 
 #include <WUtil.h>
+#include <WINGsP.h>
 
-extern char *_WINGS_progname;
 
 void __wmessage(const char *func, const char *file, int line, int type, const char *msg, ...)
 {
