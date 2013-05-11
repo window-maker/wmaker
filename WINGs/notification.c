@@ -437,7 +437,7 @@ WMEnqueueCoalesceNotification(WMNotificationQueue * queue,
 	}
 }
 
-void W_FlushASAPNotificationQueue()
+void W_FlushASAPNotificationQueue(void)
 {
 	WMNotificationQueue *queue = notificationQueueList;
 
@@ -451,7 +451,7 @@ void W_FlushASAPNotificationQueue()
 	}
 }
 
-void W_FlushIdleNotificationQueue()
+void W_FlushIdleNotificationQueue(void)
 {
 	WMNotificationQueue *queue = notificationQueueList;
 

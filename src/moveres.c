@@ -535,7 +535,7 @@ static void drawFrames(WWindow * wwin, WMArray * array, int dx, int dy)
 	}
 }
 
-static void flushMotion()
+static void flushMotion(void)
 {
 	XEvent ev;
 

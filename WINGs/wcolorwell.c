@@ -126,7 +126,7 @@ static void activatedObserver(void *data, WMNotification * notification)
 	 */
 }
 
-static WMArray *getXdndTypeArray()
+static WMArray *getXdndTypeArray(void)
 {
 	WMArray *types = WMCreateArray(1);
 	WMAddToArray(types, XDND_COLOR_DATA_TYPE);

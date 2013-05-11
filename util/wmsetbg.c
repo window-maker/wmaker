@@ -96,7 +96,7 @@ typedef struct BackgroundTexture {
 	int height;
 } BackgroundTexture;
 
-void initXinerama()
+void initXinerama(void)
 {
 	xineInfo.screens = NULL;
 	xineInfo.count = 0;
@@ -1121,13 +1121,13 @@ char *getFullPixmapPath(const char *file)
 	return wstrdup(file);
 }
 
-void wAbort()
+void wAbort(void)
 {
 	wfatal("aborting");
 	exit(1);
 }
 
-void print_help()
+void print_help(void)
 {
 	printf("Usage: %s [options] [image]\n", __progname);
 	puts("Sets the workspace background to the specified image or a texture and");

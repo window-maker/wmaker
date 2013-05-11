@@ -102,7 +102,7 @@ static void loadConfigurations(WMScreen * scr, WMWindow * mainw);
 
 static void savePanelData(Panel * panel);
 
-static void prepareForClose();
+static void prepareForClose(void);
 
 void quit(WMWidget * w, void *data)
 {
@@ -188,7 +188,7 @@ static void undoAll(WMWidget * w, void *data)
 	}
 }
 
-static void prepareForClose()
+static void prepareForClose(void)
 {
 	int i;
 

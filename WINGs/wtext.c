@@ -2911,14 +2911,14 @@ WMArray *getStreamObjects(WMText * tPtr, int sel)
 
 #define XDND_TEXT_DATA_TYPE "text/plain"
 #define XDND_COLOR_DATA_TYPE "application/X-color"
-static WMArray *getXdndSourceTypeArray()
+static WMArray *getXdndSourceTypeArray(void)
 {
 	WMArray *types = WMCreateArray(1);
 	WMAddToArray(types, XDND_TEXT_DATA_TYPE);
 	return types;
 }
 
-static WMArray *getXdndDestinationTypeArray()
+static WMArray *getXdndDestinationTypeArray(void)
 {
 	WMArray *types = WMCreateArray(1);
 	WMAddToArray(types, XDND_COLOR_DATA_TYPE);

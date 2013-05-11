@@ -753,7 +753,7 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.cycle_ignore_minimized, getBool, NULL, NULL, NULL}
 };
 
-static void initDefaults()
+static void initDefaults(void)
 {
 	unsigned int i;
 	WDefaultEntry *entry;

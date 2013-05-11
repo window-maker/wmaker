@@ -122,6 +122,6 @@ typedef struct WShortKey {
     KeyCode keycode;
 } WShortKey;
 
-void wKeyboardInitialize();
+void wKeyboardInitialize(void);
 
 #endif /* WMKEYBIND_H */

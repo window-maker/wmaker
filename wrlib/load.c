@@ -97,7 +97,7 @@ char **RSupportedFileFormats(void)
 	return tmp;
 }
 
-static void init_cache()
+static void init_cache(void)
 {
 	char *tmp;
 

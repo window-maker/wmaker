@@ -30,7 +30,7 @@ void wHideInspectorForWindow(WWindow *wwin);
 
 void wUnhideInspectorForWindow(WWindow *wwin);
 
-void wDestroyInspectorPanels();
+void wDestroyInspectorPanels(void);
 
 WWindow *wGetWindowOfInspectorForWindow(WWindow *wwin);
 
