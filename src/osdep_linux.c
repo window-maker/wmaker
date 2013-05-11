@@ -12,6 +12,8 @@
 #include <WINGs/WUtil.h>
 
 #include "wconfig.h"
+#include "funcs.h"
+
 
 #define	RETRY( x )	do {				\
 				x;			\

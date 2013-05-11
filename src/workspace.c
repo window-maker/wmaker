@@ -61,7 +61,6 @@
 extern int ignore_wks_change;
 extern WPreferences wPreferences;
 extern XContext wVEdgeContext;
-extern void ProcessPendingEvents();
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 static WMPropList *dWorkspaces = NULL;

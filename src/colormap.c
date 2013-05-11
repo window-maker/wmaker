@@ -27,9 +27,12 @@
 
 #include "WindowMaker.h"
 #include <X11/Xatom.h>
-#include "window.h"
 
+#include "window.h"
 #include "framewin.h"
+#include "colormap.h"
+
+
 void wColormapInstallForWindow(WScreen * scr, WWindow * wwin)
 {
 	int i;

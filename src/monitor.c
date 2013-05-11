@@ -43,7 +43,7 @@
 /****** Global Variables ******/
 extern WPreferences wPreferences;
 
-int showCrashDialog(int sig)
+static int showCrashDialog(int sig)
 {
 	int crashAction;
 

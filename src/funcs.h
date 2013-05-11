@@ -41,6 +41,7 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 
 void EventLoop(void);
 void DispatchEvent(XEvent *event);
+void ProcessPendingEvents(void);
 WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
 

@@ -1,6 +1,9 @@
 
 #include <WINGs/WINGsP.h>
 
+#include "geomview.h"
+
+
 typedef struct W_GeometryView {
 	W_Class widgetClass;
 	WMView *view;

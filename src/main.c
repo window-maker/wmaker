@@ -52,6 +52,7 @@
 #include "session.h"
 #include "shutdown.h"
 #include "dialog.h"
+#include "main.h"
 
 #include <WINGs/WUtil.h>
 

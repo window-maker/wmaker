@@ -37,6 +37,7 @@
 #include "funcs.h"
 #include "actions.h"
 #include "workspace.h"
+#include "placement.h"
 
 #include "geomview.h"
 #include "screen.h"

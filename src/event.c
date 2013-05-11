@@ -327,7 +327,6 @@ void DispatchEvent(XEvent * event)
 #define BUFF_SIZE ((sizeof(struct inotify_event) + 64)*5)
 static void handle_inotify_events(int fd, int wd)
 {
-	extern void wDefaultsCheckDomains(void *);
 	ssize_t eventQLength, i = 0;
 	char buff[BUFF_SIZE] = { 0 };
 	/* Check config only once per read of the event queue */

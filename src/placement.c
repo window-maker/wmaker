@@ -38,6 +38,7 @@
 #include "application.h"
 #include "dock.h"
 #include "xinerama.h"
+#include "placement.h"
 
 extern WPreferences wPreferences;
 
@@ -46,10 +47,6 @@ extern WPreferences wPreferences;
 
 #define Y_ORIGIN WMAX(usableArea.y1,\
     wPreferences.window_place_origin.y)
-
-/* interactive window placement is in moveres.c */
-extern void InteractivePlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
-				   unsigned width, unsigned height);
 
 /* Returns True if it is an icon and is in this workspace */
 static Bool

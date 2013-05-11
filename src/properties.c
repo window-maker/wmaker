@@ -29,6 +29,7 @@
 #include "WindowMaker.h"
 #include "window.h"
 #include "GNUstep.h"
+#include "properties.h"
 
 /* atoms */
 extern Atom _XA_WM_STATE;

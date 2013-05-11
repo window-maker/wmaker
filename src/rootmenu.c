@@ -52,6 +52,7 @@
 #include "session.h"
 #include "shutdown.h"
 #include "xmodifier.h"
+#include "rootmenu.h"
 
 #include <WINGs/WUtil.h>
 
