@@ -63,24 +63,19 @@ typedef struct W_FilePanel {
 #define PHEIGHT 	360
 
 static void listDirectoryOnColumn(WMFilePanel * panel, int column, const char *path);
-static void browserClick();
-static void browserDClick();
+static void browserClick(WMWidget *widget, void *p_panel);
+static void browserDClick(WMWidget *widget, void *p_panel);
 
 static void fillColumn(WMBrowserDelegate * self, WMBrowser * bPtr, int column, WMList * list);
 
 static void normalizePath(char *s);
 
-static void deleteFile();
-
-static void createDir();
-
-static void goHome();
-
-static void goFloppy();
-
-static void goUnmount();
-
-static void buttonClick();
+static void deleteFile(WMWidget *widget, void *p_panel);
+static void createDir(WMWidget *widget, void *p_panel);
+static void goHome(WMWidget *widget, void *p_panel);
+static void goFloppy(WMWidget *widget, void *p_panel);
+static void goUnmount(WMWidget *widget, void *p_panel);
+static void buttonClick(WMWidget *widget, void *p_panel);
 
 static char *getCurrentFileName(WMFilePanel * panel);
 
@@ -567,13 +562,17 @@ static void fillColumn(WMBrowserDelegate * self, WMBrowser * bPtr, int column, W
 	wfree(path);
 }
 
-static void browserDClick(WMBrowser * bPtr, WMFilePanel * panel)
+static void browserDClick(WMWidget *widget, void *p_panel)
 {
+	WMFilePanel *panel = p_panel;
+
 	WMPerformButtonClick(panel->okButton);
 }
 
-static void browserClick(WMBrowser * bPtr, WMFilePanel * panel)
+static void browserClick(WMWidget *widget, void *p_panel)
 {
+	WMBrowser *bPtr = (WMBrowser *) widget;
+	WMFilePanel *panel = p_panel;
 	int col = WMGetBrowserSelectedColumn(bPtr);
 	WMListItem *item = WMGetBrowserSelectedItemInColumn(bPtr, col);
 
@@ -598,8 +597,9 @@ static void showError(WMScreen * scr, WMWindow * owner, const char *s, const cha
 	wfree(errStr);
 }
 
-static void createDir(WMButton * bPre, WMFilePanel * panel)
+static void createDir(WMWidget *widget, void *p_panel)
 {
+	WMFilePanel *panel = p_panel;
 	char *dirName, *directory, *file;
 	size_t slen;
 	WMScreen *scr = WMWidgetScreen(panel->win);
@@ -680,8 +680,9 @@ static void normalizePath(char *s)
 }
 
 
-static void deleteFile(WMButton * bPre, WMFilePanel * panel)
+static void deleteFile(WMWidget *widget, void *p_panel)
 {
+	WMFilePanel *panel = p_panel;
 	char *file, *buffer;
 	struct stat filestat;
 	WMScreen *scr = WMWidgetScreen(panel->win);
@@ -722,12 +723,13 @@ out:
 #undef __msgbufsize__
 }
 
-static void goUnmount(WMButton * bPtr, WMFilePanel * panel)
+static void goUnmount(WMWidget *widget, void *p_panel)
 {
 }
 
-static void goFloppy(WMButton * bPtr, WMFilePanel * panel)
+static void goFloppy(WMWidget *widget, void *p_panel)
 {
+	WMFilePanel *panel = p_panel;
 	struct stat filestat;
 	WMScreen *scr = WMWidgetScreen(panel->win);
 
@@ -742,8 +744,9 @@ static void goFloppy(WMButton * bPtr, WMFilePanel * panel)
 	WMSetFilePanelDirectory(panel, WINGsConfiguration.floppyPath);
 }
 
-static void goHome(WMButton * bPtr, WMFilePanel * panel)
+static void goHome(WMWidget *widget, void *p_panel)
 {
+	WMFilePanel *panel = p_panel;
 	char *home;
 
 	/* home is statically allocated. Don't free it! */
@@ -854,8 +857,10 @@ static Bool validOpenFile(WMFilePanel * panel)
 	return True;
 }
 
-static void buttonClick(WMButton * bPtr, WMFilePanel * panel)
+static void buttonClick(WMWidget *widget, void *p_panel)
 {
+	WMButton *bPtr = (WMButton *) widget;
+	WMFilePanel *panel = p_panel;
 	WMRange range;
 
 	if (bPtr == panel->okButton) {
