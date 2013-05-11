@@ -52,7 +52,7 @@ static void defaultHandler(int bla)
 		exit(1);
 }
 
-static waborthandler *aborthandler = (waborthandler *) defaultHandler;
+static waborthandler *aborthandler = defaultHandler;
 
 #define wAbort(a) (*aborthandler)(a)
 

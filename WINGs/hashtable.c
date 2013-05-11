@@ -35,8 +35,9 @@ typedef struct W_HashTable {
 #define RELKEY(table, key) if ((table)->callbacks.releaseKey) \
     (*(table)->callbacks.releaseKey)(key)
 
-static inline unsigned hashString(const char *key)
+static inline unsigned hashString(const void *param)
 {
+	const char *key = param;
 	unsigned ret = 0;
 	unsigned ctr = 0;
 
@@ -400,13 +401,14 @@ Bool WMNextHashEnumeratorItemAndKey(WMHashEnumerator * enumerator, void **item, 
 	return False;
 }
 
-static Bool compareStrings(const char *key1, const char *key2)
+static Bool compareStrings(const void *param1, const void *param2)
 {
+	const char *key1 = param1;
+	const char *key2 = param2;
+
 	return strcmp(key1, key2) == 0;
 }
 
-typedef unsigned (*hashFunc) (const void *);
-typedef Bool(*isEqualFunc) (const void *, const void *);
 typedef void *(*retainFunc) (const void *);
 typedef void (*releaseFunc) (const void *);
 
@@ -418,15 +420,15 @@ const WMHashTableCallbacks WMIntHashCallbacks = {
 };
 
 const WMHashTableCallbacks WMStringHashCallbacks = {
-	(hashFunc) hashString,
-	(isEqualFunc) compareStrings,
+	hashString,
+	compareStrings,
 	(retainFunc) wstrdup,
 	(releaseFunc) wfree
 };
 
 const WMHashTableCallbacks WMStringPointerHashCallbacks = {
-	(hashFunc) hashString,
-	(isEqualFunc) compareStrings,
+	hashString,
+	compareStrings,
 	NULL,
 	NULL
 };

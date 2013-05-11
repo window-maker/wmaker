@@ -80,10 +80,12 @@ void WMCreateEventHandler(WMView * view, unsigned long mask, WMEventProc * event
 
 static int matchHandler(const void *item, const void *cdata)
 {
-#define H1 ((W_EventHandler*)item)
-#define H2 ((W_EventHandler*)cdata)
+	const W_EventHandler *h1 = item;
+	const W_EventHandler *h2 = cdata;
 
-	return (H1->eventMask == H2->eventMask && H1->proc == H2->proc && H1->clientData == H2->clientData);
+	return ((h1->eventMask == h2->eventMask) &&
+			  (h1->proc == h2->proc) &&
+			  (h1->clientData == h2->clientData));
 }
 
 /*

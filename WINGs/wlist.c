@@ -635,7 +635,10 @@ static void handleEvents(XEvent * event, void *data)
 
 static int matchTitle(const void *item, const void *title)
 {
-	return (strcmp(((WMListItem *) item)->text, (const char *)title) == 0 ? 1 : 0);
+	const WMListItem *wl_item = item;
+	const char *s_title = title;
+
+	return (strcmp(wl_item->text, s_title) == 0 ? 1 : 0);
 }
 
 int WMFindRowOfListItemWithTitle(WMList * lPtr, const char *title)

@@ -47,7 +47,7 @@ typedef struct StringBuffer {
 	int size;
 } StringBuffer;
 
-static unsigned hashPropList(WMPropList * plist);
+static unsigned hashPropList(const void *param);
 static WMPropList *getPLString(PLData * pldata);
 static WMPropList *getPLQString(PLData * pldata);
 static WMPropList *getPLData(PLData * pldata);
@@ -55,16 +55,13 @@ static WMPropList *getPLArray(PLData * pldata);
 static WMPropList *getPLDictionary(PLData * pldata);
 static WMPropList *getPropList(PLData * pldata);
 
-typedef unsigned (*hashFunc) (const void *);
 typedef Bool(*isEqualFunc) (const void *, const void *);
-typedef void *(*retainFunc) (const void *);
-typedef void (*releaseFunc) (const void *);
 
 static const WMHashTableCallbacks WMPropListHashCallbacks = {
-	(hashFunc) hashPropList,
+	hashPropList,
 	(isEqualFunc) WMIsPropListEqualTo,
-	(retainFunc) NULL,
-	(releaseFunc) NULL
+	NULL,
+	NULL
 };
 
 static Bool caseSensitive = True;
@@ -102,8 +99,9 @@ static Bool caseSensitive = True;
 
 #define MaxHashLength 64
 
-static unsigned hashPropList(WMPropList * plist)
+static unsigned hashPropList(const void *param)
 {
+	WMPropList *plist= (WMPropList *) param;
 	unsigned ret = 0;
 	unsigned ctr = 0;
 	const char *key;
