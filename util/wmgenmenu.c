@@ -21,7 +21,7 @@
 
 #include "wmgenmenu.h"
 
-static void find_and_write(char *group, char *list[][2], int this_is_terminals);
+static void find_and_write(const char *group, char *list[][2], int this_is_terminals);
 static void other_window_managers(void);
 static void print_help(int print_usage, int exitval);
 
@@ -378,7 +378,7 @@ int main(int argc, char *argv[])
  * - make sure previous menus of these levels are
  *   attached to their parent before calling
  */
-static void find_and_write(char *group, char *list[][2], int this_is_terminals)
+static void find_and_write(const char *group, char *list[][2], int this_is_terminals)
 {
 	int i, argc;
 	char *t, **argv, buf[PATH_MAX];

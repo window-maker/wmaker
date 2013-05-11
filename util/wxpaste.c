@@ -81,7 +81,7 @@ Time getTimestamp(Display * dpy, Window win)
 	return ev.xproperty.time;
 }
 
-char *fetchSelection(Display * dpy, char *selection, char *progName)
+char *fetchSelection(Display * dpy, const char *selection, const char *progName)
 {
 	Atom selatom = XInternAtom(dpy, selection, False);
 	Atom clipatom = XInternAtom(dpy, "CLIPBOARD", False);

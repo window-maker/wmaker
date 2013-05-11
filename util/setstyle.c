@@ -78,7 +78,7 @@ int ignoreCursors = 0;
 Display *dpy;
 
 
-static Bool isCursorOption(char *option)
+static Bool isCursorOption(const char *option)
 {
 	int i;
 
@@ -91,7 +91,7 @@ static Bool isCursorOption(char *option)
 	return False;
 }
 
-static Bool isFontOption(char *option)
+static Bool isFontOption(const char *option)
 {
 	int i;
 
@@ -110,7 +110,7 @@ static Bool isFontOption(char *option)
  * that qualifies the external references to be absolute, possibly
  * pending further expansion
  */
-void hackPathInTexture(WMPropList * texture, char *prefix)
+void hackPathInTexture(WMPropList * texture, const char *prefix)
 {
 	WMPropList *type;
 	char *t;
@@ -158,7 +158,7 @@ void hackPathInTexture(WMPropList * texture, char *prefix)
 	}
 }
 
-void hackPaths(WMPropList * style, char *prefix)
+void hackPaths(WMPropList * style, const char *prefix)
 {
 	WMPropList *keys;
 	WMPropList *key;

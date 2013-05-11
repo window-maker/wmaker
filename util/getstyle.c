@@ -152,7 +152,7 @@ void print_help(int print_usage, int exitval)
 	exit(exitval);
 }
 
-static Bool isFontOption(char *option)
+static Bool isFontOption(const char *option)
 {
 	int i;
 
@@ -165,7 +165,7 @@ static Bool isFontOption(char *option)
 	return False;
 }
 
-void findCopyFile(char *dir, char *file)
+void findCopyFile(const char *dir, const char *file)
 {
 	char *fullPath;
 
@@ -179,7 +179,7 @@ void findCopyFile(char *dir, char *file)
 	free(fullPath);
 }
 
-void makeThemePack(WMPropList * style, char *themeName)
+void makeThemePack(WMPropList * style, const char *themeName)
 {
 	WMPropList *keys;
 	WMPropList *key;

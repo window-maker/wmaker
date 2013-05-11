@@ -140,7 +140,7 @@ void initXinerama()
 #endif				/* XINERAMA */
 }
 
-RImage *loadImage(RContext * rc, char *file)
+RImage *loadImage(RContext * rc, const char *file)
 {
 	char *path;
 	RImage *image;
@@ -974,7 +974,7 @@ void helperLoop(RContext * rc)
 	}
 }
 
-void updateDomain(char *domain, char *key, char *texture)
+void updateDomain(const char *domain, const char *key, const char *texture)
 {
 	char *program = "wdwrite";
 
@@ -986,7 +986,7 @@ void updateDomain(char *domain, char *key, char *texture)
 	wwarning("warning could not run \"%s\"", program);
 }
 
-static WMPropList *getValueForKey(char *domain, char *keyName)
+static WMPropList *getValueForKey(const char *domain, const char *keyName)
 {
 	char *path;
 	WMPropList *key, *val, *d;
@@ -1043,7 +1043,7 @@ static WMPropList *getValueForKey(char *domain, char *keyName)
 	return val;
 }
 
-char *getPixmapPath(char *domain)
+char *getPixmapPath(const char *domain)
 {
 	WMPropList *val;
 	char *ptr, *data;
@@ -1094,7 +1094,7 @@ char *getPixmapPath(char *domain)
 	return data;
 }
 
-char *getFullPixmapPath(char *file)
+char *getFullPixmapPath(const char *file)
 {
 	char *tmp;
 
@@ -1155,7 +1155,7 @@ void print_help()
 	puts(" -h, --help                       show this help and exit");
 }
 
-void changeTextureForWorkspace(char *domain, char *texture, int workspace)
+void changeTextureForWorkspace(const char *domain, char *texture, int workspace)
 {
 	WMPropList *array, *val;
 	char *value;

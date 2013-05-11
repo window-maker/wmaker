@@ -44,7 +44,7 @@ typedef struct {
 } WMConfigMenuEntry;
 
 static Bool wmc_to_wm(WMConfigMenuEntry **wmc, WMMenuEntry **wm);
-static void parse_wmconfig_line(char **label, char **key, char **value, char *line);
+static void parse_wmconfig_line(char **label, char **key, char **value, const char *line);
 static void init_wmconfig_storage(WMConfigMenuEntry **wmc);
 
 void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry))
@@ -170,12 +170,12 @@ Bool wmconfig_validate_file(const char *filename, const struct stat *st, int tfl
 }
 
 /* get a line allocating label, key and value as necessary */
-static void parse_wmconfig_line(char **label, char **key, char **value, char *line)
+static void parse_wmconfig_line(char **label, char **key, char **value, const char *line)
 {
-	char *p;
+	const char *p;
 	int kstart, kend;
 
-	p = (char *)line;
+	p = line;
 	*label = *key = *value = NULL;
 	kstart = kend = 0;
 

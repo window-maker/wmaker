@@ -30,7 +30,7 @@ enum {
 	CHARSET_ENCODING
 };
 
-static int countChar(char *str, char c)
+static int countChar(const char *str, char c)
 {
 	int count = 0;
 
@@ -47,17 +47,17 @@ static int countChar(char *str, char c)
 }
 
 typedef struct str {
-	char *str;
+	const char *str;
 	int len;
 } str;
 
 #define XLFD_TOKENS 14
 
-static str *getXLFDTokens(char *xlfd)
+static str *getXLFDTokens(const char *xlfd)
 {
 	static str tokens[XLFD_TOKENS];
 	int i, len, size;
-	char *ptr;
+	const char *ptr;
 
 	/* XXX: why does this assume there can't ever be XFNextPrefix? */
 	if (!xlfd || *xlfd != '-' || countChar(xlfd, '-') != XLFD_TOKENS)
@@ -135,7 +135,7 @@ static char *mapSlantToName(str * slant)
 	}
 }
 
-char *xlfdToFc(char *xlfd, char *useFamily, Bool keepXLFD)
+char *xlfdToFc(const char *xlfd, const char *useFamily, Bool keepXLFD)
 {
 	str *tokens, *family, *weight, *slant;
 	char *name, buf[64];
