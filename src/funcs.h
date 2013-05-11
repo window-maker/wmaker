@@ -49,15 +49,7 @@ void wHackedGrabButton(unsigned int button, unsigned int modifiers,
 
 WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);
 
-Pixmap LoadIcon(WScreen *scr, char *path, char *mask, int title_height);
-
-
 Bool IsDoubleClick(WScreen *scr, XEvent *event);
-
-WWindow * NextToFocusAfter(WWindow *wwin);
-WWindow * NextToFocusBefore(WWindow *wwin);
-
-RImage * wGetImageForWindowName(WScreen *scr, char *winstance, char *wclass);
 
 #ifdef NUMLOCK_HACK
 void wHackedGrabKey(int keycode, unsigned int modifiers,
