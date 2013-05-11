@@ -96,7 +96,7 @@ static void paintTextField(TextField * tPtr);
 
 static void handleEvents(XEvent * event, void *data);
 static void handleTextFieldActionEvents(XEvent * event, void *data);
-static void didResizeTextField();
+static void didResizeTextField(W_ViewDelegate * self, WMView * view);
 
 struct W_ViewDelegate _TextFieldViewDelegate = {
 	NULL,

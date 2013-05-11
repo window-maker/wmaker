@@ -24,7 +24,7 @@ typedef struct W_ProgressIndicator {
 /* define if only the ticks within the progress region should be displayed */
 #undef SHOW_PROGRESS_TICKS_ONLY
 
-static void didResizeProgressIndicator();
+static void didResizeProgressIndicator(W_ViewDelegate * self, WMView * view);
 
 W_ViewDelegate _ProgressIndicatorDelegate = {
 	NULL,

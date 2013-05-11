@@ -37,7 +37,7 @@ static void handleDragEvents(XEvent * event, void *data);
 
 static void handleActionEvents(XEvent * event, void *data);
 
-static void willResizeColorWell();
+static void willResizeColorWell(W_ViewDelegate * self, WMView * view, unsigned int *width, unsigned int *height);
 
 W_ViewDelegate _ColorWellViewDelegate = {
 	NULL,

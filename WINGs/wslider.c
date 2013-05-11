@@ -29,7 +29,7 @@ typedef struct W_Slider {
 
 } Slider;
 
-static void didResizeSlider();
+static void didResizeSlider(W_ViewDelegate * self, WMView * view);
 
 W_ViewDelegate _SliderViewDelegate = {
 	NULL,

@@ -28,8 +28,8 @@ static void destroyScrollView(ScrollView * sPtr);
 static void paintScrollView(ScrollView * sPtr);
 static void handleEvents(XEvent * event, void *data);
 static void handleViewportEvents(XEvent * event, void *data);
-static void resizeScrollView();
-static void updateScrollerProportion();
+static void resizeScrollView(W_ViewDelegate *self, WMView *view);
+static void updateScrollerProportion(ScrollView *sPtr);
 
 W_ViewDelegate _ScrollViewViewDelegate = {
 	NULL,

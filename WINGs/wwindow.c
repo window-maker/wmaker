@@ -89,9 +89,9 @@ struct W_ViewDelegate _WindowViewDelegate = {
 
 static void destroyWindow(_Window * win);
 
-static void handleEvents();
+static void handleEvents(XEvent * event, void *clientData);
 
-static void realizeWindow();
+static void realizeWindow(WMWindow * win);
 
 static void realizeObserver(void *self, WMNotification * not)
 {

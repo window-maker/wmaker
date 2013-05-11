@@ -64,7 +64,7 @@ static void vScrollCallBack(WMWidget * scroller, void *self);
 static void toggleItemSelection(WMList * lPtr, int index);
 
 static void updateGeometry(WMList * lPtr);
-static void didResizeList();
+static void didResizeList(W_ViewDelegate * self, WMView * view);
 
 static void unselectAllListItems(WMList * lPtr, WMListItem * exceptThis);
 

@@ -73,7 +73,7 @@ typedef struct W_Scroller {
 static void destroyScroller(Scroller * sPtr);
 static void paintScroller(Scroller * sPtr);
 
-static void willResizeScroller();
+static void willResizeScroller(W_ViewDelegate * self, WMView * view, unsigned int *width, unsigned int *height);
 static void handleEvents(XEvent * event, void *data);
 static void handleActionEvents(XEvent * event, void *data);
 
