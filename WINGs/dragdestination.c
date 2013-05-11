@@ -108,7 +108,7 @@ static WMArray *getTypesFromThreeTypes(WMScreen * scr, XClientMessageEvent * eve
 	return typeList;
 }
 
-void storeRequiredTypeList(WMDraggingInfo * info)
+static void storeRequiredTypeList(WMDraggingInfo * info)
 {
 	WMView *destView = XDND_DEST_VIEW(info);
 	WMScreen *scr = W_VIEW_SCREEN(destView);
@@ -140,7 +140,7 @@ void storeRequiredTypeList(WMDraggingInfo * info)
 	XDND_REQUIRED_TYPES(info) = requiredTypes;
 }
 
-char *getNextRequestedDataType(WMDraggingInfo * info)
+static char *getNextRequestedDataType(WMDraggingInfo * info)
 {
 	/* get the type of the first data not yet retrieved from selection */
 	int nextTypeIndex;
@@ -155,7 +155,7 @@ char *getNextRequestedDataType(WMDraggingInfo * info)
 
 /* ----- Action list ----- */
 
-WMArray *sourceOperationList(WMScreen * scr, Window sourceWin)
+static WMArray *sourceOperationList(WMScreen * scr, Window sourceWin)
 {
 	Atom dataType, *actionList;
 	int i, size;
@@ -417,7 +417,7 @@ storeDropData(WMView * destView, Atom selection, Atom target, Time timestamp, vo
 	}
 }
 
-Bool requestDropDataInSelection(WMView * destView, const char *type)
+static Bool requestDropDataInSelection(WMView * destView, const char *type)
 {
 	WMScreen *scr = W_VIEW_SCREEN(destView);
 
@@ -436,7 +436,7 @@ Bool requestDropDataInSelection(WMView * destView, const char *type)
 	return False;
 }
 
-Bool requestDropData(WMDraggingInfo * info)
+static Bool requestDropData(WMDraggingInfo * info)
 {
 	WMView *destView = XDND_DEST_VIEW(info);
 	char *nextType = getNextRequestedDataType(info);
@@ -832,7 +832,7 @@ static void realizedObserver(void *self, WMNotification * notif)
 	WMRemoveNotificationObserver(self);
 }
 
-void W_SetXdndAwareProperty(WMScreen * scr, WMView * view, Atom * types, int typeCount)
+static void W_SetXdndAwareProperty(WMScreen * scr, WMView * view, Atom * types, int typeCount)
 {
 	WMView *toplevel = W_TopLevelOfView(view);
 

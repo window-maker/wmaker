@@ -2047,7 +2047,7 @@ static void releaseSelection(Text * tPtr)
 	paintText(tPtr);
 }
 
-WMData *requestHandler(WMView * view, Atom selection, Atom target, void *cdata, Atom * type)
+static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *cdata, Atom * type)
 {
 	Text *tPtr = view->self;
 	Display *dpy = tPtr->view->screen->display;
@@ -2788,7 +2788,7 @@ static WMDragDestinationProcs _DragDestinationProcs = {
 	NULL
 };
 
-char *getStream(WMText * tPtr, int sel, int array)
+static char *getStream(WMText * tPtr, int sel, int array)
 {
 	TextBlock *tb = NULL;
 	char *text = NULL;
@@ -2864,7 +2864,7 @@ static void releaseStreamObjects(void *data)
 		wfree(data);
 }
 
-WMArray *getStreamObjects(WMText * tPtr, int sel)
+static WMArray *getStreamObjects(WMText * tPtr, int sel)
 {
 	WMArray *array = WMCreateArrayWithDestructor(4, releaseStreamObjects);
 	WMData *data;

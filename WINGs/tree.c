@@ -17,7 +17,7 @@ typedef struct W_TreeNode {
 	WMFreeDataProc *destructor;
 } W_TreeNode;
 
-void destroyNode(void *data)
+static void destroyNode(void *data)
 {
 	WMTreeNode *aNode = (WMTreeNode *) data;
 

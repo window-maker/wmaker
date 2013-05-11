@@ -367,7 +367,7 @@ static void paintMenuEntry(PopUpButton * bPtr, int index, int highlight)
 	}
 }
 
-Pixmap makeMenuPixmap(PopUpButton * bPtr)
+static Pixmap makeMenuPixmap(PopUpButton * bPtr)
 {
 	Pixmap pixmap;
 	W_Screen *scr = bPtr->view->screen;

@@ -78,7 +78,7 @@ void WMDeleteSelectionHandler(WMView * view, Atom selection, Time timestamp)
 	XUngrabServer(dpy);
 }
 
-void WMDeleteSelectionCallback(WMView * view, Atom selection, Time timestamp)
+static void WMDeleteSelectionCallback(WMView * view, Atom selection, Time timestamp)
 {
 	SelectionCallback *handler;
 	WMArrayIterator iter;
