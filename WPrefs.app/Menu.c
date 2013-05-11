@@ -179,7 +179,6 @@ static Bool shouldRemoveItem(struct WEditMenuDelegate *delegate, WEditMenu * men
 
 static void freeItemData(ItemData * data);
 
-extern char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case);
 
 static WEditMenuDelegate menuDelegate = {
 	NULL,

@@ -22,40 +22,6 @@
 #include "WPrefs.h"
 #include <assert.h>
 
-extern Panel *InitWindowHandling(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitKeyboardSettings(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitMouseSettings(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitKeyboardShortcuts(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitWorkspace(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitDocks(WMScreen *scr, WMWidget *parent);
-
-extern Panel *InitFocus(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitPreferences(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitFont(WMScreen * scr, WMWidget * parent);
-extern Panel *InitFontSimple(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitConfigurations(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitPaths(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitMenu(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitExpert(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitMenuPreferences(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitIcons(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitThemes(WMScreen * scr, WMWidget * parent);
-
-extern Panel *InitAppearance(WMScreen * scr, WMWidget * parent);
 
 #define ICON_TITLE_FONT "sans serif:pixelsize=9"
 #define ICON_TITLE_VFONT "sans serif:pixelsize=9:weight=100"
@@ -104,7 +70,7 @@ static void savePanelData(Panel * panel);
 
 static void prepareForClose(void);
 
-void quit(WMWidget * w, void *data)
+static void quit(WMWidget *w, void *data)
 {
 	prepareForClose();
 
@@ -200,7 +166,7 @@ static void prepareForClose(void)
 	}
 }
 
-void toggleBalloons(WMWidget * w, void *data)
+static void toggleBalloons(WMWidget *w, void *data)
 {
 	WMUserDefaults *udb = WMGetStandardUserDefaults();
 	Bool flag;

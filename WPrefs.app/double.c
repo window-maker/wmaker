@@ -133,7 +133,6 @@ static void deactivate(void *data)
 static void handleActionEvents(XEvent * event, void *data)
 {
 	_DoubleTest *dPtr = (_DoubleTest *) data;
-	extern _WINGsConfiguration WINGsConfiguration;
 
 	switch (event->type) {
 	case ButtonPress:

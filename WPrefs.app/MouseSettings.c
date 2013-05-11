@@ -158,7 +158,6 @@ static void doubleClick(WMWidget * w, void *data)
 {
 	_Panel *panel = (_Panel *) data;
 	int i;
-	extern _WINGsConfiguration WINGsConfiguration;
 	char buffer[32];
 
 	for (i = 0; i < 5; i++) {

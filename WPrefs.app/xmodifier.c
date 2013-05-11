@@ -39,6 +39,8 @@ Perpetrator: Sudish Joseph <sj@eng.mindspring.net>, Sept. 1997. */
 
 #include <WINGs/WUtil.h>
 
+#include "WPrefs.h"
+
 /************************************************************************/
 /*                            keymap handling                           */
 /************************************************************************/

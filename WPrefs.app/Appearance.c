@@ -2036,7 +2036,7 @@ static void prepareForClose(_Panel * panel)
 	WMSynchronizeUserDefaults(udb);
 }
 
-Panel *InitAppearance(WMScreen * scr, WMWindow * win)
+Panel *InitAppearance(WMScreen *scr, WMWidget *parent)
 {
 	_Panel *panel;
 
@@ -2046,7 +2046,7 @@ Panel *InitAppearance(WMScreen * scr, WMWindow * win)
 
 	panel->description = _("Background texture configuration for windows,\n" "menus and icons.");
 
-	panel->parent = win;
+	panel->parent = parent;
 
 	panel->callbacks.createWidgets = createPanel;
 	panel->callbacks.updateDomain = storeData;

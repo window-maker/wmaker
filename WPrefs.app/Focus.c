@@ -330,7 +330,7 @@ static void createPanel(Panel * p)
 	showData(panel);
 }
 
-Panel *InitFocus(WMScreen * scr, WMWindow * win)
+Panel *InitFocus(WMScreen *scr, WMWidget *parent)
 {
 	_Panel *panel;
 
@@ -338,7 +338,7 @@ Panel *InitFocus(WMScreen * scr, WMWindow * win)
 
 	panel->sectionName = _("Window Focus Preferences");
 	panel->description = _("Keyboard focus switching policy and related options.");
-	panel->parent = win;
+	panel->parent = parent;
 
 	panel->callbacks.createWidgets = createPanel;
 	panel->callbacks.updateDomain = storeData;

@@ -111,6 +111,11 @@ void SetBoolForKey(Bool value, const char *defaultName);
 void SetSpeedForKey(int speed, const char *defaultName);
 
 
+/* ---[ KeyboardShortcuts.c ] -------------------------------------------- */
+
+char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case);
+
+
 /* ---[ double.c ] ------------------------------------------------------- */
 typedef struct W_DoubleTest DoubleTest;
 
@@ -123,6 +128,28 @@ void AddDeadChildHandler(pid_t pid, void (*handler)(void*), void *data);
 
 /* ---[ xmodifier.c ] ---------------------------------------------------- */
 int ModifierFromKey(Display * dpy, const char *key);
+
+
+/* ---[ Panel Initializers ]---------------------------------------------- */
+
+void Initialize(WMScreen *scr);
+
+/* in alphabetical order - in case you'd want to add one */
+Panel *InitAppearance(WMScreen *scr, WMWidget *parent);
+Panel *InitConfigurations(WMScreen *scr, WMWidget *parent);
+Panel *InitDocks(WMScreen *scr, WMWidget *parent);
+Panel *InitExpert(WMScreen *scr, WMWidget *parent);
+Panel *InitFocus(WMScreen *scr, WMWidget *parent);
+Panel *InitFontSimple(WMScreen *scr, WMWidget *parent);
+Panel *InitIcons(WMScreen *scr, WMWidget *parent);
+Panel *InitKeyboardShortcuts(WMScreen *scr, WMWidget *parent);
+Panel *InitMenu(WMScreen *scr, WMWidget *parent);
+Panel *InitMenuPreferences(WMScreen *scr, WMWidget *parent);
+Panel *InitMouseSettings(WMScreen *scr, WMWidget *parent);
+Panel *InitPaths(WMScreen *scr, WMWidget *parent);
+Panel *InitPreferences(WMScreen *scr, WMWidget *parent);
+Panel *InitWindowHandling(WMScreen *scr, WMWidget *parent);
+Panel *InitWorkspace(WMScreen *scr, WMWidget *parent);
 
 
 #define FRAME_TOP	105

@@ -29,7 +29,6 @@
 
 char *NOptionValueChanged = "NOptionValueChanged";
 
-extern void Initialize(WMScreen * scr);
 
 #define MAX_DEATHS	64
 
@@ -42,7 +41,7 @@ struct {
 static pid_t DeadChildren[MAX_DEATHS];
 static int DeadChildrenCount = 0;
 
-void wAbort(Bool foo)
+static void wAbort(Bool foo)
 {
 	exit(1);
 }
