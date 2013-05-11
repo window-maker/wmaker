@@ -54,7 +54,7 @@ char *FontOptions[] = {
 extern char *__progname;
 
 
-void print_help(int print_usage, int exitval)
+static void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [-h] [-v] [--keep-xlfd] <style_file>\n", __progname);
 	if (print_usage) {

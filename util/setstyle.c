@@ -110,7 +110,7 @@ static Bool isFontOption(const char *option)
  * that qualifies the external references to be absolute, possibly
  * pending further expansion
  */
-void hackPathInTexture(WMPropList * texture, const char *prefix)
+static void hackPathInTexture(WMPropList * texture, const char *prefix)
 {
 	WMPropList *type;
 	char *t;
@@ -158,7 +158,7 @@ void hackPathInTexture(WMPropList * texture, const char *prefix)
 	}
 }
 
-void hackPaths(WMPropList * style, const char *prefix)
+static void hackPaths(WMPropList * style, const char *prefix)
 {
 	WMPropList *keys;
 	WMPropList *key;
@@ -263,7 +263,7 @@ static WMPropList *getColor(WMPropList * texture)
  * IconTitleColor
  * IconTitleBack
  */
-void hackStyle(WMPropList * style)
+static void hackStyle(WMPropList * style)
 {
 	WMPropList *keys, *tmp;
 	int foundIconTitle = 0, foundResizebarBack = 0;
@@ -350,7 +350,7 @@ void hackStyle(WMPropList * style)
 	}
 }
 
-void print_help(int print_usage, int exitval)
+static void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [OPTIONS] FILE\n", __progname);
 	if (print_usage) {

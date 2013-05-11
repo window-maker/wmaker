@@ -138,7 +138,7 @@ WMPropList *PixmapPath = NULL;
 char *ThemePath = NULL;
 
 
-void print_help(int print_usage, int exitval)
+static void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [-t] [-p] [-h] [-v] [file]\n", __progname);
 	if (print_usage) {
@@ -165,7 +165,7 @@ static Bool isFontOption(const char *option)
 	return False;
 }
 
-void findCopyFile(const char *dir, const char *file)
+static void findCopyFile(const char *dir, const char *file)
 {
 	char *fullPath;
 
@@ -179,7 +179,7 @@ void findCopyFile(const char *dir, const char *file)
 	free(fullPath);
 }
 
-void makeThemePack(WMPropList * style, const char *themeName)
+static void makeThemePack(WMPropList * style, const char *themeName)
 {
 	WMPropList *keys;
 	WMPropList *key;

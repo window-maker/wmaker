@@ -135,7 +135,7 @@ static char *mapSlantToName(str * slant)
 	}
 }
 
-char *xlfdToFc(const char *xlfd, const char *useFamily, Bool keepXLFD)
+static char *xlfdToFc(const char *xlfd, const char *useFamily, Bool keepXLFD)
 {
 	str *tokens, *family, *weight, *slant;
 	char *name, buf[64];

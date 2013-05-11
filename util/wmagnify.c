@@ -275,7 +275,7 @@ static void update(void *d)
 	data->tid = WMAddTimerHandler(data->refreshrate, update, data);
 }
 
-void resizedWindow(void *d, WMNotification * notif)
+static void resizedWindow(void *d, WMNotification * notif)
 {
 	BufferData *data = (BufferData *) d;
 	WMView *view = (WMView *) WMGetNotificationObject(notif);
@@ -286,7 +286,7 @@ void resizedWindow(void *d, WMNotification * notif)
 	resizeBufferData(data, size.width, size.height, data->magfactor);
 }
 
-void closeWindow(WMWidget * w, void *d)
+static void closeWindow(WMWidget * w, void *d)
 {
 	BufferData *data = (BufferData *) d;
 

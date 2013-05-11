@@ -33,7 +33,7 @@
 
 extern char *__progname;
 
-void print_help(void)
+static void print_help(void)
 {
 	printf("Usage: %s [OPTIONS] [FILE]\n", __progname);
 	puts("Copies data from FILE or stdin into X cut buffer.");

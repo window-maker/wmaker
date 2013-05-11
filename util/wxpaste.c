@@ -37,7 +37,7 @@
 
 extern char *__progname;
 
-void print_help(void)
+static void print_help(void)
 {
 	printf("Usage: %s [OPTIONS] [FILE]\n", __progname);
 	puts("Copies data from X selection or cutbuffer to FILE or stdout.");
@@ -49,7 +49,7 @@ void print_help(void)
 	puts("  -v, --version            output version information and exit");
 }
 
-Time getTimestamp(Display * dpy, Window win)
+static Time getTimestamp(Display * dpy, Window win)
 {
 	XEvent ev;
 
@@ -81,7 +81,7 @@ Time getTimestamp(Display * dpy, Window win)
 	return ev.xproperty.time;
 }
 
-char *fetchSelection(Display * dpy, const char *selection, const char *progName)
+static char *fetchSelection(Display * dpy, const char *selection, const char *progName)
 {
 	Atom selatom = XInternAtom(dpy, selection, False);
 	Atom clipatom = XInternAtom(dpy, "CLIPBOARD", False);

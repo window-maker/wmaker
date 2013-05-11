@@ -96,7 +96,7 @@ typedef struct BackgroundTexture {
 	int height;
 } BackgroundTexture;
 
-void initXinerama(void)
+static void initXinerama(void)
 {
 	xineInfo.screens = NULL;
 	xineInfo.count = 0;
@@ -140,7 +140,7 @@ void initXinerama(void)
 #endif				/* XINERAMA */
 }
 
-RImage *loadImage(RContext * rc, const char *file)
+static RImage *loadImage(RContext * rc, const char *file)
 {
 	char *path;
 	RImage *image;
@@ -257,7 +257,7 @@ applyImage(RContext * rc, BackgroundTexture * texture, RImage * image, char type
 	}
 }
 
-BackgroundTexture *parseTexture(RContext * rc, char *text)
+static BackgroundTexture *parseTexture(RContext * rc, char *text)
 {
 	BackgroundTexture *texture = NULL;
 	WMPropList *texarray;
@@ -687,7 +687,7 @@ BackgroundTexture *parseTexture(RContext * rc, char *text)
 	return NULL;
 }
 
-void freeTexture(BackgroundTexture * texture)
+static void freeTexture(BackgroundTexture * texture)
 {
 	if (texture->solid) {
 		unsigned long pixel[1];
@@ -705,7 +705,7 @@ void freeTexture(BackgroundTexture * texture)
 	wfree(texture);
 }
 
-void setupTexture(RContext * rc, BackgroundTexture ** textures, int *maxTextures, int workspace, char *texture)
+static void setupTexture(RContext * rc, BackgroundTexture ** textures, int *maxTextures, int workspace, char *texture)
 {
 	BackgroundTexture *newTexture = NULL;
 	int i;
@@ -758,7 +758,7 @@ void setupTexture(RContext * rc, BackgroundTexture ** textures, int *maxTextures
 		*maxTextures = workspace;
 }
 
-Pixmap duplicatePixmap(Pixmap pixmap, int width, int height)
+static Pixmap duplicatePixmap(Pixmap pixmap, int width, int height)
 {
 	Display *tmpDpy;
 	Pixmap copyP;
@@ -789,7 +789,7 @@ static int dummyErrorHandler(Display * dpy, XErrorEvent * err)
 	return 0;
 }
 
-void setPixmapProperty(Pixmap pixmap)
+static void setPixmapProperty(Pixmap pixmap)
 {
 	static Atom prop = 0;
 	Atom type;
@@ -826,7 +826,7 @@ void setPixmapProperty(Pixmap pixmap)
 	XFlush(dpy);
 }
 
-void changeTexture(BackgroundTexture * texture)
+static void changeTexture(BackgroundTexture * texture)
 {
 	if (!texture) {
 		return;
@@ -850,7 +850,7 @@ void changeTexture(BackgroundTexture * texture)
 	}
 }
 
-int readmsg(int fd, char *buffer, int size)
+static int readmsg(int fd, char *buffer, int size)
 {
 	int count;
 
@@ -876,7 +876,7 @@ int readmsg(int fd, char *buffer, int size)
  * n is 4 bytes
  * size = 4 bytes for length of the message data
  */
-void helperLoop(RContext * rc)
+static void helperLoop(RContext * rc)
 {
 	BackgroundTexture *textures[WORKSPACE_COUNT];
 	int maxTextures = 0;
@@ -974,7 +974,7 @@ void helperLoop(RContext * rc)
 	}
 }
 
-void updateDomain(const char *domain, const char *key, const char *texture)
+static void updateDomain(const char *domain, const char *key, const char *texture)
 {
 	char *program = "wdwrite";
 
@@ -1043,7 +1043,7 @@ static WMPropList *getValueForKey(const char *domain, const char *keyName)
 	return val;
 }
 
-char *getPixmapPath(const char *domain)
+static char *getPixmapPath(const char *domain)
 {
 	WMPropList *val;
 	char *ptr, *data;
@@ -1094,7 +1094,7 @@ char *getPixmapPath(const char *domain)
 	return data;
 }
 
-char *getFullPixmapPath(const char *file)
+static char *getFullPixmapPath(const char *file)
 {
 	char *tmp;
 
@@ -1127,7 +1127,7 @@ void wAbort(void)
 	exit(1);
 }
 
-void print_help(void)
+static void print_help(void)
 {
 	printf("Usage: %s [options] [image]\n", __progname);
 	puts("Sets the workspace background to the specified image or a texture and");
@@ -1155,7 +1155,7 @@ void print_help(void)
 	puts(" -h, --help                       show this help and exit");
 }
 
-void changeTextureForWorkspace(const char *domain, char *texture, int workspace)
+static void changeTextureForWorkspace(const char *domain, char *texture, int workspace)
 {
 	WMPropList *array, *val;
 	char *value;
