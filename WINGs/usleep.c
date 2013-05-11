@@ -2,6 +2,7 @@
 #include <errno.h>
 #include <time.h>
 
+#include "WUtil.h"
 #include "wconfig.h"
 
 void wusleep(unsigned int usec)
