@@ -268,6 +268,11 @@ typedef struct W_Screen {
 #define W_DRAWABLE(scr)		(scr)->rcontext->drawable
 
 
+/* ---[ configuration.c ]------------------------------------------------- */
+
+void W_ReadConfigurations(void);
+
+
 /* ---[ drag*.c ]--------------------------------------------------------- */
 
 typedef struct W_DragOperationItem {

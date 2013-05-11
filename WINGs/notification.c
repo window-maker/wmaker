@@ -5,6 +5,8 @@
 #include <string.h>
 
 #include "WUtil.h"
+#include "WINGsP.h"
+
 
 typedef struct W_Notification {
 	const char *name;
@@ -13,7 +15,6 @@ typedef struct W_Notification {
 	int refCount;
 } Notification;
 
-extern void W_FlushASAPNotificationQueue();
 
 const char *WMGetNotificationName(WMNotification * notification)
 {

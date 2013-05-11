@@ -37,8 +37,6 @@ char *WMUserDefaultsDidChangeNotification = "WMUserDefaultsDidChangeNotification
 
 static void synchronizeUserDefaults(void *foo);
 
-extern char *WMGetApplicationName();
-
 #define DEFAULTS_DIR "/Defaults"
 #ifndef HAVE_INOTIFY
 /* Check defaults database for changes every this many milliseconds */

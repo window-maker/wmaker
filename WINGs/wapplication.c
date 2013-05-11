@@ -5,7 +5,6 @@
 #include "WINGsP.h"
 #include "wconfig.h"
 
-extern void W_InitNotificationCenter(void);
 
 struct W_Application WMApplication;
 

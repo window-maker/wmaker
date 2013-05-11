@@ -298,8 +298,6 @@ static char STIPPLE_BITS[] = {
 	0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55
 };
 
-extern void W_ReadConfigurations(void);
-
 static int userWidgetCount = 0;
 
 /*****  end data  ******/
