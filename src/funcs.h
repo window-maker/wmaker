@@ -32,11 +32,6 @@ typedef void (WCallBack)(void *cdata);
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
 
-/* ---[ main.c ]---------------------------------------------------------- */
-
-int getWVisualID(int screen);
-
-
 /* ---[ monitor.c ]------------------------------------------------------- */
 
 int MonitorLoop(int argc, char **argv);

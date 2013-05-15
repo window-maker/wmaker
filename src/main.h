@@ -29,5 +29,6 @@ void ExecuteShellCommand(WScreen *scr, char *command);
 Bool RelaunchWindow(WWindow *wwin);
 void wAbort(Bool dumpCore);
 void ExecExitScript(void);
+int getWVisualID(int screen);
 
 #endif
