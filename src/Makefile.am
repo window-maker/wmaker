@@ -52,6 +52,7 @@ wmaker_SOURCES = 	\
 	misc.c \
 	misc.h \
 	monitor.c \
+	monitor.h \
 	motif.c \
 	motif.h \
 	moveres.c \

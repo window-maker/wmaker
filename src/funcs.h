@@ -32,11 +32,6 @@ typedef void (WCallBack)(void *cdata);
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
 
-/* ---[ monitor.c ]------------------------------------------------------- */
-
-int MonitorLoop(int argc, char **argv);
-
-
 /* ---[ osdep_*.c ]------------------------------------------------------- */
 
 Bool GetCommandForPid(int pid, char ***argv, int *argc);

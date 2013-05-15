@@ -55,6 +55,7 @@
 #include "shutdown.h"
 #include "dialog.h"
 #include "main.h"
+#include "monitor.h"
 
 #include <WINGs/WUtil.h>
 
