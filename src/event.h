@@ -22,6 +22,8 @@
 #ifndef WMEVENT_H
 #define WMEVENT_H
 
+typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
+
 void EventLoop(void);
 void DispatchEvent(XEvent *event);
 void ProcessPendingEvents(void);

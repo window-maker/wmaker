@@ -34,7 +34,6 @@
 #include "client.h"
 #include "icon.h"
 #include "dock.h"
-#include "funcs.h"
 #include "actions.h"
 #include "workspace.h"
 #include "placement.h"

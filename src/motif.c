@@ -35,7 +35,6 @@
 #include "properties.h"
 #include "icon.h"
 #include "client.h"
-#include "funcs.h"
 #include "motif.h"
 
 /* Motif window hints */

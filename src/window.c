@@ -63,6 +63,7 @@
 #include "misc.h"
 #include "startup.h"
 #include "winmenu.h"
+#include "osdep.h"
 
 #ifdef MWM_HINTS
 # include "motif.h"

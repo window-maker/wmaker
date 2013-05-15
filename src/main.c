@@ -45,7 +45,7 @@
 
 #include "WindowMaker.h"
 #include "window.h"
-#include "funcs.h"
+#include "defaults.h"
 #include "event.h"
 #include "startup.h"
 #include "menu.h"

@@ -34,7 +34,6 @@
 #include "icon.h"
 #include "appicon.h"
 #include "actions.h"
-#include "funcs.h"
 #include "application.h"
 #include "dock.h"
 #include "xinerama.h"

@@ -33,7 +33,6 @@
 #include "WindowMaker.h"
 #include "menu.h"
 #include "actions.h"
-#include "funcs.h"
 #include "appmenu.h"
 #include "framewin.h"
 

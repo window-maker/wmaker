@@ -31,6 +31,7 @@
 
 #include "WindowMaker.h"
 #include "texture.h"
+#include "window.h"
 #include "misc.h"
 
 extern WPreferences wPreferences;

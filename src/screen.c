@@ -45,7 +45,7 @@
 #include "texture.h"
 #include "pixmap.h"
 #include "menu.h"
-#include "funcs.h"
+#include "window.h"
 #include "main.h"
 #include "actions.h"
 #include "properties.h"

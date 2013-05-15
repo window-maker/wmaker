@@ -9,7 +9,7 @@
 #include <WINGs/WUtil.h>
 
 #include "wconfig.h"
-#include "funcs.h"
+#include "osdep.h"
 
 /*
  * copy argc and argv for an existing process identified by `pid'

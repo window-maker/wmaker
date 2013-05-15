@@ -23,10 +23,7 @@
 #ifndef WMDOCK_H_
 #define WMDOCK_H_
 
-
 #include "appicon.h"
-#include "funcs.h"
-
 
 typedef struct WDock {
     WScreen *screen_ptr;

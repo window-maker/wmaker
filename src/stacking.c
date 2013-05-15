@@ -30,7 +30,6 @@
 #include "WindowMaker.h"
 #include "screen.h"
 #include "window.h"
-#include "funcs.h"
 #include "actions.h"
 #include "properties.h"
 #include "stacking.h"

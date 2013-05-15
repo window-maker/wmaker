@@ -12,7 +12,7 @@
 #include <WINGs/WUtil.h>
 
 #include "wconfig.h"
-#include "funcs.h"
+#include "osdep.h"
 
 
 #define	RETRY( x )	do {				\

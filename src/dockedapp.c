@@ -25,6 +25,7 @@
 #include <X11/Xutil.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "WindowMaker.h"
 #include "window.h"

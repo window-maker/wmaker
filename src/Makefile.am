@@ -41,7 +41,7 @@ wmaker_SOURCES = 	\
 	framewin.h \
 	geomview.c \
 	geomview.h \
-	funcs.h \
+	osdep.h \
 	icon.c \
 	icon.h \
 	keybind.h \

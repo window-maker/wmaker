@@ -24,7 +24,6 @@
 
 #include "wcore.h"
 #include "window.h"
-#include "funcs.h"
 
 #define TILE_NORMAL	0
 #define TILE_CLIP	1

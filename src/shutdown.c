@@ -30,7 +30,6 @@
 #include "WindowMaker.h"
 #include "window.h"
 #include "client.h"
-#include "funcs.h"
 #include "main.h"
 #include "properties.h"
 #include "session.h"

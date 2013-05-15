@@ -22,6 +22,7 @@
 
 #ifdef BALLOON_TEXT
 
+#include <stdio.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #ifdef SHAPED_BALLOON
@@ -39,7 +40,6 @@
 #include "framewin.h"
 #include "icon.h"
 #include "appicon.h"
-#include "funcs.h"
 #include "workspace.h"
 #include "balloon.h"
 

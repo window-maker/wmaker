@@ -51,6 +51,7 @@
 #include "WindowMaker.h"
 #include "GNUstep.h"
 #include "screen.h"
+#include "window.h"
 #include "dialog.h"
 #include "misc.h"
 #include "stacking.h"

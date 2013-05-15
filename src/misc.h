@@ -21,8 +21,9 @@
 #ifndef WMMISC_H_
 #define WMMISC_H_
 
+#include "defaults.h"
+#include "keybind.h"
 #include "appicon.h"
-
 
 Bool wFetchName(Display *dpy, Window win, char **winname);
 Bool wGetIconName(Display *dpy, Window win, char **iconname);

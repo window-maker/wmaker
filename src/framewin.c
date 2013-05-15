@@ -37,6 +37,7 @@
 #include "resources.h"
 #include "screen.h"
 #include "wcore.h"
+#include "window.h"
 #include "framewin.h"
 #include "stacking.h"
 #include "misc.h"

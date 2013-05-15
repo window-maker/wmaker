@@ -38,6 +38,7 @@
 #include <WINGs/WUtil.h>
 #include <wraster.h>
 
+#include "window.h"
 #include "misc.h"
 #include "WindowMaker.h"
 #include "GNUstep.h"
