@@ -24,6 +24,7 @@ wmaker_SOURCES = 	\
 	colormap.c \
 	colormap.h \
 	cycling.c \
+	cycling.h \
 	def_pixmaps.h \
 	defaults.c \
 	defaults.h \

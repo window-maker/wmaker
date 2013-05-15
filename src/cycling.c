@@ -34,7 +34,7 @@
 #include "keybind.h"
 #include "actions.h"
 #include "stacking.h"
-#include "funcs.h"
+#include "cycling.h"
 #include "xinerama.h"
 #include "switchpanel.h"
 

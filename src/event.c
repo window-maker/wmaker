@@ -55,7 +55,7 @@
 #include "actions.h"
 #include "client.h"
 #include "main.h"
-#include "funcs.h"
+#include "cycling.h"
 #include "keybind.h"
 #include "application.h"
 #include "stacking.h"

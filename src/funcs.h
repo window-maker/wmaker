@@ -32,11 +32,6 @@ typedef void (WCallBack)(void *cdata);
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
 
-/* ---[ cycling.c ]------------------------------------------------------- */
-
-void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only);
-
-
 /* ---[ event.c ]--------------------------------------------------------- */
 
 void EventLoop(void);
