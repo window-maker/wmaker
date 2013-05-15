@@ -63,6 +63,7 @@
 #include "properties.h"
 #include "misc.h"
 #include "event.h"
+#include "winmenu.h"
 
 #define MAX_SHORTCUT_LENGTH 32
 

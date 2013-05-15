@@ -46,6 +46,7 @@
 #include "stacking.h"
 #include "icon.h"
 #include "xinerama.h"
+#include "winmenu.h"
 
 #define MC_MAXIMIZE	0
 #define MC_MINIATURIZE	1

@@ -46,6 +46,7 @@
 #include "misc.h"
 #include "startup.h"
 #include "event.h"
+#include "winmenu.h"
 
 /**** Global varianebles ****/
 extern WPreferences wPreferences;

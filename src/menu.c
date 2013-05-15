@@ -37,7 +37,7 @@
 #include "framewin.h"
 #include "menu.h"
 #include "actions.h"
-#include "funcs.h"
+#include "winmenu.h"
 #include "stacking.h"
 #include "xinerama.h"
 #include "workspace.h"
