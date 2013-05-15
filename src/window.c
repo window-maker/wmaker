@@ -61,6 +61,7 @@
 #include "rootmenu.h"
 #include "placement.h"
 #include "misc.h"
+#include "startup.h"
 
 #ifdef MWM_HINTS
 # include "motif.h"

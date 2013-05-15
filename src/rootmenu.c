@@ -53,6 +53,7 @@
 #include "shutdown.h"
 #include "xmodifier.h"
 #include "rootmenu.h"
+#include "startup.h"
 
 #include <WINGs/WUtil.h>
 

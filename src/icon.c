@@ -44,6 +44,7 @@
 #include "appicon.h"
 #include "wmspec.h"
 #include "misc.h"
+#include "startup.h"
 
 /**** Global varianebles ****/
 extern WPreferences wPreferences;
