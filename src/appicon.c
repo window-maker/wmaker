@@ -49,6 +49,7 @@
 #include "client.h"
 #include "placement.h"
 #include "misc.h"
+#include "event.h"
 #ifdef XDND
 #include "xdnd.h"
 #endif

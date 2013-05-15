@@ -45,6 +45,7 @@
 #include "wmspec.h"
 #include "misc.h"
 #include "startup.h"
+#include "event.h"
 
 /**** Global varianebles ****/
 extern WPreferences wPreferences;

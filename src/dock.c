@@ -56,6 +56,7 @@
 #include "xinerama.h"
 #include "placement.h"
 #include "misc.h"
+#include "event.h"
 
 /**** Local variables ****/
 #define CLIP_REWIND       1

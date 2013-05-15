@@ -48,6 +48,7 @@
 #include "usermenu.h"
 #include "placement.h"
 #include "misc.h"
+#include "event.h"
 
 /****** Global Variables ******/
 

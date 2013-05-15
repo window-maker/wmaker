@@ -66,6 +66,7 @@
 #include "properties.h"
 #include "dialog.h"
 #include "wmspec.h"
+#include "event.h"
 #ifdef XDND
 #include "xdnd.h"
 #endif

@@ -72,6 +72,7 @@
 #include "screen.h"
 #include "shutdown.h"
 #include "misc.h"
+#include "event.h"
 
 /******** Global Variables **********/
 extern XContext wWinContext;

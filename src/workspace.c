@@ -48,6 +48,7 @@
 #include "appicon.h"
 #include "wmspec.h"
 #include "xinerama.h"
+#include "event.h"
 
 #define MC_NEW          0
 #define MC_DESTROY_LAST 1

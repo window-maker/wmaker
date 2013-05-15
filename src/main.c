@@ -46,6 +46,7 @@
 #include "WindowMaker.h"
 #include "window.h"
 #include "funcs.h"
+#include "event.h"
 #include "startup.h"
 #include "menu.h"
 #include "keybind.h"

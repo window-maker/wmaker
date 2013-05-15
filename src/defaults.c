@@ -62,6 +62,7 @@
 #include "workspace.h"
 #include "properties.h"
 #include "misc.h"
+#include "event.h"
 
 #define MAX_SHORTCUT_LENGTH 32
 

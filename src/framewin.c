@@ -40,6 +40,7 @@
 #include "framewin.h"
 #include "stacking.h"
 #include "misc.h"
+#include "event.h"
 
 #define DBLCLICK_TIME wPreferences.dblclick_time
 
