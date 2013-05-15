@@ -67,6 +67,7 @@
 #include "dialog.h"
 #include "wmspec.h"
 #include "event.h"
+#include "switchmenu.h"
 #ifdef XDND
 #include "xdnd.h"
 #endif

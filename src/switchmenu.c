@@ -37,6 +37,7 @@
 #include "stacking.h"
 #include "workspace.h"
 #include "framewin.h"
+#include "switchmenu.h"
 
 #define IS_GNUSTEP_MENU(w) ((w)->wm_gnustep_attr && \
 	((w)->wm_gnustep_attr->flags & GSWindowLevelAttr) && \

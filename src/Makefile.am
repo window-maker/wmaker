@@ -81,6 +81,7 @@ wmaker_SOURCES = 	\
 	superfluous.c \
 	superfluous.h \
 	switchmenu.c \
+	switchmenu.h \
 	texture.c \
 	texture.h \
 	usermenu.c \

@@ -74,6 +74,7 @@
 #include "misc.h"
 #include "event.h"
 #include "winmenu.h"
+#include "switchmenu.h"
 
 /******** Global Variables **********/
 extern XContext wWinContext;

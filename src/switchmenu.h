@@ -2,6 +2,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 2013 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -18,22 +19,11 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef WMFUNCS_H_
-#define WMFUNCS_H_
+#ifndef WMSWITCHMENU_H
+#define WMSWITCHMENU_H
 
-#include <sys/types.h>
-#include <stdio.h>
+void UpdateSwitchMenu(WScreen *scr, WWindow *wwin, int action);
+void OpenSwitchMenu(WScreen *scr, int x, int y, int keyboard);
+void InitializeSwitchMenu(void);
 
-#include "window.h"
-#include "defaults.h"
-#include "keybind.h"
-
-typedef void (WCallBack)(void *cdata);
-typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
-
-
-/* ---[ osdep_*.c ]------------------------------------------------------- */
-
-Bool GetCommandForPid(int pid, char ***argv, int *argc);
-
-#endif
+#endif /* WMSWITCHMENU_H */

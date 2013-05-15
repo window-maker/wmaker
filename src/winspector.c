@@ -47,6 +47,7 @@
 #include "client.h"
 #include "wmspec.h"
 #include "misc.h"
+#include "switchmenu.h"
 
 #include <WINGs/WUtil.h>
 

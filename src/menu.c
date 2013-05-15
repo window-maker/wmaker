@@ -43,6 +43,7 @@
 #include "workspace.h"
 #include "dialog.h"
 #include "rootmenu.h"
+#include "switchmenu.h"
 
 /****** Global Variables ******/
 
