@@ -152,7 +152,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 		modifiers = ev.xkey.state & ValidModMask;
 
 		if (!swpanel)
-			done = True;
+			break;
 
 		switch (ev.type) {
 
