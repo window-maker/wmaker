@@ -105,7 +105,7 @@ static Bool sameWindowClass(WWindow *wwin, WWindow *curwin)
 	return True;
 }
 
-static void changeImage(WSwitchPanel *panel, int idecks, int selected)
+static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim)
 {
 	WMFrame *icon = WMGetFromArray(panel->icons, idecks);
 	RImage *image = WMGetFromArray(panel->images, idecks);
@@ -115,7 +115,7 @@ static void changeImage(WSwitchPanel *panel, int idecks, int selected)
 
 	if (image && icon) {
 		RImage *back;
-		int opaq = 255;
+		int opaq = (dim) ? 75 : 255;
 		RImage *tile;
 		WMPoint pos;
 		Pixmap p;
@@ -204,7 +204,7 @@ static void scrollIcons(WSwitchPanel *panel, int delta)
 	panel->firstVisible = nfirst;
 
 	for (i = panel->firstVisible; i < panel->firstVisible + panel->visibleCount; i++)
-		changeImage(panel, i, i == panel->current);
+		changeImage(panel, i, i == panel->current, 0);
 }
 
 /*
@@ -471,7 +471,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 	WMRealizeWidget(panel->win);
 
 	WM_ITERATE_ARRAY(panel->windows, wwin, i) {
-		changeImage(panel, i, 0);
+		changeImage(panel, i, 0, False);
 	}
 
 	if (panel->bg) {
@@ -501,7 +501,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 
 	panel->current = WMGetFirstInArray(panel->windows, curwin);
 	if (panel->current >= 0)
-		changeImage(panel, panel->current, 1);
+		changeImage(panel, panel->current, 1, False);
 
 	WMMapWidget(panel->win);
 
@@ -564,15 +564,16 @@ void wSwitchPanelDestroy(WSwitchPanel *panel)
 
 WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimized, Bool class_only)
 {
-	WWindow *wwin, *curwin;
+	WWindow *wwin, *curwin, *tmpwin;
 	int count = WMGetArrayItemCount(panel->windows);
 	int orig = panel->current;
+	int i;
 
 	if (count == 0)
 		return NULL;
 
 	if (panel->win)
-		changeImage(panel, panel->current, 0);
+		changeImage(panel, panel->current, 0, False);
 
 	if (!wPreferences.cycle_ignore_minimized)
 		ignore_minimized = False;
@@ -598,6 +599,14 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimi
 		} while (!sameWindowClass(wwin, curwin));
 	} while (ignore_minimized && panel->current != orig && canReceiveFocus(wwin) < 0);
 
+	WM_ITERATE_ARRAY(panel->windows, tmpwin, i) {
+		if (!class_only || sameWindowClass(tmpwin, curwin))
+			changeImage(panel, i, 0, False);
+		else
+			changeImage(panel, i, 0, True);
+
+	}
+
 	if (panel->current < panel->firstVisible)
 		scrollIcons(panel, panel->current - panel->firstVisible);
 	else if (panel->current - panel->firstVisible >= panel->visibleCount)
@@ -606,7 +615,7 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimi
 	if (panel->win) {
 		drawTitle(panel, panel->current, wwin->frame->title);
 
-		changeImage(panel, panel->current, 1);
+		changeImage(panel, panel->current, 1, False);
 	}
 
 	return wwin;
@@ -621,7 +630,7 @@ WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
 		return NULL;
 
 	if (panel->win)
-		changeImage(panel, panel->current, 0);
+		changeImage(panel, panel->current, 0, False);
 
 	if (back) {
 		panel->current = count - 1;
@@ -635,7 +644,7 @@ WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
 
 	if (panel->win) {
 		drawTitle(panel, panel->current, wwin->frame->title);
-		changeImage(panel, panel->current, 1);
+		changeImage(panel, panel->current, 1, False);
 	}
 
 	return wwin;
@@ -662,8 +671,8 @@ WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
 	if (focus >= 0 && panel->current != focus) {
 		WWindow *wwin;
 
-		changeImage(panel, panel->current, 0);
-		changeImage(panel, focus, 1);
+		changeImage(panel, panel->current, 0, False);
+		changeImage(panel, focus, 1, False);
 		panel->current = focus;
 
 		wwin = WMGetFromArray(panel->windows, focus);
