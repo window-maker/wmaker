@@ -625,12 +625,16 @@ WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
 {
 	WWindow *wwin;
 	int count = WMGetArrayItemCount(panel->windows);
+	int i;
 
 	if (count == 0)
 		return NULL;
 
-	if (panel->win)
-		changeImage(panel, panel->current, 0, False);
+	if (panel->win) {
+		WM_ITERATE_ARRAY(panel->windows, wwin, i) {
+			changeImage(panel, i, 0, False);
+		}
+	}
 
 	if (back) {
 		panel->current = count - 1;
@@ -671,7 +675,9 @@ WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
 	if (focus >= 0 && panel->current != focus) {
 		WWindow *wwin;
 
-		changeImage(panel, panel->current, 0, False);
+		WM_ITERATE_ARRAY(panel->windows, wwin, i) {
+			changeImage(panel, i, 0, False);
+		}
 		changeImage(panel, focus, 1, False);
 		panel->current = focus;
 
