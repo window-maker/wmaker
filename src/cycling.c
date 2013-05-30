@@ -92,6 +92,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 	KeyCode         shiftLKey      = XKeysymToKeycode(dpy, XK_Shift_L);
 	KeyCode         shiftRKey      = XKeysymToKeycode(dpy, XK_Shift_R);
 	KeyCode         escapeKey      = XKeysymToKeycode(dpy, XK_Escape);
+	KeyCode         returnKey      = XKeysymToKeycode(dpy, XK_Return);
 	Bool            esc_cancel     = False;
 	Bool            somethingElse  = False;
 	Bool            done           = False;
@@ -189,6 +190,11 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 				esc_cancel = True;
 				done = True;
 
+			} else if (ev.xkey.keycode == returnKey) {
+
+				/* Close the switchpanel without eating the keypress */
+				done = True;
+
 			} else if (ev.xkey.keycode != shiftLKey && ev.xkey.keycode != shiftRKey) {
 
 				somethingElse = True;
@@ -201,6 +207,9 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 			if (ev.xkey.keycode == shiftLKey || ev.xkey.keycode == shiftRKey)
 				if (wPreferences.strict_windoze_cycle)
 					break;
+
+			if (ev.xkey.keycode == XK_Return)
+				break;
 
 			for (i = 0; i < 8 * keymap->max_keypermod; i++) {
 
