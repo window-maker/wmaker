@@ -50,6 +50,7 @@ struct SwitchPanel {
 	WMArray *icons;
 	WMArray *images;
 	WMArray *windows;
+	WMArray *flags;
 	RImage *bg;
 	int current;
 	int firstVisible;
@@ -72,6 +73,9 @@ extern WPreferences wPreferences;
 #define LABEL_HEIGHT 25
 #define SCREEN_BORDER_SPACING 2*20
 #define SCROLL_STEPS (ICON_TILE_SIZE/2)
+
+#define ICON_SELECTED (1<<1)
+#define ICON_DIM (1<<2)
 
 static int canReceiveFocus(WWindow *wwin)
 {
@@ -105,10 +109,22 @@ static Bool sameWindowClass(WWindow *wwin, WWindow *curwin)
 	return True;
 }
 
-static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim)
+static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim, Bool force)
 {
 	WMFrame *icon = WMGetFromArray(panel->icons, idecks);
 	RImage *image = WMGetFromArray(panel->images, idecks);
+	char flags = (char) WMGetFromArray(panel->flags, idecks);
+	char desired = 0;
+
+	if (selected)
+		desired |= ICON_SELECTED;
+	if (dim)
+		desired |= ICON_DIM;
+
+	if (flags == desired && !force)
+		return;
+
+	WMReplaceInArray(panel->flags, idecks, desired);
 
 	if (!panel->bg && !panel->tile && !selected)
 		WMSetFrameRelief(icon, WRFlat);
@@ -187,6 +203,7 @@ static void scrollIcons(WSwitchPanel *panel, int delta)
 	int nfirst = panel->firstVisible + delta;
 	int i;
 	int count = WMGetArrayItemCount(panel->windows);
+	Bool dim;
 
 	if (count <= panel->visibleCount)
 		return;
@@ -203,8 +220,12 @@ static void scrollIcons(WSwitchPanel *panel, int delta)
 
 	panel->firstVisible = nfirst;
 
-	for (i = panel->firstVisible; i < panel->firstVisible + panel->visibleCount; i++)
-		changeImage(panel, i, i == panel->current, 0);
+	for (i = panel->firstVisible; i < panel->firstVisible + panel->visibleCount; i++) {
+		if (i == panel->current)
+			continue;
+		dim = ((char) WMGetFromArray(panel->flags, i) & ICON_DIM);
+		changeImage(panel, i, 0, dim, True);
+	}
 }
 
 /*
@@ -376,6 +397,17 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 	return windows;
 }
 
+static WMArray *makeWindowFlagsArray(int count)
+{
+	WMArray *flags = WMCreateArray(1);
+	int i;
+
+	for (i = 0; i < count; i++)
+		WMAddToArray(flags, (char) 0);
+
+	return flags;
+}
+
 WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 {
 	WWindow *wwin;
@@ -387,6 +419,8 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 	panel->scr = scr;
 	panel->windows = makeWindowListArray(curwin, wPreferences.swtileImage != NULL, class_only);
 	count = WMGetArrayItemCount(panel->windows);
+	if (count)
+		panel->flags = makeWindowFlagsArray(count);
 
 	if (count == 0) {
 		WMFreeArray(panel->windows);
@@ -471,7 +505,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 	WMRealizeWidget(panel->win);
 
 	WM_ITERATE_ARRAY(panel->windows, wwin, i) {
-		changeImage(panel, i, 0, False);
+		changeImage(panel, i, 0, False, True);
 	}
 
 	if (panel->bg) {
@@ -501,7 +535,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 
 	panel->current = WMGetFirstInArray(panel->windows, curwin);
 	if (panel->current >= 0)
-		changeImage(panel, panel->current, 1, False);
+		changeImage(panel, panel->current, 1, False, False);
 
 	WMMapWidget(panel->win);
 
@@ -542,6 +576,9 @@ void wSwitchPanelDestroy(WSwitchPanel *panel)
 	if (panel->icons)
 		WMFreeArray(panel->icons);
 
+	if (panel->flags)
+		WMFreeArray(panel->flags);
+
 	WMFreeArray(panel->windows);
 
 	if (panel->tile)
@@ -568,12 +605,10 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimi
 	int count = WMGetArrayItemCount(panel->windows);
 	int orig = panel->current;
 	int i;
+	Bool dim = False;
 
 	if (count == 0)
 		return NULL;
-
-	if (panel->win)
-		changeImage(panel, panel->current, 0, False);
 
 	if (!wPreferences.cycle_ignore_minimized)
 		ignore_minimized = False;
@@ -600,10 +635,15 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimi
 	} while (ignore_minimized && panel->current != orig && canReceiveFocus(wwin) < 0);
 
 	WM_ITERATE_ARRAY(panel->windows, tmpwin, i) {
+		if (i == panel->current)
+			continue;
 		if (!class_only || sameWindowClass(tmpwin, curwin))
-			changeImage(panel, i, 0, False);
-		else
-			changeImage(panel, i, 0, True);
+			changeImage(panel, i, 0, False, False);
+		else {
+			if (i == orig)
+				dim = True;
+			changeImage(panel, i, 0, True, False);
+		}
 
 	}
 
@@ -614,8 +654,9 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimi
 
 	if (panel->win) {
 		drawTitle(panel, panel->current, wwin->frame->title);
-
-		changeImage(panel, panel->current, 1, False);
+		if (panel->current != orig)
+			changeImage(panel, orig, 0, dim, False);
+		changeImage(panel, panel->current, 1, False, False);
 	}
 
 	return wwin;
@@ -625,16 +666,11 @@ WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
 {
 	WWindow *wwin;
 	int count = WMGetArrayItemCount(panel->windows);
+	char *title;
 	int i;
 
 	if (count == 0)
 		return NULL;
-
-	if (panel->win) {
-		WM_ITERATE_ARRAY(panel->windows, wwin, i) {
-			changeImage(panel, i, 0, False);
-		}
-	}
 
 	if (back) {
 		panel->current = count - 1;
@@ -645,10 +681,13 @@ WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
 	}
 
 	wwin = WMGetFromArray(panel->windows, panel->current);
+	title = wwin->frame->title;
 
 	if (panel->win) {
-		drawTitle(panel, panel->current, wwin->frame->title);
-		changeImage(panel, panel->current, 1, False);
+		WM_ITERATE_ARRAY(panel->windows, wwin, i) {
+			changeImage(panel, i, i == panel->current, False, False);
+		}
+		drawTitle(panel, panel->current, title);
 	}
 
 	return wwin;
@@ -676,9 +715,8 @@ WWindow *wSwitchPanelHandleEvent(WSwitchPanel *panel, XEvent *event)
 		WWindow *wwin;
 
 		WM_ITERATE_ARRAY(panel->windows, wwin, i) {
-			changeImage(panel, i, 0, False);
+			changeImage(panel, i, i == focus, False, False);
 		}
-		changeImage(panel, focus, 1, False);
 		panel->current = focus;
 
 		wwin = WMGetFromArray(panel->windows, focus);
