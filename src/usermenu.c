@@ -72,7 +72,6 @@
 #include "WindowMaker.h"
 #include "menu.h"
 #include "actions.h"
-#include "funcs.h"
 #include "keybind.h"
 #include "xmodifier.h"
 
