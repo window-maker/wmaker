@@ -129,7 +129,7 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 
 	if (swpanel) {
 
-		if (wwin->flags.mapped)
+		if (wwin->flags.mapped && !wPreferences.panel_only_open)
 			newFocused = wSwitchPanelSelectNext(swpanel, !next, True, False);
 		else
 			newFocused = wSwitchPanelSelectFirst(swpanel, False);

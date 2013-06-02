@@ -81,6 +81,12 @@ command:
 
 $ wdwrite WindowMaker StrictWindozeCycling NO
 
+If you find yourself regularly opening the switchpanel just to visualise open
+windows, you can run the following command to force the first "FocusNextKey"
+or similar shortcut to open the panel without switching to a new window.
+
+$ wdwrite WindowMaker SwitchPanelOnlyOpen YES
+
 
 --- 0.95.2
 

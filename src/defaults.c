@@ -478,6 +478,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.single_click, getBool, NULL, NULL, NULL},
 	{"StrictWindozeCycle",	"YES",	NULL,
 	    &wPreferences.strict_windoze_cycle, getBool, NULL, NULL, NULL},
+	{"SwitchPanelOnlyOpen",	"NO",	NULL,
+	    &wPreferences.panel_only_open, getBool, NULL, NULL, NULL},
 
 	/* style options */
 
