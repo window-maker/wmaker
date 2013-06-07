@@ -1766,7 +1766,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 		if (!close_on_exit && (bev->state & ControlMask) && smenu && entry->flags.editable) {
 			char buffer[128];
 			char *name;
-			int number = entry_no - 2; /* Entries "New" and "Destroy Last" appear before workspaces */
+			int number = entry_no - 3; /* Entries "New", "Destroy Last" and "Last Used" appear before workspaces */
 
 			name = wstrdup(scr->workspaces[number]->name);
 			snprintf(buffer, sizeof(buffer), _("Type the name for workspace %i:"), number + 1);
