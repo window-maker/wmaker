@@ -20,6 +20,7 @@
 
 #include "wconfig.h"
 
+#include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/time.h>
@@ -113,7 +114,7 @@ static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim,
 {
 	WMFrame *icon = WMGetFromArray(panel->icons, idecks);
 	RImage *image = WMGetFromArray(panel->images, idecks);
-	char flags = (char) WMGetFromArray(panel->flags, idecks);
+	char flags = (char) (uintptr_t) WMGetFromArray(panel->flags, idecks);
 	char desired = 0;
 
 	if (selected)
@@ -124,7 +125,7 @@ static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim,
 	if (flags == desired && !force)
 		return;
 
-	WMReplaceInArray(panel->flags, idecks, desired);
+	WMReplaceInArray(panel->flags, idecks, (void *) (uintptr_t) desired);
 
 	if (!panel->bg && !panel->tile && !selected)
 		WMSetFrameRelief(icon, WRFlat);
@@ -223,7 +224,7 @@ static void scrollIcons(WSwitchPanel *panel, int delta)
 	for (i = panel->firstVisible; i < panel->firstVisible + panel->visibleCount; i++) {
 		if (i == panel->current)
 			continue;
-		dim = ((char) WMGetFromArray(panel->flags, i) & ICON_DIM);
+		dim = ((char) (uintptr_t) WMGetFromArray(panel->flags, i) & ICON_DIM);
 		changeImage(panel, i, 0, dim, True);
 	}
 }
