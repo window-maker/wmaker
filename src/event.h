@@ -22,9 +22,15 @@
 #ifndef WMEVENT_H
 #define WMEVENT_H
 
+#include "config.h"
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
+
 typedef void (WDeathHandler)(pid_t pid, unsigned int status, void *cdata);
 
-void EventLoop(void);
+noreturn void EventLoop(void);
 void DispatchEvent(XEvent *event);
 void ProcessPendingEvents(void);
 WMagicNumber wAddDeathHandler(pid_t pid, WDeathHandler *callback, void *cdata);

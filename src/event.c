@@ -387,7 +387,7 @@ static void handle_inotify_events(int fd, int wd)
  *      Calls inotifyGetEvents if defaults database changes.
  *----------------------------------------------------------------------
  */
-void EventLoop(void)
+noreturn void EventLoop(void)
 {
 	XEvent event;
 #ifdef HAVE_INOTIFY

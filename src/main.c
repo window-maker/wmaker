@@ -269,7 +269,7 @@ static int initWVisualID(const char *user_str)
 	return 0;
 }
 
-void Exit(int status)
+noreturn void Exit(int status)
 {
 	if (dpy)
 		XCloseDisplay(dpy);
@@ -464,7 +464,7 @@ Bool RelaunchWindow(WWindow *wwin)
  *
  *----------------------------------------------------------------------
  */
-void wAbort(Bool dumpCore)
+noreturn void wAbort(Bool dumpCore)
 {
 	int i;
 	WScreen *scr;

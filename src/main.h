@@ -22,12 +22,18 @@
 #ifndef WMMAIN_H_
 #define WMMAIN_H_
 
-void Exit(int status) __attribute__((noreturn));
+#include "config.h"
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
+
+noreturn void Exit(int status);
 void Restart(char *manager, Bool abortOnFailure);
 void SetupEnvironment(WScreen *scr);
 void ExecuteShellCommand(WScreen *scr, char *command);
 Bool RelaunchWindow(WWindow *wwin);
-void wAbort(Bool dumpCore);
+noreturn void wAbort(Bool dumpCore);
 void ExecExitScript(void);
 int getWVisualID(int screen);
 
