@@ -792,6 +792,8 @@ AC_SUBST(HEADER_SEARCH_PATH)
 
 AC_SUBST(GFXLIBS)
 AC_SUBST(ICONEXT)
+AM_CONDITIONAL([ICON_EXT_XPM],  [test "x$ICONEXT" = "xxpm"])
+AM_CONDITIONAL([ICON_EXT_TIFF], [test "x$ICONEXT" = "xtiff"])
 
 
 dnl ==============================================
