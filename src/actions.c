@@ -410,8 +410,6 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 			new_height += wwin->frame->bottom_width - 1;
 			new_y -= wwin->frame->top_width;
 		}
-		/* HACK: this will be subtracted again below */
-		new_height += wwin->frame->top_width + wwin->frame->bottom_width;
 
 		wwin->maximus_x = new_x;
 		wwin->maximus_y = new_y;
@@ -457,7 +455,7 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 		}
 	}
 
-	if (!WFLAGP(wwin, full_maximize))
+	if (!WFLAGP(wwin, full_maximize) && !(directions == MAX_MAXIMUS || directions == MAX_HORIZONTAL))
 		new_height -= wwin->frame->top_width + wwin->frame->bottom_width;
 
 	/* set maximization state */
