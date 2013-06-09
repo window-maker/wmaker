@@ -67,13 +67,20 @@ char *wgethomedir()
 	return home;
 }
 
-static char *getuserhomedir(const char *username)
+/*
+ * Return the home directory for the specified used
+ *
+ * If user not found, returns NULL, otherwise always returns a path that is
+ * statically stored.
+ *
+ * Please note you must use the path before any other call to 'getpw*' or it
+ * may be erased. This is a design choice to avoid duplication considering
+ * the use case for this function.
+ */
+static const char *getuserhomedir(const char *username)
 {
-	static char *home = NULL;
+	static const char default_home[] = "/";
 	struct passwd *user;
-
-	if (home)
-		return home;
 
 	user = getpwnam(username);
 	if (!user) {
@@ -81,11 +88,10 @@ static char *getuserhomedir(const char *username)
 		return NULL;
 	}
 	if (!user->pw_dir)
-		home = "/";
+		return default_home;
 	else
-		home = wstrdup(user->pw_dir);
+		return user->pw_dir;
 
-	return home;
 }
 
 char *wexpandpath(const char *path)
@@ -98,7 +104,7 @@ char *wexpandpath(const char *path)
 	memset(buffer, 0, PATH_MAX + 2);
 
 	if (*path == '~') {
-		char *home;
+		const char *home;
 
 		path++;
 		if (*path == '/' || *path == 0) {
