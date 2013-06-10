@@ -402,7 +402,7 @@ void W_BalloonHandleLeaveView(WMView *view);
 
 /* ---[ wcolor.c ]-------------------------------------------------------- */
 
-typedef struct W_Color {
+struct W_Color {
     struct W_Screen *screen;
 
     XColor color;
@@ -412,7 +412,7 @@ typedef struct W_Color {
     struct {
         unsigned int exact:1;
     } flags;
-} W_Color;
+};
 
 #define W_PIXEL(c)		(c)->color.pixel
 
@@ -504,7 +504,7 @@ int W_GetTextHeight(WMFont *font, const char *text, int width, int wrap);
 
 /* ---[ wpixmap.c ]------------------------------------------------------- */
 
-typedef struct W_Pixmap {
+struct W_Pixmap {
     struct W_Screen *screen;
     Pixmap pixmap;
     Pixmap mask;
@@ -512,7 +512,7 @@ typedef struct W_Pixmap {
     unsigned short height;
     short depth;
     short refCount;
-} W_Pixmap;
+};
 
 
 /* ---[ wview.c ]--------------------------------------------------------- */
@@ -526,7 +526,7 @@ typedef struct W_ViewDelegate {
                        unsigned int*, unsigned int*);
 } W_ViewDelegate;
 
-typedef struct W_View {
+struct W_View {
     struct W_Screen *screen;
 
     WMWidget *self;     /* must point to the widget the view belongs to */
@@ -599,7 +599,7 @@ typedef struct W_View {
     } flags;
 
     int refCount;
-} W_View;
+};
 
 #define W_VIEW_REALIZED(view)	(view)->flags.realized
 #define W_VIEW_MAPPED(view)	(view)->flags.mapped

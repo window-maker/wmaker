@@ -4,7 +4,7 @@
 #include "geomview.h"
 
 
-typedef struct W_GeometryView {
+struct W_GeometryView {
 	W_Class widgetClass;
 	WMView *view;
 
@@ -25,7 +25,7 @@ typedef struct W_GeometryView {
 	} data;
 
 	unsigned showPosition:1;
-} WGeometryView;
+};
 
 static void handleEvents(XEvent * event, void *clientData);
 static void paint(WGeometryView * gview);
