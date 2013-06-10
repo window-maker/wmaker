@@ -4855,7 +4855,7 @@ static WMPropList *drawerSaveState(WScreen *scr, WDock *drawer)
 	WMReleasePropList(pstr);
 
 	/* Store its position */
-	snprintf(buffer, sizeof(buffer), "%hi,%hi", ai->x_pos, ai->y_pos);
+	snprintf(buffer, sizeof(buffer), "%i,%i", ai->x_pos, ai->y_pos);
 	pstr = WMCreatePLString(buffer);
 	WMPutInPLDictionary(drawer_state, dPosition, pstr);
 	WMReleasePropList(pstr);
