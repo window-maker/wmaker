@@ -361,7 +361,10 @@ static void fillModifierPopUp(WMPopUpButton * pop)
 			if (mapping->modifiermap[idx] != 0) {
 				int l;
 				for (l = 0; l < 4; l++) {
-					ksym = XkbKeycodeToKeysym(dpy, mapping->modifiermap[idx], 0, l);
+					if (xext_xkb_supported)
+						ksym = XkbKeycodeToKeysym(dpy, mapping->modifiermap[idx], 0, l);
+					else
+						ksym = XKeycodeToKeysym(dpy, mapping->modifiermap[idx], 0);
 					if (ksym != NoSymbol)
 						break;
 				}

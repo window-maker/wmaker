@@ -40,6 +40,7 @@
 /****/
 
 extern char *NOptionValueChanged;
+extern Bool xext_xkb_supported;
 
 typedef struct _Panel Panel;
 
