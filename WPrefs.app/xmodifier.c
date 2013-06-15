@@ -162,7 +162,17 @@ static void x_reset_modifier_mapping(Display * display)
 			for (column = 0; column < 4; column += 2) {
 				KeyCode code = x_modifier_keymap->modifiermap[modifier_index * mkpm
 									      + modifier_key];
-				KeySym sym = (code ? XkbKeycodeToKeysym(display, code, 0, column) : 0);
+				KeySym sym;
+
+				if (code) {
+					if (xext_xkb_supported)
+						sym = XkbKeycodeToKeysym(display, code, 0, column);
+					else
+						sym = XKeycodeToKeysym(display, code, column);
+				} else {
+					sym = NoSymbol;
+				}
+
 				if (sym == last_sym)
 					continue;
 				last_sym = sym;

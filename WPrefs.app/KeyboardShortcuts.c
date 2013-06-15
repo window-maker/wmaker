@@ -273,7 +273,10 @@ char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 		XAllowEvents(dpy, AsyncKeyboard, CurrentTime);
 		WMNextEvent(dpy, &ev);
 		if (ev.type == KeyPress && ev.xkey.keycode != 0) {
-			ksym = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0);
+			if (xext_xkb_supported)
+				ksym = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0);
+			else
+				ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
 			if (!IsModifierKey(ksym)) {
 				if (convert_case) {
 					XConvertCase(ksym, &lksym, &uksym);
