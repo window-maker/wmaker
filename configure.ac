@@ -104,6 +104,15 @@ AS_IF([test "x$debug" = "xyes"],
      dnl
      dnl Use of 'sizeof()' on inappropriate pointer types
      AX_CFLAGS_GCC_OPTION([-Wpointer-arith])
+], [dnl
+     dnl When debug not enabled, we try to avoid some non-necessary
+     dnl messages from the compiler
+     dnl
+     dnl To support legacy X servers, we have sometime to use
+     dnl functions marked as deprecated. We do not wish our users
+     dnl to be worried about it
+     AX_CFLAGS_GCC_OPTION([-Wno-deprecated])
+     AX_CFLAGS_GCC_OPTION([-Wno-deprecated-declarations])
 ])
 
 dnl Platform-specific Makefile setup
