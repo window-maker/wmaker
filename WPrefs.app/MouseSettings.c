@@ -315,10 +315,13 @@ static void showData(_Panel * panel)
 	}
 
 	if (a < 1) {
-		sscanf(WMGetPopUpButtonItem(panel->grabP, 0), "%s", buffer);
-		WMSetPopUpButtonSelectedItem(panel->grabP, 0);
+		char *previous;
+
+		previous = WMGetPopUpButtonItem(panel->grabP, 0);
+		if (previous != NULL)
+			WMSetPopUpButtonSelectedItem(panel->grabP, 0);
 		wwarning(_("modifier key %s for option ModifierKey was not recognized. Using %s as default"),
-			 str, buffer);
+					str, previous?previous:"(empty)");
 	}
 }
 
