@@ -256,7 +256,7 @@ void SlideWindows(Window *wins[], int n, int from_x, int from_y, int to_x, int t
 	eatExpose();
 }
 
-char *ShrinkString(WMFont * font, char *string, int width)
+char *ShrinkString(WMFont *font, const char *string, int width)
 {
 	int w, w1 = 0;
 	int p;
@@ -296,7 +296,7 @@ char *ShrinkString(WMFont * font, char *string, int width)
 	}
 	strcat(text, "...");
 	width -= WMWidthOfString(font, "...", 3);
-	pos = string;
+
 	p1 = 0;
 	p2 = p;
 	t = (p2 - p1) / 2;

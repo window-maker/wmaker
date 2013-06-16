@@ -35,7 +35,7 @@ void SlideWindows(Window *wins[], int n, int from_x, int from_y, int to_x, int t
 void ParseWindowName(WMPropList * value, char **winstance, char **wclass, char *where);
 void SendHelperMessage(WScreen * scr, char type, int workspace, char *msg);
 
-char *ShrinkString(WMFont * font, char *string, int width);
+char *ShrinkString(WMFont *font, const char *string, int width);
 char *FindImage(char *paths, char *file);
 char *ExpandOptions(WScreen * scr, char *cmdline);
 char *GetShortcutString(char *text);
