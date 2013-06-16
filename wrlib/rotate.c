@@ -52,7 +52,9 @@ RImage *RRotateImage(RImage * image, float angle)
 	 */
 	static const float min_usable_angle = 0.00699;
 
-	angle = ((int)angle % 360) + (angle - (int)angle);
+	angle = fmod(angle, 360.0);
+	if (angle < 0.0)
+		angle += 360.0;
 
 	if (angle < min_usable_angle) {
 		/* Rotate by 0 degree */
