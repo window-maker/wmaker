@@ -1324,7 +1324,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 }
 
 WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
-			       char *title, int x, int y, int width, int height)
+			       const char *title, int x, int y, int width, int height)
 {
 	WWindow *wwin;
 	int foo;
@@ -2548,7 +2548,8 @@ void wWindowUpdateGNUstepAttr(WWindow * wwin, GNUstepWMAttributes * attr)
 	}
 }
 
-WMagicNumber wWindowAddSavedState(char *instance, char *class, char *command, pid_t pid, WSavedState * state)
+WMagicNumber wWindowAddSavedState(const char *instance, const char *class,
+											 const char *command, pid_t pid, WSavedState * state)
 {
 	WWindowState *wstate;
 

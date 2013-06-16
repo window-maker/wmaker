@@ -30,15 +30,15 @@ enum {
 };
 
 
-int wMessageDialog(WScreen *scr, char *title, char *message,
-                   char *defBtn, char *altBtn, char *othBtn);
-int wAdvancedInputDialog(WScreen *scr, char *title, char *message, char *name, char **text);
-int wInputDialog(WScreen *scr, char *title, char *message, char **text);
+int wMessageDialog(WScreen *scr, const char *title, const char *message,
+                   const char *defBtn, const char *altBtn, const char *othBtn);
+int wAdvancedInputDialog(WScreen *scr, const char *title, const char *message, const char *name, char **text);
+int wInputDialog(WScreen *scr, const char *title, const char *message, char **text);
 
-int wExitDialog(WScreen *scr, char *title, char *message, char *defBtn,
-                char *altBtn, char *othBtn);
+int wExitDialog(WScreen *scr, const char *title, const char *message, const char *defBtn,
+                const char *altBtn, const char *othBtn);
 
-Bool wIconChooserDialog(WScreen *scr, char **file, char *instance, char *class);
+Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const char *class);
 
 void wShowInfoPanel(WScreen *scr);
 void wShowLegalPanel(WScreen *scr);

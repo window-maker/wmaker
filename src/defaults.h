@@ -37,24 +37,24 @@ void wDefaultUpdateIcons(WScreen *scr);
 void wReadStaticDefaults(WMPropList *dict);
 void wDefaultsCheckDomains(void *arg);
 void wSaveDefaults(WScreen *scr);
-void wDefaultFillAttributes(char *instance, char *class,
+void wDefaultFillAttributes(const char *instance, const char *class,
                             WWindowAttributes *attr, WWindowAttributes *mask,
                             Bool useGlobalDefault);
 
 char *get_default_image_path(void);
 RImage *get_default_image(WScreen *scr);
 
-char *wDefaultGetIconFile(char *instance, char *class, Bool default_icon);
+char *wDefaultGetIconFile(const char *instance, const char *class, Bool default_icon);
 
 RImage *get_icon_image(WScreen *scr, char *winstance, char *wclass, int max_size);
 char *get_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
 			Bool default_icon);
 
 
-int wDefaultGetStartWorkspace(WScreen *scr, char *instance, char *class);
-void wDefaultChangeIcon(WScreen *scr, char *instance, char* class, char *file);
+int wDefaultGetStartWorkspace(WScreen *scr, const char *instance, const char *class);
+void wDefaultChangeIcon(WScreen *scr, const char *instance, const char* class, const char *file);
 RImage *get_rimage_from_file(WScreen *scr, char *file_name, int max_size);
 
-void wDefaultPurgeInfo(WScreen *scr, char *instance, char *class);
+void wDefaultPurgeInfo(WScreen *scr, const char *instance, const char *class);
 
 #endif /* WMDEFAULTS_H_ */

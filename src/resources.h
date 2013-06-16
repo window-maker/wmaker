@@ -21,8 +21,8 @@
 #ifndef WMRESOURCES_H_
 #define WMRESOURCES_H_
 
-int wGetColorForColormap(Colormap colormap, char *color_name, XColor *color);
-int wGetColor(WScreen *scr, char *color_name, XColor *color);
+int wGetColorForColormap(Colormap colormap, const char *color_name, XColor *color);
+int wGetColor(WScreen *scr, const char *color_name, XColor *color);
 void wFreeColor(WScreen *scr, unsigned long pixel);
 
 #endif

@@ -353,7 +353,7 @@ static void shellCommandHandler(pid_t pid, unsigned char status, _tuple * data)
 	wfree(data);
 }
 
-void ExecuteShellCommand(WScreen * scr, char *command)
+void ExecuteShellCommand(WScreen *scr, const char *command)
 {
 	static char *shell = NULL;
 	pid_t pid;

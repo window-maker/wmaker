@@ -67,7 +67,7 @@ static WMPoint getCenter(WScreen * scr, int width, int height)
 	return wGetPointToCenterRectInHead(scr, wGetHeadForPointerLocation(scr), width, height);
 }
 
-int wMessageDialog(WScreen * scr, char *title, char *message, char *defBtn, char *altBtn, char *othBtn)
+int wMessageDialog(WScreen *scr, const char *title, const char *message, const char *defBtn, const char *altBtn, const char *othBtn)
 {
 	WMAlertPanel *panel;
 	Window parent;
@@ -109,7 +109,7 @@ static void toggleSaveSession(WMWidget *w, void *data)
 	wPreferences.save_session_on_exit = WMGetButtonSelected((WMButton *) w);
 }
 
-int wExitDialog(WScreen * scr, char *title, char *message, char *defBtn, char *altBtn, char *othBtn)
+int wExitDialog(WScreen *scr, const char *title, const char *message, const char *defBtn, const char *altBtn, const char *othBtn)
 {
 	WMAlertPanel *panel;
 	WMButton *saveSessionBtn;
@@ -407,7 +407,7 @@ static void handleHistoryKeyPress(XEvent * event, void *clientData)
 	}
 }
 
-int wAdvancedInputDialog(WScreen * scr, char *title, char *message, char *name, char **text)
+int wAdvancedInputDialog(WScreen *scr, const char *title, const char *message, const char *name, char **text)
 {
 	WWindow *wwin;
 	Window parent;
@@ -471,7 +471,7 @@ int wAdvancedInputDialog(WScreen * scr, char *title, char *message, char *name, 
 	}
 }
 
-int wInputDialog(WScreen * scr, char *title, char *message, char **text)
+int wInputDialog(WScreen *scr, const char *title, const char *message, char **text)
 {
 	WWindow *wwin;
 	Window parent;
@@ -891,7 +891,7 @@ static void keyPressHandler(XEvent * event, void *data)
 	}
 }
 
-Bool wIconChooserDialog(WScreen * scr, char **file, char *instance, char *class)
+Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const char *class)
 {
 	WWindow *wwin;
 	Window parent;

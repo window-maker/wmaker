@@ -140,7 +140,7 @@ static void appearanceObserver(void *self, WMNotification * notif)
  * 	The created menu.
  *----------------------------------------------------------------------
  */
-WMenu *wMenuCreate(WScreen * screen, char *title, int main_menu)
+WMenu *wMenuCreate(WScreen *screen, const char *title, int main_menu)
 {
 	WMenu *menu;
 	static int brother = 0;
@@ -230,7 +230,7 @@ WMenu *wMenuCreate(WScreen * screen, char *title, int main_menu)
 	return menu;
 }
 
-WMenu *wMenuCreateForApp(WScreen * screen, char *title, int main_menu)
+WMenu *wMenuCreateForApp(WScreen *screen, const char *title, int main_menu)
 {
 	WMenu *menu;
 
@@ -254,7 +254,7 @@ static void insertEntry(WMenu * menu, WMenuEntry * entry, int index)
 	menu->entries[index] = entry;
 }
 
-WMenuEntry *wMenuInsertCallback(WMenu * menu, int index, char *text,
+WMenuEntry *wMenuInsertCallback(WMenu *menu, int index, const char *text,
 				void (*callback) (WMenu * menu, WMenuEntry * entry), void *clientdata)
 {
 	WMenuEntry *entry;

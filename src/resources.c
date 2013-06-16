@@ -35,7 +35,7 @@
 #include "resources.h"
 #include "screen.h"
 
-int wGetColorForColormap(Colormap colormap, char *color_name, XColor * color)
+int wGetColorForColormap(Colormap colormap, const char *color_name, XColor *color)
 {
 	if (!XParseColor(dpy, colormap, color_name, color)) {
 		wwarning(_("could not parse color \"%s\""), color_name);
@@ -48,7 +48,7 @@ int wGetColorForColormap(Colormap colormap, char *color_name, XColor * color)
 	return True;
 }
 
-int wGetColor(WScreen * scr, char *color_name, XColor * color)
+int wGetColor(WScreen *scr, const char *color_name, XColor *color)
 {
 	return wGetColorForColormap(scr->w_colormap, color_name, color);
 }

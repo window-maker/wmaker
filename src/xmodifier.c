@@ -262,7 +262,7 @@ static void x_reset_modifier_mapping(Display * display)
 	XFreeModifiermap(x_modifier_keymap);
 }
 
-int wXModifierFromKey(char *key)
+int wXModifierFromKey(const char *key)
 {
 	if (strcasecmp(key, "SHIFT") == 0 && ShiftMask != 0)
 		return ShiftMask;

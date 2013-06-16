@@ -1191,7 +1191,7 @@ void wFrameWindowResize(WFrameWindow * fwin, int width, int height)
 	reconfigure(fwin, 0, 0, width, height, True);
 }
 
-int wFrameWindowChangeTitle(WFrameWindow * fwin, char *new_title)
+int wFrameWindowChangeTitle(WFrameWindow *fwin, const char *new_title)
 {
 	/* check if the title is the same as before */
 	if (fwin->title) {

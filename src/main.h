@@ -31,7 +31,7 @@
 noreturn void Exit(int status);
 void Restart(char *manager, Bool abortOnFailure);
 void SetupEnvironment(WScreen *scr);
-void ExecuteShellCommand(WScreen *scr, char *command);
+void ExecuteShellCommand(WScreen *scr, const char *command);
 Bool RelaunchWindow(WWindow *wwin);
 noreturn void wAbort(Bool dumpCore);
 void ExecExitScript(void);

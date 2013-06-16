@@ -370,7 +370,7 @@ void wWindowSetKeyGrabs(WWindow *wwin);
 void wWindowResetMouseGrabs(WWindow *wwin);
 
 WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
-                               char *title, int x, int y,
+                               const char *title, int x, int y,
                                int width, int height);
 
 void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace);
@@ -383,7 +383,7 @@ void wWindowUnmap(WWindow *wwin);
 
 void wWindowDeleteSavedStatesForPID(pid_t pid);
 
-WMagicNumber wWindowAddSavedState(char *instance, char *class, char *command,
+WMagicNumber wWindowAddSavedState(const char *instance, const char *class, const char *command,
                                   pid_t pid, WSavedState *state);
 
 WMagicNumber wWindowGetSavedState(Window win);

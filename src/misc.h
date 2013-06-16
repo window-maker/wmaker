@@ -32,15 +32,15 @@ Bool UpdateDomainFile(WDDomain * domain);
 void move_window(Window win, int from_x, int from_y, int to_x, int to_y);
 void SlideWindow(Window win, int from_x, int from_y, int to_x, int to_y);
 void SlideWindows(Window *wins[], int n, int from_x, int from_y, int to_x, int to_y);
-void ParseWindowName(WMPropList * value, char **winstance, char **wclass, char *where);
-void SendHelperMessage(WScreen * scr, char type, int workspace, char *msg);
+void ParseWindowName(WMPropList *value, char **winstance, char **wclass, const char *where);
+void SendHelperMessage(WScreen *scr, char type, int workspace, const char *msg);
 
 char *ShrinkString(WMFont *font, const char *string, int width);
-char *FindImage(char *paths, char *file);
-char *ExpandOptions(WScreen * scr, char *cmdline);
+char *FindImage(const char *paths, const char *file);
+char *ExpandOptions(WScreen * scr, const char *cmdline);
 char *GetShortcutString(const char *text);
 char *GetShortcutKey(WShortKey key);
-char *EscapeWM_CLASS(char *name, char *class);
-char *StrConcatDot(char *a, char *b);
+char *EscapeWM_CLASS(const char *name, const char *class);
+char *StrConcatDot(const char *a, const char *b);
 char *GetCommandForWindow(Window win);
 #endif

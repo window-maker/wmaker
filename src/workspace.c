@@ -667,7 +667,7 @@ static void newWSCommand(WMenu *menu, WMenuEntry *foo)
 		wWorkspaceChange(menu->frame->screen_ptr, ws);
 }
 
-void wWorkspaceRename(WScreen * scr, int workspace, char *name)
+void wWorkspaceRename(WScreen *scr, int workspace, const char *name)
 {
 	char buf[MAX_WORKSPACENAME_WIDTH + 1];
 	char *tmp;
@@ -923,7 +923,7 @@ void wWorkspaceRestoreState(WScreen *scr)
 }
 
 /* Returns the workspace number for a given workspace name */
-int wGetWorkspaceNumber(WScreen * scr, char * value)
+int wGetWorkspaceNumber(WScreen *scr, const char *value)
 {
         int w, i;
 

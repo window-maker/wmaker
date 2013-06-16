@@ -175,7 +175,7 @@ void wTextureDestroy(WScreen * scr, WTexture * texture)
 #undef CANFREE
 }
 
-WTexGradient *wTextureMakeGradient(WScreen * scr, int style, RColor * from, RColor * to)
+WTexGradient *wTextureMakeGradient(WScreen *scr, int style, const RColor *from, const RColor *to)
 {
 	WTexGradient *texture;
 	XGCValues gcv;
@@ -199,8 +199,8 @@ WTexGradient *wTextureMakeGradient(WScreen * scr, int style, RColor * from, RCol
 	return texture;
 }
 
-WTexIGradient *wTextureMakeIGradient(WScreen * scr, int thickness1, RColor colors1[2],
-				     int thickness2, RColor colors2[2])
+WTexIGradient *wTextureMakeIGradient(WScreen *scr, int thickness1, const RColor colors1[2],
+				     int thickness2, const RColor colors2[2])
 {
 	WTexIGradient *texture;
 	XGCValues gcv;

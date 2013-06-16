@@ -316,7 +316,7 @@ char *ShrinkString(WMFont *font, const char *string, int width)
 	return text;
 }
 
-char *FindImage(char *paths, char *file)
+char *FindImage(const char *paths, const char *file)
 {
 	char *tmp, *path = NULL;
 
@@ -507,7 +507,7 @@ getuserinput(WScreen *scr, const char *line, int *ptr, Bool advanced)
  * OPTION	etc.	NORMAL		%<input>
  */
 #define TMPBUFSIZE 64
-char *ExpandOptions(WScreen * scr, char *cmdline)
+char *ExpandOptions(WScreen *scr, const char *cmdline)
 {
 	int ptr, optr, state, len, olen;
 	char *out, *nout;
@@ -688,7 +688,7 @@ char *ExpandOptions(WScreen * scr, char *cmdline)
 	return NULL;
 }
 
-void ParseWindowName(WMPropList * value, char **winstance, char **wclass, char *where)
+void ParseWindowName(WMPropList *value, char **winstance, char **wclass, const char *where)
 {
 	char *name;
 
@@ -815,7 +815,7 @@ char *GetShortcutKey(WShortKey key)
 	return GetShortcutString(tmp);
 }
 
-char *EscapeWM_CLASS(char *name, char *class)
+char *EscapeWM_CLASS(const char *name, const char *class)
 {
 	char *ret;
 	char *ename = NULL, *eclass = NULL;
@@ -921,7 +921,7 @@ static void UnescapeWM_CLASS(const char *str, char **name, char **class)
 	}
 }
 
-void SendHelperMessage(WScreen * scr, char type, int workspace, char *msg)
+void SendHelperMessage(WScreen *scr, char type, int workspace, const char *msg)
 {
 	char *buffer;
 	int len;
@@ -986,7 +986,7 @@ Bool UpdateDomainFile(WDDomain * domain)
 	return result;
 }
 
-char *StrConcatDot(char *a, char *b)
+char *StrConcatDot(const char *a, const char *b)
 {
 	int len;
 	char *str;

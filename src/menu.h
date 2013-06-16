@@ -106,9 +106,9 @@ typedef struct WMenu {
 void wMenuPaint(WMenu *menu);
 void wMenuDestroy(WMenu *menu, int recurse);
 void wMenuRealize(WMenu *menu);
-WMenuEntry *wMenuInsertCascade(WMenu *menu, int index, char *text,
+WMenuEntry *wMenuInsertCascade(WMenu *menu, int index, const char *text,
                                WMenu *cascade);
-WMenuEntry *wMenuInsertCallback(WMenu *menu, int index, char *text,
+WMenuEntry *wMenuInsertCallback(WMenu *menu, int index, const char *text,
                                 void (*callback)(WMenu *menu, WMenuEntry *entry),
                                 void *clientdata);
 
@@ -119,8 +119,8 @@ void wMenuEntrySetCascade(WMenu *menu, WMenuEntry *entry, WMenu *cascade);
 
 void wMenuRemoveItem(WMenu *menu, int index);
 
-WMenu *wMenuCreate(WScreen *screen, char *title, int main_menu);
-WMenu *wMenuCreateForApp(WScreen *screen, char *title, int main_menu);
+WMenu *wMenuCreate(WScreen *screen, const char *title, int main_menu);
+WMenu *wMenuCreateForApp(WScreen *screen, const char *title, int main_menu);
 void wMenuMap(WMenu *menu);
 void wMenuMapAt(WMenu *menu, int x, int y, int keyboard);
 #define wMenuMapCopyAt(menu, x, y) wMenuMapAt((menu)->brother, (x), (y), False)

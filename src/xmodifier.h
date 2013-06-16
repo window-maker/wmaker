@@ -21,6 +21,6 @@
 #define _XMODIFIER_H_INCLUDED
 
 void wXModifierInitialize(void);
-int  wXModifierFromKey(char *key);
+int  wXModifierFromKey(const char *key);
 
 #endif /* _XMODIFIER_H_INCLUDED */

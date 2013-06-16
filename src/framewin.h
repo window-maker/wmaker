@@ -181,7 +181,7 @@ void wFrameWindowShowButton(WFrameWindow *fwin, int flags);
 
 void wFrameWindowHideButton(WFrameWindow *fwin, int flags);
 
-int wFrameWindowChangeTitle(WFrameWindow *fwin, char *new_title);
+int wFrameWindowChangeTitle(WFrameWindow *fwin, const char *new_title);
 
 #ifdef XKB_BUTTON_HINT
 void wFrameWindowUpdateLanguageButton(WFrameWindow *fwin);

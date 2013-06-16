@@ -200,7 +200,7 @@ static WMPropList *get_value_from_instanceclass(const char *value)
  *
  *----------------------------------------------------------------------
  */
-void wDefaultFillAttributes(char *instance, char *class,
+void wDefaultFillAttributes(const char *instance, const char *class,
 			    WWindowAttributes *attr, WWindowAttributes *mask,
 			    Bool useGlobalDefault)
 {
@@ -483,7 +483,7 @@ RImage *get_icon_image(WScreen *scr, char *winstance, char *wclass, int max_size
 	return get_rimage_from_file(scr, file_name, max_size);
 }
 
-int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
+int wDefaultGetStartWorkspace(WScreen *scr, const char *instance, const char *class)
 {
 	WMPropList *value;
 	int w;
@@ -512,7 +512,7 @@ int wDefaultGetStartWorkspace(WScreen * scr, char *instance, char *class)
 }
 
 /* Get the name of the Icon File. If default_icon is True, then, default value included */
-char *wDefaultGetIconFile(char *instance, char *class, Bool default_icon)
+char *wDefaultGetIconFile(const char *instance, const char *class, Bool default_icon)
 {
 	WMPropList *value;
 	char *tmp;
@@ -533,7 +533,7 @@ char *wDefaultGetIconFile(char *instance, char *class, Bool default_icon)
 	return tmp;
 }
 
-void wDefaultChangeIcon(WScreen * scr, char *instance, char *class, char *file)
+void wDefaultChangeIcon(WScreen *scr, const char *instance, const char *class, const char *file)
 {
 	WDDomain *db = WDWindowAttributes;
 	WMPropList *icon_value = NULL, *value, *attr, *key, *def_win, *def_icon = NULL;
@@ -597,7 +597,7 @@ void wDefaultChangeIcon(WScreen * scr, char *instance, char *class, char *file)
 	WMPLSetCaseSensitive(False);
 }
 
-void wDefaultPurgeInfo(WScreen *scr, char *instance, char *class)
+void wDefaultPurgeInfo(WScreen *scr, const char *instance, const char *class)
 {
 	WMPropList *value, *key, *dict;
 	char *buffer;
