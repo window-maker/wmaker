@@ -477,12 +477,7 @@ dnl
 dnl libWINGS uses math functions, check whether usage requires linking
 dnl against libm
 dnl
-AC_CHECK_FUNC(atan,[mathneedslibm=no;LIBM=],[mathneedslibm=dunno])
-if test "x$mathneedslibm" = "xdunno" ; then
-	AC_CHECK_LIB(m, atan, [LIBM=-lm])
-fi
-AC_SUBST(LIBM)
-
+WM_CHECK_LIBM
 
 dnl
 dnl libWINGS uses FcPatternDel from libfontconfig
