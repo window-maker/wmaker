@@ -733,16 +733,16 @@ static char *keysymToString(KeySym keysym, unsigned int state)
 }
 #endif
 
-char *GetShortcutString(char *text)
+char *GetShortcutString(const char *shortcut)
 {
 	char *buffer = NULL;
 	char *k;
 	int modmask = 0;
 	/*    KeySym ksym; */
 	int control = 0;
-	char *tmp;
+	char *tmp, *text;
 
-	tmp = text = wstrdup(text);
+	tmp = text = wstrdup(shortcut);
 
 	/* get modifiers */
 	while ((k = strchr(text, '+')) != NULL) {

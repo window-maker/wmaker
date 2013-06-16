@@ -38,7 +38,7 @@ void SendHelperMessage(WScreen * scr, char type, int workspace, char *msg);
 char *ShrinkString(WMFont *font, const char *string, int width);
 char *FindImage(char *paths, char *file);
 char *ExpandOptions(WScreen * scr, char *cmdline);
-char *GetShortcutString(char *text);
+char *GetShortcutString(const char *text);
 char *GetShortcutKey(WShortKey key);
 char *EscapeWM_CLASS(char *name, char *class);
 char *StrConcatDot(char *a, char *b);
