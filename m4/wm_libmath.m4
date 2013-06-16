@@ -22,7 +22,9 @@
 # Checks the needed library link flags needed to have math lib
 # Sets variable LIBM with the appropriates flags
 AC_DEFUN_ONCE([WM_CHECK_LIBM],
-[AC_CHECK_FUNC(atan,
+[AC_CHECK_HEADER([math.h], [],
+                 [AC_MSG_ERROR([header for math library not found])])
+AC_CHECK_FUNC(atan,
     [LIBM=],
     [AC_CHECK_LIB(m, [atan],
         [LIBM=-lm],
