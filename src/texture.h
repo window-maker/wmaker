@@ -161,9 +161,9 @@ typedef union WTexture {
 WTexSolid *wTextureMakeSolid(WScreen*, XColor*);
 WTexGradient *wTextureMakeGradient(WScreen*, int, const RColor*, const RColor*);
 WTexMGradient *wTextureMakeMGradient(WScreen*, int, RColor**);
-WTexTGradient *wTextureMakeTGradient(WScreen*, int, RColor*, RColor*, char *, int);
+WTexTGradient *wTextureMakeTGradient(WScreen*, int, const RColor*, const RColor*, const char *, int);
 WTexIGradient *wTextureMakeIGradient(WScreen*, int, const RColor[], int, const RColor[]);
-WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, char *pixmap_file,
+WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, const char *pixmap_file,
                                XColor *color);
 void wTextureDestroy(WScreen*, WTexture*);
 void wTexturePaint(WTexture *, Pixmap *, WCoreWindow*, int, int);

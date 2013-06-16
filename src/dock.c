@@ -95,7 +95,7 @@ static void dockIconPaint(WAppIcon *btn);
 
 static void iconMouseDown(WObjDescriptor *desc, XEvent *event);
 
-static pid_t execCommand(WAppIcon *btn, char *command, WSavedState *state);
+static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state);
 
 static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock);
 
@@ -119,7 +119,7 @@ static void launchDockedApplication(WAppIcon *btn, Bool withSelection);
 
 static void clipAutoLower(void *cdata);
 static void clipAutoRaise(void *cdata);
-static WAppIcon *mainIconCreate(WScreen *scr, int type, char *name);
+static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name);
 
 static void drawerIconExpose(WObjDescriptor *desc, XEvent *event);
 static void removeDrawerCallback(WMenu *menu, WMenuEntry *entry);
@@ -815,7 +815,7 @@ static void unhideHereCallback(WMenu *menu, WMenuEntry *entry)
 /* Name is only used when type == WM_DRAWER and when restoring a specific
  * drawer, with a specific name. When creating a drawer, leave name to NULL
  * and mainIconCreate will find the first unused unique name */
-WAppIcon *mainIconCreate(WScreen *scr, int type, char *name)
+static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name)
 {
 	WAppIcon *btn;
 	int x_pos;
@@ -1280,7 +1280,7 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 	return menu;
 }
 
-WDock *wDockCreate(WScreen *scr, int type, char *name)
+WDock *wDockCreate(WScreen *scr, int type, const char *name)
 {
 	WDock *dock;
 	WAppIcon *btn;
@@ -3008,7 +3008,7 @@ static void swapDock(WDock *dock)
 	wScreenUpdateUsableArea(scr);
 }
 
-static pid_t execCommand(WAppIcon *btn, char *command, WSavedState *state)
+static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state)
 {
 	WScreen *scr = btn->icon->core->screen_ptr;
 	pid_t pid;

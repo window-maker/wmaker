@@ -68,7 +68,7 @@ extern WPreferences wPreferences;
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen *scr, const char *file_name);
-static WMenu *readMenuDirectory(WScreen * scr, char *title, char **file_name, char *command);
+static WMenu *readMenuDirectory(WScreen *scr, const char *title, char **file_name, const char *command);
 static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals);
 static void menu_parser_register_macros(WMenuParser parser);
 
@@ -764,7 +764,7 @@ static void cleanupWorkspaceMenu(WMenu * menu)
 		menu->frame->screen_ptr->workspace_menu = NULL;
 }
 
-static WMenuEntry *addWorkspaceMenu(WScreen * scr, WMenu * menu, char *title)
+static WMenuEntry *addWorkspaceMenu(WScreen *scr, WMenu *menu, const char *title)
 {
 	WMenu *wsmenu;
 	WMenuEntry *entry;
@@ -794,7 +794,7 @@ static void cleanupWindowsMenu(WMenu * menu)
 		menu->frame->screen_ptr->switch_menu = NULL;
 }
 
-static WMenuEntry *addWindowsMenu(WScreen * scr, WMenu * menu, char *title)
+static WMenuEntry *addWindowsMenu(WScreen *scr, WMenu *menu, const char *title)
 {
 	WMenu *wwmenu;
 	WWindow *wwin;
@@ -822,8 +822,8 @@ static WMenuEntry *addWindowsMenu(WScreen * scr, WMenu * menu, char *title)
 	return entry;
 }
 
-static WMenuEntry *addMenuEntry(WMenu * menu, char *title, char *shortcut, char *command,
-				char *params, const char *file_name)
+static WMenuEntry *addMenuEntry(WMenu *menu, const char *title, const char *shortcut, const char *command,
+				const char *params, const char *file_name)
 {
 	WScreen *scr;
 	WMenuEntry *entry = NULL;
@@ -1207,7 +1207,7 @@ static Bool isFilePackage(const char *file)
 	}
 }
 
-static WMenu *readMenuDirectory(WScreen * scr, char *title, char **path, char *command)
+static WMenu *readMenuDirectory(WScreen *scr, const char *title, char **path, const char *command)
 {
 	DIR *dir;
 	struct dirent *dentry;

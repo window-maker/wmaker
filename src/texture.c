@@ -37,7 +37,7 @@
 extern WPreferences wPreferences;
 
 static void bevelImage(RImage * image, int relief);
-static RImage * get_texture_image(WScreen *scr, char *pixmap_file);
+static RImage * get_texture_image(WScreen *scr, const char *pixmap_file);
 
 WTexSolid *wTextureMakeSolid(WScreen * scr, XColor * color)
 {
@@ -259,7 +259,7 @@ WTexMGradient *wTextureMakeMGradient(WScreen * scr, int style, RColor ** colors)
 	return texture;
 }
 
-WTexPixmap *wTextureMakePixmap(WScreen * scr, int style, char *pixmap_file, XColor * color)
+WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, const char *pixmap_file, XColor *color)
 {
 	WTexPixmap *texture;
 	XGCValues gcv;
@@ -285,8 +285,8 @@ WTexPixmap *wTextureMakePixmap(WScreen * scr, int style, char *pixmap_file, XCol
 	return texture;
 }
 
-WTexTGradient *wTextureMakeTGradient(WScreen * scr, int style, RColor * from, RColor * to,
-				     char *pixmap_file, int opacity)
+WTexTGradient *wTextureMakeTGradient(WScreen *scr, int style, const RColor *from, const RColor *to,
+				     const char *pixmap_file, int opacity)
 {
 	WTexTGradient *texture;
 	XGCValues gcv;
@@ -318,7 +318,7 @@ WTexTGradient *wTextureMakeTGradient(WScreen * scr, int style, RColor * from, RC
 	return texture;
 }
 
-static RImage * get_texture_image(WScreen *scr, char *pixmap_file)
+static RImage * get_texture_image(WScreen *scr, const char *pixmap_file)
 {
 	char *file;
 	RImage *image;

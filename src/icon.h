@@ -53,10 +53,10 @@ typedef struct WIcon {
 					 * color */
 } WIcon;
 
-WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char *wm_class, int tile);
+WIcon *icon_create_for_dock(WScreen *scr, const char *command, const char *wm_instance, const char *wm_class, int tile);
 WIcon *icon_create_for_wwindow(WWindow *wwin);
 
-void set_icon_image_from_database(WIcon *icon, char *wm_instance, char *wm_class, char *command);
+void set_icon_image_from_database(WIcon *icon, const char *wm_instance, const char *wm_class, const char *command);
 void wIconDestroy(WIcon *icon);
 void wIconPaint(WIcon *icon);
 void wIconUpdate(WIcon *icon);
@@ -64,13 +64,13 @@ void wIconSelect(WIcon *icon);
 void wIconChangeTitle(WIcon *icon, WWindow *wwin);
 void update_icon_pixmap(WIcon *icon);
 
-Bool wIconChangeImageFile(WIcon *icon, char *file);
+Bool wIconChangeImageFile(WIcon *icon, const char *file);
 
 RImage *wIconValidateIconSize(RImage *icon, int max_size);
 RImage *get_rimage_icon_from_wm_hints(WIcon *icon);
 
 char *wIconStore(WIcon *icon);
-char *get_name_for_instance_class(char *wm_instance, char *wm_class);
+char *get_name_for_instance_class(const char *wm_instance, const char *wm_class);
 
 void wIconSetHighlited(WIcon *icon, Bool flag);
 void set_icon_image_from_image(WIcon *icon, RImage *image);

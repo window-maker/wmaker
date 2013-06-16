@@ -303,7 +303,7 @@ static void changePage(WMPopUpButton *bPtr, InspectorPanel *panel)
 		WMUnmapWidget(panel->appFrm);
 }
 
-static int showIconFor(WMScreen *scrPtr, InspectorPanel *panel, char *wm_instance, char *wm_class, int flags)
+static int showIconFor(WMScreen *scrPtr, InspectorPanel *panel, const char *wm_instance, const char *wm_class, int flags)
 {
 	WMPixmap *pixmap = (WMPixmap *) NULL;
 	char *file = NULL, *path = NULL, *db_icon = NULL;

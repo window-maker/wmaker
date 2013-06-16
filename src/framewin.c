@@ -61,9 +61,9 @@ static void paintButton(WCoreWindow * button, WTexture * texture,
 
 static void updateTitlebar(WFrameWindow * fwin);
 
-static void allocFrameBorderPixel(Colormap colormap, char *color_name, unsigned long **pixel);
+static void allocFrameBorderPixel(Colormap colormap, const char *color_name, unsigned long **pixel);
 
-static void allocFrameBorderPixel(Colormap colormap, char *color_name, unsigned long **pixel) {
+static void allocFrameBorderPixel(Colormap colormap, const char *color_name, unsigned long **pixel) {
 	XColor xcol;
 
 	*pixel = NULL;

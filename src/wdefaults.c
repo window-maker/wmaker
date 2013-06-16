@@ -376,7 +376,7 @@ static WMPropList *get_generic_value(const char *instance, const char *class,
 }
 
 /* Get the file name of the image, using instance and class */
-char *get_icon_filename(WScreen *scr, char *winstance, char *wclass, char *command,
+char *get_icon_filename(WScreen *scr, const char *winstance, const char *wclass, const char *command,
 			Bool default_icon)
 {
 	char *file_name = NULL;
@@ -419,7 +419,7 @@ char *get_icon_filename(WScreen *scr, char *winstance, char *wclass, char *comma
 }
 
 /* This function returns the image picture for the file_name file */
-RImage *get_rimage_from_file(WScreen *scr, char *file_name, int max_size)
+RImage *get_rimage_from_file(WScreen *scr, const char *file_name, int max_size)
 {
 	RImage *image = NULL;
 
@@ -473,7 +473,7 @@ RImage *get_default_image(WScreen *scr)
 	return image;
 }
 
-RImage *get_icon_image(WScreen *scr, char *winstance, char *wclass, int max_size)
+RImage *get_icon_image(WScreen *scr, const char *winstance, const char *wclass, int max_size)
 {
 	char *file_name = NULL;
 

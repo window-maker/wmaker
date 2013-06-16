@@ -64,7 +64,7 @@ typedef struct WDock {
 
 
 
-WDock *wDockCreate(WScreen *scr, int type, char *name);
+WDock *wDockCreate(WScreen *scr, int type, const char *name);
 WDock *wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type);
 
 void wDockDestroy(WDock *dock);

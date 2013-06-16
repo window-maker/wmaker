@@ -150,7 +150,7 @@ WIcon *icon_create_for_wwindow(WWindow *wwin)
 	return icon;
 }
 
-WIcon *icon_create_for_dock(WScreen *scr, char *command, char *wm_instance, char *wm_class, int tile)
+WIcon *icon_create_for_dock(WScreen *scr, const char *command, const char *wm_instance, const char *wm_class, int tile)
 {
 	WIcon *icon;
 
@@ -354,7 +354,7 @@ RImage *wIconValidateIconSize(RImage *icon, int max_size)
 	return icon;
 }
 
-Bool wIconChangeImageFile(WIcon *icon, char *file)
+Bool wIconChangeImageFile(WIcon *icon, const char *file)
 {
 	WScreen *scr = icon->core->screen_ptr;
 	char *path;
@@ -393,7 +393,7 @@ static char *get_name_for_wwin(WWindow *wwin)
 	return get_name_for_instance_class(wwin->wm_instance, wwin->wm_class);
 }
 
-char *get_name_for_instance_class(char *wm_instance, char *wm_class)
+char *get_name_for_instance_class(const char *wm_instance, const char *wm_class)
 {
 	char *suffix;
 	int len;
@@ -900,7 +900,7 @@ static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event)
 	}
 }
 
-void set_icon_image_from_database(WIcon *icon, char *wm_instance, char *wm_class, char *command)
+void set_icon_image_from_database(WIcon *icon, const char *wm_instance, const char *wm_class, const char *command)
 {
 	char *file = NULL;
 

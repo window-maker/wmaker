@@ -69,8 +69,8 @@ typedef struct WAppIcon {
 	unsigned int lock:1;		 /* do not allow to be destroyed */
 } WAppIcon;
 
-WAppIcon *wAppIconCreateForDock(WScreen *scr, char *command, char *wm_instance,
-				char *wm_class, int tile);
+WAppIcon *wAppIconCreateForDock(WScreen *scr, const char *command, const char *wm_instance,
+				const char *wm_class, int tile);
 Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event);
 
 void wAppIconDestroy(WAppIcon *aicon);
@@ -81,7 +81,7 @@ void removeAppIconFor(WApplication * wapp);
 void save_appicon(WAppIcon *aicon, Bool dock);
 void paint_app_icon(WApplication *wapp);
 void unpaint_app_icon(WApplication *wapp);
-void wApplicationExtractDirPackIcon(WScreen * scr, char *path, char *wm_instance,
-				    char *wm_class);
+void wApplicationExtractDirPackIcon(WScreen *scr, const char *path, const char *wm_instance,
+				    const char *wm_class);
 WAppIcon *wAppIconFor(Window window);
 #endif
