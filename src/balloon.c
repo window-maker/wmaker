@@ -117,10 +117,10 @@ static int getMaxStringWidth(WMFont * font, const char *text)
 
 static void
 drawMultiLineString(WMScreen * scr, Pixmap pixmap, WMColor * color,
-		    WMFont * font, int x, int y, char *text, int len)
+		    WMFont *font, int x, int y, const char *text, int len)
 {
-	char *p = text;
-	char *pb = p;
+	const char *p = text;
+	const char *pb = p;
 	int l = 0, pos = 0;
 	int height = WMFontHeight(font);
 
