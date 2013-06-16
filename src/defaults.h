@@ -22,13 +22,13 @@
 #define WMDEFAULTS_H_
 
 typedef struct WDDomain {
-	char *domain_name;
+	const char *domain_name;
 	WMPropList *dictionary;
-	char *path;
+	const char *path;
 	time_t timestamp;
 } WDDomain;
 
-WDDomain * wDefaultsInitDomain(char *domain, Bool requireDictionary);
+WDDomain * wDefaultsInitDomain(const char *domain, Bool requireDictionary);
 
 void wDefaultsMergeGlobalMenus(WDDomain *menuDomain);
 

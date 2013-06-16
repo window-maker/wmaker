@@ -801,7 +801,7 @@ static void initDefaults(void)
 	}
 }
 
-static WMPropList *readGlobalDomain(char *domainName, Bool requireDictionary)
+static WMPropList *readGlobalDomain(const char *domainName, Bool requireDictionary)
 {
 	WMPropList *globalDict = NULL;
 	char path[PATH_MAX];
@@ -887,12 +887,12 @@ void wDefaultsMergeGlobalMenus(WDDomain * menuDomain)
 	menuDomain->dictionary = menu;
 }
 
-WDDomain *wDefaultsInitDomain(char *domain, Bool requireDictionary)
+WDDomain *wDefaultsInitDomain(const char *domain, Bool requireDictionary)
 {
 	WDDomain *db;
 	struct stat stbuf;
 	static int inited = 0;
-	char *the_path;
+	const char *the_path;
 	WMPropList *shared_dict = NULL;
 
 	if (!inited) {
