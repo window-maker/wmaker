@@ -88,10 +88,10 @@ static int countLines(const char *text)
 	return h;
 }
 
-static int getMaxStringWidth(WMFont * font, char *text)
+static int getMaxStringWidth(WMFont * font, const char *text)
 {
-	char *p = text;
-	char *pb = p;
+	const char *p = text;
+	const char *pb = p;
 	int pos = 0;
 	int w = 0, wt;
 
