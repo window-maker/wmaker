@@ -190,7 +190,7 @@ void SlideWindows(Window *wins[], int n, int from_x, int from_y, int to_x, int t
 	dx = (float) dx_int;
 	dy = (float) dy_int;
 
-	if (fabs(dx) > fabs(dy)) {
+	if (abs(dx_int) > abs(dy_int)) {
 		dx_is_bigger = 1;
 	}
 
