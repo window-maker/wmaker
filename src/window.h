@@ -342,7 +342,7 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed);
 void wWindowFocus(WWindow *wwin, WWindow *owin);
 void wWindowUnfocus(WWindow *wwin);
 
-void wWindowUpdateName(WWindow *wwin, char *newTitle);
+void wWindowUpdateName(WWindow *wwin, const char *newTitle);
 void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nheight);
 void wWindowCropSize(WWindow *wwin, unsigned int maxw, unsigned int maxh,
                      unsigned int *nwidth, unsigned int *nheight);

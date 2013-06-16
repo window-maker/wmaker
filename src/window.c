@@ -1725,9 +1725,9 @@ void wWindowUnfocus(WWindow *wwin)
 	WMPostNotificationName(WMNChangedFocus, wwin, (void *)False);
 }
 
-void wWindowUpdateName(WWindow *wwin, char *newTitle)
+void wWindowUpdateName(WWindow *wwin, const char *newTitle)
 {
-	char *title;
+	const char *title;
 
 	if (!wwin->frame)
 		return;
