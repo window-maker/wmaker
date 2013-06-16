@@ -263,9 +263,9 @@ typedef struct WObjDescriptor {
 /* notifications */
 
 #ifdef MAINFILE
-#define NOTIFICATION(n) char *WN##n = #n
+#define NOTIFICATION(n) const char WN##n [] = #n
 #else
-#define NOTIFICATION(n) extern char *WN##n
+#define NOTIFICATION(n) extern const char WN##n []
 #endif
 
 NOTIFICATION(WindowAppearanceSettingsChanged);

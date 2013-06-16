@@ -1121,7 +1121,7 @@ void wShowInfoPanel(WScreen * scr)
 	char *strbuf = NULL;
 	const char *separator;
 	char buffer[256];
-	char *name;
+	const char *name;
 	Window parent;
 	WWindow *wwin;
 	char **strl;

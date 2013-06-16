@@ -84,8 +84,8 @@ typedef int (WDECallbackConvert) (WScreen *scr, WDefaultEntry *entry, WMPropList
 typedef int (WDECallbackUpdate) (WScreen *scr, WDefaultEntry *entry, void *tdata, void *extra_data);
 
 struct _WDefaultEntry {
-	char *key;
-	char *default_value;
+	const char *key;
+	const char *default_value;
 	void *extra_data;
 	void *addr;
 	WDECallbackConvert *convert;
@@ -96,7 +96,7 @@ struct _WDefaultEntry {
 
 /* used to map strings to integers */
 typedef struct {
-	char *string;
+	const char *string;
 	short value;
 	char is_alias;
 } WOptionEnumeration;
@@ -1295,7 +1295,7 @@ static int string2index(WMPropList *key, WMPropList *val, const char *def, WOpti
 static int getBool(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
 {
 	static char data;
-	char *val;
+	const char *val;
 	int second_pass = 0;
 
 	GET_STRING_OR_DEFAULT("Boolean", val);
@@ -1338,7 +1338,7 @@ static int getBool(WScreen * scr, WDefaultEntry * entry, WMPropList * value, voi
 static int getInt(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
 {
 	static int data;
-	char *val;
+	const char *val;
 
 	GET_STRING_OR_DEFAULT("Integer", val);
 
@@ -2009,7 +2009,7 @@ getWSSpecificBackground(WScreen * scr, WDefaultEntry * entry, WMPropList * value
 static int getFont(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
 {
 	static WMFont *font;
-	char *val;
+	const char *val;
 
 	GET_STRING_OR_DEFAULT("Font", val);
 
@@ -2034,7 +2034,7 @@ static int getFont(WScreen * scr, WDefaultEntry * entry, WMPropList * value, voi
 static int getColor(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
 {
 	static XColor color;
-	char *val;
+	const char *val;
 	int second_pass = 0;
 
 	GET_STRING_OR_DEFAULT("Color", val);
@@ -2067,7 +2067,7 @@ static int getKeybind(WScreen * scr, WDefaultEntry * entry, WMPropList * value, 
 {
 	static WShortKey shortcut;
 	KeySym ksym;
-	char *val;
+	const char *val;
 	char *k;
 	char buf[MAX_SHORTCUT_LENGTH], *b;
 
@@ -2124,7 +2124,7 @@ static int getKeybind(WScreen * scr, WDefaultEntry * entry, WMPropList * value, 
 static int getModMask(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
 {
 	static int mask;
-	char *str;
+	const char *str;
 
 	GET_STRING_OR_DEFAULT("Modifier Key", str);
 
@@ -2149,13 +2149,13 @@ static int getModMask(WScreen * scr, WDefaultEntry * entry, WMPropList * value, 
 
 # include <X11/cursorfont.h>
 typedef struct {
-	char *name;
+	const char *name;
 	int id;
 } WCursorLookup;
 
 #define CURSOR_ID_NONE	(XC_num_glyphs)
 
-static WCursorLookup cursor_table[] = {
+static const WCursorLookup cursor_table[] = {
 	{"X_cursor", XC_X_cursor},
 	{"arrow", XC_arrow},
 	{"based_arrow_down", XC_based_arrow_down},

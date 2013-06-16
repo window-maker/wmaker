@@ -167,7 +167,7 @@ void SlideWindows(Window *wins[], int n, int from_x, int from_y, int to_x, int t
 	int i;
 
 	/* animation parameters */
-	static struct {
+	static const struct {
 		int delay;
 		int steps;
 		int slowdown;
