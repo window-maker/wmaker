@@ -318,7 +318,7 @@ void wUserMenuRefreshInstances(WMenu * menu, WWindow * wwin)
 		wMenuPaint(menu);
 }
 
-static WMenu *readUserMenuFile(WScreen * scr, char *file_name)
+static WMenu *readUserMenuFile(WScreen *scr, const char *file_name)
 {
 	WMenu *menu = NULL;
 	WMPropList *plum;

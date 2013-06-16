@@ -316,7 +316,7 @@ static RImage *getTile(void)
 	return stile;
 }
 
-static void drawTitle(WSwitchPanel *panel, int idecks, char *title)
+static void drawTitle(WSwitchPanel *panel, int idecks, const char *title)
 {
 	char *ntitle;
 	int width = WMWidgetWidth(panel->win);

@@ -55,7 +55,7 @@ extern WPreferences wPreferences;
 #define ICON_SIZE wPreferences.icon_size
 
 /**** Local prototypes *****/
-static void UnescapeWM_CLASS(char *str, char **name, char **class);
+static void UnescapeWM_CLASS(const char *str, char **name, char **class);
 
 /* XFetchName Wrapper */
 Bool wFetchName(Display *dpy, Window win, char **winname)
@@ -435,7 +435,7 @@ static char *getselection(WScreen * scr)
 }
 
 static char*
-parseuserinputpart(char *line, int *ptr, char *endchars)
+parseuserinputpart(const char *line, int *ptr, const char *endchars)
 {
 	int depth = 0, begin;
 	char *value = NULL;
@@ -459,7 +459,7 @@ parseuserinputpart(char *line, int *ptr, char *endchars)
 }
 
 static char*
-getuserinput(WScreen *scr, char *line, int *ptr, Bool advanced)
+getuserinput(WScreen *scr, const char *line, int *ptr, Bool advanced)
 {
     char *ret = NULL, *title = NULL, *prompt = NULL, *name = NULL;
     int rv;
@@ -870,7 +870,7 @@ char *EscapeWM_CLASS(char *name, char *class)
 	return ret;
 }
 
-static void UnescapeWM_CLASS(char *str, char **name, char **class)
+static void UnescapeWM_CLASS(const char *str, char **name, char **class)
 {
 	int i, j, k, dot;
 

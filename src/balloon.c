@@ -267,7 +267,7 @@ static Pixmap makePixmap(WScreen * scr, int width, int height, int side, Pixmap 
 	return pixmap;
 }
 
-static void showText(WScreen * scr, int x, int y, int h, int w, char *text)
+static void showText(WScreen *scr, int x, int y, int h, int w, const char *text)
 {
 	int width;
 	int height;
@@ -327,7 +327,7 @@ static void showText(WScreen * scr, int x, int y, int h, int w, char *text)
 }
 #else				/* !SHAPED_BALLOON */
 
-static void showText(WScreen * scr, int x, int y, int h, int w, char *text)
+static void showText(WScreen *scr, int x, int y, int h, int w, const char *text)
 {
 	int width;
 	int height;

@@ -124,7 +124,7 @@ static WAppIcon *mainIconCreate(WScreen *scr, int type, char *name);
 static void drawerIconExpose(WObjDescriptor *desc, XEvent *event);
 static void removeDrawerCallback(WMenu *menu, WMenuEntry *entry);
 static void drawerAppendToChain(WScreen *scr, WDock *drawer);
-static char *findUniqueName(WScreen *scr, char *instance_basename);
+static char *findUniqueName(WScreen *scr, const char *instance_basename);
 static void addADrawerCallback(WMenu *menu, WMenuEntry *entry);
 static void swapDrawers(WScreen *scr, int on_right_side, int new_x);
 static WDock* getDrawer(WScreen *scr, int y_index);
@@ -4263,7 +4263,7 @@ static void drawerRemoveFromChain(WScreen *scr, WDock *drawer)
 
 
 /* Don't free the returned string. Duplicate it. */
-static char * findUniqueName(WScreen *scr, char *instance_basename)
+static char * findUniqueName(WScreen *scr, const char *instance_basename)
 {
 	static char buffer[128];
 	WDrawerChain *dc;

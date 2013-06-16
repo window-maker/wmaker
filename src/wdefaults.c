@@ -167,7 +167,7 @@ static WMPropList *get_value(WMPropList * dict_win, WMPropList * dict_class, WMP
 	return default_value;
 }
 
-static WMPropList *get_value_from_instanceclass(char *value)
+static WMPropList *get_value_from_instanceclass(const char *value)
 {
 	WMPropList *key, *val = NULL;
 
@@ -314,7 +314,7 @@ void wDefaultFillAttributes(char *instance, char *class,
 	WMPLSetCaseSensitive(False);
 }
 
-static WMPropList *get_generic_value(char *instance, char *class,
+static WMPropList *get_generic_value(const char *instance, const char *class,
 				     WMPropList *option, Bool default_icon)
 {
 	WMPropList *value, *key, *dict;

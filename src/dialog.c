@@ -555,7 +555,7 @@ typedef struct IconPanel {
 	short preview;
 } IconPanel;
 
-static void listPixmaps(WScreen * scr, WMList * lPtr, char *path)
+static void listPixmaps(WScreen *scr, WMList *lPtr, const char *path)
 {
 	struct dirent *dentry;
 	DIR *dir;
@@ -608,7 +608,7 @@ static void listPixmaps(WScreen * scr, WMList * lPtr, char *path)
 	panel->preview = True;
 }
 
-static void setViewedImage(IconPanel * panel, char *file)
+static void setViewedImage(IconPanel *panel, const char *file)
 {
 	WMPixmap *pixmap;
 	RColor color;

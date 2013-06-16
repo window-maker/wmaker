@@ -85,7 +85,7 @@ static void menuTitleMouseDown(WCoreWindow * sender, void *data, XEvent * event)
 static void menuCloseClick(WCoreWindow * sender, void *data, XEvent * event);
 static void updateTexture(WMenu * menu);
 static int saveMenuRecurs(WMPropList * menus, WScreen * scr, WMenu * menu);
-static int restoreMenuRecurs(WScreen * scr, WMPropList * menus, WMenu * menu, char *path);
+static int restoreMenuRecurs(WScreen *scr, WMPropList *menus, WMenu *menu, const char *path);
 static void selectEntry(WMenu * menu, int entry_no);
 static void closeCascade(WMenu * menu);
 
@@ -2416,7 +2416,7 @@ static int restoreMenu(WScreen * scr, WMPropList * menu, int which)
 	return False;
 }
 
-static int restoreMenuRecurs(WScreen * scr, WMPropList * menus, WMenu * menu, char *path)
+static int restoreMenuRecurs(WScreen *scr, WMPropList *menus, WMenu *menu, const char *path)
 {
 	WMPropList *key, *entry;
 	char buffer[512];

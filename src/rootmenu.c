@@ -67,7 +67,7 @@ extern WPreferences wPreferences;
 
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
-static WMenu *readMenuFile(WScreen * scr, char *file_name);
+static WMenu *readMenuFile(WScreen *scr, const char *file_name);
 static WMenu *readMenuDirectory(WScreen * scr, char *title, char **file_name, char *command);
 static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals);
 static void menu_parser_register_macros(WMenuParser parser);
@@ -305,7 +305,7 @@ static void legalPanelCommand(WMenu * menu, WMenuEntry * entry)
 
 /********************************************************************/
 
-static char * getLocalizedMenuFile(char *menu)
+static char *getLocalizedMenuFile(const char *menu)
 {
 	char *buffer, *ptr, *locale;
 	int len;
@@ -422,7 +422,7 @@ static void removeShortcutsForMenu(WMenu * menu)
 	menu->menu->screen_ptr->flags.root_menu_changed_shortcuts = 1;
 }
 
-static Bool addShortcut(const char *file, char *shortcutDefinition, WMenu * menu, WMenuEntry * entry)
+static Bool addShortcut(const char *file, const char *shortcutDefinition, WMenu *menu, WMenuEntry *entry)
 {
 	Shortcut *ptr;
 	KeySym ksym;
@@ -564,7 +564,7 @@ static void separateCommand(char *line, char ***file, char **command)
 	WMFreeArray(array);
 }
 
-static WMenu *constructPLMenu(WScreen *screen, char *path)
+static WMenu *constructPLMenu(WScreen *screen, const char *path)
 {
 	WMPropList *pl = NULL;
 	WMenu *menu = NULL;
@@ -1013,7 +1013,7 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, WMenuParser parser)
 	return NULL;
 }
 
-static WMenu *readMenuFile(WScreen * scr, char *file_name)
+static WMenu *readMenuFile(WScreen *scr, const char *file_name)
 {
 	WMenu *menu = NULL;
 	FILE *file = NULL;
@@ -1191,7 +1191,7 @@ static void menu_parser_register_macros(WMenuParser parser)
 
 /************  Menu Configuration From Directory   *************/
 
-static Bool isFilePackage(char *file)
+static Bool isFilePackage(const char *file)
 {
 	int l;
 

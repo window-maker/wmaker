@@ -1252,7 +1252,7 @@ void wDefaultUpdateIcons(WScreen *scr)
     } else var = WMGetFromPLString(value)\
 
 
-static int string2index(WMPropList * key, WMPropList * val, char *def, WOptionEnumeration * values)
+static int string2index(WMPropList *key, WMPropList *val, const char *def, WOptionEnumeration * values)
 {
 	char *str;
 	WOptionEnumeration *v;
@@ -2236,7 +2236,7 @@ static WCursorLookup cursor_table[] = {
 	{NULL, CURSOR_ID_NONE}
 };
 
-static void check_bitmap_status(int status, char *filename, Pixmap bitmap)
+static void check_bitmap_status(int status, const char *filename, Pixmap bitmap)
 {
 	switch (status) {
 	case BitmapOpenFailed:
