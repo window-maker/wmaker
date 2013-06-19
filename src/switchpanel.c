@@ -112,10 +112,18 @@ static Bool sameWindowClass(WWindow *wwin, WWindow *curwin)
 
 static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim, Bool force)
 {
-	WMFrame *icon = WMGetFromArray(panel->icons, idecks);
-	RImage *image = WMGetFromArray(panel->images, idecks);
-	char flags = (char) (uintptr_t) WMGetFromArray(panel->flags, idecks);
+	WMFrame *icon = NULL;
+	RImage *image = NULL;
+	char flags = 0;
 	char desired = 0;
+
+	/* This whole function is a no-op if we aren't drawing the panel */
+	if (!wPreferences.swtileImage)
+		return;
+
+	icon = WMGetFromArray(panel->icons, idecks);
+	image = WMGetFromArray(panel->images, idecks);
+	flags = (char) (uintptr_t) WMGetFromArray(panel->flags, idecks);
 
 	if (selected)
 		desired |= ICON_SELECTED;
