@@ -77,6 +77,9 @@ void WMEmptyArray(WMArray * array)
 
 void WMFreeArray(WMArray * array)
 {
+	if (array == NULL)
+		return;
+
 	WMEmptyArray(array);
 	wfree(array->items);
 	wfree(array);
@@ -84,11 +87,17 @@ void WMFreeArray(WMArray * array)
 
 int WMGetArrayItemCount(WMArray * array)
 {
+	if (array == NULL)
+		return 0;
+
 	return array->itemCount;
 }
 
 void WMAppendArray(WMArray * array, WMArray * other)
 {
+	if (array == NULL || other == NULL)
+		return;
+
 	if (other->itemCount == 0)
 		return;
 
@@ -103,6 +112,9 @@ void WMAppendArray(WMArray * array, WMArray * other)
 
 void WMAddToArray(WMArray * array, void *item)
 {
+	if (array == NULL)
+		return;
+
 	if (array->itemCount >= array->allocSize) {
 		array->allocSize += RESIZE_INCREMENT;
 		array->items = wrealloc(array->items, sizeof(void *) * array->allocSize);
@@ -115,6 +127,9 @@ void WMAddToArray(WMArray * array, void *item)
 void WMInsertInArray(WMArray * array, int index, void *item)
 {
 	wassertr(index >= 0 && index <= array->itemCount);
+
+	if (array == NULL)
+		return;
 
 	if (array->itemCount >= array->allocSize) {
 		array->allocSize += RESIZE_INCREMENT;
@@ -135,6 +150,9 @@ void *WMReplaceInArray(WMArray * array, int index, void *item)
 
 	wassertrv(index >= 0 && index <= array->itemCount, NULL);
 
+	if (array == NULL)
+		return NULL;
+
 	/* is it really useful to perform append if index == array->itemCount ? -Dan */
 	if (index == array->itemCount) {
 		WMAddToArray(array, item);
@@ -150,6 +168,9 @@ void *WMReplaceInArray(WMArray * array, int index, void *item)
 int WMDeleteFromArray(WMArray * array, int index)
 {
 	wassertrv(index >= 0 && index < array->itemCount, 0);
+
+	if (array == NULL)
+		return 0;
 
 	if (array->destructor) {
 		array->destructor(array->items[index]);
@@ -168,6 +189,9 @@ int WMDeleteFromArray(WMArray * array, int index)
 int WMRemoveFromArrayMatching(WMArray * array, WMMatchDataProc * match, void *cdata)
 {
 	int i;
+
+	if (array == NULL)
+		return 1;
 
 	if (match != NULL) {
 		for (i = 0; i < array->itemCount; i++) {
@@ -190,7 +214,7 @@ int WMRemoveFromArrayMatching(WMArray * array, WMMatchDataProc * match, void *cd
 
 void *WMGetFromArray(WMArray * array, int index)
 {
-	if (index < 0 || index >= array->itemCount)
+	if (index < 0 || array == NULL || index >= array->itemCount)
 		return NULL;
 
 	return array->items[index];
@@ -198,7 +222,7 @@ void *WMGetFromArray(WMArray * array, int index)
 
 void *WMPopFromArray(WMArray * array)
 {
-	if (array->itemCount <= 0)
+	if (array->itemCount <= 0 || array == NULL)
 		return NULL;
 
 	array->itemCount--;
@@ -209,6 +233,9 @@ void *WMPopFromArray(WMArray * array)
 int WMFindInArray(WMArray * array, WMMatchDataProc * match, void *cdata)
 {
 	int i;
+
+	if (array == NULL)
+		return WANotFound;
 
 	if (match != NULL) {
 		for (i = 0; i < array->itemCount; i++) {
@@ -229,6 +256,9 @@ int WMCountInArray(WMArray * array, void *item)
 {
 	int i, count;
 
+	if (array == NULL)
+		return 0;
+
 	for (i = 0, count = 0; i < array->itemCount; i++) {
 		if (array->items[i] == item)
 			count++;
@@ -239,6 +269,9 @@ int WMCountInArray(WMArray * array, void *item)
 
 void WMSortArray(WMArray * array, WMCompareDataProc * comparer)
 {
+	if (array == NULL)
+		return;
+
 	if (array->itemCount > 1) {	/* Don't sort empty or single element arrays */
 		qsort(array->items, array->itemCount, sizeof(void *), comparer);
 	}
@@ -247,6 +280,9 @@ void WMSortArray(WMArray * array, WMCompareDataProc * comparer)
 void WMMapArray(WMArray * array, void (*function) (void *, void *), void *data)
 {
 	int i;
+
+	if (array == NULL)
+		return;
 
 	for (i = 0; i < array->itemCount; i++) {
 		(*function) (array->items[i], data);
@@ -257,7 +293,7 @@ WMArray *WMGetSubarrayWithRange(WMArray * array, WMRange aRange)
 {
 	WMArray *newArray;
 
-	if (aRange.count <= 0)
+	if (aRange.count <= 0 || array == NULL)
 		return WMCreateArray(0);
 
 	if (aRange.position < 0)
@@ -276,7 +312,7 @@ WMArray *WMGetSubarrayWithRange(WMArray * array, WMRange aRange)
 
 void *WMArrayFirst(WMArray * array, WMArrayIterator * iter)
 {
-	if (array->itemCount == 0) {
+	if (array == NULL || array->itemCount == 0) {
 		*iter = WANotFound;
 		return NULL;
 	} else {
@@ -287,7 +323,7 @@ void *WMArrayFirst(WMArray * array, WMArrayIterator * iter)
 
 void *WMArrayLast(WMArray * array, WMArrayIterator * iter)
 {
-	if (array->itemCount == 0) {
+	if (array == NULL || array->itemCount == 0) {
 		*iter = WANotFound;
 		return NULL;
 	} else {
@@ -298,6 +334,11 @@ void *WMArrayLast(WMArray * array, WMArrayIterator * iter)
 
 void *WMArrayNext(WMArray * array, WMArrayIterator * iter)
 {
+	if (array == NULL) {
+		*iter = WANotFound;
+		return NULL;
+	}
+
 	if (*iter >= 0 && *iter < array->itemCount - 1) {
 		return array->items[++(*iter)];
 	} else {
@@ -308,6 +349,11 @@ void *WMArrayNext(WMArray * array, WMArrayIterator * iter)
 
 void *WMArrayPrevious(WMArray * array, WMArrayIterator * iter)
 {
+	if (array == NULL) {
+		*iter = WANotFound;
+		return NULL;
+	}
+
 	if (*iter > 0 && *iter < array->itemCount) {
 		return array->items[--(*iter)];
 	} else {
