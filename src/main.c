@@ -150,20 +150,20 @@ char WProgramState = WSTATE_NORMAL;
 char WDelayedActionSet = 0;
 
 /* notifications */
-const char *WMNManaged = "WMNManaged";
-const char *WMNUnmanaged = "WMNUnmanaged";
-const char *WMNChangedWorkspace = "WMNChangedWorkspace";
-const char *WMNChangedState = "WMNChangedState";
-const char *WMNChangedFocus = "WMNChangedFocus";
-const char *WMNChangedStacking = "WMNChangedStacking";
-const char *WMNChangedName = "WMNChangedName";
+const char WMNManaged[] = "WMNManaged";
+const char WMNUnmanaged[] = "WMNUnmanaged";
+const char WMNChangedWorkspace[] = "WMNChangedWorkspace";
+const char WMNChangedState[] = "WMNChangedState";
+const char WMNChangedFocus[] = "WMNChangedFocus";
+const char WMNChangedStacking[] = "WMNChangedStacking";
+const char WMNChangedName[] = "WMNChangedName";
 
-const char *WMNWorkspaceCreated = "WMNWorkspaceCreated";
-const char *WMNWorkspaceDestroyed = "WMNWorkspaceDestroyed";
-const char *WMNWorkspaceChanged = "WMNWorkspaceChanged";
-const char *WMNWorkspaceNameChanged = "WMNWorkspaceNameChanged";
+const char WMNWorkspaceCreated[] = "WMNWorkspaceCreated";
+const char WMNWorkspaceDestroyed[] = "WMNWorkspaceDestroyed";
+const char WMNWorkspaceChanged[] = "WMNWorkspaceChanged";
+const char WMNWorkspaceNameChanged[] = "WMNWorkspaceNameChanged";
 
-const char *WMNResetStacking = "WMNResetStacking";
+const char WMNResetStacking[] = "WMNResetStacking";
 
 /******** End Global Variables *****/
 
