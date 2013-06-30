@@ -68,7 +68,6 @@
 /**** Global variables ****/
 extern Cursor wCursor[WCUR_LAST];
 extern XContext wWinContext;
-extern void appIconMouseDown(WObjDescriptor *desc, XEvent *event);
 
 #define MOD_MASK wPreferences.modifier_mask
 #define ICON_SIZE wPreferences.icon_size

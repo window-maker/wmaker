@@ -68,7 +68,6 @@ extern XContext wWinContext;
 #define MOD_MASK       wPreferences.modifier_mask
 #define ICON_SIZE      wPreferences.icon_size
 
-void appIconMouseDown(WObjDescriptor * desc, XEvent * event);
 static void iconDblClick(WObjDescriptor * desc, XEvent * event);
 static void iconExpose(WObjDescriptor * desc, XEvent * event);
 static void wApplicationSaveIconPathFor(const char *iconPath, const char *wm_instance, const char *wm_class);
