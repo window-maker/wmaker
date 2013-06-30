@@ -36,9 +36,9 @@ Perpetrator: Sudish Joseph <sj@eng.mindspring.net>, Sept. 1997. */
 #include <X11/XKBlib.h>
 
 #include <WINGs/WUtil.h>
+#include "WindowMaker.h"
 #include "xmodifier.h"
 
-extern Display *dpy;
 
 /************************************************************************/
 /*                            keymap handling                           */
