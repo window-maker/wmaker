@@ -138,8 +138,6 @@ extern Cursor wCursor[WCUR_LAST];
 extern char WDelayedActionSet;
 #endif
 
-extern void NotifyDeadProcess(pid_t pid, unsigned char status);
-
 /***** Local *****/
 static WScreen **wScreen = NULL;
 static unsigned int _NumLockMask = 0;

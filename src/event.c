@@ -141,9 +141,6 @@ static void handleShapeNotify(XEvent *event);
 static void handleXkbIndicatorStateNotify(XEvent *event);
 #endif
 
-/* called from the signal handler */
-void NotifyDeadProcess(pid_t pid, unsigned char status);
-
 /* real dead process handler */
 static void handleDeadProcess(void *foo);
 
