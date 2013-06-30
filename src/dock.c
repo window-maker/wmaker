@@ -26,6 +26,7 @@
 #include <X11/Xutil.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <libgen.h>
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
@@ -208,7 +209,6 @@ static void killCallback(WMenu *menu, WMenuEntry *entry)
 	WAppIcon *icon;
 	WFakeGroupLeader *fPtr;
 	char *buffer, *shortname, **argv;
-	char *basename(const char *shortname);
 	int argc;
 
 	if (!WCHECK_STATE(WSTATE_NORMAL))
