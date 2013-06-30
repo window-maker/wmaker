@@ -43,7 +43,6 @@
 #include "workspace.h"
 #include "balloon.h"
 
-extern WPreferences wPreferences;
 
 typedef struct _WBalloon {
 	Window window;

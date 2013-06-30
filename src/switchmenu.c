@@ -44,9 +44,6 @@
 	((w)->wm_gnustep_attr->window_level == WMMainMenuWindowLevel || \
 	 (w)->wm_gnustep_attr->window_level == WMSubmenuWindowLevel))
 
-/********* Global Variables *******/
-extern WPreferences wPreferences;
-
 static int initialized = 0;
 static void observer(void *self, WMNotification * notif);
 static void wsobserver(void *self, WMNotification * notif);

@@ -79,8 +79,6 @@
 
 #define MAX_SHORTCUT_LENGTH 32
 
-/*** var ***/
-extern WPreferences wPreferences;
 
 typedef struct {
 	WScreen *screen;

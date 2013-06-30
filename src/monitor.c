@@ -39,8 +39,6 @@
 #include "dialog.h"
 #include "main.h"
 
-/****** Global Variables ******/
-extern WPreferences wPreferences;
 
 static int showCrashDialog(int sig)
 {

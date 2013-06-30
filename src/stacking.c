@@ -38,8 +38,6 @@
 /*** Global Variables ***/
 extern XContext wStackContext;
 
-extern WPreferences wPreferences;
-
 static void notifyStackChange(WCoreWindow * frame, char *detail)
 {
 	WWindow *wwin = wWindowFor(frame->window);

@@ -49,7 +49,6 @@
 #define BOUNCE_DAMP		0.6
 #define URGENT_BOUNCE_DELAY	3000
 
-extern WPreferences wPreferences;
 
 void DoKaboom(WScreen * scr, Window win, int x, int y)
 {

@@ -60,7 +60,6 @@
 #include "actions.h"
 #include "xinerama.h"
 
-extern WPreferences wPreferences;
 
 static WMPoint getCenter(WScreen * scr, int width, int height)
 {

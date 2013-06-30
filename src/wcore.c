@@ -30,8 +30,6 @@
 #include "wcore.h"
 
 /****** Global Variables ******/
-extern WPreferences wPreferences;
-
 /* cursors */
 extern Cursor wCursor[WCUR_LAST];
 extern XContext wWinContext;

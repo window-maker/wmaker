@@ -34,7 +34,6 @@
 #include "window.h"
 #include "misc.h"
 
-extern WPreferences wPreferences;
 
 static void bevelImage(RImage * image, int relief);
 static RImage * get_texture_image(WScreen *scr, const char *pixmap_file);

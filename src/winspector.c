@@ -116,7 +116,6 @@ typedef struct InspectorPanel {
 
 extern Cursor wCursor[WCUR_LAST];
 extern WDDomain *WDWindowAttributes;
-extern WPreferences wPreferences;
 
 static InspectorPanel *panelList = NULL;
 static WMPropList *ANoTitlebar = NULL;

@@ -76,7 +76,6 @@ extern WDDomain *WDWindowMaker;
 extern WDDomain *WDWindowAttributes;
 extern WDDomain *WDRootMenu;
 extern int wScreenCount;
-extern WPreferences wPreferences;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 typedef struct _WDefaultEntry  WDefaultEntry;
@@ -3065,7 +3064,7 @@ static int setSwPOptions(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 	char *path;
 	RImage *bgimage;
 	int cwidth, cheight;
-	WPreferences *prefs = foo;
+	struct WPreferences *prefs = foo;
 
 	if (!WMIsPLArray(array) || WMGetPropListItemCount(array) == 0) {
 		if (prefs->swtileImage)
@@ -3182,7 +3181,7 @@ static int setModifierKeyLabels(WScreen * scr, WDefaultEntry * entry, void *tdat
 {
 	WMPropList *array = tdata;
 	int i;
-	WPreferences *prefs = foo;
+	struct WPreferences *prefs = foo;
 
 	if (!WMIsPLArray(array) || WMGetPropListItemCount(array) != 7) {
 		wwarning(_("Value for option \"%s\" must be an array of 7 strings"), entry->key);

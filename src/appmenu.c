@@ -39,7 +39,6 @@
 /******** Global Variables **********/
 extern Atom _XA_WINDOWMAKER_MENU;
 extern Time LastTimestamp;
-extern WPreferences wPreferences;
 
 typedef struct {
 	short code;

@@ -87,8 +87,6 @@ extern int wScreenCount;
 extern Time LastTimestamp;
 extern Time LastFocusChange;
 
-extern WPreferences wPreferences;
-
 #define MOD_MASK wPreferences.modifier_mask
 
 extern Atom _XA_WM_COLORMAP_NOTIFY;

@@ -48,7 +48,6 @@
     if (mask) mask->flag = 1;}
 
 /* Global stuff */
-extern WPreferences wPreferences;
 extern WDDomain *WDWindowAttributes;
 
 /* Local stuff */

@@ -66,8 +66,6 @@ struct SwitchPanel {
 	WMColor *white;
 };
 
-extern WPreferences wPreferences;
-
 #define BORDER_SPACE 10
 #define ICON_SIZE 48
 #define ICON_TILE_SIZE 64

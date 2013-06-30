@@ -82,7 +82,7 @@ char *Locale = NULL;
 
 int wScreenCount = 0;
 
-WPreferences wPreferences;
+struct WPreferences wPreferences;
 
 WShortKey wKeyBindings[WKBD_LAST];
 
@@ -599,7 +599,7 @@ int main(int argc, char **argv)
 	/* setup common stuff for the monitor and wmaker itself */
 	WMInitializeApplication("WindowMaker", &argc, argv);
 
-	memset(&wPreferences, 0, sizeof(WPreferences));
+	memset(&wPreferences, 0, sizeof(wPreferences));
 
 	wPreferences.fallbackWMs = WMCreateArray(8);
 	alt = getenv("WINDOWMAKER_ALT_WM");

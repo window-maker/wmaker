@@ -61,7 +61,6 @@
 
 /**** Global variables ****/
 extern Cursor wCursor[WCUR_LAST];
-extern WPreferences wPreferences;
 extern WDDomain *WDWindowAttributes;
 extern XContext wWinContext;
 

@@ -50,8 +50,7 @@
 #include "xutil.h"
 #include "xmodifier.h"
 
-/**** global variables *****/
-extern WPreferences wPreferences;
+
 #define ICON_SIZE wPreferences.icon_size
 
 /**** Local prototypes *****/

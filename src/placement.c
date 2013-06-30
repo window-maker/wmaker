@@ -39,7 +39,6 @@
 #include "xinerama.h"
 #include "placement.h"
 
-extern WPreferences wPreferences;
 
 #define X_ORIGIN WMAX(usableArea.x1,\
     wPreferences.window_place_origin.x)

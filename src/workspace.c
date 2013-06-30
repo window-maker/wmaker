@@ -60,7 +60,6 @@
 #define WORKSPACE_NAME_DISPLAY_PADDING 32
 
 extern int ignore_wks_change;
-extern WPreferences wPreferences;
 extern XContext wVEdgeContext;
 extern WShortKey wKeyBindings[WKBD_LAST];
 

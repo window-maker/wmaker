@@ -39,8 +39,6 @@
 #include "switchpanel.h"
 
 /* Globals */
-extern WPreferences wPreferences;
-
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 static void raiseWindow(WSwitchPanel * swpanel, WWindow * wwin)

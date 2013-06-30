@@ -51,8 +51,6 @@ extern Cursor wCursor[WCUR_LAST];
 
 extern XContext wWinContext;
 
-extern WPreferences wPreferences;
-
 #define MOD_MASK wPreferences.modifier_mask
 
 #define MENU_SCROLL_STEP  menuScrollParameters[(int)wPreferences.menu_scroll_speed].steps

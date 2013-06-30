@@ -39,8 +39,6 @@
 #include "framewin.h"
 #include "xinerama.h"
 
-/**** Global variables ****/
-extern WPreferences wPreferences;
 
 static void updateCommand(WAppIcon * icon, char *command)
 {

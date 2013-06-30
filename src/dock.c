@@ -66,7 +66,6 @@
 
 /**** Global variables ****/
 extern Cursor wCursor[WCUR_LAST];
-extern WPreferences wPreferences;
 extern XContext wWinContext;
 extern void appIconMouseDown(WObjDescriptor *desc, XEvent *event);
 

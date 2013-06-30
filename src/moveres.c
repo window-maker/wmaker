@@ -62,7 +62,6 @@
 
 /****** Global Variables ******/
 extern Cursor wCursor[WCUR_LAST];
-extern WPreferences wPreferences;
 
 /*
  *----------------------------------------------------------------------

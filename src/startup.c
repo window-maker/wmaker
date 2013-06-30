@@ -85,7 +85,6 @@
 #endif
 
 /****** Global Variables ******/
-extern WPreferences wPreferences;
 extern WDDomain *WDWindowMaker;
 extern WDDomain *WDRootMenu;
 extern WDDomain *WDWindowAttributes;

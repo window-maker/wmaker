@@ -297,7 +297,7 @@ typedef struct WCoord {
     int x, y;
 } WCoord;
 
-typedef struct WPreferences {
+extern struct WPreferences {
     char *pixmap_path;		       /* : separated list of paths to find pixmaps */
     char *icon_path;		       /* : separated list of paths to find icons */
     WMArray *fallbackWMs;              /* fallback window manager list */
@@ -446,7 +446,7 @@ typedef struct WPreferences {
 #endif
         unsigned int restarting:2;
     } flags;			       /* internal flags */
-} WPreferences;
+} wPreferences;
 
 /****** Global Variables  ******/
 extern Display	*dpy;

@@ -49,7 +49,6 @@
 #include "winmenu.h"
 
 /**** Global varianebles ****/
-extern WPreferences wPreferences;
 
 #define MOD_MASK wPreferences.modifier_mask
 #define CACHE_ICON_PATH "/Library/WindowMaker/CachedPixmaps"

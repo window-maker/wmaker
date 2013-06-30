@@ -86,7 +86,6 @@ extern XContext wWinContext;
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_STATE;
-extern WPreferences wPreferences;
 extern Time LastTimestamp;
 
 /***** Local Stuff *****/

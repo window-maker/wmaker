@@ -63,7 +63,6 @@
 extern char *Locale;
 extern WDDomain *WDRootMenu;
 extern Cursor wCursor[WCUR_LAST];
-extern WPreferences wPreferences;
 
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);

@@ -53,7 +53,6 @@
 /* Global variables */
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Time LastTimestamp;
-extern WPreferences wPreferences;
 
 /* Root Window Properties */
 static Atom net_supported;

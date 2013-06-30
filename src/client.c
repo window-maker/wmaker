@@ -577,7 +577,6 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 					wAppMenuDestroy(wapp->menu);
 				}
 				if (wwin->fake_group) {
-					extern WPreferences wPreferences;
 					WScreen *scr = wwin->screen_ptr;
 					WWindow *foo = scr->focused_window;
 					WFakeGroupLeader *fPtr = wwin->fake_group;

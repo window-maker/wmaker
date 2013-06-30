@@ -55,7 +55,6 @@
 int ignore_wks_change = 0;
 extern Time LastTimestamp;
 extern Time LastFocusChange;
-extern WPreferences wPreferences;
 extern Atom _XA_WM_TAKE_FOCUS;
 
 static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, int *new_y,

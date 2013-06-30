@@ -75,7 +75,6 @@ extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 
 extern WShortKey wKeyBindings[WKBD_LAST];
 
-extern WPreferences wPreferences;
 
 static void updateOptionsMenu(WMenu * menu, WWindow * wwin);
 

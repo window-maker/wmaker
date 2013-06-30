@@ -71,7 +71,6 @@
 
 /**** Global variables ****/
 extern Cursor wCursor[WCUR_LAST];
-extern WPreferences wPreferences;
 extern Atom _XA_WINDOWMAKER_STATE;
 extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 

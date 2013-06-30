@@ -45,7 +45,6 @@
 
 #define DBLCLICK_TIME wPreferences.dblclick_time
 
-extern WPreferences wPreferences;
 
 static void handleExpose(WObjDescriptor * desc, XEvent * event);
 static void handleButtonExpose(WObjDescriptor * desc, XEvent * event);
