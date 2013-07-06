@@ -222,7 +222,7 @@ void *WMGetFromArray(WMArray * array, int index)
 
 void *WMPopFromArray(WMArray * array)
 {
-	if (array->itemCount <= 0 || array == NULL)
+	if (array == NULL || array->itemCount <= 0)
 		return NULL;
 
 	array->itemCount--;
