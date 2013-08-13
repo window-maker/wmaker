@@ -10,6 +10,7 @@ EXTRA_DIST = bg.po ca.po cs.po de.po es.po et.po fi.po fr.po hr.po hu.po \
 POTFILES  = \
 	$(top_builddir)/WPrefs.app/Appearance.c \
 	$(top_builddir)/WPrefs.app/Configurations.c \
+	$(top_builddir)/WPrefs.app/Docks.c \
 	$(top_builddir)/WPrefs.app/Expert.c \
 	$(top_builddir)/WPrefs.app/Focus.c \
 	$(top_builddir)/WPrefs.app/FontSimple.c \
