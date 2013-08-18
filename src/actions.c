@@ -1211,8 +1211,10 @@ void wDeiconifyWindow(WWindow *wwin)
 	if (!netwm_hidden)
 		wWindowChangeWorkspace(wwin, wwin->screen_ptr->current_workspace);
 
-	if (!wwin->flags.miniaturized)
+	if (!wwin->flags.miniaturized) {
+		ignore_wks_change = 0;
 		return;
+	}
 
 	if (wwin->transient_for != None && wwin->transient_for != wwin->screen_ptr->root_win) {
 		WWindow *owner = recursiveTransientFor(wwin);
@@ -1221,6 +1223,7 @@ void wDeiconifyWindow(WWindow *wwin)
 			wDeiconifyWindow(owner);
 			wSetFocusTo(wwin->screen_ptr, wwin);
 			wRaiseFrame(wwin->frame->core);
+			ignore_wks_change = 0;
 			return;
 		}
 	}
@@ -1308,8 +1311,10 @@ void wDeiconifyWindow(WWindow *wwin)
 			ProcessPendingEvents();
 
 			/* the window can disappear while ProcessPendingEvents() runs */
-			if (!wWindowFor(clientwin))
+			if (!wWindowFor(clientwin)) {
+				ignore_wks_change = 0;
 				return;
+			}
 		}
 #endif
 	}
