@@ -47,7 +47,7 @@ RImage *get_default_image(WScreen *scr);
 char *wDefaultGetIconFile(const char *instance, const char *class, Bool default_icon);
 
 RImage *get_icon_image(WScreen *scr, const char *winstance, const char *wclass, int max_size);
-char *get_icon_filename(WScreen *scr, const char *winstance, const char *wclass, const char *command,
+char *get_icon_filename(const char *winstance, const char *wclass, const char *command,
 			Bool default_icon);
 
 

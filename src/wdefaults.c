@@ -375,7 +375,7 @@ static WMPropList *get_generic_value(const char *instance, const char *class,
 }
 
 /* Get the file name of the image, using instance and class */
-char *get_icon_filename(WScreen *scr, const char *winstance, const char *wclass, const char *command,
+char *get_icon_filename(const char *winstance, const char *wclass, const char *command,
 			Bool default_icon)
 {
 	char *file_name = NULL;
@@ -390,7 +390,7 @@ char *get_icon_filename(WScreen *scr, const char *winstance, const char *wclass,
 
 	/* If the specific icon filename is not found, and command is specified,
 	 * then include the .app icons and re-do the search. */
-	if ((!file_name || !file_path ) && scr && command) {
+	if ((!file_name || !file_path ) && command) {
 		wApplicationExtractDirPackIcon(command, winstance, wclass);
 		file_name = wDefaultGetIconFile(winstance, wclass, False);
 	}
@@ -477,7 +477,7 @@ RImage *get_icon_image(WScreen *scr, const char *winstance, const char *wclass, 
 	char *file_name = NULL;
 
 	/* Get the file name of the image, using instance and class */
-	file_name = get_icon_filename(scr, winstance, wclass, NULL, True);
+	file_name = get_icon_filename(winstance, wclass, NULL, True);
 
 	return get_rimage_from_file(scr, file_name, max_size);
 }

@@ -903,7 +903,7 @@ void set_icon_image_from_database(WIcon *icon, const char *wm_instance, const ch
 {
 	char *file = NULL;
 
-	file = get_icon_filename(icon->core->screen_ptr, wm_instance, wm_class, command, False);
+	file = get_icon_filename(wm_instance, wm_class, command, False);
 	if (file) {
 		icon->file = wstrdup(file);
 		icon->file_image = get_rimage_from_file(icon->core->screen_ptr, icon->file, wPreferences.icon_size);
