@@ -180,7 +180,7 @@ RImage *RLoadImage(RContext * context, const char *file, int index)
 
 #ifdef USE_JPEG
 	case IM_JPEG:
-		image = RLoadJPEG(context, file);
+		image = RLoadJPEG(file);
 		break;
 #endif				/* USE_JPEG */
 

@@ -61,7 +61,7 @@ RImage *RLoadPNG(RContext *context, const char *file);
 #endif
 
 #ifdef USE_JPEG
-RImage *RLoadJPEG(RContext *context, const char *file);
+RImage *RLoadJPEG(const char *file);
 #endif
 
 #ifdef USE_GIF
