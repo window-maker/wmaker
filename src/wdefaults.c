@@ -391,7 +391,7 @@ char *get_icon_filename(WScreen *scr, const char *winstance, const char *wclass,
 	/* If the specific icon filename is not found, and command is specified,
 	 * then include the .app icons and re-do the search. */
 	if ((!file_name || !file_path ) && scr && command) {
-		wApplicationExtractDirPackIcon(scr, command, winstance, wclass);
+		wApplicationExtractDirPackIcon(command, winstance, wclass);
 		file_name = wDefaultGetIconFile(winstance, wclass, False);
 	}
 

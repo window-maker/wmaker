@@ -79,7 +79,7 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 /* This function is used if the application is a .app. It checks if it has an icon in it
  * like for example /usr/local/GNUstep/Applications/WPrefs.app/WPrefs.tiff
  */
-void wApplicationExtractDirPackIcon(WScreen * scr, const char *path, const char *wm_instance, const char *wm_class)
+void wApplicationExtractDirPackIcon(const char *path, const char *wm_instance, const char *wm_class)
 {
 	char *iconPath = NULL;
 	char *tmp = NULL;
