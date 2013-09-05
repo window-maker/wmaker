@@ -49,9 +49,7 @@ RImage *RLoadGIF(const char *file, int index)
 	int width, height;
 	GifRecordType recType;
 	ColorMapObject *colormap;
-	unsigned char rmap[256];
-	unsigned char gmap[256];
-	unsigned char bmap[256];
+	unsigned char rmap[256], gmap[256], bmap[256];
 
 	if (index < 0)
 		index = 0;
@@ -83,24 +81,22 @@ RImage *RLoadGIF(const char *file, int index)
 	}
 
 	colormap = gif->SColorMap;
-
 	i = 0;
 
 	do {
 		int extCode;
 		GifByteType *extension;
 
-		if (DGifGetRecordType(gif, &recType) == GIF_ERROR) {
+		if (DGifGetRecordType(gif, &recType) == GIF_ERROR)
 			goto giferr;
-		}
+
 		switch (recType) {
 		case IMAGE_DESC_RECORD_TYPE:
 			if (i++ != index)
 				break;
 
-			if (DGifGetImageDesc(gif) == GIF_ERROR) {
+			if (DGifGetImageDesc(gif) == GIF_ERROR)
 				goto giferr;
-			}
 
 			width = gif->Image.Width;
 			height = gif->Image.Height;
@@ -109,17 +105,9 @@ RImage *RLoadGIF(const char *file, int index)
 				colormap = gif->Image.ColorMap;
 
 			/* the gif specs talk about a default colormap, but it
-			 * doesnt say what the heck is this default colormap */
-			if (!colormap) {
-				/*
-				 * Well, since the spec says the colormap can be anything,
-				 * lets just render it with whatever garbage the stack
-				 * has :)
-				 *
-
-				 goto bye;
-				 */
-			} else {
+			 * doesnt say what the heck is this default colormap
+			 * Render anything */
+			if (colormap) {
 				for (j = 0; j < colormap->ColorCount; j++) {
 					rmap[j] = colormap->Colors[j].Red;
 					gmap[j] = colormap->Colors[j].Green;
@@ -134,13 +122,11 @@ RImage *RLoadGIF(const char *file, int index)
 			}
 
 			image = RCreateImage(width, height, False);
-			if (!image) {
+			if (!image)
 				goto bye;
-			}
 
 			if (gif->Image.Interlace) {
-				int l;
-				int pelsPerLine;
+				int l, pelsPerLine;
 
 				if (RRGBAFormat == image->format)
 					pelsPerLine = width * 4;
@@ -149,9 +135,9 @@ RImage *RLoadGIF(const char *file, int index)
 
 				for (j = 0; j < 4; j++) {
 					for (k = InterlacedOffset[j]; k < height; k += InterlacedJumps[j]) {
-						if (DGifGetLine(gif, buffer, width) == GIF_ERROR) {
+						if (DGifGetLine(gif, buffer, width) == GIF_ERROR)
 							goto giferr;
-						}
+
 						cptr = image->data + (k * pelsPerLine);
 						for (l = 0; l < width; l++) {
 							int pixel = buffer[l];
@@ -164,9 +150,9 @@ RImage *RLoadGIF(const char *file, int index)
 			} else {
 				cptr = image->data;
 				for (j = 0; j < height; j++) {
-					if (DGifGetLine(gif, buffer, width) == GIF_ERROR) {
+					if (DGifGetLine(gif, buffer, width) == GIF_ERROR)
 						goto giferr;
-					}
+
 					for (k = 0; k < width; k++) {
 						int pixel = buffer[k];
 						*cptr++ = rmap[pixel];
@@ -181,14 +167,13 @@ RImage *RLoadGIF(const char *file, int index)
 
 		case EXTENSION_RECORD_TYPE:
 			/* skip all extension blocks */
-			if (DGifGetExtension(gif, &extCode, &extension) == GIF_ERROR) {
+			if (DGifGetExtension(gif, &extCode, &extension) == GIF_ERROR)
 				goto giferr;
-			}
-			while (extension) {
-				if (DGifGetExtensionNext(gif, &extension) == GIF_ERROR) {
+
+			while (extension)
+				if (DGifGetExtensionNext(gif, &extension) == GIF_ERROR)
 					goto giferr;
-				}
-			}
+
 			break;
 
 		default:
