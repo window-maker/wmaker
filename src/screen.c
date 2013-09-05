@@ -601,24 +601,6 @@ WScreen *wScreenInit(int screen_number)
 		scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
 	}
 
-	if (!scr->rcontext) {
-		wwarning(_("could not initialize graphics library context: %s"), RMessageForError(RErrorCode));
-		wAbort(False);
-	} else {
-		char **formats;
-		int i = 0;
-
-		formats = RSupportedFileFormats();
-		if (formats) {
-			for (i = 0; formats[i] != NULL; i++) {
-				if (strcmp(formats[i], "TIFF") == 0) {
-					scr->flags.supports_tiff = 1;
-					break;
-				}
-			}
-		}
-	}
-
 	scr->w_win = scr->rcontext->drawable;
 	scr->w_visual = scr->rcontext->visual;
 	scr->w_depth = scr->rcontext->depth;

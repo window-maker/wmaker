@@ -366,6 +366,7 @@ extern struct WPreferences {
     unsigned int modifier_mask;	       /* mask to use as kbd modifier */
     char *modifier_labels[7];          /* Names of the modifiers */
 
+	unsigned int supports_tiff;	/* Use tiff files */
 
     char ws_advance;                   /* Create new workspace and advance */
     char ws_cycle;                     /* Cycle existing workspaces */

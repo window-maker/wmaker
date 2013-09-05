@@ -87,7 +87,7 @@ void wApplicationExtractDirPackIcon(WScreen * scr, const char *path, const char 
 	if (strstr(path, ".app")) {
 		tmp = wmalloc(strlen(path) + 16);
 
-		if (scr->flags.supports_tiff) {
+		if (wPreferences.supports_tiff) {
 			strcpy(tmp, path);
 			strcat(tmp, ".tiff");
 			if (access(tmp, R_OK) == 0)

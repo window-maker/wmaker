@@ -478,7 +478,8 @@ static char *atomNames[] = {
 void StartUp(Bool defaultScreenOnly)
 {
 	struct sigaction sig_action;
-	int j, max;
+	int i, j, max;
+	char **formats;
 #ifdef HAVE_XRANDR
 	int dummy;
 #endif
@@ -689,6 +690,17 @@ void StartUp(Bool defaultScreenOnly)
 	wScreen = wmalloc(sizeof(WScreen *) * max);
 
 	wScreenCount = 0;
+
+	/* Check if TIFF images are supported */
+	formats = RSupportedFileFormats();
+	if (formats) {
+		for (i = 0; formats[i] != NULL; i++) {
+			if (strcmp(formats[i], "TIFF") == 0) {
+				wPreferences.supports_tiff = 1;
+				break;
+			}
+		}
+	}
 
 	/* manage the screens */
 	for (j = 0; j < max; j++) {
