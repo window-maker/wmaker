@@ -30,53 +30,46 @@
 #include "wraster.h"
 #include "imgformat.h"
 
-static RImage *load_graymap(FILE * file, int w, int h, int max, int raw)
+static RImage *load_graymap(FILE *file, int w, int h, int max, int raw)
 {
 	RImage *image;
+	unsigned char *ptr;
+	char *buf;
+	int x, y;
 
 	image = RCreateImage(w, h, 0);
-	if (!image) {
+	if (!image)
 		return NULL;
-	}
-	if (!raw) {
 
-	} else {
-		if (max < 256) {
-			unsigned char *ptr;
-			char *buf;
-			int x, y;
+	if (!raw)
+		return image;
 
-			buf = malloc(w + 1);
-			if (!buf) {
+	if (max < 256) {
+		buf = malloc(w + 1);
+		if (!buf)
+			return NULL;
+
+		ptr = image->data;
+		for (y = 0; y < h; y++) {
+			if (!fread(buf, w, 1, file)) {
+				free(buf);
+				RErrorCode = RERR_BADIMAGEFILE;
 				return NULL;
 			}
 
-			ptr = image->data;
-			for (y = 0; y < h; y++) {
-				if (!fread(buf, w, 1, file)) {
-					free(buf);
-					goto short_file;
-				}
-				for (x = 0; x < w; x++) {
-					*(ptr++) = buf[x];
-					*(ptr++) = buf[x];
-					*(ptr++) = buf[x];
-				}
+			for (x = 0; x < w; x++) {
+				*(ptr++) = buf[x];
+				*(ptr++) = buf[x];
+				*(ptr++) = buf[x];
 			}
-			free(buf);
-		} else {
-
 		}
+		free(buf);
 	}
 
 	return image;
-
- short_file:
-	RErrorCode = RERR_BADIMAGEFILE;
-	return NULL;
 }
 
-static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
+static RImage *load_pixmap(FILE *file, int w, int h, int max, int raw)
 {
 	RImage *image;
 	int i;
@@ -84,33 +77,29 @@ static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
 	unsigned char *ptr;
 
 	image = RCreateImage(w, h, 0);
-	if (!image) {
+	if (!image)
 		return NULL;
-	}
+
+	if (!raw)
+		return image;
+
 	ptr = image->data;
-	if (!raw) {
-
-	} else {
-		if (max < 256) {
-			i = 0;
-			while (i < w * h) {
-				if (fread(buf, 1, 3, file) != 3)
-					goto short_file;
-				*(ptr++) = buf[0];
-				*(ptr++) = buf[1];
-				*(ptr++) = buf[2];
-				i++;
+	if (max < 256) {
+		i = 0;
+		while (i < w * h) {
+			if (fread(buf, 1, 3, file) != 3) {
+				RErrorCode = RERR_BADIMAGEFILE;
+				return NULL;
 			}
-		} else {
 
+			*(ptr++) = buf[0];
+			*(ptr++) = buf[1];
+			*(ptr++) = buf[2];
+			i++;
 		}
 	}
 
 	return image;
-
- short_file:
-	RErrorCode = RERR_BADIMAGEFILE;
-	return NULL;
 }
 
 RImage *RLoadPPM(const char *file_name)
@@ -121,8 +110,6 @@ RImage *RLoadPPM(const char *file_name)
 	int w, h, m;
 	int type;
 
-#define GETL() if (!fgets(buffer, 255, file)) goto short_file
-
 	file = fopen(file_name, "rb");
 	if (!file) {
 		RErrorCode = RERR_OPEN;
@@ -130,7 +117,11 @@ RImage *RLoadPPM(const char *file_name)
 	}
 
 	/* get signature */
-	GETL();
+	if (!fgets(buffer, 255, file)) {
+		RErrorCode = RERR_BADIMAGEFILE;
+		fclose(file);
+		return NULL;
+	}
 
 	/* only accept raw pixmaps or graymaps */
 	if (buffer[0] != 'P' || (buffer[1] != '5' && buffer[1] != '6')) {
@@ -143,19 +134,36 @@ RImage *RLoadPPM(const char *file_name)
 
 	/* skip comments */
 	while (1) {
-		GETL();
+		if (!fgets(buffer, 255, file)) {
+			RErrorCode = RERR_BADIMAGEFILE;
+			fclose(file);
+			return NULL;
+		}
 
 		if (buffer[0] != '#')
 			break;
 	}
 
 	/* get size */
-	if (sscanf(buffer, "%i %i", &w, &h) != 2 || w < 1 || h < 1)
-		goto bad_file;
+	if (sscanf(buffer, "%i %i", &w, &h) != 2 || w < 1 || h < 1) {
+		/* Short file */
+		RErrorCode = RERR_BADIMAGEFILE;
+		fclose(file);
+		return NULL;
+	}
 
-	GETL();
-	if (sscanf(buffer, "%i", &m) != 1 || m < 1)
-		goto bad_file;
+	if (!fgets(buffer, 255, file)) {
+		RErrorCode = RERR_BADIMAGEFILE;
+		fclose(file);
+		return NULL;
+	}
+
+	if (sscanf(buffer, "%i", &m) != 1 || m < 1) {
+		/* Short file */
+		RErrorCode = RERR_BADIMAGEFILE;
+		fclose(file);
+		return NULL;
+	}
 
 	if (type == '5')
 		image = load_graymap(file, w, h, m, type == '5');
@@ -164,10 +172,4 @@ RImage *RLoadPPM(const char *file_name)
 
 	fclose(file);
 	return image;
-
- bad_file:
- short_file:
-	RErrorCode = RERR_BADIMAGEFILE;
-	fclose(file);
-	return NULL;
 }
