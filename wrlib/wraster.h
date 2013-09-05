@@ -147,7 +147,6 @@ typedef struct RContext {
 
     struct {
         unsigned int use_shared_pixmap:1;
-        unsigned int optimize_for_speed:1;
     } flags;
 } RContext;
 

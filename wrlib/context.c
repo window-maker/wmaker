@@ -502,14 +502,6 @@ static void gatherconfig(RContext * context, int screen_n)
 			context->attribs->colors_per_channel = i;
 		}
 	}
-
-	ptr = mygetenv("WRASTER_OPTIMIZE_FOR_SPEED", screen_n);
-	if (ptr) {
-		context->flags.optimize_for_speed = 1;
-	} else {
-		context->flags.optimize_for_speed = 0;
-	}
-
 }
 
 static void getColormap(RContext * context, int screen_number)

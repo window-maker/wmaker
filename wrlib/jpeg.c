@@ -149,10 +149,7 @@ RImage *RLoadJPEG(RContext * context, const char *file_name)
 	cinfo.do_block_smoothing = FALSE;
 	jpeg_calc_output_dimensions(&cinfo);
 
-	if (context->flags.optimize_for_speed)
-		image = RCreateImage(cinfo.image_width, cinfo.image_height, True);
-	else
-		image = RCreateImage(cinfo.image_width, cinfo.image_height, False);
+	image = RCreateImage(cinfo.image_width, cinfo.image_height, False);
 
 	if (!image) {
 		RErrorCode = RERR_NOMEMORY;
@@ -163,24 +160,11 @@ RImage *RLoadJPEG(RContext * context, const char *file_name)
 	ptr = image->data;
 
 	if (cinfo.out_color_space == JCS_RGB) {
-		if (context->flags.optimize_for_speed) {
-			while (cinfo.output_scanline < cinfo.output_height) {
-				jpeg_read_scanlines(&cinfo, buffer, (JDIMENSION) 1);
-				bptr = buffer[0];
-				for (i = 0; i < cinfo.image_width; i++) {
-					*ptr++ = *bptr++;
-					*ptr++ = *bptr++;
-					*ptr++ = *bptr++;
-					ptr++;	/* skip alpha channel */
-				}
-			}
-		} else {
-			while (cinfo.output_scanline < cinfo.output_height) {
-				jpeg_read_scanlines(&cinfo, buffer, (JDIMENSION) 1);
-				bptr = buffer[0];
-				memcpy(ptr, bptr, cinfo.image_width * 3);
-				ptr += cinfo.image_width * 3;
-			}
+		while (cinfo.output_scanline < cinfo.output_height) {
+			jpeg_read_scanlines(&cinfo, buffer, (JDIMENSION) 1);
+			bptr = buffer[0];
+			memcpy(ptr, bptr, cinfo.image_width * 3);
+			ptr += cinfo.image_width * 3;
 		}
 	} else {
 		while (cinfo.output_scanline < cinfo.output_height) {
