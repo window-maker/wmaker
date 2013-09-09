@@ -4284,7 +4284,7 @@ static char * findUniqueName(WScreen *scr, const char *instance_basename)
 	}
 
 	if (i == UNIQUE_NAME_WATCHDOG)
-		wwarning("Couldn't find a unique name for drawer in %d attemps.", i);
+		wwarning("Couldn't find a unique name for drawer in %d attempts.", i);
 #undef UNIQUE_NAME_WATCHDOG
 
 	return buffer;
