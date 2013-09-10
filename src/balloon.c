@@ -447,14 +447,27 @@ static void appiconBalloon(WObjDescriptor * object)
 			return;
 		}
 	} else if (aicon->command && aicon->wm_class) {
-		int len = strlen(aicon->command) + strlen(aicon->wm_class) + 8;
+		int len;
+                /* Check to see if it is a GNUstep app */
+		if (strcmp(aicon->wm_class, "GNUstep") == 0)
+			len = strlen(aicon->command) + strlen(aicon->wm_instance) + 8;
+		else
+			len = strlen(aicon->command) + strlen(aicon->wm_class) + 8;
 		tmp = wmalloc(len);
-		snprintf(tmp, len, "%s\n(%s)", aicon->wm_class, aicon->command);
+                /* Check to see if it is a GNUstep App */
+		if (strcmp(aicon->wm_class, "GNUstep") == 0)
+			snprintf(tmp, len, "%s\n(%s)", aicon->wm_instance, aicon->command);
+		else
+			snprintf(tmp, len, "%s\n(%s)", aicon->wm_class, aicon->command);
 		scr->balloon->text = tmp;
 	} else if (aicon->command) {
 		scr->balloon->text = wstrdup(aicon->command);
 	} else if (aicon->wm_class) {
-		scr->balloon->text = wstrdup(aicon->wm_class);
+                /* Check to see if it is a GNUstep App */
+		if (strcmp(aicon->wm_class, "GNUstep") == 0)
+			scr->balloon->text = wstrdup(aicon->wm_instance);
+		else
+			scr->balloon->text = wstrdup(aicon->wm_class);
 	} else {
 		wBalloonHide(scr);
 		return;
