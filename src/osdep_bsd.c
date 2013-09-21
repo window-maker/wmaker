@@ -86,7 +86,7 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 		mib[0] = CTL_KERN;
 		mib[1] = KERN_ARGMAX;
 		mib[2] = 0;
-		mib[4] = 0;
+		mib[3] = 0;
 
 		count = sizeof(argmax);
 		if (sysctl(mib, 2, &argmax, &count, NULL, 0) == -1)
