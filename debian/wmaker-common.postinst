@@ -6,7 +6,7 @@ set -e
 # Marcelo Magallon <mmagallo@debian.org>
 # Rodolfo "kix" García <kix@kix.es>
 
-inst="/etc/menu-methods/wmaker /etc/menu-methods/wmappearance"
+inst="/etc/menu-methods/wmappearance"
 
 case "$1" in
   configure)

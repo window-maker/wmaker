@@ -1,3 +1,34 @@
+wmaker (0.95.5-1) unstable; urgency=low
+
+  * New upstream version 0.95.5. [Closes: #723840]
+    - New WUtil library version 3.
+      - Updated debian/control file, replacing libwutil2 with libwutil3.
+      - Files moved in debian folder:
+        - libwutil2.changelog-upstream -> libwutil3.changelog-upstream
+        - libwutil2.install -> libwutil3.install
+      - Removed file libwutil2.symbols
+      - New file libwutil3.symbols
+  * "Build-Depends: libtiff5-dev" in packages wmaker and libwraster3-dev,
+    since libtiff-dev introduces dependency to libtiff4 which is in oldlibs.
+  * Included the word "WindowMaker" in the wmaker package description,
+    to found it easily. [Closes: #685424]
+
+ -- Rodolfo García Peñas (kix) <kix@debian.org>  Sun, 22 Sep 2013 10:08:02 +0200
+
+wmaker (0.95.4-2) unstable; urgency=low
+
+  * Package moved from experimental to unstable and updated.
+  * Changed permissions to menu-methods/wmaker to a+x. Updated the
+    debian/wmaker-common.postinst and debian/wmaker.postinst [Closes: #705160]
+  * debian/control
+    - Removed DM Upload flag (obsolete).
+    - Updated maintainer email address, from kix@kix.es to kix@debian.org.
+    - Now using libtiff-dev to build packages (libtiff4-dev is in oldlibs).
+    - Removed xosview as suggested package (not in all archs).
+  * Bumped to standard version 3.9.4.
+
+ -- Rodolfo García Peñas (kix) <kix@debian.org>  Tue, 06 Aug 2013 06:34:14 +0200
+
 wmaker (0.95.4-1) experimental; urgency=low
 
   * New upstream version 0.95.4.
@@ -9,16 +40,13 @@ wmaker (0.95.4-1) experimental; urgency=low
   * debian/control:
     - Debconf version 9 (see debian/compat too).
     - New debug scheme for multi-platform.
-      debian/wmaker-dbg.dirs not needed, deleted.
-    - Lintian override, because is experimental.
-      New file source/lintian-overrides
+      Removed debian/wmaker-dbg.dirs, because the path for debug
+      files is now using hashes (/usr/lib/debug/build-id).
   * debian/rules:
     - Removed the get-*-flags scripts fix. Not needed (and was wrong).
     - Removed the HOSTSPEC stuff. Not needed with debconf 9.
   * debian/README.Debian:
     - Changed /etc path for appearance.menu.
-  * Removed debian/wmaker-dbg.dirs, because the path for debug files
-    is now using hashes (/usr/lib/debug/build-id).
 
  -- Rodolfo García Peñas (kix) <kix@kix.es>  Wed, 3 Jan 2013 00:17:31 +0100
 

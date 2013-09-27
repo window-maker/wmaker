@@ -81,7 +81,7 @@ libWINGs.so.2 libwings2 #MINVER#
  WMDefaultSystemFont@Base 0.95.0
  WMDeleteDragHandler@Base 0.95.0
  WMDeleteEventHandler@Base 0.95.0
- WMDeleteSelectionCallback@Base 0.95.0
+#MISSING: 0.95.5-1# WMDeleteSelectionCallback@Base 0.95.0
  WMDeleteSelectionHandler@Base 0.95.0
  WMDeleteTextFieldRange@Base 0.95.0
  WMDestroyAlertPanel@Base 0.95.0
@@ -569,11 +569,14 @@ libWINGs.so.2 libwings2 #MINVER#
  W_SetPreeditPositon@Base 0.95.0
  W_SetViewBackgroundColor@Base 0.95.0
  W_SetViewCursor@Base 0.95.0
- W_SetXdndAwareProperty@Base 0.95.0
+#MISSING: 0.95.5-1# W_SetXdndAwareProperty@Base 0.95.0
  W_TopLevelOfView@Base 0.95.0
  W_UnFocusIC@Base 0.95.0
  W_UnmapSubviews@Base 0.95.0
  W_UnmapView@Base 0.95.0
+ W_getconf_mouseWheelDown@Base 0.95.5
+ W_getconf_mouseWheelUp@Base 0.95.5
+ W_setconf_doubleClickDelay@Base 0.95.5
  _BrowserViewDelegate@Base 0.95.0
  _ColorWellViewDelegate@Base 0.95.0
  _ListViewDelegate@Base 0.95.0
@@ -586,21 +589,21 @@ libWINGs.so.2 libwings2 #MINVER#
  _TextViewDelegate@Base 0.95.0
  _WindowViewDelegate@Base 0.95.0
  colorListMenuItem@Base 0.95.0
- convertCPColor@Base 0.95.0
+#MISSING: 0.95.5-1# convertCPColor@Base 0.95.0
  customPaletteMenuItem@Base 0.95.0
- generateNewFilename@Base 0.95.0
- getNextRequestedDataType@Base 0.95.0
- getShift@Base 0.95.0
- getStream@Base 0.95.0
- getStreamObjects@Base 0.95.0
- makeMenuPixmap@Base 0.95.0
- requestDropData@Base 0.95.0
- requestDropDataInSelection@Base 0.95.0
- requestHandler@Base 0.95.0
+#MISSING: 0.95.5-1# generateNewFilename@Base 0.95.0
+#MISSING: 0.95.5-1# getNextRequestedDataType@Base 0.95.0
+#MISSING: 0.95.5-1# getShift@Base 0.95.0
+#MISSING: 0.95.5-1# getStream@Base 0.95.0
+#MISSING: 0.95.5-1# getStreamObjects@Base 0.95.0
+#MISSING: 0.95.5-1# makeMenuPixmap@Base 0.95.0
+#MISSING: 0.95.5-1# requestDropData@Base 0.95.0
+#MISSING: 0.95.5-1# requestDropDataInSelection@Base 0.95.0
+#MISSING: 0.95.5-1# requestHandler@Base 0.95.0
  rgbColors@Base 0.95.0
- sourceOperationList@Base 0.95.0
- storeRequiredTypeList@Base 0.95.0
- ulongToRColor@Base 0.95.0
+#MISSING: 0.95.5-1# sourceOperationList@Base 0.95.0
+#MISSING: 0.95.5-1# storeRequiredTypeList@Base 0.95.0
+#MISSING: 0.95.5-1# ulongToRColor@Base 0.95.0
  wmkpoint@Base 0.95.0
  wmkrect@Base 0.95.0
  wmksize@Base 0.95.0

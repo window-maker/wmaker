@@ -1,16 +1,14 @@
 Description: This patch changes the default config paths
 Author: Andreas Metzler <ametzler@debian.org>
 Last-Update: 2010-08-07
-diff --git a/src/wconfig.h.in b/src/wconfig.h.in
-index c8bb947..cf06113 100644
 --- a/src/wconfig.h.in
 +++ b/src/wconfig.h.in
-@@ -132,7 +132,7 @@
+@@ -125,7 +125,7 @@
   */
-
+ 
  /* list of paths to look for the config files, searched in order of appearance */
 -#define DEF_CONFIG_PATHS "~/GNUstep/Library/WindowMaker:"PKGDATADIR
 +#define DEF_CONFIG_PATHS "~/GNUstep/Library/WindowMaker:/etc/GNUstep/Defaults:"PKGDATADIR
  #define DEF_MENU_FILE	 "menu"
-
+ 
  /* name of the script to execute at startup */

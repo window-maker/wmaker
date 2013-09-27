@@ -9,8 +9,16 @@ set -e
 x_wm_link=/etc/alternatives/x-window-manager
 x_wm_man_link=/usr/share/man/man1/x-window-manager.1.gz
 
+inst="/etc/menu-methods/wmaker"
+
 case "$1" in
   configure)
+    for file in $inst ; do
+        if [ -f $file ] ; then
+            chmod a+x $file
+        fi
+    done
+
     update-alternatives --install /usr/bin/x-window-manager \
         x-window-manager /usr/bin/wmaker 50 \
         --slave /usr/share/man/man1/x-window-manager.1.gz \
