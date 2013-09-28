@@ -351,7 +351,7 @@ RImage *wIconValidateIconSize(RImage *icon, int max_size)
 	return icon;
 }
 
-Bool wIconChangeImageFile(WIcon *icon, const char *file)
+int wIconChangeImageFile(WIcon *icon, const char *file)
 {
 	WScreen *scr = icon->core->screen_ptr;
 	char *path;
@@ -360,7 +360,7 @@ Bool wIconChangeImageFile(WIcon *icon, const char *file)
 
 	/* If no new image, don't do nothing */
 	if (!file)
-		return True;
+		return 1;
 
 	/* Find the new image */
 	path = FindImage(wPreferences.icon_path, file);
