@@ -356,7 +356,6 @@ int wIconChangeImageFile(WIcon *icon, const char *file)
 	WScreen *scr = icon->core->screen_ptr;
 	char *path;
 	RImage *image = NULL;
-	int error = 0;
 
 	/* If no new image, don't do nothing */
 	if (!file)
@@ -378,10 +377,8 @@ int wIconChangeImageFile(WIcon *icon, const char *file)
 	icon->file = wstrdup(path);
 	update_icon_pixmap(icon);
 
-	if (path)
-		wfree(path);
-
-	return !error;
+	wfree(path);
+	return 1;
 }
 
 static char *get_name_for_wwin(WWindow *wwin)
