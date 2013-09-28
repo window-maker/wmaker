@@ -364,10 +364,10 @@ int wIconChangeImageFile(WIcon *icon, const char *file)
 
 	/* Find the new image */
 	path = FindImage(wPreferences.icon_path, file);
-	if (path)
-		image = get_rimage_from_file(scr, path, wPreferences.icon_size);
-	else
-		error = 1;
+	if (!path)
+		return 0;
+
+	image = get_rimage_from_file(scr, path, wPreferences.icon_size);
 
 	/* New image! */
 	if (!error && image) {
