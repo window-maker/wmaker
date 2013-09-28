@@ -368,16 +368,15 @@ int wIconChangeImageFile(WIcon *icon, const char *file)
 		return 0;
 
 	image = get_rimage_from_file(scr, path, wPreferences.icon_size);
-
-	/* New image! */
-	if (!error && image) {
-		/* Set the new image */
-		set_icon_image_from_image(icon, image);
-		icon->file = wstrdup(path);
-		update_icon_pixmap(icon);
-	} else {
-		error = 1;
+	if (!image) {
+		wfree(path);
+		return 0;
 	}
+
+	/* Set the new image */
+	set_icon_image_from_image(icon, image);
+	icon->file = wstrdup(path);
+	update_icon_pixmap(icon);
 
 	if (path)
 		wfree(path);
