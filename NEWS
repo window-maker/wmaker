@@ -4,6 +4,28 @@ NEWS for veteran Window Maker users
 
 --- 0.95.X
 
+Support for generated menus in proplist format
+----------------------------------------------
+
+The root menu now supports a OPEN_PLMENU option to construct a submenu from
+the output of a command which is proplist format. This can be used e.g. in
+conjunction with wmmenugen like:
+
+(
+    "Generated PL Submenu", OPEN_PLMENU,
+    "|| find /usr/share/applications -type f -name '*desktop' | xargs wmmenugen -parser:xdg"
+)
+
+
+New window placements
+---------------------
+
+Now it is possible to maximize windows to the top/bottom halves
+of the screen and also to the corners (top/bottom + left/right).
+
+The keyboard shortcuts can be configured with WPrefs.
+
+
 New application Relaunching functionality
 -----------------------------------------
 
