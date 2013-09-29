@@ -227,13 +227,15 @@ typedef struct WObjDescriptor {
 
 
 /* program states */
-#define WSTATE_NORMAL		0
-#define WSTATE_NEED_EXIT	1
-#define WSTATE_NEED_RESTART	2
-#define WSTATE_EXITING		3
-#define WSTATE_RESTARTING	4
-#define WSTATE_MODAL		5
-#define WSTATE_NEED_REREAD	6
+typedef enum {
+	WSTATE_NORMAL		= 0,
+	WSTATE_NEED_EXIT	= 1,
+	WSTATE_NEED_RESTART	= 2,
+	WSTATE_EXITING		= 3,
+	WSTATE_RESTARTING	= 4,
+	WSTATE_MODAL		= 5,
+	WSTATE_NEED_REREAD	= 6
+} wprog_state;
 
 
 #define WCHECK_STATE(state)	(state == WProgramState)
@@ -241,7 +243,7 @@ typedef struct WObjDescriptor {
 
 #define WCHANGE_STATE(nstate) {\
     if (WProgramState == WSTATE_NORMAL\
-        || nstate != WSTATE_MODAL)\
+        || (nstate) != WSTATE_MODAL)\
         WProgramState = (nstate); \
     if (WProgramSigState != 0)\
         WProgramState = WProgramSigState;\
@@ -452,8 +454,8 @@ extern struct WPreferences {
 /****** Global Variables  ******/
 extern Display	*dpy;
 extern unsigned int ValidModMask;
-extern char WProgramState;
-extern char WProgramSigState;
+extern wprog_state WProgramState;
+extern wprog_state WProgramSigState;
 
 /****** Notifications ******/
 extern const char WMNManaged[];

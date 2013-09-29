@@ -145,8 +145,8 @@ int wXkbEventBase;
 #endif
 
 /* special flags */
-char WProgramSigState = 0;
-char WProgramState = WSTATE_NORMAL;
+wprog_state WProgramSigState = 0;
+wprog_state WProgramState = WSTATE_NORMAL;
 char WDelayedActionSet = 0;
 
 /* notifications */
