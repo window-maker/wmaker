@@ -61,7 +61,6 @@
  */
 
 /**** Global variables ****/
-extern Cursor wCursor[WCUR_LAST];
 extern WDDomain *WDWindowAttributes;
 extern XContext wWinContext;
 
@@ -852,7 +851,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 				    || abs(ofs_y - ev.xmotion.y) >= MOVE_THRESHOLD) {
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_MOVE], CurrentTime);
+								 wPreferences.cursor[WCUR_MOVE], CurrentTime);
 					grabbed = 1;
 				} else {
 					break;

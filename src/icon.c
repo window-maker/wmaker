@@ -54,8 +54,6 @@
 #define CACHE_ICON_PATH "/Library/WindowMaker/CachedPixmaps"
 #define ICON_BORDER 3
 
-extern Cursor wCursor[WCUR_LAST];
-
 static void miniwindowExpose(WObjDescriptor * desc, XEvent * event);
 static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event);
 static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
@@ -721,7 +719,7 @@ static void set_dockapp_in_icon(WIcon *icon)
 	    (attr.all_event_masks & ButtonPressMask))
 		wHackedGrabButton(Button1, MOD_MASK, icon->core->window, True,
 				  ButtonPressMask, GrabModeSync, GrabModeAsync,
-				  None, wCursor[WCUR_ARROW]);
+				  None, wPreferences.cursor[WCUR_ARROW]);
 }
 
 /* Get the RImage from the XWindow wm_hints */
@@ -862,7 +860,7 @@ static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event)
 				    || abs(dy - ev.xmotion.y) >= MOVE_THRESHOLD) {
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_MOVE], CurrentTime);
+								 wPreferences.cursor[WCUR_MOVE], CurrentTime);
 					grabbed = 1;
 				} else {
 					break;

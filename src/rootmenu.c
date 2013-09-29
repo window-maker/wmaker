@@ -61,7 +61,6 @@
 #define MAX_SHORTCUT_LENGTH 32
 
 extern WDDomain *WDRootMenu;
-extern Cursor wCursor[WCUR_LAST];
 
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
@@ -155,7 +154,7 @@ static void execCommand(WMenu * menu, WMenuEntry * entry)
 	cmdline = ExpandOptions(menu->frame->screen_ptr, (char *)entry->clientdata);
 
 	XGrabPointer(dpy, menu->frame->screen_ptr->root_win, True, 0,
-		     GrabModeAsync, GrabModeAsync, None, wCursor[WCUR_WAIT], CurrentTime);
+		     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
 	XSync(dpy, 0);
 
 	if (cmdline) {

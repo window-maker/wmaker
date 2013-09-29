@@ -60,8 +60,6 @@
  */
 #define HAS_BORDER_WITH_SELECT(w) ((w)->flags.selected || HAS_BORDER(w))
 
-/****** Global Variables ******/
-extern Cursor wCursor[WCUR_LAST];
 
 /*
  *----------------------------------------------------------------------
@@ -564,7 +562,7 @@ static void crossWorkspace(WScreen * scr, WWindow * wwin, int opaque_move, int n
 	if (!opaque_move) {
 		XGrabPointer(dpy, scr->root_win, True, PointerMotionMask
 			     | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
-			     GrabModeAsync, None, wCursor[WCUR_MOVE], CurrentTime);
+			     GrabModeAsync, None, wPreferences.cursor[WCUR_MOVE], CurrentTime);
 	}
 }
 
@@ -1242,7 +1240,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 	XGrabServer(dpy);
 	XGrabPointer(dpy, scr->root_win, True, PointerMotionMask
 		     | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
-		     GrabModeAsync, None, wCursor[WCUR_DEFAULT], CurrentTime);
+		     GrabModeAsync, None, wPreferences.cursor[WCUR_DEFAULT], CurrentTime);
 
 
 
@@ -1696,7 +1694,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 
 				XChangeActivePointerGrab(dpy, ButtonMotionMask
 							 | ButtonReleaseMask | ButtonPressMask,
-							 wCursor[WCUR_MOVE], CurrentTime);
+							 wPreferences.cursor[WCUR_MOVE], CurrentTime);
 				started = 1;
 				XGrabKeyboard(dpy, root, False, GrabModeAsync, GrabModeAsync, CurrentTime);
 
@@ -1988,31 +1986,31 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 				if (res == (UP | LEFT))
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_TOPLEFTRESIZE], CurrentTime);
+								 wPreferences.cursor[WCUR_TOPLEFTRESIZE], CurrentTime);
 				else if (res == (UP | RIGHT))
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_TOPRIGHTRESIZE], CurrentTime);
+								 wPreferences.cursor[WCUR_TOPRIGHTRESIZE], CurrentTime);
 				else if (res == (DOWN | LEFT))
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_BOTTOMLEFTRESIZE], CurrentTime);
+								 wPreferences.cursor[WCUR_BOTTOMLEFTRESIZE], CurrentTime);
 				else if (res == (DOWN | RIGHT))
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_BOTTOMRIGHTRESIZE], CurrentTime);
+								 wPreferences.cursor[WCUR_BOTTOMRIGHTRESIZE], CurrentTime);
 				else if (res == DOWN || res == UP)
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_VERTICALRESIZE], CurrentTime);
+								 wPreferences.cursor[WCUR_VERTICALRESIZE], CurrentTime);
 				else if (res & (DOWN | UP))
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_VERTICALRESIZE], CurrentTime);
+								 wPreferences.cursor[WCUR_VERTICALRESIZE], CurrentTime);
 				else if (res & (LEFT | RIGHT))
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_HORIZONRESIZE], CurrentTime);
+								 wPreferences.cursor[WCUR_HORIZONRESIZE], CurrentTime);
 
 				XGrabKeyboard(dpy, root, False, GrabModeAsync, GrabModeAsync, CurrentTime);
 
@@ -2153,7 +2151,7 @@ void wSelectWindows(WScreen * scr, XEvent * ev)
 
 	if (XGrabPointer(dpy, scr->root_win, False, ButtonMotionMask
 			 | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
-			 GrabModeAsync, None, wCursor[WCUR_DEFAULT], CurrentTime) != Success) {
+			 GrabModeAsync, None, wPreferences.cursor[WCUR_DEFAULT], CurrentTime) != Success) {
 		return;
 	}
 	XGrabServer(dpy);
@@ -2215,7 +2213,7 @@ void InteractivePlaceWindow(WWindow * wwin, int *x_ret, int *y_ret, unsigned wid
 	int junk;
 
 	if (XGrabPointer(dpy, root, True, PointerMotionMask | ButtonPressMask,
-			 GrabModeAsync, GrabModeAsync, None, wCursor[WCUR_DEFAULT], CurrentTime) != Success) {
+			 GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_DEFAULT], CurrentTime) != Success) {
 		*x_ret = 0;
 		*y_ret = 0;
 		return;

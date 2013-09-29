@@ -161,7 +161,6 @@ static WDECallbackUpdate updateUsableArea;
 
 static WDECallbackUpdate setModifierKeyLabels;
 
-extern Cursor wCursor[WCUR_LAST];
 static WDECallbackConvert getCursor;
 static WDECallbackUpdate setCursor;
 
@@ -3225,11 +3224,11 @@ static int setCursor(WScreen * scr, WDefaultEntry * entry, void *tdata, void *ex
 	Cursor *cursor = tdata;
 	long widx = (long) extra_data;
 
-	if (wCursor[widx] != None) {
-		XFreeCursor(dpy, wCursor[widx]);
+	if (wPreferences.cursor[widx] != None) {
+		XFreeCursor(dpy, wPreferences.cursor[widx]);
 	}
 
-	wCursor[widx] = *cursor;
+	wPreferences.cursor[widx] = *cursor;
 
 	if (widx == WCUR_ROOT && *cursor != None) {
 		XDefineCursor(dpy, scr->root_win, *cursor);

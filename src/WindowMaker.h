@@ -102,25 +102,31 @@ typedef struct WObjDescriptor {
 #define PRED_BPIXMAPS		4 /* count of WBUT icons */
 #endif /* XKB_BUTTON_HINT */
 
-/* cursors */
-#define WCUR_DEFAULT		0
-#define WCUR_NORMAL		0
-#define WCUR_MOVE		1
-#define WCUR_RESIZE		2
-#define WCUR_TOPLEFTRESIZE	3
-#define WCUR_TOPRIGHTRESIZE	4
-#define WCUR_BOTTOMLEFTRESIZE	5
-#define WCUR_BOTTOMRIGHTRESIZE	6
-#define WCUR_VERTICALRESIZE	7
-#define WCUR_HORIZONRESIZE	8
-#define WCUR_WAIT		9
-#define WCUR_ARROW		10
-#define WCUR_QUESTION		11
-#define WCUR_TEXT		12
-#define WCUR_SELECT		13
-#define WCUR_ROOT		14
-#define WCUR_EMPTY		15
-#define WCUR_LAST		16
+/* Mouse cursors */
+typedef enum {
+	WCUR_NORMAL,
+	WCUR_MOVE,
+	WCUR_RESIZE,
+	WCUR_TOPLEFTRESIZE,
+	WCUR_TOPRIGHTRESIZE,
+	WCUR_BOTTOMLEFTRESIZE,
+	WCUR_BOTTOMRIGHTRESIZE,
+	WCUR_VERTICALRESIZE,
+	WCUR_HORIZONRESIZE,
+	WCUR_WAIT,
+	WCUR_ARROW,
+	WCUR_QUESTION,
+	WCUR_TEXT,
+	WCUR_SELECT,
+	WCUR_ROOT,
+	WCUR_EMPTY,
+
+	/* Count of the number of cursors defined */
+	WCUR_LAST,
+
+	/* Alias for the Default cursor */
+	WCUR_DEFAULT = WCUR_NORMAL
+} w_cursor;
 
 /* geometry displays */
 #define WDIS_NEW		0	/* new style */
@@ -449,6 +455,10 @@ extern struct WPreferences {
 #endif
         unsigned int restarting:2;
     } flags;			       /* internal flags */
+
+	/* Map table between w_cursor and actual X id */
+	Cursor cursor[WCUR_LAST];
+
 } wPreferences;
 
 /****** Global Variables  ******/

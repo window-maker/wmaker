@@ -66,7 +66,6 @@
 #define CLIP_FORWARD      2
 
 /**** Global variables ****/
-extern Cursor wCursor[WCUR_LAST];
 extern XContext wWinContext;
 
 #define MOD_MASK wPreferences.modifier_mask
@@ -3699,7 +3698,7 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				    || abs(ofs_y - ev.xmotion.y) >= MOVE_THRESHOLD) {
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
 								 | ButtonReleaseMask | ButtonPressMask,
-								 wCursor[WCUR_MOVE], CurrentTime);
+								 wPreferences.cursor[WCUR_MOVE], CurrentTime);
 					grabbed = 1;
 				}
 				break;

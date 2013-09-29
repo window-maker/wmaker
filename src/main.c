@@ -125,9 +125,6 @@ Atom _XA_WINDOWMAKER_ICON_TILE;
 
 Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 
-/* cursors */
-Cursor wCursor[WCUR_LAST];
-
 #ifdef SHAPE
 Bool wShapeSupported;
 int wShapeEventBase;

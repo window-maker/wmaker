@@ -114,7 +114,6 @@ typedef struct InspectorPanel {
 	unsigned int choosingIcon:1;
 } InspectorPanel;
 
-extern Cursor wCursor[WCUR_LAST];
 extern WDDomain *WDWindowAttributes;
 
 static InspectorPanel *panelList = NULL;
@@ -1017,7 +1016,7 @@ static void selectWindow(WMWidget *bPtr, void *data)
 
 	if (XGrabPointer(dpy, scr->root_win, True,
 			 ButtonPressMask, GrabModeAsync, GrabModeAsync, None,
-			 wCursor[WCUR_SELECT], CurrentTime) != GrabSuccess) {
+			 wPreferences.cursor[WCUR_SELECT], CurrentTime) != GrabSuccess) {
 		wwarning("could not grab mouse pointer");
 		return;
 	}

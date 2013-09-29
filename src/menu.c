@@ -47,8 +47,6 @@
 
 /****** Global Variables ******/
 
-extern Cursor wCursor[WCUR_LAST];
-
 extern XContext wWinContext;
 
 #define MOD_MASK wPreferences.modifier_mask
@@ -2185,7 +2183,7 @@ static void menuTitleMouseDown(WCoreWindow * sender, void *data, XEvent * event)
 						     ButtonMotionMask | ButtonReleaseMask
 						     | ButtonPressMask,
 						     GrabModeAsync, GrabModeAsync, None,
-						     wCursor[WCUR_MOVE], CurrentTime);
+						     wPreferences.cursor[WCUR_MOVE], CurrentTime);
 				}
 			}
 			break;

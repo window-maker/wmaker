@@ -130,9 +130,6 @@ extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 
-/* cursors */
-extern Cursor wCursor[WCUR_LAST];
-
 #ifndef HAVE_INOTIFY
 /* special flags */
 extern char WDelayedActionSet;
@@ -546,21 +543,21 @@ void StartUp(Bool defaultScreenOnly)
 #endif
 
 	/* cursors */
-	wCursor[WCUR_NORMAL] = None;	/* inherit from root */
-	wCursor[WCUR_ROOT] = XCreateFontCursor(dpy, XC_left_ptr);
-	wCursor[WCUR_ARROW] = XCreateFontCursor(dpy, XC_top_left_arrow);
-	wCursor[WCUR_MOVE] = XCreateFontCursor(dpy, XC_fleur);
-	wCursor[WCUR_RESIZE] = XCreateFontCursor(dpy, XC_sizing);
-	wCursor[WCUR_TOPLEFTRESIZE] = XCreateFontCursor(dpy, XC_top_left_corner);
-	wCursor[WCUR_TOPRIGHTRESIZE] = XCreateFontCursor(dpy, XC_top_right_corner);
-	wCursor[WCUR_BOTTOMLEFTRESIZE] = XCreateFontCursor(dpy, XC_bottom_left_corner);
-	wCursor[WCUR_BOTTOMRIGHTRESIZE] = XCreateFontCursor(dpy, XC_bottom_right_corner);
-	wCursor[WCUR_VERTICALRESIZE] = XCreateFontCursor(dpy, XC_sb_v_double_arrow);
-	wCursor[WCUR_HORIZONRESIZE] = XCreateFontCursor(dpy, XC_sb_h_double_arrow);
-	wCursor[WCUR_WAIT] = XCreateFontCursor(dpy, XC_watch);
-	wCursor[WCUR_QUESTION] = XCreateFontCursor(dpy, XC_question_arrow);
-	wCursor[WCUR_TEXT] = XCreateFontCursor(dpy, XC_xterm);	/* odd name??? */
-	wCursor[WCUR_SELECT] = XCreateFontCursor(dpy, XC_cross);
+	wPreferences.cursor[WCUR_NORMAL] = None;	/* inherit from root */
+	wPreferences.cursor[WCUR_ROOT] = XCreateFontCursor(dpy, XC_left_ptr);
+	wPreferences.cursor[WCUR_ARROW] = XCreateFontCursor(dpy, XC_top_left_arrow);
+	wPreferences.cursor[WCUR_MOVE] = XCreateFontCursor(dpy, XC_fleur);
+	wPreferences.cursor[WCUR_RESIZE] = XCreateFontCursor(dpy, XC_sizing);
+	wPreferences.cursor[WCUR_TOPLEFTRESIZE] = XCreateFontCursor(dpy, XC_top_left_corner);
+	wPreferences.cursor[WCUR_TOPRIGHTRESIZE] = XCreateFontCursor(dpy, XC_top_right_corner);
+	wPreferences.cursor[WCUR_BOTTOMLEFTRESIZE] = XCreateFontCursor(dpy, XC_bottom_left_corner);
+	wPreferences.cursor[WCUR_BOTTOMRIGHTRESIZE] = XCreateFontCursor(dpy, XC_bottom_right_corner);
+	wPreferences.cursor[WCUR_VERTICALRESIZE] = XCreateFontCursor(dpy, XC_sb_v_double_arrow);
+	wPreferences.cursor[WCUR_HORIZONRESIZE] = XCreateFontCursor(dpy, XC_sb_h_double_arrow);
+	wPreferences.cursor[WCUR_WAIT] = XCreateFontCursor(dpy, XC_watch);
+	wPreferences.cursor[WCUR_QUESTION] = XCreateFontCursor(dpy, XC_question_arrow);
+	wPreferences.cursor[WCUR_TEXT] = XCreateFontCursor(dpy, XC_xterm);	/* odd name??? */
+	wPreferences.cursor[WCUR_SELECT] = XCreateFontCursor(dpy, XC_cross);
 
 	Pixmap cur = XCreatePixmap(dpy, DefaultRootWindow(dpy), 16, 16, 1);
 	GC gc = XCreateGC(dpy, cur, 0, NULL);
@@ -569,7 +566,7 @@ void StartUp(Bool defaultScreenOnly)
 	XSetForeground(dpy, gc, 0);
 	XFillRectangle(dpy, cur, gc, 0, 0, 16, 16);
 	XFreeGC(dpy, gc);
-	wCursor[WCUR_EMPTY] = XCreatePixmapCursor(dpy, cur, cur, &black, &black, 0, 0);
+	wPreferences.cursor[WCUR_EMPTY] = XCreatePixmapCursor(dpy, cur, cur, &black, &black, 0, 0);
 	XFreePixmap(dpy, cur);
 
 

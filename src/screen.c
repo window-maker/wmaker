@@ -70,7 +70,6 @@
     |KeyPressMask|KeyReleaseMask)
 
 /**** Global variables ****/
-extern Cursor wCursor[WCUR_LAST];
 extern Atom _XA_WINDOWMAKER_STATE;
 extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 
@@ -464,7 +463,7 @@ static void createInternalWindows(WScreen * scr)
 	attribs.override_redirect = True;
 	attribs.background_pixmap = None;
 	attribs.background_pixel = scr->white_pixel;
-	attribs.cursor = wCursor[WCUR_DEFAULT];
+	attribs.cursor = wPreferences.cursor[WCUR_DEFAULT];
 	vmask |= CWColormap;
 	attribs.colormap = scr->w_colormap;
 	scr->dock_shadow =
@@ -571,7 +570,7 @@ WScreen *wScreenInit(int screen_number)
 		return NULL;
 	}
 
-	XDefineCursor(dpy, scr->root_win, wCursor[WCUR_ROOT]);
+	XDefineCursor(dpy, scr->root_win, wPreferences.cursor[WCUR_ROOT]);
 
 	/* screen descriptor for raster graphic library */
 	rattr.flags = RC_RenderMode | RC_ColorsPerChannel | RC_StandardColormap;
