@@ -53,7 +53,6 @@
 /****** Global Variables ******/
 
 int ignore_wks_change = 0;
-extern Time LastFocusChange;
 extern Atom _XA_WM_TAKE_FOCUS;
 
 static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, int *new_y,
@@ -115,7 +114,7 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 	WApplication *oapp = NULL, *napp = NULL;
 	int wasfocused;
 
-	if (scr->flags.ignore_focus_events || compareTimes(LastFocusChange, timestamp) > 0)
+	if (scr->flags.ignore_focus_events || compareTimes(w_global.timestamp.focus_change, timestamp) > 0)
 		return;
 
 	if (!old_scr)
@@ -123,7 +122,7 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 
 	old_focused = old_scr->focused_window;
 
-	LastFocusChange = timestamp;
+	w_global.timestamp.focus_change = timestamp;
 
 	if (old_focused)
 		oapp = wApplicationOf(old_focused->main_window);

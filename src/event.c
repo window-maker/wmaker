@@ -84,7 +84,6 @@ extern Cursor wCursor[WCUR_LAST];
 
 extern WShortKey wKeyBindings[WKBD_LAST];
 extern int wScreenCount;
-extern Time LastFocusChange;
 
 #define MOD_MASK wPreferences.modifier_mask
 

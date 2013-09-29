@@ -469,6 +469,9 @@ extern struct wmaker_global_variables {
 		/* ts of the last event we received */
 		Time last_event;
 
+		/* ts on the last time we did XSetInputFocus() */
+		Time focus_change;
+
 	} timestamp;
 
 } w_global;

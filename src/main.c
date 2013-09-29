@@ -128,9 +128,6 @@ Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 /* cursors */
 Cursor wCursor[WCUR_LAST];
 
-/* timestamp on the last time we did XSetInputFocus() */
-Time LastFocusChange = CurrentTime;
-
 #ifdef SHAPE
 Bool wShapeSupported;
 int wShapeEventBase;
@@ -595,6 +592,7 @@ int main(int argc, char **argv)
 	w_global.program.state = WSTATE_NORMAL;
 	w_global.program.signal_state = WSTATE_NORMAL;
 	w_global.timestamp.last_event = CurrentTime;
+	w_global.timestamp.focus_change = CurrentTime;
 
 	/* setup common stuff for the monitor and wmaker itself */
 	WMInitializeApplication("WindowMaker", &argc, argv);
