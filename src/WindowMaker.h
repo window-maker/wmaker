@@ -522,6 +522,13 @@ extern struct wmaker_global_variables {
 
 	} atom;
 
+	/* X Contexts */
+	struct {
+		XContext client_win;
+		XContext app_win;
+		XContext stack;
+	} context;
+
 } w_global;
 
 extern unsigned int ValidModMask;

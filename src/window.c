@@ -79,9 +79,6 @@ extern WShortKey wKeyBindings[WKBD_LAST];
 extern Bool wShapeSupported;
 #endif
 
-/* contexts */
-extern XContext wWinContext;
-
 /***** Local Stuff *****/
 static WWindowState *windowState = NULL;
 static FocusMode getFocusMode(WWindow *wwin);
@@ -146,7 +143,7 @@ WWindow *wWindowFor(Window window)
 	if (window == None)
 		return NULL;
 
-	if (XFindContext(dpy, window, wWinContext, (XPointer *) & desc) == XCNOENT)
+	if (XFindContext(dpy, window, w_global.context.client_win, (XPointer *) & desc) == XCNOENT)
 		return NULL;
 
 	if (desc->parent_type == WCLASS_WINDOW)
@@ -226,7 +223,7 @@ void wWindowDestroy(WWindow *wwin)
 	if (wwin->cmap_windows)
 		XFree(wwin->cmap_windows);
 
-	XDeleteContext(dpy, wwin->client_win, wWinContext);
+	XDeleteContext(dpy, wwin->client_win, w_global.context.client_win);
 
 	if (wwin->frame)
 		wFrameWindowDestroy(wwin->frame);
@@ -621,7 +618,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	else if (!wFetchName(dpy, window, &title))
 		title = NULL;
 
-	XSaveContext(dpy, window, wWinContext, (XPointer) & wwin->client_descriptor);
+	XSaveContext(dpy, window, w_global.context.client_win, (XPointer) & wwin->client_descriptor);
 
 #ifdef SHAPE
 	if (wShapeSupported) {
@@ -1360,7 +1357,7 @@ WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
 					 scr->resizebar_texture, scr->window_title_color, &scr->title_font,
 					 scr->w_depth, scr->w_visual, scr->w_colormap);
 
-	XSaveContext(dpy, window, wWinContext, (XPointer) & wwin->client_descriptor);
+	XSaveContext(dpy, window, w_global.context.client_win, (XPointer) & wwin->client_descriptor);
 
 	wwin->frame->flags.is_client_window_frame = 1;
 	wwin->frame->flags.justification = wPreferences.title_justification;

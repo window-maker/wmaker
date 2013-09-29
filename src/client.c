@@ -46,9 +46,6 @@
 
 /****** Global Variables ******/
 
-/* contexts */
-extern XContext wWinContext;
-
 #ifdef SHAPE
 extern Bool wShapeSupported;
 #endif
@@ -191,7 +188,7 @@ void wClientConfigure(WWindow * wwin, XConfigureRequestEvent * xcre)
 		WWindow *sibling;
 
 		if ((xcre->value_mask & CWSibling) &&
-		    (XFindContext(dpy, xcre->above, wWinContext, (XPointer *) & desc) == XCSUCCESS)
+		    (XFindContext(dpy, xcre->above, w_global.context.client_win, (XPointer *) & desc) == XCSUCCESS)
 		    && (desc->parent_type == WCLASS_WINDOW)) {
 			sibling = desc->parent;
 			xwc.sibling = sibling->frame->core->window;

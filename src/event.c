@@ -77,7 +77,6 @@
 #include "switchmenu.h"
 
 /******** Global Variables **********/
-extern XContext wWinContext;
 extern XContext wVEdgeContext;
 
 extern WShortKey wKeyBindings[WKBD_LAST];
@@ -702,7 +701,7 @@ static void handleExpose(XEvent * event)
 
 	while (XCheckTypedWindowEvent(dpy, event->xexpose.window, Expose, &ev)) ;
 
-	if (XFindContext(dpy, event->xexpose.window, wWinContext, (XPointer *) & desc) == XCNOENT) {
+	if (XFindContext(dpy, event->xexpose.window, w_global.context.client_win, (XPointer *) & desc) == XCNOENT) {
 		return;
 	}
 
@@ -769,8 +768,8 @@ static void handleButtonPress(XEvent * event)
 	}
 
 	desc = NULL;
-	if (XFindContext(dpy, event->xbutton.subwindow, wWinContext, (XPointer *) & desc) == XCNOENT) {
-		if (XFindContext(dpy, event->xbutton.window, wWinContext, (XPointer *) & desc) == XCNOENT) {
+	if (XFindContext(dpy, event->xbutton.subwindow, w_global.context.client_win, (XPointer *) & desc) == XCNOENT) {
+		if (XFindContext(dpy, event->xbutton.window, w_global.context.client_win, (XPointer *) & desc) == XCNOENT) {
 			return;
 		}
 	}
@@ -1034,7 +1033,7 @@ static void handleClientMessage(XEvent * event)
 		 * For when the icon frame gets a ClientMessage
 		 * that should have gone to the icon_window.
 		 */
-		if (XFindContext(dpy, event->xbutton.window, wWinContext, (XPointer *) & desc) != XCNOENT) {
+		if (XFindContext(dpy, event->xbutton.window, w_global.context.client_win, (XPointer *) & desc) != XCNOENT) {
 			struct WIcon *icon = NULL;
 
 			if (desc->parent_type == WCLASS_MINIWINDOW) {
@@ -1084,7 +1083,7 @@ static void handleEnterNotify(XEvent * event)
 		}
 	}
 
-	if (XFindContext(dpy, event->xcrossing.window, wWinContext, (XPointer *) & desc) != XCNOENT) {
+	if (XFindContext(dpy, event->xcrossing.window, w_global.context.client_win, (XPointer *) & desc) != XCNOENT) {
 		if (desc->handle_enternotify)
 			(*desc->handle_enternotify) (desc, event);
 	}
@@ -1148,7 +1147,7 @@ static void handleLeaveNotify(XEvent * event)
 {
 	WObjDescriptor *desc = NULL;
 
-	if (XFindContext(dpy, event->xcrossing.window, wWinContext, (XPointer *) & desc) != XCNOENT) {
+	if (XFindContext(dpy, event->xcrossing.window, w_global.context.client_win, (XPointer *) & desc) != XCNOENT) {
 		if (desc->handle_leavenotify)
 			(*desc->handle_leavenotify) (desc, event);
 	}

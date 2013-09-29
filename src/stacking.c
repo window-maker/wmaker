@@ -35,8 +35,6 @@
 #include "stacking.h"
 #include "workspace.h"
 
-/*** Global Variables ***/
-extern XContext wStackContext;
 
 static void notifyStackChange(WCoreWindow * frame, char *detail)
 {
@@ -77,7 +75,7 @@ void RemakeStackList(WScreen * scr)
 		/* verify list integrity */
 		c = 0;
 		for (i = 0; i < nwindows; i++) {
-			if (XFindContext(dpy, windows[i], wStackContext, (XPointer *) & frame)
+			if (XFindContext(dpy, windows[i], w_global.context.stack, (XPointer *) & frame)
 			    == XCNOENT) {
 				continue;
 			}
@@ -404,7 +402,7 @@ void AddToStackList(WCoreWindow * frame)
 	WCoreWindow *trans = NULL;
 
 	frame->screen_ptr->window_count++;
-	XSaveContext(dpy, frame->window, wStackContext, (XPointer) frame);
+	XSaveContext(dpy, frame->window, w_global.context.stack, (XPointer) frame);
 	curtop = WMGetFromBag(scr->stacking_list, index);
 
 	/* first window in this level */
@@ -560,7 +558,7 @@ void RemoveFromStackList(WCoreWindow * frame)
 {
 	int index = frame->stacking->window_level;
 
-	if (XDeleteContext(dpy, frame->window, wStackContext) == XCNOENT) {
+	if (XDeleteContext(dpy, frame->window, w_global.context.stack) == XCNOENT) {
 		wwarning("RemoveFromStackingList(): window not in list ");
 		return;
 	}

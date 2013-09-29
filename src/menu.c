@@ -45,9 +45,6 @@
 #include "rootmenu.h"
 #include "switchmenu.h"
 
-/****** Global Variables ******/
-
-extern XContext wWinContext;
 
 #define MOD_MASK wPreferences.modifier_mask
 
@@ -1276,7 +1273,7 @@ static WMenu *findMenu(WScreen * scr, int *x_ret, int *y_ret)
 	if (win == None)
 		return NULL;
 
-	if (XFindContext(dpy, win, wWinContext, (XPointer *) & desc) == XCNOENT)
+	if (XFindContext(dpy, win, w_global.context.client_win, (XPointer *) & desc) == XCNOENT)
 		return NULL;
 
 	if (desc->parent_type == WCLASS_MENU) {
@@ -1398,7 +1395,7 @@ WMenu *wMenuUnderPointer(WScreen * screen)
 	if (win == None)
 		return NULL;
 
-	if (XFindContext(dpy, win, wWinContext, (XPointer *) & desc) == XCNOENT)
+	if (XFindContext(dpy, win, w_global.context.client_win, (XPointer *) & desc) == XCNOENT)
 		return NULL;
 
 	if (desc->parent_type == WCLASS_MENU)

@@ -102,9 +102,6 @@ extern int wXkbEventBase;
 #endif
 
 /* contexts */
-extern XContext wWinContext;
-extern XContext wAppWinContext;
-extern XContext wStackContext;
 extern XContext wVEdgeContext;
 
 #ifndef HAVE_INOTIFY
@@ -472,9 +469,9 @@ void StartUp(Bool defaultScreenOnly)
 
 	memset(&wKeyBindings, 0, sizeof(wKeyBindings));
 
-	wWinContext = XUniqueContext();
-	wAppWinContext = XUniqueContext();
-	wStackContext = XUniqueContext();
+	w_global.context.client_win = XUniqueContext();
+	w_global.context.app_win = XUniqueContext();
+	w_global.context.stack = XUniqueContext();
 	wVEdgeContext = XUniqueContext();
 
 	/*    _XA_VERSION = XInternAtom(dpy, "VERSION", False); */

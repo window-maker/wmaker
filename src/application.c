@@ -37,10 +37,6 @@
 #include "dock.h"
 #include "defaults.h"
 
-/******** Global variables ********/
-
-extern XContext wAppWinContext;
-extern XContext wWinContext;
 
 /******** Local variables ********/
 
@@ -73,7 +69,7 @@ WApplication *wApplicationOf(Window window)
 
 	if (window == None)
 		return NULL;
-	if (XFindContext(dpy, window, wAppWinContext, (XPointer *) & wapp) != XCSUCCESS)
+	if (XFindContext(dpy, window, w_global.context.app_win, (XPointer *) & wapp) != XCSUCCESS)
 		return NULL;
 	return wapp;
 }
@@ -140,7 +136,7 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	wapp->flags.emulated = WFLAGP(wapp->main_window_desc, emulate_appicon);
 
 	/* application descriptor */
-	XSaveContext(dpy, main_window, wAppWinContext, (XPointer) wapp);
+	XSaveContext(dpy, main_window, w_global.context.app_win, (XPointer) wapp);
 
 	create_appicon_for_application(wapp, wwin);
 
@@ -183,7 +179,7 @@ void wApplicationDestroy(WApplication * wapp)
 			wapp->prev->next = wapp->next;
 	}
 
-	XDeleteContext(dpy, wapp->main_window, wAppWinContext);
+	XDeleteContext(dpy, wapp->main_window, w_global.context.app_win);
 	wAppMenuDestroy(wapp->menu);
 
 	/* Remove application icon */
@@ -195,7 +191,7 @@ void wApplicationDestroy(WApplication * wapp)
 	if (wwin) {
 		/* undelete client window context that was deleted in
 		 * wWindowDestroy */
-		XSaveContext(dpy, wwin->client_win, wWinContext, (XPointer) & wwin->client_descriptor);
+		XSaveContext(dpy, wwin->client_win, w_global.context.client_win, (XPointer) & wwin->client_descriptor);
 	}
 	wfree(wapp);
 }

@@ -29,8 +29,6 @@
 #include "WindowMaker.h"
 #include "wcore.h"
 
-/****** Global Variables ******/
-extern XContext wWinContext;
 
 /*----------------------------------------------------------------------
  * wCoreCreateTopLevel--
@@ -72,7 +70,7 @@ WCoreWindow *wCoreCreateTopLevel(WScreen *screen, int x, int y, int width, int h
 	core->descriptor.self = core;
 
 	XClearWindow(dpy, core->window);
-	XSaveContext(dpy, core->window, wWinContext, (XPointer) & core->descriptor);
+	XSaveContext(dpy, core->window, w_global.context.client_win, (XPointer) & core->descriptor);
 
 	return core;
 }
@@ -116,7 +114,7 @@ WCoreWindow *wCoreCreate(WCoreWindow *parent, int x, int y, int width, int heigh
 	core->screen_ptr = parent->screen_ptr;
 	core->descriptor.self = core;
 
-	XSaveContext(dpy, core->window, wWinContext, (XPointer) & core->descriptor);
+	XSaveContext(dpy, core->window, w_global.context.client_win, (XPointer) & core->descriptor);
 	return core;
 }
 
@@ -125,7 +123,7 @@ void wCoreDestroy(WCoreWindow * core)
 	if (core->stacking)
 		wfree(core->stacking);
 
-	XDeleteContext(dpy, core->window, wWinContext);
+	XDeleteContext(dpy, core->window, w_global.context.client_win);
 	XDestroyWindow(dpy, core->window);
 	wfree(core);
 }

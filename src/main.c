@@ -91,9 +91,6 @@ WDDomain *WDWindowAttributes = NULL;
 WDDomain *WDRootMenu = NULL;
 
 /* XContexts */
-XContext wWinContext;
-XContext wAppWinContext;
-XContext wStackContext;
 XContext wVEdgeContext;
 
 #ifdef SHAPE

@@ -62,7 +62,6 @@
 
 /**** Global variables ****/
 extern WDDomain *WDWindowAttributes;
-extern XContext wWinContext;
 
 #define MOD_MASK       wPreferences.modifier_mask
 #define ICON_SIZE      wPreferences.icon_size
@@ -1221,7 +1220,7 @@ WAppIcon *wAppIconFor(Window window)
 	if (window == None)
 		return NULL;
 
-	if (XFindContext(dpy, window, wWinContext, (XPointer *) & desc) == XCNOENT)
+	if (XFindContext(dpy, window, w_global.context.client_win, (XPointer *) & desc) == XCNOENT)
 		return NULL;
 
 	if (desc->parent_type == WCLASS_APPICON || desc->parent_type == WCLASS_DOCK_ICON)

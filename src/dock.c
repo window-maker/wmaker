@@ -65,9 +65,6 @@
 #define CLIP_IDLE         0
 #define CLIP_FORWARD      2
 
-/**** Global variables ****/
-extern XContext wWinContext;
-
 #define MOD_MASK wPreferences.modifier_mask
 #define ICON_SIZE wPreferences.icon_size
 
@@ -4050,7 +4047,7 @@ static void clipLeave(WDock *dock)
 		return;
 
 	if (XCheckTypedEvent(dpy, EnterNotify, &event) != False) {
-		if (XFindContext(dpy, event.xcrossing.window, wWinContext,
+		if (XFindContext(dpy, event.xcrossing.window, w_global.context.client_win,
 				 (XPointer *) & desc) != XCNOENT
 		    && desc && desc->parent_type == WCLASS_DOCK_ICON
 		    && ((WAppIcon *) desc->parent)->dock == dock) {
