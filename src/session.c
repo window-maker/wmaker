@@ -89,7 +89,6 @@
 
 extern Atom _XA_WM_SAVE_YOURSELF;
 
-extern Time LastTimestamp;
 
 static WMPropList *sApplications = NULL;
 static WMPropList *sCommand;

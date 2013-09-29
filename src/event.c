@@ -84,7 +84,6 @@ extern Cursor wCursor[WCUR_LAST];
 
 extern WShortKey wKeyBindings[WKBD_LAST];
 extern int wScreenCount;
-extern Time LastTimestamp;
 extern Time LastFocusChange;
 
 #define MOD_MASK wPreferences.modifier_mask
@@ -527,30 +526,30 @@ static void saveTimestamp(XEvent * event)
 	switch (event->type) {
 	case ButtonRelease:
 	case ButtonPress:
-		LastTimestamp = event->xbutton.time;
+		w_global.timestamp.last_event = event->xbutton.time;
 		break;
 	case KeyPress:
 	case KeyRelease:
-		LastTimestamp = event->xkey.time;
+		w_global.timestamp.last_event = event->xkey.time;
 		break;
 	case MotionNotify:
-		LastTimestamp = event->xmotion.time;
+		w_global.timestamp.last_event = event->xmotion.time;
 		break;
 	case PropertyNotify:
-		LastTimestamp = event->xproperty.time;
+		w_global.timestamp.last_event = event->xproperty.time;
 		break;
 	case EnterNotify:
 	case LeaveNotify:
-		LastTimestamp = event->xcrossing.time;
+		w_global.timestamp.last_event = event->xcrossing.time;
 		break;
 	case SelectionClear:
-		LastTimestamp = event->xselectionclear.time;
+		w_global.timestamp.last_event = event->xselectionclear.time;
 		break;
 	case SelectionRequest:
-		LastTimestamp = event->xselectionrequest.time;
+		w_global.timestamp.last_event = event->xselectionrequest.time;
 		break;
 	case SelectionNotify:
-		LastTimestamp = event->xselection.time;
+		w_global.timestamp.last_event = event->xselection.time;
 #ifdef XDND
 		wXDNDProcessSelection(event);
 #endif

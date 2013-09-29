@@ -69,7 +69,6 @@
 #define WO_ENTRIES		3
 
 /**** Global data ***/
-extern Time LastTimestamp;
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 
@@ -113,7 +112,7 @@ static void execMenuCommand(WMenu * menu, WMenuEntry * entry)
 	switch (entry->order) {
 	case MC_CLOSE:
 		/* send delete message */
-		wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+		wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, w_global.timestamp.last_event);
 		break;
 
 	case MC_KILL:
@@ -134,7 +133,7 @@ static void execMenuCommand(WMenu * menu, WMenuEntry * entry)
 			wDeiconifyWindow(wwin);
 		} else {
 			if (wwin->protocols.MINIATURIZE_WINDOW) {
-				wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW, LastTimestamp);
+				wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW, w_global.timestamp.last_event);
 			} else {
 				wIconifyWindow(wwin);
 			}

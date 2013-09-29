@@ -52,7 +52,6 @@
 
 /* Global variables */
 extern Atom _XA_WM_DELETE_WINDOW;
-extern Time LastTimestamp;
 
 /* Root Window Properties */
 static Atom net_supported;
@@ -1406,7 +1405,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 	} else if (event->message_type == net_close_window) {
 		if (!WFLAGP(wwin, no_closable)) {
 			if (wwin->protocols.DELETE_WINDOW)
-				wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+				wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, w_global.timestamp.last_event);
 		}
 	} else if (event->message_type == net_wm_state) {
 		int maximized = wwin->flags.maximized;

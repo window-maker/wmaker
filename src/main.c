@@ -128,8 +128,6 @@ Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 /* cursors */
 Cursor wCursor[WCUR_LAST];
 
-/* last event timestamp for XSetInputFocus */
-Time LastTimestamp = CurrentTime;
 /* timestamp on the last time we did XSetInputFocus() */
 Time LastFocusChange = CurrentTime;
 
@@ -596,6 +594,7 @@ int main(int argc, char **argv)
 	memset(&w_global, 0, sizeof(w_global));
 	w_global.program.state = WSTATE_NORMAL;
 	w_global.program.signal_state = WSTATE_NORMAL;
+	w_global.timestamp.last_event = CurrentTime;
 
 	/* setup common stuff for the monitor and wmaker itself */
 	WMInitializeApplication("WindowMaker", &argc, argv);

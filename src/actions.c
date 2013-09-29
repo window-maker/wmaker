@@ -53,7 +53,6 @@
 /****** Global Variables ******/
 
 int ignore_wks_change = 0;
-extern Time LastTimestamp;
 extern Time LastFocusChange;
 extern Atom _XA_WM_TAKE_FOCUS;
 
@@ -112,7 +111,7 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 
 	WWindow *old_focused;
 	WWindow *focused = scr->focused_window;
-	Time timestamp = LastTimestamp;
+	Time timestamp = w_global.timestamp.last_event;
 	WApplication *oapp = NULL, *napp = NULL;
 	int wasfocused;
 

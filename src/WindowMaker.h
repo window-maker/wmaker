@@ -464,6 +464,13 @@ extern struct wmaker_global_variables {
 	/* locale to use. NULL==POSIX or C */
 	const char *locale;
 
+	/* Tracking of X events timestamps */
+	struct {
+		/* ts of the last event we received */
+		Time last_event;
+
+	} timestamp;
+
 } w_global;
 
 extern unsigned int ValidModMask;

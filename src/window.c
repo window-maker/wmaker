@@ -86,7 +86,6 @@ extern XContext wWinContext;
 extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_STATE;
-extern Time LastTimestamp;
 
 /***** Local Stuff *****/
 static WWindowState *windowState = NULL;
@@ -2918,7 +2917,7 @@ static void windowCloseClick(WCoreWindow *sender, void *data, XEvent *event)
 	} else {
 		if (wwin->protocols.DELETE_WINDOW && event->xbutton.state == 0) {
 			/* send delete message */
-			wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+			wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, w_global.timestamp.last_event);
 		}
 	}
 }
@@ -2934,7 +2933,7 @@ static void windowCloseDblClick(WCoreWindow *sender, void *data, XEvent *event)
 
 	/* send delete message */
 	if (wwin->protocols.DELETE_WINDOW)
-		wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, LastTimestamp);
+		wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, w_global.timestamp.last_event);
 	else
 		wClientKill(wwin);
 }
@@ -2974,7 +2973,7 @@ static void windowIconifyClick(WCoreWindow *sender, void *data, XEvent *event)
 		return;
 
 	if (wwin->protocols.MINIATURIZE_WINDOW && event->xbutton.state == 0) {
-		wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW, LastTimestamp);
+		wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW, w_global.timestamp.last_event);
 	} else {
 		WApplication *wapp;
 		if ((event->xbutton.state & ControlMask) || (event->xbutton.button == Button3)) {

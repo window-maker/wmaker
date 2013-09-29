@@ -38,7 +38,6 @@
 
 /******** Global Variables **********/
 extern Atom _XA_WINDOWMAKER_MENU;
-extern Time LastTimestamp;
 
 typedef struct {
 	short code;
@@ -67,7 +66,7 @@ static void sendMessage(Window window, int what, int tag)
 	event.xclient.format = 32;
 	event.xclient.display = dpy;
 	event.xclient.window = window;
-	event.xclient.data.l[0] = LastTimestamp;
+	event.xclient.data.l[0] = w_global.timestamp.last_event;
 	event.xclient.data.l[1] = what;
 	event.xclient.data.l[2] = tag;
 	event.xclient.data.l[3] = 0;
