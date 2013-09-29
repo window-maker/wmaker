@@ -122,10 +122,7 @@ typedef enum {
 	WCUR_EMPTY,
 
 	/* Count of the number of cursors defined */
-	WCUR_LAST,
-
-	/* Alias for the Default cursor */
-	WCUR_DEFAULT = WCUR_NORMAL
+	WCUR_LAST
 } w_cursor;
 
 /* geometry displays */

@@ -1240,7 +1240,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 	XGrabServer(dpy);
 	XGrabPointer(dpy, scr->root_win, True, PointerMotionMask
 		     | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
-		     GrabModeAsync, None, wPreferences.cursor[WCUR_DEFAULT], CurrentTime);
+		     GrabModeAsync, None, wPreferences.cursor[WCUR_NORMAL], CurrentTime);
 
 
 
@@ -2151,7 +2151,7 @@ void wSelectWindows(WScreen * scr, XEvent * ev)
 
 	if (XGrabPointer(dpy, scr->root_win, False, ButtonMotionMask
 			 | ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
-			 GrabModeAsync, None, wPreferences.cursor[WCUR_DEFAULT], CurrentTime) != Success) {
+			 GrabModeAsync, None, wPreferences.cursor[WCUR_NORMAL], CurrentTime) != Success) {
 		return;
 	}
 	XGrabServer(dpy);
@@ -2213,7 +2213,7 @@ void InteractivePlaceWindow(WWindow * wwin, int *x_ret, int *y_ret, unsigned wid
 	int junk;
 
 	if (XGrabPointer(dpy, root, True, PointerMotionMask | ButtonPressMask,
-			 GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_DEFAULT], CurrentTime) != Success) {
+			 GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_NORMAL], CurrentTime) != Success) {
 		*x_ret = 0;
 		*y_ret = 0;
 		return;

@@ -463,7 +463,7 @@ static void createInternalWindows(WScreen * scr)
 	attribs.override_redirect = True;
 	attribs.background_pixmap = None;
 	attribs.background_pixel = scr->white_pixel;
-	attribs.cursor = wPreferences.cursor[WCUR_DEFAULT];
+	attribs.cursor = wPreferences.cursor[WCUR_NORMAL];
 	vmask |= CWColormap;
 	attribs.colormap = scr->w_colormap;
 	scr->dock_shadow =
