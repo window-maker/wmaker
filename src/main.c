@@ -64,6 +64,7 @@
 #endif
 
 /****** Global Variables ******/
+struct wmaker_global_variables w_global;
 
 /* general info */
 
@@ -145,8 +146,6 @@ int wXkbEventBase;
 #endif
 
 /* special flags */
-wprog_state WProgramSigState = 0;
-wprog_state WProgramState = WSTATE_NORMAL;
 char WDelayedActionSet = 0;
 
 /* notifications */
@@ -595,6 +594,10 @@ int main(int argc, char **argv)
 {
 	int i_am_the_monitor, i, len;
 	char *str, *alt;
+
+	memset(&w_global, 0, sizeof(w_global));
+	w_global.program.state = WSTATE_NORMAL;
+	w_global.program.signal_state = WSTATE_NORMAL;
 
 	/* setup common stuff for the monitor and wmaker itself */
 	WMInitializeApplication("WindowMaker", &argc, argv);

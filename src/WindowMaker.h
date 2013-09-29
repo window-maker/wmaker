@@ -238,22 +238,22 @@ typedef enum {
 } wprog_state;
 
 
-#define WCHECK_STATE(chk_state)	(WProgramState == (chk_state))
+#define WCHECK_STATE(chk_state)	(w_global.program.state == (chk_state))
 
 
 #define WCHANGE_STATE(nstate) {\
-    if (WProgramState == WSTATE_NORMAL\
-        || (nstate) != WSTATE_MODAL)\
-        WProgramState = (nstate); \
-    if (WProgramSigState != 0)\
-        WProgramState = WProgramSigState;\
+    if (w_global.program.state == WSTATE_NORMAL\
+        || (nstate) != WSTATE_MODAL)			  \
+        w_global.program.state = (nstate); \
+    if (w_global.program.signal_state != 0)\
+        w_global.program.state = w_global.program.signal_state;\
 }
 
 
 /* only call inside signal handlers, with signals blocked */
 #define SIG_WCHANGE_STATE(nstate) {\
-    WProgramSigState = (nstate);\
-    WProgramState = (nstate);\
+    w_global.program.signal_state = (nstate);\
+    w_global.program.state = (nstate);\
 }
 
 
@@ -453,9 +453,17 @@ extern struct WPreferences {
 
 /****** Global Variables  ******/
 extern Display	*dpy;
+
+extern struct wmaker_global_variables {
+	/* Tracking of the state of the program */
+	struct {
+		wprog_state state;
+		wprog_state signal_state;
+	} program;
+
+} w_global;
+
 extern unsigned int ValidModMask;
-extern wprog_state WProgramState;
-extern wprog_state WProgramSigState;
 
 /****** Notifications ******/
 extern const char WMNManaged[];
