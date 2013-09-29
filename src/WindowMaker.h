@@ -461,6 +461,9 @@ extern struct wmaker_global_variables {
 		wprog_state signal_state;
 	} program;
 
+	/* locale to use. NULL==POSIX or C */
+	const char *locale;
+
 } w_global;
 
 extern unsigned int ValidModMask;

@@ -78,8 +78,6 @@ unsigned int ValidModMask = 0xff;
 int inotifyFD;
 int inotifyWD;
 #endif
-/* locale to use. NULL==POSIX or C */
-char *Locale = NULL;
 
 int wScreenCount = 0;
 
@@ -706,7 +704,7 @@ static int real_main(int argc, char **argv)
 					wwarning(_("too few arguments for %s"), argv[i - 1]);
 					exit(0);
 				}
-				Locale = argv[i];
+				w_global.locale = argv[i];
 			} else if (strcmp(argv[i], "-display") == 0 || strcmp(argv[i], "--display") == 0) {
 				i++;
 				if (i >= argc) {
@@ -746,19 +744,19 @@ static int real_main(int argc, char **argv)
 		check_defaults();
 	}
 
-	if (Locale) {
-		setenv("LANG", Locale, 1);
+	if (w_global.locale) {
+		setenv("LANG", w_global.locale, 1);
 	} else {
-		Locale = getenv("LC_ALL");
-		if (!Locale) {
-			Locale = getenv("LANG");
+		w_global.locale = getenv("LC_ALL");
+		if (!w_global.locale) {
+			w_global.locale = getenv("LANG");
 		}
 	}
 
 	setlocale(LC_ALL, "");
 
-	if (!Locale || strcmp(Locale, "C") == 0 || strcmp(Locale, "POSIX") == 0)
-		Locale = NULL;
+	if (!w_global.locale || strcmp(w_global.locale, "C") == 0 || strcmp(w_global.locale, "POSIX") == 0)
+		w_global.locale = NULL;
 #ifdef I18N
 	if (getenv("NLSPATH")) {
 		bindtextdomain("WindowMaker", getenv("NLSPATH"));
@@ -786,11 +784,11 @@ static int real_main(int argc, char **argv)
 	}
 #endif
 
-	if (Locale) {
+	if (w_global.locale) {
 		char *ptr;
 
-		Locale = wstrdup(Locale);
-		ptr = strchr(Locale, '.');
+		w_global.locale = wstrdup(w_global.locale);
+		ptr = strchr(w_global.locale, '.');
 		if (ptr)
 			*ptr = 0;
 	}

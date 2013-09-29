@@ -60,7 +60,6 @@
 
 #define MAX_SHORTCUT_LENGTH 32
 
-extern char *Locale;
 extern WDDomain *WDRootMenu;
 extern Cursor wCursor[WCUR_LAST];
 
@@ -309,14 +308,14 @@ static char *getLocalizedMenuFile(const char *menu)
 	char *buffer, *ptr, *locale;
 	int len;
 
-	if (!Locale)
+	if (!w_global.locale)
 		return NULL;
 
-	len = strlen(menu) + strlen(Locale) + 8;
+	len = strlen(menu) + strlen(w_global.locale) + 8;
 	buffer = wmalloc(len);
 
 	/* try menu.locale_name */
-	snprintf(buffer, len, "%s.%s", menu, Locale);
+	snprintf(buffer, len, "%s.%s", menu, w_global.locale);
 	if (access(buffer, F_OK) == 0)
 		return buffer;
 
