@@ -107,16 +107,6 @@ extern XContext wAppWinContext;
 extern XContext wStackContext;
 extern XContext wVEdgeContext;
 
-/* atoms */
-extern Atom _XA_WINDOWMAKER_MENU;
-extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
-extern Atom _XA_WINDOWMAKER_STATE;
-extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
-extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
-extern Atom _XA_WINDOWMAKER_COMMAND;
-extern Atom _XA_WINDOWMAKER_ICON_SIZE;
-extern Atom _XA_WINDOWMAKER_ICON_TILE;
-
 #ifndef HAVE_INOTIFY
 /* special flags */
 extern char WDelayedActionSet;
@@ -510,14 +500,14 @@ void StartUp(Bool defaultScreenOnly)
 	w_global.atom.wm.colormap_windows = atom[7];
 	w_global.atom.wm.colormap_notify = atom[8];
 
-	_XA_WINDOWMAKER_MENU = atom[9];
-	_XA_WINDOWMAKER_STATE = atom[10];
-	_XA_WINDOWMAKER_WM_PROTOCOLS = atom[11];
-	_XA_WINDOWMAKER_WM_FUNCTION = atom[12];
-	_XA_WINDOWMAKER_NOTICEBOARD = atom[13];
-	_XA_WINDOWMAKER_COMMAND = atom[14];
-	_XA_WINDOWMAKER_ICON_SIZE = atom[15];
-	_XA_WINDOWMAKER_ICON_TILE = atom[16];
+	w_global.atom.wmaker.menu = atom[9];
+	w_global.atom.wmaker.state = atom[10];
+	w_global.atom.wmaker.wm_protocols = atom[11];
+	w_global.atom.wmaker.wm_function = atom[12];
+	w_global.atom.wmaker.noticeboard = atom[13];
+	w_global.atom.wmaker.command = atom[14];
+	w_global.atom.wmaker.icon_size = atom[15];
+	w_global.atom.wmaker.icon_tile = atom[16];
 
 	w_global.atom.gnustep.wm_attr = atom[17];
 	w_global.atom.gnustep.wm_miniaturize_window = atom[18];

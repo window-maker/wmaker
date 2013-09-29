@@ -49,8 +49,6 @@
 /* contexts */
 extern XContext wWinContext;
 
-extern Atom _XA_WINDOWMAKER_MENU;
-
 #ifdef SHAPE
 extern Bool wShapeSupported;
 #endif
@@ -560,7 +558,7 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 			GetColormapWindows(wwin);
 			wColormapInstallForWindow(wwin->screen_ptr, wwin);
 
-		} else if (event->atom == _XA_WINDOWMAKER_MENU) {
+		} else if (event->atom == w_global.atom.wmaker.menu) {
 			WApplication *wapp;
 
 			wapp = wApplicationOf(wwin->main_window);

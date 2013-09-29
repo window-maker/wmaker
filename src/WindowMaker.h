@@ -506,6 +506,20 @@ extern struct wmaker_global_variables {
 			Atom titlebar_state;
 		} gnustep;
 
+		/* WindowMaker specific */
+		struct {
+			Atom menu;
+			Atom wm_protocols;
+			Atom state;
+
+			Atom wm_function;
+			Atom noticeboard;
+			Atom command;
+
+			Atom icon_size;
+			Atom icon_tile;
+		} wmaker;
+
 	} atom;
 
 } w_global;

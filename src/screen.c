@@ -70,9 +70,6 @@
     |KeyPressMask|KeyReleaseMask)
 
 /**** Global variables ****/
-extern Atom _XA_WINDOWMAKER_STATE;
-extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
-
 extern int wScreenCount;
 
 #ifdef KEEP_XKB_LOCK_STATUS
@@ -666,9 +663,9 @@ WScreen *wScreenInit(int screen_number)
 	PropSetWMakerProtocols(scr->root_win);
 
 	/* setup our noticeboard */
-	XChangeProperty(dpy, scr->info_window, _XA_WINDOWMAKER_NOTICEBOARD,
+	XChangeProperty(dpy, scr->info_window, w_global.atom.wmaker.noticeboard,
 			XA_WINDOW, 32, PropModeReplace, (unsigned char *)&scr->info_window, 1);
-	XChangeProperty(dpy, scr->root_win, _XA_WINDOWMAKER_NOTICEBOARD,
+	XChangeProperty(dpy, scr->root_win, w_global.atom.wmaker.noticeboard,
 			XA_WINDOW, 32, PropModeReplace, (unsigned char *)&scr->info_window, 1);
 
 #ifdef BALLOON_TEXT

@@ -82,9 +82,6 @@ extern Bool wShapeSupported;
 /* contexts */
 extern XContext wWinContext;
 
-/* protocol atoms */
-extern Atom _XA_WINDOWMAKER_STATE;
-
 /***** Local Stuff *****/
 static WWindowState *windowState = NULL;
 static FocusMode getFocusMode(WWindow *wwin);
@@ -739,10 +736,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		WSETUFLAG(wwin, shared_appicon, 0);
 
 	if (wwin->main_window) {
-		extern Atom _XA_WINDOWMAKER_MENU;
 		XTextProperty text_prop;
 
-		if (XGetTextProperty(dpy, wwin->main_window, &text_prop, _XA_WINDOWMAKER_MENU))
+		if (XGetTextProperty(dpy, wwin->main_window, &text_prop, w_global.atom.wmaker.menu))
 			WSETUFLAG(wwin, shared_appicon, 0);
 	}
 
@@ -2307,8 +2303,8 @@ void wWindowSaveState(WWindow * wwin)
 		    WMCountInArray(wwin->screen_ptr->shortcutWindows[i], wwin))
 			data[9] |= 1 << i;
 	}
-	XChangeProperty(dpy, wwin->client_win, _XA_WINDOWMAKER_STATE,
-			_XA_WINDOWMAKER_STATE, 32, PropModeReplace, (unsigned char *)data, 10);
+	XChangeProperty(dpy, wwin->client_win, w_global.atom.wmaker.state,
+			w_global.atom.wmaker.state, 32, PropModeReplace, (unsigned char *)data, 10);
 }
 
 static int getSavedState(Window window, WSavedState ** state)
@@ -2319,8 +2315,8 @@ static int getSavedState(Window window, WSavedState ** state)
 	unsigned long bytes_after_ret;
 	long *data;
 
-	if (XGetWindowProperty(dpy, window, _XA_WINDOWMAKER_STATE, 0, 10,
-			       True, _XA_WINDOWMAKER_STATE,
+	if (XGetWindowProperty(dpy, window, w_global.atom.wmaker.state, 0, 10,
+			       True, w_global.atom.wmaker.state,
 			       &type_ret, &fmt_ret, &nitems_ret, &bytes_after_ret,
 			       (unsigned char **)&data) != Success || !data || nitems_ret < 10)
 		return 0;
@@ -2340,7 +2336,7 @@ static int getSavedState(Window window, WSavedState ** state)
 
 	XFree(data);
 
-	if (*state && type_ret == _XA_WINDOWMAKER_STATE)
+	if (*state && type_ret == w_global.atom.wmaker.state)
 		return 1;
 	else
 		return 0;

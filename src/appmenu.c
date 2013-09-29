@@ -36,8 +36,6 @@
 #include "appmenu.h"
 #include "framewin.h"
 
-/******** Global Variables **********/
-extern Atom _XA_WINDOWMAKER_MENU;
 
 typedef struct {
 	short code;
@@ -62,7 +60,7 @@ static void sendMessage(Window window, int what, int tag)
 	XEvent event;
 
 	event.xclient.type = ClientMessage;
-	event.xclient.message_type = _XA_WINDOWMAKER_MENU;
+	event.xclient.message_type = w_global.atom.wmaker.menu;
 	event.xclient.format = 32;
 	event.xclient.display = dpy;
 	event.xclient.window = window;
@@ -206,7 +204,7 @@ WMenu *wAppMenuGet(WScreen * scr, Window window)
 	char **slist;
 	WMenu *menu;
 
-	if (!XGetTextProperty(dpy, window, &text_prop, _XA_WINDOWMAKER_MENU)) {
+	if (!XGetTextProperty(dpy, window, &text_prop, w_global.atom.wmaker.menu)) {
 		return NULL;
 	}
 	if (!XTextPropertyToStringList(&text_prop, &slist, &count) || count < 1) {

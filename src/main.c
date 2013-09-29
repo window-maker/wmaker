@@ -96,18 +96,6 @@ XContext wAppWinContext;
 XContext wStackContext;
 XContext wVEdgeContext;
 
-/* Atoms */
-Atom _XA_WINDOWMAKER_MENU;
-Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
-Atom _XA_WINDOWMAKER_STATE;
-
-Atom _XA_WINDOWMAKER_WM_FUNCTION;
-Atom _XA_WINDOWMAKER_NOTICEBOARD;
-Atom _XA_WINDOWMAKER_COMMAND;
-
-Atom _XA_WINDOWMAKER_ICON_SIZE;
-Atom _XA_WINDOWMAKER_ICON_TILE;
-
 #ifdef SHAPE
 Bool wShapeSupported;
 int wShapeEventBase;

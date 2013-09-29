@@ -31,12 +31,6 @@
 #include "GNUstep.h"
 #include "properties.h"
 
-/* atoms */
-extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
-extern Atom _XA_WINDOWMAKER_MENU;
-extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
-extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
-extern Atom _XA_WINDOWMAKER_ICON_TILE;
 
 int PropGetNormalHints(Window window, XSizeHints * size_hints, int *pre_iccm)
 {
@@ -164,11 +158,11 @@ void PropSetWMakerProtocols(Window root)
 	Atom protocols[3];
 	int count = 0;
 
-	protocols[count++] = _XA_WINDOWMAKER_MENU;
-	protocols[count++] = _XA_WINDOWMAKER_WM_FUNCTION;
-	protocols[count++] = _XA_WINDOWMAKER_NOTICEBOARD;
+	protocols[count++] = w_global.atom.wmaker.menu;
+	protocols[count++] = w_global.atom.wmaker.wm_function;
+	protocols[count++] = w_global.atom.wmaker.noticeboard;
 
-	XChangeProperty(dpy, root, _XA_WINDOWMAKER_WM_PROTOCOLS, XA_ATOM,
+	XChangeProperty(dpy, root, w_global.atom.wmaker.wm_protocols, XA_ATOM,
 			32, PropModeReplace, (unsigned char *)protocols, count);
 }
 
@@ -216,7 +210,7 @@ void PropSetIconTileHint(WScreen * scr, RImage * image)
 		}
 	}
 
-	XChangeProperty(dpy, scr->info_window, _XA_WINDOWMAKER_ICON_TILE,
+	XChangeProperty(dpy, scr->info_window, w_global.atom.wmaker.icon_tile,
 			imageAtom, 8, PropModeReplace, tmp, image->width * image->height * 4 + 4);
 	wfree(tmp);
 
@@ -257,7 +251,7 @@ int PropGetWindowState(Window window)
 
 void PropCleanUp(Window root)
 {
-	XDeleteProperty(dpy, root, _XA_WINDOWMAKER_WM_PROTOCOLS);
-	XDeleteProperty(dpy, root, _XA_WINDOWMAKER_NOTICEBOARD);
+	XDeleteProperty(dpy, root, w_global.atom.wmaker.wm_protocols);
+	XDeleteProperty(dpy, root, w_global.atom.wmaker.noticeboard);
 	XDeleteProperty(dpy, root, XA_WM_ICON_SIZE);
 }

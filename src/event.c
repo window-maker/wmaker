@@ -85,9 +85,6 @@ extern int wScreenCount;
 
 #define MOD_MASK wPreferences.modifier_mask
 
-extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
-extern Atom _XA_WINDOWMAKER_COMMAND;
-
 #ifdef SHAPE
 extern Bool wShapeSupported;
 extern int wShapeEventBase;
@@ -941,7 +938,7 @@ static void handleClientMessage(XEvent * event)
 		} else {	/* stopping */
 			wColormapAllowClientInstallation(scr, False);
 		}
-	} else if (event->xclient.message_type == _XA_WINDOWMAKER_COMMAND) {
+	} else if (event->xclient.message_type == w_global.atom.wmaker.command) {
 
 		char *command;
 		size_t len;
@@ -959,7 +956,7 @@ static void handleClientMessage(XEvent * event)
 
 		wfree(command);
 
-	} else if (event->xclient.message_type == _XA_WINDOWMAKER_WM_FUNCTION) {
+	} else if (event->xclient.message_type == w_global.atom.wmaker.wm_function) {
 		WApplication *wapp;
 		int done = 0;
 		wapp = wApplicationOf(event->xclient.window);
