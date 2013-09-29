@@ -238,7 +238,7 @@ typedef enum {
 } wprog_state;
 
 
-#define WCHECK_STATE(state)	(state == WProgramState)
+#define WCHECK_STATE(chk_state)	(WProgramState == (chk_state))
 
 
 #define WCHANGE_STATE(nstate) {\
