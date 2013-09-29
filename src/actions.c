@@ -53,7 +53,6 @@
 /****** Global Variables ******/
 
 int ignore_wks_change = 0;
-extern Atom _XA_WM_TAKE_FOCUS;
 
 static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, int *new_y,
 				  unsigned int *new_width, unsigned int *new_height);
@@ -172,7 +171,7 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 
 		XFlush(dpy);
 		if (wwin->protocols.TAKE_FOCUS)
-			wClientSendProtocol(wwin, _XA_WM_TAKE_FOCUS, timestamp);
+			wClientSendProtocol(wwin, w_global.atom.wm.take_focus, timestamp);
 
 		XSync(dpy, False);
 	} else {

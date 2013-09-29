@@ -481,6 +481,25 @@ extern struct wmaker_global_variables {
 
 	} timestamp;
 
+	/* definition for X Atoms */
+	struct {
+
+		/* Window-Manager related */
+		struct {
+			Atom state;
+			Atom change_state;
+			Atom protocols;
+			Atom take_focus;
+			Atom delete_window;
+			Atom save_yourself;
+			Atom client_leader;
+			Atom colormap_windows;
+			Atom colormap_notify;
+			Atom ignore_focus_events;
+		} wm;
+
+	} atom;
+
 } w_global;
 
 extern unsigned int ValidModMask;

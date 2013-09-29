@@ -38,7 +38,6 @@
 #include "colormap.h"
 #include "shutdown.h"
 
-extern Atom _XA_WM_DELETE_WINDOW;
 extern int wScreenCount;
 
 static void wipeDesktop(WScreen * scr);
@@ -196,7 +195,8 @@ static void wipeDesktop(WScreen * scr)
 	wwin = scr->focused_window;
 	while (wwin) {
 		if (wwin->protocols.DELETE_WINDOW)
-			wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, w_global.timestamp.last_event);
+			wClientSendProtocol(wwin, w_global.atom.wm.delete_window,
+									  w_global.timestamp.last_event);
 		else
 			wClientKill(wwin);
 		wwin = wwin->prev;

@@ -83,7 +83,6 @@ extern Bool wShapeSupported;
 extern XContext wWinContext;
 
 /* protocol atoms */
-extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_STATE;
 
@@ -2917,7 +2916,8 @@ static void windowCloseClick(WCoreWindow *sender, void *data, XEvent *event)
 	} else {
 		if (wwin->protocols.DELETE_WINDOW && event->xbutton.state == 0) {
 			/* send delete message */
-			wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, w_global.timestamp.last_event);
+			wClientSendProtocol(wwin, w_global.atom.wm.delete_window,
+									  w_global.timestamp.last_event);
 		}
 	}
 }
@@ -2933,7 +2933,8 @@ static void windowCloseDblClick(WCoreWindow *sender, void *data, XEvent *event)
 
 	/* send delete message */
 	if (wwin->protocols.DELETE_WINDOW)
-		wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, w_global.timestamp.last_event);
+		wClientSendProtocol(wwin, w_global.atom.wm.delete_window,
+								  w_global.timestamp.last_event);
 	else
 		wClientKill(wwin);
 }

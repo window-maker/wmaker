@@ -108,15 +108,6 @@ extern XContext wStackContext;
 extern XContext wVEdgeContext;
 
 /* atoms */
-extern Atom _XA_WM_STATE;
-extern Atom _XA_WM_CHANGE_STATE;
-extern Atom _XA_WM_PROTOCOLS;
-extern Atom _XA_WM_TAKE_FOCUS;
-extern Atom _XA_WM_DELETE_WINDOW;
-extern Atom _XA_WM_SAVE_YOURSELF;
-extern Atom _XA_WM_CLIENT_LEADER;
-extern Atom _XA_WM_COLORMAP_WINDOWS;
-extern Atom _XA_WM_COLORMAP_NOTIFY;
 extern Atom _XA_GNUSTEP_WM_ATTR;
 extern Atom _XA_WINDOWMAKER_MENU;
 extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
@@ -128,7 +119,6 @@ extern Atom _XA_WINDOWMAKER_ICON_SIZE;
 extern Atom _XA_WINDOWMAKER_ICON_TILE;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
-extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 
 #ifndef HAVE_INOTIFY
 /* special flags */
@@ -513,15 +503,15 @@ void StartUp(Bool defaultScreenOnly)
 	}
 #endif
 
-	_XA_WM_STATE = atom[0];
-	_XA_WM_CHANGE_STATE = atom[1];
-	_XA_WM_PROTOCOLS = atom[2];
-	_XA_WM_TAKE_FOCUS = atom[3];
-	_XA_WM_DELETE_WINDOW = atom[4];
-	_XA_WM_SAVE_YOURSELF = atom[5];
-	_XA_WM_CLIENT_LEADER = atom[6];
-	_XA_WM_COLORMAP_WINDOWS = atom[7];
-	_XA_WM_COLORMAP_NOTIFY = atom[8];
+	w_global.atom.wm.state = atom[0];
+	w_global.atom.wm.change_state = atom[1];
+	w_global.atom.wm.protocols = atom[2];
+	w_global.atom.wm.take_focus = atom[3];
+	w_global.atom.wm.delete_window = atom[4];
+	w_global.atom.wm.save_yourself = atom[5];
+	w_global.atom.wm.client_leader = atom[6];
+	w_global.atom.wm.colormap_windows = atom[7];
+	w_global.atom.wm.colormap_notify = atom[8];
 
 	_XA_WINDOWMAKER_MENU = atom[9];
 	_XA_WINDOWMAKER_STATE = atom[10];
@@ -536,7 +526,7 @@ void StartUp(Bool defaultScreenOnly)
 	_XA_GNUSTEP_WM_MINIATURIZE_WINDOW = atom[18];
 	_XA_GNUSTEP_TITLEBAR_STATE = atom[19];
 
-	_XA_WM_IGNORE_FOCUS_EVENTS = atom[20];
+	w_global.atom.wm.ignore_focus_events = atom[20];
 
 #ifdef XDND
 	wXDNDInitializeAtoms();

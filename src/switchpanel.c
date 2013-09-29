@@ -35,7 +35,6 @@
 #include "misc.h"
 #include "xinerama.h"
 
-extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
@@ -558,7 +557,7 @@ void wSwitchPanelDestroy(WSwitchPanel *panel)
 		Window info_win = panel->scr->info_window;
 		XEvent ev;
 		ev.xclient.type = ClientMessage;
-		ev.xclient.message_type = _XA_WM_IGNORE_FOCUS_EVENTS;
+		ev.xclient.message_type = w_global.atom.wm.ignore_focus_events;
 		ev.xclient.format = 32;
 		ev.xclient.data.l[0] = True;
 

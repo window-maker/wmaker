@@ -49,10 +49,6 @@
 /* contexts */
 extern XContext wWinContext;
 
-extern Atom _XA_WM_STATE;
-extern Atom _XA_WM_PROTOCOLS;
-extern Atom _XA_WM_COLORMAP_WINDOWS;
-
 extern Atom _XA_WINDOWMAKER_MENU;
 
 extern Atom _XA_GNUSTEP_WM_ATTR;
@@ -112,8 +108,9 @@ void wClientSetState(WWindow * wwin, int state, Window icon_win)
 	data[0] = (unsigned long)state;
 	data[1] = (unsigned long)icon_win;
 
-	XChangeProperty(dpy, wwin->client_win, _XA_WM_STATE, _XA_WM_STATE, 32,
-			PropModeReplace, (unsigned char *)data, 2);
+	XChangeProperty(dpy, wwin->client_win, w_global.atom.wm.state,
+			w_global.atom.wm.state, 32, PropModeReplace,
+			(unsigned char *)data, 2);
 }
 
 void wClientGetGravityOffsets(WWindow * wwin, int *ofs_x, int *ofs_y)
@@ -269,7 +266,7 @@ void wClientSendProtocol(WWindow * wwin, Atom protocol, Time time)
 	XEvent event;
 
 	event.xclient.type = ClientMessage;
-	event.xclient.message_type = _XA_WM_PROTOCOLS;
+	event.xclient.message_type = w_global.atom.wm.protocols;
 	event.xclient.format = 32;
 	event.xclient.display = dpy;
 	event.xclient.window = wwin->client_win;
@@ -552,7 +549,7 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 		break;
 
 	default:
-		if (event->atom == _XA_WM_PROTOCOLS) {
+		if (event->atom == w_global.atom.wm.protocols) {
 
 			PropGetProtocols(wwin->client_win, &wwin->protocols);
 
@@ -561,7 +558,7 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 			if (wwin->frame)
 				wWindowUpdateButtonImages(wwin);
 
-		} else if (event->atom == _XA_WM_COLORMAP_WINDOWS) {
+		} else if (event->atom == w_global.atom.wm.colormap_windows) {
 
 			GetColormapWindows(wwin);
 			wColormapInstallForWindow(wwin->screen_ptr, wwin);

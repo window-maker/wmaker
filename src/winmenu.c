@@ -69,7 +69,6 @@
 #define WO_ENTRIES		3
 
 /**** Global data ***/
-extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 
 extern WShortKey wKeyBindings[WKBD_LAST];
@@ -112,7 +111,8 @@ static void execMenuCommand(WMenu * menu, WMenuEntry * entry)
 	switch (entry->order) {
 	case MC_CLOSE:
 		/* send delete message */
-		wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, w_global.timestamp.last_event);
+		wClientSendProtocol(wwin, w_global.atom.wm.delete_window,
+								  w_global.timestamp.last_event);
 		break;
 
 	case MC_KILL:

@@ -85,10 +85,6 @@
 
 #include <WINGs/WUtil.h>
 
-/** Global **/
-
-extern Atom _XA_WM_SAVE_YOURSELF;
-
 
 static WMPropList *sApplications = NULL;
 static WMPropList *sCommand;

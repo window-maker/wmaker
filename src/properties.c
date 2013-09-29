@@ -32,11 +32,6 @@
 #include "properties.h"
 
 /* atoms */
-extern Atom _XA_WM_STATE;
-extern Atom _XA_WM_CLIENT_LEADER;
-extern Atom _XA_WM_TAKE_FOCUS;
-extern Atom _XA_WM_DELETE_WINDOW;
-extern Atom _XA_WM_SAVE_YOURSELF;
 extern Atom _XA_GNUSTEP_WM_ATTR;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
@@ -92,11 +87,11 @@ void PropGetProtocols(Window window, WProtocols * prots)
 		return;
 	}
 	for (i = 0; i < count; i++) {
-		if (protocols[i] == _XA_WM_TAKE_FOCUS)
+		if (protocols[i] == w_global.atom.wm.take_focus)
 			prots->TAKE_FOCUS = 1;
-		else if (protocols[i] == _XA_WM_DELETE_WINDOW)
+		else if (protocols[i] == w_global.atom.wm.delete_window)
 			prots->DELETE_WINDOW = 1;
-		else if (protocols[i] == _XA_WM_SAVE_YOURSELF)
+		else if (protocols[i] == w_global.atom.wm.save_yourself)
 			prots->SAVE_YOURSELF = 1;
 		else if (protocols[i] == _XA_GNUSTEP_WM_MINIATURIZE_WINDOW)
 			prots->MINIATURIZE_WINDOW = 1;
@@ -234,7 +229,7 @@ Window PropGetClientLeader(Window window)
 	Window *win;
 	Window leader;
 
-	win = (Window *) PropGetCheckProperty(window, _XA_WM_CLIENT_LEADER, XA_WINDOW, 32, 1, NULL);
+	win = (Window *) PropGetCheckProperty(window, w_global.atom.wm.client_leader, XA_WINDOW, 32, 1, NULL);
 
 	if (!win)
 		return None;
@@ -250,7 +245,8 @@ int PropGetWindowState(Window window)
 	long *data;
 	long state;
 
-	data = (long *)PropGetCheckProperty(window, _XA_WM_STATE, _XA_WM_STATE, 32, 1, NULL);
+	data = (long *)PropGetCheckProperty(window, w_global.atom.wm.state,
+				w_global.atom.wm.state, 32, 1, NULL);
 
 	if (!data)
 		return -1;

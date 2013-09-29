@@ -85,16 +85,11 @@ extern int wScreenCount;
 
 #define MOD_MASK wPreferences.modifier_mask
 
-extern Atom _XA_WM_COLORMAP_NOTIFY;
-
-extern Atom _XA_WM_CHANGE_STATE;
-extern Atom _XA_WM_DELETE_WINDOW;
 extern Atom _XA_GNUSTEP_WM_ATTR;
 extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_COMMAND;
-extern Atom _XA_WM_IGNORE_FOCUS_EVENTS;
 
 #ifdef SHAPE
 extern Bool wShapeSupported;
@@ -930,7 +925,7 @@ static void handleClientMessage(XEvent * event)
 	WObjDescriptor *desc;
 
 	/* handle transition from Normal to Iconic state */
-	if (event->xclient.message_type == _XA_WM_CHANGE_STATE
+	if (event->xclient.message_type == w_global.atom.wm.change_state
 	    && event->xclient.format == 32 && event->xclient.data.l[0] == IconicState) {
 
 		wwin = wWindowFor(event->xclient.window);
@@ -938,7 +933,7 @@ static void handleClientMessage(XEvent * event)
 			return;
 		if (!wwin->flags.miniaturized)
 			wIconifyWindow(wwin);
-	} else if (event->xclient.message_type == _XA_WM_COLORMAP_NOTIFY && event->xclient.format == 32) {
+	} else if (event->xclient.message_type == w_global.atom.wm.colormap_notify && event->xclient.format == 32) {
 		WScreen *scr = wScreenForRootWindow(event->xclient.window);
 
 		if (!scr)
@@ -1028,7 +1023,7 @@ static void handleClientMessage(XEvent * event)
 			wFrameWindowChangeState(wwin->frame, WS_FOCUSED);
 			break;
 		}
-	} else if (event->xclient.message_type == _XA_WM_IGNORE_FOCUS_EVENTS) {
+	} else if (event->xclient.message_type == w_global.atom.wm.ignore_focus_events) {
 		WScreen *scr = wScreenForRootWindow(event->xclient.window);
 		if (!scr)
 			return;
@@ -1554,7 +1549,7 @@ static void handleKeyPress(XEvent * event)
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && !WFLAGP(wwin, no_closable)) {
 			CloseWindowMenu(scr);
 			if (wwin->protocols.DELETE_WINDOW)
-				wClientSendProtocol(wwin, _XA_WM_DELETE_WINDOW, event->xkey.time);
+				wClientSendProtocol(wwin, w_global.atom.wm.delete_window, event->xkey.time);
 		}
 		break;
 	case WKBD_SELECT:
