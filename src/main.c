@@ -90,9 +90,6 @@ WDDomain *WDWindowMaker = NULL;
 WDDomain *WDWindowAttributes = NULL;
 WDDomain *WDRootMenu = NULL;
 
-/* XContexts */
-XContext wVEdgeContext;
-
 #ifdef SHAPE
 Bool wShapeSupported;
 int wShapeEventBase;

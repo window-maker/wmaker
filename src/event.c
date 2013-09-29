@@ -77,8 +77,6 @@
 #include "switchmenu.h"
 
 /******** Global Variables **********/
-extern XContext wVEdgeContext;
-
 extern WShortKey wKeyBindings[WKBD_LAST];
 extern int wScreenCount;
 

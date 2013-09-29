@@ -101,9 +101,6 @@ extern Bool wXkbSupported;
 extern int wXkbEventBase;
 #endif
 
-/* contexts */
-extern XContext wVEdgeContext;
-
 #ifndef HAVE_INOTIFY
 /* special flags */
 extern char WDelayedActionSet;
@@ -472,7 +469,6 @@ void StartUp(Bool defaultScreenOnly)
 	w_global.context.client_win = XUniqueContext();
 	w_global.context.app_win = XUniqueContext();
 	w_global.context.stack = XUniqueContext();
-	wVEdgeContext = XUniqueContext();
 
 	/*    _XA_VERSION = XInternAtom(dpy, "VERSION", False); */
 
