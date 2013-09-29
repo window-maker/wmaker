@@ -32,8 +32,6 @@
 #include "properties.h"
 
 /* atoms */
-extern Atom _XA_GNUSTEP_WM_ATTR;
-extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_MENU;
 extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
@@ -93,7 +91,7 @@ void PropGetProtocols(Window window, WProtocols * prots)
 			prots->DELETE_WINDOW = 1;
 		else if (protocols[i] == w_global.atom.wm.save_yourself)
 			prots->SAVE_YOURSELF = 1;
-		else if (protocols[i] == _XA_GNUSTEP_WM_MINIATURIZE_WINDOW)
+		else if (protocols[i] == w_global.atom.gnustep.wm_miniaturize_window)
 			prots->MINIATURIZE_WINDOW = 1;
 	}
 	XFree(protocols);
@@ -135,8 +133,8 @@ int PropGetGNUstepWMAttr(Window window, GNUstepWMAttributes ** attr)
 {
 	unsigned long *data;
 
-	data = (unsigned long *)PropGetCheckProperty(window, _XA_GNUSTEP_WM_ATTR,
-						     _XA_GNUSTEP_WM_ATTR, 32, 9, NULL);
+	data = (unsigned long *)PropGetCheckProperty(window, w_global.atom.gnustep.wm_attr,
+						     w_global.atom.gnustep.wm_attr, 32, 9, NULL);
 
 	if (!data)
 		return False;

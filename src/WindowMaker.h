@@ -498,6 +498,14 @@ extern struct wmaker_global_variables {
 			Atom ignore_focus_events;
 		} wm;
 
+		/* GNUStep related */
+		struct {
+			Atom wm_attr;
+			Atom wm_miniaturize_window;
+			Atom wm_resizebar;
+			Atom titlebar_state;
+		} gnustep;
+
 	} atom;
 
 } w_global;

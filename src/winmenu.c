@@ -69,8 +69,6 @@
 #define WO_ENTRIES		3
 
 /**** Global data ***/
-extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
-
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 
@@ -133,7 +131,8 @@ static void execMenuCommand(WMenu * menu, WMenuEntry * entry)
 			wDeiconifyWindow(wwin);
 		} else {
 			if (wwin->protocols.MINIATURIZE_WINDOW) {
-				wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW, w_global.timestamp.last_event);
+				wClientSendProtocol(wwin, w_global.atom.gnustep.wm_miniaturize_window,
+										  w_global.timestamp.last_event);
 			} else {
 				wIconifyWindow(wwin);
 			}

@@ -83,7 +83,6 @@ extern Bool wShapeSupported;
 extern XContext wWinContext;
 
 /* protocol atoms */
-extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
 extern Atom _XA_WINDOWMAKER_STATE;
 
 /***** Local Stuff *****/
@@ -2974,7 +2973,8 @@ static void windowIconifyClick(WCoreWindow *sender, void *data, XEvent *event)
 		return;
 
 	if (wwin->protocols.MINIATURIZE_WINDOW && event->xbutton.state == 0) {
-		wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW, w_global.timestamp.last_event);
+		wClientSendProtocol(wwin, w_global.atom.gnustep.wm_miniaturize_window,
+								  w_global.timestamp.last_event);
 	} else {
 		WApplication *wapp;
 		if ((event->xbutton.state & ControlMask) || (event->xbutton.button == Button3)) {

@@ -108,7 +108,6 @@ extern XContext wStackContext;
 extern XContext wVEdgeContext;
 
 /* atoms */
-extern Atom _XA_GNUSTEP_WM_ATTR;
 extern Atom _XA_WINDOWMAKER_MENU;
 extern Atom _XA_WINDOWMAKER_WM_PROTOCOLS;
 extern Atom _XA_WINDOWMAKER_STATE;
@@ -117,8 +116,6 @@ extern Atom _XA_WINDOWMAKER_NOTICEBOARD;
 extern Atom _XA_WINDOWMAKER_COMMAND;
 extern Atom _XA_WINDOWMAKER_ICON_SIZE;
 extern Atom _XA_WINDOWMAKER_ICON_TILE;
-extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
-extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 
 #ifndef HAVE_INOTIFY
 /* special flags */
@@ -522,9 +519,9 @@ void StartUp(Bool defaultScreenOnly)
 	_XA_WINDOWMAKER_ICON_SIZE = atom[15];
 	_XA_WINDOWMAKER_ICON_TILE = atom[16];
 
-	_XA_GNUSTEP_WM_ATTR = atom[17];
-	_XA_GNUSTEP_WM_MINIATURIZE_WINDOW = atom[18];
-	_XA_GNUSTEP_TITLEBAR_STATE = atom[19];
+	w_global.atom.gnustep.wm_attr = atom[17];
+	w_global.atom.gnustep.wm_miniaturize_window = atom[18];
+	w_global.atom.gnustep.titlebar_state = atom[19];
 
 	w_global.atom.wm.ignore_focus_events = atom[20];
 

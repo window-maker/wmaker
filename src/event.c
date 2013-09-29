@@ -85,9 +85,6 @@ extern int wScreenCount;
 
 #define MOD_MASK wPreferences.modifier_mask
 
-extern Atom _XA_GNUSTEP_WM_ATTR;
-extern Atom _XA_GNUSTEP_WM_MINIATURIZE_WINDOW;
-extern Atom _XA_GNUSTEP_TITLEBAR_STATE;
 extern Atom _XA_WINDOWMAKER_WM_FUNCTION;
 extern Atom _XA_WINDOWMAKER_COMMAND;
 
@@ -993,7 +990,7 @@ static void handleClientMessage(XEvent * event)
 				}
 			}
 		}
-	} else if (event->xclient.message_type == _XA_GNUSTEP_WM_ATTR) {
+	} else if (event->xclient.message_type == w_global.atom.gnustep.wm_attr) {
 		wwin = wWindowFor(event->xclient.window);
 		if (!wwin)
 			return;
@@ -1008,7 +1005,7 @@ static void handleClientMessage(XEvent * event)
 			}
 			break;
 		}
-	} else if (event->xclient.message_type == _XA_GNUSTEP_TITLEBAR_STATE) {
+	} else if (event->xclient.message_type == w_global.atom.gnustep.titlebar_state) {
 		wwin = wWindowFor(event->xclient.window);
 		if (!wwin)
 			return;
@@ -1401,7 +1398,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			if (wwin->protocols.MINIATURIZE_WINDOW)
-				wClientSendProtocol(wwin, _XA_GNUSTEP_WM_MINIATURIZE_WINDOW, event->xbutton.time);
+				wClientSendProtocol(wwin, w_global.atom.gnustep.wm_miniaturize_window, event->xbutton.time);
 			else {
 				wIconifyWindow(wwin);
 			}

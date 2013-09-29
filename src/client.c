@@ -51,9 +51,6 @@ extern XContext wWinContext;
 
 extern Atom _XA_WINDOWMAKER_MENU;
 
-extern Atom _XA_GNUSTEP_WM_ATTR;
-extern Atom _XA_GNUSTEP_WM_RESIZEBAR;
-
 #ifdef SHAPE
 extern Bool wShapeSupported;
 #endif
@@ -618,7 +615,7 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 				wSetFocusTo(wwin->screen_ptr, NULL);
 				wSetFocusTo(wwin->screen_ptr, wwin->screen_ptr->focused_window);
 			}
-		} else if (event->atom == _XA_GNUSTEP_WM_ATTR) {
+		} else if (event->atom == w_global.atom.gnustep.wm_attr) {
 			GNUstepWMAttributes *attr;
 
 			PropGetGNUstepWMAttr(wwin->client_win, &attr);
