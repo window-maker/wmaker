@@ -77,10 +77,11 @@ static WWindow *change_focus_and_raise(WWindow *newFocused, WWindow *oldFocused,
 	return oldFocused;
 }
 
-void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_only)
+void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 {
 
 	XModifierKeymap *keymap        = NULL;
+	WShortKey binding;
 	WSwitchPanel    *swpanel       = NULL;
 	WScreen         *scr           = wScreenForRootWindow(event->xkey.root);
 	KeyCode         leftKey        = XKeysymToKeycode(dpy, XK_Left);
@@ -106,16 +107,17 @@ void StartWindozeCycle(WWindow * wwin, XEvent * event, Bool next, Bool class_onl
 
 	if (next) {
 		if (class_only)
-			hasModifier = (wKeyBindings[WKBD_GROUPNEXT].modifier != 0);
+			binding = wKeyBindings[WKBD_GROUPNEXT];
 		else
-			hasModifier = (wKeyBindings[WKBD_FOCUSNEXT].modifier != 0);
+			binding = wKeyBindings[WKBD_FOCUSNEXT];
 	} else {
 		if (class_only)
-			hasModifier = (wKeyBindings[WKBD_GROUPPREV].modifier != 0);
+			binding = wKeyBindings[WKBD_GROUPPREV];
 		else
-			hasModifier = (wKeyBindings[WKBD_FOCUSPREV].modifier != 0);
+			binding = wKeyBindings[WKBD_FOCUSPREV];
 	}
 
+	hasModifier = (binding.modifier != 0);
 	if (hasModifier) {
 		keymap = XGetModifierMapping(dpy);
 		XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, CurrentTime);
