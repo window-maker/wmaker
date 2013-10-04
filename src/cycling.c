@@ -80,7 +80,6 @@ static WWindow *change_focus_and_raise(WWindow *newFocused, WWindow *oldFocused,
 void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 {
 
-	XModifierKeymap *keymap        = NULL;
 	WShortKey binding;
 	WSwitchPanel    *swpanel       = NULL;
 	WScreen         *scr           = wScreenForRootWindow(event->xkey.root);
@@ -118,10 +117,8 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 	}
 
 	hasModifier = (binding.modifier != 0);
-	if (hasModifier) {
-		keymap = XGetModifierMapping(dpy);
+	if (hasModifier)
 		XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, CurrentTime);
-	}
 
 	scr->flags.doing_alt_tab = 1;
 
@@ -129,7 +126,6 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 	oldFocused = wwin;
 
 	if (swpanel) {
-
 		if (wwin->flags.mapped && !wPreferences.panel_only_open)
 			newFocused = wSwitchPanelSelectNext(swpanel, !next, True, False);
 		else
@@ -144,8 +140,6 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 	}
 
 	while (hasModifier && !done) {
-		int i;
-
 		WMMaskEvent(dpy, KeyPressMask | KeyReleaseMask | ExposureMask
 			    | PointerMotionMask | ButtonReleaseMask | EnterWindowMask, &ev);
 
@@ -156,9 +150,7 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 			break;
 
 		switch (ev.type) {
-
 		case KeyPress:
-
 			if ((wKeyBindings[WKBD_FOCUSNEXT].keycode == ev.xkey.keycode
 			     && wKeyBindings[WKBD_FOCUSNEXT].modifier == modifiers)
 			    || (wKeyBindings[WKBD_GROUPNEXT].keycode == ev.xkey.keycode
@@ -203,7 +195,6 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 			break;
 
 		case KeyRelease:
-
 			if (ev.xkey.keycode == shiftLKey || ev.xkey.keycode == shiftRKey)
 				if (wPreferences.strict_windoze_cycle)
 					break;
@@ -211,19 +202,9 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 			if (ev.xkey.keycode == XK_Return)
 				break;
 
-			for (i = 0; i < 8 * keymap->max_keypermod; i++) {
+			if (ev.xkey.keycode != binding.keycode)
+				done = True;
 
-				int mask = 1 << (i / keymap->max_keypermod);
-
-				if (keymap->modifiermap[i] == ev.xkey.keycode &&
-				    ((wKeyBindings[WKBD_FOCUSNEXT].modifier & mask)
-				     || (wKeyBindings[WKBD_FOCUSPREV].modifier & mask)
-				     || (wKeyBindings[WKBD_GROUPNEXT].modifier & mask)
-				     || (wKeyBindings[WKBD_GROUPPREV].modifier & mask))) {
-					done = True;
-					break;
-				}
-			}
 			break;
 
 		case EnterNotify:
@@ -253,13 +234,9 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 			break;
 		}
 	}
-	if (keymap)
-		XFreeModifiermap(keymap);
 
-	if (hasModifier) {
-
+	if (hasModifier)
 		XUngrabKeyboard(dpy, CurrentTime);
-	}
 
 	if (swpanel)
 		wSwitchPanelDestroy(swpanel);
