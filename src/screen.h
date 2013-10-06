@@ -219,7 +219,6 @@ typedef struct _WScreen {
     int drawer_count;                  /* Nb of drawers that */
     struct WDock *attracting_drawer;   /* The drawer that auto-attracts icons, or NULL */
 
-    int keymove_tick;
     struct RContext *rcontext;	       /* wrlib context */
 
     WMScreen *wmscreen;		       /* for widget library */

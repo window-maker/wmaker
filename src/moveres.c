@@ -1469,11 +1469,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 				};
 
 		if (done) {
-			scr->keymove_tick = 0;
-			/*
-			   WMDeleteTimerWithClientData(&looper);
-			 */
-			if (!opaqueMoveResize) {/*ctrlmode=> resize    */
+			if (!opaqueMoveResize) {	/* ctrlmode => resize */
 				if (wwin->flags.shaded || scr->selected_windows) {
 					if (scr->selected_windows)
 						drawFrames(wwin, scr->selected_windows, off_x, off_y);
@@ -1482,7 +1478,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 				} else {
 					drawTransparentFrame(wwin, src_x + off_x, src_y + off_y, ww, wh);
 				}
-			};
+			}
 
 			if (ctrlmode) {
 				showGeometry(wwin, src_x + off_x, src_y + off_y, src_x + off_x + ww,
