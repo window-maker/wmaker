@@ -875,7 +875,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 			wAppIconMove(aicon, x, y);
 
 			WDock *theNewDock = NULL;
-			if (!(ev.xmotion.state & MOD_MASK) || aicon->launching || aicon->lock) {
+			if (!(ev.xmotion.state & MOD_MASK) || aicon->launching || aicon->lock || originalDock == NULL) {
 				for (i = 0; dockable && i < scr->drawer_count + 2; i++) {
 					WDock *theDock = allDocks[i];
 					if (theDock == NULL)
