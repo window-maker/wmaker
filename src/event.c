@@ -1578,7 +1578,7 @@ static void handleKeyPress(XEvent * event)
 		wWorkspaceRelativeChange(scr, -1);
 		break;
 	case WKBD_LASTWORKSPACE:
-		wWorkspaceChange(scr, scr->last_workspace);
+		wWorkspaceChange(scr, w_global.workspace.last_used);
 		break;
 
 	case WKBD_MOVE_WORKSPACE1 ... WKBD_MOVE_WORKSPACE10:
@@ -1598,7 +1598,7 @@ static void handleKeyPress(XEvent * event)
 		break;
 	case WKBD_MOVE_LASTWORKSPACE:
 		if (wwin)
-			wWindowChangeWorkspace(wwin, scr->last_workspace);
+			wWindowChangeWorkspace(wwin, w_global.workspace.last_used);
 		break;
 
 	case WKBD_MOVE_NEXTWSLAYER:

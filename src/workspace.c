@@ -192,8 +192,8 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 
 	if (scr->current_workspace >= w_global.workspace.count)
 		wWorkspaceChange(scr, w_global.workspace.count - 1);
-	if (scr->last_workspace >= w_global.workspace.count)
-		scr->last_workspace = 0;
+	if (w_global.workspace.last_used >= w_global.workspace.count)
+		w_global.workspace.last_used = 0;
 
 	return True;
 }
@@ -479,7 +479,7 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	wClipUpdateForWorkspaceChange(scr, workspace);
 
-	scr->last_workspace = scr->current_workspace;
+	w_global.workspace.last_used = scr->current_workspace;
 	scr->current_workspace = workspace;
 
 	wWorkspaceMenuUpdate(scr, scr->workspace_menu);
@@ -642,7 +642,7 @@ static void switchWSCommand(WMenu * menu, WMenuEntry * entry)
 
 static void lastWSCommand(WMenu *menu, WMenuEntry *entry)
 {
-	wWorkspaceChange(menu->frame->screen_ptr, menu->frame->screen_ptr->last_workspace);
+	wWorkspaceChange(menu->frame->screen_ptr, w_global.workspace.last_used);
 }
 
 static void deleteWSCommand(WMenu *menu, WMenuEntry *entry)
@@ -787,7 +787,7 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 		wMenuSetEnabled(menu, MC_DESTROY_LAST, True);
 
 	/* back to last workspace */
-	if (w_global.workspace.count && scr->last_workspace != scr->current_workspace)
+	if (w_global.workspace.count && w_global.workspace.last_used != scr->current_workspace)
 		wMenuSetEnabled(menu, MC_LAST_USED, True);
 	else
 		wMenuSetEnabled(menu, MC_LAST_USED, False);
