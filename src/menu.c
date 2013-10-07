@@ -2264,9 +2264,9 @@ void wMenuSaveState(WScreen * scr)
 	if (saveMenuRecurs(menus, scr, scr->root_menu))
 		save_menus = 1;
 
-	if (scr->workspace_menu && scr->workspace_menu->flags.buttoned) {
+	if (w_global.workspace.menu && w_global.workspace.menu->flags.buttoned) {
 		key = WMCreatePLString("WorkspaceMenu");
-		saveMenuInfo(menus, scr->workspace_menu, key);
+		saveMenuInfo(menus, w_global.workspace.menu, key);
 		WMReleasePropList(key);
 		save_menus = 1;
 	}

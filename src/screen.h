@@ -209,7 +209,6 @@ typedef struct _WScreen {
 
     struct WMenu *root_menu;	       /* root window menu */
     struct WMenu *switch_menu;	       /* window list menu */
-    struct WMenu *workspace_menu;      /* workspace operation */
     struct WMenu *window_menu;	       /* window command menu */
     struct WMenu *icon_menu;	       /* icon/appicon menu */
     struct WMenu *workspace_submenu;   /* workspace list for window_menu */

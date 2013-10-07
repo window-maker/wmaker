@@ -757,8 +757,8 @@ static void constructPLMenuFromPipe(WMenu * menu, WMenuEntry * entry)
 }
 static void cleanupWorkspaceMenu(WMenu *menu)
 {
-	if (menu->frame->screen_ptr->workspace_menu == menu)
-		menu->frame->screen_ptr->workspace_menu = NULL;
+	if (w_global.workspace.menu == menu)
+		w_global.workspace.menu = NULL;
 }
 
 static WMenuEntry *addWorkspaceMenu(WScreen *scr, WMenu *menu, const char *title)
@@ -776,7 +776,7 @@ static WMenuEntry *addWorkspaceMenu(WScreen *scr, WMenu *menu, const char *title
 		wsmenu = wWorkspaceMenuMake(scr, True);
 		wsmenu->on_destroy = cleanupWorkspaceMenu;
 
-		scr->workspace_menu = wsmenu;
+		w_global.workspace.menu = wsmenu;
 		entry = wMenuAddCallback(menu, title, NULL, NULL);
 		wMenuEntrySetCascade(menu, entry, wsmenu);
 

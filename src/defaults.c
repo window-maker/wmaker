@@ -1202,8 +1202,8 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 			WMPostNotificationName(WNIconTileSettingsChanged, NULL, NULL);
 
 		if (needs_refresh & REFRESH_WORKSPACE_MENU) {
-			if (scr->workspace_menu)
-				wWorkspaceMenuUpdate(scr, scr->workspace_menu);
+			if (w_global.workspace.menu)
+				wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
 			if (scr->clip_ws_menu)
 				wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 			if (scr->workspace_submenu)

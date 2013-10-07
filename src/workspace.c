@@ -114,7 +114,7 @@ int wWorkspaceNew(WScreen *scr)
 
 		w_global.workspace.array = list;
 
-		wWorkspaceMenuUpdate(scr, scr->workspace_menu);
+		wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
 		wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 		wNETWMUpdateDesktop(scr);
 		WMPostNotificationName(WMNWorkspaceCreated, scr, (void *)(uintptr_t) (w_global.workspace.count - 1));
@@ -165,7 +165,7 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 	w_global.workspace.count--;
 
 	/* update menu */
-	wWorkspaceMenuUpdate(scr, scr->workspace_menu);
+	wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
 	/* clip workspace menu */
 	wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 
@@ -482,7 +482,7 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 	w_global.workspace.last_used = w_global.workspace.current;
 	w_global.workspace.current = workspace;
 
-	wWorkspaceMenuUpdate(scr, scr->workspace_menu);
+	wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
 
 	wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 
@@ -691,11 +691,11 @@ void wWorkspaceRename(WScreen *scr, int workspace, const char *name)
 			wMenuRealize(scr->clip_ws_menu);
 		}
 	}
-	if (scr->workspace_menu) {
-		if (strcmp(scr->workspace_menu->entries[workspace + MC_WORKSPACE1]->text, buf) != 0) {
-			wfree(scr->workspace_menu->entries[workspace + MC_WORKSPACE1]->text);
-			scr->workspace_menu->entries[workspace + MC_WORKSPACE1]->text = wstrdup(buf);
-			wMenuRealize(scr->workspace_menu);
+	if (w_global.workspace.menu) {
+		if (strcmp(w_global.workspace.menu->entries[workspace + MC_WORKSPACE1]->text, buf) != 0) {
+			wfree(w_global.workspace.menu->entries[workspace + MC_WORKSPACE1]->text);
+			w_global.workspace.menu->entries[workspace + MC_WORKSPACE1]->text = wstrdup(buf);
+			wMenuRealize(w_global.workspace.menu);
 		}
 	}
 
@@ -856,10 +856,10 @@ void wWorkspaceRestoreState(WScreen *scr)
 		if (i >= w_global.workspace.count)
 			wWorkspaceNew(scr);
 
-		if (scr->workspace_menu) {
-			wfree(scr->workspace_menu->entries[i + MC_WORKSPACE1]->text);
-			scr->workspace_menu->entries[i + MC_WORKSPACE1]->text = wstrdup(WMGetFromPLString(pstr));
-			scr->workspace_menu->flags.realized = 0;
+		if (w_global.workspace.menu) {
+			wfree(w_global.workspace.menu->entries[i + MC_WORKSPACE1]->text);
+			w_global.workspace.menu->entries[i + MC_WORKSPACE1]->text = wstrdup(WMGetFromPLString(pstr));
+			w_global.workspace.menu->flags.realized = 0;
 		}
 
 		wfree(w_global.workspace.array[i]->name);
