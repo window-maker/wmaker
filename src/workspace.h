@@ -36,7 +36,7 @@ Bool wWorkspaceDelete(WScreen *scr, int workspace);
 void wWorkspaceChange(WScreen *scr, int workspace);
 void wWorkspaceForceChange(WScreen *scr, int workspace);
 WMenu *wWorkspaceMenuMake(WScreen *scr, Bool titled);
-void wWorkspaceMenuUpdate(WScreen *scr, WMenu *menu);
+void wWorkspaceMenuUpdate(WMenu *menu);
 void wWorkspaceMenuEdit(WScreen *scr);
 void wWorkspaceSaveState(WScreen *scr, WMPropList *old_state);
 void wWorkspaceRestoreState(WScreen *scr);

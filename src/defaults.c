@@ -1203,9 +1203,9 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 
 		if (needs_refresh & REFRESH_WORKSPACE_MENU) {
 			if (w_global.workspace.menu)
-				wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
+				wWorkspaceMenuUpdate(w_global.workspace.menu);
 			if (w_global.clip.ws_menu)
-				wWorkspaceMenuUpdate(scr, w_global.clip.ws_menu);
+				wWorkspaceMenuUpdate(w_global.clip.ws_menu);
 			if (w_global.workspace.submenu)
 				w_global.workspace.submenu->flags.realized = 0;
 			if (w_global.clip.submenu)

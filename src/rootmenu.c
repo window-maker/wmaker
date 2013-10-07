@@ -780,7 +780,7 @@ static WMenuEntry *addWorkspaceMenu(WScreen *scr, WMenu *menu, const char *title
 		entry = wMenuAddCallback(menu, title, NULL, NULL);
 		wMenuEntrySetCascade(menu, entry, wsmenu);
 
-		wWorkspaceMenuUpdate(scr, wsmenu);
+		wWorkspaceMenuUpdate(wsmenu);
 	}
 	return entry;
 }

@@ -3965,7 +3965,7 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 			WMenu *wsMenu = w_global.clip.ws_menu;
 			int xpos;
 
-			wWorkspaceMenuUpdate(scr, wsMenu);
+			wWorkspaceMenuUpdate(wsMenu);
 
 			xpos = event->xbutton.x_root - wsMenu->frame->core->width / 2 - 1;
 			if (xpos < 0) {

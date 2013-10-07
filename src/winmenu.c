@@ -356,19 +356,9 @@ static WMenu *makeWorkspaceMenu(WScreen * scr)
 	return menu;
 }
 
-static WMenu *makeMakeShortcutMenu(WScreen * scr, WMenu * menu)
+static WMenu *makeMakeShortcutMenu(WMenu *menu)
 {
-	/*
-	   WMenu *menu;
-	 */
 	int i;
-	/*
-	   menu = wMenuCreate(scr, NULL, False);
-	   if (!menu) {
-	   wwarning(_("could not create submenu for window menu"));
-	   return NULL;
-	   }
-	 */
 
 	for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
 		WMenuEntry *entry;
@@ -443,12 +433,7 @@ static WMenu *createWindowMenu(WScreen * scr)
 	entry = wMenuAddCallback(menu, _("Attributes..."), execMenuCommand, NULL);
 
 	entry = wMenuAddCallback(menu, _("Options"), NULL, NULL);
-	wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr, makeOptionsMenu(scr)));
-
-	/*
-	   entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
-	   wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
-	 */
+	wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(makeOptionsMenu(scr)));
 
 	entry = wMenuAddCallback(menu, _("Launch"), execMenuCommand, NULL);
 	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_RELAUNCH]);

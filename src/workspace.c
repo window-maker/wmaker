@@ -114,8 +114,8 @@ int wWorkspaceNew(WScreen *scr)
 
 		w_global.workspace.array = list;
 
-		wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
-		wWorkspaceMenuUpdate(scr, w_global.clip.ws_menu);
+		wWorkspaceMenuUpdate(w_global.workspace.menu);
+		wWorkspaceMenuUpdate(w_global.clip.ws_menu);
 		wNETWMUpdateDesktop(scr);
 		WMPostNotificationName(WMNWorkspaceCreated, scr, (void *)(uintptr_t) (w_global.workspace.count - 1));
 		XFlush(dpy);
@@ -165,9 +165,9 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 	w_global.workspace.count--;
 
 	/* update menu */
-	wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
+	wWorkspaceMenuUpdate(w_global.workspace.menu);
 	/* clip workspace menu */
-	wWorkspaceMenuUpdate(scr, w_global.clip.ws_menu);
+	wWorkspaceMenuUpdate(w_global.clip.ws_menu);
 
 	/* update also window menu */
 	if (w_global.workspace.submenu) {
@@ -482,9 +482,9 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 	w_global.workspace.last_used = w_global.workspace.current;
 	w_global.workspace.current = workspace;
 
-	wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
+	wWorkspaceMenuUpdate(w_global.workspace.menu);
 
-	wWorkspaceMenuUpdate(scr, w_global.clip.ws_menu);
+	wWorkspaceMenuUpdate(w_global.clip.ws_menu);
 
 	toUnmapSize = 16;
 	toUnmapCount = 0;
@@ -737,7 +737,7 @@ WMenu *wWorkspaceMenuMake(WScreen * scr, Bool titled)
 	return wsmenu;
 }
 
-void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
+void wWorkspaceMenuUpdate(WMenu *menu)
 {
 	int i;
 	long ws;
