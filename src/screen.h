@@ -211,18 +211,11 @@ typedef struct _WScreen {
     struct WMenu *switch_menu;	       /* window list menu */
     struct WMenu *window_menu;	       /* window command menu */
     struct WMenu *icon_menu;	       /* icon/appicon menu */
-    struct WMenu *workspace_submenu;   /* workspace list for window_menu */
 
     struct WDock *dock;		       /* the application dock */
-    struct WMenu *dock_pos_menu;       /* Dock position menu */
     struct WPixmap *dock_dots;	       /* 3 dots for the Dock */
     Window dock_shadow;		       /* shadow for dock buttons */
     struct WAppIcon *clip_icon;        /* The clip main icon, or the dock's, if they are merged */
-    struct WMenu *clip_menu;           /* Menu for clips */
-    struct WMenu *clip_submenu;        /* Workspace list for clips */
-    struct WMenu *clip_options;	       /* Options for Clip */
-    struct WMenu *clip_ws_menu;	       /* workspace menu for clip */
-    struct WMenu *drawer_menu;         /* Menu for drawers */
     struct WDock *last_dock;
     WAppIconChain *global_icons;       /* for omnipresent icons chain in clip */
     int global_icon_count;	       /* How many global icons do we have */

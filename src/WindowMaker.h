@@ -493,7 +493,22 @@ extern struct wmaker_global_variables {
 
 		/* Menus */
 		struct WMenu *menu;	/* workspace operation */
+		struct WMenu *submenu;	/* workspace list for window_menu */
 	} workspace;
+
+	/* Clip related */
+	struct {
+		struct WMenu *menu;	/* Menu for clips */
+		struct WMenu *submenu;	/* Workspace list for clips */
+		struct WMenu *opt_menu;	/* Options for Clip */
+		struct WMenu *ws_menu;	/* workspace menu for clip */
+	} clip;
+
+	/* Dock related */
+	struct {
+		struct WMenu *pos_menu;	/* menu for position of the dock */
+		struct WMenu *drawer_menu;	/* menu for the drawers */
+	} dock;
 
 	/* definition for X Atoms */
 	struct {

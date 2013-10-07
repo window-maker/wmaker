@@ -115,7 +115,7 @@ int wWorkspaceNew(WScreen *scr)
 		w_global.workspace.array = list;
 
 		wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
-		wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
+		wWorkspaceMenuUpdate(scr, w_global.clip.ws_menu);
 		wNETWMUpdateDesktop(scr);
 		WMPostNotificationName(WMNWorkspaceCreated, scr, (void *)(uintptr_t) (w_global.workspace.count - 1));
 		XFlush(dpy);
@@ -167,11 +167,11 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 	/* update menu */
 	wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
 	/* clip workspace menu */
-	wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
+	wWorkspaceMenuUpdate(scr, w_global.clip.ws_menu);
 
 	/* update also window menu */
-	if (scr->workspace_submenu) {
-		WMenu *menu = scr->workspace_submenu;
+	if (w_global.workspace.submenu) {
+		WMenu *menu = w_global.workspace.submenu;
 
 		i = menu->entry_no;
 		while (i > w_global.workspace.count)
@@ -179,8 +179,8 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 		wMenuRealize(menu);
 	}
 	/* and clip menu */
-	if (scr->clip_submenu) {
-		WMenu *menu = scr->clip_submenu;
+	if (w_global.clip.submenu) {
+		WMenu *menu = w_global.clip.submenu;
 
 		i = menu->entry_no;
 		while (i > w_global.workspace.count)
@@ -484,7 +484,7 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
 
-	wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
+	wWorkspaceMenuUpdate(scr, w_global.clip.ws_menu);
 
 	toUnmapSize = 16;
 	toUnmapCount = 0;
@@ -684,11 +684,11 @@ void wWorkspaceRename(WScreen *scr, int workspace, const char *name)
 	wfree(w_global.workspace.array[workspace]->name);
 	w_global.workspace.array[workspace]->name = wstrdup(buf);
 
-	if (scr->clip_ws_menu) {
-		if (strcmp(scr->clip_ws_menu->entries[workspace + MC_WORKSPACE1]->text, buf) != 0) {
-			wfree(scr->clip_ws_menu->entries[workspace + MC_WORKSPACE1]->text);
-			scr->clip_ws_menu->entries[workspace + MC_WORKSPACE1]->text = wstrdup(buf);
-			wMenuRealize(scr->clip_ws_menu);
+	if (w_global.clip.ws_menu) {
+		if (strcmp(w_global.clip.ws_menu->entries[workspace + MC_WORKSPACE1]->text, buf) != 0) {
+			wfree(w_global.clip.ws_menu->entries[workspace + MC_WORKSPACE1]->text);
+			w_global.clip.ws_menu->entries[workspace + MC_WORKSPACE1]->text = wstrdup(buf);
+			wMenuRealize(w_global.clip.ws_menu);
 		}
 	}
 	if (w_global.workspace.menu) {

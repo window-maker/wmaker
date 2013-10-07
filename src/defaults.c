@@ -1204,12 +1204,12 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 		if (needs_refresh & REFRESH_WORKSPACE_MENU) {
 			if (w_global.workspace.menu)
 				wWorkspaceMenuUpdate(scr, w_global.workspace.menu);
-			if (scr->clip_ws_menu)
-				wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
-			if (scr->workspace_submenu)
-				scr->workspace_submenu->flags.realized = 0;
-			if (scr->clip_submenu)
-				scr->clip_submenu->flags.realized = 0;
+			if (w_global.clip.ws_menu)
+				wWorkspaceMenuUpdate(scr, w_global.clip.ws_menu);
+			if (w_global.workspace.submenu)
+				w_global.workspace.submenu->flags.realized = 0;
+			if (w_global.clip.submenu)
+				w_global.clip.submenu->flags.realized = 0;
 		}
 	}
 }

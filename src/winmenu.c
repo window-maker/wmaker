@@ -436,9 +436,9 @@ static WMenu *createWindowMenu(WScreen * scr)
 	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_SELECT]);
 
 	entry = wMenuAddCallback(menu, _("Move To"), NULL, NULL);
-	scr->workspace_submenu = makeWorkspaceMenu(scr);
-	if (scr->workspace_submenu)
-		wMenuEntrySetCascade(menu, entry, scr->workspace_submenu);
+	w_global.workspace.submenu = makeWorkspaceMenu(scr);
+	if (w_global.workspace.submenu)
+		wMenuEntrySetCascade(menu, entry, w_global.workspace.submenu);
 
 	entry = wMenuAddCallback(menu, _("Attributes..."), execMenuCommand, NULL);
 
@@ -479,7 +479,6 @@ void CloseWindowMenu(WScreen * scr)
 static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 {
 	WApplication *wapp = wApplicationOf(wwin->main_window);
-	WScreen *scr = wwin->screen_ptr;
 	int i;
 
 	updateOptionsMenu(menu, wwin);
@@ -568,12 +567,13 @@ static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 		menu->entries[i]->clientdata = wwin;
 	}
 
-	for (i = 0; i < scr->workspace_submenu->entry_no; i++) {
-		scr->workspace_submenu->entries[i]->clientdata = wwin;
+	for (i = 0; i < w_global.workspace.submenu->entry_no; i++) {
+		w_global.workspace.submenu->entries[i]->clientdata = wwin;
+
 		if (i == w_global.workspace.current)
-			wMenuSetEnabled(scr->workspace_submenu, i, False);
+			wMenuSetEnabled(w_global.workspace.submenu, i, False);
 		else
-			wMenuSetEnabled(scr->workspace_submenu, i, True);
+			wMenuSetEnabled(w_global.workspace.submenu, i, True);
 	}
 
 	menu->flags.realized = 0;
@@ -596,7 +596,7 @@ static WMenu *open_window_menu_core(WWindow *wwin, int x, int y)
 		wfree(scr->window_menu->entries[MC_SHADE]->text);
 		wfree(scr->window_menu->entries[MC_SELECT]->text);
 	} else {
-		updateWorkspaceMenu(scr->workspace_submenu);
+		updateWorkspaceMenu(w_global.workspace.submenu);
 	}
 
 	menu = scr->window_menu;
@@ -649,16 +649,15 @@ void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard)
 {
 	int i;
 	WMenu *menu;
-	WScreen *scr = wwin->screen_ptr;
 
 	menu = open_window_menu_core(wwin, x, y);
 	if (!menu)
 		return;
 
 	/* Specific menu position */
-	for (i = 0; i < scr->workspace_submenu->entry_no; i++) {
-		scr->workspace_submenu->entries[i]->clientdata = wwin;
-		wMenuSetEnabled(scr->workspace_submenu, i, True);
+	for (i = 0; i < w_global.workspace.submenu->entry_no; i++) {
+		w_global.workspace.submenu->entries[i]->clientdata = wwin;
+		wMenuSetEnabled(w_global.workspace.submenu, i, True);
 	}
 
 	x -= menu->frame->core->width / 2;

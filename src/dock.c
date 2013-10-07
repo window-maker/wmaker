@@ -1186,18 +1186,18 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 	WMenu *menu;
 	WMenuEntry *entry;
 
-	if (type == WM_CLIP && scr->clip_menu)
-		return scr->clip_menu;
+	if (type == WM_CLIP && w_global.clip.menu)
+		return w_global.clip.menu;
 
-	if (type == WM_DRAWER && scr->drawer_menu)
-		return scr->drawer_menu;
+	if (type == WM_DRAWER && w_global.dock.drawer_menu)
+		return w_global.dock.drawer_menu;
 
 	menu = wMenuCreate(scr, NULL, False);
 	if (type == WM_DOCK) {
 		entry = wMenuAddCallback(menu, _("Dock position"), NULL, NULL);
-		if (scr->dock_pos_menu == NULL)
-			scr->dock_pos_menu = makeDockPositionMenu(scr);
-		wMenuEntrySetCascade(menu, entry, scr->dock_pos_menu);
+		if (w_global.dock.pos_menu == NULL)
+			w_global.dock.pos_menu = makeDockPositionMenu(scr);
+		wMenuEntrySetCascade(menu, entry, w_global.dock.pos_menu);
 
 		if (!wPreferences.flags.nodrawer) {
 			entry = wMenuAddCallback(menu, _("Add a drawer"), addADrawerCallback, NULL);
@@ -1208,10 +1208,10 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 		else /* if (type == WM_DRAWER) */
 			entry = wMenuAddCallback(menu, _("Drawer options"), NULL, NULL);
 
-		if (scr->clip_options == NULL)
-			scr->clip_options = makeClipOptionsMenu(scr);
+		if (w_global.clip.opt_menu == NULL)
+			w_global.clip.opt_menu = makeClipOptionsMenu(scr);
 
-		wMenuEntrySetCascade(menu, entry, scr->clip_options);
+		wMenuEntrySetCascade(menu, entry, w_global.clip.opt_menu);
 
 		 /* The same menu is used for the dock and its appicons. If the menu
 		  * entry text is different between the two contexts, or if it can
@@ -1240,9 +1240,9 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 			entry = wMenuAddCallback(menu, _("Move Icon To"), NULL, NULL);
 			wfree(entry->text);
 			entry->text = _("Move Icon To"); /* can be: Move Icons to */
-			scr->clip_submenu = makeWorkspaceMenu(scr);
-			if (scr->clip_submenu)
-				wMenuEntrySetCascade(menu, entry, scr->clip_submenu);
+			w_global.clip.submenu = makeWorkspaceMenu(scr);
+			if (w_global.clip.submenu)
+				wMenuEntrySetCascade(menu, entry, w_global.clip.submenu);
 		}
 
 		entry = wMenuAddCallback(menu, _("Remove Icon"), removeIconsCallback, NULL);
@@ -1267,10 +1267,10 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 	entry->text = _("Kill"); /* can be: Remove drawer */
 
 	if (type == WM_CLIP)
-		scr->clip_menu = menu;
+		w_global.clip.menu = menu;
 
 	if (type == WM_DRAWER)
-		scr->drawer_menu = menu;
+		w_global.dock.drawer_menu = menu;
 
 	return menu;
 }
@@ -3410,7 +3410,7 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 
 	if (dock->type == WM_DOCK) {
 		/* Dock position menu */
-		updateDockPositionMenu(scr->dock_pos_menu, dock);
+		updateDockPositionMenu(w_global.dock.pos_menu, dock);
 		dock->menu->flags.realized = 0;
 		if (!wPreferences.flags.nodrawer) {
 			/* add a drawer */
@@ -3420,8 +3420,8 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 		}
 	} else {
 		/* clip/drawer options */
-		if (scr->clip_options)
-			updateClipOptionsMenu(scr->clip_options, dock);
+		if (w_global.clip.opt_menu)
+			updateClipOptionsMenu(w_global.clip.opt_menu, dock);
 
 		n_selected = numberOfSelectedIcons(dock);
 
@@ -3482,8 +3482,8 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 			else
 				entry->text = _("Move Icon To");
 
-			if (scr->clip_submenu)
-				updateWorkspaceMenu(scr->clip_submenu, aicon);
+			if (w_global.clip.submenu)
+				updateWorkspaceMenu(w_global.clip.submenu, aicon);
 
 			wMenuSetEnabled(dock->menu, index, !aicon->omnipresent);
 		}
@@ -3958,11 +3958,11 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 				iconDblClick(desc, event);
 		}
 	} else if (event->xbutton.button == Button2 && aicon == scr->clip_icon) {
-		if (!scr->clip_ws_menu)
-			scr->clip_ws_menu = wWorkspaceMenuMake(scr, False);
+		if (!w_global.clip.ws_menu)
+			w_global.clip.ws_menu = wWorkspaceMenuMake(scr, False);
 
-		if (scr->clip_ws_menu) {
-			WMenu *wsMenu = scr->clip_ws_menu;
+		if (w_global.clip.ws_menu) {
+			WMenu *wsMenu = w_global.clip.ws_menu;
 			int xpos;
 
 			wWorkspaceMenuUpdate(scr, wsMenu);
