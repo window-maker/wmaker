@@ -833,8 +833,17 @@ void wScreenRestoreState(WScreen * scr)
 		w_global.clip.icon = wClipRestoreState(scr, state);
 	}
 	
-	if (!wPreferences.flags.nodrawer)
+	if (!wPreferences.flags.nodrawer) {
+		if (!scr->dock->on_right_side) {
+			/* Drawer tile was created early in wScreenInit() -> wReadDefaults(). At
+			 * that time, scr->dock was NULL and the tile was created as if we were on
+			 * the right side. If we aren't, redo it now. */
+			assert(scr->drawer_tile);
+			RReleaseImage(scr->drawer_tile);
+			scr->drawer_tile = wDrawerMakeTile(scr, scr->icon_tile);
+		}
 		wDrawersRestoreState(scr);
+	}
 
 	wWorkspaceRestoreState(scr);
 	wScreenUpdateUsableArea(scr);
