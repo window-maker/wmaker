@@ -583,32 +583,6 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 
 	assert(entry->clientdata != NULL);
 
-	/* Setting a clip as autoattracting will disable an autoattracting drawer,
-	 * and reciprocally. Ask for confirmation? */
-#ifdef CONFIRM_AUTOATTRACT_CHANGE
-	if (dock->type == WM_CLIP && scr->attracting_drawer) {
-		if (wMessageDialog(scr, _("Workspace Clip"),
-						   _("The drawer that auto-attracted icons so far won't do so anymore!"),
-						   _("OK"), _("Cancel"), NULL) != WAPRDefault)
-			return;
-	} else if (dock->type == WM_DRAWER) {
-		/* check if at least one clip already auto attracts icons */
-		int i, ask_for_confirmation = False;
-		for (i = 0; i < w_global.workspace.count; i++) {
-			if (w_global.workspace.array[i]->clip->attract_icons) {
-				ask_for_confirmation = True;
-				break;
-			}
-		}
-		if (ask_for_confirmation) {
-			if (wMessageDialog(scr, _("Drawer"),
-							   _("Any clips that auto-attracted icons so far won't do so anymore!"),
-							   _("OK"), _("Cancel"), NULL) != WAPRDefault)
-				return;
-		}
-	}
-#endif
-
 	dock->attract_icons = !dock->attract_icons;
 
 	entry->flags.indicator_on = dock->attract_icons;
