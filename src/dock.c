@@ -619,10 +619,13 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 		if (dock->type == WM_DRAWER) {
 			/* The newly auto-attracting dock is a drawer: disable any clip and 
 			 * previously attracting drawer */
-			int i;
-			for (i = 0; i < w_global.workspace.count; i++)
-				w_global.workspace.array[i]->clip->attract_icons = False;
-				/* dock menu will be updated later, when opened */
+
+			if (!wPreferences.flags.noclip) {
+				int i;
+				for (i = 0; i < w_global.workspace.count; i++)
+					w_global.workspace.array[i]->clip->attract_icons = False;
+					/* dock menu will be updated later, when opened */
+			}
 
 			if (scr->attracting_drawer != NULL)
 				scr->attracting_drawer->attract_icons = False;
