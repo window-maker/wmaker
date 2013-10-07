@@ -278,8 +278,8 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	data = wmalloc(sizeof(WorkspaceNameData));
 	data->back = NULL;
 
-	w = WMWidthOfString(scr->workspace_name_font, name, len);
-	h = WMFontHeight(scr->workspace_name_font);
+	w = WMWidthOfString(w_global.workspace.font_for_name, name, len);
+	h = WMFontHeight(w_global.workspace.font_for_name);
 
 #ifdef XINERAMA
 	head = wGetHeadForPointerLocation(scr);
@@ -351,7 +351,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 
 	for (x = 0; x <= 4; x++)
 		for (y = 0; y <= 4; y++)
-			WMDrawString(scr->wmscreen, text, scr->white, scr->workspace_name_font, x, y, name, len);
+			WMDrawString(scr->wmscreen, text, scr->white, w_global.workspace.font_for_name, x, y, name, len);
 
 	XSetForeground(dpy, scr->mono_gc, 1);
 	XSetBackground(dpy, scr->mono_gc, 0);
@@ -363,7 +363,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 
 	XFillRectangle(dpy, text, WMColorGC(scr->black), 0, 0, w + 4, h + 4);
 
-	WMDrawString(scr->wmscreen, text, scr->white, scr->workspace_name_font, 2, 2, name, len);
+	WMDrawString(scr->wmscreen, text, scr->white, w_global.workspace.font_for_name, 2, 2, name, len);
 
 #ifdef SHAPE
 	XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask, ShapeSet);

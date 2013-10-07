@@ -2587,10 +2587,10 @@ static int setLargeDisplayFont(WScreen *scr, WDefaultEntry *entry, void *tdata, 
 {
 	WMFont *font = tdata;
 
-	if (scr->workspace_name_font)
-		WMReleaseFont(scr->workspace_name_font);
+	if (w_global.workspace.font_for_name)
+		WMReleaseFont(w_global.workspace.font_for_name);
 
-	scr->workspace_name_font = font;
+	w_global.workspace.font_for_name = font;
 
 	return 0;
 }

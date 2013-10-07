@@ -163,8 +163,6 @@ typedef struct _WScreen {
                                           needs to be a core font so we can
                                           use it with a XORing GC */
 
-    WMFont *workspace_name_font;
-
     WMColor *select_color;
     WMColor *select_text_color;
     /* foreground colors */
