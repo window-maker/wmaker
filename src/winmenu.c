@@ -187,24 +187,22 @@ static void switchWSCommand(WMenu * menu, WMenuEntry * entry)
 	wWindowChangeWorkspace(wwin, entry->order);
 }
 
-static void makeShortcutCommand(WMenu * menu, WMenuEntry * entry)
+static void makeShortcutCommand(WMenu *menu, WMenuEntry *entry)
 {
 	WWindow *wwin = (WWindow *) entry->clientdata;
 	WScreen *scr = wwin->screen_ptr;
 	int index = entry->order - WO_ENTRIES;
 
-	if (scr->shortcutWindows[index]) {
-		WMFreeArray(scr->shortcutWindows[index]);
-		scr->shortcutWindows[index] = NULL;
+	if (w_global.shortcut.windows[index]) {
+		WMFreeArray(w_global.shortcut.windows[index]);
+		w_global.shortcut.windows[index] = NULL;
 	}
 
 	if (wwin->flags.selected && scr->selected_windows) {
-		scr->shortcutWindows[index] = WMDuplicateArray(scr->selected_windows);
-		/*WMRemoveFromArray(scr->shortcutWindows[index], wwin);
-		   WMInsertInArray(scr->shortcutWindows[index], 0, wwin); */
+		w_global.shortcut.windows[index] = WMDuplicateArray(scr->selected_windows);
 	} else {
-		scr->shortcutWindows[index] = WMCreateArray(4);
-		WMAddToArray(scr->shortcutWindows[index], wwin);
+		w_global.shortcut.windows[index] = WMCreateArray(4);
+		WMAddToArray(w_global.shortcut.windows[index], wwin);
 	}
 
 	wSelectWindow(wwin, !wwin->flags.selected);
@@ -253,7 +251,7 @@ static void updateWorkspaceMenu(WMenu * menu)
 		wMenuRealize(menu);
 }
 
-static void updateMakeShortcutMenu(WMenu * menu, WWindow * wwin)
+static void updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 {
 	WMenu *smenu = menu->cascades[menu->entries[MC_SHORTCUT]->cascade];
 	int i;
@@ -271,7 +269,7 @@ static void updateMakeShortcutMenu(WMenu * menu, WWindow * wwin)
 		char *tmp;
 		int shortcutNo = i - WO_ENTRIES;
 		WMenuEntry *entry = smenu->entries[i];
-		WMArray *shortSelWindows = wwin->screen_ptr->shortcutWindows[shortcutNo];
+		WMArray *shortSelWindows = w_global.shortcut.windows[shortcutNo];
 
 		snprintf(buffer, buflen, "%s %i", _("Set Shortcut"), shortcutNo + 1);
 

@@ -184,14 +184,14 @@ void wWindowDestroy(WWindow *wwin)
 	wwin->flags.destroyed = 1;
 
 	for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-		if (!wwin->screen_ptr->shortcutWindows[i])
+		if (!w_global.shortcut.windows[i])
 			continue;
 
-		WMRemoveFromArray(wwin->screen_ptr->shortcutWindows[i], wwin);
+		WMRemoveFromArray(w_global.shortcut.windows[i], wwin);
 
-		if (!WMGetArrayItemCount(wwin->screen_ptr->shortcutWindows[i])) {
-			WMFreeArray(wwin->screen_ptr->shortcutWindows[i]);
-			wwin->screen_ptr->shortcutWindows[i] = NULL;
+		if (!WMGetArrayItemCount(w_global.shortcut.windows[i])) {
+			WMFreeArray(w_global.shortcut.windows[i]);
+			w_global.shortcut.windows[i] = NULL;
 		}
 	}
 
@@ -890,10 +890,10 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 				for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
 					if (mask & (1 << i)) {
-						if (!scr->shortcutWindows[i])
-							scr->shortcutWindows[i] = WMCreateArray(4);
+						if (!w_global.shortcut.windows[i])
+							w_global.shortcut.windows[i] = WMCreateArray(4);
 
-						WMAddToArray(scr->shortcutWindows[i], wwin);
+						WMAddToArray(w_global.shortcut.windows[i], wwin);
 					}
 				}
 			}
@@ -2272,7 +2272,7 @@ void wWindowConfigureBorders(WWindow *wwin)
 	}
 }
 
-void wWindowSaveState(WWindow * wwin)
+void wWindowSaveState(WWindow *wwin)
 {
 	long data[10];
 	int i;
@@ -2296,10 +2296,11 @@ void wWindowSaveState(WWindow * wwin)
 	}
 
 	for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-		if (wwin->screen_ptr->shortcutWindows[i] &&
-		    WMCountInArray(wwin->screen_ptr->shortcutWindows[i], wwin))
+		if (w_global.shortcut.windows[i] &&
+		    WMCountInArray(w_global.shortcut.windows[i], wwin))
 			data[9] |= 1 << i;
 	}
+
 	XChangeProperty(dpy, wwin->client_win, w_global.atom.wmaker.state,
 			w_global.atom.wmaker.state, 32, PropModeReplace, (unsigned char *)data, 10);
 }

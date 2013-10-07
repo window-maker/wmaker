@@ -1634,8 +1634,8 @@ static void handleKeyPress(XEvent * event)
 
 		widx = command - WKBD_WINDOW1;
 
-		if (scr->shortcutWindows[widx]) {
-			WMArray *list = scr->shortcutWindows[widx];
+		if (w_global.shortcut.windows[widx]) {
+			WMArray *list = w_global.shortcut.windows[widx];
 			int cw;
 			int count = WMGetArrayItemCount(list);
 			WWindow *twin;
@@ -1661,18 +1661,16 @@ static void handleKeyPress(XEvent * event)
 			WMAddToArray(list, twin);
 
 		} else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {
-			if (scr->shortcutWindows[widx]) {
-				WMFreeArray(scr->shortcutWindows[widx]);
-				scr->shortcutWindows[widx] = NULL;
+			if (w_global.shortcut.windows[widx]) {
+				WMFreeArray(w_global.shortcut.windows[widx]);
+				w_global.shortcut.windows[widx] = NULL;
 			}
 
 			if (wwin->flags.selected && scr->selected_windows) {
-				scr->shortcutWindows[widx] = WMDuplicateArray(scr->selected_windows);
-				/*WMRemoveFromArray(scr->shortcutWindows[index], wwin);
-				   WMInsertInArray(scr->shortcutWindows[index], 0, wwin); */
+				w_global.shortcut.windows[widx] = WMDuplicateArray(scr->selected_windows);
 			} else {
-				scr->shortcutWindows[widx] = WMCreateArray(4);
-				WMAddToArray(scr->shortcutWindows[widx], wwin);
+				w_global.shortcut.windows[widx] = WMCreateArray(4);
+				WMAddToArray(w_global.shortcut.windows[widx], wwin);
 			}
 
 			wSelectWindow(wwin, !wwin->flags.selected);
@@ -1682,12 +1680,11 @@ static void handleKeyPress(XEvent * event)
 			XFlush(dpy);
 
 		} else if (scr->selected_windows && WMGetArrayItemCount(scr->selected_windows)) {
-
 			if (wwin->flags.selected && scr->selected_windows) {
-				if (scr->shortcutWindows[widx]) {
-					WMFreeArray(scr->shortcutWindows[widx]);
-				}
-				scr->shortcutWindows[widx] = WMDuplicateArray(scr->selected_windows);
+				if (w_global.shortcut.windows[widx])
+					WMFreeArray(w_global.shortcut.windows[widx]);
+
+				w_global.shortcut.windows[widx] = WMDuplicateArray(scr->selected_windows);
 			}
 		}
 

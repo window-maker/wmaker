@@ -208,8 +208,8 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 		geometry = WMCreatePLString(buffer);
 
 		for (mask = 0, i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-			if (scr->shortcutWindows[i] != NULL &&
-			    WMGetFirstInArray(scr->shortcutWindows[i], wwin) != WANotFound)
+			if (w_global.shortcut.windows[i] != NULL &&
+			    WMGetFirstInArray(w_global.shortcut.windows[i], wwin) != WANotFound)
 				mask |= 1 << i;
 		}
 

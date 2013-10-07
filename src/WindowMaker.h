@@ -563,6 +563,11 @@ extern struct wmaker_global_variables {
 	/* Session related */
 	WMPropList *session_state;
 
+	/* Keyboard and shortcuts */
+	struct {
+		WMArray *windows[MAX_WINDOW_SHORTCUTS];
+	} shortcut;
+
 	/* Application related */
 	struct WAppIcon *app_icon_list;	/* list of all aplication icons */
 

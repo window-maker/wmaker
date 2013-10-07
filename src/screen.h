@@ -257,10 +257,6 @@ typedef struct _WScreen {
     WMHandlerID *autoRaiseTimer;
     Window autoRaiseWindow;	       /* window that is scheduled to be
                                         * raised */
-
-    /* for window shortcuts */
-    WMArray *shortcutWindows[MAX_WINDOW_SHORTCUTS];
-
 #ifdef XDND
     char *xdestring;
 #endif
