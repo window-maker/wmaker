@@ -172,7 +172,7 @@ void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head)
 		while (obj) {
 			int x, y;
 
-			if (iconPosition(obj, sx1, sy1, sx2, sy2, scr->current_workspace, &x, &y)) {
+			if (iconPosition(obj, sx1, sy1, sx2, sy2, w_global.workspace.current, &x, &y)) {
 				int xdi, ydi;	/* rounded down */
 				int xui, yui;	/* rounded up */
 
@@ -269,7 +269,7 @@ static int calcSumOfCoveredAreas(WWindow *wwin, int x, int y, int w, int h)
 		ty = test_window->frame_y;
 
 		if (test_window->flags.mapped || (test_window->flags.shaded &&
-		     test_window->frame->workspace == wwin->screen_ptr->current_workspace &&
+		     test_window->frame->workspace == w_global.workspace.current &&
 		     !(test_window->flags.miniaturized || test_window->flags.hidden))) {
 			sum_isect += calcIntersectionArea(tx, ty, tw, th, x, y, w, h);
 		}
@@ -413,7 +413,7 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 				    (ty < (test_y + height)) && ((ty + th) > test_y) &&
 				    (test_window->flags.mapped ||
 				     (test_window->flags.shaded &&
-				      test_window->frame->workspace == scr->current_workspace &&
+				      test_window->frame->workspace == w_global.workspace.current &&
 				      !(test_window->flags.miniaturized || test_window->flags.hidden)))) {
 
 					loc_ok = False;
@@ -439,7 +439,7 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 				    (ty < (test_y + height)) && ((ty + th) > test_y) &&
 				    (test_window->flags.mapped ||
 				     (test_window->flags.shaded &&
-				      test_window->frame->workspace == scr->current_workspace &&
+				      test_window->frame->workspace == w_global.workspace.current &&
 				      !(test_window->flags.miniaturized || test_window->flags.hidden)))) {
 
 					loc_ok = False;

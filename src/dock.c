@@ -171,7 +171,7 @@ static void renameCallback(WMenu *menu, WMenuEntry *entry)
 
 	assert(entry->clientdata != NULL);
 
-	wspace = dock->screen_ptr->current_workspace;
+	wspace = w_global.workspace.current;
 
 	name = wstrdup(dock->screen_ptr->workspaces[wspace]->name);
 
@@ -865,7 +865,7 @@ static void switchWSCommand(WMenu *menu, WMenuEntry *entry)
 	WMArray *selectedIcons;
 	int x, y;
 
-	if (entry->order == scr->current_workspace)
+	if (entry->order == w_global.workspace.current)
 		return;
 	src = icon->dock;
 	dest = scr->workspaces[entry->order]->clip;
@@ -959,7 +959,7 @@ static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 			menu->flags.realized = 0;
 		}
 
-		if (i == scr->current_workspace)
+		if (i == w_global.workspace.current)
 			wMenuSetEnabled(menu, i, False);
 		else
 			wMenuSetEnabled(menu, i, True);
@@ -1368,7 +1368,7 @@ void wDockDestroy(WDock *dock)
 void wClipIconPaint(WAppIcon *aicon)
 {
 	WScreen *scr = aicon->icon->core->screen_ptr;
-	WWorkspace *workspace = scr->workspaces[scr->current_workspace];
+	WWorkspace *workspace = scr->workspaces[w_global.workspace.current];
 	WMColor *color;
 	Window win = aicon->icon->core->window;
 	int length, nlength;
@@ -1380,7 +1380,7 @@ void wClipIconPaint(WAppIcon *aicon)
 	length = strlen(workspace->name);
 	ws_name = wmalloc(length + 1);
 	snprintf(ws_name, length + 1, "%s", workspace->name);
-	snprintf(ws_number, sizeof(ws_number), "%i", scr->current_workspace + 1);
+	snprintf(ws_number, sizeof(ws_number), "%i", w_global.workspace.current + 1);
 	nlength = strlen(ws_number);
 
 	if (wPreferences.flags.noclip || !workspace->clip->collapsed)
@@ -2030,7 +2030,7 @@ static WDock *findDock(WScreen *scr, XEvent *event, int *icon_pos)
 			}
 		}
 	}
-	if (*icon_pos < 0 && (dock = scr->workspaces[scr->current_workspace]->clip) != NULL) {
+	if (*icon_pos < 0 && (dock = scr->workspaces[w_global.workspace.current]->clip) != NULL) {
 		for (i = 0; i < dock->max_icons; i++) {
 			if (dock->icon_array[i]
 			    && dock->icon_array[i]->icon->core->window == event->xclient.window) {
@@ -2577,7 +2577,7 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 		int neighbours = 0;
 		int start, stop, k;
 
-		start = icon->omnipresent ? 0 : scr->current_workspace;
+		start = icon->omnipresent ? 0 : w_global.workspace.current;
 		stop = icon->omnipresent ? w_global.workspace.count : start + 1;
 
 		aicon = NULL;
@@ -2707,7 +2707,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 		return True;
 	}
 
-	if (dock->type == WM_CLIP && dock != scr->workspaces[scr->current_workspace]->clip)
+	if (dock->type == WM_CLIP && dock != scr->workspaces[w_global.workspace.current]->clip)
 		extra_count = scr->global_icon_count;
 
 	/* if the dock is full */
@@ -3064,7 +3064,7 @@ static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state)
 			if (btn->dock == scr->dock || btn->dock->type == WM_DRAWER || btn->omnipresent)
 				state->workspace = -1;
 			else
-				state->workspace = scr->current_workspace;
+				state->workspace = w_global.workspace.current;
 		}
 		wWindowAddSavedState(btn->wm_instance, btn->wm_class, cmdline, pid, state);
 		wAddDeathHandler(pid, (WDeathHandler *) trackDeadProcess, btn->dock);
@@ -3274,8 +3274,8 @@ void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 {
 	if (!wPreferences.flags.noclip) {
 		scr->clip_icon->dock = scr->workspaces[workspace]->clip;
-		if (scr->current_workspace != workspace) {
-			WDock *old_clip = scr->workspaces[scr->current_workspace]->clip;
+		if (w_global.workspace.current != workspace) {
+			WDock *old_clip = scr->workspaces[w_global.workspace.current]->clip;
 			WAppIconChain *chain = scr->global_icons;
 
 			while (chain) {
@@ -3594,7 +3594,7 @@ static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 		unhideHere = (event->xbutton.state & ShiftMask);
 
 		/* go to the last workspace that the user worked on the app */
-		if (wapp->last_workspace != dock->screen_ptr->current_workspace && !unhideHere)
+		if (wapp->last_workspace != w_global.workspace.current && !unhideHere)
 			wWorkspaceChange(dock->screen_ptr, wapp->last_workspace);
 
 		wUnhideApplication(wapp, event->xbutton.button == Button2, unhideHere);
@@ -3897,16 +3897,16 @@ static void handleClipChangeWorkspace(WScreen *scr, XEvent *event)
 	new_ws = wPreferences.ws_advance || (event->xbutton.state & ControlMask);
 
 	if (direction == CLIP_FORWARD) {
-		if (scr->current_workspace < w_global.workspace.count - 1)
-			wWorkspaceChange(scr, scr->current_workspace + 1);
-		else if (new_ws && scr->current_workspace < MAX_WORKSPACES - 1)
-			wWorkspaceChange(scr, scr->current_workspace + 1);
+		if (w_global.workspace.current < w_global.workspace.count - 1)
+			wWorkspaceChange(scr, w_global.workspace.current + 1);
+		else if (new_ws && w_global.workspace.current < MAX_WORKSPACES - 1)
+			wWorkspaceChange(scr, w_global.workspace.current + 1);
 		else if (wPreferences.ws_cycle)
 			wWorkspaceChange(scr, 0);
 	} else if (direction == CLIP_REWIND) {
-		if (scr->current_workspace > 0)
-			wWorkspaceChange(scr, scr->current_workspace - 1);
-		else if (scr->current_workspace == 0 && wPreferences.ws_cycle)
+		if (w_global.workspace.current > 0)
+			wWorkspaceChange(scr, w_global.workspace.current - 1);
+		else if (w_global.workspace.current == 0 && wPreferences.ws_cycle)
 			wWorkspaceChange(scr, w_global.workspace.count - 1);
 	}
 

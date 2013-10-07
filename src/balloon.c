@@ -440,8 +440,8 @@ static void appiconBalloon(WObjDescriptor *object)
 
 	/* Show balloon if it is the Clip and the workspace name is > 5 chars */
 	if (object->parent == scr->clip_icon) {
-		if (strlen(scr->workspaces[scr->current_workspace]->name) > 5) {
-			scr->balloon->text = wstrdup(scr->workspaces[scr->current_workspace]->name);
+		if (strlen(scr->workspaces[w_global.workspace.current]->name) > 5) {
+			scr->balloon->text = wstrdup(scr->workspaces[w_global.workspace.current]->name);
 		} else {
 			wBalloonHide(scr);
 			return;

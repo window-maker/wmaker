@@ -316,7 +316,7 @@ void wSessionSaveState(WScreen * scr)
 	WMPutInPLDictionary(scr->session_state, sApplications, list);
 	WMReleasePropList(list);
 
-	wks = WMCreatePLString(scr->workspaces[scr->current_workspace]->name);
+	wks = WMCreatePLString(scr->workspaces[w_global.workspace.current]->name);
 	WMPutInPLDictionary(scr->session_state, sWorkspace, wks);
 	WMReleasePropList(wks);
 
@@ -556,6 +556,6 @@ void wSessionRestoreLastWorkspace(WScreen * scr)
 	/* Get the workspace number for the workspace name */
 	w = wGetWorkspaceNumber(scr, value);
 
-	if (w != scr->current_workspace && w < w_global.workspace.count)
+	if (w != w_global.workspace.current && w < w_global.workspace.count)
 		wWorkspaceChange(scr, w);
 }

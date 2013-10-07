@@ -876,6 +876,6 @@ static void manageAllWindows(WScreen * scr, int crashRecovery)
 	w_global.workspace.last_used = 0;
 	wWorkspaceForceChange(scr, 0);
 	if (!wPreferences.flags.noclip)
-		wDockShowIcons(scr->workspaces[scr->current_workspace]->clip);
+		wDockShowIcons(scr->workspaces[w_global.workspace.current]->clip);
 	scr->flags.startup2 = 0;
 }

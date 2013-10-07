@@ -190,7 +190,7 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 	wNETWMUpdateDesktop(scr);
 	WMPostNotificationName(WMNWorkspaceDestroyed, scr, (void *)(uintptr_t) (w_global.workspace.count - 1));
 
-	if (scr->current_workspace >= w_global.workspace.count)
+	if (w_global.workspace.current >= w_global.workspace.count)
 		wWorkspaceChange(scr, w_global.workspace.count - 1);
 	if (w_global.workspace.last_used >= w_global.workspace.count)
 		w_global.workspace.last_used = 0;
@@ -429,7 +429,7 @@ void wWorkspaceChange(WScreen *scr, int workspace)
 	if (scr->flags.startup || scr->flags.startup2 || scr->flags.ignore_focus_events)
 		return;
 
-	if (workspace != scr->current_workspace)
+	if (workspace != w_global.workspace.current)
 		wWorkspaceForceChange(scr, workspace);
 }
 
@@ -444,7 +444,7 @@ void wWorkspaceRelativeChange(WScreen * scr, int amount)
 	if (ignore_wks_change)
 		return;
 
-	w = scr->current_workspace + amount;
+	w = w_global.workspace.current + amount;
 
 	if (amount < 0) {
 		if (w >= 0) {
@@ -479,8 +479,8 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	wClipUpdateForWorkspaceChange(scr, workspace);
 
-	w_global.workspace.last_used = scr->current_workspace;
-	scr->current_workspace = workspace;
+	w_global.workspace.last_used = w_global.workspace.current;
+	w_global.workspace.current = workspace;
 
 	wWorkspaceMenuUpdate(scr, scr->workspace_menu);
 
@@ -770,24 +770,24 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 
 	for (i = 0; i < w_global.workspace.count; i++) {
 		/* workspace shortcut labels */
-		if (i / 10 == scr->current_workspace / 10)
+		if (i / 10 == w_global.workspace.current / 10)
 			menu->entries[i + MC_WORKSPACE1]->rtext = GetShortcutKey(wKeyBindings[WKBD_WORKSPACE1 + (i % 10)]);
 		else
 			menu->entries[i + MC_WORKSPACE1]->rtext = NULL;
 
 		menu->entries[i + MC_WORKSPACE1]->flags.indicator_on = 0;
 	}
-	menu->entries[scr->current_workspace + MC_WORKSPACE1]->flags.indicator_on = 1;
+	menu->entries[w_global.workspace.current + MC_WORKSPACE1]->flags.indicator_on = 1;
 	wMenuRealize(menu);
 
 	/* don't let user destroy current workspace */
-	if (scr->current_workspace == w_global.workspace.count - 1)
+	if (w_global.workspace.current == w_global.workspace.count - 1)
 		wMenuSetEnabled(menu, MC_DESTROY_LAST, False);
 	else
 		wMenuSetEnabled(menu, MC_DESTROY_LAST, True);
 
 	/* back to last workspace */
-	if (w_global.workspace.count && w_global.workspace.last_used != scr->current_workspace)
+	if (w_global.workspace.count && w_global.workspace.last_used != w_global.workspace.current)
 		wMenuSetEnabled(menu, MC_LAST_USED, True);
 	else
 		wMenuSetEnabled(menu, MC_LAST_USED, False);

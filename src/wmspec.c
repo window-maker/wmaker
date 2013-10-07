@@ -509,13 +509,13 @@ static void wNETWMShowingDesktop(WScreen *scr, Bool show)
 		updateShowDesktop(scr, True);
 	} else if (scr->netdata->show_desktop != NULL) {
 		/* FIXME: get rid of workspace flashing ! */
-		int ws = scr->current_workspace;
+		int ws = w_global.workspace.current;
 		WWindow **tmp;
 		for (tmp = scr->netdata->show_desktop; *tmp; ++tmp) {
 			wDeiconifyWindow(*tmp);
 			(*tmp)->flags.net_show_desktop = 0;
 		}
-		if (ws != scr->current_workspace)
+		if (ws != w_global.workspace.current)
 			wWorkspaceChange(scr, ws);
 		wfree(scr->netdata->show_desktop);
 		scr->netdata->show_desktop = NULL;
@@ -746,7 +746,7 @@ static void updateCurrentWorkspace(WScreen *scr)
 {				/* changeable */
 	long count;
 
-	count = scr->current_workspace;
+	count = w_global.workspace.current;
 
 	XChangeProperty(dpy, scr->root_win, net_current_desktop, XA_CARDINAL, 32,
 			PropModeReplace, (unsigned char *)&count, 1);
@@ -1394,7 +1394,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 		 * - giving the client the focus does not cause a change in
 		 *   the active workspace (XXX: or the active head if Xinerama)
 		 */
-		if (wwin->frame->workspace == wwin->screen_ptr->current_workspace /* No workspace change */
+		if (wwin->frame->workspace == w_global.workspace.current /* No workspace change */
 		    || event->data.l[0] == 2 /* Requested by pager */
 		    || WFLAGP(wwin, focus_across_wksp) /* Explicitly allowed */) {
 				wNETWMShowingDesktop(scr, False);

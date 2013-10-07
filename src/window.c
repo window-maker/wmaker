@@ -844,12 +844,12 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			if (w < 0 || w >= w_global.workspace.count) {
 				workspace = win_state->state->workspace;
 				if (workspace >= w_global.workspace.count)
-					workspace = scr->current_workspace;
+					workspace = w_global.workspace.current;
 			} else {
 				workspace = w;
 			}
 		} else {
-			workspace = scr->current_workspace;
+			workspace = w_global.workspace.current;
 		}
 	}
 
@@ -925,7 +925,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			if (wPreferences.open_transients_with_parent && transientOwner)
 				workspace = transientOwner->frame->workspace;
 			else
-				workspace = scr->current_workspace;
+				workspace = w_global.workspace.current;
 		}
 	}
 
@@ -949,7 +949,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			y = win_state->state->y;
 		} else if ((wwin->transient_for == None || wPreferences.window_placement != WPM_MANUAL)
 			   && !scr->flags.startup
-			   && workspace == scr->current_workspace
+			   && workspace == w_global.workspace.current
 			   && !wwin->flags.miniaturized
 			   && !wwin->flags.maximized && !(wwin->normal_hints->flags & (USPosition | PPosition))) {
 
@@ -1188,7 +1188,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	XLowerWindow(dpy, window);
 
 	/* if window is in this workspace and should be mapped, then  map it */
-	if (!wwin->flags.miniaturized && (workspace == scr->current_workspace || IS_OMNIPRESENT(wwin))
+	if (!wwin->flags.miniaturized && (workspace == w_global.workspace.current || IS_OMNIPRESENT(wwin))
 	    && !wwin->flags.hidden && !withdraw) {
 
 		/* The following "if" is to avoid crashing of clients that expect
@@ -1262,7 +1262,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	/* Final preparations before window is ready to go */
 	wFrameWindowChangeState(wwin->frame, WS_UNFOCUSED);
 
-	if (!wwin->flags.miniaturized && workspace == scr->current_workspace && !wwin->flags.hidden) {
+	if (!wwin->flags.miniaturized && workspace == w_global.workspace.current && !wwin->flags.hidden) {
 		if (((transientOwner && transientOwner->flags.focused)
 		     || wPreferences.auto_focus) && !WFLAGP(wwin, no_focusable)) {
 
@@ -1371,7 +1371,7 @@ WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
 	wFrameWindowHideButton(wwin->frame, WFF_RIGHT_BUTTON);
 
 	wwin->frame->child = wwin;
-	wwin->frame->workspace = wwin->screen_ptr->current_workspace;
+	wwin->frame->workspace = w_global.workspace.current;
 
 #ifdef XKB_BUTTON_HINT
 	if (wPreferences.modelock)
@@ -1869,7 +1869,7 @@ void wWindowChangeWorkspace(WWindow *wwin, int workspace)
 	if (workspace >= w_global.workspace.count || workspace < 0 || workspace == wwin->frame->workspace)
 		return;
 
-	if (workspace != scr->current_workspace) {
+	if (workspace != w_global.workspace.current) {
 		/* Sent to other workspace. Unmap window */
 		if ((wwin->flags.mapped
 		     || wwin->flags.shaded || (wwin->flags.miniaturized && !wPreferences.sticky_icons))
@@ -1913,7 +1913,7 @@ void wWindowChangeWorkspace(WWindow *wwin, int workspace)
 void wWindowChangeWorkspaceRelative(WWindow *wwin, int amount)
 {
 	WScreen *scr = wwin->screen_ptr;
-	int w = scr->current_workspace + amount;
+	int w = w_global.workspace.current + amount;
 
 	if (amount < 0) {
 		if (w >= 0) {

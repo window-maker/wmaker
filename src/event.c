@@ -846,7 +846,7 @@ static void handleUnmapNotify(XEvent * event)
 		return;
 
 	if (!wwin->flags.mapped && !withdraw
-	    && wwin->frame->workspace == wwin->screen_ptr->current_workspace
+	    && wwin->frame->workspace == w_global.workspace.current
 	    && !wwin->flags.miniaturized && !wwin->flags.hidden)
 		return;
 
@@ -1566,7 +1566,7 @@ static void handleKeyPress(XEvent * event)
 
 	case WKBD_WORKSPACE1 ... WKBD_WORKSPACE10:
 		widx = command - WKBD_WORKSPACE1;
-		i = (scr->current_workspace / 10) * 10 + widx;
+		i = (w_global.workspace.current / 10) * 10 + widx;
 		if (wPreferences.ws_advance || i < w_global.workspace.count)
 			wWorkspaceChange(scr, i);
 		break;
@@ -1583,7 +1583,7 @@ static void handleKeyPress(XEvent * event)
 
 	case WKBD_MOVE_WORKSPACE1 ... WKBD_MOVE_WORKSPACE10:
 		widx = command - WKBD_MOVE_WORKSPACE1;
-		i = (scr->current_workspace / 10) * 10 + widx;
+		i = (w_global.workspace.current / 10) * 10 + widx;
 		if (wwin && (wPreferences.ws_advance || i < w_global.workspace.count))
 			wWindowChangeWorkspace(wwin, i);
 		break;
@@ -1607,8 +1607,8 @@ static void handleKeyPress(XEvent * event)
 			if (wwin) {
 				int row, column;
 
-				row = scr->current_workspace / 10;
-				column = scr->current_workspace % 10;
+				row = w_global.workspace.current / 10;
+				column = w_global.workspace.current % 10;
 
 				if (command == WKBD_MOVE_NEXTWSLAYER) {
 					if ((row + 1) * 10 < w_global.workspace.count)
@@ -1643,7 +1643,7 @@ static void handleKeyPress(XEvent * event)
 			WWindow *wwin;
 
 			wUnselectWindows(scr);
-			cw = scr->current_workspace;
+			cw = w_global.workspace.current;
 
 			WM_ETARETI_ARRAY(list, wwin, iter) {
 				if (count > 1)
@@ -1727,8 +1727,8 @@ static void handleKeyPress(XEvent * event)
 		{
 			int row, column;
 
-			row = scr->current_workspace / 10;
-			column = scr->current_workspace % 10;
+			row = w_global.workspace.current / 10;
+			column = w_global.workspace.current % 10;
 
 			if (command == WKBD_NEXTWSLAYER) {
 				if ((row + 1) * 10 < w_global.workspace.count)
@@ -1741,7 +1741,7 @@ static void handleKeyPress(XEvent * event)
 		break;
 	case WKBD_CLIPRAISELOWER:
 		if (!wPreferences.flags.noclip)
-			wDockRaiseLower(scr->workspaces[scr->current_workspace]->clip);
+			wDockRaiseLower(scr->workspaces[w_global.workspace.current]->clip);
 		break;
 	case WKBD_DOCKRAISELOWER:
 		if (!wPreferences.flags.nodock)
@@ -1754,7 +1754,7 @@ static void handleKeyPress(XEvent * event)
 			wwin = scr->focused_window;
 
 			if (wwin && wwin->flags.mapped
-			    && wwin->frame->workspace == wwin->screen_ptr->current_workspace
+			    && wwin->frame->workspace == w_global.workspace.current
 			    && !wwin->flags.miniaturized && !wwin->flags.hidden) {
 				XkbGetState(dpy, XkbUseCoreKbd, &staterec);
 

@@ -244,7 +244,7 @@ static void updateWorkspaceMenu(WMenu * menu)
 		}
 
 		/* workspace shortcut labels */
-		if (i / 10 == scr->current_workspace / 10)
+		if (i / 10 == w_global.workspace.current / 10)
 			entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MOVE_WORKSPACE1 + (i % 10)]);
 		else
 			entry->rtext = NULL;
@@ -571,7 +571,7 @@ static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 
 	for (i = 0; i < scr->workspace_submenu->entry_no; i++) {
 		scr->workspace_submenu->entries[i]->clientdata = wwin;
-		if (i == scr->current_workspace)
+		if (i == w_global.workspace.current)
 			wMenuSetEnabled(scr->workspace_submenu, i, False);
 		else
 			wMenuSetEnabled(scr->workspace_submenu, i, True);

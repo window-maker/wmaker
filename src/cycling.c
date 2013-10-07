@@ -133,7 +133,7 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 
 		oldFocused = change_focus_and_raise(newFocused, oldFocused, swpanel, scr, False);
 	} else {
-		if (wwin->frame->workspace == scr->current_workspace)
+		if (wwin->frame->workspace == w_global.workspace.current)
 			newFocused = wwin;
 		else
 			newFocused = NULL;

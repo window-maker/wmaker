@@ -2452,7 +2452,7 @@ static int setWrapAppiconsInDock(WScreen *scr, WDefaultEntry *entry, void *tdata
 static int setStickyIcons(WScreen * scr, WDefaultEntry * entry, void *bar, void *foo)
 {
 	if (scr->workspaces) {
-		wWorkspaceForceChange(scr, scr->current_workspace);
+		wWorkspaceForceChange(scr, w_global.workspace.current);
 		wArrangeIcons(scr, False);
 	}
 	return 0;
@@ -2882,7 +2882,7 @@ static int setWorkspaceBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 			if (str) {
 				SendHelperMessage(scr, 'S', 0, str);
 				wfree(str);
-				SendHelperMessage(scr, 'C', scr->current_workspace + 1, NULL);
+				SendHelperMessage(scr, 'C', w_global.workspace.current + 1, NULL);
 			} else {
 				SendHelperMessage(scr, 'U', 0, NULL);
 			}

@@ -484,6 +484,7 @@ extern struct wmaker_global_variables {
 	/* Workspace related */
 	struct {
 		int count;		/* number of workspaces */
+		int current;		/* current workspace number */
 		int last_used;		/* last used workspace number */
 
 		WMFont *font_for_name;  /* used during workspace switch */
