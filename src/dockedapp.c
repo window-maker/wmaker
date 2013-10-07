@@ -178,7 +178,7 @@ static void panelBtnCallback(WMWidget * self, void *data)
 
 			// Cf dock.c:dockIconPaint(WAppIcon *aicon)?
 			if (aicon == w_global.clip.icon)
-				wClipIconPaint(aicon);
+				wClipIconPaint();
 			else if (wIsADrawer(aicon))
 				wDrawerIconPaint(aicon);
 			else

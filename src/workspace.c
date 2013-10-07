@@ -624,7 +624,7 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 		XMapWindow(dpy, w_global.clip.icon->icon->core->window);
 	}
 	else if (w_global.clip.icon != NULL) {
-		wClipIconPaint(w_global.clip.icon);
+		wClipIconPaint();
 	}
 	wScreenUpdateUsableArea(scr);
 	wNETWMUpdateDesktop(scr);
@@ -700,7 +700,7 @@ void wWorkspaceRename(WScreen *scr, int workspace, const char *name)
 	}
 
 	if (w_global.clip.icon)
-		wClipIconPaint(w_global.clip.icon);
+		wClipIconPaint();
 
 	WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void *)(uintptr_t) workspace);
 }

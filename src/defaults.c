@@ -1228,7 +1228,7 @@ void wDefaultUpdateIcons(WScreen *scr)
 	}
 
 	if (!wPreferences.flags.noclip || wPreferences.flags.clip_merged_in_dock)
-		wClipIconPaint(w_global.clip.icon);
+		wClipIconPaint();
 
 	for (dc = scr->drawers; dc != NULL; dc = dc->next)
 		wDrawerIconPaint(dc->adrawer->icon_array[0]);
