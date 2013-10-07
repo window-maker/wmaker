@@ -324,7 +324,7 @@ void wSessionSaveState(WScreen * scr)
 	WMFreeArray(wapp_list);
 }
 
-void wSessionClearState(WScreen * scr)
+void wSessionClearState(void)
 {
 	make_keys();
 
@@ -369,7 +369,7 @@ static pid_t execCommand(WScreen *scr, char *command)
 	return pid;
 }
 
-static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
+static WSavedState *getWindowState(WMPropList *win_state)
 {
 	WSavedState *state = wmalloc(sizeof(WSavedState));
 	WMPropList *value;
@@ -461,7 +461,7 @@ void wSessionRestoreState(WScreen *scr)
 		if (!instance && !class)
 			continue;
 
-		state = getWindowState(scr, win_info);
+		state = getWindowState(win_info);
 
 		dock = NULL;
 		value = WMGetFromPLDictionary(win_info, sDock);

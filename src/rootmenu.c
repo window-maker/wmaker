@@ -284,9 +284,9 @@ static void saveSessionCommand(WMenu * menu, WMenuEntry * entry)
 	wScreenSaveState(menu->frame->screen_ptr);
 }
 
-static void clearSessionCommand(WMenu * menu, WMenuEntry * entry)
+static void clearSessionCommand(WMenu *menu, WMenuEntry *entry)
 {
-	wSessionClearState(menu->frame->screen_ptr);
+	wSessionClearState();
 	wScreenSaveState(menu->frame->screen_ptr);
 }
 
