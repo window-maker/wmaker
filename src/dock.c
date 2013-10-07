@@ -4339,6 +4339,10 @@ static int addADrawer(WScreen *scr)
 
 	drawer = wDockCreate(scr, WM_DRAWER, NULL);
 	drawer->lowered = scr->dock->lowered;
+	if (!drawer->lowered)
+		ChangeStackingLevel(drawer->icon_array[0]->icon->core, WMDockLevel);
+	else
+		ChangeStackingLevel(drawer->icon_array[0]->icon->core, WMNormalLevel);
 	drawer->auto_raise_lower = scr->dock->auto_raise_lower;
 	drawer->x_pos = dock->x_pos;
 	drawer->y_pos = dock->y_pos + ICON_SIZE * y;
