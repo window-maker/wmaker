@@ -143,10 +143,9 @@ WApplication *wApplicationCreate(WWindow * wwin)
 	return wapp;
 }
 
-void wApplicationDestroy(WApplication * wapp)
+void wApplicationDestroy(WApplication *wapp)
 {
 	WWindow *wwin;
-	WScreen *scr;
 
 	if (!wapp)
 		return;
@@ -166,18 +165,10 @@ void wApplicationDestroy(WApplication * wapp)
 		return;
 	}
 
-	scr = wapp->main_window_desc->screen_ptr;
-
-	if (wapp == scr->wapp_list) {
-		if (wapp->next)
-			wapp->next->prev = NULL;
-		scr->wapp_list = wapp->next;
-	} else {
-		if (wapp->next)
-			wapp->next->prev = wapp->prev;
-		if (wapp->prev)
-			wapp->prev->next = wapp->next;
-	}
+	if (wapp->next)
+		wapp->next->prev = wapp->prev;
+	if (wapp->prev)
+		wapp->prev->next = wapp->next;
 
 	XDeleteContext(dpy, wapp->main_window, w_global.context.app_win);
 	wAppMenuDestroy(wapp->menu);

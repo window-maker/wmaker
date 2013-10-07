@@ -107,8 +107,6 @@ typedef struct _WScreen {
 
     WMArray *fakeGroupLeaders;         /* list of fake window group ids */
 
-    struct WApplication *wapp_list;    /* list of all aplications */
-
     WMBag *stacking_list;	       /* bag of lists of windows
                                         * in stacking order.
                                         * Indexed by window level
