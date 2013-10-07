@@ -620,10 +620,10 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 			/* The newly auto-attracting dock is a drawer: disable any clip and 
 			 * previously attracting drawer */
 			int i;
-			for (i = 0; i < scr->workspace_count; i++) {
+			for (i = 0; i < scr->workspace_count; i++)
 				scr->workspaces[ i ]->clip->attract_icons = False;
 				/* dock menu will be updated later, when opened */
-			}
+
 			if (scr->attracting_drawer != NULL)
 				scr->attracting_drawer->attract_icons = False;
 			scr->attracting_drawer = dock;
@@ -818,6 +818,7 @@ static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name)
 	case WM_CLIP:
 		if (scr->clip_icon)
 			return scr->clip_icon;
+
 		btn = wAppIconCreateForDock(scr, NULL, "Logo", "WMClip", TILE_CLIP);
 		btn->icon->core->descriptor.handle_expose = clipIconExpose;
 		x_pos = 0;
@@ -1210,6 +1211,7 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 
 		if (scr->clip_options == NULL)
 			scr->clip_options = makeClipOptionsMenu(scr);
+
 		wMenuEntrySetCascade(menu, entry, scr->clip_options);
 
 		 /* The same menu is used for the dock and its appicons. If the menu
@@ -3957,9 +3959,9 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 				iconDblClick(desc, event);
 		}
 	} else if (event->xbutton.button == Button2 && aicon == scr->clip_icon) {
-		if (!scr->clip_ws_menu) {
+		if (!scr->clip_ws_menu)
 			scr->clip_ws_menu = wWorkspaceMenuMake(scr, False);
-		}
+
 		if (scr->clip_ws_menu) {
 			WMenu *wsMenu = scr->clip_ws_menu;
 			int xpos;

@@ -259,9 +259,8 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	int xx, yy;
 #endif
 
-	if (wPreferences.workspace_name_display_position == WD_NONE || scr->workspace_count < 2) {
+	if (wPreferences.workspace_name_display_position == WD_NONE || scr->workspace_count < 2)
 		return;
-	}
 
 	if (scr->workspace_name_timer) {
 		WMDeleteTimerHandler(scr->workspace_name_timer);
@@ -350,11 +349,9 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 
 	XFillRectangle(dpy, text, WMColorGC(scr->black), 0, 0, w + 4, h + 4);
 
-	for (x = 0; x <= 4; x++) {
-		for (y = 0; y <= 4; y++) {
+	for (x = 0; x <= 4; x++)
+		for (y = 0; y <= 4; y++)
 			WMDrawString(scr->wmscreen, text, scr->white, scr->workspace_name_font, x, y, name, len);
-		}
-	}
 
 	XSetForeground(dpy, scr->mono_gc, 1);
 	XSetBackground(dpy, scr->mono_gc, 0);
@@ -477,9 +474,8 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	SendHelperMessage(scr, 'C', workspace + 1, NULL);
 
-	if (workspace > scr->workspace_count - 1) {
+	if (workspace > scr->workspace_count - 1)
 		wWorkspaceMake(scr, workspace - scr->workspace_count + 1);
-	}
 
 	wClipUpdateForWorkspaceChange(scr, workspace);
 
@@ -644,12 +640,12 @@ static void switchWSCommand(WMenu * menu, WMenuEntry * entry)
 	wWorkspaceChange(menu->frame->screen_ptr, (long)entry->clientdata);
 }
 
-static void lastWSCommand(WMenu * menu, WMenuEntry * entry)
+static void lastWSCommand(WMenu *menu, WMenuEntry *entry)
 {
 	wWorkspaceChange(menu->frame->screen_ptr, menu->frame->screen_ptr->last_workspace);
 }
 
-static void deleteWSCommand(WMenu * menu, WMenuEntry * entry)
+static void deleteWSCommand(WMenu *menu, WMenuEntry *entry)
 {
 	wWorkspaceDelete(menu->frame->screen_ptr, menu->frame->screen_ptr->workspace_count - 1);
 }
@@ -768,9 +764,8 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 		}
 	} else if (menu->entry_no > scr->workspace_count + MC_WORKSPACE1) {
 		/* removed workspace(s) */
-		for (i = menu->entry_no - 1; i >= scr->workspace_count + MC_WORKSPACE1; i--) {
+		for (i = menu->entry_no - 1; i >= scr->workspace_count + MC_WORKSPACE1; i--)
 			wMenuRemoveItem(menu, i);
-		}
 	}
 
 	for (i = 0; i < scr->workspace_count; i++) {
@@ -786,11 +781,10 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 	wMenuRealize(menu);
 
 	/* don't let user destroy current workspace */
-	if (scr->current_workspace == scr->workspace_count - 1) {
+	if (scr->current_workspace == scr->workspace_count - 1)
 		wMenuSetEnabled(menu, MC_DESTROY_LAST, False);
-	} else {
+	else
 		wMenuSetEnabled(menu, MC_DESTROY_LAST, True);
-	}
 
 	/* back to last workspace */
 	if (scr->workspace_count && scr->last_workspace != scr->current_workspace)

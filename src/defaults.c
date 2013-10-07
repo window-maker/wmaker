@@ -2583,13 +2583,12 @@ static int setClipTitleFont(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 	return REFRESH_ICON_FONT;
 }
 
-static int setLargeDisplayFont(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
+static int setLargeDisplayFont(WScreen *scr, WDefaultEntry *entry, void *tdata, void *foo)
 {
 	WMFont *font = tdata;
 
-	if (scr->workspace_name_font) {
+	if (scr->workspace_name_font)
 		WMReleaseFont(scr->workspace_name_font);
-	}
 
 	scr->workspace_name_font = font;
 

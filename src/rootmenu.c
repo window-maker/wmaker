@@ -755,7 +755,7 @@ static void constructPLMenuFromPipe(WMenu * menu, WMenuEntry * entry)
 		wfree(cmd);
 
 }
-static void cleanupWorkspaceMenu(WMenu * menu)
+static void cleanupWorkspaceMenu(WMenu *menu)
 {
 	if (menu->frame->screen_ptr->workspace_menu == menu)
 		menu->frame->screen_ptr->workspace_menu = NULL;

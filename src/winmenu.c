@@ -571,11 +571,10 @@ static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 
 	for (i = 0; i < scr->workspace_submenu->entry_no; i++) {
 		scr->workspace_submenu->entries[i]->clientdata = wwin;
-		if (i == scr->current_workspace) {
+		if (i == scr->current_workspace)
 			wMenuSetEnabled(scr->workspace_submenu, i, False);
-		} else {
+		else
 			wMenuSetEnabled(scr->workspace_submenu, i, True);
-		}
 	}
 
 	menu->flags.realized = 0;

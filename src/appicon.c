@@ -375,7 +375,7 @@ void wAppIconMove(WAppIcon * aicon, int x, int y)
 }
 
 #ifdef WS_INDICATOR
-static void updateDockNumbers(WScreen * scr)
+static void updateDockNumbers(WScreen *scr)
 {
 	int length;
 	char *ws_numbers;
@@ -807,9 +807,11 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 	}
 	if (!wPreferences.flags.nodock && scr->dock != originalDock)
 		allDocks[ i++ ] = scr->dock;
+
 	if (!wPreferences.flags.noclip &&
 	    originalDock != scr->workspaces[scr->current_workspace]->clip)
 		allDocks[ i++ ] = scr->workspaces[scr->current_workspace]->clip;
+
 	for ( ; i < scr->drawer_count + 2; i++) /* In case the clip, the dock, or both, are disabled */
 		allDocks[ i ] = NULL;
 
@@ -862,6 +864,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 				for (i = 0; i < scr->workspace_count; i++) {
 					if (i == scr->current_workspace)
 						continue;
+
 					wDockShowIcons(scr->workspaces[i]->clip);
 					/* Note: if dock is collapsed (for instance, because it
 					   auto-collapses), its icons still won't show up */
@@ -1067,6 +1070,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 				for (i = 0; i < scr->workspace_count; i++) {
 					if (i == scr->current_workspace)
 						continue;
+
 					wDockHideIcons(scr->workspaces[i]->clip);
 				}
 			}
@@ -1148,8 +1152,10 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 		int i;
 		for (i = 0; i < scr->workspace_count; i++) {
 			WDock *dock = scr->workspaces[i]->clip;
+
 			if (dock)
 				wapp->app_icon = findDockIconFor(dock, main_window);
+
 			if (wapp->app_icon)
 				break;
 		}

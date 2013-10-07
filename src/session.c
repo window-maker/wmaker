@@ -198,9 +198,8 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 
 		name = WMCreatePLString(buffer);
 		cmd = WMCreatePLString(command);
-		/*sprintf(buffer, "%d", wwin->frame->workspace+1);
-		   workspace = WMCreatePLString(buffer); */
 		workspace = WMCreatePLString(scr->workspaces[wwin->frame->workspace]->name);
+
 		shaded = wwin->flags.shaded ? sYes : sNo;
 		miniaturized = wwin->flags.miniaturized ? sYes : sNo;
 		hidden = wwin->flags.hidden ? sYes : sNo;
@@ -233,22 +232,21 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 		if (wapp && wapp->app_icon && wapp->app_icon->dock) {
 			int i;
 			char *name = NULL;
-			if (wapp->app_icon->dock == scr->dock) {
+			if (wapp->app_icon->dock == scr->dock)
 				name = "Dock";
-			}
-			if (name == NULL) // Try the clips
-			{
+
+			/* Try the clips */
+			if (name == NULL) {
 				for (i = 0; i < scr->workspace_count; i++)
 					if (scr->workspaces[i]->clip == wapp->app_icon->dock)
 						break;
 				if (i < scr->workspace_count)
 					name = scr->workspaces[i]->name;
 			}
-			if (name == NULL) // Try the drawers
-			{
+			/* Try the drawers */
+			if (name == NULL) {
 				WDrawerChain *dc;
-				for (dc = scr->drawers; dc != NULL; dc = dc->next)
-				{
+				for (dc = scr->drawers; dc != NULL; dc = dc->next) {
 					if (dc->adrawer == wapp->app_icon->dock)
 						break;
 				}
@@ -468,11 +466,11 @@ void wSessionRestoreState(WScreen *scr)
 		value = WMGetFromPLDictionary(win_info, sDock);
 		if (value && WMIsPLString(value) && (tmp = WMGetFromPLString(value)) != NULL) {
 			if (sscanf(tmp, "%i", &n) != 1) {
-				if (!strcasecmp(tmp, "DOCK")) {
+				if (!strcasecmp(tmp, "DOCK"))
 					dock = scr->dock;
-				}
-				if (dock == NULL) // Try the clips
-				{
+
+				/* Try the clips */
+				if (dock == NULL) {
 					for (j = 0; j < scr->workspace_count; j++) {
 						if (strcmp(scr->workspaces[j]->name, tmp) == 0) {
 							dock = scr->workspaces[j]->clip;

@@ -432,7 +432,7 @@ static void miniwindowBalloon(WObjDescriptor * object)
 	}
 }
 
-static void appiconBalloon(WObjDescriptor * object)
+static void appiconBalloon(WObjDescriptor *object)
 {
 	WAppIcon *aicon = (WAppIcon *) object->parent;
 	WScreen *scr = aicon->icon->core->screen_ptr;

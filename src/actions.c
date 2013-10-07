@@ -1624,9 +1624,9 @@ void wUnhideApplication(WApplication *wapp, Bool miniwindows, Bool bringToCurren
 					     wapp->app_icon->y_pos, wlist, animate, bringToCurrentWS);
 				animate = False;
 			} else {
-				if (bringToCurrentWS && wlist->frame->workspace != scr->current_workspace) {
+				if (bringToCurrentWS && wlist->frame->workspace != scr->current_workspace)
 					wWindowChangeWorkspace(wlist, scr->current_workspace);
-				}
+
 				wRaiseFrame(wlist->frame->core);
 			}
 		}
@@ -1871,9 +1871,9 @@ void wMakeWindowVisible(WWindow *wwin)
 	if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
 		wWorkspaceChange(wwin->screen_ptr, wwin->frame->workspace);
 
-	if (wwin->flags.shaded) {
+	if (wwin->flags.shaded)
 		wUnshadeWindow(wwin);
-	}
+
 	if (wwin->flags.hidden) {
 		WApplication *app;
 
