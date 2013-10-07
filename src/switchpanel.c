@@ -670,7 +670,7 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimi
 
 WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
 {
-	WWindow *wwin, *tmpwin;
+	WWindow *wwin;
 	int count = WMGetArrayItemCount(panel->windows);
 	char *title;
 	int i;
@@ -690,9 +690,9 @@ WWindow *wSwitchPanelSelectFirst(WSwitchPanel *panel, int back)
 	title = wwin->frame->title;
 
 	if (panel->win) {
-		WM_ITERATE_ARRAY(panel->windows, tmpwin, i) {
+		for (WMArrayFirst(panel->windows, &(i)); (i) != WANotFound; WMArrayNext(panel->windows, &(i)))
 			changeImage(panel, i, i == panel->current, False, False);
-		}
+
 		drawTitle(panel, panel->current, title);
 	}
 
