@@ -179,7 +179,7 @@ static void panelBtnCallback(WMWidget * self, void *data)
 			// Cf dock.c:dockIconPaint(WAppIcon *aicon)?
 			if (aicon == aicon->icon->core->screen_ptr->clip_icon)
 				wClipIconPaint(aicon);
-			else if (wIsADrawer(aicon->icon->core->screen_ptr, aicon))
+			else if (wIsADrawer(aicon))
 				wDrawerIconPaint(aicon);
 			else
 				wAppIconPaint(aicon);

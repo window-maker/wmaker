@@ -104,7 +104,7 @@ WAppIcon *wClipRestoreState(WScreen *scr, WMPropList *clip_state);
 void wDrawerIconPaint(WAppIcon *dicon);
 void wDrawersSaveState(WScreen *scr);
 void wDrawersRestoreState(WScreen *scr);
-int wIsADrawer(WScreen *scr, WAppIcon *aicon);
+int wIsADrawer(WAppIcon *aicon);
 
 void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace);
 

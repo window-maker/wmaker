@@ -1416,7 +1416,7 @@ static void dockIconPaint(WAppIcon *btn)
 {
 	if (btn == btn->icon->core->screen_ptr->clip_icon) {
 		wClipIconPaint(btn);
-	} else if (wIsADrawer(btn->icon->core->screen_ptr, btn)) {
+	} else if (wIsADrawer(btn)) {
 		wDrawerIconPaint(btn);
 	} else {
 		wAppIconPaint(btn);
@@ -3452,7 +3452,7 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 		entry = dock->menu->entries[++index];
 		entry->clientdata = aicon;
 		entry->flags.indicator_on = aicon->icon->selected;
-		wMenuSetEnabled(dock->menu, index, aicon != scr->clip_icon && !wIsADrawer(scr, aicon));
+		wMenuSetEnabled(dock->menu, index, aicon != scr->clip_icon && !wIsADrawer(aicon));
 
 		/* select/unselect all icons */
 		entry = dock->menu->entries[++index];
@@ -3544,7 +3544,7 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 	/* kill or remove drawer */
 	entry = dock->menu->entries[++index];
 	entry->clientdata = aicon;
-	if (wIsADrawer(scr, aicon)) {
+	if (wIsADrawer(aicon)) {
 		entry->callback = removeDrawerCallback;
 		entry->text = _("Remove drawer");
 		wMenuSetEnabled(dock->menu, index, True);
@@ -3622,7 +3622,7 @@ static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 				}
 				else
 					toggleCollapsed(dock);
-			} else if (wIsADrawer(dock->screen_ptr, btn)) {
+			} else if (wIsADrawer(btn)) {
 				toggleCollapsed(dock);
 			} else if (btn->command) {
 				if (!btn->launching && (!btn->running || (event->xbutton.state & ControlMask)))
@@ -4531,7 +4531,7 @@ static void swapDrawers(WScreen *scr, int on_right_side, int new_x)
 }
 
 
-int wIsADrawer(WScreen *scr, WAppIcon *aicon)
+int wIsADrawer(WAppIcon *aicon)
 {
 	return aicon && aicon->dock &&
 		aicon->dock->type == WM_DRAWER && aicon->dock->icon_array[0] == aicon;
