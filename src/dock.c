@@ -594,7 +594,7 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 	} else if (dock->type == WM_DRAWER) {
 		/* check if at least one clip already auto attracts icons */
 		int i, ask_for_confirmation = False;
-		for (i = 0; i < scr->workspace_count; i++) {
+		for (i = 0; i < w_global.workspace.count; i++) {
 			if (scr->workspaces[ i ]->clip->attract_icons) {
 				ask_for_confirmation = True;
 				break;
@@ -620,7 +620,7 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 			/* The newly auto-attracting dock is a drawer: disable any clip and 
 			 * previously attracting drawer */
 			int i;
-			for (i = 0; i < scr->workspace_count; i++)
+			for (i = 0; i < w_global.workspace.count; i++)
 				scr->workspaces[ i ]->clip->attract_icons = False;
 				/* dock menu will be updated later, when opened */
 
@@ -942,7 +942,7 @@ static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 	if (!menu || !icon)
 		return;
 
-	for (i = 0; i < scr->workspace_count; i++) {
+	for (i = 0; i < w_global.workspace.count; i++) {
 		if (i < menu->entry_no) {
 			if (strcmp(menu->entries[i]->text, scr->workspaces[i]->name) != 0) {
 				wfree(menu->entries[i]->text);
@@ -2578,7 +2578,7 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 		int start, stop, k;
 
 		start = icon->omnipresent ? 0 : scr->current_workspace;
-		stop = icon->omnipresent ? scr->workspace_count : start + 1;
+		stop = icon->omnipresent ? w_global.workspace.count : start + 1;
 
 		aicon = NULL;
 		for (k = start; k < stop; k++) {
@@ -3897,7 +3897,7 @@ static void handleClipChangeWorkspace(WScreen *scr, XEvent *event)
 	new_ws = wPreferences.ws_advance || (event->xbutton.state & ControlMask);
 
 	if (direction == CLIP_FORWARD) {
-		if (scr->current_workspace < scr->workspace_count - 1)
+		if (scr->current_workspace < w_global.workspace.count - 1)
 			wWorkspaceChange(scr, scr->current_workspace + 1);
 		else if (new_ws && scr->current_workspace < MAX_WORKSPACES - 1)
 			wWorkspaceChange(scr, scr->current_workspace + 1);
@@ -3907,7 +3907,7 @@ static void handleClipChangeWorkspace(WScreen *scr, XEvent *event)
 		if (scr->current_workspace > 0)
 			wWorkspaceChange(scr, scr->current_workspace - 1);
 		else if (scr->current_workspace == 0 && wPreferences.ws_cycle)
-			wWorkspaceChange(scr, scr->workspace_count - 1);
+			wWorkspaceChange(scr, w_global.workspace.count - 1);
 	}
 
 	wClipIconPaint(scr->clip_icon);
@@ -4150,7 +4150,7 @@ static Bool iconCanBeOmnipresent(WAppIcon *aicon)
 	WAppIcon *btn;
 	int i, j;
 
-	for (i = 0; i < scr->workspace_count; i++) {
+	for (i = 0; i < w_global.workspace.count; i++) {
 		clip = scr->workspaces[i]->clip;
 
 		if (clip == aicon->dock)

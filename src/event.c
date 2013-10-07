@@ -1567,7 +1567,7 @@ static void handleKeyPress(XEvent * event)
 	case WKBD_WORKSPACE1 ... WKBD_WORKSPACE10:
 		widx = command - WKBD_WORKSPACE1;
 		i = (scr->current_workspace / 10) * 10 + widx;
-		if (wPreferences.ws_advance || i < scr->workspace_count)
+		if (wPreferences.ws_advance || i < w_global.workspace.count)
 			wWorkspaceChange(scr, i);
 		break;
 
@@ -1584,7 +1584,7 @@ static void handleKeyPress(XEvent * event)
 	case WKBD_MOVE_WORKSPACE1 ... WKBD_MOVE_WORKSPACE10:
 		widx = command - WKBD_MOVE_WORKSPACE1;
 		i = (scr->current_workspace / 10) * 10 + widx;
-		if (wwin && (wPreferences.ws_advance || i < scr->workspace_count))
+		if (wwin && (wPreferences.ws_advance || i < w_global.workspace.count))
 			wWindowChangeWorkspace(wwin, i);
 		break;
 
@@ -1611,7 +1611,7 @@ static void handleKeyPress(XEvent * event)
 				column = scr->current_workspace % 10;
 
 				if (command == WKBD_MOVE_NEXTWSLAYER) {
-					if ((row + 1) * 10 < scr->workspace_count)
+					if ((row + 1) * 10 < w_global.workspace.count)
 						wWindowChangeWorkspace(wwin, column + (row + 1) * 10);
 				} else {
 					if (row > 0)
@@ -1731,7 +1731,7 @@ static void handleKeyPress(XEvent * event)
 			column = scr->current_workspace % 10;
 
 			if (command == WKBD_NEXTWSLAYER) {
-				if ((row + 1) * 10 < scr->workspace_count)
+				if ((row + 1) * 10 < w_global.workspace.count)
 					wWorkspaceChange(scr, column + (row + 1) * 10);
 			} else {
 				if (row > 0)

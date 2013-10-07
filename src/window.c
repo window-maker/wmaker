@@ -379,7 +379,7 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 		}
 
 		if (tmp_workspace >= 0)
-			*workspace = tmp_workspace % scr->workspace_count;
+			*workspace = tmp_workspace % w_global.workspace.count;
 	}
 
 	/*
@@ -841,9 +841,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		if (!IS_OMNIPRESENT(wwin)) {
 			int w = wDefaultGetStartWorkspace(scr, wwin->wm_instance,
 							  wwin->wm_class);
-			if (w < 0 || w >= scr->workspace_count) {
+			if (w < 0 || w >= w_global.workspace.count) {
 				workspace = win_state->state->workspace;
-				if (workspace >= scr->workspace_count)
+				if (workspace >= w_global.workspace.count)
 					workspace = scr->current_workspace;
 			} else {
 				workspace = w;
@@ -912,14 +912,14 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	/* set workspace on which the window starts */
 	if (workspace >= 0) {
-		if (workspace > scr->workspace_count - 1)
-			workspace = workspace % scr->workspace_count;
+		if (workspace > w_global.workspace.count - 1)
+			workspace = workspace % w_global.workspace.count;
 	} else {
 		int w;
 
 		w = wDefaultGetStartWorkspace(scr, wwin->wm_instance, wwin->wm_class);
 
-		if (w >= 0 && w < scr->workspace_count && !(IS_OMNIPRESENT(wwin))) {
+		if (w >= 0 && w < w_global.workspace.count && !(IS_OMNIPRESENT(wwin))) {
 			workspace = w;
 		} else {
 			if (wPreferences.open_transients_with_parent && transientOwner)
@@ -1866,7 +1866,7 @@ void wWindowChangeWorkspace(WWindow *wwin, int workspace)
 	WApplication *wapp;
 	int unmap = 0;
 
-	if (workspace >= scr->workspace_count || workspace < 0 || workspace == wwin->frame->workspace)
+	if (workspace >= w_global.workspace.count || workspace < 0 || workspace == wwin->frame->workspace)
 		return;
 
 	if (workspace != scr->current_workspace) {
@@ -1919,17 +1919,17 @@ void wWindowChangeWorkspaceRelative(WWindow *wwin, int amount)
 		if (w >= 0) {
 			wWindowChangeWorkspace(wwin, w);
 		} else if (wPreferences.ws_cycle) {
-			wWindowChangeWorkspace(wwin, scr->workspace_count + w);
+			wWindowChangeWorkspace(wwin, w_global.workspace.count + w);
 		}
 	} else if (amount > 0) {
-		if (w < scr->workspace_count) {
+		if (w < w_global.workspace.count) {
 			wWindowChangeWorkspace(wwin, w);
 		} else if (wPreferences.ws_advance) {
 			int workspace = WMIN(w, MAX_WORKSPACES - 1);
 			wWorkspaceMake(scr, workspace);
 			wWindowChangeWorkspace(wwin, workspace);
 		} else if (wPreferences.ws_cycle) {
-			wWindowChangeWorkspace(wwin, w % scr->workspace_count);
+			wWindowChangeWorkspace(wwin, w % w_global.workspace.count);
 		}
 	}
 }

@@ -315,16 +315,16 @@ void wNETWMUpdateDesktop(WScreen *scr)
 	long *views, sizes[2];
 	int count, i;
 
-	if (scr->workspace_count == 0)
+	if (w_global.workspace.count == 0)
 		return;
 
-	count = scr->workspace_count * 2;
+	count = w_global.workspace.count * 2;
 	views = wmalloc(sizeof(long) * count);
 	/*memset(views, 0, sizeof(long) * count); */
 	sizes[0] = scr->scr_width;
 	sizes[1] = scr->scr_height;
 
-	for (i = 0; i < scr->workspace_count; i++) {
+	for (i = 0; i < w_global.workspace.count; i++) {
 		views[2 * i + 0] = 0;
 		views[2 * i + 1] = 0;
 	}
@@ -736,7 +736,7 @@ static void updateWorkspaceCount(WScreen *scr)
 {				/* changeable */
 	long count;
 
-	count = scr->workspace_count;
+	count = w_global.workspace.count;
 
 	XChangeProperty(dpy, scr->root_win, net_number_of_desktops, XA_CARDINAL,
 			32, PropModeReplace, (unsigned char *)&count, 1);
@@ -759,7 +759,7 @@ static void updateWorkspaceNames(WScreen *scr)
 
 	pos = buf;
 	len = 0;
-	for (i = 0; i < scr->workspace_count; i++) {
+	for (i = 0; i < w_global.workspace.count; i++) {
 		curr_size = strlen(scr->workspaces[i]->name);
 		strcpy(pos, scr->workspaces[i]->name);
 		pos += (curr_size + 1);
@@ -1352,13 +1352,13 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 			long value;
 
 			value = event->data.l[0];
-			if (value > scr->workspace_count) {
-				wWorkspaceMake(scr, value - scr->workspace_count);
-			} else if (value < scr->workspace_count) {
+			if (value > w_global.workspace.count) {
+				wWorkspaceMake(scr, value - w_global.workspace.count);
+			} else if (value < w_global.workspace.count) {
 				int i;
 				Bool rebuild = False;
 
-				for (i = scr->workspace_count - 1; i >= value; i--) {
+				for (i = w_global.workspace.count - 1; i >= value; i--) {
 					if (!wWorkspaceDelete(scr, i)) {
 						rebuild = True;
 						break;

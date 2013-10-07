@@ -719,7 +719,7 @@ void StartUp(Bool defaultScreenOnly)
 			/* auto-launch apps in clip */
 			if (!wPreferences.flags.noclip) {
 				int i;
-				for (i = 0; i < wScreen[j]->workspace_count; i++) {
+				for (i = 0; i < w_global.workspace.count; i++) {
 					if (wScreen[j]->workspaces[i]->clip) {
 						wScreen[j]->last_dock = wScreen[j]->workspaces[i]->clip;
 						wDockDoAutoLaunch(wScreen[j]->workspaces[i]->clip, i);

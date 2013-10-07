@@ -861,7 +861,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 
 			if (omnipresent && !showed_all_clips) {
 				int i;
-				for (i = 0; i < scr->workspace_count; i++) {
+				for (i = 0; i < w_global.workspace.count; i++) {
 					if (i == scr->current_workspace)
 						continue;
 
@@ -1067,7 +1067,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 			}
 			if (showed_all_clips) {
 				int i;
-				for (i = 0; i < scr->workspace_count; i++) {
+				for (i = 0; i < w_global.workspace.count; i++) {
 					if (i == scr->current_workspace)
 						continue;
 
@@ -1150,7 +1150,7 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 	/* check clips */
 	if (!wapp->app_icon) {
 		int i;
-		for (i = 0; i < scr->workspace_count; i++) {
+		for (i = 0; i < w_global.workspace.count; i++) {
 			WDock *dock = scr->workspaces[i]->clip;
 
 			if (dock)

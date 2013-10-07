@@ -237,10 +237,10 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 
 			/* Try the clips */
 			if (name == NULL) {
-				for (i = 0; i < scr->workspace_count; i++)
+				for (i = 0; i < w_global.workspace.count; i++)
 					if (scr->workspaces[i]->clip == wapp->app_icon->dock)
 						break;
-				if (i < scr->workspace_count)
+				if (i < w_global.workspace.count)
 					name = scr->workspaces[i]->name;
 			}
 			/* Try the drawers */
@@ -382,7 +382,7 @@ static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
 		tmp = WMGetFromPLString(value);
 		if (sscanf(tmp, "%i", &state->workspace) != 1) {
 			state->workspace = -1;
-			for (i = 0; i < scr->workspace_count; i++) {
+			for (i = 0; i < w_global.workspace.count; i++) {
 				if (strcmp(scr->workspaces[i]->name, tmp) == 0) {
 					state->workspace = i;
 					break;
@@ -471,7 +471,7 @@ void wSessionRestoreState(WScreen *scr)
 
 				/* Try the clips */
 				if (dock == NULL) {
-					for (j = 0; j < scr->workspace_count; j++) {
+					for (j = 0; j < w_global.workspace.count; j++) {
 						if (strcmp(scr->workspaces[j]->name, tmp) == 0) {
 							dock = scr->workspaces[j]->clip;
 							break;
@@ -493,7 +493,7 @@ void wSessionRestoreState(WScreen *scr)
 			} else {
 				if (n == 0) {
 					dock = scr->dock;
-				} else if (n > 0 && n <= scr->workspace_count) {
+				} else if (n > 0 && n <= w_global.workspace.count) {
 					dock = scr->workspaces[n - 1]->clip;
 				}
 			}
@@ -556,6 +556,6 @@ void wSessionRestoreLastWorkspace(WScreen * scr)
 	/* Get the workspace number for the workspace name */
 	w = wGetWorkspaceNumber(scr, value);
 
-	if (w != scr->current_workspace && w < scr->workspace_count)
+	if (w != scr->current_workspace && w < w_global.workspace.count)
 		wWorkspaceChange(scr, w);
 }

@@ -842,13 +842,13 @@ static Bool checkWorkspaceChange(WWindow * wwin, MoveData * data, Bool opaqueMov
 			changed = True;
 			data->rubCount = 0;
 		} else if (scr->current_workspace == 0 && wPreferences.ws_cycle) {
-			crossWorkspace(scr, wwin, opaqueMove, scr->workspace_count - 1, True);
+			crossWorkspace(scr, wwin, opaqueMove, w_global.workspace.count - 1, True);
 			changed = True;
 			data->rubCount = 0;
 		}
 	} else if (data->mouseX >= scr->scr_width - 2) {
-		if (scr->current_workspace == scr->workspace_count - 1) {
-			if (wPreferences.ws_cycle || scr->workspace_count == MAX_WORKSPACES) {
+		if (scr->current_workspace == w_global.workspace.count - 1) {
+			if (wPreferences.ws_cycle || w_global.workspace.count == MAX_WORKSPACES) {
 				crossWorkspace(scr, wwin, opaqueMove, 0, False);
 				changed = True;
 				data->rubCount = 0;
@@ -876,7 +876,7 @@ static Bool checkWorkspaceChange(WWindow * wwin, MoveData * data, Bool opaqueMov
 				changed = True;
 				data->rubCount = 0;
 			}
-		} else if (scr->current_workspace < scr->workspace_count) {
+		} else if (scr->current_workspace < w_global.workspace.count) {
 			/* go to next workspace */
 			crossWorkspace(scr, wwin, opaqueMove, scr->current_workspace + 1, False);
 			changed = True;
@@ -1388,13 +1388,13 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 				if (wPreferences.ws_cycle) {
 					if (src_x + off_x + ww < 20) {
 						if (!scr->current_workspace)
-							wWorkspaceChange(scr, scr->workspace_count - 1);
+							wWorkspaceChange(scr, w_global.workspace.count - 1);
 						else
 							wWorkspaceChange(scr, scr->current_workspace - 1);
 
 						off_x += scr_width;
 					} else if (src_x + off_x + 20 > scr_width) {
-						if (scr->current_workspace == scr->workspace_count - 1)
+						if (scr->current_workspace == w_global.workspace.count - 1)
 							wWorkspaceChange(scr, 0);
 						else
 							wWorkspaceChange(scr, scr->current_workspace + 1);

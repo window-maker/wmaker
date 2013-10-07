@@ -88,8 +88,8 @@ int wWorkspaceNew(WScreen *scr)
 	WWorkspace *wspace, **list;
 	int i;
 
-	if (scr->workspace_count < MAX_WORKSPACES) {
-		scr->workspace_count++;
+	if (w_global.workspace.count < MAX_WORKSPACES) {
+		w_global.workspace.count++;
 
 		wspace = wmalloc(sizeof(WWorkspace));
 		wspace->name = NULL;
@@ -97,15 +97,15 @@ int wWorkspaceNew(WScreen *scr)
 
 		if (!wspace->name) {
 			wspace->name = wmalloc(strlen(_("Workspace %i")) + 8);
-			sprintf(wspace->name, _("Workspace %i"), scr->workspace_count);
+			sprintf(wspace->name, _("Workspace %i"), w_global.workspace.count);
 		}
 
 		if (!wPreferences.flags.noclip)
 			wspace->clip = wDockCreate(scr, WM_CLIP, NULL);
 
-		list = wmalloc(sizeof(WWorkspace *) * scr->workspace_count);
+		list = wmalloc(sizeof(WWorkspace *) * w_global.workspace.count);
 
-		for (i = 0; i < scr->workspace_count - 1; i++)
+		for (i = 0; i < w_global.workspace.count - 1; i++)
 			list[i] = scr->workspaces[i];
 
 		list[i] = wspace;
@@ -117,10 +117,10 @@ int wWorkspaceNew(WScreen *scr)
 		wWorkspaceMenuUpdate(scr, scr->workspace_menu);
 		wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 		wNETWMUpdateDesktop(scr);
-		WMPostNotificationName(WMNWorkspaceCreated, scr, (void *)(uintptr_t) (scr->workspace_count - 1));
+		WMPostNotificationName(WMNWorkspaceCreated, scr, (void *)(uintptr_t) (w_global.workspace.count - 1));
 		XFlush(dpy);
 
-		return scr->workspace_count - 1;
+		return w_global.workspace.count - 1;
 	}
 
 	return -1;
@@ -148,9 +148,9 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 		scr->workspaces[workspace]->clip = NULL;
 	}
 
-	list = wmalloc(sizeof(WWorkspace *) * (scr->workspace_count - 1));
+	list = wmalloc(sizeof(WWorkspace *) * (w_global.workspace.count - 1));
 	j = 0;
-	for (i = 0; i < scr->workspace_count; i++) {
+	for (i = 0; i < w_global.workspace.count; i++) {
 		if (i != workspace) {
 			list[j++] = scr->workspaces[i];
 		} else {
@@ -162,7 +162,7 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 	wfree(scr->workspaces);
 	scr->workspaces = list;
 
-	scr->workspace_count--;
+	w_global.workspace.count--;
 
 	/* update menu */
 	wWorkspaceMenuUpdate(scr, scr->workspace_menu);
@@ -174,7 +174,7 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 		WMenu *menu = scr->workspace_submenu;
 
 		i = menu->entry_no;
-		while (i > scr->workspace_count)
+		while (i > w_global.workspace.count)
 			wMenuRemoveItem(menu, --i);
 		wMenuRealize(menu);
 	}
@@ -183,16 +183,16 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 		WMenu *menu = scr->clip_submenu;
 
 		i = menu->entry_no;
-		while (i > scr->workspace_count)
+		while (i > w_global.workspace.count)
 			wMenuRemoveItem(menu, --i);
 		wMenuRealize(menu);
 	}
 	wNETWMUpdateDesktop(scr);
-	WMPostNotificationName(WMNWorkspaceDestroyed, scr, (void *)(uintptr_t) (scr->workspace_count - 1));
+	WMPostNotificationName(WMNWorkspaceDestroyed, scr, (void *)(uintptr_t) (w_global.workspace.count - 1));
 
-	if (scr->current_workspace >= scr->workspace_count)
-		wWorkspaceChange(scr, scr->workspace_count - 1);
-	if (scr->last_workspace >= scr->workspace_count)
+	if (scr->current_workspace >= w_global.workspace.count)
+		wWorkspaceChange(scr, w_global.workspace.count - 1);
+	if (scr->last_workspace >= w_global.workspace.count)
 		scr->last_workspace = 0;
 
 	return True;
@@ -259,7 +259,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	int xx, yy;
 #endif
 
-	if (wPreferences.workspace_name_display_position == WD_NONE || scr->workspace_count < 2)
+	if (wPreferences.workspace_name_display_position == WD_NONE || w_global.workspace.count < 2)
 		return;
 
 	if (scr->workspace_name_timer) {
@@ -450,15 +450,15 @@ void wWorkspaceRelativeChange(WScreen * scr, int amount)
 		if (w >= 0) {
 			wWorkspaceChange(scr, w);
 		} else if (wPreferences.ws_cycle) {
-			wWorkspaceChange(scr, scr->workspace_count + w);
+			wWorkspaceChange(scr, w_global.workspace.count + w);
 		}
 	} else if (amount > 0) {
-		if (w < scr->workspace_count) {
+		if (w < w_global.workspace.count) {
 			wWorkspaceChange(scr, w);
 		} else if (wPreferences.ws_advance) {
 			wWorkspaceChange(scr, WMIN(w, MAX_WORKSPACES - 1));
 		} else if (wPreferences.ws_cycle) {
-			wWorkspaceChange(scr, w % scr->workspace_count);
+			wWorkspaceChange(scr, w % w_global.workspace.count);
 		}
 	}
 }
@@ -474,8 +474,8 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	SendHelperMessage(scr, 'C', workspace + 1, NULL);
 
-	if (workspace > scr->workspace_count - 1)
-		wWorkspaceMake(scr, workspace - scr->workspace_count + 1);
+	if (workspace > w_global.workspace.count - 1)
+		wWorkspaceMake(scr, workspace - w_global.workspace.count + 1);
 
 	wClipUpdateForWorkspaceChange(scr, workspace);
 
@@ -647,7 +647,7 @@ static void lastWSCommand(WMenu *menu, WMenuEntry *entry)
 
 static void deleteWSCommand(WMenu *menu, WMenuEntry *entry)
 {
-	wWorkspaceDelete(menu->frame->screen_ptr, menu->frame->screen_ptr->workspace_count - 1);
+	wWorkspaceDelete(menu->frame->screen_ptr, w_global.workspace.count - 1);
 }
 
 static void newWSCommand(WMenu *menu, WMenuEntry *foo)
@@ -666,7 +666,7 @@ void wWorkspaceRename(WScreen *scr, int workspace, const char *name)
 	char buf[MAX_WORKSPACENAME_WIDTH + 1];
 	char *tmp;
 
-	if (workspace >= scr->workspace_count)
+	if (workspace >= w_global.workspace.count)
 		return;
 
 	/* trim white spaces */
@@ -748,9 +748,9 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 	if (!menu)
 		return;
 
-	if (menu->entry_no < scr->workspace_count + MC_WORKSPACE1) {
+	if (menu->entry_no < w_global.workspace.count + MC_WORKSPACE1) {
 		/* new workspace(s) added */
-		i = scr->workspace_count - (menu->entry_no - MC_WORKSPACE1);
+		i = w_global.workspace.count - (menu->entry_no - MC_WORKSPACE1);
 		ws = menu->entry_no - MC_WORKSPACE1;
 		while (i > 0) {
 			wstrlcpy(title, scr->workspaces[ws]->name, MAX_WORKSPACENAME_WIDTH);
@@ -762,13 +762,13 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 			i--;
 			ws++;
 		}
-	} else if (menu->entry_no > scr->workspace_count + MC_WORKSPACE1) {
+	} else if (menu->entry_no > w_global.workspace.count + MC_WORKSPACE1) {
 		/* removed workspace(s) */
-		for (i = menu->entry_no - 1; i >= scr->workspace_count + MC_WORKSPACE1; i--)
+		for (i = menu->entry_no - 1; i >= w_global.workspace.count + MC_WORKSPACE1; i--)
 			wMenuRemoveItem(menu, i);
 	}
 
-	for (i = 0; i < scr->workspace_count; i++) {
+	for (i = 0; i < w_global.workspace.count; i++) {
 		/* workspace shortcut labels */
 		if (i / 10 == scr->current_workspace / 10)
 			menu->entries[i + MC_WORKSPACE1]->rtext = GetShortcutKey(wKeyBindings[WKBD_WORKSPACE1 + (i % 10)]);
@@ -781,13 +781,13 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 	wMenuRealize(menu);
 
 	/* don't let user destroy current workspace */
-	if (scr->current_workspace == scr->workspace_count - 1)
+	if (scr->current_workspace == w_global.workspace.count - 1)
 		wMenuSetEnabled(menu, MC_DESTROY_LAST, False);
 	else
 		wMenuSetEnabled(menu, MC_DESTROY_LAST, True);
 
 	/* back to last workspace */
-	if (scr->workspace_count && scr->last_workspace != scr->current_workspace)
+	if (w_global.workspace.count && scr->last_workspace != scr->current_workspace)
 		wMenuSetEnabled(menu, MC_LAST_USED, True);
 	else
 		wMenuSetEnabled(menu, MC_LAST_USED, False);
@@ -809,7 +809,7 @@ void wWorkspaceSaveState(WScreen * scr, WMPropList * old_state)
 
 	old_wks_state = WMGetFromPLDictionary(old_state, dWorkspaces);
 	parr = WMCreatePLArray(NULL);
-	for (i = 0; i < scr->workspace_count; i++) {
+	for (i = 0; i < w_global.workspace.count; i++) {
 		pstr = WMCreatePLString(scr->workspaces[i]->name);
 		wks_state = WMCreatePLDictionary(dName, pstr, NULL);
 		WMReleasePropList(pstr);
@@ -853,7 +853,7 @@ void wWorkspaceRestoreState(WScreen *scr)
 		else
 			pstr = wks_state;
 
-		if (i >= scr->workspace_count)
+		if (i >= w_global.workspace.count)
 			wWorkspaceNew(scr);
 
 		if (scr->workspace_menu) {
@@ -921,7 +921,7 @@ int wGetWorkspaceNumber(WScreen *scr, const char *value)
 
 	if (sscanf(value, "%i", &w) != 1) {
 		w = -1;
-		for (i = 0; i < scr->workspace_count; i++) {
+		for (i = 0; i < w_global.workspace.count; i++) {
 			if (strcmp(scr->workspaces[i]->name, value) == 0) {
 				w = i;
 				break;

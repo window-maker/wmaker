@@ -221,7 +221,7 @@ static void updateWorkspaceMenu(WMenu * menu)
 	WMenuEntry *entry;
 	int i;
 
-	for (i = 0; i < scr->workspace_count; i++) {
+	for (i = 0; i < w_global.workspace.count; i++) {
 		if (i < menu->entry_no) {
 
 			entry = menu->entries[i];

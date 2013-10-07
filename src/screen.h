@@ -121,8 +121,6 @@ typedef struct _WScreen {
 
     int window_count;		       /* number of windows in window_list */
 
-    int workspace_count;	       /* number of workspaces */
-
     struct WWorkspace **workspaces;    /* workspace array */
 
     int current_workspace;	       /* current workspace number */
