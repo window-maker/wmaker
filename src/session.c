@@ -280,9 +280,9 @@ void wSessionSaveState(WScreen * scr)
 
 	make_keys();
 
-	if (!scr->session_state) {
-		scr->session_state = WMCreatePLDictionary(NULL, NULL);
-		if (!scr->session_state)
+	if (!w_global.session_state) {
+		w_global.session_state = WMCreatePLDictionary(NULL, NULL);
+		if (!w_global.session_state)
 			return;
 	}
 
@@ -312,12 +312,13 @@ void wSessionSaveState(WScreen * scr)
 		}
 		wwin = wwin->prev;
 	}
-	WMRemoveFromPLDictionary(scr->session_state, sApplications);
-	WMPutInPLDictionary(scr->session_state, sApplications, list);
+
+	WMRemoveFromPLDictionary(w_global.session_state, sApplications);
+	WMPutInPLDictionary(w_global.session_state, sApplications, list);
 	WMReleasePropList(list);
 
 	wks = WMCreatePLString(w_global.workspace.array[w_global.workspace.current]->name);
-	WMPutInPLDictionary(scr->session_state, sWorkspace, wks);
+	WMPutInPLDictionary(w_global.session_state, sWorkspace, wks);
 	WMReleasePropList(wks);
 
 	WMFreeArray(wapp_list);
@@ -327,11 +328,11 @@ void wSessionClearState(WScreen * scr)
 {
 	make_keys();
 
-	if (!scr->session_state)
+	if (!w_global.session_state)
 		return;
 
-	WMRemoveFromPLDictionary(scr->session_state, sApplications);
-	WMRemoveFromPLDictionary(scr->session_state, sWorkspace);
+	WMRemoveFromPLDictionary(w_global.session_state, sApplications);
+	WMRemoveFromPLDictionary(w_global.session_state, sWorkspace);
 }
 
 static pid_t execCommand(WScreen *scr, char *command)
@@ -431,12 +432,12 @@ void wSessionRestoreState(WScreen *scr)
 
 	make_keys();
 
-	if (!scr->session_state)
+	if (!w_global.session_state)
 		return;
 
 	WMPLSetCaseSensitive(True);
 
-	apps = WMGetFromPLDictionary(scr->session_state, sApplications);
+	apps = WMGetFromPLDictionary(w_global.session_state, sApplications);
 	if (!apps)
 		return;
 
@@ -536,12 +537,12 @@ void wSessionRestoreLastWorkspace(WScreen * scr)
 
 	make_keys();
 
-	if (!scr->session_state)
+	if (!w_global.session_state)
 		return;
 
 	WMPLSetCaseSensitive(True);
 
-	wks = WMGetFromPLDictionary(scr->session_state, sWorkspace);
+	wks = WMGetFromPLDictionary(w_global.session_state, sWorkspace);
 	if (!wks || !WMIsPLString(wks))
 		return;
 

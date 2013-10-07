@@ -1575,8 +1575,7 @@ void wDockSaveState(WScreen *scr, WMPropList *old_state)
 		WMReleasePropList(keys);
 	}
 
-	WMPutInPLDictionary(scr->session_state, dDock, dock_state);
-
+	WMPutInPLDictionary(w_global.session_state, dDock, dock_state);
 	WMReleasePropList(dock_state);
 }
 
@@ -1586,8 +1585,7 @@ void wClipSaveState(WScreen *scr)
 
 	clip_state = make_icon_state(w_global.clip.icon);
 
-	WMPutInPLDictionary(scr->session_state, dClip, clip_state);
-
+	WMPutInPLDictionary(w_global.session_state, dClip, clip_state);
 	WMReleasePropList(clip_state);
 }
 
@@ -4896,7 +4894,7 @@ void wDrawersSaveState(WScreen *scr)
 		WMAddToPLArray(all_drawers, drawer_state);
 		WMReleasePropList(drawer_state);
 	}
-	WMPutInPLDictionary(scr->session_state, dDrawers, all_drawers);
+	WMPutInPLDictionary(w_global.session_state, dDrawers, all_drawers);
 	WMReleasePropList(all_drawers);
 }
 
@@ -4908,10 +4906,10 @@ void wDrawersRestoreState(WScreen *scr)
 
 	make_keys();
 
-	if (scr->session_state == NULL)
+	if (w_global.session_state == NULL)
 		return;
 
-	all_drawers = WMGetFromPLDictionary(scr->session_state, dDrawers);
+	all_drawers = WMGetFromPLDictionary(w_global.session_state, dDrawers);
 	if (!all_drawers)
 		return;
 

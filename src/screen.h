@@ -240,8 +240,6 @@ typedef struct _WScreen {
     /* state and other informations */
     short cascade_index;	       /* for cascade window placement */
 
-    WMPropList *session_state;
-
     /* for double-click detection */
     Time last_click_time;
     Window last_click_window;

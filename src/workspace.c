@@ -827,7 +827,7 @@ void wWorkspaceSaveState(WScreen * scr, WMPropList * old_state)
 		WMAddToPLArray(parr, wks_state);
 		WMReleasePropList(wks_state);
 	}
-	WMPutInPLDictionary(scr->session_state, dWorkspaces, parr);
+	WMPutInPLDictionary(w_global.session_state, dWorkspaces, parr);
 	WMReleasePropList(parr);
 }
 
@@ -838,10 +838,10 @@ void wWorkspaceRestoreState(WScreen *scr)
 
 	make_keys();
 
-	if (scr->session_state == NULL)
+	if (w_global.session_state == NULL)
 		return;
 
-	parr = WMGetFromPLDictionary(scr->session_state, dWorkspaces);
+	parr = WMGetFromPLDictionary(w_global.session_state, dWorkspaces);
 
 	if (!parr)
 		return;

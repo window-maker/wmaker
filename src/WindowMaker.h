@@ -560,6 +560,9 @@ extern struct wmaker_global_variables {
 		XContext stack;
 	} context;
 
+	/* Session related */
+	WMPropList *session_state;
+
 	/* Application related */
 	struct WAppIcon *app_icon_list;	/* list of all aplication icons */
 

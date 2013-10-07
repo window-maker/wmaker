@@ -2273,7 +2273,7 @@ void wMenuSaveState(WScreen * scr)
 
 	if (save_menus) {
 		key = WMCreatePLString("Menus");
-		WMPutInPLDictionary(scr->session_state, key, menus);
+		WMPutInPLDictionary(w_global.session_state, key, menus);
 		WMReleasePropList(key);
 	}
 	WMReleasePropList(menus);
@@ -2476,12 +2476,11 @@ void wMenuRestoreState(WScreen * scr)
 {
 	WMPropList *menus, *menu, *key, *skey;
 
-	if (!scr->session_state) {
+	if (!w_global.session_state)
 		return;
-	}
 
 	key = WMCreatePLString("Menus");
-	menus = WMGetFromPLDictionary(scr->session_state, key);
+	menus = WMGetFromPLDictionary(w_global.session_state, key);
 	WMReleasePropList(key);
 
 	if (!menus)
