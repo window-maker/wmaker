@@ -661,7 +661,7 @@ static void colectIconsCallback(WMenu *menu, WMenuEntry *entry)
 	assert(entry->clientdata != NULL);
 	clip = clickedIcon->dock;
 
-	aicon = clip->screen_ptr->app_icon_list;
+	aicon = w_global.app_icon_list;
 
 	while (aicon) {
 		if (!aicon->docked && wDockFindFreeSlot(clip, &x, &y)) {

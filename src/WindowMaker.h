@@ -558,6 +558,9 @@ extern struct wmaker_global_variables {
 		XContext stack;
 	} context;
 
+	/* Application related */
+	struct WAppIcon *app_icon_list;	/* list of all aplication icons */
+
 } w_global;
 
 extern unsigned int ValidModMask;

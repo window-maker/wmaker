@@ -1766,7 +1766,7 @@ void wArrangeIcons(WScreen *scr, Bool arrangeAll)
     : vars[head].yo + vars[head].ys*(vars[head].si*isize))
 
 	/* arrange application icons */
-	aicon = scr->app_icon_list;
+	aicon = w_global.app_icon_list;
 	/* reverse them to avoid unnecessarily sliding of icons */
 	while (aicon && aicon->next)
 		aicon = aicon->next;

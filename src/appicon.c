@@ -70,8 +70,8 @@ static void iconDblClick(WObjDescriptor * desc, XEvent * event);
 static void iconExpose(WObjDescriptor * desc, XEvent * event);
 static void wApplicationSaveIconPathFor(const char *iconPath, const char *wm_instance, const char *wm_class);
 static WAppIcon *wAppIconCreate(WWindow * leader_win);
-static void add_to_appicon_list(WScreen *scr, WAppIcon *appicon);
-static void remove_from_appicon_list(WScreen *scr, WAppIcon *appicon);
+static void add_to_appicon_list(WAppIcon *appicon);
+static void remove_from_appicon_list(WAppIcon *appicon);
 static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_window);
 
 /* This function is used if the application is a .app. It checks if it has an icon in it
@@ -118,7 +118,7 @@ WAppIcon *wAppIconCreateForDock(WScreen *scr, const char *command, const char *w
 	aicon->yindex = -1;
 	aicon->xindex = -1;
 
-	add_to_appicon_list(scr, aicon);
+	add_to_appicon_list(aicon);
 
 	if (command)
 		aicon->command = wstrdup(command);
@@ -191,7 +191,7 @@ void unpaint_app_icon(WApplication *wapp)
 	/* We want to avoid having it on the list  because otherwise
 	 * there will be a hole when the icons are arranged with
 	 * wArrangeIcons() */
-	remove_from_appicon_list(scr, aicon);
+	remove_from_appicon_list(aicon);
 
 	if (wPreferences.auto_arrange_icons && !aicon->attracted)
 		wArrangeIcons(scr, True);
@@ -242,7 +242,7 @@ void paint_app_icon(WApplication *wapp)
 	 * having it on the list */
 	if (!WFLAGP(wapp->main_window_desc, no_appicon) &&
 	    wapp->app_icon->next == NULL && wapp->app_icon->prev == NULL)
-		add_to_appicon_list(scr, wapp->app_icon);
+		add_to_appicon_list(wapp->app_icon);
 
 	if (!attracting_dock || !wapp->app_icon->attracted || !attracting_dock->collapsed)
 		XMapWindow(dpy, icon->core->window);
@@ -326,10 +326,8 @@ static WAppIcon *wAppIconCreate(WWindow *leader_win)
 	return aicon;
 }
 
-void wAppIconDestroy(WAppIcon * aicon)
+void wAppIconDestroy(WAppIcon *aicon)
 {
-	WScreen *scr = aicon->icon->core->screen_ptr;
-
 	RemoveFromStackList(aicon->icon->core);
 	wIconDestroy(aicon->icon);
 	if (aicon->command)
@@ -344,7 +342,7 @@ void wAppIconDestroy(WAppIcon * aicon)
 	if (aicon->wm_class)
 		wfree(aicon->wm_class);
 
-	remove_from_appicon_list(scr, aicon);
+	remove_from_appicon_list(aicon);
 
 	aicon->destroyed = 1;
 	wrelease(aicon);
@@ -1190,23 +1188,23 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 }
 
 /* Add the appicon to the appiconlist */
-static void add_to_appicon_list(WScreen *scr, WAppIcon *appicon)
+static void add_to_appicon_list(WAppIcon *appicon)
 {
 	appicon->prev = NULL;
-	appicon->next = scr->app_icon_list;
-	if (scr->app_icon_list)
-		scr->app_icon_list->prev = appicon;
+	appicon->next = w_global.app_icon_list;
+	if (w_global.app_icon_list)
+		w_global.app_icon_list->prev = appicon;
 
-	scr->app_icon_list = appicon;
+	w_global.app_icon_list = appicon;
 }
 
 /* Remove the appicon from the appiconlist */
-static void remove_from_appicon_list(WScreen *scr, WAppIcon *appicon)
+static void remove_from_appicon_list(WAppIcon *appicon)
 {
-	if (appicon == scr->app_icon_list) {
+	if (appicon == w_global.app_icon_list) {
 		if (appicon->next)
 			appicon->next->prev = NULL;
-		scr->app_icon_list = appicon->next;
+		w_global.app_icon_list = appicon->next;
 	} else {
 		if (appicon->next)
 			appicon->next->prev = appicon->prev;

@@ -1216,7 +1216,7 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 
 void wDefaultUpdateIcons(WScreen *scr)
 {
-	WAppIcon *aicon = scr->app_icon_list;
+	WAppIcon *aicon = w_global.app_icon_list;
 	WDrawerChain *dc;
 	WWindow *wwin = scr->focused_window;
 
