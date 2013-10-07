@@ -829,7 +829,7 @@ void wScreenRestoreState(WScreen * scr)
 
 	if (!wPreferences.flags.noclip) {
 		state = WMGetFromPLDictionary(scr->session_state, dClip);
-		scr->clip_icon = wClipRestoreState(scr, state);
+		w_global.clip.icon = wClipRestoreState(scr, state);
 	}
 	
 	if (!wPreferences.flags.nodrawer)
