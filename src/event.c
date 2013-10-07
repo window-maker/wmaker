@@ -1741,7 +1741,7 @@ static void handleKeyPress(XEvent * event)
 		break;
 	case WKBD_CLIPRAISELOWER:
 		if (!wPreferences.flags.noclip)
-			wDockRaiseLower(scr->workspaces[w_global.workspace.current]->clip);
+			wDockRaiseLower(w_global.workspace.array[w_global.workspace.current]->clip);
 		break;
 	case WKBD_DOCKRAISELOWER:
 		if (!wPreferences.flags.nodock)

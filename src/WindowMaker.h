@@ -483,6 +483,8 @@ extern struct wmaker_global_variables {
 
 	/* Workspace related */
 	struct {
+		struct WWorkspace **array;	/* data for the workspaces */
+
 		int count;		/* number of workspaces */
 		int current;		/* current workspace number */
 		int last_used;		/* last used workspace number */

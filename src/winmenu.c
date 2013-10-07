@@ -216,7 +216,6 @@ static void makeShortcutCommand(WMenu * menu, WMenuEntry * entry)
 
 static void updateWorkspaceMenu(WMenu * menu)
 {
-	WScreen *scr = menu->frame->screen_ptr;
 	char title[MAX_WORKSPACENAME_WIDTH + 1];
 	WMenuEntry *entry;
 	int i;
@@ -225,16 +224,16 @@ static void updateWorkspaceMenu(WMenu * menu)
 		if (i < menu->entry_no) {
 
 			entry = menu->entries[i];
-			if (strcmp(entry->text, scr->workspaces[i]->name) != 0) {
+			if (strcmp(entry->text, w_global.workspace.array[i]->name) != 0) {
 				wfree(entry->text);
-				strncpy(title, scr->workspaces[i]->name, MAX_WORKSPACENAME_WIDTH);
+				strncpy(title, w_global.workspace.array[i]->name, MAX_WORKSPACENAME_WIDTH);
 				title[MAX_WORKSPACENAME_WIDTH] = 0;
 				menu->entries[i]->text = wstrdup(title);
 				menu->entries[i]->rtext = GetShortcutKey(wKeyBindings[WKBD_MOVE_WORKSPACE1 + i]);
 				menu->flags.realized = 0;
 			}
 		} else {
-			strncpy(title, scr->workspaces[i]->name, MAX_WORKSPACENAME_WIDTH);
+			strncpy(title, w_global.workspace.array[i]->name, MAX_WORKSPACENAME_WIDTH);
 			title[MAX_WORKSPACENAME_WIDTH] = 0;
 
 			entry = wMenuAddCallback(menu, title, switchWSCommand, NULL);

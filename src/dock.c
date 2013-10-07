@@ -173,7 +173,7 @@ static void renameCallback(WMenu *menu, WMenuEntry *entry)
 
 	wspace = w_global.workspace.current;
 
-	name = wstrdup(dock->screen_ptr->workspaces[wspace]->name);
+	name = wstrdup(w_global.workspace.array[wspace]->name);
 
 	snprintf(buffer, sizeof(buffer), _("Type the name for workspace %i:"), wspace + 1);
 	if (wInputDialog(dock->screen_ptr, _("Rename Workspace"), buffer, &name))
@@ -595,7 +595,7 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 		/* check if at least one clip already auto attracts icons */
 		int i, ask_for_confirmation = False;
 		for (i = 0; i < w_global.workspace.count; i++) {
-			if (scr->workspaces[ i ]->clip->attract_icons) {
+			if (w_global.workspace.array[i]->clip->attract_icons) {
 				ask_for_confirmation = True;
 				break;
 			}
@@ -621,7 +621,7 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 			 * previously attracting drawer */
 			int i;
 			for (i = 0; i < w_global.workspace.count; i++)
-				scr->workspaces[ i ]->clip->attract_icons = False;
+				w_global.workspace.array[i]->clip->attract_icons = False;
 				/* dock menu will be updated later, when opened */
 
 			if (scr->attracting_drawer != NULL)
@@ -868,7 +868,7 @@ static void switchWSCommand(WMenu *menu, WMenuEntry *entry)
 	if (entry->order == w_global.workspace.current)
 		return;
 	src = icon->dock;
-	dest = scr->workspaces[entry->order]->clip;
+	dest = w_global.workspace.array[entry->order]->clip;
 
 	selectedIcons = getSelected(src);
 
@@ -935,7 +935,6 @@ static void launchDockedApplication(WAppIcon *btn, Bool withSelection)
 
 static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 {
-	WScreen *scr = menu->frame->screen_ptr;
 	char title[MAX_WORKSPACENAME_WIDTH + 1];
 	int i;
 
@@ -944,15 +943,15 @@ static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 
 	for (i = 0; i < w_global.workspace.count; i++) {
 		if (i < menu->entry_no) {
-			if (strcmp(menu->entries[i]->text, scr->workspaces[i]->name) != 0) {
+			if (strcmp(menu->entries[i]->text, w_global.workspace.array[i]->name) != 0) {
 				wfree(menu->entries[i]->text);
-				strcpy(title, scr->workspaces[i]->name);
+				strcpy(title, w_global.workspace.array[i]->name);
 				menu->entries[i]->text = wstrdup(title);
 				menu->flags.realized = 0;
 			}
 			menu->entries[i]->clientdata = (void *)icon;
 		} else {
-			strcpy(title, scr->workspaces[i]->name);
+			strcpy(title, w_global.workspace.array[i]->name);
 
 			wMenuAddCallback(menu, title, switchWSCommand, (void *)icon);
 
@@ -1368,7 +1367,7 @@ void wDockDestroy(WDock *dock)
 void wClipIconPaint(WAppIcon *aicon)
 {
 	WScreen *scr = aicon->icon->core->screen_ptr;
-	WWorkspace *workspace = scr->workspaces[w_global.workspace.current];
+	WWorkspace *workspace = w_global.workspace.array[w_global.workspace.current];
 	WMColor *color;
 	Window win = aicon->icon->core->window;
 	int length, nlength;
@@ -1594,7 +1593,7 @@ void wClipSaveState(WScreen *scr)
 
 WMPropList *wClipSaveWorkspaceState(WScreen *scr, int workspace)
 {
-	return dockSaveState(scr->workspaces[workspace]->clip);
+	return dockSaveState(w_global.workspace.array[workspace]->clip);
 }
 
 static Bool getBooleanDockValue(WMPropList *value, WMPropList *key)
@@ -2030,7 +2029,7 @@ static WDock *findDock(WScreen *scr, XEvent *event, int *icon_pos)
 			}
 		}
 	}
-	if (*icon_pos < 0 && (dock = scr->workspaces[w_global.workspace.current]->clip) != NULL) {
+	if (*icon_pos < 0 && (dock = w_global.workspace.array[w_global.workspace.current]->clip) != NULL) {
 		for (i = 0; i < dock->max_icons; i++) {
 			if (dock->icon_array[i]
 			    && dock->icon_array[i]->icon->core->window == event->xclient.window) {
@@ -2582,7 +2581,7 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 
 		aicon = NULL;
 		for (k = start; k < stop; k++) {
-			WDock *tmp = scr->workspaces[k]->clip;
+			WDock *tmp = w_global.workspace.array[k]->clip;
 			if (!tmp)
 				continue;
 			for (i = 0; i < tmp->max_icons; i++) {
@@ -2596,7 +2595,7 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 				break;
 		}
 		for (k = start; k < stop; k++) {
-			WDock *tmp = scr->workspaces[k]->clip;
+			WDock *tmp = w_global.workspace.array[k]->clip;
 			if (!tmp)
 				continue;
 			for (i = 0; i < tmp->max_icons; i++) {
@@ -2707,7 +2706,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 		return True;
 	}
 
-	if (dock->type == WM_CLIP && dock != scr->workspaces[w_global.workspace.current]->clip)
+	if (dock->type == WM_CLIP && dock != w_global.workspace.array[w_global.workspace.current]->clip)
 		extra_count = scr->global_icon_count;
 
 	/* if the dock is full */
@@ -3273,16 +3272,16 @@ void wDockTrackWindowLaunch(WDock *dock, Window window)
 void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 {
 	if (!wPreferences.flags.noclip) {
-		scr->clip_icon->dock = scr->workspaces[workspace]->clip;
+		scr->clip_icon->dock = w_global.workspace.array[workspace]->clip;
 		if (w_global.workspace.current != workspace) {
-			WDock *old_clip = scr->workspaces[w_global.workspace.current]->clip;
+			WDock *old_clip = w_global.workspace.array[w_global.workspace.current]->clip;
 			WAppIconChain *chain = scr->global_icons;
 
 			while (chain) {
 				wDockMoveIconBetweenDocks(chain->aicon->dock,
-						     scr->workspaces[workspace]->clip,
+						     w_global.workspace.array[workspace]->clip,
 						     chain->aicon, chain->aicon->xindex, chain->aicon->yindex);
-				if (scr->workspaces[workspace]->clip->collapsed)
+				if (w_global.workspace.array[workspace]->clip->collapsed)
 					XUnmapWindow(dpy, chain->aicon->icon->core->window);
 				chain = chain->next;
 			}
@@ -3302,7 +3301,7 @@ void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 				}
 				old_clip->collapsed = 1;
 			}
-			wDockShowIcons(scr->workspaces[workspace]->clip);
+			wDockShowIcons(w_global.workspace.array[workspace]->clip);
 		}
 	}
 }
@@ -4151,7 +4150,7 @@ static Bool iconCanBeOmnipresent(WAppIcon *aicon)
 	int i, j;
 
 	for (i = 0; i < w_global.workspace.count; i++) {
-		clip = scr->workspaces[i]->clip;
+		clip = w_global.workspace.array[i]->clip;
 
 		if (clip == aicon->dock)
 			continue;

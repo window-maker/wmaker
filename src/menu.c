@@ -1761,7 +1761,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 			char *name;
 			int number = entry_no - 3; /* Entries "New", "Destroy Last" and "Last Used" appear before workspaces */
 
-			name = wstrdup(scr->workspaces[number]->name);
+			name = wstrdup(w_global.workspace.array[number]->name);
 			snprintf(buffer, sizeof(buffer), _("Type the name for workspace %i:"), number + 1);
 
 			wMenuUnmap(scr->root_menu);

@@ -720,9 +720,9 @@ void StartUp(Bool defaultScreenOnly)
 			if (!wPreferences.flags.noclip) {
 				int i;
 				for (i = 0; i < w_global.workspace.count; i++) {
-					if (wScreen[j]->workspaces[i]->clip) {
-						wScreen[j]->last_dock = wScreen[j]->workspaces[i]->clip;
-						wDockDoAutoLaunch(wScreen[j]->workspaces[i]->clip, i);
+					if (w_global.workspace.array[i]->clip) {
+						wScreen[j]->last_dock = w_global.workspace.array[i]->clip;
+						wDockDoAutoLaunch(w_global.workspace.array[i]->clip, i);
 					}
 				}
 			}
@@ -876,6 +876,6 @@ static void manageAllWindows(WScreen * scr, int crashRecovery)
 	w_global.workspace.last_used = 0;
 	wWorkspaceForceChange(scr, 0);
 	if (!wPreferences.flags.noclip)
-		wDockShowIcons(scr->workspaces[w_global.workspace.current]->clip);
+		wDockShowIcons(w_global.workspace.array[w_global.workspace.current]->clip);
 	scr->flags.startup2 = 0;
 }

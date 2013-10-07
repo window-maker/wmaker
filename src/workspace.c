@@ -106,13 +106,13 @@ int wWorkspaceNew(WScreen *scr)
 		list = wmalloc(sizeof(WWorkspace *) * w_global.workspace.count);
 
 		for (i = 0; i < w_global.workspace.count - 1; i++)
-			list[i] = scr->workspaces[i];
+			list[i] = w_global.workspace.array[i];
 
 		list[i] = wspace;
-		if (scr->workspaces)
-			wfree(scr->workspaces);
+		if (w_global.workspace.array)
+			wfree(w_global.workspace.array);
 
-		scr->workspaces = list;
+		w_global.workspace.array = list;
 
 		wWorkspaceMenuUpdate(scr, scr->workspace_menu);
 		wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
@@ -144,23 +144,23 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 	}
 
 	if (!wPreferences.flags.noclip) {
-		wDockDestroy(scr->workspaces[workspace]->clip);
-		scr->workspaces[workspace]->clip = NULL;
+		wDockDestroy(w_global.workspace.array[workspace]->clip);
+		w_global.workspace.array[workspace]->clip = NULL;
 	}
 
 	list = wmalloc(sizeof(WWorkspace *) * (w_global.workspace.count - 1));
 	j = 0;
 	for (i = 0; i < w_global.workspace.count; i++) {
 		if (i != workspace) {
-			list[j++] = scr->workspaces[i];
+			list[j++] = w_global.workspace.array[i];
 		} else {
-			if (scr->workspaces[i]->name)
-				wfree(scr->workspaces[i]->name);
-			wfree(scr->workspaces[i]);
+			if (w_global.workspace.array[i]->name)
+				wfree(w_global.workspace.array[i]->name);
+			wfree(w_global.workspace.array[i]);
 		}
 	}
-	wfree(scr->workspaces);
-	scr->workspaces = list;
+	wfree(w_global.workspace.array);
+	w_global.workspace.array = list;
 
 	w_global.workspace.count--;
 
@@ -250,7 +250,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	Pixmap text, mask;
 	int w, h;
 	int px, py;
-	char *name = scr->workspaces[workspace]->name;
+	char *name = w_global.workspace.array[workspace]->name;
 	int len = strlen(name);
 	int x, y;
 #ifdef XINERAMA
@@ -617,8 +617,8 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 	if (scr->dock)
 		wAppIconPaint(scr->dock->icon_array[0]);
 
-	if (!wPreferences.flags.noclip && (scr->workspaces[workspace]->clip->auto_collapse ||
-						scr->workspaces[workspace]->clip->auto_raise_lower)) {
+	if (!wPreferences.flags.noclip && (w_global.workspace.array[workspace]->clip->auto_collapse ||
+					   w_global.workspace.array[workspace]->clip->auto_raise_lower)) {
 		/* to handle enter notify. This will also */
 		XUnmapWindow(dpy, scr->clip_icon->icon->core->window);
 		XMapWindow(dpy, scr->clip_icon->icon->core->window);
@@ -681,8 +681,8 @@ void wWorkspaceRename(WScreen *scr, int workspace, const char *name)
 	wfree(tmp);
 
 	/* update workspace */
-	wfree(scr->workspaces[workspace]->name);
-	scr->workspaces[workspace]->name = wstrdup(buf);
+	wfree(w_global.workspace.array[workspace]->name);
+	w_global.workspace.array[workspace]->name = wstrdup(buf);
 
 	if (scr->clip_ws_menu) {
 		if (strcmp(scr->clip_ws_menu->entries[workspace + MC_WORKSPACE1]->text, buf) != 0) {
@@ -753,7 +753,7 @@ void wWorkspaceMenuUpdate(WScreen * scr, WMenu * menu)
 		i = w_global.workspace.count - (menu->entry_no - MC_WORKSPACE1);
 		ws = menu->entry_no - MC_WORKSPACE1;
 		while (i > 0) {
-			wstrlcpy(title, scr->workspaces[ws]->name, MAX_WORKSPACENAME_WIDTH);
+			wstrlcpy(title, w_global.workspace.array[ws]->name, MAX_WORKSPACENAME_WIDTH);
 
 			entry = wMenuAddCallback(menu, title, switchWSCommand, (void *)ws);
 			entry->flags.indicator = 1;
@@ -810,7 +810,7 @@ void wWorkspaceSaveState(WScreen * scr, WMPropList * old_state)
 	old_wks_state = WMGetFromPLDictionary(old_state, dWorkspaces);
 	parr = WMCreatePLArray(NULL);
 	for (i = 0; i < w_global.workspace.count; i++) {
-		pstr = WMCreatePLString(scr->workspaces[i]->name);
+		pstr = WMCreatePLString(w_global.workspace.array[i]->name);
 		wks_state = WMCreatePLDictionary(dName, pstr, NULL);
 		WMReleasePropList(pstr);
 		if (!wPreferences.flags.noclip) {
@@ -862,26 +862,26 @@ void wWorkspaceRestoreState(WScreen *scr)
 			scr->workspace_menu->flags.realized = 0;
 		}
 
-		wfree(scr->workspaces[i]->name);
-		scr->workspaces[i]->name = wstrdup(WMGetFromPLString(pstr));
+		wfree(w_global.workspace.array[i]->name);
+		w_global.workspace.array[i]->name = wstrdup(WMGetFromPLString(pstr));
 		if (!wPreferences.flags.noclip) {
 			int added_omnipresent_icons = 0;
 
 			clip_state = WMGetFromPLDictionary(wks_state, dClip);
-			if (scr->workspaces[i]->clip)
-				wDockDestroy(scr->workspaces[i]->clip);
+			if (w_global.workspace.array[i]->clip)
+				wDockDestroy(w_global.workspace.array[i]->clip);
 
-			scr->workspaces[i]->clip = wDockRestoreState(scr, clip_state, WM_CLIP);
+			w_global.workspace.array[i]->clip = wDockRestoreState(scr, clip_state, WM_CLIP);
 			if (i > 0)
-				wDockHideIcons(scr->workspaces[i]->clip);
+				wDockHideIcons(w_global.workspace.array[i]->clip);
 
 			/* We set the global icons here, because scr->workspaces[i]->clip
 			 * was not valid in wDockRestoreState().
 			 * There we only set icon->omnipresent to know which icons we
 			 * need to set here.
 			 */
-			for (j = 0; j < scr->workspaces[i]->clip->max_icons; j++) {
-				WAppIcon *aicon = scr->workspaces[i]->clip->icon_array[j];
+			for (j = 0; j < w_global.workspace.array[i]->clip->max_icons; j++) {
+				WAppIcon *aicon = w_global.workspace.array[i]->clip->icon_array[j];
 				int k;
 
 				if (!aicon || !aicon->omnipresent)
@@ -893,21 +893,21 @@ void wWorkspaceRestoreState(WScreen *scr)
 					continue;
 
 				/* Move this appicon from workspace i to workspace 0 */
-				scr->workspaces[i]->clip->icon_array[j] = NULL;
-				scr->workspaces[i]->clip->icon_count--;
+				w_global.workspace.array[i]->clip->icon_array[j] = NULL;
+				w_global.workspace.array[i]->clip->icon_count--;
 
 				added_omnipresent_icons++;
 				/* If there are too many omnipresent appicons, we are in trouble */
-				assert(scr->workspaces[0]->clip->icon_count + added_omnipresent_icons
-				       <= scr->workspaces[0]->clip->max_icons);
+				assert(w_global.workspace.array[0]->clip->icon_count + added_omnipresent_icons
+				       <= w_global.workspace.array[0]->clip->max_icons);
 				/* Find first free spot on workspace 0 */
-				for (k = 0; k < scr->workspaces[0]->clip->max_icons; k++)
-					if (scr->workspaces[0]->clip->icon_array[k] == NULL)
+				for (k = 0; k < w_global.workspace.array[0]->clip->max_icons; k++)
+					if (w_global.workspace.array[0]->clip->icon_array[k] == NULL)
 						break;
-				scr->workspaces[0]->clip->icon_array[k] = aicon;
-				aicon->dock = scr->workspaces[0]->clip;
+				w_global.workspace.array[0]->clip->icon_array[k] = aicon;
+				aicon->dock = w_global.workspace.array[0]->clip;
 			}
-			scr->workspaces[0]->clip->icon_count += added_omnipresent_icons;
+			w_global.workspace.array[0]->clip->icon_count += added_omnipresent_icons;
 		}
 
 		WMPostNotificationName(WMNWorkspaceNameChanged, scr, (void *)(uintptr_t) i);
@@ -922,7 +922,7 @@ int wGetWorkspaceNumber(WScreen *scr, const char *value)
 	if (sscanf(value, "%i", &w) != 1) {
 		w = -1;
 		for (i = 0; i < w_global.workspace.count; i++) {
-			if (strcmp(scr->workspaces[i]->name, value) == 0) {
+			if (strcmp(w_global.workspace.array[i]->name, value) == 0) {
 				w = i;
 				break;
 			}

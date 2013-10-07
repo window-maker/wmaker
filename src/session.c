@@ -198,8 +198,8 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 
 		name = WMCreatePLString(buffer);
 		cmd = WMCreatePLString(command);
-		workspace = WMCreatePLString(scr->workspaces[wwin->frame->workspace]->name);
 
+		workspace = WMCreatePLString(w_global.workspace.array[wwin->frame->workspace]->name);
 		shaded = wwin->flags.shaded ? sYes : sNo;
 		miniaturized = wwin->flags.miniaturized ? sYes : sNo;
 		hidden = wwin->flags.hidden ? sYes : sNo;
@@ -238,10 +238,10 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 			/* Try the clips */
 			if (name == NULL) {
 				for (i = 0; i < w_global.workspace.count; i++)
-					if (scr->workspaces[i]->clip == wapp->app_icon->dock)
+					if (w_global.workspace.array[i]->clip == wapp->app_icon->dock)
 						break;
 				if (i < w_global.workspace.count)
-					name = scr->workspaces[i]->name;
+					name = w_global.workspace.array[i]->name;
 			}
 			/* Try the drawers */
 			if (name == NULL) {
@@ -316,7 +316,7 @@ void wSessionSaveState(WScreen * scr)
 	WMPutInPLDictionary(scr->session_state, sApplications, list);
 	WMReleasePropList(list);
 
-	wks = WMCreatePLString(scr->workspaces[w_global.workspace.current]->name);
+	wks = WMCreatePLString(w_global.workspace.array[w_global.workspace.current]->name);
 	WMPutInPLDictionary(scr->session_state, sWorkspace, wks);
 	WMReleasePropList(wks);
 
@@ -383,7 +383,7 @@ static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
 		if (sscanf(tmp, "%i", &state->workspace) != 1) {
 			state->workspace = -1;
 			for (i = 0; i < w_global.workspace.count; i++) {
-				if (strcmp(scr->workspaces[i]->name, tmp) == 0) {
+				if (strcmp(w_global.workspace.array[i]->name, tmp) == 0) {
 					state->workspace = i;
 					break;
 				}
@@ -472,8 +472,8 @@ void wSessionRestoreState(WScreen *scr)
 				/* Try the clips */
 				if (dock == NULL) {
 					for (j = 0; j < w_global.workspace.count; j++) {
-						if (strcmp(scr->workspaces[j]->name, tmp) == 0) {
-							dock = scr->workspaces[j]->clip;
+						if (strcmp(w_global.workspace.array[j]->name, tmp) == 0) {
+							dock = w_global.workspace.array[j]->clip;
 							break;
 						}
 					}
@@ -494,7 +494,7 @@ void wSessionRestoreState(WScreen *scr)
 				if (n == 0) {
 					dock = scr->dock;
 				} else if (n > 0 && n <= w_global.workspace.count) {
-					dock = scr->workspaces[n - 1]->clip;
+					dock = w_global.workspace.array[n - 1]->clip;
 				}
 			}
 		}

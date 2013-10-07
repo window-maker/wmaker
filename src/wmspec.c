@@ -760,8 +760,8 @@ static void updateWorkspaceNames(WScreen *scr)
 	pos = buf;
 	len = 0;
 	for (i = 0; i < w_global.workspace.count; i++) {
-		curr_size = strlen(scr->workspaces[i]->name);
-		strcpy(pos, scr->workspaces[i]->name);
+		curr_size = strlen(w_global.workspace.array[i]->name);
+		strcpy(pos, w_global.workspace.array[i]->name);
 		pos += (curr_size + 1);
 		len += (curr_size + 1);
 	}

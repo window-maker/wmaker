@@ -238,7 +238,7 @@ void UpdateSwitchMenu(WScreen * scr, WWindow * wwin, int action)
 			snprintf(entry->rtext, MAX_WORKSPACENAME_WIDTH, "[*]");
 		else
 			snprintf(entry->rtext, MAX_WORKSPACENAME_WIDTH, "[%s]",
-				 scr->workspaces[wwin->frame->workspace]->name);
+				 w_global.workspace.array[wwin->frame->workspace]->name);
 
 		if (wwin->flags.hidden) {
 			entry->flags.indicator_type = MI_HIDDEN;
@@ -296,7 +296,7 @@ void UpdateSwitchMenu(WScreen * scr, WWindow * wwin, int action)
 						} else {
 							snprintf(entry->rtext, MAX_WORKSPACENAME_WIDTH,
 								 "[%s]",
-								 scr->workspaces[wwin->frame->workspace]->name);
+								 w_global.workspace.array[wwin->frame->workspace]->name);
 						}
 
 						rt = entry->rtext;
@@ -374,7 +374,7 @@ static void UpdateSwitchMenuWorkspace(WScreen *scr, int workspace)
 				snprintf(menu->entries[i]->rtext, MAX_WORKSPACENAME_WIDTH, "[*]");
 			else
 				snprintf(menu->entries[i]->rtext, MAX_WORKSPACENAME_WIDTH, "[%s]",
-					 scr->workspaces[wwin->frame->workspace]->name);
+					 w_global.workspace.array[wwin->frame->workspace]->name);
 			menu->flags.realized = 0;
 		}
 	}

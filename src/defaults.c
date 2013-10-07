@@ -2451,7 +2451,7 @@ static int setWrapAppiconsInDock(WScreen *scr, WDefaultEntry *entry, void *tdata
 
 static int setStickyIcons(WScreen * scr, WDefaultEntry * entry, void *bar, void *foo)
 {
-	if (scr->workspaces) {
+	if (w_global.workspace.array) {
 		wWorkspaceForceChange(scr, w_global.workspace.current);
 		wArrangeIcons(scr, False);
 	}

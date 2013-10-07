@@ -495,7 +495,7 @@ static void saveSettings(WMButton *button, InspectorPanel *panel)
 
 	i = WMGetPopUpButtonSelectedItem(panel->wsP) - 1;
 	if (i >= 0 && i < w_global.workspace.count) {
-		value = WMCreatePLString(panel->frame->screen_ptr->workspaces[i]->name);
+		value = WMCreatePLString(w_global.workspace.array[i]->name);
 		different |= insertAttribute(dict, winDic, AStartWorkspace, value, flags);
 		WMReleasePropList(value);
 	}
@@ -1478,7 +1478,6 @@ static void create_tab_window_advanced(WWindow *wwin, InspectorPanel *panel, int
 
 static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel, int frame_width)
 {
-	WScreen *scr = wwin->screen_ptr;
 	int i = 0;
 
 	/* miniwindow/workspace */
@@ -1530,7 +1529,7 @@ static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel, int 
 	WMAddPopUpButtonItem(panel->wsP, _("Nowhere in particular"));
 
 	for (i = 0; i < w_global.workspace.count; i++)
-		WMAddPopUpButtonItem(panel->wsP, scr->workspaces[i]->name);
+		WMAddPopUpButtonItem(panel->wsP, w_global.workspace.array[i]->name);
 
 	i = wDefaultGetStartWorkspace(wwin->screen_ptr, wwin->wm_instance, wwin->wm_class);
 	if (i >= 0 && i <= w_global.workspace.count)

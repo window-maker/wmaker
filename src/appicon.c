@@ -183,7 +183,7 @@ void unpaint_app_icon(WApplication *wapp)
 		return;
 
 	scr = wapp->main_window_desc->screen_ptr;
-	clip = scr->workspaces[w_global.workspace.current]->clip;
+	clip = w_global.workspace.array[w_global.workspace.current]->clip;
 
 	if (!clip || !aicon->attracted || !clip->collapsed)
 		XUnmapWindow(dpy, aicon->icon->core->window);
@@ -217,7 +217,7 @@ void paint_app_icon(WApplication *wapp)
 
 	attracting_dock = scr->attracting_drawer != NULL ?
 		scr->attracting_drawer :
-		scr->workspaces[w_global.workspace.current]->clip;
+		w_global.workspace.array[w_global.workspace.current]->clip;
 	if (attracting_dock && attracting_dock->attract_icons &&
 		wDockFindFreeSlot(attracting_dock, &x, &y)) {
 		wapp->app_icon->attracted = 1;
@@ -809,8 +809,8 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 		allDocks[ i++ ] = scr->dock;
 
 	if (!wPreferences.flags.noclip &&
-	    originalDock != scr->workspaces[w_global.workspace.current]->clip)
-		allDocks[ i++ ] = scr->workspaces[w_global.workspace.current]->clip;
+	    originalDock != w_global.workspace.array[w_global.workspace.current]->clip)
+		allDocks[i++] = w_global.workspace.array[w_global.workspace.current]->clip;
 
 	for ( ; i < scr->drawer_count + 2; i++) /* In case the clip, the dock, or both, are disabled */
 		allDocks[ i ] = NULL;
@@ -865,7 +865,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 					if (i == w_global.workspace.current)
 						continue;
 
-					wDockShowIcons(scr->workspaces[i]->clip);
+					wDockShowIcons(w_global.workspace.array[i]->clip);
 					/* Note: if dock is collapsed (for instance, because it
 					   auto-collapses), its icons still won't show up */
 				}
@@ -1071,7 +1071,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 					if (i == w_global.workspace.current)
 						continue;
 
-					wDockHideIcons(scr->workspaces[i]->clip);
+					wDockHideIcons(w_global.workspace.array[i]->clip);
 				}
 			}
 			if (wPreferences.auto_arrange_icons && !(originalDock != NULL && docked))
@@ -1151,7 +1151,7 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 	if (!wapp->app_icon) {
 		int i;
 		for (i = 0; i < w_global.workspace.count; i++) {
-			WDock *dock = scr->workspaces[i]->clip;
+			WDock *dock = w_global.workspace.array[i]->clip;
 
 			if (dock)
 				wapp->app_icon = findDockIconFor(dock, main_window);
