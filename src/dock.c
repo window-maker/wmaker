@@ -4342,7 +4342,7 @@ static void drawerDestroy(WDock *drawer)
 {
 	WScreen *scr;
 	int i;
-	WAppIcon *aicon;
+	WAppIcon *aicon = NULL;
 	WMArray *icons;
 
 	if (drawer == NULL)
@@ -4353,21 +4353,21 @@ static void drawerDestroy(WDock *drawer)
 	/* Note regarding menus: we can't delete any dock/clip/drawer menu, because
 	 * that would (attempt to) wfree some memory in gettext library (see menu
 	 * entries that have several "versions", such like "Hide" and "Unhide"). */
-
 	wDefaultPurgeInfo(scr, drawer->icon_array[0]->wm_instance,
 			drawer->icon_array[0]->wm_class);
+
 	if (drawer->icon_count == 2) {
-		// Drawer contains a single appicon: dock it where the drawer was
+		/* Drawer contains a single appicon: dock it where the drawer was */
 		for (i = 1; i < drawer->max_icons; i++) {
 			if ((aicon = drawer->icon_array[i]))
 				break;
 		}
+
 		wDockMoveIconBetweenDocks(drawer, scr->dock, aicon,
 					0, (drawer->y_pos - scr->dock->y_pos) / ICON_SIZE);
 		XMoveWindow(dpy, aicon->icon->core->window, drawer->x_pos, drawer->y_pos);
 		XMapWindow(dpy, aicon->icon->core->window);
-	}
-	else if (drawer->icon_count > 2) {
+	} else if (drawer->icon_count > 2) {
 		icons = WMCreateArray(drawer->icon_count - 1);
 		for (i = 1; i < drawer->max_icons; i++) {
 			if (!(aicon = drawer->icon_array[i]))
