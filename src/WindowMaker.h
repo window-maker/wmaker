@@ -522,6 +522,13 @@ extern struct wmaker_global_variables {
 		struct WMenu *drawer_menu;	/* menu for the drawers */
 	} dock;
 
+#ifdef HAVE_INOTIFY
+	struct {
+		int fd_event_queue;   /* Inotify's queue file descriptor */
+		int wd_defaults;   /* Watch Descriptor for the 'Defaults' configuration file */
+	} inotify;
+#endif
+
 	/* definition for X Atoms */
 	struct {
 

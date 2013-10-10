@@ -74,11 +74,6 @@ char *ProgName;
 
 unsigned int ValidModMask = 0xff;
 
-#ifdef HAVE_INOTIFY
-int inotifyFD;
-int inotifyWD;
-#endif
-
 struct WPreferences wPreferences;
 
 WShortKey wKeyBindings[WKBD_LAST];
@@ -474,8 +469,9 @@ static void check_defaults(void)
 static void inotifyWatchConfig(void)
 {
 	char *watchPath = NULL;
-	inotifyFD = inotify_init();	/* Initialise an inotify instance */
-	if (inotifyFD < 0) {
+
+	w_global.inotify.fd_event_queue = inotify_init();	/* Initialise an inotify instance */
+	if (w_global.inotify.fd_event_queue < 0) {
 		wwarning(_("could not initialise an inotify instance."
 			   " Changes to the defaults database will require"
 			   " a restart to take effect. Check your kernel!"));
@@ -485,12 +481,13 @@ static void inotifyWatchConfig(void)
 		 * but we might want more in the future so check all events for now.
 		 * The individual events are checked for in event.c.
 		 */
-		inotifyWD = inotify_add_watch(inotifyFD, watchPath, IN_ALL_EVENTS);
-		if (inotifyWD < 0) {
+		w_global.inotify.wd_defaults = inotify_add_watch(w_global.inotify.fd_event_queue, watchPath, IN_ALL_EVENTS);
+		if (w_global.inotify.wd_defaults < 0) {
 			wwarning(_("could not add an inotify watch on path %s."
 				   "Changes to the defaults database will require"
 				   " a restart to take effect."), watchPath);
-			close(inotifyFD);
+			close(w_global.inotify.fd_event_queue);
+			w_global.inotify.fd_event_queue = -1;
 		}
 	}
 	wfree(watchPath);

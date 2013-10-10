@@ -358,13 +358,11 @@ noreturn void EventLoop(void)
 {
 	XEvent event;
 #ifdef HAVE_INOTIFY
-	extern int inotifyFD;
-	extern int inotifyWD;
 	struct timeval time;
 	fd_set rfds;
 	int retVal = 0;
 
-	if (inotifyFD < 0 || inotifyWD < 0)
+	if (w_global.inotify.fd_event_queue < 0 || w_global.inotify.wd_defaults < 0)
 		retVal = -1;
 #endif
 
@@ -377,20 +375,21 @@ noreturn void EventLoop(void)
 			time.tv_sec = 0;
 			time.tv_usec = 0;
 			FD_ZERO(&rfds);
-			FD_SET(inotifyFD, &rfds);
+			FD_SET(w_global.inotify.fd_event_queue, &rfds);
 
 			/* check for available read data from inotify - don't block! */
-			retVal = select(inotifyFD + 1, &rfds, NULL, NULL, &time);
+			retVal = select(w_global.inotify.fd_event_queue + 1, &rfds, NULL, NULL, &time);
 
 			if (retVal < 0) {	/* an error has occured */
 				wwarning(_("select failed. The inotify instance will be closed."
 					   " Changes to the defaults database will require"
 					   " a restart to take effect."));
-				close(inotifyFD);
+				close(w_global.inotify.fd_event_queue);
+				w_global.inotify.fd_event_queue = -1;
 				continue;
 			}
-			if (FD_ISSET(inotifyFD, &rfds))
-				handle_inotify_events(inotifyFD, inotifyWD);
+			if (FD_ISSET(w_global.inotify.fd_event_queue, &rfds))
+				handle_inotify_events(w_global.inotify.fd_event_queue, w_global.inotify.wd_defaults);
 		}
 #endif
 	}
