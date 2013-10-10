@@ -102,6 +102,11 @@ AS_IF([test "x$debug" = "xyes"],
      dnl Try to report misuses of '&' versus '&&' and similar
      AX_CFLAGS_GCC_OPTION([-Wlogical-op])
      dnl
+     dnl Reports declaration of global things that are done inside
+     dnl a local environment, instead of using the appropriate
+     dnl header
+     AX_CFLAGS_GCC_OPTION([-Wnested-externs])
+     dnl
      dnl Use of 'sizeof()' on inappropriate pointer types
      AX_CFLAGS_GCC_OPTION([-Wpointer-arith])
 ], [dnl
