@@ -83,9 +83,6 @@ WDDomain *WDWindowMaker = NULL;
 WDDomain *WDWindowAttributes = NULL;
 WDDomain *WDRootMenu = NULL;
 
-/* special flags */
-char WDelayedActionSet = 0;
-
 /* notifications */
 const char WMNManaged[] = "WMNManaged";
 const char WMNUnmanaged[] = "WMNUnmanaged";

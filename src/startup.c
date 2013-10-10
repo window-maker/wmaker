@@ -90,11 +90,6 @@ extern WDDomain *WDRootMenu;
 extern WDDomain *WDWindowAttributes;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
-#ifndef HAVE_INOTIFY
-/* special flags */
-extern char WDelayedActionSet;
-#endif
-
 /***** Local *****/
 static WScreen **wScreen = NULL;
 static unsigned int _NumLockMask = 0;
@@ -142,28 +137,6 @@ static int handleXIO(Display * xio_dpy)
 	Exit(0);
 	return 0;
 }
-
-#ifndef HAVE_INOTIFY
-/*
- *----------------------------------------------------------------------
- * delayedAction-
- *      Action to be executed after the signal() handler is exited.
- *----------------------------------------------------------------------
- */
-static void delayedAction(void *cdata)
-{
-	if (WDelayedActionSet == 0)
-		return;
-
-	WDelayedActionSet--;
-	/*
-	 * Make the event dispatcher do whatever it needs to do,
-	 * including handling zombie processes, restart and exit
-	 * signals.
-	 */
-	DispatchEvent(NULL);
-}
-#endif
 
 /*
  *----------------------------------------------------------------------
@@ -527,12 +500,6 @@ void StartUp(Bool defaultScreenOnly)
 	XFreeGC(dpy, gc);
 	wPreferences.cursor[WCUR_EMPTY] = XCreatePixmapCursor(dpy, cur, cur, &black, &black, 0, 0);
 	XFreePixmap(dpy, cur);
-
-
-#ifndef HAVE_INOTIFY
-	/* signal handler stuff that gets called when a signal is caught */
-	WMAddPersistentTimerHandler(500, delayedAction, NULL);
-#endif
 
 	/* emergency exit... */
 	sig_action.sa_handler = handleSig;
