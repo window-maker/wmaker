@@ -38,8 +38,6 @@
 
 #ifdef SHAPE
 #include <X11/extensions/shape.h>
-
-extern Bool wShapeSupported;
 #endif
 
 struct SwitchPanel {
@@ -522,7 +520,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 		XSetWindowBackgroundPixmap(dpy, WMWidgetXID(panel->win), pixmap);
 
 #ifdef SHAPE
-		if (mask && wShapeSupported)
+		if (mask && w_global.xext.shape.supported)
 			XShapeCombineMask(dpy, WMWidgetXID(panel->win), ShapeBounding, 0, 0, mask, ShapeSet);
 #endif
 		if (pixmap)

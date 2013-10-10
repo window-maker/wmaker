@@ -81,11 +81,6 @@ extern WShortKey wKeyBindings[WKBD_LAST];
 
 #define MOD_MASK wPreferences.modifier_mask
 
-#ifdef SHAPE
-extern Bool wShapeSupported;
-extern int wShapeEventBase;
-#endif
-
 #ifdef KEEP_XKB_LOCK_STATUS
 extern int wXkbEventBase;
 #endif
@@ -551,7 +546,7 @@ static void handleExtensions(XEvent * event)
 	xkbevent = (XkbEvent *) event;
 #endif				/*KEEP_XKB_LOCK_STATUS */
 #ifdef SHAPE
-	if (wShapeSupported && event->type == (wShapeEventBase + ShapeNotify)) {
+	if (w_global.xext.shape.supported && event->type == (w_global.xext.shape.event_base + ShapeNotify)) {
 		handleShapeNotify(event);
 	}
 #endif

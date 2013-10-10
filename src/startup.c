@@ -90,11 +90,6 @@ extern WDDomain *WDRootMenu;
 extern WDDomain *WDWindowAttributes;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
-#ifdef SHAPE
-extern Bool wShapeSupported;
-extern int wShapeEventBase;
-#endif
-
 #ifdef KEEP_XKB_LOCK_STATUS
 extern Bool wXkbSupported;
 extern int wXkbEventBase;
@@ -633,7 +628,7 @@ void StartUp(Bool defaultScreenOnly)
 
 #ifdef SHAPE
 	/* ignore j */
-	wShapeSupported = XShapeQueryExtension(dpy, &wShapeEventBase, &j);
+	w_global.xext.shape.supported = XShapeQueryExtension(dpy, &w_global.xext.shape.event_base, &j);
 #endif
 
 #ifdef HAVE_XRANDR

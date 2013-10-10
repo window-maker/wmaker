@@ -570,6 +570,23 @@ extern struct wmaker_global_variables {
 		XContext stack;
 	} context;
 
+	/* X Extensions */
+	struct {
+#ifdef SHAPE
+		struct {
+			Bool supported;
+			int event_base;
+		} shape;
+#endif
+
+		/*
+		 * If no extension were activated, we would end up with an empty
+		 * structure, which old compilers may not appreciate, so let's
+		 * work around this with a simple:
+		 */
+		int dummy;
+	} xext;
+
 	/* Session related */
 	WMPropList *session_state;
 

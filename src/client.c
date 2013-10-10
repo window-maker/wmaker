@@ -44,11 +44,6 @@
 #include "wmspec.h"
 #include "misc.h"
 
-/****** Global Variables ******/
-
-#ifdef SHAPE
-extern Bool wShapeSupported;
-#endif
 
 /*
  *--------------------------------------------------------------------
@@ -172,7 +167,7 @@ void wClientConfigure(WWindow * wwin, XConfigureRequestEvent * xcre)
 		return;
 	}
 #ifdef SHAPE
-	if (wShapeSupported) {
+	if (w_global.xext.shape.supported) {
 		int junk;
 		unsigned int ujunk;
 		int b_shaped;

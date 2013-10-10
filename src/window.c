@@ -75,10 +75,6 @@
 /****** Global Variables ******/
 extern WShortKey wKeyBindings[WKBD_LAST];
 
-#ifdef SHAPE
-extern Bool wShapeSupported;
-#endif
-
 /***** Local Stuff *****/
 static WWindowState *windowState = NULL;
 static FocusMode getFocusMode(WWindow *wwin);
@@ -621,7 +617,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	XSaveContext(dpy, window, w_global.context.client_win, (XPointer) & wwin->client_descriptor);
 
 #ifdef SHAPE
-	if (wShapeSupported) {
+	if (w_global.xext.shape.supported) {
 		int junk;
 		unsigned int ujunk;
 		int b_shaped;
@@ -2042,7 +2038,7 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 		wwin->client.y += wwin->screen_ptr->frame_border_width;
 	}
 #ifdef SHAPE
-	if (wShapeSupported && wwin->flags.shaped && resize)
+	if (w_global.xext.shape.supported && wwin->flags.shaped && resize)
 		wWindowSetShape(wwin);
 #endif
 
@@ -2266,7 +2262,7 @@ void wWindowConfigureBorders(WWindow *wwin)
 			wFrameWindowHideButton(wwin->frame, flags);
 
 #ifdef SHAPE
-		if (wShapeSupported && wwin->flags.shaped)
+		if (w_global.xext.shape.supported && wwin->flags.shaped)
 			wWindowSetShape(wwin);
 #endif
 	}
