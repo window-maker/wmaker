@@ -59,7 +59,6 @@
 #define MAX_SHORTCUT_LENGTH 32
 #define WORKSPACE_NAME_DISPLAY_PADDING 32
 
-extern int ignore_wks_change;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 static WMPropList *dWorkspaces = NULL;
@@ -441,7 +440,7 @@ void wWorkspaceRelativeChange(WScreen * scr, int amount)
 	 * still "flying" to its final position and we don't want to
 	 * change workspace before the animation finishes, otherwise
 	 * the window will land in the new workspace */
-	if (ignore_wks_change)
+	if (w_global.workspace.ignore_change)
 		return;
 
 	w = w_global.workspace.current + amount;

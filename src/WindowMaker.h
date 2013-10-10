@@ -494,6 +494,13 @@ extern struct wmaker_global_variables {
 
 		WMFont *font_for_name;  /* used during workspace switch */
 
+		/*
+		 * Ignore Workspace Change:
+		 * this variable is used to prevent workspace switch while certain
+		 * operations are ongoing.
+		 */
+		Bool ignore_change;
+
 		/* Menus */
 		struct WMenu *menu;	/* workspace operation */
 		struct WMenu *submenu;	/* workspace list for window_menu */

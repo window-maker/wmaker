@@ -50,9 +50,6 @@
 #include "misc.h"
 #include "event.h"
 
-/****** Global Variables ******/
-
-int ignore_wks_change = 0;
 
 static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, int *new_y,
 				  unsigned int *new_width, unsigned int *new_height);
@@ -1199,7 +1196,7 @@ void wIconifyWindow(WWindow * wwin)
 void wDeiconifyWindow(WWindow *wwin)
 {
 	/* Let's avoid changing workspace while deiconifying */
-	ignore_wks_change = 1;
+	w_global.workspace.ignore_change = True;
 
 	/* we're hiding for show_desktop */
 	int netwm_hidden = wwin->flags.net_show_desktop &&
@@ -1209,7 +1206,7 @@ void wDeiconifyWindow(WWindow *wwin)
 		wWindowChangeWorkspace(wwin, w_global.workspace.current);
 
 	if (!wwin->flags.miniaturized) {
-		ignore_wks_change = 0;
+		w_global.workspace.ignore_change = False;
 		return;
 	}
 
@@ -1220,7 +1217,7 @@ void wDeiconifyWindow(WWindow *wwin)
 			wDeiconifyWindow(owner);
 			wSetFocusTo(wwin->screen_ptr, wwin);
 			wRaiseFrame(wwin->frame->core);
-			ignore_wks_change = 0;
+			w_global.workspace.ignore_change = False;
 			return;
 		}
 	}
@@ -1309,7 +1306,7 @@ void wDeiconifyWindow(WWindow *wwin)
 
 			/* the window can disappear while ProcessPendingEvents() runs */
 			if (!wWindowFor(clientwin)) {
-				ignore_wks_change = 0;
+				w_global.workspace.ignore_change = False;
 				return;
 			}
 		}
@@ -1325,7 +1322,7 @@ void wDeiconifyWindow(WWindow *wwin)
 	if (!netwm_hidden)
 		wUnshadeWindow(wwin);
 
-	ignore_wks_change = 0;
+	w_global.workspace.ignore_change = False;
 }
 
 static void hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int animate)
