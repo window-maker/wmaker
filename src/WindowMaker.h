@@ -579,6 +579,13 @@ extern struct wmaker_global_variables {
 		} shape;
 #endif
 
+#ifdef KEEP_XKB_LOCK_STATUS
+		struct {
+			Bool supported;
+			int event_base;
+		} xkb;
+#endif
+
 		/*
 		 * If no extension were activated, we would end up with an empty
 		 * structure, which old compilers may not appreciate, so let's

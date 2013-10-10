@@ -71,10 +71,6 @@
 
 /**** Global variables ****/
 
-#ifdef KEEP_XKB_LOCK_STATUS
-extern int wXkbSupported;
-#endif
-
 #ifdef HAVE_XRANDR
 Bool has_randr;
 int randr_event_base;
@@ -548,7 +544,7 @@ WScreen *wScreenInit(int screen_number)
 	/* Only GroupLock doesn't work correctly in my system since right-alt
 	 * can change mode while holding it too - ]d
 	 */
-	if (wXkbSupported) {
+	if (w_global.xext.xkb.supported) {
 		XkbSelectEvents(dpy, XkbUseCoreKbd, XkbStateNotifyMask, XkbStateNotifyMask);
 	}
 #endif				/* KEEP_XKB_LOCK_STATUS */

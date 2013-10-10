@@ -81,10 +81,6 @@ extern WShortKey wKeyBindings[WKBD_LAST];
 
 #define MOD_MASK wPreferences.modifier_mask
 
-#ifdef KEEP_XKB_LOCK_STATUS
-extern int wXkbEventBase;
-#endif
-
 /************ Local stuff ***********/
 
 static void saveTimestamp(XEvent *event);
@@ -551,7 +547,7 @@ static void handleExtensions(XEvent * event)
 	}
 #endif
 #ifdef KEEP_XKB_LOCK_STATUS
-	if (wPreferences.modelock && (xkbevent->type == wXkbEventBase)) {
+	if (wPreferences.modelock && (xkbevent->type == w_global.xext.xkb.event_base)) {
 		handleXkbIndicatorStateNotify(event);
 	}
 #endif				/*KEEP_XKB_LOCK_STATUS */

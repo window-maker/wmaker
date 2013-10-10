@@ -88,11 +88,6 @@ WDDomain *WDWindowMaker = NULL;
 WDDomain *WDWindowAttributes = NULL;
 WDDomain *WDRootMenu = NULL;
 
-#ifdef KEEP_XKB_LOCK_STATUS
-Bool wXkbSupported;
-int wXkbEventBase;
-#endif
-
 /* special flags */
 char WDelayedActionSet = 0;
 

@@ -90,11 +90,6 @@ extern WDDomain *WDRootMenu;
 extern WDDomain *WDWindowAttributes;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
-#ifdef KEEP_XKB_LOCK_STATUS
-extern Bool wXkbSupported;
-extern int wXkbEventBase;
-#endif
-
 #ifndef HAVE_INOTIFY
 /* special flags */
 extern char WDelayedActionSet;
@@ -636,8 +631,8 @@ void StartUp(Bool defaultScreenOnly)
 #endif
 
 #ifdef KEEP_XKB_LOCK_STATUS
-	wXkbSupported = XkbQueryExtension(dpy, NULL, &wXkbEventBase, NULL, NULL, NULL);
-	if (wPreferences.modelock && !wXkbSupported) {
+	w_global.xext.xkb.supported = XkbQueryExtension(dpy, NULL, &w_global.xext.xkb.event_base, NULL, NULL, NULL);
+	if (wPreferences.modelock && !w_global.xext.xkb.supported) {
 		wwarning(_("XKB is not supported. KbdModeLock is automatically disabled."));
 		wPreferences.modelock = 0;
 	}
