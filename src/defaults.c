@@ -75,7 +75,6 @@
 extern WDDomain *WDWindowMaker;
 extern WDDomain *WDWindowAttributes;
 extern WDDomain *WDRootMenu;
-extern int wScreenCount;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 typedef struct _WDefaultEntry  WDefaultEntry;
@@ -995,7 +994,7 @@ void wDefaultsCheckDomains(void* arg)
 					shared_dict = NULL;
 				}
 
-				for (i = 0; i < wScreenCount; i++) {
+				for (i = 0; i < w_global.screen_count; i++) {
 					scr = wScreenWithNumber(i);
 					if (scr)
 						wReadDefaults(scr, dict);
@@ -1038,7 +1037,7 @@ void wDefaultsCheckDomains(void* arg)
 					WMReleasePropList(WDWindowAttributes->dictionary);
 
 				WDWindowAttributes->dictionary = dict;
-				for (i = 0; i < wScreenCount; i++) {
+				for (i = 0; i < w_global.screen_count; i++) {
 					scr = wScreenWithNumber(i);
 					if (scr) {
 						wDefaultUpdateIcons(scr);

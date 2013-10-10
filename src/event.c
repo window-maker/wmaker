@@ -78,7 +78,6 @@
 
 /******** Global Variables **********/
 extern WShortKey wKeyBindings[WKBD_LAST];
-extern int wScreenCount;
 
 #define MOD_MASK wPreferences.modifier_mask
 
@@ -1198,7 +1197,7 @@ static void handleXkbIndicatorStateNotify(XEvent *event)
 	XkbStateRec staterec;
 	int i;
 
-	for (i = 0; i < wScreenCount; i++) {
+	for (i = 0; i < w_global.screen_count; i++) {
 		scr = wScreenWithNumber(i);
 		wwin = scr->focused_window;
 		if (wwin && wwin->flags.focused) {
@@ -1697,17 +1696,17 @@ static void handleKeyPress(XEvent * event)
 		break;
 
 	case WKBD_SWITCH_SCREEN:
-		if (wScreenCount > 1) {
+		if (w_global.screen_count > 1) {
 			WScreen *scr2;
 			int i;
 
 			/* find index of this screen */
-			for (i = 0; i < wScreenCount; i++) {
+			for (i = 0; i < w_global.screen_count; i++) {
 				if (wScreenWithNumber(i) == scr)
 					break;
 			}
 			i++;
-			if (i >= wScreenCount) {
+			if (i >= w_global.screen_count) {
 				i = 0;
 			}
 			scr2 = wScreenWithNumber(i);

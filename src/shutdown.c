@@ -38,7 +38,6 @@
 #include "colormap.h"
 #include "shutdown.h"
 
-extern int wScreenCount;
 
 static void wipeDesktop(WScreen * scr);
 
@@ -68,7 +67,7 @@ void Shutdown(WShutdownMode mode)
 #ifdef HAVE_INOTIFY
 		close(inotifyFD);
 #endif
-		for (i = 0; i < wScreenCount; i++) {
+		for (i = 0; i < w_global.screen_count; i++) {
 			WScreen *scr;
 
 			scr = wScreenWithNumber(i);
@@ -89,7 +88,7 @@ void Shutdown(WShutdownMode mode)
 		break;
 
 	case WSRestartPreparationMode:
-		for (i = 0; i < wScreenCount; i++) {
+		for (i = 0; i < w_global.screen_count; i++) {
 			WScreen *scr;
 
 #ifdef HAVE_INOTIFY

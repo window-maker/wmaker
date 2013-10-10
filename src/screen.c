@@ -70,7 +70,6 @@
     |KeyPressMask|KeyReleaseMask)
 
 /**** Global variables ****/
-extern int wScreenCount;
 
 #ifdef KEEP_XKB_LOCK_STATUS
 extern int wXkbSupported;
@@ -804,7 +803,7 @@ void wScreenRestoreState(WScreen * scr)
 
 	make_keys();
 
-	if (wScreenCount == 1) {
+	if (w_global.screen_count == 1) {
 		path = wdefaultspathfordomain("WMState");
 	} else {
 		char buf[16];
@@ -814,7 +813,7 @@ void wScreenRestoreState(WScreen * scr)
 
 	w_global.session_state = WMReadPropListFromFile(path);
 	wfree(path);
-	if (!w_global.session_state && wScreenCount > 1) {
+	if (!w_global.session_state && w_global.screen_count > 1) {
 		path = wdefaultspathfordomain("WMState");
 		w_global.session_state = WMReadPropListFromFile(path);
 		wfree(path);
@@ -915,7 +914,7 @@ void wScreenSaveState(WScreen * scr)
 
 	wMenuSaveState(scr);
 
-	if (wScreenCount == 1) {
+	if (w_global.screen_count == 1) {
 		str = wdefaultspathfordomain("WMState");
 	} else {
 		char buf[16];

@@ -481,6 +481,9 @@ extern struct wmaker_global_variables {
 
 	} timestamp;
 
+	/* Screens related */
+	int screen_count;
+
 	/* Workspace related */
 	struct {
 		struct WWorkspace **array;	/* data for the workspaces */

@@ -79,8 +79,6 @@ int inotifyFD;
 int inotifyWD;
 #endif
 
-int wScreenCount = 0;
-
 struct WPreferences wPreferences;
 
 WShortKey wKeyBindings[WKBD_LAST];
@@ -423,7 +421,7 @@ noreturn void wAbort(Bool dumpCore)
 	int i;
 	WScreen *scr;
 
-	for (i = 0; i < wScreenCount; i++) {
+	for (i = 0; i < w_global.screen_count; i++) {
 		scr = wScreenWithNumber(i);
 		if (scr)
 			RestoreDesktop(scr);
@@ -792,7 +790,7 @@ static int real_main(int argc, char **argv)
 	wXModifierInitialize();
 	StartUp(!multiHead);
 
-	if (wScreenCount == 1)
+	if (w_global.screen_count == 1)
 		multiHead = False;
 
 	execInitScript();

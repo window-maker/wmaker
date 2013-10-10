@@ -89,7 +89,6 @@ extern WDDomain *WDWindowMaker;
 extern WDDomain *WDRootMenu;
 extern WDDomain *WDWindowAttributes;
 extern WShortKey wKeyBindings[WKBD_LAST];
-extern int wScreenCount;
 
 #ifdef SHAPE
 extern Bool wShapeSupported;
@@ -371,7 +370,7 @@ wHackedGrabButton(unsigned int button, unsigned int modifiers,
 
 WScreen *wScreenWithNumber(int i)
 {
-	assert(i < wScreenCount);
+	assert(i < w_global.screen_count);
 
 	return wScreen[i];
 }
@@ -380,13 +379,13 @@ WScreen *wScreenForRootWindow(Window window)
 {
 	int i;
 
-	if (wScreenCount == 1)
+	if (w_global.screen_count == 1)
 		return wScreen[0];
 
 	/* Since the number of heads will probably be small (normally 2),
 	 * it should be faster to use this than a hash table, because
 	 * of the overhead. */
-	for (i = 0; i < wScreenCount; i++)
+	for (i = 0; i < w_global.screen_count; i++)
 		if (wScreen[i]->root_win == window)
 			return wScreen[i];
 
@@ -397,7 +396,7 @@ WScreen *wScreenForWindow(Window window)
 {
 	XWindowAttributes attr;
 
-	if (wScreenCount == 1)
+	if (w_global.screen_count == 1)
 		return wScreen[0];
 
 	if (XGetWindowAttributes(dpy, window, &attr))
@@ -656,7 +655,7 @@ void StartUp(Bool defaultScreenOnly)
 
 	wScreen = wmalloc(sizeof(WScreen *) * max);
 
-	wScreenCount = 0;
+	w_global.screen_count = 0;
 
 	/* Check if TIFF images are supported */
 	formats = RSupportedFileFormats();
@@ -672,25 +671,25 @@ void StartUp(Bool defaultScreenOnly)
 	/* manage the screens */
 	for (j = 0; j < max; j++) {
 		if (defaultScreenOnly || max == 1) {
-			wScreen[wScreenCount] = wScreenInit(DefaultScreen(dpy));
-			if (!wScreen[wScreenCount]) {
+			wScreen[w_global.screen_count] = wScreenInit(DefaultScreen(dpy));
+			if (!wScreen[w_global.screen_count]) {
 				wfatal(_("it seems that there is already a window manager running"));
 				Exit(1);
 			}
 		} else {
-			wScreen[wScreenCount] = wScreenInit(j);
-			if (!wScreen[wScreenCount]) {
+			wScreen[w_global.screen_count] = wScreenInit(j);
+			if (!wScreen[w_global.screen_count]) {
 				wwarning(_("could not manage screen %i"), j);
 				continue;
 			}
 		}
-		wScreenCount++;
+		w_global.screen_count++;
 	}
 
 	InitializeSwitchMenu();
 
 	/* initialize/restore state for the screens */
-	for (j = 0; j < wScreenCount; j++) {
+	for (j = 0; j < w_global.screen_count; j++) {
 		int lastDesktop;
 
 		lastDesktop = wNETWMGetCurrentDesktopFromHint(wScreen[j]);
@@ -743,7 +742,7 @@ void StartUp(Bool defaultScreenOnly)
 			wSessionRestoreLastWorkspace(wScreen[j]);
 	}
 
-	if (wScreenCount == 0) {
+	if (w_global.screen_count == 0) {
 		wfatal(_("could not manage any screen"));
 		Exit(1);
 	}
