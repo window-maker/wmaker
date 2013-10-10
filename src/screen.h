@@ -35,11 +35,6 @@
 #define WTB_PFOCUSED	4
 #define WTB_MENU 6
 
-#ifdef HAVE_XRANDR
-extern Bool has_randr;
-extern int randr_event_base;
-#endif
-
 typedef struct {
     WMRect *screens;
     int count;                 /* screen count, 0 = inactive */

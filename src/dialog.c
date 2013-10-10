@@ -1280,7 +1280,7 @@ void wShowInfoPanel(WScreen * scr)
 
 #ifdef HAVE_XRANDR
 	strbuf = wstrappend(strbuf, ", XRandR ");
-	if (has_randr)
+	if (w_global.xext.randr.supported)
 		strbuf = wstrappend(strbuf, _("(Supported)"));
 	else
 		strbuf = wstrappend(strbuf, _("(Unsupported)"));

@@ -71,11 +71,6 @@
 
 /**** Global variables ****/
 
-#ifdef HAVE_XRANDR
-Bool has_randr;
-int randr_event_base;
-#endif
-
 extern WDDomain *WDWindowMaker;
 
 /**** Local ****/
@@ -550,7 +545,7 @@ WScreen *wScreenInit(int screen_number)
 #endif				/* KEEP_XKB_LOCK_STATUS */
 
 #ifdef HAVE_XRANDR
-	if (has_randr)
+	if (w_global.xext.randr.supported)
 		XRRSelectInput(dpy, scr->root_win, RRScreenChangeNotifyMask);
 #endif
 

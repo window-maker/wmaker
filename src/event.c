@@ -552,7 +552,7 @@ static void handleExtensions(XEvent * event)
 	}
 #endif				/*KEEP_XKB_LOCK_STATUS */
 #ifdef HAVE_XRANDR
-	if (has_randr && event->type == (randr_event_base + RRScreenChangeNotify)) {
+	if (w_global.xext.randr.supported && event->type == (w_global.xext.randr.event_base + RRScreenChangeNotify)) {
 		/* From xrandr man page: "Clients must call back into Xlib using
 		 * XRRUpdateConfiguration when screen configuration change notify
 		 * events are generated */

@@ -627,7 +627,7 @@ void StartUp(Bool defaultScreenOnly)
 #endif
 
 #ifdef HAVE_XRANDR
-	has_randr = XRRQueryExtension(dpy, &randr_event_base, &dummy);
+	w_global.xext.randr.supported = XRRQueryExtension(dpy, &w_global.xext.randr.event_base, &dummy);
 #endif
 
 #ifdef KEEP_XKB_LOCK_STATUS
