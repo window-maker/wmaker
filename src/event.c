@@ -1311,7 +1311,7 @@ static void handleKeyPress(XEvent * event)
 #endif				/*KEEP_XKB_LOCK_STATUS */
 
 	/* ignore CapsLock */
-	modifiers = event->xkey.state & ValidModMask;
+	modifiers = event->xkey.state & w_global.shortcut.modifiers_mask;
 
 	for (i = 0; i < WKBD_LAST; i++) {
 		if (wKeyBindings[i].keycode == 0)

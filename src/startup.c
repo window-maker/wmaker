@@ -418,13 +418,13 @@ void StartUp(Bool defaultScreenOnly)
 	/*
 	 * Ignore CapsLock in modifiers
 	 */
-	ValidModMask = 0xff & ~LockMask;
+	w_global.shortcut.modifiers_mask = 0xff & ~LockMask;
 
 	getOffendingModifiers();
 	/*
 	 * Ignore NumLock and ScrollLock too
 	 */
-	ValidModMask &= ~(_NumLockMask | _ScrollLockMask);
+	w_global.shortcut.modifiers_mask &= ~(_NumLockMask | _ScrollLockMask);
 
 	memset(&wKeyBindings, 0, sizeof(wKeyBindings));
 

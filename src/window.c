@@ -2680,7 +2680,7 @@ static void resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 	}
 #endif
 
-	event->xbutton.state &= ValidModMask;
+	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
 	CloseWindowMenu(wwin->screen_ptr);
 
@@ -2714,7 +2714,7 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = data;
 
-	event->xbutton.state &= ValidModMask;
+	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
 	if (event->xbutton.button == Button1) {
 		if (event->xbutton.state == 0) {
@@ -2778,7 +2778,7 @@ static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 		resize_height_increment = wPreferences.resize_increment;
 	}
 
-	event->xbutton.state &= ValidModMask;
+	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
 	CloseWindowMenu(wwin->screen_ptr);
 
@@ -2834,7 +2834,7 @@ static void titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 		wwarning(_("The NumLock, ScrollLock or similar key seems to be turned on. "
 			   "Turn it off or some mouse actions and keyboard shortcuts will not work."));
 #endif
-	event->xbutton.state &= ValidModMask;
+	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
 	CloseWindowMenu(wwin->screen_ptr);
 
@@ -2892,7 +2892,7 @@ static void windowCloseClick(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = data;
 
-	event->xbutton.state &= ValidModMask;
+	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
 	CloseWindowMenu(wwin->screen_ptr);
 
@@ -2955,7 +2955,7 @@ static void windowIconifyClick(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = data;
 
-	event->xbutton.state &= ValidModMask;
+	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
 	CloseWindowMenu(wwin->screen_ptr);
 

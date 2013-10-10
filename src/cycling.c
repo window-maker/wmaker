@@ -144,7 +144,7 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 			    | PointerMotionMask | ButtonReleaseMask | EnterWindowMask, &ev);
 
 		/* ignore CapsLock */
-		modifiers = ev.xkey.state & ValidModMask;
+		modifiers = ev.xkey.state & w_global.shortcut.modifiers_mask;
 
 		if (!swpanel)
 			break;

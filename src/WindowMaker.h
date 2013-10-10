@@ -613,6 +613,12 @@ extern struct wmaker_global_variables {
 
 	/* Keyboard and shortcuts */
 	struct {
+		/*
+		 * Bit-mask to hide special key modifiers which we don't want to
+		 * impact the shortcuts (typically: CapsLock, NumLock, ScrollLock)
+		 */
+		unsigned int modifiers_mask;
+
 		WMArray *windows[MAX_WINDOW_SHORTCUTS];
 	} shortcut;
 
@@ -620,8 +626,6 @@ extern struct wmaker_global_variables {
 	struct WAppIcon *app_icon_list;	/* list of all aplication icons */
 
 } w_global;
-
-extern unsigned int ValidModMask;
 
 /****** Notifications ******/
 extern const char WMNManaged[];

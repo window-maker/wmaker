@@ -72,8 +72,6 @@ Display *dpy;
 
 char *ProgName;
 
-unsigned int ValidModMask = 0xff;
-
 struct WPreferences wPreferences;
 
 WShortKey wKeyBindings[WKBD_LAST];
@@ -538,6 +536,7 @@ int main(int argc, char **argv)
 	w_global.timestamp.last_event = CurrentTime;
 	w_global.timestamp.focus_change = CurrentTime;
 	w_global.workspace.ignore_change = False;
+	w_global.shortcut.modifiers_mask = 0xff;
 
 	/* setup common stuff for the monitor and wmaker itself */
 	WMInitializeApplication("WindowMaker", &argc, argv);

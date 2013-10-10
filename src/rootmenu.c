@@ -350,7 +350,7 @@ Bool wRootMenuPerformShortcut(XEvent * event)
 	int done = 0;
 
 	/* ignore CapsLock */
-	modifiers = event->xkey.state & ValidModMask;
+	modifiers = event->xkey.state & w_global.shortcut.modifiers_mask;
 
 	for (ptr = shortcutList; ptr != NULL; ptr = ptr->next) {
 		if (ptr->keycode == 0 || ptr->menu->menu->screen_ptr != scr)
