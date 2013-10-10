@@ -72,9 +72,6 @@
 #endif
 
 /***** Global *****/
-extern WDDomain *WDWindowMaker;
-extern WDDomain *WDWindowAttributes;
-extern WDDomain *WDRootMenu;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 typedef struct _WDefaultEntry  WDefaultEntry;
@@ -971,21 +968,21 @@ void wDefaultsCheckDomains(void* arg)
 	WMPropList *dict;
 	int i;
 
-	if (stat(WDWindowMaker->path, &stbuf) >= 0 && WDWindowMaker->timestamp < stbuf.st_mtime) {
-		WDWindowMaker->timestamp = stbuf.st_mtime;
+	if (stat(w_global.domain.wmaker->path, &stbuf) >= 0 && w_global.domain.wmaker->timestamp < stbuf.st_mtime) {
+		w_global.domain.wmaker->timestamp = stbuf.st_mtime;
 
 		/* Global dictionary */
 		shared_dict = readGlobalDomain("WindowMaker", True);
 
 		/* User dictionary */
-		dict = WMReadPropListFromFile(WDWindowMaker->path);
+		dict = WMReadPropListFromFile(w_global.domain.wmaker->path);
 
 		if (dict) {
 			if (!WMIsPLDictionary(dict)) {
 				WMReleasePropList(dict);
 				dict = NULL;
 				wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
-					 "WindowMaker", WDWindowMaker->path);
+					 "WindowMaker", w_global.domain.wmaker->path);
 			} else {
 				if (shared_dict) {
 					WMMergePLDictionaries(shared_dict, dict, True);
@@ -1000,10 +997,10 @@ void wDefaultsCheckDomains(void* arg)
 						wReadDefaults(scr, dict);
 				}
 
-				if (WDWindowMaker->dictionary)
-					WMReleasePropList(WDWindowMaker->dictionary);
+				if (w_global.domain.wmaker->dictionary)
+					WMReleasePropList(w_global.domain.wmaker->dictionary);
 
-				WDWindowMaker->dictionary = dict;
+				w_global.domain.wmaker->dictionary = dict;
 			}
 		} else {
 			wwarning(_("could not load domain %s from user defaults database"), "WindowMaker");
@@ -1014,17 +1011,17 @@ void wDefaultsCheckDomains(void* arg)
 
 	}
 
-	if (stat(WDWindowAttributes->path, &stbuf) >= 0 && WDWindowAttributes->timestamp < stbuf.st_mtime) {
+	if (stat(w_global.domain.window_attr->path, &stbuf) >= 0 && w_global.domain.window_attr->timestamp < stbuf.st_mtime) {
 		/* global dictionary */
 		shared_dict = readGlobalDomain("WMWindowAttributes", True);
 		/* user dictionary */
-		dict = WMReadPropListFromFile(WDWindowAttributes->path);
+		dict = WMReadPropListFromFile(w_global.domain.window_attr->path);
 		if (dict) {
 			if (!WMIsPLDictionary(dict)) {
 				WMReleasePropList(dict);
 				dict = NULL;
 				wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
-					 "WMWindowAttributes", WDWindowAttributes->path);
+					 "WMWindowAttributes", w_global.domain.window_attr->path);
 			} else {
 				if (shared_dict) {
 					WMMergePLDictionaries(shared_dict, dict, True);
@@ -1033,10 +1030,10 @@ void wDefaultsCheckDomains(void* arg)
 					shared_dict = NULL;
 				}
 
-				if (WDWindowAttributes->dictionary)
-					WMReleasePropList(WDWindowAttributes->dictionary);
+				if (w_global.domain.window_attr->dictionary)
+					WMReleasePropList(w_global.domain.window_attr->dictionary);
 
-				WDWindowAttributes->dictionary = dict;
+				w_global.domain.window_attr->dictionary = dict;
 				for (i = 0; i < w_global.screen_count; i++) {
 					scr = wScreenWithNumber(i);
 					if (scr) {
@@ -1053,30 +1050,30 @@ void wDefaultsCheckDomains(void* arg)
 			wwarning(_("could not load domain %s from user defaults database"), "WMWindowAttributes");
 		}
 
-		WDWindowAttributes->timestamp = stbuf.st_mtime;
+		w_global.domain.window_attr->timestamp = stbuf.st_mtime;
 		if (shared_dict)
 			WMReleasePropList(shared_dict);
 	}
 
-	if (stat(WDRootMenu->path, &stbuf) >= 0 && WDRootMenu->timestamp < stbuf.st_mtime) {
-		dict = WMReadPropListFromFile(WDRootMenu->path);
+	if (stat(w_global.domain.root_menu->path, &stbuf) >= 0 && w_global.domain.root_menu->timestamp < stbuf.st_mtime) {
+		dict = WMReadPropListFromFile(w_global.domain.root_menu->path);
 		if (dict) {
 			if (!WMIsPLArray(dict) && !WMIsPLString(dict)) {
 				WMReleasePropList(dict);
 				dict = NULL;
 				wwarning(_("Domain %s (%s) of defaults database is corrupted!"),
-					 "WMRootMenu", WDRootMenu->path);
+					 "WMRootMenu", w_global.domain.root_menu->path);
 			} else {
-				if (WDRootMenu->dictionary)
-					WMReleasePropList(WDRootMenu->dictionary);
+				if (w_global.domain.root_menu->dictionary)
+					WMReleasePropList(w_global.domain.root_menu->dictionary);
 
-				WDRootMenu->dictionary = dict;
-				wDefaultsMergeGlobalMenus(WDRootMenu);
+				w_global.domain.root_menu->dictionary = dict;
+				wDefaultsMergeGlobalMenus(w_global.domain.root_menu);
 			}
 		} else {
 			wwarning(_("could not load domain %s from user defaults database"), "WMRootMenu");
 		}
-		WDRootMenu->timestamp = stbuf.st_mtime;
+		w_global.domain.root_menu->timestamp = stbuf.st_mtime;
 	}
 #ifndef HAVE_INOTIFY
 	if (!arg)
@@ -1092,7 +1089,7 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 	int update_workspace_back = 0;	/* kluge :/ */
 	unsigned int needs_refresh;
 	void *tdata;
-	WMPropList *old_dict = (WDWindowMaker->dictionary != new_dict ? WDWindowMaker->dictionary : NULL);
+	WMPropList *old_dict = (w_global.domain.wmaker->dictionary != new_dict ? w_global.domain.wmaker->dictionary : NULL);
 
 	needs_refresh = 0;
 
@@ -1995,7 +1992,7 @@ getWSSpecificBackground(WScreen * scr, WDefaultEntry * entry, WMPropList * value
 	if (!scr->flags.backimage_helper_launched && !scr->flags.startup) {
 		WMPropList *key = WMCreatePLString("WorkspaceBack");
 
-		WMRemoveFromPLDictionary(WDWindowMaker->dictionary, key);
+		WMRemoveFromPLDictionary(w_global.domain.wmaker->dictionary, key);
 
 		WMReleasePropList(key);
 	}

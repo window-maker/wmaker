@@ -60,7 +60,6 @@
 
 #define MAX_SHORTCUT_LENGTH 32
 
-extern WDDomain *WDRootMenu;
 
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
@@ -1462,7 +1461,7 @@ static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool include
 
 		if (!scr->root_menu || stat_buf.st_mtime > scr->root_menu->timestamp
 		    /* if the pointer in WMRootMenu has changed */
-		    || WDRootMenu->timestamp > scr->root_menu->timestamp) {
+		    || w_global.domain.root_menu->timestamp > scr->root_menu->timestamp) {
 
 			if (menu_is_default) {
 				wwarning(_
@@ -1472,7 +1471,7 @@ static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool include
 
 			menu = readMenuFile(scr, path);
 			if (menu)
-				menu->timestamp = WMAX(stat_buf.st_mtime, WDRootMenu->timestamp);
+				menu->timestamp = WMAX(stat_buf.st_mtime, w_global.domain.root_menu->timestamp);
 		} else {
 			menu = NULL;
 		}
@@ -1617,17 +1616,17 @@ void OpenRootMenu(WScreen * scr, int x, int y, int keyboard)
 		return;
 	}
 
-	definition = WDRootMenu->dictionary;
+	definition = w_global.domain.root_menu->dictionary;
 
 	/*
 	   definition = PLGetDomain(domain);
 	 */
 	if (definition) {
 		if (WMIsPLArray(definition)) {
-			if (!scr->root_menu || WDRootMenu->timestamp > scr->root_menu->timestamp) {
+			if (!scr->root_menu || w_global.domain.root_menu->timestamp > scr->root_menu->timestamp) {
 				menu = configureMenu(scr, definition, True);
 				if (menu)
-					menu->timestamp = WDRootMenu->timestamp;
+					menu->timestamp = w_global.domain.root_menu->timestamp;
 
 			} else
 				menu = NULL;

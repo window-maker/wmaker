@@ -69,11 +69,6 @@
     |SubstructureRedirectMask|ButtonPressMask|ButtonReleaseMask\
     |KeyPressMask|KeyReleaseMask)
 
-/**** Global variables ****/
-
-extern WDDomain *WDWindowMaker;
-
-/**** Local ****/
 #define STIPPLE_WIDTH 2
 #define STIPPLE_HEIGHT 2
 static char STIPPLE_DATA[] = { 0x02, 0x01 };
@@ -619,7 +614,7 @@ WScreen *wScreenInit(int screen_number)
 	scr->info_window = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, 0, 0);
 
 	/* read defaults for this screen */
-	wReadDefaults(scr, WDWindowMaker->dictionary);
+	wReadDefaults(scr, w_global.domain.wmaker->dictionary);
 
 	{
 		XColor xcol;

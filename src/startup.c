@@ -85,9 +85,6 @@
 #endif
 
 /****** Global Variables ******/
-extern WDDomain *WDWindowMaker;
-extern WDDomain *WDRootMenu;
-extern WDDomain *WDWindowAttributes;
 extern WShortKey wKeyBindings[WKBD_LAST];
 
 /***** Local *****/
@@ -560,13 +557,13 @@ void StartUp(Bool defaultScreenOnly)
 	WMHookEventHandler(DispatchEvent);
 
 	/* initialize defaults stuff */
-	WDWindowMaker = wDefaultsInitDomain("WindowMaker", True);
-	if (!WDWindowMaker->dictionary)
+	w_global.domain.wmaker = wDefaultsInitDomain("WindowMaker", True);
+	if (!w_global.domain.wmaker->dictionary)
 		wwarning(_("could not read domain \"%s\" from defaults database"), "WindowMaker");
 
 	/* read defaults that don't change until a restart and are
 	 * screen independent */
-	wReadStaticDefaults(WDWindowMaker ? WDWindowMaker->dictionary : NULL);
+	wReadStaticDefaults(w_global.domain.wmaker ? w_global.domain.wmaker->dictionary : NULL);
 
 	/* check sanity of some values */
 	if (wPreferences.icon_size < 16) {
@@ -576,14 +573,14 @@ void StartUp(Bool defaultScreenOnly)
 	}
 
 	/* init other domains */
-	WDRootMenu = wDefaultsInitDomain("WMRootMenu", False);
-	if (!WDRootMenu->dictionary)
+	w_global.domain.root_menu = wDefaultsInitDomain("WMRootMenu", False);
+	if (!w_global.domain.root_menu->dictionary)
 		wwarning(_("could not read domain \"%s\" from defaults database"), "WMRootMenu");
 
-	wDefaultsMergeGlobalMenus(WDRootMenu);
+	wDefaultsMergeGlobalMenus(w_global.domain.root_menu);
 
-	WDWindowAttributes = wDefaultsInitDomain("WMWindowAttributes", True);
-	if (!WDWindowAttributes->dictionary)
+	w_global.domain.window_attr = wDefaultsInitDomain("WMWindowAttributes", True);
+	if (!w_global.domain.window_attr->dictionary)
 		wwarning(_("could not read domain \"%s\" from defaults database"), "WMWindowAttributes");
 
 	XSetErrorHandler((XErrorHandler) catchXError);

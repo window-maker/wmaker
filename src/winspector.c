@@ -114,8 +114,6 @@ typedef struct InspectorPanel {
 	unsigned int choosingIcon:1;
 } InspectorPanel;
 
-extern WDDomain *WDWindowAttributes;
-
 static InspectorPanel *panelList = NULL;
 static WMPropList *ANoTitlebar = NULL;
 static WMPropList *ANoResizebar;
@@ -430,7 +428,7 @@ insertAttribute(WMPropList *dict, WMPropList *window, WMPropList *attr, WMPropLi
 static void saveSettings(WMButton *button, InspectorPanel *panel)
 {
 	WWindow *wwin = panel->inspected;
-	WDDomain *db = WDWindowAttributes;
+	WDDomain *db = w_global.domain.window_attr;
 	WMPropList *dict = NULL;
 	WMPropList *winDic, *appDic, *value, *value1, *key = NULL, *key2;
 	char *icon_file, *buf1, *buf2;

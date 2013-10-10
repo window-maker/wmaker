@@ -76,11 +76,6 @@ struct WPreferences wPreferences;
 
 WShortKey wKeyBindings[WKBD_LAST];
 
-/* defaults domains */
-WDDomain *WDWindowMaker = NULL;
-WDDomain *WDWindowAttributes = NULL;
-WDDomain *WDRootMenu = NULL;
-
 /* notifications */
 const char WMNManaged[] = "WMNManaged";
 const char WMNUnmanaged[] = "WMNUnmanaged";

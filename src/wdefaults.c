@@ -47,9 +47,6 @@
     if (value) {attr->flag = getBool(attrib, value); \
     if (mask) mask->flag = 1;}
 
-/* Global stuff */
-extern WDDomain *WDWindowAttributes;
-
 /* Local stuff */
 
 /* type converters */
@@ -177,8 +174,8 @@ static WMPropList *get_value_from_instanceclass(const char *value)
 
 	WMPLSetCaseSensitive(True);
 
-	if (WDWindowAttributes->dictionary)
-		val = key ? WMGetFromPLDictionary(WDWindowAttributes->dictionary, key) : NULL;
+	if (w_global.domain.window_attr->dictionary)
+		val = key ? WMGetFromPLDictionary(w_global.domain.window_attr->dictionary, key) : NULL;
 
 	if (key)
 		WMReleasePropList(key);
@@ -222,8 +219,8 @@ void wDefaultFillAttributes(const char *instance, const char *class,
 
 	WMPLSetCaseSensitive(True);
 
-	if ((WDWindowAttributes->dictionary) && (useGlobalDefault))
-		da = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
+	if ((w_global.domain.window_attr->dictionary) && (useGlobalDefault))
+		da = WMGetFromPLDictionary(w_global.domain.window_attr->dictionary, AnyWindow);
 
 	/* get the data */
 	value = get_value(dw, dc, dn, da, ANoTitlebar, No, useGlobalDefault);
@@ -331,7 +328,7 @@ static WMPropList *get_generic_value(const char *instance, const char *class,
 		key = WMCreatePLString(buffer);
 		wfree(buffer);
 
-		dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+		dict = WMGetFromPLDictionary(w_global.domain.window_attr->dictionary, key);
 		WMReleasePropList(key);
 
 		if (dict)
@@ -342,7 +339,7 @@ static WMPropList *get_generic_value(const char *instance, const char *class,
 	if (!value && instance) {
 		key = WMCreatePLString(instance);
 
-		dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+		dict = WMGetFromPLDictionary(w_global.domain.window_attr->dictionary, key);
 		WMReleasePropList(key);
 
 		if (dict)
@@ -353,7 +350,7 @@ static WMPropList *get_generic_value(const char *instance, const char *class,
 	if (!value && class) {
 		key = WMCreatePLString(class);
 
-		dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+		dict = WMGetFromPLDictionary(w_global.domain.window_attr->dictionary, key);
 		WMReleasePropList(key);
 
 		if (dict)
@@ -363,7 +360,7 @@ static WMPropList *get_generic_value(const char *instance, const char *class,
 	/* Search the default icon name - See default_icon argument! */
 	if (!value && default_icon) {
 		/* AnyWindow is "*" - see wdefaults.c */
-		dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, AnyWindow);
+		dict = WMGetFromPLDictionary(w_global.domain.window_attr->dictionary, AnyWindow);
 
 		if (dict)
 			value = WMGetFromPLDictionary(dict, option);
@@ -403,12 +400,12 @@ char *get_icon_filename(const char *winstance, const char *wclass, const char *c
 			wwarning(_("icon \"%s\" doesn't exist, check your config files"), file_name);
 
 		/* FIXME: Here, if file_path don't exists, then the icon is in the
-		 * "icon database" (WDWindowAttributes->dictionary), but the icon
+		 * "icon database" (w_global.domain.window_attr->dictionary), but the icon
 		 * is not en disk. Therefore, we should remove it from the icon
 		 * database. Is possible to do that using wDefaultChangeIcon() */
 
 		/* Don't wfree(file_name) here, because is a pointer to the icon
-		 * dictionary (WDWindowAttributes->dictionary) value. */
+		 * dictionary (w_global.domain.window_attr->dictionary) value. */
 	}
 
 	if (!file_path && default_icon)
@@ -491,7 +488,7 @@ int wDefaultGetStartWorkspace(WScreen *scr, const char *instance, const char *cl
 	if (!ANoTitlebar)
 		init_wdefaults();
 
-	if (!WDWindowAttributes->dictionary)
+	if (!w_global.domain.window_attr->dictionary)
 		return -1;
 
 	value = get_generic_value(instance, class, AStartWorkspace, True);
@@ -519,7 +516,7 @@ char *wDefaultGetIconFile(const char *instance, const char *class, Bool default_
 	if (!ANoTitlebar)
 		init_wdefaults();
 
-	if (!WDWindowAttributes || !WDWindowAttributes->dictionary)
+	if (!w_global.domain.window_attr || !w_global.domain.window_attr->dictionary)
 		return NULL;
 
 	value = get_generic_value(instance, class, AIcon, default_icon);
@@ -534,7 +531,7 @@ char *wDefaultGetIconFile(const char *instance, const char *class, Bool default_
 
 void wDefaultChangeIcon(WScreen *scr, const char *instance, const char *class, const char *file)
 {
-	WDDomain *db = WDWindowAttributes;
+	WDDomain *db = w_global.domain.window_attr;
 	WMPropList *icon_value = NULL, *value, *attr, *key, *def_win, *def_icon = NULL;
 	WMPropList *dict = db->dictionary;
 	int same = 0;
@@ -611,15 +608,15 @@ void wDefaultPurgeInfo(WScreen *scr, const char *instance, const char *class)
 	sprintf(buffer, "%s.%s", instance, class);
 	key = WMCreatePLString(buffer);
 
-	dict = WMGetFromPLDictionary(WDWindowAttributes->dictionary, key);
+	dict = WMGetFromPLDictionary(w_global.domain.window_attr->dictionary, key);
 
 	if (dict) {
 		value = WMGetFromPLDictionary(dict, AIcon);
 		if (value) {
 			WMRemoveFromPLDictionary(dict, AIcon);
 		}
-		WMRemoveFromPLDictionary(WDWindowAttributes->dictionary, key);
-		UpdateDomainFile(WDWindowAttributes);
+		WMRemoveFromPLDictionary(w_global.domain.window_attr->dictionary, key);
+		UpdateDomainFile(w_global.domain.window_attr);
 	}
 
 	wfree(buffer);

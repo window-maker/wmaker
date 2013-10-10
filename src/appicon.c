@@ -60,9 +60,6 @@
  * using the classname/instancename
  */
 
-/**** Global variables ****/
-extern WDDomain *WDWindowAttributes;
-
 #define MOD_MASK       wPreferences.modifier_mask
 #define ICON_SIZE      wPreferences.icon_size
 
@@ -1084,7 +1081,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 /* This function save the application icon and store the path in the Dictionary */
 static void wApplicationSaveIconPathFor(const char *iconPath, const char *wm_instance, const char *wm_class)
 {
-	WMPropList *dict = WDWindowAttributes->dictionary;
+	WMPropList *dict = w_global.domain.window_attr->dictionary;
 	WMPropList *adict, *key, *iconk;
 	WMPropList *val;
 	char *tmp;
@@ -1118,7 +1115,7 @@ static void wApplicationSaveIconPathFor(const char *iconPath, const char *wm_ins
 	WMReleasePropList(iconk);
 
 	if (val && !wPreferences.flags.noupdates)
-		UpdateDomainFile(WDWindowAttributes);
+		UpdateDomainFile(w_global.domain.window_attr);
 }
 
 static WAppIcon *findDockIconFor(WDock *dock, Window main_window)

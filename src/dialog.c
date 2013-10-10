@@ -1454,8 +1454,6 @@ void wShowLegalPanel(WScreen * scr)
  ***********************************************************************
  */
 
-extern WDDomain *WDWindowAttributes;
-
 typedef struct _CrashPanel {
 	WMWindow *win;		/* main window */
 

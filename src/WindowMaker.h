@@ -481,6 +481,14 @@ extern struct wmaker_global_variables {
 
 	} timestamp;
 
+	/* Global Domains, for storing dictionaries */
+	struct {
+		/* Note: you must #include <defaults.h> if you want to use them */
+		struct WDDomain *wmaker;
+		struct WDDomain *window_attr;
+		struct WDDomain *root_menu;
+	} domain;
+
 	/* Screens related */
 	int screen_count;
 
