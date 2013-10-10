@@ -72,8 +72,6 @@
 
 #define MOD_MASK wPreferences.modifier_mask
 
-/****** Global Variables ******/
-extern WShortKey wKeyBindings[WKBD_LAST];
 
 /***** Local Stuff *****/
 static WWindowState *windowState = NULL;

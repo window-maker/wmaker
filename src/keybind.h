@@ -128,6 +128,12 @@ typedef struct WShortKey {
     KeyCode keycode;
 } WShortKey;
 
+/* ---[ Global Variables ]------------------------------------------------ */
+
+extern WShortKey wKeyBindings[WKBD_LAST];
+
+/* ---[ Functions ]------------------------------------------------------- */
+
 void wKeyboardInitialize(void);
 
 #endif /* WMKEYBIND_H */

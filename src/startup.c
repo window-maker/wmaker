@@ -84,9 +84,6 @@
 # define SA_NODEFER 0
 #endif
 
-/****** Global Variables ******/
-extern WShortKey wKeyBindings[WKBD_LAST];
-
 /***** Local *****/
 static WScreen **wScreen = NULL;
 static unsigned int _NumLockMask = 0;

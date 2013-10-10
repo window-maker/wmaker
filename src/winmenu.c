@@ -68,9 +68,6 @@
 #define WO_OMNIPRESENT		2
 #define WO_ENTRIES		3
 
-/**** Global data ***/
-extern WShortKey wKeyBindings[WKBD_LAST];
-
 
 static void updateOptionsMenu(WMenu * menu, WWindow * wwin);
 

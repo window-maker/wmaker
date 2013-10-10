@@ -59,7 +59,6 @@
 #define MAX_SHORTCUT_LENGTH 32
 #define WORKSPACE_NAME_DISPLAY_PADDING 32
 
-extern WShortKey wKeyBindings[WKBD_LAST];
 
 static WMPropList *dWorkspaces = NULL;
 static WMPropList *dClip, *dName;

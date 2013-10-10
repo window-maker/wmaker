@@ -76,8 +76,6 @@
 #include "winmenu.h"
 #include "switchmenu.h"
 
-/******** Global Variables **********/
-extern WShortKey wKeyBindings[WKBD_LAST];
 
 #define MOD_MASK wPreferences.modifier_mask
 

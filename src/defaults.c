@@ -71,8 +71,6 @@
 #define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
 #endif
 
-/***** Global *****/
-extern WShortKey wKeyBindings[WKBD_LAST];
 
 typedef struct _WDefaultEntry  WDefaultEntry;
 typedef int (WDECallbackConvert) (WScreen *scr, WDefaultEntry *entry, WMPropList *plvalue, void *addr, void **tdata);
