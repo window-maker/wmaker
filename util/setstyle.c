@@ -440,7 +440,7 @@ int main(int argc, char **argv)
 			perror(file);
 			return 1;
 		}
-		strncat(buf, "/style", sizeof(buf) - strlen(buf));
+		strncat(buf, "/style", sizeof(buf) - strlen(buf) - 1);
 
 		if (stat(buf, &st) != 0 || !S_ISREG(st.st_mode)) {	/* maybe symlink too? */
 			printf("%s: %s: style file not found or not a file\n", __progname, buf);
