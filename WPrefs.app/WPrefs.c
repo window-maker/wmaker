@@ -915,7 +915,7 @@ void SetIntegerForKey(int value, const char *defaultName)
 	WMReleasePropList(object);
 }
 
-void SetStringForKey(const char *value, const const char *defaultName)
+void SetStringForKey(const char *value, const char *defaultName)
 {
 	WMPropList *object;
 
