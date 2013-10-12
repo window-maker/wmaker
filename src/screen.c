@@ -866,7 +866,7 @@ void wScreenSaveState(WScreen * scr)
 		}
 	}
 	if (!wPreferences.flags.noclip) {
-		wClipSaveState(scr);
+		wClipSaveState();
 	} else {
 		if ((foo = WMGetFromPLDictionary(old_state, dClip)) != NULL) {
 			WMPutInPLDictionary(w_global.session_state, dClip, foo);

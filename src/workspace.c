@@ -812,7 +812,7 @@ void wWorkspaceSaveState(WScreen * scr, WMPropList * old_state)
 		wks_state = WMCreatePLDictionary(dName, pstr, NULL);
 		WMReleasePropList(pstr);
 		if (!wPreferences.flags.noclip) {
-			pstr = wClipSaveWorkspaceState(scr, i);
+			pstr = wClipSaveWorkspaceState(i);
 			WMPutInPLDictionary(wks_state, dClip, pstr);
 			WMReleasePropList(pstr);
 		} else if (old_wks_state != NULL) {

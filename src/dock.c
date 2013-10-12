@@ -1556,7 +1556,7 @@ void wDockSaveState(WScreen *scr, WMPropList *old_state)
 	WMReleasePropList(dock_state);
 }
 
-void wClipSaveState(WScreen *scr)
+void wClipSaveState(void)
 {
 	WMPropList *clip_state;
 
@@ -1566,7 +1566,7 @@ void wClipSaveState(WScreen *scr)
 	WMReleasePropList(clip_state);
 }
 
-WMPropList *wClipSaveWorkspaceState(WScreen *scr, int workspace)
+WMPropList *wClipSaveWorkspaceState(int workspace)
 {
 	return dockSaveState(w_global.workspace.array[workspace]->clip);
 }
