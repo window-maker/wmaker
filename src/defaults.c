@@ -2485,7 +2485,7 @@ static int setIconTile(WScreen * scr, WDefaultEntry * entry, void *tdata, void *
 		if (scr->clip_tile) {
 			RReleaseImage(scr->clip_tile);
 		}
-		scr->clip_tile = wClipMakeTile(scr, img);
+		scr->clip_tile = wClipMakeTile(img);
 	}
 
 	if (!wPreferences.flags.nodrawer) {

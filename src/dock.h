@@ -108,7 +108,7 @@ int wIsADrawer(WAppIcon *aicon);
 
 void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace);
 
-RImage *wClipMakeTile(WScreen *scr, RImage *normalTile);
+RImage *wClipMakeTile(RImage *normalTile);
 RImage* wDrawerMakeTile(WScreen *scr, RImage *normalTile);
 
 #define WO_FAILED          0

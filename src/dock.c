@@ -365,7 +365,7 @@ static void paintClipButtons(WAppIcon *clipIcon, Bool lpushed, Bool rpushed)
 	}
 }
 
-RImage *wClipMakeTile(WScreen *scr, RImage *normalTile)
+RImage *wClipMakeTile(RImage *normalTile)
 {
 	RImage *tile = RCloneImage(normalTile);
 	RColor black;
