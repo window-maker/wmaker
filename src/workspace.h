@@ -38,7 +38,7 @@ void wWorkspaceForceChange(WScreen *scr, int workspace);
 WMenu *wWorkspaceMenuMake(WScreen *scr, Bool titled);
 void wWorkspaceMenuUpdate(WMenu *menu);
 void wWorkspaceMenuEdit(WScreen *scr);
-void wWorkspaceSaveState(WScreen *scr, WMPropList *old_state);
+void wWorkspaceSaveState(WMPropList *old_state);
 void wWorkspaceRestoreState(WScreen *scr);
 void wWorkspaceRename(WScreen *scr, int workspace, const char *name);
 void wWorkspaceRelativeChange(WScreen *scr, int amount);

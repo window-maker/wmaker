@@ -798,7 +798,7 @@ void wWorkspaceMenuUpdate(WMenu *menu)
 	wMenuPaint(menu);
 }
 
-void wWorkspaceSaveState(WScreen * scr, WMPropList * old_state)
+void wWorkspaceSaveState(WMPropList * old_state)
 {
 	WMPropList *parr, *pstr, *wks_state, *old_wks_state, *foo, *bar;
 	int i;

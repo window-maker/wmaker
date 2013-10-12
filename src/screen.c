@@ -873,7 +873,7 @@ void wScreenSaveState(WScreen * scr)
 		}
 	}
 
-	wWorkspaceSaveState(scr, old_state);
+	wWorkspaceSaveState(old_state);
 
 	if (!wPreferences.flags.nodrawer) {
 		wDrawersSaveState(scr);
