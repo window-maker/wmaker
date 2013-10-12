@@ -59,8 +59,15 @@ static const struct {
 
 
 static char *autoDelayPresetValues[5] = { "0", "100", "250", "600", "1000" };
-static char *dockDisablingKeys[3] = { "DisableDock", "DisableClip", "DisableDrawers" };
-static char *dockFiles[3] = { "dock", "clip", "drawer" };
+
+static const struct {
+	const char *disable_key;
+	const char *icon_file;
+} dock_config[] = {
+	{ "DisableDock",    "dock"   },
+	{ "DisableClip",    "clip"   },
+	{ "DisableDrawers", "drawer" }
+};
 
 static void showData(_Panel *panel);
 static void storeData(_Panel *panel);
@@ -228,7 +235,7 @@ static void createPanel(Panel *p)
 		WMResizeWidget(panel->docksB[i], 56, 56);
 		WMMoveWidget(panel->docksB[i], 30, 20 + 62 * i);
 		WMSetButtonImagePosition(panel->docksB[i], WIPImageOnly);
-		CreateImages(scr, rc, xis, dockFiles[i], &icon1, &icon2);
+		CreateImages(scr, rc, xis, dock_config[i].icon_file, &icon1, &icon2);
 		if (icon2) {
 			WMSetButtonImage(panel->docksB[i], icon2);
 			WMReleasePixmap(icon2);
@@ -275,7 +282,7 @@ static void storeData(_Panel *panel)
 	}
 	for (i = 0; i < 3; i++)
 	{
-		SetBoolForKey(!WMGetButtonSelected(panel->docksB[i]), dockDisablingKeys[i]);
+		SetBoolForKey(!WMGetButtonSelected(panel->docksB[i]), dock_config[i].disable_key);
 	}
 }
 
@@ -291,7 +298,7 @@ static void showData(_Panel *panel)
 	}
 	for (i = 0; i < 3; i++)
 	{
-		WMSetButtonSelected(panel->docksB[i], !GetBoolForKey(dockDisablingKeys[i]));
+		WMSetButtonSelected(panel->docksB[i], !GetBoolForKey(dock_config[i].disable_key));
 	}
 }
 
