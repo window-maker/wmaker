@@ -4829,7 +4829,7 @@ finish:
 /* Same kind of comment than for previous function: this function is
  * very similar to make_icon_state, but has substential differences as
  * well. */
-static WMPropList *drawerSaveState(WScreen *scr, WDock *drawer)
+static WMPropList *drawerSaveState(WDock *drawer)
 {
 	WMPropList *pstr, *drawer_state;
 	WAppIcon *ai;
@@ -4884,7 +4884,7 @@ void wDrawersSaveState(WScreen *scr)
 	for (i=0, dc = scr->drawers;
 	     i < scr->drawer_count;
 	     i++, dc = dc->next) {
-		drawer_state = drawerSaveState(scr, dc->adrawer);
+		drawer_state = drawerSaveState(dc->adrawer);
 		WMAddToPLArray(all_drawers, drawer_state);
 		WMReleasePropList(drawer_state);
 	}
