@@ -34,7 +34,7 @@ typedef struct WPixmap {
 } WPixmap;
 
 
-WPixmap *wPixmapCreate(WScreen *scr, Pixmap image, Pixmap mask);
+WPixmap *wPixmapCreate(Pixmap image, Pixmap mask);
 
 WPixmap *wPixmapCreateFromXPMData(WScreen *scr, char **data);
 

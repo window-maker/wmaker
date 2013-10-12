@@ -2109,7 +2109,7 @@ void wWindowUpdateButtonImages(WWindow *wwin)
 			}
 
 			if (!fwin->lbutton_image) {
-				fwin->lbutton_image = wPixmapCreate(scr, pixmap, mask);
+				fwin->lbutton_image = wPixmapCreate(pixmap, mask);
 				fwin->lbutton_image->client_owned = 1;
 				fwin->lbutton_image->client_owned_mask = 1;
 			}
@@ -2150,7 +2150,7 @@ void wWindowUpdateButtonImages(WWindow *wwin)
 			}
 
 			if (!fwin->rbutton_image) {
-				fwin->rbutton_image = wPixmapCreate(scr, pixmap, mask);
+				fwin->rbutton_image = wPixmapCreate(pixmap, mask);
 				fwin->rbutton_image->client_owned = 1;
 				fwin->rbutton_image->client_owned_mask = 1;
 			}

@@ -98,7 +98,7 @@ WPixmap *wPixmapCreateFromXBMData(WScreen * scr, char *data, char *mask,
 	return pix;
 }
 
-WPixmap *wPixmapCreate(WScreen * scr, Pixmap image, Pixmap mask)
+WPixmap *wPixmapCreate(Pixmap image, Pixmap mask)
 {
 	WPixmap *pix;
 	Window foo;

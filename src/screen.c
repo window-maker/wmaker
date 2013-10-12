@@ -242,7 +242,7 @@ static WPixmap *make3Dots(WScreen * scr)
 
 	XFreeGC(dpy, gc2);
 
-	wpix = wPixmapCreate(scr, pix, mask);
+	wpix = wPixmapCreate(pix, mask);
 	wpix->shared = 1;
 
 	return wpix;
