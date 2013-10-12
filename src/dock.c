@@ -4353,7 +4353,7 @@ static void drawerDestroy(WDock *drawer)
 	/* Note regarding menus: we can't delete any dock/clip/drawer menu, because
 	 * that would (attempt to) wfree some memory in gettext library (see menu
 	 * entries that have several "versions", such like "Hide" and "Unhide"). */
-	wDefaultPurgeInfo(scr, drawer->icon_array[0]->wm_instance,
+	wDefaultPurgeInfo(drawer->icon_array[0]->wm_instance,
 			drawer->icon_array[0]->wm_class);
 
 	if (drawer->icon_count == 2) {

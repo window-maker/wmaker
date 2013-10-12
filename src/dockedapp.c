@@ -184,7 +184,7 @@ static void panelBtnCallback(WMWidget * self, void *data)
 			else
 				wAppIconPaint(aicon);
 
-			wDefaultChangeIcon(panel->wwin->screen_ptr, aicon->wm_instance, aicon->wm_class, text);
+			wDefaultChangeIcon(aicon->wm_instance, aicon->wm_class, text);
 		}
 		if (text)
 			wfree(text);

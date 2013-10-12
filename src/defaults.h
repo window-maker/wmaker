@@ -52,9 +52,9 @@ char *get_icon_filename(const char *winstance, const char *wclass, const char *c
 
 
 int wDefaultGetStartWorkspace(const char *instance, const char *class);
-void wDefaultChangeIcon(WScreen *scr, const char *instance, const char* class, const char *file);
+void wDefaultChangeIcon(const char *instance, const char* class, const char *file);
 RImage *get_rimage_from_file(WScreen *scr, const char *file_name, int max_size);
 
-void wDefaultPurgeInfo(WScreen *scr, const char *instance, const char *class);
+void wDefaultPurgeInfo(const char *instance, const char *class);
 
 #endif /* WMDEFAULTS_H_ */

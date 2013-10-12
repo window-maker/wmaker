@@ -529,7 +529,7 @@ char *wDefaultGetIconFile(const char *instance, const char *class, Bool default_
 	return tmp;
 }
 
-void wDefaultChangeIcon(WScreen *scr, const char *instance, const char *class, const char *file)
+void wDefaultChangeIcon(const char *instance, const char *class, const char *file)
 {
 	WDDomain *db = w_global.domain.window_attr;
 	WMPropList *icon_value = NULL, *value, *attr, *key, *def_win, *def_icon = NULL;
@@ -593,7 +593,7 @@ void wDefaultChangeIcon(WScreen *scr, const char *instance, const char *class, c
 	WMPLSetCaseSensitive(False);
 }
 
-void wDefaultPurgeInfo(WScreen *scr, const char *instance, const char *class)
+void wDefaultPurgeInfo(const char *instance, const char *class)
 {
 	WMPropList *value, *key, *dict;
 	char *buffer;

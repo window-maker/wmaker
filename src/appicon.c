@@ -533,7 +533,7 @@ static void setIconCallback(WMenu *menu, WMenuEntry *entry)
 			wMessageDialog(scr, _("Error"),
 				       _("Could not open specified icon file"), _("OK"), NULL, NULL);
 		} else {
-			wDefaultChangeIcon(scr, icon->wm_instance, icon->wm_class, file);
+			wDefaultChangeIcon(icon->wm_instance, icon->wm_class, file);
 			wAppIconPaint(icon);
 		}
 		if (file)
