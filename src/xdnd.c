@@ -213,7 +213,7 @@ Bool acceptXDND(Window window)
 			}
 		}
 	}
-	if (icon_pos < 0 && (dock = scr->workspaces[w_global.workspace.current]->clip) != NULL) {
+	if (icon_pos < 0 && (dock = w_global.workspace.array[w_global.workspace.current]->clip) != NULL) {
 		for (i = 0; i < dock->max_icons; i++) {
 			if (dock->icon_array[i]
 			    && dock->icon_array[i]->icon->core->window == window) {
