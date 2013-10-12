@@ -20,23 +20,23 @@
 
 #define XDND_VERSION 3L
 
-Atom _XA_XdndAware;
-Atom _XA_XdndEnter;
-Atom _XA_XdndLeave;
-Atom _XA_XdndDrop;
-Atom _XA_XdndPosition;
-Atom _XA_XdndStatus;
-Atom _XA_XdndActionCopy;
-Atom _XA_XdndSelection;
-Atom _XA_XdndFinished;
-Atom _XA_WINDOWMAKER_XDNDEXCHANGE;
+static Atom _XA_XdndAware;
+static Atom _XA_XdndEnter;
+static Atom _XA_XdndLeave;
+static Atom _XA_XdndDrop;
+static Atom _XA_XdndPosition;
+static Atom _XA_XdndStatus;
+static Atom _XA_XdndActionCopy;
+static Atom _XA_XdndSelection;
+static Atom _XA_XdndFinished;
+static Atom _XA_WINDOWMAKER_XDNDEXCHANGE;
 
 /*
  Atom _XA_MOTIF_DRAG_RECEIVER_INFO;
  Atom _XA_MOTIF_DRAG_AND_DROP_MESSAGE;
  */
 
-Atom atom_support;
+static Atom atom_support;
 
 void wXDNDInitializeAtoms()
 {
