@@ -47,8 +47,17 @@ typedef struct _Panel {
 #define DELAY_ICON "timer%i"
 #define DELAY_ICON_S "timer%is"
 
-static char *autoDelayStrings[4];
-static char *autoDelayKeys[4] = { "ClipAutoexpandDelay", "ClipAutocollapseDelay", "ClipAutoraiseDelay", "ClipAutolowerDelay" };
+static const struct {
+	const char *key;
+	const char *string;
+} auto_delay[] = {
+	{ "ClipAutoexpandDelay",   N_("Delay before auto-expansion") },
+	{ "ClipAutocollapseDelay", N_("Delay before auto-collapsing") },
+	{ "ClipAutoraiseDelay",    N_("Delay before auto-raise") },
+	{ "ClipAutolowerDelay",    N_("Delay before auto-lowering") }
+};
+
+
 static char *autoDelayPresetValues[5] = { "0", "100", "250", "600", "1000" };
 static char *dockDisablingKeys[3] = { "DisableDock", "DisableClip", "DisableDrawers" };
 static char *dockFiles[3] = { "dock", "clip", "drawer" };
@@ -165,7 +174,7 @@ static void createPanel(Panel *p)
 			panel->autoDelayL[i + k * 2] = WMCreateLabel(panel->autoDelayF[k]);
 			WMResizeWidget(panel->autoDelayL[i + k * 2], 165, 20);
 			WMMoveWidget(panel->autoDelayL[i + k * 2], 10, 27 + 40 * i);
-			WMSetLabelText(panel->autoDelayL[i + k * 2], autoDelayStrings[i + k * 2]);
+			WMSetLabelText(panel->autoDelayL[i + k * 2], _(auto_delay[i + k * 2].string));
 			WMSetLabelTextAlignment(panel->autoDelayL[i + k * 2], WARight);
 
 			for (j = 0; j < 5; j++)
@@ -262,7 +271,7 @@ static void storeData(_Panel *panel)
 	int i;
 	for (i = 0; i < 4; i++)
 	{
-		SetStringForKey(WMGetTextFieldText(panel->autoDelayT[i]), autoDelayKeys[i]);
+		SetStringForKey(WMGetTextFieldText(panel->autoDelayT[i]), auto_delay[i].key);
 	}
 	for (i = 0; i < 3; i++)
 	{
@@ -276,7 +285,7 @@ static void showData(_Panel *panel)
 	int i;
 	for (i = 0; i < 4; i++)
 	{
-		value = GetStringForKey(autoDelayKeys[i]);
+		value = GetStringForKey(auto_delay[i].key);
 		WMSetTextFieldText(panel->autoDelayT[i], value);
 		adjustButtonSelectionBasedOnValue(panel, i, value);
 	}
@@ -289,11 +298,6 @@ static void showData(_Panel *panel)
 Panel *InitDocks(WMScreen *scr, WMWidget *parent)
 {
 	_Panel *panel;
-
-	autoDelayStrings[0] = _("Delay before auto-expansion");
-	autoDelayStrings[1] = _("Delay before auto-collapsing");
-	autoDelayStrings[2] = _("Delay before auto-raise");
-	autoDelayStrings[3] = _("Delay before auto-lowering");
 
 	panel = wmalloc(sizeof(_Panel));
 	memset(panel, 0, sizeof(_Panel));
