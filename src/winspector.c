@@ -928,7 +928,7 @@ static void revertSettings(WMButton *button, InspectorPanel *panel)
 
 	showIconFor(WMWidgetScreen(panel->alwChk), panel, wm_instance, wm_class, REVERT_TO_DEFAULT);
 
-	n = wDefaultGetStartWorkspace(wwin->screen_ptr, wm_instance, wm_class);
+	n = wDefaultGetStartWorkspace(wm_instance, wm_class);
 
 	if (n >= 0 && n < w_global.workspace.count)
 		WMSetPopUpButtonSelectedItem(panel->wsP, n + 1);
@@ -1529,7 +1529,7 @@ static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel, int 
 	for (i = 0; i < w_global.workspace.count; i++)
 		WMAddPopUpButtonItem(panel->wsP, w_global.workspace.array[i]->name);
 
-	i = wDefaultGetStartWorkspace(wwin->screen_ptr, wwin->wm_instance, wwin->wm_class);
+	i = wDefaultGetStartWorkspace(wwin->wm_instance, wwin->wm_class);
 	if (i >= 0 && i <= w_global.workspace.count)
 		WMSetPopUpButtonSelectedItem(panel->wsP, i + 1);
 	else

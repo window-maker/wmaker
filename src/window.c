@@ -833,8 +833,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			wwin->flags.miniaturized = win_state->state->miniaturized;
 
 		if (!IS_OMNIPRESENT(wwin)) {
-			int w = wDefaultGetStartWorkspace(scr, wwin->wm_instance,
-							  wwin->wm_class);
+			int w = wDefaultGetStartWorkspace(wwin->wm_instance, wwin->wm_class);
 			if (w < 0 || w >= w_global.workspace.count) {
 				workspace = win_state->state->workspace;
 				if (workspace >= w_global.workspace.count)
@@ -911,7 +910,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	} else {
 		int w;
 
-		w = wDefaultGetStartWorkspace(scr, wwin->wm_instance, wwin->wm_class);
+		w = wDefaultGetStartWorkspace(wwin->wm_instance, wwin->wm_class);
 
 		if (w >= 0 && w < w_global.workspace.count && !(IS_OMNIPRESENT(wwin))) {
 			workspace = w;

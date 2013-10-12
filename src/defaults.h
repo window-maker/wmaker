@@ -51,7 +51,7 @@ char *get_icon_filename(const char *winstance, const char *wclass, const char *c
 			Bool default_icon);
 
 
-int wDefaultGetStartWorkspace(WScreen *scr, const char *instance, const char *class);
+int wDefaultGetStartWorkspace(const char *instance, const char *class);
 void wDefaultChangeIcon(WScreen *scr, const char *instance, const char* class, const char *file);
 RImage *get_rimage_from_file(WScreen *scr, const char *file_name, int max_size);
 

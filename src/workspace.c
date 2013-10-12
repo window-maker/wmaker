@@ -913,7 +913,7 @@ void wWorkspaceRestoreState(WScreen *scr)
 }
 
 /* Returns the workspace number for a given workspace name */
-int wGetWorkspaceNumber(WScreen *scr, const char *value)
+int wGetWorkspaceNumber(const char *value)
 {
         int w, i;
 

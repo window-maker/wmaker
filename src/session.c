@@ -555,7 +555,7 @@ void wSessionRestoreLastWorkspace(WScreen * scr)
 	WMPLSetCaseSensitive(False);
 
 	/* Get the workspace number for the workspace name */
-	w = wGetWorkspaceNumber(scr, value);
+	w = wGetWorkspaceNumber(value);
 
 	if (w != w_global.workspace.current && w < w_global.workspace.count)
 		wWorkspaceChange(scr, w);
