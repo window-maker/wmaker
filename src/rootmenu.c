@@ -250,6 +250,10 @@ static void shutdownCommand(WMenu * menu, WMenuEntry * entry)
 
 static void restartCommand(WMenu * menu, WMenuEntry * entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+	(void) entry;
+
 	Shutdown(WSRestartPreparationMode);
 	Restart((char *)entry->clientdata, False);
 	Restart(NULL, True);
@@ -257,26 +261,41 @@ static void restartCommand(WMenu * menu, WMenuEntry * entry)
 
 static void refreshCommand(WMenu * menu, WMenuEntry * entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	wRefreshDesktop(menu->frame->screen_ptr);
 }
 
 static void arrangeIconsCommand(WMenu * menu, WMenuEntry * entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	wArrangeIcons(menu->frame->screen_ptr, True);
 }
 
 static void showAllCommand(WMenu * menu, WMenuEntry * entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	wShowAllWindows(menu->frame->screen_ptr);
 }
 
 static void hideOthersCommand(WMenu * menu, WMenuEntry * entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	wHideOtherApplications(menu->frame->screen_ptr->focused_window);
 }
 
 static void saveSessionCommand(WMenu * menu, WMenuEntry * entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	if (!wPreferences.save_session_on_exit)
 		wSessionSaveState(menu->frame->screen_ptr);
 
@@ -285,17 +304,26 @@ static void saveSessionCommand(WMenu * menu, WMenuEntry * entry)
 
 static void clearSessionCommand(WMenu *menu, WMenuEntry *entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	wSessionClearState();
 	wScreenSaveState(menu->frame->screen_ptr);
 }
 
 static void infoPanelCommand(WMenu * menu, WMenuEntry * entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	wShowInfoPanel(menu->frame->screen_ptr);
 }
 
 static void legalPanelCommand(WMenu * menu, WMenuEntry * entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	wShowLegalPanel(menu->frame->screen_ptr);
 }
 

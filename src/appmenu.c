@@ -76,6 +76,9 @@ static void notifyClient(WMenu * menu, WMenuEntry * entry)
 {
 	WAppMenuData *data = entry->clientdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	sendMessage(data->window, wmSelectItem, data->tag);
 }
 

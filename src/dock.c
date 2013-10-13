@@ -169,6 +169,9 @@ static void renameCallback(WMenu *menu, WMenuEntry *entry)
 	int wspace;
 	char *name;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	assert(entry->clientdata != NULL);
 
 	wspace = w_global.workspace.current;
@@ -419,6 +422,9 @@ static void omnipresentCallback(WMenu *menu, WMenuEntry *entry)
 	WMArrayIterator iter;
 	int failed;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	assert(entry->clientdata != NULL);
 
 	dock = clickedIcon->dock;
@@ -484,6 +490,9 @@ static void removeIconsCallback(WMenu *menu, WMenuEntry *entry)
 	WDock *dock;
 	WMArray *selectedIcons;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	assert(clickedIcon != NULL);
 
 	dock = clickedIcon->dock;
@@ -520,6 +529,9 @@ static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 	WAppIcon *aicon;
 	WMArray *selectedIcons;
 	WMArrayIterator it;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
 
 	assert(clickedIcon != NULL);
 	dock = clickedIcon->dock;
@@ -635,6 +647,9 @@ static void colectIconsCallback(WMenu *menu, WMenuEntry *entry)
 	int x, y, x_pos, y_pos;
 	Bool update_icon = False;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	assert(entry->clientdata != NULL);
 	clip = clickedIcon->dock;
 
@@ -731,6 +746,10 @@ static void toggleAutoRaiseLower(WDock *dock)
 static void toggleAutoRaiseLowerCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WDock *dock;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	assert(entry->clientdata != NULL);
 
 	dock = (WDock *) entry->clientdata;
@@ -746,12 +765,18 @@ static void launchCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *btn = (WAppIcon *) entry->clientdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	launchDockedApplication(btn, False);
 }
 
 static void settingsCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *btn = (WAppIcon *) entry->clientdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
 
 	if (btn->editing)
 		return;
@@ -762,6 +787,9 @@ static void hideCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WApplication *wapp;
 	WAppIcon *btn = (WAppIcon *) entry->clientdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
 
 	wapp = wApplicationOf(btn->icon->owner->main_window);
 
@@ -777,6 +805,9 @@ static void unhideHereCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WApplication *wapp;
 	WAppIcon *btn = (WAppIcon *) entry->clientdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
 
 	wapp = wApplicationOf(btn->icon->owner->main_window);
 
@@ -840,6 +871,9 @@ static void switchWSCommand(WMenu *menu, WMenuEntry *entry)
 	WDock *src, *dest;
 	WMArray *selectedIcons;
 	int x, y;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
 
 	if (entry->order == w_global.workspace.current)
 		return;
@@ -1047,6 +1081,10 @@ static void setDockPositionNormalCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WDock *dock = (WDock *) entry->clientdata;
 	WDrawerChain *dc;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	if (entry->flags.indicator_on) // already set, nothing to do
 		return;
 	// Do we come from auto raise lower or keep on top?
@@ -1070,6 +1108,10 @@ static void setDockPositionAutoRaiseLowerCallback(WMenu *menu, WMenuEntry *entry
 {
 	WDock *dock = (WDock *) entry->clientdata;
 	WDrawerChain *dc;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	if (entry->flags.indicator_on) // already set, nothing to do
 		return;
 	// Do we come from normal or keep on top?
@@ -1089,6 +1131,10 @@ static void setDockPositionKeepOnTopCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WDock *dock = (WDock *) entry->clientdata;
 	WDrawerChain *dc;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	if (entry->flags.indicator_on) // already set, nothing to do
 		return;
 	dock->auto_raise_lower = 0;
@@ -4333,6 +4379,9 @@ static int addADrawer(WScreen *scr)
 
 static void addADrawerCallback(WMenu *menu, WMenuEntry *entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	assert(entry->clientdata!=NULL);
 	addADrawer(((WAppIcon *) entry->clientdata)->dock->screen_ptr);
 }
@@ -4401,6 +4450,10 @@ static void drawerDestroy(WDock *drawer)
 static void removeDrawerCallback(WMenu *menu, WMenuEntry *entry)
 {
 	WDock *dock = ((WAppIcon*)entry->clientdata)->dock;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	assert(dock != NULL);
 
 	if (dock->icon_count > 2) {

@@ -640,17 +640,26 @@ static void switchWSCommand(WMenu * menu, WMenuEntry * entry)
 
 static void lastWSCommand(WMenu *menu, WMenuEntry *entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	wWorkspaceChange(menu->frame->screen_ptr, w_global.workspace.last_used);
 }
 
 static void deleteWSCommand(WMenu *menu, WMenuEntry *entry)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	wWorkspaceDelete(menu->frame->screen_ptr, w_global.workspace.count - 1);
 }
 
 static void newWSCommand(WMenu *menu, WMenuEntry *foo)
 {
 	int ws;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) foo;
 
 	ws = wWorkspaceNew(menu->frame->screen_ptr);
 

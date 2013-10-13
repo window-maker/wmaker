@@ -483,6 +483,9 @@ static void relaunchCallback(WMenu * menu, WMenuEntry * entry)
 {
 	WApplication *wapp = (WApplication *) entry->clientdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	relaunchApplication(wapp);
 }
 
@@ -502,6 +505,9 @@ static void unhideHereCallback(WMenu * menu, WMenuEntry * entry)
 {
 	WApplication *wapp = (WApplication *) entry->clientdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	wUnhideApplication(wapp, False, True);
 }
 
@@ -511,6 +517,9 @@ static void setIconCallback(WMenu *menu, WMenuEntry *entry)
 	char *file = NULL;
 	WScreen *scr;
 	int result;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
 
 	assert(icon != NULL);
 

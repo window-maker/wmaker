@@ -75,6 +75,9 @@ static void execWindowOptionCommand(WMenu * menu, WMenuEntry * entry)
 {
 	WWindow *wwin = (WWindow *) entry->clientdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	switch (entry->order) {
 	case WO_KEEP_ON_TOP:
 		if (wwin->frame->core->stacking->window_level != WMFloatingLevel)
@@ -180,6 +183,9 @@ static void switchWSCommand(WMenu * menu, WMenuEntry * entry)
 {
 	WWindow *wwin = (WWindow *) entry->clientdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	wSelectWindow(wwin, False);
 	wWindowChangeWorkspace(wwin, entry->order);
 }
@@ -189,6 +195,9 @@ static void makeShortcutCommand(WMenu *menu, WMenuEntry *entry)
 	WWindow *wwin = (WWindow *) entry->clientdata;
 	WScreen *scr = wwin->screen_ptr;
 	int index = entry->order - WO_ENTRIES;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
 
 	if (w_global.shortcut.windows[index]) {
 		WMFreeArray(w_global.shortcut.windows[index]);

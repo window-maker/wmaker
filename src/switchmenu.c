@@ -65,6 +65,9 @@ static void focusWindow(WMenu * menu, WMenuEntry * entry)
 	WScreen *scr;
 	int x, y, move = 0;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+
 	wwin = (WWindow *) entry->clientdata;
 	scr = wwin->screen_ptr;
 
