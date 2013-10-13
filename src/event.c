@@ -291,12 +291,11 @@ void DispatchEvent(XEvent * event)
  * 	Calls wDefaultsCheckDomains if config database is updated
  *----------------------------------------------------------------------
  */
-/* allow 5 simultaneous events, with path + filenames up to 64 chars */
-#define BUFF_SIZE ((sizeof(struct inotify_event) + 64)*5)
 static void handle_inotify_events(void)
 {
 	ssize_t eventQLength, i = 0;
-	char buff[BUFF_SIZE] = { 0 };
+	/* Make room for at lease 5 simultaneous events, with path + filenames */
+	char buff[ (sizeof(struct inotify_event) + NAME_MAX + 1) * 5 ];
 	/* Check config only once per read of the event queue */
 	int oneShotFlag = 0;
 
@@ -308,7 +307,7 @@ static void handle_inotify_events(void)
 	 * a few entries before a read().
 	 */
 	eventQLength = read(w_global.inotify.fd_event_queue,
-	                    buff, BUFF_SIZE);
+	                    buff, sizeof(buff) );
 
 	/* check what events occured */
 	/* Should really check wd here too, but for now we only have one watch! */
