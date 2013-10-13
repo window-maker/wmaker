@@ -112,7 +112,7 @@ static void handleXkbIndicatorStateNotify(XEvent *event);
 #endif
 
 /* real dead process handler */
-static void handleDeadProcess(void *foo);
+static void handleDeadProcess(void);
 
 typedef struct DeadProcesses {
 	pid_t pid;
@@ -165,7 +165,7 @@ static void wdelete_death_handler(WMagicNumber id)
 void DispatchEvent(XEvent * event)
 {
 	if (deathHandlers)
-		handleDeadProcess(NULL);
+		handleDeadProcess();
 
 	if (WCHECK_STATE(WSTATE_NEED_EXIT)) {
 		WCHANGE_STATE(WSTATE_EXITING);
@@ -454,7 +454,7 @@ void NotifyDeadProcess(pid_t pid, unsigned char status)
 	deadProcessPtr++;
 }
 
-static void handleDeadProcess(void *foo)
+static void handleDeadProcess(void)
 {
 	DeathHandler *tmp;
 	int i;
