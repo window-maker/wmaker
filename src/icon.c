@@ -93,6 +93,9 @@ static void tileObserver(void *self, WMNotification *notif)
 {
 	WIcon *icon = (WIcon *) self;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) notif;
+
 	update_icon_pixmap(icon);
 
 	XClearArea(dpy, icon->core->window, 0, 0, 1, 1, True);

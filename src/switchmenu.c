@@ -391,6 +391,9 @@ static void observer(void *self, WMNotification * notif)
 	const char *name = WMGetNotificationName(notif);
 	void *data = WMGetNotificationClientData(notif);
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	if (!wwin)
 		return;
 
@@ -418,6 +421,9 @@ static void wsobserver(void *self, WMNotification * notif)
 	WScreen *scr = (WScreen *) WMGetNotificationObject(notif);
 	const char *name = WMGetNotificationName(notif);
 	void *data = WMGetNotificationClientData(notif);
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
 
 	if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
 		UpdateSwitchMenuWorkspace(scr, (uintptr_t)data);
