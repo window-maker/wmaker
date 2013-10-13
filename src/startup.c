@@ -201,6 +201,9 @@ static RETSIGTYPE buryChild(int foo)
 	int save_errno = errno;
 	sigset_t sigs;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) foo;
+
 	sigfillset(&sigs);
 	/* Block signals so that NotifyDeadProcess() doesn't get fux0red */
 	sigprocmask(SIG_BLOCK, &sigs, NULL);
