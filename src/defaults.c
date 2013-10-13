@@ -2903,6 +2903,10 @@ static void trackDeadProcess(pid_t pid, unsigned int status, void *client_data)
 {
 	WScreen *scr = (WScreen *) client_data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) pid;
+	(void) status;
+
 	close(scr->helper_fd);
 	scr->helper_fd = 0;
 	scr->helper_pid = 0;

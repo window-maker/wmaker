@@ -265,6 +265,9 @@ static void shellCommandHandler(pid_t pid, unsigned int status, void *client_dat
 {
 	_tuple *data = (_tuple *) client_data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) pid;
+
 	if (status == 127) {
 		char *buffer;
 
