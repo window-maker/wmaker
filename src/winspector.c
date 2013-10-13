@@ -222,6 +222,10 @@ static void destroyInspector(WCoreWindow *foo, void *data, XEvent *event)
 {
 	InspectorPanel *panel, *tmp;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) foo;
+	(void) event;
+
 	panel = panelList;
 	while (panel->frame != data)
 		panel = panel->nextPtr;

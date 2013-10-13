@@ -1105,6 +1105,11 @@ static InfoPanel *thePanel = NULL;
 
 static void destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) foo;
+	(void) data;
+	(void) event;
+
 	WMUnmapWidget(thePanel);
 	wUnmanageWindow(thePanel->wwin, False, False);
 	WMDestroyWidget(thePanel->win);
@@ -1365,6 +1370,11 @@ static LegalPanel *legalPanel = NULL;
 
 static void destroyLegalPanel(WCoreWindow * foo, void *data, XEvent * event)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) foo;
+	(void) data;
+	(void) event;
+
 	WMUnmapWidget(legalPanel->win);
 
 	WMDestroyWidget(legalPanel->win);
