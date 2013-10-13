@@ -99,7 +99,7 @@ static void handleKeyPress(XEvent *event);
 static void handleFocusIn(XEvent *event);
 static void handleMotionNotify(XEvent *event);
 static void handleVisibilityNotify(XEvent *event);
-static void handle_inotify_events(int fd);
+static void handle_inotify_events(void);
 static void wdelete_death_handler(WMagicNumber id);
 
 
@@ -293,7 +293,7 @@ void DispatchEvent(XEvent * event)
  */
 /* allow 5 simultaneous events, with path + filenames up to 64 chars */
 #define BUFF_SIZE ((sizeof(struct inotify_event) + 64)*5)
-static void handle_inotify_events(int fd)
+static void handle_inotify_events(void)
 {
 	ssize_t eventQLength, i = 0;
 	char buff[BUFF_SIZE] = { 0 };
@@ -307,7 +307,8 @@ static void handle_inotify_events(int fd)
 	 * occur as a result of an Xevent - so the event queue should never have more than
 	 * a few entries before a read().
 	 */
-	eventQLength = read(fd, buff, BUFF_SIZE);
+	eventQLength = read(w_global.inotify.fd_event_queue,
+	                    buff, BUFF_SIZE);
 
 	/* check what events occured */
 	/* Should really check wd here too, but for now we only have one watch! */
@@ -320,12 +321,21 @@ static void handle_inotify_events(int fd)
 		if (pevent->mask & IN_DELETE_SELF) {
 			wwarning(_("the defaults database has been deleted!"
 				   " Restart Window Maker to create the database" " with the default settings"));
-			close(fd);
+
+			if (w_global.inotify.fd_event_queue >= 0) {
+				close(w_global.inotify.fd_event_queue);
+				w_global.inotify.fd_event_queue = -1;
+			}
 		}
 		if (pevent->mask & IN_UNMOUNT) {
 			wwarning(_("the unit containing the defaults database has"
 				   " been unmounted. Setting --static mode." " Any changes will not be saved."));
-			close(fd);
+
+			if (w_global.inotify.fd_event_queue >= 0) {
+				close(w_global.inotify.fd_event_queue);
+				w_global.inotify.fd_event_queue = -1;
+			}
+
 			wPreferences.flags.noupdates = 1;
 		}
 		if ((pevent->mask & IN_MODIFY) && oneShotFlag == 0) {
@@ -387,7 +397,7 @@ noreturn void EventLoop(void)
 				continue;
 			}
 			if (FD_ISSET(w_global.inotify.fd_event_queue, &rfds))
-				handle_inotify_events(w_global.inotify.fd_event_queue);
+				handle_inotify_events();
 		}
 #endif
 	}
