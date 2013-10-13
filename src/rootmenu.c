@@ -1509,6 +1509,9 @@ static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool include
 			wMenuEntrySetCascade(menu, mentry, submenu);
 		}
 	}
+#else
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) includeGlobals;
 #endif
 
 	for (i = 1; i < count; i++) {

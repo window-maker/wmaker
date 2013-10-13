@@ -176,6 +176,9 @@ void DoWindowBirth(WWindow *wwin)
 	center_y = wwin->frame_y + (height - h) / 2;
 
 	animateResize(scr, center_x, center_y, 1, 1, wwin->frame_x, wwin->frame_y, width, height);
+#else
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) wwin;
 #endif
 }
 
