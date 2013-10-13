@@ -1290,6 +1290,9 @@ static int getBool(WScreen * scr, WDefaultEntry * entry, WMPropList * value, voi
 	const char *val;
 	int second_pass = 0;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+
 	GET_STRING_OR_DEFAULT("Boolean", val);
 
  again:
@@ -1331,6 +1334,9 @@ static int getInt(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void
 {
 	static int data;
 	const char *val;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
 
 	GET_STRING_OR_DEFAULT("Integer", val);
 
@@ -1429,6 +1435,11 @@ static int getCoord(WScreen * scr, WDefaultEntry * entry, WMPropList * value, vo
 
 static int getPropList(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) entry;
+	(void) addr;
+
 	WMRetainPropList(value);
 
 	*ret = value;
@@ -1443,6 +1454,10 @@ static int getPathList(WScreen * scr, WDefaultEntry * entry, WMPropList * value,
 	char *ptr;
 	WMPropList *d;
 	int changed = 0;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) ret;
 
  again:
 	if (!WMIsPLArray(value)) {
@@ -1504,6 +1519,9 @@ static int getPathList(WScreen * scr, WDefaultEntry * entry, WMPropList * value,
 static int getEnum(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
 {
 	static signed char data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
 
 	data = string2index(entry->plkey, value, entry->default_value, (WOptionEnumeration *) entry->extra_data);
 	if (data < 0)
@@ -1906,6 +1924,10 @@ static int getWSBackground(WScreen * scr, WDefaultEntry * entry, WMPropList * va
 	char *val;
 	int nelem;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) addr;
+
  again:
 	if (!WMIsPLArray(value)) {
 		wwarning(_("Wrong option format for key \"%s\". Should be %s."),
@@ -1950,6 +1972,10 @@ getWSSpecificBackground(WScreen * scr, WDefaultEntry * entry, WMPropList * value
 	WMPropList *elem;
 	int nelem;
 	int changed = 0;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) addr;
 
  again:
 	if (!WMIsPLArray(value)) {
@@ -2063,6 +2089,10 @@ static int getKeybind(WScreen * scr, WDefaultEntry * entry, WMPropList * value, 
 	char *k;
 	char buf[MAX_SHORTCUT_LENGTH], *b;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) addr;
+
 	GET_STRING_OR_DEFAULT("Key spec", val);
 
 	if (!val || strcasecmp(val, "NONE") == 0) {
@@ -2117,6 +2147,9 @@ static int getModMask(WScreen * scr, WDefaultEntry * entry, WMPropList * value, 
 {
 	static int mask;
 	const char *str;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
 
 	GET_STRING_OR_DEFAULT("Modifier Key", str);
 
@@ -2395,11 +2428,23 @@ static int getCursor(WScreen * scr, WDefaultEntry * entry, WMPropList * value, v
 /* ---------------- value setting functions --------------- */
 static int setJustify(WScreen * scr, WDefaultEntry * entry, void *tdata, void *extra_data)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) entry;
+	(void) tdata;
+	(void) extra_data;
+
 	return REFRESH_WINDOW_TITLE_COLOR;
 }
 
 static int setClearance(WScreen * scr, WDefaultEntry * entry, void *bar, void *foo)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) entry;
+	(void) bar;
+	(void) foo;
+
 	return REFRESH_WINDOW_FONT | REFRESH_BUTTON_IMAGES | REFRESH_MENU_TITLE_FONT | REFRESH_MENU_FONT;
 }
 
@@ -2407,6 +2452,10 @@ static int setIfDockPresent(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 {
 	char *flag = tdata;
 	long which = (long) extra_data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) entry;
 
 	switch (which) {
 	case WM_DOCK:
@@ -2430,6 +2479,11 @@ static int setClipMergedInDock(WScreen *scr, WDefaultEntry *entry, void *tdata, 
 {
 	char *flag = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) entry;
+	(void) foo;
+
 	wPreferences.flags.clip_merged_in_dock = *flag;
 	wPreferences.flags.noclip = wPreferences.flags.noclip || *flag;
 	return 0;
@@ -2439,12 +2493,22 @@ static int setWrapAppiconsInDock(WScreen *scr, WDefaultEntry *entry, void *tdata
 {
 	char *flag = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) entry;
+	(void) foo;
+
 	wPreferences.flags.wrap_appicons_in_dock = *flag;
 	return 0;
 }
 
 static int setStickyIcons(WScreen * scr, WDefaultEntry * entry, void *bar, void *foo)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) bar;
+	(void) foo;
+
 	if (w_global.workspace.array) {
 		wWorkspaceForceChange(scr, w_global.workspace.current);
 		wArrangeIcons(scr, False);
@@ -2458,6 +2522,9 @@ static int setIconTile(WScreen * scr, WDefaultEntry * entry, void *tdata, void *
 	RImage *img;
 	WTexture ** texture = tdata;
 	int reset = 0;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) foo;
 
 	img = wTextureRenderImage(*texture, wPreferences.icon_size,
 				  wPreferences.icon_size, ((*texture)->any.type & WREL_BORDER_MASK)
@@ -2518,6 +2585,10 @@ static int setWinTitleFont(WScreen * scr, WDefaultEntry * entry, void *tdata, vo
 {
 	WMFont *font = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->title_font) {
 		WMReleaseFont(scr->title_font);
 	}
@@ -2529,6 +2600,10 @@ static int setWinTitleFont(WScreen * scr, WDefaultEntry * entry, void *tdata, vo
 static int setMenuTitleFont(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	WMFont *font = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->menu_title_font) {
 		WMReleaseFont(scr->menu_title_font);
@@ -2543,6 +2618,10 @@ static int setMenuTextFont(WScreen * scr, WDefaultEntry * entry, void *tdata, vo
 {
 	WMFont *font = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->menu_entry_font) {
 		WMReleaseFont(scr->menu_entry_font);
 	}
@@ -2554,6 +2633,10 @@ static int setMenuTextFont(WScreen * scr, WDefaultEntry * entry, void *tdata, vo
 static int setIconTitleFont(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	WMFont *font = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->icon_title_font) {
 		WMReleaseFont(scr->icon_title_font);
@@ -2568,6 +2651,10 @@ static int setClipTitleFont(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 {
 	WMFont *font = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->clip_title_font) {
 		WMReleaseFont(scr->clip_title_font);
 	}
@@ -2581,6 +2668,11 @@ static int setLargeDisplayFont(WScreen *scr, WDefaultEntry *entry, void *tdata, 
 {
 	WMFont *font = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) entry;
+	(void) foo;
+
 	if (w_global.workspace.font_for_name)
 		WMReleaseFont(w_global.workspace.font_for_name);
 
@@ -2592,6 +2684,10 @@ static int setLargeDisplayFont(WScreen *scr, WDefaultEntry *entry, void *tdata, 
 static int setHightlight(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	XColor *color = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->select_color)
 		WMReleaseColor(scr->select_color);
@@ -2606,6 +2702,10 @@ static int setHightlight(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 static int setHightlightText(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	XColor *color = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->select_text_color)
 		WMReleaseColor(scr->select_text_color);
@@ -2622,6 +2722,9 @@ static int setClipTitleColor(WScreen * scr, WDefaultEntry * entry, void *tdata, 
 	XColor *color = tdata;
 	long widx = (long) extra_data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+
 	if (scr->clip_title_color[widx])
 		WMReleaseColor(scr->clip_title_color[widx]);
 
@@ -2635,6 +2738,9 @@ static int setWTitleColor(WScreen * scr, WDefaultEntry * entry, void *tdata, voi
 {
 	XColor *color = tdata;
 	long widx = (long) extra_data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
 
 	if (scr->window_title_color[widx])
 		WMReleaseColor(scr->window_title_color[widx]);
@@ -2651,6 +2757,10 @@ static int setMenuTitleColor(WScreen * scr, WDefaultEntry * entry, void *tdata, 
 {
 	XColor *color = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) extra_data;
+
 	if (scr->menu_title_color[0])
 		WMReleaseColor(scr->menu_title_color[0]);
 
@@ -2664,6 +2774,10 @@ static int setMenuTitleColor(WScreen * scr, WDefaultEntry * entry, void *tdata, 
 static int setMenuTextColor(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	XColor *color = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->mtext_color)
 		WMReleaseColor(scr->mtext_color);
@@ -2685,6 +2799,10 @@ static int setMenuDisabledColor(WScreen * scr, WDefaultEntry * entry, void *tdat
 {
 	XColor *color = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->dtext_color)
 		WMReleaseColor(scr->dtext_color);
 
@@ -2705,6 +2823,10 @@ static int setIconTitleColor(WScreen * scr, WDefaultEntry * entry, void *tdata, 
 {
 	XColor *color = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->icon_title_color)
 		WMReleaseColor(scr->icon_title_color);
 	scr->icon_title_color = WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue, True);
@@ -2718,6 +2840,10 @@ static int setIconTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 {
 	XColor *color = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->icon_title_texture) {
 		wTextureDestroy(scr, (WTexture *) scr->icon_title_texture);
 	}
@@ -2730,6 +2856,10 @@ static int setFrameBorderWidth(WScreen * scr, WDefaultEntry * entry, void *tdata
 {
 	int *value = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	scr->frame_border_width = *value;
 
 	return REFRESH_FRAME_BORDER;
@@ -2738,6 +2868,10 @@ static int setFrameBorderWidth(WScreen * scr, WDefaultEntry * entry, void *tdata
 static int setFrameBorderColor(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	XColor *color = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->frame_border_color)
 		WMReleaseColor(scr->frame_border_color);
@@ -2751,6 +2885,10 @@ static int setFrameBorderColor(WScreen * scr, WDefaultEntry * entry, void *tdata
 static int setFrameSelectedBorderColor(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	XColor *color = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->frame_selected_border_color)
 		WMReleaseColor(scr->frame_selected_border_color);
@@ -2775,6 +2913,10 @@ static int setWorkspaceSpecificBack(WScreen * scr, WDefaultEntry * entry, void *
 	WMPropList *val;
 	char *str;
 	int i;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) bar;
 
 	if (scr->flags.backimage_helper_launched) {
 		if (WMGetPropListItemCount(value) == 0) {
@@ -2865,6 +3007,10 @@ static int setWorkspaceBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 {
 	WMPropList *value = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) bar;
+
 	if (scr->flags.backimage_helper_launched) {
 		char *str;
 
@@ -2908,6 +3054,10 @@ static int setWidgetColor(WScreen * scr, WDefaultEntry * entry, void *tdata, voi
 {
 	WTexture **texture = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->widget_texture) {
 		wTextureDestroy(scr, (WTexture *) scr->widget_texture);
 	}
@@ -2919,6 +3069,10 @@ static int setWidgetColor(WScreen * scr, WDefaultEntry * entry, void *tdata, voi
 static int setFTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	WTexture **texture = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->window_title_texture[WS_FOCUSED]) {
 		wTextureDestroy(scr, scr->window_title_texture[WS_FOCUSED]);
@@ -2932,6 +3086,10 @@ static int setPTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 {
 	WTexture **texture = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->window_title_texture[WS_PFOCUSED]) {
 		wTextureDestroy(scr, scr->window_title_texture[WS_PFOCUSED]);
 	}
@@ -2943,6 +3101,10 @@ static int setPTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 static int setUTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	WTexture **texture = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->window_title_texture[WS_UNFOCUSED]) {
 		wTextureDestroy(scr, scr->window_title_texture[WS_UNFOCUSED]);
@@ -2956,6 +3118,10 @@ static int setResizebarBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 {
 	WTexture **texture = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->resizebar_texture[0]) {
 		wTextureDestroy(scr, scr->resizebar_texture[0]);
 	}
@@ -2968,6 +3134,10 @@ static int setMenuTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 {
 	WTexture **texture = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
 	if (scr->menu_title_texture[0]) {
 		wTextureDestroy(scr, scr->menu_title_texture[0]);
 	}
@@ -2979,6 +3149,10 @@ static int setMenuTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 static int setMenuTextBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
 	WTexture **texture = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
 
 	if (scr->menu_item_texture) {
 		wTextureDestroy(scr, scr->menu_item_texture);
@@ -2996,6 +3170,9 @@ static int setKeyGrab(WScreen * scr, WDefaultEntry * entry, void *tdata, void *e
 	WShortKey *shortcut = tdata;
 	WWindow *wwin;
 	long widx = (long) extra_data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
 
 	wKeyBindings[widx] = *shortcut;
 
@@ -3023,6 +3200,11 @@ static int setKeyGrab(WScreen * scr, WDefaultEntry * entry, void *tdata, void *e
 
 static int setIconPosition(WScreen * scr, WDefaultEntry * entry, void *bar, void *foo)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) bar;
+	(void) foo;
+
 	wScreenUpdateUsableArea(scr);
 	wArrangeIcons(scr, True);
 
@@ -3031,6 +3213,11 @@ static int setIconPosition(WScreen * scr, WDefaultEntry * entry, void *bar, void
 
 static int updateUsableArea(WScreen * scr, WDefaultEntry * entry, void *bar, void *foo)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) bar;
+	(void) foo;
+
 	wScreenUpdateUsableArea(scr);
 
 	return 0;
@@ -3038,6 +3225,12 @@ static int updateUsableArea(WScreen * scr, WDefaultEntry * entry, void *bar, voi
 
 static int setMenuStyle(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+	(void) entry;
+	(void) tdata;
+	(void) foo;
+
 	return REFRESH_MENU_TEXTURE;
 }
 
@@ -3204,6 +3397,10 @@ static int setDoubleClick(WScreen *scr, WDefaultEntry *entry, void *tdata, void 
 {
 	int *value = tdata;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) scr;
+
 	if (*value <= 0)
 		*(int *)foo = 1;
 
@@ -3216,6 +3413,9 @@ static int setCursor(WScreen * scr, WDefaultEntry * entry, void *tdata, void *ex
 {
 	Cursor *cursor = tdata;
 	long widx = (long) extra_data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
 
 	if (wPreferences.cursor[widx] != None) {
 		XFreeCursor(dpy, wPreferences.cursor[widx]);
