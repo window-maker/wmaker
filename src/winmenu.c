@@ -560,7 +560,7 @@ static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 	wMenuRealize(menu);
 }
 
-static WMenu *open_window_menu_core(WWindow *wwin, int x, int y)
+static WMenu *open_window_menu_core(WWindow *wwin)
 {
 	WScreen *scr = wwin->screen_ptr;
 	WMenu *menu;
@@ -607,7 +607,7 @@ void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
 {
 	WMenu *menu;
 
-	menu = open_window_menu_core(wwin, x, y);
+	menu = open_window_menu_core(wwin);
 	if (!menu)
 		return;
 
@@ -630,7 +630,7 @@ void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard)
 	int i;
 	WMenu *menu;
 
-	menu = open_window_menu_core(wwin, x, y);
+	menu = open_window_menu_core(wwin);
 	if (!menu)
 		return;
 
@@ -653,7 +653,7 @@ void OpenMiniwindowMenu(WWindow * wwin, int x, int y)
 {
 	WMenu *menu;
 
-	menu = open_window_menu_core(wwin, x, y);
+	menu = open_window_menu_core(wwin);
 	if (!menu)
 		return;
 
