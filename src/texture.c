@@ -110,6 +110,10 @@ WTexSolid *wTextureMakeSolid(WScreen * scr, XColor * color)
 
 static int dummyErrorHandler(Display * foo, XErrorEvent * bar)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) foo;
+	(void) bar;
+
 	return 0;
 }
 

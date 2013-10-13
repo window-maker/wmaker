@@ -109,6 +109,10 @@ static void make_keys(void)
  */
 static int alreadyRunningError(Display * dpy, XErrorEvent * error)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) dpy;
+	(void) error;
+
 	CantManageScreen = 1;
 	return -1;
 }
@@ -520,7 +524,7 @@ WScreen *wScreenInit(int screen_number)
 	scr->fakeGroupLeaders = WMCreateArray(16);
 
 	CantManageScreen = 0;
-	oldHandler = XSetErrorHandler((XErrorHandler) alreadyRunningError);
+	oldHandler = XSetErrorHandler(alreadyRunningError);
 
 	event_mask = EVENT_MASK;
 

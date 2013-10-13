@@ -127,6 +127,9 @@ static int catchXError(Display * dpy, XErrorEvent * error)
  */
 static int handleXIO(Display * xio_dpy)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) xio_dpy;
+
 	dpy = NULL;
 	Exit(0);
 	return 0;
