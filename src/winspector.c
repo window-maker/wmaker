@@ -159,7 +159,7 @@ static InspectorPanel *createInspectorForWindow(WWindow *wwin, int xpos, int ypo
 
 static void create_tab_window_attributes(WWindow *wwin, InspectorPanel *panel, int frame_width);
 static void create_tab_window_advanced(WWindow *wwin, InspectorPanel *panel, int frame_width);
-static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel, int frame_width);
+static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel);
 static void create_tab_app_specific(WWindow *wwin, InspectorPanel *panel, int frame_width);
 
 static void make_keys(void)
@@ -1168,7 +1168,7 @@ static InspectorPanel *createInspectorForWindow(WWindow *wwin, int xpos, int ypo
 	/**** attributes ****/
 	create_tab_window_attributes(wwin, panel, frame_width);
 	create_tab_window_advanced(wwin, panel, frame_width);
-	create_tab_icon_workspace(wwin, panel, frame_width);
+	create_tab_icon_workspace(wwin, panel);
 	create_tab_app_specific(wwin, panel, frame_width);
 
 	/* if the window is a transient, don't let it have a miniaturize button */
@@ -1474,7 +1474,7 @@ static void create_tab_window_advanced(WWindow *wwin, InspectorPanel *panel, int
 	}
 }
 
-static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel, int frame_width)
+static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel)
 {
 	int i = 0;
 
