@@ -105,6 +105,9 @@ int wMessageDialog(WScreen *scr, const char *title, const char *message, const c
 
 static void toggleSaveSession(WMWidget *w, void *data)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) data;
+
 	wPreferences.save_session_on_exit = WMGetButtonSelected((WMButton *) w);
 }
 
@@ -714,6 +717,9 @@ static void drawIconProc(WMList * lPtr, int index, Drawable d, char *text, int s
 	WMScreen *wmscr = WMWidgetScreen(panel->win);
 	RColor color;
 	int x, y, width, height, len;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) index;
 
 	if (!panel->preview)
 		return;
@@ -1499,6 +1505,9 @@ static void handleKeyPress(XEvent * event, void *clientData)
 static void okButtonCallback(void *self, void *clientData)
 {
 	CrashPanel *panel = (CrashPanel *) clientData;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
 
 	panel->done = True;
 }

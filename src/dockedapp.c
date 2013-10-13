@@ -122,6 +122,9 @@ static void chooseIconCallback(WMWidget * self, void *clientData)
 	AppSettingsPanel *panel = (AppSettingsPanel *) clientData;
 	int result;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	panel->choosingIcon = 1;
 
 	WMSetButtonEnabled(panel->browseBtn, False);

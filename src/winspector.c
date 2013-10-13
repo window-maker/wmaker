@@ -813,6 +813,9 @@ static void revertSettings(WMWidget *button, void *client_data)
 	int i, n, workspace, level;
 	char *wm_instance = NULL, *wm_class = NULL;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) button;
+
 	if (panel->instRb && WMGetButtonSelected(panel->instRb) != 0)
 		wm_instance = wwin->wm_instance;
 	else if (panel->clsRb && WMGetButtonSelected(panel->clsRb) != 0)
@@ -1019,6 +1022,9 @@ static void selectWindow(WMWidget *bPtr, void *data)
 	WScreen *scr = wwin->screen_ptr;
 	XEvent event;
 	WWindow *iwin;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) bPtr;
 
 	if (XGrabPointer(dpy, scr->root_win, True,
 			 ButtonPressMask, GrabModeAsync, GrabModeAsync, None,
