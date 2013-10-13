@@ -99,7 +99,7 @@ static void handleKeyPress(XEvent *event);
 static void handleFocusIn(XEvent *event);
 static void handleMotionNotify(XEvent *event);
 static void handleVisibilityNotify(XEvent *event);
-static void handle_inotify_events(int fd, int wd);
+static void handle_inotify_events(int fd);
 static void wdelete_death_handler(WMagicNumber id);
 
 
@@ -293,7 +293,7 @@ void DispatchEvent(XEvent * event)
  */
 /* allow 5 simultaneous events, with path + filenames up to 64 chars */
 #define BUFF_SIZE ((sizeof(struct inotify_event) + 64)*5)
-static void handle_inotify_events(int fd, int wd)
+static void handle_inotify_events(int fd)
 {
 	ssize_t eventQLength, i = 0;
 	char buff[BUFF_SIZE] = { 0 };
@@ -387,7 +387,7 @@ noreturn void EventLoop(void)
 				continue;
 			}
 			if (FD_ISSET(w_global.inotify.fd_event_queue, &rfds))
-				handle_inotify_events(w_global.inotify.fd_event_queue, w_global.inotify.wd_defaults);
+				handle_inotify_events(w_global.inotify.fd_event_queue);
 		}
 #endif
 	}
