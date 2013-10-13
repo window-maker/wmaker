@@ -153,7 +153,7 @@ static WMPropList *EmptyString;
 static WMPropList *Yes, *No;
 
 static char *spec_text;
-static void applySettings(WMButton *button, InspectorPanel *panel);
+static void applySettings(WMWidget *button, void *panel);
 
 static InspectorPanel *createInspectorForWindow(WWindow *wwin, int xpos, int ypos, Bool showSelectPanel);
 
@@ -267,8 +267,9 @@ void wDestroyInspectorPanels(void)
 	}
 }
 
-static void changePage(WMPopUpButton *bPtr, InspectorPanel *panel)
+static void changePage(WMWidget *bPtr, void *client_data)
 {
+	InspectorPanel *panel = (InspectorPanel *) client_data;
 	int page;
 
 	page = WMGetPopUpButtonSelectedItem(bPtr);
@@ -429,8 +430,9 @@ insertAttribute(WMPropList *dict, WMPropList *window, WMPropList *attr, WMPropLi
 	return modified;
 }
 
-static void saveSettings(WMButton *button, InspectorPanel *panel)
+static void saveSettings(WMWidget *button, void *client_data)
 {
+	InspectorPanel *panel = (InspectorPanel *) client_data;
 	WWindow *wwin = panel->inspected;
 	WDDomain *db = w_global.domain.window_attr;
 	WMPropList *dict = NULL;
@@ -637,8 +639,9 @@ static void saveSettings(WMButton *button, InspectorPanel *panel)
 	WMPLSetCaseSensitive(False);
 }
 
-static void applySettings(WMButton *button, InspectorPanel *panel)
+static void applySettings(WMWidget *button, void *client_data)
 {
+	InspectorPanel *panel = (InspectorPanel *) client_data;
 	WWindow *wwin = panel->inspected;
 	WApplication *wapp = wApplicationOf(wwin->main_window);
 	int floating, sunken, skip_window_list;
@@ -802,8 +805,9 @@ static void applySettings(WMButton *button, InspectorPanel *panel)
 	wNETFrameExtents(wwin);
 }
 
-static void revertSettings(WMButton *button, InspectorPanel *panel)
+static void revertSettings(WMWidget *button, void *client_data)
 {
+	InspectorPanel *panel = (InspectorPanel *) client_data;
 	WWindow *wwin = panel->inspected;
 	WApplication *wapp = wApplicationOf(wwin->main_window);
 	int i, n, workspace, level;
@@ -1065,7 +1069,7 @@ static InspectorPanel *createInspectorForWindow(WWindow *wwin, int xpos, int ypo
 	/* command buttons */
 	btn_width = (PWIDTH - (2 * 15) - (2 * 10)) / 3;
 	panel->saveBtn = WMCreateCommandButton(panel->win);
-	WMSetButtonAction(panel->saveBtn, (WMAction *) saveSettings, panel);
+	WMSetButtonAction(panel->saveBtn, saveSettings, panel);
 	WMMoveWidget(panel->saveBtn, (2 * (btn_width + 10)) + 15, PHEIGHT - 40);
 	WMSetButtonText(panel->saveBtn, _("Save"));
 	WMResizeWidget(panel->saveBtn, btn_width, 28);
@@ -1073,20 +1077,20 @@ static InspectorPanel *createInspectorForWindow(WWindow *wwin, int xpos, int ypo
 		WMSetButtonEnabled(panel->saveBtn, False);
 
 	panel->applyBtn = WMCreateCommandButton(panel->win);
-	WMSetButtonAction(panel->applyBtn, (WMAction *) applySettings, panel);
+	WMSetButtonAction(panel->applyBtn, applySettings, panel);
 	WMMoveWidget(panel->applyBtn, btn_width + 10 + 15, PHEIGHT - 40);
 	WMSetButtonText(panel->applyBtn, _("Apply"));
 	WMResizeWidget(panel->applyBtn, btn_width, 28);
 
 	panel->revertBtn = WMCreateCommandButton(panel->win);
-	WMSetButtonAction(panel->revertBtn, (WMAction *) revertSettings, panel);
+	WMSetButtonAction(panel->revertBtn, revertSettings, panel);
 	WMMoveWidget(panel->revertBtn, 15, PHEIGHT - 40);
 	WMSetButtonText(panel->revertBtn, _("Reload"));
 	WMResizeWidget(panel->revertBtn, btn_width, 28);
 
 	/* page selection popup button */
 	panel->pagePopUp = WMCreatePopUpButton(panel->win);
-	WMSetPopUpButtonAction(panel->pagePopUp, (WMAction *) changePage, panel);
+	WMSetPopUpButtonAction(panel->pagePopUp, changePage, panel);
 	WMMoveWidget(panel->pagePopUp, 25, 15);
 	WMResizeWidget(panel->pagePopUp, PWIDTH - 50, 20);
 
