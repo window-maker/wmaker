@@ -2669,6 +2669,9 @@ static void resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
+
 #ifndef NUMLOCK_HACK
 	if ((event->xbutton.state & ValidModMask)
 	    != (event->xbutton.state & ~LockMask)) {
@@ -2710,6 +2713,9 @@ static void resizebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
 
 	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
@@ -2826,6 +2832,9 @@ static void titlebarMouseDown(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = (WWindow *) data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
+
 #ifndef NUMLOCK_HACK
 	if ((event->xbutton.state & ValidModMask) != (event->xbutton.state & ~LockMask))
 		wwarning(_("The NumLock, ScrollLock or similar key seems to be turned on. "
@@ -2889,6 +2898,9 @@ static void windowCloseClick(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
+
 	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
 	CloseWindowMenu(wwin->screen_ptr);
@@ -2912,6 +2924,9 @@ static void windowCloseDblClick(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
+
 	CloseWindowMenu(wwin->screen_ptr);
 
 	if (event->xbutton.button < Button1 || event->xbutton.button > Button3)
@@ -2933,6 +2948,9 @@ static void windowLanguageClick(WCoreWindow *sender, void *data, XEvent *event)
 	WScreen *scr = fwin->screen_ptr;
 	int tl;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
+
 	if (event->xbutton.button != Button1 && event->xbutton.button != Button3)
 		return;
 	tl = wwin->frame->languagemode;
@@ -2951,6 +2969,9 @@ static void windowLanguageClick(WCoreWindow *sender, void *data, XEvent *event)
 static void windowIconifyClick(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
 
 	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 

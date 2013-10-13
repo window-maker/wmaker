@@ -2094,6 +2094,9 @@ static void menuTitleDoubleClick(WCoreWindow * sender, void *data, XEvent * even
 	WMenu *menu = data;
 	int lower;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
+
 	if (event->xbutton.state & MOD_MASK) {
 		if (menu->flags.lowered) {
 			lower = 0;
@@ -2113,6 +2116,9 @@ static void menuTitleMouseDown(WCoreWindow * sender, void *data, XEvent * event)
 	int dx = event->xbutton.x_root, dy = event->xbutton.y_root;
 	int i, lower;
 	Bool started;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
 
 	/* can't touch the menu copy */
 	if (menu->flags.brother)
@@ -2220,6 +2226,10 @@ static void menuCloseClick(WCoreWindow * sender, void *data, XEvent * event)
 	WMenu *menu = (WMenu *) data;
 	WMenu *parent = menu->parent;
 	int i;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sender;
+	(void) event;
 
 	if (parent) {
 		for (i = 0; i < parent->cascade_no; i++) {
