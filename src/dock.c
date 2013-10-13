@@ -1432,6 +1432,10 @@ void wClipIconPaint(void)
 
 static void clipIconExpose(WObjDescriptor *desc, XEvent *event)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) desc;
+	(void) event;
+
 	wClipIconPaint();
 }
 
@@ -4311,6 +4315,9 @@ static char * findUniqueName(WScreen *scr, const char *instance_basename)
 
 static void drawerIconExpose(WObjDescriptor *desc, XEvent *event)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) event;
+
 	wDrawerIconPaint((WAppIcon *) desc->parent);
 }
 

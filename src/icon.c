@@ -784,12 +784,18 @@ void wIconPaint(WIcon *icon)
 
 static void miniwindowExpose(WObjDescriptor * desc, XEvent * event)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) event;
+
 	wIconPaint(desc->parent);
 }
 
 static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event)
 {
 	WIcon *icon = desc->parent;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) event;
 
 	assert(icon->owner != NULL);
 

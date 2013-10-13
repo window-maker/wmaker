@@ -1667,6 +1667,9 @@ void wMenuScroll(WMenu * menu, XEvent * event)
 
 static void menuExpose(WObjDescriptor * desc, XEvent * event)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) event;
+
 	wMenuPaint(desc->parent);
 }
 

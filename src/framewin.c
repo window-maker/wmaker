@@ -1378,6 +1378,9 @@ static void handleButtonExpose(WObjDescriptor * desc, XEvent * event)
 	WFrameWindow *fwin = (WFrameWindow *) desc->parent;
 	WCoreWindow *button = (WCoreWindow *) desc->self;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) event;
+
 #ifdef XKB_BUTTON_HINT
 	if (button == fwin->language_button) {
 		if (wPreferences.modelock)

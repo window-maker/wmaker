@@ -650,6 +650,9 @@ static void openApplicationMenu(WApplication * wapp, int x, int y)
 
 static void iconExpose(WObjDescriptor *desc, XEvent *event)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) event;
+
 	wAppIconPaint(desc->parent);
 }
 
