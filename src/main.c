@@ -261,8 +261,10 @@ typedef struct {
 	char *command;
 } _tuple;
 
-static void shellCommandHandler(pid_t pid, unsigned char status, _tuple * data)
+static void shellCommandHandler(pid_t pid, unsigned int status, void *client_data)
 {
+	_tuple *data = (_tuple *) client_data;
+
 	if (status == 127) {
 		char *buffer;
 
@@ -317,7 +319,7 @@ void ExecuteShellCommand(WScreen *scr, const char *command)
 		data->scr = scr;
 		data->command = wstrdup(command);
 
-		wAddDeathHandler(pid, (WDeathHandler *) shellCommandHandler, data);
+		wAddDeathHandler(pid, shellCommandHandler, data);
 	}
 }
 
@@ -376,7 +378,7 @@ Bool RelaunchWindow(WWindow *wwin)
 		data->command = wtokenjoin(argv, argc);
 
 		/* not actually a shell command */
-		wAddDeathHandler(pid, (WDeathHandler *) shellCommandHandler, data);
+		wAddDeathHandler(pid, shellCommandHandler, data);
 
 		XFreeStringList(argv);
 	}

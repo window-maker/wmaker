@@ -2899,8 +2899,10 @@ static int setFrameSelectedBorderColor(WScreen * scr, WDefaultEntry * entry, voi
 	return REFRESH_FRAME_BORDER;
 }
 
-static void trackDeadProcess(pid_t pid, unsigned char status, WScreen * scr)
+static void trackDeadProcess(pid_t pid, unsigned int status, void *client_data)
 {
+	WScreen *scr = (WScreen *) client_data;
+
 	close(scr->helper_fd);
 	scr->helper_fd = 0;
 	scr->helper_pid = 0;
@@ -2978,7 +2980,7 @@ static int setWorkspaceSpecificBack(WScreen * scr, WDefaultEntry * entry, void *
 			scr->helper_pid = pid;
 			scr->flags.backimage_helper_launched = 1;
 
-			wAddDeathHandler(pid, (WDeathHandler *) trackDeadProcess, scr);
+			wAddDeathHandler(pid, trackDeadProcess, scr);
 
 			SendHelperMessage(scr, 'P', -1, wPreferences.pixmap_path);
 		}
