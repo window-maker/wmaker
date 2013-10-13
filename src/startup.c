@@ -163,6 +163,8 @@ static RETSIGTYPE handleExitSig(int sig)
 /* Dummy signal handler */
 static void dummyHandler(int sig)
 {
+	/* Parameter is not used, but tell the compiler that it is ok */
+	(void) sig;
 }
 
 /*
