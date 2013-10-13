@@ -649,7 +649,7 @@ static int compareWBottom(const void *a, const void *b)
 		return 0;
 }
 
-static void updateResistance(WWindow * wwin, MoveData * data, int newX, int newY)
+static void updateResistance(MoveData *data, int newX, int newY)
 {
 	int i;
 	int newX2 = newX + data->winWidth;
@@ -1177,7 +1177,7 @@ updateWindowPosition(WWindow * wwin, MoveData * data, Bool doResistance,
 
 	/* recalc relative window position */
 	if (doResistance && (data->realX != newX || data->realY != newY)) {
-		updateResistance(wwin, data, newX, newY);
+		updateResistance(data, newX, newY);
 	}
 
 	data->realX = newX;
