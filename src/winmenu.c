@@ -48,26 +48,45 @@
 #include "xinerama.h"
 #include "winmenu.h"
 
-#define MC_MAXIMIZE	0
-#define MC_MINIATURIZE	1
-#define MC_SHADE	2
-#define MC_HIDE		3
-#define MC_MOVERESIZE   4
-#define MC_SELECT       5
-#define MC_DUMMY_MOVETO 6
-#define MC_PROPERTIES   7
-#define MC_OPTIONS      8
-#define MC_SHORTCUT     8
-#define MC_RELAUNCH     9
+enum
+{
+	MC_MAXIMIZE,
+	MC_OTHERMAX,
+	MC_MINIATURIZE,
+	MC_SHADE,
+	MC_HIDE,
+	MC_MOVERESIZE,
+	MC_SELECT,
+	MC_DUMMY_MOVETO,
+	MC_PROPERTIES,
+	MC_OPTIONS,
+	MC_RELAUNCH,
+	MC_CLOSE,
+	MC_KILL
+};
 
-#define MC_CLOSE        10
-#define MC_KILL         11
+enum
+{
+	WO_KEEP_ON_TOP,
+	WO_KEEP_AT_BOTTOM,
+	WO_OMNIPRESENT,
+	WO_ENTRIES
+};
 
-#define WO_KEEP_ON_TOP		0
-#define WO_KEEP_AT_BOTTOM	1
-#define WO_OMNIPRESENT		2
-#define WO_ENTRIES		3
-
+enum
+{
+	MAXC_V,
+	MAXC_H,
+	MAXC_LH,
+	MAXC_RH,
+	MAXC_TH,
+	MAXC_BH,
+	MAXC_LTC,
+	MAXC_RTC,
+	MAXC_LBC,
+	MAXC_RBC,
+	MAXC_MAXIMUS
+};
 
 static void updateOptionsMenu(WMenu * menu, WWindow * wwin);
 
@@ -96,6 +115,61 @@ static void execWindowOptionCommand(WMenu * menu, WMenuEntry * entry)
 	case WO_OMNIPRESENT:
 		wWindowSetOmnipresent(wwin, !wwin->flags.omnipresent);
 		break;
+	}
+}
+
+static void execMaximizeCommand(WMenu * menu, WMenuEntry * entry)
+{
+	WWindow *wwin = (WWindow *) entry->clientdata;
+	
+	(void) menu;
+
+
+	switch (entry->order) {
+	case MAXC_V:
+		handleMaximize(wwin, MAX_VERTICAL);
+		break;
+
+	case MAXC_H:
+		handleMaximize(wwin,MAX_HORIZONTAL);
+		break;
+
+	case MAXC_LH:
+		handleMaximize(wwin,MAX_VERTICAL | MAX_LEFTHALF);
+		break;
+
+	case MAXC_RH:
+		handleMaximize(wwin,MAX_VERTICAL | MAX_RIGHTHALF);
+		break;
+
+	case MAXC_TH:
+		handleMaximize(wwin,MAX_HORIZONTAL | MAX_TOPHALF);
+		break;
+
+	case MAXC_BH:
+		handleMaximize(wwin,MAX_HORIZONTAL | MAX_BOTTOMHALF);
+		break;
+
+	case MAXC_LTC:
+		handleMaximize(wwin,MAX_LEFTHALF | MAX_TOPHALF);
+		break;
+
+	case MAXC_RTC:
+		handleMaximize(wwin,MAX_RIGHTHALF | MAX_TOPHALF);
+		break;
+
+	case MAXC_LBC:
+		handleMaximize(wwin,MAX_LEFTHALF | MAX_BOTTOMHALF);
+		break;
+
+	case MAXC_RBC:
+		handleMaximize(wwin,MAX_RIGHTHALF | MAX_BOTTOMHALF);
+		break;
+
+	case MAXC_MAXIMUS:
+		handleMaximize(wwin,MAX_MAXIMUS);
+		break;
+
 	}
 }
 
@@ -259,7 +333,7 @@ static void updateWorkspaceMenu(WMenu * menu)
 
 static void updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 {
-	WMenu *smenu = menu->cascades[menu->entries[MC_SHORTCUT]->cascade];
+	WMenu *smenu = menu->cascades[menu->entries[MC_OPTIONS]->cascade];
 	int i;
 	char *buffer;
 	int buflen;
@@ -345,6 +419,26 @@ static void updateOptionsMenu(WMenu * menu, WWindow * wwin)
 	wMenuRealize(smenu);
 }
 
+static void updateMaximizeMenu(WMenu * menu, WWindow * wwin)
+{
+	WMenu *smenu = menu->cascades[menu->entries[MC_OTHERMAX]->cascade];
+
+	smenu->entries[MAXC_V]->clientdata = wwin;
+	smenu->entries[MAXC_H]->clientdata = wwin;
+	smenu->entries[MAXC_LH]->clientdata = wwin;
+	smenu->entries[MAXC_RH]->clientdata = wwin;
+	smenu->entries[MAXC_TH]->clientdata = wwin;
+	smenu->entries[MAXC_BH]->clientdata = wwin;
+	smenu->entries[MAXC_LTC]->clientdata = wwin;
+	smenu->entries[MAXC_RTC]->clientdata = wwin;
+	smenu->entries[MAXC_LBC]->clientdata = wwin;
+	smenu->entries[MAXC_RBC]->clientdata = wwin;
+	smenu->entries[MAXC_MAXIMUS]->clientdata = wwin;
+
+	smenu->flags.realized = 0;
+	wMenuRealize(smenu);
+}
+
 static WMenu *makeWorkspaceMenu(WScreen * scr)
 {
 	WMenu *menu;
@@ -400,6 +494,52 @@ static WMenu *makeOptionsMenu(WScreen * scr)
 	return menu;
 }
 
+static WMenu *makeMaximizeMenu(WScreen * scr)
+{
+	WMenu *menu;
+	WMenuEntry *entry;
+
+	menu = wMenuCreate(scr, NULL, False);
+	if (!menu) {
+		wwarning(_("could not create submenu for window menu"));
+		return NULL;
+	}
+
+	entry = wMenuAddCallback(menu, _("Maximize vertically"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_VMAXIMIZE]);
+	entry = wMenuAddCallback(menu, _("Maximize horizontally"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_HMAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Maximize left half"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_LHMAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Maximize right half"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_RHMAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Maximize top half"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_THMAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Maximize bottom half"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_BHMAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Maximize left top corner"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_LTCMAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Maximize right top corner"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_RTCMAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Maximize left bottom corner"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_LBCMAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Maximize right bottom corner"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_RBCMAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Maximus: tiled maximization"), execMaximizeCommand, NULL);
+	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MAXIMUS]);
+
+	return menu;
+}
+
 static WMenu *createWindowMenu(WScreen * scr)
 {
 	WMenu *menu;
@@ -408,11 +548,14 @@ static WMenu *createWindowMenu(WScreen * scr)
 	menu = wMenuCreate(scr, NULL, False);
 	/*
 	 * Warning: If you make some change that affects the order of the
-	 * entries, you must update the command #defines in the top of
+	 * entries, you must update the command enum in the top of
 	 * this file.
 	 */
 	entry = wMenuAddCallback(menu, _("Maximize"), execMenuCommand, NULL);
 	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MAXIMIZE]);
+
+	entry = wMenuAddCallback(menu, _("Other maximization"), NULL, NULL);
+	wMenuEntrySetCascade(menu, entry, makeMaximizeMenu(scr));
 
 	entry = wMenuAddCallback(menu, _("Miniaturize"), execMenuCommand, NULL);
 	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MINIATURIZE]);
@@ -471,6 +614,7 @@ static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 	int i;
 
 	updateOptionsMenu(menu, wwin);
+	updateMaximizeMenu(menu, wwin);
 
 	updateMakeShortcutMenu(menu, wwin);
 
