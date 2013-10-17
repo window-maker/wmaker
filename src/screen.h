@@ -97,6 +97,9 @@ typedef struct _WScreen {
                                         * Use this list if you want to
                                         * traverse the entire window list
                                         */
+    struct WWindow *bfs_focused_window; /* window that had focus before
+                                        * another window entered fullscreen
+                                        */
 
     WMArray *selected_windows;
 

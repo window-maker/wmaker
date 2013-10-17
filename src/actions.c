@@ -712,6 +712,9 @@ void wFullscreenWindow(WWindow *wwin)
 	rect = wGetRectForHead(wwin->screen_ptr, head);
 	wWindowConfigure(wwin, rect.pos.x, rect.pos.y, rect.size.width, rect.size.height);
 
+	wwin->screen_ptr->bfs_focused_window = wwin->screen_ptr->focused_window;
+	wSetFocusTo(wwin->screen_ptr, wwin);
+
 	WMPostNotificationName(WMNChangedState, wwin, "fullscreen");
 }
 
@@ -742,6 +745,11 @@ void wUnfullscreenWindow(WWindow *wwin)
 	 */
 
 	WMPostNotificationName(WMNChangedState, wwin, "fullscreen");
+
+	if (wwin->screen_ptr->bfs_focused_window) {
+		wSetFocusTo(wwin->screen_ptr, wwin->screen_ptr->bfs_focused_window);
+		wwin->screen_ptr->bfs_focused_window = NULL;
+	}
 }
 
 #ifdef ANIMATIONS

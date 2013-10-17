@@ -1455,6 +1455,11 @@ void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed)
 	if (wwin->flags.menu_open_for_me)
 		CloseWindowMenu(scr);
 
+	/* Don't restore focus to this window after a window exits
+	 * fullscreen mode */
+	if (scr->bfs_focused_window == wwin)
+		scr->bfs_focused_window = NULL;
+
 	if (!destroyed) {
 		if (!wwin->flags.internal_window)
 			XRemoveFromSaveSet(dpy, wwin->client_win);
