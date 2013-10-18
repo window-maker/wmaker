@@ -173,6 +173,63 @@ static void execMaximizeCommand(WMenu * menu, WMenuEntry * entry)
 	}
 }
 
+static void updateUnmaximizeShortcut(WMenuEntry * entry, int flags)
+{
+	int key;
+
+	switch (flags & (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS)) {
+	case MAX_HORIZONTAL:
+		key = WKBD_HMAXIMIZE;
+		break;
+
+	case MAX_VERTICAL:
+		key = WKBD_VMAXIMIZE;
+		break;
+
+	case MAX_LEFTHALF | MAX_VERTICAL:
+		key = WKBD_LHMAXIMIZE;
+		break;
+
+	case MAX_RIGHTHALF | MAX_VERTICAL:
+		key = WKBD_RHMAXIMIZE;
+		break;
+
+	case MAX_TOPHALF | MAX_HORIZONTAL:
+		key = WKBD_THMAXIMIZE;
+		break;
+
+	case MAX_BOTTOMHALF | MAX_HORIZONTAL:
+		key = WKBD_BHMAXIMIZE;
+		break;
+
+	case MAX_LEFTHALF | MAX_TOPHALF:
+		key = WKBD_LTCMAXIMIZE;
+		break;
+
+	case MAX_RIGHTHALF | MAX_TOPHALF:
+		key = WKBD_RTCMAXIMIZE;
+		break;
+
+	case MAX_LEFTHALF | MAX_BOTTOMHALF:
+		key = WKBD_LBCMAXIMIZE;
+		break;
+
+	case MAX_RIGHTHALF | MAX_BOTTOMHALF:
+		key = WKBD_RBCMAXIMIZE;
+		break;
+
+	case MAX_MAXIMUS:
+		key = WKBD_MAXIMUS;
+		break;
+
+	default:
+		key = WKBD_MAXIMIZE;
+		break;
+	}
+
+	entry->rtext = GetShortcutKey(wKeyBindings[key]);
+}
+
 static void execMenuCommand(WMenu * menu, WMenuEntry * entry)
 {
 	WWindow *wwin = (WWindow *) entry->clientdata;
@@ -644,12 +701,14 @@ static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 			text = _("Unmaximize");
 
 		menu->entries[MC_MAXIMIZE]->text = text;
+		updateUnmaximizeShortcut(menu->entries[MC_MAXIMIZE], wwin->flags.maximized);
 	} else {
 		static char *text = NULL;
 		if (!text)
 			text = _("Maximize");
 
 		menu->entries[MC_MAXIMIZE]->text = text;
+		menu->entries[MC_MAXIMIZE]->rtext = GetShortcutKey(wKeyBindings[WKBD_MAXIMIZE]);
 	}
 	wMenuSetEnabled(menu, MC_MAXIMIZE, IS_RESIZABLE(wwin));
 
