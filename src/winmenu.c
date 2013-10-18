@@ -610,25 +610,19 @@ static WMenu *createWindowMenu(WScreen * scr)
 	 * this file.
 	 */
 	entry = wMenuAddCallback(menu, _("Maximize"), execMenuCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MAXIMIZE]);
 
 	entry = wMenuAddCallback(menu, _("Other maximization"), NULL, NULL);
 	wMenuEntrySetCascade(menu, entry, makeMaximizeMenu(scr));
 
 	entry = wMenuAddCallback(menu, _("Miniaturize"), execMenuCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MINIATURIZE]);
 
 	entry = wMenuAddCallback(menu, _("Shade"), execMenuCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_SHADE]);
 
 	entry = wMenuAddCallback(menu, _("Hide"), execMenuCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_HIDE]);
 
 	entry = wMenuAddCallback(menu, _("Resize/Move"), execMenuCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MOVERESIZE]);
 
 	entry = wMenuAddCallback(menu, _("Select"), execMenuCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_SELECT]);
 
 	entry = wMenuAddCallback(menu, _("Move To"), NULL, NULL);
 	w_global.workspace.submenu = makeWorkspaceMenu(scr);
@@ -641,10 +635,8 @@ static WMenu *createWindowMenu(WScreen * scr)
 	wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(makeOptionsMenu(scr)));
 
 	entry = wMenuAddCallback(menu, _("Launch"), execMenuCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_RELAUNCH]);
 
 	entry = wMenuAddCallback(menu, _("Close"), execMenuCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_CLOSE]);
 
 	entry = wMenuAddCallback(menu, _("Kill"), execMenuCommand, NULL);
 
@@ -754,6 +746,17 @@ static void updateMenuForWindow(WMenu * menu, WWindow * wwin)
 	} else {
 		wMenuSetEnabled(menu, MC_PROPERTIES, False);
 	}
+
+	/* Update shortcut labels except for (Un)Maximize which is
+	 * handled separately.
+	 */
+	menu->entries[MC_MINIATURIZE]->rtext = GetShortcutKey(wKeyBindings[WKBD_MINIATURIZE]);
+	menu->entries[MC_SHADE]->rtext = GetShortcutKey(wKeyBindings[WKBD_SHADE]);
+	menu->entries[MC_HIDE]->rtext = GetShortcutKey(wKeyBindings[WKBD_HIDE]);
+	menu->entries[MC_MOVERESIZE]->rtext = GetShortcutKey(wKeyBindings[WKBD_MOVERESIZE]);
+	menu->entries[MC_SELECT]->rtext = GetShortcutKey(wKeyBindings[WKBD_SELECT]);
+	menu->entries[MC_RELAUNCH]->rtext = GetShortcutKey(wKeyBindings[WKBD_RELAUNCH]);
+	menu->entries[MC_CLOSE]->rtext = GetShortcutKey(wKeyBindings[WKBD_CLOSE]);
 
 	/* set the client data of the entries to the window */
 	for (i = 0; i < menu->entry_no; i++) {
