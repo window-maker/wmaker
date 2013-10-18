@@ -481,16 +481,37 @@ static void updateMaximizeMenu(WMenu * menu, WWindow * wwin)
 	WMenu *smenu = menu->cascades[menu->entries[MC_OTHERMAX]->cascade];
 
 	smenu->entries[MAXC_V]->clientdata = wwin;
+	smenu->entries[MAXC_V]->rtext = GetShortcutKey(wKeyBindings[WKBD_VMAXIMIZE]);
+
 	smenu->entries[MAXC_H]->clientdata = wwin;
+	smenu->entries[MAXC_H]->rtext = GetShortcutKey(wKeyBindings[WKBD_HMAXIMIZE]);
+
 	smenu->entries[MAXC_LH]->clientdata = wwin;
+	smenu->entries[MAXC_LH]->rtext = GetShortcutKey(wKeyBindings[WKBD_LHMAXIMIZE]);
+
 	smenu->entries[MAXC_RH]->clientdata = wwin;
+	smenu->entries[MAXC_RH]->rtext = GetShortcutKey(wKeyBindings[WKBD_RHMAXIMIZE]);
+
 	smenu->entries[MAXC_TH]->clientdata = wwin;
+	smenu->entries[MAXC_TH]->rtext = GetShortcutKey(wKeyBindings[WKBD_THMAXIMIZE]);
+
 	smenu->entries[MAXC_BH]->clientdata = wwin;
+	smenu->entries[MAXC_BH]->rtext = GetShortcutKey(wKeyBindings[WKBD_BHMAXIMIZE]);
+
 	smenu->entries[MAXC_LTC]->clientdata = wwin;
+	smenu->entries[MAXC_LTC]->rtext = GetShortcutKey(wKeyBindings[WKBD_LTCMAXIMIZE]);
+
 	smenu->entries[MAXC_RTC]->clientdata = wwin;
+	smenu->entries[MAXC_RTC]->rtext = GetShortcutKey(wKeyBindings[WKBD_RTCMAXIMIZE]);
+
 	smenu->entries[MAXC_LBC]->clientdata = wwin;
+	smenu->entries[MAXC_LBC]->rtext = GetShortcutKey(wKeyBindings[WKBD_LBCMAXIMIZE]);
+
 	smenu->entries[MAXC_RBC]->clientdata = wwin;
+	smenu->entries[MAXC_RBC]->rtext = GetShortcutKey(wKeyBindings[WKBD_RBCMAXIMIZE]);
+
 	smenu->entries[MAXC_MAXIMUS]->clientdata = wwin;
+	smenu->entries[MAXC_MAXIMUS]->rtext = GetShortcutKey(wKeyBindings[WKBD_MAXIMUS]);
 
 	smenu->flags.realized = 0;
 	wMenuRealize(smenu);
@@ -563,36 +584,16 @@ static WMenu *makeMaximizeMenu(WScreen * scr)
 	}
 
 	entry = wMenuAddCallback(menu, _("Maximize vertically"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_VMAXIMIZE]);
 	entry = wMenuAddCallback(menu, _("Maximize horizontally"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_HMAXIMIZE]);
-
 	entry = wMenuAddCallback(menu, _("Maximize left half"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_LHMAXIMIZE]);
-
 	entry = wMenuAddCallback(menu, _("Maximize right half"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_RHMAXIMIZE]);
-
 	entry = wMenuAddCallback(menu, _("Maximize top half"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_THMAXIMIZE]);
-
 	entry = wMenuAddCallback(menu, _("Maximize bottom half"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_BHMAXIMIZE]);
-
 	entry = wMenuAddCallback(menu, _("Maximize left top corner"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_LTCMAXIMIZE]);
-
 	entry = wMenuAddCallback(menu, _("Maximize right top corner"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_RTCMAXIMIZE]);
-
 	entry = wMenuAddCallback(menu, _("Maximize left bottom corner"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_LBCMAXIMIZE]);
-
 	entry = wMenuAddCallback(menu, _("Maximize right bottom corner"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_RBCMAXIMIZE]);
-
 	entry = wMenuAddCallback(menu, _("Maximus: tiled maximization"), execMaximizeCommand, NULL);
-	entry->rtext = GetShortcutKey(wKeyBindings[WKBD_MAXIMUS]);
 
 	return menu;
 }
