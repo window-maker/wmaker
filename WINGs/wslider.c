@@ -258,6 +258,9 @@ static void didResizeSlider(W_ViewDelegate * self, WMView * view)
 	int width = sPtr->view->size.width;
 	int height = sPtr->view->size.height;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	assert(width > 0);
 	assert(height > 0);
 

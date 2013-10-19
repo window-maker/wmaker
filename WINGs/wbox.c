@@ -223,6 +223,9 @@ static void destroyBox(Box * bPtr)
 
 static void didResize(struct W_ViewDelegate *delegate, WMView * view)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) delegate;
+
 	rearrange(view->self);
 }
 

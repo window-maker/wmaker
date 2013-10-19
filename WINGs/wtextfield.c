@@ -650,6 +650,9 @@ static void didResizeTextField(W_ViewDelegate * self, WMView * view)
 {
 	WMTextField *tPtr = (WMTextField *) view->self;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	tPtr->offsetWidth = WMAX((tPtr->view->size.height - WMFontHeight(tPtr->font)) / 2, 1);
 
 	tPtr->usableWidth = tPtr->view->size.width - 2 * tPtr->offsetWidth /*+ 2 */ ;

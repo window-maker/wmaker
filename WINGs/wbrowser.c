@@ -434,6 +434,9 @@ static void willResizeBrowser(W_ViewDelegate * self, WMView * view, unsigned int
 	int colX, colY;
 	int i;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	assert(*width > 0);
 	assert(*height > 0);
 

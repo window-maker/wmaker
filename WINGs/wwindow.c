@@ -314,6 +314,9 @@ static void willResizeWindow(W_ViewDelegate * self, WMView * view, unsigned *wid
 {
 	WMWindow *win = (WMWindow *) view->self;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	if (win->minSize.width > 0 && win->minSize.height > 0) {
 		if (*width < win->minSize.width)
 			*width = win->minSize.width;

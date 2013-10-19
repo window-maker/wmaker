@@ -199,6 +199,9 @@ static void reorganizeInterior(WMScrollView * sPtr)
 
 static void resizeScrollView(W_ViewDelegate * self, WMView * view)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	reorganizeInterior(view->self);
 	updateScrollerProportion(view->self);
 }

@@ -740,6 +740,9 @@ static void rearrange(TabView * tPtr)
 
 static void didResize(struct W_ViewDelegate *deleg, WMView * view)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) deleg;
+
 	rearrange(view->self);
 }
 

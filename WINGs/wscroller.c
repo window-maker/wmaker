@@ -134,6 +134,9 @@ static void willResizeScroller(W_ViewDelegate * self, WMView * view, unsigned in
 {
 	WMScroller *sPtr = (WMScroller *) view->self;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	if (*width > *height) {
 		sPtr->flags.horizontal = 1;
 		*height = SCROLLER_WIDTH;

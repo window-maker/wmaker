@@ -218,6 +218,9 @@ static void willResizeColorWell(W_ViewDelegate * self, WMView * view, unsigned i
 	WMColorWell *cPtr = (WMColorWell *) view->self;
 	int bw;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	if (cPtr->flags.bordered) {
 
 		if (*width < MIN_WIDTH)

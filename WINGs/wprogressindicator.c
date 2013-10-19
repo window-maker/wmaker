@@ -139,6 +139,9 @@ static void didResizeProgressIndicator(W_ViewDelegate * self, WMView * view)
 	int width = pPtr->view->size.width;
 	int height = pPtr->view->size.height;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	assert(width > 0);
 	assert(height > 0);
 }

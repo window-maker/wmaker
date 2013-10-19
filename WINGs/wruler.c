@@ -297,6 +297,9 @@ static void rulerDidResize(W_ViewDelegate * self, WMView * view)
 {
 	Ruler *rPtr = (Ruler *) view->self;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	createDrawBuffer(rPtr);
 	rPtr->flags.redraw = True;
 	paintRuler(rPtr);

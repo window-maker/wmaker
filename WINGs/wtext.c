@@ -1697,6 +1697,9 @@ static void textDidResize(W_ViewDelegate * self, WMView * view)
 	unsigned short h = tPtr->view->size.height;
 	unsigned short rh = 0, vw = 0, rel;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	rel = (tPtr->flags.relief == WRFlat);
 
 	if (tPtr->ruler && tPtr->flags.rulerShown) {
