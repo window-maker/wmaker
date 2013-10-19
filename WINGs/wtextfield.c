@@ -244,6 +244,10 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 	Atom COMPOUND_TEXT = XInternAtom(dpy, "COMPOUND_TEXT", False);
 	WMData *data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) selection;
+	(void) cdata;
+
 	count = tPtr->selection.count < 0
 	    ? tPtr->selection.position + tPtr->selection.count : tPtr->selection.position;
 
@@ -280,6 +284,9 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 static void lostSelection(WMView * view, Atom selection, void *cdata)
 {
 	TextField *tPtr = (WMTextField *) view->self;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) cdata;
 
 	if (tPtr->flags.ownsSelection) {
 		WMDeleteSelectionHandler(view, selection, CurrentTime);
@@ -1309,6 +1316,12 @@ static void pasteText(WMView * view, Atom selection, Atom target, Time timestamp
 {
 	TextField *tPtr = (TextField *) view->self;
 	char *str;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) selection;
+	(void) target;
+	(void) timestamp;
+	(void) cdata;
 
 	tPtr->flags.waitingSelection = 0;
 

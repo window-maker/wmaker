@@ -10,6 +10,10 @@ typedef struct W_IMContext {
 
 static void instantiateIM_cb(Display * display, XPointer client_data, XPointer call_data)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) display;
+	(void) call_data;
+
 	W_InitIM((W_Screen *) client_data);
 }
 
@@ -17,6 +21,9 @@ static void destroyIM_cb(XIM xim, XPointer client_data, XPointer call_data)
 {
 	W_Screen *scr = (W_Screen *) client_data;
 	W_View *target;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) call_data;
 
 	if (scr->imctx->xim != xim)
 		return;

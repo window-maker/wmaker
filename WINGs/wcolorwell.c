@@ -342,6 +342,9 @@ static void handleActionEvents(XEvent * event, void *data)
 	WMScreen *scr = WMWidgetScreen(cPtr);
 	WMColorPanel *cpanel;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) event;
+
 	if (cPtr->flags.active)
 		W_SetViewBackgroundColor(cPtr->view, scr->gray);
 	else

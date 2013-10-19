@@ -2059,6 +2059,10 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 	Atom COMPOUND_TEXT = XInternAtom(dpy, "COMPOUND_TEXT", False);
 	WMData *data = NULL;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) selection;
+	(void) cdata;
+
 	if (target == XA_STRING || target == TEXT || target == COMPOUND_TEXT) {
 		char *text = WMGetTextSelectedStream(tPtr);
 
@@ -2093,6 +2097,10 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 
 static void lostHandler(WMView * view, Atom selection, void *cdata)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) selection;
+	(void) cdata;
+
 	releaseSelection((WMText *) view->self);
 }
 
@@ -2339,6 +2347,12 @@ static void pasteText(WMView * view, Atom selection, Atom target, Time timestamp
 {
 	Text *tPtr = (Text *) view->self;
 	char *text;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) selection;
+	(void) target;
+	(void) timestamp;
+	(void) cdata;
 
 	tPtr->flags.waitingForSelection = 0;
 
