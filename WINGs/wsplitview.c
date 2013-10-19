@@ -351,6 +351,9 @@ static void handleViewResized(void *self, WMNotification * notification)
 {
 	WMSplitView *sPtr = (WMSplitView *) self;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) notification;
+
 #if 0
 	printf("---- (handleViewResized - 1) ----\n");
 	dumpSubviews(sPtr);

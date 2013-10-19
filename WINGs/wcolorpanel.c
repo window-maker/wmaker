@@ -2321,6 +2321,9 @@ static void grayBrightnessTextFieldCallback(void *observerData, WMNotification *
 	int value;
 	W_ColorPanel *panel = (W_ColorPanel *) observerData;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) notification;
+
 	value = atoi(WMGetTextFieldText(panel->grayBrightnessT));
 	if (value > 100)
 		value = 100;
@@ -2374,6 +2377,9 @@ static void rgbTextFieldCallback(void *observerData, WMNotification * notificati
 	char tmp[4];
 	int n;
 	W_ColorPanel *panel = (W_ColorPanel *) observerData;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) notification;
 
 	value[0] = atoi(WMGetTextFieldText(panel->rgbRedT));
 	value[1] = atoi(WMGetTextFieldText(panel->rgbGreenT));
@@ -2448,6 +2454,9 @@ static void cmykTextFieldCallback(void *observerData, WMNotification * notificat
 	int n;
 	double scale;
 	W_ColorPanel *panel = (W_ColorPanel *) observerData;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) notification;
 
 	value[0] = atoi(WMGetTextFieldText(panel->cmykCyanT));
 	value[1] = atoi(WMGetTextFieldText(panel->cmykMagentaT));
@@ -2533,6 +2542,9 @@ static void hsbTextFieldCallback(void *observerData, WMNotification * notificati
 	char tmp[4];
 	int n;
 	W_ColorPanel *panel = (W_ColorPanel *) observerData;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) notification;
 
 	value[0] = atoi(WMGetTextFieldText(panel->hsbHueT));
 	value[1] = atoi(WMGetTextFieldText(panel->hsbSaturationT));

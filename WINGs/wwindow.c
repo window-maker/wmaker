@@ -95,6 +95,9 @@ static void realizeWindow(WMWindow * win);
 
 static void realizeObserver(void *self, WMNotification * not)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) not;
+
 	realizeWindow(self);
 }
 

@@ -49,6 +49,9 @@ static void makeKnobPixmap(Slider * sPtr);
 
 static void realizeObserver(void *self, WMNotification * not)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) not;
+
 	makeKnobPixmap(self);
 }
 

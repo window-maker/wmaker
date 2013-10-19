@@ -307,6 +307,9 @@ static void selectionNotification(void *observerData, WMNotification * notificat
 
 static void realizeObserver(void *self, WMNotification * not)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) not;
+
 	W_CreateIC(((TextField *) self)->view);
 }
 
