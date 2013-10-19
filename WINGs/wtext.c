@@ -2678,6 +2678,9 @@ static void rulerMoveCallBack(WMWidget * w, void *self)
 {
 	Text *tPtr = (Text *) self;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	if (!tPtr)
 		return;
 	if (W_CLASS(tPtr) != WC_Text)
@@ -2689,6 +2692,9 @@ static void rulerMoveCallBack(WMWidget * w, void *self)
 static void rulerReleaseCallBack(WMWidget * w, void *self)
 {
 	Text *tPtr = (Text *) self;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	if (!tPtr)
 		return;

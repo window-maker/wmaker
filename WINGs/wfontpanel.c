@@ -85,6 +85,10 @@ static void listFamilies(WMScreen * scr, WMFontPanel * panel);
 
 static void splitViewConstrainCallback(WMSplitView * sPtr, int indView, int *min, int *max)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) sPtr;
+	(void) max;
+
 	if (indView == 0)
 		*min = MIN_UPPER_HEIGHT;
 	else
@@ -138,6 +142,9 @@ static void closeWindow(WMWidget * w, void *data)
 {
 	FontPanel *panel = (FontPanel *) data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	WMHideFontPanel(panel);
 }
 
@@ -145,12 +152,19 @@ static void setClickedAction(WMWidget * w, void *data)
 {
 	FontPanel *panel = (FontPanel *) data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	if (panel->action)
 		(*panel->action) (panel, panel->data);
 }
 
 static void revertClickedAction(WMWidget * w, void *data)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+	(void) data;
+
 	/*FontPanel *panel = (FontPanel*)data; */
 	/* XXX TODO */
 }
@@ -676,6 +690,9 @@ static void typefaceClick(WMWidget * w, void *data)
 	int sizei = -1;
 	void *size;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	osize = WMGetTextFieldText(panel->sizT);
 
 	item = WMGetListSelectedItem(panel->typLs);
@@ -714,6 +731,9 @@ static void sizeClick(WMWidget * w, void *data)
 {
 	FontPanel *panel = (FontPanel *) data;
 	WMListItem *item;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	item = WMGetListSelectedItem(panel->sizLs);
 	WMSetTextFieldText(panel->sizT, item->text);

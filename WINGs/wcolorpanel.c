@@ -1129,6 +1129,9 @@ static void closeWindowCallback(WMWidget * w, void *data)
 {
 	W_ColorPanel *panel = (W_ColorPanel *) data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	WMCloseColorPanel(panel);
 }
 
@@ -1680,6 +1683,9 @@ static void magnifyPutCursor(WMWidget * w, void *data)
 	XEvent event;
 	WMPoint initialPosition;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	/* Destroy wheelBackImg, so it'll update properly */
 	if (panel->selectionBackImg) {
 		XFreePixmap(WMWidgetScreen(panel->win)->display, panel->selectionBackImg);
@@ -2130,6 +2136,9 @@ static void wheelBrightnessSliderCallback(WMWidget * w, void *data)
 
 	W_ColorPanel *panel = (W_ColorPanel *) data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	value = 255 - WMGetSliderValue(panel->wheelBrightnessS);
 
 	wheelCalculateValues(panel, value);
@@ -2275,6 +2284,9 @@ static void grayBrightnessSliderCallback(WMWidget * w, void *data)
 	char tmp[4];
 	W_ColorPanel *panel = (W_ColorPanel *) data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	value = WMGetSliderValue(panel->grayBrightnessS);
 
 	sprintf(tmp, "%d", value);
@@ -2350,6 +2362,9 @@ static void rgbSliderCallback(WMWidget * w, void *data)
 	char tmp[4];
 	W_ColorPanel *panel = (W_ColorPanel *) data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	value[0] = WMGetSliderValue(panel->rgbRedS);
 	value[1] = WMGetSliderValue(panel->rgbGreenS);
 	value[2] = WMGetSliderValue(panel->rgbBlueS);
@@ -2421,6 +2436,9 @@ static void cmykSliderCallback(WMWidget * w, void *data)
 	char tmp[4];
 	W_ColorPanel *panel = (W_ColorPanel *) data;
 	double scale;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	value[0] = WMGetSliderValue(panel->cmykCyanS);
 	value[1] = WMGetSliderValue(panel->cmykMagentaS);
@@ -2862,6 +2880,9 @@ static void customPaletteMenuCallback(WMWidget * w, void *data)
 	W_ColorPanel *panel = (W_ColorPanel *) data;
 	int item = WMGetPopUpButtonSelectedItem(panel->customPaletteMenuBtn);
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	switch (item) {
 	case CPmenuNewFromFile:
 		customPaletteMenuNewFromFile(panel);
@@ -3200,6 +3221,9 @@ static void colorListColorMenuCallback(WMWidget * w, void *data)
 	W_ColorPanel *panel = (W_ColorPanel *) data;
 	int item = WMGetPopUpButtonSelectedItem(panel->colorListColorMenuBtn);
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	switch (item) {
 	case CLmenuAdd:
 		break;
@@ -3214,6 +3238,9 @@ static void colorListListMenuCallback(WMWidget * w, void *data)
 {
 	W_ColorPanel *panel = (W_ColorPanel *) data;
 	int item = WMGetPopUpButtonSelectedItem(panel->colorListListMenuBtn);
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	switch (item) {
 	case CLmenuAdd:

@@ -480,6 +480,9 @@ static void paintItem(WMList * lPtr, int index, Drawable d, char *text, int stat
 	WMColor *backColor = ((state & WLDSSelected) ? scr->white : view->backColor);
 	int width, height, x, y, textLen;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) index;
+
 	width = rect->size.width;
 	height = rect->size.height;
 	x = rect->pos.x;

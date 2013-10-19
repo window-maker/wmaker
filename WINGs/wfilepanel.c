@@ -551,6 +551,10 @@ static void fillColumn(WMBrowserDelegate * self, WMBrowser * bPtr, int column, W
 	char *path;
 	WMFilePanel *panel;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+	(void) list;
+
 	if (column > 0) {
 		path = WMGetBrowserPathToColumn(bPtr, column - 1);
 	} else {
@@ -565,6 +569,9 @@ static void fillColumn(WMBrowserDelegate * self, WMBrowser * bPtr, int column, W
 static void browserDClick(WMWidget *widget, void *p_panel)
 {
 	WMFilePanel *panel = p_panel;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) widget;
 
 	WMPerformButtonClick(panel->okButton);
 }
@@ -603,6 +610,9 @@ static void createDir(WMWidget *widget, void *p_panel)
 	char *dirName, *directory, *file;
 	size_t slen;
 	WMScreen *scr = WMWidgetScreen(panel->win);
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) widget;
 
 	dirName = WMRunInputPanel(scr, panel->win, _("Create Directory"),
 				  _("Enter directory name"), "", _("OK"), _("Cancel"));
@@ -688,6 +698,9 @@ static void deleteFile(WMWidget *widget, void *p_panel)
 	WMScreen *scr = WMWidgetScreen(panel->win);
 #define __msgbufsize__ 512
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) widget;
+
 	buffer = wmalloc(__msgbufsize__);
 	file = getCurrentFileName(panel);
 	normalizePath(file);
@@ -733,6 +746,9 @@ static void goFloppy(WMWidget *widget, void *p_panel)
 	struct stat filestat;
 	WMScreen *scr = WMWidgetScreen(panel->win);
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) widget;
+
 	if (stat(WINGsConfiguration.floppyPath, &filestat)) {
 		showError(scr, panel->win, _("An error occured browsing '%s'."), WINGsConfiguration.floppyPath);
 		return;
@@ -748,6 +764,9 @@ static void goHome(WMWidget *widget, void *p_panel)
 {
 	WMFilePanel *panel = p_panel;
 	char *home;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) widget;
 
 	/* home is statically allocated. Don't free it! */
 	home = wgethomedir();
