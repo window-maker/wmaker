@@ -13,7 +13,8 @@ defsdata_DATA = \
 	defaultterm.xpm\
 	draw.tiff\
 	draw.xpm\
-	Drawer.png\
+	Drawer.xpm\
+	Drawer.tiff\
 	Ear.png\
 	Ftp.png\
 	GNUstep3D.tiff\
