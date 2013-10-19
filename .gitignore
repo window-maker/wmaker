@@ -6,6 +6,7 @@
 INSTALL
 aclocal.m4
 autom4te.cache*
+compile
 config-paths.h
 config.guess
 config.h
