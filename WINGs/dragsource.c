@@ -132,6 +132,10 @@ static WMData *convertSelection(WMView * view, Atom selection, Atom target, void
 	WMData *data;
 	char *typeName;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) selection;
+	(void) cdata;
+
 	scr = W_VIEW_SCREEN(view);
 	typeName = XGetAtomName(scr->display, target);
 
@@ -151,11 +155,22 @@ static WMData *convertSelection(WMView * view, Atom selection, Atom target, void
 
 static void selectionLost(WMView * view, Atom selection, void *cdata)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) view;
+	(void) selection;
+	(void) cdata;
+
 	wwarning("DND selection lost during drag operation...");
 }
 
 static void selectionDone(WMView * view, Atom selection, Atom target, void *cdata)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) view;
+	(void) selection;
+	(void) target;
+	(void) cdata;
+
 #ifdef XDND_DEBUG
 	printf("selection done\n");
 #endif
@@ -542,11 +557,17 @@ static void initSourceDragInfo(WMView * sourceView, WMDraggingInfo * info)
  */
 static WMArray *defDropDataTypes(WMView * self)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	return NULL;
 }
 
 static WMDragOperationType defWantedDropOperation(WMView * self)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	return WDOperationNone;
 }
 
@@ -560,15 +581,26 @@ static WMDragOperationType defWantedDropOperation(WMView * self)
 
 static Bool defAcceptDropOperation(WMView * self, WMDragOperationType allowedOperation)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+	(void) allowedOperation;
+
 	return False;
 }
 
 static void defBeganDrag(WMView * self, WMPoint * point)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+	(void) point;
 }
 
 static void defEndedDrag(WMView * self, WMPoint * point, Bool deposited)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+	(void) point;
+	(void) deposited;
 }
 
 /*
@@ -576,6 +608,10 @@ static void defEndedDrag(WMView * self, WMPoint * point, Bool deposited)
  */
 static WMData *defFetchDragData(WMView * self, char *type)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+	(void) type;
+
 	return NULL;
 }
 

@@ -407,6 +407,12 @@ storeDropData(WMView * destView, Atom selection, Atom target, Time timestamp, vo
 	WMDraggingInfo *info = &(scr->dragInfo);
 	WMData *dataToStore = NULL;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) selection;
+	(void) target;
+	(void) timestamp;
+	(void) cdata;
+
 	if (data != NULL)
 		dataToStore = WMRetainData(data);
 
@@ -888,6 +894,11 @@ void WMUnregisterViewDraggedTypes(WMView * view)
 static WMDragOperationType
 defAllowedOperation(WMView * self, WMDragOperationType requestedOperation, WMArray * sourceDataTypes)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+	(void) requestedOperation;
+	(void) sourceDataTypes;
+
 	/* no operation allowed */
 	return WDOperationNone;
 }
@@ -903,6 +914,11 @@ defAllowedOperation(WMView * self, WMDragOperationType requestedOperation, WMArr
 static WMArray *defRequiredDataTypes(WMView * self,
 				     WMDragOperationType requestedOperation, WMArray * sourceDataTypes)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+	(void) requestedOperation;
+	(void) sourceDataTypes;
+
 	/* no data type allowed (NULL even at 2nd pass) */
 	return NULL;
 }
@@ -912,6 +928,8 @@ static WMArray *defRequiredDataTypes(WMView * self,
  */
 static void defPrepareForDragOperation(WMView * self)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
 }
 
 /*
@@ -938,11 +956,18 @@ static void defPrepareForDragOperation(WMView * self)
 static void
 defPerformDragOperation(WMView * self, WMArray * dropDatas, WMArray * operationList, WMPoint * dropLocation)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+	(void) dropDatas;
+	(void) operationList;
+	(void) dropLocation;
 }
 
 /* Executed after drop */
 static void defConcludeDragOperation(WMView * self)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
 }
 
 void WMSetViewDragDestinationProcs(WMView * view, WMDragDestinationProcs * procs)

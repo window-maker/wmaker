@@ -2703,11 +2703,17 @@ static WMArray *dropDataTypes(WMView * self)
 
 static WMDragOperationType wantedDropOperation(WMView * self)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	return WDOperationCopy;
 }
 
 static Bool acceptDropOperation(WMView * self, WMDragOperationType allowedOperation)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	return (allowedOperation == WDOperationCopy);
 }
 
@@ -2746,11 +2752,20 @@ static WMDragSourceProcs _DragSourceProcs = {
 
 static WMArray *requiredDataTypes(WMView * self, WMDragOperationType request, WMArray * sourceDataTypes)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) request;
+	(void) sourceDataTypes;
+
 	return ((Text *) self->self)->xdndDestinationTypes;
 }
 
 static WMDragOperationType allowedOperation(WMView * self, WMDragOperationType request, WMArray * sourceDataTypes)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+	(void) request;
+	(void) sourceDataTypes;
+
 	return WDOperationCopy;
 }
 
@@ -2760,6 +2775,10 @@ static void performDragOperation(WMView * self, WMArray * dropData, WMArray * op
 	WMData *data;
 	char *colorName;
 	WMColor *color;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) operations;
+	(void) dropLocation;
 
 	if (tPtr) {
 

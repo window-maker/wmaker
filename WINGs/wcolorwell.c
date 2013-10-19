@@ -279,11 +279,17 @@ static WMArray *dropDataTypes(WMView * self)
 
 static WMDragOperationType wantedDropOperation(WMView * self)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	return WDOperationCopy;
 }
 
 static Bool acceptDropOperation(WMView * self, WMDragOperationType operation)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	return (operation == WDOperationCopy);
 }
 
@@ -291,6 +297,9 @@ static WMData *fetchDragData(WMView * self, char *type)
 {
 	char *color = WMGetColorRGBDescription(((WMColorWell *) self->self)->color);
 	WMData *data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) type;
 
 	data = WMCreateDataWithBytes(color, strlen(color) + 1);
 	wfree(color);
@@ -388,6 +397,9 @@ static WMArray *requiredDataTypes(WMView * self, WMDragOperationType request, WM
 
 static WMDragOperationType allowedOperation(WMView * self, WMDragOperationType request, WMArray * sourceDataTypes)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	if (dropIsOk(request, sourceDataTypes))
 		return WDOperationCopy;
 	else
@@ -399,6 +411,10 @@ static void performDragOperation(WMView * self, WMArray * dropData, WMArray * op
 	char *colorName;
 	WMColor *color;
 	WMData *data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) operations;
+	(void) dropLocation;
 
 	/* only one operation requested (WDOperationCopy) implies only one data */
 	data = (WMData *) WMGetFromArray(dropData, 0);
