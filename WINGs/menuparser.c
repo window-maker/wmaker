@@ -30,8 +30,7 @@
 
 static WMenuParser menu_parser_create_new(const char *file_name, void *file,
 					  const char *include_default_paths);
-static char *menu_parser_isolate_token(WMenuParser parser,
-				       WParserMacro *list_macros);
+static char *menu_parser_isolate_token(WMenuParser parser);
 static void menu_parser_get_directive(WMenuParser parser);
 static Bool menu_parser_include_file(WMenuParser parser);
 static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists);
@@ -179,7 +178,7 @@ read_next_line:
 			goto read_next_line;
 
 		/* Found a word */
-		token = menu_parser_isolate_token(cur_parser, top_parser->macros);
+		token = menu_parser_isolate_token(cur_parser);
 		switch (scanmode) {
 		case GET_TITLE:
 			*title = token;
@@ -299,7 +298,7 @@ found_end_of_comment:
 
 /* read a token (non-spaces suite of characters)
  * the result is wmalloc's, so it needs to be free'd */
-static char *menu_parser_isolate_token(WMenuParser parser, WParserMacro *list_macros)
+static char *menu_parser_isolate_token(WMenuParser parser)
 {
 	char buffer_token[sizeof(parser->line_buffer)];
 	char *token;
