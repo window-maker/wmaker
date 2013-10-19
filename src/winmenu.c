@@ -575,7 +575,6 @@ static WMenu *makeOptionsMenu(WScreen * scr)
 static WMenu *makeMaximizeMenu(WScreen * scr)
 {
 	WMenu *menu;
-	WMenuEntry *entry;
 
 	menu = wMenuCreate(scr, NULL, False);
 	if (!menu) {
@@ -583,17 +582,17 @@ static WMenu *makeMaximizeMenu(WScreen * scr)
 		return NULL;
 	}
 
-	entry = wMenuAddCallback(menu, _("Maximize vertically"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximize horizontally"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximize left half"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximize right half"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximize top half"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximize bottom half"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximize left top corner"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximize right top corner"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximize left bottom corner"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximize right bottom corner"), execMaximizeCommand, NULL);
-	entry = wMenuAddCallback(menu, _("Maximus: tiled maximization"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize vertically"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize horizontally"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize left half"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize right half"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize top half"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize bottom half"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize left top corner"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize right top corner"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize left bottom corner"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximize right bottom corner"), execMaximizeCommand, NULL);
+	(void) wMenuAddCallback(menu, _("Maximus: tiled maximization"), execMaximizeCommand, NULL);
 
 	return menu;
 }
