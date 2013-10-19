@@ -95,6 +95,9 @@ char *WMGetDragOperationItemText(WMDragOperationItem * item)
 
 static int handleNoWindowXError(Display * dpy, XErrorEvent * errEvt)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) dpy;
+
 	if (errEvt->error_code == BadWindow || errEvt->error_code == BadDrawable) {
 		_WindowExists = False;
 		return Success;

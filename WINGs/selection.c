@@ -102,6 +102,10 @@ static void WMDeleteSelectionCallback(WMView * view, Atom selection, Time timest
 
 static int handleXError(Display * dpy, XErrorEvent * ev)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) dpy;
+	(void) ev;
+
 	gotXError = True;
 
 	return 1;
