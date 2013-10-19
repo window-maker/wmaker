@@ -758,5 +758,8 @@ void *WMBagIteratorAtIndex(WMBag * self, int index, WMBagIterator * ptr)
 
 int WMBagIndexForIterator(WMBag * bag, WMBagIterator ptr)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) bag;
+
 	return ((W_Node *) ptr)->index;
 }
