@@ -33,6 +33,9 @@ WMMenuItem *WMGetSeparatorMenuItem(void)
 
 Bool WMMenuItemIsSeparator(WMMenuItem * item)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) item;
+
 	return False;
 }
 

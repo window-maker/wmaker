@@ -3473,6 +3473,10 @@ static void destroyWidget(WMWidget * widget)
 void WMDestroyTextBlock(WMText * tPtr, void *vtb)
 {
 	TextBlock *tb = (TextBlock *) vtb;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) tPtr;
+
 	if (!tb)
 		return;
 
