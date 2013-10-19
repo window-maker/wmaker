@@ -1766,6 +1766,10 @@ int wmkdirhier(const char *path)
 static int wrmdirhier_fn(const char *path, const struct stat *st,
     int type, struct FTW *ftw)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) st;
+	(void) ftw;
+
 	switch(type) {
 	case FTW_D:
 		break;

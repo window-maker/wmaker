@@ -679,6 +679,9 @@ static void mpm_get_user_name(WParserMacro *this, WMenuParser parser)
 /* Number id of the user under which we are running */
 static void mpm_get_user_id(WParserMacro *this, WMenuParser parser)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) parser;
+
 	if (this->value[0] != '\0') return; // Already evaluated, re-use previous
 	snprintf((char *) this->value, sizeof(this->value), "%d", getuid() );
 }

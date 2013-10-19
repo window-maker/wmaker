@@ -136,6 +136,9 @@ static void synchronizeUserDefaults(void *foo)
 {
 	UserDefaults *database = sharedUserDefaults;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) foo;
+
 	while (database) {
 		if (!database->dontSync)
 			WMSynchronizeUserDefaults(database);
