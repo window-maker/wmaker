@@ -235,6 +235,10 @@ void wClientConfigure(WWindow * wwin, XConfigureRequestEvent * xcre)
 		else
 			nheight = wwin->frame->core->height - wwin->frame->top_width - wwin->frame->bottom_width;
 
+		/* Don't overwrite the saved geometry unnecessarily. */
+		if (!(xcre->value_mask & (CWX | CWY | CWWidth | CWHeight)))
+			return;
+
 		if (nwidth != wwin->old_geometry.width)
 			wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
 		if (nheight != wwin->old_geometry.height)
