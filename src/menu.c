@@ -1551,7 +1551,7 @@ static void leaving(_delay * dl)
 	wfree(dl);
 }
 
-void wMenuScroll(WMenu * menu, XEvent * event)
+void wMenuScroll(WMenu *menu)
 {
 	WMenu *smenu;
 	WMenu *omenu = parentMenu(menu);

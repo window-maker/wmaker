@@ -1778,7 +1778,7 @@ static void handleMotionNotify(XEvent * event)
 
 			menu = wMenuUnderPointer(scr);
 			if (menu != NULL)
-				wMenuScroll(menu, event);
+				wMenuScroll(menu);
 		}
 	}
 }
