@@ -23,7 +23,6 @@ WPrefs_SOURCES = \
 	Focus.c \
 	FontSimple.c \
 	Icons.c \
-	KeyboardSettings.c \
 	KeyboardShortcuts.c \
 	Menu.c \
 	MenuPreferences.c \
@@ -32,13 +31,17 @@ WPrefs_SOURCES = \
 	Preferences.c \
 	TexturePanel.c \
 	TexturePanel.h \
-	Themes.c \
 	WindowHandling.c \
 	Workspace.c \
 	double.c \
 	editmenu.c \
 	editmenu.h \
 	xmodifier.c
+
+# not_yet_fully_implemented
+#WPrefs_SOURCES += \
+#	KeyboardSettings.c \
+#	Themes.c
 
 AM_CFLAGS =
 
