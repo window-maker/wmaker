@@ -425,7 +425,7 @@ static void storeData(_Panel *panel)
 	SetIntegerForKey(WMGetSliderValue(panel->dithS), "ColormapSize");
 }
 
-Panel *InitConfigurations(WMScreen *scr, WMWidget *parent)
+Panel *InitConfigurations(WMWidget *parent)
 {
 	_Panel *panel;
 

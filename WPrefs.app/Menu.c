@@ -1734,7 +1734,7 @@ static void hideMenus(_Panel * panel)
 		WEditMenuHide(panel->menu);
 }
 
-Panel *InitMenu(WMScreen * scr, WMWidget * parent)
+Panel *InitMenu(WMWidget *parent)
 {
 	_Panel *panel;
 

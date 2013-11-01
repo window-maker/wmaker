@@ -581,7 +581,7 @@ static void storeData(_Panel * panel)
 	}
 }
 
-Panel *InitKeyboardShortcuts(WMScreen * scr, WMWidget * parent)
+Panel *InitKeyboardShortcuts(WMWidget *parent)
 {
 	_Panel *panel;
 

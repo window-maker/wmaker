@@ -2060,7 +2060,7 @@ static void prepareForClose(_Panel * panel)
 	WMSynchronizeUserDefaults(udb);
 }
 
-Panel *InitAppearance(WMScreen *scr, WMWidget *parent)
+Panel *InitAppearance(WMWidget *parent)
 {
 	_Panel *panel;
 

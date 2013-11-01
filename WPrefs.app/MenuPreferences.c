@@ -213,7 +213,7 @@ static void createPanel(Panel * p)
 	showData(panel);
 }
 
-Panel *InitMenuPreferences(WMScreen * scr, WMWidget * parent)
+Panel *InitMenuPreferences(WMWidget *parent)
 {
 	_Panel *panel;
 

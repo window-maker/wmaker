@@ -774,7 +774,7 @@ static void storeData(_Panel * panel)
 	wfree(tmp);
 }
 
-Panel *InitMouseSettings(WMScreen * scr, WMWidget * parent)
+Panel *InitMouseSettings(WMWidget *parent)
 {
 	_Panel *panel;
 

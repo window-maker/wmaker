@@ -326,7 +326,7 @@ static void createPanel(Panel * p)
 	showData(panel);
 }
 
-Panel *InitPreferences(WMScreen * scr, WMWidget * parent)
+Panel *InitPreferences(WMWidget *parent)
 {
 	_Panel *panel;
 

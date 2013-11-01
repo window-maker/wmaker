@@ -215,7 +215,7 @@ static void storeData(_Panel * panel)
 			"WorkspaceNameDisplayPosition");
 }
 
-Panel *InitWorkspace(WMScreen * scr, WMWidget * parent)
+Panel *InitWorkspace(WMWidget *parent)
 {
 	_Panel *panel;
 

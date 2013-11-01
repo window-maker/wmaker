@@ -333,7 +333,7 @@ static void createPanel(Panel * p)
 	showData(panel);
 }
 
-Panel *InitFocus(WMScreen *scr, WMWidget *parent)
+Panel *InitFocus(WMWidget *parent)
 {
 	_Panel *panel;
 

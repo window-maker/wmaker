@@ -155,7 +155,7 @@ static void createPanel(Panel * p)
 	WMMapSubwidgets(panel->box);
 }
 
-Panel *InitKeyboardSettings(WMScreen * scr, WMWidget * parent)
+Panel *InitKeyboardSettings(WMWidget *parent)
 {
 	_Panel *panel;
 

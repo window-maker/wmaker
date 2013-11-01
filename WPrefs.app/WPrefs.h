@@ -136,21 +136,21 @@ int ModifierFromKey(Display * dpy, const char *key);
 void Initialize(WMScreen *scr);
 
 /* in alphabetical order - in case you'd want to add one */
-Panel *InitAppearance(WMScreen *scr, WMWidget *parent);
-Panel *InitConfigurations(WMScreen *scr, WMWidget *parent);
-Panel *InitDocks(WMScreen *scr, WMWidget *parent);
-Panel *InitExpert(WMScreen *scr, WMWidget *parent);
-Panel *InitFocus(WMScreen *scr, WMWidget *parent);
-Panel *InitFontSimple(WMScreen *scr, WMWidget *parent);
-Panel *InitIcons(WMScreen *scr, WMWidget *parent);
-Panel *InitKeyboardShortcuts(WMScreen *scr, WMWidget *parent);
-Panel *InitMenu(WMScreen *scr, WMWidget *parent);
-Panel *InitMenuPreferences(WMScreen *scr, WMWidget *parent);
-Panel *InitMouseSettings(WMScreen *scr, WMWidget *parent);
-Panel *InitPaths(WMScreen *scr, WMWidget *parent);
-Panel *InitPreferences(WMScreen *scr, WMWidget *parent);
-Panel *InitWindowHandling(WMScreen *scr, WMWidget *parent);
-Panel *InitWorkspace(WMScreen *scr, WMWidget *parent);
+Panel *InitAppearance(WMWidget *parent);
+Panel *InitConfigurations(WMWidget *parent);
+Panel *InitDocks(WMWidget *parent);
+Panel *InitExpert(WMWidget *parent);
+Panel *InitFocus(WMWidget *parent);
+Panel *InitFontSimple(WMWidget *parent);
+Panel *InitIcons(WMWidget *parent);
+Panel *InitKeyboardShortcuts(WMWidget *parent);
+Panel *InitMenu(WMWidget *parent);
+Panel *InitMenuPreferences(WMWidget *parent);
+Panel *InitMouseSettings(WMWidget *parent);
+Panel *InitPaths(WMWidget *parent);
+Panel *InitPreferences(WMWidget *parent);
+Panel *InitWindowHandling(WMWidget *parent);
+Panel *InitWorkspace(WMWidget *parent);
 
 
 #define FRAME_TOP	105

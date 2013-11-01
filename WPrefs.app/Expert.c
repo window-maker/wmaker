@@ -165,7 +165,7 @@ static void storeDefaults(_Panel * panel)
 	}
 }
 
-Panel *InitExpert(WMScreen * scr, WMWidget * parent)
+Panel *InitExpert(WMWidget *parent)
 {
 	_Panel *panel;
 

@@ -515,7 +515,7 @@ static void undo(_Panel * panel)
 	showData(panel);
 }
 
-Panel *InitWindowHandling(WMScreen * scr, WMWidget * parent)
+Panel *InitWindowHandling(WMWidget *parent)
 {
 	_Panel *panel;
 

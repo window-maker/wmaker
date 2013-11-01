@@ -716,7 +716,7 @@ static void createPanel(Panel * p)
 	showData(panel);
 }
 
-Panel *InitFontSimple(WMScreen * scr, WMWidget * parent)
+Panel *InitFontSimple(WMWidget *parent)
 {
 	_Panel *panel;
 

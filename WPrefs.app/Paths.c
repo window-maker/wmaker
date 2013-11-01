@@ -305,7 +305,7 @@ static void createPanel(Panel * p)
 	showData(panel);
 }
 
-Panel *InitPaths(WMScreen * scr, WMWidget * parent)
+Panel *InitPaths(WMWidget *parent)
 {
 	_Panel *panel;
 

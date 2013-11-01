@@ -302,7 +302,7 @@ static void showData(_Panel *panel)
 	}
 }
 
-Panel *InitDocks(WMScreen *scr, WMWidget *parent)
+Panel *InitDocks(WMWidget *parent)
 {
 	_Panel *panel;
 

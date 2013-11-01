@@ -645,34 +645,34 @@ void Initialize(WMScreen * scr)
 
 	WMSetLabelText(WPrefs.statusL, _("Initializing configuration panels..."));
 
-	InitFocus(scr, WPrefs.banner);
-	InitWindowHandling(scr, WPrefs.banner);
+	InitFocus(WPrefs.banner);
+	InitWindowHandling(WPrefs.banner);
 
-	InitMenuPreferences(scr, WPrefs.banner);
-	InitIcons(scr, WPrefs.banner);
-	InitPreferences(scr, WPrefs.banner);
+	InitMenuPreferences(WPrefs.banner);
+	InitIcons(WPrefs.banner);
+	InitPreferences(WPrefs.banner);
 
-	InitPaths(scr, WPrefs.banner);
-	InitDocks(scr, WPrefs.banner);
-	InitWorkspace(scr, WPrefs.banner);
-	InitConfigurations(scr, WPrefs.banner);
+	InitPaths(WPrefs.banner);
+	InitDocks(WPrefs.banner);
+	InitWorkspace(WPrefs.banner);
+	InitConfigurations(WPrefs.banner);
 
-	InitMenu(scr, WPrefs.banner);
-
-#ifdef not_yet_fully_implemented
-	InitKeyboardSettings(scr, WPrefs.banner);
-#endif
-	InitKeyboardShortcuts(scr, WPrefs.banner);
-	InitMouseSettings(scr, WPrefs.banner);
-
-	InitAppearance(scr, WPrefs.banner);
-
-	InitFontSimple(scr, WPrefs.banner);
+	InitMenu(WPrefs.banner);
 
 #ifdef not_yet_fully_implemented
-	InitThemes(scr, WPrefs.banner);
+	InitKeyboardSettings(WPrefs.banner);
 #endif
-	InitExpert(scr, WPrefs.banner);
+	InitKeyboardShortcuts(WPrefs.banner);
+	InitMouseSettings(WPrefs.banner);
+
+	InitAppearance(WPrefs.banner);
+
+	InitFontSimple(WPrefs.banner);
+
+#ifdef not_yet_fully_implemented
+	InitThemes(WPrefs.banner);
+#endif
+	InitExpert(WPrefs.banner);
 
 	WMRealizeWidget(WPrefs.scrollV);
 

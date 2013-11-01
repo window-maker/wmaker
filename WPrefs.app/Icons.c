@@ -320,7 +320,7 @@ static void storeData(_Panel * panel)
 		SetStringForKey("none", "IconificationStyle");
 }
 
-Panel *InitIcons(WMScreen * scr, WMWidget * parent)
+Panel *InitIcons(WMWidget *parent)
 {
 	_Panel *panel;
 

@@ -202,7 +202,7 @@ static void storeData(_Panel * panel)
 {
 }
 
-Panel *InitThemes(WMScreen * scr, WMWidget * parent)
+Panel *InitThemes(WMWidget *parent)
 {
 	_Panel *panel;
 
