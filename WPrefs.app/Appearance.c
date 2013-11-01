@@ -133,7 +133,7 @@ static void changePage(WMWidget * w, void *data);
 
 static void changeColorPage(WMWidget * w, void *data);
 
-static void OpenExtractPanelFor(_Panel * panel, const char *path);
+static void OpenExtractPanelFor(_Panel *panel);
 
 static void changedTabItem(struct WMTabViewDelegate *self, WMTabView * tabView, WMTabViewItem * item);
 
@@ -1060,7 +1060,7 @@ static void extractTexture(WMWidget * w, void *data)
 	if (WMRunModalFilePanelForDirectory(opanel, panel->parent, wgethomedir(), _("Select File"), NULL)) {
 		path = WMGetFilePanelFileName(opanel);
 
-		OpenExtractPanelFor(panel, path);
+		OpenExtractPanelFor(panel);
 
 		wfree(path);
 	}
@@ -2093,7 +2093,7 @@ typedef struct ExtractPanel {
 	WMButton *extrB;
 } ExtractPanel;
 
-static void OpenExtractPanelFor(_Panel * panel, const char *path)
+static void OpenExtractPanelFor(_Panel *panel)
 {
 	ExtractPanel *epanel;
 	WMColor *color;
