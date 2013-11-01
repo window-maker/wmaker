@@ -529,7 +529,7 @@ static void *checkActionAllowed(WMView * destView, WMDraggingInfo * info)
 	return dropAllowedState;
 }
 
-static void *checkDropAllowed(WMView * destView, XClientMessageEvent * event, WMDraggingInfo * info)
+static void *checkDropAllowed(WMView *destView, WMDraggingInfo *info)
 {
 	storeRequiredTypeList(info);
 
@@ -664,7 +664,7 @@ static void *idleState(WMView * destView, XClientMessageEvent * event, WMDraggin
 
 			if (XDND_SOURCE_TYPES(info) != NULL) {
 				/* enter message infos are available */
-				return checkDropAllowed(destView, event, info);
+				return checkDropAllowed(destView, info);
 			}
 
 			/* waiting for enter message */
@@ -685,7 +685,7 @@ static void *waitEnterState(WMView * destView, XClientMessageEvent * event, WMDr
 
 	if (sourceMsg == scr->xdndEnterAtom) {
 		W_DragDestinationStoreEnterMsgInfo(info, destView, event);
-		return checkDropAllowed(destView, event, info);
+		return checkDropAllowed(destView, info);
 	}
 
 	return waitEnterState;
@@ -728,7 +728,7 @@ static void *dropNotAllowedState(WMView * destView, XClientMessageEvent * event,
 
 	if (sourceMsg == scr->xdndPositionAtom) {
 		if (XDND_SOURCE_ACTION_CHANGED(info)) {
-			return checkDropAllowed(destView, event, info);
+			return checkDropAllowed(destView, info);
 		} else {
 			sendStatusMessage(destView, info, None);
 			return dropNotAllowedState;
@@ -764,7 +764,7 @@ static void *dropAllowedState(WMView * destView, XClientMessageEvent * event, WM
 
 	if (sourceMsg == scr->xdndPositionAtom) {
 		if (XDND_SOURCE_ACTION_CHANGED(info)) {
-			return checkDropAllowed(destView, event, info);
+			return checkDropAllowed(destView, info);
 		} else {
 			sendStatusMessage(destView, info, XDND_DEST_ACTION(info));
 			return dropAllowedState;
