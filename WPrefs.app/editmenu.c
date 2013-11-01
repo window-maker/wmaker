@@ -1001,7 +1001,7 @@ static WEditMenu *findMenuInWindow(Display * dpy, Window toplevel, int x, int y)
 	return NULL;
 }
 
-static void handleDragOver(WEditMenu * menu, WMView * view, WEditMenuItem * item, int x, int y)
+static void handleDragOver(WEditMenu *menu, WMView *view, WEditMenuItem *item, int y)
 {
 	WMScreen *scr = W_VIEW_SCREEN(menu->view);
 	Window blaw;
@@ -1019,7 +1019,7 @@ static void handleDragOver(WEditMenu * menu, WMView * view, WEditMenuItem * item
 	}
 }
 
-static void handleItemDrop(WEditMenu * menu, WEditMenuItem * item, int x, int y)
+static void handleItemDrop(WEditMenu *menu, WEditMenuItem *item, int y)
 {
 	WMScreen *scr = W_VIEW_SCREEN(menu->view);
 	Window blaw;
@@ -1225,7 +1225,7 @@ static void dragItem(WEditMenu * menu, WEditMenuItem * item, Bool copy)
 			dmenu = findMenuInWindow(dpy, win, x, y);
 
 			if (dmenu) {
-				handleDragOver(dmenu, dview, dritem, x - dx, y - dy);
+				handleDragOver(dmenu, dview, dritem, y - dy);
 				if (!enteredMenu) {
 					enteredMenu = True;
 					XRecolorCursor(dpy, scr->defaultCursor, &green, &back);
@@ -1271,7 +1271,7 @@ static void dragItem(WEditMenu * menu, WEditMenuItem * item, Bool copy)
 
 			if (!menu->flags.isFactory && !copy) {
 				WRemoveEditMenuItem(menu, dritem);
-				handleItemDrop(dmenu ? dmenu : menu, dritem, orix, oriy);
+				handleItemDrop(dmenu ? dmenu : menu, dritem, oriy);
 			}
 		} else {
 			WRemoveEditMenuItem(menu, dritem);
@@ -1283,7 +1283,7 @@ static void dragItem(WEditMenu * menu, WEditMenuItem * item, Bool copy)
 			(*menu->delegate->itemCloned) (menu->delegate, menu, item, dritem);
 		}
 
-		handleItemDrop(dmenu, dritem, x - dy, y - dy);
+		handleItemDrop(dmenu, dritem, y - dy);
 
 		if (item->submenu && (menu->flags.isFactory || copy)) {
 			WEditMenu *submenu;
