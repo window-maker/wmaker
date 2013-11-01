@@ -941,6 +941,10 @@ static void slideWindow(Display * dpy, Window win, int srcX, int srcY, int dstX,
 
 static int errorHandler(Display * d, XErrorEvent * ev)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) d;
+	(void) ev;
+
 	/* just ignore */
 	return 0;
 }
