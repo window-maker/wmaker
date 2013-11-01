@@ -81,7 +81,7 @@ static Time getTimestamp(Display * dpy, Window win)
 	return ev.xproperty.time;
 }
 
-static char *fetchSelection(Display * dpy, const char *selection, const char *progName)
+static char *fetchSelection(Display *dpy, const char *selection)
 {
 	Atom selatom = XInternAtom(dpy, selection, False);
 	Atom clipatom = XInternAtom(dpy, "CLIPBOARD", False);
@@ -209,7 +209,7 @@ int main(int argc, char **argv)
 	}
 
 	if (selection_name) {
-		buf = fetchSelection(dpy, selection_name, __progname);
+		buf = fetchSelection(dpy, selection_name);
 	} else {
 		buf = NULL;
 	}
