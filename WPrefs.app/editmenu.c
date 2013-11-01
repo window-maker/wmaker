@@ -334,6 +334,9 @@ static void realizeObserver(void *self, WMNotification * not)
 	WEditMenu *menu = (WEditMenu *) self;
 	GNUstepWMAttributes attribs;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) not;
+
 	memset(&attribs, 0, sizeof(GNUstepWMAttributes));
 	attribs.flags = GSWindowStyleAttr | GSWindowLevelAttr;
 	attribs.window_style = WMBorderlessWindowMask;

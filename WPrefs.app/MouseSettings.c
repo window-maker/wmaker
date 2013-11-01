@@ -151,6 +151,9 @@ static void returnPressed(void *observerData, WMNotification * notification)
 {
 	_Panel *panel = (_Panel *) observerData;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) notification;
+
 	speedChange(NULL, panel);
 }
 

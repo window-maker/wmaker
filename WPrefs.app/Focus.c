@@ -167,6 +167,9 @@ static void raiseTextChanged(void *observerData, WMNotification * notification)
 	_Panel *panel = (_Panel *) observerData;
 	int i;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) notification;
+
 	if (panel->raiseDelaySelected) {
 		for (i = 0; i < 5; i++) {
 			WMSetButtonSelected(panel->raisB[i], False);

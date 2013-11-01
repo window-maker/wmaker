@@ -1465,6 +1465,9 @@ static void colorWellObserver(void *self, WMNotification * n)
 	_Panel *panel = (_Panel *) self;
 	int p;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) n;
+
 	p = WMGetPopUpButtonSelectedItem(panel->colP);
 
 	WMReleaseColor(panel->colors[p]);

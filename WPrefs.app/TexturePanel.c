@@ -524,6 +524,9 @@ static void gradDeleteCallback(WMWidget * w, void *data)
 
 static void colorWellObserver(void *self, WMNotification * n)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) n;
+
 	updateSGradButtons(self);
 }
 

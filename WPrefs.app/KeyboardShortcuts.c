@@ -393,6 +393,9 @@ static void typedKeys(void *observerData, WMNotification * notification)
 	_Panel *panel = (_Panel *) observerData;
 	int row = WMGetListSelectedItemRow(panel->actLs);
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) notification;
+
 	if (row < 0)
 		return;
 
