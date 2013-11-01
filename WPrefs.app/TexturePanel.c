@@ -714,11 +714,6 @@ static void changeTypeCallback(WMWidget * w, void *data)
  * Public functions
  *--------------------------------------------------------------------------
  */
-void DestroyTexturePanel(TexturePanel * panel)
-{
-
-}
-
 void ShowTexturePanel(TexturePanel * panel)
 {
 	Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->win));

@@ -29,8 +29,6 @@ typedef struct _TexturePanel TexturePanel;
 
 TexturePanel *CreateTexturePanel(WMWindow *keyWindow);
 
-void DestroyTexturePanel(TexturePanel *panel);
-
 void ShowTexturePanel(TexturePanel *panel);
 
 void HideTexturePanel(TexturePanel *panel);
