@@ -1213,6 +1213,9 @@ static void paintListItem(WMList * lPtr, int index, Drawable d, char *text, int 
 	WMColor *black = WMBlackColor(scr);
 	TextureListItem *titem;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) text;
+
 	item = WMGetListItem(lPtr, index);
 	titem = (TextureListItem *) item->clientData;
 	if (!titem) {
@@ -1496,6 +1499,9 @@ static void changedTabItem(struct WMTabViewDelegate *self, WMTabView * tabView, 
 {
 	_Panel *panel = self->data;
 	int i;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) tabView;
 
 	i = WMGetTabViewItemIdentifier(item);
 	switch (i) {

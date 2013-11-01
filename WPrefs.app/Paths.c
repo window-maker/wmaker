@@ -177,6 +177,9 @@ static void paintItem(WMList * lPtr, int index, Drawable d, char *text, int stat
 	Display *dpy = WMScreenDisplay(scr);
 	WMColor *backColor = (state & WLDSSelected) ? panel->white : panel->gray;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) index;
+
 	width = rect->size.width;
 	height = rect->size.height;
 	x = rect->pos.x;

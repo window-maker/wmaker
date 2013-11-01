@@ -1215,6 +1215,10 @@ menuItemCloned(WEditMenuDelegate * delegate, WEditMenu * menu, WEditMenuItem * o
 	ItemData *data = WGetEditMenuItemData(origItem);
 	ItemData *newData;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) delegate;
+	(void) menu;
+
 	if (!data)
 		return;
 
@@ -1310,6 +1314,10 @@ static void menuItemDeselected(WEditMenuDelegate * delegate, WEditMenu * menu, W
 {
 	_Panel *panel = (_Panel *) delegate->data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
+	(void) item;
+
 	changeInfoType(panel, NULL, NoInfo);
 }
 
@@ -1317,6 +1325,9 @@ static void menuItemSelected(WEditMenuDelegate * delegate, WEditMenu * menu, WEd
 {
 	ItemData *data = WGetEditMenuItemData(item);
 	_Panel *panel = (_Panel *) delegate->data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) menu;
 
 	panel->currentItem = item;
 
