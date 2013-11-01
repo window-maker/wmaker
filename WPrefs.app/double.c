@@ -33,7 +33,7 @@ static W_Class DoubleTestClass = 0;
  * Initializer for our widget. Must be called before creating any
  * instances of the widget.
  */
-W_Class InitDoubleTest(WMScreen * scr)
+W_Class InitDoubleTest(void)
 {
 	/* register our widget with WINGs and get our widget class ID */
 	if (!DoubleTestClass) {
@@ -51,7 +51,7 @@ DoubleTest *CreateDoubleTest(WMWidget * parent, const char *text)
 	DoubleTest *dPtr;
 
 	if (!DoubleTestClass)
-		InitDoubleTest(WMWidgetScreen(parent));
+		InitDoubleTest();
 
 	/* allocate some storage for our new widget instance */
 	dPtr = wmalloc(sizeof(DoubleTest));

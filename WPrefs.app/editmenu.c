@@ -105,7 +105,7 @@ static void handleItemClick(XEvent * event, void *data);
 
 static W_Class EditMenuItemClass = 0;
 
-W_Class InitEditMenuItem(WMScreen * scr)
+W_Class InitEditMenuItem(void)
 {
 	/* register our widget with WINGs and get our widget class ID */
 	if (!EditMenuItemClass) {
@@ -121,7 +121,7 @@ WEditMenuItem *WCreateEditMenuItem(WMWidget * parent, const char *title, Bool is
 	WMScreen *scr = WMWidgetScreen(parent);
 
 	if (!EditMenuItemClass)
-		InitEditMenuItem(scr);
+		InitEditMenuItem();
 
 	iPtr = wmalloc(sizeof(WEditMenuItem));
 
@@ -284,7 +284,7 @@ static void deselectItem(WEditMenu * menu);
 
 static W_Class EditMenuClass = 0;
 
-W_Class InitEditMenu(WMScreen * scr)
+W_Class InitEditMenu(void)
 {
 	/* register our widget with WINGs and get our widget class ID */
 	if (!EditMenuClass) {
@@ -371,7 +371,7 @@ static WEditMenu *makeEditMenu(WMScreen * scr, WMWidget * parent, const char *ti
 	WEditMenuItem *item;
 
 	if (!EditMenuClass)
-		InitEditMenu(scr);
+		InitEditMenu();
 
 	mPtr = wmalloc(sizeof(WEditMenu));
 
