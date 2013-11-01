@@ -770,7 +770,7 @@ static void updateWorkspaceNames(WScreen *scr)
 			PropModeReplace, (unsigned char *)buf, len);
 }
 
-static void updateFocusHint(WScreen *scr, WWindow *wwin)
+static void updateFocusHint(WScreen *scr)
 {				/* changeable */
 	Window window;
 
@@ -1302,7 +1302,7 @@ void wNETWMCheckInitialClientState(WWindow *wwin)
 	updateIconImage(wwin);
 }
 
-static void handleDesktopNames(XClientMessageEvent *event, WScreen *scr)
+static void handleDesktopNames(WScreen *scr)
 {
 	unsigned long nitems_ret, bytes_after_ret;
 	char *data, *names[32];
@@ -1371,7 +1371,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 		} else if (event->message_type == net_showing_desktop) {
 			wNETWMShowingDesktop(scr, event->data.l[0]);
 		} else if (event->message_type == net_desktop_names) {
-			handleDesktopNames(event, scr);
+			handleDesktopNames(scr);
 		} else {
 			done = False;
 		}
@@ -1560,7 +1560,7 @@ static void observer(void *self, WMNotification *notif)
 		updateClientListStacking(wwin->screen_ptr, NULL);
 		updateStateHint(wwin, False, False);
 	} else if (strcmp(name, WMNChangedFocus) == 0) {
-		updateFocusHint(ndata->scr, wwin);
+		updateFocusHint(ndata->scr);
 	} else if (strcmp(name, WMNChangedWorkspace) == 0 && wwin) {
 		updateWorkspaceHint(wwin, False, False);
 		updateStateHint(wwin, True, False);
