@@ -838,7 +838,7 @@ static void realizedObserver(void *self, WMNotification * notif)
 	WMRemoveNotificationObserver(self);
 }
 
-static void W_SetXdndAwareProperty(WMScreen * scr, WMView * view, Atom * types, int typeCount)
+static void W_SetXdndAwareProperty(WMScreen *scr, WMView *view)
 {
 	WMView *toplevel = W_TopLevelOfView(view);
 
@@ -875,7 +875,7 @@ void WMRegisterViewForDraggedTypes(WMView * view, WMArray * acceptedTypes)
 	view->droppableTypes = types;
 	/* WMFreeArray(acceptedTypes); */
 
-	W_SetXdndAwareProperty(W_VIEW_SCREEN(view), view, types, typeCount);
+	W_SetXdndAwareProperty(W_VIEW_SCREEN(view), view);
 }
 
 void WMUnregisterViewDraggedTypes(WMView * view)
