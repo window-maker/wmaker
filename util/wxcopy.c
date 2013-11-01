@@ -48,6 +48,10 @@ static void print_help(void)
 
 static int errorHandler(Display * dpy, XErrorEvent * err)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) dpy;
+	(void) err;
+
 	/* ignore all errors */
 	return 0;
 }

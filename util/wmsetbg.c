@@ -786,6 +786,10 @@ static Pixmap duplicatePixmap(Pixmap pixmap, int width, int height)
 
 static int dummyErrorHandler(Display * dpy, XErrorEvent * err)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) dpy;
+	(void) err;
+
 	return 0;
 }
 
