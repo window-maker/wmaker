@@ -966,6 +966,9 @@ void wDefaultsCheckDomains(void* arg)
 	WMPropList *dict;
 	int i;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) arg;
+
 	if (stat(w_global.domain.wmaker->path, &stbuf) >= 0 && w_global.domain.wmaker->timestamp < stbuf.st_mtime) {
 		w_global.domain.wmaker->timestamp = stbuf.st_mtime;
 
