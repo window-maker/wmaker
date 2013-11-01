@@ -88,7 +88,7 @@ AS_IF([test "x$debug" = "xyes"],
 
 
 AX_CFLAGS_GCC_OPTION(-Wall)
-AX_CFLAGS_GCC_OPTION(-Wextra -Wno-sign-compare -Wno-unused-parameter)
+AX_CFLAGS_GCC_OPTION(-Wextra -Wno-sign-compare)
 AS_IF([test "x$debug" = "xyes"],
     [dnl When debug is enabled, we try to activate more checks from
      dnl the compiler. They are on independant check because the
