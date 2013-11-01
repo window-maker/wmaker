@@ -45,6 +45,9 @@ static int DeadChildrenCount = 0;
 
 static void wAbort(Bool foo)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) foo;
+
 	exit(1);
 }
 
