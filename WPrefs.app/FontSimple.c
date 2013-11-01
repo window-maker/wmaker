@@ -355,6 +355,9 @@ static void selectedFamily(WMWidget * w, void *data)
 	FontStyle *oldStyle = NULL;
 	char buffer[1024];
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	item = WMGetListSelectedItem(panel->styleL);
 	if (item)
 		oldStyle = (FontStyle *) item->clientData;
@@ -436,6 +439,9 @@ static void selected(WMWidget * w, void *data)
 	FcChar8 *ofont;
 	char *nfont;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	ofont = (FcChar8 *) WMGetMenuItemRepresentedObject(item);
 	nfont = getSelectedFont(panel, ofont);
 	if (ofont)
@@ -452,6 +458,9 @@ static void selectedOption(WMWidget * w, void *data)
 	int index = WMGetPopUpButtonSelectedItem(panel->optionP);
 	WMMenuItem *item = WMGetPopUpButtonMenuItem(panel->optionP, index);
 	char *font;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	font = (char *)WMGetMenuItemRepresentedObject(item);
 	if (font) {

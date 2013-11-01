@@ -378,6 +378,9 @@ static void clearShortcut(WMWidget * w, void *data)
 	_Panel *panel = (_Panel *) data;
 	int row = WMGetListSelectedItemRow(panel->actLs);
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	WMSetTextFieldText(panel->shoT, NULL);
 
 	if (row >= 0) {

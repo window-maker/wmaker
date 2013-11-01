@@ -460,6 +460,9 @@ static void gradAddCallback(WMWidget * w, void *data)
 	int row;
 	RColor *rgb;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	row = WMGetListSelectedItemRow(panel->gcolL) + 1;
 	item = WMInsertListItem(panel->gcolL, row, "00,00,00");
 	rgb = wmalloc(sizeof(RColor));
@@ -502,6 +505,9 @@ static void gradDeleteCallback(WMWidget * w, void *data)
 	WMListItem *item;
 	int row;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	row = WMGetListSelectedItemRow(panel->gcolL);
 	if (row < 0)
 		return;
@@ -533,6 +539,9 @@ static void colorWellObserver(void *self, WMNotification * n)
 static void opaqChangeCallback(WMWidget * w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	updateTGradImage(panel);
 }

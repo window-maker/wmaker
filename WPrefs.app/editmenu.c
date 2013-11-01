@@ -574,6 +574,9 @@ static void closeMenuAction(WMWidget * w, void *data)
 {
 	WEditMenu *menu = (WEditMenu *) data;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	WMAddIdleHandler(WMDestroyWidget, menu->closeB);
 	menu->closeB = NULL;
 

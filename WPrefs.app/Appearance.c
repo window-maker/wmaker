@@ -971,6 +971,9 @@ static void editTexture(WMWidget * w, void *data)
 	WMListItem *item;
 	TextureListItem *titem;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	item = WMGetListItem(panel->texLs, WMGetListSelectedItemRow(panel->texLs));
 	titem = (TextureListItem *) item->clientData;
 
@@ -987,6 +990,9 @@ static void editTexture(WMWidget * w, void *data)
 static void newTexture(WMWidget * w, void *data)
 {
 	_Panel *panel = (_Panel *) data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	SetTexturePanelPixmapPath(panel->texturePanel, GetObjectForKey("PixmapPath"));
 
@@ -1006,6 +1012,9 @@ static void deleteTexture(WMWidget * w, void *data)
 	TextureListItem *titem;
 	int row;
 	int section;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	section = WMGetPopUpButtonSelectedItem(panel->secP);
 	row = WMGetListSelectedItemRow(panel->texLs);
@@ -1144,6 +1153,9 @@ static void textureClick(WMWidget * w, void *data)
 	WMListItem *item;
 	TextureListItem *titem;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	i = WMGetListSelectedItemRow(panel->texLs);
 
 	item = WMGetListItem(panel->texLs, i);
@@ -1163,6 +1175,9 @@ static void textureDoubleClick(WMWidget * w, void *data)
 	int i, section;
 	WMListItem *item;
 	TextureListItem *titem;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	/* unselect old texture */
 	section = WMGetPopUpButtonSelectedItem(panel->secP);

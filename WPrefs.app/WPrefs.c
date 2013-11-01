@@ -72,6 +72,10 @@ static void prepareForClose(void);
 
 static void quit(WMWidget *w, void *data)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+	(void) data;
+
 	prepareForClose();
 
 	exit(0);
@@ -84,6 +88,9 @@ static void save(WMWidget * w, void *data)
 	WMPropList *keyList;
 	WMPropList *key;
 	XEvent ev;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) data;
 
 	/*    puts("gathering data"); */
 	for (i = 0; i < WPrefs.sectionCount; i++) {
@@ -134,6 +141,10 @@ static void undo(WMWidget * w, void *data)
 {
 	PanelRec *rec = (PanelRec *) WPrefs.currentPanel;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+	(void) data;
+
 	if (!rec)
 		return;
 
@@ -145,6 +156,10 @@ static void undo(WMWidget * w, void *data)
 static void undoAll(WMWidget * w, void *data)
 {
 	int i;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+	(void) data;
 
 	for (i = 0; i < WPrefs.sectionCount; i++) {
 		PanelRec *rec = WMGetHangedData(WPrefs.sectionB[i]);
@@ -170,6 +185,10 @@ static void toggleBalloons(WMWidget *w, void *data)
 {
 	WMUserDefaults *udb = WMGetStandardUserDefaults();
 	Bool flag;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+	(void) data;
 
 	flag = WMGetButtonSelected(WPrefs.balloonBtn);
 
@@ -317,6 +336,9 @@ static void savePanelData(Panel * panel)
 
 static void changeSection(WMWidget * self, void *data)
 {
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) self;
+
 	if (WPrefs.currentPanel == data)
 		return;
 

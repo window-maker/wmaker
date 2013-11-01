@@ -94,6 +94,9 @@ static void sliderCallback(WMWidget * w, void *data)
 	int swidth = WMGetSliderMaxValue(panel->hsli);
 	int sheight = WMGetSliderMaxValue(panel->vsli);
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	x = WMGetSliderValue(panel->hsli);
 	y = WMGetSliderValue(panel->vsli);
 
@@ -111,6 +114,9 @@ static void resistanceCallback(WMWidget * w, void *data)
 	char buffer[64];
 	int i;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	i = WMGetSliderValue(panel->resS);
 
 	if (i == 0)
@@ -126,6 +132,9 @@ static void resizeCallback(WMWidget * w, void *data)
 	_Panel *panel = (_Panel *) data;
 	char buffer[64];
 	int i;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
 
 	i = WMGetSliderValue(panel->resizeS);
 

@@ -62,6 +62,9 @@ static void borderCallback(WMWidget * w, void *data)
 	char buffer[64];
 	int i;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) w;
+
 	i = WMGetSliderValue(panel->borderS);
 
 	if (i == 0)
