@@ -6,8 +6,8 @@
 
 _WINGsConfiguration WINGsConfiguration;
 
-#define SYSTEM_FONT "Trebuchet MS,sans serif"
-#define BOLD_SYSTEM_FONT "Trebuchet MS,sans serif:bold"
+#define SYSTEM_FONT "sans serif"
+#define BOLD_SYSTEM_FONT "sans serif:bold"
 #define DEFAULT_FONT_SIZE 12
 
 #define FLOPPY_PATH "/floppy"

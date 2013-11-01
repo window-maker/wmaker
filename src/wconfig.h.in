@@ -164,13 +164,13 @@
 #define DEF_FRAME_COLOR   "white"
 
 /* default fonts */
-#define DEF_TITLE_FONT          "\"Trebuchet MS,sans serif:bold:pixelsize=12\""
-#define DEF_MENU_TITLE_FONT     "\"Trebuchet MS,sans serif:bold:pixelsize=12\""
-#define DEF_MENU_ENTRY_FONT     "\"Trebuchet MS,sans serif:pixelsize=12\""
-#define DEF_ICON_TITLE_FONT     "\"Arial,sans serif:pixelsize=9\""
-#define DEF_CLIP_TITLE_FONT     "\"Verdana:bold:pixelsize=10\""
-#define DEF_INFO_TEXT_FONT      "\"Trebuchet MS,sans serif:pixelsize=12\""
-#define DEF_WORKSPACE_NAME_FONT "\"Trebuchet MS,sans serif:pixelsize=24\""
+#define DEF_TITLE_FONT          "\"sans-serif:bold:pixelsize=12\""
+#define DEF_MENU_TITLE_FONT     "\"sans-serif:bold:pixelsize=12\""
+#define DEF_MENU_ENTRY_FONT     "\"sans-serif:pixelsize=12\""
+#define DEF_ICON_TITLE_FONT     "\"sans-serif:pixelsize=9\""
+#define DEF_CLIP_TITLE_FONT     "\"sans-serif:bold:pixelsize=10\""
+#define DEF_INFO_TEXT_FONT      "\"sans-serif:pixelsize=12\""
+#define DEF_WORKSPACE_NAME_FONT "\"sans-serif:pixelsize=24\""
 
 /* line width of the move/resize frame */
 #define DEF_FRAME_THICKNESS              1
