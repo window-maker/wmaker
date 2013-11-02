@@ -1123,17 +1123,19 @@ static void destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 	thePanel = NULL;
 }
 
-void wShowInfoPanel(WScreen * scr)
+void wShowInfoPanel(WScreen *scr)
 {
+	const int win_width = 382;
+	const int win_height = 230;
 	InfoPanel *panel;
 	WMPixmap *logo;
 	WMFont *font;
-	char *strbuf = NULL;
+	char *name, *strbuf = NULL;
 	const char *separator;
 	char buffer[256];
-	const char *name;
 	Window parent;
 	WWindow *wwin;
+	WMPoint center;
 	char **strl;
 	int i, width = 50, sepHeight;
 	char *visuals[] = {
@@ -1158,7 +1160,7 @@ void wShowInfoPanel(WScreen * scr)
 	panel->scr = scr;
 
 	panel->win = WMCreateWindow(scr->wmscreen, "info");
-	WMResizeWidget(panel->win, 390, 230);
+	WMResizeWidget(panel->win, win_width, win_height);
 
 	logo = WMCreateApplicationIconBlendedPixmap(scr->wmscreen, (RColor *) NULL);
 	if (!logo) {
@@ -1329,17 +1331,14 @@ void wShowInfoPanel(WScreen * scr)
 	WMRealizeWidget(panel->win);
 	WMMapSubwidgets(panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 382, 230, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, win_width, win_height, 0, 0, 0);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
 	WMMapWidget(panel->win);
 
-	{
-		WMPoint center = getCenter(scr, 382, 230);
-
-		wwin = wManageInternalWindow(scr, parent, None, _("Info"), center.x, center.y, 382, 230);
-	}
+	center = getCenter(scr, win_width, win_height);
+	wwin = wManageInternalWindow(scr, parent, None, _("Info"), center.x, center.y, win_width, win_height);
 
 	WSETUFLAG(wwin, no_closable, 0);
 	WSETUFLAG(wwin, no_close_button, 0);
