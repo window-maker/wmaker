@@ -3180,7 +3180,7 @@ void wDockRaiseLower(WDock *dock)
 		wDockRaise(dock);
 }
 
-void wDockFinishLaunch(WDock *dock, WAppIcon *icon)
+void wDockFinishLaunch(WAppIcon *icon)
 {
 	icon->launching = 0;
 	icon->relaunching = 0;
@@ -3275,7 +3275,7 @@ void wDockTrackWindowLaunch(WDock *dock, Window window)
 				XUnmapWindow(dpy, aicon->icon->core->window);
 				wAppIconDestroy(aicon);
 			}
-			wDockFinishLaunch(dock, icon);
+			wDockFinishLaunch(icon);
 			break;
 		}
 	}
@@ -3346,7 +3346,7 @@ static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock)
 				icon->running = 0;
 				icon->main_window = None;
 			}
-			wDockFinishLaunch(dock, icon);
+			wDockFinishLaunch(icon);
 			icon->pid = 0;
 			if (status == 111) {
 				char msg[PATH_MAX];

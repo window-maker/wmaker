@@ -98,7 +98,7 @@ WApplication *wApplicationCreate(WWindow * wwin)
 		wapp->refcount++;
 		if (wapp->app_icon && wapp->app_icon->docked &&
 		    wapp->app_icon->relaunching && wapp->main_window_desc->fake_group)
-			wDockFinishLaunch(wapp->app_icon->dock, wapp->app_icon);
+			wDockFinishLaunch(wapp->app_icon);
 
 		return wapp;
 	}
