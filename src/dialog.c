@@ -1105,7 +1105,8 @@ typedef struct {
 
 #define COPYRIGHT_TEXT  \
     "Copyright \xc2\xa9 1997-2006 Alfredo K. Kojima\n"\
-    "Copyright \xc2\xa9 1998-2006 Dan Pascu"
+    "Copyright \xc2\xa9 1998-2006 Dan Pascu\n"\
+    "Copyright \xc2\xa9 2013 Window Maker Developers Team"
 
 static InfoPanel *thePanel = NULL;
 
@@ -1126,7 +1127,7 @@ static void destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 void wShowInfoPanel(WScreen *scr)
 {
 	const int win_width = 382;
-	const int win_height = 230;
+	const int win_height = 250;
 	InfoPanel *panel;
 	WMPixmap *logo;
 	WMFont *font;
@@ -1219,7 +1220,7 @@ void wShowInfoPanel(WScreen *scr)
 	WMSetLabelWraps(panel->versionL, False);
 
 	panel->copyrL = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->copyrL, 360, 40);
+	WMResizeWidget(panel->copyrL, 360, 60);
 	WMMoveWidget(panel->copyrL, 15, 185);
 	WMSetLabelTextAlignment(panel->copyrL, WALeft);
 	WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
