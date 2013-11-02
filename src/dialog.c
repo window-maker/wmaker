@@ -1364,11 +1364,8 @@ void wShowInfoPanel(WScreen *scr)
 
 typedef struct {
 	WScreen *scr;
-
 	WWindow *wwin;
-
 	WMWindow *win;
-
 	WMLabel *licenseL;
 } LegalPanel;
 
@@ -1382,21 +1379,21 @@ static void destroyLegalPanel(WCoreWindow * foo, void *data, XEvent * event)
 	(void) event;
 
 	WMUnmapWidget(legalPanel->win);
-
 	WMDestroyWidget(legalPanel->win);
-
 	wUnmanageWindow(legalPanel->wwin, False, False);
-
 	wfree(legalPanel);
-
 	legalPanel = NULL;
 }
 
-void wShowLegalPanel(WScreen * scr)
+void wShowLegalPanel(WScreen *scr)
 {
+	const int win_width = 420;
+	const int win_height = 250;
+	const int margin = 10;
 	LegalPanel *panel;
 	Window parent;
 	WWindow *wwin;
+	WMPoint center;
 
 	if (legalPanel) {
 		if (legalPanel->scr == scr) {
@@ -1407,16 +1404,14 @@ void wShowLegalPanel(WScreen * scr)
 	}
 
 	panel = wmalloc(sizeof(LegalPanel));
-
 	panel->scr = scr;
-
 	panel->win = WMCreateWindow(scr->wmscreen, "legal");
-	WMResizeWidget(panel->win, 420, 250);
+	WMResizeWidget(panel->win, win_width, win_height);
 
 	panel->licenseL = WMCreateLabel(panel->win);
 	WMSetLabelWraps(panel->licenseL, True);
-	WMResizeWidget(panel->licenseL, 400, 230);
-	WMMoveWidget(panel->licenseL, 10, 10);
+	WMResizeWidget(panel->licenseL, win_width - (2 * margin), win_height - (2 * margin));
+	WMMoveWidget(panel->licenseL, margin, margin);
 	WMSetLabelTextAlignment(panel->licenseL, WALeft);
 	WMSetLabelText(panel->licenseL,
 		       _("    Window Maker is free software; you can redistribute it and/or "
@@ -1436,15 +1431,10 @@ void wShowLegalPanel(WScreen * scr)
 	WMRealizeWidget(panel->win);
 	WMMapSubwidgets(panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 420, 250, 0, 0, 0);
-
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, win_width, win_height, 0, 0, 0);
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
-
-	{
-		WMPoint center = getCenter(scr, 420, 250);
-
-		wwin = wManageInternalWindow(scr, parent, None, _("Legal"), center.x, center.y, 420, 250);
-	}
+	center = getCenter(scr, win_width, win_height);
+	wwin = wManageInternalWindow(scr, parent, None, _("Legal"), center.x, center.y, win_width, win_height);
 
 	WSETUFLAG(wwin, no_closable, 0);
 	WSETUFLAG(wwin, no_close_button, 0);
@@ -1454,13 +1444,10 @@ void wShowLegalPanel(WScreen * scr)
 	wFrameWindowHideButton(wwin->frame, WFF_LANGUAGE_BUTTON);
 #endif
 	wwin->frame->on_click_right = destroyLegalPanel;
-
 	panel->wwin = wwin;
 
 	WMMapWidget(panel->win);
-
 	wWindowMap(wwin);
-
 	legalPanel = panel;
 }
 
