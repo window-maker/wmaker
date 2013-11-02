@@ -2000,7 +2000,7 @@ finish:
 	return dock;
 }
 
-void wDockLaunchWithState(WDock *dock, WAppIcon *btn, WSavedState *state)
+void wDockLaunchWithState(WAppIcon *btn, WSavedState *state)
 {
 	if (btn && btn->command && !btn->running && !btn->launching) {
 		btn->drop_launch = 0;
@@ -2034,7 +2034,7 @@ void wDockDoAutoLaunch(WDock *dock, int workspace)
 		state->workspace = workspace;
 		/* TODO: this is klugy and is very difficult to understand
 		 * what's going on. Try to clean up */
-		wDockLaunchWithState(dock, btn, state);
+		wDockLaunchWithState(btn, state);
 	}
 }
 

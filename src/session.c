@@ -513,7 +513,7 @@ void wSessionRestoreState(WScreen *scr)
 		}
 
 		if (found) {
-			wDockLaunchWithState(dock, btn, state);
+			wDockLaunchWithState(btn, state);
 		} else if ((pid = execCommand(scr, command)) > 0) {
 			wWindowAddSavedState(instance, class, command, pid, state);
 		} else {
