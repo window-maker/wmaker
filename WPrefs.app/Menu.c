@@ -1274,6 +1274,9 @@ static void menuItemEdited(struct WEditMenuDelegate *delegate, WEditMenu * menu,
 	_Panel *panel = (_Panel *) delegate->data;
 	WEditMenu *submenu;
 
+	/* Parameter not used, but tell the compiler it is ok */
+	(void) menu;
+
 	updateFrameTitle(panel, WGetEditMenuItemTitle(item), panel->currentType);
 
 	submenu = WGetEditMenuSubmenu(item);
