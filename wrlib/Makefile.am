@@ -40,9 +40,11 @@ libwraster_la_SOURCES = 	\
 	ppm.c		\
 	png.c 		\
 	jpeg.c 		\
-	tiff.c		\
-	gif.c
+	tiff.c
 
+if USE_GIF
+libwraster_la_SOURCES += gif.c
+endif
 
 LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
 COMPILE2=`echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`

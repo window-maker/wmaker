@@ -22,8 +22,6 @@
 
 #include <config.h>
 
-#ifdef USE_GIF
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -209,5 +207,3 @@ RImage *RLoadGIF(const char *file, int index)
 
 	return image;
 }
-
-#endif				/* USE_GIF */

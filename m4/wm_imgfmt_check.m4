@@ -64,7 +64,8 @@ AS_IF([test "x$enable_gif" = "xno"],
          AC_DEFINE_UNQUOTED([USE_GIF],
            [1],
            [defined when valid GIF library with header was found])])
-    ])dnl
+    ])
+    AM_CONDITIONAL([USE_GIF], [test "x$enable_gif" != "xno"])dnl
 ]) dnl AC_DEFUN
 
 
