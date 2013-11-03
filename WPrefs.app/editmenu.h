@@ -81,7 +81,7 @@ void WSetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item,
                          WEditMenu *submenu);
 
 
-WEditMenu *WGetEditMenuSubmenu(WEditMenu *mPtr, WEditMenuItem *item);
+WEditMenu *WGetEditMenuSubmenu(WEditMenuItem *item);
 
 void WRemoveEditMenuItem(WEditMenu *mPtr, WEditMenuItem *item);
 

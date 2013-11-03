@@ -1276,7 +1276,7 @@ static void menuItemEdited(struct WEditMenuDelegate *delegate, WEditMenu * menu,
 
 	updateFrameTitle(panel, WGetEditMenuItemTitle(item), panel->currentType);
 
-	submenu = WGetEditMenuSubmenu(menu, item);
+	submenu = WGetEditMenuSubmenu(item);
 	if (submenu) {
 		WSetEditMenuTitle(submenu, WGetEditMenuItemTitle(item));
 	}
@@ -1289,7 +1289,7 @@ static Bool shouldRemoveItem(struct WEditMenuDelegate *delegate, WEditMenu * men
 	if (panel->dontAsk)
 		return True;
 
-	if (WGetEditMenuSubmenu(menu, item)) {
+	if (WGetEditMenuSubmenu(item)) {
 		int res;
 
 		res = WMRunAlertPanel(WMWidgetScreen(menu), NULL,
@@ -1683,7 +1683,7 @@ static WMPropList *processSubmenu(WEditMenu * menu)
 
 		s = WGetEditMenuItemTitle(item);
 
-		submenu = WGetEditMenuSubmenu(menu, item);
+		submenu = WGetEditMenuSubmenu(item);
 		if (submenu) {
 			pl = processSubmenu(submenu);
 		} else {

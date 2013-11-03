@@ -507,7 +507,7 @@ void WSetEditMenuSubmenu(WEditMenu * mPtr, WEditMenuItem * item, WEditMenu * sub
 	paintEditMenuItem(item);
 }
 
-WEditMenu *WGetEditMenuSubmenu(WEditMenu * mPtr, WEditMenuItem * item)
+WEditMenu *WGetEditMenuSubmenu(WEditMenuItem *item)
 {
 	return item->submenu;
 }
@@ -622,7 +622,7 @@ void WEditMenuHide(WEditMenu * mPtr)
 	while ((item = WGetEditMenuItem(mPtr, i++))) {
 		WEditMenu *submenu;
 
-		submenu = WGetEditMenuSubmenu(mPtr, item);
+		submenu = WGetEditMenuSubmenu(item);
 		if (submenu) {
 			WEditMenuHide(submenu);
 		}
@@ -640,7 +640,7 @@ void WEditMenuUnhide(WEditMenu * mPtr)
 	while ((item = WGetEditMenuItem(mPtr, i++))) {
 		WEditMenu *submenu;
 
-		submenu = WGetEditMenuSubmenu(mPtr, item);
+		submenu = WGetEditMenuSubmenu(item);
 		if (submenu) {
 			WEditMenuUnhide(submenu);
 		}
