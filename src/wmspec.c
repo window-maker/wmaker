@@ -927,7 +927,7 @@ static int getWindowLayer(WWindow *wwin)
 		if (wwin->transient_for) {
 			WWindow *parent = wWindowFor(wwin->transient_for);
 			if (parent && parent->flags.fullscreen)
-				layer = WMFullscreenLevel;
+				layer = WMNormalLevel;
 		}
 		/* //layer = WMPopUpLevel; // this seems a bad idea -Dan */
 	} else if (wwin->type == net_wm_window_type_normal) {

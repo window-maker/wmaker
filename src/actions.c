@@ -701,7 +701,7 @@ void wFullscreenWindow(WWindow *wwin)
 
 	wWindowConfigureBorders(wwin);
 
-	ChangeStackingLevel(wwin->frame->core, WMFullscreenLevel);
+	ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
 
 	wwin->bfs_geometry.x = wwin->frame_x;
 	wwin->bfs_geometry.y = wwin->frame_y;
@@ -725,14 +725,10 @@ void wUnfullscreenWindow(WWindow *wwin)
 
 	wwin->flags.fullscreen = False;
 
-	if (wwin->frame->core->stacking->window_level == WMFullscreenLevel) {
-		if (WFLAGP(wwin, sunken)) {
-			ChangeStackingLevel(wwin->frame->core, WMSunkenLevel);
-		} else if (WFLAGP(wwin, floating)) {
-			ChangeStackingLevel(wwin->frame->core, WMFloatingLevel);
-		} else {
-			ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
-		}
+	if (WFLAGP(wwin, sunken)) {
+		ChangeStackingLevel(wwin->frame->core, WMSunkenLevel);
+	} else if (WFLAGP(wwin, floating)) {
+		ChangeStackingLevel(wwin->frame->core, WMFloatingLevel);
 	}
 
 	wWindowConfigure(wwin, wwin->bfs_geometry.x, wwin->bfs_geometry.y,
