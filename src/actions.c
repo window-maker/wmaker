@@ -702,6 +702,7 @@ void wFullscreenWindow(WWindow *wwin)
 	wWindowConfigureBorders(wwin);
 
 	ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
+	wRaiseFrame(wwin->frame->core);
 
 	wwin->bfs_geometry.x = wwin->frame_x;
 	wwin->bfs_geometry.y = wwin->frame_y;
