@@ -120,6 +120,12 @@ AS_IF([test "x$debug" = "xyes"],
      AX_CFLAGS_GCC_OPTION([-Wno-deprecated-declarations])
 ])
 
+
+dnl Tracking on what is detected for final status
+dnl =============================================
+unsupported=""
+
+
 dnl Platform-specific Makefile setup
 dnl ================================
 AS_CASE(["$host"],
@@ -709,36 +715,13 @@ fi
 
 dnl GIF Support
 dnl ============
-gif=yes
-AC_ARG_ENABLE(gif, AS_HELP_STRING([--disable-gif], [disable GIF support through libgif or libungif]),
-	gif=$enableval, gif=yes, gif=no)
-
-if test "$gif" = yes; then
-    my_libname=""
-    WM_CHECK_LIB(ungif, DGifOpenFileName, [$XLFLAGS $XLIBS])
-    if test "x$ac_cv_lib_ungif_DGifOpenFileName" = xyes; then
-        my_libname=-lungif
-    fi
-dnl
-dnl libungif is the same thing as libgif for all practical purposes.
-dnl
-    if test "x$my_libname" = x; then
-        WM_CHECK_LIB(gif, DGifOpenFileName, [$XLFLAGS $XLIBS])
-        if test "x$ac_cv_lib_gif_DGifOpenFileName" = xyes; then
-            my_libname=-lgif
-        fi
-    fi
-
-    if test "$my_libname" != x; then
-	WM_CHECK_HEADER(gif_lib.h)
-	if test "x$ac_cv_header_gif_lib_h" = xyes; then
-	    GFXLIBS="$GFXLIBS $my_libname"
-	    supported_gfx="$supported_gfx GIF"
-            AC_DEFINE(USE_GIF, 1, [define if GIF libraries are available (set by configure)])
-	fi
-    fi
-fi
-
+AC_ARG_ENABLE(gif,
+    [AS_HELP_STRING([--disable-gif], [disable GIF support through libgif or libungif])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-gif])] )],
+    [enable_gif=auto])
+WM_IMGFMT_CHECK_GIF
 
 
 dnl TIFF Support
@@ -924,6 +907,7 @@ echo "Installation path for binaries      : $_bindir"
 echo "Installation path for libraries     : $libdir"
 echo "Installation path for WPrefs.app    : $wprefs_base_dir" | sed -e 's|\${prefix}|'"$prefix|"
 echo "Supported graphic format libraries  : $supported_gfx"
+echo "Unsupported features                :$unsupported"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Xinerama extension support          : $xinerama"
 echo "XRandR extension support            : $xrandr"
