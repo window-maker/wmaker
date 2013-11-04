@@ -22,8 +22,6 @@
 
 #include <config.h>
 
-#ifdef USE_PNG
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -215,5 +213,3 @@ RImage *RLoadPNG(RContext *context, const char *file)
 	free(png_rows);
 	return image;
 }
-
-#endif				/* USE_PNG */

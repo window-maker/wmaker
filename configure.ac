@@ -657,36 +657,13 @@ dnl ===============================================
 
 dnl PNG Support
 dnl ===========
-png=yes
-AC_ARG_ENABLE(png, AS_HELP_STRING([--disable-png], [disable PNG support through libpng]),
-	png=$enableval, png=yes, png=no)
-
-if test "$png" = yes ; then
-    my_libname=""
-    WM_CHECK_LIB(png, png_get_valid, [-lm])
-    if test "x$ac_cv_lib_png_png_get_valid" = xyes; then
-	my_libname="-lpng"
-    fi
-dnl
-dnl Retry with zlib
-dnl
-    if test "x$my_libname" = x; then
-        unset ac_cv_lib_png_png_get_valid
-        WM_CHECK_LIB(png, png_get_valid, [-lz -lm])
-	if test "x$ac_cv_lib_png_png_get_valid" = xyes; then
-	    my_libname="-lpng -lz"
-	fi
-    fi
-
-    if test "x$ac_cv_lib_png_png_get_valid" = xyes; then
-    	WM_CHECK_HEADER(png.h)
-	if test "x$ac_cv_header_png_h" = xyes; then
-	    GFXLIBS="$GFXLIBS $my_libname"
-	    supported_gfx="$supported_gfx PNG"
-            AC_DEFINE(USE_PNG, 1, [define if PNG libraries are available (set by configure)])
-	fi
-    fi
-fi
+AC_ARG_ENABLE([png],
+    [AS_HELP_STRING([--disable-png], [disable PNG support through libpng])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-png])] )],
+    [enable_png=auto])
+WM_IMGFMT_CHECK_PNG
 
 
 dnl JPEG Support
