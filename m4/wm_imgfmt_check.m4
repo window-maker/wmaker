@@ -79,6 +79,63 @@ const char *filename = "dummy";],
 ]) dnl AC_DEFUN
 
 
+# WM_IMGFMT_CHECK_JPEG
+# --------------------
+#
+# Check for JPEG file support through 'libjpeg'
+# The check depends on variable 'enable_jpeg' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, disable support
+#   auto - detect, disable if not found
+#
+# When found, append appropriate stuff in GFXLIBS, and append info to
+# the variable 'supported_gfx'
+# When not found, append info to variable 'unsupported'
+AC_DEFUN_ONCE([WM_IMGFMT_CHECK_JPEG],
+[AC_REQUIRE([_WM_IMGFMT_CHECK_FUNCTS])
+AS_IF([test "x$enable_jpeg" = "xno"],
+    [unsupported="$unsupported JPEG"],
+    [AC_CACHE_CHECK([for JPEG support library], [wm_cv_imgfmt_jpeg],
+        [wm_cv_imgfmt_jpeg=no
+         wm_save_LIBS="$LIBS"
+         dnl
+         dnl We check first if one of the known libraries is available
+         AS_IF([wm_fn_imgfmt_try_link "jpeg_destroy_compress" "$XLFLAGS $XLIBS -ljpeg"],
+             [wm_cv_imgfmt_jpeg="-ljpeg"])
+         LIBS="$wm_save_LIBS"
+         AS_IF([test "x$enable_jpeg$wm_cv_imgfmt_jpeg" = "xyesno"],
+             [AC_MSG_ERROR([explicit JPEG support requested but no library found])])
+         AS_IF([test "x$wm_cv_imgfmt_jpeg" != "xno"],
+           [dnl
+            dnl A library was found, now check for the appropriate header
+            AC_COMPILE_IFELSE(
+                [AC_LANG_PROGRAM(
+                    [@%:@include <stdlib.h>
+@%:@include <stdio.h>
+@%:@include <jpeglib.h>],
+                    [  struct jpeg_decompress_struct cinfo;
+
+  jpeg_destroy_decompress(&cinfo);])],
+                [],
+                [AS_ECHO([failed])
+                 AS_ECHO(["$as_me: error: found $wm_cv_imgfmt_jpeg but cannot compile header"])
+                 AS_ECHO(["$as_me: error:   - does header 'jpeglib.h' exists? (is package 'jpeg-dev' missing?)"])
+                 AS_ECHO(["$as_me: error:   - version of header is not supported? (report to dev team)"])
+                 AC_MSG_ERROR([JPEG library is not usable, cannot continue])])
+           ])
+         ])
+    AS_IF([test "x$wm_cv_imgfmt_jpeg" = "xno"],
+        [unsupported="$unsupported JPEG"
+         enable_jpeg="no"],
+        [supported_gfx="$supported_gfx JPEG"
+         GFXLIBS="$GFXLIBS $wm_cv_imgfmt_jpeg"
+         AC_DEFINE([USE_JPEG], [1],
+           [defined when valid JPEG library with header was found])])
+    ])
+AM_CONDITIONAL([USE_JPEG], [test "x$enable_jpeg" != "xno"])dnl
+]) dnl AC_DEFUN
+
+
 # _WM_IMGFMT_CHECK_FUNCTS
 # -----------------------
 # (internal shell functions)

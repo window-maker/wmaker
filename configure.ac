@@ -691,26 +691,13 @@ fi
 
 dnl JPEG Support
 dnl ============
-jpeg=yes
-ljpeg=""
-AC_ARG_ENABLE(jpeg, AS_HELP_STRING([--disable-jpeg], [disable JPEG support through libjpeg]),
-	jpeg=$enableval, jpeg=yes, jpeg=no)
-
-if test "$jpeg" = yes; then
-    WM_CHECK_LIB(jpeg, jpeg_destroy_compress)
-
-    if test "x$ac_cv_lib_jpeg_jpeg_destroy_compress" = xyes; then
-
-    	ljpeg="-ljpeg"
-
-	WM_CHECK_HEADER(jpeglib.h)
-	if test "x$ac_cv_header_jpeglib_h" = xyes; then
-	    GFXLIBS="$GFXLIBS -ljpeg"
-	    supported_gfx="$supported_gfx JPEG"
-            AC_DEFINE(USE_JPEG, 1, [define if JPEG libraries are available (set by configure)])
-	fi
-    fi
-fi
+AC_ARG_ENABLE([jpeg],
+    [AS_HELP_STRING([--disable-jpeg], [disable JPEG support through libjpeg])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-jpeg])] )],
+    [enable_jpeg=auto])
+WM_IMGFMT_CHECK_JPEG
 
 
 dnl GIF Support
@@ -921,19 +908,19 @@ echo
 
 dnl WM_PRINT_REDCRAP_BUG_STATUS
 
-if test "x$ac_cv_header_jpeglib_h" != xyes; then
-echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"
-echo
-echo "JPEG support will not be included because the JPEG library is"
-echo "not installed correctly or was not found. Background images"
-echo "from themes will not display as they usually are JPEG files."
-echo
-echo "To fix, download and install the jpeg library and/or make sure you"
-echo "installed all jpeg related packages, SPECIALLY the development packages"
-echo "like jpeg-devel (if you use some prepackaged version of libjpeg)."
-echo
-echo "WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"
-fi
+AS_IF([test "x$enable_jpeg" = xno], [dnl
+    AS_ECHO(["WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"])
+    AS_ECHO([])
+    AS_ECHO(["JPEG support will not be included because the JPEG library is"])
+    AS_ECHO(["not installed correctly or was not found. Background images"])
+    AS_ECHO(["from themes will not display as they usually are JPEG files."])
+    AS_ECHO([])
+    AS_ECHO(["To fix, download and install the jpeg library and/or make sure you"])
+    AS_ECHO(["installed all jpeg related packages, SPECIALLY the development packages"])
+    AS_ECHO(["like jpeg-dev (if you use some prepackaged version of libjpeg)."])
+    AS_ECHO([])
+    AS_ECHO(["WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"])dnl
+])
 
 
 dnl This is for Emacs.  I'm lazy, I know... (nicolai)

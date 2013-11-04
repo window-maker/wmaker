@@ -39,11 +39,14 @@ libwraster_la_SOURCES = 	\
 	xutil.c		\
 	ppm.c		\
 	png.c 		\
-	jpeg.c 		\
 	tiff.c
 
 if USE_GIF
 libwraster_la_SOURCES += gif.c
+endif
+
+if USE_JPEG
+libwraster_la_SOURCES += jpeg.c
 endif
 
 LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`

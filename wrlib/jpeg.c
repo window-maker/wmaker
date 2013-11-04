@@ -25,8 +25,6 @@
 /* Avoid a compiler warning */
 #undef HAVE_STDLIB_H
 
-#ifdef USE_JPEG
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -190,5 +188,3 @@ RImage *RLoadJPEG(const char *file_name)
 
 	return image;
 }
-
-#endif				/* USE_JPEG */
