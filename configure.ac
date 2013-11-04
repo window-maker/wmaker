@@ -690,55 +690,20 @@ WM_IMGFMT_CHECK_GIF
 
 dnl TIFF Support
 dnl ============
-AC_ARG_ENABLE(tiff, 
-AS_HELP_STRING([--disable-tiff], [disable use of TIFF images through libtiff]),
-	tif=$enableval, tif=yes, tif=no)
-
-#
-# TIFF can optionally have JPEG and/or zlib support. Must find out
-# when they are supported so that correct library flags are passed during
-# detection and linkage
-#
-#
-# By default use xpm icons if tiff is not found.
-ICONEXT="xpm"
-#
-
-if test "$tif" = yes; then
-    my_libname=""
-    WM_CHECK_LIB(tiff, TIFFGetVersion, [-lm])
-    if test "x$ac_cv_lib_tiff_TIFFGetVersion" = xyes; then
-    	my_libname="-ltiff"
-    fi
-dnl
-dnl Retry with zlib
-dnl
-    unset ac_cv_lib_tiff_TIFFGetVersion
-    if test "x$my_libname" = x; then
-    	WM_CHECK_LIB(tiff, TIFFGetVersion, [$ljpeg -lz -lm])
-	if test "x$ac_cv_lib_tiff_TIFFGetVersion" = xyes; then
-	    my_libname="-ltiff -lz"
-	fi
-    fi
-
-    if test "x$my_libname" = x; then
-	WM_CHECK_LIB(tiff34, TIFFGetVersion, [$ljpeg -lm])
-	if test "x$ac_cv_lib_tiff34_TIFFGetVersion" = xyes; then
-	    my_libname="-ltiff34"
-	fi
-    fi
+AC_ARG_ENABLE([tiff],
+    [AS_HELP_STRING([--disable-tiff], [disable use of TIFF images through libtiff])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-tiff])] )],
+    [enable_tiff=auto])
+WM_IMGFMT_CHECK_TIFF
 
 
-    if test "x$my_libname" != x; then
-	WM_CHECK_HEADER(tiffio.h)
-	if test "x$ac_cv_header_tiffio_h" = xyes; then
-	    GFXLIBS="$my_libname $GFXLIBS"
-	    ICONEXT="tiff"
-            supported_gfx="$supported_gfx TIFF"
-            AC_DEFINE(USE_TIFF, 1, [define if TIFF libraries are available (set by configure)])	    
-	fi
-    fi
-fi
+# Choice of the default format for icons
+AS_IF([test "x$enable_tiff" != "xno"],
+    [ICONEXT="tiff"],
+    [ICONEXT="xpm"])
+
 
 LIBRARY_SEARCH_PATH="$lib_search_path"
 HEADER_SEARCH_PATH="$inc_search_path"

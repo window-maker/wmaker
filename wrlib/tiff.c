@@ -22,8 +22,6 @@
 
 #include <config.h>
 
-#ifdef USE_TIFF
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -141,5 +139,3 @@ RImage *RLoadTIFF(const char *file, int index)
 
 	return image;
 }
-
-#endif				/* USE_TIFF */

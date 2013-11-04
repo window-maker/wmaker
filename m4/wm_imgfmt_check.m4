@@ -188,6 +188,66 @@ AM_CONDITIONAL([USE_PNG], [test "x$enable_png" != "xno"])dnl
 ]) dnl AC_DEFUN
 
 
+# WM_IMGFMT_CHECK_TIFF
+# --------------------
+#
+# Check for TIFF file support through 'libtiff'
+# The check depends on variable 'enable_tiff' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, disable support
+#   auto - detect, disable if not found
+#
+# When found, append appropriate stuff in GFXLIBS, and append info to
+# the variable 'supported_gfx'
+# When not found, append info to variable 'unsupported'
+AC_DEFUN_ONCE([WM_IMGFMT_CHECK_TIFF],
+[AC_REQUIRE([_WM_IMGFMT_CHECK_FUNCTS])
+AS_IF([test "x$enable_tiff" = "xno"],
+    [unsupported="$unsupported TIFF"],
+    [AC_CACHE_CHECK([for TIFF support library], [wm_cv_imgfmt_tiff],
+        [wm_cv_imgfmt_tiff=no
+         dnl
+         dnl We check first if one of the known libraries is available
+         wm_save_LIBS="$LIBS"
+         for wm_arg in "-ltiff"  \
+             dnl TIFF can have a dependancy over zlib
+             "-ltiff -lz" "-ltiff -lz -lm"  \
+             dnl It may also have a dependancy to jpeg_lib
+             "-ltiff -ljpeg" "-ltiff -ljpeg -lz" "-ltiff -ljpeg -lz -lm"  \
+             dnl There is also a possible dependancy on JBIGKit
+             "-ltiff -ljpeg -ljbig -lz"  \
+             dnl Probably for historical reasons?
+             "-ltiff34" "-ltiff34 -ljpeg" "-ltiff34 -ljpeg -lm" ; do
+           AS_IF([wm_fn_imgfmt_try_link "TIFFGetVersion" "$XLFLAGS $XLIBS $wm_arg"],
+             [wm_cv_imgfmt_tiff="$wm_arg" ; break])
+         done
+         LIBS="$wm_save_LIBS"
+         AS_IF([test "x$enable_tiff$wm_cv_imgfmt_tiff" = "xyesno"],
+           [AC_MSG_ERROR([explicit TIFF support requested but no library found])])
+         AS_IF([test "x$wm_cv_imgfmt_tiff" != "xno"],
+           [dnl
+            dnl A library was found, now check for the appropriate header
+            wm_save_CFLAGS="$CFLAGS"
+            AS_IF([wm_fn_imgfmt_try_compile "tiffio.h" "return 0" ""],
+              [],
+              [AC_MSG_ERROR([found $wm_cv_imgfmt_tiff but could not find appropriate header - are you missing libtiff-dev package?])])
+            AS_IF([wm_fn_imgfmt_try_compile "tiffio.h" 'TIFFOpen(filename, "r")' ""],
+              [],
+              [AC_MSG_ERROR([found $wm_cv_imgfmt_tiff and header, but cannot compile - unsupported version?])])
+            CFLAGS="$wm_save_CFLAGS"])
+         ])
+    AS_IF([test "x$wm_cv_imgfmt_tiff" = "xno"],
+        [unsupported="$unsupported TIFF"
+         enable_tiff="no"],
+        [supported_gfx="$supported_gfx TIFF"
+         GFXLIBS="$GFXLIBS $wm_cv_imgfmt_tiff"
+         AC_DEFINE([USE_TIFF], [1],
+           [defined when valid TIFF library with header was found])])
+    ])
+AM_CONDITIONAL([USE_TIFF], [test "x$enable_tiff" != "xno"])dnl
+]) dnl AC_DEFUN
+
+
 # _WM_IMGFMT_CHECK_FUNCTS
 # -----------------------
 # (internal shell functions)
