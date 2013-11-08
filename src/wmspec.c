@@ -198,8 +198,6 @@ static atomitem_t atomNames[] = {
 	{"UTF8_STRING", &utf8_string},
 };
 
-#define atomNr (sizeof(atomNames)/sizeof(atomNames[0]))
-
 #define _NET_WM_STATE_REMOVE 0
 #define _NET_WM_STATE_ADD 1
 #define _NET_WM_STATE_TOGGLE 2
@@ -235,7 +233,7 @@ typedef struct NetData {
 
 static void setSupportedHints(WScreen *scr)
 {
-	Atom atom[atomNr];
+	Atom atom[wlengthof(atomNames)];
 	int i = 0;
 
 	/* set supported hints list */
@@ -534,19 +532,19 @@ void wNETWMInitStuff(WScreen *scr)
 
 #ifdef HAVE_XINTERNATOMS
 	{
-		Atom atoms[atomNr];
-		char *names[atomNr];
+		Atom atoms[wlengthof(atomNames)];
+		char *names[wlengthof(atomNames)];
 
-		for (i = 0; i < atomNr; ++i)
+		for (i = 0; i < wlengthof(atomNames); ++i)
 			names[i] = atomNames[i].name;
 
-		XInternAtoms(dpy, &names[0], atomNr, False, atoms);
-		for (i = 0; i < atomNr; ++i)
+		XInternAtoms(dpy, &names[0], wlengthof(atomNames), False, atoms);
+		for (i = 0; i < wlengthof(atomNames); ++i)
 			*atomNames[i].atom = atoms[i];
 
 	}
 #else
-	for (i = 0; i < atomNr; i++)
+	for (i = 0; i < wlengthof(atomNames); i++)
 		*atomNames[i].atom = XInternAtom(dpy, atomNames[i].name, False);
 #endif
 
@@ -585,7 +583,7 @@ void wNETWMCleanup(WScreen *scr)
 {
 	int i;
 
-	for (i = 0; i < atomNr; i++)
+	for (i = 0; i < wlengthof(atomNames); i++)
 		XDeleteProperty(dpy, scr->root_win, *atomNames[i].atom);
 }
 

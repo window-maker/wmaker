@@ -168,7 +168,7 @@ void FormatXError(Display * dpy, XErrorEvent * error, char *buffer, int size)
 	if (i > size - 100)
 		return;
 	buffer += i;
-	if (error->request_code >= sizeof(requestCodes) / sizeof(requestCodes[0])) {
+	if (error->request_code >= wlengthof(requestCodes)) {
 		sprintf(buffer, "\n	Request code: %i\n", error->request_code);
 	} else {
 		sprintf(buffer, "\n	Request code: %i %s\n", error->request_code,

@@ -772,7 +772,7 @@ static void initDefaults(void)
 
 	WMPLSetCaseSensitive(False);
 
-	for (i = 0; i < sizeof(optionList) / sizeof(optionList[0]); i++) {
+	for (i = 0; i < wlengthof(optionList); i++) {
 		entry = &optionList[i];
 
 		entry->plkey = WMCreatePLString(entry->key);
@@ -782,7 +782,7 @@ static void initDefaults(void)
 			entry->plvalue = NULL;
 	}
 
-	for (i = 0; i < sizeof(staticOptionList) / sizeof(staticOptionList[0]); i++) {
+	for (i = 0; i < wlengthof(staticOptionList); i++) {
 		entry = &staticOptionList[i];
 
 		entry->plkey = WMCreatePLString(entry->key);
@@ -937,7 +937,7 @@ void wReadStaticDefaults(WMPropList * dict)
 	unsigned int i;
 	void *tdata;
 
-	for (i = 0; i < sizeof(staticOptionList) / sizeof(staticOptionList[0]); i++) {
+	for (i = 0; i < wlengthof(staticOptionList); i++) {
 		entry = &staticOptionList[i];
 
 		if (dict)
@@ -1094,7 +1094,7 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 
 	needs_refresh = 0;
 
-	for (i = 0; i < sizeof(optionList) / sizeof(optionList[0]); i++) {
+	for (i = 0; i < wlengthof(optionList); i++) {
 		entry = &optionList[i];
 
 		if (new_dict)

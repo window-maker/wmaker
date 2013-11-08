@@ -831,7 +831,7 @@ static void revertSettings(WMWidget *button, void *client_data)
 
 	wWindowSetupInitialAttributes(wwin, &level, &workspace);
 
-	for (i = 0; i < (sizeof(panel->attrChk) / sizeof(panel->attrChk[0])); i++) {
+	for (i = 0; i < wlengthof(panel->attrChk); i++) {
 		int flag = 0;
 
 		switch (i) {
@@ -872,7 +872,7 @@ static void revertSettings(WMWidget *button, void *client_data)
 		WMSetButtonSelected(panel->attrChk[i], flag);
 	}
 
-	for (i = 0; i < (sizeof(panel->moreChk) / sizeof(panel->moreChk[0])); i++) {
+	for (i = 0; i < wlengthof(panel->moreChk); i++) {
 		int flag = 0;
 
 		switch (i) {
@@ -918,7 +918,7 @@ static void revertSettings(WMWidget *button, void *client_data)
 		WMSetButtonSelected(panel->moreChk[i], flag);
 	}
 	if (panel->appFrm && wapp) {
-		for (i = 0; i < (sizeof(panel->appChk) / sizeof(panel->appChk[0])); i++) {
+		for (i = 0; i < wlengthof(panel->appChk); i++) {
 			int flag = 0;
 
 			switch (i) {
@@ -1318,7 +1318,7 @@ static void create_tab_window_attributes(WWindow *wwin, InspectorPanel *panel, i
 	WMMoveWidget(panel->attrFrm, 15, 45);
 	WMResizeWidget(panel->attrFrm, frame_width, 250);
 
-	for (i = 0; i < (sizeof(panel->attrChk) / sizeof(panel->attrChk[0])); i++) {
+	for (i = 0; i < wlengthof(panel->attrChk); i++) {
 		switch (i) {
 		case 0:
 			caption = _("Disable titlebar");
@@ -1402,7 +1402,7 @@ static void create_tab_window_advanced(WWindow *wwin, InspectorPanel *panel, int
 	WMMoveWidget(panel->moreFrm, 15, 45);
 	WMResizeWidget(panel->moreFrm, frame_width, 265);
 
-	for (i = 0; i < (sizeof(panel->moreChk) / sizeof(panel->moreChk[0])); i++) {
+	for (i = 0; i < wlengthof(panel->moreChk); i++) {
 		switch (i) {
 		case 0:
 			caption = _("Do not bind keyboard shortcuts");
@@ -1565,7 +1565,7 @@ static void create_tab_app_specific(WWindow *wwin, InspectorPanel *panel, int fr
 		WMMoveWidget(panel->appFrm, 15, 50);
 		WMResizeWidget(panel->appFrm, frame_width, 240);
 
-		for (i = 0; i < (sizeof(panel->appChk) / sizeof(panel->appChk[0])); i++) {
+		for (i = 0; i < wlengthof(panel->appChk); i++) {
 			switch (i) {
 			case 0:
 				caption = _("Start hidden");
