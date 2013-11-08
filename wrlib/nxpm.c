@@ -52,7 +52,6 @@
 
 #define LINEWIDTH 64
 
-#ifndef USE_XPM
 
 static void free_color_symbol_table(unsigned char *color_table[],
 				     unsigned short *symbol_table)
@@ -444,5 +443,3 @@ RImage *RLoadXPM(RContext * context, const char *file)
 		RReleaseImage(image);
 	return NULL;
 }
-
-#endif

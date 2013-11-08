@@ -34,7 +34,6 @@ libwraster_la_SOURCES = 	\
 	scale.c		\
 	rotate.c	\
 	convolve.c	\
-	nxpm.c		\
 	save_xpm.c	\
 	xutil.c		\
 	ppm.c
@@ -57,6 +56,8 @@ endif
 
 if USE_XPM
 libwraster_la_SOURCES += xpm.c
+else
+libwraster_la_SOURCES += nxpm.c
 endif
 
 LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
