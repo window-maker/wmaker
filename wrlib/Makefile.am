@@ -35,7 +35,6 @@ libwraster_la_SOURCES = 	\
 	rotate.c	\
 	convolve.c	\
 	nxpm.c		\
-	xpm.c 		\
 	xutil.c		\
 	ppm.c
 
@@ -53,6 +52,10 @@ endif
 
 if USE_TIFF
 libwraster_la_SOURCES += tiff.c
+endif
+
+if USE_XPM
+libwraster_la_SOURCES += xpm.c
 endif
 
 LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`

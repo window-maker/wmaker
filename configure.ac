@@ -124,6 +124,7 @@ AS_IF([test "x$debug" = "xyes"],
 dnl Tracking on what is detected for final status
 dnl =============================================
 unsupported=""
+supported_gfx=""
 
 
 dnl Platform-specific Makefile setup
@@ -625,24 +626,14 @@ dnl ==============================================
 
 dnl XPM Support
 dnl ===========
-xpm=yes
-AC_ARG_ENABLE(xpm, AS_HELP_STRING([--disable-xpm], [disable use of XPM pixmaps through libXpm]),
-	xpm=$enableval, xpm=yes)
+AC_ARG_ENABLE([xpm],
+    [AS_HELP_STRING([--disable-xpm], [disable use of XPM pixmaps through libXpm])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-xpm])] )],
+    [enable_xpm=auto])
+WM_IMGFMT_CHECK_XPM
 
-if test "$xpm" = yes; then
-    WM_CHECK_LIB(Xpm, XpmCreatePixmapFromData, [$XLFLAGS $XLIBS])
-
-    if test "x$ac_cv_lib_Xpm_XpmCreatePixmapFromData" = xyes; then
-        WM_CHECK_HEADER(X11/xpm.h)
-	if test "x$ac_cv_header_X11_xpm_h" = xyes; then
-		GFXLIBS="$GFXLIBS -lXpm"
-		supported_gfx="XPM"
-		AC_DEFINE(USE_XPM, 1, [define if XPM libraries are available (set by configure)])
-	else
-		supported_gfx="builtin-XPM"
-	fi
-    fi
-fi
 
 # for wmlib
 AC_SUBST(XCFLAGS)
@@ -835,7 +826,7 @@ echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
 echo "Installation path for libraries     : $libdir"
 echo "Installation path for WPrefs.app    : $wprefs_base_dir" | sed -e 's|\${prefix}|'"$prefix|"
-echo "Supported graphic format libraries  : $supported_gfx"
+echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Xinerama extension support          : $xinerama"

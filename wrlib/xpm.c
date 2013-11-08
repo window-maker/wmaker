@@ -1,4 +1,4 @@
-/* xpm.c - load XPM image from file
+/* xpm.c - load XPM image from file using libXpm
  *
  * Raster graphics library
  *
@@ -21,8 +21,6 @@
  */
 
 #include <config.h>
-
-#ifdef USE_XPM
 
 #include <X11/Xlib.h>
 #include <stdlib.h>
@@ -271,5 +269,3 @@ RImage *RLoadXPM(RContext * context, const char *file)
 	XpmFreeXpmImage(&xpm);
 	return image;
 }
-
-#endif				/* USE_XPM */

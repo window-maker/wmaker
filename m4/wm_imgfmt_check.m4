@@ -248,6 +248,55 @@ AM_CONDITIONAL([USE_TIFF], [test "x$enable_tiff" != "xno"])dnl
 ]) dnl AC_DEFUN
 
 
+# WM_IMGFMT_CHECK_XPM
+# -------------------
+#
+# Check for XPM file support through 'libXpm'
+# The check depends on variable 'enable_xpm' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, use internal support
+#   auto - detect, use internal if not found
+#
+# When found, append appropriate stuff in GFXLIBS, and append info to
+# the variable 'supported_gfx'
+AC_DEFUN_ONCE([WM_IMGFMT_CHECK_XPM],
+[AC_REQUIRE([_WM_IMGFMT_CHECK_FUNCTS])
+AS_IF([test "x$enable_xpm" = "xno"],
+    [supported_gfx="$supported_gfx builtin-XPM"],
+    [AC_CACHE_CHECK([for XPM support library], [wm_cv_imgfmt_xpm],
+        [wm_cv_imgfmt_xpm=no
+         dnl
+         dnl We check first if one of the known libraries is available
+         wm_save_LIBS="$LIBS"
+         AS_IF([wm_fn_imgfmt_try_link "XpmCreatePixmapFromData" "$XLFLAGS $XLIBS -lXpm"],
+           [wm_cv_imgfmt_xpm="-lXpm" ; break])
+         LIBS="$wm_save_LIBS"
+         AS_IF([test "x$enable_xpm$wm_cv_imgfmt_xpm" = "xyesno"],
+           [AC_MSG_ERROR([explicit libXpm support requested but no library found])])
+         AS_IF([test "x$wm_cv_imgfmt_xpm" != "xno"],
+           [dnl
+            dnl A library was found, now check for the appropriate header
+            wm_save_CFLAGS="$CFLAGS"
+            AS_IF([wm_fn_imgfmt_try_compile "X11/xpm.h" "return 0" "$XCFLAGS"],
+              [],
+              [AC_MSG_ERROR([found $wm_cv_imgfmt_xpm but could not find appropriate header - are you missing libXpm-dev package?])])
+            AS_IF([wm_fn_imgfmt_try_compile "X11/xpm.h" 'XpmReadFileToXpmImage((char *)filename, NULL, NULL)' "$XCFLAGS"],
+              [],
+              [AC_MSG_ERROR([found $wm_cv_imgfmt_xpm and header, but cannot compile - unsupported version?])])
+            CFLAGS="$wm_save_CFLAGS"])
+         ])
+    AS_IF([test "x$wm_cv_imgfmt_xpm" = "xno"],
+        [supported_gfx="$supported_gfx builtin-XPM"
+         enable_xpm="no"],
+        [supported_gfx="$supported_gfx XPM"
+         GFXLIBS="$GFXLIBS $wm_cv_imgfmt_xpm"
+         AC_DEFINE([USE_XPM], [1],
+           [defined when valid XPM library with header was found])])
+    ])
+AM_CONDITIONAL([USE_XPM], [test "x$enable_xpm" != "xno"])dnl
+]) dnl AC_DEFUN
+
+
 # _WM_IMGFMT_CHECK_FUNCTS
 # -----------------------
 # (internal shell functions)
