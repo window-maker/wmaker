@@ -88,6 +88,27 @@
 #endif /* !NDEBUG */
 
 
+#ifdef static_assert
+# define _wutil_static_assert(check, message) static_assert(check, message)
+#else
+# ifdef __STDC_VERSION__
+#  if __STDC_VERSION__ >= 201112L
+/*
+ * Ideally, we would like to include <assert.h> to have 'static_assert'
+ * properly defined, but as we have to be sure about portability and
+ * because we're a public header we can't count on 'configure' to tell
+ * us about availability, so we use the raw C11 keyword
+ */
+#   define _wutil_static_assert(check, message) _Static_assert(check, message)
+#  else
+#   define _wutil_static_assert(check, message) /**/
+#  endif
+# else
+#  define _wutil_static_assert(check, message) /**/
+# endif
+#endif
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -180,6 +201,16 @@ typedef void *WMBagIterator;
 
 typedef void WMNotificationObserverAction(void *observerData,
                                           WMNotification *notification);
+
+
+/* ---[ Macros ]---------------------------------------------------------- */
+
+#define wlengthof(array)  \
+	({   \
+		_wutil_static_assert(sizeof(array) > sizeof(array[0]),   \
+		                     "the macro 'wlengthof' cannot be used on pointers, only on known size arrays");   \
+		sizeof(array) / sizeof(array[0]);   \
+	})
 
 
 /* ---[ WINGs/memory.c ]-------------------------------------------------- */
