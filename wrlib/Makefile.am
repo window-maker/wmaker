@@ -36,28 +36,28 @@ libwraster_la_SOURCES = 	\
 	convolve.c	\
 	save_xpm.c	\
 	xutil.c		\
-	ppm.c
+	load_ppm.c
 
 if USE_GIF
-libwraster_la_SOURCES += gif.c
+libwraster_la_SOURCES += load_gif.c
 endif
 
 if USE_JPEG
-libwraster_la_SOURCES += jpeg.c
+libwraster_la_SOURCES += load_jpeg.c
 endif
 
 if USE_PNG
-libwraster_la_SOURCES += png.c
+libwraster_la_SOURCES += load_png.c
 endif
 
 if USE_TIFF
-libwraster_la_SOURCES += tiff.c
+libwraster_la_SOURCES += load_tiff.c
 endif
 
 if USE_XPM
-libwraster_la_SOURCES += xpm.c
+libwraster_la_SOURCES += load_xpm.c
 else
-libwraster_la_SOURCES += nxpm.c
+libwraster_la_SOURCES += load_xpm_normalized.c
 endif
 
 LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
