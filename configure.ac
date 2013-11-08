@@ -84,7 +84,18 @@ AC_ARG_ENABLE(debug,
         [AC_MSG_ERROR([bad value $enableval for --enable-debug])] )],
     [debug=no])
 AS_IF([test "x$debug" = "xyes"],
-    [CFLAGS="-g -O0" ; CPPFLAGS="$CPPFLAGS -DDEBUG"])
+    [dnl This flag should have already been detected and added, but if user
+     dnl provided an explicit CFLAGS it may not be the case
+     AS_IF([echo " $CFLAGS " | grep " -g " 2>&1 > /dev/null],
+           [@%:@ Debug symbol already activated],
+           [AX_CFLAGS_GCC_OPTION([-g])])
+     dnl
+     dnl This flag generally makes debugging nightmarish, remove it if present
+     CFLAGS="`echo "$CFLAGS" | sed -e 's/-fomit-frame-pointer *//' `"
+     dnl
+     dnl Enable internal debug code
+     CPPFLAGS="$CPPFLAGS -DDEBUG"
+])
 
 
 AX_CFLAGS_GCC_OPTION(-Wall)
@@ -841,7 +852,8 @@ dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then
 	echo "Installation path for translations  : $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"
 fi
-AS_IF([test "x$debug" = "xyes"], [echo "Debug information enabled           : $debug"])
+AS_IF([test "x$debug" = "xyes"],
+    [AS_ECHO(["Debug enabled: CFLAGS = $CFLAGS"]) ])
 echo
 
 dnl WM_PRINT_REDCRAP_BUG_STATUS
