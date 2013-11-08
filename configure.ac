@@ -690,6 +690,13 @@ AC_ARG_ENABLE([tiff],
 WM_IMGFMT_CHECK_TIFF
 
 
+dnl PPM Support
+dnl ===========
+# The PPM format is always enabled because we have built-in support for the format
+# We are not using any external library like libppm
+supported_gfx="$supported_gfx builtin-PPM"
+
+
 # Choice of the default format for icons
 AS_IF([test "x$enable_tiff" != "xno"],
     [ICONEXT="tiff"],
@@ -804,8 +811,6 @@ AC_SUBST(inc_search_path)
 dnl
 dnl Spit out the configuration
 dnl ==========================
-
-supported_gfx="$supported_gfx builtin-PPM"
 
 if test "x$MOFILES" = "x"; then
 	mof=None
