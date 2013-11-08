@@ -69,6 +69,7 @@ dnl Checks for programs.
 dnl ===================
 AC_ISC_POSIX
 AC_PROG_CC
+WM_PROG_CC_C11
 AC_PROG_LN_S
 AC_PROG_GCC_TRADITIONAL
 AC_PROG_LIBTOOL
