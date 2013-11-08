@@ -95,6 +95,10 @@ AS_IF([test "x$debug" = "xyes"],
      dnl
      dnl Enable internal debug code
      CPPFLAGS="$CPPFLAGS -DDEBUG"
+],  [dnl
+     dnl When debug is not enabled, the user probably does not wants to keep
+     dnl assertions in the final program
+     CPPFLAGS="$CPPFLAGS -DNDEBUG"
 ])
 
 
