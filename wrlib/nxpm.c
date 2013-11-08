@@ -80,6 +80,12 @@ RImage *RGetImageFromXPMData(RContext * context, char **data)
 	int bsize;
 	int w, h, ccount, csize;
 
+	/*
+	 * When using libXpm we need the context argument but the code here does
+	 * not, so tell the compiler to not warn about it
+	 */
+	(void) context;
+
 	if (sscanf(data[line++], "%i %i %i %i", &w, &h, &ccount, &csize) != 4
 	    || w <= 0 || h <= 0 || ccount <= 0 || csize <= 0)
 		goto bad_format;
@@ -241,6 +247,12 @@ RImage *RLoadXPM(RContext * context, const char *file)
 	int bsize;
 	int w, h, ccount, csize;
 	FILE *f;
+
+	/*
+	 * When using libXpm we need the context argument but the code here does
+	 * not, so tell the compiler to not warn about it
+	 */
+	(void) context;
 
 	f = fopen(file, "rb");
 	if (!f) {
