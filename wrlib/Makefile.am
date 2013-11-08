@@ -35,6 +35,7 @@ libwraster_la_SOURCES = 	\
 	rotate.c	\
 	convolve.c	\
 	nxpm.c		\
+	save_xpm.c	\
 	xutil.c		\
 	ppm.c
 
