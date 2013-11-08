@@ -115,11 +115,11 @@ static void createPanel(Panel * p)
 	WMSetScrollViewHasHorizontalScroller(sv, False);
 
 	f = WMCreateFrame(panel->box);
-	WMResizeWidget(f, 495, (sizeof(expert_options) / sizeof(expert_options[0])) * 25 + 8);
+	WMResizeWidget(f, 495, wlengthof(expert_options) * 25 + 8);
 	WMSetFrameRelief(f, WRFlat);
 
 	udb = WMGetStandardUserDefaults();
-	for (i = 0; i < sizeof(expert_options) / sizeof(expert_options[0]); i++) {
+	for (i = 0; i < wlengthof(expert_options); i++) {
 		panel->swi[i] = WMCreateSwitchButton(f);
 		WMResizeWidget(panel->swi[i], FRAME_WIDTH - 40, 25);
 		WMMoveWidget(panel->swi[i], 5, 5 + i * 25);
@@ -152,7 +152,7 @@ static void storeDefaults(_Panel * panel)
 	WMUserDefaults *udb = WMGetStandardUserDefaults();
 	int i;
 
-	for (i = 0; i < sizeof(expert_options) / sizeof(expert_options[0]); i++) {
+	for (i = 0; i < wlengthof(expert_options); i++) {
 		switch (expert_options[i].class) {
 		case OPTION_WMAKER:
 			SetBoolForKey(WMGetButtonSelected(panel->swi[i]), expert_options[i].op_name);

@@ -509,7 +509,7 @@ static void createPanel(Panel * p)
 	WMSetListUserDrawProc(panel->actLs, paintItem);
 	WMHangData(panel->actLs, panel);
 
-	for (i = 0; i < sizeof(keyOptions)/sizeof(keyOptions[0]); i++) {
+	for (i = 0; i < wlengthof(keyOptions); i++) {
 		WMAddListItem(panel->actLs, _(keyOptions[i].title));
 	}
 	WMSetListAction(panel->actLs, listClick, panel);
