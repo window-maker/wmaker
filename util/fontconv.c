@@ -108,7 +108,7 @@ static char *mapWeightToName(str * weight)
 	if (weight->len == 0)
 		return "";
 
-	for (i = 0; i < sizeof(normalNames) / sizeof(normalNames[0]); i++) {
+	for (i = 0; i < wlengthof(normalNames); i++) {
 		if (strlen(normalNames[i]) == weight->len && strncmp(normalNames[i], weight->str, weight->len)) {
 			return "";
 		}
