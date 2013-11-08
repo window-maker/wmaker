@@ -596,7 +596,7 @@ static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists)
 		parser->rd++;
 
 	/* Add this condition to the stack of conditions */
-	if (parser->cond.depth >= sizeof(parser->cond.stack) / sizeof(parser->cond.stack[0])) {
+	if (parser->cond.depth >= wlengthof(parser->cond.stack)) {
 		WMenuParserError(parser, _("too many nested #if sequences") );
 		return;
 	}

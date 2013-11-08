@@ -190,7 +190,7 @@ void menu_parser_define_macro(WMenuParser parser)
 			}
 			if (*parser->rd == ')') break;
 
-			if (macro->arg_count >= sizeof(arg_name) / sizeof(arg_name[0])) {
+			if (macro->arg_count >= wlengthof(arg_name)) {
 				WMenuParserError(parser, _("too many parameters for macro \"%s\" definition"), macro->name);
 				wfree(macro);
 				*parser->rd = '\0'; // fake end-of-line to avoid warnings from remaining line content

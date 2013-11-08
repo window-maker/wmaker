@@ -550,7 +550,7 @@ WMScreen *WMCreateScreenWithRContext(Display * display, int screen, RContext * c
 		"_NET_WM_ICON_NAME",
 		"_NET_WM_ICON",
 	};
-	Atom atoms[sizeof(atomNames) / sizeof(atomNames[0])];
+	Atom atoms[wlengthof(atomNames)];
 	int i;
 
 	if (!initialized) {
@@ -801,9 +801,9 @@ WMScreen *WMCreateScreenWithRContext(Display * display, int screen, RContext * c
 	}
 
 #ifdef HAVE_XINTERNATOMS
-	XInternAtoms(display, atomNames, sizeof(atomNames) / sizeof(atomNames[0]), False, atoms);
+	XInternAtoms(display, atomNames, wlengthof(atomNames), False, atoms);
 #else
-	for (i = 0; i < sizeof(atomNames) / sizeof(atomNames[0]); i++) {
+	for (i = 0; i < wlengthof(atomNames); i++) {
 		atoms[i] = XInternAtom(display, atomNames[i], False);
 	}
 #endif
