@@ -94,8 +94,15 @@ int wWorkspaceNew(WScreen *scr)
 		wspace->clip = NULL;
 
 		if (!wspace->name) {
-			wspace->name = wmalloc(strlen(_("Workspace %i")) + 8);
-			sprintf(wspace->name, _("Workspace %i"), w_global.workspace.count);
+			static const char *new_name = NULL;
+			static size_t name_length;
+
+			if (new_name == NULL) {
+				new_name = _("Workspace %i");
+				name_length = strlen(new_name) + 8;
+			}
+			wspace->name = wmalloc(name_length);
+			snprintf(wspace->name, name_length, new_name, w_global.workspace.count);
 		}
 
 		if (!wPreferences.flags.noclip)
