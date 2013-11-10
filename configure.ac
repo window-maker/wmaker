@@ -190,18 +190,18 @@ AC_ARG_WITH(incs-from, AS_HELP_STRING([--with-incs-from], [pass compiler flags t
 
 dnl Boehm GC
 dnl ========
-with_boehm_gc=no
 AC_ARG_ENABLE([boehm-gc],
     [AS_HELP_STRING([--enable-boehm-gc], [use Boehm GC instead of the default libc malloc() [default=no]])],
-    [with_boehm_gc=$enableval])
-
+    [AS_CASE(["$enableval"],
+        [yes], [with_boehm_gc=yes],
+        [no],  [with_boehm_gc=no],
+        [AC_MSG_ERROR([bad value $enableval for --enable-boehm-gc])] )],
+    [with_boehm_gc=no])
 AS_IF([test "x$with_boehm_gc" = "xyes"],
     AC_SEARCH_LIBS([GC_malloc], [gc],
         [AC_DEFINE(USE_BOEHM_GC, 1, [Define if Boehm GC is to be used])],
-        [AC_MSG_FAILURE([--enable-boehm-gc specified but test for libgc failed])],
-        []
-    )
-)
+        [AC_MSG_FAILURE([--enable-boehm-gc specified but test for libgc failed])]))
+
 
 dnl LCOV
 dnl ====
@@ -212,13 +212,11 @@ AC_ARG_ENABLE([lcov],
 
 AS_IF([test "x$enable_lcov" != "xno"],
     [AX_CFLAGS_GCC_OPTION(-fprofile-arcs -ftest-coverage)
-    if test "x$enable_lcov" = "xyes"; then
-        lcov_output_directory="coverage-report"
-    else
-        lcov_output_directory="${enable_lcov}/coverage-report"
-    fi
-    AC_SUBST(lcov_output_directory)]
-)
+    AS_IF([test "x$enable_lcov" = "xyes"],
+        [lcov_output_directory="coverage-report"],
+        [lcov_output_directory="${enable_lcov}/coverage-report"])
+    AC_SUBST(lcov_output_directory)])
+
 AM_CONDITIONAL([USE_LCOV], [test "x$enable_lcov" != "xno"])
 
 dnl
