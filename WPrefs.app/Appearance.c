@@ -325,19 +325,22 @@ static char *textureOptions[] = {
 #define CLIP_COL	(1<<10)
 #define CCLIP_COL	(1<<11)
 
-static char *colorOptions[] = {
-	"FTitleColor", "white",
-	"UTitleColor", "black",
-	"PTitleColor", "white",
-	"MenuTitleColor", "white",
-	"MenuTextColor", "black",
-	"MenuDisabledColor", "#616161",
-	"HighlightColor", "white",
-	"HighlightTextColor", "black",
-	"IconTitleColor", "white",
-	"IconTitleBack", "black",
-	"ClipTitleColor", "black",
-	"CClipTitleColor", "#454045"
+static const struct {
+	const char *key;
+	const char *default_value;
+} colorOptions[] = {
+	{ "FTitleColor", "white" },
+	{ "UTitleColor", "black" },
+	{ "PTitleColor", "white" },
+	{ "MenuTitleColor", "white" },
+	{ "MenuTextColor", "black" },
+	{ "MenuDisabledColor", "#616161" },
+	{ "HighlightColor", "white" },
+	{ "HighlightTextColor", "black" },
+	{ "IconTitleColor", "white" },
+	{ "IconTitleBack", "black" },
+	{ "ClipTitleColor", "black" },
+	{ "CClipTitleColor", "#454045" }
 };
 
 static WMRect previewPositions[] = {
@@ -1922,7 +1925,7 @@ static void setupTextureFor(WMList * list, const char *key, char *defValue, cons
 static void showData(_Panel * panel)
 {
 	int i;
-	char *str;
+	const char *str;
 
 	str = GetStringForKey("MenuStyle");
 	if (str && strcasecmp(str, "flat") == 0) {
@@ -1942,12 +1945,12 @@ static void showData(_Panel * panel)
 		panel->titleAlignment = WACenter;
 	}
 
-	for (i = 0; i < sizeof(colorOptions) / (2 * sizeof(char *)); i++) {
+	for (i = 0; i < wlengthof(colorOptions); i++) {
 		WMColor *color;
 
-		str = GetStringForKey(colorOptions[i * 2]);
+		str = GetStringForKey(colorOptions[i].key);
 		if (!str)
-			str = colorOptions[i * 2 + 1];
+			str = colorOptions[i].default_value;
 
 		if (!(color = WMCreateNamedColor(WMWidgetScreen(panel->box), str, False))) {
 			color = WMCreateNamedColor(WMWidgetScreen(panel->box), "#000000", False);
@@ -1986,7 +1989,7 @@ static void storeData(_Panel * panel)
 		str = WMGetColorRGBDescription(panel->colors[i]);
 
 		if (str) {
-			SetStringForKey(str, colorOptions[i * 2]);
+			SetStringForKey(str, colorOptions[i].key);
 			wfree(str);
 		}
 	}
