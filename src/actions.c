@@ -84,7 +84,14 @@ static int compareTimes(Time t1, Time t2)
 #ifdef ANIMATIONS
 static void shade_animate(WWindow *wwin, Bool what);
 #else
-static void shade_animate(WWindow *wwin, Bool what) { }
+static inline void shade_animate(WWindow *wwin, Bool what) {
+	/*
+	 * This function is empty on purpose, so tell the compiler
+	 * to not warn about parameters being not used
+	 */
+	(void) wwin;
+	(void) what;
+}
 #endif
 
 /*
