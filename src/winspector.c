@@ -993,26 +993,20 @@ static void textEditedObserver(void *observerData, WMNotification *notification)
 static void selectSpecification(WMWidget *bPtr, void *data)
 {
 	InspectorPanel *panel = (InspectorPanel *) data;
-	char *str;
+	char str[256];
 	WWindow *wwin = panel->inspected;
-	int len;
 
 	if (bPtr == panel->defaultRb && (wwin->wm_instance || wwin->wm_class))
 		WMSetButtonEnabled(panel->applyBtn, False);
 	else
 		WMSetButtonEnabled(panel->applyBtn, True);
 
-	len = 16 + strlen(wwin->wm_instance ? wwin->wm_instance : "?")
-	    + strlen(wwin->wm_class ? wwin->wm_class : "?");
-
-	str = wmalloc(len);
-
-	snprintf(str, len, _("Inspecting  %s.%s"),
-		 wwin->wm_instance ? wwin->wm_instance : "?", wwin->wm_class ? wwin->wm_class : "?");
+	snprintf(str, sizeof(str),
+	         _("Inspecting  %s.%s"),
+	         wwin->wm_instance ? wwin->wm_instance : "?",
+	         wwin->wm_class ? wwin->wm_class : "?");
 
 	wFrameWindowChangeTitle(panel->frame->frame, str);
-
-	wfree(str);
 }
 
 static void selectWindow(WMWidget *bPtr, void *data)
