@@ -693,32 +693,35 @@ static void normalizePath(char *s)
 static void deleteFile(WMWidget *widget, void *p_panel)
 {
 	WMFilePanel *panel = p_panel;
-	char *file, *buffer;
+	char *file;
+	char buffer[512];
 	struct stat filestat;
 	WMScreen *scr = WMWidgetScreen(panel->win);
-#define __msgbufsize__ 512
 
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) widget;
 
-	buffer = wmalloc(__msgbufsize__);
 	file = getCurrentFileName(panel);
 	normalizePath(file);
 
 	if (stat(file, &filestat) == -1) {
-		snprintf(buffer, __msgbufsize__, _("Can not find %s: %s"), file, strerror(errno));
+		snprintf(buffer, sizeof(buffer),
+		         _("Can not find %s: %s"),
+		         file, strerror(errno));
 		showError(scr, panel->win, buffer, NULL);
 		goto out;
 	}
 
-	snprintf(buffer, __msgbufsize__, _("Delete %s %s?"),
+	snprintf(buffer, sizeof(buffer), _("Delete %s %s?"),
 		S_ISDIR(filestat.st_mode) ? _("directory") : _("file"), file);
 
 	if (!WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
 			     _("Warning"), buffer, _("OK"), _("Cancel"), NULL)) {
 
 		if (remove(file) == -1) {
-			snprintf(buffer, __msgbufsize__, _("Removing %s failed: %s"), file, strerror(errno));
+			snprintf(buffer, sizeof(buffer),
+			         _("Removing %s failed: %s"),
+			         file, strerror(errno));
 			showError(scr, panel->win, buffer, NULL);
 		} else {
 			char *s = strrchr(file, '/');
@@ -729,11 +732,8 @@ static void deleteFile(WMWidget *widget, void *p_panel)
 
 	}
 out:
-	if (buffer)
-		wfree(buffer);
 	if (file)
 		wfree(file);
-#undef __msgbufsize__
 }
 
 static void goUnmount(WMWidget *widget, void *p_panel)
