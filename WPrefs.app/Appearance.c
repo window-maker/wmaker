@@ -292,14 +292,18 @@ static char *sampleColors[] = {
 	"black"
 };
 
-static char *textureOptions[] = {
-	"FTitleBack", "(solid, black)", "[Focused]",
-	"UTitleBack", "(solid, gray)", "[Unfocused]",
-	"PTitleBack", "(solid, \"#616161\")", "[Owner of Focused]",
-	"ResizebarBack", "(solid, gray)", "[Resizebar]",
-	"MenuTitleBack", "(solid, black)", "[Menu Title]",
-	"MenuTextBack", "(solid, gray)", "[Menu Item]",
-	"IconBack", "(solid, gray)", "[Icon]"
+static const struct {
+	const char *key;
+	const char *default_value;
+	const char *label;
+} textureOptions[] = {
+	{ "FTitleBack", "(solid, black)", "[Focused]" },
+	{ "UTitleBack", "(solid, gray)", "[Unfocused]" },
+	{ "PTitleBack", "(solid, \"#616161\")", "[Owner of Focused]" },
+	{ "ResizebarBack", "(solid, gray)", "[Resizebar]" },
+	{ "MenuTitleBack", "(solid, black)", "[Menu Title]" },
+	{ "MenuTextBack", "(solid, gray)", "[Menu Item]" },
+	{ "IconBack", "(solid, gray)", "[Icon]" }
 };
 
 #define RESIZEBAR_BEVEL	-1
@@ -1895,7 +1899,7 @@ static void createPanel(Panel * p)
 	panel->texturePanel = CreateTexturePanel(panel->parent);
 }
 
-static void setupTextureFor(WMList * list, const char *key, char *defValue, const char *title, int index)
+static void setupTextureFor(WMList *list, const char *key, const char *defValue, const char *title, int index)
 {
 	WMListItem *item;
 	TextureListItem *titem;
@@ -1960,9 +1964,9 @@ static void showData(_Panel * panel)
 	}
 	changeColorPage(panel->colP, panel);
 
-	for (i = 0; i < sizeof(textureOptions) / (3 * sizeof(char *)); i++) {
-		setupTextureFor(panel->texLs, textureOptions[i * 3],
-				textureOptions[i * 3 + 1], textureOptions[i * 3 + 2], i);
+	for (i = 0; i < wlengthof(textureOptions); i++) {
+		setupTextureFor(panel->texLs, textureOptions[i].key,
+				textureOptions[i].default_value, textureOptions[i].label, i);
 		panel->textureIndex[i] = i;
 	}
 	updatePreviewBox(panel, EVERYTHING);
@@ -1977,10 +1981,10 @@ static void storeData(_Panel * panel)
 	WMListItem *item;
 	int i;
 
-	for (i = 0; i < sizeof(textureOptions) / (sizeof(char *) * 3); i++) {
+	for (i = 0; i < wlengthof(textureOptions); i++) {
 		item = WMGetListItem(panel->texLs, panel->textureIndex[i]);
 		titem = (TextureListItem *) item->clientData;
-		SetObjectForKey(titem->prop, textureOptions[i * 3]);
+		SetObjectForKey(titem->prop, textureOptions[i].key);
 	}
 
 	for (i = 0; i < 8; i++) {
