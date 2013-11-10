@@ -297,13 +297,13 @@ static const struct {
 	const char *default_value;
 	const char *label;
 } textureOptions[] = {
-	{ "FTitleBack", "(solid, black)", "[Focused]" },
-	{ "UTitleBack", "(solid, gray)", "[Unfocused]" },
-	{ "PTitleBack", "(solid, \"#616161\")", "[Owner of Focused]" },
-	{ "ResizebarBack", "(solid, gray)", "[Resizebar]" },
-	{ "MenuTitleBack", "(solid, black)", "[Menu Title]" },
-	{ "MenuTextBack", "(solid, gray)", "[Menu Item]" },
-	{ "IconBack", "(solid, gray)", "[Icon]" }
+	{ "FTitleBack", "(solid, black)", N_("[Focused]") },
+	{ "UTitleBack", "(solid, gray)", N_("[Unfocused]") },
+	{ "PTitleBack", "(solid, \"#616161\")", N_("[Owner of Focused]") },
+	{ "ResizebarBack", "(solid, gray)", N_("[Resizebar]") },
+	{ "MenuTitleBack", "(solid, black)", N_("[Menu Title]") },
+	{ "MenuTextBack", "(solid, gray)", N_("[Menu Item]") },
+	{ "IconBack", "(solid, gray)", N_("[Icon]") }
 };
 
 #define RESIZEBAR_BEVEL	-1
@@ -1966,7 +1966,7 @@ static void showData(_Panel * panel)
 
 	for (i = 0; i < wlengthof(textureOptions); i++) {
 		setupTextureFor(panel->texLs, textureOptions[i].key,
-				textureOptions[i].default_value, textureOptions[i].label, i);
+		                textureOptions[i].default_value, _(textureOptions[i].label), i);
 		panel->textureIndex[i] = i;
 	}
 	updatePreviewBox(panel, EVERYTHING);
