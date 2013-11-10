@@ -73,19 +73,22 @@ enum
 	WO_ENTRIES
 };
 
-enum
-{
-	MAXC_V,
-	MAXC_H,
-	MAXC_LH,
-	MAXC_RH,
-	MAXC_TH,
-	MAXC_BH,
-	MAXC_LTC,
-	MAXC_RTC,
-	MAXC_LBC,
-	MAXC_RBC,
-	MAXC_MAXIMUS
+static const struct {
+	const char *label;
+	unsigned int shortcut_idx;
+	int maxim_direction;
+} menu_maximize_entries[] = {
+	{ N_("Maximize vertically"), WKBD_VMAXIMIZE, MAX_VERTICAL },
+	{ N_("Maximize horizontally"), WKBD_HMAXIMIZE, MAX_HORIZONTAL },
+	{ N_("Maximize left half"), WKBD_LHMAXIMIZE, MAX_VERTICAL | MAX_LEFTHALF },
+	{ N_("Maximize right half"), WKBD_RHMAXIMIZE, MAX_VERTICAL | MAX_RIGHTHALF },
+	{ N_("Maximize top half"), WKBD_THMAXIMIZE, MAX_HORIZONTAL | MAX_TOPHALF },
+	{ N_("Maximize bottom half"), WKBD_BHMAXIMIZE, MAX_HORIZONTAL | MAX_BOTTOMHALF },
+	{ N_("Maximize left top corner"), WKBD_LTCMAXIMIZE, MAX_LEFTHALF | MAX_TOPHALF },
+	{ N_("Maximize right top corner"), WKBD_RTCMAXIMIZE, MAX_RIGHTHALF | MAX_TOPHALF },
+	{ N_("Maximize left bottom corner"), WKBD_LBCMAXIMIZE, MAX_LEFTHALF | MAX_BOTTOMHALF },
+	{ N_("Maximize right bottom corner"), WKBD_RBCMAXIMIZE, MAX_RIGHTHALF | MAX_BOTTOMHALF },
+	{ N_("Maximus: tiled maximization"), WKBD_MAXIMUS, MAX_MAXIMUS }
 };
 
 static void updateOptionsMenu(WMenu * menu, WWindow * wwin);
@@ -122,55 +125,10 @@ static void execMaximizeCommand(WMenu * menu, WMenuEntry * entry)
 {
 	WWindow *wwin = (WWindow *) entry->clientdata;
 	
+	/* Parameter not used, but tell the compiler that it is ok */
 	(void) menu;
 
-
-	switch (entry->order) {
-	case MAXC_V:
-		handleMaximize(wwin, MAX_VERTICAL);
-		break;
-
-	case MAXC_H:
-		handleMaximize(wwin,MAX_HORIZONTAL);
-		break;
-
-	case MAXC_LH:
-		handleMaximize(wwin,MAX_VERTICAL | MAX_LEFTHALF);
-		break;
-
-	case MAXC_RH:
-		handleMaximize(wwin,MAX_VERTICAL | MAX_RIGHTHALF);
-		break;
-
-	case MAXC_TH:
-		handleMaximize(wwin,MAX_HORIZONTAL | MAX_TOPHALF);
-		break;
-
-	case MAXC_BH:
-		handleMaximize(wwin,MAX_HORIZONTAL | MAX_BOTTOMHALF);
-		break;
-
-	case MAXC_LTC:
-		handleMaximize(wwin,MAX_LEFTHALF | MAX_TOPHALF);
-		break;
-
-	case MAXC_RTC:
-		handleMaximize(wwin,MAX_RIGHTHALF | MAX_TOPHALF);
-		break;
-
-	case MAXC_LBC:
-		handleMaximize(wwin,MAX_LEFTHALF | MAX_BOTTOMHALF);
-		break;
-
-	case MAXC_RBC:
-		handleMaximize(wwin,MAX_RIGHTHALF | MAX_BOTTOMHALF);
-		break;
-
-	case MAXC_MAXIMUS:
-		handleMaximize(wwin,MAX_MAXIMUS);
-		break;
-
-	}
+	handleMaximize(wwin, menu_maximize_entries[entry->order].maxim_direction);
 }
 
 static void updateUnmaximizeShortcut(WMenuEntry * entry, int flags)
@@ -479,39 +437,12 @@ static void updateOptionsMenu(WMenu * menu, WWindow * wwin)
 static void updateMaximizeMenu(WMenu * menu, WWindow * wwin)
 {
 	WMenu *smenu = menu->cascades[menu->entries[MC_OTHERMAX]->cascade];
+	int i;
 
-	smenu->entries[MAXC_V]->clientdata = wwin;
-	smenu->entries[MAXC_V]->rtext = GetShortcutKey(wKeyBindings[WKBD_VMAXIMIZE]);
-
-	smenu->entries[MAXC_H]->clientdata = wwin;
-	smenu->entries[MAXC_H]->rtext = GetShortcutKey(wKeyBindings[WKBD_HMAXIMIZE]);
-
-	smenu->entries[MAXC_LH]->clientdata = wwin;
-	smenu->entries[MAXC_LH]->rtext = GetShortcutKey(wKeyBindings[WKBD_LHMAXIMIZE]);
-
-	smenu->entries[MAXC_RH]->clientdata = wwin;
-	smenu->entries[MAXC_RH]->rtext = GetShortcutKey(wKeyBindings[WKBD_RHMAXIMIZE]);
-
-	smenu->entries[MAXC_TH]->clientdata = wwin;
-	smenu->entries[MAXC_TH]->rtext = GetShortcutKey(wKeyBindings[WKBD_THMAXIMIZE]);
-
-	smenu->entries[MAXC_BH]->clientdata = wwin;
-	smenu->entries[MAXC_BH]->rtext = GetShortcutKey(wKeyBindings[WKBD_BHMAXIMIZE]);
-
-	smenu->entries[MAXC_LTC]->clientdata = wwin;
-	smenu->entries[MAXC_LTC]->rtext = GetShortcutKey(wKeyBindings[WKBD_LTCMAXIMIZE]);
-
-	smenu->entries[MAXC_RTC]->clientdata = wwin;
-	smenu->entries[MAXC_RTC]->rtext = GetShortcutKey(wKeyBindings[WKBD_RTCMAXIMIZE]);
-
-	smenu->entries[MAXC_LBC]->clientdata = wwin;
-	smenu->entries[MAXC_LBC]->rtext = GetShortcutKey(wKeyBindings[WKBD_LBCMAXIMIZE]);
-
-	smenu->entries[MAXC_RBC]->clientdata = wwin;
-	smenu->entries[MAXC_RBC]->rtext = GetShortcutKey(wKeyBindings[WKBD_RBCMAXIMIZE]);
-
-	smenu->entries[MAXC_MAXIMUS]->clientdata = wwin;
-	smenu->entries[MAXC_MAXIMUS]->rtext = GetShortcutKey(wKeyBindings[WKBD_MAXIMUS]);
+	for (i = 0; i < smenu->entry_no; i++) {
+		smenu->entries[i]->clientdata = wwin;
+		smenu->entries[i]->rtext = GetShortcutKey(wKeyBindings[menu_maximize_entries[i].shortcut_idx]);
+	}
 
 	smenu->flags.realized = 0;
 	wMenuRealize(smenu);
@@ -575,6 +506,7 @@ static WMenu *makeOptionsMenu(WScreen * scr)
 static WMenu *makeMaximizeMenu(WScreen * scr)
 {
 	WMenu *menu;
+	int i;
 
 	menu = wMenuCreate(scr, NULL, False);
 	if (!menu) {
@@ -582,17 +514,8 @@ static WMenu *makeMaximizeMenu(WScreen * scr)
 		return NULL;
 	}
 
-	(void) wMenuAddCallback(menu, _("Maximize vertically"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximize horizontally"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximize left half"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximize right half"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximize top half"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximize bottom half"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximize left top corner"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximize right top corner"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximize left bottom corner"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximize right bottom corner"), execMaximizeCommand, NULL);
-	(void) wMenuAddCallback(menu, _("Maximus: tiled maximization"), execMaximizeCommand, NULL);
+	for (i = 0; i < wlengthof(menu_maximize_entries); i++)
+		wMenuAddCallback(menu, _(menu_maximize_entries[i].label), execMaximizeCommand, NULL);
 
 	return menu;
 }
