@@ -93,16 +93,16 @@ static int closestListItem(WMList * list, const char *text, Bool exact)
 {
 	WMListItem *item;
 	WMArray *items = WMGetListItems(list);
-	int i, len = strlen(text);
+	int i, nb_item, len = strlen(text);
 
 	if (len == 0)
 		return -1;
 
-	for (i = 0; i < WMGetArrayItemCount(items); i++) {
+	nb_item = WMGetArrayItemCount(items);
+	for (i = 0; i < nb_item; i++) {
 		item = WMGetFromArray(items, i);
-		if (strlen(item->text) >= len &&
-		    ((exact && strcmp(item->text, text) == 0) ||
-		     (!exact && strncmp(item->text, text, len) == 0))) {
+		if ((exact && strcmp(item->text, text) == 0) ||
+			 (!exact && strncmp(item->text, text, len) == 0)) {
 			return i;
 		}
 	}
