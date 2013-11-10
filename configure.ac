@@ -125,6 +125,10 @@ AS_IF([test "x$debug" = "xyes"],
      dnl
      dnl Use of 'sizeof()' on inappropriate pointer types
      AX_CFLAGS_GCC_OPTION([-Wpointer-arith])
+     dnl
+     dnl Having more than 1 prototype for a function makes code updates
+     dnl more difficult, so try to avoid it
+     AX_CFLAGS_GCC_OPTION([-Wredundant-decls])
 ], [dnl
      dnl When debug not enabled, we try to avoid some non-necessary
      dnl messages from the compiler
