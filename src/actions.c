@@ -397,6 +397,17 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 			usableArea.x1 += offset;
 	}
 
+	/* check if icons are on the same side as dock, and adjust if not done already */
+	if (scr->dock && wPreferences.no_window_over_icons && !wPreferences.no_window_over_dock && (wPreferences.icon_yard & IY_VERT)) {
+		int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+
+		if (scr->dock->on_right_side && (wPreferences.icon_yard & IY_RIGHT))
+			usableArea.x2 -= offset;
+		/* can't use IY_LEFT in if, it's 0 ... */
+		if (!scr->dock->on_right_side && !(wPreferences.icon_yard & IY_RIGHT))
+			usableArea.x1 += offset;
+	}
+
 	/* Only save directions, not kbd or xinerama hints */
 	directions &= (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
 
