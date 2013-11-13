@@ -354,6 +354,7 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 	WArea usableArea, totalArea;
 	Bool has_border = 1;
 	int adj_size;
+	WScreen *scr = wwin->screen_ptr;
 
 	if (!IS_RESIZABLE(wwin))
 		return;
@@ -362,14 +363,14 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 		has_border = 0;
 
 	/* the size to adjust the geometry */
-	adj_size = wwin->screen_ptr->frame_border_width * 2 * has_border;
+	adj_size = scr->frame_border_width * 2 * has_border;
 
 	/* save old coordinates before we change the current values */
 	if (!wwin->flags.maximized)
 		save_old_geometry(wwin, SAVE_GEOMETRY_ALL);
 
-	totalArea.x2 = wwin->screen_ptr->scr_width;
-	totalArea.y2 = wwin->screen_ptr->scr_height;
+	totalArea.x2 = scr->scr_width;
+	totalArea.y2 = scr->scr_height;
 	totalArea.x1 = 0;
 	totalArea.y1 = 0;
 	usableArea = totalArea;
@@ -384,6 +385,16 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 			head = wGetHeadForPointerLocation(scr);
 
 		usableArea = wGetUsableAreaForHead(scr, head, &totalArea, True);
+	}
+
+	/* check if user wants dock covered */
+	if (scr->dock && (!scr->dock->lowered || wPreferences.no_window_over_dock)) {
+		int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+
+		if (scr->dock->on_right_side)
+			usableArea.x2 -= offset;
+		else
+			usableArea.x1 += offset;
 	}
 
 	/* Only save directions, not kbd or xinerama hints */

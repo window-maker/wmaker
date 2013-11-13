@@ -710,16 +710,6 @@ void wScreenUpdateUsableArea(WScreen * scr)
 		scr->totalUsableArea[i].x2 = rect.pos.x + rect.size.width;
 		scr->totalUsableArea[i].y2 = rect.pos.y + rect.size.height;
 
-		if (scr->dock && dock_head == i && (!scr->dock->lowered || wPreferences.no_window_over_dock)) {
-			int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
-
-			if (scr->dock->on_right_side) {
-				scr->totalUsableArea[i].x2 -= offset;
-			} else {
-				scr->totalUsableArea[i].x1 += offset;
-			}
-		}
-
 		if (wNETWMGetUsableArea(scr, i, &area)) {
 			scr->totalUsableArea[i].x1 = WMAX(scr->totalUsableArea[i].x1, area.x1);
 			scr->totalUsableArea[i].y1 = WMAX(scr->totalUsableArea[i].y1, area.y1);
