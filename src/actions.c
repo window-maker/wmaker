@@ -1740,7 +1740,19 @@ void wArrangeIcons(WScreen *scr, Bool arrangeAll)
 
 	for (head = 0; head < heads; ++head) {
 		WArea area = wGetUsableAreaForHead(scr, head, NULL, False);
-		WMRect rect = wmkrect(area.x1, area.y1, area.x2 - area.x1, area.y2 - area.y1);
+		WMRect rect;
+
+		if (scr->dock) {
+			int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+
+			if (scr->dock->on_right_side)
+				area.x2 -= offset;
+			else
+				area.x1 += offset;
+		}
+
+		rect = wmkrect(area.x1, area.y1, area.x2 - area.x1, area.y2 - area.y1);
+
 		vars[head].pi = vars[head].si = 0;
 		vars[head].sx1 = rect.pos.x;
 		vars[head].sy1 = rect.pos.y;
