@@ -74,6 +74,7 @@
 #include "actions.h"
 #include "keybind.h"
 #include "xmodifier.h"
+#include "misc.h"
 
 #include "framewin.h"
 
