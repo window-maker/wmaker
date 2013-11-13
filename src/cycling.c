@@ -197,6 +197,9 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 				if (wPreferences.strict_windoze_cycle)
 					break;
 
+			if (ev.xkey.keycode == leftKey || ev.xkey.keycode == rightKey)
+				break;
+
 			if (ev.xkey.keycode == XK_Return)
 				break;
 
