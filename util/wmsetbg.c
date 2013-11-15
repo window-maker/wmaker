@@ -1125,12 +1125,6 @@ static char *getFullPixmapPath(const char *file)
 	return wstrdup(file);
 }
 
-void wAbort(void)
-{
-	wfatal("aborting");
-	exit(1);
-}
-
 static void print_help(void)
 {
 	printf("Usage: %s [options] [image]\n", __progname);
