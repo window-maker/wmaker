@@ -186,19 +186,16 @@ static Window makeDragIcon(WMScreen * scr, WMPixmap * pixmap)
 	WMSize size;
 	unsigned long flags;
 	XSetWindowAttributes attribs;
-	Pixmap pix, mask;
 
 	if (!pixmap) {
 		pixmap = scr->defaultObjectIcon;
 	}
 
 	size = WMGetPixmapSize(pixmap);
-	pix = pixmap->pixmap;
-	mask = pixmap->mask;
 
 	flags = CWSaveUnder | CWBackPixmap | CWOverrideRedirect | CWColormap;
 	attribs.save_under = True;
-	attribs.background_pixmap = pix;
+	attribs.background_pixmap = pixmap->pixmap;
 	attribs.override_redirect = True;
 	attribs.colormap = scr->colormap;
 
@@ -206,9 +203,8 @@ static Window makeDragIcon(WMScreen * scr, WMPixmap * pixmap)
 			       size.height, 0, scr->depth, InputOutput, scr->visual, flags, &attribs);
 
 #ifdef SHAPE
-
-	if (mask) {
-		XShapeCombineMask(scr->display, window, ShapeBounding, 0, 0, mask, ShapeSet);
+	if (pixmap->mask) {
+		XShapeCombineMask(scr->display, window, ShapeBounding, 0, 0, pixmap->mask, ShapeSet);
 	}
 #endif
 
