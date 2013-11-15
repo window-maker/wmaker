@@ -371,7 +371,8 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	WMDrawString(scr->wmscreen, text, scr->white, w_global.workspace.font_for_name, 2, 2, name, len);
 
 #ifdef SHAPE
-	XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask, ShapeSet);
+	if (w_global.xext.shape.supported)
+		XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask, ShapeSet);
 #endif
 	XSetWindowBackgroundPixmap(dpy, scr->workspace_name, text);
 	XClearWindow(dpy, scr->workspace_name);
