@@ -23,6 +23,8 @@
 #define _GNU_SOURCE		/* getopt_long */
 #endif
 
+#include "config.h"
+
 #include <sys/types.h>
 #include <sys/stat.h>
 
@@ -37,6 +39,10 @@
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
 
 #include <WINGs/WUtil.h>
 
@@ -138,7 +144,7 @@ WMPropList *PixmapPath = NULL;
 char *ThemePath = NULL;
 
 
-static void print_help(int print_usage, int exitval)
+static noreturn void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [-t] [-p] [-h] [-v] [file]\n", __progname);
 	if (print_usage) {

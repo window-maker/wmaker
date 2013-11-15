@@ -24,6 +24,8 @@
 /*
  * TODO: rewrite, too dirty
  */
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -37,14 +39,16 @@
 #include <sys/types.h>
 #include <ctype.h>
 
-#include "../config.h"
-
 #ifdef XINERAMA
 # ifdef SOLARIS_XINERAMA	/* sucks */
 #  include <X11/extensions/xinerama.h>
 # else
 #  include <X11/extensions/Xinerama.h>
 # endif
+#endif
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
 #endif
 
 #include "../src/wconfig.h"
@@ -880,7 +884,7 @@ static int readmsg(int fd, char *buffer, int size)
  * n is 4 bytes
  * size = 4 bytes for length of the message data
  */
-static void helperLoop(RContext * rc)
+static noreturn void helperLoop(RContext * rc)
 {
 	BackgroundTexture *textures[WORKSPACE_COUNT];
 	int maxTextures = 0;

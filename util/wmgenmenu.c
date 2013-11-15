@@ -4,6 +4,8 @@
 #define _GNU_SOURCE		/* getopt_long */
 #endif
 
+#include "config.h"
+
 #include <ctype.h>
 #include <getopt.h>
 #include <limits.h>
@@ -11,6 +13,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
 
 #include <WINGs/WUtil.h>
 
@@ -477,7 +483,7 @@ static void other_window_managers(void)
 		WMAddToPLArray(RMenu, L1Menu);
 }
 
-void print_help(int print_usage, int exitval)
+noreturn void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [-h] [-v]\n", __progname);
 	if (print_usage) {

@@ -23,6 +23,8 @@
 #define _GNU_SOURCE		/* getopt_long */
 #endif
 
+#include "config.h"
+
 #include <sys/stat.h>
 
 #include <getopt.h>
@@ -30,6 +32,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
 
 #include <WINGs/WUtil.h>
 
@@ -54,7 +60,7 @@ char *FontOptions[] = {
 extern char *__progname;
 
 
-static void print_help(int print_usage, int exitval)
+static noreturn void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [-h] [-v] [--keep-xlfd] <style_file>\n", __progname);
 	if (print_usage) {

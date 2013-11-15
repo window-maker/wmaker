@@ -23,6 +23,8 @@
 #define _GNU_SOURCE		/* getopt_long */
 #endif
 
+#include "config.h"
+
 #include <sys/stat.h>
 
 #include <getopt.h>
@@ -33,6 +35,10 @@
 #include <strings.h>
 #include <unistd.h>
 #include <X11/Xlib.h>
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
 
 #include <WINGs/WUtil.h>
 
@@ -350,7 +356,7 @@ static void hackStyle(WMPropList * style)
 	}
 }
 
-static void print_help(int print_usage, int exitval)
+static noreturn void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [OPTIONS] FILE\n", __progname);
 	if (print_usage) {

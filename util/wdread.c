@@ -27,6 +27,7 @@
 /*
  * WindowMaker defaults DB reader
  */
+#include "config.h"
 
 #include <getopt.h>
 #include <limits.h>
@@ -35,13 +36,17 @@
 #include <string.h>
 #include <unistd.h>
 
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
+
 #include <WINGs/WUtil.h>
 
 #include "../src/wconfig.h"
 
 extern char *__progname;
 
-static void print_help(int print_usage, int exitval)
+static noreturn void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [OPTIONS] <domain> <key>\n", __progname);
 	if (print_usage) {
