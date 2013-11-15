@@ -129,6 +129,12 @@ AS_IF([test "x$debug" = "xyes"],
      dnl Having more than 1 prototype for a function makes code updates
      dnl more difficult, so try to avoid it
      AX_CFLAGS_GCC_OPTION([-Wredundant-decls])
+     dnl
+     dnl Proper attributes helps the compiler to produce better code
+     WM_CFLAGS_CHECK_FIRST([format attribute suggest],
+         [-Wsuggest-attribute=format  dnl new gcc syntax
+          -Wmissing-format-attribute  dnl old gcc syntax, clang
+         ])
 ], [dnl
      dnl When debug not enabled, we try to avoid some non-necessary
      dnl messages from the compiler
