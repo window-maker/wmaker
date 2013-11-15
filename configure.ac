@@ -135,6 +135,10 @@ AS_IF([test "x$debug" = "xyes"],
          [-Wsuggest-attribute=format  dnl new gcc syntax
           -Wmissing-format-attribute  dnl old gcc syntax, clang
          ])
+     WM_CFLAGS_CHECK_FIRST([no-return attribute suggest],
+         [-Wsuggest-attribute=noreturn  dnl gcc syntax
+          -Wmissing-noreturn            dnl clang syntax
+         ])
 ], [dnl
      dnl When debug not enabled, we try to avoid some non-necessary
      dnl messages from the compiler
