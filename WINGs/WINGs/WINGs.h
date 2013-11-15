@@ -26,7 +26,7 @@
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20041030
+#define WINGS_H_VERSION  20131115
 
 
 #ifdef __cplusplus
@@ -36,6 +36,22 @@ extern "C" {
 }
 #endif
 
+
+#ifdef __STDC_VERSION__
+# if __STDC_VERSION__ >= 201112L
+/*
+ * Ideally, we would like to include the proper header to have 'noreturn' properly
+ * defined (that's what is done for the rest of the code)
+ * However, as we're a public API file we can't do that in a portable fashion, so
+ * we just stick to plain STD C11 keyword
+ */
+#  define _wings_noreturn _Noreturn
+# else
+#  define _wings_noreturn /**/
+# endif
+#else
+#define _wings_noreturn /**/
+#endif
 
 typedef unsigned long WMPixel;
 
@@ -648,7 +664,7 @@ WMScreen* WMCreateScreen(Display *display, int screen);
 
 WMScreen* WMCreateSimpleApplicationScreen(Display *display);
 
-void WMScreenMainLoop(WMScreen *scr);
+_wings_noreturn void WMScreenMainLoop(WMScreen *scr);
 
 void WMBreakModalLoop(WMScreen *scr);
 
@@ -1859,5 +1875,9 @@ void W_setconf_doubleClickDelay(int value);
 }
 #endif /* __cplusplus */
 
-#endif
 
+/* These definitions are not meant to be seen outside this file */
+#undef _wings_noreturn
+
+
+#endif
