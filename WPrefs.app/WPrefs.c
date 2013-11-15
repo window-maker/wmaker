@@ -19,8 +19,14 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include "config.h"
+
 #include "WPrefs.h"
 #include <assert.h>
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
 
 
 #define ICON_TITLE_FONT "sans serif:pixelsize=9"
@@ -70,7 +76,7 @@ static void savePanelData(Panel * panel);
 
 static void prepareForClose(void);
 
-static void quit(WMWidget *w, void *data)
+static noreturn void quit(WMWidget *w, void *data)
 {
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) w;

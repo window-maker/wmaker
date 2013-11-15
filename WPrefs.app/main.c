@@ -18,6 +18,8 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include "config.h"
+
 #include "WPrefs.h"
 
 #include <assert.h>
@@ -27,6 +29,10 @@
 
 #include <sys/wait.h>
 #include <unistd.h>
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
 
 char *NOptionValueChanged = "NOptionValueChanged";
 Bool xext_xkb_supported = False;
@@ -43,7 +49,7 @@ struct {
 static pid_t DeadChildren[MAX_DEATHS];
 static int DeadChildrenCount = 0;
 
-static void wAbort(Bool foo)
+static noreturn void wAbort(Bool foo)
 {
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) foo;
