@@ -28,9 +28,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#ifdef SHAPE
-#include <X11/extensions/shape.h>
-#endif
 #ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
 #endif				/* KEEP_XKB_LOCK_STATUS */

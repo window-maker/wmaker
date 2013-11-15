@@ -42,12 +42,6 @@
 
 /* BUG There's something fishy with shaped windows */
 /* Whithout shape extension the magnified image is completely broken -Dan */
-#if 0
-# ifdef SHAPE
-#  define SHAPE_WAS_DEFINED
-#  undef SHAPE
-# endif
-#endif
 
 #ifdef SHAPE
 # include <X11/extensions/shape.h>
@@ -3463,8 +3457,3 @@ static unsigned char getShift(unsigned char value)
 
 	return i;
 }
-
-#ifdef SHAPE_WAS_DEFINED
-#undef SHAPE_WAS_DEFINED
-#define SHAPE
-#endif
