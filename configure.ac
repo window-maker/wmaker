@@ -139,6 +139,11 @@ AS_IF([test "x$debug" = "xyes"],
          [-Wsuggest-attribute=noreturn  dnl gcc syntax
           -Wmissing-noreturn            dnl clang syntax
          ])
+     dnl
+     dnl The use of trampolines cause code that can crash on some
+     dnl secured OS, and in a more general way generate binary code
+     dnl that may not be optimal
+     AX_CFLAGS_GCC_OPTION([-Wtrampolines])
 ], [dnl
      dnl When debug not enabled, we try to avoid some non-necessary
      dnl messages from the compiler
