@@ -412,9 +412,6 @@ void StartUp(Bool defaultScreenOnly)
 	struct sigaction sig_action;
 	int i, j, max;
 	char **formats;
-#ifdef HAVE_XRANDR
-	int dummy;
-#endif
 	Atom atom[wlengthof(atomNames)];
 
 	/*
@@ -596,7 +593,7 @@ void StartUp(Bool defaultScreenOnly)
 #endif
 
 #ifdef HAVE_XRANDR
-	w_global.xext.randr.supported = XRRQueryExtension(dpy, &w_global.xext.randr.event_base, &dummy);
+	w_global.xext.randr.supported = XRRQueryExtension(dpy, &w_global.xext.randr.event_base, &j);
 #endif
 
 #ifdef KEEP_XKB_LOCK_STATUS
