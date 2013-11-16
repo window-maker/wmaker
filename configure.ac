@@ -67,7 +67,6 @@ dnl AC_CANONICAL_HOST -- already done by AC_PROG_LIBTOOL
 
 dnl Checks for programs.
 dnl ===================
-AC_ISC_POSIX
 AC_PROG_CC
 WM_PROG_CC_C11
 AC_PROG_LN_S
@@ -247,6 +246,7 @@ AC_FUNC_MEMCMP
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname select poll strcasecmp strncasecmp \
 	       setsid mallinfo mkstemp sysconf)
+AC_SEARCH_LIBS([strerror], [cposix])
 
 dnl Check for strlcat/strlcpy
 dnl =========================
