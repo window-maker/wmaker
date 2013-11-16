@@ -138,6 +138,13 @@ static void createPanel(Panel * p)
 			state = WMGetUDBoolForKey(udb, expert_options[i].op_name);
 			break;
 
+		default:
+#ifdef DEBUG
+			wwarning("export_options[%d].class = %d, this should not happen\n",
+			         i, expert_options[i].class);
+#endif
+			state = expert_options[i].def_state;
+			break;
 		}
 		WMSetButtonSelected(panel->swi[i], state);
 	}
