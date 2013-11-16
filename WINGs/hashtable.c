@@ -42,7 +42,7 @@ static inline unsigned hashString(const void *param)
 	unsigned ctr = 0;
 
 	while (*key) {
-		ret ^= *(char *)key++ << ctr;
+		ret ^= *key++ << ctr;
 		ctr = (ctr + 1) % sizeof(char *);
 	}
 
