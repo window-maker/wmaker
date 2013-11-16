@@ -1,25 +1,20 @@
-dnl
-dnl WM_CHECK_LIB(NAME, FUNCTION, EXTRALIBS)
-dnl
-AC_DEFUN([WM_CHECK_LIB],
-[
-LDFLAGS_old="$LDFLAGS"
-LDFLAGS="$LDFLAGS $lib_search_path"
-AC_CHECK_LIB([$1],[$2],yes=yes,no=no,[$3])
-LDFLAGS="$LDFLAGS_old"
-])
-
-dnl
-dnl WM_CHECK_HEADER(NAME)
-dnl
-AC_DEFUN([WM_CHECK_HEADER],
-[
-CPPFLAGS_old="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS $inc_search_path"
-AC_CHECK_HEADER([$1])
-CPPFLAGS="$CPPFLAGS_old"
-])
-
+# windowmaker.m4 - General macros for Window Maker autoconf
+#
+# Copyright (c) 2004 Dan Pascu
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 dnl
 dnl WM_CHECK_XFT_VERSION(MIN_VERSION, [ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]])
