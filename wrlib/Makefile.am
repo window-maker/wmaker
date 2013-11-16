@@ -60,9 +60,6 @@ else
 libwraster_la_SOURCES += load_xpm_normalized.c
 endif
 
-LTCOMPILE2=`echo $(LTCOMPILE) | sed -e s/-fomit-frame-pointer//`
-COMPILE2=`echo $(COMPILE) | sed -e s/-fomit-frame-pointer//`
-
 AM_CPPFLAGS = $(DFLAGS) @HEADER_SEARCH_PATH@
 
 libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ @LIBXMU@ -lm
