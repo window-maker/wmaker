@@ -638,16 +638,6 @@ if test "$shm" = yes; then
 fi
 
 
-dnl R6 Style Session Management Support
-dnl ===================================
-
-#
-#
-#AC_DEFINE(R6SM)
-#AC_SUBST(XSMPLIBS)
-#
-
-
 dnl ==============================================
 dnl         Graphic Format Libraries
 dnl ==============================================
