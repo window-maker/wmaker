@@ -16,6 +16,14 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+
+dnl Tell m4 to not allow stuff starting with "WM_" in the generated file
+dnl because this is likely a problem of a macro that was not expanded as
+dnl expected (with an exception for an already used variable name)
+m4_pattern_forbid([^_?WM_])
+m4_pattern_allow([^WM_OSDEP(_[A-Z]*)?$])
+
+
 dnl
 dnl WM_CHECK_XFT_VERSION(MIN_VERSION, [ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]])
 dnl
