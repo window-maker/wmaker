@@ -30,14 +30,14 @@
 
 #include <assert.h>
 
-#ifdef XSHM
+#ifdef USE_XSHM
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#endif				/* XSHM */
+#endif				/* USE_XSHM */
 
 #include "wraster.h"
 
-#ifdef XSHM
+#ifdef USE_XSHM
 
 static int shmError;
 
@@ -64,7 +64,7 @@ RXImage *RCreateXImage(RContext * context, int depth, unsigned width, unsigned h
 		RErrorCode = RERR_NOMEMORY;
 		return NULL;
 	}
-#ifndef XSHM
+#ifndef USE_XSHM
 	rximg->image = XCreateImage(context->dpy, visual, depth, ZPixmap, 0, NULL, width, height, 8, 0);
 	if (!rximg->image) {
 		free(rximg);
@@ -78,7 +78,7 @@ RXImage *RCreateXImage(RContext * context, int depth, unsigned width, unsigned h
 		RErrorCode = RERR_NOMEMORY;
 		return NULL;
 	}
-#else				/* XSHM */
+#else				/* USE_XSHM */
 	if (!context->attribs->use_shared_memory) {
  retry_without_shm:
 
@@ -145,16 +145,16 @@ RXImage *RCreateXImage(RContext * context, int depth, unsigned width, unsigned h
 			goto retry_without_shm;
 		}
 	}
-#endif				/* XSHM */
+#endif				/* USE_XSHM */
 
 	return rximg;
 }
 
 void RDestroyXImage(RContext * context, RXImage * rximage)
 {
-#ifndef XSHM
+#ifndef USE_XSHM
 	XDestroyImage(rximage->image);
-#else				/* XSHM */
+#else				/* USE_XSHM */
 	if (rximage->is_shared) {
 		XSync(context->dpy, False);
 		XShmDetach(context->dpy, &rximage->info);
@@ -186,7 +186,7 @@ RXImage *RGetXImage(RContext * context, Drawable d, int x, int y, unsigned width
 {
 	RXImage *ximg = NULL;
 
-#ifdef XSHM
+#ifdef USE_XSHM
 	if (context->attribs->use_shared_memory && 0) {
 		ximg = RCreateXImage(context, getDepth(context->dpy, d), width, height);
 
@@ -208,7 +208,7 @@ RXImage *RGetXImage(RContext * context, Drawable d, int x, int y, unsigned width
 		ximg->image = XGetImage(context->dpy, d, x, y, width, height, AllPlanes, ZPixmap);
 	}
 	return ximg;
-#else				/* !XSHM */
+#else				/* !USE_XSHM */
 	ximg = malloc(sizeof(RXImage));
 	if (!ximg) {
 		RErrorCode = RERR_NOMEMORY;
@@ -218,14 +218,14 @@ RXImage *RGetXImage(RContext * context, Drawable d, int x, int y, unsigned width
 	ximg->image = XGetImage(context->dpy, d, x, y, width, height, AllPlanes, ZPixmap);
 
 	return ximg;
-#endif				/* !XSHM */
+#endif				/* !USE_XSHM */
 }
 
 void
 RPutXImage(RContext * context, Drawable d, GC gc, RXImage * ximage, int src_x,
 	   int src_y, int dest_x, int dest_y, unsigned int width, unsigned int height)
 {
-#ifndef XSHM
+#ifndef USE_XSHM
 	XPutImage(context->dpy, d, gc, ximage->image, src_x, src_y, dest_x, dest_y, width, height);
 #else
 	if (ximage->is_shared) {
@@ -235,10 +235,10 @@ RPutXImage(RContext * context, Drawable d, GC gc, RXImage * ximage, int src_x,
 		XPutImage(context->dpy, d, gc, ximage->image, src_x, src_y, dest_x, dest_y, width, height);
 	}
 	XFlush(context->dpy);
-#endif				/* XSHM */
+#endif				/* USE_XSHM */
 }
 
-#ifdef XSHM
+#ifdef USE_XSHM
 Pixmap R_CreateXImageMappedPixmap(RContext * context, RXImage * rximage)
 {
 	Pixmap pix;
@@ -250,4 +250,4 @@ Pixmap R_CreateXImageMappedPixmap(RContext * context, RXImage * rximage)
 	return pix;
 }
 
-#endif				/* XSHM */
+#endif				/* USE_XSHM */

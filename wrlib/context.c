@@ -664,7 +664,7 @@ RContext *RCreateContext(Display * dpy, int screen_number, const RContextAttribu
 	}
 
 	/* check avaiability of MIT-SHM */
-#ifdef XSHM
+#ifdef USE_XSHM
 	if (!(context->attribs->flags & RC_UseSharedMemory)) {
 		context->attribs->flags |= RC_UseSharedMemory;
 		context->attribs->use_shared_memory = True;

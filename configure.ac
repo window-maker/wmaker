@@ -604,7 +604,7 @@ if test "$shm" = yes; then
 		if test "$added_xext" = no; then
 			XLIBS="-lXext $XLIBS"
 		fi
-                AC_DEFINE(XSHM, 1, [define if X's shared memory extension is available (set by configure)])
+                AC_DEFINE(USE_XSHM, 1, [define if X's shared memory extension is available (set by configure)])
 	fi
 fi
 

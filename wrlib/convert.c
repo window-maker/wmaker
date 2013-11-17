@@ -35,7 +35,7 @@
 
 #include "wraster.h"
 
-#ifdef XSHM
+#ifdef USE_XSHM
 extern Pixmap R_CreateXImageMappedPixmap(RContext * context, RXImage * ximage);
 #endif
 
@@ -819,7 +819,7 @@ static RXImage *image2Bitmap(RContext * ctx, RImage * image, int threshold)
 int RConvertImage(RContext * context, RImage * image, Pixmap * pixmap)
 {
 	RXImage *ximg = NULL;
-#ifdef XSHM
+#ifdef USE_XSHM
 	Pixmap tmp;
 #endif
 
@@ -852,7 +852,7 @@ int RConvertImage(RContext * context, RImage * image, Pixmap * pixmap)
 
 	*pixmap = XCreatePixmap(context->dpy, context->drawable, image->width, image->height, context->depth);
 
-#ifdef XSHM
+#ifdef USE_XSHM
 	if (context->flags.use_shared_pixmap && ximg->is_shared)
 		tmp = R_CreateXImageMappedPixmap(context, ximg);
 	else
@@ -873,9 +873,9 @@ int RConvertImage(RContext * context, RImage * image, Pixmap * pixmap)
 	} else {
 		RPutXImage(context, *pixmap, context->copy_gc, ximg, 0, 0, 0, 0, image->width, image->height);
 	}
-#else				/* !XSHM */
+#else				/* !USE_XSHM */
 	RPutXImage(context, *pixmap, context->copy_gc, ximg, 0, 0, 0, 0, image->width, image->height);
-#endif				/* !XSHM */
+#endif				/* !USE_XSHM */
 
 	RDestroyXImage(context, ximg);
 
