@@ -520,7 +520,7 @@ LIBXRANDR=
 if test "$xrandr" = yes; then
 	AC_CHECK_LIB(Xrandr, XRRQueryExtension, [LIBXRANDR=-lXrandr
 		added_xext=yes
-		AC_DEFINE(HAVE_XRANDR, 1, [define if you want support for XRandR (set by configure)])],
+		AC_DEFINE(USE_XRANDR, 1, [define if you want support for XRandR (set by configure)])],
 		xrandr=no, $XLFLAGS $XLIBS)
 fi
 AC_SUBST(LIBXRANDR)

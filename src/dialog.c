@@ -1292,7 +1292,7 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
 	strbuf = wstrappend(strbuf, "WMSPEC");
 
-#ifdef HAVE_XRANDR
+#ifdef USE_XRANDR
 	strbuf = wstrappend(strbuf, ", XRandR ");
 	if (w_global.xext.randr.supported)
 		strbuf = wstrappend(strbuf, _("(Supported)"));

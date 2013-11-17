@@ -600,7 +600,7 @@ extern struct wmaker_global_variables {
 		} xkb;
 #endif
 
-#ifdef HAVE_XRANDR
+#ifdef USE_XRANDR
 		struct {
 			Bool supported;
 			int event_base;

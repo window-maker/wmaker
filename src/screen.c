@@ -31,7 +31,7 @@
 #ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
 #endif				/* KEEP_XKB_LOCK_STATUS */
-#ifdef HAVE_XRANDR
+#ifdef USE_XRANDR
 #include <X11/extensions/Xrandr.h>
 #endif
 
@@ -540,7 +540,7 @@ WScreen *wScreenInit(int screen_number)
 	}
 #endif				/* KEEP_XKB_LOCK_STATUS */
 
-#ifdef HAVE_XRANDR
+#ifdef USE_XRANDR
 	if (w_global.xext.randr.supported)
 		XRRSelectInput(dpy, scr->root_win, RRScreenChangeNotifyMask);
 #endif
