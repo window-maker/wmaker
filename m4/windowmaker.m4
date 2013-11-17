@@ -102,3 +102,22 @@ $[]2], [  $[]3;])],
   AS_SET_STATUS([$wm_retval])
 }
 ])
+
+
+# WM_APPEND_ONCE
+# --------------
+#
+# Append flags to a variable, but only if not already present
+#
+# Usage: WM_APPEND_ONCE([libflags], [variable])
+#   $1 libflags: the list of flag to append
+#   $2 variable: the variable, if unset use LIBS
+AC_DEFUN([WM_APPEND_ONCE],
+[AS_VAR_PUSHDEF([VAR], [m4_ifnblank([$2], [$2], [LIBS])])dnl
+for wm_arg in $1 ; do
+  AS_IF([echo " $VAR " | grep " $wm_arg " 2>&1 >/dev/null],
+        [@%:@ Flag already present in VAR],
+        [VAR="$VAR $wm_arg"])
+done
+AS_VAR_POPDEF([VAR])dnl
+])

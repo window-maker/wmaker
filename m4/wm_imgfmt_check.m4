@@ -70,12 +70,12 @@ const char *filename = "dummy";],
         [unsupported="$unsupported GIF"
          enable_gif="no"],
         [supported_gfx="$supported_gfx GIF"
-         GFXLIBS="$GFXLIBS `echo "$wm_cv_imgfmt_gif" | sed -e 's, *version:.*,,' `"
+         WM_APPEND_ONCE([`echo "$wm_cv_imgfmt_gif" | sed -e 's, *version:.*,,' `], [GFXLIBS])
          AC_DEFINE_UNQUOTED([USE_GIF],
            [`echo "$wm_cv_imgfmt_gif" | sed -e 's,.*version:,,' `],
            [defined when valid GIF library with header was found])])
     ])
-    AM_CONDITIONAL([USE_GIF], [test "x$enable_gif" != "xno"])dnl
+AM_CONDITIONAL([USE_GIF], [test "x$enable_gif" != "xno"])dnl
 ]) dnl AC_DEFUN
 
 
@@ -128,7 +128,7 @@ AS_IF([test "x$enable_jpeg" = "xno"],
         [unsupported="$unsupported JPEG"
          enable_jpeg="no"],
         [supported_gfx="$supported_gfx JPEG"
-         GFXLIBS="$GFXLIBS $wm_cv_imgfmt_jpeg"
+         WM_APPEND_ONCE([$wm_cv_imgfmt_jpeg], [GFXLIBS])
          AC_DEFINE([USE_JPEG], [1],
            [defined when valid JPEG library with header was found])])
     ])
@@ -180,7 +180,7 @@ AS_IF([test "x$enable_png" = "xno"],
         [unsupported="$unsupported PNG"
          enable_png="no"],
         [supported_gfx="$supported_gfx PNG"
-         GFXLIBS="$GFXLIBS $wm_cv_imgfmt_png"
+         WM_APPEND_ONCE([$wm_cv_imgfmt_png], [GFXLIBS])
          AC_DEFINE([USE_PNG], [1],
            [defined when valid PNG library with header was found])])
     ])
@@ -240,7 +240,7 @@ AS_IF([test "x$enable_tiff" = "xno"],
         [unsupported="$unsupported TIFF"
          enable_tiff="no"],
         [supported_gfx="$supported_gfx TIFF"
-         GFXLIBS="$GFXLIBS $wm_cv_imgfmt_tiff"
+         WM_APPEND_ONCE([$wm_cv_imgfmt_tiff], [GFXLIBS])
          AC_DEFINE([USE_TIFF], [1],
            [defined when valid TIFF library with header was found])])
     ])
@@ -289,7 +289,7 @@ AS_IF([test "x$enable_xpm" = "xno"],
         [supported_gfx="$supported_gfx builtin-XPM"
          enable_xpm="no"],
         [supported_gfx="$supported_gfx XPM"
-         GFXLIBS="$GFXLIBS $wm_cv_imgfmt_xpm"
+         WM_APPEND_ONCE([$wm_cv_imgfmt_xpm], [GFXLIBS])
          AC_DEFINE([USE_XPM], [1],
            [defined when valid XPM library with header was found])])
     ])
