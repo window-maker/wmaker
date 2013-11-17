@@ -22,7 +22,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
 
@@ -166,7 +166,7 @@ void wClientConfigure(WWindow * wwin, XConfigureRequestEvent * xcre)
 		XConfigureWindow(dpy, xcre->window, xcre->value_mask, &xwc);
 		return;
 	}
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	if (w_global.xext.shape.supported) {
 		int junk;
 		unsigned int ujunk;

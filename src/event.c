@@ -35,7 +35,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 # include <X11/extensions/shape.h>
 #endif
 #ifdef XDND
@@ -103,7 +103,7 @@ static void handle_inotify_events(void);
 static void wdelete_death_handler(WMagicNumber id);
 
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 static void handleShapeNotify(XEvent *event);
 #endif
 
@@ -547,7 +547,7 @@ static void handleExtensions(XEvent * event)
 	XkbEvent *xkbevent;
 	xkbevent = (XkbEvent *) event;
 #endif				/*KEEP_XKB_LOCK_STATUS */
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	if (w_global.xext.shape.supported && event->type == (w_global.xext.shape.event_base + ShapeNotify)) {
 		handleShapeNotify(event);
 	}
@@ -1147,7 +1147,7 @@ static void handleLeaveNotify(XEvent * event)
 	}
 }
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 static void handleShapeNotify(XEvent * event)
 {
 	XShapeEvent *shev = (XShapeEvent *) event;
@@ -1183,7 +1183,7 @@ static void handleShapeNotify(XEvent * event)
 		wWindowSetShape(wwin);
 	}
 }
-#endif				/* SHAPE */
+#endif				/* USE_XSHAPE */
 
 #ifdef KEEP_XKB_LOCK_STATUS
 /* please help ]d if you know what to do */

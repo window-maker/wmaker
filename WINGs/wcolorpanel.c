@@ -43,7 +43,7 @@
 /* BUG There's something fishy with shaped windows */
 /* Whithout shape extension the magnified image is completely broken -Dan */
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 # include <X11/extensions/shape.h>
 #endif
 
@@ -1510,7 +1510,7 @@ static Pixmap magnifyCreatePixmap(WMColorPanel * panel)
 {
 	W_Screen *scr = WMWidgetScreen(panel->win);
 	int u, v;
-#ifndef SHAPE
+#ifndef USE_XSHAPE
 	Pixmap pixmap;
 #endif
 	unsigned long color;
@@ -1547,7 +1547,7 @@ static Pixmap magnifyCreatePixmap(WMColorPanel * panel)
 		}
 	}
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	return panel->magnifyGlass->magPix;
 #else
 	pixmap = XCreatePixmap(scr->display, W_DRAWABLE(scr), Cursor_mask_width, Cursor_mask_height, scr->depth);
@@ -1639,7 +1639,7 @@ static WMPoint magnifyInitialize(W_ColorPanel * panel)
 	panel->magnifyGlass->image = NULL;
 
 	/* Clipmask to make magnified view-contents circular */
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	XShapeCombineMask(scr->display, WMViewXID(panel->magnifyGlass->view),
 			  ShapeBounding, 0, 0, clip_mask, ShapeSet);
 #else
@@ -1658,7 +1658,7 @@ static WMPoint magnifyInitialize(W_ColorPanel * panel)
 	XClearWindow(scr->display, WMViewXID(panel->magnifyGlass->view));
 	XFlush(scr->display);
 
-#ifndef SHAPE
+#ifndef USE_XSHAPE
 	XFreePixmap(scr->display, pixmap);
 #endif
 
@@ -1778,7 +1778,7 @@ static void magnifyPutCursor(WMWidget * w, void *data)
 				XClearWindow(scr->display, WMViewXID(panel->magnifyGlass->view));
 				/* Synchronize the event queue, so the Expose is handled NOW */
 				XFlush(scr->display);
-#ifndef SHAPE
+#ifndef USE_XSHAPE
 				XFreePixmap(scr->display, pixmap);
 #endif
 			}

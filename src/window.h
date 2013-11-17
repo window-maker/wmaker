@@ -256,7 +256,7 @@ typedef struct WWindow {
 		unsigned int semi_focused:1;
 		/* window type flags */
 		unsigned int urgent:1;		/* if wm_hints says this is urgent */
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 		unsigned int shaped:1;
 #endif
 
@@ -330,7 +330,7 @@ typedef void* WMagicNumber;
 void wWindowDestroy(WWindow *wwin);
 WWindow *wWindowCreate(void);
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 void wWindowSetShape(WWindow *wwin);
 void wWindowClearShape(WWindow *wwin);
 #endif

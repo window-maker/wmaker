@@ -22,7 +22,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
 
@@ -370,7 +370,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 
 	WMDrawString(scr->wmscreen, text, scr->white, w_global.workspace.font_for_name, 2, 2, name, len);
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	if (w_global.xext.shape.supported)
 		XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask, ShapeSet);
 #endif

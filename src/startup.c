@@ -38,7 +38,7 @@
 #include <X11/cursorfont.h>
 #include <X11/Xproto.h>
 #include <X11/keysym.h>
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
 #ifdef KEEP_XKB_LOCK_STATUS
@@ -587,7 +587,7 @@ void StartUp(Bool defaultScreenOnly)
 
 	XSetErrorHandler((XErrorHandler) catchXError);
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	/* ignore j */
 	w_global.xext.shape.supported = XShapeQueryExtension(dpy, &w_global.xext.shape.event_base, &j);
 #endif

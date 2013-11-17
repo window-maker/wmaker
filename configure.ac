@@ -488,8 +488,8 @@ dnl ============================
 AC_ARG_ENABLE(modelock, AS_HELP_STRING([--enable-modelock], [XKB keyboard language status support]),
 		AC_DEFINE(XKB_MODELOCK, 1, [whether XKB language MODELOCK should be enabled]))
 
-dnl Shape support
-dnl =============
+dnl XShape support
+dnl ==============
 shape=yes
 AC_ARG_ENABLE(shape, AS_HELP_STRING([--disable-shape], [disable shaped window extension support]),
 		shape=$enableval, shape=yes)
@@ -498,7 +498,7 @@ added_xext=no
 if test "$shape" = yes; then
 	AC_CHECK_LIB(Xext, XShapeSelectInput, [XLIBS="-lXext $XLIBS"
 		added_xext=yes
-		AC_DEFINE(SHAPE, 1, [define if you want support for shaped windows (set by configure)])], 
+		AC_DEFINE(USE_XSHAPE, 1, [define if you want support for shaped windows (set by configure)])],
 		shape=no, $XLFLAGS $XLIBS)
 fi
 

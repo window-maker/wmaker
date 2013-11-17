@@ -2,7 +2,7 @@
 #include "wconfig.h"
 #include "WINGsP.h"
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
 
@@ -438,7 +438,7 @@ static void showText(Balloon * bPtr, int x, int y, int w, int h, const char *tex
 
 	XFreePixmap(dpy, pixmap);
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	XShapeCombineMask(dpy, bPtr->view->window, ShapeBounding, 0, 0, mask, ShapeSet);
 #endif
 	XFreePixmap(dpy, mask);

@@ -23,7 +23,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
 #ifdef KEEP_XKB_LOCK_STATUS
@@ -614,7 +614,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	XSaveContext(dpy, window, w_global.context.client_win, (XPointer) & wwin->client_descriptor);
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	if (w_global.xext.shape.supported) {
 		int junk;
 		unsigned int ujunk;
@@ -2039,7 +2039,7 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 		wwin->client.x += wwin->screen_ptr->frame_border_width;
 		wwin->client.y += wwin->screen_ptr->frame_border_width;
 	}
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	if (w_global.xext.shape.supported && wwin->flags.shaped && resize)
 		wWindowSetShape(wwin);
 #endif
@@ -2263,7 +2263,7 @@ void wWindowConfigureBorders(WWindow *wwin)
 		if (flags != 0)
 			wFrameWindowHideButton(wwin->frame, flags);
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 		if (w_global.xext.shape.supported && wwin->flags.shaped)
 			wWindowSetShape(wwin);
 #endif
@@ -2338,7 +2338,7 @@ static int getSavedState(Window window, WSavedState ** state)
 		return 0;
 }
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 void wWindowClearShape(WWindow * wwin)
 {
 	XShapeCombineMask(dpy, wwin->frame->core->window, ShapeBounding,
@@ -2422,7 +2422,7 @@ void wWindowSetShape(WWindow * wwin)
 			   ShapeBounding, (count > 0 ? ShapeUnion : ShapeSet));
 	XFlush(dpy);
 }
-#endif				/* SHAPE */
+#endif				/* USE_XSHAPE */
 
 /* ====================================================================== */
 

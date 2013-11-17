@@ -36,7 +36,7 @@
 #include "xinerama.h"
 
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
 
@@ -519,7 +519,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 
 		XSetWindowBackgroundPixmap(dpy, WMWidgetXID(panel->win), pixmap);
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 		if (mask && w_global.xext.shape.supported)
 			XShapeCombineMask(dpy, WMWidgetXID(panel->win), ShapeBounding, 0, 0, mask, ShapeSet);
 #endif

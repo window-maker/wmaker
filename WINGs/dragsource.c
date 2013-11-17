@@ -4,7 +4,7 @@
 
 #include <X11/Xatom.h>
 #include <X11/cursorfont.h>
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
 
@@ -202,7 +202,7 @@ static Window makeDragIcon(WMScreen * scr, WMPixmap * pixmap)
 	window = XCreateWindow(scr->display, scr->rootWin, 0, 0, size.width,
 			       size.height, 0, scr->depth, InputOutput, scr->visual, flags, &attribs);
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	if (pixmap->mask) {
 		XShapeCombineMask(scr->display, window, ShapeBounding, 0, 0, pixmap->mask, ShapeSet);
 	}

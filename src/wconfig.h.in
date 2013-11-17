@@ -363,7 +363,7 @@
 #endif
 
 /* some rules */
-#ifndef SHAPE
+#ifndef USE_XSHAPE
 #undef SHAPED_BALLOON
 #endif
 

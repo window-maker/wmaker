@@ -586,7 +586,7 @@ extern struct wmaker_global_variables {
 
 	/* X Extensions */
 	struct {
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 		struct {
 			Bool supported;
 			int event_base;
