@@ -611,7 +611,7 @@ if test "$xinerama" = yes; then
 	fi
 
 	if test "$xine" = 1; then
-	    AC_DEFINE(XINERAMA, 1, 
+	    AC_DEFINE(USE_XINERAMA, 1,
 		[define if you want support for the XINERAMA extension (set by configure)])
 	fi
 fi

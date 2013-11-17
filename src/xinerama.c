@@ -27,7 +27,7 @@
 #include "framewin.h"
 #include "placement.h"
 
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 # ifdef SOLARIS_XINERAMA	/* sucks */
 #  include <X11/extensions/xinerama.h>
 # else
@@ -40,7 +40,7 @@ void wInitXinerama(WScreen * scr)
 	scr->xine_info.primary_head = 0;
 	scr->xine_info.screens = NULL;
 	scr->xine_info.count = 0;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 # ifdef SOLARIS_XINERAMA
 	if (XineramaGetState(dpy, scr->screen)) {
 		WXineramaInfo *info = &scr->xine_info;
@@ -79,7 +79,7 @@ void wInitXinerama(WScreen * scr)
 		XFree(xine_screens);
 	}
 # endif				/* !SOLARIS_XINERAMA */
-#endif				/* XINERAMA */
+#endif				/* USE_XINERAMA */
 }
 
 int wGetRectPlacementInfo(WScreen * scr, WMRect rect, int *flags)

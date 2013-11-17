@@ -1304,7 +1304,7 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, ", MWM");
 #endif
 
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 	strbuf = wstrappend(strbuf, _("\n"));
 #ifdef SOLARIS_XINERAMA
 	strbuf = wstrappend(strbuf, _("Solaris "));

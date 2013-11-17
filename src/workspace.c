@@ -258,7 +258,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	char *name = w_global.workspace.array[workspace]->name;
 	int len = strlen(name);
 	int x, y;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 	int head;
 	WMRect rect;
 	int xx, yy;
@@ -286,7 +286,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	w = WMWidthOfString(w_global.workspace.font_for_name, name, len);
 	h = WMFontHeight(w_global.workspace.font_for_name);
 
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 	head = wGetHeadForPointerLocation(scr);
 	rect = wGetRectForHead(scr, head);
 	if (scr->xine_info.count) {
@@ -301,7 +301,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 
 	switch (wPreferences.workspace_name_display_position) {
 	case WD_TOP:
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 		px = xx;
 #else
 		px = (scr->scr_width - (w + 4)) / 2;
@@ -309,7 +309,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 		py = WORKSPACE_NAME_DISPLAY_PADDING;
 		break;
 	case WD_BOTTOM:
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 		px = xx;
 #else
 		px = (scr->scr_width - (w + 4)) / 2;
@@ -334,7 +334,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 		break;
 	case WD_CENTER:
 	default:
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 		px = xx;
 		py = yy;
 #else

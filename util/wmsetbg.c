@@ -39,7 +39,7 @@
 #include <sys/types.h>
 #include <ctype.h>
 
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 # ifdef SOLARIS_XINERAMA	/* sucks */
 #  include <X11/extensions/xinerama.h>
 # else
@@ -78,7 +78,7 @@ int scrX, scrY;
 WXineramaInfo xineInfo;
 
 Bool smooth = False;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 Bool xineStretch = False;
 #endif
 
@@ -104,7 +104,7 @@ static void initXinerama(void)
 {
 	xineInfo.screens = NULL;
 	xineInfo.count = 0;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 # ifdef SOLARIS_XINERAMA
 	if (XineramaGetState(dpy, scr)) {
 		XRectangle head[MAXFRAMEBUFFERS];
@@ -141,7 +141,7 @@ static void initXinerama(void)
 		XFree(xine_screens);
 	}
 # endif				/* !SOLARIS_XINERAMA */
-#endif				/* XINERAMA */
+#endif				/* USE_XINERAMA */
 }
 
 static RImage *loadImage(RContext * rc, const char *file)
@@ -552,7 +552,7 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 				texture->width = scrWidth;
 				texture->height = scrHeight;
 
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 				if (xineInfo.count && ! xineStretch) {
 					int i;
 					for (i = 0; i < xineInfo.count; ++i) {
@@ -564,9 +564,9 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 				} else {
 					applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
 				}
-#else				/* !XINERAMA */
+#else				/* !USE_XINERAMA */
 				applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
-#endif				/* !XINERAMA */
+#endif				/* !USE_XINERAMA */
 				RReleaseImage(image);
 			}
 			break;
@@ -1139,7 +1139,7 @@ static void print_help(void)
 	puts(" -d, --dither                     dither image");
 	puts(" -m, --match                      match  colors");
 	puts(" -S, --smooth                     smooth scaled image");
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 	puts(" -X, --xinerama                   stretch image across Xinerama heads");
 #endif
 	puts(" -b, --back-color <color>         background color");
@@ -1249,7 +1249,7 @@ int main(int argc, char **argv)
 			obey_user++;
 		} else if (strcmp(argv[i], "-S") == 0 || strcmp(argv[i], "--smooth") == 0) {
 			smooth = True;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 		} else if (strcmp(argv[i], "-X") == 0 || strcmp(argv[i], "--xinerama") == 0) {
 			xineStretch = True;
 #endif
