@@ -98,3 +98,27 @@ sed -e 's,^[[^%]]*% *,,' | sed -e 's, *%.*$,,' `" dnl
     ])
 AC_SUBST(LIBXINERAMA)dnl
 ])
+
+
+# WM_XEXT_CHECK_XRANDR
+# --------------------
+#
+# Check for the X RandR (Resize-and-Rotate) extension
+# The check depends on variable 'enable_xrandr' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, disable support
+#   auto - detect, disable if not found
+#
+# When found, append appropriate stuff in LIBXRANDR, and append info to
+# the variable 'supported_xext'
+# When not found, append info to variable 'unsupported'
+AC_DEFUN_ONCE([WM_XEXT_CHECK_XRANDR],
+[WM_LIB_CHECK([XRandR], [-lXrandr], [XRRQueryExtension], [$XLIBS],
+    [wm_save_CFLAGS="$CFLAGS"
+     AS_IF([wm_fn_lib_try_compile "X11/extensions/Xrandr.h" "Display *dpy;" "XRRQueryExtension(dpy, NULL, NULL)" ""],
+        [],
+        [AC_MSG_ERROR([found $CACHEVAR but cannot compile using XRandR header])])
+     CFLAGS="$wm_save_CFLAGS"],
+    [supported_xext], [LIBXRANDR], [], [-])dnl
+AC_SUBST([LIBXRANDR])dnl
+]) dnl AC_DEFUN

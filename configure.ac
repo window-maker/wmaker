@@ -511,19 +511,13 @@ WM_XEXT_CHECK_XINERAMA
 
 dnl XRandR support
 dnl ==============
-xrandr=no
-AC_ARG_ENABLE(xrandr, AS_HELP_STRING([--enable-xrandr], [enable XRandR window extension support (NOT recommended, buggy)]),
-		xrandr=$enableval, xrandr=no)
-added_xext=no
-
-LIBXRANDR=
-if test "$xrandr" = yes; then
-	AC_CHECK_LIB(Xrandr, XRRQueryExtension, [LIBXRANDR=-lXrandr
-		added_xext=yes
-		AC_DEFINE(USE_XRANDR, 1, [define if you want support for XRandR (set by configure)])],
-		xrandr=no, $XLFLAGS $XLIBS)
-fi
-AC_SUBST(LIBXRANDR)
+AC_ARG_ENABLE([xrandr],
+    [AS_HELP_STRING([--enable-xrandr], [enable XRandR extension support (NOT recommended, buggy)])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-xrandr]) ]) ],
+    [enable_xrandr=no])
+WM_XEXT_CHECK_XRANDR
 
 dnl
 dnl libWINGS uses math functions, check whether usage requires linking
@@ -830,7 +824,6 @@ echo "Supported X extensions:             :$supported_xext"
 echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
 echo "Antialiased text support in WINGs   : $xft"
-echo "XRandR extension support            : $xrandr"
 echo "Translated message files to install : $mof"
 dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then
