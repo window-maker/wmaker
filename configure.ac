@@ -499,6 +499,16 @@ AC_ARG_ENABLE([shape],
     [enable_shape=auto])
 WM_XEXT_CHECK_XSHAPE
 
+dnl MIT-SHM support
+dnl ===============
+AC_ARG_ENABLE([shm],
+    [AS_HELP_STRING([--disable-shm], [disable usage of MIT-SHM extension])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-shm]) ]) ],
+    [enable_shm=auto])
+WM_XEXT_CHECK_XSHM
+
 dnl XINERAMA support
 dnl ================
 AC_ARG_ENABLE([xinerama],
@@ -585,28 +595,6 @@ fi
 
 AC_SUBST(XFTFLAGS)
 AC_SUBST(XFTLIBS)
-
-
-dnl MIT-SHM support
-dnl ===============
-shm=yes
-AC_ARG_ENABLE(shm, AS_HELP_STRING([--disable-shm], [disable usage of MIT-SHM extension]),
-		shm=$enableval, shm=yes)
-
-if test "$shm" = yes; then
-	AC_CHECK_LIB(Xext, XShmAttach, ok=yes, ok=no, $XLFLAGS $XLIBS)
-
-	if test "$ok" = yes; then
-	AC_CHECK_FUNC(shmget, ok=yes, ok=no)
-	fi
-
-	if test "$ok" = yes; then
-		if test "$added_xext" = no; then
-			XLIBS="-lXext $XLIBS"
-		fi
-                AC_DEFINE(USE_XSHM, 1, [define if X's shared memory extension is available (set by configure)])
-	fi
-fi
 
 
 dnl ==============================================

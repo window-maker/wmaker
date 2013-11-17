@@ -39,6 +39,42 @@ AC_DEFUN_ONCE([WM_XEXT_CHECK_XSHAPE],
 ]) dnl AC_DEFUN
 
 
+# WM_XEXT_CHECK_XSHM
+# ------------------
+#
+# Check for the MIT-SHM extension for Shared Memory support
+# The check depends on variable 'enable_shm' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, disable support
+#   auto - detect, disable if not found
+#
+# When found, append appropriate stuff in XLIBS, and append info to
+# the variable 'supported_xext'
+# When not found, append info to variable 'unsupported'
+AC_DEFUN_ONCE([WM_XEXT_CHECK_XSHM],
+[WM_LIB_CHECK([XShm], [-lXext], [XShmAttach], [$XLIBS],
+    [wm_save_CFLAGS="$CFLAGS"
+     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([dnl
+@%:@include <X11/Xlib.h>
+@%:@include <X11/extensions/XShm.h>
+], [dnl
+  XShmSegmentInfo si;
+
+  XShmAttach(NULL, &si);])],
+        [],
+        [AC_MSG_ERROR([found $CACHEVAR but cannot compile using XShm header])])
+     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([dnl
+@%:@include <sys/ipc.h>
+@%:@include <sys/shm.h>
+], [dnl
+  shmget(IPC_PRIVATE, 1024, IPC_CREAT);])],
+        [],
+        [AC_MSG_ERROR([found $CACHEVAR but cannot compile using ipc/shm headers])])
+     CFLAGS="$wm_save_CFLAGS"],
+    [supported_xext], [XLIBS], [enable_shm], [-])dnl
+]) dnl AC_DEFUN
+
+
 # WM_XEXT_CHECK_XINERAMA
 # ----------------------
 #
