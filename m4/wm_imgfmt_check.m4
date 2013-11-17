@@ -29,7 +29,7 @@
 # the variable 'supported_gfx'
 # When not found, append info to variable 'unsupported'
 AC_DEFUN_ONCE([WM_IMGFMT_CHECK_GIF],
-[AC_REQUIRE([_WM_IMGFMT_CHECK_FUNCTS])
+[AC_REQUIRE([_WM_LIB_CHECK_FUNCTS])
 AS_IF([test "x$enable_gif" = "xno"],
     [unsupported="$unsupported GIF"],
     [AC_CACHE_CHECK([for GIF support library], [wm_cv_imgfmt_gif],
@@ -38,7 +38,7 @@ AS_IF([test "x$enable_gif" = "xno"],
          dnl
          dnl We check first if one of the known libraries is available
          for wm_arg in "-lgif" "-lungif" ; do
-           AS_IF([wm_fn_imgfmt_try_link "DGifOpenFileName" "$XLFLAGS $XLIBS $wm_arg"],
+           AS_IF([wm_fn_lib_try_link "DGifOpenFileName" "$XLFLAGS $XLIBS $wm_arg"],
              [wm_cv_imgfmt_gif="$wm_arg" ; break])
          done
          LIBS="$wm_save_LIBS"
@@ -48,10 +48,10 @@ AS_IF([test "x$enable_gif" = "xno"],
            [dnl
             dnl A library was found, now check for the appropriate header
             wm_save_CFLAGS="$CFLAGS"
-            AS_IF([wm_fn_imgfmt_try_compile "gif_lib.h" "return 0" ""],
+            AS_IF([wm_fn_lib_try_compile "gif_lib.h" "" "return 0" ""],
               [],
               [AC_MSG_ERROR([found $wm_cv_imgfmt_gif but could not find appropriate header - are you missing libgif-dev package?])])
-            AS_IF([wm_fn_imgfmt_try_compile "gif_lib.h" "DGifOpenFileName(filename)" ""],
+            AS_IF([wm_fn_lib_try_compile "gif_lib.h" 'const char *filename = "dummy";' "DGifOpenFileName(filename)" ""],
               [wm_cv_imgfmt_gif="$wm_cv_imgfmt_gif version:4"],
               [AC_COMPILE_IFELSE(
                 [AC_LANG_PROGRAM(
@@ -92,7 +92,7 @@ const char *filename = "dummy";],
 # the variable 'supported_gfx'
 # When not found, append info to variable 'unsupported'
 AC_DEFUN_ONCE([WM_IMGFMT_CHECK_JPEG],
-[AC_REQUIRE([_WM_IMGFMT_CHECK_FUNCTS])
+[AC_REQUIRE([_WM_LIB_CHECK_FUNCTS])
 AS_IF([test "x$enable_jpeg" = "xno"],
     [unsupported="$unsupported JPEG"],
     [AC_CACHE_CHECK([for JPEG support library], [wm_cv_imgfmt_jpeg],
@@ -100,7 +100,7 @@ AS_IF([test "x$enable_jpeg" = "xno"],
          wm_save_LIBS="$LIBS"
          dnl
          dnl We check first if one of the known libraries is available
-         AS_IF([wm_fn_imgfmt_try_link "jpeg_destroy_compress" "$XLFLAGS $XLIBS -ljpeg"],
+         AS_IF([wm_fn_lib_try_link "jpeg_destroy_compress" "$XLFLAGS $XLIBS -ljpeg"],
              [wm_cv_imgfmt_jpeg="-ljpeg"])
          LIBS="$wm_save_LIBS"
          AS_IF([test "x$enable_jpeg$wm_cv_imgfmt_jpeg" = "xyesno"],
@@ -149,7 +149,7 @@ AM_CONDITIONAL([USE_JPEG], [test "x$enable_jpeg" != "xno"])dnl
 # the variable 'supported_gfx'
 # When not found, append info to variable 'unsupported'
 AC_DEFUN_ONCE([WM_IMGFMT_CHECK_PNG],
-[AC_REQUIRE([_WM_IMGFMT_CHECK_FUNCTS])
+[AC_REQUIRE([_WM_LIB_CHECK_FUNCTS])
 AS_IF([test "x$enable_png" = "xno"],
     [unsupported="$unsupported PNG"],
     [AC_CACHE_CHECK([for PNG support library], [wm_cv_imgfmt_png],
@@ -158,7 +158,7 @@ AS_IF([test "x$enable_png" = "xno"],
          dnl We check first if one of the known libraries is available
          wm_save_LIBS="$LIBS"
          for wm_arg in "-lpng" "-lpng -lz" "-lpng -lz -lm" ; do
-           AS_IF([wm_fn_imgfmt_try_link "png_get_valid" "$XLFLAGS $XLIBS $wm_arg"],
+           AS_IF([wm_fn_lib_try_link "png_get_valid" "$XLFLAGS $XLIBS $wm_arg"],
              [wm_cv_imgfmt_png="$wm_arg" ; break])
          done
          LIBS="$wm_save_LIBS"
@@ -168,10 +168,10 @@ AS_IF([test "x$enable_png" = "xno"],
            [dnl
             dnl A library was found, now check for the appropriate header
             wm_save_CFLAGS="$CFLAGS"
-            AS_IF([wm_fn_imgfmt_try_compile "png.h" "return 0" ""],
+            AS_IF([wm_fn_lib_try_compile "png.h" "" "return 0" ""],
               [],
               [AC_MSG_ERROR([found $wm_cv_imgfmt_png but could not find appropriate header - are you missing libpng-dev package?])])
-            AS_IF([wm_fn_imgfmt_try_compile "png.h" "png_get_valid(NULL, NULL, PNG_INFO_tRNS)" ""],
+            AS_IF([wm_fn_lib_try_compile "png.h" "" "png_get_valid(NULL, NULL, PNG_INFO_tRNS)" ""],
               [],
               [AC_MSG_ERROR([found $wm_cv_imgfmt_png and header, but cannot compile - unsupported version?])])
             CFLAGS="$wm_save_CFLAGS"])
@@ -201,7 +201,7 @@ AM_CONDITIONAL([USE_PNG], [test "x$enable_png" != "xno"])dnl
 # the variable 'supported_gfx'
 # When not found, append info to variable 'unsupported'
 AC_DEFUN_ONCE([WM_IMGFMT_CHECK_TIFF],
-[AC_REQUIRE([_WM_IMGFMT_CHECK_FUNCTS])
+[AC_REQUIRE([_WM_LIB_CHECK_FUNCTS])
 AS_IF([test "x$enable_tiff" = "xno"],
     [unsupported="$unsupported TIFF"],
     [AC_CACHE_CHECK([for TIFF support library], [wm_cv_imgfmt_tiff],
@@ -218,7 +218,7 @@ AS_IF([test "x$enable_tiff" = "xno"],
              "-ltiff -ljpeg -ljbig -lz"  \
              dnl Probably for historical reasons?
              "-ltiff34" "-ltiff34 -ljpeg" "-ltiff34 -ljpeg -lm" ; do
-           AS_IF([wm_fn_imgfmt_try_link "TIFFGetVersion" "$XLFLAGS $XLIBS $wm_arg"],
+           AS_IF([wm_fn_lib_try_link "TIFFGetVersion" "$XLFLAGS $XLIBS $wm_arg"],
              [wm_cv_imgfmt_tiff="$wm_arg" ; break])
          done
          LIBS="$wm_save_LIBS"
@@ -228,10 +228,10 @@ AS_IF([test "x$enable_tiff" = "xno"],
            [dnl
             dnl A library was found, now check for the appropriate header
             wm_save_CFLAGS="$CFLAGS"
-            AS_IF([wm_fn_imgfmt_try_compile "tiffio.h" "return 0" ""],
+            AS_IF([wm_fn_lib_try_compile "tiffio.h" "" "return 0" ""],
               [],
               [AC_MSG_ERROR([found $wm_cv_imgfmt_tiff but could not find appropriate header - are you missing libtiff-dev package?])])
-            AS_IF([wm_fn_imgfmt_try_compile "tiffio.h" 'TIFFOpen(filename, "r")' ""],
+            AS_IF([wm_fn_lib_try_compile "tiffio.h" 'const char *filename = "dummy";' 'TIFFOpen(filename, "r")' ""],
               [],
               [AC_MSG_ERROR([found $wm_cv_imgfmt_tiff and header, but cannot compile - unsupported version?])])
             CFLAGS="$wm_save_CFLAGS"])
@@ -260,7 +260,7 @@ AM_CONDITIONAL([USE_TIFF], [test "x$enable_tiff" != "xno"])dnl
 # When found, append appropriate stuff in GFXLIBS, and append info to
 # the variable 'supported_gfx'
 AC_DEFUN_ONCE([WM_IMGFMT_CHECK_XPM],
-[AC_REQUIRE([_WM_IMGFMT_CHECK_FUNCTS])
+[AC_REQUIRE([_WM_LIB_CHECK_FUNCTS])
 AS_IF([test "x$enable_xpm" = "xno"],
     [supported_gfx="$supported_gfx builtin-XPM"],
     [AC_CACHE_CHECK([for XPM support library], [wm_cv_imgfmt_xpm],
@@ -268,7 +268,7 @@ AS_IF([test "x$enable_xpm" = "xno"],
          dnl
          dnl We check first if one of the known libraries is available
          wm_save_LIBS="$LIBS"
-         AS_IF([wm_fn_imgfmt_try_link "XpmCreatePixmapFromData" "$XLFLAGS $XLIBS -lXpm"],
+         AS_IF([wm_fn_lib_try_link "XpmCreatePixmapFromData" "$XLFLAGS $XLIBS -lXpm"],
            [wm_cv_imgfmt_xpm="-lXpm" ; break])
          LIBS="$wm_save_LIBS"
          AS_IF([test "x$enable_xpm$wm_cv_imgfmt_xpm" = "xyesno"],
@@ -277,10 +277,10 @@ AS_IF([test "x$enable_xpm" = "xno"],
            [dnl
             dnl A library was found, now check for the appropriate header
             wm_save_CFLAGS="$CFLAGS"
-            AS_IF([wm_fn_imgfmt_try_compile "X11/xpm.h" "return 0" "$XCFLAGS"],
+            AS_IF([wm_fn_lib_try_compile "X11/xpm.h" "" "return 0" "$XCFLAGS"],
               [],
               [AC_MSG_ERROR([found $wm_cv_imgfmt_xpm but could not find appropriate header - are you missing libXpm-dev package?])])
-            AS_IF([wm_fn_imgfmt_try_compile "X11/xpm.h" 'XpmReadFileToXpmImage((char *)filename, NULL, NULL)' "$XCFLAGS"],
+            AS_IF([wm_fn_lib_try_compile "X11/xpm.h" 'char *filename = "dummy";' 'XpmReadFileToXpmImage(filename, NULL, NULL)' "$XCFLAGS"],
               [],
               [AC_MSG_ERROR([found $wm_cv_imgfmt_xpm and header, but cannot compile - unsupported version?])])
             CFLAGS="$wm_save_CFLAGS"])
@@ -295,45 +295,3 @@ AS_IF([test "x$enable_xpm" = "xno"],
     ])
 AM_CONDITIONAL([USE_XPM], [test "x$enable_xpm" != "xno"])dnl
 ]) dnl AC_DEFUN
-
-
-# _WM_IMGFMT_CHECK_FUNCTS
-# -----------------------
-# (internal shell functions)
-#
-# Create 2 shell functions:
-#  wm_fn_imgfmt_try_link: try to link against library
-#  wm_fn_imgfmt_try_compile: try to compile against header
-#
-AC_DEFUN_ONCE([_WM_IMGFMT_CHECK_FUNCTS],
-[@%:@ wm_fn_imgfmt_try_link FUNCTION LFLAGS
-@%:@ -------------------------------------
-@%:@ Try linking aginst library in $LFLAGS using function named $FUNCTION
-@%:@ Assumes that LIBS have been saved in 'wm_save_LIBS' by caller
-wm_fn_imgfmt_try_link ()
-{
-  LIBS="$wm_save_LIBS $[]2"
-  AC_TRY_LINK_FUNC([$[]1],
-    [wm_retval=0],
-    [wm_retval=1])
-  AS_SET_STATUS([$wm_retval])
-}
-
-@%:@ wm_fn_imgfmt_try_compile HEADER FUNC_CALL CFLAGS
-@%:@ -----------------------------------------
-@%:@ Try to compile using header $HEADER and trying to call a function
-@%:@ using the $FUNC_CALL expression and using extra $CFLAGS in the
-@%:@ compiler's command line
-@%:@ Assumes that CFLAGS have been saved in 'wm_save_CFLAGS' by caller
-wm_fn_imgfmt_try_compile ()
-{
-  CFLAGS="$wm_save_CFLAGS $[]3"
-  AC_COMPILE_IFELSE(
-    [AC_LANG_PROGRAM([@%:@include <$[]1>
-
-const char *filename = "dummy";], [  $[]2;])],
-    [wm_retval=0],
-    [wm_retval=1])
-  AS_SET_STATUS([$wm_retval])
-}
-])

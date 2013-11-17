@@ -59,3 +59,46 @@ else
 fi
 CPPFLAGS="$CPPFLAGS_old"
 ])
+
+
+dnl _WM_LIB_CHECK_FUNCTS
+dnl -----------------------
+dnl (internal shell functions)
+dnl
+dnl Create 2 shell functions:
+dnl  wm_fn_imgfmt_try_link: try to link against library
+dnl  wm_fn_imgfmt_try_compile: try to compile against header
+dnl
+AC_DEFUN_ONCE([_WM_LIB_CHECK_FUNCTS],
+[@%:@ wm_fn_lib_try_link FUNCTION LFLAGS
+@%:@ ----------------------------------
+@%:@ Try linking against library in $LFLAGS using function named $FUNCTION
+@%:@ Assumes that LIBS have been saved in 'wm_save_LIBS' by caller
+wm_fn_lib_try_link ()
+{
+  LIBS="$wm_save_LIBS $[]2"
+  AC_TRY_LINK_FUNC([$[]1],
+    [wm_retval=0],
+    [wm_retval=1])
+  AS_SET_STATUS([$wm_retval])
+}
+
+@%:@ wm_fn_lib_try_compile HEADER GVARDEF FUNC_CALL CFLAGS
+@%:@ -----------------------------------------------------
+@%:@ Try to compile using header $HEADER and trying to call a function
+@%:@ using the $FUNC_CALL expression and using extra $CFLAGS in the
+@%:@ compiler's command line; GVARDEF can be used to include one line
+@%:@ in the global context of the source.
+@%:@ Assumes that CFLAGS have been saved in 'wm_save_CFLAGS' by caller
+wm_fn_lib_try_compile ()
+{
+  CFLAGS="$wm_save_CFLAGS $[]4"
+  AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM([@%:@include <$[]1>
+
+$[]2], [  $[]3;])],
+    [wm_retval=0],
+    [wm_retval=1])
+  AS_SET_STATUS([$wm_retval])
+}
+])
