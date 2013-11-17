@@ -121,3 +121,64 @@ for wm_arg in $1 ; do
 done
 AS_VAR_POPDEF([VAR])dnl
 ])
+
+
+# WM_LIB_CHECK
+# ------------
+#
+# Check if a library exists (can be linked to) and check if its header can
+# compile (using code in parameter to the macro), then update the appropriate
+# stuff accordingly
+#
+# Usage: WM_LIB_CHECK([name], [lflaglist], [lfunc], [extralibs], [headercheck], [supvar], [libvar], [enable_var], [cond_name])
+#   $1 name: name of the feature used in messages and in supvar
+#   $2 lflaglist: the list of linker '-l' options to try, stopping on first success
+#   $3 lfunc: the name of the function to look for when linking
+#   $4 extralibs: optional, additional libraries included in the link check
+#   $5 headercheck: the code that checks for the header
+#   $6 supvar: if the library was found, append $name to this variable,
+#              otherwise append $name to 'unsupported'
+#   $7 libvar: if the library was found, append the working $lflag to this variable
+#   $8 enable_var: variable to check for user's feature request, if empty we use "lowercase(enable_$1)"
+#   $9 cond_name: name of the AC_DEFINE and the AM_CONDITIONAL
+#                 if empty, use "uppercase(USE_$1)", if equals "-" same but do not create AM_CONDITIONAL
+AC_DEFUN([WM_LIB_CHECK],
+[AC_REQUIRE([_WM_LIB_CHECK_FUNCTS])
+m4_pushdef([ENABLEVAR], [m4_ifnblank([$8], [$8], enable_[]m4_tolower($1))])dnl
+m4_pushdef([CACHEVAR], [wm_cv_libchk_[]m4_tolower($1)])dnl
+m4_pushdef([USEVAR], [m4_bmatch([$9], [^-?$], [USE_[]m4_toupper($1)], [$9])])dnl
+AS_IF([test "x$ENABLEVAR" = "xno"],
+    [unsupported="$unsupported $1"],
+    [AC_CACHE_CHECK([for $1 support library], CACHEVAR,
+        [CACHEVAR=no
+         wm_save_LIBS="$LIBS"
+         dnl
+         dnl We check that the library is available
+         m4_bmatch([$2], [ ], dnl Any space in 'lflaglist' means we have a list of flags
+            [for wm_arg in $2 ; do
+               AS_IF([wm_fn_lib_try_link "$3" "$4 $wm_arg"],
+                 [CACHEVAR="$wm_arg" ; break])
+             done],
+            [AS_IF([wm_fn_lib_try_link "$3" "$4 $2"],
+                [CACHEVAR="$2"]) ])
+         LIBS="$wm_save_LIBS"
+         AS_IF([test "x$ENABLEVAR$CACHEVAR" = "xyesno"],
+            [AC_MSG_ERROR([explicit $1 support requested but no library found])])
+         dnl
+         dnl A library was found, check if header is available and compile
+         AS_IF([test "x$CACHEVAR" != "xno"], [$5])
+        ])
+    AS_IF([test "x$CACHEVAR" = "xno"],
+        [unsupported="$unsupported $1"
+         ENABLEVAR="no"],
+        [$6="$$6 $1"
+         WM_APPEND_ONCE([$CACHEVAR], [$7])
+         AC_DEFINE(USEVAR, [1],
+            [defined when valid $1 library with header was found])])
+    ])
+m4_bmatch([$9], [^-$], [],
+    [AM_CONDITIONAL(USEVAR, [test "x$ENABLEVAR" != "xno"])])dnl
+m4_popdef([ENABLEVAR])dnl
+m4_popdef([CACHEVAR])dnl
+m4_popdef([USEVAR])dnl
+])
