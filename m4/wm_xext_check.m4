@@ -37,3 +37,64 @@ AC_DEFUN_ONCE([WM_XEXT_CHECK_XSHAPE],
      CFLAGS="$wm_save_CFLAGS"],
     [supported_xext], [XLIBS], [enable_shape], [-])dnl
 ]) dnl AC_DEFUN
+
+
+# WM_XEXT_CHECK_XINERAMA
+# ----------------------
+#
+# Check for the Xinerama extension for multiscreen-as-one support
+# The check depends on variable 'enable_xinerama' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, disable support
+#   auto - detect, disable if not found
+#
+# When found, append appropriate stuff in LIBXINERAMA, and append info to
+# the variable 'supported_xext'
+# When not found, append info to variable 'unsupported'
+AC_DEFUN_ONCE([WM_XEXT_CHECK_XINERAMA],
+[LIBXINERAMA=""
+AS_IF([test "x$enable_xinerama" = "xno"],
+    [unsupported="$unsupported Xinerama"],
+    [AC_CACHE_CHECK([for Xinerama support library], [wm_cv_xext_xinerama],
+        [wm_cv_xext_xinerama=no
+         dnl
+         dnl We check that the library is available
+         wm_save_LIBS="$LIBS"
+         for wm_arg in dnl
+dnl           Lib flag   % Function name        % info
+             "-lXinerama % XineramaQueryScreens" dnl
+             "-lXext     % XineramaGetInfo      % solaris" ; do
+           AS_IF([wm_fn_lib_try_link "`echo "$wm_arg" | dnl
+sed -e 's,^[[^%]]*% *,,' | sed -e 's, *%.*$,,' `" dnl
+"$XLFLAGS $XLIBS `echo "$wm_arg" | sed -e 's, *%.*$,,' `"],
+             [wm_cv_xext_xinerama="`echo "$wm_arg" | sed -e 's, *%[[^%]]*, ,' `"
+              break])
+         done
+         LIBS="$wm_save_LIBS"
+         AS_IF([test "x$enable_xinerama$wm_cv_xext_xinerama" = "xyesno"],
+            [AC_MSG_ERROR([explicit Xinerama support requested but no library found])])
+         dnl
+         dnl A library was found, check if header is available and compile
+         wm_save_CFLAGS="$CFLAGS"
+         AS_CASE([`echo "$wm_cv_xext_xinerama" | sed -e 's,^[[^%]]*,,' `],
+             [*solaris*], [wm_header="X11/extensions/xinerama.h" ; wm_fct="XineramaGetInfo(NULL, 0, NULL, NULL, &intval)"],
+             [wm_header="X11/extensions/Xinerama.h" ; wm_fct="XineramaQueryScreens(NULL, &intval)"])
+         AS_IF([wm_fn_lib_try_compile "$wm_header" "int intval;" "$wm_fct" ""],
+             [],
+             [AC_MSG_ERROR([found $wm_cv_xext_xinerama but cannot compile with the header])])
+         AS_UNSET([wm_header])
+         AS_UNSET([wm_fct])
+         CFLAGS="$wm_save_CFLAGS"])
+     AS_IF([test "x$wm_cv_xext_xinerama" = "xno"],
+        [unsupported="$unsupported Xinerama"
+         enable_xinerama="no"],
+        [LIBXINERAMA="`echo "$wm_cv_xext_xinerama" | sed -e 's, *%.*$,,' `"
+         AC_DEFINE([USE_XINERAMA], [1],
+             [defined when usable Xinerama library with header was found])
+         AS_CASE([`echo "$wm_cv_xext_xinerama" | sed -e 's,^[[^%]]*,,' `],
+             [*solaris*], [AC_DEFINE([SOLARIS_XINERAMA], [1],
+                 [defined when the Solaris Xinerama extension was detected])])
+         supported_xext="$supported_xext Xinerama"])
+    ])
+AC_SUBST(LIBXINERAMA)dnl
+])

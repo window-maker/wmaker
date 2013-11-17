@@ -499,6 +499,16 @@ AC_ARG_ENABLE([shape],
     [enable_shape=auto])
 WM_XEXT_CHECK_XSHAPE
 
+dnl XINERAMA support
+dnl ================
+AC_ARG_ENABLE([xinerama],
+    [AS_HELP_STRING([--enable-xinerama], [enable Xinerama extension support])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-xinerama]) ]) ],
+    [enable_xinerama=auto])
+WM_XEXT_CHECK_XINERAMA
+
 dnl XRandR support
 dnl ==============
 xrandr=no
@@ -581,41 +591,6 @@ fi
 
 AC_SUBST(XFTFLAGS)
 AC_SUBST(XFTLIBS)
-
-
-dnl XINERAMA support
-dnl ================
-xinerama=no
-AC_ARG_ENABLE(xinerama, AS_HELP_STRING([--enable-xinerama], [enable Xinerama extension support]),
-		xinerama=$enableval, xinerama=no)
-
-LIBXINERAMA=
-if test "$xinerama" = yes; then
-	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, 
-                [LIBXINERAMA=-lXinerama
-                xfxine=yes],
-		xfxine=no, $XLFLAGS $XLIBS)
-
-	AC_CHECK_LIB(Xext, XineramaGetInfo,
-                [sunxine=yes
-                ], sunxine=no, $XLFLAGS $XLIBS)
-
-	if test "$xfxine" = yes; then
-		xine=1
-	fi
-
-	if test "$sunxine" = yes; then
-	    xine=1
-	    AC_DEFINE(SOLARIS_XINERAMA, 1, 
-		[define if you want support for the XINERAMA extension and are in Solaris (set by configure)])
-	fi
-
-	if test "$xine" = 1; then
-	    AC_DEFINE(USE_XINERAMA, 1,
-		[define if you want support for the XINERAMA extension (set by configure)])
-	fi
-fi
-AC_SUBST(LIBXINERAMA)
 
 
 dnl MIT-SHM support
@@ -855,7 +830,6 @@ echo "Supported X extensions:             :$supported_xext"
 echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
 echo "Antialiased text support in WINGs   : $xft"
-echo "Xinerama extension support          : $xinerama"
 echo "XRandR extension support            : $xrandr"
 echo "Translated message files to install : $mof"
 dnl echo "Supported languages beside English  : $languages"
