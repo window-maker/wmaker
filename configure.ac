@@ -158,6 +158,7 @@ AS_IF([test "x$debug" = "xyes"],
 dnl Tracking on what is detected for final status
 dnl =============================================
 unsupported=""
+supported_xext=""
 supported_gfx=""
 
 
@@ -490,17 +491,13 @@ AC_ARG_ENABLE(modelock, AS_HELP_STRING([--enable-modelock], [XKB keyboard langua
 
 dnl XShape support
 dnl ==============
-shape=yes
-AC_ARG_ENABLE(shape, AS_HELP_STRING([--disable-shape], [disable shaped window extension support]),
-		shape=$enableval, shape=yes)
-added_xext=no
-
-if test "$shape" = yes; then
-	AC_CHECK_LIB(Xext, XShapeSelectInput, [XLIBS="-lXext $XLIBS"
-		added_xext=yes
-		AC_DEFINE(USE_XSHAPE, 1, [define if you want support for shaped windows (set by configure)])],
-		shape=no, $XLFLAGS $XLIBS)
-fi
+AC_ARG_ENABLE([shape],
+    [AS_HELP_STRING([--disable-shape], [disable shaped window extension support])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-shape]) ]) ],
+    [enable_shape=auto])
+WM_XEXT_CHECK_XSHAPE
 
 dnl XRandR support
 dnl ==============
@@ -854,6 +851,7 @@ echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
 echo "Installation path for libraries     : $libdir"
 echo "Installation path for WPrefs.app    : $wprefs_base_dir" | sed -e 's|\${prefix}|'"$prefix|"
+echo "Supported X extensions:             :$supported_xext"
 echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
 echo "Antialiased text support in WINGs   : $xft"
