@@ -451,8 +451,6 @@ X_LIBRARY_PATH=$x_libraries
 XCFLAGS="$X_CFLAGS"
 XLFLAGS="$X_LIBS"
 XLIBS="-lX11 $X_EXTRA_LIBS"
-LIBXMU="-lXmu"
-AC_SUBST(LIBXMU)
 
 lib_search_path="$lib_search_path $XLFLAGS"
 inc_search_path="$inc_search_path $XCFLAGS"
@@ -508,6 +506,11 @@ AC_ARG_ENABLE([shm],
         [AC_MSG_ERROR([bad value $enableval for --enable-shm]) ]) ],
     [enable_shm=auto])
 WM_XEXT_CHECK_XSHM
+
+dnl X Misceleanous Utility
+dnl ======================
+# the libXmu is used in WRaster
+WM_EXT_CHECK_XMU
 
 dnl XINERAMA support
 dnl ================

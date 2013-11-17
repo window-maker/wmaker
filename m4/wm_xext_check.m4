@@ -75,6 +75,44 @@ AC_DEFUN_ONCE([WM_XEXT_CHECK_XSHM],
 ]) dnl AC_DEFUN
 
 
+# WM_XEXT_CHECK_XMU
+# -----------------
+#
+# Check for the libXmu (X Misceleanous Utilities)
+# When found, append it to LIBXMU
+# When not found, generate an error because we have no work-around for it
+AC_DEFUN_ONCE([WM_EXT_CHECK_XMU],
+[AC_CACHE_CHECK([for Xmu library], [wm_cv_xext_xmu],
+    [wm_cv_xext_xmu=no
+     dnl
+     dnl We check that the library is available
+     wm_save_LIBS="$LIBS"
+     AS_IF([wm_fn_lib_try_link "XmuLookupStandardColormap" "-lXmu"],
+         [wm_cv_xext_xmu="-lXmu"])
+     LIBS="$wm_save_LIBS"
+     AS_IF([test "x$wm_cv_xext_xmu" = "xno"],
+         [AC_MSG_ERROR([library Xmu not found])])
+     dnl
+     dnl A library was found, check if header is available and compile
+     wm_save_CFLAGS="$CFLAGS"
+     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([dnl
+@%:@include <X11/Xlib.h>
+@%:@include <X11/Xutil.h>
+@%:@include <X11/Xmu/StdCmap.h>
+
+Display *dpy;
+Atom prop;
+], [dnl
+  XmuLookupStandardColormap(dpy, 0, 0, 0, prop, False, True);]) ],
+         [],
+         [AC_MSG_ERROR([found $wm_cv_xext_xmu but cannot compile with the header])])
+     CFLAGS="$wm_save_CFLAGS"])
+dnl The cached check already reported problems when not found
+LIBXMU="$wm_cv_xext_xmu"
+AC_SUBST(LIBXMU)dnl
+])
+
+
 # WM_XEXT_CHECK_XINERAMA
 # ----------------------
 #
