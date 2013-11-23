@@ -347,7 +347,7 @@ void WHandleEvents(void);
 /* ---[ WINGs/hashtable.c ]----------------------------------------------- */
 
 
-WMHashTable* WMCreateHashTable(WMHashTableCallbacks callbacks);
+WMHashTable* WMCreateHashTable(const WMHashTableCallbacks callbacks);
 
 void WMFreeHashTable(WMHashTable *table);
 

@@ -90,7 +90,7 @@ static void rebuildTable(WMHashTable * table)
 	wfree(oldArray);
 }
 
-WMHashTable *WMCreateHashTable(WMHashTableCallbacks callbacks)
+WMHashTable *WMCreateHashTable(const WMHashTableCallbacks callbacks)
 {
 	HashTable *table;
 
