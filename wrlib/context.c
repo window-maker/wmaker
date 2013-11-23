@@ -40,7 +40,7 @@ extern void _wraster_change_filter(int type);
 
 static Bool bestContext(Display * dpy, int screen_number, RContext * context);
 
-static RContextAttributes DEFAULT_CONTEXT_ATTRIBS = {
+static const RContextAttributes DEFAULT_CONTEXT_ATTRIBS = {
 	RC_UseSharedMemory | RC_RenderMode | RC_ColorsPerChannel,	/* flags */
 	RDitheredRendering,	/* render_mode */
 	4,			/* colors_per_channel */
