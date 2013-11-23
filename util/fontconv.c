@@ -101,7 +101,7 @@ static int strToInt(str * token)
 
 static char *mapWeightToName(str * weight)
 {
-	char *normalNames[] = { "medium", "normal", "regular" };
+	static const char *normalNames[] = { "medium", "normal", "regular" };
 	static char buf[32];
 	size_t i;
 

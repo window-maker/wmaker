@@ -41,7 +41,7 @@ static void (*parse)(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntr
 static Bool (*validateFilename)(const char *filename, const struct stat *st, int tflags, struct FTW *ftw);
 
 static WMArray *plMenuNodes;
-char *terminal;
+static const char *terminal;
 
 extern char *__progname;
 
