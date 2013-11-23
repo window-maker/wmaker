@@ -68,7 +68,7 @@ static void didResizeList(W_ViewDelegate * self, WMView * view);
 
 static void unselectAllListItems(WMList * lPtr, WMListItem * exceptThis);
 
-W_ViewDelegate _ListViewDelegate = {
+static W_ViewDelegate _ListViewDelegate = {
 	NULL,
 	NULL,
 	didResizeList,

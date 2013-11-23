@@ -25,7 +25,7 @@
 #define XDND_DEST_VIEW_IS_REGISTERED(dragInfo) ((dragInfo->destInfo) != NULL)\
     && ((dragInfo->destInfo->destView->dragDestinationProcs) != NULL)
 
-static unsigned char XDNDversion = XDND_VERSION;
+static const unsigned char XDNDversion = XDND_VERSION;
 static WMHandlerID dndDestinationTimer = NULL;
 
 static void *idleState(WMView * destView, XClientMessageEvent * event, WMDraggingInfo * info);

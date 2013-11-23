@@ -15,7 +15,7 @@ char *WMViewRealizedNotification = "WMViewRealizedNotification";
     VisibilityChangeMask|FocusChangeMask|PropertyChangeMask|\
     SubstructureNotifyMask|SubstructureRedirectMask
 
-static XSetWindowAttributes defAtts = {
+static const XSetWindowAttributes defAtts = {
 	None,			/* background_pixmap */
 	0,			/* background_pixel */
 	CopyFromParent,		/* border_pixmap */

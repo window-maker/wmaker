@@ -1178,7 +1178,7 @@ static void readConfiguration(W_ColorPanel * panel)
 static void readXColors(W_ColorPanel * panel)
 {
 	WMListItem *item;
-	RGBColor *entry;
+	const RGBColor *entry;
 
 	for (entry = rgbColors; entry->name != NULL; entry++) {
 		item = WMAddListItem(panel->colorListContentLst, entry->name);
