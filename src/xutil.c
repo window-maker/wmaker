@@ -35,7 +35,7 @@
 static Atom Clipboard = 0;
 #endif
 
-static char *requestCodes[] = {
+static const char *requestCodes[] = {
 	"DUMMY",
 	"X_CreateWindow",
 	"X_ChangeWindowAttributes",
