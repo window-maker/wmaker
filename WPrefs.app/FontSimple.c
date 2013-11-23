@@ -91,9 +91,9 @@ typedef struct _Panel {
 
 #define ICON_FILE	"fonts"
 
-static struct {
-	char *option;
-	char *label;
+static const struct {
+	const char *option;
+	const char *label;
 } fontOptions[] = {
 	{
 	"WindowTitleFont", N_("Window Title")}, {
@@ -104,7 +104,7 @@ static struct {
 	"LargeDisplayFont", N_("Desktop Caption")}, {
 NULL, NULL},};
 
-static char *standardSizes[] = {
+static const char *standardSizes[] = {
 	"6",
 	"8",
 	"9",
@@ -128,9 +128,9 @@ static char *standardSizes[] = {
 	NULL
 };
 
-static struct {
+static const struct {
 	int weight;
-	char *name;
+	const char *name;
 } fontWeights[] = {
 	{
 	FC_WEIGHT_THIN, "Thin"}, {
@@ -146,9 +146,9 @@ static struct {
 	0, NULL}
 };
 
-static struct {
+static const struct {
 	int slant;
-	char *name;
+	const char *name;
 } fontSlants[] = {
 	{
 	FC_SLANT_ROMAN, ""},	/*"Roman"}, */
@@ -158,9 +158,9 @@ static struct {
 	0, NULL}
 };
 
-static struct {
+static const struct {
 	int width;
-	char *name;
+	const char *name;
 } fontWidths[] = {
 	{
 	FC_WIDTH_ULTRACONDENSED, "UltraCondensed"}, {
@@ -371,7 +371,7 @@ static void selectedFamily(WMWidget * w, void *data)
 		WMClearList(panel->styleL);
 		for (i = 0; i < family->stylen; i++) {
 			int j;
-			char *weight = "", *slant = "", *width = "";
+			const char *weight = "", *slant = "", *width = "";
 			WMListItem *item;
 
 			for (j = 0; fontWeights[j].name; j++)

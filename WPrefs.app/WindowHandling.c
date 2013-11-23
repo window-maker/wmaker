@@ -77,7 +77,7 @@ typedef struct _Panel {
 
 #define THUMB_SIZE	16
 
-static char *placements[] = {
+static const char *placements[] = {
 	"auto",
 	"random",
 	"manual",
