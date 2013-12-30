@@ -166,7 +166,7 @@ static void createPanel(Panel * p)
 	}
 
 	/**/ panel->posL = WMCreateLabel(panel->navF);
-	WMResizeWidget(panel->posL, 200, 30);
+	WMResizeWidget(panel->posL, 275, 30);
 	WMMoveWidget(panel->posL, 75, 165);
 	// WMSetLabelTextAlignment(panel->posL, WARight);
 	WMSetLabelText(panel->posL, _("Position of workspace name display"));
@@ -184,7 +184,7 @@ static void createPanel(Panel * p)
 
 	panel->posP = WMCreatePopUpButton(panel->navF);
 	WMResizeWidget(panel->posP, 125, 20);
-	WMMoveWidget(panel->posP, 290, 170);
+	WMMoveWidget(panel->posP, 350, 170);
 	WMAddPopUpButtonItem(panel->posP, _("Disable"));
 	WMAddPopUpButtonItem(panel->posP, _("Center"));
 	WMAddPopUpButtonItem(panel->posP, _("Top"));
