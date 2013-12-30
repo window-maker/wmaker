@@ -242,7 +242,7 @@ char *wstrappend(char *dst, const char *src)
 }
 
 
-#if HAVE_STRLCAT
+#ifdef HAVE_STRLCAT
 size_t
 wstrlcat(char *dst, const char *src, size_t siz)
 {
@@ -303,7 +303,7 @@ wstrlcat(char *dst, const char *src, size_t siz)
 }
 #endif /* HAVE_STRLCAT */
 
-#if HAVE_STRLCPY
+#ifdef HAVE_STRLCPY
 size_t
 wstrlcpy(char *dst, const char *src, size_t siz)
 {

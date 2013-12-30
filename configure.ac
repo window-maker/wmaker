@@ -143,6 +143,10 @@ AS_IF([test "x$debug" = "xyes"],
      dnl secured OS, and in a more general way generate binary code
      dnl that may not be optimal
      AX_CFLAGS_GCC_OPTION([-Wtrampolines])
+     dnl
+     dnl GCC provides a couple of checks to detect incorrect macro uses
+     AX_CFLAGS_GCC_OPTION([-Wundef])
+     AX_CFLAGS_GCC_OPTION([-Wunused-macros])
 ], [dnl
      dnl When debug not enabled, we try to avoid some non-necessary
      dnl messages from the compiler
