@@ -29,18 +29,24 @@ Display *dpy;
 Window leader;
 WMAppContext *app;
 
-static void callback(void *foo, int item, Time time)
+static void callback(int item)
 {
+	(void) item;
+
 	printf("pushed item %i\n", item);
 }
 
-static void quit(void *foo, int item, Time time)
+static void quit(int item)
 {
+	(void) item;
+
 	exit(0);
 }
 
-static void hide(void *foo, int item, Time time)
+static void hide(int item)
 {
+	(void) item;
+
 	WMHideApplication(app);
 }
 
@@ -52,11 +58,12 @@ WMMenu *menu;
 WMMenu *submenu;
 int wincount = 0;
 
-static void newwin(void *foo, int item, Time time)
+static void newwin(int item)
 {
 	Window win;
 	XClassHint classhint;
 	char title[100];
+	(void) item;
 
 	wincount++;
 	win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10 * wincount, 10 * wincount, 200, 100, 0, 0, 0);
@@ -76,10 +83,6 @@ static void newwin(void *foo, int item, Time time)
 	attr.miniaturize_pixmap = XCreateBitmapFromData(dpy, DefaultRootWindow(dpy), bits, 10, 10);
 
 	attr.miniaturize_mask = XCreateBitmapFromData(dpy, DefaultRootWindow(dpy), mbits, 10, 10);
-	/*
-	   attr.flags |= GSWindowStyleAttr;
-	   attr.window_style = NSTitledWindowMask|NSClosableWindowMask;
-	 */
 
 	WMSetWindowAttributes(dpy, win, &attr);
 
@@ -106,6 +109,7 @@ int main(int argc, char **argv)
 	miniaturize_win = XInternAtom(dpy, "_GNUSTEP_WM_MINIATURIZE_WINDOW", False);
 
 	leader = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10, 10, 10, 10, 0, 0, 0);
+
 	/* set class hint */
 	classhint.res_name = "test";
 	classhint.res_class = "Test";
@@ -138,7 +142,7 @@ int main(int argc, char **argv)
 	XSetCommand(dpy, leader, argv, argc);
 
 	/* create first window */
-	newwin(NULL, 0, 0);
+	newwin(0);
 
 	XFlush(dpy);
 	puts("Run xprop on the test window to see the properties defined");
