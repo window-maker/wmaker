@@ -84,7 +84,7 @@ void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, const char *file);
 void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, const char *file,
 		WMPixmap **icon_normal, WMPixmap **icon_greyed);
 
-WMWindow *GetWindow(Panel *panel);
+WMWindow *GetWindow(void);
 
 /* manipulate the dictionary for the WindowMaker domain */
 

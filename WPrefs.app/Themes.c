@@ -80,7 +80,7 @@ static pid_t downloadFile(WMScreen * scr, _Panel * panel, const char *file)
 	if (pid < 0) {
 		werror("could not fork() process");
 
-		WMRunAlertPanel(scr, GetWindow(panel), _("Error"),
+		WMRunAlertPanel(scr, GetWindow(), _("Error"),
 				"Could not start download. fork() failed", _("OK"), NULL, NULL);
 		return -1;
 	}

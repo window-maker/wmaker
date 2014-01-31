@@ -610,7 +610,7 @@ void Initialize(WMScreen * scr)
 	WMSetLabelText(WPrefs.statusL, "");
 }
 
-WMWindow *GetWindow(Panel * panel)
+WMWindow *GetWindow(void)
 {
 	return WPrefs.win;
 }

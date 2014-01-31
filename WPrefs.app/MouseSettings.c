@@ -117,7 +117,7 @@ static void speedChange(WMWidget * w, void *data)
 
 		tmp = WMGetTextFieldText(panel->acceT);
 		if (sscanf(tmp, "%f", &accel) != 1 || accel < 0) {
-			WMRunAlertPanel(WMWidgetScreen(panel->acceT), GetWindow(panel),
+			WMRunAlertPanel(WMWidgetScreen(panel->acceT), GetWindow(),
 					_("Error"),
 					_("Invalid mouse acceleration value. Must be a positive real value."),
 					_("OK"), NULL, NULL);
@@ -137,7 +137,7 @@ static void speedChange(WMWidget * w, void *data)
 
 	tmp = WMGetTextFieldText(panel->threT);
 	if (sscanf(tmp, "%i", &threshold) != 1 || threshold < 0 || threshold > panel->maxThreshold) {
-		WMRunAlertPanel(WMWidgetScreen(panel->parent), GetWindow(panel), _("Error"),
+		WMRunAlertPanel(WMWidgetScreen(panel->parent), GetWindow(), _("Error"),
 				_
 				("Invalid mouse acceleration threshold value. Must be the number of pixels to travel before accelerating."),
 				_("OK"), NULL, NULL);
