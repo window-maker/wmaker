@@ -673,7 +673,7 @@ WScreen *wScreenInit(int screen_number)
 	return scr;
 }
 
-void wScreenUpdateUsableArea(WScreen * scr)
+void wScreenUpdateUsableArea(WScreen *scr)
 {
 	/*
 	 * scr->totalUsableArea[] will become the usableArea used for Windowplacement,
@@ -682,23 +682,10 @@ void wScreenUpdateUsableArea(WScreen * scr)
 	 */
 
 	WArea area;
-	int i, dock_head;
-	unsigned long best_area, tmp_area;
-	unsigned int size, position;
-
-	dock_head = scr->xine_info.primary_head;
-	best_area = 0;
-	size = wPreferences.workspace_border_size;
-	position = wPreferences.workspace_border_position;
-
-	if (scr->dock) {
-		WMRect rect;
-		rect.pos.x = scr->dock->x_pos;
-		rect.pos.y = scr->dock->y_pos;
-		rect.size.width = wPreferences.icon_size;
-		rect.size.height = wPreferences.icon_size;
-		dock_head = wGetHeadForRect(scr, rect);
-	}
+	int i;
+	unsigned long tmp_area, best_area = 0;
+	unsigned int size = wPreferences.workspace_border_size;
+	unsigned int position = wPreferences.workspace_border_position;
 
 	for (i = 0; i < wXineramaHeads(scr); ++i) {
 		WMRect rect = wGetRectForHead(scr, i);
@@ -716,23 +703,17 @@ void wScreenUpdateUsableArea(WScreen * scr)
 
 		scr->usableArea[i] = scr->totalUsableArea[i];
 
-#if 0
-		printf("usableArea[%d]: %d %d %d %d\n", i,
-		       scr->usableArea[i].x1, scr->usableArea[i].x2, scr->usableArea[i].y1, scr->usableArea[i].y2);
-#endif
 		if (wPreferences.no_window_over_icons) {
 			if (wPreferences.icon_yard & IY_VERT) {
-				if (wPreferences.icon_yard & IY_RIGHT) {
+				if (wPreferences.icon_yard & IY_RIGHT)
 					scr->totalUsableArea[i].x2 -= wPreferences.icon_size;
-				} else {
+				else
 					scr->totalUsableArea[i].x1 += wPreferences.icon_size;
-				}
 			} else {
-				if (wPreferences.icon_yard & IY_TOP) {
+				if (wPreferences.icon_yard & IY_TOP)
 					scr->totalUsableArea[i].y1 += wPreferences.icon_size;
-				} else {
+				else
 					scr->totalUsableArea[i].y2 -= wPreferences.icon_size;
-				}
 			}
 		}
 
