@@ -2032,6 +2032,8 @@ static int getFont(WScreen * scr, WDefaultEntry * entry, WMPropList * value, voi
 	static WMFont *font;
 	const char *val;
 
+	(void) addr;
+
 	GET_STRING_OR_DEFAULT("Font", val);
 
 	font = WMCreateFont(scr->wmscreen, val);
@@ -2057,6 +2059,8 @@ static int getColor(WScreen * scr, WDefaultEntry * entry, WMPropList * value, vo
 	static XColor color;
 	const char *val;
 	int second_pass = 0;
+
+	(void) addr;
 
 	GET_STRING_OR_DEFAULT("Color", val);
 
