@@ -111,21 +111,6 @@ static void updateColorCallback(void *self, void *data)
 	WMPostNotificationName(WMColorWellDidChangeNotification, cPtr, NULL);
 }
 
-static void activatedObserver(void *data, WMNotification * notification)
-{
-	/*
-	   WMColorWell *cPtr = (WMColorWell*)data;
-
-	   if (!cPtr->flags.active || WMGetNotificationObject(notification) == cPtr)
-	   return;
-
-	   W_SetViewBackgroundColor(cPtr->view, WMWidgetScreen(cPtr)->gray);
-	   paintColorWell(cPtr);
-
-	   cPtr->flags.active = 0;
-	 */
-}
-
 static WMArray *getXdndTypeArray(void)
 {
 	WMArray *types = WMCreateArray(1);
@@ -172,8 +157,6 @@ WMColorWell *WMCreateColorWell(WMWidget * parent)
 	cPtr->flags.bordered = 1;
 
 	W_ResizeView(cPtr->view, DEFAULT_WIDTH, DEFAULT_HEIGHT);
-
-	WMAddNotificationObserver(activatedObserver, cPtr, _ColorWellActivatedNotification, NULL);
 
 	cPtr->color = WMBlackColor(WMWidgetScreen(cPtr));
 

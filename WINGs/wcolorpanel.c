@@ -340,7 +340,6 @@ static void colorListPaintItem(WMList * lPtr, int index, Drawable d, char *text,
 static void colorListSelect(WMWidget * w, void *data);
 static void colorListColorMenuCallback(WMWidget * w, void *data);
 static void colorListListMenuCallback(WMWidget * w, void *data);
-static void colorListListMenuNew(W_ColorPanel * panel);
 
 static void wheelInit(W_ColorPanel * panel);
 static void grayInit(W_ColorPanel * panel);
@@ -3238,19 +3237,12 @@ static void colorListListMenuCallback(WMWidget * w, void *data)
 
 	switch (item) {
 	case CLmenuAdd:
-		/* New Color List */
-		colorListListMenuNew(panel);
 		break;
 	case CLmenuRename:
 		break;
 	case CLmenuRemove:
 		break;
 	}
-}
-
-static void colorListListMenuNew(W_ColorPanel * panel)
-{
-
 }
 
 /*************** Panel Initialisation Functions *****************/

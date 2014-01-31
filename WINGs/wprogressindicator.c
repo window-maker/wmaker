@@ -141,6 +141,8 @@ static void didResizeProgressIndicator(W_ViewDelegate * self, WMView * view)
 
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) self;
+	(void) width;
+	(void) height;
 
 	assert(width > 0);
 	assert(height > 0);

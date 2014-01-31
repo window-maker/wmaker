@@ -775,9 +775,11 @@ void WMSetSplitViewVertical(WMSplitView * sPtr, Bool flag)
 	 */
 }
 
-int WMGetSplitViewDividerThickness(WMSplitView * sPtr)
+int WMGetSplitViewDividerThickness(WMSplitView *sPtr)
 {
 	CHECK_CLASS(sPtr, WC_SplitView);
+
+	(void) sPtr;
 
 	return (DIVIDER_THICKNESS);
 }

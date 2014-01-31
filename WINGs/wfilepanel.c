@@ -470,11 +470,6 @@ static char *get_name_from_path(const char *path)
 	return wstrdup(&(path[size]));
 }
 
-static Bool filterFileName(WMFilePanel * panel, const char *file, Bool isDirectory)
-{
-	return True;
-}
-
 #define CAST(item) (*((WMListItem**)item))
 static int comparer(const void *a, const void *b)
 {
@@ -535,9 +530,7 @@ static void listDirectoryOnColumn(WMFilePanel * panel, int column, const char *p
 			int isDirectory;
 
 			isDirectory = S_ISDIR(stat_buf.st_mode);
-
-			if (filterFileName(panel, dentry->d_name, isDirectory))
-				WMInsertBrowserItem(bPtr, column, -1, dentry->d_name, isDirectory);
+			WMInsertBrowserItem(bPtr, column, -1, dentry->d_name, isDirectory);
 		}
 	}
 	WMSortBrowserColumnWithComparer(bPtr, column, comparer);
@@ -738,6 +731,9 @@ out:
 
 static void goUnmount(WMWidget *widget, void *p_panel)
 {
+	/* Not implemented yet */
+	(void) widget;
+	(void) p_panel;
 }
 
 static void goFloppy(WMWidget *widget, void *p_panel)
