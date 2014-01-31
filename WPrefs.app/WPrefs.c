@@ -448,7 +448,7 @@ static WMPixmap *makeTitledIcon(WMPixmap *icon)
 	return WMRetainPixmap(icon);
 }
 
-void SetButtonAlphaImage(WMScreen * scr, WMButton * bPtr, const char *file, const char *title1, const char *title2)
+void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, const char *file)
 {
 	WMPixmap *icon;
 	WMPixmap *icon2;
@@ -517,26 +517,13 @@ void AddSection(Panel * panel, const char *iconFile)
 	WMHangData(bPtr, panel);
 
 	WMSetBalloonTextForView(((PanelRec *) panel)->description, WMWidgetView(bPtr));
-
-	{
-		char *t1, *t2;
-
-		t1 = wstrdup(((PanelRec *) panel)->sectionName);
-		t2 = strchr(t1, ' ');
-		if (t2) {
-			*t2 = 0;
-			t2++;
-		}
-		SetButtonAlphaImage(WMWidgetScreen(bPtr), bPtr, iconFile, t1, t2);
-		wfree(t1);
-	}
+	SetButtonAlphaImage(WMWidgetScreen(bPtr), bPtr, iconFile);
 	WMMapWidget(bPtr);
 
 	WPrefs.sectionB[WPrefs.sectionCount] = bPtr;
 
-	if (WPrefs.sectionCount > 0) {
+	if (WPrefs.sectionCount > 0)
 		WMGroupButtons(WPrefs.sectionB[0], bPtr);
-	}
 
 	WPrefs.sectionCount++;
 
