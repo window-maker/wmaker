@@ -85,6 +85,12 @@ static Atom net_wm_window_type_menu;
 static Atom net_wm_window_type_utility;
 static Atom net_wm_window_type_splash;
 static Atom net_wm_window_type_dialog;
+static Atom net_wm_window_type_dropdown_menu;
+static Atom net_wm_window_type_popup_menu;
+static Atom net_wm_window_type_tooltip;
+static Atom net_wm_window_type_notification;
+static Atom net_wm_window_type_combo;
+static Atom net_wm_window_type_dnd;
 static Atom net_wm_window_type_normal;
 static Atom net_wm_state;
 static Atom net_wm_state_modal;	/* XXX: what is this?!? */
@@ -161,6 +167,12 @@ static atomitem_t atomNames[] = {
 	{"_NET_WM_WINDOW_TYPE_UTILITY", &net_wm_window_type_utility},
 	{"_NET_WM_WINDOW_TYPE_SPLASH", &net_wm_window_type_splash},
 	{"_NET_WM_WINDOW_TYPE_DIALOG", &net_wm_window_type_dialog},
+	{"_NET_WM_WINDOW_TYPE_DROPDOWN_MENU", &net_wm_window_type_dropdown_menu},
+	{"_NET_WM_WINDOW_TYPE_POPUP_MENU", &net_wm_window_type_popup_menu},
+	{"_NET_WM_WINDOW_TYPE_TOOLTIP", &net_wm_window_type_tooltip},
+	{"_NET_WM_WINDOW_TYPE_NOTIFICATION", &net_wm_window_type_notification},
+	{"_NET_WM_WINDOW_TYPE_COMBO", &net_wm_window_type_combo},
+	{"_NET_WM_WINDOW_TYPE_DND", &net_wm_window_type_dnd},
 	{"_NET_WM_WINDOW_TYPE_NORMAL", &net_wm_window_type_normal},
 	{"_NET_WM_STATE", &net_wm_state},
 	{"_NET_WM_STATE_MODAL", &net_wm_state_modal},
@@ -263,6 +275,12 @@ static void setSupportedHints(WScreen *scr)
 	atom[i++] = net_wm_window_type_utility;
 	atom[i++] = net_wm_window_type_splash;
 	atom[i++] = net_wm_window_type_dialog;
+	atom[i++] = net_wm_window_type_dropdown_menu;
+	atom[i++] = net_wm_window_type_popup_menu;
+	atom[i++] = net_wm_window_type_tooltip;
+	atom[i++] = net_wm_window_type_notification;
+	atom[i++] = net_wm_window_type_combo;
+	atom[i++] = net_wm_window_type_dnd;
 	atom[i++] = net_wm_window_type_normal;
 
 	atom[i++] = net_wm_state;
@@ -959,6 +977,16 @@ static int getWindowLayer(WWindow *wwin)
 				layer = WMNormalLevel;
 		}
 		/* //layer = WMPopUpLevel; // this seems a bad idea -Dan */
+	} else if (wwin->type == net_wm_window_type_dropdown_menu) {
+		layer = WMSubmenuLevel;
+	} else if (wwin->type == net_wm_window_type_popup_menu) {
+		layer = WMSubmenuLevel;
+	} else if (wwin->type == net_wm_window_type_tooltip) {
+	} else if (wwin->type == net_wm_window_type_notification) {
+		layer = WMPopUpLevel;
+	} else if (wwin->type == net_wm_window_type_combo) {
+		layer = WMSubmenuLevel;
+	} else if (wwin->type == net_wm_window_type_dnd) {
 	} else if (wwin->type == net_wm_window_type_normal) {
 	}
 
@@ -1133,7 +1161,10 @@ static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->client_flags.no_appicon = 1;
-	} else if (type == net_wm_window_type_menu) {
+	} else if (type == net_wm_window_type_menu ||
+			type == net_wm_window_type_dropdown_menu ||
+			type == net_wm_window_type_popup_menu ||
+			type == net_wm_window_type_combo) {
 		wwin->client_flags.no_titlebar = 1;
 		wwin->client_flags.no_resizable = 1;
 		wwin->client_flags.no_miniaturizable = 1;
@@ -1162,6 +1193,46 @@ static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 		   // wwin->client_flags.skip_window_list = 1;
 		   // wwin->client_flags.no_appicon = 1;
 		 */
+	} else if (wwin->type == net_wm_window_type_tooltip) {
+		wwin->client_flags.no_titlebar = 1;
+		wwin->client_flags.no_resizable = 1;
+		wwin->client_flags.no_miniaturizable = 1;
+		wwin->client_flags.no_resizebar = 1;
+		wwin->client_flags.no_shadeable = 1;
+		wwin->client_flags.no_movable = 1;
+		wwin->client_flags.skip_window_list = 1;
+		wwin->client_flags.skip_switchpanel = 1;
+		wwin->client_flags.dont_move_off = 1;
+		wwin->client_flags.no_appicon = 1;
+		wwin->flags.net_skip_pager = 1;
+	} else if (wwin->type == net_wm_window_type_notification) {
+		wwin->client_flags.no_titlebar = 1;
+		wwin->client_flags.no_resizable = 1;
+		wwin->client_flags.no_miniaturizable = 1;
+		wwin->client_flags.no_border = 1;
+		wwin->client_flags.no_resizebar = 1;
+		wwin->client_flags.no_shadeable = 1;
+		wwin->client_flags.no_movable = 1;
+		wwin->client_flags.omnipresent = 1;
+		wwin->client_flags.skip_window_list = 1;
+		wwin->client_flags.skip_switchpanel = 1;
+		wwin->client_flags.dont_move_off = 1;
+		wwin->client_flags.no_hide_others= 1;
+		wwin->client_flags.no_appicon = 1;
+		wwin->flags.net_skip_pager = 1;
+	} else if (wwin->type == net_wm_window_type_dnd) {
+		wwin->client_flags.no_titlebar = 1;
+		wwin->client_flags.no_resizable = 1;
+		wwin->client_flags.no_miniaturizable = 1;
+		wwin->client_flags.no_border = 1;
+		wwin->client_flags.no_resizebar = 1;
+		wwin->client_flags.no_shadeable = 1;
+		wwin->client_flags.no_movable = 1;
+		wwin->client_flags.skip_window_list = 1;
+		wwin->client_flags.skip_switchpanel = 1;
+		wwin->client_flags.dont_move_off = 1;
+		wwin->client_flags.no_appicon = 1;
+		wwin->flags.net_skip_pager = 1;
 	} else if (type == net_wm_window_type_normal) {
 	} else {
 		ret = False;
@@ -1327,6 +1398,7 @@ void wNETWMCheckInitialClientState(WWindow *wwin)
 
 	wNETWMShowingDesktop(wwin->screen_ptr, False);
 
+	updateWindowType(wwin);
 	updateNetIconInfo(wwin);
 	updateIconImage(wwin);
 }
