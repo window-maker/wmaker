@@ -1079,6 +1079,8 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	wwin->frame->flags.is_client_window_frame = 1;
 	wwin->frame->flags.justification = wPreferences.title_justification;
 
+	wNETWMCheckInitialFrameState(wwin);
+
 	/* setup button images */
 	wWindowUpdateButtonImages(wwin);
 

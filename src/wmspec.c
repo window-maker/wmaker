@@ -115,6 +115,7 @@ static Atom net_wm_icon_geometry;	/* FIXME: should work together with net_wm_han
 static Atom net_wm_icon;
 static Atom net_wm_pid;		/* TODO */
 static Atom net_wm_handled_icons;	/* FIXME: see net_wm_icon_geometry */
+static Atom net_wm_window_opacity;
 
 static Atom net_frame_extents;
 
@@ -190,6 +191,7 @@ static atomitem_t atomNames[] = {
 	{"_NET_WM_ICON", &net_wm_icon},
 	{"_NET_WM_PID", &net_wm_pid},
 	{"_NET_WM_HANDLED_ICONS", &net_wm_handled_icons},
+	{"_NET_WM_WINDOW_OPACITY", &net_wm_window_opacity},
 
 	{"_NET_FRAME_EXTENTS", &net_frame_extents},
 
@@ -292,6 +294,7 @@ static void setSupportedHints(WScreen *scr)
 	atom[i++] = net_wm_icon_geometry;
 	atom[i++] = net_wm_icon;
 	atom[i++] = net_wm_handled_icons;
+	atom[i++] = net_wm_window_opacity;
 
 	atom[i++] = net_frame_extents;
 
@@ -470,6 +473,34 @@ static void updateIconImage(WWindow *wwin)
 		wIconUpdate(app->app_icon->icon);
 		wAppIconPaint(app->app_icon);
 	}
+}
+
+static void updateWindowOpacity(WWindow *wwin)
+{
+	Atom type;
+	int format;
+	unsigned long items, rest;
+	unsigned long *property;
+
+	if (!wwin->frame)
+		return;
+
+	/* We don't care about this ourselves, but other programs need us to copy
+	 * this to the frame window. */
+	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_window_opacity, 0L, 1L,
+				False, XA_CARDINAL, &type, &format, &items, &rest,
+				(unsigned char **)&property) != Success)
+		return;
+
+	if (type == None) {
+		XDeleteProperty(dpy, wwin->frame->core->window, net_wm_window_opacity);
+	} else if (type == XA_CARDINAL && format == 32 && items == 1 && property) {
+		XChangeProperty(dpy, wwin->frame->core->window, net_wm_window_opacity,
+				XA_CARDINAL, 32, PropModeReplace, (unsigned char *)property, 1L);
+	}
+
+	if (property)
+		XFree(property);
 }
 
 static void updateShowDesktop(WScreen *scr, Bool show)
@@ -1300,6 +1331,15 @@ void wNETWMCheckInitialClientState(WWindow *wwin)
 	updateIconImage(wwin);
 }
 
+void wNETWMCheckInitialFrameState(WWindow *wwin)
+{
+#ifdef DEBUG_WMSPEC
+	wmessage("wNETWMCheckInitialFrameState");
+#endif
+
+	updateWindowOpacity(wwin);
+}
+
 static void handleDesktopNames(WScreen *scr)
 {
 	unsigned long nitems_ret, bytes_after_ret;
@@ -1470,6 +1510,8 @@ void wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 		}
 	} else if (event->atom == net_wm_icon) {
 		updateIconImage(wwin);
+	} else if (event->atom == net_wm_window_opacity) {
+		updateWindowOpacity(wwin);
 	}
 }
 

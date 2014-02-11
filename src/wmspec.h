@@ -33,6 +33,7 @@ void wNETWMCleanup(WScreen *scr);
 void wNETWMUpdateWorkarea(WScreen *scr, WArea usableArea);
 Bool wNETWMGetUsableArea(WScreen *scr, int head, WArea *area);
 void wNETWMCheckInitialClientState(WWindow *wwin);
+void wNETWMCheckInitialFrameState(WWindow *wwin);
 Bool wNETWMProcessClientMessage(XClientMessageEvent *event);
 void wNETWMCheckClientHints(WWindow *wwin, int *layer, int *workspace);
 void wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event);
