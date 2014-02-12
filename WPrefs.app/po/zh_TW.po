@@ -1914,9 +1914,7 @@ msgid "Attract"
 msgstr "吸引"
 
 #: ../../WPrefs.app/WindowHandling.c:421
-msgid ""
-"Open dialogs in the same workspace\n"
-"as their owners"
+msgid "Open dialogs in the same workspace as their owners"
 msgstr "開啟對話視窗在其擁有者之相同工作區"
 
 #: ../../WPrefs.app/WindowHandling.c:448

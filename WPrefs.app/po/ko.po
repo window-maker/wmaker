@@ -2168,9 +2168,7 @@ msgid "Attract"
 msgstr "당김"
 
 #: ../../WPrefs.app/WindowHandling.c:493
-msgid ""
-"Open dialogs in the same workspace\n"
-"as their owners"
+msgid "Open dialogs in the same workspace as their owners"
 msgstr "같은 작업 공간에서 소유자로서 대화창 열기"
 
 #: ../../WPrefs.app/WindowHandling.c:515

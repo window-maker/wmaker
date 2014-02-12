@@ -2106,11 +2106,9 @@ msgid "Attract"
 msgstr "Attirer"
 
 #: ../../WPrefs.app/WindowHandling.c:423
-msgid ""
-"Open dialogs in same workspace\n"
-"as their owners"
+msgid "Open dialogs in same workspace as their owners"
 msgstr ""
-"Ouvrir les boîtes de dialogue sur le\n"
+"Ouvrir les boîtes de dialogue sur le "
 "même bureau que leurs propriétaires."
 
 #: ../../WPrefs.app/WindowHandling.c:450

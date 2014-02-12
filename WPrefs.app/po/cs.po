@@ -1945,12 +1945,8 @@ msgid "Attract"
 msgstr "Ne"
 
 #: ../WindowHandling.c:423
-msgid ""
-"Open dialogs in same workspace\n"
-"as their owners"
-msgstr ""
-"Otevřít dialogy na stejné ploše\n"
-"jako je vlastník"
+msgid "Open dialogs in same workspace as their owners"
+msgstr "Otevřít dialogy na stejné ploše jako je vlastník"
 
 #: ../WindowHandling.c:450
 msgid "Window Handling Preferences"

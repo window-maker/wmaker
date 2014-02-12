@@ -499,7 +499,7 @@ static void createPanel(Panel * p)
 	panel->tranB = WMCreateSwitchButton(panel->tranF);
 	WMMoveWidget(panel->tranB, 10, 5);
 	WMResizeWidget(panel->tranB, 250, 30);
-	WMSetButtonText(panel->tranB, _("Open dialogs in the same workspace\nas their owners"));
+	WMSetButtonText(panel->tranB, _("Open dialogs in the same workspace as their owners"));
 
 	WMMapSubwidgets(panel->tranF);
 

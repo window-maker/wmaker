@@ -2027,12 +2027,8 @@ msgid "Attract"
 msgstr "Veto"
 
 #: ../../WPrefs.app/WindowHandling.c:423
-msgid ""
-"Open dialogs in same workspace\n"
-"as their owners"
-msgstr ""
-"Avaa valintaikkunat\n"
-"omistajansa työtilassa"
+msgid "Open dialogs in same workspace as their owners"
+msgstr "Avaa valintaikkunat omistajansa työtilassa"
 
 #: ../../WPrefs.app/WindowHandling.c:450
 msgid "Window Handling Preferences"

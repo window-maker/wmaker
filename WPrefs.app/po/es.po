@@ -1993,12 +1993,8 @@ msgid "Attract"
 msgstr "Atraer"
 
 #: ../../WPrefs.app/WindowHandling.c:423
-msgid ""
-"Open dialogs in same workspace\n"
-"as their owners"
-msgstr ""
-"Abrir diálogos en la misma área\n"
-"que sus padres"
+msgid "Open dialogs in same workspace as their owners"
+msgstr "Abrir diálogos en la misma área que sus padres"
 
 #: ../../WPrefs.app/WindowHandling.c:450
 msgid "Window Handling Preferences"

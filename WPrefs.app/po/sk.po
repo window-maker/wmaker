@@ -1991,9 +1991,7 @@ msgid "Attract"
 msgstr "Priťah."
 
 #: ../../WPrefs.app/WindowHandling.c:423
-msgid ""
-"Open dialogs in same workspace\n"
-"as their owners"
+msgid "Open dialogs in same workspace as their owners"
 msgstr "Otvárať dialógy na ploche vlastníka"
 
 #: ../../WPrefs.app/WindowHandling.c:450

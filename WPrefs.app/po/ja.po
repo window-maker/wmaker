@@ -1977,12 +1977,9 @@ msgid "Attract"
 msgstr "ひっつく"
 
 #: ../../WPrefs.app/WindowHandling.c:482
-msgid ""
-"Open dialogs in the same workspace\n"
-"as their owners"
+msgid "Open dialogs in the same workspace as their owners"
 msgstr ""
-"ダイアログはオーナーと同じ\n"
-"ワークスペースに表示する"
+"ダイアログはオーナーと同じ ワークスペースに表示する"
 
 #: ../../WPrefs.app/WindowHandling.c:505
 msgid "Window Handling Preferences"

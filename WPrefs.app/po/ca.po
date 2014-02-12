@@ -2085,11 +2085,9 @@ msgid "Attract"
 msgstr "Atreu"
 
 #: ../../WPrefs.app/WindowHandling.c:423
-msgid ""
-"Open dialogs in same workspace\n"
-"as their owners"
+msgid "Open dialogs in same workspace as their owners"
 msgstr ""
-"Obrir els quadres de diàleg a la mateixa\n"
+"Obrir els quadres de diàleg a la mateixa "
 "àrea de treball que els seus propietaris."
 
 #: ../../WPrefs.app/WindowHandling.c:450

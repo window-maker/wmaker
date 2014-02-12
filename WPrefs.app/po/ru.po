@@ -1920,11 +1920,9 @@ msgid "Attract"
 msgstr "Притягиваться"
 
 #: ../../WPrefs.app/WindowHandling.c:423
-msgid ""
-"Open dialogs in same workspace\n"
-"as their owners"
+msgid "Open dialogs in same workspace as their owners"
 msgstr ""
-"Открывать диалоги в одном рабочем\n"
+"Открывать диалоги в одном рабочем "
 "пространстве с их родителями"
 
 #: ../../WPrefs.app/WindowHandling.c:450

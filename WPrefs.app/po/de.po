@@ -1971,12 +1971,8 @@ msgid "Attract"
 msgstr "Zug"
 
 #: ../../WPrefs.app/WindowHandling.c:441
-msgid ""
-"Open dialogs in the same workspace\n"
-"as their owners"
-msgstr ""
-"Dialoge auf Arbeitsfläche des\n"
-"Eigentümers öffnen"
+msgid "Open dialogs in the same workspace as their owners"
+msgstr "Dialoge auf Arbeitsfläche des Eigentümers öffnen"
 
 #: ../../WPrefs.app/WindowHandling.c:464
 msgid "Window Handling Preferences"
