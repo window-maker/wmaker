@@ -169,7 +169,7 @@ static void createPanel(Panel *p)
 	for (k = 0; k < 2; k++)
 	{
 		panel->autoDelayF[k] = WMCreateFrame(panel->box);
-		WMResizeWidget(panel->autoDelayF[k], 365, 100);
+		WMResizeWidget(panel->autoDelayF[k], 370, 100);
 		WMMoveWidget(panel->autoDelayF[k], 15, 10 + k * 110);
 		if (k == 0)
 			WMSetFrameTitle(panel->autoDelayF[k], _("Delays in milliseconds for autocollapsing clips"));
@@ -179,7 +179,7 @@ static void createPanel(Panel *p)
 		for (i = 0; i < 2; i++)
 		{
 			panel->autoDelayL[i + k * 2] = WMCreateLabel(panel->autoDelayF[k]);
-			WMResizeWidget(panel->autoDelayL[i + k * 2], 165, 20);
+			WMResizeWidget(panel->autoDelayL[i + k * 2], 175, 20);
 			WMMoveWidget(panel->autoDelayL[i + k * 2], 10, 27 + 40 * i);
 			WMSetLabelText(panel->autoDelayL[i + k * 2], _(auto_delay[i + k * 2].string));
 			WMSetLabelTextAlignment(panel->autoDelayL[i + k * 2], WARight);
@@ -188,7 +188,7 @@ static void createPanel(Panel *p)
 			{
 				panel->autoDelayB[i + k * 2][j] = WMCreateCustomButton(panel->autoDelayF[k], WBBStateChangeMask);
 				WMResizeWidget(panel->autoDelayB[i + k * 2][j], 25, 25);
-				WMMoveWidget(panel->autoDelayB[i + k * 2][j], 175 + (25 * j), 25 + 40 * i);
+				WMMoveWidget(panel->autoDelayB[i + k * 2][j], 185 + (25 * j), 25 + 40 * i);
 				WMSetButtonBordered(panel->autoDelayB[i + k * 2][j], False);
 				WMSetButtonImagePosition(panel->autoDelayB[i + k * 2][j], WIPImageOnly);
 				WMSetButtonAction(panel->autoDelayB[i + k * 2][j], pushAutoDelayButton, panel);
@@ -213,8 +213,8 @@ static void createPanel(Panel *p)
 			}
 
 			panel->autoDelayT[i + k * 2] = WMCreateTextField(panel->autoDelayF[k]);
-			WMResizeWidget(panel->autoDelayT[i + k * 2], 36, 20);
-			WMMoveWidget(panel->autoDelayT[i + k * 2], 310, 27 + 40 * i);
+			WMResizeWidget(panel->autoDelayT[i + k * 2], 40, 20);
+			WMMoveWidget(panel->autoDelayT[i + k * 2], 315, 27 + 40 * i);
 			WMAddNotificationObserver(autoDelayChanged, panel, WMTextDidChangeNotification, panel->autoDelayT[i + k * 2]);
 		}
 
