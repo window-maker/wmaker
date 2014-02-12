@@ -121,7 +121,7 @@ static void removeDrawerCallback(WMenu *menu, WMenuEntry *entry);
 static void drawerAppendToChain(WScreen *scr, WDock *drawer);
 static char *findUniqueName(WScreen *scr, const char *instance_basename);
 static void addADrawerCallback(WMenu *menu, WMenuEntry *entry);
-static void swapDrawers(WScreen *scr, int on_right_side, int new_x);
+static void swapDrawers(WScreen *scr, int new_x);
 static WDock* getDrawer(WScreen *scr, int y_index);
 static int indexOfHole(WDock *drawer, WAppIcon *moving_aicon, int redocking);
 static void drawerConsolidateIcons(WDock *drawer);
@@ -3015,7 +3015,7 @@ static void swapDock(WDock *dock)
 	else
 		x = dock->x_pos = DOCK_EXTRA_SPACE;
 
-	swapDrawers(scr, dock->on_right_side, x);
+	swapDrawers(scr, x);
 
 	for (i = 0; i < dock->max_icons; i++) {
 		btn = dock->icon_array[i];
@@ -4031,6 +4031,9 @@ static void clipEnterNotify(WObjDescriptor *desc, XEvent *event)
 	WDock *dock, *tmp;
 	WScreen *scr;
 
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) event;
+
 	assert(event->type == EnterNotify);
 
 	if (desc->parent_type != WCLASS_DOCK_ICON)
@@ -4110,6 +4113,9 @@ static void clipLeave(WDock *dock)
 static void clipLeaveNotify(WObjDescriptor *desc, XEvent *event)
 {
 	WAppIcon *btn = (WAppIcon *) desc->parent;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) event;
 
 	assert(event->type == LeaveNotify);
 
@@ -4567,19 +4573,17 @@ static void swapDrawer(WDock *drawer, int new_x)
 }
 
 
-static void swapDrawers(WScreen *scr, int on_right_side, int new_x)
+static void swapDrawers(WScreen *scr, int new_x)
 {
 	WDrawerChain *dc;
 
-	if (scr->drawer_tile) {
+	if (scr->drawer_tile)
 		RReleaseImage(scr->drawer_tile);
-	}
+
 	scr->drawer_tile = wDrawerMakeTile(scr, scr->icon_tile);
 
-	for (dc = scr->drawers; dc != NULL; dc = dc->next) {
+	for (dc = scr->drawers; dc != NULL; dc = dc->next)
 		swapDrawer(dc->adrawer, new_x);
-		assert(dc->adrawer->on_right_side == on_right_side);
-	}
 }
 
 
