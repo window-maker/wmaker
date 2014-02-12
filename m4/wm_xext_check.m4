@@ -145,20 +145,23 @@ sed -e 's,^[[^%]]*% *,,' | sed -e 's, *%.*$,,' `" dnl
               break])
          done
          LIBS="$wm_save_LIBS"
-         AS_IF([test "x$enable_xinerama$wm_cv_xext_xinerama" = "xyesno"],
-            [AC_MSG_ERROR([explicit Xinerama support requested but no library found])])
-         dnl
-         dnl A library was found, check if header is available and compile
-         wm_save_CFLAGS="$CFLAGS"
-         AS_CASE([`echo "$wm_cv_xext_xinerama" | sed -e 's,^[[^%]]*,,' `],
-             [*solaris*], [wm_header="X11/extensions/xinerama.h" ; wm_fct="XineramaGetInfo(NULL, 0, NULL, NULL, &intval)"],
-             [wm_header="X11/extensions/Xinerama.h" ; wm_fct="XineramaQueryScreens(NULL, &intval)"])
-         AS_IF([wm_fn_lib_try_compile "$wm_header" "int intval;" "$wm_fct" ""],
-             [],
-             [AC_MSG_ERROR([found $wm_cv_xext_xinerama but cannot compile with the header])])
-         AS_UNSET([wm_header])
-         AS_UNSET([wm_fct])
-         CFLAGS="$wm_save_CFLAGS"])
+         AS_IF([test "x$wm_cv_xext_xinerama" = "xno"],
+             [AS_IF([test "x$enable_xinerama" = "xyesno"],
+                 [AC_MSG_ERROR([explicit Xinerama support requested but no library found])])],
+             [dnl
+              dnl A library was found, check if header is available and compiles
+              wm_save_CFLAGS="$CFLAGS"
+              AS_CASE([`echo "$wm_cv_xext_xinerama" | sed -e 's,^[[^%]]*,,' `],
+                  [*solaris*], [wm_header="X11/extensions/xinerama.h" ; wm_fct="XineramaGetInfo(NULL, 0, NULL, NULL, &intval)"],
+                  [wm_header="X11/extensions/Xinerama.h" ; wm_fct="XineramaQueryScreens(NULL, &intval)"])
+              AS_IF([wm_fn_lib_try_compile "$wm_header" "int intval;" "$wm_fct" ""],
+                  [],
+                  [AC_MSG_ERROR([found $wm_cv_xext_xinerama but cannot compile with the header])])
+              AS_UNSET([wm_header])
+              AS_UNSET([wm_fct])
+              CFLAGS="$wm_save_CFLAGS" dnl
+         ]) dnl
+     ])
      AS_IF([test "x$wm_cv_xext_xinerama" = "xno"],
         [unsupported="$unsupported Xinerama"
          enable_xinerama="no"],
