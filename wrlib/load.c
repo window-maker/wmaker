@@ -78,8 +78,8 @@ char **RSupportedFileFormats(void)
 
 	/* built-in */
 	tmp[i++] = "XPM";
-	/* built-in */
-	tmp[i++] = "PPM";
+	/* built-in PNM here refers to anymap format: PPM, PGM, PBM */
+	tmp[i++] = "PNM";
 #ifdef USE_TIFF
 	tmp[i++] = "TIFF";
 #endif
