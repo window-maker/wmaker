@@ -36,6 +36,7 @@ typedef struct _Panel {
 	WMLabel *autoDelayL[4];
 	WMButton *autoDelayB[4][5];
 	WMTextField *autoDelayT[4];
+	WMLabel *autoDelayMsL[4];
 	
 	WMFrame *dockF;
 	WMButton *docksB[3];
@@ -51,10 +52,10 @@ static const struct {
 	const char *key;
 	const char *string;
 } auto_delay[] = {
-	{ "ClipAutoexpandDelay",   N_("Delay before auto-expansion") },
-	{ "ClipAutocollapseDelay", N_("Delay before auto-collapsing") },
-	{ "ClipAutoraiseDelay",    N_("Delay before auto-raise") },
-	{ "ClipAutolowerDelay",    N_("Delay before auto-lowering") }
+	{ "ClipAutoexpandDelay",   N_("Before auto-expansion") },
+	{ "ClipAutocollapseDelay", N_("Before auto-collapsing") },
+	{ "ClipAutoraiseDelay",    N_("Before auto-raise") },
+	{ "ClipAutolowerDelay",    N_("Before auto-lowering") }
 };
 
 
@@ -149,6 +150,8 @@ static void createPanel(Panel *p)
 	char *path;
 	int i, j, k;
 	char *buf1, *buf2;
+	WMColor *color;
+	WMFont *font;
 
 	path = LocateImage(ARQUIVO_XIS);
 	if (path) {
@@ -172,23 +175,23 @@ static void createPanel(Panel *p)
 		WMResizeWidget(panel->autoDelayF[k], 370, 100);
 		WMMoveWidget(panel->autoDelayF[k], 15, 10 + k * 110);
 		if (k == 0)
-			WMSetFrameTitle(panel->autoDelayF[k], _("Delays in milliseconds for autocollapsing clips"));
+			WMSetFrameTitle(panel->autoDelayF[k], _("Clip autocollapsing delays"));
 		else
-			WMSetFrameTitle(panel->autoDelayF[k], _("Delays in milliseconds for autoraising clips"));
+			WMSetFrameTitle(panel->autoDelayF[k], _("Clip autoraising delays"));
 
 		for (i = 0; i < 2; i++)
 		{
 			panel->autoDelayL[i + k * 2] = WMCreateLabel(panel->autoDelayF[k]);
-			WMResizeWidget(panel->autoDelayL[i + k * 2], 175, 20);
+			WMResizeWidget(panel->autoDelayL[i + k * 2], 155, 20);
 			WMMoveWidget(panel->autoDelayL[i + k * 2], 10, 27 + 40 * i);
 			WMSetLabelText(panel->autoDelayL[i + k * 2], _(auto_delay[i + k * 2].string));
-			WMSetLabelTextAlignment(panel->autoDelayL[i + k * 2], WARight);
+			/* WMSetLabelTextAlignment(panel->autoDelayL[i + k * 2], WARight); */
 
 			for (j = 0; j < 5; j++)
 			{
 				panel->autoDelayB[i + k * 2][j] = WMCreateCustomButton(panel->autoDelayF[k], WBBStateChangeMask);
 				WMResizeWidget(panel->autoDelayB[i + k * 2][j], 25, 25);
-				WMMoveWidget(panel->autoDelayB[i + k * 2][j], 185 + (25 * j), 25 + 40 * i);
+				WMMoveWidget(panel->autoDelayB[i + k * 2][j], 145 + (28 * j), 25 + 40 * i);
 				WMSetButtonBordered(panel->autoDelayB[i + k * 2][j], False);
 				WMSetButtonImagePosition(panel->autoDelayB[i + k * 2][j], WIPImageOnly);
 				WMSetButtonAction(panel->autoDelayB[i + k * 2][j], pushAutoDelayButton, panel);
@@ -213,9 +216,20 @@ static void createPanel(Panel *p)
 			}
 
 			panel->autoDelayT[i + k * 2] = WMCreateTextField(panel->autoDelayF[k]);
-			WMResizeWidget(panel->autoDelayT[i + k * 2], 40, 20);
-			WMMoveWidget(panel->autoDelayT[i + k * 2], 315, 27 + 40 * i);
+			WMResizeWidget(panel->autoDelayT[i + k * 2], 36, 20);
+			WMMoveWidget(panel->autoDelayT[i + k * 2], 287, 27 + 40 * i);
 			WMAddNotificationObserver(autoDelayChanged, panel, WMTextDidChangeNotification, panel->autoDelayT[i + k * 2]);
+
+			color = WMDarkGrayColor(scr);
+			font = WMSystemFontOfSize(scr, 10);
+			panel->autoDelayMsL[i + k * 2] = WMCreateLabel(panel->autoDelayF[k]);
+			WMResizeWidget(panel->autoDelayMsL[i + k * 2], 36, 16);
+			WMMoveWidget(panel->autoDelayMsL[i + k * 2], 327, 33 + 40 *i);
+			WMSetLabelText(panel->autoDelayMsL[i + k * 2], _("msec"));
+			WMSetLabelTextColor(panel->autoDelayMsL[i + k * 2], color);
+			WMSetLabelFont(panel->autoDelayMsL[i + k * 2], font);
+			WMReleaseColor(color);
+			WMReleaseFont(font);
 		}
 
 		WMMapSubwidgets(panel->autoDelayF[k]);

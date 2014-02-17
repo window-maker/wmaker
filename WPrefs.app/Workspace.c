@@ -223,8 +223,8 @@ Panel *InitWorkspace(WMWidget *parent)
 
 	panel->sectionName = _("Workspace Preferences");
 
-	panel->description = _("Workspace navigation features.\n"
-			       "You can also enable/disable the Dock and Clip here.");
+	panel->description = _("Workspace navigation features\n"
+			       "and workspace name display settings.");
 
 	panel->parent = parent;
 

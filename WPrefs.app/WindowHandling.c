@@ -120,7 +120,7 @@ static void resistanceCallback(WMWidget * w, void *data)
 	i = WMGetSliderValue(panel->resS);
 
 	if (i == 0)
-		WMSetLabelText(panel->resL, "OFF");
+		WMSetLabelText(panel->resL, _("OFF"));
 	else {
 		sprintf(buffer, "%i", i);
 		WMSetLabelText(panel->resL, buffer);
@@ -139,7 +139,7 @@ static void resizeCallback(WMWidget * w, void *data)
 	i = WMGetSliderValue(panel->resizeS);
 
 	if (i == 0)
-		WMSetLabelText(panel->resizeL, "OFF");
+		WMSetLabelText(panel->resizeL, _("OFF"));
 	else {
 		sprintf(buffer, "%i", i);
 		WMSetLabelText(panel->resizeL, buffer);
@@ -450,7 +450,7 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->resizeL, 60, 74);
 
 	panel->resizeTextL = WMCreateLabel(panel->maxiF);
-	WMSetLabelText(panel->resizeTextL, "Mod+Wheel\nresize increment");
+	WMSetLabelText(panel->resizeTextL, _("Mod+Wheel\nresize increment"));
 	WMResizeWidget(panel->resizeTextL, 110, 30);
 	WMMoveWidget(panel->resizeTextL, 90, 66);
 

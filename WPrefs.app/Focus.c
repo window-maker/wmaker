@@ -150,7 +150,7 @@ static void pushDelayButton(WMWidget * w, void *data)
 
 	panel->raiseDelaySelected = 1;
 	if (w == panel->raisB[0]) {
-		WMSetTextFieldText(panel->raisT, "OFF");
+		WMSetTextFieldText(panel->raisT, _("OFF"));
 	} else if (w == panel->raisB[1]) {
 		WMSetTextFieldText(panel->raisT, "10");
 	} else if (w == panel->raisB[2]) {

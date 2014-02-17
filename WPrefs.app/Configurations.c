@@ -204,9 +204,6 @@ static void createPanel(Panel *p)
 	WMResizeWidget(panel->smoF, 94, 100);
 	WMMoveWidget(panel->smoF, 420, 10);
 	WMSetFrameTitle(panel->smoF, _("Smooth Scaling"));
-	WMSetBalloonTextForView(_("Smooth scaled background images, neutralizing\n"
-				  "the `pixelization' effect. This will slow\n"
-				  "down loading of background images considerably."), WMWidgetView(panel->smoF));
 
 	panel->smoB = WMCreateButton(panel->smoF, WBTToggle);
 	WMResizeWidget(panel->smoB, 64, 64);
@@ -237,6 +234,9 @@ static void createPanel(Panel *p)
 
 		RReleaseImage(image);
 	}
+	WMSetBalloonTextForView(_("Smooth scaled background images, neutralizing\n"
+				  "the `pixelization' effect. This will slow\n"
+				  "down loading of background images considerably."), WMWidgetView(panel->smoB));
 
 	WMMapSubwidgets(panel->smoF);
 
