@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Window Maker 0.95.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-02-17 19:46+0100\n"
-"PO-Revision-Date: 2014-02-17 19:57+0100\n"
+"POT-Creation-Date: 2014-02-18 00:14+0100\n"
+"PO-Revision-Date: 2014-02-18 00:33+0100\n"
 "Last-Translator: BALATON Zoltán <balaton@eik.bme.hu>\n"
 "Language-Team: Hungarian\n"
 "Language: \n"
@@ -214,8 +214,8 @@ msgstr "Menü stílus"
 #: ../../../wmaker-crm/WPrefs.app/MenuPreferences.c:181
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:520
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:531
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:529
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:554
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:467
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:492
 #, c-format
 msgid "could not load icon file %s"
 msgstr "nem tudom betölteni ezt az ikon fájlt: %s"
@@ -445,8 +445,7 @@ msgstr ""
 "és késleltetések hangolása."
 
 #: ../../../wmaker-crm/WPrefs.app/Expert.c:41
-msgid ""
-"Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."
+msgid "Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."
 msgstr "Miniablakok (ikonállapotú ablakok) letiltása. KDE/GNOME-hoz."
 
 #. default:
@@ -462,8 +461,7 @@ msgstr "Munkafelület állapot (session) automatikus mentése kilépéskor."
 #. default:
 #: ../../../wmaker-crm/WPrefs.app/Expert.c:50
 msgid "Use SaveUnder in window frames, icons, menus and other objects."
-msgstr ""
-"\"SaveUnder\" használata keretek, ikonok, menük és más objektumok alatt."
+msgstr "\"SaveUnder\" használata keretek, ikonok, menük és más objektumok alatt."
 
 #. default:
 #: ../../../wmaker-crm/WPrefs.app/Expert.c:53
@@ -519,16 +517,12 @@ msgstr ""
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:75
 #, c-format
 msgid "bad option value %s for option FocusMode. Using default Manual"
-msgstr ""
-"rossz érték a FocusMode-nál: \"%s\". Az alapértelmezett manuális módot "
-"használom."
+msgstr "rossz érték a FocusMode-nál: \"%s\". Az alapértelmezett manuális módot használom."
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:87
 #, c-format
 msgid "bad option value %s for option ColormapMode. Using default Auto"
-msgstr ""
-"rossz érték a ColorMapMode-nál: \"%s\". Az alapértelmezett automatikus módot "
-"használom."
+msgstr "rossz érték a ColorMapMode-nál: \"%s\". Az alapértelmezett automatikus módot használom."
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:153
 #: ../../../wmaker-crm/WPrefs.app/Preferences.c:71
@@ -548,9 +542,7 @@ msgstr "Manuális:  Fókusz váltáshoz az ablakra kell kattintani."
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:212
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer."
-msgstr ""
-"Automatikus:  A fókusz mindig azé az ablaké lesz, amely felett az egér "
-"mutató áll."
+msgstr "Automatikus:  A fókusz mindig azé az ablaké lesz, amely felett az egér mutató áll."
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:225
 msgid "Install colormap in the window..."
@@ -1039,9 +1031,7 @@ msgstr "Mégsem"
 
 #: ../../../wmaker-crm/WPrefs.app/KeyboardShortcuts.c:352
 msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
-msgstr ""
-"Nyomd le a kívánt billentyű kombinációt vagy kattints a Mégsem gombra a "
-"tanulás leállításához"
+msgstr "Nyomd le a kívánt billentyű kombinációt vagy kattints a Mégsem gombra a tanulás leállításához"
 
 #: ../../../wmaker-crm/WPrefs.app/KeyboardShortcuts.c:371
 #: ../../../wmaker-crm/WPrefs.app/KeyboardShortcuts.c:541
@@ -1053,9 +1043,7 @@ msgstr "Megtanul"
 #: ../../../wmaker-crm/WPrefs.app/KeyboardShortcuts.c:372
 #: ../../../wmaker-crm/WPrefs.app/KeyboardShortcuts.c:549
 msgid "Click on Capture to interactively define the shortcut key."
-msgstr ""
-"Kattints a \"Megtanul\" gombra ha interaktívan akarod megadni a "
-"gyorsbillentyű kombinációt."
+msgstr "Kattints a \"Megtanul\" gombra ha interaktívan akarod megadni a gyorsbillentyű kombinációt."
 
 #: ../../../wmaker-crm/WPrefs.app/KeyboardShortcuts.c:498
 msgid "Actions"
@@ -1479,7 +1467,7 @@ msgstr "Törölve: érvénytelen menü parancs \"%s\", címke: \"%s\""
 
 #: ../../../wmaker-crm/WPrefs.app/Menu.c:1443
 #: ../../../wmaker-crm/WPrefs.app/Menu.c:1501
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:762
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:687
 msgid "Warning"
 msgstr "Figyelmeztetés"
 
@@ -1491,14 +1479,14 @@ msgstr "Figyelmeztetés"
 #: ../../../wmaker-crm/WPrefs.app/TexturePanel.c:644
 #: ../../../wmaker-crm/WPrefs.app/TexturePanel.c:1402
 #: ../../../wmaker-crm/WPrefs.app/Themes.c:84
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:711
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:715
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:735
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:747
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:753
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:762
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:793
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:797
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:636
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:640
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:660
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:672
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:678
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:687
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:718
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:722
 msgid "OK"
 msgstr "OK"
 
@@ -1513,13 +1501,13 @@ msgstr "Nem tudom megnyitni az alapértelmezett menüt innen: %s"
 #: ../../../wmaker-crm/WPrefs.app/TexturePanel.c:566
 #: ../../../wmaker-crm/WPrefs.app/TexturePanel.c:642
 #: ../../../wmaker-crm/WPrefs.app/Themes.c:83
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:711
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:715
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:732
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:743
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:753
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:793
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:797
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:636
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:640
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:657
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:668
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:678
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:718
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:722
 msgid "Error"
 msgstr "Hiba"
 
@@ -1586,12 +1574,8 @@ msgid "Invalid mouse acceleration value. Must be a positive real value."
 msgstr "Érvénytelen egérgyorsulási érték. Pozitív valós számot adj meg."
 
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:142
-msgid ""
-"Invalid mouse acceleration threshold value. Must be the number of pixels to "
-"travel before accelerating."
-msgstr ""
-"Érvénytelen egérgyorsulási küszöbérték. Add meg hány pixelt lehet odébb "
-"vinni, mielőtt gyorsulna."
+msgid "Invalid mouse acceleration threshold value. Must be the number of pixels to travel before accelerating."
+msgstr "Érvénytelen egérgyorsulási küszöbérték. Add meg hány pixelt lehet odébb vinni, mielőtt gyorsulna."
 
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:231
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:243
@@ -1603,12 +1587,8 @@ msgstr "hibás érték (%s) a \"%s\" opciónál"
 
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:326
 #, c-format
-msgid ""
-"modifier key %s for option ModifierKey was not recognized. Using %s as "
-"default"
-msgstr ""
-"a (%s) módosító billentyűt (ModifierKey) nem ismerem. Az \"%s\" "
-"alapbeállítást használom."
+msgid "modifier key %s for option ModifierKey was not recognized. Using %s as default"
+msgstr "a (%s) módosító billentyűt (ModifierKey) nem ismerem. Az \"%s\" alapbeállítást használom."
 
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:347
 msgid "could not retrieve keyboard modifier mapping"
@@ -1630,7 +1610,7 @@ msgid "could not load icon %s"
 msgstr "nem tudom betölteni ezt az ikont: %s"
 
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:471
-msgid "Acceler.:"
+msgid "Accel.:"
 msgstr "Gyorsulás:"
 
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:482
@@ -1756,15 +1736,11 @@ msgstr ""
 
 #: ../../../wmaker-crm/WPrefs.app/Paths.c:78
 msgid "bad value in option IconPath. Using default path list"
-msgstr ""
-"rossz érték az IconPath értékénél. Az alapértelmezett útvonal listát "
-"használom."
+msgstr "rossz érték az IconPath értékénél. Az alapértelmezett útvonal listát használom."
 
 #: ../../../wmaker-crm/WPrefs.app/Paths.c:95
 msgid "bad value in option PixmapPath. Using default path list"
-msgstr ""
-"rossz érték a PixmapPath értékénél. Az alapértelmezett útvonal listát "
-"használom."
+msgstr "rossz érték a PixmapPath értékénél. Az alapértelmezett útvonal listát használom."
 
 #: ../../../wmaker-crm/WPrefs.app/Paths.c:140
 msgid "Select directory"
@@ -2098,58 +2074,47 @@ msgstr "a képfájl (%s) helyét nem találom"
 msgid "could not process icon %s: %s"
 msgstr "a %s ikont nem tudom feldolgozni: %s"
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:631
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:556
 #, c-format
 msgid "could not load image file %s:%s"
 msgstr "a képfájlt nem tudom betölteni %s:%s"
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:648
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:573
 msgid "Loading Window Maker configuration files..."
 msgstr "Window Maker konfigurációs fájlok betöltése..."
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:652
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:577
 msgid "Initializing configuration panels..."
 msgstr "Beállító panelek inicializálása..."
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:710
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:792
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:635
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:717
 #, c-format
 msgid "Window Maker domain (%s) is corrupted!"
 msgstr "Window Maker domain (%s) megsérült!"
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:714
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:639
 #, c-format
 msgid "Could not load Window Maker domain (%s) from defaults database."
-msgstr ""
-"A Window Maker domaint (%s) nem tudtam betölteni a beállítás adatbázisból."
+msgstr "A Window Maker domaint (%s) nem tudtam betölteni a beállítás adatbázisból."
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:729
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:654
 msgid "could not extract version information from Window Maker"
 msgstr "nem tudom kideríteni a Window Maker verziószámát"
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:730
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:655
 msgid "Make sure wmaker is in your search path."
 msgstr "Győzödj meg róla, hogy a wmaker benne van-e a keresési útvonalban."
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:734
-msgid ""
-"Could not extract version from Window Maker. Make sure it is correctly "
-"installed and is in your PATH environment variable."
-msgstr ""
-"Nem tudom kideríteni a Window Maker verziószámát. Győzödj meg róla, hogy jól "
-"van-e felinstallálva és benne van-e a keresési útvonalban (PATH)"
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:659
+msgid "Could not extract version from Window Maker. Make sure it is correctly installed and is in your PATH environment variable."
+msgstr "Nem tudom kideríteni a Window Maker verziószámát. Győzödj meg róla, hogy jól van-e felinstallálva és benne van-e a keresési útvonalban (PATH)"
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:744
-msgid ""
-"Could not extract version from Window Maker. Make sure it is correctly "
-"installed and the path where it installed is in the PATH environment "
-"variable."
-msgstr ""
-"Nem tudom kideríteni a Window Maker verziószámát. Győzödj meg róla, hogy jól "
-"van-e felinstallálva és a hely, ahova telepítetted, benne van-e a keresési "
-"útvonalban (PATH)"
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:669
+msgid "Could not extract version from Window Maker. Make sure it is correctly installed and the path where it installed is in the PATH environment variable."
+msgstr "Nem tudom kideríteni a Window Maker verziószámát. Győzödj meg róla, hogy jól van-e felinstallálva és a hely, ahova telepítetted, benne van-e a keresési útvonalban (PATH)"
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:751
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:676
 #, c-format
 msgid ""
 "WPrefs only supports Window Maker 0.18.0 or newer.\n"
@@ -2158,44 +2123,34 @@ msgstr ""
 "A WPrefs csak 0.18.0 vagy nagyobb verziószámú Window Makert\n"
 "támogat. A jelenlegi verzió: %i.%i.%i\n"
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:760
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:685
 #, c-format
-msgid ""
-"Window Maker %i.%i.%i, which is installed in your system, is not fully "
-"supported by this version of WPrefs."
-msgstr ""
-"A jelenleg telepített Window Makert (%i.%i.%i) nem támogatja teljesen ez a "
-"WPrefs verzió."
+msgid "Window Maker %i.%i.%i, which is installed in your system, is not fully supported by this version of WPrefs."
+msgstr "A jelenleg telepített Window Makert (%i.%i.%i) nem támogatja teljesen ez a WPrefs verzió."
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:773
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:698
 #, c-format
 msgid "could not run \"%s --global_defaults_path\"."
 msgstr "nem tudom futtatni a \"%s -global_defaults_path\" parancsot."
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:796
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:721
 #, c-format
 msgid "Could not load global Window Maker domain (%s)."
 msgstr "a globális Window Maker domaint (%s) nem tudom betölteni."
 
-#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:1016
+#: ../../../wmaker-crm/WPrefs.app/WPrefs.c:941
 #, c-format
 msgid "bad speed value for option %s; using default Medium"
-msgstr ""
-"Rossz sebesség-érték a %s kulcshoz; az alapértelmezett \"Közepes\"-t "
-"használom"
+msgstr "Rossz sebesség-érték a %s kulcshoz; az alapértelmezett \"Közepes\"-t használom"
 
 #: ../../../wmaker-crm/WPrefs.app/WindowHandling.c:167
 #, c-format
 msgid "bad option value %s in WindowPlacement. Using default value"
-msgstr ""
-"rossz érték (%s) a WindowPlacement opciónál. Az alapértelmezett értéket "
-"használom."
+msgstr "rossz érték (%s) a WindowPlacement opciónál. Az alapértelmezett értéket használom."
 
 #: ../../../wmaker-crm/WPrefs.app/WindowHandling.c:186
 msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
-msgstr ""
-"érvénytelen adat a WindowPlaceOrigin beállításánál. (0,0)-t használok "
-"helyette."
+msgstr "érvénytelen adat a WindowPlaceOrigin beállításánál. (0,0)-t használok helyette."
 
 #: ../../../wmaker-crm/WPrefs.app/WindowHandling.c:275
 msgid "Window Placement"
@@ -2294,12 +2249,8 @@ msgid "Attract"
 msgstr "Vonz"
 
 #: ../../../wmaker-crm/WPrefs.app/WindowHandling.c:502
-msgid ""
-"Open dialogs in the same workspace\n"
-"as their owners"
-msgstr ""
-"A dialógus ablakok szülőikkel azonos\n"
-"munkafelületen jelenjenek meg"
+msgid "Open dialogs in the same workspace as their owners"
+msgstr "A dialógus ablakok szülőikkel azonos munkafelületen jelenjenek meg"
 
 #: ../../../wmaker-crm/WPrefs.app/WindowHandling.c:524
 msgid "Window Handling Preferences"

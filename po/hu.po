@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: Window Maker 0.95.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2014-02-14 01:34+0100\n"
-"PO-Revision-Date: 2014-02-17 02:27+0100\n"
+"PO-Revision-Date: 2014-02-18 00:23+0100\n"
 "Last-Translator: BALATON Zoltán <balaton@eik.bme.hu>\n"
 "Language-Team: Hungarian\n"
 "Language: \n"
@@ -97,12 +97,12 @@ msgstr "Előhoz"
 #: ../../wmaker-crm/src/defaults.c:806
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr "A globális beállítás adatbázisból a %s (%s) domain sérült."
+msgstr "A globális beállítás adatbázis %s (%s) domainja sérült!"
 
 #: ../../wmaker-crm/src/defaults.c:810
 #, c-format
 msgid "could not load domain %s from global defaults database"
-msgstr "Az felhasználói beállítás adatbázisból a %s domaint nem tudtam betölteni."
+msgstr "Nem tudtam betölteni a globális beállítás adatbázis %s domainját."
 
 #: ../../wmaker-crm/src/defaults.c:855 ../../wmaker-crm/src/defaults.c:869
 #, c-format
@@ -119,7 +119,7 @@ msgstr "A beállítás adatbázis %s (%s) domainja sérült!"
 #: ../../wmaker-crm/src/defaults.c:1051 ../../wmaker-crm/src/defaults.c:1075
 #, c-format
 msgid "could not load domain %s from user defaults database"
-msgstr "A felhasználói beállítás adatbázisból nem tudtam betölteni a %s domain."
+msgstr "Nem tudtam betölteni a felhasználói beállítás adatbázisból a %s domaint."
 
 #. --------------------------- Local -----------------------
 #: ../../wmaker-crm/src/defaults.c:1243 ../../wmaker-crm/src/defaults.c:1372
