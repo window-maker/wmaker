@@ -363,7 +363,7 @@ dnl List of supported locales
 dnl =========================
 supported_locales="be bg bs ca cs da de el es et fi fr gl hr hu hy it ja ko ms nl no pl pt ro ru sk sv tr zh_CN zh_TW"
 supported_wprefs_locales="bg ca cs de es et fi fr hr hu it ja ko pt ru sk zh_CN zh_TW"
-supported_wings_locales="bg ca cs de fr sk"
+supported_wings_locales="bg ca cs de fr hu sk"
 supported_util_locales="de es fr pt"
 
 for lang in $LINGUAS; do

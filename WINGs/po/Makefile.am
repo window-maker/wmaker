@@ -4,7 +4,7 @@ CATALOGS = @WINGSMOFILES@
 
 CLEANFILES = $(CATALOGS) WINGs.pot
 
-EXTRA_DIST = bg.po ca.po cs.po de.po fr.po sk.po
+EXTRA_DIST = bg.po ca.po cs.po de.po fr.po hu.po sk.po
 
 POTFILES  = \
 	$(top_srcdir)/WINGs/error.c \
