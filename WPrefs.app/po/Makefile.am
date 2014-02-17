@@ -8,26 +8,26 @@ EXTRA_DIST = bg.po ca.po cs.po de.po es.po et.po fi.po fr.po hr.po hu.po \
 	it.po ja.po ko.po pt.po ru.po sk.po zh_CN.po zh_TW.po
 
 POTFILES  = \
-	$(top_builddir)/WPrefs.app/Appearance.c \
-	$(top_builddir)/WPrefs.app/Configurations.c \
-	$(top_builddir)/WPrefs.app/Docks.c \
-	$(top_builddir)/WPrefs.app/Expert.c \
-	$(top_builddir)/WPrefs.app/Focus.c \
-	$(top_builddir)/WPrefs.app/FontSimple.c \
-	$(top_builddir)/WPrefs.app/Icons.c \
-	$(top_builddir)/WPrefs.app/KeyboardSettings.c \
-	$(top_builddir)/WPrefs.app/KeyboardShortcuts.c \
-	$(top_builddir)/WPrefs.app/Menu.c \
-	$(top_builddir)/WPrefs.app/MenuPreferences.c \
-	$(top_builddir)/WPrefs.app/MouseSettings.c \
-	$(top_builddir)/WPrefs.app/Paths.c \
-	$(top_builddir)/WPrefs.app/Preferences.c \
-	$(top_builddir)/WPrefs.app/TexturePanel.c \
-	$(top_builddir)/WPrefs.app/Themes.c \
-	$(top_builddir)/WPrefs.app/WPrefs.c \
-	$(top_builddir)/WPrefs.app/WindowHandling.c \
-	$(top_builddir)/WPrefs.app/Workspace.c \
-	$(top_builddir)/WPrefs.app/main.c
+	$(top_srcdir)/WPrefs.app/Appearance.c \
+	$(top_srcdir)/WPrefs.app/Configurations.c \
+	$(top_srcdir)/WPrefs.app/Docks.c \
+	$(top_srcdir)/WPrefs.app/Expert.c \
+	$(top_srcdir)/WPrefs.app/Focus.c \
+	$(top_srcdir)/WPrefs.app/FontSimple.c \
+	$(top_srcdir)/WPrefs.app/Icons.c \
+	$(top_srcdir)/WPrefs.app/KeyboardSettings.c \
+	$(top_srcdir)/WPrefs.app/KeyboardShortcuts.c \
+	$(top_srcdir)/WPrefs.app/Menu.c \
+	$(top_srcdir)/WPrefs.app/MenuPreferences.c \
+	$(top_srcdir)/WPrefs.app/MouseSettings.c \
+	$(top_srcdir)/WPrefs.app/Paths.c \
+	$(top_srcdir)/WPrefs.app/Preferences.c \
+	$(top_srcdir)/WPrefs.app/TexturePanel.c \
+	$(top_srcdir)/WPrefs.app/Themes.c \
+	$(top_srcdir)/WPrefs.app/WPrefs.c \
+	$(top_srcdir)/WPrefs.app/WindowHandling.c \
+	$(top_srcdir)/WPrefs.app/Workspace.c \
+	$(top_srcdir)/WPrefs.app/main.c
 
 SUFFIXES = .po .mo
 

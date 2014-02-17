@@ -7,17 +7,17 @@ CLEANFILES = $(CATALOGS) WINGs.pot
 EXTRA_DIST = bg.po ca.po cs.po de.po fr.po sk.po
 
 POTFILES  = \
-	$(top_builddir)/WINGs/error.c \
-	$(top_builddir)/WINGs/findfile.c \
-	$(top_builddir)/WINGs/proplist.c \
-	$(top_builddir)/WINGs/userdefaults.c \
-	$(top_builddir)/WINGs/wcolor.c \
-	$(top_builddir)/WINGs/wcolorpanel.c \
-	$(top_builddir)/WINGs/wfilepanel.c \
-	$(top_builddir)/WINGs/wfont.c \
-	$(top_builddir)/WINGs/wfontpanel.c \
-	$(top_builddir)/WINGs/widgets.c \
-	$(top_builddir)/WINGs/wruler.c
+	$(top_srcdir)/WINGs/error.c \
+	$(top_srcdir)/WINGs/findfile.c \
+	$(top_srcdir)/WINGs/proplist.c \
+	$(top_srcdir)/WINGs/userdefaults.c \
+	$(top_srcdir)/WINGs/wcolor.c \
+	$(top_srcdir)/WINGs/wcolorpanel.c \
+	$(top_srcdir)/WINGs/wfilepanel.c \
+	$(top_srcdir)/WINGs/wfont.c \
+	$(top_srcdir)/WINGs/wfontpanel.c \
+	$(top_srcdir)/WINGs/widgets.c \
+	$(top_srcdir)/WINGs/wruler.c
 
 SUFFIXES = .po .mo
 

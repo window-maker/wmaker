@@ -10,33 +10,31 @@ EXTRA_DIST = be.po bg.po bs.po ca.po cs.po da.po de.po el.po es.po et.po \
 	no.po pl.po pt.po ro.po ru.po sk.po sv.po tr.po zh_CN.po zh_TW.po
 
 POTFILES  = \
-	$(top_builddir)/src/appicon.c \
-	$(top_builddir)/src/application.c \
-	$(top_builddir)/src/defaults.c \
-	$(top_builddir)/src/dialog.c \
-	$(top_builddir)/src/dock.c \
-	$(top_builddir)/src/dockedapp.c \
-	$(top_builddir)/src/framewin.c \
-	$(top_builddir)/src/icon.c \
-	$(top_builddir)/src/main.c \
-	$(top_builddir)/src/menu.c \
-	$(top_builddir)/src/misc.c \
-	$(top_builddir)/src/pixmap.c \
-	$(top_builddir)/src/resources.c \
-	$(top_builddir)/src/rootmenu.c \
-	$(top_builddir)/src/screen.c \
-	$(top_builddir)/src/session.c \
-	$(top_builddir)/src/stacking.c \
-	$(top_builddir)/src/startup.c \
-	$(top_builddir)/src/switchmenu.c \
-	$(top_builddir)/src/switchpanel.c \
-	$(top_builddir)/src/texture.c \
-	$(top_builddir)/src/wdefaults.c \
-	$(top_builddir)/src/window.c \
-	$(top_builddir)/src/winmenu.c \
-	$(top_builddir)/src/winspector.c \
-	$(top_builddir)/src/wmspec.c \
-	$(top_builddir)/src/workspace.c
+	$(top_srcdir)/src/appicon.c \
+	$(top_srcdir)/src/defaults.c \
+	$(top_srcdir)/src/dialog.c \
+	$(top_srcdir)/src/dock.c \
+	$(top_srcdir)/src/dockedapp.c \
+	$(top_srcdir)/src/event.c \
+	$(top_srcdir)/src/framewin.c \
+	$(top_srcdir)/src/icon.c \
+	$(top_srcdir)/src/main.c \
+	$(top_srcdir)/src/menu.c \
+	$(top_srcdir)/src/misc.c \
+	$(top_srcdir)/src/monitor.c \
+	$(top_srcdir)/src/resources.c \
+	$(top_srcdir)/src/rootmenu.c \
+	$(top_srcdir)/src/screen.c \
+	$(top_srcdir)/src/session.c \
+	$(top_srcdir)/src/stacking.c \
+	$(top_srcdir)/src/startup.c \
+	$(top_srcdir)/src/switchmenu.c \
+	$(top_srcdir)/src/texture.c \
+	$(top_srcdir)/src/wdefaults.c \
+	$(top_srcdir)/src/window.c \
+	$(top_srcdir)/src/winmenu.c \
+	$(top_srcdir)/src/winspector.c \
+	$(top_srcdir)/src/workspace.c
 
 SUFFIXES = .po .mo
 
