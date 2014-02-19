@@ -1204,6 +1204,7 @@ static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->client_flags.no_appicon = 1;
+		wwin->client_flags.no_focusable = 1;
 		wwin->flags.net_skip_pager = 1;
 	} else if (wwin->type == net_wm_window_type_notification) {
 		wwin->client_flags.no_titlebar = 1;
@@ -1219,6 +1220,7 @@ static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 		wwin->client_flags.dont_move_off = 1;
 		wwin->client_flags.no_hide_others= 1;
 		wwin->client_flags.no_appicon = 1;
+		wwin->client_flags.no_focusable = 1;
 		wwin->flags.net_skip_pager = 1;
 	} else if (wwin->type == net_wm_window_type_dnd) {
 		wwin->client_flags.no_titlebar = 1;
