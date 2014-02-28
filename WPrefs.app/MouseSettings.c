@@ -714,7 +714,8 @@ static void storeCommandInScript(const char *cmd, const char *line)
 		wfree(tmppath);
 	}
 	sprintf(buffer, "chmod u+x %s", path);
-	system(buffer);
+	if (system(buffer) == -1)
+		werror(_("could not execute command \"%s\""), buffer);
 
  end:
 	wfree(path);

@@ -1261,17 +1261,25 @@ static Pixmap loadRImage(WMScreen * scr, const char *path)
 {
 	FILE *f;
 	RImage *image;
-	int w, h, d;
+	int w, h, d, cnt;
+	size_t read_size;
 	Pixmap pixmap;
 
 	f = fopen(path, "rb");
 	if (!f)
 		return None;
 
-	fscanf(f, "%02x%02x%1x", &w, &h, &d);
-
+	cnt = fscanf(f, "%02x%02x%1x", &w, &h, &d);
+	if (cnt != 3) {
+		fclose(f);
+		return None;
+	}
 	image = RCreateImage(w, h, d == 4);
-	fread(image->data, 1, w * h * d, f);
+	read_size = w * h * d;
+	if (fread(image->data, 1, read_size, f) != read_size) {
+		fclose(f);
+		return None;
+	}
 	fclose(f);
 
 	RConvertImage(WMScreenRContext(scr), image, &pixmap);
