@@ -20,7 +20,7 @@ bugs@windowmaker.org
 [ ] could not compile
 [ ] crashed
 [ ] configuration option does not work
-[ ] weird behaviour
+[ ] weird behavior
 [ ] cosmetic 
 [ ] some problem with WPrefs 
 [ ] others: ...................................
@@ -42,13 +42,13 @@ bugs@windowmaker.org
 5. Changes to the src/wconfig.h file:
 
 
-6. The error occured during:
+6. The error occurred during:
 [ ] configuration
 [ ] compilation
-[ ] startup
+[ ] start-up
 [ ] use
 
-7. Changes made to the configuration files, if the error ocurred during use:
+7. Changes made to the configuration files, if the error occurred during use:
 
 
 8. Error messages output:
@@ -70,6 +70,6 @@ WindowMaker Version (run "wmaker -version"): .........................
 
 11. backtrace if the bug made Window Maker crash. PLEASE SEND THE
 BACKTRACE. Your bug report might be of not much use without one.
-strace/truss outputs are usually not usefull for crashes, so you can
+strace/truss outputs are usually not useful for crashes, so you can
 skip it. The README file has instructions to make one.
 

@@ -64,7 +64,7 @@ Using Cursors with 'getstyle' and 'setstyle'
 The 'getstyle' and 'setstyle' style/theme-management utilities can
 handle user-definable cursors.  By default, 'getstyle' ignores cursor
 definitions; using 'getstyle -t' to get theme-related settings will
-also include any cursors you've defined in the resulting stylefile.
+also include any cursors you've defined in the resulting style file.
 
 However, by default, 'setstyle' does NOT ignore cursor settings.  If
 you wish to set a style or theme without installing cursor settings,

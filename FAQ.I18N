@@ -19,9 +19,9 @@ If I18N support does not work for you, check these:
  	  support a locale for your language, you can use X Window System's
 	  locale emulation feature instead of OS's locale. To use this
 	  feature, add this option to the configure, "--with-x-locale".
-	  if your OS is commercial one, such as Solaris,IRIX,AIX,...,
+	  if your OS is commercial one, such as Solaris, IRIX, AIX, ...
 	  you perhaps don't have to use X's locale emulation.
-	  But if your OS is Linux or NetBSD or .. , it's possible
+	  But if your OS is Linux or NetBSD or..., it is possible that
 	  your locale is not supported so far. then use "--with-x-locale".
 
 	  Note: to use X's locale emulation, your Xlib has to be
@@ -39,7 +39,7 @@ If I18N support does not work for you, check these:
 	  MenuTitleFont   = "Trebuchet MS:bold:pixelsize=12";
 	  ......................................................
 
-	  then you can't display asian language (ja,ko,ch) characters using
+	  then you can't display Asian language (ja, ko, ch) characters using
           Trebuchet MS. A font that is guaranteed to work for any language is
           sans (or sans-serif). sans is not a font itself, but an alias which
           points to multiple fonts and will load the first in that list that
@@ -53,7 +53,7 @@ If I18N support does not work for you, check these:
 
 		"Trebuchet MS,sans serif:pixelsize=12"
 
-	  this will not be able to display asian languages if any of the
+	  this will not be able to display Asian languages if any of the
           previous fonts before sans are installed. This is because unlike
           the proper font pickup that sans guarantees for your language,
           this construct only allows a font fallback mechanism, which tries

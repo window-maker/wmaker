@@ -49,7 +49,7 @@ OPTIONAL:
 
 These libraries are not required to make Window Maker work, but they
 are supported in case you want to use them. Version numbers are those
-that I have (and therefore, guraranteed to work), but other versions
+that I have (and therefore, guaranteed to work), but other versions
 might work too.
 
 
@@ -57,7 +57,7 @@ might work too.
 	Older versions may not work!!!
 	Available at ftp://sunsite.unc.edu/pub/Linux/libs/X/
 
-	There is builtin support for XPM files, but it will not
+	There is built-in support for XPM files, but it will not
 	load images in some uncommon encodings.
 
 - libpng 0.96 or newer and zlib
@@ -185,7 +185,7 @@ PLATFORM SPECIFIC NOTES:
 - MetroX (unknown version)
 	MetroX has a bug that corrupts pixmaps that are set as window
 	backgrounds. If you use MetroX and has weird problems with
-	textures, do not use textures in titlebars. Or use a different
+	textures, do not use textures in title bars. Or use a different
 	X server.
 
 INSTALLATION:
@@ -392,7 +392,7 @@ Steps 1 to 3 can be skipped if you use the Install script.
 
 1 - You have to select the languages you want to support. Set the
 LINGUAS to the list of locales you want. English is always
-suported. Example:
+supported. Example:
 
 setenv LINGUAS "pt ja de"
 in csh
@@ -414,9 +414,9 @@ in ~/GNUstep/Defaults/WMGLOBAL
 
 3 - Configure, build and install Window Maker normally.
 
-4 - To select a particular locale at runtime you must set the LANG
+4 - To select a particular locale at run-time you must set the LANG
 environment variable to the locale you want. For example, if you want to set
-the portuguese locale, you must run
+the Portuguese locale, you must run
 
 setenv LANG pt
 
@@ -424,13 +424,13 @@ in csh or
 
 export LANG; LANG=pt
 
-in Bourne sh and similars
+in Bourne sh and similar
 
 Note: If you have the LC_CTYPE environment variable set, you must
 unset it before running wmaker.
 
 For menu definition files, Window Maker searches for them in the
-following order (for brazilian portuguese, in this case):
+following order (for Brazilian Portuguese, in this case):
 
 menu.pt_BR
 menu.pt

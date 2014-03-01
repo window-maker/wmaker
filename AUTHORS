@@ -7,7 +7,7 @@ patches, bug fixes and other stuff for Window Maker:
 ABE Shige <sabe@ibm.net>
 I18N support, diagonal and vertical gradient, cosmetic additions to
 move/resize frames, window list menu, side swapping and other things for dock,
-japanese local, icon arrangement fix, remember current workspace after
+Japanese local, icon arrangement fix, remember current workspace after
 restart, dock bug fixes
 
 Andrea Arcangeli <arcangeli@mbox.queen.it>
@@ -103,9 +103,9 @@ Bradley M Keryan <keryan@andrew.cmu.edu>
 EMACS/keypad like cursor movement for WINGs textfield
 
 Jim Knoble <jmknoble@pobox.com>
-made autoarrange icons a runtime option, SHADOW_RESIZEBAR c-time option,
+made autoarrange icons a run-time option, SHADOW_RESIZEBAR c-time option,
 no workspace switch to the same workspace, dashed icon selection,
-misclellaneous bug fixes, definable cursors, --no-polling command line option.
+miscellaneous bug fixes, definable cursors, --no-polling command line option.
 
 The JED Text Editor <xjed@windowmaker.info>
 Project maintainer
@@ -135,7 +135,7 @@ Tim Malone <mrgone@eskimo.com>
 bug fix, jpeg bug fix
 
 MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>
-I18N bug fixes and japanese locale, wsetfont script
+I18N bug fixes and Japanese locale, wsetfont script
 
 Brian Alexander Martin <brian@goober.wireless.ucsc.edu>
 PIPE_MENU
@@ -171,7 +171,7 @@ Toby Sargeant <?>
 menu format converter
 
 Carsten Schaar <nhadcasc@fs-maphy.uni-hannover.de>
-SCO portability, german locale, autoconf enhancements
+SCO portability, German locale, autoconf enhancements
 
 Christopher Seawood <cls@seawood.org>
 REDUCE_APPICON/single-icon

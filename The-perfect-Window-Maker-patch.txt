@@ -24,7 +24,7 @@ Producing a patch with git
 --------------------------
 
 You have the wmaker source and you want to write a patch in order to fix
-a bug or improve something. A possible workflow is the following.
+a bug or improve something. A possible work-flow is the following:
 
 # Optional: Create a new branch (to be safe in case you screw up)
 git checkout -b fixbug
@@ -74,7 +74,7 @@ can be a better way to fix it.
 
 Then you should explain why the wmaker source leads to Y and not to X.
 
-Technicall stuff can be expected at this point, e.g. "upon doing xyz in function
+Technical stuff can be expected at this point, e.g. "upon doing xyz in function
 foobar(), wmaker sets the variable foo to 'y' instead of setting it to 'x', and
 that will lead to blabla happening in function foobar_squared()...".
 
@@ -92,7 +92,7 @@ more than one thing in the same patch. Again:
        "Each patch must do one thing and one thing only."
 
 If your patch does too much of unrelated stuff, it makes reviewing a nightmare
-and long-term mantainance much worse (think about a patch which introduces a
+and long-term maintenance much worse (think about a patch which introduces a
 regression in the middle of many other nice improvements, and now you have to
 get rid of the regression without removing the improvements -- 'git revert'
 will not help you here).
@@ -159,7 +159,7 @@ The diff itself.
 **********************************
 
 Read the file email-clients.txt in the topdir of the wmaker-crm repository
-to be adviced on how to tweak your email client to avoid common pitfalls.
+to be advised on how to tweak your email client to avoid common pitfalls.
 
 ___________________
 Example .gitconfig

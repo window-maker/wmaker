@@ -22,7 +22,7 @@
 
 		Congratulations! You have purchased an extremely fine
 	device that would give you thousands of years of trouble-free 
-	service, except	that you undoubtably will destroy it via some 
+	service, except	that you undoubtedly will destroy it via some
 	typical bonehead consumer maneuver. Which is why we ask you
 	to PLEASE FOR GOD'S SAKE READ THIS OWNER'S MANUAL CAREFULLY
 	BEFORE YOU UNPACK THE DEVICE. YOU ALREADY UNPACKED IT, DIDN'T
@@ -121,7 +121,7 @@ Directories & Files in the Source Tree
 
 * wrlib/ image processing library
 
-* po/ has message catalogs wich are the translated versions of the messages
+* po/ has message catalogs which are the translated versions of the messages
   displayed by Window Maker.
 
 
@@ -139,7 +139,7 @@ reports use the BUGFORM.
 If you have a problem with a precompiled version of Window Maker (rpm, deb etc),
 first ask the person who made the package.
 
-IMPORTANT NOTE: when asking for help (in the mailing list or to the developerts,
+IMPORTANT NOTE: when asking for help (in the mailing list or to the developers,
 directly) *always* send information about the system you are using. You can use
 the system information section at the end of BUGFORM as a guideline. Another
 thing: please don't send HTML mail.
@@ -160,7 +160,7 @@ non-graphical) applications; providing among other things, base system
 libraries, a high-level GUI application framework that uses a Display
 PostScript(tm)-like imaging model (DGS), objects for accessing relational
 databases, distributed objects and a graphical development environment, with
-tools like interface modeller, a project management system (project center) and
+tools like interface modeler, a project management system (project center) and
 other tools.
 
 The GNUstep development system will be used to create a user environment, with
@@ -178,7 +178,7 @@ Running multiple instances of Window Maker
 
 It is not a good idea to run more than one instance of Window Maker
 from the same user (so that wmaker will use the same configuration files) at the
-same time. You might get unexpected behaviour when Window Maker updates it's
+same time. You might get unexpected behavior when Window Maker updates it's
 configuration files.
 
 If you really desire to do this, try running Window Maker with the command line
@@ -192,7 +192,7 @@ Performance Tuning
 If you want to diminish Window Maker's memory usage and improve performance,
 while keeping a nice appearance and good functionality, follow the items bellow:
 
-- use solid textures for everything, mainly titlebars and menus. If you want a
+- use solid textures for everything, mainly title bars and menus. If you want a
   nice looking desktop, use the Traditional style.
 - turn NewStyle and Superfluous off
 - do not bind many shortcuts in the menu and keep only the essential items in
@@ -217,7 +217,7 @@ Keyboard Mouse Control
 
 Many people ask about adding keyboard control of mouse, like in fvwm, but Window
 Maker will not have such feature. The XKB extension supports mouse simulation
-from the keyboard, in a much more powerfull fashion than any simulation done by
+from the keyboard, in a much more powerful fashion than any simulation done by
 a window manager.
 
 To enable it, hit the Control+Shift+NumLock or Shift+NumLock key combination.
@@ -240,7 +240,7 @@ clicked with the 0 (Ins) key.
 
 
 The above key values work in a XFree86 3.2 (X11R6.1) X server but your
-milleage may vary.
+mileage may vary.
 
 
 How to make a gdb backtrace
@@ -249,7 +249,7 @@ How to make a gdb backtrace
 Backtraces can help us fix bugs that make Window Maker crash. If you find a bug
 that crashes Window Maker, please send a backtrace with your bug report.
 
-To make a usefull backtrace, you need a core file with debugging information
+To make a useful backtrace, you need a core file with debugging information
 produced by Window Maker when it crashes. It should have been installed without
 stripping too.
 
