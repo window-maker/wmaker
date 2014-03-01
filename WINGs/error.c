@@ -36,7 +36,7 @@
 static Bool syslog_initialized = False;
 
 
-static void syslog_open(char *prog_name)
+static void syslog_open(const char *prog_name)
 {
 	int options;
 
@@ -48,7 +48,7 @@ static void syslog_open(char *prog_name)
 	syslog_initialized = True;
 }
 
-static void syslog_message(int prio, char *prog_name, char *msg)
+static void syslog_message(int prio, const char *prog_name, const char *msg)
 {
 	if (!syslog_initialized)
 		syslog_open(prog_name);
