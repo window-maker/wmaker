@@ -443,15 +443,9 @@ void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, const char *file,
 }
 
 
-static WMPixmap *makeTitledIcon(WMPixmap *icon)
-{
-	return WMRetainPixmap(icon);
-}
-
 void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, const char *file)
 {
 	WMPixmap *icon;
-	WMPixmap *icon2;
 	RColor color;
 	char *iconPath;
 
@@ -469,18 +463,7 @@ void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, const char *file)
 		icon = NULL;
 	}
 
-	if (icon) {
-		icon2 = makeTitledIcon(icon);
-		if (icon)
-			WMReleasePixmap(icon);
-	} else {
-		icon2 = NULL;
-	}
-
-	WMSetButtonImage(bPtr, icon2);
-
-	if (icon2)
-		WMReleasePixmap(icon2);
+	WMSetButtonImage(bPtr, icon);
 
 	color.red = 0xff;
 	color.green = 0xff;
