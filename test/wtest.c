@@ -31,13 +31,16 @@ WMAppContext *app;
 
 static void callback(int item)
 {
-	(void) item;
-
 	printf("pushed item %i\n", item);
 }
 
 static void quit(int item)
 {
+	/*
+	 * This parameter is not used, but because we're a call-back we have a fixed
+	 * prototype, so we tell the compiler it is ok to avoid a spurious unused
+	 * variable warning
+	 */
 	(void) item;
 
 	exit(0);
@@ -45,6 +48,11 @@ static void quit(int item)
 
 static void hide(int item)
 {
+	/*
+	 * This parameter is not used, but because we're a call-back we have a fixed
+	 * prototype, so we tell the compiler it is ok to avoid a spurious unused
+	 * variable warning
+	 */
 	(void) item;
 
 	WMHideApplication(app);
@@ -63,6 +71,12 @@ static void newwin(int item)
 	Window win;
 	XClassHint classhint;
 	char title[100];
+
+	/*
+	 * This parameter is not used, but because we're a call-back we have a fixed
+	 * prototype, so we tell the compiler it is ok to avoid a spurious unused
+	 * variable warning
+	 */
 	(void) item;
 
 	wincount++;
