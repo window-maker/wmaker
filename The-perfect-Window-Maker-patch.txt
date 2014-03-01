@@ -13,6 +13,12 @@ To clone the wmaker-crm repository you can do:
 
 git clone git://repo.or.cz/wmaker-crm.git
 
+You should note that the development occur in the #next branch, and
+patches are backported to #master when considered ok. So, you probably
+want to switch to #next branch, if not already done:
+
+git checkout next
+
 __________________________
 Producing a patch with git
 --------------------------
@@ -38,6 +44,10 @@ modifications you've just made! See "Writing the commit log" for advice.
 # Prepare the patch to submit to the mailing-list.
 # (use HEAD~2 if you want patches for the last 2 commits etc)
 git format-patch HEAD~1
+
+# If you have created your own branch, and want all your commits created
+# after the #next branch, you can use:
+git format-patch next
 
 ______________________
 Writing the commit log
@@ -104,9 +114,32 @@ Please do not send patches to any individual developer unless you have a very
 good reason to avoid more people being able to comment (and improve) on your
 patches.
 
-Sending the patch _properly_ is not as trivial as you might think. Some mail
+The HIGHLY RECOMMENDED way to send a patch is to actually let Git do it for
+you, otherwise you may face the problems below. Doing this is really easy:
+
+# Tell git once how to send mails:
+#   (of course, replace smtp.example.com with your ISP's)
+git config --global sendemail.smtpserver "smtp.example.com"
+git config --global sendemail.validate   true
+git config sendemail.to "Window Maker Devel <wmaker-dev@lists.windowmaker.org>"
+
+# If you're sending more than 1 patch, you may be interested in having an
+# introduction mail for the batch:
+git format-patch  --cover-letter  next
+vi/emacs/nedit/whatever 0000-cover-letter.patch
+
+# When you're satisfied, ask Git to mail all the patches:
+git send-email 00*
+
+
+If you do not want or cannot let Git send them for you, please note that
+sending the patch _properly_ is not as trivial as you may think. Some mail
 clients convert TABs to spaces or word wrap long lines automatically, which
 will result in your patch being rejected as it will not apply with 'git apply'.
+
+You could send the patch as an attachement to the mail, but this generally
+makes it a bit harder to review, and a lot harder to comment on; that's why
+the preferred method is inlined patches (like Git does).
 
 Ideally your patch should contain a very good commit message that explains
 why you wrote the patch in the first place (see "Writing the commit log").
