@@ -70,8 +70,7 @@ Read before asking.
 in the directories. 
 
 * INSTALL has installation instructions and some troubleshooting tips.
-You're meant to read it before installing. It was not written just to fill up
-space in the package.
+You're meant to read it if you are compiling the sources.
 
 * FAQ: Frequently Asked Questions. READ IT!!! FAQ.I18N is for
 internationalization related questions.
@@ -125,15 +124,13 @@ Directories & Files in the Source Tree
 * po/ has message catalogs wich are the translated versions of the messages
   displayed by Window Maker.
 
-* docklib-x.x.tar.gz  a library for writing dockapps
-
 
 HELP ME!!!
 ==========
 
 There is a mailing list for discussing Window Maker at
 wmaker-user@lists.windowmaker.org To subscribe to it, send a message to
-wmaker-user-subscribe@lists.windowmaker.info
+wmaker-user-subscribe@lists.windowmaker.org
 
 If you got a problem, ask there (after reading the docs, of course). The people
 there is more likely to be able to answer your questions than we are.  For bug
@@ -258,8 +255,8 @@ stripping too.
 
 To compile wmaker with debugging information:
 
-  ./configure
-  make CFLAGS=-g
+  ./configure --enable-debug
+  make
 
 If you get the dialog window telling you that wmaker crashed and asks you what
 to do, tell it to "Abort and leave a core file".
