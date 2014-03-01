@@ -67,6 +67,7 @@ libWUtil_la_SOURCES = 	\
 	bagtree.c \
 	data.c \
 	error.c \
+	error.h \
 	findfile.c \
 	handlers.c \
 	hashtable.c \

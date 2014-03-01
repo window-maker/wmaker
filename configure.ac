@@ -293,6 +293,11 @@ dnl =================
 AC_CHECK_HEADERS(sys/inotify.h, AC_DEFINE(HAVE_INOTIFY, 1, Check for inotify))
 
 
+dnl Check for syslog 
+dnl =================
+AC_CHECK_HEADERS([syslog.h], [AC_DEFINE([HAVE_SYSLOG], [1], [Check for syslog])])
+
+
 dnl Checks for header files.
 dnl =======================
 AC_HEADER_SYS_WAIT

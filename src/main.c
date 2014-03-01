@@ -201,6 +201,8 @@ noreturn void Exit(int status)
 	if (dpy)
 		XCloseDisplay(dpy);
 
+	wutil_shutdown();  /* WUtil clean-up */
+
 	exit(status);
 }
 

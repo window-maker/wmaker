@@ -30,6 +30,41 @@
 #include <WUtil.h>
 #include <WINGsP.h>
 
+#ifdef HAVE_SYSLOG_H
+#include <syslog.h>
+
+static Bool syslog_initialized = False;
+
+
+static void syslog_open(char *prog_name)
+{
+	int options;
+
+	if (!prog_name)
+		prog_name = "WINGs";
+
+	options = LOG_PID;
+	openlog(prog_name, options, LOG_DAEMON);
+	syslog_initialized = True;
+}
+
+static void syslog_message(int prio, char *prog_name, char *msg)
+{
+	if (!syslog_initialized)
+		syslog_open(prog_name);
+
+	//jump over the program name cause syslog is already displaying it
+	syslog(prio, "%s", msg + strlen(prog_name));
+}
+
+void w_syslog_close(void)
+{
+	if (syslog_initialized) {
+		closelog();
+		syslog_initialized = False;
+	}
+}
+#endif
 
 void __wmessage(const char *func, const char *file, int line, int type, const char *msg, ...)
 {
@@ -37,6 +72,10 @@ void __wmessage(const char *func, const char *file, int line, int type, const ch
 	char *buf;
 	static int linemax = 0;
 	int truncated = 0;
+#ifdef HAVE_SYSLOG
+	int syslog_priority = LOG_INFO;
+	const char *syslog_prefix = "INFO";
+#endif
 
 	if (linemax == 0) {
 #ifdef HAVE_SYSCONF
@@ -65,13 +104,25 @@ void __wmessage(const char *func, const char *file, int line, int type, const ch
 
 	switch (type) {
 		case WMESSAGE_TYPE_FATAL:
-			strncat(buf, _("fatal error: "), linemax - 1 - strlen(buf));
+			strncat(buf, _("fatal: "), linemax - 1 - strlen(buf));
+#ifdef HAVE_SYSLOG
+			syslog_priority = LOG_CRIT;
+			syslog_prefix = "FATAL";
+#endif
 		break;
 		case WMESSAGE_TYPE_ERROR:
 			strncat(buf, _("error: "), linemax - 1 - strlen(buf));
+#ifdef HAVE_SYSLOG
+			syslog_priority = LOG_ERR;
+			syslog_prefix = "ERROR";
+#endif
 		break;
 		case WMESSAGE_TYPE_WARNING:
 			strncat(buf, _("warning: "), linemax - 1 - strlen(buf));
+#ifdef HAVE_SYSLOG
+			syslog_priority = LOG_WARNING;
+			syslog_prefix = "WARNING";
+#endif
 		break;
 		case WMESSAGE_TYPE_MESSAGE:
 			/* FALLTHROUGH */
@@ -86,6 +137,9 @@ void __wmessage(const char *func, const char *file, int line, int type, const ch
 	va_end(args);
 
 	fputs(buf, stderr);
+#ifdef HAVE_SYSLOG
+	syslog_message(syslog_priority, _WINGS_progname ? _WINGS_progname : "WINGs", buf);
+#endif
 
 	if (truncated)
 		fputs("*** message truncated ***", stderr);
