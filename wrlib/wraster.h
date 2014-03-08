@@ -431,7 +431,11 @@ RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors,
 RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
                                   RColor colors1[2], int thickness1,
                                   RColor colors2[2], int thickness2);
+/*
+ * Cleaning
+ */
 
+void RShutdown();
 
 /*
  * Convertion into X Pixmaps

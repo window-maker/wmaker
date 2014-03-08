@@ -201,6 +201,7 @@ noreturn void Exit(int status)
 	if (dpy)
 		XCloseDisplay(dpy);
 
+	RShutdown(); /* wrlib clean exit */
 	wutil_shutdown();  /* WUtil clean-up */
 
 	exit(status);

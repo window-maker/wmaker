@@ -322,6 +322,11 @@ dnl ==========
 dnl AC_ARG_VAR(PKGCONFIG, [pkg-config command])
 AC_CHECK_PROG(PKGCONFIG, pkg-config, pkg-config) 
 
+dnl MagickWand-config
+dnl ==========
+dnl AC_ARG_VAR(MAGICKWCONFIG, [MagickWand-config command])
+AC_CHECK_PROG(MAGICKWCONFIG, MagickWand-config, MagickWand-config)
+
 dnl gettext
 dnl =======
 
@@ -559,6 +564,26 @@ else
 fi
 AC_SUBST(FCLIBS)
 
+dnl
+dnl libMagickWand
+dnl
+AC_MSG_CHECKING([for libmagickwand header])
+IMFLAGS=`$MAGICKWCONFIG --cflags`
+if test "x$IMFLAGS" = "x" ; then
+        AC_MSG_RESULT([not found])
+else
+        AC_MSG_RESULT([found])
+fi
+AC_SUBST(IMFLAGS)
+
+AC_MSG_CHECKING([for libmagickwand library])
+IMLIBS=`$MAGICKWCONFIG --ldflags`
+if test "x$IMLIBS" = "x" ; then
+        AC_MSG_RESULT([not found])
+else
+        AC_MSG_RESULT([found])
+fi
+AC_SUBST(IMLIBS)
 
 dnl Xft2 antialiased font support
 dnl =============================
@@ -688,6 +713,17 @@ AC_ARG_ENABLE([webp],
         [AC_MSG_ERROR([bad value $enableval for --enable-webp])] )],
     [enable_webp=auto])
 WM_IMGFMT_CHECK_WEBP
+
+
+dnl MAGICK Support
+dnl ===========
+AC_ARG_ENABLE([magick],
+    [AS_HELP_STRING([--disable-magick], [disable MAGICK support through libMagickWand])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-magick])] )],
+    [enable_magick=auto])
+WM_IMGFMT_CHECK_MAGICK
 
 
 dnl PPM Support

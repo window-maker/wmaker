@@ -72,6 +72,7 @@ LIBWRASTER3
     RRotateImage;
     RSaveImage;
     RScaleImage;
+    RShutdown;
     RSmoothScaleImage;
     RSupportedFileFormats;
 

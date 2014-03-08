@@ -1297,6 +1297,10 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, ", MWM");
 #endif
 
+#ifdef USE_MAGICK
+	strbuf = wstrappend(strbuf, ", ImageMagick");
+#endif
+
 #ifdef USE_XINERAMA
 	strbuf = wstrappend(strbuf, _("\n"));
 #ifdef SOLARIS_XINERAMA

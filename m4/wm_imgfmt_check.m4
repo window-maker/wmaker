@@ -244,3 +244,26 @@ AS_IF([test "x$enable_xpm" = "xno"],
     ])
 AM_CONDITIONAL([USE_XPM], [test "x$enable_xpm" != "xno"])dnl
 ]) dnl AC_DEFUN
+
+
+# WM_IMGFMT_CHECK_MAGICK
+# ----------------------
+#
+# Check for MagickWand library to support more image file formats
+# The check depends on variable 'enable_magick' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, disable support
+#   auto - detect, disable if not found
+#
+# When found, store the appropriate compilation flags in MAGICKFLAGS
+# and MAGICKLIBS, and append info to the variable 'supported_gfx'
+# When not found, append info to variable 'unsupported'
+AC_DEFUN_ONCE([WM_IMGFMT_CHECK_MAGICK],
+[WM_LIB_CHECK([MAGICK], ["$IMLIBS"], [MagickGetImagePixels], [$XLFLAGS $XLIBS],
+    [wm_save_CFLAGS="$CFLAGS $IMFLAGS"
+     AS_IF([wm_fn_lib_try_compile "wand/magick_wand.h" "" "return 0" ""],
+         [],
+         [AC_MSG_ERROR([found $CACHEVAR but could not find appropriate header - are you missing libmagickwand package?])])
+     CFLAGS="$wm_save_CFLAGS"],
+    [supported_gfx], [GFXLIBS])dnl
+]) dnl AC_DEFUN

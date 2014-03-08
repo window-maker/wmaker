@@ -103,6 +103,13 @@ char **RSupportedFileFormats(void)
 	return tmp;
 }
 
+/* cleaning third-party libs at shutdown */
+void RShutdown() {
+#ifdef USE_MAGICK
+	MagickWandTerminus();
+#endif
+}
+
 static void init_cache(void)
 {
 	char *tmp;
@@ -165,8 +172,16 @@ RImage *RLoadImage(RContext * context, const char *file, int index)
 		return NULL;
 
 	case IM_UNKNOWN:
+#ifdef USE_MAGICK
+		/* generic file format support using ImageMagick
+		 * BMP, PCX, PICT, SVG, ...
+		 */
+		image = RLoadMagick(file);
+		break;
+#else
 		RErrorCode = RERR_BADFORMAT;
 		return NULL;
+#endif
 
 	case IM_XPM:
 		image = RLoadXPM(context, file);
