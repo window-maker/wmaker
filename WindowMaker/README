@@ -36,7 +36,6 @@ menu.ja Japanese        MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>
 				ABE Shige <sabe@ibm.net>
 menu.pt Portuguese      Alfredo K. Kojima <kojima@inf.ufrgs.br>
 menu.de	German		Carsten Schaar <nhadcasc@fs-maphy.uni-hannover.de>
-menu.nl	Dutch		Roeland Mertens <roeland@zeus.rug.ac.be>
 menu.cz	Czech		David ©auer <xsauer@hwlab.felk.cvut.cz>
 menu.ko	Korean		Chae-Yong Chong <cychong@metro.telecom.samsung.co.kr>
 			Byeong-Chan Kim <redhands@linux.sarang.net>
@@ -63,6 +62,7 @@ menu.zh_CN Chinese	Wang Jian <wangjian2@asiainfo.com>
 menu.pl Polish		Maciej Friedel <tytus@tytus.itma.pwr.wroc.pl>
 menu.bg	Bulgarian	Slavei Karadjov <slaff@exco.net>
 menu.sk Slovak      	judas@hell <tomka@oalevice.sk>
+menu.nl Dutch		Alwin <translations@ziggo.nl>
 
 
 
@@ -77,4 +77,5 @@ plemnu.es Spanish	David A. Schekaiban <nb@zaz.net>
 plmenu.bg Bulgarian	Slavei Karadjov <slaff@exco.net>
 plmenu.sk Slovak      	judas@hell <tomka@oalevice.sk>
 plmenu.ja Japanese	Seiichi SATO <sato@cvs-net.co.jp>
+plmenu.nl Dutch		Alwin <translations@ziggo.nl>
 

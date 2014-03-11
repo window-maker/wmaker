@@ -19,7 +19,6 @@ ko.po	Korean		1,2	Byeong-Chan Kim <redhands@linux.sarang.net>
 sv.po	Swedish			John Forgoil <forgoil@rsn.hk-r.se>
 cs.po	Czech		3	Jiri Hnidek <Jiri.Hnidek@vslib.cz
 no.po	Norwegian		Marcus Ramberg <draven@mo.himolde.no>
-nl.po	Dutch			Roeland Mertens <roeland@zeus.rug.ac.be>
 gl.po	Galician		Xose Vazquez Perez <xose.vazquez@gmail.com>
 fr.po	French			Bastien Nocera <hadess@hadess.net>
 				Jean-Francois BIGNOLLES <bignolle@grif.fr>
@@ -49,6 +48,7 @@ be.po	Belarusian		Ihar Viarheichyk <iverg@mail.ru>
 ca.po	Catalan			Ernest Adrogué <eadrogue@gmx.net>
 bs.po	Bosnian			Ahmet Mulalic <am@lugzdk.ba>
 hy.po   Armenian                Norayr Chilignaryan <chnorik@gmail.com>
+nl.po	Dutch			Alwin <translations@ziggo.nl>
 
 
 Some translations are based on previous translations by other people.
