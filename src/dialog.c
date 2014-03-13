@@ -1221,7 +1221,7 @@ void wShowInfoPanel(WScreen *scr)
 
 	panel->copyrL = WMCreateLabel(panel->win);
 	WMResizeWidget(panel->copyrL, 360, 60);
-	WMMoveWidget(panel->copyrL, 15, 185);
+	WMMoveWidget(panel->copyrL, 15, 190);
 	WMSetLabelTextAlignment(panel->copyrL, WALeft);
 	WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
 	font = WMSystemFontOfSize(scr->wmscreen, 11);
@@ -1292,14 +1292,6 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
 	strbuf = wstrappend(strbuf, "WMSPEC");
 
-#ifdef USE_XRANDR
-	strbuf = wstrappend(strbuf, ", XRandR ");
-	if (w_global.xext.randr.supported)
-		strbuf = wstrappend(strbuf, _("(Supported)"));
-	else
-		strbuf = wstrappend(strbuf, _("(Unsupported)"));
-#endif
-
 #ifdef MWM_HINTS
 	strbuf = wstrappend(strbuf, ", MWM");
 #endif
@@ -1317,8 +1309,18 @@ void wShowInfoPanel(WScreen *scr)
 	}
 #endif
 
+#ifdef USE_RANDR
+	strbuf = wstrappend(strbuf, _("\n"));
+	strbuf = wstrappend(strbuf, "RandR: ");
+	if (w_global.xext.randr.supported)
+		strbuf = wstrappend(strbuf, _("supported"));
+	else
+		strbuf = wstrappend(strbuf, _("unsupported"));
+	strbuf = wstrappend(strbuf, ".");
+#endif
+
 	panel->infoL = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->infoL, 350, 75);
+	WMResizeWidget(panel->infoL, 350, 80);
 	WMMoveWidget(panel->infoL, 15, 115);
 	WMSetLabelText(panel->infoL, strbuf);
 	font = WMSystemFontOfSize(scr->wmscreen, 11);

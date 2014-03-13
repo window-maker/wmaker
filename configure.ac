@@ -526,14 +526,14 @@ AC_ARG_ENABLE([xinerama],
     [enable_xinerama=auto])
 WM_XEXT_CHECK_XINERAMA
 
-dnl XRandR support
+dnl RandR support
 dnl ==============
-AC_ARG_ENABLE([xrandr],
-    [AS_HELP_STRING([--enable-xrandr], [enable XRandR extension support (NOT recommended, buggy)])],
+AC_ARG_ENABLE([randr],
+    [AS_HELP_STRING([--enable-randr], [enable RandR extension support (NOT recommended, buggy)])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
-        [AC_MSG_ERROR([bad value $enableval for --enable-xrandr]) ]) ],
-    [enable_xrandr=no])
+        [AC_MSG_ERROR([bad value $enableval for --enable-randr]) ]) ],
+    [enable_randr=no])
 WM_XEXT_CHECK_XRANDR
 
 dnl

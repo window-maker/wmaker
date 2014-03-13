@@ -42,7 +42,7 @@
 #include "xdnd.h"
 #endif
 
-#ifdef USE_XRANDR
+#ifdef USE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
 
@@ -265,7 +265,7 @@ void DispatchEvent(XEvent * event)
 		break;
 
 	case ConfigureNotify:
-#ifdef USE_XRANDR
+#ifdef USE_RANDR
 		if (event->xconfigure.window == DefaultRootWindow(dpy))
 			XRRUpdateConfiguration(event);
 #endif
@@ -557,7 +557,7 @@ static void handleExtensions(XEvent * event)
 		handleXkbIndicatorStateNotify(event);
 	}
 #endif				/*KEEP_XKB_LOCK_STATUS */
-#ifdef USE_XRANDR
+#ifdef USE_RANDR
 	if (w_global.xext.randr.supported && event->type == (w_global.xext.randr.event_base + RRScreenChangeNotify)) {
 		/* From xrandr man page: "Clients must call back into Xlib using
 		 * XRRUpdateConfiguration when screen configuration change notify
