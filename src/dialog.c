@@ -619,7 +619,8 @@ static void setViewedImage(IconPanel *panel, const char *file)
 	color.green = 0xaa;
 	color.blue = 0xae;
 	color.alpha = 0;
-	pixmap = WMCreateBlendedPixmapFromFile(WMWidgetScreen(panel->win), file, &color);
+	pixmap = WMCreateScaledBlendedPixmapFromFile(WMWidgetScreen(panel->win), file, &color, 75, 75);
+
 	if (!pixmap) {
 		WMSetButtonEnabled(panel->okButton, False);
 
@@ -742,7 +743,7 @@ static void drawIconProc(WMList * lPtr, int index, Drawable d, char *text, int s
 	color.blue = WMBlueComponentOfColor(back) >> 8;
 	color.alpha = WMGetColorAlpha(back) >> 8;
 
-	pixmap = WMCreateBlendedPixmapFromFile(wmscr, file, &color);
+	pixmap = WMCreateScaledBlendedPixmapFromFile(wmscr, file, &color, width - 2, height - 2);
 	wfree(file);
 
 	if (!pixmap) {

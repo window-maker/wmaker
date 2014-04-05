@@ -103,7 +103,7 @@ static void updateSettingsPanelIcon(AppSettingsPanel * panel)
 			color.green = 0xaa;
 			color.blue = 0xae;
 			color.alpha = 0;
-			pixmap = WMCreateBlendedPixmapFromFile(WMWidgetScreen(panel->win), path, &color);
+			pixmap = WMCreateScaledBlendedPixmapFromFile(WMWidgetScreen(panel->win), path, &color, 64, 64);
 			if (!pixmap) {
 				WMSetLabelImage(panel->iconLabel, NULL);
 			} else {

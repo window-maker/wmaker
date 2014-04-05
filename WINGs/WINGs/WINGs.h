@@ -843,6 +843,11 @@ WMPixmap* WMCreateBlendedPixmapFromRImage(WMScreen *scrPtr, RImage *image,
 WMPixmap* WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, const char *fileName,
                                         const RColor *color);
 
+WMPixmap* WMCreateScaledBlendedPixmapFromFile(WMScreen *scrPtr, const char *fileName,
+                                              const RColor *color,
+                                              unsigned int width,
+                                              unsigned int height);
+
 void WMDrawPixmap(WMPixmap *pixmap, Drawable d, int x, int y);
 
 Pixmap WMGetPixmapXID(WMPixmap *pixmap);

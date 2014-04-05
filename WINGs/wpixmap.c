@@ -119,6 +119,12 @@ WMPixmap *WMCreateBlendedPixmapFromRImage(WMScreen * scrPtr, RImage * image, con
 
 WMPixmap *WMCreateBlendedPixmapFromFile(WMScreen * scrPtr, const char *fileName, const RColor * color)
 {
+	return WMCreateScaledBlendedPixmapFromFile(scrPtr, fileName, color, 0, 0);
+}
+
+WMPixmap *WMCreateScaledBlendedPixmapFromFile(WMScreen *scrPtr, const char *fileName, const RColor *color,
+                                              unsigned int width, unsigned int height)
+{
 	WMPixmap *pixPtr;
 	RImage *image;
 
@@ -126,10 +132,20 @@ WMPixmap *WMCreateBlendedPixmapFromFile(WMScreen * scrPtr, const char *fileName,
 	if (!image)
 		return NULL;
 
+	/* scale it if needed to fit in the specified box */
+	if ((width > 0) && (height > 0) && ((image->width > width) || (image->height > height))) {
+		RImage *tmp;
+
+		tmp = image;
+		if (image->width > image->height)
+			image = RScaleImage(tmp, width, image->height * height / image->width);
+		else
+			image = RScaleImage(tmp, image->width * width / image->height, height);
+		RReleaseImage(tmp);
+	}
+
 	RCombineImageWithColor(image, color);
-
 	pixPtr = WMCreatePixmapFromRImage(scrPtr, image, 0);
-
 	RReleaseImage(image);
 
 	return pixPtr;
