@@ -990,11 +990,15 @@ static noreturn void helperLoop(RContext * rc)
 
 static void updateDomain(const char *domain, const char *key, const char *texture)
 {
+	int result;
 	char *program = "wdwrite";
 
 	/* here is a mem leak */
-	system(wstrconcat("wdwrite ",
+	result = system(wstrconcat("wdwrite ",
 			  wstrconcat(domain, smooth ? " SmoothWorkspaceBack YES" : " SmoothWorkspaceBack NO")));
+
+	if (result == -1)
+		werror("error executing system command");
 
 	execlp(program, program, domain, key, texture, NULL);
 	wwarning("warning could not run \"%s\"", program);
@@ -1377,8 +1381,12 @@ int main(int argc, char **argv)
 	}
 
 	if (helperMode) {
+		int result;
+
 		/* lower priority, so that it wont use all the CPU */
-		nice(15);
+		result = nice(15);
+		if (result == -1)
+			wwarning("error could not nice process");
 
 		helperLoop(rc);
 	} else {
@@ -1387,8 +1395,7 @@ int main(int argc, char **argv)
 
 		if (!texture) {
 			char *image_path = getFullPixmapPath(image_name);
-
-			sprintf(buffer, "(%s, \"%s\", %s)", style, image_path, back_color);
+			snprintf(buffer, sizeof(buffer), "(%s, \"%s\", %s)", style, image_path, back_color);
 			wfree(image_path);
 			texture = (char *)buffer;
 		}
