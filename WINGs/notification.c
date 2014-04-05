@@ -94,6 +94,21 @@ void W_InitNotificationCenter(void)
 	notificationCenter->observerTable = WMCreateHashTable(WMIntHashCallbacks);
 }
 
+void W_ReleaseNotificationCenter(void)
+{
+	if (notificationCenter) {
+		if (notificationCenter->nameTable)
+			WMFreeHashTable(notificationCenter->nameTable);
+		if (notificationCenter->objectTable)
+			WMFreeHashTable(notificationCenter->objectTable);
+		if (notificationCenter->observerTable)
+			WMFreeHashTable(notificationCenter->observerTable);
+
+		wfree(notificationCenter);
+		notificationCenter = NULL;
+	}
+}
+
 void
 WMAddNotificationObserver(WMNotificationObserverAction * observerAction,
 			  void *observer, const char *name, void *object)

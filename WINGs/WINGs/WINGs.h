@@ -642,8 +642,10 @@ WMRect wmkrect(int x, int y, unsigned int width, unsigned int height);
 /* ---[ WINGs/wapplication.c ]-------------------------------------------- */
 
 
-
 void WMInitializeApplication(const char *applicationName, int *argc, char **argv);
+
+/* You're supposed to call this funtion before exiting so WINGs can terminate properly */
+void WMReleaseApplication(void);
 
 void WMSetResourcePath(const char *path);
 

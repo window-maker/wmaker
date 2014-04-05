@@ -365,6 +365,8 @@ Bool W_HandleInputEvents(Bool waitForInput, int inputfd);
 
 void W_InitNotificationCenter(void);
 
+void W_ReleaseNotificationCenter(void);
+
 void W_FlushASAPNotificationQueue(void);
 
 void W_FlushIdleNotificationQueue(void);

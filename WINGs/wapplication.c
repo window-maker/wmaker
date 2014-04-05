@@ -48,6 +48,21 @@ void WMInitializeApplication(const char *applicationName, int *argc, char **argv
 	W_InitNotificationCenter();
 }
 
+void WMReleaseApplication(void) {
+	int i;
+
+	W_ReleaseNotificationCenter();
+
+	if (WMApplication.applicationName)
+		wfree(WMApplication.applicationName);
+
+	for (i = 0; i < WMApplication.argc; i++)
+		wfree(WMApplication.argv[i]);
+
+	if (WMApplication.argv)
+		wfree(WMApplication.argv);
+}
+
 void WMSetResourcePath(const char *path)
 {
 	if (WMApplication.resourcePath)
