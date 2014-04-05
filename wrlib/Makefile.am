@@ -60,6 +60,10 @@ else
 libwraster_la_SOURCES += load_xpm_normalized.c
 endif
 
+if USE_WEBP
+libwraster_la_SOURCES += load_webp.c
+endif
+
 AM_CPPFLAGS = $(DFLAGS) @HEADER_SEARCH_PATH@
 
 libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ @LIBXMU@ -lm

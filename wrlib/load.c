@@ -3,6 +3,7 @@
  * Raster graphics library
  *
  * Copyright (c) 1997-2003 Alfredo K. Kojima
+ * Copyright (c) 2014 Window Maker Team
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -93,6 +94,9 @@ char **RSupportedFileFormats(void)
 #endif
 #ifdef USE_GIF
 	tmp[i++] = "GIF";
+#endif
+#ifdef USE_WEBP
+	tmp[i++] = "WEBP";
 #endif
 	tmp[i] = NULL;
 
@@ -192,6 +196,12 @@ RImage *RLoadImage(RContext * context, const char *file, int index)
 		break;
 #endif				/* USE_GIF */
 
+#ifdef USE_WEBP
+	case IM_WEBP:
+		image = RLoadWEBP(file);
+		break;
+#endif				/* USE_WEBP */
+
 	case IM_PPM:
 		image = RLoadPPM(file);
 		break;
@@ -266,6 +276,11 @@ char *RGetImageFileFormat(const char *file)
 		return "GIF";
 #endif				/* USE_GIF */
 
+#ifdef USE_WEBP
+	case IM_WEBP:
+		return "WEBP";
+#endif				/* USE_WEBP */
+
 	case IM_PPM:
 		return "PPM";
 
@@ -328,6 +343,15 @@ static WRImgFormat identFile(const char *path)
 	if (buffer[0] == 'G' && buffer[1] == 'I' && buffer[2] == 'F' && buffer[3] == '8' &&
 	    (buffer[4] == '7' ||  buffer[4] == '9') && buffer[5] == 'a')
 		return IM_GIF;
+
+	/* check for WEBP */
+	if (buffer[ 0] == 'R' && buffer[ 1] == 'I' && buffer[ 2] == 'F' && buffer[ 3] == 'F' &&
+	    buffer[ 8] == 'W' && buffer[ 9] == 'E' && buffer[10] == 'B' && buffer[11] == 'P' &&
+	    buffer[12] == 'V' && buffer[13] == 'P' && buffer[14] == '8' &&
+	    (buffer[15] == ' '       /* Simple File Format (Lossy) */
+	     || buffer[15] == 'L'    /* Simple File Format (Lossless) */
+	     || buffer[15] == 'X'))  /* Extended File Format */
+		return IM_WEBP;
 
 	return IM_UNKNOWN;
 }

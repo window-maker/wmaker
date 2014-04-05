@@ -679,6 +679,17 @@ AC_ARG_ENABLE([tiff],
 WM_IMGFMT_CHECK_TIFF
 
 
+dnl WEBP Support
+dnl ===========
+AC_ARG_ENABLE([webp],
+    [AS_HELP_STRING([--disable-webp], [disable WEBP support through libwebp])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-webp])] )],
+    [enable_webp=auto])
+WM_IMGFMT_CHECK_WEBP
+
+
 dnl PPM Support
 dnl ===========
 # The PPM format is always enabled because we have built-in support for the format
