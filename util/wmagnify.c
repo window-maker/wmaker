@@ -292,6 +292,7 @@ static void closeWindow(WMWidget * w, void *d)
 
 	windowCount--;
 	if (windowCount == 0) {
+		WMReleaseApplication();
 		exit(0);
 	} else {
 		WMDeleteTimerHandler(data->tid);

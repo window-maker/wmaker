@@ -100,6 +100,12 @@ typedef struct BackgroundTexture {
 	int height;
 } BackgroundTexture;
 
+static void quit(int rcode)
+{
+	WMReleaseApplication();
+	exit(rcode);
+}
+
 static void initXinerama(void)
 {
 	xineInfo.screens = NULL;
@@ -903,7 +909,7 @@ static noreturn void helperLoop(RContext * rc)
 			errcount--;
 			if (errcount == 0) {
 				wfatal("quitting");
-				exit(1);
+				quit(1);
 			}
 			continue;
 		}
@@ -917,7 +923,7 @@ static noreturn void helperLoop(RContext * rc)
 			errcount--;
 			if (errcount == 0) {
 				wfatal("quitting");
-				exit(1);
+				quit(1);
 			}
 			continue;
 		}
@@ -973,7 +979,7 @@ static noreturn void helperLoop(RContext * rc)
 #ifdef DEBUG
 			printf("exit command\n");
 #endif
-			exit(0);
+			quit(0);
 
 		default:
 			wwarning("unknown message received");
@@ -1228,7 +1234,7 @@ int main(int argc, char **argv)
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			display = argv[i];
 		} else if (strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--scale") == 0) {
@@ -1260,61 +1266,61 @@ int main(int argc, char **argv)
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			domain = wstrdup(argv[i]);
 		} else if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--colors") == 0) {
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			if (sscanf(argv[i], "%i", &cpc) != 1) {
 				wfatal("bad value for colors per channel: \"%s\"", argv[i]);
-				exit(1);
+				quit(1);
 			}
 		} else if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--back-color") == 0) {
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			back_color = argv[i];
 		} else if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--parse") == 0) {
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			texture = argv[i];
 		} else if (strcmp(argv[i], "-w") == 0 || strcmp(argv[i], "--workspace") == 0) {
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			if (sscanf(argv[i], "%i", &workspace) != 1) {
 				wfatal("bad value for workspace number: \"%s\"", argv[i]);
-				exit(1);
+				quit(1);
 			}
 		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
 			printf("%s (Window Maker %s)\n", __progname, VERSION);
-			exit(0);
+			quit(0);
 		} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
 			print_help();
-			exit(0);
+			quit(0);
 		} else if (argv[i][0] != '-') {
 			image_name = argv[i];
 		} else {
 			printf("%s: invalid argument '%s'\n", __progname, argv[i]);
 			printf("Try '%s --help' for more information\n", __progname);
-			exit(1);
+			quit(1);
 		}
 	}
 	if (!image_name && !texture && !helperMode) {
 		printf("%s: you must specify a image file name or a texture\n", __progname);
 		printf("Try '%s --help' for more information\n", __progname);
-		exit(1);
+		quit(1);
 	}
 
 	PixmapPath = getPixmapPath(domain);
@@ -1334,7 +1340,7 @@ int main(int argc, char **argv)
 	dpy = XOpenDisplay(display);
 	if (!dpy) {
 		wfatal("could not open display");
-		exit(1);
+		quit(1);
 	}
 #if 0
 	XSynchronize(dpy, 1);
@@ -1367,7 +1373,7 @@ int main(int argc, char **argv)
 
 	if (!rc) {
 		wfatal("could not initialize wrlib: %s", RMessageForError(RErrorCode));
-		exit(1);
+		quit(1);
 	}
 
 	if (helperMode) {
@@ -1393,7 +1399,7 @@ int main(int argc, char **argv)
 
 		tex = parseTexture(rc, texture);
 		if (!tex)
-			exit(1);
+			quit(1);
 
 		if (workspace < 0)
 			changeTexture(tex);
@@ -1403,5 +1409,6 @@ int main(int argc, char **argv)
 		}
 	}
 
+	WMReleaseApplication();
 	return 0;
 }

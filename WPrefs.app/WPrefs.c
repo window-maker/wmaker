@@ -84,6 +84,7 @@ static noreturn void quit(WMWidget *w, void *data)
 
 	prepareForClose();
 
+	WMReleaseApplication();
 	exit(0);
 }
 
