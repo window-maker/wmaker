@@ -41,6 +41,12 @@ int main(int argc, char *argv[])
 {
 	char *t;
 	int ch;
+	char *tmp, *theme_paths, *style_paths, *icon_paths;
+
+	tmp = wstrconcat("-noext ", PKGDATADIR);
+	theme_paths = wstrconcat(tmp, "/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle");
+	style_paths = wstrconcat(tmp, "/Styles $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle");
+	icon_paths = wstrconcat(tmp, "/IconSets $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons");
 
 	struct option longopts[] = {
 		{ "version",		no_argument,	NULL,	'v' },
@@ -152,7 +158,7 @@ int main(int argc, char *argv[])
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Themes")),
 		WMCreatePLString("OPEN_MENU"),
-		WMCreatePLString("-noext /usr/local/share/WindowMaker/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
+		WMCreatePLString(theme_paths),
 		NULL
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
@@ -161,7 +167,7 @@ int main(int argc, char *argv[])
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Styles")),
 		WMCreatePLString("OPEN_MENU"),
-		WMCreatePLString("-noext /usr/local/share/WindowMaker/Styles $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
+		WMCreatePLString(style_paths),
 		NULL
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
@@ -170,7 +176,7 @@ int main(int argc, char *argv[])
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Icon Sets")),
 		WMCreatePLString("OPEN_MENU"),
-		WMCreatePLString("-noext /usr/local/share/WindowMaker/IconSets $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+		WMCreatePLString(icon_paths),
 		NULL
 	);
 	WMAddToPLArray(L1Menu, L2Menu);
