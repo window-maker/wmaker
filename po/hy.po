@@ -476,8 +476,8 @@ msgstr "(%d գույն)\n"
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
 msgstr "Ընդհանուր հատկացված հիշողությունը՝ %i կբ. Ընդհանուր օգտագործվող հիշողությունը՝ %i կբ.\n"
 
-#: ../src/dialog.c:1361
-msgid "Supported image formats: "
+#: ../src/dialog.c:1283
+msgid "Image formats: "
 msgstr "Կիրառելի պատկերային որմատները"
 
 #: ../src/dialog.c:1368
