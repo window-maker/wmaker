@@ -423,30 +423,27 @@ center_place_window(WWindow *wwin, int *x_ret, int *y_ret,
 
 static Bool
 autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
-		unsigned int width, unsigned int height, int tryCount, WArea usableArea)
+		unsigned int width, unsigned int height,
+		int tryCount, WArea usableArea)
 {
 	WScreen *scr = wwin->screen_ptr;
-	int test_x = 0, test_y = Y_ORIGIN;
-	int swidth, sx;
+	int x, y;
+	int sw, sh;
 
 	set_width_height(wwin, &width, &height);
-	swidth = usableArea.x2 - usableArea.x1;
-	sx = X_ORIGIN;
+	sw = usableArea.x2 - usableArea.x1;
+	sh = usableArea.y2 - usableArea.y1;
 
 	/* this was based on fvwm2's smart placement */
-	while (((test_y + height) < (usableArea.y2 - usableArea.y1))) {
-		test_x = sx;
-
-		while (((test_x + width) < swidth)) {
-			if (screen_has_space(scr, test_x, test_y,
+	for (y = Y_ORIGIN; (y + height) < sh; y += PLACETEST_VSTEP) {
+		for (x = X_ORIGIN; (x + width) < sw; x += PLACETEST_HSTEP) {
+			if (screen_has_space(scr, x, y,
 					     width, height, tryCount)) {
-				*x_ret = test_x;
-				*y_ret = test_y;
+				*x_ret = x;
+				*y_ret = y;
 				return True;
 			}
-			test_x += PLACETEST_HSTEP;
 		}
-		test_y += PLACETEST_VSTEP;
 	}
 
 	return False;
