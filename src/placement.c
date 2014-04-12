@@ -434,6 +434,14 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	sw = usableArea.x2 - usableArea.x1;
 	sh = usableArea.y2 - usableArea.y1;
 
+	/* try placing at center first */
+	if (center_place_window(wwin, &x, &y, width, height, usableArea) &&
+	    screen_has_space(scr, x, y, width, height, False)) {
+		*x_ret = x;
+		*y_ret = y;
+		return True;
+	}
+
 	/* this was based on fvwm2's smart placement */
 	for (y = Y_ORIGIN; (y + height) < sh; y += PLACETEST_VSTEP) {
 		for (x = X_ORIGIN; (x + width) < sw; x += PLACETEST_HSTEP) {
