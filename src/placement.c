@@ -424,7 +424,7 @@ center_place_window(WWindow *wwin, int *x_ret, int *y_ret,
 static Bool
 autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 		unsigned int width, unsigned int height,
-		int tryCount, WArea usableArea)
+		Bool ignore_sunken, WArea usableArea)
 {
 	WScreen *scr = wwin->screen_ptr;
 	int x, y;
@@ -438,7 +438,7 @@ autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
 	for (y = Y_ORIGIN; (y + height) < sh; y += PLACETEST_VSTEP) {
 		for (x = X_ORIGIN; (x + width) < sw; x += PLACETEST_HSTEP) {
 			if (screen_has_space(scr, x, y,
-					     width, height, tryCount)) {
+					     width, height, ignore_sunken)) {
 				*x_ret = x;
 				*y_ret = y;
 				return True;
@@ -511,9 +511,9 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 			break;
 
 	case WPM_AUTO:
-		if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 0, usableArea)) {
+		if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, False, usableArea)) {
 			break;
-		} else if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 1, usableArea)) {
+		} else if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, True, usableArea)) {
 			break;
 		}
 		/* there isn't a break here, because if we fail, it should fall
