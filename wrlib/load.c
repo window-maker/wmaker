@@ -33,10 +33,6 @@
 #include <time.h>
 #include <assert.h>
 
-#ifdef USE_PNG
-#include <png.h>
-#endif
-
 #include "wraster.h"
 #include "imgformat.h"
 
@@ -281,7 +277,7 @@ char *RGetImageFileFormat(const char *file)
 static WRImgFormat identFile(const char *path)
 {
 	FILE *file;
-	unsigned char buffer[7];
+	unsigned char buffer[32];
 	size_t nread;
 
 	assert(path != NULL);
@@ -301,7 +297,7 @@ static WRImgFormat identFile(const char *path)
 	RETRY( fclose(file) )
 
 	/* check for XPM */
-	if (strncmp((char *)buffer, "/* XPM", 6) == 0)
+	if (strncmp((char *)buffer, "/* XPM */", 9) == 0)
 		return IM_XPM;
 
 	/* check for TIFF */
@@ -309,8 +305,15 @@ static WRImgFormat identFile(const char *path)
 	    || (buffer[0] == 'M' && buffer[1] == 'M' && buffer[2] == 0 && buffer[3] == '*'))
 		return IM_TIFF;
 
-	/* check for PNG */
-	if (buffer[0] == 0x89 && buffer[1] == 'P' && buffer[2] == 'N' && buffer[3] == 'G')
+	/*
+	 * check for PNG
+	 *
+	 * The signature is defined in the PNG specifiation:
+	 * http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
+	 * it is valid for v1.0, v1.1, v1.2 and ISO version
+	 */
+	if (buffer[0] == 137 && buffer[1] == 80 && buffer[2] == 78 && buffer[3] == 71 &&
+	    buffer[4] ==  13 && buffer[5] == 10 && buffer[6] == 26 && buffer[7] == 10)
 		return IM_PNG;
 
 	/* check for PBM or PGM or PPM */
@@ -322,7 +325,8 @@ static WRImgFormat identFile(const char *path)
 		return IM_JPEG;
 
 	/* check for GIF */
-	if (buffer[0] == 'G' && buffer[1] == 'I' && buffer[2] == 'F' && buffer[3] == '8')
+	if (buffer[0] == 'G' && buffer[1] == 'I' && buffer[2] == 'F' && buffer[3] == '8' &&
+	    (buffer[4] == '7' ||  buffer[4] == '9') && buffer[5] == 'a')
 		return IM_GIF;
 
 	return IM_UNKNOWN;
