@@ -562,6 +562,8 @@ int main(int argc, char **argv)
 	RContextAttributes attr;
 	int visualID = -1;
 
+	(void) argc;
+
 	ProgName = strrchr(argv[0], '/');
 	if (!ProgName)
 		ProgName = argv[0];

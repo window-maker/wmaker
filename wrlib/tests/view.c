@@ -24,8 +24,10 @@ int main(int argc, char **argv)
 	attr.colors_per_channel = 4;
 	ctx = RCreateContext(dpy, DefaultScreen(dpy), &attr);
 
-	if (argc < 2)
+	if (argc < 2) {
+		printf("using default image as none was provided\n");
 		img = RGetImageFromXPMData(ctx, image_name);
+	}
 	else
 		img = RLoadImage(ctx, argv[1], 0);
 
@@ -70,7 +72,7 @@ int main(int argc, char **argv)
 		exit(1);
 	}
 
-	printf("%ix%i\n", img->width, img->height);
+	printf("size is %ix%i\n", img->width, img->height);
 
 	win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 10, 10, img->width, img->height, 0, 0, 0);
 	XSetWindowBackgroundPixmap(dpy, win, pix);

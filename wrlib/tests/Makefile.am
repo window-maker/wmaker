@@ -8,7 +8,7 @@ EXTRA_DIST = test.png tile.xpm ballot_box.xpm
 
 AM_CPPFLAGS = -I$(srcdir)/.. $(DFLAGS) @HEADER_SEARCH_PATH@
 
-LIBLIST = $(top_builddir)/wrlib/libwraster.la
+LIBLIST = $(top_builddir)/wrlib/libwraster.la @XLIBS@
 
 testdraw_SOURCES = testdraw.c
 testdraw_LDADD = $(LIBLIST)
