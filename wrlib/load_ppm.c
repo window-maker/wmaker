@@ -32,10 +32,18 @@
 #include "wraster.h"
 #include "imgformat.h"
 
-/* fileio.c - routines to read elements based on Netpbm
-**
-** Copyright (C) 1988 by Jef Poskanzer.
-*/
+/*
+ * fileio.c - routines to read elements based on Netpbm
+ *
+ * Copyright (C) 1988 by Jef Poskanzer.
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation for any purpose and without fee is hereby granted, provided
+ * that the above copyright notice appear in all copies and that both that
+ * copyright notice and this permission notice appear in supporting
+ * documentation.  This software is provided "as is" without express or
+ * implied warranty.
+ */
 
 char pm_getc(FILE * const fileP)
 {
@@ -103,6 +111,7 @@ int pm_getuint(FILE * const ifP)
 
 	return i;
 }
+/* end of fileio.c re-used code */
 /******************************************************************************************/
 
 /* PGM: support for portable graymap ascii and binary encoding */
@@ -127,6 +136,7 @@ static RImage *load_graymap(FILE * file, int w, int h, int max, int raw)
 		ptr = image->data;
 		if (raw == '2') {
 			int val;
+
 			for (y = 0; y < h; y++) {
 				for (x = 0; x < w; x++) {
 					val = pm_getuint(file);
@@ -146,6 +156,7 @@ static RImage *load_graymap(FILE * file, int w, int h, int max, int raw)
 		} else {
 			if (raw == '5') {
 				char *buf;
+
 				buf = malloc(w + 1);
 				if (!buf) {
 					RErrorCode = RERR_NOMEMORY;
@@ -177,8 +188,8 @@ static RImage *load_graymap(FILE * file, int w, int h, int max, int raw)
 static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
 {
 	RImage *image;
+	int i;
 	unsigned char *ptr;
-	int i = 0;
 
 	if (raw != '3' && raw != '6') {
 		RErrorCode = RERR_BADFORMAT;
@@ -195,6 +206,7 @@ static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
 	if (max < 256) {
 		if (raw == '3') {
 			int x, y, val;
+
 			for (y = 0; y < h; y++) {
 				for (x = 0; x < w; x++) {
 					for (i = 0; i < 3; i++) {
@@ -213,6 +225,8 @@ static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
 			}
 		} else if (raw == '6') {
 			char buf[3];
+
+			i = 0;
 			while (i < w * h) {
 				if (fread(buf, 1, 3, file) != 3) {
 					RErrorCode = RERR_BADIMAGEFILE;
@@ -251,6 +265,7 @@ static RImage *load_bitmap(FILE * file, int w, int h, int max, int raw)
 	ptr = image->data;
 	if (raw == '1') {
 		int i = 0;
+
 		while (i < w * h) {
 			val = pm_getuint(file);
 
@@ -313,8 +328,8 @@ RImage *RLoadPPM(const char *file_name)
 		return NULL;
 	}
 
-	/* accept bitmaps,  pixmaps or graymaps */
-	if (buffer[0] != 'P' || (buffer[1] < '1' && buffer[1] > '6')) {
+	/* accept bitmaps, pixmaps or graymaps */
+	if (buffer[0] != 'P' || (buffer[1] < '1' || buffer[1] > '6')) {
 		RErrorCode = RERR_BADFORMAT;
 		fclose(file);
 		return NULL;
@@ -359,17 +374,15 @@ RImage *RLoadPPM(const char *file_name)
 		m = 1;
 	}
 
-	/* check portable bitmap type,  ascii = 1 and binary = 4 */
-	if (type == '1' || type == '4')
+	if (type == '1' || type == '4') {
+		/* Portable Bit Map: P1 is for 'plain' (ascii, rare), P4 for 'regular' (binary) */
 		image = load_bitmap(file, w, h, m, type);
-	else {
-		/* check portable graymap type,  ascii = 2 and binary = 5 */
-		if (type == '2' || type == '5')
-			image = load_graymap(file, w, h, m, type);
-		else
-			/* check portable pixmap type, ascii = 3 and binary = 6 */
-		if (type == '3' || type == '6')
-			image = load_pixmap(file, w, h, m, type);
+	} else if (type == '2' || type == '5') {
+		/* Portable Gray Map: P2 is for 'plain' (ascii, rare), P5 for 'regular' (binary) */
+		image = load_graymap(file, w, h, m, type);
+	} else if (type == '3' || type == '6') {
+		/* Portable Pix Map: P3 is for 'plain' (ascii, rare), P6 for 'regular' (binary) */
+		image = load_pixmap(file, w, h, m, type);
 	}
 
 	fclose(file);

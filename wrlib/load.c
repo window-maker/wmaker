@@ -73,13 +73,19 @@ static WRImgFormat identFile(const char *path);
 
 char **RSupportedFileFormats(void)
 {
-	static char *tmp[IM_TYPES + 1];
+	static char *tmp[IM_TYPES + 2];
 	int i = 0;
 
 	/* built-in */
 	tmp[i++] = "XPM";
 	/* built-in PNM here refers to anymap format: PPM, PGM, PBM */
 	tmp[i++] = "PNM";
+	/*
+	 * PPM is a just a sub-type of PNM, but it has to be in the list
+	 * for compatibility with legacy programs that may expect it but
+	 * not the new PNM type
+	 */
+	tmp[i++] = "PPM";
 #ifdef USE_TIFF
 	tmp[i++] = "TIFF";
 #endif
