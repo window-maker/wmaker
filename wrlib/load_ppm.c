@@ -112,12 +112,16 @@ static RImage *load_graymap(FILE * file, int w, int h, int max, int raw)
 	unsigned char *ptr;
 	int x, y;
 
-	image = RCreateImage(w, h, 0);
-	if (!image)
+	if (raw != '2' && raw != '5') {
+		RErrorCode = RERR_BADFORMAT;
 		return NULL;
+	}
 
-	if (raw != '2' && raw != '5')
-		return image;
+	image = RCreateImage(w, h, 0);
+	if (!image) {
+		RErrorCode = RERR_NOMEMORY;
+		return NULL;
+	}
 
 	if (max < 256) {
 		ptr = image->data;
@@ -129,6 +133,7 @@ static RImage *load_graymap(FILE * file, int w, int h, int max, int raw)
 
 					if (val > max || val < 0) {
 						RErrorCode = RERR_BADIMAGEFILE;
+						RReleaseImage(image);
 						return NULL;
 					}
 
@@ -142,12 +147,16 @@ static RImage *load_graymap(FILE * file, int w, int h, int max, int raw)
 			if (raw == '5') {
 				char *buf;
 				buf = malloc(w + 1);
-				if (!buf)
+				if (!buf) {
+					RErrorCode = RERR_NOMEMORY;
+					RReleaseImage(image);
 					return NULL;
+				}
 				for (y = 0; y < h; y++) {
 					if (!fread(buf, w, 1, file)) {
 						free(buf);
 						RErrorCode = RERR_BADIMAGEFILE;
+						RReleaseImage(image);
 						return NULL;
 					}
 
@@ -171,12 +180,16 @@ static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
 	unsigned char *ptr;
 	int i = 0;
 
-	image = RCreateImage(w, h, 0);
-	if (!image)
+	if (raw != '3' && raw != '6') {
+		RErrorCode = RERR_BADFORMAT;
 		return NULL;
+	}
 
-	if (raw != '3' && raw != '6')
-		return image;
+	image = RCreateImage(w, h, 0);
+	if (!image) {
+		RErrorCode = RERR_NOMEMORY;
+		return NULL;
+	}
 
 	ptr = image->data;
 	if (max < 256) {
@@ -189,6 +202,7 @@ static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
 
 						if (val > max || val < 0) {
 							RErrorCode = RERR_BADIMAGEFILE;
+							RReleaseImage(image);
 							return NULL;
 						}
 
@@ -202,6 +216,7 @@ static RImage *load_pixmap(FILE * file, int w, int h, int max, int raw)
 			while (i < w * h) {
 				if (fread(buf, 1, 3, file) != 3) {
 					RErrorCode = RERR_BADIMAGEFILE;
+					RReleaseImage(image);
 					return NULL;
 				}
 
@@ -222,12 +237,16 @@ static RImage *load_bitmap(FILE * file, int w, int h, int max, int raw)
 	int val;
 	unsigned char *ptr;
 
-	image = RCreateImage(w, h, 0);
-	if (!image)
+	if (raw != '1' && raw != '4') {
+		RErrorCode = RERR_BADFORMAT;
 		return NULL;
+	}
 
-	if (raw != '1' && raw != '4')
-		return image;
+	image = RCreateImage(w, h, 0);
+	if (!image) {
+		RErrorCode = RERR_NOMEMORY;
+		return NULL;
+	}
 
 	ptr = image->data;
 	if (raw == '1') {
@@ -237,6 +256,7 @@ static RImage *load_bitmap(FILE * file, int w, int h, int max, int raw)
 
 			if (val > max || val < 0) {
 				RErrorCode = RERR_BADIMAGEFILE;
+				RReleaseImage(image);
 				return NULL;
 			}
 
