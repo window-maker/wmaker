@@ -281,7 +281,7 @@ char *RGetImageFileFormat(const char *file)
 static WRImgFormat identFile(const char *path)
 {
 	FILE *file;
-	unsigned char buffer[32];
+	unsigned char buffer[7];
 	size_t nread;
 
 	assert(path != NULL);
@@ -301,7 +301,7 @@ static WRImgFormat identFile(const char *path)
 	RETRY( fclose(file) )
 
 	/* check for XPM */
-	if (strncmp((char *)buffer, "/* XPM */", 9) == 0)
+	if (strncmp((char *)buffer, "/* XPM", 6) == 0)
 		return IM_XPM;
 
 	/* check for TIFF */
@@ -309,14 +309,12 @@ static WRImgFormat identFile(const char *path)
 	    || (buffer[0] == 'M' && buffer[1] == 'M' && buffer[2] == 0 && buffer[3] == '*'))
 		return IM_TIFF;
 
-#ifdef USE_PNG
 	/* check for PNG */
-	if (!png_sig_cmp(buffer, 0, 8))
+	if (buffer[0] == 0x89 && buffer[1] == 'P' && buffer[2] == 'N' && buffer[3] == 'G')
 		return IM_PNG;
-#endif
 
-	/* check for raw PPM or PGM */
-	if (buffer[0] == 'P' && (buffer[1] == '5' || buffer[1] == '6'))
+	/* check for PBM or PGM or PPM */
+	if (buffer[0] == 'P' && (buffer[1] > '0' && buffer[1] < '7') && (buffer[2] == 0x0a || buffer[2] == 0x20 || buffer[2] == 0x09 || buffer[2] == 0x0d))
 		return IM_PPM;
 
 	/* check for JPEG */
@@ -324,7 +322,7 @@ static WRImgFormat identFile(const char *path)
 		return IM_JPEG;
 
 	/* check for GIF */
-	if (buffer[0] == 'G' && buffer[1] == 'I' && buffer[2] == 'F')
+	if (buffer[0] == 'G' && buffer[1] == 'I' && buffer[2] == 'F' && buffer[3] == '8')
 		return IM_GIF;
 
 	return IM_UNKNOWN;
