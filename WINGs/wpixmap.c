@@ -134,14 +134,23 @@ WMPixmap *WMCreateScaledBlendedPixmapFromFile(WMScreen *scrPtr, const char *file
 
 	/* scale it if needed to fit in the specified box */
 	if ((width > 0) && (height > 0) && ((image->width > width) || (image->height > height))) {
-		RImage *tmp;
+		int new_width, new_height;
+		RImage *new_image;
 
-		tmp = image;
-		if (image->width > image->height)
-			image = RScaleImage(tmp, width, image->height * height / image->width);
-		else
-			image = RScaleImage(tmp, image->width * width / image->height, height);
-		RReleaseImage(tmp);
+		new_width  = image->width;
+		new_height = image->height;
+		if (new_width > width) {
+			new_width  = width;
+			new_height = width * image->height / image->width;
+		}
+		if (new_height > height) {
+			new_width  = height * image->width / image->height;
+			new_height = height;
+		}
+
+		new_image = RScaleImage(image, new_width, new_height);
+		RReleaseImage(image);
+		image = new_image;
 	}
 
 	RCombineImageWithColor(image, color);
