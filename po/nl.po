@@ -392,7 +392,7 @@ msgid "Total memory allocated: %i kB (in use: %i kB).\n"
 msgstr "Toegewezen geheugen: %i kB (gebruikt: %i kB).\n"
 
 #: ../src/dialog.c:1282
-msgid "Supported image formats: "
+msgid "Image formats: "
 msgstr "Ondersteunde afb.: "
 
 #: ../src/dialog.c:1292
