@@ -407,9 +407,9 @@ msgstr "(%d 色)\n"
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
 msgstr "已配置記憶體總計: %i kB。使用中憶體總計: %i kB。\n"
 
-#: ../src/dialog.c:1360
-msgid "Supported image formats: "
-msgstr "支援影像格式: "
+#: ../src/dialog.c:1283
+msgid "Image formats: "
+msgstr "影像格式: "
 
 #: ../src/dialog.c:1367
 msgid ""

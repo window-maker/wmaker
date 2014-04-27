@@ -371,9 +371,9 @@ msgstr "(%d väriä)\n"
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
 msgstr "Muistia varattu yhteensä %i kt. Muistia käytössä yhteensä %i kt.\n"
 
-#: ../src/dialog.c:1327
-msgid "Supported image formats: "
-msgstr "Tuetut kuvamuodot: "
+#: ../src/dialog.c:1283
+msgid "Image formats: "
+msgstr "Kuvamuodot: "
 
 #: ../src/dialog.c:1334
 msgid ""

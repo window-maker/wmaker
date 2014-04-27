@@ -459,9 +459,9 @@ msgstr "(%d farver)\n"
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
 msgstr "Total tildelt hukommelse: %i kB. Total hukommelse i brug: %i kB.\n"
 
-#: ../src/dialog.c:1408
-msgid "Supported image formats: "
-msgstr "Understøttede billedformater: "
+#: ../src/dialog.c:1283
+msgid "Image formats: "
+msgstr "Billedformater: "
 
 #: ../src/dialog.c:1415
 msgid ""

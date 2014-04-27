@@ -404,9 +404,9 @@ msgstr "Lefoglalt memória: %i kB (használatban: %i kB, %d szabad darab)\n"
 msgid "Total memory allocated: %i kB (in use: %i kB).\n"
 msgstr "Lefoglalt memória: %i kB (használatban: %i kB)\n"
 
-#: ../../wmaker-crm/src/dialog.c:1282
-msgid "Supported image formats: "
-msgstr "Kép formátum támogatás: "
+#: ../../wmaker-crm/src/dialog.c:1283
+msgid "Image formats: "
+msgstr "Kép formátum: "
 
 #: ../../wmaker-crm/src/dialog.c:1292
 msgid ""
@@ -434,9 +434,9 @@ msgstr "Solaris "
 msgid "Xinerama: "
 msgstr "Xinerama: "
 
-#: ../../wmaker-crm/src/dialog.c:1315
+#: ../../wmaker-crm/src/dialog.c:1320
 #, c-format
-msgid "%d heads found."
+msgid "%d head(s) found."
 msgstr "%d képernyőt találtam."
 
 #: ../../wmaker-crm/src/dialog.c:1342

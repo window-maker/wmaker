@@ -378,9 +378,9 @@ msgstr "(%d couleurs)\n"
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
 msgstr "Mémoire allouée : %i ko. Mémoire utilisée : %i ko.\n"
 
-#: ../src/dialog.c:1358
-msgid "Supported image formats: "
-msgstr "Formats d'images acceptés : "
+#: ../src/dialog.c:1283
+msgid "Image formats: "
+msgstr "Formats d'images : "
 
 #: ../src/dialog.c:1365
 msgid ""

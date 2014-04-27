@@ -425,7 +425,7 @@ msgstr "Xinerama: "
 
 #: ../src/dialog.c:1315
 #, c-format
-msgid "%d heads found."
+msgid "%d head(s) found."
 msgstr "%d koppen gevonden."
 
 #: ../src/dialog.c:1342

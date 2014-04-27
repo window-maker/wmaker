@@ -394,9 +394,9 @@ msgstr "사용된 전체 메모리: %i kB (사용중: %i kB, %d 사용가능).\n
 msgid "Total memory allocated: %i kB (in use: %i kB).\n"
 msgstr "사용된 전체 메모리: %i kB (사용중: %i kB).\n"
 
-#: ../src/dialog.c:1269
-msgid "Supported image formats: "
-msgstr "지원되는 이미지 형식:"
+#: ../src/dialog.c:1283
+msgid "Image formats: "
+msgstr "이미지 형식:"
 
 #: ../src/dialog.c:1279
 msgid ""
@@ -426,9 +426,9 @@ msgstr "솔라리스"
 msgid "Xinerama: "
 msgstr ""
 
-#: ../src/dialog.c:1302
+#: ../src/dialog.c:1320
 #, c-format
-msgid "%d heads found."
+msgid "%d head(s) found."
 msgstr ""
 
 #: ../src/dialog.c:1331

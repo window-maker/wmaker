@@ -408,9 +408,9 @@ msgstr "(%d värvi)\n"
 msgid "Total memory allocated: %i kB (in use: %i kB).\n"
 msgstr "Kogu eraldatud mälu: %i kB (kasutusel: %i kB).\n"
 
-#: ../src/dialog.c:1238
-msgid "Supported image formats: "
-msgstr "Toetatud pildivormingud: "
+#: ../src/dialog.c:1283
+msgid "Image formats: "
+msgstr "Pildivormingud: "
 
 #: ../src/dialog.c:1245
 msgid ""
