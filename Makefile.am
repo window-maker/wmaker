@@ -35,7 +35,8 @@ SUBDIRS = wrlib WINGs src util po WindowMaker wmlib WPrefs.app doc test
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N INSTALL \
 	INSTALL-WMAKER README.definable-cursor \
 	The-perfect-Window-Maker-patch.txt \
-	README COPYING.WTFPL autogen.sh
+	README COPYING.WTFPL autogen.sh \
+	email-clients.txt
 
 if USE_LCOV
 coverage-reset:

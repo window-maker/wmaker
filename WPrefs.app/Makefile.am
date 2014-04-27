@@ -10,7 +10,9 @@ wpdatadir = @wprefs_datadir@
 
 wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
-EXTRA_DIST = $(wpdata_DATA)
+EXTRA_DIST = $(wpdata_DATA) \
+	KeyboardSettings.c \
+	Themes.c
 
 WPrefs_SOURCES = \
 	main.c \
