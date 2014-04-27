@@ -94,7 +94,7 @@ AM_CPPFLAGS = -DLOCALEDIR=\"$(NLSDIR)\" -DRESOURCE_PATH=\"$(datadir)/WINGs\" \
 	@XFTFLAGS@ @HEADER_SEARCH_PATH@
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = WINGs.pc
+pkgconfig_DATA = WINGs.pc WUtil.pc
 
 DISTCLEANFILES = $(pkgconfig_DATA) get-wings-flags get-wutil-flags
 
@@ -103,7 +103,7 @@ WINGs.pc: Makefile
 	@echo 'Name: WINGs' > $@
 	@echo 'Description: Small widget set with the NeXTStep(TM) look and feel' >> $@
 	@echo 'Version: $(VERSION)' >> $@
-	@echo 'Requires: wrlib' >> $@
+	@echo 'Requires: wrlib WUtil' >> $@
 	@echo 'Libs: $(lib_search_path) -lWINGs' >> $@
 	@echo 'Libs.private: $(XFTLIBS) $(XLIBS) -lm $(INTLIBS)' >> $@
 	@echo 'Cflags: $(inc_search_path)' >> $@
@@ -117,6 +117,15 @@ get-wings-flags: get-wings-flags.in Makefile
 	        -e 's#$${INTLIBS}#$(INTLIBS)#;' \
 	        -e 's#$${XLIBS}#$(XLIBS)#;' < $(abs_srcdir)/get-wings-flags.in > $@
 	@chmod 755 $@
+
+WUtil.pc: Makefile
+	@echo "Generating $@"
+	@echo 'Name: WUtil' > $@
+	@echo 'Description: Utility library for WINGs' >> $@
+	@echo 'Version: $(VERSION)' >> $@
+	@echo 'Libs: -L$(libdir) -lWUtil' >> $@
+	@echo 'Libs.private: $(INTLIBS)' >> $@
+	@echo 'Cflags: -I$(includedir)' >> $@
 
 get-wutil-flags: get-wutil-flags.in Makefile
 	@echo "Generating $@"

@@ -81,6 +81,7 @@ WPrefs.app/WPrefs
 # These files are generated from make rules
 wrlib/wrlib.pc
 WINGs/WINGs.pc
+WINGs/WUtil.pc
 
 WindowMaker/Defaults/WMRootMenu
 WindowMaker/Defaults/WMState
