@@ -39,13 +39,12 @@ typedef enum {
 	IM_PPM     =  4,
 	IM_JPEG    =  5,
 	IM_GIF     =  6,
-	IM_WEBP    =  7,
-	IM_MAGICK  =  8
+	IM_WEBP    =  7
 } WRImgFormat;
 
 /* How many image types we have. */
 /* Increase this when adding new image types! */
-#define IM_TYPES    8
+#define IM_TYPES    7
 
 /*
  * Function for Loading in a specific format
