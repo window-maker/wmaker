@@ -290,6 +290,11 @@ enum {
 
 
 /*
+ * Cleaning before application exit
+ */
+void RShutdown(void);
+
+/*
  * Returns a NULL terminated array of strings containing the
  * supported formats, such as: TIFF, XPM, PNG, JPEG, PPM, GIF
  * Do not free the returned data.
@@ -431,11 +436,7 @@ RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors,
 RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
                                   RColor colors1[2], int thickness1,
                                   RColor colors2[2], int thickness2);
-/*
- * Cleaning
- */
 
-void RShutdown();
 
 /*
  * Convertion into X Pixmaps
