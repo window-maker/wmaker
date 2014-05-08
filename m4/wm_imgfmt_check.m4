@@ -275,7 +275,7 @@ AS_IF([test "x$enable_magick" = "xno"],
               wm_save_LIBS="$LIBS"
               dnl
               dnl We check that the library is available
-              AS_IF([wm_fn_lib_try_link "MagickGetImagePixels" "$wm_cv_libchk_magick_libs"],
+              AS_IF([wm_fn_lib_try_link "NewMagickWand" "$wm_cv_libchk_magick_libs"],
                   [wm_cv_libchk_magick=maybe])
               LIBS="$wm_save_LIBS"
               AS_IF([test "x$enable_magick$wm_cv_libchk_magick" = "xyesno"],
@@ -284,7 +284,7 @@ AS_IF([test "x$enable_magick" = "xno"],
               dnl The library was found, check if header is available and compiles
               AS_IF([test "x$wm_cv_libchk_magick" != "xno"],
                   [wm_save_CFLAGS="$CFLAGS"
-                   AS_IF([wm_fn_lib_try_compile "wand/magick_wand.h" "" "return 0" "$wm_cv_libchk_magick_cflags"],
+                   AS_IF([wm_fn_lib_try_compile "wand/magick_wand.h" "MagickWand *wand;" "wand = NewMagickWand()" "$wm_cv_libchk_magick_cflags"],
                        [wm_cv_libchk_magick="$wm_cv_libchk_magick_cflags % $wm_cv_libchk_magick_libs"],
                        [AC_MSG_ERROR([found Magick library but could not compile appropriate header - are you missing libmagickwand-dev package?])])
                    CFLAGS="$wm_save_CFLAGS"])
