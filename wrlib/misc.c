@@ -251,4 +251,5 @@ void RShutdown(void)
 #ifdef USE_MAGICK
 	RReleaseMagick();
 #endif
+	RReleaseCache();
 }

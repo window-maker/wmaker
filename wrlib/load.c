@@ -129,6 +129,23 @@ static void init_cache(void)
 	}
 }
 
+void RReleaseCache(void)
+{
+	int i;
+
+	if (RImageCacheSize > 0) {
+		for (i = 0; i < RImageCacheSize; i++) {
+			if (RImageCache[i].file) {
+				RReleaseImage(RImageCache[i].image);
+				free(RImageCache[i].file);
+			}
+		}
+		free(RImageCache);
+		RImageCache = NULL;
+		RImageCacheSize = -1;
+	}
+}
+
 RImage *RLoadImage(RContext * context, const char *file, int index)
 {
 	RImage *image = NULL;

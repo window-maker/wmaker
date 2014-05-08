@@ -85,4 +85,10 @@ void RReleaseMagick(void);
 Bool RSaveXPM(RImage *image, const char *file);
 
 
+/*
+ * Function to terminate properly
+ */
+void RReleaseCache(void);
+
+
 #endif
