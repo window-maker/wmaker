@@ -262,43 +262,49 @@ AC_DEFUN_ONCE([WM_IMGFMT_CHECK_MAGICK],
 [AC_REQUIRE([_WM_LIB_CHECK_FUNCTS])
 AS_IF([test "x$enable_magick" = "xno"],
     [unsupported="$unsupported Magick"],
-    [AC_CHECK_PROG([MAGICKWCONFIG], [MagickWand-config], [MagickWand-config])
-     AS_IF([test "x$MAGICKWCONFIG" = "x"],
-         [AS_IF([test "x$enable_magick" = "xyes"],
-             [AC_MSG_ERROR([explicit Magick support requested but MagickWand-config not found])])
-          enable_magick=no
-          unsupported="$unsupported Magick"],
-         [AC_CACHE_CHECK([for Magick support library], [wm_cv_libchk_magick],
-             [wm_cv_libchk_magick=no
-              wm_cv_libchk_magick_cflags=`$MAGICKWCONFIG --cflags`
-              wm_cv_libchk_magick_libs=`$MAGICKWCONFIG --ldflags`
+    [AC_CACHE_CHECK([for Magick support library], [wm_cv_libchk_magick],
+        [wm_cv_libchk_magick=no
+         dnl First try to get the configuration from either pkg-config (the official way)
+         dnl or with the fallback MagickWand-config
+         AS_IF([test "x$PKGCONFIG" = "x"],
+             [AC_PATH_PROGS_FEATURE_CHECK([magickwand], [MagickWand-config],
+                 [wm_cv_libchk_magick_cflags=`$ac_path_magickwand --cflags`
+                  wm_cv_libchk_magick_libs=`$ac_path_magickwand --ldflags`
+                  wm_cv_libchk_magick=magickwand])],
+             [AS_IF([$PKGCONFIG --exists MagickWand],
+                 [wm_cv_libchk_magick_cflags=`$PKGCONFIG --cflags MagickWand`
+                  wm_cv_libchk_magick_libs=`$PKGCONFIG --libs MagickWand`
+                  wm_cv_libchk_magick=pkgconfig])])
+         AS_IF([test "x$wm_cv_libchk_magick" = "xno"],
+             [AS_IF([test "x$enable_magick" != "xauto"],
+                 [AC_MSG_RESULT([not found])
+                  AC_MSG_ERROR([explicit Magick support requested but configuration not found with pkg-config and MagickWand-config - are you missing libmagickwand-dev package?])])],
+             [dnl The configuration was found, check that it actually works
               wm_save_LIBS="$LIBS"
               dnl
               dnl We check that the library is available
               AS_IF([wm_fn_lib_try_link "NewMagickWand" "$wm_cv_libchk_magick_libs"],
                   [wm_cv_libchk_magick=maybe])
               LIBS="$wm_save_LIBS"
-              AS_IF([test "x$enable_magick$wm_cv_libchk_magick" = "xyesno"],
-                  [AC_MSG_ERROR([explicit Magick support requested but library does not link])])
+              AS_IF([test "x$wm_cv_libchk_magick" != "xmaybe"],
+                  [AC_MSG_ERROR([MagickWand was found but the library does not link])])
               dnl
               dnl The library was found, check if header is available and compiles
-              AS_IF([test "x$wm_cv_libchk_magick" != "xno"],
-                  [wm_save_CFLAGS="$CFLAGS"
-                   AS_IF([wm_fn_lib_try_compile "wand/magick_wand.h" "MagickWand *wand;" "wand = NewMagickWand()" "$wm_cv_libchk_magick_cflags"],
-                       [wm_cv_libchk_magick="$wm_cv_libchk_magick_cflags % $wm_cv_libchk_magick_libs"],
-                       [AC_MSG_ERROR([found Magick library but could not compile appropriate header - are you missing libmagickwand-dev package?])])
-                   CFLAGS="$wm_save_CFLAGS"])
-             ])
-          AS_IF([test "x$wm_cv_libchk_magick" = "xno"],
-             [unsupported="$unsupported Magick"
-              enable_magick="no"],
-             [supported_gfx="$supported_gfx Magick"
-              MAGICKFLAGS=`echo "$wm_cv_libchk_magick" | sed -e 's, *%.*$,,' `
-               MAGICKLIBS=`echo "$wm_cv_libchk_magick" | sed -e 's,^.*% *,,' `
-              AC_DEFINE([USE_MAGICK], [1],
-                  [defined when MagickWand library with header was found])])
-         ])dnl AS_IF(MAGICKWCONFIG != "")
-    ])
+              wm_save_CFLAGS="$CFLAGS"
+              AS_IF([wm_fn_lib_try_compile "wand/magick_wand.h" "MagickWand *wand;" "wand = NewMagickWand()" "$wm_cv_libchk_magick_cflags"],
+                  [wm_cv_libchk_magick="$wm_cv_libchk_magick_cflags % $wm_cv_libchk_magick_libs"],
+                  [AC_MSG_ERROR([found MagickWand library but could not compile its header])])
+              CFLAGS="$wm_save_CFLAGS"])dnl
+         ])
+     AS_IF([test "x$wm_cv_libchk_magick" = "xno"],
+         [unsupported="$unsupported Magick"
+          enable_magick="no"],
+         [supported_gfx="$supported_gfx Magick"
+          MAGICKFLAGS=`echo "$wm_cv_libchk_magick" | sed -e 's, *%.*$,,' `
+           MAGICKLIBS=`echo "$wm_cv_libchk_magick" | sed -e 's,^.*% *,,' `
+          AC_DEFINE([USE_MAGICK], [1],
+              [defined when MagickWand library with header was found])])
+     ])
 AM_CONDITIONAL([USE_MAGICK], [test "x$enable_magick" != "xno"])dnl
 AC_SUBST(MAGICKFLAGS)dnl
 AC_SUBST(MAGICKLIBS)dnl
