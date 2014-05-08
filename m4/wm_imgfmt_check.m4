@@ -259,8 +259,8 @@ AM_CONDITIONAL([USE_XPM], [test "x$enable_xpm" != "xno"])dnl
 # and MAGICKLIBS, and append info to the variable 'supported_gfx'
 # When not found, append info to variable 'unsupported'
 AC_DEFUN_ONCE([WM_IMGFMT_CHECK_MAGICK],
-[WM_LIB_CHECK([MAGICK], ["$IMLIBS"], [MagickGetImagePixels], [$XLFLAGS $XLIBS],
-    [wm_save_CFLAGS="$CFLAGS $IMFLAGS"
+[WM_LIB_CHECK([MAGICK], ["$MAGICKLIBS"], [MagickGetImagePixels], [$XLFLAGS $XLIBS],
+    [wm_save_CFLAGS="$CFLAGS $MAGICKLIBS"
      AS_IF([wm_fn_lib_try_compile "wand/magick_wand.h" "" "return 0" ""],
          [],
          [AC_MSG_ERROR([found $CACHEVAR but could not find appropriate header - are you missing libmagickwand package?])])

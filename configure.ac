@@ -568,22 +568,22 @@ dnl
 dnl libMagickWand
 dnl
 AC_MSG_CHECKING([for libmagickwand header])
-IMFLAGS=`$MAGICKWCONFIG --cflags`
-if test "x$IMFLAGS" = "x" ; then
+MAGICKFLAGS=`$MAGICKWCONFIG --cflags`
+if test "x$MAGICKFLAGS" = "x" ; then
         AC_MSG_RESULT([not found])
 else
         AC_MSG_RESULT([found])
 fi
-AC_SUBST(IMFLAGS)
+AC_SUBST(MAGICKFLAGS)
 
 AC_MSG_CHECKING([for libmagickwand library])
-IMLIBS=`$MAGICKWCONFIG --ldflags`
-if test "x$IMLIBS" = "x" ; then
+MAGICKLIBS=`$MAGICKWCONFIG --ldflags`
+if test "x$MAGICKLIBS" = "x" ; then
         AC_MSG_RESULT([not found])
 else
         AC_MSG_RESULT([found])
 fi
-AC_SUBST(IMLIBS)
+AC_SUBST(MAGICKLIBS)
 
 dnl Xft2 antialiased font support
 dnl =============================
