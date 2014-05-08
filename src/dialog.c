@@ -1280,7 +1280,7 @@ void wShowInfoPanel(WScreen *scr)
 	}
 #endif
 
-	strbuf = wstrappend(strbuf, _("Supported image formats: "));
+	strbuf = wstrappend(strbuf, _("Image formats: "));
 	strl = RSupportedFileFormats();
 	separator = NULL;
 	for (i = 0; strl[i] != NULL; i++) {
@@ -1309,7 +1309,7 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, _("Xinerama: "));
 	{
 		char tmp[128];
-		snprintf(tmp, sizeof(tmp) - 1, _("%d heads found."), scr->xine_info.count);
+		snprintf(tmp, sizeof(tmp) - 1, _("%d head(s) found."), scr->xine_info.count);
 		strbuf = wstrappend(strbuf, tmp);
 	}
 #endif
