@@ -688,6 +688,21 @@ RContext *RCreateContext(Display * dpy, int screen_number, const RContextAttribu
 	return context;
 }
 
+void RDestroyContext(RContext *context)
+{
+	if (context) {
+		if (context->copy_gc)
+			XFreeGC(context->dpy, context->copy_gc);
+		if (context->attribs) {
+			if ((context->attribs->flags & RC_VisualID) &&
+			    !(context->attribs->flags & RC_DefaultVisual))
+				XDestroyWindow(context->dpy, context->drawable);
+			free(context->attribs);
+		}
+		free(context);
+	}
+}
+
 static Bool bestContext(Display * dpy, int screen_number, RContext * context)
 {
 	XVisualInfo *vinfo = NULL, rvinfo;

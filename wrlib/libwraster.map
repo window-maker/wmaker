@@ -33,6 +33,7 @@ LIBWRASTER3
     RConvertImageMask;
     RCopyArea;
     RCreateContext;
+    RDestroyContext;
     RCreateImage;
     RCreateImageFromDrawable;
     RCreateImageFromXImage;
