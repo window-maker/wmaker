@@ -28,6 +28,7 @@ libwraster_la_SOURCES = 	\
 	save.c		\
 	gradient.c 	\
 	xpixmap.c	\
+	convert.h 	\
 	convert.c 	\
 	context.c 	\
 	misc.c 		\

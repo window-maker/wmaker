@@ -27,6 +27,7 @@
 
 #include "wraster.h"
 #include "imgformat.h"
+#include "convert.h"
 
 
 void RBevelImage(RImage * image, int bevel_type)
@@ -252,4 +253,5 @@ void RShutdown(void)
 	RReleaseMagick();
 #endif
 	RReleaseCache();
+	r_destroy_conversion_tables();
 }

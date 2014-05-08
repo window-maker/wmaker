@@ -34,6 +34,8 @@
 #include <assert.h>
 
 #include "wraster.h"
+#include "convert.h"
+
 
 #ifdef USE_XSHM
 extern Pixmap R_CreateXImageMappedPixmap(RContext * context, RXImage * ximage);
@@ -61,6 +63,38 @@ typedef struct RStdConversionTable {
 
 static RConversionTable *conversionTable = NULL;
 static RStdConversionTable *stdConversionTable = NULL;
+
+static void release_conversion_table(void)
+{
+	RConversionTable *tmp = conversionTable;
+
+	while (tmp) {
+		RConversionTable *tmp_to_delete = tmp;
+
+		tmp = tmp->next;
+		free(tmp_to_delete);
+	}
+	conversionTable = NULL;
+}
+
+static void release_std_conversion_table(void)
+{
+	RStdConversionTable *tmp = stdConversionTable;
+
+	while (tmp) {
+		RStdConversionTable *tmp_to_delete = tmp;
+
+		tmp = tmp->next;
+		free(tmp_to_delete);
+	}
+	stdConversionTable = NULL;
+}
+
+void r_destroy_conversion_tables(void)
+{
+	release_conversion_table();
+	release_std_conversion_table();
+}
 
 static unsigned short *computeTable(unsigned short mask)
 {
