@@ -322,11 +322,6 @@ dnl ==========
 dnl AC_ARG_VAR(PKGCONFIG, [pkg-config command])
 AC_CHECK_PROG(PKGCONFIG, pkg-config, pkg-config) 
 
-dnl MagickWand-config
-dnl ==========
-dnl AC_ARG_VAR(MAGICKWCONFIG, [MagickWand-config command])
-AC_CHECK_PROG(MAGICKWCONFIG, MagickWand-config, MagickWand-config)
-
 dnl gettext
 dnl =======
 
@@ -564,26 +559,6 @@ else
 fi
 AC_SUBST(FCLIBS)
 
-dnl
-dnl libMagickWand
-dnl
-AC_MSG_CHECKING([for libmagickwand header])
-MAGICKFLAGS=`$MAGICKWCONFIG --cflags`
-if test "x$MAGICKFLAGS" = "x" ; then
-        AC_MSG_RESULT([not found])
-else
-        AC_MSG_RESULT([found])
-fi
-AC_SUBST(MAGICKFLAGS)
-
-AC_MSG_CHECKING([for libmagickwand library])
-MAGICKLIBS=`$MAGICKWCONFIG --ldflags`
-if test "x$MAGICKLIBS" = "x" ; then
-        AC_MSG_RESULT([not found])
-else
-        AC_MSG_RESULT([found])
-fi
-AC_SUBST(MAGICKLIBS)
 
 dnl Xft2 antialiased font support
 dnl =============================
