@@ -75,6 +75,8 @@ RImage *RLoadWEBP(const char *file);
 
 #ifdef USE_MAGICK
 RImage *RLoadMagick(const char *file_name);
+
+void RReleaseMagick(void);
 #endif
 
 /*

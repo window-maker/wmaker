@@ -86,3 +86,8 @@ bye:
 
 	return image;
 }
+
+void RReleaseMagick(void)
+{
+	MagickWandTerminus();
+}

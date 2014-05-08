@@ -103,13 +103,6 @@ char **RSupportedFileFormats(void)
 	return tmp;
 }
 
-/* cleaning third-party libs at shutdown */
-void RShutdown() {
-#ifdef USE_MAGICK
-	MagickWandTerminus();
-#endif
-}
-
 static void init_cache(void)
 {
 	char *tmp;
