@@ -28,6 +28,9 @@
 #include "imgformat.h"
 
 
+static int RInitMagickIfNeeded(void);
+
+
 RImage *RLoadMagick(const char *file_name)
 {
 	RImage *image = NULL;
@@ -38,7 +41,10 @@ RImage *RLoadMagick(const char *file_name)
 	MagickBooleanType hasAlfa;
 	PixelWand *bg_wand = NULL;
 
-	MagickWandGenesis();
+	if (RInitMagickIfNeeded()) {
+		RErrorCode = RERR_BADFORMAT;
+		return NULL;
+	}
 
 	/* Create a wand */
 	m_wand = NewMagickWand();
@@ -87,7 +93,31 @@ bye:
 	return image;
 }
 
+/* Track the state of the library in memory */
+static enum {
+	MW_NotReady,
+	MW_Ready
+} magick_state;
+
+/*
+ * Initialise MagickWand, but only if it was not already done
+ *
+ * Return ok(0) when MagickWand is usable and fail(!0) if not usable
+ */
+static int RInitMagickIfNeeded(void)
+{
+	if (magick_state == MW_NotReady) {
+		MagickWandGenesis();
+		magick_state = MW_Ready;
+	}
+
+	return 0;
+}
+
 void RReleaseMagick(void)
 {
-	MagickWandTerminus();
+	if (magick_state == MW_Ready) {
+		MagickWandTerminus();
+		magick_state = MW_NotReady;
+	}
 }
