@@ -21,9 +21,8 @@
  */
 
 #include "config.h"
-#include <X11/Xlib.h>
 
-#include <wand/magick_wand.h>
+#include <wand/MagickWand.h>
 
 #include "wraster.h"
 #include "imgformat.h"
@@ -67,14 +66,15 @@ RImage *RLoadMagick(const char *file_name)
 	}
 
 	ptr = image->data;
-	if (hasAlfa == MagickTrue)
-		mrc = MagickExportImagePixels(m_wand, 0, 0, (size_t)w, (size_t)h, "RGBA", CharPixel, ptr);
-	else
+	if (hasAlfa == MagickFalse)
 		mrc = MagickExportImagePixels(m_wand, 0, 0, (size_t)w, (size_t)h, "RGB", CharPixel, ptr);
+	else
+		mrc = MagickExportImagePixels(m_wand, 0, 0, (size_t)w, (size_t)h, "RGBA", CharPixel, ptr);
 
 	if (mrc == MagickFalse) {
 		RErrorCode = RERR_BADIMAGEFILE;
 		RReleaseImage(image);
+		image = NULL;
 		goto bye;
 	}
 
