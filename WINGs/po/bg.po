@@ -29,16 +29,16 @@ msgid "Error %d"
 msgstr "Грешка %d"
 
 #: ../../WINGs/error.c:110
-msgid " warning: "
+msgid "warning: "
 msgstr "внимание: "
 
 #: ../../WINGs/error.c:137
-msgid " fatal error: "
-msgstr " критична грешка: "
+msgid "fatal: "
+msgstr "критична грешка: "
 
 #: ../../WINGs/error.c:163 ../../WINGs/error.c:192
-msgid " error: "
-msgstr " грешка: "
+msgid "error: "
+msgstr "грешка: "
 
 #: ../../WINGs/findfile.c:48
 #, c-format

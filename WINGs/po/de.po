@@ -35,16 +35,16 @@ msgid "Error %d"
 msgstr "Fehler %d"
 
 #: ../../WINGs/error.c:110
-msgid " warning: "
-msgstr " Warnung: "
+msgid "warning: "
+msgstr "warnung: "
 
 #: ../../WINGs/error.c:137
-msgid " fatal error: "
-msgstr " fataler Fehler: "
+msgid "fatal: "
+msgstr "fataler Fehler: "
 
 #: ../../WINGs/error.c:163 ../../WINGs/error.c:192
-msgid " error: "
-msgstr " Fehler: "
+msgid "error: "
+msgstr "fehler: "
 
 #: ../../WINGs/findfile.c:48
 #, c-format

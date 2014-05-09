@@ -25,7 +25,7 @@ msgid "error: "
 msgstr "hiba: "
 
 #: ../../../wmaker-crm/WINGs/error.c:131
-msgid "warn: "
+msgid "warning: "
 msgstr "figyelmeztetés: "
 
 #: ../../../wmaker-crm/WINGs/findfile.c:58

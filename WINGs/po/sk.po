@@ -39,16 +39,16 @@ msgid "Error %d"
 msgstr "Chyba %d"
 
 #: ../../WINGs/error.c:110
-msgid " warning: "
-msgstr " varovanie: "
+msgid "warning: "
+msgstr "varovanie: "
 
 #: ../../WINGs/error.c:137
-msgid " fatal error: "
-msgstr " fatálna chyba: "
+msgid "fatal: "
+msgstr "fatálna chyba: "
 
 #: ../../WINGs/error.c:163 ../../WINGs/error.c:192
-msgid " error: "
-msgstr " chyba: "
+msgid "error: "
+msgstr "chyba: "
 
 #: ../../WINGs/findfile.c:48
 #, c-format
