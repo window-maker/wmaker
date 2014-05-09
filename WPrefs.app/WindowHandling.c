@@ -354,8 +354,8 @@ static void createPanel(Panel * p)
 				WMWidgetView(panel->opaqF));
 
 	panel->opaqB = WMCreateButton(panel->opaqF, WBTToggle);
-	WMResizeWidget(panel->opaqB, 48,48);
-	WMMoveWidget(panel->opaqB, 18, 20);
+	WMResizeWidget(panel->opaqB, 54, 54);
+	WMMoveWidget(panel->opaqB, 14, 20);
 	WMSetButtonImagePosition(panel->opaqB, WIPImageOnly);
 
 	path = LocateImage(NON_OPAQUE_MOVE_PIXMAP);
@@ -385,8 +385,8 @@ static void createPanel(Panel * p)
 
 
 	panel->opaqresizeB = WMCreateButton(panel->opaqF, WBTToggle);
-	WMResizeWidget(panel->opaqresizeB, 48,48);
-	WMMoveWidget(panel->opaqresizeB, 86, 20);
+	WMResizeWidget(panel->opaqresizeB, 54, 54);
+	WMMoveWidget(panel->opaqresizeB, 82, 20);
 	WMSetButtonImagePosition(panel->opaqresizeB, WIPImageOnly);
 
 	path = LocateImage(NON_OPAQUE_RESIZE_PIXMAP);
@@ -414,8 +414,8 @@ static void createPanel(Panel * p)
 	}
 
 	panel->opaqkeybB = WMCreateSwitchButton(panel->opaqF);
-	WMResizeWidget(panel->opaqkeybB, 100, 25);
-	WMMoveWidget(panel->opaqkeybB, 18, 76);
+	WMResizeWidget(panel->opaqkeybB, 122, 25);
+	WMMoveWidget(panel->opaqkeybB, 14, 79);
 	WMSetButtonText(panel->opaqkeybB, _("by keyboard"));
 
 	WMMapSubwidgets(panel->opaqF);
