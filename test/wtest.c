@@ -8,12 +8,19 @@
  * TODO: remake
  */
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xproto.h>
 #include <WMaker.h>
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
+
 
 static char bits[] = {
 	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
@@ -34,7 +41,7 @@ static void callback(int item)
 	printf("pushed item %i\n", item);
 }
 
-static void quit(int item)
+static noreturn void quit(int item)
 {
 	/*
 	 * This parameter is not used, but because we're a call-back we have a fixed

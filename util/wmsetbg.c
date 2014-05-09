@@ -100,7 +100,7 @@ typedef struct BackgroundTexture {
 	int height;
 } BackgroundTexture;
 
-static void quit(int rcode)
+static noreturn void quit(int rcode)
 {
 	WMReleaseApplication();
 	exit(rcode);
