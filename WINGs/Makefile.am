@@ -81,6 +81,7 @@ libWUtil_la_SOURCES = 	\
 	string.c \
 	tree.c \
 	userdefaults.c \
+	userdefaults.h \
 	usleep.c \
 	wapplication.c \
 	wconfig.h \
