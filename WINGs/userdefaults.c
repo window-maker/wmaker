@@ -90,13 +90,10 @@ char *wdefaultspathfordomain(const char *domain)
 	slen = strlen(gspath) + strlen(DEFAULTS_DIR) + strlen(domain) + 4;
 	path = wmalloc(slen);
 
-	if (wstrlcpy(path, gspath, slen) >= slen ||
-	    wstrlcat(path, DEFAULTS_DIR, slen) >= slen ||
-	    wstrlcat(path, "/", slen) >= slen ||
-	    wstrlcat(path, domain, slen) >= slen) {
-		wfree(path);
-		return NULL;
-	}
+	strcpy(path, gspath);
+	strcat(path, DEFAULTS_DIR);
+	strcat(path, "/");
+	strcat(path, domain);
 
 	return path;
 }

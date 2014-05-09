@@ -823,23 +823,14 @@ static char *getCurrentFileName(WMFilePanel * panel)
 	slen = strlen(path) + strlen(file) + 1;
 	ret = wmalloc(slen);
 
-	if (*file != '/' &&
-	    wstrlcat(ret, path, slen) >= slen)
-		goto error;
+	if (file[0] != '/')
+		strcpy(ret, path);
 
-	if (wstrlcat(ret, file, slen) >= slen)
-		goto error;
+	strcat(ret, file);
 
 	wfree(file);
 	wfree(path);
 	return ret;
-
-error:
-	wfree(file);
-	wfree(path);
-	wfree(ret);
-
-	return NULL;
 }
 
 
