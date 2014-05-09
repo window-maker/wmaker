@@ -1531,7 +1531,7 @@ msgid "could not load icon %s"
 msgstr "아이콘 %s를 읽어들일 수 없음"
 
 #: ../../WPrefs.app/MouseSettings.c:468
-msgid "Acceler.:"
+msgid "Accel.:"
 msgstr "가속.:"
 
 #: ../../WPrefs.app/MouseSettings.c:479

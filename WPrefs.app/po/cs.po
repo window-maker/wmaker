@@ -1304,7 +1304,7 @@ msgid "Mouse Speed"
 msgstr "Rychlost myši"
 
 #: ../MouseSettings.c:507
-msgid "Acceler.:"
+msgid "Accel.:"
 msgstr "Zrychl.:"
 
 #: ../MouseSettings.c:520

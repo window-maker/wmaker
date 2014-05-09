@@ -1624,7 +1624,7 @@ msgstr "Скорост на мишката"
 
 # ../../WPrefs.app/MouseSettings.c:508
 #: ../../WPrefs.app/MouseSettings.c:507
-msgid "Acceler.:"
+msgid "Accel.:"
 msgstr "Ускорение"
 
 # ../../WPrefs.app/MouseSettings.c:521

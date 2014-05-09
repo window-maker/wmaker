@@ -1437,7 +1437,7 @@ msgid "Mouse Speed"
 msgstr "Vitesse de la souris"
 
 #: ../../WPrefs.app/MouseSettings.c:507
-msgid "Acceler.:"
+msgid "Accel.:"
 msgstr "Accélér. :"
 
 #: ../../WPrefs.app/MouseSettings.c:520
