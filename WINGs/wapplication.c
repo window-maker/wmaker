@@ -62,14 +62,18 @@ void WMReleaseApplication(void) {
 
 	W_ReleaseNotificationCenter();
 
-	if (WMApplication.applicationName)
+	if (WMApplication.applicationName) {
 		wfree(WMApplication.applicationName);
+		WMApplication.applicationName = NULL;
+	}
 
-	for (i = 0; i < WMApplication.argc; i++)
-		wfree(WMApplication.argv[i]);
+	if (WMApplication.argv) {
+		for (i = 0; i < WMApplication.argc; i++)
+			wfree(WMApplication.argv[i]);
 
-	if (WMApplication.argv)
 		wfree(WMApplication.argv);
+		WMApplication.argv = NULL;
+	}
 }
 
 void WMSetResourcePath(const char *path)
