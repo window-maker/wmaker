@@ -109,8 +109,8 @@ static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim,
 {
 	WMFrame *icon = NULL;
 	RImage *image = NULL;
-	char flags = 0;
-	char desired = 0;
+	int flags;
+	int desired = 0;
 
 	/* This whole function is a no-op if we aren't drawing the panel */
 	if (!wPreferences.swtileImage)
@@ -118,7 +118,7 @@ static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim,
 
 	icon = WMGetFromArray(panel->icons, idecks);
 	image = WMGetFromArray(panel->images, idecks);
-	flags = (char) (uintptr_t) WMGetFromArray(panel->flags, idecks);
+	flags = (int) (uintptr_t) WMGetFromArray(panel->flags, idecks);
 
 	if (selected)
 		desired |= ICON_SELECTED;
@@ -227,7 +227,7 @@ static void scrollIcons(WSwitchPanel *panel, int delta)
 	for (i = panel->firstVisible; i < panel->firstVisible + panel->visibleCount; i++) {
 		if (i == panel->current)
 			continue;
-		dim = ((char) (uintptr_t) WMGetFromArray(panel->flags, i) & ICON_DIM);
+		dim = ((int) (uintptr_t) WMGetFromArray(panel->flags, i) & ICON_DIM);
 		changeImage(panel, i, 0, dim, True);
 	}
 }
@@ -403,11 +403,11 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 
 static WMArray *makeWindowFlagsArray(int count)
 {
-	WMArray *flags = WMCreateArray(1);
+	WMArray *flags = WMCreateArray(count);
 	int i;
 
 	for (i = 0; i < count; i++)
-		WMAddToArray(flags, (char) 0);
+		WMAddToArray(flags, (void *) 0);
 
 	return flags;
 }
