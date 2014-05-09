@@ -74,7 +74,6 @@ void __wmessage(const char *func, const char *file, int line, int type, const ch
 	int truncated = 0;
 #ifdef HAVE_SYSLOG
 	int syslog_priority = LOG_INFO;
-	const char *syslog_prefix = "INFO";
 #endif
 
 	if (linemax == 0) {
@@ -107,21 +106,18 @@ void __wmessage(const char *func, const char *file, int line, int type, const ch
 			strncat(buf, _("fatal: "), linemax - 1 - strlen(buf));
 #ifdef HAVE_SYSLOG
 			syslog_priority = LOG_CRIT;
-			syslog_prefix = "FATAL";
 #endif
 		break;
 		case WMESSAGE_TYPE_ERROR:
 			strncat(buf, _("error: "), linemax - 1 - strlen(buf));
 #ifdef HAVE_SYSLOG
 			syslog_priority = LOG_ERR;
-			syslog_prefix = "ERROR";
 #endif
 		break;
 		case WMESSAGE_TYPE_WARNING:
 			strncat(buf, _("warning: "), linemax - 1 - strlen(buf));
 #ifdef HAVE_SYSLOG
 			syslog_priority = LOG_WARNING;
-			syslog_prefix = "WARNING";
 #endif
 		break;
 		case WMESSAGE_TYPE_MESSAGE:
