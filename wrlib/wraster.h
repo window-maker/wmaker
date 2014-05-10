@@ -403,6 +403,8 @@ void RDrawLines(RImage *image, const RPoint *points, int npoints, int mode,
 void ROperateLines(RImage *image, int operation, const RPoint *points, int npoints,
                    int mode, const RColor *color);
 
+void ROperateRectangle(RImage *image, int operation, int x0, int y0, int x1, int y1, const RColor *color);
+
 void RDrawSegments(RImage *image, const RSegment *segs, int nsegs, const RColor *color);
 
 void ROperateSegments(RImage *image, int operation, const RSegment *segs, int nsegs,

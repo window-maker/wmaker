@@ -60,6 +60,7 @@ LIBWRASTER3
     ROperateLines;
     ROperatePixel;
     ROperatePixels;
+    ROperateRectangle;
     ROperateSegments;
     RPutPixel;
     RPutPixels;

@@ -463,6 +463,15 @@ void ROperateLines(RImage * image, int operation, const RPoint * points, int npo
 	genericLine(image, x1, y1, x2, y2, color, operation, i);
 }
 
+void ROperateRectangle(RImage *image, int operation, int x0, int y0, int x1, int y1, const RColor *color)
+{
+	int y;
+
+	for (y = y0; y <= y1; y++) {
+		genericLine(image, x0, y, x1, y, color, operation, False);
+	}
+}
+
 void RDrawSegments(RImage * image, const RSegment * segs, int nsegs, const RColor * color)
 {
 	register int i;
