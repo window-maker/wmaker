@@ -1715,6 +1715,25 @@ static void handleKeyPress(XEvent * event)
 		}
 		break;
 
+	case WKBD_RUN:
+	{
+		char *cmdline;
+
+		cmdline = ExpandOptions(scr, _("exec %a(Run,Type command to run:)"));
+
+		XGrabPointer(dpy, scr->root_win, True, 0,
+			     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
+		XSync(dpy, 0);
+
+		if (cmdline) {
+			ExecuteShellCommand(scr, cmdline);
+			wfree(cmdline);
+		}
+		XUngrabPointer(dpy, CurrentTime);
+		XSync(dpy, 0);
+		break;
+	}
+
 	case WKBD_NEXTWSLAYER:
 	case WKBD_PREVWSLAYER:
 		{

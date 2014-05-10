@@ -116,6 +116,9 @@ enum {
 	/* screen */
 	WKBD_SWITCH_SCREEN,
 
+	/* open "run" dialog */
+	WKBD_RUN,
+
 #ifdef KEEP_XKB_LOCK_STATUS
 	WKBD_TOGGLE,
 #endif

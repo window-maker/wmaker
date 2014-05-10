@@ -721,6 +721,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"ScreenSwitchKey", "None", (void *)WKBD_SWITCH_SCREEN,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"RunKey", "None", (void *)WKBD_RUN,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 
 #ifdef KEEP_XKB_LOCK_STATUS
 	{"ToggleKbdModeKey", "None", (void *)WKBD_TOGGLE,
