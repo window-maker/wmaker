@@ -102,6 +102,8 @@ static const struct {
 	"IconTitleFont", N_("Icon Title")}, {
 	"ClipTitleFont", N_("Clip Title")}, {
 	"LargeDisplayFont", N_("Desktop Caption")}, {
+	"SystemFont", N_("System Font")}, {
+	"BoldSystemFont", N_("Bold System Font")}, {
 NULL, NULL},};
 
 static const char *standardSizes[] = {
@@ -587,7 +589,19 @@ static void showData(_Panel * panel)
 		if (ofont)
 			wfree(ofont);
 
-		font = GetStringForKey(fontOptions[i].option);
+		if (strcmp(fontOptions[i].option, "SystemFont") == 0 ||
+		    strcmp(fontOptions[i].option, "BoldSystemFont") == 0) {
+			char *path;
+			WMUserDefaults *defaults;
+
+			path = wdefaultspathfordomain("WMGLOBAL");
+			defaults = WMGetDefaultsFromPath(path);
+			wfree(path);
+			font = WMGetUDStringForKey(defaults,
+						   fontOptions[i].option);
+		} else {
+			font = GetStringForKey(fontOptions[i].option);
+		}
 		if (font)
 			font = wstrdup(font);
 		WMSetMenuItemRepresentedObject(item, font);
@@ -608,7 +622,21 @@ static void storeData(_Panel * panel)
 
 		font = WMGetMenuItemRepresentedObject(item);
 		if (font && *font) {
-			SetStringForKey(font, fontOptions[i].option);
+			if (strcmp(fontOptions[i].option, "SystemFont") == 0 ||
+			    strcmp(fontOptions[i].option, "BoldSystemFont") == 0) {
+				char *path;
+				WMUserDefaults *defaults;
+
+				path = wdefaultspathfordomain("WMGLOBAL");
+				defaults = WMGetDefaultsFromPath(path);
+				wfree(path);
+				WMSetUDStringForKey(defaults,
+						    font,
+						    fontOptions[i].option);
+				WMSaveUserDefaults(defaults);
+			} else {
+				SetStringForKey(font, fontOptions[i].option);
+			}
 		}
 	}
 }
