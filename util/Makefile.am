@@ -5,7 +5,7 @@ AUTOMAKE_OPTIONS =
 pkgdatadir  = $(datadir)/@PACKAGE@
 
 bin_PROGRAMS = wxcopy wxpaste wdwrite wdread getstyle setstyle convertfonts \
-	seticons geticonset wmsetbg wmagnify wmgenmenu wmmenugen
+	seticons geticonset wmsetbg wmagnify wmgenmenu wmmenugen wmiv
 
 bin_SCRIPTS = wmaker.inst wm-oldmenu2new wkdemenu.pl
 
@@ -69,6 +69,13 @@ wmmenugen_LDADD = \
 wmmenugen_SOURCES = wmmenugen.c wmmenugen.h wmmenugen_misc.c \
 	wmmenugen_parse_wmconfig.c \
 	wmmenugen_parse_xdg.c
+
+wmiv_LDADD = \
+	$(top_builddir)/wrlib/libwraster.la \
+	@XLFLAGS@ @XLIBS@ \
+	@GFXLIBS@ $(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
+
+wmiv_SOURCES = wmiv.c wmiv.h
 
 CLEANFILES = wmaker.inst
 

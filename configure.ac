@@ -158,6 +158,10 @@ AS_IF([test "x$debug" = "xyes"],
      AX_CFLAGS_GCC_OPTION([-Wno-deprecated-declarations])
 ])
 
+dnl Posix thread
+dnl =================
+AX_PTHREAD
+
 
 dnl Tracking on what is detected for final status
 dnl =============================================
