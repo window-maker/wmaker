@@ -108,6 +108,7 @@ typedef struct _Panel {
 
 	Pixmap preview;
 	Pixmap previewNoText;
+	Pixmap previewBack;
 
 	char *fprefix;
 } _Panel;
@@ -303,7 +304,8 @@ static const struct {
 	{ "ResizebarBack", "(solid, gray)", N_("[Resizebar]") },
 	{ "MenuTitleBack", "(solid, black)", N_("[Menu Title]") },
 	{ "MenuTextBack", "(solid, gray)", N_("[Menu Item]") },
-	{ "IconBack", "(solid, gray)", N_("[Icon]") }
+	{ "IconBack", "(solid, gray)", N_("[Icon]") },
+	{ "WorkspaceBack", "(solid, black)", N_("[Background]") }
 };
 
 #define RESIZEBAR_BEVEL	-1
@@ -364,6 +366,7 @@ static WMRect previewPositions[] = {
 	{{155, 130}, {64, 64}}
 };
 
+#define PBACKGROUND     7
 #define EVERYTHING	0xff
 
 static WMRect previewColorPositions[] = {
@@ -755,21 +758,32 @@ static void updatePreviewBox(_Panel * panel, int elements)
 	gc = XCreateGC(dpy, WMWidgetXID(panel->parent), 0, NULL);
 
 	if (panel->preview == None) {
-		WMColor *color;
 		WMPixmap *p;
 
 		panel->previewNoText = XCreatePixmap(dpy, WMWidgetXID(panel->parent),
+						     240 - 4, 215 - 4, WMScreenDepth(scr));
+		panel->previewBack = XCreatePixmap(dpy, WMWidgetXID(panel->parent),
 						     240 - 4, 215 - 4, WMScreenDepth(scr));
 
 		p = WMCreatePixmap(scr, 240 - 4, 215 - 4, WMScreenDepth(scr), False);
 		panel->preview = WMGetPixmapXID(p);
 		WMSetLabelImage(panel->prevL, p);
 		WMReleasePixmap(p);
+	}
+	if  (elements & (1 << PBACKGROUND)) {
+		Pixmap tmp;
+		TextureListItem *titem;
+		WMListItem *item;
 
-		color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
-		XFillRectangle(dpy, panel->preview, WMColorGC(color), 0, 0, 240 - 4, 215 - 4);
-		XFillRectangle(dpy, panel->previewNoText, WMColorGC(color), 0, 0, 240 - 4, 215 - 4);
-		WMReleaseColor(color);
+		item = WMGetListItem(panel->texLs,
+				     panel->textureIndex[PBACKGROUND]);
+		titem = (TextureListItem *) item->clientData;
+		tmp = renderTexture(scr, titem->prop, 240 - 4, 215 - 4, NULL, 0);
+
+		XCopyArea(dpy, tmp, panel->preview, gc, 0, 0, 240 - 4, 215 -4 , 0, 0);
+		XCopyArea(dpy, tmp, panel->previewNoText, gc, 0, 0, 240 - 4, 215 -4 , 0, 0);
+		XCopyArea(dpy, tmp, panel->previewBack, gc, 0, 0, 240 - 4, 215 -4 , 0, 0);
+		XFreePixmap(dpy, tmp);
 	}
 
 	if (elements & (1 << PFOCUSED)) {
@@ -966,8 +980,12 @@ static void okEditTexture(void *data)
 
 	WMRedisplayWidget(panel->texLs);
 
-	if (titem->selectedFor)
-		updatePreviewBox(panel, titem->selectedFor);
+	if (titem->selectedFor) {
+		if (titem->selectedFor & (1 << PBACKGROUND))
+			updatePreviewBox(panel, EVERYTHING);
+		else
+			updatePreviewBox(panel, titem->selectedFor);
+	}
 
 	changePage(panel->secP, panel);
 }
@@ -1097,12 +1115,14 @@ static void changePage(WMWidget * w, void *data)
 		WMSetListPosition(panel->texLs, panel->textureIndex[section] - 2);
 	}
 	{
-		WMColor *color;
+		GC gc;
 
-		color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
-		XFillRectangle(rc->dpy, panel->preview, WMColorGC(color),
-			       positions[panel->oldsection].x, positions[panel->oldsection].y, 22, 22);
-		WMReleaseColor(color);
+		gc = XCreateGC(rc->dpy, WMWidgetXID(panel->parent), 0, NULL);
+		XCopyArea(rc->dpy, panel->previewBack, panel->preview, gc,
+			  positions[panel->oldsection].x,
+			  positions[panel->oldsection].y, 22, 22 ,
+			  positions[panel->oldsection].x,
+			  positions[panel->oldsection].y);
 	}
 	if (w) {
 		panel->oldsection = section;
@@ -1206,7 +1226,10 @@ static void textureDoubleClick(WMWidget * w, void *data)
 
 	WMRedisplayWidget(panel->texLs);
 
-	updatePreviewBox(panel, 1 << section);
+	if (section == PBACKGROUND)
+		updatePreviewBox(panel, EVERYTHING);
+	else
+		updatePreviewBox(panel, 1 << section);
 }
 
 static void paintListItem(WMList * lPtr, int index, Drawable d, char *text, int state, WMRect * rect)
@@ -1380,12 +1403,14 @@ static void changeColorPage(WMWidget * w, void *data)
 	};
 
 	if (panel->preview) {
-		WMColor *color;
+		GC gc;
 
-		color = WMCreateRGBColor(scr, 0x5100, 0x5100, 0x7100, True);
-		XFillRectangle(rc->dpy, panel->preview, WMColorGC(color),
-			       positions[panel->oldcsection].x, positions[panel->oldcsection].y, 22, 22);
-		WMReleaseColor(color);
+		gc = XCreateGC(rc->dpy, WMWidgetXID(panel->parent), 0, NULL);
+		XCopyArea(rc->dpy, panel->previewBack, panel->preview, gc,
+			  positions[panel->oldcsection].x,
+			  positions[panel->oldcsection].y, 22, 22 ,
+			  positions[panel->oldcsection].x,
+			  positions[panel->oldcsection].y);
 	}
 	if (w) {
 		section = WMGetPopUpButtonSelectedItem(panel->colP);
@@ -1668,8 +1693,8 @@ static void createPanel(Panel * p)
 	WMAddPopUpButtonItem(panel->secP, _("Titlebar of Menus"));
 	WMAddPopUpButtonItem(panel->secP, _("Menu Items"));
 	WMAddPopUpButtonItem(panel->secP, _("Icon Background"));
-	/*    WMAddPopUpButtonItem(panel->secP, _("Workspace Backgrounds"));
-	 */
+	WMAddPopUpButtonItem(panel->secP, _("Workspace Background"));
+
 	WMSetPopUpButtonSelectedItem(panel->secP, 0);
 	WMSetPopUpButtonAction(panel->secP, changePage, panel);
 
@@ -2044,7 +2069,7 @@ static void prepareForClose(_Panel * panel)
 	textureList = WMCreatePLArray(NULL, NULL);
 
 	/* store list of textures */
-	for (i = 7; i < WMGetListNumberOfRows(panel->texLs); i++) {
+	for (i = 8; i < WMGetListNumberOfRows(panel->texLs); i++) {
 		item = WMGetListItem(panel->texLs, i);
 		titem = (TextureListItem *) item->clientData;
 
