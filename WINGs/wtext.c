@@ -1023,7 +1023,6 @@ static void cursorToTextPosition(Text * tPtr, int x, int y)
 			if ((dir ? tb->next : tb->prior)) {
 				tb = (dir ? tb->next : tb->prior);
 			} else {
-				pos = tb->used;
 				break;	/* goto _doneH; */
 			}
 		}
@@ -1047,9 +1046,6 @@ static void cursorToTextPosition(Text * tPtr, int x, int y)
 			goto _doNothing;
 		}
 	}
-
-	if (tb->blank)
-		_w = 0;
 
 	_y = tb->sections[s]._y;
 
@@ -1117,7 +1113,6 @@ static void cursorToTextPosition(Text * tPtr, int x, int y)
 		if ((dir ? tb->next : tb->prior)) {
 			tb = (dir ? tb->next : tb->prior);
 		} else {
-			done = True;
 			break;
 		}
 
