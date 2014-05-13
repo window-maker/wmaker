@@ -135,6 +135,8 @@ int RBlurImage(RImage * image)
 		}
 	}
 
+	free(tmpp);
+
 	return True;
 }
 
