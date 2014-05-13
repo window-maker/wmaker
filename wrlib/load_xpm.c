@@ -79,7 +79,7 @@ RImage *RGetImageFromXPMData(RContext * context, char **xpmData)
 
 	/* make color table */
 	for (i = 0; i < 4; i++) {
-		color_table[i] = malloc(xpm.ncolors * sizeof(char));
+		color_table[i] = malloc(xpm.ncolors * sizeof(unsigned char));
 		if (!color_table[i]) {
 			for (i = i - 1; i >= 0; i--) {
 				if (color_table[i])
@@ -199,7 +199,7 @@ RImage *RLoadXPM(RContext * context, const char *file)
 
 	/* make color table */
 	for (i = 0; i < 4; i++) {
-		color_table[i] = malloc(xpm.ncolors * sizeof(char));
+		color_table[i] = malloc(xpm.ncolors * sizeof(unsigned char));
 		if (!color_table[i]) {
 			for (i = i - 1; i >= 0; i--) {
 				if (color_table[i])
