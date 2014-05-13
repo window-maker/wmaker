@@ -200,7 +200,7 @@ static WMTreeNode *findNodeInTree(WMTreeNode * aNode, WMMatchDataProc * match, v
 {
 	if (match == NULL && aNode->data == cdata)
 		return aNode;
-	else if ((*match) (aNode->data, cdata))
+	else if (match && (*match) (aNode->data, cdata))
 		return aNode;
 
 	if (aNode->leaves && limit != 0) {
