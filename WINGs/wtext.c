@@ -3299,7 +3299,7 @@ WMSetTextBlockProperties(WMText * tPtr, void *vtb, unsigned int first,
 
 void
 WMGetTextBlockProperties(WMText * tPtr, void *vtb, unsigned int *first,
-			 unsigned int *kanji, unsigned int *underlined, int *script, WMRulerMargins * margins)
+			 unsigned int *kanji, unsigned int *underlined, int *script, WMRulerMargins *margins)
 {
 	TextBlock *tb = (TextBlock *) vtb;
 	if (!tb)
@@ -3314,7 +3314,7 @@ WMGetTextBlockProperties(WMText * tPtr, void *vtb, unsigned int *first,
 	if (script)
 		*script = tb->script;
 	if (margins)
-		margins = &tPtr->margins[tb->marginN];
+		*margins = tPtr->margins[tb->marginN];
 }
 
 void WMPrependTextBlock(WMText * tPtr, void *vtb)
