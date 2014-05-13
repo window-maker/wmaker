@@ -121,7 +121,7 @@ RImage *RLoadGIF(const char *file, int index)
 				}
 			}
 
-			buffer = malloc(width * sizeof(GifColorType));
+			buffer = malloc(width * sizeof(GifPixelType));
 			if (!buffer) {
 				RErrorCode = RERR_NOMEMORY;
 				goto bye;
