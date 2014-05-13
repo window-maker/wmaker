@@ -1253,7 +1253,6 @@ static void scrollersCallBack(WMWidget * w, void *self)
 					tPtr->vpos -= 16;
 				else
 					tPtr->vpos = 0;
-				scroll = True;
 			}
 			break;
 
@@ -1264,7 +1263,6 @@ static void scrollersCallBack(WMWidget * w, void *self)
 						tPtr->vpos += 16;
 					else
 						tPtr->vpos = limit;
-					scroll = True;
 				}
 			}
 			break;
@@ -1274,21 +1272,17 @@ static void scrollersCallBack(WMWidget * w, void *self)
 				tPtr->vpos -= height;
 			else
 				tPtr->vpos = 0;
-
-			scroll = True;
 			break;
 
 		case WSIncrementPage:
 			tPtr->vpos += height;
 			if (tPtr->vpos > (tPtr->docHeight - height))
 				tPtr->vpos = tPtr->docHeight - height;
-			scroll = True;
 			break;
 
 		case WSKnob:
 			tPtr->vpos = WMGetScrollerValue(tPtr->vS)
 			    * (float)(tPtr->docHeight - height);
-			scroll = True;
 			break;
 
 		case WSKnobSlot:
@@ -1311,7 +1305,6 @@ static void scrollersCallBack(WMWidget * w, void *self)
 					tPtr->hpos -= 16;
 				else
 					tPtr->hpos = 0;
-				scroll = True;
 			}
 			break;
 
@@ -1322,7 +1315,6 @@ static void scrollersCallBack(WMWidget * w, void *self)
 						tPtr->hpos += 16;
 					else
 						tPtr->hpos = limit;
-					scroll = True;
 				}
 			}
 			break;
@@ -1332,21 +1324,17 @@ static void scrollersCallBack(WMWidget * w, void *self)
 				tPtr->hpos -= width;
 			else
 				tPtr->hpos = 0;
-
-			scroll = True;
 			break;
 
 		case WSIncrementPage:
 			tPtr->hpos += width;
 			if (tPtr->hpos > (tPtr->docWidth - width))
 				tPtr->hpos = tPtr->docWidth - width;
-			scroll = True;
 			break;
 
 		case WSKnob:
 			tPtr->hpos = WMGetScrollerValue(tPtr->hS)
 			    * (float)(tPtr->docWidth - width);
-			scroll = True;
 			break;
 
 		case WSKnobSlot:
