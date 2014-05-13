@@ -160,7 +160,7 @@ RImage *RLoadPNG(RContext *context, const char *file)
 		image->background.blue = bkcolor->blue >> 8;
 	}
 
-	png_rows = calloc(height, sizeof(char *));
+	png_rows = calloc(height, sizeof(png_bytep));
 	if (!png_rows) {
 		RErrorCode = RERR_NOMEMORY;
 		fclose(f);
