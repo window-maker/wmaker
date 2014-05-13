@@ -2719,7 +2719,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	int x, y;
 	int i, done = False;
 	int corner;
-	int sx = 0, ex = scr->scr_width, ey = scr->scr_height;
+	int ex = scr->scr_width, ey = scr->scr_height;
 	int extra_count = 0;
 
 	if (dock->type == WM_DRAWER) {
@@ -2738,17 +2738,12 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 	if (dock->icon_count + extra_count >= dock->max_icons)
 		return False;
 
-	if (!wPreferences.flags.nodock && scr->dock) {
-		if (scr->dock->on_right_side)
-			ex -= ICON_SIZE + DOCK_EXTRA_SPACE;
-		else
-			sx += ICON_SIZE + DOCK_EXTRA_SPACE;
+	if (!wPreferences.flags.nodock && scr->dock && scr->dock->on_right_side) {
+		ex -= ICON_SIZE + DOCK_EXTRA_SPACE;
 	}
 
 	if (ex < dock->x_pos)
 		ex = dock->x_pos;
-	if (sx > dock->x_pos + ICON_SIZE)
-		sx = dock->x_pos + ICON_SIZE;
 #define C_NONE 0
 #define C_NW 1
 #define C_NE 2
