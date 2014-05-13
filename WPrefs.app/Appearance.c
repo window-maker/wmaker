@@ -646,18 +646,15 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 		case 'T':
 			image = RMakeTiledImage(timage, width, height);
 			RReleaseImage(timage);
-			timage = image;
 			break;
 		case 'C':
 			image = RMakeCenteredImage(timage, width, height, &color);
 			RReleaseImage(timage);
-			timage = image;
 			break;
 		case 'S':
 		case 'M':
 			image = RScaleImage(timage, width, height);
 			RReleaseImage(timage);
-			timage = image;
 			break;
 		}
 	}
