@@ -491,12 +491,30 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 {
 	char *type;
 	RImage *image = NULL;
+	RImage *timage = NULL;
 	Pixmap pixmap;
 	RContext *rc = WMScreenRContext(scr);
 	char *str;
 	RColor rcolor;
 
 	type = WMGetFromPLString(WMGetFromPLArray(texture, 0));
+
+	if (strcasecmp(&type[1], "pixmap") == 0 ||
+	    (strcasecmp(&type[2], "gradient") == 0 && toupper(type[0]) == 'T')) {
+		char *path;
+
+		str = WMGetFromPLString(WMGetFromPLArray(texture, 1));
+		path = wfindfileinarray(GetObjectForKey("PixmapPath"), str);
+		if (path) {
+			timage = RLoadImage(rc, path, 0);
+			if (!timage) {
+				wwarning("could not load file '%s': %s", path ? path : str, RMessageForError(RErrorCode));
+				texture = WMCreatePropListFromDescription("(solid, black)");
+				type = "solid";
+			}
+			wfree(path);
+		}
+	}
 
 	if (strcasecmp(type, "solid") == 0) {
 
@@ -552,8 +570,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 		int style;
 		RColor rcolor2;
 		int i;
-		RImage *grad, *timage = NULL;
-		char *path;
+		RImage *grad = NULL;
 
 		switch (toupper(type[1])) {
 		case 'V':
@@ -573,24 +590,16 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 		str = WMGetFromPLString(WMGetFromPLArray(texture, 4));
 		str2rcolor(rc, str, &rcolor2);
 
-		str = WMGetFromPLString(WMGetFromPLArray(texture, 1));
+		grad = RRenderGradient(width, height, &rcolor, &rcolor2, style);
 
-		if ((path = wfindfileinarray(GetObjectForKey("PixmapPath"), str)) != NULL)
-			timage = RLoadImage(rc, path, 0);
+		image = RMakeTiledImage(timage, width, height);
+		RReleaseImage(timage);
 
-		if (!path || !timage) {
-			wwarning("could not load file '%s': %s", path, RMessageForError(RErrorCode));
-		} else {
-			grad = RRenderGradient(width, height, &rcolor, &rcolor2, style);
+		i = atoi(WMGetFromPLString(WMGetFromPLArray(texture, 2)));
 
-			image = RMakeTiledImage(timage, width, height);
-			RReleaseImage(timage);
+		RCombineImagesWithOpaqueness(image, grad, i);
+		RReleaseImage(grad);
 
-			i = atoi(WMGetFromPLString(WMGetFromPLArray(texture, 2)));
-
-			RCombineImagesWithOpaqueness(image, grad, i);
-			RReleaseImage(grad);
-		}
 	} else if (strcasecmp(&type[2], "gradient") == 0 && toupper(type[0]) == 'M') {
 		int style;
 		RColor **colors;
@@ -628,42 +637,29 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 			wfree(colors);
 		}
 	} else if (strcasecmp(&type[1], "pixmap") == 0) {
-		RImage *timage = NULL;
-		char *path;
 		RColor color;
 
-		str = WMGetFromPLString(WMGetFromPLArray(texture, 1));
+		str = WMGetFromPLString(WMGetFromPLArray(texture, 2));
+		str2rcolor(rc, str, &color);
 
-		if ((path = wfindfileinarray(GetObjectForKey("PixmapPath"), str)) != NULL)
-			timage = RLoadImage(rc, path, 0);
-
-		if (!path || !timage) {
-			wwarning("could not load file '%s': %s", path ? path : str, RMessageForError(RErrorCode));
-		} else {
-			str = WMGetFromPLString(WMGetFromPLArray(texture, 2));
-			str2rcolor(rc, str, &color);
-
-			switch (toupper(type[0])) {
-			case 'T':
-				image = RMakeTiledImage(timage, width, height);
-				RReleaseImage(timage);
-				timage = image;
-				break;
-			case 'C':
-				image = RMakeCenteredImage(timage, width, height, &color);
-				RReleaseImage(timage);
-				timage = image;
-				break;
-			case 'S':
-			case 'M':
-				image = RScaleImage(timage, width, height);
-				RReleaseImage(timage);
-				timage = image;
-				break;
-			}
-
+		switch (toupper(type[0])) {
+		case 'T':
+			image = RMakeTiledImage(timage, width, height);
+			RReleaseImage(timage);
+			timage = image;
+			break;
+		case 'C':
+			image = RMakeCenteredImage(timage, width, height, &color);
+			RReleaseImage(timage);
+			timage = image;
+			break;
+		case 'S':
+		case 'M':
+			image = RScaleImage(timage, width, height);
+			RReleaseImage(timage);
+			timage = image;
+			break;
 		}
-		wfree(path);
 	}
 
 	if (!image)
