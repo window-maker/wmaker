@@ -75,14 +75,6 @@ typedef struct _Panel {
 	WMFrame *taliF;
 	WMButton *taliB[3];
 
-	/* root bg */
-	WMFrame *bgF;
-
-	WMLabel *bgprevL;
-	WMButton *selbgB;
-
-	WMPopUpButton *modeB[3];
-
 	/* */
 
 	int textureIndex[8];
@@ -1805,30 +1797,6 @@ static void createPanel(Panel * p)
 
 	WMMapSubwidgets(panel->colF);
 
-#ifdef unfinished
-    /*** root bg ***/
-
-	panel->bgF = WMCreateFrame(panel->box);
-	WMSetFrameRelief(panel->bgF, WRFlat);
-
-	item = WMCreateTabViewItemWithIdentifier(2);
-	WMSetTabViewItemView(item, WMWidgetView(panel->bgF));
-	WMSetTabViewItemLabel(item, _("Background"));
-
-	WMAddItemInTabView(panel->tabv, item);
-
-	panel->bgprevL = WMCreateLabel(panel->bgF);
-	WMResizeWidget(panel->bgprevL, 230, 155);
-	WMMoveWidget(panel->bgprevL, 5, 5);
-	WMSetLabelRelief(panel->bgprevL, WRSunken);
-
-	panel->selbgB = WMCreateCommandButton(panel->bgF);
-	WMMoveWidget(panel->selbgB, 5, 165);
-	WMResizeWidget(panel->selbgB, 100, 24);
-	WMSetButtonText(panel->selbgB, _("Browse..."));
-
-	WMMapSubwidgets(panel->bgF);
-#endif				/* unfinished */
     /*** options ***/
 	panel->optF = WMCreateFrame(panel->box);
 	WMSetFrameRelief(panel->optF, WRFlat);
