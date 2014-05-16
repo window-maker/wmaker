@@ -118,6 +118,12 @@ typedef struct {
 	unsigned ispixmap:1;
 } TextureListItem;
 
+enum {
+	TAB_TEXTURE,
+	TAB_COLOR,
+	TAB_OPTIONS
+};
+
 static void updateColorPreviewBox(_Panel * panel, int elements);
 
 static void showData(_Panel * panel);
@@ -1530,28 +1536,28 @@ static void changedTabItem(struct WMTabViewDelegate *self, WMTabView * tabView, 
 
 	i = WMGetTabViewItemIdentifier(item);
 	switch (i) {
-	case 0:
+	case TAB_TEXTURE:
 		switch (panel->oldTabItem) {
-		case 1:
+		case TAB_COLOR:
 			changeColorPage(NULL, panel);
 			break;
 		}
 		changePage(panel->secP, panel);
 		break;
-	case 1:
+	case TAB_COLOR:
 		switch (panel->oldTabItem) {
-		case 0:
+		case TAB_TEXTURE:
 			changePage(NULL, panel);
 			break;
 		}
 		changeColorPage(panel->colP, panel);
 		break;
-	case 3:
+	case TAB_OPTIONS:
 		switch (panel->oldTabItem) {
-		case 0:
+		case TAB_TEXTURE:
 			changePage(NULL, panel);
 			break;
-		case 1:
+		case TAB_COLOR:
 			changeColorPage(NULL, panel);
 			break;
 		}
@@ -1662,7 +1668,7 @@ static void createPanel(Panel * p)
 	panel->texF = WMCreateFrame(panel->box);
 	WMSetFrameRelief(panel->texF, WRFlat);
 
-	item = WMCreateTabViewItemWithIdentifier(0);
+	item = WMCreateTabViewItemWithIdentifier(TAB_TEXTURE);
 	WMSetTabViewItemView(item, WMWidgetView(panel->texF));
 	WMSetTabViewItemLabel(item, _("Texture"));
 
@@ -1752,7 +1758,7 @@ static void createPanel(Panel * p)
 	panel->colF = WMCreateFrame(panel->box);
 	WMSetFrameRelief(panel->colF, WRFlat);
 
-	item = WMCreateTabViewItemWithIdentifier(1);
+	item = WMCreateTabViewItemWithIdentifier(TAB_COLOR);
 	WMSetTabViewItemView(item, WMWidgetView(panel->colF));
 	WMSetTabViewItemLabel(item, _("Color"));
 
@@ -1801,7 +1807,7 @@ static void createPanel(Panel * p)
 	panel->optF = WMCreateFrame(panel->box);
 	WMSetFrameRelief(panel->optF, WRFlat);
 
-	item = WMCreateTabViewItemWithIdentifier(3);
+	item = WMCreateTabViewItemWithIdentifier(TAB_OPTIONS);
 	WMSetTabViewItemView(item, WMWidgetView(panel->optF));
 	WMSetTabViewItemLabel(item, _("Options"));
 
