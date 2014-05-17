@@ -729,16 +729,16 @@ static WMenu *open_window_menu_core(WWindow *wwin)
 	return menu;
 }
 
-static void prepare_menu_position(WMenu *menu, int x, int y)
+static void prepare_menu_position(WMenu *menu, int *x, int *y)
 {
 	WMRect rect;
 
 	rect = wGetRectForHead(menu->frame->screen_ptr,
 			       wGetHeadForPointerLocation(menu->frame->screen_ptr));
-	if (x < rect.pos.x - menu->frame->core->width / 2)
-		x = rect.pos.x - menu->frame->core->width / 2;
-	if (y < rect.pos.y)
-		y = rect.pos.y;
+	if (*x < rect.pos.x - menu->frame->core->width / 2)
+		*x = rect.pos.x - menu->frame->core->width / 2;
+	if (*y < rect.pos.y)
+		*y = rect.pos.y;
 }
 
 void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
@@ -757,7 +757,7 @@ void OpenWindowMenu(WWindow *wwin, int x, int y, int keyboard)
 		x = wwin->frame_x;
 
 	/* Common menu position */
-	prepare_menu_position(menu, x, y);
+	prepare_menu_position(menu, &x, &y);
 
 	if (!wwin->flags.internal_window)
 		wMenuMapAt(menu, x, y, keyboard);
@@ -781,7 +781,7 @@ void OpenWindowMenu2(WWindow *wwin, int x, int y, int keyboard)
 	x -= menu->frame->core->width / 2;
 
 	/* Common menu position */
-	prepare_menu_position(menu, x, y);
+	prepare_menu_position(menu, &x, &y);
 
 	if (!wwin->flags.internal_window)
 		wMenuMapAt(menu, x, y, keyboard);
