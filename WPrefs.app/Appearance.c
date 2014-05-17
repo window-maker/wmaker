@@ -306,28 +306,38 @@ static const struct {
 	{ "WorkspaceBack", "(solid, black)", N_("[Background]") }
 };
 
-#define RESIZEBAR_BEVEL	-1
-#define MENU_BEVEL 	-2
+enum {
+	RESIZEBAR_BEVEL	= -1,
+	MENU_BEVEL = -2
+};
 
-#define TEXPREV_WIDTH	40
-#define TEXPREV_HEIGHT	24
+enum {
+	TEXPREV_WIDTH = 40,
+	TEXPREV_HEIGHT = 24
+};
 
-#define MSTYLE_NORMAL	0
-#define MSTYLE_SINGLE	1
-#define MSTYLE_FLAT	2
+enum {
+	MSTYLE_NORMAL,
+	MSTYLE_SINGLE,
+	MSTYLE_FLAT
+};
 
-#define FTITLE_COL	(1<<0)
-#define UTITLE_COL	(1<<1)
-#define OTITLE_COL	(1<<2)
-#define MTITLE_COL	(1<<3)
-#define MITEM_COL	(1<<4)
-#define MDISAB_COL	(1<<5)
-#define MHIGH_COL	(1<<6)
-#define MHIGHT_COL	(1<<7)
-#define ICONT_COL	(1<<8)
-#define ICONB_COL	(1<<9)
-#define CLIP_COL	(1<<10)
-#define CCLIP_COL	(1<<11)
+enum {
+	FTITLE_COL,
+	UTITLE_COL,
+	OTITLE_COL,
+	MTITLE_COL,
+	MITEM_COL,
+	MDISAB_COL,
+	MHIGH_COL,
+	MHIGHT_COL,
+	FBORDER_COL,
+	FSBORDER_COL,
+	ICONT_COL,
+	ICONB_COL,
+	CLIP_COL,
+	CCLIP_COL
+};
 
 static const struct {
 	const char *key;
@@ -341,10 +351,12 @@ static const struct {
 	{ "MenuDisabledColor", "#616161" },
 	{ "HighlightColor", "white" },
 	{ "HighlightTextColor", "black" },
-	{ "IconTitleColor", "white" },
-	{ "IconTitleBack", "black" },
-	{ "ClipTitleColor", "black" },
-	{ "CClipTitleColor", "#454045" }
+	{ "FrameBorderColor", "black" },
+	{ "FrameSelectedBorderColor", "white" }/* , */
+	/* { "IconTitleColor", "white" }, */
+	/* { "IconTitleBack", "black" }, */
+	/* { "ClipTitleColor", "black" }, */
+	/* { "CClipTitleColor", "#454045" } */
 };
 
 static WMRect previewPositions[] = {
@@ -376,6 +388,8 @@ static WMRect previewColorPositions[] = {
 	{{30, 160}, {90, 20}},
 	{{30, 180}, {90, 20}},
 	{{30, 200}, {90, 20}},
+	{{30, 40}, {190, 20}},
+	{{30, 10}, {190, 20}},
 	{{155, 130}, {64, 64}},
 	{{155, 130}, {64, 64}},
 	{{155, 130}, {64, 64}},
@@ -433,13 +447,9 @@ static void drawResizebarBevel(RImage * img)
 {
 	RColor light;
 	RColor dark;
-	RColor black;
 	int width = img->width;
 	int height = img->height;
 	int cwidth = 28;
-
-	black.alpha = 255;
-	black.red = black.green = black.blue = 0;
 
 	light.alpha = 0;
 	light.red = light.green = light.blue = 80;
@@ -456,9 +466,6 @@ static void drawResizebarBevel(RImage * img)
 	ROperateLine(img, RSubtractOperation, width - cwidth - 2, 2, width - cwidth - 2, height - 1, &dark);
 	ROperateLine(img, RAddOperation, width - cwidth - 1, 2, width - cwidth - 1, height - 1, &light);
 
-	RDrawLine(img, 0, height - 1, width - 1, height - 1, &black);
-	RDrawLine(img, 0, 0, 0, height - 1, &black);
-	RDrawLine(img, width - 1, 0, width - 1, height - 1, &black);
 }
 
 static void drawMenuBevel(RImage * img)
@@ -744,7 +751,6 @@ static void updatePreviewBox(_Panel * panel, int elements)
 	Pixmap pix;
 	GC gc;
 	int colorUpdate = 0;
-	WMColor *black = WMBlackColor(scr);
 
 	gc = XCreateGC(dpy, WMWidgetXID(panel->parent), 0, NULL);
 
@@ -779,46 +785,23 @@ static void updatePreviewBox(_Panel * panel, int elements)
 
 	if (elements & (1 << PFOCUSED)) {
 		renderPreview(panel, gc, PFOCUSED, RBEV_RAISED2);
-		XDrawRectangle(dpy, panel->preview, WMColorGC(black),
-			       previewPositions[PFOCUSED].pos.x - 1,
-			       previewPositions[PFOCUSED].pos.y - 1,
-			       previewPositions[PFOCUSED].size.width, previewPositions[PFOCUSED].size.height);
-		XDrawRectangle(dpy, panel->previewNoText, WMColorGC(black),
-			       previewPositions[PFOCUSED].pos.x - 1,
-			       previewPositions[PFOCUSED].pos.y - 1,
-			       previewPositions[PFOCUSED].size.width, previewPositions[PFOCUSED].size.height);
-		colorUpdate |= FTITLE_COL;
+		colorUpdate |= 1 << FTITLE_COL | 1 << FSBORDER_COL;
 	}
 	if (elements & (1 << PUNFOCUSED)) {
 		renderPreview(panel, gc, PUNFOCUSED, RBEV_RAISED2);
-		XDrawRectangle(dpy, panel->preview, WMColorGC(black),
-			       previewPositions[PUNFOCUSED].pos.x - 1,
-			       previewPositions[PUNFOCUSED].pos.y - 1,
-			       previewPositions[PUNFOCUSED].size.width, previewPositions[PUNFOCUSED].size.height);
-		XDrawRectangle(dpy, panel->previewNoText, WMColorGC(black),
-			       previewPositions[PUNFOCUSED].pos.x - 1,
-			       previewPositions[PUNFOCUSED].pos.y - 1,
-			       previewPositions[PUNFOCUSED].size.width, previewPositions[PUNFOCUSED].size.height);
-		colorUpdate |= UTITLE_COL;
+		colorUpdate |= 1 << UTITLE_COL | 1 << FBORDER_COL;
 	}
 	if (elements & (1 << POWNER)) {
 		renderPreview(panel, gc, POWNER, RBEV_RAISED2);
-		XDrawRectangle(dpy, panel->preview, WMColorGC(black),
-			       previewPositions[POWNER].pos.x - 1,
-			       previewPositions[POWNER].pos.y - 1,
-			       previewPositions[POWNER].size.width, previewPositions[POWNER].size.height);
-		XDrawRectangle(dpy, panel->previewNoText, WMColorGC(black),
-			       previewPositions[POWNER].pos.x - 1,
-			       previewPositions[POWNER].pos.y - 1,
-			       previewPositions[POWNER].size.width, previewPositions[POWNER].size.height);
-		colorUpdate |= OTITLE_COL;
+		colorUpdate |= 1 << OTITLE_COL | 1 << FBORDER_COL;
 	}
 	if (elements & (1 << PRESIZEBAR)) {
 		renderPreview(panel, gc, PRESIZEBAR, RESIZEBAR_BEVEL);
+		colorUpdate |= 1 << FBORDER_COL;
 	}
 	if (elements & (1 << PMTITLE)) {
 		renderPreview(panel, gc, PMTITLE, RBEV_RAISED2);
-		colorUpdate |= MTITLE_COL;
+		colorUpdate |= 1 << MTITLE_COL | 1 << FBORDER_COL;
 	}
 	if (elements & (1 << PMITEM)) {
 		WMListItem *item;
@@ -842,14 +825,9 @@ static void updatePreviewBox(_Panel * panel, int elements)
 
 		XFreePixmap(dpy, pix);
 
-		colorUpdate |= MITEM_COL | MDISAB_COL | MHIGH_COL | MHIGHT_COL;
-	}
-	if (elements & (1 << PMITEM | 1 << PMTITLE)) {
-		XDrawLine(dpy, panel->preview, gc, 29, 120, 29, 120 + 20 * 4 + 20);
-		XDrawLine(dpy, panel->preview, gc, 29, 119, 119, 119);
-
-		XDrawLine(dpy, panel->previewNoText, gc, 29, 120, 29, 120 + 20 * 4 + 20);
-		XDrawLine(dpy, panel->previewNoText, gc, 29, 119, 119, 119);
+		colorUpdate |= 1 << MITEM_COL | 1 << MDISAB_COL |
+			1 << MHIGH_COL | 1 << MHIGHT_COL |
+			1 << FBORDER_COL;
 	}
 	if (elements & (1 << PICON)) {
 		WMListItem *item;
@@ -860,7 +838,8 @@ static void updatePreviewBox(_Panel * panel, int elements)
 
 		renderPreview(panel, gc, PICON, titem->ispixmap ? 0 : RBEV_RAISED3);
 
-		colorUpdate |= ICONT_COL | ICONB_COL | CLIP_COL | CCLIP_COL;
+		colorUpdate |= 1 << ICONT_COL | 1 << ICONB_COL |
+			1 << CLIP_COL | 1 << CCLIP_COL;
 	}
 
 	if (colorUpdate)
@@ -869,7 +848,6 @@ static void updatePreviewBox(_Panel * panel, int elements)
 		WMRedisplayWidget(panel->prevL);
 
 	XFreeGC(dpy, gc);
-	WMReleaseColor(black);
 }
 
 static void cancelNewTexture(void *data)
@@ -1387,6 +1365,8 @@ static void changeColorPage(WMWidget * w, void *data)
 		{5, 160},
 		{5, 180},
 		{5, 180},
+		{5, 40},
+		{5, 10},
 		{130, 140},
 		{130, 140},
 		{130, 140},
@@ -1447,62 +1427,145 @@ static void updateColorPreviewBox(_Panel * panel, int elements)
 
 	d = panel->preview;
 	pnot = panel->previewNoText;
-	gc = WMColorGC(panel->colors[0]);
+	gc = WMColorGC(panel->colors[FTITLE_COL]);
 
-	if (elements & FTITLE_COL) {
+	if (elements & (1 << FTITLE_COL)) {
 		XCopyArea(dpy, pnot, d, gc, 30, 10, 190, 20, 30, 10);
-		paintText(scr, d, panel->colors[0], panel->boldFont, 30, 10, 190, 20,
+		paintText(scr, d, panel->colors[FTITLE_COL],
+			  panel->boldFont, 30, 10, 190, 20,
 			  panel->titleAlignment, _("Focused Window"));
 	}
-	if (elements & UTITLE_COL) {
+	if (elements & (1 << UTITLE_COL)) {
 		XCopyArea(dpy, pnot, d, gc, 30, 40, 190, 20, 30, 40);
-		paintText(scr, d, panel->colors[1], panel->boldFont, 30, 40, 190, 20,
-			  panel->titleAlignment, _("Unfocused Window"));
+		paintText(scr, d, panel->colors[UTITLE_COL],
+			  panel->boldFont, 30, 40, 190, 20,
+			  panel->titleAlignment,
+			  _("Unfocused Window"));
 	}
-	if (elements & OTITLE_COL) {
+	if (elements & (1 << OTITLE_COL)) {
 		XCopyArea(dpy, pnot, d, gc, 30, 70, 190, 20, 30, 70);
-		paintText(scr, d, panel->colors[2], panel->boldFont, 30, 70, 190, 20,
-			  panel->titleAlignment, _("Owner of Focused Window"));
+		paintText(scr, d, panel->colors[OTITLE_COL],
+			  panel->boldFont, 30, 70, 190, 20,
+			  panel->titleAlignment,
+			  _("Owner of Focused Window"));
 	}
-	if (elements & MTITLE_COL) {
+	if (elements & (1 << MTITLE_COL)) {
 		XCopyArea(dpy, pnot, d, gc, 30, 120, 90, 20, 30, 120);
-		paintText(scr, d, panel->colors[3], panel->boldFont, 30, 120, 90, 20, WALeft, _("Menu Title"));
+		paintText(scr, d, panel->colors[MTITLE_COL],
+			  panel->boldFont, 30, 120, 90, 20, WALeft,
+			  _("Menu Title"));
 	}
-	if (elements & MITEM_COL) {
+	if (elements & (1 << MITEM_COL)) {
 		XCopyArea(dpy, pnot, d, gc, 30, 140, 90, 20, 30, 140);
-		paintText(scr, d, panel->colors[4], panel->normalFont, 30, 140, 90, 20, WALeft, _("Normal Item"));
+		paintText(scr, d, panel->colors[MITEM_COL],
+			  panel->normalFont, 30, 140, 90, 20, WALeft,
+			  _("Normal Item"));
 		XCopyArea(dpy, pnot, d, gc, 30, 200, 90, 20, 30, 200);
-		paintText(scr, d, panel->colors[4], panel->normalFont, 30, 200, 90, 20, WALeft, _("Normal Item"));
+		paintText(scr, d, panel->colors[MITEM_COL],
+			  panel->normalFont, 30, 200, 90, 20, WALeft,
+			  _("Normal Item"));
 	}
-	if (elements & MDISAB_COL) {
+	if (elements & (1 << MDISAB_COL)) {
 		XCopyArea(dpy, pnot, d, gc, 30, 160, 90, 20, 30, 160);
-		paintText(scr, d, panel->colors[5], panel->normalFont, 30, 160, 90, 20,
-			  WALeft, _("Disabled Item"));
+		paintText(scr, d, panel->colors[MDISAB_COL],
+			  panel->normalFont, 30, 160, 90, 20, WALeft,
+			  _("Disabled Item"));
 	}
-	if (elements & MHIGH_COL) {
-		XFillRectangle(WMScreenDisplay(scr), d, WMColorGC(panel->colors[6]), 31, 181, 87, 17);
-		XFillRectangle(WMScreenDisplay(scr), pnot, WMColorGC(panel->colors[6]), 31, 181, 87, 17);
-		elements |= MHIGHT_COL;
+	if (elements & (1 << MHIGH_COL)) {
+		XFillRectangle(WMScreenDisplay(scr), d,
+			       WMColorGC(panel->colors[MHIGH_COL]),
+			       31, 181, 87, 17);
+		XFillRectangle(WMScreenDisplay(scr), pnot,
+			       WMColorGC(panel->colors[MHIGH_COL]),
+			       31, 181, 87, 17);
+		elements |= 1 << MHIGHT_COL;
 	}
-	if (elements & MHIGHT_COL) {
+	if (elements & (1 << MHIGHT_COL)) {
 		XCopyArea(dpy, pnot, d, gc, 30, 180, 90, 20, 30, 180);
-		paintText(scr, d, panel->colors[7], panel->normalFont, 30, 180, 90, 20, WALeft, _("Highlighted"));
+		paintText(scr, d, panel->colors[MHIGHT_COL],
+			  panel->normalFont, 30, 180, 90, 20, WALeft,
+			  _("Highlighted"));
 	}
+	if (elements & (1 << FBORDER_COL)) {
+		XDrawRectangle(dpy, pnot,
+			       WMColorGC(panel->colors[FBORDER_COL]),
+			       29, 39, 190, 20);
+		XDrawRectangle(dpy, d,
+			       WMColorGC(panel->colors[FBORDER_COL]),
+			       29, 39, 190, 20);
+		XDrawRectangle(dpy, pnot,
+			       WMColorGC(panel->colors[FBORDER_COL]),
+			       29, 69, 190, 20);
+		XDrawRectangle(dpy, d,
+			       WMColorGC(panel->colors[FBORDER_COL]),
+			       29, 69, 190, 20);
+		XDrawLine(dpy, pnot,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  30, 100, 30, 109);
+		XDrawLine(dpy, d,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  30, 100, 30, 109);
+		XDrawLine(dpy, pnot,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  31, 109, 219, 109);
+		XDrawLine(dpy, d,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  31, 109, 219, 109);
+		XDrawLine(dpy, pnot,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  220, 100, 220, 109);
+		XDrawLine(dpy, d,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  220, 100, 220, 109);
+		XDrawLine(dpy, pnot,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  29, 120, 29, 220);
+		XDrawLine(dpy, d,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  29, 120, 29, 220);
+		XDrawLine(dpy, pnot,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  29, 119, 119, 119);
+		XDrawLine(dpy, d,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  29, 119, 119, 119);
+		XDrawLine(dpy, pnot,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  119, 120, 119, 220);
+		XDrawLine(dpy, d,
+			  WMColorGC(panel->colors[FBORDER_COL]),
+			  119, 120, 119, 220);
+	}
+	if (elements & (1 << FSBORDER_COL)) {
+		XDrawRectangle(dpy, pnot,
+			       WMColorGC(panel->
+					 colors[FSBORDER_COL]),
+			       29, 9, 190, 20);
+		XDrawRectangle(dpy, d,
+			       WMColorGC(panel->
+					 colors[FSBORDER_COL]),
+			       29, 9, 190, 20);
+	}
+
 	/*
-	   if (elements & ICONT_COL) {
-	   WRITE(_("Focused Window"), panel->colors[8], panel->boldFont,
+	   if (elements & (1 << ICONT_COL)) {
+	   WRITE(_("Focused Window"), panel->colors[ICONT_COL],
+	   panel->boldFont,
 	   155, 130, 64);
 	   }
-	   if (elements & ICONB_COL) {
-	   WRITE(_("Focused Window"), panel->colors[9], panel->boldFont,
+	   if (elements & (1 << ICONB_COL)) {
+	   WRITE(_("Focused Window"), panel->colors[ICONB_COL],
+	   panel->boldFont,
 	   0, 0, 30);
 	   }
-	   if (elements & CLIP_COL) {
-	   WRITE(_("Focused Window"), panel->colors[10], panel->boldFont,
+	   if (elements & (1 << CLIP_COL)) {
+	   WRITE(_("Focused Window"), panel->colors[CLIP_COL],
+	   panel->boldFont,
 	   0, 0, 30);
 	   }
-	   if (elements & CCLIP_COL) {
-	   WRITE(_("Focused Window"), panel->colors[11], panel->boldFont,
+	   if (elements & (1 << CCLIP_COL)) {
+	   WRITE(_("Focused Window"), panel->colors[CCLIP_COL],
+	   panel->boldFont,
 	   0, 0, 30);
 	   }
 	 */
@@ -1775,6 +1838,8 @@ static void createPanel(Panel * p)
 	WMAddPopUpButtonItem(panel->colP, _("Disabled Menu Item Text"));
 	WMAddPopUpButtonItem(panel->colP, _("Menu Highlight Color"));
 	WMAddPopUpButtonItem(panel->colP, _("Highlighted Menu Text Color"));
+	WMAddPopUpButtonItem(panel->colP, _("Frame Border Color"));
+	WMAddPopUpButtonItem(panel->colP, _("Selected Frame Border Color"));
 	/*
 	   WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title"));
 	   WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title Back"));
@@ -1987,7 +2052,7 @@ static void storeData(_Panel * panel)
 		SetObjectForKey(titem->prop, textureOptions[i].key);
 	}
 
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < wlengthof(colorOptions); i++) {
 		char *str;
 
 		str = WMGetColorRGBDescription(panel->colors[i]);
