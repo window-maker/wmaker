@@ -55,20 +55,13 @@
 
 #ifdef NDEBUG
 
-#define wassertr(expr)		{}
-#define wassertrv(expr, val)	{}
+#define wassertr(expr)  \
+	if (!(expr)) { return; }
+
+#define wassertrv(expr, val)  \
+	if (!(expr)) { return (val); }
 
 #else /* !NDEBUG */
-
-#ifdef DEBUG
-
-#include <assert.h>
-
-#define wassertr(expr) 	assert(expr)
-
-#define wassertrv(expr, val)	assert(expr)
-
-#else /* !DEBUG */
 
 #define wassertr(expr) \
     if (!(expr)) { \
@@ -83,7 +76,6 @@
                  __FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
         return (val);\
     }
-#endif /* !DEBUG */
 
 #endif /* !NDEBUG */
 
