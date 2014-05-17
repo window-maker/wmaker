@@ -79,6 +79,24 @@ or similar shortcut to open the panel without switching to a new window.
 $ wdwrite WindowMaker SwitchPanelOnlyOpen YES
 
 
+--- 0.95.4
+
+New window placement strategy
+-----------------------------
+
+Among the window placement algorithms has arrived the "center" placement to
+get new windows appear at the center of the screen (unless application
+explicitly specify a position, of course).
+
+
+Removed dependency to CPP
+-------------------------
+
+The menu files used to be pre-processed with CPP, which can be a problem because
+modern system do not install dev tools by default, and some compilers do not
+provide a pre-processor anyway. WindowMaker is now autonomous.
+
+
 --- 0.95.3
 
 The references to the legacy path /usr/X11R6 have been removed because xorg
