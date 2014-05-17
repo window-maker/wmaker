@@ -81,6 +81,11 @@ $ wdwrite WindowMaker SwitchPanelOnlyOpen YES
 
 --- 0.95.3
 
+The references to the legacy path /usr/X11R6 have been removed because xorg
+does not use it in favor of a standard /usr layout. Similarly, the directory
+/etc/X11/WindowMaker is now /usr/share/WindowMaker.
+
+
 New application Relaunching functionality
 -----------------------------------------
 
