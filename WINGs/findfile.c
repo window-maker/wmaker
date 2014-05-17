@@ -138,17 +138,19 @@ char *wexpandpath(const char *path)
 		char *tmp;
 
 		if (*path == '$') {
-			int j = 0;
+			int j;
+
 			path++;
 			/* expand $(HOME) or $HOME style environment variables */
 			if (*path == '(') {
 				path++;
+				j = 0;
 				while (*path != 0 && *path != ')') {
 					if (j > PATH_MAX)
 						goto error;
 					buffer2[j++] = *(path++);
-					buffer2[j] = 0;
 				}
+				buffer2[j] = 0;
 				if (*path == ')') {
 					path++;
 					tmp = getenv(buffer2);
@@ -173,12 +175,13 @@ char *wexpandpath(const char *path)
 						goto error;
 				}
 			} else {
+				j = 0;
 				while (*path != 0 && *path != '/') {
 					if (j > PATH_MAX)
 						goto error;
 					buffer2[j++] = *(path++);
-					buffer2[j] = 0;
 				}
+				buffer2[j] = 0;
 				tmp = getenv(buffer2);
 				if (!tmp) {
 					if ((i += strlen(buffer2) + 1) > PATH_MAX ||
