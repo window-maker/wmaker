@@ -197,15 +197,16 @@ void unpaint_app_icon(WApplication *wapp)
 void paint_app_icon(WApplication *wapp)
 {
 	WIcon *icon;
-	WScreen *scr = wapp->main_window_desc->screen_ptr;
+	WScreen *scr;
 	WDock *attracting_dock;
 	int x = 0, y = 0;
 	Bool update_icon = False;
 
-	if (!wapp || !wapp->app_icon)
+	if (!wapp || !wapp->app_icon || !wapp->main_window_desc)
 		return;
 
 	icon = wapp->app_icon->icon;
+	scr = wapp->main_window_desc->screen_ptr;
 	wapp->app_icon->main_window = wapp->main_window;
 
 	/* If the icon is docked, don't continue */
