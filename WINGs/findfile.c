@@ -36,7 +36,6 @@
 #define PATH_MAX  1024
 #endif
 
-#define RETRY( x ) do { x; } while (errno == EINTR);
 
 char *wgethomedir()
 {
@@ -431,27 +430,31 @@ int wcopy_file(const char *dir, const char *src_file, const char *dest_file)
 	if (stat(src_file, &st) != 0 || !S_ISREG(st.st_mode))
 		return -1;
 
-	RETRY( src = fopen(src_file, "rb") )
+	do {
+		src = fopen(src_file, "rb");
+	} while ((src == NULL) && (errno == EINTR));
 	if (src == NULL) {
-		werror(_("Could not open %s"), src_file);
+		werror(_("Could not open input file \"%s\""), src_file);
 		return -1;
 	}
 
 	dstpath = wstrconcat(dir, dest_file);
-	RETRY( dst = fopen(dstpath, "wb") )
+	do {
+		dst = fopen(dstpath, "wb");
+	} while ((dst == NULL) && (errno == EINTR));
 	if (dst == NULL) {
-		werror(_("Could not create %s"), dstpath);
+		werror(_("Could not create target file \"%s\""), dstpath);
 		wfree(dstpath);
-		RETRY( fclose(src) )
+		fclose(src);
 		return -1;
 	}
 
 	do {
-		RETRY( nread = fread(buf, 1, sizeof(buf), src) )
+		nread = fread(buf, 1, sizeof(buf), src);
 		if (ferror(src))
 			break;
 
-		RETRY( nwritten = fwrite(buf, 1, nread, dst) )
+		nwritten = fwrite(buf, 1, nread, dst);
 		if (ferror(dst) || feof(src) || nread != nwritten)
 			break;
 
@@ -460,10 +463,11 @@ int wcopy_file(const char *dir, const char *src_file, const char *dest_file)
 	if (ferror(src) || ferror(dst))
 		unlink(dstpath);
 
-	RETRY( fclose(src) )
+	fclose(src);
 	fchmod(fileno(dst), st.st_mode);
 	fsync(fileno(dst));
-	RETRY( fclose(dst) )
+	if (fclose(dst))
+		wwarning("error occured during fclose(\"%s\")", dstpath);
 	wfree(dstpath);
 
 	return 0;
