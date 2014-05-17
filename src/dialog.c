@@ -1011,22 +1011,40 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
 	{
-		char *tmp;
-		int len = (instance ? strlen(instance) : 0)
-		    + (class ? strlen(class) : 0) + 32;
+		static const char *prefix = NULL;
+		char *title;
+		int len;
 		WMPoint center;
 
-		tmp = wmalloc(len);
+		if (prefix == NULL)
+			prefix = _("Icon Chooser");
 
-		if (tmp && (instance || class))
-			snprintf(tmp, len, "%s [%s.%s]", _("Icon Chooser"), instance, class);
-		else
-			strcpy(tmp, _("Icon Chooser"));
+		len = strlen(prefix)
+			+ 2	// " ["
+			+ (instance ? strlen(instance) : 0)
+			+ 1	// "."
+			+ (class ? strlen(class) : 0)
+			+ 1	// "]"
+			+ 1;	// final NUL
+
+		title = wmalloc(len);
+		strcpy(title, prefix);
+
+		if (instance || class) {
+			strcat(title, " [");
+			if (instance != NULL)
+				strcat(title, instance);
+			if (instance && class)
+				strcat(title, ".");
+			if (class != NULL)
+				strcat(title, class);
+			strcat(title, "]");
+		}
 
 		center = getCenter(scr, 450, 280);
 
-		wwin = wManageInternalWindow(scr, parent, None, tmp, center.x, center.y, 450, 280);
-		wfree(tmp);
+		wwin = wManageInternalWindow(scr, parent, None, title, center.x, center.y, 450, 280);
+		wfree(title);
 	}
 
 	/* put icon paths in the list */
