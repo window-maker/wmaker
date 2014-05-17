@@ -736,7 +736,6 @@ char *GetShortcutString(const char *shortcut)
 {
 	char *buffer = NULL;
 	char *k;
-	int modmask = 0;
 	/*    KeySym ksym; */
 	int control = 0;
 	char *tmp, *text;
@@ -752,8 +751,6 @@ char *GetShortcutString(const char *shortcut)
 		if (mod < 0) {
 			return wstrdup("bug");
 		}
-
-		modmask |= mod;
 
 		if (strcasecmp(text, "Meta") == 0) {
 			buffer = wstrappend(buffer, "M+");
@@ -783,13 +780,6 @@ char *GetShortcutString(const char *shortcut)
 		buffer = wstrappend(buffer, "^");
 	}
 	buffer = wstrappend(buffer, text);
-
-	/* get key */
-	/*    ksym = XStringToKeysym(text);
-	   tmp = keysymToString(ksym, modmask);
-	   puts(tmp);
-	   buffer = wstrappend(buffer, tmp);
-	 */
 	wfree(tmp);
 
 	return buffer;
