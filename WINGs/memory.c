@@ -30,6 +30,10 @@
 #include <assert.h>
 #include <signal.h>
 
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
+
 #ifdef USE_BOEHM_GC
 #ifndef GC_DEBUG
 #define GC_DEBUG
@@ -54,7 +58,11 @@ static void defaultHandler(int bla)
 
 static waborthandler *aborthandler = defaultHandler;
 
-#define wAbort(a) (*aborthandler)(a)
+static inline noreturn void wAbort(int bla)
+{
+	(*aborthandler)(bla);
+	exit(-1);
+}
 
 waborthandler *wsetabort(waborthandler * handler)
 {
