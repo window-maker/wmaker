@@ -2,6 +2,16 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+--- 0.95.6
+
+More image format supported
+---------------------------
+
+In addition to a more complete Netpbm image formats support, WindowMaker
+can now load WebP images. It can also make use of the ImageMagick library
+to support a lot more formats, like SVG, BMP, TGA...
+
+
 --- 0.95.5
 
 Support for generated menus in proplist format
