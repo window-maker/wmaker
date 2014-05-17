@@ -303,8 +303,7 @@ WMUserDefaults *WMGetStandardUserDefaults(void)
 	if (!domain)
 		domain = WMCreatePLDictionary(NULL, NULL);
 
-	if (path)
-		wfree(path);
+	wfree(path);
 
 	defaults->appDomain = domain;
 
