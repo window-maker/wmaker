@@ -103,9 +103,9 @@ void wtokensplit(char *command, char ***argv, int *argc)
 		token = wtokennext(line, &line);
 		if (token) {
 			if (count == 0)
-				*argv = wmalloc(sizeof(char **));
+				*argv = wmalloc(sizeof(**argv));
 			else
-				*argv = wrealloc(*argv, (count + 1) * sizeof(char **));
+				*argv = wrealloc(*argv, (count + 1) * sizeof(**argv));
 			(*argv)[count++] = token;
 		}
 	} while (token != NULL && line != NULL);
