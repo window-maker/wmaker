@@ -235,8 +235,7 @@ char *wstrappend(char *dst, const char *src)
 
 	slen = strlen(dst) + strlen(src) + 1;
 	dst = wrealloc(dst, slen);
-	if (wstrlcat(dst, src, slen) >= slen)
-		return NULL;
+	strcat(dst, src);
 
 	return dst;
 }
