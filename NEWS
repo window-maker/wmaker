@@ -26,37 +26,6 @@ of the screen and also to the corners (top/bottom + left/right).
 The keyboard shortcuts can be configured with WPrefs.
 
 
-New application Relaunching functionality
------------------------------------------
-
-There are now several ways to launch a new instance of an application with the
-same command line that was originally used to start it.
-
-1. By selecting Launch from the application's window menu.
-2. By using the "Launch new instance of application" keyboard shortcut.
-3. By clicking the application's appicon with the middle button.
-4. By double-clicking the application's appicon while holding Control.
-
-For example, if you have two xterms open, one started with "xterm" and one
-started with "xterm -rv", using the Relaunch functionality on the first xterm
-would run "xterm" and using it on the second would run "xterm -rv".  Thus
-Relaunching can also be thought of as "cloning" an application.
-
-Application Relaunching works by examining the window's WM_COMMAND property and
-so will not work if it is not set.
-
-Options to limit the window/menu title height
----------------------------------------------
-
-You can now set the minimum and maximum titlebar heights.
-For example, to force all titlebars to 24 pixels execute
-the following commands:
-
-$ wdwrite WindowMaker WindowTitleMinHeight 24
-$ wdwrite WindowMaker WindowTitleMaxHeight 24
-$ wdwrite WindowMaker MenuTitleMinHeight 24
-$ wdwrite WindowMaker MenuTitleMaxHeight 24
-
 Options to configure window/menu borders
 ----------------------------------------
 
@@ -108,6 +77,41 @@ windows, you can run the following command to force the first "FocusNextKey"
 or similar shortcut to open the panel without switching to a new window.
 
 $ wdwrite WindowMaker SwitchPanelOnlyOpen YES
+
+
+--- 0.95.3
+
+New application Relaunching functionality
+-----------------------------------------
+
+There are now several ways to launch a new instance of an application with the
+same command line that was originally used to start it.
+
+1. By selecting Launch from the application's window menu.
+2. By using the "Launch new instance of application" keyboard shortcut.
+3. By clicking the application's appicon with the middle button.
+4. By double-clicking the application's appicon while holding Control.
+
+For example, if you have two xterms open, one started with "xterm" and one
+started with "xterm -rv", using the Relaunch functionality on the first xterm
+would run "xterm" and using it on the second would run "xterm -rv".  Thus
+Relaunching can also be thought of as "cloning" an application.
+
+Application Relaunching works by examining the window's WM_COMMAND property and
+so will not work if it is not set.
+
+
+Options to limit the window/menu title height
+---------------------------------------------
+
+You can now set the minimum and maximum titlebar heights.
+For example, to force all titlebars to 24 pixels execute
+the following commands:
+
+$ wdwrite WindowMaker WindowTitleMinHeight 24
+$ wdwrite WindowMaker WindowTitleMaxHeight 24
+$ wdwrite WindowMaker MenuTitleMinHeight 24
+$ wdwrite WindowMaker MenuTitleMaxHeight 24
 
 
 --- 0.95.2
