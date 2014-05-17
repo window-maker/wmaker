@@ -279,7 +279,6 @@ static WMenu *configureUserMenu(WScreen * scr, WMPropList * plum)
 
 void wUserMenuRefreshInstances(WMenu * menu, WWindow * wwin)
 {
-	WMenuEntry *entry;
 	int i, j, count, paintflag;
 
 	paintflag = 0;
@@ -335,7 +334,7 @@ WMenu *wUserMenuGet(WScreen * scr, WWindow * wwin)
 	WMenu *menu = NULL;
 	char *path = NULL;
 	char *tmp;
-	if (wwin->wm_instance && wwin->wm_class) {
+	if (wwin && wwin->wm_instance && wwin->wm_class) {
 		int len = strlen(wwin->wm_instance) + strlen(wwin->wm_class) + 7;
 		tmp = wmalloc(len);
 		snprintf(tmp, len, "%s.%s.menu", wwin->wm_instance, wwin->wm_class);
@@ -345,9 +344,7 @@ WMenu *wUserMenuGet(WScreen * scr, WWindow * wwin)
 		if (!path)
 			return NULL;
 
-		if (wwin)
-			menu = readUserMenuFile(scr, path);
-
+		menu = readUserMenuFile(scr, path);
 		wfree(path);
 	}
 	return menu;
