@@ -57,6 +57,7 @@ char *wgethomedir()
 	if (!user) {
 		werror(_("could not get password entry for UID %i"), getuid());
 		home = "/";
+		return home;
 	}
 
 	if (!user->pw_dir)
