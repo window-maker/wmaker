@@ -253,6 +253,7 @@ dnl ============================
 dnl not used anywhere
 AC_FUNC_MEMCMP
 AC_FUNC_VPRINTF
+WM_FUNC_SECURE_GETENV
 AC_CHECK_FUNCS(gethostname select poll strcasecmp strncasecmp \
 	       setsid mallinfo mkstemp sysconf)
 AC_SEARCH_LIBS([strerror], [cposix])

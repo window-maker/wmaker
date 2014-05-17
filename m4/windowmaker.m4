@@ -182,3 +182,28 @@ m4_popdef([ENABLEVAR])dnl
 m4_popdef([CACHEVAR])dnl
 m4_popdef([USEVAR])dnl
 ])
+
+
+# WM_FUNC_SECURE_GETENV
+# ---------------------
+#
+# Check if the function 'secure_getenv' is available
+# If found, defines HAVE_SECURE_GETENV
+AC_DEFUN_ONCE([WM_FUNC_SECURE_GETENV],
+[AC_REQUIRE([_WM_LIB_CHECK_FUNCTS])
+AC_CACHE_CHECK([for secure_getenv], [wm_cv_func_secure_getenv],
+    [wm_cv_func_secure_getenv=no
+     wm_save_CFLAGS="$CFLAGS"
+     for wm_arg in "% yes" "-D_GNU_SOURCE"; do
+         AS_IF([wm_fn_lib_try_compile "stdlib.h" "const char *h;" "h = secure_getenv(\"HOME\")" dnl
+                    "`echo "$wm_arg" | sed -e 's, *%.*$,,' ` -Werror=implicit-function-declaration"],
+             [wm_cv_func_secure_getenv="`echo "$wm_arg" | sed -e 's,^.*% *,,' `"
+              break])
+     done
+     CFLAGS="$wm_save_CFLAGS"])
+AS_IF([test "x$wm_cv_func_secure_getenv" != "xno"],
+    [AS_IF([test "x$wm_cv_func_secure_getenv" != "xyes"],
+         [WM_APPEND_ONCE([$wm_cv_func_secure_getenv], [CPPFLAGS])])
+     AC_DEFINE([HAVE_SECURE_GETENV], [1],
+         [defined when GNU's secure_getenv function is available])])
+])

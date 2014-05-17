@@ -58,7 +58,11 @@ const char *wusergnusteppath()
 		/* Value have been already computed, re-use it */
 		return path;
 
+#ifdef HAVE_SECURE_GETENV
+	gspath = secure_getenv("GNUSTEP_USER_ROOT");
+#else
 	gspath = getenv("GNUSTEP_USER_ROOT");
+#endif
 	if (gspath) {
 		gspath = wexpandpath(gspath);
 		if (gspath) {

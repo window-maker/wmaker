@@ -46,7 +46,11 @@ char *wgethomedir()
 	if (home)
 		return home;
 
+#ifdef HAVE_SECURE_GETENV
+	tmp = secure_getenv("HOME");
+#else
 	tmp = getenv("HOME");
+#endif
 	if (tmp) {
 		home = wstrdup(tmp);
 		return home;
