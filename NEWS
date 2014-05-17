@@ -88,12 +88,12 @@ is now configured so that it no longer automatically closes when the shift key
 is pressed and released.
 
 To configure the switchpanel so that it does close on release of the shift
-key, which was the traditional Window Maker behaviour, run the following
+key, which was the traditional Window Maker behavior, run the following
 command:
 
 $ wdwrite WindowMaker StrictWindozeCycling NO
 
-If you find yourself regularly opening the switchpanel just to visualise open
+If you find yourself regularly opening the switchpanel just to visualize open
 windows, you can run the following command to force the first "FocusNextKey"
 or similar shortcut to open the panel without switching to a new window.
 
@@ -183,14 +183,14 @@ in WPrefs in the "Keyboard Shortcuts" page, or in the config file with
 
 Left/right maximization. Now wmaker supports maximizing a window to the
 left or right half of the screen, making it occupy 50% of the area. This is
-useful on widescreen displays where you want to bring up two windows side-by-
+useful on wide screen displays where you want to bring up two windows side-by-
 side. The shortcut keys for this can be configured in WPrefs in the "Keyboard
 Shortcuts" page, or in the config file with "LHMaximizeKey" and "RHMaximizeKey"
 
 History and AutoComplete in the run dialog
 ------------------------------------------
 
-The "Run..." dialog now autocompletes executables in your path (triggered by
+The "Run..." dialog now auto-completes executables in your path (triggered by
 the TAB key) and records the history of past commands (last 500 by default).
 It can also complete folder names if you start the complete with a "/"
 To use it replace %a with %A in the "Run..." entry in your WMRootMenu file.
@@ -214,7 +214,7 @@ restarting wmaker (made possible by the 'inotify' mechanism)
 Automatic detection of menu changes (via inotify)
 -------------------------------------------------
 
-Window Maker now uses the 'inotify' mechanism from the linux kernel
+Window Maker now uses the 'inotify' mechanism from the Linux kernel
 to automatically detect changes in the WMRootMenu file. So the
 --no-polling option is now gone and Window Maker does not wake up
 your CPU unnecessarily (0 wakeups when idle, instead of 4).
@@ -313,7 +313,7 @@ NetWM / EWMH Support
 --------------------
 
 Support for the EWMH standard has been added. Applications from GNOME 2.x and
-KDE 3.x should now interoperate better with Window Maker.
+KDE 3.x should now inter-operate better with Window Maker.
 
 Support for the obsolete/legacy GNOME 1.x, KDE 1.x and OpenLook(!) hints was
 wiped out for the sake of sanity.
@@ -416,13 +416,13 @@ Shared application icons
 Real application icon sharing was implemented in place of the collapse
 appicon thing. With this applications of the same instance.class will
 have a single shared application icon and hiding will hide all windows
-of the aplications attached to that appicon as if there is a single
+of the application attached to that appicon as if there is a single
 application. This feature is enabled by default for all applications in
 the global WMWindowAttributes defaults domain using:
 
 "*" = {SharedAppIcon = Yes;};
 
-If you're not satisfied with this or want the old behaviour back you
+If you're not satisfied with this or want the old behavior back you
 can revert this (either in the global domain for all users or in your
 personal WMWindowAttibutes domain) using SharedAppIcon = No; for "*"
 It can also be enabled/disabled for individual applications as needed.
@@ -502,7 +502,7 @@ the one where the cursor pointer is.
 - Try to place windows inside one head in non-manual placement modes
 
 
-Less dependancies
+Less dependencies
 -----------------
 
 starting with 0.70.0 libPropList is no longer required to build Window
@@ -633,7 +633,7 @@ configuration files (good for laptops to let them spin disks down when idle).
 Note:
 For the ones used with Jim Knoble's 'no polling' patch, this is the same,
 except that the need to #define ENABLE_NO_POLLING in wconfig.h was removed
-and the behaviour is always available if you use the command line option.
+and the behavior is always available if you use the command line option.
 
 
 --- 0.63.0
@@ -653,7 +653,7 @@ with each section having the specified thickness.
 wmagnify
 --------
 
-The wmagnify utility will magnify the area on teh screen where
+The wmagnify utility will magnify the area on the screen where
 your mouse pointer is located, updating it in real-time.
 
 tip: maximize it horizontally, make it Omnipresent and Always at Bottom.
@@ -668,10 +668,10 @@ covered by windows when maximizing, allowing one to easily access the clip
 or map a menu using the mouse in the border area, even when there are
 windows maximized in both horizontal and vertical directions.
 WorkspaceBorder can be one of (None, LeftRight, TopBottom, AllDirections)
-while WorkspaceBorderSize is the size in pixles of the border not to be
-covered by windows when maximizing (usually a small amount 0..5 pixles).
+while WorkspaceBorderSize is the size in pixels of the border not to be
+covered by windows when maximizing (usually a small amount 0..5 pixels).
 
-Both options can be set using WPrefs.app in the "Miscelaneous Ergonomic
+Both options can be set using WPrefs.app in the "Miscellaneous Ergonomic
 Preferences" section. WPrefs will always limit WorkspaceBorderSize in the
 (0..5) range.
 
@@ -760,15 +760,15 @@ Window edge attraction was now added.
 
 Attraction = YES/NO;
 
-will enable/disable gravity to edge's boder.
-The strength of gravity can be controled by modify `EdgeResistance' value
+will enable/disable gravity to edge's border.
+The strength of gravity can be controlled by modify `EdgeResistance' value
 in WindowMaker configuration file.
 
 
 Titlebar Draw String Plugin
 ---------------------------
 
-FTitleColor, UTitleColor, PTitleColor, MenuTitleColor can be assigend with
+FTitleColor, UTitleColor, PTitleColor, MenuTitleColor can be assigned with
 drawstring plugin instead of plain color. For example:
 
     FTitleColor = (
@@ -781,7 +781,7 @@ drawstring plugin instead of plain color. For example:
     );
 
 will invoke function drawplainstring from libwmfun.so and pass 3 colors for
-arguments. To code new plugin, please see plugin.h for more informations.
+arguments. To code new plugin, please see plugin.h for more information.
 
 
 --- 0.60.0
@@ -803,7 +803,7 @@ SHEXEC <command> will execute the shell command.
 
 If you want to execute something like blabla > /dev/null, then use SHEXEC
 
-Dont forget to update your menus.
+Don't forget to update your menus.
 
 
 New Option For setstyle
@@ -873,7 +873,7 @@ This entry will work in the following way, depending on the context:
 2. If one or more icons are already selected when the Clip menu is called, the
    entry will be named "Toggle Omnipresent" and will apply to all selected
    icons trying to toggle their omnipresent state. The icons which will be
-   succesfully changed to their new state as requested, will be unselected,
+   successfully changed to their new state as requested, will be unselected,
    while the ones that will fail for some reason to gain their new state,
    will remain selected.
 
@@ -901,7 +901,7 @@ don't need a panel to explain them why ;) ).
 
 Now before you load your gun to start a flame war because this is against your
 principles you love so much, please sit down and think that this is a feature,
-which, if you don't use, the old behaviour of the Clip is totally preserved.
+which, if you don't use, the old behavior of the Clip is totally preserved.
 It just adds some extra capabilities to the Clip for people who think that this
 is useful.
 
@@ -951,8 +951,8 @@ New crash dialog panel
 From now on, whenever a fatal situation appears, Window Maker will display a
 dialog panel to the user and let him choose what to do.
 The options are:
-- Abort and leave a core file (usefull for debugging and getting backtraces)
-- Restart Window Maker (default behaviour)
+- Abort and leave a core file (useful for debugging and getting backtraces)
+- Restart Window Maker (default behavior)
 - Start alternate window manager (the one defined as fallback, or if not
   possible fvwm or twm in this order).
 
@@ -1041,7 +1041,7 @@ Full Screen Maximization
 
 The FullMaximize window attribute will allow the window to
 be maximized to the full size of the screen (ignoring anything
-like titlebar, resizebar, dock, panels etc). It should be usefull
+like titlebar, resizebar, dock, panels etc). It should be useful
 for programs that must use the whole screen, like games or things 
 like presentation programs.
 
@@ -1100,7 +1100,7 @@ libPropList
 -----------
 
 WARNING!!! libPropList was removed from the Window Maker distribution
-and is being distributed separately. If you dont have it installed yet,
+and is being distributed separately. If you don't have it installed yet,
 get it from ftp.windowmaker.info/pub/libs and install before building
 Window Maker.
 
@@ -1115,7 +1115,7 @@ Complaints should go to gnome people. SIGUSR1 will restart wmaker now.
 script change
 -------------
 WINGs-flags was removed, and replaced by get-wraster-flags.
-Please remove WINGs-flags from your system, since it was obsoloted by
+Please remove WINGs-flags from your system, since it was obsoleted by
 get-wraster-flags.
 Continuing to use WINGs-flags can lead to hazardous effects, since is no
 longer updated.
@@ -1231,7 +1231,7 @@ Syntax is (thgradient, <file>, <opaqueness>, <color1>, <color2>)
 where:
 <color1> and <color2> are the colors for the gradient,
 <file> is the texture file and
-<opaqueness> is the opaqueness to merge the texture witht the gradient,
+<opaqueness> is the opaqueness to merge the texture with the gradient,
 ranging from 0 to 255.
 
 Example:
@@ -1278,7 +1278,7 @@ AutoRaiseLower option for the Clip. This allows automatic Raise/Lower of the
 Clip icons when the mouse pointer enter/leave the Clip. To avoid unwanted
 raising/lowering there is a time threshold before raising/lowering.
 The thresholds can be changed in wconfig.h by changing one or both of
-AUTO_LOWER_DELAY and AUTO_RAISE_DELAY (expressed in miliseconds).
+AUTO_LOWER_DELAY and AUTO_RAISE_DELAY (expressed in milliseconds).
 For example if you set AUTO_RAISE_DELAY to 0, then the Clip will be raised as
 soon as the mouse pointer enters it's area. Setting AUTO_RAISE_DELAY to a very
 big value, will make the Clip to practically do not auto raise unless clicked,
@@ -1349,7 +1349,7 @@ Hopefully it's intelligent enough, so you won't notice it.
 
 In case you want to know what's it, it's equivalent to that
 (insanely long) 2 second delay present in that Windoze95 menu, 
-but more usefull than annoying (I hope :). To see it, do the following
+but more useful than annoying (I hope :). To see it, do the following
 with your current wmaker version and later with 0.20.3:
 
 - open the apps menu and stick it
@@ -1408,7 +1408,7 @@ Edit src/wconfig.h and #define ICON_KABOOM_EXTRA to get
 more effects for the icon undocking animation.
 
 Options for superfluous stuff are even more superfluous, so this
-will not become runtime.
+will not become run-time.
 
 
 XDE drag and drop support
@@ -1422,7 +1422,7 @@ The support works with gtk 1.1.2
 libPropList
 -----------
 
-libPropList will now be built automatically by wmaker. Wich means
+libPropList will now be built automatically by wmaker. Which means
 the (simplified) building process is now:
 
 ./configure
@@ -1449,7 +1449,7 @@ Maker will disable the animation of window creation if the focus mode is
 either sloppy or auto AND AutoFocus=NO.
 
 If you want the animation, enable AutoFocus or use manual focus mode
-(prefered). 
+(preferred).
 
 
 The NoWindowUnderDock option was removed
@@ -1457,8 +1457,8 @@ The NoWindowUnderDock option was removed
 To obtain the same result, use the "Keep Dock On Top" option in the dock menu.
 
 
-Persistent Program Suplied Icons
---------------------------------
+Persistent Program Supplied Icons
+---------------------------------
 
 Application supplied icons are now stored, so that the dock will keep
 showing them after the app is exited. The icons are stored at
@@ -1505,7 +1505,7 @@ exitscript
 New runtime options
 -------------------
 
-1. Miniaturization animation is now selectable by a runtime option
+1. Miniaturization animation is now selectable by a run-time option
 Add a line with
 
 IconificationStyle = <style>;
@@ -1604,11 +1604,11 @@ Read WPrefs/README
 
 --- 0.18.1
 
-Boolean balues have changed!!! YES, Y and any non-zero integer will
+Boolean values have changed!!! YES, Y and any non-zero integer will
 mean TRUE and anything else (including True) will mean FALSE. This
 is to conform to the OpenStep values used for booleans and
 not cause headaches later, when GNUstep apps also starts using
-defaults and users will try using True wich won't get recognized.
+defaults and users will try using True which won't get recognized.
 
 
 --- 0.18.0
@@ -1741,7 +1741,7 @@ The Move To command was renamed to Move Icon(s) To.
 
 --- 0.17.0
 
-If you have libPropList installed, you might want to reinstall it,
+If you have libPropList installed, you might want to re-install it,
 replacing with the included libPropList. It has a small bug fix.
 
 Misc. Changes
@@ -1915,7 +1915,7 @@ Start miniaturized, will override start hidden if both set.
 
 IMPORTANT NOTE.
 Because of the way Netscape Communicator is implemented, it is NOT possible
-to set the start hidden or miniatirized flags for it. This is because Netscape
+to set the start hidden or miniaturized flags for it. This is because Netscape
 chooses to send a second map event to the window it maps. This makes the
 window to receive a second map request and to be unhidden or maximized back,
 immediately after it was hidden or miniaturized by WindowMaker at startup.
@@ -1978,7 +1978,7 @@ They are now settable in the Attributes Panel.
 
 Also added DontSaveSession attribute. This way, you won't end up with multiple
 unwanted copies of the same app after the previous session is restored.
-I start X with a xterm in .xinitrc instead of wmaker, wich will cause the
+I start X with a xterm in .xinitrc instead of wmaker, which will cause the
 xterm restored by wmaker be duplicate. Just add -name something to the
 xterm started form .xinitrc and mark DontSaveSession=YES for that window.
 
@@ -1988,7 +1988,7 @@ User Specifiable Visual IDs
 ---------------------------
 
 wmaker now supports different visuals than the default one. It isn't of much
-use for most people, but can be usefull for lucky SGI users who want it
+use for most people, but can be useful for lucky SGI users who want it
 to use TrueColor instead of the default PseudoColor.
 
 wmaker -visualid VISUAL_ID
@@ -2011,7 +2011,7 @@ The starting workspace is identified in the following order:
 4. Else the current workspace is used.
 
 Restoring saved sessions will always use the saved workspace, no matter
-what other options are, except onmipresent.
+what other options are, except omnipresent.
 
 
 
@@ -2037,8 +2037,8 @@ animation is used instead. Take a look at the section where this is described
 in src/wconfig.h
 By default there is #undef SPREAD_ICON to select "Falling pieces" animation.
 
-Auto Colapse for Clip
----------------------
+Auto Collapse for Clip
+----------------------
 
 The clip now supports an option named "Auto Collapse" which can be set from
 the clip main menu. When set, clip will stay collapsed, and will show itself
@@ -2064,7 +2064,7 @@ Changed name from Fiend to Clip
 All occurrences of word Fiend with or without capital F were replaced with
 the corresponding Clip (same capital).
 This affects all configuration files under ~/GNUstep that contain this word.
-It can be refered as "Workspace Dock" too.
+It can be referred as "Workspace Dock" too.
 
 
 New option in Clip menu, and extended Clip behavior
@@ -2237,15 +2237,15 @@ Themes installed under ~/GNUstep will be available only for a user, but
 if if they are installed under /usr/local/share/WindowMaker they will be seen
 by all users. This is also true for style files, background images, pixmaps,
 etc that get installed under /usr/local/share/WindowMaker.
-Themes can be saved or loaded using the Appereance menu.
+Themes can be saved or loaded using the Appearance menu.
 
 Also support for different IconSets is available. You can save or load a new
-IconSet using the Appereance menu.
+IconSet using the Appearance menu.
 
 Setting background images is now as simple as putting the images in the right
 place (~/GNUstep/Library/WindowMaker/Backgrounds or
 /usr/local/share/WindowMaker/Backgrounds, or any other place in your
-PixmapPath). Then use the Appereance menu. They will be instantly available
+PixmapPath). Then use the Appearance menu. They will be instantly available
 since they are opened by a OPEN_MENU command. Also the image do not need to
 have a .jpg or any other extension. It will be recognized anyhow.
 As an example please see the OpenStep theme supplied with WindowMaker.
@@ -2333,7 +2333,7 @@ User WindowMaker configuration files are now merged with global ones
 --------------------------------------------------------------------
 
 When starts WindowMaker will look for database domain files under
-$GNUSTEP_USER_ROOT/Defaults or ~/GNUstep/Deafults to be read. (In this order).
+$GNUSTEP_USER_ROOT/Defaults or ~/GNUstep/Defaults to be read. (In this order).
 
 If they are not available then it will scan for them in
 $GNUSTEP_LOCAL_ROOT/Defaults, $GNUSTEP_SYSTEM_ROOT/Defaults or
@@ -2350,7 +2350,7 @@ file will be available for users that do not have them in their config files.
 Any option the user have in his config file will override the one in the
 shared domain file.
 
-So any new runtime options that appear in WindowMaker domain, do not need to
+So any new run-time options that appear in WindowMaker domain, do not need to
 be set in all user files, except the ones the user wants a different behavior
 from the default set for all users in the shared file.
 
@@ -2363,7 +2363,7 @@ So all it needs to have is ~/GNUstep/Defaults directory available.
 New behavior of the Slide Icons
 -------------------------------
 
-Animation constants are now runtime.
+Animation constants are now run-time.
 They are:
 IconSlideDelay = 0;
 IconSlideStep = 5;
@@ -2416,9 +2416,9 @@ Sound support
 
 Some basic sound support is now part of WindowMaker. The sound server is not
 yet part of WindowMaker distribution, so you need to download it separately.
-This is because is linux specific, and need some changes before it can be
+This is because is Linux specific, and need some changes before it can be
 included.
-Until them if you have a linux system and want to use sound, use the
+Until them if you have a Linux system and want to use sound, use the
 wmsound-0.5 available at http://www.geocities.com/SiliconValley/Bay/7874
 Download that package, and only build the sound server there.
 DO NO APPLY ANY PATCHES FROM THERE!, because they are already applied.
@@ -2428,7 +2428,7 @@ procedure.
 
 To enable sound for WindowMaker pass --enable-sound to configure.
 
-Also use NoSound = Yes/No; to enable/disable sound at runtime without killing
+Also use NoSound = Yes/No; to enable/disable sound at run-time without killing
 the sound server.
 
 If you cannot set the sound to work yet, then is not for you.
@@ -2438,7 +2438,7 @@ Wait until the sound server will be fixed and will be part of WindowMaker.
 New entries in WindowMaker domain database
 ------------------------------------------
 
-The following entries have been added to the runtime options:
+The following entries have been added to the run-time options:
 
   SaveSessionOnExit = No;
 
@@ -2459,7 +2459,7 @@ If you set it to "128, 128" it will have 2 rows and 2 columns not overlapped.
 
   NoSound = No;
 
-Enable/disable sound at runtime without the need of killing the sound server.
+Enable/disable sound at run-time without the need of killing the sound server.
 
 
   MenuScrollDelay = 10;
@@ -2504,7 +2504,7 @@ Here are the new fiend features:
 
    All reside in WindowMaker configuration file.
 
-2. Added posibility to launch the workspace menu with button1 click on the
+2. Added possibility to launch the workspace menu with button1 click on the
    idle indicator of fiend, or with button3 click on workspace name on the
    fiend.
 
@@ -2514,7 +2514,7 @@ Here are the new fiend features:
 4. Fiend's idle indicator do have a color that reflects its normal/collapsed
    state.
 
-5. The delay between changing workspaces from fiend is now a runtime option:
+5. The delay between changing workspaces from fiend is now a run-time option:
 
    WorkspaceChangeDelay = 700;
 
@@ -2522,15 +2522,15 @@ Here are the new fiend features:
 
 6. Application icons can be moved between dock and fiend now.
 
-7. The way workspaces are changed is controlled now by two runtime options:
+7. The way workspaces are changed is controlled now by two run-time options:
 
    AdvanceToNewWorkspace=Yes/No;
    CycleWorkspaces=Yes/No;
 
-   Both apply to either fiend navigating buttons or to next/prev worksapace
+   Both apply to either fiend navigating buttons or to next/prev workspace
    keybindings. Both default to No, and are in WindowMaker configuration file.
 
-8. Also added posibility to advance to new workspace, no matter what value
+8. Also added possibility to advance to new workspace, no matter what value
    AdvanceToNewWorkspace have, with Control-button1-click on "next workspace"
    fiend button.
 
@@ -2565,14 +2565,14 @@ In case of WorkspaceBack, color is used to be set in the background until
 the image gets loaded and displayed. This is to avoid the stippled screen
 the X server shows, in case the image is big and loads slow.
 There is a small utility in the util directory, named wmsetbg which is
-used to set the background image. This is needed for windowmaker not to
+used to set the background image. This is needed for WindowMaker not to
 freeze while loading and scaling the image.
-Currently it is hardcoded in windowmaker to use wmsetbg to set the background
+Currently it is hardcoded in WindowMaker to use wmsetbg to set the background
 image, and is better to use it since is smaller that other image manipulation
-programs, and it is compiled with support for same image types as windowmaker.
+programs, and it is compiled with support for same image types as WindowMaker.
 Since it comes and is installed with WindowMaker, there will be no need to
 download and use an external app, which also may not have support for the same
-image types as windowmaker.
+image types as WindowMaker.
 
 
 
@@ -2604,13 +2604,13 @@ When an icons is to be docked, but the position can be either in the dock
 or in the fiend, the dock will be used first, and the icon will be docked
 there.
 
-Here are the new runtime options introduced by the fiend:
+Here are the new run-time options introduced by the fiend:
 Files are located in ~/GNUstep/Defaults/
 
 In WMWindowAttributes:
        "Logo.WMFiend" = {Icon = "Cone.xpm";};  - icon for the fiend
 
-In Windowmaker:
+In WindowMaker:
 	FiendMaxIcons = 25;           - the max number of icons in fiend per
         				workspace
 	FiendTitleFont = "-*-helvetica-bold-r-normal-*-10-*-*-*-*-*-*-*";
@@ -2638,7 +2638,7 @@ to work.
 *** Enhanced Attribute editor.
 
 Now you can save defaults for all windows.
-Please note that only Icon, KeepInsideScree, and sometimes NoAppIcon
+Please note that only Icon, KeepInsideScreen, and sometimes NoAppIcon
 can be useful in a normal environment. But others may have other opinion ;)
 If you set AlwaysUserIcon default for all windows, note that apps like
 asclock, wmload, wmmail, wmrack, will show that icon instead of their
@@ -2663,7 +2663,7 @@ every time you minimize the window and is destroyed when you restore.
 
 --- 0.13.0
 
-*** Atribute editor is working ;).
+*** Attribute editor is working ;).
 
 How it works is quite obvious.
 Anyway, here is a short description.
@@ -2693,7 +2693,7 @@ until you close them.
  Please note that only the root_menu, the window switch_menu and the
 workspaces_menu can be saved this way.
 
-*** Changed the lousy Windoze menu behaviour.
+*** Changed the lousy Windoze menu behavior.
 
 This applies to 'NextMenuBehaviour = NO;'
 
@@ -2705,7 +2705,7 @@ will be selected after that delay, and launched when you will release the
 mouse button.
  If the click was short, a second one is needed to launch the item.
 
-*** Autoarrange icons is now a runtime option
+*** Auto-arrange icons is now a run-time option
 
 Use
 AutoArrangeIcons = YES/NO;
@@ -2727,7 +2727,7 @@ and works completely independent.
 
 OPEN_MENU | /foo/bar/script
 
-will make a menu that is dinamically constructed by /foo/bar/script
+will make a menu that is dynamically constructed by /foo/bar/script
 
 
 --- 0.12.0
