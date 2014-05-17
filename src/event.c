@@ -1721,16 +1721,17 @@ static void handleKeyPress(XEvent * event)
 
 		cmdline = ExpandOptions(scr, _("exec %a(Run,Type command to run:)"));
 
-		XGrabPointer(dpy, scr->root_win, True, 0,
-			     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
-		XSync(dpy, 0);
-
 		if (cmdline) {
+			XGrabPointer(dpy, scr->root_win, True, 0,
+			     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
+			XSync(dpy, False);
+
 			ExecuteShellCommand(scr, cmdline);
 			wfree(cmdline);
+
+			XUngrabPointer(dpy, CurrentTime);
+			XSync(dpy, False);
 		}
-		XUngrabPointer(dpy, CurrentTime);
-		XSync(dpy, 0);
 		break;
 	}
 
