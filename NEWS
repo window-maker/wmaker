@@ -2,7 +2,7 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
---- 0.95.X
+--- 0.95.5
 
 Support for generated menus in proplist format
 ----------------------------------------------
@@ -36,6 +36,7 @@ $ wdwrite WindowMaker FrameBorderWidth 1
 $ wdwrite WindowMaker FrameBorderColor black
 $ wdwrite WindowMaker FrameSelectedBorderColor white
 
+
 Keyboard shortcuts to move windows between workspaces
 -----------------------------------------------------
 
@@ -44,6 +45,16 @@ to move windows to other workspaces.  You can either move a window directly to
 a particular workspace or to the "next" or "previous" workspace.
 
 The new shortcuts can be configured in WPrefs.
+
+
+Native support for Drawers
+--------------------------
+
+WindowMaker now supports drawers in the dock natively. You can add a dock by
+right-clicking on a docked appicon and select "Add a drawer". You can now drag
+appicons to this drawer.
+You can customize how you want your drawers to auto-expand/collapse and
+auto-raise/lower, or you can also completely disable them.
 
 
 Improved switchpanel functionality
