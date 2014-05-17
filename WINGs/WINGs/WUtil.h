@@ -40,15 +40,6 @@
 #endif
 
 
-#ifndef __ASSERT_FUNCTION
-# if (!defined (__GNUC__) || (__GNUC__ < 2 && \
-      __GNUC_MINOR__ < (defined (__cplusplus) ? 6 : 4)))
-#  define __ASSERT_FUNCTION       ((char *) 0)
-# else
-#  define __ASSERT_FUNCTION       __PRETTY_FUNCTION__
-# endif
-#endif
-
 #ifndef __GNUC__
 #define  __attribute__(x)  /*NOTHING*/
 #endif
@@ -65,15 +56,13 @@
 
 #define wassertr(expr) \
     if (!(expr)) { \
-        wwarning("%s line %i (%s): assertion %s failed",\
-                 __FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
+        wwarning("wassertr: assertion %s failed", #expr); \
         return;\
     }
 
 #define wassertrv(expr, val) \
     if (!(expr)) { \
-        wwarning("%s line %i (%s): assertion %s failed",\
-                 __FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
+        wwarning("wassertrv: assertion %s failed", #expr); \
         return (val);\
     }
 
