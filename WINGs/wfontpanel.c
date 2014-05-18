@@ -812,7 +812,6 @@ static void setFontPanelFontName(FontPanel * panel, const char *family, const ch
 	sz = WMFindRowOfListItemWithTitle(panel->sizLs, asize);
 
 	if (sz < 0) {
-		sz = 4;
 		return;
 	}
 
