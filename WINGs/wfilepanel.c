@@ -695,6 +695,9 @@ static void deleteFile(WMWidget *widget, void *p_panel)
 	(void) widget;
 
 	file = getCurrentFileName(panel);
+	if (file == NULL)
+		return;
+
 	normalizePath(file);
 
 	if (stat(file, &filestat) == -1) {
@@ -725,8 +728,7 @@ static void deleteFile(WMWidget *widget, void *p_panel)
 
 	}
 out:
-	if (file)
-		wfree(file);
+	wfree(file);
 }
 
 static void goUnmount(WMWidget *widget, void *p_panel)
