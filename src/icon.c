@@ -54,9 +54,9 @@
 #define CACHE_ICON_PATH "/Library/WindowMaker/CachedPixmaps"
 #define ICON_BORDER 3
 
-static void miniwindowExpose(WObjDescriptor * desc, XEvent * event);
-static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event);
-static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event);
+static void miniwindowExpose(WObjDescriptor *desc, XEvent *event);
+static void miniwindowMouseDown(WObjDescriptor *desc, XEvent *event);
+static void miniwindowDblClick(WObjDescriptor *desc, XEvent *event);
 
 static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y);
 
@@ -199,7 +199,7 @@ static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y)
 	return icon;
 }
 
-void wIconDestroy(WIcon * icon)
+void wIconDestroy(WIcon *icon)
 {
 	WCoreWindow *core = icon->core;
 	WScreen *scr = core->screen_ptr;
@@ -463,7 +463,7 @@ static RImage *get_wwindow_image_from_wmhints(WWindow *wwin, WIcon *icon)
  * Side effects:
  * 	New directories might be created.
  */
-char *wIconStore(WIcon * icon)
+char *wIconStore(WIcon *icon)
 {
 	char *path, *dir_path, *file;
 	int len = 0;
@@ -537,7 +537,7 @@ void wIconSetHighlited(WIcon *icon, Bool flag)
 	update_icon_pixmap(icon);
 }
 
-void wIconSelect(WIcon * icon)
+void wIconSelect(WIcon *icon)
 {
 	WScreen *scr = icon->core->screen_ptr;
 	icon->selected = !icon->selected;
@@ -785,7 +785,7 @@ void wIconPaint(WIcon *icon)
 
 /******************************************************************/
 
-static void miniwindowExpose(WObjDescriptor * desc, XEvent * event)
+static void miniwindowExpose(WObjDescriptor *desc, XEvent *event)
 {
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) event;
@@ -793,7 +793,7 @@ static void miniwindowExpose(WObjDescriptor * desc, XEvent * event)
 	wIconPaint(desc->parent);
 }
 
-static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event)
+static void miniwindowDblClick(WObjDescriptor *desc, XEvent *event)
 {
 	WIcon *icon = desc->parent;
 
@@ -805,7 +805,7 @@ static void miniwindowDblClick(WObjDescriptor * desc, XEvent * event)
 	wDeiconifyWindow(icon->owner);
 }
 
-static void miniwindowMouseDown(WObjDescriptor * desc, XEvent * event)
+static void miniwindowMouseDown(WObjDescriptor *desc, XEvent *event)
 {
 	WIcon *icon = desc->parent;
 	WWindow *wwin = icon->owner;
