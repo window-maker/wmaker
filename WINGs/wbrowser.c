@@ -781,6 +781,7 @@ WMArray *WMGetBrowserPaths(WMBrowser * bPtr)
 		for (i = 0; i <= column; i++) {
 			if (wstrlcat(path, bPtr->pathSeparator, slen) >= slen) {
 				wfree(path);
+				WMFreeArray(paths);
 				return NULL;
 			}
 			if (i == column) {
