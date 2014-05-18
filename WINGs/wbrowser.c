@@ -375,8 +375,6 @@ void WMSetBrowserTitled(WMBrowser * bPtr, Bool flag)
 	if (bPtr->flags.isTitled == flag)
 		return;
 
-	columnX = 0;
-
 	if (!bPtr->flags.isTitled) {
 		columnY = TITLE_SPACING + bPtr->titleHeight;
 
