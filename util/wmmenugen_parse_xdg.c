@@ -363,7 +363,6 @@ static Bool getBooleanValue(const char *line)
 	char *p;
 	int ret;
 
-	ret = 0;
 	getStringValue(&p, line);
 	ret = strcmp(p, "true") == 0 ? True : False;
 	wfree(p);
