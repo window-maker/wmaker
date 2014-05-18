@@ -581,7 +581,7 @@ static Bool updateStartForCurrentTextBlock(Text * tPtr, int x, int y, int *dir, 
 			return 0;
 
 		if (tb->graphic) {
-			tPtr->currentTextBlock = (dir ? tPtr->lastTextBlock : tPtr->firstTextBlock);
+			tPtr->currentTextBlock = (*dir ? tPtr->lastTextBlock : tPtr->firstTextBlock);
 			tPtr->tpos = 0;
 			return 0;
 		}
