@@ -2150,8 +2150,14 @@ static void autoSelectText(Text * tPtr, int clicks)
 	} else if (clicks == 3) {
 		TextBlock *cur = tb;
 
-		while (tb && !tb->first) {
+		while (!tb->first) {
 			tb = tb->prior;
+			if (tb == NULL) {
+#ifndef NDEBUG
+				wwarning("corrupted list of text blocks in WMText, while searching for first block");
+#endif
+				goto error_select_3clicks;
+			}
 		}
 		tPtr->sel.y = tb->sections[0]._y;
 
@@ -2161,6 +2167,7 @@ static void autoSelectText(Text * tPtr, int clicks)
 		}
 		tPtr->sel.h = tb->sections[tb->nsections - 1]._y + 5 - tPtr->sel.y;
 
+	error_select_3clicks:
 		tPtr->sel.x = 0;
 		tPtr->sel.w = tPtr->docWidth;
 		tPtr->clicked.x = 0;	/* only for now, fix sel. code */
