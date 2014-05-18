@@ -868,7 +868,6 @@ static int readmsg(int fd, char *buffer, int size)
 {
 	int count;
 
-	count = 0;
 	while (size > 0) {
 		count = read(fd, buffer, size);
 		if (count < 0)
