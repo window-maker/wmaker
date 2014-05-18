@@ -1,54 +1,68 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
 .TH getstyle 1x "Leden 1999"
-.SH JMÉNO
-getstyle \- vytvoøí balík s aktuálním stylem Window Makera.
+.SH JMÃ‰NO
+getstyle \- vytvoÃ¸Ã­ balÃ­k s aktuÃ¡lnÃ­m stylem Window Makera.
 .SH SYNTAXE
 .B getstyle
 [[\-t|\-\-theme-options] [\-p|\-\-pack] [soubor se stylem]]
 .SH POPIS
 .B getstyle
-mù¾e buï vypsat konfiguraèní informace aktuálního stylu Window Makera do
-souboru/standardního vıstupu nebo vytvoøit samostatnı balík s tématem. Balík
-s tématem je adresáø, kterı obsahuje v¹echno potøebné pro distributovatelné
-téma, informace o stylech a obrázcích.
+mÃ¹Â¾e buÃ¯ vypsat konfiguraÃ¨nÃ­ informace aktuÃ¡lnÃ­ho stylu Window Makera do
+souboru/standardnÃ­ho vÃ½stupu nebo vytvoÃ¸it samostatnÃ½ balÃ­k s tÃ©matem. BalÃ­k
+s tÃ©matem je adresÃ¡Ã¸, kterÃ½ obsahuje vÂ¹echno potÃ¸ebnÃ© pro distributovatelnÃ©
+tÃ©ma, informace o stylech a obrÃ¡zcÃ­ch.
 
-Dejte pozor na to, ¾e informace o stylu ulo¾ené v globální konfiguraci
-systému se nenaèítají.
+Dejte pozor na to, Â¾e informace o stylu uloÂ¾enÃ© v globÃ¡lnÃ­ konfiguraci
+systÃ©mu se nenaÃ¨Ã­tajÃ­.
 
-Standardnì se ulo¾í nasledné vlastnosti: \fIIconBack\fP,
-\fIIconBack\fP, \fITitleJustify\fP, \fIWindowTitleFont\fP,
-\fIMenuTitleFont, MenuTextFont\fP, \fIIconTitleFont\fP,
-\fIDisplayFont\fP, \fIHighlightColor\fP, \fIHighlightTextColor\fP,
-\fIIconTitleColor\fP, \fICClipTitleColor\fP, \fIIconBackColor\fP,
-\fIFTitleColor\fP, \fIPTitleColor\fP, \fIUTitleColor\fP,
-\fIFTitleBack\fP, \fIPTitleBack, UTitleBack\fP, \fIMenuTitleColor\fP,
-\fIMenuTextColor\fP, \fIMenuDisabledColor\fP, \fIMenuTitleBack\fP and
-\fIMenuTextBack\fP. Jakmile je dána volba \fB-t\fP nebo \fB--theme-options\fP,
-vlastnost \fIWorkspaceBack\fP se ulo¾í také.
+StandardnÃ¬ se uloÂ¾Ã­ naslednÃ© vlastnosti: \fITitleJustify\fP,
+\fIClipTitleFont\fP, \fIWindowTitleFont\fP, \fIMenuTitleFont\fP,
+\fIMenuTextFont\fP, \fIIconTitleFont\fP,
+\fILargeDisplayFont\fP, \fIHighlightColor\fP, \fIHighlightTextColor\fP,
+\fIClipTitleColor\fP, \fICClipTitleColor\fP, \fIFTitleColor\fP,
+\fIPTitleColor\fP, \fIUTitleColor\fP, \fIFTitleBack\fP,
+\fIPTitleBack\fP, \fIUTitleBack\fP, \fIResizebarBack\fP,
+\fIMenuTitleColor\fP, \fIMenuTextColor\fP, \fIMenuDisabledColor\fP,
+\fIMenuTitleBack\fP, \fIMenuTextBack\fP, \fIIconBack\fP,
+\fIIconTitleColor\fP, \fIIconTitleBack\fP, \fIFrameBorderWidth\fP,
+\fIFrameBorderColor\fP, \fIFrameSelectedBorderColor\fP,
+\fIMenuStyle\fP, \fIWindowTitleExtendSpace\fP,
+\fIMenuTitleExtendSpace\fP, a \fIMenuTextExtendSpace\fP.
+
+Jakmile je dÃ¡na volba \fB-t\fP nebo \fB--theme-options\fP,
+vlastnost \fIWorkspaceBack\fP se uloÂ¾Ã­ takÃ©, spolu se vÅ¡emi myÅ¡i
+nastavenÃ­m kurzoru uÅ¾ivatelsky definovatelnÃ©
+(\fINormalCursor\fP, \fIArrowCursor\fP, \fIMoveCursor\fP,
+\fIResizeCursor\fP,
+\fITopLeftResizeCursor\fP, \fITopRightResizeCursor\fP,
+\fIBottomLeftResizeCursor\fP, \fIBottomRightResizeCursor\fP,
+\fIVerticalResizeCursor\fP, \fIHorizontalResizeCursor\fP,
+\fIWaitCursor\fP, \fIQuestionCursor\fP, \fITextCursor\fP,
+\fISelectCursor\fP) kterÃ© jsou pÅ™Ã­tomny.
 
 .SH VOLBY
 .TP
 .B \-t
-ulo¾í i informace související s tématem, co¾ je textura pozadí hlavního okna.
-Tato volba je v¾dy nastavená, jakmile je pou¾itá volba \-p.
+uloÂ¾Ã­ i informace souvisejÃ­cÃ­ s tÃ©matem, coÂ¾ je textura pozadÃ­ hlavnÃ­ho okna.
+Tato volba je vÂ¾dy nastavenÃ¡, jakmile je pouÂ¾itÃ¡ volba \-p.
 .TP
 .B \-p
-vytvoøí balík s tématem v adresáøi nazvanım podla jména tématu s pøíponou .themed.
+vytvoÃ¸Ã­ balÃ­k s tÃ©matem v adresÃ¡Ã¸i nazvanÃ½m podla jmÃ©na tÃ©matu s pÃ¸Ã­ponou .themed.
 
-.SH PROMÌNNÉ PROSTØEDÍ
+.SH PROMÃŒNNÃ‰ PROSTÃ˜EDÃ
 .IP GNUSTEP_USER_ROOT
-specifikuje cestu k adresáøi Defaults. Øetìzec "Defaults/" je pøidán k této
-promìnné, èím¾ se urèí umístìní databází. Jakmile promìnná není nastavená,
-tak její implicitní hodnota je "~/GNUstep"
+specifikuje cestu k adresÃ¡Ã¸i Defaults. Ã˜etÃ¬zec "Defaults/" je pÃ¸idÃ¡n k tÃ©to
+promÃ¬nnÃ©, Ã¨Ã­mÂ¾ se urÃ¨Ã­ umÃ­stÃ¬nÃ­ databÃ¡zÃ­. Jakmile promÃ¬nnÃ¡ nenÃ­ nastavenÃ¡,
+tak jejÃ­ implicitnÃ­ hodnota je "~/GNUstep"
 .SH SOUBORY
 .IP GNUSTEP_USER_ROOT/Defaults/WindowMaker
-Toto je soubor, kterı se zapí¹e.
-.SH PODÍVEJTE SE TAKÉ
+Toto je soubor, kterÃ½ se zapÃ­Â¹e.
+.SH PODÃVEJTE SE TAKÃ‰
 .BR setstyle (1x),
 .BR wmaker (1x)
 .SH AUTOR
 Autorem Window Makera je Alfredo K. Kojima <kojima@windowmaker.info>.
 .PP
-Tuto manuálovou stránku napsal Marcelo Magallon <mmagallo@debian.org>.
+Tuto manuÃ¡lovou strÃ¡nku napsal Marcelo Magallon <mmagallo@debian.org>.
 .PP
-Do èe¹tiny pølo¾il Jiøí Hnídek <jiri.hnidek@vslib.cz>.
+Do Ã¨eÂ¹tiny pÃ¸loÂ¾il JiÃ¸Ã­ HnÃ­dek <jiri.hnidek@vslib.cz>.

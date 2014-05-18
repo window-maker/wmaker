@@ -47,7 +47,6 @@
 char *FontOptions[] = {
 	"IconTitleFont",
 	"ClipTitleFont",
-	"DisplayFont",
 	"LargeDisplayFont",
 	"MenuTextFont",
 	"MenuTitleFont",

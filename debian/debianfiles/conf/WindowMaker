@@ -113,7 +113,6 @@
   MenuTextFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
   IconTitleFont = "-*-helvetica-bold-r-normal-*-9-*-*-*-*-*-*-*";
   ClipTitleFont = "Verdana:bold:pixelsize=10";
-  DisplayFont = "-*-helvetica-medium-r-normal-*-12-*-*-*-*-*-*-*";
   HighlightColor = white;
   HighlightTextColor = black;
   ClipTitleColor = black;

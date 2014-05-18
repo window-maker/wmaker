@@ -1,45 +1,55 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
 .TH setstyle 1x "January 1999"
 .SH MENO
-setstyle \- zmení nastavenia Window Makera súvisiace so ¹tılmi alebo
-zavedie tému
+setstyle \- zmenÃ­ nastavenia Window Makera sÃºvisiace so Â¹tÃ½lmi alebo
+zavedie tÃ©mu
 .SH SYNTAX
 .B setstyle
 .I "[--no-fonts] [--help] [--version]"
-.I súbor so ¹tılom
+.I sÃºbor so Â¹tÃ½lom
 .SH DESCRIPTION
 .B setstyle
-naèíta
-.I súbor so ¹tılom
-a zapí¹e jeho obsah do domény Window Makera, èím nastaví aktuálny ¹tıl
-Window Makera. Ak je poskytnutá cesta adresár, bude pova¾ovanı za balík
-s témou a podµa toho bude aj zavedenı. Ak je danı argument
-\fB\-\-no\-fonts\fP, nastavenia súvisiace s fontami (\fIIconTitleFont\fP,
-\fIClipTitleFont\fP, \fIDisplayFont\fP, \fIMenuTextFont\fP,
-\fIMenuTitleFont\fP, \fIWindowTitleFont\fP) v súbore so ¹tılom budú
-ignorované.
-.SH VO¥BY
+naÃ¨Ã­ta
+.I sÃºbor so Â¹tÃ½lom
+a zapÃ­Â¹e jeho obsah do domÃ©ny Window Makera, Ã¨Ã­m nastavÃ­ aktuÃ¡lny Â¹tÃ½l
+Window Makera. Ak je poskytnutÃ¡ cesta adresÃ¡r, bude povaÂ¾ovanÃ½ za balÃ­k
+s tÃ©mou a podÂµa toho bude aj zavedenÃ½. Ak je danÃ½ argument
+\fB\-\-no\-fonts\fP, nastavenia sÃºvisiace s fontami (\fIIconTitleFont\fP,
+\fIClipTitleFont\fP, \fIMenuTextFont\fP,
+\fIMenuTitleFont\fP, \fIWindowTitleFont\fP) v sÃºbore so Â¹tÃ½lom budÃº
+ignorovanÃ©.
+
+PokiaÄ¾ je uvedenÃ© \fB\-\-no\-cursors\fP vlajky, definÃ­cia kurzora myÅ¡i
+(\fINormalCursor\fP, \fIArrowCursor\fP, \fIMoveCursor\fP,
+\fIResizeCursor\fP,
+\fITopLeftResizeCursor\fP, \fITopRightResizeCursor\fP,
+\fIBottomLeftResizeCursor\fP, \fIBottomRightResizeCursor\fP,
+\fIVerticalResizeCursor\fP, \fIHorizontalResizeCursor\fP,
+\fIWaitCursor\fP, \fIQuestionCursor\fP, \fITextCursor\fP,
+\fISelectCursor\fP)
+v Å¡tÃ½le a tÃ©me budÃº ignorovanÃ©.
+.SH VOÂ¥BY
 .TP
 .B \-\-no\-fonts
-ignorova» nastavenia fontov v súbore so ¹tılom.
+ignorovaÂ» nastavenia fontov v sÃºbore so Â¹tÃ½lom.
 .TP
 .B \-\-help
-vypí¹e pomocnı text
+vypÃ­Â¹e pomocnÃ½ text
 .TP
 .B \-\-version
-vypí¹e èíslo verzie
-.SH PREMENNÉ PROSTREDIA
+vypÃ­Â¹e Ã¨Ã­slo verzie
+.SH PREMENNÃ‰ PROSTREDIA
 .IP GNUSTEP_USER_ROOT
-¹pecifikuje cestu k adresáru Defaults. "Defaults/" je pridané k tejto
-premennej, èím sa urèí umiestnenie databáz. Ak premenná nie je nastavená,
-jej implicitná hodnota je "~/GNUstep"
-.SH SÚBORY
+Â¹pecifikuje cestu k adresÃ¡ru Defaults. "Defaults/" je pridanÃ© k tejto
+premennej, Ã¨Ã­m sa urÃ¨Ã­ umiestnenie databÃ¡z. Ak premennÃ¡ nie je nastavenÃ¡,
+jej implicitnÃ¡ hodnota je "~/GNUstep"
+.SH SÃšBORY
 .IP GNUSTEP_USER_ROOT/Defaults/WindowMaker
-Toto je súbor, ktorı sa zapí¹e.
-.SH POZRI TIE®
+Toto je sÃºbor, ktorÃ½ sa zapÃ­Â¹e.
+.SH POZRI TIEÂ®
 .BR getstyle (1x),
 .BR wmaker (1x)
 .SH AUTOR
 Autorom Window Makera je Alfredo K. Kojima <kojima@windowmaker.info>.
 .PP
-Túto manuálovú stránku napísal Marcelo Magallon <mmagallo@debian.org>.
+TÃºto manuÃ¡lovÃº strÃ¡nku napÃ­sal Marcelo Magallon <mmagallo@debian.org>.

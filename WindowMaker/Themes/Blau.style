@@ -25,7 +25,6 @@
   CClipTitleColor = gray60;
   MenuStyle = flat;
   ResizebarBack = (solid, "#989aa6");
-  DisplayFont = "lucida:pixelsize=12";
   IconTitleColor = white;
   TitleJustify = center;
   MenuTextColor = "#ffffff";

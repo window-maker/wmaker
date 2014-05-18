@@ -4,7 +4,6 @@
   MenuTextFont = "Trebuchet MS,sans serif:pixelsize=12";
   IconTitleFont = "Arial,sans serif:pixelsize=9";
   ClipTitleFont = "Verdana:bold:pixelsize=10";
-  DisplayFont = "Trebuchet MS,sans serif:pixelsize=12";
   LargeDisplayFont = "Trebuchet MS,sans serif:pixelsize=24";
   TitleJustify = center;
   HighlightColor = white;

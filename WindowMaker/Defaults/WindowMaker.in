@@ -111,7 +111,6 @@
   MenuTextFont = "Sans:pixelsize=12";
   IconTitleFont = "Sans:pixelsize=9";
   ClipTitleFont = "Sans:bold:pixelsize=10";
-  DisplayFont = "Sans:pixelsize=12";
   LargeDisplayFont = "Sans:pixelsize=24";
   HighlightColor = white;
   HighlightTextColor = black;

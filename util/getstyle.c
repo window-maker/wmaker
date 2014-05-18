@@ -70,7 +70,6 @@ static char *options[] = {
 	"MenuTitleFont",
 	"MenuTextFont",
 	"IconTitleFont",
-	"DisplayFont",
 	"LargeDisplayFont",
 	"HighlightColor",
 	"HighlightTextColor",
@@ -129,7 +128,6 @@ static char *font_options[] = {
 	"MenuTitleFont",
 	"MenuTextFont",
 	"IconTitleFont",
-	"DisplayFont",
 	"LargeDisplayFont",
 	NULL
 };
