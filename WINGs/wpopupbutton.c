@@ -344,8 +344,6 @@ static void paintMenuEntry(PopUpButton * bPtr, int index, int highlight)
 	if (!highlight) {
 		XClearArea(scr->display, bPtr->menuView->window, 0, index * itemHeight, width, itemHeight, False);
 		return;
-	} else if (index < 0 && bPtr->flags.pullsDown) {
-		return;
 	}
 
 	XFillRectangle(scr->display, bPtr->menuView->window, WMColorGC(scr->white),
