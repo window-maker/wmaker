@@ -2898,7 +2898,7 @@ static void releaseStreamObjects(void *data)
 
 static WMArray *getStreamObjects(WMText * tPtr, int sel)
 {
-	WMArray *array = WMCreateArrayWithDestructor(4, releaseStreamObjects);
+	WMArray *array;
 	WMData *data;
 	char *stream;
 	unsigned short len;
@@ -2907,6 +2907,8 @@ static WMArray *getStreamObjects(WMText * tPtr, int sel)
 	stream = getStream(tPtr, sel, 1);
 	if (!stream)
 		return NULL;
+
+	array = WMCreateArrayWithDestructor(4, releaseStreamObjects);
 
 	start = stream;
 	while (start) {
