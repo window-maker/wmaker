@@ -1097,14 +1097,15 @@ WMColorPanel *WMGetColorPanel(WMScreen * scrPtr)
 
 void WMFreeColorPanel(WMColorPanel * panel)
 {
-	W_Screen *scr = WMWidgetScreen(panel->win);
-
-	if (panel == scr->sharedColorPanel) {
-		scr->sharedColorPanel = NULL;
-	}
+	W_Screen *scr;
 
 	if (!panel)
 		return;
+
+	scr = WMWidgetScreen(panel->win);
+	if (panel == scr->sharedColorPanel) {
+		scr->sharedColorPanel = NULL;
+	}
 
 	WMRemoveNotificationObserver(panel);
 	WMUnmapWidget(panel->win);
