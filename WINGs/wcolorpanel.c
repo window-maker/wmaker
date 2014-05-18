@@ -354,6 +354,18 @@ static void rgbInit(W_ColorPanel * panel);
 static void cmykInit(W_ColorPanel * panel);
 static void hsbInit(W_ColorPanel * panel);
 
+
+static inline int get_textfield_as_integer(WMTextField *widget)
+{
+	char *str;
+	int value;
+
+	str = WMGetTextFieldText(widget);
+	value = atoi(str);
+	wfree(str);
+	return value;
+}
+
 void WMSetColorPanelAction(WMColorPanel * panel, WMAction2 * action, void *data)
 {
 	panel->action = action;
@@ -2353,7 +2365,7 @@ static void grayBrightnessTextFieldCallback(void *observerData, WMNotification *
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) notification;
 
-	value = atoi(WMGetTextFieldText(panel->grayBrightnessT));
+	value = get_textfield_as_integer(panel->grayBrightnessT);
 	if (value > 100)
 		value = 100;
 	if (value < 0)
@@ -2398,6 +2410,7 @@ int *rgbCharToInt(W_ColorPanel *panel)
 {
 	int base = 0;
 	static int value[3];
+	char *str;
 
 	switch (panel->rgbState) {
 	case RGBdec:
@@ -2408,9 +2421,17 @@ int *rgbCharToInt(W_ColorPanel *panel)
 		break;
 	}
 
-	value[0] = strtol(WMGetTextFieldText(panel->rgbRedT), NULL, base);
-	value[1] = strtol(WMGetTextFieldText(panel->rgbGreenT), NULL, base);
-	value[2] = strtol(WMGetTextFieldText(panel->rgbBlueT),  NULL, base);
+	str = WMGetTextFieldText(panel->rgbRedT);
+	value[0] = strtol(str, NULL, base);
+	wfree(str);
+
+	str = WMGetTextFieldText(panel->rgbGreenT);
+	value[1] = strtol(str, NULL, base);
+	wfree(str);
+
+	str = WMGetTextFieldText(panel->rgbBlueT);
+	value[2] = strtol(str, NULL, base);
+	wfree(str);
 
 	return value;
 }
@@ -2552,10 +2573,10 @@ static void cmykTextFieldCallback(void *observerData, WMNotification * notificat
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) notification;
 
-	value[0] = atoi(WMGetTextFieldText(panel->cmykCyanT));
-	value[1] = atoi(WMGetTextFieldText(panel->cmykMagentaT));
-	value[2] = atoi(WMGetTextFieldText(panel->cmykYellowT));
-	value[3] = atoi(WMGetTextFieldText(panel->cmykBlackT));
+	value[0] = get_textfield_as_integer(panel->cmykCyanT);
+	value[1] = get_textfield_as_integer(panel->cmykMagentaT);
+	value[2] = get_textfield_as_integer(panel->cmykYellowT);
+	value[3] = get_textfield_as_integer(panel->cmykBlackT);
 
 	for (n = 0; n < 4; n++) {
 		if (value[n] > 100)
@@ -2640,9 +2661,9 @@ static void hsbTextFieldCallback(void *observerData, WMNotification * notificati
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) notification;
 
-	value[0] = atoi(WMGetTextFieldText(panel->hsbHueT));
-	value[1] = atoi(WMGetTextFieldText(panel->hsbSaturationT));
-	value[2] = atoi(WMGetTextFieldText(panel->hsbBrightnessT));
+	value[0] = get_textfield_as_integer(panel->hsbHueT);
+	value[1] = get_textfield_as_integer(panel->hsbSaturationT);
+	value[2] = get_textfield_as_integer(panel->hsbBrightnessT);
 
 	if (value[0] > 359)
 		value[0] = 359;
