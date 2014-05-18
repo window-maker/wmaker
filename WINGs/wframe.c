@@ -82,9 +82,6 @@ static void paintFrame(Frame * fPtr)
 		tlen = 0;
 	}
 
-	fh = view->size.height;
-	fy = 0;
-
 	switch (fPtr->flags.titlePosition) {
 	case WTPAboveTop:
 		ty = 0;
