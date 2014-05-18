@@ -87,7 +87,6 @@ static Bool addcolor(XPMColor ** list, unsigned r, unsigned g, unsigned b, int *
 	int index;
 
 	index = r << 16 | g << 8 | b;
-	tmpc = *list;
 
 	tmpc = lookfor(*list, index);
 
@@ -225,7 +224,6 @@ Bool RSaveXPM(RImage * image, const char *filename)
 		fprintf(file, "\"%s c None\",\n", transp);
 	}
 
-	i = 0;
 	outputcolormap(file, colormap, charsPerPixel);
 
 	r = image->data;
