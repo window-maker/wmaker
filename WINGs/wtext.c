@@ -2052,6 +2052,7 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 		if (text) {
 			data = WMCreateDataWithBytes(text, strlen(text));
 			WMSetDataFormat(data, TYPETEXT);
+			wfree(text);
 		}
 		*type = target;
 		return data;
