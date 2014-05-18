@@ -255,12 +255,12 @@ static void setMiniwindow(WMWindow *win, RImage *image)
 
 void WMSetWindowTitle(WMWindow * win, const char *title)
 {
+	wassertr(title != NULL);
+
 	if (win->title != NULL)
 		wfree(win->title);
-	if (title != NULL)
-		win->title = wstrdup(title);
-	else
-		win->title = NULL;
+
+	win->title = wstrdup(title);
 
 	if (win->view->flags.realized) {
 		setWindowTitle(win, title);
