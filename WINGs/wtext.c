@@ -2231,11 +2231,8 @@ static void handleTextKeyPress(Text * tPtr, XEvent * event)
 	case XK_Left:
 		if (!(tb = tPtr->currentTextBlock))
 			break;
-		if (tb->graphic)
-			goto L_imaGFX;
 
-		if (tPtr->tpos == 0) {
- L_imaGFX:
+		if (tb->graphic || tPtr->tpos == 0) {
 			if (tb->prior) {
 				tPtr->currentTextBlock = tb->prior;
 				if (tPtr->currentTextBlock->graphic)
@@ -2256,10 +2253,7 @@ static void handleTextKeyPress(Text * tPtr, XEvent * event)
 	case XK_Right:
 		if (!(tb = tPtr->currentTextBlock))
 			break;
-		if (tb->graphic)
-			goto R_imaGFX;
-		if (tPtr->tpos == tb->used) {
- R_imaGFX:
+		if (tb->graphic || tPtr->tpos == tb->used) {
 			if (tb->next) {
 				tPtr->currentTextBlock = tb->next;
 				tPtr->tpos = 0;
