@@ -545,13 +545,11 @@ WMGenericPanel *WMCreateGenericPanel(WMScreen * scrPtr, WMWindow * owner,
 
 	w = WMAX(dw, aw);
 	if ((w + 10) * 2 < 400) {
-		aw = w;
 		dw = w;
 	} else {
 		int t;
 
 		t = 400 - 40 - aw - dw;
-		aw += t / 2;
 		dw += t / 2;
 	}
 
