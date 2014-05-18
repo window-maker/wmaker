@@ -3026,6 +3026,7 @@ WMText *WMCreateTextForDocumentType(WMWidget * parent, WMAction * parser, WMActi
 		WMAddToArray(types, "application/X-color");
 		WMAddToArray(types, "application/X-image");
 		WMRegisterViewForDraggedTypes(tPtr->view, types);
+		WMFreeArray(types);
 	}
 
 	/*WMAddNotificationObserver(fontChanged, tPtr,
