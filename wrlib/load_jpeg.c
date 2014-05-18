@@ -136,7 +136,8 @@ RImage *RLoadJPEG(const char *file_name)
 		goto bye;
 	}
 
-	bptr = buffer[0] = (JSAMPROW) malloc(cinfo.image_width * cinfo.num_components);
+	buffer[0] = (JSAMPROW) malloc(cinfo.image_width * cinfo.num_components);
+
 	if (!buffer[0]) {
 		RErrorCode = RERR_NOMEMORY;
 		goto bye;
