@@ -279,7 +279,6 @@ char *ShrinkString(WMFont *font, const char *string, int width)
 		p = strlen(text);
 		w1 = WMWidthOfString(font, text, p);
 		if (w1 > width) {
-			w1 = 0;
 			p = 0;
 			*pos = ' ';
 			*text = 0;
