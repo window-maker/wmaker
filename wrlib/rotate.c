@@ -77,7 +77,6 @@ RImage *RRotateImage(RImage * image, float angle)
 			offs = nwidth * 4;
 
 			optr = image->data;
-			nptr = img->data;
 
 			for (x = 0; x < nwidth; x++) {
 				nptr = img->data + x * 4;
@@ -160,7 +159,6 @@ RImage *RRotateImage(RImage * image, float angle)
 			offs = nwidth * 4;
 
 			optr = image->data;
-			nptr = img->data;
 
 			for (x = 0; x < nwidth; x++) {
 				nptr = img->data + x * 4;
