@@ -388,8 +388,8 @@ static WMRect previewColorPositions[] = {
 	{{30, 160}, {90, 20}},
 	{{30, 180}, {90, 20}},
 	{{30, 200}, {90, 20}},
-	{{30, 40}, {190, 20}},
-	{{30, 10}, {190, 20}},
+	{{0, 0}, {0, 0}},
+	{{0, 0}, {0, 0}},
 	{{155, 130}, {64, 64}},
 	{{155, 130}, {64, 64}},
 	{{155, 130}, {64, 64}},
@@ -785,7 +785,7 @@ static void updatePreviewBox(_Panel * panel, int elements)
 
 	if (elements & (1 << PFOCUSED)) {
 		renderPreview(panel, gc, PFOCUSED, RBEV_RAISED2);
-		colorUpdate |= 1 << FTITLE_COL | 1 << FSBORDER_COL;
+		colorUpdate |= 1 << FTITLE_COL | 1 << FBORDER_COL;
 	}
 	if (elements & (1 << PUNFOCUSED)) {
 		renderPreview(panel, gc, PUNFOCUSED, RBEV_RAISED2);
@@ -1365,8 +1365,8 @@ static void changeColorPage(WMWidget * w, void *data)
 		{5, 160},
 		{5, 180},
 		{5, 180},
-		{5, 40},
-		{5, 10},
+		{-22, -21},
+		{-22, -21},
 		{130, 140},
 		{130, 140},
 		{130, 140},
@@ -1489,6 +1489,12 @@ static void updateColorPreviewBox(_Panel * panel, int elements)
 	if (elements & (1 << FBORDER_COL)) {
 		XDrawRectangle(dpy, pnot,
 			       WMColorGC(panel->colors[FBORDER_COL]),
+			       29, 9, 190, 20);
+		XDrawRectangle(dpy, d,
+			       WMColorGC(panel->colors[FBORDER_COL]),
+			       29, 9, 190, 20);
+		XDrawRectangle(dpy, pnot,
+			       WMColorGC(panel->colors[FBORDER_COL]),
 			       29, 39, 190, 20);
 		XDrawRectangle(dpy, d,
 			       WMColorGC(panel->colors[FBORDER_COL]),
@@ -1535,16 +1541,6 @@ static void updateColorPreviewBox(_Panel * panel, int elements)
 		XDrawLine(dpy, d,
 			  WMColorGC(panel->colors[FBORDER_COL]),
 			  119, 120, 119, 220);
-	}
-	if (elements & (1 << FSBORDER_COL)) {
-		XDrawRectangle(dpy, pnot,
-			       WMColorGC(panel->
-					 colors[FSBORDER_COL]),
-			       29, 9, 190, 20);
-		XDrawRectangle(dpy, d,
-			       WMColorGC(panel->
-					 colors[FSBORDER_COL]),
-			       29, 9, 190, 20);
 	}
 
 	/*
@@ -1838,8 +1834,8 @@ static void createPanel(Panel * p)
 	WMAddPopUpButtonItem(panel->colP, _("Disabled Menu Item Text"));
 	WMAddPopUpButtonItem(panel->colP, _("Menu Highlight Color"));
 	WMAddPopUpButtonItem(panel->colP, _("Highlighted Menu Text Color"));
-	WMAddPopUpButtonItem(panel->colP, _("Frame Border Color"));
-	WMAddPopUpButtonItem(panel->colP, _("Selected Frame Border Color"));
+	WMAddPopUpButtonItem(panel->colP, _("Window Border Color"));
+	WMAddPopUpButtonItem(panel->colP, _("Selected Window Border Color"));
 	/*
 	   WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title"));
 	   WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title Back"));
