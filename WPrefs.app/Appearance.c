@@ -331,6 +331,7 @@ enum {
 	MDISAB_COL,
 	MHIGH_COL,
 	MHIGHT_COL,
+	FFBORDER_COL,
 	FBORDER_COL,
 	FSBORDER_COL,
 	ICONT_COL,
@@ -351,6 +352,7 @@ static const struct {
 	{ "MenuDisabledColor", "#616161" },
 	{ "HighlightColor", "white" },
 	{ "HighlightTextColor", "black" },
+	{ "FrameFocusedBorderColor", "black" },
 	{ "FrameBorderColor", "black" },
 	{ "FrameSelectedBorderColor", "white" }/* , */
 	/* { "IconTitleColor", "white" }, */
@@ -388,6 +390,7 @@ static WMRect previewColorPositions[] = {
 	{{30, 160}, {90, 20}},
 	{{30, 180}, {90, 20}},
 	{{30, 200}, {90, 20}},
+	{{0, 0}, {0, 0}},
 	{{0, 0}, {0, 0}},
 	{{0, 0}, {0, 0}},
 	{{155, 130}, {64, 64}},
@@ -790,7 +793,7 @@ static void updatePreviewBox(_Panel * panel, int elements)
 
 	if (elements & (1 << PFOCUSED)) {
 		renderPreview(panel, gc, PFOCUSED, RBEV_RAISED2);
-		colorUpdate |= 1 << FTITLE_COL | 1 << FBORDER_COL;
+		colorUpdate |= 1 << FTITLE_COL | 1 << FFBORDER_COL;
 	}
 	if (elements & (1 << PUNFOCUSED)) {
 		renderPreview(panel, gc, PUNFOCUSED, RBEV_RAISED2);
@@ -1372,6 +1375,7 @@ static void changeColorPage(WMWidget * w, void *data)
 		{5, 180},
 		{-22, -21},
 		{-22, -21},
+		{-22, -21},
 		{130, 140},
 		{130, 140},
 		{130, 140},
@@ -1494,12 +1498,6 @@ static void updateColorPreviewBox(_Panel * panel, int elements)
 	if (elements & (1 << FBORDER_COL)) {
 		XDrawRectangle(dpy, pnot,
 			       WMColorGC(panel->colors[FBORDER_COL]),
-			       29, 9, 190, 20);
-		XDrawRectangle(dpy, d,
-			       WMColorGC(panel->colors[FBORDER_COL]),
-			       29, 9, 190, 20);
-		XDrawRectangle(dpy, pnot,
-			       WMColorGC(panel->colors[FBORDER_COL]),
 			       29, 39, 190, 20);
 		XDrawRectangle(dpy, d,
 			       WMColorGC(panel->colors[FBORDER_COL]),
@@ -1546,6 +1544,15 @@ static void updateColorPreviewBox(_Panel * panel, int elements)
 		XDrawLine(dpy, d,
 			  WMColorGC(panel->colors[FBORDER_COL]),
 			  119, 120, 119, 220);
+	}
+
+	if (elements & (1 << FFBORDER_COL)) {
+		XDrawRectangle(dpy, pnot,
+			       WMColorGC(panel->colors[FFBORDER_COL]),
+			       29, 9, 190, 20);
+		XDrawRectangle(dpy, d,
+			       WMColorGC(panel->colors[FFBORDER_COL]),
+			       29, 9, 190, 20);
 	}
 
 	/*
@@ -1839,6 +1846,7 @@ static void createPanel(Panel * p)
 	WMAddPopUpButtonItem(panel->colP, _("Disabled Menu Item Text"));
 	WMAddPopUpButtonItem(panel->colP, _("Menu Highlight Color"));
 	WMAddPopUpButtonItem(panel->colP, _("Highlighted Menu Text Color"));
+	WMAddPopUpButtonItem(panel->colP, _("Focused Window Border Color"));
 	WMAddPopUpButtonItem(panel->colP, _("Window Border Color"));
 	WMAddPopUpButtonItem(panel->colP, _("Selected Window Border Color"));
 	/*
