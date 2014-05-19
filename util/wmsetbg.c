@@ -1144,26 +1144,26 @@ static void print_help(void)
 	puts("Sets the workspace background to the specified image or a texture and");
 	puts("optionally update Window Maker configuration");
 	puts("");
-	puts(" -display                         display to use");
-	puts(" -d, --dither                     dither image");
-	puts(" -m, --match                      match  colors");
-	puts(" -S, --smooth                     smooth scaled image");
+	puts(" -display                      display to use");
+	puts(" -d, --dither                  dither image");
+	puts(" -m, --match                   match  colors");
+	puts(" -S, --smooth                  smooth scaled image");
 #ifdef USE_XINERAMA
-	puts(" -X, --xinerama                   stretch image across Xinerama heads");
+	puts(" -X, --xinerama                stretch image across Xinerama heads");
 #endif
-	puts(" -b, --back-color <color>         background color");
-	puts(" -t, --tile                       tile   image");
-	puts(" -e, --center                     center image");
-	puts(" -s, --scale                      scale  image (default)");
-	puts(" -a, --maxscale                   scale  image and keep aspect ratio");
-	puts(" -f, --fillscale                  scale  image to fill screen and keep aspect ratio");
-	puts(" -u, --update-wmaker              update WindowMaker domain database");
-	puts(" -D, --update-domain <domain>     update <domain> database");
-	puts(" -c, --colors <cpc>               colors per channel to use");
-	puts(" -p, --parse <texture>            proplist style texture specification");
-	puts(" -w, --workspace <workspace>      update background for the specified workspace");
-	puts(" -v, --version                    show version of wmsetbg and exit");
-	puts(" -h, --help                       show this help and exit");
+	puts(" -b, --back-color <color>      background color");
+	puts(" -t, --tile                    tile   image");
+	puts(" -e, --center                  center image");
+	puts(" -s, --scale                   scale  image (default)");
+	puts(" -a, --maxscale                scale  image and keep aspect ratio");
+	puts(" -f, --fillscale               scale  image to fill screen and keep aspect ratio");
+	puts(" -u, --update-wmaker           update WindowMaker domain database");
+	puts(" -D, --update-domain <domain>  update <domain> database");
+	puts(" -c, --colors <cpc>            colors per channel to use");
+	puts(" -p, --parse <texture>         proplist style texture specification");
+	puts(" -w, --workspace <workspace>   update background for the specified workspace");
+	puts(" -v, --version                 show version of wmsetbg and exit");
+	puts(" -h, --help                    show this help and exit");
 }
 
 static void changeTextureForWorkspace(const char *domain, char *texture, int workspace)
