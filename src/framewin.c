@@ -415,6 +415,7 @@ void wFrameWindowUpdateBorders(WFrameWindow * fwin, int flags)
 	checkTitleSize(fwin);
 
 	allocFrameBorderPixel(fwin->colormap, WMGetColorRGBDescription(scr->frame_border_color), &fwin->border_pixel);
+	allocFrameBorderPixel(fwin->colormap, WMGetColorRGBDescription(scr->frame_focused_border_color), &fwin->focused_border_pixel);
 	allocFrameBorderPixel(fwin->colormap, WMGetColorRGBDescription(scr->frame_selected_border_color), &fwin->selected_border_pixel);
 
 	if (flags & WFF_SELECTED) {
@@ -422,8 +423,13 @@ void wFrameWindowUpdateBorders(WFrameWindow * fwin, int flags)
 			XSetWindowBorder(dpy, fwin->core->window, *fwin->selected_border_pixel);
 	}
 	else {
-		if (fwin->border_pixel)
-			XSetWindowBorder(dpy, fwin->core->window, *fwin->border_pixel);
+		if (fwin->flags.state == WS_FOCUSED) {
+			if (fwin->focused_border_pixel)
+				XSetWindowBorder(dpy, fwin->core->window, *fwin->focused_border_pixel);
+		} else {
+			if (fwin->border_pixel)
+				XSetWindowBorder(dpy, fwin->core->window, *fwin->border_pixel);
+		}
 	}
 }
 
@@ -477,6 +483,13 @@ void wFrameWindowChangeState(WFrameWindow * fwin, int state)
 	fwin->flags.state = state;
 	fwin->flags.need_texture_change = 1;
 
+	if (fwin->flags.state == WS_FOCUSED) {
+		if (fwin->focused_border_pixel)
+			XSetWindowBorder(dpy, fwin->core->window, *fwin->focused_border_pixel);
+	} else {
+		if (fwin->border_pixel)
+			XSetWindowBorder(dpy, fwin->core->window, *fwin->border_pixel);
+	}
 	wFrameWindowPaint(fwin);
 }
 

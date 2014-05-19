@@ -622,6 +622,8 @@ WScreen *wScreenInit(int screen_number)
 		/* frame boder color */
 		wGetColor(scr, WMGetColorRGBDescription(scr->frame_border_color), &xcol);
 		scr->frame_border_pixel = xcol.pixel;
+		wGetColor(scr, WMGetColorRGBDescription(scr->frame_focused_border_color), &xcol);
+		scr->frame_focused_border_pixel = xcol.pixel;
 		wGetColor(scr, WMGetColorRGBDescription(scr->frame_selected_border_color), &xcol);
 		scr->frame_selected_border_pixel = xcol.pixel;
 	}

@@ -126,6 +126,7 @@ static WDECallbackUpdate setIconTitleColor;
 static WDECallbackUpdate setIconTitleBack;
 static WDECallbackUpdate setFrameBorderWidth;
 static WDECallbackUpdate setFrameBorderColor;
+static WDECallbackUpdate setFrameFocusedBorderColor;
 static WDECallbackUpdate setFrameSelectedBorderColor;
 static WDECallbackUpdate setLargeDisplayFont;
 static WDECallbackUpdate setWTitleColor;
@@ -568,6 +569,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getInt, setFrameBorderWidth, NULL, NULL},
 	{"FrameBorderColor", "black", NULL,
 	    NULL, getColor, setFrameBorderColor, NULL, NULL},
+	{"FrameFocusedBorderColor", "black", NULL,
+	    NULL, getColor, setFrameFocusedBorderColor, NULL, NULL},
 	{"FrameSelectedBorderColor", "white", NULL,
 	    NULL, getColor, setFrameSelectedBorderColor, NULL, NULL},
 
@@ -2885,6 +2888,23 @@ static int setFrameBorderColor(WScreen * scr, WDefaultEntry * entry, void *tdata
 	if (scr->frame_border_color)
 		WMReleaseColor(scr->frame_border_color);
 	scr->frame_border_color = WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue, True);
+
+	wFreeColor(scr, color->pixel);
+
+	return REFRESH_FRAME_BORDER;
+}
+
+static int setFrameFocusedBorderColor(WScreen *scr, WDefaultEntry *entry, void *tdata, void *foo)
+{
+	XColor *color = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
+	if (scr->frame_focused_border_color)
+		WMReleaseColor(scr->frame_focused_border_color);
+	scr->frame_focused_border_color = WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue, True);
 
 	wFreeColor(scr, color->pixel);
 

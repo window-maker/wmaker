@@ -160,10 +160,12 @@ typedef struct _WScreen {
 
     int frame_border_width;
     WMColor *frame_border_color;
+    WMColor *frame_focused_border_color;
     WMColor *frame_selected_border_color;
 
     WMPixel line_pixel;
     WMPixel frame_border_pixel;	       /* frame border */
+    WMPixel frame_focused_border_pixel;	       /* frame border */
     WMPixel frame_selected_border_pixel;/* frame border */
 
 

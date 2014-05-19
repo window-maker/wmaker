@@ -1874,10 +1874,17 @@ void wSelectWindow(WWindow *wwin, Bool flag)
 		WMAddToArray(scr->selected_windows, wwin);
 	} else {
 		wwin->flags.selected = 0;
-		if (wwin->frame->border_pixel)
-			XSetWindowBorder(dpy, wwin->frame->core->window, *wwin->frame->border_pixel);
-		else
-			XSetWindowBorder(dpy, wwin->frame->core->window, scr->frame_border_pixel);
+		if (wwin->flags.focused) {
+			if (wwin->frame->focused_border_pixel)
+				XSetWindowBorder(dpy, wwin->frame->core->window, *wwin->frame->focused_border_pixel);
+			else
+				XSetWindowBorder(dpy, wwin->frame->core->window, scr->frame_focused_border_pixel);
+		} else {
+			if (wwin->frame->border_pixel)
+				XSetWindowBorder(dpy, wwin->frame->core->window, *wwin->frame->border_pixel);
+			else
+				XSetWindowBorder(dpy, wwin->frame->core->window, scr->frame_border_pixel);
+		}
 
 		if (!HAS_BORDER(wwin)) {
 			XSetWindowBorderWidth(dpy, wwin->frame->core->window, 0);

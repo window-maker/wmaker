@@ -92,6 +92,7 @@ static char *options[] = {
 	"IconTitleBack",
 	"FrameBorderWidth",
 	"FrameBorderColor",
+	"FrameFocusedBorderColor",
 	"FrameSelectedBorderColor",
 	"MenuStyle",
 	"WindowTitleExtendSpace",
