@@ -512,12 +512,16 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 		path = wfindfileinarray(GetObjectForKey("PixmapPath"), str);
 		if (path) {
 			timage = RLoadImage(rc, path, 0);
-			if (!timage) {
-				wwarning("could not load file '%s': %s", path ? path : str, RMessageForError(RErrorCode));
-				texture = WMCreatePropListFromDescription("(solid, black)");
-				type = "solid";
-			}
+			if (!timage)
+				wwarning("could not load file '%s': %s", path, RMessageForError(RErrorCode));
 			wfree(path);
+		} else {
+			wwarning("could not find file '%s' for %s of texture", str, type);
+			timage = NULL;
+		}
+		if (!timage) {
+			texture = WMCreatePropListFromDescription("(solid, black)");
+			type = "solid";
 		}
 	}
 
