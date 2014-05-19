@@ -660,6 +660,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 			image = RMakeCenteredImage(timage, width, height, &color);
 			RReleaseImage(timage);
 			break;
+		case 'F':
 		case 'S':
 		case 'M':
 			image = RScaleImage(timage, width, height);
