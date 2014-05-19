@@ -4,8 +4,9 @@
 wmsetbg \- sets the background on the X11 display
 .SH SYNOPSIS
 .B wmsetbg
-[\-display] [\-\-version] [\-\-help] [{\-b|\-\-back\-color} \fIcolor\fP]
-[{\-t|\-\-tile}|{\-e|\-\-center}|{\-s|\-\-scale}|{\-a|\-\-maxscale} \fIimage\fP]
+[\-display] [{\-v|\-\-version}] [{\-h|\-\-help}] [{\-S|\-\-smooth}]
+[{\-X|\-\-xinerama}] [{\-b|\-\-back\-color} \fIcolor\fP]
+[{\-t|\-\-tile}|{\-e|\-\-center}|{\-s|\-\-scale}|{\-a|\-\-maxscale}|{\-f|\-\-fillscale} \fIimage\fP]
 [{\-d|\-\-dither}|{\-m|\-\-match}] [\-u|\-\-update\-wmaker]
 [{\-D|\-\-update\-domain} \fIdomain\fP] [{\-c|\-\-colors} \fIcpc\fP]
 [{\-p|\-\-parse} \fItexture\fP] [{\-w|\-\-workspace} \fIworkspace\fP]
@@ -39,8 +40,17 @@ tiles the specified \fIimage\fP
 .B \-s|\-\-scale
 scales the specified \fIimage\fP (default)
 .TP
+.B \-f|\-\-fillscale
+scales the specified \fIimage\fP to fill screen while preserving aspect ratio
+.TP
 .B \-d|\-\-dither
 dithers colors
+.TP
+.B \-S|\-\-smooth
+smooth scaled image
+.TP
+.B \-X|\-\-xinerama
+stretch image across Xinerama heads
 .TP
 .B \-m|\-\-match
 matches colors
@@ -60,10 +70,10 @@ parses the specified \fItexture\fP as a \fIproplist style texture\fP
 .B \-w|\-\-workspace
 update background only for the specified \fIworkspace\fP
 .TP
-.B \-\-help
+.B \-h|\-\-help
 print a help message
 .TP
-.B \-\-version
+.B \-v|\-\-version
 print version number
 .SH SEE ALSO
 .BR wmaker (1x)
