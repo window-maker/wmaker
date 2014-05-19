@@ -151,6 +151,7 @@ WMColorWell *WMCreateColorWell(WMWidget * parent)
 	WMCreateDragHandler(cPtr->colorView, handleDragEvents, cPtr);
 
 	WMCreateEventHandler(cPtr->view, ButtonPressMask, handleActionEvents, cPtr);
+	WMCreateEventHandler(cPtr->colorView, ButtonPressMask, handleActionEvents, cPtr);
 
 	cPtr->colorView->flags.mapWhenRealized = 1;
 
