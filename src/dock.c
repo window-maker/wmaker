@@ -3204,8 +3204,11 @@ void wDockTrackWindowLaunch(WDock *dock, Window window)
 	Bool found = False;
 	char *command = NULL;
 
-	if (!PropGetWMClass(window, &wm_class, &wm_instance) || (!wm_class && !wm_instance))
+	if (!PropGetWMClass(window, &wm_class, &wm_instance)) {
+		free(wm_class);
+		free(wm_instance);
 		return;
+	}
 
 	command = GetCommandForWindow(window);
  retry:
