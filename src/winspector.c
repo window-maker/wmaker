@@ -598,7 +598,6 @@ static void saveSettings(WMWidget *button, void *client_data)
 				WMPutInPLDictionary(dict, key2, appDic);
 		}
 		WMReleasePropList(key2);
-		WMReleasePropList(appDic);
 	} else if (wwin->main_window != wwin->client_win) {
 		WApplication *wapp = wApplicationOf(wwin->main_window);
 
@@ -617,13 +616,12 @@ static void saveSettings(WMWidget *button, void *client_data)
 					WMPutInPLDictionary(dict, key2, appDic);
 			}
 			WMReleasePropList(key2);
-			WMReleasePropList(appDic);
 		}
 	} else {
 		WMMergePLDictionaries(winDic, appDic, True);
 		different |= different2;
-		WMReleasePropList(appDic);
 	}
+	WMReleasePropList(appDic);
 
 	WMRemoveFromPLDictionary(dict, key);
 	if (different)
