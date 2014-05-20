@@ -361,7 +361,6 @@ static void updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 	buffer = wmalloc(buflen);
 
 	for (i = WO_ENTRIES; i < smenu->entry_no; i++) {
-		char *tmp;
 		int shortcutNo = i - WO_ENTRIES;
 		WMenuEntry *entry = smenu->entries[i];
 		WMArray *shortSelWindows = w_global.shortcut.windows[shortcutNo];
@@ -387,12 +386,28 @@ static void updateMakeShortcutMenu(WMenu *menu, WWindow *wwin)
 		kcode = wKeyBindings[WKBD_WINDOW1 + shortcutNo].keycode;
 
 		if (kcode) {
-			if ((tmp = GetShortcutKey(wKeyBindings[WKBD_WINDOW1 + shortcutNo]))
-			    && (!entry->rtext || strcmp(tmp, entry->rtext) != 0)) {
-				if (entry->rtext)
+			char *tmp;
+
+			tmp = GetShortcutKey(wKeyBindings[WKBD_WINDOW1 + shortcutNo]);
+			if (tmp == NULL) {
+				if (entry->rtext != NULL) {
+					/* There was a shortcut, but there is no more */
 					wfree(entry->rtext);
+					entry->rtext = NULL;
+					smenu->flags.realized = 0;
+				}
+			} else if (entry->rtext == NULL) {
+				/* There was no shortcut, but there is one now */
 				entry->rtext = tmp;
 				smenu->flags.realized = 0;
+			} else if (strcmp(tmp, entry->rtext) != 0) {
+				/* There was a shortcut, but it has changed */
+				wfree(entry->rtext);
+				entry->rtext = tmp;
+				smenu->flags.realized = 0;
+			} else {
+				/* There was a shortcut but it did not change */
+				wfree(tmp);
 			}
 			wMenuSetEnabled(smenu, i, True);
 		} else {
