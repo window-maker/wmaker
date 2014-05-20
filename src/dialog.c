@@ -664,13 +664,13 @@ static void listCallback(void *self, void *data)
 		if (item == NULL)
 			return;
 		path = item->text;
-		tmp = wexpandpath(path);
 
 		item = WMGetListSelectedItem(panel->iconList);
 		if (item == NULL)
 			return;
 		iconFile = item->text;
 
+		tmp = wexpandpath(path);
 		path = wmalloc(strlen(tmp) + strlen(iconFile) + 4);
 		strcpy(path, tmp);
 		strcat(path, "/");
