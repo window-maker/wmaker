@@ -136,7 +136,6 @@ static void chooseIconCallback(WMWidget * self, void *clientData)
 	if (!panel->destroyed) {
 		if (result) {
 			WMSetTextFieldText(panel->iconField, file);
-			wfree(file);
 			updateSettingsPanelIcon(panel);
 		}
 
@@ -146,6 +145,8 @@ static void chooseIconCallback(WMWidget * self, void *clientData)
 		 * the icon chooser */
 		DestroyDockAppSettingsPanel(panel);
 	}
+	if (result)
+		wfree(file);
 }
 
 static void panelBtnCallback(WMWidget * self, void *data)
