@@ -307,7 +307,7 @@ static void changePage(WMWidget *bPtr, void *client_data)
 static int showIconFor(WMScreen *scrPtr, InspectorPanel *panel, const char *wm_instance, const char *wm_class, int flags)
 {
 	WMPixmap *pixmap = (WMPixmap *) NULL;
-	char *file = NULL, *path = NULL, *db_icon = NULL;
+	char *file = NULL, *path = NULL;
 
 	if ((flags & USE_TEXT_FIELD) != 0) {
 		file = WMGetTextFieldText(panel->fileText);
@@ -315,16 +315,15 @@ static int showIconFor(WMScreen *scrPtr, InspectorPanel *panel, const char *wm_i
 			wfree(file);
 			file = NULL;
 		}
-	} else {
+	} else if (flags & REVERT_TO_DEFAULT) {
+		const char *db_icon;
+
 		/* Get the application icon, default NOT included */
 		db_icon = wDefaultGetIconFile(wm_instance, wm_class, False);
-		if (db_icon != NULL)
+		if (db_icon != NULL) {
 			file = wstrdup(db_icon);
-	}
-	if (db_icon != NULL && (flags & REVERT_TO_DEFAULT) != 0) {
-		if (file)
-			file = wstrdup(db_icon);
-		flags |= UPDATE_TEXT_FIELD;
+			flags |= UPDATE_TEXT_FIELD;
+		}
 	}
 
 	if ((flags & UPDATE_TEXT_FIELD) != 0)
