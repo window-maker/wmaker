@@ -2319,6 +2319,11 @@ static int getSavedState(Window window, WSavedState ** state)
 			       (unsigned char **)&data) != Success || !data || nitems_ret < 10)
 		return 0;
 
+	if (type_ret != w_global.atom.wmaker.state) {
+		XFree(data);
+		return 0;
+	}
+
 	*state = wmalloc(sizeof(WSavedState));
 
 	(*state)->workspace = data[0];
@@ -2334,10 +2339,7 @@ static int getSavedState(Window window, WSavedState ** state)
 
 	XFree(data);
 
-	if (*state && type_ret == w_global.atom.wmaker.state)
-		return 1;
-	else
-		return 0;
+	return 1;
 }
 
 #ifdef USE_XSHAPE
