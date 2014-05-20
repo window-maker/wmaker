@@ -889,7 +889,6 @@ WDDomain *wDefaultsInitDomain(const char *domain, Bool requireDictionary)
 	WDDomain *db;
 	struct stat stbuf;
 	static int inited = 0;
-	const char *the_path;
 	WMPropList *shared_dict = NULL;
 
 	if (!inited) {
@@ -900,15 +899,14 @@ WDDomain *wDefaultsInitDomain(const char *domain, Bool requireDictionary)
 	db = wmalloc(sizeof(WDDomain));
 	db->domain_name = domain;
 	db->path = wdefaultspathfordomain(domain);
-	the_path = db->path;
 
-	if (the_path && stat(the_path, &stbuf) >= 0) {
-		db->dictionary = WMReadPropListFromFile(the_path);
+	if (stat(db->path, &stbuf) >= 0) {
+		db->dictionary = WMReadPropListFromFile(db->path);
 		if (db->dictionary) {
 			if (requireDictionary && !WMIsPLDictionary(db->dictionary)) {
 				WMReleasePropList(db->dictionary);
 				db->dictionary = NULL;
-				wwarning(_("Domain %s (%s) of defaults database is corrupted!"), domain, the_path);
+				wwarning(_("Domain %s (%s) of defaults database is corrupted!"), domain, db->path);
 			}
 			db->timestamp = stbuf.st_mtime;
 		} else {
