@@ -488,11 +488,13 @@ static void saveSettings(WMWidget *button, void *client_data)
 
 	/* The icon filename (if exists) */
 	icon_file = WMGetTextFieldText(panel->fileText);
-	if ((icon_file) && (icon_file[0] != 0)) {
-		value = WMCreatePLString(icon_file);
-		different |= insertAttribute(dict, winDic, AIcon, value, flags);
-		different2 |= insertAttribute(dict, appDic, AIcon, value, flags);
-		WMReleasePropList(value);
+	if (icon_file != NULL) {
+		if (icon_file[0] != '\0') {
+			value = WMCreatePLString(icon_file);
+			different |= insertAttribute(dict, winDic, AIcon, value, flags);
+			different2 |= insertAttribute(dict, appDic, AIcon, value, flags);
+			WMReleasePropList(value);
+		}
 		wfree(icon_file);
 	}
 
