@@ -593,6 +593,12 @@ WScreen *wScreenInit(int screen_number)
 
 	if (!scr->wmscreen) {
 		wfatal(_("could not initialize WINGs widget set"));
+		RDestroyContext(scr->rcontext);
+		WMFreeArray(scr->fakeGroupLeaders);
+		wfree(scr->totalUsableArea);
+		wfree(scr->usableArea);
+		WMFreeBag(scr->stacking_list);
+		wfree(scr);
 		return NULL;
 	}
 
