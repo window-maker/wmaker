@@ -571,6 +571,7 @@ static void separateCommand(char *line, char ***file, char **command)
 					*command = wstrdup(tmp);
 				else
 					wwarning(_("%s: missing command"), line);
+				wfree(token);
 				break;
 			}
 			WMAddToArray(array, token);
