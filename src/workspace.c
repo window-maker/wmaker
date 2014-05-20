@@ -472,8 +472,6 @@ void wWorkspaceRelativeChange(WScreen * scr, int amount)
 void wWorkspaceForceChange(WScreen * scr, int workspace)
 {
 	WWindow *tmp, *foc = NULL, *foc2 = NULL;
-	WWindow **toUnmap;
-	int toUnmapSize, toUnmapCount;
 
 	if (workspace >= MAX_WORKSPACES || workspace < 0)
 		return;
@@ -492,15 +490,18 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	wWorkspaceMenuUpdate(w_global.clip.ws_menu);
 
-	toUnmapSize = 16;
-	toUnmapCount = 0;
-	toUnmap = wmalloc(toUnmapSize * sizeof(WWindow *));
-
 	if ((tmp = scr->focused_window) != NULL) {
+		WWindow **toUnmap;
+		int toUnmapSize, toUnmapCount;
+
 		if ((IS_OMNIPRESENT(tmp) && (tmp->flags.mapped || tmp->flags.shaded) &&
 		     !WFLAGP(tmp, no_focusable)) || tmp->flags.changing_workspace) {
 			foc = tmp;
 		}
+
+		toUnmapSize = 16;
+		toUnmapCount = 0;
+		toUnmap = wmalloc(toUnmapSize * sizeof(WWindow *));
 
 		/* foc2 = tmp; will fix annoyance with gnome panel
 		 * but will create annoyance for every other application
