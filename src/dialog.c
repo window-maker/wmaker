@@ -1569,8 +1569,6 @@ int wShowCrashingDialogPanel(int whatSig)
 	int action;
 	char buf[256];
 
-	panel = wmalloc(sizeof(CrashPanel));
-
 	screen_no = DefaultScreen(dpy);
 	scr_width = WidthOfScreen(ScreenOfDisplay(dpy, screen_no));
 	scr_height = HeightOfScreen(ScreenOfDisplay(dpy, screen_no));
@@ -1580,6 +1578,8 @@ int wShowCrashingDialogPanel(int whatSig)
 		werror(_("cannot open connection for crashing dialog panel. Aborting."));
 		return WMAbort;
 	}
+
+	panel = wmalloc(sizeof(CrashPanel));
 
 	panel->retKey = XKeysymToKeycode(dpy, XK_Return);
 
