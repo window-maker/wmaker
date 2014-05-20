@@ -125,6 +125,7 @@ int MonitorLoop(int argc, char **argv)
 			 * the crash panel and ask the user what to do */
 			if (time(NULL) - last_start < 3) {
 				if (showCrashDialog(WTERMSIG(status)) == 0) {
+					wfree(child_argv);
 					return 1;
 				}
 			}
@@ -133,5 +134,6 @@ int MonitorLoop(int argc, char **argv)
 		} else
 			break;
 	}
+	wfree(child_argv);
 	return 0;
 }
