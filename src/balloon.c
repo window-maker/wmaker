@@ -382,10 +382,8 @@ static void showBalloon(WScreen * scr)
 	Window foow;
 	unsigned foo, w;
 
-	if (scr->balloon) {
-		scr->balloon->timer = NULL;
-		scr->balloon->ignoreTimer = 1;
-	}
+	scr->balloon->timer = NULL;
+	scr->balloon->ignoreTimer = 1;
 
 	if (!XGetGeometry(dpy, scr->balloon->objectWindow, &foow, &x, &y, &w, &foo, &foo, &foo)) {
 		scr->balloon->prevType = 0;
