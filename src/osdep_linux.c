@@ -15,10 +15,6 @@
 #include "osdep.h"
 
 
-#define	RETRY( x )	do {				\
-				x;			\
-			} while (errno == EINTR);
-
 /*
  * copy argc and argv for an existing process identified by `pid'
  * into suitable storage given in ***argv and *argc.
@@ -54,10 +50,10 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 			break;
 		if (errno == EINTR)
 			continue;
-		RETRY( close(fd) )
+		close(fd);
 		return False;
 	}
-	RETRY( close(fd) )
+	close(fd);
 
 	/* count args */
 	for (i = 0; i < count; i++)
