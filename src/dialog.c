@@ -275,7 +275,7 @@ ScanFiles(const char *dir, const char *prefix, unsigned acceptmask, unsigned dec
 						  de->d_name + prefixlen) == WANotFound) {
 					suffix = wstrdup(de->d_name + prefixlen);
 					if (sb.st_mode & S_IFDIR)
-						wstrappend(suffix,"/");
+						suffix = wstrappend(suffix, "/");
 					WMAddToArray(result, suffix);
 				}
 				wfree(fullfilename);
