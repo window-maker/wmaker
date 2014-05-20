@@ -535,10 +535,6 @@ static void setIconCallback(WMenu *menu, WMenuEntry *entry)
 	result = wIconChooserDialog(scr, &file, icon->wm_instance, icon->wm_class);
 
 	if (result && !icon->destroyed) {
-		if (file && *file == 0) {
-			wfree(file);
-			file = NULL;
-		}
 		if (!wIconChangeImageFile(icon->icon, file)) {
 			wMessageDialog(scr, _("Error"),
 				       _("Could not open specified icon file"), _("OK"), NULL, NULL);
