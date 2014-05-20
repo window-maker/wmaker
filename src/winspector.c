@@ -971,12 +971,13 @@ static void chooseIconCallback(WMWidget *self, void *clientData)
 		if (result) {
 			WMSetTextFieldText(panel->fileText, file);
 			showIconFor(WMWidgetScreen(self), panel, NULL, NULL, USE_TEXT_FIELD);
-			wfree(file);
 		}
 		WMSetButtonEnabled(panel->browseIconBtn, True);
 	} else {
 		freeInspector(panel);
 	}
+	if (result)
+		wfree(file);
 }
 
 static void textEditedObserver(void *observerData, WMNotification *notification)
