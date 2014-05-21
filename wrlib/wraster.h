@@ -371,6 +371,9 @@ RImage *RSmoothScaleImage(RImage *src, unsigned new_width,
 
 RImage *RRotateImage(RImage *image, float angle);
 
+RImage *RVerticalFlipImage(RImage *image);
+
+RImage *RHorizontalFlipImage(RImage *image);
 
 RImage *RMakeTiledImage(RImage *tile, unsigned width, unsigned height);
 

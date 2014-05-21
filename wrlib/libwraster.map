@@ -72,6 +72,8 @@ LIBWRASTER3
     RRetainImage;
     RRGBtoHSV;
     RRotateImage;
+    RVerticalFlipImage;
+    RHorizontalFlipImage;
     RSaveImage;
     RScaleImage;
     RShutdown;
