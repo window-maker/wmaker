@@ -213,6 +213,7 @@ RImage *RRotateImage(RImage * image, float angle)
  *
  */
 
+#if 0
 static void
 copyLine(int x1, int y1, int x2, int y2, int nwidth, int format, unsigned char *dst, unsigned char **src)
 {
@@ -292,9 +293,14 @@ copyLine(int x1, int y1, int x2, int y2, int nwidth, int format, unsigned char *
 
 	*src = s;
 }
+#endif
 
 static RImage *rotateImage(RImage * image, float angle)
 {
+	(void) angle;
+	puts("NOT FULLY IMPLEMENTED");
+	return RCloneImage(image);
+#if 0
 	RImage *img;
 	int nwidth, nheight;
 	int x1, y1;
@@ -371,8 +377,6 @@ static RImage *rotateImage(RImage * image, float angle)
 			}
 		}
 	} else {
-		puts("NOT IMPLEMTENED");
-		return img;
 		dpr = dx << 1;
 		dpru = dpr - (dy << 1);
 		p = dpr - dy;
@@ -396,4 +400,5 @@ static RImage *rotateImage(RImage * image, float angle)
 	}
 
 	return img;
+#endif
 }
