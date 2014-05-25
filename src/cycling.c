@@ -43,7 +43,7 @@ static void raiseWindow(WSwitchPanel * swpanel, WWindow * wwin)
 {
 	Window swwin = wSwitchPanelGetWindow(swpanel);
 
-	if (wwin->flags.mapped) {
+	if (wwin->flags.mapped || wwin->flags.shaded) {
 		if (swwin != None) {
 			Window win[2];
 
