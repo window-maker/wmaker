@@ -43,42 +43,42 @@ RImage *RVerticalFlipImage(RImage *image)
 		return NULL;
 
 	if (bpp == 3) {
-			unsigned char *optr, *nptr;
+		unsigned char *optr, *nptr;
 
-			optr = image->data;
-			nptr = img->data + 4 * (nwidth * nheight - nwidth - 1);
+		optr = image->data;
+		nptr = img->data + 4 * (nwidth * nheight - nwidth);
 
-			for (y = 0; y < nheight; y++) {
-				for (x = 0; x < nwidth; x++) {
-					nptr[0] = optr[0];
-					nptr[1] = optr[1];
-					nptr[2] = optr[2];
-					nptr[3] = 255;
+		for (y = 0; y < nheight; y++) {
+			for (x = 0; x < nwidth; x++) {
+				nptr[0] = optr[0];
+				nptr[1] = optr[1];
+				nptr[2] = optr[2];
+				nptr[3] = 255;
 
-					optr += 3;
-					nptr += 4;
-				}
-				nptr -= nwidth*8;
+				optr += 3;
+				nptr += 4;
 			}
-		} else {
-			unsigned char *optr, *nptr;
-
-			optr = image->data;
-			nptr = img->data + 4 * (nwidth * nheight - nwidth - 1);
-
-			for (y = 0; y < nheight; y++) {
-				for (x = 0; x < nwidth; x++) {
-					nptr[0] = optr[0];
-					nptr[1] = optr[1];
-					nptr[2] = optr[2];
-					nptr[3] = optr[3];
-
-					optr += 4;
-					nptr += 4;
-				}
-				nptr -= nwidth*8;
-			}
+			nptr -= nwidth*8;
 		}
+	} else {
+		unsigned char *optr, *nptr;
+
+		optr = image->data;
+		nptr = img->data + 4 * (nwidth * nheight - nwidth);
+
+		for (y = 0; y < nheight; y++) {
+			for (x = 0; x < nwidth; x++) {
+				nptr[0] = optr[0];
+				nptr[1] = optr[1];
+				nptr[2] = optr[2];
+				nptr[3] = optr[3];
+
+				optr += 4;
+				nptr += 4;
+			}
+			nptr -= nwidth * 8;
+		}
+	}
 	return img;
 }
 
@@ -97,37 +97,41 @@ RImage *RHorizontalFlipImage(RImage *image)
 		return NULL;
 
 	if (bpp == 3) {
-			unsigned char *optr, *nptr;
+		unsigned char *optr, *nptr;
 
-			nptr = img->data + nwidth * nheight * 4 - 4;
-			for (y = nheight; y; y--) {
-				for (x = 0; x < nwidth; x++) {
-					optr = image->data + (y*nwidth + x) * 3;
+		optr = image->data;
+		nptr = img->data + 4 * (nwidth - 1);
 
-					nptr[0] = optr[0];
-					nptr[1] = optr[1];
-					nptr[2] = optr[2];
-					nptr[3] = 255;
+		for (y = nheight; y; y--) {
+			for (x = 0; x < nwidth; x++) {
+				nptr[0] = optr[0];
+				nptr[1] = optr[1];
+				nptr[2] = optr[2];
+				nptr[3] = 255;
 
-					nptr -= 4;
-				}
+				optr += 3;
+				nptr -= 4;
 			}
-		} else {
-			unsigned char *optr, *nptr;
-
-			nptr = img->data + nwidth * nheight * 4 - 4;
-			for (y = nheight; y; y--) {
-				for (x = 0; x < nwidth; x++) {
-					optr = image->data + (y*nwidth + x) * 4;
-
-					nptr[0] = optr[0];
-					nptr[1] = optr[1];
-					nptr[2] = optr[2];
-					nptr[3] = optr[3];
-
-					nptr -= 4;
-				}
-			}
+			nptr += 8 * nwidth;
 		}
+	} else {
+		unsigned char *optr, *nptr;
+
+		optr = image->data;
+		nptr = img->data + 4 * (nwidth - 1);
+
+		for (y = nheight; y; y--) {
+			for (x = 0; x < nwidth; x++) {
+				nptr[0] = optr[0];
+				nptr[1] = optr[1];
+				nptr[2] = optr[2];
+				nptr[3] = optr[3];
+
+				optr += 4;
+				nptr -= 4;
+			}
+			nptr += 8 * nwidth;
+		}
+	}
 	return img;
 }
