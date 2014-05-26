@@ -23,8 +23,8 @@
  */
 
 char *Terminals[MAX_NR_APPS][2] = {
-	{ N_("xterm"), "xterm -bg black -fg white +sb +sm -fn 10x20 -sl 4000 -cr yellow" },
-	{ N_("mrxvt"), "mrxvt +bt +bc -shade 00 -vb +sb +sm -tr -sl 2000 -trt -itabbg black -hb -tabfg yellow -fn 10x20 -cr yellow" },
+	{ N_("xterm"), "xterm" },
+	{ N_("mrxvt"), "mrxvt" },
 	{ N_("Konsole"), "konsole" },
 	{ N_("Urxvt"), "urxvt" },
 	{ NULL, NULL }
