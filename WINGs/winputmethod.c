@@ -199,20 +199,15 @@ void W_SetPreeditPositon(W_View * view, int x, int y)
 	}
 }
 
-int
-W_LookupString(W_View * view, XKeyPressedEvent * event, char *buffer, int buflen, KeySym * keysym, Status * status)
+int W_LookupString(W_View *view, XKeyPressedEvent *event, char *buffer, int buflen, KeySym *keysym, Status *status)
 {
 	WMScreen *scr = W_VIEW_SCREEN(view);
 
 	XSetInputFocus(scr->display, view->window, RevertToParent, CurrentTime);
 
-	if (view->xic) {
 #ifdef X_HAVE_UTF8_STRING
+	if (view->xic)
 		return Xutf8LookupString(view->xic, event, buffer, buflen, keysym, status);
-#else
-		return XLookupString(event, buffer, buflen, keysym, (XComposeStatus *) status);
 #endif
-	} else {
-		return XLookupString(event, buffer, buflen, keysym, (XComposeStatus *) status);
-	}
+	return XLookupString(event, buffer, buflen, keysym, (XComposeStatus *) status);
 }
