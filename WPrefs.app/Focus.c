@@ -138,6 +138,7 @@ static void storeData(_Panel * panel)
 	if (sscanf(str, "%i", &i) != 1)
 		i = 0;
 	SetIntegerForKey(i, "RaiseDelay");
+	free(str);
 
 	SetBoolForKey(WMGetButtonSelected(panel->ignB), "IgnoreFocusClick");
 	SetBoolForKey(WMGetButtonSelected(panel->newB), "AutoFocus");

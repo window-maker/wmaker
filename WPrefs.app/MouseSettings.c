@@ -750,6 +750,7 @@ static void storeData(_Panel * panel)
 	tmp = WMGetTextFieldText(panel->ddelaT);
 	if (sscanf(tmp, "%i", &i) == 1 && i > 0)
 		SetIntegerForKey(i, "DoubleClickTime");
+	wfree(tmp);
 
 	SetBoolForKey(WMGetButtonSelected(panel->disaB), "DisableWSMouseActions");
 
