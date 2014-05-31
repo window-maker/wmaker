@@ -1276,13 +1276,13 @@ static Pixmap loadRImage(WMScreen * scr, const char *path)
 	}
 	image = RCreateImage(w, h, d == 4);
 	read_size = w * h * d;
-	if (fread(image->data, 1, read_size, f) != read_size) {
-		fclose(f);
-		return None;
-	}
+	if (fread(image->data, 1, read_size, f) == read_size)
+		RConvertImage(WMScreenRContext(scr), image, &pixmap);
+	else
+		pixmap = None;
+
 	fclose(f);
 
-	RConvertImage(WMScreenRContext(scr), image, &pixmap);
 	RReleaseImage(image);
 
 	return pixmap;
