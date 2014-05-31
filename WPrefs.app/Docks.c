@@ -120,6 +120,7 @@ static void autoDelayChanged(void *observerData, WMNotification *notification)
 		}
 		char *value = WMGetTextFieldText(anAutoDelayT);
 		adjustButtonSelectionBasedOnValue(panel, row, value);
+		free(value);
 		return;
 	}
 }
