@@ -1557,7 +1557,7 @@ static WMPropList *processData(const char *title, ItemData * data)
 	switch (data->type) {
 	case ExecInfo:
 		if (data->param.exec.command == NULL)
-			return NULL;
+			goto return_null;
 #if 1
 		if (strpbrk(data->param.exec.command, "&$*|><?`=;")) {
 			s1 = "SHEXEC";
@@ -1607,7 +1607,7 @@ static WMPropList *processData(const char *title, ItemData * data)
 	case PipeInfo:
 	case PLPipeInfo:
 		if (!data->param.pipe.command)
-			return NULL;
+			goto return_null;
 		if (data->type == PLPipeInfo)
 			WMAddToPLArray(item, poplmenu);
 		else
@@ -1623,17 +1623,18 @@ static WMPropList *processData(const char *title, ItemData * data)
 
 	case ExternalInfo:
 		if (!data->param.external.path)
-			return NULL;
+			goto return_null;
 		WMAddToPLArray(item, pomenu);
 		WMAddToPLArray(item, WMCreatePLString(data->param.external.path));
 		break;
 
 	case DirectoryInfo:
-		if (!data->param.directory.directory || !data->param.directory.command)
-			return NULL;
 		{
 			int l;
 			char *tmp;
+
+			if (!data->param.directory.directory || !data->param.directory.command)
+				goto return_null;
 
 			l = strlen(data->param.directory.directory);
 			l += strlen(data->param.directory.command);
@@ -1665,6 +1666,10 @@ static WMPropList *processData(const char *title, ItemData * data)
 	}
 
 	return item;
+
+ return_null:
+	WMReleasePropList(item);
+	return NULL;
 }
 
 static WMPropList *processSubmenu(WEditMenu * menu)
