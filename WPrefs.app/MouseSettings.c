@@ -768,7 +768,8 @@ static void storeData(_Panel * panel)
 	tmp = WMGetPopUpButtonItem(panel->grabP, WMGetPopUpButtonSelectedItem(panel->grabP));
 	tmp = wstrdup(tmp);
 	p = strchr(tmp, ' ');
-	*p = 0;
+	if (p != NULL)
+		*p = '\0';
 
 	SetStringForKey(tmp, "ModifierKey");
 
