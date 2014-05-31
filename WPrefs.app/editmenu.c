@@ -809,13 +809,9 @@ static void handleEvents(XEvent * event, void *data)
 
 static void stopEditItem(WEditMenu * menu, Bool apply)
 {
-	char *text;
-
 	if (apply) {
-		text = WMGetTextFieldText(menu->tfield);
-
 		wfree(menu->selectedItem->label);
-		menu->selectedItem->label = wstrdup(text);
+		menu->selectedItem->label = WMGetTextFieldText(menu->tfield);
 
 		updateMenuContents(menu);
 
