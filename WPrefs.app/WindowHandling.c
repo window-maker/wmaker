@@ -222,7 +222,8 @@ static void showData(_Panel * panel)
 static void storeData(_Panel * panel)
 {
 	WMPropList *arr;
-	char x[16], y[16];
+	WMPropList *x, *y;
+	char buf[16];
 
 	SetBoolForKey(WMGetButtonSelected(panel->miconB), "NoWindowOverIcons");
 	SetBoolForKey(WMGetButtonSelected(panel->mdockB), "NoWindowOverDock");
@@ -234,9 +235,13 @@ static void storeData(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->tranB), "OpenTransientOnOwnerWorkspace");
 
 	SetStringForKey(placements[WMGetPopUpButtonSelectedItem(panel->placP)], "WindowPlacement");
-	sprintf(x, "%i", WMGetSliderValue(panel->hsli));
-	sprintf(y, "%i", WMGetSliderValue(panel->vsli));
-	arr = WMCreatePLArray(WMCreatePLString(x), WMCreatePLString(y), NULL);
+	sprintf(buf, "%i", WMGetSliderValue(panel->hsli));
+	x = WMCreatePLString(buf);
+	sprintf(buf, "%i", WMGetSliderValue(panel->vsli));
+	y = WMCreatePLString(buf);
+	arr = WMCreatePLArray(x, y, NULL);
+	WMReleasePropList(x);
+	WMReleasePropList(y);
 	SetObjectForKey(arr, "WindowPlaceOrigin");
 
 	SetIntegerForKey(WMGetSliderValue(panel->resS), "EdgeResistance");
