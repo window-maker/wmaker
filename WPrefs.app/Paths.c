@@ -149,22 +149,24 @@ static void browseForFile(WMWidget * w, void *data)
 				len--;
 			}
 			if (len > 0) {
-				WMList *lPtr = NULL;
+				WMList *lPtr;
 				int i;
 
 				if (w == panel->icoaB)
 					lPtr = panel->icoL;
 				else if (w == panel->pixaB)
 					lPtr = panel->pixL;
+				else
+					goto error_unknown_widget;
 
 				i = WMGetListSelectedItemRow(lPtr);
 				if (i >= 0)
 					i++;
 				addPathToList(lPtr, i, str);
 				WMSetListBottomPosition(lPtr, WMGetListNumberOfRows(lPtr));
-
-				wfree(str);
 			}
+		error_unknown_widget:
+			wfree(str);
 		}
 	}
 }
