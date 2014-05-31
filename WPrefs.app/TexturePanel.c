@@ -824,8 +824,8 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 			wfree(panel->imageFile);
 		panel->imageFile = wstrdup(WMGetFromPLString(WMGetFromPLArray(texture, 1)));
 
-		i = 180;
-		sscanf(WMGetFromPLString(WMGetFromPLArray(texture, 2)), "%i", &i);
+		if (sscanf(WMGetFromPLString(WMGetFromPLArray(texture, 2)), "%i", &i) != 1)
+			i = 180;
 		WMSetSliderValue(panel->topaS, i);
 
 		p = WMGetFromPLArray(texture, 3);
