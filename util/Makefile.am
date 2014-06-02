@@ -73,7 +73,7 @@ wmmenugen_SOURCES = wmmenugen.c wmmenugen.h wmmenugen_misc.c \
 wmiv_LDADD = \
 	$(top_builddir)/wrlib/libwraster.la \
 	@XLFLAGS@ @XLIBS@ \
-	@GFXLIBS@ $(PTHREAD_CFLAGS) $(PTHREAD_LIBS)
+	@GFXLIBS@ $(PTHREAD_CFLAGS) $(PTHREAD_LIBS) $(LIBEXIF)
 
 wmiv_SOURCES = wmiv.c wmiv.h
 

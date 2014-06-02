@@ -640,6 +640,12 @@ dnl ===============================================
 dnl 		End of stuff that uses X
 dnl ===============================================
 
+dnl EXIF Support
+dnl ===========
+WM_CHECK_LIBEXIF
+AS_IF([test "x$LIBEXIF" != "x"],
+        [AC_DEFINE(HAVE_EXIF, 1, [Define if EXIF can be used])])
+
 dnl PNG Support
 dnl ===========
 AC_ARG_ENABLE([png],

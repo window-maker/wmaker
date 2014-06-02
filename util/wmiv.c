@@ -21,6 +21,7 @@
 #if !defined(_GNU_SOURCE)
 #define _GNU_SOURCE
 #endif
+
 #include <X11/keysym.h>
 #include <X11/XKBlib.h>
 #include <X11/Xatom.h>
@@ -34,6 +35,11 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include "config.h"
+
+#ifdef HAVE_EXIF
+#include <libexif/exif-data.h>
+#endif
+
 #ifdef HAVE_PTHREAD
 #include <pthread.h>
 #endif
@@ -57,7 +63,7 @@ Pixmap pix;
 
 const char *APPNAME = "wmiv";
 int APPVERSION_MAJOR = 0;
-int APPVERSION_MINOR = 6;
+int APPVERSION_MINOR = 7;
 int NEXT = 0;
 int PREV = 1;
 float zoom_factor = 0;
@@ -66,6 +72,7 @@ int max_height = 0;
 
 Bool fullscreen_flag = False;
 Bool focus = False;
+Bool back_from_fullscreen = False;
 
 #ifdef HAVE_PTHREAD
 Bool diaporama_flag = False;
@@ -97,6 +104,90 @@ typedef struct linked_list {
 
 linked_list_t list;
 link_t *current_link;
+
+
+/*
+	load_oriented_image: used to load an image and optionally
+	get its orientation if libexif is available
+	return the image on success, NULL on failure
+*/
+RImage *load_oriented_image(RContext *context, const char *file, int index)
+{
+	RImage *image;
+#ifdef HAVE_EXIF
+	int orientation = 0;
+#endif
+	image = RLoadImage(context, file, index);
+	if (!image)
+		return NULL;
+#ifdef HAVE_EXIF
+	ExifData *exifData = exif_data_new_from_file(file);
+	if (exifData) {
+		ExifByteOrder byteOrder = exif_data_get_byte_order(exifData);
+		ExifEntry *exifEntry = exif_data_get_entry(exifData, EXIF_TAG_ORIENTATION);
+		if (exifEntry)
+			orientation = exif_get_short(exifEntry->data, byteOrder);
+
+		exif_data_free(exifData);
+	}
+
+/*
+	0th Row      0th Column
+	1  top          left side
+	2  top          right side
+	3  bottom     right side
+	4  bottom     left side
+	5  left side    top
+	6  right side  top
+	7  right side  bottom
+	8  left side    bottom
+*/
+
+	if (image && (orientation > 1)) {
+		RImage *tmp = NULL;
+		switch (orientation) {
+		case 2:
+			tmp = RHorizontalFlipImage(image);
+			break;
+		case 3:
+			tmp = RRotateImage(image, 180);
+			break;
+		case 4:
+			tmp = RVerticalFlipImage(image);
+			break;
+		case 5: {
+				RImage *tmp2;
+				tmp2 = RVerticalFlipImage(image);
+				if (tmp2) {
+					tmp = RRotateImage(tmp2, 90);
+					RReleaseImage(tmp2);
+				}
+			}
+			break;
+		case 6:
+			tmp = RRotateImage(image, 90);
+			break;
+		case 7: {
+				RImage *tmp2;
+				tmp2 = RVerticalFlipImage(image);
+				if (tmp2) {
+					tmp = RRotateImage(tmp2, 270);
+					RReleaseImage(tmp2);
+				}
+			}
+			break;
+		case 8:
+			tmp = RRotateImage(image, 270);
+			break;
+		}
+		if (tmp) {
+			RReleaseImage(image);
+			image = tmp;
+		}
+	}
+#endif
+	return image;
+}
 
 /*
 	change_title: used to change window title
@@ -212,6 +303,59 @@ int merge_with_background(RImage *i)
 }
 
 /*
+	turn_image: rotate the image by the angle passed
+	return EXIT_SUCCESS on success, EXIT_FAILURE on failure
+*/
+int turn_image(float angle)
+{
+	RImage *tmp;
+
+	if (!img)
+		return EXIT_FAILURE;
+
+	tmp = RRotateImage(img, angle);
+	if (!tmp)
+		return EXIT_FAILURE;
+
+	if (!fullscreen_flag) {
+		if (img->width != tmp->width || img->height != tmp->height)
+			XResizeWindow(dpy, win, tmp->width, tmp->height);
+	}
+
+	RReleaseImage(img);
+	img = tmp;
+
+	rescale_image();
+	if (!fullscreen_flag) {
+		XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, img->width, img->height, 0, 0);
+	} else {
+		XClearWindow(dpy, win);
+		XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0,
+			img->width, img->height, max_width/2-img->width/2, max_height/2-img->height/2);
+	}
+
+	return EXIT_SUCCESS;
+}
+
+/*
+	turn_image_right: rotate the image by 90 degree
+	return EXIT_SUCCESS on success, EXIT_FAILURE on failure
+*/
+int turn_image_right(void)
+{
+	return turn_image(90.0);
+}
+
+/*
+	turn_image_left: rotate the image by -90 degree
+	return EXIT_SUCCESS on success, 1 on failure
+*/
+int turn_image_left(void)
+{
+	return turn_image(-90.0);
+}
+
+/*
 	draw_failed_image: create a red crossed image to indicate an error loading file
 	return the image on success, NULL on failure
 
@@ -250,6 +394,7 @@ int full_screen(void)
 	if (fullscreen_flag) {
 		fullscreen_flag = False;
 		zoom_factor = 0;
+		back_from_fullscreen = True;
 	} else {
 		fullscreen_flag = True;
 		zoom_factor = 1000;
@@ -279,7 +424,7 @@ int full_screen(void)
 int zoom_in_out(int z)
 {
 	RImage *old_img = img;
-	RImage *tmp = RLoadImage(ctx, current_link->data, 0);
+	RImage *tmp = load_oriented_image(ctx, current_link->data, 0);
 	if (!tmp)
 		return EXIT_FAILURE;
 
@@ -368,7 +513,7 @@ int change_image(int way)
 		}
 		if (DEBUG)
 			fprintf(stderr, "current file is> %s\n", (char *)current_link->data);
-		img = RLoadImage(ctx, current_link->data, 0);
+		img = load_oriented_image(ctx, current_link->data, 0);
 
 		if (!img) {
 			fprintf(stderr, "Error: %s %s\n", (char *)current_link->data,
@@ -453,7 +598,7 @@ int linked_list_add(linked_list_t *list, const void *data)
 	/* calloc sets the "next" field to zero. */
 	link = calloc(1, sizeof(link_t));
 	if (!link) {
-		fprintf(stderr, "calloc failed.\n");
+		fprintf(stderr, "Error: memory allocation failed\n");
 		return EXIT_FAILURE;
 	}
 	link->data = data;
@@ -572,7 +717,9 @@ int main(int argc, char **argv)
 #ifdef HAVE_PTHREAD
 			"d: launch diaporama mode\n"
 #endif
+			"l: rotate image on the left\n"
 			"q: quit\n"
+			"r: rotate image on the right\n"
 			"right: next image\n"
 			"left: previous image\n"
 			"up: first image\n"
@@ -618,7 +765,7 @@ int main(int argc, char **argv)
 		}
 	}
 
-	img = RLoadImage(ctx, reading_filename, 0);
+	img = load_oriented_image(ctx, reading_filename, 0);
 
 	if (!img) {
 		fprintf(stderr, "Error: %s %s\n", reading_filename, RMessageForError(RErrorCode));
@@ -703,21 +850,33 @@ int main(int argc, char **argv)
 			XConfigureEvent xce = e.xconfigure;
 			if (xce.width != img->width || xce.height != img->height) {
 				RImage *old_img = img;
-				img = RLoadImage(ctx, current_link->data, 0);
+				img = load_oriented_image(ctx, current_link->data, 0);
 				if (!img) {
 					/* keep the old img and window size */
 					img = old_img;
 					XResizeWindow(dpy, win, img->width, img->height);
 				} else {
-					img = RScaleImage(img, xce.width, xce.height);
-					if (!img) {
-						img = old_img;
+					RImage *tmp2;
+					if (!back_from_fullscreen)
+						/* manually resized window */
+						tmp2 = RScaleImage(img, xce.width, xce.height);
+					else {
+						/* back from fullscreen mode, maybe img was rotated */
+						tmp2 = img;
+						back_from_fullscreen = False;
+						XClearWindow(dpy, win);
+					}
+					merge_with_background(tmp2);
+					if (RConvertImage(ctx, tmp2, &pix)) {
+						RReleaseImage(old_img);
+						img = RCloneImage(tmp2);
+						RReleaseImage(tmp2);
+						change_title(&title_property, (char *)current_link->data);
+						XSync(dpy, True);
 						XResizeWindow(dpy, win, img->width, img->height);
-					} else {
-						merge_with_background(img);
-						if (RConvertImage(ctx, img, &pix))
-							RReleaseImage(old_img);
-						XResizeWindow(dpy, win, img->width, img->height);
+						XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0,
+									img->width, img->height, 0, 0);
+
 					}
 				}
 			}
@@ -813,6 +972,12 @@ int main(int argc, char **argv)
 			case XK_F11:
 			case XK_f:
 				full_screen();
+				break;
+			case XK_r:
+				turn_image_right();
+				break;
+			case XK_l:
+				turn_image_left();
 				break;
 			}
 
