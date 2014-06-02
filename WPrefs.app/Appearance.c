@@ -60,7 +60,7 @@ typedef struct _Panel {
 	WMFrame *colF;
 
 	WMPopUpButton *colP;
-	WMColor *colors[14];
+	WMColor *colors[15];
 
 	WMColorWell *colW;
 
@@ -354,11 +354,11 @@ static const struct {
 	{ "HighlightTextColor", "black" },
 	{ "FrameFocusedBorderColor", "black" },
 	{ "FrameBorderColor", "black" },
-	{ "FrameSelectedBorderColor", "white" }/* , */
-	/* { "IconTitleColor", "white" }, */
-	/* { "IconTitleBack", "black" }, */
-	/* { "ClipTitleColor", "black" }, */
-	/* { "CClipTitleColor", "#454045" } */
+	{ "FrameSelectedBorderColor", "white" },
+	{ "IconTitleColor", "white" },
+	{ "IconTitleBack", "black" },
+	{ "ClipTitleColor", "black" },
+	{ "CClipTitleColor", "#454045" }
 };
 
 static WMRect previewPositions[] = {
@@ -853,9 +853,6 @@ static void updatePreviewBox(_Panel * panel, int elements)
 		titem = (TextureListItem *) item->clientData;
 
 		renderPreview(panel, gc, PICON, titem->ispixmap ? 0 : RBEV_RAISED3);
-
-		colorUpdate |= 1 << ICONT_COL | 1 << ICONB_COL |
-			1 << CLIP_COL | 1 << CCLIP_COL;
 	}
 
 	if (colorUpdate)
@@ -1384,10 +1381,10 @@ static void changeColorPage(WMWidget * w, void *data)
 		{-22, -21},
 		{-22, -21},
 		{-22, -21},
-		{130, 140},
-		{130, 140},
-		{130, 140},
-		{130, 140}
+		{130, 132},
+		{130, 132},
+		{130, 132},
+		{130, 132}
 	};
 
 	if (panel->preview) {
@@ -1407,7 +1404,8 @@ static void changeColorPage(WMWidget * w, void *data)
 		if (panel->preview)
 			WMDrawPixmap(panel->hand, panel->preview, positions[section].x, positions[section].y);
 
-		section = WMGetPopUpButtonSelectedItem(panel->colP);
+		if (section >= ICONT_COL)
+			updateColorPreviewBox(panel, 1 << section);
 
 		WMSetColorWellColor(panel->colW, panel->colors[section]);
 	}
@@ -1563,28 +1561,129 @@ static void updateColorPreviewBox(_Panel * panel, int elements)
 			       29, 9, 190, 20);
 	}
 
-	/*
-	   if (elements & (1 << ICONT_COL)) {
-	   WRITE(_("Focused Window"), panel->colors[ICONT_COL],
-	   panel->boldFont,
-	   155, 130, 64);
+	if (elements & (1 << ICONT_COL) || elements & (1 << ICONB_COL)) {
+		RColor rgb;
+		RHSVColor hsv, hsv2;
+		int v;
+		WMColor *light, *dim;
+
+		updatePreviewBox(panel, 1 << PICON);
+
+		rgb.red = WMRedComponentOfColor(panel->colors[ICONB_COL]) >> 8;
+		rgb.green = WMGreenComponentOfColor(panel->colors[ICONB_COL]) >> 8;
+		rgb.blue = WMBlueComponentOfColor(panel->colors[ICONB_COL]) >> 8;
+		RRGBtoHSV(&rgb, &hsv);
+		RHSVtoRGB(&hsv, &rgb);
+		hsv2 = hsv;
+
+		v = hsv.value * 16 / 10;
+		hsv.value = (v > 255 ? 255 : v);
+		RHSVtoRGB(&hsv, &rgb);
+		light = WMCreateRGBColor(scr, rgb.red << 8, rgb.green << 8, rgb.blue << 8, False);
+
+		hsv2.value = hsv2.value / 2;
+		RHSVtoRGB(&hsv2, &rgb);
+		dim = WMCreateRGBColor(scr, rgb.red << 8, rgb.green << 8, rgb.blue << 8, False);
+
+		XFillRectangle(dpy, d, WMColorGC(panel->colors[ICONB_COL]), 156, 131, 62, 11);
+		XDrawLine(dpy, d, WMColorGC(light), 155, 130, 155, 142);
+		XDrawLine(dpy, d, WMColorGC(light), 156, 130, 217, 130);
+		XDrawLine(dpy, d, WMColorGC(dim), 218, 130, 218, 142);
+
+		paintText(scr, d, panel->colors[ICONT_COL],
+			     panel->smallFont, 155, 130, 64, 13, WALeft,
+			     _("Icon Text"));
+
 	   }
-	   if (elements & (1 << ICONB_COL)) {
-	   WRITE(_("Focused Window"), panel->colors[ICONB_COL],
-	   panel->boldFont,
-	   0, 0, 30);
-	   }
-	   if (elements & (1 << CLIP_COL)) {
-	   WRITE(_("Focused Window"), panel->colors[CLIP_COL],
-	   panel->boldFont,
-	   0, 0, 30);
-	   }
-	   if (elements & (1 << CCLIP_COL)) {
-	   WRITE(_("Focused Window"), panel->colors[CCLIP_COL],
-	   panel->boldFont,
-	   0, 0, 30);
-	   }
-	 */
+
+	if (elements & (1 << CLIP_COL) || elements & (1 << CCLIP_COL)) {
+		Pixmap pix;
+		RColor black;
+		RColor dark;
+		RColor light;
+		RImage *tile;
+		TextureListItem *titem;
+		WMListItem *item;
+		XPoint p[4];
+
+		item = WMGetListItem(panel->texLs, panel->textureIndex[PICON]);
+		titem = (TextureListItem *) item->clientData;
+
+		pix = renderTexture(scr, titem->prop, 64, 64, NULL, titem->ispixmap ? 0 : RBEV_RAISED3);
+		tile = RCreateImageFromDrawable(WMScreenRContext(scr), pix, None);
+
+		black.alpha = 255;
+		black.red = black.green = black.blue = 0;
+
+		dark.alpha = 0;
+		dark.red = dark.green = dark.blue = 60;
+
+		light.alpha = 0;
+		light.red = light.green = light.blue = 80;
+
+		/* top right */
+		ROperateLine(tile, RSubtractOperation, 64 - 1 - 23, 0, 64 - 2, 23 - 1, &dark);
+		RDrawLine(tile, 64 - 1 - 23 - 1, 0, 64 - 1, 23 + 1, &black);
+		ROperateLine(tile, RAddOperation, 64 - 1 - 23, 2, 64 - 3, 23, &light);
+
+		/* arrow bevel */
+		ROperateLine(tile, RSubtractOperation, 64 - 7 - (23 - 15), 4, 64 - 5, 4, &dark);
+		ROperateLine(tile, RSubtractOperation, 64 - 6 - (23 - 15), 5, 64 - 5, 6 + 23 - 15, &dark);
+		ROperateLine(tile, RAddOperation, 64 - 5, 4, 64 - 5, 6 + 23 - 15, &light);
+
+		/* bottom left */
+		ROperateLine(tile, RAddOperation, 2, 64 - 1 - 23 + 2, 23 - 2, 64 - 3, &dark);
+		RDrawLine(tile, 0, 64 - 1 - 23 - 1, 23 + 1, 64 - 1, &black);
+		ROperateLine(tile, RSubtractOperation, 0, 64 - 1 - 23 - 2, 23 + 1, 64 - 2, &light);
+
+		/* arrow bevel */
+		ROperateLine(tile, RSubtractOperation, 4, 64 - 7 - (23 - 15), 4, 64 - 5, &dark);
+		ROperateLine(tile, RSubtractOperation, 5, 64 - 6 - (23 - 15), 6 + 23 - 15, 64 - 5, &dark);
+		ROperateLine(tile, RAddOperation, 4, 64 - 5, 6 + 23 - 15, 64 - 5, &light);
+
+		RConvertImage(WMScreenRContext(scr), tile, &pix);
+		RReleaseImage(tile);
+
+		XCopyArea(dpy, pix, d, gc, 0, 0, 64, 64, 155, 130);
+		XFreePixmap(dpy, pix);
+
+		/* top right arrow */
+		p[0].x = p[3].x = 155 + 64 - 5 - (23 - 15);
+		p[0].y = p[3].y = 130 + 5;
+		p[1].x = 155 + 64 - 6;
+		p[1].y = 130 + 5;
+		p[2].x = 155 + 64 - 6;
+		p[2].y = 130 + 4 + 23 - 15;
+
+		XFillPolygon(dpy, d, WMColorGC(panel->colors[CLIP_COL]), p, 3, Convex, CoordModeOrigin);
+		XDrawLines(dpy, d, WMColorGC(panel->colors[CLIP_COL]), p, 4, CoordModeOrigin);
+
+		/* bottom left arrow */
+		p[0].x = p[3].x = 155 + 5;
+		p[0].y = p[3].y = 130 + 64 - 5 - (23 - 15);
+		p[1].x = 155 + 5;
+		p[1].y = 130 + 64 - 6;
+		p[2].x = 155 + 4 + 23 - 15;
+		p[2].y = 130 + 64 - 6;
+
+		XFillPolygon(dpy, d, WMColorGC(panel->colors[CLIP_COL]), p, 3, Convex, CoordModeOrigin);
+		XDrawLines(dpy, d, WMColorGC(panel->colors[CLIP_COL]), p, 4, CoordModeOrigin);
+
+	}
+
+	if (elements & (1 << CLIP_COL))
+		paintText(scr, d, panel->colors[CLIP_COL],
+			  panel->boldFont, 155 + 23, 130 + 64 - 15 - 3, 22, 15, WALeft,
+			  _("Clip"));
+
+	if (elements & (1 << CCLIP_COL)) {
+		paintText(scr, d, panel->colors[CCLIP_COL],
+			  panel->boldFont, 155+2, 130 + 2, 26, 15, WALeft, _("Coll."));
+		paintText(scr, d, panel->colors[CCLIP_COL],
+			  panel->boldFont, 155 + 23, 130 + 64 - 15 - 3, 22, 15, WALeft,
+			  _("Clip"));
+	}
+
 	WMRedisplayWidget(panel->prevL);
 }
 
@@ -1857,12 +1956,10 @@ static void createPanel(Panel * p)
 	WMAddPopUpButtonItem(panel->colP, _("Focused Window Border Color"));
 	WMAddPopUpButtonItem(panel->colP, _("Window Border Color"));
 	WMAddPopUpButtonItem(panel->colP, _("Selected Window Border Color"));
-	/*
-	   WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title"));
-	   WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title Back"));
-	   WMAddPopUpButtonItem(panel->colP, _("Clip Title"));
-	   WMAddPopUpButtonItem(panel->colP, _("Collapsed Clip Title"));
-	 */
+	WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title"));
+	WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title Back"));
+	WMAddPopUpButtonItem(panel->colP, _("Clip Title"));
+	WMAddPopUpButtonItem(panel->colP, _("Collapsed Clip Title"));
 
 	WMSetPopUpButtonSelectedItem(panel->colP, 0);
 
