@@ -2,6 +2,7 @@
  *
  *  WPrefs - Window Maker Preferences Program
  *
+ *  Copyright (c) 2014 Window Maker Team
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -31,6 +32,7 @@ static const struct {
 
 	enum {
 		OPTION_WMAKER,
+		OPTION_WMAKER_ARRAY,
 		OPTION_USERDEF
 	} class;
 
@@ -65,6 +67,9 @@ static const struct {
 	{ N_("Ignore minimized windows when cycling."),
 	  /* default: */ False, OPTION_WMAKER, "CycleIgnoreMinimized" },
 
+	{ N_("Show switch panel when cycling windows."),
+	  /* default: */ True, OPTION_WMAKER_ARRAY, "SwitchPanelImages" },
+
 	{ N_("Show workspace title on Clip."),
 	  /* default: */ True, OPTION_WMAKER, "ShowClipTitle" },
 
@@ -96,7 +101,7 @@ typedef struct _Panel {
 #define ICON_FILE	"expert"
 
 
-static void createPanel(Panel * p)
+static void createPanel(Panel *p)
 {
 	_Panel *panel = (_Panel *) p;
 	WMScrollView *sv;
@@ -134,6 +139,14 @@ static void createPanel(Panel * p)
 				state = expert_options[i].def_state;
 			break;
 
+		case OPTION_WMAKER_ARRAY: {
+				char *str = GetStringForKey(expert_options[i].op_name);
+				state = expert_options[i].def_state;
+				if (str && strcasecmp(str, "None") == 0)
+					state = False;
+			}
+			break;
+
 		case OPTION_USERDEF:
 			state = WMGetUDBoolForKey(udb, expert_options[i].op_name);
 			break;
@@ -141,7 +154,7 @@ static void createPanel(Panel * p)
 		default:
 #ifdef DEBUG
 			wwarning("export_options[%d].class = %d, this should not happen\n",
-			         i, expert_options[i].class);
+				i, expert_options[i].class);
 #endif
 			state = expert_options[i].def_state;
 			break;
@@ -154,7 +167,7 @@ static void createPanel(Panel * p)
 	WMRealizeWidget(panel->box);
 }
 
-static void storeDefaults(_Panel * panel)
+static void storeDefaults(_Panel *panel)
 {
 	WMUserDefaults *udb = WMGetStandardUserDefaults();
 	int i;
@@ -163,6 +176,17 @@ static void storeDefaults(_Panel * panel)
 		switch (expert_options[i].class) {
 		case OPTION_WMAKER:
 			SetBoolForKey(WMGetButtonSelected(panel->swi[i]), expert_options[i].op_name);
+			break;
+
+		case OPTION_WMAKER_ARRAY:
+			if (WMGetButtonSelected(panel->swi[i])) {
+				/* check if the array was not manually modified */
+				char *str = GetStringForKey(expert_options[i].op_name);
+				if (str && strcasecmp(str, "None") == 0)
+					RemoveObjectForKey(expert_options[i].op_name);
+			}
+			else
+				SetStringForKey("None", expert_options[i].op_name);
 			break;
 
 		case OPTION_USERDEF:
