@@ -627,9 +627,6 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 					dropped_thing = wstrdup(scr->xdestring);
 				}
 				if (!dropped_thing) {
-					dropped_thing = get_dnd_selection(scr);
-				}
-				if (!dropped_thing) {
 					scr->flags.dnd_data_convertion_status = 1;
 					goto error;
 				}
