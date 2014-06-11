@@ -108,16 +108,15 @@ static void init_cache(void)
 	char *tmp;
 
 	tmp = getenv("RIMAGE_CACHE");
-	if (!tmp || sscanf(tmp, "%i", &RImageCacheSize) != 1) {
+	if (!tmp || sscanf(tmp, "%i", &RImageCacheSize) != 1)
 		RImageCacheSize = IMAGE_CACHE_SIZE;
-	}
+
 	if (RImageCacheSize < 0)
 		RImageCacheSize = 0;
 
 	tmp = getenv("RIMAGE_CACHE_SIZE");
-	if (!tmp || sscanf(tmp, "%i", &RImageCacheMaxImage) != 1) {
+	if (!tmp || sscanf(tmp, "%i", &RImageCacheMaxImage) != 1)
 		RImageCacheMaxImage = IMAGE_CACHE_MAX_IMAGE;
-	}
 
 	if (RImageCacheSize > 0) {
 		RImageCache = malloc(sizeof(RCachedImage) * RImageCacheSize);
@@ -146,7 +145,7 @@ void RReleaseCache(void)
 	}
 }
 
-RImage *RLoadImage(RContext * context, const char *file, int index)
+RImage *RLoadImage(RContext *context, const char *file, int index)
 {
 	RImage *image = NULL;
 	int i;
@@ -154,9 +153,8 @@ RImage *RLoadImage(RContext * context, const char *file, int index)
 
 	assert(file != NULL);
 
-	if (RImageCacheSize < 0) {
+	if (RImageCacheSize < 0)
 		init_cache();
-	}
 
 	if (RImageCacheSize > 0) {
 
@@ -370,8 +368,8 @@ static WRImgFormat identFile(const char *path)
 		return IM_GIF;
 
 	/* check for WEBP */
-	if (buffer[ 0] == 'R' && buffer[ 1] == 'I' && buffer[ 2] == 'F' && buffer[ 3] == 'F' &&
-	    buffer[ 8] == 'W' && buffer[ 9] == 'E' && buffer[10] == 'B' && buffer[11] == 'P' &&
+	if (buffer[0]  == 'R' && buffer[1]  == 'I' && buffer[2]  == 'F' && buffer[3]  == 'F' &&
+	    buffer[8]  == 'W' && buffer[9]  == 'E' && buffer[10] == 'B' && buffer[11] == 'P' &&
 	    buffer[12] == 'V' && buffer[13] == 'P' && buffer[14] == '8' &&
 	    (buffer[15] == ' '       /* Simple File Format (Lossy) */
 	     || buffer[15] == 'L'    /* Simple File Format (Lossless) */
