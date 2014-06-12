@@ -316,6 +316,9 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 #else
 	WMSetTextFieldEditable(panel->dndCommandField, False);
 	WMSetLabelText(panel->dndCommandLabel, _("DND support was not compiled in"));
+
+	WMSetFrameTitleColor(panel->dndCommandFrame, WMDarkGrayColor(scr->wmscreen));
+	WMSetLabelTextColor(panel->dndCommandLabel, WMDarkGrayColor(scr->wmscreen));
 #endif
 	WMMapSubwidgets(panel->dndCommandFrame);
 
