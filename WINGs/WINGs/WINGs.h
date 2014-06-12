@@ -1135,6 +1135,8 @@ void WMSetFrameRelief(WMFrame *fPtr, WMReliefType relief);
 
 void WMSetFrameTitle(WMFrame *fPtr, const char *title);
 
+void WMSetFrameTitleColor(WMFrame *fPtr, WMColor *color);
+
 /* ---[ WINGs/wtextfield.c ]---------------------------------------------- */
 
 WMTextField* WMCreateTextField(WMWidget *parent);

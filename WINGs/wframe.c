@@ -6,6 +6,7 @@ typedef struct W_Frame {
 	W_View *view;
 
 	char *caption;
+	WMColor *textColor;
 
 	struct {
 		WMReliefType relief:4;
@@ -186,7 +187,7 @@ static void paintFrame(Frame * fPtr)
 			d = XCreatePixmap(display, view->window, tw, th, scrPtr->depth);
 			XFillRectangle(display, d, WMColorGC(view->backColor), 0, 0, tw, th);
 
-			WMDrawString(scrPtr, d, scrPtr->black, font, 0, 0, fPtr->caption, tlen);
+			WMDrawString(scrPtr, d, fPtr->textColor ? fPtr->textColor : scrPtr->black, font, 0, 0, fPtr->caption, tlen);
 			XCopyArea(display, d, view->window, scrPtr->copyGC, 0, 0, tw, th, tx, ty);
 			XFreePixmap(display, d);
 		} else {
@@ -213,6 +214,17 @@ static void handleEvents(XEvent * event, void *data)
 	}
 }
 
+void WMSetFrameTitleColor(WMFrame *fPtr, WMColor *color)
+{
+	if (fPtr->textColor)
+		WMReleaseColor(fPtr->textColor);
+	fPtr->textColor = WMRetainColor(color);
+
+	if (fPtr->view->flags.realized) {
+		repaintFrame(fPtr);
+	}
+}
+
 WMFrame *WMCreateFrame(WMWidget * parent)
 {
 	Frame *fPtr;
@@ -227,6 +239,7 @@ WMFrame *WMCreateFrame(WMWidget * parent)
 		return NULL;
 	}
 	fPtr->view->self = fPtr;
+	fPtr->textColor = WMRetainColor(fPtr->view->screen->black);
 
 	WMCreateEventHandler(fPtr->view, ExposureMask | StructureNotifyMask, handleEvents, fPtr);
 
