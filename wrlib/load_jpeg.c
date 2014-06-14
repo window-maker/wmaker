@@ -132,6 +132,7 @@ RImage *RLoadJPEG(const char *file_name)
 	jpeg_read_header(&cinfo, TRUE);
 
 	if (cinfo.image_width < 1 || cinfo.image_height < 1) {
+		buffer[0] = NULL;	/* Initialize pointer to avoid spurious free in cleanup code */
 		RErrorCode = RERR_BADIMAGEFILE;
 		goto bye;
 	}
