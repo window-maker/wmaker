@@ -326,7 +326,8 @@ static RXImage *image2TrueColor(RContext * ctx, RImage * image)
 	}
 
 	if (ctx->attribs->render_mode == RBestMatchRendering) {
-		int ofs, r, g, b;
+		int ofs;
+		unsigned long r, g, b;
 		int x, y;
 		unsigned long pixel;
 		unsigned char *ptr = image->data;
@@ -339,7 +340,10 @@ static RXImage *image2TrueColor(RContext * ctx, RImage * image)
 			for (y = 0; y < image->height; y++) {
 				for (x = 0; x < image->width; x++, ptr += channels) {
 					/* reduce pixel */
-					pixel = (*(ptr) << roffs) | (*(ptr + 1) << goffs) | (*(ptr + 2) << boffs);
+					r = ptr[0];
+					g = ptr[1];
+					b = ptr[2];
+					pixel = (r << roffs) | (g << goffs) | (b << boffs);
 					XPutPixel(ximg->image, x, y, pixel);
 				}
 			}
