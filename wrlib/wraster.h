@@ -254,11 +254,11 @@ enum {
 /* 2 pixel width */
 #define RBEV_RAISED3	3
 
-enum {
+typedef enum {
     RHorizontalGradient = 2,
     RVerticalGradient = 3,
     RDiagonalGradient = 4
-};
+} RGradientStyle;
 /* for backwards compatibility */
 #define RGRD_HORIZONTAL  RHorizontalGradient
 #define RGRD_VERTICAL 	RVerticalGradient
@@ -426,11 +426,11 @@ void RFillImage(RImage *image, const RColor *color);
 void RBevelImage(RImage *image, int bevel_type);
 
 RImage *RRenderGradient(unsigned width, unsigned height, const RColor *from,
-                        const RColor *to, int style);
+                        const RColor *to, RGradientStyle style);
 
 
 RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors,
-                             int style);
+                             RGradientStyle style);
 
 
 RImage *RRenderInterwovenGradient(unsigned width, unsigned height,

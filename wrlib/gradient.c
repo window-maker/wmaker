@@ -39,7 +39,7 @@ static RImage *renderMHGradient(unsigned width, unsigned height, RColor ** color
 static RImage *renderMVGradient(unsigned width, unsigned height, RColor ** colors, int count);
 static RImage *renderMDGradient(unsigned width, unsigned height, RColor ** colors, int count);
 
-RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor ** colors, int style)
+RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors, RGradientStyle style)
 {
 	int count;
 
@@ -65,7 +65,7 @@ RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor ** colors, 
 	return NULL;
 }
 
-RImage *RRenderGradient(unsigned width, unsigned height, const RColor * from, const RColor * to, int style)
+RImage *RRenderGradient(unsigned width, unsigned height, const RColor *from, const RColor *to, RGradientStyle style)
 {
 	switch (style) {
 	case RHorizontalGradient:

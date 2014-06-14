@@ -556,7 +556,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 
 		image = RRenderInterwovenGradient(width, height, c1, t1, c2, t2);
 	} else if (strcasecmp(&type[1], "gradient") == 0) {
-		int style;
+		RGradientStyle style;
 		RColor rcolor2;
 
 		switch (toupper(type[0])) {
@@ -580,7 +580,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 
 		image = RRenderGradient(width, height, &rcolor, &rcolor2, style);
 	} else if (strcasecmp(&type[2], "gradient") == 0 && toupper(type[0]) == 'T') {
-		int style;
+		RGradientStyle style;
 		RColor rcolor2;
 		int i;
 		RImage *grad = NULL;
@@ -615,7 +615,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 		RReleaseImage(grad);
 
 	} else if (strcasecmp(&type[2], "gradient") == 0 && toupper(type[0]) == 'M') {
-		int style;
+		RGradientStyle style;
 		RColor **colors;
 		int i, j;
 

@@ -326,7 +326,7 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 		RColor color1, color2;
 		RImage *image;
 		Pixmap pixmap;
-		int gtype;
+		RGradientStyle gtype;
 		int iwidth, iheight;
 
 		GETSTRORGOTO(val, tmp, 1, error);
@@ -396,7 +396,7 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 		RImage *image;
 		Pixmap pixmap;
 		int i, j;
-		int gtype;
+		RGradientStyle gtype;
 		int iwidth, iheight;
 
 		colors = malloc(sizeof(RColor *) * (count - 1));
@@ -587,7 +587,7 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 		Pixmap pixmap;
 		int opaq;
 		char *file;
-		int gtype;
+		RGradientStyle gtype;
 		int twidth, theight;
 
 		GETSTRORGOTO(val, file, 1, error);
