@@ -82,30 +82,43 @@ extern "C" {
 
 
 
-
+/* image display modes */
+typedef enum {
+	RDitheredRendering = 0,
+	RBestMatchRendering = 1
+} RRenderingMode;
 
 
 /* std colormap usage/creation modes */
-enum {
-    RUseStdColormap,		       /* default. fallbacks to RIgnore.. if
-    there is none defined */
-    RCreateStdColormap,
-    RIgnoreStdColormap
-};
+typedef enum {
+	RUseStdColormap,	/* default: fallbacks to RIgnore if there is none defined */
+	RCreateStdColormap,
+	RIgnoreStdColormap
+} RStdColormapMode;
 
+
+/* smoothed scaling filter types */
+typedef enum {
+	RBoxFilter,
+	RTriangleFilter,
+	RBellFilter,
+	RBSplineFilter,
+	RLanczos3Filter,
+	RMitchellFilter
+} RScalingFilter;
 
 
 typedef struct RContextAttributes {
     int flags;
-    int render_mode;
+    RRenderingMode render_mode;
     int colors_per_channel;	       /* for PseudoColor */
     float rgamma;		       /* gamma correction for red, */
     float ggamma;		       /* green, */
     float bgamma;		       /* and blue */
     VisualID visualid;	       /* visual ID to use */
     int use_shared_memory;	       /* True of False */
-    int scaling_filter;
-    int standard_colormap_mode;    /* what to do with std cma */
+    RScalingFilter scaling_filter;
+    RStdColormapMode standard_colormap_mode;    /* what to do with std cma */
 } RContextAttributes;
 
 
@@ -209,24 +222,6 @@ typedef struct RXImage {
     char is_shared;
 #endif
 } RXImage;
-
-
-/* image display modes */
-enum {
-    RDitheredRendering = 0,
-    RBestMatchRendering = 1
-};
-
-
-/* smoothed scaling filter types */
-enum {
-    RBoxFilter,
-    RTriangleFilter,
-    RBellFilter,
-    RBSplineFilter,
-    RLanczos3Filter,
-    RMitchellFilter
-};
 
 
 /* note that not all operations are supported in all functions */
@@ -481,4 +476,3 @@ extern int RErrorCode;
 #endif /* __cplusplus */
 
 #endif
-

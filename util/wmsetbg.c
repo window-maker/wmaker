@@ -1213,7 +1213,8 @@ int main(int argc, char **argv)
 	char *back_color = "gray20";
 	char *image_name = NULL;
 	char *domain = "WindowMaker";
-	int update = 0, cpc = 4, render_mode = RDitheredRendering, obey_user = 0;
+	int update = 0, cpc = 4, obey_user = 0;
+	RRenderingMode render_mode = RDitheredRendering;
 	char *texture = NULL;
 	int workspace = -1;
 

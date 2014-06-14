@@ -247,7 +247,7 @@ static double Mitchell_filter(double t)
 static double (*filterf)(double) = Mitchell_filter;
 static double fwidth = Mitchell_support;
 
-void wraster_change_filter(int type)
+void wraster_change_filter(RScalingFilter type)
 {
 	switch (type) {
 	case RBoxFilter:

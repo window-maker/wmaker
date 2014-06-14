@@ -24,7 +24,7 @@
 /*
  * Function to change the smoothing filter used for image scaling (RSmoothScaleImage)
  */
-void wraster_change_filter(int type);
+void wraster_change_filter(RScalingFilter type);
 
 
 #endif
