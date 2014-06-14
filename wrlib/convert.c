@@ -35,11 +35,8 @@
 
 #include "wraster.h"
 #include "convert.h"
+#include "xutil.h"
 
-
-#ifdef USE_XSHM
-extern Pixmap R_CreateXImageMappedPixmap(RContext * context, RXImage * ximage);
-#endif
 
 #define NFREE(n)  if (n) free(n)
 

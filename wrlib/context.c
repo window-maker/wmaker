@@ -35,8 +35,8 @@
 #include <math.h>
 
 #include "wraster.h"
+#include "scale.h"
 
-extern void _wraster_change_filter(int type);
 
 static Bool bestContext(Display * dpy, int screen_number, RContext * context);
 
@@ -588,7 +588,7 @@ RContext *RCreateContext(Display * dpy, int screen_number, const RContextAttribu
 
 	/* get configuration from environment variables */
 	gatherconfig(context, screen_number);
-	_wraster_change_filter(context->attribs->scaling_filter);
+	wraster_change_filter(context->attribs->scaling_filter);
 	if ((context->attribs->flags & RC_VisualID)) {
 		XVisualInfo *vinfo, templ;
 		int nret;

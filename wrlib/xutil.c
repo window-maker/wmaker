@@ -36,6 +36,7 @@
 #endif				/* USE_XSHM */
 
 #include "wraster.h"
+#include "xutil.h"
 
 #ifdef USE_XSHM
 
