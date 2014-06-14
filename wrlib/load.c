@@ -37,9 +37,6 @@
 #include "wraster.h"
 #include "imgformat.h"
 
-#define	RETRY( x )	do {				\
-				x;			\
-			} while (errno == EINTR);
 
 typedef struct RCachedImage {
 	RImage *image;
@@ -320,19 +317,23 @@ static WRImgFormat identFile(const char *path)
 
 	assert(path != NULL);
 
-	RETRY( file = fopen(path, "rb") )
-	if (file == NULL) {
-		RErrorCode = RERR_OPEN;
-		return IM_ERROR;
+	for (;;) {
+		file = fopen(path, "rb");
+		if (file != NULL)
+			break;
+		if (errno != EINTR) {
+			RErrorCode = RERR_OPEN;
+			return IM_ERROR;
+		}
 	}
 
-	RETRY( nread = fread(buffer, 1, sizeof(buffer), file) )
+	nread = fread(buffer, 1, sizeof(buffer), file);
 	if (nread < sizeof(buffer) || ferror(file)) {
-		RETRY( fclose(file) )
+		fclose(file);
 		RErrorCode = RERR_READ;
 		return IM_ERROR;
 	}
-	RETRY( fclose(file) )
+	fclose(file);
 
 	/* check for XPM */
 	if (strncmp((char *)buffer, "/* XPM */", 9) == 0)
