@@ -46,18 +46,21 @@ typedef struct RCachedImage {
 } RCachedImage;
 
 /*
- * Size of image cache
+ * Number of image to keep in the cache
  */
 static int RImageCacheSize = -1;
 
+#define IMAGE_CACHE_DEFAULT_NBENTRIES	  8
+#define IMAGE_CACHE_MAXIMUM_NBENTRIES	256
+
 /*
- * Max. size of image to store in cache
+ * Max. size of image (in pixels) to store in the cache
  */
 static int RImageCacheMaxImage = -1;	/* 0 = any size */
 
-#define IMAGE_CACHE_SIZE	8
+#define IMAGE_CACHE_DEFAULT_MAXPIXELS	(64 * 64)
+#define IMAGE_CACHE_MAXIMUM_MAXPIXELS	(256 * 256)
 
-#define IMAGE_CACHE_MAX_IMAGE	64*64
 
 static RCachedImage *RImageCache;
 
@@ -106,14 +109,19 @@ static void init_cache(void)
 
 	tmp = getenv("RIMAGE_CACHE");
 	if (!tmp || sscanf(tmp, "%i", &RImageCacheSize) != 1)
-		RImageCacheSize = IMAGE_CACHE_SIZE;
-
+		RImageCacheSize = IMAGE_CACHE_DEFAULT_NBENTRIES;
 	if (RImageCacheSize < 0)
 		RImageCacheSize = 0;
+	if (RImageCacheSize > IMAGE_CACHE_MAXIMUM_NBENTRIES)
+		RImageCacheSize = IMAGE_CACHE_MAXIMUM_NBENTRIES;
 
 	tmp = getenv("RIMAGE_CACHE_SIZE");
 	if (!tmp || sscanf(tmp, "%i", &RImageCacheMaxImage) != 1)
-		RImageCacheMaxImage = IMAGE_CACHE_MAX_IMAGE;
+		RImageCacheMaxImage = IMAGE_CACHE_DEFAULT_MAXPIXELS;
+	if (RImageCacheMaxImage < 0)
+		RImageCacheMaxImage = 0;
+	if (RImageCacheMaxImage > IMAGE_CACHE_MAXIMUM_MAXPIXELS)
+		RImageCacheMaxImage = IMAGE_CACHE_MAXIMUM_MAXPIXELS;
 
 	if (RImageCacheSize > 0) {
 		RImageCache = malloc(sizeof(RCachedImage) * RImageCacheSize);
