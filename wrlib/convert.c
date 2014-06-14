@@ -978,8 +978,9 @@ Bool RGetClosestXColor(RContext * context, const RColor * color, XColor * retCol
 		gtable = computeTable(gmask);
 		btable = computeTable(bmask);
 
-		retColor->pixel = (rtable[color->red] << roffs) |
-		    (gtable[color->green] << goffs) | (btable[color->blue] << boffs);
+		retColor->pixel = (((unsigned long) rtable[color->red])   << roffs)
+		               |  (((unsigned long) gtable[color->green]) << goffs)
+		               |  (((unsigned long) btable[color->blue])  << boffs);
 
 		retColor->red = color->red << 8;
 		retColor->green = color->green << 8;
