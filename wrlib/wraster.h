@@ -225,19 +225,19 @@ typedef struct RXImage {
 
 
 /* note that not all operations are supported in all functions */
-enum {
+typedef enum {
     RClearOperation,	       /* clear with 0 */
     RCopyOperation,
     RNormalOperation,	       /* same as combine */
     RAddOperation,
     RSubtractOperation
-};
+} RPixelOperation;
 
 
-enum {
+typedef enum {
     RAbsoluteCoordinates = 0,
     RRelativeCoordinates = 1
-};
+} RCoordinatesMode;
 
 
 enum {
@@ -382,30 +382,30 @@ Bool RGetPixel(RImage *image, int x, int y, RColor *color);
 
 void RPutPixel(RImage *image, int x, int y, const RColor *color);
 
-void ROperatePixel(RImage *image, int operation, int x, int y, const RColor *color);
+void ROperatePixel(RImage *image, RPixelOperation operation, int x, int y, const RColor *color);
 
-void RPutPixels(RImage *image, const RPoint *points, int npoints, int mode,
+void RPutPixels(RImage *image, const RPoint *points, int npoints, RCoordinatesMode mode,
                 const RColor *color);
 
-void ROperatePixels(RImage *image, int operation, const RPoint *points,
-                    int npoints, int mode, const RColor *color);
+void ROperatePixels(RImage *image, RPixelOperation operation, const RPoint *points,
+                    int npoints, RCoordinatesMode mode, const RColor *color);
 
 int RDrawLine(RImage *image, int x0, int y0, int x1, int y1, const RColor *color);
 
-int ROperateLine(RImage *image, int operation, int x0, int y0, int x1, int y1,
+int ROperateLine(RImage *image, RPixelOperation operation, int x0, int y0, int x1, int y1,
                  const RColor *color);
 
-void RDrawLines(RImage *image, const RPoint *points, int npoints, int mode,
+void RDrawLines(RImage *image, const RPoint *points, int npoints, RCoordinatesMode mode,
                 const RColor *color);
 
-void ROperateLines(RImage *image, int operation, const RPoint *points, int npoints,
-                   int mode, const RColor *color);
+void ROperateLines(RImage *image, RPixelOperation operation, const RPoint *points, int npoints,
+                   RCoordinatesMode mode, const RColor *color);
 
-void ROperateRectangle(RImage *image, int operation, int x0, int y0, int x1, int y1, const RColor *color);
+void ROperateRectangle(RImage *image, RPixelOperation operation, int x0, int y0, int x1, int y1, const RColor *color);
 
 void RDrawSegments(RImage *image, const RSegment *segs, int nsegs, const RColor *color);
 
-void ROperateSegments(RImage *image, int operation, const RSegment *segs, int nsegs,
+void ROperateSegments(RImage *image, RPixelOperation operation, const RSegment *segs, int nsegs,
                       const RColor *color);
 
 /*

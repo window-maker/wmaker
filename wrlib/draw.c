@@ -104,7 +104,7 @@ void RPutPixel(RImage *image, int x, int y, const RColor *color)
 	}
 }
 
-static void operatePixel(RImage * image, int ofs, int operation, const RColor * color)
+static void operatePixel(RImage *image, int ofs, RPixelOperation operation, const RColor *color)
 {
 	unsigned char *sr, *sg, *sb, *sa;
 	register int alpha, nalpha, tmp;
@@ -170,7 +170,7 @@ static void operatePixel(RImage * image, int ofs, int operation, const RColor * 
 	}
 }
 
-void ROperatePixel(RImage * image, int operation, int x, int y, const RColor * color)
+void ROperatePixel(RImage *image, RPixelOperation operation, int x, int y, const RColor *color)
 {
 	int ofs;
 
@@ -184,7 +184,7 @@ void ROperatePixel(RImage * image, int operation, int x, int y, const RColor * c
 	operatePixel(image, ofs, operation, color);
 }
 
-void RPutPixels(RImage * image, const RPoint * points, int npoints, int mode, const RColor * color)
+void RPutPixels(RImage *image, const RPoint *points, int npoints, RCoordinatesMode mode, const RColor *color)
 {
 	register int x, y, i;
 
@@ -205,7 +205,9 @@ void RPutPixels(RImage * image, const RPoint * points, int npoints, int mode, co
 	}
 }
 
-void ROperatePixels(RImage * image, int operation, const RPoint * points, int npoints, int mode, const RColor * color)
+void ROperatePixels(RImage *image, RPixelOperation operation,
+                    const RPoint *points, int npoints, RCoordinatesMode mode,
+                    const RColor *color)
 {
 	register int x, y, i;
 
@@ -287,7 +289,8 @@ static Bool clipLineInRectangle(int xmin, int ymin, int xmax, int ymax, int *x1,
  * This routine is a generic drawing routine, based on Bresenham's line
  * drawing algorithm.
  */
-static int genericLine(RImage * image, int x0, int y0, int x1, int y1, const RColor * color, int operation, int polyline)
+static int genericLine(RImage *image, int x0, int y0, int x1, int y1, const RColor *color,
+                       RPixelOperation operation, int polyline)
 {
 	int i, err, du, dv, du2, dv2, uofs, vofs, last;
 
@@ -382,12 +385,12 @@ int RDrawLine(RImage * image, int x0, int y0, int x1, int y1, const RColor * col
 	return genericLine(image, x0, y0, x1, y1, color, RNormalOperation, False);
 }
 
-int ROperateLine(RImage * image, int operation, int x0, int y0, int x1, int y1, const RColor * color)
+int ROperateLine(RImage *image, RPixelOperation operation, int x0, int y0, int x1, int y1, const RColor *color)
 {
 	return genericLine(image, x0, y0, x1, y1, color, operation, False);
 }
 
-void RDrawLines(RImage * image, const RPoint * points, int npoints, int mode, const RColor * color)
+void RDrawLines(RImage *image, const RPoint *points, int npoints, RCoordinatesMode mode, const RColor *color)
 {
 	register int x1, y1, x2, y2, i;
 
@@ -425,7 +428,9 @@ void RDrawLines(RImage * image, const RPoint * points, int npoints, int mode, co
 	genericLine(image, x1, y1, x2, y2, color, RNormalOperation, i);
 }
 
-void ROperateLines(RImage * image, int operation, const RPoint * points, int npoints, int mode, const RColor * color)
+void ROperateLines(RImage *image, RPixelOperation operation,
+                   const RPoint *points, int npoints, RCoordinatesMode mode,
+                   const RColor *color)
 {
 	register int x1, y1, x2, y2, i;
 
@@ -463,7 +468,7 @@ void ROperateLines(RImage * image, int operation, const RPoint * points, int npo
 	genericLine(image, x1, y1, x2, y2, color, operation, i);
 }
 
-void ROperateRectangle(RImage *image, int operation, int x0, int y0, int x1, int y1, const RColor *color)
+void ROperateRectangle(RImage *image, RPixelOperation operation, int x0, int y0, int x1, int y1, const RColor *color)
 {
 	int y;
 
@@ -472,7 +477,7 @@ void ROperateRectangle(RImage *image, int operation, int x0, int y0, int x1, int
 	}
 }
 
-void RDrawSegments(RImage * image, const RSegment * segs, int nsegs, const RColor * color)
+void RDrawSegments(RImage *image, const RSegment *segs, int nsegs, const RColor *color)
 {
 	register int i;
 
@@ -484,7 +489,7 @@ void RDrawSegments(RImage * image, const RSegment * segs, int nsegs, const RColo
 	}
 }
 
-void ROperateSegments(RImage * image, int operation, const RSegment * segs, int nsegs, const RColor * color)
+void ROperateSegments(RImage *image, RPixelOperation operation, const RSegment *segs, int nsegs, const RColor *color)
 {
 	register int i;
 
