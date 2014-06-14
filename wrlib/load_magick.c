@@ -88,7 +88,7 @@ bye:
 	/* Tidy up */
 	DestroyPixelWand(bg_wand);
 	MagickClearException(m_wand);
-	m_wand = DestroyMagickWand(m_wand);
+	DestroyMagickWand(m_wand);
 
 	return image;
 }
