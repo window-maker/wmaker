@@ -207,7 +207,6 @@ RXImage *RGetXImage(RContext * context, Drawable d, int x, int y, unsigned width
 		ximg->is_shared = 0;
 		ximg->image = XGetImage(context->dpy, d, x, y, width, height, AllPlanes, ZPixmap);
 	}
-	return ximg;
 #else				/* !USE_XSHM */
 	ximg = malloc(sizeof(RXImage));
 	if (!ximg) {
@@ -216,9 +215,14 @@ RXImage *RGetXImage(RContext * context, Drawable d, int x, int y, unsigned width
 	}
 
 	ximg->image = XGetImage(context->dpy, d, x, y, width, height, AllPlanes, ZPixmap);
+#endif				/* !USE_XSHM */
+
+	if (ximg->image == NULL) {
+		free(ximg);
+		return NULL;
+	}
 
 	return ximg;
-#endif				/* !USE_XSHM */
 }
 
 void

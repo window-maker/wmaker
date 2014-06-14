@@ -390,10 +390,8 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	}
 
 	ximg = RGetXImage(scr->rcontext, scr->root_win, px, py, data->text->width, data->text->height);
-
-	if (!ximg || !ximg->image) {
+	if (!ximg)
 		goto erro;
-	}
 
 	XMapRaised(dpy, scr->workspace_name);
 	XFlush(dpy);
