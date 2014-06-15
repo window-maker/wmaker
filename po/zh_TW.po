@@ -321,7 +321,7 @@ msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "無法載入選項 \"%2$s\"的影像 \"%1$s\""
 
 #: ../src/defaults.c:3567
-msgid "Invalid split sizes for SwitchPanel back image."
+msgid "Invalid split sizes for switch panel back image."
 msgstr "「切換面版」底圖的分割大小無效。"
 
 #: ../src/defaults.c:3640

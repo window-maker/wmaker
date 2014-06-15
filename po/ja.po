@@ -300,7 +300,7 @@ msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "%s 指定で画像を読み込めません: %s"
 
 #: ../src/defaults.c:2913
-msgid "Invalid split sizes for SwitchPanel back image."
+msgid "Invalid split sizes for switch panel back image."
 msgstr ""
 
 #: ../src/defaults.c:2982
@@ -1602,7 +1602,7 @@ msgid "Do not show in the switch panel"
 msgstr "ウィンドウ切替に表示しない"
 
 #: ../src/winspector.c:1373
-msgid "Do not include in switchpanel while alternating windows."
+msgid "Do not include in switch panel while cycling windows."
 msgstr "ウィンドウ切替にこのウィンドウを表示しません."
 
 #: ../src/winspector.c:1376

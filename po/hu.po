@@ -302,7 +302,7 @@ msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "Nem tudtam betölteni a \"%s\" képet a \"%s\" opcióhoz"
 
 #: ../../wmaker-crm/src/defaults.c:3296
-msgid "Invalid split sizes for SwitchPanel back image."
+msgid "Invalid split sizes for switch panel back image."
 msgstr "Érvénytelen osztás méret a VáltóPanel háttér képéhez."
 
 #: ../../wmaker-crm/src/defaults.c:3365
@@ -1713,7 +1713,7 @@ msgid "Do not show in the switch panel"
 msgstr "Nem jelenik meg a váltó panelen"
 
 #: ../../wmaker-crm/src/winspector.c:1423
-msgid "Do not include in switchpanel while alternating windows."
+msgid "Do not include in switch panel while cycling windows."
 msgstr "Ne jelenítse meg a váltó panelen aktív ablak váltáskor."
 
 #: ../../wmaker-crm/src/winspector.c:1426

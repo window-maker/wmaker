@@ -182,7 +182,7 @@ void StartWindozeCycle(WWindow *wwin, XEvent *event, Bool next, Bool class_only)
 
 			} else if (ev.xkey.keycode == returnKey) {
 
-				/* Close the switchpanel without eating the keypress */
+				/* Close the switch panel without eating the keypress */
 				done = True;
 
 			} else if (ev.xkey.keycode != shiftLKey && ev.xkey.keycode != shiftRKey) {

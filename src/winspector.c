@@ -1420,7 +1420,7 @@ static void create_tab_window_advanced(WWindow *wwin, InspectorPanel *panel, int
 		case 3:
 			caption = _("Do not show in the switch panel");
 			flag = WFLAGP(wwin, skip_switchpanel);
-			descr = _("Do not include in switchpanel while alternating windows.");
+			descr = _("Do not include in switch panel while cycling windows.");
 			break;
 		case 4:
 			caption = _("Do not let it take focus");

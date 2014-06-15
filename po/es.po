@@ -313,8 +313,8 @@ msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "No pudo cargar imagen \"%s\" para la opción \"%s\""
 
 #: ../src/defaults.c:2915
-msgid "Invalid split sizes for SwitchPanel back image."
-msgstr "Tamaños de división no válidos para el fondo del SwitchPanel"
+msgid "Invalid split sizes for switch panel back image."
+msgstr "Tamaños de división no válidos para el fondo del switch panel"
 
 #: ../src/defaults.c:2984
 #, c-format
@@ -1646,7 +1646,7 @@ msgid "Do not show in the switch panel"
 msgstr "No mostrar en panel de cambio de ventanas"
 
 #: ../src/winspector.c:1373
-msgid "Do not include in switchpanel while alternating windows."
+msgid "Do not include in switch panel while cycling windows."
 msgstr "No incluir en el panel de cambio de ventanas cuando las ventanas se alternen."
 
 #: ../src/winspector.c:1376

@@ -290,7 +290,7 @@ msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "Kon afbeelding \"%s\" voor optie \"%s\" niet laden"
 
 #: ../src/defaults.c:3300
-msgid "Invalid split sizes for SwitchPanel back image."
+msgid "Invalid split sizes for switch panel back image."
 msgstr "Ongeldige deelafmetingen voor achterafbeelding schakelpaneel."
 
 #: ../src/defaults.c:3369
@@ -1718,7 +1718,7 @@ msgid "Do not show in the switch panel"
 msgstr "Niet in 't schakelpaneel tonen"
 
 #: ../src/winspector.c:1423
-msgid "Do not include in switchpanel while alternating windows."
+msgid "Do not include in switch panel while cycling windows."
 msgstr "Niet in schakelpaneel opnemen, bij wisselen van venster."
 
 #: ../src/winspector.c:1426

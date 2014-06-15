@@ -326,7 +326,7 @@ msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "Impossibile caricare l'immagine \"%s\" per l'opzione \"%s\""
 
 #: ../src/defaults.c:3567
-msgid "Invalid split sizes for SwitchPanel back image."
+msgid "Invalid split sizes for switch panel back image."
 msgstr ""
 
 #: ../src/defaults.c:3640

@@ -293,7 +293,7 @@ msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "다음 옵션으로 이미지 \"%s\" 를 읽지 못했습니다:  \"%s\""
 
 #: ../src/defaults.c:3103
-msgid "Invalid split sizes for SwitchPanel back image."
+msgid "Invalid split sizes for switch panel back image."
 msgstr "스위치패널 배경 이미지에 맞지 않는 크기"
 
 #: ../src/defaults.c:3172
@@ -1602,7 +1602,7 @@ msgid "Do not show in the switch panel"
 msgstr "전환 패널에 나오지 않게 함"
 
 #: ../src/winspector.c:1419
-msgid "Do not include in switchpanel while alternating windows."
+msgid "Do not include in switch panel while cycling windows."
 msgstr "창을 넘길 때 스위치패널을 포함하지 않는다."
 
 #: ../src/winspector.c:1422

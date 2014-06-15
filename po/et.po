@@ -312,7 +312,7 @@ msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "Pilti \"%s\" pole võtmele \"%s\" võimalik laadida"
 
 #: ../src/defaults.c:2913
-msgid "Invalid split sizes for SwitchPanel back image."
+msgid "Invalid split sizes for switch panel back image."
 msgstr ""
 
 #: ../src/defaults.c:2982
@@ -1617,7 +1617,7 @@ msgid "Do not show in the switch panel"
 msgstr "Aknavahetuse paneelil ei näidata"
 
 #: ../src/winspector.c:1371
-msgid "Do not include in switchpanel while alternating windows."
+msgid "Do not include in switch panel while cycling windows."
 msgstr "Akende vahetamisel ei näidata aknavahetuse paneelil."
 
 #: ../src/winspector.c:1374

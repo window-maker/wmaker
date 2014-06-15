@@ -316,8 +316,8 @@ msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "Bild \"%s\"aus Eigenschaft \"%s\" konnte nicht geladen werden"
 
 #: ../src/defaults.c:3142
-msgid "Invalid split sizes for SwitchPanel back image."
-msgstr "Ungültige Unterteilungsangaben für SwitchPanel-Hintergrundbild."
+msgid "Invalid split sizes for switch panel back image."
+msgstr "Ungültige Unterteilungsangaben für switch panel-Hintergrundbild."
 
 #: ../src/defaults.c:3211
 #, c-format

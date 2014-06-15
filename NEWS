@@ -67,14 +67,14 @@ You can customize how you want your drawers to auto-expand/collapse and
 auto-raise/lower, or you can also completely disable them.
 
 
-Improved switchpanel functionality
-----------------------------------
+Improved switch panel functionality
+-----------------------------------
 
-The switchpanel can be used to switch between windows of the same WM_CLASS,
-for example between all open xterms.  If the switchpanel is opened as normal
+The switch panel can be used to switch between windows of the same WM_CLASS,
+for example between all open xterms.  If the switch panel is opened as normal
 with either the "FocusNextKey" or "FocusPrevKey" shortcut, you can switch to
 the next (or previous) window of the same type as the focused window with the
-"GroupNextKey" or "GroupPrevKey" shortcut.  If the switchpanel is opened with
+"GroupNextKey" or "GroupPrevKey" shortcut.  If the switch panel is opened with
 the "GroupNextKey" or "GroupPrevKey" shortcut, it will show only windows of
 the same type as the window which was focused at the time the panel was opened,
 and no difference will be seen between the two types of window selection
@@ -83,17 +83,17 @@ shortcut.
 The new shortcuts can be configured in WPrefs, where they are described as
 allowing switching between windows of the same group.
 
-To maintain consistency with other popular operating systems, the switchpanel
+To maintain consistency with other popular operating systems, the switch panel
 is now configured so that it no longer automatically closes when the shift key
 is pressed and released.
 
-To configure the switchpanel so that it does close on release of the shift
+To configure the switch panel so that it does close on release of the shift
 key, which was the traditional Window Maker behavior, run the following
 command:
 
 $ wdwrite WindowMaker StrictWindozeCycling NO
 
-If you find yourself regularly opening the switchpanel just to visualize open
+If you find yourself regularly opening the switch panel just to visualize open
 windows, you can run the following command to force the first "FocusNextKey"
 or similar shortcut to open the panel without switching to a new window.
 
