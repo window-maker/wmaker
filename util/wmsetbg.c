@@ -918,6 +918,14 @@ static noreturn void helperLoop(RContext * rc)
 		memcpy(buf, buffer, 4);
 		buf[4] = 0;
 		size = atoi(buf);
+		if (size < 0 || size > sizeof(buffer)) {
+			wfatal("received invalid size %d for message from WindowMaker", size);
+			quit(1);
+		}
+		if (size == 0) {
+			werror("received 0-sized message from WindowMaker, trying to continue");
+			continue;
+		}
 
 		/* get message */
 		if (readmsg(0, buffer, size) < 0) {
