@@ -279,6 +279,7 @@ static void makeThemePack(WMPropList * style, const char *themeName)
 			}
 		}
 	}
+	WMReleasePropList(keys);
 }
 
 int main(int argc, char **argv)
