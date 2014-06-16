@@ -36,9 +36,6 @@
 #include <sys/stat.h>
 #include <dirent.h>
 
-#define	RETRY( x )	do {				\
-				x;			\
-			} while (errno == EINTR);
 
 /* BUG There's something fishy with shaped windows */
 /* Whithout shape extension the magnified image is completely broken -Dan */

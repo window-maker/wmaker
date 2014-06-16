@@ -48,10 +48,6 @@
 
 #include "common.h"
 
-#define	RETRY( x )	do {				\
-				x;			\
-			} while (errno == EINTR);
-
 #ifndef PATH_MAX
 #define PATH_MAX  1024
 #endif
