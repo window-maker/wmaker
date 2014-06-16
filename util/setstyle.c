@@ -203,6 +203,7 @@ static void hackPaths(WMPropList * style, const char *prefix)
 		}
 	}
 
+	WMReleasePropList(keys);
 }
 
 static WMPropList *getColor(WMPropList * texture)
@@ -313,6 +314,7 @@ static void hackStyle(WMPropList * style)
 			}
 		}
 	}
+	WMReleasePropList(keys);
 
 	if (!foundIconTitle) {
 		/* set the default values */
