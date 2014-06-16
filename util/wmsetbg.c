@@ -526,9 +526,8 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 			rcolor.blue = 0;
 		}
 		/* for images with a transparent color */
-		if (image->data[3]) {
+		if (image && image->data[3])
 			RCombineImageWithColor(image, &rcolor);
-		}
 
 		switch (toupper(type[0])) {
 		case 'T':
@@ -539,8 +538,6 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 				RReleaseImage(image);
 				goto error;
 			}
-			if (image)
-				RReleaseImage(image);
 
 			texture->pixmap = pixmap;
 			texture->color = color;
@@ -560,6 +557,9 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 				texture->width = scrWidth;
 				texture->height = scrHeight;
 
+				if (!image)
+					break;
+
 #ifdef USE_XINERAMA
 				if (xineInfo.count && ! xineStretch) {
 					int i;
@@ -575,10 +575,12 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 #else				/* !USE_XINERAMA */
 				applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
 #endif				/* !USE_XINERAMA */
-				RReleaseImage(image);
 			}
 			break;
 		}
+		if (image)
+			RReleaseImage(image);
+
 	} else if (strcasecmp(type, "thgradient") == 0
 		   || strcasecmp(type, "tvgradient") == 0 || strcasecmp(type, "tdgradient") == 0) {
 		XColor color;
