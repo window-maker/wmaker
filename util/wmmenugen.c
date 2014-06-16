@@ -239,17 +239,19 @@ static void assemblePLMenuFunc(WMTreeNode *aNode, void *data)
 			);
 		} else {				/* plain simple command */
 			char buf[1024];
+
 			memset(buf, 0, sizeof(buf));
 			if (wm->Flags & F_TERMINAL)	/* XXX: quoting! */
 				snprintf(buf, sizeof(buf), "%s -e \"%s\"", terminal, wm->CmdLine);
 			else
 				snprintf(buf, sizeof(buf), "%s", wm->CmdLine);
-				WMAddToPLArray(pl, WMCreatePLArray(
-					WMCreatePLString(wm->Name),
-					WMCreatePLString("SHEXEC"),
-					WMCreatePLString(buf),
-					NULL)
-				);
+
+			WMAddToPLArray(pl, WMCreatePLArray(
+				WMCreatePLString(wm->Name),
+				WMCreatePLString("SHEXEC"),
+				WMCreatePLString(buf),
+				NULL)
+			);
 		}
 		WMAddToArray(plMenuNodes, pl);
 	}
