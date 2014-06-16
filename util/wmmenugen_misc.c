@@ -39,16 +39,12 @@ static char *terminals[] = {
  */
 char *find_terminal_emulator(void)
 {
-	char *path, *t, *ret;
+	char *path, *t;
 	int i;
 
-	path = t = ret = NULL;
-
 	t = getenv("WMMENU_TERMINAL");
-	if (t) {
-		ret = wstrdup(t);
-		return ret;
-	}
+	if (t)
+		return wstrdup(t);
 
 	path = getenv("PATH");
 	if (!path)
@@ -56,18 +52,13 @@ char *find_terminal_emulator(void)
 
 	for (i = 0; terminals[i]; i++) {
 		t = wfindfile(path, terminals[i]);
-		if (t)
-			break;
+		if (t) {
+			wfree(t);
+			return wstrdup(terminals[i]);
+		}
 	}
 
-	if (t)
-		ret = wstrdup(basename(t));
-	else
-		ret = wstrdup(t);
-
-	wfree(t);
-
-	return ret;
+	return NULL;
 }
 
 /* tokenize `what' (LC_MESSAGES or LANG if `what' is NULL) in the form of
