@@ -230,6 +230,8 @@ applyImage(RContext * rc, BackgroundTexture * texture, RImage * image, char type
 
 			if (!RConvertImage(rc, image, &pixmap)) {
 				wwarning("could not convert texture:%s", RMessageForError(RErrorCode));
+				if (fimage)
+					RReleaseImage(image);
 				return;
 			}
 
