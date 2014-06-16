@@ -175,7 +175,7 @@ static void addWMMenuEntryCallback(WMMenuEntry *aEntry)
 	}
 
 	if (aEntry->SubMenu)
-		at = findPositionInMenu(wstrdup(aEntry->SubMenu));
+		at = findPositionInMenu(aEntry->SubMenu);
 
 	if (!at)
 		at = menu;
