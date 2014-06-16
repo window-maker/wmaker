@@ -992,13 +992,14 @@ static void updateDomain(const char *domain, const char *key, const char *textur
 {
 	int result;
 	char *program = "wdwrite";
+	char cmd_smooth[1024];
 
-	/* here is a mem leak */
-	result = system(wstrconcat("wdwrite ",
-			  wstrconcat(domain, smooth ? " SmoothWorkspaceBack YES" : " SmoothWorkspaceBack NO")));
-
+	snprintf(cmd_smooth, sizeof(cmd_smooth),
+	         "wdwrite %s SmoothWorkspaceBack %s",
+	         domain, smooth ? "YES" : "NO");
+	result = system(cmd_smooth);
 	if (result == -1)
-		werror("error executing system command");
+		werror("error executing system(\"%s\")", cmd_smooth);
 
 	execlp(program, program, domain, key, texture, NULL);
 	wwarning("warning could not run \"%s\"", program);
