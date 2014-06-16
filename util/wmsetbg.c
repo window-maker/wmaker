@@ -1196,6 +1196,8 @@ static void changeTextureForWorkspace(const char *domain, char *texture, int wor
 			WMAddToPLArray(array, empty);
 		}
 		WMAddToPLArray(array, val);
+
+		WMReleasePropList(empty);
 	} else {
 		WMDeleteFromPLArray(array, workspace);
 		WMInsertInPLArray(array, workspace, val);
@@ -1203,6 +1205,8 @@ static void changeTextureForWorkspace(const char *domain, char *texture, int wor
 
 	value = WMGetPropListDescription(array, False);
 	updateDomain(domain, "WorkspaceSpecificBack", value);
+
+	WMReleasePropList(array);
 }
 
 int main(int argc, char **argv)
