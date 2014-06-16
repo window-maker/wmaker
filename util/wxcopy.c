@@ -121,7 +121,10 @@ int main(int argc, char **argv)
 		file = fopen(filename, "rb");
 		if (!file) {
 			char line[1024];
-			sprintf(line, "%s: could not open \"%s\"", __progname, filename);
+
+			snprintf(line, sizeof(line),
+			         "%s: could not open \"%s\"",
+			         __progname, filename);
 			perror(line);
 			exit(1);
 		}
