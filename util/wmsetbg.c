@@ -646,7 +646,6 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 
 		if (!gradient) {
 			wwarning("could not render texture:%s", RMessageForError(RErrorCode));
-			RReleaseImage(gradient);
 			RReleaseImage(image);
 			goto error;
 		}
