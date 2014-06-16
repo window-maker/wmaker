@@ -26,10 +26,20 @@
 
 #include <WINGs/WUtil.h>
 
-static char *terminals[] = {
-	"x-terminal-emulator", "aterm","eterm", "gnome-terminal", "konsole",
-	"kterm", "mlterm", "rxvt", "mrxvt", "pterm", "xterm", "dtterm",
-	NULL
+
+static const char *const terminals[] = {
+	"x-terminal-emulator", /* Debian wrapper to launch user's prefered X terminal */
+	"aterm",    /* AfterStep's X terminal, which provides "transparency" */
+	"eterm",    /* Enlightenment's terminal, designed for eye-candyness (and efficiency) */
+	"gnome-terminal",      /* GNOME project's terminal */
+	"konsole",  /* KDE project's terminals */
+	"kterm",    /* a Multi-Lingual Terminal based on xterm, originally by Katsuya Sano */
+	"mlterm",   /* a Multi-Lingual Terminal emulator written from scratch */
+	"rxvt",     /* a slimmed-down xterm */
+	"mrxvt",    /* rxvt with support for tabs amongst other things */
+	"pterm",    /* terminal based on PuTTY, a popular SSH client for Windows */
+	"xterm",    /* the standard terminal provided by the X Window System */
+	"dtterm"    /* provided by CDE, a frequent Desktop Environment in proprietary UNIXs */
 };
 
 /* pick a terminal emulator by finding the first existing entry of `terminals'
@@ -50,7 +60,7 @@ char *find_terminal_emulator(void)
 	if (!path)
 		return NULL;
 
-	for (i = 0; terminals[i]; i++) {
+	for (i = 0; i < wlengthof(terminals); i++) {
 		t = wfindfile(path, terminals[i]);
 		if (t) {
 			wfree(t);
