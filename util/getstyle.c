@@ -181,6 +181,9 @@ static void findCopyFile(const char *dir, const char *file)
 	free(fullPath);
 }
 
+#define THEME_SUBPATH "/Library/WindowMaker/Themes/"
+#define THEME_EXTDIR  ".themed/"
+
 static void makeThemePack(WMPropList * style, const char *themeName)
 {
 	WMPropList *keys;
@@ -189,13 +192,16 @@ static void makeThemePack(WMPropList * style, const char *themeName)
 	int i;
 	size_t themeNameLen;
 	char *themeDir;
-	const char *t;
+	const char *user_base;
 
-	if ((t = wusergnusteppath()) == NULL)
+	user_base = wusergnusteppath();
+	if (user_base == NULL)
 		return;
-	themeNameLen = strlen(t) + strlen(themeName) + 50;
+	themeNameLen = strlen(user_base) + sizeof(THEME_SUBPATH) + strlen(themeName) + sizeof(THEME_EXTDIR) + 1;
 	themeDir = wmalloc(themeNameLen);
-	snprintf(themeDir, themeNameLen, "%s/Library/WindowMaker/Themes/%s.themed/", t, themeName);
+	snprintf(themeDir, themeNameLen,
+	         "%s" THEME_SUBPATH "%s" THEME_EXTDIR,
+	         user_base, themeName);
 	ThemePath = themeDir;
 
 	if (!wmkdirhier(themeDir)) {
