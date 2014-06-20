@@ -46,7 +46,7 @@
  ("Hulpmiddelen",
   ("Rekenmachine", EXEC, "xcalc"),
   ("Venstereigenschappen", SHEXEC, "xprop | xmessage -center -title 'xprop' -file -"),
-  ("Lettertype kiezen", EXEC, "xfontsel"),
+  ("Lettertypekiezer", EXEC, "xfontsel"),
   ("Vergroten", EXEC, "wmagnify"),
   ("Kleurenkaart", EXEC, "xcmap"),
   ("X-programma doden", EXEC, "xkill")

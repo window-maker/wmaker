@@ -5,26 +5,26 @@
  *
  * <Titel> [SHORTCUT <Sneltoets>] <Commando> <Parameters>
  *
- * <Titel> is elke string te gebruiken als titel. Moet tussen " staan als 't
- * 	spaties heeft
+ * <Titel> is elke tekenreeks te gebruiken als titel. Moet tussen " staan als 't
+ * 	spaties heeft.
  * 
- * SHORTCUT geeft 'n sneltoets op voor dat item. <Sneltoets> heeft
+ * SHORTCUT geeft 'n sneltoets op voor die ingang. <Sneltoets> heeft
  * dezelfde opmaak als de sneltoetsopties in 't
  * $HOME/GNUstep/Defaults/WindowMaker bestand, zoals RootMenuKey of MiniaturizeKey.
  *
- * U kunt geen sneltoets opgeven voor 'n MENU- of OPEN_MENU-item.
+ * U kunt geen sneltoets opgeven voor 'n MENU- of OPEN_MENU-onderdeel.
  * 
- * <Command> één van de geldige commando's: 
+ * <Commando> een van de geldige commando's: 
  *	MENU - begint (sub)menubepaling
  *	END  - beëindigt (sub)menubepaling
- *	OPEN_MENU - opent 'n menu uit 'n bestand, pipe of map(pen)inhoud
+ *	OPEN_MENU - opent 'n menu uit 'n bestand, 'pipe' of map(pen)inhoud,
  *		    en gaat eventueel elk vooraf met 'n commando.
- *	WORKSPACE_MENU - voegt 'n submenu toe voor werkruimtehandelingen. Slechts één
+ *	WORKSPACE_MENU - voegt 'n submenu voor werkruimtehandelingen toe. Slechts één
  *		    workspace_menu is toegestaan. 		
  *	EXEC <programma> - voert 'n extern programma uit
- *	SHEXEC <commando> - voert 'n shellcommando uit (zoals gimp > /dev/null)
+ *	SHEXEC <commando> - voert 'n 'shell'-commando uit (zoals gimp > /dev/null)
  *	EXIT - sluit de vensterbeheerder af
- *	RESTART [<vensterbeheerder>] - herstart WindowMaker of start 'n andere
+ *	RESTART [<vensterbeheerder>] - herstart WindowMaker, of start 'n andere
  *			vensterbeheerder
  *	REFRESH - vernieuwt 't bureaublad
  *	ARRANGE_ICONS - herschikt de iconen in de werkruimte
@@ -33,55 +33,55 @@
  *	HIDE_OTHERS - verbergt alle vensters in de werkruimte, behalve die
  *		focus heeft (of de laatste die focus had)
  *	SAVE_SESSION - slaat de huidige staat van 't bureaublad op, inbegrepen
- *		       alle draaiende programma's, al hun hints (afmetingen,
- *		       positie op scherm, werkruimte waarin ze leven, 't dok
- *		       of clip van waaruit ze werden opgestart, en indien
- *		       geminiaturiseerd, opgerold of verborgen). Slaat tevens de huidige
+ *		       alle lopende programma's, al hun 'hints' (afmetingen,
+ *		       positie op 't scherm, werkruimte waarin ze leven, Dok
+ *		       of Clip van waaruit ze werden opgestart, en indien
+ *		       geminiaturiseerd, opgerold of verborgen). Slaat tevens de actuele
  *		       werkruimte van de gebruiker op. Alles zal worden hersteld bij elke
- *		       start van windowmaker tot 'n andere SAVE_SESSION of
+ *		       start van windowmaker, tot 'n andere SAVE_SESSION of
  *		       CLEAR_SESSION wordt gebruikt. Als SaveSessionOnExit = Yes; in
- *		       WindowMaker-domeinbestand, dan wordt opslaan automatisch
- *		       gedaan bij elke windowmaker-afsluiting, en overschrijft 'n
- *		       SAVE_SESSION of CLEAR_SESSION (zie beneden).
+ *		       't WindowMaker-domeinbestand, dan wordt opslaan automatisch
+ *		       gedaan bij elke windowmaker-afsluiting, en wordt 'n
+ *		       SAVE_SESSION of CLEAR_SESSION overschreven (zie hierna).
  *	CLEAR_SESSION - wist 'n eerder opgeslagen sessie. Dit zal geen
  *		       effect hebben als SaveSessionOnExit is True.
  *	INFO - toont 't Infopaneel
  *
  * OPEN_MENU-opmaak:
- *   1. Bestandsmenubehandeling.
- *	// opent bestand.menu dat 'n geldig menubestand moet bevatten en voegt
- *	// 't in op huidige plaats
+ *   1. Menuafhandeling uit bestand.
+ *	// opent bestand.menu, dat 'n geldig menubestand moet bevatten, en voegt
+ *	// 't in op de huidige plaats
  *	OPEN_MENU bestand.menu
- *   2. Pipe-menubehandeling.
- *	// opent commando en gebruikt z'n stdout om menu aan te maken.
- *	// Commando-uitvoer moet 'n geldige menubeschrijving zijn.
- *	// De ruimte tussen "|" en commando zelf is optioneel.
- *      // Gebruik "||" in plaats van "|" als u 't menu altijd wilt bijwerken
- *	// bij openen. 't Zou traag kunnen zijn.
+ *   2. Menuafhandeling uit pipe.
+ *	// opent commando en gebruikt z'n 'stdout' om 'n menu aan te maken.
+ *	// Commando-output moet 'n geldige menubeschrijving zijn.
+ *	// De ruimte tussen '|' en 't commando zelf is optioneel.
+ *      // Gebruik '||' in plaats van '|' als u 't menu altijd wilt bijwerken
+ *	// bij openen. Dat zou traag kunnen werken.
  *	OPEN_MENU | commando
  *      OPEN_MENU || commando
- *   3. Mapbehandeling.
- *	// Opent één of meer mappen en maakt 'n menu aan met daarin alle
+ *   3. Mapafhandeling.
+ *	// Opent een of meer mappen en maakt 'n menu aan, met daarin alle
  *	// submappen en uitvoerbare bestanden alfabetisch
  *	// gesorteerd.
  *	OPEN_MENU /een/map [/een/andere/map ...]
- *   4. Mapbehandeling met commando.
- *	// Opent één of meer mappen en maakt menu aan met daarin alle
+ *   4. Mapafhandeling met commando.
+ *	// Opent een of meer mappen en maakt 'n menu aan, met daarin alle
  *	// submappen en leesbare bestanden alfabetisch gesorteerd,
  *	// elk van hen voorafgegaan met commando.
  *	OPEN_MENU [opties] /een/map [/een/andere/map ...] WITH commando -opties
  *		Opties:
- * 			-noext 	haal alles eraf, wat na de laatste punt in de
- *				bestandsnaam komt
+ * 			-noext 	haal alles vanaf de laatste punt in de
+ *				bestandsnaam eraf
  *
- * <Parameters> is 't programma om uit te voeren.
+ * <Parameters> is 't uit te voeren programma.
  *
  * ** Commandoregelopties in EXEC:
- * %s - wordt vervangen door huidige selectie
+ * %s - wordt vervangen door de actuele selectie
  * %a(titel[,aanwijzing]) - opent 'n invoerveld met de opgegeven titel en de
- *			optionele aanwijzing	en wordt vervangen door wat u intypt
- * %w - wordt vervangen door XID voor 't huidig gefocust venster
- * %W - wordt vervangen door 't nummer van de huidige werkruimte
+ *			optionele aanwijzing, en wordt vervangen door wat u intypt
+ * %w - wordt vervangen door XID voor 't actuele gefocust venster
+ * %W - wordt vervangen door 't nummer van de actuele werkruimte
  * 
  * U kunt speciale karakters (zoals % en ") uitschakelen met 't \-teken:
  * vb.: xterm -T "\"Hallo Wereld\""
@@ -94,14 +94,14 @@
  *
  * "Test" MENU
  *	"XTerm" EXEC xterm
- *		// maakt 'n submenu met de inhoud van /usr/openwin/bin
+ *		// maakt 'n submenu met de inhoud van /usr/openwin/bin aan
  *	"XView-progr" OPEN_MENU "/usr/openwin/bin"
  *		// enige X11-programma's in verschillende mappen
  *	"X11-progr" OPEN_MENU /usr/X11/bin $HOME/bin/X11
- *		// stel enige achtergrondafbeeldingen in
+ *		// enige achtergrondafbeeldingen instellen
  *	"Achtergrond" OPEN_MENU -noext $HOME/afbeeldingen /usr/share/images WITH wmsetbg -u -t
- *		// voegt 't stijl.menu in, in dit item
- *	"Stijl" OPEN_MENU stijl.menu
+ *		// voegt 't style.menu in met dit onderdeel
+ *	"Stijl" OPEN_MENU style.menu
  * "Test" END
  */
 
@@ -158,7 +158,7 @@
 	"Hulpmiddelen" MENU
 		"Rekenmachine" EXEC xcalc
 		"Venstereigenschappen" SHEXEC xprop | xmessage -center -title 'xprop' -file -
-		"Lettertype kiezen" EXEC xfontsel
+		"Lettertypekiezer" EXEC xfontsel
 		"Vergroten" EXEC wmagnify
 		"Kleurenkaart" EXEC xcmap
 		"X-programma doden" EXEC xkill
