@@ -19,6 +19,19 @@ want to switch to #next branch, if not already done:
 
 git checkout next
 
+____________________
+Testing your changes
+--------------------
+
+If you want to raise the quality of your contribution, you are strongly
+encouraged to use at least this configure option:
+
+./configure --enable-debug
+
+This does not only enable debugging information, which you may need when
+testing your work, it also enables a number of extra compiler warning
+which help keeping safer code.
+
 __________________________
 Producing a patch with git
 --------------------------
@@ -48,6 +61,14 @@ git format-patch HEAD~1
 # If you have created your own branch, and want all your commits created
 # after the #next branch, you can use:
 git format-patch next
+
+
+In order to ensure consistency in the code, there's an extra step to
+check the patchs. You should run this script (inherited from the Linux
+kernel) on the patch files generated and fix your commits for what it
+reports:
+
+./checkpatch.pl 00*
 
 ______________________
 Writing the commit log
