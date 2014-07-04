@@ -29,8 +29,35 @@
 #include <X11/Xlib.h>
 
 #include "wraster.h"
+#include "rotate.h"
 
-RImage *RVerticalFlipImage(RImage *source)
+
+static RImage *r_flip_vertically(RImage *source);
+static RImage *r_flip_horizontally(RImage *source);
+
+/* Flip an image in the direction(s) specified */
+RImage *RFlipImage(RImage *source, int mode)
+{
+	/* Security */
+	if (source == NULL)
+		return NULL;
+
+	switch (mode & (RVerticalFlip | RHorizontalFlip)) {
+	case RHorizontalFlip:
+		return r_flip_horizontally(source);
+
+	case RVerticalFlip:
+		return r_flip_vertically(source);
+
+	case RHorizontalFlip | RVerticalFlip:
+		return wraster_rotate_image_180(source);
+
+	default:
+		return RRetainImage(source);
+	}
+}
+
+RImage *r_flip_vertically(RImage *source)
 {
 	RImage *target;
 	int nwidth, nheight;
@@ -82,7 +109,7 @@ RImage *RVerticalFlipImage(RImage *source)
 	return target;
 }
 
-RImage *RHorizontalFlipImage(RImage *source)
+RImage *r_flip_horizontally(RImage *source)
 {
 	RImage *target;
 	int nwidth, nheight;

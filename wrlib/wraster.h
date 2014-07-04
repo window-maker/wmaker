@@ -265,6 +265,14 @@ typedef enum {
 #define RGRD_DIAGONAL	RDiagonalGradient
 
 
+/*
+ * How an image can be flipped, for RFlipImage
+ *
+ * Values are actually bit-mask which can be OR'd
+ */
+#define RHorizontalFlip	0x0001
+#define RVerticalFlip	0x0002
+
 
 /* error codes */
 #define RERR_NONE		0
@@ -366,9 +374,7 @@ RImage *RSmoothScaleImage(RImage *src, unsigned new_width,
 
 RImage *RRotateImage(RImage *image, float angle);
 
-RImage *RVerticalFlipImage(RImage *image);
-
-RImage *RHorizontalFlipImage(RImage *image);
+RImage *RFlipImage(RImage *image, int mode);
 
 RImage *RMakeTiledImage(RImage *tile, unsigned width, unsigned height);
 
