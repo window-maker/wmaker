@@ -25,8 +25,11 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #include <X11/Xlib.h>
+
 #include "wraster.h"
+#include "rotate.h"
 
 #include <math.h>
 
@@ -34,15 +37,13 @@
 #define PI 3.14159265358979323846
 #endif
 
-static RImage *rotateImage(RImage *image, float angle);
+static RImage *rotate_image_90(RImage *source);
+static RImage *rotate_image_270(RImage *source);
+static RImage *rotate_image_any(RImage *source, float angle);
+
 
 RImage *RRotateImage(RImage *image, float angle)
 {
-	RImage *img;
-	int nwidth, nheight;
-	int x, y;
-	int bpp = image->format == RRGBAFormat ? 4 : 3;
-
 	/*
 	 * Angle steps below this value would represent a rotation
 	 * of less than 1 pixel for a 4k wide image, so not worth
@@ -62,133 +63,165 @@ RImage *RRotateImage(RImage *image, float angle)
 
 	} else if ((angle > 90.0 - min_usable_angle) &&
 				  (angle < 90.0 + min_usable_angle)) {
-		nwidth = image->height;
-		nheight = image->width;
+		return rotate_image_90(image);
 
-		img = RCreateImage(nwidth, nheight, True);
-		if (!img)
-			return NULL;
-
-		if (bpp == 3) {
-			unsigned char *optr, *nptr;
-
-			optr = image->data;
-			nptr = img->data;
-
-			for (x = nwidth; x; x--) {
-				nptr = img->data + 4 * (x - 1);
-				for (y = nheight; y; y--) {
-					nptr[0] = *optr++;
-					nptr[1] = *optr++;
-					nptr[2] = *optr++;
-					nptr[3] = 255;
-
-					nptr += 4 * nwidth;
-				}
-			}
-		} else {
-			unsigned char *optr, *nptr;
-
-			optr = image->data;
-			nptr = img->data;
-
-			for (x = nwidth; x; x--) {
-				nptr = img->data + 4 * (x - 1);
-				for (y = nheight; y; y--) {
-					nptr[0] = *optr++;
-					nptr[1] = *optr++;
-					nptr[2] = *optr++;
-					nptr[3] = *optr++;
-
-					nptr += 4 * nwidth;
-				}
-			}
-		}
 	} else if ((angle > 180.0 - min_usable_angle) &&
 				  (angle < 180.0 + min_usable_angle)) {
+		return wraster_rotate_image_180(image);
 
-		nwidth = image->width;
-		nheight = image->height;
-		img = RCreateImage(nwidth, nheight, True);
-		if (!img)
-			return NULL;
-
-		if (bpp == 3) {
-			unsigned char *optr, *nptr;
-
-			optr = image->data;
-			nptr = img->data + nwidth * nheight * 4 - 4;
-
-			for (y = 0; y < nheight; y++) {
-				for (x = 0; x < nwidth; x++) {
-					nptr[0] = optr[0];
-					nptr[1] = optr[1];
-					nptr[2] = optr[2];
-					nptr[3] = 255;
-
-					optr += 3;
-					nptr -= 4;
-				}
-			}
-		} else {
-			unsigned *optr, *nptr;
-
-			optr = (unsigned *)image->data;
-			nptr = (unsigned *)img->data + nwidth * nheight - 1;
-
-			for (y = nheight * nwidth - 1; y >= 0; y--) {
-				*nptr = *optr;
-				optr++;
-				nptr--;
-			}
-		}
 	} else if ((angle > 270.0 - min_usable_angle) &&
 				  (angle < 270.0 + min_usable_angle)) {
-		nwidth = image->height;
-		nheight = image->width;
+		return rotate_image_270(image);
 
-		img = RCreateImage(nwidth, nheight, True);
-		if (!img)
-			return NULL;
+	} else {
+		return rotate_image_any(image, angle);
+	}
+}
 
-		if (bpp == 3) {
-			unsigned char *optr, *nptr;
+static RImage *rotate_image_90(RImage *source)
+{
+	RImage *target;
+	int nwidth, nheight;
+	int x, y;
 
-			optr = image->data;
+	nwidth = source->height;
+	nheight = source->width;
 
-			for (x = nwidth; x; x--) {
-				nptr = img->data + 4 * nwidth * nheight - x * 4;
-				for (y = nheight; y; y--) {
-					nptr[0] = *optr++;
-					nptr[1] = *optr++;
-					nptr[2] = *optr++;
-					nptr[3] = 255;
+	target = RCreateImage(nwidth, nheight, (source->format != RRGBFormat));
+	if (!target)
+		return NULL;
 
-					nptr -= 4 * nwidth;
-				}
-			}
-		} else {
-			unsigned char *optr, *nptr;
+	if (source->format == RRGBFormat) {
+		unsigned char *optr, *nptr;
 
-			optr = image->data;
+		optr = source->data;
+		for (x = nwidth; x; x--) {
+			nptr = target->data + 3 * (x - 1);
+			for (y = nheight; y; y--) {
+				nptr[0] = *optr++;
+				nptr[1] = *optr++;
+				nptr[2] = *optr++;
 
-			for (x = nwidth; x; x--) {
-				nptr = img->data + 4 * nwidth * nheight - x * 4;
-				for (y = nheight; y; y--) {
-					nptr[0] = *optr++;
-					nptr[1] = *optr++;
-					nptr[2] = *optr++;
-					nptr[3] = *optr++;
-
-					nptr -= 4 * nwidth;
-				}
+				nptr += 3 * nwidth;
 			}
 		}
+
 	} else {
-		img = rotateImage(image, angle);
+		unsigned char *optr, *nptr;
+
+		optr = source->data;
+		for (x = nwidth; x; x--) {
+			nptr = target->data + 4 * (x - 1);
+			for (y = nheight; y; y--) {
+				nptr[0] = *optr++;
+				nptr[1] = *optr++;
+				nptr[2] = *optr++;
+				nptr[3] = *optr++;
+
+				nptr += 4 * nwidth;
+			}
+		}
 	}
 
-	return img;
+	return target;
+}
+
+RImage *wraster_rotate_image_180(RImage *source)
+{
+	RImage *target;
+	int nwidth, nheight;
+	int x, y;
+
+	nwidth = source->width;
+	nheight = source->height;
+
+	target = RCreateImage(nwidth, nheight, (source->format != RRGBFormat));
+	if (!target)
+		return NULL;
+
+	if (source->format == RRGBFormat) {
+		unsigned char *optr, *nptr;
+
+		optr = source->data;
+		nptr = target->data + nwidth * nheight * 3 - 3;
+
+		for (y = 0; y < nheight; y++) {
+			for (x = 0; x < nwidth; x++) {
+				nptr[0] = optr[0];
+				nptr[1] = optr[1];
+				nptr[2] = optr[2];
+
+				optr += 3;
+				nptr -= 3;
+			}
+		}
+
+	} else {
+		unsigned char *optr, *nptr;
+
+		optr = source->data;
+		nptr = target->data + nwidth * nheight * 4 - 4;
+
+		for (y = nheight * nwidth - 1; y >= 0; y--) {
+			nptr[0] = optr[0];
+			nptr[1] = optr[1];
+			nptr[2] = optr[2];
+			nptr[3] = optr[3];
+
+			optr += 4;
+			nptr -= 4;
+		}
+	}
+
+	return target;
+}
+
+static RImage *rotate_image_270(RImage *source)
+{
+	RImage *target;
+	int nwidth, nheight;
+	int x, y;
+
+	nwidth = source->height;
+	nheight = source->width;
+
+	target = RCreateImage(nwidth, nheight, (source->format != RRGBFormat));
+	if (!target)
+		return NULL;
+
+	if (source->format == RRGBFormat) {
+		unsigned char *optr, *nptr;
+
+		optr = source->data;
+		for (x = nwidth; x; x--) {
+			nptr = target->data + 3 * nwidth * nheight - x * 3;
+			for (y = nheight; y; y--) {
+				nptr[0] = *optr++;
+				nptr[1] = *optr++;
+				nptr[2] = *optr++;
+
+				nptr -= 3 * nwidth;
+			}
+		}
+
+	} else {
+		unsigned char *optr, *nptr;
+
+		optr = source->data;
+		for (x = nwidth; x; x--) {
+			nptr = target->data + 4 * nwidth * nheight - x * 4;
+			for (y = nheight; y; y--) {
+				nptr[0] = *optr++;
+				nptr[1] = *optr++;
+				nptr[2] = *optr++;
+				nptr[3] = *optr++;
+
+				nptr -= 4 * nwidth;
+			}
+		}
+	}
+
+	return target;
 }
 
 /*
@@ -294,11 +327,11 @@ copyLine(int x1, int y1, int x2, int y2, int nwidth, int format, unsigned char *
 }
 #endif
 
-static RImage *rotateImage(RImage *image, float angle)
+static RImage *rotate_image_any(RImage *source, float angle)
 {
 	(void) angle;
 	puts("NOT FULLY IMPLEMENTED");
-	return RCloneImage(image);
+	return RCloneImage(source);
 #if 0
 	RImage *img;
 	int nwidth, nheight;

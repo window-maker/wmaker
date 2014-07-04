@@ -35,6 +35,7 @@ libwraster_la_SOURCES = 	\
 	scale.c		\
 	scale.h		\
 	rotate.c	\
+	rotate.h	\
 	flip.c		\
 	convolve.c	\
 	save_xpm.c	\
