@@ -35,32 +35,30 @@ RImage *RVerticalFlipImage(RImage *source)
 	RImage *target;
 	int nwidth, nheight;
 	int x, y;
-	int bpp = source->format == RRGBAFormat ? 4 : 3;
 
 	nwidth = source->width;
 	nheight = source->height;
 
-	target = RCreateImage(nwidth, nheight, True);
+	target = RCreateImage(nwidth, nheight, (source->format != RRGBFormat));
 	if (!target)
 		return NULL;
 
-	if (bpp == 3) {
+	if (source->format == RRGBFormat) {
 		unsigned char *optr, *nptr;
 
 		optr = source->data;
-		nptr = target->data + 4 * (nwidth * nheight - nwidth);
+		nptr = target->data + 3 * (nwidth * nheight - nwidth);
 
 		for (y = 0; y < nheight; y++) {
 			for (x = 0; x < nwidth; x++) {
 				nptr[0] = optr[0];
 				nptr[1] = optr[1];
 				nptr[2] = optr[2];
-				nptr[3] = 255;
 
 				optr += 3;
-				nptr += 4;
+				nptr += 3;
 			}
-			nptr -= (nwidth * 4) * 2;
+			nptr -= (nwidth * 3) * 2;
 		}
 	} else {
 		unsigned char *optr, *nptr;
@@ -89,32 +87,30 @@ RImage *RHorizontalFlipImage(RImage *source)
 	RImage *target;
 	int nwidth, nheight;
 	int x, y;
-	int bpp = source->format == RRGBAFormat ? 4 : 3;
 
 	nwidth = source->width;
 	nheight = source->height;
 
-	target = RCreateImage(nwidth, nheight, True);
+	target = RCreateImage(nwidth, nheight, (source->format != RRGBFormat));
 	if (!target)
 		return NULL;
 
-	if (bpp == 3) {
+	if (source->format == RRGBFormat) {
 		unsigned char *optr, *nptr;
 
 		optr = source->data;
-		nptr = target->data + 4 * (nwidth - 1);
+		nptr = target->data + 3 * (nwidth - 1);
 
 		for (y = nheight; y; y--) {
 			for (x = 0; x < nwidth; x++) {
 				nptr[0] = optr[0];
 				nptr[1] = optr[1];
 				nptr[2] = optr[2];
-				nptr[3] = 255;
 
 				optr += 3;
-				nptr -= 4;
+				nptr -= 3;
 			}
-			nptr += (nwidth * 4) * 2;
+			nptr += (nwidth * 3) * 2;
 		}
 	} else {
 		unsigned char *optr, *nptr;
