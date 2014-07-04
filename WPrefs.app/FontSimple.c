@@ -95,16 +95,15 @@ static const struct {
 	const char *option;
 	const char *label;
 } fontOptions[] = {
-	{
-	"WindowTitleFont", N_("Window Title")}, {
-	"MenuTitleFont", N_("Menu Title")}, {
-	"MenuTextFont", N_("Menu Text")}, {
-	"IconTitleFont", N_("Icon Title")}, {
-	"ClipTitleFont", N_("Clip Title")}, {
-	"LargeDisplayFont", N_("Desktop Caption")}, {
-	"SystemFont", N_("System Font")}, {
-	"BoldSystemFont", N_("Bold System Font")}, {
-NULL, NULL},};
+	{ "WindowTitleFont", N_("Window Title") },
+	{ "MenuTitleFont", N_("Menu Title") },
+	{ "MenuTextFont", N_("Menu Text") },
+	{ "IconTitleFont", N_("Icon Title") },
+	{ "ClipTitleFont", N_("Clip Title") },
+	{ "LargeDisplayFont", N_("Desktop Caption") },
+	{ "SystemFont", N_("System Font") },
+	{ "BoldSystemFont", N_("Bold System Font")}
+};
 
 static const char *standardSizes[] = {
 	"6",
@@ -134,48 +133,39 @@ static const struct {
 	int weight;
 	const char *name;
 } fontWeights[] = {
-	{
-	FC_WEIGHT_THIN, "Thin"}, {
-	FC_WEIGHT_EXTRALIGHT, "ExtraLight"}, {
-	FC_WEIGHT_LIGHT, "Light"}, {
-	FC_WEIGHT_NORMAL, "Normal"}, {
-	FC_WEIGHT_MEDIUM, ""},	/*"medium"}, */
-	{
-	FC_WEIGHT_DEMIBOLD, "DemiBold"}, {
-	FC_WEIGHT_BOLD, "Bold"}, {
-	FC_WEIGHT_EXTRABOLD, "ExtraBold"}, {
-	FC_WEIGHT_BLACK, "Black"}, {
-	0, NULL}
+	{ FC_WEIGHT_THIN, "Thin" },
+	{ FC_WEIGHT_EXTRALIGHT, "ExtraLight" },
+	{ FC_WEIGHT_LIGHT, "Light" },
+	{ FC_WEIGHT_NORMAL, "Normal" },
+	{ FC_WEIGHT_MEDIUM, "" },
+	{ FC_WEIGHT_DEMIBOLD, "DemiBold" },
+	{ FC_WEIGHT_BOLD, "Bold" },
+	{ FC_WEIGHT_EXTRABOLD, "ExtraBold" },
+	{ FC_WEIGHT_BLACK, "Black" }
 };
 
 static const struct {
 	int slant;
 	const char *name;
 } fontSlants[] = {
-	{
-	FC_SLANT_ROMAN, ""},	/*"Roman"}, */
-	{
-	FC_SLANT_ITALIC, "Italic"}, {
-	FC_SLANT_OBLIQUE, "Oblique"}, {
-	0, NULL}
+	{ FC_SLANT_ROMAN, "" },
+	{ FC_SLANT_ITALIC, "Italic" },
+	{ FC_SLANT_OBLIQUE, "Oblique" }
 };
 
 static const struct {
 	int width;
 	const char *name;
 } fontWidths[] = {
-	{
-	FC_WIDTH_ULTRACONDENSED, "UltraCondensed"}, {
-	FC_WIDTH_EXTRACONDENSED, "ExtraCondensed"}, {
-	FC_WIDTH_CONDENSED, "Condensed"}, {
-	FC_WIDTH_SEMICONDENSED, "SemiCondensed"}, {
-	FC_WIDTH_NORMAL, ""},	/*"normal"}, */
-	{
-	FC_WIDTH_SEMIEXPANDED, "SemiExpanded"}, {
-	FC_WIDTH_EXPANDED, "Expanded"}, {
-	FC_WIDTH_EXTRAEXPANDED, "ExtraExpanded"}, {
-	FC_WIDTH_ULTRAEXPANDED, "UltraExpanded"}, {
-	0, NULL}
+	{ FC_WIDTH_ULTRACONDENSED, "UltraCondensed" },
+	{ FC_WIDTH_EXTRACONDENSED, "ExtraCondensed" },
+	{ FC_WIDTH_CONDENSED, "Condensed" },
+	{ FC_WIDTH_SEMICONDENSED, "SemiCondensed" },
+	{ FC_WIDTH_NORMAL, "" },
+	{ FC_WIDTH_SEMIEXPANDED, "SemiExpanded" },
+	{ FC_WIDTH_EXPANDED, "Expanded" },
+	{ FC_WIDTH_EXTRAEXPANDED, "ExtraExpanded" },
+	{ FC_WIDTH_ULTRAEXPANDED, "UltraExpanded" },
 };
 
 static int compare_family(const void *a, const void *b)
@@ -376,17 +366,17 @@ static void selectedFamily(WMWidget * w, void *data)
 			const char *weight = "", *slant = "", *width = "";
 			WMListItem *item;
 
-			for (j = 0; fontWeights[j].name; j++)
+			for (j = 0; j < wlengthof(fontWeights); j++)
 				if (fontWeights[j].weight == family->styles[i].weight) {
 					weight = fontWeights[j].name;
 					break;
 				}
-			for (j = 0; fontWidths[j].name; j++)
+			for (j = 0; j < wlengthof(fontWidths); j++)
 				if (fontWidths[j].width == family->styles[i].width) {
 					width = fontWidths[j].name;
 					break;
 				}
-			for (j = 0; fontSlants[j].name; j++)
+			for (j = 0; j < wlengthof(fontSlants); j++)
 				if (fontSlants[j].slant == family->styles[i].slant) {
 					slant = fontSlants[j].name;
 					break;
@@ -666,9 +656,8 @@ static void createPanel(Panel * p)
 	WMSetBoxHorizontal(vbox, False);
 	panel->optionP = WMCreatePopUpButton(vbox);
 	WMAddBoxSubviewAtEnd(vbox, WMWidgetView(panel->optionP), False, True, 20, 0, 8);
-	for (i = 0; fontOptions[i].option; i++) {
+	for (i = 0; i < wlengthof(fontOptions); i++)
 		WMAddPopUpButtonItem(panel->optionP, _(fontOptions[i].label));
-	}
 	WMSetPopUpButtonAction(panel->optionP, selectedOption, panel);
 
 	label = WMCreateLabel(hbox);
