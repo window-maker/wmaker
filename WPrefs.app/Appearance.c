@@ -343,22 +343,54 @@ enum {
 static const struct {
 	const char *key;
 	const char *default_value;
+	const char *label;
+	WMRect      preview;	/* The rectangle where the corresponding object is displayed */
+	WMPoint     hand;	/* The coordinate where the hand is drawn when pointing this item */
 } colorOptions[] = {
-	{ "FTitleColor", "white" },
-	{ "UTitleColor", "black" },
-	{ "PTitleColor", "white" },
-	{ "MenuTitleColor", "white" },
-	{ "MenuTextColor", "black" },
-	{ "MenuDisabledColor", "#616161" },
-	{ "HighlightColor", "white" },
-	{ "HighlightTextColor", "black" },
-	{ "FrameFocusedBorderColor", "black" },
-	{ "FrameBorderColor", "black" },
-	{ "FrameSelectedBorderColor", "white" },
-	{ "IconTitleColor", "white" },
-	{ "IconTitleBack", "black" },
-	{ "ClipTitleColor", "black" },
-	{ "CClipTitleColor", "#454045" }
+	/* Related to Window titles */
+	{ "FTitleColor", "white", N_("Focused Window Title"),
+	  { { 30, 10 }, { 190, 20 } }, { 5, 10 } },
+	{ "UTitleColor", "black", N_("Unfocused Window Title"),
+	  { { 30, 40 }, { 190, 20 } }, { 5, 40 } },
+	{ "PTitleColor", "white", N_("Owner of Focused Window Title"),
+	  { { 30, 70 }, { 190, 20 } }, { 5, 70 } },
+
+	/* Related to Menus */
+	{ "MenuTitleColor", "white", N_("Menu Title") ,
+	  { { 30, 120 }, { 90, 20 } }, { 5, 120 } },
+	{ "MenuTextColor", "black", N_("Menu Item Text") ,
+	  { { 30, 140 }, { 90, 20 } }, { 5, 140 } },
+	{ "MenuDisabledColor", "#616161", N_("Disabled Menu Item Text") ,
+	  { { 30, 160 }, { 90, 20 } }, { 5, 160 } },
+	{ "HighlightColor", "white", N_("Menu Highlight Color") ,
+	  { { 30, 180 }, { 90, 20 } }, { 5, 180 } },
+	{ "HighlightTextColor", "black", N_("Highlighted Menu Text Color") ,
+	  { { 30, 200 }, { 90, 20 } }, { 5, 180 } },
+	/*
+	 * yuck kluge: the coordinate for HighlightTextColor are actually those of the last "Normal item"
+	 * at the bottom when user clicks it, the "yuck kluge" in the function 'previewClick' will swap it
+	 * for the MenuTextColor selection as user would expect
+	 *
+	 * Note that the entries are reffered by their index for performance
+	 */
+
+	/* Related to Window's border */
+	{ "FrameFocusedBorderColor", "black", N_("Focused Window Border Color") ,
+	  { { 0, 0 }, { 0, 0 } }, { -22, -21 } },
+	{ "FrameBorderColor", "black", N_("Window Border Color") ,
+	  { { 0, 0 }, { 0, 0 } }, { -22, -21 } },
+	{ "FrameSelectedBorderColor", "white", N_("Selected Window Border Color") ,
+	  { { 0, 0 }, { 0, 0 } }, { -22, -21 } },
+
+	/* Related to Icons and Clip */
+	{ "IconTitleColor", "white", N_("Miniwindow Title") ,
+	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } },
+	{ "IconTitleBack", "black", N_("Miniwindow Title Back") ,
+	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } },
+	{ "ClipTitleColor", "black", N_("Clip Title") ,
+	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } },
+	{ "CClipTitleColor", "#454045", N_("Collapsed Clip Title") ,
+	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } }
 };
 
 static WMRect previewPositions[] = {
@@ -381,23 +413,6 @@ static WMRect previewPositions[] = {
 #define PBACKGROUND     7
 #define EVERYTHING	0xff
 
-static WMRect previewColorPositions[] = {
-	{{30, 10}, {190, 20}},
-	{{30, 40}, {190, 20}},
-	{{30, 70}, {190, 20}},
-	{{30, 120}, {90, 20}},
-	{{30, 140}, {90, 20}},
-	{{30, 160}, {90, 20}},
-	{{30, 180}, {90, 20}},
-	{{30, 200}, {90, 20}},
-	{{0, 0}, {0, 0}},
-	{{0, 0}, {0, 0}},
-	{{0, 0}, {0, 0}},
-	{{155, 130}, {64, 64}},
-	{{155, 130}, {64, 64}},
-	{{155, 130}, {64, 64}},
-	{{155, 130}, {64, 64}}
-};
 
 static void str2rcolor(RContext * rc, const char *name, RColor * color)
 {
@@ -1135,14 +1150,17 @@ static void previewClick(XEvent * event, void *clientData)
 		break;
 	case 1:
 		for (i = 0; i < WMGetPopUpButtonNumberOfItems(panel->colP); i++) {
-			if (event->xbutton.x >= previewColorPositions[i].pos.x
-			    && event->xbutton.y >= previewColorPositions[i].pos.y
-			    && event->xbutton.x < previewColorPositions[i].pos.x
-			    + previewColorPositions[i].size.width
-			    && event->xbutton.y < previewColorPositions[i].pos.y
-			    + previewColorPositions[i].size.height) {
+			if (event->xbutton.x >= colorOptions[i].preview.pos.x &&
+			    event->xbutton.y >= colorOptions[i].preview.pos.y &&
+			    event->xbutton.x < colorOptions[i].preview.pos.x + colorOptions[i].preview.size.width &&
+			    event->xbutton.y < colorOptions[i].preview.pos.y + colorOptions[i].preview.size.height) {
 
-				/* yuck kluge */
+				/*
+				 * yuck kluge: the entry #7 is HighlightTextColor which does not have actually a
+				 * display area, but are reused to make the last "Normal Item" menu entry actually
+				 * pick the same color item as the other similar item displayed, which corresponds
+				 * to MenuTextColor
+				 */
 				if (i == 7)
 					i = 4;
 
@@ -1369,40 +1387,24 @@ static void changeColorPage(WMWidget * w, void *data)
 	int section;
 	WMScreen *scr = WMWidgetScreen(panel->box);
 	RContext *rc = WMScreenRContext(scr);
-	static WMPoint positions[] = {
-		{5, 10},
-		{5, 40},
-		{5, 70},
-		{5, 120},
-		{5, 140},
-		{5, 160},
-		{5, 180},
-		{5, 180},
-		{-22, -21},
-		{-22, -21},
-		{-22, -21},
-		{130, 132},
-		{130, 132},
-		{130, 132},
-		{130, 132}
-	};
 
 	if (panel->preview) {
 		GC gc;
 
 		gc = XCreateGC(rc->dpy, WMWidgetXID(panel->parent), 0, NULL);
 		XCopyArea(rc->dpy, panel->previewBack, panel->preview, gc,
-			  positions[panel->oldcsection].x,
-			  positions[panel->oldcsection].y, 22, 22 ,
-			  positions[panel->oldcsection].x,
-			  positions[panel->oldcsection].y);
+			  colorOptions[panel->oldcsection].hand.x,
+			  colorOptions[panel->oldcsection].hand.y, 22, 22 ,
+			  colorOptions[panel->oldcsection].hand.x,
+			  colorOptions[panel->oldcsection].hand.y);
 	}
 	if (w) {
 		section = WMGetPopUpButtonSelectedItem(panel->colP);
 
 		panel->oldcsection = section;
 		if (panel->preview)
-			WMDrawPixmap(panel->hand, panel->preview, positions[section].x, positions[section].y);
+			WMDrawPixmap(panel->hand, panel->preview,
+			             colorOptions[section].hand.x, colorOptions[section].hand.y);
 
 		if (section >= ICONT_COL)
 			updateColorPreviewBox(panel, 1 << section);
@@ -1945,21 +1947,9 @@ static void createPanel(Panel * p)
 	panel->colP = WMCreatePopUpButton(panel->colF);
 	WMResizeWidget(panel->colP, 228, 20);
 	WMMoveWidget(panel->colP, 7, 7);
-	WMAddPopUpButtonItem(panel->colP, _("Focused Window Title"));
-	WMAddPopUpButtonItem(panel->colP, _("Unfocused Window Title"));
-	WMAddPopUpButtonItem(panel->colP, _("Owner of Focused Window Title"));
-	WMAddPopUpButtonItem(panel->colP, _("Menu Title"));
-	WMAddPopUpButtonItem(panel->colP, _("Menu Item Text"));
-	WMAddPopUpButtonItem(panel->colP, _("Disabled Menu Item Text"));
-	WMAddPopUpButtonItem(panel->colP, _("Menu Highlight Color"));
-	WMAddPopUpButtonItem(panel->colP, _("Highlighted Menu Text Color"));
-	WMAddPopUpButtonItem(panel->colP, _("Focused Window Border Color"));
-	WMAddPopUpButtonItem(panel->colP, _("Window Border Color"));
-	WMAddPopUpButtonItem(panel->colP, _("Selected Window Border Color"));
-	WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title"));
-	WMAddPopUpButtonItem(panel->colP, _("Miniwindow Title Back"));
-	WMAddPopUpButtonItem(panel->colP, _("Clip Title"));
-	WMAddPopUpButtonItem(panel->colP, _("Collapsed Clip Title"));
+
+	for (i = 0; i < wlengthof(colorOptions); i++)
+		WMAddPopUpButtonItem(panel->colP, _(colorOptions[i].label));
 
 	WMSetPopUpButtonSelectedItem(panel->colP, 0);
 
