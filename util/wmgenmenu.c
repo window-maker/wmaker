@@ -424,9 +424,16 @@ static void find_and_write(const char *group, char *list[][2], int this_is_termi
 
 				/* delete character " !" from the command */
 				ptr = strchr(comm, '!');
-				while (ptr >= comm && (*ptr == '!' || isspace(*ptr)))
-					*ptr-- = '\0';
+				if (ptr != NULL) {
+					while (ptr > comm) {
+						if (!isspace(ptr[-1]))
+							break;
+						ptr--;
+					}
+					*ptr = '\0';
+				}
 				snprintf(buf, sizeof(buf), "%s -e %s", terminal ? terminal : "xterm" , comm);
+
 				/* Root -> Applications -> <category> -> <application> */
 				L3Menu = WMCreatePLArray(
 					WMCreatePLString(_(list[i][0])),
