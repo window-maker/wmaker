@@ -108,7 +108,7 @@ static void handleShapeNotify(XEvent *event);
 #endif
 
 #ifdef KEEP_XKB_LOCK_STATUS
-static void handleXkbIndicatorStateNotify(XEvent *event);
+static void handleXkbIndicatorStateNotify(XkbEvent *event);
 #endif
 
 /* real dead process handler */
@@ -544,18 +544,14 @@ static int matchWindow(const void *item, const void *cdata)
 
 static void handleExtensions(XEvent * event)
 {
-#ifdef KEEP_XKB_LOCK_STATUS
-	XkbEvent *xkbevent;
-	xkbevent = (XkbEvent *) event;
-#endif				/*KEEP_XKB_LOCK_STATUS */
 #ifdef USE_XSHAPE
 	if (w_global.xext.shape.supported && event->type == (w_global.xext.shape.event_base + ShapeNotify)) {
 		handleShapeNotify(event);
 	}
 #endif
 #ifdef KEEP_XKB_LOCK_STATUS
-	if (wPreferences.modelock && (xkbevent->type == w_global.xext.xkb.event_base)) {
-		handleXkbIndicatorStateNotify(event);
+	if (wPreferences.modelock && (event->type == w_global.xext.xkb.event_base)) {
+		handleXkbIndicatorStateNotify((XkbEvent *) event);
 	}
 #endif				/*KEEP_XKB_LOCK_STATUS */
 #ifdef USE_RANDR
@@ -1188,7 +1184,7 @@ static void handleShapeNotify(XEvent * event)
 
 #ifdef KEEP_XKB_LOCK_STATUS
 /* please help ]d if you know what to do */
-static void handleXkbIndicatorStateNotify(XEvent *event)
+static void handleXkbIndicatorStateNotify(XkbEvent *event)
 {
 	WWindow *wwin;
 	WScreen *scr;
