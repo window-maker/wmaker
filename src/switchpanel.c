@@ -261,35 +261,29 @@ static RImage *assemblePuzzleImage(RImage **images, int width, int height)
 	RFillImage(img, &color);
 
 	/* top */
-	if (tw > 0) {
-		tmp = RSmoothScaleImage(images[1], tw, images[1]->height);
-		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, images[0]->width, 0);
-		RReleaseImage(tmp);
-	}
+	tmp = RSmoothScaleImage(images[1], tw, images[1]->height);
+	RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, images[0]->width, 0);
+	RReleaseImage(tmp);
+
 	/* bottom */
-	if (tw > 0) {
-		tmp = RSmoothScaleImage(images[7], tw, images[7]->height);
-		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, images[6]->width, height - images[6]->height);
-		RReleaseImage(tmp);
-	}
+	tmp = RSmoothScaleImage(images[7], tw, images[7]->height);
+	RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, images[6]->width, height - images[6]->height);
+	RReleaseImage(tmp);
+
 	/* left */
-	if (th > 0) {
-		tmp = RSmoothScaleImage(images[3], images[3]->width, th);
-		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, 0, images[0]->height);
-		RReleaseImage(tmp);
-	}
+	tmp = RSmoothScaleImage(images[3], images[3]->width, th);
+	RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, 0, images[0]->height);
+	RReleaseImage(tmp);
+
 	/* right */
-	if (th > 0) {
-		tmp = RSmoothScaleImage(images[5], images[5]->width, th);
-		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, width - images[5]->width, images[2]->height);
-		RReleaseImage(tmp);
-	}
+	tmp = RSmoothScaleImage(images[5], images[5]->width, th);
+	RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, width - images[5]->width, images[2]->height);
+	RReleaseImage(tmp);
+
 	/* center */
-	if (tw > 0 && th > 0) {
-		tmp = RSmoothScaleImage(images[4], tw, th);
-		RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, images[0]->width, images[0]->height);
-		RReleaseImage(tmp);
-	}
+	tmp = RSmoothScaleImage(images[4], tw, th);
+	RCopyArea(img, tmp, 0, 0, tmp->width, tmp->height, images[0]->width, images[0]->height);
+	RReleaseImage(tmp);
 
 	/* corners */
 	RCopyArea(img, images[0], 0, 0, images[0]->width, images[0]->height, 0, 0);
