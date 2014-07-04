@@ -340,6 +340,7 @@ static void handle_inotify_events(void)
 		if ((pevent->mask & IN_MODIFY) && oneShotFlag == 0) {
 			wwarning(_("Inotify: Reading config files in defaults database."));
 			wDefaultsCheckDomains(NULL);
+			oneShotFlag = 1;
 		}
 
 		/* move to next event in the buffer */
