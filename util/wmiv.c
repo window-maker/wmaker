@@ -147,17 +147,17 @@ RImage *load_oriented_image(RContext *context, const char *file, int index)
 		RImage *tmp = NULL;
 		switch (orientation) {
 		case 2:
-			tmp = RHorizontalFlipImage(image);
+			tmp = RFlipImage(image, RHorizontalFlip);
 			break;
 		case 3:
 			tmp = RRotateImage(image, 180);
 			break;
 		case 4:
-			tmp = RVerticalFlipImage(image);
+			tmp = RFlipImage(image, RVerticalFlip);
 			break;
 		case 5: {
 				RImage *tmp2;
-				tmp2 = RVerticalFlipImage(image);
+				tmp2 = RFlipImage(image, RVerticalFlip);
 				if (tmp2) {
 					tmp = RRotateImage(tmp2, 90);
 					RReleaseImage(tmp2);
@@ -169,7 +169,7 @@ RImage *load_oriented_image(RContext *context, const char *file, int index)
 			break;
 		case 7: {
 				RImage *tmp2;
-				tmp2 = RVerticalFlipImage(image);
+				tmp2 = RFlipImage(image, RVerticalFlip);
 				if (tmp2) {
 					tmp = RRotateImage(tmp2, 270);
 					RReleaseImage(tmp2);
