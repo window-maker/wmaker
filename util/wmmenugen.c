@@ -37,11 +37,16 @@ static int dirParseFunc(const char *filename, const struct stat *st, int tflags,
 static int menuSortFunc(const void *left, const void *right);
 static int nodeFindSubMenuByNameFunc(const void *item, const void *cdata);
 static WMTreeNode *findPositionInMenu(const char *submenu);
-static void (*parse)(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry));
-static Bool (*validateFilename)(const char *filename, const struct stat *st, int tflags, struct FTW *ftw);
+
+
+typedef void fct_parse_menufile(const char *file, cb_add_menu_entry *addWMMenuEntryCallback);
+typedef Bool fct_validate_filename(const char *filename, const struct stat *st, int tflags, struct FTW *ftw);
+
 
 static WMArray *plMenuNodes;
 static const char *terminal;
+static fct_parse_menufile *parse;
+static fct_validate_filename *validateFilename;
 
 extern char *__progname;
 

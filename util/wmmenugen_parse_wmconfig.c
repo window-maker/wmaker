@@ -47,7 +47,8 @@ static Bool wmc_to_wm(WMConfigMenuEntry **wmc, WMMenuEntry **wm);
 static void parse_wmconfig_line(char **label, char **key, char **value, const char *line);
 static void init_wmconfig_storage(WMConfigMenuEntry **wmc);
 
-void parse_wmconfig(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry))
+
+void parse_wmconfig(const char *file, cb_add_menu_entry *addWMMenuEntryCallback)
 {
 	FILE *fp;
 	char buf[1024];

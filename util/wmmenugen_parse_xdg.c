@@ -79,7 +79,8 @@ static Bool  xdg_to_wm(XDGMenuEntry **xdg, WMMenuEntry **wmentry);
 static void init_xdg_storage(XDGMenuEntry **xdg);
 static void init_wm_storage(WMMenuEntry **wm);
 
-void parse_xdg(const char *file, void (*addWMMenuEntryCallback)(WMMenuEntry *aEntry))
+
+void parse_xdg(const char *file, cb_add_menu_entry *addWMMenuEntryCallback)
 {
 	FILE *fp;
 	char buf[1024];
