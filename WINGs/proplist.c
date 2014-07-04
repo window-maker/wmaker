@@ -1566,8 +1566,10 @@ WMPropList *WMReadPropListFromPipe(const char *command)
 	FILE *file;
 	WMPropList *plist;
 	PLData *pldata;
-	char line[1024];
-	char *read_buf;
+	char *read_buf, *read_ptr;
+	size_t remain_size, line_size;
+	const size_t block_read_size = 4096;
+	const size_t block_read_margin = 512;
 
 	file = popen(command, "r");
 
@@ -1576,27 +1578,32 @@ WMPropList *WMReadPropListFromPipe(const char *command)
 		return NULL;
 	}
 
-	pldata = (PLData *) wmalloc(sizeof(PLData));
-	pldata->ptr = NULL;
-	pldata->filename = command;
-	pldata->lineNumber = 1;
-
 	/* read from file till EOF or OOM and fill proplist buffer*/
-	read_buf = NULL;
-	while (fgets(line, sizeof(line), file) != NULL) {
-		if (read_buf == NULL) {
-			read_buf = wmalloc(strlen(line)+1);
-			read_buf[0] = '\0';
-		} else {
-			read_buf = wrealloc(read_buf,
-			    strlen(line) + strlen(read_buf) + 1);
-		}
+	remain_size = block_read_size;
+	read_buf = wmalloc(remain_size);
+	read_ptr = read_buf;
+	while (fgets(read_ptr, remain_size, file) != NULL) {
+		line_size = strlen(read_ptr);
 
-		read_buf = strncat(read_buf, line, strlen(line));
+		remain_size -= line_size;
+		read_ptr += line_size;
+
+		if (remain_size < block_read_margin) {
+			size_t read_length;
+
+			read_length = read_ptr - read_buf;
+			read_buf = wrealloc(read_buf, read_length + block_read_size);
+			read_ptr = read_buf + read_length;
+			remain_size = block_read_size;
+		}
 	}
-	pldata->ptr = read_buf;
 
 	pclose(file);
+
+	pldata = (PLData *) wmalloc(sizeof(PLData));
+	pldata->ptr = read_buf;
+	pldata->filename = command;
+	pldata->lineNumber = 1;
 
 	plist = getPropList(pldata);
 
