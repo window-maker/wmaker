@@ -41,7 +41,7 @@
 
 
 /* version of the header for the library */
-#define WRASTER_HEADER_VERSION	22
+#define WRASTER_HEADER_VERSION	23
 
 
 #include <X11/Xlib.h>
