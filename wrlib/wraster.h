@@ -52,6 +52,22 @@
 #endif
 
 
+/*
+ * Define some macro to provide attributes for the compiler
+ *
+ * These attributes help producing better code and/or detecting bugs, however not all compiler support them
+ * as they are not standard.
+ * Because we're a public API header, we can't count on autoconf to detect them for us, so we use that #if
+ * mechanism and define an internal macro appropriately. Please note that the macro are not considered being
+ * part of the public API.
+ */
+#if __GNUC__ >= 3
+#define __wrlib_deprecated(msg)  __attribute__ ((deprecated(msg)))
+#else
+#define __wrlib_deprecated(msg)
+#endif
+
+
 #ifdef __cplusplus
 extern "C" {
 #endif /* __cplusplus */
@@ -160,6 +176,9 @@ typedef struct RContext {
 
     struct {
         unsigned int use_shared_pixmap:1;
+        unsigned int optimize_for_speed:1
+            __wrlib_deprecated("Flag optimize_for_speed in RContext is not used anymore "
+                               "and will be removed in future version, please do not use");
     } flags;
 } RContext;
 
@@ -480,5 +499,11 @@ extern int RErrorCode;
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+
+/*
+ * The definitions below are done for internal use only
+ * We undef them so users of the library may not misuse them
+ */
+#undef __wrlib_deprecated
 
 #endif
