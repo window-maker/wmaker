@@ -138,7 +138,7 @@ static void setWVisualID(int screen, int val)
 		int oldlen = wVisualID_len;
 
 		wVisualID_len = screen + 1;
-		wVisualID = (int *)realloc(wVisualID, wVisualID_len * sizeof(int));
+		wVisualID = (int *)wrealloc(wVisualID, wVisualID_len * sizeof(int));
 		for (i = oldlen; i < wVisualID_len; i++) {
 			wVisualID[i] = -1;
 		}
