@@ -135,15 +135,28 @@ int main(int argc, char **argv)
 	imgd = RRenderMultiGradient(250, 250, colors, RGRD_DIAGONAL);
 	RConvertImage(ctx, imgh, &pix);
 	XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 0, 0);
+	RReleaseImage(imgh);
 
 	RConvertImage(ctx, imgv, &pix);
 	XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 250, 0);
+	RReleaseImage(imgv);
 
 	RConvertImage(ctx, imgd, &pix);
 	XCopyArea(dpy, pix, win, ctx->copy_gc, 0, 0, 250, 250, 500, 0);
+	RReleaseImage(imgd);
 
 	XFlush(dpy);
 
 	getchar();
+
+	free(color_name);
+	for (i = 0; i < ncolors + 1; i++)
+		free(colors[i]);
+	free(colors);
+
+	RDestroyContext(ctx);
+	RShutdown();
+	XCloseDisplay(dpy);
+
 	return 0;
 }
