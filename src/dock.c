@@ -568,7 +568,7 @@ static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 		if (aicon->icon->selected)
 			wIconSelect(aicon->icon);
 
-		if (aicon && aicon->attracted && aicon->command) {
+		if (aicon->attracted && aicon->command) {
 			aicon->attracted = 0;
 			if (aicon->icon->shadowed) {
 				aicon->icon->shadowed = 0;
