@@ -126,7 +126,7 @@ void WMAddToArray(WMArray * array, void *item)
 
 void WMInsertInArray(WMArray * array, int index, void *item)
 {
-	wassertr(index >= 0 && index <= array->itemCount);
+	wassertr(array && index >= 0 && index <= array->itemCount);
 
 	if (array == NULL)
 		return;
@@ -148,7 +148,7 @@ void *WMReplaceInArray(WMArray * array, int index, void *item)
 {
 	void *old;
 
-	wassertrv(index >= 0 && index <= array->itemCount, NULL);
+	wassertrv(array && index >= 0 && index <= array->itemCount, NULL);
 
 	if (array == NULL)
 		return NULL;
@@ -167,7 +167,7 @@ void *WMReplaceInArray(WMArray * array, int index, void *item)
 
 int WMDeleteFromArray(WMArray * array, int index)
 {
-	wassertrv(index >= 0 && index < array->itemCount, 0);
+	wassertrv(array && index >= 0 && index < array->itemCount, 0);
 
 	if (array == NULL)
 		return 0;
