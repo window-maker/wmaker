@@ -195,8 +195,11 @@ static void doAppBounce(void *arg)
 	AppBouncerData *data = (AppBouncerData*)arg;
 	WAppIcon *aicon = data->wapp->app_icon;
 
+	if (!aicon)
+		return;
+
 reinit:
-	if (aicon && data->wapp->refcount > 1) {
+	if (data->wapp->refcount > 1) {
 		if (wPreferences.raise_appicons_when_bouncing)
 			XRaiseWindow(dpy, aicon->icon->core->window);
 
