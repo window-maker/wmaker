@@ -15,6 +15,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 
 #include <X11/Xatom.h>
 
@@ -65,7 +66,7 @@ void wXDNDMakeAwareness(Window window)
 	/*
 	   MotifDragReceiverInfo info;
 	 */
-	XChangeProperty(dpy, window, _XA_XdndAware, XA_ATOM, 32, PropModeAppend, (char *)&xdnd_version, 1);
+	XChangeProperty(dpy, window, _XA_XdndAware, XA_ATOM, 32, PropModeAppend, (unsigned char *)&xdnd_version, 1);
 
     /*** MOTIF ***
      info.byte_order = '\0';
@@ -84,6 +85,21 @@ void wXDNDMakeAwareness(Window window)
      */
 }
 
+void wXDNDDecodeURI(char *uri) {
+	char *last = uri + strlen(uri);
+	while (uri < last-2) {
+		if (*uri == '%') {
+			int h;
+			if (sscanf(uri+1, "%2X", &h) != 1)
+				break;
+			*uri = h;
+			memmove(uri+1, uri+3, last - (uri+2));
+			last -= 2;
+		}
+		uri++;
+	}
+}
+
 Bool wXDNDProcessSelection(XEvent * event)
 {
 	WScreen *scr = wScreenForWindow(event->xselection.requestor);
@@ -95,15 +111,11 @@ Bool wXDNDProcessSelection(XEvent * event)
 	char *delme;
 	XEvent xevent;
 	Window selowner = XGetSelectionOwner(dpy, _XA_XdndSelection);
-	WMArray *items;
 
 	XGetWindowProperty(dpy, event->xselection.requestor,
 			   _XA_WINDOWMAKER_XDNDEXCHANGE,
 			   0, 65536, True, atom_support, &ret_type, &ret_format,
 			   &ret_item, &remain_byte, (unsigned char **)&delme);
-	if (delme) {
-		scr->xdestring = delme;
-	}
 
 	/*send finished */
 	memset(&xevent, 0, sizeof(xevent));
@@ -116,12 +128,14 @@ Bool wXDNDProcessSelection(XEvent * event)
 	XSendEvent(dpy, selowner, 0, 0, &xevent);
 
 	/*process dropping */
-	if (scr->xdestring) {
+	if (delme) {
+		WMArray *items;
 		WMArrayIterator iter;
 		int length, str_size;
 		int total_size = 0;
 		char *tmp;
 
+		scr->xdestring = delme;
 		items = WMCreateArray(4);
 		retain = wstrdup(scr->xdestring);
 		XFree(scr->xdestring);	/* since xdestring was created by Xlib */
@@ -153,23 +167,20 @@ Bool wXDNDProcessSelection(XEvent * event)
 		scr->xdestring = wmalloc(total_size);
 		scr->xdestring[0] = 0;	/* empty string */
 		WM_ETARETI_ARRAY(items, tmp, iter) {
-			if (!strncmp(tmp, "file:", 5)) {
-				/* add more 2 chars while removing 5 is harmless */
+			/* only supporting file: URI objects */
+			if (!strncmp(tmp, "file://", 7)) {
+				/* drag-and-drop file name format as per the spec is encoded as an URI */
+				wXDNDDecodeURI(&tmp[7]);
 				strcat(scr->xdestring, " \"");
-				strcat(scr->xdestring, &tmp[5]);
+				strcat(scr->xdestring, &tmp[7]);
 				strcat(scr->xdestring, "\"");
-			} else {
-				/* unsupport object, still need more " ? tell ]d */
-				strcat(scr->xdestring, &tmp[5]);
 			}
 			wfree(tmp);
 		}
 		WMFreeArray(items);
-		wDockReceiveDNDDrop(scr, event);
-		/*
-		   printf("free ");
-		   puts(scr->xdestring);
-		 */
+		if (scr->xdestring[0]) {
+			wDockReceiveDNDDrop(scr, event);
+		}
 		wfree(scr->xdestring);	/* this xdestring is not from Xlib (no XFree) */
 	}
 
@@ -291,7 +302,7 @@ Bool wXDNDProcessClientMessage(XClientMessageEvent * event)
 			XConvertSelection(dpy, _XA_XdndSelection, atom_support,
 					  _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
 		} else {
-			puts("wierd selection owner? QT?");
+			//printf("weird selection owner? QT?\n");
 			XConvertSelection(dpy, _XA_XdndSelection, atom_support,
 					  _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
 		}
