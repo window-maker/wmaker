@@ -1,25 +1,38 @@
+/*
+ *  Window Maker window manager
+ *
+ *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 2014 Window Maker Team
+ *
+ *  This program is free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License along
+ *  with this program; if not, write to the Free Software Foundation
+ */
+
 /* Many part of code are ripped of an example from JX's site */
 
 #include "wconfig.h"
 
 #ifdef XDND
 
-#include <X11/Xlib.h>
 #include "WindowMaker.h"
-#include "window.h"
 #include "dock.h"
 #include "xdnd.h"
-#include "motif.h"
-
 #include "workspace.h"
 
 #include <stdlib.h>
-#include <string.h>
 #include <stdio.h>
-
+#include <string.h>
 #include <X11/Xatom.h>
-
-#define XDND_VERSION 3L
 
 static Atom _XA_XdndAware;
 static Atom _XA_XdndEnter;
@@ -30,18 +43,13 @@ static Atom _XA_XdndStatus;
 static Atom _XA_XdndActionCopy;
 static Atom _XA_XdndSelection;
 static Atom _XA_XdndFinished;
+static Atom _XA_XdndTypeList;
 static Atom _XA_WINDOWMAKER_XDNDEXCHANGE;
+static Atom supported_typelist;
+static Atom selected_typelist;
 
-/*
- Atom _XA_MOTIF_DRAG_RECEIVER_INFO;
- Atom _XA_MOTIF_DRAG_AND_DROP_MESSAGE;
- */
-
-static Atom atom_support;
-
-void wXDNDInitializeAtoms()
+void wXDNDInitializeAtoms(void)
 {
-
 	_XA_XdndAware = XInternAtom(dpy, "XdndAware", False);
 	_XA_XdndEnter = XInternAtom(dpy, "XdndEnter", False);
 	_XA_XdndLeave = XInternAtom(dpy, "XdndLeave", False);
@@ -51,41 +59,21 @@ void wXDNDInitializeAtoms()
 	_XA_XdndActionCopy = XInternAtom(dpy, "XdndActionCopy", False);
 	_XA_XdndSelection = XInternAtom(dpy, "XdndSelection", False);
 	_XA_XdndFinished = XInternAtom(dpy, "XdndFinished", False);
-
+	_XA_XdndTypeList = XInternAtom(dpy, "XdndTypeList", False);
 	_XA_WINDOWMAKER_XDNDEXCHANGE = XInternAtom(dpy, "_WINDOWMAKER_XDNDEXCHANGE", False);
 
-	/*
-	   _XA_MOTIF_DRAG_RECEIVER_INFO = XInternAtom(dpy, "_MOTIF_DRAG_RECEIVER_INFO",False);
-	   _XA_MOTIF_DRAG_AND_DROP_MESSAGE = XInternAtom(dpy, "_MOTIF_DRAG_AND_DROP_MESSAGE", False);
-	 */
+	supported_typelist = XInternAtom(dpy, "text/uri-list", False);
 }
 
 void wXDNDMakeAwareness(Window window)
 {
-	long int xdnd_version = 3;
-	/*
-	   MotifDragReceiverInfo info;
-	 */
-	XChangeProperty(dpy, window, _XA_XdndAware, XA_ATOM, 32, PropModeAppend, (unsigned char *)&xdnd_version, 1);
-
-    /*** MOTIF ***
-     info.byte_order = '\0';
-     info.protocol_version = 0;
-     info.protocol_style = XmDRAG_DYNAMIC;
-     info.proxy_window = 0;
-     info.num_drop_sites = 0;
-     info.total_size = sizeof(info);
-
-     XChangeProperty (dpy, window,
-     _XA_MOTIF_DRAG_RECEIVER_INFO,
-     _XA_MOTIF_DRAG_RECEIVER_INFO,
-     8, PropModeReplace,
-     (unsigned char *)&info,
-     sizeof (info));
-     */
+	long int xdnd_version = XDND_VERSION;
+	XChangeProperty(dpy, window, _XA_XdndAware, XA_ATOM, 32,
+					PropModeAppend, (unsigned char *)&xdnd_version, 1);
 }
 
-void wXDNDDecodeURI(char *uri) {
+static void wXDNDDecodeURI(char *uri)
+{
 	char *last = uri + strlen(uri);
 	while (uri < last-2) {
 		if (*uri == '%') {
@@ -100,7 +88,7 @@ void wXDNDDecodeURI(char *uri) {
 	}
 }
 
-Bool wXDNDProcessSelection(XEvent * event)
+Bool wXDNDProcessSelection(XEvent *event)
 {
 	WScreen *scr = wScreenForWindow(event->xselection.requestor);
 	char *retain;
@@ -114,7 +102,7 @@ Bool wXDNDProcessSelection(XEvent * event)
 
 	XGetWindowProperty(dpy, event->xselection.requestor,
 			   _XA_WINDOWMAKER_XDNDEXCHANGE,
-			   0, 65536, True, atom_support, &ret_type, &ret_format,
+			   0, 65536, True, selected_typelist, &ret_type, &ret_format,
 			   &ret_item, &remain_byte, (unsigned char **)&delme);
 
 	/*send finished */
@@ -178,16 +166,15 @@ Bool wXDNDProcessSelection(XEvent * event)
 			wfree(tmp);
 		}
 		WMFreeArray(items);
-		if (scr->xdestring[0]) {
+		if (scr->xdestring[0])
 			wDockReceiveDNDDrop(scr, event);
-		}
 		wfree(scr->xdestring);	/* this xdestring is not from Xlib (no XFree) */
 	}
 
 	return True;
 }
 
-Bool isAwareXDND(Window window)
+static Bool isAwareXDND(Window window)
 {
 	Atom actual;
 	int format;
@@ -208,14 +195,15 @@ Bool isAwareXDND(Window window)
 	return True;
 }
 
-Bool acceptXDND(Window window)
+static Bool acceptXDND(Window window)
 {
 	WScreen *scr = wScreenForWindow(window);
 	WDock *dock;
 	int icon_pos, i;
 
 	icon_pos = -1;
-	if ((dock = scr->dock) != NULL) {
+	dock = scr->dock;
+	if (dock) {
 		for (i = 0; i < dock->max_icons; i++) {
 			if (dock->icon_array[i]
 			    && dock->icon_array[i]->icon->core->window == window) {
@@ -224,12 +212,15 @@ Bool acceptXDND(Window window)
 			}
 		}
 	}
-	if (icon_pos < 0 && (dock = w_global.workspace.array[w_global.workspace.current]->clip) != NULL) {
-		for (i = 0; i < dock->max_icons; i++) {
-			if (dock->icon_array[i]
-			    && dock->icon_array[i]->icon->core->window == window) {
-				icon_pos = i;
-				break;
+	if (icon_pos < 0) {
+		dock = w_global.workspace.array[w_global.workspace.current]->clip;
+		if (dock) {
+			for (i = 0; i < dock->max_icons; i++) {
+				if (dock->icon_array[i]
+				    && dock->icon_array[i]->icon->core->window == window) {
+					icon_pos = i;
+					break;
+				}
 			}
 		}
 	}
@@ -246,74 +237,66 @@ Bool acceptXDND(Window window)
 	return False;
 }
 
-Bool wXDNDProcessClientMessage(XClientMessageEvent * event)
+static void wXDNDGetTypeList(Display *dpy, Window window)
 {
-	/* test */
-	{
-		char *name = XGetAtomName(dpy, event->message_type);
-		/*
-		   printf("Get %s\n",name);
-		 */
-		XFree(name);
+	Atom type, *a;
+	Atom *typelist;
+	int format, i;
+	unsigned long count, remaining;
+	unsigned char *data = NULL;
+
+	XGetWindowProperty(dpy, window, _XA_XdndTypeList,
+						0, 0x8000000L, False, XA_ATOM,
+						&type, &format, &count, &remaining, &data);
+
+	if (type != XA_ATOM || format != 32 || count == 0 || !data) {
+		if (data)
+			XFree(data);
+		wwarning(_("wXDNDGetTypeList failed = %ld"), _XA_XdndTypeList);
+		return;
 	}
 
-	/*
-	   if (event->message_type == _XA_MOTIF_DRAG_AND_DROP_MESSAGE) {
-	   printf("motif dnd msg %d\n",event->data.b[0]);
-	   if (event->data.b[0] == XmDROP_START){
-	   unsigned x_root, y_root, flags;
-	   unsigned char reason;
-	   unsigned long timestamp;
-	   Atom atom;
-	   Window source_window;
-	   MotifDragInitiatorInfo *initiator_info;
-	   Atom ret_type;
-	   int ret_format;
-	   unsigned long ret_item;
-	   unsigned long remain_byte;
-
-	   reason = event->data.b[0];
-	   flags = event->data.s[1];
-	   timestamp = event->data.l[1];
-	   x_root = event->data.s[4];
-	   y_root = event->data.s[5];
-	   atom = event->data.l[3];
-	   source_window = event->data.l[4];
-
-	   XGetWindowProperty(dpy, source_window, atom,
-	   0, sizeof(*initiator_info), True, atom_support,
-	   &ret_type, &ret_format,
-	   &ret_item, &remain_byte, (unsigned char **)&initiator_info);
-	   }
-	   }
-	   else */
-	if (event->message_type == _XA_XdndEnter) {
-		if ((event->data.l[1] & 1) == 0) {
-			atom_support = event->data.l[2];
+	typelist = malloc((count + 1) * sizeof(Atom));
+	a = (Atom *) data;
+	for (i = 0; i < count; i++) {
+		typelist[i] = a[i];
+		if (typelist[i] == supported_typelist) {
+			selected_typelist = typelist[i];
+			break;
 		}
-		/*
-		   else puts("enter more than 3 types");
-		 */
+	}
+	typelist[count] = 0;
+	XFree(data);
+	free(typelist);
+}
+
+Bool wXDNDProcessClientMessage(XClientMessageEvent *event)
+{
+	if (event->message_type == _XA_XdndEnter) {
+
+		if (XDND_ENTER_THREE_TYPES(event)) {
+			selected_typelist = XDND_ENTER_TYPE(event, 0);
+		} else {
+			wXDNDGetTypeList(dpy, XDND_ENTER_SOURCE_WIN(event));
+			/*
+			char *name = XGetAtomName(dpy, selected_typelist);
+			fprintf(stderr, "Get %s\n",name);
+			XFree(name);
+			*/
+		}
 		return True;
 	} else if (event->message_type == _XA_XdndLeave) {
 		return True;
 	} else if (event->message_type == _XA_XdndDrop) {
-		if (event->data.l[0] == XGetSelectionOwner(dpy, _XA_XdndSelection)) {
-			XConvertSelection(dpy, _XA_XdndSelection, atom_support,
-					  _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
-		} else {
-			//printf("weird selection owner? QT?\n");
-			XConvertSelection(dpy, _XA_XdndSelection, atom_support,
+		if (XDND_DROP_SOURCE_WIN(event) == XGetSelectionOwner(dpy, _XA_XdndSelection)) {
+			XConvertSelection(dpy, _XA_XdndSelection, selected_typelist,
 					  _XA_WINDOWMAKER_XDNDEXCHANGE, event->window, CurrentTime);
 		}
 		return True;
 	} else if (event->message_type == _XA_XdndPosition) {
 		XEvent xevent;
-		Window srcwin = event->data.l[0];
-		if (atom_support != XInternAtom(dpy, "text/uri-list", False)) {
-			return True;
-		}
-		{
+		Window srcwin = XDND_POSITION_SOURCE_WIN(event);
+		if (selected_typelist == supported_typelist) {
 			memset(&xevent, 0, sizeof(xevent));
 			xevent.xany.type = ClientMessage;
 			xevent.xany.display = dpy;
@@ -324,7 +307,7 @@ Bool wXDNDProcessClientMessage(XClientMessageEvent * event)
 			XDND_STATUS_TARGET_WIN(&xevent) = event->window;
 			XDND_STATUS_WILL_ACCEPT_SET(&xevent, acceptXDND(event->window));
 			XDND_STATUS_WANT_POSITION_SET(&xevent, True);
-			XDND_STATUS_RECT_SET(&xevent, 0, 0, 1024, 768);
+			XDND_STATUS_RECT_SET(&xevent, 0, 0, 0, 0);
 			XDND_STATUS_ACTION(&xevent) = _XA_XdndActionCopy;
 
 			XSendEvent(dpy, srcwin, 0, 0, &xevent);
@@ -333,5 +316,4 @@ Bool wXDNDProcessClientMessage(XClientMessageEvent * event)
 	}
 	return False;
 }
-
 #endif
