@@ -1315,6 +1315,10 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, ", MWM");
 #endif
 
+#ifdef XDND
+	strbuf = wstrappend(strbuf, ", XDnD");
+#endif
+
 #ifdef USE_MAGICK
 	strbuf = wstrappend(strbuf, ", ImageMagick");
 #endif
