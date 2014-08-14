@@ -1798,7 +1798,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 #define RESIZEBAR	1
 #define HCONSTRAIN	2
 
-static int getResizeDirection(WWindow * wwin, int x, int y, int dx, int dy, int flags)
+static int getResizeDirection(WWindow * wwin, int x, int y, int dy, int flags)
 {
 	int w = wwin->frame->core->width - 1;
 	int cw = wwin->frame->resizebar_corner_width;
@@ -1980,9 +1980,7 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 						     || abs(orig_y - event.xmotion.y_root) < HRESIZE_THRESHOLD))
 					flags |= HCONSTRAIN;
 
-				res = getResizeDirection(wwin, tx, ty,
-							 orig_x - event.xmotion.x_root,
-							 orig_y - event.xmotion.y_root, flags);
+				res = getResizeDirection(wwin, tx, ty, orig_y - event.xmotion.y_root, flags);
 
 				if (res == (UP | LEFT))
 					XChangeActivePointerGrab(dpy, ButtonMotionMask
