@@ -36,9 +36,6 @@
 /* If you want animations for iconification, shading, icon arrangement etc. */
 #define ANIMATIONS
 
-/* support for XDND drop in the Dock. Experimental */
-/*#define XDND*/
-
 /* support for Motif window manager (mwm) window hints */
 #define MWM_HINTS
 

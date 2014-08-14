@@ -501,6 +501,18 @@ dnl ============================
 AC_ARG_ENABLE(modelock, AS_HELP_STRING([--enable-modelock], [XKB keyboard language status support]),
 		AC_DEFINE(XKB_MODELOCK, 1, [whether XKB language MODELOCK should be enabled]))
 
+dnl XDND Drag-nd-Drop support
+dnl ============================
+AC_ARG_ENABLE([xdnd],
+    [AS_HELP_STRING([--disable-xdnd], [disable Drag-nd-Drop support])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --disable-xdnd]) ]) ],
+    [enable_xdnd=yes
+  supported_xext="$supported_xext XDnD"
+  AC_DEFINE(XDND, 1, [whether Drag-nd-Drop support should be enabled])
+])
+
 dnl XShape support
 dnl ==============
 AC_ARG_ENABLE([shape],
