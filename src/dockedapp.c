@@ -300,7 +300,7 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 	WMMapSubwidgets(panel->pasteCommandFrame);
 
 	panel->dndCommandFrame = WMCreateFrame(vbox);
-	WMSetFrameTitle(panel->dndCommandFrame, _("Command for files dropped with DND"));
+	WMSetFrameTitle(panel->dndCommandFrame, _("Command for dragged and dropped files"));
 	WMAddBoxSubview(vbox, WMWidgetView(panel->dndCommandFrame), False, True, 70, 70, 5);
 
 	panel->dndCommandField = WMCreateTextField(panel->dndCommandFrame);
@@ -315,7 +315,7 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 	WMSetLabelText(panel->dndCommandLabel, _("%d will be replaced with the file name"));
 #else
 	WMSetTextFieldEditable(panel->dndCommandField, False);
-	WMSetLabelText(panel->dndCommandLabel, _("DND support was not compiled in"));
+	WMSetLabelText(panel->dndCommandLabel, _("XDnD support was not compiled in"));
 
 	WMSetFrameTitleColor(panel->dndCommandFrame, WMDarkGrayColor(scr->wmscreen));
 	WMSetLabelTextColor(panel->dndCommandLabel, WMDarkGrayColor(scr->wmscreen));
