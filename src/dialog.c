@@ -4,6 +4,7 @@
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
+ *  Copyright (c) 2014 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1127,7 +1128,7 @@ typedef struct {
     "Copyright \xc2\xa9 1998-2006 Dan Pascu\n"\
     "Copyright \xc2\xa9 2013-2014 Window Maker Developers Team"
 
-static InfoPanel *thePanel = NULL;
+static InfoPanel *infoPanel = NULL;
 
 static void destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 {
@@ -1136,11 +1137,11 @@ static void destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 	(void) data;
 	(void) event;
 
-	WMUnmapWidget(thePanel);
-	wUnmanageWindow(thePanel->wwin, False, False);
-	WMDestroyWidget(thePanel->win);
-	wfree(thePanel);
-	thePanel = NULL;
+	WMUnmapWidget(infoPanel);
+	wUnmanageWindow(infoPanel->wwin, False, False);
+	WMDestroyWidget(infoPanel->win);
+	wfree(infoPanel);
+	infoPanel = NULL;
 }
 
 void wShowInfoPanel(WScreen *scr)
@@ -1167,10 +1168,10 @@ void wShowInfoPanel(WScreen *scr)
 		"DirectColor"
 	};
 
-	if (thePanel) {
-		if (thePanel->scr == scr) {
-			wRaiseFrame(thePanel->wwin->frame->core);
-			wSetFocusTo(scr, thePanel->wwin);
+	if (infoPanel) {
+		if (infoPanel->scr == scr) {
+			wRaiseFrame(infoPanel->wwin->frame->core);
+			wSetFocusTo(scr, infoPanel->wwin);
 		}
 		return;
 	}
@@ -1382,7 +1383,7 @@ void wShowInfoPanel(WScreen *scr)
 	wWindowMap(wwin);
 
 	panel->wwin = wwin;
-	thePanel = panel;
+	infoPanel = panel;
 }
 
 /*
