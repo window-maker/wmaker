@@ -265,18 +265,33 @@ static void XConvertCase(register KeySym sym, KeySym * lower, KeySym * upper)
 
 static int NumLockMask(Display *dpy)
 {
-	int i;
-	XModifierKeymap *map = XGetModifierMapping(dpy);
+	int i, mask;
+	XModifierKeymap *map;
+	static int mask_table[8] = {
+		ShiftMask, LockMask, ControlMask, Mod1Mask,
+		Mod2Mask, Mod3Mask, Mod4Mask, Mod5Mask
+	};
 	KeyCode numlock_keycode = XKeysymToKeycode(dpy, XK_Num_Lock);
+
 	if (numlock_keycode == NoSymbol)
 		return 0;
 
-	for (i = 0; i < 8; i++) {
-		if (map->modifiermap[map->max_keypermod * i] == numlock_keycode)
-			return 1 << i;
+	map = XGetModifierMapping(dpy);
+	if (!map)
+		return 0;
+
+	mask = 0;
+	for (i = 0; i < 8 * map->max_keypermod; i++) {
+		if (map->modifiermap[i] == numlock_keycode && mask == 0) {
+			mask = mask_table[i/map->max_keypermod];
+			break;
+		}
 	}
 
-	return 0;
+	if (map)
+		XFreeModifiermap(map);
+
+	return mask;
 }
 
 char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
@@ -285,15 +300,20 @@ char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 	KeySym ksym, lksym, uksym;
 	char buffer[64];
 	char *key = NULL;
+	unsigned int numlock_mask;
 
 	while (*capturing) {
 		XAllowEvents(dpy, AsyncKeyboard, CurrentTime);
 		WMNextEvent(dpy, &ev);
 		if (ev.type == KeyPress && ev.xkey.keycode != 0) {
+			numlock_mask = NumLockMask(dpy);
+
 			if (xext_xkb_supported)
-				ksym = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0);
+				/* conditional mask check to get numeric keypad keys */
+				ksym = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, ev.xkey.state & numlock_mask?1:0);
 			else
 				ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
+
 			if (!IsModifierKey(ksym)) {
 				if (convert_case) {
 					XConvertCase(ksym, &lksym, &uksym);
@@ -320,19 +340,19 @@ char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 	if (ev.xkey.state & ShiftMask)
 		strcat(buffer, "Shift+");
 
-	if ((ev.xkey.state & Mod1Mask) && !NumLockMask(dpy))
+	if ((numlock_mask != Mod1Mask) && (ev.xkey.state & Mod1Mask))
 		strcat(buffer, "Mod1+");
 
-	if ((ev.xkey.state & Mod2Mask) && !NumLockMask(dpy))
+	if ((numlock_mask != Mod2Mask) && (ev.xkey.state & Mod2Mask))
 		strcat(buffer, "Mod2+");
 
-	if ((ev.xkey.state & Mod3Mask) && !NumLockMask(dpy))
+	if ((numlock_mask != Mod3Mask) && (ev.xkey.state & Mod3Mask))
 		strcat(buffer, "Mod3+");
 
-	if ((ev.xkey.state & Mod4Mask) && !NumLockMask(dpy))
+	if ((numlock_mask != Mod4Mask) && (ev.xkey.state & Mod4Mask))
 		strcat(buffer, "Mod4+");
 
-	if ((ev.xkey.state & Mod5Mask) && !NumLockMask(dpy))
+	if ((numlock_mask != Mod5Mask) && (ev.xkey.state & Mod5Mask))
 		strcat(buffer, "Mod5+");
 
 	strcat(buffer, key);
