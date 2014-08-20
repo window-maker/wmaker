@@ -72,10 +72,10 @@ typedef struct _WBalloon {
 #define LEFT	0
 #define RIGHT	2
 
-#define TLEFT	(TOP|LEFT)
-#define TRIGHT 	(TOP|RIGHT)
-#define BLEFT	(BOTTOM|LEFT)
-#define BRIGHT	(BOTTOM|RIGHT)
+#define TLEFT (TOP|LEFT)
+#define TRIGHT (TOP|RIGHT)
+#define BLEFT (BOTTOM|LEFT)
+#define BRIGHT (BOTTOM|RIGHT)
 
 static int countLines(const char *text)
 {
@@ -90,7 +90,7 @@ static int countLines(const char *text)
 	return h;
 }
 
-static int getMaxStringWidth(WMFont * font, const char *text)
+static int getMaxStringWidth(WMFont *font, const char *text)
 {
 	const char *p = text;
 	const char *pb = p;
@@ -117,8 +117,7 @@ static int getMaxStringWidth(WMFont * font, const char *text)
 	return w;
 }
 
-static void
-drawMultiLineString(WMScreen * scr, Pixmap pixmap, WMColor * color,
+static void drawMultiLineString(WMScreen *scr, Pixmap pixmap, WMColor *color,
 		    WMFont *font, int x, int y, const char *text, int len)
 {
 	const char *p = text;
@@ -137,16 +136,15 @@ drawMultiLineString(WMScreen * scr, Pixmap pixmap, WMColor * color,
 		}
 		p++;
 	}
-	if (pos > 0) {
+	if (pos > 0)
 		WMDrawString(scr, pixmap, color, font, x, y + l * height, pb, pos);
-	}
 }
 
 #ifdef SHAPED_BALLOON
 
-#define 	SPACE	12
+#define SPACE 12
 
-static void drawBalloon(WScreen * scr, Pixmap bitmap, Pixmap pix, int x, int y, int w, int h, int side)
+static void drawBalloon(WScreen *scr, Pixmap bitmap, Pixmap pix, int x, int y, int w, int h, int side)
 {
 	GC bgc = scr->balloon->monoGC;
 	GC gc = scr->draw_gc;
@@ -236,7 +234,7 @@ static void drawBalloon(WScreen * scr, Pixmap bitmap, Pixmap pix, int x, int y, 
 	XDrawLines(dpy, pix, gc, pt, 3, CoordModeOrigin);
 }
 
-static Pixmap makePixmap(WScreen * scr, int width, int height, int side, Pixmap * mask)
+static Pixmap makePixmap(WScreen *scr, int width, int height, int side, Pixmap *mask)
 {
 	WBalloon *bal = scr->balloon;
 	Pixmap bitmap;
@@ -245,9 +243,9 @@ static Pixmap makePixmap(WScreen * scr, int width, int height, int side, Pixmap 
 
 	bitmap = XCreatePixmap(dpy, scr->root_win, width + SPACE, height + SPACE, 1);
 
-	if (!bal->monoGC) {
+	if (!bal->monoGC)
 		bal->monoGC = XCreateGC(dpy, bitmap, 0, NULL);
-	}
+
 	XSetForeground(dpy, bal->monoGC, 0);
 	XFillRectangle(dpy, bitmap, bal->monoGC, 0, 0, width + SPACE, height + SPACE);
 
@@ -255,11 +253,10 @@ static Pixmap makePixmap(WScreen * scr, int width, int height, int side, Pixmap 
 	XSetForeground(dpy, scr->draw_gc, scr->black_pixel);
 	XFillRectangle(dpy, pixmap, scr->draw_gc, 0, 0, width + SPACE, height + SPACE);
 
-	if (side & BOTTOM) {
+	if (side & BOTTOM)
 		y = 0;
-	} else {
+	else
 		y = SPACE;
-	}
 	x = 0;
 
 	drawBalloon(scr, bitmap, pixmap, x, y, width, height, side);
@@ -444,7 +441,7 @@ static void showApercu(WScreen *scr, int x, int y, int height, int width, char *
 	scr->balloon->mapped = 1;
 }
 
-static void showBalloon(WScreen * scr)
+static void showBalloon(WScreen *scr)
 {
 	int x, y;
 	Window foow;
@@ -460,13 +457,14 @@ static void showBalloon(WScreen * scr)
 
 	if (wPreferences.miniwin_apercu_balloon && scr->balloon->apercu != None)
 		/* used to display either the apercu alone or the apercu and the title */
-		showApercu(scr, x, y, (wPreferences.icon_size - 1) * wPreferences.apercu_size, (wPreferences.icon_size - 1) * wPreferences.apercu_size,
+		showApercu(scr, x, y, (wPreferences.icon_size - 1) * wPreferences.apercu_size,
+					(wPreferences.icon_size - 1) * wPreferences.apercu_size,
 					scr->balloon->text, scr->balloon->apercu);
 	else
 		showText(scr, x, y, scr->balloon->h, w, scr->balloon->text);
 }
 
-static void frameBalloon(WObjDescriptor * object)
+static void frameBalloon(WObjDescriptor *object)
 {
 	WFrameWindow *fwin = (WFrameWindow *) object->parent;
 	WScreen *scr = fwin->core->screen_ptr;
@@ -483,7 +481,7 @@ static void frameBalloon(WObjDescriptor * object)
 	}
 }
 
-static void miniwindowBalloon(WObjDescriptor * object)
+static void miniwindowBalloon(WObjDescriptor *object)
 {
 	WIcon *icon = (WIcon *) object->parent;
 	WScreen *scr = icon->core->screen_ptr;
@@ -522,22 +520,43 @@ static void appiconBalloon(WObjDescriptor *object)
 		}
 	} else if (aicon->command && aicon->wm_class) {
 		int len;
-                /* Check to see if it is a GNUstep app */
+		WApplication *app;
+		unsigned int app_win_cnt = 0;
+
+		if (object->parent_type == WCLASS_DOCK_ICON) {
+			if (aicon->main_window) {
+				app = wApplicationOf(aicon->main_window);
+				if (app && app->main_window_desc && app->main_window_desc->fake_group)
+					app_win_cnt = app->main_window_desc->fake_group->retainCount - 1;
+			}
+		}
+
+		/* Check to see if it is a GNUstep app */
 		if (strcmp(aicon->wm_class, "GNUstep") == 0)
 			len = strlen(aicon->command) + strlen(aicon->wm_instance) + 8;
 		else
 			len = strlen(aicon->command) + strlen(aicon->wm_class) + 8;
+
+		if (app_win_cnt > 0)
+			len += 1 + snprintf(NULL, 0, "%u", app_win_cnt);
+
 		tmp = wmalloc(len);
-                /* Check to see if it is a GNUstep App */
+		/* Check to see if it is a GNUstep App */
 		if (strcmp(aicon->wm_class, "GNUstep") == 0)
-			snprintf(tmp, len, "%s\n(%s)", aicon->wm_instance, aicon->command);
+			if (app_win_cnt > 0)
+				snprintf(tmp, len, "%u %s\n(%s)", app_win_cnt, aicon->wm_instance, aicon->command);
+			else
+				snprintf(tmp, len, "%s\n(%s)", aicon->wm_instance, aicon->command);
 		else
-			snprintf(tmp, len, "%s\n(%s)", aicon->wm_class, aicon->command);
+			if (app_win_cnt > 0)
+				snprintf(tmp, len, "%u %s\n(%s)", app_win_cnt, aicon->wm_class, aicon->command);
+			else
+				snprintf(tmp, len, "%s\n(%s)", aicon->wm_class, aicon->command);
 		scr->balloon->text = tmp;
 	} else if (aicon->command) {
 		scr->balloon->text = wstrdup(aicon->command);
 	} else if (aicon->wm_class) {
-                /* Check to see if it is a GNUstep App */
+		/* Check to see if it is a GNUstep App */
 		if (strcmp(aicon->wm_class, "GNUstep") == 0)
 			scr->balloon->text = wstrdup(aicon->wm_instance);
 		else
@@ -558,7 +577,7 @@ static void appiconBalloon(WObjDescriptor *object)
 	}
 }
 
-void wBalloonInitialize(WScreen * scr)
+void wBalloonInitialize(WScreen *scr)
 {
 	WBalloon *bal;
 	XSetWindowAttributes attribs;
@@ -584,7 +603,7 @@ void wBalloonInitialize(WScreen * scr)
 #endif
 }
 
-void wBalloonEnteredObject(WScreen * scr, WObjDescriptor * object)
+void wBalloonEnteredObject(WScreen *scr, WObjDescriptor *object)
 {
 	WBalloon *balloon = scr->balloon;
 
@@ -630,7 +649,7 @@ void wBalloonEnteredObject(WScreen * scr, WObjDescriptor * object)
 	scr->balloon->prevType = object->parent_type;
 }
 
-void wBalloonHide(WScreen * scr)
+void wBalloonHide(WScreen *scr)
 {
 	if (scr) {
 		if (scr->balloon->mapped) {
