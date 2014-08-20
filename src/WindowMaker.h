@@ -392,7 +392,8 @@ extern struct WPreferences {
 
     /* balloon text */
     char window_balloon;
-    char miniwin_balloon;
+    char miniwin_title_balloon;
+    char miniwin_apercu_balloon;
     char appicon_balloon;
     char help_balloon;
 

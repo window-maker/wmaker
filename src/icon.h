@@ -29,6 +29,8 @@
 #define TILE_CLIP	1
 #define TILE_DRAWER	2
 
+#define APERCU_BORDER 2
+
 typedef struct WIcon {
 	WCoreWindow 	*core;
 	WWindow 	*owner;		/* owner window */
@@ -48,6 +50,7 @@ typedef struct WIcon {
 	unsigned int	highlighted:1;
 
 	Pixmap 		pixmap;
+	Pixmap		apercu;
 
 	WMHandlerID	handlerID;	/* timer handler ID for cycling select
 					 * color */
@@ -74,5 +77,6 @@ char *get_name_for_instance_class(const char *wm_instance, const char *wm_class)
 
 void wIconSetHighlited(WIcon *icon, Bool flag);
 void set_icon_image_from_image(WIcon *icon, RImage *image);
+void set_icon_apercu(WIcon *icon, RImage *image);
 
 #endif /* WMICON_H_ */

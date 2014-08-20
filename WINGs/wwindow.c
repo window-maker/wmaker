@@ -606,8 +606,8 @@ void WMSetWindowMiniwindowPixmap(WMWindow * win, WMPixmap * pixmap)
 
 void WMSetWindowMiniwindowTitle(WMWindow * win, const char *title)
 {
-	if ((win->miniTitle && !title) || (!win->miniTitle && title)
-	    || (title && win->miniTitle && strcoll(title, win->miniTitle) != 0)) {
+	if (win && ((win->miniTitle && !title) || (!win->miniTitle && title)
+	    || (title && win->miniTitle && strcoll(title, win->miniTitle) != 0))) {
 		if (win->miniTitle)
 			wfree(win->miniTitle);
 

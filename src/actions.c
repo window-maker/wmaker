@@ -1094,6 +1094,40 @@ void wIconifyWindow(WWindow * wwin)
 
 		wwin->icon = icon_create_for_wwindow(wwin);
 		wwin->icon->mapped = 1;
+
+		/* extract the window screenshot everytime, as the option can be enable anytime */
+		if (wwin->client_win && wwin->flags.mapped) {
+			RImage *apercu;
+			XImage *pimg;
+			unsigned int w, h;
+			int x, y;
+			Window baz;
+
+			XRaiseWindow(dpy, wwin->frame->core->window);
+			XTranslateCoordinates(dpy, wwin->client_win, wwin->screen_ptr->root_win, 0, 0, &x, &y, &baz);
+
+			w = attribs.width;
+			h = attribs.height;
+
+			if (x - attribs.x + attribs.width > wwin->screen_ptr->scr_width)
+				w = wwin->screen_ptr->scr_width - x + attribs.x;
+
+			if (y - attribs.y + attribs.height > wwin->screen_ptr->scr_height)
+				h = wwin->screen_ptr->scr_height - y + attribs.y;
+
+			pimg = XGetImage(dpy, wwin->client_win, 0, 0, w, h, AllPlanes, ZPixmap);
+			if (pimg) {
+				apercu = RCreateImageFromXImage(wwin->screen_ptr->rcontext, pimg, NULL);
+				XDestroyImage(pimg);
+
+				if (apercu) {
+					set_icon_apercu(wwin->icon, apercu);
+					RReleaseImage(apercu);
+				} else {
+					wwarning("window apercu creation failed");
+				}
+			}
+		}
 	}
 
 	wwin->flags.miniaturized = 1;

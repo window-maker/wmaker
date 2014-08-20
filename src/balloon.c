@@ -2,6 +2,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
+ *  Copyright (c) 2014 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -42,6 +43,7 @@
 #include "appicon.h"
 #include "workspace.h"
 #include "balloon.h"
+#include "misc.h"
 
 
 typedef struct _WBalloon {
@@ -59,6 +61,7 @@ typedef struct _WBalloon {
 	WMHandlerID timer;
 
 	Pixmap contents;
+	Pixmap apercu;
 
 	char mapped;
 	char ignoreTimer;
@@ -376,6 +379,71 @@ static void showText(WScreen *scr, int x, int y, int h, int w, const char *text)
 }
 #endif				/* !SHAPED_BALLOON */
 
+static void showApercu(WScreen *scr, int x, int y, int height, int width, char *title, Pixmap apercu)
+{
+	Pixmap pixmap;
+	WMFont *font = scr->info_text_font;
+	int titleHeight = 0;
+	char *shortenTitle = title;
+
+	if (scr->balloon->contents)
+		XFreePixmap(dpy, scr->balloon->contents);
+
+	if (wPreferences.miniwin_title_balloon) {
+		shortenTitle = ShrinkString(font, title, width - APERCU_BORDER);
+		titleHeight = countLines(shortenTitle) * WMFontHeight(font) + 4;
+		height += titleHeight;
+	}
+
+	if (x < 0)
+		x = 0;
+	else if (x + width > scr->scr_width - 1)
+		x = scr->scr_width - width - APERCU_BORDER;
+
+	if (y - height - 2 < 0) {
+		y += wPreferences.icon_size;
+		if (y < 0)
+			y = 0;
+	} else {
+		y -= height + 2;
+	}
+
+	if (scr->window_title_texture[0])
+		XSetForeground(dpy, scr->draw_gc, scr->window_title_texture[0]->any.color.pixel);
+	else
+		XSetForeground(dpy, scr->draw_gc, scr->light_pixel);
+
+	pixmap = XCreatePixmap(dpy, scr->root_win, width, height, scr->w_depth);
+	XFillRectangle(dpy, pixmap, scr->draw_gc, 0, 0, width, height);
+
+	if (shortenTitle && wPreferences.miniwin_title_balloon) {
+		drawMultiLineString(scr->wmscreen, pixmap, scr->window_title_color[0], font,
+						APERCU_BORDER, APERCU_BORDER, shortenTitle, strlen(shortenTitle));
+		wfree(shortenTitle);
+	}
+
+	XCopyArea(dpy, apercu, pixmap, scr->draw_gc,
+				0, 0, (wPreferences.icon_size - 1 - APERCU_BORDER) * 2,
+				(wPreferences.icon_size - 1 - APERCU_BORDER) * 2,
+				APERCU_BORDER, APERCU_BORDER + titleHeight);
+
+#ifdef SHAPED_BALLOON
+	XShapeCombineMask(dpy, scr->balloon->window, ShapeBounding, 0, 0, None, ShapeSet);
+#endif
+	XResizeWindow(dpy, scr->balloon->window, width, height);
+	XMoveWindow(dpy, scr->balloon->window, x, y);
+
+	XSetWindowBackgroundPixmap(dpy, scr->balloon->window, pixmap);
+
+	XClearWindow(dpy, scr->balloon->window);
+	XMapRaised(dpy, scr->balloon->window);
+
+
+	scr->balloon->contents = pixmap;
+
+	scr->balloon->mapped = 1;
+}
+
 static void showBalloon(WScreen * scr)
 {
 	int x, y;
@@ -389,7 +457,13 @@ static void showBalloon(WScreen * scr)
 		scr->balloon->prevType = 0;
 		return;
 	}
-	showText(scr, x, y, scr->balloon->h, w, scr->balloon->text);
+
+	if (wPreferences.miniwin_apercu_balloon && scr->balloon->apercu != None)
+		/* used to display either the apercu alone or the apercu and the title */
+		showApercu(scr, x, y, (wPreferences.icon_size - 1) * 2, (wPreferences.icon_size - 1) * 2,
+					scr->balloon->text, scr->balloon->apercu);
+	else
+		showText(scr, x, y, scr->balloon->h, w, scr->balloon->text);
 }
 
 static void frameBalloon(WObjDescriptor * object)
@@ -420,7 +494,9 @@ static void miniwindowBalloon(WObjDescriptor * object)
 	}
 	scr->balloon->h = icon->core->height;
 	scr->balloon->text = wstrdup(icon->icon_name);
+	scr->balloon->apercu = icon->apercu;
 	scr->balloon->objectWindow = icon->core->window;
+
 	if ((scr->balloon->prevType == object->parent_type || scr->balloon->prevType == WCLASS_APPICON)
 	    && scr->balloon->ignoreTimer) {
 		XUnmapWindow(dpy, scr->balloon->window);
@@ -522,6 +598,8 @@ void wBalloonEnteredObject(WScreen * scr, WObjDescriptor * object)
 		wfree(scr->balloon->text);
 	scr->balloon->text = NULL;
 
+	scr->balloon->apercu = None;
+
 	if (!object) {
 		wBalloonHide(scr);
 		balloon->ignoreTimer = 0;
@@ -538,7 +616,7 @@ void wBalloonEnteredObject(WScreen * scr, WObjDescriptor * object)
 			appiconBalloon(object);
 		break;
 	case WCLASS_MINIWINDOW:
-		if (wPreferences.miniwin_balloon)
+		if (wPreferences.miniwin_title_balloon || wPreferences.miniwin_apercu_balloon)
 			miniwindowBalloon(object);
 		break;
 	case WCLASS_APPICON:

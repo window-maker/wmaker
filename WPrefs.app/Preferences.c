@@ -39,7 +39,7 @@ typedef struct _Panel {
 	WMPopUpButton *posiP;
 
 	WMFrame *ballF;
-	WMButton *ballB[4];
+	WMButton *ballB[5];
 
 	WMFrame *optF;
 	WMButton *bounceB;
@@ -136,8 +136,9 @@ static void showData(_Panel * panel)
 
 	WMSetButtonSelected(panel->ballB[0], GetBoolForKey("WindowTitleBalloons"));
 	WMSetButtonSelected(panel->ballB[1], GetBoolForKey("MiniwindowTitleBalloons"));
-	WMSetButtonSelected(panel->ballB[2], GetBoolForKey("AppIconBalloons"));
-	WMSetButtonSelected(panel->ballB[3], GetBoolForKey("HelpBalloons"));
+	WMSetButtonSelected(panel->ballB[2], GetBoolForKey("MiniwindowApercuBalloons"));
+	WMSetButtonSelected(panel->ballB[3], GetBoolForKey("AppIconBalloons"));
+	WMSetButtonSelected(panel->ballB[4], GetBoolForKey("HelpBalloons"));
 }
 
 static void storeData(_Panel * panel)
@@ -198,8 +199,9 @@ static void storeData(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->bounceRaisB), "RaiseAppIconsWhenBouncing");
 	SetBoolForKey(WMGetButtonSelected(panel->ballB[0]), "WindowTitleBalloons");
 	SetBoolForKey(WMGetButtonSelected(panel->ballB[1]), "MiniwindowTitleBalloons");
-	SetBoolForKey(WMGetButtonSelected(panel->ballB[2]), "AppIconBalloons");
-	SetBoolForKey(WMGetButtonSelected(panel->ballB[3]), "HelpBalloons");
+	SetBoolForKey(WMGetButtonSelected(panel->ballB[2]), "MiniwindowApercuBalloons");
+	SetBoolForKey(WMGetButtonSelected(panel->ballB[3]), "AppIconBalloons");
+	SetBoolForKey(WMGetButtonSelected(panel->ballB[4]), "HelpBalloons");
 }
 
 static void createPanel(Panel * p)
@@ -251,26 +253,27 @@ static void createPanel(Panel * p)
 
     /***************** Balloon Text ****************/
 	panel->ballF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->ballF, 240, 109);
+	WMResizeWidget(panel->ballF, 240, 126);
 	WMMoveWidget(panel->ballF, 265, 10);
-	WMSetFrameTitle(panel->ballF, _("Show balloon text for..."));
+	WMSetFrameTitle(panel->ballF, _("Show balloon for..."));
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < 5; i++) {
 		panel->ballB[i] = WMCreateSwitchButton(panel->ballF);
 		WMResizeWidget(panel->ballB[i], 210, 20);
 		WMMoveWidget(panel->ballB[i], 15, 16 + i * 22);
 	}
 	WMSetButtonText(panel->ballB[0], _("incomplete window titles"));
 	WMSetButtonText(panel->ballB[1], _("miniwindow titles"));
-	WMSetButtonText(panel->ballB[2], _("application/dock icons"));
-	WMSetButtonText(panel->ballB[3], _("internal help"));
+	WMSetButtonText(panel->ballB[2], _("miniwindow apercus"));
+	WMSetButtonText(panel->ballB[3], _("application/dock icons"));
+	WMSetButtonText(panel->ballB[4], _("internal help"));
 
 	WMMapSubwidgets(panel->ballF);
 
     /***************** Options ****************/
 	panel->optF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->optF, 240, 101);
-	WMMoveWidget(panel->optF, 265, 124);
+	WMResizeWidget(panel->optF, 240, 91);
+	WMMoveWidget(panel->optF, 265, 136);
 	WMSetFrameTitle(panel->optF, _("AppIcon bouncing"));
 
 	panel->bounceB = WMCreateSwitchButton(panel->optF);
@@ -279,21 +282,21 @@ static void createPanel(Panel * p)
 	WMSetButtonText(panel->bounceB, _("Disable AppIcon bounce."));
 
 	panel->bounceUrgB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->bounceUrgB, 210, 30);
-	WMMoveWidget(panel->bounceUrgB, 15, 39);
+	WMResizeWidget(panel->bounceUrgB, 210, 28);
+	WMMoveWidget(panel->bounceUrgB, 15, 37);
 	WMSetButtonText(panel->bounceUrgB, _("Bounce AppIcon when the application wants attention."));
 	WMSetButtonSelected(panel->bounceUrgB, True); /* defaults to true */
 
 	panel->bounceRaisB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->bounceRaisB, 210, 25);
-	WMMoveWidget(panel->bounceRaisB, 15, 70);
+	WMResizeWidget(panel->bounceRaisB, 210, 23);
+	WMMoveWidget(panel->bounceRaisB, 15, 65);
 	WMSetButtonText(panel->bounceRaisB, _("Raise AppIcons when bouncing."));
 
 	WMMapSubwidgets(panel->optF);
 
     /***************** Workspace border ****************/
 	panel->borderF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->borderF, 240, 80);
+	WMResizeWidget(panel->borderF, 240, 82);
 	WMMoveWidget(panel->borderF, 15, 145);
 	WMSetFrameTitle(panel->borderF, _("Workspace border"));
 
