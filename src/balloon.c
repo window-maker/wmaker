@@ -423,8 +423,8 @@ static void showApercu(WScreen *scr, int x, int y, int height, int width, char *
 	}
 
 	XCopyArea(dpy, apercu, pixmap, scr->draw_gc,
-				0, 0, (wPreferences.icon_size - 1 - APERCU_BORDER) * 2,
-				(wPreferences.icon_size - 1 - APERCU_BORDER) * 2,
+				0, 0, (wPreferences.icon_size - 1 - APERCU_BORDER) * wPreferences.apercu_size,
+				(wPreferences.icon_size - 1 - APERCU_BORDER) * wPreferences.apercu_size,
 				APERCU_BORDER, APERCU_BORDER + titleHeight);
 
 #ifdef SHAPED_BALLOON
@@ -460,7 +460,7 @@ static void showBalloon(WScreen * scr)
 
 	if (wPreferences.miniwin_apercu_balloon && scr->balloon->apercu != None)
 		/* used to display either the apercu alone or the apercu and the title */
-		showApercu(scr, x, y, (wPreferences.icon_size - 1) * 2, (wPreferences.icon_size - 1) * 2,
+		showApercu(scr, x, y, (wPreferences.icon_size - 1) * wPreferences.apercu_size, (wPreferences.icon_size - 1) * wPreferences.apercu_size,
 					scr->balloon->text, scr->balloon->apercu);
 	else
 		showText(scr, x, y, scr->balloon->h, w, scr->balloon->text);
