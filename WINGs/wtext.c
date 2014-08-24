@@ -3322,13 +3322,8 @@ WMGetTextBlockProperties(WMText * tPtr, void *vtb, unsigned int *first,
 		*margins = tPtr->margins[tb->marginN];
 }
 
-void WMPrependTextBlock(WMText * tPtr, void *vtb)
+static int prepareTextBlock(WMText *tPtr, TextBlock *tb)
 {
-	TextBlock *tb = (TextBlock *) vtb;
-
-	if (!tb)
-		return;
-
 	if (tb->graphic) {
 		if (tb->object) {
 			WMWidget *w = tb->d.widget;
@@ -3348,12 +3343,23 @@ void WMPrependTextBlock(WMText * tPtr, void *vtb)
 		tb->next = tb->prior = NULL;
 		tb->first = True;
 		tPtr->lastTextBlock = tPtr->firstTextBlock = tPtr->currentTextBlock = tb;
-		return;
+		return 0;
 	}
 
 	if (!tb->first) {
 		tb->marginN = tPtr->currentTextBlock->marginN;
 	}
+
+	return 1;
+}
+
+
+void WMPrependTextBlock(WMText *tPtr, void *vtb)
+{
+	TextBlock *tb = (TextBlock *) vtb;
+
+	if (!tb || !prepareTextBlock(tPtr, tb))
+		return;
 
 	tb->next = tPtr->currentTextBlock;
 	tb->prior = tPtr->currentTextBlock->prior;
@@ -3367,38 +3373,12 @@ void WMPrependTextBlock(WMText * tPtr, void *vtb)
 	tPtr->currentTextBlock = tb;
 }
 
-void WMAppendTextBlock(WMText * tPtr, void *vtb)
+void WMAppendTextBlock(WMText *tPtr, void *vtb)
 {
 	TextBlock *tb = (TextBlock *) vtb;
 
-	if (!tb)
+	if (!tb || !prepareTextBlock(tPtr, tb))
 		return;
-
-	if (tb->graphic) {
-		if (tb->object) {
-			WMWidget *w = tb->d.widget;
-			if (W_CLASS(w) != WC_TextField && W_CLASS(w) != WC_Text) {
-				(W_VIEW(w))->attribs.cursor = tPtr->view->screen->defaultCursor;
-				(W_VIEW(w))->attribFlags |= CWOverrideRedirect | CWCursor;
-			}
-		}
-		WMAddToArray(tPtr->gfxItems, (void *)tb);
-		tPtr->tpos = 1;
-
-	} else {
-		tPtr->tpos = tb->used;
-	}
-
-	if (!tPtr->lastTextBlock || !tPtr->firstTextBlock) {
-		tb->next = tb->prior = NULL;
-		tb->first = True;
-		tPtr->lastTextBlock = tPtr->firstTextBlock = tPtr->currentTextBlock = tb;
-		return;
-	}
-
-	if (!tb->first) {
-		tb->marginN = tPtr->currentTextBlock->marginN;
-	}
 
 	tb->next = tPtr->currentTextBlock->next;
 	tb->prior = tPtr->currentTextBlock;
