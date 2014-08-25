@@ -732,7 +732,6 @@ char *GetShortcutString(const char *shortcut)
 {
 	char *buffer = NULL;
 	char *k;
-	/*    KeySym ksym; */
 	int control = 0;
 	char *tmp, *text;
 
@@ -788,7 +787,7 @@ char *GetShortcutKey(WShortKey key)
 	if (!k) return NULL;
 
 	char **m = wPreferences.modifier_labels;
-	if (key.modifier & ControlMask) tmp = wstrappend(tmp, m[1] ? m[1] : "Ctrl+");
+	if (key.modifier & ControlMask) tmp = wstrappend(tmp, m[1] ? m[1] : "Control+");
 	if (key.modifier & ShiftMask)   tmp = wstrappend(tmp, m[0] ? m[0] : "Shift+");
 	if (key.modifier & Mod1Mask)    tmp = wstrappend(tmp, m[2] ? m[2] : "Mod1+");
 	if (key.modifier & Mod2Mask)    tmp = wstrappend(tmp, m[3] ? m[3] : "Mod2+");
