@@ -2,6 +2,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 2014 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -20,6 +21,23 @@
 
 #ifndef WMKEYBIND_H
 #define WMKEYBIND_H
+
+/* <X11/X.h> doesn't define these, even though XFree supports them */
+#ifndef Button6
+#define Button6 6
+#endif
+
+#ifndef Button7
+#define Button7 7
+#endif
+
+#ifndef Button8
+#define Button8 8
+#endif
+
+#ifndef Button9
+#define Button9 9
+#endif
 
 enum {
 	/* anywhere */

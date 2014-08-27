@@ -3,6 +3,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 2014 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -751,10 +752,18 @@ static void handleButtonPress(XEvent * event)
 			executeButtonAction(scr, event, wPreferences.mouse_button2);
 		} else if (event->xbutton.button == Button3 && wPreferences.mouse_button3 != WA_NONE) {
 			executeButtonAction(scr, event, wPreferences.mouse_button3);
-		} else if (event->xbutton.button == Button4 && wPreferences.mouse_wheel != WA_NONE) {
+		} else if (event->xbutton.button == Button8 && wPreferences.mouse_button8 != WA_NONE) {
+			executeButtonAction(scr, event, wPreferences.mouse_button8);
+		}else if (event->xbutton.button == Button9 && wPreferences.mouse_button9 != WA_NONE) {
+			executeButtonAction(scr, event, wPreferences.mouse_button9);
+		} else if (event->xbutton.button == Button4 && wPreferences.mouse_wheel_scroll != WA_NONE) {
 			wWorkspaceRelativeChange(scr, 1);
-		} else if (event->xbutton.button == Button5 && wPreferences.mouse_wheel != WA_NONE) {
+		} else if (event->xbutton.button == Button5 && wPreferences.mouse_wheel_scroll != WA_NONE) {
 			wWorkspaceRelativeChange(scr, -1);
+		} else if (event->xbutton.button == Button6 && wPreferences.mouse_wheel_tilt != WA_NONE) {
+			wWorkspaceRelativeChange(scr, -1);
+		} else if (event->xbutton.button == Button7 && wPreferences.mouse_wheel_tilt != WA_NONE) {
+			wWorkspaceRelativeChange(scr, 1);
 		}
 	}
 
