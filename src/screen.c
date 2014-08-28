@@ -524,11 +524,6 @@ WScreen *wScreenInit(int screen_number)
 	oldHandler = XSetErrorHandler(alreadyRunningError);
 
 	event_mask = EVENT_MASK;
-
-	if (wPreferences.disable_root_mouse) {
-		event_mask &= ~(ButtonPressMask | ButtonReleaseMask);
-	}
-
 	XSelectInput(dpy, scr->root_win, event_mask);
 
 #ifdef KEEP_XKB_LOCK_STATUS

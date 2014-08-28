@@ -324,8 +324,6 @@ WDefaultEntry staticOptionList[] = {
 	    &wPreferences.icon_size, getInt, NULL, NULL, NULL},
 	{"ModifierKey", "Mod1", NULL,
 	    &wPreferences.modifier_mask, getModMask, NULL, NULL, NULL},
-	{"DisableWSMouseActions", "NO", NULL,
-	    &wPreferences.disable_root_mouse, getBool, NULL, NULL, NULL},
 	{"FocusMode", "manual", seFocusModes,				/* have a problem when switching from */
 	    &wPreferences.focus_mode, getEnum, NULL, NULL, NULL},	/* manual to sloppy without restart */
 	{"NewStyle", "new", seTitlebarModes,
@@ -353,6 +351,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.icon_yard, getEnum, setIconPosition, NULL, NULL},
 	{"IconificationStyle", "Zoom", seIconificationStyles,
 	    &wPreferences.iconification_style, getEnum, NULL, NULL, NULL},
+	{"DisableWSMouseActions", "NO", NULL,
+	    &wPreferences.disable_root_mouse, getBool, NULL, NULL, NULL},
 	{"MouseLeftButtonAction", "SelectWindows", seMouseButtonActions,
 	    &wPreferences.mouse_button1, getEnum, NULL, NULL, NULL},
 	{"MouseMiddleButtonAction", "OpenWindowListMenu", seMouseButtonActions,

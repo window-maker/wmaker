@@ -745,7 +745,7 @@ static void handleButtonPress(XEvent * event)
 	wBalloonHide(scr);
 #endif
 
-	if (event->xbutton.window == scr->root_win) {
+	if (!wPreferences.disable_root_mouse && event->xbutton.window == scr->root_win) {
 		if (event->xbutton.button == Button1 && wPreferences.mouse_button1 != WA_NONE) {
 			executeButtonAction(scr, event, wPreferences.mouse_button1);
 		} else if (event->xbutton.button == Button2 && wPreferences.mouse_button2 != WA_NONE) {
