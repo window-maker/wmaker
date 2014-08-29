@@ -61,6 +61,7 @@ static Atom net_desktop_viewport;
 static Atom net_current_desktop;
 static Atom net_desktop_names;
 static Atom net_active_window;
+static Atom net_workarea;
 static Atom net_supporting_wm_check;
 static Atom net_virtual_roots;	/* N/A */
 static Atom net_desktop_layout;	/* XXX */
@@ -115,7 +116,7 @@ static Atom net_wm_action_maximize_vert;
 static Atom net_wm_action_fullscreen;
 static Atom net_wm_action_change_desktop;
 static Atom net_wm_action_close;
-static Atom net_wm_strut;	/* XXX: see net_workarea */
+static Atom net_wm_strut;
 static Atom net_wm_strut_partial;	/* TODO: doesn't really fit into the current strut scheme */
 static Atom net_wm_icon_geometry;	/* FIXME: should work together with net_wm_handled_icons, gnome-panel-2.2.0.1 doesn't use _NET_WM_HANDLED_ICONS, thus present situation. */
 static Atom net_wm_icon;
@@ -145,6 +146,7 @@ static atomitem_t atomNames[] = {
 	{"_NET_CURRENT_DESKTOP", &net_current_desktop},
 	{"_NET_DESKTOP_NAMES", &net_desktop_names},
 	{"_NET_ACTIVE_WINDOW", &net_active_window},
+	{"_NET_WORKAREA", &net_workarea},
 	{"_NET_SUPPORTING_WM_CHECK", &net_supporting_wm_check},
 	{"_NET_VIRTUAL_ROOTS", &net_virtual_roots},
 	{"_NET_DESKTOP_LAYOUT", &net_desktop_layout},
@@ -261,6 +263,7 @@ static void setSupportedHints(WScreen *scr)
 	atom[i++] = net_current_desktop;
 	atom[i++] = net_desktop_names;
 	atom[i++] = net_active_window;
+	atom[i++] = net_workarea;
 	atom[i++] = net_supporting_wm_check;
 	atom[i++] = net_showing_desktop;
 #if 0
@@ -339,7 +342,6 @@ void wNETWMUpdateDesktop(WScreen *scr)
 
 	count = w_global.workspace.count * 2;
 	views = wmalloc(sizeof(long) * count);
-	/*memset(views, 0, sizeof(long) * count); */
 	sizes[0] = scr->scr_width;
 	sizes[1] = scr->scr_height;
 
@@ -680,6 +682,29 @@ void wNETWMUpdateActions(WWindow *wwin, Bool del)
 
 	XChangeProperty(dpy, wwin->client_win, net_wm_allowed_actions,
 			XA_ATOM, 32, PropModeReplace, (unsigned char *)action, i);
+}
+
+void wNETWMUpdateWorkarea(WScreen *scr)
+{
+	long *area;
+	int count, i;
+
+	if (!scr->netdata || w_global.workspace.count == 0 || !scr->usableArea)
+		return;
+
+	count = w_global.workspace.count * 4;
+	area = wmalloc(sizeof(long) * count);
+
+	for (i = 0; i < w_global.workspace.count; i++) {
+		area[4 * i + 0] = scr->usableArea[0].x1;
+		area[4 * i + 1] = scr->usableArea[0].y1;
+		area[4 * i + 2] = scr->usableArea[0].x2 - scr->usableArea[0].x1;
+		area[4 * i + 3] = scr->usableArea[0].y2 - scr->usableArea[0].y1;
+	}
+
+	XChangeProperty(dpy, scr->root_win, net_workarea, XA_CARDINAL, 32,
+				PropModeReplace, (unsigned char *)area, count);
+	wfree(area);
 }
 
 Bool wNETWMGetUsableArea(WScreen *scr, int head, WArea *area)
@@ -1101,7 +1126,7 @@ static void doStateAtom(WWindow *wwin, Atom state, int set, Bool init)
 
 	} else {
 #ifdef DEBUG_WMSPEC
-		wmessage("doStateAtom unknown atom %s set %d\n", XGetAtomName(dpy, state), set);
+		wmessage("doStateAtom unknown atom %s set %d", XGetAtomName(dpy, state), set);
 #endif
 	}
 }
@@ -1452,7 +1477,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 	Bool done = True;
 
 #ifdef DEBUG_WMSPEC
-	wmessage("processClientMessage type %s\n", XGetAtomName(dpy, event->message_type));
+	wmessage("processClientMessage type %s", XGetAtomName(dpy, event->message_type));
 #endif
 
 	scr = wScreenForWindow(event->window);
@@ -1523,7 +1548,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 		long set = event->data.l[0];
 
 #ifdef DEBUG_WMSPEC
-		wmessage("net_wm_state set %ld a1 %s a2 %s\n", set,
+		wmessage("net_wm_state set %ld a1 %s a2 %s", set,
 		       XGetAtomName(dpy, event->data.l[1]), XGetAtomName(dpy, event->data.l[2]));
 #endif
 
@@ -1561,7 +1586,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 void wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
 {
 #ifdef DEBUG_WMSPEC
-	wmessage("clientHintChange type %s\n", XGetAtomName(dpy, event->atom));
+	wmessage("clientHintChange type %s", XGetAtomName(dpy, event->atom));
 #endif
 
 	if (event->atom == net_wm_strut || event->atom == net_wm_strut_partial) {
@@ -1694,9 +1719,11 @@ static void wsobserver(void *self, WMNotification *notif)
 	if (strcmp(name, WMNWorkspaceCreated) == 0) {
 		updateWorkspaceCount(scr);
 		updateWorkspaceNames(scr);
+		wNETWMUpdateWorkarea(scr);
 	} else if (strcmp(name, WMNWorkspaceDestroyed) == 0) {
 		updateWorkspaceCount(scr);
 		updateWorkspaceNames(scr);
+		wNETWMUpdateWorkarea(scr);
 	} else if (strcmp(name, WMNWorkspaceChanged) == 0) {
 		updateCurrentWorkspace(scr);
 	} else if (strcmp(name, WMNWorkspaceNameChanged) == 0) {
