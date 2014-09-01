@@ -262,6 +262,34 @@ static void x_reset_modifier_mapping(Display * display)
 	XFreeModifiermap(x_modifier_keymap);
 }
 
+const char *wXModifierToShortcutLabel(int mask)
+{
+	if (mask < 0)
+		return NULL;
+
+	if (mask == ShiftMask)
+		return "Sh+";
+	if (mask ==  ControlMask)
+		return "^";
+	if (mask ==  AltMask)
+		return "A+";
+	if (mask ==  Mod1Mask)
+		return "M1+";
+	if (mask ==  Mod2Mask)
+		return "M2+";
+	if (mask ==  Mod3Mask)
+		return "M3+";
+	if (mask ==  Mod4Mask)
+		return "M4+";
+	if (mask ==  Mod5Mask)
+		return "M5+";
+	if (mask ==  MetaMask)
+		return "M+";
+
+	wwarning("Can't convert keymask %d to shortcut label", mask);
+	return NULL;
+}
+
 int wXModifierFromKey(const char *key)
 {
 	if (strcasecmp(key, "SHIFT") == 0 && ShiftMask != 0)
