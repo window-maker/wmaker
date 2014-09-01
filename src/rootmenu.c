@@ -4,6 +4,7 @@
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
+ *  Copyright (c) 2014 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -59,7 +60,6 @@
 #include <WINGs/WUtil.h>
 
 #define MAX_SHORTCUT_LENGTH 32
-
 
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
@@ -1048,19 +1048,13 @@ static WMenu *parseCascade(WScreen * scr, WMenu * menu, WMenuParser parser)
 	return NULL;
 }
 
-static WMenu *readMenuFile(WScreen *scr, const char *file_name)
+static WMenu *readMenu(WScreen *scr, const char *flat_file, FILE *file)
 {
 	WMenu *menu = NULL;
-	FILE *file = NULL;
 	WMenuParser parser;
-	char *command, *params, *shortcut, *title;
+	char *title, *command, *params, *shortcut;
 
-	file = fopen(file_name, "rb");
-	if (!file) {
-		werror(_("%s:could not open menu file"), file_name);
-		return NULL;
-	}
-	parser = WMenuParserCreate(file_name, file, DEF_CONFIG_PATHS);
+	parser = WMenuParserCreate(flat_file, file, DEF_CONFIG_PATHS);
 	menu_parser_register_macros(parser);
 
 	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
@@ -1080,14 +1074,29 @@ static WMenu *readMenuFile(WScreen *scr, const char *file_name)
 			freeline(title, command, params, shortcut);
 			break;
 		} else {
-			WMenuParserError(parser, _("invalid menu file, MENU command is missing") );
+			WMenuParserError(parser, _("invalid menu, no menu title given") );
 			freeline(title, command, params, shortcut);
 			break;
 		}
+
 		freeline(title, command, params, shortcut);
 	}
 
 	WMenuParserDelete(parser);
+	return menu;
+}
+
+static WMenu *readMenuFile(WScreen *scr, const char *file_name)
+{
+	WMenu *menu = NULL;
+	FILE *file = NULL;
+
+	file = fopen(file_name, "rb");
+	if (!file) {
+		werror(_("%s:could not open menu file"), file_name);
+		return NULL;
+	}
+	menu = readMenu(scr, file_name, file);
 	fclose(file);
 
 	return menu;
@@ -1130,8 +1139,6 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 {
 	WMenu *menu = NULL;
 	FILE *file = NULL;
-	WMenuParser parser;
-	char *command, *params, *shortcut, *title;
 	char *filename;
 	char flat_file[MAXLINE];
 	int i;
@@ -1149,35 +1156,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 		werror(_("%s:could not open menu file"), filename);
 		return NULL;
 	}
-	parser = WMenuParserCreate(flat_file, file, DEF_CONFIG_PATHS);
-	menu_parser_register_macros(parser);
-
-	while (WMenuParserGetLine(parser, &title, &command, &params, &shortcut)) {
-
-		if (command == NULL || !command[0]) {
-			WMenuParserError(parser, _("missing command in menu config") );
-			freeline(title, command, params, shortcut);
-			break;
-		}
-		if (strcasecmp(command, "MENU") == 0) {
-			menu = wMenuCreate(scr, M_(title), True);
-			menu->on_destroy = removeShortcutsForMenu;
-			if (!parseCascade(scr, menu, parser)) {
-				wMenuDestroy(menu, True);
-				menu = NULL;
-			}
-			freeline(title, command, params, shortcut);
-			break;
-		} else {
-			WMenuParserError(parser, _("no title given for the root menu") );
-			freeline(title, command, params, shortcut);
-			break;
-		}
-
-		freeline(title, command, params, shortcut);
-	}
-
-	WMenuParserDelete(parser);
+	menu = readMenu(scr, flat_file, file);
 	pclose(file);
 
 	return menu;
