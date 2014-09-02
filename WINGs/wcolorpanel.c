@@ -721,7 +721,7 @@ static WMColorPanel *makeColorPanel(WMScreen * scrPtr, const char *name)
 	WMAddNotificationObserver(rgbTextFieldCallback, panel, WMTextDidEndEditingNotification, panel->rgbBlueT);
 
 	panel->rgbDecB = WMCreateButton(panel->rgbFrm, WBTRadio);
-	WMSetButtonText(panel->rgbDecB, "Decimal");
+	WMSetButtonText(panel->rgbDecB, _("Decimal"));
 	WMSetButtonSelected(panel->rgbDecB, 1);
 	panel->rgbState = RGBdec;
 	WMSetButtonAction(panel->rgbDecB, rgbDecToHex, panel);
@@ -729,7 +729,7 @@ static WMColorPanel *makeColorPanel(WMScreen * scrPtr, const char *name)
 	WMMoveWidget(panel->rgbDecB, 2, 81);
 
 	panel->rgbHexB = WMCreateButton(panel->rgbFrm, WBTRadio);
-	WMSetButtonText(panel->rgbHexB, "Hexadecimal");
+	WMSetButtonText(panel->rgbHexB, _("Hexadecimal"));
 	WMSetButtonAction(panel->rgbHexB, rgbDecToHex, panel);
 	WMResizeWidget(panel->rgbHexB, PWIDTH - 8, 23);
 	WMMoveWidget(panel->rgbHexB, 2, 104);
