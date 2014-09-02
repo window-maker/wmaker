@@ -420,10 +420,8 @@ void WMInsertInBag(WMBag * self, int index, void *item)
 	self->count++;
 }
 
-int WMRemoveFromBag(WMBag * self, void *item)
+static int treeDeleteNode(WMBag * self, W_Node *ptr)
 {
-	W_Node *ptr = treeFind(self->root, self->nil, item);
-
 	if (ptr != self->nil) {
 		W_Node *tmp;
 
@@ -439,11 +437,15 @@ int WMRemoveFromBag(WMBag * self, void *item)
 		if (self->destructor)
 			self->destructor(ptr->data);
 		wfree(ptr);
-
 		return 1;
-	} else {
-		return 0;
 	}
+	return 0;
+}
+
+int WMRemoveFromBag(WMBag * self, void *item)
+{
+	W_Node *ptr = treeFind(self->root, self->nil, item);
+	return treeDeleteNode(self, ptr);
 }
 
 int WMEraseFromBag(WMBag * self, int index)
@@ -470,29 +472,7 @@ int WMEraseFromBag(WMBag * self, int index)
 int WMDeleteFromBag(WMBag * self, int index)
 {
 	W_Node *ptr = treeSearch(self->root, self->nil, index);
-
-	if (ptr != self->nil) {
-		W_Node *tmp;
-
-		self->count--;
-
-		tmp = treeSuccessor(ptr, self->nil);
-		while (tmp != self->nil) {
-			tmp->index--;
-			tmp = treeSuccessor(tmp, self->nil);
-		}
-
-		ptr = rbTreeDelete(self, ptr);
-		if (self->destructor)
-			self->destructor(ptr->data);
-		wfree(ptr);
-
-		wassertrv(self->count == 0 || self->root->index >= 0, 1);
-
-		return 1;
-	} else {
-		return 0;
-	}
+	return treeDeleteNode(self, ptr);
 }
 
 void *WMGetFromBag(WMBag * self, int index)
