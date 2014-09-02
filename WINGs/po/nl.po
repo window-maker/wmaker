@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wmaker-0.95.5-473-gb431dcc3\n"
+"Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-20 10:55+0200\n"
-"PO-Revision-Date: 2014-06-20 00:00+0200\n"
+"POT-Creation-Date: 2014-09-02 14:55+0200\n"
+"PO-Revision-Date: 2014-09-02 00:00+0200\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -106,7 +106,7 @@ msgstr ""
 msgid "missing PropList dictionary key"
 msgstr ""
 
-# Geen chocola van te maken. ;-)
+#  Geen chocola van te maken. ;-)
 #: ../../WINGs/proplist.c:794
 msgid "missing PropList dictionary entry key or unterminated dictionary"
 msgstr ""
@@ -138,7 +138,7 @@ msgid "Comments are not allowed inside WindowMaker owned domain files."
 msgstr "Commentaar is niet toegestaan binnen domeinbestanden van WindowMaker."
 
 #: ../../WINGs/proplist.c:1482 ../../WINGs/proplist.c:1547
-#: ../../WINGs/proplist.c:1604
+#: ../../WINGs/proplist.c:1611
 msgid "extra data after end of property list"
 msgstr "extra data na einde van 'property list'"
 
@@ -152,42 +152,42 @@ msgstr "kon grootte voor bestand '%s' niet krijgen"
 msgid "error reading from file '%s'"
 msgstr "fout bij lezen uit bestand '%s'"
 
-#: ../../WINGs/proplist.c:1575
+#: ../../WINGs/proplist.c:1577
 #, c-format
 msgid "%s:could not open menu file"
 msgstr "%s:kon menubestand niet openen"
 
-#: ../../WINGs/proplist.c:1642
+#: ../../WINGs/proplist.c:1649
 #, c-format
 msgid "mkstemp (%s) failed"
 msgstr "aanmaken uniek tijdelijk bestand (%s) mislukt"
 
-#: ../../WINGs/proplist.c:1653
+#: ../../WINGs/proplist.c:1660
 #, c-format
 msgid "mktemp (%s) failed"
 msgstr "aanmaken tijdelijk bestand (%s) mislukt"
 
-#: ../../WINGs/proplist.c:1660
+#: ../../WINGs/proplist.c:1667
 #, c-format
 msgid "open (%s) failed"
 msgstr "openen (%s) mislukt"
 
-#: ../../WINGs/proplist.c:1667
+#: ../../WINGs/proplist.c:1674
 #, c-format
 msgid "writing to file: %s failed"
 msgstr "schrijven naar bestand: %s mislukt"
 
-#: ../../WINGs/proplist.c:1676
+#: ../../WINGs/proplist.c:1683
 #, c-format
 msgid "fclose (%s) failed"
 msgstr "afsluiten stream (%s) mislukt"
 
-#: ../../WINGs/proplist.c:1684
+#: ../../WINGs/proplist.c:1691
 #, c-format
 msgid "rename ('%s' to '%s') failed"
 msgstr "hernoemen ('%s' naar '%s') mislukt"
 
-#: ../../WINGs/proplist.c:1755
+#: ../../WINGs/proplist.c:1762
 #, c-format
 msgid "Could not create component %s"
 msgstr "Kon component %s niet aanmaken"
@@ -579,3 +579,9 @@ msgstr ""
 #: ../../WINGs/wruler.c:175
 msgid "0   inches"
 msgstr "0   inch"
+
+msgid "Decimal"
+msgstr "Decimaal"
+
+msgid "Hexadecimal"
+msgstr "Hexadecimaal"

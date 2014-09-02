@@ -5,9 +5,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wmaker-0.95.5-473-gb431dcc3\n"
+"Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-06-20 10:55+0200\n"
+"POT-Creation-Date: 2014-09-02 14:55+0200\n"
 "PO-Revision-Date: 2014-03-05 00:00+0100\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
@@ -274,12 +274,12 @@ msgstr "Scherm vergrendelen"
 msgid "Exit Window Maker"
 msgstr "Window Maker afsluiten"
 
-#: ../../util/wmgenmenu.c:472
+#: ../../util/wmgenmenu.c:479
 #, c-format
 msgid "Start %s"
 msgstr "%s starten"
 
-#: ../../util/wmgenmenu.c:482
+#: ../../util/wmgenmenu.c:489
 msgid "Other Window Managers"
 msgstr "Andere vensterbeheerders"
 
