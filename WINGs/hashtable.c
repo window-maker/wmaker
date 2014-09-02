@@ -154,7 +154,7 @@ unsigned WMCountHashTable(WMHashTable * table)
 	return table->itemCount;
 }
 
-void *WMHashGet(WMHashTable * table, const void *key)
+static HashItem *hashGetItem(WMHashTable *table, const void *key)
 {
 	unsigned h;
 	HashItem *item;
@@ -177,44 +177,32 @@ void *WMHashGet(WMHashTable * table, const void *key)
 			item = item->next;
 		}
 	}
-	if (item)
-		return (void *)item->data;
-	else
+	return item;
+}
+
+void *WMHashGet(WMHashTable * table, const void *key)
+{
+	HashItem *item;
+
+	item = hashGetItem(table, key);
+	if (!item)
 		return NULL;
+	return (void *)item->data;
 }
 
 Bool WMHashGetItemAndKey(WMHashTable * table, const void *key, void **retItem, void **retKey)
 {
-	unsigned h;
 	HashItem *item;
 
-	h = HASH(table, key);
-	item = table->table[h];
-
-	if (table->callbacks.keyIsEqual) {
-		while (item) {
-			if ((*table->callbacks.keyIsEqual) (key, item->key)) {
-				break;
-			}
-			item = item->next;
-		}
-	} else {
-		while (item) {
-			if (key == item->key) {
-				break;
-			}
-			item = item->next;
-		}
-	}
-	if (item) {
-		if (retKey)
-			*retKey = (void *)item->key;
-		if (retItem)
-			*retItem = (void *)item->data;
-		return True;
-	} else {
+	item = hashGetItem(table, key);
+	if (!item)
 		return False;
-	}
+
+	if (retKey)
+		*retKey = (void *)item->key;
+	if (retItem)
+		*retItem = (void *)item->data;
+	return True;
 }
 
 void *WMHashInsert(WMHashTable * table, const void *key, const void *data)
