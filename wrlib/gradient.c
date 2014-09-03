@@ -134,6 +134,44 @@ static RImage *renderHGradient(unsigned width, unsigned height, int r0, int g0, 
 	return image;
 }
 
+static inline unsigned char *renderGradientWidth(unsigned char *ptr, unsigned width, unsigned char r, unsigned char g, unsigned char b)
+{
+	int i;
+
+	for (i = width / 4; i--;) {
+		*ptr++ = r;
+		*ptr++ = g;
+		*ptr++ = b;
+
+		*ptr++ = r;
+		*ptr++ = g;
+		*ptr++ = b;
+
+		*ptr++ = r;
+		*ptr++ = g;
+		*ptr++ = b;
+
+		*ptr++ = r;
+		*ptr++ = g;
+		*ptr++ = b;
+	}
+	switch (width % 4) {
+	case 3:
+		*ptr++ = r;
+		*ptr++ = g;
+		*ptr++ = b;
+	case 2:
+		*ptr++ = r;
+		*ptr++ = g;
+		*ptr++ = b;
+	case 1:
+		*ptr++ = r;
+		*ptr++ = g;
+		*ptr++ = b;
+	}
+	return ptr;
+}
+
 /*
  *----------------------------------------------------------------------
  * renderVGradient--
@@ -149,11 +187,10 @@ static RImage *renderHGradient(unsigned width, unsigned height, int r0, int g0, 
  */
 static RImage *renderVGradient(unsigned width, unsigned height, int r0, int g0, int b0, int rf, int gf, int bf)
 {
-	int i, j;
+	int i;
 	long r, g, b, dr, dg, db;
 	RImage *image;
 	unsigned char *ptr;
-	unsigned char rr, gg, bb;
 
 	image = RCreateImage(width, height, False);
 	if (!image) {
@@ -170,65 +207,7 @@ static RImage *renderVGradient(unsigned width, unsigned height, int r0, int g0, 
 	db = ((bf - b0) << 16) / (int)height;
 
 	for (i = 0; i < height; i++) {
-		rr = r >> 16;
-		gg = g >> 16;
-		bb = b >> 16;
-		for (j = 0; j < width / 8; j++) {
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		}
-		switch (width % 8) {
-		case 7:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 6:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 5:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 4:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 3:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 2:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 1:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		}
+		ptr = renderGradientWidth(ptr, width, r >> 16, g >> 16, b >> 16);
 		r += dr;
 		g += dg;
 		b += db;
@@ -358,8 +337,6 @@ static RImage *renderMVGradient(unsigned width, unsigned height, RColor ** color
 	RImage *image;
 	unsigned char *ptr, *tmp;
 	unsigned height2;
-	int x;
-	unsigned char rr, gg, bb;
 
 	assert(count > 2);
 
@@ -389,38 +366,7 @@ static RImage *renderMVGradient(unsigned width, unsigned height, RColor ** color
 		db = ((int)(colors[i]->blue - colors[i - 1]->blue) << 16) / (int)height2;
 
 		for (j = 0; j < height2; j++) {
-			rr = r >> 16;
-			gg = g >> 16;
-			bb = b >> 16;
-
-			for (x = 0; x < width / 4; x++) {
-				*ptr++ = rr;
-				*ptr++ = gg;
-				*ptr++ = bb;
-				*ptr++ = rr;
-				*ptr++ = gg;
-				*ptr++ = bb;
-				*ptr++ = rr;
-				*ptr++ = gg;
-				*ptr++ = bb;
-				*ptr++ = rr;
-				*ptr++ = gg;
-				*ptr++ = bb;
-			}
-			switch (width % 4) {
-			case 3:
-				*ptr++ = rr;
-				*ptr++ = gg;
-				*ptr++ = bb;
-			case 2:
-				*ptr++ = rr;
-				*ptr++ = gg;
-				*ptr++ = bb;
-			case 1:
-				*ptr++ = rr;
-				*ptr++ = gg;
-				*ptr++ = bb;
-			}
+			ptr = renderGradientWidth(ptr, width, r >> 16, g >> 16, b >> 16);
 			r += dr;
 			g += dg;
 			b += db;
@@ -431,43 +377,9 @@ static RImage *renderMVGradient(unsigned width, unsigned height, RColor ** color
 		b = colors[i]->blue << 16;
 	}
 
-	rr = r >> 16;
-	gg = g >> 16;
-	bb = b >> 16;
-
 	if (k < height) {
 		tmp = ptr;
-		for (x = 0; x < width / 4; x++) {
-			*ptr++ = rr;
-			*ptr++ = gg;
-			*ptr++ = bb;
-			*ptr++ = rr;
-			*ptr++ = gg;
-			*ptr++ = bb;
-			*ptr++ = rr;
-			*ptr++ = gg;
-			*ptr++ = bb;
-			*ptr++ = rr;
-			*ptr++ = gg;
-			*ptr++ = bb;
-		}
-		switch (width % 4) {
-		case 3:
-			*ptr++ = rr;
-			*ptr++ = gg;
-			*ptr++ = bb;
-		case 2:
-			*ptr++ = rr;
-			*ptr++ = gg;
-			*ptr++ = bb;
-		case 1:
-			*ptr++ = rr;
-			*ptr++ = gg;
-			*ptr++ = bb;
-		default:
-			break;
-		}
-
+		ptr = renderGradientWidth(ptr, width, r >> 16, g >> 16, b >> 16);
 		for (j = k + 1; j < height; j++) {
 			memcpy(ptr, tmp, lineSize);
 			ptr += lineSize;
@@ -529,12 +441,11 @@ static RImage *renderMDGradient(unsigned width, unsigned height, RColor ** color
 RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
 				  RColor colors1[2], int thickness1, RColor colors2[2], int thickness2)
 {
-	int i, j, k, l, ll;
+	int i, k, l, ll;
 	long r1, g1, b1, dr1, dg1, db1;
 	long r2, g2, b2, dr2, dg2, db2;
 	RImage *image;
 	unsigned char *ptr;
-	unsigned char rr, gg, bb;
 
 	image = RCreateImage(width, height, False);
 	if (!image) {
@@ -559,71 +470,11 @@ RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
 	db2 = ((colors2[1].blue - colors2[0].blue) << 16) / (int)height;
 
 	for (i = 0, k = 0, l = 0, ll = thickness1; i < height; i++) {
-		if (k == 0) {
-			rr = r1 >> 16;
-			gg = g1 >> 16;
-			bb = b1 >> 16;
-		} else {
-			rr = r2 >> 16;
-			gg = g2 >> 16;
-			bb = b2 >> 16;
-		}
-		for (j = 0; j < width / 8; j++) {
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		}
-		switch (width % 8) {
-		case 7:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 6:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 5:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 4:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 3:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 2:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		case 1:
-			*(ptr++) = rr;
-			*(ptr++) = gg;
-			*(ptr++) = bb;
-		}
+		if (k == 0)
+			ptr = renderGradientWidth(ptr, width, r1 >> 16, g1 >> 16, b1 >> 16);
+		else
+			ptr = renderGradientWidth(ptr, width, r2 >> 16, g2 >> 16, b2 >> 16);
+
 		if (++l == ll) {
 			if (k == 0) {
 				k = 1;
