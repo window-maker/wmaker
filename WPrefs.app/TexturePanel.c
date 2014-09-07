@@ -357,10 +357,9 @@ static void sliderChangeCallback(WMWidget * w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 	RHSVColor hsv;
-	int row, rows;
+	int i, row, rows;
 	WMListItem *item;
 	RColor **colors;
-	int i;
 	RImage *image;
 	WMScreen *scr = WMWidgetScreen(w);
 
@@ -368,7 +367,20 @@ static void sliderChangeCallback(WMWidget * w, void *data)
 	hsv.saturation = WMGetSliderValue(panel->gsatS);
 	hsv.value = WMGetSliderValue(panel->gvalS);
 
+	rows = WMGetListNumberOfRows(panel->gcolL);
 	row = WMGetListSelectedItemRow(panel->gcolL);
+
+	if (row < 0 && rows > 0) {
+		row = 0;
+		WMSelectListItem(panel->gcolL, row);
+		item = WMGetListItem(panel->gcolL, row);
+		RRGBtoHSV((RColor *) item->clientData, &hsv);
+
+		WMSetSliderValue(panel->ghueS, hsv.hue);
+		WMSetSliderValue(panel->gsatS, hsv.saturation);
+		WMSetSliderValue(panel->gvalS, hsv.value);
+	}
+
 	if (row >= 0) {
 		RColor *rgb;
 
@@ -382,6 +394,7 @@ static void sliderChangeCallback(WMWidget * w, void *data)
 	}
 
 	if (w == panel->ghueS) {
+		updateHueSlider(panel->ghueS, panel->listFont, &hsv);
 		updateSVSlider(panel->gsatS, True, panel->listFont, &hsv);
 		updateSVSlider(panel->gvalS, False, panel->listFont, &hsv);
 	} else if (w == panel->gsatS) {
@@ -392,7 +405,6 @@ static void sliderChangeCallback(WMWidget * w, void *data)
 		updateSVSlider(panel->gsatS, True, panel->listFont, &hsv);
 	}
 
-	rows = WMGetListNumberOfRows(panel->gcolL);
 	if (rows == 0)
 		return;
 
@@ -503,7 +515,7 @@ static void gradDeleteCallback(WMWidget * w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 	WMListItem *item;
-	int row;
+	int row, rows;
 
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) w;
@@ -516,9 +528,14 @@ static void gradDeleteCallback(WMWidget * w, void *data)
 	wfree(item->clientData);
 
 	WMRemoveListItem(panel->gcolL, row);
+	if (row > 0)
+		WMSelectListItem(panel->gcolL, row - 1);
+	else {
+		rows = WMGetListNumberOfRows(panel->gcolL);
+		if (rows > 0)
+			WMSelectListItem(panel->gcolL, 0);
 
-	WMSelectListItem(panel->gcolL, row - 1);
-
+	}
 	updateGradButtons(panel);
 
 	gradClickCallback(panel->gcolL, panel);
