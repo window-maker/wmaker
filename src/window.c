@@ -1629,6 +1629,61 @@ void wWindowUnmap(WWindow *wwin)
 	XUnmapWindow(dpy, wwin->frame->core->window);
 }
 
+void wWindowSingleFocus(WWindow *wwin)
+{
+	WScreen *scr;
+	int x, y, move = 0;
+
+	if (!wwin)
+		return;
+
+	scr = wwin->screen_ptr;
+	wMakeWindowVisible(wwin);
+
+	x = wwin->frame_x;
+	y = wwin->frame_y;
+
+	/* bring window back to visible area */
+	move = wScreenBringInside(scr, &x, &y, wwin->frame->core->width, wwin->frame->core->height);
+
+	if (move) {
+		wWindowConfigure(wwin, x, y, wwin->client.width, wwin->client.height);
+	}
+}
+
+void wWindowFocusPrev(WWindow *wwin, Bool inSameWorkspace)
+{
+	WWindow *tmp;
+
+	if (!wwin || !wwin->prev)
+		return;
+
+	tmp = wwin;
+	while (tmp->prev)
+		tmp = tmp->prev;
+
+	if (inSameWorkspace)
+		while (tmp && (tmp->frame->workspace != wwin->frame->workspace))
+			tmp = tmp->next;
+
+	wWindowSingleFocus(tmp);
+}
+
+void wWindowFocusNext(WWindow *wwin, Bool inSameWorkspace)
+{
+	WWindow *tmp;
+
+	if (!wwin || !wwin->prev)
+		return;
+
+	tmp = wwin->prev;
+	if (inSameWorkspace)
+		while (tmp && (tmp->frame->workspace != wwin->frame->workspace))
+			tmp = tmp->prev;
+
+	wWindowSingleFocus(tmp);
+}
+
 void wWindowFocus(WWindow *wwin, WWindow *owin)
 {
 	WWindow *nowner;

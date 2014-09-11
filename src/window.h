@@ -339,6 +339,9 @@ WWindow *wManageWindow(WScreen *scr, Window window);
 
 void wUnmanageWindow(WWindow *wwin, Bool restore, Bool destroyed);
 
+void wWindowSingleFocus(WWindow *wwin);
+void wWindowFocusPrev(WWindow *wwin, Bool inSameWorkspace);
+void wWindowFocusNext(WWindow *wwin, Bool inSameWorkspace);
 void wWindowFocus(WWindow *wwin, WWindow *owin);
 void wWindowUnfocus(WWindow *wwin);
 
