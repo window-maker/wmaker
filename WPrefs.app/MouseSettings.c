@@ -93,9 +93,9 @@ typedef struct _Panel {
 
 static char *modifierNames[8];
 
-static char *buttonActions[4];
+static char *buttonActions[8];
 
-static char *wheelActions[2];
+static char *wheelActions[3];
 
 #define DELAY(i)		((i)*75+170)
 
@@ -192,6 +192,14 @@ static int getButtonAction(const char *str)
 		return 2;
 	else if (strcasecmp(str, "SelectWindows") == 0)
 		return 3;
+	else if (strcasecmp(str, "MoveToPrevWorkspace") == 0)
+		return 4;
+	else if (strcasecmp(str, "MoveToNextWorkspace") == 0)
+		return 5;
+	else if (strcasecmp(str, "MoveToPrevWindow") == 0)
+		return 6;
+	else if (strcasecmp(str, "MoveToNextWindow") == 0)
+		return 7;
 	else
 		return -1;
 
@@ -206,6 +214,8 @@ static int getWheelAction(const char *str)
 		return 0;
 	else if (strcasecmp(str, "SwitchWorkspaces") == 0)
 		return 1;
+	else if (strcasecmp(str, "SwitchWindows") == 0)
+		return 2;
 	else
 		return -1;
 
@@ -805,8 +815,9 @@ static void storeData(_Panel * panel)
 	char buffer[64];
 	int i;
 	char *tmp, *p;
-	static char *button[4] = { "None", "OpenApplicationsMenu", "OpenWindowListMenu", "SelectWindows" };
-	static char *wheel[2] = { "None", "SwitchWorkspaces" };
+	static char *button[8] = { "None", "OpenApplicationsMenu", "OpenWindowListMenu", "SelectWindows",
+						"MoveToPrevWorkspace", "MoveToNextWorkspace", "MoveToPrevWindow", "MoveToNextWindow" };
+	static char *wheel[3] = { "None", "SwitchWorkspaces", "SwitchWindows" };
 	WMUserDefaults *udb = WMGetStandardUserDefaults();
 
 	if (!WMGetUDBoolForKey(udb, "NoXSetStuff")) {
@@ -878,9 +889,14 @@ Panel *InitMouseSettings(WMWidget *parent)
 	buttonActions[1] = wstrdup(_("Applications Menu"));
 	buttonActions[2] = wstrdup(_("Window List Menu"));
 	buttonActions[3] = wstrdup(_("Select Windows"));
+	buttonActions[4] = wstrdup(_("Previous Workspace"));
+	buttonActions[5] = wstrdup(_("Next Workspace"));
+	buttonActions[6] = wstrdup(_("Previous Window"));
+	buttonActions[7] = wstrdup(_("Next Window"));
 
 	wheelActions[0] = wstrdup(_("None"));
 	wheelActions[1] = wstrdup(_("Switch Workspaces"));
+	wheelActions[2] = wstrdup(_("Switch Windows"));
 
 	panel = wmalloc(sizeof(_Panel));
 
