@@ -62,26 +62,12 @@ static void wsobserver(void *self, WMNotification * notif);
 static void focusWindow(WMenu * menu, WMenuEntry * entry)
 {
 	WWindow *wwin;
-	WScreen *scr;
-	int x, y, move = 0;
 
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) menu;
 
 	wwin = (WWindow *) entry->clientdata;
-	scr = wwin->screen_ptr;
-
-	wMakeWindowVisible(wwin);
-
-	x = wwin->frame_x;
-	y = wwin->frame_y;
-
-	/* bring window back to visible area */
-	move = wScreenBringInside(scr, &x, &y, wwin->frame->core->width, wwin->frame->core->height);
-
-	if (move) {
-		wWindowConfigure(wwin, x, y, wwin->client.width, wwin->client.height);
-	}
+	wWindowSingleFocus(wwin);
 }
 
 void InitializeSwitchMenu(void)
