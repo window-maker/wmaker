@@ -240,12 +240,17 @@ static WOptionEnumeration seMouseButtonActions[] = {
 	{"SelectWindows", WA_SELECT_WINDOWS, 0},
 	{"OpenApplicationsMenu", WA_OPEN_APPMENU, 0},
 	{"OpenWindowListMenu", WA_OPEN_WINLISTMENU, 0},
+	{"MoveToPrevWorkspace", WA_MOVE_PREVWORKSPACE, 0},
+	{"MoveToNextWorkspace", WA_MOVE_NEXTWORKSPACE, 0},
+	{"MoveToPrevWindow", WA_MOVE_PREVWINDOW, 0},
+	{"MoveToNextWindow", WA_MOVE_NEXTWINDOW, 0},
 	{NULL, 0, 0}
 };
 
 static WOptionEnumeration seMouseWheelActions[] = {
 	{"None", WA_NONE, 0},
 	{"SwitchWorkspaces", WA_SWITCH_WORKSPACES, 0},
+	{"SwitchWindows", WA_SWITCH_WINDOWS, 0},
 	{NULL, 0, 0}
 };
 

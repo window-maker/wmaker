@@ -206,6 +206,11 @@ typedef enum {
 #define WA_OPEN_APPMENU         2
 #define WA_OPEN_WINLISTMENU     3
 #define WA_SWITCH_WORKSPACES    4
+#define WA_MOVE_PREVWORKSPACE   5
+#define WA_MOVE_NEXTWORKSPACE   6
+#define WA_SWITCH_WINDOWS       7
+#define WA_MOVE_PREVWINDOW      8
+#define WA_MOVE_NEXTWINDOW      9
 
 /* workspace display position */
 #define WD_NONE		0
