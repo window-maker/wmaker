@@ -358,41 +358,22 @@ static void drawTitle(WSwitchPanel *panel, int idecks, const char *title)
 		free(ntitle);
 }
 
-static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool class_only)
+static WMArray *makeWindowListArray(WScreen *scr, int include_unmapped, Bool class_only)
 {
 	WMArray *windows = WMCreateArray(10);
-	int fl;
-	WWindow *wwin;
+	WWindow *wwin = scr->focused_window;
 
-	for (fl = 0; fl < 2; fl++) {
-		for (wwin = curwin; wwin; wwin = wwin->prev) {
-			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-			    (wwin->flags.mapped || wwin->flags.shaded || include_unmapped)) {
-				if (class_only)
-					if (!sameWindowClass(wwin, curwin))
-						continue;
-
-				if (!WFLAGP(wwin, skip_switchpanel))
-					WMAddToArray(windows, wwin);
-			}
-		}
-		wwin = curwin;
-		/* start over from the beginning of the list */
-		while (wwin->next)
-			wwin = wwin->next;
-
-		for (wwin = curwin; wwin && wwin != curwin; wwin = wwin->prev) {
-			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-			    (wwin->flags.mapped || wwin->flags.shaded || include_unmapped)) {
-				if (class_only)
-				    if (!sameWindowClass(wwin, curwin))
+	while (wwin) {
+		if ((canReceiveFocus(wwin) != 0) &&
+		    (wwin->flags.mapped || wwin->flags.shaded || include_unmapped)) {
+			if (class_only)
+				if (!sameWindowClass(scr->focused_window, wwin))
 					continue;
-				if (!WFLAGP(wwin, skip_switchpanel))
+			if (!WFLAGP(wwin, skip_switchpanel))
 				WMAddToArray(windows, wwin);
-			}
 		}
+		wwin = wwin->prev;
 	}
-
 	return windows;
 }
 
@@ -416,7 +397,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 	WMRect rect = wGetRectForHead(scr, wGetHeadForPointerLocation(scr));
 
 	panel->scr = scr;
-	panel->windows = makeWindowListArray(curwin, wPreferences.swtileImage != NULL, class_only);
+	panel->windows = makeWindowListArray(scr, wPreferences.swtileImage != NULL, class_only);
 	count = WMGetArrayItemCount(panel->windows);
 	if (count)
 		panel->flags = makeWindowFlagsArray(count);
@@ -623,7 +604,7 @@ WWindow *wSwitchPanelSelectNext(WSwitchPanel *panel, int back, int ignore_minimi
 			else
 				panel->current++;
 
-			panel->current= (count + panel->current) % count;
+			panel->current = (count + panel->current) % count;
 			wwin = WMGetFromArray(panel->windows, panel->current);
 
 			if (!class_only)
