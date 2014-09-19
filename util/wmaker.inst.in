@@ -111,8 +111,12 @@ if test "x$GNUSTEP_USER_ROOT" = "x"; then
 else
 	GSDIR="$GNUSTEP_USER_ROOT"
 	if [ ! -d "$GSDIR" ]; then
+		# in this case, and in this case only, mkdir needs -p option
+		mkdir -p $GSDIR || {
 		echo "Directory specified in GNUSTEP_USER_ROOT environment variable does not exist"
 		exit 1
+		}
+		chmod +rwx $GSDIR || exit 1
 	fi
 	cd "$GSDIR"
 	cd ..
