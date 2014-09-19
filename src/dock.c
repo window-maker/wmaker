@@ -4020,6 +4020,10 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 
 		if (!btn->launching && (!btn->running || (event->xbutton.state & ControlMask)))
 			launchDockedApplication(btn, True);
+	} else if (event->xbutton.button == Button4 && dock->type == WM_CLIP) {
+		wWorkspaceRelativeChange(scr, 1);
+	} else if (event->xbutton.button == Button5 && dock->type == WM_CLIP) {
+		wWorkspaceRelativeChange(scr, -1);
 	}
 }
 
