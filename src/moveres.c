@@ -1723,6 +1723,11 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 			} else if (abs(ev->xmotion.x_root - event.xmotion.x_root) >= MOVE_THRESHOLD
 				   || abs(ev->xmotion.y_root - event.xmotion.y_root) >= MOVE_THRESHOLD) {
 
+				if (wwin->flags.maximized) {
+					wwin->flags.maximized = 0;
+					wwin->flags.old_maximized = 0;
+				}
+
 				XChangeActivePointerGrab(dpy, ButtonMotionMask
 							 | ButtonReleaseMask | ButtonPressMask,
 							 wPreferences.cursor[WCUR_MOVE], CurrentTime);
