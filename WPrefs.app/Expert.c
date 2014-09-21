@@ -81,6 +81,9 @@ static const struct {
 	  /* default: */ False, OPTION_WMAKER, "KbdModeLock" }
 #endif /* XKB_MODELOCK */
 
+	{ N_("Enable window snapping."),
+	  /* default: */ False, OPTION_WMAKER, "WindowSnapping" },
+
 };
 
 
