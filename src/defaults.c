@@ -452,6 +452,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.no_autowrap, getBool, NULL, NULL, NULL},
 	{"WindowSnapping", "NO", NULL,
 	    &wPreferences.window_snapping, getBool, NULL, NULL, NULL},
+	{"UnmaximizeOnMove", "NO", NULL,
+	    &wPreferences.unmaximize_on_move, getBool, NULL, NULL, NULL},
 	{"HighlightActiveApp", "YES", NULL,
 	    &wPreferences.highlight_active_app, getBool, NULL, NULL, NULL},
 	{"AutoArrangeIcons", "NO", NULL,

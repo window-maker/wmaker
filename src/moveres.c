@@ -1724,8 +1724,22 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 				   || abs(ev->xmotion.y_root - event.xmotion.y_root) >= MOVE_THRESHOLD) {
 
 				if (wwin->flags.maximized) {
-					wwin->flags.maximized = 0;
-					wwin->flags.old_maximized = 0;
+					if (wPreferences.unmaximize_on_move) {
+						float titlebar_ratio;
+						int new_x, new_y;
+
+						titlebar_ratio = (moveData.mouseX - wwin->frame_x) /
+							(float)wwin->frame->core->width;
+						new_y = wwin->frame_y;
+						wUnmaximizeWindow(wwin);
+						new_x = moveData.mouseX - titlebar_ratio * wwin->frame->core->width;
+						wWindowMove(wwin, new_x, new_y);
+						moveData.realX = moveData.calcX = wwin->frame_x;
+						moveData.realY = moveData.calcY = wwin->frame_y;
+					} else {
+						wwin->flags.maximized = 0;
+						wwin->flags.old_maximized = 0;
+					}
 				}
 
 				XChangeActivePointerGrab(dpy, ButtonMotionMask
