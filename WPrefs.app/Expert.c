@@ -78,11 +78,14 @@ static const struct {
 
 #ifdef XKB_MODELOCK
 	{ N_("Enable keyboard language switch button in window titlebars."),
-	  /* default: */ False, OPTION_WMAKER, "KbdModeLock" }
+	  /* default: */ False, OPTION_WMAKER, "KbdModeLock" },
 #endif /* XKB_MODELOCK */
 
 	{ N_("Enable window snapping."),
 	  /* default: */ False, OPTION_WMAKER, "WindowSnapping" },
+
+	{ N_("Return maximized windows to original geometry when moved."),
+	  /* default: */ False, OPTION_WMAKER, "UnmaximizeOnMove" }
 
 };
 
