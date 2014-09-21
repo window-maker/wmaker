@@ -588,6 +588,8 @@ typedef struct {
 	int calcX, calcY;	/* calculated position of window */
 	int omouseX, omouseY;	/* old mouse position */
 	int mouseX, mouseY;	/* last known position of the pointer */
+
+	enum {SNAP_NONE, SNAP_LEFT, SNAP_RIGHT} snap;
 } MoveData;
 
 #define WTOP(w) (w)->frame_y
@@ -829,6 +831,8 @@ static void initMoveData(WWindow * wwin, MoveData * data)
 
 	data->winWidth = wwin->frame->core->width + (HAS_BORDER_WITH_SELECT(wwin) ? 2 * wwin->screen_ptr->frame_border_width : 0);
 	data->winHeight = wwin->frame->core->height + (HAS_BORDER_WITH_SELECT(wwin) ? 2 * wwin->screen_ptr->frame_border_width : 0);
+
+	data->snap = SNAP_NONE;
 }
 
 static Bool checkWorkspaceChange(WWindow * wwin, MoveData * data, Bool opaqueMove)
@@ -1642,11 +1646,47 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 			break;
 
 		case MotionNotify:
+			if (IS_RESIZABLE(wwin) && wPreferences.window_snapping && wPreferences.no_autowrap) {
+				if (moveData.snap == SNAP_LEFT && moveData.mouseX > 1) {
+					moveData.snap = SNAP_NONE;
+					drawTransparentFrame(wwin, 0, 0, scr->scr_width/2, scr->scr_height);
+				}
+				if (moveData.snap == SNAP_RIGHT && moveData.mouseX < scr->scr_width - 2) {
+					moveData.snap = SNAP_NONE;
+					drawTransparentFrame(wwin, scr->scr_width/2, 0, scr->scr_width/2,
+							     scr->scr_height);
+				}
+				if (moveData.snap == SNAP_NONE) {
+					if (moveData.mouseX <= 1) {
+						moveData.snap = SNAP_LEFT;
+						drawTransparentFrame(wwin, 0, 0, scr->scr_width/2,
+								     scr->scr_height);
+					}
+					if (moveData.mouseX >= scr->scr_width - 2) {
+						moveData.snap = SNAP_RIGHT;
+						drawTransparentFrame(wwin, scr->scr_width/2, 0, scr->scr_width/2,
+								     scr->scr_height);
+					}
+				}
+			}
+
 			if (started) {
+				if (moveData.snap == SNAP_LEFT)
+					drawTransparentFrame(wwin, 0, 0, scr->scr_width/2, scr->scr_height);
+				if (moveData.snap == SNAP_RIGHT)
+					drawTransparentFrame(wwin, scr->scr_width/2, 0, scr->scr_width/2,
+							     scr->scr_height);
+
 				updateWindowPosition(wwin, &moveData,
 						     scr->selected_windows == NULL
 						     && wPreferences.edge_resistance > 0,
 						     opaqueMove, event.xmotion.x_root, event.xmotion.y_root);
+
+				if (moveData.snap == SNAP_LEFT)
+					drawTransparentFrame(wwin, 0, 0, scr->scr_width/2, scr->scr_height);
+				if (moveData.snap == SNAP_RIGHT)
+					drawTransparentFrame(wwin, scr->scr_width/2, 0, scr->scr_width/2,
+							     scr->scr_height);
 
 				if (!warped && !wPreferences.no_autowrap) {
 					int oldWorkspace = w_global.workspace.current;
@@ -1703,6 +1743,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 						showPosition(wwin, moveData.realX, moveData.realY);
 				}
 			}
+
 			break;
 
 		case ButtonPress:
@@ -1712,7 +1753,28 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 			if (event.xbutton.button != ev->xbutton.button)
 				break;
 
-			if (started) {
+			if (moveData.snap != SNAP_NONE) {
+				if (moveData.snap == SNAP_LEFT) {
+					/* erase frames */
+					if (!opaqueMove)
+						drawFrames(wwin, scr->selected_windows,
+							   moveData.realX - wwin->frame_x,
+							   moveData.realY - wwin->frame_y);
+					drawTransparentFrame(wwin, 0, 0, scr->scr_width/2, scr->scr_height);
+					handleMaximize(wwin, MAX_VERTICAL | MAX_LEFTHALF);
+				}
+				if (moveData.snap == SNAP_RIGHT) {
+					/* erase frames */
+					if (!opaqueMove)
+						drawFrames(wwin, scr->selected_windows,
+							   moveData.realX - wwin->frame_x,
+							   moveData.realY - wwin->frame_y);
+					drawTransparentFrame(wwin, scr->scr_width/2, 0, scr->scr_width/2,
+							     scr->scr_height);
+					handleMaximize(wwin, MAX_VERTICAL | MAX_RIGHTHALF);
+				}
+				moveData.snap = SNAP_NONE;
+			} else if (started) {
 				XEvent e;
 				if (!opaqueMove) {
 					drawFrames(wwin, scr->selected_windows,

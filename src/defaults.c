@@ -450,6 +450,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.no_animations, getBool, NULL, NULL, NULL},
 	{"DontLinkWorkspaces", "NO", NULL,
 	    &wPreferences.no_autowrap, getBool, NULL, NULL, NULL},
+	{"WindowSnapping", "NO", NULL,
+	    &wPreferences.window_snapping, getBool, NULL, NULL, NULL},
 	{"HighlightActiveApp", "YES", NULL,
 	    &wPreferences.highlight_active_app, getBool, NULL, NULL, NULL},
 	{"AutoArrangeIcons", "NO", NULL,
