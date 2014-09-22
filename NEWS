@@ -2,6 +2,21 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+-- 0.95.7
+
+Window snapping
+---------------
+
+You can now "snap" a window, i.e., maximize it to the left or right half of the
+screen, by dragging it to that side.  It is enabled by setting
+"WindowSnapping = YES" in ~/GNUstep/Defaults/WindowMaker or selecting "Enable
+window snapping" under "Expert User Preferences" in WPrefs.app.
+
+Note that window snapping is automatically disabled if "Switch workspaces while
+dragging windows" is selected under "Workspace Preferences" in WPrefs.app, or
+if "DontLinkWorkspaces = NO" in  ~/GNUstep/Defaults/WindowMaker, as this feature
+also involves dragging a window to one side of the screen.
+
 --- 0.95.6
 
 More image format supported
