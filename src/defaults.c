@@ -309,6 +309,14 @@ static WOptionEnumeration seWorkspaceBorder[] = {
 	{NULL, 0, 0}
 };
 
+static WOptionEnumeration seDragMaximizedWindow[] = {
+	{"Move", DRAGMAX_MOVE, 0},
+	{"RestoreGeometry", DRAGMAX_RESTORE, 0},
+	{"Unmaximize", DRAGMAX_UNMAXIMIZE, 0},
+	{"NoMove", DRAGMAX_NOMOVE, 0},
+	{NULL, 0, 0}
+};
+
 /*
  * ALL entries in the tables bellow, NEED to have a default value
  * defined, and this value needs to be correct.
@@ -452,8 +460,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.no_autowrap, getBool, NULL, NULL, NULL},
 	{"WindowSnapping", "NO", NULL,
 	    &wPreferences.window_snapping, getBool, NULL, NULL, NULL},
-	{"UnmaximizeOnMove", "NO", NULL,
-	    &wPreferences.unmaximize_on_move, getBool, NULL, NULL, NULL},
+	{"DragMaximizedWindow", "Move", seDragMaximizedWindow,
+	    &wPreferences.drag_maximized_window, getEnum, NULL, NULL, NULL},
 	{"HighlightActiveApp", "YES", NULL,
 	    &wPreferences.highlight_active_app, getBool, NULL, NULL, NULL},
 	{"AutoArrangeIcons", "NO", NULL,

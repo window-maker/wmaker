@@ -364,6 +364,9 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 	if (!HAS_BORDER(wwin))
 		has_border = 0;
 
+	if (wPreferences.drag_maximized_window == DRAGMAX_NOMOVE)
+		wwin->client_flags.no_movable = 1;
+
 	/* the size to adjust the geometry */
 	adj_size = scr->frame_border_width * 2 * has_border;
 
@@ -680,6 +683,9 @@ void wUnmaximizeWindow(WWindow *wwin)
 		wwin->flags.skip_next_animation = 1;
 		wUnshadeWindow(wwin);
 	}
+
+	if (wPreferences.drag_maximized_window == DRAGMAX_NOMOVE)
+		wwin->client_flags.no_movable = 0;
 
 	/* Use old coordinates if they are set, current values otherwise */
 	remember_geometry(wwin, &x, &y, &w, &h);

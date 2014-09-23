@@ -233,6 +233,13 @@ typedef enum {
 #define	WB_TOPBOTTOM	2
 #define	WB_ALLDIRS     	(WB_LEFTRIGHT|WB_TOPBOTTOM)
 
+/* drag maximized window behaviors */
+enum {
+	DRAGMAX_MOVE,
+	DRAGMAX_RESTORE,
+	DRAGMAX_UNMAXIMIZE,
+	DRAGMAX_NOMOVE
+};
 
 /* program states */
 typedef enum {
@@ -353,7 +360,7 @@ extern struct WPreferences {
     char no_animations;		       /* enable/disable animations */
     char no_autowrap;		       /* wrap workspace when window is moved to the edge */
     char window_snapping;              /* enable window snapping */
-    char unmaximize_on_move;           /* unmaximize a maximized window when it is moved */
+    char drag_maximized_window;        /* behavior when a maximized window is dragged */
 
     char highlight_active_app;         /* show the focused app by highlighting its icon */
     char auto_arrange_icons;	       /* automagically arrange icons */

@@ -1724,7 +1724,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 				   || abs(ev->xmotion.y_root - event.xmotion.y_root) >= MOVE_THRESHOLD) {
 
 				if (wwin->flags.maximized) {
-					if (wPreferences.unmaximize_on_move) {
+					if (wPreferences.drag_maximized_window == DRAGMAX_RESTORE) {
 						float titlebar_ratio;
 						int new_x, new_y;
 
@@ -1736,7 +1736,8 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 						wWindowMove(wwin, new_x, new_y);
 						moveData.realX = moveData.calcX = wwin->frame_x;
 						moveData.realY = moveData.calcY = wwin->frame_y;
-					} else {
+					}
+					if (wPreferences.drag_maximized_window == DRAGMAX_UNMAXIMIZE) {
 						wwin->flags.maximized = 0;
 						wwin->flags.old_maximized = 0;
 					}
