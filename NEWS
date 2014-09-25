@@ -7,8 +7,8 @@ NEWS for veteran Window Maker users
 Window snapping
 ---------------
 
-You can now "snap" a window, i.e., maximize it to the left or right half of the
-screen, by dragging it to that side.  It is enabled by setting
+You can now "snap" a window, i.e., maximize it to a side or corner of the
+screen, by dragging it to that side or corner.  It is enabled by setting
 "WindowSnapping = YES" in ~/GNUstep/Defaults/WindowMaker or selecting "Enable
 window snapping" under "Expert User Preferences" in WPrefs.app.
 
