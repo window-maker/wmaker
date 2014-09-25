@@ -61,8 +61,8 @@ typedef struct _Panel {
 	WMButton *opaqresizeB;
 	WMButton *opaqkeybB;
 
-	WMFrame *tranF;
-	WMButton *tranB;
+	WMFrame *dragmaxF;
+	WMPopUpButton *dragmaxP;
 } _Panel;
 
 #define ICON_FILE "whandling"
@@ -77,13 +77,20 @@ typedef struct _Panel {
 
 #define THUMB_SIZE	16
 
-static const char *placements[] = {
+static const char *const placements[] = {
 	"auto",
 	"random",
 	"manual",
 	"cascade",
 	"smart",
 	"center"
+};
+
+static const char *const dragMaximizedWindowOptions[] = {
+	"Move",
+	"RestoreGeometry",
+	"Unmaximize",
+	"NoMove"
 };
 
 static void sliderCallback(WMWidget * w, void *data)
@@ -168,6 +175,25 @@ static int getPlacement(const char *str)
 	return 0;
 }
 
+static int getDragMaximizedWindow(const char *str)
+{
+	if (!str)
+		return 0;
+
+	if (strcasecmp(str, "Move") == 0)
+		return 0;
+	else if (strcasecmp(str, "RestoreGeometry") == 0)
+		return 1;
+	else if (strcasecmp(str, "Unmaximize") == 0)
+		return 2;
+	else if (strcasecmp(str, "NoMove") == 0)
+		return 3;
+	else
+		wwarning(_("bad option value %s in WindowPlacement. Using default value"), str);
+	return 0;
+}
+
+
 static void showData(_Panel * panel)
 {
 	char *str;
@@ -200,11 +226,12 @@ static void showData(_Panel * panel)
 	WMSetSliderValue(panel->resS, x);
 	resistanceCallback(NULL, panel);
 
+	str = GetStringForKey("DragMaximizedWindow");
+	WMSetPopUpButtonSelectedItem(panel->dragmaxP, getDragMaximizedWindow(str));
+
 	x = GetIntegerForKey("ResizeIncrement");
 	WMSetSliderValue(panel->resizeS, x);
 	resizeCallback(NULL, panel);
-
-	WMSetButtonSelected(panel->tranB, GetBoolForKey("OpenTransientOnOwnerWorkspace"));
 
 	WMSetButtonSelected(panel->opaqB, GetBoolForKey("OpaqueMove"));
 	WMSetButtonSelected(panel->opaqresizeB, GetBoolForKey("OpaqueResize"));
@@ -232,8 +259,6 @@ static void storeData(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->opaqresizeB), "OpaqueResize");
 	SetBoolForKey(WMGetButtonSelected(panel->opaqkeybB), "OpaqueMoveResizeKeyboard");
 
-	SetBoolForKey(WMGetButtonSelected(panel->tranB), "OpenTransientOnOwnerWorkspace");
-
 	SetStringForKey(placements[WMGetPopUpButtonSelectedItem(panel->placP)], "WindowPlacement");
 	sprintf(buf, "%i", WMGetSliderValue(panel->hsli));
 	x = WMCreatePLString(buf);
@@ -245,6 +270,9 @@ static void storeData(_Panel * panel)
 	SetObjectForKey(arr, "WindowPlaceOrigin");
 
 	SetIntegerForKey(WMGetSliderValue(panel->resS), "EdgeResistance");
+
+	SetStringForKey(dragMaximizedWindowOptions[WMGetPopUpButtonSelectedItem(panel->dragmaxP)],
+			"DragMaximizedWindow");
 
 	SetIntegerForKey(WMGetSliderValue(panel->resizeS), "ResizeIncrement");
 	SetBoolForKey(WMGetButtonSelected(panel->resrB), "Attraction");
@@ -463,7 +491,7 @@ static void createPanel(Panel * p)
 
     /**************** Edge Resistance  ****************/
 	panel->resF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->resF, 289, 50);
+	WMResizeWidget(panel->resF, 289, 47);
 	WMMoveWidget(panel->resF, 8, 125);
 	WMSetFrameTitle(panel->resF, _("Edge Resistance"));
 
@@ -474,7 +502,7 @@ static void createPanel(Panel * p)
 
 	panel->resS = WMCreateSlider(panel->resF);
 	WMResizeWidget(panel->resS, 80, 15);
-	WMMoveWidget(panel->resS, 10, 22);
+	WMMoveWidget(panel->resS, 10, 20);
 	WMSetSliderMinValue(panel->resS, 0);
 	WMSetSliderMaxValue(panel->resS, 80);
 	WMSetSliderAction(panel->resS, resistanceCallback, panel);
@@ -496,17 +524,21 @@ static void createPanel(Panel * p)
 
 	WMMapSubwidgets(panel->resF);
 
-    /**************** Transients on Parent Workspace ****************/
-	panel->tranF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->tranF, 289, 40);
-	WMMoveWidget(panel->tranF, 8, 185);
+    /**************** Dragging a Maximized Window ****************/
+	panel->dragmaxF = WMCreateFrame(panel->box);
+	WMResizeWidget(panel->dragmaxF, 289, 46);
+	WMMoveWidget(panel->dragmaxF, 8, 179);
+	WMSetFrameTitle(panel->dragmaxF, _("When dragging a maximized window..."));
 
-	panel->tranB = WMCreateSwitchButton(panel->tranF);
-	WMMoveWidget(panel->tranB, 10, 5);
-	WMResizeWidget(panel->tranB, 250, 30);
-	WMSetButtonText(panel->tranB, _("Open dialogs in the same workspace as their owners"));
+	panel->dragmaxP = WMCreatePopUpButton(panel->dragmaxF);
+	WMResizeWidget(panel->dragmaxP, 269, 20);
+	WMMoveWidget(panel->dragmaxP, 10, 20);
+	WMAddPopUpButtonItem(panel->dragmaxP, _("...change position (normal behavior)"));
+	WMAddPopUpButtonItem(panel->dragmaxP, _("...restore unmaximized geometry"));
+	WMAddPopUpButtonItem(panel->dragmaxP, _("...consider the window unmaximized"));
+	WMAddPopUpButtonItem(panel->dragmaxP, _("...do not move the window"));
 
-	WMMapSubwidgets(panel->tranF);
+	WMMapSubwidgets(panel->dragmaxF);
 
 	WMRealizeWidget(panel->box);
 	WMMapSubwidgets(panel->box);

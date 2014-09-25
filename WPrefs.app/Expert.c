@@ -84,8 +84,8 @@ static const struct {
 	{ N_("Enable window snapping."),
 	  /* default: */ False, OPTION_WMAKER, "WindowSnapping" },
 
-	{ N_("Return maximized windows to original geometry when moved."),
-	  /* default: */ False, OPTION_WMAKER, "UnmaximizeOnMove" }
+	{ N_("Open dialogs in the same workspace as their owners."),
+	  /* default: */ False, OPTION_WMAKER, "OpenTransientOnOwnerWorkspace" }
 
 };
 
