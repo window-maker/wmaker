@@ -17,6 +17,36 @@ dragging windows" is selected under "Workspace Preferences" in WPrefs.app, or
 if "DontLinkWorkspaces = NO" in  ~/GNUstep/Defaults/WindowMaker, as this feature
 also involves dragging a window to one side of the screen.
 
+
+Dragging maximized windows
+--------------------------
+You can now control the behavior when a maximized window is dragged by setting
+the "DragMaximizedWindow" option in ~/GNUstep/Defaults/WindowMaker or by
+selecting an option from the "When dragging a maximized window..." pop-up button
+under "Window Handling Preferences" in WPrefs.app.
+
+There are four choices:
+* "Move" ("...change position (normal behavior)" in WPrefs.app) is the default
+  and traditional behavior.  A maximized window is moved when dragged and
+  remains maximized, i.e., it keeps its maximized geometry and can later be
+  unmaximized.
+* "RestoreGeometry" ("...restore unmaximized geometry") is the behavior standard
+  in desktop environments like GNOME, Cinnamon, and Unity.  A maximized window
+  is moved when dragged and is completely unmaximized, i.e., its unmaximized
+  geometry is restored.
+* "Unmaximize" ("...consider the window unmaximized") causes a maximized window
+  to be moved when dragged and remains partially maximized, i.e., it keeps its
+  maximized geometry, but is consider to be unmaximized.  In particular, it can
+  be immediately re-maximized.
+* "NoMove" ("...do not move the window") prevents a maximized window from being
+  moved when dragged.
+
+Note that, to accomodate this option in the "Window Handling Preferences" tab in
+WPrefs.app, the option to "Open dialogs in the same workspace as their owners"
+(which sets the "OpenTransientOnOwnerWorkspace" option from
+~/GNUstep/Defaults/WindowMaker) has been moved to "Expert User Preferences".
+
+
 --- 0.95.6
 
 More image format supported
