@@ -1069,6 +1069,9 @@ void WMSetButtonTextAlignment(WMButton *bPtr, WMAlignment alignment);
 
 void WMSetButtonText(WMButton *bPtr, const char *text);
 
+/* Returns direct pointer to internal data, do not modify! */
+const char *WMGetButtonText(WMButton *bPtr);
+
 void WMSetButtonAltText(WMButton *bPtr, const char *text);
 
 void WMSetButtonTextColor(WMButton *bPtr, WMColor *color);

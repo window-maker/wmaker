@@ -325,6 +325,11 @@ void WMSetButtonText(WMButton * bPtr, const char *text)
 	}
 }
 
+const char *WMGetButtonText(WMButton *bPtr)
+{
+	return bPtr->caption;
+}
+
 void WMSetButtonAltText(WMButton * bPtr, const char *text)
 {
 	if (bPtr->altCaption)
