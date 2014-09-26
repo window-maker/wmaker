@@ -30,16 +30,16 @@
 
 /* class codes */
 typedef enum {
-    WCLASS_UNKNOWN = 0,
-    WCLASS_WINDOW = 1,		/* managed client windows */
-    WCLASS_MENU = 2,		/* root menus */
-    WCLASS_APPICON = 3,
-    WCLASS_DUMMYWINDOW = 4,	/* window that holds window group leader */
-    WCLASS_MINIWINDOW = 5,
-    WCLASS_DOCK_ICON = 6,
-    WCLASS_PAGER = 7,
-    WCLASS_TEXT_INPUT = 8,
-    WCLASS_FRAME = 9
+	WCLASS_UNKNOWN = 0,
+	WCLASS_WINDOW = 1,          /* managed client windows */
+	WCLASS_MENU = 2,            /* root menus */
+	WCLASS_APPICON = 3,
+	WCLASS_DUMMYWINDOW = 4,     /* window that holds window group leader */
+	WCLASS_MINIWINDOW = 5,
+	WCLASS_DOCK_ICON = 6,
+	WCLASS_PAGER = 7,
+	WCLASS_TEXT_INPUT = 8,
+	WCLASS_FRAME = 9
 } WClassType;
 
 
@@ -50,19 +50,19 @@ typedef enum {
  * but discouraged.
  */
 enum {
-    WMBackLevel = INT_MIN+1,	/* Very lowest level */
-    WMDesktopLevel = -1000,		/* Lowest level of normal use */
-    WMSunkenLevel = -1,
-    WMNormalLevel = 0,
-    WMFloatingLevel = 3,
-    WMDockLevel = 5,
-    WMSubmenuLevel = 15,
-    WMMainMenuLevel = 20,
-    WMStatusLevel = 21,
-    WMModalLevel = 100,
-    WMPopUpLevel = 101,
-    WMScreensaverLevel = 1000,
-    WMOuterSpaceLevel = INT_MAX
+	WMBackLevel = INT_MIN+1,    /* Very lowest level */
+	WMDesktopLevel = -1000,     /* Lowest level of normal use */
+	WMSunkenLevel = -1,
+	WMNormalLevel = 0,
+	WMFloatingLevel = 3,
+	WMDockLevel = 5,
+	WMSubmenuLevel = 15,
+	WMMainMenuLevel = 20,
+	WMStatusLevel = 21,
+	WMModalLevel = 100,
+	WMPopUpLevel = 101,
+	WMScreensaverLevel = 1000,
+	WMOuterSpaceLevel = INT_MAX
 };
 
 /*
@@ -76,15 +76,15 @@ enum {
  */
 
 typedef struct WObjDescriptor {
-    void *self;			       /* the object that will be called */
-    /* event handlers */
-    void (*handle_expose)(struct WObjDescriptor *sender, XEvent *event);
-    void (*handle_mousedown)(struct WObjDescriptor *sender, XEvent *event);
-    void (*handle_enternotify)(struct WObjDescriptor *sender, XEvent *event);
-    void (*handle_leavenotify)(struct WObjDescriptor *sender, XEvent *event);
+	void *self;                        /* the object that will be called */
+	/* event handlers */
+	void (*handle_expose)(struct WObjDescriptor *sender, XEvent *event);
+	void (*handle_mousedown)(struct WObjDescriptor *sender, XEvent *event);
+	void (*handle_enternotify)(struct WObjDescriptor *sender, XEvent *event);
+	void (*handle_leavenotify)(struct WObjDescriptor *sender, XEvent *event);
 
-    WClassType parent_type;	       /* type code of the parent */
-    void *parent;		       /* parent object (WWindow or WMenu) */
+	WClassType parent_type;            /* type code of the parent */
+	void *parent;                      /* parent object (WWindow or WMenu) */
 } WObjDescriptor;
 
 /* internal buttons */
@@ -231,7 +231,7 @@ typedef enum {
 #define	WB_NONE		0
 #define	WB_LEFTRIGHT	1
 #define	WB_TOPBOTTOM	2
-#define	WB_ALLDIRS     	(WB_LEFTRIGHT|WB_TOPBOTTOM)
+#define WB_ALLDIRS      (WB_LEFTRIGHT|WB_TOPBOTTOM)
 
 /* drag maximized window behaviors */
 enum {
@@ -257,18 +257,18 @@ typedef enum {
 
 
 #define WCHANGE_STATE(nstate) {\
-    if (w_global.program.state == WSTATE_NORMAL\
-        || (nstate) != WSTATE_MODAL)			  \
-        w_global.program.state = (nstate); \
-    if (w_global.program.signal_state != 0)\
-        w_global.program.state = w_global.program.signal_state;\
+		if (w_global.program.state == WSTATE_NORMAL		\
+		    || (nstate) != WSTATE_MODAL)			\
+			w_global.program.state = (nstate);		\
+		if (w_global.program.signal_state != 0)			\
+			w_global.program.state = w_global.program.signal_state;	\
 }
 
 
 /* only call inside signal handlers, with signals blocked */
 #define SIG_WCHANGE_STATE(nstate) {\
-    w_global.program.signal_state = (nstate);\
-    w_global.program.state = (nstate);\
+		w_global.program.signal_state = (nstate);	\
+		w_global.program.state = (nstate);		\
 }
 
 
@@ -298,179 +298,179 @@ NOTIFICATION(MenuTitleAppearanceSettingsChanged);
 
 /* appearance settings clientdata flags */
 enum {
-    WFontSettings = 1 << 0,
-    WTextureSettings = 1 << 1,
-    WColorSettings = 1 << 2
+	WFontSettings = 1 << 0,
+	WTextureSettings = 1 << 1,
+	WColorSettings = 1 << 2
 };
 
 
 
 typedef struct {
-    int x1, y1;
-    int x2, y2;
+	int x1, y1;
+	int x2, y2;
 } WArea;
 
 typedef struct WCoord {
-    int x, y;
+	int x, y;
 } WCoord;
 
 extern struct WPreferences {
-    char *pixmap_path;		       /* : separated list of paths to find pixmaps */
-    char *icon_path;		       /* : separated list of paths to find icons */
-    WMArray *fallbackWMs;              /* fallback window manager list */
-    char *logger_shell;		       /* shell to log child stdi/o */
-    RImage *button_images;	       /* titlebar button images */
-    char smooth_workspace_back;
-    signed char size_display;	       /* display type for resize geometry */
-    signed char move_display;	       /* display type for move geometry */
-    signed char window_placement;      /* window placement mode */
-    signed char colormap_mode;	       /* colormap focus mode */
-    signed char focus_mode;	       /* window focusing mode */
+	char *pixmap_path;                 /* : separated list of paths to find pixmaps */
+	char *icon_path;                   /* : separated list of paths to find icons */
+	WMArray *fallbackWMs;              /* fallback window manager list */
+	char *logger_shell;                /* shell to log child stdi/o */
+	RImage *button_images;             /* titlebar button images */
+	char smooth_workspace_back;
+	signed char size_display;          /* display type for resize geometry */
+	signed char move_display;          /* display type for move geometry */
+	signed char window_placement;      /* window placement mode */
+	signed char colormap_mode;         /* colormap focus mode */
+	signed char focus_mode;            /* window focusing mode */
 
-    char opaque_move;		       /* update window position during move */
-    char opaque_resize;		       /* update window position during resize */
-    char opaque_move_resize_keyboard; /* update window position during move,resize with keyboard */
-    char wrap_menus;		       /* wrap menus at edge of screen */
-    char scrollable_menus;	       /* let them be scrolled */
-    char vi_key_menus;		       /* use h/j/k/l to select */
-    char align_menus;		       /* align menu with their parents */
-    char use_saveunders;	       /* turn on SaveUnders for menus, icons etc. */
-    char no_window_over_dock;
-    char no_window_over_icons;
-    WCoord window_place_origin;	       /* Offset for windows placed on screen */
+	char opaque_move;                  /* update window position during move */
+	char opaque_resize;                /* update window position during resize */
+	char opaque_move_resize_keyboard;  /* update window position during move,resize with keyboard */
+	char wrap_menus;                   /* wrap menus at edge of screen */
+	char scrollable_menus;             /* let them be scrolled */
+	char vi_key_menus;                 /* use h/j/k/l to select */
+	char align_menus;                  /* align menu with their parents */
+	char use_saveunders;               /* turn on SaveUnders for menus, icons etc. */
+	char no_window_over_dock;
+	char no_window_over_icons;
+	WCoord window_place_origin;        /* Offset for windows placed on screen */
 
-    char constrain_window_size;	       /* don't let windows get bigger than screen */
-    char windows_cycling;	       /* windoze cycling */
-    char circ_raise;		       /* raise window after Alt-tabbing */
-    char ignore_focus_click;
-    char open_transients_with_parent;  /* open transient window in same workspace as parent */
-    signed char title_justification;   /* titlebar text alignment */
-    int window_title_clearance;
-    int window_title_min_height;
-    int window_title_max_height;
-    int menu_title_clearance;
-    int menu_title_min_height;
-    int menu_title_max_height;
-    int menu_text_clearance;
-    char multi_byte_text;
+	char constrain_window_size;        /* don't let windows get bigger than screen */
+	char windows_cycling;              /* windoze cycling */
+	char circ_raise;                   /* raise window after Alt-tabbing */
+	char ignore_focus_click;
+	char open_transients_with_parent;  /* open transient window in same workspace as parent */
+	signed char title_justification;   /* titlebar text alignment */
+	int window_title_clearance;
+	int window_title_min_height;
+	int window_title_max_height;
+	int menu_title_clearance;
+	int menu_title_min_height;
+	int menu_title_max_height;
+	int menu_text_clearance;
+	char multi_byte_text;
 #ifdef KEEP_XKB_LOCK_STATUS
-    char modelock;
+	char modelock;
 #endif
-    char no_dithering;		       /* use dithering or not */
-    char no_animations;		       /* enable/disable animations */
-    char no_autowrap;		       /* wrap workspace when window is moved to the edge */
-    char window_snapping;              /* enable window snapping */
-    char drag_maximized_window;        /* behavior when a maximized window is dragged */
+	char no_dithering;                 /* use dithering or not */
+	char no_animations;                /* enable/disable animations */
+	char no_autowrap;                  /* wrap workspace when window is moved to the edge */
+	char window_snapping;              /* enable window snapping */
+	char drag_maximized_window;        /* behavior when a maximized window is dragged */
 
-    char highlight_active_app;         /* show the focused app by highlighting its icon */
-    char auto_arrange_icons;	       /* automagically arrange icons */
-    char icon_box_position;	       /* position to place icons */
-    signed char iconification_style;   /* position to place icons */
-    char disable_root_mouse;	       /* disable button events in root window */
-    char auto_focus;		       /* focus window when it's mapped */
-    char *icon_back_file;	       /* background image for icons */
+	char highlight_active_app;         /* show the focused app by highlighting its icon */
+	char auto_arrange_icons;           /* automagically arrange icons */
+	char icon_box_position;            /* position to place icons */
+	signed char iconification_style;   /* position to place icons */
+	char disable_root_mouse;           /* disable button events in root window */
+	char auto_focus;                   /* focus window when it's mapped */
+	char *icon_back_file;              /* background image for icons */
 
-    WCoord *root_menu_pos;	       /* initial position of the root menu*/
-    WCoord *app_menu_pos;
-    WCoord *win_menu_pos;
+	WCoord *root_menu_pos;             /* initial position of the root menu*/
+	WCoord *app_menu_pos;
+	WCoord *win_menu_pos;
 
-    signed char icon_yard;	       /* aka iconbox */
+	signed char icon_yard;             /* aka iconbox */
 
-    int raise_delay;		       /* delay for autoraise. 0 is disabled */
-    int cmap_size;		       /* size of dithering colormap in colors per channel */
+	int raise_delay;                   /* delay for autoraise. 0 is disabled */
+	int cmap_size;                     /* size of dithering colormap in colors per channel */
 
-    int icon_size;		       /* size of the icon */
-    signed char menu_style;	       /* menu decoration style */
-    signed char workspace_name_display_position;
-    unsigned int modifier_mask;	       /* mask to use as kbd modifier */
-    char *modifier_labels[7];          /* Names of the modifiers */
+	int icon_size;                     /* size of the icon */
+	signed char menu_style;            /* menu decoration style */
+	signed char workspace_name_display_position;
+	unsigned int modifier_mask;        /* mask to use as kbd modifier */
+	char *modifier_labels[7];          /* Names of the modifiers */
 
-	unsigned int supports_tiff;	/* Use tiff files */
+	unsigned int supports_tiff;        /* Use tiff files */
 
-    char ws_advance;                   /* Create new workspace and advance */
-    char ws_cycle;                     /* Cycle existing workspaces */
-    char save_session_on_exit;	       /* automatically save session on exit */
-    char sticky_icons;		       /* If miniwindows will be onmipresent */
-    char dont_confirm_kill;	       /* do not confirm Kill application */
-    char disable_miniwindows;
-    char dont_blink;		       /* do not blink icon selection */
+	char ws_advance;                   /* Create new workspace and advance */
+	char ws_cycle;                     /* Cycle existing workspaces */
+	char save_session_on_exit;         /* automatically save session on exit */
+	char sticky_icons;                 /* If miniwindows will be onmipresent */
+	char dont_confirm_kill;            /* do not confirm Kill application */
+	char disable_miniwindows;
+	char dont_blink;                   /* do not blink icon selection */
 
-    /* Appearance options */
-    char new_style;		       /* Use newstyle buttons */
-    char superfluous;		       /* Use superfluous things */
+	/* Appearance options */
+	char new_style;                    /* Use newstyle buttons */
+	char superfluous;                  /* Use superfluous things */
 
-    /* root window mouse bindings */
-    signed char mouse_button1;	       /* action for left mouse button */
-    signed char mouse_button2;	       /* action for middle mouse button */
-    signed char mouse_button3;	       /* action for right mouse button */
-    signed char mouse_button8;	       /* action for 4th button aka backward mouse button */
-    signed char mouse_button9;	       /* action for 5th button aka forward mouse button */
-    signed char mouse_wheel_scroll;  /* action for mouse wheel scroll */
-    signed char mouse_wheel_tilt;      /* action for mouse wheel tilt */
+	/* root window mouse bindings */
+	signed char mouse_button1;         /* action for left mouse button */
+	signed char mouse_button2;         /* action for middle mouse button */
+	signed char mouse_button3;         /* action for right mouse button */
+	signed char mouse_button8;         /* action for 4th button aka backward mouse button */
+	signed char mouse_button9;         /* action for 5th button aka forward mouse button */
+	signed char mouse_wheel_scroll;    /* action for mouse wheel scroll */
+	signed char mouse_wheel_tilt;      /* action for mouse wheel tilt */
 
-    /* balloon text */
-    char window_balloon;
-    char miniwin_title_balloon;
-    char miniwin_apercu_balloon;
-    char appicon_balloon;
-    char help_balloon;
+	/* balloon text */
+	char window_balloon;
+	char miniwin_title_balloon;
+	char miniwin_apercu_balloon;
+	char appicon_balloon;
+	char help_balloon;
 
-    /* some constants */
-    int dblclick_time;		       /* double click delay time in ms */
+	/* some constants */
+	int dblclick_time;                 /* double click delay time in ms */
 
-    /* animate menus */
-    signed char menu_scroll_speed;	       /* how fast menus are scrolled */
+	/* animate menus */
+	signed char menu_scroll_speed;     /* how fast menus are scrolled */
 
-    /* animate icon sliding */
-    signed char icon_slide_speed;	       /* icon slide animation speed */
+	/* animate icon sliding */
+	signed char icon_slide_speed;      /* icon slide animation speed */
 
-    /* shading animation */
-    signed char shade_speed;
+	/* shading animation */
+	signed char shade_speed;
 
-    /* bouncing animation */
-    char bounce_appicons_when_urgent;
-    char raise_appicons_when_bouncing;
-    char do_not_make_appicons_bounce;
+	/* bouncing animation */
+	char bounce_appicons_when_urgent;
+	char raise_appicons_when_bouncing;
+	char do_not_make_appicons_bounce;
 
-    int edge_resistance;
-    int resize_increment;
-    char attract;
+	int edge_resistance;
+	int resize_increment;
+	char attract;
 
-    unsigned int workspace_border_size; /* Size in pixels of the workspace border */
-    char workspace_border_position;     /* Where to leave a workspace border */
-    char single_click;                  /* single click to lauch applications */
-    int history_lines;                  /* history of "Run..." dialog */
-    char cycle_active_head_only;        /* Cycle only windows on the active head */
-    char cycle_ignore_minimized;        /* Ignore minimized windows when cycling */
-    char strict_windoze_cycle;          /* don't close switch panel when shift is released */
-    char panel_only_open;               /* Only open the switch panel; don't switch */
-    char apercu_size;                   /* Size of apercu preview as a multiple of icon size */
+	unsigned int workspace_border_size; /* Size in pixels of the workspace border */
+	char workspace_border_position;     /* Where to leave a workspace border */
+	char single_click;                  /* single click to lauch applications */
+	int history_lines;                  /* history of "Run..." dialog */
+	char cycle_active_head_only;        /* Cycle only windows on the active head */
+	char cycle_ignore_minimized;        /* Ignore minimized windows when cycling */
+	char strict_windoze_cycle;          /* don't close switch panel when shift is released */
+	char panel_only_open;               /* Only open the switch panel; don't switch */
+	char apercu_size;                   /* Size of apercu preview as a multiple of icon size */
 
-    /* All delays here are in ms. 0 means instant auto-action. */
-    int clip_auto_raise_delay;         /* Delay after which the clip will be raised when entered */
-    int clip_auto_lower_delay;         /* Delay after which the clip will be lowered when leaved */
-    int clip_auto_expand_delay;        /* Delay after which the clip will expand when entered */
-    int clip_auto_collapse_delay;      /* Delay after which the clip will collapse when leaved */
+	/* All delays here are in ms. 0 means instant auto-action. */
+	int clip_auto_raise_delay;          /* Delay after which the clip will be raised when entered */
+	int clip_auto_lower_delay;          /* Delay after which the clip will be lowered when leaved */
+	int clip_auto_expand_delay;         /* Delay after which the clip will expand when entered */
+	int clip_auto_collapse_delay;       /* Delay after which the clip will collapse when leaved */
 
-    RImage *swtileImage;
-    RImage *swbackImage[9];
+	RImage *swtileImage;
+	RImage *swbackImage[9];
 
-    int show_clip_title;
+	int show_clip_title;
 
-    struct {
-        unsigned int nodock:1;	       /* don't display the dock */
-        unsigned int noclip:1;         /* don't display the clip */
-        unsigned int clip_merged_in_dock:1; /* disable clip, dock gets its workspace switching functionality */
-        unsigned int nodrawer:1;       /* don't use drawers */
-        unsigned int wrap_appicons_in_dock:1; /* Whether to wrap appicons when Dock is moved up and down */
-        unsigned int noupdates:1;      /* don't require ~/GNUstep (-static) */
-        unsigned int noautolaunch:1;   /* don't autolaunch apps */
-        unsigned int norestore:1;      /* don't restore session */
+	struct {
+		unsigned int nodock:1;                /* don't display the dock */
+		unsigned int noclip:1;                /* don't display the clip */
+		unsigned int clip_merged_in_dock:1;   /* disable clip, switch workspaces with dock */
+		unsigned int nodrawer:1;              /* don't use drawers */
+		unsigned int wrap_appicons_in_dock:1; /* Whether to wrap appicons when Dock is moved up and down */
+		unsigned int noupdates:1;             /* don't require ~/GNUstep (-static) */
+		unsigned int noautolaunch:1;          /* don't autolaunch apps */
+		unsigned int norestore:1;             /* don't restore session */
 #ifndef HAVE_INOTIFY
-	unsigned int nopolling:1;      /* don't poll the defaults database for changes */
+		unsigned int nopolling:1;             /* don't poll the defaults database for changes */
 #endif
-        unsigned int restarting:2;
-    } flags;			       /* internal flags */
+		unsigned int restarting:2;
+	} flags;                                      /* internal flags */
 
 	/* Map table between w_cursor and actual X id */
 	Cursor cursor[WCUR_LAST];
