@@ -36,7 +36,7 @@ EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N INSTALL \
 	INSTALL-WMAKER README.definable-cursor \
 	The-perfect-Window-Maker-patch.txt \
 	README COPYING.WTFPL autogen.sh \
-	email-clients.txt checkpatch.pl
+	email-clients.txt checkpatch.pl update-changelog.pl
 
 if USE_LCOV
 coverage-reset:
