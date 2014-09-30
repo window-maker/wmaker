@@ -3097,13 +3097,17 @@ static int setWorkspaceBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 		len = strlen(text) + 40;
 		command = wmalloc(len);
 		dither = wPreferences.no_dithering ? "-m" : "-d";
-		if (wPreferences.smooth_workspace_back)
-			snprintf(command, len, "wmsetbg %s -S -p '%s' &", dither, text);
-		else
-			snprintf(command, len, "wmsetbg %s -p '%s' &", dither, text);
+		if (!strchr(text, '\'') && !strchr(text, '\\')) {
+			command = wmalloc(len);
+			if (wPreferences.smooth_workspace_back)
+				snprintf(command, len, "wmsetbg %s -S -p '%s' &", dither, text);
+			else
+				snprintf(command, len, "wmsetbg %s -p '%s' &", dither, text);
+			ExecuteShellCommand(scr, command);
+			wfree(command);
+		} else
+			wwarning(_("Invalid arguments for background \"%s\""), text);
 		wfree(text);
-		ExecuteShellCommand(scr, command);
-		wfree(command);
 	}
 	WMReleasePropList(value);
 
