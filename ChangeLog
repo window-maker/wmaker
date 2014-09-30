@@ -1,3 +1,2283 @@
+Changes since version 0.95.6:
+.............................
+
+- wmaker: improve key shortcut labelling
+- WINGs: merge hashtable duplicate code
+- WINGs: merge bagtree duplicate code
+- wmaker: merge reading menu duplicate code
+  (David Maciejak <david.maciejak@gmail.com>)
+- Catch-up and some improvements of the Dutch .po files
+- Make two text strings translatable
+  (Alwin <translations@ziggo.nl>)
+- wrlib: merge gradient duplicate code
+- wmaker: update NEWS for 0.95.6
+- WPrefs: set default to 1st color in gradient texture
+- wmaker: add next and previous window focus functions
+- wmaker: use defined wWindowSingleFocus() function
+- wmaker: add new button and wheel mouse actions
+- WPrefs: add new mouse actions configuration
+  (David Maciejak <david.maciejak@gmail.com>)
+- wmaker: Remove dead links from BUGFORM.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- wmaker: improve windows listing in switchpanel
+- wmaker: add clip mouse wheel action to change workspace
+- util: create custom GNUSTEP dir if needed
+  (David Maciejak <david.maciejak@gmail.com>)
+- wmaker: Add window snapping feature.
+- WPrefs.app: Add ability to enable or disable window snapping.
+- wmaker: Clear maximized flag of a maximized window when moved.
+- wmaker: Add "unmaximize on move" feature.
+- WPrefs.app: Add ability to enable or disable "unmaximize on move" feature.
+- NEWS: Add note about window snapping.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- fix maximize when dock is set 'on top' and it should be covered
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- wmaker: Add new options for dragging maximized windows.
+- WPrefs.app: Add ability to set behavior when dragging a maximized window.
+- NEWS: Add note about dragging maximized windows.
+- wmaker: Add more directions for window snapping.
+- wmaker: Consistent whitespace in WindowMaker.h.
+- Add script to update ChangeLog from git log.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+
+Changes since version 0.95.5:
+.............................
+
+- ppm.c code style
+- gif.c code style
+- Removed optimize_for_speed flag
+- Removed context argument in jpeg files
+- supports_tiff moved to wPreferences
+- wApplicationExtractDirPackIcon doesn't use WScreen
+- get_icon_filename doesn't use WScreen
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Display app name in ballon help of GNUstep apps
+  (Charles Philip Chan <cpchan@bell.net>)
+- osdep_bsd.c: Fix a typo causing memory to be overwritten
+  (François Tigeot <ftigeot@wolfpond.org>)
+- Add some information in the NEWS file
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Debian 0.95.5
+- Small typo with the word attempts
+- WPrefs: Ignore NumLock key when capturing keyboard shortcuts
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- wmaker: Converted #define to an Enum for the Program State tracking variables
+- wmaker: Changed name of parameter in macro WCHECK_STATE
+- wmaker: Created a global structure to regroup all global variables
+- wmaker: Moved the variable for Locale choice (I18N) to the global variable
+  structure
+- wmaker: Moved timestamp variable (#1) to the global variable structure
+- wmaker: Moved timestamp variable (#2) to the global variable structure
+- wmaker: Moved global var with list of cursors to the preferences variable
+- wmaker: Removed notion of 'Default' mouse cursor
+- wmaker: Moved definition of WM-related XAtoms into the global variables
+  structure
+- wmaker: Moved definition of GNUStep-related XAtoms into the global variables
+  structure
+- wmaker: Moved definition of WMaker-specific XAtoms into the global variables
+  structure
+- wmaker: Moved definition of X Contexts into the global variables structure
+- wmaker: Removed variable for X Context that is not used
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wIconChangeImageFile returns int
+- wIconChangeImageFile find image if block swapped
+- wIconChangeImageFile get image block swapped
+- wIconChangeImageFile removed error variable
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Fixed scoping error in wSwitchPanelSelectFirst().
+  (Iain Patterson <wm@iain.cx>)
+- StartWindozeCycle uses ease variable
+- Avoid loop in keybinding check
+- wmaker: code style
+- Moved 'workspace_name_font' from the Screen to a Workspace object in the
+  global namespace
+- Variable workspace_count moved to the workspace object in the global
+  namespace
+- Variable last_workspace moved to workspace object in global namespace
+- Variable current_workspace moved to workspace object in global namespace
+- Array of workspaces moved to the workspace object in the global namespace
+- Variable workspace_menu moved to workspace object in global namespace
+- Clip, Dock and Drawers menu moved to appropriate global namespace
+- Removed WScreen args not used
+- AppIcon list moved out of WScreen
+- Removed unused WScreen variable in wIsADrawer
+- Variable clip_icon moved to clip object in the global namespace
+- wClipIconPaint appicon argument removed
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Remove warning by open coding WM_ITERATE_ARRAY macro
+  (Rodolfo García Peñas <kix@kix.es>)
+- Varible session_state moved to global namespace
+- Removed WScreen argument
+- shortcutWindows moved to w_global
+- Removed unused variable wapp_list
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Allow undocking appicon when Alt is pressed
+- Prevent crash when toggling auto-attract on a drawer with clip disabled
+- Correctly initialize the drawer tile when the dock is on the left side
+- Fix stacking level bug when creating a drawer in a keep-on-top dock
+- Fix removal of drawer with a single appicon
+- Remove dead code for a confirmation dialog that we'll probably never want to
+  show
+  (Daniel Déchelotte <yo.dan@free.fr>)
+- Compiler food.
+- Removed unused keymove_tick variable
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- wmaker: Moved variable Screen Count into the global namespace
+- wmaker: Moved variable Ignore Wks Change into the workspace object in the
+  global namespace
+- wmaker: Moved variables for the XShape extension into the global namespace
+- wmaker: Moved variables for the Xkb extension into the global namespace
+- wmaker: Moved variables for the XRandR extension into the global namespace
+- wmaker: Moved variables for Inotify into the global namespace
+- wmaker: Removed global variable 'WDelayedActionSet' and associated dead code
+- wmaker: Moved variable ValidModMask into the global namespace
+- wmaker: Moved global domain definition to the global namespace
+- wmaker: Moved definition of global variable 'wKeyBindings' to header
+- configure: Added compilation check for dangerous use of 'extern' keyword
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Removed unused WScreen argument
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Removed unused WScreen argument from dock's clip state functions
+- Removed unused WScreen argument from workspace's state functions
+- Removed unused WScreen argument in Pixmap function
+- Removed unused WScreen argument in dock's drawer state functions
+- Removed unused WScreen argument in dock's clip function
+- Removed unused WScreen argument in some Default handling functions
+- util: Fixed possible off-by-one issue when generating filename
+- WPrefs: Grouped config key and user display string in a single struct
+- WPrefs: Grouped config key and user display icon in a single struct
+- WPrefs: Fixed duplicate 'const' keyword
+- wmaker: Fixed compilation of XDND support
+- wmaker: Added 'static' attribute to local variables
+- Removed parameter to function 'create_tab_icon_workspace' that was not used
+- Removed parameters to function 'open_window_menu_core' that were not used
+- Removed parameter to function 'updateResistance' that was not used
+- Removed parameter to function 'handleDeadProcess' that was not used
+- Removed parameters to function 'handle_inotify_events' that were not used
+- wmaker: Added reset of file handle variable to avoid multiple file close
+- wmaker: Removed non necessary macro for buffer size
+- wmaker: Marked arg as unused for compiler in callback code
+- wmaker: Marked args as unused at places where conditional code is used
+- wmaker: Marked args as unused for compiler in callback code
+- wmaker: Marked args as unused for compiler in menu callback code
+- wmaker: Marked args as unused for compiler in XExposeEvent callback code
+- wmaker: Marked args as unused for compiler in XClickEvent callback code
+- wmaker: Marked args as unused for compiler in XCloseEvent callback code
+- wmaker: Marked args as unused for compiler in WINGs Notif callback code
+- wmaker: Removed explicit callback type conversion
+- wmaker: Marked args as unused for compiler in WINGs callback code
+- wmaker: Marked args as unused for compiler in X Error handlers
+- wmaker: Removed explicit callback type conversion
+- wmaker: Marked args as unused for compiler in process death handlers
+- wmaker: Marked args as unused for compiler in signal handlers
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Add "Other maximization options" to window menu.
+  (Doug Torrance <torrance@vandals.uidaho.edu>)
+- Focus fullscreen windows.
+- Update shortcut label for Unmaximize menu entry.
+- Update shortcut labels for Other maximization submenu.
+- Update other window menu shortcut labels.
+  (Iain Patterson <wm@iain.cx>)
+- Included compile file in gitignore
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Compiler food.
+  (Iain Patterson <wm@iain.cx>)
+- WUtil: Marked args as unused for compiler in a callback functions
+- WUtil: Marked args as unused for compiler in WUtil's API code
+- WUtil: Removed unused argument in internal function
+- WINGs: Marked args as unused for compiler in Notification callback code
+- WINGs: Marked args as unused for compiler in XDND callback code
+- WINGs: Marked args as unused for compiler in widget resize callback code
+- WINGs: Marked args as unused for compiler in X Error handlers
+- WINGs: Marked args as unused for compiler in event callback code
+- WINGs: Marked args as unused for compiler in a few more callback functions
+- WINGs: Marked args as unused for compiler in WINGs API code
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Updated default icons
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- Avoid unnecessary wWindowConfigure().
+  (Iain Patterson <wm@iain.cx>)
+- util: Marked args as unused for compiler in X Error handlers
+- WPrefs: Marked args as unused for compiler in Notification callback code
+- WPrefs: Marked args as unused for compiler in X Error handler
+- WPrefs: Marked args as unused for compiler in event callback code
+- WPrefs: Marked args as unused for compiler in signal handlers
+- WPrefs: Marked args as unused for compiler in WINGs callback code
+- wmaker: Marked arg as unused for compiler in Timer handler
+- Re-enable the compiler check for unused arguments
+- wmaker: Removed unused argument to function 'wMenuScroll'
+- wmaker: Removed unused args to local functions in wmspec
+- util: Removed argument that is not used
+- WINGs: Removed unused argument in function 'checkDropAllowed'
+- WINGs: Removed unused argument to function 'W_SetXdndAwareProperty'
+- WPrefs: Removed unused argument to function 'handleDragOver'
+- WPrefs: Removed unused screen argument in functions 'Init*'
+- WPrefs: Removed unused function 'DestroyTexturePanel'
+- WPrefs: Removed unused Screen argument to the 'Init*' functions
+- WPrefs: Disable compilation for code that is 'not_yet_fully_implemented'
+- WPrefs: Removed unused argument to function 'OpenExtractPanelFor'
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Remove default Microsoft fonts.
+- Remove newlines in legal panel.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- wmaker: Removed unused argument in function 'wDockFinishLaunch'
+- wmaker: Removed unused argument in function 'wDockLaunchWithState'
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Info Panel size with variables
+- Window Maker Developers Team Copyright
+- Legal Panel size with variables
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Removed newlines from legal text in translations
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- Improved ignore for 'm4' macro directory
+- configure: Moved detection of GIF support to a dedicated macro
+- wrlib: Use a Conditional for GIF in the makefile instead of #if in source
+- wrlib: Add support for v5 of the gif_lib API
+- WPrefs: Removed unused argument in function 'WGetEditMenuSubmenu'
+- WPrefs: Marked args as unused for compiler in callback code
+- wrlib: Moved configure's detection of JPEG support to a dedicated macro
+- wrlib: Moved configure's detection of PNG support to a dedicated macro
+- wrlib: Moved configure's detection of TIFF support to a dedicated macro
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Remove WMFullscreenLevel
+- Raise fullscreened window
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- wrlib: Moved configure's detection of XPM support to a dedicated macro
+- configure: Moved PPM image format handling to a consistent place
+- wrlib: separated the code to save to XPM from the builtin XPM loading
+- wrlib: Use a Conditional for XPM in the makefile instead of #if in source
+- wrlib: Marked args as unused for compiler
+- wrlib: Renamed image format related files for clarity
+- WUtil: New macro 'wlengthof' in the public API to get number of elements in
+  an array
+- WINGs: Use the macro 'wlengthof' to get the number of element in an array
+- wmaker: Use the macro 'wlengthof' to get the number of element in an array
+- WPrefs: Use the macro 'wlengthof' to get the number of element in an array
+- util: Use the macro 'wlengthof' to get the number of element in an array
+- configure: Less intrusive CFLAGS change when --enable-debug is chosen
+- configure: Do not keep assertion if debug was not enabled
+- configure: Added a check to try to enable STD C11 if possible
+- configure: Minor changes to option parsing for consistency
+- configure: Add check on function prototypes when debug is enabled
+- WINGs: Minor improvments in 'closestListItem' function
+- WINGs: Do not allocate memory for a fixed-size short-lived buffer
+- wmaker: Minor improvements to function 'shade_animate' when empty on purpose
+- wmaker: Avoid multiple calls to gettext
+- wmaker: Created an array to hold the maximize menu entries
+- WPrefs: Changed array of strings 'colorOptions' into a struct for
+  explicitness
+- WPrefs: Changed array of strings 'textureOptions' into a struct for
+  explicitness
+- WPrefs: Make the label internationalised for the texture option in dialog
+  window
+- wmaker: Do not allocate memory for a short lived string in
+  'selectSpecification'
+  (Christophe CURIS <christophe.curis@free.fr>)
+- move maximization size adjustments to maximization function
+- make adjustments for dock when calculating area for miniwindows
+- take dock into account when not covering icons next to it
+- Fix implicit declaration
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- Fix arrow keys in switchpanel.
+  (Iain Patterson <wm@iain.cx>)
+- configure: Enable compiler warnings to help add 'format' attribute
+- configure: Enable compiler warnings to help add 'noreturn' attribute
+- WINGs: Added attribute 'noreturn' to public function 'WMScreenMainLoop'
+- util: Removed unused procedure that caused a compilation warning
+- util: Added noreturn attribute to appropriate functions
+- WPrefs: Added noreturn attribute to appropriate functions
+- wrlib: Added noreturn attribute to appropriate functions
+- wmaker: Do not call XShape function if the server did not say it supports it
+- WINGs: Do not create variables for trivial things
+- Remove some unnecessary code related to XShape usage
+- configure: Removed deprecated lines for unused X stuff
+- configure: Enable compiler warnings for trampoline code generation
+- configure: Replaced deprecated construct with recommended new check
+- configure: Removed macro that are not used anymore
+- configure: Added m4 check to detect possible non-expanded macros
+- WINGs: Removed unnecessary type conversion
+- WRaster: Removed unused variables from Makefile
+- wmaker: Do not create a temporary variable for Xrandr support detection
+- WPrefs: Add case check to fix -Wmaybe-uninitialized warning
+- Code refactoring: replaced macro 'SHAPE' by 'USE_XSHAPE' for consistency
+- configure: made the functions to try lib link+compile more generic
+- configure: Created new macro to append only once a flag to a variable
+- configure: Created new macro to perform the repetitive part of Library check
+- configure: Moved configure's detection of XShape to a dedicated macro
+- Code refactoring: replaced macro 'XINERAMA' by 'USE_XINERAMA' for consistency
+- configure: Moved configure's detection of Xinerama to a dedicated macro
+- Code refactoring: replaced macro 'HAVE_XRANDR' by 'USE_XRANDR' for
+  consistency
+- configure: Moved configure's detection of XRandR to a dedicated macro
+- Code refactoring: replaced macro 'XSHM' by 'USE_XSHM' for consistency
+- Configure: Moved configure's detection of XShm to a dedicated macro
+- Configure: Added proper check for Xmu library for WRaster
+- WINGs: Added a few missing const attributes
+- WRaster: Added missing const attribute
+- wmaker: Added missing const attribute
+- WPrefs: Added a few missing const attributes
+- utils: Added a few missing attributes to local variables
+- WINGs: Added 'const' attribute to function 'WMCreateHashTable'
+  (Christophe CURIS <christophe.curis@free.fr>)
+- move dock/icons size adjustments, to fix window placement
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- Fixed a few improper macro usages
+- WPrefs: Moved widgets in Workspace panel so that label is not truncated
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Removed unused code in makeTitledIcon
+- Arguments not used in SetButtonAlphaImage
+- GetWindow function, argument not used
+- Remove compiler warnings in defaults.c
+- Removed unused code in screen.c
+- remove wtest compiler warnings.
+- WINGS: removed compiler warnings.
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Minimal support for _NET_WM_WINDOW_OPACITY
+- Add _NET_WM_WINDOW_TYPEs added in EWMH 1.3
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- WINGs/Examples: Removed refs to connect and server examples
+- WPrefs: Fixed label display truncated for delays in ms for autocollapsing
+  clips
+  (David Maciejak <david.maciejak@gmail.com>)
+- Fixed compiler warnings in dock.c
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Fixed xinerama detection
+- WPrefs: Resized frames inside Mouse Settings panel to avoid label truncated
+- WPrefs: Removed \n from label as the widget does at better job at splitting
+  lines
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Fix out of source build for i18n pot files
+- Updated Hungarian translations
+  (BALATON Zoltan <balaton@eik.bme.hu>)
+- Set no_focusable for "notification" and "tooltip" windows
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- WPrefs: Make Dock preferences pane less busy and fix up some strings
+- Updated Hungarian translation
+  (BALATON Zoltan <balaton@eik.bme.hu>)
+- Updated copyright date
+- WPrefs: Fixed compiler warnings
+  (David Maciejak <david.maciejak@gmail.com>)
+- WPrefs: Completely removed function 'makeTitledIcon' that did nothing
+- test: Added a few comments to explain things
+- doc: Minor updates to the main README file
+- doc: Added info on git send-email in the 'perfect-patch' recommendation
+- doc: Ran spell-checker on most text files present in the top directory
+  (Christophe CURIS <christophe.curis@free.fr>)
+- New translation into Dutch for Window Maker
+  (Alwin <translations@ziggo.nl>)
+- RandR misc.
+  (David Maciejak <david.maciejak@gmail.com>)
+- wmgenmenu: Write paths according to options set at configure time
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- split autoPlaceWindow to smaller functions
+- autoPlaceWindow: rewrite iteration to more comprehensible form
+- autoPlaceWindow: rename mysterious parameter tryCount to ignore_sunken
+- autoPlaceWindow: try placing window at center first
+  (Yuri Karaban <dev@dev97.com>)
+- WINGs: Add support for syslog messaging
+  (David Maciejak <david.maciejak@gmail.com>)
+- WUtil: Fixed incorrect header being included
+- WUtil: Added missing const attribute to function arguments
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WINGs: Add functions to release application memory
+- Add call to WMReleaseApplication on application exit
+- util: Make code a bit more secure
+- wrlib: Improved NETPBM support, file format detection
+- wrlib: Improvements to Netpbm memory usage on errors
+  (David Maciejak <david.maciejak@gmail.com>)
+- wrlib: Improved NETPBM support
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wrlib: Improved file format detection
+  (David Maciejak <david.maciejak@gmail.com>)
+- wrlib: Improved file format detection
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wrlib: Fixed and improved NETPBM examples
+- wrlib: Added support for webp image
+  (David Maciejak <david.maciejak@gmail.com>)
+- wmaker: Scale image to make them fit in the preview panel
+- WINGs: Changed algorithm to resize a pixmap while keeping aspect ratio
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wrlib: added support for imagemagick third-party lib
+  (David Maciejak <david.maciejak@gmail.com>)
+- Added pkg-config file for WUtil.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- wrlib: revert addition of an internal ImgFormat for ImageMagick
+- wmaker: update translations following string changes from previous commit
+- wmaker: Updated Dutch translation against changes in Info Panel
+- wmaker: Updated Armenian translation against changes in Info Panel
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Added missing files to distribution tarball.
+- Debian: Added wrlib.pc to libwraster3-dev package.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- wrlib: fixed prototype for 'RShutdown' in the public API header
+- wrlib: renamed compilation flags variables with a name less prone to clash
+- wrlib: fixed compilation to use the flags detected by configure for
+  MagickWand
+- wrlib: light changes to the code for ImageMagick
+- wrlib: grouped the detection of ImageMagick in the CHECK_MAGICK macro
+- wrlib: changed the function used to detecting MagickWand
+- wrlib: moved 'RShutdown' from 'load.c' to 'misc.c' for consistency
+- wrlib: do not initialize/release ImageMagick unnecessarily
+- wrlib: add detection for ImageMagick using pkg-config
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wmaker: minor improvements to labels in the info panel
+- wrlib: Implemented functions to allow clean-up of Contexts
+- wrlib: Added clean-up of image cache in 'RShutdown'
+- wrlib: Added clean-up of library internals in 'RShutdown'
+  (David Maciejak <david.maciejak@gmail.com>)
+- WINGs: Fix crash on exit while trying to save user config changes
+- WUtil: Aligned msgid for error message translations against latest code
+- WINGs: removed unused variable in syslog messaging code
+- WINGs: safer cleanup in the 'WMReleaseApplication' function
+- WINGs: Removed checks for code that can't fail
+- WMaker: rationalised the use of flags for window icons in the switchpanel
+- WPrefs: Make Opaque Move/Resize less cramped in the Window Handling panel
+- WPrefs: Updated translation source strings against source code
+- Add attribute 'noreturn' to a few functions pointed by clang
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Add keyboard shortcut to run application.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- wrlib: add a function to draw rectangles
+  (David Maciejak <david.maciejak@gmail.com>)
+- Restore wprogressindicator.c declarations to WINGs/WINGs.h
+- WPrefs: WINGs font configuration
+- WINGs: Option for decimal or hexadecimal RGB colors
+- WPrefs: Set workspace background
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- util/wmiv: an image viewer using wrlib
+- clean wDockFindFreeSlot function
+  (David Maciejak <david.maciejak@gmail.com>)
+- wrlib: Potential leak of memory pointed to by 'tmpp'
+- wmlib: Potential leak of memory pointed to by 'entry'
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- wmlib: remove wrong free highlighted by commit 65dc99d805
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wrlib: potentially incorrect sizeof in malloc
+- wrlib: wrong type in sizeof
+- wrlib: wrong type in sizeof
+- WINGs: Called function pointer is null (null dereference)
+- WINGs: Value stored to 'scroll' is never read
+- WINGs: Value stored to 'pos'|'_w'|'done' is never read
+- WINGs: actually assign variable
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- WPrefs: fix segfault when image not found
+- add util/wmiv to .gitignore
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- WPrefs: Value stored to 'timage' is never read
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- WPrefs: remove unfinished background tab from appearances panel code
+- WPrefs: new enum in Appearances.c for tab identifiers to increase readability
+- doc: Update getstyle and setstyle manpages.
+- WPrefs: Add ability to edit FrameBorderColor/FrameSelectedBorderColor.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- WINGs: changed use of 'if' on panel->rgbState into a switch
+- WMaker: moved XGrab/XUngrabPointer into the conditional code
+- News: created section dedicated to the changes related to 0.95.3
+- News: added description of a change that may be interesting to users
+- News: added section to describe the changes that have occured in 0.95.4
+- News: marked the current changes as part of 0.95.5 and describe the drawers
+  feature
+- News: described the new features for future 0.95.6 release
+- News: ran spell-checker on the file
+  (Christophe CURIS <christophe.curis@free.fr>)
+- src/appicon.c: updated paint_app_icon
+  (David Maciejak <david.maciejak@gmail.com>)
+- WMaker: rewrote generation of title for the Icon Chooser to avoid problems
+  (Christophe CURIS <christophe.curis@free.fr>)
+- src/misc.c: updated GetShortcutString
+- src/usermenu.c: updated wUserMenuRefreshInstances
+- src/winmenu.c: updated prepare_menu_position
+  (David Maciejak <david.maciejak@gmail.com>)
+- WUtil: fix posible crash in 'wgethomedir' (Coverity #50070)
+- WUtil: make sure wmalloc/wrealloc won't fail because of abort handler
+- WUtil: remove unnecessary check in wstrappend (Coverity #50138)
+- WUtil: fixed possible problem in wcopy_file (Coverity #50141)
+- WUtil: remove unnecessary check in WMGetStandardUserDefaults (Coverity
+  #50191)
+- WUtil: fix type used in sizeof in function wtokensplit (Coverity #50208 +
+  #50209)
+- WUtil: make use of secure_getenv if the function is available
+- WUtil: fix undefined behaviour with $VARS in wexpandpath (Coverity #50244)
+- WUtil: change 'wassertr(v)' to still perform check even if NDEBUG is set
+- WUtil: remove duplicated information from 'wassertr(v)' message
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Coding style: Change 'foo * bar' to 'foo *bar' in function arguments
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WINGs: Value stored to 'columnX' is never read
+- wrlib: Value stored to 'i'|'tmpc' is never read
+- wrlib: Value stored to 'bptr' is never read
+- util: Value stored to 'ret' is never read
+- wmaker: Value stored to 'w1' is never read
+- wrlib: Value stored to 'nptr' is never read
+- WINGs: Value stored to 'aw' is never read
+- util: Value stored to 'count' is never read
+- WINGs: Value stored to 'fh'|'fy' is never read
+- WINGs: Value stored to 'sz' is never read
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- WINGs: remove unreachable code in paintMenuEntry (Coverity #50042)
+- WINGs: do not crash on NULL title in WMSetWindowTitle (Coverity #50046)
+- WINGs: fix check for NULL pointer in WMText selection (Coverity #50067)
+- WINGs: fix memory leak in WColorPanel (Coverity #50102, #50103, #50104 and
+  #50133)
+- WINGs: fix memory leak in WMGetBrowserPaths (Coverity #50111)
+- WINGs: fix memory leak in WMCreateTextForDocumentType (Coverity #50118)
+- WINGs: fix memory leak in getStreamObjects (Coverity #50119)
+- WINGs: fix memory leak in requestHandler (Coverity #50135)
+- WINGs: fix memory leak in requestHandler (Coverity #50136)
+- WINGs: fix possible NULL pointer dereference in WMFreeColorPanel (Coverity
+  #50189)
+- WINGs: fix incorrect usage of direction variable in
+  updateStartForCurrentTextBlock (Coverity #50192)
+- WINGs: fix check for NULL pointer in WMFilePanel (Coverity #50195)
+- WINGs: fix possible NULL pointer dereference (Coverity #50197)
+- WINGs: fix probable crash in drag'n'drop (Coverity #50264)
+- WINGs: removed unnecessary gotos in handleTextKeyPress
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WPrefs: updates to FrameBorderColor/FrameSelectedBorderColor options
+- WINGs: Click on colored portion of color well also opens color panel.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- Add checkpatch.pl, stolen from the linux kernel
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Removed references to obsolete DisplayFont
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- WPrefs: changed renderTexture to always fallback to solid black when image
+  can't be loaded
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Fix segfault in Wprefs when background is set to fpixmap (wmsetbg
+  --fillscale)
+- Allow setting separate border color for focused windows
+- Allow setting "FrameFocusedBorderColor" from WPrefs
+- reformat output so it fits on terminals with 80 columns
+- Add missing options to wmsetbg manpage
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- WMaker: remove unnecessary check in Balloon show function (Coverity #50065)
+- WMaker: fix memory leak in windows menu (Coverity #50109)
+- WMaker: fix memory leak in window inspector (Coverity #50116)
+- WMaker: fix memory leak in the docked apps icon chooser (Coverity #50117.1)
+- WMaker: fix memory leak in the windows icon chooser (Coverity #50117.2)
+- WMaker: fix memory leak in wDockTrackWindowLaunch (Coverity #50120 and
+  #50121)
+- WMaker: fix memory leak in the root menu parser (Coverity #50122)
+- WMaker: fix memory leak in root menu parser (Coverity #50123 and #50124)
+- WMaker: fix memory leak in workspace switching (Coverity #50126)
+- WMaker: fix memory leak in the switchpanel backgroung image (Coverity #50131)
+- WMaker: fix memory leak in screen initialisation (Coverity #50134)
+- WMaker: removed unnecessary case handling in appicon setting
+- WMaker: fix memory leak in app icon changing (Coverity #50139)
+- WMaker: fix memory leak in the crash handling dialog (Coverity #50163)
+- WMaker: fix memory leak when respawning after crash (Coverity #50165)
+- WMaker: fix memory leak in windows saved state handling (Coverity #50171)
+- WMaker: fix dangerous code in file scanning for wAdvancedInputDialog
+  (Coverity #50172)
+- WMaker: fix possible memory leak in the icon chooser dialog (Coverity #50173)
+- WMaker: fix memory leak in the window inspector when saving settings
+  (Coverity #50174)
+- WMaker: fix memory leak in the window inspector when saving settings
+  (Coverity #50175)
+- WMaker: removed check that is always true in wDefaultsInitDomain (Coverity
+  #50243)
+- WMaker: change conceptually imperfect code in drawerDestroy (Coverity #50265)
+- WMaker: removed use of dangerous RETRY macro in GetCommandForPid for Linux
+  (Coverity #50267)
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wrlib: add image flip functions
+- util/wmiv: correct errors and warnings
+- wrlib: RRotateImage function not fully implemented
+  (David Maciejak <david.maciejak@gmail.com>)
+- wmaker: raise shaded window when alt tabbing
+- wmaker: alt-tab to shaded windows when "SwitchPanelImages = None" is set
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- wrlib: fixed transformation functions
+  (David Maciejak <david.maciejak@gmail.com>)
+- wmgenmenu: Do not force command line options upon everybody
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WINGs: fix duplicate if/else branch in W_LookupString
+  (David Maciejak <david.maciejak@gmail.com>)
+- WPrefs: make fall-back value look like a fall-back value in Texture Panel
+  (Coverity #50031)
+- WPrefs: fix NULL pointer dereference in the Pixmap/Icon path panel (Coverity
+  #50073 + #50150)
+- WPrefs: fix possible crash when saving mouse modifier (Coverity #50098)
+- WPrefs: fix memory leak in buildPLFromMenu (Coverity #50105)
+- WPrefs: fix memory leak in loadRImage (Coverity #50107)
+- WPrefs: fix memory leak when editing the label of a menu (Coverity #50130)
+- WPrefs: fix memory leak when saving settings (Coverity #50140 + #50157 +
+  #50159)
+- WPrefs: fix memory leak when editing a delay for the dock (Coverity #50156)
+- WPrefs: fix memory leak when saving window handling settings (Coverity
+  #50158)
+- WPrefs: fix NULL pointer handling when getting the Modifiers (Coverity
+  #50200)
+- WPrefs: add warning when renderTexture encounters some unknow settings
+  (Christophe CURIS <christophe.curis@free.fr>)
+- util/wmiv: add image auto orientation detection
+  (David Maciejak <david.maciejak@gmail.com>)
+- WPrefs: set IconTitleColor, IconTitleBack, ClipTitleColor, and
+  CClipTitleColor
+- Add checkpatch.pl to distribution tarball.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- WPrefs: add expert option to disable switch panel
+- WMaker: src/misc.c remove obsolete code
+- wrlib: load.c clean coding style
+- WINGs: add function to set the color of the frame title
+- wmaker: darken labels from docked application settings
+  (David Maciejak <david.maciejak@gmail.com>)
+- wrlib: fix possible incorrect shifting operations (Coverity #50203)
+- wrlib: fix possible incorrect shifting operations (Coverity #50204, #50205,
+  #50206)
+- wrlib: removed macro RETRY that does not does what is expected (Coverity
+  #50160)
+- wrlib: added a limit to the image cache size (Coverity #50223)
+- wrlib: initialise value for variable to avoid possible crash (Coverity
+  #50245)
+- wrlib: remove unnecessary variable assignation (Coverity #50258)
+- wrlib: return NULL if XImage could not be taken, for consistency
+- wrlib: new headers to contain definition of internal stuff
+- wrlib: add explicit type definition in API to allow compiler Type Checks
+  (1/3)
+- wrlib: add explicit type definition in API to allow compiler Type Checks
+  (2/3)
+- wrlib: add explicit type definition in API to allow compiler Type Checks
+  (3/3)
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Consistent terms for switch panel cycling.
+  (Iain Patterson <wm@iain.cx>)
+- wmaker: redo logo
+  (David Maciejak <david.maciejak@gmail.com>)
+- util: simplify the code for 'find_terminal_emulator' (Coverity #50076)
+- util: removed unnecessary RReleaseImage in wmsetbg (Coverity #50077)
+- util: fix misleading indentation in assemblePLMenuFunc (Coverity #50094)
+- util: fix leak in setstyle (Coverity #50151+#50152)
+- util: remove unnecesary allocation in addWMMenuEntryCallback (Coverity
+  #50161)
+- util: fix leak in getstyle's makeThemePack (Coverity #50164)
+- util: fix image leak in wmsebg's parseTexture (Coverity #50166)
+- util: fixed memleak in wmsetbg's updateDomain (Coverity #50167)
+- util: fix leaks in wmsetbg's changeTextureForWorkspace (Coverity #50169)
+- util: add proper check for null pointer in wmsetbg (Coverity #50198)
+- util: fix possible buffer overrun in the function that create L2 menus
+  (Coverity #50219)
+- util: replaced sprintf with snprintf to avoid buffer overflow (Coverity
+  #50220)
+- util: add check for size validity (Coverity #50224)
+- util: rewrote path building in makeThemePack
+- Removed definitions of dangerous macro RETRY that does not work as expected
+- util: cosmetic updates to the list of terminals for wmmenugen
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Catch-up with new strings, and overall improvements of the Dutch language
+  files
+  (Alwin <translations@ziggo.nl>)
+- wrlib: move fixed angle rotation code to dedicated functions
+- wrlib: code refactoring in RFlipImage functions
+- wrlib: do not create an alpha channel if the original image did not have it
+  in RFlipImage
+- wrlib: merged both R*FlipImage function into one for the public API
+- WINGs: optimisations to 'WMReadPropListFromPipe'
+- wmaker: fixed flag to avoid reloading config multiple times
+- wmaker: removed variable whose value never changed
+- wmaker: remove checks on variables that have already been checked
+- wmaker: simplify the code for the Xkb event handler
+- WPrefs: replaced NULL terminated lists by 'wlengthof' usages
+- WPrefs: grouped items related to the color selection in a single place
+- WPrefs: grouped items related to the texture selection in a single place
+- util: update wmiv after the RFlipImage API change in wrlib
+- util: clarify a bit of the code for parsing commands in wmgenmenu
+- util: add explicit types for calback functions definitions
+- doc: add a few more suggestions for people willing to contribute
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wmaker: improve the behaviour of window resizing by user
+  (Ioan Moldovan <ioanm@outlook.com>)
+- wrlib: re-introduce the optimize_for_speed flag for binary compatibility
+- Increment versions of libraries for next release due to public API Changes
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wrlib/tests: fix testgrad memory leak
+- WINGs/Tests: make them compile again
+- wmaker: dock.c possible null pointer dereference
+- wmaker: superfluous.c possible null pointer dereference
+- wmaker: main.c fix realloc mistake
+- WINGs: correct possible null pointer dereference
+- wrlib: fix RCreateImageFromDrawable error log msg
+- wmaker: fix xdnd accepted type
+- wmaker: Improve drag-nd-drop support
+- wmaker: Add drag-nd-drop support in info panel
+- wmaker: Add drag-nd-drop support
+- wmaker: fix moveres.c compilation warning
+- wmaker: switch back icon name to the window name when needed
+- wmaker: unset default app logo size
+- wmaker: update drag-nd-drop label related
+- wmaker: src/dialog cosmetic code change
+- wmaker: add miniwindow apercu
+  (David Maciejak <david.maciejak@gmail.com>)
+- apercu: Make preview size a configuration option
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- wmaker: change default app icon
+- WPrefs: fix key capture
+- wmaker: update docked application balloon text
+- wmaker: fix src/dock.c code typo
+- wmaker: src/action.c merge duplicate code
+- WINGs: merge duplicate code from wtext
+- wmaker: fix deiconify window on double-click
+- wmaker: fix control shortcut label in window menu
+- wmaker: update src/action.c coding style
+- wrlib: add merged code for xpm support in 2 distinct functions
+- wrlib: remove duplicate code from xpm support
+- wmaker: add support for more mouse buttons
+- WPrefs: add new mouse buttons configuration support
+- wmaker: make disable mouse actions a live set
+- wmaker: implement EWMH _NET_WORKAREA
+  (David Maciejak <david.maciejak@gmail.com>)
+- Window Maker 0.95.6
+  (Carlos R. Mafra <crmafra@gmail.com>)
+
+Changes since version 0.95.4:
+.............................
+
+- Fix underlinking
+  (Kamil Rytarowski <krytarowski@gmail.com>)
+- Set mod+wheel to OFF by default
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix incorrect FSF address
+- Include LGPL with correct FSF address
+  (Andreas Bierfert <andreas.bierfert@lowlatency.de>)
+- README capitalization fix
+  (SJS <wmaker@stremler.net>)
+- Removed XRANDR externs
+- New shutdown.h file
+- WINGs: Functions to read the Mouse Wheel conf
+- Don't access to private WINGs info
+- WINGs: New function W_setconf_doubleClickDelay
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Window placement: Enforce center position
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Update docked icon after kill dockapp
+- New function set_icon_image_from_database
+- Simplify the application appicon creation
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- autoconf: add remaining parameter for AC_SEARCH_LIBS
+  (Wade Berrier <wberrier@gmail.com>)
+- Sanitize 'Ignore client supplied icon' logic
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- wmgenmenu: Add XBMC entry
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WPrefs: Fix single click activation button in Icon preferences
+  (BALATON Zoltan <balaton@eik.bme.hu>)
+- WINGS: New function WMReadPropListFromPipe
+- Add OPEN_PLMENU option to parse command generated proplist style menus
+- Teach WPrefs about OPEN_PLMENU
+  (Andreas Bierfert <andreas.bierfert@lowlatency.de>)
+- Removed dead code in wSessionRestoreState
+- Cosmetic code changes in workspace
+- Removed unused dock types
+- Window attributes moved to wCoreCreateTopLevel
+- Removed extra XClearWindow call
+- Workspace clip creation in two steps
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Added wGetColorForColormap().
+- Use wGetColorForColormap() when allocating border pixel.
+- Make window border colours configurable.
+- Make window border size configurable.
+- Document FrameBorder* preferences.
+- Change Select menu entry text for selected windows.
+  (Iain Patterson <wm@iain.cx>)
+- Removed old window clip balloon code
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Added GetShortcutKey().
+- Eliminate Workspaces menu magic numbers.
+- Show shortcuts for workspace switching menu entries.
+- Added shortcut to switch to last used workspace.
+- Allow WPrefs to configure the last used workspace key.
+- Shortcuts for moving windows between workspaces.
+- Allow WPrefs to configure workspace switching keys.
+- Document new workspace shortcuts.
+  (Iain Patterson <wm@iain.cx>)
+- Removed dup function wScreenSearchForRootWindow
+- code clean at startup.c
+- wGetRectForHead moved to where used
+- New file placement.h
+- New function set_icon_image_from_image
+- wIconChangeImageFile use set_icon_image_from_image
+- wIconUpdate removed image argument
+- Dockapps don't have title
+- drawIconTitle renamed
+- New function update_icon_title
+- wIconChangeTitle rewrited
+- Move out wIconUpdate from set_icon_image_from_database
+- Remove wIconUpdate in keepIconsCallback
+- Remove wIconUpdate in moveIconBetweenDocks
+- Remove wIconUpdate in wDockDetach
+- Remove wIconUpdate in wDockAttachIcon
+- Remove wIconUpdate in tileObserver
+- wIconPaint: avoid crashing if icon is NULL
+- wIconChangeTitle rewritten
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- configure: Add detection of library kvm that is used under OpenBSD
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Deleted useless test
+- Avoid clip flickering when docking an appicon
+- BF for "some obscured windows briefly appears when switching workspaces"
+- Fix leading spaces in comment (trivial)
+- WPrefs: consolidate the 2 createImages static functions into a global one
+- Consolidated all code checking whether a tile is fully on screen in one
+  static function
+- Make the clip's auto-delays configurable
+- WPrefs: new Docks pannel, to change auto-expand/collapse/etc delays
+- Increase MAX_WINDOWLIST_WIDTH from 160 to 400 (in pixels)
+- Bring back some "About" information when double-clicking the dock
+- Move code that removes icons from a dock to new removeIcons function
+- Merging appicon.c:appIconMouseDown and dock.c:handleIconMove into
+  appicon.c:wHandleAppIconMove
+- Added wDefaultPurgeInfo to remove what we stored about a given instance-class
+  couple.
+- Added a SlideWindows function to handle horizontally-aligned array of windows
+- Add drawers to wmaker!
+- WPrefs: adds possibility to disable drawers from Docks panel
+- Real-time dock left-right swapping
+- Allow appicons above the dock
+- Wrap appicons when dock is moved up and down
+- Add option to merge the workspace-switching functionality into the dock
+  (Daniel Déchelotte <yo.dan@free.fr>)
+- Merge branch 'wmdrawer' into next
+- Fix compilation from merge conflict
+- WPrefs: Avoid crash when config file does not contain wmdrawer settings
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WPrefs: fix missing drawer image in Makefile.am
+  (Renan Traba <rvt10@inf.ufpr.br>)
+- Compiler food.
+  (Iain Patterson <wm@iain.cx>)
+- New file misc.h
+- icon_update_pixmap default moved to bottom
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Fix StartWindozeCycle() shift key behaviour.
+- Set StrictWindozeCycle by default.
+- Added sameWindowClass().
+- Correct check for modifier in class-specific cycle.
+- Support for same-class cycling in open switchpanel.
+  (Iain Patterson <wm@iain.cx>)
+- Move the list of keyboard shortcut texts into the array of their config
+  keyword
+- Moved declaration of format-specific image Load functions to dedicated header
+- Moved the function to Save image also into the internal header
+- Converted #define into an Enum for image format number
+- Added 'const' attribute to the file name parameter to load/save
+- Added 'const' attribute on non-modified arguments for drawing functions
+- Added 'const' attribute on non-modified arguments for color handling
+  functions
+- Added the last missing 'const' attributes to function parameters
+- Increased library's revision to reflect API updates
+- Added missing headers to the list of source files of the project
+- WRaster: Bugfix, added missing 'const' to RLoad* functions
+- WUtil: Added 'const' attribute on non-modified arguments to functions
+- WUtil: Added 'const' attribute to parameters for file related API
+- WUtil: Added 'const' attribute to the filename on WM(Read|Write)PropList*
+- WUtil: Added 'const' attribute to all remaining functions where applicable
+- WUtil: Added comment about values returned by API functions
+- WUtil: Avoid unnecessary strdup + free
+- WUtil: Fixed wrong type recast
+- WUtil: Fixed risky code for de-escaping of strings
+- WUtil: Changed declaration of 'wusergnusteppath' to return a CONST string
+- Fixed const correctness in functions using 'wusergnusteppath'
+- WUtil: Rewrote 'wusergnusteppath' to be more efficient
+- WUtil: Increased version number for the library
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Documentation on the new switchpanel behaviour.
+  (Iain Patterson <wm@iain.cx>)
+- WPrefs: Added the proper 'const' attribute to the dictionnary functions
+- WPrefs: Added const attribute to statically stored strings
+- Fixed memory leak due to non-freed temporary PropList
+- Added a few 'const' to filename parameters for History functions
+- Changed method to limit the number of History entries loaded
+- Fixed memory leak due to non-freed property list structure
+- WINGs: Added 'const' attribute to functions in wapplication, wappresource,
+  wcolor, wfont, wpixmap
+- WINGs: Added 'const' attribute to functions in wbutton, wframe, wlabel,
+  wlist, wwindow
+- WINGs: Added 'const' attribute to functions in wbrowser, wcolorpanel,
+  wfilepanel and wfontpanel
+- WINGs: Added 'const' attribute to functions in wballoon, wmenuitem, wmisc,
+  wtextfield
+- WINGs: Added 'const' attribute to functions in wpanel, wpopupbutton, wtabview
+- WINGs: Added 'const' attribute to functions in dragdestination, wtext
+- WINGs: Added 'const' attribute to 'WMCreatePropListFromDescription'
+- WINGs: Added 'static' attribute to local functions in wcolorpanel
+- wrlib: Added 'const' attribute to local function in 'context'
+- WPrefs.app: Added const attribute to local string
+- WINGs: Fixed incorrect allocation size, missing room for '\0'
+- WINGs: Fixed incorrect return type for internal function
+- WINGs: Updated NEWS file about the API changes in the libraries
+  (Christophe CURIS <christophe.curis@free.fr>)
+- InfoPanel: Added info about XRandR in the info dialog
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- InfoPanel: Minor fixes for what must be translated and what does not need to
+- InfoPanel: Use a more user-friendly separator to display supported image
+  formats
+- InfoPanel: Added display of memory fragmentation information
+- Readme: Removed reference to the tutorial
+- Readme: Removed reference to 'contrib' directory
+- util: removed deprecated file 'directjpeg.c'
+- Configure: Changed OS dependant check to use Autoconf's macro
+- Changed WM_OSDEP to use Conditional instead of Substitution
+- WPrefs: Added a few comments in header file
+- Added proper legal notice at beginning of header files
+- Added missing include guards in a few headers
+- Removed temporary allocation to build a path that is actually a constant
+- Configure: Fixed usage of CPPFLAGS instead of CFLAGS for some options
+- Changed formula for getting the number of elements in a static array
+- Unified usage of the 'inline' attribute for functions
+- WPrefs: Move declaration of function into the common header
+- Fixed improper variables definition in header file
+- WRaster: Changed equality/inequality comparison on floating point number
+- WINGs: Changed the minimum internal knob size of WScroller
+- WINGs: Changed equality comparison on floating point number
+- wmaker: Removed equality comparison on floating point number
+- Configure: Added some -Wxxx checks when debug mode is enabled
+- util: Created header to define functions that may be used in more that one
+  place
+- util: Added 'const' attribute to function parameters
+- WPrefs: Moved content of 'double.h' into 'WPrefs.h'
+- WPrefs: Added 'const' attribute to function parameters
+- wmaker: Removed deprecated function definition from header
+- wmaker: Reorganised the header 'funcs.h'
+- src/main.c: Moved local prototype for global function to header 'funcs.h'
+- Added explicit 'void' to function that takes no argument
+- WINGs: Added explicit parameter list to function prototypes (Simple cases)
+- WINGs: Added explicit parameter list to function prototypes (Complex case)
+- WINGs: Removed cast to change function prototype
+- WINGs: Reorganised the private header
+- WINGs: Place prototype of functions in WINGsP.h instead of local definition
+- WINGs: Moved declaration of extern variable to the global header
+- WINGs: Added include for header defining the funcion provided by the file
+- WINGs: Added a few missing 'static' attributes to functions
+- wmaker: Cleaned dangerous function prototype usage
+- util: Added a few missing 'static' attributes for functions
+- WPrefs: Cleaned dangerous function prototype usage
+  (Christophe CURIS <christophe.curis@free.fr>)
+- fix condition to restore window position when unmaximized
+- simplified logic of handleMaximize function
+  (Renan Traba <rvt10@inf.ufpr.br>)
+- simplified logic of wMaximizeWindow function
+- added new maximize positions, top and bottom
+  (Renan Traba <hellupline@gmail.com>)
+- WPrefs: added option to configure new top and bottom viewports
+- added new windows positions
+- WPrefs: added option to configure new viewports
+- explicit restore to MAX_MAXIMUS instead of empty flag at handleMaximize
+- enforce requested window position whem maximizing
+  (Renan Traba <rvt10@inf.ufpr.br>)
+- Prevent crash when switchpanel is not initialised.
+- Dim switchpanel icons when same-class cycling.
+- Undim switchpanel icons when selecting windows directly.
+  (Iain Patterson <wm@iain.cx>)
+- New header file startup.h
+- New header file cycling.h
+- New header file event.h
+- getWVisualID prototype moved to main.h
+- New header file monitor.h
+- New header file winmenu.h
+- New header file switchmenu.h
+- funcs.h removed
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Fix workspace renaming with Ctrl+left click
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Avoid unnecessary switchpanel icon redraws.
+- Compiler food.
+- Preference to open the switchpanel without selecting a window.
+- Handle Return in switchpanel.
+- funcs.h regression
+- Maximization regression
+  (Iain Patterson <wm@iain.cx>)
+- Configure: Use automake's conditional to handle icon installation
+- WUtil: Avoid memory leak and misbehaviour on internal function
+  'getuserhomedir'
+- Configure: Added check for compiler attribute 'noreturn'
+- wmaker: Added attribute 'noreturn' to appropriate functions
+- Added explicit prototype for callback function and fixed code accordingly
+- Fixed structure declaration syntax
+- Fixed incorrect format specifier
+- WPrefs: Fix crash when switching to mouse settings panel
+- WPrefs: Fixed empty list of Mouse Grab Modifier problem
+- WPrefs: Added XKeycodeToKeysym work-around to all other usage places
+- Hide some compiler warning that are known and accepted
+- wmaker: Added 'const' attribute to function 'ShrinkString'
+- wmaker: Added 'const' attribute to local function 'getMaxStringWidth'
+- wmaker: Added 'const' attribute to local function 'drawMultiLineString'
+- wmaker: Added 'const' attribute to function 'GetShortcutString'
+- wmaker: Added 'const' attribute to function 'wDefaultsInitDomain'
+- wmaker: Added 'const' attribute to most local functions
+- wmaker: Added 'const' attribute to most global functions
+- wmaker: Added 'const' attribute to function 'wWindowUpdateName'
+- wmaker: Added 'const' attribute to remaining functions
+- wmaker: Added 'const' attribute to local variables
+- Configure: Moved check for Math lib to a dedicated M4 macro
+- Configure: Added explicit check for math library header
+- wmaker: Changed math on floating point by integer operation
+- WRaster: Changed formula for reconverting angle to the (0-360) bounds
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Fix segfault when SwitchPanelImages = None and user press Alt+tab.
+  (Gabriel VLASIU <gabriel@vlasiu.net>)
+- Don't crash when SwitchPanelImages is None.
+  (Iain Patterson <wm@iain.cx>)
+- Estonian translation of Window Maker 0.95.4
+  (Ivar Smolin <okul@linux.ee>)
+- wmaker: Replaced local 'extern' definition by proper header include
+- wmaker: Replaced local 'extern' definition of wPreferences by proper header
+  usage
+- wmaker: Moved function prototype to the appropriate header
+- wmaker: Replaced local declaration of system function by proper header call
+- wmaker: Moved function prototype to the appropriate header
+- wmaker: Changed global constant declaration to use appropriate type
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Proper fix for array == NULL in WMPopFromArray() function.
+  (Gabriel VLASIU <gabriel@vlasiu.net>)
+- Korean Localization update, etc.
+  (Lee, Seong-Gu <sgleehd@gmail.com>)
+- wmaker: reset "ignore workspace change" flag in all cases
+  (Thomas Otto <totto@zbh.uni-hamburg.de>)
+- Window Maker 0.95.5
+  (Carlos R. Mafra <crmafra@gmail.com>)
+
+Changes since version 0.95.3:
+.............................
+
+- Makefile: Add missing subdir
+  (John H. Robinson, IV <jaqque@sbih.org>)
+- debian: New version 0.95.3
+- Added wmlib/libWMaker.la to .gitignore
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Bugs with readMenu*().
+  (Iain Patterson <wm@iain.cx>)
+- Fixed possible off-by-one loops
+  (Christophe CURIS <christophe.curis@free.nospam.fr>)
+- Initialize app_icon to null
+- New function save_app_icon
+- New function app_icon_create_from_docks
+- Move makeAppIconFor() and removeAppIconFor()
+- Split makeAppIconFor()
+- Remove code duplication by calling paint_app_icon()
+- Check one time if no_appicon is set
+- Coding style cleanup in application.c
+- Remove code duplication by calling removeAppIconFor()
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Random coding style cleanup in winspector.c
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- New function create_logo_image
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Add fill screen scale to wmsetbg
+- Fix "implicit declaration of function"
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- WScreen argument removed in get_generic_value()
+- Function wDefaultFillAttributes() rewritten
+- New functions in icon.c
+- Function get_name_for_icon splitted
+- Remove code duplication by calling readGlobalDomain()
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Add "Center" window placement strategy
+  (Yuri Karaban <mlists@dev97.com>)
+- New function get_name_for_instance_class
+- Remove code duplication by calling get_name_for_instance_class()
+- Icon functions moved to appicon.c
+- wAppIconSave is now void
+- wAppIconSave splitted
+- app_icon_create_from_docks moved to appicon.c
+- Create WAppIcon always
+- extractIcon removed.
+- save_app_icon WWindow argument removed
+- Do static icon functions
+- GetProgramNameForWindow removed
+- Change a small comment in icon.c
+- Icon painting moved to makeAppIconFor()
+- New debian version 0.95.3-2
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- wmmenugen: properly skip NoDispaly entries
+  (Alexey I. Froloff <raorn@raorn.name>)
+- app_icon_create_from_docks renamed to create_appicon_from_dock
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- WMPopFromArray(): avoid underflow
+  (Alexey I. Froloff <raorn@raorn.name>)
+- Make create_appicon_from_dock() do only what its name implies
+- Unify save_appicon() and wAppIconSave()
+- Skip no_appicon apps in the application icon list
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Correct window shading logic.
+  (Iain Patterson <wm@iain.cx>)
+- Cleanup superfluous.c a bit
+- icon.c code cleanup
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Address unprototyped call in dock.c
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Remove code duplication in winmenu.c
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Address 'may be used uninitialized' warnings
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- rootmenu header file updated
+- XKeycodeToKeysym deprecated function
+- Moving header functions to main.h
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- wmaker.inst: Remove test for LITE and KDE message
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Add helper functions for appicon list management
+- New move_window function
+- New colormap header file and remove unused functions
+- Remove unused variables from WSessionData struct
+- Remove unused wWindowCanReceiveFocus()
+- Remove unused variable wm_name_changed
+- Remove never-set variable net_state_from_client
+- Variables user_changed_* can be removed
+- window.h: Remove unused variables from WWindow struct
+- Remove unused stuff from session.h
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- More (un)maximize tweaks.
+- Support _NET_FRAME_EXTENTS.
+  (Iain Patterson <wm@iain.cx>)
+- Remove unused argument from init_wdefaults()
+- Remove unused argument from wDefaultGetIconFile()
+- Remove unused argument from wDefaultFillAttributes()
+- wDefaultGetImage splitted
+- Remove dup code from getWindowMakerIconImage()
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Remove dependency to CPP: Moving parser functions to a dedicated file
+- Remove dependency to CPP: create structure to keep info of file being parsed
+- Remove dependency to CPP: merged 'getLine' and 'separateline' into a single
+  function call
+- Remove dependency to CPP: add function to report problems while parsing
+- Remove dependency to CPP: new parser that handles comments
+- Remove dependency to CPP: support for #include directive
+- Remove dependency to CPP: support for #define macros
+- Remove dependency to CPP: added pre-defined macros
+- Remove dependency to CPP: add support for conditional directives
+- Remove dependency to CPP: removed stuff related to CPP calls
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WPrefs: XKeycodeToKeysym deprecated function
+- switchpanel.c code clean
+- New function create_default_icon
+- switchpanel default icon removed
+- Better icon scale
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Added some comments and spaces in Git's ignore file
+- Small cleanup in Git's ignore file
+- Fixed wrong re-generation of 'config-paths.h' file
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Removed WScreen argument in wIconValidateIconSize
+- Removed scaleDownIfNeeded function (dup code)
+- get_wwindow_image_from_x11 icon resize
+- Format string bug in WMenuParserError
+- noDefault changed to default_icon
+- Remove dup code in wAppIconCreateForDock
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Fixed warning in Debian's wrapper script for wmaker
+- Menu parser: fix possible infinite loop when loading menu file
+- Menu parser: added boundary checks in the path-gen for #include file search
+- Menu parser: remove d-quotes around title of entry
+  (Christophe CURIS <christophe.curis@free.fr>)
+- menuparser.c code clean
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Allow windows to specify their own depth.
+- _NET_FRAME_EXTENTS fixes.
+- Draw window borders with correct colormap.
+- Fixed invalid argument to popen in readMenuPipe().
+  (Iain Patterson <wm@iain.cx>)
+- Debian 0.95.3-20120909-1 version
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Remove _NET_FRAME_EXTENTS on shutdown.
+  (Iain Patterson <wm@iain.cx>)
+- Code style cleanup in framewin.c
+- Coding style cleanup in dock.c
+- Removed block in restore_icon_state
+- Icon: Replace code by call to helper function in wIconCreateWithIconFile
+- wIconCreate: get the icon file name first
+- Remove call to wIconUpdate() from wAppIconCreate()
+- wAppIconCreateForDockm, changed variable WAppIcon name
+- wIcon* functions renamed
+- Icon: Make icon_create_for_* be more similar
+- New helper function remove_wwindowstate()
+- wmcore code clean
+- wcore set vmask in one step
+- Icon creation in only one function
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Fixed crash when changing icon to non-existent file
+- Fixed possible null pointer dereference
+- Fixed incorrect attributes for XCreateWindow's attributes
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Revert "Fixed incorrect attributes for XCreateWindow's attributes"
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Make debug statement print function name
+- wNETWMShowingDesktop is now static
+- wNETWMCheckInitialClientState is now void
+- Code not needed at wWindowSetupInitialAttributes
+- wNETWMCheckClientHints should be void
+- wNETWMCheckClientHintChange should be void
+- wmspec code clean - style
+- get_pixmap_icon_from_user_icon extra argument removed
+- get_pixmap_icon_from_wm_hints removed extra arguments
+- New icon_update_pixmap helper function
+- declare get_pixmap_icon_from_* as static functions
+- New helper function get_default_image
+- Better default icon management
+- Function makeIcon removed
+- New helper function get_pixmap_icon_from_default_icon
+- Changed get_default_icon_rimage function name
+- remove_wwindowstate name changed
+- Debian configuration file error
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Partially support _NET_WM_STRUT_PARTIAL.
+- AppIcon helper functions.
+- Brief documentation on wAppIconFor() and wWindowFor().
+- Allow struts from all windows.
+  (Iain Patterson <wm@iain.cx>)
+- Removed dup code at get_default_image
+- wIconChangeImageFile don't update without file
+- wIconChangeImageFile removed dup code
+- wIconChangeImageFile change image only if found
+- CachedPixmaps added as pixmap folder
+- getSize returns XGetGeometry exit
+- get_pixmap_icon_from_wm_hints uses getSize
+- get_pixmap_icon_from_wm_hints rewritten
+- New helper function unset_icon_image()
+- Split get_pixmap_icon_from_default_icon() into two
+- Split get_pixmap_icon_from_user_icon() into two
+- Split get_pixmap_icon_from_wm_hints() into two
+- New functions get_*_icon_from_x11
+- Make get_wwindow_image_from_x11() take Window as argument
+- get_pixmap_icon_from_icon_win rewritten
+- Solved bug if icon doesn't exists
+- Split get_pixmap_icon_from_icon_win()
+- wIconUpdate create rimage and then pixmap
+- New function update_icon_pixmap
+- wIconSetHighlited: Do not create the icon again
+- appearanceObserver doesn't create icon again
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Maximized windows appear misplaced
+  (Iain Patterson <wm@iain.cx>)
+- wDockAttachIcon icon_editing is common in if else
+- get_default_icon_filename rewritten
+- wDefaultGetImage renamed to get_icon_image
+- get_default_image_path unused argument
+- wDockAttachIcon paint argument
+- wAppIconPaint paint argument
+- force_paint removed
+- Update icon images before calling wIconUpdate
+- wAppIconPaint argument removed
+- Window comments cleanup
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Fixed out of source dir build
+  (BALATON Zoltan <balaton@eik.bme.hu>)
+- Remove last QUIET hack from Makefiles
+- WPrefs: Remove pointless 'this is annoying' warning
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WPrefs: Update translations
+- WPrefs: Move around some options between pages
+  (BALATON Zoltan <balaton@eik.bme.hu>)
+- appicon: Avoid double 'Hide' entry
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Added reset of pointer after memory free to avoid double-free crash
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Remove dup set icon file to NULL
+- get_wwindow_image_from_wmhints scale image
+- wIconValidateIconSize checks the width and height
+- get_default_image resize image
+- wIconUpdate removed scr variable
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Changed handling of quoted strings in the menu parser for consistency
+- Fixed wrong count to release temporary memory
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WPrefs: More moving around of options and tweaks to layout
+  (BALATON Zoltan <balaton@eik.bme.hu>)
+- Added option to 'configure' to control debug information for compilation
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Prevent windows from drifting on restart.
+- Fixed regression when placing windows.
+- Prevent border drifting.
+  (Iain Patterson <wm@iain.cx>)
+- Made highlighting the AppIcon of the active app configurable at run time
+- WPrefs: Fixed handling of options which default to true
+  (BALATON Zoltan <balaton@eik.bme.hu>)
+- wIconUpdate image preselected
+- update_icon_pixmap don't paint dock icon
+- wIconUpdate wwin checks
+- wIconChangeImageFile set the file image
+- get_rimage_icon_from_wm_hints returns image
+- applySettings icon set updated
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Moved parameters of WPrefs's expert check-buttons to a single place
+  (Christophe CURIS <christophe.curis@free.fr>)
+- create_stdcmap is never used
+- window.c clean code 1
+- stacking.h removed white lines
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Makefile: Add forgotten .h files
+  (John H. Robinson, IV <jaqque@sbih.org>)
+- Fix Maximize/Unmaximize in window menu
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- Added option to ignore minimized windows during cycling.
+  (Martin Frydl <mfrydl@gmail.com>)
+- Avoid crash on icon move without command
+- winspector.c: Full clean patch
+- winspector: Don't use text input if NULL
+- winspector: Save iconpath if icon will be used
+- Avoid icon change to default on winspector save
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Revert "Prevent border drifting."
+- Revert "Fixed regression when placing windows."
+- Revert "Prevent windows from drifting on restart."
+- Revert "Maximized windows appear misplaced"
+- WINGs: Enable cursor blinking in text fields
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Debian changes for final 0.95.4
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Fix build with automake-1.13 and modernize .am files.
+  (Kamil Rytarowski <krytarowski@gmail.com>)
+- Window Maker 0.95.4
+  (Carlos R. Mafra <crmafra@gmail.com>)
+
+Changes since version 0.95.2:
+.............................
+
+- debian: New debian version 0.95.2
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Don't shrink icons in switchpanel.
+  (Iain Patterson <wm@iain.cx>)
+- 'Make install' now installs all man pages:
+- Cleanup German plmenu entries
+- Stop using old /usr/X11R6 directory
+  (Kamil Rytarowski <n54@gmx.com>)
+- debian: Added the debian revision to changelog
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- WINGs: Do not call exit()
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- utils: Include the SHEXEC in the wm-oldmenu2new script
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Change behaviour of the GNUstep dockapp
+  (Kamil Rytarowski <n54@gmx.com>)
+- Remove wShowGNUstepPanel() etc
+- Small update on wmgenmenu list of apps
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- wmgenmenu: Add Portuguese translation
+  (Leandro Vital <leandro.vital@yahoo.com.br>)
+- Enable toggling of AppIcons bouncing
+  (Giuseppe Gatta <tails92@gmail.com>)
+- debian: Remove /etc/X11/WindowMaker folder
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Remove commented out code
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WindowMaker: Spanish translation updated
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Add wmlib folder back
+- wmgenmenu: Fix name for FSViewer
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Options for limiting window/menu title height
+  (Alexey I. Froloff <raorn@altlinux.org>)
+- Coding style cleanups
+- debian: Small updates in menus etc
+- Fix technical drawing+opaque resize
+- Coding style cleanup in wmspec.c
+- Little simplification in makeIcon()
+- WindowMaker: New get_wwindow_image_from_x11 function
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Japanese translation updated
+  (Takeo Hashimoto <HashimotoTakeo@mac.com>)
+- WindowMaker: New function get_pixmap_icon_from_icon_win
+- WindowMaker: New function get_pixmap_icon_from_wm_hints
+- WindowMaker: New function get_pixmap_icon_from_user_icon
+- WindowMaker: icon.c goto removed
+- WindowMaker: icon.c comments added
+- Coding-style cleanup
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- wmgenmenu: Add more apps to our nice menu
+  (Christoph Soehngen <Blackstar86@gmx.net>)
+- canReceiveFocus() should check no_focusable first
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Allow relaunch with shortcut key.
+- Also allow relaunching from the window menu.
+- Also allow relaunching from appicon.
+- Also relaunch from appicon with Ctrl + DblClick.
+- Compiler food.
+- Describe relaunching in the NEWS file.
+  (Iain Patterson <wm@iain.cx>)
+- Remove unused functions
+- Turn wApplication{Activate,Deactivate} into real functions
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Style consistency.
+- Compiler diet.
+- Use noreturn attribute in Exit() declaration.
+  (Iain Patterson <wm@iain.cx>)
+- WindowMaker: appicon.h clean code
+- WindowMaker: Clean curly brackets
+- WindowMaker: New function wGetWorkspaceNumber
+- WindowMaker: Check iconPath variable only if needed
+- WindowMaker: New function wIconCreateCore()
+- wIconStore(): do not save the icon if it exists
+- WindowMaker: Header files clean code
+- WindowMaker: New get_texture_image function
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Fixed wrong structure declaration
+  (Christophe CURIS <christophe.curis@free.nospam.fr>)
+- Fix wrong wfree() use
+- Revert "Inotify: Reload keyboard shortcut definitions when configuration
+  changes"
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Avoid GNUism in Makefiles for *BSD support
+- Include assert.h to avoid linker issues if -DDEBUG was not supplied.
+- Adjust OpenBSD-specific code to match OpenBSD-current
+  (Tobias Stoeckmann <tobias@openbsd.org>)
+- Scare people away from --enable-xrandr
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fixed some typos.
+- Use proper (w)free functions for (w)malloced data.
+- Fixed memory leak in wHideAll.
+- Avoid memory leak on error path in constructMenu.
+  (Tobias Stoeckmann <tobias@openbsd.org>)
+- More intuitive maximization handling.
+  (Iain Patterson <wm@iain.cx>)
+- No need to call memset after wmalloc
+- Get rid of NEW definition.
+- Removed unused "buffer" variables.
+- Easier error path in wDockTrackWindowLaunch.
+- wstrdup cannot fail, therefore no need to check for NULL.
+- Easier code path in appIconMouseDown
+- Remove curly brackets
+- Avoid buffer overrun in parseMenuCommand.
+  (Tobias Stoeckmann <tobias@openbsd.org>)
+- Fixed memory leak in wWorkspaceRename.
+  (Tobias Stoeckmann <tobias@picolo.pizza.local>)
+- Don't fail with assert() in string functions if both strings are NULL.
+- Major overhaul of rootmenu's file handling.
+  (Tobias Stoeckmann <tobias@openbsd.org>)
+- Fixed typos
+  (Tobias Stoeckmann <tobias@picolo.pizza.local>)
+- Window Maker 0.95.3
+  (Carlos R. Mafra <crmafra@gmail.com>)
+
+Changes since version 0.95.1:
+.............................
+
+- debian: New debian version 0.95.1-1
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- WINGs: Rename copy_file() to wcopy_file()
+- Remove forgotten src/text.h
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- debian: Symbols update for libWutil2
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Revert "getstyle: Remove dead code"
+- Fix getstyle, again
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- debian: Don't include files created under debian/ from previous builds in the
+  tarball.
+  (Martin Dietze <mdietze@gmail.com>)
+- Made ARROWLESS_KBD a preference.
+  (Iain Patterson <wm@iain.cx>)
+- Remove dead code ifdef'ed by GRADIENT_CLIP_ARROW
+- dock: Trivial code style cleanups
+- clip: Do not display balloon with workspace name
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WindowMaker: Add Balloon to the clip
+- menu: remove OpenWorkspaceMenu()
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- wmgenmenu: Update mrxvt options
+- dock: Make some functions static
+- Window Maker 0.95.2
+  (Carlos R. Mafra <crmafra@gmail.com>)
+
+Changes since version 0.95.0-crm:
+.................................
+
+- Update email address
+  (Xose Vazquez Perez <xose.vazquez@gmail.com>)
+- Debian: New version 0.95.0-1
+- WINGs: removed prev_y variable not used
+- WindowMaker: icon DefaultAppIcon.tiff removed
+- debian: symbols updated to 0.95.0
+- util: po files reports warning with fuzzy
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Add WMRootMenu to the clean list
+  (Rodolfo kix Garcia <kix@kix.es>)
+- configure: New architectures kfreebsd* and Hurd
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- WPrefs: Fetch default menu from system path
+  (Rodolfo Garc??a Pe??as (kix) <kix@kix.es>)
+- Prevent removal of dock icons due to resolution changes
+  (David Couzelis <drcouzelis@gmail.com>)
+- Expand the documentation about writing patches
+- Steal documentation with tips on email clients
+- getstyle: Fix output to stdout
+- getstyle: Save theme pack in Themes dir
+- wmgenmenu: Fix "Save Theme"
+- WINGs: Make fetchFile() more similar to copyFile() from getstyle.c
+- WINGs: Add copy_file() to libWUtil
+- WINGs: Replace fetchFile() by copy_file() in wcolorpanel.c
+- getstyle: Use new copy_file() from libWUtil and delete copyFile()
+- getstyle: Get rid of abortar()
+- getstyle: Remove dead code
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- wrlib: Improvement in the alpha channel support.
+  (Christophe CURIS <christophe.curis@free.nospam.fr>)
+- configure: Also display the library dir in the summary
+- Fix non-ascii workspace rename via menu
+- wtext killing spree
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Remove endian swap for icon image data.
+  (GhostlyDeath <ghostlydeath@gmail.com>)
+- Get rid of cropline(), use wtrimspace() instead
+- WPrefs: Remove trimstr() and use wtrimspace() from WINGs
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WINGs: Remove proplist-compat.h
+- WPrefs: Remove duplicated function captureShortcut()
+- WPrefs: Remove extra include of src/wconfig.h
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Inotify: Use wwarning() instead of fprintf()
+- Inotify: Reload keyboard shortcut definitions when configuration changes
+- Info panel: Shorten memory line and simplify code a bit
+- event.c: Make two functions static
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Remove unused variables
+- Make ProgName a local variable
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Window Maker 0.95.1
+  (Carlos R. Mafra <crmafra@gmail.com>)
+
+Changes since version 0.94.0-crm:
+.................................
+
+- Small fix for wmaker nightly build script
+  (Martin Dietze <di@fh-wedel.de>)
+- Remove VIRTUAL_DESKTOP code
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Small fix for wmaker nightly build script 2
+  (Martin Dietze <di@fh-wedel.de>)
+- Remove mkpatch script
+- Add a few instructions to the WPrefs.app/po/README
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Turn anti-aliasing on by default.
+  (Alexey I. Froloff <raorn@altlinux.org>)
+- Add new style
+- Re-create German translation file
+- Add new German translated strings
+- Regenerate WPrefs German translation file
+- Add new WPrefs German strings
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Changed runtime dependency libjpeg62-dev to libjpeg-dev
+  (Martin Dietze <herbert@spamcop.net>)
+- Remove old backward compatibility code
+- Remove unused stuff from src/defaults.c
+- Remove HEARTBEAT #ifdef's
+- wmgenmenu: A Window Maker menu generator
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Removed unused version of RScaleImage() in wrlib/scale.c
+  (Nicolas Bonifas <nicolas.bonifas@free.fr>)
+- Patch for WINGs buffer overflow
+  (Martin Frydl <mfrydl@gmail.com>)
+- Add a trailing "/" to dirs in dialog autocomplete
+  (Johann Haarhoff <johann@haarhoff.org.za>)
+- Remove ancient 'DBase 3' data file
+- Remove references to non-gpl artwork license
+- Convert README.pt to UTF-8
+- Delete reference to non-gpl license in README.pt
+- Remove COPYING.OPL
+- Remove reference to sound support from README.*
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- CTRL+Wheel Horizontal Resize + extras
+- Make CTRL+Wheel less intrusive
+- Add info about Resize, Maximus and LR Maximize to NEWS
+  (Johann Haarhoff <johann@haarhoff.org.za>)
+- Add more info to the NEWS file etc
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Unused wsmap, begone!
+  (Tamas TEVESZ <ice@extreme.hu>)
+- wmgenmenu: Add 'mc' to file managers list
+  (Tamas TEVESZ <ice@wormhole.hu>)
+- Remove NEWAPPICON #ifdefs
+- Maximus: Simplify the +/- border width madness
+- Fix typos, remove commented out code etc
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Add a new helper function, WMMkDirHier()
+- simplify WMWritePropListToFile()
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Remove redundant 'if defined' check
+- Cleanup includes of wcore.h, defaults.h and pixmap.h
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Kill redundant function
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Constify the argument of wstrdup()
+- Constify WMMatchDataProc and fix fallout
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Remove unused WINGs/international.c
+- Fold many functions into one
+- make wtrimspace() use internal api
+- Remove unreferenced files
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Remove DEBUG statements, #if 0 etc
+- Maximus: Cleanup the code
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Remove unneeded files
+- Remove long-dead plugins.
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Nightly build script with more robust handling of debian patches.
+  (Martin Dietze <herbert@spamcop.net>)
+- Some rework on getstyle
+- Feet protector for getstyle
+- Collect low-hanging fruits
+- Sensible defaults
+- Idle fixes
+- Make inotify optional
+  (Tamas TEVESZ <ice@extreme.hu>)
+- rebase in git pull for nightly build
+  (Martin Dietze <herbert@spamcop.net>)
+- Trivial format string fixes
+- Remove texture plugins
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Remove python support from WINGs
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Introduce OS-dependent stuff
+- Add the BSD version of GetCommandForPid()
+- GetCommandForPid() for darwin/osx
+- Remove some dead weight from configure.ac and debian/rules
+- Remove wmlib
+- Half-assed fix to make autoconf bend
+- Remove network support from WINGs
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Fix non-I18N build
+  (Renato Botelho <rbgarga@gmail.com>)
+- Remove looking for libxpg4 on FreeBSD
+- Remove old unused Red Hat-specific configure checks
+- Remove dead code from wrlib
+- Add Cygwin to GCFB() (it is just like linux)
+- Switch file ops to stdio
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Remove GRADIENT_CLIP_ARROWS from wconfig.h.in
+- Remove uncompiled code from src/window.c
+- Use 'long' instead of 'CARD32' in wClientSetState() and wWindowSaveState()
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix png 1.4+ builds
+- An XLFD has exactly 15 fields, not "at least" 15 fields.
+- Make asm code readable
+- Style stuff up
+- Autoconf mods
+- Spice up setstyle
+- Convert to getopt, continued
+- Attach utils versions to WM version
+- Tidy comms between external apps and wm a bit
+- Kill leftovers
+- Poke wmgenmenu
+- Poke wmgenmenu, part 2
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Regenerate wmgenmenu German translation
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Poke wmgenmenu some more
+  (Tamas TEVESZ <ice@extreme.hu>)
+- wmgenmenu: Change the app order in terminals list
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Add new cycling option
+- Make WPrefs' Expert panel scrollable
+- Fix spacing on WPrefs Misc panel
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Menu positioning bug
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Tidy
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Use int instead of size_t to silence warning
+- Do not skip windows in the switchpanel
+- Rename wmaker INSTALL file
+- Remove install-sh, missing and mkinstalldirs from the repo
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix out-of-tree builds
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Fix trivial warnings
+- Fix internationalized format string warnings
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Fix PO files breaking build
+  (Tamas TEVESZ <ice@extreme.hu>)
+- XShapeEvent strict aliasing violation
+- Fix uninitialized vars
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Plug leak
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Fix enable-modelock warnings
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Fix Debian builds
+- Fix CRLF files
+- Kill contribs
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Rename INSTALL.pt
+- Fix "make dist"
+- Ignore build files
+- Remove apparently-unused files
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Fix 'make install' from silent compilation
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix loading saved states on 64-bit systems
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Add nice labels to wmgenmenu
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Add more pretty names for wmgenmenu apps
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Add i18n labels to wmgenmenu
+- Add missing initializers
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Address some sparse warnings
+- Remove unneeded extern's in .c files
+- Add include guards
+- Remove NEWSTUFF #ifdef's
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix mouse button grab swallowing
+- Don't grab Ctrl+Wheel if ResizeIncrement is 0
+- Fix wheel resizing with resize increments
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- wrlib: Use snprintf() instead of sprintf()
+  (Tamas TEVESZ <ice@extreme.hu>)
+- link libWINGs against libWUtil
+- link libWINGs against libwraster
+- link libWINGs against libXft
+- link libWINGs against libfontconfig
+- link libWINGs against libm if necessary
+- floppy mountpoint is /media/floppy
+- Fix duplicate entry in manpage.
+- line wrap build-depends for enhanced readability.
+- Add libxmu-dev to build-depends.
+- Add ${misc:Depends} to all package dependencies.
+- Move homepage from description text to homepage field.
+- Invoke ./configure with correct --build argument.
+- Use dh_prep instead of "dh_clean -k"
+- Use ${binary:Version} instead of ${Source-Version}
+- Remove ./libtool on clean
+- remove cruft from debian/rules
+- patch management with dpkg-source v3
+- do not run complete debian build under fakeroot
+- remove dead outdated code from debian/rules
+- Use static debian/libwings-dev.files.
+- Use static debian/libwraster*.files.
+- stop removing debian/files manually
+- Drop code for generating debian/conffiles
+- Use dh_lintian.
+- Invoke dh_installman only once.
+- Invoke dh_link only once.
+- Generate symlink with dh_link instead of ln -s
+- Remove unneeded directory creation
+- Drop dead code from debian rules
+- Ship libWUtils and libWINGs in dedicated packages
+- invoke dh_installdeb after dh_makeshlibs
+- Escape minus sign ("-") in manpages.
+- Typo fixes
+- update debian/changelog.
+- Use automake instead of automake1.4.
+- Add some bug closers
+- SelectWindowsMouseButton -> MouseLeftButtonAction
+  (Andreas Metzler <ametzler@downhill.at.eu.org>)
+- Made Debian autobuild work again
+  (Martin Dietze <herbert@spamcop.net>)
+- Add Russian manpages
+  (NIR Ginko <faust@gmx.com>)
+- Correct .TH header
+  (Andreas Metzler <ametzler@downhill.at.eu.org>)
+- Make wmaker XRandR aware
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix build failure on missing randr
+  (Andreas Metzler <ametzler@downhill.at.eu.org>)
+- Add /usr/local/share/WindowMaker dir to wmgenmenu
+- Avoid more gcc warnings
+- configure: Use AS_HELP_STRING macro to print messages
+- configure: Replace obsolete macros
+- configure: Remove gcc warning about signed x unsigned
+- configure: Remove --disable-verbose-compile hack
+- WINGs: Remove private snprintf() implementation
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Build Debian packages with RandR support
+- Pass tarname argument to AC_INIT
+- Set library version in configure.ac
+- Import ld-version-script.m4 from gnulib
+- Add version script versioning for libwraster
+- Move debugging symbols to new wmaker-dbg package
+  (Andreas Metzler <ametzler@downhill.at.eu.org>)
+- Raise shaded window frame when unhiding
+- Luxi Sans doesn't have cyrillic
+- Menu translation support
+- Add key binding to minimize all windows
+  (Alexey I. Froloff <raorn@altlinux.org>)
+- WPrefs: Add MinimizeAllKey shortcut configuration
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Open window menu on right-click in window list menu
+- New titlebar button style
+- Bouncing appicon effect
+- Highlite current window's appicon
+  (Alexey I. Froloff <raorn@altlinux.org>)
+- wconfig: Define BOUNCE_APP and NEWAPPICON
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Option to disable clip title
+  (Alexey I. Froloff <raorn@altlinux.org>)
+- WPrefs: Add ShowClipTitle config option
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Improve dockapp recognition
+- Automake dependency tracking
+- Make bouncing respect DisableAnimations
+- Fix bounce direction of docked appicons
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Drop BOUNCE_APP #ifdef's
+  (Alexey I. Froloff <raorn@altlinux.org>)
+- Periodic bouncing for XUrgencyHint
+- Add a preference for XUrgencyHint bouncing
+- Option to raise bouncing appicons
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- configure: Disable XRandR by default
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Prevent a WPrefs segfault
+- CommitStackingForWindow prototype
+- Remove local strcasecmp implementation
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Fix compilation with LDFLAGS=-Wl,--no-add-needed
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- WPrefs: Replace Netscape and Acrobat Reader menu entries
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix typo in wApplicationExtractDirPackIcon()
+  (Tamas TEVESZ <ice@extreme.hu>)
+- XRandR temporary amendments
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix --with-gnustepdir
+- Documentation cleanups for --with-gnustepdir
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Pretty-print for string2index
+- Repair TEST_WITH_GC
+- Kill BENCH
+- Ungeneralize wrlib DEBUG
+- Kill wstrerror
+- Reduce noise in WUtil
+- Fix some off-by-ones
+- Remove obsolete --with-xft from debian/rules
+  (Tamas TEVESZ <ice@extreme.hu>)
+- configure: Do not warn about unused parameters
+- Remove assembly/optimized code
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WINGs: Make wmalloc() intialize allocated memory to 0
+- WINGs: Return NULL on NULL input in checkFile()
+- WINGs: Simplify WMPathForResourceOfType()
+- WINGs: Add normalizePath()
+- WINGs: Simplify and rationalize createDir() and deleteFile()
+- WINGs: Small assorted formatting changes
+- WINGs: Add detection and local copy for strlcat()/strlcpy()
+- WINGs: Less ad-hoc approach for __wmessage()
+- Repair defaults for new titlebar button style
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Use -lbsd for strlcat/strlcpy, if needed and available
+- Clean up library linking
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Add function declaration for wIconSetHighlited
+- Build-Depend on automake 1.11 or later.
+- Do not mark product names as translatable
+- Fix typo enviroment
+- Document ABI and API changes
+  (Andreas Metzler <ametzler@downhill.at.eu.org>)
+- More precise information on unknown systems
+- Remove wsyserrorwithcode, rename wsyserror to werror
+- Preparing to do exactly as FIXME says
+- WINGs: Make w*() print message origins
+- Fix some double newlines
+- WINGs: Plug potential segfault
+- WINGs: Do not look static information up every time
+- WINGs: Remove wruler and wtext
+- Repair wgethomedir(), broken a little while back
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Rename libwutil1 to libwutil2
+  (Andreas Metzler <ametzler@downhill.at.eu.org>)
+- Ignore shared_appicon if an appicon already exists
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- WINGs: Dead code removal
+- WINGs: Remove wprogressindicator and tree
+- WINGs: Reorg headers to mark items' locations in source files
+- WPrefs: Remove dead code
+- WINGs: Modernize wusleep()
+- WINGs: Remove #ifdef OLD_CODE
+- WINGs: Bounded string ops
+- Silence a few warnings
+- Add LCOV support to generate coverage information
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Fix "make dist"
+- Fix path substitutions
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Remove translations of INSTALL-WMAKER, README and FAQ.I18N
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix wusleep
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Make OPEN_MENU be able to include PropList menus
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Minor fixes to appicon highlighting
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Document ABI/API changes
+  (Andreas Metzler <ametzler@downhill.at.eu.org>)
+- Missed a piece in tree.c removal
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Fix stuck appicon from embedded apps
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- WINGs: fts() -> nftw() in wrmdirhier()
+  (Adam Hoka <adam.hoka@gmail.com>)
+- Cleanup .gitignore
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Add back WINGs/tree.c that was removed in c9d0c7c
+- WINGs: tree enhancements
+- Add wmmenugen, an extensible PropList-format menu generator
+- Update local copy of GPLv2 and FSF address in copyrights
+  (Tamas TEVESZ <ice@extreme.hu>)
+- wmaker.inst: better locale check
+- wmaker.inst: quote shell variables
+  (Alexey I. Froloff <raorn@altlinux.org>)
+- Fix some warnings
+- Fix handling of NET_WM_ICON
+- Fix wIconUpdate logic
+- Paint app icons when updated
+- Only cache pixmaps for docked icons
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- wmmenugen: Finish Wmconfig parser, touch up PropList writer
+- wmmenugen: Add executable detection, make Wmconfig use it
+- wmmenugen: Add file name validator function
+- wmmenugen: Finish the XDG parser
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Reset bouncing app icon position when bounce ends
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- WINGs: Add wshellquote()
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Don't save app settings proplist when nothing changed
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Simplify/fix pkgconfig installation
+- pkgconfig - minimize direct linking
+  (Andreas Metzler <ametzler@downhill.at.eu.org>)
+- Fix pkgdatadir
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Update documentation of ABI/API changes again.
+  (Andreas Metzler <ametzler@downhill.at.eu.org>)
+- Display modifiers in window menu
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Remove duplicated #includes
+  (Andrea Gelmini <andrea.gelmini@gelma.net>)
+- wmgenmenu: Add more apps
+- WPrefs: Update po/Makefile.am to reflect file deletion
+- WPrefs: Update ballon text for "Window Focus Preferences"
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- wmgenmenu: Add French and Spanish translations
+  (Camille d'Alméras <camilledalmeras@yahoo.com>)
+- switchpanel: Add skip_switchpanel advanced option
+  (Haroldo Santos <haroldo.santos@gmail.com>)
+- Fix compilation in FreeBSD
+  (Szabó Ambrus <szambusz@gmail.com>)
+- Adapt for libpng changes
+- Remove warnings
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Fix makefiles bug.
+- opaque resize
+- Bugfix: java menu problem after resize, maximize
+  (Ambrus Szabo <donamo@donamo.hu>)
+- wmgenmenu: Add more apps
+- wmgenmenu: Update German translation
+  (Christoph Soehngen <Blackstar86@gmx.net>)
+- Fix app behaviour on Xinerama displays
+- Amend recent wmgenmenu changes
+- Partial fix for focus stealing
+- Plug some (possible) memleaks
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Fix make-gzip
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Added mailing list address in the parfect-patch file
+  (Christophe CURIS <christophe.curis@free.nospam.fr>)
+- util: Fix wmagnify
+- Use wmgenmenu to create WMRootMenu during installation
+- Remove Netscape icon
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix possible missing NUL at end of string
+  (Christophe CURIS <christophe.curis@free.nospam.fr>)
+- Remove warning in wmagnify.c (correctly)
+- Fix some "'var' may be used uninitialized" warnings
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Increase width of 'Attributes' window
+- Make 'no miniaturizable' window property user-configurable
+- Increase height of 'Attributes' window
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- doc: Fix error in Russian wmaker.1x manpage (lintian error)
+- debian: lots of updates
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Revert "WINGs: Remove wruler and wtext"
+- WINGs: Add back wprogressindicator.c
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Debian full patch migration
+- debian: add back wmlib folder
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- debian: Version bump in nightly build script.
+  (Martin Dietze <herbert@spamcop.net>)
+- debian: problem with spaces and forget autogenerated files
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- WindowMaker 0.95.0-crm
+  (Carlos R. Mafra <crmafra@gmail.com>)
+
+Changes since version 0.93.0-crm:
+.................................
+
+- Add GLOBAL_DEFAULTS_SUBDIR and fix a syntax error in wmlib/Makefile.am
+- Add two menu files from the Debian package
+- Add debianisation code and automatic build script
+  (Martin Dietze <herbert@spamcop.net>)
+- Do not switch workspace to follow new windows in others
+- Fix NULL pointer dereference
+  (Martin Dietze <di@fh-wedel.de>)
+- Adapted nightly build script to coexist with new 'next' branch.
+  (Martin Dietze <herbert@spamcop.net>)
+- Add config option to supress focus requests across workspaces
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Miscellaneous fixes from OpenSuse
+  (Vladimir Nadvornik <nadvornik@suse.cz>)
+- Show app name in Kill Application dialog
+  (Gilbert Ashley <amigo@ibiblio.org>)
+- Nightly Build script can now deal with testing and unstable branches.
+  (Martin Dietze <herbert@spamcop.net>)
+- Make wmaker 0.11% smaller by avoiding code duplication
+- Define TITLEBAR_HEIGHT in default configuration file
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Left Half / Right Half Maximize
+  (Johann Haarhoff <johann@haarhoff.org.za>)
+- k&r->ansi some stuff
+  (Tamas TEVESZ <ice@wormhole.hu>)
+- Trivial coding style changes
+- Increase the readability of wUnshadeWindow() and wShadeWindow() a little bit
+- Use half_scr_width instead of computing it each time
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix half_scr_width calculation
+  (klaasvakie <johann@haarhoff.org.za>)
+- Gobble "spurious" EnterNotify events when moving an appIcon or a dock
+  (Daniel Déchelotte <yo.dan@free.fr>)
+- Clean up #ifdef mess
+  (Tamas TEVESZ <ice@wormhole.hu>)
+- Fix for omnipresent AppIcon bug at startup
+  (Daniel Déchelotte <yo.dan@free.fr>)
+- Maximus: Tiled Maximization
+- Clean up maximization and un-maximization logic
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Add option to allow starting DockApps with a single click
+  (Sebastien Bauer <seb_bauer@bigfoot.com>)
+- Add history to some dialog boxes
+  (Alexey Voinov <voins@altlinux.ru>)
+- Atomic save for session
+- Remove alloca(3)
+  (Alexey I. Froloff <raorn@altlinux.org>)
+- wmrlib: Avoid code duplication
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Christmas does not last forever
+  (Alexey Voinov <voins@altlinux.ru>)
+- Reduce the number of simultaneous inotify events
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix session saving for apps with shared appicons
+  (Alexey Voinov <voins@altlinux.ru>)
+- Fix compilation failure
+  (Andreas Tscharner <andy@vis.ethz.ch>)
+- Fix miniwindows auto-arranging bug
+  (BERTRAND Joel <joel.bertrand@systella.fr>)
+- Delete stale .cvsignore files
+- Ansify function declaration
+- Make left/right maximization work again
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Maximizing a resized window
+  (Nicolas Bonifas <nicolas.bonifas@free.fr>)
+- Remove bundled wrlib stuff
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Remove commented code in xinerama.c
+- Maximus: Use unsigned int for width/height variables
+- Un-maximize window inside current head
+  (Nicolas Bonifas <nicolas.bonifas@free.fr>)
+- x86_64 mmx fixes
+  (Alexey Voinov <voins@altlinux.ru>)
+- Fix the use of uinptr_t
+- Add Maximus key back in WPrefs.app
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Constrain switching workspace name to one head.
+- Pad workspace name display.
+- Support Xinerama in wmsetbg.
+- Mac OS X-style window cycling.
+  (Iain Patterson <wm@iain.cx>)
+- Trivial coding style fix
+- Fix the call to XChangeProperty() in 64-bit mode
+- Yet another trivial coding style cleanup
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix race condition during workspace changes
+  (Alexey I. Froloff <raorn@altlinux.org>)
+- Increase the readability of SlideWindow()
+- Simplify wMaximizeWindow() a little bit
+- Maximus: Consider the full_maximize window attribute
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- WINGs shared library generation
+  (Alexey Voinov <voins@altlinux.ru>)
+- Fix --disable-verbose-compile
+- Maximus: Avoid a window list order issue
+- Maximus: Some cleanups and bug fixes
+- swpanel: Fix focus issue when alt-tabbing
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix automatic Debian builds
+  (Martin Dietze <di@fh-wedel.de>)
+- Ansify function declarations
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Window Maker armenian translation
+  (Norayr Chilignaryan <chnorik@gmail.com>)
+- Fix msgfmt error with Armenian translation.
+  (Iain Patterson <wm@iain.cx>)
+- Updated documentation
+  (John H. Robinson, IV <jhriv@sbih.org>)
+- Clean up contrib/ folder
+- Remove sound support
+- Remove SPEAKER_SOUND dead code
+- Remove 'ghost window move' code
+- Delete WINDOW_BIRTH_ZOOM and default to WINDOW_BIRTH_ZOOM2
+- Remove 'hiding' parameter from animateResize()
+- Add function prototypes in action.h and include it in superfluous.c
+- Remove MINIATURIZE_ANIMATION_DELAY_{Z,F,T} tests
+- Increase granularity of 'shrink/zoom' animation
+- HOWTO: The perfect Window Maker patch
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Mod+Wheel Window Resize
+  (Johann Haarhoff <johann@haarhoff.org.za>)
+- A few trivial code style cleanups
+- Remove #ifdef NETWM_HINTS constructs
+- Remove repeated functions enclosed by #if 0
+- WPrefs: trivial coding style fixes
+- Remove remaining sound stuff from WPrefs etc
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Respect size hints when resizing with wheel.
+  (Iain Patterson <wm@iain.cx>)
+- Mod+Wheel resize increment now respects size hints
+  (Johann Haarhoff <johann@haarhoff.org.za>)
+- Remove #ifdef SYS_SIGLIST_DECLARED constructs
+- Remove SILLYNESS
+- Remove DEMATERIALIZE_ICON code
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix the empty button in titlebar after going fullscreen bug (Debian bug
+  #298873)
+  (Nicolas Bonifas <nicolas.bonifas@free.fr>)
+- Update German translation
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- 2 open() statements were not matched with close() statements in function
+  fetchFile
+- Remove useless NULL test
+  (Nicolas Bonifas <nicolas.bonifas@free.fr>)
+- Remove unused function wWindowCheckAttributeSanity()
+- Remove unused functions from src/pixmap.c
+- Remove unused function wIconSetHighlited()
+- Remove unused wHackedUngrabButton()
+- Remove unused src/menureader.c file
+- Remove unused function getRImages()
+- Remove DRAWSTRING_PLUGIN reference from wconfig.h.in
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- activate XGrabServer again
+- fixed wrong env setup when setting background
+- changed behavior when focusing new windows with autofocus enabled
+  (Ralf Hoffmann <ralf@boomerangsworld.de>)
+- Maximus: Take border into account
+  (Nicolas Bonifas <nicolas.bonifas@free.fr>)
+- Remove unused function argument from randomPlaceWindow()
+- Remove static function declaration from header file
+- Remove unused arguments from a few functions
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Add menu path to Debian build system
+  (Nicolas Bonifas <nicolas.bonifas@free.fr>)
+- fixed problem with default visual ID for multi-screen setups by using
+  multiple IDs for each screen
+  (Ralf Hoffmann <ralf@boomerangsworld.de>)
+- Remove XSMP_ENABLED constructs
+- Remove unused function raiseMenus()
+- Do not change workspace during deiconify animation
+- Do not compile extra stuff under wrlib/tests etc
+- Undefine WINDOW_BIRTH_ZOOM
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Keyboard shortcut to raise the dock
+  (Brad Jorsch <anomie@users.sourceforge.net>)
+- Remove a few unneeded includes
+- Remove ICON_KABOOM_EXTRA
+- Remove [raise,lower]clip shortcut keys
+- wmaker-0.94.0-crm
+  (Carlos R. Mafra <crmafra@gmail.com>)
+
+Changes since version 0.92.0+:
+..............................
+
+- Add .gitignore to git repository
+- wmaker: Reduce wakeups to zero
+- WINGs/wfont.c: Avoid returning font=NULL in WMCreateFont()
+  (Carlos R. Mafra <crmafra@ift.unesp.br>)
+- Workaround for Composite problems when default depth is not 24.
+  (Paulo Cesar Pereira de Andrade <pcpa@mandriva.com.br>)
+- Fix periodic focus bug
+  (Pedro Gimeno <parigalo@formauri.es>)
+- Use inotify to check for changes to the defaults database. Workaround for
+  (Rodney Padgett <rod_padgett@hotmail.com>)
+- Makefile: Beautify compilation messages
+- automake: Fix warnings about underquoted calls to AC_DEFUN
+- wmaker: Fix compiler warnings about pointer <--> integer conversion
+- Fix buffer overflows in shortcut and workspace name handling
+- Compilation: Add a few spaces in the output
+- Fix gcc warnings
+- Trivial cleanup
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix menu positioning bug
+  (Samir SAADA <zepard@gmail.com>)
+- Sync comment with reality
+- avoid integer overflow
+  (Tamas TEVESZ <ice@extreme.hu>)
+- Fix workspace limit segfault
+  (Samir SAADA <zepard@gmail.com>)
+- Fix mixing pixels when maximizing borderless windows
+  (David Benbennick <dbenbenn@gmail.com>)
+- xinerama switchpanel corruption fix
+  (Iain Patterson <wm@iain.cx>)
+- Check for argc==0 when calling wtokensplit()
+  (Tobias Stoeckmann <unknown-email>)
+- Remove unused StartLogShell function.
+  (John H. Robinson, IV <jaqque@sbih.org>)
+- Fix buffer overflow in SendHelperMessage()
+  (Tamas TEVESZ <ice@wormhole.hu>)
+- Remove prototype of unused function StartLogShell
+- Make compilation even less verbose
+- Remove unused variables
+- WPrefs: Remove unused function updateThemeList()
+- Fix improper use of function sentinel
+- real_main: Use setenv() instead of putenv()
+- real_main: Use setenv() instead of putenv() in remaining places
+- inotifyHandleEvents: Reduce buffer size to avoid huge memory consumption
+- handleKeyPress: Fix shadowing of global 'index' variable
+- WMCreateFont: Add missing wfree()'s
+- Fix variable shadowing
+- Make loop variable be unsigned int
+- Sanitize calling sites of wDefaultsCheckDomains()
+- Remove unsigned type from 'mask'
+- Clean up case switching in handleKeyPress()
+- Make drawIconProc() static
+- Change to the linux kernel coding style
+- Clean up StartWindozeCycle()
+- Clean up coding style in StartWindozeCycle()
+- Use helper function in StartWindozeCycle()
+- Escape key handling in switchpanel
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Fix focus issues with the switch panel and auto-focus
+- Fix "smart" placement bug when there are shaded windows in other workspaces
+  (Daniel Déchelotte <yo.dan@free.fr>)
+- Fix findBestIcon()
+- Less strict font requirements
+  (Vladimir Nadvornik <nadvornik@suse.cz>)
+- Fix use of uninitialized variable
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Remove useless tests
+  (Daniel Déchelotte <yo.dan@free.fr>)
+- Fix multiple errors in findfile.c
+  (Tobias Stoeckmann <tobias@openbsd.org>)
+- swpanel: Clean up StartWindozeCycle() a bit more
+- swpanel: Clean up "case ButtonRelease"
+- swpanel: Factor out if (swpanel) test
+- swpanel: Fix stacking issue with swpanel escape handling
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- swpanel: Start with the first window when all are minimized
+  (Nicolas Bonifas <nicolas.bonifas@free.fr>)
+- WINGs: Fix memory leak in wtokenfree()
+  (Tobias Stoeckmann <tobias@openbsd.org>)
+- WPrefs: Fix crash due to wtokenfree() memory leak fix
+  (Pedro Martelletto <pedro@ambientworks.net>)
+- Fix function prototype declaration
+- Add spaces to gcc 'case' range extension
+- Remove LITE config option
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- swpanel: Consider also the release of FOCUSPREV
+  (Alexey Voinov <voins@altlinux.ru>)
+- Fix format strings
+  (Tamas TEVESZ <ice@wormhole.hu>)
+- Up the version number for the GIT version to 0.93.0-pre
+  (Martin Dietze <herbert@spamcop.net>)
+
 Changes since version 0.92.0:
 .............................
 
