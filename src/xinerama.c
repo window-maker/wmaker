@@ -306,7 +306,7 @@ WArea wGetUsableAreaForHead(WScreen * scr, int head, WArea * totalAreaPtr, Bool 
 
 	if (noicons) {
 		/* check if user wants dock covered */
-		if (scr->dock && wPreferences.no_window_over_dock) {
+		if (scr->dock && wPreferences.no_window_over_dock && wAppIconTouchesHead(scr->dock->icon_array[0], head)) {
 			int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
 
 			if (scr->dock->on_right_side)
