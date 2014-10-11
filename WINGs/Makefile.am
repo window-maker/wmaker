@@ -13,7 +13,7 @@ lib_LTLIBRARIES = libWUtil.la libWINGs.la
 
 
 LDADD= libWUtil.la libWINGs.la $(top_builddir)/wrlib/libwraster.la @INTLIBS@
-libWINGs_la_LIBADD = libWUtil.la $(top_builddir)/wrlib/libwraster.la @XLIBS@ @XFTLIBS@ @FCLIBS@ @LIBM@
+libWINGs_la_LIBADD = libWUtil.la $(top_builddir)/wrlib/libwraster.la @XLIBS@ @XFTLIBS@ @FCLIBS@ @LIBM@ @PANGOLIBS@
 libWUtil_la_LIBADD = @LIBBSD@
 
 EXTRA_DIST = BUGS make-rgb Examples Extras Tests get-wings-flags.in get-wutil-flags.in
@@ -106,7 +106,7 @@ WINGs.pc: Makefile
 	@echo 'Version: $(VERSION)' >> $@
 	@echo 'Requires: wrlib WUtil' >> $@
 	@echo 'Libs: $(lib_search_path) -lWINGs' >> $@
-	@echo 'Libs.private: $(XFTLIBS) $(XLIBS) -lm $(INTLIBS)' >> $@
+	@echo 'Libs.private: $(XFTLIBS) $(PANGOLIBS) $(XLIBS) -lm $(INTLIBS)' >> $@
 	@echo 'Cflags: $(inc_search_path)' >> $@
 
 get-wings-flags: get-wings-flags.in Makefile
@@ -115,6 +115,7 @@ get-wings-flags: get-wings-flags.in Makefile
 	        -e 's#$${lib_search_path}#$(lib_search_path)#;' \
 	        -e 's#$${GFXLIBS}#$(GFXLIBS)#;' \
 	        -e 's#$${XFTLIBS}#$(XFTLIBS)#;' \
+	        -e 's#$${PANGOLIBS}#$(PANGOLIBS)#;' \
 	        -e 's#$${INTLIBS}#$(INTLIBS)#;' \
 	        -e 's#$${XLIBS}#$(XLIBS)#;' < $(abs_srcdir)/get-wings-flags.in > $@
 	@chmod 755 $@

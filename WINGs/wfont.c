@@ -12,6 +12,12 @@
 #include <X11/Xft/Xft.h>
 #include <fontconfig/fontconfig.h>
 
+#ifdef USE_PANGO
+#include <pango/pango.h>
+#include <pango/pangofc-fontmap.h>
+#include <pango/pangoxft.h>
+#endif
+
 #define DEFAULT_FONT "sans serif:pixelsize=12"
 
 #define DEFAULT_SIZE WINGsConfiguration.defaultFontSize
@@ -120,6 +126,14 @@ WMFont *WMCreateFont(WMScreen * scrPtr, const char *fontName)
 	Display *display = scrPtr->display;
 	WMFont *font;
 	char *fname;
+#ifdef USE_PANGO
+	PangoFontMap *fontmap;
+	PangoContext *context;
+	PangoLayout *layout;
+	FcPattern *pattern;
+	PangoFontDescription *description;
+	double size;
+#endif
 
 	if (fontName[0] == '-') {
 		fname = xlfdToFcName(fontName);
@@ -155,6 +169,25 @@ WMFont *WMCreateFont(WMScreen * scrPtr, const char *fontName)
 	font->refCount = 1;
 
 	font->name = fname;
+
+#ifdef USE_PANGO
+	fontmap = pango_xft_get_font_map(scrPtr->display, scrPtr->screen);
+	context = pango_font_map_create_context(fontmap);
+	layout = pango_layout_new(context);
+
+	pattern = FcNameParse((FcChar8 *) font->name);
+	description = pango_fc_font_description_from_pattern(pattern, FALSE);
+
+	/* Pango examines FC_SIZE but not FC_PIXEL_SIZE of the patten, but
+	 * font-name has only "pixelsize", so set the size manually here.
+	 */
+	if (FcPatternGetDouble(pattern, FC_PIXEL_SIZE, 0, &size) == FcResultMatch)
+		pango_font_description_set_absolute_size(description, size * PANGO_SCALE);
+
+	pango_layout_set_font_description(layout, description);
+
+	font->layout = layout;
+#endif
 
 	assert(WMHashInsert(scrPtr->fontCache, font->name, font) == NULL);
 
@@ -252,18 +285,34 @@ WMFont *WMBoldSystemFontOfSize(WMScreen * scrPtr, int size)
 
 int WMWidthOfString(WMFont * font, const char *text, int length)
 {
+#ifdef USE_PANGO
+	const char *previous_text;
+	int width;
+#else
 	XGlyphInfo extents;
+#endif
 
 	wassertrv(font != NULL && text != NULL, 0);
+#ifdef USE_PANGO
+	previous_text = pango_layout_get_text(font->layout);
+	if ((previous_text == NULL) || (strcmp(text, previous_text) != 0))
+		pango_layout_set_text(font->layout, text, length);
+	pango_layout_get_pixel_size(font->layout, &width, NULL);
 
+	return width;
+#else
 	XftTextExtentsUtf8(font->screen->display, font->font, (XftChar8 *) text, length, &extents);
 
 	return extents.xOff;	/* don't ask :P */
+#endif
 }
 
 void WMDrawString(WMScreen * scr, Drawable d, WMColor * color, WMFont * font, int x, int y, const char *text, int length)
 {
 	XftColor xftcolor;
+#ifdef USE_PANGO
+	const char *previous_text;
+#endif
 
 	wassertr(font != NULL);
 
@@ -275,7 +324,14 @@ void WMDrawString(WMScreen * scr, Drawable d, WMColor * color, WMFont * font, in
 
 	XftDrawChange(scr->xftdraw, d);
 
+#ifdef USE_PANGO
+	previous_text = pango_layout_get_text(font->layout);
+	if ((previous_text == NULL) || (strcmp(text, previous_text) != 0))
+		pango_layout_set_text(font->layout, text, length);
+	pango_xft_render_layout(scr->xftdraw, &xftcolor, font->layout, x * PANGO_SCALE, y * PANGO_SCALE);
+#else
 	XftDrawStringUtf8(scr->xftdraw, &xftcolor, font->font, x, y + font->y, (XftChar8 *) text, length);
+#endif
 }
 
 void
@@ -284,6 +340,9 @@ WMDrawImageString(WMScreen * scr, Drawable d, WMColor * color, WMColor * backgro
 {
 	XftColor textColor;
 	XftColor bgColor;
+#ifdef USE_PANGO
+	const char *previous_text;
+#endif
 
 	wassertr(font != NULL);
 
@@ -303,7 +362,14 @@ WMDrawImageString(WMScreen * scr, Drawable d, WMColor * color, WMColor * backgro
 
 	XftDrawRect(scr->xftdraw, &bgColor, x, y, WMWidthOfString(font, text, length), font->height);
 
+#ifdef USE_PANGO
+	previous_text = pango_layout_get_text(font->layout);
+	if ((previous_text == NULL) || (strcmp(text, previous_text) != 0))
+		pango_layout_set_text(font->layout, text, length);
+	pango_xft_render_layout(scr->xftdraw, &textColor, font->layout, x * PANGO_SCALE, y * PANGO_SCALE);
+#else
 	XftDrawStringUtf8(scr->xftdraw, &textColor, font->font, x, y + font->y, (XftChar8 *) text, length);
+#endif
 }
 
 WMFont *WMCopyFontWithStyle(WMScreen * scrPtr, WMFont * font, WMFontStyle style)
