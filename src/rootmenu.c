@@ -302,12 +302,12 @@ static void saveSessionCommand(WMenu * menu, WMenuEntry * entry)
 	wScreenSaveState(menu->frame->screen_ptr);
 }
 
-static void clearSessionCommand(WMenu *menu, WMenuEntry *entry)
+static void clearSessionCommand(WMenu * menu, WMenuEntry * entry)
 {
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) entry;
 
-	wSessionClearState();
+	wSessionClearState(menu->frame->screen_ptr);
 	wScreenSaveState(menu->frame->screen_ptr);
 }
 
@@ -795,8 +795,8 @@ static void constructPLMenuFromPipe(WMenu * menu, WMenuEntry * entry)
 }
 static void cleanupWorkspaceMenu(WMenu *menu)
 {
-	if (w_global.workspace.menu == menu)
-		w_global.workspace.menu = NULL;
+	if (menu->frame->screen_ptr->workspace_menu == menu)
+		menu->frame->screen_ptr->workspace_menu = NULL;
 }
 
 static WMenuEntry *addWorkspaceMenu(WScreen *scr, WMenu *menu, const char *title)
@@ -814,11 +814,11 @@ static WMenuEntry *addWorkspaceMenu(WScreen *scr, WMenu *menu, const char *title
 		wsmenu = wWorkspaceMenuMake(scr, True);
 		wsmenu->on_destroy = cleanupWorkspaceMenu;
 
-		w_global.workspace.menu = wsmenu;
+		scr->workspace_menu = wsmenu;
 		entry = wMenuAddCallback(menu, title, NULL, NULL);
 		wMenuEntrySetCascade(menu, entry, wsmenu);
 
-		wWorkspaceMenuUpdate(wsmenu);
+		wWorkspaceMenuUpdate(scr, wsmenu);
 	}
 	return entry;
 }

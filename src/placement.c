@@ -172,7 +172,7 @@ void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head)
 		while (obj) {
 			int x, y;
 
-			if (iconPosition(obj, sx1, sy1, sx2, sy2, w_global.workspace.current, &x, &y)) {
+			if (iconPosition(obj, sx1, sy1, sx2, sy2, scr->current_workspace, &x, &y)) {
 				int xdi, ydi;	/* rounded down */
 				int xui, yui;	/* rounded up */
 
@@ -269,7 +269,7 @@ static int calcSumOfCoveredAreas(WWindow *wwin, int x, int y, int w, int h)
 		ty = test_window->frame_y;
 
 		if (test_window->flags.mapped || (test_window->flags.shaded &&
-		     test_window->frame->workspace == w_global.workspace.current &&
+		     test_window->frame->workspace == wwin->screen_ptr->current_workspace &&
 		     !(test_window->flags.miniaturized || test_window->flags.hidden))) {
 			sum_isect += calcIntersectionArea(tx, ty, tw, th, x, y, w, h);
 		}
@@ -313,7 +313,7 @@ window_overlaps(WWindow *win, int x, int y, int w, int h, Bool ignore_sunken)
 	    (ty < (y + h)) && ((ty + th) > y) &&
 	    (win->flags.mapped ||
 	     (win->flags.shaded &&
-	      win->frame->workspace == w_global.workspace.current &&
+	      win->frame->workspace == win->screen_ptr->current_workspace &&
 	      !(win->flags.miniaturized || win->flags.hidden)))) {
 		return True;
 	}

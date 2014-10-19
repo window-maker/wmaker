@@ -198,8 +198,8 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 
 		name = WMCreatePLString(buffer);
 		cmd = WMCreatePLString(command);
+		workspace = WMCreatePLString(scr->workspaces[wwin->frame->workspace]->name);
 
-		workspace = WMCreatePLString(w_global.workspace.array[wwin->frame->workspace]->name);
 		shaded = wwin->flags.shaded ? sYes : sNo;
 		miniaturized = wwin->flags.miniaturized ? sYes : sNo;
 		hidden = wwin->flags.hidden ? sYes : sNo;
@@ -208,8 +208,8 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 		geometry = WMCreatePLString(buffer);
 
 		for (mask = 0, i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-			if (w_global.shortcut.windows[i] != NULL &&
-			    WMGetFirstInArray(w_global.shortcut.windows[i], wwin) != WANotFound)
+			if (scr->shortcutWindows[i] != NULL &&
+			    WMGetFirstInArray(scr->shortcutWindows[i], wwin) != WANotFound)
 				mask |= 1 << i;
 		}
 
@@ -237,11 +237,11 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 
 			/* Try the clips */
 			if (name == NULL) {
-				for (i = 0; i < w_global.workspace.count; i++)
-					if (w_global.workspace.array[i]->clip == wapp->app_icon->dock)
+				for (i = 0; i < scr->workspace_count; i++)
+					if (scr->workspaces[i]->clip == wapp->app_icon->dock)
 						break;
-				if (i < w_global.workspace.count)
-					name = w_global.workspace.array[i]->name;
+				if (i < scr->workspace_count)
+					name = scr->workspaces[i]->name;
 			}
 			/* Try the drawers */
 			if (name == NULL) {
@@ -280,9 +280,9 @@ void wSessionSaveState(WScreen * scr)
 
 	make_keys();
 
-	if (!w_global.session_state) {
-		w_global.session_state = WMCreatePLDictionary(NULL, NULL);
-		if (!w_global.session_state)
+	if (!scr->session_state) {
+		scr->session_state = WMCreatePLDictionary(NULL, NULL);
+		if (!scr->session_state)
 			return;
 	}
 
@@ -312,27 +312,26 @@ void wSessionSaveState(WScreen * scr)
 		}
 		wwin = wwin->prev;
 	}
-
-	WMRemoveFromPLDictionary(w_global.session_state, sApplications);
-	WMPutInPLDictionary(w_global.session_state, sApplications, list);
+	WMRemoveFromPLDictionary(scr->session_state, sApplications);
+	WMPutInPLDictionary(scr->session_state, sApplications, list);
 	WMReleasePropList(list);
 
-	wks = WMCreatePLString(w_global.workspace.array[w_global.workspace.current]->name);
-	WMPutInPLDictionary(w_global.session_state, sWorkspace, wks);
+	wks = WMCreatePLString(scr->workspaces[scr->current_workspace]->name);
+	WMPutInPLDictionary(scr->session_state, sWorkspace, wks);
 	WMReleasePropList(wks);
 
 	WMFreeArray(wapp_list);
 }
 
-void wSessionClearState(void)
+void wSessionClearState(WScreen * scr)
 {
 	make_keys();
 
-	if (!w_global.session_state)
+	if (!scr->session_state)
 		return;
 
-	WMRemoveFromPLDictionary(w_global.session_state, sApplications);
-	WMRemoveFromPLDictionary(w_global.session_state, sWorkspace);
+	WMRemoveFromPLDictionary(scr->session_state, sApplications);
+	WMRemoveFromPLDictionary(scr->session_state, sWorkspace);
 }
 
 static pid_t execCommand(WScreen *scr, char *command)
@@ -369,7 +368,7 @@ static pid_t execCommand(WScreen *scr, char *command)
 	return pid;
 }
 
-static WSavedState *getWindowState(WMPropList *win_state)
+static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
 {
 	WSavedState *state = wmalloc(sizeof(WSavedState));
 	WMPropList *value;
@@ -383,8 +382,8 @@ static WSavedState *getWindowState(WMPropList *win_state)
 		tmp = WMGetFromPLString(value);
 		if (sscanf(tmp, "%i", &state->workspace) != 1) {
 			state->workspace = -1;
-			for (i = 0; i < w_global.workspace.count; i++) {
-				if (strcmp(w_global.workspace.array[i]->name, tmp) == 0) {
+			for (i = 0; i < scr->workspace_count; i++) {
+				if (strcmp(scr->workspaces[i]->name, tmp) == 0) {
 					state->workspace = i;
 					break;
 				}
@@ -432,12 +431,12 @@ void wSessionRestoreState(WScreen *scr)
 
 	make_keys();
 
-	if (!w_global.session_state)
+	if (!scr->session_state)
 		return;
 
 	WMPLSetCaseSensitive(True);
 
-	apps = WMGetFromPLDictionary(w_global.session_state, sApplications);
+	apps = WMGetFromPLDictionary(scr->session_state, sApplications);
 	if (!apps)
 		return;
 
@@ -461,7 +460,7 @@ void wSessionRestoreState(WScreen *scr)
 		if (!instance && !class)
 			continue;
 
-		state = getWindowState(win_info);
+		state = getWindowState(scr, win_info);
 
 		dock = NULL;
 		value = WMGetFromPLDictionary(win_info, sDock);
@@ -472,9 +471,9 @@ void wSessionRestoreState(WScreen *scr)
 
 				/* Try the clips */
 				if (dock == NULL) {
-					for (j = 0; j < w_global.workspace.count; j++) {
-						if (strcmp(w_global.workspace.array[j]->name, tmp) == 0) {
-							dock = w_global.workspace.array[j]->clip;
+					for (j = 0; j < scr->workspace_count; j++) {
+						if (strcmp(scr->workspaces[j]->name, tmp) == 0) {
+							dock = scr->workspaces[j]->clip;
 							break;
 						}
 					}
@@ -494,8 +493,8 @@ void wSessionRestoreState(WScreen *scr)
 			} else {
 				if (n == 0) {
 					dock = scr->dock;
-				} else if (n > 0 && n <= w_global.workspace.count) {
-					dock = w_global.workspace.array[n - 1]->clip;
+				} else if (n > 0 && n <= scr->workspace_count) {
+					dock = scr->workspaces[n - 1]->clip;
 				}
 			}
 		}
@@ -537,12 +536,12 @@ void wSessionRestoreLastWorkspace(WScreen * scr)
 
 	make_keys();
 
-	if (!w_global.session_state)
+	if (!scr->session_state)
 		return;
 
 	WMPLSetCaseSensitive(True);
 
-	wks = WMGetFromPLDictionary(w_global.session_state, sWorkspace);
+	wks = WMGetFromPLDictionary(scr->session_state, sWorkspace);
 	if (!wks || !WMIsPLString(wks))
 		return;
 
@@ -555,8 +554,8 @@ void wSessionRestoreLastWorkspace(WScreen * scr)
 	WMPLSetCaseSensitive(False);
 
 	/* Get the workspace number for the workspace name */
-	w = wGetWorkspaceNumber(value);
+	w = wGetWorkspaceNumber(scr, value);
 
-	if (w != w_global.workspace.current && w < w_global.workspace.count)
+	if (w != scr->current_workspace && w < scr->workspace_count)
 		wWorkspaceChange(scr, w);
 }

@@ -674,10 +674,10 @@ void StartUp(Bool defaultScreenOnly)
 			/* auto-launch apps in clip */
 			if (!wPreferences.flags.noclip) {
 				int i;
-				for (i = 0; i < w_global.workspace.count; i++) {
-					if (w_global.workspace.array[i]->clip) {
-						wScreen[j]->last_dock = w_global.workspace.array[i]->clip;
-						wDockDoAutoLaunch(w_global.workspace.array[i]->clip, i);
+				for (i = 0; i < wScreen[j]->workspace_count; i++) {
+					if (wScreen[j]->workspaces[i]->clip) {
+						wScreen[j]->last_dock = wScreen[j]->workspaces[i]->clip;
+						wDockDoAutoLaunch(wScreen[j]->workspaces[i]->clip, i);
 					}
 				}
 			}
@@ -828,9 +828,9 @@ static void manageAllWindows(WScreen * scr, int crashRecovery)
 		WMNextEvent(dpy, &ev);
 		WMHandleEvent(&ev);
 	}
-	w_global.workspace.last_used = 0;
+	scr->last_workspace = 0;
 	wWorkspaceForceChange(scr, 0);
 	if (!wPreferences.flags.noclip)
-		wDockShowIcons(w_global.workspace.array[w_global.workspace.current]->clip);
+		wDockShowIcons(scr->workspaces[scr->current_workspace]->clip);
 	scr->flags.startup2 = 0;
 }

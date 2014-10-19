@@ -479,7 +479,7 @@ RImage *get_icon_image(WScreen *scr, const char *winstance, const char *wclass, 
 	return get_rimage_from_file(scr, file_name, max_size);
 }
 
-int wDefaultGetStartWorkspace(const char *instance, const char *class)
+int wDefaultGetStartWorkspace(WScreen *scr, const char *instance, const char *class)
 {
 	WMPropList *value;
 	int w;
@@ -502,7 +502,7 @@ int wDefaultGetStartWorkspace(const char *instance, const char *class)
 		return -1;
 
 	/* Get the workspace number for the workspace name */
-	w = wGetWorkspaceNumber(tmp);
+	w = wGetWorkspaceNumber(scr, tmp);
 
 	return w;
 }

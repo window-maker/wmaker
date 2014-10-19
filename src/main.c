@@ -538,7 +538,7 @@ int main(int argc, char **argv)
 	w_global.program.signal_state = WSTATE_NORMAL;
 	w_global.timestamp.last_event = CurrentTime;
 	w_global.timestamp.focus_change = CurrentTime;
-	w_global.workspace.ignore_change = False;
+	w_global.ignore_workspace_change = False;
 	w_global.shortcut.modifiers_mask = 0xff;
 
 	/* setup common stuff for the monitor and wmaker itself */

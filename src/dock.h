@@ -96,9 +96,9 @@ void wDockLaunchWithState(WAppIcon *btn, WSavedState *state);
 int wDockReceiveDNDDrop(WScreen *scr, XEvent *event);
 #endif
 
-void wClipIconPaint(void);
-void wClipSaveState(void);
-WMPropList *wClipSaveWorkspaceState(int workspace);
+void wClipIconPaint(WAppIcon *aicon);
+void wClipSaveState(WScreen *scr);
+WMPropList *wClipSaveWorkspaceState(WScreen *scr, int workspace);
 WAppIcon *wClipRestoreState(WScreen *scr, WMPropList *clip_state);
 
 void wDrawerIconPaint(WAppIcon *dicon);

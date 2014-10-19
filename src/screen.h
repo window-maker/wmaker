@@ -105,6 +105,10 @@ typedef struct _WScreen {
 
     WMArray *fakeGroupLeaders;         /* list of fake window group ids */
 
+    struct WAppIcon *app_icon_list;    /* list of all app-icons on screen */
+
+    struct WApplication *wapp_list;    /* list of all aplications */
+
     WMBag *stacking_list;	       /* bag of lists of windows
                                         * in stacking order.
                                         * Indexed by window level
@@ -114,6 +118,14 @@ typedef struct _WScreen {
                                         */
 
     int window_count;		       /* number of windows in window_list */
+
+    int workspace_count;	       /* number of workspaces */
+
+    struct WWorkspace **workspaces;    /* workspace array */
+
+    int current_workspace;	       /* current workspace number */
+    int last_workspace;		       /* last used workspace number */
+
 
     WReservedArea *reservedAreas;      /* used to build totalUsableArea */
 
@@ -148,6 +160,8 @@ typedef struct _WScreen {
     XFontStruct *tech_draw_font;       /* font for tech draw style geom view
                                           needs to be a core font so we can
                                           use it with a XORing GC */
+
+    WMFont *workspace_name_font;
 
     WMColor *select_color;
     WMColor *select_text_color;
@@ -205,12 +219,21 @@ typedef struct _WScreen {
 
     struct WMenu *root_menu;	       /* root window menu */
     struct WMenu *switch_menu;	       /* window list menu */
+    struct WMenu *workspace_menu;      /* workspace operation */
     struct WMenu *window_menu;	       /* window command menu */
     struct WMenu *icon_menu;	       /* icon/appicon menu */
+    struct WMenu *workspace_submenu;   /* workspace list for window_menu */
 
     struct WDock *dock;		       /* the application dock */
+    struct WMenu *dock_pos_menu;       /* Dock position menu */
     struct WPixmap *dock_dots;	       /* 3 dots for the Dock */
     Window dock_shadow;		       /* shadow for dock buttons */
+    struct WAppIcon *clip_icon;        /* The clip main icon, or the dock's, if they are merged */
+    struct WMenu *clip_menu;           /* Menu for clips */
+    struct WMenu *clip_submenu;        /* Workspace list for clips */
+    struct WMenu *clip_options;	       /* Options for Clip */
+    struct WMenu *clip_ws_menu;	       /* workspace menu for clip */
+    struct WMenu *drawer_menu;         /* Menu for drawers */
     struct WDock *last_dock;
     WAppIconChain *global_icons;       /* for omnipresent icons chain in clip */
     int global_icon_count;	       /* How many global icons do we have */
@@ -237,6 +260,8 @@ typedef struct _WScreen {
     /* state and other informations */
     short cascade_index;	       /* for cascade window placement */
 
+    WMPropList *session_state;
+
     /* for double-click detection */
     Time last_click_time;
     Window last_click_window;
@@ -254,6 +279,10 @@ typedef struct _WScreen {
     WMHandlerID *autoRaiseTimer;
     Window autoRaiseWindow;	       /* window that is scheduled to be
                                         * raised */
+
+    /* for window shortcuts */
+    WMArray *shortcutWindows[MAX_WINDOW_SHORTCUTS];
+
 #ifdef XDND
     char *xdestring;
 #endif

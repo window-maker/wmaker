@@ -890,7 +890,7 @@ static void handleUnmapNotify(XEvent * event)
 		return;
 
 	if (!wwin->flags.mapped && !withdraw
-	    && wwin->frame->workspace == w_global.workspace.current
+	    && wwin->frame->workspace == wwin->screen_ptr->current_workspace
 	    && !wwin->flags.miniaturized && !wwin->flags.hidden)
 		return;
 
@@ -1610,8 +1610,8 @@ static void handleKeyPress(XEvent * event)
 
 	case WKBD_WORKSPACE1 ... WKBD_WORKSPACE10:
 		widx = command - WKBD_WORKSPACE1;
-		i = (w_global.workspace.current / 10) * 10 + widx;
-		if (wPreferences.ws_advance || i < w_global.workspace.count)
+		i = (scr->current_workspace / 10) * 10 + widx;
+		if (wPreferences.ws_advance || i < scr->workspace_count)
 			wWorkspaceChange(scr, i);
 		break;
 
@@ -1622,13 +1622,13 @@ static void handleKeyPress(XEvent * event)
 		wWorkspaceRelativeChange(scr, -1);
 		break;
 	case WKBD_LASTWORKSPACE:
-		wWorkspaceChange(scr, w_global.workspace.last_used);
+		wWorkspaceChange(scr, scr->last_workspace);
 		break;
 
 	case WKBD_MOVE_WORKSPACE1 ... WKBD_MOVE_WORKSPACE10:
 		widx = command - WKBD_MOVE_WORKSPACE1;
-		i = (w_global.workspace.current / 10) * 10 + widx;
-		if (wwin && (wPreferences.ws_advance || i < w_global.workspace.count))
+		i = (scr->current_workspace / 10) * 10 + widx;
+		if (wwin && (wPreferences.ws_advance || i < scr->workspace_count))
 			wWindowChangeWorkspace(wwin, i);
 		break;
 
@@ -1642,7 +1642,7 @@ static void handleKeyPress(XEvent * event)
 		break;
 	case WKBD_MOVE_LASTWORKSPACE:
 		if (wwin)
-			wWindowChangeWorkspace(wwin, w_global.workspace.last_used);
+			wWindowChangeWorkspace(wwin, scr->last_workspace);
 		break;
 
 	case WKBD_MOVE_NEXTWSLAYER:
@@ -1651,11 +1651,11 @@ static void handleKeyPress(XEvent * event)
 			if (wwin) {
 				int row, column;
 
-				row = w_global.workspace.current / 10;
-				column = w_global.workspace.current % 10;
+				row = scr->current_workspace / 10;
+				column = scr->current_workspace % 10;
 
 				if (command == WKBD_MOVE_NEXTWSLAYER) {
-					if ((row + 1) * 10 < w_global.workspace.count)
+					if ((row + 1) * 10 < scr->workspace_count)
 						wWindowChangeWorkspace(wwin, column + (row + 1) * 10);
 				} else {
 					if (row > 0)
@@ -1678,8 +1678,8 @@ static void handleKeyPress(XEvent * event)
 
 		widx = command - WKBD_WINDOW1;
 
-		if (w_global.shortcut.windows[widx]) {
-			WMArray *list = w_global.shortcut.windows[widx];
+		if (scr->shortcutWindows[widx]) {
+			WMArray *list = scr->shortcutWindows[widx];
 			int cw;
 			int count = WMGetArrayItemCount(list);
 			WWindow *twin;
@@ -1687,7 +1687,7 @@ static void handleKeyPress(XEvent * event)
 			WWindow *wwin;
 
 			wUnselectWindows(scr);
-			cw = w_global.workspace.current;
+			cw = scr->current_workspace;
 
 			WM_ETARETI_ARRAY(list, wwin, iter) {
 				if (count > 1)
@@ -1705,16 +1705,18 @@ static void handleKeyPress(XEvent * event)
 			WMAddToArray(list, twin);
 
 		} else if (wwin && ISMAPPED(wwin) && ISFOCUSED(wwin)) {
-			if (w_global.shortcut.windows[widx]) {
-				WMFreeArray(w_global.shortcut.windows[widx]);
-				w_global.shortcut.windows[widx] = NULL;
+			if (scr->shortcutWindows[widx]) {
+				WMFreeArray(scr->shortcutWindows[widx]);
+				scr->shortcutWindows[widx] = NULL;
 			}
 
 			if (wwin->flags.selected && scr->selected_windows) {
-				w_global.shortcut.windows[widx] = WMDuplicateArray(scr->selected_windows);
+				scr->shortcutWindows[widx] = WMDuplicateArray(scr->selected_windows);
+				/*WMRemoveFromArray(scr->shortcutWindows[index], wwin);
+				   WMInsertInArray(scr->shortcutWindows[index], 0, wwin); */
 			} else {
-				w_global.shortcut.windows[widx] = WMCreateArray(4);
-				WMAddToArray(w_global.shortcut.windows[widx], wwin);
+				scr->shortcutWindows[widx] = WMCreateArray(4);
+				WMAddToArray(scr->shortcutWindows[widx], wwin);
 			}
 
 			wSelectWindow(wwin, !wwin->flags.selected);
@@ -1724,11 +1726,12 @@ static void handleKeyPress(XEvent * event)
 			XFlush(dpy);
 
 		} else if (scr->selected_windows && WMGetArrayItemCount(scr->selected_windows)) {
-			if (wwin->flags.selected && scr->selected_windows) {
-				if (w_global.shortcut.windows[widx])
-					WMFreeArray(w_global.shortcut.windows[widx]);
 
-				w_global.shortcut.windows[widx] = WMDuplicateArray(scr->selected_windows);
+			if (wwin->flags.selected && scr->selected_windows) {
+				if (scr->shortcutWindows[widx]) {
+					WMFreeArray(scr->shortcutWindows[widx]);
+				}
+				scr->shortcutWindows[widx] = WMDuplicateArray(scr->selected_windows);
 			}
 		}
 
@@ -1788,11 +1791,11 @@ static void handleKeyPress(XEvent * event)
 		{
 			int row, column;
 
-			row = w_global.workspace.current / 10;
-			column = w_global.workspace.current % 10;
+			row = scr->current_workspace / 10;
+			column = scr->current_workspace % 10;
 
 			if (command == WKBD_NEXTWSLAYER) {
-				if ((row + 1) * 10 < w_global.workspace.count)
+				if ((row + 1) * 10 < scr->workspace_count)
 					wWorkspaceChange(scr, column + (row + 1) * 10);
 			} else {
 				if (row > 0)
@@ -1802,7 +1805,7 @@ static void handleKeyPress(XEvent * event)
 		break;
 	case WKBD_CLIPRAISELOWER:
 		if (!wPreferences.flags.noclip)
-			wDockRaiseLower(w_global.workspace.array[w_global.workspace.current]->clip);
+			wDockRaiseLower(scr->workspaces[scr->current_workspace]->clip);
 		break;
 	case WKBD_DOCKRAISELOWER:
 		if (!wPreferences.flags.nodock)
@@ -1815,7 +1818,7 @@ static void handleKeyPress(XEvent * event)
 			wwin = scr->focused_window;
 
 			if (wwin && wwin->flags.mapped
-			    && wwin->frame->workspace == w_global.workspace.current
+			    && wwin->frame->workspace == wwin->screen_ptr->current_workspace
 			    && !wwin->flags.miniaturized && !wwin->flags.hidden) {
 				XkbGetState(dpy, XkbUseCoreKbd, &staterec);
 

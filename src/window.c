@@ -178,14 +178,14 @@ void wWindowDestroy(WWindow *wwin)
 	wwin->flags.destroyed = 1;
 
 	for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-		if (!w_global.shortcut.windows[i])
+		if (!wwin->screen_ptr->shortcutWindows[i])
 			continue;
 
-		WMRemoveFromArray(w_global.shortcut.windows[i], wwin);
+		WMRemoveFromArray(wwin->screen_ptr->shortcutWindows[i], wwin);
 
-		if (!WMGetArrayItemCount(w_global.shortcut.windows[i])) {
-			WMFreeArray(w_global.shortcut.windows[i]);
-			w_global.shortcut.windows[i] = NULL;
+		if (!WMGetArrayItemCount(wwin->screen_ptr->shortcutWindows[i])) {
+			WMFreeArray(wwin->screen_ptr->shortcutWindows[i]);
+			wwin->screen_ptr->shortcutWindows[i] = NULL;
 		}
 	}
 
@@ -373,7 +373,7 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 		}
 
 		if (tmp_workspace >= 0)
-			*workspace = tmp_workspace % w_global.workspace.count;
+			*workspace = tmp_workspace % scr->workspace_count;
 	}
 
 	/*
@@ -833,16 +833,17 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			wwin->flags.miniaturized = win_state->state->miniaturized;
 
 		if (!IS_OMNIPRESENT(wwin)) {
-			int w = wDefaultGetStartWorkspace(wwin->wm_instance, wwin->wm_class);
-			if (w < 0 || w >= w_global.workspace.count) {
+			int w = wDefaultGetStartWorkspace(scr, wwin->wm_instance,
+							  wwin->wm_class);
+			if (w < 0 || w >= scr->workspace_count) {
 				workspace = win_state->state->workspace;
-				if (workspace >= w_global.workspace.count)
-					workspace = w_global.workspace.current;
+				if (workspace >= scr->workspace_count)
+					workspace = scr->current_workspace;
 			} else {
 				workspace = w;
 			}
 		} else {
-			workspace = w_global.workspace.current;
+			workspace = scr->current_workspace;
 		}
 	}
 
@@ -883,10 +884,10 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 				for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
 					if (mask & (1 << i)) {
-						if (!w_global.shortcut.windows[i])
-							w_global.shortcut.windows[i] = WMCreateArray(4);
+						if (!scr->shortcutWindows[i])
+							scr->shortcutWindows[i] = WMCreateArray(4);
 
-						WMAddToArray(w_global.shortcut.windows[i], wwin);
+						WMAddToArray(scr->shortcutWindows[i], wwin);
 					}
 				}
 			}
@@ -905,20 +906,20 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 	/* set workspace on which the window starts */
 	if (workspace >= 0) {
-		if (workspace > w_global.workspace.count - 1)
-			workspace = workspace % w_global.workspace.count;
+		if (workspace > scr->workspace_count - 1)
+			workspace = workspace % scr->workspace_count;
 	} else {
 		int w;
 
-		w = wDefaultGetStartWorkspace(wwin->wm_instance, wwin->wm_class);
+		w = wDefaultGetStartWorkspace(scr, wwin->wm_instance, wwin->wm_class);
 
-		if (w >= 0 && w < w_global.workspace.count && !(IS_OMNIPRESENT(wwin))) {
+		if (w >= 0 && w < scr->workspace_count && !(IS_OMNIPRESENT(wwin))) {
 			workspace = w;
 		} else {
 			if (wPreferences.open_transients_with_parent && transientOwner)
 				workspace = transientOwner->frame->workspace;
 			else
-				workspace = w_global.workspace.current;
+				workspace = scr->current_workspace;
 		}
 	}
 
@@ -942,7 +943,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			y = win_state->state->y;
 		} else if ((wwin->transient_for == None || wPreferences.window_placement != WPM_MANUAL)
 			   && !scr->flags.startup
-			   && workspace == w_global.workspace.current
+			   && workspace == scr->current_workspace
 			   && !wwin->flags.miniaturized
 			   && !wwin->flags.maximized && !(wwin->normal_hints->flags & (USPosition | PPosition))) {
 
@@ -1183,7 +1184,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	XLowerWindow(dpy, window);
 
 	/* if window is in this workspace and should be mapped, then  map it */
-	if (!wwin->flags.miniaturized && (workspace == w_global.workspace.current || IS_OMNIPRESENT(wwin))
+	if (!wwin->flags.miniaturized && (workspace == scr->current_workspace || IS_OMNIPRESENT(wwin))
 	    && !wwin->flags.hidden && !withdraw) {
 
 		/* The following "if" is to avoid crashing of clients that expect
@@ -1257,7 +1258,7 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	/* Final preparations before window is ready to go */
 	wFrameWindowChangeState(wwin->frame, WS_UNFOCUSED);
 
-	if (!wwin->flags.miniaturized && workspace == w_global.workspace.current && !wwin->flags.hidden) {
+	if (!wwin->flags.miniaturized && workspace == scr->current_workspace && !wwin->flags.hidden) {
 		if (((transientOwner && transientOwner->flags.focused)
 		     || wPreferences.auto_focus) && !WFLAGP(wwin, no_focusable)) {
 
@@ -1366,7 +1367,7 @@ WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
 	wFrameWindowHideButton(wwin->frame, WFF_RIGHT_BUTTON);
 
 	wwin->frame->child = wwin;
-	wwin->frame->workspace = w_global.workspace.current;
+	wwin->frame->workspace = wwin->screen_ptr->current_workspace;
 
 #ifdef XKB_BUTTON_HINT
 	if (wPreferences.modelock)
@@ -1921,10 +1922,10 @@ void wWindowChangeWorkspace(WWindow *wwin, int workspace)
 	WApplication *wapp;
 	int unmap = 0;
 
-	if (workspace >= w_global.workspace.count || workspace < 0 || workspace == wwin->frame->workspace)
+	if (workspace >= scr->workspace_count || workspace < 0 || workspace == wwin->frame->workspace)
 		return;
 
-	if (workspace != w_global.workspace.current) {
+	if (workspace != scr->current_workspace) {
 		/* Sent to other workspace. Unmap window */
 		if ((wwin->flags.mapped
 		     || wwin->flags.shaded || (wwin->flags.miniaturized && !wPreferences.sticky_icons))
@@ -1968,23 +1969,23 @@ void wWindowChangeWorkspace(WWindow *wwin, int workspace)
 void wWindowChangeWorkspaceRelative(WWindow *wwin, int amount)
 {
 	WScreen *scr = wwin->screen_ptr;
-	int w = w_global.workspace.current + amount;
+	int w = scr->current_workspace + amount;
 
 	if (amount < 0) {
 		if (w >= 0) {
 			wWindowChangeWorkspace(wwin, w);
 		} else if (wPreferences.ws_cycle) {
-			wWindowChangeWorkspace(wwin, w_global.workspace.count + w);
+			wWindowChangeWorkspace(wwin, scr->workspace_count + w);
 		}
 	} else if (amount > 0) {
-		if (w < w_global.workspace.count) {
+		if (w < scr->workspace_count) {
 			wWindowChangeWorkspace(wwin, w);
 		} else if (wPreferences.ws_advance) {
 			int workspace = WMIN(w, MAX_WORKSPACES - 1);
 			wWorkspaceMake(scr, workspace);
 			wWindowChangeWorkspace(wwin, workspace);
 		} else if (wPreferences.ws_cycle) {
-			wWindowChangeWorkspace(wwin, w % w_global.workspace.count);
+			wWindowChangeWorkspace(wwin, w % scr->workspace_count);
 		}
 	}
 }
@@ -2351,8 +2352,8 @@ void wWindowSaveState(WWindow *wwin)
 	}
 
 	for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
-		if (w_global.shortcut.windows[i] &&
-		    WMCountInArray(w_global.shortcut.windows[i], wwin))
+		if (wwin->screen_ptr->shortcutWindows[i] &&
+		    WMCountInArray(wwin->screen_ptr->shortcutWindows[i], wwin))
 			data[9] |= 1 << i;
 	}
 

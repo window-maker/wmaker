@@ -23,7 +23,7 @@
 #define WMSESSION_H_
 
 void wSessionSaveState(WScreen *scr);
-void wSessionClearState(void);
+void wSessionClearState(WScreen *scr);
 void wSessionRestoreState(WScreen *scr);
 void wSessionRestoreLastWorkspace(WScreen *scr);
 #endif

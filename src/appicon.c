@@ -67,8 +67,8 @@ static void iconDblClick(WObjDescriptor * desc, XEvent * event);
 static void iconExpose(WObjDescriptor * desc, XEvent * event);
 static void wApplicationSaveIconPathFor(const char *iconPath, const char *wm_instance, const char *wm_class);
 static WAppIcon *wAppIconCreate(WWindow * leader_win);
-static void add_to_appicon_list(WAppIcon *appicon);
-static void remove_from_appicon_list(WAppIcon *appicon);
+static void add_to_appicon_list(WScreen *scr, WAppIcon *appicon);
+static void remove_from_appicon_list(WScreen *scr, WAppIcon *appicon);
 static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window main_window);
 
 /* This function is used if the application is a .app. It checks if it has an icon in it
@@ -115,7 +115,7 @@ WAppIcon *wAppIconCreateForDock(WScreen *scr, const char *command, const char *w
 	aicon->yindex = -1;
 	aicon->xindex = -1;
 
-	add_to_appicon_list(aicon);
+	add_to_appicon_list(scr, aicon);
 
 	if (command)
 		aicon->command = wstrdup(command);
@@ -180,7 +180,7 @@ void unpaint_app_icon(WApplication *wapp)
 		return;
 
 	scr = wapp->main_window_desc->screen_ptr;
-	clip = w_global.workspace.array[w_global.workspace.current]->clip;
+	clip = scr->workspaces[scr->current_workspace]->clip;
 
 	if (!clip || !aicon->attracted || !clip->collapsed)
 		XUnmapWindow(dpy, aicon->icon->core->window);
@@ -188,7 +188,7 @@ void unpaint_app_icon(WApplication *wapp)
 	/* We want to avoid having it on the list  because otherwise
 	 * there will be a hole when the icons are arranged with
 	 * wArrangeIcons() */
-	remove_from_appicon_list(aicon);
+	remove_from_appicon_list(scr, aicon);
 
 	if (wPreferences.auto_arrange_icons && !aicon->attracted)
 		wArrangeIcons(scr, True);
@@ -215,7 +215,7 @@ void paint_app_icon(WApplication *wapp)
 
 	attracting_dock = scr->attracting_drawer != NULL ?
 		scr->attracting_drawer :
-		w_global.workspace.array[w_global.workspace.current]->clip;
+		scr->workspaces[scr->current_workspace]->clip;
 	if (attracting_dock && attracting_dock->attract_icons &&
 		wDockFindFreeSlot(attracting_dock, &x, &y)) {
 		wapp->app_icon->attracted = 1;
@@ -240,7 +240,7 @@ void paint_app_icon(WApplication *wapp)
 	 * having it on the list */
 	if (!WFLAGP(wapp->main_window_desc, no_appicon) &&
 	    wapp->app_icon->next == NULL && wapp->app_icon->prev == NULL)
-		add_to_appicon_list(wapp->app_icon);
+		add_to_appicon_list(scr, wapp->app_icon);
 
 	if (!attracting_dock || !wapp->app_icon->attracted || !attracting_dock->collapsed)
 		XMapWindow(dpy, icon->core->window);
@@ -324,8 +324,10 @@ static WAppIcon *wAppIconCreate(WWindow *leader_win)
 	return aicon;
 }
 
-void wAppIconDestroy(WAppIcon *aicon)
+void wAppIconDestroy(WAppIcon * aicon)
 {
+	WScreen *scr = aicon->icon->core->screen_ptr;
+
 	RemoveFromStackList(aicon->icon->core);
 	wIconDestroy(aicon->icon);
 	if (aicon->command)
@@ -340,7 +342,7 @@ void wAppIconDestroy(WAppIcon *aicon)
 	if (aicon->wm_class)
 		wfree(aicon->wm_class);
 
-	remove_from_appicon_list(aicon);
+	remove_from_appicon_list(scr, aicon);
 
 	aicon->destroyed = 1;
 	wrelease(aicon);
@@ -378,7 +380,7 @@ static void updateDockNumbers(WScreen *scr)
 	WAppIcon *dicon = scr->dock->icon_array[0];
 
 	ws_numbers = wmalloc(20);
-	snprintf(ws_numbers, 20, "%i [ %i ]", w_global.workspace.current + 1, ((w_global.workspace.current / 10) + 1));
+	snprintf(ws_numbers, 20, "%i [ %i ]", scr->current_workspace + 1, ((scr->current_workspace / 10) + 1));
 	length = strlen(ws_numbers);
 
 	XClearArea(dpy, dicon->icon->core->window, 2, 2, 50, WMFontHeight(scr->icon_title_font) + 1, False);
@@ -674,7 +676,7 @@ static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 
 	unhideHere = (event->xbutton.state & ShiftMask);
 	/* go to the last workspace that the user worked on the app */
-	if (!unhideHere && wapp->last_workspace != w_global.workspace.current)
+	if (!unhideHere && wapp->last_workspace != scr->current_workspace)
 		wWorkspaceChange(scr, wapp->last_workspace);
 
 	wUnhideApplication(wapp, event->xbutton.button == Button2, unhideHere);
@@ -816,8 +818,8 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 		allDocks[ i++ ] = scr->dock;
 
 	if (!wPreferences.flags.noclip &&
-	    originalDock != w_global.workspace.array[w_global.workspace.current]->clip)
-		allDocks[i++] = w_global.workspace.array[w_global.workspace.current]->clip;
+	    originalDock != scr->workspaces[scr->current_workspace]->clip)
+		allDocks[ i++ ] = scr->workspaces[scr->current_workspace]->clip;
 
 	for ( ; i < scr->drawer_count + 2; i++) /* In case the clip, the dock, or both, are disabled */
 		allDocks[ i ] = NULL;
@@ -868,11 +870,11 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 
 			if (omnipresent && !showed_all_clips) {
 				int i;
-				for (i = 0; i < w_global.workspace.count; i++) {
-					if (i == w_global.workspace.current)
+				for (i = 0; i < scr->workspace_count; i++) {
+					if (i == scr->current_workspace)
 						continue;
 
-					wDockShowIcons(w_global.workspace.array[i]->clip);
+					wDockShowIcons(scr->workspaces[i]->clip);
 					/* Note: if dock is collapsed (for instance, because it
 					   auto-collapses), its icons still won't show up */
 				}
@@ -1074,11 +1076,11 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 			}
 			if (showed_all_clips) {
 				int i;
-				for (i = 0; i < w_global.workspace.count; i++) {
-					if (i == w_global.workspace.current)
+				for (i = 0; i < scr->workspace_count; i++) {
+					if (i == scr->current_workspace)
 						continue;
 
-					wDockHideIcons(w_global.workspace.array[i]->clip);
+					wDockHideIcons(scr->workspaces[i]->clip);
 				}
 			}
 			if (wPreferences.auto_arrange_icons && !(originalDock != NULL && docked))
@@ -1156,8 +1158,8 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 	/* check clips */
 	if (!wapp->app_icon) {
 		int i;
-		for (i = 0; i < w_global.workspace.count; i++) {
-			WDock *dock = w_global.workspace.array[i]->clip;
+		for (i = 0; i < scr->workspace_count; i++) {
+			WDock *dock = scr->workspaces[i]->clip;
 
 			if (dock)
 				wapp->app_icon = findDockIconFor(dock, main_window);
@@ -1196,23 +1198,23 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 }
 
 /* Add the appicon to the appiconlist */
-static void add_to_appicon_list(WAppIcon *appicon)
+static void add_to_appicon_list(WScreen *scr, WAppIcon *appicon)
 {
 	appicon->prev = NULL;
-	appicon->next = w_global.app_icon_list;
-	if (w_global.app_icon_list)
-		w_global.app_icon_list->prev = appicon;
+	appicon->next = scr->app_icon_list;
+	if (scr->app_icon_list)
+		scr->app_icon_list->prev = appicon;
 
-	w_global.app_icon_list = appicon;
+	scr->app_icon_list = appicon;
 }
 
 /* Remove the appicon from the appiconlist */
-static void remove_from_appicon_list(WAppIcon *appicon)
+static void remove_from_appicon_list(WScreen *scr, WAppIcon *appicon)
 {
-	if (appicon == w_global.app_icon_list) {
+	if (appicon == scr->app_icon_list) {
 		if (appicon->next)
 			appicon->next->prev = NULL;
-		w_global.app_icon_list = appicon->next;
+		scr->app_icon_list = appicon->next;
 	} else {
 		if (appicon->next)
 			appicon->next->prev = appicon->prev;

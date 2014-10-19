@@ -511,43 +511,12 @@ extern struct wmaker_global_variables {
 	/* Screens related */
 	int screen_count;
 
-	/* Workspace related */
-	struct {
-		struct WWorkspace **array;	/* data for the workspaces */
-
-		int count;		/* number of workspaces */
-		int current;		/* current workspace number */
-		int last_used;		/* last used workspace number */
-
-		WMFont *font_for_name;  /* used during workspace switch */
-
-		/*
-		 * Ignore Workspace Change:
-		 * this variable is used to prevent workspace switch while certain
-		 * operations are ongoing.
-		 */
-		Bool ignore_change;
-
-		/* Menus */
-		struct WMenu *menu;	/* workspace operation */
-		struct WMenu *submenu;	/* workspace list for window_menu */
-	} workspace;
-
-	/* Clip related */
-	struct {
-		struct WAppIcon *icon;	/* The clip main icon, or the dock's, if they are merged */
-
-		struct WMenu *menu;	/* Menu for clips */
-		struct WMenu *submenu;	/* Workspace list for clips */
-		struct WMenu *opt_menu;	/* Options for Clip */
-		struct WMenu *ws_menu;	/* workspace menu for clip */
-	} clip;
-
-	/* Dock related */
-	struct {
-		struct WMenu *pos_menu;	/* menu for position of the dock */
-		struct WMenu *drawer_menu;	/* menu for the drawers */
-	} dock;
+	/*
+	 * Ignore Workspace Change:
+	 * this variable is used to prevent workspace switch while certain
+	 * operations are ongoing.
+	 */
+	Bool ignore_workspace_change;
 
 #ifdef HAVE_INOTIFY
 	struct {
@@ -635,9 +604,6 @@ extern struct wmaker_global_variables {
 		int dummy;
 	} xext;
 
-	/* Session related */
-	WMPropList *session_state;
-
 	/* Keyboard and shortcuts */
 	struct {
 		/*
@@ -645,13 +611,7 @@ extern struct wmaker_global_variables {
 		 * impact the shortcuts (typically: CapsLock, NumLock, ScrollLock)
 		 */
 		unsigned int modifiers_mask;
-
-		WMArray *windows[MAX_WINDOW_SHORTCUTS];
 	} shortcut;
-
-	/* Application related */
-	struct WAppIcon *app_icon_list;	/* list of all aplication icons */
-
 } w_global;
 
 /****** Notifications ******/

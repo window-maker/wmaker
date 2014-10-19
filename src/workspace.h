@@ -31,14 +31,14 @@ typedef struct WWorkspace {
 
 void wWorkspaceMake(WScreen *scr, int count);
 int wWorkspaceNew(WScreen *scr);
-int wGetWorkspaceNumber(const char *value);
+int wGetWorkspaceNumber(WScreen *scr, const char *value);
 Bool wWorkspaceDelete(WScreen *scr, int workspace);
 void wWorkspaceChange(WScreen *scr, int workspace);
 void wWorkspaceForceChange(WScreen *scr, int workspace);
 WMenu *wWorkspaceMenuMake(WScreen *scr, Bool titled);
-void wWorkspaceMenuUpdate(WMenu *menu);
+void wWorkspaceMenuUpdate(WScreen *scr, WMenu *menu);
 void wWorkspaceMenuEdit(WScreen *scr);
-void wWorkspaceSaveState(WMPropList *old_state);
+void wWorkspaceSaveState(WScreen *scr, WMPropList *old_state);
 void wWorkspaceRestoreState(WScreen *scr);
 void wWorkspaceRename(WScreen *scr, int workspace, const char *name);
 void wWorkspaceRelativeChange(WScreen *scr, int amount);

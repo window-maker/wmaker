@@ -1764,7 +1764,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 			char *name;
 			int number = entry_no - 3; /* Entries "New", "Destroy Last" and "Last Used" appear before workspaces */
 
-			name = wstrdup(w_global.workspace.array[number]->name);
+			name = wstrdup(scr->workspaces[number]->name);
 			snprintf(buffer, sizeof(buffer), _("Type the name for workspace %i:"), number + 1);
 
 			wMenuUnmap(scr->root_menu);
@@ -2277,16 +2277,16 @@ void wMenuSaveState(WScreen * scr)
 	if (saveMenuRecurs(menus, scr, scr->root_menu))
 		save_menus = 1;
 
-	if (w_global.workspace.menu && w_global.workspace.menu->flags.buttoned) {
+	if (scr->workspace_menu && scr->workspace_menu->flags.buttoned) {
 		key = WMCreatePLString("WorkspaceMenu");
-		saveMenuInfo(menus, w_global.workspace.menu, key);
+		saveMenuInfo(menus, scr->workspace_menu, key);
 		WMReleasePropList(key);
 		save_menus = 1;
 	}
 
 	if (save_menus) {
 		key = WMCreatePLString("Menus");
-		WMPutInPLDictionary(w_global.session_state, key, menus);
+		WMPutInPLDictionary(scr->session_state, key, menus);
 		WMReleasePropList(key);
 	}
 	WMReleasePropList(menus);
@@ -2489,11 +2489,12 @@ void wMenuRestoreState(WScreen * scr)
 {
 	WMPropList *menus, *menu, *key, *skey;
 
-	if (!w_global.session_state)
+	if (!scr->session_state) {
 		return;
+	}
 
 	key = WMCreatePLString("Menus");
-	menus = WMGetFromPLDictionary(w_global.session_state, key);
+	menus = WMGetFromPLDictionary(scr->session_state, key);
 	WMReleasePropList(key);
 
 	if (!menus)

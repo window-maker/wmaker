@@ -174,9 +174,9 @@ static void renameCallback(WMenu *menu, WMenuEntry *entry)
 
 	assert(entry->clientdata != NULL);
 
-	wspace = w_global.workspace.current;
+	wspace = dock->screen_ptr->current_workspace;
 
-	name = wstrdup(w_global.workspace.array[wspace]->name);
+	name = wstrdup(dock->screen_ptr->workspaces[wspace]->name);
 
 	snprintf(buffer, sizeof(buffer), _("Type the name for workspace %i:"), wspace + 1);
 	if (wInputDialog(dock->screen_ptr, _("Rename Workspace"), buffer, &name))
@@ -539,7 +539,7 @@ static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 	selectedIcons = getSelected(dock);
 
 	if (!WMGetArrayItemCount(selectedIcons)
-	    && clickedIcon != w_global.clip.icon) {
+	    && clickedIcon != dock->screen_ptr->clip_icon) {
 		char *command = NULL;
 
 		if (!clickedIcon->command && !clickedIcon->editing) {
@@ -608,8 +608,8 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 
 			if (!wPreferences.flags.noclip) {
 				int i;
-				for (i = 0; i < w_global.workspace.count; i++)
-					w_global.workspace.array[i]->clip->attract_icons = False;
+				for (i = 0; i < scr->workspace_count; i++)
+					scr->workspaces[ i ]->clip->attract_icons = False;
 					/* dock menu will be updated later, when opened */
 			}
 
@@ -653,7 +653,7 @@ static void attractIconsCallback(WMenu *menu, WMenuEntry *entry)
 	assert(entry->clientdata != NULL);
 	clip = clickedIcon->dock;
 
-	aicon = w_global.app_icon_list;
+	aicon = clip->screen_ptr->app_icon_list;
 
 	while (aicon) {
 		if (!aicon->docked && wDockFindFreeSlot(clip, &x, &y)) {
@@ -824,8 +824,8 @@ static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name)
 
 	switch(type) {
 	case WM_CLIP:
-		if (w_global.clip.icon)
-			return w_global.clip.icon;
+		if (scr->clip_icon)
+			return scr->clip_icon;
 
 		btn = wAppIconCreateForDock(scr, NULL, "Logo", "WMClip", TILE_CLIP);
 		btn->icon->core->descriptor.handle_expose = clipIconExpose;
@@ -860,7 +860,7 @@ static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name)
 	btn->docked = 1;
 	if (type == WM_CLIP ||
 		(type == WM_DOCK && wPreferences.flags.clip_merged_in_dock))
-		w_global.clip.icon = btn;
+		scr->clip_icon = btn;
 
 	return btn;
 }
@@ -868,6 +868,7 @@ static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name)
 static void switchWSCommand(WMenu *menu, WMenuEntry *entry)
 {
 	WAppIcon *btn, *icon = (WAppIcon *) entry->clientdata;
+	WScreen *scr = icon->icon->core->screen_ptr;
 	WDock *src, *dest;
 	WMArray *selectedIcons;
 	int x, y;
@@ -875,10 +876,11 @@ static void switchWSCommand(WMenu *menu, WMenuEntry *entry)
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) menu;
 
-	if (entry->order == w_global.workspace.current)
+	if (entry->order == scr->current_workspace)
 		return;
+
 	src = icon->dock;
-	dest = w_global.workspace.array[entry->order]->clip;
+	dest = scr->workspaces[entry->order]->clip;
 
 	selectedIcons = getSelected(src);
 
@@ -891,7 +893,7 @@ static void switchWSCommand(WMenu *menu, WMenuEntry *entry)
 				XUnmapWindow(dpy, btn->icon->core->window);
 			}
 		}
-	} else if (icon != w_global.clip.icon) {
+	} else if (icon != scr->clip_icon) {
 		if (wDockFindFreeSlot(dest, &x, &y)) {
 			wDockMoveIconBetweenDocks(src, dest, icon, x, y);
 			XUnmapWindow(dpy, icon->icon->core->window);
@@ -945,30 +947,31 @@ static void launchDockedApplication(WAppIcon *btn, Bool withSelection)
 
 static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 {
+	WScreen *scr = menu->frame->screen_ptr;
 	char title[MAX_WORKSPACENAME_WIDTH + 1];
 	int i;
 
 	if (!menu || !icon)
 		return;
 
-	for (i = 0; i < w_global.workspace.count; i++) {
+	for (i = 0; i < scr->workspace_count; i++) {
 		if (i < menu->entry_no) {
-			if (strcmp(menu->entries[i]->text, w_global.workspace.array[i]->name) != 0) {
+			if (strcmp(menu->entries[i]->text, scr->workspaces[i]->name) != 0) {
 				wfree(menu->entries[i]->text);
-				strcpy(title, w_global.workspace.array[i]->name);
+				strcpy(title, scr->workspaces[i]->name);
 				menu->entries[i]->text = wstrdup(title);
 				menu->flags.realized = 0;
 			}
 			menu->entries[i]->clientdata = (void *)icon;
 		} else {
-			strcpy(title, w_global.workspace.array[i]->name);
+			strcpy(title, scr->workspaces[i]->name);
 
 			wMenuAddCallback(menu, title, switchWSCommand, (void *)icon);
 
 			menu->flags.realized = 0;
 		}
 
-		if (i == w_global.workspace.current)
+		if (i == scr->current_workspace)
 			wMenuSetEnabled(menu, i, False);
 		else
 			wMenuSetEnabled(menu, i, True);
@@ -986,7 +989,7 @@ static WMenu *makeWorkspaceMenu(WScreen *scr)
 	if (!menu)
 		wwarning(_("could not create workspace submenu for Clip menu"));
 
-	wMenuAddCallback(menu, "", switchWSCommand, (void *)w_global.clip.icon);
+	wMenuAddCallback(menu, "", switchWSCommand, (void *)scr->clip_icon);
 
 	menu->flags.realized = 0;
 	wMenuRealize(menu);
@@ -1208,18 +1211,18 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 	WMenu *menu;
 	WMenuEntry *entry;
 
-	if (type == WM_CLIP && w_global.clip.menu)
-		return w_global.clip.menu;
+	if (type == WM_CLIP && scr->clip_menu)
+		return scr->clip_menu;
 
-	if (type == WM_DRAWER && w_global.dock.drawer_menu)
-		return w_global.dock.drawer_menu;
+	if (type == WM_DRAWER && scr->drawer_menu)
+		return scr->drawer_menu;
 
 	menu = wMenuCreate(scr, NULL, False);
 	if (type == WM_DOCK) {
 		entry = wMenuAddCallback(menu, _("Dock position"), NULL, NULL);
-		if (w_global.dock.pos_menu == NULL)
-			w_global.dock.pos_menu = makeDockPositionMenu(scr);
-		wMenuEntrySetCascade(menu, entry, w_global.dock.pos_menu);
+		if (scr->dock_pos_menu == NULL)
+			scr->dock_pos_menu = makeDockPositionMenu(scr);
+		wMenuEntrySetCascade(menu, entry, scr->dock_pos_menu);
 
 		if (!wPreferences.flags.nodrawer) {
 			entry = wMenuAddCallback(menu, _("Add a drawer"), addADrawerCallback, NULL);
@@ -1230,10 +1233,10 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 		else /* if (type == WM_DRAWER) */
 			entry = wMenuAddCallback(menu, _("Drawer options"), NULL, NULL);
 
-		if (w_global.clip.opt_menu == NULL)
-			w_global.clip.opt_menu = makeClipOptionsMenu(scr);
+		if (scr->clip_options == NULL)
+			scr->clip_options = makeClipOptionsMenu(scr);
 
-		wMenuEntrySetCascade(menu, entry, w_global.clip.opt_menu);
+		wMenuEntrySetCascade(menu, entry, scr->clip_options);
 
 		 /* The same menu is used for the dock and its appicons. If the menu
 		  * entry text is different between the two contexts, or if it can
@@ -1262,9 +1265,9 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 			entry = wMenuAddCallback(menu, _("Move Icon To"), NULL, NULL);
 			wfree(entry->text);
 			entry->text = _("Move Icon To"); /* can be: Move Icons to */
-			w_global.clip.submenu = makeWorkspaceMenu(scr);
-			if (w_global.clip.submenu)
-				wMenuEntrySetCascade(menu, entry, w_global.clip.submenu);
+			scr->clip_submenu = makeWorkspaceMenu(scr);
+			if (scr->clip_submenu)
+				wMenuEntrySetCascade(menu, entry, scr->clip_submenu);
 		}
 
 		entry = wMenuAddCallback(menu, _("Remove Icon"), removeIconsCallback, NULL);
@@ -1289,10 +1292,10 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 	entry->text = _("Kill"); /* can be: Remove drawer */
 
 	if (type == WM_CLIP)
-		w_global.clip.menu = menu;
+		scr->clip_menu = menu;
 
 	if (type == WM_DRAWER)
-		w_global.dock.drawer_menu = menu;
+		scr->drawer_menu = menu;
 
 	return menu;
 }
@@ -1386,11 +1389,10 @@ void wDockDestroy(WDock *dock)
 	wfree(dock);
 }
 
-void wClipIconPaint(void)
+void wClipIconPaint(WAppIcon *aicon)
 {
-	WAppIcon *aicon = w_global.clip.icon;
 	WScreen *scr = aicon->icon->core->screen_ptr;
-	WWorkspace *workspace = w_global.workspace.array[w_global.workspace.current];
+	WWorkspace *workspace = scr->workspaces[scr->current_workspace];
 	WMColor *color;
 	Window win = aicon->icon->core->window;
 	int length, nlength;
@@ -1402,7 +1404,7 @@ void wClipIconPaint(void)
 	length = strlen(workspace->name);
 	ws_name = wmalloc(length + 1);
 	snprintf(ws_name, length + 1, "%s", workspace->name);
-	snprintf(ws_number, sizeof(ws_number), "%i", w_global.workspace.current + 1);
+	snprintf(ws_number, sizeof(ws_number), "%i", scr->current_workspace + 1);
 	nlength = strlen(ws_number);
 
 	if (wPreferences.flags.noclip || !workspace->clip->collapsed)
@@ -1436,13 +1438,13 @@ static void clipIconExpose(WObjDescriptor *desc, XEvent *event)
 	(void) desc;
 	(void) event;
 
-	wClipIconPaint();
+	wClipIconPaint(desc->parent);
 }
 
 static void dockIconPaint(WAppIcon *btn)
 {
-	if (btn == w_global.clip.icon) {
-		wClipIconPaint();
+	if (btn == btn->icon->core->screen_ptr->clip_icon) {
+		wClipIconPaint(btn);
 	} else if (wIsADrawer(btn)) {
 		wDrawerIconPaint(btn);
 	} else {
@@ -1479,7 +1481,7 @@ static WMPropList *make_icon_state(WAppIcon *btn)
 
 		buggy = btn->buggy_app ? dYes : dNo;
 
-		if (!wPreferences.flags.clip_merged_in_dock && btn == w_global.clip.icon)
+		if (!wPreferences.flags.clip_merged_in_dock && btn == btn->icon->core->screen_ptr->clip_icon)
 			snprintf(buffer, sizeof(buffer), "%i,%i", btn->x_pos, btn->y_pos);
 		else
 			snprintf(buffer, sizeof(buffer), "%hi,%hi", btn->xindex, btn->yindex);
@@ -1602,23 +1604,25 @@ void wDockSaveState(WScreen *scr, WMPropList *old_state)
 		WMReleasePropList(keys);
 	}
 
-	WMPutInPLDictionary(w_global.session_state, dDock, dock_state);
+	WMPutInPLDictionary(scr->session_state, dDock, dock_state);
+
 	WMReleasePropList(dock_state);
 }
 
-void wClipSaveState(void)
+void wClipSaveState(WScreen *scr)
 {
 	WMPropList *clip_state;
 
-	clip_state = make_icon_state(w_global.clip.icon);
+	clip_state = make_icon_state(scr->clip_icon);
 
-	WMPutInPLDictionary(w_global.session_state, dClip, clip_state);
+	WMPutInPLDictionary(scr->session_state, dClip, clip_state);
+
 	WMReleasePropList(clip_state);
 }
 
-WMPropList *wClipSaveWorkspaceState(int workspace)
+WMPropList *wClipSaveWorkspaceState(WScreen *scr, int workspace)
 {
-	return dockSaveState(w_global.workspace.array[workspace]->clip);
+	return dockSaveState(scr->workspaces[workspace]->clip);
 }
 
 static Bool getBooleanDockValue(WMPropList *value, WMPropList *key)
@@ -1988,8 +1992,8 @@ WDock *wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
 		 * incremented in the loop above.
 		 */
 	} else if (old_top != dock->icon_array[0]) {
-		if (old_top == w_global.clip.icon) /* TODO dande: understand the logic */
-			w_global.clip.icon = dock->icon_array[0];
+		if (old_top == scr->clip_icon) // TODO dande: understand the logic
+			scr->clip_icon = dock->icon_array[0];
 
 		wAppIconDestroy(old_top);
 	}
@@ -2054,7 +2058,7 @@ static WDock *findDock(WScreen *scr, XEvent *event, int *icon_pos)
 			}
 		}
 	}
-	if (*icon_pos < 0 && (dock = w_global.workspace.array[w_global.workspace.current]->clip) != NULL) {
+	if (*icon_pos < 0 && (dock = scr->workspaces[scr->current_workspace]->clip) != NULL) {
 		for (i = 0; i < dock->max_icons; i++) {
 			if (dock->icon_array[i]
 			    && dock->icon_array[i]->icon->core->window == event->xclient.window) {
@@ -2601,12 +2605,12 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 		int neighbours = 0;
 		int start, stop, k;
 
-		start = icon->omnipresent ? 0 : w_global.workspace.current;
-		stop = icon->omnipresent ? w_global.workspace.count : start + 1;
+		start = icon->omnipresent ? 0 : scr->current_workspace;
+		stop = icon->omnipresent ? scr->workspace_count : start + 1;
 
 		aicon = NULL;
 		for (k = start; k < stop; k++) {
-			WDock *tmp = w_global.workspace.array[k]->clip;
+			WDock *tmp = scr->workspaces[k]->clip;
 			if (!tmp)
 				continue;
 			for (i = 0; i < tmp->max_icons; i++) {
@@ -2620,7 +2624,7 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 				break;
 		}
 		for (k = start; k < stop; k++) {
-			WDock *tmp = w_global.workspace.array[k]->clip;
+			WDock *tmp = scr->workspaces[k]->clip;
 			if (!tmp)
 				continue;
 			for (i = 0; i < tmp->max_icons; i++) {
@@ -2731,7 +2735,7 @@ Bool wDockFindFreeSlot(WDock *dock, int *x_pos, int *y_pos)
 		return True;
 	}
 
-	if (dock->type == WM_CLIP && dock != w_global.workspace.array[w_global.workspace.current]->clip)
+	if (dock->type == WM_CLIP && dock != scr->workspaces[scr->current_workspace]->clip)
 		extra_count = scr->global_icon_count;
 
 	/* if the dock is full */
@@ -3083,7 +3087,7 @@ static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state)
 			if (btn->dock == scr->dock || btn->dock->type == WM_DRAWER || btn->omnipresent)
 				state->workspace = -1;
 			else
-				state->workspace = w_global.workspace.current;
+				state->workspace = scr->current_workspace;
 		}
 		wWindowAddSavedState(btn->wm_instance, btn->wm_class, cmdline, pid, state);
 		wAddDeathHandler(pid, (WDeathHandler *) trackDeadProcess, btn->dock);
@@ -3295,16 +3299,16 @@ void wDockTrackWindowLaunch(WDock *dock, Window window)
 void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 {
 	if (!wPreferences.flags.noclip) {
-		w_global.clip.icon->dock = w_global.workspace.array[workspace]->clip;
-		if (w_global.workspace.current != workspace) {
-			WDock *old_clip = w_global.workspace.array[w_global.workspace.current]->clip;
+		scr->clip_icon->dock = scr->workspaces[workspace]->clip;
+		if (scr->current_workspace != workspace) {
+			WDock *old_clip = scr->workspaces[scr->current_workspace]->clip;
 			WAppIconChain *chain = scr->global_icons;
 
 			while (chain) {
 				wDockMoveIconBetweenDocks(chain->aicon->dock,
-						     w_global.workspace.array[workspace]->clip,
+						     scr->workspaces[workspace]->clip,
 						     chain->aicon, chain->aicon->xindex, chain->aicon->yindex);
-				if (w_global.workspace.array[workspace]->clip->collapsed)
+				if (scr->workspaces[workspace]->clip->collapsed)
 					XUnmapWindow(dpy, chain->aicon->icon->core->window);
 				chain = chain->next;
 			}
@@ -3324,7 +3328,7 @@ void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 				}
 				old_clip->collapsed = 1;
 			}
-			wDockShowIcons(w_global.workspace.array[workspace]->clip);
+			wDockShowIcons(scr->workspaces[workspace]->clip);
 		}
 	}
 }
@@ -3433,7 +3437,7 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 
 	if (dock->type == WM_DOCK) {
 		/* Dock position menu */
-		updateDockPositionMenu(w_global.dock.pos_menu, dock);
+		updateDockPositionMenu(scr->dock_pos_menu, dock);
 		dock->menu->flags.realized = 0;
 		if (!wPreferences.flags.nodrawer) {
 			/* add a drawer */
@@ -3443,15 +3447,15 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 		}
 	} else {
 		/* clip/drawer options */
-		if (w_global.clip.opt_menu)
-			updateClipOptionsMenu(w_global.clip.opt_menu, dock);
+		if (scr->clip_options)
+			updateClipOptionsMenu(scr->clip_options, dock);
 
 		n_selected = numberOfSelectedIcons(dock);
 
 		if (dock->type == WM_CLIP) {
 			/* Rename Workspace */
 			entry = dock->menu->entries[++index];
-			if (aicon == w_global.clip.icon) {
+			if (aicon == scr->clip_icon) {
 				entry->callback = renameCallback;
 				entry->clientdata = dock;
 				entry->flags.indicator = 0;
@@ -3475,7 +3479,7 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 		entry = dock->menu->entries[++index];
 		entry->clientdata = aicon;
 		entry->flags.indicator_on = aicon->icon->selected;
-		wMenuSetEnabled(dock->menu, index, aicon != w_global.clip.icon && !wIsADrawer(aicon));
+		wMenuSetEnabled(dock->menu, index, aicon != scr->clip_icon && !wIsADrawer(aicon));
 
 		/* select/unselect all icons */
 		entry = dock->menu->entries[++index];
@@ -3505,8 +3509,8 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 			else
 				entry->text = _("Move Icon To");
 
-			if (w_global.clip.submenu)
-				updateWorkspaceMenu(w_global.clip.submenu, aicon);
+			if (scr->clip_submenu)
+				updateWorkspaceMenu(scr->clip_submenu, aicon);
 
 			wMenuSetEnabled(dock->menu, index, !aicon->omnipresent);
 		}
@@ -3616,7 +3620,7 @@ static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 		unhideHere = (event->xbutton.state & ShiftMask);
 
 		/* go to the last workspace that the user worked on the app */
-		if (wapp->last_workspace != w_global.workspace.current && !unhideHere)
+		if (wapp->last_workspace != dock->screen_ptr->current_workspace && !unhideHere)
 			wWorkspaceChange(dock->screen_ptr, wapp->last_workspace);
 
 		wUnhideApplication(wapp, event->xbutton.button == Button2, unhideHere);
@@ -3628,7 +3632,7 @@ static void iconDblClick(WObjDescriptor *desc, XEvent *event)
 			if (event->xbutton.state & MOD_MASK) {
 				/* raise/lower dock */
 				toggleLowered(dock);
-			} else if (btn == w_global.clip.icon) {
+			} else if (btn == dock->screen_ptr->clip_icon) {
 				if (getClipButton(event->xbutton.x, event->xbutton.y) != CLIP_IDLE)
 					handleClipChangeWorkspace(dock->screen_ptr, event);
 				else if (wPreferences.flags.clip_merged_in_dock) {
@@ -3878,14 +3882,14 @@ static void handleClipChangeWorkspace(WScreen *scr, XEvent *event)
 	XEvent ev;
 	int done, direction, new_ws;
 	int new_dir;
-	WDock *clip = w_global.clip.icon->dock;
+	WDock *clip = scr->clip_icon->dock;
 
 	direction = getClipButton(event->xbutton.x, event->xbutton.y);
 
 	clip->lclip_button_pushed = direction == CLIP_REWIND;
 	clip->rclip_button_pushed = direction == CLIP_FORWARD;
 
-	wClipIconPaint();
+	wClipIconPaint(scr->clip_icon);
 	done = 0;
 	while (!done) {
 		WMMaskEvent(dpy, ExposureMask | ButtonMotionMask | ButtonReleaseMask | ButtonPressMask, &ev);
@@ -3900,7 +3904,7 @@ static void handleClipChangeWorkspace(WScreen *scr, XEvent *event)
 				direction = new_dir;
 				clip->lclip_button_pushed = direction == CLIP_REWIND;
 				clip->rclip_button_pushed = direction == CLIP_FORWARD;
-				wClipIconPaint();
+				wClipIconPaint(scr->clip_icon);
 			}
 			break;
 
@@ -3919,20 +3923,20 @@ static void handleClipChangeWorkspace(WScreen *scr, XEvent *event)
 	new_ws = wPreferences.ws_advance || (event->xbutton.state & ControlMask);
 
 	if (direction == CLIP_FORWARD) {
-		if (w_global.workspace.current < w_global.workspace.count - 1)
-			wWorkspaceChange(scr, w_global.workspace.current + 1);
-		else if (new_ws && w_global.workspace.current < MAX_WORKSPACES - 1)
-			wWorkspaceChange(scr, w_global.workspace.current + 1);
+		if (scr->current_workspace < scr->workspace_count - 1)
+			wWorkspaceChange(scr, scr->current_workspace + 1);
+		else if (new_ws && scr->current_workspace < MAX_WORKSPACES - 1)
+			wWorkspaceChange(scr, scr->current_workspace + 1);
 		else if (wPreferences.ws_cycle)
 			wWorkspaceChange(scr, 0);
 	} else if (direction == CLIP_REWIND) {
-		if (w_global.workspace.current > 0)
-			wWorkspaceChange(scr, w_global.workspace.current - 1);
-		else if (w_global.workspace.current == 0 && wPreferences.ws_cycle)
-			wWorkspaceChange(scr, w_global.workspace.count - 1);
+		if (scr->current_workspace > 0)
+			wWorkspaceChange(scr, scr->current_workspace - 1);
+		else if (scr->current_workspace == 0 && wPreferences.ws_cycle)
+			wWorkspaceChange(scr, scr->workspace_count - 1);
 	}
 
-	wClipIconPaint();
+	wClipIconPaint(scr->clip_icon);
 }
 
 static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
@@ -3964,7 +3968,7 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 		else
 			wDockRaise(dock);
 
-		if ((event->xbutton.state & ShiftMask) && aicon != w_global.clip.icon && dock->type != WM_DOCK) {
+		if ((event->xbutton.state & ShiftMask) && aicon != scr->clip_icon && dock->type != WM_DOCK) {
 			wIconSelect(aicon->icon);
 			return;
 		}
@@ -3980,15 +3984,15 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 			if (wPreferences.single_click && !hasMoved)
 				iconDblClick(desc, event);
 		}
-	} else if (event->xbutton.button == Button2 && aicon == w_global.clip.icon) {
-		if (!w_global.clip.ws_menu)
-			w_global.clip.ws_menu = wWorkspaceMenuMake(scr, False);
+	} else if (event->xbutton.button == Button2 && aicon == scr->clip_icon) {
+		if (!scr->clip_ws_menu)
+			scr->clip_ws_menu = wWorkspaceMenuMake(scr, False);
 
-		if (w_global.clip.ws_menu) {
-			WMenu *wsMenu = w_global.clip.ws_menu;
+		if (scr->clip_ws_menu) {
+			WMenu *wsMenu = scr->clip_ws_menu;
 			int xpos;
 
-			wWorkspaceMenuUpdate(wsMenu);
+			wWorkspaceMenuUpdate(scr, wsMenu);
 
 			xpos = event->xbutton.x_root - wsMenu->frame->core->width / 2 - 1;
 			if (xpos < 0) {
@@ -4003,7 +4007,7 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event)
 			(*desc->handle_mousedown) (desc, event);
 		}
 	} else if (event->xbutton.button == Button2 && dock->type == WM_CLIP &&
-		   (event->xbutton.state & ShiftMask) && aicon != w_global.clip.icon) {
+		   (event->xbutton.state & ShiftMask) && aicon != scr->clip_icon) {
 		wClipMakeIconOmnipresent(aicon, !aicon->omnipresent);
 	} else if (event->xbutton.button == Button3) {
 		if (event->xbutton.send_event &&
@@ -4182,8 +4186,8 @@ static Bool iconCanBeOmnipresent(WAppIcon *aicon)
 	WAppIcon *btn;
 	int i, j;
 
-	for (i = 0; i < w_global.workspace.count; i++) {
-		clip = w_global.workspace.array[i]->clip;
+	for (i = 0; i < scr->workspace_count; i++) {
+		clip = scr->workspaces[i]->clip;
 
 		if (clip == aicon->dock)
 			continue;
@@ -4207,7 +4211,7 @@ int wClipMakeIconOmnipresent(WAppIcon *aicon, int omnipresent)
 	WAppIconChain *new_entry, *tmp, *tmp1;
 	int status = WO_SUCCESS;
 
-	if ((scr->dock && aicon->dock == scr->dock) || aicon == w_global.clip.icon)
+	if ((scr->dock && aicon->dock == scr->dock) || aicon == scr->clip_icon)
 		return WO_NOT_APPLICABLE;
 
 	if (aicon->omnipresent == omnipresent)
@@ -4956,7 +4960,7 @@ void wDrawersSaveState(WScreen *scr)
 		WMAddToPLArray(all_drawers, drawer_state);
 		WMReleasePropList(drawer_state);
 	}
-	WMPutInPLDictionary(w_global.session_state, dDrawers, all_drawers);
+	WMPutInPLDictionary(scr->session_state, dDrawers, all_drawers);
 	WMReleasePropList(all_drawers);
 }
 
@@ -4968,10 +4972,10 @@ void wDrawersRestoreState(WScreen *scr)
 
 	make_keys();
 
-	if (w_global.session_state == NULL)
+	if (scr->session_state == NULL)
 		return;
 
-	all_drawers = WMGetFromPLDictionary(w_global.session_state, dDrawers);
+	all_drawers = WMGetFromPLDictionary(scr->session_state, dDrawers);
 	if (!all_drawers)
 		return;
 

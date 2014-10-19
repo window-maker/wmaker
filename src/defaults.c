@@ -1229,21 +1229,21 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 			WMPostNotificationName(WNIconTileSettingsChanged, NULL, NULL);
 
 		if (needs_refresh & REFRESH_WORKSPACE_MENU) {
-			if (w_global.workspace.menu)
-				wWorkspaceMenuUpdate(w_global.workspace.menu);
-			if (w_global.clip.ws_menu)
-				wWorkspaceMenuUpdate(w_global.clip.ws_menu);
-			if (w_global.workspace.submenu)
-				w_global.workspace.submenu->flags.realized = 0;
-			if (w_global.clip.submenu)
-				w_global.clip.submenu->flags.realized = 0;
+			if (scr->workspace_menu)
+				wWorkspaceMenuUpdate(scr, scr->workspace_menu);
+			if (scr->clip_ws_menu)
+				wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
+			if (scr->workspace_submenu)
+				scr->workspace_submenu->flags.realized = 0;
+			if (scr->clip_submenu)
+				scr->clip_submenu->flags.realized = 0;
 		}
 	}
 }
 
 void wDefaultUpdateIcons(WScreen *scr)
 {
-	WAppIcon *aicon = w_global.app_icon_list;
+	WAppIcon *aicon = scr->app_icon_list;
 	WDrawerChain *dc;
 	WWindow *wwin = scr->focused_window;
 
@@ -1255,7 +1255,7 @@ void wDefaultUpdateIcons(WScreen *scr)
 	}
 
 	if (!wPreferences.flags.noclip || wPreferences.flags.clip_merged_in_dock)
-		wClipIconPaint();
+		wClipIconPaint(scr->clip_icon);
 
 	for (dc = scr->drawers; dc != NULL; dc = dc->next)
 		wDrawerIconPaint(dc->adrawer->icon_array[0]);
@@ -2546,8 +2546,8 @@ static int setStickyIcons(WScreen * scr, WDefaultEntry * entry, void *bar, void 
 	(void) bar;
 	(void) foo;
 
-	if (w_global.workspace.array) {
-		wWorkspaceForceChange(scr, w_global.workspace.current);
+	if (scr->workspaces) {
+		wWorkspaceForceChange(scr, scr->current_workspace);
 		wArrangeIcons(scr, False);
 	}
 	return 0;
@@ -2710,10 +2710,10 @@ static int setLargeDisplayFont(WScreen *scr, WDefaultEntry *entry, void *tdata, 
 	(void) entry;
 	(void) foo;
 
-	if (w_global.workspace.font_for_name)
-		WMReleaseFont(w_global.workspace.font_for_name);
+	if (scr->workspace_name_font)
+		WMReleaseFont(scr->workspace_name_font);
 
-	w_global.workspace.font_for_name = font;
+	scr->workspace_name_font = font;
 
 	return 0;
 }
@@ -3082,7 +3082,7 @@ static int setWorkspaceBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 			if (str) {
 				SendHelperMessage(scr, 'S', 0, str);
 				wfree(str);
-				SendHelperMessage(scr, 'C', w_global.workspace.current + 1, NULL);
+				SendHelperMessage(scr, 'C', scr->current_workspace + 1, NULL);
 			} else {
 				SendHelperMessage(scr, 'U', 0, NULL);
 			}
