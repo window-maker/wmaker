@@ -48,7 +48,7 @@ static const char *terminal;
 static fct_parse_menufile *parse;
 static fct_validate_filename *validateFilename;
 
-extern char *__progname;
+static const char *prog_name;
 
 /* Global Variables from wmmenugen.h */
 WMTreeNode *menu;
@@ -60,6 +60,7 @@ int main(int argc, char **argv)
 	int i;
 	int *previousDepth;
 
+	prog_name = argv[0];
 	plMenuNodes = WMCreateArray(8); /* grows on demand */
 	menu = (WMTreeNode *)NULL;
 	parse = NULL;
@@ -77,7 +78,7 @@ int main(int argc, char **argv)
 
 	if (argc < 3) {
 		fprintf(stderr, "Usage: %s -parser:<parser> fspec [fpsec...] "
-			"[-parser:<parser> fspec [fpsec...]...]\n", __progname);
+			"[-parser:<parser> fspec [fpsec...]...]\n", prog_name);
 		fputs(  "Known parsers: xdg wmconfig\n", stderr);
 		return 1;
 	}
@@ -97,28 +98,28 @@ int main(int argc, char **argv)
 				parse = &parse_wmconfig;
 				validateFilename = &wmconfig_validate_file;
 			} else {
-				fprintf(stderr, "%s: Unknown parser \"%s\"\n", __progname, argv[i] + 8);
+				fprintf(stderr, "%s: Unknown parser \"%s\"\n", prog_name, argv[i] + 8);
 			}
 			continue;
 		}
 
 		if (parse) {
 			if (stat(argv[i], &st) == -1) {
-				fprintf(stderr, "%s: unable to stat \"%s\"\n", __progname, argv[i]);
+				fprintf(stderr, "%s: unable to stat \"%s\"\n", prog_name, argv[i]);
 			} else if (S_ISREG(st.st_mode)) {
 				parse(argv[i], addWMMenuEntryCallback);
 			} else if (S_ISDIR(st.st_mode)) {
 				nftw(argv[i], dirParseFunc, 16, FTW_PHYS);
 			} else {
-				fprintf(stderr, "%s: \"%s\" is not a file or directory\n", __progname, argv[i]);
+				fprintf(stderr, "%s: \"%s\" is not a file or directory\n", prog_name, argv[i]);
 			}
 		} else {
-			fprintf(stderr, "%s: argument \"%s\" with no valid parser\n", __progname, argv[i]);
+			fprintf(stderr, "%s: argument \"%s\" with no valid parser\n", prog_name, argv[i]);
 		}
 	}
 
 	if (!menu) {
-		fprintf(stderr, "%s: parsers failed to create a valid menu\n", __progname);
+		fprintf(stderr, "%s: parsers failed to create a valid menu\n", prog_name);
 		return 1;
 	}
 
@@ -127,7 +128,7 @@ int main(int argc, char **argv)
 
 	i = WMGetArrayItemCount(plMenuNodes);
 	if (i > 2) { /* more than one submenu unprocessed is almost certainly an error */
-		fprintf(stderr, "%s: unprocessed levels on the stack. fishy.\n", __progname);
+		fprintf(stderr, "%s: unprocessed levels on the stack. fishy.\n", prog_name);
 		return 1;
 	} else if (i > 1 ) { /* possibly the top-level attachment is not yet done */
 		WMPropList *first, *next;

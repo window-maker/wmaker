@@ -76,7 +76,7 @@ char *CursorOptions[] = {
 	NULL
 };
 
-extern char *__progname;
+static const char *prog_name;
 int ignoreFonts = 0;
 int ignoreCursors = 0;
 
@@ -359,7 +359,7 @@ static void hackStyle(WMPropList * style)
 
 static noreturn void print_help(int print_usage, int exitval)
 {
-	printf("Usage: %s [OPTIONS] FILE\n", __progname);
+	printf("Usage: %s [OPTIONS] FILE\n", prog_name);
 	if (print_usage) {
 		puts("Reads style/theme configuration from FILE and updates Window Maker.");
 		puts("");
@@ -392,10 +392,11 @@ int main(int argc, char **argv)
 		{ NULL,		0,			NULL,			0 }
 	};
 
+	prog_name = argv[0];
 	while ((ch = getopt_long(argc, argv, "hv", longopts, NULL)) != -1)
 		switch(ch) {
 			case 'v':
-				printf("%s (Window Maker %s)\n", __progname, VERSION);
+				printf("%s (Window Maker %s)\n", prog_name, VERSION);
 				return 0;
 				/* NOTREACHED */
 			case 'h':
@@ -431,7 +432,7 @@ int main(int argc, char **argv)
 	prop = WMReadPropListFromFile(path);
 	if (!prop) {
 		perror(path);
-		printf("%s: could not load WindowMaker configuration file.\n", __progname);
+		printf("%s: could not load WindowMaker configuration file.\n", prog_name);
 		return 1;
 	}
 
@@ -450,14 +451,14 @@ int main(int argc, char **argv)
 		strncat(buf, "/style", sizeof(buf) - strlen(buf) - 1);
 
 		if (stat(buf, &st) != 0 || !S_ISREG(st.st_mode)) {	/* maybe symlink too? */
-			printf("%s: %s: style file not found or not a file\n", __progname, buf);
+			printf("%s: %s: style file not found or not a file\n", prog_name, buf);
 			return 1;
 		}
 
 		style = WMReadPropListFromFile(buf);
 		if (!style) {
 			perror(buf);
-			printf("%s: could not load style file.\n", __progname);
+			printf("%s: could not load style file.\n", prog_name);
 			return 1;
 		}
 
@@ -480,13 +481,13 @@ int main(int argc, char **argv)
 		style = WMReadPropListFromFile(file);
 		if (!style) {
 			perror(file);
-			printf("%s:could not load style file.\n", __progname);
+			printf("%s:could not load style file.\n", prog_name);
 			return 1;
 		}
 	}
 
 	if (!WMIsPLDictionary(style)) {
-		printf("%s: '%s' is not a style file/theme\n", __progname, file);
+		printf("%s: '%s' is not a style file/theme\n", prog_name, file);
 		return 1;
 	}
 

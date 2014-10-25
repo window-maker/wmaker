@@ -44,11 +44,11 @@
 
 #include "../src/wconfig.h"
 
-extern char *__progname;
+static const char *prog_name;
 
 static noreturn void print_help(int print_usage, int exitval)
 {
-	printf("Usage: %s [OPTIONS] <domain> <key>\n", __progname);
+	printf("Usage: %s [OPTIONS] <domain> <key>\n", prog_name);
 	if (print_usage) {
 		puts("Read <key> from <domain>'s database");
 		puts("");
@@ -70,10 +70,11 @@ int main(int argc, char **argv)
 		{ NULL,		0,			NULL,			0 }
 	};
 
+	prog_name = argv[0];
 	while ((ch = getopt_long(argc, argv, "hv", longopts, NULL)) != -1)
 		switch(ch) {
 			case 'v':
-				printf("%s (Window Maker %s)\n", __progname, VERSION);
+				printf("%s (Window Maker %s)\n", prog_name, VERSION);
 				return 0;
 				/* NOTREACHED */
 			case 'h':

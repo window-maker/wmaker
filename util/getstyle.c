@@ -129,7 +129,7 @@ static char *font_options[] = {
 	NULL
 };
 
-extern char *__progname;
+static const char *prog_name;
 
 WMPropList *PixmapPath = NULL;
 
@@ -138,7 +138,7 @@ char *ThemePath = NULL;
 
 static noreturn void print_help(int print_usage, int exitval)
 {
-	printf("Usage: %s [-t] [-p] [-h] [-v] [file]\n", __progname);
+	printf("Usage: %s [-t] [-p] [-h] [-v] [file]\n", prog_name);
 	if (print_usage) {
 		puts("Retrieves style/theme configuration and outputs to ~/GNUstep/Library/WindowMaker/Themes/file.themed/style or to stdout");
 		puts("");
@@ -299,10 +299,11 @@ int main(int argc, char **argv)
 		{ NULL,			0,		NULL,	0 }
 	};
 
+	prog_name = argv[0];
 	while ((ch = getopt_long(argc, argv, "ptvh", longopts, NULL)) != -1)
 		switch(ch) {
 			case 'v':
-				printf("%s (Window Maker %s)\n", __progname, VERSION);
+				printf("%s (Window Maker %s)\n", prog_name, VERSION);
 				return 0;
 				/* NOTREACHED */
 			case 'h':
@@ -329,7 +330,7 @@ int main(int argc, char **argv)
 		style_file = argv[argc - 1];
 
 	if (make_pack && !style_file) {
-		printf("%s: you must supply a name for the theme pack\n", __progname);
+		printf("%s: you must supply a name for the theme pack\n", prog_name);
 		return 1;
 	}
 
@@ -339,7 +340,7 @@ int main(int argc, char **argv)
 
 	prop = WMReadPropListFromFile(path);
 	if (!prop) {
-		printf("%s: could not load WindowMaker configuration file \"%s\".\n", __progname, path);
+		printf("%s: could not load WindowMaker configuration file \"%s\".\n", prog_name, path);
 		return 1;
 	}
 

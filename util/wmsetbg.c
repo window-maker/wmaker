@@ -85,7 +85,7 @@ Bool xineStretch = False;
 Pixmap CurrentPixmap = None;
 char *PixmapPath = NULL;
 
-extern char *__progname;
+static const char *prog_name;
 
 typedef struct BackgroundTexture {
 	int refcount;
@@ -1152,7 +1152,7 @@ static char *getFullPixmapPath(const char *file)
 
 static void print_help(void)
 {
-	printf("Usage: %s [options] [image]\n", __progname);
+	printf("Usage: %s [options] [image]\n", prog_name);
 	puts("Sets the workspace background to the specified image or a texture and");
 	puts("optionally update Window Maker configuration");
 	puts("");
@@ -1247,6 +1247,7 @@ int main(int argc, char **argv)
 
 	WMInitializeApplication("wmsetbg", &argc, argv);
 
+	prog_name = argv[0];
 	for (i = 1; i < argc; i++) {
 		if (strcmp(argv[i], "-helper") == 0) {
 			helperMode = 1;
@@ -1324,7 +1325,7 @@ int main(int argc, char **argv)
 				quit(1);
 			}
 		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
-			printf("%s (Window Maker %s)\n", __progname, VERSION);
+			printf("%s (Window Maker %s)\n", prog_name, VERSION);
 			quit(0);
 		} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
 			print_help();
@@ -1332,14 +1333,14 @@ int main(int argc, char **argv)
 		} else if (argv[i][0] != '-') {
 			image_name = argv[i];
 		} else {
-			printf("%s: invalid argument '%s'\n", __progname, argv[i]);
-			printf("Try '%s --help' for more information\n", __progname);
+			printf("%s: invalid argument '%s'\n", prog_name, argv[i]);
+			printf("Try '%s --help' for more information\n", prog_name);
 			quit(1);
 		}
 	}
 	if (!image_name && !texture && !helperMode) {
-		printf("%s: you must specify a image file name or a texture\n", __progname);
-		printf("Try '%s --help' for more information\n", __progname);
+		printf("%s: you must specify a image file name or a texture\n", prog_name);
+		printf("Try '%s --help' for more information\n", prog_name);
 		quit(1);
 	}
 

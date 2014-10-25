@@ -35,11 +35,11 @@
 
 #define MAXDATA		(4*1024*1024)
 
-extern char *__progname;
+static const char *prog_name;
 
 static void print_help(void)
 {
-	printf("Usage: %s [OPTIONS] [FILE]\n", __progname);
+	printf("Usage: %s [OPTIONS] [FILE]\n", prog_name);
 	puts("Copies data from X selection or cutbuffer to FILE or stdout.");
 	puts("");
 	puts("  -display display         display to use");
@@ -157,13 +157,14 @@ int main(int argc, char **argv)
 	char *display_name = "";
 	char *selection_name = NULL;
 
+	prog_name = argv[0];
 	for (i = 1; i < argc; i++) {
 		if (argv[i][0] == '-') {
 			if (argv[i][1] == 'h' || strcmp(argv[i], "--help") == 0) {
 				print_help();
 				exit(0);
 			} else if (argv[i][1] == 'v' || strcmp(argv[i], "--version") == 0) {
-				printf("%s (Window Maker %s)\n", __progname, VERSION);
+				printf("%s (Window Maker %s)\n", prog_name, VERSION);
 				exit(0);
 			} else if (strcmp(argv[i], "-selection") == 0 || strcmp(argv[i], "--selection") == 0) {
 				if (i < argc - 1) {
@@ -183,28 +184,28 @@ int main(int argc, char **argv)
 					i++;
 					if (sscanf(argv[i], "%i", &buffer) != 1) {
 						fprintf(stderr, "%s: could not convert \"%s\" to int\n",
-							__progname, argv[i]);
+						        prog_name, argv[i]);
 						exit(1);
 					}
 					if (buffer < 0 || buffer > 7) {
-						fprintf(stderr, "%s: invalid buffer number %i\n", __progname, buffer);
+						fprintf(stderr, "%s: invalid buffer number %i\n", prog_name, buffer);
 						exit(1);
 					}
 				} else {
-					fprintf(stderr, "%s: invalid argument '%s'\n", __progname, argv[i]);
-					fprintf(stderr, "Try '%s --help' for more information.\n", __progname);
+					fprintf(stderr, "%s: invalid argument '%s'\n", prog_name, argv[i]);
+					fprintf(stderr, "Try '%s --help' for more information.\n", prog_name);
 					exit(1);
 				}
 			}
 		} else {
-			fprintf(stderr, "%s: invalid argument '%s'\n", __progname, argv[i]);
-			fprintf(stderr, "Try '%s --help' for more information.\n", __progname);
+			fprintf(stderr, "%s: invalid argument '%s'\n", prog_name, argv[i]);
+			fprintf(stderr, "Try '%s --help' for more information.\n", prog_name);
 			exit(1);
 		}
 	}
 	dpy = XOpenDisplay(display_name);
 	if (!dpy) {
-		fprintf(stderr, "%s: could not open display \"%s\"\n", __progname, XDisplayName(display_name));
+		fprintf(stderr, "%s: could not open display \"%s\"\n", prog_name, XDisplayName(display_name));
 		exit(1);
 	}
 

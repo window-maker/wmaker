@@ -31,7 +31,7 @@ static void find_and_write(const char *group, char *list[][2], int this_is_termi
 static void other_window_managers(void);
 static void print_help(int print_usage, int exitval);
 
-extern char *__progname;
+static const char *prog_name;
 
 char *path, *terminal = NULL;
 
@@ -54,10 +54,11 @@ int main(int argc, char *argv[])
 		{ NULL,			0,		NULL,	0 }
 	};
 
+	prog_name = argv[0];
 	while ((ch = getopt_long(argc, argv, "hv", longopts, NULL)) != -1)
 		switch (ch) {
 		case 'v':
-			printf("%s (Window Maker %s)\n", __progname, VERSION);
+			printf("%s (Window Maker %s)\n", prog_name, VERSION);
 			return 0;
 			/* NOTREACHED */
 		case 'h':
@@ -500,7 +501,7 @@ static void other_window_managers(void)
 
 noreturn void print_help(int print_usage, int exitval)
 {
-	printf("Usage: %s [-h] [-v]\n", __progname);
+	printf("Usage: %s [-h] [-v]\n", prog_name);
 	if (print_usage) {
 		puts("Writes a menu structure usable as ~/GNUstep/Defaults/WMRootMenu to stdout");
 		puts("");
