@@ -81,7 +81,11 @@ RImage *RLoadGIF(const char *file, int index)
 	}
 
 	if (gif->SWidth < 1 || gif->SHeight < 1) {
+#if (USE_GIF == 5) && (GIFLIB_MINOR >= 1)
+		DGifCloseFile(gif, NULL);
+#else
 		DGifCloseFile(gif);
+#endif
 		RErrorCode = RERR_BADIMAGEFILE;
 		return NULL;
 	}
@@ -216,7 +220,11 @@ RImage *RLoadGIF(const char *file, int index)
 		free(buffer);
 
 	if (gif)
+#if (USE_GIF == 5) && (GIFLIB_MINOR >= 1)
+		DGifCloseFile(gif, NULL);
+#else
 		DGifCloseFile(gif);
+#endif
 
 	return image;
 }
