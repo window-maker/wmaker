@@ -61,8 +61,10 @@
  * mechanism and define an internal macro appropriately. Please note that the macro are not considered being
  * part of the public API.
  */
-#if __GNUC__ >= 3
+#if __GNUC__ >= 4
 #define __wrlib_deprecated(msg)  __attribute__ ((deprecated(msg)))
+#elif __GNUC__ >= 3
+#define __wrlib_deprecated(msg)  __attribute__ ((deprecated))
 #else
 #define __wrlib_deprecated(msg)
 #endif
