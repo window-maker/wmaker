@@ -258,6 +258,12 @@ AC_CHECK_FUNCS(gethostname select poll strcasecmp strncasecmp \
 	       setsid mallinfo mkstemp sysconf)
 AC_SEARCH_LIBS([strerror], [cposix])
 
+dnl nanosleep is generally available in standard libc, although not always the
+dnl case. One known example is Solaris which needs -lrt
+AC_SEARCH_LIBS([nanosleep], [rt], [],
+    [AC_MSG_ERROR([function 'nanosleep' not found, please report to wmaker-dev@lists.windowmaker.org])])
+
+
 dnl Check for strlcat/strlcpy
 dnl =========================
 AC_ARG_WITH([libbsd],
