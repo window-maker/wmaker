@@ -77,13 +77,16 @@ typedef struct _Panel {
 
 #define THUMB_SIZE	16
 
-static const char *const placements[] = {
-	"auto",
-	"random",
-	"manual",
-	"cascade",
-	"smart",
-	"center"
+static const struct {
+	const char *db_value;
+	const char *label;
+} window_placements[] = {
+	{ "auto",     N_("Automatic") },
+	{ "random",   N_("Random")    },
+	{ "manual",   N_("Manual")    },
+	{ "cascade",  N_("Cascade")   },
+	{ "smart",    N_("Smart")     },
+	{ "center",   N_("Center")    }
 };
 
 static const struct {
@@ -158,23 +161,17 @@ static void resizeCallback(WMWidget * w, void *data)
 
 static int getPlacement(const char *str)
 {
+	int i;
+
 	if (!str)
 		return 0;
 
-	if (strcasecmp(str, "auto") == 0)
-		return 0;
-	else if (strcasecmp(str, "random") == 0)
-		return 1;
-	else if (strcasecmp(str, "manual") == 0)
-		return 2;
-	else if (strcasecmp(str, "cascade") == 0)
-		return 3;
-	else if (strcasecmp(str, "smart") == 0)
-		return 4;
-	else if (strcasecmp(str, "center") == 0)
-		return 5;
-	else
-		wwarning(_("bad option value %s in WindowPlacement. Using default value"), str);
+	for (i = 0; i < wlengthof(window_placements); i++) {
+		if (strcasecmp(str, window_placements[i].db_value) == 0)
+			return i;
+	}
+
+	wwarning(_("bad option value %s in WindowPlacement. Using default value"), str);
 	return 0;
 }
 
@@ -260,7 +257,7 @@ static void storeData(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->opaqresizeB), "OpaqueResize");
 	SetBoolForKey(WMGetButtonSelected(panel->opaqkeybB), "OpaqueMoveResizeKeyboard");
 
-	SetStringForKey(placements[WMGetPopUpButtonSelectedItem(panel->placP)], "WindowPlacement");
+	SetStringForKey(window_placements[WMGetPopUpButtonSelectedItem(panel->placP)].db_value, "WindowPlacement");
 	sprintf(buf, "%i", WMGetSliderValue(panel->hsli));
 	x = WMCreatePLString(buf);
 	sprintf(buf, "%i", WMGetSliderValue(panel->vsli));
@@ -314,12 +311,9 @@ static void createPanel(Panel * p)
 	panel->placP = WMCreatePopUpButton(panel->placF);
 	WMResizeWidget(panel->placP, 105, 20);
 	WMMoveWidget(panel->placP, 10, 20);
-	WMAddPopUpButtonItem(panel->placP, _("Automatic"));
-	WMAddPopUpButtonItem(panel->placP, _("Random"));
-	WMAddPopUpButtonItem(panel->placP, _("Manual"));
-	WMAddPopUpButtonItem(panel->placP, _("Cascade"));
-	WMAddPopUpButtonItem(panel->placP, _("Smart"));
-	WMAddPopUpButtonItem(panel->placP, _("Center"));
+
+	for (i = 0; i < wlengthof(window_placements); i++)
+		WMAddPopUpButtonItem(panel->placP, _(window_placements[i].label));
 
 	panel->porigL = WMCreateLabel(panel->placF);
 	WMResizeWidget(panel->porigL, 110, 32);
