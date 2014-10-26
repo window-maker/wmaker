@@ -101,6 +101,15 @@ static const struct {
 	[MSTYLE_FLAT]   { "flat",          "msty3" }
 };
 
+/********************************************************************/
+static const struct {
+	const char *label;
+	const char *db_value;
+} wintitle_align[] = {
+	[WALeft]   { N_("Left"),   "left"   },
+	[WACenter] { N_("Center"), "center" },
+	[WARight]  { N_("Right"),  "right"  }
+};
 
 /********************************************************************/
 typedef struct _Panel {
@@ -145,7 +154,7 @@ typedef struct _Panel {
 	WMButton *mstyB[wlengthof_nocheck(menu_style)];
 
 	WMFrame *taliF;
-	WMButton *taliB[3];
+	WMButton *taliB[wlengthof_nocheck(wintitle_align)];
 
 	/* */
 
@@ -168,7 +177,7 @@ typedef struct _Panel {
 
 	menu_style_index menuStyle;
 
-	int titleAlignment;
+	WMAlignment titleAlignment;
 
 	Pixmap preview;
 	Pixmap previewNoText;
@@ -1773,19 +1782,16 @@ static void menuStyleCallback(WMWidget * self, void *data)
 static void titleAlignCallback(WMWidget * self, void *data)
 {
 	_Panel *panel = (_Panel *) data;
+	WMAlignment align;
 
-	if (self == panel->taliB[0]) {
-		panel->titleAlignment = WALeft;
-		updatePreviewBox(panel, 1 << PFOCUSED | 1 << PUNFOCUSED | 1 << POWNER);
-
-	} else if (self == panel->taliB[1]) {
-		panel->titleAlignment = WACenter;
-		updatePreviewBox(panel, 1 << PFOCUSED | 1 << PUNFOCUSED | 1 << POWNER);
-
-	} else if (self == panel->taliB[2]) {
-		panel->titleAlignment = WARight;
-		updatePreviewBox(panel, 1 << PFOCUSED | 1 << PUNFOCUSED | 1 << POWNER);
+	for (align = 0; align < wlengthof(wintitle_align); align++) {
+		if (self == panel->taliB[align]) {
+			panel->titleAlignment = align;
+			break;
+		}
 	}
+
+	updatePreviewBox(panel, 1 << PFOCUSED | 1 << PUNFOCUSED | 1 << POWNER);
 }
 
 static void createPanel(Panel * p)
@@ -2016,20 +2022,10 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->taliF, 15, 100);
 	WMSetFrameTitle(panel->taliF, _("Title Alignment"));
 
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < wlengthof(wintitle_align); i++) {
 		panel->taliB[i] = WMCreateRadioButton(panel->taliF);
 		WMSetButtonAction(panel->taliB[i], titleAlignCallback, panel);
-		switch (i) {
-		case 0:
-			WMSetButtonText(panel->taliB[i], _("Left"));
-			break;
-		case 1:
-			WMSetButtonText(panel->taliB[i], _("Center"));
-			break;
-		case 2:
-			WMSetButtonText(panel->taliB[i], _("Right"));
-			break;
-		}
+		WMSetButtonText(panel->taliB[i], _(wintitle_align[i].label));
 		WMResizeWidget(panel->taliB[i], 90, 18);
 		WMMoveWidget(panel->taliB[i], 10, 15 + 20 * i);
 	}
@@ -2100,12 +2096,16 @@ static void showData(_Panel * panel)
 	}
 
 	str = GetStringForKey("TitleJustify");
-	if (str && strcasecmp(str, "left") == 0) {
-		panel->titleAlignment = WALeft;
-	} else if (str && strcasecmp(str, "right") == 0) {
-		panel->titleAlignment = WARight;
-	} else {
-		panel->titleAlignment = WACenter;
+	panel->titleAlignment = WACenter;
+	if (str != NULL) {
+		WMAlignment align;
+
+		for (align = 0; align < wlengthof(wintitle_align); align++) {
+			if (strcasecmp(str, wintitle_align[align].db_value) == 0) {
+				panel->titleAlignment = align;
+				break;
+			}
+		}
 	}
 
 	for (i = 0; i < wlengthof(colorOptions); i++) {
@@ -2158,19 +2158,7 @@ static void storeData(_Panel * panel)
 	}
 
 	SetStringForKey(menu_style[panel->menuStyle].db_value, "MenuStyle");
-
-	switch (panel->titleAlignment) {
-	case WALeft:
-		SetStringForKey("left", "TitleJustify");
-		break;
-	case WARight:
-		SetStringForKey("right", "TitleJustify");
-		break;
-	default:
-	case WACenter:
-		SetStringForKey("center", "TitleJustify");
-		break;
-	}
+	SetStringForKey(wintitle_align[panel->titleAlignment].db_value, "TitleJustify");
 }
 
 static void prepareForClose(_Panel * panel)
