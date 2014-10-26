@@ -85,6 +85,22 @@ static const struct {
 	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } }
 };
 
+/********************************************************************/
+typedef enum {
+	MSTYLE_NORMAL = 0,
+	MSTYLE_SINGLE = 1,
+	MSTYLE_FLAT   = 2
+} menu_style_index;
+
+static const struct {
+	const char *db_value;
+	const char *file_name;
+} menu_style[] = {
+	[MSTYLE_NORMAL] { "normal",        "msty1" },
+	[MSTYLE_SINGLE] { "singletexture", "msty2" },
+	[MSTYLE_FLAT]   { "flat",          "msty3" }
+};
+
 
 /********************************************************************/
 typedef struct _Panel {
@@ -126,7 +142,7 @@ typedef struct _Panel {
 	WMFrame *optF;
 
 	WMFrame *mstyF;
-	WMButton *mstyB[3];
+	WMButton *mstyB[wlengthof_nocheck(menu_style)];
 
 	WMFrame *taliF;
 	WMButton *taliB[3];
@@ -150,7 +166,7 @@ typedef struct _Panel {
 
 	char oldTabItem;
 
-	int menuStyle;
+	menu_style_index menuStyle;
 
 	int titleAlignment;
 
@@ -206,10 +222,6 @@ static WMTabViewDelegate tabviewDelegate = {
 #define TDEL_FILE	"tdel"
 #define TEDIT_FILE	"tedit"
 #define TEXTR_FILE 	"textr"
-
-#define MSTYLE1_FILE	"msty1"
-#define MSTYLE2_FILE	"msty2"
-#define MSTYLE3_FILE	"msty3"
 
 /* XPM */
 static char *blueled_xpm[] = {
@@ -399,12 +411,6 @@ enum {
 enum {
 	TEXPREV_WIDTH = 40,
 	TEXPREV_HEIGHT = 24
-};
-
-enum {
-	MSTYLE_NORMAL,
-	MSTYLE_SINGLE,
-	MSTYLE_FLAT
 };
 
 enum {
@@ -1752,19 +1758,16 @@ static void changedTabItem(struct WMTabViewDelegate *self, WMTabView * tabView, 
 static void menuStyleCallback(WMWidget * self, void *data)
 {
 	_Panel *panel = (_Panel *) data;
+	menu_style_index i;
 
-	if (self == panel->mstyB[0]) {
-		panel->menuStyle = MSTYLE_NORMAL;
-		updatePreviewBox(panel, 1 << PMITEM);
-
-	} else if (self == panel->mstyB[1]) {
-		panel->menuStyle = MSTYLE_SINGLE;
-		updatePreviewBox(panel, 1 << PMITEM);
-
-	} else if (self == panel->mstyB[2]) {
-		panel->menuStyle = MSTYLE_FLAT;
-		updatePreviewBox(panel, 1 << PMITEM);
+	for (i = 0; i < wlengthof(menu_style); i++) {
+		if (self == panel->mstyB[i]) {
+			panel->menuStyle = i;
+			break;
+		}
 	}
+
+	updatePreviewBox(panel, 1 << PMITEM);
 }
 
 static void titleAlignCallback(WMWidget * self, void *data)
@@ -1982,7 +1985,7 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->mstyF, 15, 10);
 	WMSetFrameTitle(panel->mstyF, _("Menu Style"));
 
-	for (i = 0; i < 3; i++) {
+	for (i = 0; i < wlengthof(menu_style); i++) {
 		WMPixmap *icon;
 		char *path;
 
@@ -1991,17 +1994,7 @@ static void createPanel(Panel * p)
 		WMMoveWidget(panel->mstyB[i], 15 + i * 65, 20);
 		WMSetButtonImagePosition(panel->mstyB[i], WIPImageOnly);
 		WMSetButtonAction(panel->mstyB[i], menuStyleCallback, panel);
-		switch (i) {
-		case 0:
-			path = LocateImage(MSTYLE1_FILE);
-			break;
-		case 1:
-			path = LocateImage(MSTYLE2_FILE);
-			break;
-		case 2:
-			path = LocateImage(MSTYLE3_FILE);
-			break;
-		}
+		path = LocateImage(menu_style[i].file_name);
 		if (path) {
 			icon = WMCreatePixmapFromFile(scr, path);
 			if (icon) {
@@ -2096,12 +2089,14 @@ static void showData(_Panel * panel)
 	const char *str;
 
 	str = GetStringForKey("MenuStyle");
-	if (str && strcasecmp(str, "flat") == 0) {
-		panel->menuStyle = MSTYLE_FLAT;
-	} else if (str && strcasecmp(str, "singletexture") == 0) {
-		panel->menuStyle = MSTYLE_SINGLE;
-	} else {
-		panel->menuStyle = MSTYLE_NORMAL;
+	panel->menuStyle = MSTYLE_NORMAL;
+	if (str != NULL) {
+		for (i = 0; i < wlengthof(menu_style); i++) {
+			if (strcasecmp(str, menu_style[i].db_value) == 0) {
+				panel->menuStyle = i;
+				break;
+			}
+		}
 	}
 
 	str = GetStringForKey("TitleJustify");
@@ -2162,18 +2157,8 @@ static void storeData(_Panel * panel)
 		}
 	}
 
-	switch (panel->menuStyle) {
-	case MSTYLE_SINGLE:
-		SetStringForKey("singletexture", "MenuStyle");
-		break;
-	case MSTYLE_FLAT:
-		SetStringForKey("flat", "MenuStyle");
-		break;
-	default:
-	case MSTYLE_NORMAL:
-		SetStringForKey("normal", "MenuStyle");
-		break;
-	}
+	SetStringForKey(menu_style[panel->menuStyle].db_value, "MenuStyle");
+
 	switch (panel->titleAlignment) {
 	case WALeft:
 		SetStringForKey("left", "TitleJustify");
