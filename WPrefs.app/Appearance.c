@@ -28,6 +28,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <math.h>
 
 #include "TexturePanel.h"
 
@@ -112,6 +113,34 @@ static const struct {
 };
 
 /********************************************************************/
+static const char *const sample_colors[] = {
+	"black",
+	"#292929",
+	"#525252",
+	"#848484",
+	"#adadad",
+	"#d6d6d6",
+	"white",
+	"#d6d68c",
+	"#d6a57b",
+	"#8cd68c",
+	"#8cd6ce",
+	"#d68c8c",
+	"#8c9cd6",
+	"#bd86d6",
+	"#d68cbd",
+	"#d64a4a",
+	"#4a5ad6",
+	"#4ad6ce",
+	"#4ad65a",
+	"#ced64a",
+	"#d6844a",
+	"#8ad631",
+	"#ce29c6",
+	"#ce2973"
+};
+
+/********************************************************************/
 typedef struct _Panel {
 	WMBox *box;
 	char *sectionName;
@@ -145,7 +174,7 @@ typedef struct _Panel {
 
 	WMColorWell *colW;
 
-	WMColorWell *sampW[24];
+	WMColorWell *sampW[wlengthof_nocheck(sample_colors)];
 
 	/* options */
 	WMFrame *optF;
@@ -338,34 +367,6 @@ static char *hand_xpm[] = {
 	"   {{{{{{{{{{{        ",
 	"     ~~{{{~~          ",
 	"                      "
-};
-
-static char *sampleColors[] = {
-	"black",
-	"#292929",
-	"#525252",
-	"#848484",
-	"#adadad",
-	"#d6d6d6",
-	"white",
-	"#d6d68c",
-	"#d6a57b",
-	"#8cd68c",
-	"#8cd6ce",
-	"#d68c8c",
-	"#8c9cd6",
-	"#bd86d6",
-	"#d68cbd",
-	"#d64a4a",
-	"#4a5ad6",
-	"#4ad6ce",
-	"#4ad65a",
-	"#ced64a",
-	"#d6844a",
-	"#8ad631",
-	"#ce29c6",
-	"#ce2973",
-	"black"
 };
 
 static const struct {
@@ -1371,8 +1372,8 @@ static void fillColorList(_Panel * panel)
 
 	list = WMGetUDObjectForKey(udb, "ColorList");
 	if (!list) {
-		for (i = 0; i < 24; i++) {
-			color = WMCreateNamedColor(scr, sampleColors[i], False);
+		for (i = 0; i < wlengthof(sample_colors); i++) {
+			color = WMCreateNamedColor(scr, sample_colors[i], False);
 			if (!color)
 				continue;
 			WMSetColorWellColor(panel->sampW[i], color);
@@ -1381,7 +1382,7 @@ static void fillColorList(_Panel * panel)
 	} else {
 		WMPropList *c;
 
-		for (i = 0; i < WMIN(24, WMGetPropListItemCount(list)); i++) {
+		for (i = 0; i < WMIN(wlengthof(sample_colors), WMGetPropListItemCount(list)); i++) {
 			c = WMGetFromPLArray(list, i);
 			if (!c || !WMIsPLString(c))
 				continue;
@@ -1964,13 +1965,31 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->colW, 30, 75);
 	WMAddNotificationObserver(colorWellObserver, panel, WMColorWellDidChangeNotification, panel->colW);
 
-	for (i = 0; i < 4; i++) {
-		int j;
-		for (j = 0; j < 6; j++) {
-			panel->sampW[i + j * 4] = WMCreateColorWell(panel->colF);
-			WMResizeWidget(panel->sampW[i + j * 4], 22, 22);
-			WMMoveWidget(panel->sampW[i + j * 4], 130 + i * 22, 40 + j * 22);
-			WSetColorWellBordered(panel->sampW[i + j * 4], False);
+	{ /* Distribute the color samples regularly in the right half */
+		const int parent_width  = 242;
+		const int parent_height = 195;
+		const int available_width  = (parent_width / 2) - 7;
+		const int available_height = parent_height - 7 - 20 - 7 - 7;
+		const int widget_size = 22;
+
+		const int nb_x = (int) round(sqrt(wlengthof(sample_colors) * available_width / available_height));
+		const int nb_y = (wlengthof(sample_colors) + nb_x - 1) / nb_x;
+
+		const int offset_x = (parent_width / 2) + (available_width - nb_x * widget_size) / 2;
+		const int offset_y = (7 + 20 + 7) + (available_height - nb_y * widget_size) / 2;
+
+		int x, y;
+
+		x = 0; y = 0;
+		for (i = 0; i < wlengthof(sample_colors); i++) {
+			panel->sampW[i] = WMCreateColorWell(panel->colF);
+			WMResizeWidget(panel->sampW[i], widget_size, widget_size);
+			WMMoveWidget(panel->sampW[i], offset_x + x * widget_size, offset_y + y * widget_size);
+			WSetColorWellBordered(panel->sampW[i], False);
+			if (++x >= nb_x) {
+				y++;
+				x = 0;
+			}
 		}
 	}
 
@@ -2188,7 +2207,7 @@ static void prepareForClose(_Panel * panel)
 
 	/* store list of colors */
 	textureList = WMCreatePLArray(NULL, NULL);
-	for (i = 0; i < 24; i++) {
+	for (i = 0; i < wlengthof(sample_colors); i++) {
 		WMColor *color;
 		char *str;
 
