@@ -100,7 +100,7 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMButton *swi[sizeof(expert_options) / sizeof(expert_options[0])];
+	WMButton *swi[wlengthof_nocheck(expert_options)];
 
 } _Panel;
 

@@ -31,6 +31,62 @@
 
 #include "TexturePanel.h"
 
+
+static const struct {
+	const char *key;
+	const char *default_value;
+	const char *label;
+	WMRect      preview;	/* The rectangle where the corresponding object is displayed */
+	WMPoint     hand;	/* The coordinate where the hand is drawn when pointing this item */
+} colorOptions[] = {
+	/* Related to Window titles */
+	{ "FTitleColor", "white", N_("Focused Window Title"),
+	  { { 30, 10 }, { 190, 20 } }, { 5, 10 } },
+	{ "UTitleColor", "black", N_("Unfocused Window Title"),
+	  { { 30, 40 }, { 190, 20 } }, { 5, 40 } },
+	{ "PTitleColor", "white", N_("Owner of Focused Window Title"),
+	  { { 30, 70 }, { 190, 20 } }, { 5, 70 } },
+
+	/* Related to Menus */
+	{ "MenuTitleColor", "white", N_("Menu Title") ,
+	  { { 30, 120 }, { 90, 20 } }, { 5, 120 } },
+	{ "MenuTextColor", "black", N_("Menu Item Text") ,
+	  { { 30, 140 }, { 90, 20 } }, { 5, 140 } },
+	{ "MenuDisabledColor", "#616161", N_("Disabled Menu Item Text") ,
+	  { { 30, 160 }, { 90, 20 } }, { 5, 160 } },
+	{ "HighlightColor", "white", N_("Menu Highlight Color") ,
+	  { { 30, 180 }, { 90, 20 } }, { 5, 180 } },
+	{ "HighlightTextColor", "black", N_("Highlighted Menu Text Color") ,
+	  { { 30, 200 }, { 90, 20 } }, { 5, 180 } },
+	/*
+	 * yuck kluge: the coordinate for HighlightTextColor are actually those of the last "Normal item"
+	 * at the bottom when user clicks it, the "yuck kluge" in the function 'previewClick' will swap it
+	 * for the MenuTextColor selection as user would expect
+	 *
+	 * Note that the entries are reffered by their index for performance
+	 */
+
+	/* Related to Window's border */
+	{ "FrameFocusedBorderColor", "black", N_("Focused Window Border Color") ,
+	  { { 0, 0 }, { 0, 0 } }, { -22, -21 } },
+	{ "FrameBorderColor", "black", N_("Window Border Color") ,
+	  { { 0, 0 }, { 0, 0 } }, { -22, -21 } },
+	{ "FrameSelectedBorderColor", "white", N_("Selected Window Border Color") ,
+	  { { 0, 0 }, { 0, 0 } }, { -22, -21 } },
+
+	/* Related to Icons and Clip */
+	{ "IconTitleColor", "white", N_("Miniwindow Title") ,
+	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } },
+	{ "IconTitleBack", "black", N_("Miniwindow Title Back") ,
+	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } },
+	{ "ClipTitleColor", "black", N_("Clip Title") ,
+	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } },
+	{ "CClipTitleColor", "#454045", N_("Collapsed Clip Title") ,
+	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } }
+};
+
+
+/********************************************************************/
 typedef struct _Panel {
 	WMBox *box;
 	char *sectionName;
@@ -60,7 +116,7 @@ typedef struct _Panel {
 	WMFrame *colF;
 
 	WMPopUpButton *colP;
-	WMColor *colors[15];
+	WMColor *colors[wlengthof_nocheck(colorOptions)];
 
 	WMColorWell *colW;
 
@@ -367,59 +423,6 @@ enum {
 	ICONB_COL,
 	CLIP_COL,
 	CCLIP_COL
-};
-
-static const struct {
-	const char *key;
-	const char *default_value;
-	const char *label;
-	WMRect      preview;	/* The rectangle where the corresponding object is displayed */
-	WMPoint     hand;	/* The coordinate where the hand is drawn when pointing this item */
-} colorOptions[] = {
-	/* Related to Window titles */
-	{ "FTitleColor", "white", N_("Focused Window Title"),
-	  { { 30, 10 }, { 190, 20 } }, { 5, 10 } },
-	{ "UTitleColor", "black", N_("Unfocused Window Title"),
-	  { { 30, 40 }, { 190, 20 } }, { 5, 40 } },
-	{ "PTitleColor", "white", N_("Owner of Focused Window Title"),
-	  { { 30, 70 }, { 190, 20 } }, { 5, 70 } },
-
-	/* Related to Menus */
-	{ "MenuTitleColor", "white", N_("Menu Title") ,
-	  { { 30, 120 }, { 90, 20 } }, { 5, 120 } },
-	{ "MenuTextColor", "black", N_("Menu Item Text") ,
-	  { { 30, 140 }, { 90, 20 } }, { 5, 140 } },
-	{ "MenuDisabledColor", "#616161", N_("Disabled Menu Item Text") ,
-	  { { 30, 160 }, { 90, 20 } }, { 5, 160 } },
-	{ "HighlightColor", "white", N_("Menu Highlight Color") ,
-	  { { 30, 180 }, { 90, 20 } }, { 5, 180 } },
-	{ "HighlightTextColor", "black", N_("Highlighted Menu Text Color") ,
-	  { { 30, 200 }, { 90, 20 } }, { 5, 180 } },
-	/*
-	 * yuck kluge: the coordinate for HighlightTextColor are actually those of the last "Normal item"
-	 * at the bottom when user clicks it, the "yuck kluge" in the function 'previewClick' will swap it
-	 * for the MenuTextColor selection as user would expect
-	 *
-	 * Note that the entries are reffered by their index for performance
-	 */
-
-	/* Related to Window's border */
-	{ "FrameFocusedBorderColor", "black", N_("Focused Window Border Color") ,
-	  { { 0, 0 }, { 0, 0 } }, { -22, -21 } },
-	{ "FrameBorderColor", "black", N_("Window Border Color") ,
-	  { { 0, 0 }, { 0, 0 } }, { -22, -21 } },
-	{ "FrameSelectedBorderColor", "white", N_("Selected Window Border Color") ,
-	  { { 0, 0 }, { 0, 0 } }, { -22, -21 } },
-
-	/* Related to Icons and Clip */
-	{ "IconTitleColor", "white", N_("Miniwindow Title") ,
-	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } },
-	{ "IconTitleBack", "black", N_("Miniwindow Title Back") ,
-	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } },
-	{ "ClipTitleColor", "black", N_("Clip Title") ,
-	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } },
-	{ "CClipTitleColor", "#454045", N_("Collapsed Clip Title") ,
-	  { { 155, 130 }, { 64, 64 } }, { 130, 132 } }
 };
 
 

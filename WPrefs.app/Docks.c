@@ -21,6 +21,28 @@
 
 #include "WPrefs.h"
 
+
+static const struct {
+	const char *key;
+	const char *string;
+} auto_delay[] = {
+	{ "ClipAutoexpandDelay",   N_("Before auto-expansion") },
+	{ "ClipAutocollapseDelay", N_("Before auto-collapsing") },
+	{ "ClipAutoraiseDelay",    N_("Before auto-raise") },
+	{ "ClipAutolowerDelay",    N_("Before auto-lowering") }
+};
+
+static char *autoDelayPresetValues[5] = { "0", "100", "250", "600", "1000" };
+
+static const struct {
+	const char *disable_key;
+	const char *icon_file;
+} dock_config[] = {
+	{ "DisableDock", "dock" },
+	{ "DisableClip", "clip" },
+	{ "DisableDrawers", "drawer" }
+};
+
 typedef struct _Panel {
 	WMBox *box;
 
@@ -33,13 +55,13 @@ typedef struct _Panel {
 	WMWidget *parent;
 
 	WMFrame *autoDelayF[2];
-	WMLabel *autoDelayL[4];
-	WMButton *autoDelayB[4][5];
-	WMTextField *autoDelayT[4];
-	WMLabel *autoDelayMsL[4];
+	WMLabel *autoDelayL[wlengthof_nocheck(auto_delay)];
+	WMButton *autoDelayB[wlengthof_nocheck(auto_delay)][wlengthof_nocheck(autoDelayPresetValues)];
+	WMTextField *autoDelayT[wlengthof_nocheck(auto_delay)];
+	WMLabel *autoDelayMsL[wlengthof_nocheck(auto_delay)];
 	
 	WMFrame *dockF;
-	WMButton *docksB[3];
+	WMButton *docksB[wlengthof_nocheck(dock_config)];
 } _Panel;
 
 #define ICON_FILE	"dockclipdrawersection"
@@ -47,28 +69,6 @@ typedef struct _Panel {
 #define ARQUIVO_XIS	"xis"
 #define DELAY_ICON "timer%i"
 #define DELAY_ICON_S "timer%is"
-
-static const struct {
-	const char *key;
-	const char *string;
-} auto_delay[] = {
-	{ "ClipAutoexpandDelay",   N_("Before auto-expansion") },
-	{ "ClipAutocollapseDelay", N_("Before auto-collapsing") },
-	{ "ClipAutoraiseDelay",    N_("Before auto-raise") },
-	{ "ClipAutolowerDelay",    N_("Before auto-lowering") }
-};
-
-
-static char *autoDelayPresetValues[5] = { "0", "100", "250", "600", "1000" };
-
-static const struct {
-	const char *disable_key;
-	const char *icon_file;
-} dock_config[] = {
-	{ "DisableDock",    "dock"   },
-	{ "DisableClip",    "clip"   },
-	{ "DisableDrawers", "drawer" }
-};
 
 static void showData(_Panel *panel);
 static void storeData(_Panel *panel);

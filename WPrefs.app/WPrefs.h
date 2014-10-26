@@ -37,6 +37,20 @@
 /* Needed for HAVE_LIBINTL_H and EXTENDED_WINDOWSHORTCUT */
 #include "../src/wconfig.h"
 
+/*
+ * The macro 'wlengthof' should be used as much as possible, this macro
+ * is reserved for the cases where wlengthof cannot be used because the
+ * static_assert. Typical symptom is this compiler error (gcc):
+ *
+ *   error: braced-group within expression allowed only inside a function
+ *
+ * which appears when you try to create an array whose size is determined using
+ * wlengthof on some other array.
+ */
+#define wlengthof_nocheck(array)  \
+	(sizeof(array) / sizeof(array[0]))
+
+
 /****/
 
 extern char *NOptionValueChanged;
