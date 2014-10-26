@@ -21,6 +21,18 @@
 
 #include "WPrefs.h"
 
+
+static const struct {
+	const char *db_key;
+	const char *label;
+} balloon_choices[] = {
+	{ "WindowTitleBalloons",       N_("incomplete window titles"), },
+	{ "MiniwindowTitleBalloons",   N_("miniwindow titles"), },
+	{ "MiniwindowApercuBalloons",  N_("miniwindow apercus"), },
+	{ "AppIconBalloons",           N_("application/dock icons"), },
+	{ "HelpBalloons",              N_("internal help"), }
+};
+
 typedef struct _Panel {
 	WMBox *box;
 
@@ -39,7 +51,7 @@ typedef struct _Panel {
 	WMPopUpButton *posiP;
 
 	WMFrame *ballF;
-	WMButton *ballB[5];
+	WMButton *ballB[wlengthof_nocheck(balloon_choices)];
 
 	WMFrame *optF;
 	WMButton *bounceB;
@@ -134,17 +146,15 @@ static void showData(_Panel * panel)
 		WMSetButtonSelected(panel->bounceUrgB, GetBoolForKey("BounceAppIconsWhenUrgent"));
 	WMSetButtonSelected(panel->bounceRaisB, GetBoolForKey("RaiseAppIconsWhenBouncing"));
 
-	WMSetButtonSelected(panel->ballB[0], GetBoolForKey("WindowTitleBalloons"));
-	WMSetButtonSelected(panel->ballB[1], GetBoolForKey("MiniwindowTitleBalloons"));
-	WMSetButtonSelected(panel->ballB[2], GetBoolForKey("MiniwindowApercuBalloons"));
-	WMSetButtonSelected(panel->ballB[3], GetBoolForKey("AppIconBalloons"));
-	WMSetButtonSelected(panel->ballB[4], GetBoolForKey("HelpBalloons"));
+	for (x = 0; x < wlengthof(balloon_choices); x++)
+		WMSetButtonSelected(panel->ballB[x], GetBoolForKey(balloon_choices[x].db_key));
 }
 
 static void storeData(_Panel * panel)
 {
 	char *str;
 	Bool lr, tb;
+	int i;
 
 	switch (WMGetPopUpButtonSelectedItem(panel->sizeP)) {
 	case 0:
@@ -197,11 +207,9 @@ static void storeData(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->bounceB), "DoNotMakeAppIconsBounce");
 	SetBoolForKey(WMGetButtonSelected(panel->bounceUrgB), "BounceAppIconsWhenUrgent");
 	SetBoolForKey(WMGetButtonSelected(panel->bounceRaisB), "RaiseAppIconsWhenBouncing");
-	SetBoolForKey(WMGetButtonSelected(panel->ballB[0]), "WindowTitleBalloons");
-	SetBoolForKey(WMGetButtonSelected(panel->ballB[1]), "MiniwindowTitleBalloons");
-	SetBoolForKey(WMGetButtonSelected(panel->ballB[2]), "MiniwindowApercuBalloons");
-	SetBoolForKey(WMGetButtonSelected(panel->ballB[3]), "AppIconBalloons");
-	SetBoolForKey(WMGetButtonSelected(panel->ballB[4]), "HelpBalloons");
+
+	for (i = 0; i < wlengthof(balloon_choices); i++)
+		SetBoolForKey(WMGetButtonSelected(panel->ballB[i]), balloon_choices[i].db_key);
 }
 
 static void createPanel(Panel * p)
@@ -257,16 +265,12 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->ballF, 265, 10);
 	WMSetFrameTitle(panel->ballF, _("Show balloon for..."));
 
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i < wlengthof(balloon_choices); i++) {
 		panel->ballB[i] = WMCreateSwitchButton(panel->ballF);
 		WMResizeWidget(panel->ballB[i], 210, 20);
 		WMMoveWidget(panel->ballB[i], 15, 16 + i * 22);
+		WMSetButtonText(panel->ballB[i], _(balloon_choices[i].label));
 	}
-	WMSetButtonText(panel->ballB[0], _("incomplete window titles"));
-	WMSetButtonText(panel->ballB[1], _("miniwindow titles"));
-	WMSetButtonText(panel->ballB[2], _("miniwindow apercus"));
-	WMSetButtonText(panel->ballB[3], _("application/dock icons"));
-	WMSetButtonText(panel->ballB[4], _("internal help"));
 
 	WMMapSubwidgets(panel->ballF);
 
