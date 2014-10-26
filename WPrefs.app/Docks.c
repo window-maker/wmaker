@@ -78,9 +78,9 @@ static void pushAutoDelayButton(WMWidget *w, void *data)
 {
 	_Panel *panel = (_Panel *) data;
 	int i, j;
-	for (i = 0; i < 4; i++)
+	for (i = 0; i < wlengthof(auto_delay); i++)
 	{
-		for (j = 0; j < 5; j++)
+		for (j = 0; j < wlengthof(autoDelayPresetValues); j++)
 		{
 			if (w == panel->autoDelayB[i][j])
 			{
@@ -98,7 +98,7 @@ static void adjustButtonSelectionBasedOnValue(_Panel *panel, int row, const char
 	if (!value)
 		return;
 
-	for (j = 0; j < 5; j++)
+	for (j = 0; j < wlengthof(autoDelayPresetValues); j++)
 	{
 		int isThatOne = !strcmp(autoDelayPresetValues[j], value);
 		WMSetButtonSelected(panel->autoDelayB[row][j], isThatOne);
@@ -112,7 +112,7 @@ static void autoDelayChanged(void *observerData, WMNotification *notification)
 	_Panel *panel = (_Panel *) observerData;
 	int row;
 	WMTextField *anAutoDelayT = (WMTextField *) WMGetNotificationObject(notification);
-	for (row = 0; row < 4; row++)
+	for (row = 0; row < wlengthof(panel->autoDelayT); row++)
 	{
 		if (anAutoDelayT != panel->autoDelayT[row])
 		{
@@ -188,7 +188,7 @@ static void createPanel(Panel *p)
 			WMSetLabelText(panel->autoDelayL[i + k * 2], _(auto_delay[i + k * 2].string));
 			/* WMSetLabelTextAlignment(panel->autoDelayL[i + k * 2], WARight); */
 
-			for (j = 0; j < 5; j++)
+			for (j = 0; j < wlengthof(autoDelayPresetValues); j++)
 			{
 				panel->autoDelayB[i + k * 2][j] = WMCreateCustomButton(panel->autoDelayF[k], WBBStateChangeMask);
 				WMResizeWidget(panel->autoDelayB[i + k * 2][j], 25, 25);
@@ -244,7 +244,7 @@ static void createPanel(Panel *p)
 	WMMoveWidget(panel->dockF, 390, 10);
 	WMSetFrameTitle(panel->dockF, _("Dock/Clip/Drawer"));
 
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < wlengthof(dock_config); i++)
 	{
 		panel->docksB[i] = WMCreateButton(panel->dockF, WBTToggle);
 		WMResizeWidget(panel->docksB[i], 56, 56);
@@ -291,7 +291,7 @@ static void createPanel(Panel *p)
 static void storeData(_Panel *panel)
 {
 	int i;
-	for (i = 0; i < 4; i++)
+	for (i = 0; i < wlengthof(auto_delay); i++)
 	{
 		char *str;
 
@@ -299,7 +299,7 @@ static void storeData(_Panel *panel)
 		SetStringForKey(str, auto_delay[i].key);
 		wfree(str);
 	}
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < wlengthof(dock_config); i++)
 	{
 		SetBoolForKey(!WMGetButtonSelected(panel->docksB[i]), dock_config[i].disable_key);
 	}
@@ -309,13 +309,13 @@ static void showData(_Panel *panel)
 {
 	char *value;
 	int i;
-	for (i = 0; i < 4; i++)
+	for (i = 0; i < wlengthof(auto_delay); i++)
 	{
 		value = GetStringForKey(auto_delay[i].key);
 		WMSetTextFieldText(panel->autoDelayT[i], value);
 		adjustButtonSelectionBasedOnValue(panel, i, value);
 	}
-	for (i = 0; i < 3; i++)
+	for (i = 0; i < wlengthof(dock_config); i++)
 	{
 		WMSetButtonSelected(panel->docksB[i], !GetBoolForKey(dock_config[i].disable_key));
 	}

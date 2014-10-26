@@ -169,7 +169,7 @@ static void doubleClick(WMWidget * w, void *data)
 	int i;
 	char buffer[32];
 
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i < wlengthof(panel->ddelaB); i++) {
 		if (panel->ddelaB[i] == w)
 			break;
 	}
@@ -342,7 +342,7 @@ static void showData(_Panel * panel)
 	 /**/ b = GetIntegerForKey("DoubleClickTime");
 	/* find best match */
 	a = -1;
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i < wlengthof(panel->ddelaB); i++) {
 		if (DELAY(i) == b)
 			a = i;
 	}
@@ -567,7 +567,7 @@ static void createPanel(Panel * p)
 	buf1 = wmalloc(strlen(DELAY_ICON) + 2);
 	buf2 = wmalloc(strlen(DELAY_ICON_S) + 2);
 
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i < wlengthof(panel->ddelaB); i++) {
 		panel->ddelaB[i] = WMCreateCustomButton(panel->ddelaF, WBBStateChangeMask);
 		WMResizeWidget(panel->ddelaB[i], 25, 25);
 		WMMoveWidget(panel->ddelaB[i], 20 + (40 * i), 20);

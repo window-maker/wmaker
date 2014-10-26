@@ -73,7 +73,7 @@ static void storeData(_Panel * panel)
 {
 	int i;
 
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i < wlengthof(panel->scrB); i++) {
 		if (WMGetButtonSelected(panel->scrB[i]))
 			break;
 	}
@@ -106,7 +106,7 @@ static void createPanel(Panel * p)
 
 	buf1 = wmalloc(strlen(SPEED_IMAGE) + 1);
 	buf2 = wmalloc(strlen(SPEED_IMAGE_S) + 1);
-	for (i = 0; i < 5; i++) {
+	for (i = 0; i < wlengthof(panel->scrB); i++) {
 		panel->scrB[i] = WMCreateCustomButton(panel->scrF, WBBStateChangeMask);
 		WMResizeWidget(panel->scrB[i], 40, 40);
 		WMMoveWidget(panel->scrB[i], 15 + (40 * i), 30);

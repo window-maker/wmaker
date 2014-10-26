@@ -804,7 +804,7 @@ static void createPanel(_Panel * p)
 
 	{
 		int i;
-		for (i = 0; i < 3; i++)
+		for (i = 0; i < wlengthof(panel->itemPad); i++)
 			WMUnmapWidget(panel->itemPad[i]);
 	}
 	changedItemPad(panel->typeP, panel);
