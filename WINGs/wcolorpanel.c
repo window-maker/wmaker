@@ -3391,6 +3391,7 @@ static void grayInit(W_ColorPanel * panel)
 static void rgbInit(W_ColorPanel * panel)
 {
 	char tmp[4];
+	const char *format;
 
 	if (panel->color.set != cpRGB)
 		convertCPColor(&panel->color);
@@ -3399,11 +3400,20 @@ static void rgbInit(W_ColorPanel * panel)
 	WMSetSliderValue(panel->rgbGreenS, panel->color.rgb.green);
 	WMSetSliderValue(panel->rgbBlueS, panel->color.rgb.blue);
 
-	sprintf(tmp, "%d", panel->color.rgb.red);
+	switch (panel->rgbState) {
+	case RGBdec:
+		format = "%d";
+		break;
+	case RGBhex:
+		format = "%0X";
+		break;
+	}
+
+	sprintf(tmp, format, panel->color.rgb.red);
 	WMSetTextFieldText(panel->rgbRedT, tmp);
-	sprintf(tmp, "%d", panel->color.rgb.green);
+	sprintf(tmp, format, panel->color.rgb.green);
 	WMSetTextFieldText(panel->rgbGreenT, tmp);
-	sprintf(tmp, "%d", panel->color.rgb.blue);
+	sprintf(tmp, format, panel->color.rgb.blue);
 	WMSetTextFieldText(panel->rgbBlueT, tmp);
 }
 
