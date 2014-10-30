@@ -23,6 +23,7 @@
 #include <stdint.h>
 #include <WINGs/WINGs.h>
 #include <WINGs/WUtil.h>
+#include <inttypes.h>
 
 void wAbort()
 {
@@ -35,7 +36,7 @@ void show(WMWidget * self, void *data)
 	void *d;
 	WMLabel *l = (WMLabel *) data;
 	d = WMGetHangedData(self);
-	sprintf(buf, "%i -  0x%x - 0%o", (int)d, (int)d, (int)d);
+	sprintf(buf, "%"PRIiPTR" -  0x%"PRIxPTR" - 0%"PRIoPTR, (intptr_t) d, (intptr_t) d, (intptr_t) d);
 	WMSetLabelText(l, buf);
 }
 
