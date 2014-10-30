@@ -7,6 +7,7 @@ void showSelectedColor(void *self, void *cdata)
 {
 	WMColorPanel *panel = (WMColorPanel *) self;
 
+	(void) cdata;
 	printf("Selected Color: %s\n", WMGetColorRGBDescription(WMGetColorPanelColor(panel)));
 }
 

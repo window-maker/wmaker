@@ -41,6 +41,8 @@ void show(WMWidget * self, void *data)
 
 void quit(WMWidget * self, void *data)
 {
+	(void) self;
+	(void) data;
 	exit(0);
 }
 

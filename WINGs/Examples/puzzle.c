@@ -155,6 +155,9 @@ static void resizeObserver(void *self, WMNotification * notif)
 	WMSize size = WMGetViewSize(WMWidgetView(win));
 	int x, y;
 
+	(void) self;
+	(void) notif;
+
 	WinSize = size.width;
 	for (y = 0; y < Size; y++) {
 		for (x = 0; x < Size; x++) {
