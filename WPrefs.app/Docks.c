@@ -42,10 +42,14 @@ static char *autoDelayPresetValues[5] = { "0", "100", "250", "600", "1000" };
 static const struct {
 	const char *disable_key;
 	const char *icon_file;
+	const char *balloon_text;
 } dock_config[] = {
-	{ "DisableDock", "dock" },
-	{ "DisableClip", "clip" },
-	{ "DisableDrawers", "drawer" }
+	{ "DisableDock", "dock",
+	  N_("Disable/enable the application Dock (the\nvertical icon bar in the side of the screen).") },
+	{ "DisableClip", "clip",
+	  N_("Disable/enable the Clip (that thing with\na paper clip icon).") },
+	{ "DisableDrawers", "drawer",
+	  N_("Disable/enable Drawers (a dock that stores\napplication icons horizontally). The dock is required.") }
 };
 
 typedef struct _Panel {
@@ -261,21 +265,7 @@ static void createPanel(Panel *p)
 			WMSetButtonAltImage(panel->docksB[i], icon1);
 			WMReleasePixmap(icon1);
 		}
-		switch(i)
-		{
-		case 0:
-			WMSetBalloonTextForView(_("Disable/enable the application Dock (the\n"
-						  "vertical icon bar in the side of the screen)."), WMWidgetView(panel->docksB[i]));
-			break;
-		case 1:
-			WMSetBalloonTextForView(_("Disable/enable the Clip (that thing with\n"
-						  "a paper clip icon)."), WMWidgetView(panel->docksB[i]));
-			break;
-		case 2:
-			WMSetBalloonTextForView(_("Disable/enable Drawers (a dock that stores\n"
-						  "application icons horizontally). The dock is required."), WMWidgetView(panel->docksB[i]));
-			break;
-		}
+		WMSetBalloonTextForView(_(dock_config[i].balloon_text), WMWidgetView(panel->docksB[i]));
 		WMSetButtonAction(panel->docksB[i], pushDockButton, panel);
 	}
 	
