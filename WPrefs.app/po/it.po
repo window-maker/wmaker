@@ -640,32 +640,12 @@ msgid "bad option value %s for option ColormapMode. Using default Auto"
 msgstr "Valore %s errato per l'opzione ColormapMode. Uso Auto"
 
 #: ../../WPrefs.app/Focus.c:196
-msgid ""
-"Click on the window to set\n"
-"keyboard input focus."
-msgstr ""
-"Clicca sulla finestra per assegnarle\n"
-"il focus di tastiera."
+msgid "Manual:  Click on the window to set keyboard input focus"
+msgstr "Clicca sulla finestra per assegnarle il focus di tastiera"
 
 #: ../../WPrefs.app/Focus.c:200
-msgid ""
-"Set keyboard input focus to\n"
-"the window under the mouse pointer,\n"
-"including the root window."
-msgstr ""
-"Assegna il focus di tastiera\n"
-"alla finestra sotto al puntatore,\n"
-"compreso lo sfondo (root window)."
-
-#: ../../WPrefs.app/Focus.c:205
-msgid ""
-"Set keyboard input focus to\n"
-"the window under the mouse pointer,\n"
-"except the root window."
-msgstr ""
-"Assegna il focus di tastiera alla\n"
-"finestra sotto al puntatore,\n"
-"escluso lo sfondo (root window)."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
+msgstr "Assegna il focus di tastiera alla finestra sotto al puntatore"
 
 #: ../../WPrefs.app/Focus.c:248
 msgid "Input Focus Mode"
@@ -684,16 +664,16 @@ msgid "\"Sloppy\" focus"
 msgstr "Focus intelligente \"Sloppy\""
 
 #: ../../WPrefs.app/Focus.c:270
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Installa la mappa dei colori della finestra..."
 
 #: ../../WPrefs.app/Focus.c:275
-msgid "...that has the input focus."
-msgstr "...che ha il focus."
+msgid "...that has the input focus"
+msgstr "...che ha il focus"
 
 #: ../../WPrefs.app/Focus.c:280
-msgid "...that is under the mouse pointer."
-msgstr "...che è sotto al puntatore."
+msgid "...that's under the mouse pointer"
+msgstr "...che è sotto al puntatore"
 
 #: ../../WPrefs.app/Focus.c:289
 msgid "Automatic Window Raise Delay"
@@ -704,20 +684,12 @@ msgid "msec"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:363
-msgid ""
-"Do not let applications receive\n"
-"the click used to focus windows."
-msgstr ""
-"Evita che le applicazioni ricevano "
-"il click usato per assegnare il focus."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Evita che le applicazioni ricevano il click usato per assegnare il focus"
 
 #: ../../WPrefs.app/Focus.c:369
-msgid ""
-"Automatically focus new\n"
-"windows."
-msgstr ""
-"Assegna automaticamente\n"
-"il focus alle nuove finestre."
+msgid "Automatically focus new windows"
+msgstr "Assegna automaticamente il focus alle nuove finestre"
 
 #: ../../WPrefs.app/Focus.c:390
 msgid "Window Focus Preferences"
@@ -1782,12 +1754,8 @@ msgid "internal help"
 msgstr "...aiuto di Window Maker"
 
 #: ../../WPrefs.app/Preferences.c:280
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Porta davanti le finestre "
-"cambiando focus con la tastiera."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Porta davanti le finestre cambiando focus con la tastiera"
 
 #: ../../WPrefs.app/Preferences.c:286
 msgid ""

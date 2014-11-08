@@ -205,13 +205,13 @@ static void createPanel(Panel * p)
 
 		panel->kfocB[0] = WMCreateRadioButton(box);
 		WMSetButtonText(panel->kfocB[0], _("Manual:  Click on the window to set "
-						   "keyboard input focus."));
+		                                   "keyboard input focus"));
 		WMAddBoxSubview(box, WMWidgetView(panel->kfocB[0]), True, True, 20, 0, 0);
 
 		panel->kfocB[1] = WMCreateRadioButton(box);
 		WMGroupButtons(panel->kfocB[0], panel->kfocB[1]);
 		WMSetButtonText(panel->kfocB[1], _("Auto:  Set keyboard input focus to "
-						   "the window under the mouse pointer."));
+		                                   "the window under the mouse pointer"));
 		WMAddBoxSubview(box, WMWidgetView(panel->kfocB[1]), True, True, 20, 0, 0);
 
 		WMMapSubwidgets(box);
@@ -223,17 +223,26 @@ static void createPanel(Panel * p)
 	panel->cfocF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->cfocF, 240, 77);
 	WMMoveWidget(panel->cfocF, 15, 143);
-	WMSetFrameTitle(panel->cfocF, _("Install colormap in the window..."));
+	WMSetFrameTitle(panel->cfocF, _("Install colormap from the window..."));
+
+	WMSetBalloonTextForView(_("This option is for screens that can display only a limited number\n"
+	                          "of colors at a time, so they use an indexed table of colors (called\n"
+	                          "a ColorMap) that each application customizes for its needs, and\n"
+	                          "WindowMaker will set the global ColorMap dynamically from the\n"
+	                          "active application.\n"
+	                          "You can know the capability of your screen in WindowMaker's info\n"
+	                          "panel as the 'visual'."),
+	                        WMWidgetView(panel->cfocF));
 
 	panel->manB = WMCreateRadioButton(panel->cfocF);
-	WMResizeWidget(panel->manB, 225, 20);
-	WMMoveWidget(panel->manB, 10, 20);
-	WMSetButtonText(panel->manB, _("...that has the input focus."));
+	WMResizeWidget(panel->manB, 226, 24);
+	WMMoveWidget(panel->manB, 9, 18);
+	WMSetButtonText(panel->manB, _("...that has the input focus"));
 
 	panel->autB = WMCreateRadioButton(panel->cfocF);
-	WMResizeWidget(panel->autB, 225, 20);
-	WMMoveWidget(panel->autB, 10, 45);
-	WMSetButtonText(panel->autB, _("...that's under the mouse pointer."));
+	WMResizeWidget(panel->autB, 226, 24);
+	WMMoveWidget(panel->autB, 9, 43);
+	WMSetButtonText(panel->autB, _("...that's under the mouse pointer"));
 	WMGroupButtons(panel->manB, panel->autB);
 
 	WMMapSubwidgets(panel->cfocF);
@@ -312,19 +321,19 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->optF, 265, 88);
 
 	panel->ignB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->ignB, 225, 50);
+	WMResizeWidget(panel->ignB, 228, 50-2);
 	WMMoveWidget(panel->ignB, 10, 4);
-	WMSetButtonText(panel->ignB, _("Do not let applications receive " "the click used to focus windows."));
+	WMSetButtonText(panel->ignB, _("Do not let applications receive the click used to focus windows"));
 
 	panel->newB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->newB, 225, 35);
-	WMMoveWidget(panel->newB, 10, 49);
-	WMSetButtonText(panel->newB, _("Automatically focus new windows."));
+	WMResizeWidget(panel->newB, 228, 35);
+	WMMoveWidget(panel->newB, 10, 52);
+	WMSetButtonText(panel->newB, _("Automatically focus new windows"));
 
 	panel->craisB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->craisB, 225, 36);
-	WMMoveWidget(panel->craisB, 10, 85);
-	WMSetButtonText(panel->craisB, _("Raise window when switching\nfocus with keyboard."));
+	WMResizeWidget(panel->craisB, 228, 36);
+	WMMoveWidget(panel->craisB, 10, 87);
+	WMSetButtonText(panel->craisB, _("Raise window when switching focus with keyboard"));
 
 	WMMapSubwidgets(panel->optF);
 

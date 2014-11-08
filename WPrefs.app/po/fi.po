@@ -644,23 +644,23 @@ msgstr "Syöttökohdistuksen tila"
 
 #: ../../WPrefs.app/Focus.c:223
 msgid "Manual:  Click on the window to set keyboard input focus"
-msgstr "Manuaalinen: Napauta ikkunaa asettaaksesi sen näppäimistösyötön kohteeksi."
+msgstr "Manuaalinen: Napauta ikkunaa asettaaksesi sen näppäimistösyötön kohteeksi"
 
 #: ../../WPrefs.app/Focus.c:230
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
-msgstr "Automaattinen: Aseta hiiren osoittimen alla oleva ikkuna näppäimistösyötön kohteeksi."
+msgstr "Automaattinen: Aseta hiiren osoittimen alla oleva ikkuna näppäimistösyötön kohteeksi"
 
 #: ../../WPrefs.app/Focus.c:244
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Asenna värikartta ikkunaan..."
 
 #: ../../WPrefs.app/Focus.c:249
-msgid "...that has the input focus."
-msgstr "...jolla on syöttökohdistus."
+msgid "...that has the input focus"
+msgstr "...jolla on syöttökohdistus"
 
 #: ../../WPrefs.app/Focus.c:254
-msgid "...that is under the mouse pointer."
-msgstr "...joka on hiiren osoittimen alla."
+msgid "...that's under the mouse pointer"
+msgstr "...joka on hiiren osoittimen alla"
 
 #: ../../WPrefs.app/Focus.c:263
 msgid "Automatic Window Raise Delay"
@@ -671,20 +671,12 @@ msgid "msec"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:337
-msgid ""
-"Do not let applications receive\n"
-"the click used to focus windows."
-msgstr ""
-"Älä välitä sovelluksille ikkunan\n"
-"aktivointipainallusta."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Älä välitä sovelluksille ikkunan aktivointipainallusta"
 
 #: ../../WPrefs.app/Focus.c:343
-msgid ""
-"Automatically focus new\n"
-"windows."
-msgstr ""
-"Aktivoi uudet ikkunat\n"
-"automaattisesti."
+msgid "Automatically focus new windows"
+msgstr "Aktivoi uudet ikkunat automaattisesti"
 
 #: ../../WPrefs.app/Focus.c:364
 msgid "Window Focus Preferences"
@@ -1758,12 +1750,8 @@ msgid "internal help"
 msgstr "sisäinen apu"
 
 #: ../../WPrefs.app/Preferences.c:292
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Nosta ikkuna, kun aktiivista ikku-\n"
-"naa vaihdetaan näppäimistöllä."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Nosta ikkuna, kun aktiivista ikkunaa vaihdetaan näppäimistöllä"
 
 #: ../../WPrefs.app/Preferences.c:298
 msgid ""
@@ -2130,15 +2118,6 @@ msgstr ""
 
 #~ msgid "Disable cycling color highlighting of icons"
 #~ msgstr "Ei kuvakkeiden korostusta värikierrolla."
-
-#~ msgid ""
-#~ "Set keyboard input focus to\n"
-#~ "the window under the mouse pointer,\n"
-#~ "including the root window."
-#~ msgstr ""
-#~ "Aseta hiiren osoittimen alla oleva\n"
-#~ "ikkuna, juuri-ikkuna mukaanlukien,\n"
-#~ "näppäimistösyötön kohteeksi."
 
 #~ msgid "Click window to focus"
 #~ msgstr "Napauta ikkunaa kohdistaaksesi"

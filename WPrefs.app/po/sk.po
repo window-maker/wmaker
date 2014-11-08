@@ -442,16 +442,16 @@ msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
 msgstr "Automatické:  Aktivuje sa okno pod kurzorom myši"
 
 #: ../../WPrefs.app/Focus.c:243
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Nastaviť paletu oknu..."
 
 #: ../../WPrefs.app/Focus.c:248
-msgid "...that has the input focus."
-msgstr "...ktoré je aktívne."
+msgid "...that has the input focus"
+msgstr "...ktoré je aktívne"
 
 #: ../../WPrefs.app/Focus.c:253
-msgid "...that is under the mouse pointer."
-msgstr "...ktoré sa nachádza pod kurzorom."
+msgid "...that's under the mouse pointer"
+msgstr "...ktoré sa nachádza pod kurzorom"
 
 #: ../../WPrefs.app/Focus.c:262
 msgid "Automatic Window Raise Delay"
@@ -462,20 +462,12 @@ msgid "msec"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:336
-msgid ""
-"Do not let applications receive\n"
-"the click used to focus windows."
-msgstr ""
-"Aplikácia nesmie prijať kliknutie,\n"
-"ktoré spôsobilo aktiváciu okna."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Aplikácia nesmie prijať kliknutie, ktoré spôsobilo aktiváciu okna"
 
 #: ../../WPrefs.app/Focus.c:342
-msgid ""
-"Automatically focus new\n"
-"windows."
-msgstr ""
-"Automaticky aktivovať\n"
-"nové okná."
+msgid "Automatically focus new windows"
+msgstr "Automaticky aktivovať nové okná"
 
 #: ../../WPrefs.app/Focus.c:363
 msgid "Window Focus Preferences"
@@ -1575,12 +1567,8 @@ msgid "internal help"
 msgstr "internú nápovedu"
 
 #: ../../WPrefs.app/Preferences.c:292
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Pri aktivovaní okna klávesnicou\n"
-"presunúť okno do popredia."
+msgid "Raise window when switchingfocus with keyboard"
+msgstr "Pri aktivovaní okna klávesnicoupresunúť okno do popredia"
 
 #: ../../WPrefs.app/Preferences.c:298
 msgid ""

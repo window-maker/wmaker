@@ -599,32 +599,12 @@ msgid "bad option value %s for option ColormapMode. Using default Auto"
 msgstr "ColormapMode 选项值 %s 错误.使用默认的自动方式"
 
 #: ../../WPrefs.app/Focus.c:196
-msgid ""
-"Click on the window to set\n"
-"keyboard input focus."
-msgstr ""
-"在窗口上点击一下以\n"
-"设置键盘输入焦点."
+msgid "Manual:  Click on the window to set keyboard input focus"
+msgstr "在窗口上点击一下以设置键盘输入焦点"
 
 #: ../../WPrefs.app/Focus.c:200
-msgid ""
-"Set keyboard input focus to\n"
-"the window under the mouse pointer,\n"
-"including the root window."
-msgstr ""
-"鼠标下面的窗口\n"
-"获得键盘输入焦点,\n"
-"包括根窗口."
-
-#: ../../WPrefs.app/Focus.c:205
-msgid ""
-"Set keyboard input focus to\n"
-"the window under the mouse pointer,\n"
-"except the root window."
-msgstr ""
-"鼠标下面的窗口\n"
-"获得键盘输入焦点,\n"
-"不包括根窗口."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
+msgstr "鼠标下面的窗口获得键盘输入焦点"
 
 #: ../../WPrefs.app/Focus.c:249
 msgid "Input Focus Mode"
@@ -643,16 +623,16 @@ msgid "\"Sloppy\" focus"
 msgstr "\"Sloppy\" 焦点"
 
 #: ../../WPrefs.app/Focus.c:271
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "在窗口里安装颜色表..."
 
 #: ../../WPrefs.app/Focus.c:276
-msgid "...that has the input focus."
-msgstr "...获得输入焦点的窗口."
+msgid "...that has the input focus"
+msgstr "...获得输入焦点的窗口"
 
 #: ../../WPrefs.app/Focus.c:281
-msgid "...that is under the mouse pointer."
-msgstr "...鼠标下面的窗口."
+msgid "...that's under the mouse pointer"
+msgstr "...鼠标下面的窗口"
 
 #: ../../WPrefs.app/Focus.c:290
 msgid "Automatic Window Raise Delay"
@@ -663,12 +643,12 @@ msgid "msec"
 msgstr "毫秒"
 
 #: ../../WPrefs.app/Focus.c:364
-msgid "Do not let applications receive the click used to focus windows."
-msgstr "不让应用程序得到用来设置窗口焦点的鼠标按键动作."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "不让应用程序得到用来设置窗口焦点的鼠标按键动作"
 
 #: ../../WPrefs.app/Focus.c:370
-msgid "Automatically focus new windows."
-msgstr "新窗口自动得到焦点."
+msgid "Automatically focus new windows"
+msgstr "新窗口自动得到焦点"
 
 #: ../../WPrefs.app/Focus.c:391
 msgid "Window Focus Preferences"
@@ -1390,8 +1370,8 @@ msgid "internal help"
 msgstr "内部帮助"
 
 #: ../../WPrefs.app/Preferences.c:220
-msgid "Raise window when switching focus with keyboard (CirculateRaise)."
-msgstr "当使用键盘切换焦点时把窗口放置在前(CirculateRaise)"
+msgid "Raise window when switching focus with keyboard"
+msgstr "当使用键盘切换焦点时把窗口放置在前"
 
 #: ../../WPrefs.app/Preferences.c:226
 msgid "Keep keyboard language status for each window."

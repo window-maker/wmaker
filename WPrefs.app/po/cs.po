@@ -426,26 +426,23 @@ msgstr "Způsob zaměření okna"
 
 #: ../Focus.c:222
 msgid "Manual:  Click on the window to set keyboard input focus"
-msgstr "Ručně: Ťuk myši zaměří okno."
+msgstr "Ručně: Ťuk myši zaměří okno"
 
 #: ../Focus.c:229
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
-msgstr ""
-"Automaticky: Nastaví zaměření\n"
-"vstupu na okno pod ukazatelem\n"
-"myši." 
+msgstr "Automaticky: Nastaví zaměření vstupu na okno pod ukazatelem myši"
 
 #: ../Focus.c:243
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Nastavit mapu barev v okně,"
 
 #: ../Focus.c:248
-msgid "...that has the input focus."
-msgstr "které má zaměření."
+msgid "...that has the input focus"
+msgstr "které má zaměření"
 
 #: ../Focus.c:253
-msgid "...that is under the mouse pointer."
-msgstr "které je pod myší."
+msgid "...that's under the mouse pointer"
+msgstr "které je pod myší"
 
 #: ../Focus.c:262
 msgid "Automatic Window Raise Delay"
@@ -456,20 +453,12 @@ msgid "msec"
 msgstr "ms"
 
 #: ../Focus.c:336
-msgid ""
-"Do not let applications receive\n"
-"the click used to focus windows."
-msgstr ""
-"Nenechat aplikaci přijmout ťuk\n"
-"myši k zaměření oken."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Nenechat aplikaci přijmout ťuk myši k zaměření oken"
 
 #: ../Focus.c:342
-msgid ""
-"Automatically focus new\n"
-"windows."
-msgstr ""
-"Automaticky zaměřit\n"
-"nová okna."
+msgid "Automatically focus new windows"
+msgstr "Automaticky zaměřit nová okna"
 
 #: ../Focus.c:363
 msgid "Window Focus Preferences"
@@ -1543,12 +1532,8 @@ msgid "internal help"
 msgstr "interní nápovědu"
 
 #: ../Preferences.c:292
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Při změně zaměření přes\n"
-" klávesnici zdvihnout okno."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Při změně zaměření přes klávesnici zdvihnout okno"
 
 #: ../Preferences.c:298
 msgid ""

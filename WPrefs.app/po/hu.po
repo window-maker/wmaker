@@ -537,44 +537,40 @@ msgid "Input Focus Mode"
 msgstr "Beviteli fókusz mód"
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:206
-msgid "Manual:  Click on the window to set keyboard input focus."
-msgstr "Manuális:  Fókusz váltáshoz az ablakra kell kattintani."
+msgid "Manual:  Click on the window to set keyboard input focus"
+msgstr "Manuális:  Fókusz váltáshoz az ablakra kell kattintani"
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:212
-msgid "Auto:  Set keyboard input focus to the window under the mouse pointer."
-msgstr "Automatikus:  A fókusz mindig azé az ablaké lesz, amely felett az egér mutató áll."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
+msgstr "Automatikus:  A fókusz mindig azé az ablaké lesz, amely felett az egér mutató áll"
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:225
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Színtérkép ahhoz az ablakhoz..."
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:230
-msgid "...that has the input focus."
-msgstr "...amelyiké a beviteli fókusz."
+msgid "...that has the input focus"
+msgstr "...amelyiké a beviteli fókusz"
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:235
-msgid "...that's under the mouse pointer."
-msgstr "...amelyikre az egér mutat."
+msgid "...that's under the mouse pointer"
+msgstr "...amelyikre az egér mutat"
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:244
 msgid "Automatic Window Raise Delay"
 msgstr "Automatikus ablak előrerakás késleltetése"
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:316
-msgid "Do not let applications receive the click used to focus windows."
-msgstr "A fókuszálásra használt egérkattintást ne kapja meg az alkalmazás."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "A fókuszálásra használt egérkattintást ne kapja meg az alkalmazás"
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:321
-msgid "Automatically focus new windows."
-msgstr "Új ablakok automatikusan fókuszba kerülnek."
+msgid "Automatically focus new windows"
+msgstr "Új ablakok automatikusan fókuszba kerülnek"
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:326
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Billentyűvel váltott fókusznál\n"
-"az aktív ablak előtérbe is kerül."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Billentyűvel váltott fókusznál az aktív ablak előtérbe is kerül"
 
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:342
 msgid "Window Focus Preferences"

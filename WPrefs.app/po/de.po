@@ -419,24 +419,24 @@ msgid "Input Focus Mode"
 msgstr "Eingabefokus-Modus"
 
 #: ../../WPrefs.app/Focus.c:201
-msgid "Manual:  Click on the window to set keyboard input focus."
+msgid "Manual:  Click on the window to set keyboard input focus"
 msgstr "Manuell: Tastaturfokus durch Anklicken des Fensters setzen"
 
 #: ../../WPrefs.app/Focus.c:207
-msgid "Auto:  Set keyboard input focus to the window under the mouse pointer."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
 msgstr "Auto: Tastaturfokus immer auf das Fenster unter dem Mauszeiger setzen"
 
 #: ../../WPrefs.app/Focus.c:220
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Farbtabelle im Fenster setzen, das..."
 
 #: ../../WPrefs.app/Focus.c:225
-msgid "...that has the input focus."
-msgstr "...den Eingabefokus hat."
+msgid "...that has the input focus"
+msgstr "...den Eingabefokus hat"
 
 #: ../../WPrefs.app/Focus.c:230
-msgid "...that's under the mouse pointer."
-msgstr "...unter dem Mauszeiger ist."
+msgid "...that's under the mouse pointer"
+msgstr "...unter dem Mauszeiger ist"
 
 #: ../../WPrefs.app/Focus.c:239
 msgid "Automatic Window Raise Delay"
@@ -447,12 +447,11 @@ msgid "msec"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:311
-msgid "Do not let applications receive the click used to focus windows."
-msgstr ""
-"Mausklicks, die ein Fenster fokussiert haben, nicht an die Anwendung senden."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Mausklicks, die ein Fenster fokussiert haben, nicht an die Anwendung senden"
 
 #: ../../WPrefs.app/Focus.c:316
-msgid "Automatically focus new windows."
+msgid "Automatically focus new windows"
 msgstr "Neue Fenster automatisch auswählen"
 
 #: ../../WPrefs.app/Focus.c:333
@@ -1584,12 +1583,8 @@ msgid "internal help"
 msgstr "interne Hilfe"
 
 #: ../../WPrefs.app/Preferences.c:278
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Aktives Fenster nach Tastatur-\n"
-"Fokuswechsel oben."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Aktives Fenster nach Tastatur-Fokuswechsel oben"
 
 #: ../../WPrefs.app/Preferences.c:284
 msgid ""

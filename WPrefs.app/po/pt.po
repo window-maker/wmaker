@@ -624,32 +624,12 @@ msgid "bad option value %s for option ColormapMode. Using default Auto"
 msgstr "valor %s inválido para opção ColormapMode. Usando default Auto"
 
 #: ../../WPrefs.app/Focus.c:196
-msgid ""
-"Click on the window to set\n"
-"keyboard input focus."
-msgstr ""
-"Clicar na janelar para mudar\n"
-"o foco do teclado."
+msgid "Manual:  Click on the window to set keyboard input focus"
+msgstr "Clicar na janelar para mudar o foco do teclado"
 
 #: ../../WPrefs.app/Focus.c:200
-msgid ""
-"Set keyboard input focus to\n"
-"the window under the mouse pointer,\n"
-"including the root window."
-msgstr ""
-"Mudar foco do teclado para a\n"
-"janela sob o cursor do mouse,\n"
-"inclusive a janela raiz."
-
-#: ../../WPrefs.app/Focus.c:205
-msgid ""
-"Set keyboard input focus to\n"
-"the window under the mouse pointer,\n"
-"except the root window."
-msgstr ""
-"Mudar foco do teclado para a\n"
-"janela sob o cursor do mouse,\n"
-"exceto a janela raiz."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
+msgstr "Mudar foco do teclado para a janela sob o cursor do mouse"
 
 #: ../../WPrefs.app/Focus.c:249
 msgid "Input Focus Mode"
@@ -668,16 +648,16 @@ msgid "\"Sloppy\" focus"
 msgstr "\"Sloppy focus\""
 
 #: ../../WPrefs.app/Focus.c:271
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Instalar colormap na janela..."
 
 #: ../../WPrefs.app/Focus.c:276
-msgid "...that has the input focus."
-msgstr "...que tem o foco do teclado."
+msgid "...that has the input focus"
+msgstr "...que tem o foco do teclado"
 
 #: ../../WPrefs.app/Focus.c:281
-msgid "...that is under the mouse pointer."
-msgstr "...que está sob o cursor do mouse."
+msgid "...that's under the mouse pointer"
+msgstr "...que está sob o cursor do mouse"
 
 #: ../../WPrefs.app/Focus.c:290
 msgid "Automatic Window Raise Delay"
@@ -688,12 +668,12 @@ msgid "msec"
 msgstr "mseg"
 
 #: ../../WPrefs.app/Focus.c:364
-msgid "Do not let applications receive the click used to focus windows."
-msgstr "Não deixar aplicação receber o clique usado para focar janelas."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Não deixar aplicação receber o clique usado para focar janelas"
 
 #: ../../WPrefs.app/Focus.c:370
-msgid "Automatically focus new windows."
-msgstr "Focar janelas novas automaticamente."
+msgid "Automatically focus new windows"
+msgstr "Focar janelas novas automaticamente"
 
 #: ../../WPrefs.app/Focus.c:391
 msgid "Window Focus Preferences"
@@ -1497,8 +1477,8 @@ msgid "internal help"
 msgstr "ajuda interna"
 
 #: ../../WPrefs.app/Preferences.c:220
-msgid "Raise window when switching focus with keyboard (CirculateRaise)."
-msgstr "Levantar janela ao mudar de foco com teclado (CirculateRaise)."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Levantar janela ao mudar de foco com teclado"
 
 #: ../../WPrefs.app/Preferences.c:226
 msgid "Keep keyboard language status for each window."

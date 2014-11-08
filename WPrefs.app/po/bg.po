@@ -537,27 +537,27 @@ msgstr "Правило за фокусиране"
 # ../../WPrefs.app/Focus.c:196
 #: ../../WPrefs.app/Focus.c:222
 msgid "Manual:  Click on the window to set keyboard input focus"
-msgstr "Ръчно: щракане върху прозореца, за да му се даде клавиатурния фокус."
+msgstr "Ръчно: щракане върху прозореца, за да му се даде клавиатурния фокус"
 
 # ../../WPrefs.app/Focus.c:205
 #: ../../WPrefs.app/Focus.c:229
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
-msgstr "Автоматично: клавиатурният фокус се получава от прозореца, върху който е мишката."
+msgstr "Автоматично: клавиатурният фокус се получава от прозореца, върху който е мишката"
 
 # ../../WPrefs.app/Focus.c:271
 #: ../../WPrefs.app/Focus.c:243
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Цветовата палитра е за прозореца,... "
 
 # ../../WPrefs.app/Focus.c:276
 #: ../../WPrefs.app/Focus.c:248
-msgid "...that has the input focus."
-msgstr "... който е фокусиран."
+msgid "...that has the input focus"
+msgstr "... който е фокусиран"
 
 # ../../WPrefs.app/Focus.c:281
 #: ../../WPrefs.app/Focus.c:253
-msgid "...that is under the mouse pointer."
-msgstr "... който е под мишката."
+msgid "...that's under the mouse pointer"
+msgstr "... който е под мишката"
 
 # ../../WPrefs.app/Focus.c:290
 #: ../../WPrefs.app/Focus.c:262
@@ -571,22 +571,13 @@ msgstr "ms"
 
 # ../../WPrefs.app/Focus.c:364
 #: ../../WPrefs.app/Focus.c:336
-msgid ""
-"Do not let applications receive\n"
-"the click used to focus windows."
-msgstr ""
-"Приложенията да не получават\n"
-"щракания, използвани за\n"
-"фокусиране на прозорец."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Приложенията да не получават щракания, използвани за фокусиране на прозорец"
 
 # ../../WPrefs.app/Focus.c:370
 #: ../../WPrefs.app/Focus.c:342
-msgid ""
-"Automatically focus new\n"
-"windows."
-msgstr ""
-"Автоматично да се фокусират\n"
-"новите прозорци."
+msgid "Automatically focus new windows"
+msgstr "Автоматично да се фокусират новите прозорци"
 
 # ../../WPrefs.app/Focus.c:391
 #: ../../WPrefs.app/Focus.c:363
@@ -1917,12 +1908,8 @@ msgid "internal help"
 msgstr "вътрешна справка"
 
 #: ../../WPrefs.app/Preferences.c:292
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Да се повдига прозорецът при про-\n"
-"мяна на фокуса с клавиатурата."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Да се повдига прозорецът при про-мяна на фокуса с клавиатурата"
 
 #: ../../WPrefs.app/Preferences.c:298
 msgid ""
@@ -2595,16 +2582,6 @@ msgstr "приложението не може да бъде инициализ�
 # ../../WPrefs.app/Expert.c:79
 #~ msgid "Disable cycling color highlighting of icons"
 #~ msgstr "Без въртене на пунктир около маркираните иконки."
-
-# ../../WPrefs.app/Focus.c:200
-#~ msgid ""
-#~ "Set keyboard input focus to\n"
-#~ "the window under the mouse pointer,\n"
-#~ "including the root window."
-#~ msgstr ""
-#~ "Фокусът е за прозореца, върху\n"
-#~ "който е мишката, в това число\n"
-#~ "и основния (т.н. root) прозорец."
 
 # ../../WPrefs.app/Focus.c:254
 #~ msgid "Click window to focus"

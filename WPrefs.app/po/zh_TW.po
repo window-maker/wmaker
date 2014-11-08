@@ -417,23 +417,23 @@ msgid "Input Focus Mode"
 msgstr "輸入焦點模式"
 
 #: ../../WPrefs.app/Focus.c:222
-msgid "Manual:  Click on the window to set keyboard input focus."
+msgid "Manual:  Click on the window to set keyboard input focus"
 msgstr "手動: 在視窗上按一下設定鍵盤輸入焦點。"
 
 #: ../../WPrefs.app/Focus.c:229
-msgid "Auto:  Set keyboard input focus to the window under the mouse pointer."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
 msgstr "自動: 設定鍵盤輸入焦點至滑鼠指標下面的視窗。"
 
 #: ../../WPrefs.app/Focus.c:243
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "安裝色盤..."
 
 #: ../../WPrefs.app/Focus.c:248
-msgid "...that has the input focus."
+msgid "...that has the input focus"
 msgstr "...輸入焦點所在視窗。"
 
 #: ../../WPrefs.app/Focus.c:253
-msgid "...that's under the mouse pointer."
+msgid "...that's under the mouse pointer"
 msgstr "...滑鼠指標下面的視窗。"
 
 #: ../../WPrefs.app/Focus.c:262
@@ -445,11 +445,11 @@ msgid "msec"
 msgstr "毫秒"
 
 #: ../../WPrefs.app/Focus.c:336
-msgid "Do not let applications receive the click used to focus windows."
+msgid "Do not let applications receive the click used to focus windows"
 msgstr "不要讓應用程式得到用來設定視窗焦點的滑鼠按鍵動作。"
 
 #: ../../WPrefs.app/Focus.c:342
-msgid "Automatically focus new windows."
+msgid "Automatically focus new windows"
 msgstr "新視窗自動得到焦點。"
 
 #: ../../WPrefs.app/Focus.c:363
@@ -1540,9 +1540,7 @@ msgid "internal help"
 msgstr "內部說明"
 
 #: ../../WPrefs.app/Preferences.c:292
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
+msgid "Raise window when switching focus with keyboard"
 msgstr "當使用鍵盤切換焦點時升起視窗。"
 
 #: ../../WPrefs.app/Preferences.c:298
@@ -2075,15 +2073,6 @@ msgstr "桌面標題"
 
 #~ msgid "Disable cycling color highlighting of icons."
 #~ msgstr "使圖示的循環色彩強調失效"
-
-#~ msgid ""
-#~ "Set keyboard input focus to\n"
-#~ "the window under the mouse pointer,\n"
-#~ "including the root window."
-#~ msgstr ""
-#~ "設定鍵盤輸入焦點至\n"
-#~ "滑鼠指標下面的視窗，\n"
-#~ "包含根視窗。"
 
 #~ msgid "Click window to focus"
 #~ msgstr "按視窗取得焦點"

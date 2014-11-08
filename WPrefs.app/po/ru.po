@@ -448,21 +448,19 @@ msgstr "Вручную:  Щелкните на окне, для передачи
 
 #: ../../WPrefs.app/Focus.c:229
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
-msgstr ""
-"Автоматически:  Фокус клавиатурного ввода передается окну, находящемуся под "
-"курсором мыши."
+msgstr "Автоматически:  Фокус клавиатурного ввода передается окну, находящемуся под курсором мыши"
 
 #: ../../WPrefs.app/Focus.c:243
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Устанавливать палитру окна..."
 
 #: ../../WPrefs.app/Focus.c:248
-msgid "...that has the input focus."
-msgstr "...имеющего фокус ввода."
+msgid "...that has the input focus"
+msgstr "...имеющего фокус ввода"
 
 #: ../../WPrefs.app/Focus.c:253
-msgid "...that is under the mouse pointer."
-msgstr "...находящегося под курсором мыши."
+msgid "...that's under the mouse pointer"
+msgstr "...находящегося под курсором мыши"
 
 #: ../../WPrefs.app/Focus.c:262
 msgid "Automatic Window Raise Delay"
@@ -473,20 +471,12 @@ msgid "msec"
 msgstr "Мсек"
 
 #: ../../WPrefs.app/Focus.c:336
-msgid ""
-"Do not let applications receive\n"
-"the click used to focus windows."
-msgstr ""
-"Не передавать приложениям щелчок мыши,\n"
-"сделанный для фокусировки."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Не передавать приложениям щелчок мыши,сделанный для фокусировки"
 
 #: ../../WPrefs.app/Focus.c:342
-msgid ""
-"Automatically focus new\n"
-"windows."
-msgstr ""
-"Автоматически передавать фокус\n"
-"новым окнам."
+msgid "Automatically focus new windows"
+msgstr "Автоматически передавать фокус новым окнам"
 
 #: ../../WPrefs.app/Focus.c:363
 msgid "Window Focus Preferences"
@@ -1653,12 +1643,8 @@ msgid "internal help"
 msgstr "внутренней помощи"
 
 #: ../../WPrefs.app/Preferences.c:292
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Поднимать окно при переключении\n"
-"фокуса с клавиатуры."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Поднимать окно при переключениифокуса с клавиатуры"
 
 #: ../../WPrefs.app/Preferences.c:298
 #, fuzzy

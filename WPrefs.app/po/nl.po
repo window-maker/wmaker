@@ -588,43 +588,41 @@ msgid "Input Focus Mode"
 msgstr "Invoerfocusmodus"
 
 #: ../../WPrefs.app/Focus.c:207
-msgid "Manual:  Click on the window to set keyboard input focus."
-msgstr "Handmatig:  klik op 't venster om toetsenbordinvoerfocus te geven."
+msgid "Manual:  Click on the window to set keyboard input focus"
+msgstr "Handmatig:  klik op 't venster om toetsenbordinvoerfocus te geven"
 
 #: ../../WPrefs.app/Focus.c:213
-msgid "Auto:  Set keyboard input focus to the window under the mouse pointer."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
 msgstr ""
-"Vanzelf:  geef toetsenbordinvoerfocus aan 't venster onder de muispijl."
+"Vanzelf:  geef toetsenbordinvoerfocus aan 't venster onder de muispijl"
 
 #: ../../WPrefs.app/Focus.c:226
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Installeer kleurenkaart in 't venster..."
 
 #: ../../WPrefs.app/Focus.c:231
-msgid "...that has the input focus."
-msgstr "...dat de invoerfocus heeft."
+msgid "...that has the input focus"
+msgstr "...dat de invoerfocus heeft"
 
 #: ../../WPrefs.app/Focus.c:236
-msgid "...that's under the mouse pointer."
-msgstr "...dat onder de muispijl zit."
+msgid "...that's under the mouse pointer"
+msgstr "...dat onder de muispijl zit"
 
 #: ../../WPrefs.app/Focus.c:245
 msgid "Automatic Window Raise Delay"
 msgstr "Vertraging vanzelf vensters verhogen"
 
 #: ../../WPrefs.app/Focus.c:317
-msgid "Do not let applications receive the click used to focus windows."
-msgstr "Laat programma's niet de vensterfocusklik ontvangen."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Laat programma's niet de vensterfocusklik ontvangen"
 
 #: ../../WPrefs.app/Focus.c:322
-msgid "Automatically focus new windows."
-msgstr "Focus nieuwe vensters vanzelf."
+msgid "Automatically focus new windows"
+msgstr "Focus nieuwe vensters vanzelf"
 
 #: ../../WPrefs.app/Focus.c:327
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr "Verhoog venster bij focus wisselen met toetsenbord."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Verhoog venster bij focus wisselen met toetsenbord"
 
 #: ../../WPrefs.app/Focus.c:343
 msgid "Window Focus Preferences"

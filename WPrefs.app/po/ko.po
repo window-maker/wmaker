@@ -485,24 +485,24 @@ msgid "Input Focus Mode"
 msgstr "입력 활성화 모드"
 
 #: ../../WPrefs.app/Focus.c:203
-msgid "Manual:  Click on the window to set keyboard input focus."
-msgstr "수동: 키보드 입력을 활성화하려면 창을 클릭합니다."
+msgid "Manual:  Click on the window to set keyboard input focus"
+msgstr "수동: 키보드 입력을 활성화하려면 창을 클릭합니다"
 
 #: ../../WPrefs.app/Focus.c:209
-msgid "Auto:  Set keyboard input focus to the window under the mouse pointer."
-msgstr "자동: 마우스 포인터 아래에 있는 창으로 키보드 입력을 활성화합니다."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
+msgstr "자동: 마우스 포인터 아래에 있는 창으로 키보드 입력을 활성화합니다"
 
 #: ../../WPrefs.app/Focus.c:222
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "컬러맵의 설치는"
 
 #: ../../WPrefs.app/Focus.c:227
-msgid "...that has the input focus."
-msgstr "입력 활성화가 된 창."
+msgid "...that has the input focus"
+msgstr "입력 활성화가 된 창"
 
 #: ../../WPrefs.app/Focus.c:232
-msgid "...that's under the mouse pointer."
-msgstr "...마우스 포인터 아래입니다."
+msgid "...that's under the mouse pointer"
+msgstr "...마우스 포인터 아래입니다"
 
 #: ../../WPrefs.app/Focus.c:241
 msgid "Automatic Window Raise Delay"
@@ -513,20 +513,16 @@ msgid "msec"
 msgstr "msec"
 
 #: ../../WPrefs.app/Focus.c:313
-msgid "Do not let applications receive the click used to focus windows."
-msgstr "응용프로그램이 창을 활성화하는 클릭을 받지 못하도록 합니다."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "응용프로그램이 창을 활성화하는 클릭을 받지 못하도록 합니다"
 
 #: ../../WPrefs.app/Focus.c:318
-msgid "Automatically focus new windows."
-msgstr "새로운 창을 자동 활성화합니다."
+msgid "Automatically focus new windows"
+msgstr "새로운 창을 자동 활성화합니다"
 
 #: ../../WPrefs.app/Focus.c:323
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"키보드로 활성화 전환시\n"
-" 창을 올립니다."
+msgid "Raise window when switching focus with keyboard"
+msgstr "키보드로 활성화 전환시 창을 올립니다"
 
 #: ../../WPrefs.app/Focus.c:339
 msgid "Window Focus Preferences"
@@ -2336,15 +2332,6 @@ msgstr "응용프로그램을 초기화 할 수 없음"
 
 #~ msgid "Disable cycling color highlighting of icons."
 #~ msgstr "아이콘에 색상 하이라이팅 순환 사용 않음."
-
-#~ msgid ""
-#~ "Set keyboard input focus to\n"
-#~ "the window under the mouse pointer,\n"
-#~ "including the root window."
-#~ msgstr ""
-#~ "마우스 포인터를 루트 창을\n"
-#~ "포함한 모든 창 아래에 놓으면\n"
-#~ "그 창이 활성화됩니다."
 
 #~ msgid "Click window to focus"
 #~ msgstr "활성화하기 위해 창을 클릭"

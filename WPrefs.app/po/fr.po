@@ -443,23 +443,23 @@ msgstr "Mode d'activation des fenêtres"
 
 #: ../../WPrefs.app/Focus.c:222
 msgid "Manual:  Click on the window to set keyboard input focus"
-msgstr "Manuel : Cliquer sur une fenêtre pour l'activer."
+msgstr "Manuel : Cliquer sur une fenêtre pour l'activer"
 
 #: ../../WPrefs.app/Focus.c:229
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
-msgstr "Automatique : Activer la fenêtre pointée par la souris."
+msgstr "Automatique : Activer la fenêtre pointée par la souris"
 
 # "Utiliser la palette de couleurs de la fenêtre..." prends trop de place
 #: ../../WPrefs.app/Focus.c:243
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Palette de couleurs utilisée"
 
 #: ../../WPrefs.app/Focus.c:248
-msgid "...that has the input focus."
+msgid "...that has the input focus"
 msgstr "fenêtre active"
 
 #: ../../WPrefs.app/Focus.c:253
-msgid "...that is under the mouse pointer."
+msgid "...that's under the mouse pointer"
 msgstr "fenêtre pointée par la souris"
 
 #: ../../WPrefs.app/Focus.c:262
@@ -471,20 +471,12 @@ msgid "msec"
 msgstr "msec"
 
 #: ../../WPrefs.app/Focus.c:336
-msgid ""
-"Do not let applications receive\n"
-"the click used to focus windows."
-msgstr ""
-"L'application ne reçoit pas le clic\n"
-"utilisé pour activer la fenêtre."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "L'application ne reçoit pas le clic utilisé pour activer la fenêtre"
 
 #: ../../WPrefs.app/Focus.c:342
-msgid ""
-"Automatically focus new\n"
-"windows."
-msgstr ""
-"Activer automatiquement les\n"
-"nouvelles fenêtres."
+msgid "Automatically focus new windows"
+msgstr "Activer automatiquement les nouvelles fenêtres"
 
 #: ../../WPrefs.app/Focus.c:363
 msgid "Window Focus Preferences"
@@ -1685,12 +1677,8 @@ msgid "internal help"
 msgstr "Aide interne"
 
 #: ../../WPrefs.app/Preferences.c:292
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Une fenêtre activée par le\n"
-"clavier passe devant."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Une fenêtre activée par le clavier passe devant"
 
 #: ../../WPrefs.app/Preferences.c:298
 msgid ""

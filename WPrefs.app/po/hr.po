@@ -110,31 +110,12 @@ msgid "bad option value %s for option ColormapMode. Using default Manual"
 msgstr "kriva vrijednost opcije %s za ColormapMod. Koristim Manual"
 
 #: ../../WPrefs/Focus.c:190
-msgid ""
-"Click on the window to set\n"
-"keyboard input focus."
-msgstr ""
-"Kliknite na prozor da\n"
-"postavite fokus"
+msgid "Manual:  Click on the window to set keyboard input focus"
+msgstr "Kliknite na prozor da postavite fokus"
 
 #: ../../WPrefs/Focus.c:194
-msgid ""
-"Set keyboard input focus to\n"
-"the window under the mouse pointer,\n"
-"including the root window."
-msgstr ""
-"Postavljanje fokusa na prozor\n"
-"ispod pokazivača miša,\n"
-"uključujući i root prozor."
-
-#: ../../WPrefs/Focus.c:199
-msgid ""
-"Set keyboard input focus to\n"
-"the window under the mouse pointer,\n"
-"except the root window."
-msgstr ""
-"Postavljanje fokusa na prozor ispod\n"
-"pokazivača miša, osim root prozora."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
+msgstr "Postavljanje fokusa na prozor ispod pokazivača miša"
 
 #: ../../WPrefs/Focus.c:243
 msgid "Input Focus Mode"
@@ -153,15 +134,15 @@ msgid "\"Sloppy\" focus"
 msgstr "\"Sloppy\" fokus"
 
 #: ../../WPrefs/Focus.c:265
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Instaliraj colormap u prozor..."
 
 #: ../../WPrefs/Focus.c:270
-msgid "...that has the input focus."
-msgstr "što ima fokus."
+msgid "...that has the input focus"
+msgstr "što ima fokus"
 
 #: ../../WPrefs/Focus.c:275
-msgid "...that is under the mouse pointer."
+msgid "...that's under the mouse pointer"
 msgstr "što je ispod kursora"
 
 #: ../../WPrefs/Focus.c:284
@@ -177,7 +158,7 @@ msgid "Do not let aplications receive the click used to focus windows."
 msgstr "Ne daj da aplikacije prime klik za fokusiranje prozora."
 
 #: ../../WPrefs/Focus.c:364
-msgid "Automatically focus new windows."
+msgid "Automatically focus new windows"
 msgstr "Automatski fokusiraj nove prozore"
 
 #: ../../WPrefs/Focus.c:385
@@ -796,8 +777,8 @@ msgid "application/dock icons"
 msgstr "aplikacijske/dock ikone"
 
 #: ../../WPrefs/Preferences.c:204
-msgid "Raise window when switching focus with keyboard (CirculateRaise)."
-msgstr "Podigni prozor pri mjenjanju fokusa tastaturom."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Podići prozor pri mjenjanju fokusa tastaturom"
 
 #: ../../WPrefs/Preferences.c:210
 msgid "Keep keyboard language status for each window."
@@ -1206,9 +1187,6 @@ msgstr "ne mogu inicijalizirati aplikaciju"
 # 
 # msgid "WindowMaker domain (%s) is corrupted!"
 # msgstr "WindowMaker domena (%s) je oštećena!"
-# 
-# msgid "Raise window when switching focus with keyboard."
-# msgstr "Podići prozor pri mjenjanju fokusa tastaturom."
 # 
 # msgid "WindowMaker %i.%i.%i, which is installed in your system, is not fully supported by this version of WPrefs."
 # msgstr "WindowMaker %i.%i.%i, koji je instaliran na vašem sistemu, nije potpuno podržan ovom verzijom WPrefs-a."

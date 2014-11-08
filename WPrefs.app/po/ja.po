@@ -425,23 +425,23 @@ msgid "Input Focus Mode"
 msgstr "インプット・フォーカスの設定"
 
 #: ../../WPrefs.app/Focus.c:200
-msgid "Manual:  Click on the window to set keyboard input focus."
+msgid "Manual:  Click on the window to set keyboard input focus"
 msgstr "手動：フォーカスする ウィンドウ上でクリックする"
 
 #: ../../WPrefs.app/Focus.c:206
-msgid "Auto:  Set keyboard input focus to the window under the mouse pointer."
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
 msgstr "自動：マウスポインタで 自動的にフォーカスを取得"
 
 #: ../../WPrefs.app/Focus.c:219
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "カラーマップのウィンドウへの設定は..."
 
 #: ../../WPrefs.app/Focus.c:224
-msgid "...that has the input focus."
+msgid "...that has the input focus"
 msgstr "...フォーカスが移動した時に"
 
 #: ../../WPrefs.app/Focus.c:229
-msgid "...that's under the mouse pointer."
+msgid "...that's under the mouse pointer"
 msgstr "...マウスポインタがある時に"
 
 #: ../../WPrefs.app/Focus.c:238
@@ -453,12 +453,12 @@ msgid "msec"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:310
-msgid "Do not let applications receive the click used to focus windows."
-msgstr "フォーカス移動のためのマウスクリックを アプリケーションに渡さない."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "フォーカス移動のためのマウスクリックを アプリケーションに渡さない"
 
 #: ../../WPrefs.app/Focus.c:315
-msgid "Automatically focus new windows."
-msgstr "新しいウィンドウに フォーカスを自動的に当てる."
+msgid "Automatically focus new windows"
+msgstr "新しいウィンドウに フォーカスを自動的に当てる"
 
 #: ../../WPrefs.app/Focus.c:332
 msgid "Window Focus Preferences"
@@ -1598,12 +1598,8 @@ msgid "internal help"
 msgstr "内部ヘルプ"
 
 #: ../../WPrefs.app/Preferences.c:277
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"キーボードによりフォーカス\n"
-"されたときウィンドウを前面に"
+msgid "Raise window when switching focus with keyboard"
+msgstr "キーボードによりフォーカスされたときウィンドウを前面に"
 
 #: ../../WPrefs.app/Preferences.c:283
 msgid ""

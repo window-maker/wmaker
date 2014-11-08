@@ -454,16 +454,16 @@ msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
 msgstr "Auto:  Enfoca la finestra que es troba sota el punter del ratolí"
 
 #: ../../WPrefs.app/Focus.c:243
-msgid "Install colormap in the window..."
+msgid "Install colormap from the window..."
 msgstr "Instal·lar el mapa de color a la finestra..."
 
 #: ../../WPrefs.app/Focus.c:248
-msgid "...that has the input focus."
-msgstr "...que està enfocada."
+msgid "...that has the input focus"
+msgstr "...que està enfocada"
 
 #: ../../WPrefs.app/Focus.c:253
-msgid "...that is under the mouse pointer."
-msgstr "...que està sota el punter del ratolí."
+msgid "...that's under the mouse pointer"
+msgstr "...que està sota el punter del ratolí"
 
 #: ../../WPrefs.app/Focus.c:262
 msgid "Automatic Window Raise Delay"
@@ -474,20 +474,12 @@ msgid "msec"
 msgstr "mseg"
 
 #: ../../WPrefs.app/Focus.c:336
-msgid ""
-"Do not let applications receive\n"
-"the click used to focus windows."
-msgstr ""
-"No passar el clic utilitzat per\n"
-"enfocar la finestra a les aplicacions."
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "No passar el clic utilitzat per enfocar la finestra a les aplicacions"
 
 #: ../../WPrefs.app/Focus.c:342
-msgid ""
-"Automatically focus new\n"
-"windows."
-msgstr ""
-"Enfocar les finestres noves\n"
-"automàticament."
+msgid "Automatically focus new windows"
+msgstr "Enfocar les finestres noves automàticament"
 
 #: ../../WPrefs.app/Focus.c:363
 msgid "Window Focus Preferences"
@@ -1675,12 +1667,8 @@ msgid "internal help"
 msgstr "ajuda interna"
 
 #: ../../WPrefs.app/Preferences.c:292
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr ""
-"Elevar la finestra enfocada amb\n"
-"el teclat automàticament."
+msgid "Raise window when switching focus with keyboard"
+msgstr "Elevar la finestra enfocada amb el teclat automàticament"
 
 #: ../../WPrefs.app/Preferences.c:298
 msgid ""
