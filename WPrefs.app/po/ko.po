@@ -379,7 +379,7 @@ msgid "Delay before auto-collapsing"
 msgstr "자동 축소 전 지연 시간"
 
 #: ../../WPrefs.app/Docks.c:295
-msgid "Delay before auto-raise"
+msgid "Delay before auto-raising"
 msgstr "자동 올림 전 지연 시간"
 
 #: ../../WPrefs.app/Docks.c:296

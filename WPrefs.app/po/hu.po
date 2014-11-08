@@ -383,7 +383,7 @@ msgid "Before auto-collapsing"
 msgstr "Összecsukás előtt"
 
 #: ../../../wmaker-crm/WPrefs.app/Docks.c:57
-msgid "Before auto-raise"
+msgid "Before auto-raising"
 msgstr "Előrehozás előtt"
 
 #: ../../../wmaker-crm/WPrefs.app/Docks.c:58

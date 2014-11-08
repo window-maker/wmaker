@@ -425,7 +425,7 @@ msgid "Before auto-collapsing"
 msgstr "Vanzelf inschuiven na"
 
 #: ../../WPrefs.app/Docks.c:57
-msgid "Before auto-raise"
+msgid "Before auto-raising"
 msgstr "Vanzelf verhogen na"
 
 #: ../../WPrefs.app/Docks.c:58

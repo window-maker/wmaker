@@ -33,7 +33,7 @@ static const struct {
 } auto_delay[] = {
 	{ "ClipAutoexpandDelay",   N_("Before auto-expansion") },
 	{ "ClipAutocollapseDelay", N_("Before auto-collapsing") },
-	{ "ClipAutoraiseDelay",    N_("Before auto-raise") },
+	{ "ClipAutoraiseDelay",    N_("Before auto-raising") },
 	{ "ClipAutolowerDelay",    N_("Before auto-lowering") }
 };
 
@@ -182,23 +182,22 @@ static void createPanel(Panel *p)
 	for (k = 0; k < wlengthof(clip_delay_frame_titles); k++)
 	{
 		panel->autoDelayF[k] = WMCreateFrame(panel->box);
-		WMResizeWidget(panel->autoDelayF[k], 370, 100);
-		WMMoveWidget(panel->autoDelayF[k], 15, 10 + k * 110);
+		WMResizeWidget(panel->autoDelayF[k], 372, 100);
+		WMMoveWidget(panel->autoDelayF[k], 11, 10 + k * 110);
 		WMSetFrameTitle(panel->autoDelayF[k], _(clip_delay_frame_titles[k]));
 
 		for (i = 0; i < 2; i++)
 		{
 			panel->autoDelayL[i + k * 2] = WMCreateLabel(panel->autoDelayF[k]);
-			WMResizeWidget(panel->autoDelayL[i + k * 2], 155, 20);
-			WMMoveWidget(panel->autoDelayL[i + k * 2], 10, 27 + 40 * i);
+			WMResizeWidget(panel->autoDelayL[i + k * 2], 152, 20);
+			WMMoveWidget(panel->autoDelayL[i + k * 2], 8, 27 + 40 * i);
 			WMSetLabelText(panel->autoDelayL[i + k * 2], _(auto_delay[i + k * 2].string));
-			/* WMSetLabelTextAlignment(panel->autoDelayL[i + k * 2], WARight); */
 
 			for (j = 0; j < wlengthof(autoDelayPresetValues); j++)
 			{
 				panel->autoDelayB[i + k * 2][j] = WMCreateCustomButton(panel->autoDelayF[k], WBBStateChangeMask);
 				WMResizeWidget(panel->autoDelayB[i + k * 2][j], 25, 25);
-				WMMoveWidget(panel->autoDelayB[i + k * 2][j], 145 + (28 * j), 25 + 40 * i);
+				WMMoveWidget(panel->autoDelayB[i + k * 2][j], 160 + (26 * j), 25 + 40 * i);
 				WMSetButtonBordered(panel->autoDelayB[i + k * 2][j], False);
 				WMSetButtonImagePosition(panel->autoDelayB[i + k * 2][j], WIPImageOnly);
 				WMSetButtonAction(panel->autoDelayB[i + k * 2][j], pushAutoDelayButton, panel);
@@ -223,15 +222,15 @@ static void createPanel(Panel *p)
 			}
 
 			panel->autoDelayT[i + k * 2] = WMCreateTextField(panel->autoDelayF[k]);
-			WMResizeWidget(panel->autoDelayT[i + k * 2], 36, 20);
-			WMMoveWidget(panel->autoDelayT[i + k * 2], 287, 27 + 40 * i);
+			WMResizeWidget(panel->autoDelayT[i + k * 2], 41, 20);
+			WMMoveWidget(panel->autoDelayT[i + k * 2], 293, 27 + 40 * i);
 			WMAddNotificationObserver(autoDelayChanged, panel, WMTextDidChangeNotification, panel->autoDelayT[i + k * 2]);
 
 			color = WMDarkGrayColor(scr);
 			font = WMSystemFontOfSize(scr, 10);
 			panel->autoDelayMsL[i + k * 2] = WMCreateLabel(panel->autoDelayF[k]);
-			WMResizeWidget(panel->autoDelayMsL[i + k * 2], 36, 16);
-			WMMoveWidget(panel->autoDelayMsL[i + k * 2], 327, 33 + 40 *i);
+			WMResizeWidget(panel->autoDelayMsL[i + k * 2], 26, 16);
+			WMMoveWidget(panel->autoDelayMsL[i + k * 2], 337, 30 + 40 * i);
 			WMSetLabelText(panel->autoDelayMsL[i + k * 2], _("msec"));
 			WMSetLabelTextColor(panel->autoDelayMsL[i + k * 2], color);
 			WMSetLabelFont(panel->autoDelayMsL[i + k * 2], font);
@@ -247,7 +246,7 @@ static void createPanel(Panel *p)
 	/***************** Enable/disable clip/dock/drawers *****************/
 	panel->dockF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->dockF, 115, 210);
-	WMMoveWidget(panel->dockF, 390, 10);
+	WMMoveWidget(panel->dockF, 394, 10);
 	WMSetFrameTitle(panel->dockF, _("Dock/Clip/Drawer"));
 
 	for (i = 0; i < wlengthof(dock_config); i++)
