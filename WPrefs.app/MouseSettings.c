@@ -26,6 +26,8 @@
 #include <X11/XKBlib.h>
 
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <math.h>
 
 
@@ -641,6 +643,12 @@ static void storeCommandInScript(const char *cmd, const char *line)
 	char *path;
 	FILE *f;
 	char buffer[128];
+	mode_t permissions;
+
+	/* Calculate permission to be Executable but taking into account user's umask */
+	permissions = umask(0);
+	umask(permissions);
+	permissions = (S_IRWXU | S_IRWXG | S_IRWXO) & (~permissions);
 
 	path = wstrconcat(wusergnusteppath(), "/Library/WindowMaker/autostart");
 
@@ -700,9 +708,8 @@ static void storeCommandInScript(const char *cmd, const char *line)
 		}
 		wfree(tmppath);
 	}
-	sprintf(buffer, "chmod u+x %s", path);
-	if (system(buffer) == -1)
-		werror(_("could not execute command \"%s\""), buffer);
+	if (chmod(path, permissions) != 0)
+		wwarning(_("could not set permission 0%03o on file \"%s\""), permissions, path);
 
  end:
 	wfree(path);
