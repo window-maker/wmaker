@@ -1865,16 +1865,16 @@ msgid "AppIcon bouncing"
 msgstr "Appikon pattogás"
 
 #: ../../../wmaker-crm/WPrefs.app/Preferences.c:279
-msgid "Disable AppIcon bounce."
-msgstr "Patogás letiltása."
+msgid "Disable AppIcon bounce"
+msgstr "Patogás letiltása"
 
 #: ../../../wmaker-crm/WPrefs.app/Preferences.c:284
-msgid "Bounce AppIcon when the application wants attention."
-msgstr "Az appikon pattog ha az alkalmazás figyelmet kér."
+msgid "Bounce when the application wants attention"
+msgstr "Az appikon pattog ha az alkalmazás figyelmet kér"
 
 #: ../../../wmaker-crm/WPrefs.app/Preferences.c:290
-msgid "Raise AppIcons when bouncing."
-msgstr "Ikonok előre hozása pattogáskor."
+msgid "Raise AppIcon when bouncing"
+msgstr "Ikonok előre hozása pattogáskor"
 
 #: ../../../wmaker-crm/WPrefs.app/Preferences.c:298
 msgid "Workspace border"

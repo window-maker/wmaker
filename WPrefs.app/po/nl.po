@@ -1931,16 +1931,16 @@ msgid "AppIcon bouncing"
 msgstr "Stuiteren van programma-iconen"
 
 #: ../../WPrefs.app/Preferences.c:282
-msgid "Disable AppIcon bounce."
-msgstr "Schakel stuiteren iconen uit."
+msgid "Disable AppIcon bounce"
+msgstr "Schakel stuiteren iconen uit"
 
 #: ../../WPrefs.app/Preferences.c:287
-msgid "Bounce AppIcon when the application wants attention."
-msgstr "Stuiter icoon als 't programma aandacht wil."
+msgid "Bounce when the application wants attention"
+msgstr "Stuiter icoon als 't programma aandacht wil"
 
 #: ../../WPrefs.app/Preferences.c:293
-msgid "Raise AppIcons when bouncing."
-msgstr "Verhoog iconen bij stuiteren."
+msgid "Raise AppIcon when bouncing"
+msgstr "Verhoog iconen bij stuiteren"
 
 #: ../../WPrefs.app/Preferences.c:301
 msgid "Workspace border"

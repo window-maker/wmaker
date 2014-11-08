@@ -387,11 +387,11 @@ msgid "Show workspace title on Clip."
 msgstr "ワークスペースのタイトルをクリップに表示する"
 
 #: ../../WPrefs.app/Expert.c:97
-msgid "Bounce AppIcon when the application wants attention."
+msgid "Bounce when the application wants attention"
 msgstr "注意喚起のためにアイコンが飛び跳ねるようにする"
 
 #: ../../WPrefs.app/Expert.c:98
-msgid "Raise AppIcons when bouncing."
+msgid "Raise AppIcon when bouncing"
 msgstr "アイコンが飛び跳ねる時に前面表示にする"
 
 #: ../../WPrefs.app/Expert.c:99

@@ -1784,16 +1784,16 @@ msgid "AppIcon bouncing"
 msgstr "앱 아이콘 튕김"
 
 #: ../../WPrefs.app/Preferences.c:276
-msgid "Disable AppIcon bounce."
+msgid "Disable AppIcon bounce"
 msgstr "앱 아이콘 튕김 효과 끄기"
 
 #: ../../WPrefs.app/Preferences.c:281
-msgid "Bounce AppIcon when the application wants attention."
-msgstr "응용프로그램에서 메시지가 있으면 앱 아이콘을 튕깁니다."
+msgid "Bounce when the application wants attention"
+msgstr "응용프로그램에서 메시지가 있으면 앱 아이콘을 튕깁니다"
 
 #: ../../WPrefs.app/Preferences.c:287
-msgid "Raise AppIcons when bouncing."
-msgstr "튕기는 앱 아아콘을 엽니다."
+msgid "Raise AppIcon when bouncing"
+msgstr "튕기는 앱 아아콘을 엽니다"
 
 #: ../../WPrefs.app/Preferences.c:295
 msgid "Workspace border"
