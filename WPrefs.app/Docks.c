@@ -22,6 +22,11 @@
 #include "WPrefs.h"
 
 
+static const char *const clip_delay_frame_titles[] = {
+	N_("Clip autocollapsing delays"),
+	N_("Clip autoraising delays")
+};
+
 static const struct {
 	const char *key;
 	const char *string;
@@ -54,7 +59,7 @@ typedef struct _Panel {
 
 	WMWidget *parent;
 
-	WMFrame *autoDelayF[2];
+	WMFrame *autoDelayF[wlengthof_nocheck(clip_delay_frame_titles)];
 	WMLabel *autoDelayL[wlengthof_nocheck(auto_delay)];
 	WMButton *autoDelayB[wlengthof_nocheck(auto_delay)][wlengthof_nocheck(autoDelayPresetValues)];
 	WMTextField *autoDelayT[wlengthof_nocheck(auto_delay)];
@@ -170,15 +175,12 @@ static void createPanel(Panel *p)
 	buf1 = wmalloc(strlen(DELAY_ICON) + 1);
 	buf2 = wmalloc(strlen(DELAY_ICON_S) + 1);
 
-	for (k = 0; k < 2; k++)
+	for (k = 0; k < wlengthof(clip_delay_frame_titles); k++)
 	{
 		panel->autoDelayF[k] = WMCreateFrame(panel->box);
 		WMResizeWidget(panel->autoDelayF[k], 370, 100);
 		WMMoveWidget(panel->autoDelayF[k], 15, 10 + k * 110);
-		if (k == 0)
-			WMSetFrameTitle(panel->autoDelayF[k], _("Clip autocollapsing delays"));
-		else
-			WMSetFrameTitle(panel->autoDelayF[k], _("Clip autoraising delays"));
+		WMSetFrameTitle(panel->autoDelayF[k], _(clip_delay_frame_titles[k]));
 
 		for (i = 0; i < 2; i++)
 		{
