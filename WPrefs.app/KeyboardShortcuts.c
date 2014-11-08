@@ -513,8 +513,8 @@ static void createPanel(Panel * p)
 
 	/* **************** Actions **************** */
 	panel->actL = WMCreateLabel(panel->box);
-	WMResizeWidget(panel->actL, 280, 20);
-	WMMoveWidget(panel->actL, 20, 10);
+	WMResizeWidget(panel->actL, 314, 20);
+	WMMoveWidget(panel->actL, 9, 9);
 	WMSetLabelFont(panel->actL, boldFont);
 	WMSetLabelText(panel->actL, _("Actions"));
 	WMSetLabelRelief(panel->actL, WRSunken);
@@ -525,8 +525,8 @@ static void createPanel(Panel * p)
 	WMSetLabelTextColor(panel->actL, panel->white);
 
 	panel->actLs = WMCreateList(panel->box);
-	WMResizeWidget(panel->actLs, 280, 190);
-	WMMoveWidget(panel->actLs, 20, 32);
+	WMResizeWidget(panel->actLs, 314, 191);
+	WMMoveWidget(panel->actLs, 9, 31);
 	WMSetListUserDrawProc(panel->actLs, paintItem);
 	WMHangData(panel->actLs, panel);
 
@@ -541,30 +541,30 @@ static void createPanel(Panel * p)
     /***************** Shortcut ****************/
 
 	panel->shoF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->shoF, 190, 210);
-	WMMoveWidget(panel->shoF, 315, 10);
+	WMResizeWidget(panel->shoF, 178, 214);
+	WMMoveWidget(panel->shoF, 333, 8);
 	WMSetFrameTitle(panel->shoF, _("Shortcut"));
 
 	panel->shoT = WMCreateTextField(panel->shoF);
 	WMResizeWidget(panel->shoT, 160, 20);
-	WMMoveWidget(panel->shoT, 15, 65);
+	WMMoveWidget(panel->shoT, 9, 65);
 	WMAddNotificationObserver(typedKeys, panel, WMTextDidChangeNotification, panel->shoT);
 
 	panel->cleB = WMCreateCommandButton(panel->shoF);
 	WMResizeWidget(panel->cleB, 75, 24);
-	WMMoveWidget(panel->cleB, 15, 95);
+	WMMoveWidget(panel->cleB, 9, 95);
 	WMSetButtonText(panel->cleB, _("Clear"));
 	WMSetButtonAction(panel->cleB, clearShortcut, panel);
 
 	panel->defB = WMCreateCommandButton(panel->shoF);
 	WMResizeWidget(panel->defB, 75, 24);
-	WMMoveWidget(panel->defB, 100, 95);
+	WMMoveWidget(panel->defB, 94, 95);
 	WMSetButtonText(panel->defB, _("Capture"));
 	WMSetButtonAction(panel->defB, captureClick, panel);
 
 	panel->instructionsL = WMCreateLabel(panel->shoF);
 	WMResizeWidget(panel->instructionsL, 160, 55);
-	WMMoveWidget(panel->instructionsL, 15, 140);
+	WMMoveWidget(panel->instructionsL, 9, 140);
 	WMSetLabelTextAlignment(panel->instructionsL, WACenter);
 	WMSetLabelWraps(panel->instructionsL, True);
 	WMSetLabelText(panel->instructionsL, _("Click on Capture to interactively define the shortcut key."));
