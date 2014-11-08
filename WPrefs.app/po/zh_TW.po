@@ -441,7 +441,7 @@ msgid "Automatic Window Raise Delay"
 msgstr "自動升起視窗延遲"
 
 #: ../../WPrefs.app/Focus.c:319 ../../WPrefs.app/MouseSettings.c:601
-msgid "msec"
+msgid "ms"
 msgstr "毫秒"
 
 #: ../../WPrefs.app/Focus.c:336

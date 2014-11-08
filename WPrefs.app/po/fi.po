@@ -667,7 +667,7 @@ msgid "Automatic Window Raise Delay"
 msgstr "Automaattisen ikkunannoston viive"
 
 #: ../../WPrefs.app/Focus.c:320 ../../WPrefs.app/MouseSettings.c:601
-msgid "msec"
+msgid "ms"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:337

@@ -664,8 +664,8 @@ msgid "Automatic Window Raise Delay"
 msgstr "Levantar Janela Depois de..."
 
 #: ../../WPrefs.app/Focus.c:347
-msgid "msec"
-msgstr "mseg"
+msgid "ms"
+msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:364
 msgid "Do not let applications receive the click used to focus windows"

@@ -443,7 +443,7 @@ msgid "Automatic Window Raise Delay"
 msgstr "Verzögerung für Auto-Fensterheber"
 
 #: ../../WPrefs.app/Focus.c:294 ../../WPrefs.app/MouseSettings.c:555
-msgid "msec"
+msgid "ms"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:311

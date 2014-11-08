@@ -680,7 +680,7 @@ msgid "Automatic Window Raise Delay"
 msgstr "Ritardo per il sollevamento automatico"
 
 #: ../../WPrefs.app/Focus.c:346 ../../WPrefs.app/MouseSettings.c:601
-msgid "msec"
+msgid "ms"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:363

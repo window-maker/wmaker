@@ -401,7 +401,7 @@ msgstr "Kapocs automatikus előre ugrás késleltetései"
 #: ../../../wmaker-crm/WPrefs.app/Docks.c:228
 #: ../../../wmaker-crm/WPrefs.app/Focus.c:299
 #: ../../../wmaker-crm/WPrefs.app/MouseSettings.c:561
-msgid "msec"
+msgid "ms"
 msgstr "ms"
 
 #: ../../../wmaker-crm/WPrefs.app/Docks.c:244

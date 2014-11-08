@@ -306,7 +306,7 @@ static void createPanel(Panel * p)
 	panel->raisL = WMCreateLabel(panel->raisF);
 	WMResizeWidget(panel->raisL, 36, 16);
 	WMMoveWidget(panel->raisL, 205, 32);
-	WMSetLabelText(panel->raisL, _("msec"));
+	WMSetLabelText(panel->raisL, _("ms"));
 	WMSetLabelTextColor(panel->raisL, color);
 	WMSetLabelFont(panel->raisL, font);
 

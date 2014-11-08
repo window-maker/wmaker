@@ -451,8 +451,8 @@ msgid "Automatic Window Raise Delay"
 msgstr "Retraso en el Alzado de Ventanas"
 
 #: ../../WPrefs.app/Focus.c:319 ../../WPrefs.app/MouseSettings.c:601
-msgid "msec"
-msgstr "mseg"
+msgid "ms"
+msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:336
 msgid "Do not let applications receive the click used to focus windows"

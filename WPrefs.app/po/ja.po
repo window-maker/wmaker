@@ -449,7 +449,7 @@ msgid "Automatic Window Raise Delay"
 msgstr "自動的に前面へ出すまでに"
 
 #: ../../WPrefs.app/Focus.c:293 ../../WPrefs.app/MouseSettings.c:555
-msgid "msec"
+msgid "ms"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:310

@@ -449,7 +449,7 @@ msgid "Automatic Window Raise Delay"
 msgstr "Prodleva při vyzdvihnutí oken"
 
 #: ../Focus.c:319 ../MouseSettings.c:601
-msgid "msec"
+msgid "ms"
 msgstr "ms"
 
 #: ../Focus.c:336

@@ -231,7 +231,7 @@ static void createPanel(Panel *p)
 			panel->autoDelayMsL[i + k * 2] = WMCreateLabel(panel->autoDelayF[k]);
 			WMResizeWidget(panel->autoDelayMsL[i + k * 2], 26, 16);
 			WMMoveWidget(panel->autoDelayMsL[i + k * 2], 337, 30 + 40 * i);
-			WMSetLabelText(panel->autoDelayMsL[i + k * 2], _("msec"));
+			WMSetLabelText(panel->autoDelayMsL[i + k * 2], _("ms"));
 			WMSetLabelTextColor(panel->autoDelayMsL[i + k * 2], color);
 			WMSetLabelFont(panel->autoDelayMsL[i + k * 2], font);
 			WMReleaseColor(color);

@@ -509,8 +509,8 @@ msgid "Automatic Window Raise Delay"
 msgstr "자동 창 올림 지연 시간"
 
 #: ../../WPrefs.app/Focus.c:296 ../../WPrefs.app/MouseSettings.c:558
-msgid "msec"
-msgstr "msec"
+msgid "ms"
+msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:313
 msgid "Do not let applications receive the click used to focus windows"

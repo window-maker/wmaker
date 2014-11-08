@@ -467,8 +467,8 @@ msgid "Automatic Window Raise Delay"
 msgstr "Délai d'auto-activation des fenêtres"
 
 #: ../../WPrefs.app/Focus.c:319 ../../WPrefs.app/MouseSettings.c:601
-msgid "msec"
-msgstr "msec"
+msgid "ms"
+msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:336
 msgid "Do not let applications receive the click used to focus windows"

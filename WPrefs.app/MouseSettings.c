@@ -590,7 +590,7 @@ static void createPanel(Panel * p)
 		WMReleaseFont(font);
 		WMReleaseColor(color);
 	}
-	WMSetLabelText(panel->ddelaL, _("msec"));
+	WMSetLabelText(panel->ddelaL, _("ms"));
 
 	WMMapSubwidgets(panel->ddelaF);
 

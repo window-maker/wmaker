@@ -467,7 +467,7 @@ msgid "Automatic Window Raise Delay"
 msgstr "Всплывать через..."
 
 #: ../../WPrefs.app/Focus.c:319 ../../WPrefs.app/MouseSettings.c:601
-msgid "msec"
+msgid "ms"
 msgstr "Мсек"
 
 #: ../../WPrefs.app/Focus.c:336

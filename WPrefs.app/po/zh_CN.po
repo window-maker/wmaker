@@ -639,7 +639,7 @@ msgid "Automatic Window Raise Delay"
 msgstr "自动升起窗口的延迟"
 
 #: ../../WPrefs.app/Focus.c:347
-msgid "msec"
+msgid "ms"
 msgstr "毫秒"
 
 #: ../../WPrefs.app/Focus.c:364

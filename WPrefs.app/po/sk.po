@@ -458,7 +458,7 @@ msgid "Automatic Window Raise Delay"
 msgstr "Zdržanie pred presunutím do popredia"
 
 #: ../../WPrefs.app/Focus.c:319 ../../WPrefs.app/MouseSettings.c:601
-msgid "msec"
+msgid "ms"
 msgstr "ms"
 
 #: ../../WPrefs.app/Focus.c:336

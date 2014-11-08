@@ -442,8 +442,8 @@ msgstr "Vertraging vanzelf verhogen Clip"
 
 #: ../../WPrefs.app/Docks.c:229 ../../WPrefs.app/Focus.c:300
 #: ../../WPrefs.app/MouseSettings.c:620
-msgid "msec"
-msgstr "msec"
+msgid "ms"
+msgstr "ms"
 
 #: ../../WPrefs.app/Docks.c:245
 msgid "Dock/Clip/Drawer"

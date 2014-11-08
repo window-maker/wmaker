@@ -150,8 +150,8 @@ msgid "Automatic Window Raise Delay"
 msgstr "Automatsko zadržavanje podizanja prozora"
 
 #: ../../WPrefs/Focus.c:341
-msgid "msec"
-msgstr "msec"
+msgid "ms"
+msgstr "ms"
 
 #: ../../WPrefs/Focus.c:358
 msgid "Do not let aplications receive the click used to focus windows."

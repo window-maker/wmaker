@@ -566,7 +566,7 @@ msgstr "Забавяне на автоматичното повдигане"
 
 # ../../WPrefs.app/Focus.c:347
 #: ../../WPrefs.app/Focus.c:319 ../../WPrefs.app/MouseSettings.c:601
-msgid "msec"
+msgid "ms"
 msgstr "ms"
 
 # ../../WPrefs.app/Focus.c:364
