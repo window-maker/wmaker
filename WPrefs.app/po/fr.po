@@ -2117,26 +2117,20 @@ msgid "Workspace Navigation"
 msgstr "Navigation entre bureaux"
 
 #: ../../WPrefs.app/Workspace.c:183
-msgid ""
-"wrap to the first workspace after the\n"
-"last workspace."
-msgstr "Revenir au premier bureau après le dernier."
+msgid "Wrap to the first workspace from the last workspace"
+msgstr "Revenir au premier bureau après le dernier"
 
 #: ../../WPrefs.app/Workspace.c:205
-msgid "switch workspaces while dragging windows."
-msgstr "Déplacer les fenêtres d'un bureau à l'autre."
+msgid "Switch workspaces while dragging windows"
+msgstr "Déplacer les fenêtres d'un bureau à l'autre"
 
 #: ../../WPrefs.app/Workspace.c:227
-msgid "automatically create new workspaces."
-msgstr "Créer automatiquement d'autres bureaux."
+msgid "Automatically create new workspaces"
+msgstr "Créer automatiquement d'autres bureaux"
 
 #: ../../WPrefs.app/Workspace.c:250
-msgid ""
-"Position of workspace\n"
-"name display"
-msgstr ""
-"Position pour l'affichage\n"
-"du nom du bureau"
+msgid "Position of workspace name display"
+msgstr "Position pour l'affichage du nom du bureau"
 
 #: ../../WPrefs.app/Workspace.c:269
 msgid "Disable"

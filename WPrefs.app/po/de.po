@@ -1986,26 +1986,20 @@ msgid "Workspace Navigation"
 msgstr "Arbeitsflächennavigation"
 
 #: ../../WPrefs.app/Workspace.c:168
-msgid "Wrap to the first workspace from the last workspace."
-msgstr ""
-"Auf die letzte Arbeitsfläche folgt wieder\n"
-"die erste."
+msgid "Wrap to the first workspace from the last workspace"
+msgstr "Auf die letzte Arbeitsfläche folgt wieder die erste"
 
 #: ../../WPrefs.app/Workspace.c:187
-msgid "Switch workspaces while dragging windows."
-msgstr "Beim Bewegen von Fenstern Arbeitsfläche wechseln."
+msgid "Switch workspaces while dragging windows"
+msgstr "Beim Bewegen von Fenstern Arbeitsfläche wechseln"
 
 #: ../../WPrefs.app/Workspace.c:206
-msgid "Automatically create new workspaces."
-msgstr "Automatisch neue Arbeitsflächen erstellen."
+msgid "Automatically create new workspaces"
+msgstr "Automatisch neue Arbeitsflächen erstellen"
 
 #: ../../WPrefs.app/Workspace.c:226
-msgid ""
-"Position of workspace\n"
-"name display"
-msgstr ""
-"Position des Namens\n"
-"der Arbeitsfläche"
+msgid "Position of workspace name display"
+msgstr "Position des Namens der Arbeitsfläche"
 
 #: ../../WPrefs.app/Workspace.c:245
 msgid "Disable"

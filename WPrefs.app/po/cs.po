@@ -1950,30 +1950,20 @@ msgid "Workspace Navigation"
 msgstr "Orientace v plochách"
 
 #: ../Workspace.c:183
-msgid ""
-"wrap to the first workspace after the\n"
-"last workspace."
-msgstr ""
-"Za poslední pracovní plochou přepnout\n"
-"na první a opačně."
+msgid "Wrap to the first workspace from the last workspace"
+msgstr "Za poslední pracovní plochou přepnout na první a opačně"
 
 #: ../Workspace.c:205
-msgid "switch workspaces while dragging windows."
-msgstr ""
-"Automaticky se přepnout na další plochu\n"
-"při přetažení aplikace přes hranu plochy."
+msgid "Switch workspaces while dragging windows"
+msgstr "Automaticky se přepnout na další plochu při přetažení aplikace přes hranu plochy"
 
 #: ../Workspace.c:227
-msgid "automatically create new workspaces."
-msgstr "Automaticky vytvářet nové pracovní plochy."
+msgid "Automatically create new workspaces"
+msgstr "Automaticky vytvářet nové pracovní plochy"
 
 #: ../Workspace.c:250
-msgid ""
-"Position of workspace\n"
-"name display"
-msgstr ""
-"Pozice názvu indikátoru\n"
-" pracovní plochy:"
+msgid "Position of workspace name display"
+msgstr "Pozice názvu indikátoru pracovní plochy:"
 
 #: ../Workspace.c:269
 msgid "Disable"

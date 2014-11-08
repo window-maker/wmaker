@@ -2000,28 +2000,20 @@ msgid "Workspace Navigation"
 msgstr "Pracovné plochy"
 
 #: ../../WPrefs.app/Workspace.c:183
-msgid ""
-"wrap to the first workspace after the\n"
-"last workspace."
-msgstr ""
-"za poslednou pracovnou plochou\n"
-"nasleduje prvá a naopak."
+msgid "Wrap to the first workspace from the last workspace"
+msgstr "Za poslednou pracovnou plochou nasleduje prvá a naopak"
 
 #: ../../WPrefs.app/Workspace.c:205
-msgid "switch workspaces while dragging windows."
-msgstr "ťahanie okien medzi pracovnými plochami."
+msgid "Switch workspaces while dragging windows"
+msgstr "ťahanie okien medzi pracovnými plochami"
 
 #: ../../WPrefs.app/Workspace.c:227
-msgid "automatically create new workspaces."
-msgstr "automaticky vytvárať nové pracovné plochy."
+msgid "Automatically create new workspaces"
+msgstr "Automaticky vytvárať nové pracovné plochy"
 
 #: ../../WPrefs.app/Workspace.c:250
-msgid ""
-"Position of workspace\n"
-"name display"
-msgstr ""
-"Umiestnenie názvu\n"
-"pracovnej plochy."
+msgid "Position of workspace name display"
+msgstr "Umiestnenie názvu pracovnej plochy"
 
 #: ../../WPrefs.app/Workspace.c:269
 msgid "Disable"

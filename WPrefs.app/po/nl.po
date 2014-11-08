@@ -2346,16 +2346,16 @@ msgid "Workspace Navigation"
 msgstr "Werkruimtenavigatie"
 
 #: ../../WPrefs.app/Workspace.c:123
-msgid "Wrap to the first workspace from the last workspace."
-msgstr "Omslaan naar de eerste werkruimte, vanaf de laatste werkruimte."
+msgid "Wrap to the first workspace from the last workspace"
+msgstr "Omslaan naar de eerste werkruimte, vanaf de laatste werkruimte"
 
 #: ../../WPrefs.app/Workspace.c:139
-msgid "Switch workspaces while dragging windows."
-msgstr "Van werkruimte wisselen bij vensters verslepen."
+msgid "Switch workspaces while dragging windows"
+msgstr "Van werkruimte wisselen bij vensters verslepen"
 
 #: ../../WPrefs.app/Workspace.c:155
-msgid "Automatically create new workspaces."
-msgstr "Vanzelf nieuwe werkruimten aanmaken."
+msgid "Automatically create new workspaces"
+msgstr "Vanzelf nieuwe werkruimten aanmaken"
 
 #. WMSetLabelTextAlignment(panel->posL, WARight);
 #: ../../WPrefs.app/Workspace.c:172

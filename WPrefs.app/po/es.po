@@ -2003,28 +2003,20 @@ msgid "Workspace Navigation"
 msgstr "Navegación de Áreas"
 
 #: ../../WPrefs.app/Workspace.c:183
-msgid ""
-"wrap to the first workspace after the\n"
-"last workspace."
-msgstr ""
-"ir para la primera área de trabajo\n"
-"después de la última."
+msgid "Wrap to the first workspace from the last workspace"
+msgstr "Ir para la primera área de trabajo después de la última"
 
 #: ../../WPrefs.app/Workspace.c:205
-msgid "switch workspaces while dragging windows."
-msgstr "mover ventanas entre áreas de trabajo."
+msgid "Switch workspaces while dragging windows"
+msgstr "Mover ventanas entre áreas de trabajo"
 
 #: ../../WPrefs.app/Workspace.c:227
-msgid "automatically create new workspaces."
-msgstr "crear nuevas áreas de trabajo automáticamente."
+msgid "Automatically create new workspaces"
+msgstr "Crear nuevas áreas de trabajo automáticamente"
 
 #: ../../WPrefs.app/Workspace.c:250
-msgid ""
-"Position of workspace\n"
-"name display"
-msgstr ""
-"Posición del nombre del\n"
-"área de trabajo"
+msgid "Position of workspace name display"
+msgstr "Posición del nombre del área de trabajo"
 
 #: ../../WPrefs.app/Workspace.c:269
 msgid "Disable"
