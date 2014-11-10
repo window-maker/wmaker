@@ -649,6 +649,8 @@ WDefaultEntry optionList[] = {
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"MaximusKey", "None", (void*)WKBD_MAXIMUS,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"OmnipresentKey", "None", (void *)WKBD_OMNIPRESENT,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"RaiseKey", "\"Meta+Up\"", (void *)WKBD_RAISE,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"LowerKey", "\"Meta+Down\"", (void *)WKBD_LOWER,
