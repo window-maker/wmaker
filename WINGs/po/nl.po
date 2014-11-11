@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-02 14:55+0200\n"
-"PO-Revision-Date: 2014-09-02 00:00+0200\n"
+"POT-Creation-Date: 2014-11-09 08:19+0100\n"
+"PO-Revision-Date: 2014-11-11 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -254,6 +254,14 @@ msgstr "Groen"
 msgid "Blue"
 msgstr "Blauw"
 
+#: ../../WINGs/wcolorpanel.c:724
+msgid "Decimal"
+msgstr "Decimaal"
+
+#: ../../WINGs/wcolorpanel.c:732
+msgid "Hexadecimal"
+msgstr "Hexadecimaal"
+
 #: ../../WINGs/wcolorpanel.c:785
 msgid "Cyan"
 msgstr "Cyaan"
@@ -439,7 +447,7 @@ msgstr ""
 msgid "Couldn't remove palette %s"
 msgstr "Kon palet %s niet verwijderen"
 
-#: ../../WINGs/wcolorpanel.c:3497
+#: ../../WINGs/wcolorpanel.c:3507
 msgid "Color Panel: Color unspecified"
 msgstr "Kleurenpaneel: Kleur niet opgegeven"
 
@@ -458,12 +466,12 @@ msgstr "Opslaan"
 #: ../../WINGs/wfilepanel.c:506
 #, c-format
 msgid "WINGs: could not open directory %s\n"
-msgstr "WINGs: kon map %s niet openen\n"
+msgstr "WINGs: Kon map %s niet openen\n"
 
 #: ../../WINGs/wfilepanel.c:526
 #, c-format
 msgid "WINGs: could not stat %s\n"
-msgstr "WINGs: kon status %s niet vaststellen\n"
+msgstr "WINGs: Kon status %s niet vaststellen\n"
 
 #: ../../WINGs/wfilepanel.c:596 ../../WINGs/wfilepanel.c:883
 #: ../../WINGs/wfontpanel.c:533
@@ -520,12 +528,12 @@ msgstr "'%s' is geen map."
 msgid "File does not exist."
 msgstr "Bestand bestaat niet."
 
-#: ../../WINGs/wfont.c:37
+#: ../../WINGs/wfont.c:43
 #, c-format
 msgid "invalid font: %s. Trying '%s'"
 msgstr "ongeldig lettertype: %s. Probeert '%s'"
 
-#: ../../WINGs/wfont.c:227 ../../WINGs/wfont.c:245
+#: ../../WINGs/wfont.c:260 ../../WINGs/wfont.c:278
 #, c-format
 msgid "could not load font: %s."
 msgstr "kon lettertype niet laden: %s."
@@ -566,7 +574,7 @@ msgstr "Kon bibliotheek 'lettertype instellen' niet initialiseren\n"
 #: ../../WINGs/widgets.c:389
 #, c-format
 msgid "WINGs: could not load widget images file: %s"
-msgstr "WINGs: kon afbeeldingenbestand besturingselementen niet laden: %s"
+msgstr "WINGs: Kon afbeeldingenbestand besturingselementen niet laden: %s"
 
 #: ../../WINGs/widgets.c:724
 msgid ""
@@ -579,9 +587,3 @@ msgstr ""
 #: ../../WINGs/wruler.c:175
 msgid "0   inches"
 msgstr "0   inch"
-
-msgid "Decimal"
-msgstr "Decimaal"
-
-msgid "Hexadecimal"
-msgstr "Hexadecimaal"

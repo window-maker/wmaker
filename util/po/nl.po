@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-09-02 14:55+0200\n"
-"PO-Revision-Date: 2014-03-05 00:00+0100\n"
+"POT-Creation-Date: 2014-11-09 08:19+0100\n"
+"PO-Revision-Date: 2014-03-05 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -17,269 +17,269 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #. Root -> Applications
-#: ../../util/wmgenmenu.c:116
+#: ../../util/wmgenmenu.c:117
 msgid "Applications"
 msgstr "Programma's"
 
 #. Root -> Applications -> <category>
-#: ../../util/wmgenmenu.c:119
+#: ../../util/wmgenmenu.c:120
 msgid "Terminals"
 msgstr "Terminals"
 
 #. always keep terminals the top item
-#: ../../util/wmgenmenu.c:120
+#: ../../util/wmgenmenu.c:121
 msgid "Internet"
 msgstr "Internet"
 
-#: ../../util/wmgenmenu.c:121
+#: ../../util/wmgenmenu.c:122
 msgid "Email"
 msgstr "E-mail"
 
-#: ../../util/wmgenmenu.c:122
+#: ../../util/wmgenmenu.c:123
 msgid "Mathematics"
 msgstr "Wiskunde"
 
-#: ../../util/wmgenmenu.c:123
+#: ../../util/wmgenmenu.c:124
 msgid "File Managers"
 msgstr "Bestandsbeheerders"
 
-#: ../../util/wmgenmenu.c:124
+#: ../../util/wmgenmenu.c:125
 msgid "Graphics"
 msgstr "Grafisch"
 
-#: ../../util/wmgenmenu.c:125
+#: ../../util/wmgenmenu.c:126
 msgid "Multimedia"
 msgstr "Multimedia"
 
-#: ../../util/wmgenmenu.c:126
+#: ../../util/wmgenmenu.c:127
 msgid "Editors"
 msgstr "Tekstbewerkers"
 
-#: ../../util/wmgenmenu.c:127
+#: ../../util/wmgenmenu.c:128
 msgid "Development"
 msgstr "Ontwikkelen"
 
-#: ../../util/wmgenmenu.c:129
+#: ../../util/wmgenmenu.c:130
 msgid "Office"
 msgstr "Kantoor"
 
-#: ../../util/wmgenmenu.c:130
+#: ../../util/wmgenmenu.c:131
 msgid "Astronomy"
 msgstr "Sterrenkunde"
 
-#: ../../util/wmgenmenu.c:131
+#: ../../util/wmgenmenu.c:132
 msgid "Sound"
 msgstr "Audio"
 
-#: ../../util/wmgenmenu.c:132
+#: ../../util/wmgenmenu.c:133
 msgid "Comics"
 msgstr "Strips"
 
-#: ../../util/wmgenmenu.c:133
+#: ../../util/wmgenmenu.c:134
 msgid "Viewers"
 msgstr "Viewers"
 
-#: ../../util/wmgenmenu.c:134
+#: ../../util/wmgenmenu.c:135
 msgid "Utilities"
 msgstr "Hulpmiddelen"
 
-#: ../../util/wmgenmenu.c:135
+#: ../../util/wmgenmenu.c:136
 msgid "System"
 msgstr "Systeem"
 
-#: ../../util/wmgenmenu.c:136
+#: ../../util/wmgenmenu.c:137
 msgid "Video"
 msgstr "Video"
 
-#: ../../util/wmgenmenu.c:137
+#: ../../util/wmgenmenu.c:138
 msgid "Chat and Talk"
 msgstr "Berichten en spraak"
 
-#: ../../util/wmgenmenu.c:138
+#: ../../util/wmgenmenu.c:139
 msgid "P2P Network"
 msgstr "P2P-netwerk"
 
-#: ../../util/wmgenmenu.c:139
+#: ../../util/wmgenmenu.c:140
 msgid "Games"
 msgstr "Spellen"
 
-#: ../../util/wmgenmenu.c:147
+#: ../../util/wmgenmenu.c:148
 msgid "Run..."
 msgstr "Uitvoeren..."
 
-#: ../../util/wmgenmenu.c:149
+#: ../../util/wmgenmenu.c:150
 #, c-format
 msgid "%A(Run, Type command:)"
 msgstr "%A(Uitvoeren, Typ commando:)"
 
 #. Root -> Appearance
-#: ../../util/wmgenmenu.c:155
+#: ../../util/wmgenmenu.c:156
 msgid "Appearance"
 msgstr "Uiterlijk"
 
-#: ../../util/wmgenmenu.c:159
+#: ../../util/wmgenmenu.c:160
 msgid "Themes"
 msgstr "Thema's"
 
-#: ../../util/wmgenmenu.c:168
+#: ../../util/wmgenmenu.c:169
 msgid "Styles"
 msgstr "Stijlen"
 
-#: ../../util/wmgenmenu.c:177
+#: ../../util/wmgenmenu.c:178
 msgid "Icon Sets"
 msgstr "Iconensets"
 
 #. Root -> Appearance -> Background
-#: ../../util/wmgenmenu.c:185
+#: ../../util/wmgenmenu.c:186
 msgid "Background"
 msgstr "Achtergrond"
 
 #. Root -> Appearance -> Background -> Solid
-#: ../../util/wmgenmenu.c:188
+#: ../../util/wmgenmenu.c:189
 msgid "Solid"
 msgstr "Effen"
 
 #. Root -> Appearance -> Background -> Solid -> <color>
-#: ../../util/wmgenmenu.c:200
+#: ../../util/wmgenmenu.c:201
 msgid "Black"
 msgstr "Zwart"
 
-#: ../../util/wmgenmenu.c:201
+#: ../../util/wmgenmenu.c:202
 msgid "Blue"
 msgstr "Blauw"
 
-#: ../../util/wmgenmenu.c:202
+#: ../../util/wmgenmenu.c:203
 msgid "Indigo"
 msgstr "Indigo"
 
-#: ../../util/wmgenmenu.c:203
+#: ../../util/wmgenmenu.c:204
 msgid "Bluemarine"
 msgstr "Marineblauw"
 
-#: ../../util/wmgenmenu.c:204
+#: ../../util/wmgenmenu.c:205
 msgid "Purple"
 msgstr "Purper"
 
-#: ../../util/wmgenmenu.c:205
+#: ../../util/wmgenmenu.c:206
 msgid "Wheat"
 msgstr "Tarwe"
 
-#: ../../util/wmgenmenu.c:206
+#: ../../util/wmgenmenu.c:207
 msgid "Dark Gray"
 msgstr "Donkergrijs"
 
-#: ../../util/wmgenmenu.c:207
+#: ../../util/wmgenmenu.c:208
 msgid "Wine"
 msgstr "Wijnrood"
 
 #. Root -> Appearance -> Background -> Gradient
-#: ../../util/wmgenmenu.c:212
+#: ../../util/wmgenmenu.c:213
 msgid "Gradient"
 msgstr "Kleurverloop"
 
-#: ../../util/wmgenmenu.c:226
+#: ../../util/wmgenmenu.c:227
 msgid "Sunset"
 msgstr "Zonsondergang"
 
-#: ../../util/wmgenmenu.c:233
+#: ../../util/wmgenmenu.c:234
 msgid "Sky"
 msgstr "Lucht"
 
-#: ../../util/wmgenmenu.c:234
+#: ../../util/wmgenmenu.c:235
 msgid "Blue Shades"
 msgstr "Blauwtinten"
 
-#: ../../util/wmgenmenu.c:235
+#: ../../util/wmgenmenu.c:236
 msgid "Indigo Shades"
 msgstr "Indigotinten"
 
-#: ../../util/wmgenmenu.c:236
+#: ../../util/wmgenmenu.c:237
 msgid "Purple Shades"
 msgstr "Purpertinten"
 
-#: ../../util/wmgenmenu.c:237
+#: ../../util/wmgenmenu.c:238
 msgid "Wheat Shades"
 msgstr "Tarwetinten"
 
-#: ../../util/wmgenmenu.c:238
+#: ../../util/wmgenmenu.c:239
 msgid "Grey Shades"
 msgstr "Grijstinten"
 
-#: ../../util/wmgenmenu.c:239
+#: ../../util/wmgenmenu.c:240
 msgid "Wine Shades"
 msgstr "Wijnroodtinten"
 
-#: ../../util/wmgenmenu.c:245
+#: ../../util/wmgenmenu.c:246
 msgid "Images"
 msgstr "Afbeeldingen"
 
-#: ../../util/wmgenmenu.c:256
+#: ../../util/wmgenmenu.c:257
 msgid "Save Theme"
 msgstr "Thema opslaan"
 
-#: ../../util/wmgenmenu.c:265
+#: ../../util/wmgenmenu.c:266
 msgid "Save IconSet"
 msgstr "Iconenset opslaan"
 
-#: ../../util/wmgenmenu.c:276
+#: ../../util/wmgenmenu.c:277
 msgid "Workspaces"
 msgstr "Werkruimten"
 
 #. Root -> Workspace
-#: ../../util/wmgenmenu.c:283
+#: ../../util/wmgenmenu.c:284
 msgid "Workspace"
 msgstr "Werkruimte"
 
-#: ../../util/wmgenmenu.c:285
+#: ../../util/wmgenmenu.c:286
 msgid "Hide Others"
 msgstr "Andere verbergen"
 
-#: ../../util/wmgenmenu.c:293
+#: ../../util/wmgenmenu.c:294
 msgid "Show All"
 msgstr "Alles tonen"
 
-#: ../../util/wmgenmenu.c:301
+#: ../../util/wmgenmenu.c:302
 msgid "Arrange Icons"
 msgstr "Iconen schikken"
 
-#: ../../util/wmgenmenu.c:309
+#: ../../util/wmgenmenu.c:310
 msgid "Refresh"
 msgstr "Vernieuwen"
 
-#: ../../util/wmgenmenu.c:317
+#: ../../util/wmgenmenu.c:318
 msgid "Save Session"
 msgstr "Sessie opslaan"
 
-#: ../../util/wmgenmenu.c:325
+#: ../../util/wmgenmenu.c:326
 msgid "Clear Session"
 msgstr "Sessie wissen"
 
-#: ../../util/wmgenmenu.c:334
+#: ../../util/wmgenmenu.c:335
 msgid "Configure Window Maker"
 msgstr "Window Maker instellen"
 
-#: ../../util/wmgenmenu.c:343
+#: ../../util/wmgenmenu.c:344
 msgid "Info Panel"
 msgstr "Infopaneel"
 
-#: ../../util/wmgenmenu.c:351
+#: ../../util/wmgenmenu.c:352
 msgid "Restart Window Maker"
 msgstr "Window Maker herstarten"
 
-#: ../../util/wmgenmenu.c:364
+#: ../../util/wmgenmenu.c:365
 msgid "Lock Screen"
 msgstr "Scherm vergrendelen"
 
-#: ../../util/wmgenmenu.c:375
+#: ../../util/wmgenmenu.c:376
 msgid "Exit Window Maker"
 msgstr "Window Maker afsluiten"
 
-#: ../../util/wmgenmenu.c:479
+#: ../../util/wmgenmenu.c:480
 #, c-format
 msgid "Start %s"
 msgstr "%s starten"
 
-#: ../../util/wmgenmenu.c:489
+#: ../../util/wmgenmenu.c:490
 msgid "Other Window Managers"
 msgstr "Andere vensterbeheerders"
 
