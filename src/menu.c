@@ -1543,8 +1543,10 @@ typedef struct _delay {
 	int ox, oy;
 } _delay;
 
-static void leaving(_delay * dl)
+static void callback_leaving(void *user_param)
 {
+	_delay *dl = (_delay *) user_param;
+
 	wMenuMove(dl->menu, dl->ox, dl->oy, True);
 	dl->menu->jump_back = NULL;
 	dl->menu->menu->screen_ptr->flags.jump_back_pending = 0;
@@ -1652,6 +1654,7 @@ void wMenuScroll(WMenu *menu)
 
 	if (jump_back) {
 		_delay *delayer;
+
 		if (!omenu->jump_back) {
 			delayer = wmalloc(sizeof(_delay));
 			delayer->menu = omenu;
@@ -1661,7 +1664,7 @@ void wMenuScroll(WMenu *menu)
 			scr->flags.jump_back_pending = 1;
 		} else
 			delayer = omenu->jump_back;
-		WMAddTimerHandler(MENU_JUMP_BACK_DELAY, (WMCallback *) leaving, delayer);
+		WMAddTimerHandler(MENU_JUMP_BACK_DELAY, callback_leaving, delayer);
 	}
 }
 
