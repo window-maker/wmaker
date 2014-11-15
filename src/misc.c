@@ -33,6 +33,7 @@
 #include <pwd.h>
 #include <math.h>
 #include <time.h>
+#include <errno.h>
 
 #include <X11/XKBlib.h>
 
@@ -929,48 +930,51 @@ Bool start_bg_helper(WScreen *scr)
 	int filedes[2];
 
 	if (pipe(filedes) < 0) {
-		werror("pipe() failed:can't set workspace specific background image");
+		werror(_("%s failed, can't set workspace specific background image (%s)"),
+		       "pipe()", strerror(errno));
 		return False;
 	}
 
 	pid = fork();
 	if (pid < 0) {
-		werror("fork() failed:can't set workspace specific background image");
-		if (close(filedes[0]) < 0)
-			werror("could not close pipe");
-		if (close(filedes[1]) < 0)
-			werror("could not close pipe");
+		werror(_("%s failed, can't set workspace specific background image (%s)"),
+		       "fork()", strerror(errno));
+		close(filedes[0]);
+		close(filedes[1]);
 		return False;
 
 	} else if (pid == 0) {
-		char *dither;
+		const char *dither;
 
 		/* We don't need this side of the pipe in the child process */
 		close(filedes[1]);
 
 		SetupEnvironment(scr);
 
-		if (close(0) < 0)
-			werror("could not close pipe");
-		if (dup(filedes[0]) < 0) {
-			werror("dup() failed:can't set workspace specific background image");
+		close(STDIN_FILENO);
+		if (dup2(filedes[0], STDIN_FILENO) < 0) {
+			werror(_("%s failed, can't set workspace specific background image (%s)"),
+			       "dup2()", strerror(errno));
+			exit(1);
 		}
 		close(filedes[0]);
+
 		dither = wPreferences.no_dithering ? "-m" : "-d";
 		if (wPreferences.smooth_workspace_back)
 			execlp("wmsetbg", "wmsetbg", "-helper", "-S", dither, NULL);
 		else
 			execlp("wmsetbg", "wmsetbg", "-helper", dither, NULL);
-		werror("could not execute wmsetbg");
+
+		werror(_("could not execute \"%s\": %s"), "wmsetbg", strerror(errno));
 		exit(1);
 
 	} else {
 		/* We don't need this side of the pipe in the parent process */
 		close(filedes[0]);
 
-		if (fcntl(filedes[1], F_SETFD, FD_CLOEXEC) < 0) {
-			werror("error setting close-on-exec flag");
-		}
+		if (fcntl(filedes[1], F_SETFD, FD_CLOEXEC) < 0)
+			wwarning(_("could not set close-on-exec flag for bg_helper's communication file handle (%s)"),
+			         strerror(errno));
 
 		scr->helper_fd = filedes[1];
 		scr->helper_pid = pid;
