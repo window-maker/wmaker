@@ -29,7 +29,8 @@
 #define TILE_CLIP	1
 #define TILE_DRAWER	2
 
-#define APERCU_BORDER 2
+/* This is the border, in pixel, drawn around an Aperçu */
+#define APERCU_BORDER 1
 
 typedef struct WIcon {
 	WCoreWindow 	*core;

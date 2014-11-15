@@ -593,8 +593,8 @@ void set_icon_apercu(WIcon *icon, RImage *image)
 	RImage *scaled_apercu;
 	WScreen *scr = icon->core->screen_ptr;
 
-	scaled_apercu = RSmoothScaleImage(image, (wPreferences.icon_size - 1 - APERCU_BORDER) * wPreferences.apercu_size,
-						(wPreferences.icon_size - 1 - APERCU_BORDER) * wPreferences.apercu_size);
+	scaled_apercu = RSmoothScaleImage(image, wPreferences.apercu_size - 2 * APERCU_BORDER,
+	                                  wPreferences.apercu_size - 2 * APERCU_BORDER);
 
 	if (RConvertImage(scr->rcontext, scaled_apercu, &tmp)) {
 		if (icon->apercu != None)

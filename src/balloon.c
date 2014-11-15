@@ -376,26 +376,33 @@ static void showText(WScreen *scr, int x, int y, int h, int w, const char *text)
 }
 #endif				/* !SHAPED_BALLOON */
 
-static void showApercu(WScreen *scr, int x, int y, int height, int width, char *title, Pixmap apercu)
+static void showApercu(WScreen *scr, int x, int y, const char *title, Pixmap apercu)
 {
 	Pixmap pixmap;
 	WMFont *font = scr->info_text_font;
-	int titleHeight = 0;
-	char *shortenTitle = title;
+	int width, height;
+	int titleHeight;
+	char *shortenTitle;
 
 	if (scr->balloon->contents)
 		XFreePixmap(dpy, scr->balloon->contents);
 
+	width  = wPreferences.apercu_size;
+	height = wPreferences.apercu_size;
+
 	if (wPreferences.miniwin_title_balloon) {
-		shortenTitle = ShrinkString(font, title, width - APERCU_BORDER);
+		shortenTitle = ShrinkString(font, title, width - APERCU_BORDER * 2);
 		titleHeight = countLines(shortenTitle) * WMFontHeight(font) + 4;
 		height += titleHeight;
+	} else {
+		shortenTitle = NULL;
+		titleHeight = 0;
 	}
 
 	if (x < 0)
 		x = 0;
 	else if (x + width > scr->scr_width - 1)
-		x = scr->scr_width - width - APERCU_BORDER;
+		x = scr->scr_width - width - 1;
 
 	if (y - height - 2 < 0) {
 		y += wPreferences.icon_size;
@@ -413,16 +420,16 @@ static void showApercu(WScreen *scr, int x, int y, int height, int width, char *
 	pixmap = XCreatePixmap(dpy, scr->root_win, width, height, scr->w_depth);
 	XFillRectangle(dpy, pixmap, scr->draw_gc, 0, 0, width, height);
 
-	if (shortenTitle && wPreferences.miniwin_title_balloon) {
+	if (shortenTitle != NULL) {
 		drawMultiLineString(scr->wmscreen, pixmap, scr->window_title_color[0], font,
 						APERCU_BORDER, APERCU_BORDER, shortenTitle, strlen(shortenTitle));
 		wfree(shortenTitle);
 	}
 
 	XCopyArea(dpy, apercu, pixmap, scr->draw_gc,
-				0, 0, (wPreferences.icon_size - 1 - APERCU_BORDER) * wPreferences.apercu_size,
-				(wPreferences.icon_size - 1 - APERCU_BORDER) * wPreferences.apercu_size,
-				APERCU_BORDER, APERCU_BORDER + titleHeight);
+	          0, 0, (wPreferences.apercu_size - 1 - APERCU_BORDER * 2),
+	          (wPreferences.apercu_size - 1 - APERCU_BORDER * 2),
+	          APERCU_BORDER, APERCU_BORDER + titleHeight);
 
 #ifdef SHAPED_BALLOON
 	XShapeCombineMask(dpy, scr->balloon->window, ShapeBounding, 0, 0, None, ShapeSet);
@@ -457,9 +464,7 @@ static void showBalloon(WScreen *scr)
 
 	if (wPreferences.miniwin_apercu_balloon && scr->balloon->apercu != None)
 		/* used to display either the apercu alone or the apercu and the title */
-		showApercu(scr, x, y, (wPreferences.icon_size - 1) * wPreferences.apercu_size,
-					(wPreferences.icon_size - 1) * wPreferences.apercu_size,
-					scr->balloon->text, scr->balloon->apercu);
+		showApercu(scr, x, y, scr->balloon->text, scr->balloon->apercu);
 	else
 		showText(scr, x, y, scr->balloon->h, w, scr->balloon->text);
 }
