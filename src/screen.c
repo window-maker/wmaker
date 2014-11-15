@@ -577,6 +577,11 @@ WScreen *wScreenInit(int screen_number)
 
 		scr->rcontext = RCreateContext(dpy, screen_number, &rattr);
 	}
+	if (scr->rcontext == NULL) {
+		wfatal(_("can't create Context on screen %d, %s"),
+		       screen_number, RMessageForError(RErrorCode));
+		goto abort_no_context;
+	}
 
 	scr->w_win = scr->rcontext->drawable;
 	scr->w_visual = scr->rcontext->visual;
@@ -589,6 +594,7 @@ WScreen *wScreenInit(int screen_number)
 	if (!scr->wmscreen) {
 		wfatal(_("could not initialize WINGs widget set"));
 		RDestroyContext(scr->rcontext);
+	abort_no_context:
 		WMFreeArray(scr->fakeGroupLeaders);
 		wfree(scr->totalUsableArea);
 		wfree(scr->usableArea);
