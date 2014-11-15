@@ -702,14 +702,12 @@ msgid "Focus previous window"
 msgstr "Vorheriges Fenster"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:488
-#, fuzzy
 msgid "Focus next group window"
-msgstr "Nächstes Fenster"
+msgstr ""
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:489
-#, fuzzy
 msgid "Focus previous group window"
-msgstr "Vorheriges Fenster"
+msgstr ""
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:490
 msgid "Switch to next workspace"
