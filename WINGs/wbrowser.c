@@ -781,11 +781,7 @@ WMArray *WMGetBrowserPaths(WMBrowser * bPtr)
 		path = wmalloc(slen);
 		/* ignore first `/' */
 		for (i = 0; i <= column; i++) {
-			if (wstrlcat(path, bPtr->pathSeparator, slen) >= slen) {
-				wfree(path);
-				WMFreeArray(paths);
-				return NULL;
-			}
+			wstrlcat(path, bPtr->pathSeparator, slen);
 			if (i == column) {
 				item = lastItem;
 			} else {
@@ -793,10 +789,7 @@ WMArray *WMGetBrowserPaths(WMBrowser * bPtr)
 			}
 			if (!item)
 				break;
-			if (wstrlcat(path, item->text, slen) >= slen) {
-				wfree(path);
-				return NULL;
-			}
+			wstrlcat(path, item->text, slen);
 		}
 		WMAddToArray(paths, path);
 	}
