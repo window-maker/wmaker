@@ -28,6 +28,7 @@
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <stdarg.h>
 #include <pwd.h>
 #include <math.h>
@@ -49,6 +50,8 @@
 #include "dialog.h"
 #include "xutil.h"
 #include "xmodifier.h"
+#include "main.h"
+#include "event.h"
 
 
 #define ICON_SIZE wPreferences.icon_size
@@ -903,6 +906,75 @@ static void UnescapeWM_CLASS(const char *str, char **name, char **class)
 	if (!*class) {
 		wfree(*class);
 		*class = NULL;
+	}
+}
+
+static void track_bg_helper_death(pid_t pid, unsigned int status, void *client_data)
+{
+	WScreen *scr = (WScreen *) client_data;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) pid;
+	(void) status;
+
+	close(scr->helper_fd);
+	scr->helper_fd = 0;
+	scr->helper_pid = 0;
+	scr->flags.backimage_helper_launched = 0;
+}
+
+Bool start_bg_helper(WScreen *scr)
+{
+	pid_t pid;
+	int filedes[2];
+
+	if (pipe(filedes) < 0) {
+		werror("pipe() failed:can't set workspace specific background image");
+		return False;
+	}
+
+	pid = fork();
+	if (pid < 0) {
+		werror("fork() failed:can't set workspace specific background image");
+		if (close(filedes[0]) < 0)
+			werror("could not close pipe");
+		if (close(filedes[1]) < 0)
+			werror("could not close pipe");
+		return False;
+
+	} else if (pid == 0) {
+		char *dither;
+
+		SetupEnvironment(scr);
+
+		if (close(0) < 0)
+			werror("could not close pipe");
+		if (dup(filedes[0]) < 0) {
+			werror("dup() failed:can't set workspace specific background image");
+		}
+		dither = wPreferences.no_dithering ? "-m" : "-d";
+		if (wPreferences.smooth_workspace_back)
+			execlp("wmsetbg", "wmsetbg", "-helper", "-S", dither, NULL);
+		else
+			execlp("wmsetbg", "wmsetbg", "-helper", dither, NULL);
+		werror("could not execute wmsetbg");
+		exit(1);
+
+	} else {
+		if (fcntl(filedes[0], F_SETFD, FD_CLOEXEC) < 0) {
+			werror("error setting close-on-exec flag");
+		}
+		if (fcntl(filedes[1], F_SETFD, FD_CLOEXEC) < 0) {
+			werror("error setting close-on-exec flag");
+		}
+
+		scr->helper_fd = filedes[1];
+		scr->helper_pid = pid;
+		scr->flags.backimage_helper_launched = 1;
+
+		wAddDeathHandler(pid, track_bg_helper_death, scr);
+
+		return True;
 	}
 }
 

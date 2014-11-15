@@ -32,7 +32,6 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
 #include <limits.h>
 #include <signal.h>
 
@@ -62,7 +61,6 @@
 #include "workspace.h"
 #include "properties.h"
 #include "misc.h"
-#include "event.h"
 #include "winmenu.h"
 
 #define MAX_SHORTCUT_LENGTH 32
@@ -2971,20 +2969,6 @@ static int setFrameSelectedBorderColor(WScreen * scr, WDefaultEntry * entry, voi
 	return REFRESH_FRAME_BORDER;
 }
 
-static void trackDeadProcess(pid_t pid, unsigned int status, void *client_data)
-{
-	WScreen *scr = (WScreen *) client_data;
-
-	/* Parameter not used, but tell the compiler that it is ok */
-	(void) pid;
-	(void) status;
-
-	close(scr->helper_fd);
-	scr->helper_fd = 0;
-	scr->helper_pid = 0;
-	scr->flags.backimage_helper_launched = 0;
-}
-
 static int setWorkspaceSpecificBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void *bar)
 {
 	WMPropList *value = tdata;
@@ -3005,62 +2989,15 @@ static int setWorkspaceSpecificBack(WScreen * scr, WDefaultEntry * entry, void *
 			return 0;
 		}
 	} else {
-		pid_t pid;
-		int filedes[2];
-
 		if (WMGetPropListItemCount(value) == 0)
 			return 0;
 
-		if (pipe(filedes) < 0) {
-			werror("pipe() failed:can't set workspace specific background image");
-
+		if (!start_bg_helper(scr)) {
 			WMReleasePropList(value);
 			return 0;
 		}
 
-		pid = fork();
-		if (pid < 0) {
-			werror("fork() failed:can't set workspace specific background image");
-			if (close(filedes[0]) < 0)
-				werror("could not close pipe");
-			if (close(filedes[1]) < 0)
-				werror("could not close pipe");
-
-		} else if (pid == 0) {
-			char *dither;
-
-			SetupEnvironment(scr);
-
-			if (close(0) < 0)
-				werror("could not close pipe");
-			if (dup(filedes[0]) < 0) {
-				werror("dup() failed:can't set workspace specific background image");
-			}
-			dither = wPreferences.no_dithering ? "-m" : "-d";
-			if (wPreferences.smooth_workspace_back)
-				execlp("wmsetbg", "wmsetbg", "-helper", "-S", dither, NULL);
-			else
-				execlp("wmsetbg", "wmsetbg", "-helper", dither, NULL);
-			werror("could not execute wmsetbg");
-			exit(1);
-		} else {
-
-			if (fcntl(filedes[0], F_SETFD, FD_CLOEXEC) < 0) {
-				werror("error setting close-on-exec flag");
-			}
-			if (fcntl(filedes[1], F_SETFD, FD_CLOEXEC) < 0) {
-				werror("error setting close-on-exec flag");
-			}
-
-			scr->helper_fd = filedes[1];
-			scr->helper_pid = pid;
-			scr->flags.backimage_helper_launched = 1;
-
-			wAddDeathHandler(pid, trackDeadProcess, scr);
-
-			SendHelperMessage(scr, 'P', -1, wPreferences.pixmap_path);
-		}
-
+		SendHelperMessage(scr, 'P', -1, wPreferences.pixmap_path);
 	}
 
 	for (i = 0; i < WMGetPropListItemCount(value); i++) {
