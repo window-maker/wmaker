@@ -375,8 +375,8 @@ static WMPropList *get_generic_value(const char *instance, const char *class,
 char *get_icon_filename(const char *winstance, const char *wclass, const char *command,
 			Bool default_icon)
 {
-	char *file_name = NULL;
-	char *file_path = NULL;
+	char *file_name;
+	char *file_path;
 
 	/* Get the file name of the image, using instance and class */
 	file_name = wDefaultGetIconFile(winstance, wclass, default_icon);
@@ -384,29 +384,32 @@ char *get_icon_filename(const char *winstance, const char *wclass, const char *c
 	/* Check if the file really exists in the disk */
 	if (file_name)
 		file_path = FindImage(wPreferences.icon_path, file_name);
+	else
+		file_path = NULL;
 
 	/* If the specific icon filename is not found, and command is specified,
 	 * then include the .app icons and re-do the search. */
-	if ((!file_name || !file_path ) && command) {
+	if (!file_path && command) {
 		wApplicationExtractDirPackIcon(command, winstance, wclass);
 		file_name = wDefaultGetIconFile(winstance, wclass, False);
+
+		if (file_name) {
+			file_path = FindImage(wPreferences.icon_path, file_name);
+			if (!file_path)
+				wwarning(_("icon \"%s\" doesn't exist, check your config files"), file_name);
+
+			/* FIXME: Here, if file_path does not exist then the icon is still in the
+			 * "icon database" (w_global.domain.window_attr->dictionary), but the file
+			 * for the icon is no more on disk. Therefore, we should remove it from the
+			 * database. Is possible to do that using wDefaultChangeIcon() */
+		}
 	}
 
-	/* Get the full path for the image file */
-	if (file_name) {
-		file_path = FindImage(wPreferences.icon_path, file_name);
-
-		if (!file_path)
-			wwarning(_("icon \"%s\" doesn't exist, check your config files"), file_name);
-
-		/* FIXME: Here, if file_path don't exists, then the icon is in the
-		 * "icon database" (w_global.domain.window_attr->dictionary), but the icon
-		 * is not en disk. Therefore, we should remove it from the icon
-		 * database. Is possible to do that using wDefaultChangeIcon() */
-
-		/* Don't wfree(file_name) here, because is a pointer to the icon
-		 * dictionary (w_global.domain.window_attr->dictionary) value. */
-	}
+	/*
+	 * Don't wfree(file_name) because it is a direct pointer inside the icon
+	 * dictionary (w_global.domain.window_attr->dictionary) and not a result
+	 * allocated with wstrdup()
+	 */
 
 	if (!file_path && default_icon)
 		file_path = get_default_image_path();
