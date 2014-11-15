@@ -575,7 +575,7 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 					olen += slen;
 					nout = realloc(out, olen);
 					if (!nout) {
-						wwarning(_("out of memory during expansion of \"%%w\""));
+						wwarning(_("out of memory during expansion of '%s' for command \"%s\""), "%w", cmdline);
 						goto error;
 					}
 					out = nout;
@@ -592,7 +592,7 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 				olen += slen;
 				nout = realloc(out, olen);
 				if (!nout) {
-					wwarning(_("out of memory during expansion of \"%%W\""));
+					wwarning(_("out of memory during expansion of '%s' for command \"%s\""), "%W", cmdline);
 					goto error;
 				}
 				out = nout;
@@ -609,7 +609,7 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 					olen += slen;
 					nout = realloc(out, olen);
 					if (!nout) {
-						wwarning(_("out of memory during expansion of \"%%a\""));
+						wwarning(_("out of memory during expansion of '%s' for command \"%s\""), "%a", cmdline);
 						goto error;
 					}
 					out = nout;
@@ -632,7 +632,7 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 				olen += slen;
 				nout = realloc(out, olen);
 				if (!nout) {
-					wwarning(_("out of memory during expansion of \"%%d\""));
+					wwarning(_("out of memory during expansion of '%s' for command \"%s\""), "%d", cmdline);
 					goto error;
 				}
 				out = nout;
@@ -653,7 +653,7 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 				olen += slen;
 				nout = realloc(out, olen);
 				if (!nout) {
-					wwarning(_("out of memory during expansion of \"%%s\""));
+					wwarning(_("out of memory during expansion of '%s' for command \"%s\""), "%s", cmdline);
 					goto error;
 				}
 				out = nout;

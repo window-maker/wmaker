@@ -1108,21 +1108,9 @@ msgid "out of memory during expansion of \"%s\""
 msgstr "Plus assez de mémoire pendant l'interprétation de « %s »."
 
 #: ../src/misc.c:863
-msgid "out of memory during expansion of \"%w\""
-msgstr "Plus assez de mémoire pendant l'interprétation de « %w »."
-
-#: ../src/misc.c:881
-msgid "out of memory during expansion of \"%W\""
-msgstr "Plus assez de mémoire pendant l'interprétation de « %W »."
-
-#: ../src/misc.c:897
-msgid "out of memory during expansion of \"%a\""
-msgstr "Plus assez de mémoire pendant l'interprétation de « %a »."
-
-#: ../src/misc.c:928
 #, c-format
-msgid "out of memory during expansion of \"%d\""
-msgstr "Plus assez de mémoire pendant l'interprétation de « %d »."
+msgid "out of memory during expansion of '%s' for command \"%s\""
+msgstr "Plus assez de mémoire pour l'interprétation du « %s » dans la commande « %s »"
 
 #: ../src/misc.c:942
 msgid "selection not available"
