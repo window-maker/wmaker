@@ -515,9 +515,6 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 	char *out, *nout;
 	char *selection = NULL;
 	char *user_input = NULL;
-#ifdef XDND
-	char *dropped_thing = NULL;
-#endif
 	char tmpbuf[TMPBUFSIZE];
 	int slen;
 
@@ -627,14 +624,11 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 
 #ifdef XDND
 			case 'd':
-				if (scr->xdestring) {
-					dropped_thing = wstrdup(scr->xdestring);
-				}
-				if (!dropped_thing) {
+				if (!scr->xdestring) {
 					scr->flags.dnd_data_convertion_status = 1;
 					goto error;
 				}
-				slen = strlen(dropped_thing);
+				slen = strlen(scr->xdestring);
 				olen += slen;
 				nout = realloc(out, olen);
 				if (!nout) {
@@ -642,7 +636,7 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 					goto error;
 				}
 				out = nout;
-				strcat(out, dropped_thing);
+				strcat(out, scr->xdestring);
 				optr += slen;
 				break;
 #endif				/* XDND */
