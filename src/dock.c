@@ -1659,14 +1659,11 @@ static WAppIcon *restore_icon_state(WScreen *scr, WMPropList *info, int type, in
 		return NULL;
 
 	/* get commands */
-	if (cmd)
-		command = wstrdup(WMGetFromPLString(cmd));
-	else
-		command = NULL;
+	command = wstrdup(WMGetFromPLString(cmd));
 
-	if (!command || strcmp(command, "-") == 0) {
-		if (command)
-			wfree(command);
+	if (strcmp(command, "-") == 0) {
+		wfree(command);
+
 		if (wclass)
 			wfree(wclass);
 		if (winstance)
@@ -1680,8 +1677,8 @@ static WAppIcon *restore_icon_state(WScreen *scr, WMPropList *info, int type, in
 		wfree(wclass);
 	if (winstance)
 		wfree(winstance);
-	if (command)
-		wfree(command);
+
+	wfree(command);
 
 	aicon->icon->core->descriptor.handle_mousedown = iconMouseDown;
 	aicon->icon->core->descriptor.handle_enternotify = clipEnterNotify;
