@@ -541,8 +541,6 @@ void wDrawBevel(Drawable d, unsigned width, unsigned height, WTexSolid * texture
 	dim = texture->dim_gc;
 	dark = texture->dark_gc;
 	switch (relief) {
-	case WREL_FLAT:
-		return;
 	case WREL_MENUENTRY:
 	case WREL_RAISED:
 	case WREL_ICON:
