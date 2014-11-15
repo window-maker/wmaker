@@ -1310,10 +1310,22 @@ static Pixmap loadRImage(WMScreen * scr, const char *path)
 
 	cnt = fscanf(f, "%02x%02x%1x", &w, &h, &d);
 	if (cnt != 3) {
+		wwarning(_("could not read size of image from '%s', ignoring"), path);
+		fclose(f);
+		return None;
+	}
+	if (d < 3 || d > 4) {
+		wwarning(_("image \"%s\" has an invalid depth of %d, ignoring"), path, d);
 		fclose(f);
 		return None;
 	}
 	image = RCreateImage(w, h, d == 4);
+	if (image == NULL) {
+		wwarning(_("could not create RImage for \"%s\": %s"),
+		         path, RMessageForError(RErrorCode));
+		fclose(f);
+		return None;
+	}
 	read_size = w * h * d;
 	if (fread(image->data, 1, read_size, f) == read_size)
 		RConvertImage(WMScreenRContext(scr), image, &pixmap);
