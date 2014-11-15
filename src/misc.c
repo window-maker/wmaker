@@ -945,6 +945,9 @@ Bool start_bg_helper(WScreen *scr)
 	} else if (pid == 0) {
 		char *dither;
 
+		/* We don't need this side of the pipe in the child process */
+		close(filedes[1]);
+
 		SetupEnvironment(scr);
 
 		if (close(0) < 0)
@@ -952,6 +955,7 @@ Bool start_bg_helper(WScreen *scr)
 		if (dup(filedes[0]) < 0) {
 			werror("dup() failed:can't set workspace specific background image");
 		}
+		close(filedes[0]);
 		dither = wPreferences.no_dithering ? "-m" : "-d";
 		if (wPreferences.smooth_workspace_back)
 			execlp("wmsetbg", "wmsetbg", "-helper", "-S", dither, NULL);
@@ -961,9 +965,9 @@ Bool start_bg_helper(WScreen *scr)
 		exit(1);
 
 	} else {
-		if (fcntl(filedes[0], F_SETFD, FD_CLOEXEC) < 0) {
-			werror("error setting close-on-exec flag");
-		}
+		/* We don't need this side of the pipe in the parent process */
+		close(filedes[0]);
+
 		if (fcntl(filedes[1], F_SETFD, FD_CLOEXEC) < 0) {
 			werror("error setting close-on-exec flag");
 		}
