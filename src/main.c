@@ -246,9 +246,22 @@ void SetupEnvironment(WScreen * scr)
 		int len = strlen(DisplayName) + 64;
 		tmp = wmalloc(len);
 		snprintf(tmp, len, "DISPLAY=%s", XDisplayName(DisplayName));
-		ptr = strchr(strchr(tmp, ':'), '.');
-		if (ptr)
-			*ptr = 0;
+
+		/* Search from the end to be compatible with ipv6 address */
+		ptr = strrchr(tmp, ':');
+		if (ptr == NULL) {
+			static Bool message_already_displayed = False;
+
+			if (!message_already_displayed)
+				wwarning(_("the display name has an unexpected syntax: \"%s\""),
+				         XDisplayName(DisplayName));
+			message_already_displayed = True;
+		} else {
+			/* If found, remove the screen specification from the display variable */
+			ptr = strchr(ptr, '.');
+			if (ptr)
+				*ptr = 0;
+		}
 		snprintf(buf, sizeof(buf), ".%i", scr->screen);
 		strcat(tmp, buf);
 		putenv(tmp);
