@@ -862,16 +862,14 @@ char *EscapeWM_CLASS(const char *name, const char *class)
 static void UnescapeWM_CLASS(const char *str, char **name, char **class)
 {
 	int i, j, k, dot;
+	int length_of_name;
 
 	j = strlen(str);
-	*name = wmalloc(j);
-	**name = 0;
-	*class = wmalloc(j);
-	**class = 0;
 
 	/* separate string in 2 parts */
+	length_of_name = 0;
 	dot = -1;
-	for (i = 0; i < j; i++) {
+	for (i = 0; i < j; i++, length_of_name++) {
 		if (str[i] == '\\') {
 			i++;
 			continue;
@@ -881,31 +879,27 @@ static void UnescapeWM_CLASS(const char *str, char **name, char **class)
 		}
 	}
 
-	/* unescape strings */
-	for (i = 0, k = 0; i < dot; i++) {
-		if (str[i] == '\\') {
-			continue;
-		} else {
-			(*name)[k++] = str[i];
+	/* unescape the name */
+	if (length_of_name > 0) {
+		*name = wmalloc(length_of_name + 1);
+		for (i = 0, k = 0; i < dot; i++) {
+			if (str[i] != '\\')
+				(*name)[k++] = str[i];
 		}
-	}
-	(*name)[k] = 0;
-
-	for (i = dot + 1, k = 0; i < j; i++) {
-		if (str[i] == '\\') {
-			continue;
-		} else {
-			(*class)[k++] = str[i];
-		}
-	}
-	(*class)[k] = 0;
-
-	if (!*name) {
-		wfree(*name);
+		(*name)[k] = '\0';
+	} else {
 		*name = NULL;
 	}
-	if (!*class) {
-		wfree(*class);
+
+	/* unescape the class */
+	if (dot < j-1) {
+		*class = wmalloc(j - (dot + 1) + 1);
+		for (i = dot + 1, k = 0; i < j; i++) {
+			if (str[i] != '\\')
+				(*class)[k++] = str[i];
+		}
+		(*class)[k] = 0;
+	} else {
 		*class = NULL;
 	}
 }
