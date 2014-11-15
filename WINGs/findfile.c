@@ -23,7 +23,9 @@
 
 #include "WUtil.h"
 
+#include <sys/types.h>
 #include <sys/stat.h>
+#include <fcntl.h>
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -422,60 +424,104 @@ char *wfindfileinarray(WMPropList *array, const char *file)
 	return NULL;
 }
 
-int wcopy_file(const char *dir, const char *src_file, const char *dest_file)
+int wcopy_file(const char *dest_dir, const char *src_file, const char *dest_file)
 {
-	FILE *src, *dst;
-	size_t nread, nwritten;
-	char *dstpath;
-	struct stat st;
-	char buf[4096];
+	char *path_dst;
+	int fd_src, fd_dst;
+	struct stat stat_src;
+	mode_t permission_dst;
+	const size_t buffer_size = 2 * 1024 * 1024;	/* 4MB is a decent start choice to allow the OS to take advantage of modern disk's performance */
+	char *buffer;	/* The buffer is not created on the stack to avoid possible stack overflow as our buffer is big */
 
-	/* only to a directory */
-	if (stat(dir, &st) != 0 || !S_ISDIR(st.st_mode))
-		return -1;
-	/* only copy files */
-	if (stat(src_file, &st) != 0 || !S_ISREG(st.st_mode))
-		return -1;
-
-	do {
-		src = fopen(src_file, "rb");
-	} while ((src == NULL) && (errno == EINTR));
-	if (src == NULL) {
-		werror(_("Could not open input file \"%s\""), src_file);
+ try_again_src:
+	fd_src = open(src_file, O_RDONLY | O_NOFOLLOW);
+	if (fd_src == -1) {
+		if (errno == EINTR)
+			goto try_again_src;
+		werror(_("Could not open input file \"%s\": %s"), src_file, strerror(errno));
 		return -1;
 	}
 
-	dstpath = wstrconcat(dir, dest_file);
-	do {
-		dst = fopen(dstpath, "wb");
-	} while ((dst == NULL) && (errno == EINTR));
-	if (dst == NULL) {
-		werror(_("Could not create target file \"%s\""), dstpath);
-		wfree(dstpath);
-		fclose(src);
+	/* Only accept to copy regular files */
+	if (fstat(fd_src, &stat_src) != 0 || !S_ISREG(stat_src.st_mode)) {
+		close(fd_src);
 		return -1;
 	}
 
-	do {
-		nread = fread(buf, 1, sizeof(buf), src);
-		if (ferror(src))
-			break;
+	path_dst = wstrconcat(dest_dir, dest_file);
+ try_again_dst:
+	fd_dst = open(path_dst, O_WRONLY | O_CREAT | O_TRUNC, S_IRUSR | S_IWUSR);
+	if (fd_dst == -1) {
+		if (errno == EINTR)
+			goto try_again_dst;
+		werror(_("Could not create target file \"%s\": %s"), path_dst, strerror(errno));
+		wfree(path_dst);
+		close(fd_src);
+		return -1;
+	}
 
-		nwritten = fwrite(buf, 1, nread, dst);
-		if (ferror(dst) || feof(src) || nread != nwritten)
-			break;
+	buffer = malloc(buffer_size);	/* Don't use wmalloc to avoid the memset(0) we don't need */
+	if (buffer == NULL) {
+		werror(_("could not allocate memory for the copy buffer"));
+		close(fd_dst);
+		goto cleanup_and_return_failure;
+	}
 
-	} while (1);
+	for (;;) {
+		ssize_t size_data;
+		const char *write_ptr;
+		size_t write_remain;
 
-	if (ferror(src) || ferror(dst))
-		unlink(dstpath);
+	try_again_read:
+		size_data = read(fd_src, buffer, buffer_size);
+		if (size_data == 0)
+			break; /* End of File have been reached */
+		if (size_data < 0) {
+			if (errno == EINTR)
+				goto try_again_read;
+			werror(_("could not read from file \"%s\": %s"), src_file, strerror(errno));
+			close(fd_dst);
+			goto cleanup_and_return_failure;
+		}
 
-	fclose(src);
-	fchmod(fileno(dst), st.st_mode);
-	fsync(fileno(dst));
-	if (fclose(dst))
-		wwarning("error occured during fclose(\"%s\")", dstpath);
-	wfree(dstpath);
+		write_ptr = buffer;
+		write_remain = size_data;
+		while (write_remain > 0) {
+			ssize_t write_done;
+
+		try_again_write:
+			write_done = write(fd_dst, write_ptr, write_remain);
+			if (write_done < 0) {
+				if (errno == EINTR)
+					goto try_again_write;
+				werror(_("could not write data to file \"%s\": %s"), path_dst, strerror(errno));
+				close(fd_dst);
+				goto cleanup_and_return_failure;
+			}
+			write_ptr    += write_done;
+			write_remain -= write_done;
+		}
+	}
+
+	/* Keep only the permission-related part of the field: */
+	permission_dst = stat_src.st_mode & (S_IRWXU | S_IRWXG | S_IRWXO | S_ISUID | S_ISGID | S_ISVTX);
+	if (fchmod(fd_dst, permission_dst) != 0)
+		wwarning(_("could not set permission 0%03o on file \"%s\": %s"),
+		         permission_dst, path_dst, strerror(errno));
+
+	if (close(fd_dst) != 0) {
+		werror(_("could not close the file \"%s\": %s"), path_dst, strerror(errno));
+	cleanup_and_return_failure:
+		free(buffer);
+		wfree(path_dst);
+		close(fd_src);
+		unlink(path_dst);
+		return -1;
+	}
+
+	free(buffer);
+	wfree(path_dst);
+	close(fd_src);
 
 	return 0;
 }
