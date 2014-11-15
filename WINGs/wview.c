@@ -188,6 +188,12 @@ void W_RealizeView(W_View * view)
 	}
 
 	if (!view->flags.realized) {
+
+		if (view->parent == NULL) {
+			wwarning("trying to realize widget without parent");
+			return;
+		}
+
 		parentWID = view->parent->window;
 		view->window = XCreateWindow(dpy, parentWID, view->pos.x, view->pos.y,
 					     view->size.width, view->size.height, 0,
