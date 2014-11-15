@@ -410,16 +410,16 @@ static void handleActionEvents(XEvent * event, void *data)
 
 	switch (event->type) {
 	case ButtonPress:
-		if (event->xbutton.button == WINGsConfiguration.mouseWheelUp && !sPtr->flags.dragging) {
-			/* Wheel up */
+		if (event->xbutton.button == WINGsConfiguration.mouseWheelDown && !sPtr->flags.dragging) {
+			/* Wheel down */
 			if (sPtr->value + 1 <= sPtr->maxValue) {
 				WMSetSliderValue(sPtr, sPtr->value + 1);
 				if (sPtr->flags.continuous && sPtr->action) {
 					(*sPtr->action) (sPtr, sPtr->clientData);
 				}
 			}
-		} else if (event->xbutton.button == WINGsConfiguration.mouseWheelDown && !sPtr->flags.dragging) {
-			/* Wheel down */
+		} else if (event->xbutton.button == WINGsConfiguration.mouseWheelUp && !sPtr->flags.dragging) {
+			/* Wheel up */
 			if (sPtr->value - 1 >= sPtr->minValue) {
 				WMSetSliderValue(sPtr, sPtr->value - 1);
 				if (sPtr->flags.continuous && sPtr->action) {
