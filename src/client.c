@@ -574,6 +574,7 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 						if (foo->fake_group && foo->fake_group == fPtr) {
 							WSETUFLAG(foo, shared_appicon, 0);
 							foo->fake_group = NULL;
+
 							if (foo->group_id != None)
 								foo->main_window = foo->group_id;
 							else if (foo->client_leader != None)
@@ -582,9 +583,9 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 								foo->main_window = foo->client_win;
 							else
 								foo->main_window = None;
-							if (foo->main_window) {
-								wapp = wApplicationCreate(foo);
-							}
+
+							if (foo->main_window)
+								wApplicationCreate(foo);
 						}
 						foo = foo->prev;
 					}
