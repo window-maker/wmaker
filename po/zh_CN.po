@@ -990,8 +990,8 @@ msgstr "%s:不能打开或预处理菜单文件"
 
 #: ../src/rootmenu.c:1126 ../src/rootmenu.c:1227
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:不能打开菜单文件"
+msgid "could not open menu file \"%s\": %s"
+msgstr "不能打开菜单文件 \"%s\": %s"
 
 #: ../src/rootmenu.c:1153
 #, c-format

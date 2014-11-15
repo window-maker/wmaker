@@ -1204,8 +1204,8 @@ msgstr "ongeldig menu, geen menutitel opgegeven"
 
 #: ../src/rootmenu.c:1096 ../src/rootmenu.c:1156
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:kon menubestand niet openen"
+msgid "could not open menu file \"%s\": %s"
+msgstr "kon menubestand \"%s\" niet openen: %s"
 
 #: ../src/rootmenu.c:1264 ../src/rootmenu.c:1336 ../src/rootmenu.c:1375
 #, c-format

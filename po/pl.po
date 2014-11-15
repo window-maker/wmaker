@@ -842,8 +842,8 @@ msgstr "%s:nie można otworzyć/przetworzyć pliku menu"
 
 #: ../src/rootmenu.c:1096 ../src/rootmenu.c:1197
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:nie można otworzyć pliku menu"
+msgid "could not open menu file \"%s\": %s"
+msgstr "nie można otworzyć pliku menu \"%s\": %s"
 
 #: ../src/rootmenu.c:1123
 #, c-format

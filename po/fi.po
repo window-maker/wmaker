@@ -1210,8 +1210,8 @@ msgstr "%s: valikkotiedostoa ei voitu avata/esikäsitellä"
 
 #: ../src/rootmenu.c:1174 ../src/rootmenu.c:1276
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: valikkotiedoston avaus ei onnistunut"
+msgid "could not open menu file \"%s\": %s"
+msgstr "valikkotiedoston \"%s\" avaus ei onnistunut: %s"
 
 #: ../src/rootmenu.c:1201
 #, c-format

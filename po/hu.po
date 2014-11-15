@@ -1179,8 +1179,8 @@ msgstr "szintaktikai hiba a menü fájlban: hiányzó END kulcsszó"
 
 #: ../../wmaker-crm/src/rootmenu.c:1049 ../../wmaker-crm/src/rootmenu.c:1138
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: nem tudom megnyitni a menü fájlt"
+msgid "could not open menu file \"%s\": %s"
+msgstr "nem tudom megnyitni a menü fájlt \"%s\": %s"
 
 #: ../../wmaker-crm/src/rootmenu.c:1072
 msgid "invalid menu file, MENU command is missing"

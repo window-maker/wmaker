@@ -1483,8 +1483,8 @@ msgstr "%s:kunne ikke åbne/forbehandle menufil"
 # ../src/rootmenu.c:1126 ../src/rootmenu.c:1227
 #: ../src/rootmenu.c:1212 ../src/rootmenu.c:1314
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:kunne ikke åbne menufil"
+msgid "could not open menu file \"%s\": %s"
+msgstr "kunne ikke åbne menufil \"%s\": %s"
 
 # ../src/rootmenu.c:1153
 #: ../src/rootmenu.c:1239

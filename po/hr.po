@@ -744,8 +744,8 @@ msgid "%s:could not open/preprocess menu file"
 msgstr "%s:ne mogu otvoriti/preprocesirati datoteku izbornika"
 
 #: ../src/rootmenu.c:1079 ../src/rootmenu.c:1180
-msgid "%s:could not open menu file"
-msgstr "%s: ne mogu otvoriti datoteku izbornika"
+msgid "could not open menu file \"%s\": %s"
+msgstr "ne mogu otvoriti datoteku izbornika \"%s\": %s"
 
 #: ../src/rootmenu.c:1106
 msgid "%s:invalid menu file. MENU command is missing"

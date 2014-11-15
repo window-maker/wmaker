@@ -1094,7 +1094,7 @@ static WMenu *readMenuFile(WScreen *scr, const char *file_name)
 
 	file = fopen(file_name, "rb");
 	if (!file) {
-		werror(_("%s:could not open menu file"), file_name);
+		werror(_("could not open menu file \"%s\": %s"), file_name, strerror(errno));
 		return NULL;
 	}
 	menu = readMenu(scr, file_name, file);
@@ -1172,9 +1172,15 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	}
 	filename = flat_file + (flat_file[1] == '|' ? 2 : 1);
 
+	/*
+	 * In case of memory problem, 'popen' will not set the errno, so we initialise it
+	 * to be able to display a meaningful message. For other problems, 'popen' will
+	 * properly set errno, so we'll still get a good message
+	 */
+	errno = ENOMEM;
 	file = popen(filename, "r");
 	if (!file) {
-		werror(_("%s:could not open menu file"), filename);
+		werror(_("could not open menu file \"%s\": %s"), filename, strerror(errno));
 		return NULL;
 	}
 	menu = readMenu(scr, flat_file, file);

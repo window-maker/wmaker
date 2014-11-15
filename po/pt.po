@@ -1050,8 +1050,8 @@ msgstr "%s:não foi possível abrir/preprocessar arquivo de menu"
 
 #: ../src/rootmenu.c:1123 ../src/rootmenu.c:1224
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:não foi possível abrir arquivo de menu"
+msgid "could not open menu file \"%s\": %s"
+msgstr "não foi possível abrir arquivo de menu \"%s\": %s"
 
 #: ../src/rootmenu.c:1150
 #, c-format

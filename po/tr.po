@@ -650,8 +650,8 @@ msgid "%s:could not open/preprocess menu file"
 msgstr "%s:menü dosyası açılamadı/işlenemedi"
 
 #: ../src/rootmenu.c:1033 ../src/rootmenu.c:1131
-msgid "%s:could not open menu file"
-msgstr "%s: menü dosyası açılamadı"
+msgid "could not open menu file \"%s\": %s"
+msgstr "menü dosyası \"%s\" açılamadı: %s"
 
 #: ../src/rootmenu.c:1060
 msgid "%s:invalid menu file"

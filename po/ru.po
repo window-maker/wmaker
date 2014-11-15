@@ -1260,8 +1260,8 @@ msgstr "%s:не удалось открыть/предобработать фа�
 
 #: ../src/rootmenu.c:1212 ../src/rootmenu.c:1315
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:не удалось открыть файл меню"
+msgid "could not open menu file \"%s\": %s"
+msgstr "не удалось открыть файл меню \"%s\": %s"
 
 #: ../src/rootmenu.c:1239
 #, c-format

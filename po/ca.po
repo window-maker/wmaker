@@ -1299,8 +1299,8 @@ msgstr "%s: no s'ha pogut obrir/preprocessar el fitxer de menú"
 
 #: ../src/rootmenu.c:1217 ../src/rootmenu.c:1321
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: no s'ha pogut obrir el fitxer de menú"
+msgid "could not open menu file \"%s\": %s"
+msgstr "no s'ha pogut obrir el fitxer de menú \"%s\": %s"
 
 #: ../src/rootmenu.c:1244
 #, c-format

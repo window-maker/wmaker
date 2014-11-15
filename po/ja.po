@@ -1137,8 +1137,8 @@ msgstr "%s:メニューファイルのオープン／プリプロセスができ
 
 #: ../src/rootmenu.c:1105 ../src/rootmenu.c:1199
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:メニューファイルを開けません"
+msgid "could not open menu file \"%s\": %s"
+msgstr "メニューファイルを開けません \"%s\": %s"
 
 #: ../src/rootmenu.c:1131
 #, c-format

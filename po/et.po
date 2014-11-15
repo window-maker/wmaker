@@ -1147,8 +1147,8 @@ msgstr "%s:menüüfaili pole võimalik avada või eeltöödelda"
 
 #: ../src/rootmenu.c:1064 ../src/rootmenu.c:1149
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:menüüfaili pole võimalik avada"
+msgid "could not open menu file \"%s\": %s"
+msgstr "menüüfaili \"%s\" pole võimalik avada: %s"
 
 #: ../src/rootmenu.c:1084
 #, c-format

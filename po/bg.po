@@ -1557,8 +1557,8 @@ msgstr "%s: не може да се отвори/обработи от пред�
 # ../src/rootmenu.c:1123 ../src/rootmenu.c:1224
 #: ../src/rootmenu.c:1212 ../src/rootmenu.c:1315
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: не може да се отвори файлът меню"
+msgid "could not open menu file \"%s\": %s"
+msgstr "не може да се отвори файлът меню \"%s\": %s"
 
 # ../src/rootmenu.c:1150
 #: ../src/rootmenu.c:1239

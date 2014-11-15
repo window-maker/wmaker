@@ -1244,8 +1244,8 @@ msgstr "%s:tak dapat membuka/mempraproses fail menu)"
 
 #: ../src/rootmenu.c:1209 ../src/rootmenu.c:1311
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: tak dapat membuka fail menu"
+msgid "could not open menu file \"%s\": %s"
+msgstr "tak dapat membuka fail menu \"%s\": %s"
 
 #: ../src/rootmenu.c:1236
 #, c-format

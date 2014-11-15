@@ -484,8 +484,8 @@ msgstr "%s:kunne ikke åpne/behandle meny filen"
 
 #: ../src/rootmenu.c:685 ../src/rootmenu.c:767
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:kunne ikke åpne meny filen"
+msgid "could not open menu file \"%s\": %s"
+msgstr "kunne ikke åpne meny filen \"%s\": %s"
 
 #: ../src/rootmenu.c:698
 #, c-format

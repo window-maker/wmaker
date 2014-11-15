@@ -1164,8 +1164,8 @@ msgstr "%s: Menüdatei konnte nicht geöffnet/bearbeitet werden"
 
 #: ../src/rootmenu.c:1106 ../src/rootmenu.c:1203
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: Menüdatei konnte nicht geöffnet werden"
+msgid "could not open menu file \"%s\": %s"
+msgstr "Menüdatei \"%s\" konnte nicht geöffnet werden: %s"
 
 #: ../src/rootmenu.c:1132
 #, c-format

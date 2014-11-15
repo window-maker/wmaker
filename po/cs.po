@@ -1221,8 +1221,8 @@ msgstr "%s: nelze otevřít nebo předzpracovat soubor s menu"
 
 #: ../src/rootmenu.c:1175 ../src/rootmenu.c:1277
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:nelze otevřít soubor s menu"
+msgid "could not open menu file \"%s\": %s"
+msgstr "nelze otevřít soubor s menu \"%s\": %s"
 
 #: ../src/rootmenu.c:1202
 #, c-format

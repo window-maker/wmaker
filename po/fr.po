@@ -1283,8 +1283,8 @@ msgstr "%s : échec à l'ouverture ou au traitement du fichier de menu."
 
 #: ../src/rootmenu.c:1217 ../src/rootmenu.c:1320
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s : l'ouverture du fichier de menu a échoué."
+msgid "could not open menu file \"%s\": %s"
+msgstr "l'ouverture du fichier de menu \"%s\" a échoué: %s"
 
 #: ../src/rootmenu.c:1244
 #, c-format

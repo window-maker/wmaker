@@ -1121,8 +1121,8 @@ msgstr "메뉴 파일에서 문법 오류: END 선언 없음"
 
 #: ../src/rootmenu.c:1025 ../src/rootmenu.c:1114
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:메뉴 파일을 열 수 없음"
+msgid "could not open menu file \"%s\": %s"
+msgstr "메뉴 파일을 열 수 없음 \"%s\": %s"
 
 #: ../src/rootmenu.c:1048
 msgid "invalid menu file, MENU command is missing"

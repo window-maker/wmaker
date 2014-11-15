@@ -1234,11 +1234,10 @@ msgstr "impossibile generare gli argomenti per il preprocessore del file di men�
 msgid "%s:could not open/preprocess menu file"
 msgstr "%s: impossibile aprire/preelaborare il file di menù"
 
-# FIXME UPSTREAM<
 #: ../src/rootmenu.c:1217 ../src/rootmenu.c:1321
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: impossibile aprire il file di menù"
+msgid "could not open menu file \"%s\": %s"
+msgstr "impossibile aprire il file di menù \"%s\": %s"
 
 # FIXME UPSTREAM<
 #: ../src/rootmenu.c:1244

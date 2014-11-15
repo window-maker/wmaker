@@ -1205,8 +1205,8 @@ msgstr "%s: 無法開啟/預先處理選單檔"
 
 #: ../src/rootmenu.c:1217 ../src/rootmenu.c:1321
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: 無法開啟選單檔"
+msgid "could not open menu file \"%s\": %s"
+msgstr "無法開啟選單檔 \"%s\": %s"
 
 #: ../src/rootmenu.c:1244
 #, c-format
