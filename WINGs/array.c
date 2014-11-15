@@ -126,10 +126,10 @@ void WMAddToArray(WMArray * array, void *item)
 
 void WMInsertInArray(WMArray * array, int index, void *item)
 {
-	wassertr(array && index >= 0 && index <= array->itemCount);
-
 	if (array == NULL)
 		return;
+
+	wassertr(index >= 0 && index <= array->itemCount);
 
 	if (array->itemCount >= array->allocSize) {
 		array->allocSize += RESIZE_INCREMENT;
@@ -148,10 +148,10 @@ void *WMReplaceInArray(WMArray * array, int index, void *item)
 {
 	void *old;
 
-	wassertrv(array && index >= 0 && index <= array->itemCount, NULL);
-
 	if (array == NULL)
 		return NULL;
+
+	wassertrv(index >= 0 && index <= array->itemCount, NULL);
 
 	/* is it really useful to perform append if index == array->itemCount ? -Dan */
 	if (index == array->itemCount) {
@@ -167,10 +167,10 @@ void *WMReplaceInArray(WMArray * array, int index, void *item)
 
 int WMDeleteFromArray(WMArray * array, int index)
 {
-	wassertrv(array && index >= 0 && index < array->itemCount, 0);
-
 	if (array == NULL)
 		return 0;
+
+	wassertrv(index >= 0 && index < array->itemCount, 0);
 
 	if (array->destructor) {
 		array->destructor(array->items[index]);
