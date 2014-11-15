@@ -356,7 +356,7 @@ char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 	if ((numlock_mask != Mod5Mask) && (ev.xkey.state & Mod5Mask))
 		strcat(buffer, "Mod5+");
 
-	strcat(buffer, key);
+	wstrlcat(buffer, key, sizeof(buffer));
 
 	return wstrdup(buffer);
 }
