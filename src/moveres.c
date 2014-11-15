@@ -776,10 +776,10 @@ static void updateMoveData(WWindow * wwin, MoveData * data)
 
 	/* order from closest to the border of the screen to farthest */
 
-	qsort(data->topList, data->count, sizeof(WWindow **), compareWTop);
-	qsort(data->leftList, data->count, sizeof(WWindow **), compareWLeft);
-	qsort(data->rightList, data->count, sizeof(WWindow **), compareWRight);
-	qsort(data->bottomList, data->count, sizeof(WWindow **), compareWBottom);
+	qsort(data->topList, data->count, sizeof(data->topList[0]), compareWTop);
+	qsort(data->leftList, data->count, sizeof(data->leftList[0]), compareWLeft);
+	qsort(data->rightList, data->count, sizeof(data->rightList[0]), compareWRight);
+	qsort(data->bottomList, data->count, sizeof(data->bottomList[0]), compareWBottom);
 
 	/* figure the position of the window relative to the others */
 
