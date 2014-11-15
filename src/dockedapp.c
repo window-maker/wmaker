@@ -154,7 +154,6 @@ static void panelBtnCallback(WMWidget * self, void *data)
 	WMButton *btn = self;
 	AppSettingsPanel *panel = (AppSettingsPanel *) data;
 	char *text;
-	int done = 1;
 
 	if (panel->okBtn == btn) {
 		text = WMGetTextFieldText(panel->iconField);
@@ -215,8 +214,7 @@ static void panelBtnCallback(WMWidget * self, void *data)
 		panel->editedIcon->lock = WMGetButtonSelected(panel->lockBtn);
 	}
 
-	if (done)
-		DestroyDockAppSettingsPanel(panel);
+	DestroyDockAppSettingsPanel(panel);
 }
 
 #define PWIDTH	295
