@@ -34,6 +34,7 @@
 #include <ctype.h>
 #include <time.h>
 #include <dirent.h>
+#include <errno.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -1102,6 +1103,30 @@ static WMenu *readMenuFile(WScreen *scr, const char *file_name)
 	return menu;
 }
 
+static inline int generate_command_from_list(char *buffer, size_t buffer_size, char **command_elements)
+{
+	char *rd;
+	int wr_idx;
+	int i;
+
+	wr_idx = 0;
+	for (i = 0; command_elements[i] != NULL; i++) {
+
+		if (i > 0)
+			if (wr_idx < buffer_size - 1)
+				buffer[wr_idx++] = ' ';
+
+		for (rd = command_elements[i]; *rd != '\0'; rd++) {
+			if (wr_idx < buffer_size - 1)
+				buffer[wr_idx++] = *rd;
+			else
+				return 1;
+		}
+	}
+	buffer[wr_idx] = '\0';
+	return 0;
+}
+
 /************    Menu Configuration From Pipe      *************/
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name)
 {
@@ -1109,13 +1134,11 @@ static WMenu *readPLMenuPipe(WScreen * scr, char **file_name)
 	WMenu *menu = NULL;
 	char *filename;
 	char flat_file[MAXLINE];
-	int i;
 
-	flat_file[0] = '\0';
-
-	for (i = 0; file_name[i] != NULL; i++) {
-		strcat(flat_file, file_name[i]);
-		strcat(flat_file, " ");
+	if (generate_command_from_list(flat_file, sizeof(flat_file), file_name)) {
+		werror(_("could not open menu file \"%s\": %s"),
+		       file_name[0], _("pipe command for PropertyList is too long"));
+		return NULL;
 	}
 	filename = flat_file + (flat_file[1] == '|' ? 2 : 1);
 
@@ -1141,13 +1164,11 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name)
 	FILE *file = NULL;
 	char *filename;
 	char flat_file[MAXLINE];
-	int i;
 
-	flat_file[0] = '\0';
-
-	for (i = 0; file_name[i] != NULL; i++) {
-		strcat(flat_file, file_name[i]);
-		strcat(flat_file, " ");
+	if (generate_command_from_list(flat_file, sizeof(flat_file), file_name)) {
+		werror(_("could not open menu file \"%s\": %s"),
+		       file_name[0], _("pipe command is too long"));
+		return NULL;
 	}
 	filename = flat_file + (flat_file[1] == '|' ? 2 : 1);
 
