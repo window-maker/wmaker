@@ -1645,13 +1645,22 @@ Bool WMWritePropListToFile(WMPropList * plist, const char *path)
 	thePath = wstrconcat(path, ".XXXXXX");
 
 #ifdef  HAVE_MKSTEMP
+	/*
+	 * We really just want to read the current umask, but as Coverity is
+	 * pointing a possible security issue:
+	 * some versions of mkstemp do not set file rights properly on the
+	 * created file, so it is recommended so set the umask beforehand.
+	 * As we need to set an umask to read the current value, we take this
+	 * opportunity to set a temporary aggresive umask so Coverity won't
+	 * complain, even if we do not really care in the present use case.
+	 */
+	mask = umask(S_IRWXG | S_IRWXO);
 	if ((fd = mkstemp(thePath)) < 0) {
 		werror(_("mkstemp (%s) failed"), thePath);
 		goto failure;
 	}
-	mask = umask(0);
 	umask(mask);
-	fchmod(fd, 0644 & ~mask);
+	fchmod(fd, 0666 & ~mask);
 	if ((theFile = fdopen(fd, "wb")) == NULL) {
 		close(fd);
 	}
