@@ -1205,12 +1205,12 @@ void wFrameWindowResize(WFrameWindow * fwin, int width, int height)
 
 int wFrameWindowChangeTitle(WFrameWindow *fwin, const char *new_title)
 {
+	if (new_title == NULL)
+		return 0;
+
 	/* check if the title is the same as before */
 	if (fwin->title) {
-		if (new_title && (strcmp(fwin->title, new_title) == 0))
-			return 0;
-	} else {
-		if (!new_title)
+		if (strcmp(fwin->title, new_title) == 0)
 			return 0;
 	}
 
