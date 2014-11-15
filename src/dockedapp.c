@@ -170,8 +170,7 @@ static void panelBtnCallback(WMWidget * self, void *data)
 			snprintf(buf, len, _("Could not open specified icon file: %s"), text);
 			if (wMessageDialog(panel->wwin->screen_ptr, _("Error"), buf,
 					   _("OK"), _("Ignore"), NULL) == WAPRDefault) {
-				if (text)
-					wfree(text);
+				wfree(text);
 				wfree(buf);
 				return;
 			}
