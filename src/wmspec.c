@@ -1175,8 +1175,8 @@ static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->flags.net_skip_pager = 1;
-	} else if (type == net_wm_window_type_toolbar) {
-		wwin->client_flags.no_titlebar = 1;
+	} else if (type == net_wm_window_type_toolbar ||
+	           type == net_wm_window_type_menu) {
 		wwin->client_flags.no_resizable = 1;
 		wwin->client_flags.no_miniaturizable = 1;
 		wwin->client_flags.no_resizebar = 1;
@@ -1185,8 +1185,7 @@ static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->client_flags.no_appicon = 1;
-	} else if (type == net_wm_window_type_menu ||
-			type == net_wm_window_type_dropdown_menu ||
+	} else if (type == net_wm_window_type_dropdown_menu ||
 			type == net_wm_window_type_popup_menu ||
 			type == net_wm_window_type_combo) {
 		wwin->client_flags.no_titlebar = 1;
