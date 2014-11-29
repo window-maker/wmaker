@@ -90,15 +90,14 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 	char title[300];
 	char rtext[300];
 
-	if (strlen(slist[*index]) > sizeof(title) - 1) {
-		wwarning("appmenu: menu command size exceeded in window %lx", win);
-		return NULL;
-	}
 	if (sscanf(slist[*index], "%i %i %n", &command, &code, &pos) < 2 || command != wmBeginMenu) {
 		wwarning("appmenu: bad menu entry \"%s\" in window %lx", slist[*index], win);
 		return NULL;
 	}
-	strcpy(title, &slist[*index][pos]);
+	if (wstrlcpy(title, &slist[*index][pos], sizeof(title)) >= sizeof(title)) {
+		wwarning("appmenu: menu command size exceeded in window %lx", win);
+		return NULL;
+	}
 	menu = wMenuCreateForApp(scr, title, *index == 1);
 	if (!menu)
 		return NULL;
@@ -128,7 +127,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 						 slist[*index], win);
 					return NULL;
 				}
-				strcpy(title, &slist[*index][pos]);
+				wstrlcpy(title, &slist[*index][pos], sizeof(title));
 				rtext[0] = 0;
 			} else {
 				if (sscanf(slist[*index], "%i %i %i %i %s %n",
@@ -138,7 +137,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 						 slist[*index], win);
 					return NULL;
 				}
-				strcpy(title, &slist[*index][pos]);
+				wstrlcpy(title, &slist[*index][pos], sizeof(title));
 			}
 			if (!(data = malloc(sizeof(WAppMenuData)))) {
 				wwarning("appmenu: out of memory making menu for window %lx", win);
@@ -174,7 +173,7 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 
 				return NULL;
 			}
-			strcpy(title, &slist[*index][pos]);
+			wstrlcpy(title, &slist[*index][pos], sizeof(title));
 			*index += 1;
 
 			submenu = parseMenuCommand(scr, win, slist, count, index);
