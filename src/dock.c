@@ -1220,9 +1220,9 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 			scr->dock_pos_menu = makeDockPositionMenu(scr);
 		wMenuEntrySetCascade(menu, entry, scr->dock_pos_menu);
 
-		if (!wPreferences.flags.nodrawer) {
-			entry = wMenuAddCallback(menu, _("Add a drawer"), addADrawerCallback, NULL);
-		}
+		if (!wPreferences.flags.nodrawer)
+			wMenuAddCallback(menu, _("Add a drawer"), addADrawerCallback, NULL);
+
 	} else {
 		if (type == WM_CLIP)
 			entry = wMenuAddCallback(menu, _("Clip Options"), NULL, NULL);
