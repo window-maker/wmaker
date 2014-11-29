@@ -295,7 +295,7 @@ int WMWidthOfString(WMFont * font, const char *text, int length)
 	wassertrv(font != NULL && text != NULL, 0);
 #ifdef USE_PANGO
 	previous_text = pango_layout_get_text(font->layout);
-	if ((previous_text == NULL) || (strcmp(text, previous_text) != 0))
+	if ((previous_text == NULL) || (strncmp(text, previous_text, length) != 0) || previous_text[length] != '\0')
 		pango_layout_set_text(font->layout, text, length);
 	pango_layout_get_pixel_size(font->layout, &width, NULL);
 
