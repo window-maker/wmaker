@@ -2222,11 +2222,14 @@ static void prepareForClose(_Panel * panel)
 	for (i = 0; i < wlengthof(sample_colors); i++) {
 		WMColor *color;
 		char *str;
+		WMPropList *pl_color;
 
 		color = WMGetColorWellColor(panel->sampW[i]);
 
 		str = WMGetColorRGBDescription(color);
-		WMAddToPLArray(textureList, WMCreatePLString(str));
+		pl_color = WMCreatePLString(str);
+		WMAddToPLArray(textureList, pl_color);
+		WMReleasePropList(pl_color);
 		wfree(str);
 	}
 	WMSetUDObjectForKey(udb, textureList, "ColorList");
