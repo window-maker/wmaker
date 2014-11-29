@@ -175,7 +175,7 @@ static void findCopyFile(const char *dir, const char *file)
 		return;
 	}
 	wcopy_file(dir, fullPath, fullPath);
-	free(fullPath);
+	wfree(fullPath);
 }
 
 #define THEME_SUBPATH "/Library/WindowMaker/Themes/"
