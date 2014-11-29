@@ -2061,15 +2061,14 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 
 	_TARGETS = XInternAtom(dpy, "TARGETS", False);
 	if (target == _TARGETS) {
-		Atom *ptr;
+		Atom array[4];
 
-		ptr = wmalloc(4 * sizeof(Atom));
-		ptr[0] = _TARGETS;
-		ptr[1] = XA_STRING;
-		ptr[2] = TEXT;
-		ptr[3] = COMPOUND_TEXT;
+		array[0] = _TARGETS;
+		array[1] = XA_STRING;
+		array[2] = TEXT;
+		array[3] = COMPOUND_TEXT;
 
-		data = WMCreateDataWithBytes(ptr, 4 * 4);
+		data = WMCreateDataWithBytes(&array, sizeof(array));
 		WMSetDataFormat(data, 32);
 
 		*type = target;
