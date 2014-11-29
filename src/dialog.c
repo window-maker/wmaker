@@ -592,9 +592,13 @@ static void listPixmaps(WScreen *scr, WMList *lPtr, const char *path)
 		if (strcmp(dentry->d_name, ".") == 0 || strcmp(dentry->d_name, "..") == 0)
 			continue;
 
-		strcpy(pbuf, apath);
-		strcat(pbuf, "/");
-		strcat(pbuf, dentry->d_name);
+		if (wstrlcpy(pbuf, apath, sizeof(pbuf)) >= sizeof(pbuf) ||
+		    wstrlcat(pbuf, "/", sizeof(pbuf)) >= sizeof(pbuf) ||
+		    wstrlcat(pbuf, dentry->d_name, sizeof(pbuf)) >= sizeof(pbuf)) {
+			wwarning(_("full path for file \"%s\" in \"%s\" is longer than %ld bytes, skipped"),
+			         dentry->d_name, path, sizeof(pbuf) - 1);
+			continue;
+		}
 
 		if (stat(pbuf, &statb) < 0)
 			continue;
