@@ -131,11 +131,10 @@ error:
 
 char *WMPathForResourceOfType(const char *resource, const char *ext)
 {
-	char *path, *tmp, *appdir;
-	int i;
+	char *path, *appdir;
 	size_t slen;
 
-	path = tmp = appdir = NULL;
+	path = appdir = NULL;
 
 	/*
 	 * Paths are searched in this order:
@@ -156,17 +155,19 @@ char *WMPathForResourceOfType(const char *resource, const char *ext)
 	}
 
 	if (WMApplication.argv[0]) {
-		tmp = wstrdup(WMApplication.argv[0]);
-		i = strlen(tmp);
-		while (i > 0 && tmp[i] != '/')
-			i--;
-		tmp[i] = 0;
-		if (i > 0) {
+		char *ptr_slash;
+
+		ptr_slash = strrchr(WMApplication.argv[0], '/');
+		if (ptr_slash != NULL) {
+			char tmp[ptr_slash - WMApplication.argv[0] + 1];
+
+			strncpy(tmp, WMApplication.argv[0], sizeof(tmp)-1);
+			tmp[sizeof(tmp) - 1] = '\0';
+
 			path = checkFile(tmp, NULL, ext, resource);
-		} else {
-			path = NULL;
+			if (path)
+				goto out;
 		}
-		goto out;
 	}
 
 	slen = strlen(WMApplication.applicationName) + sizeof("Applications/.app");
@@ -197,8 +198,6 @@ char *WMPathForResourceOfType(const char *resource, const char *ext)
 	path = checkFile("/usr/GNUstep", appdir, ext, resource); /* falls through */
 
 out:
-	if (tmp)
-		wfree(tmp);
 	if (appdir)
 		wfree(appdir);
 
