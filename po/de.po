@@ -335,8 +335,8 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: ../src/dialog.c:563
-msgid "Could not open directory "
-msgstr "Verzeichnis konnte nicht geöffnet werden"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Verzeichnis konnte nicht geöffnet werden \"%s\":\n%s"
 
 #: ../src/dialog.c:613
 msgid "Could not load image file "

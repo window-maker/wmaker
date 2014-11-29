@@ -322,8 +322,8 @@ msgid "Cancel"
 msgstr "취소"
 
 #: ../src/dialog.c:574
-msgid "Could not open directory "
-msgstr "디렉터리를 열 수 없음 "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "디렉터리를 열 수 없음 \"%s\":\n%s"
 
 #: ../src/dialog.c:624
 msgid "Could not load image file "

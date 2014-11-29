@@ -260,8 +260,8 @@ msgid "Cancel"
 msgstr "Άκυρο"
 
 #: ../src/dialog.c:218
-msgid "Could not open directory "
-msgstr "Αδύνατο να ανοιχθεί ο κατάλογος "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Αδύνατο να ανοιχθεί ο κατάλογος \"%s\":\n%s"
 
 #: ../src/dialog.c:271
 msgid "Could not load image file "

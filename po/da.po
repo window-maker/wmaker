@@ -385,8 +385,8 @@ msgstr "Annullér"
 
 # ../src/dialog.c:218
 #: ../src/dialog.c:277
-msgid "Could not open directory "
-msgstr "Kunne ikke åbne mappe "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Kunne ikke åbne mappe \"%s\":\n%s"
 
 # ../src/dialog.c:271
 #: ../src/dialog.c:332

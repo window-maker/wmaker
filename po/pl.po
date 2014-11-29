@@ -227,8 +227,8 @@ msgid "Cancel"
 msgstr "Anuluj"
 
 #: ../src/dialog.c:211
-msgid "Could not open directory "
-msgstr "Nie można otworzyć katalogu "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Nie można otworzyć katalogu \"%s\":\n%s"
 
 #: ../src/dialog.c:267
 msgid "Could not load image file "

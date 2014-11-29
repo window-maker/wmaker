@@ -324,8 +324,8 @@ msgstr "Отказ"
 
 #
 #: ../src/dialog.c:299
-msgid "Could not open directory "
-msgstr "Невозможно открыть каталог "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Невозможно открыть каталог \"%s\":\n%s"
 
 #: ../src/dialog.c:354
 msgid "Could not load image file "

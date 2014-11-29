@@ -304,8 +304,8 @@ msgid "Cancel"
 msgstr "Batal"
 
 #: ../src/dialog.c:277
-msgid "Could not open directory "
-msgstr "Tak dapat membuka direktori"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Tak dapat membuka direktori \"%s\":\n%s"
 
 #: ../src/dialog.c:332
 msgid "Could not load image file "

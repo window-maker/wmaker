@@ -249,8 +249,8 @@ msgid "Cancel"
 msgstr "取消"
 
 #: ../src/dialog.c:218
-msgid "Could not open directory "
-msgstr "不能打开目录 "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "不能打开目录 \"%s\":\n%s"
 
 #: ../src/dialog.c:271
 msgid "Could not load image file "

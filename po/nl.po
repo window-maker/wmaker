@@ -327,8 +327,8 @@ msgid "Cancel"
 msgstr "Annuleren"
 
 #: ../src/dialog.c:577
-msgid "Could not open directory "
-msgstr "Openen mislukt van map "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Openen mislukt van map \"%s\":\n%s"
 
 #: ../src/dialog.c:628
 msgid "Could not load image file "

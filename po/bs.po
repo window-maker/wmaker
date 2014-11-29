@@ -212,8 +212,8 @@ msgid "Cancel"
 msgstr "Poništi"
 
 #: ../src/dialog.c:210
-msgid "Could not open directory "
-msgstr "Ne mogu otvoriti direktorij "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Ne mogu otvoriti direktorij \"%s\":\n%s"
 
 #: ../src/dialog.c:266
 msgid "Could not load image file "

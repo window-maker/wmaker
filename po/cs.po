@@ -312,8 +312,8 @@ msgid "Cancel"
 msgstr "Zrušit"
 
 #: ../src/dialog.c:219
-msgid "Could not open directory "
-msgstr "Nelze otevřít adresář"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Nelze otevřít adresář \"%s\":\n%s"
 
 #: ../src/dialog.c:274
 msgid "Could not load image file "

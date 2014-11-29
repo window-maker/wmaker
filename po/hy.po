@@ -407,8 +407,8 @@ msgid "Cancel"
 msgstr "Հրաժարվել"
 
 #: ../src/dialog.c:290
-msgid "Could not open directory "
-msgstr "Հնարավոր չէ բացել պանակը"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Հնարավոր չէ բացել պանակը \"%s\":\n%s"
 
 #: ../src/dialog.c:345
 msgid "Could not load image file "

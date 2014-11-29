@@ -304,8 +304,8 @@ msgid "Cancel"
 msgstr "Peruuta"
 
 #: ../src/dialog.c:219
-msgid "Could not open directory "
-msgstr "Ei voi avata hakemistoa "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Ei voi avata hakemistoa \"%s\":\n%s"
 
 #: ../src/dialog.c:274
 msgid "Could not load image file "

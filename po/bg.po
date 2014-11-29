@@ -423,8 +423,8 @@ msgstr "Отменям"
 # 
 # ../src/dialog.c:225
 #: ../src/dialog.c:299
-msgid "Could not open directory "
-msgstr "Не може да бъде отворена директорията "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Не може да бъде отворена директорията \"%s\":\n%s"
 
 # ../src/dialog.c:280
 #: ../src/dialog.c:354

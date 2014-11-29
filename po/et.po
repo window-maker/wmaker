@@ -341,8 +341,8 @@ msgid "Cancel"
 msgstr "Loobu"
 
 #: ../src/dialog.c:558
-msgid "Could not open directory "
-msgstr "Pole võimalik avada kataloogi "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Pole võimalik avada kataloogi \"%s\":\n%s"
 
 #: ../src/dialog.c:608
 msgid "Could not load image file "

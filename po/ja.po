@@ -329,8 +329,8 @@ msgid "Cancel"
 msgstr "キャンセル"
 
 #: ../src/dialog.c:558
-msgid "Could not open directory "
-msgstr "ディレクトリを開けません"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "ディレクトリを開けません \"%s\":\n%s"
 
 #: ../src/dialog.c:608
 msgid "Could not load image file "

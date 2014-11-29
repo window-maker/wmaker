@@ -304,8 +304,8 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: ../src/dialog.c:225
-msgid "Could not open directory "
-msgstr "Non foi posible abri-lo directorio "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Non foi posible abri-lo directorio \"%s\":\n%s"
 
 #: ../src/dialog.c:280
 msgid "Could not load image file "

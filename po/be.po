@@ -306,8 +306,8 @@ msgid "Cancel"
 msgstr "Адмена"
 
 #: ../src/dialog.c:299
-msgid "Could not open directory "
-msgstr "Немагчыма адкрыць каталаг "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Немагчыма адкрыць каталаг \"%s\":\n%s"
 
 #: ../src/dialog.c:354
 msgid "Could not load image file "

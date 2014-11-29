@@ -332,8 +332,8 @@ msgid "Cancel"
 msgstr "Mégsem"
 
 #: ../../wmaker-crm/src/dialog.c:576
-msgid "Could not open directory "
-msgstr "Nem sikerült megnyitni ezt a könyvtárat: "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Nem sikerült megnyitni ezt a könyvtárat \"%s\":\n%s"
 
 #: ../../wmaker-crm/src/dialog.c:626
 msgid "Could not load image file "

@@ -340,8 +340,8 @@ msgid "Cancel"
 msgstr "取消"
 
 #: ../src/dialog.c:290
-msgid "Could not open directory "
-msgstr "無法開啟目錄"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "無法開啟目錄 \"%s\":\n%s"
 
 #: ../src/dialog.c:345
 msgid "Could not load image file "

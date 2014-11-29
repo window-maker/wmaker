@@ -195,8 +195,8 @@ msgid "No"
 msgstr "Hayır"
 
 #: ../src/dialog.c:268
-msgid "Could not open directory "
-msgstr "Dizin açılamadı"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Dizin açılamadı \"%s\":\n%s"
 
 #: ../src/dialog.c:324
 msgid "Could not load image file "
