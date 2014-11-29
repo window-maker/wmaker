@@ -948,7 +948,6 @@ static void launchDockedApplication(WAppIcon *btn, Bool withSelection)
 static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 {
 	WScreen *scr = menu->frame->screen_ptr;
-	char title[MAX_WORKSPACENAME_WIDTH + 1];
 	int i;
 
 	if (!menu || !icon)
@@ -958,15 +957,12 @@ static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 		if (i < menu->entry_no) {
 			if (strcmp(menu->entries[i]->text, scr->workspaces[i]->name) != 0) {
 				wfree(menu->entries[i]->text);
-				strcpy(title, scr->workspaces[i]->name);
-				menu->entries[i]->text = wstrdup(title);
+				menu->entries[i]->text = wstrdup(scr->workspaces[i]->name);
 				menu->flags.realized = 0;
 			}
 			menu->entries[i]->clientdata = (void *)icon;
 		} else {
-			strcpy(title, scr->workspaces[i]->name);
-
-			wMenuAddCallback(menu, title, switchWSCommand, (void *)icon);
+			wMenuAddCallback(menu, scr->workspaces[i]->name, switchWSCommand, (void *)icon);
 
 			menu->flags.realized = 0;
 		}
