@@ -217,7 +217,7 @@ static void setMiniwindowTitle(WMWindow * win, const char *title)
 static void setMiniwindow(WMWindow *win, RImage *image)
 {
 	WMScreen *scr = win->view->screen;
-	long *data;
+	unsigned long *data;
 	int x, y;
 	int o;
 
@@ -232,15 +232,19 @@ static void setMiniwindow(WMWindow *win, RImage *image)
 
 	for (y = 0; y < image->height; y++) {
 		for (x = 0; x < image->width; x++) {
-			long pixel;
+			unsigned long pixel;
 			int offs = (x + y * image->width);
 
-			if (image->format == RRGBFormat)
-				pixel = image->data[offs * 3] << 16 | image->data[offs * 3 + 1] << 8
-				        | image->data[offs * 3 + 2];
-			else
-				pixel = image->data[offs * 4] << 16 | image->data[offs * 4 + 1] << 8
-				        | image->data[offs * 4 + 2] | image->data[offs * 4 + 3] << 24;
+			if (image->format == RRGBFormat) {
+				pixel  = ((unsigned long) image->data[offs * 3    ]) << 16;
+				pixel |= ((unsigned long) image->data[offs * 3 + 1]) <<  8;
+				pixel |= ((unsigned long) image->data[offs * 3 + 2]);
+			} else {
+				pixel  = ((unsigned long) image->data[offs * 4    ]) << 16;
+				pixel |= ((unsigned long) image->data[offs * 4 + 1]) <<  8;
+				pixel |= ((unsigned long) image->data[offs * 4 + 2]);
+				pixel |= ((unsigned long) image->data[offs * 4 + 3]) << 24;
+			}
 
 			data[o++] = pixel;
 		}
