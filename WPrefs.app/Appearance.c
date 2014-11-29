@@ -1624,7 +1624,9 @@ static void updateColorPreviewBox(_Panel * panel, int elements)
 			     panel->smallFont, 155, 130, 64, 13, WALeft,
 			     _("Icon Text"));
 
-	   }
+		WMReleaseColor(light);
+		WMReleaseColor(dim);
+	}
 
 	if (elements & (1 << CLIP_COL) || elements & (1 << CCLIP_COL)) {
 		Pixmap pix;
