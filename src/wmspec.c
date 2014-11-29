@@ -1472,7 +1472,6 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 {
 	WScreen *scr;
 	WWindow *wwin;
-	Bool done = True;
 
 #ifdef DEBUG_WMSPEC
 	wmessage("processClientMessage type %s", XGetAtomName(dpy, event->message_type));
@@ -1483,6 +1482,8 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 		/* generic client messages */
 		if (event->message_type == net_current_desktop) {
 			wWorkspaceChange(scr, event->data.l[0]);
+			return True;
+
 		} else if (event->message_type == net_number_of_desktops) {
 			long value;
 
@@ -1503,16 +1504,16 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 				if (rebuild)
 					updateWorkspaceCount(scr);
 			}
+			return True;
+
 		} else if (event->message_type == net_showing_desktop) {
 			wNETWMShowingDesktop(scr, event->data.l[0]);
+			return True;
+
 		} else if (event->message_type == net_desktop_names) {
 			handleDesktopNames(scr);
-		} else {
-			done = False;
-		}
-
-		if (done)
 			return True;
+		}
 	}
 
 	/* window specific client messages */
@@ -1535,12 +1536,16 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 				wNETWMShowingDesktop(scr, False);
 				wMakeWindowVisible(wwin);
 		}
+		return True;
+
 	} else if (event->message_type == net_close_window) {
 		if (!WFLAGP(wwin, no_closable)) {
 			if (wwin->protocols.DELETE_WINDOW)
 				wClientSendProtocol(wwin, w_global.atom.wm.delete_window,
 										  w_global.timestamp.last_event);
 		}
+		return True;
+
 	} else if (event->message_type == net_wm_state) {
 		int maximized = wwin->flags.maximized;
 		long set = event->data.l[0];
@@ -1563,10 +1568,15 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 			}
 		}
 		updateStateHint(wwin, False, False);
+		return True;
+
 	} else if (event->message_type == net_wm_handled_icons || event->message_type == net_wm_icon_geometry) {
 		updateNetIconInfo(wwin);
+		return True;
+
 	} else if (event->message_type == net_wm_desktop) {
 		long desktop = event->data.l[0];
+
 		if (desktop == -1) {
 			wWindowSetOmnipresent(wwin, True);
 		} else {
@@ -1574,11 +1584,10 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 				wWindowSetOmnipresent(wwin, False);
 			wWindowChangeWorkspace(wwin, desktop);
 		}
-	} else {
-		done = False;
+		return True;
 	}
 
-	return done;
+	return False;
 }
 
 void wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)
