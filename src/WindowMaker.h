@@ -393,6 +393,8 @@ extern struct WPreferences {
 	char sticky_icons;                 /* If miniwindows will be onmipresent */
 	char dont_confirm_kill;            /* do not confirm Kill application */
 	char disable_miniwindows;
+	char disable_workspace_pager;
+
 	char dont_blink;                   /* do not blink icon selection */
 
 	/* Appearance options */
@@ -454,6 +456,8 @@ extern struct WPreferences {
 
 	RImage *swtileImage;
 	RImage *swbackImage[9];
+
+	union WTexture *wsmbackTexture;
 
 	int show_clip_title;
 

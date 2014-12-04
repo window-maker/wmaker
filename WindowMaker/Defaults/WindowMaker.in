@@ -3,6 +3,7 @@
   PopupSwitchMenu = NO;
   MenuStyle = normal;
   DisableMiniwindows = NO;
+  DisableWorkspacePager = NO;
   OpenTransientOnOwnerWorkspace = NO;
   EdgeResistance = 30;
   WorkspaceBorderSize = 0;
