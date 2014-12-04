@@ -100,7 +100,8 @@ static W_View *createView(W_Screen * screen, W_View * parent)
 		view->attribFlags = CWEventMask | CWBitGravity;
 		view->attribs = defAtts;
 
-		view->attribFlags |= CWBackPixel | CWColormap | CWBorderPixel;
+                view->attribFlags |= CWBackPixel | CWColormap | CWBorderPixel | CWBackPixmap;
+                view->attribs.background_pixmap = None;
 		view->attribs.background_pixel = W_PIXEL(screen->gray);
 		view->attribs.border_pixel = W_PIXEL(screen->black);
 		view->attribs.colormap = screen->colormap;
@@ -494,6 +495,20 @@ void W_SetViewBackgroundColor(W_View * view, WMColor * color)
 		XSetWindowBackground(view->screen->display, view->window, W_PIXEL(color));
 		XClearWindow(view->screen->display, view->window);
 	}
+}
+
+void W_SetViewBackgroundPixmap(W_View *view, WMPixmap *pix)
+{
+       if (view->backImage)
+               WMReleasePixmap(view->backImage);
+       view->backImage = WMRetainPixmap(pix);
+
+       view->attribFlags |= CWBackPixmap;
+       view->attribs.background_pixmap = pix->pixmap;
+       if (view->flags.realized) {
+               XSetWindowBackgroundPixmap(view->screen->display, view->window, pix->pixmap);
+               XClearWindow(view->screen->display, view->window);
+       }
 }
 
 void W_SetViewCursor(W_View * view, Cursor cursor)

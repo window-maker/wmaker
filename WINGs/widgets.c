@@ -960,6 +960,21 @@ WMColor *WMGetWidgetBackgroundColor(WMWidget * w)
 	return W_VIEW(w)->backColor;
 }
 
+void WMSetWidgetBackgroundPixmap(WMWidget *w, WMPixmap *pix)
+{
+	if (!pix)
+		return;
+
+	W_SetViewBackgroundPixmap(W_VIEW(w), pix);
+	if (W_VIEW(w)->flags.mapped)
+		WMRedisplayWidget(w);
+}
+
+WMPixmap *WMGetWidgetBackgroundPixmap(WMWidget *w)
+{
+	return W_VIEW(w)->backImage;
+}
+
 void WMRaiseWidget(WMWidget * w)
 {
 	W_RaiseView(W_VIEW(w));

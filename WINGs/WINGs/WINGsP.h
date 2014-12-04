@@ -572,6 +572,8 @@ struct W_View {
     void *hangedData;                  /* data holder for user program */
 
     WMColor *backColor;
+    WMPixmap *backImage;
+
 
     Cursor cursor;
 
@@ -663,6 +665,8 @@ void W_MoveView(W_View *view, int x, int y);
 void W_ResizeView(W_View *view, unsigned int width, unsigned int height);
 
 void W_SetViewBackgroundColor(W_View *view, WMColor *color);
+
+void W_SetViewBackgroundPixmap(W_View *view, WMPixmap *pix);
 
 void W_SetViewCursor(W_View *view, Cursor cursor);
 

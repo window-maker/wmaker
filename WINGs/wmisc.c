@@ -220,12 +220,20 @@ W_PaintTextAndImage(W_View * view, int wrap, WMColor * textColor, W_Font * font,
 		XFillRectangle(screen->display, d, WMColorGC(backColor),
 			       0, 0, view->size.width, view->size.height);
 	} else {
+		if (view->attribs.background_pixmap) {
 #ifndef DOUBLE_BUFFER
-		XClearWindow(screen->display, d);
+			XClearWindow(screen->display, d);
 #else
-		XSetForeground(screen->display, screen->copyGC, view->attribs.background_pixel);
-		XFillRectangle(screen->display, d, screen->copyGC, 0, 0, view->size.width, view->size.height);
+			XCopyArea(screen->display, view->attribs.background_pixmap, d, screen->copyGC, 0, 0, view->size.width, view->size.height, 0, 0);
 #endif
+		} else {
+#ifndef DOUBLE_BUFFER
+			XClearWindow(screen->display, d);
+#else
+			XSetForeground(screen->display, screen->copyGC, view->attribs.background_pixel);
+			XFillRectangle(screen->display, d, screen->copyGC, 0, 0, view->size.width, view->size.height);
+#endif
+		}
 	}
 
 	if (relief == WRFlat) {

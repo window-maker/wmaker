@@ -930,6 +930,10 @@ void WMSetWidgetBackgroundColor(WMWidget *w, WMColor *color);
 
 WMColor* WMGetWidgetBackgroundColor(WMWidget *w);
 
+void WMSetWidgetBackgroundPixmap(WMWidget *w, WMPixmap *pix);
+
+WMPixmap *WMGetWidgetBackgroundPixmap(WMWidget *w);
+
 void WMMapSubwidgets(WMWidget *w);
 
 void WMUnmapSubwidgets(WMWidget *w);
