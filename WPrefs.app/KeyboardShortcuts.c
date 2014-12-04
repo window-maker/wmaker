@@ -102,6 +102,7 @@ static const struct {
 	{ "GroupPrevKey",   N_("Focus previous group window") },
 
 	/* Workspace Related */
+	{ "WorkspaceMapKey",  N_("Open workspace pager") },
 	{ "NextWorkspaceKey", N_("Switch to next workspace") },
 	{ "PrevWorkspaceKey", N_("Switch to previous workspace") },
 	{ "LastWorkspaceKey", N_("Switch to last used workspace") },
