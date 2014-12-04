@@ -245,7 +245,7 @@ void SlideWindows(Window *wins[], int n, int from_x, int from_y, int to_x, int t
 		if (slide_delay > 0) {
 			wusleep(slide_delay * 1000L);
 		} else {
-			wusleep(10);
+			wusleep(1000L);
 		}
 		if (time(NULL) - time0 > MAX_ANIMATION_TIME)
 			break;

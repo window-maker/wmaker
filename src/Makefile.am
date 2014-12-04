@@ -107,7 +107,9 @@ wmaker_SOURCES = 	\
 	wmspec.h \
 	wmspec.c \
 	workspace.c \
-	workspace.h
+	workspace.h \
+	wsmap.c \
+	wsmap.h
 
 if WM_OSDEP_BSD
 wmaker_SOURCES += osdep_bsd.c

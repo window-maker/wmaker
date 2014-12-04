@@ -49,6 +49,7 @@
 #include "wmspec.h"
 #include "xinerama.h"
 #include "event.h"
+#include "wsmap.h"
 
 #define MC_NEW          0
 #define MC_DESTROY_LAST 1
@@ -160,6 +161,8 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 		} else {
 			if (scr->workspaces[i]->name)
 				wfree(scr->workspaces[i]->name);
+			if (scr->workspaces[i]->map)
+				RReleaseImage(scr->workspaces[i]->map);
 			wfree(scr->workspaces[i]);
 		}
 	}
@@ -472,6 +475,9 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	if (workspace >= MAX_WORKSPACES || workspace < 0)
 		return;
+
+	if (!wPreferences.disable_workspace_pager && !process_workspacemap_event)
+		wWorkspaceMapUpdate(scr);
 
 	SendHelperMessage(scr, 'C', workspace + 1, NULL);
 
