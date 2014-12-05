@@ -763,8 +763,10 @@ char *GetShortcutKey(WShortKey key)
 	char buffer[256];
 	char *wr;
 
-	void append_string(const char *string)
+	void append_string(const char *text)
 	{
+		const char *string = text;
+
 		while (*string) {
 			if (wr >= buffer + sizeof(buffer) - 1)
 				break;
@@ -774,10 +776,11 @@ char *GetShortcutKey(WShortKey key)
 
 	void append_modifier(int modifier_index, const char *fallback_name)
 	{
-		if (wPreferences.modifier_labels[modifier_index])
+		if (wPreferences.modifier_labels[modifier_index]) {
 			append_string(wPreferences.modifier_labels[modifier_index]);
-		else
+		} else {
 			append_string(fallback_name);
+		}
 	}
 
 	key_name = XKeysymToString(XkbKeycodeToKeysym(dpy, key.keycode, 0, 0));

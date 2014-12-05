@@ -158,6 +158,12 @@ AS_IF([test "x$debug" = "xyes"],
      AX_CFLAGS_GCC_OPTION([-Wno-deprecated-declarations])
 ])
 
+
+dnl Support for Nested Functions by the compiler
+dnl ============================================
+WM_PROG_CC_NESTEDFUNC
+
+
 dnl Posix thread
 dnl =================
 AX_PTHREAD
@@ -904,6 +910,9 @@ fi
 AS_IF([test "x$debug" = "xyes"],
     [AS_ECHO(["Debug enabled: CFLAGS = $CFLAGS"]) ])
 echo
+
+AS_IF([test "x$wm_cv_prog_cc_nestedfunc" != "xyes"],
+    [AC_MSG_WARN([[Your compiler does not support Nested Function, work-around enabled]])])
 
 dnl WM_PRINT_REDCRAP_BUG_STATUS
 

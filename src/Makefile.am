@@ -49,7 +49,6 @@ wmaker_SOURCES = 	\
 	main.h \
 	menu.c \
 	menu.h \
-	misc.c \
 	misc.h \
 	monitor.c \
 	monitor.h \
@@ -122,6 +121,20 @@ endif
 if WM_OSDEP_GENERIC
 wmaker_SOURCES += osdep_stub.c
 endif
+
+if USE_NESTED_FUNC
+wmaker_SOURCES += misc.c
+else
+nodist_wmaker_SOURCES = misc.hack_nf.c
+
+CLEANFILES = $(nodist_wmaker_SOURCES)
+
+misc.hack_nf.c: misc.c $(top_srcdir)/script/nested-func-to-macro.sh
+	$(top_srcdir)/script/nested-func-to-macro.sh \
+		$(srcdir)/misc.c -o $(builddir)/misc.hack_nf.c \
+		-f "append_string" -f "append_modifier"
+endif
+
 
 AM_CFLAGS =
 
