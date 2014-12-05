@@ -97,9 +97,9 @@ static const struct {
 	const char *db_value;
 	const char *file_name;
 } menu_style[] = {
-	[MSTYLE_NORMAL] { "normal",        "msty1" },
-	[MSTYLE_SINGLE] { "singletexture", "msty2" },
-	[MSTYLE_FLAT]   { "flat",          "msty3" }
+	[MSTYLE_NORMAL] = { "normal",        "msty1" },
+	[MSTYLE_SINGLE] = { "singletexture", "msty2" },
+	[MSTYLE_FLAT]   = { "flat",          "msty3" }
 };
 
 /********************************************************************/
@@ -107,9 +107,9 @@ static const struct {
 	const char *label;
 	const char *db_value;
 } wintitle_align[] = {
-	[WALeft]   { N_("Left"),   "left"   },
-	[WACenter] { N_("Center"), "center" },
-	[WARight]  { N_("Right"),  "right"  }
+	[WALeft]   = { N_("Left"),   "left"   },
+	[WACenter] = { N_("Center"), "center" },
+	[WARight]  = { N_("Right"),  "right"  }
 };
 
 /********************************************************************/
