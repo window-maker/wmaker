@@ -80,12 +80,9 @@ wmiv_SOURCES = wmiv.c wmiv.h
 CLEANFILES = wmaker.inst
 
 wmaker.inst: $(srcdir)/wmaker.inst.in ./Makefile
-	-rm -f wmaker.inst
-	sed -e "s|#pkgdatadir#|$(pkgdatadir)|" \
+	$(AM_V_GEN)sed -e "s|#pkgdatadir#|$(pkgdatadir)|" \
 		-e "s|#sysconfdir#|$(sysconfdir)/WindowMaker|" \
 		-e "s|#version#|$(VERSION)|" \
 		-e "s|#bindir#|$(bindir)|" \
-			$(srcdir)/wmaker.inst.in >wmaker.inst
-
+			$(srcdir)/wmaker.inst.in >wmaker.inst ; \
 	chmod 755 wmaker.inst
-

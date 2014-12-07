@@ -10,22 +10,18 @@ EXTRA_DIST = WMGLOBAL WMWindowAttributes.in WindowMaker.in WMState.in
 CLEANFILES = WMWindowAttributes WindowMaker WMState WMRootMenu
 
 WMWindowAttributes: $(srcdir)/WMWindowAttributes.in
-	-rm -f WMWindowAttributes
-	sed -e "s:#extension#:@ICONEXT@:" \
-		$(srcdir)/WMWindowAttributes.in > WMWindowAttributes
+	$(AM_V_GEN)sed -e "s:#extension#:@ICONEXT@:" \
+		$(srcdir)/WMWindowAttributes.in > WMWindowAttributes ; \
 	chmod 644 WMWindowAttributes
 
 WindowMaker: $(srcdir)/WindowMaker.in
-	-rm -f WindowMaker
-	sed -e "s:#pkgdatadir#:$(pkgdatadir):" $(srcdir)/WindowMaker.in \
-		> WindowMaker
+	$(AM_V_GEN)sed -e "s:#pkgdatadir#:$(pkgdatadir):" $(srcdir)/WindowMaker.in \
+		> WindowMaker ; \
 	chmod 644 WindowMaker
 
 WMState: $(srcdir)/WMState.in
-	-rm -f WMState
-	sed -e "s:#wprefs#:$(wpexecbindir)/WPrefs:" $(srcdir)/WMState.in > WMState
+	$(AM_V_GEN)sed -e "s:#wprefs#:$(wpexecbindir)/WPrefs:" $(srcdir)/WMState.in > WMState ; \
 	chmod 644 WMState
 
 WMRootMenu: $(srcdir)/../plmenu
-	-cp -f $(srcdir)/../plmenu WMRootMenu
-
+	$(AM_V_GEN)cp -f $(srcdir)/../plmenu WMRootMenu
