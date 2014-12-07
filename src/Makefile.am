@@ -140,7 +140,7 @@ misc.hack_nf.c: misc.c $(top_srcdir)/script/nested-func-to-macro.sh
 xmodifier.hack_nf.c: xmodifier.c $(top_srcdir)/script/nested-func-to-macro.sh
 	$(AM_V_GEN)$(top_srcdir)/script/nested-func-to-macro.sh \
 		$(srcdir)/xmodifier.c -o $(builddir)/xmodifier.hack_nf.c \
-		-f "modwarn" -f "modbarf" -f "check_modifier"
+		-f "modwarn" -f "modbarf" -f "check_modifier" -f "store_modifier"
 endif
 
 

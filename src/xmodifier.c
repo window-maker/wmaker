@@ -120,27 +120,6 @@ static void x_reset_modifier_mapping(Display * display)
 	int mode_bit = 0;
 	XModifierKeymap *x_modifier_keymap = XGetModifierMapping(display);
 
-#define store_modifier(name,old)						\
-    if (old && old != modifier_index)						\
-    wwarning ("%s (0x%x) generates both %s and %s, which is nonsensical.",	\
-    name, code, index_to_name (old),						\
-    index_to_name (modifier_index));						\
-    if (modifier_index == ShiftMapIndex) { modbarf (name,"ModShift"); } \
-    else if (modifier_index == LockMapIndex) { modbarf (name,"ModLock"); } \
-    else if (modifier_index == ControlMapIndex) { modbarf (name,"ModControl"); } \
-    else if (sym == XK_Mode_switch)						\
-    mode_bit = modifier_index; /* Mode_switch is special, see below... */	\
-    else if (modifier_index == meta_bit && old != meta_bit) {	  \
-    modwarn (name, meta_bit, "Meta");						\
-    } else if (modifier_index == super_bit && old != super_bit) {	  \
-    modwarn (name, super_bit, "Super");						\
-    } else if (modifier_index == hyper_bit && old != hyper_bit) {	  \
-    modwarn (name, hyper_bit, "Hyper");						\
-    } else if (modifier_index == alt_bit && old != alt_bit) {	  \
-    modwarn (name, alt_bit, "Alt");						\
-    } else	  \
-    old = modifier_index;
-
 	mkpm = x_modifier_keymap->max_keypermod;
 	for (modifier_index = 0; modifier_index < 8; modifier_index++)
 		for (modifier_key = 0; modifier_key < mkpm; modifier_key++) {
@@ -168,6 +147,32 @@ static void x_reset_modifier_mapping(Display * display)
 						modbarf(key_name, index_to_name(modifier_index));
 				}
 
+				inline void store_modifier(const char *key_name, int *old_mod)
+				{
+					if (*old_mod && *old_mod != modifier_index)
+						wwarning("key %s (0x%x) generates both %s and %s, which is nonsensical",
+						         key_name, code, index_to_name(*old_mod), index_to_name(modifier_index));
+					if (modifier_index == ShiftMapIndex) {
+						modbarf(key_name, "ModShift");
+					} else if (modifier_index == LockMapIndex) {
+						modbarf(key_name, "ModLock");
+					} else if (modifier_index == ControlMapIndex) {
+						modbarf(key_name, "ModControl");
+					} else if (sym == XK_Mode_switch) {
+						mode_bit = modifier_index; /* Mode_switch is special, see below... */
+					} else if (modifier_index == meta_bit && *old_mod != meta_bit) {
+						modwarn(key_name, meta_bit, "Meta");
+					} else if (modifier_index == super_bit && *old_mod != super_bit) {
+						modwarn(key_name, super_bit, "Super");
+					} else if (modifier_index == hyper_bit && *old_mod != hyper_bit) {
+						modwarn(key_name, hyper_bit, "Hyper");
+					} else if (modifier_index == alt_bit && *old_mod != alt_bit) {
+						modwarn(key_name, alt_bit, "Alt");
+					} else {
+						*(old_mod) = modifier_index;
+					}
+				}
+
 				code = x_modifier_keymap->modifiermap[modifier_index * mkpm + modifier_key];
 				sym = (code ? XkbKeycodeToKeysym(display, code, 0, column) : NoSymbol);
 
@@ -177,31 +182,31 @@ static void x_reset_modifier_mapping(Display * display)
 
 				switch (sym) {
 				case XK_Mode_switch:
-					store_modifier("Mode_switch", mode_bit);
+					store_modifier("Mode_switch", &mode_bit);
 					break;
 				case XK_Meta_L:
-					store_modifier("Meta_L", meta_bit);
+					store_modifier("Meta_L", &meta_bit);
 					break;
 				case XK_Meta_R:
-					store_modifier("Meta_R", meta_bit);
+					store_modifier("Meta_R", &meta_bit);
 					break;
 				case XK_Super_L:
-					store_modifier("Super_L", super_bit);
+					store_modifier("Super_L", &super_bit);
 					break;
 				case XK_Super_R:
-					store_modifier("Super_R", super_bit);
+					store_modifier("Super_R", &super_bit);
 					break;
 				case XK_Hyper_L:
-					store_modifier("Hyper_L", hyper_bit);
+					store_modifier("Hyper_L", &hyper_bit);
 					break;
 				case XK_Hyper_R:
-					store_modifier("Hyper_R", hyper_bit);
+					store_modifier("Hyper_R", &hyper_bit);
 					break;
 				case XK_Alt_L:
-					store_modifier("Alt_L", alt_bit);
+					store_modifier("Alt_L", &alt_bit);
 					break;
 				case XK_Alt_R:
-					store_modifier("Alt_R", alt_bit);
+					store_modifier("Alt_R", &alt_bit);
 					break;
 				case XK_Control_L:
 					check_modifier("Control_L", ControlMask);
