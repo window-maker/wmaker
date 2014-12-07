@@ -2207,11 +2207,16 @@ static void prepareForClose(_Panel * panel)
 
 	/* store list of textures */
 	for (i = 8; i < WMGetListNumberOfRows(panel->texLs); i++) {
+		WMPropList *pl_title, *pl_path;
+
 		item = WMGetListItem(panel->texLs, i);
 		titem = (TextureListItem *) item->clientData;
 
-		texture = WMCreatePLArray(WMCreatePLString(titem->title),
-					  WMRetainPropList(titem->prop), WMCreatePLString(titem->path), NULL);
+		pl_title = WMCreatePLString(titem->title);
+		pl_path = WMCreatePLString(titem->path);
+		texture = WMCreatePLArray(pl_title, titem->prop, pl_path, NULL);
+		WMReleasePropList(pl_title);
+		WMReleasePropList(pl_path);
 
 		WMAddToPLArray(textureList, texture);
 	}
