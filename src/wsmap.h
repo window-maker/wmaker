@@ -20,8 +20,6 @@
 #ifndef WSMAP_H
 #define WSMAP_H
 
-Bool process_workspacemap_event;
-
 void wWorkspaceMapUpdate(WScreen *scr);
 void StartWorkspaceMap(WScreen *scr);
 

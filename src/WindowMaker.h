@@ -522,6 +522,13 @@ extern struct wmaker_global_variables {
 	 */
 	Bool ignore_workspace_change;
 
+	/*
+	 * Process WorkspaceMap Event:
+	 * this variable is set when the Workspace Map window is being displayed,
+	 * it is mainly used to avoid re-opening another one at the same time
+	 */
+	Bool process_workspacemap_event;
+
 #ifdef HAVE_INOTIFY
 	struct {
 		int fd_event_queue;   /* Inotify's queue file descriptor */
