@@ -487,8 +487,6 @@ static void handle_event(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 		WMMaskEvent(dpy, KeyPressMask | KeyReleaseMask | ExposureMask
 		            | PointerMotionMask | ButtonPressMask | ButtonReleaseMask | EnterWindowMask, &ev);
 
-		if (!wsmap)
-			break;
 		modifiers = ev.xkey.state & w_global.shortcut.modifiers_mask;
 
 		switch (ev.type) {
@@ -539,8 +537,7 @@ static void handle_event(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 	XUngrabPointer(dpy, CurrentTime);
 	XUngrabKeyboard(dpy, CurrentTime);
 
-	if (wsmap)
-		workspace_map_destroy(wsmap);
+	workspace_map_destroy(wsmap);
 }
 
 static WWorkspaceMap *init_workspace_map(WScreen *scr, W_WorkspaceMap *wsmap_array)
