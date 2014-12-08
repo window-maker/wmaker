@@ -146,7 +146,7 @@ AS_IF([test "x$debug" = "xyes"],
      dnl
      dnl GCC provides a couple of checks to detect incorrect macro uses
      AX_CFLAGS_GCC_OPTION([-Wundef])
-     AX_CFLAGS_GCC_OPTION([-Wunused-macros])
+     WM_CFLAGS_GCC_OPTION_UNUSEDMACROS
 ], [dnl
      dnl When debug not enabled, we try to avoid some non-necessary
      dnl messages from the compiler
@@ -844,6 +844,12 @@ fi
 )
 
 gl_LD_VERSION_SCRIPT
+
+
+dnl Add the post-poned compilation options
+dnl ======================================
+WM_CFLAGS_GCC_OPTION_POSTPONED
+
 
 AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile test/Makefile \
 	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
