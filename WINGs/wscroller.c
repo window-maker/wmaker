@@ -64,8 +64,6 @@ typedef struct W_Scroller {
 	} flags;
 } Scroller;
 
-#define DEFAULT_HEIGHT		60
-#define DEFAULT_WIDTH		SCROLLER_WIDTH
 #define DEFAULT_ARROWS_POSITION	WSAMinEnd
 
 #define BUTTON_SIZE             ((SCROLLER_WIDTH) - 4)
@@ -108,7 +106,7 @@ WMScroller *WMCreateScroller(WMWidget * parent)
 	WMCreateEventHandler(sPtr->view, ExposureMask | StructureNotifyMask
 			     | ClientMessageMask, handleEvents, sPtr);
 
-	W_ResizeView(sPtr->view, DEFAULT_WIDTH, DEFAULT_WIDTH);
+	W_ResizeView(sPtr->view, SCROLLER_WIDTH, SCROLLER_WIDTH);
 	sPtr->flags.arrowsPosition = DEFAULT_ARROWS_POSITION;
 
 	WMCreateEventHandler(sPtr->view, ButtonPressMask | ButtonReleaseMask
