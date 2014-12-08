@@ -92,6 +92,16 @@ static void setupMWMHints(WWindow *wwin, MWMHints *mwm_hints)
 			WSETUFLAG(wwin, no_resizable, 0);
 		}
 
+		if (mwm_hints->decorations & MWM_DECOR_BORDER) {
+			/*
+			 * WindowMaker is drawing only a discreet 1 pixel border without
+			 * any decoration like a few other X window managers used to do, so
+			 * we assume it is not worth spending the time to add extra
+			 * complexity to handle this special request, considering also that
+			 * the Motif toolkit is not used anymore nowadays.
+			 */
+		}
+
 		if (mwm_hints->decorations & MWM_DECOR_RESIZEH)
 			WSETUFLAG(wwin, no_resizebar, 0);
 
@@ -101,9 +111,25 @@ static void setupMWMHints(WWindow *wwin, MWMHints *mwm_hints)
 			WSETUFLAG(wwin, no_closable, 0);
 		}
 
+		if (mwm_hints->decorations * MWM_DECOR_MENU) {
+			/*
+			 * WindowMaker does not include a button to display the menu
+			 * for windows, this is done using right mouse button on the
+			 * title bar. As a consequence, we ignore this flag because we
+			 * have nothing to hide.
+			 */
+		}
+
 		if (mwm_hints->decorations & MWM_DECOR_MINIMIZE) {
 			WSETUFLAG(wwin, no_miniaturize_button, 0);
 			WSETUFLAG(wwin, no_miniaturizable, 0);
+		}
+
+		if (mwm_hints->decorations & MWM_DECOR_MAXIMIZE) {
+			/*
+			 * WindowMaker does not display a button to maximize windows,
+			 * so we don't need to hide anything more for that flag
+			 */
 		}
 	}
 
@@ -119,6 +145,13 @@ static void setupMWMHints(WWindow *wwin, MWMHints *mwm_hints)
 		}
 		if (mwm_hints->functions & MWM_FUNC_RESIZE)
 			WSETUFLAG(wwin, no_resizable, 0);
+
+		if (mwm_hints->functions & MWM_FUNC_MOVE) {
+			/*
+			 * WindowMaker does not allow a window to not be moved, and this
+			 * is a good thing, so we explicitly ignore this flag.
+			 */
+		}
 
 		if (mwm_hints->functions & MWM_FUNC_MINIMIZE)
 			WSETUFLAG(wwin, no_miniaturizable, 0);
