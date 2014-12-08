@@ -57,7 +57,6 @@
 /* index of the first workspace menu entry */
 #define MC_WORKSPACE1   3
 
-#define MAX_SHORTCUT_LENGTH 32
 #define WORKSPACE_NAME_DISPLAY_PADDING 32
 
 static WMPropList *dWorkspaces = NULL;

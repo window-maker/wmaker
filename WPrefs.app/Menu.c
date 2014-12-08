@@ -42,7 +42,6 @@ typedef enum {
 } InfoType;
 
 #define MAX_SECTION_SIZE 4
-#define PATH_LEN 256
 
 typedef struct _Panel {
 	WMBox *box;

@@ -43,8 +43,6 @@ typedef struct W_FontPanel {
 #define MIN_UPPER_HEIGHT	20
 #define MIN_LOWER_HEIGHT	140
 
-#define MAX_FONTS_TO_RETRIEVE	2000
-
 #define BUTTON_SPACE_HEIGHT 40
 
 #define MIN_WIDTH	250

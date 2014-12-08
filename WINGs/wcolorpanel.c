@@ -264,9 +264,6 @@ enum {
 
 #define	COLORWHEEL_PART         1
 #define	CUSTOMPALETTE_PART      2
-#define	BUFSIZE                 1024
-
-#define MAX_LENGTH              1024
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
