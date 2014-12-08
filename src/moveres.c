@@ -50,10 +50,8 @@
 
 #define LEFT            1
 #define RIGHT           2
-#define HORIZONTAL      (LEFT|RIGHT)
 #define UP              4
 #define DOWN            8
-#define VERTICAL        (UP|DOWN)
 
 /* True if window currently has a border. This also includes borderless
  * windows which are currently selected
@@ -2268,10 +2266,8 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 
 #undef LEFT
 #undef RIGHT
-#undef HORIZONTAL
 #undef UP
 #undef DOWN
-#undef VERTICAL
 #undef HCONSTRAIN
 #undef RESIZEBAR
 
