@@ -3,6 +3,8 @@
 
 #include "WINGsP.h"
 
+#include "GNUstep.h"
+
 #include <X11/Xatom.h>
 
 typedef struct W_Window {
@@ -46,32 +48,6 @@ typedef struct W_Window {
 	} flags;
 } _Window;
 
-typedef struct {
-	CARD32 flags;
-	CARD32 window_style;
-	CARD32 window_level;
-	CARD32 reserved;
-	Pixmap miniaturize_pixmap;	/* pixmap for miniaturize button */
-	Pixmap close_pixmap;	/* pixmap for close button */
-	Pixmap miniaturize_mask;	/* miniaturize pixmap mask */
-	Pixmap close_mask;	/* close pixmap mask */
-	CARD32 extra_flags;
-} GNUstepWMAttributes;
-
-#define GSWindowStyleAttr 	(1<<0)
-#define GSWindowLevelAttr 	(1<<1)
-#define GSMiniaturizePixmapAttr	(1<<3)
-#define GSClosePixmapAttr	(1<<4)
-#define GSMiniaturizeMaskAttr	(1<<5)
-#define GSCloseMaskAttr		(1<<6)
-#define GSExtraFlagsAttr	(1<<7)
-
-/* extra flags */
-#define GSDocumentEditedFlag	(1<<0)
-#define GSNoApplicationIconFlag	(1<<5)
-
-#define WMFHideOtherApplications	10
-#define WMFHideApplication		12
 
 static void willResizeWindow(W_ViewDelegate *, WMView *, unsigned *, unsigned *);
 
