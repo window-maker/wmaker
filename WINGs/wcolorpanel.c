@@ -3525,9 +3525,6 @@ static void convertCPColor(CPColor * color)
 	}
 }
 
-#define ABS_SHIFT(val, shift) \
-    (((shift) > 0) ? (val) >> (shift) : (val) << -(shift))
-
 static RColor ulongToRColor(WMScreen * scr, unsigned long value)
 {
 	RColor color;
