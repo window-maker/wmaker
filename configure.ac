@@ -111,16 +111,39 @@ AS_IF([test "x$debug" = "xyes"],
      dnl where some options are not supported and we don't want to
      dnl loose all of them.
      dnl
+     dnl clang, suggest parenthesis on bit operations that could be
+     dnl misunderstood due to C operator precedence
+     AX_CFLAGS_GCC_OPTION([-Wbitwise-op-parentheses])
+     dnl
+     dnl Points at code that gcc thinks is so complicated that gcc
+     dnl gives up trying to optimize, which probably also means it is
+     dnl too complicated to maintain
+     AX_CFLAGS_GCC_OPTION([-Wdisabled-optimization])
+     dnl
      dnl Floating-point comparison is not a good idea
      AX_CFLAGS_GCC_OPTION([-Wfloat-equal])
      dnl
+     dnl clang warns about constants that may have portability issues due
+     dnl to the endianness of the host
+     AX_CFLAGS_GCC_OPTION([-Wfour-char-constants])
+     dnl
+     dnl clang warns about constant that may be too big to be portable
+     AX_CFLAGS_GCC_OPTION([-Wliteral-range])
+     dnl
      dnl Try to report misuses of '&' versus '&&' and similar
      AX_CFLAGS_GCC_OPTION([-Wlogical-op])
+     dnl
+     dnl clang, reports cases where the code assumes everyone is an
+     dnl expert in C operator precedence... which is unlikely!
+     AX_CFLAGS_GCC_OPTION([-Wlogical-op-parentheses])
      dnl
      dnl Reports declaration of global things that are done inside
      dnl a local environment, instead of using the appropriate
      dnl header
      AX_CFLAGS_GCC_OPTION([-Wnested-externs])
+     dnl
+     dnl Warn about constant strings that could pose portability issues
+     AX_CFLAGS_GCC_OPTION([-Woverlength-strings])
      dnl
      dnl Use of 'sizeof()' on inappropriate pointer types
      AX_CFLAGS_GCC_OPTION([-Wpointer-arith])
@@ -128,6 +151,11 @@ AS_IF([test "x$debug" = "xyes"],
      dnl Having more than 1 prototype for a function makes code updates
      dnl more difficult, so try to avoid it
      AX_CFLAGS_GCC_OPTION([-Wredundant-decls])
+     dnl
+     dnl clang, detect some misuses of sizeof. We also count in our code
+     dnl on the use of the macro 'wlength' which contains a check if the
+     dnl compiler support C11's static_assert
+     AX_CFLAGS_GCC_OPTION([-Wsizeof-array-argument])
      dnl
      dnl Prototype of function must be explicit, no deprecated K&R syntax
      dnl and no empty argument list which prevents compiler from doing
@@ -152,6 +180,9 @@ AS_IF([test "x$debug" = "xyes"],
      dnl GCC provides a couple of checks to detect incorrect macro uses
      AX_CFLAGS_GCC_OPTION([-Wundef])
      WM_CFLAGS_GCC_OPTION_UNUSEDMACROS
+     dnl
+     dnl clang reports stuff marked unused but which is actually used
+     AX_CFLAGS_GCC_OPTION([-Wused-but-marked-unused])
 ], [dnl
      dnl When debug not enabled, we try to avoid some non-necessary
      dnl messages from the compiler
