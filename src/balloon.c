@@ -72,11 +72,6 @@ typedef struct _WBalloon {
 #define LEFT	0
 #define RIGHT	2
 
-#define TLEFT (TOP|LEFT)
-#define TRIGHT (TOP|RIGHT)
-#define BLEFT (BOTTOM|LEFT)
-#define BRIGHT (BOTTOM|RIGHT)
-
 static int countLines(const char *text)
 {
 	const char *p = text;

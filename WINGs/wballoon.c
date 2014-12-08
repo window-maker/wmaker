@@ -229,11 +229,6 @@ void W_BalloonHandleEnterView(WMView * view)
 #define LEFT	0
 #define RIGHT	2
 
-#define TLEFT	(TOP|LEFT)
-#define TRIGHT 	(TOP|RIGHT)
-#define BLEFT	(BOTTOM|LEFT)
-#define BRIGHT	(BOTTOM|RIGHT)
-
 #define 	SPACE	12
 
 static void drawBalloon(WMScreen * scr, Pixmap bitmap, Pixmap pix, int x, int y, int w, int h, int side)
