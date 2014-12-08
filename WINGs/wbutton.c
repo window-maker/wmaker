@@ -98,7 +98,6 @@ static void handleActionEvents(XEvent * event, void *data);
 
 static char *WMPushedRadioNotification = "WMPushedRadioNotification";
 
-#define NFONT(b) (b)->view->screen->normalFont
 
 WMButton *WMCreateCustomButton(WMWidget * parent, int behaviourMask)
 {
