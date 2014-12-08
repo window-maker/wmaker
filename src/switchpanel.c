@@ -68,7 +68,6 @@ struct SwitchPanel {
 #define ICON_TILE_SIZE 64
 #define LABEL_HEIGHT 25
 #define SCREEN_BORDER_SPACING 2*20
-#define SCROLL_STEPS (ICON_TILE_SIZE/2)
 
 #define ICON_SELECTED (1<<1)
 #define ICON_DIM (1<<2)
