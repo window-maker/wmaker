@@ -43,8 +43,6 @@
 #include "misc.h"
 #include "event.h"
 
-#define DBLCLICK_TIME wPreferences.dblclick_time
-
 
 static void handleExpose(WObjDescriptor * desc, XEvent * event);
 static void handleButtonExpose(WObjDescriptor * desc, XEvent * event);
