@@ -363,10 +363,7 @@ static WMPixmap *makePixmap(W_Screen * sPtr, char **data, int width, int height,
 }
 
 #define T_WINGS_IMAGES_FILE  RESOURCE_PATH"/Images.tiff"
-#define T_DEFAULT_OBJECT_ICON_FILE RESOURCE_PATH"/defaultIcon.tiff"
-
 #define X_WINGS_IMAGES_FILE  RESOURCE_PATH"/Images.xpm"
-#define X_DEFAULT_OBJECT_ICON_FILE RESOURCE_PATH"/defaultIcon.xpm"
 
 static Bool loadPixmaps(WMScreen * scr)
 {
@@ -474,16 +471,6 @@ static Bool loadPixmaps(WMScreen * scr)
 
 	RReleaseImage(image);
 
-#if 0
-	scr->defaultObjectIcon = WMCreatePixmapFromFile(scr, T_DEFAULT_OBJECT_ICON_FILE);
-	if (!scr->defaultObjectIcon) {
-		scr->defaultObjectIcon = WMCreatePixmapFromFile(scr, X_DEFAULT_OBJECT_ICON_FILE);
-	}
-	if (!scr->defaultObjectIcon) {
-		wwarning("WINGs: could not load default icon file");
-		return False;
-	}
-#endif
 	return True;
 }
 
