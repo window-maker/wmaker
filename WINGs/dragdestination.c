@@ -19,9 +19,7 @@
 #define XDND_REQUIRED_TYPES(dragInfo) dragInfo->destInfo->requiredTypes
 #define XDND_SOURCE_ACTION(dragInfo) dragInfo->sourceAction
 #define XDND_DEST_ACTION(dragInfo) dragInfo->destinationAction
-#define XDND_SOURCE_OPERATIONS(dragInfo) dragInfo->destInfo->sourceOperations
 #define XDND_DROP_DATAS(dragInfo) dragInfo->destInfo->dropDatas
-#define XDND_DROP_DATA_COUNT(dragInfo) dragInfo->destInfo->dropDataCount
 #define XDND_DEST_VIEW_IS_REGISTERED(dragInfo) ((dragInfo->destInfo) != NULL)\
     && ((dragInfo->destInfo->destView->dragDestinationProcs) != NULL)
 
