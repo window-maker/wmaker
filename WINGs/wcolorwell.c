@@ -80,7 +80,6 @@ static WMDragDestinationProcs _DragDestinationProcs = {
 
 #define DEFAULT_WIDTH		60
 #define DEFAULT_HEIGHT		30
-#define DEFAULT_BORDER_WIDTH	6
 
 #define MIN_WIDTH	16
 #define MIN_HEIGHT	8
