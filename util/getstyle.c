@@ -54,9 +54,6 @@
 
 #include "../src/wconfig.h"
 
-#ifndef GLOBAL_DEFAULTS_SUBDIR
-#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
-#endif
 
 /* table of style related options */
 static char *options[] = {

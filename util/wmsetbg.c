@@ -53,9 +53,6 @@
 
 #include "../src/wconfig.h"
 
-#ifndef GLOBAL_DEFAULTS_SUBDIR
-#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
-#endif
 
 #include <WINGs/WINGs.h>
 #include <wraster.h>
