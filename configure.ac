@@ -129,6 +129,11 @@ AS_IF([test "x$debug" = "xyes"],
      dnl more difficult, so try to avoid it
      AX_CFLAGS_GCC_OPTION([-Wredundant-decls])
      dnl
+     dnl Prototype of function must be explicit, no deprecated K&R syntax
+     dnl and no empty argument list which prevents compiler from doing
+     dnl type checking when using the function
+     WM_CFLAGS_GCC_OPTION_STRICTPROTO
+     dnl
      dnl Proper attributes helps the compiler to produce better code
      WM_CFLAGS_CHECK_FIRST([format attribute suggest],
          [-Wsuggest-attribute=format  dnl new gcc syntax
