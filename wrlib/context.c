@@ -142,13 +142,83 @@ static Bool setupStandardColormap(RContext * ctx, Atom property)
 	return True;
 }
 
-static Bool allocatePseudoColor(RContext * ctx)
+static XColor *allocateColor(RContext *ctx, XColor *colors, int ncolors)
 {
-	XColor *colors;
 	XColor avcolors[256];
 	int avncolors;
-	int i, ncolors, r, g, b;
+	int i, r, g, b;
 	int retries;
+
+	for (i = 0; i < ncolors; i++) {
+#ifdef WRLIB_DEBUG
+		fprintf(stderr, "trying:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
+#endif
+		if (!XAllocColor(ctx->dpy, ctx->cmap, &(colors[i]))) {
+			colors[i].flags = 0;	/* failed */
+#ifdef WRLIB_DEBUG
+			fprintf(stderr, "failed:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
+#endif
+		} else {
+			colors[i].flags = DoRed | DoGreen | DoBlue;
+#ifdef WRLIB_DEBUG
+			fprintf(stderr, "success:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
+#endif
+		}
+	}
+	/* try to allocate close values for the colors that couldn't
+	 * be allocated before */
+	avncolors = (1 << ctx->depth > 256 ? 256 : 1 << ctx->depth);
+	for (i = 0; i < avncolors; i++)
+		avcolors[i].pixel = i;
+
+	XQueryColors(ctx->dpy, ctx->cmap, avcolors, avncolors);
+
+	for (i = 0; i < ncolors; i++) {
+		if (colors[i].flags == 0) {
+			int j;
+			unsigned long cdiff = 0xffffffff, diff;
+			unsigned long closest = 0;
+
+			retries = 2;
+
+			while (retries--) {
+				/* find closest color */
+				for (j = 0; j < avncolors; j++) {
+					r = (colors[i].red - avcolors[i].red) >> 8;
+					g = (colors[i].green - avcolors[i].green) >> 8;
+					b = (colors[i].blue - avcolors[i].blue) >> 8;
+					diff = r * r + g * g + b * b;
+					if (diff < cdiff) {
+						cdiff = diff;
+						closest = j;
+					}
+				}
+				/* allocate closest color found */
+#ifdef WRLIB_DEBUG
+				fprintf(stderr, "best match:%x,%x,%x => %x,%x,%x\n",
+					colors[i].red, colors[i].green, colors[i].blue,
+					avcolors[closest].red, avcolors[closest].green, avcolors[closest].blue);
+#endif
+				colors[i].red = avcolors[closest].red;
+				colors[i].green = avcolors[closest].green;
+				colors[i].blue = avcolors[closest].blue;
+				if (XAllocColor(ctx->dpy, ctx->cmap, &colors[i])) {
+					colors[i].flags = DoRed | DoGreen | DoBlue;
+					break;	/* succeeded, don't need to retry */
+				}
+#ifdef WRLIB_DEBUG
+				fputs("close color allocation failed. Retrying...\n", stderr);
+#endif
+			}
+		}
+	}
+	return colors;
+}
+
+static Bool allocatePseudoColor(RContext *ctx)
+{
+	XColor *colors;
+	int i, ncolors, r, g, b;
 	int cpc = ctx->attribs->colors_per_channel;
 
 	ncolors = cpc * cpc * cpc;
@@ -221,57 +291,7 @@ static Bool allocatePseudoColor(RContext * ctx)
 		}
 	}
 	/* try to allocate the colors */
-	for (i = 0; i < ncolors; i++) {
-		if (!XAllocColor(ctx->dpy, ctx->cmap, &(colors[i]))) {
-			colors[i].flags = 0;	/* failed */
-		} else {
-			colors[i].flags = DoRed | DoGreen | DoBlue;
-		}
-	}
-	/* try to allocate close values for the colors that couldn't
-	 * be allocated before */
-	avncolors = (1 << ctx->depth > 256 ? 256 : 1 << ctx->depth);
-	for (i = 0; i < avncolors; i++)
-		avcolors[i].pixel = i;
-
-	XQueryColors(ctx->dpy, ctx->cmap, avcolors, avncolors);
-
-	for (i = 0; i < ncolors; i++) {
-		if (colors[i].flags == 0) {
-			int j;
-			unsigned long cdiff = 0xffffffff, diff;
-			unsigned long closest = 0;
-
-			retries = 2;
-
-			while (retries--) {
-				/* find closest color */
-				for (j = 0; j < avncolors; j++) {
-					r = (colors[i].red - avcolors[i].red) >> 8;
-					g = (colors[i].green - avcolors[i].green) >> 8;
-					b = (colors[i].blue - avcolors[i].blue) >> 8;
-					diff = r * r + g * g + b * b;
-					if (diff < cdiff) {
-						cdiff = diff;
-						closest = j;
-					}
-				}
-				/* allocate closest color found */
-				colors[i].red = avcolors[closest].red;
-				colors[i].green = avcolors[closest].green;
-				colors[i].blue = avcolors[closest].blue;
-				if (XAllocColor(ctx->dpy, ctx->cmap, &colors[i])) {
-					colors[i].flags = DoRed | DoGreen | DoBlue;
-					break;	/* succeeded, don't need to retry */
-				}
-#ifdef WRLIB_DEBUG
-				fputs("close color allocation failed. Retrying...\n", stderr);
-#endif
-			}
-		}
-	}
-
-	ctx->colors = colors;
+	ctx->colors = allocateColor(ctx, colors, ncolors);
 	ctx->ncolors = ncolors;
 
 	/* fill the pixels shortcut array */
@@ -285,10 +305,7 @@ static Bool allocatePseudoColor(RContext * ctx)
 static XColor *allocateGrayScale(RContext * ctx)
 {
 	XColor *colors;
-	XColor avcolors[256];
-	int avncolors;
-	int i, ncolors, r, g, b;
-	int retries;
+	int i, ncolors;
 	int cpc = ctx->attribs->colors_per_channel;
 
 	ncolors = cpc * cpc * cpc;
@@ -322,71 +339,9 @@ static XColor *allocateGrayScale(RContext * ctx)
 		colors[i].blue = (i * 0xffff) / (ncolors - 1);
 		colors[i].flags = DoRed | DoGreen | DoBlue;
 	}
+
 	/* try to allocate the colors */
-	for (i = 0; i < ncolors; i++) {
-#ifdef WRLIB_DEBUG
-		fprintf(stderr, "trying:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
-#endif
-		if (!XAllocColor(ctx->dpy, ctx->cmap, &(colors[i]))) {
-			colors[i].flags = 0;	/* failed */
-#ifdef WRLIB_DEBUG
-			fprintf(stderr, "failed:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
-#endif
-		} else {
-			colors[i].flags = DoRed | DoGreen | DoBlue;
-#ifdef WRLIB_DEBUG
-			fprintf(stderr, "success:%x,%x,%x\n", colors[i].red, colors[i].green, colors[i].blue);
-#endif
-		}
-	}
-	/* try to allocate close values for the colors that couldn't
-	 * be allocated before */
-	avncolors = (1 << ctx->depth > 256 ? 256 : 1 << ctx->depth);
-	for (i = 0; i < avncolors; i++)
-		avcolors[i].pixel = i;
-
-	XQueryColors(ctx->dpy, ctx->cmap, avcolors, avncolors);
-
-	for (i = 0; i < ncolors; i++) {
-		if (colors[i].flags == 0) {
-			int j;
-			unsigned long cdiff = 0xffffffff, diff;
-			unsigned long closest = 0;
-
-			retries = 2;
-
-			while (retries--) {
-				/* find closest color */
-				for (j = 0; j < avncolors; j++) {
-					r = (colors[i].red - avcolors[i].red) >> 8;
-					g = (colors[i].green - avcolors[i].green) >> 8;
-					b = (colors[i].blue - avcolors[i].blue) >> 8;
-					diff = r * r + g * g + b * b;
-					if (diff < cdiff) {
-						cdiff = diff;
-						closest = j;
-					}
-				}
-				/* allocate closest color found */
-#ifdef WRLIB_DEBUG
-				fprintf(stderr, "best match:%x,%x,%x => %x,%x,%x\n",
-					colors[i].red, colors[i].green, colors[i].blue,
-					avcolors[closest].red, avcolors[closest].green, avcolors[closest].blue);
-#endif
-				colors[i].red = avcolors[closest].red;
-				colors[i].green = avcolors[closest].green;
-				colors[i].blue = avcolors[closest].blue;
-				if (XAllocColor(ctx->dpy, ctx->cmap, &colors[i])) {
-					colors[i].flags = DoRed | DoGreen | DoBlue;
-					break;	/* succeeded, don't need to retry */
-				}
-#ifdef WRLIB_DEBUG
-				fputs("close color allocation failed. Retrying...\n", stderr);
-#endif
-			}
-		}
-	}
-	return colors;
+	return allocateColor(ctx, colors, ncolors);
 }
 
 static Bool setupPseudoColorColormap(RContext * context)
