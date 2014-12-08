@@ -56,10 +56,6 @@
 
 /***** Local Stuff ******/
 
-#define WSS_ROOTMENU	(1<<0)
-#define WSS_SWITCHMENU	(1<<1)
-#define WSS_WSMENU	(1<<2)
-
 static struct {
 	int steps;
 	int delay;
@@ -2382,7 +2378,7 @@ static Bool getMenuInfo(WMPropList * info, int *x, int *y, Bool * lowered)
 	return True;
 }
 
-static int restoreMenu(WScreen * scr, WMPropList * menu, int which)
+static int restoreMenu(WScreen *scr, WMPropList *menu)
 {
 	int x, y;
 	Bool lowered = False;
@@ -2394,10 +2390,8 @@ static int restoreMenu(WScreen * scr, WMPropList * menu, int which)
 	if (!getMenuInfo(menu, &x, &y, &lowered))
 		return False;
 
-	if (which & WSS_SWITCHMENU) {
-		OpenSwitchMenu(scr, x, y, False);
-		pmenu = scr->switch_menu;
-	}
+	OpenSwitchMenu(scr, x, y, False);
+	pmenu = scr->switch_menu;
 
 	if (pmenu) {
 		int width = MENUW(pmenu);
@@ -2508,7 +2502,7 @@ void wMenuRestoreState(WScreen * scr)
 	skey = WMCreatePLString("SwitchMenu");
 	menu = WMGetFromPLDictionary(menus, skey);
 	WMReleasePropList(skey);
-	restoreMenu(scr, menu, WSS_SWITCHMENU);
+	restoreMenu(scr, menu);
 
 	if (!scr->root_menu) {
 		OpenRootMenu(scr, scr->scr_width * 2, 0, False);
