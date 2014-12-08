@@ -85,7 +85,6 @@ struct W_ViewDelegate _WindowViewDelegate = {
 
 #define DEFAULT_WIDTH	400
 #define DEFAULT_HEIGHT	180
-#define DEFAULT_TITLE	""
 
 static void destroyWindow(_Window * win);
 
