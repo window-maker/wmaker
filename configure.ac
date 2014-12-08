@@ -104,6 +104,16 @@ AS_IF([test "x$debug" = "xyes"],
 
 AX_CFLAGS_GCC_OPTION(-Wall)
 AX_CFLAGS_GCC_OPTION(-Wextra -Wno-sign-compare)
+dnl
+dnl The use of trampolines cause code that can crash on some secured OS, it is
+dnl also known to be a source of crash if not used properly, in a more general
+dnl way it tends to generate binary code that may not be optimal, and it is
+dnl not compatible with the 'nested-func-to-macro' workaround
+WM_CFLAGS_CHECK_FIRST([-Wtrampolines],
+         [-Werror=trampolines  dnl try to generate an error if possible
+          -Wtrampolines        dnl if not, try to fall back to a simple warning
+         ])
+dnl
 AS_IF([test "x$debug" = "xyes"],
     [dnl When debug is enabled, we try to activate more checks from
      dnl the compiler. They are on independant check because the
@@ -171,11 +181,6 @@ AS_IF([test "x$debug" = "xyes"],
          [-Wsuggest-attribute=noreturn  dnl gcc syntax
           -Wmissing-noreturn            dnl clang syntax
          ])
-     dnl
-     dnl The use of trampolines cause code that can crash on some
-     dnl secured OS, and in a more general way generate binary code
-     dnl that may not be optimal
-     AX_CFLAGS_GCC_OPTION([-Wtrampolines])
      dnl
      dnl GCC provides a couple of checks to detect incorrect macro uses
      AX_CFLAGS_GCC_OPTION([-Wundef])
