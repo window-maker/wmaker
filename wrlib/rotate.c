@@ -33,9 +33,6 @@
 
 #include <math.h>
 
-#ifndef PI
-#define PI 3.14159265358979323846
-#endif
 
 static RImage *rotate_image_90(RImage *source);
 static RImage *rotate_image_270(RImage *source);
@@ -347,13 +344,13 @@ static RImage *rotate_image_any(RImage *source, float angle)
 	if (angle > 180.0)
 		angle -= 180.0;
 
-	angle = (angle * PI) / 180.0;
+	angle = (angle * WM_PI) / 180.0;
 
 	nwidth = ceil(abs(cos(angle) * image->width))
-	    + ceil(abs(cos(PI / 2 - angle) * image->width));
+	    + ceil(abs(cos(WM_PI / 2 - angle) * image->width));
 
 	nheight = ceil(abs(sin(angle) * image->height))
-	    + ceil(abs(cos(PI / 2 - angle) * image->height));
+	    + ceil(abs(cos(WM_PI / 2 - angle) * image->height));
 
 	img = RCreateImage(nwidth, nheight, True);
 	if (!img)
@@ -362,16 +359,16 @@ static RImage *rotate_image_any(RImage *source, float angle)
 	src = image->data;
 	dst = img->data;
 
-	x1 = floor(abs(cos(PI / 2 - angle) * image->width));
+	x1 = floor(abs(cos(WM_PI / 2 - angle) * image->width));
 	y1 = 0;
 
 	x2 = 0;
-	y2 = floor(abs(sin(PI / 2 - angle) * image->width));
+	y2 = floor(abs(sin(WM_PI / 2 - angle) * image->width));
 
 	xx = floor(abs(cos(angle) * image->height)) - 1;
 	yy = nheight - 1;
 
-	printf("%ix%i, %i %i     %i %i %i\n", nwidth, nheight, x1, y1, x2, y2, (int)((angle * 180.0) / PI));
+	printf("%ix%i, %i %i     %i %i %i\n", nwidth, nheight, x1, y1, x2, y2, (int)((angle * 180.0) / WM_PI));
 
 	dx = abs(x2 - x1);
 	dy = abs(y2 - y1);
@@ -414,8 +411,8 @@ static RImage *rotate_image_any(RImage *source, float angle)
 		p = dpr - dy;
 
 		while (dy-- >= 0) {
-			xx = abs(x1 * sin(angle * PI / 180.0));
-			yy = abs(y1 * cos(angle * PI / 180.0));
+			xx = abs(x1 * sin(angle * WM_PI / 180.0));
+			yy = abs(y1 * cos(angle * WM_PI / 180.0));
 
 			copyLine(x1, y1, xx, yy, nwidth, image->format, dst, &src);
 

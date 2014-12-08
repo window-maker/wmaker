@@ -30,5 +30,24 @@ AC_CHECK_FUNC(atan,
         [LIBM=-lm],
         [AC_MSG_WARN(Could not find Math library, you may experience problems)
          LIBM=] )] ) dnl
+AC_CACHE_CHECK([if M_PI is defined in math.h], [wm_cv_libm_pi],
+    [wm_cv_libm_pi="no"
+     wm_save_CFLAGS="$CFLAGS"
+     for wm_arg in dnl
+       "% yes" dnl natively available (Unix98 compliant?)
+       "-D_XOPEN_SOURCE=500" ; dnl Explicit request
+     do
+       AS_IF([wm_fn_lib_try_compile "math.h" "double val;" "val = M_PI" dnl
+                  "`echo "$wm_arg" | sed -e 's, *%.*$,,' `"],
+           [wm_cv_libm_pi="`echo "$wm_arg" | sed -e 's,^.*% *,,' `" ; break])
+     done
+     CFLAGS="$wm_save_CFLAGS"])
+AS_IF([test "x$wm_cv_libm_pi" = "xno"],
+    [AC_DEFINE([WM_PI], [(3.14159265358979323846)],
+        [Defines how to access the value of Pi])],
+    [AC_DEFINE([WM_PI], [(M_PI)],
+        [Defines how to access the value of Pi])
+     AS_IF([test "x$wm_cv_libm_pi" != "xyes"],
+        [CFLAGS="$CFLAGS $wm_cv_libm_pi"]) ])
 AC_SUBST(LIBM) dnl
 ])

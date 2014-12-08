@@ -334,7 +334,6 @@
 
 /* number of window shortcuts */
 #define MAX_WINDOW_SHORTCUTS      10
-#define WM_PI                     3.14159265358979323846
 #define MIN_TITLEFONT_HEIGHT(h)   ((h)>14 ? (h) : 14)
 #define TITLEBAR_HEIGHT           18  /* window's titlebar height */
 #define RESIZEBAR_HEIGHT          8   /* height of the resizebar */

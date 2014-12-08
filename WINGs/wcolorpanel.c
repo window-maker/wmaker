@@ -265,9 +265,6 @@ enum {
 #define	COLORWHEEL_PART         1
 #define	CUSTOMPALETTE_PART      2
 
-#ifndef M_PI
-#define M_PI 3.14159265358979323846
-#endif
 
 static char *generateNewFilename(const char *curName);
 static void convertCPColor(CPColor * color);
@@ -1951,7 +1948,7 @@ static void wheelInitMatrix(W_ColorPanel * panel)
 			if (sat < 256) {
 				if (xcor != 0)
 					dhue[0] = rint(atan((double)ycor / (double)xcor) *
-						       (180.0 / M_PI)) + (xcor < 0 ? 180.0 : 0.0);
+						       (180.0 / WM_PI)) + (xcor < 0 ? 180.0 : 0.0);
 				else
 					dhue[0] = 270;
 
@@ -2237,7 +2234,7 @@ static void wheelPositionSelectionOutBounds(W_ColorPanel * panel, int x, int y)
 	panel->color.hsv.value = 255 - WMGetSliderValue(panel->wheelBrightnessS);
 
 	if (xcor != 0)
-		hue = rint(atan(-(double)ycor / (double)xcor) * (180.0 / M_PI));
+		hue = rint(atan(-(double)ycor / (double)xcor) * (180.0 / WM_PI));
 	else {
 		if (ycor < 0)
 			hue = 90;
@@ -2257,9 +2254,9 @@ static void wheelPositionSelectionOutBounds(W_ColorPanel * panel, int x, int y)
 
 	wheelUndrawSelection(panel);
 
-	panel->colx = 2 + rint((colorWheelSize * (1.0 + cos(panel->color.hsv.hue * (M_PI / 180.0)))) / 2.0);
+	panel->colx = 2 + rint((colorWheelSize * (1.0 + cos(panel->color.hsv.hue * (WM_PI / 180.0)))) / 2.0);
 	/* "+2" because of "colorWheelSize + 4" */
-	panel->coly = 2 + rint((colorWheelSize * (1.0 + sin(-panel->color.hsv.hue * (M_PI / 180.0)))) / 2.0);
+	panel->coly = 2 + rint((colorWheelSize * (1.0 + sin(-panel->color.hsv.hue * (WM_PI / 180.0)))) / 2.0);
 
 	wheelUpdateSelection(panel);
 	cpColor = panel->color;
@@ -3357,10 +3354,10 @@ static void wheelInit(W_ColorPanel * panel)
 
 	panel->colx = 2 + rint((colorWheelSize / 2.0) *
 			       (1 + (panel->color.hsv.saturation / 255.0) *
-				cos(panel->color.hsv.hue * M_PI / 180.0)));
+				cos(panel->color.hsv.hue * WM_PI / 180.0)));
 	panel->coly = 2 + rint((colorWheelSize / 2.0) *
 			       (1 + (panel->color.hsv.saturation / 255.0) *
-				sin(-panel->color.hsv.hue * M_PI / 180.0)));
+				sin(-panel->color.hsv.hue * WM_PI / 180.0)));
 
 	wheelCalculateValues(panel, panel->color.hsv.value);
 

@@ -27,11 +27,6 @@
 #include <string.h>
 #include <X11/Xlib.h>
 #include <math.h>
-
-#ifndef PI
-#define PI 3.14159265358979323846
-#endif
-
 #include <assert.h>
 
 #include "wraster.h"
@@ -200,7 +195,7 @@ static double sinc(double x)
 	 * The goal was to avoid a Divide-by-0 error, now we also
 	 * avoid a +/-inf result too
 	 */
-	x *= PI;
+	x *= WM_PI;
 	if (x > 1.0E-9)
 		return (sin(x) / x);
 	return (1.0);
