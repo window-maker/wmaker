@@ -29,9 +29,6 @@
 #endif
 
 
-#define ICON_TITLE_FONT "sans serif:pixelsize=9"
-#define ICON_TITLE_VFONT "sans serif:pixelsize=9:weight=100"
-
 #define MAX_SECTIONS 16
 
 typedef struct _WPrefs {
