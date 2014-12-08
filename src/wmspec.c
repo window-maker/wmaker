@@ -217,6 +217,22 @@ static atomitem_t atomNames[] = {
 #define _NET_WM_STATE_ADD 1
 #define _NET_WM_STATE_TOGGLE 2
 
+#if 0
+/*
+ * These constant provide information on the kind of window move/resize when
+ * it is initiated by the application instead of by WindowMaker. They are
+ * parameter for the client message _NET_WM_MOVERESIZE, as defined by the
+ * FreeDesktop wm-spec standard:
+ *   http://standards.freedesktop.org/wm-spec/1.5/ar01s04.html
+ *
+ * Today, WindowMaker does not support this at all (the corresponding Atom
+ * is not added to the list in setSupportedHints), probably because there is
+ * nothing it needs to do about it, the application is assumed to know what
+ * it is doing, and WindowMaker won't get in the way.
+ *
+ * The definition of the constants (taken from the standard) are disabled to
+ * avoid a spurious warning (-Wunused-macros).
+ */
 #define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
 #define _NET_WM_MOVERESIZE_SIZE_TOP          1
 #define _NET_WM_MOVERESIZE_SIZE_TOPRIGHT     2
@@ -228,6 +244,7 @@ static atomitem_t atomNames[] = {
 #define _NET_WM_MOVERESIZE_MOVE              8	/* movement only */
 #define _NET_WM_MOVERESIZE_SIZE_KEYBOARD     9	/* size via keyboard */
 #define _NET_WM_MOVERESIZE_MOVE_KEYBOARD    10	/* move via keyboard */
+#endif
 
 static void observer(void *self, WMNotification *notif);
 static void wsobserver(void *self, WMNotification *notif);
