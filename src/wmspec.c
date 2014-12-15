@@ -702,25 +702,67 @@ void wNETWMUpdateActions(WWindow *wwin, Bool del)
 
 void wNETWMUpdateWorkarea(WScreen *scr)
 {
-	long *area;
-	int count, i;
+	WArea total_usable;
+	int nb_workspace;
 
-	if (!scr->netdata || scr->workspace_count == 0 || !scr->usableArea)
+	if (!scr->netdata) {
+		/* If the _NET_xxx were not initialised, it not necessary to do anything */
 		return;
-
-	count = scr->workspace_count * 4;
-	area = wmalloc(sizeof(long) * count);
-
-	for (i = 0; i < scr->workspace_count; i++) {
-		area[4 * i + 0] = scr->usableArea[0].x1;
-		area[4 * i + 1] = scr->usableArea[0].y1;
-		area[4 * i + 2] = scr->usableArea[0].x2 - scr->usableArea[0].x1;
-		area[4 * i + 3] = scr->usableArea[0].y2 - scr->usableArea[0].y1;
 	}
 
-	XChangeProperty(dpy, scr->root_win, net_workarea, XA_CARDINAL, 32,
-				PropModeReplace, (unsigned char *)area, count);
-	wfree(area);
+	if (!scr->usableArea) {
+		/* If we don't have any info, we fall back on using the complete screen area */
+		total_usable.x1 = 0;
+		total_usable.y1 = 0;
+		total_usable.x2 = scr->scr_width;
+		total_usable.y2 = scr->scr_height;
+
+	} else {
+		int i;
+
+		/*
+		 * the _NET_WORKAREA is supposed to contain the total area of the screen that
+		 * is usable, so we merge the areas from all xrandr sub-screens
+		 */
+		total_usable = scr->usableArea[0];
+
+		for (i = 1; i < wXineramaHeads(scr); i++) {
+			/* The merge is not subtle because _NET_WORKAREA does not need more */
+			if (scr->usableArea[i].x1 < total_usable.x1)
+				total_usable.x1 = scr->usableArea[i].x1;
+
+			if (scr->usableArea[i].y1 < total_usable.y1)
+				total_usable.y1 = scr->usableArea[i].y1;
+
+			if (scr->usableArea[i].x2 > total_usable.x2)
+				total_usable.x2 = scr->usableArea[i].x2;
+
+			if (scr->usableArea[i].y2 > total_usable.y2)
+				total_usable.y2 = scr->usableArea[i].y2;
+		}
+
+	}
+
+	/* We are expected to repeat the information for each workspace */
+	if (scr->workspace_count == 0)
+		nb_workspace = 1;
+	else
+		nb_workspace = scr->workspace_count;
+
+	{
+		long property_value[nb_workspace * 4];
+		int i;
+
+		for (i = 0; i < nb_workspace; i++) {
+			property_value[4 * i + 0] = total_usable.x1;
+			property_value[4 * i + 1] = total_usable.y1;
+			property_value[4 * i + 2] = total_usable.x2 - total_usable.x1;
+			property_value[4 * i + 3] = total_usable.y2 - total_usable.y1;
+		}
+
+		XChangeProperty(dpy, scr->root_win, net_workarea, XA_CARDINAL, 32, PropModeReplace,
+		                (unsigned char *) property_value, nb_workspace * 4);
+	}
 }
 
 Bool wNETWMGetUsableArea(WScreen *scr, int head, WArea *area)
