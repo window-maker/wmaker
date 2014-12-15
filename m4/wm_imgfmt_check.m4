@@ -187,14 +187,34 @@ AC_DEFUN_ONCE([WM_IMGFMT_CHECK_TIFF],
 # the variable 'supported_gfx'
 # When not found, append info to variable 'unsupported'
 AC_DEFUN_ONCE([WM_IMGFMT_CHECK_WEBP],
-[WM_LIB_CHECK([WEBP], ["-lwebp"], [VP8DecodeLayer], [$XLFLAGS $XLIBS],
-    [wm_save_CFLAGS="$CFLAGS"
-     AS_IF([wm_fn_lib_try_compile "webp/decode.h" "" "return 0" ""],
-         [],
-         [AC_MSG_ERROR([found $CACHEVAR but could not find appropriate header - are you missing libwebp-dev package?])])
-     CFLAGS="$wm_save_CFLAGS"],
-    [supported_gfx], [GFXLIBS])dnl
-]) dnl AC_DEFUN
+[AS_IF([test "x$enable_webp" = "xno"],
+    [unsupported="$unsupported WebP"],
+    [AC_CACHE_CHECK([for WebP support library], [wm_cv_imgfmt_webp],
+        [wm_cv_imgfmt_webp=no
+         dnl
+         dnl The library is using a special trick on the functions to provide
+         dnl compatibility between versions, so we cannot try linking against
+         dnl a symbol without first using the header to handle it
+         wm_save_LIBS="$LIBS"
+         LIBS="$LIBS -lwebp"
+         AC_TRY_LINK(
+             [@%:@include <webp/decode.h>],
+             [WebPGetFeatures(NULL, 1024, NULL);],
+             [wm_cv_imgfmt_webp="-lwebp"])
+         LIBS="$wm_save_LIBS"
+         AS_IF([test "x$enable_webp$wm_cv_imgfmt_webp" = "xyesno"],
+              [AC_MSG_ERROR([explicit WebP support requested but no library found])])dnl
+        ])
+     AS_IF([test "x$wm_cv_imgfmt_webp" = "xno"],
+         [unsupported="$unsupported WebP"
+          enable_webp="no"],
+         [supported_gfx="$supported_gfx WebP"
+          WM_APPEND_ONCE([$wm_cv_imgfmt_webp], [GFXLIBS])dnl
+          AC_DEFINE([USE_WEBP], [1],
+              [defined when valid Webp library with header was found])])dnl
+    ])
+AM_CONDITIONAL([USE_WEBP], [test "x$enable_webp" != "xno"])dnl
+])
 
 
 # WM_IMGFMT_CHECK_XPM
