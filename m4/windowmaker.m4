@@ -207,3 +207,40 @@ AS_IF([test "x$wm_cv_func_secure_getenv" != "xno"],
      AC_DEFINE([HAVE_SECURE_GETENV], [1],
          [defined when GNU's secure_getenv function is available])])
 ])
+
+
+# WM_FUNC_OPEN_NOFOLLOW
+# ---------------------
+#
+# Check if the flag 'O_NOFOLLOW' is supported, for the function 'open'
+AC_DEFUN_ONCE([WM_FUNC_OPEN_NOFOLLOW],
+[AC_CACHE_CHECK([for O_NOFOLLOW], [wm_cv_func_open_nofollow],
+    [wm_cv_func_open_nofollow=no
+     wm_save_CPPFLAGS="$CPPFLAGS"
+     for wm_arg in dnl
+"yes"  dnl natively supported, nothing to do
+"-D_POSIX_C_SOURCE=200809L"  dnl the flag was officially added in POSIX.1-2008
+"-D_XOPEN_SOURCE=700"  dnl for recent glibc
+"-D_GNU_SOURCE"  dnl for older glibc
+     ; do
+         AS_IF([test "x$wm_arg" != "xyes"], [CPPFLAGS="$wm_save_CPPFLAGS $wm_arg"])
+         AC_LINK_IFELSE([AC_LANG_PROGRAM([dnl
+@%:@include <sys/types.h>
+@%:@include <sys/stat.h>
+@%:@include <fcntl.h>], [dnl
+  int fd;
+
+  fd = open("/dev/null", O_RDONLY | O_NOFOLLOW);
+  return fd;])], [found=1], [found=0])
+         AS_IF([test $found = 1],
+             [wm_cv_func_open_nofollow="$wm_arg"
+              break])
+     done
+     CPPFLAGS="$wm_save_CPPFLAGS"])
+AS_CASE([$wm_cv_func_open_nofollow],
+    [yes], [],
+    [no],  [AC_DEFINE([O_NOFOLLOW], [0],
+                [defined by configure if the attribute is not defined on your platform])
+            AC_MSG_WARN([flag O_NOFOLLOW is not defined on your platform])],
+    [CPPFLAGS="$CPPFLAGS $wm_cv_func_open_nofollow"])
+])

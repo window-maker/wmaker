@@ -317,6 +317,9 @@ dnl case. One known example is Solaris which needs -lrt
 AC_SEARCH_LIBS([nanosleep], [rt], [],
     [AC_MSG_ERROR([function 'nanosleep' not found, please report to wmaker-dev@lists.windowmaker.org])])
 
+dnl the flag 'O_NOFOLLOW' for 'open' is used in WINGs
+WM_FUNC_OPEN_NOFOLLOW
+
 
 dnl Check for strlcat/strlcpy
 dnl =========================
