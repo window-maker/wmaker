@@ -22,6 +22,19 @@
 #include "WPrefs.h"
 
 
+/* Possible choices to display window information during a resize */
+static const struct {
+	const char *db_value;
+	const char *label;
+} resize_display[] = {
+	{ "corner",   N_("Corner of screen") },
+	{ "center",   N_("Center of screen") },
+	{ "floating", N_("Center of resized window") },
+	{ "line",     N_("Technical drawing-like") },
+	{ "none",     N_("Disabled") }
+};
+
+/* All the places where a balloon can be used to display more stuff to user */
 static const struct {
 	const char *db_key;
 	const char *label;
@@ -112,18 +125,18 @@ static void showData(_Panel * panel)
 	int x;
 
 	str = GetStringForKey("ResizeDisplay");
-	if (!str)
-		str = "corner";
-	if (strcasecmp(str, "corner") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 0);
-	else if (strcasecmp(str, "center") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 1);
-	else if (strcasecmp(str, "floating") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 2);
-	else if (strcasecmp(str, "line") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 3);
-	else if (strcasecmp(str, "none") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 4);
+	if (str != NULL) {
+		for (x = 0; x < wlengthof(resize_display); x++) {
+			if (strcasecmp(str, resize_display[x].db_value) == 0) {
+				WMSetPopUpButtonSelectedItem(panel->sizeP, x);
+				goto found_valid_resize_display;
+			}
+		}
+		wwarning(_("bad value \"%s\" for option %s, using default \"%s\""),
+		         str, "ResizeDisplay", resize_display[0].db_value);
+	}
+	WMSetPopUpButtonSelectedItem(panel->sizeP, 0);
+ found_valid_resize_display:
 
 	str = GetStringForKey("MoveDisplay");
 	if (!str)
@@ -170,24 +183,8 @@ static void storeData(_Panel * panel)
 	Bool lr, tb;
 	int i;
 
-	switch (WMGetPopUpButtonSelectedItem(panel->sizeP)) {
-	case 0:
-		str = "corner";
-		break;
-	case 1:
-		str = "center";
-		break;
-	case 2:
-		str = "floating";
-		break;
-	case 4:
-		str = "none";
-		break;
-	default:
-		str = "line";
-		break;
-	}
-	SetStringForKey(str, "ResizeDisplay");
+	i = WMGetPopUpButtonSelectedItem(panel->sizeP);
+	SetStringForKey(resize_display[i].db_value, "ResizeDisplay");
 
 	switch (WMGetPopUpButtonSelectedItem(panel->posiP)) {
 	case 0:
@@ -245,11 +242,8 @@ static void createPanel(Panel * p)
 	panel->sizeP = WMCreatePopUpButton(panel->sizeF);
 	WMResizeWidget(panel->sizeP, 227, 20);
 	WMMoveWidget(panel->sizeP, 14, 20);
-	WMAddPopUpButtonItem(panel->sizeP, _("Corner of screen"));
-	WMAddPopUpButtonItem(panel->sizeP, _("Center of screen"));
-	WMAddPopUpButtonItem(panel->sizeP, _("Center of resized window"));
-	WMAddPopUpButtonItem(panel->sizeP, _("Technical drawing-like"));
-	WMAddPopUpButtonItem(panel->sizeP, _("Disabled"));
+	for (i = 0; i < wlengthof(resize_display); i++)
+		WMAddPopUpButtonItem(panel->sizeP, _(resize_display[i].label));
 
 	WMMapSubwidgets(panel->sizeF);
 
