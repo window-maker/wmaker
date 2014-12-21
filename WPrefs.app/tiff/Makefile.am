@@ -38,6 +38,7 @@ dist_tiffdata_DATA = \
 	opaque.tiff \
 	opaqueresize.tiff \
 	paths.tiff \
+	smallwindow.tiff \
 	smooth.tiff \
 	sound.tiff \
 	speed0.tiff \

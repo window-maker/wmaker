@@ -37,6 +37,7 @@ dist_xpmdata_DATA = \
 	opaque.xpm \
 	opaqueresize.xpm \
 	paths.xpm \
+	smallwindow.xpm \
 	smooth.xpm \
 	sound.xpm \
 	speed0.xpm \

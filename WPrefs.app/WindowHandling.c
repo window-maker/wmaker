@@ -77,6 +77,8 @@ typedef struct _Panel {
 
 #define NON_OPAQUE_RESIZE_PIXMAP "noopaqueresize"
 
+#define PLACEMENT_WINDOW_PIXMAP "smallwindow"
+
 #define THUMB_SIZE	16
 
 static const struct {
@@ -354,9 +356,29 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->porigF, 9 + (204 - 13 - width) / 2, 45 + (109 - 13 - height) / 2);
 
 	panel->porigW = WMCreateLabel(panel->porigF);
-	WMResizeWidget(panel->porigW, THUMB_SIZE, THUMB_SIZE);
 	WMMoveWidget(panel->porigW, 2, 2);
-	WMSetLabelRelief(panel->porigW, WRRaised);
+	path = LocateImage(PLACEMENT_WINDOW_PIXMAP);
+	if (path) {
+		pixmap = WMCreatePixmapFromFile(scr, path);
+		if (pixmap) {
+			WMSize size;
+
+			WMSetLabelImagePosition(panel->porigW, WIPImageOnly);
+			size = WMGetPixmapSize(pixmap);
+			WMSetLabelImage(panel->porigW, pixmap);
+			WMResizeWidget(panel->porigW, size.width, size.height);
+			WMReleasePixmap(pixmap);
+		} else {
+			wwarning(_("could not load icon %s"), path);
+		}
+		wfree(path);
+		if (!pixmap)
+			goto use_old_window_representation;
+	} else {
+	use_old_window_representation:
+		WMResizeWidget(panel->porigW, THUMB_SIZE, THUMB_SIZE);
+		WMSetLabelRelief(panel->porigW, WRRaised);
+	}
 
 	panel->hsli = WMCreateSlider(panel->placF);
 	WMResizeWidget(panel->hsli, width, 12);
