@@ -95,10 +95,10 @@ static const struct {
 	const char *db_value;
 	const char *label;
 } drag_maximized_window_options[] = {
-	{ "Move",            N_("...change position (normal behavior)") },
-	{ "RestoreGeometry", N_("...restore unmaximized geometry")      },
-	{ "Unmaximize",      N_("...consider the window unmaximized")   },
-	{ "NoMove",          N_("...do not move the window")            }
+	{ "Move",            N_("...changes its position (normal behavior)") },
+	{ "RestoreGeometry", N_("...restores its unmaximized geometry")      },
+	{ "Unmaximize",      N_("...considers the window now unmaximized")   },
+	{ "NoMove",          N_("...does not move the window")               }
 };
 
 static void sliderCallback(WMWidget * w, void *data)
@@ -544,7 +544,7 @@ static void createPanel(Panel * p)
 	panel->dragmaxF = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->dragmaxF, 357, 49);
 	WMMoveWidget(panel->dragmaxF, 8, 172);
-	WMSetFrameTitle(panel->dragmaxF, _("When dragging a maximized window..."));
+	WMSetFrameTitle(panel->dragmaxF, _("Dragging a maximized window..."));
 
 	panel->dragmaxP = WMCreatePopUpButton(panel->dragmaxF);
 	WMResizeWidget(panel->dragmaxP, 328, 20);
