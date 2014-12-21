@@ -1892,8 +1892,8 @@ msgid "miniwindow titles"
 msgstr "minivenster-titels"
 
 #: ../../WPrefs.app/Preferences.c:31
-msgid "miniwindow apercus"
-msgstr "minivenster-voorbeelden"
+msgid "Miniwindow aperçus"
+msgstr "Minivenster-voorbeelden"
 
 #: ../../WPrefs.app/Preferences.c:32
 msgid "application/dock icons"

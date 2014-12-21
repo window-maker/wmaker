@@ -52,7 +52,6 @@ static const struct {
 } balloon_choices[] = {
 	{ "WindowTitleBalloons",       N_("incomplete window titles"), },
 	{ "MiniwindowTitleBalloons",   N_("miniwindow titles"), },
-	{ "MiniwindowApercuBalloons",  N_("miniwindow apercus"), },
 	{ "AppIconBalloons",           N_("application/dock icons"), },
 	{ "HelpBalloons",              N_("internal help"), }
 };
@@ -266,14 +265,14 @@ static void createPanel(Panel * p)
 
     /***************** Balloon Text ****************/
 	panel->ballF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->ballF, 220, 132);
+	WMResizeWidget(panel->ballF, 220, 130);
 	WMMoveWidget(panel->ballF, 285, 7);
 	WMSetFrameTitle(panel->ballF, _("Show balloon for..."));
 
 	for (i = 0; i < wlengthof(balloon_choices); i++) {
 		panel->ballB[i] = WMCreateSwitchButton(panel->ballF);
 		WMResizeWidget(panel->ballB[i], 198, 20);
-		WMMoveWidget(panel->ballB[i], 11, 16 + i * 22);
+		WMMoveWidget(panel->ballB[i], 11, 20 + i * 26);
 		WMSetButtonText(panel->ballB[i], _(balloon_choices[i].label));
 	}
 
