@@ -21,6 +21,17 @@
 
 #include "WPrefs.h"
 
+
+static const struct {
+	const char *db_value;
+	const char *label;
+} icon_animation[] = {
+	{ "zoom",  N_("Shrinking/Zooming") },
+	{ "twist", N_("Spinning/Twisting") },
+	{ "flip",  N_("3D-flipping") },
+	{ "none",  N_("None") }
+};
+
 typedef struct _Panel {
 	WMBox *box;
 
@@ -39,7 +50,7 @@ typedef struct _Panel {
 	WMButton *posB[8];
 
 	WMFrame *animF;
-	WMButton *animB[4];
+	WMButton *animB[wlengthof_nocheck(icon_animation)];
 
 	WMFrame *optF;
 	WMButton *arrB;
@@ -136,17 +147,20 @@ static void showData(_Panel * panel)
 	WMSetPopUpButtonSelectedItem(panel->sizeP, i);
 
 	str = GetStringForKey("IconificationStyle");
-	if (!str)
-		str = "zoom";
-	if (strcasecmp(str, "none") == 0)
-		WMPerformButtonClick(panel->animB[3]);
-	else if (strcasecmp(str, "twist") == 0)
-		WMPerformButtonClick(panel->animB[1]);
-	else if (strcasecmp(str, "flip") == 0)
-		WMPerformButtonClick(panel->animB[2]);
-	else {
-		WMPerformButtonClick(panel->animB[0]);
+	if (str != NULL) {
+		for (i = 0; i < wlengthof(icon_animation); i++) {
+			if (strcasecmp(str, icon_animation[i].db_value) == 0) {
+				WMPerformButtonClick(panel->animB[i]);
+				goto found_animation_value;
+			}
+		}
+		wwarning(_("animation style \"%s\" is unknow, resetting to \"%s\""),
+		         str, icon_animation[0].db_value);
 	}
+	/* If we're here, no valid value have been found so we fall-back to the default */
+	WMPerformButtonClick(panel->animB[0]);
+ found_animation_value:
+	;
 }
 
 static void createPanel(Panel * p)
@@ -230,19 +244,16 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->animF, 240, 10);
 	WMSetFrameTitle(panel->animF, _("Iconification Animation"));
 
-	for (i = 0; i < 4; i++) {
+	for (i = 0; i < wlengthof(icon_animation); i++) {
 		panel->animB[i] = WMCreateRadioButton(panel->animF);
 		WMResizeWidget(panel->animB[i], 145, 20);
 		WMMoveWidget(panel->animB[i], 15, 18 + i * 22);
-	}
-	WMGroupButtons(panel->animB[0], panel->animB[1]);
-	WMGroupButtons(panel->animB[0], panel->animB[2]);
-	WMGroupButtons(panel->animB[0], panel->animB[3]);
 
-	WMSetButtonText(panel->animB[0], _("Shrinking/Zooming"));
-	WMSetButtonText(panel->animB[1], _("Spinning/Twisting"));
-	WMSetButtonText(panel->animB[2], _("3D-flipping"));
-	WMSetButtonText(panel->animB[3], _("None"));
+		if (i > 0)
+			WMGroupButtons(panel->animB[0], panel->animB[i]);
+
+		WMSetButtonText(panel->animB[i], _(icon_animation[i].label));
+	}
 
 	WMMapSubwidgets(panel->animF);
 
@@ -284,6 +295,7 @@ static void createPanel(Panel * p)
 static void storeData(_Panel * panel)
 {
 	char buf[8];
+	int i;
 
 	SetBoolForKey(WMGetButtonSelected(panel->arrB), "AutoArrangeIcons");
 	SetBoolForKey(WMGetButtonSelected(panel->omnB), "StickyIcons");
@@ -310,14 +322,12 @@ static void storeData(_Panel * panel)
 	}
 	SetStringForKey(buf, "IconPosition");
 
-	if (WMGetButtonSelected(panel->animB[0]))
-		SetStringForKey("zoom", "IconificationStyle");
-	else if (WMGetButtonSelected(panel->animB[1]))
-		SetStringForKey("twist", "IconificationStyle");
-	else if (WMGetButtonSelected(panel->animB[2]))
-		SetStringForKey("flip", "IconificationStyle");
-	else
-		SetStringForKey("none", "IconificationStyle");
+	for (i = 0; i < wlengthof(icon_animation); i++) {
+		if (WMGetButtonSelected(panel->animB[i])) {
+			SetStringForKey(icon_animation[i].db_value, "IconificationStyle");
+			break;
+		}
+	}
 }
 
 Panel *InitIcons(WMWidget *parent)
