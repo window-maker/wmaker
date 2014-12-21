@@ -34,6 +34,17 @@ static const struct {
 	{ "none",     N_("Disabled") }
 };
 
+/* Possible choices to display window information while a window is being moved */
+static const struct {
+	const char *db_value;
+	const char *label;
+} move_display[] = {
+	{ "corner",   N_("Corner of screen") },
+	{ "center",   N_("Center of screen") },
+	{ "floating", N_("Center of resized window") },
+	{ "none",     N_("Disabled") }
+};
+
 /* All the places where a balloon can be used to display more stuff to user */
 static const struct {
 	const char *db_key;
@@ -139,16 +150,18 @@ static void showData(_Panel * panel)
  found_valid_resize_display:
 
 	str = GetStringForKey("MoveDisplay");
-	if (!str)
-		str = "corner";
-	if (strcasecmp(str, "corner") == 0)
-		WMSetPopUpButtonSelectedItem(panel->posiP, 0);
-	else if (strcasecmp(str, "center") == 0)
-		WMSetPopUpButtonSelectedItem(panel->posiP, 1);
-	else if (strcasecmp(str, "floating") == 0)
-		WMSetPopUpButtonSelectedItem(panel->posiP, 2);
-	else if (strcasecmp(str, "none") == 0)
-		WMSetPopUpButtonSelectedItem(panel->posiP, 3);
+	if (str != NULL) {
+		for (x = 0; x < wlengthof(move_display); x++) {
+			if (strcasecmp(str, move_display[x].db_value) == 0) {
+				WMSetPopUpButtonSelectedItem(panel->posiP, x);
+				goto found_valid_move_display;
+			}
+		}
+		wwarning(_("bad value \"%s\" for option %s, using default \"%s\""),
+		         str, "MoveDisplay", move_display[0].db_value);
+	}
+	WMSetPopUpButtonSelectedItem(panel->posiP, 0);
+ found_valid_move_display:
 
 	x = GetIntegerForKey("WorkspaceBorderSize");
 	x = x < 0 ? 0 : x;
@@ -186,21 +199,8 @@ static void storeData(_Panel * panel)
 	i = WMGetPopUpButtonSelectedItem(panel->sizeP);
 	SetStringForKey(resize_display[i].db_value, "ResizeDisplay");
 
-	switch (WMGetPopUpButtonSelectedItem(panel->posiP)) {
-	case 0:
-		str = "corner";
-		break;
-	case 1:
-		str = "center";
-		break;
-	case 3:
-		str = "none";
-		break;
-	default:
-		str = "floating";
-		break;
-	}
-	SetStringForKey(str, "MoveDisplay");
+	i = WMGetPopUpButtonSelectedItem(panel->posiP);
+	SetStringForKey(move_display[i].db_value, "MoveDisplay");
 
 	lr = WMGetButtonSelected(panel->lrB);
 	tb = WMGetButtonSelected(panel->tbB);
@@ -259,10 +259,8 @@ static void createPanel(Panel * p)
 	panel->posiP = WMCreatePopUpButton(panel->posiF);
 	WMResizeWidget(panel->posiP, 227, 20);
 	WMMoveWidget(panel->posiP, 14, 20);
-	WMAddPopUpButtonItem(panel->posiP, _("Corner of screen"));
-	WMAddPopUpButtonItem(panel->posiP, _("Center of screen"));
-	WMAddPopUpButtonItem(panel->posiP, _("Center of resized window"));
-	WMAddPopUpButtonItem(panel->posiP, _("Disabled"));
+	for (i = 0; i < wlengthof(move_display); i++)
+		WMAddPopUpButtonItem(panel->posiP, _(move_display[i].label));
 
 	WMMapSubwidgets(panel->posiF);
 
