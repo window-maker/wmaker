@@ -32,6 +32,25 @@ static const struct {
 	{ "none",  N_("None") }
 };
 
+/*
+ * The code is using a convenient trick to make the link between the icon
+ * position and its representing number:
+ *   bit[0] tell if the icon are arranged horizontally or vertically
+ *   bit[2:1] tell the corner to which they are starting from:
+ *     bit[2] is for Top or Bottom choice
+ *     bit[1] is for Left or Right choice
+ */
+static const char icon_position_dbvalue[][4] = {
+	/* 000: */ "tlv",
+	/* 001: */ "tlh",
+	/* 010: */ "trv",
+	/* 011: */ "trh",
+	/* 100: */ "blv",
+	/* 101: */ "blh",
+	/* 110: */ "brv",
+	/* 111: */ "brh"
+};
+
 typedef struct _Panel {
 	WMBox *box;
 
@@ -47,7 +66,7 @@ typedef struct _Panel {
 	WMFrame *posVF;
 	WMFrame *posV;
 
-	WMButton *posB[8];
+	WMButton *posB[wlengthof_nocheck(icon_position_dbvalue)];
 
 	WMFrame *animF;
 	WMButton *animB[wlengthof_nocheck(icon_animation)];
@@ -71,7 +90,7 @@ static void showIconLayout(WMWidget * widget, void *data)
 	int w, h;
 	int i;
 
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < wlengthof(panel->posB); i++) {
 		if (panel->posB[i] == widget) {
 			panel->iconPos = i;
 			break;
@@ -107,35 +126,24 @@ static void showData(_Panel * panel)
 {
 	int i;
 	char *str;
-	char *def = "blh";
 
 	WMSetButtonSelected(panel->arrB, GetBoolForKey("AutoArrangeIcons"));
 	WMSetButtonSelected(panel->omnB, GetBoolForKey("StickyIcons"));
 	WMSetButtonSelected(panel->sclB, GetBoolForKey("SingleClickLaunch"));
 
 	str = GetStringForKey("IconPosition");
-	if (!str)
-		str = def;
-	if (strlen(str) != 3) {
-		wwarning("bad value %s for option IconPosition. Using default blh", str);
-		str = def;
+	if (str != NULL) {
+		for (i = 0; i < wlengthof(icon_position_dbvalue); i++)
+			if (strcmp(str, icon_position_dbvalue[i]) == 0) {
+				panel->iconPos = i;
+				goto found_position_value;
+			}
+		wwarning(_("bad value \"%s\" for option %s, using default \"%s\""),
+		         str, "IconPosition", icon_position_dbvalue[5]);
 	}
-
-	if (str[0] == 't' || str[0] == 'T') {
-		i = 0;
-	} else {
-		i = 4;
-	}
-	if (str[1] == 'r' || str[1] == 'R') {
-		i += 2;
-	}
-	if (str[2] == 'v' || str[2] == 'V') {
-		i += 0;
-	} else {
-		i += 1;
-	}
-	panel->iconPos = i;
-	WMPerformButtonClick(panel->posB[i]);
+	panel->iconPos = 5;
+ found_position_value:
+	WMPerformButtonClick(panel->posB[panel->iconPos]);
 
 	i = GetIntegerForKey("IconSize");
 	i = (i - 24) / 8;
@@ -179,7 +187,7 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->posF, 20, 10);
 	WMSetFrameTitle(panel->posF, _("Icon Positioning"));
 
-	for (i = 0; i < 8; i++) {
+	for (i = 0; i < wlengthof(icon_position_dbvalue); i++) {
 		panel->posB[i] = WMCreateButton(panel->posF, WBTOnOff);
 		WMSetButtonAction(panel->posB[i], showIconLayout, panel);
 
@@ -294,7 +302,6 @@ static void createPanel(Panel * p)
 
 static void storeData(_Panel * panel)
 {
-	char buf[8];
 	int i;
 
 	SetBoolForKey(WMGetButtonSelected(panel->arrB), "AutoArrangeIcons");
@@ -303,24 +310,7 @@ static void storeData(_Panel * panel)
 
 	SetIntegerForKey(WMGetPopUpButtonSelectedItem(panel->sizeP) * 8 + 24, "IconSize");
 
-	buf[3] = 0;
-
-	if (panel->iconPos < 4) {
-		buf[0] = 't';
-	} else {
-		buf[0] = 'b';
-	}
-	if (panel->iconPos & 2) {
-		buf[1] = 'r';
-	} else {
-		buf[1] = 'l';
-	}
-	if (panel->iconPos & 1) {
-		buf[2] = 'h';
-	} else {
-		buf[2] = 'v';
-	}
-	SetStringForKey(buf, "IconPosition");
+	SetStringForKey(icon_position_dbvalue[panel->iconPos], "IconPosition");
 
 	for (i = 0; i < wlengthof(icon_animation); i++) {
 		if (WMGetButtonSelected(panel->animB[i])) {
