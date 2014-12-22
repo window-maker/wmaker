@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-09 08:19+0100\n"
-"PO-Revision-Date: 2014-11-11 00:00+0000\n"
+"POT-Creation-Date: 2014-12-21 21:25+0100\n"
+"PO-Revision-Date: 2014-12-22 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -30,7 +30,7 @@ msgid "Owner of Focused Window Title"
 msgstr "Titel van eigenaar gefocust venster"
 
 #. Related to Menus
-#: ../../WPrefs.app/Appearance.c:52 ../../WPrefs.app/Appearance.c:1489
+#: ../../WPrefs.app/Appearance.c:52 ../../WPrefs.app/Appearance.c:1501
 #: ../../WPrefs.app/FontSimple.c:99
 msgid "Menu Title"
 msgstr "Menutitel"
@@ -93,7 +93,7 @@ msgid "Left"
 msgstr "Links"
 
 #: ../../WPrefs.app/Appearance.c:111 ../../WPrefs.app/TexturePanel.c:1408
-#: ../../WPrefs.app/WindowHandling.c:91 ../../WPrefs.app/Workspace.c:189
+#: ../../WPrefs.app/WindowHandling.c:93 ../../WPrefs.app/Workspace.c:189
 msgid "Center"
 msgstr "Centreren"
 
@@ -169,47 +169,62 @@ msgstr "Werkruimteachtergrond"
 msgid "Select File"
 msgstr "Kies bestand"
 
-#: ../../WPrefs.app/Appearance.c:1469
+#: ../../WPrefs.app/Appearance.c:1313
+#, c-format
+msgid "could not read size of image from '%s', ignoring"
+msgstr "kon afbeeldingsgrootte niet inlezen uit '%s', genegeerd"
+
+#: ../../WPrefs.app/Appearance.c:1318
+#, c-format
+msgid "image \"%s\" has an invalid depth of %d, ignoring"
+msgstr "afbeelding \"%s\" heeft 'n ongeldige kleurdiepte van %d, genegeerd"
+
+#: ../../WPrefs.app/Appearance.c:1324
+#, c-format
+msgid "could not create RImage for \"%s\": %s"
+msgstr "kon RImage niet aanmaken voor \"%s\": %s"
+
+#: ../../WPrefs.app/Appearance.c:1481
 msgid "Focused Window"
 msgstr "Gefocust venster"
 
-#: ../../WPrefs.app/Appearance.c:1476
+#: ../../WPrefs.app/Appearance.c:1488
 msgid "Unfocused Window"
 msgstr "Ongefocust venster"
 
-#: ../../WPrefs.app/Appearance.c:1483
+#: ../../WPrefs.app/Appearance.c:1495
 msgid "Owner of Focused Window"
 msgstr "Eigenaar gefocust venster"
 
-#: ../../WPrefs.app/Appearance.c:1495 ../../WPrefs.app/Appearance.c:1499
+#: ../../WPrefs.app/Appearance.c:1507 ../../WPrefs.app/Appearance.c:1511
 msgid "Normal Item"
 msgstr "Normaal item"
 
-#: ../../WPrefs.app/Appearance.c:1505
+#: ../../WPrefs.app/Appearance.c:1517
 msgid "Disabled Item"
 msgstr "Uitgeschakeld"
 
-#: ../../WPrefs.app/Appearance.c:1520
+#: ../../WPrefs.app/Appearance.c:1532
 msgid "Highlighted"
 msgstr "Gemarkeerd"
 
-#: ../../WPrefs.app/Appearance.c:1613
+#: ../../WPrefs.app/Appearance.c:1625
 msgid "Icon Text"
 msgstr "Icoontekst"
 
-#: ../../WPrefs.app/Appearance.c:1695 ../../WPrefs.app/Appearance.c:1702
+#: ../../WPrefs.app/Appearance.c:1709 ../../WPrefs.app/Appearance.c:1716
 msgid "Clip"
 msgstr "Clip"
 
-#: ../../WPrefs.app/Appearance.c:1699
+#: ../../WPrefs.app/Appearance.c:1713
 msgid "Coll."
 msgstr "Ing."
 
-#: ../../WPrefs.app/Appearance.c:1863
+#: ../../WPrefs.app/Appearance.c:1877
 msgid "Texture"
 msgstr "Textuur"
 
-#: ../../WPrefs.app/Appearance.c:1886
+#: ../../WPrefs.app/Appearance.c:1900
 msgid ""
 "Double click in the texture you want to use\n"
 "for the selected item."
@@ -217,74 +232,74 @@ msgstr ""
 "Dubbelklik in de textuur die u wilt gebruiken\n"
 "voor 't geselecteerde onderdeel."
 
-#: ../../WPrefs.app/Appearance.c:1898
+#: ../../WPrefs.app/Appearance.c:1912
 msgid "New"
 msgstr "Nieuw"
 
-#: ../../WPrefs.app/Appearance.c:1902
+#: ../../WPrefs.app/Appearance.c:1916
 msgid "Create a new texture."
 msgstr "Maak 'n nieuwe textuur aan."
 
-#: ../../WPrefs.app/Appearance.c:1909
+#: ../../WPrefs.app/Appearance.c:1923
 msgid "Extract..."
 msgstr "Uitpakken..."
 
-#: ../../WPrefs.app/Appearance.c:1913
+#: ../../WPrefs.app/Appearance.c:1927
 msgid "Extract texture(s) from a theme or a style file."
 msgstr ""
 "Pak textu(u)r(en) van 'n thema- of\n"
 "stijlbestand uit."
 
-#: ../../WPrefs.app/Appearance.c:1922
+#: ../../WPrefs.app/Appearance.c:1936
 msgid "Edit"
 msgstr "Bewerken"
 
-#: ../../WPrefs.app/Appearance.c:1925
+#: ../../WPrefs.app/Appearance.c:1939
 msgid "Edit the highlighted texture."
 msgstr "Bewerk de gemarkeerde textuur."
 
-#: ../../WPrefs.app/Appearance.c:1932 ../../WPrefs.app/TexturePanel.c:1219
+#: ../../WPrefs.app/Appearance.c:1946 ../../WPrefs.app/TexturePanel.c:1219
 msgid "Delete"
 msgstr "Wissen"
 
-#: ../../WPrefs.app/Appearance.c:1936
+#: ../../WPrefs.app/Appearance.c:1950
 msgid "Delete the highlighted texture."
 msgstr "Wis de gemarkeerde textuur."
 
-#: ../../WPrefs.app/Appearance.c:1948
+#: ../../WPrefs.app/Appearance.c:1962
 msgid "Color"
 msgstr "Kleur"
 
-#: ../../WPrefs.app/Appearance.c:2004
+#: ../../WPrefs.app/Appearance.c:2018
 msgid "Options"
 msgstr "Opties"
 
-#: ../../WPrefs.app/Appearance.c:2011
+#: ../../WPrefs.app/Appearance.c:2025
 msgid "Menu Style"
 msgstr "Menustijl"
 
-#: ../../WPrefs.app/Appearance.c:2029 ../../WPrefs.app/Configurations.c:179
+#: ../../WPrefs.app/Appearance.c:2043 ../../WPrefs.app/Configurations.c:179
 #: ../../WPrefs.app/Configurations.c:191 ../../WPrefs.app/Docks.c:212
 #: ../../WPrefs.app/Docks.c:220 ../../WPrefs.app/Focus.c:279
 #: ../../WPrefs.app/Focus.c:290 ../../WPrefs.app/MenuPreferences.c:127
 #: ../../WPrefs.app/MenuPreferences.c:138
 #: ../../WPrefs.app/MenuPreferences.c:166
 #: ../../WPrefs.app/MenuPreferences.c:181 ../../WPrefs.app/MouseSettings.c:554
-#: ../../WPrefs.app/MouseSettings.c:565 ../../WPrefs.app/WPrefs.c:462
-#: ../../WPrefs.app/WPrefs.c:476
+#: ../../WPrefs.app/MouseSettings.c:565 ../../WPrefs.app/WPrefs.c:459
+#: ../../WPrefs.app/WPrefs.c:473
 #, c-format
 msgid "could not load icon file %s"
 msgstr "kon icoonbestand %s niet laden"
 
-#: ../../WPrefs.app/Appearance.c:2042
+#: ../../WPrefs.app/Appearance.c:2056
 msgid "Title Alignment"
 msgstr "Titeluitlijning"
 
-#: ../../WPrefs.app/Appearance.c:2232
+#: ../../WPrefs.app/Appearance.c:2254
 msgid "Appearance Preferences"
 msgstr "Uiterlijkvoorkeuren"
 
-#: ../../WPrefs.app/Appearance.c:2234
+#: ../../WPrefs.app/Appearance.c:2256
 msgid ""
 "Background texture configuration for windows,\n"
 "menus and icons."
@@ -292,19 +307,19 @@ msgstr ""
 "Achtergrondtextuurinstellingen voor vensters,\n"
 "menu's en iconen."
 
-#: ../../WPrefs.app/Appearance.c:2270
+#: ../../WPrefs.app/Appearance.c:2292
 msgid "Extract Texture"
 msgstr "Textuur uitpakken"
 
-#: ../../WPrefs.app/Appearance.c:2290
+#: ../../WPrefs.app/Appearance.c:2312
 msgid "Textures"
 msgstr "Texturen"
 
-#: ../../WPrefs.app/Appearance.c:2299 ../../WPrefs.app/WPrefs.c:256
+#: ../../WPrefs.app/Appearance.c:2321 ../../WPrefs.app/WPrefs.c:253
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../../WPrefs.app/Appearance.c:2304
+#: ../../WPrefs.app/Appearance.c:2326
 msgid "Extract"
 msgstr "Uitpakken"
 
@@ -494,79 +509,85 @@ msgstr ""
 
 #. default:
 #: ../../WPrefs.app/Expert.c:46
+msgid "Disable workspace pager"
+msgstr "Schakel werkruimtevolger uit."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:49
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)."
 msgstr ""
 "Stel geen niet-WindowMaker-specifieke parameters in (gebruik 'xset' niet)."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:49
+#: ../../WPrefs.app/Expert.c:52
 msgid "Automatically save session when exiting Window Maker."
 msgstr "Sla sessie vanzelf op bij afsluiten van Window Maker."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:52
+#: ../../WPrefs.app/Expert.c:55
 msgid "Use SaveUnder in window frames, icons, menus and other objects."
 msgstr ""
 "Gebruik SaveUnder in vensteromlijsting, iconen, menu's en andere objecten."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:55
+#: ../../WPrefs.app/Expert.c:58
 msgid "Disable confirmation panel for the Kill command."
 msgstr "Schakel bevestigingspaneel voor 't commando 'Doden' uit."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:58
+#: ../../WPrefs.app/Expert.c:61
 msgid "Disable selection animation for selected icons."
 msgstr "Schakel selectieanimatie voor geselecteerde iconen uit."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:61
+#: ../../WPrefs.app/Expert.c:64
 msgid "Smooth font edges (needs restart)."
 msgstr "Vlak letterranden af (herstart nodig)."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:64
+#: ../../WPrefs.app/Expert.c:67
 msgid "Cycle windows only on the active head."
 msgstr "Wissel vensters alleen op de actieve kop."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:67
+#: ../../WPrefs.app/Expert.c:70
 msgid "Ignore minimized windows when cycling."
 msgstr "Negeer geminiaturiseerde vensters bij wisselen."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:70
+#: ../../WPrefs.app/Expert.c:73
 msgid "Show switch panel when cycling windows."
 msgstr "Toon schakelpaneel bij vensters wisselen."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:73
+#: ../../WPrefs.app/Expert.c:76
 msgid "Show workspace title on Clip."
 msgstr "Toon werkruimtetitel op Clip."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:76
+#: ../../WPrefs.app/Expert.c:79
 msgid "Highlight the icon of the application when it has the focus."
 msgstr "Accentueer 't programma-icoon, wanneer 't focus heeft."
 
-#: ../../WPrefs.app/Expert.c:80
+#: ../../WPrefs.app/Expert.c:83
 msgid "Enable keyboard language switch button in window titlebars."
 msgstr "Schakel toetsenbordtaalknop op venstertitelbalken in."
 
-#: ../../WPrefs.app/Expert.c:84
-msgid "Enable window snapping."
-msgstr "Schakel venstermaximalisering door verslepen in."
+#: ../../WPrefs.app/Expert.c:87
+# Recent msgid change on wmaker-dev list
+msgid "Maximize a window to side or corner by dragging."
+msgstr "Maximaliseer 'n venster tegen zijkant of hoek door verslepen."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:87
+#: ../../WPrefs.app/Expert.c:90
 msgid "Open dialogs in the same workspace as their owners."
 msgstr "Open dialogen in dezelfde werkruimte als hun eigenaren."
 
-#: ../../WPrefs.app/Expert.c:211
+#: ../../WPrefs.app/Expert.c:214
 msgid "Expert User Preferences"
 msgstr "Voorkeuren voor ervaren gebruikers"
 
-#: ../../WPrefs.app/Expert.c:213
+#: ../../WPrefs.app/Expert.c:216
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also has some other misc. options."
@@ -586,8 +607,9 @@ msgid "bad option value %s for option ColormapMode. Using default Auto"
 msgstr ""
 "verkeerde optiewaarde %s voor optie ColormapMode. Gebruikt standaard Auto"
 
-#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Preferences.c:97
-#: ../../WPrefs.app/WindowHandling.c:138 ../../WPrefs.app/WindowHandling.c:157
+#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:160
+#: ../../WPrefs.app/Icons.c:362 ../../WPrefs.app/Preferences.c:120
+#: ../../WPrefs.app/WindowHandling.c:140 ../../WPrefs.app/WindowHandling.c:159
 #, c-format
 msgid "OFF"
 msgstr "UIT"
@@ -602,8 +624,7 @@ msgstr "Handmatig:  Klik op 't venster om toetsenbordinvoerfocus te geven"
 
 #: ../../WPrefs.app/Focus.c:213
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
-msgstr ""
-"Vanzelf:  Geef toetsenbordinvoerfocus aan 't venster onder de muispijl"
+msgstr "Vanzelf:  Geef toetsenbordinvoerfocus aan 't venster onder de muispijl"
 
 #: ../../WPrefs.app/Focus.c:226
 msgid "Install colormap from the window..."
@@ -711,72 +732,95 @@ msgstr ""
 "Stel lettertypen in voor Window Maker-titelbalken,\n"
 "menu's enz."
 
-#: ../../WPrefs.app/Icons.c:166
+#: ../../WPrefs.app/Icons.c:29
+msgid "Shrinking/Zooming"
+msgstr "Krimpen/zoomen"
+
+#: ../../WPrefs.app/Icons.c:30
+msgid "Spinning/Twisting"
+msgstr "Spinnen/draaien"
+
+#: ../../WPrefs.app/Icons.c:31
+msgid "3D-flipping"
+msgstr "3D wentelen"
+
+#: ../../WPrefs.app/Icons.c:32 ../../WPrefs.app/MouseSettings.c:56
+#: ../../WPrefs.app/MouseSettings.c:70
+msgid "None"
+msgstr "Geen"
+
+#: ../../WPrefs.app/Icons.c:184 ../../WPrefs.app/Preferences.c:145
+#: ../../WPrefs.app/Preferences.c:159
+#, c-format
+msgid "bad value \"%s\" for option %s, using default \"%s\""
+msgstr "verkeerde waarde \"%s\" voor optie %s, gebruikt standaard \"%s\""
+
+#: ../../WPrefs.app/Icons.c:221
+#, c-format
+msgid "animation style \"%s\" is unknow, resetting to \"%s\""
+msgstr "animatiestijl \"%s\" is onbekend, teruggezet op \"%s\""
+
+#: ../../WPrefs.app/Icons.c:248
 msgid "Icon Positioning"
 msgstr "Icoonplaatsing"
 
-#: ../../WPrefs.app/Icons.c:212
+#: ../../WPrefs.app/Icons.c:327
 msgid "Icon Size"
 msgstr "Icoongrootte"
 
-#: ../../WPrefs.app/Icons.c:214
+#: ../../WPrefs.app/Icons.c:329
 msgid "The size of the dock/application icon and miniwindows"
 msgstr ""
 "De afmetingen van 't dok-/programma-icoon\n"
 "en minivensters"
 
-#: ../../WPrefs.app/Icons.c:231
+#: ../../WPrefs.app/Icons.c:346
+msgid "Miniwindow aperçus"
+msgstr "Miniaturen"
+
+#: ../../WPrefs.app/Icons.c:348
+msgid ""
+"The Aperçu provides a small view of the content of the\n"
+"window when the mouse is placed over the icon."
+msgstr ""
+"De miniatuur biedt 'n kleine blik op de inhoud van 't\n"
+"minivenster, als de muis op 't icoon wordt geplaatst."
+
+#: ../../WPrefs.app/Icons.c:370
 msgid "Iconification Animation"
 msgstr "Iconificeringsanimatie"
 
-#: ../../WPrefs.app/Icons.c:242
-msgid "Shrinking/Zooming"
-msgstr "Krimpen/zoomen"
-
-#: ../../WPrefs.app/Icons.c:243
-msgid "Spinning/Twisting"
-msgstr "Spinnen/draaien"
-
-#: ../../WPrefs.app/Icons.c:244
-msgid "3D-flipping"
-msgstr "3D wentelen"
-
-#: ../../WPrefs.app/Icons.c:245 ../../WPrefs.app/MouseSettings.c:56
-#: ../../WPrefs.app/MouseSettings.c:70
-msgid "None"
-msgstr "Geen"
-
-#: ../../WPrefs.app/Icons.c:258
+#: ../../WPrefs.app/Icons.c:394
 msgid "Auto-arrange icons"
 msgstr "Iconen vanzelf schikken"
 
-#: ../../WPrefs.app/Icons.c:260
+#: ../../WPrefs.app/Icons.c:396
 msgid "Keep icons and miniwindows arranged all the time."
 msgstr "Houd iconen en minivensters altijd geschikt."
 
-#: ../../WPrefs.app/Icons.c:265
+#: ../../WPrefs.app/Icons.c:401
 msgid "Omnipresent miniwindows"
 msgstr "Alomtegenwoordige minivensters"
 
-#: ../../WPrefs.app/Icons.c:267
+#: ../../WPrefs.app/Icons.c:403
 msgid "Make miniwindows be present in all workspaces."
 msgstr "Maak minivensters aanwezig in alle werkruimten."
 
-#: ../../WPrefs.app/Icons.c:272
+#: ../../WPrefs.app/Icons.c:408
 msgid "Single click activation"
 msgstr "Enkelkliksactivering"
 
-#: ../../WPrefs.app/Icons.c:274
+#: ../../WPrefs.app/Icons.c:410
 msgid "Launch applications and restore windows with a single click."
 msgstr ""
 "Start programma's op, en herstel vensters met\n"
 "'n enkele klik."
 
-#: ../../WPrefs.app/Icons.c:329
+#: ../../WPrefs.app/Icons.c:462
 msgid "Icon Preferences"
 msgstr "Icoonvoorkeuren"
 
-#: ../../WPrefs.app/Icons.c:331
+#: ../../WPrefs.app/Icons.c:464
 msgid ""
 "Icon/Miniwindow handling options. Icon positioning\n"
 "area, sizes of icons, miniaturization animation style."
@@ -885,270 +929,278 @@ msgid "Maximus: Tiled maximization "
 msgstr "Maximus: tegelmaximalisering "
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:92
+msgid "Toggle window omnipresent status"
+msgstr "Schakel 'venster alomtegenwoordig' in/uit"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:93
 msgid "Raise active window"
 msgstr "Verhoog actief venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:93
+#: ../../WPrefs.app/KeyboardShortcuts.c:94
 msgid "Lower active window"
 msgstr "Verlaag actief venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:94
+#: ../../WPrefs.app/KeyboardShortcuts.c:95
 msgid "Raise/Lower window under mouse pointer"
 msgstr "Verhoog/verlaag venster onder muispijl"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:95
+#: ../../WPrefs.app/KeyboardShortcuts.c:96
 msgid "Shade active window"
 msgstr "Rol actief venster op"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:96
+#: ../../WPrefs.app/KeyboardShortcuts.c:97
 msgid "Move/Resize active window"
 msgstr "Verplaats/vergroot actief venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:97
+#: ../../WPrefs.app/KeyboardShortcuts.c:98
 msgid "Select active window"
 msgstr "Selecteer actief venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:98
+#: ../../WPrefs.app/KeyboardShortcuts.c:99
 msgid "Focus next window"
 msgstr "Focus volgende venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:99
+#: ../../WPrefs.app/KeyboardShortcuts.c:100
 msgid "Focus previous window"
 msgstr "Focus vorig venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:100
+#: ../../WPrefs.app/KeyboardShortcuts.c:101
 msgid "Focus next group window"
 msgstr "Focus volgend groepsvenster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:101
+#: ../../WPrefs.app/KeyboardShortcuts.c:102
 msgid "Focus previous group window"
 msgstr "Focus vorig groepsvenster"
 
 #. Workspace Related
-#: ../../WPrefs.app/KeyboardShortcuts.c:104
+#: ../../WPrefs.app/KeyboardShortcuts.c:105
+msgid "Open workspace pager"
+msgstr "Open werkruimtevolger"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:106
 msgid "Switch to next workspace"
 msgstr "Schakel naar volgende werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:105
+#: ../../WPrefs.app/KeyboardShortcuts.c:107
 msgid "Switch to previous workspace"
 msgstr "Schakel naar vorige werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:106
+#: ../../WPrefs.app/KeyboardShortcuts.c:108
 msgid "Switch to last used workspace"
 msgstr "Schakel n. laatst gebruikte werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:107
+#: ../../WPrefs.app/KeyboardShortcuts.c:109
 msgid "Switch to next ten workspaces"
 msgstr "Schakel 10 werkruimten verder"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:108
+#: ../../WPrefs.app/KeyboardShortcuts.c:110
 msgid "Switch to previous ten workspaces"
 msgstr "Schakel 10 werkruimten terug"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:109
+#: ../../WPrefs.app/KeyboardShortcuts.c:111
 msgid "Switch to workspace 1"
 msgstr "Schakel naar werkruimte 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:110
+#: ../../WPrefs.app/KeyboardShortcuts.c:112
 msgid "Switch to workspace 2"
 msgstr "Schakel naar werkruimte 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:111
+#: ../../WPrefs.app/KeyboardShortcuts.c:113
 msgid "Switch to workspace 3"
 msgstr "Schakel naar werkruimte 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:112
+#: ../../WPrefs.app/KeyboardShortcuts.c:114
 msgid "Switch to workspace 4"
 msgstr "Schakel naar werkruimte 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:113
+#: ../../WPrefs.app/KeyboardShortcuts.c:115
 msgid "Switch to workspace 5"
 msgstr "Schakel naar werkruimte 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:114
+#: ../../WPrefs.app/KeyboardShortcuts.c:116
 msgid "Switch to workspace 6"
 msgstr "Schakel naar werkruimte 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:115
+#: ../../WPrefs.app/KeyboardShortcuts.c:117
 msgid "Switch to workspace 7"
 msgstr "Schakel naar werkruimte 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:116
+#: ../../WPrefs.app/KeyboardShortcuts.c:118
 msgid "Switch to workspace 8"
 msgstr "Schakel naar werkruimte 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:117
+#: ../../WPrefs.app/KeyboardShortcuts.c:119
 msgid "Switch to workspace 9"
 msgstr "Schakel naar werkruimte 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:118
+#: ../../WPrefs.app/KeyboardShortcuts.c:120
 msgid "Switch to workspace 10"
 msgstr "Schakel naar werkruimte 10"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:119
+#: ../../WPrefs.app/KeyboardShortcuts.c:121
 msgid "Move window to next workspace"
 msgstr "Verpl. venster n. volgende werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:120
+#: ../../WPrefs.app/KeyboardShortcuts.c:122
 msgid "Move window to previous workspace"
 msgstr "Verpl. venster n. vorige werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:121
+#: ../../WPrefs.app/KeyboardShortcuts.c:123
 msgid "Move window to last used workspace"
 msgstr "Verpl. venster n. laatst gebruikte werkr."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:122
+#: ../../WPrefs.app/KeyboardShortcuts.c:124
 msgid "Move window to next ten workspaces"
 msgstr "Verpl. venster 10 werkruimten verder"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:123
+#: ../../WPrefs.app/KeyboardShortcuts.c:125
 msgid "Move window to previous ten workspaces"
 msgstr "Verpl. venster 10 werkruimten terug"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:124
+#: ../../WPrefs.app/KeyboardShortcuts.c:126
 msgid "Move window to workspace 1"
 msgstr "Verplaats venster naar werkruimte 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:125
+#: ../../WPrefs.app/KeyboardShortcuts.c:127
 msgid "Move window to workspace 2"
 msgstr "Verplaats venster naar werkruimte 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:126
+#: ../../WPrefs.app/KeyboardShortcuts.c:128
 msgid "Move window to workspace 3"
 msgstr "Verplaats venster naar werkruimte 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:127
+#: ../../WPrefs.app/KeyboardShortcuts.c:129
 msgid "Move window to workspace 4"
 msgstr "Verplaats venster naar werkruimte 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:128
+#: ../../WPrefs.app/KeyboardShortcuts.c:130
 msgid "Move window to workspace 5"
 msgstr "Verplaats venster naar werkruimte 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:129
+#: ../../WPrefs.app/KeyboardShortcuts.c:131
 msgid "Move window to workspace 6"
 msgstr "Verplaats venster naar werkruimte 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:130
+#: ../../WPrefs.app/KeyboardShortcuts.c:132
 msgid "Move window to workspace 7"
 msgstr "Verplaats venster naar werkruimte 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:131
+#: ../../WPrefs.app/KeyboardShortcuts.c:133
 msgid "Move window to workspace 8"
 msgstr "Verplaats venster naar werkruimte 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:132
+#: ../../WPrefs.app/KeyboardShortcuts.c:134
 msgid "Move window to workspace 9"
 msgstr "Verplaats venster naar werkruimte 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:133
+#: ../../WPrefs.app/KeyboardShortcuts.c:135
 msgid "Move window to workspace 10"
 msgstr "Verplaats venster naar werkruimte 10"
 
 #. Window Selection
-#: ../../WPrefs.app/KeyboardShortcuts.c:136
+#: ../../WPrefs.app/KeyboardShortcuts.c:138
 msgid "Shortcut for window 1"
 msgstr "Sneltoets voor venster 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:137
+#: ../../WPrefs.app/KeyboardShortcuts.c:139
 msgid "Shortcut for window 2"
 msgstr "Sneltoets voor venster 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:138
+#: ../../WPrefs.app/KeyboardShortcuts.c:140
 msgid "Shortcut for window 3"
 msgstr "Sneltoets voor venster 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:139
+#: ../../WPrefs.app/KeyboardShortcuts.c:141
 msgid "Shortcut for window 4"
 msgstr "Sneltoets voor venster 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:140
+#: ../../WPrefs.app/KeyboardShortcuts.c:142
 msgid "Shortcut for window 5"
 msgstr "Sneltoets voor venster 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:141
+#: ../../WPrefs.app/KeyboardShortcuts.c:143
 msgid "Shortcut for window 6"
 msgstr "Sneltoets voor venster 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:142
+#: ../../WPrefs.app/KeyboardShortcuts.c:144
 msgid "Shortcut for window 7"
 msgstr "Sneltoets voor venster 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:143
+#: ../../WPrefs.app/KeyboardShortcuts.c:145
 msgid "Shortcut for window 8"
 msgstr "Sneltoets voor venster 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:144
+#: ../../WPrefs.app/KeyboardShortcuts.c:146
 msgid "Shortcut for window 9"
 msgstr "Sneltoets voor venster 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:145
+#: ../../WPrefs.app/KeyboardShortcuts.c:147
 msgid "Shortcut for window 10"
 msgstr "Sneltoets voor venster 10"
 
 #. Misc.
-#: ../../WPrefs.app/KeyboardShortcuts.c:148
+#: ../../WPrefs.app/KeyboardShortcuts.c:150
 msgid "Launch new instance of application"
 msgstr "Start nieuw exemplaar van programma op"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:149
+#: ../../WPrefs.app/KeyboardShortcuts.c:151
 msgid "Switch to Next Screen/Monitor"
 msgstr "Schakel naar volgend scherm/monitor"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:150
+#: ../../WPrefs.app/KeyboardShortcuts.c:152
 msgid "Run application"
 msgstr "Voer programma uit"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:151
+#: ../../WPrefs.app/KeyboardShortcuts.c:153
 msgid "Raise/Lower Dock"
 msgstr "Verhoog/verlaag Dok"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:152
+#: ../../WPrefs.app/KeyboardShortcuts.c:154
 msgid "Raise/Lower Clip"
 msgstr "Verhoog/verlaag Clip"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:154
+#: ../../WPrefs.app/KeyboardShortcuts.c:156
 msgid "Toggle keyboard language"
 msgstr "Wissel toetsenbordtaal"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:371 ../../WPrefs.app/Menu.c:275
+#: ../../WPrefs.app/KeyboardShortcuts.c:373 ../../WPrefs.app/Menu.c:274
 #: ../../WPrefs.app/TexturePanel.c:1425
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:373
+#: ../../WPrefs.app/KeyboardShortcuts.c:375
 msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
 msgstr ""
 "Druk op de verlangde sneltoets(en), of klik Annuleren om opnemen te stoppen."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:392
-#: ../../WPrefs.app/KeyboardShortcuts.c:562 ../../WPrefs.app/Menu.c:285
-#: ../../WPrefs.app/Menu.c:733
+#: ../../WPrefs.app/KeyboardShortcuts.c:394
+#: ../../WPrefs.app/KeyboardShortcuts.c:564 ../../WPrefs.app/Menu.c:284
+#: ../../WPrefs.app/Menu.c:732
 msgid "Capture"
 msgstr "Opnemen"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:393
-#: ../../WPrefs.app/KeyboardShortcuts.c:570
+#: ../../WPrefs.app/KeyboardShortcuts.c:395
+#: ../../WPrefs.app/KeyboardShortcuts.c:572
 msgid "Click on Capture to interactively define the shortcut key."
 msgstr "Klik op Opnemen om interactief de sneltoets te bepalen."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:519
+#: ../../WPrefs.app/KeyboardShortcuts.c:521
 msgid "Actions"
 msgstr "Acties"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:546
+#: ../../WPrefs.app/KeyboardShortcuts.c:548
 msgid "Shortcut"
 msgstr "Sneltoets"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:556 ../../WPrefs.app/Menu.c:739
+#: ../../WPrefs.app/KeyboardShortcuts.c:558 ../../WPrefs.app/Menu.c:738
 msgid "Clear"
 msgstr "Wissen"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:611
+#: ../../WPrefs.app/KeyboardShortcuts.c:613
 msgid "Keyboard Shortcut Preferences"
 msgstr "Sneltoetsvoorkeuren"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:613
+#: ../../WPrefs.app/KeyboardShortcuts.c:615
 msgid ""
 "Change the keyboard shortcuts for actions such\n"
 "as changing workspaces and opening menus."
@@ -1156,188 +1208,188 @@ msgstr ""
 "Wijzig de sneltoetsen voor acties, zoals van\n"
 "werkruimte wisselen en menu's openen."
 
-#: ../../WPrefs.app/Menu.c:251
+#: ../../WPrefs.app/Menu.c:250
 msgid "Select Program"
 msgstr "Kies programma"
 
-#: ../../WPrefs.app/Menu.c:413
+#: ../../WPrefs.app/Menu.c:412
 msgid "New Items"
 msgstr "Nieuwe onderdelen"
 
-#: ../../WPrefs.app/Menu.c:414
+#: ../../WPrefs.app/Menu.c:413
 msgid "Sample Commands"
 msgstr "Voorbeeldcommando's"
 
-#: ../../WPrefs.app/Menu.c:415
+#: ../../WPrefs.app/Menu.c:414
 msgid "Sample Submenus"
 msgstr "Voorbeeldmenu's"
 
-#: ../../WPrefs.app/Menu.c:427
+#: ../../WPrefs.app/Menu.c:426
 msgid "Run Program"
 msgstr "Programma uitvoeren"
 
-#: ../../WPrefs.app/Menu.c:428
+#: ../../WPrefs.app/Menu.c:427
 msgid "Internal Command"
 msgstr "Intern commando"
 
-#: ../../WPrefs.app/Menu.c:429
+#: ../../WPrefs.app/Menu.c:428
 msgid "Submenu"
 msgstr "Submenu"
 
-#: ../../WPrefs.app/Menu.c:430
+#: ../../WPrefs.app/Menu.c:429
 msgid "External Submenu"
 msgstr "Extern submenu"
 
-#: ../../WPrefs.app/Menu.c:431
+#: ../../WPrefs.app/Menu.c:430
 msgid "Generated Submenu"
 msgstr "Aangemaakt submenu"
 
-#: ../../WPrefs.app/Menu.c:432
+#: ../../WPrefs.app/Menu.c:431
 msgid "Generated PL Menu"
 msgstr "Aangemaakt PL-menu"
 
-#: ../../WPrefs.app/Menu.c:433
+#: ../../WPrefs.app/Menu.c:432
 msgid "Directory Contents"
 msgstr "Mapinhoud"
 
-#: ../../WPrefs.app/Menu.c:434
+#: ../../WPrefs.app/Menu.c:433
 msgid "Workspace Menu"
 msgstr "Werkruimtenmenu"
 
-#: ../../WPrefs.app/Menu.c:435 ../../WPrefs.app/MouseSettings.c:58
+#: ../../WPrefs.app/Menu.c:434 ../../WPrefs.app/MouseSettings.c:58
 msgid "Window List Menu"
 msgstr "Vensterlijstmenu"
 
-#: ../../WPrefs.app/Menu.c:454
+#: ../../WPrefs.app/Menu.c:453
 msgid "XTerm"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:457
+#: ../../WPrefs.app/Menu.c:456
 msgid "rxvt"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:460
+#: ../../WPrefs.app/Menu.c:459
 msgid "ETerm"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:463
+#: ../../WPrefs.app/Menu.c:462
 msgid "Run..."
 msgstr "Uitvoeren..."
 
-#: ../../WPrefs.app/Menu.c:464
+#: ../../WPrefs.app/Menu.c:463
 #, c-format
 msgid "%A(Run,Type command to run)"
 msgstr "%A(Uitvoeren,Typ uit te voeren commando)"
 
-#: ../../WPrefs.app/Menu.c:466
+#: ../../WPrefs.app/Menu.c:465
 msgid "Firefox"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:469
+#: ../../WPrefs.app/Menu.c:468
 msgid "gimp"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:472
+#: ../../WPrefs.app/Menu.c:471
 msgid "epic"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:475
+#: ../../WPrefs.app/Menu.c:474
 msgid "ee"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:478
+#: ../../WPrefs.app/Menu.c:477
 msgid "xv"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:481
+#: ../../WPrefs.app/Menu.c:480
 msgid "Evince"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:484
+#: ../../WPrefs.app/Menu.c:483
 msgid "ghostview"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:487 ../../WPrefs.app/Menu.c:758
+#: ../../WPrefs.app/Menu.c:486 ../../WPrefs.app/Menu.c:757
 msgid "Exit Window Maker"
 msgstr "Window Maker afsluiten"
 
-#: ../../WPrefs.app/Menu.c:509
+#: ../../WPrefs.app/Menu.c:508
 msgid "Debian Menu"
 msgstr "Debian-menu"
 
-#: ../../WPrefs.app/Menu.c:512
+#: ../../WPrefs.app/Menu.c:511
 msgid "RedHat Menu"
 msgstr "RedHat-menu"
 
-#: ../../WPrefs.app/Menu.c:515
+#: ../../WPrefs.app/Menu.c:514
 msgid "Menu Conectiva"
 msgstr "Conectiva-menu"
 
-#: ../../WPrefs.app/Menu.c:518 ../../WPrefs.app/Themes.c:211
+#: ../../WPrefs.app/Menu.c:517 ../../WPrefs.app/Themes.c:211
 msgid "Themes"
 msgstr "Thema's"
 
-#: ../../WPrefs.app/Menu.c:524
+#: ../../WPrefs.app/Menu.c:523
 msgid "Bg Images (scale)"
 msgstr "Achtergr. (schaal)"
 
-#: ../../WPrefs.app/Menu.c:530
+#: ../../WPrefs.app/Menu.c:529
 msgid "Bg Images (tile)"
 msgstr "Achtergr. (tegel)"
 
-#: ../../WPrefs.app/Menu.c:536
+#: ../../WPrefs.app/Menu.c:535
 msgid "Assorted XTerms"
 msgstr "Allerlei XTerms"
 
-#: ../../WPrefs.app/Menu.c:538
+#: ../../WPrefs.app/Menu.c:537
 msgid "XTerm Yellow on Blue"
 msgstr "XTerm geel op blauw"
 
-#: ../../WPrefs.app/Menu.c:541
+#: ../../WPrefs.app/Menu.c:540
 msgid "XTerm White on Black"
 msgstr "XTerm wit op zwart"
 
-#: ../../WPrefs.app/Menu.c:544
+#: ../../WPrefs.app/Menu.c:543
 msgid "XTerm Black on White"
 msgstr "XTerm zwart op wit"
 
-#: ../../WPrefs.app/Menu.c:547
+#: ../../WPrefs.app/Menu.c:546
 msgid "XTerm Black on Beige"
 msgstr "XTerm zwart op beige"
 
-#: ../../WPrefs.app/Menu.c:550
+#: ../../WPrefs.app/Menu.c:549
 msgid "XTerm White on Green"
 msgstr "XTerm wit op groen"
 
-#: ../../WPrefs.app/Menu.c:553
+#: ../../WPrefs.app/Menu.c:552
 msgid "XTerm White on Olive"
 msgstr "XTerm wit op olijfgroen"
 
-#: ../../WPrefs.app/Menu.c:556
+#: ../../WPrefs.app/Menu.c:555
 msgid "XTerm Blue on Blue"
 msgstr "XTerm blauw op blauw"
 
-#: ../../WPrefs.app/Menu.c:559
+#: ../../WPrefs.app/Menu.c:558
 msgid "XTerm BIG FONTS"
 msgstr "XTerm GROTE LETTERS"
 
-#: ../../WPrefs.app/Menu.c:580
+#: ../../WPrefs.app/Menu.c:579
 msgid "Program to Run"
 msgstr "Uit te voeren programma"
 
-#: ../../WPrefs.app/Menu.c:590
+#: ../../WPrefs.app/Menu.c:589
 msgid "Browse"
 msgstr "Bladeren"
 
-#: ../../WPrefs.app/Menu.c:599
+#: ../../WPrefs.app/Menu.c:598
 msgid "Run the program inside a Xterm"
 msgstr "Voer 't programma uit in 'n XTerm"
 
-#: ../../WPrefs.app/Menu.c:608
+#: ../../WPrefs.app/Menu.c:607
 msgid "Path for Menu"
 msgstr "Pad naar menu"
 
-#: ../../WPrefs.app/Menu.c:619
+#: ../../WPrefs.app/Menu.c:618
 msgid ""
 "Enter the path for a file containing a menu\n"
 "or a list of directories with the programs you\n"
@@ -1353,11 +1405,11 @@ msgstr ""
 "of\n"
 "/usr/bin ~/xbin"
 
-#: ../../WPrefs.app/Menu.c:631 ../../WPrefs.app/Menu.c:656
+#: ../../WPrefs.app/Menu.c:630 ../../WPrefs.app/Menu.c:655
 msgid "Command"
 msgstr "Commando"
 
-#: ../../WPrefs.app/Menu.c:642
+#: ../../WPrefs.app/Menu.c:641
 msgid ""
 "Enter a command that outputs a menu\n"
 "definition to stdout when invoked."
@@ -1365,7 +1417,7 @@ msgstr ""
 "Voer 'n commando in, dat bij aanroepen\n"
 "'n uitgewerkt menu geeft naar 'stdout'."
 
-#: ../../WPrefs.app/Menu.c:647 ../../WPrefs.app/Menu.c:672
+#: ../../WPrefs.app/Menu.c:646 ../../WPrefs.app/Menu.c:671
 msgid ""
 "Cache menu contents after opening for\n"
 "the first time"
@@ -1373,7 +1425,7 @@ msgstr ""
 "Bewaar menu-inhoud na de eerste keer\n"
 "openen"
 
-#: ../../WPrefs.app/Menu.c:667
+#: ../../WPrefs.app/Menu.c:666
 msgid ""
 "Enter a command that outputs a proplist menu\n"
 "definition to stdout when invoked."
@@ -1382,11 +1434,11 @@ msgstr ""
 "'n uitgewerkt 'property list'-menu geeft\n"
 "naar 'stdout'."
 
-#: ../../WPrefs.app/Menu.c:681
+#: ../../WPrefs.app/Menu.c:680
 msgid "Command to Open Files"
 msgstr "Commando om bestanden te openen"
 
-#: ../../WPrefs.app/Menu.c:692
+#: ../../WPrefs.app/Menu.c:691
 msgid ""
 "Enter the command you want to use to open the\n"
 "files in the directories listed below."
@@ -1394,71 +1446,71 @@ msgstr ""
 "Voer 't te gebruiken commando in, om de\n"
 "bestanden in onderstaande mappen te openen."
 
-#: ../../WPrefs.app/Menu.c:700
+#: ../../WPrefs.app/Menu.c:699
 msgid "Directories with Files"
 msgstr "Mappen met bestanden"
 
-#: ../../WPrefs.app/Menu.c:711
+#: ../../WPrefs.app/Menu.c:710
 msgid "Strip extensions from file names"
 msgstr "Extensies van bestandsnamen af halen"
 
-#: ../../WPrefs.app/Menu.c:722
+#: ../../WPrefs.app/Menu.c:721
 msgid "Keyboard Shortcut"
 msgstr "Sneltoets"
 
-#: ../../WPrefs.app/Menu.c:754
+#: ../../WPrefs.app/Menu.c:753
 msgid "Arrange Icons"
 msgstr "Iconen schikken"
 
-#: ../../WPrefs.app/Menu.c:755
+#: ../../WPrefs.app/Menu.c:754
 msgid "Hide All Windows Except For The Focused One"
 msgstr "Alle vensters verbergen, behalve die focus heeft"
 
-#: ../../WPrefs.app/Menu.c:756
+#: ../../WPrefs.app/Menu.c:755
 msgid "Show All Windows"
 msgstr "Alle vensters tonen"
 
-#: ../../WPrefs.app/Menu.c:759
+#: ../../WPrefs.app/Menu.c:758
 msgid "Exit X Session"
 msgstr "X-sessie afsluiten"
 
-#: ../../WPrefs.app/Menu.c:760
+#: ../../WPrefs.app/Menu.c:759
 msgid "Restart Window Maker"
 msgstr "Window Maker herstarten"
 
-#: ../../WPrefs.app/Menu.c:761
+#: ../../WPrefs.app/Menu.c:760
 msgid "Start Another Window Manager   : ("
 msgstr "Andere vensterbeheerder starten   : ("
 
-#: ../../WPrefs.app/Menu.c:763
+#: ../../WPrefs.app/Menu.c:762
 msgid "Save Current Session"
 msgstr "Huidige sessie opslaan"
 
-#: ../../WPrefs.app/Menu.c:764
+#: ../../WPrefs.app/Menu.c:763
 msgid "Clear Saved Session"
 msgstr "Opgeslagen sessie wissen"
 
-#: ../../WPrefs.app/Menu.c:765
+#: ../../WPrefs.app/Menu.c:764
 msgid "Refresh Screen"
 msgstr "Scherm vernieuwen"
 
-#: ../../WPrefs.app/Menu.c:766
+#: ../../WPrefs.app/Menu.c:765
 msgid "Open Info Panel"
 msgstr "Infopaneel openen"
 
-#: ../../WPrefs.app/Menu.c:767
+#: ../../WPrefs.app/Menu.c:766
 msgid "Open Copyright Panel"
 msgstr "Auteursrechtenpaneel openen"
 
-#: ../../WPrefs.app/Menu.c:772
+#: ../../WPrefs.app/Menu.c:771
 msgid "Window Manager to Start"
 msgstr "Te starten vensterbeheerder"
 
-#: ../../WPrefs.app/Menu.c:785
+#: ../../WPrefs.app/Menu.c:784
 msgid "Do not confirm action."
 msgstr "Actie niet bevestigen."
 
-#: ../../WPrefs.app/Menu.c:792
+#: ../../WPrefs.app/Menu.c:791
 msgid ""
 "Instructions:\n"
 "\n"
@@ -1483,48 +1535,48 @@ msgstr ""
 "- Klik op 'n menu-ingang, om gerelateerde informatie te\n"
 "  wijzigen."
 
-#: ../../WPrefs.app/Menu.c:1031
+#: ../../WPrefs.app/Menu.c:1030
 #, c-format
 msgid "unknown command '%s' in menu"
 msgstr "onbekend commando '%s' in menu"
 
-#: ../../WPrefs.app/Menu.c:1055
+#: ../../WPrefs.app/Menu.c:1054
 msgid ": Execute Program"
 msgstr ": start programma"
 
-#: ../../WPrefs.app/Menu.c:1059
+#: ../../WPrefs.app/Menu.c:1058
 msgid ": Perform Internal Command"
 msgstr ": voer intern commando uit"
 
-#: ../../WPrefs.app/Menu.c:1063
+#: ../../WPrefs.app/Menu.c:1062
 msgid ": Open a Submenu"
 msgstr ": open 'n submenu"
 
-#: ../../WPrefs.app/Menu.c:1067
+#: ../../WPrefs.app/Menu.c:1066
 msgid ": Program Generated Submenu"
 msgstr ": submenu uit programma"
 
-#: ../../WPrefs.app/Menu.c:1071
+#: ../../WPrefs.app/Menu.c:1070
 msgid ": Program Generated Proplist Submenu"
 msgstr ": PropList-submenu uit programma"
 
-#: ../../WPrefs.app/Menu.c:1075
+#: ../../WPrefs.app/Menu.c:1074
 msgid ": Directory Contents Menu"
 msgstr ": menu met mapinhoud"
 
-#: ../../WPrefs.app/Menu.c:1079
+#: ../../WPrefs.app/Menu.c:1078
 msgid ": Open Workspaces Submenu"
 msgstr ": open werkruimtensubmenu"
 
-#: ../../WPrefs.app/Menu.c:1083
+#: ../../WPrefs.app/Menu.c:1082
 msgid ": Open Window List Submenu"
 msgstr ": open vensterlijstsubmenu"
 
-#: ../../WPrefs.app/Menu.c:1299
+#: ../../WPrefs.app/Menu.c:1298
 msgid "Remove Submenu"
 msgstr "Submenu verwijderen"
 
-#: ../../WPrefs.app/Menu.c:1300
+#: ../../WPrefs.app/Menu.c:1299
 msgid ""
 "Removing this item will destroy all items inside\n"
 "the submenu. Do you really want to do that?"
@@ -1532,55 +1584,55 @@ msgstr ""
 "Dit onderdeel verwijderen, zal alle ingangen in 't\n"
 "submenu vernietigen. Wilt u dat echt doen?"
 
-#: ../../WPrefs.app/Menu.c:1302
+#: ../../WPrefs.app/Menu.c:1301
 msgid "Yes"
 msgstr "Ja"
 
-#: ../../WPrefs.app/Menu.c:1302
+#: ../../WPrefs.app/Menu.c:1301
 msgid "No"
 msgstr "Nee"
 
-#: ../../WPrefs.app/Menu.c:1302
+#: ../../WPrefs.app/Menu.c:1301
 msgid "Yes, don't ask again."
 msgstr "Ja, vraag niet weer"
 
-#: ../../WPrefs.app/Menu.c:1440
+#: ../../WPrefs.app/Menu.c:1439
 #, c-format
 msgid "Invalid menu command \"%s\" with label \"%s\" cleared"
 msgstr "Ongeldig menucommando \"%s\" met label \"%s\" leeg"
 
-#: ../../WPrefs.app/Menu.c:1443 ../../WPrefs.app/Menu.c:1501
-#: ../../WPrefs.app/WPrefs.c:671
+#: ../../WPrefs.app/Menu.c:1442 ../../WPrefs.app/Menu.c:1500
+#: ../../WPrefs.app/WPrefs.c:668
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: ../../WPrefs.app/Menu.c:1443 ../../WPrefs.app/Menu.c:1476
+#: ../../WPrefs.app/Menu.c:1442 ../../WPrefs.app/Menu.c:1475
 #: ../../WPrefs.app/MouseSettings.c:156 ../../WPrefs.app/MouseSettings.c:176
 #: ../../WPrefs.app/TexturePanel.c:583 ../../WPrefs.app/TexturePanel.c:661
 #: ../../WPrefs.app/TexturePanel.c:1419 ../../WPrefs.app/Themes.c:84
-#: ../../WPrefs.app/WPrefs.c:620 ../../WPrefs.app/WPrefs.c:624
-#: ../../WPrefs.app/WPrefs.c:644 ../../WPrefs.app/WPrefs.c:656
-#: ../../WPrefs.app/WPrefs.c:662 ../../WPrefs.app/WPrefs.c:671
-#: ../../WPrefs.app/WPrefs.c:702 ../../WPrefs.app/WPrefs.c:706
+#: ../../WPrefs.app/WPrefs.c:617 ../../WPrefs.app/WPrefs.c:621
+#: ../../WPrefs.app/WPrefs.c:641 ../../WPrefs.app/WPrefs.c:653
+#: ../../WPrefs.app/WPrefs.c:659 ../../WPrefs.app/WPrefs.c:668
+#: ../../WPrefs.app/WPrefs.c:699 ../../WPrefs.app/WPrefs.c:703
 msgid "OK"
 msgstr "OK"
 
-#: ../../WPrefs.app/Menu.c:1472
+#: ../../WPrefs.app/Menu.c:1471
 #, c-format
 msgid "Could not open default menu from '%s'"
 msgstr "Kon standaardmenu niet openen uit '%s'"
 
-#: ../../WPrefs.app/Menu.c:1476 ../../WPrefs.app/MouseSettings.c:154
+#: ../../WPrefs.app/Menu.c:1475 ../../WPrefs.app/MouseSettings.c:154
 #: ../../WPrefs.app/MouseSettings.c:173 ../../WPrefs.app/TexturePanel.c:583
 #: ../../WPrefs.app/TexturePanel.c:659 ../../WPrefs.app/Themes.c:83
-#: ../../WPrefs.app/WPrefs.c:620 ../../WPrefs.app/WPrefs.c:624
-#: ../../WPrefs.app/WPrefs.c:641 ../../WPrefs.app/WPrefs.c:652
-#: ../../WPrefs.app/WPrefs.c:662 ../../WPrefs.app/WPrefs.c:702
-#: ../../WPrefs.app/WPrefs.c:706
+#: ../../WPrefs.app/WPrefs.c:617 ../../WPrefs.app/WPrefs.c:621
+#: ../../WPrefs.app/WPrefs.c:638 ../../WPrefs.app/WPrefs.c:649
+#: ../../WPrefs.app/WPrefs.c:659 ../../WPrefs.app/WPrefs.c:699
+#: ../../WPrefs.app/WPrefs.c:703
 msgid "Error"
 msgstr "Fout"
 
-#: ../../WPrefs.app/Menu.c:1502
+#: ../../WPrefs.app/Menu.c:1501
 msgid ""
 "The menu file format currently in use is not supported\n"
 "by this tool. Do you want to discard the current menu\n"
@@ -1590,19 +1642,19 @@ msgstr ""
 "door dit hulpmiddel. Wilt u 't huidige menu verwerpen,\n"
 "om dit hulpmiddel te gebruiken?"
 
-#: ../../WPrefs.app/Menu.c:1505
+#: ../../WPrefs.app/Menu.c:1504
 msgid "Yes, Discard and Update"
 msgstr "Ja, verwerp en werk bij"
 
-#: ../../WPrefs.app/Menu.c:1505
+#: ../../WPrefs.app/Menu.c:1504
 msgid "No, Keep Current Menu"
 msgstr "Nee, behoud huidig menu"
 
-#: ../../WPrefs.app/Menu.c:1751
+#: ../../WPrefs.app/Menu.c:1750
 msgid "Applications Menu Definition"
 msgstr "Programmamenu bepalen"
 
-#: ../../WPrefs.app/Menu.c:1753
+#: ../../WPrefs.app/Menu.c:1752
 msgid "Edit the menu for launching applications."
 msgstr "Bewerk 't menu voor programma's opstarten."
 
@@ -1732,10 +1784,10 @@ msgstr "kon beschrijving modificatortoets niet ophalen"
 msgid "Mouse Speed"
 msgstr "Muissnelheid"
 
-#: ../../WPrefs.app/MouseSettings.c:471 ../../WPrefs.app/WPrefs.c:411
-#: ../../WPrefs.app/WPrefs.c:427 ../../WPrefs.app/WindowHandling.c:401
-#: ../../WPrefs.app/WindowHandling.c:413 ../../WPrefs.app/WindowHandling.c:432
-#: ../../WPrefs.app/WindowHandling.c:444
+#: ../../WPrefs.app/MouseSettings.c:471 ../../WPrefs.app/WPrefs.c:408
+#: ../../WPrefs.app/WPrefs.c:424 ../../WPrefs.app/WindowHandling.c:372
+#: ../../WPrefs.app/WindowHandling.c:423 ../../WPrefs.app/WindowHandling.c:435
+#: ../../WPrefs.app/WindowHandling.c:454 ../../WPrefs.app/WindowHandling.c:466
 #, c-format
 msgid "could not load icon %s"
 msgstr "kon icoon %s niet laden"
@@ -1883,45 +1935,61 @@ msgstr ""
 "Te gebruiken zoekpaden bij zoeken naar 'pixmaps'\n"
 "en iconen."
 
-#: ../../WPrefs.app/Preferences.c:29
+#: ../../WPrefs.app/Preferences.c:30 ../../WPrefs.app/Preferences.c:42
+msgid "Corner of screen"
+msgstr "Schermhoek"
+
+#: ../../WPrefs.app/Preferences.c:31 ../../WPrefs.app/Preferences.c:43
+msgid "Center of screen"
+msgstr "Schermmidden"
+
+#: ../../WPrefs.app/Preferences.c:32 ../../WPrefs.app/Preferences.c:44
+msgid "Center of resized window"
+msgstr "Midden van vergroot venster"
+
+#: ../../WPrefs.app/Preferences.c:33
+msgid "Technical drawing-like"
+msgstr "Technischetekeningachtig"
+
+#: ../../WPrefs.app/Preferences.c:34 ../../WPrefs.app/Preferences.c:45
+msgid "Disabled"
+msgstr "Uitgeschakeld"
+
+#: ../../WPrefs.app/Preferences.c:53
 msgid "incomplete window titles"
 msgstr "onvolledige venstertitels"
 
-#: ../../WPrefs.app/Preferences.c:30
+#: ../../WPrefs.app/Preferences.c:54
 msgid "miniwindow titles"
 msgstr "minivenster-titels"
 
-#: ../../WPrefs.app/Preferences.c:31
-msgid "Miniwindow aperçus"
-msgstr "Minivenster-voorbeelden"
-
-#: ../../WPrefs.app/Preferences.c:32
+#: ../../WPrefs.app/Preferences.c:55
 msgid "application/dock icons"
 msgstr "programma-/dokiconen"
 
-#: ../../WPrefs.app/Preferences.c:33
+#: ../../WPrefs.app/Preferences.c:56
 msgid "internal help"
 msgstr "interne hulp"
 
-#: ../../WPrefs.app/Preferences.c:42
+#: ../../WPrefs.app/Preferences.c:65
 msgid "Disable AppIcon bounce"
 msgstr "Schakel stuiteren icoon uit"
 
-#: ../../WPrefs.app/Preferences.c:43
+#: ../../WPrefs.app/Preferences.c:66
 msgid "By default, the AppIcon bounces when the application is launched"
 msgstr ""
 "Standaard stuitert 't programma-icoon,\n"
 "wanneer 't programma wordt opgestart."
 
-#: ../../WPrefs.app/Preferences.c:45
+#: ../../WPrefs.app/Preferences.c:68
 msgid "Bounce when the application wants attention"
 msgstr "Stuiter als 't programma aandacht wil"
 
-#: ../../WPrefs.app/Preferences.c:48
+#: ../../WPrefs.app/Preferences.c:71
 msgid "Raise AppIcon when bouncing"
 msgstr "Verhoog icoon bij stuiteren"
 
-#: ../../WPrefs.app/Preferences.c:49
+#: ../../WPrefs.app/Preferences.c:72
 msgid ""
 "Otherwise you will not see it bouncing if\n"
 "there is a window in front of the AppIcon"
@@ -1929,28 +1997,28 @@ msgstr ""
 "Anders zult u 't niet zien stuiteren, als er\n"
 "'n venster voor 't programma-icoon zit."
 
-#: ../../WPrefs.app/Preferences.c:99
+#: ../../WPrefs.app/Preferences.c:122
 #, c-format
 msgid "1 pixel"
 msgstr "1 pixel"
 
 #. 2-4
-#: ../../WPrefs.app/Preferences.c:102
+#: ../../WPrefs.app/Preferences.c:125
 #, c-format
 msgid "%i pixels"
 msgstr "%i pixels"
 
 #. >4
-#: ../../WPrefs.app/Preferences.c:105
+#: ../../WPrefs.app/Preferences.c:128
 #, c-format
 msgid "%i pixels "
 msgstr "%i pixels "
 
-#: ../../WPrefs.app/Preferences.c:240
+#: ../../WPrefs.app/Preferences.c:236
 msgid "Size Display"
 msgstr "Afmetingenweergave"
 
-#: ../../WPrefs.app/Preferences.c:242
+#: ../../WPrefs.app/Preferences.c:238
 msgid ""
 "The position or style of the window size\n"
 "display that's shown when a window is resized."
@@ -1958,31 +2026,11 @@ msgstr ""
 "De plaats of stijl van de vensterafmetingenweergave,\n"
 "die wordt getoond als 'n venster wordt vergroot."
 
-#: ../../WPrefs.app/Preferences.c:248 ../../WPrefs.app/Preferences.c:268
-msgid "Corner of screen"
-msgstr "Schermhoek"
-
-#: ../../WPrefs.app/Preferences.c:249 ../../WPrefs.app/Preferences.c:269
-msgid "Center of screen"
-msgstr "Schermmidden"
-
-#: ../../WPrefs.app/Preferences.c:250 ../../WPrefs.app/Preferences.c:270
-msgid "Center of resized window"
-msgstr "Midden van vergroot venster"
-
-#: ../../WPrefs.app/Preferences.c:251
-msgid "Technical drawing-like"
-msgstr "Technischetekeningachtig"
-
-#: ../../WPrefs.app/Preferences.c:252 ../../WPrefs.app/Preferences.c:271
-msgid "Disabled"
-msgstr "Uitgeschakeld"
-
-#: ../../WPrefs.app/Preferences.c:260
+#: ../../WPrefs.app/Preferences.c:253
 msgid "Position Display"
 msgstr "Positieweergave"
 
-#: ../../WPrefs.app/Preferences.c:262
+#: ../../WPrefs.app/Preferences.c:255
 msgid ""
 "The position or style of the window position\n"
 "display that's shown when a window is moved."
@@ -1990,31 +2038,31 @@ msgstr ""
 "De plaats of stijl van de vensterpositieweergave,\n"
 "die wordt getoond als 'n venster wordt verplaatst."
 
-#: ../../WPrefs.app/Preferences.c:279
+#: ../../WPrefs.app/Preferences.c:270
 msgid "Show balloon for..."
 msgstr "Toon ballon voor..."
 
-#: ../../WPrefs.app/Preferences.c:294
+#: ../../WPrefs.app/Preferences.c:285
 msgid "AppIcon bouncing"
 msgstr "Stuiteren van programma-icoon"
 
-#: ../../WPrefs.app/Preferences.c:316
+#: ../../WPrefs.app/Preferences.c:307
 msgid "Workspace border"
 msgstr "Werkruimterand"
 
-#: ../../WPrefs.app/Preferences.c:332
+#: ../../WPrefs.app/Preferences.c:323
 msgid "Left/Right"
 msgstr "Links/rechts"
 
-#: ../../WPrefs.app/Preferences.c:337
+#: ../../WPrefs.app/Preferences.c:328
 msgid "Top/Bottom"
 msgstr "Boven/onder"
 
-#: ../../WPrefs.app/Preferences.c:353
+#: ../../WPrefs.app/Preferences.c:344
 msgid "Miscellaneous Ergonomic Preferences"
 msgstr "Allerlei gebruiksvriendelijke voorkeuren"
 
-#: ../../WPrefs.app/Preferences.c:354
+#: ../../WPrefs.app/Preferences.c:345
 msgid ""
 "Various settings like balloon text, geometry\n"
 "displays etc."
@@ -2157,77 +2205,77 @@ msgstr "Tegel van de dag"
 msgid "Bar of The Day"
 msgstr "Balk van de dag"
 
-#: ../../WPrefs.app/WPrefs.c:215 ../../WPrefs.app/WPrefs.c:285
+#: ../../WPrefs.app/WPrefs.c:212 ../../WPrefs.app/WPrefs.c:282
 msgid "Window Maker Preferences"
 msgstr "Window Maker-voorkeuren"
 
-#: ../../WPrefs.app/WPrefs.c:238
+#: ../../WPrefs.app/WPrefs.c:235
 msgid "Revert Page"
 msgstr "Pagina herstellen"
 
-#: ../../WPrefs.app/WPrefs.c:244
+#: ../../WPrefs.app/WPrefs.c:241
 msgid "Revert All"
 msgstr "Alles herstellen"
 
-#: ../../WPrefs.app/WPrefs.c:250
+#: ../../WPrefs.app/WPrefs.c:247
 msgid "Save"
 msgstr "Opslaan"
 
-#: ../../WPrefs.app/WPrefs.c:262
+#: ../../WPrefs.app/WPrefs.c:259
 msgid "Balloon Help"
 msgstr "Ballonhulp"
 
-#: ../../WPrefs.app/WPrefs.c:292
+#: ../../WPrefs.app/WPrefs.c:289
 #, c-format
 msgid "Version %s"
 msgstr "Versie %s"
 
-#: ../../WPrefs.app/WPrefs.c:299
+#: ../../WPrefs.app/WPrefs.c:296
 msgid "Starting..."
 msgstr "Starten..."
 
-#: ../../WPrefs.app/WPrefs.c:386
+#: ../../WPrefs.app/WPrefs.c:383
 #, c-format
 msgid "could not locate image file %s"
 msgstr "kon afbeeldingsbestand %s niet lokaliseren"
 
-#: ../../WPrefs.app/WPrefs.c:440
+#: ../../WPrefs.app/WPrefs.c:437
 #, c-format
 msgid "could not process icon %s: %s"
 msgstr "kon icoon %s niet verwerken: %s"
 
-#: ../../WPrefs.app/WPrefs.c:540
+#: ../../WPrefs.app/WPrefs.c:537
 #, c-format
 msgid "could not load image file %s:%s"
 msgstr "kon afbeeldingsbestand %s niet laden:%s"
 
-#: ../../WPrefs.app/WPrefs.c:557
+#: ../../WPrefs.app/WPrefs.c:554
 msgid "Loading Window Maker configuration files..."
 msgstr "Laden Window Maker-configuratiebestanden..."
 
-#: ../../WPrefs.app/WPrefs.c:561
+#: ../../WPrefs.app/WPrefs.c:558
 msgid "Initializing configuration panels..."
 msgstr "Initialiseren configuratiepanelen..."
 
-#: ../../WPrefs.app/WPrefs.c:619 ../../WPrefs.app/WPrefs.c:701
+#: ../../WPrefs.app/WPrefs.c:616 ../../WPrefs.app/WPrefs.c:698
 #, c-format
 msgid "Window Maker domain (%s) is corrupted!"
 msgstr "Window Maker-domein (%s) is beschadigd!"
 
-#: ../../WPrefs.app/WPrefs.c:623
+#: ../../WPrefs.app/WPrefs.c:620
 #, c-format
 msgid "Could not load Window Maker domain (%s) from defaults database."
 msgstr "Kon Window Maker-domein (%s) niet laden uit instellingendatabase."
 
-#: ../../WPrefs.app/WPrefs.c:638
+#: ../../WPrefs.app/WPrefs.c:635
 msgid "could not extract version information from Window Maker"
 msgstr "kon versie-informatie niet afleiden uit Window Maker"
 
-#: ../../WPrefs.app/WPrefs.c:639
+#: ../../WPrefs.app/WPrefs.c:636
 msgid "Make sure wmaker is in your search path."
 msgstr "Zorg ervoor dat 'wmaker' in uw zoekpad zit."
 
-#: ../../WPrefs.app/WPrefs.c:643
+#: ../../WPrefs.app/WPrefs.c:640
 msgid ""
 "Could not extract version from Window Maker. Make sure it is correctly "
 "installed and is in your PATH environment variable."
@@ -2235,7 +2283,7 @@ msgstr ""
 "Kon versie niet afleiden uit Window Maker. Zorg ervoor dat 't correct is "
 "geïnstalleerd, en in uw PATH-omgevingsvariabele zit."
 
-#: ../../WPrefs.app/WPrefs.c:653
+#: ../../WPrefs.app/WPrefs.c:650
 msgid ""
 "Could not extract version from Window Maker. Make sure it is correctly "
 "installed and the path where it installed is in the PATH environment "
@@ -2245,7 +2293,7 @@ msgstr ""
 "geïnstalleerd, en 't pad waar 't is geïnstalleerd in de PATH-"
 "omgevingsvariabele zit."
 
-#: ../../WPrefs.app/WPrefs.c:660
+#: ../../WPrefs.app/WPrefs.c:657
 #, c-format
 msgid ""
 "WPrefs only supports Window Maker 0.18.0 or newer.\n"
@@ -2254,7 +2302,7 @@ msgstr ""
 "WPrefs ondersteunt alleen Window Maker 0.18.0 of nieuwer.\n"
 "De geïnstalleerde versie is %i.%i.%i\n"
 
-#: ../../WPrefs.app/WPrefs.c:669
+#: ../../WPrefs.app/WPrefs.c:666
 #, c-format
 msgid ""
 "Window Maker %i.%i.%i, which is installed in your system, is not fully "
@@ -2263,71 +2311,71 @@ msgstr ""
 "Window Maker %i.%i.%i, die op uw systeem is geïnstalleerd, wordt niet "
 "volledig ondersteund door deze versie van WPrefs."
 
-#: ../../WPrefs.app/WPrefs.c:682
+#: ../../WPrefs.app/WPrefs.c:679
 #, c-format
 msgid "could not run \"%s --global_defaults_path\"."
 msgstr "kon \"%s --global_defaults_path\" niet uitvoeren."
 
-#: ../../WPrefs.app/WPrefs.c:705
+#: ../../WPrefs.app/WPrefs.c:702
 #, c-format
 msgid "Could not load global Window Maker domain (%s)."
 msgstr "Kon algemeen Window Maker-domein (%s) niet laden."
 
-#: ../../WPrefs.app/WPrefs.c:925
+#: ../../WPrefs.app/WPrefs.c:922
 #, c-format
 msgid "bad speed value for option %s; using default Medium"
 msgstr "verkeerde snelheidswaarde voor optie %s; gebruikt standaard Medium"
 
-#: ../../WPrefs.app/WindowHandling.c:86
+#: ../../WPrefs.app/WindowHandling.c:88
 msgid "Automatic"
 msgstr "Automatisch"
 
-#: ../../WPrefs.app/WindowHandling.c:87
+#: ../../WPrefs.app/WindowHandling.c:89
 msgid "Random"
 msgstr "Willekeurig"
 
-#: ../../WPrefs.app/WindowHandling.c:88
+#: ../../WPrefs.app/WindowHandling.c:90
 msgid "Manual"
 msgstr "Handmatig"
 
-#: ../../WPrefs.app/WindowHandling.c:89
+#: ../../WPrefs.app/WindowHandling.c:91
 msgid "Cascade"
 msgstr "Trapsgewijs"
 
-#: ../../WPrefs.app/WindowHandling.c:90
+#: ../../WPrefs.app/WindowHandling.c:92
 msgid "Smart"
 msgstr "Slim"
 
-#: ../../WPrefs.app/WindowHandling.c:98
-msgid "...change position (normal behavior)"
-msgstr "...plaats veranderen (normaal gedrag)"
-
-#: ../../WPrefs.app/WindowHandling.c:99
-msgid "...restore unmaximized geometry"
-msgstr "...gedemaximaliseerde grootte herstellen"
-
 #: ../../WPrefs.app/WindowHandling.c:100
-msgid "...consider the window unmaximized"
-msgstr "...venster gedemaximaliseerd beschouwen"
+msgid "...changes its position (normal behavior)"
+msgstr "...verandert z'n plaats (normaal gedrag)"
 
 #: ../../WPrefs.app/WindowHandling.c:101
-msgid "...do not move the window"
-msgstr "...venster niet verplaatsen"
+msgid "...restores its unmaximized geometry"
+msgstr "...herstelt z'n gedemaximaliseerde grootte"
 
-#: ../../WPrefs.app/WindowHandling.c:176 ../../WPrefs.app/WindowHandling.c:192
+#: ../../WPrefs.app/WindowHandling.c:102
+msgid "...considers the window now unmaximized"
+msgstr "...beschouwt 't venster nú gedemaximaliseerd"
+
+#: ../../WPrefs.app/WindowHandling.c:103
+msgid "...does not move the window"
+msgstr "...verplaatst 't venster niet"
+
+#: ../../WPrefs.app/WindowHandling.c:178 ../../WPrefs.app/WindowHandling.c:194
 #, c-format
 msgid "bad option value %s in WindowPlacement. Using default value"
 msgstr "verkeerde optiewaarde %s in WindowPlacement. Gebruikt standaardwaarde"
 
-#: ../../WPrefs.app/WindowHandling.c:212
+#: ../../WPrefs.app/WindowHandling.c:214
 msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
 msgstr "ongeldige data in optie WindowPlaceOrigin. Gebruikt standaard (0,0)"
 
-#: ../../WPrefs.app/WindowHandling.c:308
+#: ../../WPrefs.app/WindowHandling.c:310
 msgid "Window Placement"
 msgstr "Vensterplaatsing"
 
-#: ../../WPrefs.app/WindowHandling.c:309
+#: ../../WPrefs.app/WindowHandling.c:311
 msgid ""
 "How to place windows when they are first put\n"
 "on screen."
@@ -2335,15 +2383,15 @@ msgstr ""
 "Hoe vensters te plaatsen, wanneer ze voor 't\n"
 "eerst op 't scherm worden gezet."
 
-#: ../../WPrefs.app/WindowHandling.c:323
+#: ../../WPrefs.app/WindowHandling.c:325
 msgid "Origin:"
 msgstr "Begin:"
 
-#: ../../WPrefs.app/WindowHandling.c:384
+#: ../../WPrefs.app/WindowHandling.c:406
 msgid "Opaque Move/Resize"
 msgstr "Ondoorzichtig verpl./gr."
 
-#: ../../WPrefs.app/WindowHandling.c:385
+#: ../../WPrefs.app/WindowHandling.c:407
 msgid ""
 "Whether the window contents or only a frame should\n"
 "be displayed during a move or resize.\n"
@@ -2351,11 +2399,11 @@ msgstr ""
 "Of de vensterinhoud, of alleen 'n kader moet worden\n"
 "weergegeven tijdens verplaatsen of vergroten.\n"
 
-#: ../../WPrefs.app/WindowHandling.c:452
+#: ../../WPrefs.app/WindowHandling.c:474
 msgid "by keyboard"
 msgstr "met toetsenbord"
 
-#: ../../WPrefs.app/WindowHandling.c:454
+#: ../../WPrefs.app/WindowHandling.c:476
 msgid ""
 "When selected, moving or resizing windows\n"
 "using keyboard shortcuts will also display its\n"
@@ -2365,35 +2413,35 @@ msgstr ""
 "of vergroten met sneltoetsen ook de inhoud\n"
 "weergeven, in plaats van alleen 'n kader."
 
-#: ../../WPrefs.app/WindowHandling.c:465
+#: ../../WPrefs.app/WindowHandling.c:487
 msgid "When maximizing..."
 msgstr "Bij maximaliseren..."
 
-#: ../../WPrefs.app/WindowHandling.c:468
+#: ../../WPrefs.app/WindowHandling.c:490
 msgid "...do not cover:"
 msgstr "...niet bedekken:"
 
-#: ../../WPrefs.app/WindowHandling.c:475
+#: ../../WPrefs.app/WindowHandling.c:497
 msgid "Icons"
 msgstr "iconen"
 
-#: ../../WPrefs.app/WindowHandling.c:480
+#: ../../WPrefs.app/WindowHandling.c:502
 msgid "The dock"
 msgstr "'t Dok"
 
-#: ../../WPrefs.app/WindowHandling.c:488
+#: ../../WPrefs.app/WindowHandling.c:510
 msgid "Mod+Wheel"
 msgstr "'Mod'+wiel"
 
-#: ../../WPrefs.app/WindowHandling.c:491
+#: ../../WPrefs.app/WindowHandling.c:513
 msgid "Resize increment:"
 msgstr "Vergrootstap:"
 
-#: ../../WPrefs.app/WindowHandling.c:512
+#: ../../WPrefs.app/WindowHandling.c:534
 msgid "Edge Resistance"
 msgstr "Kantweerstand"
 
-#: ../../WPrefs.app/WindowHandling.c:514
+#: ../../WPrefs.app/WindowHandling.c:536
 msgid ""
 "Edge resistance will make windows `resist'\n"
 "being moved further for the defined threshold\n"
@@ -2405,23 +2453,23 @@ msgstr ""
 "indien geplaatst tegen andere vensters of de\n"
 "kanten van 't scherm."
 
-#: ../../WPrefs.app/WindowHandling.c:533
+#: ../../WPrefs.app/WindowHandling.c:555
 msgid "Resist"
 msgstr "Stoot af"
 
-#: ../../WPrefs.app/WindowHandling.c:538
+#: ../../WPrefs.app/WindowHandling.c:560
 msgid "Attract"
 msgstr "Trek aan"
 
-#: ../../WPrefs.app/WindowHandling.c:547
-msgid "When dragging a maximized window..."
-msgstr "Bij 'n gemaximaliseerd venster verslepen..."
+#: ../../WPrefs.app/WindowHandling.c:569
+msgid "Dragging a maximized window..."
+msgstr "Verslepen van 'n gemaximaliseerd venster..."
 
-#: ../../WPrefs.app/WindowHandling.c:576
+#: ../../WPrefs.app/WindowHandling.c:598
 msgid "Window Handling Preferences"
 msgstr "Vensterbehandelingsvoorkeuren"
 
-#: ../../WPrefs.app/WindowHandling.c:578
+#: ../../WPrefs.app/WindowHandling.c:600
 msgid ""
 "Window handling options. Initial placement style\n"
 "edge resistance, opaque move etc."
@@ -2533,11 +2581,11 @@ msgstr "kon scherm %s niet openen"
 msgid "could not initialize application"
 msgstr "kon programma niet initialiseren"
 
-#  New shortcut
-msgid "Toggle window omnipresent status"
-msgstr "Schakel 'venster alomtegenwoordig' om"
+# Patch sent to wmaker-dev list
+msgid "Preferences"
+msgstr "Voorkeuren"
 
-#  Keep next entries for wmaker-0.95.6
+# Keep next entries for wmaker-0.95.6
 msgid "Open dialogs in the same workspace as their owners"
 msgstr "Open dialogen in dezelfde werkruimte als hun eigenaren"
 
@@ -2550,7 +2598,8 @@ msgstr "ms"
 msgid "Manual:  Click on the window to set keyboard input focus."
 msgstr "Handmatig:  Klik op 't venster om toetsenbordinvoerfocus te geven"
 
-msgid "Auto:  Set keyboard input focus to the window under the mouse pointer."
+msgid ""
+"Auto:  Set keyboard input focus to the window under the mouse pointer."
 msgstr ""
 "Vanzelf:  Geef toetsenbordinvoerfocus aan 't venster onder de muispijl"
 
@@ -2574,7 +2623,6 @@ msgid ""
 "focus with keyboard."
 msgstr "Verhoog venster bij focus wisselen met toetsenbord"
 
-#, c-format
 msgid "could not execute command \"%s\""
 msgstr "kon commando \"%s\" niet uitvoeren"
 
@@ -2611,3 +2659,6 @@ msgstr "Van werkruimte wisselen bij vensters verslepen"
 
 msgid "Automatically create new workspaces."
 msgstr "Vanzelf nieuwe werkruimten aanmaken"
+
+msgid "miniwindow apercus"
+msgstr "miniaturen"

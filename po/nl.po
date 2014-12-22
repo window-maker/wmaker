@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-09 08:19+0100\n"
-"PO-Revision-Date: 2014-11-11 00:00+0000\n"
+"POT-Creation-Date: 2014-12-21 21:25+0100\n"
+"PO-Revision-Date: 2014-12-22 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -16,8 +16,8 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/appicon.c:542 ../src/dialog.c:582 ../src/dock.c:3369
-#: ../src/dockedapp.c:172 ../src/main.c:279 ../src/rootmenu.c:1662
+#: ../src/appicon.c:542 ../src/dialog.c:580 ../src/dock.c:3362
+#: ../src/dockedapp.c:171 ../src/main.c:292 ../src/rootmenu.c:1687
 #: ../src/winspector.c:341 ../src/winspector.c:357
 msgid "Error"
 msgstr "Fout"
@@ -26,11 +26,11 @@ msgstr "Fout"
 msgid "Could not open specified icon file"
 msgstr "Kon opgegeven icoonbestand niet openen"
 
-#: ../src/appicon.c:544 ../src/dialog.c:424 ../src/dialog.c:485
-#: ../src/dialog.c:582 ../src/dialog.c:991 ../src/dialog.c:1655
-#: ../src/dock.c:452 ../src/dock.c:459 ../src/dock.c:506 ../src/dock.c:3369
-#: ../src/dock.c:4483 ../src/dockedapp.c:173 ../src/dockedapp.c:348
-#: ../src/main.c:279 ../src/rootmenu.c:1665 ../src/winspector.c:341
+#: ../src/appicon.c:544 ../src/dialog.c:425 ../src/dialog.c:486
+#: ../src/dialog.c:580 ../src/dialog.c:991 ../src/dialog.c:1655
+#: ../src/dock.c:452 ../src/dock.c:459 ../src/dock.c:506 ../src/dock.c:3362
+#: ../src/dock.c:4476 ../src/dockedapp.c:172 ../src/dockedapp.c:345
+#: ../src/main.c:292 ../src/rootmenu.c:1690 ../src/winspector.c:341
 #: ../src/winspector.c:357 ../src/winspector.c:755
 msgid "OK"
 msgstr "OK"
@@ -57,12 +57,12 @@ msgstr "Ja"
 msgid "No"
 msgstr "Nee"
 
-#: ../src/appicon.c:607 ../src/dock.c:1282 ../src/dock.c:3550
+#: ../src/appicon.c:607 ../src/dock.c:1278 ../src/dock.c:3543
 msgid "Unhide Here"
 msgstr "Hier terugplaatsen"
 
-#: ../src/appicon.c:608 ../src/appicon.c:632 ../src/dock.c:1284
-#: ../src/dock.c:1286 ../src/dock.c:3562 ../src/winmenu.c:561
+#: ../src/appicon.c:608 ../src/appicon.c:632 ../src/dock.c:1280
+#: ../src/dock.c:1282 ../src/dock.c:3555 ../src/winmenu.c:561
 msgid "Hide"
 msgstr "Verbergen"
 
@@ -70,7 +70,7 @@ msgstr "Verbergen"
 #. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
 #. wMenuEntrySetCascade(menu, entry, makeMakeShortcutMenu(scr));
 #.
-#: ../src/appicon.c:609 ../src/dock.c:1280 ../src/winmenu.c:582
+#: ../src/appicon.c:609 ../src/dock.c:1276 ../src/winmenu.c:582
 msgid "Launch"
 msgstr "Opstarten"
 
@@ -78,257 +78,278 @@ msgstr "Opstarten"
 msgid "Set Icon..."
 msgstr "Icoon instellen..."
 
-#: ../src/appicon.c:611 ../src/dock.c:1290 ../src/dock.c:1292
-#: ../src/dock.c:3580 ../src/rootmenu.c:232 ../src/winmenu.c:586
+#: ../src/appicon.c:611 ../src/dock.c:1286 ../src/dock.c:1288
+#: ../src/dock.c:3573 ../src/rootmenu.c:233 ../src/winmenu.c:586
 msgid "Kill"
 msgstr "Doden"
 
-#: ../src/appicon.c:630 ../src/dock.c:3560
+#: ../src/appicon.c:630 ../src/dock.c:3553
 msgid "Unhide"
 msgstr "Terugplaatsen"
 
-#: ../src/defaults.c:838
+#: ../src/defaults.c:847
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr "Domein %s (%s) van algemene instellingendatabase is beschadigd!"
+msgstr "Domein %s (%s) uit algemene instellingendatabase is beschadigd!"
 
-#: ../src/defaults.c:842
+#: ../src/defaults.c:851
 #, c-format
 msgid "could not load domain %s from global defaults database"
 msgstr "kon domein %s niet laden uit algemene instellingendatabase"
 
-#: ../src/defaults.c:887 ../src/defaults.c:901
+#: ../src/defaults.c:896 ../src/defaults.c:910
 #, c-format
 msgid "invalid global menu file %s"
 msgstr "ongeldig algemeen menubestand %s"
 
-#: ../src/defaults.c:936 ../src/defaults.c:1015 ../src/defaults.c:1054
-#: ../src/defaults.c:1095
+#: ../src/defaults.c:945 ../src/defaults.c:1024 ../src/defaults.c:1063
+#: ../src/defaults.c:1104
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr "Domein %s (%s) van instellingendatabase is beschadigd!"
+msgstr "Domein %s (%s) uit instellingendatabase is beschadigd!"
 
-#: ../src/defaults.c:940 ../src/defaults.c:1037 ../src/defaults.c:1081
-#: ../src/defaults.c:1105
+#: ../src/defaults.c:949 ../src/defaults.c:1046 ../src/defaults.c:1090
+#: ../src/defaults.c:1114
 #, c-format
 msgid "could not load domain %s from user defaults database"
 msgstr "kon domein %s niet laden uit gebruikers-instellingendatabase"
 
+#: ../src/defaults.c:1203
+#, c-format
+msgid ""
+"your ApercuSize setting is using old syntax, it is converted to %d pixels; "
+"consider running WPrefs.app to update your settings"
+msgstr ""
+"uw ApercuSize-instelling gebruikt de oude syntax, 't is omgezet naar %d "
+"pixels; voer WPrefs.app uit om uw instellingen bij te werken"
+
 #. --------------------------- Local -----------------------
-#: ../src/defaults.c:1273 ../src/defaults.c:1402 ../src/defaults.c:1497
-#: ../src/defaults.c:1905 ../src/defaults.c:1921 ../src/defaults.c:1966
-#: ../src/defaults.c:2015 ../src/defaults.c:2433 ../src/wdefaults.c:634
-#: ../src/wdefaults.c:663
+#: ../src/defaults.c:1298 ../src/defaults.c:1427 ../src/defaults.c:1522
+#: ../src/defaults.c:1930 ../src/defaults.c:1946 ../src/defaults.c:1991
+#: ../src/defaults.c:2040 ../src/defaults.c:2458 ../src/wdefaults.c:637
+#: ../src/wdefaults.c:666
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
 msgstr "Verkeerde optievorm voor 'key' \"%s\". Moet %s zijn."
 
-#: ../src/defaults.c:1275 ../src/defaults.c:1351 ../src/defaults.c:1379
-#: ../src/defaults.c:1406 ../src/defaults.c:1418 ../src/defaults.c:1432
-#: ../src/defaults.c:1446 ../src/defaults.c:1501 ../src/defaults.c:1513
-#: ../src/defaults.c:1909 ../src/defaults.c:1926 ../src/defaults.c:1938
-#: ../src/defaults.c:1971 ../src/defaults.c:1987 ../src/defaults.c:2020
-#: ../src/defaults.c:2103 ../src/defaults.c:2438 ../src/defaults.c:2449
+#: ../src/defaults.c:1300 ../src/defaults.c:1376 ../src/defaults.c:1404
+#: ../src/defaults.c:1431 ../src/defaults.c:1443 ../src/defaults.c:1457
+#: ../src/defaults.c:1471 ../src/defaults.c:1526 ../src/defaults.c:1538
+#: ../src/defaults.c:1934 ../src/defaults.c:1951 ../src/defaults.c:1963
+#: ../src/defaults.c:1996 ../src/defaults.c:2012 ../src/defaults.c:2045
+#: ../src/defaults.c:2128 ../src/defaults.c:2463 ../src/defaults.c:2474
 #, c-format
 msgid "using default \"%s\" instead"
 msgstr "gebruikt standaard \"%s\" in plaats daarvan"
 
-#: ../src/defaults.c:1302
+#: ../src/defaults.c:1327
 #, c-format
 msgid "wrong option value for key \"%s\"; got \"%s\", should be one of %s."
 msgstr ""
 "verkeerde optiewaarde voor 'key' \"%s\"; kreeg \"%s\", moet een van %s zijn."
 
-#: ../src/defaults.c:1347
+#: ../src/defaults.c:1372
 #, c-format
 msgid "can't convert \"%s\" to boolean for key \"%s\""
 msgstr "kan \"%s\" niet omzetten naar 'boolean' voor 'key' \"%s\""
 
-#: ../src/defaults.c:1377
+#: ../src/defaults.c:1402
 #, c-format
 msgid "can't convert \"%s\" to integer for key \"%s\""
 msgstr "kan \"%s\" niet omzetten naar 'integer' voor 'key' \"%s\""
 
-#: ../src/defaults.c:1414
+#: ../src/defaults.c:1439
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
 msgstr "Onjuist aantal elementen in 'array' voor 'key' \"%s\"."
 
-#: ../src/defaults.c:1428
+#: ../src/defaults.c:1453
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
 msgstr "Verkeerde waarde voor 'key' \"%s\". Moet coördinaat zijn."
 
-#: ../src/defaults.c:1442
+#: ../src/defaults.c:1467
 #, c-format
 msgid "can't convert array to integers for \"%s\"."
 msgstr "kan 'array' niet omzetten naar 'integers' voor \"%s\"."
 
-#: ../src/defaults.c:1619 ../src/defaults.c:1649 ../src/defaults.c:1665
-#: ../src/defaults.c:1694 ../src/defaults.c:1716 ../src/defaults.c:1767
-#: ../src/defaults.c:1806 ../src/defaults.c:1843 ../src/defaults.c:1859
+#: ../src/defaults.c:1644 ../src/defaults.c:1674 ../src/defaults.c:1690
+#: ../src/defaults.c:1719 ../src/defaults.c:1741 ../src/defaults.c:1792
+#: ../src/defaults.c:1831 ../src/defaults.c:1868 ../src/defaults.c:1884
 #, c-format
 msgid "\"%s\" is not a valid color name"
 msgstr "\"%s\" is geen geldige kleurnaam"
 
-#: ../src/defaults.c:1631 ../src/defaults.c:1682
+#: ../src/defaults.c:1656 ../src/defaults.c:1707
 msgid "bad number of arguments in gradient specification"
 msgstr "verkeerd aantal argumenten in kleurverloopopgave"
 
-#: ../src/defaults.c:1740
+#: ../src/defaults.c:1765
 msgid "too few arguments in multicolor gradient specification"
 msgstr "te weinig argumenten in meerkleurenverloopopgave"
 
-#: ../src/defaults.c:1832
+#: ../src/defaults.c:1857
 msgid "bad number of arguments in textured gradient specification"
 msgstr "verkeerd aantal argumenten in opgave getextureerd kleurverloop"
 
-#: ../src/defaults.c:1875
+#: ../src/defaults.c:1900
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
 msgstr ""
 "verkeerde doorzichtigheidswaarde getext. kleurverloop \"%s\". Moet [0..255] "
 "zijn"
 
-#: ../src/defaults.c:1892
+#: ../src/defaults.c:1917
 #, c-format
 msgid "invalid texture type %s"
 msgstr "ongeldig textuurtype %s"
 
-#: ../src/defaults.c:1934
+#: ../src/defaults.c:1959
 #, c-format
 msgid "Error in texture specification for key \"%s\""
 msgstr "Fout in textuuropgave voor 'key' \"%s\""
 
-#: ../src/defaults.c:1983
+#: ../src/defaults.c:2008
 msgid "Wrong type for workspace background. Should be a texture type."
 msgstr "Verkeerd type voor werkruimteachtergrond. Moet 'n textuurtype zijn."
 
-#: ../src/defaults.c:2033
+#: ../src/defaults.c:2058
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
 msgstr ""
 "Verkeerd type voor achtergrond van werkruimte %i. Moet 'n textuur zijn."
 
-#: ../src/defaults.c:2074
+#: ../src/defaults.c:2099
 msgid "could not load any usable font!!!"
 msgstr "kon geen bruikbaar lettertype laden!!!"
 
-#: ../src/defaults.c:2099
+#: ../src/defaults.c:2124
 #, c-format
 msgid "could not get color for key \"%s\""
 msgstr "kon kleur niet krijgen voor 'key' \"%s\""
 
-#: ../src/defaults.c:2155 ../src/rootmenu.c:469
+#: ../src/defaults.c:2180 ../src/rootmenu.c:470
 #, c-format
 msgid "%s: invalid key modifier \"%s\""
 msgstr "%s: ongeldige toetsmodificator \"%s\""
 
-#: ../src/defaults.c:2167
+#: ../src/defaults.c:2192
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
 msgstr "%s:ongeldige sneltoetsopgave \"%s\""
 
-#: ../src/defaults.c:2173
+#: ../src/defaults.c:2198
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
 msgstr "%s:ongeldige toets in snelkoppeling \"%s\""
 
-#: ../src/defaults.c:2198
+#: ../src/defaults.c:2223
 #, c-format
 msgid "%s: modifier key %s is not valid"
 msgstr "%s: modificatortoets %s is niet geldig"
 
-#: ../src/defaults.c:2305
+#: ../src/defaults.c:2330
 #, c-format
 msgid "failed to open bitmap file \"%s\""
 msgstr "openen bitmapbestand \"%s\" mislukt"
 
-#: ../src/defaults.c:2308
+#: ../src/defaults.c:2333
 #, c-format
 msgid "\"%s\" is not a valid bitmap file"
 msgstr "\"%s\" is geen geldig bitmapbestand"
 
-#: ../src/defaults.c:2311
+#: ../src/defaults.c:2336
 #, c-format
 msgid "out of memory reading bitmap file \"%s\""
-msgstr "geheugentekort bij lezen bitmapbestand \"%s\""
+msgstr "geheugentekort bij inlezen bitmapbestand \"%s\""
 
-#: ../src/defaults.c:2349 ../src/defaults.c:2382
+#: ../src/defaults.c:2374 ../src/defaults.c:2407
 msgid "bad number of arguments in cursor specification"
 msgstr "verkeerd aantal argumenten in cursoropgave"
 
-#: ../src/defaults.c:2365
+#: ../src/defaults.c:2390
 #, c-format
 msgid "unknown builtin cursor name \"%s\""
 msgstr "onbekende ingebouwde cursornaam \"%s\""
 
-#: ../src/defaults.c:2392 ../src/defaults.c:2404
+#: ../src/defaults.c:2417 ../src/defaults.c:2429
 #, c-format
 msgid "could not find cursor bitmap file \"%s\""
 msgstr "kon cursorbitmapbestand \"%s\" niet vinden"
 
-#: ../src/defaults.c:2445
+#: ../src/defaults.c:2470
 #, c-format
 msgid "Error in cursor specification for key \"%s\""
 msgstr "Fout in cursoropgave voor 'key' \"%s\""
 
-#: ../src/defaults.c:2570
+#: ../src/defaults.c:2595
 msgid "could not render texture for icon background"
 msgstr "kon textuur voor icoonachtergrond niet weergeven"
 
-#: ../src/defaults.c:3109
+#: ../src/defaults.c:3073
 #, c-format
 msgid "Invalid arguments for background \"%s\""
 msgstr "Ongeldige argumenten voor achtergrond \"%s\""
 
-#: ../src/defaults.c:3330 ../src/defaults.c:3399
+#: ../src/defaults.c:3310 ../src/defaults.c:3379
 #, c-format
 msgid "Invalid arguments for option \"%s\""
 msgstr "Ongeldige argumenten voor optie \"%s\""
 
-#: ../src/defaults.c:3336 ../src/defaults.c:3405
+#: ../src/defaults.c:3316 ../src/defaults.c:3385
 #, c-format
 msgid "Could not find image \"%s\" for option \"%s\""
 msgstr "Kon afbeelding \"%s\" voor optie \"%s\" niet vinden"
 
-#: ../src/defaults.c:3341 ../src/defaults.c:3413
+#: ../src/defaults.c:3321 ../src/defaults.c:3393
 #, c-format
 msgid "Could not load image \"%s\" for option \"%s\""
 msgstr "Kon afbeelding \"%s\" voor optie \"%s\" niet laden"
 
-#: ../src/defaults.c:3351
+#: ../src/defaults.c:3331
 msgid "Invalid split sizes for switch panel back image."
 msgstr "Ongeldige deelafmetingen voor achterafbeelding schakelpaneel."
 
-#: ../src/defaults.c:3420
+#: ../src/defaults.c:3400
 #, c-format
 msgid "Invalid number of arguments for option \"%s\""
 msgstr "Ongeldig aantal argumenten voor optie \"%s\""
 
-#: ../src/defaults.c:3436
+#: ../src/defaults.c:3416
 #, c-format
 msgid "Value for option \"%s\" must be an array of 7 strings"
 msgstr "Waarde voor optie \"%s\" moet 'n 'array' van 7 'strings' zijn"
 
-#: ../src/defaults.c:3450
+#: ../src/defaults.c:3430
 #, c-format
 msgid "Invalid argument for option \"%s\" item %d"
 msgstr "Ongeldig argument voor optie \"%s\" item %d"
 
-#: ../src/dialog.c:130
+#: ../src/dialog.c:131
 msgid "Save workspace state"
 msgstr "Werkruimtestaat opslaan"
 
-#: ../src/dialog.c:424 ../src/dialog.c:485 ../src/dialog.c:998
-#: ../src/dock.c:506 ../src/dock.c:4483 ../src/dockedapp.c:353
-#: ../src/rootmenu.c:189 ../src/rootmenu.c:232
+#: ../src/dialog.c:425 ../src/dialog.c:486 ../src/dialog.c:998
+#: ../src/dock.c:506 ../src/dock.c:4476 ../src/dockedapp.c:350
+#: ../src/rootmenu.c:190 ../src/rootmenu.c:233
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: ../src/dialog.c:577
-msgid "Could not open directory \"%s\":\n%s"
-msgstr "Openen mislukt van map \"%s\":\n%s"
+#: ../src/dialog.c:578
+#, c-format
+msgid ""
+"Could not open directory \"%s\":\n"
+"%s"
+msgstr ""
+"Kon map \"%s\" niet openen:\n"
+"%s"
+
+#: ../src/dialog.c:594
+#, c-format
+msgid "full path for file \"%s\" in \"%s\" is longer than %ld bytes, skipped"
+msgstr ""
+"volledig pad voor bestand \"%s\" in \"%s\" is langer dan %ld byte, "
+"overgeslagen"
 
 #: ../src/dialog.c:628
 msgid "Could not load image file "
@@ -456,19 +477,19 @@ msgid ""
 "with this program; if not, write to the Free Software Foundation, Inc., 51 "
 "Franklin Street, Fifth Floor, Boston, MA02110-1301 USA."
 msgstr ""
-"    Window Maker is vrije software; u mag het herdistribueren en/of wijzigen "
+"Window Maker is vrije software; u mag het herdistribueren en/of wijzigen "
 "onder de voorwaarden van de GNU Algemene Publieke Licentie zoals "
 "gepubliceerd door de Free Software Foundation; onder version 2 van de "
 "Licentie, of (naar uw keuze) elke latere versie.\n"
 "\n"
-"    Window Maker is gedistribueerd in de hoop dat het nuttig zal zijn, maar "
+"Window Maker is gedistribueerd in de hoop dat het nuttig zal zijn, maar "
 "ZONDER ENIGE GARANTIE; zelfs zonder de impliciete garanties die GEBRUIKELIJK "
 "ZIJN IN DE HANDEL of voor BRUIKBAARHEID VOOR EEN SPECIFIEK DOEL. Zie de GNU "
 "Algemene Publieke Licentie voor meer details.\n"
 "\n"
-"    U hoort een kopie van de GNU Algemene Publieke Licentie te hebben "
-"ontvangen samen met dit programma; als dat niet het geval is, schrijf naar "
-"de Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, "
+"U hoort een kopie van de GNU Algemene Publieke Licentie te hebben ontvangen "
+"samen met dit programma; als dat niet het geval is, schrijf naar de Free "
+"Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, "
 "MA02110-1301 USA."
 
 #: ../src/dialog.c:1467
@@ -516,13 +537,13 @@ msgstr "Window Maker herstarten"
 msgid "Start alternate window manager"
 msgstr "Andere vensterbeheerder starten"
 
-#: ../src/dock.c:181 ../src/menu.c:1768
+#: ../src/dock.c:181 ../src/menu.c:1767
 #, c-format
 msgid "Type the name for workspace %i:"
 msgstr "Typ de naam voor werkruimte %i:"
 
-#: ../src/dock.c:182 ../src/dock.c:1246 ../src/dock.c:1248 ../src/dock.c:3462
-#: ../src/menu.c:1772
+#: ../src/dock.c:182 ../src/dock.c:1242 ../src/dock.c:1244 ../src/dock.c:3455
+#: ../src/menu.c:1771
 msgid "Rename Workspace"
 msgstr "Werkruimte hernoemen"
 
@@ -554,7 +575,7 @@ msgstr ""
 msgid "Workspace Clip"
 msgstr "Werkruimteclip"
 
-#: ../src/dock.c:504 ../src/dock.c:4481
+#: ../src/dock.c:504 ../src/dock.c:4474
 msgid "Drawer"
 msgstr "Lade"
 
@@ -563,11 +584,11 @@ msgid "All selected icons will be removed!"
 msgstr "Alle geselecteerde iconen zullen worden verwijderd!"
 
 #. can be: Unselect all icons
-#: ../src/dock.c:547 ../src/dock.c:1260 ../src/dock.c:1262 ../src/dock.c:3500
+#: ../src/dock.c:547 ../src/dock.c:1256 ../src/dock.c:1258 ../src/dock.c:3493
 msgid "Keep Icon"
 msgstr "Icoon behouden"
 
-#: ../src/dock.c:548 ../src/dock.c:2155 ../src/dock.c:2297
+#: ../src/dock.c:548 ../src/dock.c:2148 ../src/dock.c:2290
 msgid "Type the command used to launch the application"
 msgstr "Typ 't gebruikte programmaopstartcommando"
 
@@ -576,150 +597,150 @@ msgstr "Typ 't gebruikte programmaopstartcommando"
 msgid "could not launch application %s"
 msgstr "kon programma %s niet opstarten"
 
-#: ../src/dock.c:990
+#: ../src/dock.c:986
 msgid "could not create workspace submenu for Clip menu"
 msgstr "kon werkruimtesubmenu niet aanmaken voor clipmenu"
 
-#: ../src/dock.c:1047
+#: ../src/dock.c:1043
 msgid "could not create options submenu for Clip menu"
 msgstr "kon optiesubmenu niet aanmaken voor clipmenu"
 
-#: ../src/dock.c:1051 ../src/dock.c:1198
+#: ../src/dock.c:1047 ../src/dock.c:1194
 msgid "Keep on Top"
 msgstr "Bovenop houden"
 
-#: ../src/dock.c:1056
+#: ../src/dock.c:1052
 msgid "Collapsed"
 msgstr "Ingeschoven"
 
-#: ../src/dock.c:1061
+#: ../src/dock.c:1057
 msgid "Autocollapse"
 msgstr "Vanzelf schuiven"
 
-#: ../src/dock.c:1066
+#: ../src/dock.c:1062
 msgid "Autoraise"
 msgstr "Vanzelf verhogen"
 
-#: ../src/dock.c:1071
+#: ../src/dock.c:1067
 msgid "Autoattract Icons"
 msgstr "Vanzelf iconen aantrekken"
 
-#: ../src/dock.c:1186
+#: ../src/dock.c:1182
 msgid "could not create options submenu for dock position menu"
 msgstr "kon optiesubmenu niet aanmaken voor dokpositiemenu"
 
-#: ../src/dock.c:1190
+#: ../src/dock.c:1186
 msgid "Normal"
 msgstr "Normaal"
 
-#: ../src/dock.c:1194
+#: ../src/dock.c:1190
 msgid "Auto raise & lower"
 msgstr "Vanzelf verhogen & verlagen"
 
-#: ../src/dock.c:1222
+#: ../src/dock.c:1218
 msgid "Dock position"
 msgstr "Dokpositie"
 
-#: ../src/dock.c:1228
+#: ../src/dock.c:1224
 msgid "Add a drawer"
 msgstr "Lade toevoegen"
 
-#: ../src/dock.c:1232
+#: ../src/dock.c:1228
 msgid "Clip Options"
 msgstr "Clipopties"
 
 #. if (type == WM_DRAWER)
-#: ../src/dock.c:1234
+#: ../src/dock.c:1230
 msgid "Drawer options"
 msgstr "Ladeopties"
 
-#: ../src/dock.c:1251
+#: ../src/dock.c:1247
 msgid "Selected"
 msgstr "Geselecteerd"
 
-#: ../src/dock.c:1256 ../src/dock.c:1258 ../src/dock.c:3490
+#: ../src/dock.c:1252 ../src/dock.c:1254 ../src/dock.c:3483
 msgid "Select All Icons"
 msgstr "Alle iconen selecteren"
 
-#: ../src/dock.c:1265 ../src/dock.c:1267 ../src/dock.c:3510
+#: ../src/dock.c:1261 ../src/dock.c:1263 ../src/dock.c:3503
 msgid "Move Icon To"
 msgstr "Icoon verplaatsen naar"
 
-#: ../src/dock.c:1273 ../src/dock.c:1275 ../src/dock.c:3524
+#: ../src/dock.c:1269 ../src/dock.c:1271 ../src/dock.c:3517
 msgid "Remove Icon"
 msgstr "Icoon verwijderen"
 
 #. can be: Remove Icons
-#: ../src/dock.c:1277
+#: ../src/dock.c:1273
 msgid "Attract Icons"
 msgstr "Iconen aantrekken"
 
 #. can be: Unhide
-#: ../src/dock.c:1288
+#: ../src/dock.c:1284
 msgid "Settings..."
 msgstr "Instellingen..."
 
-#: ../src/dock.c:1635 ../src/dock.c:1726
+#: ../src/dock.c:1631 ../src/dock.c:1719
 #, c-format
 msgid "bad value in docked icon state info %s"
 msgstr "verkeerde waarde in staatinfo gedokt icoon %s"
 
-#: ../src/dock.c:1749
+#: ../src/dock.c:1742
 #, c-format
 msgid "bad value in dock state info:%s"
 msgstr "verkeerde waarde in staatinfo Dok:%s"
 
-#: ../src/dock.c:1948
+#: ../src/dock.c:1941
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
 msgstr "er zijn te veel iconen opgeslagen in Dok. Negeert wat niet past"
 
 #. icon->forced_dock = 1;
-#: ../src/dock.c:2154 ../src/dock.c:2296
+#: ../src/dock.c:2147 ../src/dock.c:2289
 msgid "Dock Icon"
 msgstr "Dokicoon"
 
-#: ../src/dock.c:3367
+#: ../src/dock.c:3360
 #, c-format
 msgid "Could not execute command \"%s\""
 msgstr "Kon commando \"%s\" niet uitvoeren"
 
-#: ../src/dock.c:3468
+#: ../src/dock.c:3461
 msgid "Toggle Omnipresent"
-msgstr "Alomtegenwoordig omschakelen"
+msgstr "Alomtegenwoordig in-/uitschakelen"
 
-#: ../src/dock.c:3473 ../src/winmenu.c:517 ../src/winspector.c:1356
+#: ../src/dock.c:3466 ../src/winmenu.c:517 ../src/winspector.c:1356
 msgid "Omnipresent"
 msgstr "Alomtegenwoordig"
 
-#: ../src/dock.c:3488
+#: ../src/dock.c:3481
 msgid "Unselect All Icons"
 msgstr "Alle iconen deselecteren"
 
-#: ../src/dock.c:3498
+#: ../src/dock.c:3491
 msgid "Keep Icons"
 msgstr "Iconen behouden"
 
-#: ../src/dock.c:3508
+#: ../src/dock.c:3501
 msgid "Move Icons To"
 msgstr "Iconen verplaatsen naar"
 
-#: ../src/dock.c:3522
+#: ../src/dock.c:3515
 msgid "Remove Icons"
 msgstr "Iconen verwijderen"
 
-#: ../src/dock.c:3552
+#: ../src/dock.c:3545
 msgid "Bring Here"
 msgstr "Hier brengen"
 
-#: ../src/dock.c:3576
+#: ../src/dock.c:3569
 msgid "Remove drawer"
 msgstr "Lade verwijderen"
 
-#: ../src/dock.c:4482
+#: ../src/dock.c:4475
 msgid "All icons in this drawer will be detached!"
 msgstr "Alle iconen in deze lade zullen worden losgemaakt!"
 
-#: ../src/dock.c:4865
+#: ../src/dock.c:4858
 msgid "there are too many icons stored in drawer. Ignoring what doesn't fit"
 msgstr "er zijn te veel iconen opgeslagen in lade. Negeert wat niet past"
 
@@ -728,62 +749,67 @@ msgstr "er zijn te veel iconen opgeslagen in lade. Negeert wat niet past"
 msgid "could not find icon %s, used in a docked application"
 msgstr "kon icoon %s, gebruikt in 'n gedokt programma, niet vinden"
 
-#: ../src/dockedapp.c:171
+#: ../src/dockedapp.c:170
 #, c-format
 msgid "Could not open specified icon file: %s"
 msgstr "Kon opgegeven icoonbestand niet openen: %s"
 
-#: ../src/dockedapp.c:173
+#: ../src/dockedapp.c:172
 msgid "Ignore"
 msgstr "Negeren"
 
-#: ../src/dockedapp.c:267
+#: ../src/dockedapp.c:264
 msgid "Start when Window Maker is started"
 msgstr "Starten als Window Maker wordt gestart"
 
-#: ../src/dockedapp.c:272
+#: ../src/dockedapp.c:269
 msgid "Lock (prevent accidental removal)"
 msgstr "Vergrendelen (voorkomt p.o. verwijderen)"
 
-#: ../src/dockedapp.c:276
+#: ../src/dockedapp.c:273
 msgid "Application path and arguments"
 msgstr "Programmapad en argumenten"
 
-#: ../src/dockedapp.c:287
+#: ../src/dockedapp.c:284
 msgid "Command for middle-click launch"
 msgstr "Commando voor opstarten met middenklik"
 
-#: ../src/dockedapp.c:299
+#: ../src/dockedapp.c:296
 #, c-format
 msgid "%s will be replaced with current selection"
 msgstr "%s wordt vervangen door actuele selectie"
 
-#: ../src/dockedapp.c:303
+#: ../src/dockedapp.c:300
 msgid "Command for dragged and dropped files"
 msgstr "Commando voor versleepte bestanden"
 
-#: ../src/dockedapp.c:315
+#: ../src/dockedapp.c:312
 #, c-format
 msgid "%d will be replaced with the file name"
 msgstr "%d wordt vervangen door de bestandsnaam"
 
-#: ../src/dockedapp.c:318
+#: ../src/dockedapp.c:315
 msgid "XDnD support was not compiled in"
 msgstr "XDnD-ondersteuning is niet ingecompileerd"
 
-#: ../src/dockedapp.c:326
+#: ../src/dockedapp.c:323
 msgid "Icon Image"
 msgstr "Icoonafbeelding"
 
-#: ../src/dockedapp.c:337 ../src/winspector.c:1506
+#: ../src/dockedapp.c:334 ../src/winspector.c:1506
 msgid "Browse..."
 msgstr "Bladeren..."
 
-#: ../src/dockedapp.c:395
+#: ../src/dockedapp.c:392
 msgid "Docked Application Settings"
 msgstr "Instellingen gedokt programma"
 
-#: ../src/event.c:322
+#: ../src/event.c:317
+#, c-format
+msgid "read problem when trying to get INotify event: %s"
+msgstr "inleesprobleem bij proberen 'INotify event' te krijgen: %s"
+
+#: ../src/event.c:330
 msgid ""
 "the defaults database has been deleted! Restart Window Maker to create the "
 "database with the default settings"
@@ -791,7 +817,7 @@ msgstr ""
 "de instellingendatabase is verwijderd! Herstart Window Maker om de database "
 "aan te maken met de standaardinstellingen"
 
-#: ../src/event.c:331
+#: ../src/event.c:339
 msgid ""
 "the unit containing the defaults database has been unmounted. Setting --"
 "static mode. Any changes will not be saved."
@@ -799,12 +825,12 @@ msgstr ""
 "de eenheid met de instellingendatabase is afgekoppeld. Stelt '--static'-"
 "modus in. Wijzigingen zullen niet worden opgeslagen."
 
-#: ../src/event.c:342
+#: ../src/event.c:350
 msgid "Inotify: Reading config files in defaults database."
-msgstr "Inotify: Leest configuratiebestanden in instellingendatabase."
+msgstr "Inotify: Inlezen configuratiebestanden uit instellingendatabase."
 
 #. an error has occured
-#: ../src/event.c:393
+#: ../src/event.c:401
 msgid ""
 "select failed. The inotify instance will be closed. Changes to the defaults "
 "database will require a restart to take effect."
@@ -813,34 +839,34 @@ msgstr ""
 "Wijzigingen in de instellingendatabase zullen 'n herstart vereisen om te "
 "werken."
 
-#: ../src/event.c:992
+#: ../src/event.c:1000
 msgid "Got Reconfigure command"
 msgstr "Kreeg commando 'herconfigureren'"
 
-#: ../src/event.c:995
+#: ../src/event.c:1003
 #, c-format
 msgid "Got unknown command %s"
 msgstr "Kreeg onbekend commando %s"
 
-#: ../src/event.c:1773
+#: ../src/event.c:1794
 #, c-format
 msgid "exec %a(Run,Type command to run:)"
 msgstr "exec %a(Uitvoeren,Typ uit te voeren commando:)"
 
-#: ../src/framewin.c:662 ../src/framewin.c:752 ../src/menu.c:408
+#: ../src/framewin.c:660 ../src/framewin.c:750 ../src/menu.c:404
 #: ../src/texture.c:454
 #, c-format
 msgid "could not render texture: %s"
 msgstr "kon textuur niet weergeven: %s"
 
-#: ../src/framewin.c:685 ../src/framewin.c:695 ../src/framewin.c:711
-#: ../src/framewin.c:722 ../src/framewin.c:729 ../src/framewin.c:735
-#: ../src/icon.c:311 ../src/menu.c:435
+#: ../src/framewin.c:683 ../src/framewin.c:693 ../src/framewin.c:709
+#: ../src/framewin.c:720 ../src/framewin.c:727 ../src/framewin.c:733
+#: ../src/icon.c:311 ../src/menu.c:431
 #, c-format
 msgid "error rendering image:%s"
 msgstr "fout bij weergeven afbeelding:%s"
 
-#: ../src/framewin.c:780
+#: ../src/framewin.c:778
 #, c-format
 msgid "error rendering image: %s"
 msgstr "fout bij weergeven afbeelding: %s"
@@ -854,75 +880,80 @@ msgstr "Window Maker herstarten mislukt."
 msgid "could not exec %s"
 msgstr "kon commando %s niet uitvoeren"
 
-#: ../src/main.c:277
+#: ../src/main.c:256
+#, c-format
+msgid "the display name has an unexpected syntax: \"%s\""
+msgstr "de schermnaam heeft 'n onverwachte syntax: \"%s\""
+
+#: ../src/main.c:290
 msgid "Could not execute command: "
 msgstr "Kon commando niet uitvoeren: "
 
-#: ../src/main.c:412
+#: ../src/main.c:425
 #, c-format
 msgid "%s aborted.\n"
 msgstr "%s afgebroken.\n"
 
-#: ../src/main.c:421
+#: ../src/main.c:434
 #, c-format
 msgid "Usage: %s [options]\n"
 msgstr "Gebruik: %s [opties]\n"
 
-#: ../src/main.c:422
+#: ../src/main.c:435
 msgid "The Window Maker window manager for the X window system"
 msgstr "De Window Maker-vensterbeheerder voor X Window System"
 
-#: ../src/main.c:424
+#: ../src/main.c:437
 msgid " -display host:dpy\tdisplay to use"
 msgstr " -display host:dpy\tte gebruiken scherm"
 
-#: ../src/main.c:425
+#: ../src/main.c:438
 msgid " --no-dock\t\tdo not open the application Dock"
 msgstr " --no-dock\t\t't programmadok niet openen"
 
-#: ../src/main.c:426
+#: ../src/main.c:439
 msgid " --no-clip\t\tdo not open the workspace Clip"
 msgstr " --no-clip\t\tde werkruimteclip niet openen"
 
-#: ../src/main.c:427
+#: ../src/main.c:440
 msgid " --no-autolaunch\tdo not autolaunch applications"
 msgstr " --no-autolaunch\tprogramma's niet vanzelf opstarten"
 
-#: ../src/main.c:428
+#: ../src/main.c:441
 msgid " --dont-restore\t\tdo not restore saved session"
 msgstr " --dont-restore\t\topgeslagen sessie niet hervatten"
 
-#: ../src/main.c:430
+#: ../src/main.c:443
 msgid " --locale locale\tlocale to use"
 msgstr " --locale locale\tte gebruiken lokalisatie"
 
-#: ../src/main.c:432
+#: ../src/main.c:445
 msgid " --visual-id visualid\tvisual id of visual to use"
 msgstr " --visual-id visualid\tte gebruiken 'visual id' voor kleurdiepte"
 
-#: ../src/main.c:433
+#: ../src/main.c:446
 msgid " --static\t\tdo not update or save configurations"
 msgstr " --static\t\tinstellingen niet bijwerken of opslaan"
 
-#: ../src/main.c:435
+#: ../src/main.c:448
 msgid " --no-polling\t\tdo not periodically check for configuration updates"
 msgstr ""
 " --no-polling\t\tniet periodiek controleren op bijgewerkte instellingen"
 
-#: ../src/main.c:437
+#: ../src/main.c:450
 msgid " --version\t\tprint version and exit"
 msgstr " --version\t\tversie afdrukken, en afsluiten"
 
-#: ../src/main.c:438
+#: ../src/main.c:451
 msgid " --help\t\t\tshow this message"
 msgstr " --help\t\t\tdeze boodschap tonen"
 
-#: ../src/main.c:448
+#: ../src/main.c:461
 #, c-format
 msgid "could not find user GNUstep directory (%s)."
 msgstr "kon gebruikers-GNUstep-map (%s) niet vinden."
 
-#: ../src/main.c:451
+#: ../src/main.c:464
 msgid ""
 "There was an error while creating GNUstep directory, please make sure you "
 "have installed Window Maker correctly and run wmaker.inst"
@@ -930,12 +961,12 @@ msgstr ""
 "Er trad 'n fout op bij aanmaken van de GNUstep-map. Zorg a.u.b. ervoor dat u "
 "Window Maker correct heeft geïnstalleerd, en voer 'wmaker.inst' uit"
 
-#: ../src/main.c:454
+#: ../src/main.c:467
 #, c-format
 msgid "%s directory created with default configuration."
 msgstr "map %s aangemaakt met standaardinstellingen."
 
-#: ../src/main.c:473
+#: ../src/main.c:486
 msgid ""
 "could not initialise an inotify instance. Changes to the defaults database "
 "will require a restart to take effect. Check your kernel!"
@@ -944,7 +975,7 @@ msgstr ""
 "instellingendatabase zullen 'n herstart vereisen om te werken. Controleer uw "
 "kernel!"
 
-#: ../src/main.c:484
+#: ../src/main.c:497
 #, c-format
 msgid ""
 "could not add an inotify watch on path %s.Changes to the defaults database "
@@ -953,107 +984,107 @@ msgstr ""
 "kon geen 'inotify watch' toevoegen op pad %s. Wijzigingen in de "
 "instellingendatabase zullen 'n herstart vereisen om te werken."
 
-#: ../src/main.c:507
+#: ../src/main.c:520
 #, c-format
 msgid "%s:could not execute initialization script"
 msgstr "%s:kon initialiseringsscript niet uitvoeren"
 
-#: ../src/main.c:525
+#: ../src/main.c:538
 #, c-format
 msgid "%s:could not execute exit script"
 msgstr "%s:kon afsluitingsscript niet uitvoeren"
 
-#: ../src/main.c:571 ../src/main.c:648 ../src/main.c:655 ../src/main.c:662
+#: ../src/main.c:584 ../src/main.c:661 ../src/main.c:668 ../src/main.c:675
 #, c-format
 msgid "too few arguments for %s"
 msgstr "te weinig argumenten voor %s"
 
-#: ../src/main.c:620
+#: ../src/main.c:633
 #, c-format
 msgid "option \"%s\" is deprecated, please remove it from your script"
 msgstr "optie \"%s\" wordt afgeraden, verwijder 't a.u.b. uit uw script"
 
-#: ../src/main.c:666
+#: ../src/main.c:679
 #, c-format
 msgid "bad value for visualid: \"%s\""
 msgstr "verkeerde waarde voor 'visualid': \"%s\""
 
-#: ../src/main.c:679
+#: ../src/main.c:692
 #, c-format
 msgid "%s: invalid argument '%s'\n"
 msgstr "%s: ongeldig argument '%s'\n"
 
-#: ../src/main.c:680
+#: ../src/main.c:693
 #, c-format
 msgid "Try '%s --help' for more information\n"
 msgstr "Probeer '%s --help' voor meer informatie\n"
 
-#: ../src/main.c:723
+#: ../src/main.c:736
 msgid "X server does not support locale"
 msgstr "X-server ondersteunt lokalisatie niet"
 
-#: ../src/main.c:727
+#: ../src/main.c:740
 msgid "cannot set locale modifiers"
 msgstr "kan lokalisatiemodificators niet instellen"
 
-#: ../src/main.c:743
+#: ../src/main.c:756
 #, c-format
 msgid "could not open display \"%s\""
 msgstr "kon scherm \"%s\" niet openen"
 
-#: ../src/menu.c:2351
+#: ../src/menu.c:2350
 #, c-format
 msgid "bad value in menus state info: %s"
 msgstr "verkeerde waarde in staatinfo menu's: %s"
 
-#: ../src/misc.c:474 ../src/misc.c:479
+#: ../src/misc.c:478 ../src/misc.c:483
 msgid "Program Arguments"
 msgstr "Programma-argumenten"
 
-#: ../src/misc.c:475 ../src/misc.c:480
+#: ../src/misc.c:479 ../src/misc.c:484
 msgid "Enter command arguments:"
 msgstr "Voer commandoargumenten in:"
 
-#: ../src/misc.c:524
+#: ../src/misc.c:525
 #, c-format
 msgid "out of memory during expansion of \"%s\""
 msgstr "geheugentekort bij uitwerken van \"%s\""
 
-#: ../src/misc.c:577
+#: ../src/misc.c:578 ../src/misc.c:595 ../src/misc.c:612 ../src/misc.c:635
+#: ../src/misc.c:656
 #, c-format
-msgid "out of memory during expansion of \"%%w\""
-msgstr "geheugentekort bij uitwerken van \"%%w\""
+msgid "out of memory during expansion of '%s' for command \"%s\""
+msgstr "geheugentekort bij uitwerken van '%s' voor commando \"%s\""
 
-#: ../src/misc.c:594
-#, c-format
-msgid "out of memory during expansion of \"%%W\""
-msgstr "geheugentekort bij uitwerken van \"%%W\""
-
-#: ../src/misc.c:611
-#, c-format
-msgid "out of memory during expansion of \"%%a\""
-msgstr "geheugentekort bij uitwerken van \"%%a\""
-
-#: ../src/misc.c:637
-#, c-format
-msgid "out of memory during expansion of \"%%d\""
-msgstr "geheugentekort bij uitwerken van \"%%d\""
-
-#: ../src/misc.c:651
+#: ../src/misc.c:649
 msgid "selection not available"
 msgstr "selectie niet beschikbaar"
 
-#: ../src/misc.c:658
-#, c-format
-msgid "out of memory during expansion of \"%%s\""
-msgstr "geheugentekort bij uitwerken van \"%%s\""
-
-#: ../src/misc.c:693 ../src/misc.c:699
+#: ../src/misc.c:691 ../src/misc.c:697
 #, c-format
 msgid "bad window name value in %s state info"
 msgstr "verkeerde vensternaamwaarde in staatinfo %s"
 
-#: ../src/misc.c:914
+#: ../src/misc.c:924 ../src/misc.c:931 ../src/misc.c:947
+#, c-format
+msgid "%s failed, can't set workspace specific background image (%s)"
+msgstr ""
+"%s mislukt, kan werkruimtespecifieke achtergrondafbeelding (%s) niet "
+"instellen"
+
+#: ../src/misc.c:959
+#, c-format
+msgid "could not execute \"%s\": %s"
+msgstr "kon \"%s\" niet uitvoeren: %s"
+
+#: ../src/misc.c:967
+#, c-format
+msgid ""
+"could not set close-on-exec flag for bg_helper's communication file handle "
+"(%s)"
+msgstr ""
+
+#: ../src/misc.c:1007
 msgid "could not send message to background image helper"
 msgstr "kon bericht naar achtergrondafbeeldingshelper niet verzenden"
 
@@ -1089,19 +1120,19 @@ msgstr "kon kleur \"%s\" niet verwerken"
 msgid "could not allocate color \"%s\""
 msgstr "kon kleur \"%s\" niet toewijzen"
 
-#: ../src/rootmenu.c:188 ../src/rootmenu.c:189
+#: ../src/rootmenu.c:189 ../src/rootmenu.c:190
 msgid "Exit"
 msgstr "Afsluiten"
 
-#: ../src/rootmenu.c:189
+#: ../src/rootmenu.c:190
 msgid "Exit window manager?"
 msgstr "Vensterbeheerder afsluiten?"
 
-#: ../src/rootmenu.c:230
+#: ../src/rootmenu.c:231
 msgid "Kill X session"
 msgstr "X-sessie doden"
 
-#: ../src/rootmenu.c:231
+#: ../src/rootmenu.c:232
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
@@ -1109,52 +1140,52 @@ msgstr ""
 "Dood Window System-sessie?\n"
 "(Alle programma's zullen worden afgesloten.)"
 
-#: ../src/rootmenu.c:482
+#: ../src/rootmenu.c:483
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
 msgstr "%s:ongeldige sneltoetsopgave \"%s\" voor ingang %s"
 
-#: ../src/rootmenu.c:490
+#: ../src/rootmenu.c:491
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
 msgstr "%s:ongeldige toets in snelkoppeling \"%s\" voor ingang %s"
 
-#: ../src/rootmenu.c:524
+#: ../src/rootmenu.c:525
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
 msgstr "%s: ongekoppelde '\"' in menubestand"
 
-#: ../src/rootmenu.c:573
+#: ../src/rootmenu.c:574
 #, c-format
 msgid "%s: missing command"
 msgstr "%s: ontbrekend commando"
 
-#: ../src/rootmenu.c:629
+#: ../src/rootmenu.c:630
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
 msgstr "ongeldige OPEN_MENU-opgave: %s"
 
-#: ../src/rootmenu.c:691
+#: ../src/rootmenu.c:692
 #, c-format
 msgid "%s:could not stat menu"
 msgstr "%s:kon status menu niet vaststellen"
 
-#: ../src/rootmenu.c:699
+#: ../src/rootmenu.c:700
 #, c-format
 msgid "%s:could not stat menu:%s"
 msgstr "%s:kon status menu niet vaststellen:%s"
 
-#: ../src/rootmenu.c:715
+#: ../src/rootmenu.c:716
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
 msgstr "te veel parameters in OPEN_MENU: %s"
 
-#: ../src/rootmenu.c:753
+#: ../src/rootmenu.c:754
 #, c-format
 msgid "invalid OPEN_PLMENU specification: %s"
 msgstr "ongeldige OPEN_PLMENU-opgave: %s"
 
-#: ../src/rootmenu.c:809
+#: ../src/rootmenu.c:810
 msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
@@ -1162,7 +1193,7 @@ msgstr ""
 "Er staan meer dan één WORKSPACE_MENU-commando's in 't programmamenu. Slechts "
 "één is toegestaan."
 
-#: ../src/rootmenu.c:840
+#: ../src/rootmenu.c:841
 msgid ""
 "There are more than one WINDOWS_MENU commands in the applications menu. Only "
 "one is allowed."
@@ -1170,76 +1201,85 @@ msgstr ""
 "Er staan meer dan één WINDOWS_MENU-commando's in 't programmamenu. Slechts "
 "één is toegestaan."
 
-#: ../src/rootmenu.c:845
+#: ../src/rootmenu.c:846
 msgid "Window List"
 msgstr "Vensterlijst"
 
-#: ../src/rootmenu.c:872 ../src/rootmenu.c:889 ../src/rootmenu.c:906
-#: ../src/rootmenu.c:914
+#: ../src/rootmenu.c:873 ../src/rootmenu.c:890 ../src/rootmenu.c:907
+#: ../src/rootmenu.c:915
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
 msgstr "%s:ontbrekende parameter voor menucommando \"%s\""
 
-#: ../src/rootmenu.c:978
+#: ../src/rootmenu.c:979
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
 msgstr "%s:onbekend commando \"%s\" in menuconfiguratie."
 
-#: ../src/rootmenu.c:985
+#: ../src/rootmenu.c:986
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
 msgstr "%s:kan sneltoets voor ingang \"%s\" niet toevoegen"
 
-#: ../src/rootmenu.c:1017 ../src/rootmenu.c:1063
+#: ../src/rootmenu.c:1018 ../src/rootmenu.c:1064
 msgid "missing command in menu config"
 msgstr "ontbrekend commando in menuconfiguratie"
 
-#: ../src/rootmenu.c:1045
+#: ../src/rootmenu.c:1046
 msgid "syntax error in menu file: END declaration missing"
 msgstr "syntaxfout in menubestand: END-declaratie ontbreekt"
 
-#: ../src/rootmenu.c:1077
+#: ../src/rootmenu.c:1078
 msgid "invalid menu, no menu title given"
 msgstr "ongeldig menu, geen menutitel opgegeven"
 
-#: ../src/rootmenu.c:1096 ../src/rootmenu.c:1156
+#: ../src/rootmenu.c:1097 ../src/rootmenu.c:1139 ../src/rootmenu.c:1169
+#: ../src/rootmenu.c:1183
 #, c-format
 msgid "could not open menu file \"%s\": %s"
 msgstr "kon menubestand \"%s\" niet openen: %s"
 
-#: ../src/rootmenu.c:1264 ../src/rootmenu.c:1336 ../src/rootmenu.c:1375
+#: ../src/rootmenu.c:1140
+msgid "pipe command for PropertyList is too long"
+msgstr "PropertyList-commando met 'pipe' is te lang"
+
+#: ../src/rootmenu.c:1170
+msgid "pipe command is too long"
+msgstr "commando met 'pipe' is te lang"
+
+#: ../src/rootmenu.c:1291 ../src/rootmenu.c:1363 ../src/rootmenu.c:1401
 #, c-format
 msgid "out of memory while constructing directory menu %s"
 msgstr "geheugentekort bij samenstellen mapmenu %s"
 
-#: ../src/rootmenu.c:1273
+#: ../src/rootmenu.c:1300
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
 msgstr "%s:kon status bestand \"%s\" in menumap niet vaststellen"
 
-#: ../src/rootmenu.c:1425
+#: ../src/rootmenu.c:1450
 msgid "Commands"
 msgstr "Commando's"
 
-#: ../src/rootmenu.c:1428
+#: ../src/rootmenu.c:1453
 msgid "Restart"
 msgstr "Herstarten"
 
-#: ../src/rootmenu.c:1429
+#: ../src/rootmenu.c:1454
 msgid "Exit..."
 msgstr "Afsluiten..."
 
-#: ../src/rootmenu.c:1468
+#: ../src/rootmenu.c:1493
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
 msgstr "kon menubestand \"%s\", verwezen in WMRootMenu, niet vinden"
 
-#: ../src/rootmenu.c:1474
+#: ../src/rootmenu.c:1499
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
 msgstr "geen toegang tot menu \"%s\", verwezen in WMRootMenu"
 
-#: ../src/rootmenu.c:1486
+#: ../src/rootmenu.c:1511
 #, c-format
 msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
@@ -1248,12 +1288,12 @@ msgstr ""
 "standaardmenubestand \"%s\" wordt gebruikt, want 't menu verwezen in "
 "WMRootMenu kon niet worden gevonden "
 
-#: ../src/rootmenu.c:1509 ../src/rootmenu.c:1586
+#: ../src/rootmenu.c:1534 ../src/rootmenu.c:1611
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
 msgstr "%s:opmaakfout in hoofdmenuconfiguratie \"%s\""
 
-#: ../src/rootmenu.c:1663
+#: ../src/rootmenu.c:1688
 msgid ""
 "The applications menu could not be loaded. Look at the console output for a "
 "detailed description of the errors."
@@ -1266,16 +1306,21 @@ msgstr ""
 msgid "could not load logo image for panels: %s"
 msgstr "kon logoafbeelding voor panelen niet laden: %s"
 
-#: ../src/screen.c:590
+#: ../src/screen.c:581
+#, c-format
+msgid "can't create Context on screen %d, %s"
+msgstr "kan Context niet aanmaken op scherm %d, %s"
+
+#: ../src/screen.c:595
 msgid "could not initialize WINGs widget set"
 msgstr "kon WINGs-besturingselementen niet initialiseren"
 
-#: ../src/screen.c:885
+#: ../src/screen.c:891
 #, c-format
 msgid "could not save session state in %s"
 msgstr "kon sessiestaat niet opslaan in %s"
 
-#: ../src/session.c:147 ../src/wdefaults.c:650 ../src/winspector.c:393
+#: ../src/session.c:147 ../src/wdefaults.c:653 ../src/winspector.c:393
 #, c-format
 msgid "can't convert \"%s\" to boolean"
 msgstr "kan \"%s\" niet omzetten naar 'boolean'"
@@ -1292,7 +1337,7 @@ msgstr "interne X-fout: %s"
 #: ../src/startup.c:564 ../src/startup.c:580 ../src/startup.c:586
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
-msgstr "kon domein \"%s\" niet lezen uit instellingendatabase"
+msgstr "kon domein \"%s\" niet inlezen uit instellingendatabase"
 
 #: ../src/startup.c:572
 #, c-format
@@ -1334,17 +1379,17 @@ msgstr "kon textuurpixmap \"%s\" niet laden:%s"
 msgid "could not allocate image buffer"
 msgstr "kon afbeeldingsbuffer niet toewijzen"
 
-#: ../src/wdefaults.c:400
+#: ../src/wdefaults.c:399
 #, c-format
 msgid "icon \"%s\" doesn't exist, check your config files"
 msgstr "icoon \"%s\" bestaat niet, controleer uw configuratiebestanden"
 
-#: ../src/wdefaults.c:427
+#: ../src/wdefaults.c:430
 #, c-format
 msgid "error loading image file \"%s\": %s"
 msgstr "fout bij laden afbeeldingsbestand \"%s\": %s"
 
-#: ../src/wdefaults.c:463
+#: ../src/wdefaults.c:466
 #, c-format
 msgid "could not find default icon \"%s\""
 msgstr "kon standaardicoon \"%s\" niet vinden"
@@ -1902,34 +1947,55 @@ msgstr ""
 "Gebruik 'n enkel gedeeld programma-icoon voor\n"
 "alle exemplaren van dit programma.\n"
 
-#: ../src/workspace.c:100 ../src/workspace.c:689
+#: ../src/workspace.c:100 ../src/workspace.c:694
 #, c-format
 msgid "Workspace %i"
 msgstr "Werkruimte %i"
 
-#: ../src/workspace.c:735
+#: ../src/workspace.c:740
 msgid "Workspaces"
 msgstr "Werkruimten"
 
-#: ../src/workspace.c:737
+#: ../src/workspace.c:742
 msgid "could not create Workspace menu"
 msgstr "kon werkruimtemenu niet aanmaken"
 
-#: ../src/workspace.c:744
+#: ../src/workspace.c:749
 msgid "New"
 msgstr "Nieuw"
 
-#: ../src/workspace.c:745
+#: ../src/workspace.c:750
 msgid "Destroy Last"
 msgstr "Laatste vernietigen"
 
-#: ../src/workspace.c:747
+#: ../src/workspace.c:752
 msgid "Last Used"
 msgstr "Laatst gebruikt"
 
-#  Keep next entries for wmaker-0.95.6
+# Keep next entries for wmaker-0.95.6
 msgid "invalid menu file, MENU command is missing"
 msgstr "ongeldig menubestand, MENU-commando ontbreekt"
 
 msgid "no title given for the root menu"
 msgstr "geen titel opgegeven voor 't hoofdmenu"
+
+msgid "out of memory during expansion of \"%%w\""
+msgstr "geheugentekort bij uitwerken van \"%%w\""
+
+msgid "out of memory during expansion of \"%%W\""
+msgstr "geheugentekort bij uitwerken van \"%%W\""
+
+msgid "out of memory during expansion of \"%%a\""
+msgstr "geheugentekort bij uitwerken van \"%%a\""
+
+msgid "out of memory during expansion of \"%%d\""
+msgstr "geheugentekort bij uitwerken van \"%%d\""
+
+msgid "out of memory during expansion of \"%%s\""
+msgstr "geheugentekort bij uitwerken van \"%%s\""
+
+msgid "%s:could not open menu file"
+msgstr "%s:kon menubestand niet openen"
+
+msgid "Could not open directory "
+msgstr "Openen mislukt van map "
