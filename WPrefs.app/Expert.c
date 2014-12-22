@@ -84,7 +84,7 @@ static const struct {
 	  /* default: */ False, OPTION_WMAKER, "KbdModeLock" },
 #endif /* XKB_MODELOCK */
 
-	{ N_("Enable window snapping."),
+	{ N_("Maximize a window to side or corner by dragging."),
 	  /* default: */ False, OPTION_WMAKER, "WindowSnapping" },
 
 	{ N_("Open dialogs in the same workspace as their owners."),
