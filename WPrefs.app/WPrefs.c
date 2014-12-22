@@ -213,7 +213,7 @@ static void createMainWindow(WMScreen * scr)
 	WMSetWindowCloseAction(WPrefs.win, quit, NULL);
 	WMSetWindowMaxSize(WPrefs.win, 520, 390);
 	WMSetWindowMinSize(WPrefs.win, 520, 390);
-	WMSetWindowMiniwindowTitle(WPrefs.win, "Preferences");
+	WMSetWindowMiniwindowTitle(WPrefs.win, _("Preferences"));
 
 	WPrefs.scrollV = WMCreateScrollView(WPrefs.win);
 	WMResizeWidget(WPrefs.scrollV, 500, 87);
