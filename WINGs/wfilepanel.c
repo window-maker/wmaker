@@ -748,7 +748,7 @@ static void goFloppy(WMWidget *widget, void *p_panel)
 	(void) widget;
 
 	if (stat(WINGsConfiguration.floppyPath, &filestat)) {
-		showError(scr, panel->win, _("An error occured browsing '%s'."), WINGsConfiguration.floppyPath);
+		showError(scr, panel->win, _("An error occurred browsing '%s'."), WINGsConfiguration.floppyPath);
 		return;
 	} else if (!S_ISDIR(filestat.st_mode)) {
 		showError(scr, panel->win, _("'%s' is not a directory."), WINGsConfiguration.floppyPath);

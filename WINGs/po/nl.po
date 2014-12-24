@@ -540,7 +540,7 @@ msgstr "Verwijderen %s mislukt: %s"
 
 #: ../../WINGs/wfilepanel.c:751
 #, c-format
-msgid "An error occured browsing '%s'."
+msgid "An error occurred browsing '%s'."
 msgstr "'n Fout trad op bij bladeren door '%s'."
 
 #: ../../WINGs/wfilepanel.c:754

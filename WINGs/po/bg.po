@@ -545,7 +545,7 @@ msgstr "\"%s\" е директория."
 
 #: ../../WINGs/wfilepanel.c:829
 #, c-format
-msgid "An error occured browsing '%s'."
+msgid "An error occurred browsing '%s'."
 msgstr "Настъпи грешка при показване на \"%s\"."
 
 #: ../../WINGs/wfilepanel.c:833

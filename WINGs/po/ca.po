@@ -557,7 +557,7 @@ msgstr "\"%s\" és un directori."
 
 #: ../../WINGs/wfilepanel.c:832
 #, c-format
-msgid "An error occured browsing '%s'."
+msgid "An error occurred browsing '%s'."
 msgstr "S'ha produït un error mentre s'explorava \"%s\"."
 
 #: ../../WINGs/wfilepanel.c:836

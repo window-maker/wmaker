@@ -559,7 +559,7 @@ msgstr "'%s' est un répertoire."
 
 #: ../../WINGs/wfilepanel.c:832
 #, c-format
-msgid "An error occured browsing '%s'."
+msgid "An error occurred browsing '%s'."
 msgstr "Une erreur s'est produite pendant le parcours de '%s'."
 
 #: ../../WINGs/wfilepanel.c:836

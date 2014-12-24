@@ -537,7 +537,7 @@ msgstr "Hiba \"%s\" törlésekor: %s"
 
 #: ../../../wmaker-crm/WINGs/wfilepanel.c:749
 #, c-format
-msgid "An error occured browsing '%s'."
+msgid "An error occurred browsing '%s'."
 msgstr "Hiba történt a '%s' olvasásakor."
 
 #: ../../../wmaker-crm/WINGs/wfilepanel.c:752

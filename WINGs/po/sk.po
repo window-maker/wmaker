@@ -557,7 +557,7 @@ msgstr "'%s' je adresár."
 
 #: ../../WINGs/wfilepanel.c:832
 #, c-format
-msgid "An error occured browsing '%s'."
+msgid "An error occurred browsing '%s'."
 msgstr "Pri prehliadaní '%s' nastala chyba."
 
 #: ../../WINGs/wfilepanel.c:836

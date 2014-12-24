@@ -553,7 +553,7 @@ msgstr "'%s' ist ein Verzeichnis."
 
 #: ../../WINGs/wfilepanel.c:832
 #, c-format
-msgid "An error occured browsing '%s'."
+msgid "An error occurred browsing '%s'."
 msgstr "Fehler beim Lesen von '%s'."
 
 #: ../../WINGs/wfilepanel.c:836
