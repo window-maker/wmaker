@@ -903,7 +903,7 @@ msgstr ""
 #: ../src/main.c:493
 #, c-format
 msgid ""
-"could not add an inotify watch on path %s.Changes to the defaults database "
+"could not add an inotify watch on path %s. Changes to the defaults database "
 "will require a restart to take effect."
 msgstr ""
 "no se pudo añadir un guardian inotify en la ruta %s. Cambios en la base de datos "
@@ -1625,7 +1625,7 @@ msgstr "No asociar clicks del ratón"
 #, c-format
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you have\n"
+"in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
 "No asociar acciones de ratón, tal como `Alt'+arrastre\n"
@@ -1764,7 +1764,7 @@ msgid "Initial Workspace"
 msgstr "Área de trabajo inicial"
 
 #: ../src/winspector.c:1484
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr ""
 "El área de trabajo dónde colocar la ventana la primera vez que se muestre."
 

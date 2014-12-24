@@ -883,7 +883,7 @@ msgstr ""
 #: ../src/main.c:493
 #, c-format
 msgid ""
-"could not add an inotify watch on path %s.Changes to the defaults database "
+"could not add an inotify watch on path %s. Changes to the defaults database "
 "will require a restart to take effect."
 msgstr ""
 
@@ -1583,7 +1583,7 @@ msgstr "マウスクリックと連動しない"
 #: ../src/winspector.c:1362
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you have\n"
+"in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
 "ウィンドウ内でのマウスの動作(Alt+ドラッグなど)\n"
@@ -1715,7 +1715,7 @@ msgid "Initial Workspace"
 msgstr "起動時のワークスペース"
 
 #: ../src/winspector.c:1484
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "このウィンドウが起動時に出現するワークスペース."
 
 #: ../src/winspector.c:1490

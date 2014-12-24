@@ -1768,7 +1768,8 @@ msgstr "Не перахопліваць падзеі мышы"
 #: ../src/winspector.c:1438
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Не перахопліваць паздеі ад мышы, такія як\n"
 "перацягванне вакна з дапамогай Alt, у гэтым вакне."
@@ -1870,7 +1871,7 @@ msgid "Initial Workspace"
 msgstr "Пачатковае працамесца"
 
 #: ../src/winspector.c:1550
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Працамесца ў якім будзе адкрывацца вакно па запуску"
 
 #: ../src/winspector.c:1556

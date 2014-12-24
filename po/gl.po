@@ -1584,10 +1584,11 @@ msgstr "Desactivar Clics do Rato"
 #: ../src/winspector.c:1447
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Desactivar as accións do rato, como `Alt'+arrastrar\n"
-"na fiestra (cando alt é o modificador que configurou)."
+"na fiestra (cando Alt é o modificador que configurou)."
 
 #: ../src/winspector.c:1452
 msgid "Keep Inside Screen"
@@ -1685,7 +1686,7 @@ msgid "Initial Workspace"
 msgstr "Area de Traballo Inicial"
 
 #: ../src/winspector.c:1561
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr ""
 "A área de traballo na que coloca-la fiestra ó amosala por primeira vez."
 

@@ -1513,7 +1513,8 @@ msgstr "Μη δέσμευση των κλικ ποντικιού"
 #: ../src/winspector.c:1267
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Να μην δεσμέυονται οι κινήσεις του ποντικιού,\n"
 "όπως η 'Alt'+drag, στο παράθυρο."
@@ -1617,7 +1618,7 @@ msgid "Initial Workspace"
 msgstr "Αρχική Επιφάνεια"
 
 #: ../src/winspector.c:1381
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Η επιφάνεια στη οποία θα τοποθετηθεί το παράθυρο\n"
 "όταν εμφανίζεται για πρώτη φορά."
 

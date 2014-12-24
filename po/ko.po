@@ -890,7 +890,7 @@ msgstr ""
 #: ../src/main.c:548
 #, c-format
 msgid ""
-"could not add an inotify watch on path %s.Changes to the defaults database "
+"could not add an inotify watch on path %s. Changes to the defaults database "
 "will require a restart to take effect."
 msgstr ""
 "경로 %s에 inotify 감시를 추가하지 못했습니다. 기본 데이터베이스로 바꾸면 다"
@@ -1583,7 +1583,7 @@ msgstr "마우스 클릭 연결 안함"
 #: ../src/winspector.c:1408
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you have\n"
+"in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
 "창에 대고 `Alt'+끌기(마우스 수정자를 `Alt'로 설정했을\n"
@@ -1713,7 +1713,7 @@ msgid "Initial Workspace"
 msgstr "초기 작업공간"
 
 #: ../src/winspector.c:1526
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "이 창을 처음으로 표시할 작업공간을 지정합니다."
 
 #: ../src/winspector.c:1532

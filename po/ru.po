@@ -1779,7 +1779,8 @@ msgstr "Не проверять щелчки мыши"
 #: ../src/winspector.c:1438
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 
 #: ../src/winspector.c:1443
@@ -1878,7 +1879,7 @@ msgid "Initial Workspace"
 msgstr "Начальное рабочее пространство"
 
 #: ../src/winspector.c:1550
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr ""
 "Рабочее пространство, на которое помещать окно,\n"
 "когда оно открывается в первый раз."

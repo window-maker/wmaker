@@ -1754,7 +1754,7 @@ msgstr ""
 #: ../src/winspector.c:1446
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you have\n"
+"in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
 
@@ -1844,7 +1844,7 @@ msgid "Initial Workspace"
 msgstr ""
 
 #: ../src/winspector.c:1558
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr ""
 
 #: ../src/winspector.c:1564

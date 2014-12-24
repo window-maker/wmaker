@@ -1410,7 +1410,7 @@ static void create_tab_window_advanced(WWindow *wwin, InspectorPanel *panel, int
 			caption = _("Do not bind mouse clicks");
 			flag = WFLAGP(wwin, no_bind_mouse);
 			descr = _("Do not bind mouse actions, such as `Alt'+drag\n"
-				  "in the window (when alt is the modifier you have\n" "configured).");
+				  "in the window (when Alt is the modifier you have\n" "configured).");
 			break;
 		case 2:
 			caption = _("Do not show in the window list");
@@ -1528,7 +1528,7 @@ static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel)
 	WMSetFrameTitle(panel->wsFrm, _("Initial Workspace"));
 
 	WMSetBalloonTextForView(_("The workspace to place the window when it's"
-				  "first shown."), WMWidgetView(panel->wsFrm));
+				  " first shown."), WMWidgetView(panel->wsFrm));
 
 	panel->wsP = WMCreatePopUpButton(panel->wsFrm);
 	WMMoveWidget(panel->wsP, 20, 30);

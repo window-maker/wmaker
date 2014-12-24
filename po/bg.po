@@ -2232,7 +2232,8 @@ msgstr "Да не се прихваща мишката"
 #: ../src/winspector.c:1438
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Да не се прихващат действия с мишката\n"
 "(напр. Alt+влачене) в прозореца."
@@ -2367,7 +2368,7 @@ msgstr "Начално работно място"
 
 # ../src/winspector.c:1561
 #: ../src/winspector.c:1550
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr ""
 "Работното място, където да се помести\n"
 "прозореца при първото му появяване."

@@ -1709,11 +1709,11 @@ msgstr ""
 msgid "Do not bind mouse clicks"
 msgstr "Blocca i clic del mouse"
 
-# FIXME UPSTREAM: haveconfigured -> have configured REPORTED
 #: ../src/winspector.c:1446
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Non risponde alle azioni del mouse, come 'Alt'+trascina\n"
 "nella finestra (se Alt è il modificatore configurato)."
@@ -1816,7 +1816,7 @@ msgid "Initial Workspace"
 msgstr "Area di lavoro iniziale"
 
 #: ../src/winspector.c:1558
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "L'area di lavoro in cui la finestra appare la prima volta."
 
 #: ../src/winspector.c:1564

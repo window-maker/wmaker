@@ -1740,10 +1740,11 @@ msgstr "Jangan bind klik tetikus"
 #: ../src/winspector.c:1438
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Jangan bind aksi tetikus, seperti `Alt'+heret pada\n"
-"tetingkap (bila alt ialah modifier yang telah anda konfigurasikan)."
+"tetingkap (bila Alt ialah modifier yang telah anda konfigurasikan)."
 
 #: ../src/winspector.c:1443
 msgid "Do not show in the window list"
@@ -1841,7 +1842,7 @@ msgid "Initial Workspace"
 msgstr "Ruangkerja permulaan"
 
 #: ../src/winspector.c:1550
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Ruangkerja dimana letaknya tetingkap bila ianya pertamakali dipaparkan"
 
 #: ../src/winspector.c:1556

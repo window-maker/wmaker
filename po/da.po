@@ -2092,7 +2092,8 @@ msgstr "Museklik gælder ikke"
 #: ../src/winspector.c:1440
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Musehandlinger såsom 'Alt'+træk gælder ikke for dette\n"
 "vindue (hvis du har valgt Alt som modificeringstast)."
@@ -2215,7 +2216,7 @@ msgstr "Første arbejdsbord"
 
 # ../src/winspector.c:1394
 #: ../src/winspector.c:1552
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Hvilket arbejdsbord vinduet først skal dukke op på."
 
 # ../src/winspector.c:1400

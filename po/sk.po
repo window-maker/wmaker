@@ -1819,7 +1819,8 @@ msgstr "Ignorovať akcie myši"
 #: ../src/winspector.c:1438
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Ignorovať akcie myši ako napr. Alt+ťahanie\n"
 "v okne (ak je Alt váš nastavený modifikátor)."
@@ -1920,7 +1921,7 @@ msgid "Initial Workspace"
 msgstr "Počiatočná plocha"
 
 #: ../src/winspector.c:1550
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Plocha, na ktorú sa umiestni okno pri prvom zobrazení."
 
 #: ../src/winspector.c:1556

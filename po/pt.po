@@ -1574,7 +1574,8 @@ msgstr "Não adicionar cliques de mouse"
 #: ../src/winspector.c:1447
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Não adicionar ações de mouse, tal como `Alt'+arrasto\n"
 "na janela (quando Alt é o modificador que você configurou)."
@@ -1673,7 +1674,7 @@ msgid "Initial Workspace"
 msgstr "Área de Trabalho Inicial"
 
 #: ../src/winspector.c:1561
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Onde mostrar a janela quando da primeira aparição."
 
 #: ../src/winspector.c:1567

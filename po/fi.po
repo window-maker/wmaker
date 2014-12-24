@@ -1767,10 +1767,11 @@ msgstr "Älä sido hiiren napautuksia"
 #: ../src/winspector.c:1458
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Älä sido ikkunassa hiiritoimintoja kuten\n"
-"'Alt'-siirtoja (kun alt on määrittelemäsi modifier)."
+"'Alt'-siirtoja (kun Alt on määrittelemäsi modifier)."
 
 #: ../src/winspector.c:1463
 #, fuzzy
@@ -1879,7 +1880,7 @@ msgid "Initial Workspace"
 msgstr "Työtila käynnistettäessä"
 
 #: ../src/winspector.c:1570
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr ""
 "Työtila, johon ikkuna sijoitetaan, kun se näytetään ensimmäisen kerran."
 

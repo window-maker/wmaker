@@ -893,7 +893,7 @@ msgstr ""
 #: ../src/main.c:556
 #, c-format
 msgid ""
-"could not add an inotify watch on path %s.Changes to the defaults database "
+"could not add an inotify watch on path %s. Changes to the defaults database "
 "will require a restart to take effect."
 msgstr ""
 "rajale %s pole võimalik inotify jälgijat määrata. Vaikeväärtuste andmebaasi "
@@ -1597,7 +1597,7 @@ msgstr "Hiirevajutustele ei reageerita"
 #: ../src/winspector.c:1360
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you have\n"
+"in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
 "Aknal keelatakse reageerimast hiiretoimingutele.\n"
@@ -1733,7 +1733,7 @@ msgid "Initial Workspace"
 msgstr "Töölaud, millel käivitatakse"
 
 #: ../src/winspector.c:1482
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Töölaua nimi, mille peal akent esimest korda näidatakse."
 
 #: ../src/winspector.c:1488

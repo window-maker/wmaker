@@ -1622,7 +1622,7 @@ msgstr "Kein Mausklicks abfangen"
 #, fuzzy
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you have\n"
+"in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
 "Für dieses Fenster keine Mausaktionen abfangen,\n"
@@ -1735,7 +1735,7 @@ msgid "Initial Workspace"
 msgstr "Start-Arbeitsfläche"
 
 #: ../src/winspector.c:1463
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Die Arbeitsfläche, auf dem das Fenster beim Start erscheinen soll"
 
 #: ../src/winspector.c:1469

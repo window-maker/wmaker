@@ -1721,10 +1721,11 @@ msgstr "Myš jen pro aplikaci"
 #: ../src/winspector.c:1455
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Pro okno nepoužívat akce myši jako např. \n"
-"'Alt'+táhni (s myší:), je-li alt modifikátorem, \n"
+"'Alt'+táhni (s myší:), je-li Alt modifikátorem, \n"
 "který jste si nastavili."
 
 #: ../src/winspector.c:1460
@@ -1821,7 +1822,7 @@ msgid "Initial Workspace"
 msgstr "Počáteční plocha"
 
 #: ../src/winspector.c:1567
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Plocha, kam umístit okno při prvním ukázání."
 
 #: ../src/winspector.c:1573

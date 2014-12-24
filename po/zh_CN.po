@@ -1494,7 +1494,8 @@ msgstr "不关联鼠标点击"
 #: ../src/winspector.c:1262
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "不关联鼠标动作, 比如, 在窗口中使用 `Alt'+拖动\n"
 "(当 Alt 是你配置的修饰键时)."
@@ -1591,7 +1592,7 @@ msgid "Initial Workspace"
 msgstr "初始工作区"
 
 #: ../src/winspector.c:1376
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "窗口第一次出现时放置的工作空间."
 
 #: ../src/winspector.c:1382

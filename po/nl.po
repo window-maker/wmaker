@@ -978,7 +978,7 @@ msgstr ""
 #: ../src/main.c:497
 #, c-format
 msgid ""
-"could not add an inotify watch on path %s.Changes to the defaults database "
+"could not add an inotify watch on path %s. Changes to the defaults database "
 "will require a restart to take effect."
 msgstr ""
 "kon geen 'inotify watch' toevoegen op pad %s. Wijzigingen in de "
@@ -1756,7 +1756,7 @@ msgstr "Muisklikken niet verbinden"
 #: ../src/winspector.c:1412
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you have\n"
+"in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
 "Verbind muisacties niet, zoals 'Alt'+verslepen\n"
@@ -1896,7 +1896,7 @@ msgid "Initial Workspace"
 msgstr "Initiële werkruimte"
 
 #: ../src/winspector.c:1530
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr ""
 "De werkruimte om 't venster in te plaatsen,\n"
 "wanneer 't voor 't eerst wordt getoond."
