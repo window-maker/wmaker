@@ -218,7 +218,7 @@ static void showData(_Panel * panel)
 				goto found_animation_value;
 			}
 		}
-		wwarning(_("animation style \"%s\" is unknow, resetting to \"%s\""),
+		wwarning(_("animation style \"%s\" is unknown, resetting to \"%s\""),
 		         str, icon_animation[0].db_value);
 	}
 	/* If we're here, no valid value have been found so we fall-back to the default */

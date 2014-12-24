@@ -509,7 +509,7 @@ msgstr ""
 
 #. default:
 #: ../../WPrefs.app/Expert.c:46
-msgid "Disable workspace pager"
+msgid "Disable workspace pager."
 msgstr "Schakel werkruimtevolger uit."
 
 #. default:
@@ -757,7 +757,7 @@ msgstr "verkeerde waarde \"%s\" voor optie %s, gebruikt standaard \"%s\""
 
 #: ../../WPrefs.app/Icons.c:221
 #, c-format
-msgid "animation style \"%s\" is unknow, resetting to \"%s\""
+msgid "animation style \"%s\" is unknown, resetting to \"%s\""
 msgstr "animatiestijl \"%s\" is onbekend, teruggezet op \"%s\""
 
 #: ../../WPrefs.app/Icons.c:248
@@ -1593,7 +1593,7 @@ msgid "No"
 msgstr "Nee"
 
 #: ../../WPrefs.app/Menu.c:1301
-msgid "Yes, don't ask again."
+msgid "Yes, don't ask again"
 msgstr "Ja, vraag niet weer"
 
 #: ../../WPrefs.app/Menu.c:1439

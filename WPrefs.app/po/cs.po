@@ -1185,8 +1185,8 @@ msgid "No"
 msgstr "Ne"
 
 #: ../Menu.c:1347
-msgid "Yes, don't ask again."
-msgstr "Ano, neptejte se víc."
+msgid "Yes, don't ask again"
+msgstr "Ano, neptejte se víc"
 
 #: ../Menu.c:1514 ../Menu.c:1521
 #, c-format

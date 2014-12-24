@@ -1174,8 +1174,8 @@ msgid "No"
 msgstr "否"
 
 #: ../../WPrefs.app/Menu.c:1405
-msgid "Yes, don't ask again."
-msgstr "是，不要再問。"
+msgid "Yes, don't ask again"
+msgstr "是，不要再問"
 
 #: ../../WPrefs.app/Menu.c:1579
 #, c-format

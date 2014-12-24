@@ -1453,8 +1453,8 @@ msgid "No"
 msgstr "Nem"
 
 #: ../../../wmaker-crm/WPrefs.app/Menu.c:1302
-msgid "Yes, don't ask again."
-msgstr "Igen, a többire is."
+msgid "Yes, don't ask again"
+msgstr "Igen, a többire is"
 
 #: ../../../wmaker-crm/WPrefs.app/Menu.c:1440
 #, c-format

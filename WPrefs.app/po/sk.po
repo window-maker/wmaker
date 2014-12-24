@@ -1210,7 +1210,7 @@ msgid "No"
 msgstr "Nie"
 
 #: ../../WPrefs.app/Menu.c:1348
-msgid "Yes, don't ask again."
+msgid "Yes, don't ask again"
 msgstr "Áno, viac sa nepýtať"
 
 #. if there is a localized plmenu for the tongue put it's filename here

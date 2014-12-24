@@ -1213,7 +1213,7 @@ msgid "No"
 msgstr "いいえ"
 
 #: ../../WPrefs.app/Menu.c:1226
-msgid "Yes, don't ask again."
+msgid "Yes, don't ask again"
 msgstr "はい, 以後確認しない"
 
 #: ../../WPrefs.app/Menu.c:1352

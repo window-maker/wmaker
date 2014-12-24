@@ -1387,8 +1387,8 @@ msgid "No"
 msgstr "아니오"
 
 #: ../../WPrefs.app/Menu.c:1295
-msgid "Yes, don't ask again."
-msgstr "예, 다시 묻지 않습니다."
+msgid "Yes, don't ask again"
+msgstr "예, 다시 묻지 않습니다"
 
 #: ../../WPrefs.app/Menu.c:1426
 #, c-format

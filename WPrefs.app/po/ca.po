@@ -1314,8 +1314,8 @@ msgid "No"
 msgstr "No"
 
 #: ../../WPrefs.app/Menu.c:1405
-msgid "Yes, don't ask again."
-msgstr "Sí, no preguntis més."
+msgid "Yes, don't ask again"
+msgstr "Sí, no preguntis més"
 
 #. if there is a localized plmenu for the tongue put it's filename here
 #: ../../WPrefs.app/Menu.c:1573 ../../WPrefs.app/Menu.c:1580

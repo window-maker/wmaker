@@ -1204,7 +1204,7 @@ msgid "No"
 msgstr "Nein"
 
 #: ../../WPrefs.app/Menu.c:1282
-msgid "Yes, don't ask again."
+msgid "Yes, don't ask again"
 msgstr "Ja, alle"
 
 #: ../../WPrefs.app/Menu.c:1437
