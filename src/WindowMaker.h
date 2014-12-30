@@ -470,9 +470,6 @@ extern struct WPreferences {
 		unsigned int noupdates:1;             /* don't require ~/GNUstep (-static) */
 		unsigned int noautolaunch:1;          /* don't autolaunch apps */
 		unsigned int norestore:1;             /* don't restore session */
-#ifndef HAVE_INOTIFY
-		unsigned int nopolling:1;             /* don't poll the defaults database for changes */
-#endif
 		unsigned int restarting:2;
 	} flags;                                      /* internal flags */
 

@@ -705,7 +705,7 @@ void StartUp(Bool defaultScreenOnly)
 
 #ifndef HAVE_INOTIFY
 	/* setup defaults file polling */
-	if (!wPreferences.flags.nopolling && !wPreferences.flags.noupdates)
+	if (!wPreferences.flags.noupdates)
 		WMAddTimerHandler(3000, wDefaultsCheckDomains, NULL);
 #endif
 

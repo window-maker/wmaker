@@ -679,12 +679,14 @@ static int real_main(int argc, char **argv)
 					wwarning(_("bad value for visualid: \"%s\""), argv[i]);
 					exit(0);
 				}
-			} else if (strcmp(argv[i], "-static") == 0 || strcmp(argv[i], "--static") == 0
-#ifndef HAVE_INOTIFY
-				    || strcmp(argv[i], "--no-polling") == 0
-#endif
-				    ) {
+			} else if (strcmp(argv[i], "-static") == 0 || strcmp(argv[i], "--static") == 0) {
 				wPreferences.flags.noupdates = 1;
+			} else if (strcmp(argv[i], "--no-polling") == 0) {
+#ifndef HAVE_INOTIFY
+				wPreferences.flags.noupdates = 1;
+#else
+				wmessage(_("your version of Window Maker was compiler with INotify support, so \"--no-polling\" has no effect"));
+#endif
 			} else if (strcmp(argv[i], "--help") == 0) {
 				print_help();
 				exit(0);
