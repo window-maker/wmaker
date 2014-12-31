@@ -73,22 +73,22 @@ void wWorkspaceMapUpdate(WScreen *scr)
 	                 scr->scr_width, scr->scr_height,
 	                 AllPlanes, ZPixmap);
 	if (pimg) {
-		RImage *apercu;
+		RImage *mini_preview;
 
-		apercu = RCreateImageFromXImage(scr->rcontext, pimg, NULL);
+		mini_preview = RCreateImageFromXImage(scr->rcontext, pimg, NULL);
 		XDestroyImage(pimg);
 
-		if (apercu) {
+		if (mini_preview) {
 			RImage *tmp = scr->workspaces[scr->current_workspace]->map;
 
 			if (tmp)
 				RReleaseImage(tmp);
 
 			scr->workspaces[scr->current_workspace]->map =
-				RSmoothScaleImage(apercu,
+				RSmoothScaleImage(mini_preview,
 				                  scr->scr_width / WORKSPACE_MAP_RATIO,
 				                  scr->scr_height / WORKSPACE_MAP_RATIO);
-			RReleaseImage(apercu);
+			RReleaseImage(mini_preview);
 		}
 	}
 }

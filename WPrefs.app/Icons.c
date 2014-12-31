@@ -84,7 +84,7 @@ typedef struct _Panel {
 		WMFrame *frame;
 		WMSlider *slider;
 		WMLabel *label;
-	} apercu;
+	} minipreview;
 
 	WMFrame *sizeF;
 	WMPopUpButton *sizeP;
@@ -98,9 +98,9 @@ typedef struct _Panel {
  * We set the slider min to taht number minus one, because when set to this
  * value WPrefs will consider that the user wants the feature turned off.
  */
-static const int apercu_minimum_size = 2 * 24 - 1;
+static const int minipreview_minimum_size = 2 * 24 - 1;
 
-static const int apercu_maximum_size = 512;	/* Arbitrary limit for the slider */
+static const int minipreview_maximum_size = 512;	/* Arbitrary limit for the slider */
 
 #define ICON_FILE	"iconprefs"
 
@@ -142,7 +142,7 @@ static void showIconLayout(WMWidget * widget, void *data)
 	}
 }
 
-static void apercu_slider_changed(WMWidget *w, void *data)
+static void minipreview_slider_changed(WMWidget *w, void *data)
 {
 	_Panel *panel = (_Panel *) data;
 	char buffer[64];
@@ -151,17 +151,17 @@ static void apercu_slider_changed(WMWidget *w, void *data)
 	/* Parameter is not used, but tell the compiler that it is ok */
 	(void) w;
 
-	value = WMGetSliderValue(panel->apercu.slider);
+	value = WMGetSliderValue(panel->minipreview.slider);
 
 	/* Round the value to a multiple of 8 because it makes the displayed value look better */
 	value &= ~7;
 
-	if (value <= apercu_minimum_size)
+	if (value <= minipreview_minimum_size)
 		sprintf(buffer, _("OFF"));
 	else
 		sprintf(buffer, "%i", value);
 
-	WMSetLabelText(panel->apercu.label, buffer);
+	WMSetLabelText(panel->minipreview.label, buffer);
 }
 
 static void showData(_Panel * panel)
@@ -201,13 +201,13 @@ static void showData(_Panel * panel)
 	b = GetBoolForKey("MiniwindowApercuBalloons");
 	if (b) {
 		i = GetIntegerForKey("ApercuSize");
-		if (i <= apercu_minimum_size)
-			i = apercu_minimum_size;
+		if (i <= minipreview_minimum_size)
+			i = minipreview_minimum_size;
 	} else {
-		i = apercu_minimum_size;
+		i = minipreview_minimum_size;
 	}
-	WMSetSliderValue(panel->apercu.slider, i);
-	apercu_slider_changed(panel->apercu.slider, panel);
+	WMSetSliderValue(panel->minipreview.slider, i);
+	minipreview_slider_changed(panel->minipreview.slider, panel);
 
 	/* Animation */
 	str = GetStringForKey("IconificationStyle");
@@ -340,28 +340,28 @@ static void createPanel(Panel * p)
 	WMMapSubwidgets(panel->sizeF);
 
 	/***************** Mini-Previews ****************/
-	panel->apercu.frame = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->apercu.frame, 156, 52);
-	WMMoveWidget(panel->apercu.frame, 124, 168);
-	WMSetFrameTitle(panel->apercu.frame, _("Mini-Previews for Icons"));
+	panel->minipreview.frame = WMCreateFrame(panel->box);
+	WMResizeWidget(panel->minipreview.frame, 156, 52);
+	WMMoveWidget(panel->minipreview.frame, 124, 168);
+	WMSetFrameTitle(panel->minipreview.frame, _("Mini-Previews for Icons"));
 
 	WMSetBalloonTextForView(_("The Mini-Preview provides a small view of the content of the\n"
 	                          "window when the mouse is placed over the icon."),
-	                        WMWidgetView(panel->apercu.frame));
+	                        WMWidgetView(panel->minipreview.frame));
 
-	panel->apercu.slider = WMCreateSlider(panel->apercu.frame);
-	WMResizeWidget(panel->apercu.slider, 109, 15);
-	WMMoveWidget(panel->apercu.slider, 11, 23);
-	WMSetSliderMinValue(panel->apercu.slider, apercu_minimum_size);
-	WMSetSliderMaxValue(panel->apercu.slider, apercu_maximum_size);
-	WMSetSliderAction(panel->apercu.slider, apercu_slider_changed, panel);
+	panel->minipreview.slider = WMCreateSlider(panel->minipreview.frame);
+	WMResizeWidget(panel->minipreview.slider, 109, 15);
+	WMMoveWidget(panel->minipreview.slider, 11, 23);
+	WMSetSliderMinValue(panel->minipreview.slider, minipreview_minimum_size);
+	WMSetSliderMaxValue(panel->minipreview.slider, minipreview_maximum_size);
+	WMSetSliderAction(panel->minipreview.slider, minipreview_slider_changed, panel);
 
-	panel->apercu.label = WMCreateLabel(panel->apercu.frame);
-	WMResizeWidget(panel->apercu.label, 33, 15);
-	WMMoveWidget(panel->apercu.label, 120, 23);
-	WMSetLabelText(panel->apercu.label, _("OFF"));
+	panel->minipreview.label = WMCreateLabel(panel->minipreview.frame);
+	WMResizeWidget(panel->minipreview.label, 33, 15);
+	WMMoveWidget(panel->minipreview.label, 120, 23);
+	WMSetLabelText(panel->minipreview.label, _("OFF"));
 
-	WMMapSubwidgets(panel->apercu.frame);
+	WMMapSubwidgets(panel->minipreview.frame);
 
     /***************** Animation ****************/
 	panel->animF = WMCreateFrame(panel->box);
@@ -429,12 +429,12 @@ static void storeData(_Panel * panel)
 
 	SetStringForKey(icon_position_dbvalue[panel->iconPos], "IconPosition");
 
-	i = WMGetSliderValue(panel->apercu.slider);
-	if (i <= apercu_minimum_size) {
+	i = WMGetSliderValue(panel->minipreview.slider);
+	if (i <= minipreview_minimum_size) {
 		SetBoolForKey(False, "MiniwindowApercuBalloons");
 	} else {
 		SetBoolForKey(True, "MiniwindowApercuBalloons");
-		if (i < apercu_maximum_size) {
+		if (i < minipreview_maximum_size) {
 			/*
 			 * If the value is bigger, it means it was edited by the user manually
 			 * so we keep as-is. Otherwise, we round it to a multiple of 8 like it

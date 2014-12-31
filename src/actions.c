@@ -1124,7 +1124,7 @@ void wIconifyWindow(WWindow *wwin)
 
 		/* extract the window screenshot everytime, as the option can be enable anytime */
 		if (wwin->client_win && wwin->flags.mapped) {
-			RImage *apercu;
+			RImage *mini_preview;
 			XImage *pimg;
 			unsigned int w, h;
 			int x, y;
@@ -1144,12 +1144,12 @@ void wIconifyWindow(WWindow *wwin)
 
 			pimg = XGetImage(dpy, wwin->client_win, 0, 0, w, h, AllPlanes, ZPixmap);
 			if (pimg) {
-				apercu = RCreateImageFromXImage(wwin->screen_ptr->rcontext, pimg, NULL);
+				mini_preview = RCreateImageFromXImage(wwin->screen_ptr->rcontext, pimg, NULL);
 				XDestroyImage(pimg);
 
-				if (apercu) {
-					set_icon_apercu(wwin->icon, apercu);
-					RReleaseImage(apercu);
+				if (mini_preview) {
+					set_icon_minipreview(wwin->icon, mini_preview);
+					RReleaseImage(mini_preview);
 				} else {
 					wwarning(_("window mini-preview creation failed"));
 				}

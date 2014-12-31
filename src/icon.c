@@ -225,8 +225,8 @@ void wIconDestroy(WIcon *icon)
 	if (icon->pixmap)
 		XFreePixmap(dpy, icon->pixmap);
 
-	if (icon->apercu)
-		XFreePixmap(dpy, icon->apercu);
+	if (icon->mini_preview)
+		XFreePixmap(dpy, icon->mini_preview);
 
 	unset_icon_image(icon);
 
@@ -587,21 +587,21 @@ void set_icon_image_from_image(WIcon *icon, RImage *image)
 	icon->file_image = image;
 }
 
-void set_icon_apercu(WIcon *icon, RImage *image)
+void set_icon_minipreview(WIcon *icon, RImage *image)
 {
 	Pixmap tmp;
-	RImage *scaled_apercu;
+	RImage *scaled_mini_preview;
 	WScreen *scr = icon->core->screen_ptr;
 
-	scaled_apercu = RSmoothScaleImage(image, wPreferences.apercu_size - 2 * APERCU_BORDER,
-	                                  wPreferences.apercu_size - 2 * APERCU_BORDER);
+	scaled_mini_preview = RSmoothScaleImage(image, wPreferences.minipreview_size - 2 * MINIPREVIEW_BORDER,
+	                                  wPreferences.minipreview_size - 2 * MINIPREVIEW_BORDER);
 
-	if (RConvertImage(scr->rcontext, scaled_apercu, &tmp)) {
-		if (icon->apercu != None)
-			XFreePixmap(dpy, icon->apercu);
-		icon->apercu = tmp;
+	if (RConvertImage(scr->rcontext, scaled_mini_preview, &tmp)) {
+		if (icon->mini_preview != None)
+			XFreePixmap(dpy, icon->mini_preview);
+		icon->mini_preview = tmp;
 	}
-	RReleaseImage(scaled_apercu);
+	RReleaseImage(scaled_mini_preview);
 }
 
 void wIconUpdate(WIcon *icon)

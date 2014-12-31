@@ -30,7 +30,7 @@
 #define TILE_DRAWER	2
 
 /* This is the border, in pixel, drawn around a Mini-Preview */
-#define APERCU_BORDER 1
+#define MINIPREVIEW_BORDER 1
 
 typedef struct WIcon {
 	WCoreWindow 	*core;
@@ -51,7 +51,7 @@ typedef struct WIcon {
 	unsigned int	highlighted:1;
 
 	Pixmap 		pixmap;
-	Pixmap		apercu;
+	Pixmap		mini_preview;
 
 	WMHandlerID	handlerID;	/* timer handler ID for cycling select
 					 * color */
@@ -78,6 +78,6 @@ char *get_name_for_instance_class(const char *wm_instance, const char *wm_class)
 
 void wIconSetHighlited(WIcon *icon, Bool flag);
 void set_icon_image_from_image(WIcon *icon, RImage *image);
-void set_icon_apercu(WIcon *icon, RImage *image);
+void set_icon_minipreview(WIcon *icon, RImage *image);
 
 #endif /* WMICON_H_ */
