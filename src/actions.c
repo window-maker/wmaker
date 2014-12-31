@@ -1151,7 +1151,7 @@ void wIconifyWindow(WWindow *wwin)
 					set_icon_apercu(wwin->icon, apercu);
 					RReleaseImage(apercu);
 				} else {
-					wwarning("window apercu creation failed");
+					wwarning(_("window mini-preview creation failed"));
 				}
 			}
 		}

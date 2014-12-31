@@ -93,7 +93,7 @@ typedef struct _Panel {
 } _Panel;
 
 /*
- * Minimum size for an Apercu:
+ * Minimum size for a Mini-Preview:
  * This value is actually twice the size of the minimum icon size choosable.
  * We set the slider min to taht number minus one, because when set to this
  * value WPrefs will consider that the user wants the feature turned off.
@@ -197,7 +197,7 @@ static void showData(_Panel * panel)
 		i = 9;
 	WMSetPopUpButtonSelectedItem(panel->sizeP, i);
 
-	/* Apercu */
+	/* Mini-Previews for Icons */
 	b = GetBoolForKey("MiniwindowApercuBalloons");
 	if (b) {
 		i = GetIntegerForKey("ApercuSize");
@@ -339,13 +339,13 @@ static void createPanel(Panel * p)
 
 	WMMapSubwidgets(panel->sizeF);
 
-	/***************** Apercu ****************/
+	/***************** Mini-Previews ****************/
 	panel->apercu.frame = WMCreateFrame(panel->box);
 	WMResizeWidget(panel->apercu.frame, 156, 52);
 	WMMoveWidget(panel->apercu.frame, 124, 168);
-	WMSetFrameTitle(panel->apercu.frame, _("Miniwindow aperçus"));
+	WMSetFrameTitle(panel->apercu.frame, _("Mini-Previews for Icons"));
 
-	WMSetBalloonTextForView(_("The Aperçu provides a small view of the content of the\n"
+	WMSetBalloonTextForView(_("The Mini-Preview provides a small view of the content of the\n"
 	                          "window when the mouse is placed over the icon."),
 	                        WMWidgetView(panel->apercu.frame));
 

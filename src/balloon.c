@@ -458,7 +458,7 @@ static void showBalloon(WScreen *scr)
 	}
 
 	if (wPreferences.miniwin_apercu_balloon && scr->balloon->apercu != None)
-		/* used to display either the apercu alone or the apercu and the title */
+		/* used to display either the mini-preview alone or the mini-preview with the title */
 		showApercu(scr, x, y, scr->balloon->text, scr->balloon->apercu);
 	else
 		showText(scr, x, y, scr->balloon->h, w, scr->balloon->text);
