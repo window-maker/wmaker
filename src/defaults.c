@@ -319,6 +319,17 @@ static WOptionEnumeration seDragMaximizedWindow[] = {
 };
 
 /*
+ * Backward Compatibility:
+ * The Mini-Previews were introduced in 0.95.6 under the name "Apercu".
+ * For compatibility, we still support the old names in configuration files,
+ * which are loaded in this structure, so this should stay for at least
+ * 2 years (that means until 2017) */
+static struct {
+	char enable;
+	int  size;
+} legacy_minipreview_config;
+
+/*
  * ALL entries in the tables bellow, NEED to have a default value
  * defined, and this value needs to be correct.
  */
@@ -485,7 +496,7 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.window_balloon, getBool, NULL, NULL, NULL},
 	{"MiniwindowTitleBalloons", "NO", NULL,
 	    &wPreferences.miniwin_title_balloon, getBool, NULL, NULL, NULL},
-	{"MiniwindowApercuBalloons", "NO", NULL,
+	{"MiniwindowPreviewBalloons", "NO", NULL,
 	    &wPreferences.miniwin_preview_balloon, getBool, NULL, NULL, NULL},
 	{"AppIconBalloons", "NO", NULL,
 	    &wPreferences.appicon_balloon, getBool, NULL, NULL, NULL},
@@ -505,8 +516,19 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.strict_windoze_cycle, getBool, NULL, NULL, NULL},
 	{"SwitchPanelOnlyOpen",	"NO",	NULL,
 	    &wPreferences.panel_only_open, getBool, NULL, NULL, NULL},
-	{"ApercuSize", "128", NULL,
+	{"MiniPreviewSize", "128", NULL,
 	    &wPreferences.minipreview_size, getInt, NULL, NULL, NULL},
+
+	/*
+	 * Backward Compatibility:
+	 * The Mini-Previews were introduced in 0.95.6 under the name "Apercu".
+	 * For compatibility, we still support the old names in configuration files,
+	 * so this should stay for at least 2 years (that means until 2017)
+	 */
+	{"MiniwindowApercuBalloons", "NO", NULL,
+	    &legacy_minipreview_config.enable, getBool, NULL, NULL, NULL},
+	{"ApercuSize", "128", NULL,
+	    &legacy_minipreview_config.size, getInt, NULL, NULL, NULL},
 
 	/* style options */
 
@@ -1131,6 +1153,10 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 	void *tdata;
 	WMPropList *old_dict = (w_global.domain.wmaker->dictionary != new_dict ? w_global.domain.wmaker->dictionary : NULL);
 
+	/* Backward Compatibility: init array to special value to detect if they changed */
+	legacy_minipreview_config.enable = 99;
+	legacy_minipreview_config.size   = -1;
+
 	needs_refresh = 0;
 
 	for (i = 0; i < wlengthof(optionList); i++) {
@@ -1190,18 +1216,28 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 
 	/*
 	 * Backward Compatibility:
-	 * the option 'minipreview_size' used to be coded as a multiple of the icon size in v0.95.6
-	 * it is now expressed directly in pixels, but to avoid breaking user's setting we check
-	 * for old coding and convert it now.
+	 * Support the old setting names for Apercu, now called Mini-Preview
+	 *
 	 * This code should probably stay for at least 2 years, you should not consider removing
 	 * it before year 2017
 	 */
-	if (wPreferences.minipreview_size < 24) {
-		/* 24 is the minimum icon size proposed in WPref's settings */
-		wPreferences.minipreview_size *= wPreferences.icon_size;
-		if (wPreferences.miniwin_preview_balloon)
-			wwarning(_("your ApercuSize setting is using old syntax, it is converted to %d pixels; consider running WPrefs.app to update your settings"),
-			         wPreferences.minipreview_size);
+	if (legacy_minipreview_config.enable != 99) {
+		wwarning(_("your configuration is using old syntax for Mini-Preview settings; consider running WPrefs.app to update"));
+		wPreferences.miniwin_preview_balloon = legacy_minipreview_config.enable;
+
+		if (legacy_minipreview_config.size >= 0) {
+			/*
+			 * the option 'ApercuSize' used to be coded as a multiple of the icon size in v0.95.6
+			 * it is now expressed directly in pixels, but to avoid breaking user's setting we check
+			 * for old coding and convert it now.
+			 */
+			if (legacy_minipreview_config.size < 24) {
+				/* 24 is the minimum icon size proposed in WPref's settings */
+				wPreferences.minipreview_size = legacy_minipreview_config.size * wPreferences.icon_size;
+			} else {
+				wPreferences.minipreview_size = legacy_minipreview_config.size;
+			}
+		}
 	}
 
 	if (needs_refresh != 0 && !scr->flags.startup) {

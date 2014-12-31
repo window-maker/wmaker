@@ -47,6 +47,15 @@ WPrefs.app, the option to "Open dialogs in the same workspace as their owners"
 ~/GNUstep/Defaults/WindowMaker) has been moved to "Expert User Preferences".
 
 
+Mini-Previews instead of Apercus
+--------------------------------
+
+Since the original name was not really clear because it is a French word that
+is rarely used by British people, it was decided to change it to the more usual
+Mini-Preview name. The setting is configurable with WPrefs in the Icon
+Preferences tab, the size is now expressed in pixels directly.
+
+
 --- 0.95.6
 
 More image format supported

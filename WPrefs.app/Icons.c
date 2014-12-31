@@ -198,13 +198,35 @@ static void showData(_Panel * panel)
 	WMSetPopUpButtonSelectedItem(panel->sizeP, i);
 
 	/* Mini-Previews for Icons */
-	b = GetBoolForKey("MiniwindowApercuBalloons");
-	if (b) {
-		i = GetIntegerForKey("ApercuSize");
-		if (i <= minipreview_minimum_size)
+
+	/*
+	 * Backward Compatibility:
+	 * These settings changed names after 0.95.6, so to avoid breaking user's
+	 * config we still support the old names, and silently convert them to the
+	 * new settings
+	 * This hack should be kept for at least 2 years, that means >= 2017.
+	 */
+	str = GetStringForKey("MiniwindowPreviewBalloons");
+	if (str != NULL) {
+		/* New names found, use them in priority */
+		b = GetBoolForKey("MiniwindowPreviewBalloons");
+		if (b) {
+			i = GetIntegerForKey("MiniPreviewSize");
+			if (i <= minipreview_minimum_size)
+				i = minipreview_minimum_size;
+		} else {
 			i = minipreview_minimum_size;
+		}
 	} else {
-		i = minipreview_minimum_size;
+		/* No new names, try the legacy names */
+		b = GetBoolForKey("MiniwindowApercuBalloons");
+		if (b) {
+			i = GetIntegerForKey("ApercuSize");
+			if (i <= minipreview_minimum_size)
+				i = minipreview_minimum_size;
+		} else {
+			i = minipreview_minimum_size;
+		}
 	}
 	WMSetSliderValue(panel->minipreview.slider, i);
 	minipreview_slider_changed(panel->minipreview.slider, panel);
@@ -431,9 +453,9 @@ static void storeData(_Panel * panel)
 
 	i = WMGetSliderValue(panel->minipreview.slider);
 	if (i <= minipreview_minimum_size) {
-		SetBoolForKey(False, "MiniwindowApercuBalloons");
+		SetBoolForKey(False, "MiniwindowPreviewBalloons");
 	} else {
-		SetBoolForKey(True, "MiniwindowApercuBalloons");
+		SetBoolForKey(True, "MiniwindowPreviewBalloons");
 		if (i < minipreview_maximum_size) {
 			/*
 			 * If the value is bigger, it means it was edited by the user manually
@@ -442,7 +464,7 @@ static void storeData(_Panel * panel)
 			 */
 			i &= ~7;
 		}
-		SetIntegerForKey(i, "ApercuSize");
+		SetIntegerForKey(i, "MiniPreviewSize");
 	}
 
 	for (i = 0; i < wlengthof(icon_animation); i++) {
