@@ -32,7 +32,9 @@ dnl Because the 2.69 was released only a few month later, let's just ask for it
 AC_PREREQ([2.69])
 
 
-AC_INIT(WindowMaker, 0.95.6, , WindowMaker, http://www.windowmaker.org/)
+dnl Configuration for Autoconf and Automake
+dnl =======================================
+AC_INIT([WindowMaker],[0.95.6],[wmaker-dev@lists.windowmaker.org],[WindowMaker],[http://www.windowmaker.org/])
 AC_CONFIG_SRCDIR(src/WindowMaker.h)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS(config.h)
