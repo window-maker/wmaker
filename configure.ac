@@ -43,7 +43,7 @@ AM_INIT_AUTOMAKE([1.11 silent-rules])
 AH_BOTTOM([#include "config-paths.h"])
 
 dnl libtool library versioning
-dnl =======================
+dnl ==========================
 dnl
 dnl current
 dnl revision
@@ -84,7 +84,7 @@ WUTIL_VERSION=$WUTIL_CURRENT:$WUTIL_REVISION:$WUTIL_AGE
 AC_SUBST(WUTIL_VERSION)
 
 
-dnl Checks for programs.
+dnl Checks for programs
 dnl ===================
 AC_PROG_CC
 WM_PROG_CC_C11
@@ -225,7 +225,8 @@ WM_PROG_CC_NESTEDFUNC
 
 
 dnl Posix thread
-dnl =================
+dnl ============
+dnl they are used by util/wmiv
 AX_PTHREAD
 
 
@@ -312,7 +313,7 @@ AS_IF([test "x$enable_lcov" != "xno"],
 
 AM_CONDITIONAL([USE_LCOV], [test "x$enable_lcov" != "xno"])
 
-dnl
+
 dnl ============================
 dnl Checks for library functions
 dnl ============================
@@ -362,22 +363,27 @@ AS_IF([test "x$ac_cv_search_strlcat" = "x-lbsd" -o "x$ac_cv_search_strlcpy" = "x
 )
 AC_SUBST(LIBBSD)
 
+
 dnl Check for OpenBSD kernel memory interface - kvm(3)
 dnl ==================================================
 AS_IF([test "x$WM_OSDEP" = "xbsd"],
   AC_SEARCH_LIBS([kvm_openfiles], [kvm]) )
 
+
 dnl Check for inotify
 dnl =================
+dnl It is used by WindowMaker to reload automatically the configuration when the
+dnl user changed it using WPref or wdwrite
 AC_CHECK_HEADERS(sys/inotify.h, AC_DEFINE(HAVE_INOTIFY, 1, Check for inotify))
 
 
 dnl Check for syslog 
-dnl =================
+dnl ================
+dnl It is used by WUtil to log the wwarning, werror and wfatal
 AC_CHECK_HEADERS([syslog.h], [AC_DEFINE([HAVE_SYSLOG], [1], [Check for syslog])])
 
 
-dnl Checks for header files.
+dnl Checks for header files
 dnl =======================
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
@@ -385,8 +391,8 @@ AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h libintl.h poll.h malloc.h ctype.h 
 		 string.h strings.h)
 
 
-dnl Checks for typedefs, structures, and compiler characteristics.
-dnl ==============================================================
+dnl Checks for typedefs, structures, and compiler characteristics
+dnl =============================================================
 AC_C_CONST
 AC_C_INLINE
 WM_C_NORETURN
@@ -398,6 +404,7 @@ WM_TYPE_SIGNAL
 dnl pkg-config
 dnl ==========
 AC_CHECK_PROG(PKGCONFIG, pkg-config, pkg-config) 
+
 
 dnl gettext
 dnl =======
@@ -521,6 +528,7 @@ AC_SUBST(UTILMOFILES)
 AC_SUBST(WINGSMOFILES)
 AC_SUBST(supported_locales)
 
+
 dnl ===========================================
 dnl 		Stuff that uses X
 dnl ===========================================
@@ -543,6 +551,7 @@ inc_search_path="$inc_search_path $XCFLAGS"
 
 AC_SUBST(X_LIBRARY_PATH)
 
+
 dnl Decide which locale function to use, setlocale() or _Xsetlocale()
 dnl by MANOME Tomonori 
 dnl ===========================================
@@ -556,11 +565,13 @@ if test "$use_locale" = yes; then
 		$XLFLAGS $XLIBS)
 fi
 
+
 dnl Check whether XInternAtoms() exist
 dnl ==================================
 AC_CHECK_LIB(X11, XInternAtoms, 
              AC_DEFINE(HAVE_XINTERNATOMS, 1, [define if your X server has XInternAtoms() (set by configure)]),,
              $XLFLAGS $XLIBS)
+
 
 dnl Check whether XConvertCase() exist
 dnl ==================================
@@ -568,13 +579,15 @@ AC_CHECK_LIB(X11, XConvertCase,
              AC_DEFINE(HAVE_XCONVERTCASE, 1, [define if your X server has XConvertCase() (set by configure)]),,
              $XLFLAGS $XLIBS)
 
+
 dnl XKB keyboard language status
 dnl ============================
 AC_ARG_ENABLE(modelock, AS_HELP_STRING([--enable-modelock], [XKB keyboard language status support]),
 		AC_DEFINE(XKB_MODELOCK, 1, [whether XKB language MODELOCK should be enabled]))
 
+
 dnl XDND Drag-nd-Drop support
-dnl ============================
+dnl =========================
 AC_ARG_ENABLE([xdnd],
     [AS_HELP_STRING([--disable-xdnd], [disable Drag-nd-Drop support])],
     [AS_CASE(["$enableval"],
@@ -584,6 +597,7 @@ AC_ARG_ENABLE([xdnd],
   supported_xext="$supported_xext XDnD"
   AC_DEFINE(XDND, 1, [whether Drag-nd-Drop support should be enabled])
 ])
+
 
 dnl XShape support
 dnl ==============
@@ -595,6 +609,7 @@ AC_ARG_ENABLE([shape],
     [enable_shape=auto])
 WM_XEXT_CHECK_XSHAPE
 
+
 dnl MIT-SHM support
 dnl ===============
 AC_ARG_ENABLE([shm],
@@ -605,10 +620,12 @@ AC_ARG_ENABLE([shm],
     [enable_shm=auto])
 WM_XEXT_CHECK_XSHM
 
+
 dnl X Misceleanous Utility
 dnl ======================
-# the libXmu is used in WRaster
+dnl the libXmu is used in WRaster
 WM_EXT_CHECK_XMU
+
 
 dnl XINERAMA support
 dnl ================
@@ -620,8 +637,9 @@ AC_ARG_ENABLE([xinerama],
     [enable_xinerama=auto])
 WM_XEXT_CHECK_XINERAMA
 
+
 dnl RandR support
-dnl ==============
+dnl =============
 AC_ARG_ENABLE([randr],
     [AS_HELP_STRING([--enable-randr], [enable RandR extension support (NOT recommended, buggy)])],
     [AS_CASE(["$enableval"],
@@ -630,15 +648,17 @@ AC_ARG_ENABLE([randr],
     [enable_randr=no])
 WM_XEXT_CHECK_XRANDR
 
-dnl
+
+dnl Math library
+dnl ============
 dnl libWINGS uses math functions, check whether usage requires linking
 dnl against libm
-dnl
 WM_CHECK_LIBM
 
-dnl
+
+dnl FontConfig
+dnl ==========
 dnl libWINGS uses FcPatternDel from libfontconfig
-dnl
 AC_MSG_CHECKING([for fontconfig library])
 FCLIBS=`$PKGCONFIG fontconfig --libs`
 if test "x$FCLIBS" = "x" ; then
@@ -745,10 +765,11 @@ dnl 		End of stuff that uses X
 dnl ===============================================
 
 dnl EXIF Support
-dnl ===========
+dnl ============
 WM_CHECK_LIBEXIF
 AS_IF([test "x$LIBEXIF" != "x"],
         [AC_DEFINE(HAVE_EXIF, 1, [Define if EXIF can be used])])
+
 
 dnl PNG Support
 dnl ===========
@@ -795,7 +816,7 @@ WM_IMGFMT_CHECK_TIFF
 
 
 dnl WEBP Support
-dnl ===========
+dnl ============
 AC_ARG_ENABLE([webp],
     [AS_HELP_STRING([--disable-webp], [disable WEBP support through libwebp])],
     [AS_CASE(["$enableval"],
@@ -805,8 +826,8 @@ AC_ARG_ENABLE([webp],
 WM_IMGFMT_CHECK_WEBP
 
 
-dnl MAGICK Support
-dnl ===========
+dnl MagicK Support
+dnl ==============
 AC_ARG_ENABLE([magick],
     [AS_HELP_STRING([--disable-magick], [disable MAGICK support through libMagickWand])],
     [AS_CASE(["$enableval"],
@@ -866,7 +887,6 @@ AC_SUBST(pixmapdir)
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
 dnl ==============================================
-
 AC_ARG_WITH(gnustepdir, AS_HELP_STRING([--with-gnustepdir=PATH], [specify the directory for GNUstep applications]))
 
 if test "x`echo $with_gnustepdir | grep ^/`" != "x"; then
@@ -902,6 +922,9 @@ if test "$enableval" = yes; then
 fi
 )
 
+
+dnl Support for removing non-public symbols from a library
+dnl ======================================================
 gl_LD_VERSION_SCRIPT
 
 
@@ -913,7 +936,7 @@ WM_CFLAGS_GCC_OPTION_POSTPONED
 AC_SUBST(lib_search_path)
 AC_SUBST(inc_search_path)
 
-dnl
+
 dnl Spit out the configuration
 dnl ==========================
 AC_CONFIG_FILES(
@@ -950,6 +973,9 @@ AC_CONFIG_FILES(
 
 AC_OUTPUT
 
+
+dnl Provide a summary of the config
+dnl ===============================
 if test "x$MOFILES" = "x"; then
 	mof=None
 else
@@ -1006,4 +1032,3 @@ dnl ================================================
 dnl Local Variables:
 dnl compile-command: "autoconf"
 dnl End:
-

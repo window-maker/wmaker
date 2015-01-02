@@ -16,6 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+
 # WM_IMGFMT_CHECK_GIF
 # -------------------
 #
@@ -175,7 +176,7 @@ AC_DEFUN_ONCE([WM_IMGFMT_CHECK_TIFF],
 
 
 # WM_IMGFMT_CHECK_WEBP
-# -------------------
+# --------------------
 #
 # Check for WEBP file support through 'libwebp'
 # The check depends on variable 'enable_webp' being either:

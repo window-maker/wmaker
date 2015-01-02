@@ -16,8 +16,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+
 # WM_PROG_CC_C11
-# ---------------------
+# --------------
 #
 # Check if the compiler supports C11 standard natively, or if any
 # option may help enabling the support

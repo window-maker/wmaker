@@ -24,12 +24,11 @@ m4_pattern_forbid([^_?WM_])
 m4_pattern_allow([^WM_OSDEP(_[A-Z]*)?$])
 
 
-dnl
-dnl WM_CHECK_XFT_VERSION(MIN_VERSION, [ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]])
-dnl
-dnl # $XFTFLAGS should be defined before calling this macro,
-dnl # else it will not be able to find Xft.h
-dnl
+# WM_CHECK_XFT_VERSION(MIN_VERSION, [ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]])
+#
+# $XFTFLAGS should be defined before calling this macro,
+# else it will not be able to find Xft.h
+#
 AC_DEFUN([WM_CHECK_XFT_VERSION],
 [
 CPPFLAGS_old="$CPPFLAGS"
@@ -61,14 +60,14 @@ CPPFLAGS="$CPPFLAGS_old"
 ])
 
 
-dnl _WM_LIB_CHECK_FUNCTS
-dnl -----------------------
-dnl (internal shell functions)
-dnl
-dnl Create 2 shell functions:
-dnl  wm_fn_imgfmt_try_link: try to link against library
-dnl  wm_fn_imgfmt_try_compile: try to compile against header
-dnl
+# _WM_LIB_CHECK_FUNCTS
+# --------------------
+# (internal shell functions)
+#
+# Create 2 shell functions:
+#  wm_fn_imgfmt_try_link: try to link against library
+#  wm_fn_imgfmt_try_compile: try to compile against header
+#
 AC_DEFUN_ONCE([_WM_LIB_CHECK_FUNCTS],
 [@%:@ wm_fn_lib_try_link FUNCTION LFLAGS
 @%:@ ----------------------------------

@@ -16,6 +16,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+
 # WM_C_NORETURN
 # -------------
 #
@@ -61,8 +62,9 @@ AS_CASE([$wm_cv_c_noreturn],
         [Defines the attribute to tell the compiler that a function never returns, if the ISO C11 attribute does not work])])
 ])
 
+
 # _WM_SHELLFN_FUNCATTRIBUTE
-# ----------------------
+# -------------------------
 # (internal shell function only!)
 #
 # Create a shell function to check if we can compile with special
