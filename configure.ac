@@ -588,8 +588,14 @@ AC_CHECK_LIB([X11], [XConvertCase],
 
 dnl XKB keyboard language status
 dnl ============================
-AC_ARG_ENABLE(modelock, AS_HELP_STRING([--enable-modelock], [XKB keyboard language status support]),
-		AC_DEFINE(XKB_MODELOCK, 1, [whether XKB language MODELOCK should be enabled]))
+AC_ARG_ENABLE([modelock],
+    [AS_HELP_STRING([--enable-modelock], [XKB keyboard language status support])],
+    [AS_CASE([$enableval],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value '$enableval' for --enable-modelock])])],
+    [enable_modelock=no])
+AS_IF([test "x$enable_modelock" = "xyes"],
+    [AC_DEFINE([XKB_MODELOCK], [1], [whether XKB language MODELOCK should be enabled]) ])
 
 
 dnl XDND Drag-nd-Drop support
@@ -599,10 +605,11 @@ AC_ARG_ENABLE([xdnd],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --disable-xdnd]) ]) ],
-    [enable_xdnd=yes
-  supported_xext="$supported_xext XDnD"
-  AC_DEFINE(XDND, 1, [whether Drag-nd-Drop support should be enabled])
-])
+    [enable_xdnd=yes])
+AS_IF([test "x$enable_xdnd" = "xyes"],
+    [supported_xext="$supported_xext XDnD"
+     AC_DEFINE([XDND], [1], [whether Drag-nd-Drop support should be enabled])],
+    [unsupported="$unsupported XDnd"])
 
 
 dnl XShape support
@@ -922,11 +929,15 @@ AC_SUBST(wprefs_bindir)
 
 dnl Enable User Defined Menu thing
 dnl ==============================
-AC_ARG_ENABLE(usermenu, AS_HELP_STRING([--enable-usermenu], [user defined menus for applications]),
-if test "$enableval" = yes; then
-	AC_DEFINE(USER_MENU, 1, [define if you want user defined menus for applications])
-fi
-)
+AC_ARG_ENABLE([usermenu],
+    [AS_HELP_STRING([--enable-usermenu], [user defined menus for applications])],
+    [AS_CASE([$enableval],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value '$enableval' for --enable-usermenu])])],
+    [enable_usermenu=no])
+AS_IF([test "x$enable_usermenu" = "xyes"],
+    [AC_DEFINE([USER_MENU], [1],
+        [define if you want user defined menus for applications])])
 
 
 dnl Support for removing non-public symbols from a library
