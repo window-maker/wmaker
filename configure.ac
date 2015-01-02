@@ -78,7 +78,7 @@ AC_PROG_CC
 WM_PROG_CC_C11
 AC_PROG_LN_S
 AC_PROG_GCC_TRADITIONAL
-AC_PROG_LIBTOOL
+LT_INIT
 
 
 dnl Debugging Options
@@ -376,13 +376,12 @@ AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h libintl.h poll.h malloc.h ctype.h 
 
 dnl Checks for typedefs, structures, and compiler characteristics.
 dnl ==============================================================
-AC_DECL_SYS_SIGLIST
 AC_C_CONST
 AC_C_INLINE
 WM_C_NORETURN
 AC_TYPE_SIZE_T
 AC_TYPE_PID_T
-AC_TYPE_SIGNAL
+WM_TYPE_SIGNAL
 
 
 dnl pkg-config
@@ -902,22 +901,6 @@ dnl ======================================
 WM_CFLAGS_GCC_OPTION_POSTPONED
 
 
-AC_OUTPUT(Makefile po/Makefile util/Makefile util/po/Makefile test/Makefile \
-	WINGs/Makefile WINGs/WINGs/Makefile WINGs/Documentation/Makefile \
-	WINGs/Examples/Makefile WINGs/Resources/Makefile WINGs/Tests/Makefile \
-	WINGs/Extras/Makefile WINGs/po/Makefile \
-	wmlib/Makefile wrlib/Makefile wrlib/tests/Makefile \
-	src/Makefile src/wconfig.h \
-	doc/Makefile doc/sk/Makefile doc/cs/Makefile \
-	doc/ru/Makefile \
-	WindowMaker/Makefile WindowMaker/Backgrounds/Makefile \
-	WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile \
-	WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile \
-	WindowMaker/Styles/Makefile WindowMaker/Themes/Makefile \
-	WPrefs.app/Makefile WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile \
-	WPrefs.app/po/Makefile )
-
-
 dnl Output some helpful data for compiling wraster and WINGs/WUtil apps
 dnl ===================================================================
 
@@ -934,6 +917,39 @@ AC_SUBST(inc_search_path)
 dnl
 dnl Spit out the configuration
 dnl ==========================
+AC_CONFIG_FILES(
+    Makefile
+
+    dnl WRaster Library
+    wrlib/Makefile
+    wrlib/tests/Makefile
+
+    dnl WINGs toolkit
+    WINGs/Makefile WINGs/WINGs/Makefile WINGs/po/Makefile
+    WINGs/Documentation/Makefile WINGs/Resources/Makefile WINGs/Extras/Makefile
+    WINGs/Examples/Makefile WINGs/Tests/Makefile
+
+    dnl Window Maker's core
+    src/Makefile src/wconfig.h po/Makefile
+    doc/Makefile doc/sk/Makefile doc/cs/Makefile doc/ru/Makefile
+    WindowMaker/Makefile WindowMaker/Backgrounds/Makefile
+    WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile
+    WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile
+    WindowMaker/Styles/Makefile WindowMaker/Themes/Makefile
+
+    dnl Preference GUI
+    WPrefs.app/Makefile WPrefs.app/po/Makefile
+    WPrefs.app/tiff/Makefile WPrefs.app/xpm/Makefile
+
+    dnl Command-line utilities
+    util/Makefile util/po/Makefile
+
+    dnl Misceleanous stuff
+    wmlib/Makefile
+    test/Makefile
+)
+
+AC_OUTPUT
 
 if test "x$MOFILES" = "x"; then
 	mof=None

@@ -244,3 +244,25 @@ AS_CASE([$wm_cv_func_open_nofollow],
             AC_MSG_WARN([flag O_NOFOLLOW is not defined on your platform])],
     [CPPFLAGS="$CPPFLAGS $wm_cv_func_open_nofollow"])
 ])
+
+
+# WM_TYPE_SIGNAL
+# --------------
+#
+# Check the return type for the function 'signal'
+# Autoconf now claims we can assume the type is 'void' as it is in the C89 standard,
+# but as Window Maker is supposed to be lightweight enough for old machines, we
+# prefer to keep the check for portability
+AC_DEFUN_ONCE([WM_TYPE_SIGNAL],
+[AC_CACHE_CHECK([return type of signal handlers], [wm_cv_type_signal],
+    [AC_COMPILE_IFELSE(
+        [AC_LANG_PROGRAM([#include <sys/types.h>
+#include <signal.h>
+],
+            [return *(signal (0, 0)) (0) == 1;])],
+        [wm_cv_type_signal=int],
+        [wm_cv_type_signal=void])dnl
+    ])
+AC_DEFINE_UNQUOTED([RETSIGTYPE], [$wm_cv_type_signal],
+    [Define as the return type of signal handlers (`int' or `void')])dnl
+])
