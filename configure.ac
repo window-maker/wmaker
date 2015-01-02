@@ -1,13 +1,27 @@
+dnl ============================================================================
 dnl
-dnl Window Maker autoconf input.
+dnl Window Maker autoconf input
 dnl
-dnl Process with:
-dnl               aclocal
-dnl               autoheader
-dnl               autoconf
-dnl               libtoolize --force --automake
-dnl               automake -a --gnu --include-deps
+AC_COPYRIGHT([Copyright (c) 2001-2015 The Window Maker Team])
 dnl
+dnl ============================================================================
+dnl
+dnl This program is free software; you can redistribute it and/or modify
+dnl it under the terms of the GNU General Public License as published by
+dnl the Free Software Foundation; either version 2 of the License, or
+dnl (at your option) any later version.
+dnl
+dnl This program is distributed in the hope that it will be useful,
+dnl but WITHOUT ANY WARRANTY; without even the implied warranty of
+dnl MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+dnl GNU General Public License for more details.
+dnl
+dnl You should have received a copy of the GNU General Public License along
+dnl with this program; see the file COPYING.
+dnl
+dnl ============================================================================
+dnl
+dnl Process with: ./autogen.sh
 
 
 dnl Due to a bug in Autoconf 2.68 (apparently a regression), we need at least
