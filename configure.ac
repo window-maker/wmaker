@@ -888,43 +888,44 @@ AC_CHECK_HEADERS(stdlib.h)
 
 dnl Support for PIXMAPDIR option
 dnl ============================
-AC_ARG_WITH(pixmapdir, AS_HELP_STRING([--with-pixmapdir=PATH], [specify where pixmaps are located [DATADIR/pixmaps]]))
+AC_ARG_WITH([pixmapdir],
+    [AS_HELP_STRING([--with-pixmapdir=PATH], [specify where pixmaps are located [DATADIR/pixmaps]])],
+    [AS_CASE([$withval],
+        [yes|no], [AC_MSG_ERROR([bad value '$withval' for --with-pixmapdir, expected a path]) ],
+        [/*],  [], dnl Absolute path, ok
+        [\$*], [], dnl Assumes it starts with a reference to $prefix or a similar variable, ok
+        [AC_MSG_ERROR([bad path '$withval' for pixmapdir, expecting an absolute path])])],
+    [with_pixmapdir=""])
 
-if test "x$with_pixmapdir" != "x"; then
-	pixmapdir=$with_pixmapdir
-else
-	pixmapdir='${datadir}/pixmaps'
-fi
-AC_SUBST(pixmapdir)
+AS_IF([test "x$with_pixmapdir" != "x"],
+    [pixmapdir="$with_pixmapdir"],
+    [pixmapdir='${datadir}/pixmaps'])
+AC_SUBST([pixmapdir])dnl
 
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
 dnl ==============================================
-AC_ARG_WITH(gnustepdir, AS_HELP_STRING([--with-gnustepdir=PATH], [specify the directory for GNUstep applications]))
+AC_ARG_WITH([gnustepdir],
+    [AS_HELP_STRING([--with-gnustepdir=PATH], [specify the directory for GNUstep applications])],
+    [AS_CASE([$withval],
+        [yes|no], [AC_MSG_ERROR([bad value '$withval' for --with-gnustepdir, expected a path]) ],
+        [/*],  [], dnl Absolute path, ok
+        [\$*], [], dnl Assumes it starts with a reference to $prefix or a similar variable, ok
+        [AC_MSG_ERROR([bad path '$withval' for gnustepdir, expecting an absolute path])])],
+    [dnl If no command-line option was given, we use $GNUSTEP_LOCAL_ROOT if it was set
+     with_gnustepdir="$GNUSTEP_LOCAL_ROOT"])
 
-if test "x`echo $with_gnustepdir | grep ^/`" != "x"; then
-    appspath=$with_gnustepdir
-fi
-
-if test "x$appspath$GNUSTEP_LOCAL_ROOT" = "x"; then
-    wprefs_base_dir=${prefix}
-    wprefs_datadir="${datadir}/WPrefs"
-    wprefs_bindir="${bindir}"
-else
-    gnustepdir=$appspath
-
-    if test "x$GNUSTEP_LOCAL_ROOT" != "x" ; then
-	gnustepdir=`echo "$GNUSTEP_LOCAL_ROOT" | sed -e "s|^${prefix}|prefix|"`
-	gnustepdir=`echo $gnustepdir | sed -e 's|^prefix|${prefix}|'`
-    fi
-
-    wprefs_base_dir=$gnustepdir/Applications
-    wprefs_datadir=$wprefs_base_dir/WPrefs.app
-    wprefs_bindir=$wprefs_base_dir/WPrefs.app
-fi
-
-AC_SUBST(wprefs_datadir)
-AC_SUBST(wprefs_bindir)
+AS_IF([test "x$with_gnustepdir" = "x"],
+    [dnl No path specified, use default
+     wprefs_base_dir=${prefix}
+     wprefs_datadir="${datadir}/WPrefs"
+     wprefs_bindir="${bindir}"],
+    [dnl User specified base path
+     wprefs_base_dir="$with_gnustepdir/Applications"
+     wprefs_datadir="$wprefs_base_dir/WPrefs.app"
+     wprefs_bindir="$wprefs_base_dir/WPrefs.app"])
+AC_SUBST([wprefs_datadir])dnl
+AC_SUBST([wprefs_bindir])dnl
 
 
 dnl Enable User Defined Menu thing
