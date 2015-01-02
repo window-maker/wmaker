@@ -68,10 +68,6 @@ WUTIL_VERSION=$WUTIL_CURRENT:$WUTIL_REVISION:$WUTIL_AGE
 AC_SUBST(WUTIL_VERSION)
 
 
-dnl Checks for host/os name
-dnl =======================
-dnl AC_CANONICAL_HOST -- already done by AC_PROG_LIBTOOL
-
 dnl Checks for programs.
 dnl ===================
 AC_PROG_CC
@@ -304,7 +300,6 @@ dnl
 dnl ============================
 dnl Checks for library functions
 dnl ============================
-dnl not used anywhere
 AC_FUNC_MEMCMP
 AC_FUNC_VPRINTF
 WM_FUNC_SECURE_GETENV
@@ -386,7 +381,6 @@ WM_TYPE_SIGNAL
 
 dnl pkg-config
 dnl ==========
-dnl AC_ARG_VAR(PKGCONFIG, [pkg-config command])
 AC_CHECK_PROG(PKGCONFIG, pkg-config, pkg-config) 
 
 dnl gettext
@@ -841,7 +835,6 @@ dnl
 dnl stdlib.h is checked here, because of conflict in jpeglib.h
 AC_CHECK_HEADERS(stdlib.h)
 
-# AC_PREFIX_PROGRAM(wmaker)
 
 dnl Support for PIXMAPDIR option
 dnl ============================
@@ -900,16 +893,6 @@ dnl Add the post-poned compilation options
 dnl ======================================
 WM_CFLAGS_GCC_OPTION_POSTPONED
 
-
-dnl Output some helpful data for compiling wraster and WINGs/WUtil apps
-dnl ===================================================================
-
-dnl echo "WFLAGS=\"$LIBPL_INC_PATH -I$prefix/include\"" > WINGs-flags
-dnl echo "WLIBS=\"-L$exec_prefix/lib -lWINGs -lwraster $LIBPL_LIBS $GFXLIBS -lm\""\
-dnl 	| sed -e 's|\$(prefix)|'"$prefix|" >> WINGs-flags
-
-dnl The #lp# and #rp# stuff below is a hack because [ and ] get lost when
-dnl parsed by m4
 
 AC_SUBST(lib_search_path)
 AC_SUBST(inc_search_path)
@@ -986,8 +969,6 @@ echo
 
 AS_IF([test "x$wm_cv_prog_cc_nestedfunc" != "xyes"],
     [AC_MSG_WARN([[Your compiler does not support Nested Function, work-around enabled]])])
-
-dnl WM_PRINT_REDCRAP_BUG_STATUS
 
 AS_IF([test "x$enable_jpeg" = xno], [dnl
     AS_ECHO(["WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"])
