@@ -5,14 +5,16 @@ DIST_SUBDIRS = $(SUBDIRS) tests
 
 AUTOMAKE_OPTIONS =
 
-EXTRA_DIST = tests libwraster.map get-wraster-flags.in
+EXTRA_DIST = tests get-wraster-flags.in
 
 lib_LTLIBRARIES = libwraster.la
 
 libwraster_la_LDFLAGS = -version-info @WRASTER_VERSION@
 
 if HAVE_LD_VERSION_SCRIPT
-libwraster_la_LDFLAGS += -Wl,--version-script=$(srcdir)/libwraster.map
+libwraster_la_LDFLAGS += -Wl,--version-script=libwraster.map
+EXTRA_libwraster_la_DEPENDENCIES = libwraster.map
+CLEANFILES = libwraster.map
 endif
 
 bin_SCRIPTS = get-wraster-flags
@@ -101,3 +103,8 @@ get-wraster-flags: get-wraster-flags.in Makefile
 	        -e 's#$${XLIBS}#$(XLIBS)#;' < $(abs_srcdir)/get-wraster-flags.in > $@
 	@chmod 755 $@
 
+if HAVE_LD_VERSION_SCRIPT
+libwraster.map: $(include_HEADERS) $(top_srcdir)/script/generate-mapfile-from-header.sh
+	$(AM_V_GEN)$(top_srcdir)/script/generate-mapfile-from-header.sh \
+		-n LIBWRASTER -v $(WRASTER_VERSION) $(srcdir)/$(include_HEADERS) > libwraster.map
+endif

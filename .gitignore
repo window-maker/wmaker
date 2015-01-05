@@ -84,6 +84,8 @@ wrlib/wrlib.pc
 WINGs/WINGs.pc
 WINGs/WUtil.pc
 
+wrlib/libwraster.map
+
 WindowMaker/Defaults/WMRootMenu
 WindowMaker/Defaults/WMState
 WindowMaker/Defaults/WMWindowAttributes
