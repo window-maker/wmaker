@@ -38,6 +38,7 @@ EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N INSTALL \
 	The-perfect-Window-Maker-patch.txt \
 	README COPYING.WTFPL autogen.sh \
 	email-clients.txt checkpatch.pl update-changelog.pl \
+	script/generate-mapfile-from-header.sh \
 	script/nested-func-to-macro.sh
 
 if USE_LCOV
