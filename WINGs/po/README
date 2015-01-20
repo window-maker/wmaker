@@ -1,9 +1,3 @@
-
-Instructions for translating po files can be found in the po/README directory
-in the top of the WindowMaker source tree.
-
-All files are in UTF-8
-
 File	Language	Note	Current Maintainer
 ------------------------------------------------------------------------------
 ca.po	Catalan			Ernest Adrogué <eadrogue@gmx.net>

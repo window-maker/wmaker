@@ -1,21 +1,3 @@
-
-General instructions for translating po files can be found in the po/README directory
-in the top of the WindowMaker source tree. To update one of the WPrefs.app
-translations (e.g. the German) do this:
-
-1) make WPrefs.pot
-
-2) edit the file WPrefs.pot, adding new translated strings or correcting
-   previous entries
-
-3) msgmerge de.po WPrefs.pot > de.po.new
-
-4) After checking de.po.new is OK, rename it to de.po to overwrite the
-   previous file.
-
-
-All files are now in UTF-8
-
 File	Language		Current Maintainer
 ------------------------------------------------------------------------------
 pt.po	Portuguese		Eliphas Levy Theodoro <eliphas@conectiva.com.br>

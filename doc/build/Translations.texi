@@ -61,7 +61,8 @@ with this program, see file COPYING for details.
 @titlepage
 @title Window Maker Internationalisation
 @subtitle A guide to enable support for language translations
-@subtitle in @sc{Window Maker}.
+@subtitle in @sc{Window Maker} and to the contributors
+@subtitle who want to help translating.
 @author Christophe CURIS
 
 @page
@@ -79,7 +80,8 @@ Published by The Window Maker team on @today{}.
 
 @ifclear cctexi2txt
 A guide to enable support for language translations
-in @sc{Window Maker}.
+in @sc{Window Maker} and to the contributors
+who want to help translating.
 @end ifclear
 @end ifnottex
 
@@ -96,6 +98,7 @@ This manual is for Window Maker, version @value{version}.
 * Enabling Languages support::  How to compile Window Maker with i18n support
 * Choosing the Language::       When installed, how to run wmaker with your language
 * Troubleshooting::             Some points to check if you have problems
+* Contribute to Translations::  What to do if you want to help translating
 @end menu
 
 
@@ -336,6 +339,180 @@ the @env{LC_CTYPE} environment variable is unset or it has the correct
 value. If you don't know what is the correct value, unset it.
 
 @end itemize
+
+
+@c ------------------------------------------------------------------ Contribute to Translations ---
+@node Contribute to Translations
+@chapter Contribute to Translations
+
+You may have noticed that many translations are not up to date, because the code has evolved but the
+persons who initially contributed may not have had the time to continue, so any help is welcome.
+
+
+@c ------------------------------------------------------------------ Install the latest sources ---
+@section Install the latest sources
+
+If you want to contribute, the first step is get the development branch of the code;
+this is done using @command{git}.
+If you do not feel confident at all with using @command{git}, you may also try to ask for a
+@emph{snapshot} on the developer's mailing list @value{emailsupport}.
+With @command{git} the procedure is:
+
+@example
+# Get your working copy of the sources
+git clone git://repo.or.cz/wmaker-crm.git
+
+# Go into that newly created directory
+cd wmaker-crm
+
+# Switch to the branch where everything happens
+git checkout next
+
+# Generate the configuration script
+./autogen.sh
+@end example
+
+Now you should have an up-to-date working copy ready to be compiled;
+you will not need to go the full way but you should run the @command{configure} script, so it will
+create the @file{Makefile}s, and you may want to compile the code once so it will not do it again
+automatically later while you are doing something else:
+
+@example
+# Setup the build, enabling at least the language you want to work on
+./configure LINGUAS="<list of iso 639 country code>"
+
+# Compile the code once
+make
+@end example
+
+
+@c ------------------------------------------------------------------- Updating the Translations ---
+@section Updating the Translations
+
+The typical process for translating one program is:
+
+@itemize @bullet
+@item
+generate a POT file (PO Template):
+this is done with @command{xgettext} which searches for all the strings from the sources that can be
+translated;
+
+@item
+update the PO file for your language:
+this is done with @command{msgmerge} which compares the PO file and aligns it to the latest
+template;
+
+@item
+edit the new PO file:
+this is done by you with your favourite editor, to add the missing @code{msgstr}, review the
+possible @emph{fuzzy matches}, ...
+
+@item
+check the PO file:
+unfortunately there is no definitive method for this;
+
+@item
+submit your contribution to the project:
+this is done with @command{git}.
+@end itemize
+
+In @sc{Window Maker}, you have actually 4 @code{po} files to take care of:
+
+@itemize @minus
+@item @file{po/@emph{<lang>}.po}: for @sc{Window Maker} itself
+@item @file{WPrefs.app/po/@emph{<lang>}.po}: for the Preference Editor program
+@item @file{WINGs/po/@emph{<lang>}.po}: for the graphic toolkit library
+@item @file{util/po/@emph{<lang>}.po}: for the command-line tools of @sc{Window Maker}
+@end itemize
+
+
+Please note that the encoding should be set to @emph{UTF-8} as this is now the standard.
+
+If you think an error message is too obscure, just ask on the developer mailing list
+@value{emailsupport}: in addition to clarifications there's even a chance for the original message
+to be improved!
+
+You may find some information on working with @code{po} file in the
+@uref{https://www.gnu.org/software/gettext/manual/html_node/Editing.html,GNU gettext documentation}.
+
+
+@c ------------------------------------------------------------------------- Checking the Result ---
+@section Checking the Result
+
+In the @sc{Window Maker} build tree you also have another target that can help you, it is
+@command{make check}.
+
+At current time, it does not check much, but if during the @command{make update-lang} new @code{po}
+file have been created you may get some errors, because you have to add these new files to the
+variable @var{EXTRA_DIST} in the corresponding @file{Makefile}.
+
+If you do not feel confident about doing it, do not worry, just tell about it when you submit your
+work, and some developer on the mailing list will just be happy to do it for you when integrating
+your valuable contribution (we always like when someone helps making @sc{Window Maker} better).
+
+
+@c ---------------------------------------------------------------- Submitting your Contribution ---
+@section Submitting your Contribution
+
+@emph{Preliminary Remark}: if the update process made changes in a @code{po} file but you did not
+change any @code{msgstr} content, it is probably a good idea to not submit the changes to that
+@code{po} file because it would just add noise.
+
+When you feel ready to send your changes, the first step is to prepare them.
+This is done with @command{git}: if you have not run the @command{git gui} previously then it is a
+good time to do it now.
+This window offers you the possibility to show your changes and to decide what you want to send.
+
+The window is divided in 4 panes:
+@itemize @bullet
+@item
+top-right show the current changes you have selected, for review
+(and also for cherry-picking stuff if you want to select precisely)
+
+@item
+top-left ("Unstaged Changes") the list of files with changes to be send,
+ you can click on the name of the file to see the changes,
+ you can click on the icon of the file if you want to send all the changes in this file;
+an icon in blue shows a file that have been changed and an icon in black shows a file that is new
+
+@item
+bottom-left ("Staged Changes") the list of files with changes that you have chosen to send so far,
+ you can click on the file name to view these changes,
+ you can click on the icon if you want to remove the changes from this file from the list to send
+
+@item
+bottom-right ("Commit Message") the message you want to attach to your changes when you submit them
+to the development team
+@end itemize
+
+The idea here is to pick your changes to the @code{po} files;
+for the @emph{commit message} you may wish to stuck to a simple, single line:
+
+@quotation
+"Updated translations for @emph{<lang>}"
+@end quotation
+
+The penultimate step is to click on the button @key{Sign Off} (it will add a line in the commit
+message), and then click on the button @key{Commit}.
+From this time, the commit message will clear itself and the "Staged Changes" also, showing that
+your action was done.
+
+You may now quit the @command{git gui}, the final step begins by running this command:
+
+@example
+git format-patch HEAD^
+@end example
+
+This will generate a file named like @file{0001-@emph{updated-translations-for-XX}.patch}
+which contains your changes, ready for sending.
+The goal will now be to email this file to @value{emailsupport}.
+If you feel confident in having @command{git} send it for you, you may want to read the file
+@file{The-perfect-Window-Maker-patch.txt} to see how to configure @command{git} for mailing, so you
+can run:
+
+@example
+git send-email 0001-@emph{updated-translations-for-XX}.patch
+@end example
 
 
 @c ------------------------------------------------------------------------------------- The End ---
