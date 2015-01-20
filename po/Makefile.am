@@ -10,31 +10,59 @@ EXTRA_DIST = be.po bg.po bs.po ca.po cs.po da.po de.po el.po es.po et.po \
 	no.po pl.po pt.po ro.po ru.po sk.po sv.po tr.po zh_CN.po zh_TW.po
 
 POTFILES  = \
+	$(top_srcdir)/src/actions.c \
 	$(top_srcdir)/src/appicon.c \
+	$(top_srcdir)/src/application.c \
+	$(top_srcdir)/src/appmenu.c \
+	$(top_srcdir)/src/balloon.c \
+	$(top_srcdir)/src/client.c \
+	$(top_srcdir)/src/colormap.c \
+	$(top_srcdir)/src/cycling.c \
 	$(top_srcdir)/src/defaults.c \
 	$(top_srcdir)/src/dialog.c \
 	$(top_srcdir)/src/dock.c \
 	$(top_srcdir)/src/dockedapp.c \
 	$(top_srcdir)/src/event.c \
 	$(top_srcdir)/src/framewin.c \
+	$(top_srcdir)/src/geomview.c \
 	$(top_srcdir)/src/icon.c \
 	$(top_srcdir)/src/main.c \
 	$(top_srcdir)/src/menu.c \
 	$(top_srcdir)/src/misc.c \
 	$(top_srcdir)/src/monitor.c \
+	$(top_srcdir)/src/motif.c \
+	$(top_srcdir)/src/moveres.c \
+	$(top_srcdir)/src/osdep_bsd.c \
+	$(top_srcdir)/src/osdep_darwin.c \
+	$(top_srcdir)/src/osdep_linux.c \
+	$(top_srcdir)/src/osdep_stub.c \
+	$(top_srcdir)/src/pixmap.c \
+	$(top_srcdir)/src/placement.c \
+	$(top_srcdir)/src/properties.c \
 	$(top_srcdir)/src/resources.c \
 	$(top_srcdir)/src/rootmenu.c \
 	$(top_srcdir)/src/screen.c \
 	$(top_srcdir)/src/session.c \
+	$(top_srcdir)/src/shutdown.c \
 	$(top_srcdir)/src/stacking.c \
 	$(top_srcdir)/src/startup.c \
+	$(top_srcdir)/src/superfluous.c \
+	$(top_srcdir)/src/switchpanel.c \
 	$(top_srcdir)/src/switchmenu.c \
 	$(top_srcdir)/src/texture.c \
+	$(top_srcdir)/src/usermenu.c \
+	$(top_srcdir)/src/wcore.c \
 	$(top_srcdir)/src/wdefaults.c \
 	$(top_srcdir)/src/window.c \
 	$(top_srcdir)/src/winmenu.c \
 	$(top_srcdir)/src/winspector.c \
-	$(top_srcdir)/src/workspace.c
+	$(top_srcdir)/src/wmspec.c \
+	$(top_srcdir)/src/workspace.c \
+	$(top_srcdir)/src/wsmap.c \
+	$(top_srcdir)/src/xdnd.c \
+	$(top_srcdir)/src/xinerama.c \
+	$(top_srcdir)/src/xmodifier.c \
+	$(top_srcdir)/src/xutil.c
 
 SUFFIXES = .po .mo
 
