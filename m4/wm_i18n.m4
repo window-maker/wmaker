@@ -36,6 +36,8 @@
 AC_DEFUN_ONCE([WM_I18N_LANGUAGES],
 [AC_ARG_VAR([LINGUAS],
     [list of language translations to support (I18N), use 'list' to get the list of supported languages, default: none])dnl
+AC_DEFUN([WM_ALL_LANGUAGES],
+    [m4_esyscmd([( ls WINGs/po/ ; ls po/ ; ls WPrefs.app/po/ ; ls util/po/ ) | sed -n -e '/po$/{s,\.po,,;p}' | sort -u | tr '\n' ' '])])dnl
 AS_IF([test "x$LINGUAS" != "x"],
     [wm_save_LIBS="$LIBS"
      AC_SEARCH_LIBS([gettext], [intl], [],
@@ -61,6 +63,11 @@ AS_IF([test "x$LINGUAS" != "x"],
      wmaker_locales=" m4_esyscmd([ls po/ | sed -n '/po$/{s,.po,,;p}' | tr '\n' ' '])"
      wprefs_locales=" m4_esyscmd([ls WPrefs.app/po/ | sed -n '/po$/{s,.po,,;p}' | tr '\n' ' '])"
      util_locales=" m4_esyscmd([ls util/po/ | sed -n '/po$/{s,.po,,;p}' | tr '\n' ' '])"
+
+     # If the LINGUAS is specified as a simple '*', then we enable all the languages
+     # we know. This is not standard, but it is useful is some cases
+     AS_IF([test "x$LINGUAS" = "x*"],
+         [LINGUAS="WM_ALL_LANGUAGES"])
 
      # Check every language asked by user against these lists to know what to install
      for lang in $LINGUAS; do
