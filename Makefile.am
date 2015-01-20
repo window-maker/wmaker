@@ -19,6 +19,9 @@ config-paths.h: Makefile
 	  echo '#define MENU_TEXTDOMAIN "$(menutextdomain)"' >> $@; \
 	fi
 	@echo '' >> $@
+	@echo '/* define where the translations are stored */' >> $@
+	@echo '#define LOCALEDIR "$(localedir)"' >> $@
+	@echo '' >> $@
 	@echo '/* define an extra path for pixmaps */' >> $@
 	@echo '#define PIXMAPDIR "$(pixmapdir)"' >> $@
 	@echo '' >> $@

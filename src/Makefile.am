@@ -146,8 +146,7 @@ endif
 
 AM_CFLAGS =
 
-AM_CPPFLAGS = \
-	$(DFLAGS) -DLOCALEDIR=\"$(NLSDIR)\" \
+AM_CPPFLAGS = $(DFLAGS) \
 	-I$(top_srcdir)/wrlib \
 	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
 

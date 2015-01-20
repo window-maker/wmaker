@@ -419,18 +419,11 @@ dnl that the gettext environment works
 WM_I18N_LANGUAGES
 WM_I18N_XGETTEXT
 
+dnl 2014/12/29: The option is deprecated, we should keep this message for at
+dnl least 2 years to ensure users see it and update their build scripts
+AC_ARG_WITH([nlsdir], [],
+    [AC_MSG_ERROR([option '--with-nlsdir' is deprecated, please use autoconf's standard '--localedir' instead])])
 
-dnl Added by Oliver - Support for NLSDIR option
-dnl ===========================================
-AC_ARG_WITH(nlsdir, AS_HELP_STRING([--with-nlsdir=PATH], [specify where the locale stuff should go]))
-
-if test "x$NLSDIR" = "x"; then
-	if test "x$with_nlsdir" != "x"; then
-		NLSDIR=$with_nlsdir
-	else
-		NLSDIR='$(prefix)/lib/locale'
-	fi
-fi
 
 menutextdomain=
 AC_ARG_WITH(menu-textdomain, AS_HELP_STRING([--with-menu-textdomain=DOMAIN], [specify gettext domain used for menu translations]),
@@ -916,8 +909,6 @@ echo "Unsupported features                :$unsupported"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Pango text layout support in WINGs  : $pango"
 echo "Translated languages to support     :$supported_locales"
-AS_IF([test "x$supported_locales" != "x disabled"],
-	[echo "Installation path for translations  : $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"])
 AS_IF([test "x$debug" = "xyes"],
     [AS_ECHO(["Debug enabled: CFLAGS = $CFLAGS"]) ])
 echo

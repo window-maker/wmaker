@@ -2,8 +2,6 @@ DOMAIN = WPrefs
 
 CATALOGS = @WPREFSMOFILES@
 
-nlsdir = $(NLSDIR)
-
 CLEANFILES = $(DOMAIN).pot $(CATALOGS)
 
 EXTRA_DIST = bg.po ca.po cs.po de.po es.po et.po fi.po fr.po hr.po hu.po \
@@ -59,12 +57,12 @@ endif
 
 
 install-data-local:  $(CATALOGS)
-	$(mkinstalldirs) $(DESTDIR)$(nlsdir)
+	$(mkinstalldirs) $(DESTDIR)$(localedir)
 	for n in $(CATALOGS) __DuMmY ; do \
 		if test "$$n" -a "$$n" != "__DuMmY" ; then \
 			l=`basename $$n .mo`; \
-			$(mkinstalldirs) $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES; \
-			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/$(DOMAIN).mo; \
+			$(mkinstalldirs) $(DESTDIR)$(localedir)/$$l/LC_MESSAGES; \
+			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(localedir)/$$l/LC_MESSAGES/$(DOMAIN).mo; \
 		fi; \
 	done
 

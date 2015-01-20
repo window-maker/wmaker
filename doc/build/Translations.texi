@@ -109,6 +109,10 @@ library); when you run @command{make} to compile the project, it will also compi
 (@code{mo} files) for the language(s) you asked (if available, of course), and during
 @command{make install} it will install them in the usual directory.
 
+The installation directory can be changed with the standard option @option{--localedir} to the
+@command{configure} script, the default path being
+@file{@emph{<prefix>}/share/locale/@emph{<lang>}/LC_MESSAGES}).
+
 
 @c --------------------------------------------------------------------- LINGUAS at system level ---
 @section Setting @env{LINGUAS} at system level
