@@ -1,8 +1,10 @@
+DOMAIN = WINGs
+
 nlsdir      = $(NLSDIR)
 
 CATALOGS = @WINGSMOFILES@
 
-CLEANFILES = $(CATALOGS) WINGs.pot
+CLEANFILES = $(CATALOGS) $(DOMAIN).pot
 
 EXTRA_DIST = bg.po ca.po cs.po de.po fr.po hu.po nl.po sk.po
 
@@ -77,13 +79,13 @@ SUFFIXES = .po .mo
 
 all-local: $(CATALOGS)
 
-WINGs.pot: $(POTFILES)
-	xgettext --default-domain=WINGs \
+$(DOMAIN).pot: $(POTFILES)
+	xgettext --default-domain=$(DOMAIN) \
 	--add-comments --keyword=_ --keyword=N_ $(POTFILES)
-	if cmp -s WINGs.po WINGs.pot; then \
-	    rm -f WINGs.po; \
+	if cmp -s $(DOMAIN).po $(DOMAIN).pot; then \
+	    rm -f $(DOMAIN).po; \
 	else \
-	    mv -f WINGs.po WINGs.pot; \
+	    mv -f $(DOMAIN).po $(DOMAIN).pot; \
 	fi
 
 install-data-local:  $(CATALOGS)
@@ -92,7 +94,7 @@ install-data-local:  $(CATALOGS)
 		if test "$$n" -a "$$n" != "__DuMmY" ; then \
 			l=`basename $$n .mo`; \
 			$(mkinstalldirs) $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES; \
-			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/WINGs.mo; \
+			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/$(DOMAIN).mo; \
 		fi; \
 	done
 

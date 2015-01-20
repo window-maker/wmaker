@@ -1,8 +1,10 @@
+DOMAIN = WPrefs
+
 CATALOGS = @WPMOFILES@
 
 nlsdir = $(NLSDIR)
 
-CLEANFILES = WPrefs.pot $(CATALOGS)
+CLEANFILES = $(DOMAIN).pot $(CATALOGS)
 
 EXTRA_DIST = bg.po ca.po cs.po de.po es.po et.po fi.po fr.po hr.po hu.po \
 	it.po ja.po ko.po nl.po pt.po ru.po sk.po zh_CN.po zh_TW.po
@@ -43,13 +45,13 @@ SUFFIXES = .po .mo
 
 all-local: $(CATALOGS)
 
-WPrefs.pot: $(POTFILES)
-	xgettext --default-domain=WPrefs \
+$(DOMAIN).pot: $(POTFILES)
+	xgettext --default-domain=$(DOMAIN) \
 	--add-comments --keyword=_ --keyword=N_ $(POTFILES)
-	if cmp -s WPrefs.po WPrefs.pot; then \
-	    rm -f WPrefs.po; \
+	if cmp -s $(DOMAIN).po $(DOMAIN).pot; then \
+	    rm -f $(DOMAIN).po; \
 	else \
-	    mv -f WPrefs.po WPrefs.pot; \
+	    mv -f $(DOMAIN).po $(DOMAIN).pot; \
 	fi
 
 
@@ -59,7 +61,7 @@ install-data-local:  $(CATALOGS)
 		if test "$$n" -a "$$n" != "__DuMmY" ; then \
 			l=`basename $$n .mo`; \
 			$(mkinstalldirs) $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES; \
-			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/WPrefs.mo; \
+			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/$(DOMAIN).mo; \
 		fi; \
 	done
 

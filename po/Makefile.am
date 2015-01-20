@@ -1,8 +1,10 @@
+DOMAIN = WindowMaker
+
 nlsdir      = $(NLSDIR)
 
 CATALOGS = @MOFILES@
 
-CLEANFILES = $(CATALOGS) WindowMaker.pot
+CLEANFILES = $(CATALOGS) $(DOMAIN).pot
 
 # Please keep this sorted in alphabetic order!
 EXTRA_DIST = be.po bg.po bs.po ca.po cs.po da.po de.po el.po es.po et.po \
@@ -72,13 +74,13 @@ SUFFIXES = .po .mo
 
 all-local: $(CATALOGS)
 
-WindowMaker.pot: $(POTFILES)
-	xgettext --default-domain=WindowMaker \
+$(DOMAIN).pot: $(POTFILES)
+	xgettext --default-domain=$(DOMAIN) \
 	--add-comments --keyword=_ --keyword=N_ $(POTFILES)
-	if cmp -s WindowMaker.po WindowMaker.pot; then \
-	    rm -f WindowMaker.po; \
+	if cmp -s $(DOMAIN).po $(DOMAIN).pot; then \
+	    rm -f $(DOMAIN).po; \
 	else \
-	    mv -f WindowMaker.po WindowMaker.pot; \
+	    mv -f $(DOMAIN).po $(DOMAIN).pot; \
 	fi
 
 install-data-local:  $(CATALOGS)
@@ -87,7 +89,7 @@ install-data-local:  $(CATALOGS)
 		if test "$$n" -a "$$n" != "__DuMmY" ; then \
 			l=`basename $$n .mo`; \
 			$(mkinstalldirs) $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES; \
-			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/WindowMaker.mo; \
+			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/$(DOMAIN).mo; \
 		fi; \
 	done
 

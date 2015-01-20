@@ -1,8 +1,10 @@
+DOMAIN = wmgenmenu
+
 CATALOGS = @UTILMOFILES@
 
 nlsdir = $(NLSDIR)
 
-CLEANFILES = wmgenmenu.pot $(CATALOGS)
+CLEANFILES = $(DOMAIN).pot $(CATALOGS)
 
 EXTRA_DIST = de.po es.po fr.po nl.po pt.po
 
@@ -18,13 +20,13 @@ SUFFIXES = .po .mo
 
 all-local: $(CATALOGS)
 
-wmgenmenu.pot: $(POTFILES)
-	xgettext --default-domain=wmgenmenu \
+$(DOMAIN).pot: $(POTFILES)
+	xgettext --default-domain=$(DOMAIN) \
 	--add-comments --keyword=_ --keyword=N_ $(POTFILES)
-	if cmp -s wmgenmenu.po wmgenmenu.pot; then \
-	    rm -f wmgenmenu.po; \
+	if cmp -s $(DOMAIN).po $(DOMAIN).pot; then \
+	    rm -f $(DOMAIN).po; \
 	else \
-	    mv -f wmgenmenu.po wmgenmenu.pot; \
+	    mv -f $(DOMAIN).po $(DOMAIN).pot; \
 	fi
 
 
@@ -34,6 +36,6 @@ install-data-local:  $(CATALOGS)
 		if test "$$n" -a "$$n" != "__DuMmY" ; then \
 			l=`basename $$n .mo`; \
 			$(mkinstalldirs) $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES; \
-			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/wmgenmenu.mo; \
+			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/$(DOMAIN).mo; \
 		fi; \
 	done
