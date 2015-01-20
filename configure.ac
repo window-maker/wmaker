@@ -417,16 +417,8 @@ dnl ====================
 dnl Detect the language for translations to be installed and check
 dnl that the gettext environment works
 WM_I18N_LANGUAGES
+WM_I18N_XGETTEXT
 
-
-AC_CHECK_PROG(XGETTEXT, xgettext, xgettext)
-
-if test "$XGETTEXT" != ""; then 
-    if $XGETTEXT --help 2>&1 | grep illegal >/dev/null ; then
-        echo "xgettext isn't GNU version"
-        XGETTEXT=""
-    fi
-fi
 
 dnl Added by Oliver - Support for NLSDIR option
 dnl ===========================================

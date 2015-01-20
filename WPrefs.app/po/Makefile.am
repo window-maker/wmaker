@@ -45,14 +45,17 @@ SUFFIXES = .po .mo
 
 all-local: $(CATALOGS)
 
+
+if HAVE_XGETTEXT
 $(DOMAIN).pot: $(POTFILES)
-	xgettext --default-domain=$(DOMAIN) \
-	--add-comments --keyword=_ --keyword=N_ $(POTFILES)
-	if cmp -s $(DOMAIN).po $(DOMAIN).pot; then \
+	$(AM_V_GEN)$(XGETTEXT) --default-domain=$(DOMAIN) \
+	    --add-comments --keyword=_ --keyword=N_ $(POTFILES)
+	@if cmp -s $(DOMAIN).po $(DOMAIN).pot; then \
 	    rm -f $(DOMAIN).po; \
 	else \
 	    mv -f $(DOMAIN).po $(DOMAIN).pot; \
 	fi
+endif
 
 
 install-data-local:  $(CATALOGS)

@@ -92,3 +92,19 @@ AC_SUBST([WMAKERMOFILES])dnl
 AC_SUBST([WPREFSMOFILES])dnl
 AC_SUBST([UTILMOFILES])dnl
 ])
+
+
+# WM_I18N_XGETTEXT
+# ----------------
+#
+# xgettext is used to generate the Templates for translation, it is not
+# mandatory for users, only for translation teams. We look for it even
+# if I18N was not asked because it can be used by dev team.
+AC_DEFUN_ONCE([WM_I18N_XGETTEXT],
+[AC_CHECK_PROGS([XGETTEXT], [xgettext], [])
+AS_IF([test "x$XGETTEXT" != "x"],
+    AS_IF([$XGETTEXT --help 2>&1 | grep "illegal" > /dev/null],
+        [AC_MSG_WARN([[$XGETTEXT is not GNU version, ignoring]])
+         XGETTEXT=""]))
+AM_CONDITIONAL([HAVE_XGETTEXT], [test "x$XGETTEXT" != "x"])dnl
+])
