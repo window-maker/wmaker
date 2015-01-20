@@ -383,25 +383,3 @@ LOCALES/INTERNATIONALIZATION
 
 Window Maker has national language support. The procedure to enable national
 language support is described in the dedicated README.i18n file.
-
-4 - To select a particular locale at run-time you must set the LANG
-environment variable to the locale you want. For example, if you want to set
-the Portuguese locale, you must run
-
-setenv LANG pt
-
-in csh or
-
-export LANG; LANG=pt
-
-in Bourne sh and similar
-
-Note: If you have the LC_CTYPE environment variable set, you must
-unset it before running wmaker.
-
-For menu definition files, Window Maker searches for them in the
-following order (for Brazilian Portuguese, in this case):
-
-menu.pt_BR
-menu.pt
-menu
