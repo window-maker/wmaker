@@ -115,6 +115,34 @@ The installation directory can be changed with the standard option @option{--loc
 @file{@emph{<prefix>}/share/locale/@emph{<lang>}/LC_MESSAGES}).
 
 
+@c ----------------------------------------------------------------- List of supported Languages ---
+@section Getting the list of supported languages
+
+The naming convention for the languages follows the @cite{ISO 639-1} standard,
+for which you can find a summary list in the
+@uref{https://www.gnu.org/software/gettext/manual/html_node/Usual-Language-Codes.html, GNU gettext manual}.
+
+But as @sc{Window Maker} does not support all of them, the @command{configure} script will print a
+warning for each language you specify that it does not know, and sum up at the end the list of
+enabled languages that will be installed.
+
+There is a non-standard possibility to set @env{LINGUAS} to @code{list}, in which case the
+@command{configure} script will provide you the list of languages it supports, and stop:
+
+@example
+./configure LINGUAS="list"
+@end example
+
+There is also another non-standard possibility to enable all the languages that @sc{Window Maker}
+supports by setting @env{LINGUAS} to @code{*}.
+This is an internal trick implemented so the development team can have the command
+@command{make distcheck} include some checks on translations:
+
+@example
+./configure LINGUAS='*'
+@end example
+
+
 @c ---------------------------------------------------------------------- Translations for Menus ---
 @section Translations for Menus
 

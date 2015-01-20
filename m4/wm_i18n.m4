@@ -38,6 +38,13 @@ AC_DEFUN_ONCE([WM_I18N_LANGUAGES],
     [list of language translations to support (I18N), use 'list' to get the list of supported languages, default: none])dnl
 AC_DEFUN([WM_ALL_LANGUAGES],
     [m4_esyscmd([( ls WINGs/po/ ; ls po/ ; ls WPrefs.app/po/ ; ls util/po/ ) | sed -n -e '/po$/{s,\.po,,;p}' | sort -u | tr '\n' ' '])])dnl
+dnl We 'divert' the macro to have it executed as soon as the option list have
+dnl been processed, so the list of locales will be printed after the configure
+dnl options have been parsed, but before any test have been run
+m4_divert_text([INIT_PREPARE],
+    [AS_IF([test "x$LINGUAS" = "xlist"],
+        [AS_ECHO(["Supported languages: WM_ALL_LANGUAGES"])
+         AS_EXIT([0])]) ])dnl
 AS_IF([test "x$LINGUAS" != "x"],
     [wm_save_LIBS="$LIBS"
      AC_SEARCH_LIBS([gettext], [intl], [],
