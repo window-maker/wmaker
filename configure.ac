@@ -971,7 +971,8 @@ AC_CONFIG_FILES(
 
     dnl Window Maker's core
     src/Makefile src/wconfig.h po/Makefile
-    doc/Makefile doc/sk/Makefile doc/cs/Makefile doc/ru/Makefile
+    doc/Makefile doc/build/Makefile
+    doc/sk/Makefile doc/cs/Makefile doc/ru/Makefile
     WindowMaker/Makefile WindowMaker/Backgrounds/Makefile
     WindowMaker/Defaults/Makefile WindowMaker/IconSets/Makefile
     WindowMaker/Icons/Makefile WindowMaker/Pixmaps/Makefile

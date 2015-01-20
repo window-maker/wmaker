@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Generate the documentation about compiling Window Maker
+./script/generate-txt-from-texi.sh doc/build/Translations.texi > README.i18n
+
+# Generate the configure script from the 'configure.ac'
 autoreconf -vfi -I m4
 
 exit 0

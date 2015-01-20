@@ -1,0 +1,86 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename wmaker_i18n.info
+@settitle Window Maker Internationalisation 1.0
+@c %**end of header
+
+@c This documentation is written in Texinfo format:
+@c   https://www.gnu.org/software/texinfo/manual/texinfo/
+@c
+@c The reference checker is the GNU texi2any tool, which can be invoked like this:
+@c   texi2any --plaintext --no-split --verbose Translations.texi
+@c
+@c If you modify this file, you may want to spell-check it with:
+@c    aspell --lang=en_GB --mode=texinfo check Translations.texi
+@c
+@c The length of lines in this file is set to 100 because it tends to keep sentences together
+@c despite the embedded @commands{};
+@c
+@c It is generally considered good practice for Tex and Texinfo formats to keep sentences on
+@c different lines, using the fact that in the end they will be merged in paragraph anyway, because
+@c it makes the patchs clearer about where the changes actually are.
+
+@finalout
+
+@set version git#next
+
+@c ---------------------------------------------------------------------------------- Title Page ---
+
+@copying
+@noindent
+This manual is for @sc{Window Maker} window manager, version @value{version}.
+
+@noindent Copyright @copyright{} 2015 The Window Maker Team.
+
+@quotation
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with this program, see file COPYING for details.
+@end quotation
+@end copying
+
+@titlepage
+@title Window Maker Internationalisation
+@subtitle A guide to enable support for language translations
+@subtitle in @sc{Window Maker}.
+@author Christophe CURIS
+
+@page
+@vskip 0pt plus 1filll
+@insertcopying
+
+@sp 1
+Published by The Window Maker team on @today{}.
+@end titlepage
+
+@c ---------------------------------------------------------------------------- Table of Content ---
+@node Top
+@ifnottex
+@top Window Maker Internationalisation
+
+A guide to enable support for language translations
+in @sc{Window Maker}.
+@end ifnottex
+
+@contents
+
+@ifnottex
+@sp 1
+This manual is for Window Maker, version @value{version}.
+@end ifnottex
+
+@menu
+@end menu
+
+
+@c ------------------------------------------------------------------------------------- The End ---
+@bye
