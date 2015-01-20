@@ -114,6 +114,43 @@ The installation directory can be changed with the standard option @option{--loc
 @file{@emph{<prefix>}/share/locale/@emph{<lang>}/LC_MESSAGES}).
 
 
+@c ---------------------------------------------------------------------- Translations for Menus ---
+@section Translations for Menus
+
+In order to propose an @emph{Application Menu} (also called @emph{Root Menu}) that is also
+translated in the language of the interface, @sc{Window Maker} implements two complementary
+mechanisms:
+
+The first, always enabled when i18n support is enabled, is to look for the menu file containing the
+name of the locale.
+For example, if the file is called @file{menu} and the language is set as @env{LANG=fr_FR.utf-8},
+then @sc{Window Maker} will search for, and use the first match found:
+
+@itemize
+@item @code{menu.fr_FR.utf-8}
+@item @code{menu.fr_FR}
+@item @code{menu.fr}
+@item @code{menu}
+@end itemize
+
+The second possibility, which is not enabled by default, is to be able to use a custom @file{po}
+file which contains the translations for the text of the menu.
+This feature is enabled at compile time, using the option @option{--with-menu-textdomain} to the
+@command{configure} script. For example, if you specify:
+
+@example
+./configure --with-menu-textdomain=WMMenu
+@end example
+
+@noindent then the translations for the menu will be searched in the file @file{WMMenu.mo} located
+at the standard location, the default path being
+@file{@emph{<prefix>}/share/locale/@emph{<lang>}/LC_MESSAGES/@emph{WMMenu}.mo}.
+
+If you do not enable the feature (the default behaviour, or with an explicit
+@option{--without-menu-textdomain}), then @sc{Window Maker} will @b{not} try to translate the
+strings, even using its own domain file (@file{WindowMaker.mo}).
+
+
 @c --------------------------------------------------------------------- LINGUAS at system level ---
 @section Setting @env{LINGUAS} at system level
 

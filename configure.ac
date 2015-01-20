@@ -418,21 +418,12 @@ dnl Detect the language for translations to be installed and check
 dnl that the gettext environment works
 WM_I18N_LANGUAGES
 WM_I18N_XGETTEXT
+WM_I18N_MENUTEXTDOMAIN
 
 dnl 2014/12/29: The option is deprecated, we should keep this message for at
 dnl least 2 years to ensure users see it and update their build scripts
 AC_ARG_WITH([nlsdir], [],
     [AC_MSG_ERROR([option '--with-nlsdir' is deprecated, please use autoconf's standard '--localedir' instead])])
-
-
-menutextdomain=
-AC_ARG_WITH(menu-textdomain, AS_HELP_STRING([--with-menu-textdomain=DOMAIN], [specify gettext domain used for menu translations]),
-	[if test "x$withval" != "xno"; then
-         menutextdomain=$withval
-	 fi])
-AC_SUBST(menutextdomain)
-
-AC_SUBST(NLSDIR)
 
 
 dnl ===========================================

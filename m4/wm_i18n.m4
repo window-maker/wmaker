@@ -113,3 +113,25 @@ AS_IF([test "x$XGETTEXT" != "x"],
          XGETTEXT=""]))
 AM_CONDITIONAL([HAVE_XGETTEXT], [test "x$XGETTEXT" != "x"])dnl
 ])
+
+
+# WM_I18N_MENUTEXTDOMAIN
+# ----------------------
+#
+# This option allows user to define a special Domain for translating
+# Window Maker's menus. This can be useful because distributions may
+# wish to customize the menus, and thus can make them translatable
+# with their own po/mo files without having to touch WMaker's stuff.
+AC_DEFUN_ONCE([WM_I18N_MENUTEXTDOMAIN],
+[AC_ARG_WITH([menu-textdomain],
+    [AS_HELP_STRING([--with-menu-textdomain=DOMAIN],
+        [specify gettext domain used for menu translations])],
+    [AS_CASE([$withval],
+        [yes], [AC_MSG_ERROR([you are supposed to give a domain name for '--with-menu-textdomain'])],
+        [no],  [menutextdomain=""],
+        [menutextdomain="$withval"])],
+    [menutextdomain=""])
+AS_IF([test "x$menutextdomain" != "x"],
+    [AC_DEFINE_UNQUOTED([MENU_TEXTDOMAIN], ["$menutextdomain"],
+        [gettext domain to be used for menu translations]) ])
+])
