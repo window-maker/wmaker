@@ -81,6 +81,7 @@ This manual is for Window Maker, version @value{version}.
 @menu
 * Enabling Languages support::  How to compile Window Maker with i18n support
 * Choosing the Language::       When installed, how to run wmaker with your language
+* Troubleshooting::             Some points to check if you have problems
 @end menu
 
 
@@ -226,6 +227,73 @@ For further information, you may wish to read dedicated documentation, for examp
 @uref{http://tldp.org/HOWTO/HOWTO-INDEX/other-lang.html, the Linux Documentation Project}
 or through pages like
 @uref{http://www.shellhacks.com/en/HowTo-Change-Locale-Language-and-Character-Set-in-Linux,Shell Hacks' note on Changing Locale}.
+
+
+@c ----------------------------------------------------------------------------- Troubleshooting ---
+@node Troubleshooting
+@chapter Troubleshooting
+
+If I18N support does not work for you, check these:
+
+@itemize @minus
+@item
+the @env{LANG} environment variable is set to your locale, and
+the locale is supported by your OS's locale or X's locale
+emulation. you can display all supported locales by
+executing "@command{locale -a}" command if it is available; you
+can check if your locale is supported by X's locale emulation,
+see @file{/usr/share/X11/locale/locale.alias}
+
+@item
+check if you are using an appropriate fonts for the locale you
+chose. If you're using a font set that has a different
+encoding than the one used by @sc{Xlib} or @sc{libc}, bad things can
+happen. Try specifically putting the encoding in the @env{LANG}
+variable, like @code{ru_RU.KOI8-R}. Again, see
+@file{/usr/share/X11/locale/locale.alias}
+
+@item
+the fonts you're using support your locale. if your font
+setting on @file{$HOME/GNUstep/Defaults/WindowMaker} is like...
+
+@example
+   WindowTitleFont = "Trebuchet MS:bold:pixelsize=12";
+   MenuTitleFont   = "Trebuchet MS:bold:pixelsize=12";
+@end example
+
+then you can't display Asian languages (@code{ja}, @code{ko}, @code{ch}, ...) characters using
+@code{Trebuchet MS}. A font that is guaranteed to work for any language is
+@code{sans} (or @code{sans-serif}). @code{sans} is not a font itself, but an alias which
+points to multiple fonts and will load the first in that list that
+has the ability to show glyphs in your language. If you don't know
+a font that is suited for your language you can always set all your
+fonts to something like:
+
+@example
+   "sans:pixelsize=12"
+@end example
+
+However, please note that if your font is something like:
+
+@example
+   "Trebuchet MS,sans serif:pixelsize=12"
+@end example
+
+this will not be able to display Asian languages if any of the
+previous fonts before sans are installed. This is because unlike
+the proper font pickup that @code{sans} guarantees for your language,
+this construct only allows a font fallback mechanism, which tries
+all the fonts in the list in order, until it finds one that is
+available, even if it doesn't support your language.
+
+Also you need to change font settings in style files in
+the @file{$HOME/Library/WindowMaker/Style} directory.
+
+@item
+the @env{LC_CTYPE} environment variable is unset or it has the correct
+value. If you don't know what is the correct value, unset it.
+
+@end itemize
 
 
 @c ------------------------------------------------------------------------------------- The End ---

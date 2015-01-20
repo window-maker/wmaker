@@ -29,7 +29,7 @@ ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = wrlib WINGs src util po WindowMaker wmlib WPrefs.app doc
 DIST_SUBDIRS = $(SUBDIRS) test
 
-EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N INSTALL \
+EXTRA_DIST = TODO BUGS BUGFORM FAQ INSTALL \
 	INSTALL-WMAKER README.i18n README.definable-cursor \
 	The-perfect-Window-Maker-patch.txt \
 	README COPYING.WTFPL autogen.sh \
