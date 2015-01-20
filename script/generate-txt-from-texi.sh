@@ -97,6 +97,8 @@ print_help() {
     echo "$0: convert a Texinfo file into a plain text file"
     echo "Usage: $0 [options...] file.texi"
     echo "valid options are:"
+    echo "  -Dvar=val  : set variable 'var' to value 'val'"
+    echo "  -e email   : set email address in variable 'emailsupport'"
     echo "  -v version : version of the project"
     echo "  -o file    : name of text file to create"
     exit 0
@@ -105,6 +107,18 @@ print_help() {
 # Extract command line arguments
 while [ $# -gt 0 ]; do
     case $1 in
+
+        -D*)
+            echo "$1" | grep '^-D[a-zA-Z][a-zA-Z]*=' > /dev/null || arg_error "syntax error for '$1', expected -Dname=value"
+            var_defs="$var_defs
+`echo "$1" | sed -e 's/^-D/  variable["/ ; s/=/"] = "/ ; s/$/";/' `"
+          ;;
+
+        -e)
+            shift
+            var_defs="$var_defs
+  variable[\"emailsupport\"] = \"@email{`echo "$1" | sed -e 's/@/@@/g' `}\";"
+          ;;
 
         -h|-help|--help) print_help ;;
 
@@ -178,6 +192,17 @@ function end_conditional(name,          local_i) {
   cond_state = 1;
   for (local_i = 1; local_i < cond_level; local_i++) {
     cond_state = cond_state && cond_value[local_i];
+  }
+}
+
+# Texinfo Variables
+# the texinfo standard allows to have variables set with @set and used
+# with @value; they can also be defined from command-line (-D)
+# they are stored in the global array "variable[name]"
+function set_variable(line,          local_split, local_idx) {
+  local_idx = match(line, /^([^ \t]+)([ \t]*)(.*)$/, local_split);
+  if (local_idx > 0) {
+    variable[ local_split[1] ] = local_split[3];
   }
 }
 
@@ -724,6 +749,14 @@ function execute_commands(line,               replaced_line) {
       replaced_line = replaced_line generate_url_reference(cmdargs);
       break;
 
+    # Variable and Conditional commands ########################################
+    case "value":
+      if (variable[cmdargs] == "") {
+        report_error("variable '" cmdargs "' is unknow, for @value at line " NR);
+      }
+      line = variable[cmdargs] line;
+      break;
+
     # Miscelleanous commands ###################################################
     case "c":
       # Comments: ignore everything to the end of line
@@ -816,6 +849,12 @@ BEGIN {
   # Number of entries in the Table of Content
   toc_count = 0;
   toc_file = "'"$toc_file"'";
+
+  # Define a custom variable so it is possible to differentiate between
+  # texi2any and this script
+  variable["cctexi2txt"] = "1.0";
+
+  # Variables inherited from the command line'"$var_defs"'
 }
 
 # First line is special, we always ignore it
@@ -1004,6 +1043,21 @@ BEGIN {
     case "ifnotplaintext": start_conditional(command[1], 0); line = ""; next;
     case "ifnottex":       start_conditional(command[1], 1); line = ""; next;
     case "ifnotxml":       start_conditional(command[1], 1); line = ""; next;
+
+    case "ifclear": start_conditional(command[1], (variable[line] == "")); next;
+    case "ifset":   start_conditional(command[1], (variable[line] != "")); next;
+
+    case "clear":
+      if (cond_state) {
+        variable[ execute_commands(line) ] = "";
+      }
+      next;
+
+    case "set":
+      if (cond_state) {
+        set_variable(execute_commands(line));
+      }
+      next;
 
     # Miscelleanous commands ###################################################
     case "bye":

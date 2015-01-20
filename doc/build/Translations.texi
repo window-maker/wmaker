@@ -22,7 +22,17 @@
 
 @finalout
 
+@c If the version was not given to texi2any with -D, assume we are being run
+@c on the git dev branch
+@ifclear version
 @set version git#next
+@end ifclear
+
+@c We provide the ability to change the email address for support from the
+@c command line
+@ifclear emailsupport
+@set emailsupport @email{wmaker-dev@@lists.windowmaker.org}
+@end ifclear
 
 @c ---------------------------------------------------------------------------------- Title Page ---
 
@@ -67,15 +77,19 @@ Published by The Window Maker team on @today{}.
 @ifnottex
 @top Window Maker Internationalisation
 
+@ifclear cctexi2txt
 A guide to enable support for language translations
 in @sc{Window Maker}.
+@end ifclear
 @end ifnottex
 
 @contents
 
 @ifnottex
+@ifclear cctexi2txt
 @sp 1
 This manual is for Window Maker, version @value{version}.
+@end ifclear
 @end ifnottex
 
 @menu
