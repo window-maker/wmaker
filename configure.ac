@@ -451,15 +451,8 @@ AC_SUBST(X_LIBRARY_PATH)
 dnl Decide which locale function to use, setlocale() or _Xsetlocale()
 dnl by MANOME Tomonori 
 dnl ===========================================
-use_locale=yes
-AC_ARG_ENABLE(locale, AS_HELP_STRING([--disable-locale], [disable use of X locale support]),
-              use_locale=no)
+WM_I18N_XLOCALE
 
-if test "$use_locale" = yes; then
-	AC_CHECK_LIB(X11, _Xsetlocale,
-		AC_DEFINE(X_LOCALE, 1, [define if you want support for X window's X_LOCALE (set by configure)]),,
-		$XLFLAGS $XLIBS)
-fi
 
 
 dnl Check whether XInternAtoms() exist
