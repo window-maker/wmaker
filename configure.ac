@@ -411,16 +411,13 @@ dnl ==========
 AC_CHECK_PROG([PKGCONFIG], [pkg-config], [pkg-config])
 
 
-dnl gettext
-dnl =======
 
-dnl AM_GNU_GETTEXT
+dnl Internationalization
+dnl ====================
+dnl Detect the language for translations to be installed and check
+dnl that the gettext environment works
+WM_I18N_LANGUAGES
 
-INTLIBS=""
-
-AC_CHECK_FUNC(gettext, [HAVEGETTEXT="yes"], 
-	AC_CHECK_LIB(intl, gettext, [INTLIBS="-lintl" HAVEGETTEXT="yes"],
-			 INTLIBS="" ))
 
 AC_CHECK_PROG(XGETTEXT, xgettext, xgettext)
 
@@ -430,81 +427,6 @@ if test "$XGETTEXT" != ""; then
         XGETTEXT=""
     fi
 fi
-
-if test "$LINGUAS" != ""; then
-    if test "$XGETTEXT" != "" -a "$HAVEGETTEXT" != ""; then
-        AC_DEFINE(I18N, 1, [Internationalization (I18N) support (set by configure)])
-        PO=""
-        echo "xgettext and gettext() exist; will build i18n support for $LINGUAS"
-    else
-        LINGUAS=""
-        PO=""
-        echo "xgettext and libintl.a don't both exist; will not build i18n support"
-    fi
-else
-    	INTLIBS=""
-	MOFILES=""
-	WPMOFILES=""
-	UTILMOFILES=""
-	PO=""
-fi
-
-
-dnl The Tower of Babel
-dnl ==================
-
-dnl List of supported locales
-dnl =========================
-supported_locales="be bg bs ca cs da de el es et fi fr gl hr hu hy it ja ko ms nl no pl pt ro ru sk sv tr zh_CN zh_TW"
-supported_wprefs_locales="bg ca cs de es et fi fr hr hu it ja ko nl pt ru sk zh_CN zh_TW"
-supported_wings_locales="bg ca cs de fr hu nl sk"
-supported_util_locales="de es fr nl pt"
-
-for lang in $LINGUAS; do
-	ok=0
-	for l in $supported_locales; do
-		if test "$l" = "$lang"; then
-			ok=1
-			break
-		fi
-	done
-	if test "$ok" = 1; then
-		MOFILES="$MOFILES $lang.mo"
-	else
-		echo "Locale $lang is not supported."
-	fi
-	ok=0
-	for l in $supported_wprefs_locales; do
-		if test "$l" = "$lang"; then
-			ok=1
-			break
-		fi
-	done
-	if test "$ok" = 1; then
-		WPMOFILES="$WPMOFILES $lang.mo"
-	fi
-	ok=0
-	for l in $supported_util_locales; do
-		if test "$l" = "$lang"; then
-			ok=1
-			break
-		fi
-	done
-	if test "$ok" = 1; then
-		UTILMOFILES="$UTILMOFILES $lang.mo"
-	fi
-	ok=0
-	for l in $supported_wings_locales; do
-		if test "$l" = "$lang"; then
-			ok=1
-			break
-		fi
-	done
-	if test "$ok" = 1; then
-		WINGSMOFILES="$WINGSMOFILES $lang.mo"
-	fi
-done
-
 
 dnl Added by Oliver - Support for NLSDIR option
 dnl ===========================================
@@ -525,13 +447,7 @@ AC_ARG_WITH(menu-textdomain, AS_HELP_STRING([--with-menu-textdomain=DOMAIN], [sp
 	 fi])
 AC_SUBST(menutextdomain)
 
-AC_SUBST(INTLIBS)
 AC_SUBST(NLSDIR)
-AC_SUBST(MOFILES)
-AC_SUBST(WPMOFILES)
-AC_SUBST(UTILMOFILES)
-AC_SUBST(WINGSMOFILES)
-AC_SUBST(supported_locales)
 
 
 dnl ===========================================
@@ -995,18 +911,6 @@ AC_OUTPUT
 
 dnl Provide a summary of the config
 dnl ===============================
-if test "x$MOFILES" = "x"; then
-	mof=None
-else
-	mof=`echo $MOFILES`
-fi
-
-if test "x$MOFILES" = "x"; then
-	languages=None
-else
-	languages=`echo $MOFILES | sed 's/.mo//g'`
-fi
-
 echo
 echo "Window Maker was configured as follows:"
 echo
@@ -1019,17 +923,18 @@ echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
 echo "Antialiased text support in WINGs   : $xft"
 echo "Pango text layout support in WINGs  : $pango"
-echo "Translated message files to install : $mof"
-dnl echo "Supported languages beside English  : $languages"
-if test "x$MOFILES" != "x"; then
-	echo "Installation path for translations  : $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"
-fi
+echo "Translated languages to support     :$supported_locales"
+AS_IF([test "x$supported_locales" != "x disabled"],
+	[echo "Installation path for translations  : $NLSDIR" | sed -e 's|\$(prefix)|'"$prefix|"])
 AS_IF([test "x$debug" = "xyes"],
     [AS_ECHO(["Debug enabled: CFLAGS = $CFLAGS"]) ])
 echo
 
 AS_IF([test "x$wm_cv_prog_cc_nestedfunc" != "xyes"],
     [AC_MSG_WARN([[Your compiler does not support Nested Function, work-around enabled]])])
+
+AS_IF([test "x$supported_locales" = "x"],
+    [AC_MSG_WARN([[No language from \$LINGUAS are supported]])])
 
 AS_IF([test "x$enable_jpeg" = xno], [dnl
     AS_ECHO(["WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"])

@@ -1,0 +1,94 @@
+# wm_i18n.m4 - Macros to check and enable translations in WindowMaker
+#
+# Copyright (c) 2014-2015 Christophe CURIS
+# Copyright (c) 2015 The Window Maker Tean
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; see the file COPYING.
+
+
+# WM_I18N_LANGUAGES
+# -----------------
+#
+# Detect which languages the user wants to be installed and check if
+# the gettext environment is available.
+#
+# The list of languages are provided through the environment variable
+# LINGUAS as a space-separated list of ISO 3166 country codes.
+# This list is checked against the list of currently available languages
+# the sources and a warning is issued if a language is not found.
+#
+# Support for internationalisation is disabled if the variable is empty
+# (or undefined)
+#
+# The variable 'supported_locales' is created to contain the list of
+# languages that will have been detected properly and will be installed
+AC_DEFUN_ONCE([WM_I18N_LANGUAGES],
+[AC_ARG_VAR([LINGUAS],
+    [list of language translations to support (I18N), use 'list' to get the list of supported languages, default: none])dnl
+AS_IF([test "x$LINGUAS" != "x"],
+    [wm_save_LIBS="$LIBS"
+     AC_SEARCH_LIBS([gettext], [intl], [],
+        [AC_MSG_ERROR([support for internationalization requested, but library for gettext not found])])
+     AS_IF([test "x$ac_cv_search_gettext" = "xnone required"],
+         [INTLIBS=""],
+         [INTLIBS="$ac_cv_search_gettext"])
+     AC_CHECK_FUNCS([gettext dgettext], [],
+        [AC_MSG_ERROR([support for internationalization requested, but gettext was not found])])
+     LIBS="$wm_save_LIBS"
+     dnl
+     dnl Environment is sane, let's continue
+     AC_DEFINE([I18N], [1], [Internationalization (I18N) support (set by configure)])
+     supported_locales=""
+
+     # This is the list of locales that our archive currently supports
+     wings_locales=" m4_esyscmd([ls WINGs/po/ | sed -n '/po$/{s,.po,,;p}' | tr '\n' ' '])"
+     wmaker_locales=" m4_esyscmd([ls po/ | sed -n '/po$/{s,.po,,;p}' | tr '\n' ' '])"
+     wprefs_locales=" m4_esyscmd([ls WPrefs.app/po/ | sed -n '/po$/{s,.po,,;p}' | tr '\n' ' '])"
+     util_locales=" m4_esyscmd([ls util/po/ | sed -n '/po$/{s,.po,,;p}' | tr '\n' ' '])"
+
+     # Check every language asked by user against these lists to know what to install
+     for lang in $LINGUAS; do
+         found=0
+         wm_missing=""
+         m4_foreach([REGION], [WINGs, wmaker, WPrefs, util],
+             [AS_IF([echo "$[]m4_tolower(REGION)[]_locales" | grep " $lang " > /dev/null],
+                 [m4_toupper(REGION)MOFILES="$[]m4_toupper(REGION)MOFILES $lang.mo"
+                  found=1],
+                 [wm_missing="$wm_missing, REGION"])
+             ])
+         # Locale has to be supported by at least one part to be reported in the end
+         # If it is not supported everywhere we just display a message to the user so
+         # that he knows about it
+         wm_missing="`echo "$wm_missing" | sed -e 's/^, //' `"
+         AS_IF([test $found = 1],
+             [supported_locales="$supported_locales $lang"
+              AS_IF([test "x$wm_missing" != "x"],
+                  [AC_MSG_WARN([locale $lang is not supported in $wm_missing])]) ],
+             [AC_MSG_WARN([locale $lang is not supported at all, ignoring])])
+     done
+],
+[INTLIBS=""
+ WINGSMOFILES=""
+ WMAKERMOFILES=""
+ WPREFSMOFILES=""
+ UTILMOFILES=""
+ supported_locales=" disabled"])
+dnl
+dnl The variables that are used in the Makefiles:
+AC_SUBST([INTLIBS])dnl
+AC_SUBST([WINGSMOFILES])dnl
+AC_SUBST([WMAKERMOFILES])dnl
+AC_SUBST([WPREFSMOFILES])dnl
+AC_SUBST([UTILMOFILES])dnl
+])

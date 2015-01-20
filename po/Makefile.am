@@ -2,7 +2,7 @@ DOMAIN = WindowMaker
 
 nlsdir      = $(NLSDIR)
 
-CATALOGS = @MOFILES@
+CATALOGS = @WMAKERMOFILES@
 
 CLEANFILES = $(CATALOGS) $(DOMAIN).pot
 
