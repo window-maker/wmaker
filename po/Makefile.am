@@ -95,6 +95,12 @@ install-data-local:  $(CATALOGS)
 		fi; \
 	done
 
+uninstall-local:
+	for n in $(CATALOGS) ; do \
+		l=`basename $$n .mo`; \
+		rm -f $(DESTDIR)$(localedir)/$$l/LC_MESSAGES/$(DOMAIN).mo; \
+	done
+
 # Create a 'silent rule' for our make check the same way automake does
 AM_V_CHKTRANS = $(am__v_CHKTRANS_$(V))
 am__v_CHKTRANS_ = $(am__v_CHKTRANS_$(AM_DEFAULT_VERBOSITY))

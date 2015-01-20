@@ -40,3 +40,9 @@ install-data-local:  $(CATALOGS)
 			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(localedir)/$$l/LC_MESSAGES/$(DOMAIN).mo; \
 		fi; \
 	done
+
+uninstall-local:
+	for n in $(CATALOGS) ; do \
+		l=`basename $$n .mo`; \
+		rm -f $(DESTDIR)$(localedir)/$$l/LC_MESSAGES/$(DOMAIN).mo; \
+	done
