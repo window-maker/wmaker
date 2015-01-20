@@ -381,38 +381,8 @@ visible in the console or in the .xsession-errors file.
 LOCALES/INTERNATIONALIZATION
 ============================
 
-Window Maker has national language support. To enable national language
-support, you must compile Window Maker with some additional parameters.
-
-
-0 - You must have the GNU gettext package installed. It can be
-obtained at ftp://prep.ai.mit.edu/pub/gnu/gettext-nnn.tar.gz
-
-Steps 1 to 3 can be skipped if you use the Install script.
-
-1 - You have to select the languages you want to support. Set the
-LINGUAS to the list of locales you want. English is always
-supported. Example:
-
-setenv LINGUAS "pt ja de"
-in csh
-
-or
-
-export LINGUAS;LINGUAS="pt ja de"
-in sh
-
-The list of supported locales can be found in po/README.
-English is the default language.
-
-Read po/README if you wish to translate and maintain locale files
-for other languages.
-
-2 - Additionally, if your language uses multi-byte characters, such
-as Japanese or Korean, you must set the MultiByteText option to YES
-in ~/GNUstep/Defaults/WMGLOBAL
-
-3 - Configure, build and install Window Maker normally.
+Window Maker has national language support. The procedure to enable national
+language support is described in the dedicated README.i18n file.
 
 4 - To select a particular locale at run-time you must set the LANG
 environment variable to the locale you want. For example, if you want to set
