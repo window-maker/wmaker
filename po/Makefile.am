@@ -73,7 +73,14 @@ SUFFIXES = .po .mo
 all-local: $(CATALOGS)
 
 
+.PHONY: update-lang
+
 if HAVE_XGETTEXT
+update-lang: $(DOMAIN).pot
+	$(AM_V_GEN)$(top_srcdir)/script/generate-po-from-template.sh \
+	    -n "$(PACKAGE_NAME)" -v "$(PACKAGE_VERSION)" -b "$(PACKAGE_BUGREPORT)" \
+	    -t "$(DOMAIN).pot"  "$(srcdir)/$(PO).po"
+
 $(DOMAIN).pot: $(POTFILES)
 	$(AM_V_GEN)$(XGETTEXT) --default-domain=$(DOMAIN) \
 	    --add-comments --keyword=_ --keyword=N_ $(POTFILES)
