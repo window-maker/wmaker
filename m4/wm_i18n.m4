@@ -47,6 +47,11 @@ AS_IF([test "x$LINGUAS" != "x"],
         [AC_MSG_ERROR([support for internationalization requested, but gettext was not found])])
      LIBS="$wm_save_LIBS"
      dnl
+     dnl The program 'msgfmt' is needed to convert the 'po' files into 'mo' files
+     AC_CHECK_PROG([MSGFMT], [msgfmt], [msgfmt])
+     AS_IF([test "x$MSGFMT" = "x"],
+         [AC_MSG_ERROR([the program 'msgfmt' is mandatory to install translation - do you miss the package 'gettext'?])])
+     dnl
      dnl Environment is sane, let's continue
      AC_DEFINE([I18N], [1], [Internationalization (I18N) support (set by configure)])
      supported_locales=""

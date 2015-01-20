@@ -69,7 +69,7 @@ POTFILES  = \
 SUFFIXES = .po .mo
 
 .po.mo: 
-	msgfmt -c -o $@ $<
+	$(AM_V_GEN)$(MSGFMT) -c -o $@ $<
 
 
 all-local: $(CATALOGS)
