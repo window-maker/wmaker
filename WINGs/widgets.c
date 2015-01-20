@@ -479,7 +479,7 @@ WMScreen *WMOpenScreen(const char *display)
 	Display *dpy = XOpenDisplay(display);
 
 	if (!dpy) {
-		wwarning("WINGs: could not open display %s", XDisplayName(display));
+		wwarning(_("WINGs: could not open display %s"), XDisplayName(display));
 		return NULL;
 	}
 

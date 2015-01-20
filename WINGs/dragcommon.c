@@ -1,3 +1,4 @@
+#include "wconfig.h"
 
 #include "WINGsP.h"
 
@@ -56,7 +57,7 @@ WMDragOperationType W_ActionToOperation(WMScreen * scr, Atom action)
 	} else {
 		char *tmp = XGetAtomName(scr->display, action);
 
-		wwarning("unknown XDND action %s ", tmp);
+		wwarning(_("unknown XDND action %s"), tmp);
 		XFree(tmp);
 
 		return WDOperationCopy;
@@ -138,7 +139,7 @@ W_SendDnDClientMessage(Display * dpy, Window win, Atom message,
 #endif
 
 	if (!windowExists(dpy, win)) {
-		wwarning("xdnd message target %lu does no longer exist.", win);
+		wwarning(_("target %lu for xdnd message no longer exists"), win);
 		return False;	/* message not sent */
 	}
 
@@ -216,7 +217,7 @@ void W_HandleDNDClientMessage(WMView * toplevel, XClientMessageEvent * event)
 				return;
 			}
 		} else {
-			wwarning("received dnd enter msg with unsupported version %i", XDND_SOURCE_VERSION(info));
+			wwarning(_("unsupported version %i for xdnd enter message"), XDND_SOURCE_VERSION(info));
 			W_DragDestinationCancelDropOnEnter(toplevel, info);
 			return;
 		}

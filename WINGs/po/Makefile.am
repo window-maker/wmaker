@@ -6,18 +6,68 @@ CLEANFILES = $(CATALOGS) WINGs.pot
 
 EXTRA_DIST = bg.po ca.po cs.po de.po fr.po hu.po nl.po sk.po
 
+# WUtil files:
 POTFILES  = \
+	$(top_srcdir)/WINGs/array.c \
+	$(top_srcdir)/WINGs/bagtree.c \
+	$(top_srcdir)/WINGs/data.c \
 	$(top_srcdir)/WINGs/error.c \
 	$(top_srcdir)/WINGs/findfile.c \
+	$(top_srcdir)/WINGs/handlers.c \
+	$(top_srcdir)/WINGs/hashtable.c \
+	$(top_srcdir)/WINGs/memory.c \
+	$(top_srcdir)/WINGs/menuparser.c \
+	$(top_srcdir)/WINGs/menuparser_macros.c \
+	$(top_srcdir)/WINGs/misc.c \
+	$(top_srcdir)/WINGs/notification.c \
 	$(top_srcdir)/WINGs/proplist.c \
+	$(top_srcdir)/WINGs/string.c \
+	$(top_srcdir)/WINGs/tree.c \
 	$(top_srcdir)/WINGs/userdefaults.c \
+	$(top_srcdir)/WINGs/usleep.c \
+	$(top_srcdir)/WINGs/wapplication.c \
+	$(top_srcdir)/WINGs/wutil.c
+
+# WINGs files:
+POTFILES += \
+	$(top_srcdir)/WINGs/configuration.c \
+	$(top_srcdir)/WINGs/dragcommon.c \
+	$(top_srcdir)/WINGs/dragdestination.c \
+	$(top_srcdir)/WINGs/dragsource.c \
+	$(top_srcdir)/WINGs/selection.c \
+	$(top_srcdir)/WINGs/wappresource.c \
+	$(top_srcdir)/WINGs/wballoon.c \
+	$(top_srcdir)/WINGs/wbox.c \
+	$(top_srcdir)/WINGs/wbrowser.c \
+	$(top_srcdir)/WINGs/wbutton.c \
 	$(top_srcdir)/WINGs/wcolor.c \
 	$(top_srcdir)/WINGs/wcolorpanel.c \
+	$(top_srcdir)/WINGs/wcolorwell.c \
+	$(top_srcdir)/WINGs/wevent.c \
 	$(top_srcdir)/WINGs/wfilepanel.c \
+	$(top_srcdir)/WINGs/wframe.c \
 	$(top_srcdir)/WINGs/wfont.c \
 	$(top_srcdir)/WINGs/wfontpanel.c \
 	$(top_srcdir)/WINGs/widgets.c \
-	$(top_srcdir)/WINGs/wruler.c
+	$(top_srcdir)/WINGs/winputmethod.c \
+	$(top_srcdir)/WINGs/wlabel.c \
+	$(top_srcdir)/WINGs/wlist.c \
+	$(top_srcdir)/WINGs/wmenuitem.c \
+	$(top_srcdir)/WINGs/wmisc.c \
+	$(top_srcdir)/WINGs/wpanel.c \
+	$(top_srcdir)/WINGs/wpixmap.c \
+	$(top_srcdir)/WINGs/wpopupbutton.c \
+	$(top_srcdir)/WINGs/wprogressindicator.c \
+	$(top_srcdir)/WINGs/wruler.c \
+	$(top_srcdir)/WINGs/wscroller.c \
+	$(top_srcdir)/WINGs/wscrollview.c \
+	$(top_srcdir)/WINGs/wslider.c \
+	$(top_srcdir)/WINGs/wsplitview.c \
+	$(top_srcdir)/WINGs/wtabview.c \
+	$(top_srcdir)/WINGs/wtext.c \
+	$(top_srcdir)/WINGs/wtextfield.c \
+	$(top_srcdir)/WINGs/wview.c \
+	$(top_srcdir)/WINGs/wwindow.c
 
 SUFFIXES = .po .mo
 

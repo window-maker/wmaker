@@ -160,7 +160,7 @@ static void selectionLost(WMView * view, Atom selection, void *cdata)
 	(void) selection;
 	(void) cdata;
 
-	wwarning("DND selection lost during drag operation...");
+	wwarning(_("XDND selection lost during drag operation..."));
 }
 
 static void selectionDone(WMView * view, Atom selection, Atom target, void *cdata)
@@ -755,7 +755,7 @@ static void storeDestinationProtocolVersion(WMDraggingInfo * info)
 		XFree(winXdndVersion);
 	} else {
 		XDND_DEST_VERSION(info) = 0;
-		wwarning("failed to read XDND version of drop target");
+		wwarning(_("could not get XDND version for target of drop"));
 	}
 }
 
@@ -771,7 +771,7 @@ static void initMotionProcess(WMView * view, WMDraggingInfo * info, XEvent * eve
 	XDND_TIMESTAMP(info) = event->xmotion.time;
 
 	if (!WMCreateSelectionHandler(view, scr->xdndSelectionAtom, CurrentTime, XDND_SELECTION_PROCS(info), NULL)) {
-		wwarning("could not get ownership or DND selection");
+		wwarning(_("could not get ownership or DND selection"));
 		return;
 	}
 
@@ -1067,7 +1067,7 @@ static void dragSourceResponseTimeOut(void *source)
 	WMView *view = (WMView *) source;
 	WMDraggingInfo *info = &(W_VIEW_SCREEN(view)->dragInfo);
 
-	wwarning("delay for drag destination response expired");
+	wwarning(_("delay for drag destination response expired"));
 	sendLeaveMessage(info);
 
 	recolorCursor(info, False);

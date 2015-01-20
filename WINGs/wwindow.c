@@ -1,6 +1,8 @@
 
 #include <X11/Xmd.h>
 
+#include "wconfig.h"
+
 #include "WINGsP.h"
 
 #include "GNUstep.h"
@@ -155,7 +157,7 @@ static void setWindowTitle(WMWindow * win, const char *title)
 
 	result = XmbTextListToTextProperty(scr->display, (char **)&title, 1, XStdICCTextStyle, &property);
 	if (result == XNoMemory || result == XLocaleNotSupported) {
-		wwarning("window title conversion error... using STRING encoding");
+		wwarning(_("window title conversion error... using STRING encoding"));
 		XStoreName(scr->display, win->view->window, title);
 	} else {
 		XSetWMName(scr->display, win->view->window, &property);
@@ -176,7 +178,7 @@ static void setMiniwindowTitle(WMWindow * win, const char *title)
 
 	result = XmbTextListToTextProperty(scr->display, (char **)&title, 1, XStdICCTextStyle, &property);
 	if (result == XNoMemory || result == XLocaleNotSupported) {
-		wwarning("icon title conversion error..using STRING encoding");
+		wwarning(_("icon title conversion error... using STRING encoding"));
 		XSetIconName(scr->display, win->view->window, title);
 	} else {
 		XSetWMIconName(scr->display, win->view->window, &property);

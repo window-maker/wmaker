@@ -1,6 +1,8 @@
 
 #include <X11/Xlib.h>
 
+#include "wconfig.h"
+
 #include "WINGsP.h"
 
 typedef struct W_IMContext {
@@ -60,7 +62,7 @@ void W_InitIM(W_Screen * scr)
 		cb.callback = destroyIM_cb;
 		cb.client_data = (XPointer) scr;
 		if (XSetIMValues(scr->imctx->xim, XNDestroyCallback, &cb, NULL))
-			wwarning("could not add destroy callback for input method");
+			wwarning(_("could not add destroy callback for XIM input method"));
 		XUnregisterIMInstantiateCallback(scr->display, NULL, NULL, NULL, instantiateIM_cb, (XPointer) scr);
 		/* Get available input style */
 		XGetIMValues(scr->imctx->xim, XNQueryInputStyle, &im_styles, NULL);
