@@ -44,6 +44,9 @@ EXTRA_DIST = TODO BUGS BUGFORM FAQ INSTALL \
 	script/generate-txt-from-texi.sh \
 	script/nested-func-to-macro.sh
 
+
+.PHONY:	coverage-reset coverage
+
 if USE_LCOV
 coverage-reset:
 	find . -type f -name '*.gcda' -exec rm -f '{}' ';'
@@ -54,8 +57,6 @@ coverage:
 	-mkdir -p coverage @lcov_output_directory@
 	lcov --compat-libtool --capture --directory . --output-file coverage/coverage.info
 	genhtml --output-directory @lcov_output_directory@ coverage/coverage.info
-
-.PHONY:	coverage-reset coverage
 endif
 
 # make update-lang PO=<lang>
