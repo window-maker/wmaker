@@ -48,3 +48,14 @@ install-data-local:  $(CATALOGS)
 			$(INSTALL_DATA) -m 644 $$n $(DESTDIR)$(nlsdir)/$$l/LC_MESSAGES/WINGs.mo; \
 		fi; \
 	done
+
+# Create a 'silent rule' for our make check the same way automake does
+AM_V_CHKTRANS = $(am__v_CHKTRANS_$(V))
+am__v_CHKTRANS_ = $(am__v_CHKTRANS_$(AM_DEFAULT_VERBOSITY))
+am__v_CHKTRANS_0 = @echo "  CHK     translations" ;
+am__v_CHKTRANS_1 =
+
+# 'make check' will make sure the tranlation sources are in line with the compiled source
+check-local:
+	$(AM_V_CHKTRANS)$(top_srcdir)/script/check-translation-sources.sh \
+		"$(srcdir)" -s "$(top_srcdir)/WINGs/Makefile.am"

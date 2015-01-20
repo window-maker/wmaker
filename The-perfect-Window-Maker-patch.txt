@@ -32,6 +32,11 @@ This does not only enable debugging information, which you may need when
 testing your work, it also enables a number of extra compiler warning
 which help keeping safer code.
 
+You will probably want also to run this in the end, because it does some
+checks on the source tree:
+
+make check
+
 __________________________
 Producing a patch with git
 --------------------------
