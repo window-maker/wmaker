@@ -15,7 +15,6 @@ POTFILES  = \
 	$(top_srcdir)/WPrefs.app/Focus.c \
 	$(top_srcdir)/WPrefs.app/FontSimple.c \
 	$(top_srcdir)/WPrefs.app/Icons.c \
-	$(top_srcdir)/WPrefs.app/KeyboardSettings.c \
 	$(top_srcdir)/WPrefs.app/KeyboardShortcuts.c \
 	$(top_srcdir)/WPrefs.app/Menu.c \
 	$(top_srcdir)/WPrefs.app/MenuPreferences.c \
@@ -23,11 +22,18 @@ POTFILES  = \
 	$(top_srcdir)/WPrefs.app/Paths.c \
 	$(top_srcdir)/WPrefs.app/Preferences.c \
 	$(top_srcdir)/WPrefs.app/TexturePanel.c \
-	$(top_srcdir)/WPrefs.app/Themes.c \
 	$(top_srcdir)/WPrefs.app/WPrefs.c \
 	$(top_srcdir)/WPrefs.app/WindowHandling.c \
 	$(top_srcdir)/WPrefs.app/Workspace.c \
-	$(top_srcdir)/WPrefs.app/main.c
+	$(top_srcdir)/WPrefs.app/double.c \
+	$(top_srcdir)/WPrefs.app/editmenu.c \
+	$(top_srcdir)/WPrefs.app/main.c \
+	$(top_srcdir)/WPrefs.app/xmodifier.c
+
+# not_yet_fully_implemented
+#	$(top_srcdir)/WPrefs.app/KeyboardSettings.c \
+#	$(top_srcdir)/WPrefs.app/Themes.c \
+#
 
 SUFFIXES = .po .mo
 

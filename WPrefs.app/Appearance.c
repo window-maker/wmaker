@@ -559,10 +559,10 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 		if (path) {
 			timage = RLoadImage(rc, path, 0);
 			if (!timage)
-				wwarning("could not load file '%s': %s", path, RMessageForError(RErrorCode));
+				wwarning(_("could not load file '%s': %s"), path, RMessageForError(RErrorCode));
 			wfree(path);
 		} else {
-			wwarning("could not find file '%s' for %s of texture", str, type);
+			wwarning(_("could not find file '%s' for texture type %s"), str, type);
 			timage = NULL;
 		}
 		if (!timage) {
@@ -610,7 +610,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 			style = RHorizontalGradient;
 			break;
 		default:
-			wwarning("unknow direction in '%s', falling back to diagonal", type);
+			wwarning(_("unknow direction in '%s', falling back to diagonal"), type);
 		case 'D':
 			style = RDiagonalGradient;
 			break;
@@ -636,7 +636,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 			style = RHorizontalGradient;
 			break;
 		default:
-			wwarning("unknow direction in '%s', falling back to diagonal", type);
+			wwarning(_("unknow direction in '%s', falling back to diagonal"), type);
 		case 'D':
 			style = RDiagonalGradient;
 			break;
@@ -670,7 +670,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 			style = RHorizontalGradient;
 			break;
 		default:
-			wwarning("unknow direction in '%s', falling back to diagonal", type);
+			wwarning(_("unknow direction in '%s', falling back to diagonal"), type);
 		case 'D':
 			style = RDiagonalGradient;
 			break;
@@ -717,7 +717,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 			break;
 
 		default:
-			wwarning("type '%s' in not a supported type for a texture", type);
+			wwarning(_("type '%s' in not a supported type for a texture"), type);
 			RReleaseImage(timage);
 			return None;
 		}
@@ -1085,7 +1085,7 @@ static void deleteTexture(WMWidget * w, void *data)
 	WMReleasePropList(titem->prop);
 	if (titem->path) {
 		if (remove(titem->path) < 0 && errno != ENOENT) {
-			werror("could not remove file %s", titem->path);
+			werror(_("could not remove file %s"), titem->path);
 		}
 		wfree(titem->path);
 	}
