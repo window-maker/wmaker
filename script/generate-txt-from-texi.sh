@@ -199,11 +199,18 @@ function end_conditional(name,          local_i) {
 # the texinfo standard allows to have variables set with @set and used
 # with @value; they can also be defined from command-line (-D)
 # they are stored in the global array "variable[name]"
-function set_variable(line,          local_split, local_idx) {
-  local_idx = match(line, /^([^ \t]+)([ \t]*)(.*)$/, local_split);
+function set_variable(line,          local_idx, local_name, local_value) {
+  gsub(/^[ \t]*/, "", line);
+  local_idx = match(line, /[ \t]/);
   if (local_idx > 0) {
-    variable[ local_split[1] ] = local_split[3];
+    local_name  = substr(line, 1, local_idx - 1);
+    local_value = substr(line, local_idx + 1);
+    gsub(/^[ \t]*/, "", local_value);
+  } else {
+    local_name  = line;
+    local_value = "";
   }
+  variable[ local_name ] = local_value;
 }
 
 # Write a single line to the output
@@ -631,15 +638,16 @@ function generate_paragraph(          local_prefix, local_line, local_length,
 }
 
 # Replace commands by text in the line, return the result
-function execute_commands(line,               replaced_line) {
+function execute_commands(line,               replaced_line, command) {
   replaced_line = "";
   while (1) {
-    idx = match(line, /@([a-zA-Z]+|.)/, command)
+    idx = match(line, /@([a-zA-Z]+|.)/);
     if (idx == 0) { break; }
 
     # Separate the command and its arguments from the rest of the line
     replaced_line = replaced_line substr(line, 1, idx - 1);
-    line = substr(line, idx + 1 + length(command[1]));
+    command = substr(line, idx + 1, RLENGTH - 1);
+    line = substr(line, idx + RLENGTH);
 
     if (line ~ /^\{/) {
       # Command has argument(s), extract them
@@ -654,7 +662,7 @@ function execute_commands(line,               replaced_line) {
         }
       }
       if (brace_count != 0) {
-        report_error("closing brace not found for command \"" command[1] "\", at line " NR);
+        report_error("closing brace not found for command \"@" command "\", at line " NR);
       }
 
       cmdargs = substr(line, 2, i-2);
@@ -668,7 +676,7 @@ function execute_commands(line,               replaced_line) {
     }
 
     # Process the command
-    switch (command[1]) {
+    switch (command) {
 
     # Commands generating "special" characters #################################
     case "@":
@@ -764,7 +772,7 @@ function execute_commands(line,               replaced_line) {
       break;
 
     default:
-      report_error("unknow command @" command[1] " at line " NR);
+      report_error("unknow command @" command " at line " NR);
     }
 
   }
@@ -862,13 +870,14 @@ BEGIN {
 
 /^[ \t]*@/ {
   # Treat the special commands that are supposed to be on a line by themselves
-  idx = match($0, /^@([a-zA-Z]+)/, command);
+  idx = match($0, /^@([a-zA-Z]+)/);
   if (idx != 0) {
     # Remove the command from current line
-    line = substr($0, idx + 1 + length(command[1]));
+    command = substr($0, idx + 1, RLENGTH - 1);
+    line = substr($0, idx + 1 + RLENGTH);
     sub(/^[ \t]+/, "", line);
 
-    switch (command[1]) {
+    switch (command) {
 
     # Commands for structuring the document ####################################
     case "chapter":
@@ -963,7 +972,7 @@ BEGIN {
 
     case "menu":
       generate_paragraph();
-      discard_block(command[1]);
+      discard_block(command);
       next;
 
     case "quotation":
@@ -1030,22 +1039,22 @@ BEGIN {
       next;
 
     # Variable and Conditional commands ########################################
-    case "ifdocbook":   start_conditional(command[1], 0); line = ""; next;
-    case "ifhtml":      start_conditional(command[1], 0); line = ""; next;
-    case "ifinfo":      start_conditional(command[1], 1); line = ""; next; # "for historical compatibility"
-    case "ifplaintext": start_conditional(command[1], 1); line = ""; next;
-    case "iftex":       start_conditional(command[1], 0); line = ""; next;
-    case "ifxml":       start_conditional(command[1], 0); line = ""; next;
+    case "ifdocbook":   start_conditional(command, 0); line = ""; next;
+    case "ifhtml":      start_conditional(command, 0); line = ""; next;
+    case "ifinfo":      start_conditional(command, 1); line = ""; next; # "for historical compatibility"
+    case "ifplaintext": start_conditional(command, 1); line = ""; next;
+    case "iftex":       start_conditional(command, 0); line = ""; next;
+    case "ifxml":       start_conditional(command, 0); line = ""; next;
 
-    case "ifnotdocbook":   start_conditional(command[1], 1); line = ""; next;
-    case "ifnothtml":      start_conditional(command[1], 1); line = ""; next;
-    case "ifnotinfo":      start_conditional(command[1], 0); line = ""; next; # "for historical compatibility"
-    case "ifnotplaintext": start_conditional(command[1], 0); line = ""; next;
-    case "ifnottex":       start_conditional(command[1], 1); line = ""; next;
-    case "ifnotxml":       start_conditional(command[1], 1); line = ""; next;
+    case "ifnotdocbook":   start_conditional(command, 1); line = ""; next;
+    case "ifnothtml":      start_conditional(command, 1); line = ""; next;
+    case "ifnotinfo":      start_conditional(command, 0); line = ""; next; # "for historical compatibility"
+    case "ifnotplaintext": start_conditional(command, 0); line = ""; next;
+    case "ifnottex":       start_conditional(command, 1); line = ""; next;
+    case "ifnotxml":       start_conditional(command, 1); line = ""; next;
 
-    case "ifclear": start_conditional(command[1], (variable[line] == "")); next;
-    case "ifset":   start_conditional(command[1], (variable[line] != "")); next;
+    case "ifclear": start_conditional(command, (variable[line] == "")); next;
+    case "ifset":   start_conditional(command, (variable[line] != "")); next;
 
     case "clear":
       if (cond_state) {
@@ -1055,7 +1064,7 @@ BEGIN {
 
     case "set":
       if (cond_state) {
-        set_variable(execute_commands(line));
+        set_variable(line);
       }
       next;
 
@@ -1085,7 +1094,7 @@ BEGIN {
 
     case "ignore":
       # These are multi-lines comments
-      discard_block(command[1]);
+      discard_block(command);
       next;
 
     case "indent":
