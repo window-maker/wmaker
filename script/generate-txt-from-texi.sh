@@ -217,17 +217,14 @@ function set_variable(line,          local_idx, local_name, local_value) {
 function write_line(line) {
   if (!cond_state) { return; }
 
-  switch (redirect_out) {
-  case "no":
+  if (redirect_out == "no") {
     print line;
     line_number++;
-    break;
 
-  case "copyright":
+  } else if (redirect_out == "copyright") {
     copyright_lines[copyright_count++] = line;
-    break;
 
-  default:
+  } else {
     report_error("redirect output mode \"" redirect_out "\" is not supported (line " NR ")");
   }
 }
@@ -466,14 +463,12 @@ function start_item_list(mark) {
 
 # Generate Underline string with the specified length
 function gen_underline(id, len,          local) {
-  switch (id) {
-    case -1: local = "          "; break;
-    case 1:  local = "**********"; break;
-    case 2:  local = "=========="; break;
-    case 3:  local = "----------"; break;
-    case 4:  local = ".........."; break;
-    default: local = "~~~~~~~~~~"; break;
-  }
+  if (id == -1) { local = "          "; } else
+  if (id == 1)  { local = "**********"; } else
+  if (id == 2)  { local = "=========="; } else
+  if (id == 3)  { local = "----------"; } else
+  if (id == 4)  { local = ".........."; }
+  else { local = "~~~~~~~~~~"; }
   while (length(local) < len) {
     local = local local;
   }
@@ -483,17 +478,16 @@ function gen_underline(id, len,          local) {
 # Generate text for an URL link
 function generate_url_reference(args,          local_nb, local_arr) {
   local_nb = split(args, local_arr, ",");
-  switch (local_nb) {
-  case 1:
+  if (local_nb == 1) {
     return local_arr[1];
 
-  case 2:
+  } else if (local_nb == 2) {
     return execute_commands(local_arr[2]) " (" local_arr[1] ")";
 
-  case 3:
+  } else if (local_nb == 3) {
     return execute_commands(local_arr[3]);
 
-  default:
+  } else {
     report_error("bad number of argument " local_nb " for @uref at line " NR);
   }
 }
@@ -507,24 +501,21 @@ function generate_author_line(name,          local_offset, local_attach_to_par) 
 
   generate_paragraph();
 
-  switch (par_mode) {
-  case "titlepage":
+  if (par_mode == "titlepage") {
     name = "--  " name "  --";
     local_offset = int((76 - length(name)) / 2);
     if (local_offset < 2) { local_offset = 2; }
     write_line("");
     write_line(gen_underline(-1, local_offset) name);
-    break;
 
-  case "quotation":
+  } else if (par_mode == "quotation") {
     name = "-- " name;
     local_offset = int((line_length - length(line_prefix) - length(name)) * 2/3);
     if (local_offset < length(line_prefix) + 2) { local_offset = length(line_prefix) + 2; }
     if (!local_attach_to_par) { write_line(""); }
     write_line(line_prefix gen_underline(-1, local_offset) name);
-    break;
 
-  default:
+  } else {
     report_error("command @author used in an inappropriate mode (" par_mode ") at line " NR);
   }
 }
@@ -546,8 +537,7 @@ function generate_paragraph(          local_prefix, local_line, local_length,
 
   local_line = line_prefix;
 
-  switch (par_mode) {
-  case "list":
+  if (par_mode == "list") {
     if (list_item_wants_sepline && !list_is_first_item) {
       write_line("");
     }
@@ -558,25 +548,21 @@ function generate_paragraph(          local_prefix, local_line, local_length,
       while (length(local_prefix) < 5) { local_prefix = " " local_prefix; }
       local_line = substr(local_line, 1, length(local_line) - 5) local_prefix;
     }
-    break;
 
-  case "titlepage":
+  } else if (par_mode == "titlepage") {
     write_line("");
-    break;
 
-  case "par":
+  } else if (par_mode == "par") {
     write_line("");
     if (par_indent) {
       local_line = local_line "   ";
     }
-    break;
 
-  case "quotation":
+  } else if (par_mode == "quotation") {
     write_line("");
     # There is no extra indentation of paragraphs in this mode
-    break;
 
-  default:
+  } else {
     report_error("paragraph mode \"" par_mode "\" is not supported in generate_paragraph (line " NR ")");
   }
 
@@ -675,103 +661,81 @@ function execute_commands(line,               replaced_line, command) {
       sub(/^[ \t]+/, "", line);
     }
 
-    # Process the command
-    switch (command) {
-
     # Commands generating "special" characters #################################
-    case "@":
+    if (command == "@") {
       replaced_line = replaced_line "@";
-      break;
 
-    case "bullet":
+    } else if (command == "bullet") {
       replaced_line = replaced_line "*";
-      break;
 
-    case "copyright":
+    } else if (command == "copyright") {
       replaced_line = replaced_line "(c)";
-      break;
 
-    case "minus":
+    } else if (command == "minus") {
       replaced_line = replaced_line "-";
-      break;
 
-    case "registeredsymbol":
+    } else if (command == "registeredsymbol") {
       replaced_line = replaced_line "(r)";
-      break;
 
-    case "today":
+    } else if (command == "today") {
       # Make sure the date will be in english (we use "C" because it not certain
       # that the English locale is enabled on the machine of the user)
       replaced_line = replaced_line "'"`LANG=C date '+%d %B %Y' | sed -e 's,^0,,' `"'";
-      break;
 
     # Commands to display text in a special style ##############################
-    case "b": # bold
+    } else if (command == "b") { # bold
       line = "*" cmdargs "*" line;
-      break;
 
-    case "cite":
-    case "emph":
+    } else if ((command == "cite") ||
+               (command == "emph")) {
       line = cmdargs line;
-      break;
 
-    case "code":
-    case "command":
-    case "env":
-    case "option":
-    case "var":
+    } else if ((command == "code") ||
+               (command == "command") ||
+               (command == "env") ||
+               (command == "option") ||
+               (command == "var")) {
       # Should be in fixed-spacing font; printed with single-quotes
       line = "'\''" cmdargs "'\''" line;
-      break;
 
-    case "i": # italic
+    } else if (command == "i") { # italic
       line = "_" cmdargs "_" line;
-      break;
 
-    case "email":
+    } else if (command == "email") {
       line = "<" cmdargs ">" line;
-      break;
 
-    case "file":
+    } else if (command == "file") {
       line = "\"" cmdargs "\"" line;
-      break;
 
-    case "key":
+    } else if (command == "key") {
       line = "<" cmdargs ">" line;
-      break;
 
-    case "r": # roman font
+    } else if (command == "r") { # roman font
       line = cmdargs line;
-      break;
 
-    case "sc":
+    } else if (command == "sc") {
       # Small-Caps, keep as-is in plain text
       line = cmdargs line;
-      break;
 
-    case "t": # typewriter-like
+    } else if (command == "t") { # typewriter-like
       line = cmdargs line;
-      break;
 
-    case "uref":
+    } else if (command == "uref") {
       replaced_line = replaced_line generate_url_reference(cmdargs);
-      break;
 
     # Variable and Conditional commands ########################################
-    case "value":
+    } else if (command == "value") {
       if (variable[cmdargs] == "") {
         report_error("variable '" cmdargs "' is unknow, for @value at line " NR);
       }
       line = variable[cmdargs] line;
-      break;
 
     # Miscelleanous commands ###################################################
-    case "c":
+    } else if (command == "c") {
       # Comments: ignore everything to the end of line
       line = "";
-      break;
 
-    default:
+    } else {
       report_error("unknow command @" command " at line " NR);
     }
 
@@ -785,49 +749,41 @@ function process_end(line) {
     end_conditional(line);
     return;
   }
-  switch (line) {
-  case "copying":
+  if (line == "copying") {
     generate_paragraph();
     redirect_out = "no";
-    break;
 
-  case "example":
+  } else if (line == "example") {
     generate_paragraph();
     par_mode_pop("example");
     par_indent = 1;
-    break;
 
-  case "flushleft":
+  } else if (line == "flushleft") {
     generate_paragraph();
     par_mode_pop(par_mode);
     par_indent = 1;
-    break;
 
-  case "flushright":
+  } else if (line == "flushright") {
     generate_paragraph();
     par_mode_pop(par_mode);
     par_indent = 1;
-    break;
 
-  case "itemize":
+  } else if (line == "itemize") {
     generate_paragraph();
     par_mode_pop("list");
     par_indent = 1;
-    break;
 
-  case "quotation":
+  } else if (line == "quotation") {
     generate_paragraph();
     par_mode_pop("quotation");
     par_indent = 1;
-    break;
 
-  case "titlepage":
+  } else if (line == "titlepage") {
     generate_page_break();
     par_mode_pop("titlepage");
     par_indent = 0;
-    break;
 
-  default:
+  } else {
     report_error("unknow command @end " line " at line " NR);
   }
 }
@@ -877,30 +833,28 @@ BEGIN {
     line = substr($0, idx + 1 + RLENGTH);
     sub(/^[ \t]+/, "", line);
 
-    switch (command) {
-
     # Commands for structuring the document ####################################
-    case "chapter":
+    if (command == "chapter") {
       new_section(1, execute_commands(line), 1);
       next;
 
-    case "section":
+    } else if (command == "section") {
       new_section(2, execute_commands(line), 1);
       next;
 
-    case "subsection":
+    } else if (command == "subsection") {
       new_section(3, execute_commands(line), 1);
       next;
 
-    case "subsubsection":
+    } else if (command == "subsubsection") {
       new_section(4, execute_commands(line), 1);
       next;
 
-    case "node":
+    } else if (command == "node") {
       # We ignore nodes completely, this is for the "info" format only
       next;
 
-    case "top":
+    } else if (command == "top") {
       # This is mandatory for "info" format, but useless for plain text
       if (top_was_found > 0) {
         report_error("command @top at line " NR " but was already found at line " top_was_found);
@@ -908,35 +862,35 @@ BEGIN {
       top_was_found = NR;
       next;
 
-    case "unnumbered":
+    } else if (command == "unnumbered") {
       new_section(1, execute_commands(line), 0);
       next;
 
     # Commands for content in the Title Page ###################################
-    case "author":
+    } else if (command == "author") {
       generate_author_line(execute_commands(line));
       next;
 
-    case "subtitle":
+    } else if (command == "subtitle") {
       generate_title_page_subtitle(execute_commands(line));
       next;
 
-    case "title":
+    } else if (command == "title") {
       generate_title_page_title(execute_commands(line));
       next;
 
     # Commands changing the way paragraph are displayed ########################
-    case "copying":
+    } else if (command == "copying") {
       generate_paragraph();
       redirect_out = "copyright";
       copyright_count = 0;
       next;
 
-    case "end":
+    } else if (command == "end") {
       process_end(line);
       next;
 
-    case "example":
+    } else if (command == "example") {
       if (cond_state) {
         generate_paragraph();
         write_line("");
@@ -945,7 +899,7 @@ BEGIN {
       }
       next;
 
-    case "flushleft":
+    } else if (command == "flushleft") {
       if (cond_state) {
         generate_paragraph();
         par_mode_push(par_mode);
@@ -954,7 +908,7 @@ BEGIN {
       }
       next;
 
-    case "flushright":
+    } else if (command == "flushright") {
       if (cond_state) {
         generate_paragraph();
         par_mode_push(par_mode);
@@ -963,19 +917,19 @@ BEGIN {
       }
       next;
 
-    case "itemize":
+    } else if (command == "itemize") {
       if (cond_state) {
         generate_paragraph();
         start_item_list(line);
       }
       next;
 
-    case "menu":
+    } else if (command == "menu") {
       generate_paragraph();
       discard_block(command);
       next;
 
-    case "quotation":
+    } else if (command == "quotation") {
       if (cond_state) {
         generate_paragraph();
         par_mode_push("quotation");
@@ -993,12 +947,12 @@ BEGIN {
       }
       next;
 
-    case "titlepage":
+    } else if (command == "titlepage") {
       generate_title_page();
       next;
 
     # Commands generating text automacitally ###################################
-    case "contents":
+    } else if (command == "contents") {
       if (cond_state) {
         generate_paragraph();
         write_line("");
@@ -1007,7 +961,7 @@ BEGIN {
       }
       next;
 
-    case "insertcopying":
+    } else if (command == "insertcopying") {
       if (cond_state) {
         generate_paragraph();
         # The copying block was already formatted, we just have to print it as-is
@@ -1017,11 +971,11 @@ BEGIN {
       }
       next;
 
-    case "page":
+    } else if (command == "page") {
       generate_page_break();
       next;
 
-    case "sp":
+    } else if (command == "sp") {
       if (cond_state) {
         generate_paragraph();
         while (line > 0) {
@@ -1031,7 +985,7 @@ BEGIN {
       }
       next;
 
-    case "vskip":
+    } else if (command == "vskip") {
       # Silently ignore, this is just for TeX
       if (cond_state) {
         generate_paragraph();
@@ -1039,37 +993,37 @@ BEGIN {
       next;
 
     # Variable and Conditional commands ########################################
-    case "ifdocbook":   start_conditional(command, 0); line = ""; next;
-    case "ifhtml":      start_conditional(command, 0); line = ""; next;
-    case "ifinfo":      start_conditional(command, 1); line = ""; next; # "for historical compatibility"
-    case "ifplaintext": start_conditional(command, 1); line = ""; next;
-    case "iftex":       start_conditional(command, 0); line = ""; next;
-    case "ifxml":       start_conditional(command, 0); line = ""; next;
+    } else if (command == "ifdocbook") {   start_conditional(command, 0); line = ""; next;
+    } else if (command == "ifhtml") {      start_conditional(command, 0); line = ""; next;
+    } else if (command == "ifinfo") {      start_conditional(command, 1); line = ""; next; # "for historical compatibility"
+    } else if (command == "ifplaintext") { start_conditional(command, 1); line = ""; next;
+    } else if (command == "iftex") {       start_conditional(command, 0); line = ""; next;
+    } else if (command == "ifxml") {       start_conditional(command, 0); line = ""; next;
 
-    case "ifnotdocbook":   start_conditional(command, 1); line = ""; next;
-    case "ifnothtml":      start_conditional(command, 1); line = ""; next;
-    case "ifnotinfo":      start_conditional(command, 0); line = ""; next; # "for historical compatibility"
-    case "ifnotplaintext": start_conditional(command, 0); line = ""; next;
-    case "ifnottex":       start_conditional(command, 1); line = ""; next;
-    case "ifnotxml":       start_conditional(command, 1); line = ""; next;
+    } else if (command == "ifnotdocbook") {   start_conditional(command, 1); line = ""; next;
+    } else if (command == "ifnothtml") {      start_conditional(command, 1); line = ""; next;
+    } else if (command == "ifnotinfo") {      start_conditional(command, 0); line = ""; next; # "for historical compatibility"
+    } else if (command == "ifnotplaintext") { start_conditional(command, 0); line = ""; next;
+    } else if (command == "ifnottex") {       start_conditional(command, 1); line = ""; next;
+    } else if (command == "ifnotxml") {       start_conditional(command, 1); line = ""; next;
 
-    case "ifclear": start_conditional(command, (variable[line] == "")); next;
-    case "ifset":   start_conditional(command, (variable[line] != "")); next;
+    } else if (command == "ifclear") { start_conditional(command, (variable[line] == "")); next;
+    } else if (command == "ifset") {   start_conditional(command, (variable[line] != "")); next;
 
-    case "clear":
+    } else if (command == "clear") {
       if (cond_state) {
         variable[ execute_commands(line) ] = "";
       }
       next;
 
-    case "set":
+    } else if (command == "set") {
       if (cond_state) {
         set_variable(line);
       }
       next;
 
     # Miscelleanous commands ###################################################
-    case "bye":
+    } else if (command == "bye") {
       # Mark the end of file, we are supposed to ignore everything after
       if (cond_state) {
         generate_paragraph();
@@ -1078,43 +1032,41 @@ BEGIN {
       }
       next;
 
-    case "c":
+    } else if (command == "c") {
       # Comments: ignore everything to the end of line
       next;
 
-    case "errormsg":
+    } else if (command == "errormsg") {
       print "Error: " execute_commands(cmdargs) > "/dev/stderr";
       print "   (from \"'"$input_file"'\", line " NR ")" > "/dev/stderr";
       bye_marker_found = 1;
       exit 4;
 
-    case "finalout":
+    } else if (command == "finalout") {
       # Nothing to do, we are not generating anything in output file about long lines
       next;
 
-    case "ignore":
+    } else if (command == "ignore") {
       # These are multi-lines comments
       discard_block(command);
       next;
 
-    case "indent":
+    } else if (command == "indent") {
       par_indent = 1;
       if (line == "") { next; }
       $0 = line;
-      break;
 
-    case "noindent":
+    } else if (command == "noindent") {
       par_indent = 0;
       if (line == "") { next; }
       $0 = line;
-      break;
 
-    case "setfilename":
+    } else if (command == "setfilename") {
       # Should set the output file name automatically
       # at current time, we just ignore it
       next;
 
-    case "settitle":
+    } else if (command == "settitle") {
       # This is used for page headers
       # in a plain text file, it is useless
       next;
@@ -1158,11 +1110,10 @@ BEGIN {
 {
   if (!cond_state) { next; }
 
-  switch (par_mode) {
-  case "list":
-  case "par":
-  case "titlepage":
-  case "quotation":
+  if ((par_mode == "list") ||
+      (par_mode == "par") ||
+      (par_mode == "titlepage") ||
+      (par_mode == "quotation")) {
     if (/^[ \t]*$/) {
       # Empty lines separate paragraphs
       generate_paragraph();
@@ -1171,16 +1122,14 @@ BEGIN {
     } else {
       add_text_to_paragraph(execute_commands($0));
     }
-    break;
 
-  case "example":
+  } else if (par_mode == "example") {
     # Line is printed unmodified, not split and not merged, but with an indentation
     $0 = line_prefix execute_commands($0);
     sub(/[ \t]*$/, "");
     write_line($0);
-    break;
 
-  default:
+  } else {
     report_error("paragraph mode \"" par_mode "\" is not supported for line processing (line " NR ")");
   }
 }
