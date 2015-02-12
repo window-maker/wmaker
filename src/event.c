@@ -1791,7 +1791,7 @@ static void handleKeyPress(XEvent * event)
 	{
 		char *cmdline;
 
-		cmdline = ExpandOptions(scr, _("exec %a(Run,Type command to run:)"));
+		cmdline = ExpandOptions(scr, _("exec %A(Run,Type command to run:)"));
 
 		if (cmdline) {
 			XGrabPointer(dpy, scr->root_win, True, 0,
