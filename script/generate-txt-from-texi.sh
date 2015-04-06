@@ -468,6 +468,28 @@ function start_item_list(mark, type, default_mark) {
   write_line("");
 }
 
+# One item in a Table
+function generate_item_in_table(line) {
+  if (line !~ /^[ \t]*@itemx?[ \t]/) {
+    report_error("bas usage for @item inside a @table, should be at start of line and followed by its value");
+  }
+
+  generate_paragraph();
+  if (list_item_wants_sepline && !list_is_first_item) {
+    write_line("");
+  }
+
+  # Apply the global table style to this item
+  gsub(/^[ \t]*@itemx?[ \t]*/, "", line);
+  line = execute_commands(item_list_mark "{" line "}");
+
+  # Cancel the indentation added for the 2nd column for that line
+  line = substr(line_prefix, 1, length(line_prefix)-5)  line;
+  write_line(line);
+
+  list_item_wants_sepline = 0;
+}
+
 # Generate Underline string with the specified length
 function gen_underline(id, len,          local) {
   if (id == -1) { local = "          "; } else
@@ -577,6 +599,13 @@ function generate_paragraph(          local_prefix, local_line, local_length,
         item_list_mark = substr("BCDEFGHIJKLMNOPQRSTUVWXYZ!bcdefghijklmnopqrstuvwxyz!", local_i, 1);
       }
     }
+
+  } else if (par_mode == "table") {
+    if (list_item_wants_sepline && !list_is_first_item) {
+      write_line("");
+    }
+    list_is_first_item = 0;
+    list_item_wants_sepline = 0;
 
   } else if (par_mode == "titlepage") {
     write_line("");
@@ -712,6 +741,9 @@ function execute_commands(line,               replaced_line, command) {
       replaced_line = replaced_line "'"`LANG=C date '+%d %B %Y' | sed -e 's,^0,,' `"'";
 
     # Commands to display text in a special style ##############################
+    } else if (command == "asis") {
+      line = cmdargs line;
+
     } else if (command == "b") { # bold
       line = "*" cmdargs "*" line;
 
@@ -810,6 +842,11 @@ function process_end(line) {
   } else if (line == "quotation") {
     generate_paragraph();
     par_mode_pop("quotation");
+    par_indent = 1;
+
+  } else if ((line == "table") || (line == "ftable") || (line == "vtable")) {
+    generate_paragraph();
+    par_mode_pop("table");
     par_indent = 1;
 
   } else if (line == "titlepage") {
@@ -988,6 +1025,28 @@ BEGIN {
       }
       next;
 
+    } else if ((command == "table") ||
+               (command == "ftable") ||
+               (command == "vtable")) {
+      # "ftable" and "vtable" are the same as "table" except they are adding automatically
+      # the item to the appropriate Index (respectively Function and Variable indexes).
+      # As we do not generate index in the text file, we just treat them identically
+      if (cond_state) {
+        generate_paragraph();
+        par_mode_push("table");
+        list_is_first_item = 1;
+        list_item_wants_sepline = 0;
+        par_indent = 1;
+        line_prefix = line_prefix "     ";
+        gsub(/[ \t]/, "", line);
+        if (line !~ /^@[a-z][a-z]*$/) {
+          report_error("invalid usage of @table, expecting a single style-changing command");
+        }
+        item_list_mark = line;
+        write_line("");
+      }
+      next;
+
     } else if (command == "titlepage") {
       generate_title_page();
       next;
@@ -1123,7 +1182,10 @@ BEGIN {
   # We treat @item specially because it may generate more than 1 paragraph
   if (!cond_state) { next; }
 
-  if ((par_mode != "list") && (par_mode != "enum")) {
+  if (par_mode == "table") {
+    generate_item_in_table($0);
+    next;
+  } else if ((par_mode != "list") && (par_mode != "enum")) {
     report_error("found @item at line " NR " but not inside an @itemize");
   }
 
@@ -1154,6 +1216,7 @@ BEGIN {
   if ((par_mode == "list") ||
       (par_mode == "enum") ||
       (par_mode == "par") ||
+      (par_mode == "table") ||
       (par_mode == "titlepage") ||
       (par_mode == "quotation")) {
     if (/^[ \t]*$/) {
