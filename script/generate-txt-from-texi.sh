@@ -60,6 +60,10 @@
 #  - There are 2 blank lines instead of 1 before chapter/section to make
 # them stand out more
 #
+#  - when making cross-references, generate a decent-looking string with
+# the target line number, instead of the crypting "*Note:" label (inherited
+# from "info" format) that looks out of place
+#
 #  - the line length is set to 76 instead of 72
 #
 #  - there are some difference in what characters are added when a style is
@@ -72,6 +76,13 @@
 #
 #  - not all commands are implemented, some because they were not needed
 # so far, probably a few because they would be too complex to implement
+#
+#
+# There are a few limitations due to Texinfo being a cheesy format:
+#
+#  - the @node should be followed immediately by its @chapter/@section
+# command, otherwise you may have mismatch on the line number if you make a
+# cross-reference to that @node
 #
 ###########################################################################
 #
@@ -157,6 +168,7 @@ done
 # Create the temp file in the current directory
 temp_file="`echo "$input_file" | sed -e 's,^.*/\([^/]*\)$,\1, ; s,\.[^.]*$,,' `.tmp"
 toc_file="`echo "$temp_file" | sed -e 's,\.[^.]*$,,' `.toc"
+xref_file="`echo "$temp_file" | sed -e 's,\.[^.]*$,,' `.xrf"
 
 # Run awk for 1st pass, but if it fails stop now without deleting temp files
 awk '
@@ -448,6 +460,36 @@ function new_section(level, title, is_numbered,         local_i, local_line) {
   par_indent = 0;
 }
 
+# Do not generate anything for Node command, but keep the line information so
+# the nodes can be cross-referenced
+function new_node(args,        local_nb, local_arr, local_i) {
+  if (!cond_state) { return; }
+
+  # Dump the current paragraph now
+  generate_paragraph();
+
+  # The command takes many arguments, separate them because we care only for the 1st
+  local_nb = split(args, local_arr, ",");
+  if ((local_nb < 1) || (local_nb > 4)) {
+    report_error("bad number of argument " local_nb " for @node at line " NR);
+  }
+  gsub(/^[ \t]*/, "", local_arr[1]);
+  gsub(/[ \t]*$/, "", local_arr[1]);
+  if (local_arr[1] == "") {
+    report_error("missing node name for @node at line " NR);
+  }
+
+  # Consistency check
+  if (node_address[local_arr[1]] != "") {
+    report_error("node \"" local_arr[1] "\" is redefined at line " NR ", previous definition at line " node_defline[local_arr[1]]);
+  }
+
+  # Add a +3 offset to compensate for the position of the real location that will be the
+  # chapter/section that should be following
+  node_address[local_arr[1]] = line_number + 3;
+  node_defline[local_arr[1]] = NR;
+}
+
 # List of Items
 function start_item_list(mark, type, default_mark) {
   par_mode_push(type);
@@ -519,6 +561,48 @@ function generate_url_reference(args,          local_nb, local_arr) {
   } else {
     report_error("bad number of argument " local_nb " for @uref at line " NR);
   }
+}
+
+# Generate text for a Cross-Reference into the document
+function generate_cross_reference(args, cmd,          local_nb, local_arr, local_i) {
+  local_nb = split(args, local_arr, ",");
+  if ((local_nb < 1) || (local_nb > 5)) {
+    report_error("bad number of argument " local_nb " for @" cmd " at line " NR);
+  }
+
+  local_arr[1] = execute_commands(local_arr[1]);
+  for (local_i = 1; local_i <= local_nb; local_i++) {
+    gsub(/^[ \t]*/, "", local_arr[local_i]);
+    gsub(/[ \t]*$/, "", local_arr[local_i]);
+  }
+
+  if (local_arr[1] == "") {
+    report_error("no node name specified in @" cmd " at line " NR);
+  }
+
+  if (local_arr[4] != "") {
+    # If it is a link to an external documentation, do not create an xref_table entry
+    local_i = "section [" local_arr[1] "]";
+    if (local_arr[5] != "") {
+      local_i = local_i " in " execute_commands("@cite{" local_arr[5] "}");
+    } else {
+      local_i = local_i " from " execute_commands("@file{" local_arr[4] "}");
+    }
+    return local_i;
+  }
+
+  # Build the string to be displayed
+  if (local_arr[3] != "") {
+    local_i = "section [" execute_commands(local_arr[3]) "]";
+  } else {
+    local_i = "section [" local_arr[1] "]";
+  }
+
+  xref_idcount++;
+  xref_table[xref_idcount] = local_arr[1];
+  xref_defline[xref_idcount] = NR;
+  local_i = local_i sprintf(", at line @x%02X@", xref_idcount);
+  return local_i;
 }
 
 # Generate a line with the name of an author
@@ -747,8 +831,7 @@ function execute_commands(line,               replaced_line, command) {
     } else if (command == "b") { # bold
       line = "*" cmdargs "*" line;
 
-    } else if ((command == "cite") ||
-               (command == "emph")) {
+    } else if (command == "emph") {
       line = cmdargs line;
 
     } else if ((command == "code") ||
@@ -781,8 +864,30 @@ function execute_commands(line,               replaced_line, command) {
     } else if (command == "t") { # typewriter-like
       line = cmdargs line;
 
+    # References to other places ###############################################
+    } else if (command == "anchor") {
+      if (anchor_address[cmdargs] != "") {
+        report_error("anchor \"" cmdargs "\" is redefined at line " NR ", previous definition at line " anchor_defline[cmdargs]);
+      }
+      # Set a -1 offset to compensate for the anchor being after the actual target
+      anchor_address[cmdargs] = line_number - 1;
+      anchor_defline[cmdargs] = NR;
+
+    } else if (command == "cite") {
+      # Reference to external document, we cannot do much
+      line = cmdargs line;
+
+    } else if (command == "pxref") {
+      replaced_line = replaced_line "see " generate_cross_reference(cmdargs, command);
+
+    } else if (command == "ref") {
+      replaced_line = replaced_line generate_cross_reference(cmdargs, command);
+
     } else if (command == "uref") {
       replaced_line = replaced_line generate_url_reference(cmdargs);
+
+    } else if (command == "xref") {
+      replaced_line = replaced_line " See " generate_cross_reference(cmdargs, command);
 
     # Variable and Conditional commands ########################################
     } else if (command == "value") {
@@ -885,6 +990,9 @@ BEGIN {
   toc_count = 0;
   toc_file = "'"$toc_file"'";
 
+  # File to generate for the Cross-Reference tracking
+  xref_file= "'"$xref_file"'";
+
   # Define a custom variable so it is possible to differentiate between
   # texi2any and this script
   variable["cctexi2txt"] = "1.0";
@@ -922,7 +1030,7 @@ BEGIN {
       next;
 
     } else if (command == "node") {
-      # We ignore nodes completely, this is for the "info" format only
+      new_node(execute_commands(line));
       next;
 
     } else if (command == "top") {
@@ -1276,6 +1384,18 @@ END {
     print > toc_file;
   }
 
+  # Generate the Cross-Reference line number update script
+  print "# Generated Cross-Reference script for SED" > xref_file;
+  for (i = 1; i <= xref_idcount; i++) {
+    if (anchor_address[xref_table[i]] != "") {
+      target_line = anchor_address[xref_table[i]] + toc_nb_lines;
+    } else if (node_address[xref_table[i]] != "") {
+      target_line = node_address[xref_table[i]] + toc_nb_lines;
+    } else {
+      report_error("cross reference to undefined node/anchor \"" xref_table[i] "\" found at line " xref_defline[i]);
+    }
+    printf "s/@x%02X@/%5d/g\n", i, target_line > xref_file;
+  }
 }
 ' "$input_file" > "$temp_file" || exit $?
 
@@ -1288,8 +1408,9 @@ awk '
   next;
 }
 { print }
-' "$temp_file" > "$output_file" || exit $?
+' "$temp_file" | sed -f "$xref_file" > "$output_file" || exit $?
 
 # If all worked, remove the temp files
 rm -f "$temp_file"
 rm -f "$toc_file"
+rm -f "$xref_file"
