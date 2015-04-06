@@ -42,10 +42,60 @@ am__v_CHKOPTS_  = $(am__v_CHKOPTS_$(AM_DEFAULT_VERBOSITY))
 am__v_CHKOPTS_0 = @echo "  CHK      $@" ;
 am__v_CHKOPTS_1 =
 
-check-local: wmaker-args
+check-local: wmaker-args WPrefs-args wmagnify-args geticonset-args getstyle-args seticons-args setstyle-args \
+	wdread-args wdwrite-args wmgenmenu-args wmsetbg-args wxcopy-args wxpaste-args
 
 wmaker-args:
 	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
 		--program "$(top_builddir)/src/wmaker" --man-page "wmaker.1x"
 
-.PHONY: wmaker-args
+WPrefs-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/WPrefs.app/WPrefs" --man-page "$(top_srcdir)/doc/WPrefs.1x"
+
+wmagnify-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/wmagnify" --man-page "$(top_srcdir)/doc/wmagnify.1x"
+
+geticonset-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/geticonset" --man-page "$(top_srcdir)/doc/geticonset.1x"
+
+getstyle-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/getstyle" --man-page "$(top_srcdir)/doc/getstyle.1x"
+
+seticons-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/seticons" --man-page "$(top_srcdir)/doc/seticons.1x"
+
+setstyle-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/setstyle" --man-page "$(top_srcdir)/doc/setstyle.1x"
+
+wdread-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/wdread" --man-page "$(top_srcdir)/doc/wdread.1x"
+
+wdwrite-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/wdwrite" --man-page "$(top_srcdir)/doc/wdwrite.1x"
+
+wmgenmenu-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/wmgenmenu" --man-page "$(top_srcdir)/doc/wmgenmenu.1"
+
+wmsetbg-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/wmsetbg" --man-page "$(top_srcdir)/doc/wmsetbg.1x"
+
+wxcopy-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/wxcopy" --man-page "$(top_srcdir)/doc/wxcopy.1x"
+
+wxpaste-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/wxpaste" --man-page "$(top_srcdir)/doc/wxpaste.1x"
+
+.PHONY: wmaker-args WPrefs-args wmagnify-args geticonset-args getstyle-args seticons-args setstyle-args \
+	wdread-args wdwrite-args wmgenmenu-args wmsetbg-args wxcopy-args wxpaste-args
