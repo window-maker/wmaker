@@ -96,6 +96,15 @@ check-local: configure-documentation
 
 configure-documentation:
 	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
-		--program "$(top_srcdir)/configure" --text-doc "$(top_srcdir)/INSTALL-WMAKER"
+		--program "$(top_srcdir)/configure" --text-doc "$(top_srcdir)/INSTALL-WMAKER" \
+		--ignore-prg 'with-PACKAGE,without-PACKAGE # only template names from Autoconf' \
+		--ignore-prg 'program-prefix,program-suffix,program-transform-name # in INSTALL' \
+		--ignore-prg 'version,quiet,srcdir,build,host,cache-file,no-create # in INSTALL' \
+		--ignore-prg 'enable-silent-rules,disable-silent-rules # should be in INSTALL' \
+		--ignore-prg 'enable-dependency-tracking,disable-dependency-tracking # in INSTALL' \
+		--ignore-prg 'enable-shared,enable-static # should be in INSTALL' \
+		--ignore-prg 'disable-option-checking,enable-fast-install # should be in INSTALL' \
+		--ignore-prg 'disable-libtool-lock,with-pic,with-gnu-ld,with-sysroot # for libtool' \
+		--ignore-prg 'with-x # no use, it would not work without X'
 
 .PHONY: configure-documentation

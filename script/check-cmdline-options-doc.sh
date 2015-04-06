@@ -51,6 +51,8 @@ print_help() {
     echo "$0: check program's list of options against its documentation"
     echo "Usage: $0 options..."
     echo "valid options are:"
+    echo "  --ignore-prg arg  : ignore option '--arg' from program's output"
+    echo "                (syntax: 'arg1,arg2,... # reason', args without leading '--')"
     echo "  --man-page file   : program's documentation file, in man format"
     echo "  --program name    : name of the program to run with '--help'"
     echo "  --text-doc file   : program's documentation file, in plain text format"
@@ -60,6 +62,16 @@ print_help() {
 # Extract command line arguments
 while [ $# -gt 0 ]; do
     case $1 in
+        --ignore-prg)
+            shift
+            echo "$1" | grep '#' > /dev/null || echo "Warning: no reason provided for --ignore-prg on \"$1\"" >&2
+            for arg in `echo "$1" | sed -e 's/#.*$// ; s/,/ /g' `
+            do
+                ignore_arg_program="$ignore_arg_program
+--$arg"
+            done
+          ;;
+
 	--man-page)
             shift
             [ -z "$man_page$text_doc" ] || arg_error "only 1 documentation file can be used (option: --man-page)"
@@ -111,6 +123,17 @@ fi
 prog_options=`$prog_name --help | sed -n '/^[ \t]*-/ { s/^[ \t]*// ; s/^-[^-],[ \t]*--/--/ ; s/[^-A-Z_a-z0-9].*$// ; p }' `
 
 [ "x$prog_options" = "x" ] && arg_error "program '$prog_name --help' did not return any option"
+
+# We filter options that user wants us to, but we warn if the user asked to filter an option that is
+# not actually present, to make sure his command line invocation stays up to date
+for filter in $ignore_arg_program
+do
+  if echo "$prog_options" | grep "^$filter\$" > /dev/null ; then
+    prog_options=`echo "$prog_options" | grep -v "^$filter\$" `
+  else
+    echo "Warning: program's option does not contain \"$filter\", specified in \"--ignore-prg\""
+  fi
+done
 
 
 if [ -n "$man_page" ]; then
