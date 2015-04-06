@@ -449,8 +449,8 @@ function new_section(level, title, is_numbered,         local_i, local_line) {
 }
 
 # List of Items
-function start_item_list(mark) {
-  par_mode_push("list");
+function start_item_list(mark, type, default_mark) {
+  par_mode_push(type);
   list_is_first_item = 1;
   list_item_wants_sepline = 0;
   par_indent = 1;
@@ -461,7 +461,7 @@ function start_item_list(mark) {
     line_prefix = line_prefix "    ";
   }
   if (mark == "") {
-    item_list_mark = "*";
+    item_list_mark = default_mark;
   } else {
     item_list_mark = execute_commands(mark);
   }
@@ -554,6 +554,28 @@ function generate_paragraph(          local_prefix, local_line, local_length,
       local_prefix = item_list_mark " ";
       while (length(local_prefix) < 5) { local_prefix = " " local_prefix; }
       local_line = substr(local_line, 1, length(local_line) - 5) local_prefix;
+    }
+
+  } else if (par_mode == "enum") {
+    if (list_item_wants_sepline && !list_is_first_item) {
+      write_line("");
+    }
+    list_is_first_item = 0;
+    list_item_wants_sepline = 0;
+    if (!par_indent) {
+      local_prefix = "  " item_list_mark ". ";
+      local_line = substr(local_line, 1, length(local_line) - 5) local_prefix;
+
+      # Increment the enumeration counter for the next item now
+      if (item_list_mark + 0 == item_list_mark) {
+        item_list_mark++;
+      } else {
+        local_i = index("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz", item_list_mark);
+        if (local_i == 0) {
+          report_error("value \"" item_list_mark "\" is not supported for enumerated list - invalid @enumerate argument or list too long?");
+        }
+        item_list_mark = substr("BCDEFGHIJKLMNOPQRSTUVWXYZ!bcdefghijklmnopqrstuvwxyz!", local_i, 1);
+      }
     }
 
   } else if (par_mode == "titlepage") {
@@ -760,6 +782,11 @@ function process_end(line) {
     generate_paragraph();
     redirect_out = "no";
 
+  } else if (line == "enumerate") {
+    generate_paragraph();
+    par_mode_pop("enum");
+    par_indent = 1;
+
   } else if (line == "example") {
     generate_paragraph();
     par_mode_pop("example");
@@ -897,6 +924,13 @@ BEGIN {
       process_end(line);
       next;
 
+    } else if (command == "enumerate") {
+      if (cond_state) {
+        generate_paragraph();
+        start_item_list(line, "enum", "1");
+      }
+      next;
+
     } else if (command == "example") {
       if (cond_state) {
         generate_paragraph();
@@ -927,7 +961,7 @@ BEGIN {
     } else if (command == "itemize") {
       if (cond_state) {
         generate_paragraph();
-        start_item_list(line);
+        start_item_list(line, "list", "*");
       }
       next;
 
@@ -1089,7 +1123,7 @@ BEGIN {
   # We treat @item specially because it may generate more than 1 paragraph
   if (!cond_state) { next; }
 
-  if (par_mode != "list") {
+  if ((par_mode != "list") && (par_mode != "enum")) {
     report_error("found @item at line " NR " but not inside an @itemize");
   }
 
@@ -1118,6 +1152,7 @@ BEGIN {
   if (!cond_state) { next; }
 
   if ((par_mode == "list") ||
+      (par_mode == "enum") ||
       (par_mode == "par") ||
       (par_mode == "titlepage") ||
       (par_mode == "quotation")) {
