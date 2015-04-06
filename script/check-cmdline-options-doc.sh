@@ -53,6 +53,7 @@ print_help() {
     echo "valid options are:"
     echo "  --man-page file   : program's documentation file, in man format"
     echo "  --program name    : name of the program to run with '--help'"
+    echo "  --text-doc file   : program's documentation file, in plain text format"
     exit 0
 }
 
@@ -61,7 +62,7 @@ while [ $# -gt 0 ]; do
     case $1 in
 	--man-page)
             shift
-            [ -z "$man_page" ] || arg_error "only 1 documentation file can be used (option: --man-page)"
+            [ -z "$man_page$text_doc" ] || arg_error "only 1 documentation file can be used (option: --man-page)"
             man_page="$1"
 	  ;;
 
@@ -69,6 +70,12 @@ while [ $# -gt 0 ]; do
             shift
             [ -z "$prog_name" ] || arg_error "only 1 program can be used (option: --program)"
             prog_name="$1"
+          ;;
+
+        --text-doc)
+            shift
+            [ -z "$man_page$text_doc" ] || arg_error "only 1 documentation file can be used (option: --text-doc)"
+            text_doc="$1"
           ;;
 
         -h|-help|--help) print_help ;;
@@ -83,9 +90,10 @@ done
 
 # Check consistency of command-line
 [ -z "$prog_name" ] && arg_error "no program given (option: --program)"
-[ -z "$man_page" ] && arg_error "no documentation given"
+[ -z "$man_page$text_doc" ] && arg_error "no documentation given"
 
 [ -z "$man_page" ] || [ -r "$man_page" ] || arg_error "man page file '$man_page' is not readable (option: --man-page)"
+[ -z "$text_doc" ] || [ -r "$text_doc" ] || arg_error "text file '$text_doc' is not readable (option: --text-doc)"
 
 # Make sure the program will not be searched in $PATH
 if ! echo "$prog_name" | grep '/' > /dev/null ; then
@@ -125,11 +133,40 @@ fi
 # If no problem is found, we will exit with status OK
 exit_status=0
 
+
+if [ -n "$text_doc" ]; then
+  # In the plain-text format, there is no specific identification for the options,
+  # as they may be described anywhere in the document. So we first try to get
+  # everything that looks like a long option:
+  sed_script=':restart
+              /^\(.*[^-A-Za-z_0-9]\)*--[A-Za-z0-9]/ {
+                h
+                s/^.*--/--/
+                s/[^-A-Z_a-z0-9].*$//
+                p
+
+                g
+                s/^\(.*\)--[A-Za-z0-9][-A-Z_a-z0-9]*/\1/
+                b restart
+              }'
+  doc_options=`sed -n "$sed_script" "$text_doc" `
+
+  # then we also explicitely search for the short options we got from the program
+  for opt in `echo "$prog_options" | grep '^-[^-]' `
+  do
+    if grep "^\\(.*[^-A-Za-z_0-9]\\)*$opt\\([^-A-Za-z_0-9].*\\)\$" "$text_doc" > /dev/null ; then
+      doc_options="$doc_options
+$opt"
+    fi
+  done
+fi
+
+
 # Check that all program options are documented
 for opt in $prog_options
 do
   if ! echo "$doc_options" | grep "^$opt\$" > /dev/null ; then
-    echo "Error: program option '$opt' is not in the documentation '$man_page'"
+    echo "Error: program option '$opt' is not in the documentation '$man_page$text_doc'"
     exit_status=1
   fi
 done
