@@ -438,6 +438,7 @@ static void print_help(void)
 	puts(_(" --no-dock		do not open the application Dock"));
 	puts(_(" --no-clip		do not open the workspace Clip"));
 	puts(_(" --no-autolaunch	do not autolaunch applications"));
+	puts(_(" --no-drawer		disable drawers in the dock"));
 	puts(_(" --dont-restore		do not restore saved session"));
 
 	puts(_(" --locale locale	locale to use"));
@@ -447,6 +448,7 @@ static void print_help(void)
 #ifndef HAVE_INOTIFY
 	puts(_(" --no-polling		do not periodically check for configuration updates"));
 #endif
+	puts(_(" --global_defaults_path	print the path for default config and exit"));
 	puts(_(" --version		print version and exit"));
 	puts(_(" --help			show this message"));
 }
