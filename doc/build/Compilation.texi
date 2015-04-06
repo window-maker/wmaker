@@ -456,9 +456,6 @@ If you use it, be sure to follow the steps below or @sc{Window Maker} will not w
 if you installed the @sc{Window Maker} that comes with @emph{RedHat}, uninstall it before upgrading;
 
 @item
-make sure you don't have the @env{LANG} and @env{LINGUAS} environment variables set to @code{en_RN};
-
-@item
 make sure you have @file{/usr/local/bin} in your @env{PATH} environment variable;
 
 @item
@@ -487,16 +484,6 @@ If you use @emph{MetroX} and have weird problems with textures, do not use textu
 Or use a different X server.
 
 @end itemize
-
-
-@section Installing the extras package
-
-Unpack @file{WindowMaker-extra-@emph{<version-number>}.tar.gz} in @file{/usr/local/share}
-
-You can get the file at @uref{http://windowmaker.org/pub/source/release/}.
-This file is optional and only have a few icons, and themes.
-Look for the latest @emph{<version-number>} available.
-Also there is a @file{WindowMaker-extra.readme} to instruct you where that package should go.
 
 
 @section I don't have the @emph{root} password :(
@@ -550,19 +537,6 @@ or try rebuilding without NLS support, which is done with:
 @end example
 
 
-@section Error when configuring
-
-@example
-ltconfig: unrecognized option `--no-reexec'
-Try `ltconfig --help' for more information.
-configure: error: libtool configure failed
-@end example
-
-remove the @option{--no-reexec} option from @file{aclocal.m4} and reconfigure.
-Also make sure the @emph{autoconf}, @emph{automake} and @emph{libtool} versions you have installed are in line with the versions
-listed in @ref{Special Dependencies}.
-
-
 @section configure doesn't detect @emph{libtiff}, or other graphic libraries
 
 Delete @file{config.cache}, then rerun configure adding the following options to @command{configure}
@@ -604,11 +578,6 @@ Do a @command{man hostname} for info about how to set it.
 @sc{Window Maker} could not read your menu definition file.
 You should check the output of @command{wmaker} for an error, it may be visible in the console or in the
 @file{.xsession-errors} file.
-
-
-@section checking lex output file root... configure: error: cannot find output from true; giving up
-
-Read the @ref{Software Dependencies}.
 
 
 @c ------------------------------------------------------------------------------------- The End ---
