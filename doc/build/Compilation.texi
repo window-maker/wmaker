@@ -170,6 +170,7 @@ package, you will also need:
 
 
 @section Optional Dependencies
+@anchor{Optional Dependencies}
 
 These libraries are not required to make @sc{Window Maker} work, but they are supported in case you
 want to use them. Version numbers are indicative, but other versions might work too.
@@ -208,11 +209,23 @@ so you probably want this format supported.
 For @emph{GIF} image support,
 @uref{http://giflib.sourceforge.net/}
 
+@item @emph{WebP} 0.4.1 or newer
+
+The reference library from @emph{Google} for their image format,
+@uref{https://developers.google.com/speed/webp/download}
+
 @item @emph{GNU xgettext}
 
 If you want to use translated messages, you will need @emph{GNU gettext}.
 Other versions of @emph{gettext} are not compatible and will not work.
 Get the @emph{GNU} version from @uref{http://www.gnu.org/software/gettext/}
+
+@item @emph{Pango} 1.36.8 or newer
+
+This library can be used by the @emph{WINGs} toolkit to improve support for @emph{UTF-8} and for
+languages written in right-to-left direction, in some widgets.
+You have to explicitly ask for its support through (@pxref{Configure Options}).
+You can get it from @uref{http://www.pango.org/Download}
 
 @item @emph{libbsd}
 
@@ -233,6 +246,12 @@ The needed header comes with the kernel, typical packages names include:
 @item @file{linux-libc-dev} for @emph{Debian} and @emph{Ubuntu}
 @item @file{linux-glibc-devel} for @emph{OpenSuSE}
 @end itemize
+
+@item @emph{MagickWand} 6.8.9-9 or newer
+
+If found, then the library @emph{WRaster} can use the @emph{ImageMagick} library to let
+@sc{Window Maker} support more image formats, like @emph{SVG}, @emph{BMP}, @emph{TGA}, ...
+You can get it from @uref{http://www.imagemagick.org/}
 
 @item @emph{Boehm GC}
 
@@ -386,22 +405,100 @@ Normally, you won't need any of them.
 
 To get the list of all options, run @command{./configure --help}
 
+
+@subsection Installation Directory
+
+The default installation path will be in the @file{/usr/local} hierarchy;
+a number of option can customise this:
+
 @table @option
+@item  --prefix=@i{PREFIX}
+@itemx --exec-prefix=@i{EPREFIX}
+@itemx --bindir=@i{DIR}
+@itemx --sysconfdir=@i{DIR}
+@itemx --libdir=@i{DIR}
+@itemx --includedir=@i{DIR}
+@itemx --datarootdir=@i{DIR}
+@itemx --datadir=@i{DIR}
+@itemx --localedir=@i{DIR}
+@itemx --mandir=@i{DIR}
+Standard options from @emph{autoconf} to define target paths,
+you probably want to read @ref{Installation Names,,,INSTALL,@file{INSTALL}}.
+
+@item  --sbindir=@i{DIR}
+@itemx --libexecdir=@i{DIR}
+@itemx --sharedstatedir=@i{DIR}
+@itemx --localstatedir=@i{DIR}
+@itemx --oldincludedir=@i{DIR}
+@itemx --infodir=@i{DIR}
+@itemx --docdir=@i{DIR}
+@itemx --htmldir=@i{DIR}
+@itemx --dvidir=@i{DIR}
+@itemx --pdfdir=@i{DIR}
+@itemx --psdir=@i{DIR}
+More standard options from @emph{autoconf}, today these are not used by @sc{Window Maker};
+they are provided automatically by @emph{autoconf} for consistency.
+
+@item --with-gnustepdir=@i{PATH}
+Specific to @sc{Window Maker}, defines the directory where @file{WPrefs.app} will be installed,
+if you want to install it like a @emph{GNUstep} applications.
+If not specified, it will be installed like usual programs.
+
+@item --with-pixmapdir=@i{DIR}
+Specific to @sc{Window Maker}, this option defines an additional path where @emph{pixmaps} will be
+searched. Nothing will be installed there; the default path taken is @file{@emph{DATADIR}/pixmaps},
+where @var{DATADIR} is the path defined from @option{--datadir}.
+
+@end table
+
+
+@subsection External Libraries
+
+Unless specifically written, @command{configure} will try to detect automatically for the libraries;
+if you explicitly provide @option{--enable-@emph{FEATURE}} then it will break with an error message
+if the library cannot be linked;
+if you specify @option{--disable-@emph{FEATURE}} then it will not try to search for the library.
+You can find more information about the libraries in the
+@ref{Optional Dependencies}.
+
+@table @option
+@item --enable-boehm-gc
+Never enabled by default, use Boehm GC instead of the default @emph{libc} @command{malloc()}
+
 @item --disable-gif
-disable use of @emph{GIF} library
+Disable GIF support in @emph{WRaster} library; when enabled use @file{libgif} or @file{libungif}.
 
 @item --disable-jpeg
-disable use of @emph{JPEG} library
+Disable JPEG support in @emph{WRaster} library; when enabled use @file{libjpeg}.
+
+@item --without-libbsd
+Refuse use of the @file{libbsd} compatibility library in @emph{WINGs} utility library,
+even if your system provides it.
+
+@item --disable-magick
+Disable @emph{ImageMagick's MagickWand} support in @emph{WRaster}, used to support for image formats.
+
+@item --enable-pango
+Disabled by default, enable @emph{Pango} text layout support in @emph{WINGs}.
 
 @item --disable-png
-disables use of @emph{PNG} library
+Disable PNG support in @emph{WRaster}; when enabled use @file{libpng}.
 
 @item --disable-tiff
-disable use of @emph{TIFF} library
+Disable TIFF support in @emph{WRaster}. when enabled use @file{libtiff}.
+
+@item --disable-webp
+Disable WEBP support in @emph{WRaster}. when enabled use @file{libwebp}.
 
 @item --disable-xpm
-disables use of the @emph{XPM} library even if it is available on your system.
+Disable use of @file{libXpm} for XPM support in @emph{WRaster}, use internal code instead.
 
+@end table
+
+The following options can be used to tell @command{configure} about extra paths that needs to be
+used when compiling against libraries:
+
+@table @option
 @item --with-libs-from
 specify additional paths for libraries to be searched.
 The @option{-L} flag must precede each path, like:
@@ -416,19 +513,108 @@ The @option{-I} flag must precede each paths, like:
 --with-incs-from="-I/opt/headers -I/usr/local/include"
 @end example
 
+@end table
+
+
+@subsection X11 and Extensions
+
+@command{configure} will try to detect automatically the compilation paths for X11 headers and
+libraries, and which X Extensions support can be enabled.
+if you explicitly provide @option{--enable-@emph{FEATURE}} then it will break with an error message
+if the extension cannot be used;
+if you specify @option{--disable-@emph{FEATURE}} then it will not check for the extension.
+
+@table @option
+@item  --x-includes=@i{DIR}
+@itemx --x-libraries=@i{DIR}
+@emph{Autoconf}'s option to specify search paths for @emph{X11},
+for the case were it would not have been able to detect it automatically.
+
+@item --disable-xlocale
+If you activated support for Native Languages, then @emph{X11} may use a hack to also configure its
+locale support when the program configure the locale for itself.
+The @command{configure} script detects if the @emph{Xlib} supports this or not;
+this options explicitly disable this initialisation mechanism.
+
 @item --enable-modelock
 XKB language status lock support. If you don't know what it is you probably don't need it.
+The default is to not enable it.
 
 @item --disable-shm
-disable use of the MIT shared memory extension. This will slow down
-texture generation a little bit, but in some cases it seems to be
-necessary due to a bug that manifests as messed icons and textures.
+Disable use of the @emph{MIT shared memory} extension.
+This will slow down texture generation a little bit, but in some cases it seems to be necessary due
+to a bug that manifests as messed icons and textures.
 
 @item --disable-shape
-disables shaped windows (for @command{oclock}, @command{xeyes}, etc.)
+Disables support for @emph{shaped} windows (for @command{oclock}, @command{xeyes}, etc.).
 
+@item --enable-xinerama
+The @emph{Xinerama} extension provides information about the different screens connected when
+running a multi-head setting (if you plug more than one monitor).
+
+@item --enable-randr
+The @emph{RandR} extension provides feedback when changing the multiple-monitor configuration in X11
+and allows to re-configure how screens are organised.
+
+At current time, it is not enabled by default because it is NOT recommended (buggy);
+@sc{Window Maker} only restart itself when the configuration change, to take into account the new
+screen size.
+
+@end table
+
+
+@subsection Feature Selection
+
+@table @option
 @item --disable-motif
 Disable support for Motif's MWM Window Manager hints.
+
+@item --enable-ld-version-script
+This feature is auto-detected, and you should not use this option.
+When compiling a library (@file{wrlib}, ...), @emph{gcc} has the possibility to filter the list of
+functions that will be visible, to keep only the public API, because it helps running programs
+faster.
+
+The @command{configure} script checks if this feature is available;
+if you specify this option it will not check anymore and blindly trust you that it is supposed to
+work, which is not a good idea as you may encounter problems later when compiling.
+
+@item --enable-usermenu
+This feature, disabled by default, allows to add a user-defined custom menu to applications;
+when choosing an entry of the menu it will send the key combination defined by the user to that
+application. @xref{Application User Menu,,,NEWS,@file{NEWS}} for more information.
+
+@item --with-menu-textdomain=@i{DOMAIN}
+Selection of the domain used for translation of the menus;
+@pxref{Translations for Menus,,,wmaker_i18n,@file{README.i18n}}.
+
+@end table
+
+
+@subsection Developer Stuff
+
+These options are disabled by default:
+
+@table @option
+@item --config-cache
+If you intend to re-run the @command{configure} script often, you probably want to include this
+option, so it will save and re-use the status of what have been detected in the file
+@file{config.cache}.
+
+@item --enable-debug
+Enable debugging features (debug symbol, some extra verbosity and checks) and add a number of
+check flags (warnings) for the compiler (in @emph{gcc} fashion).
+
+@item --enable-lcov=@i{DIRECTORY}
+Enable generation of code coverage and profiling data;
+if the @file{@i{DIRECTORY}} is not specified, use @file{coverage-report}.
+
+This option was meant to be use with @emph{gcc};
+it was not used recently so it is probable that is does not work anymore;
+the @command{configure} script will not even check that your compiling environment has the
+appropriate requirements and works with this.
+Despite all this, if you think there's a use for it and feel in the mood to help, do not hesitate to
+discuss on the mailing list @value{emailsupport} to get it working.
 
 @end table
 
