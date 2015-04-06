@@ -107,7 +107,9 @@ This manual is for Window Maker, version @value{version}.
 @section Supported Platforms
 
 @itemize -
-@item Intel GNU/Linux Systems in general
+@item Intel GNU/Linux Systems in general, @t{ix86} and @t{x86_64} but other architectures should work
+@item BSD systems
+@item Solaris, at least on release 10 and 11
 @end itemize
 
 Patches to make it work on other platforms are welcome.
@@ -132,38 +134,52 @@ the server.
 @item Basic obvious stuff
 
 @itemize
-@item @emph{gcc} (or some other ANSI C compiler)
+@item @emph{gcc} (or some other ANSI C compiler, supporting some C99 extensions)
 @item @emph{glibc} development files (usually @file{glibc-devel} in Linux distributions)
 @item @emph{X} development files (@file{XFree86-devel} or something similar)
-@end itemize
-
-@item @emph{autoconf}, @emph{automake} and @emph{libtool}
-@itemize
-@item autoconf 2.54
-@item automake 1.4
-@item libtool 1.4.2
 @end itemize
 
 @item @emph{Xft2} and its dependencies
 
 Dependencies include @emph{freetype2} and @emph{fontconfig}.
 You will also need the development files for them (@file{xft2-devel}).
+Sources are available at: @uref{http://www.freedesktop.org/wiki/Software/Xft/}
 
+@end itemize
+
+@noindent @b{Note}:
+@sc{Window Maker} is known to compile with @emph{gcc} and @emph{clang};
+the code source is mostly ANSI C (also known as C89 and C90) but is uses very few of the C99
+novelties;
+it also uses a few attributes introduced in the C11 standard but those are detected automatically,
+so most compilers should work.
+
+
+@section Special Dependencies
+@anchor{Special Dependencies}
+
+
+If you want to compile using the sources from the git repository instead of the distribution
+package, you will also need:
+@itemize
+@item @emph{git}
+@item @emph{autoconf} 2.69
+@item @emph{automake} 1.11
+@item @emph{libtool} 1.4.2
 @end itemize
 
 
 @section Optional Dependencies
 
 These libraries are not required to make @sc{Window Maker} work, but they are supported in case you
-want to use them. Version numbers are those that I have (and therefore, guaranteed to work), but
-other versions might work too.
+want to use them. Version numbers are indicative, but other versions might work too.
 
 @itemize -
 @item @emph{libXPM} 4.7 or newer
 
 Older versions may not work!
 
-Available at @uref{ftp://sunsite.unc.edu/pub/Linux/libs/X/}
+Available from @uref{http://xlibs.freedesktop.org/release/}
 
 There is built-in support for @emph{XPM} files, but it will not
 load images in some uncommon encodings.
@@ -171,28 +187,60 @@ load images in some uncommon encodings.
 @item @emph{libpng} 0.96 or newer and @emph{zlib}
 
 For @emph{PNG} image support,
-@uref{http://www.cdrom.com/pub/png/}
+@uref{http://www.libpng.org/pub/png/libpng.html}
 
 @item @emph{libtiff} 3.4 or newer
 
 For @emph{TIFF} image support,
-You can get it at @uref{ftp://ftp.sgi.com/graphics/tiff}
+@uref{http://www.libtiff.org/}
 
 @item @emph{libjpeg} 6.0.1 or newer
 
 For @emph{JPEG} image support,
 @uref{http://www.ijg.org/}
 
+Note that if you don't have it, @command{configure} will issue a big warning in the end,
+this is because JPEG images are often used in themes and for background images
+so you probably want this format supported.
+
 @item @emph{libgif} 2.2 or @emph{libungif}
 
 For @emph{GIF} image support,
-@uref{ftp://prtr-13.ucsc.edu/pub/libungif/}
+@uref{http://giflib.sourceforge.net/}
 
 @item @emph{GNU xgettext}
 
 If you want to use translated messages, you will need @emph{GNU gettext}.
 Other versions of @emph{gettext} are not compatible and will not work.
-Get the @emph{GNU} version from @uref{ftp://ftp.gnu.org}
+Get the @emph{GNU} version from @uref{http://www.gnu.org/software/gettext/}
+
+@item @emph{libbsd}
+
+This library can be used by the @emph{WINGs} utility library to make use of @command{strlcat} and
+@command{strlcpy} instead of using built-in functions if your system does not provide them in its
+core @emph{libc}.
+You should let @sc{Window Maker}'s @command{configure} detect this for you.
+You can get it from @uref{http://libbsd.freedesktop.org/wiki/}
+
+@item @emph{Inotify}
+
+If you have Linux's @emph{inotify} support, @sc{Window Maker} will use it to check for configuration
+updates instead of polling regularly the file.
+The needed header comes with the kernel, typical packages names include:
+@itemize
+@item @file{kernel-headers} for @emph{Slackware} and @emph{Fedora}
+@item @file{linux-userspace-headers} for @emph{Mageia}
+@item @file{linux-libc-dev} for @emph{Debian} and @emph{Ubuntu}
+@item @file{linux-glibc-devel} for @emph{OpenSuSE}
+@end itemize
+
+@item @emph{Boehm GC}
+
+This library can be used by the @emph{WINGs} utility toolkit to use a
+@cite{Boehm-Demers-Weiser Garbage Collector} instead of the traditional
+@command{malloc}/@command{free} functions from the @emph{libc}.
+You have to explicitly ask for its support though (@pxref{Configure Options}).
+You can get it from @uref{http://www.hboehm.info/gc/}
 
 @end itemize
 
@@ -203,14 +251,22 @@ Get the @emph{GNU} version from @uref{ftp://ftp.gnu.org}
 
 @section Getting the Sources
 
-The latest version of @sc{Window Maker} (@t{-crm}) can be found in the git repository at
+The latest version of @sc{Window Maker} (@t{-crm}) can be downloaded from
+@uref{http://www.windowmaker.org/}
+
+Alternatively, the development branch, called @t{#next} is in the @emph{git} repository at
 @uref{http://repo.or.cz/w/wmaker-crm.git}
 
-If you downloaded the git versions, type
+If you want to use the @emph{git} versions, you can get it with:
+@example
+git clone -b next git://repo.or.cz/wmaker-crm.git
+@end example
+@noindent then, assuming you have the dependencies listed in @ref{Special Dependencies}, you have to
+type:
 @example
 ./autogen.sh
 @end example
-@noindent to generate the config files.
+@noindent to generate the configuration script.
 
 
 @section Build and Install
@@ -229,8 +285,8 @@ make install
 ldconfig
 @end example
 
-@noindent or if you want to strip the debugging symbols from the binaries and make them
-smaller, you can instead type:
+@noindent or if you want to strip the debugging symbols from the binaries to make them smaller,
+you can type instead:
 
 @example
 make install-strip
@@ -249,7 +305,7 @@ Also run:
 ./configure --help
 @end example
 
-to get a complete listing of other options that are available.
+to get a complete list of options that are available.
 
 @item
 Run configure with the options you want.
@@ -328,7 +384,7 @@ some @sc{Window Maker} features. Example:
 will configure @sc{Window Maker} with @emph{modelock} supported and disable @emph{gif} support.
 Normally, you won't need any of them.
 
-To get a list of other options, run @command{./configure --help}
+To get the list of all options, run @command{./configure --help}
 
 @table @option
 @item --disable-gif
@@ -422,12 +478,12 @@ and @file{libjpeg-dev} installed.
 @item @emph{SuSE GNU/Linux}
 
 If you installed the @sc{Window Maker} package from @emph{SuSE}, uninstall it before trying to
-compile @emph{wmaker} or you might have problems.
+compile @emph{Window Maker} or you might have problems.
 
 @item @emph{MetroX} (unknown version)
 
 @emph{MetroX} has a bug that corrupts pixmaps that are set as window backgrounds.
-If you use @emph{MetroX} and has weird problems with textures, do not use textures in title bars.
+If you use @emph{MetroX} and have weird problems with textures, do not use textures in title bars.
 Or use a different X server.
 
 @end itemize
@@ -446,7 +502,7 @@ Also there is a @file{WindowMaker-extra.readme} to instruct you where that packa
 @section I don't have the @emph{root} password :(
 @anchor{No Root Password}
 
-If you can't get superuser privileges (can't be @i{root}) you can install @emph{wmaker} in your own
+If you can't get superuser privileges (can't be @i{root}) you can install @emph{Window Maker} in your own
 home directory.
 For that, supply the @option{--prefix} option when running configure in step 2 of building
 @sc{Window Maker}.
@@ -461,7 +517,7 @@ Example:
 Then make @file{/home/jshmoe/bin} be included in your search @env{PATH}, add @file{/home/jshmoe/lib}
 to your @env{LD_LIBRARY_PATH} environment variable and run @command{bin/wmaker.inst}
 
-Of course, @file{/home/jshmoe} is supposed to be replaced with your actual home directory path.
+Of course, @file{/home/jshmoe} is supposed to be replaced by your actual home directory path.
 
 
 @section Upgrading
@@ -486,7 +542,12 @@ clues of the problem.
 
 @section Error with loading fonts, even if they exist
 
-Try rebuilding without NLS support.
+This is probably a problem with NLS (Native Language Support), you probably want to look at the
+@ref{Troubleshooting,,,wmaker_i18n,@file{README.i18n}}
+or try rebuilding without NLS support, which is done with:
+@example
+./configure LINGUAS=""
+@end example
 
 
 @section Error when configuring
@@ -498,14 +559,8 @@ configure: error: libtool configure failed
 @end example
 
 remove the @option{--no-reexec} option from @file{aclocal.m4} and reconfigure.
-Also make sure the @emph{autoconf} and @emph{automake} versions you have installed are:
-@itemize
-@item @emph{autoconf} 2.13
-@item @emph{automake} 1.4
-@item @emph{libtool} 1.3
-@end itemize
-
-Note that it must not be @emph{libtool} 1.2b, it must be @emph{libtool} 1.3, from the GNU sites.
+Also make sure the @emph{autoconf}, @emph{automake} and @emph{libtool} versions you have installed are in line with the versions
+listed in @ref{Special Dependencies}.
 
 
 @section configure doesn't detect @emph{libtiff}, or other graphic libraries
