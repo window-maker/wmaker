@@ -239,6 +239,7 @@ function par_mode_push(mode,          local_i) {
   par_mode_save_length[par_mode_count] = line_length;
   par_mode_save_prefix[par_mode_count] = line_prefix;
   par_mode_save_justify[par_mode_count] = par_justify;
+  par_mode_save_itemmark[par_mode_count] = item_list_mark;
   par_mode = mode;
 
   # Check for quality of output
@@ -256,6 +257,7 @@ function par_mode_pop(mode,          local_i) {
   line_length = par_mode_save_length[par_mode_count];
   line_prefix = par_mode_save_prefix[par_mode_count];
   par_justify = par_mode_save_justify[par_mode_count];
+  item_list_mark = par_mode_save_itemmark[par_mode_count];
   par_mode_count--;
 }
 
@@ -452,7 +454,12 @@ function start_item_list(mark) {
   list_is_first_item = 1;
   list_item_wants_sepline = 0;
   par_indent = 1;
-  line_prefix = "     ";
+  if (line_prefix == "") {
+    # First level of enumeration get one mode indentation space
+    line_prefix = "     ";
+  } else {
+    line_prefix = line_prefix "    ";
+  }
   if (mark == "") {
     item_list_mark = "*";
   } else {
