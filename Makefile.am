@@ -38,6 +38,7 @@ EXTRA_DIST = TODO BUGS BUGFORM FAQ INSTALL \
 	The-perfect-Window-Maker-patch.txt \
 	README COPYING.WTFPL autogen.sh \
 	email-clients.txt checkpatch.pl update-changelog.pl \
+	script/check-cmdline-options-doc.sh \
 	script/check-translation-sources.sh \
 	script/generate-mapfile-from-header.sh \
 	script/generate-po-from-template.sh \

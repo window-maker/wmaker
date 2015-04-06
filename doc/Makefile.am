@@ -25,3 +25,16 @@ man_MANS = \
 
 EXTRA_DIST = $(man_MANS)
 
+# Create a 'silent rule' for our make check the same way automake does
+AM_V_CHKOPTS = $(am__v_CHKOPTS_$(V))
+am__v_CHKOPTS_  = $(am__v_CHKOPTS_$(AM_DEFAULT_VERBOSITY))
+am__v_CHKOPTS_0 = @echo "  CHK      $@" ;
+am__v_CHKOPTS_1 =
+
+check-local: wmaker-args
+
+wmaker-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/src/wmaker" --man-page "$(top_srcdir)/doc/wmaker.1x"
+
+.PHONY: wmaker-args
