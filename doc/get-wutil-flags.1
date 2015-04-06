@@ -1,32 +1,32 @@
 .TH "get-wutil-flags" "1" "22 March 2005"
 .SH "NAME"
-\fBget-wutil-flags\fR \- output libwutil compile and linker flags
+\fBget-wutil-flags\fP \- output libwutil compiler and linker flags (deprecated)
 .PP
 .SH "SYNOPSIS"
-.B get-wutil-flags \fR[ \fI\-\-cflags \fR] [ \fI\-\-ldflags \fR]
-[ \fI\-\-libs \fR]
-.PP
+.B pkg-config
+WUtil
+.I \-\-cflags
+.br
+.B pkg-config
+WUtil
+.I \-\-libs
 .SH "DESCRIPTION"
-\fBget-wutil-flags \fR\- output include path, library search path or
-library archive names needed to compile and link with libWUtil.
-.PP
-.SH "OPTIONS"
+\fBget-wutil-flags\fP used to provide the compilation and link flags for programs that use
+the \fIWutil\fP library, before \fBpkg-config\fP became the universal way to handle these
+developer configurations. The script is now deprecated and you should use instead:
 .TP
-.B \-\-cflags
-\fRoutput include file search path to find all header files needed to compile
-source code using libWUtil functions.
+.BR pkg-config " WUtil \fI\-\-cflags\fP"
+to get the flags for the compiler
 .TP
-.B \-\-ldflags
-\fRoutput library search path required to find all library archives needed to
-link object files with libWUtil.
-.TP
-.B \-\-libs
-\fRoutput library archive names required to link object filed with libWUtil.
-.PP
+.BR pkg-config " WUtil \fI\-\-libs\fP"
+to get the flags for the linker
+.SH "IMPORTANT NOTE"
+As with every deprecated stuff, the script \fBget-wutil-flags\fR will be removed soon,
+so you should update your script quickly while you know about it.
 .SH "AUTHOR"
-get-wutil-flags is a part of Window Maker, wich was written by
+get-wutil-flags is part of Window Maker, which was written by
 Alfredo K. Kojima <kojima@windowmaker.info> and Dan Pascu <dan@windowmaker.info>,
 with contributions from many people around the Internet.
 .PP
-This manpage was written by Frederik Schueler <fschueler@gmx.net> for the
+This man page was written by Frederik Schueler <fschueler@gmx.net> for the
 Debian GNU/Linux system (but may be used by others).

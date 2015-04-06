@@ -17,7 +17,7 @@ LDADD= libWUtil.la libWINGs.la $(top_builddir)/wrlib/libwraster.la @INTLIBS@
 libWINGs_la_LIBADD = libWUtil.la $(top_builddir)/wrlib/libwraster.la @XLIBS@ @XFTLIBS@ @FCLIBS@ @LIBM@ @PANGOLIBS@
 libWUtil_la_LIBADD = @LIBBSD@
 
-EXTRA_DIST = BUGS make-rgb Examples Extras Tests get-wings-flags.in get-wutil-flags.in
+EXTRA_DIST = BUGS make-rgb Examples Extras Tests get-wings-flags.in get-wutil-flags
 
 
 # wbutton.c 
@@ -98,7 +98,7 @@ AM_CPPFLAGS = -DRESOURCE_PATH=\"$(datadir)/WINGs\" \
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = WINGs.pc WUtil.pc
 
-DISTCLEANFILES = $(pkgconfig_DATA) get-wings-flags get-wutil-flags
+DISTCLEANFILES = $(pkgconfig_DATA) get-wings-flags
 
 WINGs.pc: Makefile
 	@echo "Generating $@"
@@ -129,11 +129,3 @@ WUtil.pc: Makefile
 	@echo 'Libs: -L$(libdir) -lWUtil' >> $@
 	@echo 'Libs.private: $(INTLIBS)' >> $@
 	@echo 'Cflags: -I$(includedir)' >> $@
-
-get-wutil-flags: get-wutil-flags.in Makefile
-	@echo "Generating $@"
-	@$(SED) -e 's#$${includedir}#$(includedir)#;' \
-	        -e 's#$${libdir}#$(libdir)#;' \
-	        -e 's#$${INTLIBS}#$(INTLIBS)#;' < $(abs_srcdir)/get-wutil-flags.in > $@
-	@chmod 755 $@
-
