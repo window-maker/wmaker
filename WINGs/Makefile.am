@@ -8,7 +8,7 @@ DIST_SUBDIRS = $(SUBDIRS) Tests Examples Extras
 libWINGs_la_LDFLAGS = -version-info @WINGS_VERSION@
 libWUtil_la_LDFLAGS = -version-info @WUTIL_VERSION@
 
-bin_SCRIPTS = get-wings-flags get-wutil-flags
+dist_bin_SCRIPTS = get-wings-flags get-wutil-flags
 
 lib_LTLIBRARIES = libWUtil.la libWINGs.la
 
@@ -17,7 +17,7 @@ LDADD= libWUtil.la libWINGs.la $(top_builddir)/wrlib/libwraster.la @INTLIBS@
 libWINGs_la_LIBADD = libWUtil.la $(top_builddir)/wrlib/libwraster.la @XLIBS@ @XFTLIBS@ @FCLIBS@ @LIBM@ @PANGOLIBS@
 libWUtil_la_LIBADD = @LIBBSD@
 
-EXTRA_DIST = BUGS make-rgb Examples Extras Tests get-wings-flags.in get-wutil-flags
+EXTRA_DIST = BUGS make-rgb Examples Extras Tests
 
 
 # wbutton.c 
@@ -98,7 +98,7 @@ AM_CPPFLAGS = -DRESOURCE_PATH=\"$(datadir)/WINGs\" \
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = WINGs.pc WUtil.pc
 
-DISTCLEANFILES = $(pkgconfig_DATA) get-wings-flags
+DISTCLEANFILES = $(pkgconfig_DATA)
 
 WINGs.pc: Makefile
 	@echo "Generating $@"
@@ -109,17 +109,6 @@ WINGs.pc: Makefile
 	@echo 'Libs: $(lib_search_path) -lWINGs' >> $@
 	@echo 'Libs.private: $(XFTLIBS) $(PANGOLIBS) $(XLIBS) -lm $(INTLIBS)' >> $@
 	@echo 'Cflags: $(inc_search_path)' >> $@
-
-get-wings-flags: get-wings-flags.in Makefile
-	@echo "Generating $@"
-	@$(SED) -e 's#$${inc_search_path}#$(inc_search_path)#;' \
-	        -e 's#$${lib_search_path}#$(lib_search_path)#;' \
-	        -e 's#$${GFXLIBS}#$(GFXLIBS)#;' \
-	        -e 's#$${XFTLIBS}#$(XFTLIBS)#;' \
-	        -e 's#$${PANGOLIBS}#$(PANGOLIBS)#;' \
-	        -e 's#$${INTLIBS}#$(INTLIBS)#;' \
-	        -e 's#$${XLIBS}#$(XLIBS)#;' < $(abs_srcdir)/get-wings-flags.in > $@
-	@chmod 755 $@
 
 WUtil.pc: Makefile
 	@echo "Generating $@"

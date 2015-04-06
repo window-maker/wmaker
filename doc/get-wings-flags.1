@@ -1,32 +1,32 @@
 .TH "get-wings-flags" "1" "22 March 2005"
 .SH "NAME"
-\fBget-wings-flags\fR \- output libWINGs compile and linker flags
+\fBget-wings-flags\fP \- output libWINGs compiler and linker flags (deprecated)
 .PP
 .SH "SYNOPSIS"
-.B get-wings-flags \fR[ \fI\-\-cflags \fR] [ \fI\-\-ldflags \fR]
-[ \fI\-\-libs \fR]
-.PP
+.B pkg-config
+WINGs
+.I \-\-cflags
+.br
+.B pkg-config
+WINGs
+.I \-\-libs
 .SH "DESCRIPTION"
-\fBget-wings-flags \fR\- output include path, library search path or
-library archive names needed to compile and link with libWINGs.
-.PP
-.SH "OPTIONS"
+\fBget-wings-flags\fP used to provide the compilation and link flags for programs that use
+the \fIWINGs\fP library, before \fBpkg-config\fP became the universal way to handle these
+developer configurations. The script is now deprecated and you should use instead:
 .TP
-.B \-\-cflags
-\fRoutput include file search path to find all header files needed to compile
-source code using libWINGs functions.
+.BR pkg-config " WINGs \fI\-\-cflags\fP"
+to get the flags for the compiler
 .TP
-.B \-\-ldflags
-\fRoutput library search path required to find all library archives needed to
-link object files with libWINGs.
-.TP
-.B \-\-libs
-\fRoutput library archive names required to link object filed with libWINGs.
-.PP
+.BR pkg-config " WINGs \fI\-\-libs\fP"
+to get the flags for the linker
+.SH "IMPORTANT NOTE"
+As with every deprecated stuff, the script \fBget-wings-flags\fR will be removed soon,
+so you should update your script quickly while you know about it.
 .SH "AUTHOR"
-get-wings-flags is a part of Window Maker, wich was written by
+get-wings-flags is part of Window Maker, which was written by
 Alfredo K. Kojima <kojima@windowmaker.info> and Dan Pascu <dan@windowmaker.info>,
 with contributions from many people around the Internet.
 .PP
-This manpage was written by Frederik Schueler <fschueler@gmx.net> for the
+This man page was written by Frederik Schueler <fschueler@gmx.net> for the
 Debian GNU/Linux system (but may be used by others).
