@@ -11,7 +11,7 @@ dist_man_MANS = \
 	seticons.1x \
 	setstyle.1x \
 	upgrade-windowmaker-defaults.8 \
-	wdread.1 \
+	wdread.1x \
 	wdwrite.1x \
 	WindowMaker.1x \
 	wmagnify.1x \
