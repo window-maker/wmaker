@@ -17,17 +17,17 @@ dist_man_MANS = \
 	wmagnify.1x \
 	wmgenmenu.1 \
 	wmmenugen.1 \
-	wmsetbg.1x \
 	WPrefs.1x \
 	wxcopy.1x \
 	wxpaste.1x
 
 man_MANS = \
-	wmaker.1x
+	wmaker.1x \
+	wmsetbg.1x
 
-MOSTLYCLEANFILES = wmaker.1x
+MOSTLYCLEANFILES = wmaker.1x wmsetbg.1x
 
-EXTRA_DIST = wmaker.in
+EXTRA_DIST = wmaker.in wmsetbg.in
 
 wmaker.1x: wmaker.in Makefile $(top_builddir)/config.h
 	$(AM_V_GEN)$(top_srcdir)/script/replace-ac-keywords.sh \
@@ -35,6 +35,11 @@ wmaker.1x: wmaker.in Makefile $(top_builddir)/config.h
 		-D"sysconfdir=$(sysconfdir)" --replace "sysconfdir" \
 		-D"pkgdatadir=$(pkgdatadir)" --replace "pkgdatadir" \
 		-o "wmaker.1x"  "$(srcdir)/wmaker.in"
+
+wmsetbg.1x: wmsetbg.in Makefile $(top_builddir)/config.h
+	$(AM_V_GEN)$(top_srcdir)/script/replace-ac-keywords.sh \
+		--header "$(top_builddir)/config.h" --filter "USE_XINERAMA" \
+		-o "wmsetbg.1x"  "$(srcdir)/wmsetbg.in"
 
 # Create a 'silent rule' for our make check the same way automake does
 AM_V_CHKOPTS = $(am__v_CHKOPTS_$(V))
@@ -87,7 +92,7 @@ wmgenmenu-args:
 
 wmsetbg-args:
 	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
-		--program "$(top_builddir)/util/wmsetbg" --man-page "$(top_srcdir)/doc/wmsetbg.1x"
+		--program "$(top_builddir)/util/wmsetbg" --man-page "wmsetbg.1x"
 
 wxcopy-args:
 	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \

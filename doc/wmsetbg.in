@@ -75,9 +75,9 @@ print the version of Window Maker from which the program comes
 .TP
 .BR \-\-workspace | \-w " \fIworkspace\fP"
 update background only for the specified \fIworkspace\fP
-.TP
-.BR \-\-xinerama | \-X
-stretch image across Xinerama heads
+@USE_XINERAMA@.TP
+@USE_XINERAMA@.BR \-\-xinerama | \-X
+@USE_XINERAMA@stretch image across Xinerama heads
 .SH "INDEXED COLOR SCREENS"
 If your screen is not in a \fBTrue Color\fP configuration (generally sold as 16,777,216 colors) but
 in a indexed color mode (256 colors, 16 colors, ... which are based on a \fBColorMap\fP) then Window
