@@ -566,8 +566,10 @@ screen size.
 @subsection Feature Selection
 
 @table @option
-@item --disable-motif
+@item --disable-mwm-hints
 Disable support for Motif's MWM Window Manager hints.
+These attributes were introduced by the Motif toolkit to ask for special window appearance requests.
+Nowadays this is covered by the NetWM/EWMH specification, but there are still applications that rely on MWM Hints.
 
 @item --enable-ld-version-script
 This feature is auto-detected, and you should not use this option.

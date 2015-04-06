@@ -36,9 +36,6 @@
 /* If you want animations for iconification, shading, icon arrangement etc. */
 #define ANIMATIONS
 
-/* support for Motif window manager (mwm) window hints */
-#define USE_MWM_HINTS
-
 /*
  * Undefine BALLOON_TEXT if you don't want balloons for showing extra
  * information, like window titles that are not fully visible.

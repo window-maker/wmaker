@@ -21,8 +21,6 @@
 
 #include "wconfig.h"
 
-#ifdef USE_MWM_HINTS
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <stdlib.h>
@@ -200,5 +198,3 @@ void wMWMCheckClientHints(WWindow *wwin)
 	if (getMWMHints(wwin->client_win, &hints))
 		setupMWMHints(wwin, &hints);
 }
-
-#endif	/* USE_MWM_HINTS */
