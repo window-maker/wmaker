@@ -283,7 +283,7 @@ typedef struct _WScreen {
     /* for window shortcuts */
     WMArray *shortcutWindows[MAX_WINDOW_SHORTCUTS];
 
-#ifdef XDND
+#ifdef USE_DOCK_XDND
     char *xdestring;
 #endif
 

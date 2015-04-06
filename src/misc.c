@@ -622,7 +622,7 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 				}
 				break;
 
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 			case 'd':
 				if (!scr->xdestring) {
 					scr->flags.dnd_data_convertion_status = 1;
@@ -639,7 +639,7 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 				strcat(out, scr->xdestring);
 				optr += slen;
 				break;
-#endif				/* XDND */
+#endif	/* USE_DOCK_XDND */
 
 			case 's':
 				if (!selection) {

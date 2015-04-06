@@ -20,19 +20,20 @@
 
 /* Many part of code are ripped of an example from JX's site */
 
-#include "wconfig.h"
+#include "config.h"
 
-#ifdef XDND
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+
+#include <X11/Xlib.h>
+#include <X11/Xatom.h>
 
 #include "WindowMaker.h"
 #include "dock.h"
 #include "xdnd.h"
 #include "workspace.h"
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <X11/Xatom.h>
 
 static Atom _XA_XdndAware;
 static Atom _XA_XdndEnter;
@@ -315,4 +316,3 @@ Bool wXDNDProcessClientMessage(XClientMessageEvent *event)
 	}
 	return False;
 }
-#endif

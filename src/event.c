@@ -40,7 +40,7 @@
 #ifdef USE_XSHAPE
 # include <X11/extensions/shape.h>
 #endif
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 #include "xdnd.h"
 #endif
 
@@ -539,7 +539,7 @@ static void saveTimestamp(XEvent * event)
 		break;
 	case SelectionNotify:
 		w_global.timestamp.last_event = event->xselection.time;
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 		wXDNDProcessSelection(event);
 #endif
 		break;
@@ -1073,10 +1073,10 @@ static void handleClientMessage(XEvent * event)
 		scr->flags.ignore_focus_events = event->xclient.data.l[0] ? 1 : 0;
 	} else if (wNETWMProcessClientMessage(&event->xclient)) {
 		/* do nothing */
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 	} else if (wXDNDProcessClientMessage(&event->xclient)) {
 		/* do nothing */
-#endif				/* XDND */
+#endif	/* USE_DOCK_XDND */
 	} else {
 		/*
 		 * Non-standard thing, but needed by OffiX DND.

@@ -502,15 +502,16 @@ AS_IF([test "x$enable_modelock" = "xyes"],
 dnl XDND Drag-nd-Drop support
 dnl =========================
 AC_ARG_ENABLE([xdnd],
-    [AS_HELP_STRING([--disable-xdnd], [disable Drag-nd-Drop support])],
+    [AS_HELP_STRING([--disable-xdnd], [disable support for Drag-and-Drop on the dock @<:@default=enabled@:>@])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --disable-xdnd]) ]) ],
     [enable_xdnd=yes])
 AS_IF([test "x$enable_xdnd" = "xyes"],
-    [supported_xext="$supported_xext XDnD"
-     AC_DEFINE([XDND], [1], [whether Drag-nd-Drop support should be enabled])],
+    [supported_core="$supported_core XDnD"
+     AC_DEFINE([USE_DOCK_XDND], [1], [whether Drag-and-Drop on the dock should be enabled])],
     [unsupported="$unsupported XDnd"])
+AM_CONDITIONAL([USE_DOCK_XDND], [test "x$enable_dock_xdnd" != "xno"])
 
 
 dnl XShape support

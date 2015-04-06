@@ -84,7 +84,6 @@ wmaker_SOURCES = 	\
 	usermenu.c \
 	usermenu.h \
 	xdnd.h \
-	xdnd.c \
 	xinerama.h \
 	xinerama.c \
 	xmodifier.h \
@@ -108,6 +107,9 @@ wmaker_SOURCES = 	\
 	wsmap.c \
 	wsmap.h
 
+if USE_DOCK_XDND
+wmaker_SOURCES += xdnd.c
+endif
 if USE_MWM_HINTS
 wmaker_SOURCES += motif.h motif.c
 endif

@@ -68,7 +68,7 @@
 #include "wmspec.h"
 #include "event.h"
 #include "switchmenu.h"
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 #include "xdnd.h"
 #endif
 
@@ -469,7 +469,7 @@ void StartUp(Bool defaultScreenOnly)
 
 	w_global.atom.wm.ignore_focus_events = atom[20];
 
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 	wXDNDInitializeAtoms();
 #endif
 

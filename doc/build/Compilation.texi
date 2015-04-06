@@ -571,6 +571,11 @@ Disable support for Motif's MWM Window Manager hints.
 These attributes were introduced by the Motif toolkit to ask for special window appearance requests.
 Nowadays this is covered by the NetWM/EWMH specification, but there are still applications that rely on MWM Hints.
 
+@item --disable-xdnd
+Disable support for dragging and dropping files on the dock, which launches a user-specified command
+with that file.
+Starting from version 0.65.6 this feature is enabled by default.
+
 @item --enable-ld-version-script
 This feature is auto-detected, and you should not use this option.
 When compiling a library (@file{wrlib}, ...), @emph{gcc} has the possibility to filter the list of

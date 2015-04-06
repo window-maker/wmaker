@@ -37,7 +37,7 @@ typedef struct WAppIcon {
 	WIcon *icon;
 	int x_pos, y_pos;		/* absolute screen coordinate */
 	char *command;			/* command used to launch app */
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 	char *dnd_command;		/* command to use when something is */
 					/* dropped on us */
 #endif

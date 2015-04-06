@@ -51,7 +51,7 @@
 #include "placement.h"
 #include "misc.h"
 #include "event.h"
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 #include "xdnd.h"
 #endif
 
@@ -130,7 +130,7 @@ WAppIcon *wAppIconCreateForDock(WScreen *scr, const char *command, const char *w
 		tile = TILE_CLIP;
 	aicon->icon = icon_create_for_dock(scr, command, wm_instance, wm_class, tile);
 
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 	wXDNDMakeAwareness(aicon->icon->core->window);
 #endif
 
@@ -309,7 +309,7 @@ static WAppIcon *wAppIconCreate(WWindow *leader_win)
 		aicon->wm_instance = wstrdup(leader_win->wm_instance);
 
 	aicon->icon = icon_create_for_wwindow(leader_win);
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 	wXDNDMakeAwareness(aicon->icon->core->window);
 #endif
 
@@ -332,7 +332,7 @@ void wAppIconDestroy(WAppIcon * aicon)
 	wIconDestroy(aicon->icon);
 	if (aicon->command)
 		wfree(aicon->command);
-#ifdef XDND
+#ifdef USE_DOCK_XDND
 	if (aicon->dnd_command)
 		wfree(aicon->dnd_command);
 #endif
