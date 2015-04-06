@@ -1312,7 +1312,7 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
 	strbuf = wstrappend(strbuf, "WMSPEC");
 
-#ifdef MWM_HINTS
+#ifdef USE_MWM_HINTS
 	strbuf = wstrappend(strbuf, ", MWM");
 #endif
 

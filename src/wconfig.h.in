@@ -37,7 +37,7 @@
 #define ANIMATIONS
 
 /* support for Motif window manager (mwm) window hints */
-#define MWM_HINTS
+#define USE_MWM_HINTS
 
 /*
  * Undefine BALLOON_TEXT if you don't want balloons for showing extra
