@@ -5,7 +5,7 @@ DIST_SUBDIRS = $(SUBDIRS) tests
 
 AUTOMAKE_OPTIONS =
 
-EXTRA_DIST = tests get-wraster-flags.in
+EXTRA_DIST = tests
 
 lib_LTLIBRARIES = libwraster.la
 
@@ -17,7 +17,7 @@ EXTRA_libwraster_la_DEPENDENCIES = libwraster.map
 CLEANFILES = libwraster.map
 endif
 
-bin_SCRIPTS = get-wraster-flags
+dist_bin_SCRIPTS = get-wraster-flags
 
 include_HEADERS = wraster.h
 
@@ -84,7 +84,7 @@ libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @MAGICKLIBS@ @XLIBS@ @LIB
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = wrlib.pc
 
-DISTCLEANFILES = $(pkgconfig_DATA) get-wraster-flags
+DISTCLEANFILES = $(pkgconfig_DATA)
 
 wrlib.pc: Makefile
 	@echo "Generating $@"
@@ -95,13 +95,6 @@ wrlib.pc: Makefile
 	@echo 'Libs.private: $(GFXLIBS) $(MAGICKLIBS) $(XLIBS) -lm' >> $@
 	@echo 'Cflags: $(inc_search_path)' >> $@
 
-get-wraster-flags: get-wraster-flags.in Makefile
-	@echo "Generating $@"
-	@$(SED) -e 's#$${inc_search_path}#$(inc_search_path)#;' \
-	        -e 's#$${lib_search_path}#$(lib_search_path)#;' \
-	        -e 's#$${GFXLIBS}#$(GFXLIBS)#;' \
-	        -e 's#$${XLIBS}#$(XLIBS)#;' < $(abs_srcdir)/get-wraster-flags.in > $@
-	@chmod 755 $@
 
 if HAVE_LD_VERSION_SCRIPT
 libwraster.map: $(include_HEADERS) $(top_srcdir)/script/generate-mapfile-from-header.sh

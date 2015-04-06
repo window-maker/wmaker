@@ -61,7 +61,6 @@ util/wmsetup
 util/wxcopy
 util/wxpaste
 
-wrlib/get-wraster-flags
 wrlib/tests/testdraw
 wrlib/tests/testgrad
 wrlib/tests/testrot
