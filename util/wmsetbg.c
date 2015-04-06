@@ -1153,7 +1153,7 @@ static void print_help(void)
 	puts("Sets the workspace background to the specified image or a texture and");
 	puts("optionally update Window Maker configuration");
 	puts("");
-	puts(" -display                      display to use");
+	puts(" -display <display>            display to use");
 	puts(" -d, --dither                  dither image");
 	puts(" -m, --match                   match  colors");
 	puts(" -S, --smooth                  smooth scaled image");

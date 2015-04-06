@@ -42,7 +42,7 @@ static const char *prog_name;
 
 static noreturn void print_help(int print_usage, int exitval)
 {
-	printf("Usage: %s [-h] [-v] [file]\n", prog_name);
+	printf("Usage: %s [-h] [-v] file\n", prog_name);
 	if (print_usage) {
 		puts("Reads icon configuration from FILE and updates Window Maker.");
 		puts("");

@@ -436,9 +436,11 @@ int main(int argc, char **argv)
 
 			printf("Usage: %s [options]\n", argv[0]);
 			puts("Options:");
-			puts("  -display <display>	display that should be used");
-			puts("  -m <number>		change magnification factor (default 2)");
-			puts("  -r <number>		change refresh delay, in milliseconds (default 200)");
+			puts("  -display <display>\tdisplay where to magnification is shown");
+			puts("  -m <number>\t\tchange magnification factor (default 2)");
+			puts("  -r <number>\t\tchange refresh delay, in milliseconds (default 200)");
+			puts("  -vdisplay <display>\tdisplay from which the magnification is taken");
+			puts("  -h, --help\t\tdisplay this help page");
 			puts("Keys:");
 			puts("  1,2,3,4,5,6,7,8,9	change the magnification factor");
 			puts("  <space>, f		freeze the 'camera', making it magnify only the current\n"

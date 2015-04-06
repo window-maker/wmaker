@@ -39,8 +39,8 @@ static const char *prog_name;
 
 static void print_help(void)
 {
-	printf("Usage: %s [OPTIONS] [FILE]\n", prog_name);
-	puts("Copies data from X selection or cutbuffer to FILE or stdout.");
+	printf("Usage: %s [OPTIONS]\n", prog_name);
+	puts("Copies data from X selection or cutbuffer to stdout.");
 	puts("");
 	puts("  -display display         display to use");
 	puts("  --cutbuffer number       cutbuffer number to get data from");

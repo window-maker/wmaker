@@ -1,55 +1,58 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH getstyle 1x "January 1999"
+.TH getstyle 1x "April 2015"
 .SH NAME
 getstyle \- dumps the current Window Maker style related configuration or
 creates a theme pack.
 .SH SYNOPSIS
 .B getstyle
-[[\-t|\-\-theme-options] [\-p|\-\-pack] [style file]]
+.RI [ \-t | \-\-theme-options "] [" \-p | \-\-pack "] [" "style file" ]
 .SH DESCRIPTION
 .B getstyle
 can either dump the current Window Maker style related configuration
 information to a file/stdout or create a self-contained theme pack. A theme
-pack is a directory that contains everything that is needed by a
+pack is a directory that contains everything that is needed for a
 redistributable theme, including the style information and pixmaps used by it.
 
 Note that style information stored in the global configuration of the
 system is not read.
 
-The following options are stored by default: \fITitleJustify\fP,
-\fIClipTitleFont\fP, \fIWindowTitleFont\fP, \fIMenuTitleFont\fP,
-\fIMenuTextFont\fP, \fIIconTitleFont\fP,
-\fILargeDisplayFont\fP, \fIHighlightColor\fP, \fIHighlightTextColor\fP,
-\fIClipTitleColor\fP, \fICClipTitleColor\fP, \fIFTitleColor\fP,
-\fIPTitleColor\fP, \fIUTitleColor\fP, \fIFTitleBack\fP,
-\fIPTitleBack\fP, \fIUTitleBack\fP, \fIResizebarBack\fP,
-\fIMenuTitleColor\fP, \fIMenuTextColor\fP, \fIMenuDisabledColor\fP,
-\fIMenuTitleBack\fP, \fIMenuTextBack\fP, \fIIconBack\fP,
-\fIIconTitleColor\fP, \fIIconTitleBack\fP, \fIFrameBorderWidth\fP,
-\fIFrameBorderColor\fP, \fIFrameSelectedBorderColor\fP,
-\fIMenuStyle\fP, \fIWindowTitleExtendSpace\fP,
-\fIMenuTitleExtendSpace\fP, and \fIMenuTextExtendSpace\fP.
-
-If either \fB-t\fP or \fB--theme-options\fP is specified, in addition
-to the previous options, \fIWorkspaceBack\fP is \fIalso\fP stored,
-along with any user-definable mouse cursor settings
-(\fINormalCursor\fP, \fIArrowCursor\fP, \fIMoveCursor\fP,
-\fIResizeCursor\fP,
-\fITopLeftResizeCursor\fP, \fITopRightResizeCursor\fP,
-\fIBottomLeftResizeCursor\fP, \fIBottomRightResizeCursor\fP,
-\fIVerticalResizeCursor\fP, \fIHorizontalResizeCursor\fP,
-\fIWaitCursor\fP, \fIQuestionCursor\fP, \fITextCursor\fP,
-\fISelectCursor\fP) that are present.
-
 .SH OPTIONS
 .TP
-.B \-t
+.B \-\-help
+print a help message with the list of options.
+.TP
+.BR \-\-pack " or " \-p
+creates a theme pack in the directory named by the theme name appended
+with the .themed suffix.
+.TP
+.BR \-\-theme-options " or " \-t
 dumps theme related information too, which includes the root background
 texture.  This option is always enabled when the \-p option is used.
 .TP
-.B \-p
-creates a theme pack in the directory named by the theme name appended
-with the .themed suffix.
+.B \-\-version
+print the version of Window Maker from which the program comes.
+
+.SH "STYLE CONTENT"
+
+The following options are stored by default:
+.IR TitleJustify ", " ClipTitleFont ", " WindowTitleFont ", " MenuTitleFont ,
+.IR MenuTextFont ", " IconTitleFont ", " LargeDisplayFont ", " HighlightColor ,
+.IR HighlightTextColor ", " ClipTitleColor ", " CClipTitleColor ", " FTitleColor ,
+.IR PTitleColor ", " UTitleColor ", " FTitleBack ", " PTitleBack ,
+.IR UTitleBack ", " ResizebarBack ", " MenuTitleColor ", " MenuTextColor ,
+.IR MenuDisabledColor ", " MenuTitleBack ", " MenuTextBack ", " IconBack ,
+.IR IconTitleColor ", " IconTitleBack ", " FrameBorderWidth ", " FrameBorderColor ,
+.IR FrameSelectedBorderColor ", " MenuStyle ", " WindowTitleExtendSpace ,
+.IR MenuTitleExtendSpace ", and " MenuTextExtendSpace .
+
+If either \fB-t\fP or \fB--theme-options\fP is specified, in addition
+to the previous options, \fIWorkspaceBack\fP is also stored,
+along with any user-definable mouse cursor settings
+.RI ( NormalCursor ", " ArrowCursor ", " MoveCursor ", " ResizeCursor ,
+.IR TopLeftResizeCursor ", " TopRightResizeCursor ", " BottomLeftResizeCursor ,
+.IR BottomRightResizeCursor ", " VerticalResizeCursor ", " HorizontalResizeCursor ,
+.IR WaitCursor ", " QuestionCursor ", " TextCursor ", " SelectCursor )
+that are present.
 
 .SH ENVIRONMENT
 .IP GNUSTEP_USER_ROOT
