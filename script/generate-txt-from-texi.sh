@@ -212,12 +212,12 @@ function end_conditional(name,          local_i) {
 # with @value; they can also be defined from command-line (-D)
 # they are stored in the global array "variable[name]"
 function set_variable(line,          local_idx, local_name, local_value) {
-  gsub(/^[ \t]*/, "", line);
+  gsub(/^[ \t]+/, "", line);
   local_idx = match(line, /[ \t]/);
   if (local_idx > 0) {
     local_name  = substr(line, 1, local_idx - 1);
     local_value = substr(line, local_idx + 1);
-    gsub(/^[ \t]*/, "", local_value);
+    gsub(/^[ \t]+/, "", local_value);
   } else {
     local_name  = line;
     local_value = "";
@@ -473,7 +473,7 @@ function new_node(args,        local_nb, local_arr, local_i) {
   if ((local_nb < 1) || (local_nb > 4)) {
     report_error("bad number of argument " local_nb " for @node at line " NR);
   }
-  gsub(/^[ \t]*/, "", local_arr[1]);
+  gsub(/^[ \t]+/, "", local_arr[1]);
   gsub(/[ \t]*$/, "", local_arr[1]);
   if (local_arr[1] == "") {
     report_error("missing node name for @node at line " NR);
@@ -572,7 +572,7 @@ function generate_cross_reference(args, cmd,          local_nb, local_arr, local
 
   local_arr[1] = execute_commands(local_arr[1]);
   for (local_i = 1; local_i <= local_nb; local_i++) {
-    gsub(/^[ \t]*/, "", local_arr[local_i]);
+    gsub(/^[ \t]+/, "", local_arr[local_i]);
     gsub(/[ \t]*$/, "", local_arr[local_i]);
   }
 
