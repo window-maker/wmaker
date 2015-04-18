@@ -7,6 +7,13 @@ EXTRA_DIST = Readme \
 # How to re-generate automatically the top-level text files
 all-local: $(top_srcdir)/INSTALL-WMAKER $(top_srcdir)/README.i18n
 
+# We also re-generate the documentation when "make dist" is used, because we cannot
+# be assured that the doc currently present in the directory is up-to-date, for example
+# if the user did not run "make (all)" for valid reason
+dist-hook: $(top_srcdir)/INSTALL-WMAKER $(top_srcdir)/README.i18n
+	cp -f $(top_srcdir)/INSTALL-WMAKER $(top_distdir)/INSTALL-WMAKER
+	cp -f $(top_srcdir)/README.i18n $(top_distdir)/README.i18n
+
 $(top_srcdir)/INSTALL-WMAKER: $(srcdir)/Compilation.texi $(top_srcdir)/script/generate-txt-from-texi.sh
 	$(AM_V_GEN)if test ! -e "$(top_srcdir)/INSTALL-WMAKER" -o -w "$(top_srcdir)/INSTALL-WMAKER" ; then \
 	    $(top_srcdir)/script/generate-txt-from-texi.sh \
