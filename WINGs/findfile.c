@@ -513,9 +513,9 @@ int wcopy_file(const char *dest_dir, const char *src_file, const char *dest_file
 		werror(_("could not close the file \"%s\": %s"), path_dst, strerror(errno));
 	cleanup_and_return_failure:
 		free(buffer);
-		wfree(path_dst);
 		close(fd_src);
 		unlink(path_dst);
+		wfree(path_dst);
 		return -1;
 	}
 
