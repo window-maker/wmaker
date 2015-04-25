@@ -346,9 +346,9 @@ msgstr ""
 
 #: ../src/dialog.c:594
 #, c-format
-msgid "full path for file \"%s\" in \"%s\" is longer than %ld bytes, skipped"
+msgid "full path for file \"%s\" in \"%s\" is longer than %d bytes, skipped"
 msgstr ""
-"volledig pad voor bestand \"%s\" in \"%s\" is langer dan %ld byte, "
+"volledig pad voor bestand \"%s\" in \"%s\" is langer dan %d byte, "
 "overgeslagen"
 
 #: ../src/dialog.c:628
