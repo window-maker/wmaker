@@ -85,6 +85,9 @@ WMPixmap *WMCreatePixmapFromRImage(WMScreen * scrPtr, RImage * image, int thresh
 	WMPixmap *pixPtr;
 	Pixmap pixmap, mask;
 
+	if (image == NULL)
+		return NULL;
+
 	if (!RConvertImageMask(scrPtr->rcontext, image, &pixmap, &mask, threshold)) {
 		return NULL;
 	}
