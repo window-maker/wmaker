@@ -1155,7 +1155,7 @@ void wIconifyWindow(WWindow *wwin)
 					const char *title;
 					char title_buf[32];
 
-					if (wwin->frame && wwin->frame->title) {
+					if (wwin->frame->title) {
 						title = wwin->frame->title;
 					} else {
 						snprintf(title_buf, sizeof(title_buf), "(id=0x%lx)", wwin->client_win);
