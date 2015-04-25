@@ -483,8 +483,8 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 			int foo;
 			unsigned bar;
 
-			XGetWindowAttributes(dpy, wwin->client_win, &attribs);
-			wClientGetNormalHints(wwin, &attribs, False, &foo, &foo, &bar, &bar);
+			if (XGetWindowAttributes(dpy, wwin->client_win, &attribs) != 0)
+				wClientGetNormalHints(wwin, &attribs, False, &foo, &foo, &bar, &bar);
 			/* TODO: should we check for consistency of the current
 			 * size against the new geometry hints? */
 		}
