@@ -312,10 +312,10 @@ void wMenuEntrySetCascade(WMenu * menu, WMenuEntry * entry, WMenu * cascade)
 	if (!done) {
 		entry->cascade = menu->cascade_no;
 
-		menu->cascades = wrealloc(menu->cascades, sizeof(WMenu) * (menu->cascade_no + 1));
+		menu->cascades = wrealloc(menu->cascades, sizeof(menu->cascades[0]) * (menu->cascade_no + 1));
 		menu->cascades[menu->cascade_no++] = cascade;
 
-		brother->cascades = wrealloc(brother->cascades, sizeof(WMenu) * (brother->cascade_no + 1));
+		brother->cascades = wrealloc(brother->cascades, sizeof(brother->cascades[0]) * (brother->cascade_no + 1));
 		brother->cascades[brother->cascade_no++] = cascade->brother;
 	}
 
