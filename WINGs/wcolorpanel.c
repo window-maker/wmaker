@@ -2867,8 +2867,6 @@ static void customSetPalette(W_ColorPanel * panel)
 
 	panel->palXRatio = (double)(panel->customPaletteImg->width) / (double)(customPaletteWidth);
 	panel->palYRatio = (double)(panel->customPaletteImg->height) / (double)(customPaletteHeight);
-
-	WMGetPopUpButtonSelectedItem(panel->customPaletteHistoryBtn);
 }
 
 static void customPalettePositionSelection(W_ColorPanel * panel, int x, int y)
