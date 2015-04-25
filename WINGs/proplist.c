@@ -1213,6 +1213,7 @@ WMPropList *WMSubtractPLDictionaries(WMPropList * dest, WMPropList * source, Boo
 		for (i = 0; i < WMGetArrayItemCount(keys->d.array); i++) {
 			WMRemoveFromPLDictionary(dest, WMGetFromArray(keys->d.array, i));
 		}
+		WMReleasePropList(keys);
 		return dest;
 	}
 
