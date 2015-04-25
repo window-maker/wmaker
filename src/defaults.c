@@ -3088,23 +3088,21 @@ static int setWorkspaceBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 			}
 		}
 	} else if (WMGetPropListItemCount(value) > 0) {
-		char *command;
 		char *text;
 		char *dither;
 		int len;
 
 		text = WMGetPropListDescription(value, False);
 		len = strlen(text) + 40;
-		command = wmalloc(len);
 		dither = wPreferences.no_dithering ? "-m" : "-d";
 		if (!strchr(text, '\'') && !strchr(text, '\\')) {
-			command = wmalloc(len);
+			char command[len];
+
 			if (wPreferences.smooth_workspace_back)
 				snprintf(command, len, "wmsetbg %s -S -p '%s' &", dither, text);
 			else
 				snprintf(command, len, "wmsetbg %s -p '%s' &", dither, text);
 			ExecuteShellCommand(scr, command);
-			wfree(command);
 		} else
 			wwarning(_("Invalid arguments for background \"%s\""), text);
 		wfree(text);
