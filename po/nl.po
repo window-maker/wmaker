@@ -108,12 +108,7 @@ msgstr "programmamenu: verkeerde menu-ingang \"%s\" in venster %lx"
 msgid "appmenu: menu command size exceeded in window %lx"
 msgstr "programmamenu: menucommandolengte overschreden in venster %lx"
 
-#: ../src/appmenu.c:143
-#, c-format
-msgid "appmenu: out of memory making menu for window %lx"
-msgstr "programmamenu: geheugentekort bij menu aanmaken voor venster %lx"
-
-#: ../src/appmenu.c:153 ../src/appmenu.c:186
+#: ../src/appmenu.c:143 ../src/appmenu.c:153 ../src/appmenu.c:186
 #, c-format
 msgid "appmenu: out of memory creating menu for window %lx"
 msgstr "programmamenu: geheugentekort bij menu aanmaken voor venster %lx"
@@ -1054,7 +1049,7 @@ msgstr "verkeerde waarde voor 'visualid': \"%s\""
 
 #: ../src/main.c:690
 msgid ""
-"your version of Window Maker was compiler with INotify support, so \"--no-"
+"your version of Window Maker was compiled with INotify support, so \"--no-"
 "polling\" has no effect"
 msgstr ""
 "uw versie van Window Maker is gecompileerd met INotify-ondersteuning, dus "

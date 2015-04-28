@@ -687,7 +687,7 @@ static int real_main(int argc, char **argv)
 #ifndef HAVE_INOTIFY
 				wPreferences.flags.noupdates = 1;
 #else
-				wmessage(_("your version of Window Maker was compiler with INotify support, so \"--no-polling\" has no effect"));
+				wmessage(_("your version of Window Maker was compiled with INotify support, so \"--no-polling\" has no effect"));
 #endif
 			} else if (strcmp(argv[i], "--help") == 0) {
 				print_help();
