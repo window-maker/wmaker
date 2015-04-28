@@ -139,7 +139,7 @@ W_SendDnDClientMessage(Display * dpy, Window win, Atom message,
 #endif
 
 	if (!windowExists(dpy, win)) {
-		wwarning(_("target %lu for xdnd message no longer exists"), win);
+		wwarning(_("target %lu for XDND message no longer exists"), win);
 		return False;	/* message not sent */
 	}
 
@@ -217,7 +217,7 @@ void W_HandleDNDClientMessage(WMView * toplevel, XClientMessageEvent * event)
 				return;
 			}
 		} else {
-			wwarning(_("unsupported version %i for xdnd enter message"), XDND_SOURCE_VERSION(info));
+			wwarning(_("unsupported version %i for XDND enter message"), XDND_SOURCE_VERSION(info));
 			W_DragDestinationCancelDropOnEnter(toplevel, info);
 			return;
 		}

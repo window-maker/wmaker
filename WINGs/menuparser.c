@@ -377,7 +377,7 @@ found_end_squote:
 				if (limit-- > 0)
 					goto restart_token_split;
 
-				WMenuParserError(parser, _("too many nested macro expansion, breaking loop") );
+				WMenuParserError(parser, _("too many nested macro expansions, breaking loop"));
 
 				while (isnamechr(*parser->rd))
 					parser->rd++;
@@ -436,7 +436,7 @@ static void menu_parser_get_directive(WMenuParser parser)
 		menu_parser_condition_end(parser);
 
 	} else {
-		WMenuParserError(parser, _("unknow directive '#%s'"), command);
+		WMenuParserError(parser, _("unknown directive '#%s'"), command);
 		return;
 	}
 
@@ -500,7 +500,7 @@ found_end_define_fname:
 			count++;
 
 		if (count > MAX_NESTED_INCLUDES) {
-			WMenuParserError(parser, _("too many nested includes") );
+			WMenuParserError(parser, _("too many nested #include's"));
 			return False;
 		}
 	}
@@ -565,7 +565,7 @@ found_end_define_fname:
 					src++;
 			}
 		}
-		WMenuParserError(parser, _("could not find file \"%s\" for include"), req_filename);
+		WMenuParserError(parser, _("could not find file \"%s\" for #include"), req_filename);
 		return False;
 	}
 
@@ -623,7 +623,7 @@ static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists)
 static void menu_parser_condition_else(WMenuParser parser)
 {
 	if (parser->cond.depth <= 0) {
-		WMenuParserError(parser, _("found #%s but have no matching #if"), "else" );
+		WMenuParserError(parser, _("found #%s but has no matching #if"), "else");
 		return;
 	}
 
@@ -640,7 +640,7 @@ static void menu_parser_condition_end(WMenuParser parser)
 	int idx;
 
 	if (parser->cond.depth <= 0) {
-		WMenuParserError(parser, _("found #%s but have no matching #if"), "endif" );
+		WMenuParserError(parser, _("found #%s but has no matching #if"), "endif");
 		return;
 	}
 

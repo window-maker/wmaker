@@ -22,8 +22,8 @@ msgid "Bad address-service-protocol combination"
 msgstr "Nesprávná kombinace adresa-služba-protokol"
 
 #: ../../WINGs/dragsource.c:541
-msgid "DND selection lost during drag operation..."
-msgstr "DND výběr se ztratil během opere táhnutí..."
+msgid "XDND selection lost during drag operation..."
+msgstr "XDND výběr se ztratil během opere táhnutí..."
 
 #: ../../WINGs/dragsource.c:610
 #, c-format
@@ -31,8 +31,8 @@ msgid "drag & drop timed out while waiting for response from 0x%x\n"
 msgstr "čas pro drag & drop vypršel během čekání na odpoveď z 0x%x\n"
 
 #: ../../WINGs/dragsource.c:728
-msgid "could not get ownership or DND selection"
-msgstr "nemožné získat vlastnictví nebo DND výběr"
+msgid "could not get ownership of XDND selection"
+msgstr "nemožné získat vlastnictví nebo XDND výběr"
 
 #: ../../WINGs/dragsource.c:898
 #, c-format

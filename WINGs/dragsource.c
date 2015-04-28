@@ -771,7 +771,7 @@ static void initMotionProcess(WMView * view, WMDraggingInfo * info, XEvent * eve
 	XDND_TIMESTAMP(info) = event->xmotion.time;
 
 	if (!WMCreateSelectionHandler(view, scr->xdndSelectionAtom, CurrentTime, XDND_SELECTION_PROCS(info), NULL)) {
-		wwarning(_("could not get ownership or DND selection"));
+		wwarning(_("could not get ownership of XDND selection"));
 		return;
 	}
 

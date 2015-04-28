@@ -206,7 +206,7 @@ void menu_parser_define_macro(WMenuParser parser)
 				arg_names_buf[idx] = '\0';
 				if (idx < sizeof(arg_names_buf) - 1) idx++;
 			} else {
-				WMenuParserError(parser, _("invalid characted '%c' in arg-list for macro \"%s\" while expecting parameter name"),
+				WMenuParserError(parser, _("invalid character '%c' in arg-list for macro \"%s\" while expecting parameter name"),
 									  *parser->rd, macro->name);
 				wfree(macro);
 				*parser->rd = '\0'; // fake end-of-line to avoid warnings from remaining line content
@@ -217,7 +217,7 @@ void menu_parser_define_macro(WMenuParser parser)
 			if (*parser->rd == ')') break;
 
 			if (*parser->rd != ',') {
-				WMenuParserError(parser, _("invalid characted '%c' in arg-list for macro \"%s\" while expecting ',' or ')'"),
+				WMenuParserError(parser, _("invalid character '%c' in arg-list for macro \"%s\" while expecting ',' or ')'"),
 									  *parser->rd, macro->name);
 				wfree(macro);
 				*parser->rd = '\0'; // fake end-of-line to avoid warnings from remaining line content

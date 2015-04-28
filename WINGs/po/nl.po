@@ -111,12 +111,12 @@ msgid "missing closing simple-quote before end-of-line"
 msgstr "ontbrekend sluitend enkel aanhalingsteken voor regeleinde"
 
 #: ../../WINGs/menuparser.c:380
-msgid "too many nested macro expansion, breaking loop"
+msgid "too many nested macro expansions, breaking loop"
 msgstr "te veel geneste macro-uitwerkingen, cyclus afgebroken"
 
 #: ../../WINGs/menuparser.c:439
 #, c-format
-msgid "unknow directive '#%s'"
+msgid "unknown directive '#%s'"
 msgstr "onbekende aanwijzing '#%s'"
 
 #: ../../WINGs/menuparser.c:444
@@ -140,12 +140,12 @@ msgid "missing closing '%c' in filename specification"
 msgstr "ontbrekende sluitende '%c' in bestandsnaamopgave"
 
 #: ../../WINGs/menuparser.c:503
-msgid "too many nested includes"
+msgid "too many nested #include's"
 msgstr "te veel geneste #include's"
 
 #: ../../WINGs/menuparser.c:568
 #, c-format
-msgid "could not find file \"%s\" for include"
+msgid "could not find file \"%s\" for #include"
 msgstr "kon bestand \"%s\" niet vinden voor #include"
 
 #: ../../WINGs/menuparser.c:589
@@ -159,7 +159,7 @@ msgstr "te veel geneste #if-reeksen"
 
 #: ../../WINGs/menuparser.c:626 ../../WINGs/menuparser.c:643
 #, c-format
-msgid "found #%s but have no matching #if"
+msgid "found #%s but has no matching #if"
 msgstr "#%s gevonden, maar heeft geen bijbehorende #if"
 
 #: ../../WINGs/menuparser_macros.c:166
@@ -179,7 +179,7 @@ msgstr "te veel parameters voor bepaling macro \"%s\""
 #: ../../WINGs/menuparser_macros.c:209
 #, c-format
 msgid ""
-"invalid characted '%c' in arg-list for macro \"%s\" while expecting "
+"invalid character '%c' in arg-list for macro \"%s\" while expecting "
 "parameter name"
 msgstr ""
 "ongeldig letterteken '%c' in arg.-lijst voor macro \"%s\", verwachtte "
@@ -188,7 +188,7 @@ msgstr ""
 #: ../../WINGs/menuparser_macros.c:220
 #, c-format
 msgid ""
-"invalid characted '%c' in arg-list for macro \"%s\" while expecting ',' or "
+"invalid character '%c' in arg-list for macro \"%s\" while expecting ',' or "
 "')'"
 msgstr ""
 "ongeldig letterteken '%c' in arg.-lijst voor macro \"%s\", verwachtte ',' of "
@@ -402,29 +402,29 @@ msgstr "kan domeinbestand '%s' niet inlezen bij synchroniseren"
 #: ../../WINGs/dragcommon.c:60
 #, c-format
 msgid "unknown XDND action %s"
-msgstr "onbekende XDnD-actie %s"
+msgstr "onbekende XDND-actie %s"
 
 #: ../../WINGs/dragcommon.c:142
 #, c-format
-msgid "target %lu for xdnd message no longer exists"
-msgstr "doel %lu voor XDnD-bericht bestaat niet meer"
+msgid "target %lu for XDND message no longer exists"
+msgstr "doel %lu voor XDND-bericht bestaat niet meer"
 
 #: ../../WINGs/dragcommon.c:220
 #, c-format
-msgid "unsupported version %i for xdnd enter message"
-msgstr "niet-ondersteunde versie %i voor XDnD-bericht bij binnengaan"
+msgid "unsupported version %i for XDND enter message"
+msgstr "niet-ondersteunde versie %i voor XDND-bericht bij binnengaan"
 
 #: ../../WINGs/dragsource.c:163
 msgid "XDND selection lost during drag operation..."
-msgstr "XDnD-selectie verloren tijdens versleephandeling..."
+msgstr "XDND-selectie verloren tijdens versleephandeling..."
 
 #: ../../WINGs/dragsource.c:758
 msgid "could not get XDND version for target of drop"
-msgstr "kon XDnD-versie niet krijgen voor doel van verslepen"
+msgstr "kon XDND-versie niet krijgen voor doel van verslepen"
 
 #: ../../WINGs/dragsource.c:774
-msgid "could not get ownership or DND selection"
-msgstr "kon eigendom van XDnD-selectie niet krijgen"
+msgid "could not get ownership of XDND selection"
+msgstr "kon eigendom van XDND-selectie niet krijgen"
 
 #: ../../WINGs/dragsource.c:1070
 msgid "delay for drag destination response expired"
@@ -845,3 +845,32 @@ msgstr "Kon doelbestand \"%s\" niet aanmaken"
 
 msgid "An error occured browsing '%s'."
 msgstr "Er trad 'n fout op bij bladeren door '%s'."
+
+msgid ""
+"invalid characted '%c' in arg-list for macro \"%s\" while expecting "
+"parameter name"
+msgstr ""
+"ongeldig letterteken '%c' in arg.-lijst voor macro \"%s\", verwachtte "
+"parameternaam"
+
+msgid ""
+"invalid characted '%c' in arg-list for macro \"%s\" while expecting ',' or "
+"')'"
+msgstr ""
+"ongeldig letterteken '%c' in arg.-lijst voor macro \"%s\", verwachtte ',' of "
+"')'"
+
+msgid "unknow directive '#%s'"
+msgstr "onbekende aanwijzing '#%s'"
+
+msgid "found #%s but have no matching #if"
+msgstr "#%s gevonden, maar heeft geen bijbehorende #if"
+
+msgid "too many nested includes"
+msgstr "te veel geneste #include's"
+
+msgid "could not find file \"%s\" for include"
+msgstr "kon bestand \"%s\" niet vinden voor #include"
+
+msgid "too many nested macro expansion, breaking loop"
+msgstr "te veel geneste macro-uitwerkingen, cyclus afgebroken"
