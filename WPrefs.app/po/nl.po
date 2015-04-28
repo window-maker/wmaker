@@ -1,5 +1,5 @@
 # New translation into Dutch for Window Maker
-# Copyright (C) 2014 Window Maker Developers Team
+# Copyright (C) 2014-2015 Window Maker Developers Team
 # This file is distributed under the same license as the windowmaker package.
 # Original by Alwin <translations@ziggo.nl>, 2014.
 #
@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-12-21 21:25+0100\n"
-"PO-Revision-Date: 2014-12-22 00:00+0000\n"
+"POT-Creation-Date: 2015-04-27 19:02+0200\n"
+"PO-Revision-Date: 2015-04-27 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -164,6 +164,32 @@ msgstr "[Achtergrond]"
 #: ../../WPrefs.app/Appearance.c:411
 msgid "Workspace Background"
 msgstr "Werkruimteachtergrond"
+
+#: ../../WPrefs.app/Appearance.c:562 ../../WPrefs.app/TexturePanel.c:885
+#, c-format
+msgid "could not load file '%s': %s"
+msgstr "kon bestand '%s' niet laden: %s"
+
+#: ../../WPrefs.app/Appearance.c:565
+#, c-format
+msgid "could not find file '%s' for texture type %s"
+msgstr "kon bestand '%s' niet vinden voor textuurtype %s"
+
+#: ../../WPrefs.app/Appearance.c:613 ../../WPrefs.app/Appearance.c:639
+#: ../../WPrefs.app/Appearance.c:673
+#, c-format
+msgid "unknow direction in '%s', falling back to diagonal"
+msgstr "onbekende richting in '%s', valt terug op diagonaal"
+
+#: ../../WPrefs.app/Appearance.c:720
+#, c-format
+msgid "type '%s' in not a supported type for a texture"
+msgstr "type '%s' is geen ondersteund type voor 'n textuur"
+
+#: ../../WPrefs.app/Appearance.c:1088
+#, c-format
+msgid "could not remove file %s"
+msgstr "kon bestand %s niet verwijderen"
 
 #: ../../WPrefs.app/Appearance.c:1110
 msgid "Select File"
@@ -574,7 +600,6 @@ msgid "Enable keyboard language switch button in window titlebars."
 msgstr "Schakel toetsenbordtaalknop op venstertitelbalken in."
 
 #: ../../WPrefs.app/Expert.c:87
-# Recent msgid change on wmaker-dev list
 msgid "Maximize a window to side or corner by dragging."
 msgstr "Maximaliseer 'n venster tegen zijkant of hoek door verslepen."
 
@@ -608,7 +633,7 @@ msgstr ""
 "verkeerde optiewaarde %s voor optie ColormapMode. Gebruikt standaard Auto"
 
 #: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:160
-#: ../../WPrefs.app/Icons.c:362 ../../WPrefs.app/Preferences.c:120
+#: ../../WPrefs.app/Icons.c:384 ../../WPrefs.app/Preferences.c:120
 #: ../../WPrefs.app/WindowHandling.c:140 ../../WPrefs.app/WindowHandling.c:159
 #, c-format
 msgid "OFF"
@@ -624,7 +649,9 @@ msgstr "Handmatig:  Klik op 't venster om toetsenbordinvoerfocus te geven"
 
 #: ../../WPrefs.app/Focus.c:213
 msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
-msgstr "Vanzelf:  Geef toetsenbordinvoerfocus aan 't venster onder de muispijl"
+msgstr ""
+"Vanzelf:  Geef toetsenbord-\n"
+"invoerfocus aan 't venster onder de muispijl"
 
 #: ../../WPrefs.app/Focus.c:226
 msgid "Install colormap from the window..."
@@ -755,98 +782,78 @@ msgstr "Geen"
 msgid "bad value \"%s\" for option %s, using default \"%s\""
 msgstr "verkeerde waarde \"%s\" voor optie %s, gebruikt standaard \"%s\""
 
-#: ../../WPrefs.app/Icons.c:221
+#: ../../WPrefs.app/Icons.c:243
 #, c-format
 msgid "animation style \"%s\" is unknown, resetting to \"%s\""
 msgstr "animatiestijl \"%s\" is onbekend, teruggezet op \"%s\""
 
-#: ../../WPrefs.app/Icons.c:248
+#: ../../WPrefs.app/Icons.c:270
 msgid "Icon Positioning"
 msgstr "Icoonplaatsing"
 
-#: ../../WPrefs.app/Icons.c:327
+#: ../../WPrefs.app/Icons.c:349
 msgid "Icon Size"
 msgstr "Icoongrootte"
 
-#: ../../WPrefs.app/Icons.c:329
+#: ../../WPrefs.app/Icons.c:351
 msgid "The size of the dock/application icon and miniwindows"
 msgstr ""
 "De afmetingen van 't dok-/programma-icoon\n"
 "en minivensters"
 
-#: ../../WPrefs.app/Icons.c:346
-msgid "Miniwindow aperçus"
-msgstr "Miniaturen"
+#: ../../WPrefs.app/Icons.c:368
+msgid "Mini-Previews for Icons"
+msgstr "Miniaturen voor iconen"
 
-#: ../../WPrefs.app/Icons.c:348
+#: ../../WPrefs.app/Icons.c:370
 msgid ""
-"The Aperçu provides a small view of the content of the\n"
+"The Mini-Preview provides a small view of the content of the\n"
 "window when the mouse is placed over the icon."
 msgstr ""
 "De miniatuur biedt 'n kleine blik op de inhoud van 't\n"
-"minivenster, als de muis op 't icoon wordt geplaatst."
+"venster, als de muis op 't icoon wordt geplaatst."
 
-#: ../../WPrefs.app/Icons.c:370
+#: ../../WPrefs.app/Icons.c:392
 msgid "Iconification Animation"
 msgstr "Iconificeringsanimatie"
 
-#: ../../WPrefs.app/Icons.c:394
+#: ../../WPrefs.app/Icons.c:416
 msgid "Auto-arrange icons"
 msgstr "Iconen vanzelf schikken"
 
-#: ../../WPrefs.app/Icons.c:396
+#: ../../WPrefs.app/Icons.c:418
 msgid "Keep icons and miniwindows arranged all the time."
 msgstr "Houd iconen en minivensters altijd geschikt."
 
-#: ../../WPrefs.app/Icons.c:401
+#: ../../WPrefs.app/Icons.c:423
 msgid "Omnipresent miniwindows"
 msgstr "Alomtegenwoordige minivensters"
 
-#: ../../WPrefs.app/Icons.c:403
+#: ../../WPrefs.app/Icons.c:425
 msgid "Make miniwindows be present in all workspaces."
 msgstr "Maak minivensters aanwezig in alle werkruimten."
 
-#: ../../WPrefs.app/Icons.c:408
+#: ../../WPrefs.app/Icons.c:430
 msgid "Single click activation"
 msgstr "Enkelkliksactivering"
 
-#: ../../WPrefs.app/Icons.c:410
+#: ../../WPrefs.app/Icons.c:432
 msgid "Launch applications and restore windows with a single click."
 msgstr ""
 "Start programma's op, en herstel vensters met\n"
 "'n enkele klik."
 
-#: ../../WPrefs.app/Icons.c:462
+#: ../../WPrefs.app/Icons.c:484
 msgid "Icon Preferences"
 msgstr "Icoonvoorkeuren"
 
-#: ../../WPrefs.app/Icons.c:464
+#: ../../WPrefs.app/Icons.c:486
 msgid ""
 "Icon/Miniwindow handling options. Icon positioning\n"
 "area, sizes of icons, miniaturization animation style."
 msgstr ""
 "Icoon-/minivenster-behandelingsopties. Plaatsingsgebied\n"
 "en afmetingen van iconen, animatiestijl bij miniaturiseren."
-
-#: ../../WPrefs.app/KeyboardSettings.c:68
-msgid "Initial Key Repeat"
-msgstr "Initiële toetsherhaling"
-
-#: ../../WPrefs.app/KeyboardSettings.c:109
-msgid "Key Repeat Rate"
-msgstr "Toetsherhaalsnelheid"
-
-#: ../../WPrefs.app/KeyboardSettings.c:149
-msgid "Type here to test"
-msgstr "Typ hier om te testen"
-
-#: ../../WPrefs.app/KeyboardSettings.c:164
-msgid "Keyboard Preferences"
-msgstr "Toetsenbordvoorkeuren"
-
-#: ../../WPrefs.app/KeyboardSettings.c:166
-msgid "Not done"
-msgstr "Niet klaar"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:72
 msgid "Open applications menu"
@@ -1325,7 +1332,7 @@ msgstr "RedHat-menu"
 msgid "Menu Conectiva"
 msgstr "Conectiva-menu"
 
-#: ../../WPrefs.app/Menu.c:517 ../../WPrefs.app/Themes.c:211
+#: ../../WPrefs.app/Menu.c:517
 msgid "Themes"
 msgstr "Thema's"
 
@@ -1609,11 +1616,11 @@ msgstr "Waarschuwing"
 #: ../../WPrefs.app/Menu.c:1442 ../../WPrefs.app/Menu.c:1475
 #: ../../WPrefs.app/MouseSettings.c:156 ../../WPrefs.app/MouseSettings.c:176
 #: ../../WPrefs.app/TexturePanel.c:583 ../../WPrefs.app/TexturePanel.c:661
-#: ../../WPrefs.app/TexturePanel.c:1419 ../../WPrefs.app/Themes.c:84
-#: ../../WPrefs.app/WPrefs.c:617 ../../WPrefs.app/WPrefs.c:621
-#: ../../WPrefs.app/WPrefs.c:641 ../../WPrefs.app/WPrefs.c:653
-#: ../../WPrefs.app/WPrefs.c:659 ../../WPrefs.app/WPrefs.c:668
-#: ../../WPrefs.app/WPrefs.c:699 ../../WPrefs.app/WPrefs.c:703
+#: ../../WPrefs.app/TexturePanel.c:1419 ../../WPrefs.app/WPrefs.c:617
+#: ../../WPrefs.app/WPrefs.c:621 ../../WPrefs.app/WPrefs.c:641
+#: ../../WPrefs.app/WPrefs.c:653 ../../WPrefs.app/WPrefs.c:659
+#: ../../WPrefs.app/WPrefs.c:668 ../../WPrefs.app/WPrefs.c:699
+#: ../../WPrefs.app/WPrefs.c:703
 msgid "OK"
 msgstr "OK"
 
@@ -1624,11 +1631,10 @@ msgstr "Kon standaardmenu niet openen uit '%s'"
 
 #: ../../WPrefs.app/Menu.c:1475 ../../WPrefs.app/MouseSettings.c:154
 #: ../../WPrefs.app/MouseSettings.c:173 ../../WPrefs.app/TexturePanel.c:583
-#: ../../WPrefs.app/TexturePanel.c:659 ../../WPrefs.app/Themes.c:83
-#: ../../WPrefs.app/WPrefs.c:617 ../../WPrefs.app/WPrefs.c:621
-#: ../../WPrefs.app/WPrefs.c:638 ../../WPrefs.app/WPrefs.c:649
-#: ../../WPrefs.app/WPrefs.c:659 ../../WPrefs.app/WPrefs.c:699
-#: ../../WPrefs.app/WPrefs.c:703
+#: ../../WPrefs.app/TexturePanel.c:659 ../../WPrefs.app/WPrefs.c:617
+#: ../../WPrefs.app/WPrefs.c:621 ../../WPrefs.app/WPrefs.c:638
+#: ../../WPrefs.app/WPrefs.c:649 ../../WPrefs.app/WPrefs.c:659
+#: ../../WPrefs.app/WPrefs.c:699 ../../WPrefs.app/WPrefs.c:703
 msgid "Error"
 msgstr "Fout"
 
@@ -2094,11 +2100,6 @@ msgstr "Open afbeelding"
 msgid "The selected file does not contain a supported image."
 msgstr "'t Geselecteerde bestand bevat geen ondersteunde afbeelding."
 
-#: ../../WPrefs.app/TexturePanel.c:885
-#, c-format
-msgid "could not load file '%s': %s"
-msgstr "kon bestand '%s' niet laden: %s"
-
 #: ../../WPrefs.app/TexturePanel.c:999
 #, c-format
 msgid "error creating texture %s"
@@ -2172,42 +2173,13 @@ msgstr "Schalen"
 msgid "Maximize"
 msgstr "Maximaliseren"
 
-#: ../../WPrefs.app/Themes.c:63 ../../WPrefs.app/Themes.c:71
-msgid "Set"
-msgstr "Instellen"
-
-#: ../../WPrefs.app/Themes.c:114
-msgid "Stop"
-msgstr "Stop"
-
-#: ../../WPrefs.app/Themes.c:125 ../../WPrefs.app/Themes.c:170
-#: ../../WPrefs.app/Themes.c:190
-msgid "Download"
-msgstr "Downloaden"
-
-#: ../../WPrefs.app/Themes.c:139
-msgid "Save Current Theme"
-msgstr "Huidig thema opslaan"
-
-#: ../../WPrefs.app/Themes.c:148
-msgid "Load"
-msgstr "Laden"
-
-#: ../../WPrefs.app/Themes.c:153
-msgid "Install"
-msgstr "Installeren"
-
-#: ../../WPrefs.app/Themes.c:160
-msgid "Tile of The Day"
-msgstr "Tegel van de dag"
-
-#: ../../WPrefs.app/Themes.c:180
-msgid "Bar of The Day"
-msgstr "Balk van de dag"
-
 #: ../../WPrefs.app/WPrefs.c:212 ../../WPrefs.app/WPrefs.c:282
 msgid "Window Maker Preferences"
 msgstr "Window Maker-voorkeuren"
+
+#: ../../WPrefs.app/WPrefs.c:216
+msgid "Preferences"
+msgstr "Voorkeuren"
 
 #: ../../WPrefs.app/WPrefs.c:235
 msgid "Revert Page"
@@ -2581,9 +2553,70 @@ msgstr "kon scherm %s niet openen"
 msgid "could not initialize application"
 msgstr "kon programma niet initialiseren"
 
-# Patch sent to wmaker-dev list
-msgid "Preferences"
-msgstr "Voorkeuren"
+#: ../../WPrefs.app/xmodifier.c:125
+#, c-format
+msgid "%s (0x%x) generates %s which is generated by %s"
+msgstr "%s (0x%x) genereert %s die door %s wordt gegenereerd"
+
+#: ../../WPrefs.app/xmodifier.c:129 ../../WPrefs.app/xmodifier.c:134
+#, c-format
+msgid "%s (0x%x) generates %s which is nonsensical"
+msgstr "%s (0x%x) genereert %s, wat onzinnig is"
+
+#: ../../WPrefs.app/xmodifier.c:139
+#, c-format
+msgid "%s (0x%x) generates both %s and %s which is nonsensical"
+msgstr "%s (0x%x) genereert zowel %s als %s, wat onzinnig is"
+
+#: ../../WPrefs.app/xmodifier.c:160
+msgid "XGetModifierMapping returned NULL, there is no modifiers or no memory"
+msgstr ""
+
+#: ../../WPrefs.app/xmodifier.c:268
+#, c-format
+msgid "%s is being used for both %s and %s"
+msgstr "%s wordt voor zowel %s als %s gebruikt"
+
+# Keep next entries for KeyboardSettings.c
+#~ msgid "Initial Key Repeat"
+#~ msgstr "Initiële toetsherhaling"
+
+#~ msgid "Key Repeat Rate"
+#~ msgstr "Toetsherhaalsnelheid"
+
+#~ msgid "Type here to test"
+#~ msgstr "Typ hier om te testen"
+
+#~ msgid "Keyboard Preferences"
+#~ msgstr "Toetsenbordvoorkeuren"
+
+#~ msgid "Not done"
+#~ msgstr "Niet klaar"
+
+# Keep next entries for Themes.c
+#~ msgid "Set"
+#~ msgstr "Instellen"
+
+#~ msgid "Stop"
+#~ msgstr "Stop"
+
+#~ msgid "Download"
+#~ msgstr "Downloaden"
+
+#~ msgid "Save Current Theme"
+#~ msgstr "Huidig thema opslaan"
+
+#~ msgid "Load"
+#~ msgstr "Laden"
+
+#~ msgid "Install"
+#~ msgstr "Installeren"
+
+#~ msgid "Tile of The Day"
+#~ msgstr "Tegel van de dag"
+
+#~ msgid "Bar of The Day"
+#~ msgstr "Balk van de dag"
 
 # Keep next entries for wmaker-0.95.6
 msgid "Open dialogs in the same workspace as their owners"
@@ -2601,7 +2634,8 @@ msgstr "Handmatig:  Klik op 't venster om toetsenbordinvoerfocus te geven"
 msgid ""
 "Auto:  Set keyboard input focus to the window under the mouse pointer."
 msgstr ""
-"Vanzelf:  Geef toetsenbordinvoerfocus aan 't venster onder de muispijl"
+"Vanzelf:  Geef toetsenbord-\n"
+"invoerfocus aan 't venster onder de muispijl"
 
 msgid "Install colormap in the window..."
 msgstr "Installeer kleurenkaart uit 't venster..."
@@ -2662,3 +2696,6 @@ msgstr "Vanzelf nieuwe werkruimten aanmaken"
 
 msgid "miniwindow apercus"
 msgstr "miniaturen"
+
+msgid "Yes, don't ask again."
+msgstr "Ja, vraag niet weer"
