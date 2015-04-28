@@ -157,7 +157,7 @@ static void x_reset_modifier_mapping(Display * display)
 
 	x_modifier_keymap = XGetModifierMapping(display);
 	if (x_modifier_keymap == NULL) {
-		wwarning(_("XGetModifierMapping returned NULL, there is no modifiers or no memory"));
+		wwarning(_("XGetModifierMapping returned NULL, there is no modifier or no memory"));
 		return;
 	}
 

@@ -178,12 +178,12 @@ msgstr "kon bestand '%s' niet vinden voor textuurtype %s"
 #: ../../WPrefs.app/Appearance.c:613 ../../WPrefs.app/Appearance.c:639
 #: ../../WPrefs.app/Appearance.c:673
 #, c-format
-msgid "unknow direction in '%s', falling back to diagonal"
+msgid "unknown direction in '%s', falling back to diagonal"
 msgstr "onbekende richting in '%s', valt terug op diagonaal"
 
 #: ../../WPrefs.app/Appearance.c:720
 #, c-format
-msgid "type '%s' in not a supported type for a texture"
+msgid "type '%s' is not a supported type for a texture"
 msgstr "type '%s' is geen ondersteund type voor 'n textuur"
 
 #: ../../WPrefs.app/Appearance.c:1088
@@ -2569,7 +2569,7 @@ msgid "%s (0x%x) generates both %s and %s which is nonsensical"
 msgstr "%s (0x%x) genereert zowel %s als %s, wat onzinnig is"
 
 #: ../../WPrefs.app/xmodifier.c:160
-msgid "XGetModifierMapping returned NULL, there is no modifiers or no memory"
+msgid "XGetModifierMapping returned NULL, there is no modifier or no memory"
 msgstr ""
 
 #: ../../WPrefs.app/xmodifier.c:268
