@@ -106,10 +106,18 @@ enum
 {
 	WO_KEEP_ON_TOP,
 	WO_KEEP_AT_BOTTOM,
-	WO_OMNIPRESENT,
-	WO_ENTRIES
+	WO_OMNIPRESENT
 };
 
+static const char *const menu_options_entries[] = {
+	[WO_KEEP_ON_TOP]    = N_("Keep on top"),
+	[WO_KEEP_AT_BOTTOM] = N_("Keep at bottom"),
+	[WO_OMNIPRESENT]    = N_("Omnipresent")
+};
+
+/*
+ * Defines the menu entries for the Other maximization sub-menu
+ */
 static const struct {
 	const char *label;
 	unsigned int shortcut_idx;
@@ -320,7 +328,7 @@ static void makeShortcutCommand(WMenu * menu, WMenuEntry * entry)
 {
 	WWindow *wwin = (WWindow *) entry->clientdata;
 	WScreen *scr = wwin->screen_ptr;
-	int index = entry->order - WO_ENTRIES;
+	int index = entry->order - wlengthof(menu_options_entries);
 
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) menu;
@@ -400,8 +408,8 @@ static void updateMakeShortcutMenu(WMenu * menu, WWindow * wwin)
 	buflen = strlen(_("Set Shortcut")) + 16;
 	buffer = wmalloc(buflen);
 
-	for (i = WO_ENTRIES; i < smenu->entry_no; i++) {
-		int shortcutNo = i - WO_ENTRIES;
+	for (i = wlengthof(menu_options_entries); i < smenu->entry_no; i++) {
+		int shortcutNo = i - wlengthof(menu_options_entries);
 		WMenuEntry *entry = smenu->entries[i];
 		WMArray *shortSelWindows = wwin->screen_ptr->shortcutWindows[shortcutNo];
 
@@ -538,17 +546,11 @@ static WMenu *makeOptionsMenu(WScreen * scr)
 		return NULL;
 	}
 
-	entry = wMenuAddCallback(menu, _("Keep on top"), execWindowOptionCommand, NULL);
-	entry->flags.indicator = 1;
-	entry->flags.indicator_type = MI_CHECK;
-
-	entry = wMenuAddCallback(menu, _("Keep at bottom"), execWindowOptionCommand, NULL);
-	entry->flags.indicator = 1;
-	entry->flags.indicator_type = MI_CHECK;
-
-	entry = wMenuAddCallback(menu, _("Omnipresent"), execWindowOptionCommand, NULL);
-	entry->flags.indicator = 1;
-	entry->flags.indicator_type = MI_CHECK;
+	for (i = 0; i < wlengthof(menu_options_entries); i++) {
+		entry = wMenuAddCallback(menu, _(menu_options_entries[i]), execWindowOptionCommand, NULL);
+		entry->flags.indicator = 1;
+		entry->flags.indicator_type = MI_CHECK;
+	}
 
 	for (i = 0; i < MAX_WINDOW_SHORTCUTS; i++) {
 		entry = wMenuAddCallback(menu, "", makeShortcutCommand, NULL);
