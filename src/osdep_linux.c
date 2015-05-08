@@ -38,7 +38,8 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 	while (1) {
 		/* not switching this to stdio yet, as this does not need
 		 * to be portable, and i'm lazy */
-		if ((fd = open(buf, O_RDONLY)) != -1)
+		fd = open(buf, O_RDONLY);
+		if (fd != -1)
 			break;
 		if (errno == EINTR)
 			continue;
@@ -46,7 +47,8 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 	}
 
 	while (1) {
-		if ((count = read(fd, buf, sizeof(buf))) != -1)
+		count = read(fd, buf, sizeof(buf));
+		if (count != -1)
 			break;
 		if (errno == EINTR)
 			continue;

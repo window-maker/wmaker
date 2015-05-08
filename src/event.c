@@ -582,7 +582,8 @@ static void handleMapRequest(XEvent * ev)
 	WScreen *scr = NULL;
 	Window window = ev->xmaprequest.window;
 
-	if ((wwin = wWindowFor(window))) {
+	wwin = wWindowFor(window);
+	if (wwin != NULL) {
 		if (wwin->flags.shaded) {
 			wUnshadeWindow(wwin);
 		}
@@ -931,7 +932,8 @@ static void handleConfigureRequest(XEvent * event)
 {
 	WWindow *wwin;
 
-	if (!(wwin = wWindowFor(event->xconfigurerequest.window))) {
+	wwin = wWindowFor(event->xconfigurerequest.window);
+	if (wwin == NULL) {
 		/*
 		 * Configure request for unmapped window
 		 */

@@ -102,17 +102,20 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 
 #if defined( OPENBSD )
 	/* kvm descriptor */
-	if ((kd = kvm_openfiles(NULL, NULL, NULL, KVM_NO_FILES, kvmerr)) == NULL)
+	kd = kvm_openfiles(NULL, NULL, NULL, KVM_NO_FILES, kvmerr);
+	if (kd == NULL)
 		return False;
 
 	procs = 0;
 	/* the process we are interested in */
-	if ((kp = kvm_getprocs(kd, KERN_PROC_PID, pid, sizeof(*kp), &procs)) == NULL || procs == 0)
+	kp = kvm_getprocs(kd, KERN_PROC_PID, pid, sizeof(*kp), &procs);
+	if (kp == NULL || procs == 0)
 		/* if kvm_getprocs() bombs out or does not find the process */
 		return False;
 
 	/* get its argv */
-	if ((nargv = kvm_getargv(kd, kp, 0)) == NULL)
+	nargv = kvm_getargv(kd, kp, 0);
+	if (nargv == NULL)
 		return False;
 
 	/* flatten nargv into args */

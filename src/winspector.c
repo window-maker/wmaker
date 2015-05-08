@@ -376,7 +376,8 @@ static int getBool(WMPropList *value)
 	if (!WMIsPLString(value))
 		return 0;
 
-	if (!(val = WMGetFromPLString(value)))
+	val = WMGetFromPLString(value);
+	if (val == NULL)
 		return 0;
 
 	if ((val[1] == '\0' &&
@@ -407,7 +408,8 @@ insertAttribute(WMPropList *dict, WMPropList *window, WMPropList *attr, WMPropLi
 	int update = 0, modified = 0;
 
 	if (!(flags & UPDATE_DEFAULTS) && dict) {
-		if ((def_win = WMGetFromPLDictionary(dict, AnyWindow)) != NULL)
+		def_win = WMGetFromPLDictionary(dict, AnyWindow);
+		if (def_win != NULL)
 			def_value = WMGetFromPLDictionary(def_win, attr);
 	}
 

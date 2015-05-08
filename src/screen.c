@@ -841,16 +841,16 @@ void wScreenSaveState(WScreen * scr)
 	if (!wPreferences.flags.nodock) {
 		wDockSaveState(scr, old_state);
 	} else {
-		if ((foo = WMGetFromPLDictionary(old_state, dDock)) != NULL) {
+		foo = WMGetFromPLDictionary(old_state, dDock);
+		if (foo != NULL)
 			WMPutInPLDictionary(scr->session_state, dDock, foo);
-		}
 	}
 	if (!wPreferences.flags.noclip) {
 		wClipSaveState(scr);
 	} else {
-		if ((foo = WMGetFromPLDictionary(old_state, dClip)) != NULL) {
+		foo = WMGetFromPLDictionary(old_state, dClip);
+		if (foo != NULL)
 			WMPutInPLDictionary(scr->session_state, dClip, foo);
-		}
 	}
 
 	wWorkspaceSaveState(scr, old_state);
@@ -858,21 +858,22 @@ void wScreenSaveState(WScreen * scr)
 	if (!wPreferences.flags.nodrawer) {
 		wDrawersSaveState(scr);
 	} else {
-		if ((foo = WMGetFromPLDictionary(old_state, dDrawers)) != NULL) {
+		foo = WMGetFromPLDictionary(old_state, dDrawers);
+		if (foo != NULL)
 			WMPutInPLDictionary(scr->session_state, dDrawers, foo);
-		}
 	}
 
 
 	if (wPreferences.save_session_on_exit) {
 		wSessionSaveState(scr);
 	} else {
-		if ((foo = WMGetFromPLDictionary(old_state, dApplications)) != NULL) {
+		foo = WMGetFromPLDictionary(old_state, dApplications);
+		if (foo != NULL)
 			WMPutInPLDictionary(scr->session_state, dApplications, foo);
-		}
-		if ((foo = WMGetFromPLDictionary(old_state, dWorkspace)) != NULL) {
+
+		foo = WMGetFromPLDictionary(old_state, dWorkspace);
+		if (foo != NULL)
 			WMPutInPLDictionary(scr->session_state, dWorkspace, foo);
-		}
 	}
 
 	/* clean up */

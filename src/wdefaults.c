@@ -568,14 +568,16 @@ void wDefaultChangeIcon(const char *instance, const char *class, const char *fil
 		icon_value = WMCreatePLDictionary(AIcon, value, NULL);
 		WMReleasePropList(value);
 
-		if ((def_win = WMGetFromPLDictionary(dict, AnyWindow)) != NULL)
+		def_win = WMGetFromPLDictionary(dict, AnyWindow);
+		if (def_win != NULL)
 			def_icon = WMGetFromPLDictionary(def_win, AIcon);
 
 		if (def_icon && !strcmp(WMGetFromPLString(def_icon), file))
 			same = 1;
 	}
 
-	if ((attr = WMGetFromPLDictionary(dict, key)) != NULL) {
+	attr = WMGetFromPLDictionary(dict, key);
+	if (attr != NULL) {
 		if (WMIsPLDictionary(attr)) {
 			if (icon_value != NULL && !same)
 				WMMergePLDictionaries(attr, icon_value, False);

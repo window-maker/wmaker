@@ -103,7 +103,8 @@ int MonitorLoop(int argc, char **argv)
 		}
 
 		do {
-			if ((exited = waitpid(-1, &status, 0)) < 0) {
+			exited = waitpid(-1, &status, 0);
+			if (exited < 0) {
 				werror(_("Error during monitoring of Window Maker process."));
 				error = True;
 				break;

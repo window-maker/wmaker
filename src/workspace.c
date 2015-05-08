@@ -492,7 +492,8 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 
 	wWorkspaceMenuUpdate(scr, scr->clip_ws_menu);
 
-	if ((tmp = scr->focused_window) != NULL) {
+	tmp = scr->focused_window;
+	if (tmp != NULL) {
 		WWindow **toUnmap;
 		int toUnmapSize, toUnmapCount;
 
@@ -856,10 +857,11 @@ void wWorkspaceSaveState(WScreen * scr, WMPropList * old_state)
 			WMPutInPLDictionary(wks_state, dClip, pstr);
 			WMReleasePropList(pstr);
 		} else if (old_wks_state != NULL) {
-			if ((foo = WMGetFromPLArray(old_wks_state, i)) != NULL) {
-				if ((bar = WMGetFromPLDictionary(foo, dClip)) != NULL) {
+			foo = WMGetFromPLArray(old_wks_state, i);
+			if (foo != NULL) {
+				bar = WMGetFromPLDictionary(foo, dClip);
+				if (bar != NULL)
 					WMPutInPLDictionary(wks_state, dClip, bar);
-				}
 			}
 		}
 		WMAddToPLArray(parr, wks_state);

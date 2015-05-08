@@ -128,9 +128,9 @@ static int getBool(WMPropList * value)
 	if (!WMIsPLString(value)) {
 		return 0;
 	}
-	if (!(val = WMGetFromPLString(value))) {
+	val = WMGetFromPLString(value);
+	if (val == NULL)
 		return 0;
-	}
 
 	if ((val[1] == '\0' && (val[0] == 'y' || val[0] == 'Y'))
 	    || strcasecmp(val, "YES") == 0) {
@@ -299,7 +299,8 @@ void wSessionSaveState(WScreen * scr)
 			|| WFLAGP(wwin, shared_appicon))
 		    && !WFLAGP(wwin, dont_save_session)) {
 			/* A entry for this application was not yet saved. Save one. */
-			if ((win_info = makeWindowState(wwin, wapp)) != NULL) {
+			win_info = makeWindowState(wwin, wapp);
+			if (win_info != NULL) {
 				WMAddToPLArray(list, win_info);
 				WMReleasePropList(win_info);
 				/* If we were succesful in saving the info for this window
@@ -346,7 +347,8 @@ static pid_t execCommand(WScreen *scr, char *command)
 		return 0;
 	}
 
-	if ((pid = fork()) == 0) {
+	pid = fork();
+	if (pid == 0) {
 		char **args;
 		int i;
 
@@ -392,13 +394,21 @@ static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
 			state->workspace--;
 		}
 	}
-	if ((value = WMGetFromPLDictionary(win_state, sShaded)) != NULL)
+
+	value = WMGetFromPLDictionary(win_state, sShaded);
+	if (value != NULL)
 		state->shaded = getBool(value);
-	if ((value = WMGetFromPLDictionary(win_state, sMiniaturized)) != NULL)
+
+	value = WMGetFromPLDictionary(win_state, sMiniaturized);
+	if (value != NULL)
 		state->miniaturized = getBool(value);
-	if ((value = WMGetFromPLDictionary(win_state, sHidden)) != NULL)
+
+	value = WMGetFromPLDictionary(win_state, sHidden);
+	if (value != NULL)
 		state->hidden = getBool(value);
-	if ((value = WMGetFromPLDictionary(win_state, sShortcutMask)) != NULL) {
+
+	value = WMGetFromPLDictionary(win_state, sShortcutMask);
+	if (value != NULL) {
 		mask = getInt(value);
 		state->window_shortcuts = mask;
 	}

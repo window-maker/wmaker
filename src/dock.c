@@ -1530,7 +1530,8 @@ static WMPropList *dockSaveState(WDock *dock)
 		if (!btn || btn->attracted)
 			continue;
 
-		if ((icon_info = make_icon_state(dock->icon_array[i]))) {
+		icon_info = make_icon_state(dock->icon_array[i]);
+		if (icon_info != NULL) {
 			WMAddToPLArray(list, icon_info);
 			WMReleasePropList(icon_info);
 		}
@@ -2042,7 +2043,9 @@ static WDock *findDock(WScreen *scr, XEvent *event, int *icon_pos)
 	int i;
 
 	*icon_pos = -1;
-	if ((dock = scr->dock) != NULL) {
+
+	dock = scr->dock;
+	if (dock != NULL) {
 		for (i = 0; i < dock->max_icons; i++) {
 			if (dock->icon_array[i]
 			    && dock->icon_array[i]->icon->core->window == event->xclient.window) {
@@ -2669,7 +2672,8 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 		 * it wants to be (ex_x) and slide them. */
 		j = 0;
 		for (i = 1; i < dock->max_icons; i++) {
-			if ((aicon = dock->icon_array[ i ]) && aicon != icon &&
+			aicon = dock->icon_array[i];
+			if ((aicon != NULL) && (aicon != icon) &&
 				((ex_x <= aicon->xindex && aicon->xindex < index_of_hole) ||
 					(index_of_hole < aicon->xindex && aicon->xindex <= ex_x)))
 				aicons_to_shift[ j++ ] = aicon;
@@ -3048,7 +3052,8 @@ static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state)
 		return 0;
 	}
 
-	if ((pid = fork()) == 0) {
+	pid = fork();
+	if (pid == 0) {
 		char **args;
 		int i;
 
@@ -3752,7 +3757,9 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				{
 					for (i = 0; i < dock->max_icons; i++) {
 						int new_y, new_index, j, ok;
-						if ((tmpaicon = dock->icon_array[i]) == NULL)
+
+						tmpaicon = dock->icon_array[i];
+						if (tmpaicon == NULL)
 							continue;
 						if (onScreen(scr, tmpaicon->x_pos, tmpaicon->y_pos))
 							continue;
@@ -3830,7 +3837,8 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				Window *wins[dock->icon_count];
 
 				for (i = 0; i < dock->max_icons; i++) {
-					if ((tmpaicon = dock->icon_array[i]) == NULL)
+					tmpaicon = dock->icon_array[i];
+					if (tmpaicon == NULL)
 						continue;
 					wins[ tmpaicon->xindex + (dock->on_right_side ? dock->icon_count - 1 : 0) ] = &tmpaicon->icon->core->window;
 				}
@@ -4420,7 +4428,8 @@ static void drawerDestroy(WDock *drawer)
 	if (drawer->icon_count == 2) {
 		/* Drawer contains a single appicon: dock it where the drawer was */
 		for (i = 1; i < drawer->max_icons; i++) {
-			if ((aicon = drawer->icon_array[i]))
+			aicon = drawer->icon_array[i];
+			if (aicon != NULL)
 				break;
 		}
 
@@ -4431,7 +4440,8 @@ static void drawerDestroy(WDock *drawer)
 	} else if (drawer->icon_count > 2) {
 		icons = WMCreateArray(drawer->icon_count - 1);
 		for (i = 1; i < drawer->max_icons; i++) {
-			if (!(aicon = drawer->icon_array[i]))
+			aicon = drawer->icon_array[i];
+			if (aicon == NULL)
 				continue;
 			WMAddToArray(icons, aicon);
 		}
@@ -4559,7 +4569,9 @@ static void swapDrawer(WDock *drawer, int new_x)
 
 	for (i = 0; i < drawer->max_icons; i++) {
 		WAppIcon *ai;
-		if ((ai = drawer->icon_array[i]) == NULL)
+
+		ai = drawer->icon_array[i];
+		if (ai == NULL)
 			continue;
 		ai->xindex *= -1; /* so A B C becomes C B A */
 		ai->x_pos = new_x + ai->xindex * ICON_SIZE;
