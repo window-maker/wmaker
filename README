@@ -201,7 +201,8 @@ while keeping a nice appearance and good functionality, follow the items bellow:
 - edit wconfig.h and disable the NUMLOCK_HACK and the features you don't use
   anyway (keep in mind that some of the #defines might not work, as they are not
   fully supported). Make sure to always keep NumLock and ScrollLock turned off.
-- turn on DisableAnimations. You can also #undefine ANIMATIONS in wconfig.h
+- turn on DisableAnimations. You can also specify --disable-animation at compile
+  time to the configure script.
 - strip down the default IconPath and PixmapPath entries to contain only 
   the paths that you really have in your system. 
 - do not use large images in the root background

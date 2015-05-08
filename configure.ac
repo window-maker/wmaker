@@ -289,6 +289,18 @@ AC_ARG_WITH(incs-from, AS_HELP_STRING([--with-incs-from], [pass compiler flags t
 
 dnl Features Configuration
 dnl ======================
+AC_ARG_ENABLE([animations],
+    [AS_HELP_STRING([--disable-animations], [disable permanently animations @<:@default=enabled@:>@])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-animations])])],
+    [enable_animations="yes"])
+AS_IF([test "x$enable_animations" = "xno"],
+    [unsupported="$unsupported Animations"],
+    [AC_DEFINE([USE_ANIMATIONS], [1], [Defined when user did not request to disable animations])
+     supported_core="$supported_core Animations"])
+
+
 AC_ARG_ENABLE([mwm-hints],
     [AS_HELP_STRING([--disable-mwm-hints], [disable support for Motif WM hints @<:@default=enabled@:>@])],
     [AS_CASE(["$enableval"],

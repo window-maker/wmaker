@@ -566,6 +566,10 @@ screen size.
 @subsection Feature Selection
 
 @table @option
+@item --disable-animations
+Disable animations permanently, by not compiling the corresponding code into @sc{Window Maker}.
+When enabled (the default), you still have a run-time configuration option in @emph{WPrefs}.
+
 @item --disable-mwm-hints
 Disable support for Motif's MWM Window Manager hints.
 These attributes were introduced by the Motif toolkit to ask for special window appearance requests.
