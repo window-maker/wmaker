@@ -66,7 +66,7 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen *scr, const char *file_name);
 static WMenu *readMenuDirectory(WScreen *scr, const char *title, char **file_name, const char *command);
-static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals);
+static WMenu *configureMenu(WScreen *scr, WMPropList *definition);
 static void menu_parser_register_macros(WMenuParser parser);
 
 typedef struct Shortcut {
@@ -602,7 +602,7 @@ static WMenu *constructPLMenu(WScreen *screen, const char *path)
 	if (!pl)
 		return NULL;
 
-	menu = configureMenu(screen, pl, False);
+	menu = configureMenu(screen, pl);
 
 	WMReleasePropList(pl);
 
@@ -1147,7 +1147,7 @@ static WMenu *readPLMenuPipe(WScreen * scr, char **file_name)
 	if (!plist)
 		return NULL;
 
-	menu = configureMenu(scr, plist, False);
+	menu = configureMenu(scr, plist);
 
 	WMReleasePropList(plist);
 
@@ -1462,7 +1462,7 @@ static WMenu *makeDefaultMenu(WScreen * scr)
  *
  *----------------------------------------------------------------------
  */
-static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool includeGlobals)
+static WMenu *configureMenu(WScreen *scr, WMPropList *definition)
 {
 	WMenu *menu = NULL;
 	WMPropList *elem;
@@ -1540,23 +1540,6 @@ static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool include
 	menu = wMenuCreate(scr, M_(mtitle), False);
 	menu->on_destroy = removeShortcutsForMenu;
 
-#ifdef GLOBAL_SUBMENU_FILE
-	if (includeGlobals) {
-		WMenu *submenu;
-		WMenuEntry *mentry;
-
-		submenu = readMenuFile(scr, GLOBAL_SUBMENU_FILE);
-
-		if (submenu) {
-			mentry = wMenuAddCallback(menu, submenu->frame->title, NULL, NULL);
-			wMenuEntrySetCascade(menu, mentry, submenu);
-		}
-	}
-#else
-	/* Parameter not used, but tell the compiler that it is ok */
-	(void) includeGlobals;
-#endif
-
 	for (i = 1; i < count; i++) {
 		elem = WMGetFromPLArray(definition, i);
 #if 0
@@ -1575,7 +1558,7 @@ static WMenu *configureMenu(WScreen * scr, WMPropList * definition, Bool include
 			WMenuEntry *mentry;
 
 			/* submenu */
-			submenu = configureMenu(scr, elem, True);
+			submenu = configureMenu(scr, elem);
 			if (submenu) {
 				mentry = wMenuAddCallback(menu, submenu->frame->title, NULL, NULL);
 				wMenuEntrySetCascade(menu, mentry, submenu);
@@ -1670,14 +1653,14 @@ void OpenRootMenu(WScreen * scr, int x, int y, int keyboard)
 	if (definition) {
 		if (WMIsPLArray(definition)) {
 			if (!scr->root_menu || w_global.domain.root_menu->timestamp > scr->root_menu->timestamp) {
-				menu = configureMenu(scr, definition, True);
+				menu = configureMenu(scr, definition);
 				if (menu)
 					menu->timestamp = w_global.domain.root_menu->timestamp;
 
 			} else
 				menu = NULL;
 		} else {
-			menu = configureMenu(scr, definition, True);
+			menu = configureMenu(scr, definition);
 		}
 	}
 
