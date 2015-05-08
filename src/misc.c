@@ -148,6 +148,10 @@ void move_window(Window win, int from_x, int from_y, int to_x, int to_y)
 		SlideWindow(win, from_x, from_y, to_x, to_y);
 #else
 	XMoveWindow(dpy, win, to_x, to_y);
+
+	/* Tell the compiler it is normal that those parameters are not used in this case */
+	(void) from_x;
+	(void) from_y;
 #endif
 }
 

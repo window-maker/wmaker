@@ -57,6 +57,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 static void save_old_geometry(WWindow *wwin, int directions);
 
 /******* Local Variables *******/
+#ifdef USE_ANIMATIONS
 static struct {
 	int steps;
 	int delay;
@@ -68,10 +69,12 @@ static struct {
 	{ SHADE_STEPS_US, SHADE_DELAY_US }
 };
 
-#define UNSHADE         0
-#define SHADE           1
 #define SHADE_STEPS	shadePars[(int)wPreferences.shade_speed].steps
 #define SHADE_DELAY	shadePars[(int)wPreferences.shade_speed].delay
+#endif
+
+#define UNSHADE         0
+#define SHADE           1
 
 static int compareTimes(Time t1, Time t2)
 {
@@ -1061,6 +1064,7 @@ static WWindow *recursiveTransientFor(WWindow *wwin)
 	return wwin;
 }
 
+#ifdef USE_ANIMATIONS
 static int getAnimationGeometry(WWindow *wwin, int *ix, int *iy, int *iw, int *ih)
 {
 	if (wwin->screen_ptr->flags.startup || wPreferences.no_animations
@@ -1087,6 +1091,7 @@ static int getAnimationGeometry(WWindow *wwin, int *ix, int *iy, int *iw, int *i
 	}
 	return 1;
 }
+#endif	/* USE_ANIMATIONS */
 
 void wIconifyWindow(WWindow *wwin)
 {
@@ -1397,6 +1402,11 @@ static void hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int a
 			      wwin->frame->core->width, wwin->frame->core->height,
 			      icon_x, icon_y, icon->core->width, icon->core->height);
 	}
+#else
+	/* Tell the compiler it is normal that those parameters are not used in this case */
+	(void) icon_x;
+	(void) icon_y;
+	(void) animate;
 #endif
 	wwin->flags.skip_next_animation = 0;
 
@@ -1575,6 +1585,12 @@ static void unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int
 			      wwin->frame_x, wwin->frame_y,
 			      wwin->frame->core->width, wwin->frame->core->height);
 	}
+#else
+	/* Tell the compiler it is normal that those parameters are not used in this case */
+	(void) icon;
+	(void) icon_x;
+	(void) icon_y;
+	(void) animate;
 #endif
 	wwin->flags.skip_next_animation = 0;
 	if (wwin->screen_ptr->current_workspace == wwin->frame->workspace) {
