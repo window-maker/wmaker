@@ -459,7 +459,7 @@ extern struct WPreferences {
 
 	union WTexture *wsmbackTexture;
 
-	int show_clip_title;
+	char show_clip_title;
 
 	struct {
 		unsigned int nodock:1;                /* don't display the dock */
