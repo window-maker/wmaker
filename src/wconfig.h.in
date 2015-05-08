@@ -34,7 +34,7 @@
  */
 
 /* If you want animations for iconification, shading, icon arrangement etc. */
-#define ANIMATIONS
+#define USE_ANIMATIONS
 
 /*
  * Undefine BALLOON_TEXT if you don't want balloons for showing extra

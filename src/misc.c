@@ -141,7 +141,7 @@ static void eatExpose(void)
 
 void move_window(Window win, int from_x, int from_y, int to_x, int to_y)
 {
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 	if (wPreferences.no_animations)
 		XMoveWindow(dpy, win, to_x, to_y);
 	else
