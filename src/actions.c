@@ -1843,7 +1843,7 @@ void wArrangeIcons(WScreen *scr, Bool arrangeAll)
 			if (aicon->x_pos != X || aicon->y_pos != Y) {
 #ifdef USE_ANIMATIONS
 				if (!wPreferences.no_animations)
-					SlideWindow(aicon->icon->core->window, aicon->x_pos, aicon->y_pos, X, Y);
+					slide_window(aicon->icon->core->window, aicon->x_pos, aicon->y_pos, X, Y);
 #endif /* USE_ANIMATIONS */
 			}
 			wAppIconMove(aicon, X, Y);

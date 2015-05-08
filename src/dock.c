@@ -3271,7 +3271,7 @@ void wDockTrackWindowLaunch(WDock *dock, Window window)
 				XMapWindow(dpy, aicon->icon->core->window);
 				aicon->launching = 1;
 				wAppIconPaint(aicon);
-				SlideWindow(aicon->icon->core->window, x0, y0, icon->x_pos, icon->y_pos);
+				slide_window(aicon->icon->core->window, x0, y0, icon->x_pos, icon->y_pos);
 				XUnmapWindow(dpy, aicon->icon->core->window);
 				wAppIconDestroy(aicon);
 			}
@@ -3834,15 +3834,15 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				break;
 			XUngrabPointer(dpy, CurrentTime);
 			if (dock->type == WM_DRAWER) {
-				Window *wins[dock->icon_count];
+				Window wins[dock->icon_count];
 
 				for (i = 0; i < dock->max_icons; i++) {
 					tmpaicon = dock->icon_array[i];
 					if (tmpaicon == NULL)
 						continue;
-					wins[ tmpaicon->xindex + (dock->on_right_side ? dock->icon_count - 1 : 0) ] = &tmpaicon->icon->core->window;
+					wins[ tmpaicon->xindex + (dock->on_right_side ? dock->icon_count - 1 : 0) ] = tmpaicon->icon->core->window;
 				}
-				SlideWindows(wins, dock->icon_count,
+				slide_windows(wins, dock->icon_count,
 					(dock->on_right_side ? x - (dock->icon_count - 1) * ICON_SIZE : x),
 					y,
 					(dock->on_right_side ? shad_x - (dock->icon_count - 1) * ICON_SIZE : shad_x),
@@ -4665,7 +4665,7 @@ void wSlideAppicons(WAppIcon **appicons, int n, int to_the_left)
 {
 	int i;
 	int leftmost = -1, min_index = 9999, from_x = -1; // leftmost and from_x initialized to avoid warning
-	Window *wins[n];
+	Window wins[n];
 	WAppIcon *aicon;
 
 	if (n < 1)
@@ -4684,10 +4684,10 @@ void wSlideAppicons(WAppIcon **appicons, int n, int to_the_left)
 
 	for (i = 0; i < n; i++) {
 		aicon = appicons[i];
-		wins[aicon->xindex - min_index] = &aicon->icon->core->window;
+		wins[aicon->xindex - min_index] = aicon->icon->core->window;
 	}
 	aicon = appicons[leftmost];
-	SlideWindows(wins, n, from_x, aicon->y_pos, aicon->x_pos, aicon->y_pos);
+	slide_windows(wins, n, from_x, aicon->y_pos, aicon->x_pos, aicon->y_pos);
 }
 
 

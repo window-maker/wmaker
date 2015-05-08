@@ -96,17 +96,17 @@ void wWorkspaceMapUpdate(WScreen *scr)
 static void workspace_map_slide(WWorkspaceMap *wsmap)
 {
 	if (wsmap->edge == WD_TOP)
-		SlideWindow(WMWidgetXID(wsmap->win), 0, -1 * wsmap->wsheight, wsmap->xcount, wsmap->ycount);
+		slide_window(WMWidgetXID(wsmap->win), 0, -1 * wsmap->wsheight, wsmap->xcount, wsmap->ycount);
 	else
-		SlideWindow(WMWidgetXID(wsmap->win), 0, wsmap->scr->scr_height, wsmap->xcount, wsmap->ycount);
+		slide_window(WMWidgetXID(wsmap->win), 0, wsmap->scr->scr_height, wsmap->xcount, wsmap->ycount);
 }
 
 static void workspace_map_unslide(WWorkspaceMap *wsmap)
 {
 	if (wsmap->edge == WD_TOP)
-		SlideWindow(WMWidgetXID(wsmap->win), wsmap->xcount, wsmap->ycount, 0, -1 * wsmap->wsheight);
+		slide_window(WMWidgetXID(wsmap->win), wsmap->xcount, wsmap->ycount, 0, -1 * wsmap->wsheight);
 	else
-		SlideWindow(WMWidgetXID(wsmap->win), wsmap->xcount, wsmap->ycount, 0, wsmap->scr->scr_height);
+		slide_window(WMWidgetXID(wsmap->win), wsmap->xcount, wsmap->ycount, 0, wsmap->scr->scr_height);
 }
 
 static void workspace_map_destroy(WWorkspaceMap *wsmap)
