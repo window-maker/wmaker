@@ -522,6 +522,7 @@ static void appiconBalloon(WObjDescriptor *object)
 		int len;
 		WApplication *app;
 		unsigned int app_win_cnt = 0;
+		const char *display_name;
 
 		if (object->parent_type == WCLASS_DOCK_ICON) {
 			if (aicon->main_window) {
@@ -531,28 +532,28 @@ static void appiconBalloon(WObjDescriptor *object)
 			}
 		}
 
-		/* Check to see if it is a GNUstep app */
+		/*
+		 * Check to see if it is a GNUstep app, because in this case we use the instance
+		 * instead of the class, otherwise the user will not be able to distinguish what
+		 * is being refered.
+		 */
 		if (strcmp(aicon->wm_class, "GNUstep") == 0)
-			len = strlen(aicon->command) + strlen(aicon->wm_instance) + 8;
+			display_name = aicon->wm_instance;
 		else
-			len = strlen(aicon->command) + strlen(aicon->wm_class) + 8;
+			display_name = aicon->wm_class;
+
+		len = strlen(aicon->command) + strlen(display_name) + 8;
 
 		if (app_win_cnt > 0)
 			len += 1 + snprintf(NULL, 0, "%u", app_win_cnt);
 
 		tmp = wmalloc(len);
-		/* Check to see if it is a GNUstep App */
-		if (strcmp(aicon->wm_class, "GNUstep") == 0)
-			if (app_win_cnt > 0)
-				snprintf(tmp, len, "%u %s\n(%s)", app_win_cnt, aicon->wm_instance, aicon->command);
-			else
-				snprintf(tmp, len, "%s\n(%s)", aicon->wm_instance, aicon->command);
+		if (app_win_cnt > 0)
+			snprintf(tmp, len, "%u %s\n(%s)", app_win_cnt, display_name, aicon->command);
 		else
-			if (app_win_cnt > 0)
-				snprintf(tmp, len, "%u %s\n(%s)", app_win_cnt, aicon->wm_class, aicon->command);
-			else
-				snprintf(tmp, len, "%s\n(%s)", aicon->wm_class, aicon->command);
+			snprintf(tmp, len, "%s\n(%s)", aicon->wm_instance, aicon->command);
 		scr->balloon->text = tmp;
+
 	} else if (aicon->command) {
 		scr->balloon->text = wstrdup(aicon->command);
 	} else if (aicon->wm_class) {
