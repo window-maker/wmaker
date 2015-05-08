@@ -3835,12 +3835,24 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 			XUngrabPointer(dpy, CurrentTime);
 			if (dock->type == WM_DRAWER) {
 				Window wins[dock->icon_count];
+				int offset_index;
+
+				/*
+				 * When the dock is on the Right side, the index of the icons are negative to
+				 * reflect the fact that they are placed on the other side of the dock; we use
+				 * an offset here so we can have an always positive index for the storage in
+				 * the 'wins' array.
+				 */
+				if (dock->on_right_side)
+					offset_index = dock->icon_count - 1;
+				else
+					offset_index = 0;
 
 				for (i = 0; i < dock->max_icons; i++) {
 					tmpaicon = dock->icon_array[i];
 					if (tmpaicon == NULL)
 						continue;
-					wins[ tmpaicon->xindex + (dock->on_right_side ? dock->icon_count - 1 : 0) ] = tmpaicon->icon->core->window;
+					wins[tmpaicon->xindex + offset_index] = tmpaicon->icon->core->window;
 				}
 				slide_windows(wins, dock->icon_count,
 					(dock->on_right_side ? x - (dock->icon_count - 1) * ICON_SIZE : x),
