@@ -524,14 +524,14 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 				wwin->transient_for = new_owner;
 				if (new_owner == None) {
 					if (WFLAGP(wwin, no_miniaturizable)) {
-						WSETUFLAG(wwin, no_miniaturizable, 0);
-						WSETUFLAG(wwin, no_miniaturize_button, 0);
+						wwin->client_flags.no_miniaturizable = 0;
+						wwin->client_flags.no_miniaturize_button = 0;
 						if (wwin->frame)
 							wWindowConfigureBorders(wwin);
 					}
 				} else if (!WFLAGP(wwin, no_miniaturizable)) {
-					WSETUFLAG(wwin, no_miniaturizable, 1);
-					WSETUFLAG(wwin, no_miniaturize_button, 1);
+					wwin->client_flags.no_miniaturizable = 1;
+					wwin->client_flags.no_miniaturize_button = 1;
 					if (wwin->frame)
 						wWindowConfigureBorders(wwin);
 				}
@@ -544,7 +544,7 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 
 			PropGetProtocols(wwin->client_win, &wwin->protocols);
 
-			WSETUFLAG(wwin, kill_close, !wwin->protocols.DELETE_WINDOW);
+			wwin->client_flags.kill_close = !wwin->protocols.DELETE_WINDOW;
 
 			if (wwin->frame)
 				wWindowUpdateButtonImages(wwin);
@@ -572,7 +572,7 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 					wApplicationDestroy(wapp);
 					while (foo) {
 						if (foo->fake_group && foo->fake_group == fPtr) {
-							WSETUFLAG(foo, shared_appicon, 0);
+							foo->client_flags.shared_appicon = 0;
 							foo->fake_group = NULL;
 
 							if (foo->group_id != None)

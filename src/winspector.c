@@ -1241,8 +1241,8 @@ static InspectorPanel *createInspectorForWindow(WWindow *wwin, int xpos, int ypo
 	/* kluge to know who should get the key events */
 	panel->frame->client_leader = WMWidgetXID(panel->win);
 
-	WSETUFLAG(panel->frame, no_closable, 0);
-	WSETUFLAG(panel->frame, no_close_button, 0);
+	panel->frame->client_flags.no_closable = 0;
+	panel->frame->client_flags.no_close_button = 0;
 	wWindowUpdateButtonImages(panel->frame);
 	wFrameWindowShowButton(panel->frame->frame, WFF_RIGHT_BUTTON);
 	panel->frame->frame->on_click_right = destroyInspector;
