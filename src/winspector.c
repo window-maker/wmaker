@@ -203,6 +203,7 @@ typedef struct InspectorPanel {
 
 	/* second page. attributes */
 	WMFrame *attrFrm;
+	WMButton *attrClient[sizeof(window_attribute) / sizeof(window_attribute[0])];
 	WMButton *attrChk[sizeof(window_attribute) / sizeof(window_attribute[0])];
 
 	/* 3rd page. more attributes */
@@ -642,8 +643,27 @@ static void saveSettings(WMWidget *button, void *client_data)
 
 	/* Attributes... --> Window Attributes */
 	for (i = 0; i < wlengthof(window_attribute); i++) {
-		value = (WMGetButtonSelected(panel->attrChk[i]) != 0) ? Yes : No;
-		different |= insertAttribute(dict, winDic, pl_attribute[i], value, flags);
+		WMPropList *old_value;
+		int state;
+
+		old_value = WMGetFromPLDictionary(winDic, pl_attribute[i]);
+		state = WMGetButtonSelected(panel->attrChk[i]);
+		if (state > 0) {
+			if ((old_value == NULL) || !getBool(old_value)) {
+				WMPutInPLDictionary(winDic, pl_attribute[i], Yes);
+				different |= 1;
+			}
+		} else if (state == 0) {
+			if ((old_value == NULL) || getBool(old_value)) {
+				WMPutInPLDictionary(winDic, pl_attribute[i], No);
+				different |= 1;
+			}
+		} else {	/* (state < 0) */
+			if (old_value != NULL) {
+				WMRemoveFromPLDictionary(winDic, pl_attribute[i]);
+				different |= 1;
+			}
+		}
 	}
 
 	/* Attributes... --> Advanced Options */
@@ -726,12 +746,19 @@ static void applySettings(WMWidget *button, void *client_data)
 
 	/* Attributes... --> Window Attributes */
 	for (i = 0; i < wlengthof(window_attribute); i++) {
-		if (WMGetButtonSelected(panel->attrChk[i]))
+		int state;
+
+		state = WMGetButtonSelected(panel->attrChk[i]);
+
+		if (state > 0)
 			set_attr_flag(&wwin->user_flags, &window_attribute[i].flag);
 		else
 			clear_attr_flag(&wwin->user_flags, &window_attribute[i].flag);
 
-		set_attr_flag(&wwin->defined_user_flags, &window_attribute[i].flag);
+		if (state < 0)
+			clear_attr_flag(&wwin->defined_user_flags, &window_attribute[i].flag);
+		else
+			set_attr_flag(&wwin->defined_user_flags, &window_attribute[i].flag);
 	}
 
 	/* Attributes... --> Advanced Options */
@@ -904,7 +931,7 @@ static void revertSettings(WMWidget *button, void *client_data)
 		if (is_userdef)
 			flag = get_attr_flag(&wwin->user_flags, &window_attribute[i].flag);
 		else
-			flag = get_attr_flag(&wwin->client_flags, &window_attribute[i].flag);
+			flag = -1;
 
 		WMSetButtonSelected(panel->attrChk[i], flag);
 	}
@@ -1315,15 +1342,31 @@ static void create_tab_window_attributes(WWindow *wwin, InspectorPanel *panel, i
 	for (i = 0; i < wlengthof(window_attribute); i++) {
 		int is_userdef, flag;
 
+		/* Read-only button to display the state requested by the application */
+		flag = get_attr_flag(&wwin->client_flags, &window_attribute[i].flag);
+
+		panel->attrClient[i] = WMCreateSwitchButton(panel->attrFrm);
+		WMMoveWidget(panel->attrClient[i], 10, 20 * (i + 1));
+		WMResizeWidget(panel->attrClient[i], 20, 20);
+		WMSetButtonText(panel->attrClient[i], NULL);
+		WMSetButtonSelected(panel->attrClient[i], flag);
+		WMSetButtonEnabled(panel->attrClient[i], False);
+
+		WMSetBalloonTextForView(_("Show the state that was asked by the application.\n"
+		                          "You can use the checkbox on the right to change this setting;\n"
+		                          "when it is grayed it means to follow application's choice."),
+		                        WMWidgetView(panel->attrClient[i]));
+
+		/* Button to let user override this choice */
 		is_userdef = get_attr_flag(&wwin->defined_user_flags, &window_attribute[i].flag);
 		if (is_userdef)
 			flag = get_attr_flag(&wwin->user_flags, &window_attribute[i].flag);
 		else
-			flag = get_attr_flag(&wwin->client_flags, &window_attribute[i].flag);
+			flag = -1;
 
-		panel->attrChk[i] = WMCreateSwitchButton(panel->attrFrm);
-		WMMoveWidget(panel->attrChk[i], 10, 20 * (i + 1));
-		WMResizeWidget(panel->attrChk[i], frame_width - 15, 20);
+		panel->attrChk[i] = WMCreateButton(panel->attrFrm, WBTTriState);
+		WMMoveWidget(panel->attrChk[i], 30, 20 * (i + 1));
+		WMResizeWidget(panel->attrChk[i], frame_width - 45, 20);
 		WMSetButtonSelected(panel->attrChk[i], flag);
 		WMSetButtonText(panel->attrChk[i], _(window_attribute[i].caption));
 
