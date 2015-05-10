@@ -162,6 +162,20 @@ static const struct {
 	,{ "NoLanguageButton", { .no_language_button = 1 }, N_("Disable language button"),
 	   N_("Remove the `toggle language' button of the window.") }
 #endif
+
+}, application_attr[] = {
+	{ "StartHidden", { .start_hidden = 1 }, N_("Start hidden"),
+	  N_("Automatically hide application when it's started.") },
+
+	{ "NoAppIcon", { .no_appicon = 1 }, N_("No application icon"),
+	  N_("Disable the application icon for the application.\n"
+	     "Note that you won't be able to dock it anymore,\n"
+	     "and any icons that are already docked will stop\n"
+	     "working correctly.") },
+
+	{ "SharedAppIcon", { .shared_appicon = 1 }, N_("Shared application icon"),
+	  N_("Use a single shared application icon for all of\n"
+	     "the instances of this application.\n") }
 };
 
 typedef struct InspectorPanel {
@@ -207,7 +221,7 @@ typedef struct InspectorPanel {
 
 	/* 5th page. application wide attributes */
 	WMFrame *appFrm;
-	WMButton *appChk[3];
+	WMButton *appChk[sizeof(application_attr) / sizeof(application_attr[0])];
 
 	unsigned int done:1;
 	unsigned int destroyed:1;
@@ -225,15 +239,13 @@ static InspectorPanel *panelList = NULL;
  */
 static WMPropList *pl_attribute[sizeof(window_attribute) / sizeof(window_attribute[0])] = { [0] = NULL };
 static WMPropList *pl_advoptions[sizeof(advanced_option) / sizeof(advanced_option[0])];
+static WMPropList *pl_appattrib[sizeof(application_attr) / sizeof(application_attr[0])];
 
-static WMPropList *ANoAppIcon;
 static WMPropList *AAlwaysUserIcon;
-static WMPropList *ASharedAppIcon;
 static WMPropList *AStartWorkspace;
 static WMPropList *AIcon;
 
 /* application wide options */
-static WMPropList *AStartHidden;
 static WMPropList *AnyWindow;
 static WMPropList *EmptyString;
 static WMPropList *Yes, *No;
@@ -311,11 +323,11 @@ static void make_keys(void)
 	for (i = 0; i < wlengthof(advanced_option); i++)
 		pl_advoptions[i] = WMCreatePLString(advanced_option[i].key_name);
 
+	for (i = 0; i < wlengthof(application_attr); i++)
+		pl_appattrib[i] = WMCreatePLString(application_attr[i].key_name);
+
 	AIcon = WMCreatePLString("Icon");
-	ANoAppIcon = WMCreatePLString("NoAppIcon");
 	AAlwaysUserIcon = WMCreatePLString("AlwaysUserIcon");
-	AStartHidden = WMCreatePLString("StartHidden");
-	ASharedAppIcon = WMCreatePLString("SharedAppIcon");
 
 	AStartWorkspace = WMCreatePLString("StartWorkspace");
 
@@ -640,15 +652,12 @@ static void saveSettings(WMWidget *button, void *client_data)
 		different |= insertAttribute(dict, winDic, pl_advoptions[i], value, flags);
 	}
 
+	/* Attributes... --> Application Specific */
 	if (wwin->main_window != None && wApplicationOf(wwin->main_window) != NULL) {
-		value = (WMGetButtonSelected(panel->appChk[0]) != 0) ? Yes : No;
-		different2 |= insertAttribute(dict, appDic, AStartHidden, value, flags);
-
-		value = (WMGetButtonSelected(panel->appChk[1]) != 0) ? Yes : No;
-		different2 |= insertAttribute(dict, appDic, ANoAppIcon, value, flags);
-
-		value = (WMGetButtonSelected(panel->appChk[2]) != 0) ? Yes : No;
-		different2 |= insertAttribute(dict, appDic, ASharedAppIcon, value, flags);
+		for (i = 0; i < wlengthof(application_attr); i++) {
+			value = (WMGetButtonSelected(panel->appChk[i]) != 0) ? Yes : No;
+			different2 |= insertAttribute(dict, appDic, pl_appattrib[i], value, flags);
+		}
 	}
 
 	if (wwin->fake_group) {
@@ -780,9 +789,14 @@ static void applySettings(WMWidget *button, void *client_data)
 	/* Can't apply emulate_appicon because it will probably cause problems. */
 	if (wapp) {
 		/* do application wide stuff */
-		WSETUFLAG(wapp->main_window_desc, start_hidden, WMGetButtonSelected(panel->appChk[0]));
-		WSETUFLAG(wapp->main_window_desc, no_appicon, WMGetButtonSelected(panel->appChk[1]));
-		WSETUFLAG(wapp->main_window_desc, shared_appicon, WMGetButtonSelected(panel->appChk[2]));
+		for (i = 0; i < wlengthof(application_attr); i++) {
+			if (WMGetButtonSelected(panel->appChk[i]))
+				set_attr_flag(&wapp->main_window_desc->user_flags, &application_attr[i].flag);
+			else
+				clear_attr_flag(&wapp->main_window_desc->user_flags, &application_attr[i].flag);
+
+			set_attr_flag(&wapp->main_window_desc->defined_user_flags, &application_attr[i].flag);
+		}
 
 		if (WFLAGP(wapp->main_window_desc, no_appicon))
 			unpaint_app_icon(wapp);
@@ -907,21 +921,18 @@ static void revertSettings(WMWidget *button, void *client_data)
 
 		WMSetButtonSelected(panel->moreChk[i], flag);
 	}
-	if (panel->appFrm && wapp) {
-		for (i = 0; i < wlengthof(panel->appChk); i++) {
-			int flag = 0;
 
-			switch (i) {
-			case 0:
-				flag = WFLAGP(wapp->main_window_desc, start_hidden);
-				break;
-			case 1:
-				flag = WFLAGP(wapp->main_window_desc, no_appicon);
-				break;
-			case 2:
-				flag = WFLAGP(wapp->main_window_desc, shared_appicon);
-				break;
-			}
+	/* Attributes... --> Application Specific */
+	if (panel->appFrm && wapp) {
+		for (i = 0; i < wlengthof(application_attr); i++) {
+			int is_userdef, flag = 0;
+
+			is_userdef = get_attr_flag(&wapp->main_window_desc->defined_user_flags, &application_attr[i].flag);
+			if (is_userdef)
+				flag = get_attr_flag(&wapp->main_window_desc->user_flags, &application_attr[i].flag);
+			else
+				flag = get_attr_flag(&wapp->main_window_desc->client_flags, &application_attr[i].flag);
+
 			WMSetButtonSelected(panel->appChk[i], flag);
 		}
 	}
@@ -1414,9 +1425,7 @@ static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel)
 static void create_tab_app_specific(WWindow *wwin, InspectorPanel *panel, int frame_width)
 {
 	WScreen *scr = wwin->screen_ptr;
-	int i = 0, flag = 0, tmp;
-	char *caption = NULL, *descr = NULL;
-
+	int i = 0, tmp;
 
 	if (wwin->main_window != None) {
 		WApplication *wapp = wApplicationOf(wwin->main_window);
@@ -1426,34 +1435,23 @@ static void create_tab_app_specific(WWindow *wwin, InspectorPanel *panel, int fr
 		WMMoveWidget(panel->appFrm, 15, 50);
 		WMResizeWidget(panel->appFrm, frame_width, 240);
 
-		for (i = 0; i < wlengthof(panel->appChk); i++) {
-			switch (i) {
-			case 0:
-				caption = _("Start hidden");
-				flag = WFLAGP(wapp->main_window_desc, start_hidden);
-				descr = _("Automatically hide application when it's started.");
-				break;
-			case 1:
-				caption = _("No application icon");
-				flag = WFLAGP(wapp->main_window_desc, no_appicon);
-				descr = _("Disable the application icon for the application.\n"
-					  "Note that you won't be able to dock it anymore,\n"
-					  "and any icons that are already docked will stop\n"
-					  "working correctly.");
-				break;
-			case 2:
-				caption = _("Shared application icon");
-				flag = WFLAGP(wapp->main_window_desc, shared_appicon);
-				descr = _("Use a single shared application icon for all of\n"
-					  "the instances of this application.\n");
-				break;
-			}
+		for (i = 0; i < wlengthof(application_attr); i++) {
+			int is_userdef, flag;
+
+			is_userdef = get_attr_flag(&wapp->main_window_desc->defined_user_flags, &application_attr[i].flag);
+			if (is_userdef)
+				flag = get_attr_flag(&wapp->main_window_desc->user_flags, &application_attr[i].flag);
+			else
+				flag = get_attr_flag(&wapp->main_window_desc->client_flags, &application_attr[i].flag);
+
 			panel->appChk[i] = WMCreateSwitchButton(panel->appFrm);
 			WMMoveWidget(panel->appChk[i], 10, 20 * (i + 1));
 			WMResizeWidget(panel->appChk[i], 205, 20);
 			WMSetButtonSelected(panel->appChk[i], flag);
-			WMSetButtonText(panel->appChk[i], caption);
-			WMSetBalloonTextForView(descr, WMWidgetView(panel->appChk[i]));
+			WMSetButtonText(panel->appChk[i], _(application_attr[i].caption));
+
+			WMSetBalloonTextForView(_(application_attr[i].description),
+			                        WMWidgetView(panel->appChk[i]));
 		}
 
 		if (WFLAGP(wwin, emulate_appicon)) {
