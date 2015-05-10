@@ -60,6 +60,7 @@ Summary of Contents:
      	 fonts.
      3.10 When I set the root background with wmsetbg by hand it works,
           but when I do that from the configuration files it doesn't!
+     3.11 When I run GNOME application they have no title bar.
 
 4 - Configuration 
      4.1 What are those files inside my ~/GNUstep directory? 
@@ -345,7 +346,10 @@ The same is true for CDE.
 
 Now, answering the question: Yes, you can use WindowMaker in these
 environments. To use Window Maker with GNOME, you don't need to do
-anything special. To use it with CDE, read the answer for "How do I switch
+anything special, although you may want to look at the "When I run
+GNOME application they have no title bar" below.
+
+To use it with CDE, read the answer for "How do I switch
 CDE's window manager to use Window Maker?"
 
 To use it with KDE, read it's documentation to get rid of kwm (and possibly
@@ -721,6 +725,20 @@ option. You can also put all your background images in places like
 ~/GNUstep/Library/WindowMaker/Backgrounds or
 /usr/local/share/WindowMaker/Backgrounds
 These directories will be listed under the "Search Path" section of WPrefs.
+
+
+
+3.11 When I run GNOME application they have no title bar.
+----------------------------------
+
+The GNOME toolkit decided to behave his own way, so it draws its own title bar
+with buttons, and asks Window Maker to not draw anything (title bar, resize bar,
+close and miniaturise button, ...).
+
+The workaround is, for each application, to ask for Window Maker's window menu
+(that is likely <Ctrl>+<Escape> if you did not change it), get the Attributes,
+and click on the greyed "Disable titlebar" until it is white (the same can be
+done for other decoration attributes).
 
 
 
