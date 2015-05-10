@@ -17,6 +17,7 @@ typedef struct W_Button {
 
 	W_Pixmap *image;
 	W_Pixmap *altImage;
+	W_Pixmap *tsImage;
 
 	W_Pixmap *dimage;
 
@@ -37,7 +38,7 @@ typedef struct W_Button {
 		WMImagePosition imagePosition:4;
 		WMAlignment alignment:2;
 
-		unsigned int selected:1;
+		unsigned int selected:2;
 
 		unsigned int enabled:1;
 
@@ -183,6 +184,14 @@ WMButton *WMCreateButton(WMWidget * parent, WMButtonType type)
 		bPtr->altImage = WMRetainPixmap(scrPtr->radioButtonImageOn);
 		break;
 
+	case WBTTriState:
+		bPtr = WMCreateCustomButton(parent, WBBStateChangeMask);
+		bPtr->flags.bordered = 0;
+		bPtr->image = WMRetainPixmap(scrPtr->tristateButtonImageOff);
+		bPtr->altImage = WMRetainPixmap(scrPtr->tristateButtonImageOn);
+		bPtr->tsImage = WMRetainPixmap(scrPtr->tristateButtonImageTri);
+		break;
+
 	default:
 	case WBTMomentaryLight:
 		bPtr = WMCreateCustomButton(parent, WBBSpringLoadedMask | WBBPushLightMask);
@@ -197,7 +206,7 @@ WMButton *WMCreateButton(WMWidget * parent, WMButtonType type)
 		WMSetButtonText(bPtr, DEFAULT_RADIO_TEXT);
 		bPtr->flags.alignment = DEFAULT_RADIO_ALIGNMENT;
 		bPtr->flags.imagePosition = DEFAULT_RADIO_IMAGE_POSITION;
-	} else if (type == WBTSwitch) {
+	} else if (type == WBTSwitch || type == WBTTriState) {
 		W_ResizeView(bPtr->view, DEFAULT_SWITCH_WIDTH, DEFAULT_SWITCH_HEIGHT);
 		WMSetButtonText(bPtr, DEFAULT_SWITCH_TEXT);
 		bPtr->flags.alignment = DEFAULT_SWITCH_ALIGNMENT;
@@ -371,7 +380,10 @@ void WMSetButtonDisabledTextColor(WMButton * bPtr, WMColor * color)
 
 void WMSetButtonSelected(WMButton * bPtr, int isSelected)
 {
-	bPtr->flags.selected = isSelected ? 1 : 0;
+	if ((bPtr->flags.type == WBTTriState) && (isSelected < 0))
+		bPtr->flags.selected = 2;
+	else
+		bPtr->flags.selected = isSelected ? 1 : 0;
 
 	if (bPtr->view->flags.realized) {
 		paintButton(bPtr);
@@ -383,6 +395,9 @@ void WMSetButtonSelected(WMButton * bPtr, int isSelected)
 int WMGetButtonSelected(WMButton * bPtr)
 {
 	CHECK_CLASS(bPtr, WC_Button);
+
+	if ((bPtr->flags.type == WBTTriState) && (bPtr->flags.selected == 2))
+		return -1;
 
 	return bPtr->flags.selected;
 }
@@ -558,7 +573,9 @@ static void paintButton(Button * bPtr)
 		if (bPtr->flags.stateChange) {
 			if (bPtr->altCaption)
 				caption = bPtr->altCaption;
-			if (bPtr->altImage)
+			if (bPtr->flags.selected == 2)
+				image = bPtr->tsImage;
+			else if (bPtr->altImage)
 				image = bPtr->altImage;
 			if (bPtr->altTextColor)
 				textColor = bPtr->altTextColor;
@@ -659,6 +676,8 @@ static void handleActionEvents(XEvent * event, void *data)
 
 	case ButtonPress:
 		if (event->xbutton.button == Button1) {
+			static const unsigned int next_state[4] = { [0] = 1, [1] = 2, [2] = 0 };
+
 			bPtr->flags.prevSelected = bPtr->flags.selected;
 			bPtr->flags.wasPushed = 0;
 			bPtr->flags.pushed = 1;
@@ -667,7 +686,10 @@ static void handleActionEvents(XEvent * event, void *data)
 				dopaint = 1;
 				break;
 			}
-			bPtr->flags.selected = !bPtr->flags.selected;
+			if (bPtr->flags.type == WBTTriState)
+				bPtr->flags.selected = next_state[bPtr->flags.selected];
+			else
+				bPtr->flags.selected = !bPtr->flags.selected;
 			dopaint = 1;
 
 			if (bPtr->flags.continuous && !bPtr->timer) {
@@ -747,6 +769,9 @@ static void destroyButton(Button * bPtr)
 	}
 	if (bPtr->altImage)
 		WMReleasePixmap(bPtr->altImage);
+
+	if (bPtr->tsImage)
+		WMReleasePixmap(bPtr->tsImage);
 
 	wfree(bPtr);
 }

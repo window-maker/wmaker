@@ -26,7 +26,7 @@
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20141205
+#define WINGS_H_VERSION  20150508
 
 
 #ifdef __cplusplus
@@ -127,7 +127,8 @@ typedef enum {
     WBTRadio = 5,
     WBTMomentaryChange = 6,
     WBTOnOff = 7,
-    WBTMomentaryLight = 8
+    WBTMomentaryLight = 8,
+    WBTTriState = 9
 } WMButtonType;
 
 /* button behaviour masks */

@@ -97,6 +97,66 @@ static char *RADIO_BUTTON_OFF[] = {
 	".....     .....",
 };
 
+#define TRISTATE_BUTTON_ON_WIDTH 	15
+#define TRISTATE_BUTTON_ON_HEIGHT	15
+static char *TRISTATE_BUTTON_ON[] = {
+	"%%%%%%%%%%%%%%.",
+	"%%%%%%%%%%%%%. ",
+	"%%           . ",
+	"%% ##     ## . ",
+	"%% ###   ### . ",
+	"%%  ### ###  . ",
+	"%%   #####   . ",
+	"%%    ###    . ",
+	"%%   #####   . ",
+	"%%  ### ###  . ",
+	"%% ###   ### . ",
+	"%% ##     ## . ",
+	"%%           . ",
+	"%............. ",
+	".              ",
+};
+
+#define TRISTATE_BUTTON_OFF_WIDTH 	15
+#define TRISTATE_BUTTON_OFF_HEIGHT	15
+static char *TRISTATE_BUTTON_OFF[] = {
+	"%%%%%%%%%%%%%%.",
+	"%%%%%%%%%%%%%. ",
+	"%%           . ",
+	"%%           . ",
+	"%%           . ",
+	"%%           . ",
+	"%%           . ",
+	"%%           . ",
+	"%%           . ",
+	"%%           . ",
+	"%%           . ",
+	"%%           . ",
+	"%%           . ",
+	"%............. ",
+	".              ",
+};
+
+#define TRISTATE_BUTTON_TRI_WIDTH 	15
+#define TRISTATE_BUTTON_TRI_HEIGHT	15
+static char *TRISTATE_BUTTON_TRI[] = {
+	"%%%%%%%%%%%%%%.",
+	"%%%%%%%%%%%%%. ",
+	"%%           . ",
+	"%% # # # # # . ",
+	"%%  # # # #  . ",
+	"%% # # # # # . ",
+	"%%  # # # #  . ",
+	"%% # # # # # . ",
+	"%%  # # # #  . ",
+	"%% # # # # # . ",
+	"%%  # # # #  . ",
+	"%% # # # # # . ",
+	"%%           . ",
+	"%............. ",
+	".              ",
+};
+
 static char *BUTTON_ARROW[] = {
 	"..................",
 	"....##....#### ...",
@@ -728,6 +788,15 @@ WMScreen *WMCreateScreenWithRContext(Display * display, int screen, RContext * c
 
 	scrPtr->radioButtonImageOff = makePixmap(scrPtr, RADIO_BUTTON_OFF,
 						 RADIO_BUTTON_OFF_WIDTH, RADIO_BUTTON_OFF_HEIGHT, False);
+
+	scrPtr->tristateButtonImageOn = makePixmap(scrPtr, TRISTATE_BUTTON_ON,
+	                                           TRISTATE_BUTTON_ON_WIDTH, TRISTATE_BUTTON_ON_HEIGHT, False);
+
+	scrPtr->tristateButtonImageOff = makePixmap(scrPtr, TRISTATE_BUTTON_OFF,
+	                                            TRISTATE_BUTTON_OFF_WIDTH, TRISTATE_BUTTON_OFF_HEIGHT, False);
+
+	scrPtr->tristateButtonImageTri = makePixmap(scrPtr, TRISTATE_BUTTON_TRI,
+	                                            TRISTATE_BUTTON_TRI_WIDTH, TRISTATE_BUTTON_TRI_HEIGHT, False);
 
 	scrPtr->buttonArrow = makePixmap(scrPtr, BUTTON_ARROW, BUTTON_ARROW_WIDTH, BUTTON_ARROW_HEIGHT, False);
 

@@ -268,6 +268,16 @@ typedef struct W_Screen {
     struct W_View *modalView;
     unsigned modalLoop:1;
     unsigned ignoreNextDoubleClick:1;
+
+    /*
+     * New stuff in Window Maker 0.95.7
+     * Added at the end of the structure to avoid breaking binary compatibility
+     * with previous versions of the toolkit
+     */
+    W_Pixmap *tristateButtonImageOn;
+    W_Pixmap *tristateButtonImageOff;
+    W_Pixmap *tristateButtonImageTri;
+
 } W_Screen;
 
 #define W_DRAWABLE(scr)		(scr)->rcontext->drawable
