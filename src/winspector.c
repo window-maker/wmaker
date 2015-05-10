@@ -108,6 +108,60 @@ static const struct {
 	  N_("Make the window use the whole screen space when it's\n"
 				  "maximized. The titlebar and resizebar will be moved\n"
 				  "to outside the screen.") }
+
+}, advanced_option[] = {
+	{ "NoKeyBindings", { .no_bind_keys = 1 }, N_("Do not bind keyboard shortcuts"),
+	  N_("Do not bind keyboard shortcuts from Window Maker\n"
+	     "when this window is focused. This will allow the\n"
+	     "window to receive all key combinations regardless\n"
+	     "of your shortcut configuration.") },
+
+	{ "NoMouseBindings", { .no_bind_mouse = 1 }, N_("Do not bind mouse clicks"),
+	  N_("Do not bind mouse actions, such as `Alt'+drag\n"
+	     "in the window (when Alt is the modifier you have\n"
+	     "configured).") },
+
+	{ "SkipWindowList", { .skip_window_list = 1 }, N_("Do not show in the window list"),
+	  N_("Do not list the window in the window list menu.") },
+
+	{ "SkipSwitchPanel", { .skip_switchpanel = 1 }, N_("Do not show in the switch panel"),
+	  N_("Do not include in switch panel while cycling windows.") },
+
+	{ "Unfocusable", { .no_focusable = 1 }, N_("Do not let it take focus"),
+	  N_("Do not let the window take keyboard focus when you\n"
+	     "click on it.") },
+
+	{ "KeepInsideScreen", { .dont_move_off = 1 }, N_("Keep inside screen"),
+	  N_("Do not allow the window to move itself completely\n"
+	     "outside the screen. For bug compatibility.\n") },
+
+	{ "NoHideOthers", { .no_hide_others = 1 }, N_("Ignore 'Hide Others'"),
+	  N_("Do not hide the window when issuing the\n"
+	     "`HideOthers' command.") },
+
+	{ "DontSaveSession", { .dont_save_session = 1 }, N_("Ignore 'Save Session'"),
+	  N_("Do not save the associated application in the\n"
+	     "session's state, so that it won't be restarted\n"
+	     "together with other applications when Window Maker\n"
+	     "starts.") },
+
+	{ "EmulateAppIcon", { .emulate_appicon = 1 }, N_("Emulate application icon"),
+	  N_("Make this window act as an application that provides\n"
+	     "enough information to Window Maker for a dockable\n"
+	     "application icon to be created.") },
+
+	{ "FocusAcrossWorkspace", { .focus_across_wksp = 1 }, N_("Focus across workspaces"),
+	  N_("Allow Window Maker to switch workspace to satisfy\n"
+	     "a focus request (annoying).") },
+
+	{ "NoMiniaturizable", { .no_miniaturizable = 1 }, N_("Do not let it be minimized"),
+	  N_("Do not let the window of this application be\n"
+	     "minimized.\n") }
+
+#ifdef XKB_BUTTON_HINT
+	,{ "NoLanguageButton", { .no_language_button = 1 }, N_("Disable language button"),
+	   N_("Remove the `toggle language' button of the window.") }
+#endif
 };
 
 typedef struct InspectorPanel {
@@ -139,11 +193,7 @@ typedef struct InspectorPanel {
 
 	/* 3rd page. more attributes */
 	WMFrame *moreFrm;
-#ifdef XKB_BUTTON_HINT
-	WMButton *moreChk[12];
-#else
-	WMButton *moreChk[11];
-#endif
+	WMButton *moreChk[sizeof(advanced_option) / sizeof(advanced_option[0])];
 
 	/* 4th page. icon and workspace */
 	WMFrame *iconFrm;
@@ -174,24 +224,11 @@ static InspectorPanel *panelList = NULL;
  * one everytime.
  */
 static WMPropList *pl_attribute[sizeof(window_attribute) / sizeof(window_attribute[0])] = { [0] = NULL };
+static WMPropList *pl_advoptions[sizeof(advanced_option) / sizeof(advanced_option[0])];
 
-static WMPropList *ANoHideOthers;
-static WMPropList *ANoMouseBindings;
-static WMPropList *ANoKeyBindings;
 static WMPropList *ANoAppIcon;
-static WMPropList *ASkipWindowList;
-static WMPropList *ASkipSwitchPanel;
-static WMPropList *AKeepInsideScreen;
-static WMPropList *AUnfocusable;
-static WMPropList *AFocusAcrossWorkspace;
 static WMPropList *AAlwaysUserIcon;
-static WMPropList *ADontSaveSession;
-static WMPropList *AEmulateAppIcon;
 static WMPropList *ASharedAppIcon;
-static WMPropList *ANoMiniaturizable;
-#ifdef XKB_BUTTON_HINT
-static WMPropList *ANoLanguageButton;
-#endif
 static WMPropList *AStartWorkspace;
 static WMPropList *AIcon;
 
@@ -271,26 +308,14 @@ static void make_keys(void)
 	for (i = 0; i < wlengthof(window_attribute); i++)
 		pl_attribute[i] = WMCreatePLString(window_attribute[i].key_name);
 
+	for (i = 0; i < wlengthof(advanced_option); i++)
+		pl_advoptions[i] = WMCreatePLString(advanced_option[i].key_name);
 
 	AIcon = WMCreatePLString("Icon");
-	ANoHideOthers = WMCreatePLString("NoHideOthers");
-	ANoMouseBindings = WMCreatePLString("NoMouseBindings");
-	ANoKeyBindings = WMCreatePLString("NoKeyBindings");
 	ANoAppIcon = WMCreatePLString("NoAppIcon");
-	ASkipWindowList = WMCreatePLString("SkipWindowList");
-	ASkipSwitchPanel = WMCreatePLString("SkipSwitchPanel");
-	AKeepInsideScreen = WMCreatePLString("KeepInsideScreen");
-	AUnfocusable = WMCreatePLString("Unfocusable");
-	AFocusAcrossWorkspace = WMCreatePLString("FocusAcrossWorkspace");
 	AAlwaysUserIcon = WMCreatePLString("AlwaysUserIcon");
 	AStartHidden = WMCreatePLString("StartHidden");
-	ADontSaveSession = WMCreatePLString("DontSaveSession");
-	AEmulateAppIcon = WMCreatePLString("EmulateAppIcon");
 	ASharedAppIcon = WMCreatePLString("SharedAppIcon");
-	ANoMiniaturizable = WMCreatePLString("NoMiniaturizable");
-#ifdef XKB_BUTTON_HINT
-	ANoLanguageButton = WMCreatePLString("NoLanguageButton");
-#endif
 
 	AStartWorkspace = WMCreatePLString("StartWorkspace");
 
@@ -609,43 +634,11 @@ static void saveSettings(WMWidget *button, void *client_data)
 		different |= insertAttribute(dict, winDic, pl_attribute[i], value, flags);
 	}
 
-	value = (WMGetButtonSelected(panel->moreChk[0]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ANoKeyBindings, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[1]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ANoMouseBindings, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[2]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ASkipWindowList, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[3]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ASkipSwitchPanel, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[4]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, AUnfocusable, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[5]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, AKeepInsideScreen, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[6]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ANoHideOthers, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[7]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ADontSaveSession, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[8]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, AEmulateAppIcon, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[9]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, AFocusAcrossWorkspace, value, flags);
-
-	value = (WMGetButtonSelected(panel->moreChk[10]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ANoMiniaturizable, value, flags);
-
-#ifdef XKB_BUTTON_HINT
-	value = (WMGetButtonSelected(panel->moreChk[11]) != 0) ? Yes : No;
-	different |= insertAttribute(dict, winDic, ANoLanguageButton, value, flags);
-#endif
+	/* Attributes... --> Advanced Options */
+	for (i = 0; i < wlengthof(advanced_option); i++) {
+		value = (WMGetButtonSelected(panel->moreChk[i]) != 0) ? Yes : No;
+		different |= insertAttribute(dict, winDic, pl_advoptions[i], value, flags);
+	}
 
 	if (wwin->main_window != None && wApplicationOf(wwin->main_window) != NULL) {
 		value = (WMGetButtonSelected(panel->appChk[0]) != 0) ? Yes : No;
@@ -712,10 +705,10 @@ static void applySettings(WMWidget *button, void *client_data)
 	InspectorPanel *panel = (InspectorPanel *) client_data;
 	WWindow *wwin = panel->inspected;
 	WApplication *wapp = wApplicationOf(wwin->main_window);
-	int skip_window_list;
-	int old_omnipresent, old_no_bind_keys, old_no_bind_mouse;
+	int old_skip_window_list, old_omnipresent, old_no_bind_keys, old_no_bind_mouse;
 	int i;
 
+	old_skip_window_list = WFLAGP(wwin, skip_window_list);
 	old_omnipresent = WFLAGP(wwin, omnipresent);
 	old_no_bind_keys = WFLAGP(wwin, no_bind_keys);
 	old_no_bind_mouse = WFLAGP(wwin, no_bind_mouse);
@@ -733,20 +726,15 @@ static void applySettings(WMWidget *button, void *client_data)
 	}
 
 	/* Attributes... --> Advanced Options */
-	WSETUFLAG(wwin, no_bind_keys, WMGetButtonSelected(panel->moreChk[0]));
-	WSETUFLAG(wwin, no_bind_mouse, WMGetButtonSelected(panel->moreChk[1]));
-	skip_window_list = WMGetButtonSelected(panel->moreChk[2]);
-	WSETUFLAG(wwin, skip_switchpanel, WMGetButtonSelected(panel->moreChk[3]));
-	WSETUFLAG(wwin, no_focusable, WMGetButtonSelected(panel->moreChk[4]));
-	WSETUFLAG(wwin, dont_move_off, WMGetButtonSelected(panel->moreChk[5]));
-	WSETUFLAG(wwin, no_hide_others, WMGetButtonSelected(panel->moreChk[6]));
-	WSETUFLAG(wwin, dont_save_session, WMGetButtonSelected(panel->moreChk[7]));
-	WSETUFLAG(wwin, emulate_appicon, WMGetButtonSelected(panel->moreChk[8]));
-	WSETUFLAG(wwin, focus_across_wksp, WMGetButtonSelected(panel->moreChk[9]));
-	WSETUFLAG(wwin, no_miniaturizable, WMGetButtonSelected(panel->moreChk[10]));
-#ifdef XKB_BUTTON_HINT
-	WSETUFLAG(wwin, no_language_button, WMGetButtonSelected(panel->moreChk[11]));
-#endif
+	for (i = 0; i < wlengthof(advanced_option); i++) {
+		if (WMGetButtonSelected(panel->moreChk[i]))
+			set_attr_flag(&wwin->user_flags, &advanced_option[i].flag);
+		else
+			clear_attr_flag(&wwin->user_flags, &advanced_option[i].flag);
+
+		set_attr_flag(&wwin->defined_user_flags, &advanced_option[i].flag);
+	}
+
 	WSETUFLAG(wwin, always_user_icon, WMGetButtonSelected(panel->alwChk));
 
 	if (WFLAGP(wwin, no_titlebar) && wwin->flags.shaded)
@@ -767,9 +755,8 @@ static void applySettings(WMWidget *button, void *client_data)
 
 	wwin->flags.omnipresent = 0;
 
-	if (WFLAGP(wwin, skip_window_list) != skip_window_list) {
-		WSETUFLAG(wwin, skip_window_list, skip_window_list);
-		UpdateSwitchMenu(wwin->screen_ptr, wwin, skip_window_list ? ACTION_REMOVE : ACTION_ADD);
+	if (WFLAGP(wwin, skip_window_list) != old_skip_window_list) {
+		UpdateSwitchMenu(wwin->screen_ptr, wwin, WFLAGP(wwin, skip_window_list)?ACTION_REMOVE:ACTION_ADD);
 	} else {
 		if (WFLAGP(wwin, omnipresent) != old_omnipresent)
 			WMPostNotificationName(WMNChangedState, wwin, "omnipresent");
@@ -908,49 +895,16 @@ static void revertSettings(WMWidget *button, void *client_data)
 		WMSetButtonSelected(panel->attrChk[i], flag);
 	}
 
-	for (i = 0; i < wlengthof(panel->moreChk); i++) {
-		int flag = 0;
+	/* Attributes... --> Advanced Options */
+	for (i = 0; i < wlengthof(advanced_option); i++) {
+		int is_userdef, flag;
 
-		switch (i) {
-		case 0:
-			flag = WFLAGP(wwin, no_bind_keys);
-			break;
-		case 1:
-			flag = WFLAGP(wwin, no_bind_mouse);
-			break;
-		case 2:
-			flag = WFLAGP(wwin, skip_window_list);
-			break;
-		case 3:
-			flag = WFLAGP(wwin, skip_switchpanel);
-			break;
-		case 4:
-			flag = WFLAGP(wwin, no_focusable);
-			break;
-		case 5:
-			flag = WFLAGP(wwin, dont_move_off);
-			break;
-		case 6:
-			flag = WFLAGP(wwin, no_hide_others);
-			break;
-		case 7:
-			flag = WFLAGP(wwin, dont_save_session);
-			break;
-		case 8:
-			flag = WFLAGP(wwin, emulate_appicon);
-			break;
-		case 9:
-			flag = WFLAGP(wwin, focus_across_wksp);
-			break;
-		case 10:
-			flag = WFLAGP(wwin, no_miniaturizable);
-			break;
-#ifdef XKB_BUTTON_HINT
-		case 11:
-			flag = WFLAGP(wwin, no_language_button);
-			break;
-#endif
-		}
+		is_userdef = get_attr_flag(&wwin->defined_user_flags, &advanced_option[i].flag);
+		if (is_userdef)
+			flag = get_attr_flag(&wwin->user_flags, &advanced_option[i].flag);
+		else
+			flag = get_attr_flag(&wwin->client_flags, &advanced_option[i].flag);
+
 		WMSetButtonSelected(panel->moreChk[i], flag);
 	}
 	if (panel->appFrm && wapp) {
@@ -1369,97 +1323,28 @@ static void create_tab_window_attributes(WWindow *wwin, InspectorPanel *panel, i
 static void create_tab_window_advanced(WWindow *wwin, InspectorPanel *panel, int frame_width)
 {
 	int i = 0;
-	char *caption = NULL, *descr = NULL;
-	int flag = 0;
 
 	panel->moreFrm = WMCreateFrame(panel->win);
 	WMSetFrameTitle(panel->moreFrm, _("Advanced"));
 	WMMoveWidget(panel->moreFrm, 15, 45);
 	WMResizeWidget(panel->moreFrm, frame_width, 265);
 
-	for (i = 0; i < wlengthof(panel->moreChk); i++) {
-		switch (i) {
-		case 0:
-			caption = _("Do not bind keyboard shortcuts");
-			flag = WFLAGP(wwin, no_bind_keys);
-			descr = _("Do not bind keyboard shortcuts from Window Maker\n"
-				  "when this window is focused. This will allow the\n"
-				  "window to receive all key combinations regardless\n"
-				  "of your shortcut configuration.");
-			break;
-		case 1:
-			caption = _("Do not bind mouse clicks");
-			flag = WFLAGP(wwin, no_bind_mouse);
-			descr = _("Do not bind mouse actions, such as `Alt'+drag\n"
-				  "in the window (when Alt is the modifier you have\n" "configured).");
-			break;
-		case 2:
-			caption = _("Do not show in the window list");
-			flag = WFLAGP(wwin, skip_window_list);
-			descr = _("Do not list the window in the window list menu.");
-			break;
-		case 3:
-			caption = _("Do not show in the switch panel");
-			flag = WFLAGP(wwin, skip_switchpanel);
-			descr = _("Do not include in switch panel while cycling windows.");
-			break;
-		case 4:
-			caption = _("Do not let it take focus");
-			flag = WFLAGP(wwin, no_focusable);
-			descr = _("Do not let the window take keyboard focus when you\n" "click on it.");
-			break;
-		case 5:
-			caption = _("Keep inside screen");
-			flag = WFLAGP(wwin, dont_move_off);
-			descr = _("Do not allow the window to move itself completely\n"
-				  "outside the screen. For bug compatibility.\n");
-			break;
-		case 6:
-			caption = _("Ignore 'Hide Others'");
-			flag = WFLAGP(wwin, no_hide_others);
-			descr = _("Do not hide the window when issuing the\n" "`HideOthers' command.");
-			break;
-		case 7:
-			caption = _("Ignore 'Save Session'");
-			flag = WFLAGP(wwin, dont_save_session);
-			descr = _("Do not save the associated application in the\n"
-				  "session's state, so that it won't be restarted\n"
-				  "together with other applications when Window Maker\n" "starts.");
-			break;
-		case 8:
-			caption = _("Emulate application icon");
-			flag = WFLAGP(wwin, emulate_appicon);
-			descr = _("Make this window act as an application that provides\n"
-				  "enough information to Window Maker for a dockable\n"
-				  "application icon to be created.");
-			break;
-		case 9:
-			caption = _("Focus across workspaces");
-			flag = WFLAGP(wwin, focus_across_wksp);
-			descr = _("Allow Window Maker to switch workspace to satisfy\n"
-				  "a focus request (annoying).");
-			break;
-		case 10:
-			caption = _("Do not let it be minimized");
-			flag = WFLAGP(wwin, no_miniaturizable);
-			descr = _("Do not let the window of this application be\n"
-					  "minimized.\n");
-			break;
-#ifdef XKB_BUTTON_HINT
-		case 11:
-			caption = _("Disable language button");
-			flag = WFLAGP(wwin, no_language_button);
-			descr = _("Remove the `toggle language' button of the window.");
-			break;
-#endif
-		}
+	for (i = 0; i < wlengthof(advanced_option); i++) {
+		int is_userdef, flag;
+
+		is_userdef = get_attr_flag(&wwin->defined_user_flags, &advanced_option[i].flag);
+		if (is_userdef)
+			flag = get_attr_flag(&wwin->user_flags, &advanced_option[i].flag);
+		else
+			flag = get_attr_flag(&wwin->client_flags, &advanced_option[i].flag);
+
 		panel->moreChk[i] = WMCreateSwitchButton(panel->moreFrm);
-		WMMoveWidget(panel->moreChk[i], 10, 20 * (i + 1));
+		WMMoveWidget(panel->moreChk[i], 10, 20 * (i + 1) - 4);
 		WMResizeWidget(panel->moreChk[i], frame_width - 15, 20);
 		WMSetButtonSelected(panel->moreChk[i], flag);
-		WMSetButtonText(panel->moreChk[i], caption);
+		WMSetButtonText(panel->moreChk[i], _(advanced_option[i].caption));
 
-		WMSetBalloonTextForView(descr, WMWidgetView(panel->moreChk[i]));
+		WMSetBalloonTextForView(_(advanced_option[i].description), WMWidgetView(panel->moreChk[i]));
 	}
 }
 
