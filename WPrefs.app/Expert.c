@@ -43,6 +43,9 @@ static const struct {
 	{ N_("Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."),
 	  /* default: */ False, OPTION_WMAKER, "DisableMiniwindows" },
 
+	{ N_("Ignore decoration hints for GTK applications."),
+	  /* default: */ False, OPTION_WMAKER, "IgnoreGtkHints" },
+
 	{ N_("Disable workspace pager."),
 	  /* default: */ False, OPTION_WMAKER, "DisableWorkspacePager" },
 

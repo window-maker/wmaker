@@ -740,6 +740,11 @@ The workaround is, for each application, to ask for Window Maker's window menu
 and click on the greyed "Disable titlebar" until it is white (the same can be
 done for other decoration attributes).
 
+If you use a lot of GNOME applications, you may want to ask Window Maker to just
+ignore the no-titlebar-and-all for all windows at once, which is done from
+WPrefs by going to the "Expert" panel and checking the "Ignore decoration hints
+for GTK applications" button.
+
 
 
 -=-=-=-=-=-=-=-

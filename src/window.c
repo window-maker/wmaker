@@ -288,6 +288,31 @@ static void setupGNUstepHints(WWindow *wwin, GNUstepWMAttributes *gs_hints)
 		wwin->client_flags.no_appicon = 1;
 }
 
+static void discard_hints_from_gtk(WWindow *wwin)
+{
+	Atom type;
+	int format;
+	unsigned long nb_item, nb_remain;
+	unsigned char *result;
+	int status;
+
+	status = XGetWindowProperty(dpy, wwin->client_win, w_global.atom.desktop.gtk_object_path, 0, 16, False,
+	                            AnyPropertyType, &type, &format, &nb_item, &nb_remain, &result);
+	if (status != Success)
+		return;
+
+	/* If we're here, that means the Property exists. We don't care what is inside, it means it is a GTK-based application */
+
+	if (result != NULL)
+		XFree(result);
+
+	/* GTK is asking to remove these decorations: */
+	wwin->client_flags.no_titlebar = 0;
+	wwin->client_flags.no_close_button = 0;
+	wwin->client_flags.no_miniaturize_button = 0;
+	wwin->client_flags.no_resizebar = 0;
+}
+
 void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 {
 	WScreen *scr = wwin->screen_ptr;
@@ -350,6 +375,9 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 #endif	/* USE_MWM_HINTS */
 
 		wNETWMCheckClientHints(wwin, &tmp_level, &tmp_workspace);
+
+		if (wPreferences.ignore_gtk_decoration_hints)
+			discard_hints_from_gtk(wwin);
 
 		/* window levels are between INT_MIN+1 and INT_MAX, so if we still
 		 * have INT_MIN that means that no window level was requested. -Dan

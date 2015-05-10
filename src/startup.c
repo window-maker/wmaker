@@ -394,6 +394,8 @@ static char *atomNames[] = {
 	GNUSTEP_WM_MINIATURIZE_WINDOW,
 	GNUSTEP_TITLEBAR_STATE,
 
+	"_GTK_APPLICATION_OBJECT_PATH",
+
 	"WM_IGNORE_FOCUS_EVENTS"
 };
 
@@ -467,7 +469,9 @@ void StartUp(Bool defaultScreenOnly)
 	w_global.atom.gnustep.wm_miniaturize_window = atom[18];
 	w_global.atom.gnustep.titlebar_state = atom[19];
 
-	w_global.atom.wm.ignore_focus_events = atom[20];
+	w_global.atom.desktop.gtk_object_path = atom[20];
+
+	w_global.atom.wm.ignore_focus_events = atom[21];
 
 #ifdef USE_DOCK_XDND
 	wXDNDInitializeAtoms();

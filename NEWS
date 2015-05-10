@@ -56,6 +56,16 @@ Mini-Preview name. The setting is configurable with WPrefs in the Icon
 Preferences tab, the size is now expressed in pixels directly.
 
 
+Ignore Decoration Hints from GNOME applications
+-----------------------------------------------
+
+The GNOME applications ask Window Maker to get no title bar and no resize bar to
+their windows by using "Hints". You can re-add them using the Attribute dialog
+in the Window menu, but if you are using many GNOME applications you may want to
+tell Window Maker to just ignore them. This is done with the new setting called
+"IgnoreGtkHints", which is available in the "Expert" panel in WPrefs.
+
+
 --- 0.95.6
 
 More image format supported

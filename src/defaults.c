@@ -518,6 +518,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.panel_only_open, getBool, NULL, NULL, NULL},
 	{"MiniPreviewSize", "128", NULL,
 	    &wPreferences.minipreview_size, getInt, NULL, NULL, NULL},
+	{"IgnoreGtkHints", "NO", NULL,
+	    &wPreferences.ignore_gtk_decoration_hints, getBool, NULL, NULL, NULL},
 
 	/*
 	 * Backward Compatibility:
