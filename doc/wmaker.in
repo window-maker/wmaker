@@ -51,6 +51,9 @@ disable the Drawers in the Dock
 @!HAVE_INOTIFY@.TP
 @!HAVE_INOTIFY@.B \-\-no\-polling
 @!HAVE_INOTIFY@disable the periodic check on the configuration file to reload it automatically
+@USE_ICCCM_WMREPLACE@.TP
+@USE_ICCCM_WMREPLACE@.B \-\-replace
+@USE_ICCCM_WMREPLACE@ask the currently running window manager to let Window Maker take his place
 .TP
 .B \-\-static
 do not update or save automatically the configuration

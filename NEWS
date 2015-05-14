@@ -66,6 +66,17 @@ tell Window Maker to just ignore them. This is done with the new setting called
 "IgnoreGtkHints", which is available in the "Expert" panel in WPrefs.
 
 
+Cooperative Window Manager Replacement
+--------------------------------------
+
+The ICCCM defines a protocol for window managers to ask to replace the currently
+running one; Window Maker now supports it. You can ask Window Maker to take the
+place of current one by running "wmaker --replace", or any other window manager
+can ask Window Maker to leave the place for them when started the same way.
+Please note that this feature must be explicitely enabled at compile time because
+by default it is not compiled in ("configure --enable-wmreplace").
+
+
 --- 0.95.6
 
 More image format supported
