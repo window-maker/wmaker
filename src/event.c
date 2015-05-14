@@ -37,6 +37,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
 #ifdef USE_XSHAPE
 # include <X11/extensions/shape.h>
 #endif
@@ -103,6 +104,7 @@ static void handleFocusIn(XEvent *event);
 static void handleMotionNotify(XEvent *event);
 static void handleVisibilityNotify(XEvent *event);
 static void handle_inotify_events(void);
+static void handle_selection_request(XSelectionRequestEvent *event);
 static void handle_selection_clear(XSelectionClearEvent *event);
 static void wdelete_death_handler(WMagicNumber id);
 
@@ -273,6 +275,10 @@ void DispatchEvent(XEvent * event)
 		if (event->xconfigure.window == DefaultRootWindow(dpy))
 			XRRUpdateConfiguration(event);
 #endif
+		break;
+
+	case SelectionRequest:
+		handle_selection_request(&event->xselectionrequest);
 		break;
 
 	case SelectionClear:
@@ -1890,6 +1896,79 @@ static void handleVisibilityNotify(XEvent * event)
 	if (!wwin)
 		return;
 	wwin->flags.obscured = (event->xvisibility.state == VisibilityFullyObscured);
+}
+
+static void handle_selection_request(XSelectionRequestEvent *event)
+{
+#ifdef USE_ICCCM_WMREPLACE
+	static Atom atom_version = None;
+	WScreen *scr;
+	XSelectionEvent notify;
+
+	/*
+	 * This event must be sent to the slection requester to not block him
+	 *
+	 * We create it with the answer 'there is no selection' by default
+	 */
+	notify.type = SelectionNotify;
+	notify.display = dpy;
+	notify.requestor = event->requestor;
+	notify.selection = event->selection;
+	notify.target = event->target;
+	notify.property = None; /* This says that there is no selection */
+	notify.time = event->time;
+
+	scr = wScreenForWindow(event->owner);
+	if (!scr)
+		goto not_our_selection;
+
+	if (event->owner != scr->info_window)
+		goto not_our_selection;
+
+	if (event->selection != scr->sn_atom)
+		goto not_our_selection;
+
+	if (atom_version == None)
+		atom_version = XInternAtom(dpy, "VERSION", False);
+
+	if (event->target == atom_version) {
+		static const long icccm_version[] = { 2, 0 };
+
+		/*
+		 * This protocol is defined in ICCCM 2.0:
+		 * http://www.x.org/releases/X11R7.7/doc/xorg-docs/icccm/icccm.html
+		 *  "Communication with the Window Manager by Means of Selections"
+		 */
+
+		/*
+		 * Setting the property means the content of the selection is available
+		 * According to the ICCCM spec, we need to support being asked for a property
+		 * set to 'None' for compatibility with old clients
+		 */
+		notify.property = (event->property == None)?(event->target):(event->property);
+
+		XChangeProperty(dpy, event->requestor, notify.property,
+		                XA_INTEGER, 32, PropModeReplace,
+		                (unsigned char *) icccm_version, wlengthof(icccm_version));
+	}
+
+ not_our_selection:
+	if (notify.property == None)
+		wwarning("received SelectionRequest(%s) for target=\"%s\" from requestor 0x%lX but we have no answer",
+		         XGetAtomName(dpy, event->selection), XGetAtomName(dpy, event->target), (long) event->requestor);
+
+	/* Send the answer to the requestor */
+	XSendEvent(dpy, event->requestor, False, 0L, (XEvent *) &notify);
+
+#else
+	/*
+	 * If the support for ICCCM window manager replacement was not enabled, we should not receive
+	 * this kind of event, so we just ignore it (Conceptually, we should reply with 'SelectionNotify'
+	 * event with property set to 'None' to tell that we don't have this selection, but that is a bit
+	 * costly for an event that shall never happen).
+	 */
+	(void) event;
+#endif
 }
 
 static void handle_selection_clear(XSelectionClearEvent *event)
