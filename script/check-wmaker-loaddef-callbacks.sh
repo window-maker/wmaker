@@ -163,8 +163,8 @@ function parse_structure(prefix) {
     }
 
     # skip line that define nothing interresting
-    if (/^[ \t]*$/) { continue; }
     gsub(/^[ \t]+/, "");
+    if (/^$/) { continue; }
     if (/^#/) { continue; }
     gsub(/[ \t]+$/, "");
 
@@ -198,39 +198,79 @@ function parse_structure(prefix) {
       print "Warning: line " FILENAME ":" NR " not understood inside struct" > "/dev/stderr";
       continue;
     }
+    gsub(/;$/, "");
 
     # Skip the lines that define a bit-field because they cannot be safely
     # pointed to anyway
     if (/:/) { continue; }
 
-    # It looks like a valid line, separate the name from the type
-    gsub(/;$/, "");
-    name = $0;
-    gsub(/([A-Z_a-z][A-Z_a-z0-9]*([ \t]*,[ \t]*)*)*$/, "");
-    name = substr(name, length($0) + 1);
+    separate_type_and_names();
 
     # In some rare case we cannot extract the name, that is likely a function pointer type
-    if (name == "") { continue; }
-
-    # Remove the sign specification because it is not a real problem
-    gsub(/\<(un)?signed\>/, " ");
-    if (/^[^A-Za-z]*$/) {
-      # If there is no more character, that means that the sign declaration was the only type specified, so
-      # we use the "int" type which is what C will use
-      $0 = "int " $0;
-    }
-
-    # Pack the type to have something consistent
-    gsub(/^[ \t]+/, "");
-    gsub(/[ \t]+$/, "");
-    gsub(/[ \t]*\*[ \t]*/, "*");
-    gsub(/[ \t]+/, " ");
+    if (type == "") { continue; }
 
     # Save this information in an array
-    nb_vars = split(name, var_list, /[ \t]*,[ \t]*/);
-    for (i = 1; i <= nb_vars; i++) {
-      member[prefix ":" var_list[i] ] = $0;
+    for (i = 1; i <= nb_names; i++) {
+      # If it is an array, push that information into the type
+      idx = index(name_list[i], "[");
+      if (idx > 0) {
+        member[prefix ":" substr(name_list[i], 1, idx-1) ] = type substr(name_list[i], idx);
+      } else {
+        member[prefix ":" name_list[i] ] = type;
+      }
     }
+  }
+}
+
+# Separate the declaration of an member of the struct: its type and the list of names
+# The result is returned through variables "name_list + nb_names" and "type"
+function separate_type_and_names() {
+  # Separate by names first
+  nb_names = split($0, name_list, /[ \t]*,[ \t]*/);
+
+  # Separate the type from the 1st name
+  if (name_list[1] ~ /\]$/) {
+    idx = index(name_list[1], "[") - 1;
+  } else {
+    idx = length(name_list[1]);
+  }
+  while (substr(name_list[1], idx, 1) ~ /[A-Za-z_0-9]/) { idx--; }
+
+  type = substr(name_list[1], 1, idx);
+  name_list[1] = substr(name_list[1], idx + 1);
+
+  if (type ~ /\(/) {
+    # If therese is a parenthesis in the type, that means we are parsing a function pointer
+    # declaration. This is not supported at current time (not needed), so we silently ignore
+    type = "";
+    return;
+  }
+
+  # Remove size information from array declarations
+  for (i in name_list) {
+    gsub(/\[[^\]]+\]/, "[]", name_list[i]);
+  }
+
+  # Parse the type to make it into a "standard" format
+  gsub(/[ \t]+$/, "", type);
+  nb_elem = split(type, type_list, /[ \t]+/);
+  type = "";
+  for (i = 1; i <= nb_elem; i++) {
+    if (type_list[i] == "signed" || type_list[i] == "unsigned") {
+      # The sign information is not a problem for pointer compatibility, so we do not keep it
+      continue;
+    }
+    if (type_list[i] ~ /^\*+$/) {
+      # If we have a pointer mark by itself, we glue it to the previous keyword
+      type = type type_list[i];
+    } else {
+      type = type " " type_list[i];
+    }
+  }
+  gsub(/^ /, "", type);
+  if (type ~ /^\*/ || type == "") {
+    # We have a signed/unsigned without explicit "int" specification, add it now
+    type = "int" type;
   }
 }
 
@@ -364,7 +404,7 @@ function extract_string_to_element() {
   return content "\"";
 }
 
-# Wherever a long C comment (/* comment */) is encounter, it is discarded
+# Wherever a long C comment (/* comment */) is encountered, it is discarded
 function skip_long_comment() {
   while (1) {
     idx = index($0, "*/");
