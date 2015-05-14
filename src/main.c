@@ -435,6 +435,7 @@ static void print_help(void)
 	puts(_("The Window Maker window manager for the X window system"));
 	puts("");
 	puts(_(" -display host:dpy	display to use"));
+	puts(_(" --replace		replace running window manager"));
 	puts(_(" --no-dock		do not open the application Dock"));
 	puts(_(" --no-clip		do not open the workspace Clip"));
 	puts(_(" --no-autolaunch	do not autolaunch applications"));
@@ -651,6 +652,8 @@ static int real_main(int argc, char **argv)
 				wPreferences.flags.noclip = 1;
 			} else if (strcmp(argv[i], "-nodrawer") == 0 || strcmp(argv[i], "--no-drawer") == 0) {
 				wPreferences.flags.nodrawer = 1;
+			} else if (strcmp(argv[i], "-replace") == 0 || strcmp(argv[i], "--replace") == 0) {
+				wPreferences.flags.replace = 1;
 			} else if (strcmp(argv[i], "-version") == 0 || strcmp(argv[i], "--version") == 0) {
 				printf("Window Maker %s\n", VERSION);
 				exit(0);

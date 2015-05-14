@@ -66,6 +66,8 @@
     |SubstructureRedirectMask|ButtonPressMask|ButtonReleaseMask\
     |KeyPressMask|KeyReleaseMask)
 
+#define REPLACE_WM_TIMEOUT 15
+
 #define STIPPLE_WIDTH 2
 #define STIPPLE_HEIGHT 2
 static char STIPPLE_DATA[] = { 0x02, 0x01 };
@@ -88,6 +90,106 @@ static void make_keys(void)
 	dDock = WMCreatePLString("Dock");
 	dClip = WMCreatePLString("Clip");
 	dDrawers = WMCreatePLString("Drawers");
+}
+
+/*
+ * Support for ICCCM 2.0: Window Manager Replacement protocol
+ * See: http://www.x.org/releases/X11R7.6/doc/xorg-docs/specs/ICCCM/icccm.html
+ *
+ * Basically, user should be able to dynamically change its window manager; this is done
+ * cooperatively through a special Selection ("WM_Sn" where 'n' is the X screen number)
+ *
+ * This function does 2 things:
+ *  - it checks if this selection is already owned, which means that another window
+ * manager is running. If it is the case and user specified '--replace' on the command
+ * line, then it asks the WM to shut down;
+ *  - when ok, it sets the selection ownership to ourself, so another window manager
+ * may ask us to shut down (this is handled in "event.c")
+ */
+static Bool replace_existing_wm(WScreen *scr)
+{
+	char atomName[16];
+	Window wm;
+	XSetWindowAttributes attribs;
+	XClientMessageEvent event;
+	unsigned long current_time;
+	int ret;
+
+	/* Try to acquire the atom named WM_S<screen> */
+	ret = snprintf(atomName, sizeof(atomName), "WM_S%d", scr->screen);
+	if (ret < 0 || ret == sizeof(atomName)) {
+		werror("out of memory trying to allocate window manager selection atom for screen %d", scr->screen);
+		return False;
+	}
+
+	scr->sn_atom = XInternAtom(dpy, atomName, False);
+	if (! scr->sn_atom)
+		return False;
+
+	/* Check if an existing window manager owns the selection */
+	wm = XGetSelectionOwner(dpy, scr->sn_atom);
+	if (wm) {
+		if (!wPreferences.flags.replace) {
+			wmessage(_("another window manager is running"));
+			wwarning(_("use the --replace flag to replace it"));
+			return False;
+		}
+
+		attribs.event_mask = StructureNotifyMask;
+		if (!XChangeWindowAttributes(dpy, wm, CWEventMask, &attribs))
+			wm = None;
+	}
+
+	/* for our window manager info notice board and the selection owner */
+	scr->info_window = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, 0, 0);
+
+	/* Try to acquire the selection */
+	current_time = CurrentTime;
+	ret = XSetSelectionOwner(dpy, scr->sn_atom, scr->info_window, current_time);
+	if (ret == BadAtom || ret == BadWindow)
+		return False;
+
+	/* Wait for other window manager to exit */
+	if (wm) {
+		unsigned long wait = 0;
+		unsigned long timeout = REPLACE_WM_TIMEOUT * 1000000L;
+		XEvent event;
+
+		while (wait < timeout) {
+			if (!(wait % 1000000))
+				wmessage(_("waiting %lus for other window manager to exit"), (timeout - wait) / 1000000L);
+
+			if (XCheckWindowEvent(dpy, wm, StructureNotifyMask, &event))
+				if (event.type == DestroyNotify)
+					break;
+
+			wusleep(100000);
+			wait += 100000;
+		}
+
+		if (wait >= timeout) {
+			wwarning(_("other window manager hasn't exited!"));
+			return False;
+		}
+
+		wmessage(_("replacing the other window manager"));
+	}
+
+	if (XGetSelectionOwner(dpy, scr->sn_atom) != scr->info_window)
+		return False;
+
+	event.type = ClientMessage;
+	event.message_type = scr->sn_atom;
+	event.format = 32;
+	event.data.l[0] = (long) current_time;
+	event.data.l[1] = (long) scr->sn_atom;
+	event.data.l[2] = (long) scr->info_window;
+	event.data.l[3] = (long) 0L;
+	event.data.l[4] = (long) 0L;
+	event.window = scr->root_win;
+	XSendEvent(dpy, scr->root_win, False, StructureNotifyMask, (XEvent *) &event);
+
+	return True;
 }
 
 /*
@@ -523,6 +625,13 @@ WScreen *wScreenInit(int screen_number)
 	CantManageScreen = 0;
 	oldHandler = XSetErrorHandler(alreadyRunningError);
 
+	/* Do we need to replace an existing window manager? */
+	if (!replace_existing_wm(scr)) {
+		XDestroyWindow(dpy, scr->info_window);
+		wfree(scr);
+		return NULL;
+	}
+
 	event_mask = EVENT_MASK;
 	XSelectInput(dpy, scr->root_win, event_mask);
 
@@ -615,11 +724,6 @@ WScreen *wScreenInit(int screen_number)
 
 	/* create GCs with default values */
 	allocGCs(scr);
-
-	/* for our window manager info notice board. Need to
-	 * create before reading the defaults, because it will be used there.
-	 */
-	scr->info_window = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, 0, 0);
 
 	/* read defaults for this screen */
 	wReadDefaults(scr, w_global.domain.wmaker->dictionary);

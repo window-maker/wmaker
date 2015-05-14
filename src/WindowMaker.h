@@ -463,6 +463,7 @@ extern struct WPreferences {
 	char show_clip_title;
 
 	struct {
+		unsigned int replace:1;               /* replace existing window manager */
 		unsigned int nodock:1;                /* don't display the dock */
 		unsigned int noclip:1;                /* don't display the clip */
 		unsigned int clip_merged_in_dock:1;   /* disable clip, switch workspaces with dock */
