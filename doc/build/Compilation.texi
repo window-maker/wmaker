@@ -575,6 +575,12 @@ Disable support for Motif's MWM Window Manager hints.
 These attributes were introduced by the Motif toolkit to ask for special window appearance requests.
 Nowadays this is covered by the NetWM/EWMH specification, but there are still applications that rely on MWM Hints.
 
+@item --enable-wmreplace
+Add support for the @emph{ICCCM} protocol for cooperative window manager replacement.
+This feature is disabled by default because you probably don't need to switch seamlessly the window manager;
+if you are making a package for a distribution you'd probably want to enable this because it allows users to give
+a try to different window managers without restarting everything for an extra cost that is not really big.
+
 @item --disable-xdnd
 Disable support for dragging and dropping files on the dock, which launches a user-specified command
 with that file.

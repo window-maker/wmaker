@@ -1894,6 +1894,7 @@ static void handleVisibilityNotify(XEvent * event)
 
 static void handle_selection_clear(XSelectionClearEvent *event)
 {
+#ifdef USE_ICCCM_WMREPLACE
 	WScreen *scr = wScreenForWindow(event->window);
 
 	if (!scr)
@@ -1904,4 +1905,11 @@ static void handle_selection_clear(XSelectionClearEvent *event)
 
 	wmessage(_("another window manager is replacing us!"));
 	Shutdown(WSExitMode);
+#else
+	/*
+	 * If the support for ICCCM window manager replacement was not enabled, we should not receive
+	 * this kind of event, so we simply do nothing.
+	 */
+	(void) event;
+#endif
 }

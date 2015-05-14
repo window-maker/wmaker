@@ -69,7 +69,9 @@ typedef struct WDrawerChain {
 typedef struct _WScreen {
     int	screen;			       /* screen number */
     Window info_window;		       /* for our window manager info stuff */
+#ifdef USE_ICCCM_WMREPLACE
     Atom sn_atom;		       /* window manager selection */
+#endif
 
     int scr_width;		       /* size of the screen */
     int scr_height;

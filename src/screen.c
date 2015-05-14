@@ -66,7 +66,9 @@
     |SubstructureRedirectMask|ButtonPressMask|ButtonReleaseMask\
     |KeyPressMask|KeyReleaseMask)
 
+#ifdef USE_ICCCM_WMREPLACE
 #define REPLACE_WM_TIMEOUT 15
+#endif
 
 #define STIPPLE_WIDTH 2
 #define STIPPLE_HEIGHT 2
@@ -108,6 +110,7 @@ static void make_keys(void)
  */
 static Bool replace_existing_wm(WScreen *scr)
 {
+#ifdef USE_ICCCM_WMREPLACE
 	char atomName[16];
 	Window wm;
 	XSetWindowAttributes attribs;
@@ -139,10 +142,12 @@ static Bool replace_existing_wm(WScreen *scr)
 		if (!XChangeWindowAttributes(dpy, wm, CWEventMask, &attribs))
 			wm = None;
 	}
+#endif
 
 	/* for our window manager info notice board and the selection owner */
 	scr->info_window = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, 0, 0);
 
+#ifdef USE_ICCCM_WMREPLACE
 	/* Try to acquire the selection */
 	current_time = CurrentTime;
 	ret = XSetSelectionOwner(dpy, scr->sn_atom, scr->info_window, current_time);
@@ -188,6 +193,7 @@ static Bool replace_existing_wm(WScreen *scr)
 	event.data.l[4] = (long) 0L;
 	event.window = scr->root_win;
 	XSendEvent(dpy, scr->root_win, False, StructureNotifyMask, (XEvent *) &event);
+#endif
 
 	return True;
 }

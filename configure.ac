@@ -526,6 +526,20 @@ AS_IF([test "x$enable_xdnd" = "xyes"],
 AM_CONDITIONAL([USE_DOCK_XDND], [test "x$enable_dock_xdnd" != "xno"])
 
 
+dnl Support for ICCCM 2.0 Window Manager replacement
+dnl ================================================
+AC_ARG_ENABLE([wmreplace],
+    [AS_HELP_STRING([--enable-wmreplace], [support for ICCCM window manager replacement])],
+    [AS_CASE([$enableval],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value '$enableval' for --enable-wmreplace])])],
+    [enable_wmreplace=no])
+AS_IF([test "x$enable_wmreplace" = "xyes"],
+    [AC_DEFINE([USE_ICCCM_WMREPLACE], [1],
+       [define to support ICCCM protocol for window manager replacement])
+     supported_xext="$supported_xext WMReplace"])
+
+
 dnl XShape support
 dnl ==============
 AC_ARG_ENABLE([shape],
