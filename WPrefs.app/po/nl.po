@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-27 19:02+0200\n"
-"PO-Revision-Date: 2015-04-27 00:00+0000\n"
+"POT-Creation-Date: 2015-05-18 08:07+0200\n"
+"PO-Revision-Date: 2015-05-18 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -45,11 +45,11 @@ msgstr "Tekst uitgeschakelde menu-ingang"
 
 #: ../../WPrefs.app/Appearance.c:58
 msgid "Menu Highlight Color"
-msgstr "Kleur van gemarkeerd menu"
+msgstr "Kleur van uitgelicht menu"
 
 #: ../../WPrefs.app/Appearance.c:60
 msgid "Highlighted Menu Text Color"
-msgstr "Tekstkleur van gemarkeerd menu"
+msgstr "Tekstkleur van uitgelicht menu"
 
 #.
 #. * yuck kluge: the coordinate for HighlightTextColor are actually those of the last "Normal item"
@@ -232,7 +232,7 @@ msgstr "Uitgeschakeld"
 
 #: ../../WPrefs.app/Appearance.c:1532
 msgid "Highlighted"
-msgstr "Gemarkeerd"
+msgstr "Uitgelicht"
 
 #: ../../WPrefs.app/Appearance.c:1625
 msgid "Icon Text"
@@ -282,7 +282,7 @@ msgstr "Bewerken"
 
 #: ../../WPrefs.app/Appearance.c:1939
 msgid "Edit the highlighted texture."
-msgstr "Bewerk de gemarkeerde textuur."
+msgstr "Bewerk de uitgelichte textuur."
 
 #: ../../WPrefs.app/Appearance.c:1946 ../../WPrefs.app/TexturePanel.c:1219
 msgid "Delete"
@@ -290,7 +290,7 @@ msgstr "Wissen"
 
 #: ../../WPrefs.app/Appearance.c:1950
 msgid "Delete the highlighted texture."
-msgstr "Wis de gemarkeerde textuur."
+msgstr "Wis de uitgelichte textuur."
 
 #: ../../WPrefs.app/Appearance.c:1962
 msgid "Color"
@@ -535,84 +535,89 @@ msgstr ""
 
 #. default:
 #: ../../WPrefs.app/Expert.c:46
+msgid "Ignore decoration hints for GTK applications."
+msgstr "Negeer decoratiehints voor GTK-programma's."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:49
 msgid "Disable workspace pager."
 msgstr "Schakel werkruimtevolger uit."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:49
+#: ../../WPrefs.app/Expert.c:52
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)."
 msgstr ""
 "Stel geen niet-WindowMaker-specifieke parameters in (gebruik 'xset' niet)."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:52
+#: ../../WPrefs.app/Expert.c:55
 msgid "Automatically save session when exiting Window Maker."
 msgstr "Sla sessie vanzelf op bij afsluiten van Window Maker."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:55
+#: ../../WPrefs.app/Expert.c:58
 msgid "Use SaveUnder in window frames, icons, menus and other objects."
 msgstr ""
 "Gebruik SaveUnder in vensteromlijsting, iconen, menu's en andere objecten."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:58
+#: ../../WPrefs.app/Expert.c:61
 msgid "Disable confirmation panel for the Kill command."
 msgstr "Schakel bevestigingspaneel voor 't commando 'Doden' uit."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:61
+#: ../../WPrefs.app/Expert.c:64
 msgid "Disable selection animation for selected icons."
 msgstr "Schakel selectieanimatie voor geselecteerde iconen uit."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:64
+#: ../../WPrefs.app/Expert.c:67
 msgid "Smooth font edges (needs restart)."
 msgstr "Vlak letterranden af (herstart nodig)."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:67
+#: ../../WPrefs.app/Expert.c:70
 msgid "Cycle windows only on the active head."
 msgstr "Wissel vensters alleen op de actieve kop."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:70
+#: ../../WPrefs.app/Expert.c:73
 msgid "Ignore minimized windows when cycling."
 msgstr "Negeer geminiaturiseerde vensters bij wisselen."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:73
+#: ../../WPrefs.app/Expert.c:76
 msgid "Show switch panel when cycling windows."
 msgstr "Toon schakelpaneel bij vensters wisselen."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:76
+#: ../../WPrefs.app/Expert.c:79
 msgid "Show workspace title on Clip."
 msgstr "Toon werkruimtetitel op Clip."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:79
+#: ../../WPrefs.app/Expert.c:82
 msgid "Highlight the icon of the application when it has the focus."
 msgstr "Accentueer 't programma-icoon, wanneer 't focus heeft."
 
-#: ../../WPrefs.app/Expert.c:83
+#: ../../WPrefs.app/Expert.c:86
 msgid "Enable keyboard language switch button in window titlebars."
 msgstr "Schakel toetsenbordtaalknop op venstertitelbalken in."
 
-#: ../../WPrefs.app/Expert.c:87
+#: ../../WPrefs.app/Expert.c:90
 msgid "Maximize a window to side or corner by dragging."
 msgstr "Maximaliseer 'n venster tegen zijkant of hoek door verslepen."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:90
+#: ../../WPrefs.app/Expert.c:93
 msgid "Open dialogs in the same workspace as their owners."
 msgstr "Open dialogen in dezelfde werkruimte als hun eigenaren."
 
-#: ../../WPrefs.app/Expert.c:214
+#: ../../WPrefs.app/Expert.c:217
 msgid "Expert User Preferences"
 msgstr "Voorkeuren voor ervaren gebruikers"
 
-#: ../../WPrefs.app/Expert.c:216
+#: ../../WPrefs.app/Expert.c:219
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also has some other misc. options."

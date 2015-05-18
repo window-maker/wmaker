@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-27 19:02+0200\n"
-"PO-Revision-Date: 2015-04-27 00:00+0000\n"
+"POT-Creation-Date: 2015-05-18 08:07+0200\n"
+"PO-Revision-Date: 2015-05-18 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -122,7 +122,7 @@ msgstr "onbekende aanwijzing '#%s'"
 #: ../../WINGs/menuparser.c:444
 #, c-format
 msgid "extra text after '#' command is ignored: \"%.16s...\""
-msgstr "extra tekst na #-commando is genegeerd: \"%.16s...\""
+msgstr "extra tekst na #-commando wordt genegeerd: \"%.16s...\""
 
 #: ../../WINGs/menuparser.c:459
 msgid "no file name found for #include"
@@ -798,17 +798,17 @@ msgstr "Herstellen"
 msgid "Could not init font config library\n"
 msgstr "Kon bibliotheek 'lettertype instellen' niet initialiseren\n"
 
-#: ../../WINGs/widgets.c:386
+#: ../../WINGs/widgets.c:446
 #, c-format
 msgid "WINGs: could not load widget images file: %s"
 msgstr "WINGs: Kon afbeeldingenbestand besturingselementen niet laden: %s"
 
-#: ../../WINGs/widgets.c:482
+#: ../../WINGs/widgets.c:542
 #, c-format
 msgid "WINGs: could not open display %s"
 msgstr "WINGs: Kon scherm %s niet openen"
 
-#: ../../WINGs/widgets.c:711
+#: ../../WINGs/widgets.c:771
 msgid ""
 "could not load any fonts. Make sure your font installation and locale "
 "settings are correct."
@@ -854,11 +854,11 @@ msgstr ""
 "parameternaam"
 
 msgid ""
-"invalid characted '%c' in arg-list for macro \"%s\" while expecting ',' or "
-"')'"
+"invalid characted '%c' in arg-list for macro \"%s\" while expecting ',' "
+"or ')'"
 msgstr ""
-"ongeldig letterteken '%c' in arg.-lijst voor macro \"%s\", verwachtte ',' of "
-"')'"
+"ongeldig letterteken '%c' in arg.-lijst voor macro \"%s\", verwachtte ',' "
+"of ')'"
 
 msgid "unknow directive '#%s'"
 msgstr "onbekende aanwijzing '#%s'"
