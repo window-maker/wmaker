@@ -1352,7 +1352,7 @@ static void create_tab_window_attributes(WWindow *wwin, InspectorPanel *panel, i
 		WMSetButtonSelected(panel->attrClient[i], flag);
 		WMSetButtonEnabled(panel->attrClient[i], False);
 
-		WMSetBalloonTextForView(_("Show the state that was asked by the application.\n"
+		WMSetBalloonTextForView(_("Shows the state that was asked by the application.\n"
 		                          "You can use the checkbox on the right to change this setting;\n"
 		                          "when it is grayed it means to follow application's choice."),
 		                        WMWidgetView(panel->attrClient[i]));
