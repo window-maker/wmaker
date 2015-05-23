@@ -28,6 +28,7 @@
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
+#include <errno.h>
 
 #include "wmmenugen.h"
 
@@ -54,6 +55,35 @@ static const char *prog_name;
 WMTreeNode *menu;
 char *env_lang, *env_ctry, *env_enc, *env_mod;
 
+static void print_help(void)
+{
+	printf("Usage: %s -parser:<parser> fspec [fspec...]\n", prog_name);
+	puts("Dynamically generate a menu in Property List format for Window Maker");
+	puts("");
+	puts("  -h, --help\t\tdisplay this help and exit");
+	puts("  -parser=<name>\tspecify the format of the input, see below");
+	puts("  --version\t\toutput version information and exit");
+	puts("");
+	puts("fspec: the file to be converted or the directory containing all the menu files");
+	puts("");
+	puts("Known parsers:");
+	puts("  xdg\t\tDesktop Entry from FreeDesktop standard");
+	puts("  wmconfig\tfrom the menu generation tool by the same name");
+}
+
+#ifdef DEBUG
+static const char *get_parser_name(void)
+{
+	if (parse == &parse_xdg)
+		return "xdg";
+	if (parse == &parse_wmconfig)
+		return "wmconfig";
+
+	/* This case is not supposed to happen, but if it does it means that someone to update this list */
+	return "<unknown>";
+}
+#endif
+
 int main(int argc, char **argv)
 {
 	struct stat st;
@@ -76,45 +106,69 @@ int main(int argc, char **argv)
 	parse_locale(NULL, &env_lang, &env_ctry, &env_enc, &env_mod);
 	terminal = find_terminal_emulator();
 
-	if (argc < 3) {
-		fprintf(stderr, "Usage: %s -parser:<parser> fspec [fpsec...] "
-			"[-parser:<parser> fspec [fpsec...]...]\n", prog_name);
-		fputs(  "Known parsers: xdg wmconfig\n", stderr);
-		return 1;
-	}
-
-	for (i = 1; i < argc; i++)
+	for (i = 1; i <= argc; i++)
 	{
-		if (strncmp(argv[i], "-parser:", 8) == 0) {
-			if (strcmp(argv[i] + 8, "xdg") == 0) {
-#if DEBUG
-				fputs("Using parser \"xdg\"\n", stderr);
-#endif
+		if (strncmp(argv[i], "-parser", 7) == 0 &&
+		    (argv[i][7] == '=' ||
+		     argv[i][7] == ':' || /* for legacy compatibility */
+		     argv[i][7] == '\0')) {
+			const char *name;
+
+			if (argv[i][7] == '\0') {
+				if (++i > argc) {
+					fprintf(stderr, "%s: Missing parser name after \"-parser\"\n", prog_name);
+					return 2;
+				}
+				name = argv[i];
+			} else {
+				name = argv[i] + 8;
+			}
+
+			if (strcmp(name, "xdg") == 0) {
 				parse = &parse_xdg;
-			} else if (strcmp(argv[i] + 8, "wmconfig") == 0) {
-#if DEBUG
-				fputs("Using parser \"wmconfig\"\n", stderr);
-#endif
+			} else if (strcmp(name, "wmconfig") == 0) {
 				parse = &parse_wmconfig;
 				validateFilename = &wmconfig_validate_file;
 			} else {
-				fprintf(stderr, "%s: Unknown parser \"%s\"\n", prog_name, argv[i] + 8);
+				fprintf(stderr, "%s: Unknown parser \"%s\"\n", prog_name, name);
+				return 2;
 			}
 			continue;
 		}
 
-		if (parse) {
-			if (stat(argv[i], &st) == -1) {
-				fprintf(stderr, "%s: unable to stat \"%s\"\n", prog_name, argv[i]);
-			} else if (S_ISREG(st.st_mode)) {
-				parse(argv[i], addWMMenuEntryCallback);
-			} else if (S_ISDIR(st.st_mode)) {
-				nftw(argv[i], dirParseFunc, 16, FTW_PHYS);
-			} else {
-				fprintf(stderr, "%s: \"%s\" is not a file or directory\n", prog_name, argv[i]);
-			}
-		} else {
+		if (strcmp(argv[i], "--version") == 0) {
+			printf("%s (Window Maker %s)\n", prog_name, VERSION);
+			return 0;
+		}
+
+		if (strcmp(argv[i], "-h") == 0 ||
+		    strcmp(argv[i], "-help") == 0 ||
+		    strcmp(argv[i], "--help") == 0) {
+			print_help();
+			return 0;
+		}
+
+		if (parse == NULL) {
 			fprintf(stderr, "%s: argument \"%s\" with no valid parser\n", prog_name, argv[i]);
+			return 2;
+		}
+
+#if DEBUG
+		fprintf(stderr, "%s: Using parser \"%s\" to process \"%s\"\n",
+		        prog_name, get_parser_name(), argv[i]);
+#endif
+
+		if (stat(argv[i], &st) == -1) {
+			fprintf(stderr, "%s: unable to stat \"%s\", %s\n",
+			        prog_name, argv[i], strerror(errno));
+			return 1;
+		} else if (S_ISREG(st.st_mode)) {
+			parse(argv[i], addWMMenuEntryCallback);
+		} else if (S_ISDIR(st.st_mode)) {
+			nftw(argv[i], dirParseFunc, 16, FTW_PHYS);
+		} else {
+			fprintf(stderr, "%s: \"%s\" is not a file or directory\n", prog_name, argv[i]);
+			return 1;
 		}
 	}
 
@@ -129,16 +183,17 @@ int main(int argc, char **argv)
 	i = WMGetArrayItemCount(plMenuNodes);
 	if (i > 2) { /* more than one submenu unprocessed is almost certainly an error */
 		fprintf(stderr, "%s: unprocessed levels on the stack. fishy.\n", prog_name);
-		return 1;
+		return 3;
 	} else if (i > 1 ) { /* possibly the top-level attachment is not yet done */
 		WMPropList *first, *next;
+
 		next = WMPopFromArray(plMenuNodes);
 		first = WMPopFromArray(plMenuNodes);
 		WMAddToPLArray(first, next);
 		WMAddToArray(plMenuNodes, first);
 	}
 
-	printf("%s\n", WMGetPropListDescription((WMPropList *)WMGetFromArray(plMenuNodes, 0), True));
+	puts(WMGetPropListDescription((WMPropList *)WMGetFromArray(plMenuNodes, 0), True));
 
 	return 0;
 }
