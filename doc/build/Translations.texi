@@ -448,6 +448,31 @@ You may find some information on working with @code{po} file in the
 @uref{https://www.gnu.org/software/gettext/manual/html_node/Editing.html,GNU gettext documentation}.
 
 
+@c --------------------------------------------------------------------- Translate the Man Pages ---
+@section Translate the Man Pages
+
+You may want to extend the translation to the documentation that is provided to users in the form
+of Unix @i{man pages}.
+The sources of the man pages are located in the @file{doc/} directory;
+the translation should be placed in the directory @file{doc/@i{lang}/} with the same file name.
+
+The directory will also need a file @file{Makefile.am} which provides the list of man pages to be
+included in the distribution package and to be installed.
+You can probably get inspiration from an existing one from another language;
+if you do not feel confident about it do not hesitate to ask on the project's mailing list
+(@value{emailsupport}), either for help or to ask someone to make it for you.
+
+Please note that although most man pages sources are directly in man page format
+(@emph{nroff}, the file extension being a number), a few of them are processed by a script
+(those with the @file{.in} extension, like @file{wmaker.in}).
+This is done because in some case we want the man page to reflect the actual compilation options.
+
+You may not want to bother with this hassle, in which case you can simply name your translation
+file with the @file{.1} and remove the special @code{@@keyword@@} marks.
+If you are sure you want to keep that processing but do not feel confident about hacking the
+@file{Makefile.am} do not hesitate to ask on the project's mailing list (@value{emailsupport}).
+
+
 @c ------------------------------------------------------------------------- Checking the Result ---
 @section Checking the Result
 
