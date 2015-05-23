@@ -1,17 +1,19 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH geticonset 1x "January 1999"
+.TH seticons 1 "March 1998"
 .SH NAME
-geticonset \- gets the current Window Maker icon set
+seticons \- sets the icon images used in Window Maker
 .SH SYNOPSIS
-.B geticonset
-.RI [ options ]
-.RI [ iconsetfile ]
+.B seticons
+.I iconsfile
 .SH DESCRIPTION
-.B geticonset
-reads the
+.B seticons
+reads
+.I iconsfile
+and writes its contents to the
 .I WMWindowAttributes
-domain, and writes the icon set found there either to stdout or to the file
-.IR iconsetfile .
+domain, effectively
+setting the icons Window Maker uses for a given class (for example,
+XTerm, "xterm.XTerm", "rxvt.XTerm", "pine.XTerm", etc)
 .SH OPTIONS
 .TP
 .B \-\-help
@@ -26,10 +28,10 @@ appended to this variable to determine the actual location of the
 databases. If the variable is not set, it defaults to "~/GNUstep"
 .SH FILES
 .IP GNUSTEP_USER_ROOT/Defaults/WMWindowAttributes
-is the actual file that's read.
+This is the actual file that's written.
 .SH SEE ALSO
-.BR seticons (1x),
-.BR wmaker (1x)
+.BR geticonset (1),
+.BR wmaker (1)
 .SH AUTHOR
 This man page was written by Marcelo Magallon <mmagallo@debian.org>.
 .PP

@@ -1,5 +1,5 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH wmsetbg 1x "April 2015"
+.TH wmsetbg 1 "April 2015"
 .SH NAME
 wmsetbg \- sets the background on the X11 display
 .SH SYNOPSIS
@@ -102,7 +102,7 @@ The value specified with the option defines the number of possible values for ea
 (red, green and blue), for example \fI8\fP would reduce the image to use only 8*8*8=512 colors before
 applying the conversion algorithm.
 .SH SEE ALSO
-.BR wmaker (1x)
+.BR wmaker (1)
 .SH AUTHOR
 This man page was written by Marcelo Magallon <mmagallo@debian.org>.
 .PP
