@@ -1,20 +1,15 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH wdwrite 1x "January 1999"
+.TH geticonset 1 "January 1999"
 .SH MENO
-wdwrite \- zapí¹e kµúèe a hodnoty do databázy ¹tandardných nastavení
+geticonset \- extrahuje aktuálnu sadu ikon Window Makera
 .SH SYNTAX
-.B wdwrite
-.I doména
-.I voµba
-.I hodnota
+.B geticonset
+.I [voµby] [súbor]
 .SH POPIS
-.B wdwrite
-zapí¹e
-.I voµbu
-a
-.I hodnotu
-do danej
-.I domény.
+.B geticonset
+naèíta doménu WMWindowAttributes a zapí¹e sadu nájdených ikon
+buï na ¹tandardný výstup alebo do
+.I súboru.
 .SH VO¥BY
 .TP
 .B \-\-help
@@ -28,9 +23,11 @@ vypí¹e èíslo verzie
 premennej, èím sa urèí umiestnenie databáz. Ak premenná nie je nastavená,
 jej implicitná hodnota je "~/GNUstep"
 .SH SÚBORY
-Domény sa nachádzajú v GNUSTEP_USER_ROOT/Defaults/
+.IP GNUSTEP_USER_ROOT/Defaults/WMWindowAttributes
+Toto je súbor, ktorý sa zapí¹e.
 .SH POZRI TIE®
-.BR wmaker (1x)
+.BR seticons (1),
+.BR wmaker (1)
 .SH AUTOR
 Autorom Window Makera je Alfredo K. Kojima <kojima@windowmaker.info>.
 .PP

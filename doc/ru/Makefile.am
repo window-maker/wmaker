@@ -3,14 +3,14 @@
 mandir=@mandir@/ru
 
 man_MANS = \
-	geticonset.1x \
-	setstyle.1x \
-	wxpaste.1x \
-	getstyle.1x \
-	wdwrite.1x \
-	wmsetbg.1x \
-	seticons.1x \
-	wmaker.1x \
-	wxcopy.1x
+	geticonset.1 \
+	getstyle.1 \
+	seticons.1 \
+	setstyle.1 \
+	wdwrite.1 \
+	wmaker.1 \
+	wmsetbg.1 \
+	wxcopy.1 \
+	wxpaste.1
 
 EXTRA_DIST = $(man_MANS)
