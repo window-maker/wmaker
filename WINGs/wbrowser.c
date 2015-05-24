@@ -565,7 +565,7 @@ static void scrollCallback(WMWidget * scroller, void *self)
 
 			floatValue = (floatValue * value) / value;
 
-			newFirst = rint(floatValue * (float)(bPtr->columnCount - bPtr->maxVisibleColumns));
+			newFirst = rint(floatValue * (double)(bPtr->columnCount - bPtr->maxVisibleColumns));
 
 			if (bPtr->firstVisibleColumn != newFirst)
 				scrollToColumn(bPtr, newFirst, False);
