@@ -52,6 +52,13 @@
 #include "event.h"
 
 
+#ifndef HAVE_FLOAT_MATHFUNC
+#define sinf(x) ((float)sin((double)(x)))
+#define cosf(x) ((float)cos((double)(x)))
+#define sqrtf(x) ((float)sqrt((double)(x)))
+#define atan2f(y, x) ((float)atan((double)(y) / (double)(x)))
+#endif
+
 static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, int *new_y,
 				  unsigned int *new_width, unsigned int *new_height);
 static void save_old_geometry(WWindow *wwin, int directions);
@@ -792,8 +799,8 @@ static void animateResizeFlip(WScreen *scr, int x, int y, int w, int h, int fx, 
 		if (angle > final_angle)
 			angle = final_angle;
 
-		dx = (cw / 10) - ((cw / 5) * sin(angle));
-		dch = (ch / 2) * cos(angle);
+		dx = (cw / 10) - ((cw / 5) * sinf(angle));
+		dch = (ch / 2) * cosf(angle);
 		midy = cy + (ch / 2);
 
 		points[0].x = cx + dx;
@@ -857,19 +864,19 @@ animateResizeTwist(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int
 		if (angle > final_angle)
 			angle = final_angle;
 
-		a = atan(ch / cw);
-		d = sqrt((cw / 2) * (cw / 2) + (ch / 2) * (ch / 2));
+		a = atan2f(ch, cw);
+		d = sqrtf((cw / 2) * (cw / 2) + (ch / 2) * (ch / 2));
 
-		points[0].x = cx + cos(angle - a) * d;
-		points[0].y = cy + sin(angle - a) * d;
-		points[1].x = cx + cos(angle + a) * d;
-		points[1].y = cy + sin(angle + a) * d;
-		points[2].x = cx + cos(angle - a + WM_PI) * d;
-		points[2].y = cy + sin(angle - a + WM_PI) * d;
-		points[3].x = cx + cos(angle + a + WM_PI) * d;
-		points[3].y = cy + sin(angle + a + WM_PI) * d;
-		points[4].x = cx + cos(angle - a) * d;
-		points[4].y = cy + sin(angle - a) * d;
+		points[0].x = cx + cosf(angle - a) * d;
+		points[0].y = cy + sinf(angle - a) * d;
+		points[1].x = cx + cosf(angle + a) * d;
+		points[1].y = cy + sinf(angle + a) * d;
+		points[2].x = cx + cosf(angle - a + (float)WM_PI) * d;
+		points[2].y = cy + sinf(angle - a + (float)WM_PI) * d;
+		points[3].x = cx + cosf(angle + a + (float)WM_PI) * d;
+		points[3].y = cy + sinf(angle + a + (float)WM_PI) * d;
+		points[4].x = cx + cosf(angle - a) * d;
+		points[4].y = cy + sinf(angle - a) * d;
 		XGrabServer(dpy);
 		XDrawLines(dpy, scr->root_win, scr->frame_gc, points, 5, CoordModeOrigin);
 		XFlush(dpy);

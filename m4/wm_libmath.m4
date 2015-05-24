@@ -50,5 +50,35 @@ AS_IF([test "x$wm_cv_libm_pi" = "xno"],
         [Defines how to access the value of Pi])
      AS_IF([test "x$wm_cv_libm_pi" != "xyes"],
         [CFLAGS="$CFLAGS $wm_cv_libm_pi"]) ])
+AC_CACHE_CHECK([if sinf+cosf are defined in math.h], [wm_cv_libm_sinf],
+    [wm_cv_libm_sinf="no"
+     wm_save_CFLAGS="$CFLAGS"
+     wm_save_LIBS="$LIBS"
+     LIBS="$LIBS $LIBM"
+     for wm_arg in dnl
+       "% yes" dnl natively available (C99 compliant)
+       "-D_XOPEN_SOURCE=600" ; dnl Explicit request
+     do
+       CFLAGS="$wm_save_CFLAGS `echo "$wm_arg" | sed -e 's, *%.*$,,' `"
+       AC_LINK_IFELSE([AC_LANG_PROGRAM([dnl
+@%:@include <math.h>
+], [dnl
+  float a, b;
+
+  a = WM_PI;
+  b = sqrtf(a);
+  a = atan2f(a, b);
+  b = cosf(a);
+  a = sinf(b);
+  return (int)a;])],
+           [wm_cv_libm_sinf="`echo "$wm_arg" | sed -e 's,^.*% *,,' `" ; break])
+     done
+     LIBS="$wm_save_LIBS"
+     CFLAGS="$wm_save_CFLAGS"])
+AS_IF([test "x$wm_cv_libm_sinf" != "xno"],
+    [AC_DEFINE([HAVE_FLOAT_MATHFUNC], [1],
+        [Defined if the 'float'-typed math function are available (sinf, cosf)])
+     AS_IF([test "x$wm_cv_libm_sinf" != "xyes"],
+        [CFLAGS="$CFLAGS $wm_cd_libm_sinf"]) ])
 AC_SUBST(LIBM) dnl
 ])
