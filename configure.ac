@@ -153,6 +153,11 @@ AS_IF([test "x$debug" = "xyes"],
      dnl too complicated to maintain
      AX_CFLAGS_GCC_OPTION([-Wdisabled-optimization])
      dnl
+     dnl Because of C's type promotion, the compiler has to generate
+     dnl less optimal code when a double constant is used in a
+     dnl float expression
+     AX_CFLAGS_GCC_OPTION([-Wdouble-promotion])
+     dnl
      dnl Floating-point comparison is not a good idea
      AX_CFLAGS_GCC_OPTION([-Wfloat-equal])
      dnl
