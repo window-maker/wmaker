@@ -70,6 +70,7 @@ AC_CACHE_CHECK([if sinf+cosf are defined in math.h], [wm_cv_libm_sinf],
   a = atan2f(a, b);
   b = cosf(a);
   a = sinf(b);
+  a = powf(a, b);
   return (int)a;])],
            [wm_cv_libm_sinf="`echo "$wm_arg" | sed -e 's,^.*% *,,' `" ; break])
      done

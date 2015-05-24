@@ -38,6 +38,10 @@
 #include "scale.h"
 
 
+#ifndef HAVE_FLOAT_MATHFUNC
+#define powf(x, y) ((float) pow((double)(x), (double)(y)))
+#endif
+
 static Bool bestContext(Display * dpy, int screen_number, RContext * context);
 
 static const RContextAttributes DEFAULT_CONTEXT_ATTRIBS = {
@@ -248,13 +252,13 @@ static Bool allocatePseudoColor(RContext *ctx)
 
 	if ((ctx->attribs->flags & RC_GammaCorrection) && ctx->attribs->rgamma > 0
 	    && ctx->attribs->ggamma > 0 && ctx->attribs->bgamma > 0) {
-		double rg, gg, bg;
-		double tmp;
+		float rg, gg, bg;
+		float tmp;
 
 		/* do gamma correction */
-		rg = 1.0 / ctx->attribs->rgamma;
-		gg = 1.0 / ctx->attribs->ggamma;
-		bg = 1.0 / ctx->attribs->bgamma;
+		rg = 1.0F / ctx->attribs->rgamma;
+		gg = 1.0F / ctx->attribs->ggamma;
+		bg = 1.0F / ctx->attribs->bgamma;
 		for (r = 0; r < cpc; r++) {
 			for (g = 0; g < cpc; g++) {
 				for (b = 0; b < cpc; b++) {
@@ -263,14 +267,14 @@ static Bool allocatePseudoColor(RContext *ctx)
 					colors[i].blue = (b * 0xffff) / (cpc - 1);
 					colors[i].flags = DoRed | DoGreen | DoBlue;
 
-					tmp = (double)colors[i].red / 65536.0;
-					colors[i].red = (unsigned short)(65536.0 * pow(tmp, rg));
+					tmp = (float) colors[i].red / 65536.0F;
+					colors[i].red = (unsigned short)(65536.0F * powf(tmp, rg));
 
-					tmp = (double)colors[i].green / 65536.0;
-					colors[i].green = (unsigned short)(65536.0 * pow(tmp, gg));
+					tmp = (float) colors[i].green / 65536.0F;
+					colors[i].green = (unsigned short)(65536.0F * powf(tmp, gg));
 
-					tmp = (double)colors[i].blue / 65536.0;
-					colors[i].blue = (unsigned short)(65536.0 * pow(tmp, bg));
+					tmp = (float) colors[i].blue / 65536.0F;
+					colors[i].blue = (unsigned short)(65536.0F * powf(tmp, bg));
 
 					i++;
 				}
