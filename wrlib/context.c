@@ -438,7 +438,7 @@ static void gatherconfig(RContext * context, int screen_n)
 	ptr = mygetenv("WRASTER_GAMMA", screen_n);
 	if (ptr) {
 		float g1, g2, g3;
-		if (sscanf(ptr, "%f/%f/%f", &g1, &g2, &g3) != 3 || g1 <= 0.0 || g2 <= 0.0 || g3 <= 0.0) {
+		if (sscanf(ptr, "%f/%f/%f", &g1, &g2, &g3) != 3 || g1 <= 0.0F || g2 <= 0.0F || g3 <= 0.0F) {
 			printf("wrlib: invalid value(s) for gamma correction \"%s\"\n", ptr);
 		} else {
 			context->attribs->flags |= RC_GammaCorrection;

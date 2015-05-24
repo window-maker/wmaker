@@ -201,14 +201,14 @@ void slide_windows(Window wins[], int n, int from_x, int from_y, int to_x, int t
 			px = slide_steps;
 		else if (px > -slide_steps && px < 0)
 			px = -slide_steps;
-		py = (is_dx_nul ? 0.0 : px * dy / dx);
+		py = (is_dx_nul ? 0.0F : px * dy / dx);
 	} else {
 		py = dy / slide_slowdown;
 		if (py < slide_steps && py > 0)
 			py = slide_steps;
 		else if (py > -slide_steps && py < 0)
 			py = -slide_steps;
-		px = (is_dy_nul ? 0.0 : py * dx / dy);
+		px = (is_dy_nul ? 0.0F : py * dx / dy);
 	}
 
 	while (((int)x) != to_x ||
@@ -221,19 +221,19 @@ void slide_windows(Window wins[], int n, int from_x, int from_y, int to_x, int t
 			y = (float)to_y;
 
 		if (dx_is_bigger) {
-			px = px * (1.0 - 1 / (float)slide_slowdown);
+			px = px * (1.0F - 1 / (float)slide_slowdown);
 			if (px < slide_steps && px > 0)
 				px = slide_steps;
 			else if (px > -slide_steps && px < 0)
 				px = -slide_steps;
-			py = (is_dx_nul ? 0.0 : px * dy / dx);
+			py = (is_dx_nul ? 0.0F : px * dy / dx);
 		} else {
-			py = py * (1.0 - 1 / (float)slide_slowdown);
+			py = py * (1.0F - 1 / (float)slide_slowdown);
 			if (py < slide_steps && py > 0)
 				py = slide_steps;
 			else if (py > -slide_steps && py < 0)
 				py = -slide_steps;
-			px = (is_dy_nul ? 0.0 : py * dx / dy);
+			px = (is_dy_nul ? 0.0F : py * dx / dy);
 		}
 
 		for (i = 0; i < n; i++) {

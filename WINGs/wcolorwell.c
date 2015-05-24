@@ -211,7 +211,7 @@ static void willResizeColorWell(W_ViewDelegate * self, WMView * view, unsigned i
 		if (*height < MIN_HEIGHT)
 			*height = MIN_HEIGHT;
 
-		bw = (int)((float)WMIN(*width, *height) * 0.24);
+		bw = (int)((float)WMIN(*width, *height) * 0.24F);
 
 		W_ResizeView(cPtr->colorView, *width - 2 * bw, *height - 2 * bw);
 

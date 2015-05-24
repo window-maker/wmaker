@@ -298,7 +298,7 @@ static void showData(_Panel * panel)
 	sprintf(buffer, "%i", a);
 	WMSetTextFieldText(panel->threT, buffer);
 
-	WMSetSliderValue(panel->speedS, (accel - 0.25) / 0.25);
+	WMSetSliderValue(panel->speedS, (accel - 0.25F) / 0.25F);
 
 	panel->acceleration = accel;
 	sprintf(buffer, "%.2f", accel);

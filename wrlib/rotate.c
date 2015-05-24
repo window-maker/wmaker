@@ -48,26 +48,26 @@ RImage *RRotateImage(RImage *image, float angle)
 	 * candidate for an Epsilon when trying to compare angle
 	 * to known values
 	 */
-	static const float min_usable_angle = 0.00699;
+	static const float min_usable_angle = 0.00699F;
 
 	angle = fmod(angle, 360.0);
-	if (angle < 0.0)
-		angle += 360.0;
+	if (angle < 0.0F)
+		angle += 360.0F;
 
 	if (angle < min_usable_angle) {
 		/* Rotate by 0 degree */
 		return RCloneImage(image);
 
-	} else if ((angle > 90.0 - min_usable_angle) &&
-				  (angle < 90.0 + min_usable_angle)) {
+	} else if ((angle > 90.0F - min_usable_angle) &&
+				  (angle < 90.0F + min_usable_angle)) {
 		return rotate_image_90(image);
 
-	} else if ((angle > 180.0 - min_usable_angle) &&
-				  (angle < 180.0 + min_usable_angle)) {
+	} else if ((angle > 180.0F - min_usable_angle) &&
+				  (angle < 180.0F + min_usable_angle)) {
 		return wraster_rotate_image_180(image);
 
-	} else if ((angle > 270.0 - min_usable_angle) &&
-				  (angle < 270.0 + min_usable_angle)) {
+	} else if ((angle > 270.0F - min_usable_angle) &&
+				  (angle < 270.0F + min_usable_angle)) {
 		return rotate_image_270(image);
 
 	} else {
@@ -341,8 +341,8 @@ static RImage *rotate_image_any(RImage *source, float angle)
 	int dpr, dpru, p;
 
 	/* only 180o for now */
-	if (angle > 180.0)
-		angle -= 180.0;
+	if (angle > 180.0F)
+		angle -= 180.0F;
 
 	angle = (angle * WM_PI) / 180.0;
 

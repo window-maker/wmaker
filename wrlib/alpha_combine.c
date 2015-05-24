@@ -47,7 +47,7 @@ void RCombineAlpha(unsigned char *d, unsigned char *s, int s_has_alpha,
 				cratio = 0;
 			} else {
 				ratio = (float)sa / alpha;
-				cratio = 1.0 - ratio;
+				cratio = 1.0F - ratio;
 			}
 
 			*d = (int)*d * cratio + (int)*s * ratio;

@@ -506,7 +506,7 @@ static void updateScrollerProportion(ScrollView * sPtr)
 
 		prop = (float)sPtr->viewport->size.width / (float)sPtr->contentView->size.width;
 
-		if (oldP < 1.0)
+		if (oldP < 1.0F)
 			value = (prop * oldV) / oldP;
 		else
 			value = 0;
@@ -518,7 +518,7 @@ static void updateScrollerProportion(ScrollView * sPtr)
 
 		prop = (float)sPtr->viewport->size.height / (float)sPtr->contentView->size.height;
 
-		if (oldP < 1.0)
+		if (oldP < 1.0F)
 			value = (prop * oldV) / oldP;
 		else
 			value = 0;

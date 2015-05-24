@@ -168,10 +168,10 @@ void WMSetScrollerParameters(WMScroller * sPtr, float floatValue, float knobProp
 
 	assert(!isnan(floatValue));
 
-	if (floatValue < 0.0)
-		sPtr->floatValue = 0.0;
-	else if (floatValue > 1.0)
-		sPtr->floatValue = 1.0;
+	if (floatValue < 0.0F)
+		sPtr->floatValue = 0.0F;
+	else if (floatValue > 1.0F)
+		sPtr->floatValue = 1.0F;
 	else
 		sPtr->floatValue = floatValue;
 
@@ -180,9 +180,9 @@ void WMSetScrollerParameters(WMScroller * sPtr, float floatValue, float knobProp
 		sPtr->knobProportion = min_knob_proportion;
 		sPtr->flags.documentFullyVisible = 0;
 
-	} else if (knobProportion >= 1.0) {
+	} else if (knobProportion >= 1.0F) {
 
-		sPtr->knobProportion = 1.0;
+		sPtr->knobProportion = 1.0F;
 		sPtr->flags.documentFullyVisible = 1;
 
 	} else {
@@ -344,7 +344,7 @@ static int knobLength(Scroller * sPtr)
 		length -= 2 * (BUTTON_SIZE + 1);
 	}
 
-	tmp = (int)((float)length * sPtr->knobProportion + 0.5);
+	tmp = (int)((float)length * sPtr->knobProportion + 0.5F);
 	/* keep minimum size */
 	if (tmp < BUTTON_SIZE)
 		tmp = BUTTON_SIZE;
@@ -418,7 +418,7 @@ static void paintScroller(Scroller * sPtr)
 					       length - (int)(knobP + knobL), view->size.height - 4);
 		} else {
 			/* before */
-			if (knobP > 0.0)
+			if (knobP > 0.0F)
 				XFillRectangle(scr->display, d, scr->stippleGC,
 					       2, ofs, view->size.width - 4, (int)knobP);
 
