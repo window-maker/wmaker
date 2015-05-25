@@ -411,22 +411,22 @@ static void createPanel(Panel * p)
 	/*    WMSetFrameTitle(panel->optF, _("Icon Display")); */
 
 	panel->arrB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->arrB, 198, 20);
-	WMMoveWidget(panel->arrB, 12, 10);
+	WMResizeWidget(panel->arrB, 198, 26);
+	WMMoveWidget(panel->arrB, 12, 8);
 	WMSetButtonText(panel->arrB, _("Auto-arrange icons"));
 
 	WMSetBalloonTextForView(_("Keep icons and miniwindows arranged all the time."), WMWidgetView(panel->arrB));
 
 	panel->omnB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->omnB, 198, 20);
-	WMMoveWidget(panel->omnB, 12, 35);
+	WMResizeWidget(panel->omnB, 198, 26);
+	WMMoveWidget(panel->omnB, 12, 34);
 	WMSetButtonText(panel->omnB, _("Omnipresent miniwindows"));
 
 	WMSetBalloonTextForView(_("Make miniwindows be present in all workspaces."), WMWidgetView(panel->omnB));
 
 	panel->sclB = WMCreateSwitchButton(panel->optF);
-	WMResizeWidget(panel->sclB, 198, 28);
-	WMMoveWidget(panel->sclB, 12, 56);
+	WMResizeWidget(panel->sclB, 198, 26);
+	WMMoveWidget(panel->sclB, 12, 60);
 	WMSetButtonText(panel->sclB, _("Single click activation"));
 
 	WMSetBalloonTextForView(_("Launch applications and restore windows with a single click."), WMWidgetView(panel->sclB));
