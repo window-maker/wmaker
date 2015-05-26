@@ -45,7 +45,8 @@ Section: libdevel
 Depends: libwraster5 (= ${binary:Version}), libc6-dev, libx11-dev,
  libxext-dev, libxpm-dev, libjpeg-dev, libpng-dev, libgif-dev,
  libtiff5-dev, ${misc:Depends}
-Provides: libwraster-dev
+Breaks: libwraster3-dev
+Replaces: libwraster3-dev
 Description: Static libraries and headers of Window Maker rasterizer
  This library is used to manipulate images and convert them to
  a format that can be displayed through the X window system.

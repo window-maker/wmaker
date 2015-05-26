@@ -1,3 +1,12 @@
+wmaker (0.95.6-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * debian/control:
+    - Add Breaks/Replaces for libwraster3-dev; remove Provides for
+      libwraster-dev (Closes: #784711).
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Thu, 21 May 2015 13:34:40 -0500
+
 wmaker (0.95.6-1) unstable; urgency=medium
 
   * New upstream version 0.95.6. [Closes: #148856]
