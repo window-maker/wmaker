@@ -1,4 +1,4 @@
-libWUtil.so.3 libwutil3 #MINVER#
+libWUtil.so.5 libwutil5 #MINVER#
  WHandleEvents@Base 0.95.5
  WMAddIdleHandler@Base 0.95.5
  WMAddInputHandler@Base 0.95.5
@@ -144,6 +144,7 @@ libWUtil.so.3 libwutil3 #MINVER#
  WMPutInPLDictionary@Base 0.95.5
  WMReadPropListFromFile@Base 0.95.5
  WMReadPropListFromPipe@Base 0.95.5
+ WMReleaseApplication@Base 0.95.6
  WMReleaseData@Base 0.95.5
  WMReleaseNotification@Base 0.95.5
  WMReleasePropList@Base 0.95.5
@@ -201,6 +202,7 @@ libWUtil.so.3 libwutil3 #MINVER#
  W_FlushIdleNotificationQueue@Base 0.95.5
  W_HandleInputEvents@Base 0.95.5
  W_InitNotificationCenter@Base 0.95.5
+ W_ReleaseNotificationCenter@Base 0.95.6
  _WINGS_progname@Base 0.95.5
  __wmessage@Base 0.95.5
  isnamechr@Base 0.95.5
@@ -210,6 +212,8 @@ libWUtil.so.3 libwutil3 #MINVER#
  menu_parser_free_macros@Base 0.95.5
  menu_parser_register_preset_macros@Base 0.95.5
  menu_parser_skip_spaces_and_comments@Base 0.95.5
+ w_save_defaults_changes@Base 0.95.6
+ w_syslog_close@Base 0.95.6
  wcopy_file@Base 0.95.5
  wdefaultspathfordomain@Base 0.95.5
  wexpandpath@Base 0.95.5
@@ -241,3 +245,4 @@ libWUtil.so.3 libwutil3 #MINVER#
  wtrimspace@Base 0.95.5
  wusergnusteppath@Base 0.95.5
  wusleep@Base 0.95.5
+ wutil_shutdown@Base 0.95.6

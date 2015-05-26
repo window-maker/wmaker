@@ -1,3 +1,55 @@
+wmaker (0.95.6-1) unstable; urgency=medium
+
+  * New upstream version 0.95.6. [Closes: #148856]
+  * Bumped to standard version 3.9.6. No changes.
+  * Removed patch 55_typo.diff because is now in upstream.
+  * Patch 56_ungif_problem.diff updated:
+    * New name: 55_ungif_problem.diff
+    * Now udpates the file m4/wm_imgfmt_check.m4, because upstream moved the
+      ungif code from configure.ac to this m4 file.
+  * Removed Encoding in debianfiles/wmaker-common.desktop.
+    * The Encoding key is now deprecated by the FreeDesktop.
+  * Moved library libwings2 to libwings3.
+    * Changed in debian/control.
+    * Moved libwings2.changelog-upstream to libwings3.changelog-upstream.
+    * Moved libwings2.install to libwings3.install.
+    * Moved libwings2.symbols to libwings3.symbols.
+  * Moved libwraster3-dev to libwraster-dev.
+    * Changed in debian/control.
+    * Moved libwraster3-dev.changelog-upstream to
+      libwraster-dev.changelog-upstream.
+    * Moved libwraster3-dev.install to libwraster-dev.install.
+    * Moved libwraster3-dev.docs to libwraster-dev.docs.
+    * Moved libwraster3-dev.manpages to libwraster-dev.manpages.
+      * Updated symbols.
+  * Moved libwraster3 to libwraster5.
+    * Changed in debian/control.
+    * Moved libwraster3.changelog-upstream to libwraster5.changelog-upstream.
+    * Moved libwraster3.docs to libwraster5.docs.
+    * Moved libwraster3.install to libwraster5.install.
+    * Moved libwraster3.symbols to libwraster5.symbols.
+      * Updated symbols.
+  * Moved libwutil3 to libwutil5.
+    * Changed in debian/control.
+    * Moved libwutil3.changelog-upstream to libwutil5.changelog-upstream.
+    * Moved libwutil3.install to libwutil5.install.
+    * Moved libwutil3.symbols to libwutil5.symbols.
+      * Updated symbols.
+  * Removed WindowMaker/Icons/sound.tiff in debian/copyright.
+    * Avoid lintian warning.
+  * Added Keywords in debianfiles/wmaker-common.desktop.
+    * Avoid lintian warning.
+
+ -- Rodolfo García Peñas (kix) <kix@debian.org>  Thu, 09 Oct 2014 05:59:36 +0200
+
+wmaker (0.95.5-2) unstable; urgency=low
+
+  * New patch debian/patches/56_ungif_problem.diff. [Closes: #733353]
+    This patch removes the link against -lungif.
+  * Bumped to standard version 3.9.5. No changes.
+
+ -- Rodolfo García Peñas (kix) <kix@debian.org>  Tue, 31 Dec 2013 00:20:43 +0100
+
 wmaker (0.95.5-1) unstable; urgency=low
 
   * New upstream version 0.95.5. [Closes: #723840]

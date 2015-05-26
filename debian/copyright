@@ -83,10 +83,9 @@ Files: WindowMaker/Icons/BitchX.tiff WindowMaker/Icons/defaultAppIcon.tiff
        WindowMaker/Icons/mixer.tiff WindowMaker/Icons/notepad.tiff
        WindowMaker/Icons/pdf.tiff WindowMaker/Icons/ps.tiff
        WindowMaker/Icons/real.tiff WindowMaker/Icons/sgiterm.tiff
-       WindowMaker/Icons/sound.tiff WindowMaker/Icons/staroffice2.tiff
-       WindowMaker/Icons/timer.tiff WindowMaker/Icons/wilber.tiff
-       WindowMaker/Icons/write.tiff WindowMaker/Icons/xdvi.tiff
-       WindowMaker/Icons/xv.tiff
+       WindowMaker/Icons/staroffice2.tiff WindowMaker/Icons/timer.tiff
+       WindowMaker/Icons/wilber.tiff WindowMaker/Icons/write.tiff
+       WindowMaker/Icons/xdvi.tiff WindowMaker/Icons/xv.tiff
 Copyright: 1997, Marco van Hylckama Vlieg <marco@windowmaker.info>
 License: attribution
  They may be distributed freely and/or modified as long as the original
@@ -101,6 +100,7 @@ Files: WindowMaker/Icons/GNUstepGlow.tiff WindowMaker/Icons/GNUstepGlow.xpm
        WindowMaker/Icons/Jabber.png WindowMaker/Icons/Mozilla.png
        WindowMaker/Icons/Pen.png WindowMaker/Icons/Pencil.png
        WindowMaker/Icons/Shell.png WindowMaker/Icons/Speaker.png
+       WindowMaker/Icons/XChat.png
        WPrefs.app/tiff/msty1.tiff WPrefs.app/tiff/msty2.tiff WPrefs.app/tiff/msty3.tiff
        WPrefs.app/xpm/msty1.xpm WPrefs.app/xpm/msty2.xpm WPrefs.app/xpm/msty3.xpm
        WPrefs.app/WPrefs.tiff WPrefs.app/WPrefs.xpm WPrefs.app/tiff/tdel.tiff
@@ -109,7 +109,6 @@ Files: WindowMaker/Icons/GNUstepGlow.tiff WindowMaker/Icons/GNUstepGlow.xpm
        WPrefs.app/xpm/tnew.xpm WINGs/Resources/defaultIcon.tiff
        WINGs/Resources/Images.tiff WINGs/Resources/Images.xpm
        WINGs/Resources/defaultIcon.xpm WINGs/Resources/Images.xcf
-       WindowMaker/Icons/XChat.png
 Copyright: 2000, Banlu Kemiyatorn
 License: WTFPL-1
  do What The Fuck you want to Public License

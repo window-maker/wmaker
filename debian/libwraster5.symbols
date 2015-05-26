@@ -1,4 +1,4 @@
-libwraster.so.3 libwraster3 #MINVER#
+libwraster.so.5 libwraster5 #MINVER#
  LIBWRASTER3@LIBWRASTER3 0.95.0
  RBevelImage@LIBWRASTER3 0.95.0
  RBlurImage@LIBWRASTER3 0.95.0
@@ -17,12 +17,14 @@ libwraster.so.3 libwraster3 #MINVER#
  RCreateImageFromDrawable@LIBWRASTER3 0.95.0
  RCreateImageFromXImage@LIBWRASTER3 0.95.0
  RCreateXImage@LIBWRASTER3 0.95.0
+ RDestroyContext@LIBWRASTER3 0.95.6
  RDestroyXImage@LIBWRASTER3 0.95.0
  RDrawLine@LIBWRASTER3 0.95.0
  RDrawLines@LIBWRASTER3 0.95.0
  RDrawSegments@LIBWRASTER3 0.95.0
  RErrorCode@LIBWRASTER3 0.95.0
  RFillImage@LIBWRASTER3 0.95.0
+ RFlipImage@LIBWRASTER3 0.95.6
  RGetClosestXColor@LIBWRASTER3 0.95.0
  RGetImageFileFormat@LIBWRASTER3 0.95.0
  RGetImageFromXPMData@LIBWRASTER3 0.95.0
@@ -39,6 +41,7 @@ libwraster.so.3 libwraster3 #MINVER#
  ROperateLines@LIBWRASTER3 0.95.0
  ROperatePixel@LIBWRASTER3 0.95.0
  ROperatePixels@LIBWRASTER3 0.95.0
+ ROperateRectangle@LIBWRASTER3 0.95.6
  ROperateSegments@LIBWRASTER3 0.95.0
  RPutPixel@LIBWRASTER3 0.95.0
  RPutPixels@LIBWRASTER3 0.95.0
@@ -52,5 +55,6 @@ libwraster.so.3 libwraster3 #MINVER#
  RRotateImage@LIBWRASTER3 0.95.0
  RSaveImage@LIBWRASTER3 0.95.0
  RScaleImage@LIBWRASTER3 0.95.0
+ RShutdown@LIBWRASTER3 0.95.6
  RSmoothScaleImage@LIBWRASTER3 0.95.0
  RSupportedFileFormats@LIBWRASTER3 0.95.0
