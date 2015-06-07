@@ -34,6 +34,7 @@
 #include <limits.h>
 #include <unistd.h>
 #include <sys/stat.h>
+#include <getopt.h>
 #include "config.h"
 
 #ifdef HAVE_EXIF
@@ -705,7 +706,14 @@ int main(int argc, char **argv)
 	red.red = 255;
 	red.green = red.blue = 0;
 
-	option = getopt(argc, argv, "hv");
+	static struct option long_options[] = {
+			{"version", no_argument, 0, 'v'},
+			{"help", no_argument, 0, 'h'},
+			{0, 0, 0, 0}
+		};
+	int option_index = 0;
+
+	option = getopt_long (argc, argv, "hv", long_options, &option_index);
 	if (option != -1) {
 		switch (option) {
 		case 'h':
