@@ -1,10 +1,10 @@
 Description: This patch includes the debian paths
 Author: Rodolfo García Peñas (kix) <kix@kix.es>
 Last-Update: 2011-08-16
-Index: WindowMaker-0.95.6/doc/wmaker.1x
+Index: WindowMaker-0.95.6/doc/wmaker.1
 ===================================================================
---- WindowMaker-0.95.6.orig/doc/wmaker.1x
-+++ WindowMaker-0.95.6/doc/wmaker.1x
+--- WindowMaker-0.95.6.orig/doc/wmaker.1
++++ WindowMaker-0.95.6/doc/wmaker.1
 @@ -9,6 +9,9 @@ wmaker \- X11 window manager with a NEXT
  Window Maker is a X11 window manager with a NEXTSTEP look. It tries to
  emulate NeXT's look as much as possible, but it deviates from it as
