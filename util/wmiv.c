@@ -717,21 +717,24 @@ int main(int argc, char **argv)
 	if (option != -1) {
 		switch (option) {
 		case 'h':
-			fprintf(stderr, "Usage: %s [image(s)|directory]\n"
+			printf("Usage: %s [image(s)|directory]\n"
+			"Options:\n"
+			"  -h, --help     print this help text\n"
+			"  -v, --version  print version\n"
 			"Keys:\n"
-			"+: zoom in\n"
-			"-: zoom out\n"
-			"esc: actual size\n"
+			"  [+]            zoom in\n"
+			"  [-]            zoom out\n"
+			"  [Esc]          actual size\n"
 #ifdef HAVE_PTHREAD
-			"d: launch diaporama mode\n"
+			"  [D]            launch diaporama mode\n"
 #endif
-			"l: rotate image on the left\n"
-			"q: quit\n"
-			"r: rotate image on the right\n"
-			"right: next image\n"
-			"left: previous image\n"
-			"up: first image\n"
-			"down: last image\n",
+			"  [L]            rotate image on the left\n"
+			"  [Q]            quit\n"
+			"  [R]            rotate image on the right\n"
+			"  [▸]            next image\n"
+			"  [◂]            previous image\n"
+			"  [▴]            first image\n"
+			"  [▾]            last image\n",
 			argv[0]);
 			return EXIT_SUCCESS;
 		case 'v':
