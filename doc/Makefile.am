@@ -17,6 +17,7 @@ dist_man_MANS = \
 	WindowMaker.1 \
 	wmagnify.1 \
 	wmgenmenu.1 \
+	wmiv.1 \
 	wmmenugen.1 \
 	WPrefs.1 \
 	wxcopy.1 \
@@ -50,7 +51,7 @@ am__v_CHKOPTS_0 = @echo "  CHK      $@" ;
 am__v_CHKOPTS_1 =
 
 check-local: wmaker-args WPrefs-args wmagnify-args geticonset-args getstyle-args seticons-args setstyle-args \
-	wdread-args wdwrite-args wmgenmenu-args wmmenugen-args wmsetbg-args wxcopy-args wxpaste-args
+	wdread-args wdwrite-args wmgenmenu-args wmiv-args wmmenugen-args wmsetbg-args wxcopy-args wxpaste-args
 
 wmaker-args:
 	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
@@ -92,6 +93,10 @@ wmgenmenu-args:
 	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
 		--program "$(top_builddir)/util/wmgenmenu" --man-page "$(top_srcdir)/doc/wmgenmenu.1"
 
+wmiv-args:
+	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
+		--program "$(top_builddir)/util/wmiv" --man-page "$(top_srcdir)/doc/wmiv.1"
+
 wmmenugen-args:
 	$(AM_V_CHKOPTS)$(top_srcdir)/script/check-cmdline-options-doc.sh \
 		--program "$(top_builddir)/util/wmmenugen" --man-page "$(top_srcdir)/doc/wmmenugen.1"
@@ -109,4 +114,4 @@ wxpaste-args:
 		--program "$(top_builddir)/util/wxpaste" --man-page "$(top_srcdir)/doc/wxpaste.1"
 
 .PHONY: wmaker-args WPrefs-args wmagnify-args geticonset-args getstyle-args seticons-args setstyle-args \
-	wdread-args wdwrite-args wmgenmenu-args wmmenugen-args wmsetbg-args wxcopy-args wxpaste-args
+	wdread-args wdwrite-args wmgenmenu-args wmiv-args wmmenugen-args wmsetbg-args wxcopy-args wxpaste-args
