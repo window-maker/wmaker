@@ -154,6 +154,9 @@ RXImage *RCreateXImage(RContext * context, int depth, unsigned width, unsigned h
 void RDestroyXImage(RContext * context, RXImage * rximage)
 {
 #ifndef USE_XSHM
+	/* Argument is not used in this case, tell the compiler it is ok */
+	(void) context;
+
 	XDestroyImage(rximage->image);
 #else				/* USE_XSHM */
 	if (rximage->is_shared) {
