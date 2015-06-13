@@ -591,10 +591,6 @@ msgstr ""
 msgid "Window Maker received signal %i."
 msgstr "Window Maker-ը ընդհունել է %i ազդանշանը"
 
-#: ../src/dialog.c:1769
-msgid " This fatal error occured probably due to a bug. Please fill the included BUGFORM and report it to bugs@windowmaker.org."
-msgstr ""
-
 #: ../src/dialog.c:1778
 msgid "What do you want to do now?"
 msgstr "Հիմա ի՞նչ անենք"

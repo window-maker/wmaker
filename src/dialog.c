@@ -1628,9 +1628,11 @@ int wShowCrashingDialogPanel(int whatSig)
 	WMResizeWidget(panel->note2L, PWIDTH - 20, 100);
 	WMMoveWidget(panel->note2L, 10, 130);
 	WMSetLabelTextAlignment(panel->note2L, WALeft);
-	WMSetLabelText(panel->note2L,
-		       _(" This fatal error occured probably due to a bug."
-			 " Please fill the included BUGFORM and " "report it to bugs@windowmaker.info."));
+	snprintf(buf, sizeof(buf), /* Comment for the PO file: the %s is an email address */
+	         _(" This fatal error occured probably due to a bug."
+	           " Please fill the included BUGFORM and report it to %s."),
+	         PACKAGE_BUGREPORT);
+	WMSetLabelText(panel->note2L, buf);
 	WMSetLabelWraps(panel->note2L, True);
 
 	panel->whatF = WMCreateFrame(panel->win);

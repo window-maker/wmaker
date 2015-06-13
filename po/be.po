@@ -468,13 +468,15 @@ msgstr ""
 msgid "Window Maker received signal %i."
 msgstr "Window Maker атрымаў сігнал %i."
 
-#: ../src/dialog.c:1822
+#. Comment for the PO file: the %s is an email address
+#: ../src/dialog.c:1632
+#, c-format
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.info."
+"BUGFORM and report it to %s."
 msgstr ""
 " Гэты крытычны збой магчыма вызваны памылкамі ў WindowMaker."
-"Дашліце запоўненае паведамленне аб памылке (BUGFORM) на bugs@windowmaker.info"
+"Дашліце запоўненае паведамленне аб памылке (BUGFORM) на %s"
 
 #: ../src/dialog.c:1831
 msgid "What do you want to do now?"

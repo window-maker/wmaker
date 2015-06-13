@@ -477,13 +477,15 @@ msgstr ""
 msgid "Window Maker received signal %i."
 msgstr "Window Maker a reçu le signal %i."
 
-#: ../src/dialog.c:1748
+#. Comment for the PO file: the %s is an email address
+#: ../src/dialog.c:1632
+#, c-format
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.info."
+"BUGFORM and report it to %s."
 msgstr ""
 " Cette erreur est probablement due à un bogue. Remplissez le formulaire "
-"BUGFORM et envoyez-le à bugs@windowmaker.info."
+"BUGFORM et envoyez-le à %s."
 
 #: ../src/dialog.c:1757
 msgid "What do you want to do now?"
@@ -1438,14 +1440,6 @@ msgstr "Démarrage d'un autre gestionnaire de fenêtres..."
 #: ../src/startup.c:417
 msgid "failed to start alternate window manager. Aborting."
 msgstr "Impossible de démarrer un autre gestionnaire de fenêtres. Abandon."
-
-#: ../src/startup.c:419
-msgid ""
-"a fatal error has occured, probably due to a bug. Please fill the included "
-"BUGFORM and report it."
-msgstr ""
-"Erreur probablement due à un bogue. Merci de remplir le formulaire BUGFORM "
-"et de l'envoyer à bugs@windowmaker.info."
 
 #: ../src/startup.c:894
 #, c-format

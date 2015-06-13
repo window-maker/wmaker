@@ -535,13 +535,15 @@ msgstr "Onherstelbare fout"
 msgid "Window Maker received signal %i."
 msgstr "Window Maker ontving signaal %i."
 
+#. Comment for the PO file: the %s is an email address
 #: ../src/dialog.c:1632
+#, c-format
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.info."
+"BUGFORM and report it to %s."
 msgstr ""
 " Deze onherstelbare fout trad mogelijk op door 'n bug. Vul a.u.b. bijgaand "
-"BUGFORM in, en rapporteer 't aan bugs@windowmaker.info."
+"BUGFORM in, en rapporteer 't aan %s."
 
 #: ../src/dialog.c:1639
 msgid "What do you want to do now?"
@@ -1162,14 +1164,19 @@ msgid "Window Maker exited due to a crash (signal %i) and will be restarted."
 msgstr ""
 "Window Maker sloot af door 'n crash (signaal %i) en zal worden herstart."
 
-#: ../src/osdep_stub.c:17
+#.
+#. *  1st %s is a function name
+#. *  2nd %s is an email address
+#. *  3rd %s is the name of the operating system
+#.
+#: ../src/osdep_stub.c:23
 #, c-format
 msgid ""
-"%s is not implemented on this platform; tell wmaker-dev@windowmaker.org you "
-"are running %s release %s version %s"
+"%s is not implemented on this platform; tell %s you are running %s release "
+"%s version %s"
 msgstr ""
-"%s is niet geïmplementeerd op dit platform; meld wmaker-dev@windowmaker.org "
-"dat u %s, uitgave %s, versie %s gebruikt"
+"%s is niet geïmplementeerd op dit platform; meld %s dat u %s, uitgave %s, "
+"versie %s gebruikt"
 
 #: ../src/resources.c:41
 #, c-format

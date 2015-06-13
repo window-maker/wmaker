@@ -490,14 +490,15 @@ msgstr ""
 msgid "Window Maker received signal %i."
 msgstr "Window Maker ha rebut un senyal %i."
 
-#: ../src/dialog.c:1752
+#. Comment for the PO file: the %s is an email address
+#: ../src/dialog.c:1632
+#, c-format
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.info."
+"BUGFORM and report it to %s."
 msgstr ""
 " Aquest error fatal probablement ha estat causat per un \"bug\". Si us plau, "
-"ompliu el formulari d'error inclòs i envieu-lo a l'adreça bugs@windowmaker."
-"org."
+"ompliu el formulari d'error inclòs i envieu-lo a l'adreça %s."
 
 #: ../src/dialog.c:1761
 msgid "What do you want to do now?"

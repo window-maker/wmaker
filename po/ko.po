@@ -472,10 +472,10 @@ msgstr "윈도우 메이커가 %i 신호를 받음."
 #: ../src/dialog.c:1596
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.info."
+"BUGFORM and report it to %s."
 msgstr ""
 "버그로 인해 치명적인 오류가 발생했습니다. BUGFORM을 작성하여 "
-"bugs@windowmaker.info로 보내주시길 부탁드립니다."
+"%s로 보내주시길 부탁드립니다."
 
 #: ../src/dialog.c:1603
 msgid "What do you want to do now?"

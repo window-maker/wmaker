@@ -492,8 +492,8 @@ msgstr "A Window Maker %i jelzést kapott."
 #: ../../wmaker-crm/src/dialog.c:1599
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.info."
-msgstr " Ezt a végzetes hibát valószínűleg egy programozási hiba okozta. Légy szíves töltsd ki a mellékelt BUGFORM kérdőívet és küldd el a bugs@windowmaker.info e-mail címre!"
+"BUGFORM and report it to %s."
+msgstr " Ezt a végzetes hibát valószínűleg egy programozási hiba okozta. Légy szíves töltsd ki a mellékelt BUGFORM kérdőívet és küldd el a %s e-mail címre!"
 
 #: ../../wmaker-crm/src/dialog.c:1606
 msgid "What do you want to do now?"

@@ -545,10 +545,10 @@ msgstr "Window Maker modtog signal %i"
 #: ../src/dialog.c:1790
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.info."
+"BUGFORM and report it to %s."
 msgstr ""
 "en fatal fejl er opstået, sikkert pga. en bug. Udfyld venligst den vedlagte "
-"BUGFORM og indberet det til bugs@windowmaker.info."
+"BUGFORM og indberet det til %s."
 
 # ../src/dialog.c:1458
 #: ../src/dialog.c:1799

@@ -480,10 +480,10 @@ msgstr "Window Maker: отримано сигнал %i."
 #: ../src/dialog.c:1790
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to %s."
 msgstr ""
 " Ця критична помилка, можливо, є результатом помилки в програмі. Будь ласка, "
-"заповніть форму BUGFORM і відправте її за адресою bugs@windowmaker.org."
+"заповніть форму BUGFORM і відправте її за адресою %s."
 
 #: ../src/dialog.c:1799
 msgid "What do you want to do now?"

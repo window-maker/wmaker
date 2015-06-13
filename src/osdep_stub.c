@@ -13,10 +13,16 @@ Bool GetCommandForPid(int pid, char ***argv, int *argc)
 	if (!notified) {
 		struct utsname un;
 
+		/* The comment below is placed in the PO file by xgettext to help translator */
 		if (uname(&un) != -1) {
+			/*
+			 *  1st %s is a function name
+			 *  2nd %s is an email address
+			 *  3rd %s is the name of the operating system
+			 */
 			wwarning(_("%s is not implemented on this platform; "
-				"tell wmaker-dev@windowmaker.org you are running "
-				"%s release %s version %s"), __FUNCTION__,
+			           "tell %s you are running %s release %s version %s"),
+			         __FUNCTION__, PACKAGE_BUGREPORT,
 				un.sysname, un.release, un.version);
 			notified = 1;
 		}
