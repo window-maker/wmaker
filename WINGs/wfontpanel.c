@@ -699,8 +699,10 @@ static void typefaceClick(WMWidget * w, void *data)
 	WMClearList(panel->sizLs);
 
 	WM_ITERATE_ARRAY(face->sizes, size, i) {
-		if ((uintptr_t)size != 0) {
-			sprintf(buffer, "%li", (uintptr_t)size);
+		if (size != NULL) {
+			int size_int = (int) size;
+
+			sprintf(buffer, "%i", size_int);
 
 			WMAddListItem(panel->sizLs, buffer);
 		}
@@ -798,8 +800,11 @@ static void setFontPanelFontName(FontPanel * panel, const char *family, const ch
 
 	WM_ITERATE_ARRAY(face->sizes, vsize, i) {
 		char buffer[32];
-		if ((uintptr_t)vsize != 0) {
-			sprintf(buffer, "%li", (uintptr_t)vsize);
+
+		if (vsize != NULL) {
+			int size_int = (int) vsize;
+
+			sprintf(buffer, "%i", size_int);
 
 			WMAddListItem(panel->sizLs, buffer);
 		}
