@@ -39,6 +39,364 @@ Changes since version 0.95.6:
 - wmaker: Consistent whitespace in WindowMaker.h.
 - Add script to update ChangeLog from git log.
   (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- wmaker: fix arbitrary shell command injection
+- WINGs: add function to get button caption
+- wmaker: fix maximizing window in multiple screens env
+  (David Maciejak <david.maciejak@gmail.com>)
+- WINGs: Add optional Pango text layout support
+  (Khaled Hosny <khaledhosny@eglug.org>)
+- wmaker: Restore multi screen functionality by reverting wrong commits
+  (BALATON Zoltan <balaton@eik.bme.hu>)
+- util: clarify error message in "wmaker.inst" in case of directory creation
+  failure
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wrlib: fix usage of deprecated attribute for gcc 3.x
+- wmaker: remove call to internal X11 header
+  (Milan Čermák <mcermak@chello.cz>)
+- configure: add detection for 'nanosleep' function with appropriate headers
+- util: removed usage of external '__progname' because it is not portable
+- wrlib: add support for release 5.1.0 of the libgif
+- WPrefs: created macro 'wlengthof_nocheck' for the cases were wlengthof cannot
+  be used
+- WPrefs: replaced a few constants by the macro 'wlengthof'
+- WPrefs: grouped items related to the menu style in a single place
+- WPrefs: grouped items related to the window title alignment in a single place
+- WPrefs: grouped items related to the help balloon configuration in a single
+  place
+- WPrefs: grouped items related to the AppIcon bouncing configuration in a
+  single place
+- WPrefs: grouped items related to the behaviour of moving a maximized window
+  in a single place
+- WPrefs: grouped items related to the possible window placement algorithms in
+  a single place
+- WPrefs: use length of array instead of hard-coded constant for sample colours
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WINGs: Fix decimal/hexadecimal conversion bug in color panel.
+- WINGs: Fix unused parameter compiler warnings in examples.
+- WINGs: Avoid cast from pointer to integer of different size compiler
+  warnings.
+- WINGs: Link examples against Xlib.
+- debian: Capitalize "Maker" in X session desktop entry.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- WPrefs: moved the titles of Clip Delay frames to an array
+- WPrefs: grouped the balloon text for the dock configuration with the rest of
+  the struct
+- WPrefs: grouped items related to the mouse actions in a single place
+- WPrefs: reorganised the Mouse Settings panel for better look
+- WPrefs: reorganised the Preference panel for better look
+- WPrefs: reorganised the Window Handling Settings panel for better look
+- WPrefs: small reorganisation in the Dock Preferences panel
+- WPrefs: minor improvements to the Focus Preference panel
+- WPrefs: minor reorganisation in the Keyboard Shortcut panel
+- WPrefs: minor improvements to the Workspace panel
+- WPrefs: changed label from "msec" to the standard "ms" from the SI
+- WPrefs: replaced call to external program "chmod" by the equivalent system
+  call
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wmaker: Support omnipresent setting toggle from keyboard
+  (Gaspar Chilingarov <gasparch@gmail.com>)
+- Catch-up and some cosmetic changes of the Dutch .po files
+  (Alwin <translations@ziggo.nl>)
+- WUtil: changed order for null pointer check in array functions (Coverity
+  #72806, #72807, #72819)
+- WUtil: rewrote wcopy_file for better error handling and to fix Coverity
+  #50234
+- WUtil: fix default rights for file created when saving PropList
+- WINGs: inverted the direction for mouse wheel on WMSliders
+- WINGs: removed unnecessary size checks in WMGetBrowserPaths
+- WINGs: fix possible null pointer dereference in W_RealizeView (Coverity
+  #50060)
+- wmaker: replaced dangerous function type conversion by argument conversion
+- wmaker: avoid allocating temporary memory in GetShortcutKey (Coverity #50115)
+- WMaker: Fixed crash if the RContext creation fail on a Screen (Coverity
+  #50066)
+- wmaker: removed unnecessary check when painting application icon (Coverity
+  #50052)
+- wmaker: removed unnecessary assignation (Coverity #50257)
+- wmaker: minor fixes for the size of an aperçu
+- wmaker: moved the code for the bg helper to a dedicated function
+- wmaker: close unneeded file handles when running the bg helper (Coverity
+  #50137)
+- wmaker: improve error messages when trying to start the helper
+- wmaker: removed unnecessary null pointer check (Coverity #50041)
+- wmaker: removed unnecessary variable 'done' in panelBtnCallback
+- wmaker: remove unnecessary null check (Coverity #50196)
+- wmaker: fix incomplete null pointer check in wFrameWindowChangeTitle
+  (Coverity #50058)
+- wmaker: make parsing on display name less prone to crash in SetupEnvironment
+  (Coverity #50096)
+- wmaker: remove unnecessary null check in readMenuDirectory (Coverity #50190)
+- wmaker: fix memory leak in get_icon_filename (Coverity #50132)
+- wmaker: fixes in function 'UnescapeWM_CLASS' (Coverity #50101, #50186,
+  #50187)
+- wmaker: fix possible buffer overrun in readMenuPipe (Coverity #50211, #50212)
+- wmaker: update error message to have only one string to be translated
+- wmaker: do not duplicate a string that does not need to be (Coverity #72814)
+- wmaker: change message to have only one string to translate and to have more
+  information
+- wmaker: removed case from switch that is unreachable (Coverity #50043)
+- wmaker: fix size of element given to the 'qsort' function (Coverity #50210)
+- WPrefs: remove fuzzy translation that are likely to puzzle user
+- WPrefs: fix possible buffer overrun (Coverity #50216)
+- WPrefs: add check for image validity in 'loadRImage' (Coverity #50221,
+  #50081)
+- wmaker: do not remove Title Bar for windows that declare themselves as
+  Toolbar or Tear-off menu
+- WINGs: fix infinite loop when using Pango on string that have to be split
+- WINGs: fix WMPathForResourceOfType to check for all the paths it claims to
+  check
+- WINGs: to not allocate memory for a short lived array (Coverity #50136)
+- WINGs: fix possible problems due to sign extension when setting Icon
+  (Coverity #50202)
+- wmaker: add check for null pointer in wAppIconCreateForDock (Coverity #50053)
+- wmaker: change strcpy to the version with size check (Coverity #50217)
+- wmaker: fix possible buffer overrun with filename for Icon Chooser (Coverity
+  #50218)
+- wmaker: replaced temporary allocation by local storage for error message
+- wmaker: remove intermediate strcpy in updateWorkspaceMenu (Coverity #50213)
+- wmaker: do not store return value that we don't use (Coverity #50252)
+- wmaker: fix signedness of variable (Coverity #50082, #50222)
+- wmaker: removed variable 'done' to prepare return status in
+  'wNETWMProcessClientMessage'
+- wmaker: remove unnecessary check in acceptXDND (Coverity #72817)
+- WPrefs: fix memory leak when storing the list of colors in Appearence panel
+- WPrefs: fix memory leaks on temporary colours to draw icon's title in
+  Appearence preview (Coverity #72808, #72810)
+- util: return from 'findCopyFile' if the source file could not be found
+  (Coverity #50075)
+- util: use wfree instead of free for consistency
+- wmaker: work around compilers that do not support nested functions
+- WPrefs: Use standard C declaration of array instead of GNU syntax
+- WPrefs: link against math library because it is used in a few places
+- Make sub-directories visible the automake's "dist*" targets
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WINGs: add functions to set widget background image
+- WPrefs: add workspace pager configuration
+- wmaker: add workspace pager underlying configuration
+- wmaker: add core workspace pager functions
+  (David Maciejak <david.maciejak@gmail.com>)
+- wmaker: moved the variable 'process_workspacemap_event' to the global
+  namespace
+- wmaker: remove unnecessary null pointer checks in handle_event of wsmap
+- makefile: make silent rule work also for generated files
+- wmaker: replaced macro by an inline function, in X Modifier initialisation
+- wmaker: replaced macro 'store_modifier' by an inline function, in X Modifier
+  initialisation
+- checkpatch: fix bug in regular expression
+- WPrefs: fix memory leak when storing the list of texture in Appearence panel
+  (Coverity #50112)
+- WPrefs: fix icon used in the Opaque/Non-opaque Move setting
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wrlib: Merge some duplicate code when allocating color
+  (David Maciejak <david.maciejak@gmail.com>)
+- configure: rewrote the detection for -Wunused-macro
+- configure: add macro to check compiler flag '-Wstrict-prototype'
+- configure: add a few warning flags for gcc and clang to help catch bugs
+- configure: make the gcc check for trampolines stronger
+- WINGs: remove the macro DEFAULT_TITLE because it is not used
+- WINGs: remove constants used for default width+height for the widget
+- WINGs: remove unused constant DEFAULT_BORDER_WIDTH in wcolorwell
+- WINGs: remove unused macro NFONT in wbutton
+- WINGs: remove dead code from 'loadPixmaps'
+- WINGs: remove macro ABS_SHIFT from the wcolorpanel code
+- WINGs: remove internal XDND macros that are not used
+- WINGs: reuse GNUstep header instead of duplicating stuff in wwindow.c
+- remove a few unused constant for size of buffers
+- remove unused macros defining corner positions
+- replaced all local definitions of PI by a single one
+- wmaker: removed unused macro DBLCLICK_TIME
+- wmaker: removed unused constant SCROLL_STEPS in the switchpanel code
+- wmaker: add code to explicitly ignore Motif-WM flags we don't want to handle
+- wmaker: remove constants HORIZONTAL and VERTICAL from moveres.c
+- wmaker: remove parameter 'which' from local function 'restoreMenu'
+- wmaker: comment out definition of wm-spec constant that we do not use
+- WPrefs: remove unused constants ICON_TITLE_*FONT
+- util: remove local constants GLOBAL_DEFAULTS_SUBDIR that are not used
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WINGs: increment version
+  (David Maciejak <david.maciejak@gmail.com>)
+- configure: require a minimum version for Autoconf to avoid wrong generation
+- wmaker: rewrote the update of _NET_WORKAREA property
+- configure: rewrote the detection for WebP image library
+- configure: add detection for O_NOFOLLOW flag to the open function
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WPrefs: improve texts in the Window Handling panel
+  (Yury Tarasievich <yury.tarasievich@gmail.com>)
+- WPrefs: moved the list of icon animations into an array
+- WPrefs: created an array to store the database values for the Icon Position
+  setting
+- WPrefs: grouped the choices for Window Resize Display in a single place
+- WPrefs: grouped the choices for Window Move Display in a single place
+- WPrefs: add an image to represent the window in the Window Placement frame
+- WPrefs: add possibility to configure the size of the aperçu
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WPrefs: Clarify purpose of "window snapping" feature in expert panel.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- Translations: Dutch .po files updated
+- WPrefs: make a text string translatable
+- WINGs: trivial fix in text string
+- WMaker: trivial fixes in text strings
+- WPrefs: trivial fixes in text strings
+  (Alwin <translations@ziggo.nl>)
+- wmaker: removed global variable "flags.nopolling"
+- make: do not compile stuff in the 'test' directory
+- Renamed "Aperçu" into "Mini-Preview" in visible places
+- Renamed "apercu" to "minipreview" in the source code
+- Renamed "Apercu" to "MiniPreview" in the configuration database
+- wmaker: remove execute permissions on the source file 'wsmap.c'
+- configure: updates as reported by 'autoupdate'
+- configure: remove a few commented-out stuff that are deprecated
+- configure: added the copyright notice at the begining of the file
+- configure: add email address for bug reports in AC_INIT
+- configure: cosmetic improvements on comments
+- configure: minor updates on quoting for consistency with Autoconf's syntax
+- configure: rewrote 3 ARG_ENABLEs to get them to behave properly
+- configure: rewrote 2 ARG_WITH for paths to provide better feedback
+- updated autoconf macro gl_LD_VERSION_SCRIPT from gnulib to version 4
+- wrlib: generate automatically the list of symbols to keep from the API header
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Add generate-mapfile-from-header.sh to distribution tarball.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- created script to check the list of source files to handle for translation
+- WINGs: add missing source files for translation
+- wmaker: add missing source files for translation
+- WPrefs: fix list of source files for translation
+- make: remove unnecessary chmod when creating directories for locales
+  installation
+- make: add a variable 'DOMAIN' for the name of the pot and mo files
+- doc: create the skeleton to have a documentation for Internationalisation
+- configure: rewrote the support for languages in localisation
+- configure: rewrote detection for 'xgettext'
+- configure: add check for the program "msgfmt" when i18n is requested
+- doc: explain how to compile with language support
+- doc: describe how to choose the language (i18n) at run time
+- configure: replaced option '--with-nls' by autoconf's '--localedir'
+- configure: rewrote the support for option '--with-menu-textdomain'
+- configure: rewrote support for option '--disable-locale'
+- doc: moved the FAQ on i18n into the dedicated README.i18n
+- configure: enable all languages when performing make distcheck
+- configure: add possibility to list available languages with LINGUAS=list
+- make: remove installed translations when performing Uninstall
+- txt-from-texi: add support for variables
+- doc: explain how to help translating the Window Maker project
+- make: new target 'update-lang' to update the PO files for a languages against
+  latest sources
+- make: moved PHONY outside the USE_LCOV conditional
+- txt-from-texi: fixed use of awk 'match' function to be portable
+- txt-from-texi: remove use of the 'switch' statement for portability
+- i18n: fix failing generation of the README.i18n file
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wmaker: Add autocomplete/history feature to keyboard shortcut Run dialog.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- wrlib: mark the script 'get-wraster-flags' as deprecated
+- WUtil: mark the script 'get-wutil-flags' as deprecated
+- WINGs: mark the script 'get-wings-flags' as deprecated
+- wmaker: created script to check program's options against documentation
+- wmaker: improve the documentation for the command-line options
+- wmaker: create script to handle conditional and variables replacement in man
+  pages
+- doc: changed section for man page of "wdread" to 1x for consistency
+- doc: add check of the program options against their man pages
+- doc: updated man pages for many tools
+- doc: the man page for "wmsetbg" is now processed by a script
+- texi2txt: fix support embedded item lists to allow nested lists
+- texi2txt: add support for enumerated lists
+- texi2txt: add support for the @table command
+- texi2txt: add support for making cross-references in the document
+- doc: convert INSTALL-WMAKER into a texinfo source processed by texi2txt
+- doc: update information in the Installation Manual
+- doc: removed a few deprecated stuff from the Installation Manual
+- check the "configure" option list against the INSTALL-WMAKER documentation
+- doc: describe the "new" options to the "configure" script
+- check-doc: add an option to ignore some explicit options from the command's
+  help
+- Code refactoring: replaced macro 'MWM_HINTS' by 'USE_MWM_HINTS' for
+  consistency
+- configure: Added option to disable Motif WM Hints support
+- Code refactoring: replaced macro 'XDND' by 'USE_DOCK_XDND' for consistency
+- doc: re-generate the top directory documentation when "make dist" is invoked
+- texi2txt: add workaround for a known bug in "mawk"
+- wmaker: check return value for XGetWindowAttributes (Coverity #50032)
+- Handle NULL pointer as good as possible (Coverity #50099)
+- WINGs: fix memory leak in WMSubtractPLDictionaries (Coverity #50128)
+- wmaker: fix incorrect size for memory allocation (Coverity #50207)
+- wmaker: fix memory leak in the Workspace Map if there is no workspace
+  (Coverity #109608)
+- wmaker: remove non-necessary allocation (Coverity #109609)
+- wmaker: remove useless null pointer check (Coverity #109612)
+- WINGs: remove useless function call in WColorPanel (Coverity #109617)
+- WUtil: fix improper use of de-allocated variable (Coverity #109618)
+- wmaker: converted macro 'SAME' into a static function
+- wmaker: fix crash when switching workspace with "Affiche.app"
+- wmaker: fix non-portable int argument for printf in error message
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Translations: Dutch language files updated
+- WINGs: trivial fixes in text strings
+- WMaker: trivial fixes in text strings
+- WPrefs: trivial fixes in text strings
+  (Alwin <translations@ziggo.nl>)
+- wmaker: add script to check the call-back function used when loading
+  configuration
+- wmaker: fix incorrect type for variable in the global preference structure
+- Code refactoring: replaced macro 'ANIMATIONS' by 'USE_ANIMATIONS' for
+  consistency
+- configure: Added option to disable animations
+- wmaker: fix warnings from compiler when animations are disabled
+- wmaker: took as much assignation as possible outside 'if' statements
+- wmaker: reorganisation of the control flow of the function 'findDock'
+- wmaker: remove one level of pointers for the function SlideWindows
+- wmaker: do not use strcmp twice on the same thing, in function appiconBalloon
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wmaker: removed dead code related to 'GLOBAL_SUBMENU_FILE'
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- wmaker: moved the definition of the list of entries for the window menu to an
+  array
+- wmaker: moved the definition of the entries for the window menu options to an
+  array
+- wmaker: moved calculation of internal offset in handleDockMove outside the
+  loop
+- wmaker: moved the list of Window Attributes into an array, for the Window
+  Inspector
+- wmaker: moved the list of Advanced Options into an array, for the Window
+  Inspector
+- wmaker: moved the list of Application Attributes into an array, for the
+  Window Inspector
+- wmaker: fix misuse of 'user_flags' instead of 'client_flags' for window
+  attributes
+- wmaker: honour MWM Hint to have no border to a window
+- WINGs: create a new type of Tri-State Switch Button (to doc)
+- wmaker: fix clearing of window attribute that was not saved properly
+- doc: describe the GNOME application issue in the FAQ
+- Add a configuration option to ignore Decoration Hints from GTK-based
+  application
+- wmaker-check: rewrote parsing of structure fields for callback checker
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wmaker: replace and be replaced (ICCCM protocol)
+  (Iain Patterson <wm@iain.cx>)
+- wmaker: make the '--replace' de-activable at compile time
+- wmaker: support providing ICCCM version, for compliance with the standard
+- doc: describe Iain Patterson's new feature for ICCCM compliance
+  (Christophe CURIS <christophe.curis@free.fr>)
+- Translations: Dutch language files updated
+- WMaker: trivial fix in text string
+  (Alwin <translations@ziggo.nl>)
+- doc: changed section for man pages from 1x to 1
+- util: improve the command line argument parsing in wmmenugen
+- doc: do not install translated man pages if the language was not enabled in
+  LINGUAS
+- doc: changed section for translated man pages from 1x to 1
+- configure: Add compiler detection on non optimal floating point constant
+- Fixed floating point constants defined as double but expected as float
+- Added some explicit conversion to double precision
+- Use single-precision math functions when available
+- wrlib: changed Gamma Correction calculation to use single-precision float
+  (Christophe CURIS <christophe.curis@free.fr>)
+- WPrefs: creating more space for translations
+  (Alwin <translations@ziggo.nl>)
+- debian: Import version 0.95.6-1.
+- debian: Import version 0.95.6-1.1.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+
 
 Changes since version 0.95.5:
 .............................
