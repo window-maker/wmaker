@@ -6,7 +6,7 @@ CLEANFILES = $(CATALOGS) $(DOMAIN).pot
 
 # Please keep this sorted in alphabetic order!
 EXTRA_DIST = be.po bg.po bs.po ca.po cs.po da.po de.po el.po es.po et.po \
-	fi.po fr.po gl.po hr.po hu.po hy.po it.po ja.po ko.po ms.po nl.po \
+	fi.po fr.po fy.po gl.po hr.po hu.po hy.po it.po ja.po ko.po ms.po nl.po \
 	no.po pl.po pt.po ro.po ru.po sk.po sv.po tr.po uk.po zh_CN.po zh_TW.po
 
 POTFILES  = \

@@ -4,7 +4,7 @@ CATALOGS = @WINGSMOFILES@
 
 CLEANFILES = $(CATALOGS) $(DOMAIN).pot
 
-EXTRA_DIST = bg.po ca.po cs.po de.po fr.po hu.po nl.po sk.po
+EXTRA_DIST = bg.po ca.po cs.po de.po fr.po fy.po hu.po nl.po sk.po
 
 # WUtil files:
 POTFILES  = \

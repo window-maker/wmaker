@@ -17,6 +17,7 @@ prefsdata_DATA =\
 	menu.es\
 	menu.fi\
 	menu.fr\
+	menu.fy\
 	menu.gl\
 	menu.he\
 	menu.hr\
@@ -43,6 +44,7 @@ prefsdata_DATA =\
 	plmenu.es\
 	plmenu.fi\
 	plmenu.fr\
+	plmenu.fy\
 	plmenu.hr\
 	plmenu.it\
 	plmenu.ja\

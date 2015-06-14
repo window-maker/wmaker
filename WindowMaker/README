@@ -63,6 +63,7 @@ menu.pl Polish		Maciej Friedel <tytus@tytus.itma.pwr.wroc.pl>
 menu.bg	Bulgarian	Slavei Karadjov <slaff@exco.net>
 menu.sk Slovak      	judas@hell <tomka@oalevice.sk>
 menu.nl Dutch		Alwin <translations@ziggo.nl>
+menu.fy Frisian		Alwin <translations@ziggo.nl>
 
 
 
@@ -78,4 +79,5 @@ plmenu.bg Bulgarian	Slavei Karadjov <slaff@exco.net>
 plmenu.sk Slovak      	judas@hell <tomka@oalevice.sk>
 plmenu.ja Japanese	Seiichi SATO <sato@cvs-net.co.jp>
 plmenu.nl Dutch		Alwin <translations@ziggo.nl>
+plmenu.fy Frisian	Alwin <translations@ziggo.nl>
 
