@@ -3,7 +3,7 @@ Section: x11
 Priority: optional
 Maintainer: Rodolfo García Peñas (kix) <kix@debian.org>
 Standards-Version: 3.9.6
-Build-Depends: debhelper (>= 9), automake (>= 1:1.11), gettext,
+Build-Depends: debhelper (>= 9), automake (>= 1:1.12), gettext,
  libfontconfig1-dev, libjpeg-dev, libpng-dev, libsm-dev, libtiff5-dev,
  libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev,
  libxkbfile-dev, libxpm-dev, libxt-dev, libxrender-dev, sharutils, libxmu-dev,

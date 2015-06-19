@@ -164,7 +164,7 @@ package, you will also need:
 @itemize
 @item @emph{git}
 @item @emph{autoconf} 2.69
-@item @emph{automake} 1.11
+@item @emph{automake} 1.12
 @item @emph{libtool} 1.4.2
 @end itemize
 
