@@ -281,6 +281,8 @@ test "x$exec_prefix" = xNONE && exec_prefix='${prefix}'
 
 _bindir=`eval echo $bindir`
 _bindir=`eval echo $_bindir`
+_libdir=`eval echo $libdir`
+_libdir=`eval echo $_libdir`
 
 lib_search_path='-L${libdir}'
 
@@ -937,7 +939,7 @@ echo "Window Maker was configured as follows:"
 echo
 echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
-echo "Installation path for libraries     : $libdir"
+echo "Installation path for libraries     : $_libdir"
 echo "Installation path for WPrefs.app    : $wprefs_base_dir" | sed -e 's|\${prefix}|'"$prefix|"
 echo "Supported core features:            :$supported_core"
 echo "Supported X extensions:             :$supported_xext"
