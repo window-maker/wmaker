@@ -1766,10 +1766,15 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 			break;
 
 		case MotionNotify:
-			if (IS_RESIZABLE(wwin) && wPreferences.window_snapping && wPreferences.no_autowrap) {
+			if (IS_RESIZABLE(wwin) && wPreferences.window_snapping) {
 				int snap_direction;
 
 				snap_direction = get_snap_direction(scr, moveData.mouseX, moveData.mouseY);
+
+				if (!wPreferences.no_autowrap &&
+				    snap_direction != SNAP_TOP &&
+				    snap_direction != SNAP_BOTTOM)
+					snap_direction = SNAP_NONE;
 
 				if (moveData.snap != snap_direction) {
 					/* erase old frame */

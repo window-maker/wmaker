@@ -12,10 +12,10 @@ screen, by dragging it to that side or corner.  It is enabled by setting
 "WindowSnapping = YES" in ~/GNUstep/Defaults/WindowMaker or selecting "Enable
 window snapping" under "Expert User Preferences" in WPrefs.app.
 
-Note that window snapping is automatically disabled if "Switch workspaces while
-dragging windows" is selected under "Workspace Preferences" in WPrefs.app, or
-if "DontLinkWorkspaces = NO" in  ~/GNUstep/Defaults/WindowMaker, as this feature
-also involves dragging a window to one side of the screen.
+Note that if "Switch workspaces while dragging windows" is selected under
+"Workspace Preferences" in WPrefs.app, or if "DontLinkWorkspaces = NO" in
+~/GNUstep/Defaults/WindowMaker, then you may only snap a window to the top or
+bottom of the screen.
 
 
 Dragging maximized windows
