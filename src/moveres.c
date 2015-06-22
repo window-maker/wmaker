@@ -1240,23 +1240,28 @@ static void draw_snap_frame(WWindow *wwin, int direction)
 
 static int get_snap_direction(WScreen *scr, int x, int y)
 {
-	if (x < 1) {
-		if (y < 1)
-			return SNAP_TOPLEFT;
-		if (y > scr->scr_height - 2)
-			return SNAP_BOTTOMLEFT;
+	int edge, corner;
+
+	edge = wPreferences.snap_edge_detect;
+	corner = wPreferences.snap_corner_detect;
+
+	if (x < corner && y < corner)
+		return SNAP_TOPLEFT;
+	if (x < corner && y >= scr->scr_height - corner)
+		return SNAP_BOTTOMLEFT;
+	if (x < edge)
 		return SNAP_LEFT;
-	}
-	if (x > scr->scr_width - 2) {
-		if (y < 1)
-			return SNAP_TOPRIGHT;
-		if (y > scr->scr_height - 2)
-			return SNAP_BOTTOMRIGHT;
+
+	if (x >= scr->scr_width - corner && y < corner)
+		return SNAP_TOPRIGHT;
+	if (x >= scr->scr_width - corner && y >= scr->scr_height - corner)
+		return SNAP_BOTTOMRIGHT;
+	if (x >= scr->scr_width - edge)
 		return SNAP_RIGHT;
-	}
-	if (y < 1)
+
+	if (y < edge)
 		return SNAP_TOP;
-	if (y > scr->scr_height - 2)
+	if (y >= scr->scr_height - edge)
 		return SNAP_BOTTOM;
 	return SNAP_NONE;
 }

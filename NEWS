@@ -17,6 +17,11 @@ Note that if "Switch workspaces while dragging windows" is selected under
 ~/GNUstep/Defaults/WindowMaker, then you may only snap a window to the top or
 bottom of the screen.
 
+You may set the distance (in pixels) from the edge or corner of the screen at
+which a window will begin snapping using "SnapEdgeDetect" and "SnapCornerDetect"
+in ~/GNUstep/Defaults/WindowMaker.  (The defaults are 1 pixel and 10 pixels,
+respectively).
+
 
 Dragging maximized windows
 --------------------------
