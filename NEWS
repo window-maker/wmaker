@@ -9,8 +9,9 @@ Window snapping
 
 You can now "snap" a window, i.e., maximize it to a side or corner of the
 screen, by dragging it to that side or corner.  It is enabled by setting
-"WindowSnapping = YES" in ~/GNUstep/Defaults/WindowMaker or selecting "Enable
-window snapping" under "Expert User Preferences" in WPrefs.app.
+"WindowSnapping = YES" in ~/GNUstep/Defaults/WindowMaker or selecting "Maximize
+(snap) a window to edge or corner by dragging." under "Expert User Preferences"
+in WPrefs.app.
 
 Note that if "Switch workspaces while dragging windows" is selected under
 "Workspace Preferences" in WPrefs.app, or if "DontLinkWorkspaces = NO" in
@@ -19,8 +20,9 @@ bottom of the screen.
 
 You may set the distance (in pixels) from the edge or corner of the screen at
 which a window will begin snapping using "SnapEdgeDetect" and "SnapCornerDetect"
-in ~/GNUstep/Defaults/WindowMaker.  (The defaults are 1 pixel and 10 pixels,
-respectively).
+in ~/GNUstep/Defaults/WindowMaker or setting "Distance from edge/corner to begin
+window snap." under "Expert User Preferences" in WPrefs.app.  (The defaults are
+1 pixel and 10 pixels, respectively).
 
 
 Dragging maximized windows

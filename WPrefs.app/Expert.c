@@ -88,8 +88,14 @@ static const struct {
 	  /* default: */ False, OPTION_WMAKER, "KbdModeLock" },
 #endif /* XKB_MODELOCK */
 
-	{ N_("Maximize a window to side or corner by dragging."),
+	{ N_("Maximize (snap) a window to edge or corner by dragging."),
 	  /* default: */ False, OPTION_WMAKER, "WindowSnapping" },
+
+	{ N_("Distance from edge to begin window snap."),
+	  /* default: */ 1, OPTION_WMAKER_INT, "SnapEdgeDetect" },
+
+	{ N_("Distance from corner to begin window snap."),
+	  /* default: */ 10, OPTION_WMAKER_INT, "SnapCornerDetect" },
 
 	{ N_("Open dialogs in the same workspace as their owners."),
 	  /* default: */ False, OPTION_WMAKER, "OpenTransientOnOwnerWorkspace" }
