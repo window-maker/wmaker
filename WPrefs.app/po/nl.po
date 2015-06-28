@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-18 08:07+0200\n"
-"PO-Revision-Date: 2015-05-18 00:00+0000\n"
+"POT-Creation-Date: 2015-06-26 21:39+0200\n"
+"PO-Revision-Date: 2015-06-26 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -526,98 +526,108 @@ msgstr ""
 "Dok- en clipkenmerken. Schakel 't Dok en de Clip in/uit,\n"
 "en pas vertragingen aan."
 
-#: ../../WPrefs.app/Expert.c:43
+#: ../../WPrefs.app/Expert.c:44
 msgid ""
 "Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."
 msgstr ""
-"Schakel minivensters (iconen voor geminiaturiseerde vensters) uit. Voor\n"
-"gebruik met KDE/GNOME."
+"Schakel minivensters (iconen voor geminiaturiseerde vensters) uit. Voor ge-\n"
+"bruik met KDE/GNOME."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:46
+#: ../../WPrefs.app/Expert.c:47
 msgid "Ignore decoration hints for GTK applications."
 msgstr "Negeer decoratiehints voor GTK-programma's."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:49
+#: ../../WPrefs.app/Expert.c:50
 msgid "Disable workspace pager."
 msgstr "Schakel werkruimtevolger uit."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:52
+#: ../../WPrefs.app/Expert.c:53
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)."
 msgstr ""
 "Stel geen niet-WindowMaker-specifieke parameters in (gebruik 'xset' niet)."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:55
+#: ../../WPrefs.app/Expert.c:56
 msgid "Automatically save session when exiting Window Maker."
 msgstr "Sla sessie vanzelf op bij afsluiten van Window Maker."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:58
+#: ../../WPrefs.app/Expert.c:59
 msgid "Use SaveUnder in window frames, icons, menus and other objects."
 msgstr ""
 "Gebruik SaveUnder in vensteromlijsting, iconen, menu's en andere objecten."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:61
+#: ../../WPrefs.app/Expert.c:62
 msgid "Disable confirmation panel for the Kill command."
 msgstr "Schakel bevestigingspaneel voor 't commando 'Doden' uit."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:64
+#: ../../WPrefs.app/Expert.c:65
 msgid "Disable selection animation for selected icons."
 msgstr "Schakel selectieanimatie voor geselecteerde iconen uit."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:67
+#: ../../WPrefs.app/Expert.c:68
 msgid "Smooth font edges (needs restart)."
 msgstr "Vlak letterranden af (herstart nodig)."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:70
+#: ../../WPrefs.app/Expert.c:71
 msgid "Cycle windows only on the active head."
 msgstr "Wissel vensters alleen op de actieve kop."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:73
+#: ../../WPrefs.app/Expert.c:74
 msgid "Ignore minimized windows when cycling."
 msgstr "Negeer geminiaturiseerde vensters bij wisselen."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:76
+#: ../../WPrefs.app/Expert.c:77
 msgid "Show switch panel when cycling windows."
 msgstr "Toon schakelpaneel bij vensters wisselen."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:79
+#: ../../WPrefs.app/Expert.c:80
 msgid "Show workspace title on Clip."
 msgstr "Toon werkruimtetitel op Clip."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:82
+#: ../../WPrefs.app/Expert.c:83
 msgid "Highlight the icon of the application when it has the focus."
 msgstr "Accentueer 't programma-icoon, wanneer 't focus heeft."
 
-#: ../../WPrefs.app/Expert.c:86
+#: ../../WPrefs.app/Expert.c:87
 msgid "Enable keyboard language switch button in window titlebars."
 msgstr "Schakel toetsenbordtaalknop op venstertitelbalken in."
 
-#: ../../WPrefs.app/Expert.c:90
-msgid "Maximize a window to side or corner by dragging."
-msgstr "Maximaliseer 'n venster tegen zijkant of hoek door verslepen."
+#: ../../WPrefs.app/Expert.c:91
+msgid "Maximize (snap) a window to edge or corner by dragging."
+msgstr "Maximaliseer (duw) 'n venster tegen kant of hoek door verslepen."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:93
+#: ../../WPrefs.app/Expert.c:94
+msgid "Distance from edge to begin window snap."
+msgstr "Afstand vanaf kant waar venster duwen begint."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:97
+msgid "Distance from corner to begin window snap."
+msgstr "Afstand vanaf hoek waar venster duwen begint."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:100
 msgid "Open dialogs in the same workspace as their owners."
 msgstr "Open dialogen in dezelfde werkruimte als hun eigenaren."
 
-#: ../../WPrefs.app/Expert.c:217
+#: ../../WPrefs.app/Expert.c:310
 msgid "Expert User Preferences"
 msgstr "Voorkeuren voor ervaren gebruikers"
 
-#: ../../WPrefs.app/Expert.c:219
+#: ../../WPrefs.app/Expert.c:312
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also has some other misc. options."
@@ -637,8 +647,8 @@ msgid "bad option value %s for option ColormapMode. Using default Auto"
 msgstr ""
 "verkeerde optiewaarde %s voor optie ColormapMode. Gebruikt standaard Auto"
 
-#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:160
-#: ../../WPrefs.app/Icons.c:384 ../../WPrefs.app/Preferences.c:120
+#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:162
+#: ../../WPrefs.app/Icons.c:396 ../../WPrefs.app/Preferences.c:120
 #: ../../WPrefs.app/WindowHandling.c:140 ../../WPrefs.app/WindowHandling.c:159
 #, c-format
 msgid "OFF"
@@ -781,36 +791,36 @@ msgstr "3D wentelen"
 msgid "None"
 msgstr "Geen"
 
-#: ../../WPrefs.app/Icons.c:184 ../../WPrefs.app/Preferences.c:145
+#: ../../WPrefs.app/Icons.c:186 ../../WPrefs.app/Preferences.c:145
 #: ../../WPrefs.app/Preferences.c:159
 #, c-format
 msgid "bad value \"%s\" for option %s, using default \"%s\""
 msgstr "verkeerde waarde \"%s\" voor optie %s, gebruikt standaard \"%s\""
 
-#: ../../WPrefs.app/Icons.c:243
+#: ../../WPrefs.app/Icons.c:255
 #, c-format
 msgid "animation style \"%s\" is unknown, resetting to \"%s\""
 msgstr "animatiestijl \"%s\" is onbekend, teruggezet op \"%s\""
 
-#: ../../WPrefs.app/Icons.c:270
+#: ../../WPrefs.app/Icons.c:282
 msgid "Icon Positioning"
 msgstr "Icoonplaatsing"
 
-#: ../../WPrefs.app/Icons.c:349
+#: ../../WPrefs.app/Icons.c:361
 msgid "Icon Size"
 msgstr "Icoongrootte"
 
-#: ../../WPrefs.app/Icons.c:351
+#: ../../WPrefs.app/Icons.c:363
 msgid "The size of the dock/application icon and miniwindows"
 msgstr ""
 "De afmetingen van 't dok-/programma-icoon\n"
 "en minivensters"
 
-#: ../../WPrefs.app/Icons.c:368
+#: ../../WPrefs.app/Icons.c:380
 msgid "Mini-Previews for Icons"
 msgstr "Miniaturen voor iconen"
 
-#: ../../WPrefs.app/Icons.c:370
+#: ../../WPrefs.app/Icons.c:382
 msgid ""
 "The Mini-Preview provides a small view of the content of the\n"
 "window when the mouse is placed over the icon."
@@ -818,41 +828,41 @@ msgstr ""
 "De miniatuur biedt 'n kleine blik op de inhoud van 't\n"
 "venster, als de muis op 't icoon wordt geplaatst."
 
-#: ../../WPrefs.app/Icons.c:392
+#: ../../WPrefs.app/Icons.c:404
 msgid "Iconification Animation"
 msgstr "Iconificeringsanimatie"
 
-#: ../../WPrefs.app/Icons.c:416
+#: ../../WPrefs.app/Icons.c:428
 msgid "Auto-arrange icons"
 msgstr "Iconen vanzelf schikken"
 
-#: ../../WPrefs.app/Icons.c:418
+#: ../../WPrefs.app/Icons.c:430
 msgid "Keep icons and miniwindows arranged all the time."
 msgstr "Houd iconen en minivensters altijd geschikt."
 
-#: ../../WPrefs.app/Icons.c:423
+#: ../../WPrefs.app/Icons.c:435
 msgid "Omnipresent miniwindows"
 msgstr "Alomtegenwoordige minivensters"
 
-#: ../../WPrefs.app/Icons.c:425
+#: ../../WPrefs.app/Icons.c:437
 msgid "Make miniwindows be present in all workspaces."
 msgstr "Maak minivensters aanwezig in alle werkruimten."
 
-#: ../../WPrefs.app/Icons.c:430
+#: ../../WPrefs.app/Icons.c:442
 msgid "Single click activation"
 msgstr "Enkelkliksactivering"
 
-#: ../../WPrefs.app/Icons.c:432
+#: ../../WPrefs.app/Icons.c:444
 msgid "Launch applications and restore windows with a single click."
 msgstr ""
 "Start programma's op, en herstel vensters met\n"
 "'n enkele klik."
 
-#: ../../WPrefs.app/Icons.c:484
+#: ../../WPrefs.app/Icons.c:500
 msgid "Icon Preferences"
 msgstr "Icoonvoorkeuren"
 
-#: ../../WPrefs.app/Icons.c:486
+#: ../../WPrefs.app/Icons.c:502
 msgid ""
 "Icon/Miniwindow handling options. Icon positioning\n"
 "area, sizes of icons, miniaturization animation style."
@@ -970,7 +980,7 @@ msgstr "Selecteer actief venster"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:99
 msgid "Focus next window"
-msgstr "Focus volgende venster"
+msgstr "Focus volgend venster"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:100
 msgid "Focus previous window"
@@ -2704,3 +2714,6 @@ msgstr "miniaturen"
 
 msgid "Yes, don't ask again."
 msgstr "Ja, vraag niet weer"
+
+msgid "Maximize a window to side or corner by dragging."
+msgstr "Maximaliseer 'n venster tegen zijkant of hoek door verslepen."
