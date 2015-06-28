@@ -534,7 +534,7 @@ AS_IF([test "x$enable_xdnd" = "xyes"],
     [supported_core="$supported_core XDnD"
      AC_DEFINE([USE_DOCK_XDND], [1], [whether Drag-and-Drop on the dock should be enabled])],
     [unsupported="$unsupported XDnd"])
-AM_CONDITIONAL([USE_DOCK_XDND], [test "x$enable_dock_xdnd" != "xno"])
+AM_CONDITIONAL([USE_DOCK_XDND], [test "x$enable_xdnd" != "xno"])
 
 
 dnl Support for ICCCM 2.0 Window Manager replacement
