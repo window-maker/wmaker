@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.6+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-14 16:10+0200\n"
-"PO-Revision-Date: 2015-06-14 00:00+0000\n"
+"POT-Creation-Date: 2015-06-26 21:39+0200\n"
+"PO-Revision-Date: 2015-06-26 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Western Frisian\n"
 "Language: fy\n"
@@ -19,15 +19,15 @@ msgstr ""
 #. Related to Window titles
 #: ../../WPrefs.app/Appearance.c:44
 msgid "Focused Window Title"
-msgstr "Titel fan fokusse finster"
+msgstr "Titel fan fokust finster"
 
 #: ../../WPrefs.app/Appearance.c:46
 msgid "Unfocused Window Title"
-msgstr "Titel fan ûnfokusse finster"
+msgstr "Titel fan ûnfokust finster"
 
 #: ../../WPrefs.app/Appearance.c:48
 msgid "Owner of Focused Window Title"
-msgstr "Titel fan eigener fokusse finster"
+msgstr "Titel fan eigener fokust finster"
 
 #. Related to Menus
 #: ../../WPrefs.app/Appearance.c:52 ../../WPrefs.app/Appearance.c:1501
@@ -61,7 +61,7 @@ msgstr "Tekstkleur fan útljocht menu"
 #. Related to Window's border
 #: ../../WPrefs.app/Appearance.c:71
 msgid "Focused Window Border Color"
-msgstr "Kleur fan finsterrâne, fokusse"
+msgstr "Kleur fan finsterrâne, fokust"
 
 #: ../../WPrefs.app/Appearance.c:73
 msgid "Window Border Color"
@@ -103,27 +103,27 @@ msgstr "Rjochts"
 
 #: ../../WPrefs.app/Appearance.c:382
 msgid "[Focused]"
-msgstr "[Fokusse]"
+msgstr "[Fokust]"
 
 #: ../../WPrefs.app/Appearance.c:383
 msgid "Titlebar of Focused Window"
-msgstr "Titelbalke fan fokusse finster"
+msgstr "Titelbalke fan fokust finster"
 
 #: ../../WPrefs.app/Appearance.c:386
 msgid "[Unfocused]"
-msgstr "[Unfokusse]"
+msgstr "[Unfokust]"
 
 #: ../../WPrefs.app/Appearance.c:387
 msgid "Titlebar of Unfocused Windows"
-msgstr "Titelbalke fan ûnfokusse finster"
+msgstr "Titelbalke fan ûnfokust finster"
 
 #: ../../WPrefs.app/Appearance.c:390
 msgid "[Owner of Focused]"
-msgstr "[Eigener fan fokusse]"
+msgstr "[Eigener fan fokust]"
 
 #: ../../WPrefs.app/Appearance.c:391
 msgid "Titlebar of Focused Window's Owner"
-msgstr "Titelbalke eigener fokusse finster"
+msgstr "Titelbalke eigener fokust finster"
 
 #: ../../WPrefs.app/Appearance.c:394
 msgid "[Resizebar]"
@@ -212,15 +212,15 @@ msgstr "koe RImage net oanmeitsje foar \"%s\": %s"
 
 #: ../../WPrefs.app/Appearance.c:1481
 msgid "Focused Window"
-msgstr "Fokusse finster"
+msgstr "Fokust finster"
 
 #: ../../WPrefs.app/Appearance.c:1488
 msgid "Unfocused Window"
-msgstr "Unfokusse finster"
+msgstr "Unfokust finster"
 
 #: ../../WPrefs.app/Appearance.c:1495
 msgid "Owner of Focused Window"
-msgstr "Eigener fokusse finster"
+msgstr "Eigener fokust finster"
 
 #: ../../WPrefs.app/Appearance.c:1507 ../../WPrefs.app/Appearance.c:1511
 msgid "Normal Item"
@@ -526,7 +526,7 @@ msgstr ""
 "Dok- en clipskaaimerken. Skeakelje it Dok en de Clip yn/út,\n"
 "en pas fertragingen oan."
 
-#: ../../WPrefs.app/Expert.c:43
+#: ../../WPrefs.app/Expert.c:44
 msgid ""
 "Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."
 msgstr ""
@@ -534,88 +534,98 @@ msgstr ""
 "brûk mei KDE/GNOME."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:46
+#: ../../WPrefs.app/Expert.c:47
 msgid "Ignore decoration hints for GTK applications."
 msgstr "Negearje dekoraasjehints foar GTK-programma's."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:49
+#: ../../WPrefs.app/Expert.c:50
 msgid "Disable workspace pager."
 msgstr "Skeakelje wurkromtefolger út."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:52
+#: ../../WPrefs.app/Expert.c:53
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)."
 msgstr "Stel gjin net-WindowMaker-spesifike parameters yn (brûk 'xset' net)."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:55
+#: ../../WPrefs.app/Expert.c:56
 msgid "Automatically save session when exiting Window Maker."
 msgstr "Bewarje sesje fansels by ôfslute fan Window Maker."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:58
+#: ../../WPrefs.app/Expert.c:59
 msgid "Use SaveUnder in window frames, icons, menus and other objects."
 msgstr "Brûk SaveUnder yn finsteromlisting, ikoanen, menu's en oare objekten."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:61
+#: ../../WPrefs.app/Expert.c:62
 msgid "Disable confirmation panel for the Kill command."
 msgstr "Skeakelje befêstigingspaniel foar it kommando 'Deadzje' út."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:64
+#: ../../WPrefs.app/Expert.c:65
 msgid "Disable selection animation for selected icons."
 msgstr "Skeakelje seleksjeanimaasje foar selektearre ikoanen út."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:67
+#: ../../WPrefs.app/Expert.c:68
 msgid "Smooth font edges (needs restart)."
 msgstr "Flakje letterrânen ôf (werstart nedich)."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:70
+#: ../../WPrefs.app/Expert.c:71
 msgid "Cycle windows only on the active head."
 msgstr "Wikselje finsters allinnich op de aktive kop."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:73
+#: ../../WPrefs.app/Expert.c:74
 msgid "Ignore minimized windows when cycling."
 msgstr "Negearje miniaturisearre finsters by wikselje."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:76
+#: ../../WPrefs.app/Expert.c:77
 msgid "Show switch panel when cycling windows."
 msgstr "Toan skeakelpaniel by finsters wikselje."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:79
+#: ../../WPrefs.app/Expert.c:80
 msgid "Show workspace title on Clip."
 msgstr "Toan wurkromtetitel op Clip."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:82
+#: ../../WPrefs.app/Expert.c:83
 msgid "Highlight the icon of the application when it has the focus."
 msgstr "Aksintuearje it programma-ikoan, wannear it fokus hat."
 
-#: ../../WPrefs.app/Expert.c:86
+#: ../../WPrefs.app/Expert.c:87
 msgid "Enable keyboard language switch button in window titlebars."
 msgstr "Skeakelje toetseboerdtaalknop op finstertitelbalken yn."
 
-#: ../../WPrefs.app/Expert.c:90
-msgid "Maximize a window to side or corner by dragging."
-msgstr "Maksimalisearje in finster tsjin sydkant of hoeke troch ferslepe."
+#: ../../WPrefs.app/Expert.c:91
+msgid "Maximize (snap) a window to edge or corner by dragging."
+msgstr "Maksimalisearje (triuw) in finster tsjin kant of hoeke troch ferslepe."
 
 #. default:
-#: ../../WPrefs.app/Expert.c:93
+#: ../../WPrefs.app/Expert.c:94
+msgid "Distance from edge to begin window snap."
+msgstr "Ofstân fan kant ôf wêr't finster triuwe begjint."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:97
+msgid "Distance from corner to begin window snap."
+msgstr "Ofstân fan hoeke ôf wêr't finster triuwe begjint."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:100
 msgid "Open dialogs in the same workspace as their owners."
 msgstr "Iepenje dialogen yn deselde wurkromte as har eigeners."
 
-#: ../../WPrefs.app/Expert.c:217
+#: ../../WPrefs.app/Expert.c:310
 msgid "Expert User Preferences"
 msgstr "Foarkarren foar bedreaune brûkers"
 
-#: ../../WPrefs.app/Expert.c:219
+#: ../../WPrefs.app/Expert.c:312
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also has some other misc. options."
@@ -633,8 +643,8 @@ msgstr "ferkearde opsjewearde %s foar opsje FocusMode. Brûkt standert Manual"
 msgid "bad option value %s for option ColormapMode. Using default Auto"
 msgstr "ferkearde opsjewearde %s foar opsje ColormapMode. Brûkt standert Auto"
 
-#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:160
-#: ../../WPrefs.app/Icons.c:384 ../../WPrefs.app/Preferences.c:120
+#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:162
+#: ../../WPrefs.app/Icons.c:396 ../../WPrefs.app/Preferences.c:120
 #: ../../WPrefs.app/WindowHandling.c:140 ../../WPrefs.app/WindowHandling.c:159
 #, c-format
 msgid "OFF"
@@ -777,36 +787,36 @@ msgstr "3D wintelje"
 msgid "None"
 msgstr "Gjin"
 
-#: ../../WPrefs.app/Icons.c:184 ../../WPrefs.app/Preferences.c:145
+#: ../../WPrefs.app/Icons.c:186 ../../WPrefs.app/Preferences.c:145
 #: ../../WPrefs.app/Preferences.c:159
 #, c-format
 msgid "bad value \"%s\" for option %s, using default \"%s\""
 msgstr "ferkearde wearde \"%s\" foar opsje %s, brûkt standert \"%s\""
 
-#: ../../WPrefs.app/Icons.c:243
+#: ../../WPrefs.app/Icons.c:255
 #, c-format
 msgid "animation style \"%s\" is unknown, resetting to \"%s\""
 msgstr "animaasjestyl \"%s\" is ûnbekend, weromset op \"%s\""
 
-#: ../../WPrefs.app/Icons.c:270
+#: ../../WPrefs.app/Icons.c:282
 msgid "Icon Positioning"
 msgstr "Ikoanpleatsing"
 
-#: ../../WPrefs.app/Icons.c:349
+#: ../../WPrefs.app/Icons.c:361
 msgid "Icon Size"
 msgstr "Ikoangrutte"
 
-#: ../../WPrefs.app/Icons.c:351
+#: ../../WPrefs.app/Icons.c:363
 msgid "The size of the dock/application icon and miniwindows"
 msgstr ""
 "De ôfmjittingen fan it dok-/programma-ikoan\n"
 "en minyfinsters"
 
-#: ../../WPrefs.app/Icons.c:368
+#: ../../WPrefs.app/Icons.c:380
 msgid "Mini-Previews for Icons"
 msgstr "Miniatueren foar ikoanen"
 
-#: ../../WPrefs.app/Icons.c:370
+#: ../../WPrefs.app/Icons.c:382
 msgid ""
 "The Mini-Preview provides a small view of the content of the\n"
 "window when the mouse is placed over the icon."
@@ -814,41 +824,41 @@ msgstr ""
 "De miniatuer biedt in lytse blik op de ynhâld fan it\n"
 "finster, as de mûs op it ikoan pleatst wurdt."
 
-#: ../../WPrefs.app/Icons.c:392
+#: ../../WPrefs.app/Icons.c:404
 msgid "Iconification Animation"
 msgstr "Ikoanifisearringsanimaasje"
 
-#: ../../WPrefs.app/Icons.c:416
+#: ../../WPrefs.app/Icons.c:428
 msgid "Auto-arrange icons"
 msgstr "Ikoanen fansels skikke"
 
-#: ../../WPrefs.app/Icons.c:418
+#: ../../WPrefs.app/Icons.c:430
 msgid "Keep icons and miniwindows arranged all the time."
 msgstr "Hâld ikoanen en minyfinsters altiten skikt."
 
-#: ../../WPrefs.app/Icons.c:423
+#: ../../WPrefs.app/Icons.c:435
 msgid "Omnipresent miniwindows"
 msgstr "Rûnombywêzige minyfinsters"
 
-#: ../../WPrefs.app/Icons.c:425
+#: ../../WPrefs.app/Icons.c:437
 msgid "Make miniwindows be present in all workspaces."
 msgstr "Meitsje minyfinsters oanwêzich yn alle wurkromten."
 
-#: ../../WPrefs.app/Icons.c:430
+#: ../../WPrefs.app/Icons.c:442
 msgid "Single click activation"
 msgstr "Inkeldkliksaktivearring"
 
-#: ../../WPrefs.app/Icons.c:432
+#: ../../WPrefs.app/Icons.c:444
 msgid "Launch applications and restore windows with a single click."
 msgstr ""
 "Start programma's op, en werstel finsters mei\n"
 "in inkelde klik."
 
-#: ../../WPrefs.app/Icons.c:484
+#: ../../WPrefs.app/Icons.c:500
 msgid "Icon Preferences"
 msgstr "Ikoanfoarkarren"
 
-#: ../../WPrefs.app/Icons.c:486
+#: ../../WPrefs.app/Icons.c:502
 msgid ""
 "Icon/Miniwindow handling options. Icon positioning\n"
 "area, sizes of icons, miniaturization animation style."
@@ -2700,3 +2710,6 @@ msgstr "miniatueren"
 
 msgid "Yes, don't ask again."
 msgstr "Ja, freegje net wer"
+
+msgid "Maximize a window to side or corner by dragging."
+msgstr "Maksimalisearje in finster tsjin sydkant of hoeke troch ferslepe."
