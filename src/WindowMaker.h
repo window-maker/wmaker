@@ -395,7 +395,7 @@ extern struct WPreferences {
 	char sticky_icons;                 /* If miniwindows will be onmipresent */
 	char dont_confirm_kill;            /* do not confirm Kill application */
 	char disable_miniwindows;
-	char disable_workspace_pager;
+	char enable_workspace_pager;
 	char ignore_gtk_decoration_hints;
 
 	char dont_blink;                   /* do not blink icon selection */

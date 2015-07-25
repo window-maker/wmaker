@@ -475,7 +475,7 @@ void wWorkspaceForceChange(WScreen * scr, int workspace)
 	if (workspace >= MAX_WORKSPACES || workspace < 0)
 		return;
 
-	if (!wPreferences.disable_workspace_pager && !w_global.process_workspacemap_event)
+	if (wPreferences.enable_workspace_pager && !w_global.process_workspacemap_event)
 		wWorkspaceMapUpdate(scr);
 
 	SendHelperMessage(scr, 'C', workspace + 1, NULL);

@@ -47,8 +47,8 @@ static const struct {
 	{ N_("Ignore decoration hints for GTK applications."),
 	  /* default: */ False, OPTION_WMAKER, "IgnoreGtkHints" },
 
-	{ N_("Disable workspace pager."),
-	  /* default: */ False, OPTION_WMAKER, "DisableWorkspacePager" },
+	{ N_("Enable workspace pager."),
+	  /* default: */ False, OPTION_WMAKER, "EnableWorkspacePager" },
 
 	{ N_("Do not set non-WindowMaker specific parameters (do not use xset)."),
 	  /* default: */ False, OPTION_USERDEF, "NoXSetStuff" },
