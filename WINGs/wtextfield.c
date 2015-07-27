@@ -1000,6 +1000,9 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 		}
 		break;
 
+#ifdef XK_KP_Enter
+	case XK_KP_Enter:
+#endif
 	case XK_Return:
 		if (!modified) {
 			data = (void *)WMReturnTextMovement;
