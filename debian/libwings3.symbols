@@ -118,6 +118,7 @@ libWINGs.so.3 libwings3 #MINVER#
  WMGetBrowserSelectedRowInColumn@Base 0.95.0
  WMGetButtonEnabled@Base 0.95.0
  WMGetButtonSelected@Base 0.95.0
+ WMGetButtonText@Base 0.95.7
  WMGetColorAlpha@Base 0.95.0
  WMGetColorPanel@Base 0.95.0
  WMGetColorPanelColor@Base 0.95.0
@@ -216,6 +217,7 @@ libWINGs.so.3 libwings3 #MINVER#
  WMGetViewScreenPosition@Base 0.95.0
  WMGetViewSize@Base 0.95.0
  WMGetWidgetBackgroundColor@Base 0.95.0
+ WMGetWidgetBackgroundPixmap@Base 0.95.7
  WMGrayColor@Base 0.95.0
  WMGreenComponentOfColor@Base 0.95.0
  WMGroupButtons@Base 0.95.0
@@ -465,6 +467,7 @@ libWINGs.so.3 libwings3 #MINVER#
  WMSetViewNextResponder@Base 0.95.0
  WMSetViewNotifySizeChanges@Base 0.95.0
  WMSetWidgetBackgroundColor@Base 0.95.0
+ WMSetWidgetBackgroundPixmap@Base 0.95.7
  WMSetWidgetDefaultBoldFont@Base 0.95.0
  WMSetWidgetDefaultFont@Base 0.95.0
  WMSetWindowAspectRatio@Base 0.95.0
@@ -570,6 +573,7 @@ libWINGs.so.3 libwings3 #MINVER#
  W_SetFocusOfTopLevel@Base 0.95.0
  W_SetPreeditPositon@Base 0.95.0
  W_SetViewBackgroundColor@Base 0.95.0
+ W_SetViewBackgroundPixmap@Base 0.95.7
  W_SetViewCursor@Base 0.95.0
 #MISSING: 0.95.5-1# W_SetXdndAwareProperty@Base 0.95.0
  W_TopLevelOfView@Base 0.95.0

@@ -1,3 +1,27 @@
+wmaker (0.95.7-1) unstable; urgency=medium
+
+  * New upstrem version 0.95.7.
+  * debian/changelog, removed debian files (lintian warning).
+  * Updated debian/libwings3.symbols.
+  * Updated libwraster5.symbols
+  * Changed the test for the update-menu command in these files to avoid
+    a lintian warning (command-with-path-in-maintainer-script):
+    * debian/wmaker.postrm
+    * debian/wmaker-common.postrm
+  * Removed the Encoding field in debian/debianfiles/wmaker-common.desktop
+    to avoid a lintian warning (desktop-entry-contains-encoding-key).
+  * Updated debian/rules to include pango support (--enable-pango).
+  * Updated all debian/patches only with quilt refresh.
+  * Updated some debian files because the manpages are moved from
+    section 1x to 1:
+    * debian/patches/51_wmaker_man.diff
+    * debian/wmaker-common.manpages
+    * debian/wmaker.install
+    * debian/wmaker.manpages
+  * Removed upstream file FAQ.I18N in debian/wmaker-common.docs.
+
+ -- Rodolfo García Peñas (kix) <kix@debian.org>  Thu, 13 Aug 2015 20:19:33 +0200
+
 wmaker (0.95.6-1.1) unstable; urgency=medium
 
   * Non-maintainer upload.

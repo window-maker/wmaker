@@ -1,11 +1,11 @@
 Description: This patch changes the default config paths
 Author: Andreas Metzler <ametzler@debian.org>
 Last-Update: 2010-08-07
-Index: WindowMaker-0.95.6/src/wconfig.h.in
+Index: wmaker-crm/src/wconfig.h.in
 ===================================================================
---- WindowMaker-0.95.6.orig/src/wconfig.h.in
-+++ WindowMaker-0.95.6/src/wconfig.h.in
-@@ -122,7 +122,7 @@
+--- wmaker-crm.orig/src/wconfig.h.in
++++ wmaker-crm/src/wconfig.h.in
+@@ -116,7 +116,7 @@
   */
  
  /* list of paths to look for the config files, searched in order of appearance */

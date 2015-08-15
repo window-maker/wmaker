@@ -3,7 +3,7 @@ set -e
 
 case "$1" in
   remove)
-    if [ -x /usr/bin/update-menus ] ; then
+    if which update-menus >/dev/null 2>&1 ; then
       update-menus
     fi
   ;;

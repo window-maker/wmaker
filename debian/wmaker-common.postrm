@@ -12,7 +12,7 @@ case "$1" in
     done
   ;;
   purge)
-    if [ -x /usr/bin/update-menus ] ; then
+    if which update-menus >/dev/null 2>&1 ; then
       update-menus
       rm -f /etc/GNUstep/Defaults/menu.hook /etc/GNUstep/Defaults/appearance.menu
     fi

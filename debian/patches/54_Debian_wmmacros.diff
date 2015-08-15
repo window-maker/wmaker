@@ -1,8 +1,10 @@
 Description: Macros for user paths. Based on Marcelo E. Magallon <mmagallo@debian.org> diff patch.
 Author: Rodolfo García Peñas (kix) <kix@kix.es>
 Last-Update: 2012-01-09
---- a/WindowMaker/wmmacros
-+++ b/WindowMaker/wmmacros
+Index: wmaker-crm/WindowMaker/wmmacros
+===================================================================
+--- wmaker-crm.orig/WindowMaker/wmmacros
++++ wmaker-crm/WindowMaker/wmmacros
 @@ -22,7 +22,7 @@
  /*
   * SETSTYLE FILE - loads a style file 
