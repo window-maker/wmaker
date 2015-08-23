@@ -748,7 +748,12 @@ RImage *get_rimage_icon_from_wm_hints(WIcon *icon)
 {
 	RImage *image = NULL;
 	unsigned int w, h, d;
-	WWindow *wwin = icon->owner;
+	WWindow *wwin;
+
+	if ((!icon) || (!icon->owner))
+		return NULL;
+
+	wwin = icon->owner;
 
 	if (!getSize(wwin->wm_hints->icon_pixmap, &w, &h, &d)) {
 		icon->owner->wm_hints->flags &= ~IconPixmapHint;
