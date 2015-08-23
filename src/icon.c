@@ -529,6 +529,24 @@ char *wIconStore(WIcon *icon)
 	return filename;
 }
 
+void remove_cache_icon(char *filename)
+{
+	char *cachepath;
+
+	if (!filename)
+		return;
+
+	cachepath = get_icon_cache_path();
+	if (!cachepath)
+		return;
+
+	/* Filename check/parse could be here */
+	if (!strncmp(filename, cachepath, strlen(cachepath)))
+		unlink(filename);
+
+	wfree(cachepath);
+}
+
 static void cycleColor(void *data)
 {
 	WIcon *icon = (WIcon *) data;

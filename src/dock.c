@@ -2425,6 +2425,9 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 
 	dock->icon_count--;
 
+	/* Remove the Cached Icon */
+	remove_cache_icon(icon->icon->file);
+
 	/* if the dock is not attached to an application or
 	 * the application did not set the appropriate hints yet,
 	 * destroy the icon */
@@ -2452,6 +2455,7 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 		if (wPreferences.auto_arrange_icons)
 			wArrangeIcons(dock->screen_ptr, True);
 	}
+
 	if (dock->auto_collapse || dock->auto_raise_lower)
 		clipLeave(dock);
 }

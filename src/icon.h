@@ -80,4 +80,5 @@ void wIconSetHighlited(WIcon *icon, Bool flag);
 void set_icon_image_from_image(WIcon *icon, RImage *image);
 void set_icon_minipreview(WIcon *icon, RImage *image);
 
+void remove_cache_icon(char *filename);
 #endif /* WMICON_H_ */
