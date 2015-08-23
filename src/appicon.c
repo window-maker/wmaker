@@ -1190,7 +1190,6 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 
 		/* Paint it */
 		wAppIconPaint(wapp->app_icon);
-		save_appicon(wapp->app_icon);
 	}
 }
 
