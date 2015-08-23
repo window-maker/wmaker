@@ -470,7 +470,7 @@ static RImage *get_wwindow_image_from_wmhints(WWindow *wwin, WIcon *icon)
  */
 char *wIconStore(WIcon *icon)
 {
-	char *path, *dir_path, *file;
+	char *path, *dir_path, *file, *filename;
 	int len = 0;
 	RImage *image = NULL;
 	WWindow *wwin = icon->owner;
@@ -488,15 +488,23 @@ char *wIconStore(WIcon *icon)
 		return NULL;
 	}
 
-	len = strlen(dir_path) + strlen(file) + 5;
-	path = wmalloc(len);
-	snprintf(path, len, "%s%s.xpm", dir_path, file);
-	wfree(dir_path);
+	/* Create the file name */
+	len = strlen(file) + 5;
+	filename = wmalloc(len);
+	snprintf(filename, len, "%s.xpm", file);
 	wfree(file);
 
+	/* Create the full path, including the filename */
+	len = strlen(dir_path) + strlen(filename) + 1;
+	path = wmalloc(len);
+	snprintf(path, len, "%s%s", dir_path, filename);
+	wfree(dir_path);
+
 	/* If icon exists, exit */
-	if (access(path, F_OK) == 0)
-		return path;
+	if (access(path, F_OK) == 0) {
+		wfree(path);
+		return filename;
+	}
 
 	if (wwin->net_icon_image)
 		image = RRetainImage(wwin->net_icon_image);
@@ -505,17 +513,20 @@ char *wIconStore(WIcon *icon)
 
 	if (!image) {
 		wfree(path);
+		wfree(filename);
 		return NULL;
 	}
 
 	if (!RSaveImage(image, path, "XPM")) {
 		wfree(path);
+		wfree(filename);
 		path = NULL;
 	}
 
+	wfree(path);
 	RReleaseImage(image);
 
-	return path;
+	return filename;
 }
 
 static void cycleColor(void *data)
