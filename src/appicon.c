@@ -159,9 +159,6 @@ void create_appicon_for_application(WApplication *wapp, WWindow *wwin)
 		if (!WFLAGP(wapp->main_window_desc, no_appicon))
 			paint_app_icon(wapp);
 	}
-
-	/* Save the app_icon in a file */
-	save_appicon(wapp->app_icon, False);
 }
 
 void unpaint_app_icon(WApplication *wapp)
