@@ -2344,7 +2344,6 @@ Bool wDockMoveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, i
 			icon->icon->shadowed = 0;
 			update_icon = True;
 		}
-		save_appicon(icon);
 	}
 
 	if (src->auto_collapse || src->auto_raise_lower)
