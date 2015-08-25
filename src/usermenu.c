@@ -87,13 +87,15 @@ typedef struct {
 	int key_no;
 } WUserMenuData;
 
-static void notifyClient(WMenu * menu, WMenuEntry * entry)
+static void notifyClient(WMenu *menu, WMenuEntry *entry)
 {
 	XEvent event;
 	WUserMenuData *data = entry->clientdata;
 	WScreen *scr = data->screen;
 	Window window;
 	int i;
+
+	(void) menu;
 
 	window = scr->focused_window->client_win;
 
@@ -128,20 +130,19 @@ static void removeUserMenudata(void *menudata)
 	wfree(data);
 }
 
-static WUserMenuData *convertShortcuts(WScreen * scr, WMPropList * shortcut)
+static WUserMenuData *convertShortcuts(WScreen *scr, WMPropList *shortcut)
 {
 	WUserMenuData *data;
 	KeySym ksym;
 	char *k, buf[MAX_SHORTCUT_LENGTH], *b;
 	int keycount, i, j, mod;
 
-	if (WMIsPLString(shortcut)) {
+	if (WMIsPLString(shortcut))
 		keycount = 1;
-	} else if (WMIsPLArray(shortcut)) {
+	else if (WMIsPLArray(shortcut))
 		keycount = WMGetPropListItemCount(shortcut);
-	} else {
+	else
 		return NULL;
-	}
 
 	data = wmalloc(sizeof(WUserMenuData));
 	if (!data)
@@ -160,7 +161,7 @@ static WUserMenuData *convertShortcuts(WScreen * scr, WMPropList * shortcut)
 		else
 			wstrlcpy(buf, WMGetFromPLString(shortcut), MAX_SHORTCUT_LENGTH);
 
-		b = (char *)buf;
+		b = (char *) buf;
 
 		while ((k = strchr(b, '+')) != NULL) {
 			*k = 0;
@@ -181,8 +182,6 @@ static WUserMenuData *convertShortcuts(WScreen * scr, WMPropList * shortcut)
 			j++;
 	}
 
- keyover:
-
 	/* get key */
 	if (!j) {
 		puts("fatal j");
@@ -190,17 +189,18 @@ static WUserMenuData *convertShortcuts(WScreen * scr, WMPropList * shortcut)
 		wfree(data);
 		return NULL;
 	}
+
 	data->key_no = j;
 	data->screen = scr;
 
 	return data;
 }
 
-static WMenu *configureUserMenu(WScreen * scr, WMPropList * plum)
+static WMenu *configureUserMenu(WScreen *scr, WMPropList *plum)
 {
 	char *mtitle;
 	WMenu *menu = NULL;
-	WMPropList *elem, *title, *command, *params;
+	WMPropList *elem, *title, *command, *params = NULL;
 	int count, i;
 	WUserMenuData *data;
 
@@ -219,18 +219,18 @@ static WMenu *configureUserMenu(WScreen * scr, WMPropList * plum)
 		return NULL;
 
 	mtitle = WMGetFromPLString(elem);
-
 	menu = wMenuCreateForApp(scr, mtitle, True);
 
 	for (i = 1; i < count; i++) {
 		elem = WMGetFromPLArray(plum, i);
 		if (WMIsPLArray(WMGetFromPLArray(elem, 1))) {
 			WMenu *submenu;
-			WMenuEntry *mentry;
+			WMenuEntry *mentry = NULL;
 
 			submenu = configureUserMenu(scr, elem);
 			if (submenu)
 				mentry = wMenuAddCallback(menu, submenu->frame->title, NULL, NULL);
+
 			wMenuEntrySetCascade(menu, mentry, submenu);
 		} else {
 			int idx = 0;
@@ -277,7 +277,7 @@ static WMenu *configureUserMenu(WScreen * scr, WMPropList * plum)
 	return menu;
 }
 
-void wUserMenuRefreshInstances(WMenu * menu, WWindow * wwin)
+void wUserMenuRefreshInstances(WMenu *menu, WWindow *wwin)
 {
 	int i, j, count, paintflag;
 
@@ -301,10 +301,12 @@ void wUserMenuRefreshInstances(WMenu * menu, WWindow * wwin)
 					break;
 				}
 			}
+
 			if (oldflag != menu->entries[i]->flags.enabled)
 				paintflag = 1;
 		}
 	}
+
 	for (i = 0; i < menu->cascade_no; i++) {
 		if (!menu->cascades[i]->flags.brother)
 			wUserMenuRefreshInstances(menu->cascades[i], wwin);
@@ -326,14 +328,15 @@ static WMenu *readUserMenuFile(WScreen *scr, const char *file_name)
 		menu = configureUserMenu(scr, plum);
 		WMReleasePropList(plum);
 	}
+
 	return menu;
 }
 
-WMenu *wUserMenuGet(WScreen * scr, WWindow * wwin)
+WMenu *wUserMenuGet(WScreen *scr, WWindow *wwin)
 {
 	WMenu *menu = NULL;
-	char *path = NULL;
-	char *tmp;
+	char *tmp, *path = NULL;
+
 	if (wwin && wwin->wm_instance && wwin->wm_class) {
 		int len = strlen(wwin->wm_instance) + strlen(wwin->wm_class) + 7;
 		tmp = wmalloc(len);
@@ -347,6 +350,7 @@ WMenu *wUserMenuGet(WScreen * scr, WWindow * wwin)
 		menu = readUserMenuFile(scr, path);
 		wfree(path);
 	}
+
 	return menu;
 }
 
