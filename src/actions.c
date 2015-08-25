@@ -225,6 +225,7 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 		wUserMenuRefreshInstances(napp->menu, wwin);
 #endif	/* USER_MENU */
 
+		/* kix: Only menu map with mouse, not alt+tab! */
 		if (wwin->flags.mapped)
 			wAppMenuMap(napp->menu, wwin);
 	}
