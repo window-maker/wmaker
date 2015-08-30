@@ -396,6 +396,51 @@ Changes since version 0.95.6:
 - debian: Import version 0.95.6-1.
 - debian: Import version 0.95.6-1.1.
   (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- Import of (partly outdated) Ukrainian translations.
+  (Martin Dietze <mdietze@gmail.com>)
+- Add folder with fedora .spec file
+  (Alexey I. Froloff <raorn@raorn.name>)
+- make: Add Ukrainian translation files to EXTRA_DIST.
+- wmiv: Add long command line options --help and --version.
+- wmiv: Improve help text.
+- doc: Add manpage for wmiv.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- wmaker: replaced old email address with the official one
+- WINGs: Updated news with the API changes that occured between 0.95.6 and
+  0.95.7
+- WINGs: ran spell checker on the NEWS file
+- WINGs: fix non-portable int conversion for printf in font panel size handling
+- WRaster: fix unused variable warning when XShm extention is not enabled
+  (Christophe CURIS <christophe.curis@free.fr>)
+- New translation into Frisian for Window Maker
+  (Alwin <translations@ziggo.nl>)
+- wrlib: fixed gcc version needed for deprecated attribute support
+- Configure: increased the version of Automake requested
+  (Christophe CURIS <christophe.curis@free.fr>)
+- configure: Fix output of libdir directory in summary
+  (Josip Deanovic <djosip+news@linuxpages.net>)
+- wmaker: fix detection of legacy Apercu configuration keywords
+- WPrefs: fix conversion of old "Apercu" setting to the new keywords
+  (Christophe CURIS <christophe.curis@free.fr>)
+- wmaker: Allow window snapping and linked workspaces simultaneously.
+- wmaker: Allow configuration of window snapping detect distances.
+- WPrefs: Add ability to set integer values in Expert panel
+- WPrefs: Add snap edge and corner detect to Expert panel.
+  (Doug Torrance <dtorrance@monmouthcollege.edu>)
+- Translations: Dutch updates for WPrefs
+- Translations: Frisian updates for WPrefs
+  (Alwin <translations@ziggo.nl>)
+- configure: fixed incorrect variable name that prevented --disable-xdnd to
+  work
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- Revert "wmaker: fix clearing of window attribute that was not saved properly"
+- Disable pager by default
+  (Carlos R. Mafra <crmafra@gmail.com>)
+- Allow using keypad Enter to commit move/resize
+- Allow using numpad Enter key in dialogs for confirmation
+  (Amadeusz Sławiński <amade@asmblr.net>)
+- Window Maker 0.95.7
+  (Carlos R. Mafra <crmafra@gmail.com>)
 
 
 Changes since version 0.95.5:
