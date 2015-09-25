@@ -366,8 +366,10 @@ static WMArray *makeWindowListArray(WScreen *scr, int include_unmapped, Bool cla
 		if ((canReceiveFocus(wwin) != 0) &&
 		    (wwin->flags.mapped || wwin->flags.shaded || include_unmapped)) {
 			if (class_only)
-				if (!sameWindowClass(scr->focused_window, wwin))
+				if (!sameWindowClass(scr->focused_window, wwin)) {
+					wwin = wwin->prev;
 					continue;
+				}
 			if (!WFLAGP(wwin, skip_switchpanel))
 				WMAddToArray(windows, wwin);
 		}
