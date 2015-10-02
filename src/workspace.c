@@ -50,6 +50,7 @@
 #include "xinerama.h"
 #include "event.h"
 #include "wsmap.h"
+#include "dialog.h"
 
 #define MC_NEW          0
 #define MC_DESTROY_LAST 1
@@ -142,8 +143,13 @@ Bool wWorkspaceDelete(WScreen * scr, int workspace)
 	/* verify if workspace is in use by some window */
 	tmp = scr->focused_window;
 	while (tmp) {
-		if (!IS_OMNIPRESENT(tmp) && tmp->frame->workspace == workspace)
+		if (!IS_OMNIPRESENT(tmp) && tmp->frame->workspace == workspace) {
+			char buf[256];
+			snprintf(buf, sizeof(buf), _("Workspace \"%s\" in use; cannot delete"),
+				 scr->workspaces[workspace]->name);
+			wMessageDialog(scr, _("Error"), buf, _("OK"), NULL, NULL);
 			return False;
+		}
 		tmp = tmp->prev;
 	}
 
