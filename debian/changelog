@@ -27,6 +27,8 @@ wmaker (0.95.7-1) unstable; urgency=medium
   * Use dh_autoreconf instead of invoking autogen.sh in the configure target.
   * Simplify debian/rules and use dh_auto_configure, especially for handling
     dpkg-buildflags.
+  * wmaker manpage was also moved from section 1x to 1. Fix pointer in
+    README.Debian and update-alternatives slave link.
 
  -- Rodolfo García Peñas (kix) <kix@debian.org>  Thu, 13 Aug 2015 20:19:33 +0200
 

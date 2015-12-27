@@ -22,7 +22,7 @@ case "$1" in
     update-alternatives --install /usr/bin/x-window-manager \
         x-window-manager /usr/bin/wmaker 50 \
         --slave /usr/share/man/man1/x-window-manager.1.gz \
-        x-window-manager.1.gz /usr/share/man/man1/wmaker.1x.gz
+        x-window-manager.1.gz /usr/share/man/man1/wmaker.1.gz
 
     if [ -x /usr/bin/update-menus -a -x /usr/bin/install-menu ] ; then
         update-menus

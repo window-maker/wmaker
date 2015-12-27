@@ -17,7 +17,7 @@ and remove other exec lines if present.  I have done my best to
 overcome certain glitches and gotchas regarding Window Maker
 installation. /usr/bin/wmaker is a shell script that tries to
 make sure things are properly set up.  Take a look at it to see what's
-going on.  Please read wmaker(1x).
+going on.  Please read wmaker(1).
 
 
 Other sources for documentation
