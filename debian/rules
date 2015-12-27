@@ -36,10 +36,9 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
                      --with-gnustepdir=$(GNUSTEPDIR)
 
 %:
-	dh $@ --parallel --with autotools-dev 
+	dh $@ --parallel --with autoreconf
 
 override_dh_auto_configure:
-	./autogen.sh
 	LINGUAS="$(LINGUAS)" ./configure $(COMMON_OPTIONS) \
 	$(WMAKER_OPTIONS) $(shell dpkg-buildflags --export=configure)
 

@@ -24,6 +24,7 @@ wmaker (0.95.7-1) unstable; urgency=medium
   [ Andreas Metzler ]
   * 56_ignore_runstatedir.diff: Ignore missing documentation for --runstatedir
     in INSTALL.
+  * Use dh_autoreconf instead of invoking autogen.sh in the configure target.
 
  -- Rodolfo García Peñas (kix) <kix@debian.org>  Thu, 13 Aug 2015 20:19:33 +0200
 
