@@ -1,5 +1,6 @@
 wmaker (0.95.7-1) unstable; urgency=medium
 
+  [ Rodolfo García Peñas (kix) ]
   * New upstrem version 0.95.7.
   * debian/changelog, removed debian files (lintian warning).
   * Updated debian/libwings3.symbols.
@@ -19,6 +20,10 @@ wmaker (0.95.7-1) unstable; urgency=medium
     * debian/wmaker.install
     * debian/wmaker.manpages
   * Removed upstream file FAQ.I18N in debian/wmaker-common.docs.
+
+  [ Andreas Metzler ]
+  * 56_ignore_runstatedir.diff: Ignore missing documentation for --runstatedir
+    in INSTALL.
 
  -- Rodolfo García Peñas (kix) <kix@debian.org>  Thu, 13 Aug 2015 20:19:33 +0200
 
