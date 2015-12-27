@@ -1,9 +1,6 @@
 #!/usr/bin/make -f
 # export DH_VERBOSE=1
-export CFLAGS = `dpkg-buildflags --get CFLAGS`
-export DEB_CFLAGS_MAINT_APPEND += -Wall -DGLOBAL_DEFAULTS_SUBDIR="\\\"GNUstep/Defaults\\\""
-export LDFLAGS = `dpkg-buildflags --get LDFLAGS`
-export CPPFLAGS = `dpkg-buildflags --get CPPFLAGS`
+export DEB_CFLAGS_MAINT_APPEND += -Wall -DGLOBAL_DEFAULTS_SUBDIR=\"GNUstep/Defaults\"
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
@@ -17,20 +14,14 @@ DEBIAN_TMP        := debian/tmp
 # Be careful with the leading / because some of these values are going
 # to be hardcoded into the executables
 BASEDIR           := /usr
-CONFDIR           := /etc
 INCLUDEDIR        := $(BASEDIR)/include
 SHAREDIR          := $(BASEDIR)/share
-MANDIR            := $(SHAREDIR)/man
 NLSDIR            := $(SHAREDIR)/locale
 GNUSTEPDIR        := $(SHAREDIR)/lib/GNUstep/System
 WMSHAREDIR        := $(SHAREDIR)/WindowMaker
 PIXMAPDIR         := $(INCLUDEDIR)/X11/pixmaps
 
-COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
-                     --mandir=$(MANDIR)               \
-                     --includedir=$(INCLUDEDIR)       \
-                     --sysconfdir=$(CONFDIR)          \
-                     --datadir=$(SHAREDIR)            \
+COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
                      --with-localedir=$(NLSDIR)       \
                      --with-pixmapdir=$(PIXMAPDIR)    \
                      --with-gnustepdir=$(GNUSTEPDIR)
@@ -39,8 +30,8 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
 	dh $@ --parallel --with autoreconf
 
 override_dh_auto_configure:
-	LINGUAS="$(LINGUAS)" ./configure $(COMMON_OPTIONS) \
-	$(WMAKER_OPTIONS) $(shell dpkg-buildflags --export=configure)
+	env LINGUAS="$(LINGUAS)" dh_auto_configure --verbose -- \
+		$(COMMON_OPTIONS) $(WMAKER_OPTIONS) --libdir=/usr/lib
 
 override_dh_installmenu:
 	dh_installmenu -a --noscripts
