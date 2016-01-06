@@ -9,6 +9,7 @@ usr/bin/getstyle
 usr/bin/seticons
 usr/bin/geticonset
 usr/bin/setstyle
+usr/bin/wmiv
 usr/bin/wxpaste
 usr/bin/wmaker usr/lib/WindowMaker
 usr/bin/convertfonts usr/lib/WindowMaker
