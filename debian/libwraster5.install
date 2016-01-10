@@ -1,1 +1,1 @@
-usr/lib/libwraster.so.*
+usr/lib/*/libwraster.so.*

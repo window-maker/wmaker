@@ -1,11 +1,10 @@
 AUTHORS
 BUGFORM
 BUGS
+FAQ
 NEWS
 README
 TODO
-FAQ
-debian/debianfiles/Theme/Debian.theme.txt
 debian/copyright
-# Place wm-oldmenu2new under a more appropiate directory
+debian/debianfiles/Theme/Debian.theme.txt
 util/wm-oldmenu2new

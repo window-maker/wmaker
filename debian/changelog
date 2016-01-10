@@ -1,7 +1,7 @@
-wmaker (0.95.7-1) unstable; urgency=medium
+wmaker (0.95.7-1) experimental; urgency=medium
 
   [ Rodolfo García Peñas (kix) ]
-  * New upstrem version 0.95.7.
+  * New upstream version 0.95.7.
   * debian/changelog, removed debian files (lintian warning).
   * Updated debian/libwings3.symbols.
   * Updated libwraster5.symbols
@@ -30,7 +30,27 @@ wmaker (0.95.7-1) unstable; urgency=medium
   * wmaker manpage was also moved from section 1x to 1. Fix pointer in
     README.Debian and update-alternatives slave link.
 
- -- Rodolfo García Peñas (kix) <kix@debian.org>  Thu, 13 Aug 2015 20:19:33 +0200
+  [ Doug Torrance ]
+  * Switch maintenance to Debian Window Maker Team with kix, Andreas, and
+    myself as uploaders.
+  * Tidy up packaging using wrap-and-sort.
+  * Remove Breaks/Replaces wmaker (<< 0.95.0+20111028-3); this version is no
+    longer in Debian.
+  * Switch Depends to wmaker-common (= ${source:Version}) so common files
+    are also updated on upgrade.
+  * Add Vcs-* fields to debian/control.
+  * Update Format field in debian/copyright.
+  * Update debian/watch from sepwatch project.
+  * Remove files from debian/source/options which are handled now by
+    dh-autoreconf.  Add distros directory (present in upstream git but not
+    tarball) and doc files modified during build.
+  * Add multiarch support.  In particular, add Multi-Arch fields to
+    debian/control, add wildcards for multiarch triplets to debian/*.install,
+    and remove --libdir from dh_auto_configure in debian/rules.
+  * Use wildcards for locales in debian/wmaker-common.install for
+    maintainability.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sun, 10 Jan 2016 11:38:11 +0100
 
 wmaker (0.95.6-1.2) unstable; urgency=medium
 

@@ -31,7 +31,7 @@ COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
 
 override_dh_auto_configure:
 	env LINGUAS="$(LINGUAS)" dh_auto_configure --verbose -- \
-		$(COMMON_OPTIONS) $(WMAKER_OPTIONS) --libdir=/usr/lib
+		$(COMMON_OPTIONS) $(WMAKER_OPTIONS)
 
 override_dh_installmenu:
 	dh_installmenu -a --noscripts

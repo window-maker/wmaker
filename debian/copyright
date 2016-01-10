@@ -1,4 +1,4 @@
-Format: http://anonscm.debian.org/viewvc/dep/web/deps/dep5.mdwn?view=co&pathrev=174
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: wmaker
 Upstream-Contact: Window Maker developers mailing list <wmaker-dev@lists.windowmaker.org>
 Source: http://repo.or.cz/w/wmaker-crm.git

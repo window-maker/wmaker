@@ -1,1 +1,1 @@
-usr/lib/libWUtil.so.*
+usr/lib/*/libWUtil.so.*
