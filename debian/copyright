@@ -97,3 +97,18 @@ License: WTFPL-1
  and you just
  .
  DO WHAT THE FUCK YOU WANT TO.
+
+Files: debian/debianfiles/Themes/DebianLegacy.style
+       debian/debianfiles/Themes/DebianLegacy.txt
+       debian/debianfiles/Themes/DebianSwirl.jpg
+Copyright: 1999 Gary Burke <gfburke@earthlink.net>
+License: GPL-1+
+
+License: GPL-1+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 1, or (at your option)
+ any later version.
+ .
+ On Debian systems, the complete text of version 1 of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-1'.

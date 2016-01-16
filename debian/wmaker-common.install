@@ -2,8 +2,10 @@ README.WPrefs					usr/share/doc/wmaker
 README.WPrefs.po				usr/share/doc/wmaker
 README.definable-cursor				usr/share/doc/wmaker
 README.po					usr/share/doc/wmaker
-debian/debianfiles/Theme/Debian			usr/share/WindowMaker/Themes
-debian/debianfiles/Theme/debian.tiff		usr/share/WindowMaker/Backgrounds
+debian/debianfiles/Themes/Debian		usr/share/WindowMaker/Themes
+debian/debianfiles/Themes/DebianLegacy.style	usr/share/WindowMaker/Themes
+debian/debianfiles/Themes/DebianSwirl.jpg	usr/share/WindowMaker/Backgrounds
+debian/debianfiles/Themes/debian.tiff		usr/share/WindowMaker/Backgrounds
 debian/debianfiles/conf/WMRootMenu		etc/GNUstep/Defaults
 debian/debianfiles/conf/WMWindowAttributes	etc/GNUstep/Defaults
 debian/debianfiles/conf/WindowMaker		etc/GNUstep/Defaults

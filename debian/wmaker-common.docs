@@ -6,5 +6,5 @@ NEWS
 README
 TODO
 debian/copyright
-debian/debianfiles/Theme/Debian.theme.txt
+debian/debianfiles/Themes/DebianLegacy.txt
 util/wm-oldmenu2new
