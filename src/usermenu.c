@@ -31,7 +31,7 @@
  *  - external! WINGs menu editor.
  *  TODONOT
  *  - allow applications to share their menu. ] think it
- *    looks wierd since there still are more than 1 appicon.
+ *    looks weird since there still are more than 1 appicon.
  *
  *  Syntax...
  *  (

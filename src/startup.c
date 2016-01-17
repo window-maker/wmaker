@@ -160,7 +160,7 @@ static RETSIGTYPE handleExitSig(int sig)
 	}
 
 	sigprocmask(SIG_UNBLOCK, &sigs, NULL);
-	DispatchEvent(NULL);	/* Dispatch events imediately. */
+	DispatchEvent(NULL);	/* Dispatch events immediately. */
 }
 
 /* Dummy signal handler */
@@ -532,7 +532,7 @@ void StartUp(Bool defaultScreenOnly)
 
 	/* ignore dead pipe */
 	/* Because POSIX mandates that only signal with handlers are reset
-	 * accross an exec*(), we do not want to propagate ignoring SIGPIPEs
+	 * across an exec*(), we do not want to propagate ignoring SIGPIPEs
 	 * to children. Hence the dummy handler.
 	 * Philippe Troin <phil@fifi.org>
 	 */
@@ -548,9 +548,9 @@ void StartUp(Bool defaultScreenOnly)
 	/* Now we unblock all signals, that may have been blocked by the parent
 	 * who exec()-ed us. This can happen for example if Window Maker crashes
 	 * and restarts itself or another window manager from the signal handler.
-	 * In this case, the new proccess inherits the blocked signal mask and
+	 * In this case, the new process inherits the blocked signal mask and
 	 * will no longer react to that signal, until unblocked.
-	 * This is because the signal handler of the proccess who crashed (parent)
+	 * This is because the signal handler of the process who crashed (parent)
 	 * didn't return, and the signal remained blocked. -Dan
 	 */
 	sigfillset(&sig_action.sa_mask);

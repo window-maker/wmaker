@@ -535,7 +535,7 @@ static void appiconBalloon(WObjDescriptor *object)
 		/*
 		 * Check to see if it is a GNUstep app, because in this case we use the instance
 		 * instead of the class, otherwise the user will not be able to distinguish what
-		 * is being refered.
+		 * is being referred.
 		 */
 		if (strcmp(aicon->wm_class, "GNUstep") == 0)
 			display_name = aicon->wm_instance;

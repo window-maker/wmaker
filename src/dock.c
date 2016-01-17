@@ -4650,7 +4650,7 @@ static int indexOfHole(WDock *drawer, WAppIcon *moving_aicon, int redocking)
 	 * that's where the ghost of the moving appicon is, that's what the
 	 * function should return.
 	 *
-	 * We compute 1+2+...+n (this sum is equal to n*(n+1)/2), we substract to
+	 * We compute 1+2+...+n (this sum is equal to n*(n+1)/2), we subtract to
 	 * this sum the xindex of each of the n-1 appicons, and we get the correct
 	 * index! */
 

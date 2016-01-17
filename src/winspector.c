@@ -235,7 +235,7 @@ static InspectorPanel *panelList = NULL;
  * save the user choice to the database, but as we will need to convert that name into a Property
  * List, we use here a Cache of Property Lists, generated only once, which can be reused. It will
  * also save on memory because of the re-use of the same storage space instead of allocating a new
- * one everytime.
+ * one every time.
  */
 static WMPropList *pl_attribute[sizeof(window_attribute) / sizeof(window_attribute[0])] = { [0] = NULL };
 static WMPropList *pl_advoptions[sizeof(advanced_option) / sizeof(advanced_option[0])];

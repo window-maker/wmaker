@@ -545,7 +545,7 @@ WDefaultEntry optionList[] = {
 	{"WorkspaceSpecificBack", "()", NULL,
 	    NULL, getWSSpecificBackground, setWorkspaceSpecificBack, NULL, NULL},
 	/* WorkspaceBack must come after WorkspaceSpecificBack or
-	 * WorkspaceBack wont know WorkspaceSpecificBack was also
+	 * WorkspaceBack won't know WorkspaceSpecificBack was also
 	 * specified and 2 copies of wmsetbg will be launched */
 	{"WorkspaceBack", "(solid, black)", NULL,
 	    NULL, getWSBackground, setWorkspaceBack, NULL, NULL},

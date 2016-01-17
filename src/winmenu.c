@@ -527,7 +527,7 @@ static WMenu *makeWorkspaceMenu(WScreen * scr)
 	 * The Workspace Menu is made visible in the screen structure because
 	 * it is updated when there is a change on workspaces. This was done
 	 * to be efficient, avoiding re-generating completely the window menu
-	 * and its sub-menus everytime it is needed.
+	 * and its sub-menus every time it is needed.
 	 */
 	scr->workspace_submenu = menu;
 

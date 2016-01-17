@@ -1629,7 +1629,7 @@ int wShowCrashingDialogPanel(int whatSig)
 	WMMoveWidget(panel->note2L, 10, 130);
 	WMSetLabelTextAlignment(panel->note2L, WALeft);
 	snprintf(buf, sizeof(buf), /* Comment for the PO file: the %s is an email address */
-	         _(" This fatal error occured probably due to a bug."
+	         _(" This fatal error occurred probably due to a bug."
 	           " Please fill the included BUGFORM and report it to %s."),
 	         PACKAGE_BUGREPORT);
 	WMSetLabelText(panel->note2L, buf);

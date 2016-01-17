@@ -312,7 +312,7 @@ void wLowerFrame(WCoreWindow * frame)
 	if (wlist->stacking->under == NULL) {
 		return;
 	}
-	/* cant lower transient below below its owner */
+	/* can't lower transient below below its owner */
 	if (wlist->stacking->under == wlist->stacking->child_of) {
 		return;
 	}

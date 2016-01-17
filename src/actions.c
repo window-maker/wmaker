@@ -1136,7 +1136,7 @@ void wIconifyWindow(WWindow *wwin)
 		wwin->icon = icon_create_for_wwindow(wwin);
 		wwin->icon->mapped = 1;
 
-		/* extract the window screenshot everytime, as the option can be enable anytime */
+		/* extract the window screenshot every time, as the option can be enable anytime */
 		if (wwin->client_win && wwin->flags.mapped) {
 			RImage *mini_preview;
 			XImage *pimg;
