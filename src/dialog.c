@@ -1129,7 +1129,7 @@ typedef struct {
 #define COPYRIGHT_TEXT  \
     "Copyright \xc2\xa9 1997-2006 Alfredo K. Kojima\n"\
     "Copyright \xc2\xa9 1998-2006 Dan Pascu\n"\
-    "Copyright \xc2\xa9 2013-2014 Window Maker Developers Team"
+    "Copyright \xc2\xa9 2013-2016 Window Maker Developers Team"
 
 static InfoPanel *infoPanel = NULL;
 
