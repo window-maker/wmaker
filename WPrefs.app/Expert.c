@@ -97,6 +97,9 @@ static const struct {
 	{ N_("Distance from corner to begin window snap."),
 	  /* default: */ 10, OPTION_WMAKER_INT, "SnapCornerDetect" },
 
+	{ N_("Snapping a window to the top maximizes it to the full screen."),
+	  /* default: */ False, OPTION_WMAKER, "SnapToTopMaximizesFullscreen" },
+
 	{ N_("Open dialogs in the same workspace as their owners."),
 	  /* default: */ False, OPTION_WMAKER, "OpenTransientOnOwnerWorkspace" }
 

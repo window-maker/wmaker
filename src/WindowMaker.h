@@ -362,6 +362,7 @@ extern struct WPreferences {
 	char window_snapping;              /* enable window snapping */
 	int snap_edge_detect;              /* how far from edge to begin snap */
 	int snap_corner_detect;            /* how far from corner to begin snap */
+	char snap_to_top_maximizes_fullscreen;
 	char drag_maximized_window;        /* behavior when a maximized window is dragged */
 
 	char highlight_active_app;         /* show the focused app by highlighting its icon */
