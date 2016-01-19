@@ -964,9 +964,8 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	wWindowConstrainSize(wwin, &width, &height);
 
 	/* do not ask for window placement if the window is
-	 * transient, during startup, if the initial workspace is another one
-	 * or if the window wants to start iconic.
-	 * If geometry was saved, restore it. */
+	 * transient, during startup, or if the window wants
+	 * to start iconic.  If geometry was saved, restore it. */
 	{
 		Bool dontBring = False;
 
@@ -975,7 +974,6 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 			y = win_state->state->y;
 		} else if ((wwin->transient_for == None || wPreferences.window_placement != WPM_MANUAL)
 			   && !scr->flags.startup
-			   && workspace == scr->current_workspace
 			   && !wwin->flags.miniaturized
 			   && !wwin->flags.maximized && !(wwin->normal_hints->flags & (USPosition | PPosition))) {
 
