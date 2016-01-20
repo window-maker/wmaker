@@ -482,16 +482,19 @@ static void updateOptionsMenu(WMenu * menu, WWindow * wwin)
 	smenu->entries[WO_KEEP_ON_TOP]->flags.indicator_on =
 	    (wwin->frame->core->stacking->window_level == WMFloatingLevel) ? 1 : 0;
 	wMenuSetEnabled(smenu, WO_KEEP_ON_TOP, !wwin->flags.miniaturized);
+	smenu->entries[WO_KEEP_ON_TOP]->rtext = GetShortcutKey(wKeyBindings[WKBD_KEEP_ON_TOP]);
 
 	/* keep at bottom check */
 	smenu->entries[WO_KEEP_AT_BOTTOM]->clientdata = wwin;
 	smenu->entries[WO_KEEP_AT_BOTTOM]->flags.indicator_on =
 	    (wwin->frame->core->stacking->window_level == WMSunkenLevel) ? 1 : 0;
 	wMenuSetEnabled(smenu, WO_KEEP_AT_BOTTOM, !wwin->flags.miniaturized);
+	smenu->entries[WO_KEEP_AT_BOTTOM]->rtext = GetShortcutKey(wKeyBindings[WKBD_KEEP_AT_BOTTOM]);
 
 	/* omnipresent check */
 	smenu->entries[WO_OMNIPRESENT]->clientdata = wwin;
 	smenu->entries[WO_OMNIPRESENT]->flags.indicator_on = IS_OMNIPRESENT(wwin);
+	smenu->entries[WO_OMNIPRESENT]->rtext = GetShortcutKey(wKeyBindings[WKBD_OMNIPRESENT]);
 
 	smenu->flags.realized = 0;
 	wMenuRealize(smenu);
