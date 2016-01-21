@@ -1,14 +1,14 @@
 # New translation into Dutch for Window Maker
-# Copyright (C) 2014-2015 Window Maker Developers Team
+# Copyright (C) 2014-2016 Window Maker Developers Team
 # This file is distributed under the same license as the windowmaker package.
 # Original by Alwin <translations@ziggo.nl>, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wmaker-0.95.6+\n"
+"Project-Id-Version: wmaker-0.95.7+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-26 21:39+0200\n"
-"PO-Revision-Date: 2015-06-26 00:00+0000\n"
+"POT-Creation-Date: 2016-01-21 16:19+0100\n"
+"PO-Revision-Date: 2016-01-21 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -540,8 +540,8 @@ msgstr "Negeer decoratiehints voor GTK-programma's."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:50
-msgid "Disable workspace pager."
-msgstr "Schakel werkruimtevolger uit."
+msgid "Enable workspace pager."
+msgstr "Schakel werkruimtevolger in."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:53
@@ -611,23 +611,28 @@ msgstr "Maximaliseer (duw) 'n venster tegen kant of hoek door verslepen."
 #. default:
 #: ../../WPrefs.app/Expert.c:94
 msgid "Distance from edge to begin window snap."
-msgstr "Afstand vanaf kant waar venster duwen begint."
+msgstr "Afstand vanaf kant waar venster opduwen begint."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:97
 msgid "Distance from corner to begin window snap."
-msgstr "Afstand vanaf hoek waar venster duwen begint."
+msgstr "Afstand vanaf hoek waar venster opduwen begint."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:100
+msgid "Snapping a window to the top maximizes it to the full screen."
+msgstr "Venster duwen tegen de bovenkant, maximaliseert 't schermvullend."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:103
 msgid "Open dialogs in the same workspace as their owners."
 msgstr "Open dialogen in dezelfde werkruimte als hun eigenaren."
 
-#: ../../WPrefs.app/Expert.c:310
+#: ../../WPrefs.app/Expert.c:313
 msgid "Expert User Preferences"
 msgstr "Voorkeuren voor ervaren gebruikers"
 
-#: ../../WPrefs.app/Expert.c:312
+#: ../../WPrefs.app/Expert.c:315
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also has some other misc. options."
@@ -951,278 +956,286 @@ msgid "Maximus: Tiled maximization "
 msgstr "Maximus: tegelmaximalisering "
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:92
+msgid "Toggle window on top status"
+msgstr "Schakel 'venster bovenop houden' in/uit"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:93
+msgid "Toggle window at bottom status"
+msgstr "Schakel 'venster onderop houden' in/uit"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:94
 msgid "Toggle window omnipresent status"
 msgstr "Schakel 'venster alomtegenwoordig' in/uit"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:93
+#: ../../WPrefs.app/KeyboardShortcuts.c:95
 msgid "Raise active window"
 msgstr "Verhoog actief venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:94
+#: ../../WPrefs.app/KeyboardShortcuts.c:96
 msgid "Lower active window"
 msgstr "Verlaag actief venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:95
+#: ../../WPrefs.app/KeyboardShortcuts.c:97
 msgid "Raise/Lower window under mouse pointer"
 msgstr "Verhoog/verlaag venster onder muispijl"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:96
+#: ../../WPrefs.app/KeyboardShortcuts.c:98
 msgid "Shade active window"
 msgstr "Rol actief venster op"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:97
+#: ../../WPrefs.app/KeyboardShortcuts.c:99
 msgid "Move/Resize active window"
 msgstr "Verplaats/vergroot actief venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:98
+#: ../../WPrefs.app/KeyboardShortcuts.c:100
 msgid "Select active window"
 msgstr "Selecteer actief venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:99
+#: ../../WPrefs.app/KeyboardShortcuts.c:101
 msgid "Focus next window"
 msgstr "Focus volgend venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:100
+#: ../../WPrefs.app/KeyboardShortcuts.c:102
 msgid "Focus previous window"
 msgstr "Focus vorig venster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:101
+#: ../../WPrefs.app/KeyboardShortcuts.c:103
 msgid "Focus next group window"
 msgstr "Focus volgend groepsvenster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:102
+#: ../../WPrefs.app/KeyboardShortcuts.c:104
 msgid "Focus previous group window"
 msgstr "Focus vorig groepsvenster"
 
 #. Workspace Related
-#: ../../WPrefs.app/KeyboardShortcuts.c:105
+#: ../../WPrefs.app/KeyboardShortcuts.c:107
 msgid "Open workspace pager"
 msgstr "Open werkruimtevolger"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:106
+#: ../../WPrefs.app/KeyboardShortcuts.c:108
 msgid "Switch to next workspace"
 msgstr "Schakel naar volgende werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:107
+#: ../../WPrefs.app/KeyboardShortcuts.c:109
 msgid "Switch to previous workspace"
 msgstr "Schakel naar vorige werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:108
+#: ../../WPrefs.app/KeyboardShortcuts.c:110
 msgid "Switch to last used workspace"
 msgstr "Schakel n. laatst gebruikte werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:109
+#: ../../WPrefs.app/KeyboardShortcuts.c:111
 msgid "Switch to next ten workspaces"
 msgstr "Schakel 10 werkruimten verder"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:110
+#: ../../WPrefs.app/KeyboardShortcuts.c:112
 msgid "Switch to previous ten workspaces"
 msgstr "Schakel 10 werkruimten terug"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:111
+#: ../../WPrefs.app/KeyboardShortcuts.c:113
 msgid "Switch to workspace 1"
 msgstr "Schakel naar werkruimte 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:112
+#: ../../WPrefs.app/KeyboardShortcuts.c:114
 msgid "Switch to workspace 2"
 msgstr "Schakel naar werkruimte 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:113
+#: ../../WPrefs.app/KeyboardShortcuts.c:115
 msgid "Switch to workspace 3"
 msgstr "Schakel naar werkruimte 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:114
+#: ../../WPrefs.app/KeyboardShortcuts.c:116
 msgid "Switch to workspace 4"
 msgstr "Schakel naar werkruimte 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:115
+#: ../../WPrefs.app/KeyboardShortcuts.c:117
 msgid "Switch to workspace 5"
 msgstr "Schakel naar werkruimte 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:116
+#: ../../WPrefs.app/KeyboardShortcuts.c:118
 msgid "Switch to workspace 6"
 msgstr "Schakel naar werkruimte 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:117
+#: ../../WPrefs.app/KeyboardShortcuts.c:119
 msgid "Switch to workspace 7"
 msgstr "Schakel naar werkruimte 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:118
+#: ../../WPrefs.app/KeyboardShortcuts.c:120
 msgid "Switch to workspace 8"
 msgstr "Schakel naar werkruimte 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:119
+#: ../../WPrefs.app/KeyboardShortcuts.c:121
 msgid "Switch to workspace 9"
 msgstr "Schakel naar werkruimte 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:120
+#: ../../WPrefs.app/KeyboardShortcuts.c:122
 msgid "Switch to workspace 10"
 msgstr "Schakel naar werkruimte 10"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:121
+#: ../../WPrefs.app/KeyboardShortcuts.c:123
 msgid "Move window to next workspace"
 msgstr "Verpl. venster n. volgende werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:122
+#: ../../WPrefs.app/KeyboardShortcuts.c:124
 msgid "Move window to previous workspace"
 msgstr "Verpl. venster n. vorige werkruimte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:123
+#: ../../WPrefs.app/KeyboardShortcuts.c:125
 msgid "Move window to last used workspace"
 msgstr "Verpl. venster n. laatst gebruikte werkr."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:124
+#: ../../WPrefs.app/KeyboardShortcuts.c:126
 msgid "Move window to next ten workspaces"
 msgstr "Verpl. venster 10 werkruimten verder"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:125
+#: ../../WPrefs.app/KeyboardShortcuts.c:127
 msgid "Move window to previous ten workspaces"
 msgstr "Verpl. venster 10 werkruimten terug"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:126
+#: ../../WPrefs.app/KeyboardShortcuts.c:128
 msgid "Move window to workspace 1"
 msgstr "Verplaats venster naar werkruimte 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:127
+#: ../../WPrefs.app/KeyboardShortcuts.c:129
 msgid "Move window to workspace 2"
 msgstr "Verplaats venster naar werkruimte 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:128
+#: ../../WPrefs.app/KeyboardShortcuts.c:130
 msgid "Move window to workspace 3"
 msgstr "Verplaats venster naar werkruimte 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:129
+#: ../../WPrefs.app/KeyboardShortcuts.c:131
 msgid "Move window to workspace 4"
 msgstr "Verplaats venster naar werkruimte 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:130
+#: ../../WPrefs.app/KeyboardShortcuts.c:132
 msgid "Move window to workspace 5"
 msgstr "Verplaats venster naar werkruimte 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:131
+#: ../../WPrefs.app/KeyboardShortcuts.c:133
 msgid "Move window to workspace 6"
 msgstr "Verplaats venster naar werkruimte 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:132
+#: ../../WPrefs.app/KeyboardShortcuts.c:134
 msgid "Move window to workspace 7"
 msgstr "Verplaats venster naar werkruimte 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:133
+#: ../../WPrefs.app/KeyboardShortcuts.c:135
 msgid "Move window to workspace 8"
 msgstr "Verplaats venster naar werkruimte 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:134
+#: ../../WPrefs.app/KeyboardShortcuts.c:136
 msgid "Move window to workspace 9"
 msgstr "Verplaats venster naar werkruimte 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:135
+#: ../../WPrefs.app/KeyboardShortcuts.c:137
 msgid "Move window to workspace 10"
 msgstr "Verplaats venster naar werkruimte 10"
 
 #. Window Selection
-#: ../../WPrefs.app/KeyboardShortcuts.c:138
+#: ../../WPrefs.app/KeyboardShortcuts.c:140
 msgid "Shortcut for window 1"
 msgstr "Sneltoets voor venster 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:139
+#: ../../WPrefs.app/KeyboardShortcuts.c:141
 msgid "Shortcut for window 2"
 msgstr "Sneltoets voor venster 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:140
+#: ../../WPrefs.app/KeyboardShortcuts.c:142
 msgid "Shortcut for window 3"
 msgstr "Sneltoets voor venster 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:141
+#: ../../WPrefs.app/KeyboardShortcuts.c:143
 msgid "Shortcut for window 4"
 msgstr "Sneltoets voor venster 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:142
+#: ../../WPrefs.app/KeyboardShortcuts.c:144
 msgid "Shortcut for window 5"
 msgstr "Sneltoets voor venster 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:143
+#: ../../WPrefs.app/KeyboardShortcuts.c:145
 msgid "Shortcut for window 6"
 msgstr "Sneltoets voor venster 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:144
+#: ../../WPrefs.app/KeyboardShortcuts.c:146
 msgid "Shortcut for window 7"
 msgstr "Sneltoets voor venster 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:145
+#: ../../WPrefs.app/KeyboardShortcuts.c:147
 msgid "Shortcut for window 8"
 msgstr "Sneltoets voor venster 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:146
+#: ../../WPrefs.app/KeyboardShortcuts.c:148
 msgid "Shortcut for window 9"
 msgstr "Sneltoets voor venster 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:147
+#: ../../WPrefs.app/KeyboardShortcuts.c:149
 msgid "Shortcut for window 10"
 msgstr "Sneltoets voor venster 10"
 
 #. Misc.
-#: ../../WPrefs.app/KeyboardShortcuts.c:150
+#: ../../WPrefs.app/KeyboardShortcuts.c:152
 msgid "Launch new instance of application"
 msgstr "Start nieuw exemplaar van programma op"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:151
+#: ../../WPrefs.app/KeyboardShortcuts.c:153
 msgid "Switch to Next Screen/Monitor"
 msgstr "Schakel naar volgend scherm/monitor"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:152
+#: ../../WPrefs.app/KeyboardShortcuts.c:154
 msgid "Run application"
 msgstr "Voer programma uit"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:153
+#: ../../WPrefs.app/KeyboardShortcuts.c:155
 msgid "Raise/Lower Dock"
 msgstr "Verhoog/verlaag Dok"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:154
+#: ../../WPrefs.app/KeyboardShortcuts.c:156
 msgid "Raise/Lower Clip"
 msgstr "Verhoog/verlaag Clip"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:156
+#: ../../WPrefs.app/KeyboardShortcuts.c:158
 msgid "Toggle keyboard language"
 msgstr "Wissel toetsenbordtaal"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:373 ../../WPrefs.app/Menu.c:274
+#: ../../WPrefs.app/KeyboardShortcuts.c:375 ../../WPrefs.app/Menu.c:274
 #: ../../WPrefs.app/TexturePanel.c:1425
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:375
+#: ../../WPrefs.app/KeyboardShortcuts.c:377
 msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
 msgstr ""
 "Druk op de verlangde sneltoets(en), of klik Annuleren om opnemen te stoppen."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:394
-#: ../../WPrefs.app/KeyboardShortcuts.c:564 ../../WPrefs.app/Menu.c:284
+#: ../../WPrefs.app/KeyboardShortcuts.c:396
+#: ../../WPrefs.app/KeyboardShortcuts.c:566 ../../WPrefs.app/Menu.c:284
 #: ../../WPrefs.app/Menu.c:732
 msgid "Capture"
 msgstr "Opnemen"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:395
-#: ../../WPrefs.app/KeyboardShortcuts.c:572
+#: ../../WPrefs.app/KeyboardShortcuts.c:397
+#: ../../WPrefs.app/KeyboardShortcuts.c:574
 msgid "Click on Capture to interactively define the shortcut key."
 msgstr "Klik op Opnemen om interactief de sneltoets te bepalen."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:521
+#: ../../WPrefs.app/KeyboardShortcuts.c:523
 msgid "Actions"
 msgstr "Acties"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:548
+#: ../../WPrefs.app/KeyboardShortcuts.c:550
 msgid "Shortcut"
 msgstr "Sneltoets"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:558 ../../WPrefs.app/Menu.c:738
+#: ../../WPrefs.app/KeyboardShortcuts.c:560 ../../WPrefs.app/Menu.c:738
 msgid "Clear"
 msgstr "Wissen"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:613
+#: ../../WPrefs.app/KeyboardShortcuts.c:615
 msgid "Keyboard Shortcut Preferences"
 msgstr "Sneltoetsvoorkeuren"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:615
+#: ../../WPrefs.app/KeyboardShortcuts.c:617
 msgid ""
 "Change the keyboard shortcuts for actions such\n"
 "as changing workspaces and opening menus."
@@ -2632,88 +2645,3 @@ msgstr "%s wordt voor zowel %s als %s gebruikt"
 
 #~ msgid "Bar of The Day"
 #~ msgstr "Balk van de dag"
-
-# Keep next entries for wmaker-0.95.6
-msgid "Open dialogs in the same workspace as their owners"
-msgstr "Open dialogen in dezelfde werkruimte als hun eigenaren"
-
-msgid "Before auto-raise"
-msgstr "Vanzelf verhogen na"
-
-msgid "msec"
-msgstr "ms"
-
-msgid "Manual:  Click on the window to set keyboard input focus."
-msgstr "Handmatig:  Klik op 't venster om toetsenbordinvoerfocus te geven"
-
-msgid ""
-"Auto:  Set keyboard input focus to the window under the mouse pointer."
-msgstr ""
-"Vanzelf:  Geef toetsenbord-\n"
-"invoerfocus aan 't venster onder de muispijl"
-
-msgid "Install colormap in the window..."
-msgstr "Installeer kleurenkaart uit 't venster..."
-
-msgid "...that has the input focus."
-msgstr "...dat de invoerfocus heeft"
-
-msgid "...that's under the mouse pointer."
-msgstr "...dat onder de muispijl zit"
-
-msgid "Do not let applications receive the click used to focus windows."
-msgstr "Laat programma's niet de vensterfocusklik ontvangen"
-
-msgid "Automatically focus new windows."
-msgstr "Focus nieuwe vensters vanzelf"
-
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr "Verhoog venster bij focus wisselen met toetsenbord"
-
-msgid "could not execute command \"%s\""
-msgstr "kon commando \"%s\" niet uitvoeren"
-
-msgid "Disable AppIcon bounce."
-msgstr "Schakel stuiteren icoon uit"
-
-msgid "Bounce AppIcon when the application wants attention."
-msgstr "Stuiter als 't programma aandacht wil"
-
-msgid "Raise AppIcons when bouncing."
-msgstr "Verhoog icoon bij stuiteren"
-
-msgid "Placement Origin"
-msgstr "Begin:"
-
-msgid "...do not cover icons"
-msgstr "...iconen niet bedekken"
-
-msgid "...do not cover dock"
-msgstr "...Dok niet bedekken"
-
-msgid ""
-"Mod+Wheel\n"
-"resize increment"
-msgstr ""
-"Vergrootstap\n"
-"'Mod'+wiel"
-
-msgid "Wrap to the first workspace from the last workspace."
-msgstr "Omslaan naar de eerste werkruimte, vanaf de laatste werkruimte"
-
-msgid "Switch workspaces while dragging windows."
-msgstr "Van werkruimte wisselen bij vensters verslepen"
-
-msgid "Automatically create new workspaces."
-msgstr "Vanzelf nieuwe werkruimten aanmaken"
-
-msgid "miniwindow apercus"
-msgstr "miniaturen"
-
-msgid "Yes, don't ask again."
-msgstr "Ja, vraag niet weer"
-
-msgid "Maximize a window to side or corner by dragging."
-msgstr "Maximaliseer 'n venster tegen zijkant of hoek door verslepen."

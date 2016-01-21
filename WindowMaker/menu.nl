@@ -53,7 +53,7 @@
  *	// het in op de huidige plaats
  *	OPEN_MENU bestand.menu
  *   2. Menuafhandeling uit pipe.
- *	// opent commando en gebruikt zeen 'stdout' om een menu aan te maken.
+ *	// opent commando en gebruikt zijn 'stdout' om een menu aan te maken.
  *	// Commando-output moet een geldige menubeschrijving zijn.
  *	// De ruimte tussen '|' en het commando zelf is optioneel.
  *      // Gebruik '||' in plaats van '|' als u het menu altijd wilt bijwerken
@@ -71,8 +71,8 @@
  *	// elk van hen voorafgegaan met commando.
  *	OPEN_MENU [opties] /een/map [/een/andere/map ...] WITH commando -opties
  *		Opties:
- * 			-noext 	haal alles vanaf de laatste punt in de
- *				bestandsnaam eraf
+ * 			-noext 	laat alles vanaf de laatste punt in de
+ *				bestandsnaam weg
  *
  * <Parameters> is het uit te voeren programma.
  *
