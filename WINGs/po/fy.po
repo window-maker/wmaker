@@ -1,14 +1,14 @@
 # Translation into Western Frisian for Window Maker
-# Copyright (C) 2015 Window Maker Developers Team
+# Copyright (C) 2015-2016 Window Maker Developers Team
 # This file is distributed under the same license as the windowmaker package.
 # Original by Alwin <translations@ziggo.nl>, 2015.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wmaker-0.95.6+\n"
+"Project-Id-Version: wmaker-0.95.7+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-14 16:10+0200\n"
-"PO-Revision-Date: 2015-06-14 00:00+0000\n"
+"POT-Creation-Date: 2016-01-21 16:19+0100\n"
+"PO-Revision-Date: 2016-01-21 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Western Frisian\n"
 "Language: fy\n"
@@ -99,7 +99,7 @@ msgstr "foartidich bestânsein, ferwachte in nije rigel nei '\\'"
 #, c-format
 msgid "reached end of file while searching '*/' for comment started at line %d"
 msgstr ""
-"bestânsein berikt by sykje nei '*/' foar kommentaar begûnen op rigel %d"
+"bestânsein berikt by sykjen nei '*/' foar kommentaar begûnen op rigel %d"
 
 #: ../../WINGs/menuparser.c:344
 msgid "missing closing double-quote before end-of-line"
@@ -111,7 +111,7 @@ msgstr "ûntbrekkend slutend inkeld oanhelteken foar rigelein"
 
 #: ../../WINGs/menuparser.c:380
 msgid "too many nested macro expansions, breaking loop"
-msgstr "te folle neste makro-útwurkingen, syklus ôfbrutsen"
+msgstr "te folle neske makro-útwurkingen, syklus ôfbrutsen"
 
 #: ../../WINGs/menuparser.c:439
 #, c-format
@@ -140,7 +140,7 @@ msgstr "ûntbrekkende slutende '%c' yn bestânsnammeopjefte"
 
 #: ../../WINGs/menuparser.c:503
 msgid "too many nested #include's"
-msgstr "te folle neste #include's"
+msgstr "te folle neske #include's"
 
 #: ../../WINGs/menuparser.c:568
 #, c-format
@@ -150,11 +150,11 @@ msgstr "koe bestân \"%s\" net fine foar #include"
 #: ../../WINGs/menuparser.c:589
 #, c-format
 msgid "missing macro name argument to #%s"
-msgstr "ûntbrekkend makronammeargumint by #%s"
+msgstr "ûntbrekkend makronamme-argumint by #%s"
 
 #: ../../WINGs/menuparser.c:600
 msgid "too many nested #if sequences"
-msgstr "te folle neste #if-rigen"
+msgstr "te folle neske #if-rigen"
 
 #: ../../WINGs/menuparser.c:626 ../../WINGs/menuparser.c:643
 #, c-format
@@ -168,7 +168,7 @@ msgstr "gjin makronamme fûn foar #define"
 #: ../../WINGs/menuparser_macros.c:187
 #, c-format
 msgid "premature end of file while reading arg-list for macro \"%s\""
-msgstr "foartidich bestânsein by ynlêze arg.-list foar makro \"%s\""
+msgstr "foartidich bestânsein by ynlêzen arg.-list foar makro \"%s\""
 
 #: ../../WINGs/menuparser_macros.c:194
 #, c-format
@@ -196,7 +196,7 @@ msgstr ""
 #: ../../WINGs/menuparser_macros.c:253
 #, c-format
 msgid "macro \"%s\" already defined, ignoring redefinition"
-msgstr "makro \"%s\" al definiearre, negearret werdefiniearje"
+msgstr "makro \"%s\" al definiearre, negearret werdefiniearjen"
 
 #: ../../WINGs/menuparser_macros.c:346
 #, c-format
@@ -225,7 +225,7 @@ msgstr "te folle arguminten foar makro \"%s\", ferwachte allinnich %d"
 #: ../../WINGs/menuparser_macros.c:530
 #, c-format
 msgid "premature end of line while searching for arguments to macro \"%s\""
-msgstr "foartidich rigelein by sykje nei arguminten by makro \"%s\""
+msgstr "foartidich rigelein by sykjen nei arguminten by makro \"%s\""
 
 #: ../../WINGs/menuparser_macros.c:536
 #, c-format
@@ -345,7 +345,7 @@ msgstr "koe grutte foar bestân '%s' net krije"
 #: ../../WINGs/proplist.c:1531
 #, c-format
 msgid "error reading from file '%s'"
-msgstr "flater by ynlêze bestân '%s'"
+msgstr "flater by ynlêzen bestân '%s'"
 
 #: ../../WINGs/proplist.c:1578
 #, c-format
@@ -355,32 +355,32 @@ msgstr "%s:koe menubestân net iepenje"
 #: ../../WINGs/proplist.c:1660
 #, c-format
 msgid "mkstemp (%s) failed"
-msgstr "oanmeitsje unyk tydlik bestân (%s) mislearre"
+msgstr "oanmeitsjen unyk tydlik bestân (%s) mislearre"
 
 #: ../../WINGs/proplist.c:1670
 #, c-format
 msgid "mktemp (%s) failed"
-msgstr "oanmeitsje tydlik bestân (%s) mislearre"
+msgstr "oanmeitsjen tydlik bestân (%s) mislearre"
 
 #: ../../WINGs/proplist.c:1677
 #, c-format
 msgid "open (%s) failed"
-msgstr "iepenje (%s) mislearre"
+msgstr "iepenjen (%s) mislearre"
 
 #: ../../WINGs/proplist.c:1684
 #, c-format
 msgid "writing to file: %s failed"
-msgstr "skriuwe nei bestân: %s mislearre"
+msgstr "skriuwen nei bestân: %s mislearre"
 
 #: ../../WINGs/proplist.c:1693
 #, c-format
 msgid "fclose (%s) failed"
-msgstr "ôfslute stream (%s) mislearre"
+msgstr "ôfsluten stream (%s) mislearre"
 
 #: ../../WINGs/proplist.c:1701
 #, c-format
 msgid "rename ('%s' to '%s') failed"
-msgstr "omneame ('%s' nei '%s') mislearre"
+msgstr "omneamen ('%s' nei '%s') mislearre"
 
 #: ../../WINGs/proplist.c:1772
 #, c-format
@@ -395,7 +395,7 @@ msgstr "fariabele GNUSTEP_USER_ROOT, definiearre mei ûnjildich paad, net brûkt
 #: ../../WINGs/userdefaults.c:210 ../../WINGs/userdefaults.c:225
 #, c-format
 msgid "cannot read domain from file '%s' when syncing"
-msgstr "kin domeinbestân '%s' net ynlêze by syngronisearje"
+msgstr "kin domeinbestân '%s' net ynlêze by syngronisearjen"
 
 #: ../../WINGs/dragcommon.c:60
 #, c-format
@@ -414,11 +414,11 @@ msgstr "net-stipe ferzje %i foar XDND-berjocht by binnen gean"
 
 #: ../../WINGs/dragsource.c:163
 msgid "XDND selection lost during drag operation..."
-msgstr "XDND-seleksje ferlern by fersleephanneling..."
+msgstr "XDND-seleksje ferlern ûnder fersleephanneling..."
 
 #: ../../WINGs/dragsource.c:758
 msgid "could not get XDND version for target of drop"
-msgstr "koe XDND-ferzje net krije foar doel fan ferslepe"
+msgstr "koe XDND-ferzje net krije foar doel fan ferslepen"
 
 #: ../../WINGs/dragsource.c:774
 msgid "could not get ownership of XDND selection"
@@ -456,7 +456,7 @@ msgstr "Kleuren"
 
 #: ../../WINGs/wcolorpanel.c:568 ../../WINGs/wcolorpanel.c:2720
 msgid "Brightness"
-msgstr "Helderheid"
+msgstr "Helderens"
 
 #: ../../WINGs/wcolorpanel.c:570 ../../WINGs/wcolorpanel.c:644
 #: ../../WINGs/wcolorpanel.c:675 ../../WINGs/wcolorpanel.c:706
@@ -558,7 +558,7 @@ msgstr "Nij..."
 msgid ""
 "Color Panel: Could not create directory %s needed to store configurations"
 msgstr ""
-"Kleurepaniel: Koe map %s, nedich om ynstellingen te bewarje, net oanmeitsje"
+"Kleurepaniel: Koe map %s, nedich om ynstellingen te bewarjen, net oanmeitsje"
 
 #. Delete the file, it doesn't belong here
 #: ../../WINGs/wcolorpanel.c:1176 ../../WINGs/wcolorpanel.c:3073
@@ -568,7 +568,7 @@ msgstr "Bestânsflater"
 
 #: ../../WINGs/wcolorpanel.c:1177
 msgid "Could not create ColorPanel configuration directory"
-msgstr "Koe ynstellingenmap Kleurepaniel net oanmeitsje"
+msgstr "Koe ynstellingemap Kleurepaniel net oanmeitsje"
 
 #: ../../WINGs/wcolorpanel.c:1178 ../../WINGs/wcolorpanel.c:3074
 #: ../../WINGs/wcolorpanel.c:3079 ../../WINGs/wcolorpanel.c:3104
@@ -593,7 +593,7 @@ msgstr "Fersêding"
 
 #: ../../WINGs/wcolorpanel.c:2788
 msgid "Hue"
-msgstr "Tinte"
+msgstr "Tint"
 
 #: ../../WINGs/wcolorpanel.c:3012
 msgid "Open Palette"
@@ -610,7 +610,7 @@ msgstr "kin bestân %s net ferwiderje"
 
 #: ../../WINGs/wcolorpanel.c:3078
 msgid "Couldn't remove file from Configuration Directory !"
-msgstr "Koe bestân net ferwiderje út ynstellingenmap!"
+msgstr "Koe bestân net ferwiderje út ynstellingemap!"
 
 #: ../../WINGs/wcolorpanel.c:3103
 msgid "Rename"
@@ -737,12 +737,12 @@ msgstr "Bestân"
 #: ../../WINGs/wfilepanel.c:719
 #, c-format
 msgid "Removing %s failed: %s"
-msgstr "Ferwiderje %s mislearre: %s"
+msgstr "Ferwiderjen %s mislearre: %s"
 
 #: ../../WINGs/wfilepanel.c:751
 #, c-format
 msgid "An error occurred browsing '%s'."
-msgstr "Der trede in flater op by blêdzje troch '%s'."
+msgstr "Der trede in flater op by blêdzjen troch '%s'."
 
 #: ../../WINGs/wfilepanel.c:754
 #, c-format
@@ -799,7 +799,7 @@ msgstr "Koe biblioteek 'lettertype ynstelle' net inisjalisearje\n"
 #: ../../WINGs/widgets.c:446
 #, c-format
 msgid "WINGs: could not load widget images file: %s"
-msgstr "WINGs: Koe ôfbyldingenbestân bestjoeringseleminten net lade: %s"
+msgstr "WINGs: Koe ôfbyldingebestân bestjoeringseleminten net lade: %s"
 
 #: ../../WINGs/widgets.c:542
 #, c-format
@@ -824,7 +824,7 @@ msgstr "0   inch"
 
 #: ../../WINGs/wtextfield.c:494
 msgid "only left alignment is supported in textfields"
-msgstr "allinnich lofts rjochtsje wurdt stipe yn tekstfjilden"
+msgstr "allinnich lofts rjochtsjen wurdt stipe yn tekstfjilden"
 
 #: ../../WINGs/wwindow.c:160
 msgid "window title conversion error... using STRING encoding"
@@ -833,42 +833,3 @@ msgstr "finstertitelomsettingsflater... brûkt STRING-kodearring"
 #: ../../WINGs/wwindow.c:181
 msgid "icon title conversion error... using STRING encoding"
 msgstr "ikoantitelomsettingsflater... brûkt STRING-kodearring"
-
-# Keep next entries for wmaker-0.95.6
-msgid "Could not open input file \"%s\""
-msgstr "Koe ynfierbestân \"%s\" net iepenje"
-
-msgid "Could not create target file \"%s\""
-msgstr "Koe doelbestân \"%s\" net oanmeitsje"
-
-msgid "An error occured browsing '%s'."
-msgstr "Der trede in flater op by blêdzje troch '%s'."
-
-msgid ""
-"invalid characted '%c' in arg-list for macro \"%s\" while expecting "
-"parameter name"
-msgstr ""
-"ûnjildich letterteken '%c' yn arg.-list foar makro \"%s\", ferwachte "
-"parameternamme"
-
-msgid ""
-"invalid characted '%c' in arg-list for macro \"%s\" while expecting ',' "
-"or ')'"
-msgstr ""
-"ûnjildich letterteken '%c' yn arg.-list foar makro \"%s\", ferwachte ',' "
-"of ')'"
-
-msgid "unknow directive '#%s'"
-msgstr "ûnbekende oanwizing '#%s'"
-
-msgid "found #%s but have no matching #if"
-msgstr "#%s fûn, mar hat gjin bybehearrende #if"
-
-msgid "too many nested includes"
-msgstr "te folle neste #include's"
-
-msgid "could not find file \"%s\" for include"
-msgstr "koe bestân \"%s\" net fine foar #include"
-
-msgid "too many nested macro expansion, breaking loop"
-msgstr "te folle neste makro-útwurkingen, syklus ôfbrutsen"

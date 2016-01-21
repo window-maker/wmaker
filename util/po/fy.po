@@ -1,14 +1,14 @@
 # Translation into Western Frisian for Window Maker
-# Copyright (C) 2015 Window Maker Developers Team
+# Copyright (C) 2015-2016 Window Maker Developers Team
 # This file is distributed under the same license as the windowmaker package.
 # Original by Alwin <translations@ziggo.nl>, 2015.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wmaker-0.95.6+\n"
+"Project-Id-Version: wmaker-0.95.7+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-14 16:10+0200\n"
-"PO-Revision-Date: 2015-06-14 00:00+0000\n"
+"POT-Creation-Date: 2016-01-21 16:19+0100\n"
+"PO-Revision-Date: 2016-01-21 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Western Frisian\n"
 "Language: fy\n"
@@ -57,7 +57,7 @@ msgstr "Tekstbewurkers"
 
 #: ../../util/wmgenmenu.c:128
 msgid "Development"
-msgstr "Untwikkelje"
+msgstr "Untwikkeljen"
 
 #: ../../util/wmgenmenu.c:130
 msgid "Office"
@@ -127,7 +127,7 @@ msgstr "Stilen"
 
 #: ../../util/wmgenmenu.c:178
 msgid "Icon Sets"
-msgstr "Ikoanensets"
+msgstr "Ikoanesets"
 
 #. Root -> Appearance -> Background
 #: ../../util/wmgenmenu.c:186
@@ -179,7 +179,7 @@ msgstr "Kleurferrin"
 
 #: ../../util/wmgenmenu.c:227
 msgid "Sunset"
-msgstr "Sinneûndergong"
+msgstr "Sinne-ûndergong"
 
 #: ../../util/wmgenmenu.c:234
 msgid "Sky"
@@ -219,7 +219,7 @@ msgstr "Tema bewarje"
 
 #: ../../util/wmgenmenu.c:266
 msgid "Save IconSet"
-msgstr "Ikoanenset bewarje"
+msgstr "Ikoaneset bewarje"
 
 #: ../../util/wmgenmenu.c:277
 msgid "Workspaces"
@@ -268,7 +268,7 @@ msgstr "Window Maker werstarte"
 
 #: ../../util/wmgenmenu.c:365
 msgid "Lock Screen"
-msgstr "Skerm ôfskoattelje"
+msgstr "Skerm beskoattelje"
 
 #: ../../util/wmgenmenu.c:376
 msgid "Exit Window Maker"

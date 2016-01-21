@@ -5,9 +5,9 @@
   ("Systeemconsole", EXEC, "xconsole"),
   ("Systeembelêsting", SHEXEC, "xosview || xload"),
   ("Proseslist", EXEC, "xterm -e top"),
-  ("Hantliedingbrowser", EXEC, "xman")
+  ("Hantliedingblêder", EXEC, "xman")
  ),
- ("Utfiere...", SHEXEC, "%a(Utfiere,Typ út te fiere kommando:)"),
+ ("Utfiere...", SHEXEC, "%a(Utfiere,Typ út te fieren kommando:)"),
  ("XTerm", EXEC, "xterm -sb"),
  ("Mozilla Firefox", EXEC, "firefox"),
  ("Wurkromten", WORKSPACE_MENU),
@@ -36,10 +36,10 @@
   ("Multymedia",
    ("XMMS",
     ("XMMS", EXEC, "xmms"),
-    ("XMMS ôfspylje/poazje", EXEC, "xmms -t"),
+    ("XMMS ôfspylje/skoftsje", EXEC, "xmms -t"),
     ("XMMS stopje", EXEC, "xmms -s")
    ),
-   ("Xine fideospeler", EXEC, "xine"),
+   ("Xine fideospiler", EXEC, "xine"),
    ("MPlayer", EXEC, "mplayer")
   )
  ),
@@ -62,12 +62,12 @@
   ("Alles toane", SHOW_ALL),
   ("Ikoanen skikke", ARRANGE_ICONS),
   ("Fernije", REFRESH),
-  ("Ofskoattelje", EXEC, "xlock -allowroot -usefirst")
+  ("Beskoattelje", EXEC, "xlock -allowroot -usefirst")
  ),
  ("Uterlik",
   ("Tema's", OPEN_MENU, "-noext #wmdatadir#/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle"),
   ("Stilen", OPEN_MENU, "-noext #wmdatadir#/Styles $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle"),
-  ("Ikoanensets", OPEN_MENU, "-noext #wmdatadir#/IconSets $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
+  ("Ikoanesets", OPEN_MENU, "-noext #wmdatadir#/IconSets $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons"),
   ("Eftergrûn",
    ("Effen",
 	("Swart", EXEC, "wdwrite WindowMaker WorkspaceBack '(solid, black)'"),
@@ -92,8 +92,8 @@
    ("Ofbyldingen", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
    ),
    ("Tema bewarje", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Temanamme)\""),
-   ("Ikoanenset bewarje", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(Ikoanensetnamme)\""),
-   ("Foarkarrenhelpmiddel", EXEC, "/usr/local/GNUstep/Applications/WPrefs.app/WPrefs")
+   ("Ikoaneset bewarje", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(Ikoanesetnamme)\""),
+   ("Foarkarrehelpmiddel", EXEC, "/usr/local/GNUstep/Applications/WPrefs.app/WPrefs")
    ),
    ("Sesje",
     ("Sesje bewarje", SAVE_SESSION),

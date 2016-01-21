@@ -1,14 +1,14 @@
 # Translation into Western Frisian for Window Maker
-# Copyright (C) 2015 Window Maker Developers Team
+# Copyright (C) 2015-2016 Window Maker Developers Team
 # This file is distributed under the same license as the windowmaker package.
 # Original by Alwin <translations@ziggo.nl>, 2015.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wmaker-0.95.6+\n"
+"Project-Id-Version: wmaker-0.95.7+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-26 21:39+0200\n"
-"PO-Revision-Date: 2015-06-26 00:00+0000\n"
+"POT-Creation-Date: 2016-01-21 16:19+0100\n"
+"PO-Revision-Date: 2016-01-21 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Western Frisian\n"
 "Language: fy\n"
@@ -82,11 +82,11 @@ msgstr "Titeleftergrûn fan minyfinster"
 
 #: ../../WPrefs.app/Appearance.c:83 ../../WPrefs.app/FontSimple.c:102
 msgid "Clip Title"
-msgstr "Cliptitel"
+msgstr "Kliptitel"
 
 #: ../../WPrefs.app/Appearance.c:85
 msgid "Collapsed Clip Title"
-msgstr "Cliptitel, ynskood"
+msgstr "Kliptitel, ynskood"
 
 #: ../../WPrefs.app/Appearance.c:110
 msgid "Left"
@@ -240,7 +240,7 @@ msgstr "Ikoantekst"
 
 #: ../../WPrefs.app/Appearance.c:1709 ../../WPrefs.app/Appearance.c:1716
 msgid "Clip"
-msgstr "Clip"
+msgstr "Klip"
 
 #: ../../WPrefs.app/Appearance.c:1713
 msgid "Coll."
@@ -255,7 +255,7 @@ msgid ""
 "Double click in the texture you want to use\n"
 "for the selected item."
 msgstr ""
-"Dûbeldklik yn de tekstuer dy't jo brûke wolle\n"
+"Dûbeldklik yn 'e tekstuer dy't jo brûke wolle\n"
 "foar it selektearre ûnderdiel."
 
 #: ../../WPrefs.app/Appearance.c:1912
@@ -357,11 +357,11 @@ msgstr "koe ôfbyldingsbestân %s net lade"
 
 #: ../../WPrefs.app/Configurations.c:141
 msgid "Icon Slide Speed"
-msgstr "Ikoanskogong"
+msgstr "Ikoanskofaasje"
 
 #: ../../WPrefs.app/Configurations.c:147
 msgid "Shade Animation Speed"
-msgstr "Animaasjegong fan oprôlje"
+msgstr "Animaasjefaasje fan oprôljen"
 
 #: ../../WPrefs.app/Configurations.c:206
 msgid "Smooth Scaling"
@@ -374,7 +374,7 @@ msgid ""
 "down loading of background images considerably."
 msgstr ""
 "Glêdskaalde eftergrûnôfbyldingen\n"
-"neutralisearje it 'pixeleffekt'. Dit sil it lade fan\n"
+"neutralisearje it 'pixeleffekt'. Dit sil it laden fan\n"
 "eftergrûnôfbyldingen oansjenlik fertraagje."
 
 #: ../../WPrefs.app/Configurations.c:247
@@ -391,7 +391,7 @@ msgid ""
 "for window miniaturization, shading etc."
 msgstr ""
 "Skeakelje animaasjes yn/út, sa as dy toand\n"
-"foar finster miniaturisearje, oprôlje ensf."
+"foar finster miniaturisearjen, oprôljen ensfh."
 
 #: ../../WPrefs.app/Configurations.c:324
 msgid "Superfluous"
@@ -405,9 +405,9 @@ msgid ""
 "the explosion animation when undocking icons."
 msgstr ""
 "Skeakelje 'oerfloedige' skaaimerken en animaasjes\n"
-"yn/út. Derta behearre it 'reizgje' fan it\n"
-"Dok by ferpleatse nei de oare kant, en de\n"
-"eksploazjeanimaasje by ûntdokke fan ikoanen."
+"yn/út. Dêrta hearre it 'reizgjen' fan it\n"
+"Dok by ferpleatsen nei de oare kant, en de\n"
+"eksploazje-animaasje by ûntdokken fan ikoanen."
 
 #: ../../WPrefs.app/Configurations.c:348
 msgid "Dithering colormap for 8bpp"
@@ -418,12 +418,12 @@ msgid ""
 "Number of colors to reserve for Window Maker\n"
 "on displays that support only 8bpp (PseudoColor)."
 msgstr ""
-"Oantal kleuren te reservearje foar Window Maker, op\n"
+"Oantal kleuren te reservearjen foar Window Maker, op\n"
 "skermen dy't allinnich 8 bpp (PseudoColor) stypje."
 
 #: ../../WPrefs.app/Configurations.c:357
 msgid "Disable dithering in any visual/depth"
-msgstr "Skeakelje rasterje út yn elke 'visual'/kleurdjipte"
+msgstr "Skeakelje rasterjen út yn elke 'visual'/kleurdjipte"
 
 #: ../../WPrefs.app/Configurations.c:378
 msgid ""
@@ -453,17 +453,17 @@ msgid ""
 "toggling and number of colors to reserve for\n"
 "Window Maker on 8bit displays."
 msgstr ""
-"Animaasjegongen, titelbalkestilen, verskillende\n"
-"opsjes ynskeakelje, en it oantal kleuren te reservearje\n"
+"Animaasjefaasjes, titelbalkestilen, ferskate\n"
+"opsjes ynskeakelje, en it oantal kleuren te reservearjen\n"
 "foar Window Maker op 8-bitskermen."
 
 #: ../../WPrefs.app/Docks.c:26
 msgid "Clip autocollapsing delays"
-msgstr "Fertraging fansels skowe Clip"
+msgstr "Fertraging fansels skowen Klip"
 
 #: ../../WPrefs.app/Docks.c:27
 msgid "Clip autoraising delays"
-msgstr "Fertraging fansels ferheegje Clip"
+msgstr "Fertraging fansels ferheegjen Klip"
 
 #: ../../WPrefs.app/Docks.c:34
 msgid "Before auto-expansion"
@@ -486,15 +486,15 @@ msgid ""
 "Disable/enable the application Dock (the\n"
 "vertical icon bar in the side of the screen)."
 msgstr ""
-"Skeakelje it programmadok (de fertikale ikoanenbalke\n"
-"oan de sydkant fan it skerm) yn/út."
+"Skeakelje it programmadok (de fertikale ikoanebalke\n"
+"oan 'e sydkant fan it skerm) yn/út."
 
 #: ../../WPrefs.app/Docks.c:50
 msgid ""
 "Disable/enable the Clip (that thing with\n"
 "a paper clip icon)."
 msgstr ""
-"Skeakelje de Clip (dat ding mei in paperclipikoan)\n"
+"Skeakelje de Klip (dat ding mei in paperclipikoan)\n"
 "yn/út."
 
 #: ../../WPrefs.app/Docks.c:52
@@ -502,8 +502,8 @@ msgid ""
 "Disable/enable Drawers (a dock that stores\n"
 "application icons horizontally). The dock is required."
 msgstr ""
-"Skeakelje de lade (in dok dat programma-ikoanen\n"
-"horizontaal bewarret) yn/út. it Dok is fereaske."
+"Skeakelje de laden (in dok dat programma-ikoanen\n"
+"horizontaal bewarret) yn/út. It Dok is fereaske."
 
 #: ../../WPrefs.app/Docks.c:234 ../../WPrefs.app/Focus.c:309
 #: ../../WPrefs.app/MouseSettings.c:595
@@ -512,7 +512,7 @@ msgstr "ms"
 
 #: ../../WPrefs.app/Docks.c:250
 msgid "Dock/Clip/Drawer"
-msgstr "Dok/Clip/Laad"
+msgstr "Dok/Klip/Laad"
 
 #: ../../WPrefs.app/Docks.c:322
 msgid "Dock Preferences"
@@ -523,7 +523,7 @@ msgid ""
 "Dock and clip features.\n"
 "Enable/disable the Dock and Clip, and tune some delays."
 msgstr ""
-"Dok- en clipskaaimerken. Skeakelje it Dok en de Clip yn/út,\n"
+"Dok- en klipskaaimerken. Skeakelje it Dok en de Klip yn/út,\n"
 "en pas fertragingen oan."
 
 #: ../../WPrefs.app/Expert.c:44
@@ -540,8 +540,8 @@ msgstr "Negearje dekoraasjehints foar GTK-programma's."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:50
-msgid "Disable workspace pager."
-msgstr "Skeakelje wurkromtefolger út."
+msgid "Enable workspace pager."
+msgstr "Skeakelje wurkromtefolger yn."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:53
@@ -551,7 +551,7 @@ msgstr "Stel gjin net-WindowMaker-spesifike parameters yn (brûk 'xset' net)."
 #. default:
 #: ../../WPrefs.app/Expert.c:56
 msgid "Automatically save session when exiting Window Maker."
-msgstr "Bewarje sesje fansels by ôfslute fan Window Maker."
+msgstr "Bewarje sesje fansels by ôfsluten fan Window Maker."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:59
@@ -566,7 +566,7 @@ msgstr "Skeakelje befêstigingspaniel foar it kommando 'Deadzje' út."
 #. default:
 #: ../../WPrefs.app/Expert.c:65
 msgid "Disable selection animation for selected icons."
-msgstr "Skeakelje seleksjeanimaasje foar selektearre ikoanen út."
+msgstr "Skeakelje seleksje-animaasje foar selektearre ikoanen út."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:68
@@ -576,27 +576,27 @@ msgstr "Flakje letterrânen ôf (werstart nedich)."
 #. default:
 #: ../../WPrefs.app/Expert.c:71
 msgid "Cycle windows only on the active head."
-msgstr "Wikselje finsters allinnich op de aktive kop."
+msgstr "Wikselje finsters allinnich op 'e aktive kop."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:74
 msgid "Ignore minimized windows when cycling."
-msgstr "Negearje miniaturisearre finsters by wikselje."
+msgstr "Negearje miniaturisearre finsters by wikseljen."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:77
 msgid "Show switch panel when cycling windows."
-msgstr "Toan skeakelpaniel by finsters wikselje."
+msgstr "Toan skeakelpaniel by finsters wikseljen."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:80
 msgid "Show workspace title on Clip."
-msgstr "Toan wurkromtetitel op Clip."
+msgstr "Toan wurkromtetitel op Klip."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:83
 msgid "Highlight the icon of the application when it has the focus."
-msgstr "Aksintuearje it programma-ikoan, wannear it fokus hat."
+msgstr "Aksintuearje it programma-ikoan, wannear't it fokus hat."
 
 #: ../../WPrefs.app/Expert.c:87
 msgid "Enable keyboard language switch button in window titlebars."
@@ -604,28 +604,34 @@ msgstr "Skeakelje toetseboerdtaalknop op finstertitelbalken yn."
 
 #: ../../WPrefs.app/Expert.c:91
 msgid "Maximize (snap) a window to edge or corner by dragging."
-msgstr "Maksimalisearje (triuw) in finster tsjin kant of hoeke troch ferslepe."
+msgstr ""
+"Maksimalisearje (triuw) in finster tsjin kant of hoeke troch ferslepen."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:94
 msgid "Distance from edge to begin window snap."
-msgstr "Ofstân fan kant ôf wêr't finster triuwe begjint."
+msgstr "Ofstân fan kant ôf wêr't finster optriuwen begjint."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:97
 msgid "Distance from corner to begin window snap."
-msgstr "Ofstân fan hoeke ôf wêr't finster triuwe begjint."
+msgstr "Ofstân fan hoeke ôf wêr't finster optriuwen begjint."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:100
+msgid "Snapping a window to the top maximizes it to the full screen."
+msgstr "Finster triuwen tsjin de boppekant, maksimalisearet it skermfoljend."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:103
 msgid "Open dialogs in the same workspace as their owners."
 msgstr "Iepenje dialogen yn deselde wurkromte as har eigeners."
 
-#: ../../WPrefs.app/Expert.c:310
+#: ../../WPrefs.app/Expert.c:313
 msgid "Expert User Preferences"
 msgstr "Foarkarren foar bedreaune brûkers"
 
-#: ../../WPrefs.app/Expert.c:312
+#: ../../WPrefs.app/Expert.c:315
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also has some other misc. options."
@@ -683,7 +689,7 @@ msgstr ""
 "(ColorMap neamd), dy't troch elk programma oanpast wurdt nei\n"
 "ferlet, en WindowMaker sil de algemiene kleurekaart dynamysk\n"
 "ynstelle út it aktive programma.\n"
-"Jo kinne de mooglikheden fan jo skerm werkenne oan de 'visual'\n"
+"Jo kinne de mooglikheden fan jo skerm werkenne oan 'e 'visual'\n"
 "yn WindowMakers Ynfopaniel."
 
 #: ../../WPrefs.app/Focus.c:240
@@ -696,7 +702,7 @@ msgstr "...dat ûnder de mûspylk sit"
 
 #: ../../WPrefs.app/Focus.c:254
 msgid "Automatic Window Raise Delay"
-msgstr "Fertraging fansels finsters ferheegje"
+msgstr "Fertraging fansels finsters ferheegjen"
 
 #: ../../WPrefs.app/Focus.c:326
 msgid "Do not let applications receive the click used to focus windows"
@@ -708,7 +714,7 @@ msgstr "Fokusje nije finsters fansels"
 
 #: ../../WPrefs.app/Focus.c:336
 msgid "Raise window when switching focus with keyboard"
-msgstr "Ferheegje finster by fokus wikselje mei toetseboerd"
+msgstr "Ferheegje finster by fokus wikseljen mei toetseboerd"
 
 #: ../../WPrefs.app/Focus.c:352
 msgid "Window Focus Preferences"
@@ -717,7 +723,7 @@ msgstr "Finsterfokusfoarkarren"
 #: ../../WPrefs.app/Focus.c:353
 msgid "Keyboard focus switching policy and related options."
 msgstr ""
-"Belied foar toetseboerdfokus wikselje, en\n"
+"Belied foar toetseboerdfokus wikseljen, en\n"
 "relatearre opsjes."
 
 #: ../../WPrefs.app/FontSimple.c:98
@@ -762,13 +768,13 @@ msgstr "Grutte"
 
 #: ../../WPrefs.app/FontSimple.c:742
 msgid "Font Configuration"
-msgstr "Lettertypenkonfiguraasje"
+msgstr "Lettertypekonfiguraasje"
 
 #: ../../WPrefs.app/FontSimple.c:744
 msgid "Configure fonts for Window Maker titlebars, menus etc."
 msgstr ""
 "Stel lettertypen yn foar Window Maker-titelbalken,\n"
-"menu's ensf."
+"menu's ensfh."
 
 #: ../../WPrefs.app/Icons.c:29
 msgid "Shrinking/Zooming"
@@ -821,7 +827,7 @@ msgid ""
 "The Mini-Preview provides a small view of the content of the\n"
 "window when the mouse is placed over the icon."
 msgstr ""
-"De miniatuer biedt in lytse blik op de ynhâld fan it\n"
+"De miniatuer biedt in lytse blik op 'e ynhâld fan it\n"
 "finster, as de mûs op it ikoan pleatst wurdt."
 
 #: ../../WPrefs.app/Icons.c:404
@@ -864,7 +870,7 @@ msgid ""
 "area, sizes of icons, miniaturization animation style."
 msgstr ""
 "Ikoan-/minyfinster-behannelingsopsjes. Pleatsingsgebiet\n"
-"en ôfmjittingen fan ikoanen, animaasjestyl by miniaturisearje."
+"en ôfmjittingen fan ikoanen, animaasjestyl by miniaturisearjen."
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:72
 msgid "Open applications menu"
@@ -947,284 +953,293 @@ msgid "Maximus: Tiled maximization "
 msgstr "Maximus: tegelmaksimalisearring "
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:92
+msgid "Toggle window on top status"
+msgstr "Skeakelje 'finster boppe-op hâlde' yn/út"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:93
+msgid "Toggle window at bottom status"
+msgstr "Skeakelje 'finster ûnderop hâlde' yn/út"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:94
 msgid "Toggle window omnipresent status"
 msgstr "Skeakelje 'finster rûnombywêzig' yn/út"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:93
+#: ../../WPrefs.app/KeyboardShortcuts.c:95
 msgid "Raise active window"
 msgstr "Ferheegje aktyf finster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:94
+#: ../../WPrefs.app/KeyboardShortcuts.c:96
 msgid "Lower active window"
 msgstr "Ferleegje aktyf finster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:95
+#: ../../WPrefs.app/KeyboardShortcuts.c:97
 msgid "Raise/Lower window under mouse pointer"
 msgstr "Ferheegje/ferleegje finster ûnder mûspylk"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:96
+#: ../../WPrefs.app/KeyboardShortcuts.c:98
 msgid "Shade active window"
 msgstr "Rôlje aktyf finster op"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:97
+#: ../../WPrefs.app/KeyboardShortcuts.c:99
 msgid "Move/Resize active window"
 msgstr "Ferpleats/fergrutsje aktyf finster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:98
+#: ../../WPrefs.app/KeyboardShortcuts.c:100
 msgid "Select active window"
 msgstr "Selektearje aktyf finster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:99
+#: ../../WPrefs.app/KeyboardShortcuts.c:101
 msgid "Focus next window"
 msgstr "Fokusje folgjend finster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:100
+#: ../../WPrefs.app/KeyboardShortcuts.c:102
 msgid "Focus previous window"
 msgstr "Fokusje foarich finster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:101
+#: ../../WPrefs.app/KeyboardShortcuts.c:103
 msgid "Focus next group window"
 msgstr "Fokusje folgjend groepsfinster"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:102
+#: ../../WPrefs.app/KeyboardShortcuts.c:104
 msgid "Focus previous group window"
 msgstr "Fokusje foarich groepsfinster"
 
 #. Workspace Related
-#: ../../WPrefs.app/KeyboardShortcuts.c:105
+#: ../../WPrefs.app/KeyboardShortcuts.c:107
 msgid "Open workspace pager"
 msgstr "Iepenje wurkromtefolger"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:106
+#: ../../WPrefs.app/KeyboardShortcuts.c:108
 msgid "Switch to next workspace"
 msgstr "Skeakelje nei folgjende wurkromte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:107
+#: ../../WPrefs.app/KeyboardShortcuts.c:109
 msgid "Switch to previous workspace"
 msgstr "Skeakelje nei foarige wurkromte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:108
+#: ../../WPrefs.app/KeyboardShortcuts.c:110
 msgid "Switch to last used workspace"
 msgstr "Skeakelje n. lêst brûkte wurkromte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:109
+#: ../../WPrefs.app/KeyboardShortcuts.c:111
 msgid "Switch to next ten workspaces"
 msgstr "Skeakelje 10 wurkromten fierder"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:110
+#: ../../WPrefs.app/KeyboardShortcuts.c:112
 msgid "Switch to previous ten workspaces"
 msgstr "Skeakelje 10 wurkromten werom"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:111
+#: ../../WPrefs.app/KeyboardShortcuts.c:113
 msgid "Switch to workspace 1"
 msgstr "Skeakelje nei wurkromte 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:112
+#: ../../WPrefs.app/KeyboardShortcuts.c:114
 msgid "Switch to workspace 2"
 msgstr "Skeakelje nei wurkromte 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:113
+#: ../../WPrefs.app/KeyboardShortcuts.c:115
 msgid "Switch to workspace 3"
 msgstr "Skeakelje nei wurkromte 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:114
+#: ../../WPrefs.app/KeyboardShortcuts.c:116
 msgid "Switch to workspace 4"
 msgstr "Skeakelje nei wurkromte 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:115
+#: ../../WPrefs.app/KeyboardShortcuts.c:117
 msgid "Switch to workspace 5"
 msgstr "Skeakelje nei wurkromte 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:116
+#: ../../WPrefs.app/KeyboardShortcuts.c:118
 msgid "Switch to workspace 6"
 msgstr "Skeakelje nei wurkromte 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:117
+#: ../../WPrefs.app/KeyboardShortcuts.c:119
 msgid "Switch to workspace 7"
 msgstr "Skeakelje nei wurkromte 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:118
+#: ../../WPrefs.app/KeyboardShortcuts.c:120
 msgid "Switch to workspace 8"
 msgstr "Skeakelje nei wurkromte 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:119
+#: ../../WPrefs.app/KeyboardShortcuts.c:121
 msgid "Switch to workspace 9"
 msgstr "Skeakelje nei wurkromte 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:120
+#: ../../WPrefs.app/KeyboardShortcuts.c:122
 msgid "Switch to workspace 10"
 msgstr "Skeakelje nei wurkromte 10"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:121
+#: ../../WPrefs.app/KeyboardShortcuts.c:123
 msgid "Move window to next workspace"
 msgstr "Ferpl. finster n. folgjende wurkromte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:122
+#: ../../WPrefs.app/KeyboardShortcuts.c:124
 msgid "Move window to previous workspace"
 msgstr "Ferpl. finster n. foarige wurkromte"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:123
+#: ../../WPrefs.app/KeyboardShortcuts.c:125
 msgid "Move window to last used workspace"
 msgstr "Ferpl. finster n. lêst brûkte wurkr."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:124
+#: ../../WPrefs.app/KeyboardShortcuts.c:126
 msgid "Move window to next ten workspaces"
 msgstr "Ferpl. finster 10 wurkromten fierder"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:125
+#: ../../WPrefs.app/KeyboardShortcuts.c:127
 msgid "Move window to previous ten workspaces"
 msgstr "Ferpl. finster 10 wurkromten werom"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:126
+#: ../../WPrefs.app/KeyboardShortcuts.c:128
 msgid "Move window to workspace 1"
 msgstr "Ferpleats finster nei wurkromte 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:127
+#: ../../WPrefs.app/KeyboardShortcuts.c:129
 msgid "Move window to workspace 2"
 msgstr "Ferpleats finster nei wurkromte 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:128
+#: ../../WPrefs.app/KeyboardShortcuts.c:130
 msgid "Move window to workspace 3"
 msgstr "Ferpleats finster nei wurkromte 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:129
+#: ../../WPrefs.app/KeyboardShortcuts.c:131
 msgid "Move window to workspace 4"
 msgstr "Ferpleats finster nei wurkromte 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:130
+#: ../../WPrefs.app/KeyboardShortcuts.c:132
 msgid "Move window to workspace 5"
 msgstr "Ferpleats finster nei wurkromte 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:131
+#: ../../WPrefs.app/KeyboardShortcuts.c:133
 msgid "Move window to workspace 6"
 msgstr "Ferpleats finster nei wurkromte 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:132
+#: ../../WPrefs.app/KeyboardShortcuts.c:134
 msgid "Move window to workspace 7"
 msgstr "Ferpleats finster nei wurkromte 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:133
+#: ../../WPrefs.app/KeyboardShortcuts.c:135
 msgid "Move window to workspace 8"
 msgstr "Ferpleats finster nei wurkromte 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:134
+#: ../../WPrefs.app/KeyboardShortcuts.c:136
 msgid "Move window to workspace 9"
 msgstr "Ferpleats finster nei wurkromte 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:135
+#: ../../WPrefs.app/KeyboardShortcuts.c:137
 msgid "Move window to workspace 10"
 msgstr "Ferpleats finster nei wurkromte 10"
 
 #. Window Selection
-#: ../../WPrefs.app/KeyboardShortcuts.c:138
+#: ../../WPrefs.app/KeyboardShortcuts.c:140
 msgid "Shortcut for window 1"
 msgstr "Fluchtoets foar finster 1"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:139
+#: ../../WPrefs.app/KeyboardShortcuts.c:141
 msgid "Shortcut for window 2"
 msgstr "Fluchtoets foar finster 2"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:140
+#: ../../WPrefs.app/KeyboardShortcuts.c:142
 msgid "Shortcut for window 3"
 msgstr "Fluchtoets foar finster 3"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:141
+#: ../../WPrefs.app/KeyboardShortcuts.c:143
 msgid "Shortcut for window 4"
 msgstr "Fluchtoets foar finster 4"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:142
+#: ../../WPrefs.app/KeyboardShortcuts.c:144
 msgid "Shortcut for window 5"
 msgstr "Fluchtoets foar finster 5"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:143
+#: ../../WPrefs.app/KeyboardShortcuts.c:145
 msgid "Shortcut for window 6"
 msgstr "Fluchtoets foar finster 6"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:144
+#: ../../WPrefs.app/KeyboardShortcuts.c:146
 msgid "Shortcut for window 7"
 msgstr "Fluchtoets foar finster 7"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:145
+#: ../../WPrefs.app/KeyboardShortcuts.c:147
 msgid "Shortcut for window 8"
 msgstr "Fluchtoets foar finster 8"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:146
+#: ../../WPrefs.app/KeyboardShortcuts.c:148
 msgid "Shortcut for window 9"
 msgstr "Fluchtoets foar finster 9"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:147
+#: ../../WPrefs.app/KeyboardShortcuts.c:149
 msgid "Shortcut for window 10"
 msgstr "Fluchtoets foar finster 10"
 
 #. Misc.
-#: ../../WPrefs.app/KeyboardShortcuts.c:150
+#: ../../WPrefs.app/KeyboardShortcuts.c:152
 msgid "Launch new instance of application"
 msgstr "Start nij eksimplaar fan programma op"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:151
+#: ../../WPrefs.app/KeyboardShortcuts.c:153
 msgid "Switch to Next Screen/Monitor"
 msgstr "Skeakelje nei folgjend skerm/monitor"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:152
+#: ../../WPrefs.app/KeyboardShortcuts.c:154
 msgid "Run application"
 msgstr "Fier programma út"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:153
+#: ../../WPrefs.app/KeyboardShortcuts.c:155
 msgid "Raise/Lower Dock"
 msgstr "Ferheegje/ferleegje Dok"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:154
-msgid "Raise/Lower Clip"
-msgstr "Ferheegje/ferleegje Clip"
-
 #: ../../WPrefs.app/KeyboardShortcuts.c:156
+msgid "Raise/Lower Clip"
+msgstr "Ferheegje/ferleegje Klip"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:158
 msgid "Toggle keyboard language"
 msgstr "Wikselje toetseboerdtaal"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:373 ../../WPrefs.app/Menu.c:274
+#: ../../WPrefs.app/KeyboardShortcuts.c:375 ../../WPrefs.app/Menu.c:274
 #: ../../WPrefs.app/TexturePanel.c:1425
 msgid "Cancel"
 msgstr "Annulearje"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:375
+#: ../../WPrefs.app/KeyboardShortcuts.c:377
 msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
 msgstr ""
-"Druk op de winske fluchtoets(en), of klik Annulearje om it opnimme te stopje."
+"Druk op 'e winske fluchtoets(en), of klik Annulearje om it opnimmen te "
+"stopjen."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:394
-#: ../../WPrefs.app/KeyboardShortcuts.c:564 ../../WPrefs.app/Menu.c:284
+#: ../../WPrefs.app/KeyboardShortcuts.c:396
+#: ../../WPrefs.app/KeyboardShortcuts.c:566 ../../WPrefs.app/Menu.c:284
 #: ../../WPrefs.app/Menu.c:732
 msgid "Capture"
 msgstr "Opnimme"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:395
-#: ../../WPrefs.app/KeyboardShortcuts.c:572
+#: ../../WPrefs.app/KeyboardShortcuts.c:397
+#: ../../WPrefs.app/KeyboardShortcuts.c:574
 msgid "Click on Capture to interactively define the shortcut key."
-msgstr "Klik op Opnimme om ynteraktyf de fluchtoets fêst te stelle."
+msgstr "Klik op Opnimme om ynteraktyf de fluchtoets fêst te stellen."
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:521
+#: ../../WPrefs.app/KeyboardShortcuts.c:523
 msgid "Actions"
 msgstr "Aksjes"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:548
+#: ../../WPrefs.app/KeyboardShortcuts.c:550
 msgid "Shortcut"
 msgstr "Fluchtoets"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:558 ../../WPrefs.app/Menu.c:738
+#: ../../WPrefs.app/KeyboardShortcuts.c:560 ../../WPrefs.app/Menu.c:738
 msgid "Clear"
 msgstr "Wiskje"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:613
+#: ../../WPrefs.app/KeyboardShortcuts.c:615
 msgid "Keyboard Shortcut Preferences"
 msgstr "Fluchtoetsfoarkarren"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:615
+#: ../../WPrefs.app/KeyboardShortcuts.c:617
 msgid ""
 "Change the keyboard shortcuts for actions such\n"
 "as changing workspaces and opening menus."
 msgstr ""
 "Wizigje de fluchtoetsen foar aksjes, sa as fan\n"
-"wurkromte wikselje en menu's iepenje."
+"wurkromte wikseljen en menu's iepenjen."
 
 #: ../../WPrefs.app/Menu.c:250
 msgid "Select Program"
@@ -1297,7 +1312,7 @@ msgstr "Utfiere..."
 #: ../../WPrefs.app/Menu.c:463
 #, c-format
 msgid "%A(Run,Type command to run)"
-msgstr "%A(Utfiere,Typ út te fiere kommando)"
+msgstr "%A(Utfiere,Typ út te fieren kommando)"
 
 #: ../../WPrefs.app/Menu.c:465
 msgid "Firefox"
@@ -1393,7 +1408,7 @@ msgstr "XTerm GRUTTE LETTERS"
 
 #: ../../WPrefs.app/Menu.c:579
 msgid "Program to Run"
-msgstr "Ut te fiere programma"
+msgstr "Ut te fieren programma"
 
 #: ../../WPrefs.app/Menu.c:589
 msgid "Browse"
@@ -1432,7 +1447,7 @@ msgid ""
 "Enter a command that outputs a menu\n"
 "definition to stdout when invoked."
 msgstr ""
-"Fier in kommando yn, dat by oanroppe\n"
+"Fier in kommando yn, dat by oanroppen\n"
 "in útwurke menu jout nei 'stdout'."
 
 #: ../../WPrefs.app/Menu.c:646 ../../WPrefs.app/Menu.c:671
@@ -1441,28 +1456,28 @@ msgid ""
 "the first time"
 msgstr ""
 "Bewarje menuynhâld nei de earste kear\n"
-"iepenje"
+"iepenjen"
 
 #: ../../WPrefs.app/Menu.c:666
 msgid ""
 "Enter a command that outputs a proplist menu\n"
 "definition to stdout when invoked."
 msgstr ""
-"Fier in kommando yn, dat by oanroppe\n"
+"Fier in kommando yn, dat by oanroppen\n"
 "in útwurke 'property list'-menu jout\n"
 "nei 'stdout'."
 
 #: ../../WPrefs.app/Menu.c:680
 msgid "Command to Open Files"
-msgstr "Kommando om bestannen te iepenje"
+msgstr "Kommando om bestannen te iepenjen"
 
 #: ../../WPrefs.app/Menu.c:691
 msgid ""
 "Enter the command you want to use to open the\n"
 "files in the directories listed below."
 msgstr ""
-"Fier it te brûke kommando yn, om de\n"
-"bestannen yn ûndersteande mappen te iepenje."
+"Fier it te brûken kommando yn, om 'e\n"
+"bestannen yn ûndersteande mappen te iepenjen."
 
 #: ../../WPrefs.app/Menu.c:699
 msgid "Directories with Files"
@@ -1522,7 +1537,7 @@ msgstr "Auteursrjochtenpaniel iepenje"
 
 #: ../../WPrefs.app/Menu.c:771
 msgid "Window Manager to Start"
-msgstr "Te starte finsterbehearder"
+msgstr "Te starten finsterbehearder"
 
 #: ../../WPrefs.app/Menu.c:784
 msgid "Do not confirm action."
@@ -1542,16 +1557,16 @@ msgstr ""
 "Ynstruksjes:\n"
 "\n"
 "- Fersleep ûnderdielen fan lofts nei it menu, om\n"
-"  nije yngongen ta te foegje.\n"
-"- Fersleep ûnderdielen út it menu, om se te ferwiderje.\n"
-"- Fersleep ûnderdielen binnen it menu, om har pleats te\n"
-"  feroarje.\n"
+"  nije yngongen ta te foegjen.\n"
+"- Fersleep ûnderdielen út it menu, om se te ferwiderjen.\n"
+"- Fersleep ûnderdielen binnen it menu, om har plak te\n"
+"  feroarjen.\n"
 "- Fersleep ûnderdielen mei Control yndrukt, om se te\n"
-"  kopiearje.\n"
-"- Dûbeldklik op in menuyngong, om de beneaming te\n"
-"  wizigje.\n"
+"  kopiearjen.\n"
+"- Dûbeldklik op in menuyngong, om 'e beneaming te\n"
+"  wizigjen.\n"
 "- Klik op in menuyngong, om relatearre ynformaasje te\n"
-"  wizigje."
+"  wizigjen."
 
 #: ../../WPrefs.app/Menu.c:1030
 #, c-format
@@ -1599,7 +1614,7 @@ msgid ""
 "Removing this item will destroy all items inside\n"
 "the submenu. Do you really want to do that?"
 msgstr ""
-"Dit ûnderdiel ferwiderje, sil alle yngongen yn it\n"
+"Dit ûnderdiel ferwiderjen, sil alle yngongen yn it\n"
 "submenu ferneatigje. Wolle jo dat echt dwaan?"
 
 #: ../../WPrefs.app/Menu.c:1301
@@ -1657,7 +1672,7 @@ msgid ""
 msgstr ""
 "De no brûkte menubestânsfoarm wurdt net stipe\n"
 "troch dit helpmiddel. Wolle jo it hjoeddeiske menu fersmite,\n"
-"om dit helpmiddel te brûke?"
+"om dit helpmiddel te brûken?"
 
 #: ../../WPrefs.app/Menu.c:1504
 msgid "Yes, Discard and Update"
@@ -1673,11 +1688,11 @@ msgstr "Programmamenu fêststelle"
 
 #: ../../WPrefs.app/Menu.c:1752
 msgid "Edit the menu for launching applications."
-msgstr "Bewurkje it menu foar programma's opstarte."
+msgstr "Bewurkje it menu foar programma's opstarten."
 
 #: ../../WPrefs.app/MenuPreferences.c:105
 msgid "Menu Scrolling Speed"
-msgstr "Menuskogong"
+msgstr "Menuskofaasje"
 
 #: ../../WPrefs.app/MenuPreferences.c:153
 msgid "Submenu Alignment"
@@ -1685,7 +1700,7 @@ msgstr "Submenurjochting"
 
 #: ../../WPrefs.app/MenuPreferences.c:197
 msgid "Always open submenus inside the screen, instead of scrolling."
-msgstr "Iepenje submenu's altiten binnen it skerm, yn plak fan skowe."
+msgstr "Iepenje submenu's altiten binnen it skerm, yn plak fan skowen."
 
 #: ../../WPrefs.app/MenuPreferences.c:202
 msgid "Scroll off-screen menus when pointer is moved over them."
@@ -1693,7 +1708,7 @@ msgstr "Ferskow menu's fan bûten it skerm, as mûspylk deroer beweecht."
 
 #: ../../WPrefs.app/MenuPreferences.c:206
 msgid "Use h/j/k/l keys to select menu options."
-msgstr "Brûk h/j/k/l-toetsen om menu-opsjes te selektearje."
+msgstr "Brûk h/j/k/l-toetsen om menu-opsjes te selektearjen."
 
 #: ../../WPrefs.app/MenuPreferences.c:222
 msgid "Menu Preferences"
@@ -1704,8 +1719,8 @@ msgid ""
 "Menu usability related options. Scrolling speed,\n"
 "alignment of submenus etc."
 msgstr ""
-"Menugebrûkrelatearre opsjes. Skogong,\n"
-"rjochting fan submenu's ensf."
+"Menugebrûkrelatearre opsjes. Skofaasje,\n"
+"rjochting fan submenu's ensfh."
 
 #: ../../WPrefs.app/MouseSettings.c:43
 msgid "Left Button"
@@ -1777,7 +1792,7 @@ msgid ""
 "travel before accelerating."
 msgstr ""
 "Unjildige drompelwearde mûsfersnelling. Moat it oantal pixels om te "
-"ferpleatse wêze, alear't te fersnelle."
+"ferpleatsen wêze, alear't te fersnellen."
 
 #: ../../WPrefs.app/MouseSettings.c:284
 #, c-format
@@ -1790,7 +1805,7 @@ msgid ""
 "modifier key %s for option ModifierKey was not recognized. Using %s as "
 "default"
 msgstr ""
-"modifikatortoets %s foar opsje ModifierKey wurdt net werkenne. Brûkt %s as "
+"modifikatortoets %s foar opsje ModifierKey wurdt net werkend. Brûkt %s as "
 "standert"
 
 #: ../../WPrefs.app/MouseSettings.c:364
@@ -1799,7 +1814,7 @@ msgstr "koe beskriuwing modifikatortoets net ophelje"
 
 #: ../../WPrefs.app/MouseSettings.c:458
 msgid "Mouse Speed"
-msgstr "Mûsgong"
+msgstr "Mûsfaasje"
 
 #: ../../WPrefs.app/MouseSettings.c:471 ../../WPrefs.app/WPrefs.c:408
 #: ../../WPrefs.app/WPrefs.c:424 ../../WPrefs.app/WindowHandling.c:372
@@ -1827,9 +1842,9 @@ msgid ""
 "involve dragging windows with the mouse,\n"
 "clicking inside the window."
 msgstr ""
-"Te brûke modifikatortoets, foar aksjes\n"
-"mei betrekking ta finsters ferslepe mei\n"
-"de mûs, en klikke binnen it finster."
+"Te brûken modifikatortoets, foar aksjes\n"
+"wat finsters ferslepen mei de mûs, en\n"
+"klikken binnen it finster oanbelanget."
 
 #: ../../WPrefs.app/MouseSettings.c:530
 msgid "Double-Click Delay"
@@ -1908,16 +1923,16 @@ msgid ""
 "Mouse speed/acceleration, double click delay,\n"
 "mouse button bindings etc."
 msgstr ""
-"Mûsgong/-fersnelling, dûbeldklikfertraging,\n"
-"mûsknopbinings ensf."
+"Mûsfaasje/-fersnelling, dûbeldklikfertraging,\n"
+"mûsknopbiningen ensfh."
 
 #: ../../WPrefs.app/Paths.c:78
 msgid "bad value in option IconPath. Using default path list"
-msgstr "ferkearde wearde yn opsje IconPath. Brûkt standertpadenlist"
+msgstr "ferkearde wearde yn opsje IconPath. Brûkt standertpadelist"
 
 #: ../../WPrefs.app/Paths.c:95
 msgid "bad value in option PixmapPath. Using default path list"
-msgstr "ferkearde wearde yn opsje PixmapPath. Brûkt standertpadenlist"
+msgstr "ferkearde wearde yn opsje PixmapPath. Brûkt standertpadelist"
 
 #: ../../WPrefs.app/Paths.c:140
 msgid "Select directory"
@@ -1942,14 +1957,14 @@ msgstr "Pixmapsykpaden"
 
 #: ../../WPrefs.app/Paths.c:316
 msgid "Search Path Configuration"
-msgstr "Sykpadenkonfiguraasje"
+msgstr "Sykpadekonfiguraasje"
 
 #: ../../WPrefs.app/Paths.c:318
 msgid ""
 "Search paths to use when looking for pixmaps\n"
 "and icons."
 msgstr ""
-"Te brûke sykpaden by sykje nei 'pixmaps'\n"
+"Te brûken sykpaden by sykjen nei 'pixmaps'\n"
 "en ikoanen."
 
 #: ../../WPrefs.app/Preferences.c:30 ../../WPrefs.app/Preferences.c:42
@@ -1962,7 +1977,7 @@ msgstr "Skermmidden"
 
 #: ../../WPrefs.app/Preferences.c:32 ../../WPrefs.app/Preferences.c:44
 msgid "Center of resized window"
-msgstr "Midden fan fergrutte finster"
+msgstr "Midden fan fergrut finster"
 
 #: ../../WPrefs.app/Preferences.c:33
 msgid "Technical drawing-like"
@@ -1990,7 +2005,7 @@ msgstr "ynterne help"
 
 #: ../../WPrefs.app/Preferences.c:65
 msgid "Disable AppIcon bounce"
-msgstr "Skeakelje stuiterje ikoan út"
+msgstr "Skeakelje stuiterjen ikoan út"
 
 #: ../../WPrefs.app/Preferences.c:66
 msgid "By default, the AppIcon bounces when the application is launched"
@@ -2004,7 +2019,7 @@ msgstr "Stuiterje as it programma oandacht wol"
 
 #: ../../WPrefs.app/Preferences.c:71
 msgid "Raise AppIcon when bouncing"
-msgstr "Ferheegje ikoan by stuiterje"
+msgstr "Ferheegje ikoan by stuiterjen"
 
 #: ../../WPrefs.app/Preferences.c:72
 msgid ""
@@ -2033,15 +2048,15 @@ msgstr "%i pixels "
 
 #: ../../WPrefs.app/Preferences.c:236
 msgid "Size Display"
-msgstr "Ofmjittingenwerjefte"
+msgstr "Ofmjittingewerjefte"
 
 #: ../../WPrefs.app/Preferences.c:238
 msgid ""
 "The position or style of the window size\n"
 "display that's shown when a window is resized."
 msgstr ""
-"De pleats of styl fan de finsterôfmjittingenwerjefte,\n"
-"die toand wurdt as in finster fergrutte wurdt."
+"De plak of styl fan 'e finsterôfmjittingewerjefte,\n"
+"dy't toand wurdt as in finster fergrutte wurdt."
 
 #: ../../WPrefs.app/Preferences.c:253
 msgid "Position Display"
@@ -2052,8 +2067,8 @@ msgid ""
 "The position or style of the window position\n"
 "display that's shown when a window is moved."
 msgstr ""
-"De pleats of styl fan de finsterposysjewerjefte,\n"
-"die toand wurdt as in finster ferpleatst wurdt."
+"De plak of styl fan 'e finsterposysjewerjefte,\n"
+"dy't toand wurdt as in finster ferpleatst wurdt."
 
 #: ../../WPrefs.app/Preferences.c:270
 msgid "Show balloon for..."
@@ -2061,7 +2076,7 @@ msgstr "Toan ballon foar..."
 
 #: ../../WPrefs.app/Preferences.c:285
 msgid "AppIcon bouncing"
-msgstr "Stuiterje fan programma-ikoan"
+msgstr "Stuiterjen fan programma-ikoan"
 
 #: ../../WPrefs.app/Preferences.c:307
 msgid "Workspace border"
@@ -2084,8 +2099,8 @@ msgid ""
 "Various settings like balloon text, geometry\n"
 "displays etc."
 msgstr ""
-"Ferskillende ynstellingen sa as ballontekst,\n"
-"ferhâlding fan werjeften ensf."
+"Ferskate ynstellingen sa as ballontekst,\n"
+"ferhâlding fan werjeften ensfh."
 
 #: ../../WPrefs.app/TexturePanel.c:293
 msgid "Saturation"
@@ -2093,11 +2108,11 @@ msgstr "Fersêding"
 
 #: ../../WPrefs.app/TexturePanel.c:295
 msgid "Brightness"
-msgstr "Helderheid"
+msgstr "Helderens"
 
 #: ../../WPrefs.app/TexturePanel.c:340 ../../WPrefs.app/TexturePanel.c:346
 msgid "Hue"
-msgstr "Tinte"
+msgstr "Tint"
 
 #: ../../WPrefs.app/TexturePanel.c:580
 msgid "Could not load the selected file: "
@@ -2114,7 +2129,7 @@ msgstr "It selektearre bestân befettet gjin stipe ôfbylding."
 #: ../../WPrefs.app/TexturePanel.c:999
 #, c-format
 msgid "error creating texture %s"
-msgstr "flater by oanmeitsje tekstuer %s"
+msgstr "flater by oanmeitsjen tekstuer %s"
 
 #: ../../WPrefs.app/TexturePanel.c:1158
 msgid "Texture Panel"
@@ -2248,7 +2263,7 @@ msgstr "Window Maker-domein (%s) is skansearre!"
 #: ../../WPrefs.app/WPrefs.c:620
 #, c-format
 msgid "Could not load Window Maker domain (%s) from defaults database."
-msgstr "Koe Window Maker-domein (%s) net lade út ynstellingendatabase."
+msgstr "Koe Window Maker-domein (%s) net lade út ynstellingedatabase."
 
 #: ../../WPrefs.app/WPrefs.c:635
 msgid "could not extract version information from Window Maker"
@@ -2273,7 +2288,7 @@ msgid ""
 "variable."
 msgstr ""
 "Koe ferzje net ôfliede út Window Maker. Soargje derfoar dat it korrekt "
-"ynstallearre is, en it paad wêr it ynstallearre is yn de PATH-"
+"ynstallearre is, en it paad dêr't it ynstallearre is yn 'e PATH-"
 "omjouwingsfariabele sit."
 
 #: ../../WPrefs.app/WPrefs.c:657
@@ -2307,7 +2322,7 @@ msgstr "Koe algemien Window Maker-domein (%s) net lade."
 #: ../../WPrefs.app/WPrefs.c:922
 #, c-format
 msgid "bad speed value for option %s; using default Medium"
-msgstr "ferkearde gongwearde foar opsje %s; brûkt standert Medium"
+msgstr "ferkearde faasjewearde foar opsje %s; brûkt standert Medium"
 
 #: ../../WPrefs.app/WindowHandling.c:88
 msgid "Automatic"
@@ -2331,7 +2346,7 @@ msgstr "Snoad"
 
 #: ../../WPrefs.app/WindowHandling.c:100
 msgid "...changes its position (normal behavior)"
-msgstr "...feroaret syn pleats (normaal gedrach)"
+msgstr "...feroaret syn plak (normaal gedrach)"
 
 #: ../../WPrefs.app/WindowHandling.c:101
 msgid "...restores its unmaximized geometry"
@@ -2363,7 +2378,7 @@ msgid ""
 "How to place windows when they are first put\n"
 "on screen."
 msgstr ""
-"Hoe finsters te pleatse, wannear't se foar it\n"
+"Hoe finsters te pleatsen, wannear't se foar it\n"
 "earst op it skerm set wurde."
 
 #: ../../WPrefs.app/WindowHandling.c:325
@@ -2380,7 +2395,7 @@ msgid ""
 "be displayed during a move or resize.\n"
 msgstr ""
 "Of de finsterynhâld, of allinnich in kader werjûn\n"
-"moat wurde ûnder it ferpleatse of fergrutsje.\n"
+"moat wurde ûnder ferpleatsen of fergrutsjen.\n"
 
 #: ../../WPrefs.app/WindowHandling.c:474
 msgid "by keyboard"
@@ -2392,13 +2407,13 @@ msgid ""
 "using keyboard shortcuts will also display its\n"
 "content instead of just a frame."
 msgstr ""
-"Wannear oanfinke, sil finsters ferpleatse\n"
-"of fergrutsje mei fluchtoetsen ek de ynhâld\n"
+"Wannear oanfinke, sil finsters ferpleatsen\n"
+"of fergrutsjen mei fluchtoetsen ek de ynhâld\n"
 "werjaan, yn plak fan allinnich in kader."
 
 #: ../../WPrefs.app/WindowHandling.c:487
 msgid "When maximizing..."
-msgstr "By maksimalisearje..."
+msgstr "By maksimalisearjen..."
 
 #: ../../WPrefs.app/WindowHandling.c:490
 msgid "...do not cover:"
@@ -2432,7 +2447,7 @@ msgid ""
 "of the screen."
 msgstr ""
 "Kantwjerstân lit finsters 'wjerstân' biede om\n"
-"fierder ferpleatst te wurde, oant de drompelwearde,\n"
+"fierder ferpleatst te wurden, oant de drompelwearde,\n"
 "wannear pleatst tsjin oare finsters of de\n"
 "kanten fan it skerm."
 
@@ -2446,7 +2461,7 @@ msgstr "Lûk oan"
 
 #: ../../WPrefs.app/WindowHandling.c:569
 msgid "Dragging a maximized window..."
-msgstr "Ferslepe fan in maksimalisearre finster..."
+msgstr "Ferslepen fan in maksimalisearre finster..."
 
 #: ../../WPrefs.app/WindowHandling.c:598
 msgid "Window Handling Preferences"
@@ -2458,7 +2473,7 @@ msgid ""
 "edge resistance, opaque move etc."
 msgstr ""
 "Finsterbehannelingsopsjes. Inisjele pleatsingsstyl,\n"
-"kantwjerstân, ûntrochsichtich ferpleatse ensf."
+"kantwjerstân, ûntrochsichtich ferpleatse ensfh."
 
 #: ../../WPrefs.app/Workspace.c:118
 msgid "Workspace Navigation"
@@ -2466,11 +2481,11 @@ msgstr "Wurkromtenavigaasje"
 
 #: ../../WPrefs.app/Workspace.c:123
 msgid "Wrap to the first workspace from the last workspace"
-msgstr "Omslaan nei de earste wurkromte, fan de lêste wurkromte ôf"
+msgstr "Omslaan nei de earste wurkromte, fan 'e lêste wurkromte ôf"
 
 #: ../../WPrefs.app/Workspace.c:139
 msgid "Switch workspaces while dragging windows"
-msgstr "Fan wurkromte wikselje by finsters ferslepe"
+msgstr "Fan wurkromte wikselje by finsters ferslepen"
 
 #: ../../WPrefs.app/Workspace.c:155
 msgid "Automatically create new workspaces"
@@ -2479,7 +2494,7 @@ msgstr "Fansels nije wurkromten oanmeitsje"
 #. WMSetLabelTextAlignment(panel->posL, WARight);
 #: ../../WPrefs.app/Workspace.c:172
 msgid "Position of workspace name display"
-msgstr "Pleats fan wurkromtenammewerjefte"
+msgstr "Plak fan wurkromtenammewerjefte"
 
 #: ../../WPrefs.app/Workspace.c:188
 msgid "Disable"
@@ -2519,12 +2534,12 @@ msgid ""
 "and workspace name display settings."
 msgstr ""
 "Navigaasjeskaaimerken en nammewerjefte-\n"
-"ynstellingen fan de wurkromte."
+"ynstellingen fan 'e wurkromte."
 
 #: ../../WPrefs.app/main.c:62
 #, c-format
 msgid "usage: %s [options]\n"
-msgstr "brûk: %s [opsjes]\n"
+msgstr "gebrûk: %s [opsjes]\n"
 
 #: ../../WPrefs.app/main.c:63
 msgid "options:"
@@ -2532,7 +2547,7 @@ msgstr "opsjes:"
 
 #: ../../WPrefs.app/main.c:64
 msgid " -display <display>\tdisplay to be used"
-msgstr " -display <display>\tte brûke skerm"
+msgstr " -display <display>\tte brûken skerm"
 
 #: ../../WPrefs.app/main.c:65
 msgid " --version\t\tprint version number and exit"
@@ -2553,7 +2568,7 @@ msgstr "X-server stipet lokalisaasje net"
 
 #: ../../WPrefs.app/main.c:158
 msgid "cannot set locale modifiers"
-msgstr "kin lokalisaasjemodifikators net ynstelle"
+msgstr "kin lokalisaasjemodifikatoaren net ynstelle"
 
 #: ../../WPrefs.app/main.c:164
 #, c-format
@@ -2593,10 +2608,10 @@ msgstr "%s wurdt foar sawol %s as %s brûkt"
 #~ msgstr "Inisjele toetswerhelling"
 
 #~ msgid "Key Repeat Rate"
-#~ msgstr "Toetswerhelgong"
+#~ msgstr "Toetswerhelfaasje"
 
 #~ msgid "Type here to test"
-#~ msgstr "Typ hjir om te teste"
+#~ msgstr "Typ hjir om te testen"
 
 #~ msgid "Keyboard Preferences"
 #~ msgstr "Toetseboerdfoarkarren"
@@ -2612,7 +2627,7 @@ msgstr "%s wurdt foar sawol %s as %s brûkt"
 #~ msgstr "Stopje"
 
 #~ msgid "Download"
-#~ msgstr "Downloade"
+#~ msgstr "Ynlade"
 
 #~ msgid "Save Current Theme"
 #~ msgstr "Hjoeddeisk tema bewarje"
@@ -2624,92 +2639,7 @@ msgstr "%s wurdt foar sawol %s as %s brûkt"
 #~ msgstr "Ynstallearje"
 
 #~ msgid "Tile of The Day"
-#~ msgstr "Tegel fan de dei"
+#~ msgstr "Tegel fan 'e dei"
 
 #~ msgid "Bar of The Day"
-#~ msgstr "Balke fan de dei"
-
-# Keep next entries for wmaker-0.95.6
-msgid "Open dialogs in the same workspace as their owners"
-msgstr "Iepenje dialogen yn deselde wurkromte as har eigeners"
-
-msgid "Before auto-raise"
-msgstr "Fansels ferheegje nei"
-
-msgid "msec"
-msgstr "ms"
-
-msgid "Manual:  Click on the window to set keyboard input focus."
-msgstr "Hânmjittich:  Klik op it finster om toetseboerdynfierfokus te jaan"
-
-msgid ""
-"Auto:  Set keyboard input focus to the window under the mouse pointer."
-msgstr ""
-"Fansels:  Jou toetseboerd-\n"
-"ynfierfokus oan it finster ûnder de mûspylk"
-
-msgid "Install colormap in the window..."
-msgstr "Ynstallearje kleurekaart út it finster..."
-
-msgid "...that has the input focus."
-msgstr "...dat de ynfierfokus hat"
-
-msgid "...that's under the mouse pointer."
-msgstr "...dat ûnder de mûspylk sit"
-
-msgid "Do not let applications receive the click used to focus windows."
-msgstr "Lit programma's net de finsterfokusklik ûntfange"
-
-msgid "Automatically focus new windows."
-msgstr "Fokusje nije finsters fansels"
-
-msgid ""
-"Raise window when switching\n"
-"focus with keyboard."
-msgstr "Ferheegje finster by fokus wikselje mei toetseboerd"
-
-msgid "could not execute command \"%s\""
-msgstr "koe kommando \"%s\" net útfiere"
-
-msgid "Disable AppIcon bounce."
-msgstr "Skeakelje stuiterje ikoan út"
-
-msgid "Bounce AppIcon when the application wants attention."
-msgstr "Stuiterje as it programma oandacht wol"
-
-msgid "Raise AppIcons when bouncing."
-msgstr "Ferheegje ikoan by stuiterje"
-
-msgid "Placement Origin"
-msgstr "Begjin:"
-
-msgid "...do not cover icons"
-msgstr "...ikoanen net bedekke"
-
-msgid "...do not cover dock"
-msgstr "...Dok net bedekke"
-
-msgid ""
-"Mod+Wheel\n"
-"resize increment"
-msgstr ""
-"Fergrutstap\n"
-"'Mod'+tsjil"
-
-msgid "Wrap to the first workspace from the last workspace."
-msgstr "Omslaan nei de earste wurkromte, fan de lêste wurkromte ôf"
-
-msgid "Switch workspaces while dragging windows."
-msgstr "Fan wurkromte wikselje by finsters ferslepe"
-
-msgid "Automatically create new workspaces."
-msgstr "Fansels nije wurkromten oanmeitsje"
-
-msgid "miniwindow apercus"
-msgstr "miniatueren"
-
-msgid "Yes, don't ask again."
-msgstr "Ja, freegje net wer"
-
-msgid "Maximize a window to side or corner by dragging."
-msgstr "Maksimalisearje in finster tsjin sydkant of hoeke troch ferslepe."
+#~ msgstr "Balke fan 'e dei"
