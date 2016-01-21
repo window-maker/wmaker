@@ -182,6 +182,7 @@ WMenu *wMenuCreate(WScreen *screen, const char *title, int main_menu)
 	menu->frame->child = menu;
 
 	menu->flags.lowered = 0;
+	menu->flags.shaded = 0;
 
 	/* create borders */
 	if (title) {
@@ -1113,6 +1114,12 @@ void wMenuUnmap(WMenu * menu)
 	menu->flags.buttoned = 0;
 	menu->flags.mapped = 0;
 	menu->flags.open_to_left = 0;
+
+	if (menu->flags.shaded) {
+		wFrameWindowResize(menu->frame, menu->frame->core->width, menu->frame->top_width +
+				   menu->entry_height*menu->entry_no + menu->frame->bottom_width - 1);
+		menu->flags.shaded = 0;
+	}
 
 	for (i = 0; i < menu->cascade_no; i++) {
 		if (menu->cascades[i] != NULL
@@ -2103,6 +2110,15 @@ static void menuTitleDoubleClick(WCoreWindow * sender, void *data, XEvent * even
 			lower = 1;
 		}
 		changeMenuLevels(menu, lower);
+	} else {
+		if (menu->flags.shaded) {
+			wFrameWindowResize(menu->frame, menu->frame->core->width, menu->frame->top_width +
+					   menu->entry_height*menu->entry_no + menu->frame->bottom_width - 1);
+			menu->flags.shaded = 0;
+		} else {
+			wFrameWindowResize(menu->frame, menu->frame->core->width, menu->frame->top_width - 1);
+			menu->flags.shaded = 1;
+		}
 	}
 }
 

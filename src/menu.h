@@ -99,6 +99,7 @@ typedef struct WMenu {
 		unsigned int jump_back_pending:1;
 
 		unsigned int inside_handler:1;
+		unsigned int shaded:1;
 	} flags;
 } WMenu;
 
