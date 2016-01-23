@@ -21,7 +21,7 @@ libWMaker_la_SOURCES = 	\
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = wmlib.pc
 
-DISTCLEANFILES = wmlib.pc
+DISTCLEANFILES = $(pkgconfig_DATA)
 
 wmlib.pc: Makefile
 	@echo "Generating $@"
@@ -31,13 +31,3 @@ wmlib.pc: Makefile
 	@echo 'Requires: x11' >> $@
 	@echo 'Libs: $(lib_search_path) -lWMaker' >> $@
 	@echo 'Cflags: $(inc_search_path)' >> $@
-
-install-exec-local:
-	@$(NORMAL_INSTALL)
-	$(mkinstalldirs) $(DESTDIR)$(libdir)/pkgconfig
-	@list='wmlib.pc'; for p in $$list; do \
-	  if test -f $$p; then \
-	    echo "$(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/"; \
-	    $(INSTALL_DATA) $$p $(DESTDIR)$(libdir)/pkgconfig/; \
-	  else :; fi; \
-	done
