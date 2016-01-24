@@ -117,16 +117,21 @@ typedef struct _TexturePanel {
 
 } _TexturePanel;
 
-#define TYPE_SOLID	0
-#define TYPE_GRADIENT	1
-#define TYPE_SGRADIENT	2
-#define TYPE_TGRADIENT	3
-#define TYPE_PIXMAP	4
+enum {
+	TYPE_SOLID,
+	TYPE_GRADIENT,
+	TYPE_SGRADIENT,
+	TYPE_TGRADIENT,
+	TYPE_PIXMAP
+};
 
-#define PTYPE_TILE	0
-#define PTYPE_SCALE	1
-#define PTYPE_CENTER	2
-#define PTYPE_MAXIMIZE	3
+enum {
+	PTYPE_TILE,
+	PTYPE_SCALE,
+	PTYPE_CENTER,
+	PTYPE_MAXIMIZE,
+	PTYPE_FILL
+};
 
 /*
  *--------------------------------------------------------------------------
@@ -941,6 +946,9 @@ void SetTexturePanelTexture(TexturePanel *panel, const char *name, WMPropList *t
 		case 'M':
 			WMSetPopUpButtonSelectedItem(panel->arrP, PTYPE_MAXIMIZE);
 			break;
+		case 'F':
+			WMSetPopUpButtonSelectedItem(panel->arrP, PTYPE_FILL);
+			break;
 		default:
 		case 'T':
 			WMSetPopUpButtonSelectedItem(panel->arrP, PTYPE_TILE);
@@ -1024,6 +1032,10 @@ WMPropList *GetTexturePanelTexture(TexturePanel *panel)
 			break;
 		case PTYPE_MAXIMIZE:
 			prop = WMCreatePLArray(WMCreatePLString("mpixmap"),
+					       WMCreatePLString(panel->imageFile), WMCreatePLString(str), NULL);
+			break;
+		case PTYPE_FILL:
+			prop = WMCreatePLArray(WMCreatePLString("fpixmap"),
 					       WMCreatePLString(panel->imageFile), WMCreatePLString(str), NULL);
 			break;
 		case PTYPE_CENTER:
@@ -1394,6 +1406,7 @@ TexturePanel *CreateTexturePanel(WMWindow *keyWindow)
 	WMAddPopUpButtonItem(panel->arrP, _("Scale"));
 	WMAddPopUpButtonItem(panel->arrP, _("Center"));
 	WMAddPopUpButtonItem(panel->arrP, _("Maximize"));
+	WMAddPopUpButtonItem(panel->arrP, _("Fill"));
 	WMSetPopUpButtonSelectedItem(panel->arrP, 0);
 
 	WMMapSubwidgets(panel->imageF);
