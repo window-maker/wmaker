@@ -136,7 +136,7 @@ typedef struct _TexturePanel {
 
 /************/
 
-static void updateGradButtons(TexturePanel * panel)
+static void updateGradButtons(TexturePanel *panel)
 {
 	RImage *image;
 	WMPixmap *pixmap;
@@ -180,7 +180,7 @@ static void updateGradButtons(TexturePanel * panel)
 	}
 }
 
-static void updateTGradImage(TexturePanel * panel)
+static void updateTGradImage(TexturePanel *panel)
 {
 	RImage *image, *gradient;
 	WMPixmap *pixmap;
@@ -201,19 +201,17 @@ static void updateTGradImage(TexturePanel * panel)
 	to.green = WMGreenComponentOfColor(color) >> 8;
 	to.blue = WMBlueComponentOfColor(color) >> 8;
 
-	if (panel->image->width < 141 || panel->image->height < 91) {
+	if (panel->image->width < 141 || panel->image->height < 91)
 		image = RMakeTiledImage(panel->image, 141, 91);
-	} else {
+	else
 		image = RCloneImage(panel->image);
-	}
 
-	if (WMGetButtonSelected(panel->dirhB)) {
+	if (WMGetButtonSelected(panel->dirhB))
 		gradient = RRenderGradient(image->width, image->height, &from, &to, RHorizontalGradient);
-	} else if (WMGetButtonSelected(panel->dirvB)) {
+	else if (WMGetButtonSelected(panel->dirvB))
 		gradient = RRenderGradient(image->width, image->height, &from, &to, RVerticalGradient);
-	} else {
+	else
 		gradient = RRenderGradient(image->width, image->height, &from, &to, RDiagonalGradient);
-	}
 
 	RCombineImagesWithOpaqueness(image, gradient, WMGetSliderValue(panel->topaS));
 	RReleaseImage(gradient);
@@ -225,7 +223,7 @@ static void updateTGradImage(TexturePanel * panel)
 	RReleaseImage(image);
 }
 
-static void updateSGradButtons(TexturePanel * panel)
+static void updateSGradButtons(TexturePanel *panel)
 {
 	RImage *image;
 	WMPixmap *pixmap;
@@ -264,7 +262,7 @@ static void updateSGradButtons(TexturePanel * panel)
 
 /*********** Gradient ************/
 
-static void updateSVSlider(WMSlider * sPtr, Bool saturation, WMFont * font, RHSVColor * hsv)
+static void updateSVSlider(WMSlider *sPtr, Bool saturation, WMFont *font, RHSVColor *hsv)
 {
 	RImage *image;
 	WMPixmap *pixmap;
@@ -312,7 +310,7 @@ static void updateSVSlider(WMSlider * sPtr, Bool saturation, WMFont * font, RHSV
 	WMReleasePixmap(pixmap);
 }
 
-static void updateHueSlider(WMSlider * sPtr, WMFont * font, RHSVColor * hsv)
+static void updateHueSlider(WMSlider *sPtr, WMFont *font, RHSVColor *hsv)
 {
 	RColor *colors[8];
 	RImage *image;
@@ -353,7 +351,7 @@ static void updateHueSlider(WMSlider * sPtr, WMFont * font, RHSVColor * hsv)
 		wfree(colors[i]);
 }
 
-static void sliderChangeCallback(WMWidget * w, void *data)
+static void sliderChangeCallback(WMWidget *w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 	RHSVColor hsv;
@@ -417,9 +415,8 @@ static void sliderChangeCallback(WMWidget * w, void *data)
 	}
 	colors[i] = NULL;
 
-	if (panel->gimage != None) {
+	if (panel->gimage != None)
 		XFreePixmap(WMScreenDisplay(scr), panel->gimage);
-	}
 
 	image = RRenderMultiGradient(30, i * WMGetListItemHeight(panel->gcolL), colors, RVerticalGradient);
 	RConvertImage(WMScreenRContext(scr), image, &panel->gimage);
@@ -432,7 +429,7 @@ static void sliderChangeCallback(WMWidget * w, void *data)
 	updateGradButtons(panel);
 }
 
-static void paintGradListItem(WMList * lPtr, int index, Drawable d, char *text, int state, WMRect * rect)
+static void paintGradListItem(WMList *lPtr, int index, Drawable d, char *text, int state, WMRect *rect)
 {
 	TexturePanel *panel = (TexturePanel *) WMGetHangedData(lPtr);
 	WMScreen *scr = WMWidgetScreen(lPtr);
@@ -465,7 +462,7 @@ static void paintGradListItem(WMList * lPtr, int index, Drawable d, char *text, 
 	WMReleaseColor(gray);
 }
 
-static void gradAddCallback(WMWidget * w, void *data)
+static void gradAddCallback(WMWidget *w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 	WMListItem *item;
@@ -489,7 +486,7 @@ static void gradAddCallback(WMWidget * w, void *data)
 	WMSetButtonEnabled(panel->okB, WMGetListNumberOfRows(panel->gcolL) > 1);
 }
 
-static void gradClickCallback(WMWidget * w, void *data)
+static void gradClickCallback(WMWidget *w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 	WMListItem *item;
@@ -511,7 +508,7 @@ static void gradClickCallback(WMWidget * w, void *data)
 	sliderChangeCallback(panel->gsatS, panel);
 }
 
-static void gradDeleteCallback(WMWidget * w, void *data)
+static void gradDeleteCallback(WMWidget *w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 	WMListItem *item;
@@ -545,7 +542,7 @@ static void gradDeleteCallback(WMWidget * w, void *data)
 
 /*************** Simple Gradient ***************/
 
-static void colorWellObserver(void *self, WMNotification * n)
+static void colorWellObserver(void *self, WMNotification *n)
 {
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) n;
@@ -553,7 +550,7 @@ static void colorWellObserver(void *self, WMNotification * n)
 	updateSGradButtons(self);
 }
 
-static void opaqChangeCallback(WMWidget * w, void *data)
+static void opaqChangeCallback(WMWidget *w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 
@@ -565,7 +562,7 @@ static void opaqChangeCallback(WMWidget * w, void *data)
 
 /****************** Image ******************/
 
-static void updateImage(TexturePanel * panel, const char *path)
+static void updateImage(TexturePanel *panel, const char *path)
 {
 	WMScreen *scr = WMWidgetScreen(panel->win);
 	RImage *image;
@@ -613,12 +610,12 @@ static void updateImage(TexturePanel * panel, const char *path)
 	}
 }
 
-static void browseImageCallback(WMWidget * w, void *data)
+static void browseImageCallback(WMWidget *w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 	WMOpenPanel *opanel;
 	WMScreen *scr = WMWidgetScreen(w);
-	static char *ipath = NULL;
+	static char *ipath;
 
 	opanel = WMGetOpenPanel(scr);
 	WMSetFilePanelCanChooseDirectories(opanel, False);
@@ -670,18 +667,17 @@ static void browseImageCallback(WMWidget * w, void *data)
 	}
 }
 
-static void buttonCallback(WMWidget * w, void *data)
+static void buttonCallback(WMWidget *w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 
-	if (w == panel->okB) {
+	if (w == panel->okB)
 		(*panel->okAction) (panel->okData);
-	} else {
+	else
 		(*panel->cancelAction) (panel->cancelData);
-	}
 }
 
-static void changeTypeCallback(WMWidget * w, void *data)
+static void changeTypeCallback(WMWidget *w, void *data)
 {
 	TexturePanel *panel = (TexturePanel *) data;
 	int newType;
@@ -731,7 +727,7 @@ static void changeTypeCallback(WMWidget * w, void *data)
  * Public functions
  *--------------------------------------------------------------------------
  */
-void ShowTexturePanel(TexturePanel * panel)
+void ShowTexturePanel(TexturePanel *panel)
 {
 	Display *dpy = WMScreenDisplay(WMWidgetScreen(panel->win));
 	Screen *scr = DefaultScreenOfDisplay(dpy);
@@ -742,24 +738,24 @@ void ShowTexturePanel(TexturePanel * panel)
 	WMMapWidget(panel->win);
 }
 
-void HideTexturePanel(TexturePanel * panel)
+void HideTexturePanel(TexturePanel *panel)
 {
 	WMUnmapWidget(panel->win);
 }
 
-void SetTexturePanelOkAction(TexturePanel * panel, WMCallback * action, void *clientData)
+void SetTexturePanelOkAction(TexturePanel *panel, WMCallback *action, void *clientData)
 {
 	panel->okAction = action;
 	panel->okData = clientData;
 }
 
-void SetTexturePanelCancelAction(TexturePanel * panel, WMCallback * action, void *clientData)
+void SetTexturePanelCancelAction(TexturePanel *panel, WMCallback *action, void *clientData)
 {
 	panel->cancelAction = action;
 	panel->cancelData = clientData;
 }
 
-void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList * texture)
+void SetTexturePanelTexture(TexturePanel *panel, const char *name, WMPropList *texture)
 {
 	WMScreen *scr = WMWidgetScreen(panel->win);
 	char *str, *type;
@@ -775,9 +771,8 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 		return;
 
 	p = WMGetFromPLArray(texture, 0);
-	if (!p) {
+	if (!p)
 		goto bad_texture;
-	}
 	type = WMGetFromPLString(p);
 
 	/*............................................... */
@@ -786,11 +781,10 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 		WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_SOLID);
 
 		p = WMGetFromPLArray(texture, 1);
-		if (!p) {
+		if (!p)
 			str = "black";
-		} else {
+		else
 			str = WMGetFromPLString(p);
-		}
 		color = WMCreateNamedColor(scr, str, False);
 
 		WMSetColorWellColor(panel->defcW, color);
@@ -803,11 +797,10 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 		WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_SGRADIENT);
 
 		p = WMGetFromPLArray(texture, 1);
-		if (!p) {
+		if (!p)
 			str = "black";
-		} else {
+		else
 			str = WMGetFromPLString(p);
-		}
 		color = WMCreateNamedColor(scr, str, False);
 
 		WMSetColorWellColor(panel->tcol1W, color);
@@ -815,11 +808,10 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 		WMReleaseColor(color);
 
 		p = WMGetFromPLArray(texture, 2);
-		if (!p) {
+		if (!p)
 			str = "black";
-		} else {
+		else
 			str = WMGetFromPLString(p);
-		}
 		color = WMCreateNamedColor(scr, str, False);
 
 		WMSetColorWellColor(panel->tcol2W, color);
@@ -846,11 +838,10 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 		WMSetSliderValue(panel->topaS, i);
 
 		p = WMGetFromPLArray(texture, 3);
-		if (!p) {
+		if (!p)
 			str = "black";
-		} else {
+		else
 			str = WMGetFromPLString(p);
-		}
 		color = WMCreateNamedColor(scr, str, False);
 
 		WMSetColorWellColor(panel->tcol1W, color);
@@ -858,11 +849,10 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 		WMReleaseColor(color);
 
 		p = WMGetFromPLArray(texture, 4);
-		if (!p) {
+		if (!p)
 			str = "black";
-		} else {
+		else
 			str = WMGetFromPLString(p);
-		}
 		color = WMCreateNamedColor(scr, str, False);
 
 		WMSetColorWellColor(panel->tcol2W, color);
@@ -873,9 +863,9 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 
 		if (panel->imageFile)
 			wfree(panel->imageFile);
-		if ((panel->imageFile = wfindfileinarray(panel->pathList,
-							 WMGetFromPLString(WMGetFromPLArray(texture, 1)))) !=
-		    NULL) {
+		panel->imageFile = wfindfileinarray(panel->pathList,
+						    WMGetFromPLString(WMGetFromPLArray(texture, 1)));
+		if (panel->imageFile != NULL) {
 
 			panel->image = RLoadImage(WMScreenRContext(scr), panel->imageFile, 0);
 			updateTGradImage(panel);
@@ -899,11 +889,10 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 		WMSetPopUpButtonSelectedItem(panel->typeP, TYPE_GRADIENT);
 
 		p = WMGetFromPLArray(texture, 1);
-		if (!p) {
+		if (!p)
 			str = "black";
-		} else {
+		else
 			str = WMGetFromPLString(p);
-		}
 		color = WMCreateNamedColor(scr, str, False);
 
 		WMSetColorWellColor(panel->defcW, color);
@@ -915,11 +904,10 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 			XColor xcolor;
 
 			p = WMGetFromPLArray(texture, i);
-			if (!p) {
+			if (!p)
 				str = "black";
-			} else {
+			else
 				str = WMGetFromPLString(p);
-			}
 
 			XParseColor(WMScreenDisplay(scr), WMScreenRContext(scr)->cmap, str, &xcolor);
 
@@ -1001,13 +989,13 @@ void SetTexturePanelTexture(TexturePanel * panel, const char *name, WMPropList *
 
 }
 
-char *GetTexturePanelTextureName(TexturePanel * panel)
+char *GetTexturePanelTextureName(TexturePanel *panel)
 {
 	return WMGetTextFieldText(panel->nameT);
 
 }
 
-WMPropList *GetTexturePanelTexture(TexturePanel * panel)
+WMPropList *GetTexturePanelTexture(TexturePanel *panel)
 {
 	WMPropList *prop = NULL;
 	WMColor *color;
@@ -1104,13 +1092,12 @@ WMPropList *GetTexturePanelTexture(TexturePanel * panel)
 		color = WMGetColorWellColor(panel->defcW);
 		str = WMGetColorRGBDescription(color);
 
-		if (WMGetButtonSelected(panel->dirdB)) {
+		if (WMGetButtonSelected(panel->dirdB))
 			prop = WMCreatePLArray(WMCreatePLString("mdgradient"), WMCreatePLString(str), NULL);
-		} else if (WMGetButtonSelected(panel->dirvB)) {
+		else if (WMGetButtonSelected(panel->dirvB))
 			prop = WMCreatePLArray(WMCreatePLString("mvgradient"), WMCreatePLString(str), NULL);
-		} else {
+		else
 			prop = WMCreatePLArray(WMCreatePLString("mhgradient"), WMCreatePLString(str), NULL);
-		}
 		wfree(str);
 
 		for (i = 0; i < WMGetListNumberOfRows(panel->gcolL); i++) {
@@ -1131,12 +1118,12 @@ WMPropList *GetTexturePanelTexture(TexturePanel * panel)
 	return prop;
 }
 
-void SetTexturePanelPixmapPath(TexturePanel * panel, WMPropList * array)
+void SetTexturePanelPixmapPath(TexturePanel *panel, WMPropList *array)
 {
 	panel->pathList = array;
 }
 
-TexturePanel *CreateTexturePanel(WMWindow * keyWindow)
+TexturePanel *CreateTexturePanel(WMWindow *keyWindow)
 /*CreateTexturePanel(WMScreen *scr)*/
 {
 	TexturePanel *panel;
@@ -1475,7 +1462,7 @@ TexturePanel *CreateTexturePanel(WMWindow * keyWindow)
 
 char *ProgName = "test";
 
-void testOKButton(WMWidget * self, void *data)
+void testOKButton(WMWidget *self, void *data)
 {
 	char *test;
 	Display *dpy;
@@ -1504,13 +1491,13 @@ void testOKButton(WMWidget * self, void *data)
 
 }
 
-void testCancelButton(WMWidget * self, void *data)
+void testCancelButton(WMWidget *self, void *data)
 {
 	wwarning("Exiting test....");
 	exit(0);
 }
 
-void wAbort()
+void wAbort(void)
 {
 	exit(1);
 }
