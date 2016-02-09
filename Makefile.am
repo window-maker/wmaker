@@ -106,6 +106,7 @@ configure-documentation:
 		--ignore-prg 'enable-shared,enable-static # should be in INSTALL' \
 		--ignore-prg 'disable-option-checking,enable-fast-install # should be in INSTALL' \
 		--ignore-prg 'disable-libtool-lock,with-pic,with-gnu-ld,with-sysroot # for libtool' \
+		--ignore-prg 'runstatedir #new in autoconf 2.70, backported in Debian' \
 		--ignore-prg 'with-x # no use, it would not work without X'
 
 .PHONY: configure-documentation
