@@ -1,3 +1,11 @@
+wmaker (0.95.7-3) unstable; urgency=low
+
+  * Patch back libwraster symbol version to LIBWRASTER3. Temporarily mark
+    RDrawLine@LIBWRASTER3 with a dep >= 0.95.7-3~ to force lockstep upgrades
+    from broken 0.95.7-2. Closes: #811304
+
+ -- Andreas Metzler <ametzler@debian.org>  Wed, 20 Jan 2016 20:19:27 +0100
+
 wmaker (0.95.7-2) unstable; urgency=medium
 
   [ Andreas Metzler ]
