@@ -108,7 +108,7 @@ IF YOU ARE UPGRADING FROM 0.17.5 or earlier
     the NEWS file and the ChangeLog.  If you don't have problems
     upgrading, consider it a gift from the gods.  PLEASE NOTE: WPrefs
     is a work in progress.  SAVE YOUR CONFIGURATION. READ THE READMEs.
-  * Please note that WPrefs' Menu Guru REQUIERES a menu in "Property
+  * Please note that WPrefs' Menu Guru REQUIRES a menu in "Property
     List" format to work properly.  It's very likely that you have an
     old format menu.  There's a script called wm-oldmenu2new alongside
     this file that converts your menu to the new format.  It's a hack,

@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 # export DH_VERBOSE=1
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 export DEB_CFLAGS_MAINT_APPEND += -Wall -DGLOBAL_DEFAULTS_SUBDIR=\"GNUstep/Defaults\"
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))

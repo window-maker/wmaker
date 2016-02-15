@@ -5,7 +5,7 @@ Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.alioth.debian.org>
 Uploaders: Rodolfo García Peñas (kix) <kix@debian.org>,
            Andreas Metzler <ametzler@debian.org>,
            Doug Torrance <dtorrance@piedmont.edu>
-Standards-Version: 3.9.6
+Standards-Version: 3.9.7
 Build-Depends: automake (>= 1:1.12),
                debhelper (>= 9),
                dh-autoreconf,
@@ -29,7 +29,7 @@ Build-Depends: automake (>= 1:1.12),
                libxt-dev,
                sharutils
 Homepage: http://windowmaker.org/
-Vcs-Browser: http://anonscm.debian.org/cgit/pkg-wmaker/wmaker.git
+Vcs-Browser: https://anonscm.debian.org/git/pkg-wmaker/wmaker.git
 Vcs-Git: https://anonscm.debian.org/git/pkg-wmaker/wmaker.git
 
 Package: wmaker
