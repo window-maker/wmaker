@@ -7,31 +7,12 @@ Files: *
 Copyright: 1997, Alfredo Kengi Kojima <kojima@windowmaker.info>
            2011, Carlos R. Mafra <crmafra@gmail.com>
 License: GPL-2+
- This program is free software; you can redistribute it
- and/or modify it under the terms of the GNU General Public
- License as published by the Free Software Foundation; either
- version 2 of the License, or (at your option) any later
- version.
- .
- This program is distributed in the hope that it will be
- useful, but WITHOUT ANY WARRANTY; without even the implied
- warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
- PURPOSE.  See the GNU General Public License for more
- details.
- .
- You should have received a copy of the GNU General Public
- License along with this package; if not, write to the Free
- Software Foundation, Inc., 51 Franklin St, Fifth Floor,
- Boston, MA  02110-1301 USA
- .
- On Debian systems, the full text of the GNU General Public
- License version 2 can be found in the file
- `/usr/share/common-licenses/GPL-2'.
 
-Files: wrlib/*
-Copyright: 2000-2003, Alfredo Kengi Kojima <kojima@windowmaker.info>
-           2011, Carlos R. Mafra <crmafra@gmail.com>
-License: LGPL-2
+Files: util/common.h wmlib/* wrlib/*
+Copyright: 1997-2003 Alfredo Kengi Kojima <kojima@windowmaker.info>
+           1998-2004 Dan Pascu
+           2011 Carlos R. Mafra <crmafra@gmail.com>
+License: LGPL-2+
  This library is free software; you can redistribute it and/or
  modify it under the terms of the GNU Library General Public
  License as published by the Free Software Foundation; either
@@ -98,11 +79,39 @@ License: WTFPL-1
  .
  DO WHAT THE FUCK YOU WANT TO.
 
+Files: debian/*
+Copyright: 1997, Neil A. Rubin <nar5@po.cwru.edu>
+           1997, Marcelo E. Magallon <mmagallo@debian.org>
+           2011, Rodolfo García Peñas (kix) <kix@kix.es>
+License: GPL-2+
+
 Files: debian/debianfiles/Themes/DebianLegacy.style
        debian/debianfiles/Themes/DebianLegacy.txt
        debian/debianfiles/Themes/DebianSwirl.jpg
 Copyright: 1999 Gary Burke <gfburke@earthlink.net>
 License: GPL-1+
+
+License: GPL-2+
+ This program is free software; you can redistribute it
+ and/or modify it under the terms of the GNU General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later
+ version.
+ .
+ This program is distributed in the hope that it will be
+ useful, but WITHOUT ANY WARRANTY; without even the implied
+ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the GNU General Public License for more
+ details.
+ .
+ You should have received a copy of the GNU General Public
+ License along with this package; if not, write to the Free
+ Software Foundation, Inc., 51 Franklin St, Fifth Floor,
+ Boston, MA  02110-1301 USA
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/GPL-2'.
 
 License: GPL-1+
  This program is free software; you can redistribute it and/or modify

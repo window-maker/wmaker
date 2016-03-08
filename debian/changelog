@@ -1,3 +1,16 @@
+wmaker (0.95.7-5) unstable; urgency=medium
+
+  * Clean up debian/copyright. Add some files which were missed in the LGPL
+    paragraph and bump its version to 2+.  Restore debian/* paragraph.
+  * Remove useless debian/*.changelog-upstream files.
+  * Remove out of date file README.build.
+  * Drop wmaker-dbg package in favor of automatically generated wmaker-dbgsym.
+  * New file debian/wmaker-common.maintscript; removes obsolete config files
+    (Closes: #726075).
+  * Do not use buggy --enable-randr configure option (Closes: #816993).
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 07 Mar 2016 11:04:33 -0500
+
 wmaker (0.95.7-4) unstable; urgency=medium
 
   * Update Vcs-Browser to use https; fixes vcs-field-uses-insecure-uri Lintian
