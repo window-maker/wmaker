@@ -1,3 +1,10 @@
+wmaker (0.95.7-6) unstable; urgency=medium
+
+  * Split wxcopy and wxpaste into new wmaker-utils package (Closes: #78119).
+  * Restore libwmaker packages.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 09 Mar 2016 00:08:43 -0500
+
 wmaker (0.95.7-5) unstable; urgency=medium
 
   * Clean up debian/copyright. Add some files which were missed in the LGPL
