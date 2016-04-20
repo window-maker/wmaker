@@ -171,7 +171,7 @@ static void findCopyFile(const char *dir, const char *file)
 			(void)wrmdirhier(ThemePath);
 		return;
 	}
-	wcopy_file(dir, fullPath, fullPath);
+	wcopy_file(dir, fullPath, file);
 	wfree(fullPath);
 }
 
@@ -234,9 +234,10 @@ static void makeThemePack(WMPropList * style, const char *themeName)
 
 				p = strrchr(WMGetFromPLString(file), '/');
 				if (p) {
-					wcopy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
-
 					newPath = wstrdup(p + 1);
+
+					wcopy_file(themeDir, WMGetFromPLString(file), newPath);
+
 					WMDeleteFromPLArray(value, 1);
 					WMInsertInPLArray(value, 1, WMCreatePLString(newPath));
 					free(newPath);
@@ -253,9 +254,10 @@ static void makeThemePack(WMPropList * style, const char *themeName)
 
 				p = strrchr(WMGetFromPLString(file), '/');
 				if (p) {
-					wcopy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
-
 					newPath = wstrdup(p + 1);
+
+					wcopy_file(themeDir, WMGetFromPLString(file), newPath);
+
 					WMDeleteFromPLArray(value, 1);
 					WMInsertInPLArray(value, 1, WMCreatePLString(newPath));
 					free(newPath);
@@ -267,9 +269,10 @@ static void makeThemePack(WMPropList * style, const char *themeName)
 
 				p = strrchr(WMGetFromPLString(file), '/');
 				if (p) {
-					wcopy_file(themeDir, WMGetFromPLString(file), WMGetFromPLString(file));
-
 					newPath = wstrdup(p + 1);
+
+					wcopy_file(themeDir, WMGetFromPLString(file), newPath);
+
 					WMDeleteFromPLArray(value, 2);
 					WMInsertInPLArray(value, 2, WMCreatePLString(newPath));
 					free(newPath);
