@@ -106,7 +106,7 @@ int main(int argc, char **argv)
 	parse_locale(NULL, &env_lang, &env_ctry, &env_enc, &env_mod);
 	terminal = find_terminal_emulator();
 
-	for (i = 1; i <= argc; i++)
+	for (i = 1; i < argc; i++)
 	{
 		if (strncmp(argv[i], "-parser", 7) == 0 &&
 		    (argv[i][7] == '=' ||
