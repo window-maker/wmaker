@@ -62,6 +62,10 @@ static WWindow *change_focus_and_raise(WWindow *newFocused, WWindow *oldFocused,
 	if (!newFocused)
 		return oldFocused;
 
+	/* allow the focused window to float on top of a fullscreen window */
+	if (oldFocused->flags.fullscreen)
+		ChangeStackingLevel(oldFocused->frame->core, WMNormalLevel);
+
 	wWindowFocus(newFocused, oldFocused);
 	oldFocused = newFocused;
 
