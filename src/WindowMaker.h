@@ -59,6 +59,7 @@ enum {
 	WMSubmenuLevel = 15,
 	WMMainMenuLevel = 20,
 	WMStatusLevel = 21,
+	WMFullscreenLevel = 50,
 	WMModalLevel = 100,
 	WMPopUpLevel = 101,
 	WMScreensaverLevel = 1000,
