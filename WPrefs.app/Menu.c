@@ -506,7 +506,7 @@ static void createPanel(_Panel * p)
 		WMSetScrollViewContentView(sview, WMWidgetView(pad));
 
 		data = putNewItem(panel, pad, ExternalInfo, _("Debian Menu"));
-		data->param.pipe.command = "/etc/X11/WindowMaker/menu.hook";
+		data->param.pipe.command = "/etc/GNUstep/Defaults/menu.hook";
 
 		data = putNewItem(panel, pad, PipeInfo, _("RedHat Menu"));
 		data->param.pipe.command = "wmconfig --output wmaker";
