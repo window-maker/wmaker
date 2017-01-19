@@ -10,7 +10,7 @@
  * 
  * SHORTCUT specifies a shortcut for that item. <Shortcut> has the
  * same syntax of the shortcuts key options in the 
- * ~/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
+ * $HOME/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
  *
  * You can't specify a shortcut for a MENU or OPEN_MENU entry.
  * 
@@ -22,6 +22,7 @@
  *	WORKSPACE_MENU - adds a submenu for workspace operations. Only one
  *		    workspace_menu is allowed. 		
  *	EXEC <program> - executes an external program
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - exits the window manager
  *	RESTART [<window manager>] - restarts WindowMaker or start another
  *			window manager
@@ -52,17 +53,20 @@
  *	// it in current position
  *	OPEN_MENU file.menu
  *   2. Pipe menu handling.
- *	// opens command and uses it's stdout to construct menu.
+ *	// opens command and uses its stdout to construct menu.
  *	// Command's output must be a valid menu description.
  *	// The space between '|' and command itself is optional.
+ *      // Use '||' instead of '|' if you want the menu to always update
+ *	// when opened. It might be slow.
  *	OPEN_MENU | command
+ *      OPEN_MENU || command
  *   3. Directory handling.
- *	// Opens one or more directories and construct a menu with all
+ *	// Opens one or more directories and constructs a menu with all
  *	// the subdirectories and executable files in them sorted
  *	// alphabetically.
  *	OPEN_MENU /some/dir [/some/other/dir ...]
  *   4. Directory handling with command.
- *	// Opens one or more directories and construct menu with all
+ *	// Opens one or more directories and constructs menu with all
  *	// subdirectories and readable files in them sorted alphabetically,
  *	// preceding each of them with command.
  *	OPEN_MENU [options] /some/dir [/some/other/dir ...] WITH command -options
@@ -74,10 +78,11 @@
  *
  * ** Options for command line in EXEC:
  * %s - substitute with current selection
- * %a(title[,prompt]) - opens a input box with the specified title and the
+ * %a(title[,prompt]) - opens an input box with the specified title and the
  *			optional prompt	and do substitution with what you typed
  * %w - substitute with XID for the current focused window
- *
+ * %W - substitute with the number of the current workspace
+ * 
  * You can override special characters (as % and ") with the \ character:
  * ex: xterm -T "\"Hello World\""
  *
@@ -92,9 +97,9 @@
  *		// creates a submenu with the contents of /usr/openwin/bin
  *	"XView apps" OPEN_MENU "/usr/openwin/bin"
  *		// some X11 apps in different directories
- *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
+ *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// set some background images
- *	"Background" OPEN_MENU -noext ~/images /usr/share/images WITH wmsetbg -u -t
+ *	"Background" OPEN_MENU -noext $HOME/images /usr/share/images WITH wmsetbg -u -t
  *		// inserts the style.menu in this entry
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -102,112 +107,118 @@
 
 #include "wmmacros"
 
-"應用程式" MENU
-	"資訊" MENU
-		"資訊面板..." INFO_PANEL
-		"法律..." LEGAL_PANEL
-		"系統主控台" EXEC xconsole
-		"系統負載" SHEXEC xosview || xload
-		"行程清單" EXEC xterm -e top
-		"手冊瀏覽器" EXEC xman
-	"資訊" END
-	"執行..." EXEC %a (執行，輸入執行的命令：)
-	"終端機" EXEC crxvt -thin -ls -T 終端機 -n 終端機
-	"工作區" WORKSPACE_MENU
-	"應用程式" MENU
-		"影像處理" MENU
-			"Gimp" SHEXEC gimp >/dev/null
-			"XV" EXEC xv
-			"XPaint" EXEC xpaint
-			"XFig" EXEC xfig
-		"影像處理" END
-		"X 檔案管理員" EXEC xfm
-		"OffiX Files" EXEC files
-		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
-  		"Ghostview" EXEC ghostview %a(GhostView,輸入要檢視的檔案)
-		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(輸入要檢視的 PDF)
-  		"TkDesk" EXEC tkdesk
-	"應用程式" END
-	"編輯器" MENU
-		"XFte" EXEC xfte
-		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
-		"NEdit" EXEC nedit
-		"Xedit" EXEC xedit
-		"VI" EXEC xterm -e vi
-	"編輯器" END
-	"雜項" MENU
-		"Xmcd" SHEXEC xmcd 2> /dev/null
-		"Xplaycd" EXEC xplaycd
-		"Xmixer" EXEC xmixer
-	"雜項" END
-	"公用程式" MENU
-		"計算機" EXEC xcalc
+"Applications" MENU
+	"Info" MENU
+		"Info Panel" INFO_PANEL
+		"Legal" LEGAL_PANEL
+		"System Console" EXEC xconsole
+		"System Load" SHEXEC xosview || xload
+		"Process List" EXEC xterm -e top
+		"Manual Browser" EXEC xman
+	"Info" END
+	"Run..." SHEXEC %a(Run,Type command to run:)
+	"XTerm" EXEC xterm -sb 
+	"Mozilla Firefox" EXEC firefox
+	"Workspaces" WORKSPACE_MENU
+	"Applications" MENU
+		"Gimp" SHEXEC gimp >/dev/null
+  		"Ghostview" EXEC ghostview %a(GhostView,Enter file to view)
+		"Xpdf" EXEC xpdf %a(Xpdf,Enter PDF to view)
+		"Abiword" EXEC abiword
+		"Dia" EXEC dia
+		"OpenOffice.org" MENU
+			"OpenOffice.org" EXEC ooffice
+			"Writer" EXEC oowriter
+			"Spreadsheet" EXEC oocalc
+			"Draw" EXEC oodraw
+			"Impress" EXEC ooimpress
+		"OpenOffice.org" END 
+
+		"Editors" MENU
+			"XEmacs" EXEC xemacs
+			"Emacs" EXEC emacs
+			"XJed" EXEC xjed 
+			"VI" EXEC xterm -e vi
+			"GVIM" EXEC gvim
+			"NEdit" EXEC nedit
+			"Xedit" EXEC xedit
+		"Editors" END
+
+		"Multimedia" MENU
+			"XMMS" MENU
+				"XMMS" EXEC xmms
+				"XMMS play/pause" EXEC xmms -t
+				"XMMS stop" EXEC xmms -s
+			"XMMS" END
+			"Xine video player" EXEC xine
+			"MPlayer" EXEC mplayer
+		"Multimedia" END
+	"Applications" END
+
+	"Utils" MENU
+		"Calculator" EXEC xcalc
 		"Window Properties" SHEXEC xprop | xmessage -center -title 'xprop' -file -
 		"Font Chooser" EXEC xfontsel
-		"終端機模擬器" EXEC xminicom
-		"Magnify" EXEC xmag
+		"Magnify" EXEC wmagnify
 		"Colormap" EXEC xcmap
-		"XKill" EXEC xkill
-		"Clipboard" EXEC xclipboard
-	"公用程式" END
+		"Kill X Application" EXEC xkill
+	"Utils" END
 
-	"選取" MENU
-		"複製" SHEXEC echo '%s' | wxcopy
-		"郵寄至" EXEC xterm -name mail -T "Pine" -e pine %s
+	"Selection" MENU
+		"Copy" SHEXEC echo '%s' | wxcopy
+		"Mail To" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Navigate" EXEC netscape %s
-		"在手冊中搜尋" SHEXEC MANUAL_SEARCH(%s)
-	"選取" END
+		"Search in Manual" SHEXEC MANUAL_SEARCH(%s)
+	"Selection" END
 
-	"工作區" MENU
-		"隱藏其他" HIDE_OTHERS
-		"全部顯示" SHOW_ALL
-		"排列圖示" ARRANGE_ICONS
-		"更新畫面" REFRESH
-		"鎖定" EXEC xlock -allowroot -usefirst
-		"儲存階段狀態" SAVE_SESSION
-		"清除階段狀態" CLEAR_SESSION
-	"工作區" END
+	"Commands" MENU
+		"Hide Others" HIDE_OTHERS
+		"Show All" SHOW_ALL
+		"Arrange Icons" ARRANGE_ICONS
+		"Refresh" REFRESH
+		"Lock" EXEC xlock -allowroot -usefirst
+	"Commands" END
 
-	"外觀" MENU
-		"主題" OPEN_MENU THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"風格" OPEN_MENU STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"圖示集" OPEN_MENU ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
-		"背景" MENU
-			"實體色" MENU
-                        	"Black" WS_BACK '(solid, black)'
-                        	"Blue"  WS_BACK '(solid, "#505075")'
+	"Appearance" MENU
+		"Themes" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"Styles" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"Icon Sets" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"Background" MENU
+			"Solid" MENU
+				"Black" WS_BACK '(solid, black)'
+				"Blue"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Bleumarine" WS_BACK '(solid, "#224477")'
-                        	"Purple" WS_BACK '(solid, "#554466")'
-                        	"Wheat"  WS_BACK '(solid, "wheat4")'
-                        	"Dark Gray"  WS_BACK '(solid, "#333340")'
-                        	"Wine" WS_BACK '(solid, "#400020")'
-			"實體色" END
-			"漸層色" MENU
+				"Bluemarine" WS_BACK '(solid, "#224477")'
+				"Purple" WS_BACK '(solid, "#554466")'
+				"Wheat"  WS_BACK '(solid, "wheat4")'
+				"Dark Gray"  WS_BACK '(solid, "#333340")'
+				"Wine" WS_BACK '(solid, "#400020")'
+				"Solid" END
+			"Gradient" MENU
 				"Sunset" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
 				"Sky" WS_BACK '(vgradient, blue4, white)'
-    				"Blue Shades" WS_BACK '(vgradient, "#7080a5", "#101020")'
+    			"Blue Shades" WS_BACK '(vgradient, "#7080a5", "#101020")'
 				"Indigo Shades" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
-			    	"Purple Shades" WS_BACK '(vgradient, "#654c66", "#151426")'
-    				"Wheat Shades" WS_BACK '(vgradient, "#a09060", "#302010")'
-    				"Grey Shades" WS_BACK '(vgradient, "#636380", "#131318")'
-    				"Wine Shades" WS_BACK '(vgradient, "#600040", "#180010")'
-			"漸層色" END
-			"圖片" OPEN_MENU BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
-		"背景" END
-		"儲存主題" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(主題名稱)"
-		"儲存圖示集" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(圖示集名稱)"
-		"偏好設定公用程式" EXEC /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
-	"外觀" END
+			    "Purple Shades" WS_BACK '(vgradient, "#654c66", "#151426")'
+    			"Wheat Shades" WS_BACK '(vgradient, "#a09060", "#302010")'
+    			"Grey Shades" WS_BACK '(vgradient, "#636380", "#131318")'
+    			"Wine Shades" WS_BACK '(vgradient, "#600040", "#180010")'
+			"Gradient" END
+			"Images" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+		"Background" END
+		"Save Theme" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
+		"Save IconSet" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
+		"Preferences Utility" EXEC #wprefs#
+	"Appearance" END
 
-	"離開"	MENU
-		"重新啟動" RESTART
-		"啟動 BlackBox" RESTART blackbox
-		"啟動 kwm" RESTART kwm
-		"啟動 IceWM" RESTART icewm
-		"離開..."  EXIT
-	"離開" END
-"應用程式" END
+	"Session" MENU
+		"Save Session" SAVE_SESSION
+		"Clear Session" CLEAR_SESSION
+		"Restart Window Maker" RESTART
+		"Start BlackBox" RESTART blackbox
+		"Start IceWM" RESTART icewm
+		"Exit"  EXIT
+	"Session" END
+"Applications" END
+
 

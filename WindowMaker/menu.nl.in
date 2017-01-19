@@ -208,7 +208,7 @@
 		"Achtergrond" END
 		"Thema opslaan" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Themanaam,Voer bestandsnaam in:)"
 		"Iconenset opslaan" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Iconensetnaam,Voer bestandsnaam in:)"
-		"Voorkeurenhulpmiddel" EXEC /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
+		"Voorkeurenhulpmiddel" EXEC #wprefs#
 	"Uiterlijk" END
 
 	"Sessie" MENU

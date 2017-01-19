@@ -204,7 +204,7 @@
 		"Háttér" END
 		"Téma mentése" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Téma neve,Add meg a téma fájl nevét:)"
 		"Ikonbeállítások mentése" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Ikonbeállítások mentése,Add meg a fájl nevét:)"
-		"Konfiguráló program" EXEC /usr/bin/WPrefs
+		"Konfiguráló program" EXEC #wprefs#
 	"Megjelenés" END
 
 	"Kilépés"	MENU

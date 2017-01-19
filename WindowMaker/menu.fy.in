@@ -208,7 +208,7 @@
 		"Eftergrûn" END
 		"Tema bewarje" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Temanamme,Fier bestânsnamme yn:)"
 		"Ikoaneset bewarje" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Ikoanesetnamme,Fier bestânsnamme yn:)"
-		"Foarkarrehelpmiddel" EXEC /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
+		"Foarkarrehelpmiddel" EXEC #wprefs#
 	"Uterlik" END
 
 	"Sesje" MENU

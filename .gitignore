@@ -87,6 +87,28 @@ WINGs/WUtil.pc
 
 wrlib/libwraster.map
 
+WindowMaker/menu
+WindowMaker/menu.bg
+WindowMaker/menu.fi
+WindowMaker/menu.fy
+WindowMaker/menu.hu
+WindowMaker/menu.ko
+WindowMaker/menu.nl
+WindowMaker/menu.ro
+WindowMaker/menu.sk
+WindowMaker/menu.zh_TW
+WindowMaker/plmenu
+WindowMaker/plmenu.bg
+WindowMaker/plmenu.es
+WindowMaker/plmenu.fi
+WindowMaker/plmenu.fy
+WindowMaker/plmenu.ja
+WindowMaker/plmenu.ko
+WindowMaker/plmenu.nl
+WindowMaker/plmenu.ro
+WindowMaker/plmenu.sk
+WindowMaker/plmenu.zh_TW
+
 WindowMaker/Defaults/WMRootMenu
 WindowMaker/Defaults/WMState
 WindowMaker/Defaults/WMWindowAttributes

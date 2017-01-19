@@ -10,7 +10,7 @@
  * 
  * SHORTCUT specifies a shortcut for that item. <Shortcut> has the
  * same syntax of the shortcuts key options in the 
- * $HOME/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
+ * ~/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
  *
  * You can't specify a shortcut for a MENU or OPEN_MENU entry.
  * 
@@ -22,7 +22,6 @@
  *	WORKSPACE_MENU - adds a submenu for workspace operations. Only one
  *		    workspace_menu is allowed. 		
  *	EXEC <program> - executes an external program
- *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - exits the window manager
  *	RESTART [<window manager>] - restarts WindowMaker or start another
  *			window manager
@@ -78,8 +77,7 @@
  * %a(title[,prompt]) - opens a input box with the specified title and the
  *			optional prompt	and do substitution with what you typed
  * %w - substitute with XID for the current focused window
- * %W - substitute with the number of the current workspace
- * 
+ *
  * You can override special characters (as % and ") with the \ character:
  * ex: xterm -T "\"Hello World\""
  *
@@ -94,9 +92,9 @@
  *		// creates a submenu with the contents of /usr/openwin/bin
  *	"XView apps" OPEN_MENU "/usr/openwin/bin"
  *		// some X11 apps in different directories
- *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
+ *	"X11 apps" OPEN_MENU /usr/X11/bin ~/bin/X11
  *		// set some background images
- *	"Background" OPEN_MENU -noext $HOME/images /usr/share/images WITH wmsetbg -u -t
+ *	"Background" OPEN_MENU -noext ~/images /usr/share/images WITH wmsetbg -u -t
  *		// inserts the style.menu in this entry
  *	"Style" OPEN_MENU style.menu
  * "Test" END
@@ -104,114 +102,112 @@
 
 #include "wmmacros"
 
-"Aplicaţii" MENU
-	"Informaţii" MENU
-		"Panou cu Informaţii" INFO_PANEL
-		"Panou cu Licenţa" LEGAL_PANEL
-		"Consola Sistem" EXEC xconsole
-		"Încărcarea Sistemului" SHEXEC xosview || xload
-		"Lista Proceselor" EXEC xterm -e top
-		"Navigator de Pagini Man" EXEC xman
-	"Informaţii" END
-	"Execută..." SHEXEC %a(Execută,Introduceţi o comandă:)
-	"XTerm" EXEC xterm -sb 
-	"Rxvt" EXEC rxvt -bg black -fg white -fn -misc-fixed-medium-*-*--*-*-*-*-*-*-iso8859-2 -fb -misc-fixed-medium-*-*--*-*-*-*-*-*-iso8859-2
-	"Spaţii de Lucru" WORKSPACE_MENU
-	"Aplicaţii" MENU
-		"Grafică" MENU
+"應用程式" MENU
+	"資訊" MENU
+		"資訊面板..." INFO_PANEL
+		"法律..." LEGAL_PANEL
+		"系統主控台" EXEC xconsole
+		"系統負載" SHEXEC xosview || xload
+		"行程清單" EXEC xterm -e top
+		"手冊瀏覽器" EXEC xman
+	"資訊" END
+	"執行..." EXEC %a (執行，輸入執行的命令：)
+	"終端機" EXEC crxvt -thin -ls -T 終端機 -n 終端機
+	"工作區" WORKSPACE_MENU
+	"應用程式" MENU
+		"影像處理" MENU
 			"Gimp" SHEXEC gimp >/dev/null
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
-		"Grafică" END
-		"Manager de Fişiere" EXEC xfm
-		"Fisiere OffiX" EXEC files
+		"影像處理" END
+		"X 檔案管理員" EXEC xfm
+		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
 		"Netscape" EXEC netscape 
-  		"Ghostview" EXEC ghostview %a(GhostView,Enter file to view)
-		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobar,Enter PDF to view)
+  		"Ghostview" EXEC ghostview %a(GhostView,輸入要檢視的檔案)
+		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(輸入要檢視的 PDF)
   		"TkDesk" EXEC tkdesk
-	"Aplicaţii" END
-	"Editoare" MENU
+	"應用程式" END
+	"編輯器" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
 		"XJed" EXEC xjed 
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
-	"Editoare" END
-	"Altele" MENU
+	"編輯器" END
+	"雜項" MENU
 		"Xmcd" SHEXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer" EXEC xmixer
-	"Altele" END
-	"Utilitare" MENU
-		"Calculator" EXEC xcalc
-		"Proprietăţile Ferestrei..." SHEXEC xprop | xmessage -center -title 'xprop' -file -
-		"Navigator de Fonturi" EXEC xfontsel
-		"Emulator de Terminal" EXEC xminicom
-		"Lupă" EXEC xmag
-		"Culori" EXEC xcmap
-		"Omoară Fereastra..." EXEC xkill
+	"雜項" END
+	"公用程式" MENU
+		"計算機" EXEC xcalc
+		"Window Properties" SHEXEC xprop | xmessage -center -title 'xprop' -file -
+		"Font Chooser" EXEC xfontsel
+		"終端機模擬器" EXEC xminicom
+		"Magnify" EXEC xmag
+		"Colormap" EXEC xcmap
+		"XKill" EXEC xkill
 		"Clipboard" EXEC xclipboard
-	"Utilitare" END
+	"公用程式" END
 
-	"Selecţie" MENU
-		"Copiază" SHEXEC echo '%s' | wxcopy
-		"Poştă către" EXEC xterm -name mail -T "Pine" -e pine %s
-		"Navighează" EXEC netscape %s
-		"Caută în Manual" SHEXEC MANUAL_SEARCH(%s)
-	"Selecţie" END
+	"選取" MENU
+		"複製" SHEXEC echo '%s' | wxcopy
+		"郵寄至" EXEC xterm -name mail -T "Pine" -e pine %s
+		"Navigate" EXEC netscape %s
+		"在手冊中搜尋" SHEXEC MANUAL_SEARCH(%s)
+	"選取" END
 
-	"Spaţiu de Lucru" MENU
-		"Ascunde Celelalte" HIDE_OTHERS
-		"Arată Tot" SHOW_ALL
-		"Aranjează Iconiţele" ARRANGE_ICONS
-		"Reîmprospătează" REFRESH
-		"Blochează" EXEC xlock -allowroot -usefirst
-		"Salvează Sesiunea" SAVE_SESSION
-		"Şterge Setările de Sesiune" CLEAR_SESSION
-	"Spaţiu de Lucru" END
+	"工作區" MENU
+		"隱藏其他" HIDE_OTHERS
+		"全部顯示" SHOW_ALL
+		"排列圖示" ARRANGE_ICONS
+		"更新畫面" REFRESH
+		"鎖定" EXEC xlock -allowroot -usefirst
+		"儲存階段狀態" SAVE_SESSION
+		"清除階段狀態" CLEAR_SESSION
+	"工作區" END
 
-	"Configurare" MENU
-		"Teme" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Stiluri" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Seturi de Icoane" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
-		"Fundal" MENU
-			"Solid" MENU
-                        	"Negru" WS_BACK '(solid, black)'
-                        	"Albastru"  WS_BACK '(solid, "#505075")'
+	"外觀" MENU
+		"主題" OPEN_MENU THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
+		"風格" OPEN_MENU STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
+		"圖示集" OPEN_MENU ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
+		"背景" MENU
+			"實體色" MENU
+                        	"Black" WS_BACK '(solid, black)'
+                        	"Blue"  WS_BACK '(solid, "#505075")'
 				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Bleumarin" WS_BACK '(solid, "#224477")'
-                        	"Violet" WS_BACK '(solid, "#554466")'
-                        	"Gălbui"  WS_BACK '(solid, "wheat4")'
-                        	"Gri Închis"  WS_BACK '(solid, "#333340")'
-                        	"Vişiniu" WS_BACK '(solid, "#400020")'
-			"Solid" END
-			"Gradientat" MENU
-				"Apus" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
-				"Cer" WS_BACK '(vgradient, blue4, white)'
-    				"Gradient Albastru" WS_BACK '(vgradient, "#7080a5", "#101020")'
-				"Gradient Indigo" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
-			    	"Gradient Violet" WS_BACK '(vgradient, "#654c66", "#151426")'
-    				"Gradient Gălbui" WS_BACK '(vgradient, "#a09060", "#302010")'
-    				"Gradient Gri" WS_BACK '(vgradient, "#636380", "#131318")'
-    				"Gradient Vişiniu" WS_BACK '(vgradient, "#600040", "#180010")'
-			"Gradientat" END
-			"Imagini" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
-		"Fundal" END
-		"Salvează Tema" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Theme name,Enter file name:)"
-		"Salvează Setul de Iconiţe" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(IconSet name,Enter file name:)"
-		"Utilitar de Configurare" EXEC /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
-	"Configurare" END
+				"Bleumarine" WS_BACK '(solid, "#224477")'
+                        	"Purple" WS_BACK '(solid, "#554466")'
+                        	"Wheat"  WS_BACK '(solid, "wheat4")'
+                        	"Dark Gray"  WS_BACK '(solid, "#333340")'
+                        	"Wine" WS_BACK '(solid, "#400020")'
+			"實體色" END
+			"漸層色" MENU
+				"Sunset" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
+				"Sky" WS_BACK '(vgradient, blue4, white)'
+    				"Blue Shades" WS_BACK '(vgradient, "#7080a5", "#101020")'
+				"Indigo Shades" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
+			    	"Purple Shades" WS_BACK '(vgradient, "#654c66", "#151426")'
+    				"Wheat Shades" WS_BACK '(vgradient, "#a09060", "#302010")'
+    				"Grey Shades" WS_BACK '(vgradient, "#636380", "#131318")'
+    				"Wine Shades" WS_BACK '(vgradient, "#600040", "#180010")'
+			"漸層色" END
+			"圖片" OPEN_MENU BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
+		"背景" END
+		"儲存主題" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(主題名稱)"
+		"儲存圖示集" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(圖示集名稱)"
+		"偏好設定公用程式" EXEC #wprefs#
+	"外觀" END
 
-	"Ieşire" MENU
-		"Repornire" RESTART
-		"Porneşte BlackBox" RESTART blackbox
-		"Porneşte kwm" RESTART kwm
-		"Porneşte IceWM" RESTART icewm
-		"Ieşi"  EXIT
-	"Ieşire" END
-"Aplicaţii" END
-
+	"離開"	MENU
+		"重新啟動" RESTART
+		"啟動 BlackBox" RESTART blackbox
+		"啟動 kwm" RESTART kwm
+		"啟動 IceWM" RESTART icewm
+		"離開..."  EXIT
+	"離開" END
+"應用程式" END
 
