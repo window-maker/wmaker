@@ -70,8 +70,7 @@ dist_prefsdata_DATA =\
 
 nodist_prefsdata_DATA = $(GENERATED_MENUS)
 
-EXTRA_DIST = mkMakefile\
-	$(addsuffix .in, $(GENERATED_MENUS))
+EXTRA_DIST = $(addsuffix .in, $(GENERATED_MENUS))
 
 CLEANFILES = $(GENERATED_MENUS)
 
