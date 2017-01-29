@@ -1,3 +1,10 @@
+wmaker (0.95.7-7) unstable; urgency=medium
+
+  * Add missing license information to debian/copyright.
+  * Fix segfault in wmmenugen (Closes: #844783).
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 19 Nov 2016 10:35:50 -0500
+
 wmaker (0.95.7-6) unstable; urgency=medium
 
   * Split wxcopy and wxpaste into new wmaker-utils package (Closes: #78119).

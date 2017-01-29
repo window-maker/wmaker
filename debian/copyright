@@ -4,33 +4,42 @@ Upstream-Contact: Window Maker developers mailing list <wmaker-dev@lists.windowm
 Source: http://repo.or.cz/w/wmaker-crm.git
 
 Files: *
-Copyright: 1997, Alfredo Kengi Kojima <kojima@windowmaker.info>
-           2011, Carlos R. Mafra <crmafra@gmail.com>
+Copyright: 1991-1995 Free Software Foundation, Inc.
+	   1995 Spencer Kimball
+	   1995 Peter Mattis
+	   1995 Sun Microsystems, Inc.
+	   1996 Ben Wing
+	   1997 Shige Abe
+	   1997-2004, 2006 Alfredo Kengi Kojima <kojima@windowmaker.info>
+	   1998-2004, 2006 Dan Pascu
+	   1998 scottc
+	   1998 James Thompson
+	   1999-2000 Nwanua Elumeze
+	   2001-2016 Window Maker Team
+	   2008 Norayr Chilingaryan <chnorik@gmail.com>
+	   2008 Guido U. Draheim <guidod@gmx.de>
+	   2010-2011 Carlos R. Mafra <crmafra@gmail.com>
+	   2010 Tamas Tevesz <ice@extreme.hu>
+	   2011 Camille d'Alméras <camilledalmeras@yahoo.com>
+	   2012-2015 Christophe Curis
+	   2012 Daniel Déchelotte
+	   2012 Leandro Vital <leandro.vital@yahoo.com.br>
 License: GPL-2+
+
+Files: m4/ax_pthread.m4
+Copyright: 2008 Steven G. Johnson <stevenj@alum.mit.edu>
+	   2011 Daniel Richard G. <skunk@iSKUNK.ORG>
+License: GPL-3+
+
+Files: m4/ld-version-script.m4
+Copyright: 2008-2015 Free Software Foundation, Inc.
+License: FSFULLR
 
 Files: util/common.h wmlib/* wrlib/*
 Copyright: 1997-2003 Alfredo Kengi Kojima <kojima@windowmaker.info>
            1998-2004 Dan Pascu
            2011 Carlos R. Mafra <crmafra@gmail.com>
 License: LGPL-2+
- This library is free software; you can redistribute it and/or
- modify it under the terms of the GNU Library General Public
- License as published by the Free Software Foundation; either
- version 2 of the License, or (at your option) any later version.
- .
- This library is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- Library General Public License for more details.
- .
- You should have received a copy of the GNU Library General Public
- License along with this library; if not, write to the Free Software
- Foundation, Inc., 51 Franklin Street, Fifth Floor,
- Boston, MA  02110-1301 USA
- .
- On Debian systems, the full text of the GNU Library General Public
- License version 2 can be found in the file
- `/usr/share/common-licenses/LGPL-2'.
 
 Files: WindowMaker/Icons/BitchX.tiff WindowMaker/Icons/defaultAppIcon.tiff
        WindowMaker/Icons/GNUterm.tiff WindowMaker/Icons/defaultterm.tiff
@@ -66,18 +75,6 @@ Files: WindowMaker/Icons/GNUstepGlow.tiff WindowMaker/Icons/GNUstepGlow.xpm
        WINGs/Resources/defaultIcon.xpm WINGs/Resources/Images.xcf
 Copyright: 2000, Banlu Kemiyatorn
 License: WTFPL-1
- do What The Fuck you want to Public License
- .
- Version 1.0, March 2000
- Copyright (C) 2000 Banlu Kemiyatorn (]d).
- 136 Nives 7 Jangwattana 14 Laksi Bangkok
- Everyone is permitted to copy and distribute verbatim copies
- of this license document, but changing it is not allowed.
- .
- Ok, the purpose of this license is simple
- and you just
- .
- DO WHAT THE FUCK YOU WANT TO.
 
 Files: debian/*
 Copyright: 1997, Neil A. Rubin <nar5@po.cwru.edu>
@@ -90,6 +87,43 @@ Files: debian/debianfiles/Themes/DebianLegacy.style
        debian/debianfiles/Themes/DebianSwirl.jpg
 Copyright: 1999 Gary Burke <gfburke@earthlink.net>
 License: GPL-1+
+
+Files: WINGs/string.c
+Copyright: 1998 Todd C. Miller <Todd.Miller@courtesan.com>
+License: Expat
+
+Files: wrlib/load_ppm.c
+Copyright: 1988 Jef Poskanzer
+	   1997-2003 Alfredo K. Kojima
+	   2014 Window Maker Team
+License: HPND and LGPL-2+
+
+License: Expat
+ Permission to use, copy, modify, and distribute this software for any
+ purpose with or without fee is hereby granted, provided that the above
+ copyright notice and this permission notice appear in all copies.
+ .
+ THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+ WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+ MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+ WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+License: FSFULLR
+ This file is free software; the Free Software Foundation gives unlimited
+ permission to copy and/or distribute it, with or without modifications, as
+ long as this notice is preserved.
+
+License: GPL-1+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 1, or (at your option)
+ any later version.
+ .
+ On Debian systems, the complete text of version 1 of the GNU General
+ Public License can be found in `/usr/share/common-licenses/GPL-1'.
 
 License: GPL-2+
  This program is free software; you can redistribute it
@@ -113,11 +147,65 @@ License: GPL-2+
  License version 2 can be found in the file
  `/usr/share/common-licenses/GPL-2'.
 
-License: GPL-1+
- This program is free software; you can redistribute it and/or modify
- it under the terms of the GNU General Public License as published by
- the Free Software Foundation; either version 1, or (at your option)
- any later version.
+License: GPL-3+
+ This program is free software: you can redistribute it
+ and/or modify it under the terms of the GNU General Public
+ License as published by the Free Software Foundation, either
+ version 3 of the License, or (at your option) any later
+ version.
  .
- On Debian systems, the complete text of version 1 of the GNU General
- Public License can be found in `/usr/share/common-licenses/GPL-1'.
+ This program is distributed in the hope that it will be
+ useful, but WITHOUT ANY WARRANTY; without even the implied
+ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR
+ PURPOSE.  See the GNU General Public License for more
+ details.
+ .
+ You should have received a copy of the GNU General Public
+ License along with this program.  If not, see
+ <http://www.gnu.org/licenses/>.
+ .
+ On Debian systems, the full text of the GNU General Public
+ License version 3 can be found in the file
+ `/usr/share/common-licenses/GPL-3'.
+
+License: HPND
+ Permission to use, copy, modify, and distribute this software and its
+ documentation for any purpose and without fee is hereby granted, provided
+ that the above copyright notice appear in all copies and that both that
+ copyright notice and this permission notice appear in supporting
+ documentation.  This software is provided "as is" without express or
+ implied warranty.
+
+License: LGPL-2+
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Library General Public
+ License as published by the Free Software Foundation; either
+ version 2 of the License, or (at your option) any later version.
+ .
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ Library General Public License for more details.
+ .
+ You should have received a copy of the GNU Library General Public
+ License along with this library; if not, write to the Free Software
+ Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ Boston, MA  02110-1301 USA
+ .
+ On Debian systems, the full text of the GNU Library General Public
+ License version 2 can be found in the file
+ `/usr/share/common-licenses/LGPL-2'.
+
+License: WTFPL-1
+ do What The Fuck you want to Public License
+ .
+ Version 1.0, March 2000
+ Copyright (C) 2000 Banlu Kemiyatorn (]d).
+ 136 Nives 7 Jangwattana 14 Laksi Bangkok
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+ .
+ Ok, the purpose of this license is simple
+ and you just
+ .
+ DO WHAT THE FUCK YOU WANT TO.
