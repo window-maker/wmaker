@@ -447,7 +447,8 @@ WM_TYPE_SIGNAL
 
 dnl pkg-config
 dnl ==========
-AC_CHECK_PROG([PKGCONFIG], [pkg-config], [pkg-config])
+PKG_PROG_PKG_CONFIG
+AS_IF([test -z "$PKG_CONFIG"],[AC_MSG_ERROR([pkg-config is required.])])
 
 
 
@@ -612,7 +613,7 @@ dnl FontConfig
 dnl ==========
 dnl libWINGS uses FcPatternDel from libfontconfig
 AC_MSG_CHECKING([for fontconfig library])
-FCLIBS=`$PKGCONFIG fontconfig --libs`
+FCLIBS=`$PKG_CONFIG fontconfig --libs`
 if test "x$FCLIBS" = "x" ; then
         AC_MSG_RESULT([not found])
 else
@@ -627,8 +628,8 @@ dnl =============================
 xft=yes
 XFTLIBS=""
 
-if test "x$PKGCONFIG" != x -a "`$PKGCONFIG xft; echo $?`" = 0; then
-        XFTCONFIG="$PKGCONFIG xft"
+if test "x$PKG_CONFIG" != x -a "`$PKG_CONFIG xft; echo $?`" = 0; then
+        XFTCONFIG="$PKG_CONFIG xft"
         pkgconfig_xft=yes
 else
         AC_CHECK_PROG(XFTCONFIG, xft-config, xft-config)
@@ -678,8 +679,8 @@ AC_ARG_ENABLE(pango, AS_HELP_STRING([--enable-pango], [enable Pango text layout 
 PANGOFLAGS=
 PANGOLIBS=
 if test "$pango" = yes; then
-	PANGOLIBS=`$PKGCONFIG pangoxft --libs`
-	PANGOFLAGS=`$PKGCONFIG pangoxft --cflags`
+	PANGOLIBS=`$PKG_CONFIG pangoxft --libs`
+	PANGOFLAGS=`$PKG_CONFIG pangoxft --cflags`
 	if test "x$PANGOLIBS" = "x" ; then
 	        AC_MSG_RESULT([not found])
 	else
