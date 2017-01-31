@@ -27,13 +27,6 @@
 
 #include <WINGs/WUtil.h>
 
-#define WTB_LEFT	0
-#define WTB_RIGHT	1
-
-#define WTB_FOCUSED	0
-#define WTB_UNFOCUSED	2
-#define WTB_PFOCUSED	4
-#define WTB_MENU 6
 
 typedef struct {
     WMRect *screens;
