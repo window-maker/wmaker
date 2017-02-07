@@ -35,11 +35,20 @@ void wInitXinerama(WScreen *scr);
 #define XFLAG_MULTIPLE	0x02
 #define XFLAG_PARTIAL	0x04
 
+enum {
+	DIRECTION_LEFT,
+	DIRECTION_RIGHT,
+	DIRECTION_UP,
+	DIRECTION_DOWN
+};
+
 int wGetRectPlacementInfo(WScreen *scr, WMRect rect, int *flags);
 
 int wGetHeadForRect(WScreen *scr, WMRect rect);
 
 int wGetHeadForWindow(WWindow *wwin);
+
+int wGetHeadRelativeToCurrentHead(WScreen *scr, int current_head, int direction);
 
 int wGetHeadForPoint(WScreen *scr, WMPoint point);
 
