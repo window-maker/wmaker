@@ -15,6 +15,92 @@ respectively.  This setting can also be changed by unchecking or checking
 "Expert User Preferences" tab in WPrefs.app.
 
 
+Move half-maximized windows between the screens
+-----------------------------------------------
+
+New option was introduced to allow change of behaviour of half-maximize windows
+in multiple displays environment. In such environment it is more natural that
+half maximized windows would travel from one screen to another. Now it is
+possible to make that happen by setting an option
+"MoveHalfMaximizedWindowsBetweenScreens" to "Yes" in
+~/GNUstep/Defaults/WindowMaker config file, or by checking "Allow move
+half-maximized windows between multiple screens." in 'Expert User Preferences"
+tab in WPrefs.app.
+
+For example, given there are two screens in layout where one display is on the
+left and second display is on the right with window on first screen:
+
+ ┌┬────────────────┬─────────────────┬┐
+ ├┘ ┌───────┐      │                 ├┤
+ │  ├───────┤      │                 ├┤
+ │  │       │      │                 ├┤
+ │  │       │      │                 ├┤
+ │  └───────┘      │                 └┤
+ ├┬┐               ├┬┬┐               │
+ └┴┴───────────────┴┴┴┴───────────────┘
+
+It can be right-half-maximized (using previously defined key combination), so it
+become:
+
+ ┌┬───────┬────────┬─────────────────┬┐
+ ├┘       ├────────┤                 ├┤
+ │        │        │                 ├┤
+ │        │        │                 ├┤
+ │        │        │                 ├┤
+ │        │        │                 └┤
+ ├┬┐      └────────┼┬┬┐               │
+ └┴┴───────────────┴┴┴┴───────────────┘
+
+In this example there is an assumption that WindowMaker is configured, that
+maximized windows wont cover mini icons nor dock.
+
+Without setting new option to true, issuing another right-half-maximize will
+restore window dimensions and position to the original state (like on the first
+figure). With new option set to true it will move window to second screen like:
+
+ ┌┬────────────────┬────────┬────────┬┐
+ ├┘                ├────────┤        ├┤
+ │                 │        │        ├┤
+ │                 │        │        ├┤
+ │                 │        │        ├┤
+ │                 │        │        └┤
+ ├┬┐               ├┬┬┬─────┘         │
+ └┴┴───────────────┴┴┴┴───────────────┘
+
+Another activation of right-half-maxmimize:
+
+ ┌┬────────────────┬────────┬────────┬┐
+ ├┘                │        ├────────┼┤
+ │                 │        │        ├┤
+ │                 │        │        ├┤
+ │                 │        │        ├┤
+ │                 │        │        ├┤
+ ├┬┐               ├┬┬┐     └────────┘│
+ └┴┴───────────────┴┴┴┴───────────────┘
+
+And final activation of right-half-maxmimize:
+
+ ┌┬────────────────┬───────┬─────────┬┐
+ ├┘                ├───────┤         ├┤
+ │                 │       │         ├┤
+ │                 │       │         ├┤
+ │                 ├───────┘         ├┤
+ │                 │                 └┤
+ ├┬┐               ├┬┬┐               │
+ └┴┴───────────────┴┴┴┴───────────────┘
+
+Where window is restored its size (but not position, since it it on different
+head now). Moving window in directions like left-half-maximize,
+top-half-maximize and bottom-half-maximize will behave in similar way depending
+on the layout of displays.
+
+Note, that only windows that are half-maximized vertically or horizontally can
+be moved to another screen due to the fact, that direction of movement of
+quarter-maximized windows is ambiguous. As for vertical/horizontal-maximize,
+since doesn't move the window but only strech it vertically/horizontally this
+feature also doesn't apply.
+
+
 -- 0.95.7
 
 Window snapping

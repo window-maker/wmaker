@@ -496,7 +496,53 @@ void handleMaximize(WWindow *wwin, int directions)
 		if ((wwin->flags.old_maximized & MAX_MAXIMUS) &&
 				!(requested & MAX_MAXIMUS))
 			wMaximizeWindow(wwin, MAX_MAXIMUS | flags, head);
-		else
+
+		else if (wPreferences.move_half_max_between_heads) {
+			/* Select windows, which are only horizontally or vertically
+			 * maximized. Quarters cannot be handled here, since there is not
+			 * clear on which direction user intend to move such window. */
+			if ((current & MAX_VERTICAL) || (current & MAX_HORIZONTAL)) {
+				if (requested & MAX_LEFTHALF && current & MAX_LEFTHALF) {
+					head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+							head, DIRECTION_LEFT);
+					if (head != -1) {
+						effective |= MAX_RIGHTHALF;
+						effective |= MAX_VERTICAL;
+						effective &= ~(MAX_HORIZONTAL | MAX_LEFTHALF);
+					}
+				} else if (requested & MAX_RIGHTHALF &&
+						current & MAX_RIGHTHALF) {
+					head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+							head, DIRECTION_RIGHT);
+					if (head != -1) {
+						effective |= MAX_LEFTHALF;
+						effective |= MAX_VERTICAL;
+						effective &= ~(MAX_HORIZONTAL | MAX_RIGHTHALF);
+					}
+				} else if (requested & MAX_TOPHALF && current & MAX_TOPHALF) {
+					head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+							head, DIRECTION_UP);
+					if (head != -1) {
+						effective |= MAX_BOTTOMHALF;
+						effective |= MAX_HORIZONTAL;
+						effective &= ~(MAX_VERTICAL | MAX_TOPHALF);
+					}
+				} else if (requested & MAX_BOTTOMHALF && 
+						current & MAX_BOTTOMHALF) {
+					head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+							head, DIRECTION_DOWN);
+					if (head != -1) {
+						effective |= MAX_TOPHALF;
+						effective |= MAX_HORIZONTAL;
+						effective &= ~(MAX_VERTICAL | MAX_BOTTOMHALF);
+					}
+				} if (head == -1)
+					wUnmaximizeWindow(wwin);
+				else
+					wMaximizeWindow(wwin, effective | flags, head);
+			} else
+				wUnmaximizeWindow(wwin);
+		} else
 			wUnmaximizeWindow(wwin);
 	/* these alone mean vertical|horizontal toggle */
 	} else if ((effective == MAX_LEFTHALF) ||
