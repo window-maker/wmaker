@@ -359,7 +359,7 @@ void update_saved_geometry(WWindow *wwin)
 		save_old_geometry(wwin, SAVE_GEOMETRY_X);
 }
 
-void wMaximizeWindow(WWindow *wwin, int directions)
+void wMaximizeWindow(WWindow *wwin, int directions, int head)
 {
 	unsigned int new_width, new_height, half_scr_width, half_scr_height;
 	int new_x = 0;
@@ -393,20 +393,7 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 	totalArea.y2 = scr->scr_height;
 	totalArea.x1 = 0;
 	totalArea.y1 = 0;
-	usableArea = totalArea;
-
-	if (!(directions & MAX_IGNORE_XINERAMA)) {
-		WScreen *scr = wwin->screen_ptr;
-		int head;
-
-		if (directions & MAX_KEYBOARD)
-			head = wGetHeadForWindow(wwin);
-		else
-			head = wGetHeadForPointerLocation(scr);
-
-		usableArea = wGetUsableAreaForHead(scr, head, &totalArea, True);
-	}
-
+	usableArea = wGetUsableAreaForHead(scr, head, &totalArea, True);
 
 	/* Only save directions, not kbd or xinerama hints */
 	directions &= (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
@@ -502,12 +489,13 @@ void handleMaximize(WWindow *wwin, int directions)
 	int requested = directions & (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
 	int effective = requested ^ current;
 	int flags = directions & ~requested;
+	int head = wGetHeadForWindow(wwin);
 
 	if (!effective) {
 		/* allow wMaximizeWindow to restore the Maximusized size */
 		if ((wwin->flags.old_maximized & MAX_MAXIMUS) &&
 				!(requested & MAX_MAXIMUS))
-			wMaximizeWindow(wwin, MAX_MAXIMUS | flags);
+			wMaximizeWindow(wwin, MAX_MAXIMUS | flags, head);
 		else
 			wUnmaximizeWindow(wwin);
 	/* these alone mean vertical|horizontal toggle */
@@ -557,7 +545,7 @@ void handleMaximize(WWindow *wwin, int directions)
 				effective &= ~(MAX_TOPHALF | MAX_BOTTOMHALF);
 			effective &= ~MAX_MAXIMUS;
 		}
-		wMaximizeWindow(wwin, effective | flags);
+		wMaximizeWindow(wwin, effective | flags, head);
 	}
 }
 

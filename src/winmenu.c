@@ -169,7 +169,7 @@ static void execWindowOptionCommand(WMenu * menu, WMenuEntry * entry)
 static void execMaximizeCommand(WMenu * menu, WMenuEntry * entry)
 {
 	WWindow *wwin = (WWindow *) entry->clientdata;
-	
+
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) menu;
 
@@ -277,7 +277,8 @@ static void execMenuCommand(WMenu * menu, WMenuEntry * entry)
 		if (wwin->flags.maximized)
 			wUnmaximizeWindow(wwin);
 		else
-			wMaximizeWindow(wwin, MAX_VERTICAL | MAX_HORIZONTAL);
+			wMaximizeWindow(wwin, MAX_VERTICAL | MAX_HORIZONTAL,
+					wGetHeadForWindow(wwin));
 		break;
 
 	case MC_SHADE:

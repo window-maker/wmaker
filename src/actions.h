@@ -57,7 +57,7 @@ void wSelectWindows(WScreen *scr, XEvent *ev);
 void wSelectWindow(WWindow *wwin, Bool flag);
 void wUnselectWindows(WScreen *scr);
 
-void wMaximizeWindow(WWindow *wwin, int directions);
+void wMaximizeWindow(WWindow *wwin, int directions, int head);
 void wUnmaximizeWindow(WWindow *wwin);
 void handleMaximize(WWindow *wwin, int directions);
 

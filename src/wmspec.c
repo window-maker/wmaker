@@ -1120,9 +1120,11 @@ static void doStateAtom(WWindow *wwin, Atom state, int set, Bool init)
 			wwin->flags.maximized |= (set ? MAX_VERTICAL : 0);
 		} else {
 			if (set)
-				wMaximizeWindow(wwin, wwin->flags.maximized | MAX_VERTICAL);
+				wMaximizeWindow(wwin, wwin->flags.maximized | MAX_VERTICAL,
+						wGetHeadForWindow(wwin));
 			else
-				wMaximizeWindow(wwin, wwin->flags.maximized & ~MAX_VERTICAL);
+				wMaximizeWindow(wwin, wwin->flags.maximized & ~MAX_VERTICAL,
+						wGetHeadForWindow(wwin));
 		}
 	} else if (state == net_wm_state_maximized_horz) {
 		if (set == _NET_WM_STATE_TOGGLE)
@@ -1132,9 +1134,11 @@ static void doStateAtom(WWindow *wwin, Atom state, int set, Bool init)
 			wwin->flags.maximized |= (set ? MAX_HORIZONTAL : 0);
 		} else {
 			if (set)
-				wMaximizeWindow(wwin, wwin->flags.maximized | MAX_HORIZONTAL);
+				wMaximizeWindow(wwin, wwin->flags.maximized | MAX_HORIZONTAL,
+						wGetHeadForWindow(wwin));
 			else
-				wMaximizeWindow(wwin, wwin->flags.maximized & ~MAX_HORIZONTAL);
+				wMaximizeWindow(wwin, wwin->flags.maximized & ~MAX_HORIZONTAL,
+						wGetHeadForWindow(wwin));
 		}
 	} else if (state == net_wm_state_hidden) {
 		if (set == _NET_WM_STATE_TOGGLE)
@@ -1623,7 +1627,8 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 				wwin->flags.maximized = maximized;
 				wUnmaximizeWindow(wwin);
 			} else {
-				wMaximizeWindow(wwin, wwin->flags.maximized);
+				wMaximizeWindow(wwin, wwin->flags.maximized, 
+						wGetHeadForWindow(wwin));
 			}
 		}
 		updateStateHint(wwin, False, False);

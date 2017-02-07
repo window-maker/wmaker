@@ -2853,7 +2853,7 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 				int ndir = dir ^ wwin->flags.maximized;
 
 				if (ndir != 0)
-					wMaximizeWindow(wwin, ndir);
+					wMaximizeWindow(wwin, ndir, wGetHeadForWindow(wwin));
 				else
 					wUnmaximizeWindow(wwin);
 			}
