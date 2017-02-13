@@ -100,7 +100,7 @@ static const struct {
 	{ N_("Snapping a window to the top maximizes it to the full screen."),
 	  /* default: */ False, OPTION_WMAKER, "SnapToTopMaximizesFullscreen" },
 
-	{ N_("Allow move half-maximized windows betweem multiple screens."),
+	{ N_("Allow move half-maximized windows between multiple screens."),
 	  /* default: */ False, OPTION_WMAKER, "MoveHalfMaximizedWindowsBetweenScreens" },
 
 	{ N_("Open dialogs in the same workspace as their owners."),

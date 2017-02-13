@@ -4,17 +4,6 @@ NEWS for veteran Window Maker users
 -- 0.95.8
 
 
-Snapping a window to the top
-----------------------------
-
-You can now choose whether snapping a window to the top edge of the screen
-maximizes it to the top half (the previous and default behavior) or to the
-full screen by setting "SnapToTopMaximizesFullscreen" to "NO" or "YES",
-respectively.  This setting can also be changed by unchecking or checking
-"Snapping a window to the top maximizes it to the full screen" in the
-"Expert User Preferences" tab in WPrefs.app.
-
-
 Move half-maximized windows between the screens
 -----------------------------------------------
 
@@ -97,8 +86,19 @@ on the layout of displays.
 Note, that only windows that are half-maximized vertically or horizontally can
 be moved to another screen due to the fact, that direction of movement of
 quarter-maximized windows is ambiguous. As for vertical/horizontal-maximize,
-since doesn't move the window but only strech it vertically/horizontally this
+since doesn't move the window but only stretch it vertically/horizontally this
 feature also doesn't apply.
+
+
+Snapping a window to the top
+----------------------------
+
+You can now choose whether snapping a window to the top edge of the screen
+maximizes it to the top half (the previous and default behavior) or to the
+full screen by setting "SnapToTopMaximizesFullscreen" to "NO" or "YES",
+respectively.  This setting can also be changed by unchecking or checking
+"Snapping a window to the top maximizes it to the full screen" in the
+"Expert User Preferences" tab in WPrefs.app.
 
 
 -- 0.95.7

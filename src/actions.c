@@ -393,6 +393,9 @@ void wMaximizeWindow(WWindow *wwin, int directions, int head)
 	totalArea.y2 = scr->scr_height;
 	totalArea.x1 = 0;
 	totalArea.y1 = 0;
+	/* ignore provided head information for toggling full maximize/unmaximize */
+	if (directions & MAX_KEYBOARD)
+		head = wGetHeadForWindow(wwin);
 	usableArea = wGetUsableAreaForHead(scr, head, &totalArea, True);
 
 	/* Only save directions, not kbd or xinerama hints */
@@ -490,6 +493,7 @@ void handleMaximize(WWindow *wwin, int directions)
 	int effective = requested ^ current;
 	int flags = directions & ~requested;
 	int head = wGetHeadForWindow(wwin);
+	int dest_head = -1;
 
 	if (!effective) {
 		/* allow wMaximizeWindow to restore the Maximusized size */
@@ -503,43 +507,43 @@ void handleMaximize(WWindow *wwin, int directions)
 			 * clear on which direction user intend to move such window. */
 			if ((current & MAX_VERTICAL) || (current & MAX_HORIZONTAL)) {
 				if (requested & MAX_LEFTHALF && current & MAX_LEFTHALF) {
-					head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+					dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
 							head, DIRECTION_LEFT);
-					if (head != -1) {
+					if (dest_head != -1) {
 						effective |= MAX_RIGHTHALF;
 						effective |= MAX_VERTICAL;
 						effective &= ~(MAX_HORIZONTAL | MAX_LEFTHALF);
 					}
 				} else if (requested & MAX_RIGHTHALF &&
 						current & MAX_RIGHTHALF) {
-					head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+					dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
 							head, DIRECTION_RIGHT);
-					if (head != -1) {
+					if (dest_head != -1) {
 						effective |= MAX_LEFTHALF;
 						effective |= MAX_VERTICAL;
 						effective &= ~(MAX_HORIZONTAL | MAX_RIGHTHALF);
 					}
 				} else if (requested & MAX_TOPHALF && current & MAX_TOPHALF) {
-					head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+					dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
 							head, DIRECTION_UP);
-					if (head != -1) {
+					if (dest_head != -1) {
 						effective |= MAX_BOTTOMHALF;
 						effective |= MAX_HORIZONTAL;
 						effective &= ~(MAX_VERTICAL | MAX_TOPHALF);
 					}
-				} else if (requested & MAX_BOTTOMHALF && 
+				} else if (requested & MAX_BOTTOMHALF &&
 						current & MAX_BOTTOMHALF) {
-					head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+					dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
 							head, DIRECTION_DOWN);
-					if (head != -1) {
+					if (dest_head != -1) {
 						effective |= MAX_TOPHALF;
 						effective |= MAX_HORIZONTAL;
 						effective &= ~(MAX_VERTICAL | MAX_BOTTOMHALF);
 					}
-				} if (head == -1)
+				} if (dest_head == -1)
 					wUnmaximizeWindow(wwin);
 				else
-					wMaximizeWindow(wwin, effective | flags, head);
+					wMaximizeWindow(wwin, effective | flags, dest_head);
 			} else
 				wUnmaximizeWindow(wwin);
 		} else
