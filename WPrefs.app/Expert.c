@@ -103,6 +103,9 @@ static const struct {
 	{ N_("Allow move half-maximized windows between multiple screens."),
 	  /* default: */ False, OPTION_WMAKER, "MoveHalfMaximizedWindowsBetweenScreens" },
 
+	{ N_("Alternative transitions between states for half maximized windows."),
+	  /* default: */ False, OPTION_WMAKER, "AlternativeHalfMaximized" },
+
 	{ N_("Open dialogs in the same workspace as their owners."),
 	  /* default: */ False, OPTION_WMAKER, "OpenTransientOnOwnerWorkspace" }
 

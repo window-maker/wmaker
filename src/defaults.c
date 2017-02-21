@@ -484,6 +484,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.drag_maximized_window, getEnum, NULL, NULL, NULL},
 	{"MoveHalfMaximizedWindowsBetweenScreens", "NO", NULL,
 	    &wPreferences.move_half_max_between_heads, getBool, NULL, NULL, NULL},
+	{"AlternativeHalfMaximized", "NO", NULL,
+	    &wPreferences.alt_half_maximize, getBool, NULL, NULL, NULL},
 	{"HighlightActiveApp", "YES", NULL,
 	    &wPreferences.highlight_active_app, getBool, NULL, NULL, NULL},
 	{"AutoArrangeIcons", "NO", NULL,
