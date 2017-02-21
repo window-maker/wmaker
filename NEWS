@@ -3,6 +3,17 @@ NEWS for veteran Window Maker users
 
 -- 0.95.8
 
+Move pointer with maximized windows
+-----------------------------------
+
+Implementation for moving mouse pointer within the maximized window.
+
+Mouse pointer can be now moved together with window if keyboard was used for
+arrange maximized windows on screen. This feature can be turned on in WPrefs.app
+in Expert tab by selecting "Move mouse pointer with half maximized windows.", or
+setting "PointerWithHalfMaxWindows" to "Yes" on ~/GNUstep/Defaults/WindowMaker
+file.
+
 
 Alternative way for traverse half-maximized windows
 ---------------------------------------------------

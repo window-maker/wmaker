@@ -2078,6 +2078,23 @@ void wMakeWindowVisible(WWindow *wwin)
 	}
 }
 
+void movePionterToWindowCenter(WWindow *wwin)
+{
+	if (!wPreferences.pointer_with_half_max_windows) {
+		wmessage("pointer_with_half_max_windows not set. do nothing");
+		return;
+	}
+
+	wmessage("move the pointer to: %dx%d",
+			wwin->frame_x + wwin->client.width / 2,
+			wwin->frame_y + wwin->client.height / 2);
+	XSelectInput(dpy, wwin->client_win, wwin->event_mask);
+	XWarpPointer(dpy, None, wwin->screen_ptr->root_win, 0, 0, 0, 0,
+			wwin->frame_x + wwin->client.width / 2,
+			wwin->frame_y + wwin->client.height / 2);
+	XFlush(dpy);
+}
+
 /*
  * Do the animation while shading (called with what = SHADE)
  * or unshading (what = UNSHADE).
