@@ -505,64 +505,68 @@ void handleMaximize(WWindow *wwin, int directions)
 		if ((wwin->flags.old_maximized & MAX_MAXIMUS) &&
 				!(requested & MAX_MAXIMUS))
 			wMaximizeWindow(wwin, MAX_MAXIMUS | flags, head);
+
 		else if (wPreferences.alt_half_maximize &&
 				current & MAX_HORIZONTAL && current & MAX_VERTICAL &&
 				requested & MAX_HORIZONTAL && requested & MAX_VERTICAL)
 			wUnmaximizeWindow(wwin);
-		else if (wPreferences.move_half_max_between_heads) {
-			/* Select windows, which are only horizontally or vertically
-			 * maximized. Quarters cannot be handled here, since there is not
-			 * clear on which direction user intend to move such window. */
-			if (current & (MAX_VERTICAL | MAX_HORIZONTAL)) {
-				if (requested & MAX_LEFTHALF && current & MAX_LEFTHALF) {
-					dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
-							head, DIRECTION_LEFT);
-					if (dest_head != -1) {
-						effective |= MAX_RIGHTHALF;
-						effective |= MAX_VERTICAL;
-						effective &= ~(MAX_HORIZONTAL | MAX_LEFTHALF);
-					}
-				} else if (requested & MAX_RIGHTHALF &&
-						current & MAX_RIGHTHALF) {
-					dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
-							head, DIRECTION_RIGHT);
-					if (dest_head != -1) {
-						effective |= MAX_LEFTHALF;
-						effective |= MAX_VERTICAL;
-						effective &= ~(MAX_HORIZONTAL | MAX_RIGHTHALF);
-					}
-				} else if (requested & MAX_TOPHALF && current & MAX_TOPHALF) {
-					dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
-							head, DIRECTION_UP);
-					if (dest_head != -1) {
-						effective |= MAX_BOTTOMHALF;
-						effective |= MAX_HORIZONTAL;
-						effective &= ~(MAX_VERTICAL | MAX_TOPHALF);
-					}
-				} else if (requested & MAX_BOTTOMHALF &&
-						current & MAX_BOTTOMHALF) {
-					dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
-							head, DIRECTION_DOWN);
-					if (dest_head != -1) {
-						effective |= MAX_TOPHALF;
-						effective |= MAX_HORIZONTAL;
-						effective &= ~(MAX_VERTICAL | MAX_BOTTOMHALF);
-					}
-				} if (dest_head != -1)
-					/* tell wMaximizeWindow that we were using keyboard, not
-					 * mouse, so that it will use calculated head as
-					 * destination for move_half_max_between_heads feature,
-					 * not from mouse pointer */
-					wMaximizeWindow(wwin, (effective | flags | MAX_KEYBOARD),
-							dest_head);
-				else if (!wPreferences.alt_half_maximize)
-					wUnmaximizeWindow(wwin);
-			} else if (!wPreferences.alt_half_maximize)
-				wUnmaximizeWindow(wwin);
-		} else if (!wPreferences.alt_half_maximize)
+
+		/* Apply for window state, which is only horizontally or vertically
+		 * maximized. Quarters cannot be handled here, since there is not clear
+		 * on which direction user intend to move such window. */
+		else if (wPreferences.move_half_max_between_heads &&
+				current & (MAX_VERTICAL | MAX_HORIZONTAL)) {
+			if (requested & MAX_LEFTHALF && current & MAX_LEFTHALF) {
+				dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+						head, DIRECTION_LEFT);
+				if (dest_head != -1) {
+					effective |= MAX_RIGHTHALF;
+					effective |= MAX_VERTICAL;
+					effective &= ~(MAX_HORIZONTAL | MAX_LEFTHALF);
+				}
+			} else if (requested & MAX_RIGHTHALF &&
+					current & MAX_RIGHTHALF) {
+				dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+						head, DIRECTION_RIGHT);
+				if (dest_head != -1) {
+					effective |= MAX_LEFTHALF;
+					effective |= MAX_VERTICAL;
+					effective &= ~(MAX_HORIZONTAL | MAX_RIGHTHALF);
+				}
+			} else if (requested & MAX_TOPHALF && current & MAX_TOPHALF) {
+				dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+						head, DIRECTION_UP);
+				if (dest_head != -1) {
+					effective |= MAX_BOTTOMHALF;
+					effective |= MAX_HORIZONTAL;
+					effective &= ~(MAX_VERTICAL | MAX_TOPHALF);
+				}
+			} else if (requested & MAX_BOTTOMHALF &&
+					current & MAX_BOTTOMHALF) {
+				dest_head = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+						head, DIRECTION_DOWN);
+				if (dest_head != -1) {
+					effective |= MAX_TOPHALF;
+					effective |= MAX_HORIZONTAL;
+					effective &= ~(MAX_VERTICAL | MAX_BOTTOMHALF);
+				}
+			}
+		}
+
+		if (dest_head != -1)
+			/* tell wMaximizeWindow that we were using keyboard, not mouse,
+			 * so that it will use calculated head as destination for
+			 * move_half_max_between_heads feature, not from mouse pointer */
+			wMaximizeWindow(wwin, (effective | flags | MAX_KEYBOARD),
+					dest_head);
+		else if (!wPreferences.alt_half_maximize)
 			wUnmaximizeWindow(wwin);
+
+		return;
+	}
+
 	/* these alone mean vertical|horizontal toggle */
-	} else if ((effective == MAX_LEFTHALF) ||
+	if ((effective == MAX_LEFTHALF) ||
 			(effective == MAX_RIGHTHALF) ||
 			(effective == MAX_TOPHALF) ||
 			(effective == MAX_BOTTOMHALF))
@@ -2080,14 +2084,9 @@ void wMakeWindowVisible(WWindow *wwin)
 
 void movePionterToWindowCenter(WWindow *wwin)
 {
-	if (!wPreferences.pointer_with_half_max_windows) {
-		wmessage("pointer_with_half_max_windows not set. do nothing");
+	if (!wPreferences.pointer_with_half_max_windows)
 		return;
-	}
 
-	wmessage("move the pointer to: %dx%d",
-			wwin->frame_x + wwin->client.width / 2,
-			wwin->frame_y + wwin->client.height / 2);
 	XSelectInput(dpy, wwin->client_win, wwin->event_mask);
 	XWarpPointer(dpy, None, wwin->screen_ptr->root_win, 0, 0, 0, 0,
 			wwin->frame_x + wwin->client.width / 2,
