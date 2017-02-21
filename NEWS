@@ -4,6 +4,111 @@ NEWS for veteran Window Maker users
 -- 0.95.8
 
 
+Alternative way for traverse half-maximized windows
+---------------------------------------------------
+
+For now, there could be three possible state of the window while using
+half-maximized feature. Unmaximized window have its state saved during that
+process, which was use to unmaximize it. For example, if there is a window,
+which is maximized on the half left side of the screen, and while requesting
+left-half-maximized, it become unmaximized with size and dimension restored to
+original state.
+
+By setting "AlternativeHalfMaximized" option to "Yes"
+~/GNUstep/Defaults/WindowMaker config file (or by using WPrefs.app and option
+"Alternative transitions between states for half maximized windows."), there
+would be slightly different change in window "traverse". Given layout depicted
+below:
+
+ ┌┬────────────────────┬┐
+ ├┘ ┌───────┐          ├┤
+ │  ├───────┤          ├┤
+ │  │       │          ├┤
+ │  │       │          ├┤
+ │  └───────┘          └┤
+ ├┬┐                    │
+ └┴┴────────────────────┘
+
+Window can be moved using keyboard shortcut right-half-maximize:
+
+ ┌┬─────────┬──────────┬┐
+ ├┘         ├──────────┼┤
+ │          │          ├┤
+ │          │          ├┤
+ │          │          ├┤
+ │          │          ├┤
+ ├┬┐        └──────────┘│
+ └┴┴────────────────────┘
+
+Further invoking right-half-maximize will do nothing. Note, that window always
+can be unmaximzied using appropriate keyboard shortcut or by selecting
+"Unmaximize" from window menu.
+
+Going to opposite direction by invoking left-half-maximize, will make the window
+maximized in both, vertical and horizontal directions:
+
+ ┌─────────────────────┬┐
+ ├─────────────────────┼┤
+ │                     ├┤
+ │                     ├┤
+ │                     ├┤
+ │                     ├┤
+ ├┬┬───────────────────┘│
+ └┴┴────────────────────┘
+
+Further invoking left-half-maximize, will make the window maximized in half left
+side od the screen:
+
+ ┌──────────┬──────────┬┐
+ ├──────────┤          ├┤
+ │          │          ├┤
+ │          │          ├┤
+ │          │          ├┤
+ │          │          └┤
+ ├┬┬────────┘           │
+ └┴┴────────────────────┘
+
+And again, further invoking left-half-maximize, will do nothing in this mode.
+
+This change affects all possible half-maximized window state also quarters.
+Issuing bottom-left-corner will take lower left quarter of the screen (nothing
+is new so far):
+
+ ┌┬────────────────────┬┐
+ ├┘                    ├┤
+ │                     ├┤
+ ├──────────┐          ├┤
+ ├──────────┤          ├┤
+ │          │          └┤
+ ├┬┬────────┘           │
+ └┴┴────────────────────┘
+
+Issuing bottom-right-corner again will change window state to bottom half
+maximized:
+
+ ┌┬────────────────────┬┐
+ ├┘                    ├┤
+ │                     ├┤
+ ├─────────────────────┼┤
+ ├─────────────────────┼┤
+ │                     ├┤
+ ├┬┬───────────────────┘│
+ └┴┴────────────────────┘
+
+Invoking bottom-right-corner again:
+
+ ┌┬────────────────────┬┐
+ ├┘                    ├┤
+ │                     ├┤
+ │          ┌──────────┼┤
+ │          ├──────────┼┤
+ │          │          ├┤
+ ├┬┐        └──────────┘│
+ └┴┴────────────────────┘
+
+Issuing bottom-right-corner again will have no effect.
+
+
 Move half-maximized windows between the screens
 -----------------------------------------------
 

@@ -505,7 +505,10 @@ void handleMaximize(WWindow *wwin, int directions)
 		if ((wwin->flags.old_maximized & MAX_MAXIMUS) &&
 				!(requested & MAX_MAXIMUS))
 			wMaximizeWindow(wwin, MAX_MAXIMUS | flags, head);
-
+		else if (wPreferences.alt_half_maximize &&
+				current & MAX_HORIZONTAL && current & MAX_VERTICAL &&
+				requested & MAX_HORIZONTAL && requested & MAX_VERTICAL)
+			wUnmaximizeWindow(wwin);
 		else if (wPreferences.move_half_max_between_heads) {
 			/* Select windows, which are only horizontally or vertically
 			 * maximized. Quarters cannot be handled here, since there is not
@@ -552,11 +555,11 @@ void handleMaximize(WWindow *wwin, int directions)
 					 * not from mouse pointer */
 					wMaximizeWindow(wwin, (effective | flags | MAX_KEYBOARD),
 							dest_head);
-				else
+				else if (!wPreferences.alt_half_maximize)
 					wUnmaximizeWindow(wwin);
-			} else
+			} else if (!wPreferences.alt_half_maximize)
 				wUnmaximizeWindow(wwin);
-		} else
+		} else if (!wPreferences.alt_half_maximize)
 			wUnmaximizeWindow(wwin);
 	/* these alone mean vertical|horizontal toggle */
 	} else if ((effective == MAX_LEFTHALF) ||
@@ -564,6 +567,59 @@ void handleMaximize(WWindow *wwin, int directions)
 			(effective == MAX_TOPHALF) ||
 			(effective == MAX_BOTTOMHALF))
 		wUnmaximizeWindow(wwin);
+
+	/* Following conditions might look complicated, but they are really simple:
+	 * allow fullscreen transition only for half maximized state (and not
+	 * corners) and only when requested state is also half maximized, but on
+	 * opposite side of the screen. As for corners, it is similar, but
+	 * expected is that only quarter maximized windows on corner can change
+	 * it's state to half maximized window, depending on direction. Note, that
+	 * MAX_KEYBOARD is passed to the wMaximizeWindow function, to preserve the
+	 * head, even if mouse was used for triggering the action. */
+
+	/* Quarters alternative transition. */
+	else if (wPreferences.alt_half_maximize &&
+			((requested & MAX_LEFTHALF && requested & MAX_TOPHALF &&
+			  current & MAX_RIGHTHALF && current & MAX_TOPHALF) ||
+			(requested & MAX_RIGHTHALF && requested & MAX_TOPHALF &&
+			  current & MAX_LEFTHALF && current & MAX_TOPHALF)))
+		wMaximizeWindow(wwin, (MAX_TOPHALF | MAX_HORIZONTAL | MAX_KEYBOARD),
+				head);
+	else if (wPreferences.alt_half_maximize &&
+			((requested & MAX_LEFTHALF && requested & MAX_BOTTOMHALF &&
+			 current & MAX_RIGHTHALF && current & MAX_BOTTOMHALF) ||
+			(requested & MAX_RIGHTHALF && requested & MAX_BOTTOMHALF &&
+			 current & MAX_LEFTHALF && current & MAX_BOTTOMHALF)))
+		wMaximizeWindow(wwin, (MAX_BOTTOMHALF | MAX_HORIZONTAL | MAX_KEYBOARD),
+				head);
+	else if (wPreferences.alt_half_maximize &&
+			((requested & MAX_LEFTHALF && requested & MAX_BOTTOMHALF &&
+			 current & MAX_LEFTHALF && current & MAX_TOPHALF) ||
+			(requested & MAX_LEFTHALF && requested & MAX_TOPHALF &&
+			 current & MAX_LEFTHALF && current & MAX_BOTTOMHALF)))
+		wMaximizeWindow(wwin, (MAX_LEFTHALF | MAX_VERTICAL| MAX_KEYBOARD),
+				head);
+	else if (wPreferences.alt_half_maximize &&
+			((requested & MAX_RIGHTHALF && requested & MAX_BOTTOMHALF &&
+			 current & MAX_RIGHTHALF && current & MAX_TOPHALF) ||
+			(requested & MAX_RIGHTHALF && requested & MAX_TOPHALF &&
+			 current & MAX_RIGHTHALF && current & MAX_BOTTOMHALF)))
+		wMaximizeWindow(wwin, (MAX_RIGHTHALF | MAX_VERTICAL| MAX_KEYBOARD),
+				head);
+
+	/* Half-maximized alternative transition */
+	else if (wPreferences.alt_half_maximize && (
+				(requested & MAX_LEFTHALF && requested & MAX_VERTICAL &&
+				 current & MAX_RIGHTHALF && current & MAX_VERTICAL) ||
+				(requested & MAX_RIGHTHALF && requested & MAX_VERTICAL &&
+				 current & MAX_LEFTHALF && current & MAX_VERTICAL) ||
+				(requested & MAX_TOPHALF && requested & MAX_HORIZONTAL &&
+				 current & MAX_BOTTOMHALF && current & MAX_HORIZONTAL) ||
+				(requested & MAX_BOTTOMHALF && requested & MAX_HORIZONTAL &&
+				 current & MAX_TOPHALF && current & MAX_HORIZONTAL)))
+		wMaximizeWindow(wwin, (MAX_HORIZONTAL|MAX_VERTICAL|MAX_KEYBOARD),
+				head);
+
 	else {
 		if ((requested == (MAX_HORIZONTAL | MAX_VERTICAL)) ||
 				(requested == MAX_MAXIMUS))
