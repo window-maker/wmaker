@@ -367,6 +367,7 @@ extern struct WPreferences {
 	char drag_maximized_window;        /* behavior when a maximized window is dragged */
 	char move_half_max_between_heads;  /* move half maximized window between available heads */
 	char alt_half_maximize;            /* alternative half-maximize feature behavior */
+	char pointer_with_half_max_windows;
 
 	char highlight_active_app;         /* show the focused app by highlighting its icon */
 	char auto_arrange_icons;           /* automagically arrange icons */
