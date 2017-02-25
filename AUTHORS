@@ -210,7 +210,7 @@ various fixes/enhancements to WINGs
 
 
 Yoav Yerushalmi <yoav@mit.edu>
-Fixed -visualid for screens that can do multiple depths. Another fix in 
+Fixed -visualid for screens that can do multiple depths. Another fix in
 libproplist. Chooses best depth in screen.
 
 FRBall <frb@umr.edu>
@@ -218,7 +218,7 @@ dgradient fix
 
 
 "]d" <id@windowmaker.info>
-Window list menu miniaturized/hidden hints, XDE support, XKB lock 
+Window list menu miniaturized/hidden hints, XDE support, XKB lock
 language status, WINGs enhancements, bug fixes, window commands menu
 enhancement, window move/resize by keyboard. GNUstepGlow.tiff icon,
 WINGs color panel, Appearance section icon(s)

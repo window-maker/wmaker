@@ -3,7 +3,7 @@
 			---------------------------
 
 
-	If you find a bug please fill this form and send it to 
+	If you find a bug please fill this form and send it to
 wmaker-dev@lists.windowmaker.org Please, USE THIS FORM!!!
 
 0. Before reporting this bug I already:
@@ -16,8 +16,8 @@ wmaker-dev@lists.windowmaker.org Please, USE THIS FORM!!!
 [ ] crashed
 [ ] configuration option does not work
 [ ] weird behavior
-[ ] cosmetic 
-[ ] some problem with WPrefs 
+[ ] cosmetic
+[ ] some problem with WPrefs
 [ ] others: ...................................
 
 2. Detailed description of what happened:
@@ -28,7 +28,7 @@ wmaker-dev@lists.windowmaker.org Please, USE THIS FORM!!!
 
 4. Configure time options you specified:
 [ ]  --enable-kanji
-[ ]  --disable-shape   
+[ ]  --disable-shape
 [ ]  --enable-single-icon
 [ ]  --enable-modelock
 [ ]  Others: .......................

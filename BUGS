@@ -1,5 +1,5 @@
 Newly added
-- after a crash, wmaker will forget the hidden state of the apps and just 
+- after a crash, wmaker will forget the hidden state of the apps and just
   show their windows minimized. normal restart is unaffected
 - after a crash, wmaker will completely mess the window's saved geometries
   and maximizing will have weird results. restart is unaffected
@@ -16,7 +16,7 @@ Newly added
   in the session/allow docking it if yes.
 - the SHELL environment variable support in the apps menu was removed
   because of a problem with tcsh. If ~/.tcshrc contains "stty erase ^H",
-  it will block and the cmd will not be executed. 
+  it will block and the cmd will not be executed.
 - mouse grab being done in client window (in wWindowResetMouseGrabs())
   instead of the frame window. If grab is done in frame, titlebar buttons
   dont work well

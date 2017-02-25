@@ -626,7 +626,7 @@ The 4 corner images will be copied in their original sizes and the rest will
 be scaled to the final panel size.
 
 background_image, width and height are optional. If you leave them out,
-a gray panel will be used. If your machine is not very fast, you may want 
+a gray panel will be used. If your machine is not very fast, you may want
 to use it.
 
 
@@ -649,7 +649,7 @@ Antialiased font support
 With the addition of Xft2 support in the WINGs library, now
 Window Maker can display antialiased text with TrueType or any scalable fonts.
 
-You can pick fonts for Window Maker in the Font configuration section of 
+You can pick fonts for Window Maker in the Font configuration section of
 WPrefs.
 
 Antialiased text is enabled by default, but can be disabled by adding
@@ -683,7 +683,7 @@ These are to be proplist format menus, for example:
 
 or, in case you want a submenu:
 
-(("Submenu", 
+(("Submenu",
 	("Foobar", EXEC, foobar),
 	("Blabla", EXEC, blabla)))
 
@@ -726,7 +726,7 @@ shading and unshading respectfully.
 
 However, to avoid unwanted triggers of shading/unshading the window, two
 consecutive mouse wheel events in the same direction are required. The
-trigger won't occur if the events are separated by more than a double-click's 
+trigger won't occur if the events are separated by more than a double-click's
 worth of time, which is technically speaking like making a double-click with
 the button that corresponds to the mouse wheel direction.
 
@@ -831,7 +831,7 @@ Less dependencies
 
 starting with 0.70.0 libPropList is no longer required to build Window
 Maker. PropList handling code was added to WINGs being now better
-integrated with all the rest. For more details check the Changelog and the 
+integrated with all the rest. For more details check the Changelog and the
 following files:
 ./WINGs/ChangeLog
 ./WINGs/NEWS
@@ -904,9 +904,9 @@ behavior regarding workspaces you can now (use WPrefs.app to do this).
 Client supplied icons
 ---------------------
 
-Window Maker saves the client supplied icons in 
-~/GNUstep/Library/WindowMaker/CachedPixmaps in XPM format for later use 
-when the app is no longer running (to have the image to display for docked 
+Window Maker saves the client supplied icons in
+~/GNUstep/Library/WindowMaker/CachedPixmaps in XPM format for later use
+when the app is no longer running (to have the image to display for docked
 icons for example).
 
 Until recently the XPM images saved by Window Maker were incorrect, but a
@@ -914,9 +914,9 @@ recent fix in the code to save XPM's fixed them. But with this fix, all
 previously saved XPM's in that directory are no longer readable (they give
 wrong images on screen or fail to load).
 
-To avoid the need for the user to fix this by hand editing WMWindowAttributes 
-and removing all references to icons in ~/GNUstep/Library/WindowMaker/CachedPixmaps 
-which can be annoying, new code was added to Window Maker to permit the 
+To avoid the need for the user to fix this by hand editing WMWindowAttributes
+and removing all references to icons in ~/GNUstep/Library/WindowMaker/CachedPixmaps
+which can be annoying, new code was added to Window Maker to permit the
 regeneration of images in ~/GNUstep/Library/WindowMaker/CachedPixmaps if they are missing.
 
 With this addition, all you need to do to fix your old broken images, is to
@@ -1018,7 +1018,7 @@ performance increases can go up to 150%
 Weendoze Window Cycling (alt-tab)
 ---------------------------------
 
-Window cycling was changed to weendoze style. 
+Window cycling was changed to weendoze style.
 
 
 NoBorder Window Attribute
@@ -1114,7 +1114,7 @@ arguments. To code new plugin, please see plugin.h for more information.
 User Menu
 ---------
 
-The user menu is now a compile time option disabled by default. 
+The user menu is now a compile time option disabled by default.
 Supply --enable-usermenu to configure to enable it.
 
 
@@ -1248,7 +1248,7 @@ New Options
 MenuStyle=<style>; will change the menu texture style.
 
 <style> can be:
-normal (default): for the traditional one texture per item, with bevels in 
+normal (default): for the traditional one texture per item, with bevels in
 each
 
 singleTexture: for a single texture that spans the whole menu, with bevels
@@ -1265,7 +1265,7 @@ where <texture> is any of the textures you normally use in titlebars and
 other places.
 
 If the style file/theme does not contain a ResizebarBack option, setstyle
-will automatically hack it so that wmaker will make the theme work like 
+will automatically hack it so that wmaker will make the theme work like
 before.
 
 
@@ -1366,7 +1366,7 @@ Full Screen Maximization
 The FullMaximize window attribute will allow the window to
 be maximized to the full size of the screen (ignoring anything
 like titlebar, resizebar, dock, panels etc). It should be useful
-for programs that must use the whole screen, like games or things 
+for programs that must use the whole screen, like games or things
 like presentation programs.
 
 
@@ -1375,7 +1375,7 @@ like presentation programs.
 KDE Application Menu script
 ---------------------------
 
-wkdemenu.pl is a converter from KDE application menu structures to wmaker 
+wkdemenu.pl is a converter from KDE application menu structures to wmaker
 menu that can be used as a piped menu. Look wkdemenu.sh for how to use it.
 
 
@@ -1405,14 +1405,14 @@ Window Maker has become a GNU program (part of the GNU Project).
 Title text drop shadow
 ----------------------
 
-drop shadow option added for titlebar text. This is a compile time 
+drop shadow option added for titlebar text. This is a compile time
 option which needs to be defined in src/wconfig.h after you run
 configure and before you run make.
 
 New options and syntax for your WindowMaker domain file are:
 
   Shadow = yes/no;
-  FShadowColor = <color>;  
+  FShadowColor = <color>;
   PShadowColor = <color>;
   UShadowColor = <color>;
   MShadowColor = <color>;
@@ -1476,7 +1476,7 @@ it will scale the pixmap by keeping the aspect ratio (maximize or maxpect).
 The option only works for workspace backgrounds.
 
 Also added IGNORE_PPOSITION compile time flag, which is equivalent
-to NoPPosition from fvwm. 
+to NoPPosition from fvwm.
 
 
 
@@ -1487,7 +1487,7 @@ to NoPPosition from fvwm.
 KDE and GNOME
 -------------
 
-Added full support for GNOME and KWM hints. 
+Added full support for GNOME and KWM hints.
 Read the INSTALL file to see how enable them.
 
 Everything in the so called GNOME window manager bla bla bla pseudo-spec is
@@ -1496,13 +1496,13 @@ implemented.
 As for KDE stuff, it implements 90% of everything kwm does, adds some
 Window Maker specific extensions to it and still uses half of the memory
 kwm does, which should be enough to let you dump kwm ;) For details on what
-exactly is implemented, see comments in src/kwm.c Read the README.KDE file 
+exactly is implemented, see comments in src/kwm.c Read the README.KDE file
 for more information.
 
 
 WARNING: Some KDE hints are badly designed, so doing things like using
 kpanel's desktop switcher/pager and Window Maker's internal workspace
-management functions to create, destroy and rename workspaces at the same 
+management functions to create, destroy and rename workspaces at the same
 time might cause unknown effects. To be on the safe side, only
 use either of them to manage workspaces. Switching workspaces is hopefully,
 safe, so you can switch workspaces from wherever you want.
@@ -1517,7 +1517,7 @@ workspaces. The WorkspaceBack is used as the default background image.
 
 Example:
 
-WorkspaceSpecificBack = ((solid, red), (cpixmap, ship.jpg, gray), (), 
+WorkspaceSpecificBack = ((solid, red), (cpixmap, ship.jpg, gray), (),
 				(dgradient, red, blue))
 
 This will set the background image of workspace 1 to (solid, 0),
@@ -1546,8 +1546,8 @@ WindowMaker/README.themes file.
 New Texture Type
 ----------------
 
-Textured gradients will tile a texture pixmap and combine it with a gradient, 
-using an arbitrary opaqueness. 
+Textured gradients will tile a texture pixmap and combine it with a gradient,
+using an arbitrary opaqueness.
 
 Syntax is (thgradient, <file>, <opaqueness>, <color1>, <color2>)
 	  (tvgradient, <file>, <opaqueness>, <color1>, <color2>)
@@ -1618,7 +1618,7 @@ the old format is still supported. The new format is documented
 in the WindowMaker/README.themes file.
 
 
-Root Menu 
+Root Menu
 ---------
 
 The -noext option for OPEN_MENU will strip whatever is after the last .
@@ -1646,7 +1646,7 @@ WDesktopLevel
 
 If you have a 5 button mouse and want to give some utility for
 the extra 2 buttons, edit the appropriate line in src/wconfig.h
-Clicking Button4 in the root window will switch you to the previous 
+Clicking Button4 in the root window will switch you to the previous
 workspace and Button5 will do that for the next.
 
 
@@ -1672,7 +1672,7 @@ Hysteresis for menu item selection
 Hopefully it's intelligent enough, so you won't notice it.
 
 In case you want to know what's it, it's equivalent to that
-(insanely long) 2 second delay present in that Windoze95 menu, 
+(insanely long) 2 second delay present in that Windoze95 menu,
 but more useful than annoying (I hope :). To see it, do the following
 with your current wmaker version and later with 0.20.3:
 
@@ -1761,7 +1761,7 @@ make
 make install
 
 You also don't need to worry about GNOME libPropList incompatibilities
-anymore. 
+anymore.
 
 
 Bug with focus lost in sloppy focus fixed
@@ -1800,11 +1800,11 @@ optimize it and remove a few hundred of bytes, then use --disable-sound or
 
 --- 0.20.0
 
-  
+
 Multihead support. wmaker will now manage all screens that are attached to the
-display. 
+display.
 ------------------------------------------------------------------------------
-  
+
 
 It does so from a single process (instead of spawning a new process for each
 screen, like fvwm does). This keeps memory usage a lot lower than fvwm.
@@ -1902,7 +1902,7 @@ c3 can be v or h (meaning vertical or horizontal)
 
 case is insensitive.
 
-For example, 
+For example,
 IconPosition = blh;
 
 is the old iconPosition position.
@@ -1959,7 +1959,7 @@ submenus was removed, so a menu that looked like:
 
 ( Applications,
   ("Xterm", EXEC, "xterm"),
-  ( 
+  (
     (Paint,
   	("Gimp", EXEC, "gimp"),
 	("XV", EXEC, "xv")
@@ -1983,7 +1983,7 @@ Misc
 ----
 
 NUMLOCK_HACK is back. This time it works and is enabled by default.
-If you think you don't need it and promise me that you won't send 
+If you think you don't need it and promise me that you won't send
 "bug" reports saying that shortcuts stop working after a while, you can
 disable it ;) It will save some memory and CPU.
 
@@ -2027,7 +2027,7 @@ New Options
 -----------
 
 PixmapPath was split to PixmapPath and IconPath. PixmapPath is the path
-for the pixmaps used as textures and IconPath is for the icons. 
+for the pixmaps used as textures and IconPath is for the icons.
 Don't forget to add IconPath to your current configuration file.
 
 There's also a new library in ~/GNUstep/Library/Icons. You should place
@@ -2073,7 +2073,7 @@ Misc. Changes
 
 Removed --with-gnome and made MWM_HINTS defined by default.
 This means that "GNOME support" will work with no additional
-flags passed to configure. 
+flags passed to configure.
 
 Added support for KDE, by adding a DisableWorkspaceMouseActions option.
 Set it to YES and run krootwm to be able to use everything in kfm.
@@ -2100,7 +2100,7 @@ Interface Changes
 -----------------
 
 ** Configuration of docked applications is now done in a panel instead of
-in the menu. 
+in the menu.
 
 ** Added a command menu for application icons
 
@@ -2278,7 +2278,7 @@ Now, selecting icons is as easy as clicking in the file name in a list.
 Simplified Options
 ------------------
 
-IconSlideStep, IconSlideSlowDown and IconSlideDelay were merged to 
+IconSlideStep, IconSlideSlowDown and IconSlideDelay were merged to
 IconSlideSpeed
 
 MenuScrollStep and MenuScrollDelay were merged to MenuScrollSpeed
@@ -3076,7 +3076,7 @@ thus, making a menu with entries like:
 (mhgradient, colorX, color1, color2, color3, ..., colorn)
 (mvgradient, colorX, color1, color2, color3, ..., colorn)
 
-You can put any number of colors >= 2. 
+You can put any number of colors >= 2.
 
 colorX is a special color that is used as the solid color of the
 texture when wmaker needs a solid color (like in miniwindow title and
@@ -3167,13 +3167,13 @@ then you can merge both and have:
 The configuration format has changed!! Forget everything about the old
 format.
 
-dockapp was removed and the old version will not work anymore. 
+dockapp was removed and the old version will not work anymore.
 
 the dialogs require tcl/tk. they will be rewritten in plain C
 
 
 These are some tips for people upgrading from older versions and don't want
-too many unused files around. There is no problem if you decide to keep 
+too many unused files around. There is no problem if you decide to keep
 them for a while.
 
 	you can  rm -r ~/gnustep if you don't want anything from there

@@ -23,7 +23,7 @@ They have the following meanings:
 
     none     The cursor is inherited from the parent window (often,
              this means the root window).
-            
+
     builtin  Use the cursor named <cursor-name> from X11's set of
              built-in cursors.  The names are the same as you use
              with 'xsetroot -cursor_name'.  See the xsetroot(1) man

@@ -8,7 +8,7 @@
 
 				     by
 
-		      	     Alfredo K. Kojima 
+		      	     Alfredo K. Kojima
 
 			 	 Dan Pascu
 
@@ -21,19 +21,19 @@
 
 
 		Congratulations! You have purchased an extremely fine
-	device that would give you thousands of years of trouble-free 
+	device that would give you thousands of years of trouble-free
 	service, except	that you undoubtedly will destroy it via some
 	typical bonehead consumer maneuver. Which is why we ask you
 	to PLEASE FOR GOD'S SAKE READ THIS OWNER'S MANUAL CAREFULLY
 	BEFORE YOU UNPACK THE DEVICE. YOU ALREADY UNPACKED IT, DIDN'T
-	YOU? YOU UNPACKED IT AND PLUGGED IT IN AND TURNED IT ON AND 
+	YOU? YOU UNPACKED IT AND PLUGGED IT IN AND TURNED IT ON AND
 	FIDDLED WITH THE KNOBS, AND NOW YOUR CHILD, THE	SAME CHILD WHO
 	ONCE SHOVED A POLISH SAUSAGE INTO YOUR VIDEOCASSETTE RECORDER
 	AND SET IT ON "FAST FORWARD", THIS CHILD ALSO IS FIDDLING
-	WITH THE KNOBS, RIGHT?  AND YOU'RE JUST NOW STARTING TO READ 
-	THE INSTRUCTIONS, RIGHT???  WE MIGHT AS WELL JUST BREAK THESE 
-	DEVICES	RIGHT AT THE FACTORY BEFORE WE SHIP THEM OUT, YOU 
-	KNOW THAT? 
+	WITH THE KNOBS, RIGHT?  AND YOU'RE JUST NOW STARTING TO READ
+	THE INSTRUCTIONS, RIGHT???  WE MIGHT AS WELL JUST BREAK THESE
+	DEVICES	RIGHT AT THE FACTORY BEFORE WE SHIP THEM OUT, YOU
+	KNOW THAT?
 				-- Dave	Barry, "Read This First!"
 
 
@@ -67,7 +67,7 @@ Documentation
 Read before asking.
 
 * README files all over the source tree have info related to the stuff
-in the directories. 
+in the directories.
 
 * INSTALL has installation instructions and some troubleshooting tips.
 You're meant to read it if you are compiling the sources.
@@ -112,7 +112,7 @@ Directories & Files in the Source Tree
 
 * util/ has various utility programs.
 
-* WPrefs.app/ is the configuration program. 
+* WPrefs.app/ is the configuration program.
 
 * src/wconfig.h has compile time options you can change to select some
   options/features and other stuff.
@@ -203,8 +203,8 @@ while keeping a nice appearance and good functionality, follow the items bellow:
   fully supported). Make sure to always keep NumLock and ScrollLock turned off.
 - turn on DisableAnimations. You can also specify --disable-animation at compile
   time to the configure script.
-- strip down the default IconPath and PixmapPath entries to contain only 
-  the paths that you really have in your system. 
+- strip down the default IconPath and PixmapPath entries to contain only
+  the paths that you really have in your system.
 - do not use large images in the root background
 - remove support for image formats you don't use
 - to reduce memory usage, disable the icon cache, by setting the RIMAGE_CACHE
@@ -225,7 +225,7 @@ To enable it, hit the Control+Shift+NumLock or Shift+NumLock key combination.
 You should hear the speaker beeping. To disable it, do the same thing.
 
 To control the mouse the numeric keypad is used as follows:
-- 4 (left arrow), 7 (Home), 8 (up arrow), 9 (PgUp), 6 (right arrow), 
+- 4 (left arrow), 7 (Home), 8 (up arrow), 9 (PgUp), 6 (right arrow),
 3 (PgDn), 2 (down arrow) and 1 (End) move the mouse to the corresponding
 direction;
 - holding one of the above keys and then holding the 5 key will move the
