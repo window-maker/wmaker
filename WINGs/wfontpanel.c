@@ -700,7 +700,7 @@ static void typefaceClick(WMWidget * w, void *data)
 
 	WM_ITERATE_ARRAY(face->sizes, size, i) {
 		if (size != NULL) {
-			int size_int = (int) size;
+			int size_int = (intptr_t) size;
 
 			sprintf(buffer, "%i", size_int);
 
@@ -802,7 +802,7 @@ static void setFontPanelFontName(FontPanel * panel, const char *family, const ch
 		char buffer[32];
 
 		if (vsize != NULL) {
-			int size_int = (int) vsize;
+			int size_int = (intptr_t) vsize;
 
 			sprintf(buffer, "%i", size_int);
 

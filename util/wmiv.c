@@ -35,6 +35,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <getopt.h>
+#include <math.h>
 #include "config.h"
 
 #ifdef HAVE_EXIF
@@ -218,7 +219,7 @@ int rescale_image(void)
 	long final_height = img->height;
 
 	/* check if there is already a zoom factor applied */
-	if (zoom_factor != 0) {
+	if (fabsf(zoom_factor) <= 0.0f) {
 		final_width = img->width + (int)(img->width * zoom_factor);
 		final_height = img->height + (int)(img->height * zoom_factor);
 	}
@@ -430,7 +431,7 @@ int zoom_in_out(int z)
 		return EXIT_FAILURE;
 
 	if (z) {
-		zoom_factor += 0.2;
+		zoom_factor += 0.2f;
 		img = RScaleImage(tmp, tmp->width + (int)(tmp->width * zoom_factor),
 				tmp->height + (int)(tmp->height * zoom_factor));
 		if (!img) {
@@ -438,11 +439,11 @@ int zoom_in_out(int z)
 			return EXIT_FAILURE;
 		}
 	} else {
-		zoom_factor -= 0.2;
+		zoom_factor -= 0.2f;
 		int new_width = tmp->width + (int) (tmp->width * zoom_factor);
 		int new_height = tmp->height + (int)(tmp->height * zoom_factor);
 		if ((new_width <= 0) || (new_height <= 0)) {
-			zoom_factor += 0.2;
+			zoom_factor += 0.2f;
 			RReleaseImage(tmp);
 			return EXIT_FAILURE;
 		}
@@ -966,7 +967,7 @@ int main(int argc, char **argv)
 				break;
 			case XK_Escape:
 				if (!fullscreen_flag) {
-					zoom_factor = -0.2;
+					zoom_factor = -0.2f;
 					/* zoom_in will increase the zoom factor by 0.2 */
 					zoom_in();
 				} else {

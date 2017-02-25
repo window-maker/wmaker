@@ -41,9 +41,6 @@ typedef struct W_SplitView {
 /* TODO: rewrite --Dan */
 #define _GetSubviewsCount() WMGetArrayItemCount(sPtr->subviews)
 
-#define _AddPSubviewStruct(P) \
-    (WMAddToArray(sPtr->subviews,((void*)P)))
-
 #define _GetPSubviewStructAt(i) \
     ((W_SplitViewSubview*)WMGetFromArray(sPtr->subviews,(i)))
 
