@@ -175,7 +175,7 @@ Package: libwmaker-dev
 Architecture: any
 Multi-Arch: same
 Section: libdevel
-Depends: libx11-dev, ${misc:Depends}
+Depends: libwmaker1 (= ${binary:Version}), libx11-dev, ${misc:Depends}
 Description: Static libraries and headers for Window Maker applications
  Window Maker is a NeXTSTEP-like window manager for X.
  .

@@ -1,3 +1,10 @@
+wmaker (0.95.7-8) unstable; urgency=medium
+
+  * debian/control
+    - Add libwmaker1 to libwmaker-dev Depends (Closes: #857164).
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 08 Mar 2017 10:59:29 -0500
+
 wmaker (0.95.7-7) unstable; urgency=medium
 
   * Add missing license information to debian/copyright.
