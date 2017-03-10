@@ -113,6 +113,9 @@ and here, in that order. Unless, the indicated path is an absolute path.
 .B ~/GNUstep/Library/WindowMaker/Pixmaps/
 Window Maker looks for \fBpixmaps\fP here
 .TP
+.B ~/GNUstep/Library/Icons/
+Window Maker looks for \fBicons\fP here
+.TP
 .B ~/GNUstep/Library/WindowMaker/Backgrounds/
 Window Maker looks for backgrounds here
 .TP
