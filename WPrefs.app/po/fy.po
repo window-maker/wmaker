@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: wmaker-0.95.7+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-01-21 16:19+0100\n"
-"PO-Revision-Date: 2016-01-21 00:00+0000\n"
+"POT-Creation-Date: 2017-03-10 10:56+0100\n"
+"PO-Revision-Date: 2017-03-10 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Western Frisian\n"
 "Language: fy\n"
@@ -92,7 +92,7 @@ msgstr "Kliptitel, ynskood"
 msgid "Left"
 msgstr "Lofts"
 
-#: ../../WPrefs.app/Appearance.c:111 ../../WPrefs.app/TexturePanel.c:1408
+#: ../../WPrefs.app/Appearance.c:111 ../../WPrefs.app/TexturePanel.c:1407
 #: ../../WPrefs.app/WindowHandling.c:93 ../../WPrefs.app/Workspace.c:189
 msgid "Center"
 msgstr "Sintrearje"
@@ -165,7 +165,7 @@ msgstr "[Eftergrûn]"
 msgid "Workspace Background"
 msgstr "Wurkromte-eftergrûn"
 
-#: ../../WPrefs.app/Appearance.c:562 ../../WPrefs.app/TexturePanel.c:885
+#: ../../WPrefs.app/Appearance.c:562 ../../WPrefs.app/TexturePanel.c:880
 #, c-format
 msgid "could not load file '%s': %s"
 msgstr "koe bestân '%s' net lade: %s"
@@ -284,7 +284,7 @@ msgstr "Bewurkje"
 msgid "Edit the highlighted texture."
 msgstr "Bewurkje de útljochte tekstuer."
 
-#: ../../WPrefs.app/Appearance.c:1946 ../../WPrefs.app/TexturePanel.c:1219
+#: ../../WPrefs.app/Appearance.c:1946 ../../WPrefs.app/TexturePanel.c:1218
 msgid "Delete"
 msgstr "Wiskje"
 
@@ -624,14 +624,29 @@ msgstr "Finster triuwen tsjin de boppekant, maksimalisearet it skermfoljend."
 
 #. default:
 #: ../../WPrefs.app/Expert.c:103
+msgid "Allow move half-maximized windows between multiple screens."
+msgstr "Stean ferpleatsen healmaksimalisearre finsters ta tusken skermen."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:106
+msgid "Alternative transitions between states for half maximized windows."
+msgstr "Oare steaten fan oergong foar healmaksimalisearre finsters."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:109
+msgid "Move mouse pointer with half maximized windows."
+msgstr "Ferpleats mûspylk mei healmaksimalisearre finsters."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:112
 msgid "Open dialogs in the same workspace as their owners."
 msgstr "Iepenje dialogen yn deselde wurkromte as har eigeners."
 
-#: ../../WPrefs.app/Expert.c:313
+#: ../../WPrefs.app/Expert.c:322
 msgid "Expert User Preferences"
 msgstr "Foarkarren foar bedreaune brûkers"
 
-#: ../../WPrefs.app/Expert.c:315
+#: ../../WPrefs.app/Expert.c:324
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also has some other misc. options."
@@ -1641,7 +1656,7 @@ msgstr "Warskôging"
 
 #: ../../WPrefs.app/Menu.c:1442 ../../WPrefs.app/Menu.c:1475
 #: ../../WPrefs.app/MouseSettings.c:156 ../../WPrefs.app/MouseSettings.c:176
-#: ../../WPrefs.app/TexturePanel.c:583 ../../WPrefs.app/TexturePanel.c:661
+#: ../../WPrefs.app/TexturePanel.c:585 ../../WPrefs.app/TexturePanel.c:663
 #: ../../WPrefs.app/TexturePanel.c:1419 ../../WPrefs.app/WPrefs.c:617
 #: ../../WPrefs.app/WPrefs.c:621 ../../WPrefs.app/WPrefs.c:641
 #: ../../WPrefs.app/WPrefs.c:653 ../../WPrefs.app/WPrefs.c:659
@@ -1656,8 +1671,8 @@ msgid "Could not open default menu from '%s'"
 msgstr "Koe standertmenu net iepenje út '%s'"
 
 #: ../../WPrefs.app/Menu.c:1475 ../../WPrefs.app/MouseSettings.c:154
-#: ../../WPrefs.app/MouseSettings.c:173 ../../WPrefs.app/TexturePanel.c:583
-#: ../../WPrefs.app/TexturePanel.c:659 ../../WPrefs.app/WPrefs.c:617
+#: ../../WPrefs.app/MouseSettings.c:173 ../../WPrefs.app/TexturePanel.c:585
+#: ../../WPrefs.app/TexturePanel.c:661 ../../WPrefs.app/WPrefs.c:617
 #: ../../WPrefs.app/WPrefs.c:621 ../../WPrefs.app/WPrefs.c:638
 #: ../../WPrefs.app/WPrefs.c:649 ../../WPrefs.app/WPrefs.c:659
 #: ../../WPrefs.app/WPrefs.c:699 ../../WPrefs.app/WPrefs.c:703
@@ -1943,7 +1958,7 @@ msgid "Icon Search Paths"
 msgstr "Ikoansykpaden"
 
 #: ../../WPrefs.app/Paths.c:261 ../../WPrefs.app/Paths.c:292
-#: ../../WPrefs.app/TexturePanel.c:1213
+#: ../../WPrefs.app/TexturePanel.c:1212
 msgid "Add"
 msgstr "Tafoegje"
 
@@ -2102,102 +2117,106 @@ msgstr ""
 "Ferskate ynstellingen sa as ballontekst,\n"
 "ferhâlding fan werjeften ensfh."
 
-#: ../../WPrefs.app/TexturePanel.c:293
+#: ../../WPrefs.app/TexturePanel.c:296
 msgid "Saturation"
 msgstr "Fersêding"
 
-#: ../../WPrefs.app/TexturePanel.c:295
+#: ../../WPrefs.app/TexturePanel.c:298
 msgid "Brightness"
 msgstr "Helderens"
 
-#: ../../WPrefs.app/TexturePanel.c:340 ../../WPrefs.app/TexturePanel.c:346
+#: ../../WPrefs.app/TexturePanel.c:343 ../../WPrefs.app/TexturePanel.c:349
 msgid "Hue"
 msgstr "Tint"
 
-#: ../../WPrefs.app/TexturePanel.c:580
+#: ../../WPrefs.app/TexturePanel.c:582
 msgid "Could not load the selected file: "
 msgstr "Koe it selektearre bestân net lade: "
 
-#: ../../WPrefs.app/TexturePanel.c:630
+#: ../../WPrefs.app/TexturePanel.c:632
 msgid "Open Image"
 msgstr "Iepenje ôfbylding"
 
-#: ../../WPrefs.app/TexturePanel.c:660
+#: ../../WPrefs.app/TexturePanel.c:662
 msgid "The selected file does not contain a supported image."
 msgstr "It selektearre bestân befettet gjin stipe ôfbylding."
 
-#: ../../WPrefs.app/TexturePanel.c:999
+#: ../../WPrefs.app/TexturePanel.c:995
 #, c-format
 msgid "error creating texture %s"
 msgstr "flater by oanmeitsjen tekstuer %s"
 
-#: ../../WPrefs.app/TexturePanel.c:1158
+#: ../../WPrefs.app/TexturePanel.c:1157
 msgid "Texture Panel"
 msgstr "Tekstueren"
 
-#: ../../WPrefs.app/TexturePanel.c:1165
+#: ../../WPrefs.app/TexturePanel.c:1164
 msgid "Texture Name"
 msgstr "Tekstuernamme"
 
-#: ../../WPrefs.app/TexturePanel.c:1177
+#: ../../WPrefs.app/TexturePanel.c:1176
 msgid "Solid Color"
 msgstr "Effenkleur"
 
-#: ../../WPrefs.app/TexturePanel.c:1178
+#: ../../WPrefs.app/TexturePanel.c:1177
 msgid "Gradient Texture"
 msgstr "Kleurferrin"
 
-#: ../../WPrefs.app/TexturePanel.c:1179
+#: ../../WPrefs.app/TexturePanel.c:1178
 msgid "Simple Gradient Texture"
 msgstr "Ienfâldich kleurferrin"
 
-#: ../../WPrefs.app/TexturePanel.c:1180
+#: ../../WPrefs.app/TexturePanel.c:1179
 msgid "Textured Gradient"
 msgstr "Teksturearre kleurferrin"
 
-#: ../../WPrefs.app/TexturePanel.c:1181
+#: ../../WPrefs.app/TexturePanel.c:1180
 msgid "Image Texture"
 msgstr "Ofbyldingstekstuer"
 
-#: ../../WPrefs.app/TexturePanel.c:1189
+#: ../../WPrefs.app/TexturePanel.c:1188
 msgid "Default Color"
 msgstr "Standertkleur"
 
-#: ../../WPrefs.app/TexturePanel.c:1201
+#: ../../WPrefs.app/TexturePanel.c:1200
 msgid "Gradient Colors"
 msgstr "Kleurferrin"
 
-#: ../../WPrefs.app/TexturePanel.c:1290
+#: ../../WPrefs.app/TexturePanel.c:1289
 msgid "Direction"
 msgstr "Rjochting"
 
-#: ../../WPrefs.app/TexturePanel.c:1318
+#: ../../WPrefs.app/TexturePanel.c:1317
 msgid "Gradient"
 msgstr "Ferrin"
 
-#: ../../WPrefs.app/TexturePanel.c:1334
+#: ../../WPrefs.app/TexturePanel.c:1333
 msgid "Gradient Opacity"
 msgstr "Trochsichtichheidsferrin"
 
-#: ../../WPrefs.app/TexturePanel.c:1374
+#: ../../WPrefs.app/TexturePanel.c:1373
 msgid "Image"
 msgstr "Ofbylding"
 
-#: ../../WPrefs.app/TexturePanel.c:1394
+#: ../../WPrefs.app/TexturePanel.c:1393
 msgid "Browse..."
 msgstr "Blêdzje..."
 
-#: ../../WPrefs.app/TexturePanel.c:1406
+#: ../../WPrefs.app/TexturePanel.c:1405
 msgid "Tile"
 msgstr "Tegelje"
 
-#: ../../WPrefs.app/TexturePanel.c:1407
+#: ../../WPrefs.app/TexturePanel.c:1406
 msgid "Scale"
 msgstr "Skale"
 
-#: ../../WPrefs.app/TexturePanel.c:1409
+#: ../../WPrefs.app/TexturePanel.c:1408
 msgid "Maximize"
 msgstr "Maksimalisearje"
+
+#: ../../WPrefs.app/TexturePanel.c:1409
+msgid "Fill"
+msgstr "Folje"
 
 #: ../../WPrefs.app/WPrefs.c:212 ../../WPrefs.app/WPrefs.c:282
 msgid "Window Maker Preferences"
