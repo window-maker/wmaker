@@ -35,8 +35,8 @@ wmaker.1: wmaker.in Makefile $(top_builddir)/config.h
 	$(AM_V_GEN)$(top_srcdir)/script/replace-ac-keywords.sh \
 		--header "$(top_builddir)/config.h" --filter "HAVE_INOTIFY" \
 		--filter "USE_ICCCM_WMREPLACE" \
-		-D"sysconfdir=$(sysconfdir)" --replace "sysconfdir" \
 		-D"pkgdatadir=$(pkgdatadir)" --replace "pkgdatadir" \
+		-D"defsdatadir=$(defsdatadir)" --replace "defsdatadir" \
 		-o "wmaker.1"  "$(srcdir)/wmaker.in"
 
 wmsetbg.1: wmsetbg.in Makefile $(top_builddir)/config.h
