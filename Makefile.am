@@ -21,8 +21,8 @@ config-paths.h: Makefile
 	@echo '/* where shared data is stored */' >> $@
 	@echo '#define PKGDATADIR "$(datadir)/WindowMaker"' >> $@
 	@echo '' >> $@
-	@echo '/* where the configuration is stored */' >> $@
-	@echo '#define SYSCONFDIR "$(sysconfdir)"' >> $@
+	@echo '/* where the global defaults are stored */' >> $@
+	@echo '#define DEFSDATADIR "$(defsdatadir)"' >> $@
 
 ACLOCAL_AMFLAGS = -I m4
 

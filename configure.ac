@@ -867,6 +867,21 @@ AS_IF([test "x$with_gnustepdir" = "x"],
 AC_SUBST([wprefs_datadir])dnl
 AC_SUBST([wprefs_bindir])dnl
 
+dnl Support for DEFSDATADIR option
+dnl ============================
+AC_ARG_WITH([defsdatadir],
+    [AS_HELP_STRING([--with-defsdatadir=PATH], [specify where global defaults are located [SYSCONFDIR/WindowMaker]])],
+    [AS_CASE([$withval],
+        [yes|no], [AC_MSG_ERROR([bad value '$withval' for --with-defsdatadir, expected a path]) ],
+        [/*],  [], dnl Absolute path, ok
+        [\$*], [], dnl Assumes it starts with a reference to $prefix or a similar variable, ok
+        [AC_MSG_ERROR([bad path '$withval' for defsdatadir, expecting an absolute path])])],
+    [with_defsdatadir=""])
+
+AS_IF([test "x$with_defsdatadir" != "x"],
+    [defsdatadir="$with_defsdatadir"],
+    [defsdatadir='${sysconfdir}/WindowMaker'])
+AC_SUBST([defsdatadir])dnl
 
 dnl Enable User Defined Menu thing
 dnl ==============================

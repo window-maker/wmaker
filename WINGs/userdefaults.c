@@ -103,17 +103,14 @@ char *wdefaultspathfordomain(const char *domain)
 }
 
 /* XXX: doesn't quite belong to *user*defaults.c */
-#ifndef GLOBAL_DEFAULTS_SUBDIR
-#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
-#endif
 char *wglobaldefaultspathfordomain(const char *domain)
 {
 	char *t = NULL;
 	size_t len;
 
-	len = strlen( SYSCONFDIR ) + strlen( GLOBAL_DEFAULTS_SUBDIR ) + strlen(domain) + 3;
+	len = strlen(DEFSDATADIR) + strlen(domain) + 2;
 	t = wmalloc(len);
-	snprintf(t, len, "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domain);
+	snprintf(t, len, "%s/%s", DEFSDATADIR, domain);
 
 	return t;
 }

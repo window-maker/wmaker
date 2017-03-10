@@ -59,10 +59,6 @@
 
 #include <WINGs/WUtil.h>
 
-#ifndef GLOBAL_DEFAULTS_SUBDIR
-#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
-#endif
-
 /****** Global Variables ******/
 struct wmaker_global_variables w_global;
 
@@ -662,7 +658,7 @@ static int real_main(int argc, char **argv)
 				printf("Window Maker %s\n", VERSION);
 				exit(0);
 			} else if (strcmp(argv[i], "--global_defaults_path") == 0) {
-			  printf("%s/%s\n", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR);
+			  printf("%s\n", DEFSDATADIR);
 				exit(0);
 			} else if (strcmp(argv[i], "-locale") == 0 || strcmp(argv[i], "--locale") == 0) {
 				i++;

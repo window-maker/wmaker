@@ -1,6 +1,3 @@
-
-defsdatadir = $(sysconfdir)/WindowMaker
-
 defsdata_DATA = WMRootMenu WMWindowAttributes WindowMaker WMState WMGLOBAL
 
 wpexecbindir = @wprefs_bindir@
