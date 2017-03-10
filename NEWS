@@ -216,6 +216,15 @@ respectively.  This setting can also be changed by unchecking or checking
 "Snapping a window to the top maximizes it to the full screen" in the
 "Expert User Preferences" tab in WPrefs.app.
 
+Global defaults directory configuration
+---------------------------------------
+
+You can now configure the global defaults directory, where the system
+WindowMaker, WMRootMenu, etc. files are stored, by running
+    ./configure --with-defsdatadir=/path/to/defaults
+at build time.  The previous method, which only partially worked, involved
+defining the GLOBAL_DEFAULTS_SUBDIR macro.  This is no longer available.
+Note that the default location is ${sysconfdir}/WindowMaker.
 
 -- 0.95.7
 
