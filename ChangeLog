@@ -1,3 +1,95 @@
+Changes since version 0.95.7:
+.............................
+
+- Build on Ubuntu 14.04
+  (Johann Haarhoff <johann@haarhoff.org.za>)
+- Window Maker 0.95.7 Debian files
+- create_appicon_from_dock checks if no_appicon flag is set
+- New applications do not create Cached Icon
+- Remove unused argument in save_appicon
+- Avoid recreate Cached icon moving between docks
+- Avoid create again a docked application cache icon
+- save the icon filename instead the full path
+- Remove cache icon when detached
+- usermenu.c Avoid compiler warnings
+- Enable usermenu
+  (Rodolfo García Peñas (kix) <kix@kix.es>)
+- wmaker: fixed infinite loop in switching within group
+  (Satya Mishra <qufgmx@gmail.com>)
+- wmaker: Print error dialog when attempting to delete an in-use workspace.
+  (Doug Torrance <dtorrance@piedmont.edu>)
+- debian: Ignore missing documentation for --runstatedir.
+- debian: Use dh_autoreconf.
+- debian: Simplify debian/rules.
+- debian: Fix typo occured. (Thanks, lintian.)
+- debian: wmaker manpage moved from 1x to 1.
+  (Andreas Metzler <ametzler@bebt.de>)
+- debian: Add wmiv to wmaker package.
+- debian: Add version 0.95.6-1.2 entry to changelog.
+- debian: Update with final version of 0.95.7-1 packaging.
+- wmaker: Maintain sorting of windows by workspace in switch menu.
+- debian: Update with version 0.95.7-2 packaging.
+- wmaker: Update copyright years in info panel.
+- wmaker: Remove prototype for unused get_right_position_on_screen function.
+- wmaker: Fix typos (used codespell).
+- wmaker: Add option for window snap to top edge to maximize to full screen.
+- wmaker: Use window placement settings on other workspaces.
+- wmaker: Add keyboard shortcuts for keeping window on top or at bottom.
+- wmaker: Display keyboard shortcuts for remaining options in window menu.
+- wmaker: Fix whitespace in menu.h; passes checkpatch.pl inspection.
+- wmaker: Implement basic menu shading.
+  (Doug Torrance <dtorrance@piedmont.edu>)
+- Translations: Dutch language files updated
+- Translations: Frisian language files updated
+  (Alwin <translations@ziggo.nl>)
+- wmlib: Add pkg-config file.
+- wmlib: Remove install-exec-local target.
+- WPrefs: Code formatting in TexturePanel.c; minimizes checkpatch.pl warnings.
+- WPrefs: Add support for fpixmap ("fillscale") texture.
+- check-doc: Ignore runstatedir in check-cmdline-options-doc.sh
+- check-doc: Ignore with-aix-soname in check-cmdline-options-doc.sh
+- debian: Remove 56_ignore_runstatedir.diff.
+- debian: Update with version 0.95.7-3 packaging.
+- debian: Update with version 0.95.7-4 packaging.
+- debian: Update with version 0.95.7-5 packaging.
+- debian: Update with version 0.95.7-6 packaging.
+- wmmenugen: Fix segfault; argv[argc] doesn't exist.
+  (Doug Torrance <dtorrance@piedmont.edu>)
+- getstyle: fix wcopy_file paths
+  (Alexandru Lazar <alazar@startmail.com>)
+- wmaker: fix stacking order of dock and fullscreen
+- wmaker: allow alt+tabbed windows over fullscreen
+  (Bjørn Mork <bjorn@mork.no>)
+- WPrefs: Update path for Debian menu
+- Use wprefs_bindir output variable to set WPrefs path in menus.
+- Remove WindowMaker/mkMakefile script.
+- Don't try and add removed file mkMakefile to distribution tarball.
+- Look for plmenu in build directory when creating WMRootMenu.
+- debian: Update with version 0.95.7-7 packaging.
+- configure: Use PKG_PROG_PKG_CONFIG macro to allow cross building.
+  (Doug Torrance <dtorrance@piedmont.edu>)
+- Trivial cleanup: Removed unused defines.
+  (Roman Dobosz <gryf73@gmail.com>)
+- Added 'head' parameter to wMaximizeWindow
+- Added wGetHeadRelativeToCurrentHead function
+- Added option for ability to move half-maximized between heads.
+- Added possibility for half-maximized windows to move across the screens.
+- Fixed wrong (re)stored dimensions for unmaximized window.
+  (gryf <gryf73@gmail.com>)
+- Bugfix for moving windows between heads.
+- New option for enabling alternative half-maximized window movement.
+- Alternative way for traversing half-maximized windows.
+- New option for moving mouse pointer along with half-maximized windows.
+- Implementation for moving mouse pointer within the maximized window.
+- Refactoring handleMaximize() function
+- Removed trailing whitespaces from readme files.
+- Fixed couple of compilator warning and removed unused macros.
+  (Roman Dobosz <gryf73@gmail.com>)
+- wmaker: Do not place icons under the dock
+  (Cyrus Rahman <crahman@gmail.com>)
+- debian: Update with version 0.95.7-8 packaging.
+  (Doug Torrance <dtorrance@piedmont.edu>)
+
 Changes since version 0.95.6:
 .............................
 
