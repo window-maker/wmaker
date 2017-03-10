@@ -107,7 +107,7 @@ might be shut down before the script is executed.
 .B ~/GNUstep/Library/WindowMaker/
 The menu file indicated in WMRootMenu is looked for here...
 .TP
-.B /etc/X11/WindowMaker/
+.B @pkgdatadir@/
 and here, in that order. Unless, the indicated path is an absolute path.
 .TP
 .B ~/GNUstep/Library/WindowMaker/Pixmaps/
