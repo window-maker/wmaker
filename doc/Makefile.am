@@ -8,7 +8,6 @@ dist_man_MANS = \
 	getstyle.1 \
 	seticons.1 \
 	setstyle.1 \
-	upgrade-windowmaker-defaults.8 \
 	wdread.1 \
 	wdwrite.1 \
 	WindowMaker.1 \
