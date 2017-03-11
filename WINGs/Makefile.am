@@ -8,8 +8,6 @@ DIST_SUBDIRS = $(SUBDIRS) Tests Examples Extras
 libWINGs_la_LDFLAGS = -version-info @WINGS_VERSION@
 libWUtil_la_LDFLAGS = -version-info @WUTIL_VERSION@
 
-dist_bin_SCRIPTS = get-wings-flags get-wutil-flags
-
 lib_LTLIBRARIES = libWUtil.la libWINGs.la
 
 

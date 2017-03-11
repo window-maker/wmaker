@@ -17,8 +17,6 @@ EXTRA_libwraster_la_DEPENDENCIES = libwraster.map
 CLEANFILES = libwraster.map
 endif
 
-dist_bin_SCRIPTS = get-wraster-flags
-
 include_HEADERS = wraster.h
 
 libwraster_la_SOURCES = 	\
