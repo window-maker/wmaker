@@ -460,12 +460,6 @@ WM_I18N_LANGUAGES
 WM_I18N_XGETTEXT
 WM_I18N_MENUTEXTDOMAIN
 
-dnl 2014/12/29: The option is deprecated, we should keep this message for at
-dnl least 2 years to ensure users see it and update their build scripts
-AC_ARG_WITH([nlsdir], [],
-    [AC_MSG_ERROR([option '--with-nlsdir' is deprecated, please use autoconf's standard '--localedir' instead])])
-
-
 dnl ===========================================
 dnl 		Stuff that uses X
 dnl ===========================================
