@@ -60,8 +60,6 @@ typedef struct _Panel {
 
 	CallbackRec callbacks;
 
-	Bool have_legacy_apercu;
-
 	WMWidget *parent;
 
 	WMFrame *posF;
@@ -201,14 +199,6 @@ static void showData(_Panel * panel)
 
 	/* Mini-Previews for Icons */
 
-	/*
-	 * Backward Compatibility:
-	 * These settings changed names after 0.95.6, so to avoid breaking user's
-	 * config we still support the old names, and silently convert them to the
-	 * new settings
-	 * This hack should be kept for at least 2 years, that means >= 2017.
-	 */
-	panel->have_legacy_apercu = False;
 	str = GetStringForKey("MiniwindowPreviewBalloons");
 	if (str != NULL) {
 		/* New names found, use them in priority */
@@ -217,25 +207,6 @@ static void showData(_Panel * panel)
 			i = GetIntegerForKey("MiniPreviewSize");
 			if (i <= minipreview_minimum_size)
 				i = minipreview_minimum_size;
-		} else {
-			i = minipreview_minimum_size;
-		}
-	} else {
-		/* No new names, try the legacy names */
-		b = GetBoolForKey("MiniwindowApercuBalloons");
-		if (b) {
-			panel->have_legacy_apercu = True;
-			i = GetIntegerForKey("ApercuSize");
-
-			/*
-			 * In the beginning, the option was coded as a multiple of the icon
-			 * size; then it was converted to pixel size
-			 */
-			if (i < 24)
-				i *= GetIntegerForKey("IconSize");
-
-			if (i <= minipreview_minimum_size)
-				i = minipreview_minimum_size + 1;	/* +1 to not display as "off" */
 		} else {
 			i = minipreview_minimum_size;
 		}
@@ -477,10 +448,6 @@ static void storeData(_Panel * panel)
 			i &= ~7;
 		}
 		SetIntegerForKey(i, "MiniPreviewSize");
-	}
-	if (panel->have_legacy_apercu) {
-		RemoveObjectForKey("MiniwindowApercuBalloons");
-		RemoveObjectForKey("ApercuSize");
 	}
 
 	for (i = 0; i < wlengthof(icon_animation); i++) {
