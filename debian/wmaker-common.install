@@ -13,8 +13,8 @@ debian/debianfiles/menu/wmappearance		etc/menu-methods
 debian/debianfiles/upgrade-windowmaker-defaults usr/sbin
 debian/debianfiles/wmaker			usr/bin
 debian/debianfiles/wmaker-common.desktop	usr/share/xsessions
-etc/WindowMaker/WMGLOBAL			etc/GNUstep/Defaults
-etc/WindowMaker/WMState				etc/GNUstep/Defaults
+etc/GNUstep/Defaults/WMGLOBAL
+etc/GNUstep/Defaults/WMState
 usr/share/WINGs/Images.tiff
 usr/share/WINGs/Images.xpm
 usr/share/WINGs/defaultIcon.tiff

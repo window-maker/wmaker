@@ -1,3 +1,42 @@
+wmaker (0.95.8-1~exp1) experimental; urgency=medium
+
+  * New upstream release.
+    - Menus may be shaded (Closes: #72038).
+    - Follow window placement rules when placing windows on non-active
+      workspaces (Closes: #181735).
+    - Windows list sorted by workspace (Closes: #280851).
+    - New keyboard shortcuts (Closes: #306808).
+    - Default menu uses correct path to WPrefs (Closes: #851737).
+    - Use PKG_PROG_PKG_CONFIG macro to allow cross building
+      (Closes: #853236).
+  * debian/control
+    - Add xterm to Suggests as it is referenced in the default Window
+      Maker menus (LP: #1429495).
+  * debian/libwraster*
+    - Rename libwraster5 -> libwraster6 for soname version bump.
+  * debian/patches
+     - Remove patches which were either applied or otherwise made
+       unnecessary with the new upstream release.  In particular,
+       + 51_wmaker_man.diff
+       + 55_ungif_problem.diff
+       + 56_ignore_runstatedir.diff
+       + 57_ignore_with-aix-soname.diff
+       + 60_fix_wraster_symbol_versioning.diff
+       + 61_fix_wmmenugen_segfault.diff
+  * debian/rules
+    - Use new --with-defsdatadir configure option to specify global
+      defaults directory instead of old GLOBAL_DEFAULTS_SUBDIR macro.
+    - Use renamed --with-xlocale configure option instead of old
+      --with-locale.
+    - Drop --with-localedir configure option, as it does not exist.
+      It should have been --localedir, but the default is what we
+      want anyway.
+    - Add -Wl,--as-needed to LDFLAGS to avoid useless dependencies.
+  * debian/wmaker-common.install
+    - Update path for system WMGLOBAL and WMState config files.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 13 Mar 2017 14:26:52 -0400
+
 wmaker (0.95.7-8) unstable; urgency=medium
 
   * debian/control

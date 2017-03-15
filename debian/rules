@@ -2,11 +2,12 @@
 # export DH_VERBOSE=1
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
-export DEB_CFLAGS_MAINT_APPEND += -Wall -DGLOBAL_DEFAULTS_SUBDIR=\"GNUstep/Defaults\"
+export DEB_CFLAGS_MAINT_APPEND += -Wall
+export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
-WMAKER_OPTIONS := --disable-locale --enable-modelock --enable-pango --enable-xinerama
+WMAKER_OPTIONS := --disable-xlocale --enable-modelock --enable-pango --enable-xinerama
 #not-enabled      --enable-usermenu --disable-shape --disable-shm --enable-randr
 #not-enabled      --disable-xpm --disable-png --disable-jpeg --disable-gif --disable-tiff
 
@@ -18,15 +19,15 @@ DEBIAN_TMP        := debian/tmp
 BASEDIR           := /usr
 INCLUDEDIR        := $(BASEDIR)/include
 SHAREDIR          := $(BASEDIR)/share
-NLSDIR            := $(SHAREDIR)/locale
 GNUSTEPDIR        := $(SHAREDIR)/lib/GNUstep/System
 WMSHAREDIR        := $(SHAREDIR)/WindowMaker
 PIXMAPDIR         := $(INCLUDEDIR)/X11/pixmaps
+DEFSDATADIR       := /etc/GNUstep/Defaults
 
 COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
-                     --with-localedir=$(NLSDIR)       \
                      --with-pixmapdir=$(PIXMAPDIR)    \
-                     --with-gnustepdir=$(GNUSTEPDIR)
+                     --with-gnustepdir=$(GNUSTEPDIR)  \
+                     --with-defsdatadir=$(DEFSDATADIR)
 
 %:
 	dh $@ --parallel --with autoreconf
