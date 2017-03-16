@@ -1,5 +1,3 @@
-usr/bin/get-wings-flags
-usr/bin/get-wutil-flags
 usr/include/WINGs/WINGs.h
 usr/include/WINGs/WINGsP.h
 usr/include/WINGs/WUtil.h
