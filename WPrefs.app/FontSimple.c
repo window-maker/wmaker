@@ -569,6 +569,9 @@ static void showData(_Panel * panel)
 {
 	int i;
 	WMMenuItem *item;
+	WMScreen *scr;
+
+	scr = WMWidgetScreen(panel->parent);
 
 	for (i = 0; i < WMGetPopUpButtonNumberOfItems(panel->optionP); i++) {
 		char *ofont, *font;
@@ -579,19 +582,12 @@ static void showData(_Panel * panel)
 		if (ofont)
 			wfree(ofont);
 
-		if (strcmp(fontOptions[i].option, "SystemFont") == 0 ||
-		    strcmp(fontOptions[i].option, "BoldSystemFont") == 0) {
-			char *path;
-			WMUserDefaults *defaults;
-
-			path = wdefaultspathfordomain("WMGLOBAL");
-			defaults = WMGetDefaultsFromPath(path);
-			wfree(path);
-			font = WMGetUDStringForKey(defaults,
-						   fontOptions[i].option);
-		} else {
+		if (strcmp(fontOptions[i].option, "SystemFont") == 0)
+			font = WMGetFontName(WMDefaultSystemFont(scr));
+		else if (strcmp(fontOptions[i].option, "BoldSystemFont") == 0)
+			font = WMGetFontName(WMDefaultBoldSystemFont(scr));
+		else
 			font = GetStringForKey(fontOptions[i].option);
-		}
 		if (font)
 			font = wstrdup(font);
 		WMSetMenuItemRepresentedObject(item, font);
