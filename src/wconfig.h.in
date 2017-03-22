@@ -136,7 +136,15 @@
 
 /* pixmap path */
 #define DEF_PIXMAP_PATHS \
-    "(\"~/pixmaps\",\"~/GNUstep/Library/WindowMaker/Pixmaps\",\""PIXMAPDIR"\")"
+	"("                                                        \
+		"\"~/GNUstep/Library/WindowMaker/Pixmaps\","       \
+		"\"~/GNUstep/Library/WindowMaker/Backgrounds\","   \
+		"\"~/GNUstep/Library/WindowMaker/CachedPixmaps\"," \
+		"\"~/pixmaps\","                                   \
+		"\""PKGDATADIR"/Pixmaps\","                        \
+		"\""PKGDATADIR"/Backgrounds\","                    \
+		"\""PIXMAPDIR"\""                                  \
+	")"
 
 #ifdef USER_MENU
 #define GLOBAL_USER_MENU_PATH PKGDATADIR"/UserMenus"
@@ -146,7 +154,15 @@
 
 /* icon path */
 #define DEF_ICON_PATHS \
-    "(\"~/pixmaps\",\"~/GNUstep/Library/Icons\",\"/usr/include/X11/pixmaps/\",\""PIXMAPDIR"\")"
+	"("                                                        \
+		"\"~/GNUstep/Library/Icons\","                     \
+		"\"~/GNUstep/Library/WindowMaker/Pixmaps\","       \
+		"\"~/GNUstep/Library/WindowMaker/CachedPixmaps\"," \
+		"\"~/pixmaps\","                                   \
+		"\""PKGDATADIR"/Icons\","                          \
+		"\""PKGDATADIR"/Pixmaps\","                        \
+		"\""PIXMAPDIR"\""                                  \
+	")"
 
 /* window title to use for untitled windows */
 #define DEF_WINDOW_TITLE "Untitled"
@@ -155,13 +171,12 @@
 #define DEF_FRAME_COLOR   "white"
 
 /* default fonts */
-#define DEF_TITLE_FONT          "\"sans-serif:bold:pixelsize=12\""
-#define DEF_MENU_TITLE_FONT     "\"sans-serif:bold:pixelsize=12\""
-#define DEF_MENU_ENTRY_FONT     "\"sans-serif:pixelsize=12\""
-#define DEF_ICON_TITLE_FONT     "\"sans-serif:pixelsize=9\""
-#define DEF_CLIP_TITLE_FONT     "\"sans-serif:bold:pixelsize=10\""
-#define DEF_INFO_TEXT_FONT      "\"sans-serif:pixelsize=12\""
-#define DEF_WORKSPACE_NAME_FONT "\"sans-serif:pixelsize=24\""
+#define DEF_TITLE_FONT          "\"Sans:bold:pixelsize=12\""
+#define DEF_MENU_TITLE_FONT     "\"Sans:bold:pixelsize=12\""
+#define DEF_MENU_ENTRY_FONT     "\"Sans:pixelsize=12\""
+#define DEF_ICON_TITLE_FONT     "\"Sans:pixelsize=9\""
+#define DEF_CLIP_TITLE_FONT     "\"Sans:bold:pixelsize=10\""
+#define DEF_WORKSPACE_NAME_FONT "\"Sans:pixelsize=24\""
 
 /* line width of the move/resize frame */
 #define DEF_FRAME_THICKNESS              1
