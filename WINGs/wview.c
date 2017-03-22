@@ -490,6 +490,7 @@ void W_SetViewBackgroundColor(W_View * view, WMColor * color)
 	view->backColor = WMRetainColor(color);
 
 	view->attribFlags |= CWBackPixel;
+	view->attribFlags &= ~CWBackPixmap;
 	view->attribs.background_pixel = W_PIXEL(color);
 	if (view->flags.realized) {
 		XSetWindowBackground(view->screen->display, view->window, W_PIXEL(color));
@@ -504,6 +505,7 @@ void W_SetViewBackgroundPixmap(W_View *view, WMPixmap *pix)
        view->backImage = WMRetainPixmap(pix);
 
        view->attribFlags |= CWBackPixmap;
+       view->attribFlags &= ~CWBackPixel;
        view->attribs.background_pixmap = pix->pixmap;
        if (view->flags.realized) {
                XSetWindowBackgroundPixmap(view->screen->display, view->window, pix->pixmap);
