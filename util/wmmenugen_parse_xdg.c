@@ -132,6 +132,11 @@ void parse_xdg(const char *file, cb_add_menu_entry *addWMMenuEntryCallback)
 			/* start processing group */
 			memset(buf, 0, sizeof(buf));
 			continue;
+		} else if (p[0] == '[') {
+			/* If we find a new group and the previous group was the main one,
+			 * we stop all further processing
+			 */
+			if (InGroup) break;
 		}
 
 		if (!InGroup) {
