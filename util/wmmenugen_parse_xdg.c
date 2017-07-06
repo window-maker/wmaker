@@ -178,6 +178,9 @@ void parse_xdg(const char *file, cb_add_menu_entry *addWMMenuEntryCallback)
 			getMenuHierarchyFor(&xdg->Category);
 		}
 
+		if (xdg->Category == NULL)
+			xdg->Category = wstrdup(_("Other"));
+
 		wfree(key);
 		key = NULL;
 	}
