@@ -535,6 +535,19 @@ static void  getMenuHierarchyFor(char **xdgmenuspec)
 		} else if (strcmp(p, "Utility") == 0) {
 			snprintf(buf, sizeof(buf), "%s", _("Utility"));
 			break;
+		/* reserved categories */
+		} else if (strcmp(p, "Screensaver") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Screensaver"));
+			break;
+		} else if (strcmp(p, "TrayIcon") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Tray Icon"));
+			break;
+		} else if (strcmp(p, "Applet") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Applet"));
+			break;
+		} else if (strcmp(p, "Shell") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Shell"));
+			break;
 		}
 		p = strtok(NULL, ";");
 	}
