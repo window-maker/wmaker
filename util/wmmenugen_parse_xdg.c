@@ -523,6 +523,9 @@ static void  getMenuHierarchyFor(char **xdgmenuspec)
 		} else if (strcmp(p, "Office") == 0) {
 			snprintf(buf, sizeof(buf), "%s", _("Office"));
 			break;
+		} else if (strcmp(p, "Science") == 0) {
+			snprintf(buf, sizeof(buf), "%s", _("Science"));
+			break;
 		} else if (strcmp(p, "Settings") == 0) {
 			snprintf(buf, sizeof(buf), "%s", _("Settings"));
 			break;
