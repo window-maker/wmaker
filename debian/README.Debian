@@ -64,57 +64,6 @@ Other sources for documentation
 As a sidenote, I can't package these files with wmaker because they
 don't have a copyright statement that permits redistribution.
 
-
-IF YOU ARE UPGRADING FROM 0.6.3 or earlier
-------------------------------------------
-
-  * The directory name has changed form gnustep to GNUstep
-  * The format of the style files and Window Maker file has
-    changed.
-
-IF YOU ARE UPGRADING FROM 0.14.1 or earlier (but newer than 0.6.3)
-------------------------------------------------------------------
-
-  * The Fiend has been renamed to Clip (in order to avoid hurting
-    certain people's feelings... does that ring a bell or
-    what?!?).  Look up "Fiend" in the dictionary... therefore, every
-    keyword on Defaults/WindowMaker that says "Fiend" has to be
-    replaced by "Clip".  The installation package tries to fix this
-    globally, i.e, both in the system wide files and the user's files.
-  * The ~/GNUstep/Library/WindowMaker/Style directory is no longer
-    called that, but "Styles" instead.  Update accordingly.  The wrapper
-    script tries to be smart about this...
-
-IF YOU ARE UPGRADING FROM 0.15.0 or earlier
--------------------------------------------
-
-  * WindowPlaceOrigin syntax changed. The old was:
-      WindowPlaceOrigin = "64, 64"
-    The new one is:
-      WindowPlaceOrigin = (64, 64)
-    The installation package also fixes this.
-
-IF YOU ARE UPGRADING FROM 0.17.3 or earlier
--------------------------------------------
-
-  * Please note there's a new Icons directory under ~/GNUstep/Library,
-    and a new key IconPath. Read the section on paths.
-
-IF YOU ARE UPGRADING FROM 0.17.5 or earlier
--------------------------------------------
-
-  * Pandora's Box has been opened: Beware that some features of recent
-    releases may not be compatible with those of 0.17.5; PLEASE read
-    the NEWS file and the ChangeLog.  If you don't have problems
-    upgrading, consider it a gift from the gods.  PLEASE NOTE: WPrefs
-    is a work in progress.  SAVE YOUR CONFIGURATION. READ THE READMEs.
-  * Please note that WPrefs' Menu Guru REQUIRES a menu in "Property
-    List" format to work properly.  It's very likely that you have an
-    old format menu.  There's a script called wm-oldmenu2new alongside
-    this file that converts your menu to the new format.  It's a hack,
-    it won't be installed anywhere else.
-
-
 Debian specific notes
 ---------------------
 

@@ -39,17 +39,20 @@ override_dh_auto_configure:
 override_dh_installmenu:
 	dh_installmenu -a --noscripts
 
-override_dh_install:
-	# Fix perms for /usr/share/WindowMaker/*sh before install them
-	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/autostart.sh
-	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/exitscript.sh
-
+override_dh_installdocs:
 	# Readmes - Copy+rename before install
 	# We use the root of the temporal directory debian/tmp
 	cp po/README $(DEBIAN_TMP)/README.po
 	cp README.definable-cursor $(DEBIAN_TMP)/README.definable-cursor
 	cp WPrefs.app/README $(DEBIAN_TMP)/README.WPrefs
 	cp WPrefs.app/po/README $(DEBIAN_TMP)/README.WPrefs.po
+	dh_installdocs
+
+override_dh_install:
+	# Fix perms for /usr/share/WindowMaker/*sh before install them
+	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/autostart.sh
+	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/exitscript.sh
+
 
 	# Now, change the #wmdatadir# string to $(WMSHAREDIR)
 	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' `find $(DEBIAN_TMP)/$(WMSHAREDIR) -name plmenu.*`

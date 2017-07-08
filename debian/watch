@@ -1,3 +1,2 @@
-version=3
-http://windowmaker.org/ \
-(?:|.*/)WindowMaker(?:[_\-]v?|)(\d[^\s/]*)\.(?:tar\.xz|txz|tar\.bz2|tbz2|tar\.gz|tgz)
+version=4
+http://windowmaker.org/ (?:|.*/)WindowMaker@ANY_VERSION@@ARCHIVE_EXT@

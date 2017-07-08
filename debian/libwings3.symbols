@@ -82,7 +82,6 @@ libWINGs.so.3 libwings3 #MINVER#
  WMDefaultSystemFont@Base 0.95.0
  WMDeleteDragHandler@Base 0.95.0
  WMDeleteEventHandler@Base 0.95.0
-#MISSING: 0.95.5-1# WMDeleteSelectionCallback@Base 0.95.0
  WMDeleteSelectionHandler@Base 0.95.0
  WMDeleteTextFieldRange@Base 0.95.0
  WMDestroyAlertPanel@Base 0.95.0
@@ -540,7 +539,6 @@ libWINGs.so.3 libwings3 #MINVER#
  W_DragSourceStartTimer@Base 0.95.0
  W_DragSourceStateHandler@Base 0.95.0
  W_DragSourceStopTimer@Base 0.95.0
-#MISSING: 0.95.3-1# W_DraggingInfo@Base 0.95.0
  W_DrawRelief@Base 0.95.0
  W_DrawReliefWithGC@Base 0.95.0
  W_FocusIC@Base 0.95.0
@@ -575,7 +573,6 @@ libWINGs.so.3 libwings3 #MINVER#
  W_SetViewBackgroundColor@Base 0.95.0
  W_SetViewBackgroundPixmap@Base 0.95.7
  W_SetViewCursor@Base 0.95.0
-#MISSING: 0.95.5-1# W_SetXdndAwareProperty@Base 0.95.0
  W_TopLevelOfView@Base 0.95.0
  W_UnFocusIC@Base 0.95.0
  W_UnmapSubviews@Base 0.95.0
@@ -585,7 +582,6 @@ libWINGs.so.3 libwings3 #MINVER#
  W_setconf_doubleClickDelay@Base 0.95.5
  _BrowserViewDelegate@Base 0.95.0
  _ColorWellViewDelegate@Base 0.95.0
-#MISSING: 0.95.6-1# _ListViewDelegate@Base 0.95.0
  _ProgressIndicatorDelegate@Base 0.95.0
  _RulerViewDelegate@Base 0.95.0
  _ScrollViewViewDelegate@Base 0.95.0
@@ -595,23 +591,10 @@ libWINGs.so.3 libwings3 #MINVER#
  _TextViewDelegate@Base 0.95.0
  _WindowViewDelegate@Base 0.95.0
  colorListMenuItem@Base 0.95.0
-#MISSING: 0.95.5-1# convertCPColor@Base 0.95.0
  customPaletteMenuItem@Base 0.95.0
-#MISSING: 0.95.5-1# generateNewFilename@Base 0.95.0
-#MISSING: 0.95.5-1# getNextRequestedDataType@Base 0.95.0
-#MISSING: 0.95.5-1# getShift@Base 0.95.0
-#MISSING: 0.95.5-1# getStream@Base 0.95.0
-#MISSING: 0.95.5-1# getStreamObjects@Base 0.95.0
-#MISSING: 0.95.5-1# makeMenuPixmap@Base 0.95.0
-#MISSING: 0.95.5-1# requestDropData@Base 0.95.0
-#MISSING: 0.95.5-1# requestDropDataInSelection@Base 0.95.0
-#MISSING: 0.95.5-1# requestHandler@Base 0.95.0
  rgbCharToInt@Base 0.95.6
  rgbColors@Base 0.95.0
  rgbIntToChar@Base 0.95.6
-#MISSING: 0.95.5-1# sourceOperationList@Base 0.95.0
-#MISSING: 0.95.5-1# storeRequiredTypeList@Base 0.95.0
-#MISSING: 0.95.5-1# ulongToRColor@Base 0.95.0
  wmkpoint@Base 0.95.0
  wmkrect@Base 0.95.0
  wmksize@Base 0.95.0

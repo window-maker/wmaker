@@ -1,8 +1,4 @@
-README.WPrefs					usr/share/doc/wmaker
-README.WPrefs.po				usr/share/doc/wmaker
-README.definable-cursor				usr/share/doc/wmaker
-README.po					usr/share/doc/wmaker
-debian/debianfiles/Themes/Debian		usr/share/WindowMaker/Themes
+debian/debianfiles/Themes/Debian.style		usr/share/WindowMaker/Themes
 debian/debianfiles/Themes/DebianLegacy.style	usr/share/WindowMaker/Themes
 debian/debianfiles/Themes/DebianSwirl.jpg	usr/share/WindowMaker/Backgrounds
 debian/debianfiles/Themes/debian.tiff		usr/share/WindowMaker/Backgrounds
@@ -10,36 +6,13 @@ debian/debianfiles/conf/WMRootMenu		etc/GNUstep/Defaults
 debian/debianfiles/conf/WMWindowAttributes	etc/GNUstep/Defaults
 debian/debianfiles/conf/WindowMaker		etc/GNUstep/Defaults
 debian/debianfiles/menu/wmappearance		etc/menu-methods
-debian/debianfiles/upgrade-windowmaker-defaults usr/sbin
 debian/debianfiles/wmaker			usr/bin
 debian/debianfiles/wmaker-common.desktop	usr/share/xsessions
 etc/GNUstep/Defaults/WMGLOBAL
 etc/GNUstep/Defaults/WMState
-usr/share/WINGs/Images.tiff
-usr/share/WINGs/Images.xpm
-usr/share/WINGs/defaultIcon.tiff
-usr/share/WINGs/defaultIcon.xpm
-usr/share/WindowMaker/Backgrounds/BlueImage.jpeg
-usr/share/WindowMaker/IconSets/Default.iconset
-usr/share/WindowMaker/Icons/*.png
-usr/share/WindowMaker/Icons/*.tiff
-usr/share/WindowMaker/Icons/*.xpm
-usr/share/WindowMaker/Icons/README
-usr/share/WindowMaker/Pixmaps/*.png
-usr/share/WindowMaker/Pixmaps/*.xpm
-usr/share/WindowMaker/README
-usr/share/WindowMaker/README.themes
-usr/share/WindowMaker/Styles/*.style
-usr/share/WindowMaker/Themes/*.style
-usr/share/WindowMaker/autostart.sh
-usr/share/WindowMaker/background.menu
-usr/share/WindowMaker/exitscript.sh
-usr/share/WindowMaker/menu
-usr/share/WindowMaker/menu.*
-usr/share/WindowMaker/plmenu
-usr/share/WindowMaker/plmenu.*
-usr/share/WindowMaker/wmmacros
+usr/share/WINGs
+usr/share/WindowMaker
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.tiff
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.xpm
-usr/share/lib/GNUstep/System/Applications/WPrefs.app/tiff/*.tiff
+usr/share/lib/GNUstep/System/Applications/WPrefs.app/tiff
 usr/share/locale/*/LC_MESSAGES/*.mo

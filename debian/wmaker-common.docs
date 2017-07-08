@@ -5,6 +5,9 @@ FAQ
 NEWS
 README
 TODO
-debian/copyright
 debian/debianfiles/Themes/DebianLegacy.txt
+debian/tmp/README.WPrefs
+debian/tmp/README.WPrefs.po
+debian/tmp/README.definable-cursor
+debian/tmp/README.po
 util/wm-oldmenu2new

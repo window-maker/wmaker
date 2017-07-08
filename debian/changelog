@@ -1,3 +1,67 @@
+wmaker (0.95.8-1~exp2) experimental; urgency=medium
+
+  [ Doug Torrance ]
+  * debian/debianfiles/Themes/Debian.style
+    - Rename from just "Debian" for consistency with other Window
+      Maker themes.
+  * debian/debianfiles/upgrade-windowmaker-defaults
+    - Delete archaic script. It was intended to help users upgrade
+      Window Maker 15+ years ago when the configuration file syntax
+      was not stable.  No longer necessary.
+  * debian/libwings3.symbols
+    - Remove MISSING comment lines.
+  * debian/libwings-dev.examples
+    - New file; install WINGs examples.
+  * debian/libwmaker-dev.install
+    - Install libwmaker pkg-config file.
+  * debian/patches/50_def_config_paths.diff
+    - Remove unnecessary patch. It added /etc/GNUstep/Defaults to
+      the DEF_CONFIG_PATHS macro, but the files needed in the paths
+      referenced in this macro (in particular, menu, autostart, and
+      exitscript) will not be located there.
+  * debian/patches/53_Debian_WMState.diff
+    - Update patch.  The path to WPrefs is already set correctly
+      during build; we do not need to set it explicitly.
+  * debian/README.Debian
+    - Remove notes about upgrading from very old (15+ years ago)
+      versions of Window Maker.
+  * debian/watch
+    - Bump to uscan v4 and simplify using new strings.
+  * debian/wmaker.dirs
+    - Remove unnecessary file
+  * debian/wmaker-common.dirs
+    - Remove redundant lines.
+  * debian/wmaker-common.docs
+    - Do not specify installation of debian/copyright;
+      dh_installdocs already installs it by default.
+  * debian/wmaker-common.{docs,install}
+    - Move installation of various README files from dh_install
+      to dh_installdocs.
+  * debian/wmaker-common.install
+    - Simplify by giving directories instead of individual files
+      where possible.
+  * debian/wmaker-common.links
+    - Remove unnecessary file. It created a link which was a
+      workaround for a bug fixed in the latest upstream release.
+  * debian/wmaker-common.maintscript
+    - Sort with wrap-and-sort.
+  * debian/rules
+    - New override_dh_installdocs target; contains code renaming
+      README files from override_dh_install target.
+
+  [ Andreas Metzler ]
+  * Drop Rodolfo García Peñas from uploaders. - Thanks for your work!
+    Closes: #866854
+  * 10_util-fix-parsing-of-XDG-menus-with-multiple-groups.patch from upstream
+    GIT next: Fix wmmenugen parsing of XDG menu files with more than one
+    group.
+
+  [ Doug Torrance / Andreas Metzler ]
+  * Add dependency on wmaker-common (>= ${source:Version}) to libwutil5 and
+    libwings3 to make it possible to use these libraries without wmaker.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sat, 08 Jul 2017 11:43:39 +0200
+
 wmaker (0.95.8-1~exp1) experimental; urgency=medium
 
   * New upstream release.
