@@ -1,28 +1,6 @@
 #!/bin/sh
 set -e
-
-case "$1" in
-  remove)
-    if which update-menus >/dev/null 2>&1 ; then
-      update-menus
-    fi
-  ;;
-  purge|upgrade|abort-install|disappear)
-    # nothing to do
-  ;;
-  failed-upgrade)
-    # this is an upgrade, and it has failed. What can fail?
-    exit 1
-  ;;
-  abort-upgrade)
-    # preinst failed, leave things like they were
-  ;;
-  *)
-    echo "postrm called with unknown argument \`$1'" >&2
-    exit 1
-  ;;
-esac
-
+if [ "$1" = "purge" ] && test -e /etc/GNUstep/Defaults/menu.hook ; then
+	rm /etc/GNUstep/Defaults/menu.hook
+fi
 #DEBHELPER#
-
-exit 0

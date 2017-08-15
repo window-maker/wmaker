@@ -30,14 +30,11 @@ COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
                      --with-defsdatadir=$(DEFSDATADIR)
 
 %:
-	dh $@ --parallel --with autoreconf
+	dh $@ --parallel
 
 override_dh_auto_configure:
 	env LINGUAS="$(LINGUAS)" dh_auto_configure --verbose -- \
 		$(COMMON_OPTIONS) $(WMAKER_OPTIONS)
-
-override_dh_installmenu:
-	dh_installmenu -a --noscripts
 
 override_dh_installdocs:
 	# Readmes - Copy+rename before install
@@ -61,3 +58,6 @@ override_dh_install:
 
 	# Install files
 	dh_install
+
+override_dh_installwm:
+	dh_installwm --priority=50

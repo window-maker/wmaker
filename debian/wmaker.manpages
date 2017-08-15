@@ -1,4 +1,5 @@
 doc/WPrefs.1
+doc/WindowMaker.1
 doc/geticonset.1
 doc/getstyle.1
 doc/seticons.1
@@ -6,6 +7,7 @@ doc/setstyle.1
 doc/wdread.1
 doc/wdwrite.1
 doc/wmagnify.1
+doc/wmaker.1
 doc/wmgenmenu.1
 doc/wmiv.1
 doc/wmmenugen.1

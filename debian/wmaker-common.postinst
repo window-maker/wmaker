@@ -1,41 +1,14 @@
 #!/bin/sh
 set -e
-
-# Window Maker postinst.
-#
-# Marcelo Magallon <mmagallo@debian.org>
-# Rodolfo "kix" García <kix@kix.es>
-
-inst="/etc/menu-methods/wmappearance"
-
-case "$1" in
-  configure)
-    for file in $inst ; do
-        if [ -f $file ] ; then
-            chmod a+x $file
-        fi
-    done
-
-    if [ -x /usr/bin/update-menus -a -x /usr/bin/install-menu ] ; then
-# Remove the menu.hook from all the possible paths.
-      rm -f /etc/X11/WindowMaker/menu.hook
-      rm -f /usr/share/WindowMaker/menu.hook
-# Remove appearance.menu
-      rm -f /usr/share/WindowMaker/appearance.menu
-      update-menus
-    fi
-  ;;
-
-  abort-upgrade|abort-deconfigure|abort-remove)
-    # how did we got here? Force a non-zero exit code
-    exit 1
-  ;;
-
-  *)
-    echo "postinst called with unkown argument: \$1" >&2
-  ;;
-esac
-
 #DEBHELPER#
 
-exit 0
+# run after debhelper code, which removes menu-methods.
+if [ "$1" = "configure" ] &&
+	[ x"$2" != "x" ] && 
+	test -e /etc/GNUstep/Defaults/appearance.menu &&
+	dpkg --compare-versions "$2" '<<' '0.95.8-2~' ; then
+	if head -n1 /etc/GNUstep/Defaults/appearance.menu |
+	grep -q 'Automatically generated file. Do not edit.' ; then
+		rm /etc/GNUstep/Defaults/appearance.menu
+	fi
+fi

@@ -4,10 +4,9 @@ Priority: optional
 Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.alioth.debian.org>
 Uploaders: Andreas Metzler <ametzler@debian.org>,
            Doug Torrance <dtorrance@piedmont.edu>
-Standards-Version: 3.9.7
+Standards-Version: 4.0.1
 Build-Depends: automake (>= 1:1.12),
-               debhelper (>= 9),
-               dh-autoreconf,
+               debhelper (>= 10),
                gettext,
                libfontconfig1-dev,
                libgif-dev,
@@ -39,12 +38,13 @@ Depends: wmaker-common (= ${source:Version}),
          ${shlibs:Depends}
 Provides: x-window-manager
 Suggests: desktop-base,
-          menu,
           wmaker-data,
           wmaker-utils,
           x-terminal-emulator,
           x11-apps,
           xterm
+Breaks: wmaker-common (<< 0.95.8-2~)
+Replaces: wmaker-common (<< 0.95.8-2~)
 Description: NeXTSTEP-like window manager for X
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker (originally
