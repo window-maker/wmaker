@@ -5,6 +5,7 @@
                 "Black" WS_BACK '(solid, black)'
                 "Blue"  WS_BACK '(solid, "#505075")'
                 "Indigo" WS_BACK '(solid, "#243e6c")'
+                "Bluemarine" WS_BACK '(solid, "#224477")'
                 "Deep Blue" WS_BACK '(solid, "#180090")'
                 "Purple" WS_BACK '(solid, "#554466")'
                 "Wheat"  WS_BACK '(solid, "wheat4")'
