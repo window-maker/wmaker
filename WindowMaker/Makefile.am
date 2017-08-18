@@ -4,7 +4,7 @@ prefsdatadir = $(pkgdatadir)
 
 wpexecbindir = @wprefs_bindir@
 
-# menus which need generated to have correct path to WPrefs
+# menus which need generated to have correct path to WPrefs or data directory
 GENERATED_MENUS =\
 	menu\
 	menu.bg\
@@ -24,11 +24,14 @@ GENERATED_MENUS =\
 	plmenu.ja\
 	plmenu.ko\
 	plmenu.nl\
+	plmenu.pl\
 	plmenu.ro\
 	plmenu.sk\
-	plmenu.zh_TW
+	plmenu.zh_CN\
+	plmenu.zh_TW\
+	wmmacros
 
-# menus which do not mention WPrefs
+# menus which do not mention WPrefs or data directory
 NONGENERATED_MENUS =\
 	menu.ca\
 	menu.cz\
@@ -54,9 +57,7 @@ NONGENERATED_MENUS =\
 	plmenu.de\
 	plmenu.fr\
 	plmenu.hr\
-	plmenu.it\
-	plmenu.pl\
-	plmenu.zh_CN
+	plmenu.it
 
 dist_prefsdata_DATA =\
 	appearance.menu\
@@ -65,7 +66,6 @@ dist_prefsdata_DATA =\
 	exitscript.sh\
 	README\
 	README.themes\
-	wmmacros\
 	$(NONGENERATED_MENUS)
 
 nodist_prefsdata_DATA = $(GENERATED_MENUS)
@@ -76,4 +76,4 @@ CLEANFILES = $(GENERATED_MENUS)
 
 $(GENERATED_MENUS):
 	$(AM_V_GEN)sed -e "s:#wprefs#:$(wpexecbindir)/WPrefs:" \
-		$(srcdir)/$@.in > $@
+		-e "s:#wmdatadir#:$(pkgdatadir):" $(srcdir)/$@.in > $@

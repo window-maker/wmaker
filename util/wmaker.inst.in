@@ -62,12 +62,8 @@ copy() {
 	if [ "$file" = "WindowMaker" ]; then
 		sed -e "s|~/GNUstep|$GSDIR|g" "$source" > "$target"
 	else
-		if test "x$GNUSTEP_USER_ROOT" = "x"; then
-			sed -e "s:#wmdatadir#:$GLOBALDIR:g" \
-					"$source" > "$target"
-		else
+		if test "x$GNUSTEP_USER_ROOT" != "x"; then
 			sed -e "s|\$HOME/GNUstep|$GSDIR|g" \
-				-e "s:#wmdatadir#:$GLOBALDIR:g" \
 					"$source" > "$target"
 		fi
 	fi
