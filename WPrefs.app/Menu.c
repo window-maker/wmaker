@@ -22,6 +22,7 @@
 #include "WPrefs.h"
 #include <assert.h>
 #include <ctype.h>
+#include <unistd.h>
 
 #include <X11/keysym.h>
 #include <X11/cursorfont.h>
@@ -1492,6 +1493,26 @@ static void showData(_Panel * panel)
 	strcat(menuPath, "/Defaults/WMRootMenu");
 
 	pmenu = WMReadPropListFromFile(menuPath);
+
+	/* check if WMRootMenu references another file, and if so,
+	   if that file is in proplist format */
+	while (WMIsPLString(pmenu)) {
+		char *path = NULL;
+
+		path = wexpandpath(WMGetFromPLString(pmenu));
+
+		if (access(path, F_OK) < 0)
+			path = wfindfile(DEF_CONFIG_PATHS, path);
+
+		/* TODO: if needed, concatenate locale suffix to path.
+		   See getLocalizedMenuFile() in src/rootmenu.c. */
+
+		if (!path)
+			break;
+
+		pmenu = WMReadPropListFromFile(path);
+		wfree(path);
+	}
 
 	if (!pmenu || !WMIsPLArray(pmenu)) {
 		int res;
