@@ -1527,7 +1527,7 @@ static void showData(_Panel * panel)
 		}
 
 		pmenu = WMReadPropListFromFile(path);
-		wfree(path);
+		menuPath = path;
 	}
 
 	if (!pmenu || !WMIsPLArray(pmenu)) {
