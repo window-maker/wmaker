@@ -1484,6 +1484,7 @@ static void showData(_Panel * panel)
 {
 	const char *gspath;
 	char *menuPath;
+	char buf[1024];
 	WMPropList *pmenu;
 
 	gspath = wusergnusteppath();
@@ -1509,6 +1510,21 @@ static void showData(_Panel * panel)
 
 		if (!path)
 			break;
+
+		if (access(path, W_OK) < 0) {
+			snprintf(buf, 1024,
+				 _("The menu file \"%s\" referenced by "
+				   "WMRootMenu is read-only.\n"
+				   "You cannot use WPrefs to modify it."),
+				 path);
+			WMRunAlertPanel(WMWidgetScreen(panel->parent),
+					panel->parent,
+					_("Warning"), buf,
+					_("OK"), NULL, NULL);
+			panel->dontSave = True;
+			wfree(path);
+			return;
+		}
 
 		pmenu = WMReadPropListFromFile(path);
 		wfree(path);
