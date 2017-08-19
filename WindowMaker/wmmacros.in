@@ -20,12 +20,6 @@
 
 
 /*
- * SETSTYLE FILE - loads a style file 
- */
-#define SETSTYLE EXEC cd $HOME/GNUstep/Library/WindowMaker/Styles; setstyle 
-
-
-/*
  * 
  * MANUAL_SEARCH(ITEM) - search manual page for ITEM
  * 
