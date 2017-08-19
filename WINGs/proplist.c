@@ -1253,22 +1253,34 @@ int WMGetPropListItemCount(WMPropList * plist)
 
 Bool WMIsPLString(WMPropList * plist)
 {
-	return (plist->type == WPLString);
+	if (plist)
+		return (plist->type == WPLString);
+	else
+		return False;
 }
 
 Bool WMIsPLData(WMPropList * plist)
 {
-	return (plist->type == WPLData);
+	if (plist)
+		return (plist->type == WPLData);
+	else
+		return False;
 }
 
 Bool WMIsPLArray(WMPropList * plist)
 {
-	return (plist->type == WPLArray);
+	if (plist)
+		return (plist->type == WPLArray);
+	else
+		return False;
 }
 
 Bool WMIsPLDictionary(WMPropList * plist)
 {
-	return (plist->type == WPLDictionary);
+	if (plist)
+		return (plist->type == WPLDictionary);
+	else
+		return False;
 }
 
 Bool WMIsPropListEqualTo(WMPropList * plist, WMPropList * other)
