@@ -1483,7 +1483,7 @@ static WMPropList *getDefaultMenu(_Panel * panel)
 static void showData(_Panel * panel)
 {
 	const char *gspath;
-	char *menuPath;
+	char *menuPath, *labelText;
 	char buf[1024];
 	WMPropList *pmenu;
 
@@ -1553,6 +1553,14 @@ static void showData(_Panel * panel)
 	}
 
 	panel->menuPath = menuPath;
+
+	snprintf(buf, 1024,
+		 _("\n\nWhen saved, the menu will be written to the file\n\"%s\"."),
+		 menuPath);
+	labelText = WMGetLabelText(panel->sections[NoInfo][0]);
+	labelText = wstrconcat(labelText, buf);
+	WMSetLabelText(panel->sections[NoInfo][0], labelText);
+	wfree(labelText);
 
 	buildMenuFromPL(panel, pmenu);
 
