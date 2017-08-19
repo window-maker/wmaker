@@ -74,6 +74,11 @@
  * 			-noext 	strip whatever is after the last dot in the
  *				file name
  *
+ *      // Use #usergnusteppath# as a placeholder for the path to the user
+ *      // GNUstep directory.  Window Maker will replace this with the value
+ *      // of GNUSTEP_USER_ROOT, if this environment variable is set, or
+ *      // "~/GNUstep" otherwise
+ *
  * <Parameters> is the program to execute.
  *
  * ** Options for command line in EXEC:
