@@ -5,7 +5,7 @@
  *
  * <Titel> [SHORTCUT <Fluchtoets>] <Kommando> <Parameters>
  *
- * <Titel> is elke tekenrige te brûken as titel. Moat tusken " stean as it
+ * <Titel> is elke tekenrige te brûken as titel. Moat tusken " stean at it
  * 	spaasjes hat.
  * 
  * SHORTCUT jout in fluchtoets op foar dy yngong. <Fluchtoets> hat
@@ -39,12 +39,12 @@
  *		       miniaturisearre, oprôle of ferburgen). Bewaret teffens de aktuele
  *		       wurkromte fan 'e brûker. Alles sil wersteld wurde by elke
  *		       start fan windowmaker, oant in oare SAVE_SESSION of
- *		       CLEAR_SESSION brûkt wurdt. As SaveSessionOnExit = Yes; yn
+ *		       CLEAR_SESSION brûkt wurdt. At SaveSessionOnExit = Yes; yn
  *		       it WindowMaker-domeinbestân, dan wurdt bewarjen automatysk
  *		       dien by elke windowmaker-ôfsluting, en wurdt in
  *		       SAVE_SESSION of CLEAR_SESSION oerskreaun (sjoch hjirnei).
  *	CLEAR_SESSION - wisket in earder bewarre sesje. Dit sil gjin
- *		       effekt hawwe as SaveSessionOnExit is True.
+ *		       effekt hawwe at SaveSessionOnExit is True.
  *	INFO - toant it Ynfopaniel
  *
  * OPEN_MENU-opmaak:
@@ -56,7 +56,7 @@
  *	// iepenet kommando en brûkt syn 'stdout' om in menu oan te meitsjen.
  *	// Kommando-output moat in jildige menubeskriuwing wêze.
  *	// De romte tusken '|' en it kommando sels is opsjoneel.
- *      // Brûk '||' yn plak fan '|' as jo it menu altiten bywurkje wolle
+ *      // Brûk '||' yn plak fan '|' at jo it menu altiten bywurkje wolle
  *	// by iepenjen. Dat soe traach wurkje kinne.
  *	OPEN_MENU | kommando
  *      OPEN_MENU || kommando
@@ -73,6 +73,11 @@
  *		Opsjes:
  * 			-noext 	lit alles fan 'e lêste punt yn 'e
  *				bestânsnamme ôf wei
+ *
+ *      // Brûk #usergnusteppath# as tydlike oantsjutting foar it paad nei de
+ *      // brûkers-GNUstep-map.  Window Maker sil dy ferfange mei de wearde
+ *      // fan GNUSTEP_USER_ROOT, at dizze omjouwingsfariabele ynsteld is, of
+ *      // oars "~/GNUstep"
  *
  * <Parameters> is it út te fieren programma.
  *
@@ -179,37 +184,7 @@
 		"Beskoattelje" EXEC xlock -allowroot -usefirst
 	"Kommando's" END
 
-	"Uterlik" MENU
-		"Tema's" OPEN_MENU -noext THEMES_DIR $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle
-		"Stilen" OPEN_MENU -noext STYLES_DIR $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle
-		"Ikoanesets" OPEN_MENU -noext ICON_SETS_DIR $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons
-		"Eftergrûn" MENU
-			"Effen" MENU
-				"Swart" WS_BACK '(solid, black)'
-				"Blau"  WS_BACK '(solid, "#505075")'
-				"Indigo" WS_BACK '(solid, "#243e6c")'
-				"Marineblau" WS_BACK '(solid, "#224477")'
-				"Poarper" WS_BACK '(solid, "#554466")'
-				"Weet"  WS_BACK '(solid, "wheat4")'
-				"Donkergriis"  WS_BACK '(solid, "#333340")'
-				"Wynread" WS_BACK '(solid, "#400020")'
-				"Effen" END
-			"Kleurferrin" MENU
-				"Sinneûndergong" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
-				"Loft" WS_BACK '(vgradient, blue4, white)'
-    			"Blautinten" WS_BACK '(vgradient, "#7080a5", "#101020")'
-				"Indigotinten" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
-			    "Poarpertinten" WS_BACK '(vgradient, "#654c66", "#151426")'
-    			"Weettinten" WS_BACK '(vgradient, "#a09060", "#302010")'
-    			"Griistinten" WS_BACK '(vgradient, "#636380", "#131318")'
-    			"Wynreadtinten" WS_BACK '(vgradient, "#600040", "#180010")'
-			"Kleurferrin" END
-			"Ofbyldingen" OPEN_MENU -noext BACKGROUNDS_DIR $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t
-		"Eftergrûn" END
-		"Tema bewarje" SHEXEC getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/"%a(Temanamme,Fier bestânsnamme yn:)"
-		"Ikoaneset bewarje" SHEXEC geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"%a(Ikoanesetnamme,Fier bestânsnamme yn:)"
-		"Foarkarrehelpmiddel" EXEC #wprefs#
-	"Uterlik" END
+	"Uterlik" OPEN_MENU "appearance.menu.fy"
 
 	"Sesje" MENU
 		"Sesje bewarje" SAVE_SESSION

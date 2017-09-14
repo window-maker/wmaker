@@ -1,0 +1,12 @@
+#include "wmmacros"
+
+Uterlik MENU 
+  "Eftergrûn" OPEN_MENU background.menu.fy
+  "Stilen" OPEN_MENU -noext  STYLES_DIR USER_STYLES_DIR WITH setstyle
+  "Tema's" OPEN_MENU -noext  THEMES_DIR USER_THEMES_DIR WITH setstyle
+  "Ikoanesets" OPEN_MENU -noext  ICON_SETS_DIR USER_ICON_SETS_DIR WITH seticons
+  "Ikoaneset bewarje" EXEC geticonset USER_ICON_SETS_DIR/"%a(Ikoanesetnamme)"
+  "Tema bewarje" EXEC getstyle -t USER_THEMES_DIR/"%a(Temanamme)"
+  "Foarkarrehelpmiddel" EXEC #wprefs#
+Uterlik  END 
+
