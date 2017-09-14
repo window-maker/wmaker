@@ -28,5 +28,5 @@
             "Centered" OPEN_MENU  BACKGROUNDS_DIR USER_BACKGROUNDS_DIR WITH wmsetbg -u -e
             "Maximized" OPEN_MENU  BACKGROUNDS_DIR USER_BACKGROUNDS_DIR WITH wmsetbg -u -a
             "Filled" OPEN_MENU  BACKGROUNDS_DIR USER_BACKGROUNDS_DIR WITH wmsetbg -u -f
-        "Image" END
+        "Images" END
 "Background" END
