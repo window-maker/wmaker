@@ -1,14 +1,14 @@
 # New translation into Dutch for Window Maker
-# Copyright (C) 2014-2016 Window Maker Developers Team
+# Copyright (C) 2014-2017 Window Maker Developers Team
 # This file is distributed under the same license as the windowmaker package.
 # Original by Alwin <translations@ziggo.nl>, 2014.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wmaker-0.95.7+\n"
+"Project-Id-Version: wmaker-0.95.8+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-03-10 10:56+0100\n"
-"PO-Revision-Date: 2017-03-10 00:00+0000\n"
+"POT-Creation-Date: 2017-09-14 19:36+0200\n"
+"PO-Revision-Date: 2017-09-14 00:00+0000\n"
 "Last-Translator: Alwin <translations@ziggo.nl>\n"
 "Language-Team: Dutch\n"
 "Language: nl\n"
@@ -667,8 +667,8 @@ msgid "bad option value %s for option ColormapMode. Using default Auto"
 msgstr ""
 "verkeerde optiewaarde %s voor optie ColormapMode. Gebruikt standaard Auto"
 
-#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:162
-#: ../../WPrefs.app/Icons.c:396 ../../WPrefs.app/Preferences.c:120
+#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:160
+#: ../../WPrefs.app/Icons.c:367 ../../WPrefs.app/Preferences.c:120
 #: ../../WPrefs.app/WindowHandling.c:140 ../../WPrefs.app/WindowHandling.c:159
 #, c-format
 msgid "OFF"
@@ -768,27 +768,27 @@ msgstr "Systeemletter"
 msgid "Bold System Font"
 msgstr "Systeemletter, vet"
 
-#: ../../WPrefs.app/FontSimple.c:664
+#: ../../WPrefs.app/FontSimple.c:660
 msgid "Sample Text"
 msgstr "Voorbeeld"
 
-#: ../../WPrefs.app/FontSimple.c:681
+#: ../../WPrefs.app/FontSimple.c:677
 msgid "Family"
 msgstr "Familie"
 
-#: ../../WPrefs.app/FontSimple.c:707
+#: ../../WPrefs.app/FontSimple.c:703
 msgid "Style"
 msgstr "Stijl"
 
-#: ../../WPrefs.app/FontSimple.c:710
+#: ../../WPrefs.app/FontSimple.c:706
 msgid "Size"
 msgstr "Grootte"
 
-#: ../../WPrefs.app/FontSimple.c:742
+#: ../../WPrefs.app/FontSimple.c:738
 msgid "Font Configuration"
 msgstr "Lettertypenconfiguratie"
 
-#: ../../WPrefs.app/FontSimple.c:744
+#: ../../WPrefs.app/FontSimple.c:740
 msgid "Configure fonts for Window Maker titlebars, menus etc."
 msgstr ""
 "Stel lettertypen in voor Window Maker-titelbalken,\n"
@@ -811,36 +811,36 @@ msgstr "3D wentelen"
 msgid "None"
 msgstr "Geen"
 
-#: ../../WPrefs.app/Icons.c:186 ../../WPrefs.app/Preferences.c:145
+#: ../../WPrefs.app/Icons.c:184 ../../WPrefs.app/Preferences.c:145
 #: ../../WPrefs.app/Preferences.c:159
 #, c-format
 msgid "bad value \"%s\" for option %s, using default \"%s\""
 msgstr "verkeerde waarde \"%s\" voor optie %s, gebruikt standaard \"%s\""
 
-#: ../../WPrefs.app/Icons.c:255
+#: ../../WPrefs.app/Icons.c:226
 #, c-format
 msgid "animation style \"%s\" is unknown, resetting to \"%s\""
 msgstr "animatiestijl \"%s\" is onbekend, teruggezet op \"%s\""
 
-#: ../../WPrefs.app/Icons.c:282
+#: ../../WPrefs.app/Icons.c:253
 msgid "Icon Positioning"
 msgstr "Icoonplaatsing"
 
-#: ../../WPrefs.app/Icons.c:361
+#: ../../WPrefs.app/Icons.c:332
 msgid "Icon Size"
 msgstr "Icoongrootte"
 
-#: ../../WPrefs.app/Icons.c:363
+#: ../../WPrefs.app/Icons.c:334
 msgid "The size of the dock/application icon and miniwindows"
 msgstr ""
 "De afmetingen van 't dok-/programma-icoon\n"
 "en minivensters"
 
-#: ../../WPrefs.app/Icons.c:380
+#: ../../WPrefs.app/Icons.c:351
 msgid "Mini-Previews for Icons"
 msgstr "Miniaturen voor iconen"
 
-#: ../../WPrefs.app/Icons.c:382
+#: ../../WPrefs.app/Icons.c:353
 msgid ""
 "The Mini-Preview provides a small view of the content of the\n"
 "window when the mouse is placed over the icon."
@@ -848,41 +848,41 @@ msgstr ""
 "De miniatuur biedt 'n kleine blik op de inhoud van 't\n"
 "venster, als de muis op 't icoon wordt geplaatst."
 
-#: ../../WPrefs.app/Icons.c:404
+#: ../../WPrefs.app/Icons.c:375
 msgid "Iconification Animation"
 msgstr "Iconificeringsanimatie"
 
-#: ../../WPrefs.app/Icons.c:428
+#: ../../WPrefs.app/Icons.c:399
 msgid "Auto-arrange icons"
 msgstr "Iconen vanzelf schikken"
 
-#: ../../WPrefs.app/Icons.c:430
+#: ../../WPrefs.app/Icons.c:401
 msgid "Keep icons and miniwindows arranged all the time."
 msgstr "Houd iconen en minivensters altijd geschikt."
 
-#: ../../WPrefs.app/Icons.c:435
+#: ../../WPrefs.app/Icons.c:406
 msgid "Omnipresent miniwindows"
 msgstr "Alomtegenwoordige minivensters"
 
-#: ../../WPrefs.app/Icons.c:437
+#: ../../WPrefs.app/Icons.c:408
 msgid "Make miniwindows be present in all workspaces."
 msgstr "Maak minivensters aanwezig in alle werkruimten."
 
-#: ../../WPrefs.app/Icons.c:442
+#: ../../WPrefs.app/Icons.c:413
 msgid "Single click activation"
 msgstr "Enkelkliksactivering"
 
-#: ../../WPrefs.app/Icons.c:444
+#: ../../WPrefs.app/Icons.c:415
 msgid "Launch applications and restore windows with a single click."
 msgstr ""
 "Start programma's op, en herstel vensters met\n"
 "'n enkele klik."
 
-#: ../../WPrefs.app/Icons.c:500
+#: ../../WPrefs.app/Icons.c:467
 msgid "Icon Preferences"
 msgstr "Icoonvoorkeuren"
 
-#: ../../WPrefs.app/Icons.c:502
+#: ../../WPrefs.app/Icons.c:469
 msgid ""
 "Icon/Miniwindow handling options. Icon positioning\n"
 "area, sizes of icons, miniaturization animation style."
@@ -1213,7 +1213,7 @@ msgstr "Verhoog/verlaag Clip"
 msgid "Toggle keyboard language"
 msgstr "Wissel toetsenbordtaal"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:375 ../../WPrefs.app/Menu.c:274
+#: ../../WPrefs.app/KeyboardShortcuts.c:375 ../../WPrefs.app/Menu.c:275
 #: ../../WPrefs.app/TexturePanel.c:1425
 msgid "Cancel"
 msgstr "Annuleren"
@@ -1224,8 +1224,8 @@ msgstr ""
 "Druk op de verlangde sneltoets(en), of klik Annuleren om opnemen te stoppen."
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:396
-#: ../../WPrefs.app/KeyboardShortcuts.c:566 ../../WPrefs.app/Menu.c:284
-#: ../../WPrefs.app/Menu.c:732
+#: ../../WPrefs.app/KeyboardShortcuts.c:566 ../../WPrefs.app/Menu.c:285
+#: ../../WPrefs.app/Menu.c:733
 msgid "Capture"
 msgstr "Opnemen"
 
@@ -1242,7 +1242,7 @@ msgstr "Acties"
 msgid "Shortcut"
 msgstr "Sneltoets"
 
-#: ../../WPrefs.app/KeyboardShortcuts.c:560 ../../WPrefs.app/Menu.c:738
+#: ../../WPrefs.app/KeyboardShortcuts.c:560 ../../WPrefs.app/Menu.c:739
 msgid "Clear"
 msgstr "Wissen"
 
@@ -1258,188 +1258,188 @@ msgstr ""
 "Wijzig de sneltoetsen voor acties, zoals van\n"
 "werkruimte wisselen en menu's openen."
 
-#: ../../WPrefs.app/Menu.c:250
+#: ../../WPrefs.app/Menu.c:251
 msgid "Select Program"
 msgstr "Kies programma"
 
-#: ../../WPrefs.app/Menu.c:412
+#: ../../WPrefs.app/Menu.c:413
 msgid "New Items"
 msgstr "Nieuwe onderdelen"
 
-#: ../../WPrefs.app/Menu.c:413
+#: ../../WPrefs.app/Menu.c:414
 msgid "Sample Commands"
 msgstr "Voorbeeldcommando's"
 
-#: ../../WPrefs.app/Menu.c:414
+#: ../../WPrefs.app/Menu.c:415
 msgid "Sample Submenus"
 msgstr "Voorbeeldmenu's"
 
-#: ../../WPrefs.app/Menu.c:426
+#: ../../WPrefs.app/Menu.c:427
 msgid "Run Program"
 msgstr "Programma uitvoeren"
 
-#: ../../WPrefs.app/Menu.c:427
+#: ../../WPrefs.app/Menu.c:428
 msgid "Internal Command"
 msgstr "Intern commando"
 
-#: ../../WPrefs.app/Menu.c:428
+#: ../../WPrefs.app/Menu.c:429
 msgid "Submenu"
 msgstr "Submenu"
 
-#: ../../WPrefs.app/Menu.c:429
+#: ../../WPrefs.app/Menu.c:430
 msgid "External Submenu"
 msgstr "Extern submenu"
 
-#: ../../WPrefs.app/Menu.c:430
+#: ../../WPrefs.app/Menu.c:431
 msgid "Generated Submenu"
 msgstr "Aangemaakt submenu"
 
-#: ../../WPrefs.app/Menu.c:431
+#: ../../WPrefs.app/Menu.c:432
 msgid "Generated PL Menu"
 msgstr "Aangemaakt PL-menu"
 
-#: ../../WPrefs.app/Menu.c:432
+#: ../../WPrefs.app/Menu.c:433
 msgid "Directory Contents"
 msgstr "Mapinhoud"
 
-#: ../../WPrefs.app/Menu.c:433
+#: ../../WPrefs.app/Menu.c:434
 msgid "Workspace Menu"
 msgstr "Werkruimtenmenu"
 
-#: ../../WPrefs.app/Menu.c:434 ../../WPrefs.app/MouseSettings.c:58
+#: ../../WPrefs.app/Menu.c:435 ../../WPrefs.app/MouseSettings.c:58
 msgid "Window List Menu"
 msgstr "Vensterlijstmenu"
 
-#: ../../WPrefs.app/Menu.c:453
+#: ../../WPrefs.app/Menu.c:454
 msgid "XTerm"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:456
+#: ../../WPrefs.app/Menu.c:457
 msgid "rxvt"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:459
+#: ../../WPrefs.app/Menu.c:460
 msgid "ETerm"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:462
+#: ../../WPrefs.app/Menu.c:463
 msgid "Run..."
 msgstr "Uitvoeren..."
 
-#: ../../WPrefs.app/Menu.c:463
+#: ../../WPrefs.app/Menu.c:464
 #, c-format
 msgid "%A(Run,Type command to run)"
 msgstr "%A(Uitvoeren,Typ uit te voeren commando)"
 
-#: ../../WPrefs.app/Menu.c:465
+#: ../../WPrefs.app/Menu.c:466
 msgid "Firefox"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:468
+#: ../../WPrefs.app/Menu.c:469
 msgid "gimp"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:471
+#: ../../WPrefs.app/Menu.c:472
 msgid "epic"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:474
+#: ../../WPrefs.app/Menu.c:475
 msgid "ee"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:477
+#: ../../WPrefs.app/Menu.c:478
 msgid "xv"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:480
+#: ../../WPrefs.app/Menu.c:481
 msgid "Evince"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:483
+#: ../../WPrefs.app/Menu.c:484
 msgid "ghostview"
 msgstr ""
 
-#: ../../WPrefs.app/Menu.c:486 ../../WPrefs.app/Menu.c:757
+#: ../../WPrefs.app/Menu.c:487 ../../WPrefs.app/Menu.c:758
 msgid "Exit Window Maker"
 msgstr "Window Maker afsluiten"
 
-#: ../../WPrefs.app/Menu.c:508
+#: ../../WPrefs.app/Menu.c:509
 msgid "Debian Menu"
 msgstr "Debian-menu"
 
-#: ../../WPrefs.app/Menu.c:511
+#: ../../WPrefs.app/Menu.c:512
 msgid "RedHat Menu"
 msgstr "RedHat-menu"
 
-#: ../../WPrefs.app/Menu.c:514
+#: ../../WPrefs.app/Menu.c:515
 msgid "Menu Conectiva"
 msgstr "Conectiva-menu"
 
-#: ../../WPrefs.app/Menu.c:517
+#: ../../WPrefs.app/Menu.c:518
 msgid "Themes"
 msgstr "Thema's"
 
-#: ../../WPrefs.app/Menu.c:523
+#: ../../WPrefs.app/Menu.c:524
 msgid "Bg Images (scale)"
 msgstr "Achtergr. (schaal)"
 
-#: ../../WPrefs.app/Menu.c:529
+#: ../../WPrefs.app/Menu.c:530
 msgid "Bg Images (tile)"
 msgstr "Achtergr. (tegel)"
 
-#: ../../WPrefs.app/Menu.c:535
+#: ../../WPrefs.app/Menu.c:536
 msgid "Assorted XTerms"
 msgstr "Allerlei XTerms"
 
-#: ../../WPrefs.app/Menu.c:537
+#: ../../WPrefs.app/Menu.c:538
 msgid "XTerm Yellow on Blue"
 msgstr "XTerm geel op blauw"
 
-#: ../../WPrefs.app/Menu.c:540
+#: ../../WPrefs.app/Menu.c:541
 msgid "XTerm White on Black"
 msgstr "XTerm wit op zwart"
 
-#: ../../WPrefs.app/Menu.c:543
+#: ../../WPrefs.app/Menu.c:544
 msgid "XTerm Black on White"
 msgstr "XTerm zwart op wit"
 
-#: ../../WPrefs.app/Menu.c:546
+#: ../../WPrefs.app/Menu.c:547
 msgid "XTerm Black on Beige"
 msgstr "XTerm zwart op beige"
 
-#: ../../WPrefs.app/Menu.c:549
+#: ../../WPrefs.app/Menu.c:550
 msgid "XTerm White on Green"
 msgstr "XTerm wit op groen"
 
-#: ../../WPrefs.app/Menu.c:552
+#: ../../WPrefs.app/Menu.c:553
 msgid "XTerm White on Olive"
 msgstr "XTerm wit op olijfgroen"
 
-#: ../../WPrefs.app/Menu.c:555
+#: ../../WPrefs.app/Menu.c:556
 msgid "XTerm Blue on Blue"
 msgstr "XTerm blauw op blauw"
 
-#: ../../WPrefs.app/Menu.c:558
+#: ../../WPrefs.app/Menu.c:559
 msgid "XTerm BIG FONTS"
 msgstr "XTerm GROTE LETTERS"
 
-#: ../../WPrefs.app/Menu.c:579
+#: ../../WPrefs.app/Menu.c:580
 msgid "Program to Run"
 msgstr "Uit te voeren programma"
 
-#: ../../WPrefs.app/Menu.c:589
+#: ../../WPrefs.app/Menu.c:590
 msgid "Browse"
 msgstr "Bladeren"
 
-#: ../../WPrefs.app/Menu.c:598
+#: ../../WPrefs.app/Menu.c:599
 msgid "Run the program inside a Xterm"
 msgstr "Voer 't programma uit in 'n XTerm"
 
-#: ../../WPrefs.app/Menu.c:607
+#: ../../WPrefs.app/Menu.c:608
 msgid "Path for Menu"
 msgstr "Pad naar menu"
 
-#: ../../WPrefs.app/Menu.c:618
+#: ../../WPrefs.app/Menu.c:619
 msgid ""
 "Enter the path for a file containing a menu\n"
 "or a list of directories with the programs you\n"
@@ -1455,11 +1455,11 @@ msgstr ""
 "of\n"
 "/usr/bin ~/xbin"
 
-#: ../../WPrefs.app/Menu.c:630 ../../WPrefs.app/Menu.c:655
+#: ../../WPrefs.app/Menu.c:631 ../../WPrefs.app/Menu.c:656
 msgid "Command"
 msgstr "Commando"
 
-#: ../../WPrefs.app/Menu.c:641
+#: ../../WPrefs.app/Menu.c:642
 msgid ""
 "Enter a command that outputs a menu\n"
 "definition to stdout when invoked."
@@ -1467,7 +1467,7 @@ msgstr ""
 "Voer 'n commando in, dat bij aanroepen\n"
 "'n uitgewerkt menu geeft naar 'stdout'."
 
-#: ../../WPrefs.app/Menu.c:646 ../../WPrefs.app/Menu.c:671
+#: ../../WPrefs.app/Menu.c:647 ../../WPrefs.app/Menu.c:672
 msgid ""
 "Cache menu contents after opening for\n"
 "the first time"
@@ -1475,7 +1475,7 @@ msgstr ""
 "Bewaar menu-inhoud na de eerste keer\n"
 "openen"
 
-#: ../../WPrefs.app/Menu.c:666
+#: ../../WPrefs.app/Menu.c:667
 msgid ""
 "Enter a command that outputs a proplist menu\n"
 "definition to stdout when invoked."
@@ -1484,11 +1484,11 @@ msgstr ""
 "'n uitgewerkt 'property list'-menu geeft\n"
 "naar 'stdout'."
 
-#: ../../WPrefs.app/Menu.c:680
+#: ../../WPrefs.app/Menu.c:681
 msgid "Command to Open Files"
 msgstr "Commando om bestanden te openen"
 
-#: ../../WPrefs.app/Menu.c:691
+#: ../../WPrefs.app/Menu.c:692
 msgid ""
 "Enter the command you want to use to open the\n"
 "files in the directories listed below."
@@ -1496,71 +1496,71 @@ msgstr ""
 "Voer 't te gebruiken commando in, om de\n"
 "bestanden in onderstaande mappen te openen."
 
-#: ../../WPrefs.app/Menu.c:699
+#: ../../WPrefs.app/Menu.c:700
 msgid "Directories with Files"
 msgstr "Mappen met bestanden"
 
-#: ../../WPrefs.app/Menu.c:710
+#: ../../WPrefs.app/Menu.c:711
 msgid "Strip extensions from file names"
 msgstr "Extensies van bestandsnamen af halen"
 
-#: ../../WPrefs.app/Menu.c:721
+#: ../../WPrefs.app/Menu.c:722
 msgid "Keyboard Shortcut"
 msgstr "Sneltoets"
 
-#: ../../WPrefs.app/Menu.c:753
+#: ../../WPrefs.app/Menu.c:754
 msgid "Arrange Icons"
 msgstr "Iconen schikken"
 
-#: ../../WPrefs.app/Menu.c:754
+#: ../../WPrefs.app/Menu.c:755
 msgid "Hide All Windows Except For The Focused One"
 msgstr "Alle vensters verbergen, behalve die focus heeft"
 
-#: ../../WPrefs.app/Menu.c:755
+#: ../../WPrefs.app/Menu.c:756
 msgid "Show All Windows"
 msgstr "Alle vensters tonen"
 
-#: ../../WPrefs.app/Menu.c:758
+#: ../../WPrefs.app/Menu.c:759
 msgid "Exit X Session"
 msgstr "X-sessie afsluiten"
 
-#: ../../WPrefs.app/Menu.c:759
+#: ../../WPrefs.app/Menu.c:760
 msgid "Restart Window Maker"
 msgstr "Window Maker herstarten"
 
-#: ../../WPrefs.app/Menu.c:760
+#: ../../WPrefs.app/Menu.c:761
 msgid "Start Another Window Manager   : ("
 msgstr "Andere vensterbeheerder starten   : ("
 
-#: ../../WPrefs.app/Menu.c:762
+#: ../../WPrefs.app/Menu.c:763
 msgid "Save Current Session"
 msgstr "Huidige sessie opslaan"
 
-#: ../../WPrefs.app/Menu.c:763
+#: ../../WPrefs.app/Menu.c:764
 msgid "Clear Saved Session"
 msgstr "Opgeslagen sessie wissen"
 
-#: ../../WPrefs.app/Menu.c:764
+#: ../../WPrefs.app/Menu.c:765
 msgid "Refresh Screen"
 msgstr "Scherm vernieuwen"
 
-#: ../../WPrefs.app/Menu.c:765
+#: ../../WPrefs.app/Menu.c:766
 msgid "Open Info Panel"
 msgstr "Infopaneel openen"
 
-#: ../../WPrefs.app/Menu.c:766
+#: ../../WPrefs.app/Menu.c:767
 msgid "Open Copyright Panel"
 msgstr "Auteursrechtenpaneel openen"
 
-#: ../../WPrefs.app/Menu.c:771
+#: ../../WPrefs.app/Menu.c:772
 msgid "Window Manager to Start"
 msgstr "Te starten vensterbeheerder"
 
-#: ../../WPrefs.app/Menu.c:784
+#: ../../WPrefs.app/Menu.c:785
 msgid "Do not confirm action."
 msgstr "Actie niet bevestigen."
 
-#: ../../WPrefs.app/Menu.c:791
+#: ../../WPrefs.app/Menu.c:792
 msgid ""
 "Instructions:\n"
 "\n"
@@ -1573,60 +1573,57 @@ msgid ""
 msgstr ""
 "Instructies:\n"
 "\n"
-"- Versleep onderdelen van links naar 't menu, om\n"
-"  nieuwe ingangen toe te voegen.\n"
-"- Versleep onderdelen uit 't menu, om ze te verwijderen.\n"
-"- Versleep onderdelen binnen 't menu, om hun plaats te\n"
-"  veranderen.\n"
-"- Versleep onderdelen met Control ingedrukt, om ze te\n"
-"  kopiëren.\n"
-"- Dubbelklik op 'n menu-ingang, om de benaming te\n"
-"  wijzigen.\n"
-"- Klik op 'n menu-ingang, om gerelateerde informatie te\n"
-"  wijzigen."
+"Versleep onderdelen...\n"
+" ...van links naar 't menu, om ingangen toe te voegen.\n"
+" ...uit 't menu, om ze te verwijderen.\n"
+" ...binnen 't menu, om hun plaats te veranderen.\n"
+" ...met Control ingedrukt, om ze te kopiëren.\n"
+"(Dubbel)klik op 'n menu-ingang, om...\n"
+" ...de benaming te wijzigen.\n"
+" ...gerelateerde informatie te wijzigen."
 
-#: ../../WPrefs.app/Menu.c:1030
+#: ../../WPrefs.app/Menu.c:1031
 #, c-format
 msgid "unknown command '%s' in menu"
 msgstr "onbekend commando '%s' in menu"
 
-#: ../../WPrefs.app/Menu.c:1054
+#: ../../WPrefs.app/Menu.c:1055
 msgid ": Execute Program"
 msgstr ": start programma"
 
-#: ../../WPrefs.app/Menu.c:1058
+#: ../../WPrefs.app/Menu.c:1059
 msgid ": Perform Internal Command"
 msgstr ": voer intern commando uit"
 
-#: ../../WPrefs.app/Menu.c:1062
+#: ../../WPrefs.app/Menu.c:1063
 msgid ": Open a Submenu"
 msgstr ": open 'n submenu"
 
-#: ../../WPrefs.app/Menu.c:1066
+#: ../../WPrefs.app/Menu.c:1067
 msgid ": Program Generated Submenu"
 msgstr ": submenu uit programma"
 
-#: ../../WPrefs.app/Menu.c:1070
+#: ../../WPrefs.app/Menu.c:1071
 msgid ": Program Generated Proplist Submenu"
 msgstr ": PropList-submenu uit programma"
 
-#: ../../WPrefs.app/Menu.c:1074
+#: ../../WPrefs.app/Menu.c:1075
 msgid ": Directory Contents Menu"
 msgstr ": menu met mapinhoud"
 
-#: ../../WPrefs.app/Menu.c:1078
+#: ../../WPrefs.app/Menu.c:1079
 msgid ": Open Workspaces Submenu"
 msgstr ": open werkruimtensubmenu"
 
-#: ../../WPrefs.app/Menu.c:1082
+#: ../../WPrefs.app/Menu.c:1083
 msgid ": Open Window List Submenu"
 msgstr ": open vensterlijstsubmenu"
 
-#: ../../WPrefs.app/Menu.c:1298
+#: ../../WPrefs.app/Menu.c:1299
 msgid "Remove Submenu"
 msgstr "Submenu verwijderen"
 
-#: ../../WPrefs.app/Menu.c:1299
+#: ../../WPrefs.app/Menu.c:1300
 msgid ""
 "Removing this item will destroy all items inside\n"
 "the submenu. Do you really want to do that?"
@@ -1634,45 +1631,45 @@ msgstr ""
 "Dit onderdeel verwijderen, zal alle ingangen in 't\n"
 "submenu vernietigen. Wilt u dat echt doen?"
 
-#: ../../WPrefs.app/Menu.c:1301
+#: ../../WPrefs.app/Menu.c:1302
 msgid "Yes"
 msgstr "Ja"
 
-#: ../../WPrefs.app/Menu.c:1301
+#: ../../WPrefs.app/Menu.c:1302
 msgid "No"
 msgstr "Nee"
 
-#: ../../WPrefs.app/Menu.c:1301
+#: ../../WPrefs.app/Menu.c:1302
 msgid "Yes, don't ask again"
 msgstr "Ja, vraag niet weer"
 
-#: ../../WPrefs.app/Menu.c:1439
+#: ../../WPrefs.app/Menu.c:1440
 #, c-format
 msgid "Invalid menu command \"%s\" with label \"%s\" cleared"
 msgstr "Ongeldig menucommando \"%s\" met label \"%s\" leeg"
 
-#: ../../WPrefs.app/Menu.c:1442 ../../WPrefs.app/Menu.c:1500
-#: ../../WPrefs.app/WPrefs.c:668
+#: ../../WPrefs.app/Menu.c:1443 ../../WPrefs.app/Menu.c:1522
+#: ../../WPrefs.app/Menu.c:1537 ../../WPrefs.app/WPrefs.c:668
 msgid "Warning"
 msgstr "Waarschuwing"
 
-#: ../../WPrefs.app/Menu.c:1442 ../../WPrefs.app/Menu.c:1475
-#: ../../WPrefs.app/MouseSettings.c:156 ../../WPrefs.app/MouseSettings.c:176
-#: ../../WPrefs.app/TexturePanel.c:585 ../../WPrefs.app/TexturePanel.c:663
-#: ../../WPrefs.app/TexturePanel.c:1419 ../../WPrefs.app/WPrefs.c:617
-#: ../../WPrefs.app/WPrefs.c:621 ../../WPrefs.app/WPrefs.c:641
-#: ../../WPrefs.app/WPrefs.c:653 ../../WPrefs.app/WPrefs.c:659
-#: ../../WPrefs.app/WPrefs.c:668 ../../WPrefs.app/WPrefs.c:699
-#: ../../WPrefs.app/WPrefs.c:703
+#: ../../WPrefs.app/Menu.c:1443 ../../WPrefs.app/Menu.c:1476
+#: ../../WPrefs.app/Menu.c:1523 ../../WPrefs.app/MouseSettings.c:156
+#: ../../WPrefs.app/MouseSettings.c:176 ../../WPrefs.app/TexturePanel.c:585
+#: ../../WPrefs.app/TexturePanel.c:663 ../../WPrefs.app/TexturePanel.c:1419
+#: ../../WPrefs.app/WPrefs.c:617 ../../WPrefs.app/WPrefs.c:621
+#: ../../WPrefs.app/WPrefs.c:641 ../../WPrefs.app/WPrefs.c:653
+#: ../../WPrefs.app/WPrefs.c:659 ../../WPrefs.app/WPrefs.c:668
+#: ../../WPrefs.app/WPrefs.c:699 ../../WPrefs.app/WPrefs.c:703
 msgid "OK"
 msgstr "OK"
 
-#: ../../WPrefs.app/Menu.c:1471
+#: ../../WPrefs.app/Menu.c:1472
 #, c-format
 msgid "Could not open default menu from '%s'"
 msgstr "Kon standaardmenu niet openen uit '%s'"
 
-#: ../../WPrefs.app/Menu.c:1475 ../../WPrefs.app/MouseSettings.c:154
+#: ../../WPrefs.app/Menu.c:1476 ../../WPrefs.app/MouseSettings.c:154
 #: ../../WPrefs.app/MouseSettings.c:173 ../../WPrefs.app/TexturePanel.c:585
 #: ../../WPrefs.app/TexturePanel.c:661 ../../WPrefs.app/WPrefs.c:617
 #: ../../WPrefs.app/WPrefs.c:621 ../../WPrefs.app/WPrefs.c:638
@@ -1681,7 +1678,16 @@ msgstr "Kon standaardmenu niet openen uit '%s'"
 msgid "Error"
 msgstr "Fout"
 
-#: ../../WPrefs.app/Menu.c:1501
+#: ../../WPrefs.app/Menu.c:1516
+#, c-format
+msgid ""
+"The menu file \"%s\" referenced by WMRootMenu is read-only.\n"
+"You cannot use WPrefs to modify it."
+msgstr ""
+"Menubestand \"%s\" verwezen door WMRootMenu is alleen-lezen.\n"
+"U kunt WPrefs niet gebruiken om 't te wijzigen."
+
+#: ../../WPrefs.app/Menu.c:1538
 msgid ""
 "The menu file format currently in use is not supported\n"
 "by this tool. Do you want to discard the current menu\n"
@@ -1691,19 +1697,32 @@ msgstr ""
 "door dit hulpmiddel. Wilt u 't huidige menu verwerpen,\n"
 "om dit hulpmiddel te gebruiken?"
 
-#: ../../WPrefs.app/Menu.c:1504
+#: ../../WPrefs.app/Menu.c:1541
 msgid "Yes, Discard and Update"
 msgstr "Ja, verwerp en werk bij"
 
-#: ../../WPrefs.app/Menu.c:1504
+#: ../../WPrefs.app/Menu.c:1541
 msgid "No, Keep Current Menu"
 msgstr "Nee, behoud huidig menu"
 
-#: ../../WPrefs.app/Menu.c:1750
+#: ../../WPrefs.app/Menu.c:1558
+#, c-format
+msgid ""
+"\n"
+"\n"
+"When saved, the menu will be written to the file\n"
+"\"%s\"."
+msgstr ""
+"\n"
+"\n"
+"Bij opslaan wordt 't menu geschreven naar 't bestand\n"
+"\"%s\"."
+
+#: ../../WPrefs.app/Menu.c:1795
 msgid "Applications Menu Definition"
 msgstr "Programmamenu bepalen"
 
-#: ../../WPrefs.app/Menu.c:1752
+#: ../../WPrefs.app/Menu.c:1797
 msgid "Edit the menu for launching applications."
 msgstr "Bewerk 't menu voor programma's opstarten."
 

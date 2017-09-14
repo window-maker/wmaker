@@ -7,6 +7,7 @@ wpexecbindir = @wprefs_bindir@
 # menus which need generated to have correct path to WPrefs or data directory
 GENERATED_MENUS =\
 	appearance.menu\
+	appearance.menu.nl\
 	menu\
 	menu.bg\
 	menu.fi\
@@ -63,6 +64,7 @@ NONGENERATED_MENUS =\
 dist_prefsdata_DATA =\
 	autostart.sh\
 	background.menu\
+	background.menu.nl\
 	exitscript.sh\
 	README\
 	README.themes\

@@ -217,9 +217,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/xsessions/WindowMaker.desktop
 %{_datadir}/applications/WindowMaker.desktop
 %dir %{_datadir}/WindowMaker
-%{_datadir}/WindowMaker/appearance.menu
+%{_datadir}/WindowMaker/appearance.menu*
 %{_datadir}/WindowMaker/autostart.sh
-%{_datadir}/WindowMaker/background.menu
+%{_datadir}/WindowMaker/background.menu*
 %{_datadir}/WindowMaker/exitscript.sh
 %{_datadir}/WindowMaker/menu*
 %{_datadir}/WindowMaker/plmenu*
