@@ -822,7 +822,7 @@ function execute_commands(line,               replaced_line, command) {
     } else if (command == "today") {
       # Make sure the date will be in english (we use "C" because it not certain
       # that the English locale is enabled on the machine of the user)
-      replaced_line = replaced_line "'"`LANG=C date '+%d %B %Y' | sed -e 's,^0,,' `"'";
+      replaced_line = replaced_line "'"`LANG=C date -u -r ../../ChangeLog '+%d %B %Y' | sed -e 's,^0,,' `"'";
 
     # Commands to display text in a special style ##############################
     } else if (command == "asis") {
