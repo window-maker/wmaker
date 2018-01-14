@@ -412,6 +412,20 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 	 */
 	wDefaultFillAttributes(wwin->wm_instance, wwin->wm_class, &wwin->user_flags,
 			       &wwin->defined_user_flags, False);
+
+	/* Restore decoration if the user has enabled the
+	 * IgnoreDecorationChanges option */
+	if (wwin->user_flags.ignore_decoration_changes) {
+		WSETUFLAG(wwin, no_titlebar, 0);
+		WSETUFLAG(wwin, no_resizable, 0);
+		WSETUFLAG(wwin, no_miniaturizable, 0);
+		WSETUFLAG(wwin, no_resizebar, 0);
+		WSETUFLAG(wwin, no_close_button, 0);
+		WSETUFLAG(wwin, no_miniaturize_button, 0);
+		WSETUFLAG(wwin, no_border, 0);
+		WSETUFLAG(wwin, no_movable, 0);
+	}
+
 	/*
 	 * Sanity checks for attributes that depend on other attributes
 	 */

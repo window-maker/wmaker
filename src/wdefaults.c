@@ -82,6 +82,7 @@ static WMPropList *ASharedAppIcon;	/* app */
 static WMPropList *ANoLanguageButton;
 #endif
 static WMPropList *AStartWorkspace;
+static WMPropList *AIgnoreDecorationChanges;
 static WMPropList *AIcon;
 static WMPropList *AnyWindow;
 static WMPropList *No;
@@ -121,6 +122,7 @@ static void init_wdefaults(void)
 #endif
 
 	AStartWorkspace = WMCreatePLString("StartWorkspace");
+	AIgnoreDecorationChanges = WMCreatePLString("IgnoreDecorationChanges");
 
 	AnyWindow = WMCreatePLString("*");
 	No = WMCreatePLString("No");
@@ -300,6 +302,9 @@ void wDefaultFillAttributes(const char *instance, const char *class,
 
 	value = get_value(dw, dc, dn, da, AFullMaximize, No, useGlobalDefault);
 	APPLY_VAL(value, full_maximize, AFullMaximize);
+
+	value = get_value(dw, dc, dn, da, AIgnoreDecorationChanges, No, useGlobalDefault);
+	APPLY_VAL(value, ignore_decoration_changes, AIgnoreDecorationChanges);
 
 #ifdef XKB_BUTTON_HINT
 	value = get_value(dw, dc, dn, da, ANoLanguageButton, No, useGlobalDefault);

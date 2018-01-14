@@ -142,6 +142,8 @@ typedef struct {
      * generate their own appicons and for apps that have no_appicon=1
      */
     unsigned int emulate_appicon:1;
+    /* Ignore any changes to the decoration elements (titlebar, etc) */
+    unsigned int ignore_decoration_changes:1;
 
 } WWindowAttributes;
 

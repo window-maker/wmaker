@@ -1325,6 +1325,17 @@ static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 		ret = False;
 	}
 
+	/* Restore decoration if the user has enabled the
+	 * IgnoreDecorationChanges option */
+	if (WFLAGP(wwin, ignore_decoration_changes)) {
+		wwin->client_flags.no_titlebar = 0;
+		wwin->client_flags.no_resizable = 0;
+		wwin->client_flags.no_miniaturizable = 0;
+		wwin->client_flags.no_resizebar = 0;
+		wwin->client_flags.no_border = 0;
+		wwin->client_flags.no_movable = 0;
+	}
+
 	wwin->type = type;
 	*layer = getWindowLayer(wwin);
 

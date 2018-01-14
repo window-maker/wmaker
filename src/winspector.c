@@ -156,7 +156,11 @@ static const struct {
 
 	{ "NoMiniaturizable", { .no_miniaturizable = 1 }, N_("Do not let it be minimized"),
 	  N_("Do not let the window of this application be\n"
-	     "minimized.\n") }
+	     "minimized.\n") },
+
+	{ "IgnoreDecorationChanges", { .ignore_decoration_changes = 1 }, N_("Ignore decoration changes"),
+	  N_("Ignore any request from the application to change\n"
+	     "window decorations (like hiding the titlebar).\n") }
 
 #ifdef XKB_BUTTON_HINT
 	,{ "NoLanguageButton", { .no_language_button = 1 }, N_("Disable language button"),
