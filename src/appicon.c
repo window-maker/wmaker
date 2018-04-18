@@ -159,6 +159,13 @@ void create_appicon_for_application(WApplication *wapp, WWindow *wwin)
 		if (!WFLAGP(wapp->main_window_desc, no_appicon))
 			paint_app_icon(wapp);
 	}
+
+	/* At this point the application is fully set up and all icon and
+	 * window data are known - so try to save the icon file for docked
+	 * applications to ensure that the file exists when window maker
+	 * starts up next time. */
+	if (wapp->app_icon->docked && !WFLAGP(wapp->main_window_desc, no_appicon))
+		save_appicon(wapp->app_icon);
 }
 
 void unpaint_app_icon(WApplication *wapp)
