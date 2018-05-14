@@ -134,7 +134,7 @@ Sending the patch to the mailing list
 
 Send your patches to:
 
-wmaker-dev@lists.windowmaker.org
+wmaker-dev@googlegroups.com
 
 Please do not send patches to any individual developer unless you have a very
 good reason to avoid more people being able to comment (and improve) on your
@@ -147,7 +147,7 @@ you, otherwise you may face the problems below. Doing this is really easy:
 #   (of course, replace smtp.example.com with your ISP's)
 git config --global sendemail.smtpserver "smtp.example.com"
 git config --global sendemail.validate   true
-git config sendemail.to "Window Maker Devel <wmaker-dev@lists.windowmaker.org>"
+git config sendemail.to "Window Maker Devel <wmaker-dev@googlegroups.com>"
 
 # If you're sending more than 1 patch, you may be interested in having an
 # introduction mail for the batch:

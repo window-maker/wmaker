@@ -34,7 +34,7 @@ AC_PREREQ([2.69])
 
 dnl Configuration for Autoconf and Automake
 dnl =======================================
-AC_INIT([WindowMaker],[0.95.8],[wmaker-dev@lists.windowmaker.org],[WindowMaker],[http://www.windowmaker.org/])
+AC_INIT([WindowMaker],[0.95.8],[wmaker-dev@googlegroups.com],[WindowMaker],[http://www.windowmaker.org/])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 
@@ -370,7 +370,7 @@ AC_SEARCH_LIBS([strerror], [cposix])
 dnl nanosleep is generally available in standard libc, although not always the
 dnl case. One known example is Solaris which needs -lrt
 AC_SEARCH_LIBS([nanosleep], [rt], [],
-    [AC_MSG_ERROR([function 'nanosleep' not found, please report to wmaker-dev@lists.windowmaker.org])])
+    [AC_MSG_ERROR([function 'nanosleep' not found, please report to wmaker-dev@googlegroups.com])])
 
 dnl the flag 'O_NOFOLLOW' for 'open' is used in WINGs
 WM_FUNC_OPEN_NOFOLLOW
