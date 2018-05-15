@@ -130,6 +130,7 @@ static void hackPathInTexture(WMPropList * texture, const char *prefix)
 	    strcasecmp(t, "spixmap") == 0 ||
 	    strcasecmp(t, "mpixmap") == 0 ||
 	    strcasecmp(t, "cpixmap") == 0 ||
+	    strcasecmp(t, "fpixmap") == 0 ||
 	    strcasecmp(t, "tvgradient") == 0 ||
 	    strcasecmp(t, "thgradient") == 0 ||
 	    strcasecmp(t, "tdgradient") == 0) {
