@@ -6,7 +6,7 @@ Appearance MENU
   "Themes" OPEN_MENU -noext  THEMES_DIR USER_THEMES_DIR WITH setstyle
   "Icon Sets" OPEN_MENU -noext  ICON_SETS_DIR USER_ICON_SETS_DIR WITH seticons
   "Save IconSet" EXEC geticonset USER_ICON_SETS_DIR/"%a(IconSet name)"
-  "Save Theme" EXEC getstyle -t USER_THEMES_DIR/"%a(Theme name)"
+  "Save Theme" EXEC getstyle -p "%a(Theme name)"
   "Preferences Utility" EXEC #wprefs#
 Appearance  END 
 
