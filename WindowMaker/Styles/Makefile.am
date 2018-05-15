@@ -2,6 +2,7 @@
 prefsdatadir = $(pkgdatadir)/Styles
 
 prefsdata_DATA =\
+	Adwaita.style\
 	Autumn.style\
 	Black.style\
 	BlackTexture.style\
