@@ -148,6 +148,10 @@ static const struct {
 	{ "WindowShortcut9Key",  N_("Shortcut for window 9") },
 	{ "WindowShortcut10Key", N_("Shortcut for window 10") },
 
+	/* Head Selection */
+	{ "MoveTo12to6Head",     N_("Move to right/bottom/left/top head") },
+	{ "MoveTo6to12Head",    N_("Move to left/top/right/bottom head") },
+
 	/* Misc. */
 	{ "WindowRelaunchKey", N_("Launch new instance of application") },
 	{ "ScreenSwitchKey",   N_("Switch to Next Screen/Monitor") },

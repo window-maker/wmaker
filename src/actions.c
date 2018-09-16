@@ -669,6 +669,91 @@ void handleMaximize(WWindow *wwin, int directions)
 	}
 }
 
+/* Moving window between heads
+ *
+ * Window is moved between all avaiable heads for current screen in
+ * requested direction.
+ *
+ * If heads have different sizes, window position will be adjusted to be inside
+ * screen. Window will be unmaximized on move, so that it can be immediately be
+ * maximixed by another shortcut.
+ *
+ *
+ * direction = 0 means move clock-wise from 12h position to 6h
+ *               (first try moving right, then bottom, then left, then up)
+ * direction = 1 means move clock-wise from 6h position to 12h
+ *               (first try moving left, then up, then right, then bottom)
+ *
+ *
+ * As side effect this mean if you have 9 monitors - you will not be able to
+ * move window into central cell without mouse.
+ *
+ * For common cases with 1 or 2 extra monitors this should work just fine.
+ *
+ * */
+
+void moveBetweenHeads(WWindow *wwin, int direction)
+{
+	int head = wGetHeadForWindow(wwin);
+	int destHead = -1;
+
+	unsigned int new_width, new_height;
+	int offsetX, newX = 0;
+	int offsetY, newY = 0;
+	WArea totalArea, oldHeadArea, destHeadArea;
+	WScreen *scr = wwin->screen_ptr;
+
+	int try_movements[2][4] = {
+		{DIRECTION_RIGHT, DIRECTION_DOWN, DIRECTION_LEFT, DIRECTION_UP},
+		{DIRECTION_LEFT, DIRECTION_UP, DIRECTION_RIGHT, DIRECTION_DOWN}
+	};
+
+	/* loop through directions array and try movements until one works */
+	for (int try_movement_idx = 0;
+			destHead == -1 && try_movement_idx < 4; try_movement_idx++) {
+			destHead = wGetHeadRelativeToCurrentHead(wwin->screen_ptr,
+					head, try_movements[direction][try_movement_idx]);
+	}
+
+	if (destHead != -1) {
+		totalArea.x1 = 0;
+		totalArea.y1 = 0;
+		totalArea.x2 = scr->scr_width;
+		totalArea.y2 = scr->scr_height;
+
+		oldHeadArea = wGetUsableAreaForHead(scr, head, &totalArea, True);
+		destHeadArea = wGetUsableAreaForHead(scr, destHead, &totalArea, True);
+
+		offsetX = wwin->frame_x - oldHeadArea.x1;
+		offsetY = wwin->frame_y - oldHeadArea.y1;
+
+		newX = destHeadArea.x1 + offsetX;
+		newY = destHeadArea.y1 + offsetY;
+
+		new_width = wwin->client.width;
+		new_height = wwin->client.height;
+
+		/* try to brind window inside head coordinates */
+		if (newX > destHeadArea.x2)
+			newX = destHeadArea.x2 - wwin->client.width;
+
+		if (newX < destHeadArea.x1)
+			newX = destHeadArea.x1;
+
+		if (newY > destHeadArea.y2)
+			newY = destHeadArea.y2 - wwin->client.height;
+
+		if (newY < destHeadArea.y1)
+			newY = destHeadArea.y1;
+
+		/* unset maximization state */
+		wwin->flags.maximized = 0;
+		wWindowConfigure(wwin, newX, newY, new_width, new_height);
+	}
+
+	return;
+}
+
 /* the window boundary coordinates */
 typedef struct {
 	int left;

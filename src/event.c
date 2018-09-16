@@ -1802,6 +1802,13 @@ static void handleKeyPress(XEvent * event)
 
 		break;
 
+	case WKBD_MOVE_12_TO_6_HEAD:
+	case WKBD_MOVE_6_TO_12_HEAD:
+		if (wwin)
+			moveBetweenHeads(wwin, command - WKBD_MOVE_12_TO_6_HEAD);
+
+		break;
+
 	case WKBD_RELAUNCH:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin))
 			(void) RelaunchWindow(wwin);
