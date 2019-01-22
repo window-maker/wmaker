@@ -24,6 +24,7 @@
 
 char *Terminals[MAX_NR_APPS][2] = {
 	{ N_("xterm"), "xterm" },
+	{ N_("st"), "st" },
 	{ N_("mrxvt"), "mrxvt" },
 	{ N_("Konsole"), "konsole" },
 	{ N_("Urxvt"), "urxvt" },
@@ -79,6 +80,7 @@ char *Graphics[MAX_NR_APPS][2] = {
 	{ N_("KPaint"), "kpaint" },
 	{ N_("Blender"), "blender" },
 	{ N_("KSnapshot"), "ksnapshot" },
+	{ N_("Spectacle"), "spectacle" },
 	{ N_("GPhoto"), "gphoto" },
 	{ N_("DigiKam"), "digikam" },
         { N_("GQview"), "gqview" },
@@ -127,6 +129,7 @@ char *Multimedia[MAX_NR_APPS][2] = {
 	{ N_("XawTV"), "xawtv" },
 	{ N_("XPlayCD"), "xplaycd" },
 	{ N_("XBMC"), "xbmc" },
+	{ N_("Kodi"), "kodi" },
 	{ NULL, NULL}
 };
 
