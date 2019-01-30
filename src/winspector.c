@@ -1253,7 +1253,7 @@ static InspectorPanel *createInspectorForWindow(WWindow *wwin, int xpos, int ypo
 
 	wWindowMap(panel->frame);
 
-	showIconFor(WMWidgetScreen(panel->alwChk), panel, wwin->wm_instance, wwin->wm_class, UPDATE_TEXT_FIELD);
+	showIconFor(WMWidgetScreen(panel->alwChk), panel, wwin->wm_instance, wwin->wm_class, REVERT_TO_DEFAULT);
 
 	return panel;
 }
@@ -1365,6 +1365,7 @@ static void create_tab_window_advanced(WWindow *wwin, InspectorPanel *panel, int
 
 static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel)
 {
+	const char *db_icon;
 	WScreen *scr = wwin->screen_ptr;
 	int i = 0;
 
@@ -1394,7 +1395,8 @@ static void create_tab_icon_workspace(WWindow *wwin, InspectorPanel *panel)
 	panel->fileText = WMCreateTextField(panel->iconFrm);
 	WMMoveWidget(panel->fileText, 20, 105);
 	WMResizeWidget(panel->fileText, PWIDTH - (2 * 20) - (2 * 15), 20);
-	WMSetTextFieldText(panel->fileText, NULL);
+	db_icon = wDefaultGetIconFile(wwin->wm_instance, wwin->wm_class, False);
+	WMSetTextFieldText(panel->fileText, db_icon);
 	WMAddNotificationObserver(textEditedObserver, panel, WMTextDidEndEditingNotification, panel->fileText);
 
 	panel->alwChk = WMCreateSwitchButton(panel->iconFrm);
