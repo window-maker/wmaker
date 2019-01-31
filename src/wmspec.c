@@ -388,43 +388,6 @@ int wNETWMGetCurrentDesktopFromHint(WScreen *scr)
 	return -1;
 }
 
-/*
- * Find the best icon to be used by Window Maker for appicon/miniwindows.
- * Currently the algorithm is to take the image with the size closest
- * to icon_size x icon_size, but never bigger than that.
- *
- * This algorithm is very poorly implemented and needs to be redone (it can
- * easily select images with very large widths and very small heights over
- * square images, if the area of the former is closer to the desired one).
- *
- * The logic can also be changed to accept bigger images and scale them down.
- */
-static unsigned long *findBestIcon(unsigned long *data, unsigned long items)
-{
-	int size, wanted, d;
-	unsigned long i, distance;
-	unsigned long *icon;
-
-	/* better use only 75% of icon_size. For 64x64 this means 48x48
-	 * This leaves room around the icon for the miniwindow title and
-	 * results in better overall aesthetics -Dan */
-	wanted = wPreferences.icon_size * wPreferences.icon_size;
-
-	for (icon = NULL, distance = wanted, i = 0L; i < items - 1;) {
-		size = data[i] * data[i + 1];
-		if (size == 0)
-			break;
-		d = wanted - size;
-		if (d >= 0 && d <= distance && (i + size + 2) <= items) {
-			distance = d;
-			icon = &data[i];
-		}
-		i += size + 2;
-	}
-
-	return icon;
-}
-
 static RImage *makeRImageFromARGBData(unsigned long *data)
 {
 	int size, width, height, i;
@@ -452,13 +415,105 @@ static RImage *makeRImageFromARGBData(unsigned long *data)
 	return image;
 }
 
+/* Find the best icon to be used by Window Maker for appicon/miniwindows. */
+static RImage *findBestIcon(unsigned long *data, unsigned long items)
+{
+	int wanted;
+	int dx, dy, d;
+	int sx, sy, size;
+	int best_d, largest;
+	unsigned long i;
+	unsigned long *icon;
+	RImage *src_image, *ret_image;
+	double f;
+
+	if (wPreferences.enforce_icon_margin) {
+
+		/* better use only 75% of icon_size. For 64x64 this means 48x48
+		 * This leaves room around the icon for the miniwindow title and
+		 * results in better overall aesthetics -Dan */
+		wanted = (int)((double)wPreferences.icon_size * 0.75 + 0.5);
+
+		/* the size should be a multiple of 4 */
+		wanted = (wanted >> 2) << 2;
+
+	} else {
+
+		/* This is the "old" approach, which tries to find the largest
+		 * icon that still fits into icon_size. */
+		wanted = wPreferences.icon_size;
+
+	}
+
+	/* try to find an icon which is close to the wanted size, but not larger */
+	icon = NULL;
+	best_d = wanted * wanted * 2;
+	for (i = 0L; i < items - 1;) {
+
+		/* get the current icon's size */
+		sx = (int)data[i];
+		sy = (int)data[i + 1];
+		if ((sx < 1) || (sy < 1))
+			break;
+		size = sx * sy + 2;
+
+		/* check the size difference if it's not too large */
+		if ((sx <= wanted) && (sy <= wanted)) {
+			dx = wanted - sx;
+			dy = wanted - sy;
+			d = (dx * dx) + (dy * dy);
+			if (d < best_d) {
+				icon = &data[i];
+				best_d = d;
+			}
+		}
+
+		i += size;
+	}
+
+	/* if an icon has been found, no transformation is needed */
+	if (icon)
+		return makeRImageFromARGBData(icon);
+
+	/* We need to scale down an icon. Find the largest one, for it usually
+	 * looks better to scale down a large image by a large scale than a
+	 * small image by a small scale. */
+	largest = 0;
+	for (i = 0L; i < items - 1;) {
+		size = (int)data[i] * (int)data[i + 1];
+		if (size == 0)
+			break;
+		if (size > largest) {
+			icon = &data[i];
+			largest = size;
+		}
+		i += size + 2;
+	}
+
+	/* give up if there's no icon to work with */
+	if (!icon)
+		return NULL;
+
+	/* create a scaled down version of the icon */
+	src_image = makeRImageFromARGBData(icon);
+	if (src_image->width > src_image->height) {
+		f = (double)wanted / (double)src_image->width;
+		ret_image = RScaleImage(src_image, wanted, (int)(f * (double)(src_image->height)));
+	} else {
+		f = (double)wanted / (double)src_image->height;
+		ret_image = RScaleImage(src_image, (int)(f * (double)src_image->width), wanted);
+	}
+	RReleaseImage(src_image);
+	return ret_image;
+}
+
 RImage *get_window_image_from_x11(Window window)
 {
 	RImage *image;
 	Atom type;
 	int format;
 	unsigned long items, rest;
-	unsigned long *property, *data;
+	unsigned long *property;
 
 	/* Get the icon from X11 Window */
 	if (XGetWindowProperty(dpy, window, net_wm_icon, 0L, LONG_MAX,
@@ -472,16 +527,10 @@ RImage *get_window_image_from_x11(Window window)
 	}
 
 	/* Find the best icon */
-	data = findBestIcon(property, items);
-	if (!data) {
-		XFree(property);
-		return NULL;
-	}
-
-	/* Save the best icon in the X11 icon */
-	image = makeRImageFromARGBData(data);
-
+	image = findBestIcon(property, items);
 	XFree(property);
+	if (!image)
+		return NULL;
 
 	/* Resize the image to the correct value */
 	image = wIconValidateIconSize(image, wPreferences.icon_size);
