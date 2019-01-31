@@ -73,7 +73,7 @@ typedef struct _Panel {
 	WMButton *posB[wlengthof_nocheck(icon_position_dbvalue)];
 
 	WMFrame *animF;
-	WMButton *animB[wlengthof_nocheck(icon_animation)];
+	WMPopUpButton *animP;
 
 	WMFrame *optF;
 	WMButton *arrB;
@@ -219,7 +219,7 @@ static void showData(_Panel * panel)
 	if (str != NULL) {
 		for (i = 0; i < wlengthof(icon_animation); i++) {
 			if (strcasecmp(str, icon_animation[i].db_value) == 0) {
-				WMPerformButtonClick(panel->animB[i]);
+				WMSetPopUpButtonSelectedItem(panel->animP, i);
 				goto found_animation_value;
 			}
 		}
@@ -227,7 +227,7 @@ static void showData(_Panel * panel)
 		         str, icon_animation[0].db_value);
 	}
 	/* If we're here, no valid value have been found so we fall-back to the default */
-	WMPerformButtonClick(panel->animB[0]);
+	WMSetPopUpButtonSelectedItem(panel->animP, 0);
  found_animation_value:
 	;
 }
@@ -370,46 +370,45 @@ static void createPanel(Panel * p)
 
     /***************** Animation ****************/
 	panel->animF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->animF, 215, 110);
+	WMResizeWidget(panel->animF, 215, 52);
 	WMMoveWidget(panel->animF, 292, 6);
 	WMSetFrameTitle(panel->animF, _("Iconification Animation"));
 
-	for (i = 0; i < wlengthof(icon_animation); i++) {
-		panel->animB[i] = WMCreateRadioButton(panel->animF);
-		WMResizeWidget(panel->animB[i], 192, 20);
-		WMMoveWidget(panel->animB[i], 12, 16 + i * 22);
-
-		if (i > 0)
-			WMGroupButtons(panel->animB[0], panel->animB[i]);
-
-		WMSetButtonText(panel->animB[i], _(icon_animation[i].label));
-	}
+	panel->animP = WMCreatePopUpButton(panel->animF);
+	WMResizeWidget(panel->animP, 195, 20);
+	WMMoveWidget(panel->animP, 10, 19);
+	for (i = 0; i < wlengthof(icon_animation); i++)
+		WMAddPopUpButtonItem(panel->animP, _(icon_animation[i].label));
 
 	WMMapSubwidgets(panel->animF);
 
     /***************** Options ****************/
 	panel->optF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->optF, 215, 90);
-	WMMoveWidget(panel->optF, 292, 130);
+	WMResizeWidget(panel->optF, 215, 148);
+	WMMoveWidget(panel->optF, 292, 72);
 	/*    WMSetFrameTitle(panel->optF, _("Icon Display")); */
+	starty = 8 + 27;   /* the last term centers the checkboxes within the panel; subtract 13 for a new option */
 
 	panel->arrB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->arrB, 198, 26);
-	WMMoveWidget(panel->arrB, 12, 8);
+	WMMoveWidget(panel->arrB, 12, starty);
+	starty += 26;
 	WMSetButtonText(panel->arrB, _("Auto-arrange icons"));
 
 	WMSetBalloonTextForView(_("Keep icons and miniwindows arranged all the time."), WMWidgetView(panel->arrB));
 
 	panel->omnB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->omnB, 198, 26);
-	WMMoveWidget(panel->omnB, 12, 34);
+	WMMoveWidget(panel->omnB, 12, starty);
+	starty += 26;
 	WMSetButtonText(panel->omnB, _("Omnipresent miniwindows"));
 
 	WMSetBalloonTextForView(_("Make miniwindows be present in all workspaces."), WMWidgetView(panel->omnB));
 
 	panel->sclB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->sclB, 198, 26);
-	WMMoveWidget(panel->sclB, 12, 60);
+	WMMoveWidget(panel->sclB, 12, starty);
+	starty += 26;
 	WMSetButtonText(panel->sclB, _("Single click activation"));
 
 	WMSetBalloonTextForView(_("Launch applications and restore windows with a single click."), WMWidgetView(panel->sclB));
@@ -450,12 +449,7 @@ static void storeData(_Panel * panel)
 		SetIntegerForKey(i, "MiniPreviewSize");
 	}
 
-	for (i = 0; i < wlengthof(icon_animation); i++) {
-		if (WMGetButtonSelected(panel->animB[i])) {
-			SetStringForKey(icon_animation[i].db_value, "IconificationStyle");
-			break;
-		}
-	}
+	SetStringForKey(icon_animation[WMGetPopUpButtonSelectedItem(panel->animP)].db_value, "IconificationStyle");
 }
 
 Panel *InitIcons(WMWidget *parent)
