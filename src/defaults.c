@@ -363,6 +363,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.icon_yard, getEnum, setIconPosition, NULL, NULL},
 	{"IconificationStyle", "Zoom", seIconificationStyles,
 	    &wPreferences.iconification_style, getEnum, NULL, NULL, NULL},
+	{"EnforceIconMargin", "NO", NULL,
+	    &wPreferences.enforce_icon_margin, getBool, NULL, NULL, NULL},
 	{"DisableWSMouseActions", "NO", NULL,
 	    &wPreferences.disable_root_mouse, getBool, NULL, NULL, NULL},
 	{"MouseLeftButtonAction", "SelectWindows", seMouseButtonActions,

@@ -79,6 +79,7 @@ typedef struct _Panel {
 	WMButton *arrB;
 	WMButton *omnB;
 	WMButton *sclB;
+	WMButton *marginB;
 
 	struct {
 		WMFrame *frame;
@@ -173,6 +174,7 @@ static void showData(_Panel * panel)
 	WMSetButtonSelected(panel->arrB, GetBoolForKey("AutoArrangeIcons"));
 	WMSetButtonSelected(panel->omnB, GetBoolForKey("StickyIcons"));
 	WMSetButtonSelected(panel->sclB, GetBoolForKey("SingleClickLaunch"));
+	WMSetButtonSelected(panel->marginB, GetBoolForKey("EnforceIconMargin"));
 
 	str = GetStringForKey("IconPosition");
 	if (str != NULL) {
@@ -387,7 +389,7 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->optF, 215, 148);
 	WMMoveWidget(panel->optF, 292, 72);
 	/*    WMSetFrameTitle(panel->optF, _("Icon Display")); */
-	starty = 8 + 27;   /* the last term centers the checkboxes within the panel; subtract 13 for a new option */
+	starty = 8 + 14;   /* the last term centers the checkboxes within the panel; subtract 13 for a new option */
 
 	panel->arrB = WMCreateSwitchButton(panel->optF);
 	WMResizeWidget(panel->arrB, 198, 26);
@@ -413,6 +415,14 @@ static void createPanel(Panel * p)
 
 	WMSetBalloonTextForView(_("Launch applications and restore windows with a single click."), WMWidgetView(panel->sclB));
 
+	panel->marginB = WMCreateSwitchButton(panel->optF);
+	WMResizeWidget(panel->marginB, 198, 26);
+	WMMoveWidget(panel->marginB, 12, starty);
+	starty += 26;
+	WMSetButtonText(panel->marginB, _("Enforce icon margin"));
+
+	WMSetBalloonTextForView(_("Make sure that the icon image does not protrude into the icon frame."), WMWidgetView(panel->marginB));
+
 	WMMapSubwidgets(panel->optF);
 
 	WMRealizeWidget(panel->box);
@@ -428,6 +438,7 @@ static void storeData(_Panel * panel)
 	SetBoolForKey(WMGetButtonSelected(panel->arrB), "AutoArrangeIcons");
 	SetBoolForKey(WMGetButtonSelected(panel->omnB), "StickyIcons");
 	SetBoolForKey(WMGetButtonSelected(panel->sclB), "SingleClickLaunch");
+	SetBoolForKey(WMGetButtonSelected(panel->marginB), "EnforceIconMargin");
 
 	SetIntegerForKey(WMGetPopUpButtonSelectedItem(panel->sizeP) * 8 + 24, "IconSize");
 
