@@ -110,7 +110,10 @@ static const struct {
 	  /* default: */ False, OPTION_WMAKER, "PointerWithHalfMaxWindows" },
 
 	{ N_("Open dialogs in the same workspace as their owners."),
-	  /* default: */ False, OPTION_WMAKER, "OpenTransientOnOwnerWorkspace" }
+	  /* default: */ False, OPTION_WMAKER, "OpenTransientOnOwnerWorkspace" },
+
+	{ N_("Wrap dock-attached icons around the screen edges."),
+	  /* default: */ True, OPTION_WMAKER, "WrapAppiconsInDock" }
 
 };
 
