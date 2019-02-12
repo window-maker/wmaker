@@ -22,7 +22,7 @@
 
 #include "config.h"
 
-#include <wand/MagickWand.h>
+#include <MagickWand/MagickWand.h>
 
 #include "wraster.h"
 #include "imgformat.h"

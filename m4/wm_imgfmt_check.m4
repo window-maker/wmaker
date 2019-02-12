@@ -312,7 +312,7 @@ AS_IF([test "x$enable_magick" = "xno"],
               dnl
               dnl The library was found, check if header is available and compiles
               wm_save_CFLAGS="$CFLAGS"
-              AS_IF([wm_fn_lib_try_compile "wand/magick_wand.h" "MagickWand *wand;" "wand = NewMagickWand()" "$wm_cv_libchk_magick_cflags"],
+              AS_IF([wm_fn_lib_try_compile "MagickWand/MagickWand.h" "MagickWand *wand;" "wand = NewMagickWand()" "$wm_cv_libchk_magick_cflags"],
                   [wm_cv_libchk_magick="$wm_cv_libchk_magick_cflags % $wm_cv_libchk_magick_libs"],
                   [AC_MSG_ERROR([found MagickWand library but could not compile its header])])
               CFLAGS="$wm_save_CFLAGS"])dnl
