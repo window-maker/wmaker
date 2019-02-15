@@ -59,9 +59,9 @@ const char *wusergnusteppath()
 		return path;
 
 #ifdef HAVE_SECURE_GETENV
-	gspath = secure_getenv("GNUSTEP_USER_ROOT");
+	gspath = secure_getenv("WMAKER_USER_ROOT");
 #else
-	gspath = getenv("GNUSTEP_USER_ROOT");
+	gspath = getenv("WMAKER_USER_ROOT");
 #endif
 	if (gspath) {
 		gspath = wexpandpath(gspath);
@@ -69,7 +69,7 @@ const char *wusergnusteppath()
 			path = gspath;
 			return path;
 		}
-		wwarning(_("variable GNUSTEP_USER_ROOT defined with invalid path, not used"));
+		wwarning(_("variable WMAKER_USER_ROOT defined with invalid path, not used"));
 	}
 
 	h = wgethomedir();

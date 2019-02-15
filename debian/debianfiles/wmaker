@@ -2,8 +2,8 @@
 
 set -e
 
-[ -n "$GNUSTEP_USER_ROOT" ] || export GNUSTEP_USER_ROOT="$HOME/GNUstep"
-gs_base="$GNUSTEP_USER_ROOT"
+[ -n "$WMAKER_USER_ROOT" ] || export WMAKER_USER_ROOT="$HOME/GNUstep"
+gs_base="$WMAKER_USER_ROOT"
 gs_defaults="$gs_base/Defaults"
 gs_system_defaults=/etc/GNUstep/Defaults
 wm_base="$gs_base/Library/WindowMaker"

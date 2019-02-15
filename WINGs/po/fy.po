@@ -388,8 +388,8 @@ msgid "Could not create component %s"
 msgstr "Koe komponint %s net oanmeitsje"
 
 #: ../../WINGs/userdefaults.c:72
-msgid "variable GNUSTEP_USER_ROOT defined with invalid path, not used"
-msgstr "fariabele GNUSTEP_USER_ROOT, definiearre mei ûnjildich paad, net brûkt"
+msgid "variable WMAKER_USER_ROOT defined with invalid path, not used"
+msgstr "fariabele WMAKER_USER_ROOT, definiearre mei ûnjildich paad, net brûkt"
 
 #. something happened with the file. just overwrite it
 #: ../../WINGs/userdefaults.c:210 ../../WINGs/userdefaults.c:225

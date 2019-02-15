@@ -1731,7 +1731,7 @@ Bool WMWritePropListToFile(WMPropList * plist, const char *path)
  * file, and the last component is stripped off. the rest is the
  * the hierarchy to be created.
  *
- * refuses to create anything outside $GNUSTEP_USER_ROOT
+ * refuses to create anything outside $WMAKER_USER_ROOT
  *
  * returns 1 on success, 0 on failure
  */
@@ -1742,7 +1742,7 @@ int wmkdirhier(const char *path)
 	size_t p, plen;
 	struct stat st;
 
-	/* Only create directories under $GNUSTEP_USER_ROOT */
+	/* Only create directories under $WMAKER_USER_ROOT */
 	if ((t = wusergnusteppath()) == NULL)
 		return 0;
 	if (strncmp(path, t, strlen(t)) != 0)
@@ -1823,7 +1823,7 @@ static int wrmdirhier_fn(const char *path, const struct stat *st,
 /*
  * remove a directory hierarchy
  *
- * refuses to remove anything outside $GNUSTEP_USER_ROOT
+ * refuses to remove anything outside $WMAKER_USER_ROOT
  *
  * returns 1 on success, 0 on failure
  *
@@ -1837,7 +1837,7 @@ int wrmdirhier(const char *path)
 	int error;
 	const char *t;
 
-	/* Only remove directories under $GNUSTEP_USER_ROOT */
+	/* Only remove directories under $WMAKER_USER_ROOT */
 	if ((t = wusergnusteppath()) == NULL)
 		return EPERM;
 	if (strncmp(path, t, strlen(t)) != 0)

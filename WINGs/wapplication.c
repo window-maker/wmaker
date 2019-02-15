@@ -140,7 +140,7 @@ char *WMPathForResourceOfType(const char *resource, const char *ext)
 	 * Paths are searched in this order:
 	 * - resourcePath/ext
 	 * - dirname(argv[0])/ext
-	 * - GNUSTEP_USER_ROOT/Applications/ApplicationName.app/ext
+	 * - WMAKER_USER_ROOT/Applications/ApplicationName.app/ext
 	 * - ~/GNUstep/Applications/ApplicationName.app/ext
 	 * - GNUSTEP_LOCAL_ROOT/Applications/ApplicationName.app/ext
 	 * - /usr/local/GNUstep/Applications/ApplicationName.app/ext
@@ -175,7 +175,7 @@ char *WMPathForResourceOfType(const char *resource, const char *ext)
 	if (snprintf(appdir, slen, "Applications/%s.app", WMApplication.applicationName) >= slen)
 		goto out;
 
-	path = checkFile(getenv("GNUSTEP_USER_ROOT"), appdir, ext, resource);
+	path = checkFile(getenv("WMAKER_USER_ROOT"), appdir, ext, resource);
 	if (path)
 		goto out;
 

@@ -76,7 +76,7 @@
  *
  *      // Brûk #usergnusteppath# as tydlike oantsjutting foar it paad nei de
  *      // brûkers-GNUstep-map.  Window Maker sil dy ferfange mei de wearde
- *      // fan GNUSTEP_USER_ROOT, at dizze omjouwingsfariabele ynsteld is, of
+ *      // fan WMAKER_USER_ROOT, at dizze omjouwingsfariabele ynsteld is, of
  *      // oars "~/GNUstep"
  *
  * <Parameters> is it út te fieren programma.

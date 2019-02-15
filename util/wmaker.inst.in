@@ -62,7 +62,7 @@ copy() {
 	if [ "$file" = "WindowMaker" ]; then
 		sed -e "s|~/GNUstep|$GSDIR|g" "$source" > "$target"
 	else
-		if test "x$GNUSTEP_USER_ROOT" != "x"; then
+		if test "x$WMAKER_USER_ROOT" != "x"; then
 			sed -e "s|\$HOME/GNUstep|$GSDIR|g" \
 					"$source" > "$target"
 		fi
@@ -97,7 +97,7 @@ if [ ! -d "$USERDIR" ]; then
 fi
 
 
-if test "x$GNUSTEP_USER_ROOT" = "x"; then
+if test "x$WMAKER_USER_ROOT" = "x"; then
 	cd "$USERDIR"
 	GSDIR="$USERDIR/GNUstep"
 	if [ ! -d "$GSDIR" ]; then
@@ -105,11 +105,11 @@ if test "x$GNUSTEP_USER_ROOT" = "x"; then
 		make_dir "$GSDIR"
 	fi
 else
-	GSDIR="$GNUSTEP_USER_ROOT"
+	GSDIR="$WMAKER_USER_ROOT"
 	if [ ! -d "$GSDIR" ]; then
 		# in this case, and in this case only, mkdir needs -p option
 		mkdir -p $GSDIR || {
-		    echo "Directory specified in GNUSTEP_USER_ROOT environment variable does not exist and could not be created"
+		    echo "Directory specified in WMAKER_USER_ROOT environment variable does not exist and could not be created"
 		    exit 1
 		}
 		chmod +rwx $GSDIR || exit 1

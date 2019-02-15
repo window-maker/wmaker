@@ -389,9 +389,9 @@ msgid "Could not create component %s"
 msgstr "Kon component %s niet aanmaken"
 
 #: ../../WINGs/userdefaults.c:72
-msgid "variable GNUSTEP_USER_ROOT defined with invalid path, not used"
+msgid "variable WMAKER_USER_ROOT defined with invalid path, not used"
 msgstr ""
-"variabele GNUSTEP_USER_ROOT, gedefinieerd met ongeldig pad, niet gebruikt"
+"variabele WMAKER_USER_ROOT, gedefinieerd met ongeldig pad, niet gebruikt"
 
 #. something happened with the file. just overwrite it
 #: ../../WINGs/userdefaults.c:210 ../../WINGs/userdefaults.c:225

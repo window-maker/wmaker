@@ -197,8 +197,8 @@ msgid "Could not create component %s"
 msgstr "Nem sikerült létrehozni a %s elemet"
 
 #: ../../../wmaker-crm/WINGs/userdefaults.c:65
-msgid "variable GNUSTEP_USER_ROOT defined with invalid path, not used"
-msgstr "A GNUSTEP_USER_ROOT változó be van állítva, de rossz értékre. Nem használom"
+msgid "variable WMAKER_USER_ROOT defined with invalid path, not used"
+msgstr "A WMAKER_USER_ROOT változó be van állítva, de rossz értékre. Nem használom"
 
 #. something happened with the file. just overwrite it
 #: ../../../wmaker-crm/WINGs/userdefaults.c:196

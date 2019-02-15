@@ -1,6 +1,17 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+-- 0.95.9
+
+New user configuration directory environment variable
+-----------------------------------------------------
+
+In previous versions, the GNUstep directory used to store a user's Window Maker
+configuration files was specified by the GNUSTEP_USER_ROOT environment variable,
+which defaulted to ~/GNUstep.  However, this environment variable was deprecated
+in gnustep-make v2.  Therefore, it has been replaced by the WMAKER_USER_ROOT
+environment variable.
+
 -- 0.95.8
 
 Move pointer with maximized windows

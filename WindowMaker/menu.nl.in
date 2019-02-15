@@ -76,7 +76,7 @@
  *
  *      // Gebruik #usergnusteppath# als tijdelijke aanduiding voor het pad naar de
  *      // gebruikers-GNUstep-map.  Window Maker zal die vervangen met de waarde
- *      // van GNUSTEP_USER_ROOT, als deze omgevingsvariabele is ingesteld, of
+ *      // van WMAKER_USER_ROOT, als deze omgevingsvariabele is ingesteld, of
  *      // anders "~/GNUstep"
  *
  * <Parameters> is het uit te voeren programma.
