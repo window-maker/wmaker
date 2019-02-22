@@ -181,10 +181,7 @@ static void drawRulerOnPixmap(Ruler * rPtr)
 		XDrawLine(rPtr->view->screen->display, rPtr->drawBuffer,
 			  rPtr->fgGC, rPtr->margins.left + m, 23, rPtr->margins.left + m, marks[i % 8] + 23);
 		if (i != 0 && i % 8 == 0) {
-			if (j < 10)
-				snprintf(c, 3, "%d", ++j);
-			else
-				snprintf(c, 3, "%2d", ++j);
+			snprintf(c, sizeof(c), "%d", ++j);
 			WMDrawString(rPtr->view->screen, rPtr->drawBuffer, rPtr->fg,
 				     rPtr->font, rPtr->margins.left + 2 + m, 26, c, 2);
 		}
