@@ -1512,7 +1512,7 @@ static void showData(_Panel * panel)
 			break;
 
 		if (access(path, W_OK) < 0) {
-			snprintf(buf, 1024,
+			snprintf(buf, sizeof(buf),
 				 _("The menu file \"%s\" referenced by "
 				   "WMRootMenu is read-only.\n"
 				   "You cannot use WPrefs to modify it."),
@@ -1554,7 +1554,7 @@ static void showData(_Panel * panel)
 
 	panel->menuPath = menuPath;
 
-	snprintf(buf, 1024,
+	snprintf(buf, sizeof(buf),
 		 _("\n\nWhen saved, the menu will be written to the file\n\"%s\"."),
 		 menuPath);
 	labelText = WMGetLabelText(panel->sections[NoInfo][0]);
