@@ -109,11 +109,14 @@ print_help() {
     echo "Usage: $0 [options...] file.texi"
     echo "valid options are:"
     echo "  -Dvar=val  : set variable 'var' to value 'val'"
+    echo "  -d date    : use 'date' for @today instead of current date"
     echo "  -e email   : set email address in variable 'emailsupport'"
     echo "  -v version : version of the project"
     echo "  -o file    : name of text file to create"
     exit 0
 }
+
+today_date="`LANG=C date '+%d %B %Y' | sed -e 's,^0,,' `"
 
 # Extract command line arguments
 while [ $# -gt 0 ]; do
@@ -123,6 +126,11 @@ while [ $# -gt 0 ]; do
             echo "$1" | grep '^-D[a-zA-Z][a-zA-Z]*=' > /dev/null || arg_error "syntax error for '$1', expected -Dname=value"
             var_defs="$var_defs
 `echo "$1" | sed -e 's/^-D/  variable["/ ; s/=/"] = "/ ; s/$/";/' `"
+          ;;
+
+        -d)
+            shift
+            today_date="$1"
           ;;
 
         -e)
@@ -152,6 +160,9 @@ while [ $# -gt 0 ]; do
     esac
     shift
 done
+
+var_defs="$var_defs
+  variable[\"today\"] = \"$today_date\";"
 
 # Check consistency of command-line
 [ "x$input_file" != "x" ] || arg_error "no input texi file given"
@@ -822,7 +833,7 @@ function execute_commands(line,               replaced_line, command) {
     } else if (command == "today") {
       # Make sure the date will be in english (we use "C" because it not certain
       # that the English locale is enabled on the machine of the user)
-      replaced_line = replaced_line "'"`LANG=C date -u -r ../../ChangeLog '+%d %B %Y' | sed -e 's,^0,,' `"'";
+      replaced_line = replaced_line variable["today"];
 
     # Commands to display text in a special style ##############################
     } else if (command == "asis") {
