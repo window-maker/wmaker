@@ -1436,12 +1436,12 @@ static WEditMenu *buildSubmenu(_Panel * panel, WMPropList * pl)
 					WSetEditMenuItemImage(item, panel->markerPix[data->type]);
 				WSetEditMenuItemData(item, data, (WMCallback *) freeItemData);
 			} else {
-				char *buf = wmalloc(1024);
-				snprintf(buf, 1024, _("Invalid menu command \"%s\" with label \"%s\" cleared"),
+				char buf[256];
+
+				snprintf(buf, sizeof(buf), _("Invalid menu command \"%s\" with label \"%s\" cleared"),
 					WMGetFromPLString(WMGetFromPLArray(pi, 1)),
 					WMGetFromPLString(WMGetFromPLArray(pi, 0)));
 				WMRunAlertPanel(scr, panel->parent, _("Warning"), buf, _("OK"), NULL, NULL);
-				wfree(buf);
 			}
 
 		}
