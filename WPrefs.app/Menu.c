@@ -1602,15 +1602,12 @@ static WMPropList *processData(const char *title, ItemData * data)
 	case ExecInfo:
 		if (data->param.exec.command == NULL)
 			goto return_null;
-#if 1
+
 		if (strpbrk(data->param.exec.command, "&$*|><?`=;")) {
 			s1 = "SHEXEC";
 		} else {
 			s1 = "EXEC";
 		}
-#else
-		s1 = "SHEXEC";
-#endif
 
 		if (notblank(data->param.exec.shortcut)) {
 			WMAddToPLArray(item, pscut);

@@ -66,19 +66,6 @@ static void print_help(const char *progname)
 	puts(_(" --help		print this message and exit"));
 }
 
-#if 0
-static RETSIGTYPE handleDeadChild(int sig)
-{
-	pid_t pid;
-	int status;
-
-	pid = waitpid(-1, &status, WNOHANG);
-	if (pid > 0) {
-		DeadChildren[DeadChildrenCount++] = pid;
-	}
-}
-#endif
-
 void AddDeadChildHandler(pid_t pid, void (*handler) (void *), void *data)
 {
 	int i;
@@ -164,9 +151,6 @@ int main(int argc, char **argv)
 		wfatal(_("could not open display %s"), XDisplayName(display_name));
 		exit(0);
 	}
-#if 0
-	XSynchronize(dpy, 1);
-#endif
 	scr = WMCreateScreen(dpy, DefaultScreen(dpy));
 	if (!scr) {
 		wfatal(_("could not initialize application"));
