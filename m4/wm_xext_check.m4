@@ -90,12 +90,11 @@ AC_DEFUN_ONCE([WM_EXT_CHECK_XMU],
      AS_IF([wm_fn_lib_try_link "XmuLookupStandardColormap" "-lXmu"],
          [wm_cv_xext_xmu="-lXmu"])
      LIBS="$wm_save_LIBS"
-     AS_IF([test "x$wm_cv_xext_xmu" = "xno"],
-         [AC_MSG_ERROR([library Xmu not found])])
-     dnl
-     dnl A library was found, check if header is available and compile
-     wm_save_CFLAGS="$CFLAGS"
-     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([dnl
+     AS_IF([test "x$wm_cv_xext_xmu" != "xno"],
+       [dnl
+       dnl A library was found, check if header is available and compile
+       wm_save_CFLAGS="$CFLAGS"
+       AC_COMPILE_IFELSE([AC_LANG_PROGRAM([dnl
 @%:@include <X11/Xlib.h>
 @%:@include <X11/Xutil.h>
 @%:@include <X11/Xmu/StdCmap.h>
@@ -104,11 +103,18 @@ Display *dpy;
 Atom prop;
 ], [dnl
   XmuLookupStandardColormap(dpy, 0, 0, 0, prop, False, True);]) ],
-         [],
-         [AC_MSG_ERROR([found $wm_cv_xext_xmu but cannot compile with the header])])
-     CFLAGS="$wm_save_CFLAGS"])
+           [],
+           [AC_MSG_ERROR([found $wm_cv_xext_xmu but cannot compile with the header])])
+       CFLAGS="$wm_save_CFLAGS"])
+    ])
 dnl The cached check already reported problems when not found
-LIBXMU="$wm_cv_xext_xmu"
+AS_IF([test "wm_cv_xext_xmu" = "xno"],
+  [LIBXMU=""
+   unsupported="$unsupported Xmu"],
+  [AC_DEFINE([HAVE_LIBXMU], [1],
+       [defined when the libXmu library was found])
+   LIBXMU="$wm_cv_xext_xmu"
+   supported_xext="$supported_xext Xmu"])
 AC_SUBST(LIBXMU)dnl
 ])
 

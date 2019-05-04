@@ -25,7 +25,10 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
+
+#ifdef HAVE_LIBXMU
 #include <X11/Xmu/StdCmap.h>
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -137,6 +140,7 @@ static Bool allocateStandardPseudoColor(RContext * ctx, XStandardColormap * stdc
 
 static Bool setupStandardColormap(RContext * ctx, Atom property)
 {
+#ifdef HAVE_LIBXMU
 	if (!XmuLookupStandardColormap(ctx->dpy, ctx->screen_number,
 				       ctx->visual->visualid, ctx->depth, property, True, True)) {
 		RErrorCode = RERR_STDCMAPFAIL;
@@ -144,6 +148,12 @@ static Bool setupStandardColormap(RContext * ctx, Atom property)
 		return False;
 	}
 	return True;
+#else
+	(void) ctx;
+	(void) property;
+	RErrorCode = RERR_STDCMAPFAIL;
+	return False;
+#endif
 }
 
 static XColor *allocateColor(RContext *ctx, XColor *colors, int ncolors)

@@ -12,6 +12,16 @@ which defaulted to ~/GNUstep.  However, this environment variable was deprecated
 in gnustep-make v2.  Therefore, it has been replaced by the WMAKER_USER_ROOT
 environment variable.
 
+
+libXmu is now an optional dependency
+------------------------------------
+
+If the library is not found, compilation work, the only limitation will arise
+when trying to install the standard colormap on displays which are not TrueColor.
+Please note that if you have the library but not the headers, configure will
+still stop; there is no user option to explicitly disable the library use.
+
+
 -- 0.95.8
 
 Move pointer with maximized windows
