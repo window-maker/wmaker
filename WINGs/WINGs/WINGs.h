@@ -795,6 +795,8 @@ char* WMGetFontName(WMFont *font);
 
 unsigned int WMFontHeight(WMFont *font);
 
+void WMGetScaleBaseFromSystemFont(WMScreen *scrPtr, int *alphabetWidth, int *fontHeight);
+
 void WMSetWidgetDefaultFont(WMScreen *scr, WMFont *font);
 
 void WMSetWidgetDefaultBoldFont(WMScreen *scr, WMFont *font);

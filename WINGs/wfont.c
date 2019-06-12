@@ -237,6 +237,16 @@ char *WMGetFontName(WMFont * font)
 	return font->name;
 }
 
+void WMGetScaleBaseFromSystemFont(WMScreen *scrPtr, int *alphabetWidth, int *fontHeight)
+{
+	WMFont *font;
+
+	font = WMDefaultSystemFont(scrPtr);
+	*alphabetWidth = WMWidthOfString(font, "abcdefghijklmnopqrstuvwxyz", 26);
+	*fontHeight = WMFontHeight(font);
+	WMReleaseFont(font);
+}
+
 WMFont *WMDefaultSystemFont(WMScreen * scrPtr)
 {
 	return WMRetainFont(scrPtr->normalFont);
