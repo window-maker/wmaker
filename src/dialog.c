@@ -1419,6 +1419,7 @@ typedef struct {
 	WScreen *scr;
 	WWindow *wwin;
 	WMWindow *win;
+	WMFrame *frame;
 	WMLabel *licenseL;
 } LegalPanel;
 
@@ -1440,13 +1441,12 @@ static void destroyLegalPanel(WCoreWindow * foo, void *data, XEvent * event)
 
 void wShowLegalPanel(WScreen *scr)
 {
-	const int win_width = 420;
-	const int win_height = 250;
-	const int margin = 10;
 	LegalPanel *panel;
 	Window parent;
 	WWindow *wwin;
 	WMPoint center;
+	int fw, fh;
+	int pwidth, pheight;
 
 	if (legalPanel) {
 		if (legalPanel->scr == scr) {
@@ -1459,12 +1459,20 @@ void wShowLegalPanel(WScreen *scr)
 	panel = wmalloc(sizeof(LegalPanel));
 	panel->scr = scr;
 	panel->win = WMCreateWindow(scr->wmscreen, "legal");
-	WMResizeWidget(panel->win, win_width, win_height);
+	WMGetScaleBaseFromSystemFont(scr->wmscreen, &fw, &fh);
+	pwidth = ScaleX(420);
+	pheight = ScaleY(250);
+	WMResizeWidget(panel->win, pwidth, pheight);
 
-	panel->licenseL = WMCreateLabel(panel->win);
+	panel->frame = WMCreateFrame(panel->win);
+	WMResizeWidget(panel->frame, pwidth - (2 * ScaleX(10)), pheight - (2 * ScaleY(10)));
+	WMMoveWidget(panel->frame, ScaleX(10), ScaleY(10));
+	WMSetFrameTitle(panel->frame, NULL);
+
+	panel->licenseL = WMCreateLabel(panel->frame);
 	WMSetLabelWraps(panel->licenseL, True);
-	WMResizeWidget(panel->licenseL, win_width - (2 * margin), win_height - (2 * margin));
-	WMMoveWidget(panel->licenseL, margin, margin);
+	WMResizeWidget(panel->licenseL, pwidth - (4 * ScaleX(10)), pheight - (4 * ScaleY(10)));
+	WMMoveWidget(panel->licenseL, ScaleX(8), ScaleY(8));
 	WMSetLabelTextAlignment(panel->licenseL, WALeft);
 	WMSetLabelText(panel->licenseL,
 		       _("    Window Maker is free software; you can redistribute it and/or "
@@ -1479,15 +1487,15 @@ void wShowLegalPanel(WScreen *scr)
 			 "License along with this program; if not, write to the Free Software "
 			 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA"
 			 "02110-1301 USA."));
-	WMSetLabelRelief(panel->licenseL, WRGroove);
 
 	WMRealizeWidget(panel->win);
 	WMMapSubwidgets(panel->win);
+	WMMapSubwidgets(panel->frame);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, win_width, win_height, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
-	center = getCenter(scr, win_width, win_height);
-	wwin = wManageInternalWindow(scr, parent, None, _("Legal"), center.x, center.y, win_width, win_height);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, _("Legal"), center.x, center.y, pwidth, pheight);
 
 	WSETUFLAG(wwin, no_closable, 0);
 	WSETUFLAG(wwin, no_close_button, 0);
