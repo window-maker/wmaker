@@ -630,12 +630,15 @@ static void setViewedImage(IconPanel *panel, const char *file)
 {
 	WMPixmap *pixmap;
 	RColor color;
+	int iwidth, iheight;
 
 	color.red = 0xae;
 	color.green = 0xaa;
 	color.blue = 0xae;
 	color.alpha = 0;
-	pixmap = WMCreateScaledBlendedPixmapFromFile(WMWidgetScreen(panel->win), file, &color, 75, 75);
+	iwidth = WMWidgetWidth(panel->iconView);
+	iheight = WMWidgetHeight(panel->iconView);
+	pixmap = WMCreateScaledBlendedPixmapFromFile(WMWidgetScreen(panel->win), file, &color, iwidth, iheight);
 
 	if (!pixmap) {
 		WMSetButtonEnabled(panel->okButton, False);
@@ -921,22 +924,27 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 	WMColor *color;
 	WMFont *boldFont;
 	Bool result;
+	int fw, fh;
+	int pwidth, pheight;
 
 	panel = wmalloc(sizeof(IconPanel));
 
 	panel->scr = scr;
 
 	panel->win = WMCreateWindow(scr->wmscreen, "iconChooser");
-	WMResizeWidget(panel->win, 450, 280);
+	WMGetScaleBaseFromSystemFont(scr->wmscreen, &fw, &fh);
+	pwidth = ScaleX(450);
+	pheight = ScaleY(280);
+	WMResizeWidget(panel->win, pwidth, pheight);
 
 	WMCreateEventHandler(WMWidgetView(panel->win), KeyPressMask | KeyReleaseMask, keyPressHandler, panel);
 
-	boldFont = WMBoldSystemFontOfSize(scr->wmscreen, 12);
-	panel->normalfont = WMSystemFontOfSize(WMWidgetScreen(panel->win), 12);
+	boldFont = WMBoldSystemFontOfSize(scr->wmscreen, ScaleY(12));
+	panel->normalfont = WMSystemFontOfSize(WMWidgetScreen(panel->win), ScaleY(12));
 
 	panel->dirLabel = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->dirLabel, 200, 20);
-	WMMoveWidget(panel->dirLabel, 10, 7);
+	WMResizeWidget(panel->dirLabel, ScaleX(200), ScaleY(20));
+	WMMoveWidget(panel->dirLabel, ScaleX(10), ScaleY(7));
 	WMSetLabelText(panel->dirLabel, _("Directories"));
 	WMSetLabelFont(panel->dirLabel, boldFont);
 	WMSetLabelTextAlignment(panel->dirLabel, WACenter);
@@ -944,8 +952,8 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 	WMSetLabelRelief(panel->dirLabel, WRSunken);
 
 	panel->iconLabel = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->iconLabel, 140, 20);
-	WMMoveWidget(panel->iconLabel, 215, 7);
+	WMResizeWidget(panel->iconLabel, ScaleX(140), ScaleY(20));
+	WMMoveWidget(panel->iconLabel, ScaleX(215), ScaleY(7));
 	WMSetLabelText(panel->iconLabel, _("Icons"));
 	WMSetLabelFont(panel->iconLabel, boldFont);
 	WMSetLabelTextAlignment(panel->iconLabel, WACenter);
@@ -965,64 +973,64 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 	WMSetLabelRelief(panel->iconLabel, WRSunken);
 
 	panel->dirList = WMCreateList(panel->win);
-	WMResizeWidget(panel->dirList, 200, 170);
-	WMMoveWidget(panel->dirList, 10, 30);
+	WMResizeWidget(panel->dirList, ScaleX(200), ScaleY(170));
+	WMMoveWidget(panel->dirList, ScaleX(10), ScaleY(30));
 	WMSetListAction(panel->dirList, listCallback, panel);
 
 	panel->iconList = WMCreateList(panel->win);
-	WMResizeWidget(panel->iconList, 140, 170);
-	WMMoveWidget(panel->iconList, 215, 30);
+	WMResizeWidget(panel->iconList, ScaleX(140), ScaleY(170));
+	WMMoveWidget(panel->iconList, ScaleX(215), ScaleY(30));
 	WMSetListAction(panel->iconList, listCallback, panel);
 
 	WMHangData(panel->iconList, panel);
 
 	panel->previewButton = WMCreateCommandButton(panel->win);
-	WMResizeWidget(panel->previewButton, 75, 26);
-	WMMoveWidget(panel->previewButton, 365, 130);
+	WMResizeWidget(panel->previewButton, ScaleX(75), ScaleY(26));
+	WMMoveWidget(panel->previewButton, ScaleX(365), ScaleY(130));
 	WMSetButtonText(panel->previewButton, _("Preview"));
 	WMSetButtonAction(panel->previewButton, buttonCallback, panel);
 
 	panel->iconView = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->iconView, 75, 75);
-	WMMoveWidget(panel->iconView, 365, 40);
+	WMResizeWidget(panel->iconView, ScaleX(75), ScaleY(75));
+	WMMoveWidget(panel->iconView, ScaleX(365), ScaleY(40));
 	WMSetLabelImagePosition(panel->iconView, WIPOverlaps);
 	WMSetLabelRelief(panel->iconView, WRSunken);
 	WMSetLabelTextAlignment(panel->iconView, WACenter);
 
 	panel->fileLabel = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->fileLabel, 80, 20);
-	WMMoveWidget(panel->fileLabel, 10, 210);
+	WMResizeWidget(panel->fileLabel, ScaleX(80), ScaleY(20));
+	WMMoveWidget(panel->fileLabel, ScaleX(10), ScaleY(210));
 	WMSetLabelText(panel->fileLabel, _("File Name:"));
 
 	panel->fileField = WMCreateTextField(panel->win);
 	WMSetViewNextResponder(WMWidgetView(panel->fileField), WMWidgetView(panel->win));
-	WMResizeWidget(panel->fileField, 345, 20);
-	WMMoveWidget(panel->fileField, 95, 210);
+	WMResizeWidget(panel->fileField, ScaleX(345), ScaleY(20));
+	WMMoveWidget(panel->fileField, ScaleX(95), ScaleY(210));
 	WMSetTextFieldEditable(panel->fileField, False);
 
 	panel->okButton = WMCreateCommandButton(panel->win);
-	WMResizeWidget(panel->okButton, 80, 26);
-	WMMoveWidget(panel->okButton, 360, 240);
+	WMResizeWidget(panel->okButton, ScaleX(80), ScaleY(26));
+	WMMoveWidget(panel->okButton, ScaleX(360), ScaleY(242));
 	WMSetButtonText(panel->okButton, _("OK"));
 	WMSetButtonEnabled(panel->okButton, False);
 	WMSetButtonAction(panel->okButton, buttonCallback, panel);
 
 	panel->cancelButton = WMCreateCommandButton(panel->win);
-	WMResizeWidget(panel->cancelButton, 80, 26);
-	WMMoveWidget(panel->cancelButton, 270, 240);
+	WMResizeWidget(panel->cancelButton, ScaleX(80), ScaleY(26));
+	WMMoveWidget(panel->cancelButton, ScaleX(270), ScaleY(242));
 	WMSetButtonText(panel->cancelButton, _("Cancel"));
 	WMSetButtonAction(panel->cancelButton, buttonCallback, panel);
 #if 0
 	panel->chooseButton = WMCreateCommandButton(panel->win);
-	WMResizeWidget(panel->chooseButton, 110, 26);
-	WMMoveWidget(panel->chooseButton, 150, 240);
+	WMResizeWidget(panel->chooseButton, ScaleX(110), ScaleY(26));
+	WMMoveWidget(panel->chooseButton, ScaleX(150), ScaleY(242));
 	WMSetButtonText(panel->chooseButton, _("Choose File"));
 	WMSetButtonAction(panel->chooseButton, buttonCallback, panel);
 #endif
 	WMRealizeWidget(panel->win);
 	WMMapSubwidgets(panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 450, 280, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
@@ -1057,9 +1065,9 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 			strcat(title, "]");
 		}
 
-		center = getCenter(scr, 450, 280);
+		center = getCenter(scr, pwidth, pheight);
 
-		wwin = wManageInternalWindow(scr, parent, None, title, center.x, center.y, 450, 280);
+		wwin = wManageInternalWindow(scr, parent, None, title, center.x, center.y, pwidth, pheight);
 		wfree(title);
 	}
 
