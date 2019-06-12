@@ -75,15 +75,18 @@ int wMessageDialog(WScreen *scr, const char *title, const char *message, const c
 	WWindow *wwin;
 	int result;
 	WMPoint center;
+	int pwidth, pheight;
 
 	panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
+	pwidth = WMWidgetWidth(panel->win);
+	pheight = WMWidgetHeight(panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 400, 180, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-	center = getCenter(scr, 400, 180);
-	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, 400, 180);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, pwidth, pheight);
 	wwin->client_leader = WMWidgetXID(panel->win);
 
 	WMMapWidget(panel->win);
@@ -121,24 +124,27 @@ int wExitDialog(WScreen *scr, const char *title, const char *message, const char
 	WWindow *wwin;
 	WMPoint center;
 	int result;
+	int pwidth, pheight;
 
 	panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
+	pwidth = WMWidgetWidth(panel->win);
+	pheight = WMWidgetHeight(panel->win);
 
 	/* add save session button */
 	saveSessionBtn = WMCreateSwitchButton(panel->hbox);
 	WMSetButtonAction(saveSessionBtn, toggleSaveSession, NULL);
-	WMAddBoxSubview(panel->hbox, WMWidgetView(saveSessionBtn), False, True, 200, 0, 0);
+	WMAddBoxSubview(panel->hbox, WMWidgetView(saveSessionBtn), False, True, pwidth / 2, 0, 0);
 	WMSetButtonText(saveSessionBtn, _("Save workspace state"));
 	WMSetButtonSelected(saveSessionBtn, wPreferences.save_session_on_exit);
 	WMRealizeWidget(saveSessionBtn);
 	WMMapWidget(saveSessionBtn);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 400, 180, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-	center = getCenter(scr, 400, 180);
-	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, 400, 180);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, pwidth, pheight);
 
 	wwin->client_leader = WMWidgetXID(panel->win);
 

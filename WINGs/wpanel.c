@@ -92,6 +92,8 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 	int dw = 0, aw = 0, ow = 0, w;
 	WMBox *hbox;
 	WMPixmap *icon;
+	int fw, fh;
+	int pwidth, pheight;
 
 	panel = wmalloc(sizeof(WMAlertPanel));
 
@@ -101,9 +103,22 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 		panel->win = WMCreateWindowWithStyle(scrPtr, "alertPanel", WMTitledWindowMask);
 	}
 
+	/* calculate and set the panel's size */
+	WMGetScaleBaseFromSystemFont(scrPtr, &fw, &fh);
+	pwidth = ScaleX(400);
+	pheight = ScaleY(5)    /* upper margin */
+		+ 64           /* icon size */
+		+ ScaleY(5)    /* space between icon and divider line */
+		+ 2            /* divider line */
+		+ ScaleY(5);   /* space between divider line and message */
+	if (msg)
+		pheight += WMFontHeight(scrPtr->normalFont) * 4 + ScaleY(5);
+	pheight += ScaleY(44);
+	WMResizeWidget(panel->win, pwidth, pheight);
+
 	WMSetWindowInitialPosition(panel->win,
-				   (scrPtr->rootView->size.width - WMWidgetWidth(panel->win)) / 2,
-				   (scrPtr->rootView->size.height - WMWidgetHeight(panel->win)) / 2);
+				   (scrPtr->rootView->size.width - pwidth) / 2,
+				   (scrPtr->rootView->size.height - pheight) / 2);
 
 	WMSetWindowTitle(panel->win, "");
 
@@ -113,10 +128,10 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 	WMMapWidget(panel->vbox);
 
 	hbox = WMCreateBox(panel->vbox);
-	WMSetBoxBorderWidth(hbox, 5);
+	WMSetBoxBorderWidth(hbox, ScaleX(5));
 	WMSetBoxHorizontal(hbox, True);
 	WMMapWidget(hbox);
-	WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 74, 0, 5);
+	WMAddBoxSubview(panel->vbox, WMWidgetView(hbox), False, True, 64 + 2 * ScaleY(5), 0, ScaleY(5));
 
 	panel->iLbl = WMCreateLabel(hbox);
 	WMSetLabelImagePosition(panel->iLbl, WIPImageOnly);
@@ -149,7 +164,7 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 
 	panel->line = WMCreateFrame(panel->win);
 	WMMapWidget(panel->line);
-	WMAddBoxSubview(panel->vbox, WMWidgetView(panel->line), False, True, 2, 2, 5);
+	WMAddBoxSubview(panel->vbox, WMWidgetView(panel->line), False, True, 2, 2, ScaleY(5));
 	WMSetFrameRelief(panel->line, WRGroove);
 
 	if (msg) {
@@ -157,16 +172,16 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 		WMSetLabelWraps(panel->mLbl, True);
 		WMMapWidget(panel->mLbl);
 		WMAddBoxSubview(panel->vbox, WMWidgetView(panel->mLbl), True, True,
-				WMFontHeight(scrPtr->normalFont) * 4, 0, 5);
+				WMFontHeight(scrPtr->normalFont) * 4, 0, ScaleY(5));
 		WMSetLabelText(panel->mLbl, msg);
 		WMSetLabelTextAlignment(panel->mLbl, WACenter);
 	}
 
 	panel->hbox = WMCreateBox(panel->vbox);
-	WMSetBoxBorderWidth(panel->hbox, 10);
+	WMSetBoxBorderWidth(panel->hbox, ScaleX(10));
 	WMSetBoxHorizontal(panel->hbox, True);
 	WMMapWidget(panel->hbox);
-	WMAddBoxSubview(panel->vbox, WMWidgetView(panel->hbox), False, True, 44, 0, 0);
+	WMAddBoxSubview(panel->vbox, WMWidgetView(panel->hbox), False, True, ScaleY(44), 0, 0);
 
 	/* create buttons */
 	if (otherButton)
@@ -180,19 +195,19 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 
 	dw = dw + (scrPtr->buttonArrow ? scrPtr->buttonArrow->width : 0);
 
-	aw += 30;
-	ow += 30;
-	dw += 30;
+	aw += ScaleX(30);
+	ow += ScaleX(30);
+	dw += ScaleX(30);
 
 	w = WMAX(dw, WMAX(aw, ow));
-	if ((w + 10) * 3 < 400) {
+	if ((w + ScaleX(10)) * 3 < pwidth) {
 		aw = w;
 		ow = w;
 		dw = w;
 	} else {
 		int t;
 
-		t = 400 - 40 - aw - ow - dw;
+		t = pwidth - 4 * ScaleX(10) - aw - ow - dw;
 		aw += t / 3;
 		ow += t / 3;
 		dw += t / 3;
@@ -200,6 +215,7 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 
 	if (defaultButton) {
 		panel->defBtn = WMCreateCommandButton(panel->hbox);
+		WMResizeWidget(panel->defBtn, dw, ScaleY(24));
 		WMSetButtonAction(panel->defBtn, alertPanelOnClick, panel);
 		WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(panel->defBtn), False, True, dw, 0, 0);
 		WMSetButtonText(panel->defBtn, defaultButton);
@@ -209,14 +225,16 @@ WMAlertPanel *WMCreateAlertPanel(WMScreen * scrPtr, WMWindow * owner,
 	}
 	if (alternateButton) {
 		panel->altBtn = WMCreateCommandButton(panel->hbox);
-		WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(panel->altBtn), False, True, aw, 0, 5);
+		WMResizeWidget(panel->altBtn, aw, ScaleY(24));
+		WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(panel->altBtn), False, True, aw, 0, ScaleX(5));
 		WMSetButtonAction(panel->altBtn, alertPanelOnClick, panel);
 		WMSetButtonText(panel->altBtn, alternateButton);
 	}
 	if (otherButton) {
 		panel->othBtn = WMCreateCommandButton(panel->hbox);
+		WMResizeWidget(panel->othBtn, ow, ScaleY(24));
 		WMSetButtonAction(panel->othBtn, alertPanelOnClick, panel);
-		WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(panel->othBtn), False, True, ow, 0, 5);
+		WMAddBoxSubviewAtEnd(panel->hbox, WMWidgetView(panel->othBtn), False, True, ow, 0, ScaleX(5));
 		WMSetButtonText(panel->othBtn, otherButton);
 	}
 
