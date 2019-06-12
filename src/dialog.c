@@ -428,6 +428,7 @@ int wAdvancedInputDialog(WScreen *scr, const char *title, const char *message, c
 	WMPoint center;
 	WMInputPanelWithHistory *p;
 	char *filename;
+	int pwidth, pheight;
 
 	filename = HistoryFileName(name);
 	p = wmalloc(sizeof(WMInputPanelWithHistory));
@@ -440,14 +441,16 @@ int wAdvancedInputDialog(WScreen *scr, const char *title, const char *message, c
 	p->variants = NULL;
 	p->varpos = 0;
 	WMCreateEventHandler(WMWidgetView(p->panel->text), KeyPressMask, handleHistoryKeyPress, p);
+	pwidth = WMWidgetWidth(p->panel->win);
+	pheight = WMWidgetHeight(p->panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 320, 160, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 	XSelectInput(dpy, parent, KeyPressMask | KeyReleaseMask);
 
 	XReparentWindow(dpy, WMWidgetXID(p->panel->win), parent, 0, 0);
 
-	center = getCenter(scr, 320, 160);
-	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, 320, 160);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, pwidth, pheight);
 
 	wwin->client_leader = WMWidgetXID(p->panel->win);
 
@@ -491,16 +494,19 @@ int wInputDialog(WScreen *scr, const char *title, const char *message, char **te
 	WMInputPanel *panel;
 	char *result;
 	WMPoint center;
+	int pwidth, pheight;
 
 	panel = WMCreateInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
+	pwidth = WMWidgetWidth(panel->win);
+	pheight = WMWidgetHeight(panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 320, 160, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 	XSelectInput(dpy, parent, KeyPressMask | KeyReleaseMask);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-	center = getCenter(scr, 320, 160);
-	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, 320, 160);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, pwidth, pheight);
 
 	wwin->client_leader = WMWidgetXID(panel->win);
 
