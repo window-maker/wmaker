@@ -33,3 +33,5 @@ wmagnify- a program to magnify the area near the mouse pointer,
 	with real-time update
 
 wkdemenu.pl- convert a KDE menu into a wmaker menu (for pipe)
+
+wmiv- quick image viewer using wrlib
