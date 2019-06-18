@@ -226,27 +226,27 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 	WMFont *font;
 	int x, y;
 	WMBox *vbox;
-	int fw, fh;
+	int wmScaleWidth, wmScaleHeight;
 	int pwidth, pheight;
 	int iconSize;
 
-	/* get the width and height values of the system font for use with the ScaleX/ScaleY macros */
-	WMGetScaleBaseFromSystemFont(scr->wmscreen, &fw, &fh);
+	/* get the width and height values of the system font for use with the WMScaleX/WMScaleY macros */
+	WMGetScaleBaseFromSystemFont(scr->wmscreen, &wmScaleWidth, &wmScaleHeight);
 
 	/* calculate the required width and height for the panel */
 	iconSize = wPreferences.icon_size;
-	pwidth = ScaleX(300);
-	pheight = ScaleY(10)                /* upper margin */
-		+ iconSize                  /* icon and its label */
-		+ ScaleY(10)                /* padding */
-		+ ScaleY(20) + ScaleY(2)    /* start option */
-		+ ScaleY(20) + ScaleY(5)    /* lock option */
-		+ ScaleY(50) + ScaleY(5)    /* app path and arguments */
-		+ ScaleY(70) + ScaleY(5)    /* middle-click command */
-		+ ScaleY(70) + ScaleY(5)    /* drag&drop command */
-		+ ScaleY(50) + ScaleY(10)   /* icon file */
-		+ ScaleY(24)                /* buttons */
-		+ ScaleY(10);               /* lower margin */
+	pwidth = WMScaleX(300);
+	pheight = WMScaleY(10)                  /* upper margin */
+		+ iconSize                      /* icon and its label */
+		+ WMScaleY(10)                  /* padding */
+		+ WMScaleY(20) + WMScaleY(2)    /* start option */
+		+ WMScaleY(20) + WMScaleY(5)    /* lock option */
+		+ WMScaleY(50) + WMScaleY(5)    /* app path and arguments */
+		+ WMScaleY(70) + WMScaleY(5)    /* middle-click command */
+		+ WMScaleY(70) + WMScaleY(5)    /* drag&drop command */
+		+ WMScaleY(50) + WMScaleY(10)   /* icon file */
+		+ WMScaleY(24)                  /* buttons */
+		+ WMScaleY(10);                 /* lower margin */
 
 	panel = wmalloc(sizeof(AppSettingsPanel));
 
@@ -260,13 +260,13 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 
 	panel->iconLabel = WMCreateLabel(panel->win);
 	WMResizeWidget(panel->iconLabel, iconSize, iconSize);
-	WMMoveWidget(panel->iconLabel, ScaleX(10), ScaleY(10));
+	WMMoveWidget(panel->iconLabel, WMScaleX(10), WMScaleY(10));
 	WMSetLabelImagePosition(panel->iconLabel, WIPImageOnly);
 
 	panel->nameLabel = WMCreateLabel(panel->win);
-	font = WMBoldSystemFontOfSize(scr->wmscreen, ScaleY(14));
-	WMResizeWidget(panel->nameLabel, ScaleX(190), ScaleY(18));
-	WMMoveWidget(panel->nameLabel, 2 * ScaleX(10) + iconSize, ScaleY(10) + ((iconSize - WMFontHeight(font)) / 2));
+	font = WMBoldSystemFontOfSize(scr->wmscreen, WMScaleY(14));
+	WMResizeWidget(panel->nameLabel, WMScaleX(190), WMScaleY(18));
+	WMMoveWidget(panel->nameLabel, 2 * WMScaleX(10) + iconSize, WMScaleY(10) + ((iconSize - WMFontHeight(font)) / 2));
 	WMSetLabelTextAlignment(panel->nameLabel, WALeft);
 	WMSetLabelFont(panel->nameLabel, font);
 	WMReleaseFont(font);
@@ -276,41 +276,41 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 		WMSetLabelText(panel->nameLabel, aicon->wm_class);
 
 	vbox = WMCreateBox(panel->win);
-	WMResizeWidget(vbox, pwidth - 2 * ScaleX(10), pheight - iconSize - 3 * ScaleY(10));
-	WMMoveWidget(vbox, ScaleX(10), iconSize + 2 * ScaleY(10));
+	WMResizeWidget(vbox, pwidth - 2 * WMScaleX(10), pheight - iconSize - 3 * WMScaleY(10));
+	WMMoveWidget(vbox, WMScaleX(10), iconSize + 2 * WMScaleY(10));
 
 	panel->autoLaunchBtn = WMCreateSwitchButton(vbox);
-	WMAddBoxSubview(vbox, WMWidgetView(panel->autoLaunchBtn), False, True, ScaleY(20), ScaleY(20), ScaleY(2));
+	WMAddBoxSubview(vbox, WMWidgetView(panel->autoLaunchBtn), False, True, WMScaleY(20), WMScaleY(20), WMScaleY(2));
 	WMSetButtonText(panel->autoLaunchBtn, _("Start when Window Maker is started"));
 	WMSetButtonSelected(panel->autoLaunchBtn, aicon->auto_launch);
 
 	panel->lockBtn = WMCreateSwitchButton(vbox);
-	WMAddBoxSubview(vbox, WMWidgetView(panel->lockBtn), False, True, ScaleY(20), ScaleY(20), ScaleY(5));
+	WMAddBoxSubview(vbox, WMWidgetView(panel->lockBtn), False, True, WMScaleY(20), WMScaleY(20), WMScaleY(5));
 	WMSetButtonText(panel->lockBtn, _("Lock (prevent accidental removal)"));
 	WMSetButtonSelected(panel->lockBtn, aicon->lock);
 
 	panel->commandFrame = WMCreateFrame(vbox);
 	WMSetFrameTitle(panel->commandFrame, _("Application path and arguments"));
-	WMAddBoxSubview(vbox, WMWidgetView(panel->commandFrame), False, True, ScaleY(50), ScaleY(50), ScaleY(5));
+	WMAddBoxSubview(vbox, WMWidgetView(panel->commandFrame), False, True, WMScaleY(50), WMScaleY(50), WMScaleY(5));
 
 	panel->commandField = WMCreateTextField(panel->commandFrame);
-	WMResizeWidget(panel->commandField, ScaleX(260), ScaleY(20));
-	WMMoveWidget(panel->commandField, ScaleX(10), ScaleY(20));
+	WMResizeWidget(panel->commandField, WMScaleX(260), WMScaleY(20));
+	WMMoveWidget(panel->commandField, WMScaleX(10), WMScaleY(20));
 	WMSetTextFieldText(panel->commandField, aicon->command);
 
 	WMMapSubwidgets(panel->commandFrame);
 
 	panel->pasteCommandFrame = WMCreateFrame(vbox);
 	WMSetFrameTitle(panel->pasteCommandFrame, _("Command for middle-click launch"));
-	WMAddBoxSubview(vbox, WMWidgetView(panel->pasteCommandFrame), False, True, ScaleY(70), ScaleY(70), ScaleY(5));
+	WMAddBoxSubview(vbox, WMWidgetView(panel->pasteCommandFrame), False, True, WMScaleY(70), WMScaleY(70), WMScaleY(5));
 
 	panel->pasteCommandField = WMCreateTextField(panel->pasteCommandFrame);
-	WMResizeWidget(panel->pasteCommandField, ScaleX(260), ScaleY(20));
-	WMMoveWidget(panel->pasteCommandField, ScaleX(10), ScaleY(20));
+	WMResizeWidget(panel->pasteCommandField, WMScaleX(260), WMScaleY(20));
+	WMMoveWidget(panel->pasteCommandField, WMScaleX(10), WMScaleY(20));
 
 	panel->pasteCommandLabel = WMCreateLabel(panel->pasteCommandFrame);
-	WMResizeWidget(panel->pasteCommandLabel, ScaleX(260), ScaleY(18));
-	WMMoveWidget(panel->pasteCommandLabel, ScaleX(10), ScaleY(45));
+	WMResizeWidget(panel->pasteCommandLabel, WMScaleX(260), WMScaleY(18));
+	WMMoveWidget(panel->pasteCommandLabel, WMScaleX(10), WMScaleY(45));
 
 	WMSetTextFieldText(panel->pasteCommandField, aicon->paste_command);
 	WMSetLabelText(panel->pasteCommandLabel, _("%s will be replaced with current selection"));
@@ -318,15 +318,15 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 
 	panel->dndCommandFrame = WMCreateFrame(vbox);
 	WMSetFrameTitle(panel->dndCommandFrame, _("Command for dragged and dropped files"));
-	WMAddBoxSubview(vbox, WMWidgetView(panel->dndCommandFrame), False, True, ScaleY(70), ScaleY(70), ScaleY(5));
+	WMAddBoxSubview(vbox, WMWidgetView(panel->dndCommandFrame), False, True, WMScaleY(70), WMScaleY(70), WMScaleY(5));
 
 	panel->dndCommandField = WMCreateTextField(panel->dndCommandFrame);
-	WMResizeWidget(panel->dndCommandField, ScaleX(260), ScaleY(20));
-	WMMoveWidget(panel->dndCommandField, ScaleX(10), ScaleY(20));
+	WMResizeWidget(panel->dndCommandField, WMScaleX(260), WMScaleY(20));
+	WMMoveWidget(panel->dndCommandField, WMScaleX(10), WMScaleY(20));
 
 	panel->dndCommandLabel = WMCreateLabel(panel->dndCommandFrame);
-	WMResizeWidget(panel->dndCommandLabel, ScaleX(260), ScaleY(18));
-	WMMoveWidget(panel->dndCommandLabel, ScaleX(10), ScaleY(45));
+	WMResizeWidget(panel->dndCommandLabel, WMScaleX(260), WMScaleY(18));
+	WMMoveWidget(panel->dndCommandLabel, WMScaleX(10), WMScaleY(45));
 #ifdef USE_DOCK_XDND
 	WMSetTextFieldText(panel->dndCommandField, aicon->dnd_command);
 	WMSetLabelText(panel->dndCommandLabel, _("%d will be replaced with the file name"));
@@ -341,16 +341,16 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 
 	panel->iconFrame = WMCreateFrame(vbox);
 	WMSetFrameTitle(panel->iconFrame, _("Icon Image"));
-	WMAddBoxSubview(vbox, WMWidgetView(panel->iconFrame), False, True, ScaleY(50), ScaleY(50), ScaleY(10));
+	WMAddBoxSubview(vbox, WMWidgetView(panel->iconFrame), False, True, WMScaleY(50), WMScaleY(50), WMScaleY(10));
 
 	panel->iconField = WMCreateTextField(panel->iconFrame);
-	WMResizeWidget(panel->iconField, ScaleX(180), ScaleY(20));
-	WMMoveWidget(panel->iconField, ScaleX(10), ScaleY(20));
+	WMResizeWidget(panel->iconField, WMScaleX(180), WMScaleY(20));
+	WMMoveWidget(panel->iconField, WMScaleX(10), WMScaleY(20));
 	WMSetTextFieldText(panel->iconField, wDefaultGetIconFile(aicon->wm_instance, aicon->wm_class, False));
 
 	panel->browseBtn = WMCreateCommandButton(panel->iconFrame);
-	WMResizeWidget(panel->browseBtn, ScaleX(70), ScaleY(24));
-	WMMoveWidget(panel->browseBtn, ScaleX(200), ScaleY(18));
+	WMResizeWidget(panel->browseBtn, WMScaleX(70), WMScaleY(24));
+	WMMoveWidget(panel->browseBtn, WMScaleX(200), WMScaleY(18));
 	WMSetButtonText(panel->browseBtn, _("Browse..."));
 	WMSetButtonAction(panel->browseBtn, chooseIconCallback, panel);
 
@@ -359,17 +359,17 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 
 		hbox = WMCreateBox(vbox);
 		WMSetBoxHorizontal(hbox, True);
-		WMAddBoxSubview(vbox, WMWidgetView(hbox), False, True, ScaleY(24), ScaleY(24), 0);
+		WMAddBoxSubview(vbox, WMWidgetView(hbox), False, True, WMScaleY(24), WMScaleY(24), 0);
 
 		panel->okBtn = WMCreateCommandButton(hbox);
 		WMSetButtonText(panel->okBtn, _("OK"));
 		WMSetButtonAction(panel->okBtn, panelBtnCallback, panel);
-		WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->okBtn), False, True, ScaleX(80), ScaleX(80), 0);
+		WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->okBtn), False, True, WMScaleX(80), WMScaleX(80), 0);
 
 		panel->cancelBtn = WMCreateCommandButton(hbox);
 		WMSetButtonText(panel->cancelBtn, _("Cancel"));
 		WMSetButtonAction(panel->cancelBtn, panelBtnCallback, panel);
-		WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->cancelBtn), False, True, ScaleX(80), ScaleX(80), 5);
+		WMAddBoxSubviewAtEnd(hbox, WMWidgetView(panel->cancelBtn), False, True, WMScaleX(80), WMScaleX(80), 5);
 
 		WMMapSubwidgets(hbox);
 	}
@@ -396,13 +396,13 @@ void ShowDockAppSettingsPanel(WAppIcon * aicon)
 		if (y < 0)
 			y = 0;
 		else if (y + pheight > rect.pos.y + rect.size.height)
-			y = rect.pos.y + rect.size.height - pheight - 3 * ScaleY(10);
+			y = rect.pos.y + rect.size.height - pheight - 3 * WMScaleY(10);
 
 		if (aicon->dock && aicon->dock->type == WM_DOCK) {
 			if (aicon->dock->on_right_side)
 				x = rect.pos.x + rect.size.width / 2;
 			else
-				x = rect.pos.x + rect.size.width / 2 - pwidth - ScaleX(2);
+				x = rect.pos.x + rect.size.width / 2 - pwidth - WMScaleX(2);
 		} else {
 			x = rect.pos.x + (rect.size.width - pwidth) / 2;
 		}
