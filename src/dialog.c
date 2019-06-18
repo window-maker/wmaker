@@ -77,7 +77,7 @@ int wMessageDialog(WScreen *scr, const char *title, const char *message, const c
 	WMPoint center;
 	int pwidth, pheight;
 
-	panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
+	panel = WMCreateScaledAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
 	pwidth = WMWidgetWidth(panel->win);
 	pheight = WMWidgetHeight(panel->win);
 
@@ -126,7 +126,7 @@ int wExitDialog(WScreen *scr, const char *title, const char *message, const char
 	int result;
 	int pwidth, pheight;
 
-	panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
+	panel = WMCreateScaledAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
 	pwidth = WMWidgetWidth(panel->win);
 	pheight = WMWidgetHeight(panel->win);
 
@@ -432,7 +432,7 @@ int wAdvancedInputDialog(WScreen *scr, const char *title, const char *message, c
 
 	filename = HistoryFileName(name);
 	p = wmalloc(sizeof(WMInputPanelWithHistory));
-	p->panel = WMCreateInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
+	p->panel = WMCreateScaledInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
 	p->history = LoadHistory(filename, wPreferences.history_lines);
 	p->histpos = 0;
 	p->prefix = NULL;
@@ -496,7 +496,7 @@ int wInputDialog(WScreen *scr, const char *title, const char *message, char **te
 	WMPoint center;
 	int pwidth, pheight;
 
-	panel = WMCreateInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
+	panel = WMCreateScaledInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
 	pwidth = WMWidgetWidth(panel->win);
 	pheight = WMWidgetHeight(panel->win);
 
