@@ -1466,8 +1466,8 @@ void wShowLegalPanel(WScreen *scr)
 	panel->scr = scr;
 	panel->win = WMCreateWindow(scr->wmscreen, "legal");
 	WMGetScaleBaseFromSystemFont(scr->wmscreen, &wmScaleWidth, &wmScaleHeight);
-	pwidth = WMScaleX(420);
-	pheight = WMScaleY(250);
+	pwidth = WMScaleX(440);
+	pheight = WMScaleY(270);
 	WMResizeWidget(panel->win, pwidth, pheight);
 
 	panel->frame = WMCreateFrame(panel->win);
