@@ -201,8 +201,8 @@ typedef void WMNotificationObserverAction(void *observerData,
  *    fh: the height of the current system font
  * Use the WMGetScaleBaseFromSystemFont function to set these values.
  */
-#define ScaleX(value) ((int)((double)value / 164.0 * (double)fw + 0.5))
-#define ScaleY(value) ((int)((double)value / 14.0 * (double)fh + 0.5))
+#define ScaleX(value) ((int)((double)value / 177.0 * (double)fw + 0.5))
+#define ScaleY(value) ((int)((double)value / 15.0 * (double)fh + 0.5))
 
 /* ---[ WINGs/memory.c ]-------------------------------------------------- */
 
