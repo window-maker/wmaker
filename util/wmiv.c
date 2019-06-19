@@ -842,7 +842,14 @@ int main(int argc, char **argv)
 		if (e.type == ClientMessage) {
 			if (e.xclient.data.l[0] == delWindow)
 				quit = 1;
-				break;
+
+			/*
+			 * This break could be related to all ClientMessages or
+			 * related to delWindow. Before the patch about this comment
+			 * the break was indented with one tab more (at the same level
+			 * than "quit = 1;" in the previous line.
+			 */
+			break;
 		}
 		if (e.type == FocusIn) {
 			focus = True;
