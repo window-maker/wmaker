@@ -2305,6 +2305,7 @@ static void handleTextKeyPress(Text * tPtr, XEvent * event)
 
 	case XK_Return:
 		*buffer = '\n';
+		/* FALLTHRU */
 	default:
 		if (*buffer != 0 && !control_pressed) {
 			insertTextInteractively(tPtr, buffer, strlen(buffer));
@@ -2544,6 +2545,7 @@ static void handleActionEvents(XEvent * event, void *data)
 			break;
 		}
 
+	/* FALLTHRU */
 	case ButtonRelease:
 		if (tPtr->flags.pointerGrabbed) {
 			tPtr->flags.pointerGrabbed = False;
