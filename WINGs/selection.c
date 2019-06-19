@@ -261,7 +261,7 @@ static WMData *getSelectionData(Display * dpy, Window win, Atom where)
 
 	bpi = bits / 8;
 
-	wdata = WMCreateDataWithBytesNoCopy(data, len * bpi, (WMFreeDataProc *) XFree);
+	wdata = WMCreateDataWithBytesNoCopy(data, len * bpi, (void *) XFree);
 	WMSetDataFormat(wdata, bits);
 
 	return wdata;
