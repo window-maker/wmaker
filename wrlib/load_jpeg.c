@@ -161,7 +161,7 @@ RImage *RLoadJPEG(const char *file_name)
 		if (buffer[0])
 			free(buffer[0]);
 
-		return image;
+		return NULL;
 	}
 
 	jpeg_start_decompress(&cinfo);
