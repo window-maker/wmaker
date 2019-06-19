@@ -2385,6 +2385,8 @@ void rgbIntToChar(W_ColorPanel *panel, int *value)
 	case RGBhex:
 		format = "%0X";
 		break;
+	default:
+		format = "";
 	}
 
 	sprintf(tmp, format, value[0]);
