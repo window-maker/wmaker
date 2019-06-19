@@ -418,7 +418,7 @@ static void find_and_write(const char *group, char *list[][2], int this_is_termi
 					NULL
 				);
 			} else {
-				char comm[PATH_MAX], *ptr;
+				char comm[PATH_MAX - 9], *ptr;
 
 				strncpy(comm, list[i][1], sizeof(comm) - 1);
 				comm[sizeof(comm) - 1] = '\0';
