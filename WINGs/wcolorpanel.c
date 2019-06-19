@@ -3396,6 +3396,9 @@ static void rgbInit(W_ColorPanel * panel)
 	case RGBhex:
 		format = "%0X";
 		break;
+	default:
+		/* Avoid compiler warning */
+		format = "";
 	}
 
 	sprintf(tmp, format, panel->color.rgb.red);
