@@ -139,15 +139,11 @@ RImage *RLoadJPEG(const char *file_name)
 	}
 
 	buffer[0] = (JSAMPROW) malloc(cinfo.image_width * cinfo.num_components);
-
 	if (!buffer[0]) {
 		RErrorCode = RERR_NOMEMORY;
 		jpeg_destroy_decompress(&cinfo);
 		fclose(file);
-		if (buffer[0])
-			free(buffer[0]);
-
-		return image;
+		return NULL;
 	}
 
 	if (cinfo.jpeg_color_space == JCS_GRAYSCALE) {
