@@ -134,14 +134,24 @@ RImage *RLoadJPEG(const char *file_name)
 	if (cinfo.image_width < 1 || cinfo.image_height < 1) {
 		buffer[0] = NULL;	/* Initialize pointer to avoid spurious free in cleanup code */
 		RErrorCode = RERR_BADIMAGEFILE;
-		goto bye;
+		jpeg_destroy_decompress(&cinfo);
+		fclose(file);
+		if (buffer[0])
+			free(buffer[0]);
+
+		return image;
 	}
 
 	buffer[0] = (JSAMPROW) malloc(cinfo.image_width * cinfo.num_components);
 
 	if (!buffer[0]) {
 		RErrorCode = RERR_NOMEMORY;
-		goto bye;
+		jpeg_destroy_decompress(&cinfo);
+		fclose(file);
+		if (buffer[0])
+			free(buffer[0]);
+
+		return image;
 	}
 
 	if (cinfo.jpeg_color_space == JCS_GRAYSCALE) {
@@ -157,7 +167,12 @@ RImage *RLoadJPEG(const char *file_name)
 
 	if (!image) {
 		RErrorCode = RERR_NOMEMORY;
-		goto bye;
+		jpeg_destroy_decompress(&cinfo);
+		fclose(file);
+		if (buffer[0])
+			free(buffer[0]);
+
+		return image;
 	}
 	jpeg_start_decompress(&cinfo);
 
@@ -183,12 +198,8 @@ RImage *RLoadJPEG(const char *file_name)
 	}
 
 	jpeg_finish_decompress(&cinfo);
-
- bye:
 	jpeg_destroy_decompress(&cinfo);
-
 	fclose(file);
-
 	if (buffer[0])
 		free(buffer[0]);
 
