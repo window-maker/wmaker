@@ -602,7 +602,7 @@ static void loadConfigurations(WMScreen * scr, WMWindow * mainw)
 	char *path;
 	FILE *file;
 	char buffer[1024];
-	char mbuf[1024];
+	char mbuf[1069]; /* Size of buffer and extra characters for the sprintfs */
 	int v1, v2, v3;
 
 	path = wdefaultspathfordomain("WindowMaker");
