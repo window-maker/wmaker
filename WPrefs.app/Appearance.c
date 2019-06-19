@@ -611,6 +611,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 			break;
 		default:
 			wwarning(_("unknown direction in '%s', falling back to diagonal"), type);
+			/* FALLTHRU */
 		case 'D':
 			style = RDiagonalGradient;
 			break;
@@ -637,6 +638,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 			break;
 		default:
 			wwarning(_("unknown direction in '%s', falling back to diagonal"), type);
+			/* FALLTHRU */
 		case 'D':
 			style = RDiagonalGradient;
 			break;
@@ -671,6 +673,7 @@ static Pixmap renderTexture(WMScreen * scr, WMPropList * texture, int width, int
 			break;
 		default:
 			wwarning(_("unknown direction in '%s', falling back to diagonal"), type);
+			/* FALLTHRU */
 		case 'D':
 			style = RDiagonalGradient;
 			break;
