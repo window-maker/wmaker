@@ -117,7 +117,8 @@ RImage *RLoadJPEG(const char *file_name)
 	jerr.pub.error_exit = my_error_exit;
 	/* Establish the setjmp return context for my_error_exit to use. */
 	if (setjmp(jerr.setjmp_buffer)) {
-		/* If we get here, the JPEG code has signaled an error.
+		/*
+		 * If we get here, the JPEG code has signaled an error.
 		 * We need to clean up the JPEG object, close the input file, and return.
 		 */
 		jpeg_destroy_decompress(&cinfo);
@@ -126,11 +127,8 @@ RImage *RLoadJPEG(const char *file_name)
 	}
 
 	jpeg_create_decompress(&cinfo);
-
 	jpeg_stdio_src(&cinfo, file);
-
 	jpeg_read_header(&cinfo, TRUE);
-
 	if (cinfo.image_width < 1 || cinfo.image_height < 1) {
 		RErrorCode = RERR_BADIMAGEFILE;
 		jpeg_destroy_decompress(&cinfo);
@@ -146,17 +144,16 @@ RImage *RLoadJPEG(const char *file_name)
 		return NULL;
 	}
 
-	if (cinfo.jpeg_color_space == JCS_GRAYSCALE) {
+	if (cinfo.jpeg_color_space == JCS_GRAYSCALE)
 		cinfo.out_color_space = JCS_GRAYSCALE;
-	} else
+	else
 		cinfo.out_color_space = JCS_RGB;
+
 	cinfo.quantize_colors = FALSE;
 	cinfo.do_fancy_upsampling = FALSE;
 	cinfo.do_block_smoothing = FALSE;
 	jpeg_calc_output_dimensions(&cinfo);
-
 	image = RCreateImage(cinfo.image_width, cinfo.image_height, False);
-
 	if (!image) {
 		RErrorCode = RERR_NOMEMORY;
 		jpeg_destroy_decompress(&cinfo);
@@ -166,10 +163,9 @@ RImage *RLoadJPEG(const char *file_name)
 
 		return image;
 	}
+
 	jpeg_start_decompress(&cinfo);
-
 	ptr = image->data;
-
 	if (cinfo.out_color_space == JCS_RGB) {
 		while (cinfo.output_scanline < cinfo.output_height) {
 			jpeg_read_scanlines(&cinfo, buffer, (JDIMENSION) 1);
