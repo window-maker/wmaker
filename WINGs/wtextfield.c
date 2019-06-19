@@ -965,6 +965,7 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 	switch (ksym) {
 	case XK_Tab:
 #ifdef XK_ISO_Left_Tab
+		/* FALLTHRU */
 	case XK_ISO_Left_Tab:
 #endif
 		if (!controled) {
@@ -1001,8 +1002,10 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 		break;
 
 #ifdef XK_KP_Enter
+		/* FALLTHRU */
 	case XK_KP_Enter:
 #endif
+		/* FALLTHRU */
 	case XK_Return:
 		if (!modified) {
 			data = (void *)WMReturnTextMovement;
@@ -1019,8 +1022,10 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 			controled = False;
 
 #ifdef XK_KP_Left
+		/* FALLTHRU */
 	case XK_KP_Left:
 #endif
+		/* FALLTHRU */
 	case XK_Left:
 		if (tPtr->cursorPosition > 0) {
 			int i;
@@ -1058,8 +1063,10 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 			controled = False;
 
 #ifdef XK_KP_Right
+		/* FALLTHRU */
 	case XK_KP_Right:
 #endif
+		/* FALLTHRU */
 	case XK_Right:
 		if (tPtr->cursorPosition < tPtr->textLen) {
 			int i;
@@ -1095,8 +1102,10 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 			controled = False;
 
 #ifdef XK_KP_Home
+		/* FALLTHRU */
 	case XK_KP_Home:
 #endif
+		/* FALLTHRU */
 	case XK_Home:
 		if (!controled) {
 			if (tPtr->cursorPosition > 0) {
@@ -1122,8 +1131,10 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 			controled = False;
 
 #ifdef XK_KP_End
+		/* FALLTHRU */
 	case XK_KP_End:
 #endif
+		/* FALLTHRU */
 	case XK_End:
 		if (!controled) {
 			if (tPtr->cursorPosition < tPtr->textLen) {
@@ -1149,6 +1160,7 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 		else
 			modified = False;
 
+		/* FALLTHRU */
 	case XK_BackSpace:
 		if (!modified) {
 			if (tPtr->selection.count) {
@@ -1177,8 +1189,10 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 			modified = False;
 
 #ifdef XK_KP_Delete
+		/* FALLTHRU */
 	case XK_KP_Delete:
 #endif
+		/* FALLTHRU */
 	case XK_Delete:
 		if (!modified) {
 			if (tPtr->selection.count) {
