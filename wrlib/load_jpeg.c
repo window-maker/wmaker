@@ -132,14 +132,10 @@ RImage *RLoadJPEG(const char *file_name)
 	jpeg_read_header(&cinfo, TRUE);
 
 	if (cinfo.image_width < 1 || cinfo.image_height < 1) {
-		buffer[0] = NULL;	/* Initialize pointer to avoid spurious free in cleanup code */
 		RErrorCode = RERR_BADIMAGEFILE;
 		jpeg_destroy_decompress(&cinfo);
 		fclose(file);
-		if (buffer[0])
-			free(buffer[0]);
-
-		return image;
+		return NULL;
 	}
 
 	buffer[0] = (JSAMPROW) malloc(cinfo.image_width * cinfo.num_components);
