@@ -3453,7 +3453,7 @@ static void hsbInit(W_ColorPanel * panel)
 	WMSetSliderValue(panel->hsbSaturationS, value[1]);
 	WMSetSliderValue(panel->hsbBrightnessS, value[2]);
 
-	sprintf(tmp, "%d", value[0]);
+	sprintf(tmp, "%hu", value[0]);
 	WMSetTextFieldText(panel->hsbHueT, tmp);
 	sprintf(tmp, "%d", value[1]);
 	WMSetTextFieldText(panel->hsbSaturationT, tmp);
