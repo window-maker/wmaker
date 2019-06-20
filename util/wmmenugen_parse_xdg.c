@@ -212,22 +212,23 @@ static Bool xdg_to_wm(XDGMenuEntry *xdg, WMMenuEntry *wm)
 	if (xdg->Name) {
 		wm->Name = xdg->Name;
 	} else  {
-		if (xdg->Exec)
-			wm->Name = wstrdup(xdg->Exec);
-		else /* xdg->TryExec */
+		if (xdg->TryExec)
 			wm->Name = wstrdup(xdg->TryExec);
+		else /* xdg->Exec */
+			wm->Name = wstrdup(xdg->Exec);
 
 		p = strchr(wm->Name, ' ');
 		if (p)
 			*p = '\0';
 	}
 
-	if (xdg->Exec) {
+	if (xdg->TryExec)
+		wm->CmdLine = xdg->TryExec;
+	else { /* xdg->Exec */
 		wm->CmdLine = parse_xdg_exec(xdg->Exec);
 		if (!wm->CmdLine)
 			return False;
-	} else /* xdg->TryExec */
-		wm->CmdLine = xdg->TryExec;
+	}
 
 	wm->SubMenu = xdg->Category;
 	wm->Flags = xdg->Flags;
