@@ -269,7 +269,10 @@ static char *parse_xdg_exec(char *exec)
 				if (*src == '%')
 					*dst++ = *src;
 				else if (strchr ("fFuUdDnNickvm", *src))
-					*dst++ = *src;
+					/*
+					 * Skip valid field-code.
+					 */
+					;
 				else
 					/*
 					 * Invalid field-code.
