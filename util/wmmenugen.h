@@ -30,6 +30,7 @@
 #define F_RESTART_SELF		(1 << 1)
 #define F_RESTART_OTHER		(1 << 2)
 #define F_QUIT			(1 << 3)
+#define F_FREE_CMD_LINE		(1 << 4)
 
 
 /* a representation of a Window Maker menu entry. all menus are

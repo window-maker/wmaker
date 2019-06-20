@@ -76,6 +76,7 @@ static int   getBooleanValue(const char *line);
 static void  getMenuHierarchyFor(char **xdgmenuspec);
 static int   compare_matchlevel(int *current_level, const char *found_locale);
 static Bool  xdg_to_wm(XDGMenuEntry *xdg, WMMenuEntry *wmentry);
+static char *parse_xdg_exec(char *exec);
 static void  init_xdg_storage(XDGMenuEntry *xdg);
 static void  init_wm_storage(WMMenuEntry *wm);
 
@@ -221,15 +222,76 @@ static Bool xdg_to_wm(XDGMenuEntry *xdg, WMMenuEntry *wm)
 			*p = '\0';
 	}
 
-	if (xdg->Exec)
-		wm->CmdLine = xdg->Exec;
-	else /* xdg->TryExec */
+	if (xdg->Exec) {
+		wm->CmdLine = parse_xdg_exec(xdg->Exec);
+		if (!wm->CmdLine)
+			return False;
+	} else /* xdg->TryExec */
 		wm->CmdLine = xdg->TryExec;
 
 	wm->SubMenu = xdg->Category;
 	wm->Flags = xdg->Flags;
+	if (wm->CmdLine != xdg->TryExec)
+		wm->Flags |= F_FREE_CMD_LINE;
 
 	return True;
+}
+
+static char *parse_xdg_exec(char *exec)
+{
+	char *cmd_line, *dst, *src;
+	Bool quoted = False;
+
+	cmd_line = wstrdup(exec);
+
+	for (dst = src = cmd_line; *src; src++) {
+		if (quoted) {
+			if (*src == '"')
+				quoted = False;
+			else if (*src == '\\')
+				switch (*++src) {
+				case '"':
+				case '`':
+				case '$':
+				case '\\':
+					*dst++ = *src;
+					break;
+				default:
+					goto err_out;
+				}
+			else
+				*dst++ = *src;
+		} else {
+			if (*src == '"')
+				quoted = True;
+			else if (*src == '%') {
+				src++;
+				if (*src == '%')
+					*dst++ = *src;
+				else if (strchr ("fFuUdDnNickvm", *src))
+					*dst++ = *src;
+				else
+					/*
+					 * Invalid field-code.
+					 */
+					goto err_out;
+			} else
+				*dst++ = *src;
+		}
+	}
+
+	if (quoted)
+		goto err_out;
+
+	do
+		*dst = '\0';
+	while (dst > cmd_line && isspace(*--dst));
+
+	return cmd_line;
+
+err_out:
+	wfree(cmd_line);
+	return NULL;
 }
 
 /* (re-)initialize a XDGMenuEntry storage
@@ -261,6 +323,9 @@ static void init_xdg_storage(XDGMenuEntry *xdg)
  */
 static void init_wm_storage(WMMenuEntry *wm)
 {
+	if (wm->Flags & F_FREE_CMD_LINE)
+		wfree(wm->CmdLine);
+
 	wm->Name = NULL;
 	wm->CmdLine = NULL;
 	wm->Flags = 0;
