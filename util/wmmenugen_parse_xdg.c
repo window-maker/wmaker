@@ -297,6 +297,7 @@ static void getKey(char **target, const char *line)
 static void getStringValue(char **target, const char *line)
 {
 	const char *p;
+	char *q;
 	int kstart;
 
 	p = line;
@@ -312,6 +313,26 @@ static void getStringValue(char **target, const char *line)
 		kstart++;
 
 	*target = wstrdup(p + kstart);
+
+	for (p = q = *target; *p; p++) {
+		if (*p != '\\') {
+			*q++ = *p;
+		} else {
+			switch (*++p) {
+			case 's':  *q++ = ' ';  break;
+			case 'n':  *q++ = '\n'; break;
+			case 't':  *q++ = '\t'; break;
+			case 'r':  *q++ = '\r'; break;
+			case '\\': *q++ = '\\'; break;
+			default:
+				/*
+				 * Skip invalid escape.
+				 */
+				break;
+			}
+		}
+	}
+	*q = '\0';
 }
 
 /* get a localized string value from line. allocates target, which must be wfreed later.
