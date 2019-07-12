@@ -527,6 +527,7 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 	case WPM_CENTER:
 		if (center_place_window(wwin, x_ret, y_ret, width, height, usableArea))
 			break;
+		/* Fall through. */
 
 	case WPM_AUTO:
 		if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, False, usableArea)) {
@@ -537,6 +538,8 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 		/* there isn't a break here, because if we fail, it should fall
 		   through to cascade placement, as people who want tiling want
 		   automagicness aren't going to want to place their window */
+
+		/* Fall through. */
 
 	case WPM_CASCADE:
 		if (wPreferences.window_placement == WPM_AUTO || wPreferences.window_placement == WPM_CENTER)

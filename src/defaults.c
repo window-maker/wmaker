@@ -3378,6 +3378,8 @@ static int setSwPOptions(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 			}
 		}
 
+		/* Fall through. */
+
 	case 1:
 		if (!WMIsPLString(WMGetFromPLArray(array, 0))) {
 			wwarning(_("Invalid arguments for option \"%s\""), entry->key);
