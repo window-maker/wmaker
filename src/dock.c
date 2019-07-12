@@ -92,7 +92,7 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event);
 
 static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state);
 
-static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock);
+static void trackDeadProcess(pid_t pid, unsigned int status, void *cdata);
 
 static int getClipButton(int px, int py);
 
@@ -3091,7 +3091,7 @@ static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state)
 				state->workspace = scr->current_workspace;
 		}
 		wWindowAddSavedState(btn->wm_instance, btn->wm_class, cmdline, pid, state);
-		wAddDeathHandler(pid, (WDeathHandler *) trackDeadProcess, btn->dock);
+		wAddDeathHandler(pid, trackDeadProcess, btn->dock);
 	} else if (state) {
 		wfree(state);
 	}
@@ -3334,8 +3334,9 @@ void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 	}
 }
 
-static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock)
+static void trackDeadProcess(pid_t pid, unsigned int status, void *cdata)
 {
+	WDock *dock = cdata;
 	WAppIcon *icon;
 	int i;
 
