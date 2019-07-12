@@ -82,6 +82,7 @@ void animateResize(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int
 void update_saved_geometry(WWindow *wwin);
 
 void movePionterToWindowCenter(WWindow *wwin);
+void moveBetweenHeads(WWindow *wwin, int direction);
 
 #endif
 
