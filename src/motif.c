@@ -105,7 +105,7 @@ static void setupMWMHints(WWindow *wwin, MWMHints *mwm_hints)
 			wwin->client_flags.no_closable = 0;
 		}
 
-		if (mwm_hints->decorations * MWM_DECOR_MENU) {
+		if (mwm_hints->decorations & MWM_DECOR_MENU) {
 			/*
 			 * WindowMaker does not include a button to display the menu
 			 * for windows, this is done using right mouse button on the
