@@ -3,6 +3,15 @@ NEWS for veteran Window Maker users
 
 -- 0.95.9
 
+Configurable SwitchPanel
+------------------------
+
+SwitchPanel is now more configurable: you can configure the switch panel icon
+size by setting the "SwitchPanelIconSize" option to your preferred value in
+~/GNUstep/Defaults/WindowMaker. The font size used in this panel now is also
+sensible to changes in the system font.
+
+
 New user configuration directory environment variable
 -----------------------------------------------------
 

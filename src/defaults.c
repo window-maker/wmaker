@@ -349,7 +349,9 @@ WDefaultEntry staticOptionList[] = {
 	{"DisableMiniwindows", "NO", NULL,
 	    &wPreferences.disable_miniwindows, getBool, NULL, NULL, NULL},
 	{"EnableWorkspacePager", "NO", NULL,
-	    &wPreferences.enable_workspace_pager, getBool, NULL, NULL, NULL}
+	    &wPreferences.enable_workspace_pager, getBool, NULL, NULL, NULL},
+	{"SwitchPanelIconSize", "48", NULL,
+	    &wPreferences.switch_panel_icon_size, getInt, NULL, NULL, NULL},
 };
 
 #define NUM2STRING_(x) #x
