@@ -284,18 +284,14 @@ _bindir=`eval echo $_bindir`
 _libdir=`eval echo $libdir`
 _libdir=`eval echo $_libdir`
 
-lib_search_path='-L${libdir}'
-
-inc_search_path='-I${includedir}'
-
 dnl ===============================================
 dnl Specify paths to look for libraries and headers
 dnl ===============================================
 AC_ARG_WITH(libs-from, AS_HELP_STRING([--with-libs-from], [pass compiler flags to look for libraries]),
-	[lib_search_path="$withval $lib_search_path"])
+	[lib_search_path="$withval"], [lib_search_path='-L${libdir}'])
 
 AC_ARG_WITH(incs-from, AS_HELP_STRING([--with-incs-from], [pass compiler flags to look for header files]),
-	[inc_search_path="$withval $inc_search_path"])
+	[inc_search_path="$withval"], [inc_search_path='-I${includedir}'])
 
 
 dnl Features Configuration
