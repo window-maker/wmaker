@@ -1,7 +1,7 @@
 # WindowMaker armenian translation.
 # Copyright (C) 2008 Norayr Chilingaryan
 # This file is distributed under the same license as the Windowmaker package.
-# Norayr Chilingaryan <chnorik@gmail.com>, 2008.
+# Norayr Chilingarian <norayr@arnet.am>, 2008.
 #
 msgid ""
 msgstr ""
@@ -9,8 +9,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-12-14 18:25+0000\n"
 "PO-Revision-Date: 2008-09-28 02:48+0400\n"
-"Last-Translator: Norayr Chilingaryan <chnorik@gmail.com>\n"
-"Language-Team: Armenian <norik@freenet.am>\n"
+"Last-Translator: Norayr Chilingarian <norayr@arnet.am>\n"
+"Language: Armenian\n"
+"Language-Team: Armenian <norayr@arnet.am>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -28,7 +29,7 @@ msgstr "Սխալ"
 
 #: ../src/appicon.c:416
 msgid "Could not open specified icon file"
-msgstr "Հնարավոր չէ բացել պատկերակը"
+msgstr "Հնարաւոր չէ բացել պատկերակը"
 
 #: ../src/appicon.c:417
 #: ../src/dialog.c:192
@@ -46,7 +47,7 @@ msgstr "Հնարավոր չէ բացել պատկերակը"
 #: ../src/winspector.c:395
 #: ../src/winspector.c:412
 msgid "OK"
-msgstr "Լավ"
+msgstr "Լաւ"
 
 #: ../src/appicon.c:445
 #: ../src/dock.c:244
@@ -55,12 +56,15 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
+" ստիպողաբար փակուելու է։\n"
+"Չպահուած տուեալները կորելու են։\n"
+"Հաստատէք։"
 
 #: ../src/appicon.c:453
 #: ../src/dock.c:263
 #: ../src/winmenu.c:124
 msgid "Kill Application"
-msgstr "Փակել ծրագիրը"
+msgstr "Սպանել յաւելուածը"
 
 #: ../src/appicon.c:454
 #: ../src/dock.c:264
@@ -91,7 +95,7 @@ msgstr "Թաքցնել"
 
 #: ../src/appicon.c:486
 msgid "Set Icon..."
-msgstr "Նշել պատկերակը․․․"
+msgstr "Նշել պատկերակը…"
 
 #: ../src/appicon.c:487
 #: ../src/dock.c:1176
@@ -104,29 +108,29 @@ msgstr "Սպանել"
 #: ../src/appicon.c:508
 #: ../src/dock.c:3511
 msgid "Unhide"
-msgstr "Բացել"
+msgstr "Ապաթաքցնել"
 
 #: ../src/application.c:405
 #, c-format
 msgid "recreating missing icon '%s'"
-msgstr ""
+msgstr "վերստեղծուում է բացակայող '%s' պատկերակը"
 
 #: ../src/defaults.c:930
 #: ../src/defaults.c:1148
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr ""
+msgstr "Ընդհանուր լռելեայնների տուեալների բազայի %s (%s) տիրոյթը վնասուած է"
 
 #: ../src/defaults.c:935
 #, c-format
 msgid "could not load domain %s from global defaults database"
-msgstr ""
+msgstr "հնարաւոր չէ բեռնել %s տիրոյթը ընդհանուր լռելեայնների տուեալների բազայից"
 
 #: ../src/defaults.c:1034
 #: ../src/defaults.c:1049
 #, c-format
 msgid "invalid global menu file %s"
-msgstr ""
+msgstr "ընդհանուր ցանկի %s նիշքն անվաւեր է"
 
 #: ../src/defaults.c:1077
 #: ../src/startup.c:761
@@ -134,7 +138,7 @@ msgstr ""
 #: ../src/startup.c:786
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
-msgstr ""
+msgstr "հնարաւոր չէ կարդալ \"%s\" տիրոյթը լռելեայնների տուեալների բազայից"
 
 #: ../src/defaults.c:1123
 #: ../src/defaults.c:1237
@@ -142,7 +146,7 @@ msgstr ""
 #: ../src/defaults.c:1334
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr ""
+msgstr "Լռելեայնների տուեալների բազայի %s (%s) տիրոյթը վնասուած է"
 
 #: ../src/defaults.c:1137
 #: ../src/defaults.c:1257
@@ -150,18 +154,18 @@ msgstr ""
 #: ../src/defaults.c:1344
 #, c-format
 msgid "could not load domain %s from user defaults database"
-msgstr ""
+msgstr "հնարաւոր չէ բեռնել %s տիրոյթը օգտատիրոջ լռելեայնների տուեալների բազայից"
 
 #: ../src/defaults.c:1167
 #, c-format
 msgid "could not load domain %s from global defaults database (%s)"
-msgstr ""
+msgstr "հնարաւոր չէ բեռնել %s տիրոյթը ընդհանուր լռելեայնների (%s) տուեալների բազայից"
 
 #: ../src/defaults.c:1304
 #: ../src/screen.c:419
 #, c-format
 msgid "could not load logo image for panels: %s"
-msgstr ""
+msgstr "հնարաւոր չէ բեռնել %s պատկերակը վահանակների համար"
 
 #. --------------------------- Local -----------------------
 #: ../src/defaults.c:1553
@@ -176,7 +180,7 @@ msgstr ""
 #: ../src/wdefaults.c:604
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr ""
+msgstr "\"%s\" ստեղնի համար սխալ կարգաւորումների ձեւ։ պիտի լինի %s։"
 
 #: ../src/defaults.c:1555
 #: ../src/defaults.c:1636
@@ -198,37 +202,37 @@ msgstr ""
 #: ../src/defaults.c:2888
 #, c-format
 msgid "using default \"%s\" instead"
-msgstr ""
+msgstr "փոխարէնը օգտագործուում է լռելեայն \"%s\"֊ը"
 
 #: ../src/defaults.c:1586
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
-msgstr ""
+msgstr "\"%s\" ստեղնի կարգաւորման սխալ արժէք։ պիտի լինի %s֊ից մէկը"
 
 #: ../src/defaults.c:1631
 #, c-format
 msgid "can't convert \"%s\" to boolean for key \"%s\""
-msgstr ""
+msgstr "հնարաւոր չէ փոխակերպել \"%s\"֊ը բուլեանի՝ \"%s\" ստեղնի համար"
 
 #: ../src/defaults.c:1663
 #, c-format
 msgid "can't convert \"%s\" to integer for key \"%s\""
-msgstr ""
+msgstr "հնարաւոր չէ փոխակերպել \"%s\"֊ը ամբողջ թուի՝ \"%s\" ստեղնի համար"
 
 #: ../src/defaults.c:1705
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr ""
+msgstr "\"%s\" ստեղնի համար սխալ է զանգուածի անդամների քանակը"
 
 #: ../src/defaults.c:1720
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr ""
+msgstr "\"%s\" ստեղնի սխալ արժէք։ պէտք է լինի կոորդինատ։"
 
 #: ../src/defaults.c:1735
 #, c-format
 msgid "can't convert array to integers for \"%s\"."
-msgstr ""
+msgstr "հնարաւոր չէ փոխակերպել զանգուածը ամբողջ թուերի՝ \"%s\"֊ի համար։"
 
 #: ../src/defaults.c:1940
 #: ../src/defaults.c:1972
@@ -241,160 +245,160 @@ msgstr ""
 #: ../src/defaults.c:2187
 #, c-format
 msgid "\"%s\" is not a valid color name"
-msgstr ""
+msgstr "\"%s\" վաւեր գոյնի անուն չէ"
 
 #: ../src/defaults.c:1953
 #: ../src/defaults.c:2005
 msgid "bad number of arguments in gradient specification"
-msgstr ""
+msgstr "արգումենտների քանակի սխալ՝ սահանցման յատկորոշման մէջ"
 
 #: ../src/defaults.c:2066
 msgid "too few arguments in multicolor gradient specification"
-msgstr ""
+msgstr "պակասող արգումենտներ բազմագոյն սահանցման յատկորոշման մէջ"
 
 #: ../src/defaults.c:2160
 msgid "bad number of arguments in textured gradient specification"
-msgstr ""
+msgstr "հիւսուածքի սահանցման յատկորոշման արգումենտների սխալ քանակ"
 
 #: ../src/defaults.c:2203
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
-msgstr ""
+msgstr "\"%s\" հիւսուածքի սահանցման թափանցիկութեան սխալ արժէք։ պիտի լինի՝ [0..255]"
 
 #: ../src/defaults.c:2263
 #, c-format
 msgid "could not initialize library %s"
-msgstr ""
+msgstr "%s դարանը չի մեկնարկել"
 
 #: ../src/defaults.c:2266
 #, c-format
 msgid "could not find function %s::%s"
-msgstr ""
+msgstr "%s::%s ֆունկցիան չի գտնուել"
 
 #: ../src/defaults.c:2273
 #, c-format
 msgid "invalid texture type %s"
-msgstr ""
+msgstr "հիւսուածքի %s տիպը անվաւեր է"
 
 #: ../src/defaults.c:2320
 #, c-format
 msgid "Error in texture specification for key \"%s\""
-msgstr ""
+msgstr "Սխալ հիւսուածքի յատկորոշման մէջ՝ \"%s\" ստեղնի համար"
 
 #: ../src/defaults.c:2369
 msgid "Wrong type for workspace background. Should be a texture type."
-msgstr ""
+msgstr "Տիրոյթի ետնանկարի սխալ տիպ։ Պէտք է լինի հիւսուածքի տիպ։"
 
 #: ../src/defaults.c:2417
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
-msgstr ""
+msgstr "Տիրոյթի ետնանկարի սխալ տիպ՝ %i։ Պէտք է լինի հիւսուածք։"
 
 #: ../src/defaults.c:2459
 msgid "could not load any usable font!!!"
-msgstr "հնարաոր չէ բեռնել ոչ մի տառատեսակ"
+msgstr "հնարաւո՛ր չէ բեռնել ոչ մի տառատեսակ։"
 
 #: ../src/defaults.c:2486
 #, c-format
 msgid "could not get color for key \"%s\""
-msgstr ""
+msgstr "հնարաւոր չէ գտնել գոյն՝ \"%s\" ստեղնի համար"
 
 #: ../src/defaults.c:2544
 #: ../src/rootmenu.c:531
 #, c-format
 msgid "%s: invalid key modifier \"%s\""
-msgstr ""
+msgstr "%s՝ ստեղնի անվաւեր փոփոխիչ \"%s\""
 
 #: ../src/defaults.c:2556
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr ""
+msgstr "%s՝ ստեղնաշարի կարճատի անվաւեր \"%s\" յատկորոշում"
 
 #: ../src/defaults.c:2563
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
-msgstr ""
+msgstr "%s՝ անվաւեր ստեղն \"%s\" կարճատում"
 
 #: ../src/defaults.c:2588
 #, c-format
 msgid "%s: modifier key %s is not valid"
-msgstr ""
+msgstr "%s՝ %s փոփոխիչ ստեղնը անվաւեր է"
 
 #: ../src/defaults.c:2620
 #, c-format
 msgid "could not load image in option %s: %s"
-msgstr ""
+msgstr "հնարաւոր չէ բեռնել նկար %s՝ %s կարգաւորման մէջ"
 
 #: ../src/defaults.c:2737
 #, c-format
 msgid "failed to open bitmap file \"%s\""
-msgstr ""
+msgstr "\"%s\" կէտապատկեր նիշքի բացման անվաւեր"
 
 #: ../src/defaults.c:2740
 #, c-format
 msgid "\"%s\" is not a valid bitmap file"
-msgstr ""
+msgstr "\"%s\"֊ը վաւեր կէտապատկեր նիշք չէ"
 
 #: ../src/defaults.c:2743
 #, c-format
 msgid "out of memory reading bitmap file \"%s\""
-msgstr ""
+msgstr "\"%s\" նիշք կարդալուց յիշողութիւնը սպառուեց"
 
 #: ../src/defaults.c:2782
 #: ../src/defaults.c:2815
 msgid "bad number of arguments in cursor specification"
-msgstr ""
+msgstr "արգումենտների անվաւեր քանակ նշիչի յատկորոշման մէջ"
 
 #: ../src/defaults.c:2798
 #, c-format
 msgid "unknown builtin cursor name \"%s\""
-msgstr ""
+msgstr "անյայտ նշիչի անուն \"%s\""
 
 #: ../src/defaults.c:2825
 #: ../src/defaults.c:2837
 #, c-format
 msgid "could not find cursor bitmap file \"%s\""
-msgstr ""
+msgstr "\"%s\" նշիչի կէտապատկեր նիշքը չի գտնուել"
 
 #: ../src/defaults.c:2884
 #, c-format
 msgid "Error in cursor specification for key \"%s\""
-msgstr ""
+msgstr "Սխալ՝ \"%s\" կոճակի համար նշիչի յատկորոշման մէջ"
 
 #: ../src/defaults.c:2969
 msgid "could not render texture for icon background"
-msgstr ""
+msgstr "հնարաւոր չէ նիւթաւորել պատկերակի ետնանկարի հիւսուածքը"
 
 #: ../src/defaults.c:3597
 #: ../src/defaults.c:3672
 #, c-format
 msgid "Invalid arguments for option \"%s\""
-msgstr ""
+msgstr "\"%s\" յատկութեան համար անվաւեր արգումենտ"
 
 #: ../src/defaults.c:3604
 #: ../src/defaults.c:3679
 #, c-format
 msgid "Could not find image \"%s\" for option \"%s\""
-msgstr ""
+msgstr "\"%s\" յատկութեան \"%s\" պատկերը չգտնուեց"
 
 #: ../src/defaults.c:3610
 #: ../src/defaults.c:3687
 #, c-format
 msgid "Could not load image \"%s\" for option \"%s\""
-msgstr ""
+msgstr "հնարաւոր չէ բեռնել \"%s\" յատկութեան \"%s\" պատկերը"
 
 #: ../src/defaults.c:3622
 msgid "Invalid split sizes for switch panel back image."
-msgstr ""
+msgstr "Փոխարկչի վահանակի ետնանկարի անվաւեր բաժանիչի չափեր"
 
 #: ../src/defaults.c:3695
 #, c-format
 msgid "Invalid number of arguments for option \"%s\""
-msgstr ""
+msgstr "անվաւեր քանակի արգումենտներ \"%s\" յատկութեան համար"
 
 #: ../src/dialog.c:147
 msgid "Save workspace state"
-msgstr "Հիշել աշխատատարածքների վիճակը"
+msgstr "Յիշել տիրոյթների վիճակը"
 
 #: ../src/dialog.c:192
 #: ../src/dialog.c:732
@@ -404,15 +408,15 @@ msgstr "Հիշել աշխատատարածքների վիճակը"
 #: ../src/rootmenu.c:248
 #: ../src/rootmenu.c:264
 msgid "Cancel"
-msgstr "Հրաժարվել"
+msgstr "Չեղարկել"
 
 #: ../src/dialog.c:290
 msgid "Could not open directory \"%s\":\n%s"
-msgstr "Հնարավոր չէ բացել պանակը \"%s\":\n%s"
+msgstr "Հնարաւոր չէ բացել \"%s\"՝ \n%s պանակը"
 
 #: ../src/dialog.c:345
 msgid "Could not load image file "
-msgstr "Հնարավոր չէ բացել ֆայլը"
+msgstr "Հնարաւոր չէ բեռնել նկարի նիշքը"
 
 #: ../src/dialog.c:659
 msgid "Directories"
@@ -424,15 +428,15 @@ msgstr "Պատկերակներ"
 
 #: ../src/dialog.c:701
 msgid "Preview"
-msgstr "Նախնական տեսք"
+msgstr "Նախադիտում"
 
 #: ../src/dialog.c:714
 msgid "File Name:"
-msgstr "Ֆայլի անունը"
+msgstr "Նիշքի անունը՝"
 
 #: ../src/dialog.c:738
 msgid "Choose File"
-msgstr "Ընտրել ֆայլը"
+msgstr "Ընտրել նիշք"
 
 #: ../src/dialog.c:757
 #: ../src/dialog.c:759
@@ -447,48 +451,50 @@ msgstr "Տարբերակ %s"
 
 #: ../src/dialog.c:1303
 msgid "Window Manager for X"
-msgstr "X պատուհանների ղեկավար"
+msgstr "X պատուհանների կառավարիչ"
 
 #: ../src/dialog.c:1326
 #, c-format
 msgid "Using visual 0x%x: %s %ibpp "
-msgstr ""
+msgstr "Կիրառուում է 0x%x: %s %ibpp տեսողականը"
 
 #: ../src/dialog.c:1334
 msgid "(32 thousand colors)\n"
-msgstr "(32 հազար գույն)\n"
+msgstr "(32 հազար գոյն)\n"
 
 #: ../src/dialog.c:1337
 msgid "(64 thousand colors)\n"
-msgstr "(64 հազար գույն)\n"
+msgstr "(64 հազար գոյն)\n"
 
 #: ../src/dialog.c:1341
 msgid "(16 million colors)\n"
-msgstr "(16 միլիոն գույն)\n"
+msgstr "(16 միլիոն գոյն)\n"
 
 #: ../src/dialog.c:1344
 #, c-format
 msgid "(%d colors)\n"
-msgstr "(%d գույն)\n"
+msgstr "(%d գոյն)\n"
 
 #: ../src/dialog.c:1354
 #, c-format
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
-msgstr "Ընդհանուր հատկացված հիշողությունը՝ %i կբ. Ընդհանուր օգտագործվող հիշողությունը՝ %i կբ.\n"
+msgstr "Ընդհանուր յատկացուած յիշողութիւնը՝ %i կբ․ Ընդհանուր օգտագործուող յիշողութիւնը՝ %i կբ.\n"
 
 #: ../src/dialog.c:1283
 msgid "Image formats: "
-msgstr "Կիրառելի պատկերային որմատները"
+msgstr "Պատկերային ձեւաչափերը՝ "
 
 #: ../src/dialog.c:1368
 msgid ""
 "\n"
 "Additional support for: "
 msgstr ""
+"\n"
+"Յաւելեալ աջակցութիւն՝ "
 
 #: ../src/dialog.c:1385
 msgid " and "
-msgstr " և "
+msgstr " եւ "
 
 #: ../src/dialog.c:1395
 msgid ""
@@ -496,7 +502,7 @@ msgid ""
 "Sound disabled"
 msgstr ""
 "\n"
-"Ձայնը անջատած է"
+"Ձայնն կասեցուած է"
 
 #: ../src/dialog.c:1397
 msgid ""
@@ -504,15 +510,15 @@ msgid ""
 "Sound enabled"
 msgstr ""
 "\n"
-"Ձայնը միացրած է"
+"Ձայնը միացուած է"
 
 #: ../src/dialog.c:1402
 msgid ", VirtualDesktop enabled"
-msgstr ", Վիրտուալ տարածքը միացրած է"
+msgstr ", ԿարծականՏիրոյթը միացուած է"
 
 #: ../src/dialog.c:1404
 msgid ", VirtualDesktop disabled"
-msgstr ", Վիրտուալ տարածքը անջատված է"
+msgstr ", ԿարծականՏիրոյթը կասեցուած է"
 
 #: ../src/dialog.c:1408
 msgid "\n"
@@ -524,15 +530,15 @@ msgstr "Սոլարիս"
 
 #: ../src/dialog.c:1412
 msgid "Xinerama: "
-msgstr "Քսիներամա՝"
+msgstr "Զիներամա՝"
 
 #: ../src/dialog.c:1446
 msgid "Info"
-msgstr "Ձեռնարկ"
+msgstr "Տեղեկութիւններ"
 
 #: ../src/dialog.c:1470
 msgid "Merry Christmas!"
-msgstr "Շնորհավոր Սուրբ Ծնունդ"
+msgstr "Շնորհաւոր Սուրբ Ծնունդ"
 
 #: ../src/dialog.c:1417
 msgid ""
@@ -550,32 +556,31 @@ msgid ""
 "with this program; if not, write to the Free Software Foundation, Inc., 51 "
 "Franklin Street, Fifth Floor, Boston, MA02110-1301 USA."
 msgstr ""
-"    Window Maker-ը ազատ ծրագիր է; դուք կարող եք փոփոխել և/կամ "
-"տարածել այն ըստ Ազատ Ծրարգերի Հիմնադրամի (Free Software Foundation) "
-"կողմից մշակված GNU General Public License արտոնագրի 2-րդ  "
-"կամ (ըստ Ձեր ցանկության) յուրաքանչյուր հետագա տարբերակի.\n"
+"    Window Maker֊ն ազատ ծրագրային ապահովում է; դուք կարող էք փոփոխել եւ/կամ "
+"տարածել այն ըստ Ազատ Ծրագրային Ապահովման Հիմնադրամի (Free Software Foundation) "
+"կողմից մշակուած GNU Ազատ ԾԱ Արտօնագրի 2֊րդ  "
+"կամ (ըստ Ձեր ցանկութեան) իւրաքանչիւր հետագայ տարբերակի։\n"
 "\n"
-"    Window Maker-ը տարածվում է այն հույսով, որ օգտակար կլինի, "
-"բայց ԱՌԱՆՑ ՈՐԵՎԷ ԵՐԱՇԽԻՔԻ; նույնիսկ արանց  "
-"of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. "
-"See the GNU General Public License for more details.\n"
-"\n"
-"    You should have received a copy of the GNU General Public "
-"License along with this program; if not, write to the Free Software "
-"Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA "
+"    Window Maker-ը տարածուում է այն յոյսով, որ օգտակար կը լինի, "
+"բայց ԱՌԱՆՑ ՈՐԵՒԷ ԵՐԱՇԽԻՔ; նոյնիսկ առանց  ենթադրուող ԱՌԵՒՏՐԱՅԻՆ կամ"
+"ՈՐՈՇԱԿԻ ՆՊԱՏԱԿԻ ԴԷՊՔՈՒՄ ԿԻՐԱՌԵԼԻ լինելու երաշխիքի։ "
+"Տես GNU Ազատ ԾԱ Արտօնագիրն մանրամասների համար։\n"
+"    Դուք պէտք ա որ GNU Ազատ ԾԱ Արտօնագիրը ստացած լինէիք այս յաւելուածի հետ։ "
+"Եթէ ոչ, դիմէք Ազատ ԾԱ֊ի Հիմնադրամ՝ "
+"Free Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA "
 "02110-1301, USA."
 
 #: ../src/dialog.c:1564
 msgid "Legal"
-msgstr "Իրավական"
+msgstr "Իրաւական"
 
 #: ../src/dialog.c:1720
 msgid "cannot open connection for crashing dialog panel. Aborting."
-msgstr ""
+msgstr "հնարաւոր չէ կապ հաստատել խափանուող երկխօսութեան վահանակի համար։ Փորձերը դադարեցւում են։"
 
 #: ../src/dialog.c:1746
 msgid "Fatal error"
-msgstr "Ֆատալ սխալ"
+msgstr "Վճռորոշ սխալ"
 
 #: ../src/dialog.c:1757
 #, c-format
@@ -583,13 +588,13 @@ msgid ""
 "Window Maker received signal %i\n"
 "(%s)."
 msgstr ""
-"Window Maker-ը ստացել է սիգնքլ %i\n"
+"Window Maker֊ը ստացել է %i ազդանշանը\n"
 "(%s)."
 
 #: ../src/dialog.c:1760
 #, c-format
 msgid "Window Maker received signal %i."
-msgstr "Window Maker-ը ընդհունել է %i ազդանշանը"
+msgstr "Window Maker֊ը ստացել է %i ազդանշանը"
 
 #: ../src/dialog.c:1778
 msgid "What do you want to do now?"
@@ -597,19 +602,19 @@ msgstr "Հիմա ի՞նչ անենք"
 
 #: ../src/dialog.c:1784
 msgid "Select action"
-msgstr "Ընտրեք գործողություն"
+msgstr "Ընտրէք գործողութիւն"
 
 #: ../src/dialog.c:1785
 msgid "Abort and leave a core file"
-msgstr ""
+msgstr "Դադարեցնել աշխատանքն ու պարպել յաւելուածի յիշողութեան նիշքը։"
 
 #: ../src/dialog.c:1786
 msgid "Restart Window Maker"
-msgstr "Վերաբեռնել Window Maker-ը"
+msgstr "Վերագործարկել Window Maker֊ը"
 
 #: ../src/dialog.c:1787
 msgid "Start alternate window manager"
-msgstr "Միացնել այլ պատուհանային ղեկավարիչ"
+msgstr "Միացնել այլ պատուհանային կառավարիչ"
 
 #: ../src/dialog.c:1965
 msgid ""
@@ -623,22 +628,31 @@ msgid ""
 "of the framework. For more information about\n"
 "GNUstep, please visit: www.gnustep.org"
 msgstr ""
+"Window Maker֊ը՝ GNUstep նախագծի մասն է։\n"
+"GNUstep նախագիծը միտուած է ստեղծելու\n"
+"OpenStep(tm) յատկորոշման ազատ իրականացում։\n"
+"OpenStep(tm)֊ը օբյեկտ կողմնորոշուած նախագծման համակարգ է\n"
+"առաջադէմ գրաֆիկական, բազմահարթակ ԾԱ ստեղծելու համար։\n"
+"Նախատեսուած է նաեւ նախագծման եւ աշխատանքային միջավայրի\n"
+"ստեղծում այս համակարգի հիման վրայ։\n"
+"GNUstep֊ի վերաբերող այլ տեղեկութիւնները\n"
+"կարող էք գտնել www.gnustep.org կայքում։"
 
 #: ../src/dialog.c:1988
 msgid "About GNUstep"
-msgstr "GNUstep ծրագի մասին"
+msgstr "GNUstep֊ի մասին"
 
 #: ../src/dock.c:193
 #, c-format
 msgid "Type the name for workspace %i:"
-msgstr ""
+msgstr "Ներմուծէք %i տիրոյթի անուն՝"
 
 #: ../src/dock.c:194
 #: ../src/dock.c:1132
 #: ../src/dock.c:1135
 #: ../src/dock.c:3419
 msgid "Rename Workspace"
-msgstr "Վերանվանել աշխատասեղանը"
+msgstr "Վերանուանել Տիրոյթը"
 
 #: ../src/dock.c:509
 #: ../src/dock.c:517
@@ -647,19 +661,19 @@ msgstr "Զգուշացում"
 
 #: ../src/dock.c:510
 msgid "Some icons cannot be made omnipresent. Please make sure that no other icon is docked in the same positions on the other workspaces and the Clip is not full in some workspace."
-msgstr ""
+msgstr "Որոշ պատկերակները չեն կարող դարձուել ամէն տիրոյթում հասանելի։ Համոզուէք որ ոչ մի այլ պատկերակ յարակցուած չէ նոյն դիրքում այլ տիրոյթներում եւ որ Ամրակը չի լրացել որեւէ տիրոյթում։"
 
 #: ../src/dock.c:518
 msgid "Icon cannot be made omnipresent. Please make sure that no other icon is docked in the same position on the other workspaces and the Clip is not full in some workspace."
-msgstr ""
+msgstr "Պատկերակը չի կարող դարձուել ամէն տիրոյթում հասանելի։ Համոզուէք որ ոչ մի այլ պատկերակ յարակցուած չէ նոյն դիրքում այլ տիրոյթներում եւ որ Ամրակը չի լրացել որեւէ տիրոյթում։"
 
 #: ../src/dock.c:545
 msgid "Workspace Clip"
-msgstr "Աշխատասեղանի Ամրակը"
+msgstr "Տիրոյթի Ամրակ"
 
 #: ../src/dock.c:546
 msgid "All selected icons will be removed!"
-msgstr "Բոլոր ընտրված պատկերակները հեռացվելու էն"
+msgstr "Բոլոր ընտրուած պատկերակները հեռացուելու են"
 
 #: ../src/dock.c:598
 #: ../src/dock.c:1147
@@ -672,49 +686,49 @@ msgstr "Պահել Պատկերակը"
 #: ../src/dock.c:2139
 #: ../src/dock.c:2276
 msgid "Type the command used to launch the application"
-msgstr "Ներմուծեք ծրագիրը աշխատացնող հրամանը"
+msgstr "Ներմուծէք յաւելուածը գործարկող հրամանը"
 
 #: ../src/dock.c:954
 #, c-format
 msgid "could not launch application %s\n"
-msgstr "հնարավոր չէ աշխատացնել %s ծրագիրը\n"
+msgstr "հնարաւոր չէ գործարկել %s յաւելուածը\n"
 
 #: ../src/dock.c:1010
 msgid "could not create workspace submenu for Clip menu"
-msgstr ""
+msgstr "հնարաւոր չէ ստեղծել Ամրակի ցանկի տիրոյթի ենթացանկ"
 
 #: ../src/dock.c:1069
 msgid "could not create options submenu for Clip menu"
-msgstr ""
+msgstr "հնարաւոր չէ ստեղծել Ամրակի ցանկի յատկութիւնների ենթացանկ"
 
 #: ../src/dock.c:1073
 #: ../src/dock.c:1121
 msgid "Keep on Top"
-msgstr "Պահել վերևից"
+msgstr "Պահել վերեւից"
 
 #: ../src/dock.c:1079
 msgid "Collapsed"
-msgstr ""
+msgstr "Կոծկուած"
 
 #: ../src/dock.c:1085
 msgid "Autocollapse"
-msgstr ""
+msgstr "Ինքնին կոծկուել"
 
 #: ../src/dock.c:1091
 msgid "Autoraise"
-msgstr ""
+msgstr "Ինքնին բացուել"
 
 #: ../src/dock.c:1097
 msgid "Autoattract Icons"
-msgstr ""
+msgstr "Ինքնին գրաւել պատկերակները"
 
 #: ../src/dock.c:1127
 msgid "Clip Options"
-msgstr ""
+msgstr "Ամրակի յատկութիւններ"
 
 #: ../src/dock.c:1137
 msgid "Selected"
-msgstr "Ընտրված"
+msgstr "Ընտրուած"
 
 #: ../src/dock.c:1142
 #: ../src/dock.c:1145
@@ -726,7 +740,7 @@ msgstr "Ընտրել բոլոր պատկերակները"
 #: ../src/dock.c:1153
 #: ../src/dock.c:3463
 msgid "Move Icon To"
-msgstr "Տեղաշարժել Պատկերակը"
+msgstr "Տեղաշարժել Պատկերակը դէպի"
 
 #: ../src/dock.c:1158
 #: ../src/dock.c:1161
@@ -736,60 +750,60 @@ msgstr "Հեռացնել Պատկերակը"
 
 #: ../src/dock.c:1163
 msgid "Attract Icons"
-msgstr ""
+msgstr "Գրաւել Պատկերակները"
 
 #: ../src/dock.c:1166
 msgid "Launch"
-msgstr "Աշխատացնել"
+msgstr "Գործարկել"
 
 #: ../src/dock.c:1174
 msgid "Settings..."
-msgstr "Հատկություններ․․․"
+msgstr "Յատկութիւններ…"
 
 #: ../src/dock.c:1538
 #: ../src/dock.c:1645
 #, c-format
 msgid "bad value in docked icon state info %s"
-msgstr ""
+msgstr "յարակցուած պատկերակի վիճակի %s անվաւեր արժէք"
 
 #: ../src/dock.c:1653
 #, c-format
 msgid "bad value in docked icon position %i,%i"
-msgstr ""
+msgstr "յարակցուած պատկերակի տեղայնութեան %i,%i անվաւեր արժէք"
 
 #: ../src/dock.c:1673
 #, c-format
 msgid "bad value in dock state info:%s"
-msgstr ""
+msgstr "յարակցիչի վիճակի տեղեկատուութեան անվաւեր արժէք՝ %s"
 
 #: ../src/dock.c:1923
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr ""
+msgstr "չափազանց շատ պատկերակներ են յարակցուած։ Տեղ չանողները արհամարհուում են։"
 
 #. icon->forced_dock = 1;
 #: ../src/dock.c:2138
 #: ../src/dock.c:2275
 msgid "Dock Icon"
-msgstr ""
+msgstr "Յարակցիչ Պատկերակ"
 
 #: ../src/dock.c:3333
 #, c-format
 msgid "Could not execute command \"%s\""
-msgstr ""
+msgstr "Հնարաւոր չէ գործարկել \"%s\" հրամանը"
 
 #: ../src/dock.c:3425
 msgid "Toggle Omnipresent"
-msgstr ""
+msgstr "Ցուցադրել բոլոր տիրոյթներում"
 
 #: ../src/dock.c:3430
 #: ../src/winmenu.c:414
 #: ../src/winspector.c:1383
 msgid "Omnipresent"
-msgstr ""
+msgstr "Ցուցադրել բոլոր տիրոյթներում"
 
 #: ../src/dock.c:3444
 msgid "Unselect All Icons"
-msgstr ""
+msgstr "Ապանշել Բոլոր Պատկերակները"
 
 #: ../src/dock.c:3453
 msgid "Keep Icons"
@@ -797,7 +811,7 @@ msgstr "Պահել Պատկերակները"
 
 #: ../src/dock.c:3461
 msgid "Move Icons To"
-msgstr "Տեղաշարժել Պատկերակները"
+msgstr "Տեղաշարժել Պատկերակները դէպի"
 
 #: ../src/dock.c:3472
 msgid "Remove Icons"
@@ -810,12 +824,12 @@ msgstr "Բերել Այստեղ"
 #: ../src/dockedapp.c:150
 #, c-format
 msgid "could not find icon %s, used in a docked application"
-msgstr ""
+msgstr "հնարաւոր չէ գտնել %s պատկերակը, որն օգտագործուում է յարակցուած յաւելուածում"
 
 #: ../src/dockedapp.c:230
 #, c-format
 msgid "Could not open specified icon file: %s"
-msgstr ""
+msgstr "Հնարաւոր չէ բացել նշուած պատկերակի նիշքը՝ %s"
 
 #: ../src/dockedapp.c:232
 msgid "Ignore"
@@ -823,50 +837,50 @@ msgstr "Անտեսել"
 
 #: ../src/dockedapp.c:334
 msgid "Start when Window Maker is started"
-msgstr "Աշխատացնել երբ Window Maker-ը բեռնվում է"
+msgstr "Գործարկել Window Maker֊ի հետ միասին"
 
 #: ../src/dockedapp.c:341
 msgid "Lock (prevent accidental removal)"
-msgstr "Պահել (կանխել պատահական հեռացումը)"
+msgstr "Ամրացնել (կանխել պատահական հեռացումը)"
 
 #: ../src/dockedapp.c:345
 msgid "Application path and arguments"
-msgstr ""
+msgstr "Յաւելուածի ուղին եւ արգումենտները"
 
 #: ../src/dockedapp.c:358
 msgid "Command for middle-click launch"
-msgstr ""
+msgstr "Միջին կտոցով գործարկելու հրահանգ"
 
 #: ../src/dockedapp.c:372
 #, c-format
 msgid "%s will be replaced with current selection"
-msgstr ""
+msgstr "%s֊ը փոխարինուելու է ընթացիկ նշուածով"
 
 #: ../src/dockedapp.c:377
 msgid "Command for files dropped with DND"
-msgstr ""
+msgstr "Հրահանգ Քաշել֊Գցելով նիշքերի համար"
 
 #: ../src/dockedapp.c:391
 #, c-format
 msgid "%d will be replaced with the file name"
-msgstr ""
+msgstr "%d֊ն փոխարինուելու է նիշքի անունով"
 
 #: ../src/dockedapp.c:395
 msgid "DND support was not compiled in"
-msgstr ""
+msgstr "Զետեղելու հնարաւորութիւնը կազմարկուած չէ"
 
 #: ../src/dockedapp.c:400
 msgid "Icon Image"
-msgstr ""
+msgstr "Պատկերակի Նկար"
 
 #: ../src/dockedapp.c:414
 #: ../src/winspector.c:1521
 msgid "Browse..."
-msgstr ""
+msgstr "Զննել…"
 
 #: ../src/dockedapp.c:475
 msgid "Docked Application Settings"
-msgstr ""
+msgstr "Յարակցուած Յաւելուածերի Յատկութիւններ"
 
 #: ../src/framewin.c:647
 #: ../src/framewin.c:742
@@ -874,7 +888,7 @@ msgstr ""
 #: ../src/texture.c:594
 #, c-format
 msgid "could not render texture: %s"
-msgstr ""
+msgstr "հնարաւոր չէ նիւթաւորել %s հիւսուածքը"
 
 #: ../src/framewin.c:670
 #: ../src/framewin.c:681
@@ -886,117 +900,117 @@ msgstr ""
 #: ../src/menu.c:492
 #, c-format
 msgid "error rendering image:%s"
-msgstr ""
+msgstr "%s պատկեր նիւթաւորելու սխալ"
 
 #: ../src/framewin.c:775
 #, c-format
 msgid "error rendering image: %s"
-msgstr ""
+msgstr "%s պատկեր նիւթաւորելու սխալ"
 
 #: ../src/icon.c:239
 #: ../src/wdefaults.c:443
 #, c-format
 msgid "error loading image file \"%s\": %s"
-msgstr ""
+msgstr "\"%s\"՝ %s պատկերային նիշքի բեռնման սխալ"
 
 #: ../src/icon.c:503
 #: ../src/icon.c:512
 #, c-format
 msgid "could not create directory %s"
-msgstr ""
+msgstr "հնարաւոր չէ ստեղծել %s պանակը"
 
 #: ../src/icon.c:782
 #, c-format
 msgid "could not find default icon \"%s\""
-msgstr ""
+msgstr "հնարաւոր չէ գտնել \"%s\" լռելեայն պատկերակը"
 
 #: ../src/icon.c:788
 #, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr ""
+msgstr "հնարաւոր չէ բեռնել \"%s\"՝ %s լռելեայն պատկերակը"
 
 #: ../src/main.c:220
 msgid "failed to restart Window Maker."
-msgstr "Window Maker վերաբեռնումը խափանվեց"
+msgstr "Window Maker֊ի վերագործարկումը խափանուեց"
 
 #: ../src/main.c:223
 #, c-format
 msgid "could not exec %s"
-msgstr "հնարավոր չէ աշխատացնել %s"
+msgstr "հնարաւոր չէ գործարկել %s"
 
 #: ../src/main.c:269
 msgid "Could not execute command: "
-msgstr "Հնարավոր չէ աշխատացնել հրամանը՝"
+msgstr "Հնարաւոր չէ գործարկել հրամանը՝"
 
 #: ../src/main.c:426
 #, c-format
 msgid "%s aborted.\n"
-msgstr ""
+msgstr "%s֊ը խափանուեց։\n"
 
 #: ../src/main.c:437
 #, c-format
 msgid "Usage: %s [options]\n"
-msgstr ""
+msgstr "Օգտագործում՝ %s [options]\n"
 
 #: ../src/main.c:438
 msgid "The Window Maker window manager for the X window system"
-msgstr ""
+msgstr "Window Maker պատուհանների կառավարիչ Էքս պատուհանային համակարգի համար"
 
 #: ../src/main.c:440
 msgid " -display host:dpy\tdisplay to use"
-msgstr ""
+msgstr " -display host:dpy\tնշել դիսպլէյը"
 
 #: ../src/main.c:442
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
-msgstr ""
+msgstr " --no-cpp \t\tկասեցնել կարգաւորման նիշքերի նախամշակումը"
 
 #: ../src/main.c:444
 msgid " --no-dock\t\tdo not open the application Dock"
-msgstr ""
+msgstr " --no-dock\t\tչբացել յաւելուածերի Յարակցիչը"
 
 #: ../src/main.c:445
 msgid " --no-clip\t\tdo not open the workspace Clip"
-msgstr ""
+msgstr " --no-clip\t\tչբացել տիրոյթի Ամրակը"
 
 #: ../src/main.c:446
 msgid " --no-autolaunch\tdo not autolaunch applications"
-msgstr ""
+msgstr " --no-autolaunch\tյաւելուածերն ինքաշխատօրէն չգործարկել"
 
 #: ../src/main.c:447
 msgid " --dont-restore\t\tdo not restore saved session"
-msgstr ""
+msgstr " --dont-restore\t\tչվերականգնել պահուած նիստը"
 
 #: ../src/main.c:449
 msgid " --locale locale\tlocale to use"
-msgstr ""
+msgstr " --locale locale\tտարածաշրջանի կարգաւորումներ"
 
 #: ../src/main.c:451
 msgid " --create-stdcmap\tcreate the standard colormap hint in PseudoColor visuals"
-msgstr ""
+msgstr " --create-stdcmap\tստեղծել ստանդարտ գունային քարտէզի ակնարկ PseudoColor տեսողականներում"
 
 #: ../src/main.c:452
 msgid " --visual-id visualid\tvisual id of visual to use"
-msgstr ""
+msgstr " --visual-id visualid\tտեսողականի համարը"
 
 #: ../src/main.c:453
 msgid " --static\t\tdo not update or save configurations"
-msgstr ""
+msgstr " --static\t\tչթարմացնել կամ չպահել կարգաւորումները"
 
 #: ../src/main.c:454
 msgid " --no-polling\t\tdo not periodically check for configuration updates"
-msgstr ""
+msgstr " --no-polling\t\tպարբերաբար չստուգել կարաւորումների թարմացումները"
 
 #: ../src/main.c:456
 msgid " --synchronous\t\tturn on synchronous display mode"
-msgstr ""
+msgstr " --synchronous\t\tմիացնել սինքրոն ցուցադրման ռեժիմ"
 
 #: ../src/main.c:458
 msgid " --version\t\tprint version and exit"
-msgstr ""
+msgstr " --version\t\tտպել վարկածն ու դուրս գալ"
 
 #: ../src/main.c:459
 msgid " --help\t\t\tshow this message"
-msgstr ""
+msgstr " --help\t\t\tցուցադրել այս ձեռնարկը"
 
 #: ../src/main.c:473
 #, c-format
@@ -1004,32 +1018,35 @@ msgid ""
 "could not find user GNUstep directory (%s).\n"
 "Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
+"հնարաւոր չէ գտնել օգտատիրոջ GNUstep պանակը (%s)։\n"
+"Համոզուէք որ դուք ճիշտ էք տեղակայել էք Window Maker֊ը եւ գործարկել էք wmaker.inst հրամանը"
+
 
 #: ../src/main.c:478
 #, c-format
 msgid "could not find user GNUstep directory (%s)."
-msgstr ""
+msgstr "հնարաւոր չէ գտնել օգտատիրոջ GNUstep պանակը (%s)։"
 
 #: ../src/main.c:481
 msgid "There was an error while creating GNUstep directory, please make sure you have installed Window Maker correctly and run wmaker.inst"
-msgstr ""
+msgstr "GNUstep պանակի ստեղծումը խափանուեց, համոզուէք որ ճիշտ էք տեղակայել էք Window Maker֊ը եւ գործարկէք wmaker.inst հրամանը"
 
 #: ../src/main.c:484
 #, c-format
 msgid "%s directory created with default configuration."
-msgstr ""
+msgstr "%s պանակը ստեղծուած է լռելեայն կարգաւորումներով։"
 
 #: ../src/main.c:506
 #: ../src/main.c:511
 #, c-format
 msgid "%s:could not execute initialization script"
-msgstr ""
+msgstr "%s՝ հնարաւոր չէ գործարկել մեկնարկման սկրիպտը"
 
 #: ../src/main.c:533
 #: ../src/main.c:538
 #, c-format
 msgid "%s:could not execute exit script"
-msgstr ""
+msgstr "%s՝ հնարաւոր չէ գործարկել ելքի սկրիպտը"
 
 #: ../src/main.c:622
 #: ../src/main.c:722
@@ -1038,125 +1055,125 @@ msgstr ""
 #: ../src/main.c:758
 #, c-format
 msgid "too few arguments for %s"
-msgstr ""
+msgstr "պակասող արգումենտներ %s֊ի համար"
 
 #: ../src/main.c:742
 #, c-format
 msgid "bad value for visualid: \"%s\""
-msgstr ""
+msgstr "\"%s\" տեսողականի id֊ի անվաւեր արժէք"
 
 #: ../src/main.c:766
 #, c-format
 msgid "%s: invalid argument '%s'\n"
-msgstr ""
+msgstr "%s՝ անվաւեր արգումենտ '%s'\n"
 
 #: ../src/main.c:767
 #, c-format
 msgid "Try '%s --help' for more information\n"
-msgstr ""
+msgstr "Փորձէք '%s --help' տեղեկութիւնների համար\n"
 
 #: ../src/main.c:802
 msgid "X server does not support locale"
-msgstr ""
+msgstr "Էքս սպասարկիչը չի սատարում ընտրուած տարածաշրջանի կարգաւորումները"
 
 #: ../src/main.c:806
 msgid "cannot set locale modifiers"
-msgstr ""
+msgstr "հնարաւոր չէ ստեղծել տարածաշրջանի փոփոխիչները"
 
 #: ../src/main.c:822
 #, c-format
 msgid "could not open display \"%s\""
-msgstr ""
+msgstr "հնարաւոր չէ բացել \"%s\" դիսպլէյը"
 
 #: ../src/menu.c:1276
 msgid "could not grab keyboard"
-msgstr ""
+msgstr "հնարաւոր չէ գտնել ստեղնաշարը"
 
 #: ../src/menu.c:2615
 #, c-format
 msgid "bad value in menus state info: %s"
-msgstr ""
+msgstr "ցանկերի վիճակի տեղեկատուութեան անվաւեր արժէք՝ %s"
 
 #: ../src/misc.c:65
 #, c-format
 msgid "could not define value for %s for cpp"
-msgstr ""
+msgstr "հնարաւոր չէ որոշել %s֊ի արժէքը cpp կանխազննչի համար"
 
 #: ../src/misc.c:95
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr ""
+msgstr "հնարաւոր չէ ստանալ ծածկագիրը %i UID֊ի համար"
 
 #: ../src/misc.c:120
 #, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
-msgstr ""
+msgstr "ձեր մեքենան սխալ է կարգաւորուած։ որպէս HOSTNAME նշուած է՝ %s"
 
 #: ../src/misc.c:126
 #, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr ""
+msgstr "ձեր մեքենան սխալ է կարգաւորուած։ որպէս HOST նշուած է՝ %s"
 
 #: ../src/misc.c:621
 msgid "Program Arguments"
-msgstr ""
+msgstr "յաւելուածի արգումենտներ"
 
 #: ../src/misc.c:622
 msgid "Enter command arguments:"
-msgstr "Ներմուծեք հրամանային տողի հատկությունները"
+msgstr "Ներմուծէք գործարկուող յաւելուածի արգումենտները՝"
 
 #: ../src/misc.c:736
 #: ../src/misc.c:874
 #, c-format
 msgid "out of memory during expansion of \"%s\""
-msgstr ""
+msgstr "յիշողութիւնը լրացաւ \"%s\"֊ի աւելացման ընթացքում"
 
 #: ../src/misc.c:790
 msgid "out of memory during expansion of \"%w\""
-msgstr ""
+msgstr "յիշողութիւնը լրացաւ \"%w\"֊ի աւելացման ընթացքում"
 
 #: ../src/misc.c:808
 msgid "out of memory during expansion of \"%W\""
-msgstr ""
+msgstr "յիշողուըիւնը լրացաւ \"%W\"֊ի աւելացման ընթացքում"
 
 #: ../src/misc.c:824
 #, c-format
 msgid "out of memory during expansion of \"%a\""
-msgstr ""
+msgstr "յիշողութիւնը լրացաւ \"%a\"֊ի աւելացման ընթացքում"
 
 #: ../src/misc.c:853
 #, c-format
 msgid "out of memory during expansion of \"%d\""
-msgstr ""
+msgstr "յիշողութիւնը լրացաւ \"%d\"֊ի աւելացման ընթացքում"
 
 #: ../src/misc.c:867
 msgid "selection not available"
-msgstr "ընտրվածը գոյություն չունի"
+msgstr "նշուածը գոյութիւն չունի"
 
 #: ../src/misc.c:911
 #: ../src/misc.c:917
 #, c-format
 msgid "bad window name value in %s state info"
-msgstr ""
+msgstr "սխալ պատուհանի անուան արժէք %s վիճակի տեղեկատուութեան մէջ"
 
 #: ../src/misc.c:1156
 msgid "could not send message to background image helper"
-msgstr ""
+msgstr "հնարաւոր չէ հաղորդակցութիւն ուղարկել ետնանկարի օժանդակողին"
 
 #: ../src/pixmap.c:235
 #, c-format
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
-msgstr ""
+msgstr "հնարաւոր չէ բեռնել \"%s\" կէտապատկեր նիշքը։ Դիմակ չի օգտագործուի"
 
 #: ../src/resources.c:44
 #, c-format
 msgid "could not parse color \"%s\""
-msgstr ""
+msgstr "հնարաւոր չէ հասկանալ \"%s\" գոյնը"
 
 #: ../src/resources.c:48
 #, c-format
 msgid "could not allocate color \"%s\""
-msgstr ""
+msgstr "հնարաւոր չէ յատկացնել \"%s\" գոյնը"
 
 #: ../src/rootmenu.c:196
 #: ../src/rootmenu.c:198
@@ -1165,7 +1182,7 @@ msgstr "Ելք"
 
 #: ../src/rootmenu.c:197
 msgid "Exit window manager?"
-msgstr "Դուրս գալ՞"
+msgstr "Դո՞ւրս գալ"
 
 #: ../src/rootmenu.c:245
 msgid "Close X session"
@@ -1176,6 +1193,8 @@ msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
 msgstr ""
+"Փակե՞լ Պատուհանային Համակարգի նիստը։\n"
+"Հնարաւոր է որոշ տուեալներ չեն պահուի։"
 
 #.
 #. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
@@ -1188,210 +1207,210 @@ msgstr "Փակել"
 
 #: ../src/rootmenu.c:261
 msgid "Kill X session"
-msgstr "Ստիպողաբար ընդհատել X նիստը"
+msgstr "Սպանել X նիստը"
 
 #: ../src/rootmenu.c:262
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Ստիպողաբար ընդհատե՞լ նիստը\n"
-"(բոլոր ծրագրերը կփակվեն)"
+"Սպանե՞լ նիստը\n"
+"(բոլոր յաւելուածերը կը փակուեն)"
 
 #: ../src/rootmenu.c:544
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr ""
+msgstr "%s՝ անվաւեր ստեղնաշարի կարճատի յատկորոշում \"%s\"՝ %s ֊ի համար"
 
 #: ../src/rootmenu.c:552
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr ""
+msgstr "%s՝ անվաւեր ստեղն \"%s\" կարճատում %s֊ի համար"
 
 #: ../src/rootmenu.c:605
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
-msgstr ""
+msgstr "%s՝ չհամապատասխանող '\"' ցանկի նիշքում"
 
 #: ../src/rootmenu.c:655
 #, c-format
 msgid "%s: missing command"
-msgstr ""
+msgstr "%s՝ բացակայող հրահանգ"
 
 #: ../src/rootmenu.c:687
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
-msgstr ""
+msgstr "անվաւեր OPEN_MENU յատկորոշում՝ %s"
 
 #: ../src/rootmenu.c:738
 #, c-format
 msgid "%s:could not stat menu"
-msgstr ""
+msgstr "%s՝ հնարաւոր չէ գտնել ցանկը"
 
 #: ../src/rootmenu.c:746
 #, c-format
 msgid "%s:could not stat menu:%s"
-msgstr ""
+msgstr "%s՝ հնարաւոր չէ գտնել ցանկը՝ %s"
 
 #: ../src/rootmenu.c:764
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
-msgstr ""
+msgstr "չափազանց շատ հարաչափ OPEN_MENU֊ում՝ %s"
 
 #: ../src/rootmenu.c:808
 msgid "There are more than one WORKSPACE_MENU commands in the applications menu. Only one is allowed."
-msgstr ""
+msgstr "Աւելի քան մէկ WORKSPACE_MENU հրահանգ յաւելուածերի ցանկում։ Միայն մէկն է հնարաւոր։"
 
 #: ../src/rootmenu.c:842
 msgid "There are more than one WINDOWS_MENU commands in the applications menu. Only one is allowed."
-msgstr ""
+msgstr "Աւելի քան մէկ WINDOWS_MENU հրահանգ յաւելուածերի ցանկում։ Միայն մէկն է հնարաւոր։"
 
 #: ../src/rootmenu.c:847
 msgid "Window List"
-msgstr ""
+msgstr "Պատուհանների ցանկ"
 
 #: ../src/rootmenu.c:876
 #: ../src/rootmenu.c:894
 #: ../src/rootmenu.c:904
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
-msgstr ""
+msgstr "%s՝ բացակայող հարաչափ \"%s\" ցանկի հրահանգի համար"
 
 #: ../src/rootmenu.c:972
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr ""
+msgstr "%s՝ անյայտ հրահանգ \"%s\" ցանկի կարգաւորումներում։"
 
 #: ../src/rootmenu.c:980
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr ""
+msgstr "%s՝ հնարաւոր չէ աւելացնել կարճատ \"%s\"֊ի համար"
 
 #: ../src/rootmenu.c:1117
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr ""
+msgstr "%s՝ առաւելագոյն տողի չափը լրացած է ցանկի կարգաւորումներում՝ %s"
 
 #: ../src/rootmenu.c:1139
 #: ../src/rootmenu.c:1232
 #: ../src/rootmenu.c:1336
 #, c-format
 msgid "%s:missing command in menu config: %s"
-msgstr ""
+msgstr "%s՝ ցանկի կարգաւորումներում պակասող հրահանգ՝ %s"
 
 #: ../src/rootmenu.c:1169
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr ""
+msgstr "%s՝ շարահիւսական սխալ ցանկի նիշքում՝ բացակայում է END֊ի յայտարարութիւնը"
 
 #: ../src/rootmenu.c:1198
 #: ../src/rootmenu.c:1300
 msgid "could not make arguments for menu file preprocessor"
-msgstr ""
+msgstr "հնարաւոր չէ ստեղծել արգումենտներ ցանկի նիշքի նախամշակիչի համար"
 
 #: ../src/rootmenu.c:1205
 #: ../src/rootmenu.c:1308
 #, c-format
 msgid "%s:could not open/preprocess menu file"
-msgstr ""
+msgstr "%s՝ հնարաւոր չէ բացել/նախամշակել ցանկի նիշքը"
 
 #: ../src/rootmenu.c:1217
 #: ../src/rootmenu.c:1321
 #, c-format
 msgid "%s:could not open menu file"
-msgstr ""
+msgstr "%s՝ հնարաւոր չէ բացել ցանկի նիշքը"
 
 #: ../src/rootmenu.c:1244
 #, c-format
 msgid "%s:invalid menu file. MENU command is missing"
-msgstr ""
+msgstr "%s՝ անվաւեր ցանկի նիշք։ MENU հրահանգը բացակայում է։"
 
 #: ../src/rootmenu.c:1253
 msgid "error reading preprocessed menu data"
-msgstr ""
+msgstr "սխալ նախամշակուած ցանկի տուեալներն ընթերցելիս"
 
 #: ../src/rootmenu.c:1348
 #, c-format
 msgid "%s:no title given for the root menu"
-msgstr ""
+msgstr "%s՝ որոշուած չի վերնագիր հիմնական ցանկի համար"
 
 #: ../src/rootmenu.c:1439
 #: ../src/rootmenu.c:1512
 #: ../src/rootmenu.c:1553
 #, c-format
 msgid "out of memory while constructing directory menu %s"
-msgstr ""
+msgstr "յիշողութիւնը լրացաւ %s պանակների ցանկ կազմելիս"
 
 #: ../src/rootmenu.c:1449
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr ""
+msgstr "%s՝ հնարաւոր չէ գտնել \"%s\" նիշքը ցանկի պանակում"
 
 #: ../src/rootmenu.c:1607
 msgid "Commands"
-msgstr "Հրամաններ"
+msgstr "Հրահանգներ"
 
 #: ../src/rootmenu.c:1610
 msgid "Restart"
-msgstr "Վերաբեռնում"
+msgstr "Վերագործարկում"
 
 #: ../src/rootmenu.c:1611
 msgid "Exit..."
-msgstr "Ելք"
+msgstr "Ելք…"
 
 #: ../src/rootmenu.c:1656
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr ""
+msgstr "հնարաւոր չէ գտնել WMRootMenu֊ում նշուած \"%s\" ցանկի նիշքը"
 
 #: ../src/rootmenu.c:1663
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr ""
+msgstr "հնարաւոր չէ դիմել WMRootMenu֊ում նշուած \"%s\" ցանկին"
 
 #: ../src/rootmenu.c:1674
 #, c-format
 msgid "using default menu file \"%s\" as the menu referenced in WMRootMenu could not be found "
-msgstr ""
+msgstr "կօգտագործուի \"%s\" լռելեայն ցանկի նիշքը որովհետեւ WMRootMenu֊ում նշուած ցանկը չի գտնուել"
 
 #: ../src/rootmenu.c:1697
 #: ../src/rootmenu.c:1773
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr ""
+msgstr "%s՝ ձեւաչափի սխալ \"%s\" հիմնական ցանկի կարգաւորումներում"
 
 #: ../src/rootmenu.c:1855
 msgid "The applications menu could not be loaded. Look at the console output for a detailed description of the errors."
-msgstr ""
+msgstr "Հնարաւոր չէ բեռնել յաւելուածերի ցանկը։ Զննէք կոնսոլի տեքստը սխալի մասին մանրամասնութիւնները գտնելու համար"
 
 #: ../src/screen.c:709
 #, c-format
 msgid "could not initialize graphics library context: %s"
-msgstr ""
+msgstr "հնարաւոր չէ մեկնարկել գրաֆիկական դարանի ենթատեքստ՝ %s"
 
 #: ../src/screen.c:737
 msgid "could not initialize WINGs widget set"
-msgstr ""
+msgstr "հնարաւոր չէ մեկնարկել WINGs վիջեթները"
 
 #: ../src/screen.c:1146
 #, c-format
 msgid "could not save session state in %s"
-msgstr ""
+msgstr "հնարաւոր չէ պահել նիստի վիճակը %s֊ում"
 
 #: ../src/session.c:183
 #: ../src/wdefaults.c:589
 #: ../src/winspector.c:459
 #, c-format
 msgid "can't convert \"%s\" to boolean"
-msgstr ""
+msgstr "հնարաւոր չէ փոխակերպել \"%s\"֊ը բուլեանի"
 
 #: ../src/session.c:1018
 msgid "out of memory while saving session state"
-msgstr ""
+msgstr "յիշողութիւնը լրացաւ նիստի վիճակը պահելիս"
 
 #: ../src/session.c:1101
 msgid "end of memory while saving session state"
-msgstr ""
+msgstr "յիշողութիւնը լրաւաց նիստի վիճակը պահելիս"
 
 #. This is not fatal but can mean the session manager exited.
 #. * If the session manager exited normally we would get a
@@ -1401,38 +1420,38 @@ msgstr ""
 #.
 #: ../src/session.c:1239
 msgid "connection to the session manager was lost"
-msgstr ""
+msgstr "նիստի կառավարչի հետ կապն ընդհատուեց"
 
 #: ../src/stacking.c:81
 msgid "could not get window list!!"
-msgstr ""
+msgstr "հնարաւո՛ր չէ ստանալ պատուհանների ցանկը"
 
 #: ../src/startup.c:194
 #, c-format
 msgid "internal X error: %s\n"
-msgstr ""
+msgstr "ներքին X սխալ՝ %s\n"
 
 #: ../src/startup.c:771
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
-msgstr ""
+msgstr "պատկերակի չափը կարգաւորուած է որպէս %i, սակայն դա չափազանց փոքր արժէք է։ Փոխարէնը կօգտագործուի 16֊ը։\n"
 
 #: ../src/startup.c:800
 msgid "XKB is not supported. KbdModeLock is automatically disabled."
-msgstr ""
+msgstr "XKB֊ն չի աջակցուում։ KbdModeLock֊ը ինքնաշխատօրէն կասեցուած է"
 
 #: ../src/startup.c:819
 msgid "it seems that there is already a window manager running"
-msgstr ""
+msgstr "կարծես թէ արդէն մէկ պատուհանային կառավարիչ գործարկուած է"
 
 #: ../src/startup.c:825
 #, c-format
 msgid "could not manage screen %i"
-msgstr ""
+msgstr "հնարաւոր չէ կառավարել %i էկրանը"
 
 #: ../src/startup.c:884
 msgid "could not manage any screen"
-msgstr ""
+msgstr "հնարաւոր չէ կառավարել ոչ մի էկրան"
 
 #: ../src/switchmenu.c:145
 msgid "Windows"
@@ -1442,36 +1461,36 @@ msgstr "Պատուհաններ"
 #: ../src/texture.c:371
 #, c-format
 msgid "image file \"%s\" used as texture could not be found."
-msgstr ""
+msgstr "\"%s\" նկարի նիշքն, որն օգտագործուում է որպէս հիւսուածք չի գտնուել։"
 
 #: ../src/texture.c:335
 #: ../src/texture.c:377
 #, c-format
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr ""
+msgstr "հնարաւոր չէ բեռնել հիւսուածքի \"%s\"՝ %s կէտապատկերը։"
 
 #: ../src/texture.c:437
 #, c-format
 msgid "library \"%s\" cound not be opened."
-msgstr ""
+msgstr "\"%s\" դարանը հնարաւոր չէ բացել։"
 
 #: ../src/texture.c:446
 #, c-format
 msgid "function \"%s\" not found in library \"%s\""
-msgstr ""
+msgstr "\"%s\" ֆունկցիան գտնուած չէ \"%s\" դարանում"
 
 #: ../src/texture.c:453
 msgid "function textures not supported on this system, sorry."
-msgstr ""
+msgstr "աւաղ, ֆունկցիայի հիւսուածքները չեն աջակցուում այս համակարգում։"
 
 #: ../src/texture.c:598
 msgid "could not allocate image buffer"
-msgstr ""
+msgstr "հնարաւոր չէ յատկացնել պատկերի պահնակ"
 
 #: ../src/wdefaults.c:437
 #, c-format
 msgid "could not find icon file \"%s\""
-msgstr ""
+msgstr "հնարաւոր չէ գտնել \"%s\" պատկերաի նիշքը"
 
 #: ../src/window.c:3041
 #: ../src/window.c:3182
@@ -1479,6 +1498,8 @@ msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
 msgstr ""
+"NumLock, ScrollLock կամ նման ստեղն է միացուած։\n"
+"Անջատիր, այլապէս որոշ մկնիկի գործողութիւններն ու ստեղնաշարային կարճատները չեն աշխատի։"
 
 #: ../src/winmenu.c:125
 msgid ""
@@ -1486,24 +1507,27 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
+"Սա սպանելու է յաւելուածը։\n"
+"Բոլոր չպահուած տուեալները կորելու են։\n"
+"Հաստատէք։"
 
 #: ../src/winmenu.c:268
 #: ../src/winmenu.c:277
 msgid "Set Shortcut"
-msgstr ""
+msgstr "Նշել Կարճատը"
 
 #: ../src/winmenu.c:355
 #: ../src/winmenu.c:400
 msgid "could not create submenu for window menu"
-msgstr ""
+msgstr "հնարաւոր չէ ստեղծել ենթացանկ պատուհանների ցանկում"
 
 #: ../src/winmenu.c:404
 msgid "Keep on top"
-msgstr "Պահել վերևը"
+msgstr "Պահել վերեւում"
 
 #: ../src/winmenu.c:409
 msgid "Keep at bottom"
-msgstr ""
+msgstr "Պահել ներքեւում"
 
 #.
 #. * Warning: If you make some change that affects the order of the
@@ -1518,16 +1542,16 @@ msgstr "Մեծացնել"
 #: ../src/winmenu.c:445
 #: ../src/winmenu.c:557
 msgid "Miniaturize"
-msgstr "Փոքրացնել"
+msgstr "Դարձնել մանրանկար"
 
 #: ../src/winmenu.c:453
 #: ../src/winmenu.c:588
 msgid "Shade"
-msgstr ""
+msgstr "Ստուերել"
 
 #: ../src/winmenu.c:469
 msgid "Resize/Move"
-msgstr "Փոփոխել"
+msgstr "Չափափոխել/Տեղաշարժել"
 
 #: ../src/winmenu.c:477
 msgid "Select"
@@ -1539,42 +1563,42 @@ msgstr "Տեղափոխել"
 
 #: ../src/winmenu.c:490
 msgid "Attributes..."
-msgstr ""
+msgstr "Յատկանիշներ…"
 
 #: ../src/winmenu.c:492
 msgid "Options"
-msgstr "Հատկություններ"
+msgstr "Յատկութիւններ"
 
 #: ../src/winmenu.c:552
 msgid "Deminiaturize"
-msgstr ""
+msgstr "Ապամանրանկարեցնել"
 
 #: ../src/winmenu.c:566
 msgid "Unmaximize"
-msgstr ""
+msgstr "Ապամեծացնել"
 
 #: ../src/winmenu.c:583
 msgid "Unshade"
-msgstr ""
+msgstr "Ապաստուերել"
 
 #: ../src/winspector.c:392
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr ""
+msgstr "Հնարաւոր չէ գտնել \"%s\" պատկերակը, որ նշուած է այս պատուհանի համար"
 
 #: ../src/winspector.c:409
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
-msgstr ""
+msgstr "Հնարաւոր չէ բացել նշուած \"%s\"՝ %s պատկերակը։"
 
 #: ../src/winspector.c:1129
 #, c-format
 msgid "Inspecting  %s.%s"
-msgstr ""
+msgstr "Ստուգուում է %s.%s"
 
 #: ../src/winspector.c:1155
 msgid "Click in the window you wish to inspect."
-msgstr ""
+msgstr "Կտացրէք պատուհանին, որն ուզում էք ստուգել։"
 
 #: ../src/winspector.c:1194
 msgid ""
@@ -1583,6 +1607,10 @@ msgid ""
 "property set to the above selected\n"
 "name, when saved."
 msgstr ""
+"Կարգաւորումը կիրառուելու է բոլոր\n"
+"պատուհաններին, որոնց WM_CLASS\n"
+"յատկութիւնը համապատասխանում է վերը նշուած\n"
+"անուանը, երբ պահուի։"
 
 #: ../src/winspector.c:1223
 msgid "Save"
@@ -1594,32 +1622,32 @@ msgstr "Կիրառել"
 
 #: ../src/winspector.c:1237
 msgid "Reload"
-msgstr ""
+msgstr "Վերբեռնել"
 
 #: ../src/winspector.c:1246
 #: ../src/winspector.c:1256
 msgid "Window Specification"
-msgstr ""
+msgstr "Պատուհանի Բնորոշում"
 
 #: ../src/winspector.c:1247
 msgid "Window Attributes"
-msgstr ""
+msgstr "Պատուհանի Յատկանիշներ"
 
 #: ../src/winspector.c:1248
 msgid "Advanced Options"
-msgstr ""
+msgstr "Առաջադէմ Յատկութիւններ"
 
 #: ../src/winspector.c:1249
 msgid "Icon and Initial Workspace"
-msgstr ""
+msgstr "Պատկերակ եւ Մեկնարկային Տիրոյթ"
 
 #: ../src/winspector.c:1250
 msgid "Application Specific"
-msgstr ""
+msgstr "Յաւելուածին բնորոշ"
 
 #: ../src/winspector.c:1264
 msgid "Defaults for all windows"
-msgstr ""
+msgstr "Լռելեայն է բոլոր պատուհանների համար"
 
 #: ../src/winspector.c:1318
 msgid "Select window"
@@ -1627,11 +1655,11 @@ msgstr "Ընտրել պատուհանը"
 
 #: ../src/winspector.c:1332
 msgid "Attributes"
-msgstr ""
+msgstr "Յատկանիշներ"
 
 #: ../src/winspector.c:1343
 msgid "Disable titlebar"
-msgstr ""
+msgstr "Կասեցնել անուանագօտին"
 
 #: ../src/winspector.c:1345
 msgid ""
@@ -1641,84 +1669,93 @@ msgid ""
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""
+"Հեռացնել սոյն պատուհանի անուանագօտին։\n"
+"Առանց անուանագօտու պատուհանի հրահանգային ցանկը\n"
+"գտնելու համար սեղմէք Control+Esc (կամ\n"
+"համարժէք կարճատ, եթէ փոխել էք լռելեայն\n"
+"կարգաւորումները)։"
 
 #: ../src/winspector.c:1352
 msgid "Disable resizebar"
-msgstr ""
+msgstr "Կասեցնել չափափոխագօտին"
 
 #: ../src/winspector.c:1354
 msgid "Remove the resizebar of this window."
-msgstr ""
+msgstr "Հեռացնել սոյն պատուհանի չափափոխագօտին։"
 
 #: ../src/winspector.c:1357
 msgid "Disable close button"
-msgstr ""
+msgstr "Կասեցնել փակելու կոճակը"
 
 #: ../src/winspector.c:1359
 msgid "Remove the `close window' button of this window."
-msgstr ""
+msgstr "Հեռացնել սոյն պատուհանի «փակել պատուհանը» կոճակը։"
 
 #: ../src/winspector.c:1362
 msgid "Disable miniaturize button"
-msgstr ""
+msgstr "Կասեցնել մանրանկար դարձնելու կոճակը"
 
 #: ../src/winspector.c:1364
 msgid "Remove the `miniaturize window' button of the window."
-msgstr ""
+msgstr "Հեռացնել սոյն պատուհանի «դարձնել պատուհանը մանրանկար» կոճակը։"
 
 #: ../src/winspector.c:1367
 msgid "Disable border"
-msgstr ""
+msgstr "Կասեցնել եզրագիծը"
 
 #: ../src/winspector.c:1369
 msgid "Remove the 1 pixel black border around the window."
-msgstr ""
+msgstr "Հեռացնել պատուհանի շուրջ 1 պիքսելանոց սեւ եզրագիծը։"
 
 #: ../src/winspector.c:1372
 msgid "Keep on top (floating)"
-msgstr ""
+msgstr "Պահել վերեւում (սաւառնող)"
 
 #: ../src/winspector.c:1374
 msgid ""
 "Keep the window over other windows, not allowing\n"
 "them to cover it."
 msgstr ""
+"Պահել պատուհանը այլ պատուհանների վերեւից, չթողնելով նրանց\n"
+"ծածկել այն։"
 
 #: ../src/winspector.c:1378
 msgid "Keep at bottom (sunken)"
-msgstr ""
+msgstr "Պահել ներքեւում (սուզուած)"
 
 #: ../src/winspector.c:1380
 msgid "Keep the window under all other windows."
-msgstr ""
+msgstr "Պահել պատուհանն այլ պատուհանների տակ։"
 
 #: ../src/winspector.c:1385
 msgid "Make window present in all workspaces."
-msgstr ""
+msgstr "Դարձնել պատուհանը բոլոր տիրոյթներում երեւացող։"
 
 #: ../src/winspector.c:1388
 msgid "Start miniaturized"
-msgstr ""
+msgstr "Մեկնարկել մանրանկարուած"
 
 #: ../src/winspector.c:1390
 msgid ""
 "Make the window be automatically miniaturized when it's\n"
 "first shown."
 msgstr ""
+"Դարձնել պատուհանն ինքնաշխատօրէն մանրանկարուած, երբ այն\n"
+"առաջին անգամ ցուցադրուում է։"
 
 #: ../src/winspector.c:1394
 msgid "Start maximized"
-msgstr ""
+msgstr "Մեկնարկել մեծացուած"
 
 #: ../src/winspector.c:1396
 msgid ""
-"Make the window be automatically maximized when it's\n"
-"first shown."
+"Դարձնել պատուհանն ինքնաշխատօրէն մեծացուած, երբ այն\n"
+"առաջին անգամ ցուցադրուում է։"
 msgstr ""
 
 #: ../src/winspector.c:1400
 msgid "Full screen maximization"
-msgstr ""
+msgstr "Լիաէկրան"
 
 #: ../src/winspector.c:1402
 msgid ""
@@ -1726,14 +1763,17 @@ msgid ""
 "maximized. The titlebar and resizebar will be moved\n"
 "to outside the screen."
 msgstr ""
+"Պատուհանը կօգտագործի ամբողջ էկրանի, երբ այն\n"
+"մեծացուում է։ Անուանագօտին եւ չափափոխման գօտին տեղափոխուելու են\n"
+"էկրանից դուրս։"
 
 #: ../src/winspector.c:1419
 msgid "Advanced"
-msgstr ""
+msgstr "Առաջադէմ"
 
 #: ../src/winspector.c:1436
 msgid "Do not bind keyboard shortcuts"
-msgstr ""
+msgstr "Չկապել ստեղնաշարանային կարճատները"
 
 #: ../src/winspector.c:1438
 msgid ""
@@ -1742,10 +1782,14 @@ msgid ""
 "window to receive all key combinations regardless\n"
 "of your shortcut configuration."
 msgstr ""
+"Չկապել Window Maker֊ի ստեղնաշարանային կարճատները\n"
+"երբ պատուհանը կիզակէտում է։ Սա թոյլ է տալու\n"
+"պատուհանին ստանալ բոլոր ստեղների համադրութիւններն, անախ\n"
+"ձեր կարճատային կարգաւորումներից։"
 
 #: ../src/winspector.c:1444
 msgid "Do not bind mouse clicks"
-msgstr ""
+msgstr "Չկապել մկնիկի կտոցները"
 
 #: ../src/winspector.c:1446
 msgid ""
@@ -1753,48 +1797,57 @@ msgid ""
 "in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
+"Չկապել մկնիկի գործողութիւններն, ինչպիսին են `Alt'+drag\n"
+"պատուհանին (երբ Alt֊ը կերպափոխիչ է\n"
+"կարգաւորուած)։"
 
 #: ../src/winspector.c:1451
 msgid "Do not show in the window list"
-msgstr ""
+msgstr "Չցուցադրել պատուհանների ցանկում"
 
 #: ../src/winspector.c:1453
 msgid "Do not list the window in the window list menu."
-msgstr ""
+msgstr "Չցուցադրել պատուհանը պատուհանների ցանկում։"
 
 #: ../src/winspector.c:1456
 msgid "Do not let it take focus"
-msgstr ""
+msgstr "Կանխել կիզակէտում լինելը"
 
 #: ../src/winspector.c:1458
 msgid ""
 "Do not let the window take keyboard focus when you\n"
 "click on it."
 msgstr ""
+"Կանխել պատուհանի կիզակէտում լինելը, երբ դու\n"
+"կտացնում ես այն։"
 
 #: ../src/winspector.c:1462
 msgid "Keep inside screen"
-msgstr ""
+msgstr "Պահել էկարնի տիրոյթում"
 
 #: ../src/winspector.c:1464
 msgid ""
 "Do not allow the window to move itself completely\n"
 "outside the screen. For bug compatibility.\n"
 msgstr ""
+"Չթողնել պատուհանը տեղափոխի իրեն ամբողջովին\n"
+"էկրանից դուրս։\n"
 
 #: ../src/winspector.c:1468
 msgid "Ignore 'Hide Others'"
-msgstr ""
+msgstr "Արհամարհել «Թացքնել այլ»֊ը"
 
 #: ../src/winspector.c:1470
 msgid ""
 "Do not hide the window when issuing the\n"
 "`HideOthers' command."
 msgstr ""
+"Չթաքցնել պատուհանը երբ ստացուում է\n"
+"«Թաքցնել Այլ» հրահանգը։"
 
 #: ../src/winspector.c:1474
 msgid "Ignore 'Save Session'"
-msgstr ""
+msgstr "Արհամարհել «Պահել Նիստը»"
 
 #: ../src/winspector.c:1476
 msgid ""
@@ -1803,10 +1856,14 @@ msgid ""
 "together with other applications when Window Maker\n"
 "starts."
 msgstr ""
+"Չպահել կապուած յաւելուածը նիստի ցանկում\n"
+"որպէսզի այն չվերագործարկուի\n"
+"այլ Window Maker֊ի յաւելուածների հետ միասին\n"
+"երբ նիստը սկսուում է։"
 
 #: ../src/winspector.c:1482
 msgid "Emulate application icon"
-msgstr ""
+msgstr "Նմանեցնել յաւելուածի պատկերակը"
 
 #: ../src/winspector.c:1484
 msgid ""
@@ -1814,54 +1871,57 @@ msgid ""
 "enough information to Window Maker for a dockable\n"
 "application icon to be created."
 msgstr ""
+"Այս պատուհանը կը պահի իրեն որպէս յաւելուած, որը տրամադրում է\n"
+"Window Maker֊ին բաւական տեղեկատուութիւն, որ անհրաժեշտ է յարակցուող\n"
+"յաւելուածի պատկերակ ստեղծելու համար։"
 
 #: ../src/winspector.c:1490
 msgid "Disable language button"
-msgstr ""
+msgstr "Կասեցնել լեզուի կոճակը"
 
 #: ../src/winspector.c:1492
 msgid "Remove the `toggle language' button of the window."
-msgstr ""
+msgstr "Հեռացնել պատուհանի «փոխել լեզուն» կոճակը"
 
 #: ../src/winspector.c:1509
 msgid "Miniwindow Image"
-msgstr ""
+msgstr "Փոքրացուած պատուհանի Պատկեր"
 
 #: ../src/winspector.c:1536
 msgid "Icon filename:"
-msgstr ""
+msgstr "Պատկերակի նիշքը՝"
 
 #: ../src/winspector.c:1549
 msgid "Ignore client supplied icon"
-msgstr ""
+msgstr "Արհամարհել սպասառուի մատակարարուած պատկերակը"
 
 #: ../src/winspector.c:1556
 msgid "Initial Workspace"
-msgstr ""
+msgstr "Մեկնարկային Տիրոյթ"
 
 #: ../src/winspector.c:1558
 msgid "The workspace to place the window when it's first shown."
-msgstr ""
+msgstr "Տիրոյթ, որի վրայ մեկնարկելու է պատուհանը։"
 
 #: ../src/winspector.c:1564
 msgid "Nowhere in particular"
-msgstr ""
+msgstr "Ոչ մի տեղ"
 
 #: ../src/winspector.c:1582
 msgid "Application Attributes"
-msgstr ""
+msgstr "Յաւելուածի Յատկանիշներ"
 
 #: ../src/winspector.c:1593
 msgid "Start hidden"
-msgstr "Աշխատացնել անտեսանելի"
+msgstr "Մեկնարկել թաքցուած"
 
 #: ../src/winspector.c:1595
 msgid "Automatically hide application when it's started."
-msgstr "Ավտոմատ թակցնել ծրագիրը"
+msgstr "Ինքնաշխատօրէն թաքցնել յաւելուածը, երբ այն մեկնարկում է։"
 
 #: ../src/winspector.c:1598
 msgid "No application icon"
-msgstr "Առանց պատկերակի"
+msgstr "Բացակայում է յաւելուածի պատկերակը"
 
 #: ../src/winspector.c:1600
 msgid ""
@@ -1870,31 +1930,37 @@ msgid ""
 "and any icons that are already docked will stop\n"
 "working correctly."
 msgstr ""
+"Կասեցնել յաւելուածի պատկերակը սոյն յաւելուածի համար։\n"
+"Նկատի ունեցէք, որ այլեւս չէք կարողանալու այն յարակցել,\n"
+"եւ բոլոր այլ արդէն յարակցուած պատկերակները\n"
+"դադարելու են սպասելի աշխատել։"
 
 #: ../src/winspector.c:1606
 msgid "Shared application icon"
-msgstr ""
+msgstr "Համօգտագործուող պատկերակ"
 
 #: ../src/winspector.c:1608
 msgid ""
 "Use a single shared application icon for all of\n"
 "the instances of this application.\n"
 msgstr ""
+"Օգտագործել մէկ համօգտագործուող պատկերակ\n"
+"յաւելուածի բոլոր հատանմուշների համար։\n"
 
 #: ../src/workspace.c:103
 #: ../src/workspace.c:104
 #: ../src/workspace.c:1302
 #, c-format
 msgid "Workspace %i"
-msgstr "Աշխատասեղան %i"
+msgstr "Տիրոյթ %i"
 
 #: ../src/workspace.c:1352
 msgid "Workspaces"
-msgstr "Աշխատասեղանները"
+msgstr "Տիրոյթներ"
 
 #: ../src/workspace.c:1354
 msgid "could not create Workspace menu"
-msgstr ""
+msgstr "հնարաւոր չէ ստեղծել Տիրոյթի ցանկ"
 
 #: ../src/workspace.c:1361
 msgid "New"
@@ -1902,5 +1968,5 @@ msgstr "Նոր"
 
 #: ../src/workspace.c:1362
 msgid "Destroy Last"
-msgstr ""
+msgstr "Ոչնչացնել վերջինը"
 
