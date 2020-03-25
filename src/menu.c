@@ -1519,7 +1519,7 @@ static void scrollMenuCallback(void *data)
 
 #define MENU_SCROLL_BORDER   5
 
-static int isPointNearBoder(WMenu * menu, int x, int y)
+static int isPointNearBorder(WMenu * menu, int x, int y)
 {
 	int menuX1 = menu->frame_x;
 	int menuY1 = menu->frame_y;
@@ -1598,7 +1598,7 @@ void wMenuScroll(WMenu *menu)
 
 			/* on_border is != 0 if the pointer is between the menu
 			 * and the screen border and is close enough to the border */
-			on_border = isPointNearBoder(menu, x, y);
+			on_border = isPointNearBorder(menu, x, y);
 
 			smenu = wMenuUnderPointer(scr);
 
