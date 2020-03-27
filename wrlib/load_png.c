@@ -150,6 +150,9 @@ RImage *RLoadPNG(RContext *context, const char *file)
 	else
 		png_set_gamma(png, sgamma, 0.45);
 
+	/* do not remove, required for png_read_update_info */
+	png_set_interlace_handling(png);
+
 	/* do the transforms */
 	png_read_update_info(png, pinfo);
 
