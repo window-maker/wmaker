@@ -614,7 +614,7 @@ static void createPanel(_Panel * p)
 	WMAddNotificationObserver(dataChanged, panel, WMTextDidChangeNotification, panel->pathT);
 
 	label = WMCreateLabel(panel->pathF);
-	WMResizeWidget(label, width - 20, 80);
+	WMResizeWidget(label, width - 20, 90);
 	WMMoveWidget(label, 10, 50);
 	WMSetLabelText(label, _("Enter the path for a file containing a menu\n"
 				"or a list of directories with the programs you\n"
