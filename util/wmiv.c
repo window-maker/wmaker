@@ -54,7 +54,7 @@ extern int XpmCreatePixmapFromData(Display *, Drawable, char **, Pixmap *, Pixma
 #include "wmiv.h"
 #endif
 
-#define DEBUG 0
+#define WMIV_DEBUG 0
 #define FILE_SEPARATOR '/'
 
 Display *dpy;
@@ -513,7 +513,7 @@ int change_image(int way)
 				current_index = max_index;
 			}
 		}
-		if (DEBUG)
+		if (WMIV_DEBUG)
 			fprintf(stderr, "current file is> %s\n", (char *)current_link->data);
 		img = load_oriented_image(ctx, current_link->data, 0);
 
@@ -789,7 +789,7 @@ int main(int argc, char **argv)
 	merge_with_background(img);
 	rescale_image();
 
-	if (DEBUG)
+	if (WMIV_DEBUG)
 		fprintf(stderr, "display size: %dx%d\n", max_width, max_height);
 
 	win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 0, 0,
