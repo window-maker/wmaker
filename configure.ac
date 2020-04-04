@@ -34,7 +34,7 @@ AC_PREREQ([2.69])
 
 dnl Configuration for Autoconf and Automake
 dnl =======================================
-AC_INIT([WindowMaker],[0.95.8],[wmaker-dev@googlegroups.com],[WindowMaker],[http://www.windowmaker.org/])
+AC_INIT([WindowMaker],[0.95.9],[wmaker-dev@googlegroups.com],[WindowMaker],[http://www.windowmaker.org/])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 
