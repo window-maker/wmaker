@@ -53,7 +53,7 @@
  *	// it in current position
  *	OPEN_MENU file.menu
  *   2. Pipe menu handling.
- *	// opens command and uses it's stdout to construct menu.
+ *	// opens command and uses its stdout to construct menu.
  *	// Command's output must be a valid menu description.
  *	// The space between '|' and command itself is optional.
  *	OPEN_MENU | command

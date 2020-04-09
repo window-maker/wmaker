@@ -945,7 +945,7 @@ void WMSetFocusToWidget(WMWidget * widget)
 
 /*
  * WMRealizeWidget-
- * 	Realizes the widget and all it's children.
+ * 	Realizes the widget and all its children.
  *
  */
 void WMRealizeWidget(WMWidget * w)

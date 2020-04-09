@@ -178,7 +178,7 @@ Running multiple instances of Window Maker
 
 It is not a good idea to run more than one instance of Window Maker
 from the same user (so that wmaker will use the same configuration files) at the
-same time. You might get unexpected behavior when Window Maker updates it's
+same time. You might get unexpected behavior when Window Maker updates its
 configuration files.
 
 If you really desire to do this, try running Window Maker with the command line
@@ -209,7 +209,7 @@ while keeping a nice appearance and good functionality, follow the items bellow:
 - remove support for image formats you don't use
 - to reduce memory usage, disable the icon cache, by setting the RIMAGE_CACHE
   environment variable to 0. If you want to increase performance at the cost of
-  memory usage, set it's value to a value like the number of different icons you
+  memory usage, set its value to a value like the number of different icons you
   use. Also, disable anti-aliased text support in ~/GNUstep/Defaults/WMGLOBAL.
 
 

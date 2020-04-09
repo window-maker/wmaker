@@ -333,7 +333,7 @@ Window Maker distribution.
 
 The author Anthony Quinn <southgat@frontiernet.net> has released a 
 version that works with Window Maker >= 0.15.x. It is available from 
-it's home page at http://www.frontiernet.net/~southgat/wmsound/ 
+its home page at http://www.frontiernet.net/~southgat/wmsound/
 or on Largo's site at http://wm.current.nu/files.html#wmsound 
 for your convenience. 
 
@@ -352,7 +352,7 @@ GNOME application they have no title bar" below.
 To use it with CDE, read the answer for "How do I switch
 CDE's window manager to use Window Maker?"
 
-To use it with KDE, read it's documentation to get rid of kwm (and possibly
+To use it with KDE, read its documentation to get rid of kwm (and possibly
 kpanel) and replace it with wmaker. Then, start WPrefs.app, go to "Mouse
 Preferences" and set the "Disable mouse actions" check box. You will
 need to restart Window Maker to make this change take effect. The
@@ -1283,7 +1283,7 @@ WM_NORMAL_HINTS(WM_SIZE_HINTS):
                 user specified size: 400 by 300
                 program specified minimum size: 400 by 300
 
-Now, when scilab opens it's window, Window Maker nicely does exactly what it
+Now, when scilab opens its window, Window Maker nicely does exactly what it
 is told, that is, map the window at position 136679205, 1074468360 which
 obviously falls outside the screen no matter how big is your monitor ;) 
 

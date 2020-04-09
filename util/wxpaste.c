@@ -61,7 +61,7 @@ static Time getTimestamp(Display * dpy, Window win)
 	 *
 	 * 2. Set a dummy property in our window.
 	 *
-	 * 3. Get the PropertyNotify event and get it's timestamp.
+	 * 3. Get the PropertyNotify event and get its timestamp.
 	 *
 	 * 4. Ungrab the server.
 	 */

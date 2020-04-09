@@ -70,7 +70,7 @@ static const struct {
 	{ "NoTitlebar", { .no_titlebar = 1 }, N_("Disable titlebar"),
 	  N_("Remove the titlebar of this window.\n"
 	     "To access the window commands menu of a window\n"
-	     "without it's titlebar, press Control+Esc (or the\n"
+	     "without its titlebar, press Control+Esc (or the\n"
 	     "equivalent shortcut, if you changed the default\n"
 	     "settings).") },
 

@@ -336,7 +336,7 @@ void wLowerFrame(WCoreWindow * frame)
 		if (owner != wlist) {
 			while (wlist->stacking->under) {
 				/* if this is a transient, it should not be placed under
-				 * it's owner */
+				 * its owner */
 				if (owner == wlist->stacking->under)
 					break;
 				wlist = wlist->stacking->under;
@@ -391,7 +391,7 @@ void wLowerFrame(WCoreWindow * frame)
  * 	None
  *
  * Side effects:
- * 	The frame is added to it's screen's window list.
+ * 	The frame is added to its screen's window list.
  *----------------------------------------------------------------------
  */
 void AddToStackList(WCoreWindow * frame)

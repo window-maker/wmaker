@@ -173,7 +173,7 @@ typedef struct WFakeGroupLeader {
 
 
 /*
- * Stores client window information. Each client window has it's
+ * Stores client window information. Each client window has its
  * structure created when it's being first mapped.
  */
 typedef struct WWindow {

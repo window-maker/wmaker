@@ -4063,7 +4063,7 @@ Changes since version 0.17.5:
   icons
 - fixed bug in focusfollowmouse that made windows under the currently
   focused window that close, to not get the focus
-- if the app is a .app, it will try to find it's icon in the .app
+- if the app is a .app, it will try to find its icon in the .app
   directory and save it in the WMWindowAttributes, so that the dock can use it.
 - drag docklets that select for mouse events to with Alt+drag
 
@@ -4934,7 +4934,7 @@ Changes since version 0.3.2:
 
 - application icons (not mini-windows) like I think how it is on NEXTSTEP(tm)
 - fixed "slippery" icon movement
-- added a Dock (not for GNUstep, as it will have it's own)
+- added a Dock (not for GNUstep, as it will have its own)
 
 Changes since version 0.3.1:
 ............................
@@ -4964,7 +4964,7 @@ it's opened to select items, just drag the pointer
 - transient owners get a different titlebar color when the focus
 is in the transient (e.g, in NeXTese: mainWindow is highlighted correctly when
 the keyWindow is a panel)
-- when transient is closed, it's owner always get the focus
+- when transient is closed, its owner always get the focus
 - fixed XGrabButton/BadAccess bug
 - fixed window_count error (this time I'm 90% sure)
 - fixed focusNextWindow through Alt-Tab bug with non-focusable windows

@@ -64,7 +64,7 @@ typedef struct WMenu {
 	int frame_x, frame_y;	       /* position of the frame in root*/
 
 	WMenuEntry **entries;	       /* array of entries. This is shared
-					* by the menu and it's "brother" */
+					* by the menu and its "brother" */
 	short alloced_entries;	       /* number of entries allocated in
 					* entry array */
 	struct WMenu **cascades;	       /* array of cascades */

@@ -57,7 +57,7 @@ typedef struct WDrawerChain {
 } WDrawerChain;
 
 /*
- * each WScreen is saved into a context associated with it's root window
+ * each WScreen is saved into a context associated with its root window
  */
 typedef struct _WScreen {
     int	screen;			       /* screen number */

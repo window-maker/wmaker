@@ -464,7 +464,7 @@ AC_PATH_XTRA
 
 AS_IF([test "x$no_x" = "xyes"],
     [AC_MSG_ERROR([The path for the X11 files not found!
-Make sure you have X and it's headers and libraries (the -devel packages
+Make sure you have X and its headers and libraries (the -devel packages
 in Linux) installed.])])
 
 X_LIBRARY_PATH=$x_libraries

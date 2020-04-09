@@ -577,7 +577,7 @@ void handleMaximize(WWindow *wwin, int directions)
 	 * corners) and only when requested state is also half maximized, but on
 	 * opposite side of the screen. As for corners, it is similar, but
 	 * expected is that only quarter maximized windows on corner can change
-	 * it's state to half maximized window, depending on direction. Note, that
+	 * its state to half maximized window, depending on direction. Note, that
 	 * MAX_KEYBOARD is passed to the wMaximizeWindow function, to preserve the
 	 * head, even if mouse was used for triggering the action. */
 

@@ -190,7 +190,7 @@ void UpdateSwitchMenu(WScreen * scr, WWindow * wwin, int action)
 	 *    1.  When a window is created.
 	 *    2.  When a window is destroyed.
 	 *
-	 *    3.  When a window changes it's title.
+	 *    3.  When a window changes its title.
 	 *    4.  When a window changes its workspace.
 	 */
 	if (action == ACTION_ADD) {

@@ -2074,7 +2074,7 @@ getWSSpecificBackground(WScreen * scr, WDefaultEntry * entry, WMPropList * value
 	 * Kluge to force wmsetbg helper to set the default background.
 	 * If the WorkspaceSpecificBack is changed once wmaker has started,
 	 * the WorkspaceBack won't be sent to the helper, unless the user
-	 * changes it's value too. So, we must force this by removing the
+	 * changes its value too. So, we must force this by removing the
 	 * value from the defaults DB.
 	 */
 	if (!scr->flags.backimage_helper_launched && !scr->flags.startup) {

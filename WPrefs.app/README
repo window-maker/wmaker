@@ -7,7 +7,7 @@
 
     WPrefs.app is the preferences "editor" for the WindowMaker window 
 manager. It can be used to set most of the preference options of WindowMaker
-and define it's applications menu. It also can change some settings 
+and define its applications menu. It also can change some settings 
 that do not belong to WindowMaker. 
 
     Although WPrefs.app is designed to be easy to use, you should read the
@@ -16,7 +16,7 @@ of WindowMaker that are not related to configuration.
 
     To run WPrefs, do not put it in your search path. Instead, run it
 with the full path, like /usr/local/GNUstep/Applications/WPrefs.app/WPrefs
-Then, dock it's application icon. The dock will automatically detect it's
+Then, dock its application icon. The dock will automatically detect its
 icon and use it.
 
     If you change configuration often, you might want to leave WPrefs
@@ -46,7 +46,7 @@ The mouse speed configuration is saved as a call for xset in
 ~/G/D/L/W/autostart. WindowMaker calls this file when it is started.
 
 If you don't want or can't use the menu definition section, do not
-open it's section (or if you do open it, do not Save), or WPrefs will
+open its section (or if you do open it, do not Save), or WPrefs will
 overwrite your ~/G/D/WMRootMenu file.
 
 Only options that have different values than what is found in the 

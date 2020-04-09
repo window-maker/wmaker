@@ -1994,7 +1994,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 				wusleep(MENU_BLINK_DELAY);
 			}
 #endif
-			/* unmap the menu, it's parents and call the callback */
+			/* unmap the menu, its parents and call the callback */
 			if (!menu->flags.buttoned && (!menu->flags.app_menu || menu->parent != NULL)) {
 				closeCascade(menu);
 			} else {
@@ -2234,7 +2234,7 @@ static void menuTitleMouseDown(WCoreWindow * sender, void *data, XEvent * event)
  * closed when the button is clicked.
  *
  * Side effects:
- * 	The closed menu is reinserted at it's parent menus
+ * 	The closed menu is reinserted at its parent menus
  * cascade list.
  *----------------------------------------------------------------------
  */
