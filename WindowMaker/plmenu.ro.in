@@ -91,11 +91,11 @@
     ("Gradient Vişiniu",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
    ("Imagini", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
-   ),   
+   ),
   ("Salvează Tema", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
   ("Salvează Setul de Iconiţe", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\""),
   ("Utilitar de Configurare", EXEC, "#wprefs#")
-  ), 
+  ),
  ("Ieşire",
   ("Repornire", RESTART),
   ("Porneşte BlackBox", RESTART, blackbox),

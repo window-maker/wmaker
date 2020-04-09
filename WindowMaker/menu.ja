@@ -7,9 +7,9 @@
  *
  * <Title> とはメニューのタイトルに使用される文字列です。スペースを含む
  *      場合には " で囲んでください。
- * 
  *
- * <Command> は以下のものが使えます: 
+ *
+ * <Command> は以下のものが使えます:
  *	MENU - メニュー(サブメニュー)の定義の開始を示します。
  *	OPEN_MENU - ファイル,パイプ,ディレクトリの内容(それぞれのファイルの
  *		    前処理に指定したコマンドを使用することも可能)から
@@ -27,7 +27,7 @@
  *	SHOW_ALL - ハイドされていた全てのウィンドウを表示します。
  *	HIDE_OTHERS - ワークスペース上の現在あるいは一番最近フォーカス
  *		      されたウィンドウを除く全てのウィンドウをハイドします。
- *		
+ *
  *	SAVE_SESSION - デスクトップの現在の状態をセーブします。現在の状態と
  *		       とは、全ての実行中のアプリケーション、それらのヒント
  *		       (ジオメトリ,位置,どのワークスペースに存在するか,
@@ -88,7 +88,7 @@
  *	"KTerm" EXEC kterm
  *		// /usr/openwin/bin中のファイルでサブメニューを作る
  *	"XView apps" OPEN_MENU "/usr/openwin/bin"
- *		// 異なるディレクトリのX11アプリケーションを表示 
+ *		// 異なるディレクトリのX11アプリケーションを表示
  *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// 背景の画像をセットする。
  *	"背景" OPEN_MENU $HOME/images /usr/share/images WITH wmsetbg -u -t
@@ -107,7 +107,7 @@
 		"プロセス一覧" EXEC xterm -e top
 		"マニュアルブラウザ" EXEC xman
 	"情報" END
-	"KTerm" EXEC kterm -sb 
+	"KTerm" EXEC kterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white
 	"ワークスペース" WORKSPACE_MENU
 	"アプリケーション" MENU
@@ -120,7 +120,7 @@
 		"X File Manager" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(Enter file to view)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)
   		"TkDesk" EXEC tkdesk
@@ -129,7 +129,7 @@
 		"Mule" EXEC mule
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC kterm -e vi

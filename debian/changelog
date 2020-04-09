@@ -440,7 +440,7 @@ wmaker (0.95.1+20120131-1) unstable; urgency=low
 wmaker (0.95.0+20111028-4) unstable; urgency=low
 
   * libpng12-dev dependencies changed to libpng-dev. [Closes: #648123]
-  * wterm package suggestion removed. 
+  * wterm package suggestion removed.
   * Menu shows "Run..." option. [Closes: #165075]
     Thanks to Andreas Tscharner for their patch.
   * Menu shows the background files [Closes: #655122]
@@ -648,7 +648,7 @@ wmaker (0.92.0-6) unstable; urgency=medium
 wmaker (0.92.0-5.3) unstable; urgency=low
 
   * Non-maintainer upload.
-    Fix library search path: Add XLFLAGS to src/Makefile.am and 
+    Fix library search path: Add XLFLAGS to src/Makefile.am and
     util/Makefile.am. Thanks to Goswin von Brederlow for the patch.
     (Closes: #358540)
 
@@ -657,7 +657,7 @@ wmaker (0.92.0-5.3) unstable; urgency=low
 wmaker (0.92.0-5.2) unstable; urgency=low
 
   * Non-maintainer upload.
-  * Add libxinerama-dev to the list of build dependencies. 
+  * Add libxinerama-dev to the list of build dependencies.
     (Closes: #349524, #349466)
 
  -- Frederik Schüler <fs@debian.org>  Tue, 24 Jan 2006 16:43:03 +0000
@@ -910,7 +910,7 @@ wmaker (0.80.2-0.4) unstable; urgency=medium
   * Add patch 12_wm_focus.diff (closes: #203817). Thanks to Alexis S. L.
     Carvalho, Alexey Spiridonov and Julien Wajsberg.
   * debian/wmaker.menu-method, debian/appearance.menu-method,
-    debian/wmakerpl.menu-method: 
+    debian/wmakerpl.menu-method:
     + Change menu-methods to mark GNUSTEP_USER_ROOT as an absolute path.
       Together with menu 2.1.16, this will fix bugs #252637 and #252891.
 
@@ -928,21 +928,21 @@ wmaker (0.80.2-0.2) unstable; urgency=low
 
   * NMU with maintainer approval (Thanks Marcelo!)
   * configure.ac: AM_INIT_AUTOMAKE: bump version to 0.80.2 since upstream
-    forgot to do it (closes: #250018, #250326). 
+    forgot to do it (closes: #250018, #250326).
   * debian/appearance.menu-method: (closes: #250315)
     + Add support for GNUSTEP_USER_ROOT, thanks Patrice Neff.
   * util/wmchlocale.in: (closes: #232258)
     + fix typo preventing script to start, thanks Dirk Schulz.
   * debian/wmaker.menu:
     + Move Exit and Exit Session at top-level (closes: #43887).
-    + Move other needs=wmaker entries to WindowManagers/Modules 
+    + Move other needs=wmaker entries to WindowManagers/Modules
       (closes: #92265).
-  * debian/wmaker.menu-method: 
+  * debian/wmaker.menu-method:
     + Use SHEXEC instead of EXEC (closes: #154671).
   * doc/wmaker.1x: (closes: #115682)
     + Remove duplicate pixmap path. Thanks Daniel Bonniot.
   * debian/rules: get rid of /usr/X11R6/bin/wmaker symlink.
-    
+
  -- Bill Allombert <ballombe@debian.org>  Mon, 31 May 2004 08:58:54 +0200
 
 wmaker (0.80.2-0.1) unstable; urgency=low
@@ -952,13 +952,13 @@ wmaker (0.80.2-0.1) unstable; urgency=low
   * This version include the fix to wrlib/raster.c.
   * Build with current libtool (1.5.6-1).
   * src/Makefile.am: Fix FTBFS with new libtool.
-    + Add @LIBRARY_SEARCH_PATH@. 
-  * debian/wmaker.menu-methods: 
+    + Add @LIBRARY_SEARCH_PATH@.
+  * debian/wmaker.menu-methods:
     + Add outputencoding="ISO-8859-1" (closes: #234587).
     + Add support for GNUSTEP_USER_ROOT (closes: #192741, #243612).
     + Use title() not $title and convert " to '.
   * debian/wmaker.menu: quote 'needs' fields. (27 lintian warnings)
-  * debian/control: 
+  * debian/control:
     + Add Conflicts with menu (<<2.1.10) (needed for shell()).
     + Remove broken link in wmaker description (closes: #196936), thanks Jay
       Bonci.
@@ -966,7 +966,7 @@ wmaker (0.80.2-0.1) unstable; urgency=low
     + Remove extraneous comma in Uploaders: field.
     + Set libpng build-dependency to libpng12-dev (>= 1.2.5.0-4)
       (closes: #165139).
-    + Apply patch from Kevin B. McCarty for more fine grained X11 deps. 
+    + Apply patch from Kevin B. McCarty for more fine grained X11 deps.
       (closes: #241520).
     + Change section of -dev packages to libdevel to match overrides file.
     + Bump Standard-Version to 3.6.1.
@@ -975,10 +975,10 @@ wmaker (0.80.2-0.1) unstable; urgency=low
     + Apply patch by Kevin B. McCarty to handle spaces in GNUSTEP_USER_ROOT.
       (closes: #220497).
   * debian/wmaker.desktop: Added (closes: #241554), thanks Sylvain Le Gall.
-    + DISCLAIMER: This should not be construed as an endorsement of 
+    + DISCLAIMER: This should not be construed as an endorsement of
       /usr/share/xsessions, however. see the comments in #241554.
-  * debian/rules: 
-    + Install wmaker.desktop in /usr/share/xsessions. 
+  * debian/rules:
+    + Install wmaker.desktop in /usr/share/xsessions.
     + Add --noscripts to dh_installmenu since we handle them manually.
   * debian/changelog: convert to UTF-8.
     + Remove obsolete user emacs settings (5 lintian warnings).
@@ -993,7 +993,7 @@ wmaker (0.80.2-0.1) unstable; urgency=low
   * debian/libwraster2.postinst (2 lintian warnings)
     + Replace debhelper generated part by DEBHELPER token.
     + Fix "unkow" typo.
-  * debian/wmaker.postinst.tmpl, debian/wmaker.prerm: 
+  * debian/wmaker.postinst.tmpl, debian/wmaker.prerm:
     + Remove /usr/share/doc transition code. (1 lintian warning)
   * debian/wmaker.postinst.tmpl, debian/wmaker.prerm, debian/wmaker.preinst:
     + Add DEBHELPER token. (3 lintian warnings)
@@ -1244,7 +1244,7 @@ wmaker (0.65.0-2) unstable; urgency=low
  -- Marcelo E. Magallon <mmagallo@debian.org>  Sat,  2 Jun 2001 22:26:18 +0200
 
 wmaker (0.65.0-1) unstable; urgency=low
- 
+
   * New upstream version (AYBABTU)
   * This version fixes the speckles on PowerPC (closes bug#79272)
   * debian/rules: added versioned dependency for libwraster2.
@@ -1375,7 +1375,7 @@ wmaker (0.62.1-2) unstable; urgency=low
 
   * debian/Debian.jpg.uu cropped to have a 4/3 aspect ratio
   * src/misc.c: removed code that inserts -I<path to current file> in the
-    preprocessor arguments, it's not required as that is what 
+    preprocessor arguments, it's not required as that is what
     '#include "foo"' does (closes: bug#76317)
   * debian/manpages/wmaker.1x: removed Debian options, there aren't any
     of them now. (closes: bug#76260)
@@ -1421,7 +1421,7 @@ wmaker (0.61.1-3) frozen; urgency=low
   * Added calls to x-terminal-emulator instead of xterm in
     default settings.
   * Cleaned up the control file.
-  * 
+  *
 
  -- Chris McKillop <cdm@debian.org>  Tue,  1 Feb 2000 00:42:12 -0500
 
@@ -1731,7 +1731,7 @@ wmaker (0.51.0-1) unstable; urgency=low
 
 wmaker (0.50.2-0.0.4) unstable; urgency=low
 
-  * Really fixed the '%a(blah)' bug 
+  * Really fixed the '%a(blah)' bug
 
  -- Marcelo E. Magallon <mmagallo@debian.org>  Mon, 11 Jan 1999 18:11:52 -0600
 
@@ -2250,7 +2250,7 @@ wmaker (0.15.0-0) unstable; urgency=low
   * New upstream version available. New features: The Fiend is gone. The
     Clip is here. Theme support improved. Better dithering, performs
     better on low end systems. Workspaces are more independent of each
-    other. 
+    other.
   * Rearranged directory layout. Should support themes better. Is not
     really FSSTND complaint, because the FSSTND doesn't really say
     anything about /usr/share, but it goes better with the FHS.
@@ -2595,7 +2595,7 @@ wmaker (0.4.3-1) unstable; urgency=low
 
 wmaker (0.4.2-1) unstable; urgency=low
 
-  * Added dockapp script missing in upstream tarball. 
+  * Added dockapp script missing in upstream tarball.
   * New upstream release.
 
  -- Neil A. Rubin <nar5@po.cwru.edu>  Tue, 27 May 1997 11:13:00 -0400

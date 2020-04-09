@@ -7,20 +7,20 @@
  *
  * <Title> is any string to be used as title. Must be enclosed with " if it
  * 	has spaces
- * 
+ *
  * SHORTCUT specifies a shortcut for that item. <Shortcut> has the
- * same syntax of the shortcuts key options in the 
+ * same syntax of the shortcuts key options in the
  * ~/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
  *
  * You can't specify a shortcut for a MENU or OPEN_MENU entry.
- * 
- * <Command> one of the valid commands: 
+ *
+ * <Command> one of the valid commands:
  *	MENU - starts (sub)menu definition
  *	END  - end (sub)menu definition
  *	OPEN_MENU - opens a menu from a file, pipe or directory(ies) contents
  *		    and eventually precede each with a command.
  *	WORKSPACE_MENU - adds a submenu for workspace operations. Only one
- *		    workspace_menu is allowed. 		
+ *		    workspace_menu is allowed.
  *	EXEC <program> - executes an external program
  *	EXIT - exits the window manager
  *	RESTART [<window manager>] - restarts WindowMaker or start another
@@ -124,7 +124,7 @@
 		"X 檔案管理員" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(GhostView,輸入要檢視的檔案)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(輸入要檢視的 PDF)
   		"TkDesk" EXEC tkdesk
@@ -132,7 +132,7 @@
 	"編輯器" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi

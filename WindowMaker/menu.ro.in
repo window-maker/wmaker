@@ -7,20 +7,20 @@
  *
  * <Title> is any string to be used as title. Must be enclosed with " if it
  * 	has spaces
- * 
+ *
  * SHORTCUT specifies a shortcut for that item. <Shortcut> has the
- * same syntax of the shortcuts key options in the 
+ * same syntax of the shortcuts key options in the
  * $HOME/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
  *
  * You can't specify a shortcut for a MENU or OPEN_MENU entry.
- * 
- * <Command> one of the valid commands: 
+ *
+ * <Command> one of the valid commands:
  *	MENU - starts (sub)menu definition
  *	END  - end (sub)menu definition
  *	OPEN_MENU - opens a menu from a file, pipe or directory(ies) contents
  *		    and eventually precede each with a command.
  *	WORKSPACE_MENU - adds a submenu for workspace operations. Only one
- *		    workspace_menu is allowed. 		
+ *		    workspace_menu is allowed.
  *	EXEC <program> - executes an external program
  *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - exits the window manager
@@ -79,7 +79,7 @@
  *			optional prompt	and do substitution with what you typed
  * %w - substitute with XID for the current focused window
  * %W - substitute with the number of the current workspace
- * 
+ *
  * You can override special characters (as % and ") with the \ character:
  * ex: xterm -T "\"Hello World\""
  *
@@ -114,7 +114,7 @@
 		"Navigator de Pagini Man" EXEC xman
 	"Informaţii" END
 	"Execută..." SHEXEC %a(Execută,Introduceţi o comandă:)
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn -misc-fixed-medium-*-*--*-*-*-*-*-*-iso8859-2 -fb -misc-fixed-medium-*-*--*-*-*-*-*-*-iso8859-2
 	"Spaţii de Lucru" WORKSPACE_MENU
 	"Aplicaţii" MENU
@@ -127,7 +127,7 @@
 		"Manager de Fişiere" EXEC xfm
 		"Fisiere OffiX" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(GhostView,Enter file to view)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobar,Enter PDF to view)
   		"TkDesk" EXEC tkdesk
@@ -135,7 +135,7 @@
 	"Editoare" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi

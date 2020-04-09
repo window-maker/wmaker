@@ -91,10 +91,10 @@
     ("Weinfarben schattiert",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
    ("Bilder", OPEN_MENU, "-noext /usr/local/share/WindowMaker/Backgrounds $(HOME)/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
-   ),   
+   ),
   ("Thema speichern", SHEXEC, "getstyle -t $(HOME)/GNUstep/Library/WindowMaker/Themes/\"%a(Themenname)\""),
   ("Iconsatz speichern", SHEXEC, "geticonset $(HOME)/GNUstep/Library/WindowMaker/IconSets/\"%a(Iconsatz-Name)\"")
-  ), 
+  ),
  ("Beenden",
   ("Neustart", RESTART),
   ("BlackBox starten", RESTART, blackbox),

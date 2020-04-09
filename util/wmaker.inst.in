@@ -35,7 +35,7 @@ make_script() {
 	ISCRIPT="$1"
 
 	cat << EOF >> "$ISCRIPT"
-# Window Maker default X session startup script 
+# Window Maker default X session startup script
 
 PATH="\$PATH:$BINDIR"
 

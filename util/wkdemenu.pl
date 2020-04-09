@@ -30,7 +30,7 @@
 # all of the KDE related items found. The script only needs to be run when/if
 # KDE is updated.
 #
-# 
+#
 # Installation and Configuration:
 #
 # 1) If /usr/bin/perl is not the location of the perl binary on your system,
@@ -123,7 +123,7 @@
 # -----
 #
 # Programmatically determine the system location for the KDE menu
-# directory. 
+# directory.
 #
 # Find a better way to parse the Exec= lines. In the short term,
 # provide a user mechanism for generating exceptions to the curtailing
@@ -150,7 +150,7 @@ $prefix="/usr";
 $basedir = $prefix."/share/applnk";
 
 # Terminal to use. May be specified on the command line with the -t
-# switch. 
+# switch.
 $term = "xterm";
 
 # Xmessage command line to invoke (can vary platform to platform)
@@ -283,7 +283,7 @@ sub process_dir {
   # contents must be split. Directories are added to one array, files
   # to a second. The lists are then sorted alphabetically by name and
   # combined into a single list for processing by the rest of the
-  # subroutine. 
+  # subroutine.
   while (defined($file = readdir(TLD))) {
     next if $file =~ /^\./;
     if (-d "$path/$file") {

@@ -7,20 +7,20 @@
  *
  * <Titel> is elke tekenreeks te gebruiken als titel. Moet tussen " staan als het
  * 	spaties heeft.
- * 
+ *
  * SHORTCUT geeft een sneltoets op voor die ingang. <Sneltoets> heeft
  * dezelfde opmaak als de sneltoetsopties in het
  * $HOME/GNUstep/Defaults/WindowMaker bestand, zoals RootMenuKey of MiniaturizeKey.
  *
  * U kunt geen sneltoets opgeven voor een MENU- of OPEN_MENU-onderdeel.
- * 
- * <Commando> een van de geldige commando's: 
+ *
+ * <Commando> een van de geldige commando's:
  *	MENU - begint (sub)menubepaling
  *	END  - beëindigt (sub)menubepaling
  *	OPEN_MENU - opent een menu uit een bestand, 'pipe' of map(pen)inhoud,
  *		    en gaat eventueel elk vooraf met een commando.
  *	WORKSPACE_MENU - voegt een submenu voor werkruimtehandelingen toe. Slechts één
- *		    workspace_menu is toegestaan. 		
+ *		    workspace_menu is toegestaan.
  *	EXEC <programma> - voert een extern programma uit
  *	SHEXEC <commando> - voert een 'shell'-commando uit (zoals gimp > /dev/null)
  *	EXIT - sluit de vensterbeheerder af
@@ -87,7 +87,7 @@
  *			optionele aanwijzing, en wordt vervangen door wat u intypt
  * %w - wordt vervangen door XID voor het actuele gefocust venster
  * %W - wordt vervangen door het nummer van de actuele werkruimte
- * 
+ *
  * U kunt speciale karakters (zoals % en ") uitschakelen met het \-teken:
  * vb.: xterm -T "\"Hallo Wereld\""
  *
@@ -122,7 +122,7 @@
 		"Handleidingbrowser" EXEC xman
 	"Info" END
 	"Uitvoeren..." SHEXEC %a(Uitvoeren,Typ uit te voeren commando:)
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Mozilla Firefox" EXEC firefox
 	"Werkruimten" WORKSPACE_MENU
 	"Programma's" MENU
@@ -137,12 +137,12 @@
 			"Rekenblad" EXEC oocalc
 			"Draw" EXEC oodraw
 			"Impress" EXEC ooimpress
-		"OpenOffice.org" END 
+		"OpenOffice.org" END
 
 		"Tekstbewerkers" MENU
 			"XEmacs" EXEC xemacs
 			"Emacs" EXEC emacs
-			"XJed" EXEC xjed 
+			"XJed" EXEC xjed
 			"VI" EXEC xterm -e vi
 			"GVIM" EXEC gvim
 			"NEdit" EXEC nedit

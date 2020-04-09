@@ -417,7 +417,7 @@ AC_CHECK_HEADERS([sys/inotify.h],
     [AC_DEFINE([HAVE_INOTIFY], [1], [Check for inotify])])
 
 
-dnl Check for syslog 
+dnl Check for syslog
 dnl ================
 dnl It is used by WUtil to log the wwarning, werror and wfatal
 AC_CHECK_HEADERS([syslog.h], [AC_DEFINE([HAVE_SYSLOG], [1], [Check for syslog])])
@@ -479,7 +479,7 @@ AC_SUBST(X_LIBRARY_PATH)
 
 
 dnl Decide which locale function to use, setlocale() or _Xsetlocale()
-dnl by MANOME Tomonori 
+dnl by MANOME Tomonori
 dnl ===========================================
 WM_I18N_XLOCALE
 

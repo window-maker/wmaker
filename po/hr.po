@@ -984,7 +984,7 @@ msgid ""
 "windows that have their WM_CLASS property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"Kada bude snimljeno, konfiguracija će\n" 
+"Kada bude snimljeno, konfiguracija će\n"
 "biti primjenjena na sve prozore koji\n"
 "imaju svoju WM_CLASS postavku\n"
 "postavljenu na gore navedeno ime."
@@ -1118,77 +1118,77 @@ msgid "invalid data in selection"
 msgstr "krivi podaci u odabiru"
 # msgid "could not create workspace submenu for window menu"
 # msgstr "ne mogu kreirati radni prostor podizbornik za prozor izbornik"
-# 
+#
 # msgid "Floating Dock"
 # msgstr "Plutajući dock"
-# 
+#
 # msgid "Program \"%s\" not found or cannot be executed."
 # msgstr "Program \"%s\" ne može biti nađen ili izvršen."
-# 
+#
 # msgid "Invalid justification type \"%s\". Should be Left, Center or Right"
 # msgstr "Pogrešan tip poravnanja \"%s\". Trebao bi biti Left, Center ili Right"
-# 
+#
 # msgid "Invalid colormap focus mode \"%s\". Should be Manual or Auto."
 # msgstr "Pogrešni colormap fokus mod \"%s\". Trebao bi biti Manual ili Auto."
-# 
+#
 # msgid "Invalid geometry display type \"%s\". Should be Center, Corner, Floating or Line."
 # msgstr "Pogrešni tip geometry prikaza \"%s\". Trebao bi biti Center, Corner, Floating ili Line."
-# 
+#
 # msgid "Invalid window placement mode \"%s\". Should be Auto, Cascade, Random or Manual."
 # msgstr "Pogrešni window placement mod \"%s\". Trebao bi biti Auto, Cascade, Random ili Manual."
-# 
+#
 # msgid "Invalid focus mode \"%s\". Should be Manual, Auto or Sloppy."
 # msgstr "Pogrešni fokus mod \"%s\". Trebao bi biti Manual, Auto ili Sloppy."
-# 
+#
 # msgid "Invalid mouse button \"%s\". Should be Left, Middle, Right or Button1 through Button5"
 # msgstr "Pogrešno dugme miša \"%s\". Trebalo bi biti Left, Middle, Right ili Button1 do Button5."
-# 
+#
 # msgid "Invalid iconification style \"%s\". Should be Zoom, Twist, Flip or None"
 # msgstr "Krivi stil ikonifikacije \"%s\". Trebao bi biti Zoom, Twist, Flip ili None"
-# 
+#
 # msgid "Invalid speed \"%s\". Should be UltraFast, Fast, Medium, Slow or UltraSlow."
 # msgstr "Pogrešna brzina \"%s\". Trebala bi biti UltraFast, Fast, Medium, Slow ili UltraSlow."
-# 
+#
 # msgid "Floating Clip"
 # msgstr "Plutajući Clip"
-# 
+#
 # msgid "Invalid icon Position \"%s\". Should be one of blv, blh, brv, brh, tlv, tlh, trv, trh"
 # msgstr "Kriva pozicija ikone \"%s\". Trebala bi biti: blv, blh, brv, brh, tlv, tlh, trv ili trh"
-# 
+#
 # msgid ""
 # "could not find user GNUstep directory.\n"
 # "Make sure you have installed WindowMaker correctly and run wmaker.inst"
 # msgstr ""
 # "ne mogu naći korisnikov GNUstep direktorij.\n"
 # "Provjerite da li ste ispravno instalirali WinowMaker i pokrenite wmaker.inst"
-# 
+#
 # msgid "Hide Others"
 # msgstr "Sakrij ostale"
-# 
+#
 # msgid "Exiting...\n"
 # msgstr "Izlazim...\n"
-# 
+#
 # msgid "%s:could not find menu file \"%s\""
 # msgstr "%s:ne mogu naći datoteku izbornika \"%s\""
-# 
+#
 # msgid "%s:could not access menu \"%s\""
 # msgstr "%s:ne mogu pristupiti izborniku \"%s\""
-# 
+#
 # msgid "invalid kbd shortcut specification \"%s\""
 # msgstr "pogrešna specifikacija kbd kratice \"%s\""
-# 
+#
 # msgid "invalid key modifier \"%s\""
 # msgstr "pogrešni modifier \"%s\""
-# 
+#
 # msgid "Could not find icon file specified for this window"
 # msgstr "Ne mogu naći ikonu specificiranu za ovaj prozor"
-# 
+#
 # msgid "could not load clip tile image"
 # msgstr "ne mogu učitati image za pozadinu clipa"
-# 
+#
 # msgid "invalid key in shortcut \"%s\""
 # msgstr "krivi ključ u kratici \"%s\""
-# 
+#
 # msgid "not enough memory to open window inspector panel"
 # msgstr "premalo memorije za otvaranje window inspector panela"
-# 
+#

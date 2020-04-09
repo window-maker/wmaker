@@ -2,14 +2,14 @@
 
 AUTOMAKE_OPTIONS =
 
-noinst_PROGRAMS = wtest wmquery wmfile testmywidget 
+noinst_PROGRAMS = wtest wmquery wmfile testmywidget
 
 LDADD= $(top_builddir)/WINGs/libWINGs.la $(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/WINGs/libWUtil.la \
-	@XFTLIBS@ @INTLIBS@ @XLIBS@ 
+	@XFTLIBS@ @INTLIBS@ @XLIBS@
 
 
-testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h 
+testmywidget_SOURCES = testmywidget.c mywidget.c mywidget.h
 
 wtest_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.la
 

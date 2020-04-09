@@ -8,21 +8,21 @@
  *
  * <Tytuł> Tytuł może być dowolnym ciągiem znaków. Jeśli będą w nim występować
  *         spacje umieśc go w cudzysłowie np. "Tytuł ze spacją"
- * 
+ *
  * SHORTCUT Definiowanie skrótu.
  * <Skrót> Nazwa rodzaju skrótu umieszczonego w pliku
- *         $HOME/GNUstep/Defaults/WindowMaker, tak jak RootMenuKey 
+ *         $HOME/GNUstep/Defaults/WindowMaker, tak jak RootMenuKey
  *         lub MiniaturizeKey.
  *
  * Skróty mogą występować w sekcji MENU lub OPEN_MENU .
- * 
- * <Komenda> jedna z dostępnych komend: 
- *	MENU - rozpoczęcie definicji (pod)menu 
- *	END  - zakończenie definicji (pod)menu 
+ *
+ * <Komenda> jedna z dostępnych komend:
+ *	MENU - rozpoczęcie definicji (pod)menu
+ *	END  - zakończenie definicji (pod)menu
  *	OPEN_MENU - generowanie podmenu na podstawie podanego katalogu,
  *              umieszczając w nim pliki wykonywalne i podkatalogi.
  *	WORKSPACE_MENU - Dodanie podmenu zawierającego aktywne pulpity. Tylko
- *		             jedno workspace_menu jest potrzebne. 		
+ *		             jedno workspace_menu jest potrzebne.
  *	EXEC <program> - wykonanie jakiegokolwiek programu
  *	EXIT - wyjście z menadżera okien
  *	RESTART [<window manager>] - restart WindowMakera albo start innego
@@ -51,12 +51,12 @@
  * ** Opcje w lini komend EXEC:
  * %s - znak jest zastepowany przez text znajdujacy sie w ,,schowku''
  * %a(tytuł[,komunikat]) - otwiera dodatkowe okno o tytule tytuł, komunikacie
- *                         komunikat i czeka na podanie parametrów, które 
+ *                         komunikat i czeka na podanie parametrów, które
  *                         zostaną wstawione zamiast %a. Niestety nie udalo mi
- *                         się uzyskać polskich fontów w tej pocji :( 
+ *                         się uzyskać polskich fontów w tej pocji :(
  * %w - znak jest zastepowany przez XID aktywnego okna
  * %W - znak jest zastepowany przez numer aktywnego pulpitu
- * 
+ *
  * Aby używać specjalnych znaków ( takich jak % czy " ) należy poprzedzic je znakiem \
  * np. :xterm -T "\"Witaj Świecie\""
  *
@@ -79,7 +79,7 @@
  * "Test" END
  *
  * Jeżeli zamiast polskich fontów są jakieś krzaczki należy wyedetować pliki
- * $HOME/GNUstep/Defaults/WMGLOBAL i $HOME/GNUstep/Defaults/WindowMaker,  
+ * $HOME/GNUstep/Defaults/WMGLOBAL i $HOME/GNUstep/Defaults/WindowMaker,
  * lub wejść w menu Konfiguracja.
  * Aby uzyskać polskie znaki należy uzupełnić definicje fontów.
  * np. zamienić
@@ -92,10 +92,10 @@
  *
  * i wszędzie tam gdzie występuje podobna definicja.
  */
-                  
+
 
 #include "wmmacros"
-#define ULUB_EDYTOR vi 
+#define ULUB_EDYTOR vi
 /* Jeśli nie lubisz edytora vi zmień na swój ulubiony edytor */
 #define ULUB_TERM xterm
 /* A tutaj ustaw swój ulubiony terminal */
@@ -109,18 +109,18 @@
 		"Lista Procesów"         EXEC ULUB_TERM -T "Lista Procesów" -e top
 		"Przeglądarka Manuali"   EXEC xman
 	"Informacja" END
-	
-	"Konfiguracja" MENU	
+
+	"Konfiguracja" MENU
 		"Edycja menu"       EXEC ULUB_TERM -T "Edycja menu" -e ULUB_EDYTOR $HOME/GNUstep/Library/WindowMaker/menu
 		"Ustawienie fontów" EXEC ULUB_TERM -T "Ustawienie fontów" -e ULUB_EDYTOR $HOME/GNUstep/Defaults/WMGLOBAL
 		"Konfiguracja"      EXEC ULUB_TERM -T "Konfiguracja" -e ULUB_EDYTOR $HOME/GNUstep/Defaults/WindowMaker
 	"Konfiguracja" END
-	
+
 	"Uruchom..." EXEC %a(Uruchom,Wpisz komende do uruchomienia:)
-	"Terminal"   EXEC ULUB_TERM -T "Mój ulubiony terminal" -sb 
+	"Terminal"   EXEC ULUB_TERM -T "Mój ulubiony terminal" -sb
 	"Edytor"     EXEC ULUB_TERM -T "Moj ulubiony edytor" -e ULUB_EDYTOR %a(Edytor,Podaj plik do edycji:)
 	"Pulpity"    WORKSPACE_MENU
-	
+
 	"Aplikacje" MENU
 		"Grafika" MENU
 			"Gimp"        EXEC gimp >/dev/null
@@ -145,15 +145,15 @@
 		"X Gnu debbuger"     EXEC xxgdb
 		"Xwpe"               EXEC xwpe
 	"Aplikacje" END
-	
+
 	"Internet" MENU
 		"Przeglądarki" MENU
-			"Netscape" EXEC netscape 
+			"Netscape" EXEC netscape
 			"Arena"    EXEC arena
 			"Lynx"     EXEC ULUB_TERM -e lynx %a(Lynx,Podaj URL:)
 		"Przeglądarki" END
 		"Programy pocztowe" MENU
-			"Pine" EXEC ULUB_TERM -T "Program pocztowy Pine" -e pine 
+			"Pine" EXEC ULUB_TERM -T "Program pocztowy Pine" -e pine
 			"Elm"  EXEC ULUB_TERM -T "Program pocztowy Elm" -e elm
 			"Xmh"  EXEC xmh
 		"Programy pocztowe" END
@@ -172,20 +172,20 @@
 	"Editory" MENU
 		"XFte"    EXEC xfte
 		"XEmacs"  EXEC xemacs || emacs
-		"XJed"    EXEC xjed 
+		"XJed"    EXEC xjed
 		"NEdit"   EXEC nedit
 		"Xedit"   EXEC xedit
 		"Editres" EXEC editres
 		"VI"      EXEC ULUB_TERM -e vi
 	"Editory" END
-	
+
 	"Dźwięk" MENU
 		"CDPlay"  EXEC workbone
 		"Xmcd"    EXEC xmcd 2> /dev/null
 		"Xplaycd" EXEC xplaycd
 		"Xmixer"  EXEC xmixer
 	"Dźwięk" END
-	
+
     "Gry" MENU
     	"Maze"      EXEC maze
     	"Karty "    EXEC spider
@@ -202,7 +202,7 @@
     	"xboing"    EXEC xboing -sound
     	"XBill"     EXEC xbill
     "Gry" END
-	
+
 	"Użytki" MENU
 		"Kalkulator"          EXEC xcalc
 		"Zegarek"             EXEC xclock

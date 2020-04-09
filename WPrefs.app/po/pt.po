@@ -1,5 +1,5 @@
 #
-# Mensagens do WPrefs.app traduzidas p/ Português 
+# Mensagens do WPrefs.app traduzidas p/ Português
 #
 # Update History:
 # Alfredo K. Kojima

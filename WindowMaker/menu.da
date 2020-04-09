@@ -7,13 +7,13 @@
  *
  * <Titel> er en tekst som anvendes som titel i menuen. Teksten
  * skal omgives med " hvis den indeholder mellemrum.
- * 
+ *
  * SHORTCUT angiver en genvej for menuobjektet. <Genvej> har samme
  * syntaks som genvejene i filen $HOME/GNUStep/Defaults/WindowMaker.
  *
  * Man kan ikke angive en genvej for kommandoerne MENU og OPEN_MENU.
- * 
- * <Kommando> kan være et af følgende: 
+ *
+ * <Kommando> kan være et af følgende:
  *      MENU - starter (under)menu definition.
  *      END  - afslutter (under)menu definition.
  *      OPEN_MENU - åbner en menu fra en fil, pipe eller indholdet af
@@ -109,8 +109,8 @@
                 "Manualer" EXEC xman
         "Info" END
 	"Kør..." SHEXEC "%a(Kør,Indtast kommando der skal udføres:)"
-        "XTerm" EXEC xterm -sb 
-        "Rxvt" EXEC rxvt -bg black -fg white 
+        "XTerm" EXEC xterm -sb
+        "Rxvt" EXEC rxvt -bg black -fg white
         "Arbejdsborde" WORKSPACE_MENU
         "Applikationer" MENU
                 "Grafik" MENU
@@ -122,7 +122,7 @@
                 "X Filhåndtering" EXEC xfm
                 "OffiX Files" EXEC files
                 "LyX" EXEC lyx
-                "Netscape" EXEC netscape 
+                "Netscape" EXEC netscape
                 "Ghostview" EXEC ghostview %a(GhostView,Indtast filnavn)
                 "Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat,Indtast PDF-filnavn)
                 "TkDesk" EXEC tkdesk
@@ -130,7 +130,7 @@
         "Tekstbehandling" MENU
                 "XFte" EXEC xfte
                 "Emacs" SHEXEC xemacs || emacs
-                "XJed" EXEC xjed 
+                "XJed" EXEC xjed
                 "NEdit" EXEC nedit
                 "Xedit" EXEC xedit
                 "VI" EXEC xterm -e vi

@@ -190,7 +190,7 @@ msgstr "неадпаведны лік аргументаў у спецыфіка
 #: ../src/defaults.c:2060
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
-msgstr 
+msgstr
 "дрэннае значэнне непразрыстасці для градыетнай тэкстуры \"%s\"."
 "Павінна быць [0..255]"
 

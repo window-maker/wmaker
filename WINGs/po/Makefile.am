@@ -71,7 +71,7 @@ POTFILES += \
 
 SUFFIXES = .po .mo
 
-.po.mo: 
+.po.mo:
 	$(AM_V_GEN)$(MSGFMT) -c -o $@ $<
 
 

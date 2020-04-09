@@ -16,7 +16,7 @@ libWMaker_la_SOURCES = 	\
 	event.c 	\
 	command.c	\
 	app.h		\
-	menu.h	
+	menu.h
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = wmlib.pc

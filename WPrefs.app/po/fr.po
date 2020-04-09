@@ -1,4 +1,4 @@
-# French Message file for WPrefs.app 
+# French Message file for WPrefs.app
 #
 # Update History:
 # Antoine Hulin <antoine.hulin@origan.fdn.org>

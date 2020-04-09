@@ -57,7 +57,7 @@ your own good.
 
 Notes
 -----
-1. Multibyte character support must be enabled in WindowMaker. 
+1. Multibyte character support must be enabled in WindowMaker.
 
 2. WindowMaker must also be started from a terminal program that can
 display the messages in that language, like xterm that supports Korean
@@ -66,7 +66,7 @@ characters.
 3. Uses iso8859-2 character set.
 
 
-Notes: 
+Notes:
 - if you update a translation of someone else, please contact the current
 maintainer, so that we don't have duplicate work. Also put a "history" log in
 the top of the file, like:

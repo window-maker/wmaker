@@ -3,10 +3,10 @@
 #
 # Initial translation
 #   Gudio Scholz <guido.scholz@bayernline.de>
-# 
+#
 # Adapted to versions 0.80 ff.
 #   Torsten Marek <shlomme@gmx.net>
-# 
+#
 
 msgid ""
 msgstr ""

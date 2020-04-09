@@ -24,14 +24,14 @@
  *	ARRANGE_ICONS - rydder opp i ikonene dine på skjermbildet.
  *	SHUTDOWN - Stenger ned alle X klienter og avslutter X tjeneren
  *	SHOW ALL - Viser alle skjulte vinduer på denne skjermen
- *	HIDE_OTHERS - skjuler alle vinduer på denne skjermen som ikke har 
+ *	HIDE_OTHERS - skjuler alle vinduer på denne skjermen som ikke har
  *		      fokus.
  *	SAVE_SESSION - 	lagrer desktop'en din som den ser ut. Dette inkluderer
  *			alle applikasjoner som kjører (størrelse, posisjon,
  *			arbeidsområde de er på, hvilken dock/binders de ble
  *			startet fra, og om de er minimert, shadet eller
  *			skjult. Lagrer også hvilket arbeidsområde brukeren
- * 			er på. Alt vil bli startet opp igjen hver gang 
+ * 			er på. Alt vil bli startet opp igjen hver gang
  *			windowmaker blir startet, fram til til SAVE_SESSION
  *			blir kalt igjen, eller CLEAR_SESSION blir kalt.
  *			Hvis SaveSessionOnExit = Yes; i WindowMaker domene
@@ -40,10 +40,10 @@
  *			og også CLEAR_SESSION (Se under).
  *	CLEAR_SESSION - resetter lagrede settinging fra SAVE_SESSION. Vil
  *			ikke ha noen effekt hvis SaveSessionOnExit er satt.
- *				
+ *
  * OPEN_MENU syntaks:
  *   1. Fil Meny beskrivelse
- *      // åpner fil.menu som må innholde en gyldig meny fil, og setter den 
+ *      // åpner fil.menu som må innholde en gyldig meny fil, og setter den
  *	// inn her.
  *	OPEN_MENU fil.menu
  *   2. Pipe meny beskrivelse
@@ -56,7 +56,7 @@
  *	// katalogene og alle kjørbare filer i dem, sortert alfabetisk.
  *	OPEN_MENU /en/katalog [/en/annen/katalog ....]
  *   4. Beskrivelse av katalog med kommando
- *	// Åpner en eller flere kataloger, og konstruerer en meny med alle 
+ *	// Åpner en eller flere kataloger, og konstruerer en meny med alle
  *	// katalogene og alle lesbare filer i dem. Setter kommando forran
  *	// hver av dem.
  *	OPEN_MENU /en/katalog [/en/annen/katalog ....] WITH kommando -args
@@ -72,7 +72,7 @@
  *
  * Du kan bruke \ tegnet for å skrive spesialtegn som vanlige bokstaver:
  * eksempel: xterm -T "\"Hallo Verden\""
- * 
+ *
  *
  * Du kan også bruke spesialsekvenser som i C, f.eks \n
  *
@@ -104,7 +104,7 @@
 		"Prosess Liste" EXEC xterm -e top
 		"Manual leser" EXEC stepman
 	"Info" END
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Arbeids-Områder" WORKSPACE_MENU
 	"Applikasjoner" MENU
@@ -117,7 +117,7 @@
 		"X Fil Behandler" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(Navnet på fila du vil se)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Skriv inn PDF\'en du ønsker)
   		"TkDesk" EXEC tkdesk
@@ -125,7 +125,7 @@
 	"Tekst Redigering" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi
@@ -188,7 +188,7 @@
 	"Avslutt"	MENU
 		"Restart" RESTART
 		"Start Afterstep" RESTART afterstep
-		"Avslutt WindowMaker..."  EXIT 
+		"Avslutt WindowMaker..."  EXIT
 		"Avslutt X11..." SHUTDOWN
 	"Avslutt" END
 "Applikasjoner" END

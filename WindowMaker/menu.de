@@ -8,7 +8,7 @@
 // <Title> ist ein Text, der als Titel benutzt werden soll. Falls er
 //	Leerzeichen enthält, muss er von " umgeben sein.
 //
-// <Command> eine der folgenden gültigen Anweisungen: 
+// <Command> eine der folgenden gültigen Anweisungen:
 //	MENU - beginnt (Unter)menüdefinition
 //	END  - beendet (Unter)menüdefinition
 //	EXEC <program> - führt ein externes Programm aus

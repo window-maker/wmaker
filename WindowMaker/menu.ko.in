@@ -1,7 +1,7 @@
 /*
- * Windowmaker를 위한 루트 메뉴 정의 
+ * Windowmaker를 위한 루트 메뉴 정의
  *
- * 사용법: 
+ * 사용법:
  *
  * <Title> [SHORTCUT <Shortcut>] <Command> <Parameters>
  *
@@ -14,13 +14,13 @@
  *
  * <Command> 사용가능한 명령어들
  *	MENU - (하부)메뉴 정의를 시작한다.
- *	END  - (하부)메뉴 정의를 마친다. 
+ *	END  - (하부)메뉴 정의를 마친다.
  *	OPEN_MENU - 파일이나 파이프 혹은 디렉토리 내용으로 부터 메뉴를 열고
  *		    명령어를 실행한다.
  *	WORKSPACE_MENU - 작업공간 제어에 관한 하부 메뉴를 추가한다.
- *	EXEC <program> - 외부 프로그램을 실행한다. 
+ *	EXEC <program> - 외부 프로그램을 실행한다.
  *	SHEXEC <command> - 쉘 명령을 실행한다. (예제: gimp > /dev/null)
- *	EXIT - 윈도우 매니저를 종료시킨다. 
+ *	EXIT - 윈도우 매니저를 종료시킨다.
  *	RESTART [<window manager>] - Windowmaker를 다시시작하거나 다른 윈도우
  *				     관리자를 실행시킨다.
  *	REFRESH - 화면을 다시 그린다.
@@ -34,14 +34,14 @@
  *		       화면상의 위치, 작업공간 번호, 그것들이 실행된 dock이나
  *		       클립 그리고 프로그램이 아이콘화되었는지 shade 형태
  *		       인지 혹은 숨겨졌는지의 여부이다. 또한 사용자가 현재
- *		       작업중인 워크스페이스도 저장된다. 이 모든 정보들은 
- *		       또다른 SAVE_SESSION이나 CLEAR_SEEION이 사용되기 전까지 
- *		       매번 윈도우메이커가 실행될 때마다 복원된다. 만일 
+ *		       작업중인 워크스페이스도 저장된다. 이 모든 정보들은
+ *		       또다른 SAVE_SESSION이나 CLEAR_SEEION이 사용되기 전까지
+ *		       매번 윈도우메이커가 실행될 때마다 복원된다. 만일
  *		       SaveSession OnExit = Yes; 로 설정되어 있으면 매번 윈도우
  *		       메이커가 종료될 때마다 자동적으로 세션의 내용을 저장하고
- *		       SAVE_SESSION 이나 CLEAR_SESSOIN 값은 무시된다. 
- *	CLEAR_SESSION - 이미 정장된 세션을 지운다. 이것은 SaveSessionOnExit가 
- *                      참인 경우에 효과를 미치지 않는다. 
+ *		       SAVE_SESSION 이나 CLEAR_SESSOIN 값은 무시된다.
+ *	CLEAR_SESSION - 이미 정장된 세션을 지운다. 이것은 SaveSessionOnExit가
+ *                      참인 경우에 효과를 미치지 않는다.
  *	INFO - 정보 패널을 보여준다.
  *
  * OPEN_MENU syntax:
@@ -65,9 +65,9 @@
  *	OPEN_MENU [options] /some/dir [/some/other/dir ...] WITH command -options
  *		옵션: -noext 파일 이름의 확장자를 없애고 보여준다.
  *
- * <Parameters> 는 실행할 프로그램이다. 
+ * <Parameters> 는 실행할 프로그램이다.
  *
- * ** EXEC의 명령어 라인에 대한 옵션: 
+ * ** EXEC의 명령어 라인에 대한 옵션:
  * %s - 현재 선택된 내용으로 바꾼다.
  * %a(title[,prompt]) - 입력 상자를 열고 사용자가 입력한 것으로
  *			메시지를 바꾼다.
@@ -81,7 +81,7 @@
  *
  * 각각의 MENU 문은 반드시 END와 쌍을 이루어야 한다.
  *
- * 예제: 
+ * 예제:
  *
  * "Test" MENU
  *	"XTerm" EXEC xterm
@@ -124,7 +124,7 @@
 			"하 이 텔" EXEC hanterm -T 하이텔 -n 하이텔 -e ztelnet home.hitel.net
 			"천 리 안" EXEC hanterm -T 천리안 -n 천리안 -e ztelnet chonllian.net
 			"가    우" SHEXEC gau || gaui
-		"네트워크" END 
+		"네트워크" END
 		"편 집 기" MENU
 			"VIM" EXEC hanterm -T VIM -n VIM -e vim
 			"이맥스" EXEC emacs

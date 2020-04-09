@@ -22,7 +22,7 @@ wdwrite_LDADD = $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
 wdread_LDADD = $(top_builddir)/WINGs/libWUtil.la $(liblist)
 
-wxcopy_LDADD = @XLFLAGS@ @XLIBS@ 
+wxcopy_LDADD = @XLFLAGS@ @XLIBS@
 
 wxpaste_LDADD = @XLFLAGS@ @XLIBS@
 

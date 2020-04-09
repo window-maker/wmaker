@@ -91,11 +91,11 @@
     ("Odtiene vínovej",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
    ("Obrázky", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
-   ),   
+   ),
   ("Uložiť tému", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(Theme name)\""),
   ("Uložiť sadu ikon", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(IconSet name)\""),
   ("Konfiguračný nástroj", EXEC, "#wprefs#")
-  ), 
+  ),
  ("Koniec",
   ("Reštartovať", RESTART),
   ("Spustiť BlackBox", RESTART, blackbox),

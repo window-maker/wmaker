@@ -388,13 +388,13 @@ Property lists handling code
 ----------------------------
 
 Code to handle property lists was added to WINGs. It is more robust
-than the libPropList code, mostly because some conflicting concepts 
+than the libPropList code, mostly because some conflicting concepts
 borrowed from UserDefaults (which libPropList use) are no longer used in
 the WINGs property lists code. These borrowed concepts conflicted with the
 retain/release mechanism of property lists and could lead in certain cases
 to segmentation faults when executing libPropList based code. But the worse
 part was that these libPropList problems were practically unsolvable without
-removing one of those conflicting concepts and without a complete redesign. 
+removing one of those conflicting concepts and without a complete redesign.
 The new WINGs property lists code is also better integrated with the other
 data types from WINGs and is actively maintained.
 
@@ -469,10 +469,10 @@ All WM...IconImage() functions operate on RImages
     and will also convert the RImage to a WMPixmap with a threshold of 128
     and will use that pixmap for the appicon image. If that doesn't satisfy
     you, you can make a call to WMSetApplicationIconPixmap() on your own to
-    set whatever WMPixmap you see fit for the appicon. 
+    set whatever WMPixmap you see fit for the appicon.
 
 - WMSetApplicationIconPixmap() will set the WMPixmap to be used for the
-    appicon and for the panels 
+    appicon and for the panels
 
 
 If you use only one of the above functions, the corresponding image/pixmap

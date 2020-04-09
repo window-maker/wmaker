@@ -18,11 +18,11 @@
  * No es pot especificar una combinació de tecles per a un MENU o un
  * OPEN_MENU
  *
- * <Comanda> pot ser un d'aquests comandes: 
+ * <Comanda> pot ser un d'aquests comandes:
  *      MENU - Comença la definició d'un submenú
  *      END  - Acaba la definició d'un submenú
  *      OPEN_MENU - Obre el contingut d'un menú desde un fitxer, una
- *                  canonada (pipe), o desde el contingut de un(s) 
+ *                  canonada (pipe), o desde el contingut de un(s)
  *                  directori(s) i eventualment pot precedir-li algun
  *                  comanda
  *      WORKSPACE_MENU - Afageix el menú de operacions del escriptori. Tan
@@ -38,16 +38,16 @@
  *      HIDE_OTHERS - Oculta totes les finestres de l'escriptori excepte la
  *                  actual (o la darrera que ha estat activa)
  *      SAVE_SESSION - Guarda l'estat actual de l'escriptori, que inclou
- *                  totes les aplicacions en execució, la seva geometria, la 
- *                  posició en pantalla, l'escriptori en que estaven, el dock 
- *                  o el clip desde on van ser executades, i si estaven 
+ *                  totes les aplicacions en execució, la seva geometria, la
+ *                  posició en pantalla, l'escriptori en que estaven, el dock
+ *                  o el clip desde on van ser executades, i si estaven
  *                  minimitzades, ocultes o plegades. També guarda l'escriptori
- *                  que és usat en aquest moment. Tot això serà restaurat el 
+ *                  que és usat en aquest moment. Tot això serà restaurat el
  *                  pròxim cop que s'arrenqui Window Maker fins que es faci un
  *                  altre SAVE_SESSION o CLEAR_SESSION. Si SaveSessionOnExit =
  *                  Yes; el fitxer de domini de Window Maker, llavors la sessió
- *                  es guardarà cada cop que es surt de Window Maker, 
- *                  sobreescribint qualsevol SAVE_SESSION o CLEAR_SESSION 
+ *                  es guardarà cada cop que es surt de Window Maker,
+ *                  sobreescribint qualsevol SAVE_SESSION o CLEAR_SESSION
  *                  (veure avall)
  *      CLEAR_SESSION - Borra qualsevol sessió guardada anteriorment. No té
  *                  cap efecte si SaveSessionOnExit és verdader
@@ -115,7 +115,7 @@
                 "Llista de Processos" EXEC xterm -e top
                 "Manual d'instruccions" EXEC xman
         "Informació" END
-        "XTerm" EXEC xterm -sb 
+        "XTerm" EXEC xterm -sb
         "Rxvt" EXEC rxvt -bg black -fg white -fn fixed
         "Escriptoris" WORKSPACE_MENU
         "Aplicacions" MENU
@@ -128,7 +128,7 @@
                 "X File Manager" EXEC xfm
                 "OffiX Files" EXEC files
                 "LyX" EXEC lyx
-                "Netscape" EXEC netscape 
+                "Netscape" EXEC netscape
                 "Ghostview" EXEC ghostview %a(Enter file to view)
                 "Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)
                 "TkDesk" EXEC tkdesk
@@ -136,7 +136,7 @@
         "Editors" MENU
                 "XFte" EXEC xfte
                 "XEmacs" SHEXEC xemacs || emacs
-                "XJed" EXEC xjed 
+                "XJed" EXEC xjed
                 "NEdit" EXEC nedit
                 "Xedit" EXEC xedit
                 "VI" EXEC xterm -e vi

@@ -1,6 +1,6 @@
 /*
  * Définition du menu de fond pour WindowMaker
- * 
+ *
  * La syntaxe est:
  *
  * <Titre> [SHORTCUT <Raccourci>] <Commande> <Paramètres>
@@ -47,7 +47,7 @@
  *
  *	SHOW_ALL		    Montre toutes les fenêtres sur le bureau
  *
- *	HIDE_OTHERS		    Cache toutes les fenêtres sur le 
+ *	HIDE_OTHERS		    Cache toutes les fenêtres sur le
  *				    bureau qui sont en arrière plan
  *
  *	SAVE_SESSION		    Sauve la l'état courant du bureau, cela
@@ -74,7 +74,7 @@
  *				    antérieure. Ceci n'aura aucun effet si
  *				    "SaveSessionOnExit" est égal à "Yes".
  *
- *	INFO_PANEL		    Affiche le panneau d'informations sur 
+ *	INFO_PANEL		    Affiche le panneau d'informations sur
  *				    WindowMaker.
  *
  *	LEGAL_PANEL		    Affiche le panneau d'informations sur
@@ -201,14 +201,14 @@
 		"XKill" EXEC xkill
 		"Sélections" EXEC xclipboard
 	"Utilitaires" END
-	
+
 	"Sélection" MENU
 		"Copier" SHEXEC echo '%s' | wxcopy
 		"Envoyer à" EXEC xterm -name mail -T "Pine" -e pine %s
 		"Naviguer" EXEC netscape %s
 		"Rechercher dans le manuel" SHEXEC MANUAL_SEARCH(%s)
 	"Sélection" END
-	
+
 	"Bureau" MENU
 		"Cacher les autres fenêtres" HIDE_OTHERS
 		"Montrer toutes les fenêtres" SHOW_ALL

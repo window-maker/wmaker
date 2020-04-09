@@ -3,7 +3,7 @@ wm-oldmenu2new - converts between the plain text file menu format to the
 
 bughint- gathers some information for bug reporting
 
-geticonset- outputs the current set of icon assignments. Good for making 
+geticonset- outputs the current set of icon assignments. Good for making
 	themes.
 
 setstyle- load style settings from a style file and setup WindowMaker
@@ -14,7 +14,7 @@ getstyle - gets current style settings and save into a file or create
 seticons- merges icon definitions into WMWindowAttributes file
 
 
-wmaker.inst- quick and dirty script to install necessary files from 
+wmaker.inst- quick and dirty script to install necessary files from
 	global configuration to user's directory. Look in the script to
 	adapt it to your site.
 

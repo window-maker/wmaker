@@ -934,9 +934,9 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 
 				shad_x = lastDock->x_pos + ix*wPreferences.icon_size;
 				shad_y = lastDock->y_pos + iy*wPreferences.icon_size;
-			  
+
 				XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
-			  
+
 				if (!ondock) {
 					XMapWindow(dpy, scr->dock_shadow);
 				}
@@ -945,7 +945,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 				lastDock = theNewDock; // i.e., NULL
 				if (ondock) {
 					XUnmapWindow(dpy, scr->dock_shadow);
-					/* 
+					/*
 					 * Leaving that weird comment for now.
 					 * But if we see no gap, there is no need to fill one!
 					 * We could test ondock first and the lastDock to NULL afterwards

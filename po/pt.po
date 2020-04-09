@@ -1,7 +1,7 @@
 # Portuguese message file for WindowMaker
 # Last Update: version 0.60.0
 #
-# Update History: 
+# Update History:
 # Alfredo Kojima
 # Eliphas Levy Theodoro <eliphas@conectiva.com.br>
 #

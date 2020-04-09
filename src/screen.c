@@ -907,7 +907,7 @@ void wScreenRestoreState(WScreen * scr)
 		state = WMGetFromPLDictionary(scr->session_state, dClip);
 		scr->clip_icon = wClipRestoreState(scr, state);
 	}
-	
+
 	if (!wPreferences.flags.nodrawer) {
 		if (!scr->dock->on_right_side) {
 			/* Drawer tile was created early in wScreenInit() -> wReadDefaults(). At

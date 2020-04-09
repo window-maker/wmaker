@@ -2,7 +2,7 @@
 # Copyright (C) 1999 Free Software Foundation, Inc.
 # Nikolaos Papagrigoriou <papanikos@freemail.gr>, 1998.
 #
-# 
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.3\n"

@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS =
 
 wpexecbindir = @wprefs_bindir@
 
-wpexecbin_PROGRAMS = WPrefs 
+wpexecbin_PROGRAMS = WPrefs
 
 wpdatadir = @wprefs_datadir@
 
@@ -48,7 +48,7 @@ WPrefs_SOURCES = \
 AM_CFLAGS =
 
 AM_CPPFLAGS = -DRESOURCE_PATH=\"$(wpdatadir)\" -DWMAKER_RESOURCE_PATH=\"$(pkgdatadir)\" \
-	 -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
+	 -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@
 
 WPrefs_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.la
 

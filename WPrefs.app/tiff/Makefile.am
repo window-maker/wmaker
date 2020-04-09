@@ -73,5 +73,5 @@ dist_tiffdata_DATA = \
 	windowfocus.tiff \
 	workspace.tiff \
 	workspacename.tiff \
-	xis.tiff 
+	xis.tiff
 endif

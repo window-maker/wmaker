@@ -7,13 +7,13 @@
  *
  * <Titel> är en sträng som du vill använda som titel i menyn. Strängen
  * måste omslutas med " om den innehåller mellanslag.
- * 
+ *
  * SHORTCUT anger en genväg för det menyalternativet. <Genväg> har likadan
  * syntax som genvägarna i filen $HOME/GNUStep/Defaults/WindowMaker.
  *
  * Man kan inte ange en genväg för kommandona MENU och OPEN_MENU.
- * 
- * <Kommando> kan vara ett av följande: 
+ *
+ * <Kommando> kan vara ett av följande:
  *	MENU - börjar (under)meny definition.
  *	END  - avslutar (under)meny definition.
  *	OPEN_MENU - öppnar en meny från en fil, pipe eller innehållet av
@@ -110,7 +110,7 @@
 		"Processlista" EXEC xterm -e top
 		"Manualläsare" EXEC xman
 	"Info" END
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Rxvt (fixed)" EXEC rxvt -bg black -fg white -fn fixed
 	"Rxvt (9x15)" EXEC rxvt -bg black -fg white -fn 9x15
 	"Arbetsbord" WORKSPACE_MENU
@@ -124,7 +124,7 @@
 		"X Filhanterare" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(Enter file to view)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Skriv in PDF-fil som ska visas)
   		"TkDesk" EXEC tkdesk
@@ -132,7 +132,7 @@
 	"Textredigerare" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi

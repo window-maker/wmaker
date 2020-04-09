@@ -1,6 +1,6 @@
 #include "wmmacros"
 
-Uiterlijk MENU 
+Uiterlijk MENU
   "Achtergrond" OPEN_MENU background.menu.nl
   "Stijlen" OPEN_MENU -noext  STYLES_DIR USER_STYLES_DIR WITH setstyle
   "Thema's" OPEN_MENU -noext  THEMES_DIR USER_THEMES_DIR WITH setstyle
@@ -8,5 +8,5 @@ Uiterlijk MENU
   "Iconenset opslaan" EXEC geticonset USER_ICON_SETS_DIR/"%a(Iconensetnaam)"
   "Thema opslaan" EXEC getstyle -p "%a(Themanaam)"
   "Voorkeurenhulpmiddel" EXEC #wprefs#
-Uiterlijk  END 
+Uiterlijk  END
 

@@ -8,7 +8,7 @@ as possible under X11.  It is the natural step after AfterStep.
 
 There are some changes in the paths, added support for Debian menu
 system, improved user configuration (from the sysadmin point of view).
- 
+
 To run Window Maker put this at the end of ~/.xsession:
 
 exec /usr/bin/wmaker

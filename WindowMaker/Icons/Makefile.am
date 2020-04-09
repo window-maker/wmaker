@@ -74,5 +74,5 @@ defsdata_DATA = \
 	xv.xpm
 
 
-EXTRA_DIST = $(defsdata_DATA) 
+EXTRA_DIST = $(defsdata_DATA)
 

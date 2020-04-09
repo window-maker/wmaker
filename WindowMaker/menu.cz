@@ -9,7 +9,7 @@
 // <Titulek> je jakýkoli řetěz znaků. Pokud obsahuje mezery musí být
 // 	uzavřen do uvozovek (")
 //
-// <Příkaz> může být jeden z následujících: 
+// <Příkaz> může být jeden z následujících:
 //	MENU - definice nové (sub)menu
 //	END  - konec definice nového menu
 //	EXEC <program> - provede se program
@@ -24,18 +24,18 @@
 //                    bylo naposledy zaměřeno)
 //
 // <Parameters> je program, který bude proveden.
-// 
-// Každý příkaz MENU musí mít odpovídající END. 
+//
+// Každý příkaz MENU musí mít odpovídající END.
 // následující text je česky, kódován ISO8859-2.
 #include <wmmacros>
 
 "Hlavní menu" MENU
-	"Správce oken" MENU	
+	"Správce oken" MENU
 		"Editace menu" SHEXEC xterm -T 'Editace menu' -e joe $HOME/GNUstep/Library/WindowMaker/menu
 	"Správce oken" END
 	"Info" MENU
 		"Info Panel..." INFO_PANEL
-		"Legal" LEGAL_PANEL	
+		"Legal" LEGAL_PANEL
 //		"Xosview" EXEC xosview
 		"Top"	EXEC xterm -e top
 		"Manuál" EXEC xman

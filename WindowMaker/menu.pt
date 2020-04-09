@@ -6,12 +6,12 @@
  * <Title> [SHORTCUT <tecla de atalho>] <Comando> <Parâmetros>
  *
  * <Title> é qualquer texto a ser usado como título. Deve estar entre aspas "
- * 
- * SHORTCUT especifica uma tecla de atalho para o item. <tecla de atalho> 
+ *
+ * SHORTCUT especifica uma tecla de atalho para o item. <tecla de atalho>
  * tem a mesma sintaxe das teclas de atalho em $HOME/GNUstep/Defaults/WindowMaker
  *
  * Não é possível especificar teclas de atalho para MENU ou OPEN_MENU
- * 
+ *
  * <Command> é um dos seguintes comandos:
  *	MENU - inicia definição de um (sub)menu
  *	END  - termina definição de um (sub)menu
@@ -22,7 +22,7 @@
  *	EXEC <programa> - executa um programa
  *	EXIT - termina o gerenciador de janelas
  *	SHEXEC <command> - executa comando de shell (ex.: gimp > /dev/null)
- *	RESTART [<gerenciador de janelas>] - reinicia o WindowMaker ou inicia 
+ *	RESTART [<gerenciador de janelas>] - reinicia o WindowMaker ou inicia
  *		 	outro gerenciador de janelas
  *	REFRESH - força repintagem da área de trabalho
  *	ARRANGE_ICONS - arruma os ícones na área de trabalho
@@ -33,13 +33,13 @@
  *	SAVE_SESSION - salva o estado da área de trabalho, o que inclui
  *		todos os programas em execução, informações relativas
  *		a posição, tamanho, área de trabalho onde se localizam,
- *		o dock ou clip de onde foi lançado e se a janela está 
+ *		o dock ou clip de onde foi lançado e se a janela está
  *		miniaturizada, shadeada ou hideada. Também salva qual a área
  *		de trabalho atual. Todas as informações serão restauradas
  *		até que se use o comando SAVE_SESSION de novo ou CLEAR_SESSION.
- *		Se SaveSessionOnExit = Yes; estiver definido no domínio 
- *		WindowMaker ($HOME/GNUstep/Defaults/WindowMaker), então o 
- *		salvamento da sessão é feito automaticamente quando o 
+ *		Se SaveSessionOnExit = Yes; estiver definido no domínio
+ *		WindowMaker ($HOME/GNUstep/Defaults/WindowMaker), então o
+ *		salvamento da sessão é feito automaticamente quando o
  *		WindowMaker finalizar, apagando quaisquer SAVE_SESSION ou
  *		CLEAR_SESSION usados anteriormente.
  *	CLEAR_SESSION - apaga uma sessão salvada anteriormente. Este comando
@@ -68,7 +68,7 @@
  *	// usando o comando para executar cada arquivo.
  *
  *	OPEN_MENU [-noext] /algum/dir [/algum/outro/dir ...] WITH comando -opções
- *		
+ *
  *
  * <Parâmetros> é o programa a ser executado.
  *
@@ -95,7 +95,7 @@
  *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
  *		// faz um submenu de papéis de parede
  *	"Papel de Parede" OPEN_MENU $HOME/imagens /usr/share/imagens WITH wmsetbg -u -t
- *		// insere o menu meu.menu 
+ *		// insere o menu meu.menu
  *	"Style" OPEN_MENU meu.menu
  * "Test" END
  */
@@ -111,7 +111,7 @@
 		"Lista de Processos" EXEC xterm -e top
 		"Leitor de Manual" EXEC xman
 	"Informações" END
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Áreas de Trabalho" WORKSPACE_MENU
 	"Aplicações" MENU
@@ -124,7 +124,7 @@
 		"X File Manager" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(Enter file to view)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)
   		"TkDesk" EXEC tkdesk
@@ -132,7 +132,7 @@
 	"Editores" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi

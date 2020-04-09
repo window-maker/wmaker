@@ -93,10 +93,10 @@
     ("酒红阴影",   EXEC, "wdwrite WindowMaker WorkspaceBack '(vgradient, \"#600040\", \"#180010\")'")
     ),
    ("图像", OPEN_MENU, "-noext #wmdatadir#/Backgrounds $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t")
-   ),   
+   ),
   ("保存主题", SHEXEC, "getstyle -t $HOME/GNUstep/Library/WindowMaker/Themes/\"%a(主题名)\""),
   ("保存图标集", SHEXEC, "geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/\"%a(图标集名)\"")
-  ), 
+  ),
  ("退出",
   ("重新启动", RESTART),
   ("启动 BlackBox", RESTART, blackbox),

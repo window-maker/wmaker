@@ -5,21 +5,21 @@ Themes For Window Maker
 =======================
 
 Note: the information contained in this file is only valid for themes
-in the .themed (for theme directory) format, supported in 
+in the .themed (for theme directory) format, supported in
 Window Maker 0.20.4 or newer.
 
 
 How To Install a Theme Pack
 ===========================
 
-To install a theme, unpack your theme into your WindowMaker directory 
+To install a theme, unpack your theme into your WindowMaker directory
 (the same as old-style themes), usually ~/GNUstep/Library/WindowMaker
 
 cd ~/GNUstep/Library/WindowMaker
 gzip -dc "xyztheme.tar.gz" | tar xvf -
 
 You can also do this in your system-wide WindowMaker directory (usually
-/usr/local/share/WindowMaker) to have the themes be available to all 
+/usr/local/share/WindowMaker) to have the themes be available to all
 your users. This will probably need to be done with root access.
 
 
@@ -46,10 +46,10 @@ getstyle -p ~/GNUstep/Library/WindowMaker/Themes/MyTheme
 This will create a theme pack (a new directory in either the current
 directory or a directory you specify) named MyTheme.themed, containing
 everything it requires, including all pixmap files. In this example,
-the new theme pack would be made in your themes directory and be 
+the new theme pack would be made in your themes directory and be
 immediately available in your Themes menu.
 
-Additionally, you can put a text file named MyTheme.lsm in the MyTheme.themed 
+Additionally, you can put a text file named MyTheme.lsm in the MyTheme.themed
 directory. This file can contain info like copyrights, credits or whatever.
 
 To distribute your theme, just make a .tar.gz of the .themed directory.

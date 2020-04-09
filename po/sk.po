@@ -6,7 +6,7 @@
 #
 # Revision history:
 # 	WM-ver	author			email			date
-# 	0.63.1	Jan "judas" Tomka	<tomka@oalevice.sk>	Jan 28 2001 
+# 	0.63.1	Jan "judas" Tomka	<tomka@oalevice.sk>	Jan 28 2001
 # 	0.64.0	Jan "judas" Tomka	<tomka@oalevice.sk>	Feb 22 2001
 # 	0.65.1	Jan "judas" Tomka	<judas@linux.sk>	Aug 08 2001
 # 	0.70.0	Jan "judas" Tomka	<judas@linux.sk>	Oct 15 2001

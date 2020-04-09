@@ -2810,7 +2810,7 @@ Changes since version 0.92.0:
   platforms with a recent pkg-config (debian unstable/sid for one)
 - Fixed buggy handling of UTF8 characters in textfields in WINGs.
   (Stanislav Maslovski <stanislav.maslovski@gmail.com>)
-- Fixed segfault in WPrefs when some font description is missing from the 
+- Fixed segfault in WPrefs when some font description is missing from the
   configuration file (Stanislav Maslovski <stanislav.maslovski@gmail.com>)
 - Removed WINGs' dependency on rgb.txt (from X11) and issues with locating it
   on the filesystem for different systems/distributions.
@@ -2891,11 +2891,11 @@ Changes since version 0.80.2:
 - Removed obsoleted acconfig.h and implemented its functionality using
   AC_DEFINE and AC_DEFINE_UNQUOTED as autoconf 2.5x recommends.
   This will definitely enforce the need to use autoconf 2.5x
-- Added Xft2 support to WINGs, for rendering antialiased fonts with 
+- Added Xft2 support to WINGs, for rendering antialiased fonts with
   transparency. Details in WINGs/ChangeLog.
-- Fixed problem with long, preset workspace names (Wanderlei Antonio Cavassin 
+- Fixed problem with long, preset workspace names (Wanderlei Antonio Cavassin
   <cavassin@conectiva.com.br>)
-- Added kinput2 bug workaround to stock WMWindowAttributes (Seiichi SATO 
+- Added kinput2 bug workaround to stock WMWindowAttributes (Seiichi SATO
   <sato@cvs-net.co.jp>)
 - Added Belarusian translation (Ihar Viarheichyk <iverg@mail.ru>)
 - Fixed wrlib not to load braindead images with 0 sized width or height
@@ -2966,7 +2966,7 @@ Changes since version 0.80.2:
 - Made maximize behave differently with keyboard/mouse for xinerama
   (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - A few leftover xinerama fixes (Peter Zijlstra <a.p.zijlstra@chello.nl>)
-- Extended the 'strut' to multiple heads 
+- Extended the 'strut' to multiple heads
   (Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - Icon placement now takes into account the new xinerama extended 'strut'
   (Peter Zijlstra <a.p.zijlstra@chello.nl>)
@@ -3012,7 +3012,7 @@ Changes since version 0.80.2:
   by Peter Zijlstra <a.p.zijlstra@chello.nl>)
 - Applied patch to enhance the Virtual Desktop behaviour, and to integrate
   it with the NetWM code (Peter Zijlstra <a.p.zijlstra@chello.nl>)
-- Applied a few xinerama and placement fixes (Peter Zijlstra 
+- Applied a few xinerama and placement fixes (Peter Zijlstra
     <a.p.zijlstra@chello.nl>)
 - Fixed memory leak in dock code.
 - Fixed and enhanced the text wrapping in WINGs.
@@ -3036,7 +3036,7 @@ Changes since version 0.80.2:
 - MacOS X style window switching panel (navigate through windows with Alt-Tab
   or arrow keys)
 - Added support for NET_WM_NAME/NET_WM_ICON_NAME
-- Moved out font name conversion code from getstyle/setstyle/convertfonts and 
+- Moved out font name conversion code from getstyle/setstyle/convertfonts and
   made it support fontsets
 - Converted all menu and po files to UTF-8
 - Updated de.po (Thomas Otto <3.1415926535897932384626433832@gmx.net>)
@@ -3059,8 +3059,8 @@ Changes since version 0.80.0:
   WMState.<number> file on multihead system.
 - Fixed problem with keyboard shortcuts executed an every screen for
   multihead systems.
-- Updated traditional chinese translations 
-- Fixed buglet in non-caching rootmenu option 
+- Updated traditional chinese translations
+- Fixed buglet in non-caching rootmenu option
   ("John H. Robinson, IV" <jhriv@ucsd.edu>)
 - Added Malay translation
 - Fixed problem with kcalc not having a miniaturize button.
@@ -3081,7 +3081,7 @@ Changes since version 0.80.0:
 - Added Greek (el) language pixmap (Michalis Kabrianis <Michalis@bigfoot.com>)
 - Fixes icons being reduced twice when icon size != 64x64
   Eduardo Pereira Habkost <ehabkost@conectiva.com.br>
-- Fixed a bug that crashed wmaker when selecting the "Start alternate window 
+- Fixed a bug that crashed wmaker when selecting the "Start alternate window
   manager" option in the crashing dialog panel.
 - Window Maker will now use the WINDOWMAKER_ALT_WM environment variable (if
   it is defined) to overwrite the default hardcoded fallback window manager.
@@ -3090,7 +3090,7 @@ Changes since version 0.80.0:
   "Keep on Top" option is active.
 - Added ability to browse for files/directories in the WPrefs menu editor.
 - Added Czech translations of documentation (Jiri Hnidek <Jiri.Hnidek@vslib.cz>)
-- Fixed segfault with incomplete WM_CLASS specifications. 
+- Fixed segfault with incomplete WM_CLASS specifications.
 - Fixed a bug about arranging subviews in a WMBox after removing a subview
   and a memleak occuring in the same situation.
 - Fixed a bug in wdread
@@ -3102,7 +3102,7 @@ Changes since version 0.80.0:
 Changes since version 0.70.0:
 .............................
 
-- Disabled window birth animation by default (while it was ok with normal 
+- Disabled window birth animation by default (while it was ok with normal
   windows, it was very annoying with menus editing in WPrefs.app)
 - Added ability to shade/unshade a window using the mouse wheel.
 - Fixed compilation for systems that required -lintl for WINGs
@@ -3119,7 +3119,7 @@ Changes since version 0.70.0:
   saving dock/clip/session information on exit.
 - Added an internal strcasecmp() to WINGs (only on systems where's not present)
 - Deminiaturizing a window that is also shaded, will perform an unshade too.
-  (Note that this only applies to deminiaturizing shaded windows. Unhiding 
+  (Note that this only applies to deminiaturizing shaded windows. Unhiding
   an application will keep the shaded/unshaded state of windows.)
 - Removed compile time option for definable cursors and made them available by
   default.
@@ -3127,7 +3127,7 @@ Changes since version 0.70.0:
   will unhide the application.
 - Added || pipe menu for generating non-cached menus
 - Removed the collapse appicons thing.
-- Added real appicon sharing (apps of the same kind will have a single shared 
+- Added real appicon sharing (apps of the same kind will have a single shared
   appicon).
 - Fixed user and global defaults domain merging to preserve values present in
   global but not in user, in sub-dictionaries.
@@ -3158,7 +3158,7 @@ Changes since version 0.65.1:
     (Marcelo E. Magallon <marcelo.magallon@bigfoot.com>)
 - fixed crash with broken apps that set null WM_CLASS
 - fixed crash when with gnome panel and multi-screens, some menu
-  updates and applied various other patches from 
+  updates and applied various other patches from
   (Crutcher Dunnavant <crutcher@redhat.com>)
 - po file fixes (Crutcher Dunnavant <crutcher@redhat.com>)
 - replaced I18N_MB with I18N in one place in src/wconfig.h.in
@@ -3187,7 +3187,7 @@ Changes since version 0.65.1:
   More details about this can be found in WINGs/ChangeLog and WINGs/NEWS.
   Say bye, bye libPropList =)
 - rewrote all Window Maker code to use the new WINGs based proplist functions.
-- fixed a few compilation warnings and a problem caused by an uninitialized 
+- fixed a few compilation warnings and a problem caused by an uninitialized
   variable.
 
 
@@ -3229,7 +3229,7 @@ Changes since version 0.64.0:
 - use Hermes in wrlib
 - removed MOUSE_WS_WHEEL #defines
 - fixed bug with multibyte text on libc5 systems (Osamu Ajiki <osam-a@astroarts.co.jp>)
-- fixed race conditions on signal handlers 
+- fixed race conditions on signal handlers
 - SIGINT will gently exit, SIGTERM will not be handled
 - When Window Maker calls wmsetbg to set the background, it will consider the
   value of the DisableDithering option and pass the right switch to wmsetbg.
@@ -3240,7 +3240,7 @@ Changes since version 0.64.0:
   desktop level.
 - Fixed incorrect parsing of display and screen number from $DISPLAY.
 - Organized the inspector panel a bit better.
-- Replaced bags with arrays wherever appropriate. This will improve 
+- Replaced bags with arrays wherever appropriate. This will improve
   performance a bit.
 - Made the Gnome tasklist skip the windows with the "Skip window list" flag
   enabled. (Bastien Nocera <hadess@hadess.net>)
@@ -3258,11 +3258,11 @@ Changes since version 0.64.0:
 - Added retain/release mechanism for RImages. RDestroyImage() has become
   obsolete. More about this can be found in wrlib/Changelog and wrlib/NEWS.
 - Small API change in WINGs to allow images with alpha blending set as the
-  application icons be shown correctly. More about this in WINGs/Changelog 
+  application icons be shown correctly. More about this in WINGs/Changelog
   and WINGs/NEWS.
 - Made images with alpha blending be shown correctly in the panels and the
   icon chooser.
-- The icon image set to be shown in panels ("Logo.WMPanel") will be 
+- The icon image set to be shown in panels ("Logo.WMPanel") will be
   automatically updated if its entry in WMWindowAttributes changes (without
   a need to restart as until now).
 - Fixed a bug in the icon chooser dialog that made the selected icon look
@@ -3282,7 +3282,7 @@ Changes since version 0.64.0:
 Changes since version 0.63.1:
 .............................
 - fixed messup in get-{wings,wutil,wraster}-flags
-- fixed #wmdatadir# substitution in wmaker.inst 
+- fixed #wmdatadir# substitution in wmaker.inst
 	(Seiichi SATO <sato@cvs-net.co.jp>)
 - Removed spurious focus disabling for GNUstep applications - but retain
   code that lets GNUstep apps control their window titlebar.
@@ -3323,7 +3323,7 @@ Changes since version 0.62.1:
 - added wmagnify utility
 - changed behaviour of control/shift double click on titlebar for maximize
 - updated getstyle to account for extendspace options
-- fixed weird color bug in jpeg loader 
+- fixed weird color bug in jpeg loader
 	(Alban Hertroys <dalroi@wit401310.student.utwente.nl>)
 - improved and simplified fonts configuration for multibyte languages
 	(Tomohiro KUBOTA <kubota@debian.or.jp>)
@@ -3337,7 +3337,7 @@ Changes since version 0.62.1:
 - fixed bug with incorrect window placement using automatic placement, while
   there were shaded windows on other workspaces
 - fixed some buffer overflow issues in WINGs
-- fixed bug with WPrefs.app not selecting the menu appearance options after 
+- fixed bug with WPrefs.app not selecting the menu appearance options after
   startup.
 - replaced free() with wfree() wherever appropriate
 - fixed some memory leaks generated by wstrappend()
@@ -3401,7 +3401,7 @@ Changes since version 0.61.1:
 - changed semantics of GNUstep window attribute hints
 - added get-wings-flags and get-wutil-flags with the same purpose as
   get-wraster-flags, but for compiling and linking with WINGs/WUtil
-- fixed bug handling non-string values given to string valued options in 
+- fixed bug handling non-string values given to string valued options in
   defaults.c
 - fixed colormap_window crash bug (appears when launching some apps from dock,
   or removing apps from gnome panel etc)
@@ -3420,7 +3420,7 @@ Changes since version 0.61.1:
 - added Jim Knoble <jmknoble@pobox.com>'s cursor thing patch
 - fixed lock of wmaker when clicking on menu multiple times
 - made transients appear near their owner
-- fixed crash bug with broken java implementations (Miguel Covarrubias 
+- fixed crash bug with broken java implementations (Miguel Covarrubias
 							<mcovarr@tigr.org>)
 - made Revert on attributes panel apply the reverted changes immediately
   to avoid inconsistent internal state
@@ -3438,7 +3438,7 @@ Changes since version 0.61.0:
 - fixed OPEN_MENU
 - fixed crash when moving a shaded window with keyboard
 - fixed problem with window shortcut assignment from the menu
-- fixed problem with fonts in WINGs (Masahide -mac- NODA 
+- fixed problem with fonts in WINGs (Masahide -mac- NODA
 					<mac@flab.fujitsu.co.jp>)
 - fixed multihead bugs (Morten Bøgeskov" <mb@dbc.dk>)
 - fixed crashing bug when saving session information.
@@ -3465,7 +3465,7 @@ Changes since version 0.60.0:
 - added missing kbd shortcut definitions for window shortcuts
 	(Michael Smith <mjsmith@spirit.com.au>)
 - fixed floppy button layout in filepanel (Matthew Ashton <mrashton@home.com>)
-- fixed bug with documentedited close button (Felipe A. Rodriguez 
+- fixed bug with documentedited close button (Felipe A. Rodriguez
 						<farz@mindspring.com>)
 - fixed some buffer overflows
 - fixed some problem with the alpha
@@ -3481,7 +3481,7 @@ Changes since version 0.60.0:
 - removed drop shadow for text on title bar code. (TITLE_TEXT_SHADOW)
 - text on title bar is now possible to be drawn by plugin. See NEWS.
 - WPrefs: added support for button4/5
-- fixed scrolling of menus outside screen (Vito Caputo 
+- fixed scrolling of menus outside screen (Vito Caputo
 						<swivel@virtual-webworld.com)
 - added dialog window for menu commands that can't be executed
 - fixed crash when deiconifying windows when icons are disabled
@@ -3511,7 +3511,7 @@ Changes since version 0.53.0:
 - fixed crash when changing icon of window without WM_CLASS
 - added hysteresys for offscreen menu scrollback
 - fixed bug with IgnoreFocusClick
-- fixed crash with windows with width == 1 (Alban Hertroys 
+- fixed crash with windows with width == 1 (Alban Hertroys
 					<dalroi@wit401310.student.utwente.nl>)
 - added SHEXEC command
 - fixed resizebarback for SHADOW_RESIZEBAR ( jim knoble jmknoble@pobox.com)
@@ -3631,7 +3631,7 @@ Changes since version 0.51.1:
 
 - fixed bug with window that can get focus if both shaded and hidden.
 - maximize for full screen
-- fixed problem with frame drawing in non-opaque 
+- fixed problem with frame drawing in non-opaque
 - fixed installation path prob [jmknoble@pobox.com]
 - fixed bug moving window when only one window is on screen
 - fixed bug with ignored GNUstep attributes
@@ -3727,7 +3727,7 @@ Changes since version 0.50.1:
 - fixed wmsetbg
 - fixed parsing of WorkspaceSpecificBack
 - fixed initial workspace for new windows
-- added the workspace button proxy thingy for GNOME 
+- added the workspace button proxy thingy for GNOME
 - added more GNOME compatibility fixes
 - fixed bug in %a() macro in root menu
 
@@ -3901,7 +3901,7 @@ Changes since version 0.19.3:
 .............................
 
 - fixed crash when closing windows in autoraise
-- fixed a memory leak 
+- fixed a memory leak
 - fixed a crash when closing Lotus Notes
 - rewrote colormap code
 - incomplete multihead support
@@ -4014,7 +4014,7 @@ Changes since version 0.17.5:
 .............................
 
 - fixed handling of signals when the X event queue is empty
-- fixed blank window titles 
+- fixed blank window titles
 - made current workspace entry be disabled in Move To window menu command, and
   in the Clip's Move To submenu.
 - fixed menu width calculation
@@ -4025,7 +4025,7 @@ Changes since version 0.17.5:
 - added a hack to make everything work even if NumLock or ScrollLock is on
 - added a little more verbosity to error messages
 - fixed kluged workspace menu in clip
-- removed workspace menu mapped through the microbutton in the clip. 
+- removed workspace menu mapped through the microbutton in the clip.
 - remade clip button layout to be more usable
 - fixed bug with keepontop and apps with Motif hints (x11amp)
 - changed menu border drawing
@@ -4091,7 +4091,7 @@ Changes since version 0.17.3:
 - fixed bug with rootmenu that caused twin menus to be left mapped
 - added DontConfirmKill option to remove confirmation panel for Kill
 - fixed bug with hide of app with wmaker menu
-- changed all NSsomething internal flags for the GNUstep attributes to 
+- changed all NSsomething internal flags for the GNUstep attributes to
   WMsomething
 
 Changes since version 0.17.2:
@@ -4099,7 +4099,7 @@ Changes since version 0.17.2:
 
 - fixed bug in attributes panel with Disable Resizebar
 - fixed save in attribs panel with windows other than the client leader
-- bug in  attribs panel with Revert that made it save attributes with the 
+- bug in  attribs panel with Revert that made it save attributes with the
   wrong name
 - fixed (by kluging) bugs related to destroying dialog panels in a bad order
 - fixed various bug with hide in empty screens
@@ -4206,7 +4206,7 @@ Changes since version 0.16.0:
 - Added autoscroll for scrollers in WINGs.
 - Optimized WMList and WMBrowser in WINGs.
 - Button2 on clip opens workspace menu
-- Changed cycling colors of selected icons. 
+- Changed cycling colors of selected icons.
 - Made icon chooser display a better rendering of alpha-channeled icons.
 - Sorted list/browser entries.
 - Fixed bug in timer code that was causing some timer events to be lost.
@@ -4243,11 +4243,11 @@ Changes since version 0.15.1:
 - clicking on the appicon switches to the workspace where the app was last
   focused before unhiding
 - fixed problem with aspect ratio setting (gr_osview etc.)
-- changed some extensions in the default config/data files and removed 
+- changed some extensions in the default config/data files and removed
   Sound.{xpm,tif} because it seem to be copyrighted.
 - added icon selection panel
 - changed selection indication of icons. Removed SClipColor option
-- simplified animation speed options (IconSlideDelay, IconDelayStep, 
+- simplified animation speed options (IconSlideDelay, IconDelayStep,
   MenuScrollDelay, MenuScrollStep etc. etc) to IconSlideSpeed etc.
 - removed Start miniaturized/hidden items from Dock/Clip and added them
   as attributes
@@ -4319,7 +4319,7 @@ Changes since version 0.15.0:
   window is correctly updated if the font size is changed while running.
 - Deleted unnecessary redrawing code in moveres.c.
 - Many fixes to moveres.c.
-- Put all the keys from defaults.c in WindowMaker domain database. 
+- Put all the keys from defaults.c in WindowMaker domain database.
 - Fixed a crashing bug when workspace names were as long (or longer) as
   MAX_WORKSPACENAME_WIDTH (16 characters). In this case a right click on a
   window title caused WindowMaker to crash.
@@ -4622,7 +4622,7 @@ Changes since version 0.12.1:
 Changes since version 0.12.0:
 .............................
 
-- now maintained by Matthew Hawkins <matt@mail.goldweb.com.au> while our 
+- now maintained by Matthew Hawkins <matt@mail.goldweb.com.au> while our
   esteemed friend Alfredo is away.  Have a great holiday in Japan, mate!
 - fixed __DuMmY install problems
 - made NextMenuBehaviour and ScrollableMenus run-time configuration options
@@ -4634,7 +4634,7 @@ Changes since version 0.11.1:
 - added Launch command in dock menu
 - fixed manual window placement
 - fixed problem during installation in po/ directory
-- changed Command format for dock state 
+- changed Command format for dock state
 - added OffiX DND support for the dock
 - added Move To submenu in window commands menu
 - right click on root window does not deselect windows (to allow workspace
@@ -4650,7 +4650,7 @@ Changes since version 0.11.1:
 Changes since version 0.11.0:
 .............................
 
-- fixed bug with menus that caused wmaker to crash 
+- fixed bug with menus that caused wmaker to crash
 - brought program parameter dialog box back
 - fixed autoplacement
 - changed window matching precedence for WMWindowAttributes (complete, just
@@ -4671,7 +4671,7 @@ Changes since version 0.10.2:
 - fixed maximize bug
 - added a widget set and new dialog panels
 - fixed titlebar update after font change
-- renamed back _WINDOWMAKER_COMMAND to _WINDOWMAKER_WM_FUNCTION 
+- renamed back _WINDOWMAKER_COMMAND to _WINDOWMAKER_WM_FUNCTION
 - fixed bug with miniaturization of bad behaved apps (vtcl)
 
 Changes since version 0.10.1:
@@ -4721,7 +4721,7 @@ pipe
 - more apps can be docked (ghostview et. al)
 - fixed diagonal/horizontal resize detection to be like in NS
 - simplified titlebar button code: removed possibility to add more buttons
-- fixed window gravity handling (xclock -geometry 100x100-0-0) 
+- fixed window gravity handling (xclock -geometry 100x100-0-0)
 - removed shadeable window attribute, added DontMoveOff
 - window resize with Meta-Click3 on window
 - fixed bug that caused keyboard locks if a invalid key was used in a shortcut
@@ -4831,20 +4831,20 @@ has quit. (probably the same problem with XFMail and others)
 - better handling of long text
 - limited windowlist menu width
 - fixed arrange icons
-- changed geometry display to account for base size if it's not in 
+- changed geometry display to account for base size if it's not in
 the technical drawing style
-- meta-dbl-click on appicon does hide others 
+- meta-dbl-click on appicon does hide others
 - changed RaiseOnFocus option with RaiseDelay
-- dbl-click on root window or open submenu entry brings the root menu 
+- dbl-click on root window or open submenu entry brings the root menu
 to the cursor.
 - removed AllowMenuLowering option and made menu ontopness work like on dock
-- changed meta-click on dock with meta-dbl-click, to change ontopness 
-- moved gradient and image code to a library. 
+- changed meta-click on dock with meta-dbl-click, to change ontopness
+- moved gradient and image code to a library.
 - added support for icons with alpha channel
 - simplified dithering setup
-- many clean ups 
+- many clean ups
 - not-so-good looking gradients for 8bpp
-- changed application menu stuff 
+- changed application menu stuff
 - started wmaker client library. Try out test/test.c
 
 
@@ -4889,7 +4889,7 @@ Changes since version 0.4.2:
 - fixed docking on left side dock
 - fixed bug in window command menu
 - fixed bug in narrow windows with NEWSTYLE enabled
-- fixed Hide Others crash 
+- fixed Hide Others crash
 - I18N fixes
 - hopefully stable again
 
@@ -4940,7 +4940,7 @@ Changes since version 0.3.1:
 ............................
 
 - fixed bug that caused window frames to be left after window closure
-- submenus are opened to the left/right if it is too close to the right/left 
+- submenus are opened to the left/right if it is too close to the right/left
 edge (not perfect, but better than before)
 - remember window state (shade) on restart
 - fixed resize bug
@@ -4957,7 +4957,7 @@ Changes since version 0.3.0:
 - added diagonal gradients
 - ignoreHideOthers window flag
 - optimized/fixed window raising and lowering
-- fixed menu handling: don't need to click on the menu after 
+- fixed menu handling: don't need to click on the menu after
 it's opened to select items, just drag the pointer
 - _GNUSTEP_WM_RESIZE_WINDOW, _GNUSTEP_WM_RESIZED_WINDOW protocols
 - application specified titlebar button pixmaps
@@ -4985,10 +4985,10 @@ with accidental dbl-clicks on the root menu.
 - remade application group code (more stable)
 - undid stacking code change from 0.2.0
 - fixed bug that caused hangs (not sure)
-- fixed bug that caused window_count error and associated crashes 
+- fixed bug that caused window_count error and associated crashes
 - remade application defined menus
 - vertical gradient
-- I18N support 
+- I18N support
 - fixed multiple window selection bug with windows in other workspaces
 - changed workspace numbering
 - fixed problem with series of X errors when a window is destroyed
@@ -5026,7 +5026,7 @@ you focus a shaded window
 - fixed bug that allowed on top window to be lowered
 - disappearing xconsole and other initial-state==IconicState windows fixed
 - menus open always inside screen area
-- open submenus are moved with their parents 
+- open submenus are moved with their parents
 - keyboard support
 - faster menu drawing
 - hide for applications that use window_group hint fixed (LyX et al)
@@ -5089,7 +5089,7 @@ Changes since version 0.0.4:
 - added cpp preprocessing
 - zombie process bug fixed
 - interactive and dumb (cascade) window placement
-- floating transient windows 
+- floating transient windows
 - disable mapped submenu entry on parent
 - added colormap handling stolen from fvwm (temporary)
 
@@ -5097,10 +5097,10 @@ Changes since version 0.0.4:
 Changes since version 0.0.3:
 ............................
 
-- hide application implemented (just for apps that have the window_group 
-field of WMHints set or the WM_CLIENT_LEADER property set, 
+- hide application implemented (just for apps that have the window_group
+field of WMHints set or the WM_CLIENT_LEADER property set,
 apparently most Xt based apps)
-- fixed a crashing bug caused by icons 
+- fixed a crashing bug caused by icons
 - internal change on button pixmap structure and other places
 - handling of property changes on mapped windows
 - fixed bug in event handling (MapRequest)

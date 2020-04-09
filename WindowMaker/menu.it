@@ -8,8 +8,8 @@
 // <Titolo> e' la stringa usata per il titolo. Deve essere racchiusa dagli apici
 // 	se contiene degli spazi
 //
-// <Comando> uno dei seguenti comandi: 
-//	MENU - inizio della definizione di un sottomenu 
+// <Comando> uno dei seguenti comandi:
+//	MENU - inizio della definizione di un sottomenu
 //	END  - fine della definizione di un sottomenu
 //	EXEC <programma> - esegue un programma
 //	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
@@ -17,8 +17,8 @@
 //	RESTART [<window manager>] - reinizializza WindowMaker o lancia un altro
 //			window manager
 //	REFRESH - ridisegna l'area di lavoro
-//	ARRANGE_ICONS - riordina le icone sull'area di lavoro 
-//	SHUTDOWN - uccide tutti i clienti (e chiude la sessione X window) 
+//	ARRANGE_ICONS - riordina le icone sull'area di lavoro
+//	SHUTDOWN - uccide tutti i clienti (e chiude la sessione X window)
 //	WORKSPACE_MENU - aggiunge un submenu per operazioni sull'area di lavoro
 //	SHOW_ALL - mostra tutte le finestre dell'area di lavoro
 //	HIDE_OTHERS -nasconde tutte le finestre dell'area di lavoro eccetto
@@ -29,13 +29,13 @@
 // ** Opzioni per la linea di comando in EXEC:
 // %s - sostituisce con la selezione corrente. Se non e' disponibile nessuna
 //	selezione, il comando e' annullato
-// %w - sostituisce con l'identificativo della finestra correntemente   
-//	selezionata. Se nessuna finestra e' selezionata, viene restituito vuoto 
-// 
+// %w - sostituisce con l'identificativo della finestra correntemente
+//	selezionata. Se nessuna finestra e' selezionata, viene restituito vuoto
+//
 // Si possono generare caratteri speciali (come % e ")  con il carattere \ :
 // esempio: xterm -T "\"ciao mondo\"" (ndt banale, no? )
 //
-// Ciascun comando MENU deve avere un comando END alla fine. 
+// Ciascun comando MENU deve avere un comando END alla fine.
 // Vedere esempio:
 
 
@@ -50,7 +50,7 @@
 		"Ricerca Manuali" EXEC xman
 	"Informazioni" END
 	"XTerm" SHEXEC xterm -sb || color-xterm -sb || xterm -sb
-	"XJed"	EXEC xjed 
+	"XJed"	EXEC xjed
 	"Area di lavoro" WORKSPACE_MENU
 	"Applicazioni" MENU
 		"Grafica" MENU
@@ -62,7 +62,7 @@
 		"X File Manager" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(Ghostview)
                 "XDvi" EXEC xdvi %a(XDvi)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat)
@@ -119,7 +119,7 @@
 #endif
 		"Salva area di lavoro" EXEC SAVE_WORKSPACE
 	"Area di lavoro" END
-	
+
 	"Uscire"	MENU
 		"Restart" RESTART
 		"Avviare AfterStep" RESTART afterstep

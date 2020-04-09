@@ -4,7 +4,7 @@ set -e
 
 # run after debhelper code, which removes menu-methods.
 if [ "$1" = "configure" ] &&
-	[ x"$2" != "x" ] && 
+	[ x"$2" != "x" ] &&
 	test -e /etc/GNUstep/Defaults/appearance.menu &&
 	dpkg --compare-versions "$2" '<<' '0.95.8-2~' ; then
 	if head -n1 /etc/GNUstep/Defaults/appearance.menu |

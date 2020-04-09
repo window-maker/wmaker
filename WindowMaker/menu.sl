@@ -7,20 +7,20 @@
  *
  * <Title> is any string to be used as title. Must be enclosed with " if it
  * 	has spaces
- * 
+ *
  * SHORTCUT specifies a shortcut for that item. <Shortcut> has the
- * same syntax of the shortcuts key options in the 
+ * same syntax of the shortcuts key options in the
  * $HOME/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
  *
  * You can't specify a shortcut for a MENU or OPEN_MENU entry.
- * 
- * <Command> one of the valid commands: 
+ *
+ * <Command> one of the valid commands:
  *	MENU - starts (sub)menu definition
  *	END  - end (sub)menu definition
  *	OPEN_MENU - opens a menu from a file, pipe or directory(ies) contents
  *		    and eventually precede each with a command.
  *	WORKSPACE_MENU - adds a submenu for workspace operations. Only one
- *		    workspace_menu is allowed. 		
+ *		    workspace_menu is allowed.
  *	EXEC <program> - executes an external program
  *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
  *	EXIT - exits the window manager
@@ -110,7 +110,7 @@
 		"Seznam procesov" EXEC xterm -e top
 		"Pomoč (Iskalec man strani)" EXEC xman
 	"Informacije" END
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Delovni prostori" WORKSPACE_MENU
 	"Aplikacije" MENU
@@ -123,7 +123,7 @@
 		"X File Manager" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(Enter file to view)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)
   		"TkDesk" EXEC tkdesk
@@ -131,7 +131,7 @@
 	"Urejevalniki besedil" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi

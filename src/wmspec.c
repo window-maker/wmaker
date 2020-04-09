@@ -1686,7 +1686,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 				wwin->flags.maximized = maximized;
 				wUnmaximizeWindow(wwin);
 			} else {
-				wMaximizeWindow(wwin, wwin->flags.maximized, 
+				wMaximizeWindow(wwin, wwin->flags.maximized,
 						wGetHeadForWindow(wwin));
 			}
 		}

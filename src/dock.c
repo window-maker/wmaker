@@ -603,7 +603,7 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 
 	if (dock->attract_icons) {
 		if (dock->type == WM_DRAWER) {
-			/* The newly auto-attracting dock is a drawer: disable any clip and 
+			/* The newly auto-attracting dock is a drawer: disable any clip and
 			 * previously attracting drawer */
 
 			if (!wPreferences.flags.noclip) {
@@ -843,7 +843,7 @@ static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name)
 			name = findUniqueName(scr, "Drawer");
 		btn = wAppIconCreateForDock(scr, NULL, name, "WMDrawer", TILE_DRAWER);
 		btn->icon->core->descriptor.handle_expose = drawerIconExpose;
-		x_pos = 0;		
+		x_pos = 0;
 	}
 
 	btn->xindex = 0;
@@ -4386,7 +4386,7 @@ static int addADrawer(WScreen *scr)
 			}
 		}
 	}
-    
+
 	if (!found_y)
 		/* This can happen even when dock->icon_count + scr->drawer_count
 		 * < dock->max_icons when the dock is not aligned on an

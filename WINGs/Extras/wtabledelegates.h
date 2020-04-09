@@ -11,15 +11,15 @@ WMTableColumnDelegate *WTCreateStringDelegate(WMTableView *table);
 WMTableColumnDelegate *WTCreatePixmapStringDelegate(WMTableView *parent);
 
 WMTableColumnDelegate *WTCreateStringEditorDelegate(WMTableView *table);
-    
+
 WMTableColumnDelegate *WTCreateEnumSelectorDelegate(WMTableView *table);
 void WTSetEnumSelectorOptions(WMTableColumnDelegate *delegate,
                               char **options, int count);
-    
+
 WMTableColumnDelegate *WTCreateBooleanSwitchDelegate(WMTableView *parent);
-    
+
 #ifdef __cplusplus
 }
 #endif
-    
+
 #endif

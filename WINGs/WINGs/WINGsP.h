@@ -254,7 +254,7 @@ typedef struct W_Screen {
     Atom wmIconDragOffsetAtom;
 
     Atom wmStateAtom;              /* WM_STATE */
-    
+
     Atom utf8String;
 
     Atom netwmName;

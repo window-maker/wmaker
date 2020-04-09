@@ -1,6 +1,6 @@
 /* Slovak root menu for WindowMaker
  * (C) 2001 Jan "judas" Tomka
- * 
+ *
  * Original translation by Jan "judas" Tomka on Jan 22 2001
  * Currently maintained by Jan "judas" Tomka <tomka@oalevice.sk>
  *
@@ -18,13 +18,13 @@
  *
  * <Názov> je ľubovoľný reťazec, ktorý sa použije ako názov položky. Ak obsahuje
  *	medzery, musí byť uzavretý v úvodzovkách.
- * 
+ *
  * SHORTCUT udáva klávesovú skratku pre danú položku. <Klávesová skratka> má
- *	rovnakú syntax ako v súbore $HOME/GNUstep/Defaults/WindowMaker, napr. 
+ *	rovnakú syntax ako v súbore $HOME/GNUstep/Defaults/WindowMaker, napr.
  *	RootMenuKey alebo MiniaturizeKey.
  *
  * Nemôžete zadať klávesovú skratku pre položky typu MENU a OPEN_MENU.
- * 
+ *
  * <Príkaz> je jeden z nasledujúcich:
  * 	MENU - začína definíciu (sub)menu
  * 	END  - ukončuje definíciu (sub)menu
@@ -93,7 +93,7 @@
  * 			nahradí sa v príkaze textom, ktorý zadáte
  * %w - nahradí sa identifikačným číslom (XID) aktuálneho okna
  * %W - nahradí sa číslom aktuálnej pracovnej plochy
- * 
+ *
  * Vložiť špeciálne znaky (ako % a ") môžete pomocou znaku \ :
  * 	xterm -T "\"Ahoj svet\""
  *
@@ -128,7 +128,7 @@
 		"Prehliadač manuálov" EXEC xman
 	"Informácie" END
 	"Spustiť..." SHEXEC %a(Spustiť,Zadajte príkaz:)
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Pracovné plochy" WORKSPACE_MENU
 	"Aplikácie" MENU
@@ -141,7 +141,7 @@
 		"Správca súborov Xfm" EXEC xfm
 		"Správca súborov OffiX" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(GhostView,Zadajte meno súboru)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobar,Zadajte meno PDF súboru)
   		"TkDesk" EXEC tkdesk
@@ -149,7 +149,7 @@
 	"Editory" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VIM" EXEC xterm -e vim

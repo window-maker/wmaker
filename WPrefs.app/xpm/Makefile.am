@@ -72,5 +72,5 @@ dist_xpmdata_DATA = \
 	windowfocus.xpm \
 	workspace.xpm \
 	workspacename.xpm \
-	xis.xpm 
+	xis.xpm
 endif

@@ -7,18 +7,18 @@
 		("Lista Procesów",         EXEC, "xterm -T 'Lista Procesów' -e top"),
 		("Przeglądarka Manuali",   EXEC, "xman")
 	),
-	
-	("Konfiguracja",	
+
+	("Konfiguracja",
 		("Edycja menu",       EXEC, "xterm -T 'Edycja menu' -e vi $HOME/GNUstep/Library/WindowMaker/menu"),
 		("Ustawienie fontów", EXEC, "xterm -T 'Ustawienie fontów' -e vi $HOME/GNUstep/Defaults/WMGLOBAL"),
 		("Konfiguracja",      EXEC, "xterm -T 'Konfiguracja' -e vi $HOME/GNUstep/Defaults/WindowMaker")
 	),
-	
+
 	("Uruchom...", EXEC, "%a(Uruchom,Wpisz komende do uruchomienia:)"),
 	("Terminal",   EXEC, "xterm -T 'Mój ulubiony terminal' -sb"),
 	("Edytor",     EXEC, "xterm -T 'Moj ulubiony edytor' -e vi %a(Edytor,Podaj plik do edycji:)"),
 	("Pulpity",    WORKSPACE_MENU),
-	
+
 	("Aplikacje",
 		("Grafika",
 			("Gimp",        EXEC, "gimp > /dev/null"),
@@ -43,10 +43,10 @@
 		("X Gnu debbuger",     EXEC, "xxgdb"),
 		("Xwpe",               EXEC, "xwpe")
 	),
-	
+
 	("Internet",
 		("Przeglądarki",
-			("Netscape", EXEC, "netscape"), 
+			("Netscape", EXEC, "netscape"),
 			("Arena",    EXEC, "arena"),
 			("Lynx",     EXEC, "xterm -e lynx %a(Lynx,Podaj URL:)")
 		),
@@ -76,13 +76,13 @@
 		("Editres", EXEC, "editres"),
 		("VI",      EXEC, "xterm -e vi")
 	),
-	
+
 	("Dźwięk",
 		("Xmcd",    EXEC, "xmcd 2> /dev/null"),
 		("Xplaycd", EXEC, "xplaycd"),
 		("Xmixer",  EXEC, "xmixer")
 	),
-	
+
     ("Gry",
     	("Maze",      EXEC, "maze"),
     	("Karty",     EXEC, "spider"),
@@ -99,7 +99,7 @@
     	("xboing",    EXEC, "xboing -sound"),
     	("XBill",     EXEC, "xbill")
     ),
-	
+
 	("Użytki",
 		("Kalkulator",          EXEC, "xcalc"),
 		("Zegarek",             EXEC, "xclock"),

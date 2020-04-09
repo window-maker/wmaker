@@ -669,7 +669,7 @@ void update_icon_pixmap(WIcon *icon)
 		XFreePixmap(dpy, icon->pixmap);
 
 	icon->pixmap = None;
- 
+
 	/* Create the pixmap */
 	if (icon->file_image)
 		icon_update_pixmap(icon, icon->file_image);

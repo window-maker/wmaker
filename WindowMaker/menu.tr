@@ -5,14 +5,14 @@
  *
  * <Başlık> [SHORTCUT <Kısayol>] <Komut> <Parametreler>
  *
- * <Başlık> herhangi bitr yazıyı içerebilir, boşul içeriyorsa " içinde 
+ * <Başlık> herhangi bitr yazıyı içerebilir, boşul içeriyorsa " içinde
  * 	yazılmalı
- * 
+ *
  * SHORTCUT sözkonusu giriş için kısayol tuşu tanımlamak için kullanılır
  * <Kısayol>, $HOME/GNUstep/Defaults/WindowMaker olduğu gibi tanımlanabilir.
  *
  * MENU veya OPEN_MENU için kısayol tanımlayamazsınız.
- * 
+ *
  * <Komut> aşağıdakilerden birisidir
  *	MENU - (Alt)Menü tanımını başlatır.
  *	OPEN_MENU - Menüyü, bir dosya veya dizinden oluşturur
@@ -28,28 +28,28 @@
  *	SHUTDOWN - tüm uygulamalrı kapatır ve sistemden çıkar
  *	SHOW_ALL - Tüm pencereleri saklı hallerinden çıkarır
  *	HIDE_OTHERS - içinde bulunulan dışındaki tüm pencereleri saklar
- *	SAVE_SESSION - mevcut uygulamaları ve pencere konumlarını saklar, 
+ *	SAVE_SESSION - mevcut uygulamaları ve pencere konumlarını saklar,
  *		       yeniden başladığında bu konumları korumaya çalışır.
- *	CLEAR_SESSION - son saklanan bilgileri siler. 
+ *	CLEAR_SESSION - son saklanan bilgileri siler.
  *
  * OPEN_MENU yazım kuralları:
  *   1. Dosyadan
- *	// dosya.menu isimli geçerli dosya tanımı içeren dosyayı alıp 
+ *	// dosya.menu isimli geçerli dosya tanımı içeren dosyayı alıp
  *	// belirtilen konuma ekler
  *	OPEN_MENU dosya.menu
  *
- *   2. Komut sonucundan 
- *	// "komut"u çalıştırı ve çıktısını möenü olarak kullanır. 
+ *   2. Komut sonucundan
+ *	// "komut"u çalıştırı ve çıktısını möenü olarak kullanır.
  *	// Komutun çıktısı geçerli bir menü tanımı vermeli
  *	OPEN_MENU | komut
- *  
+ *
  *   3. Dizinden
  *	// Bir veya daha fazla dizin içinde yer alan çalıştırılabilir
  *	// dosyaları alfabetik olarak sıralayarak menü oluşturur
  *	OPEN_MENU /bir/dizin [/bir/başka/dizin ...]
  *
  *   4. Dizinden komutla
- *	// Dizin seçeneği gibi, ancak dizindeki dosyaları "komut" 
+ *	// Dizin seçeneği gibi, ancak dizindeki dosyaları "komut"
  *	// ile çalıştırır
  *
  *	OPEN_MENU /bir/dizin [/bir/başka/dizin ...] WITH komut -seçenekler
@@ -59,7 +59,7 @@
  *
  * ** EXEC komut satırı seçenekleri:
  * %s - mevcut seçimi koyar.
- * %a(mesaj) - bir mesaj başlığı ile bir kutucuk açarak yazılan bilgileri 
+ * %a(mesaj) - bir mesaj başlığı ile bir kutucuk açarak yazılan bilgileri
  *             komuta parametre olarak gönderir
  * %w - seçili pencerenin XID'sini verir.
  *
@@ -96,7 +96,7 @@
 		"Süreç Dökümü" EXEC xterm -e top
 		"Kılavuz Tarayıcısı" EXEC xman
 	"Bilgi" END
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Çalışma Alanları" WORKSPACE_MENU
 	"Uygulamalar" MENU
@@ -109,7 +109,7 @@
 		"X File Manager" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(PS dosyasını girin)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(PDF dosyasını girin)
   		"TkDesk" EXEC tkdesk
@@ -117,7 +117,7 @@
 	"Düzenleyiciler" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi

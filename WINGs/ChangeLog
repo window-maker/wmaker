@@ -63,7 +63,7 @@ Changes since wmaker 0.80.1:
 - Fixed small memory leak in the font panel code.
 - Fixed call to qsort in WMSortArray.
 - Fixed a memleak in the file panel.
-- Double/triple-click selection in text widgets 
+- Double/triple-click selection in text widgets
   (Vitaly Ovtchinnikov <ov@rbcmail.ru>)
 - Fixed bug in tableview (clicked row callback got incorrect row)
   (Carlos Torres <vlaadbrain@operamail.com>)
@@ -102,7 +102,7 @@ Changes since wmaker 0.70.0:
 ............................
 
 - added an internal strcasecmp() (only on systems where is not present)
-- removed some redundant includes of ../src/config.h when wconfig.h is 
+- removed some redundant includes of ../src/config.h when wconfig.h is
   included too
 - removed a wsyserror() message when reading a property list from file
   (the programmer should decide if to give that message or just ignore).
@@ -117,7 +117,7 @@ Changes since wmaker 0.65.0:
   related error when text was selected in a textfiled.
 - moved wstrdup(), wstrconcat() and wstrappend() from memory.c to string.c
 - added property list handling code making libPropList unnecessary and
-  obsolete. Backward compatibility is provided through the 
+  obsolete. Backward compatibility is provided through the
   WINGs/proplist-compat.h header file which has #defines from old libPropList
   function names to new function names with minimal changes. Read this
   header file and the NEWS file for more details about this subject.
@@ -197,7 +197,7 @@ changes since wmaker 0.63.1:
 changes since wmaker 0.62.1:
 ............................
 - added WRuler widget
-- added WText widget (rtf multiline text widget) 
+- added WText widget (rtf multiline text widget)
 	Nwanua Elumeze <nwanua@colorado.edu>
 - added a new AUTO option for the UseMultiByte option
 - added WMRaiseWidget()/WMLowerWidget()
@@ -217,7 +217,7 @@ changes since wmaker 0.62.1:
 - added WMGetListSelectedItems()
 - added WMSetListAllowMultipleSelection(), WMListAllowsMultipleSelection().
 - added WMSetListAllowEmptySelection(), WMListAllowsEmptySelection().
-- WMListSelectionDidChangeNotification passes NULL as the notification 
+- WMListSelectionDidChangeNotification passes NULL as the notification
   client data (previously passed the selected item row).
 - added WMUnselectListItem(), WMSelectAllListItems(), WMUnselectAllListItems()
 - better behavior of wheel mices in WMList. Simple mouse wheel events
@@ -243,8 +243,8 @@ changes since wmaker 0.62.1:
   str1 with str2 and returns that in a newly malloc'ed string.
   Be sure to rename wstrappend with wstrconcat in your code too, else
   hazardous things can happen!
-- implemented a new wstrappend() function. wstrappend(dst, src) will append 
-  src to dst modifing dst and returning a pointer to it. No new string is 
+- implemented a new wstrappend() function. wstrappend(dst, src) will append
+  src to dst modifing dst and returning a pointer to it. No new string is
   generated, except if dst is NULL, in which case its the same as calling
   wstrdup(src).
   dst can ONLY be NULL or a dynamically allocated string (obtained from a
@@ -334,7 +334,7 @@ changes since wmaker 0.61.1:
   item that is beyond the total number of items present in the popup button.
 - changed names of functions for SplitView to be consistent. Some contained
   SubView while other Subview. Now all have Subview.
-- fixed a bug in how input events were posted. Establishing 2 or more input 
+- fixed a bug in how input events were posted. Establishing 2 or more input
   handlers for the same file descriptor, handling different (read/write/except)
   events, caused wrong handlers to be called.
 - Reimplemented the input and idle handlers with WMBag to avoid a functional
@@ -346,7 +346,7 @@ changes since wmaker 0.61.1:
     2. if new_size is 0, call wfree(old), and return NULL.
     3. if both old is a valid pointer and new_size>0, call realloc.
 - added wstrerror(int errnum) to return the string associated with errnum.
-- new wsyserrorwithcode(int error, const char* fmt, ...), similar to 
+- new wsyserrorwithcode(int error, const char* fmt, ...), similar to
   wsyserror(), but printing the message for the specified error code.
 - added 3 new classes: WMData, WMHost and WMConnection
 - fixed a big memory leak in the color panel code (from Pascal Hofstee).
@@ -357,7 +357,7 @@ changes since wmaker 0.61.0:
 
 - added WMGetTextFieldFont()
 - escape key in panels (craig nellist <crn@ozemail.com.au>)
-- applied patch with fixes and enhancements to textfield 
+- applied patch with fixes and enhancements to textfield
 	(Franck Wolff <wolff@cybercable.fr>)
 - changed WMList to use WMBag internally, instead of a linked list
 - replaced WMAddSortedListItem() with WMSortListItems()
@@ -437,10 +437,10 @@ changes since wmaker 0.53.0:
 	The notifications will still work, but using the delegate is preferable
 
   How to convert old code to delegate callbacks:
-  	1 - create a variable (static or dynamic) of the type of the 
+  	1 - create a variable (static or dynamic) of the type of the
 	    delegate for the widget type.
-	2 - Replace the notification observers with the equivalent 
-	    delegate callbacks. 
+	2 - Replace the notification observers with the equivalent
+	    delegate callbacks.
 	3 - Put pointers to the callbacks in the delegate variable.
 
 	Take a look in wfilepanel.c to see how it is used there.
@@ -480,7 +480,7 @@ changes since wmaker 0.51.2:
 
 - added WMColorWellDidChangeNotification
 - added wfindfileinarray()
-- fixed bug in window title setting 
+- fixed bug in window title setting
 	(MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>)
 
 changes since wmaker 0.51.1:
@@ -611,7 +611,7 @@ I don't remember everything, but here it goes:
 The same panel will be reused every time you call for it, unless you free it.
 - changed semantics of WMCreateFont() so that it returns NULL if the requested
   font can't be loaded
-- removed WMAddDestroyCallback() 
+- removed WMAddDestroyCallback()
 - fixed bug in WMRemovePopUpButtonItem()
 - added function for user specified item height in WMList
 - added WMSetPopUpButtonText(). It will set the default text in the button

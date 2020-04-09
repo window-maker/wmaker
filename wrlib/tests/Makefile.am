@@ -4,7 +4,7 @@ AUTOMAKE_OPTIONS =
 
 noinst_PROGRAMS = testdraw testgrad testrot view
 
-EXTRA_DIST = test.png tile.xpm ballot_box.xpm 
+EXTRA_DIST = test.png tile.xpm ballot_box.xpm
 
 AM_CPPFLAGS = -I$(srcdir)/.. $(DFLAGS) @HEADER_SEARCH_PATH@
 

@@ -1168,88 +1168,88 @@ msgid "could not initialize application"
 msgstr "ne mogu inicijalizirati aplikaciju"
 # msgid "could not extract version information from WindowMaker"
 # msgstr "ne mogu izvuči informaciju o verziji WindowMaker-a"
-# 
+#
 # msgid "Could not load WindowMaker domain (%s) from defaults database."
 # msgstr "Ne mogu učitati WindowMaker domenu (%s) iz početne baze."
-# 
+#
 # msgid "Version %s for WindowMaker %s"
 # msgstr "Verzija %s za WindowMaker %s"
-# 
+#
 # msgid "Could not extract version from WindowMaker. Make sure it is correctly installed."
 # msgstr "Ne mogu izvuči verziju WindowMakera. Provjerite da je ispravno instaliran."
-# 
+#
 # msgid ""
 # "Programming/Design: Alfredo K. Kojima\n"
 # "Artwork: Marco van Hylckama Vlieg"
 # msgstr ""
 # "Programiranje/Dizajn: Alfredo K. Kojima\n"
 # "Artwork: Marco van Hylckama Vlieg"
-# 
+#
 # msgid "WindowMaker domain (%s) is corrupted!"
 # msgstr "WindowMaker domena (%s) je oštećena!"
-# 
+#
 # msgid "WindowMaker %i.%i.%i, which is installed in your system, is not fully supported by this version of WPrefs."
 # msgstr "WindowMaker %i.%i.%i, koji je instaliran na vašem sistemu, nije potpuno podržan ovom verzijom WPrefs-a."
-# 
+#
 # msgid "WindowMaker Preferences"
 # msgstr "Postavke WindowMaker-a"
-# 
+#
 # msgid "Make sure WindowMaker is in your search path."
 # msgstr "Provjerite da je WindowMaker u vašoj search stazi."
-# 
+#
 # msgid "...do not resize over dock"
 # msgstr "ne pokrivati dock"
-# 
+#
 # msgid ""
 # "WPrefs only supports WindowMaker 0.18.0 or newer.\n"
 # "The version installed is %i.%i.%i\n"
 # msgstr ""
 # "WPrefs podržava samo WindowMaker 0.18.0 ili noviji.\n"
 # "Instalirana je verzija %i.%i.%i\n"
-# 
+#
 # msgid "Could not load global WindowMaker domain (%s)."
 # msgstr "Ne mogu učitati globlanu WindowMaker domenu (%s)."
-# 
+#
 # msgid "Loading WindowMaker configuration files..."
 # msgstr "Učitavam WindowMaker konfiguracijske datoteke..."
-# 
+#
 # msgid "Aplications Menu Definition"
 # msgstr "Definiranje izbornika Aplikacije"
-# 
+#
 # msgid "The command supplied must generate and output a valid menu definition to stdout. This definition should be in the plain text menu file format, described in the menu files included with WindowMaker, probably at ~/GNUstep/Library/WindowMaker/menu"
 # msgstr "Ponuđena naredba mora generirati i ispisati važeću definicuju izbornika na stdout. Ova bi definicja trebala biti u čistom tekst menu formatu koji je opisan u menu datotekama iz distribucije, vjerojatno u ~/GNUstep/Library/WindowMaker/menu"
-# 
+#
 # msgid ""
 # "bad speed value for option %s.\n"
 # "Using default Medium"
 # msgstr ""
 # "kriva vrijednost za brzinu za opciju %s.\n"
 # "Koristm Medium"
-# 
+#
 # msgid "The format of the current menu file (%s) is not supported by WPrefs. A new menu will be created."
 # msgstr "Format trenutne datoteke izbornika (%s) nije podržan od strane WPrefs-a. Kreirat ću novi izbornik."
-# 
+#
 # msgid "Omnipresent miniwindows"
 # msgstr "SvugdjePrisutni mini prozori"
-# 
+#
 # msgid "Error extracting version from WindowMaker. Make sure it is correctly installed."
 # msgstr "Greška pri izvlačenju verzije WindowMakera. Provjerite da je ispravno instaliran."
-# 
+#
 # msgid "Auto-arrange icons"
 # msgstr "Auto-pospremanje ikona"
-# 
+#
 # msgid "Open submenus to the left if they don't fit inside the screen."
 # msgstr "Otvoriti podizbornike na lijevo ako ne stanu unutar ekrana."
-# 
+#
 # msgid "Use SaveUnders in icons, menus and other objects"
 # msgstr "Koristi SnimiIspod u ikonama, izbornicima i drugim objektima"
-# 
-# msgid "Type the path for the directory. You can type more than one path by separating them with spaces." 
+#
+# msgid "Type the path for the directory. You can type more than one path by separating them with spaces."
 # msgstr "Upišite stazu za direktorij. Možete upisati više od jedne staze odvajajući ih razmacima."
-# 
+#
 # msgid "invalid data in option WindowPlacementOrigin. Using default (0,0)"
 # msgstr "krivi podaci u opciji WindowPlacementOrigin. Koristim (0,0)"
-# 
+#
 # msgid "Icon Size"
 # msgstr "Veličina ikone"
-# 
+#

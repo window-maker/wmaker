@@ -503,7 +503,7 @@ rm -rf $RPM_BUILD_ROOT
 
 * Tue Aug 09 2005 Andreas Bierfert <andreas.bierfert[AT]lowlatency.de>
 0.92.0-1
-- upgrade to new version 
+- upgrade to new version
 - use dist tag
 - use smp_mflags
 - fix #163459

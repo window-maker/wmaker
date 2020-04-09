@@ -68,7 +68,7 @@ typedef struct _Panel {
 	WMButton *autoDelayB[wlengthof_nocheck(auto_delay)][wlengthof_nocheck(autoDelayPresetValues)];
 	WMTextField *autoDelayT[wlengthof_nocheck(auto_delay)];
 	WMLabel *autoDelayMsL[wlengthof_nocheck(auto_delay)];
-	
+
 	WMFrame *dockF;
 	WMButton *docksB[wlengthof_nocheck(dock_config)];
 } _Panel;
@@ -267,7 +267,7 @@ static void createPanel(Panel *p)
 		WMSetBalloonTextForView(_(dock_config[i].balloon_text), WMWidgetView(panel->docksB[i]));
 		WMSetButtonAction(panel->docksB[i], pushDockButton, panel);
 	}
-	
+
 	WMMapSubwidgets(panel->dockF);
 
 	if (xis)

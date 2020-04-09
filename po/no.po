@@ -54,7 +54,7 @@ msgid ""
 "Invalid geometry display type \"%s\". Should be Center, Corner, Floating or "
 "Line."
 msgstr ""
-"\"%s\". er et ugyldig geometri valg. Gyldige valg er Center, Corner," 
+"\"%s\". er et ugyldig geometri valg. Gyldige valg er Center, Corner,"
 "Floating eller Line"
 
 #: ../src/defaults.c:1130 ../src/defaults.c:1161 ../src/defaults.c:1173

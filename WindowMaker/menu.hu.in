@@ -3,7 +3,7 @@
  * Verzio: 0.61
  *
  * Horvath Szabolcs <horvathsz@penguinpowered.com> - 2000. junius
- * A 0.20.3-s verziohoz keszult forditast 
+ * A 0.20.3-s verziohoz keszult forditast
  * Prew (Csanaki Csaba <prew@mail.matav.hu>) keszitette. Koszonet erte!
  *
  * Szintakszis:
@@ -12,14 +12,14 @@
  *
  * <Title> egy szoveg, amelyet cimkent kell hasznalni. Ha tartalmaz space-t,
  * akkor idezojelbe ("... ...") kell tenni.
- * 
+ *
  * SHORTCUT meghataroz egy shortcut-ot adott programokra. <Shortcut>-nak
  * ugyanolyan megadasi szintakszisa van a
  * $HOME/GNUstep/Defaults/WindowMaker file-ban, mint a RootMenuKey
  * vagy a MiniaturizeKey.
  *
  * Nem lehet letrehozni shortcut-ot MENU vagy OPEN_MENU bejegyzesben.
- * 
+ *
  * <Parancs> az itt kovetkezo utasitasok valamelyike:
  *      MENU - kezdi a/az (al)menudefiniciot
  *      END  - befejezi a/az (al)menudefiniciot
@@ -104,7 +104,7 @@
  *      "Style" OPEN_MENU style.menu
  * "Teszt" END
  */
-	    
+
 #include "wmmacros"
 
 "Alkalmazások" MENU
@@ -117,7 +117,7 @@
 		"Kézikönyv böngésző" EXEC xman
 	"Infó" END
 	"Futtatás..." SHEXEC %a(Futtatás,Írd be a futtatni kívánt programot:)
-	"X Terminál" EXEC xterm -sb 
+	"X Terminál" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"Gnome terminál" EXEC gnome-terminal --background black --foreground white --font -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso8859-1
 	"Munkafelületek" WORKSPACE_MENU
@@ -131,7 +131,7 @@
 		"X File Manager" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"Netscape" EXEC netscape 
+		"Netscape" EXEC netscape
   		"Ghostview" EXEC ghostview %a(GhostView,Kérem a fájl nevét)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Acrobat,Kérem a PDF fájl nevét)
   		"TkDesk" EXEC tkdesk
@@ -139,7 +139,7 @@
 	"Szerkesztők" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi

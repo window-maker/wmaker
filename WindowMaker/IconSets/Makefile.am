@@ -3,7 +3,7 @@ defsdatadir = $(pkgdatadir)/IconSets
 
 defsdata_DATA = Default.iconset
 
-EXTRA_DIST = 
+EXTRA_DIST =
 
 CLEANFILES = Default.iconset
 

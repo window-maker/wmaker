@@ -4,7 +4,7 @@ BUILT_SOURCES = wconfig.h
 
 bin_PROGRAMS = wmaker
 
-EXTRA_DIST = 
+EXTRA_DIST =
 
 wmaker_SOURCES = 	\
 	GNUstep.h \
@@ -152,7 +152,7 @@ AM_CFLAGS =
 
 AM_CPPFLAGS = $(DFLAGS) \
 	-I$(top_srcdir)/wrlib \
-	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@ 
+	-I$(top_srcdir)/WINGs @HEADER_SEARCH_PATH@
 
 
 wmaker_LDADD = \

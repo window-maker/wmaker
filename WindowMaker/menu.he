@@ -8,7 +8,7 @@
  * <Title> is any string to be used as title. Must be enclosed with " if it
  * 	has spaces
  *
- * <Command> one of the valid commands: 
+ * <Command> one of the valid commands:
  *	MENU - starts (sub)menu definition
  *	OPEN_MENU - opens a menu from a file, pipe or directory(ies) contents
  *		    and eventually precede each with a command.
@@ -101,7 +101,7 @@
 		"Process List" EXEC xterm -e top
 		"Manual Browser" EXEC xman
 	"עדימ" END
-	"XTerm" EXEC xterm -sb 
+	"XTerm" EXEC xterm -sb
 	"Rxvt" EXEC rxvt -bg black -fg white -fn fixed
 	"הדובע יבחרמ" WORKSPACE_MENU
 	"םימושי" MENU
@@ -114,7 +114,7 @@
 		"X File Manager" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
-		"פייקסטנ" EXEC netscape 
+		"פייקסטנ" EXEC netscape
   		"Ghostview" EXEC ghostview %a(Enter file to view)
 		"Acrobat" EXEC /usr/local/Acrobat3/bin/acroread %a(Enter PDF to view)
   		"TkDesk" EXEC tkdesk
@@ -122,7 +122,7 @@
 	"םיכרוע" MENU
 		"XFte" EXEC xfte
 		"XEmacs" SHEXEC xemacs || emacs
-		"XJed" EXEC xjed 
+		"XJed" EXEC xjed
 		"NEdit" EXEC nedit
 		"Xedit" EXEC xedit
 		"VI" EXEC xterm -e vi

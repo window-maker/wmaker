@@ -1,6 +1,6 @@
 #include "wmmacros"
 
-Appearance MENU 
+Appearance MENU
   "Background" OPEN_MENU background.menu
   "Styles" OPEN_MENU -noext  STYLES_DIR USER_STYLES_DIR WITH setstyle
   "Themes" OPEN_MENU -noext  THEMES_DIR USER_THEMES_DIR WITH setstyle
@@ -8,5 +8,5 @@ Appearance MENU
   "Save IconSet" EXEC geticonset USER_ICON_SETS_DIR/"%a(IconSet name)"
   "Save Theme" EXEC getstyle -p "%a(Theme name)"
   "Preferences Utility" EXEC #wprefs#
-Appearance  END 
+Appearance  END
 

@@ -8,7 +8,7 @@
 //
 // <Título> cadena de texto usada como el título.Tiene que estar entre ""
 //
-// <Comando> un comando de los siguientes : 
+// <Comando> un comando de los siguientes :
 //	MENU - comienza la definición del (sub)menu.
 //	END  - termina la definición del (sub)menu.
 //	EXEC <programa> - ejecuta un programa externo
@@ -23,12 +23,12 @@
 //		excepto la que tiene el foco (o la ultima que haya recibido el foco)
 //
 // <Parametros> es el programa a ejecutar.
-// 
+//
 // ** Opciones para a linea de comando EXEC :
 // %s - se sustituye por la corriente seleción. Si la selección no es posible ,
 //      el comando es cancelado
-// %w - se sustituye con la corrente ID de la ventana selecionada . Si no hay 
-//      ventanas selecionadas , no se devuolve nada. 
+// %w - se sustituye con la corrente ID de la ventana selecionada . Si no hay
+//      ventanas selecionadas , no se devuolve nada.
 //
 // Se puede anular carácteres especiales (como % e ") con el caracter \ :
 // ejemplo: xterm -T "\"Terminal X\""
@@ -54,14 +54,14 @@
         "Emuladores ..." END
 
 	"Aplicaciones ..." MENU
-	
+
 		"Graficos ..." MENU
 			"Gimp" EXEC gimp
 			"XV" EXEC xv
 			"XPaint" EXEC xpaint
 			"XFig" EXEC xfig
 		"Graficos ..." END
-     
+
                 "Editores ..." MENU
 	                "XEmacs" SHEXEC xemacs || emacs
 			"XJed" EXEC xjed
@@ -69,13 +69,13 @@
 			"Xedit" EXEC xedit
 			"VI" EXEC xterm -e vi
 	        "Editores ..." END
-		
+
 		"Multimedia ..." MENU
 	                "Xmcd" SHEXEC xmcd 2> /dev/null
 			"Xplaycd" EXEC xplaycd
 			"Xmixer" EXEC xmixer
 		"Multimedia ..." END
-		
+
 		"Utilidades ..." MENU
 	                "Calculadora" EXEC xcalc
 			"Selector de fuente" EXEC xfontsel
@@ -85,7 +85,7 @@
 			"ASClock" EXEC asclock -shape
 			"Portapapeles" EXEC xclipboard
 		"Utilidades ..." END
-		
+
 		"X File Manager" EXEC xfm
 		"OffiX Files" EXEC files
 		"LyX" EXEC lyx
@@ -123,7 +123,7 @@
 	"Configurar Area de Trabajo ..." END
 
         "Areas de Trabajo ..." WORKSPACE_MENU
-	
+
 #if (UID==0)	// Só o ve root ou usuarios con UID=0
 	"Sistema" MENU
 		// Panel de control

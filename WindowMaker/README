@@ -17,10 +17,10 @@ in double quotes ("). Ex: "~/GNUstep/Library/WindowMaker/menu"
 
 Instructions for editing the plain text menus can be found in the menu
 file itself, kindly translated to your tongue for your convenience, by
-the translation contributors. 
+the translation contributors.
 
 There is a script to convert plain text menus to property list menus
-in the utils directory, named wm-oldmenu2new. 
+in the utils directory, named wm-oldmenu2new.
 
 If you are unsure to wich format to use, stick with the plain text menus
 as they are more flexible. If for some psychological reason you are
@@ -32,7 +32,7 @@ Localized menu file translators:
 
 File    Language        Maintainer
 ------------------------------------------------------------------------------
-menu.ja Japanese        MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp> 
+menu.ja Japanese        MANOME Tomonori <manome@itlb.te.noda.sut.ac.jp>
 				ABE Shige <sabe@ibm.net>
 menu.pt Portuguese      Alfredo K. Kojima <kojima@inf.ufrgs.br>
 menu.de	German		Carsten Schaar <nhadcasc@fs-maphy.uni-hannover.de>

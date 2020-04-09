@@ -1,6 +1,6 @@
 /*
  * Some generic macros for WindowMaker configuration files
- * 
+ *
  */
 
 #ifndef WMMACROS_
@@ -11,7 +11,7 @@
 /*
  * WS_BACK - sets the root background texture to VAL
  */
-#define WS_BACK EXEC wdwrite WindowMaker WorkspaceBack 
+#define WS_BACK EXEC wdwrite WindowMaker WorkspaceBack
 
 /*
  * CLEARROOT - set the root background to nothing
@@ -20,10 +20,10 @@
 
 
 /*
- * 
+ *
  * MANUAL_SEARCH(ITEM) - search manual page for ITEM
- * 
- * You might need to change this according to what's the exit status of your 
+ *
+ * You might need to change this according to what's the exit status of your
  * man(1). This is for the one that comes with Linux (RedHat)
  */
 #ifdef HAVE_XLESS

@@ -111,7 +111,7 @@
 /*
  * Some of the following options can be configured in the preference files,
  * but if for some reason they can't, these are their defaults.
- * 
+ *
  * There are also some options that can only be configured here, at compile time.
  */
 

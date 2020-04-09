@@ -18,7 +18,7 @@ libWUtil_la_LIBADD = @LIBBSD@
 EXTRA_DIST = BUGS make-rgb Examples Extras Tests
 
 
-# wbutton.c 
+# wbutton.c
 libWINGs_la_SOURCES = 	\
 	configuration.c \
 	dragcommon.c \
