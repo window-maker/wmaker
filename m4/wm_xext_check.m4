@@ -108,7 +108,7 @@ Atom prop;
        CFLAGS="$wm_save_CFLAGS"])
     ])
 dnl The cached check already reported problems when not found
-AS_IF([test "wm_cv_xext_xmu" = "xno"],
+AS_IF([test "x$wm_cv_xext_xmu" = "xno"],
   [LIBXMU=""
    unsupported="$unsupported Xmu"],
   [AC_DEFINE([HAVE_LIBXMU], [1],
