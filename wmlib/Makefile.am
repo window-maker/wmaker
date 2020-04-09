@@ -8,7 +8,7 @@ include_HEADERS = WMaker.h
 
 AM_CPPFLAGS = $(DFLAGS) @XCFLAGS@
 
-libWMaker_la_LIBADD = -lX11
+libWMaker_la_LIBADD = @XLFLAGS@ @XLIBS@
 
 libWMaker_la_SOURCES = 	\
 	menu.c 		\
