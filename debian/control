@@ -4,13 +4,15 @@ Priority: optional
 Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.alioth.debian.org>
 Uploaders: Andreas Metzler <ametzler@debian.org>,
            Doug Torrance <dtorrance@piedmont.edu>
-Standards-Version: 4.0.1
-Build-Depends: automake (>= 1:1.12),
-               debhelper (>= 10),
+Rules-Requires-Root: no
+Standards-Version: 4.5.0
+Build-Depends: debhelper-compat (= 12),
                gettext,
                libfontconfig1-dev,
                libgif-dev,
                libjpeg-dev,
+               libmagickwand-6.q16-dev,
+               libpango1.0-dev,
                libpng-dev,
                libsm-dev,
                libtiff-dev,
@@ -26,9 +28,9 @@ Build-Depends: automake (>= 1:1.12),
                libxrender-dev,
                libxt-dev,
                sharutils
-Homepage: http://windowmaker.org/
-Vcs-Browser: https://anonscm.debian.org/git/pkg-wmaker/wmaker.git
-Vcs-Git: https://anonscm.debian.org/git/pkg-wmaker/wmaker.git
+Homepage: https://www.windowmaker.org/
+Vcs-Browser: https://salsa.debian.org/wmaker-team/wmaker
+Vcs-Git: https://salsa.debian.org/wmaker-team/wmaker.git
 
 Package: wmaker
 Architecture: any

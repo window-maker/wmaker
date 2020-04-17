@@ -1,4 +1,5 @@
 libWINGs.so.3 libwings3 #MINVER#
+* Build-Depends-Package: libwings-dev
  WINGsConfiguration@Base 0.95.0
  WMAddBoxSubview@Base 0.95.0
  WMAddBoxSubviewAtEnd@Base 0.95.0
@@ -58,7 +59,9 @@ libWINGs.so.3 libwings3 #MINVER#
  WMCreateRGBAColor@Base 0.95.0
  WMCreateRGBColor@Base 0.95.0
  WMCreateRuler@Base 0.95.0
+ WMCreateScaledAlertPanel@Base 0.95.9
  WMCreateScaledBlendedPixmapFromFile@Base 0.95.6
+ WMCreateScaledInputPanel@Base 0.95.9
  WMCreateScreen@Base 0.95.0
  WMCreateScreenWithRContext@Base 0.95.0
  WMCreateScrollView@Base 0.95.0
@@ -173,6 +176,7 @@ libWINGs.so.3 libwings3 #MINVER#
  WMGetRulerMargins@Base 0.95.0
  WMGetRulerOffset@Base 0.95.0
  WMGetSavePanel@Base 0.95.0
+ WMGetScaleBaseFromSystemFont@Base 0.95.9
  WMGetScrollViewHorizontalScroller@Base 0.95.0
  WMGetScrollViewVerticalScroller@Base 0.95.0
  WMGetScrollViewVisibleRect@Base 0.95.0

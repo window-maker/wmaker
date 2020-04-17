@@ -6,8 +6,5 @@ NEWS
 README
 TODO
 debian/debianfiles/Themes/DebianLegacy.txt
-debian/tmp/README.WPrefs
-debian/tmp/README.WPrefs.po
-debian/tmp/README.definable-cursor
-debian/tmp/README.po
+debian/tmp/README.*
 util/wm-oldmenu2new

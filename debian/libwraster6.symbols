@@ -1,4 +1,5 @@
 libwraster.so.6 libwraster6 #MINVER#
+* Build-Depends-Package: libwraster-dev
  LIBWRASTER6@LIBWRASTER6 0.95.8
  RBevelImage@LIBWRASTER6 0.95.8
  RBlurImage@LIBWRASTER6 0.95.8

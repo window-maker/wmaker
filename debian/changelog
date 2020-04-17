@@ -1,3 +1,90 @@
+wmaker (0.95.9-1) experimental; urgency=low
+
+  [ Doug Torrance ]
+  * New upstream release.
+    - No longer sets GNUSTEP_USER_ROOT environment variable
+      (Closes: #922284).
+    - Prefers TryExec to Exec when generating menu entries from XDG desktop
+      files (closes: #930674).
+    - Drop patches previously pulled from upstream GIT:
+      10_util-fix-parsing-of-XDG-menus-with-multiple-groups.patch
+      11_XDG-menu-categories.patch 12_reference-proplist-menus.patch
+      60_fix_pkg-config_variable_typo.patch
+    - Unfuzz 75_WPrefs_to_bindir_when_gnustedir_is_set.diff
+    - 54_Debian_wmmacros.diff dropped, main functionality included upstream.
+  * debian/compat
+    - Remove file; compatibility level now handled by debhelper-compat
+      package.
+  * debian/control
+    - Bump Standards-Version to 4.5.0.
+    - Switch Build-Depends on debhelper to debhelper-compat for
+      compatibility level 12.
+  * debian/lib*.symbols
+    - Add Build-Depends-Package fields.
+  * debian/libwings3.symbols
+    - Add new WINGs symbols.
+  * debian/patches/10_support_imagemagick6.diff
+    - New patch; restore support for ImageMagick v6, as v7 is not in
+      Debian yet.
+  * debian/patches/.keepme
+    - Remove unnecessary file; was causing
+      patch-file-present-but-not-mentioned-in-series Lintian warning.
+  * debian/README.Debian
+    - Fix typo.
+  * debian/rules
+    - Remove replacement of #wmdatadir# to $(WMSHAREDIR) in some menu
+      files; this is now done by upstream during build.
+    - Install README's from WindowMaker directory correctly. Avoids
+      package-contains-documentation-outside-usr-share-doc Lintian
+      warning.
+  * debian/wmaker-common.docs
+    - Use wildcard to catch all the README's that have been renamed
+      in d/rules.
+
+ -- Andreas Metzler <ametzler@debian.org>  Tue, 14 Apr 2020 18:06:26 +0200
+
+wmaker (0.95.8-3) unstable; urgency=low
+
+  [ Doug Torrance ]
+  * debian/compat
+    - Bump debhelper compatibility level to 11.
+  * debian/control
+    - Bump versioned dependency on debhelper to >= 11.
+    - Drop automake (>= 1:1.12) from Build-Depends; automake 1.14 is
+      now in oldstable.
+    - Add libmagickwand-6.q16-dev to Build-Depends.
+    - Add libpango1.0-dev to Build-Depends.  We have been passing
+      --enable-pango to configure during build since version 0.95.7-1,
+      but it has been failing.
+    - Bump Standards-Version to 4.2.1.
+    - Use https in Homepage.
+    - Update Vcs-* after migration to Salsa.
+  * debian/copyright
+    - Update Format to https.
+  * debian/patches/60_fix_pkg-config_variable_typo.patch
+    - New patch; correctly call pkg-config when building with
+      ImageMagick support.
+  * debian/README.Debian
+    - Add documentation for new FreeDesktop-style menu which replaced
+      the deprecated Debian menu (Closes: #872879).
+  * debian/rules
+    - Add --enable-magick configure option to enable ImageMagick
+      support (Closes: #905608).
+    - Remove --parallel option to dh; default after debhelper 10.
+  * debian/watch
+    - Use https for download link.
+
+  [ Andreas Metzler ]
+  * Delete trailing whitespace in Debian changelog. (Thanks, lintian)
+  * 75_WPrefs_to_bindir_when_gnustedir_is_set.diff: Install main WPrefs
+    executable to /usr/bin even if --with-gnustepdir is used.
+    Build with --with-gnustepdir=/usr/share/GNUstep (instead of
+    /usr/share/lib/...) and fix references in debian/* accordingly.
+    (LP: #1742842)
+  * Set Rules-Requires-Root: no.
+
+ -- Andreas Metzler <ametzler@debian.org>  Thu, 13 Sep 2018 19:16:14 +0200
+
 wmaker (0.95.8-2) unstable; urgency=low
 
   [ Doug Torrance ]
@@ -1421,7 +1508,6 @@ wmaker (0.61.1-3) frozen; urgency=low
   * Added calls to x-terminal-emulator instead of xterm in
     default settings.
   * Cleaned up the control file.
-  *
 
  -- Chris McKillop <cdm@debian.org>  Tue,  1 Feb 2000 00:42:12 -0500
 

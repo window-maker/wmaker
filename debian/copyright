@@ -1,4 +1,4 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: wmaker
 Upstream-Contact: Window Maker developers mailing list <wmaker-dev@googlegroups.com>
 Source: http://repo.or.cz/w/wmaker-crm.git

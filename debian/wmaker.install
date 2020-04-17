@@ -11,7 +11,7 @@ usr/bin/wmgenmenu
 usr/bin/wmiv
 usr/bin/wmmenugen
 usr/bin/wmsetbg
-usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs usr/lib/GNUstep/System/Applications/WPrefs.app
+usr/bin/WPrefs
 usr/share/man/cs/man1/geticonset.1
 usr/share/man/cs/man1/getstyle.1
 usr/share/man/cs/man1/seticons.1

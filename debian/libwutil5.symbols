@@ -1,4 +1,5 @@
 libWUtil.so.5 libwutil5 #MINVER#
+* Build-Depends-Package: libwings-dev
  WHandleEvents@Base 0.95.5
  WMAddIdleHandler@Base 0.95.5
  WMAddInputHandler@Base 0.95.5

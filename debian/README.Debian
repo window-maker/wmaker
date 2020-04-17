@@ -6,8 +6,8 @@ another window manager, written mostly from scratch by Alfredo Kojima
 in an attempt to provide as much of the useful OpenStep functionality
 as possible under X11.  It is the natural step after AfterStep.
 
-There are some changes in the paths, added support for Debian menu
-system, improved user configuration (from the sysadmin point of view).
+There are some changes in the paths and improved user configuration
+(from the sysadmin point of view).
 
 To run Window Maker put this at the end of ~/.xsession:
 
@@ -132,23 +132,8 @@ theme.
 
 If you don't like the arrangement of the Appearance menu, you can put
 a file "appearance.menu" in ~/GNUstep/Library/WindowMaker, and it will
-override the default one. Look at /etc/GNUstep/Defaults/appearance.menu
+override the default one. Look at /usr/share/WindowMaker/appearance.menu
 for an example.
-
-Shortcuts
----------
-
-Thanks to a suggestion, there's support for Shortcuts.  If you want to
-have Shift F1 launch an XTerm, you can:
-
-$ cp /usr/lib/menu/xterm /etc/menu
-$ sensible-editor /etc/menu/xterm
-
-add:
-
-        shortcut=Shift+F1
-
-and run update-menus.
 
 Sound Support
 -------------
@@ -200,4 +185,28 @@ above into ~/GNUstep/Defaults/WMRootMenu, start WPrefs, click the Menu
 Guru (the 9th icon, left to right).  Now go read the docs.  That's the
 reason they are there.
 
+FreeDesktop menu
+----------------
+
+As of policy version 3.9.8, the Debian menu has been deprecated in favor
+of the FreeDesktop menu standard.
+
+There is currently not a menu for Window Maker which is 100% compatible
+with the standards.  But several options exist which offer a decent
+approximation.
+
+* The wmmenugen utility included with Window Maker, e.g.
+
+      wmmenugen -parser:xdg /usr/share/applications/
+
+  This is the option used by the default menu, which may be found in
+  /etc/GNUstep/Defaults/plmenu.Debian.  This is symlinked by
+  /usr/share/WindowMaker/menu.hook.
+
+* xdgmenumaker (https://github.com/gapan/xdgmenumaker)
+
+* xdg-menu (https://wiki.archlinux.org/index.php/xdg-menu)
+
 Marcelo E. Magallon <mmagallo@debian.org>, Thr, 1 Apr 1999 18:47:30 -0600
+
+ -- Doug Torrance <dtorrance@piedmont.edu>, Sun,  5 Apr 2020 20:09:38 -0400

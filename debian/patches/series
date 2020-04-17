@@ -1,1 +1,3 @@
+10_support_imagemagick6.diff
 53_Debian_WMState.diff
+75_WPrefs_to_bindir_when_gnustedir_is_set.diff

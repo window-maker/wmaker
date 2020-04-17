@@ -7,7 +7,8 @@ export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
-WMAKER_OPTIONS := --disable-xlocale --enable-modelock --enable-pango --enable-xinerama
+WMAKER_OPTIONS := --disable-xlocale --enable-modelock --enable-pango \
+                  --enable-xinerama --enable-magick
 #not-enabled      --enable-usermenu --disable-shape --disable-shm --enable-randr
 #not-enabled      --disable-xpm --disable-png --disable-jpeg --disable-gif --disable-tiff
 
@@ -19,7 +20,7 @@ DEBIAN_TMP        := debian/tmp
 BASEDIR           := /usr
 INCLUDEDIR        := $(BASEDIR)/include
 SHAREDIR          := $(BASEDIR)/share
-GNUSTEPDIR        := $(SHAREDIR)/lib/GNUstep/System
+GNUSTEPDIR        := $(SHAREDIR)/GNUstep/System
 WMSHAREDIR        := $(SHAREDIR)/WindowMaker
 PIXMAPDIR         := $(INCLUDEDIR)/X11/pixmaps
 DEFSDATADIR       := /etc/GNUstep/Defaults
@@ -30,7 +31,7 @@ COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
                      --with-defsdatadir=$(DEFSDATADIR)
 
 %:
-	dh $@ --parallel
+	dh $@
 
 override_dh_auto_configure:
 	env LINGUAS="$(LINGUAS)" dh_auto_configure --verbose -- \
@@ -41,6 +42,9 @@ override_dh_installdocs:
 	# We use the root of the temporal directory debian/tmp
 	cp po/README $(DEBIAN_TMP)/README.po
 	cp README.definable-cursor $(DEBIAN_TMP)/README.definable-cursor
+	cp WindowMaker/Icons/README $(DEBIAN_TMP)/README.Icons
+	cp WindowMaker/README $(DEBIAN_TMP)/README.menu
+	cp WindowMaker/README.themes $(DEBIAN_TMP)/README.themes
 	cp WPrefs.app/README $(DEBIAN_TMP)/README.WPrefs
 	cp WPrefs.app/po/README $(DEBIAN_TMP)/README.WPrefs.po
 	dh_installdocs
@@ -50,14 +54,8 @@ override_dh_install:
 	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/autostart.sh
 	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/exitscript.sh
 
-
-	# Now, change the #wmdatadir# string to $(WMSHAREDIR)
-	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' `find $(DEBIAN_TMP)/$(WMSHAREDIR) -name plmenu.*`
-	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' $(DEBIAN_TMP)$(WMSHAREDIR)/wmmacros
-	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' $(DEBIAN_TMP)$(WMSHAREDIR)/plmenu
-
 	# Install files
-	dh_install
+	dh_install -XREADME
 
 override_dh_installwm:
 	dh_installwm --priority=50

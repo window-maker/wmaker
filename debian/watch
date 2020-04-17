@@ -1,2 +1,2 @@
 version=4
-http://windowmaker.org/ (?:|.*/)WindowMaker@ANY_VERSION@@ARCHIVE_EXT@
+https://www.windowmaker.org/ (?:|.*/)WindowMaker@ANY_VERSION@@ARCHIVE_EXT@
