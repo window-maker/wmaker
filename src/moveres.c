@@ -2002,8 +2002,8 @@ static int getResizeDirection(WWindow * wwin, int x, int y, int dy, int flags)
 		int ydir = (abs(y) < (wwin->client.height / 2)) ? UP : DOWN;
 
 		/* How much resize space is allowed */
-		int spacew = abs(wwin->client.width / 3);
-		int spaceh = abs(wwin->client.height / 3);
+		int spacew = wwin->client.width / 3;
+		int spaceh = wwin->client.height / 3;
 
 		/* Determine where x fits */
 		if ((abs(x) > wwin->client.width/2 - spacew/2) &&

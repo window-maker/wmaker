@@ -261,28 +261,28 @@ int wGetHeadRelativeToCurrentHead(WScreen *scr, int current_head, int direction)
 			case DIRECTION_LEFT:
 				if (rect->pos.x < crect.pos.x) {
 					found = 1;
-					distance = abs((rect->pos.x + rect->size.width)
+					distance = abs((rect->pos.x + (int)rect->size.width)
 							- crect.pos.x) + abs(rect->pos.y + crect.pos.y);
 				}
 				break;
 			case DIRECTION_RIGHT:
 				if (rect->pos.x > crect.pos.x) {
 					found = 1;
-					distance = abs((crect.pos.x + crect.size.width)
+					distance = abs((crect.pos.x + (int)crect.size.width)
 							- rect->pos.x) + abs(rect->pos.y + crect.pos.y);
 				}
 				break;
 			case DIRECTION_UP:
 				if (rect->pos.y < crect.pos.y) {
 					found = 1;
-					distance = abs((rect->pos.y + rect->size.height)
+					distance = abs((rect->pos.y + (int)rect->size.height)
 							- crect.pos.y) + abs(rect->pos.x + crect.pos.x);
 				}
 				break;
 			case DIRECTION_DOWN:
 				if (rect->pos.y > crect.pos.y) {
 					found = 1;
-					distance = abs((crect.pos.y + crect.size.height)
+					distance = abs((crect.pos.y + (int)crect.size.height)
 							- rect->pos.y) + abs(rect->pos.x + crect.pos.x);
 				}
 				break;

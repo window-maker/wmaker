@@ -997,9 +997,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 				int head;
 
 				x = transientOwner->frame_x +
-				    abs((transientOwner->frame->core->width - width) / 2) + offs;
+					abs(((int)transientOwner->frame->core->width - (int)width) / 2) + offs;
 				y = transientOwner->frame_y +
-				    abs((transientOwner->frame->core->height - height) / 3) + offs;
+					abs(((int)transientOwner->frame->core->height - (int)height) / 3) + offs;
 
 				/* limit transient windows to be inside their parent's head */
 				rect.pos.x = transientOwner->frame_x;

@@ -1436,7 +1436,7 @@ static void getScrollAmount(WMenu * menu, int *hamount, int *vamount)
 
 	} else if (xroot >= (rect.pos.x + rect.size.width - 2) && menuX2 > (rect.pos.x + rect.size.width - 1)) {
 		/* scroll to the left */
-		*hamount = WMIN(MENU_SCROLL_STEP, abs(menuX2 - rect.pos.x - rect.size.width - 1));
+		*hamount = WMIN(MENU_SCROLL_STEP, abs(menuX2 - rect.pos.x - (int)rect.size.width - 1));
 
 		if (*hamount == 0)
 			*hamount = 1;
@@ -1450,7 +1450,7 @@ static void getScrollAmount(WMenu * menu, int *hamount, int *vamount)
 
 	} else if (yroot >= (rect.pos.y + rect.size.height - 2) && menuY2 > (rect.pos.y + rect.size.height - 1)) {
 		/* scroll up */
-		*vamount = WMIN(MENU_SCROLL_STEP, abs(menuY2 - rect.pos.y - rect.size.height - 2));
+		*vamount = WMIN(MENU_SCROLL_STEP, abs(menuY2 - rect.pos.y - (int)rect.size.height - 2));
 
 		*vamount = -*vamount;
 	}

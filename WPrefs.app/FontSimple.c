@@ -22,6 +22,7 @@
 #include "WPrefs.h"
 #include <unistd.h>
 #include <fontconfig/fontconfig.h>
+#include <math.h>
 
 /* workaround for older fontconfig, that doesn't define these constants */
 #ifndef FC_WEIGHT_NORMAL
@@ -521,7 +522,7 @@ static void selectedOption(WMWidget * w, void *data)
 				WMListItem *item = WMGetListItem(panel->sizeL, i);
 				int distance;
 
-				distance = abs(size - atoi(item->text));
+				distance = fabs(size - atoi(item->text));
 
 				if (i == 0 || distance < closest) {
 					closest = distance;
