@@ -1,3 +1,10 @@
+wmaker (0.95.9-2) unstable; urgency=low
+
+  * Ship manpages from as-installed location (debian/tmp) instead of
+    sourcetree to make dh_missing output more useful.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sat, 18 Apr 2020 11:30:41 +0200
+
 wmaker (0.95.9-1) experimental; urgency=low
 
   [ Doug Torrance ]
