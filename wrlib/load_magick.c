@@ -22,10 +22,12 @@
 
 #include "config.h"
 
-#if USE_MAGIC < 7
+#ifdef USE_MAGICK
+#if USE_MAGICK < 7
 #include <wand/magick_wand.h>
 #else
 #include <MagickWand/MagickWand.h>
+#endif
 #endif
 
 #include "wraster.h"
