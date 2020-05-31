@@ -1,6 +1,0 @@
-#!/bin/sh
-set -e
-if [ "$1" = "purge" ] && test -e /etc/GNUstep/Defaults/menu.hook ; then
-	rm /etc/GNUstep/Defaults/menu.hook
-fi
-#DEBHELPER#

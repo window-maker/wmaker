@@ -1,6 +1,0 @@
-mv_conffile /etc/X11/WindowMaker/background.menu /usr/share/WindowMaker/background.menu 0.95.7-5~
-mv_conffile /etc/X11/WindowMaker/wmmacros /usr/share/WindowMaker/wmmacros 0.95.7-5~
-rm_conffile /etc/X11/WindowMaker/appearance.menu 0.95.7-5~
-rm_conffile /etc/X11/WindowMaker/menu.posthook 0.95.7-5~
-rm_conffile /etc/X11/WindowMaker/menu.prehook 0.95.7-5~
-rm_conffile /etc/menu-methods/wmappearance 0.95.8-2~
