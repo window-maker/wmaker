@@ -41,7 +41,7 @@ AC_CONFIG_HEADERS([config.h])
 dnl We need the EXTRA_xxx_DEPENDENCIES keyword in Makefiles which have been
 dnl introduced in the version 1.11.3; because the 1.12 was realeased shortly
 dnl after, we just ask for it
-AM_INIT_AUTOMAKE([1.12 silent-rules])
+AM_INIT_AUTOMAKE([1.12 silent-rules -Wno-portability])
 
 dnl Reference file used by 'configure' to make sure the path to sources is valid
 AC_CONFIG_SRCDIR([src/WindowMaker.h])
