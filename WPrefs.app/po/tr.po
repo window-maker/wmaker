@@ -1,0 +1,2627 @@
+# Copyright (C) 2020 The Window Maker Team
+# This file is distributed under the same license as the Window Maker package.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WindowMaker 0.95.9\n"
+"Report-Msgid-Bugs-To: wmaker-dev@googlegroups.com\n"
+"POT-Creation-Date: 2020-06-20 13:50+0200\n"
+"PO-Revision-Date: 2020-06-28 07:47+0000\n"
+"Last-Translator: XOR <wmaker-dev@googlegroups.com>\n"
+"Language-Team: Turkish\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#. Related to Window titles
+#: ../../WPrefs.app/Appearance.c:44
+msgid "Focused Window Title"
+msgstr "Odaklanmış Pencere Başlığı"
+
+#: ../../WPrefs.app/Appearance.c:46
+msgid "Unfocused Window Title"
+msgstr "Odaklanmamış Pencere Başlığı"
+
+#: ../../WPrefs.app/Appearance.c:48
+msgid "Owner of Focused Window Title"
+msgstr "Odaklanmış Pencere Başlığının Sahibi"
+
+#. Related to Menus
+#: ../../WPrefs.app/Appearance.c:52 ../../WPrefs.app/Appearance.c:1504
+#: ../../WPrefs.app/FontSimple.c:100
+msgid "Menu Title"
+msgstr "Menü Başlığı"
+
+#: ../../WPrefs.app/Appearance.c:54
+msgid "Menu Item Text"
+msgstr "Menü Öğesi Metni"
+
+#: ../../WPrefs.app/Appearance.c:56
+msgid "Disabled Menu Item Text"
+msgstr "Devre Dışı Menü Öğesi Metni"
+
+#: ../../WPrefs.app/Appearance.c:58
+msgid "Menu Highlight Color"
+msgstr "Menü Vurgu Rengi"
+
+#: ../../WPrefs.app/Appearance.c:60
+msgid "Highlighted Menu Text Color"
+msgstr "Vurgulanan Menü Metin Rengi"
+
+#.
+#. * yuck kluge: the coordinate for HighlightTextColor are actually those of the last "Normal item"
+#. * at the bottom when user clicks it, the "yuck kluge" in the function 'previewClick' will swap it
+#. * for the MenuTextColor selection as user would expect
+#. *
+#. * Note that the entries are reffered by their index for performance
+#.
+#. Related to Window's border
+#: ../../WPrefs.app/Appearance.c:71
+msgid "Focused Window Border Color"
+msgstr "Odaklanmış Pencere Kenarlığı Rengi"
+
+#: ../../WPrefs.app/Appearance.c:73
+msgid "Window Border Color"
+msgstr "Pencere Kenarlığı Rengi"
+
+#: ../../WPrefs.app/Appearance.c:75
+msgid "Selected Window Border Color"
+msgstr "Seçili Pencere Kenarlığı Rengi"
+
+#. Related to Icons and Clip
+#: ../../WPrefs.app/Appearance.c:79
+msgid "Miniwindow Title"
+msgstr "Miniwindow Başlığı"
+
+#: ../../WPrefs.app/Appearance.c:81
+msgid "Miniwindow Title Back"
+msgstr "Miniwindow Başlığı Geri"
+
+#: ../../WPrefs.app/Appearance.c:83 ../../WPrefs.app/FontSimple.c:103
+msgid "Clip Title"
+msgstr "Klip Başlığı"
+
+#: ../../WPrefs.app/Appearance.c:85
+msgid "Collapsed Clip Title"
+msgstr "Daraltılmış Klip Başlığı"
+
+#: ../../WPrefs.app/Appearance.c:110
+msgid "Left"
+msgstr "Sol"
+
+#: ../../WPrefs.app/Appearance.c:111 ../../WPrefs.app/TexturePanel.c:1407
+#: ../../WPrefs.app/WindowHandling.c:93 ../../WPrefs.app/Workspace.c:189
+msgid "Center"
+msgstr "Merkez"
+
+#: ../../WPrefs.app/Appearance.c:112
+msgid "Right"
+msgstr "Sağ"
+
+#: ../../WPrefs.app/Appearance.c:382
+msgid "[Focused]"
+msgstr "[Odaklanmış]"
+
+#: ../../WPrefs.app/Appearance.c:383
+msgid "Titlebar of Focused Window"
+msgstr "Odaklanmış Pencerenin Başlık Çubuğu"
+
+#: ../../WPrefs.app/Appearance.c:386
+msgid "[Unfocused]"
+msgstr "[Odaklanmamış]"
+
+#: ../../WPrefs.app/Appearance.c:387
+msgid "Titlebar of Unfocused Windows"
+msgstr "Odaklanmamış Windows'un Başlık Çubuğu"
+
+#: ../../WPrefs.app/Appearance.c:390
+msgid "[Owner of Focused]"
+msgstr "[Odaklanmışın Sahibi]"
+
+#: ../../WPrefs.app/Appearance.c:391
+msgid "Titlebar of Focused Window's Owner"
+msgstr "Odaklanmış Pencerenin Sahibinin Başlık Çubuğu"
+
+#: ../../WPrefs.app/Appearance.c:394
+msgid "[Resizebar]"
+msgstr "[Resizebar]"
+
+#: ../../WPrefs.app/Appearance.c:395
+msgid "Window Resizebar"
+msgstr "Pencere Resizebar"
+
+#: ../../WPrefs.app/Appearance.c:398
+msgid "[Menu Title]"
+msgstr "[Menü Başlığı]"
+
+#: ../../WPrefs.app/Appearance.c:399
+msgid "Titlebar of Menus"
+msgstr "Menülerin Başlık Çubuğu"
+
+#: ../../WPrefs.app/Appearance.c:402
+msgid "[Menu Item]"
+msgstr "[Menü Öğesi]"
+
+#: ../../WPrefs.app/Appearance.c:403
+msgid "Menu Items"
+msgstr "Menü Öğeleri"
+
+#: ../../WPrefs.app/Appearance.c:406
+msgid "[Icon]"
+msgstr "[Simge]"
+
+#: ../../WPrefs.app/Appearance.c:407
+msgid "Icon Background"
+msgstr "Simge Arkaplan"
+
+#: ../../WPrefs.app/Appearance.c:410
+msgid "[Background]"
+msgstr "[Arka plan]"
+
+#: ../../WPrefs.app/Appearance.c:411
+msgid "Workspace Background"
+msgstr "Çalışma Alanı Arkaplanı"
+
+#: ../../WPrefs.app/Appearance.c:562 ../../WPrefs.app/TexturePanel.c:880
+#, c-format
+msgid "could not load file '%s': %s"
+msgstr "'%s' dosyası yüklenemedi: %s"
+
+#: ../../WPrefs.app/Appearance.c:565
+#, c-format
+msgid "could not find file '%s' for texture type %s"
+msgstr "%s doku tipi için '%s' dosyası bulunamadı"
+
+#: ../../WPrefs.app/Appearance.c:613 ../../WPrefs.app/Appearance.c:640
+#: ../../WPrefs.app/Appearance.c:675
+#, c-format
+msgid "unknown direction in '%s', falling back to diagonal"
+msgstr "'%s' de bilinmeyen yön, diyagonal geri düşüyor"
+
+#: ../../WPrefs.app/Appearance.c:723
+#, c-format
+msgid "type '%s' is not a supported type for a texture"
+msgstr "'%s' türü bir doku için desteklenen bir tür değil"
+
+#: ../../WPrefs.app/Appearance.c:1091
+#, c-format
+msgid "could not remove file %s"
+msgstr "%s dosyası silinemedi"
+
+#: ../../WPrefs.app/Appearance.c:1113
+msgid "Select File"
+msgstr "Dosya Seç"
+
+#: ../../WPrefs.app/Appearance.c:1316
+#, c-format
+msgid "could not read size of image from '%s', ignoring"
+msgstr "'%s' öğesinden resim boyutu okunamadı, yok sayılıyor"
+
+#: ../../WPrefs.app/Appearance.c:1321
+#, c-format
+msgid "image \"%s\" has an invalid depth of %d, ignoring"
+msgstr "image \"%s\" geçersiz bir %d derinliğe sahip, yoksayılıyor"
+
+#: ../../WPrefs.app/Appearance.c:1327
+#, c-format
+msgid "could not create RImage for \"%s\": %s"
+msgstr "\"%s\" için RImage oluşturulamadı: %s"
+
+#: ../../WPrefs.app/Appearance.c:1484
+msgid "Focused Window"
+msgstr "Odaklanmış Pencere"
+
+#: ../../WPrefs.app/Appearance.c:1491
+msgid "Unfocused Window"
+msgstr "Odaklanmamış Pencere"
+
+#: ../../WPrefs.app/Appearance.c:1498
+msgid "Owner of Focused Window"
+msgstr "Odaklanmış Pencerenin Sahibi"
+
+#: ../../WPrefs.app/Appearance.c:1510 ../../WPrefs.app/Appearance.c:1514
+msgid "Normal Item"
+msgstr "Normal Öğe"
+
+#: ../../WPrefs.app/Appearance.c:1520
+msgid "Disabled Item"
+msgstr "Devre dışı bırakılmış öğe"
+
+#: ../../WPrefs.app/Appearance.c:1535
+msgid "Highlighted"
+msgstr "Vurgulanan"
+
+#: ../../WPrefs.app/Appearance.c:1628
+msgid "Icon Text"
+msgstr "Simge Metni"
+
+#: ../../WPrefs.app/Appearance.c:1712 ../../WPrefs.app/Appearance.c:1719
+msgid "Clip"
+msgstr "Klip"
+
+#: ../../WPrefs.app/Appearance.c:1716
+msgid "Coll."
+msgstr ""
+
+#: ../../WPrefs.app/Appearance.c:1880
+msgid "Texture"
+msgstr "Doku"
+
+#: ../../WPrefs.app/Appearance.c:1903
+msgid ""
+"Double click in the texture you want to use\n"
+"for the selected item."
+msgstr "Seçilen öğe için kullanmak istediğiniz dokuya çift tıklayın."
+
+#: ../../WPrefs.app/Appearance.c:1915
+msgid "New"
+msgstr "Yeni"
+
+#: ../../WPrefs.app/Appearance.c:1919
+msgid "Create a new texture."
+msgstr "Yeni bir doku oluştur."
+
+#: ../../WPrefs.app/Appearance.c:1926
+msgid "Extract..."
+msgstr "Ayıkla ..."
+
+#: ../../WPrefs.app/Appearance.c:1930
+msgid "Extract texture(s) from a theme or a style file."
+msgstr "Bir tema veya stil dosyasından doku (ları) ayıklayın."
+
+#: ../../WPrefs.app/Appearance.c:1939
+msgid "Edit"
+msgstr "Düzenle"
+
+#: ../../WPrefs.app/Appearance.c:1942
+msgid "Edit the highlighted texture."
+msgstr "Vurgulanan dokuyu düzenleyin."
+
+#: ../../WPrefs.app/Appearance.c:1949 ../../WPrefs.app/TexturePanel.c:1218
+msgid "Delete"
+msgstr "Sil"
+
+#: ../../WPrefs.app/Appearance.c:1953
+msgid "Delete the highlighted texture."
+msgstr "Vurgulanan dokuyu sil."
+
+#: ../../WPrefs.app/Appearance.c:1965
+msgid "Color"
+msgstr "Renk"
+
+#: ../../WPrefs.app/Appearance.c:2021
+msgid "Options"
+msgstr "Seçenekler"
+
+#: ../../WPrefs.app/Appearance.c:2028
+msgid "Menu Style"
+msgstr "Menü Stili"
+
+#: ../../WPrefs.app/Appearance.c:2046 ../../WPrefs.app/Configurations.c:179
+#: ../../WPrefs.app/Configurations.c:191 ../../WPrefs.app/Docks.c:212
+#: ../../WPrefs.app/Docks.c:220 ../../WPrefs.app/Focus.c:279
+#: ../../WPrefs.app/Focus.c:290 ../../WPrefs.app/MenuPreferences.c:127
+#: ../../WPrefs.app/MenuPreferences.c:138
+#: ../../WPrefs.app/MenuPreferences.c:166
+#: ../../WPrefs.app/MenuPreferences.c:181 ../../WPrefs.app/MouseSettings.c:554
+#: ../../WPrefs.app/MouseSettings.c:565 ../../WPrefs.app/WPrefs.c:459
+#: ../../WPrefs.app/WPrefs.c:473
+#, c-format
+msgid "could not load icon file %s"
+msgstr "%s simge dosyası yüklenemedi"
+
+#: ../../WPrefs.app/Appearance.c:2059
+msgid "Title Alignment"
+msgstr "Başlık Hizalama"
+
+#: ../../WPrefs.app/Appearance.c:2257
+msgid "Appearance Preferences"
+msgstr "Görünüm Tercihleri"
+
+#: ../../WPrefs.app/Appearance.c:2259
+msgid ""
+"Background texture configuration for windows,\n"
+"menus and icons."
+msgstr ""
+"Windows, menüler ve simgeler için arka plan doku yapılandırması."
+
+#: ../../WPrefs.app/Appearance.c:2295
+msgid "Extract Texture"
+msgstr "Doku Çıkar"
+
+#: ../../WPrefs.app/Appearance.c:2315
+msgid "Textures"
+msgstr "Dokular"
+
+#: ../../WPrefs.app/Appearance.c:2324 ../../WPrefs.app/WPrefs.c:253
+msgid "Close"
+msgstr "Kapat"
+
+#: ../../WPrefs.app/Appearance.c:2329
+msgid "Extract"
+msgstr "Ayıkla"
+
+#: ../../WPrefs.app/Configurations.c:130 ../../WPrefs.app/Docks.c:170
+#: ../../WPrefs.app/Workspace.c:106
+#, c-format
+msgid "could not load image file %s"
+msgstr "%s resim dosyası yüklenemedi"
+
+#: ../../WPrefs.app/Configurations.c:141
+msgid "Icon Slide Speed"
+msgstr "Simge Slayt Hızı"
+
+#: ../../WPrefs.app/Configurations.c:147
+msgid "Shade Animation Speed"
+msgstr "Gölge Animasyon Hızı"
+
+#: ../../WPrefs.app/Configurations.c:206
+msgid "Smooth Scaling"
+msgstr "Düzgün Ölçekleme"
+
+#: ../../WPrefs.app/Configurations.c:237
+msgid ""
+"Smooth scaled background images, neutralizing\n"
+"the `pixelization' effect. This will slow\n"
+"down loading of background images considerably."
+msgstr ""
+"Pikselleştirme efektini nötralize eden pürüzsüz ölçekli arka plan resimleri.\n"
+"Bu, arka plan görüntülerinin yüklenmesini önemli ölçüde yavaşlatır."
+
+#: ../../WPrefs.app/Configurations.c:247
+msgid "Titlebar Style"
+msgstr "Başlık Çubuğu Stili"
+
+#: ../../WPrefs.app/Configurations.c:300 ../../WPrefs.app/Configurations.c:306
+msgid "Animations"
+msgstr "Animasyonlar"
+
+#: ../../WPrefs.app/Configurations.c:317
+msgid ""
+"Disable/enable animations such as those shown\n"
+"for window miniaturization, shading etc."
+msgstr ""
+"Pencere minyatürleştirme, gölgeleme vb. Gibi animasyonları devre dışı "
+"bırakın / etkinleştirin."
+
+#: ../../WPrefs.app/Configurations.c:324
+msgid "Superfluous"
+msgstr "Gereksiz"
+
+#: ../../WPrefs.app/Configurations.c:335
+msgid ""
+"Disable/enable `superfluous' features and\n"
+"animations. These include the `ghosting' of the\n"
+"dock when it's being moved to another side and\n"
+"the explosion animation when undocking icons."
+msgstr ""
+"`` Gereksiz '' özellikleri ve animasyonları devre dışı bırakın / "
+"etkinleştirin. Bunlar, başka bir tarafa taşınırken rıhtımın `` "
+"gölgelenmesini '' ve simgeleri geri alırken patlama animasyonunu içerir."
+
+#: ../../WPrefs.app/Configurations.c:348
+msgid "Dithering colormap for 8bpp"
+msgstr "8bpp için renk taklidi renk taklidi"
+
+#: ../../WPrefs.app/Configurations.c:350
+msgid ""
+"Number of colors to reserve for Window Maker\n"
+"on displays that support only 8bpp (PseudoColor)."
+msgstr ""
+"Yalnızca 8bpp (PseudoColor) destekleyen ekranlarda Window Maker için "
+"ayrılacak renk sayısı."
+
+#: ../../WPrefs.app/Configurations.c:357
+msgid "Disable dithering in any visual/depth"
+msgstr "Herhangi bir görsel / derinlikte titremeyi devre dışı bırak"
+
+#: ../../WPrefs.app/Configurations.c:378
+msgid ""
+"More colors for\n"
+"applications"
+msgstr "Uygulamalar için daha fazla renk"
+
+#: ../../WPrefs.app/Configurations.c:385
+msgid ""
+"More colors for\n"
+"Window Maker"
+msgstr "Window Maker için daha fazla renk"
+
+#: ../../WPrefs.app/Configurations.c:434
+msgid "Other Configurations"
+msgstr "Diğer Konfigürasyonlar"
+
+#: ../../WPrefs.app/Configurations.c:435
+msgid ""
+"Animation speeds, titlebar styles, various option\n"
+"toggling and number of colors to reserve for\n"
+"Window Maker on 8bit displays."
+msgstr ""
+"Animasyon hızları, başlık çubuğu stilleri, çeşitli seçenek geçişleri ve 8 "
+"bitlik ekranlarda Window Maker için ayrılacak renk sayısı."
+
+#: ../../WPrefs.app/Docks.c:26
+msgid "Clip autocollapsing delays"
+msgstr "Klip otomatik çakıştırma gecikmeleri"
+
+#: ../../WPrefs.app/Docks.c:27
+msgid "Clip autoraising delays"
+msgstr "Klip otomatikleştirme gecikmeleri"
+
+#: ../../WPrefs.app/Docks.c:34
+msgid "Before auto-expansion"
+msgstr "Otomatik genişletmeden önce"
+
+#: ../../WPrefs.app/Docks.c:35
+msgid "Before auto-collapsing"
+msgstr "Otomatik daralmadan önce"
+
+#: ../../WPrefs.app/Docks.c:36
+msgid "Before auto-raising"
+msgstr "Otomatik kaldırmadan önce"
+
+#: ../../WPrefs.app/Docks.c:37
+msgid "Before auto-lowering"
+msgstr "Otomatik indirme öncesi"
+
+#: ../../WPrefs.app/Docks.c:48
+msgid ""
+"Disable/enable the application Dock (the\n"
+"vertical icon bar in the side of the screen)."
+msgstr ""
+"Uygulama Yuvasını devre dışı bırakın / etkinleştirin (ekranın yan "
+"tarafındaki dikey simge çubuğu)."
+
+#: ../../WPrefs.app/Docks.c:50
+msgid ""
+"Disable/enable the Clip (that thing with\n"
+"a paper clip icon)."
+msgstr "Klibi devre dışı bırakma / etkinleştirme (ataş simgesiyle bu şey)."
+
+#: ../../WPrefs.app/Docks.c:52
+msgid ""
+"Disable/enable Drawers (a dock that stores\n"
+"application icons horizontally). The dock is required."
+msgstr ""
+"Çekmeceleri devre dışı bırakma / etkinleştirme (uygulama simgelerini yatay "
+"olarak saklayan bir yuva). Yuva gereklidir."
+
+#: ../../WPrefs.app/Docks.c:234 ../../WPrefs.app/Focus.c:309
+#: ../../WPrefs.app/MouseSettings.c:595
+msgid "ms"
+msgstr ""
+
+#: ../../WPrefs.app/Docks.c:250
+msgid "Dock/Clip/Drawer"
+msgstr "Dock/Klip/Çekmece (Dock/Clip/Drawer)"
+
+#: ../../WPrefs.app/Docks.c:322
+msgid "Dock Preferences"
+msgstr "Dock Tercihleri"
+
+#: ../../WPrefs.app/Docks.c:324
+msgid ""
+"Dock and clip features.\n"
+"Enable/disable the Dock and Clip, and tune some delays."
+msgstr ""
+"Yuva ve klips özellikleri. Dock ve Clip'i etkinleştirin / devre dışı bırakın "
+"ve bazı gecikmeleri ayarlayın."
+
+#: ../../WPrefs.app/Expert.c:44
+msgid ""
+"Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."
+msgstr ""
+"Mini pencereleri devre dışı bırakın (simge durumuna küçültülmüş pencereler "
+"için simgeler). KDE / GNOME ile kullanım için."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:47
+msgid "Ignore decoration hints for GTK applications."
+msgstr "GTK uygulamaları için dekorasyon ipuçlarını yoksay."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:50
+msgid "Enable workspace pager."
+msgstr "Çalışma alanı çağrı cihazını etkinleştir."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:53
+msgid "Do not set non-WindowMaker specific parameters (do not use xset)."
+msgstr ""
+"WindowMaker'a özgü olmayan parametreler ayarlamayın (xset kullanmayın)."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:56
+msgid "Automatically save session when exiting Window Maker."
+msgstr "Window Maker'dan çıkarken oturumu otomatik olarak kaydet."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:59
+msgid "Use SaveUnder in window frames, icons, menus and other objects."
+msgstr ""
+"SaveUnder'i pencere çerçeveleri, simgeler, menüler ve diğer nesnelerde "
+"kullanın."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:62
+msgid "Disable confirmation panel for the Kill command."
+msgstr "Kill (sonlandırma) komutu için onay panelini devre dışı bırak."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:65
+msgid "Disable selection animation for selected icons."
+msgstr "Seçili simgeler için seçim animasyonunu devre dışı bırak."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:68
+msgid "Smooth font edges (needs restart)."
+msgstr "Pürüzsüz yazı tipi kenarları (yeniden başlatılması gerekiyor)."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:71
+msgid "Cycle windows only on the active head."
+msgstr "Pencereleri sadece aktif kafada dolaş."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:74
+msgid "Ignore minimized windows when cycling."
+msgstr "Bisiklet sürerken simge durumuna küçültülmüş pencereleri yoksay."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:77
+msgid "Show switch panel when cycling windows."
+msgstr "Pencereleri çevirirken anahtar panelini göster."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:80
+msgid "Show workspace title on Clip."
+msgstr "Klipte çalışma alanı başlığını göster."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:83
+msgid "Highlight the icon of the application when it has the focus."
+msgstr "Odak olduğunda uygulamanın simgesini vurgula."
+
+#: ../../WPrefs.app/Expert.c:87
+msgid "Enable keyboard language switch button in window titlebars."
+msgstr "Pencere başlık çubuklarında klavye dili geçiş düğmesini etkinleştir."
+
+#: ../../WPrefs.app/Expert.c:91
+msgid "Maximize (snap) a window to edge or corner by dragging."
+msgstr ""
+"Bir pencereyi sürükleyerek kenarına veya köşesine büyütme (yapıştırma)."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:94
+msgid "Distance from edge to begin window snap."
+msgstr "Pencere kenetlemeye başlamak için kenardan uzaklık."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:97
+msgid "Distance from corner to begin window snap."
+msgstr "Pencere yapışmasına başlamak için köşeden uzaklık."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:100
+msgid "Snapping a window to the top maximizes it to the full screen."
+msgstr "Bir pencereyi en üste yapıştırmak onu tam ekrana büyütür."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:103
+msgid "Allow move half-maximized windows between multiple screens."
+msgstr ""
+"Birden çok ekran arasında yarı büyütülmüş pencerelerin taşınmasına izin ver."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:106
+msgid "Alternative transitions between states for half maximized windows."
+msgstr "Yarı büyütülmüş pencereler için durumlar arasında alternatif geçişler."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:109
+msgid "Move mouse pointer with half maximized windows."
+msgstr "Fare işaretçisini yarı büyütülmüş pencerelerle taşı."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:112
+msgid "Open dialogs in the same workspace as their owners."
+msgstr "Diyalogları sahipleriyle aynı çalışma alanında aç."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:115
+msgid "Wrap dock-attached icons around the screen edges."
+msgstr "Dock-ekli simgeleri ekran kenarlarına sarın."
+
+#: ../../WPrefs.app/Expert.c:325
+msgid "Expert User Preferences"
+msgstr "Uzman Kullanıcı Tercihleri"
+
+#: ../../WPrefs.app/Expert.c:327
+msgid ""
+"Options for people who know what they're doing...\n"
+"Also has some other misc. options."
+msgstr ""
+"Ne yaptıklarını bilenler için seçenekler ... Ayrıca başka çeşitli var. "
+"seçenekler."
+
+#: ../../WPrefs.app/Focus.c:75
+#, c-format
+msgid "bad option value %s for option FocusMode. Using default Manual"
+msgstr ""
+"FocusMode seçeneği için %s hatalı seçenek değeri. Varsayılan Manuel'i "
+"kullanma"
+
+#: ../../WPrefs.app/Focus.c:87
+#, c-format
+msgid "bad option value %s for option ColormapMode. Using default Auto"
+msgstr ""
+"ColormapMode seçeneği için %s hatalı seçenek değeri. Varsayılan Otomatik "
+"kullanımı"
+
+#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:161
+#: ../../WPrefs.app/Icons.c:369 ../../WPrefs.app/Preferences.c:120
+#: ../../WPrefs.app/WindowHandling.c:140 ../../WPrefs.app/WindowHandling.c:159
+#, c-format
+msgid "OFF"
+msgstr "KAPALI"
+
+#: ../../WPrefs.app/Focus.c:199
+msgid "Input Focus Mode"
+msgstr "Giriş Odak Modu"
+
+#: ../../WPrefs.app/Focus.c:207
+msgid "Manual:  Click on the window to set keyboard input focus"
+msgstr "Manuel: Klavye giriş odağını ayarlamak için pencereye tıklayın"
+
+#: ../../WPrefs.app/Focus.c:213
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
+msgstr ""
+"Otomatik: Klavye giriş odağını fare işaretçisinin altındaki pencereye ayarla"
+
+#: ../../WPrefs.app/Focus.c:226
+msgid "Install colormap from the window..."
+msgstr "Renk haritasını pencereden yükle ..."
+
+#: ../../WPrefs.app/Focus.c:228
+msgid ""
+"This option is for screens that can display only a limited number\n"
+"of colors at a time, so they use an indexed table of colors (called\n"
+"a ColorMap) that each application customizes for its needs, and\n"
+"WindowMaker will set the global ColorMap dynamically from the\n"
+"active application.\n"
+"You can know the capability of your screen in WindowMaker's info\n"
+"panel as the 'visual'."
+msgstr ""
+"Bu seçenek bir seferde yalnızca sınırlı sayıda renk görüntüleyebilen "
+"ekranlar içindir, bu nedenle her uygulamanın ihtiyaçları için özelleştirdiği "
+"dizine alınmış bir renk tablosu (ColorMap olarak adlandırılır) kullanırlar "
+"ve WindowMaker genel ColorMap'i etkin olarak dinamik olarak ayarlar uygulama."
+" WindowMaker'ın bilgi panelinde ekranınızın yeteneğini 'görsel' olarak "
+"bilebilirsiniz."
+
+#: ../../WPrefs.app/Focus.c:240
+msgid "...that has the input focus"
+msgstr "... giriş odağı olan"
+
+#: ../../WPrefs.app/Focus.c:245
+msgid "...that's under the mouse pointer"
+msgstr "... bu fare imlecinin altında"
+
+#: ../../WPrefs.app/Focus.c:254
+msgid "Automatic Window Raise Delay"
+msgstr "Otomatik Pencere Yükseltme Gecikmesi"
+
+#: ../../WPrefs.app/Focus.c:326
+msgid "Do not let applications receive the click used to focus windows"
+msgstr ""
+"Uygulamaların pencereleri odaklamak için kullanılan tıklamayı almasına izin "
+"verme"
+
+#: ../../WPrefs.app/Focus.c:331
+msgid "Automatically focus new windows"
+msgstr "Yeni pencereleri otomatik olarak odakla"
+
+#: ../../WPrefs.app/Focus.c:336
+msgid "Raise window when switching focus with keyboard"
+msgstr "Odağı klavyeyle değiştirirken pencereyi kaldır"
+
+#: ../../WPrefs.app/Focus.c:352
+msgid "Window Focus Preferences"
+msgstr "Pencere Odaklama Tercihleri"
+
+#: ../../WPrefs.app/Focus.c:353
+msgid "Keyboard focus switching policy and related options."
+msgstr "Klavye odak değiştirme politikası ve ilgili seçenekler."
+
+#: ../../WPrefs.app/FontSimple.c:99
+msgid "Window Title"
+msgstr "Pencere Başlığı"
+
+#: ../../WPrefs.app/FontSimple.c:101
+msgid "Menu Text"
+msgstr "Menü Metni"
+
+#: ../../WPrefs.app/FontSimple.c:102
+msgid "Icon Title"
+msgstr "Simge Başlığı"
+
+#: ../../WPrefs.app/FontSimple.c:104
+msgid "Desktop Caption"
+msgstr "Masaüstü Altyazısı"
+
+#: ../../WPrefs.app/FontSimple.c:105
+msgid "System Font"
+msgstr "Sistem Yazı Tipi"
+
+#: ../../WPrefs.app/FontSimple.c:106
+msgid "Bold System Font"
+msgstr "Kalın Sistem Yazı Tipi"
+
+#: ../../WPrefs.app/FontSimple.c:661
+msgid "Sample Text"
+msgstr "Örnek Metin"
+
+#: ../../WPrefs.app/FontSimple.c:678
+msgid "Family"
+msgstr "Aile"
+
+#: ../../WPrefs.app/FontSimple.c:704
+msgid "Style"
+msgstr "Stil"
+
+#: ../../WPrefs.app/FontSimple.c:707
+msgid "Size"
+msgstr "Boyut"
+
+#: ../../WPrefs.app/FontSimple.c:739
+msgid "Font Configuration"
+msgstr "Yazı Tipi Yapılandırması"
+
+#: ../../WPrefs.app/FontSimple.c:741
+msgid "Configure fonts for Window Maker titlebars, menus etc."
+msgstr ""
+"Window Maker başlık çubukları, menüler vb. için yazı tiplerini yapılandırma."
+
+#: ../../WPrefs.app/Icons.c:29
+msgid "Shrinking/Zooming"
+msgstr "Küçülme / Yakınlaştırma"
+
+#: ../../WPrefs.app/Icons.c:30
+msgid "Spinning/Twisting"
+msgstr "Eğirme / Büküm"
+
+#: ../../WPrefs.app/Icons.c:31
+msgid "3D-flipping"
+msgstr "3B çevirme"
+
+#: ../../WPrefs.app/Icons.c:32 ../../WPrefs.app/MouseSettings.c:56
+#: ../../WPrefs.app/MouseSettings.c:70
+msgid "None"
+msgstr "Yok"
+
+#: ../../WPrefs.app/Icons.c:186 ../../WPrefs.app/Preferences.c:145
+#: ../../WPrefs.app/Preferences.c:159
+#, c-format
+msgid "bad value \"%s\" for option %s, using default \"%s\""
+msgstr "%s seçeneği için varsayılan \"%s\" kullanılarak \"%s\" hatalı değeri"
+
+#: ../../WPrefs.app/Icons.c:228
+#, c-format
+msgid "animation style \"%s\" is unknown, resetting to \"%s\""
+msgstr "animasyon stili \"%s\" bilinmiyor, \"%s\" olarak sıfırlanıyor"
+
+#: ../../WPrefs.app/Icons.c:255
+msgid "Icon Positioning"
+msgstr "Simge Konumlandırma"
+
+#: ../../WPrefs.app/Icons.c:334
+msgid "Icon Size"
+msgstr "Simge Boyutu"
+
+#: ../../WPrefs.app/Icons.c:336
+msgid "The size of the dock/application icon and miniwindows"
+msgstr "Dock / uygulama simgesinin ve mini pencerelerin boyutu"
+
+#: ../../WPrefs.app/Icons.c:353
+msgid "Mini-Previews for Icons"
+msgstr "Simgeler için Mini Önizlemeler"
+
+#: ../../WPrefs.app/Icons.c:355
+msgid ""
+"The Mini-Preview provides a small view of the content of the\n"
+"window when the mouse is placed over the icon."
+msgstr ""
+"Mini Önizleme, fare simgenin üzerine getirildiğinde pencerenin içeriğinin "
+"küçük bir görünümünü sağlar."
+
+#: ../../WPrefs.app/Icons.c:377
+msgid "Iconification Animation"
+msgstr "İkonlaştırma Animasyonu"
+
+#: ../../WPrefs.app/Icons.c:398
+msgid "Auto-arrange icons"
+msgstr "Simgeleri otomatik düzenle"
+
+#: ../../WPrefs.app/Icons.c:400
+msgid "Keep icons and miniwindows arranged all the time."
+msgstr "Simgeleri ve mini pencereleri her zaman düzenli tutun."
+
+#: ../../WPrefs.app/Icons.c:406
+msgid "Omnipresent miniwindows"
+msgstr "Omnipresent mini pencereler"
+
+#: ../../WPrefs.app/Icons.c:408
+msgid "Make miniwindows be present in all workspaces."
+msgstr "Mini pencerelerin tüm çalışma alanlarında bulunmasını sağla."
+
+#: ../../WPrefs.app/Icons.c:414
+msgid "Single click activation"
+msgstr "Tek tıkla etkinleştirme"
+
+#: ../../WPrefs.app/Icons.c:416
+msgid "Launch applications and restore windows with a single click."
+msgstr ""
+"Uygulamaları başlatın ve tek bir tıklama ile pencereleri geri yükleyin."
+
+#: ../../WPrefs.app/Icons.c:422
+msgid "Enforce icon margin"
+msgstr "Simge kenar boşluğunu zorunlu kıl"
+
+#: ../../WPrefs.app/Icons.c:424
+msgid "Make sure that the icon image does not protrude into the icon frame."
+msgstr "Simge görüntüsünün simge çerçevesine çıkmadığından emin olun."
+
+#: ../../WPrefs.app/Icons.c:472
+msgid "Icon Preferences"
+msgstr "Simge Tercihleri"
+
+#: ../../WPrefs.app/Icons.c:474
+msgid ""
+"Icon/Miniwindow handling options. Icon positioning\n"
+"area, sizes of icons, miniaturization animation style."
+msgstr ""
+"Simge / Miniwindow kullanım seçenekleri. Simge konumlandırma alanı, simge "
+"boyutları, minyatür animasyon stili."
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:72
+msgid "Open applications menu"
+msgstr "Uygulamalar menüsünü aç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:73
+msgid "Open window list menu"
+msgstr "Pencere listesi menüsünü aç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:74
+msgid "Open window commands menu"
+msgstr "Pencere komutları menüsünü aç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:75
+msgid "Hide active application"
+msgstr "Etkin uygulamayı gizle"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:76
+msgid "Hide other applications"
+msgstr "Diğer uygulamaları gizle"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:77
+msgid "Miniaturize active window"
+msgstr "Aktif pencereyi küçült"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:78
+msgid "Miniaturize all windows"
+msgstr "Tüm pencereleri küçült"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:79
+msgid "Close active window"
+msgstr "Etkin pencereyi kapat"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:80
+msgid "Maximize active window"
+msgstr "Etkin pencereyi büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:81
+msgid "Maximize active window vertically"
+msgstr "Aktif pencereyi dikey olarak büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:82
+msgid "Maximize active window horizontally"
+msgstr "Aktif pencereyi yatay olarak büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:83
+msgid "Maximize active window left half"
+msgstr "Aktif pencerenin sol yarısını büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:84
+msgid "Maximize active window right half"
+msgstr "Aktif pencerenin sağ yarısını büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:85
+msgid "Maximize active window top half"
+msgstr "Aktif pencerenin üst yarısını büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:86
+msgid "Maximize active window bottom half"
+msgstr "Aktif pencerenin alt yarısını büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:87
+msgid "Maximize active window left top corner"
+msgstr "Aktif pencereyi sol üst köşeye büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:88
+msgid "Maximize active window right top corner"
+msgstr "Aktif pencereyi sağ üst köşeye büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:89
+msgid "Maximize active window left bottom corner"
+msgstr "Aktif pencereyi sol alt köşeye büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:90
+msgid "Maximize active window right bottom corner"
+msgstr "Aktif pencereyi sağ alt köşeye büyüt"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:91
+msgid "Maximus: Tiled maximization "
+msgstr "Maximus: Döşenmiş maksimizasyon"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:92
+msgid "Toggle window on top status"
+msgstr "Pencereyi üst durumda aç / kapat"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:93
+msgid "Toggle window at bottom status"
+msgstr "Pencereyi en alt konumda aç / kapat"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:94
+msgid "Toggle window omnipresent status"
+msgstr "Pencere her zaman mevcut durumunu aç / kapat"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:95
+msgid "Raise active window"
+msgstr "Aktif pencereyi kaldır"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:96
+msgid "Lower active window"
+msgstr "Alt aktif pencere"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:97
+msgid "Raise/Lower window under mouse pointer"
+msgstr "Fare işaretçisinin altındaki pencereyi kaldır / indir"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:98
+msgid "Shade active window"
+msgstr "Gölge aktif pencere"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:99
+msgid "Move/Resize active window"
+msgstr "Etkin pencereyi taşı / yeniden boyutlandır"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:100
+msgid "Select active window"
+msgstr "Aktif pencereyi seç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:101
+msgid "Focus next window"
+msgstr "Bir sonraki pencereye odaklan"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:102
+msgid "Focus previous window"
+msgstr "Önceki pencereye odaklan"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:103
+msgid "Focus next group window"
+msgstr "Sonraki grup penceresine odaklan"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:104
+msgid "Focus previous group window"
+msgstr "Önceki grup penceresine odaklan"
+
+#. Workspace Related
+#: ../../WPrefs.app/KeyboardShortcuts.c:107
+msgid "Open workspace pager"
+msgstr "Çalışma alanı çağrı cihazını aç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:108
+msgid "Switch to next workspace"
+msgstr "Sonraki çalışma alanına geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:109
+msgid "Switch to previous workspace"
+msgstr "Önceki çalışma alanına geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:110
+msgid "Switch to last used workspace"
+msgstr "Son kullanılan çalışma alanına geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:111
+msgid "Switch to next ten workspaces"
+msgstr "Sonraki on çalışma alanına geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:112
+msgid "Switch to previous ten workspaces"
+msgstr "Önceki on çalışma alanına geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:113
+msgid "Switch to workspace 1"
+msgstr "Çalışma alanı 1'e geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:114
+msgid "Switch to workspace 2"
+msgstr "Çalışma alanı 2'ye geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:115
+msgid "Switch to workspace 3"
+msgstr "Çalışma alanı 3'e geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:116
+msgid "Switch to workspace 4"
+msgstr "Çalışma alanı 4'e geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:117
+msgid "Switch to workspace 5"
+msgstr "Çalışma alanına 5 geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:118
+msgid "Switch to workspace 6"
+msgstr "Çalışma alanına 6 geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:119
+msgid "Switch to workspace 7"
+msgstr "Çalışma alanı 7'ye geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:120
+msgid "Switch to workspace 8"
+msgstr "Çalışma alanına 8 geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:121
+msgid "Switch to workspace 9"
+msgstr "Çalışma alanına 9 geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:122
+msgid "Switch to workspace 10"
+msgstr "Çalışma alanı 10'a geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:123
+msgid "Move window to next workspace"
+msgstr "Pencereyi bir sonraki çalışma alanına taşı"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:124
+msgid "Move window to previous workspace"
+msgstr "Pencereyi önceki çalışma alanına taşı"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:125
+msgid "Move window to last used workspace"
+msgstr "Pencereyi son kullanılan çalışma alanına taşı"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:126
+msgid "Move window to next ten workspaces"
+msgstr "Pencereyi sonraki on çalışma alanına taşı"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:127
+msgid "Move window to previous ten workspaces"
+msgstr "Pencereyi önceki on çalışma alanına taşı"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:128
+msgid "Move window to workspace 1"
+msgstr "Pencereyi çalışma alanına taşıma 1"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:129
+msgid "Move window to workspace 2"
+msgstr "Pencereyi çalışma alanına 2 taşı"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:130
+msgid "Move window to workspace 3"
+msgstr "Pencereyi çalışma alanına 3 taşı"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:131
+msgid "Move window to workspace 4"
+msgstr "Pencereyi çalışma alanına 4 taşı"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:132
+msgid "Move window to workspace 5"
+msgstr "Pencereyi çalışma alanına taşıma 5"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:133
+msgid "Move window to workspace 6"
+msgstr "Pencereyi çalışma alanına taşıma 6"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:134
+msgid "Move window to workspace 7"
+msgstr "Pencereyi çalışma alanına taşıma 7"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:135
+msgid "Move window to workspace 8"
+msgstr "Pencereyi çalışma alanına 8 taşıma"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:136
+msgid "Move window to workspace 9"
+msgstr "Pencereyi çalışma alanına 9 taşıma"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:137
+msgid "Move window to workspace 10"
+msgstr "Pencereyi çalışma alanına taşıma 10"
+
+#. Window Selection
+#: ../../WPrefs.app/KeyboardShortcuts.c:140
+msgid "Shortcut for window 1"
+msgstr "Pencere 1 için kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:141
+msgid "Shortcut for window 2"
+msgstr "Pencere 2 için kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:142
+msgid "Shortcut for window 3"
+msgstr "Pencere 3 için kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:143
+msgid "Shortcut for window 4"
+msgstr "Pencere 4 için kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:144
+msgid "Shortcut for window 5"
+msgstr "Pencere 5 için kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:145
+msgid "Shortcut for window 6"
+msgstr "Pencere 6 için kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:146
+msgid "Shortcut for window 7"
+msgstr "Pencere 7 için kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:147
+msgid "Shortcut for window 8"
+msgstr "Pencere 8 için kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:148
+msgid "Shortcut for window 9"
+msgstr "Pencere 9 için kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:149
+msgid "Shortcut for window 10"
+msgstr "Pencere 10 için kısayol"
+
+#. Head Selection
+#: ../../WPrefs.app/KeyboardShortcuts.c:152
+msgid "Move to right/bottom/left/top head"
+msgstr "Sağ / alt / sol / üst başa git"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:153
+msgid "Move to left/top/right/bottom head"
+msgstr "Sola / yukarı / sağa / alta başa git"
+
+#. Misc.
+#: ../../WPrefs.app/KeyboardShortcuts.c:156
+msgid "Launch new instance of application"
+msgstr "Yeni uygulama örneği başlat"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:157
+msgid "Switch to Next Screen/Monitor"
+msgstr "Sonraki Ekrana / Monitöre Geç"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:158
+msgid "Run application"
+msgstr "Uygulamayı çalıştır"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:159
+msgid "Raise/Lower Dock"
+msgstr "Yükseltme / indirme istasyonu"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:160
+msgid "Raise/Lower Clip"
+msgstr "Yükselt / Alt Klip"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:162
+msgid "Toggle keyboard language"
+msgstr "Klavye dilini aç / kapat"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:379 ../../WPrefs.app/Menu.c:275
+#: ../../WPrefs.app/TexturePanel.c:1425
+msgid "Cancel"
+msgstr "İptal"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:381
+msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
+msgstr ""
+"Yakalamayı durdurmak için istediğiniz kısayol tuşlarına basın veya İptal'i "
+"tıklayın."
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:400
+#: ../../WPrefs.app/KeyboardShortcuts.c:570 ../../WPrefs.app/Menu.c:285
+#: ../../WPrefs.app/Menu.c:733
+msgid "Capture"
+msgstr "Yakala"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:401
+#: ../../WPrefs.app/KeyboardShortcuts.c:578
+msgid "Click on Capture to interactively define the shortcut key."
+msgstr "Kısayol tuşunu etkileşimli olarak tanımlamak için Yakala'ya tıklayın."
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:527
+msgid "Actions"
+msgstr "Eylemler"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:554
+msgid "Shortcut"
+msgstr "Kısayol"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:564 ../../WPrefs.app/Menu.c:739
+msgid "Clear"
+msgstr "Temizle"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:619
+msgid "Keyboard Shortcut Preferences"
+msgstr "Klavye Kısayol Tercihleri"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:621
+msgid ""
+"Change the keyboard shortcuts for actions such\n"
+"as changing workspaces and opening menus."
+msgstr ""
+"Çalışma alanlarını değiştirme ve menüleri açma gibi eylemler için klavye "
+"kısayollarını değiştirin."
+
+#: ../../WPrefs.app/Menu.c:251
+msgid "Select Program"
+msgstr "Program Seç"
+
+#: ../../WPrefs.app/Menu.c:413
+msgid "New Items"
+msgstr "Yeni Ürünler"
+
+#: ../../WPrefs.app/Menu.c:414
+msgid "Sample Commands"
+msgstr "Örnek Komutlar"
+
+#: ../../WPrefs.app/Menu.c:415
+msgid "Sample Submenus"
+msgstr "Örnek Alt Menüler"
+
+#: ../../WPrefs.app/Menu.c:427
+msgid "Run Program"
+msgstr "Programı Çalıştır"
+
+#: ../../WPrefs.app/Menu.c:428
+msgid "Internal Command"
+msgstr "Dahili Komut"
+
+#: ../../WPrefs.app/Menu.c:429
+msgid "Submenu"
+msgstr "Alt menü"
+
+#: ../../WPrefs.app/Menu.c:430
+msgid "External Submenu"
+msgstr "Dış Alt menü"
+
+#: ../../WPrefs.app/Menu.c:431
+msgid "Generated Submenu"
+msgstr "Oluşturulan Alt Menü"
+
+#: ../../WPrefs.app/Menu.c:432
+msgid "Generated PL Menu"
+msgstr "Oluşturulmuş PL Menüsü"
+
+#: ../../WPrefs.app/Menu.c:433
+msgid "Directory Contents"
+msgstr "Dizin İçeriği"
+
+#: ../../WPrefs.app/Menu.c:434
+msgid "Workspace Menu"
+msgstr "Çalışma Alanı Menüsü"
+
+#: ../../WPrefs.app/Menu.c:435 ../../WPrefs.app/MouseSettings.c:58
+msgid "Window List Menu"
+msgstr "Pencere Listesi Menüsü"
+
+#: ../../WPrefs.app/Menu.c:454
+msgid "XTerm"
+msgstr "Xterm"
+
+#: ../../WPrefs.app/Menu.c:457
+msgid "rxvt"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:460
+msgid "ETerm"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:463
+msgid "Run..."
+msgstr "Çalıştır ..."
+
+#: ../../WPrefs.app/Menu.c:464
+#, c-format
+msgid "%A(Run,Type command to run)"
+msgstr "%A (Çalıştır, Çalıştırılacak komut)"
+
+#: ../../WPrefs.app/Menu.c:466
+msgid "Firefox"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:469
+msgid "gimp"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:472
+msgid "epic"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:475
+msgid "ee"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:478
+msgid "xv"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:481
+msgid "Evince"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:484
+msgid "ghostview"
+msgstr ""
+
+#: ../../WPrefs.app/Menu.c:487 ../../WPrefs.app/Menu.c:758
+msgid "Exit Window Maker"
+msgstr "Pencere Oluşturucusundan Çık"
+
+#: ../../WPrefs.app/Menu.c:509
+msgid "Debian Menu"
+msgstr "Debian Menüsü"
+
+#: ../../WPrefs.app/Menu.c:512
+msgid "RedHat Menu"
+msgstr "RedHat Menüsü"
+
+#: ../../WPrefs.app/Menu.c:515
+msgid "Menu Conectiva"
+msgstr "Menü Bağlantısı"
+
+#: ../../WPrefs.app/Menu.c:518
+msgid "Themes"
+msgstr "Temalar"
+
+#: ../../WPrefs.app/Menu.c:524
+msgid "Bg Images (scale)"
+msgstr "Bg Görüntüleri (ölçek)"
+
+#: ../../WPrefs.app/Menu.c:530
+msgid "Bg Images (tile)"
+msgstr "Bg Görüntüleri (kutucuk)"
+
+#: ../../WPrefs.app/Menu.c:536
+msgid "Assorted XTerms"
+msgstr "Çeşitli XTerms"
+
+#: ../../WPrefs.app/Menu.c:538
+msgid "XTerm Yellow on Blue"
+msgstr "XTerm Mavi üzerine sarı"
+
+#: ../../WPrefs.app/Menu.c:541
+msgid "XTerm White on Black"
+msgstr "XTerm Siyah üzerine beyaz"
+
+#: ../../WPrefs.app/Menu.c:544
+msgid "XTerm Black on White"
+msgstr "XTerm beyaz üzerine siyah"
+
+#: ../../WPrefs.app/Menu.c:547
+msgid "XTerm Black on Beige"
+msgstr "XTerm Bej üzerine siyah"
+
+#: ../../WPrefs.app/Menu.c:550
+msgid "XTerm White on Green"
+msgstr "XTerm Yeşil Beyaz"
+
+#: ../../WPrefs.app/Menu.c:553
+msgid "XTerm White on Olive"
+msgstr "XTerm Zeytin Üzerine Beyaz"
+
+#: ../../WPrefs.app/Menu.c:556
+msgid "XTerm Blue on Blue"
+msgstr "XTerm Mavi üzerinde mavi"
+
+#: ../../WPrefs.app/Menu.c:559
+msgid "XTerm BIG FONTS"
+msgstr "XTerm BÜYÜK FONTS"
+
+#: ../../WPrefs.app/Menu.c:580
+msgid "Program to Run"
+msgstr "Çalıştırılacak Program"
+
+#: ../../WPrefs.app/Menu.c:590
+msgid "Browse"
+msgstr "Gözat"
+
+#: ../../WPrefs.app/Menu.c:599
+msgid "Run the program inside a Xterm"
+msgstr "Programı bir Xterm içinde çalıştır"
+
+#: ../../WPrefs.app/Menu.c:608
+msgid "Path for Menu"
+msgstr "Menü Yolu"
+
+#: ../../WPrefs.app/Menu.c:619
+msgid ""
+"Enter the path for a file containing a menu\n"
+"or a list of directories with the programs you\n"
+"want to have listed in the menu. Ex:\n"
+"~/GNUstep/Library/WindowMaker/menu\n"
+"or\n"
+"/usr/bin ~/xbin"
+msgstr ""
+"Menü içeren bir dosyanın yolunu veya menüde listelenmesini istediğiniz "
+"programların bulunduğu dizinlerin bir listesini girin.\n"
+"Örnek: ~/GNUstep/Library/WindowMaker/menu\n"
+"veya\n"
+"/usr/bin ~/xbin"
+
+#: ../../WPrefs.app/Menu.c:631 ../../WPrefs.app/Menu.c:656
+msgid "Command"
+msgstr "Komut"
+
+#: ../../WPrefs.app/Menu.c:642
+msgid ""
+"Enter a command that outputs a menu\n"
+"definition to stdout when invoked."
+msgstr "Çağrıldığında stdout'a bir menü tanımı veren bir komut girin."
+
+#: ../../WPrefs.app/Menu.c:647 ../../WPrefs.app/Menu.c:672
+msgid ""
+"Cache menu contents after opening for\n"
+"the first time"
+msgstr ""
+"İlk kez açtıktan sonra menü içeriğini önbelleğe al"
+
+#: ../../WPrefs.app/Menu.c:667
+msgid ""
+"Enter a command that outputs a proplist menu\n"
+"definition to stdout when invoked."
+msgstr ""
+"Çağrıldığında stdout'a bir destek listesi menü tanımı veren bir komut girin."
+
+#: ../../WPrefs.app/Menu.c:681
+msgid "Command to Open Files"
+msgstr "Dosyaları Açma Komutu"
+
+#: ../../WPrefs.app/Menu.c:692
+msgid ""
+"Enter the command you want to use to open the\n"
+"files in the directories listed below."
+msgstr ""
+"Dosyaları aşağıda listelenen dizinlerde açmak için kullanmak istediğiniz "
+"komutu girin."
+
+#: ../../WPrefs.app/Menu.c:700
+msgid "Directories with Files"
+msgstr "Dosyalı Dizinler"
+
+#: ../../WPrefs.app/Menu.c:711
+msgid "Strip extensions from file names"
+msgstr "Dosya adlarından uzantıları çıkar"
+
+#: ../../WPrefs.app/Menu.c:722
+msgid "Keyboard Shortcut"
+msgstr "Klavye Kısayolu"
+
+#: ../../WPrefs.app/Menu.c:754
+msgid "Arrange Icons"
+msgstr "Simgeleri Yerleştir"
+
+#: ../../WPrefs.app/Menu.c:755
+msgid "Hide All Windows Except For The Focused One"
+msgstr "Odaklanmış Biri Hariç Tüm Pencereleri Gizle"
+
+#: ../../WPrefs.app/Menu.c:756
+msgid "Show All Windows"
+msgstr "Tüm Pencereleri Göster"
+
+#: ../../WPrefs.app/Menu.c:759
+msgid "Exit X Session"
+msgstr "X Oturumundan Çık"
+
+#: ../../WPrefs.app/Menu.c:760
+msgid "Restart Window Maker"
+msgstr "Pencere Oluşturucuyu Yeniden Başlat"
+
+#: ../../WPrefs.app/Menu.c:761
+msgid "Start Another Window Manager   : ("
+msgstr "Başka Bir Pencere Yöneticisi Başlat : ("
+
+#: ../../WPrefs.app/Menu.c:763
+msgid "Save Current Session"
+msgstr "Mevcut Oturumu Kaydet"
+
+#: ../../WPrefs.app/Menu.c:764
+msgid "Clear Saved Session"
+msgstr "Kayıtlı Oturumu Temizle"
+
+#: ../../WPrefs.app/Menu.c:765
+msgid "Refresh Screen"
+msgstr "Ekranı Yenile"
+
+#: ../../WPrefs.app/Menu.c:766
+msgid "Open Info Panel"
+msgstr "Bilgi Panelini Aç"
+
+#: ../../WPrefs.app/Menu.c:767
+msgid "Open Copyright Panel"
+msgstr "Telif Hakkı Panelini Aç"
+
+#: ../../WPrefs.app/Menu.c:772
+msgid "Window Manager to Start"
+msgstr "Pencere Yöneticisi Başlatılacak"
+
+#: ../../WPrefs.app/Menu.c:785
+msgid "Do not confirm action."
+msgstr "Eylemi onaylama."
+
+#: ../../WPrefs.app/Menu.c:792
+msgid ""
+"Instructions:\n"
+"\n"
+" - drag items from the left to the menu to add new items\n"
+" - drag items out of the menu to remove items\n"
+" - drag items in menu to change their position\n"
+" - drag items with Control pressed to copy them\n"
+" - double click in a menu item to change the label\n"
+" - click on a menu item to change related information"
+msgstr ""
+"Talimatlar:\n"
+"\n"
+" - yeni öğeler eklemek için öğeleri soldan menüye sürükleyin \n"
+" - öğeleri kaldırmak için öğeleri menüden dışarı sürükleyin \n"
+" - konumlarını değiştirmek için menüdeki öğeleri sürükleyin \n"
+" - kopyalamak için Control tuşunu basılı tutarak öğeleri sürükleyin \n"
+" - bir menü öğesine çift tıklayın etiketi değiştirmek için \n"
+" - ilgili bilgileri değiştirmek için bir menü öğesini tıklayın"
+
+#: ../../WPrefs.app/Menu.c:1031
+#, c-format
+msgid "unknown command '%s' in menu"
+msgstr "menüde '%s' bilinmeyen komutu"
+
+#: ../../WPrefs.app/Menu.c:1055
+msgid ": Execute Program"
+msgstr ": Programı Yürüt"
+
+#: ../../WPrefs.app/Menu.c:1059
+msgid ": Perform Internal Command"
+msgstr ": Dahili Komutu Gerçekleştir"
+
+#: ../../WPrefs.app/Menu.c:1063
+msgid ": Open a Submenu"
+msgstr ": Bir alt menü aç"
+
+#: ../../WPrefs.app/Menu.c:1067
+msgid ": Program Generated Submenu"
+msgstr ": Program Oluşturulan Alt Menüsü"
+
+#: ../../WPrefs.app/Menu.c:1071
+msgid ": Program Generated Proplist Submenu"
+msgstr ": Program Oluşturulan Destekçi Alt Menüsü"
+
+#: ../../WPrefs.app/Menu.c:1075
+msgid ": Directory Contents Menu"
+msgstr ": Dizin İçeriği Menüsü"
+
+#: ../../WPrefs.app/Menu.c:1079
+msgid ": Open Workspaces Submenu"
+msgstr ": Açık Çalışma Alanları Alt Menüsü"
+
+#: ../../WPrefs.app/Menu.c:1083
+msgid ": Open Window List Submenu"
+msgstr ": Pencere Listesi Alt Menüsünü Aç"
+
+#: ../../WPrefs.app/Menu.c:1299
+msgid "Remove Submenu"
+msgstr "Alt menüyü kaldır"
+
+#: ../../WPrefs.app/Menu.c:1300
+msgid ""
+"Removing this item will destroy all items inside\n"
+"the submenu. Do you really want to do that?"
+msgstr ""
+"Bu öğenin kaldırılması, alt menüdeki tüm öğeleri yok edecektir. Bunu "
+"gerçekten yapmak istiyor musun?"
+
+#: ../../WPrefs.app/Menu.c:1302
+msgid "Yes"
+msgstr "Evet"
+
+#: ../../WPrefs.app/Menu.c:1302
+msgid "No"
+msgstr "Hayır"
+
+#: ../../WPrefs.app/Menu.c:1302
+msgid "Yes, don't ask again"
+msgstr "Evet, bir daha sorma"
+
+#: ../../WPrefs.app/Menu.c:1441
+#, c-format
+msgid "Invalid menu command \"%s\" with label \"%s\" cleared"
+msgstr "Geçersiz menü komutu \"%s\" etiketli \"%s\" temizlendi"
+
+#: ../../WPrefs.app/Menu.c:1444 ../../WPrefs.app/Menu.c:1522
+#: ../../WPrefs.app/Menu.c:1537 ../../WPrefs.app/WPrefs.c:668
+msgid "Warning"
+msgstr "Uyarı"
+
+#: ../../WPrefs.app/Menu.c:1444 ../../WPrefs.app/Menu.c:1476
+#: ../../WPrefs.app/Menu.c:1523 ../../WPrefs.app/MouseSettings.c:156
+#: ../../WPrefs.app/MouseSettings.c:176 ../../WPrefs.app/TexturePanel.c:585
+#: ../../WPrefs.app/TexturePanel.c:663 ../../WPrefs.app/TexturePanel.c:1419
+#: ../../WPrefs.app/WPrefs.c:617 ../../WPrefs.app/WPrefs.c:621
+#: ../../WPrefs.app/WPrefs.c:641 ../../WPrefs.app/WPrefs.c:653
+#: ../../WPrefs.app/WPrefs.c:659 ../../WPrefs.app/WPrefs.c:668
+#: ../../WPrefs.app/WPrefs.c:699 ../../WPrefs.app/WPrefs.c:703
+msgid "OK"
+msgstr "Tamam"
+
+#: ../../WPrefs.app/Menu.c:1472
+#, c-format
+msgid "Could not open default menu from '%s'"
+msgstr "'%s' öğesinden varsayılan menü açılamadı"
+
+#: ../../WPrefs.app/Menu.c:1476 ../../WPrefs.app/MouseSettings.c:154
+#: ../../WPrefs.app/MouseSettings.c:173 ../../WPrefs.app/TexturePanel.c:585
+#: ../../WPrefs.app/TexturePanel.c:661 ../../WPrefs.app/WPrefs.c:617
+#: ../../WPrefs.app/WPrefs.c:621 ../../WPrefs.app/WPrefs.c:638
+#: ../../WPrefs.app/WPrefs.c:649 ../../WPrefs.app/WPrefs.c:659
+#: ../../WPrefs.app/WPrefs.c:699 ../../WPrefs.app/WPrefs.c:703
+msgid "Error"
+msgstr "Hata"
+
+#: ../../WPrefs.app/Menu.c:1516
+#, c-format
+msgid ""
+"The menu file \"%s\" referenced by WMRootMenu is read-only.\n"
+"You cannot use WPrefs to modify it."
+msgstr ""
+"WMRootMenu tarafından başvurulan \"%s\" menü dosyası salt okunurdur.\n"
+"WPrefs'i değiştirmek için kullanamazsınız."
+
+#: ../../WPrefs.app/Menu.c:1538
+msgid ""
+"The menu file format currently in use is not supported\n"
+"by this tool. Do you want to discard the current menu\n"
+"to use this tool?"
+msgstr ""
+"Şu anda kullanımda olan menü dosyası biçimi bu araç tarafından "
+"desteklenmiyor. Bu aracı kullanmak için geçerli menüyü silmek istiyor "
+"musunuz?"
+
+#: ../../WPrefs.app/Menu.c:1541
+msgid "Yes, Discard and Update"
+msgstr "Evet, Sil ve Güncelle"
+
+#: ../../WPrefs.app/Menu.c:1541
+msgid "No, Keep Current Menu"
+msgstr "Hayır, Geçerli Menüyü Koru"
+
+#: ../../WPrefs.app/Menu.c:1558
+#, c-format
+msgid ""
+"\n"
+"\n"
+"When saved, the menu will be written to the file\n"
+"\"%s\"."
+msgstr ""
+"\n"
+"\n"
+"Kaydedildiğinde, menü \"%s\" dosyasına yazılır."
+
+#: ../../WPrefs.app/Menu.c:1792
+msgid "Applications Menu Definition"
+msgstr "Uygulamalar Menü Tanımı"
+
+#: ../../WPrefs.app/Menu.c:1794
+msgid "Edit the menu for launching applications."
+msgstr "Uygulamaları başlatmak için menüyü düzenleyin."
+
+#: ../../WPrefs.app/MenuPreferences.c:105
+msgid "Menu Scrolling Speed"
+msgstr "Menü Kaydırma Hızı"
+
+#: ../../WPrefs.app/MenuPreferences.c:153
+msgid "Submenu Alignment"
+msgstr "Alt menü Hizalaması"
+
+#: ../../WPrefs.app/MenuPreferences.c:197
+msgid "Always open submenus inside the screen, instead of scrolling."
+msgstr "Kaydırma yerine her zaman ekranın alt menülerini aç."
+
+#: ../../WPrefs.app/MenuPreferences.c:202
+msgid "Scroll off-screen menus when pointer is moved over them."
+msgstr "İşaretçi üzerine getirildiğinde ekran dışındaki menüleri kaydırın."
+
+#: ../../WPrefs.app/MenuPreferences.c:206
+msgid "Use h/j/k/l keys to select menu options."
+msgstr "Menü seçeneklerini seçmek için h / j / k / l tuşlarını kullanın."
+
+#: ../../WPrefs.app/MenuPreferences.c:222
+msgid "Menu Preferences"
+msgstr "Menü Tercihleri"
+
+#: ../../WPrefs.app/MenuPreferences.c:224
+msgid ""
+"Menu usability related options. Scrolling speed,\n"
+"alignment of submenus etc."
+msgstr ""
+"Menü kullanılabilirliği ile ilgili seçenekler. Kaydırma hızı, alt menülerin "
+"hizalanması vb."
+
+#: ../../WPrefs.app/MouseSettings.c:43
+msgid "Left Button"
+msgstr "Sol Düğme"
+
+#: ../../WPrefs.app/MouseSettings.c:44
+msgid "Middle Button"
+msgstr "Orta Düğme"
+
+#: ../../WPrefs.app/MouseSettings.c:45
+msgid "Right Button"
+msgstr "Sağ Düğme"
+
+#: ../../WPrefs.app/MouseSettings.c:46
+msgid "Back Button"
+msgstr "Geri Düğmesi"
+
+#: ../../WPrefs.app/MouseSettings.c:47
+msgid "Forward Button"
+msgstr "İleri Düğmesi"
+
+#: ../../WPrefs.app/MouseSettings.c:48
+msgid "Mouse Wheel"
+msgstr "Fare Tekerleği"
+
+#: ../../WPrefs.app/MouseSettings.c:49
+msgid "Mouse Wheel Tilt"
+msgstr "Fare Tekerleği Eğimi"
+
+#: ../../WPrefs.app/MouseSettings.c:57
+msgid "Applications Menu"
+msgstr "Uygulamalar Menüsü"
+
+#: ../../WPrefs.app/MouseSettings.c:59
+msgid "Select Windows"
+msgstr "Windows'u seç"
+
+#: ../../WPrefs.app/MouseSettings.c:60
+msgid "Previous Workspace"
+msgstr "Önceki Çalışma Alanı"
+
+#: ../../WPrefs.app/MouseSettings.c:61
+msgid "Next Workspace"
+msgstr "Sonraki Çalışma Alanı"
+
+#: ../../WPrefs.app/MouseSettings.c:62
+msgid "Previous Window"
+msgstr "Önceki Pencere"
+
+#: ../../WPrefs.app/MouseSettings.c:63
+msgid "Next Window"
+msgstr "Sonraki Pencere"
+
+#: ../../WPrefs.app/MouseSettings.c:71
+msgid "Switch Workspaces"
+msgstr "Çalışma Alanlarını Değiştir"
+
+#: ../../WPrefs.app/MouseSettings.c:72
+msgid "Switch Windows"
+msgstr "Pencereleri değiştir"
+
+#: ../../WPrefs.app/MouseSettings.c:155
+msgid "Invalid mouse acceleration value. Must be a positive real value."
+msgstr "Geçersiz fare hızlanma değeri. Olumlu bir gerçek değer olmalı."
+
+#: ../../WPrefs.app/MouseSettings.c:175
+msgid ""
+"Invalid mouse acceleration threshold value. Must be the number of pixels to "
+"travel before accelerating."
+msgstr ""
+"Geçersiz fare hızlanma eşik değeri. Hızlanmadan önce gidilecek piksel sayısı "
+"olmalıdır."
+
+#: ../../WPrefs.app/MouseSettings.c:284
+#, c-format
+msgid "bad value %s for option %s"
+msgstr "%s seçeneği için %s hatalı değeri"
+
+#: ../../WPrefs.app/MouseSettings.c:343
+#, c-format
+msgid ""
+"modifier key %s for option ModifierKey was not recognized. Using %s as "
+"default"
+msgstr ""
+"ModifierKey seçeneği için %s değiştirici anahtarı tanınmadı. %s 'yi "
+"varsayılan olarak kullanma"
+
+#: ../../WPrefs.app/MouseSettings.c:364
+msgid "could not retrieve keyboard modifier mapping"
+msgstr "klavye değiştirici eşlemesi alınamadı"
+
+#: ../../WPrefs.app/MouseSettings.c:458
+msgid "Mouse Speed"
+msgstr "Fare Hızı"
+
+#: ../../WPrefs.app/MouseSettings.c:471 ../../WPrefs.app/WPrefs.c:408
+#: ../../WPrefs.app/WPrefs.c:424 ../../WPrefs.app/WindowHandling.c:372
+#: ../../WPrefs.app/WindowHandling.c:423 ../../WPrefs.app/WindowHandling.c:435
+#: ../../WPrefs.app/WindowHandling.c:454 ../../WPrefs.app/WindowHandling.c:466
+#, c-format
+msgid "could not load icon %s"
+msgstr "%s simgesi yüklenemedi"
+
+#: ../../WPrefs.app/MouseSettings.c:488
+msgid "Accel.:"
+msgstr "Hızlanma:"
+
+#: ../../WPrefs.app/MouseSettings.c:499
+msgid "Threshold:"
+msgstr "Eşik:"
+
+#: ../../WPrefs.app/MouseSettings.c:512
+msgid "Mouse Grab Modifier"
+msgstr "Fare Tutucu Değiştirici"
+
+#: ../../WPrefs.app/MouseSettings.c:514
+msgid ""
+"Keyboard modifier to use for actions that\n"
+"involve dragging windows with the mouse,\n"
+"clicking inside the window."
+msgstr ""
+"Pencerenin içini tıklatarak pencereleri fare ile sürüklemeyi içeren eylemler "
+"için kullanılacak klavye değiştirici."
+
+#: ../../WPrefs.app/MouseSettings.c:530
+msgid "Double-Click Delay"
+msgstr "Çift Tıklama Gecikmesi"
+
+#: ../../WPrefs.app/MouseSettings.c:573
+msgid "Test"
+msgstr ""
+
+#: ../../WPrefs.app/MouseSettings.c:604
+msgid "Workspace Mouse Actions"
+msgstr "Çalışma Alanı Fare Eylemleri"
+
+#: ../../WPrefs.app/MouseSettings.c:609
+msgid "Disable mouse actions"
+msgstr "Fare eylemlerini devre dışı bırak"
+
+#: ../../WPrefs.app/MouseSettings.c:659
+#, c-format
+msgid "could not create %s"
+msgstr "%s oluşturulamadı"
+
+#: ../../WPrefs.app/MouseSettings.c:674
+#, c-format
+msgid "could not create temporary file %s"
+msgstr "%s geçici dosyası oluşturulamadı"
+
+#: ../../WPrefs.app/MouseSettings.c:707
+#, c-format
+msgid "could not rename file %s to %s"
+msgstr "%s dosyası %s olarak yeniden adlandırılamadı"
+
+#: ../../WPrefs.app/MouseSettings.c:712
+#, c-format
+msgid "could not set permission 0%03o on file \"%s\""
+msgstr "dosyasında izin 0%03o ayarlanamadı (%s)"
+
+#: ../../WPrefs.app/MouseSettings.c:776
+msgid "Shift"
+msgstr ""
+
+#: ../../WPrefs.app/MouseSettings.c:777
+msgid "Lock"
+msgstr "Kilitle"
+
+#: ../../WPrefs.app/MouseSettings.c:778
+msgid "Control"
+msgstr "Kontrol"
+
+#: ../../WPrefs.app/MouseSettings.c:779
+msgid "Mod1"
+msgstr ""
+
+#: ../../WPrefs.app/MouseSettings.c:780
+msgid "Mod2"
+msgstr ""
+
+#: ../../WPrefs.app/MouseSettings.c:781
+msgid "Mod3"
+msgstr ""
+
+#: ../../WPrefs.app/MouseSettings.c:782
+msgid "Mod4"
+msgstr ""
+
+#: ../../WPrefs.app/MouseSettings.c:783
+msgid "Mod5"
+msgstr ""
+
+#: ../../WPrefs.app/MouseSettings.c:787
+msgid "Mouse Preferences"
+msgstr "Fare Tercihleri"
+
+#: ../../WPrefs.app/MouseSettings.c:789
+msgid ""
+"Mouse speed/acceleration, double click delay,\n"
+"mouse button bindings etc."
+msgstr ""
+"Fare hızı / ivmesi, çift tıklama gecikmesi, fare düğmesi bağlantıları vb."
+
+#: ../../WPrefs.app/Paths.c:78
+msgid "bad value in option IconPath. Using default path list"
+msgstr "IconPath seçeneğinde hatalı değer. Varsayılan yol listesini kullanma"
+
+#: ../../WPrefs.app/Paths.c:95
+msgid "bad value in option PixmapPath. Using default path list"
+msgstr "PixmapPath seçeneğinde hatalı değer. Varsayılan yol listesini kullanma"
+
+#: ../../WPrefs.app/Paths.c:140
+msgid "Select directory"
+msgstr "Dizini seç"
+
+#: ../../WPrefs.app/Paths.c:250
+msgid "Icon Search Paths"
+msgstr "Simge Arama Yolları"
+
+#: ../../WPrefs.app/Paths.c:261 ../../WPrefs.app/Paths.c:292
+#: ../../WPrefs.app/TexturePanel.c:1212
+msgid "Add"
+msgstr "Ekle"
+
+#: ../../WPrefs.app/Paths.c:268 ../../WPrefs.app/Paths.c:299
+msgid "Remove"
+msgstr "Kaldır"
+
+#: ../../WPrefs.app/Paths.c:281
+msgid "Pixmap Search Paths"
+msgstr "Pixmap Arama Yolları"
+
+#: ../../WPrefs.app/Paths.c:316
+msgid "Search Path Configuration"
+msgstr "Arama Yolu Yapılandırması"
+
+#: ../../WPrefs.app/Paths.c:318
+msgid ""
+"Search paths to use when looking for pixmaps\n"
+"and icons."
+msgstr ""
+"Pikselleri ararken kullanılacak arama yolları\n"
+"ve simgeler."
+
+#: ../../WPrefs.app/Preferences.c:30 ../../WPrefs.app/Preferences.c:42
+msgid "Corner of screen"
+msgstr "Ekranın köşesi"
+
+#: ../../WPrefs.app/Preferences.c:31 ../../WPrefs.app/Preferences.c:43
+msgid "Center of screen"
+msgstr "Ekranın merkezi"
+
+#: ../../WPrefs.app/Preferences.c:32 ../../WPrefs.app/Preferences.c:44
+msgid "Center of resized window"
+msgstr "Yeniden boyutlandırılan pencerenin merkezi"
+
+#: ../../WPrefs.app/Preferences.c:33
+msgid "Technical drawing-like"
+msgstr "Teknik resim benzeri"
+
+#: ../../WPrefs.app/Preferences.c:34 ../../WPrefs.app/Preferences.c:45
+msgid "Disabled"
+msgstr "Devre dışı"
+
+#: ../../WPrefs.app/Preferences.c:53
+msgid "incomplete window titles"
+msgstr "tamamlanmamış pencere başlıkları"
+
+#: ../../WPrefs.app/Preferences.c:54
+msgid "miniwindow titles"
+msgstr "mini pencere başlıkları"
+
+#: ../../WPrefs.app/Preferences.c:55
+msgid "application/dock icons"
+msgstr "uygulama / dock simgeleri"
+
+#: ../../WPrefs.app/Preferences.c:56
+msgid "internal help"
+msgstr "dahili yardım"
+
+#: ../../WPrefs.app/Preferences.c:65
+msgid "Disable AppIcon bounce"
+msgstr "AppIcon sekmesini devre dışı bırak"
+
+#: ../../WPrefs.app/Preferences.c:66
+msgid "By default, the AppIcon bounces when the application is launched"
+msgstr "Uygulama başlatıldığında varsayılan olarak AppIcon sekiyor"
+
+#: ../../WPrefs.app/Preferences.c:68
+msgid "Bounce when the application wants attention"
+msgstr "Uygulama dikkat istediğinde zıpla"
+
+#: ../../WPrefs.app/Preferences.c:71
+msgid "Raise AppIcon when bouncing"
+msgstr "Zıplarken AppIcon'u kaldır"
+
+#: ../../WPrefs.app/Preferences.c:72
+msgid ""
+"Otherwise you will not see it bouncing if\n"
+"there is a window in front of the AppIcon"
+msgstr ""
+"Aksi takdirde, AppIcon'un önünde bir pencere varsa sıçradığını görmezsiniz"
+
+#: ../../WPrefs.app/Preferences.c:122
+#, c-format
+msgid "1 pixel"
+msgstr "1 piksel"
+
+#. 2-4
+#: ../../WPrefs.app/Preferences.c:125
+#, c-format
+msgid "%i pixels"
+msgstr "%i piksel"
+
+#. >4
+#: ../../WPrefs.app/Preferences.c:128
+#, c-format
+msgid "%i pixels "
+msgstr "%i piksel"
+
+#: ../../WPrefs.app/Preferences.c:236
+msgid "Size Display"
+msgstr "Boyut Göstergesi"
+
+#: ../../WPrefs.app/Preferences.c:238
+msgid ""
+"The position or style of the window size\n"
+"display that's shown when a window is resized."
+msgstr ""
+"Pencere yeniden boyutlandırıldığında gösterilen pencere boyutu ekranının "
+"konumu veya stili."
+
+#: ../../WPrefs.app/Preferences.c:253
+msgid "Position Display"
+msgstr "Pozisyon Göstergesi"
+
+#: ../../WPrefs.app/Preferences.c:255
+msgid ""
+"The position or style of the window position\n"
+"display that's shown when a window is moved."
+msgstr ""
+"Bir pencere taşındığında gösterilen pencere konumu ekranının konumu veya "
+"stili."
+
+#: ../../WPrefs.app/Preferences.c:270
+msgid "Show balloon for..."
+msgstr "Balonu şunun için göster ..."
+
+#: ../../WPrefs.app/Preferences.c:285
+msgid "AppIcon bouncing"
+msgstr "AppIcon sıçrayan"
+
+#: ../../WPrefs.app/Preferences.c:307
+msgid "Workspace border"
+msgstr "Çalışma alanı sınırı"
+
+#: ../../WPrefs.app/Preferences.c:323
+msgid "Left/Right"
+msgstr "Sol / Sağ"
+
+#: ../../WPrefs.app/Preferences.c:328
+msgid "Top/Bottom"
+msgstr "Üst / Alt"
+
+#: ../../WPrefs.app/Preferences.c:344
+msgid "Miscellaneous Ergonomic Preferences"
+msgstr "Çeşitli Ergonomik Tercihler"
+
+#: ../../WPrefs.app/Preferences.c:345
+msgid ""
+"Various settings like balloon text, geometry\n"
+"displays etc."
+msgstr "Balon metni, geometri göstergeleri vb. Çeşitli ayarlar."
+
+#: ../../WPrefs.app/TexturePanel.c:296
+msgid "Saturation"
+msgstr "Doygunluk"
+
+#: ../../WPrefs.app/TexturePanel.c:298
+msgid "Brightness"
+msgstr "Parlaklık"
+
+#: ../../WPrefs.app/TexturePanel.c:343 ../../WPrefs.app/TexturePanel.c:349
+msgid "Hue"
+msgstr "Ton"
+
+#: ../../WPrefs.app/TexturePanel.c:582
+msgid "Could not load the selected file: "
+msgstr "Seçilen dosya yüklenemedi:"
+
+#: ../../WPrefs.app/TexturePanel.c:632
+msgid "Open Image"
+msgstr "Görüntüyü Aç"
+
+#: ../../WPrefs.app/TexturePanel.c:662
+msgid "The selected file does not contain a supported image."
+msgstr "Seçili dosya desteklenen bir resim içermiyor."
+
+#: ../../WPrefs.app/TexturePanel.c:995
+#, c-format
+msgid "error creating texture %s"
+msgstr "%s doku oluşturulurken hata"
+
+#: ../../WPrefs.app/TexturePanel.c:1157
+msgid "Texture Panel"
+msgstr "Doku Paneli"
+
+#: ../../WPrefs.app/TexturePanel.c:1164
+msgid "Texture Name"
+msgstr "Doku Adı"
+
+#: ../../WPrefs.app/TexturePanel.c:1176
+msgid "Solid Color"
+msgstr "Düz Renk"
+
+#: ../../WPrefs.app/TexturePanel.c:1177
+msgid "Gradient Texture"
+msgstr "Degrade Doku"
+
+#: ../../WPrefs.app/TexturePanel.c:1178
+msgid "Simple Gradient Texture"
+msgstr "Basit Degrade Doku"
+
+#: ../../WPrefs.app/TexturePanel.c:1179
+msgid "Textured Gradient"
+msgstr "Dokulu Degrade"
+
+#: ../../WPrefs.app/TexturePanel.c:1180
+msgid "Image Texture"
+msgstr "Görüntü Dokusu"
+
+#: ../../WPrefs.app/TexturePanel.c:1188
+msgid "Default Color"
+msgstr "Varsayılan Renk"
+
+#: ../../WPrefs.app/TexturePanel.c:1200
+msgid "Gradient Colors"
+msgstr "Degrade Renkler"
+
+#: ../../WPrefs.app/TexturePanel.c:1289
+msgid "Direction"
+msgstr "Yön"
+
+#: ../../WPrefs.app/TexturePanel.c:1317
+msgid "Gradient"
+msgstr "Degrade"
+
+#: ../../WPrefs.app/TexturePanel.c:1333
+msgid "Gradient Opacity"
+msgstr "Degrade Opaklığı"
+
+#: ../../WPrefs.app/TexturePanel.c:1373
+msgid "Image"
+msgstr "Görüntü"
+
+#: ../../WPrefs.app/TexturePanel.c:1393
+msgid "Browse..."
+msgstr "Gözat ..."
+
+#: ../../WPrefs.app/TexturePanel.c:1405
+msgid "Tile"
+msgstr "Karo"
+
+#: ../../WPrefs.app/TexturePanel.c:1406
+msgid "Scale"
+msgstr "Ölçek"
+
+#: ../../WPrefs.app/TexturePanel.c:1408
+msgid "Maximize"
+msgstr "Ekranı kapla"
+
+#: ../../WPrefs.app/TexturePanel.c:1409
+msgid "Fill"
+msgstr "Doldur"
+
+#: ../../WPrefs.app/WPrefs.c:212 ../../WPrefs.app/WPrefs.c:282
+msgid "Window Maker Preferences"
+msgstr "Pencere Oluşturucu Tercihleri"
+
+#: ../../WPrefs.app/WPrefs.c:216
+msgid "Preferences"
+msgstr "Tercihler"
+
+#: ../../WPrefs.app/WPrefs.c:235
+msgid "Revert Page"
+msgstr "Sayfayı Geri Al"
+
+#: ../../WPrefs.app/WPrefs.c:241
+msgid "Revert All"
+msgstr "Tümünü Döndür"
+
+#: ../../WPrefs.app/WPrefs.c:247
+msgid "Save"
+msgstr "Kaydet"
+
+#: ../../WPrefs.app/WPrefs.c:259
+msgid "Balloon Help"
+msgstr "Balon Yardımı"
+
+#: ../../WPrefs.app/WPrefs.c:289
+#, c-format
+msgid "Version %s"
+msgstr "Sürüm %s"
+
+#: ../../WPrefs.app/WPrefs.c:296
+msgid "Starting..."
+msgstr "Başlatılıyor ..."
+
+#: ../../WPrefs.app/WPrefs.c:383
+#, c-format
+msgid "could not locate image file %s"
+msgstr "%s resim dosyası bulunamadı"
+
+#: ../../WPrefs.app/WPrefs.c:437
+#, c-format
+msgid "could not process icon %s: %s"
+msgstr "%s: %s simgesi işlenemedi"
+
+#: ../../WPrefs.app/WPrefs.c:537
+#, c-format
+msgid "could not load image file %s:%s"
+msgstr "resim dosyası yüklenemedi %s:%s"
+
+#: ../../WPrefs.app/WPrefs.c:554
+msgid "Loading Window Maker configuration files..."
+msgstr "Window Maker yapılandırma dosyaları yükleniyor ..."
+
+#: ../../WPrefs.app/WPrefs.c:558
+msgid "Initializing configuration panels..."
+msgstr "Yapılandırma panelleri başlatılıyor ..."
+
+#: ../../WPrefs.app/WPrefs.c:616 ../../WPrefs.app/WPrefs.c:698
+#, c-format
+msgid "Window Maker domain (%s) is corrupted!"
+msgstr "Window Maker etki alanı (%s) bozuk!"
+
+#: ../../WPrefs.app/WPrefs.c:620
+#, c-format
+msgid "Could not load Window Maker domain (%s) from defaults database."
+msgstr "Windows Maker etki alanı (%s) varsayılan veritabanından yüklenemedi."
+
+#: ../../WPrefs.app/WPrefs.c:635
+msgid "could not extract version information from Window Maker"
+msgstr "Windows Maker'dan sürüm bilgisi alınamadı"
+
+#: ../../WPrefs.app/WPrefs.c:636
+msgid "Make sure wmaker is in your search path."
+msgstr "Wmaker'ın arama yolunuzda olduğundan emin olun."
+
+#: ../../WPrefs.app/WPrefs.c:640
+msgid ""
+"Could not extract version from Window Maker. Make sure it is correctly "
+"installed and is in your PATH environment variable."
+msgstr ""
+"Windows Maker'dan sürüm alınamadı. Doğru bir şekilde kurulduğundan ve PATH "
+"ortam değişkeninizde olduğundan emin olun."
+
+#: ../../WPrefs.app/WPrefs.c:650
+msgid ""
+"Could not extract version from Window Maker. Make sure it is correctly "
+"installed and the path where it installed is in the PATH environment "
+"variable."
+msgstr ""
+"Windows Maker'dan sürüm alınamadı. Doğru yüklendiğinden ve yüklendiği yolun "
+"PATH ortam değişkeninde olduğundan emin olun."
+
+#: ../../WPrefs.app/WPrefs.c:657
+#, c-format
+msgid ""
+"WPrefs only supports Window Maker 0.18.0 or newer.\n"
+"The version installed is %i.%i.%i\n"
+msgstr ""
+"WPrefs yalnızca Window Maker 0.18.0 veya daha yenisini destekler. Yüklü "
+"sürüm %i.%i.%i\n"
+
+#: ../../WPrefs.app/WPrefs.c:666
+#, c-format
+msgid ""
+"Window Maker %i.%i.%i, which is installed in your system, is not fully "
+"supported by this version of WPrefs."
+msgstr ""
+"Sisteminize yüklenmiş olan Window Maker %i.%i.%i, WPrefs'in bu sürümü "
+"tarafından tam olarak desteklenmiyor."
+
+#: ../../WPrefs.app/WPrefs.c:679
+#, c-format
+msgid "could not run \"%s --global_defaults_path\"."
+msgstr "\"%s --global_defaults_path\" çalıştırılamadı."
+
+#: ../../WPrefs.app/WPrefs.c:702
+#, c-format
+msgid "Could not load global Window Maker domain (%s)."
+msgstr "Genel Window Maker etki alanı (%s) yüklenemedi."
+
+#: ../../WPrefs.app/WPrefs.c:922
+#, c-format
+msgid "bad speed value for option %s; using default Medium"
+msgstr "%s seçeneği için hatalı hız değeri; varsayılan Ortamı kullanma"
+
+#: ../../WPrefs.app/WindowHandling.c:88
+msgid "Automatic"
+msgstr "Otomatik"
+
+#: ../../WPrefs.app/WindowHandling.c:89
+msgid "Random"
+msgstr "Rastgele"
+
+#: ../../WPrefs.app/WindowHandling.c:90
+msgid "Manual"
+msgstr ""
+
+#: ../../WPrefs.app/WindowHandling.c:91
+msgid "Cascade"
+msgstr "Çağlayan"
+
+#: ../../WPrefs.app/WindowHandling.c:92
+msgid "Smart"
+msgstr "Akıllı"
+
+#: ../../WPrefs.app/WindowHandling.c:100
+msgid "...changes its position (normal behavior)"
+msgstr "... konumunu değiştiriyor (normal davranış)"
+
+#: ../../WPrefs.app/WindowHandling.c:101
+msgid "...restores its unmaximized geometry"
+msgstr "... eşsiz geometrisini geri yüklüyor"
+
+#: ../../WPrefs.app/WindowHandling.c:102
+msgid "...considers the window now unmaximized"
+msgstr "... pencerenin şimdi belirsiz olduğunu düşünüyor"
+
+#: ../../WPrefs.app/WindowHandling.c:103
+msgid "...does not move the window"
+msgstr "... pencereyi hareket ettirmiyor"
+
+#: ../../WPrefs.app/WindowHandling.c:178 ../../WPrefs.app/WindowHandling.c:194
+#, c-format
+msgid "bad option value %s in WindowPlacement. Using default value"
+msgstr ""
+"WindowPlacement'da %s hatalı seçenek değeri. Varsayılan değeri kullanma"
+
+#: ../../WPrefs.app/WindowHandling.c:214
+msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
+msgstr ""
+"WindowPlaceOrigin seçeneğinde geçersiz veriler. Varsayılan (0,0) kullanılması"
+
+#: ../../WPrefs.app/WindowHandling.c:310
+msgid "Window Placement"
+msgstr "Pencere Yerleşimi"
+
+#: ../../WPrefs.app/WindowHandling.c:311
+msgid ""
+"How to place windows when they are first put\n"
+"on screen."
+msgstr "Pencereleri ilk kez ekrana yerleştirildiklerinde yerleştirme."
+
+#: ../../WPrefs.app/WindowHandling.c:325
+msgid "Origin:"
+msgstr "Menşei:"
+
+#: ../../WPrefs.app/WindowHandling.c:406
+msgid "Opaque Move/Resize"
+msgstr "Opak Taşı / Yeniden Boyutlandır"
+
+#: ../../WPrefs.app/WindowHandling.c:407
+msgid ""
+"Whether the window contents or only a frame should\n"
+"be displayed during a move or resize.\n"
+msgstr ""
+"Taşıma veya yeniden boyutlandırma sırasında pencere içeriğinin veya yalnızca "
+"çerçevenin görüntülenip görüntülenmeyeceği.\n"
+
+#: ../../WPrefs.app/WindowHandling.c:474
+msgid "by keyboard"
+msgstr "klavye ile"
+
+#: ../../WPrefs.app/WindowHandling.c:476
+msgid ""
+"When selected, moving or resizing windows\n"
+"using keyboard shortcuts will also display its\n"
+"content instead of just a frame."
+msgstr ""
+"Seçildiğinde, klavye kısayollarını kullanarak pencereleri taşımak veya "
+"yeniden boyutlandırmak da içeriğini bir çerçeve yerine görüntüler."
+
+#: ../../WPrefs.app/WindowHandling.c:487
+msgid "When maximizing..."
+msgstr "Büyütülürken ..."
+
+#: ../../WPrefs.app/WindowHandling.c:490
+msgid "...do not cover:"
+msgstr "... aşağıdakileri kapsamaz:"
+
+#: ../../WPrefs.app/WindowHandling.c:497
+msgid "Icons"
+msgstr "Simgeler"
+
+#: ../../WPrefs.app/WindowHandling.c:502
+msgid "The dock"
+msgstr "Rıhtım"
+
+#: ../../WPrefs.app/WindowHandling.c:510
+msgid "Mod+Wheel"
+msgstr "Mod + Tekerlek"
+
+#: ../../WPrefs.app/WindowHandling.c:513
+msgid "Resize increment:"
+msgstr "Artışı yeniden boyutlandır:"
+
+#: ../../WPrefs.app/WindowHandling.c:534
+msgid "Edge Resistance"
+msgstr "Kenar Direnci"
+
+#: ../../WPrefs.app/WindowHandling.c:536
+msgid ""
+"Edge resistance will make windows `resist'\n"
+"being moved further for the defined threshold\n"
+"when moved against other windows or the edges\n"
+"of the screen."
+msgstr ""
+"Kenar direnci, diğer pencerelere veya ekranın kenarlarına taşındığında "
+"pencerelerin tanımlanan eşik için daha fazla hareket etmesini sağlayacaktır."
+
+#: ../../WPrefs.app/WindowHandling.c:555
+msgid "Resist"
+msgstr "Direnç"
+
+#: ../../WPrefs.app/WindowHandling.c:560
+msgid "Attract"
+msgstr "Çek"
+
+#: ../../WPrefs.app/WindowHandling.c:569
+msgid "Dragging a maximized window..."
+msgstr "Büyütülmüş bir pencere sürükleniyor ..."
+
+#: ../../WPrefs.app/WindowHandling.c:598
+msgid "Window Handling Preferences"
+msgstr "Pencere İşleme Tercihleri"
+
+#: ../../WPrefs.app/WindowHandling.c:600
+msgid ""
+"Window handling options. Initial placement style\n"
+"edge resistance, opaque move etc."
+msgstr ""
+"Pencere taşıma seçenekleri. İlk yerleştirme stili kenar direnci, opak "
+"hareket vb."
+
+#: ../../WPrefs.app/Workspace.c:118
+msgid "Workspace Navigation"
+msgstr "Çalışma Alanında Gezinme"
+
+#: ../../WPrefs.app/Workspace.c:123
+msgid "Wrap to the first workspace from the last workspace"
+msgstr "Son çalışma alanından ilk çalışma alanına sarma"
+
+#: ../../WPrefs.app/Workspace.c:139
+msgid "Switch workspaces while dragging windows"
+msgstr "Pencereleri sürüklerken çalışma alanlarını değiştir"
+
+#: ../../WPrefs.app/Workspace.c:155
+msgid "Automatically create new workspaces"
+msgstr "Otomatik olarak yeni çalışma alanları yarat"
+
+#. WMSetLabelTextAlignment(panel->posL, WARight);
+#: ../../WPrefs.app/Workspace.c:172
+msgid "Position of workspace name display"
+msgstr "Çalışma alanı adı görüntüleme konumu"
+
+#: ../../WPrefs.app/Workspace.c:188
+msgid "Disable"
+msgstr "Devre dışı bırak"
+
+#: ../../WPrefs.app/Workspace.c:190
+msgid "Top"
+msgstr "Üst"
+
+#: ../../WPrefs.app/Workspace.c:191
+msgid "Bottom"
+msgstr "Alt"
+
+#: ../../WPrefs.app/Workspace.c:192
+msgid "Top/Left"
+msgstr "Üst / Sol"
+
+#: ../../WPrefs.app/Workspace.c:193
+msgid "Top/Right"
+msgstr "Üst / Sağ"
+
+#: ../../WPrefs.app/Workspace.c:194
+msgid "Bottom/Left"
+msgstr "Alt / Sol"
+
+#: ../../WPrefs.app/Workspace.c:195
+msgid "Bottom/Right"
+msgstr "Alt / Sağ"
+
+#: ../../WPrefs.app/Workspace.c:224
+msgid "Workspace Preferences"
+msgstr "Çalışma Alanı Tercihleri"
+
+#: ../../WPrefs.app/Workspace.c:226
+msgid ""
+"Workspace navigation features\n"
+"and workspace name display settings."
+msgstr ""
+"Çalışma alanı gezinme özellikleri ve çalışma alanı adı görüntüleme ayarları."
+
+#: ../../WPrefs.app/main.c:62
+#, c-format
+msgid "usage: %s [options]\n"
+msgstr "kullanım: %s [seçenekler]\n"
+
+#: ../../WPrefs.app/main.c:63
+msgid "options:"
+msgstr "seçenekler:"
+
+#: ../../WPrefs.app/main.c:64
+msgid " -display <display>\tdisplay to be used"
+msgstr "-display <display>\tkullanılacak ekran"
+
+#: ../../WPrefs.app/main.c:65
+msgid " --version\t\tprint version number and exit"
+msgstr " --versiyon\t\tbaskı sürüm numarası ve çıkış"
+
+#: ../../WPrefs.app/main.c:66
+msgid " --help\t\tprint this message and exit"
+msgstr " --help\t\tbu mesajı yazdır ve çık"
+
+#: ../../WPrefs.app/main.c:120
+#, c-format
+msgid "too few arguments for %s"
+msgstr "%s için çok az argüman"
+
+#: ../../WPrefs.app/main.c:142
+msgid "X server does not support locale"
+msgstr "X sunucusu yerel ayarı desteklemiyor"
+
+#: ../../WPrefs.app/main.c:145
+msgid "cannot set locale modifiers"
+msgstr "yerel ayar değiştiricileri ayarlanamıyor"
+
+#: ../../WPrefs.app/main.c:151
+#, c-format
+msgid "could not open display %s"
+msgstr "%s ekranı açılamadı"
+
+#: ../../WPrefs.app/main.c:156
+msgid "could not initialize application"
+msgstr "uygulama başlatılamadı"
+
+#: ../../WPrefs.app/xmodifier.c:125
+#, c-format
+msgid "%s (0x%x) generates %s which is generated by %s"
+msgstr "%s (0x%x) %s tarafından oluşturulan %s üretir"
+
+#: ../../WPrefs.app/xmodifier.c:129 ../../WPrefs.app/xmodifier.c:134
+#, c-format
+msgid "%s (0x%x) generates %s which is nonsensical"
+msgstr "%s (0x%x), saçma olmayan %s üretir"
+
+#: ../../WPrefs.app/xmodifier.c:139
+#, c-format
+msgid "%s (0x%x) generates both %s and %s which is nonsensical"
+msgstr "%s (0x%x) hem %s hem de %s üretiyor, bu da saçma"
+
+#: ../../WPrefs.app/xmodifier.c:160
+msgid "XGetModifierMapping returned NULL, there is no modifier or no memory"
+msgstr "XGetModifierMapping NULL döndürdü, değiştirici veya bellek yok"
+
+#: ../../WPrefs.app/xmodifier.c:268
+#, c-format
+msgid "%s is being used for both %s and %s"
+msgstr "%s, hem %s hem de %s için kullanılıyor"
