@@ -2849,15 +2849,28 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 
 	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
-	if (event->xbutton.button == Button1) {
-		if (event->xbutton.state == 0) {
-			if (!WFLAGP(wwin, no_shadeable)) {
+	if (event->xbutton.button == Button1 ) {
+		if (event->xbutton.state == 0 ) {
+			if (!WFLAGP(wwin, no_shadeable) & !wPreferences.double_click_fullscreen) {
 				/* shade window */
 				if (wwin->flags.shaded)
 					wUnshadeWindow(wwin);
 				else
 					wShadeWindow(wwin);
-			}
+			} 
+		}
+		
+		if (wPreferences.double_click_fullscreen){
+			int dir = 0;
+			if (event->xbutton.state == 0) {
+				/* maximize window full screen*/
+				dir |= (MAX_VERTICAL|MAX_HORIZONTAL);
+				int ndir = dir ^ wwin->flags.maximized;
+					wMaximizeWindow(wwin, ndir, wGetHeadForWindow(wwin));
+			
+			} 
+
+					
 		} else {
 			int dir = 0;
 
@@ -2871,6 +2884,7 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 			}
 
 			/* maximize window */
+			
 			if (dir != 0 && IS_RESIZABLE(wwin)) {
 				int ndir = dir ^ wwin->flags.maximized;
 

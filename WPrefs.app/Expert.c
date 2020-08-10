@@ -113,7 +113,10 @@ static const struct {
 	  /* default: */ False, OPTION_WMAKER, "OpenTransientOnOwnerWorkspace" },
 
 	{ N_("Wrap dock-attached icons around the screen edges."),
-	  /* default: */ True, OPTION_WMAKER, "WrapAppiconsInDock" }
+	  /* default: */ True, OPTION_WMAKER, "WrapAppiconsInDock" },
+	  
+	{ N_("Double click on titlebar maximize a window to full screen."),
+	  /* default: */ False, OPTION_WMAKER, "DbClickFullScreen" }
 
 };
 

@@ -825,7 +825,9 @@ WDefaultEntry optionList[] = {
 	{"CycleActiveHeadOnly", "NO", NULL,
 	    &wPreferences.cycle_active_head_only, getBool, NULL, NULL, NULL},
 	{"CycleIgnoreMinimized", "NO", NULL,
-	    &wPreferences.cycle_ignore_minimized, getBool, NULL, NULL, NULL}
+	    &wPreferences.cycle_ignore_minimized, getBool, NULL, NULL, NULL},
+	{"DbClickFullScreen", "NO", NULL,
+	    &wPreferences.double_click_fullscreen, getBool, NULL, NULL, NULL}
 };
 
 static void initDefaults(void)
