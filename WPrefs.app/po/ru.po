@@ -380,45 +380,68 @@ msgstr ""
 "параметров и количества цветов для резервирования за\n"
 "Window Maker'ом при работе с 8bit'ным цветом (8bpp)."
 
-#: ../../WPrefs.app/Expert.c:75
-msgid ""
-"Disable miniwindows (icons for miniaturized windows). For use with KDE/GNOME."
-msgstr ""
-"Запретить миниокна (иконки для минимизированных окон). Для использования с "
-"KDE/GNOME."
+#: ../../WPrefs.app/Expert.c:44
+msgid  "Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."
+msgstr "Запретить миниокна иконки для минимизированных окон. Для использования с KDE/GNOME."
 
-#: ../../WPrefs.app/Expert.c:76
+#: ../../WPrefs.app/Expert.c:47
+msgid "Ignore decoration hints for GTK applications."
+msgstr "Игнорировать декорацию окон для GTK приложений."
+
+#: ../../WPrefs.app/Expert.c:53
 msgid "Do not set non-WindowMaker specific parameters (do not use xset)."
 msgstr ""
 "Не устанавливать параметры, не относящиеся непосредственно к\n"
 "Window Maker'у (не использовать xset)."
 
-#: ../../WPrefs.app/Expert.c:77
+#: ../../WPrefs.app/Expert.c:56
 msgid "Automatically save session when exiting Window Maker."
 msgstr "Автоматически сохранять сессию при выходе из Window Maker'а."
 
-#: ../../WPrefs.app/Expert.c:78
+#: ../../WPrefs.app/Expert.c:59
 msgid "Use SaveUnder in window frames, icons, menus and other objects."
 msgstr "Использовать SaveUnder для окон, иконок, меню и других объектов."
 
-#: ../../WPrefs.app/Expert.c:79
-msgid "Use Windoze style cycling."
-msgstr "Переключение окон в стиле Windows"
-
-#: ../../WPrefs.app/Expert.c:80
+#: ../../WPrefs.app/Expert.c:62
 msgid "Disable confirmation panel for the Kill command."
 msgstr "Запретить диалог подтверждения для команды `Убить'."
 
-# awn: FIXME: что это вообще значит?
-#: ../../WPrefs.app/Expert.c:81
 msgid "Disable selection animation for selected icons."
 msgstr "Запретить анимацию выбора для выбранных иконок."
 
-#: ../../WPrefs.app/Expert.c:115
+msgid "Show switch panel when cycling windows."
+msgstr "Показывать панель переключения окон."
+
+#: ../../WPrefs.app/Expert.c:68
+msgid "Smooth font edges (needs restart)."
+msgstr "Cглаживание шрифтов (требуется перезагрузка)."
+
+#: ../../WPrefs.app/Expert.c:80
+msgid "Show workspace title on Clip."
+msgstr "Показывать имя рабочего места на скрепке."
+
+#: ../../WPrefs.app/Expert.c:83
+msgid "Highlight the icon of the application when it has the focus."
+msgstr "Подсвечивание иконок при нажатии (в фокусе)."
+
+#: ../../WPrefs.app/Expert.c:91
+msgid "Maximize (snap) a window to edge or corner by dragging."
+msgstr "Прилипания окон по краям и углам."
+
+#: ../../WPrefs.app/Expert.c:100
+msgid "Snapping a window to the top maximizes it to the full screen."
+msgstr "Распахнуть окно при перетаскивании к верхнему краю."
+
+
+#: ../../WPrefs.app/Expert.c:118
+msgid "Double click on titlebar maximize a window to full screen."
+msgstr "Распахнуть окно двойным щелчком."
+
+#: ../../WPrefs.app/Expert.c:328
 msgid "Expert User Preferences"
 msgstr "Установки для опытного пользователя"
 
-#: ../../WPrefs.app/Expert.c:117
+#: ../../WPrefs.app/Expert.c:330
 msgid ""
 "Options for people who know what they're doing...\n"
 "Also have some other misc. options."
@@ -622,6 +645,11 @@ msgid ""
 msgstr ""
 "Параметры обработки иконок и миниокон.  Размещение иконок,\n"
 "размер иконок, в каком стиле анимировать сворачивание."
+
+#: ../../WPrefs.app/Icons.c:414
+msgid "Single click activation"
+msgstr "Одинарный щелчок мыши"
+
 
 #: ../../WPrefs.app/imagebrowser.c:95
 msgid "View"
@@ -1901,6 +1929,10 @@ msgstr ""
 msgid "Resist"
 msgstr "Упираться"
 
+#: ../../WPrefs.app/WindowHandling.c:406
+msgid "Opaque Move/Resize"
+msgstr "Перемещ/Измен.разм."
+
 #: ../../WPrefs.app/WindowHandling.c:407
 msgid "Attract"
 msgstr "Притягиваться"
@@ -1922,6 +1954,22 @@ msgid ""
 msgstr ""
 "Как обращаться с окнами.  Начальное расположение окон.\n"
 "Сопротивляемость границ.  Сплошное/каркасное перемещение, и т.п."
+
+#: ../../WPrefs.app/WindowHandling.c:474
+msgid "by keyboard"
+msgstr "c помощ.клав."
+
+#: ../../WPrefs.app/WindowHandling.c:490
+msgid "...do not cover:"
+msgstr "не перекрывать:"
+
+#: ../../WPrefs.app/WindowHandling.c:497
+msgid "Icons"
+msgstr "Иконок"
+
+#: ../../WPrefs.app/WindowHandling.c:502
+msgid "The dock"
+msgstr "Дока"
 
 #: ../../WPrefs.app/Workspace.c:176
 msgid "Workspace Navigation"
