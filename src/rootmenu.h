@@ -25,5 +25,6 @@
 Bool wRootMenuPerformShortcut(XEvent * event);
 void wRootMenuBindShortcuts(Window window);
 void OpenRootMenu(WScreen * scr, int x, int y, int keyboard);
+WMenu *configureMenu(WScreen *scr, WMPropList *definition);
 
 #endif /* WMROOTMENU_H */

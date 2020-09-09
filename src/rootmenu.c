@@ -66,7 +66,6 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen *scr, const char *file_name);
 static WMenu *readMenuDirectory(WScreen *scr, const char *title, char **file_name, const char *command);
-static WMenu *configureMenu(WScreen *scr, WMPropList *definition);
 static void menu_parser_register_macros(WMenuParser parser);
 
 typedef struct Shortcut {
@@ -1467,7 +1466,7 @@ static WMenu *makeDefaultMenu(WScreen * scr)
  *
  *----------------------------------------------------------------------
  */
-static WMenu *configureMenu(WScreen *scr, WMPropList *definition)
+WMenu *configureMenu(WScreen *scr, WMPropList *definition)
 {
 	WMenu *menu = NULL;
 	WMPropList *elem;

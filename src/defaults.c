@@ -827,7 +827,9 @@ WDefaultEntry optionList[] = {
 	{"CycleIgnoreMinimized", "NO", NULL,
 	    &wPreferences.cycle_ignore_minimized, getBool, NULL, NULL, NULL},
 	{"DbClickFullScreen", "NO", NULL,
-	    &wPreferences.double_click_fullscreen, getBool, NULL, NULL, NULL}
+	    &wPreferences.double_click_fullscreen, getBool, NULL, NULL, NULL},
+	{"CloseRootMenuByLeftOrRightMouseClick", "NO", NULL,
+	    &wPreferences.close_rootmenu_left_right_click, getBool, NULL, NULL, NULL}
 };
 
 static void initDefaults(void)

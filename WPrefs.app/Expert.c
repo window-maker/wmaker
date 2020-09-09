@@ -116,7 +116,10 @@ static const struct {
 	  /* default: */ True, OPTION_WMAKER, "WrapAppiconsInDock" },
 	  
 	{ N_("Double click on titlebar maximize a window to full screen."),
-	  /* default: */ False, OPTION_WMAKER, "DbClickFullScreen" }
+	  /* default: */ False, OPTION_WMAKER, "DbClickFullScreen" },
+
+	{ N_("Close rootmenu when mouse (left or right) is clicked outside focus."),
+	  /* default: */ False, OPTION_WMAKER, "CloseRootMenuByLeftOrRightMouseClick" }
 
 };
 

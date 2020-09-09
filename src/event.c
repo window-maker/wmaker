@@ -759,6 +759,18 @@ static void executeButtonAction(WScreen *scr, XEvent *event, int action)
 	case WA_SELECT_WINDOWS:
 		wUnselectWindows(scr);
 		wSelectWindows(scr, event);
+		if (wPreferences.close_rootmenu_left_right_click){
+			WMenu *menu = NULL;
+			WMPropList *definition;
+			menu = scr->root_menu;
+			if (scr->root_menu){
+				wMenuDestroy(menu,True);
+				scr->root_menu = NULL;
+				definition = w_global.domain.root_menu->dictionary;
+				menu = configureMenu(scr, definition);
+				scr->root_menu = menu;
+			}
+		}
 		break;
 	case WA_OPEN_APPMENU:
 		OpenRootMenu(scr, event->xbutton.x_root, event->xbutton.y_root, False);

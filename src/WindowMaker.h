@@ -454,6 +454,7 @@ extern struct WPreferences {
 	char cycle_active_head_only;        /* Cycle only windows on the active head */
 	char cycle_ignore_minimized;        /* Ignore minimized windows when cycling */
 	char double_click_fullscreen;       /* Double click on titlebar maximize a window to full screen*/
+	char close_rootmenu_left_right_click;/* Close application menu when mouse (left or right) is clicked outside focus */
 	char strict_windoze_cycle;          /* don't close switch panel when shift is released */
 	char panel_only_open;               /* Only open the switch panel; don't switch */
 	int minipreview_size;               /* Size of Mini-Previews in pixels */

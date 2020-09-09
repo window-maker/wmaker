@@ -432,10 +432,13 @@ msgstr "Прилипания окон по краям и углам."
 msgid "Snapping a window to the top maximizes it to the full screen."
 msgstr "Распахнуть окно при перетаскивании к верхнему краю."
 
-
 #: ../../WPrefs.app/Expert.c:118
 msgid "Double click on titlebar maximize a window to full screen."
 msgstr "Распахнуть окно двойным щелчком."
+
+#: ../../WPrefs.app/Expert.c:121
+msgid "Close rootmenu when mouse (left or right) is clicked outside focus."
+msgstr "Закрывать меню приложений правым или левым щелчком мыши вне фокуса."
 
 #: ../../WPrefs.app/Expert.c:328
 msgid "Expert User Preferences"
