@@ -579,10 +579,29 @@ static void handleExtensions(XEvent * event)
 		/* From xrandr man page: "Clients must call back into Xlib using
 		 * XRRUpdateConfiguration when screen configuration change notify
 		 * events are generated */
+		WScreen *scr = NULL;
+		WWindow *win;
+		WWindow **wndsInDeadZone;
+
+
+		scr = wScreenForRootWindow(event->xmaprequest.parent);
+		wScreenUpdateUsableArea(scr);
+		win = scr->focused_window;
+		while(win) {
+			if (win->frame_x > scr->usableArea[0].x2 || win->frame_y > scr->usableArea[0].y2 ) {
+				wwarning(_("indeadzone, screen: %d, wnd: %p, wnd->frame_x: %d, usableArea[i].x2: %d, wnd->frame_y: %d, usableArea[i].y2:%d"),
+				0, win, win->frame_x, scr->usableArea[0].x2, win->frame_y, scr->usableArea[0].y2 );
+				wWindowMove(win, 200, 200);
+			}
+			win = win->prev;
+		}
+		
 		XRRUpdateConfiguration(event);
-		WCHANGE_STATE(WSTATE_RESTARTING);
-		Shutdown(WSRestartPreparationMode);
-		Restart(NULL,True);
+
+		/* don't need to restart window maker anymore */
+		//WCHANGE_STATE(WSTATE_RESTARTING);
+		//Shutdown(WSRestartPreparationMode);
+		//Restart(NULL,True);
 	}
 #endif
 }
