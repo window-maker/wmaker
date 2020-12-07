@@ -819,7 +819,7 @@ msgstr "Clip in den Vor-/Hintergrund"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:518
 msgid "Toggle keyboard language"
-msgstr "Tastatursbelegung ändern"
+msgstr "Tastaturbelegung ändern"
 
 #: ../../WPrefs.app/KeyboardShortcuts.c:532
 msgid "Shortcut"
