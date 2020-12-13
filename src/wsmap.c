@@ -50,6 +50,17 @@ static int wsmap_bulk_index;
 static WMPixmap *frame_bg_focused;
 static WMPixmap *frame_bg_unfocused;
 
+/* The workspace map may not be in use (and is not accessible in the
+ * default configurations). Saving the workspace map image in case
+ * it's needed may add a large amount of overhead to switching
+ * workspaces, which isn't necessary at all unless the workspace map
+ * is in use.
+ *
+ * So we disable updating the workspace preview image until the
+ * workspace manager is first used.
+ */
+static int wsmap_in_use = 0;
+
 typedef struct {
 	WScreen *scr;
 	WMWindow *win;
@@ -68,6 +79,9 @@ typedef struct {
 void wWorkspaceMapUpdate(WScreen *scr)
 {
 	XImage *pimg;
+
+	if (!wsmap_in_use)
+		return;
 
 	pimg = XGetImage(dpy, scr->root_win, 0, 0,
 	                 scr->scr_width, scr->scr_height,
@@ -404,7 +418,6 @@ static WWorkspaceMap *create_workspace_map(WScreen *scr, W_WorkspaceMap *wsmap_a
 	WMFrame *framel = WMCreateFrame(wsmap->win);
 	WMResizeWidget(framel, wsmap->wswidth, wsmap->border_width);
 	WMSetFrameRelief(framel, WRSimple);
-	wWorkspaceMapUpdate(scr);
 
 	wsmap->xcount = 0;
 	if (edge == WD_TOP) {
@@ -554,6 +567,8 @@ void StartWorkspaceMap(WScreen *scr)
 {
 	WWorkspaceMap *wsmap;
 	W_WorkspaceMap wsmap_array[2 * mini_workspace_per_line];
+
+	wsmap_in_use = 1;
 
 	/* save the current screen before displaying the workspace map */
 	wWorkspaceMapUpdate(scr);
