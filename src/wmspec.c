@@ -845,43 +845,56 @@ Bool wNETWMGetUsableArea(WScreen *scr, int head, WArea *area)
 
 	rect = wGetRectForHead(scr, head);
 
-    /* NOTE(gryf): calculation for the reserved area should be preformed for 
-     * current head, but area, which comes form _NET_WM_STRUT, has to be 
-     * calculated relative to entire screen size, i.e. suppose we have three 
-     * heads arranged like this:
-     *
-     * ╔════════════════════════╗
-     * ║ 0                      ║
-     * ║                        ╠═══════════╗
-     * ║                        ║ 2         ║
-     * ║                        ║           ║
-     * ╟────────────────────────╫───────────╢
-     * ╠════════════════════════╬═══════════╝
-     * ║ 1                      ║
-     * ║                        ║
-     * ║                        ║
-     * ║                        ║
-     * ║                        ║
-     * ╟────────────────────────╢
-     * ╚════════════════════════╝
-     *
-     * where head 0 have resolution 1920x1080, head 1: 1920x1200 and head 2 
-     * 800x600, so the screen size in this arrangement will be 2720x2280 (1920 
-     * + 800) x (1080 + 1200).
-     *
-     * Bottom line represents some 3rd party panel, which sets properties in 
-     * _NET_WM_STRUT_PARTIAL and optionally _NET_WM_STRUT.
-     *
-     * By coincidence, coordinates x1 and y1 from left and top are the same as 
-     * the original data which came from _NET_WM_STRUT, since they meaning 
-     * distance from the edge.
-     */
+	/* NOTE(gryf): calculation for the reserved area should be preformed for
+	 * current head, but area, which comes form _NET_WM_STRUT, has to be
+	 * calculated relative to entire screen size, i.e. suppose we have three
+	 * heads arranged like this:
+	 *
+	 * ╔════════════════════════╗
+	 * ║ 0                      ║
+	 * ║                        ╠═══════════╗
+	 * ║                        ║ 2         ║
+	 * ║                        ║           ║
+	 * ╟────────────────────────╫───────────╢
+	 * ╠════════════════════════╬═══════════╝
+	 * ║ 1                      ║
+	 * ║                        ║
+	 * ║                        ║
+	 * ║                        ║
+	 * ║                        ║
+	 * ╟────────────────────────╢
+	 * ╚════════════════════════╝
+	 *
+	 * where head 0 have resolution 1920x1080, head 1: 1920x1200 and head 2
+	 * 800x600, so the screen size in this arrangement will be 2720x2280 (1920
+	 * + 800) x (1080 + 1200).
+	 *
+	 * Bottom line represents some 3rd party panel, which sets properties in
+	 * _NET_WM_STRUT_PARTIAL and optionally _NET_WM_STRUT.
+	 *
+	 * By coincidence, coordinates x1 and y1 from left and top are the same as
+	 * the original data which came from _NET_WM_STRUT, since they meaning
+	 * distance from the edge, so we leave it as-is, otherwise if they have 0
+	 * value, we need to set right head position.
+	 */
 
-    /* optional reserved space from right */
-    area->x2 = scr->scr_width - area->x2;
+	/* optional reserved space from left */
+	if (area->x1 == 0) area->x1 = rect.pos.x;
 
-    /* optional reserved space from bottom */
-	area->y2 = scr->scr_height - area->y2;
+	/* optional reserved space from top */
+	if (area->y1 == 0) area->y1 = rect.pos.y;
+
+	/* optional reserved space from right */
+	if (area->x2 == 0)
+		area->x2 = rect.pos.x + rect.size.width;
+	else
+		area->x2 = scr->scr_width - area->x2;
+
+	/* optional reserved space from bottom */
+	if (area->y2 == 0)
+		area->y2 = rect.pos.y + rect.size.height;
+	else
+		area->y2 = scr->scr_height - area->y2;
 
 	return True;
 }
