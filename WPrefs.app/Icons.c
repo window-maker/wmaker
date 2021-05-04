@@ -195,8 +195,8 @@ static void showData(_Panel * panel)
 
 	if (i < 0)
 		i = 0;
-	else if (i > 9)
-		i = 9;
+	else if (i > 29)
+		i = 29;
 	WMSetPopUpButtonSelectedItem(panel->sizeP, i);
 
 	/* Mini-Previews for Icons */
@@ -339,7 +339,7 @@ static void createPanel(Panel * p)
 	panel->sizeP = WMCreatePopUpButton(panel->sizeF);
 	WMResizeWidget(panel->sizeP, 80, 20);
 	WMMoveWidget(panel->sizeP, 10, 19);
-	for (i = 24; i <= 96; i += 8) {
+	for (i = 24; i <= 256; i += 8) {
 		sprintf(buf, "%ix%i", i, i);
 		WMAddPopUpButtonItem(panel->sizeP, buf);
 	}
