@@ -313,14 +313,34 @@ static void allocButtonPixmaps(WScreen * scr)
 	scr->b_pixmaps[WBUT_KILL] = pix;
 }
 
+static int get_dot_mult(void)
+{
+    int dot_mult;
+    
+    /*
+     * Since it's an int, the multiplier will grow only when
+     * a certain icon size is reached (1 for 64, 2 for 128,
+     * 3 for 192, and so on).
+     */
+    dot_mult = wPreferences.icon_size / 64;
+
+    if (dot_mult < 1)
+        dot_mult = 1;
+    
+    return dot_mult;
+}
+
 static void draw_dot(WScreen * scr, Drawable d, int x, int y, GC gc)
 {
+    int dot_mult;
+
+    dot_mult = get_dot_mult();
 	XSetForeground(dpy, gc, scr->black_pixel);
-	XDrawLine(dpy, d, gc, x, y, x + 1, y);
-	XDrawPoint(dpy, d, gc, x, y + 1);
+	XFillRectangle(dpy, d, gc, x, y, x + (2 * dot_mult), y + (1 * dot_mult));
+	XFillRectangle(dpy, d, gc, x, y + (1 * dot_mult), x + (1 * dot_mult), y + (2 * dot_mult));
 	XSetForeground(dpy, gc, scr->white_pixel);
-	XDrawLine(dpy, d, gc, x + 2, y, x + 2, y + 1);
-	XDrawPoint(dpy, d, gc, x + 1, y + 1);
+	XFillRectangle(dpy, d, gc, x + (2 * dot_mult), y, x + (3 * dot_mult), y + (2 * dot_mult));
+	XFillRectangle(dpy, d, gc, x + (1 * dot_mult), y + (1 * dot_mult), x + (2 * dot_mult), y + (2 * dot_mult));
 }
 
 static WPixmap *make3Dots(WScreen * scr)
@@ -329,15 +349,17 @@ static WPixmap *make3Dots(WScreen * scr)
 	GC gc2, gc;
 	XGCValues gcv;
 	Pixmap pix, mask;
+    int dot_mult;
 
+    dot_mult = get_dot_mult();
 	gc = scr->copy_gc;
 	pix = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size, wPreferences.icon_size, scr->w_depth);
 	XSetForeground(dpy, gc, scr->black_pixel);
 	XFillRectangle(dpy, pix, gc, 0, 0, wPreferences.icon_size, wPreferences.icon_size);
 	XSetForeground(dpy, gc, scr->white_pixel);
-	draw_dot(scr, pix, 4, wPreferences.icon_size - 6, gc);
-	draw_dot(scr, pix, 9, wPreferences.icon_size - 6, gc);
-	draw_dot(scr, pix, 14, wPreferences.icon_size - 6, gc);
+	draw_dot(scr, pix, 4 * dot_mult, wPreferences.icon_size - (6 * dot_mult), gc);
+	draw_dot(scr, pix, 9 * dot_mult, wPreferences.icon_size - (6 * dot_mult), gc);
+	draw_dot(scr, pix, 14 * dot_mult, wPreferences.icon_size - (6 * dot_mult), gc);
 
 	mask = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size, wPreferences.icon_size, 1);
 	gcv.foreground = 0;
@@ -345,9 +367,9 @@ static WPixmap *make3Dots(WScreen * scr)
 	gc2 = XCreateGC(dpy, mask, GCForeground | GCGraphicsExposures, &gcv);
 	XFillRectangle(dpy, mask, gc2, 0, 0, wPreferences.icon_size, wPreferences.icon_size);
 	XSetForeground(dpy, gc2, 1);
-	XFillRectangle(dpy, mask, gc2, 4, wPreferences.icon_size - 6, 3, 2);
-	XFillRectangle(dpy, mask, gc2, 9, wPreferences.icon_size - 6, 3, 2);
-	XFillRectangle(dpy, mask, gc2, 14, wPreferences.icon_size - 6, 3, 2);
+	XFillRectangle(dpy, mask, gc2, 4 * dot_mult, wPreferences.icon_size - (6 * dot_mult), 3 * dot_mult, 2 * dot_mult);
+	XFillRectangle(dpy, mask, gc2, 9 * dot_mult, wPreferences.icon_size - (6 * dot_mult), 3 * dot_mult, 2 * dot_mult);
+	XFillRectangle(dpy, mask, gc2, 14 * dot_mult, wPreferences.icon_size - (6 * dot_mult), 3 * dot_mult, 2 * dot_mult);
 
 	XFreeGC(dpy, gc2);
 
