@@ -5,9 +5,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#ifdef USE_PANGO
-#include <pango/pango.h>
-#endif
+@USE_PANGO@#include <pango/pango.h>
 
 #include <WINGs/WINGs.h>
 
@@ -459,9 +457,7 @@ typedef struct W_Font {
     short refCount;
     char *name;
 
-#ifdef USE_PANGO
-    PangoLayout *layout;
-#endif
+@USE_PANGO@    PangoLayout *layout;
 } W_Font;
 
 #define W_FONTID(f)		(f)->font->fid
