@@ -146,15 +146,16 @@ typedef struct _Panel {
 static void changeIntTextfield(void *data, int delta)
 {
 	WMTextField *textfield;
-	char *text;
+	char *text, buffer[12];
 	int value;
 
 	textfield = (WMTextField *)data;
 	text = WMGetTextFieldText(textfield);
 	value = atoi(text);
+	wfree(text);
 	value += delta;
-	sprintf(text, "%d", value);
-	WMSetTextFieldText(textfield, text);
+	sprintf(buffer, "%d", value);
+	WMSetTextFieldText(textfield, buffer);
 }
 
 static void downButtonCallback(WMWidget *self, void *data)
