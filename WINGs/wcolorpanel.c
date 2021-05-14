@@ -2645,7 +2645,7 @@ static void hsbTextFieldCallback(void *observerData, WMNotification * notificati
 {
 	CPColor cpColor;
 	int value[3];
-	char tmp[4];
+	char tmp[12];  /* We only 4 bytes needed, but compilers cannot know that */
 	int n;
 	W_ColorPanel *panel = (W_ColorPanel *) observerData;
 
