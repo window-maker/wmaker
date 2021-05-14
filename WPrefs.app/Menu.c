@@ -1502,8 +1502,12 @@ static void showData(_Panel * panel)
 
 		path = wexpandpath(WMGetFromPLString(pmenu));
 
-		if (access(path, F_OK) < 0)
+		if (access(path, F_OK) < 0) {
+			char *old_path = path;
+
 			path = wfindfile(DEF_CONFIG_PATHS, path);
+			wfree(old_path);
+		}
 
 		/* TODO: if needed, concatenate locale suffix to path.
 		   See getLocalizedMenuFile() in src/rootmenu.c. */
