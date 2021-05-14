@@ -518,9 +518,8 @@ char *wIconStore(WIcon *icon)
 	}
 
 	if (!RSaveImage(image, path, "XPM")) {
-		wfree(path);
 		wfree(filename);
-		path = NULL;
+		filename = NULL;
 	}
 
 	wfree(path);
