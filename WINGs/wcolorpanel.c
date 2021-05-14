@@ -3504,13 +3504,17 @@ static void convertCPColor(CPColor * color)
 		old_hue = color->hsv.hue;
 		RRGBtoHSV(&(color->rgb), &(color->hsv));
 
-		/* In black the hue is undefined, and may change by conversion
-		 * Same for white. */
-		if (((color->rgb.red == 0) &&
-		     (color->rgb.green == 0) &&
-		     (color->rgb.blue == 0)) ||
-		    ((color->rgb.red == 0) && (color->rgb.green == 0) && (color->rgb.blue == 255))
-		    )
+		/*
+		 * For pure grey colors, the Hue is generally calculated
+		 * as 0, but in reality the Hue does not matter.
+		 *
+		 * But in an interactive GUI it is interresting to remember
+		 * the previous Hue because if user moves away from perfect
+		 * grey then he could be interrested in finding back his
+		 * previous tint
+		 */
+		if ((color->rgb.red == color->rgb.green) &&
+		    (color->rgb.red == color->rgb.blue)  )
 			color->hsv.hue = old_hue;
 		break;
 	case cpHSV:
