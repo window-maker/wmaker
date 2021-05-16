@@ -446,12 +446,18 @@ static void str2rcolor(RContext * rc, const char *name, RColor * color)
 {
 	XColor xcolor;
 
-	XParseColor(rc->dpy, rc->cmap, name, &xcolor);
-
-	color->alpha = 255;
-	color->red = xcolor.red >> 8;
-	color->green = xcolor.green >> 8;
-	color->blue = xcolor.blue >> 8;
+	if (XParseColor(rc->dpy, rc->cmap, name, &xcolor) != 0) {
+		color->alpha = 255;
+		color->red = xcolor.red >> 8;
+		color->green = xcolor.green >> 8;
+		color->blue = xcolor.blue >> 8;
+	} else {
+		/* Color Name was not found - Return white instead */
+		color->alpha = 255;
+		color->red   = 255;
+		color->green = 255;
+		color->blue  = 255;
+	}
 }
 
 static void dumpRImage(const char *path, RImage * image)
