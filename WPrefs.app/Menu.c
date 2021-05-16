@@ -914,6 +914,11 @@ static ItemData *parseCommand(WMPropList * item)
 
 		data->type = ExecInfo;
 
+		if (parameter == NULL) {
+			wfree(data);
+			return NULL;
+		}
+
 		data->param.exec.command = wstrdup(parameter);
 		if (shortcut)
 			data->param.exec.shortcut = wstrdup(shortcut);
@@ -926,6 +931,12 @@ static ItemData *parseCommand(WMPropList * item)
 		 * |pipe
 		 */
 		p = parameter;
+
+		if (p == NULL) {
+			wfree(data);
+			return NULL;
+		}
+
 		while (isspace(*p) && *p)
 			p++;
 		if (*p == '|') {
