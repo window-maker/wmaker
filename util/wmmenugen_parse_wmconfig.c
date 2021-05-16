@@ -96,8 +96,10 @@ void parse_wmconfig(const char *file, cb_add_menu_entry *addWMMenuEntryCallback)
 
 		parse_wmconfig_line(&label, &key, &value, p);
 
-		if (label && strlen(label) == 0)
+		if (label && strlen(label) == 0) {
+			wfree(label);
 			continue;
+		}
 		if (!lastlabel && label)
 			lastlabel = wstrdup(label);
 
@@ -110,6 +112,7 @@ void parse_wmconfig(const char *file, cb_add_menu_entry *addWMMenuEntryCallback)
 			wfree(lastlabel);
 			lastlabel = wstrdup(label);
 		}
+		wfree(label);
 
 		if (key && value) {
 			if (strcmp(key, "name") == 0)
@@ -124,9 +127,12 @@ void parse_wmconfig(const char *file, cb_add_menu_entry *addWMMenuEntryCallback)
 				wmc->Flags |= F_TERMINAL;
 		}
 
+		wfree(key);
 	}
 
 	fclose(fp);
+
+	wfree(lastlabel);
 
 	if (wmc_to_wm(&wmc, &wm)) {
 		(*addWMMenuEntryCallback)(wm);
