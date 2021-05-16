@@ -1695,6 +1695,7 @@ Bool WMWritePropListToFile(WMPropList * plist, const char *path)
 	if (fprintf(theFile, "%s\n", desc) != strlen(desc) + 1) {
 		werror(_("writing to file: %s failed"), thePath);
 		wfree(desc);
+		fclose(theFile);
 		goto failure;
 	}
 
