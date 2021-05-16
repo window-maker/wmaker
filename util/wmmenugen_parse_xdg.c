@@ -645,6 +645,7 @@ static void  getMenuHierarchyFor(char **xdgmenuspec)
 		p = strtok(NULL, ";");
 	}
 
+	wfree(category);
 
 	if (!*buf)		/* come up with something if nothing found */
 		snprintf(buf, sizeof(buf), "%s", _("Other"));
