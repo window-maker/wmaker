@@ -448,10 +448,10 @@ static void getLocalizedStringValue(char **target, const char *line, int *match_
 	}
 
 	if (compare_matchlevel(match_level, locale)) {
-		wfree(locale);
 		*target = wstrdup(p + kstart);
-		return;
 	}
+
+	wfree(locale);
 
 	return;
 }
