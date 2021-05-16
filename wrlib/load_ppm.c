@@ -85,8 +85,10 @@ int pm_getuint(FILE * const ifP)
 		ch = pm_getc(ifP);
 	} while (ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r');
 
-	if (ch < '0' || ch > '9')
+	if (ch < '0' || ch > '9') {
 		fprintf(stderr, "junk in file where an unsigned integer should be\n");
+		return -1;
+	}
 
 	i = 0;
 	do {
