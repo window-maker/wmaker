@@ -479,16 +479,43 @@ static Bool compare_matchlevel(int *current_level, const char *found_locale)
 
 	parse_locale(found_locale, &key_lang, &key_ctry, &key_enc, &key_mod);
 
-	if (env_lang && key_lang &&		/* Shortcut: if key and env languages don't match, */
-	    strcmp(env_lang, key_lang) != 0)	/* don't even bother. This takes care of the great */
-		return False;			/* majority of the cases without having to go through */
-						/* the more theoretical parts of the spec'd algo. */
+	if (env_lang && key_lang && strcmp(env_lang, key_lang) != 0) {
+		/*
+		 * Shortcut: if key and env languages don't match,
+		 * don't even bother. This takes care of the great
+		 * majority of the cases without having to go through
+		 * the more theoretical parts of the spec'd algo.
+		 */
+		wfree(key_lang);
+		wfree(key_ctry);
+		wfree(key_enc);
+		wfree(key_mod);
+		return False;
+	}
 
-	if (!env_mod && key_mod)	/* If LC_MESSAGES does not have a MODIFIER field, */
-		return False;		/* then no key with a modifier will be matched. */
+	if (!env_mod && key_mod) {
+		/*
+		 * If LC_MESSAGES does not have a MODIFIER field,
+		 * then no key with a modifier will be matched.
+		 */
+		wfree(key_lang);
+		wfree(key_ctry);
+		wfree(key_enc);
+		wfree(key_mod);
+		return False;
+	}
 
-	if (!env_ctry && key_ctry)	/* Similarly, if LC_MESSAGES does not have a COUNTRY field, */
-		return False;		/* then no key with a country specified will be matched. */
+	if (!env_ctry && key_ctry) {
+		/*
+		 * Similarly, if LC_MESSAGES does not have a COUNTRY field,
+		 * then no key with a country specified will be matched.
+		 */
+		wfree(key_lang);
+		wfree(key_ctry);
+		wfree(key_enc);
+		wfree(key_mod);
+		return False;
+	}
 
 	/* LC_MESSAGES value: lang_COUNTRY@MODIFIER */
 	if (env_lang && env_ctry && env_mod) {		/* lang_COUNTRY@MODIFIER */
@@ -497,25 +524,45 @@ static Bool compare_matchlevel(int *current_level, const char *found_locale)
 		    strcmp(env_ctry, key_ctry) == 0 &&
 		    strcmp(env_mod,  key_mod) == 0) {
 			*current_level = MATCH_LANG_COUNTRY_MODIFIER;
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return True;
 		} else if (key_lang && key_ctry &&	/* lang_COUNTRY */
 		    strcmp(env_lang, key_lang) == 0 &&
 		    strcmp(env_ctry, key_ctry) == 0 &&
 		    *current_level < MATCH_LANG_COUNTRY) {
 			*current_level = MATCH_LANG_COUNTRY;
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return True;
 		} else if (key_lang && key_mod &&	/* lang@MODIFIER */
 		    strcmp(env_lang, key_lang) == 0 &&
 		    strcmp(env_mod,  key_mod) == 0 &&
 		    *current_level < MATCH_LANG_MODIFIER) {
 			*current_level = MATCH_LANG_MODIFIER;
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return True;
 		} else if (key_lang &&			/* lang */
 		    strcmp(env_lang, key_lang) == 0 &&
 		    *current_level < MATCH_LANG) {
 			*current_level = MATCH_LANG;
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return True;
 		} else {
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return False;
 		}
 	}
@@ -527,13 +574,25 @@ static Bool compare_matchlevel(int *current_level, const char *found_locale)
 		    strcmp(env_ctry, key_ctry) == 0 &&
 		    *current_level < MATCH_LANG_COUNTRY) {
 			*current_level = MATCH_LANG_COUNTRY;
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return True;
 		} else if (key_lang &&			/* lang */
 		    strcmp(env_lang, key_lang) == 0 &&
 		    *current_level < MATCH_LANG) {
 			*current_level = MATCH_LANG;
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return True;
 		} else {
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return False;
 		}
 	}
@@ -545,13 +604,25 @@ static Bool compare_matchlevel(int *current_level, const char *found_locale)
 		    strcmp(env_mod,  key_mod) == 0 &&
 		    *current_level < MATCH_LANG_MODIFIER) {
 			*current_level = MATCH_LANG_MODIFIER;
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return True;
 		} else if (key_lang &&			/* lang */
 		    strcmp(env_lang, key_lang) == 0 &&
 		    *current_level < MATCH_LANG) {
 			*current_level = MATCH_LANG;
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return True;
 		} else {
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return False;
 		}
 	}
@@ -562,14 +633,26 @@ static Bool compare_matchlevel(int *current_level, const char *found_locale)
 		    strcmp(env_lang, key_lang) == 0 &&
 		    *current_level < MATCH_LANG) {
 			*current_level = MATCH_LANG;
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return True;
 		} else {
+			wfree(key_lang);
+			wfree(key_ctry);
+			wfree(key_enc);
+			wfree(key_mod);
 			return False;
 		}
 	}
 
 	/* MATCH_DEFAULT is handled in getLocalizedStringValue */
 
+	wfree(key_lang);
+	wfree(key_ctry);
+	wfree(key_enc);
+	wfree(key_mod);
 	return False;
 }
 
