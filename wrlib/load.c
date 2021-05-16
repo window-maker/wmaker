@@ -246,6 +246,11 @@ RImage *RLoadImage(RContext *context, const char *file, int index)
 		int oldest_idx = 0;
 		int done = 0;
 
+		if (stat(file, &st) != 0) {
+			/* If we can't get the info, at least use a valid time to reduce risk of problems */
+			st.st_mtime = oldest;
+		}
+
 		for (i = 0; i < RImageCacheSize; i++) {
 			if (!RImageCache[i].file) {
 				RImageCache[i].file = malloc(strlen(file) + 1);
