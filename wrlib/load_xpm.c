@@ -31,6 +31,8 @@
 
 #include "wraster.h"
 #include "imgformat.h"
+#include "wr_i18n.h"
+
 
 static RImage *create_rimage_from_xpm(RContext *context, XpmImage xpm)
 {

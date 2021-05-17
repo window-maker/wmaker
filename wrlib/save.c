@@ -33,6 +33,7 @@
 
 #include "wraster.h"
 #include "imgformat.h"
+#include "wr_i18n.h"
 
 
 Bool RSaveImage(RImage * image, const char *filename, const char *format)

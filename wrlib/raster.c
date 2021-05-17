@@ -26,7 +26,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <X11/Xlib.h>
+
 #include "wraster.h"
+#include "wr_i18n.h"
 
 #include <assert.h>
 

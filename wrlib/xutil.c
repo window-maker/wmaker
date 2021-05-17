@@ -37,6 +37,8 @@
 
 #include "wraster.h"
 #include "xutil.h"
+#include "wr_i18n.h"
+
 
 #ifdef USE_XSHM
 

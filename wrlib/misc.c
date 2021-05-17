@@ -28,6 +28,7 @@
 #include "wraster.h"
 #include "imgformat.h"
 #include "convert.h"
+#include "wr_i18n.h"
 
 
 void RBevelImage(RImage * image, int bevel_type)

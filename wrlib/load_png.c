@@ -30,6 +30,8 @@
 
 #include "wraster.h"
 #include "imgformat.h"
+#include "wr_i18n.h"
+
 
 RImage *RLoadPNG(RContext *context, const char *file)
 {

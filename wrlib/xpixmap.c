@@ -30,6 +30,8 @@
 #include <assert.h>
 
 #include "wraster.h"
+#include "wr_i18n.h"
+
 
 static int get_shifts(unsigned long mask)
 {

@@ -31,6 +31,8 @@
 
 #include "wraster.h"
 #include "imgformat.h"
+#include "wr_i18n.h"
+
 
 RImage *RLoadTIFF(const char *file, int index)
 {

@@ -36,6 +36,7 @@
 #include "wraster.h"
 #include "convert.h"
 #include "xutil.h"
+#include "wr_i18n.h"
 
 
 #define NFREE(n)  if (n) free(n)

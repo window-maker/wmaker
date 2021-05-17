@@ -31,6 +31,8 @@
 
 #include "wraster.h"
 #include "imgformat.h"
+#include "wr_i18n.h"
+
 
 /*
  * fileio.c - routines to read elements based on Netpbm

@@ -30,6 +30,7 @@
 
 #include "wraster.h"
 #include "rotate.h"
+#include "wr_i18n.h"
 
 #include <math.h>
 

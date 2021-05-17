@@ -40,6 +40,7 @@ libwraster_la_SOURCES = 	\
 	flip.c		\
 	convolve.c	\
 	save_xpm.c	\
+	wr_i18n.h	\
 	xutil.c		\
 	xutil.h		\
 	load_ppm.c

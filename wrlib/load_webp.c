@@ -30,6 +30,7 @@
 
 #include "wraster.h"
 #include "imgformat.h"
+#include "wr_i18n.h"
 
 
 RImage *RLoadWEBP(const char *file_name)

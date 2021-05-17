@@ -28,6 +28,8 @@
 #include <assert.h>
 
 #include "wraster.h"
+#include "wr_i18n.h"
+
 
 #define MIN(a,b)	((a) < (b) ? (a) : (b))
 #define MAX(a,b)	((a) > (b) ? (a) : (b))

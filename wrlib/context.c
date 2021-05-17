@@ -39,6 +39,7 @@
 
 #include "wraster.h"
 #include "scale.h"
+#include "wr_i18n.h"
 
 
 #ifndef HAVE_FLOAT_MATHFUNC

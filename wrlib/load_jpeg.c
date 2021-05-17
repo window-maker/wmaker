@@ -37,6 +37,8 @@
 
 #include "wraster.h"
 #include "imgformat.h"
+#include "wr_i18n.h"
+
 
 /*
  * <setjmp.h> is used for the optional error recovery mechanism shown in
