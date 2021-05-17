@@ -1,0 +1,170 @@
+# WRaster library French translation
+# Copyright (C) 2021 The WindowMaker Team
+# This file is distributed under the same license as the Window Maker package.
+# Christophe CURIS <christophe.curis@free.fr>, 2021.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WRaster\n"
+"Report-Msgid-Bugs-To: wmaker-dev@googlegroups.com\n"
+"POT-Creation-Date: 2021-05-17 15:53+0200\n"
+"PO-Revision-Date: 2021-05-17 15:56+0200\n"
+"Last-Translator: Christophe CURIS <christophe.curis@free.fr>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../../wrlib/load.c:130
+#, c-format
+msgid "wrlib: out of memory for image cache\n"
+msgstr "wrlib: plus de mémoire pour le cache\n"
+
+#: ../../../wrlib/xpixmap.c:160
+#, c-format
+msgid "wrlib: invalid window or pixmap passed to RCreateImageFromDrawable\n"
+msgstr "wrlib: identifiant de fenêtre ou de pixmap invalide pour RCreateImageFromDrawable\n"
+
+#: ../../../wrlib/context.c:410
+#, c-format
+msgid "wrlib: no standard colormap found for visual 0x%lX\n"
+msgstr "wrlib: pas de colormap standard trouvée pour le Visual 0x%lX\n"
+
+#: ../../../wrlib/context.c:458 ../../../wrlib/context.c:470
+#, c-format
+msgid "wrlib: invalid value \"%s\" for %s\n"
+msgstr "wrlib: valeur \"%s\" invalide pour %s\n"
+
+#: ../../../wrlib/misc.c:207
+msgid "no error"
+msgstr "pas d'erreur"
+
+#: ../../../wrlib/misc.c:210
+msgid "could not open file"
+msgstr "impossible d'ouvrir le fichier"
+
+#: ../../../wrlib/misc.c:213
+msgid "error reading from file"
+msgstr "erreur de lecture depuis le fichier"
+
+#: ../../../wrlib/misc.c:216
+msgid "error writing to file"
+msgstr "erreur d'écriture dans le fichier"
+
+#: ../../../wrlib/misc.c:219 ../../../wrlib/load_webp.c:46
+msgid "out of memory"
+msgstr "plus de mémoire"
+
+#: ../../../wrlib/misc.c:222
+msgid "out of color cells"
+msgstr "plus d'index de couleur disponible"
+
+#: ../../../wrlib/misc.c:225
+msgid "invalid or corrupted image file"
+msgstr "fichier d'image invalide ou corrompu"
+
+#: ../../../wrlib/misc.c:228
+msgid "image format is not supported"
+msgstr "format d'image non supporté"
+
+#: ../../../wrlib/misc.c:231
+msgid "file does not contain requested image index"
+msgstr "le fichier ne contient pas l'image a l'index demandé"
+
+#: ../../../wrlib/misc.c:234
+msgid "request for an invalid Visual ID"
+msgstr "demande d'un identifiant de Visual invalide"
+
+#: ../../../wrlib/misc.c:237
+msgid "failed to create X standard colormap"
+msgstr "impossible de créer la colormap standard pour X"
+
+#: ../../../wrlib/misc.c:240
+msgid "internal X error"
+msgstr "erreur X interne"
+
+#: ../../../wrlib/misc.c:244
+msgid "internal error"
+msgstr "erreur interne"
+
+#: ../../../wrlib/xutil.c:115 ../../../wrlib/xutil.c:122
+#, c-format
+msgid "wrlib: could not allocate shared memory segment, %s: %s\n"
+msgstr "wrlib: impossible d'allouer un segment de mémoire partagé, %s: %s\n"
+
+#: ../../../wrlib/xutil.c:125 ../../../wrlib/xutil.c:145
+#: ../../../wrlib/xutil.c:147
+#, c-format
+msgid "wrlib: error occured while aborting %s, %s\n"
+msgstr "wrlib: une erreur s'est produit en annulant %s, %s\n"
+
+#: ../../../wrlib/xutil.c:141
+#, c-format
+msgid "wrlib: could not attach shared memory segment to XImage\n"
+msgstr "wrlib: impossible de lier le segment de mémoire partagé a une XImage\n"
+
+#: ../../../wrlib/xutil.c:169 ../../../wrlib/xutil.c:171
+#, c-format
+msgid "wrlib: error occured while releasing XImage, %s: %s\n"
+msgstr "wrlib: une erreur s'est produite en libérant une XImage, %s: %s\n"
+
+#: ../../../wrlib/load_ppm.c:57 ../../../wrlib/load_ppm.c:64
+#: ../../../wrlib/load_ppm.c:77
+#, c-format
+msgid "wrlib: EOF / read error reading a byte from PPM file \"%s\"\n"
+msgstr "wrlib: fin de fichier prématurée en essayant de lire un octet depuis le fichier PPM \"%s\"\n"
+
+#: ../../../wrlib/load_ppm.c:91
+#, c-format
+msgid "wrlib: junk in PPM file \"%s\", expected an unsigned integer but got 0x%02X\n"
+msgstr "wrlib: contenu invalide dans le fichier PPM \"%s\", un nombre était attendu mais il y a 0x%02X\n"
+
+#: ../../../wrlib/load_ppm.c:100 ../../../wrlib/load_ppm.c:107
+#, c-format
+msgid "wrlib: ASCII decimal integer in PPM file \"%s\" is too large to be processed\n"
+msgstr "wrlib: le nombre dans le fichier PPM \"%s\" est trop grand pour être traité\n"
+
+#: ../../../wrlib/load_webp.c:47
+msgid "invalid parameter"
+msgstr "paramètre invalide"
+
+#: ../../../wrlib/load_webp.c:48
+msgid "error in the bitstream"
+msgstr "erreur dans le flux de données"
+
+#: ../../../wrlib/load_webp.c:49
+msgid "feature is not supported"
+msgstr "fonctionnalité non supporté"
+
+#: ../../../wrlib/load_webp.c:50
+msgid "operation suspended"
+msgstr "opération suspendue"
+
+#: ../../../wrlib/load_webp.c:51
+msgid "aborted by user"
+msgstr "annulé par l'utilisateur"
+
+#: ../../../wrlib/load_webp.c:52
+msgid "not enough data"
+msgstr "pas assez de données"
+
+#: ../../../wrlib/load_webp.c:61
+#, c-format
+msgid "unknow status code %d"
+msgstr "code de statut inconnu %d"
+
+#: ../../../wrlib/load_webp.c:106
+#, c-format
+msgid "wrlib: could not get size of WebP file \"%s\", %s\n"
+msgstr "wrlib: impossible de connaître la taille du fichier WebP \"%s\", %s\n"
+
+#: ../../../wrlib/load_webp.c:133
+#, c-format
+msgid "wrlib: could not get features from WebP file \"%s\", %s\n"
+msgstr "wrlib: impossible de récupérer les caractéristiques du fichier WebP \"%s\", %s\n"
+
+#: ../../../wrlib/load_webp.c:165
+#, c-format
+msgid "wrlib: failed to decode WebP from file \"%s\"\n"
+msgstr "wrlib: impossible de décoder le fichier WebP \"%s\"\n"
