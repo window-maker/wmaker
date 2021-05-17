@@ -204,44 +204,44 @@ const char *RMessageForError(int errorCode)
 {
 	switch (errorCode) {
 	case RERR_NONE:
-		return "no error";
+		return _("no error");
 
 	case RERR_OPEN:
-		return "could not open file";
+		return _("could not open file");
 
 	case RERR_READ:
-		return "error reading from file";
+		return _("error reading from file");
 
 	case RERR_WRITE:
-		return "error writing to file";
+		return _("error writing to file");
 
 	case RERR_NOMEMORY:
-		return "out of memory";
+		return _("out of memory");
 
 	case RERR_NOCOLOR:
-		return "out of color cells";
+		return _("out of color cells");
 
 	case RERR_BADIMAGEFILE:
-		return "invalid or corrupted image file";
+		return _("invalid or corrupted image file");
 
 	case RERR_BADFORMAT:
-		return "the image format in the file is not supported and can't be loaded";
+		return _("image format is not supported");
 
 	case RERR_BADINDEX:
-		return "image file does not contain requested image index";
+		return _("file does not contain requested image index");
 
 	case RERR_BADVISUALID:
-		return "request for an invalid visual ID";
+		return _("request for an invalid Visual ID");
 
 	case RERR_STDCMAPFAIL:
-		return "failed to create standard colormap";
+		return _("failed to create X standard colormap");
 
 	case RERR_XERROR:
-		return "internal X error";
+		return _("internal X error");
 
 	default:
 	case RERR_INTERNAL:
-		return "internal error";
+		return _("internal error");
 	}
 }
 

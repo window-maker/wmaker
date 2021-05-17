@@ -129,7 +129,7 @@ RImage *RLoadWEBP(const char *file_name)
 	free(raw_data);
 
 	if (!ret) {
-		fprintf(stderr, "wrlib: Failed to decode WEBP from file \"%s\"\n", file_name);
+		fprintf(stderr, _("wrlib: failed to decode WebP from file \"%s\"\n"), file_name);
 		RErrorCode = RERR_BADIMAGEFILE;
 		RReleaseImage(image);
 		return NULL;

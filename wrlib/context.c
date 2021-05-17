@@ -454,7 +454,7 @@ static void gatherconfig(RContext * context, int screen_n)
 	if (ptr) {
 		float g1, g2, g3;
 		if (sscanf(ptr, "%f/%f/%f", &g1, &g2, &g3) != 3 || g1 <= 0.0F || g2 <= 0.0F || g3 <= 0.0F) {
-			printf("wrlib: invalid value(s) for gamma correction \"%s\"\n", ptr);
+			fprintf(stderr, _("wrlib: invalid value \"%s\" for %s\n"), ptr, "WRASTER_GAMMA");
 		} else {
 			context->attribs->flags |= RC_GammaCorrection;
 			context->attribs->rgamma = g1;
@@ -466,7 +466,7 @@ static void gatherconfig(RContext * context, int screen_n)
 	if (ptr) {
 		int i;
 		if (sscanf(ptr, "%d", &i) != 1 || i < 2 || i > 6) {
-			printf("wrlib: invalid value for color resolution \"%s\"\n", ptr);
+			fprintf(stderr, _("wrlib: invalid value \"%s\" for %s\n"), ptr, "WRASTER_COLOR_RESOLUTION");
 		} else {
 			context->attribs->flags |= RC_ColorsPerChannel;
 			context->attribs->colors_per_channel = i;
