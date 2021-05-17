@@ -407,7 +407,8 @@ static Bool setupPseudoColorColormap(RContext * context)
 			}
 
 			if (theMap < 0) {
-				puts("wrlib: no std cmap found");
+				fprintf(stderr, _("wrlib: no standard colormap found for visual 0x%lX\n"),
+				        context->visual->visualid);
 			}
 
 			if (theMap >= 0 && allocateStandardPseudoColor(context, &maps[theMap])) {
