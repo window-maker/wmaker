@@ -245,6 +245,27 @@ const char *RMessageForError(int errorCode)
 	}
 }
 
+#ifdef I18N
+/*
+ * Setup internationalization on startup
+ *
+ * For historical reason, the WRaster library does not have a function that
+ * user is supposed to call to initialise the library. Because we need to do
+ * some stuff now, we rely on the compiler attribute to tell this function
+ * has to be called automatically when library is loaded.
+ */
+void WLIB_CONSTRUCTOR(RStartup) (void)
+{
+	const char *locale_path;
+
+	locale_path = getenv("NLSPATH");
+	if (locale_path == NULL)
+		locale_path = LOCALEDIR;
+
+	bindtextdomain("WRaster", locale_path);
+}
+#endif
+
 /*
  * cleaning third-party libs at shutdown
  */

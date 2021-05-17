@@ -455,6 +455,7 @@ dnl that the gettext environment works
 WM_I18N_LANGUAGES
 WM_I18N_XGETTEXT
 WM_I18N_MENUTEXTDOMAIN
+WM_LIBRARY_CONSTRUCTORS
 
 dnl ===========================================
 dnl 		Stuff that uses X
@@ -977,6 +978,15 @@ AS_IF([test "x$enable_jpeg" = xno], [dnl
     AS_ECHO([])
     AS_ECHO(["WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"])dnl
 ])
+
+AS_IF([test "x$LINGUAS" != "x"],
+    [AS_IF([test "X$wm_cv_library_constructors" = "Xlegacy"],
+        [AC_MSG_WARN([I18N is enabled, but library constructor attribute is not supported])
+         AS_ECHO(["   If you have translation problems in lib WRaster, yet you know that the translation"])
+         AS_ECHO(["   file (po) is valid, this could be a cause."])
+         AS_ECHO([])dnl
+        ])dnl
+    ])
 
 
 dnl This is for Emacs.  I'm lazy, I know... (nicolai)
