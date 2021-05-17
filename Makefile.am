@@ -80,7 +80,7 @@ if HAVE_XGETTEXT
 	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) update-lang || exit $$?); \
 	done
 
-SUBDIRS_PO = WINGs/po po util/po WPrefs.app/po
+SUBDIRS_PO = wrlib/po WINGs/po po util/po WPrefs.app/po
 else
 	@echo "Error: the program 'xgettext' was not found by configure, it is mandatory for this operation" >&2 ; exit 1
 endif

@@ -419,23 +419,24 @@ submit your contribution to the project:
 this is done with @command{git}.
 @end itemize
 
-In @sc{Window Maker}, you have actually 4 @code{po} files to take care of:
+In @sc{Window Maker}, you have actually 5 @code{po} files to take care of:
 
 @itemize @minus
 @item @file{po/@emph{<lang>}.po}: for @sc{Window Maker} itself
 @item @file{WPrefs.app/po/@emph{<lang>}.po}: for the Preference Editor program
 @item @file{WINGs/po/@emph{<lang>}.po}: for the graphic toolkit library
+@item @file{wrlib/po/@emph{<lang>}.po}: for the image processing library
 @item @file{util/po/@emph{<lang>}.po}: for the command-line tools of @sc{Window Maker}
 @end itemize
 
 As stated previously, there is a @command{make} target that can help you to automatically generate
-the POT and update the PO for these 4 cases:
+the POT and update the PO for these 5 cases:
 
 @example
 make update-lang PO=<lang>
 @end example
 
-Once run, it will have updated as needed the 4 @code{po} files against the latest source code.
+Once run, it will have updated as needed the 5 @code{po} files against the latest source code.
 You may wish to use the command @command{git gui} to view the changes;
 you can now edit the files to complete the translation, correct them, remove deprecated stuff, ...
 Please note that the encoding should be set to @emph{UTF-8} as this is now the standard.
