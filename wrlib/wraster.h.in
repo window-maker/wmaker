@@ -46,10 +46,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-
-#ifdef USE_XSHM
-#include <X11/extensions/XShm.h>
-#endif
+@USE_XSHM@#include <X11/extensions/XShm.h>
 
 
 /*
@@ -261,11 +258,9 @@ typedef struct RImage {
 typedef struct RXImage {
     XImage *image;
 
-    /* Private data. Do not access */
-#ifdef USE_XSHM
-    XShmSegmentInfo info;
-    char is_shared;
-#endif
+@USE_XSHM@    /* Private data. Do not access */
+@USE_XSHM@    XShmSegmentInfo info;
+@USE_XSHM@    char is_shared;
 } RXImage;
 
 

@@ -12,7 +12,7 @@ bin_SCRIPTS = wmaker.inst wm-oldmenu2new wkdemenu.pl
 EXTRA_DIST = wmaker.inst.in bughint wm-oldmenu2new wkdemenu.pl
 
 AM_CPPFLAGS = \
-	 $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_srcdir)/wrlib \
+	 $(DFLAGS) -I$(top_srcdir)/WINGs -I$(top_builddir)/wrlib \
 	@HEADER_SEARCH_PATH@ \
 	-DETCDIR=\"sysconfdir\" -DDATADIR=\"pkgdatadir\"
 
