@@ -26,13 +26,13 @@ m4_pattern_allow([^WM_OSDEP(_[A-Z]*)?$])
 
 # WM_CHECK_XFT_VERSION(MIN_VERSION, [ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]])
 #
-# $XFTFLAGS should be defined before calling this macro,
+# $XFT_CFLAGS should be defined before calling this macro,
 # else it will not be able to find Xft.h
 #
 AC_DEFUN([WM_CHECK_XFT_VERSION],
 [
 CPPFLAGS_old="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS $XFTFLAGS $inc_search_path"
+CPPFLAGS="$CPPFLAGS $XFT_CFLAGS $inc_search_path"
 xft_major_version=`echo $1 | sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
 xft_minor_version=`echo $1 | sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
 xft_micro_version=`echo $1 | sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`

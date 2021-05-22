@@ -8,7 +8,7 @@ noinst_PROGRAMS = fontl puzzle colorpick
 
 LDADD= $(top_builddir)/WINGs/libWINGs.la $(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/WINGs/libWUtil.la \
-	@XFTLIBS@ @INTLIBS@ @XLIBS@
+	@XFT_LIBS@ @INTLIBS@ @XLIBS@
 
 colorpick_DEPENDENCIES = $(top_builddir)/WINGs/libWINGs.la
 

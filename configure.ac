@@ -615,51 +615,24 @@ AC_SUBST(FCLIBS)
 
 dnl Xft2 antialiased font support
 dnl =============================
+m4_define([XFT_MIN_VERSION], [2.1.0])
+PKG_CHECK_MODULES([XFT], [xft >= ]XFT_MIN_VERSION,
+    [], dnl Module found, nothing to do
+    [XFT_CFLAGS=failed])
+AS_IF([test "x$XFT_CFLAGS" = "xfailed"],
+    [dnl pkg-config did not find it, try the legacy method
+     AC_CHECK_PROG([XFTCONFIG], [xft-config], [xft-config])
+     AS_IF([test -z "$XFTCONFIG"],
+         [AC_MSG_ERROR([libXft2 is not installed, is too old or could not be found -- $XFT_PKG_ERRORS]) ])
+     XFT_LIBS=`$XFTCONFIG --libs`
+     XFT_CFLAGS=`$XFTCONFIG --cflags`
+     WM_CHECK_XFT_VERSION(XFT_MIN_VERSION,
+         [], dnl Version is ok, nothing to do
+         [AC_MSG_ERROR([Version of libXft is too old, consider upgrading to] XFT_MIN_VERSION [or newer]) ])
+    ])
+AC_SUBST(XFT_CFLAGS)
+AC_SUBST(XFT_LIBS)
 
-xft=yes
-XFTLIBS=""
-
-if test "x$PKG_CONFIG" != x -a "`$PKG_CONFIG xft; echo $?`" = 0; then
-        XFTCONFIG="$PKG_CONFIG xft"
-        pkgconfig_xft=yes
-else
-        AC_CHECK_PROG(XFTCONFIG, xft-config, xft-config)
-fi
-
-AC_MSG_CHECKING([for the Xft2 library])
-
-if test "x$XFTCONFIG" != x; then
-        XFTLIBS=`$XFTCONFIG --libs`
-        XFTFLAGS=`$XFTCONFIG --cflags`
-        AC_MSG_RESULT([found])
-else
-        AC_MSG_RESULT([not found])
-        echo
-        echo "ERROR!!! libXft2 is not installed or could not be found."
-        echo "         Xft2 is a requirement for building Window Maker."
-        echo "         Please install it (along with fontconfig) before continuing."
-        echo
-        exit 1
-fi
-
-minXFT="2.1.0"
-goodxft="no"
-
-dnl
-dnl The macro below will use $XFTFLAGS (defined above) to find Xft.h
-dnl
-WM_CHECK_XFT_VERSION($minXFT, goodxft=yes, goodxft=no)
-
-if test "$goodxft" = no; then
-        echo
-        echo "ERROR!!! libXft on this system is an old version."
-        echo "         Please consider upgrading to at least version ${minXFT}."
-        echo
-        exit 1
-fi
-
-AC_SUBST(XFTFLAGS)
-AC_SUBST(XFTLIBS)
 
 dnl PANGO support
 dnl =============
@@ -952,7 +925,6 @@ echo "Supported core features:            :$supported_core"
 echo "Supported X extensions:             :$supported_xext"
 echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
-echo "Antialiased text support in WINGs   : $xft"
 echo "Pango text layout support in WINGs  : $pango"
 echo "Translated languages to support     :$supported_locales"
 AS_IF([test "x$debug" = "xyes"],
