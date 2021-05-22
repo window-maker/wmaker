@@ -30,33 +30,23 @@ m4_pattern_allow([^WM_OSDEP(_[A-Z]*)?$])
 # else it will not be able to find Xft.h
 #
 AC_DEFUN([WM_CHECK_XFT_VERSION],
-[
-CPPFLAGS_old="$CPPFLAGS"
-CPPFLAGS="$CPPFLAGS $XFT_CFLAGS $inc_search_path"
-xft_major_version=`echo $1 | sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\1/'`
-xft_minor_version=`echo $1 | sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\2/'`
-xft_micro_version=`echo $1 | sed 's/\([[0-9]]*\).\([[0-9]]*\).\([[0-9]]*\)/\3/'`
-AC_MSG_CHECKING([whether libXft is at least version $1])
-AC_CACHE_VAL(ac_cv_lib_xft_version_ok,
-[AC_TRY_LINK(
-[/* Test version of libXft we have */
+[m4_define([XFT_REQUIRED_VERSION],
+    m4_eval(m4_bregexp($1, [^\([[0-9]]*\)\.\([[0-9]]*\)\.\([[0-9]]*\)],
+                       [\1 * 10000 + \2 * 100 + \3]) ) )dnl
+ AC_CACHE_CHECK([whether libXft is at least version $1], [ac_cv_lib_xft_version_ok],
+    [CPPFLAGS_save="$CPPFLAGS"
+     CPPFLAGS="$CPPFLAGS $XFT_CFLAGS $inc_search_path"
+     AC_TRY_LINK([
 #include <X11/Xlib.h>
 #include <X11/Xft/Xft.h>
-
-#if !defined(XFT_VERSION) || XFT_VERSION < $xft_major_version*10000 + $xft_minor_version*100 + $xft_micro_version
+], [
+#if !defined(XFT_VERSION) || XFT_VERSION < ]XFT_REQUIRED_VERSION[
 #error libXft on this system is too old. Consider upgrading to at least $1
 #endif
-], [],
-eval "ac_cv_lib_xft_version_ok=yes",
-eval "ac_cv_lib_xft_version_ok=no")])
-if eval "test \"`echo '$ac_cv_lib_xft_version_ok'`\" = yes"; then
-  AC_MSG_RESULT(yes)
-  ifelse([$2], , :, [$2])
-else
-  AC_MSG_RESULT(no)
-  ifelse([$3], , , [$3])
-fi
-CPPFLAGS="$CPPFLAGS_old"
+], [ac_cv_lib_xft_version_ok=yes], [ac_cv_lib_xft_version_ok=no])
+     CPPFLAGS="$CPPFLAGS_save"])
+ m4_undefine([XFT_REQUIRED_VERSION])dnl
+ AS_IF([test "x$ac_cv_lib_xft_version_ok" != "xyes"], [$3], [$2])dnl
 ])
 
 
