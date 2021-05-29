@@ -12,7 +12,7 @@ lib_LTLIBRARIES = libWUtil.la libWINGs.la
 
 
 LDADD= libWUtil.la libWINGs.la $(top_builddir)/wrlib/libwraster.la @INTLIBS@
-libWINGs_la_LIBADD = libWUtil.la $(top_builddir)/wrlib/libwraster.la @XLIBS@ @XFT_LIBS@ @FCLIBS@ @LIBM@ @PANGOLIBS@
+libWINGs_la_LIBADD = libWUtil.la $(top_builddir)/wrlib/libwraster.la @XLIBS@ @XFT_LIBS@ @FCLIBS@ @LIBM@ @PANGO_LIBS@
 libWUtil_la_LIBADD = @LIBBSD@
 
 EXTRA_DIST = BUGS make-rgb Examples Extras Tests
@@ -87,7 +87,7 @@ libWUtil_la_SOURCES = 	\
 	wutil.c
 
 
-AM_CFLAGS =
+AM_CFLAGS = @PANGO_CFLAGS@
 
 AM_CPPFLAGS = -DRESOURCE_PATH=\"$(datadir)/WINGs\" \
 	 -I$(top_srcdir)/WINGs/WINGs -I$(top_builddir)/WINGs/WINGs \

@@ -636,24 +636,15 @@ AC_SUBST(XFT_LIBS)
 
 dnl PANGO support
 dnl =============
-pango=no
-AC_ARG_ENABLE(pango, AS_HELP_STRING([--enable-pango], [enable Pango text layout support]),
-                pango=$enableval, pango=no)
+dnl The libray can be used by WINGs to get better support on UTF-8 for i18n
+AC_ARG_ENABLE([pango],
+    [AS_HELP_STRING([--disable-pango], [disable Pango text layout support @<:@default=auto@:>@])],
+    [AS_CASE([$enableval],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --disable-pango])] )],
+    [enable_pango=auto])
+WM_CHECK_LIBPANGO
 
-PANGOFLAGS=
-PANGOLIBS=
-if test "$pango" = yes; then
-	PANGOLIBS=`$PKG_CONFIG pangoxft --libs`
-	PANGOFLAGS=`$PKG_CONFIG pangoxft --cflags`
-	if test "x$PANGOLIBS" = "x" ; then
-	        AC_MSG_RESULT([not found])
-	else
-		AC_DEFINE(USE_PANGO, 1, [Define if Pango is to be used])
-		AC_MSG_RESULT([found])
-	fi
-fi
-inc_search_path="$inc_search_path $PANGOFLAGS"
-AC_SUBST(PANGOLIBS)
 
 dnl ==============================================
 dnl         Graphic Format Libraries

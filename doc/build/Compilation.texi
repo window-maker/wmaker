@@ -224,7 +224,7 @@ Get the @emph{GNU} version from @uref{http://www.gnu.org/software/gettext/}
 
 This library can be used by the @emph{WINGs} toolkit to improve support for @emph{UTF-8} and for
 languages written in right-to-left direction, in some widgets.
-You have to explicitly ask for its support through (@pxref{Configure Options}).
+If detected, it will be automatically used; you may request explicit support/ignore through (@pxref{Configure Options}).
 You can get it from @uref{http://www.pango.org/Download}
 
 @item @emph{libbsd}
@@ -484,8 +484,8 @@ even if your system provides it.
 @item --disable-magick
 Disable @emph{ImageMagick's MagickWand} support in @emph{WRaster}, used to support for image formats.
 
-@item --enable-pango
-Disabled by default, enable @emph{Pango} text layout support in @emph{WINGs}.
+@item --disable-pango
+Disable @emph{Pango} text layout support in @emph{WINGs}.
 
 @item --disable-png
 Disable PNG support in @emph{WRaster}; when enabled use @file{libpng}.

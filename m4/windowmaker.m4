@@ -50,6 +50,27 @@ AC_DEFUN([WM_CHECK_XFT_VERSION],
 ])
 
 
+# WM_CHECK_LIBPANGO
+# -----------------
+#
+# If the support was not disabled by user, check for the pango library using
+# pkg-config, and if found place the appropriate stuff in the variables
+# PANGO_CFLAGS (for compiler) and PANGO_LIBS (for linker)
+AC_DEFUN([WM_CHECK_LIBPANGO],
+[AS_IF([test "x$enable_pango" != "xno"],
+    [PKG_CHECK_MODULES([PANGO], [pangoxft],
+        [AC_DEFINE([USE_PANGO], [1], [defined when the pango library is used in WINGs])
+         pango="yes"],
+        [pango="no"])
+     AS_IF([test "x$enable_pango$pango" == "xyesno"],
+        [AC_MSG_ERROR([Pango library was not found - $PANGO_PKG_ERRORS])])
+    ],
+    [pango="no"])
+ AC_SUBST([PANGO_CFLAGS])dnl
+ AC_SUBST([PANGO_LIBS])dnl
+])
+
+
 # _WM_LIB_CHECK_FUNCTS
 # --------------------
 # (internal shell functions)
