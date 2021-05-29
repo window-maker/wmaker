@@ -107,7 +107,7 @@ WINGs.pc: Makefile
 	@echo 'Requires: wrlib WUtil' >> $@
 	@echo 'Libs: $(lib_search_path) -lWINGs' >> $@
 	@echo 'Libs.private: $(XFT_LIBS) $(PANGOLIBS) $(XLIBS) -lm $(INTLIBS)' >> $@
-	@echo 'Cflags: $(inc_search_path)' >> $@
+	@echo 'Cflags: $(inc_search_path) @PANGO_CFLAGS@' >> $@
 
 WUtil.pc: Makefile
 	@echo "Generating $@"

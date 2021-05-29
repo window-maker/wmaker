@@ -148,7 +148,7 @@ xmodifier.hack_nf.c: xmodifier.c $(top_srcdir)/script/nested-func-to-macro.sh
 endif
 
 
-AM_CFLAGS =
+AM_CFLAGS = @PANGO_CFLAGS@
 
 AM_CPPFLAGS = $(DFLAGS) \
 	-I$(top_builddir)/wrlib \
