@@ -194,6 +194,29 @@ m4_popdef([USEVAR])dnl
 ])
 
 
+# WM_CHECK_WEBREPODIR
+# -------------------
+#
+# If the maintainer's option --with-web-repo was specified, check that the path provided is a valid
+# existing directory and that it is a GIT repository that looks like Window Maker's Website repo.
+AC_DEFUN_ONCE([WM_CHECK_WEBREPODIR],
+[AS_IF([test "x$WEB_REPO_ROOT" != "x"],
+    [AS_IF([test ! -d "$WEB_REPO_ROOT"],
+         [AC_MSG_ERROR([The path "$with_web_repo" is not a directory, for --with-web-repo])])
+
+     # Convert to an Absolute path in the case it is not
+     WEB_REPO_ROOT=`cd "$WEB_REPO_ROOT" ; pwd`
+
+     AS_IF([test ! -d "$WEB_REPO_ROOT/.git"],
+         [AC_MSG_ERROR([The path "$WEB_REPO_ROOT" is not a GIT repository, for --with-web-repo])])
+     AS_IF([test ! -f "$WEB_REPO_ROOT/_config.yml"],
+         [AC_MSG_ERROR([The path "$WEB_REPO_ROOT" does not look like Window Maker's website repository, for --with-web-repo])])
+    ])
+ AM_CONDITIONAL([WITH_WEB_REPO], [test "x$WEB_REPO_ROOT" != "x"])
+ AC_SUBST([WEB_REPO_ROOT])
+])
+
+
 # WM_FUNC_SECURE_GETENV
 # ---------------------
 #

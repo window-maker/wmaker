@@ -639,6 +639,14 @@ appropriate requirements and works with this.
 Despite all this, if you think there's a use for it and feel in the mood to help, do not hesitate to
 discuss on the mailing list @value{emailsupport} to get it working.
 
+@item --with-web-repo=@i{PATH}
+Enable generation of HTML documentation to be uploaded to @sc{Window Maker}'s website.
+The @file{@i{PATH}} is the directory where you have cloned the homepage's repository.
+
+When enabled, the command @command{make website} generates a few HTML pages
+and copy them into the specified directory, then you can commit them to publish on the web site.
+You should not do that, it is handled by the development team.
+
 @end table
 
 

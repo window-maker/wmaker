@@ -232,6 +232,18 @@ AS_IF([test "x$debug" = "xyes"],
 ])
 
 
+dnl To upload documentation to the Website
+dnl ======================================
+AC_ARG_WITH([web-repo],
+    [AS_HELP_STRING([--with-web-repo=PATH], [path to your git repository for the Web home page (maintainer stuff)])],
+    [AS_CASE([$withval],
+        [yes], [AC_MSG_ERROR([bad value '$withval' for --with-web-repo, expected a path]) ],
+        [no],  [WEB_REPO_ROOT=""],
+        [WEB_REPO_ROOT=$withval])],
+    [WEB_REPO_ROOT=""])
+WM_CHECK_WEBREPODIR
+
+
 dnl Support for Nested Functions by the compiler
 dnl ============================================
 WM_PROG_CC_NESTEDFUNC
@@ -918,6 +930,8 @@ echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
 echo "Pango text layout support in WINGs  : $pango"
 echo "Translated languages to support     :$supported_locales"
+AS_IF([test "x$WEB_REPO_ROOT" != "x"],
+    [AS_ECHO(["Git repository for WMaker's Website : $WEB_REPO_ROOT"]) ])
 AS_IF([test "x$debug" = "xyes"],
     [AS_ECHO(["Debug enabled: CFLAGS = $CFLAGS"]) ])
 echo

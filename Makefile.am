@@ -62,6 +62,10 @@ coverage:
 	genhtml --output-directory @lcov_output_directory@ coverage/coverage.info
 endif
 
+################################################################################
+# Section for the I18N processing
+################################################################################
+
 # make update-lang PO=<lang>
 # ==========================
 # Update the PO files against the POT file in all the translation sub-directories
@@ -86,6 +90,27 @@ else
 endif
 
 .PHONY: update-lang
+
+################################################################################
+# Section related to generating HTML content for the website
+################################################################################
+
+if WITH_WEB_REPO
+
+SUBDIRS_WEB = doc
+
+website:
+	@for subdir in $(SUBDIRS_WEB); do \
+	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) website || exit $$?); \
+	done
+
+endif
+
+.PHONY: website
+
+################################################################################
+# Section for the automated checks
+################################################################################
 
 # Create a 'silent-rule' for our make check the same way automake does
 AM_V_CHKOPTS = $(am__v_CHKOPTS_$(V))
