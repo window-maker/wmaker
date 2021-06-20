@@ -131,6 +131,7 @@ if WITH_WEB_REPO
 # We convert all man pages except those that are a link to other man page (.so command)
 website: $(MANS) website.menu
 	@local_pages=`echo "$^" | sed -e 's/ [^ ]*\.menu$$// ; s,[^ /]*/,,g' `; \
+	generated_pages=""; \
 	for man in $^; do \
 	  [ "$$man" = "website.menu" ] && continue; \
 	  grep -i '^\.so[ \t]' "$$man" > /dev/null && continue; \
@@ -140,7 +141,12 @@ website: $(MANS) website.menu
 	        --local-pages "$$local_pages"  --external-url 'http://linux.die.net/man/%s/%l' \
 	        --with-menu "website.menu"  --package '$(PACKAGE_STRING)' \
 	        $$man || exit $$?; \
-	done
+	  generated_pages="$$generated_pages $$man"; \
+	done; \
+	echo "  UPDATE   index.md"; \
+	$(top_srcdir)/script/replace-generated-content.sh  --man-pages "$$generated_pages" \
+	        --template '<tr><td class="name"><a href="\1">\2</a></td><td class="section">\3</td><td>\4</td></tr>' \
+	        --marker LIST_MANPAGES_COMMANDS  $(WEB_REPO_ROOT)/docs/manpages/index.md
 
 MOSTLYCLEANFILES += website.menu
 
