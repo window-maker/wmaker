@@ -211,6 +211,14 @@ AC_DEFUN_ONCE([WM_CHECK_WEBREPODIR],
          [AC_MSG_ERROR([The path "$WEB_REPO_ROOT" is not a GIT repository, for --with-web-repo])])
      AS_IF([test ! -f "$WEB_REPO_ROOT/_config.yml"],
          [AC_MSG_ERROR([The path "$WEB_REPO_ROOT" does not look like Window Maker's website repository, for --with-web-repo])])
+
+     # This is used to convert MAN pages into HTML pages
+     AC_CACHE_CHECK([how to convert man to html], [ac_cv_path_GROFF],
+         [AC_PATH_PROGS_FEATURE_CHECK([GROFF], [groff],
+             [echo '.TH dummy 0' | $ac_path_GROFF -man -Dutf8 -Thtml > /dev/null 2> /dev/null
+              test $? -eq 0 && ac_cv_path_GROFF=$ac_path_GROFF ac_path_GROFF_found=:],
+             [AC_MSG_ERROR([no working "groff" found -- If you have "groff-base" it is not enough for HTML support])]) ])
+     AC_SUBST([GROFF], [$ac_cv_path_GROFF])
     ])
  AM_CONDITIONAL([WITH_WEB_REPO], [test "x$WEB_REPO_ROOT" != "x"])
  AC_SUBST([WEB_REPO_ROOT])

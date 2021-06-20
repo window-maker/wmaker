@@ -41,6 +41,7 @@ EXTRA_DIST = TODO BUGS BUGFORM FAQ INSTALL \
 	script/check-cmdline-options-doc.sh \
 	script/check-translation-sources.sh \
 	script/check-wmaker-loaddef-callbacks.sh \
+	script/generate-html-from-man.sh \
 	script/generate-mapfile-from-header.sh \
 	script/generate-po-from-template.sh \
 	script/generate-txt-from-texi.sh \

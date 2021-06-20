@@ -27,6 +27,11 @@ MOSTLYCLEANFILES = wmaker.1 wmsetbg.1
 
 EXTRA_DIST = wmaker.in wmsetbg.in
 
+
+################################################################################
+# Generation of man pages that need processing
+################################################################################
+
 wmaker.1: wmaker.in Makefile $(top_builddir)/config.h
 	$(AM_V_GEN)$(top_srcdir)/script/replace-ac-keywords.sh \
 		--header "$(top_builddir)/config.h" --filter "HAVE_INOTIFY" \
@@ -39,6 +44,11 @@ wmsetbg.1: wmsetbg.in Makefile $(top_builddir)/config.h
 	$(AM_V_GEN)$(top_srcdir)/script/replace-ac-keywords.sh \
 		--header "$(top_builddir)/config.h" --filter "USE_XINERAMA" \
 		-o "wmsetbg.1"  "$(srcdir)/wmsetbg.in"
+
+
+################################################################################
+# Section for checking the man pages against the program's --help text
+################################################################################
 
 # Create a 'silent rule' for our make check the same way automake does
 AM_V_CHKOPTS = $(am__v_CHKOPTS_$(V))
@@ -111,3 +121,33 @@ wxpaste-args:
 
 .PHONY: wmaker-args WPrefs-args wmagnify-args geticonset-args getstyle-args seticons-args setstyle-args \
 	wdread-args wdwrite-args wmgenmenu-args wmiv-args wmmenugen-args wmsetbg-args wxcopy-args wxpaste-args
+
+
+################################################################################
+# Section related to generating HTML version of man pages for the website
+################################################################################
+
+if WITH_WEB_REPO
+# We convert all man pages except those that are a link to other man page (.so command)
+website: $(MANS) website.menu
+	@local_pages=`echo "$^" | sed -e 's/ [^ ]*\.menu$$// ; s,[^ /]*/,,g' `; \
+	for man in $^; do \
+	  [ "$$man" = "website.menu" ] && continue; \
+	  grep -i '^\.so[ \t]' "$$man" > /dev/null && continue; \
+	  echo "  MAN2HTML $$man"; \
+	  $(top_srcdir)/script/generate-html-from-man.sh --groff $(GROFF) \
+	        --output $(WEB_REPO_ROOT)/docs/manpages/`echo "$$man" | sed -e 's,[^ /]*/,,g ; s/\.[^.]*$$//' `.html \
+	        --local-pages "$$local_pages"  --external-url 'http://linux.die.net/man/%s/%l' \
+	        --with-menu "website.menu"  --package '$(PACKAGE_STRING)' \
+	        $$man || exit $$?; \
+	done
+
+MOSTLYCLEANFILES += website.menu
+
+# This menu is the icon bar to navigate on the website, which we want to keep on all man pages
+# We extract it from the Template defined for all pages of the site
+website.menu: $(WEB_REPO_ROOT)/_layouts/default.html
+	$(AM_V_GEN)sed -n -e '/<aside>/,/<\/aside>/ { s/{{ site.baseurl }}// ; s/^    // ; p }'  $<  >  $@
+endif
+
+.PHONY: website
