@@ -1159,21 +1159,18 @@ static void readConfiguration(W_ColorPanel * panel)
 
 	DIR *dPtr;
 	struct dirent *dp;
-	struct stat stat_buf;
 	int item;
 
-	if (stat(panel->configurationPath, &stat_buf) != 0) {
-		if (mkdir(panel->configurationPath, S_IRWXU | S_IRGRP | S_IROTH | S_IXGRP | S_IXOTH) != 0) {
-			werror(_("Color Panel: Could not create directory %s needed"
-				    " to store configurations"), panel->configurationPath);
-			WMSetPopUpButtonEnabled(panel->customPaletteMenuBtn, False);
-			WMSetPopUpButtonEnabled(panel->colorListColorMenuBtn, False);
-			WMSetPopUpButtonEnabled(panel->colorListListMenuBtn, False);
-			WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
-					_("File Error"),
-					_("Could not create ColorPanel configuration directory"),
-					_("OK"), NULL, NULL);
-		}
+	if (!wmkdirhier(panel->configurationPath)) {
+		werror(_("Color Panel: Could not create directory %s needed"
+			 " to store configurations"), panel->configurationPath);
+		WMSetPopUpButtonEnabled(panel->customPaletteMenuBtn, False);
+		WMSetPopUpButtonEnabled(panel->colorListColorMenuBtn, False);
+		WMSetPopUpButtonEnabled(panel->colorListListMenuBtn, False);
+		WMRunAlertPanel(WMWidgetScreen(panel->win), panel->win,
+				_("File Error"),
+				_("Could not create ColorPanel configuration directory"),
+				_("OK"), NULL, NULL);
 		return;
 	}
 
