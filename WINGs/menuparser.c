@@ -536,7 +536,7 @@ found_end_define_fname:
 			while (*src != '\0') {
 				idx = 0;
 				if (*src == '~') {
-					char *home = wgethomedir();
+					const char *home = wgethomedir();
 					while (*home != '\0') {
 						if (idx < sizeof(buffer) - 2)
 							buffer[idx++] = *home;

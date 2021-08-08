@@ -249,7 +249,7 @@ char* wexpandpath(const char *path);
 int wcopy_file(const char *toPath, const char *srcFile, const char *destFile);
 
 /* don't free the returned string */
-char* wgethomedir(void);
+const char* wgethomedir(void);
 
 /* ---[ WINGs/proplist.c ]------------------------------------------------ */
 

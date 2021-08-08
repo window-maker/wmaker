@@ -1324,7 +1324,7 @@ void WMSortBrowserColumnWithComparer(WMBrowser *bPtr, int column,
                                      WMCompareDataProc *func);
 
 /* Don't free the returned string. */
-char* WMSetBrowserPath(WMBrowser *bPtr, char *path);
+const char* WMSetBrowserPath(WMBrowser *bPtr, const char *path);
 
 /* free the returned string */
 char* WMGetBrowserPath(WMBrowser *bPtr);
@@ -1876,7 +1876,7 @@ void WMSetFilePanelCanChooseFiles(WMFilePanel *panel, Bool flag);
 
 void WMSetFilePanelAutoCompletion(WMFilePanel *panel, Bool flag);
 
-void WMSetFilePanelDirectory(WMFilePanel *panel, char *path);
+void WMSetFilePanelDirectory(WMFilePanel *panel, const char *path);
 
 /* you can free the returned string */
 char* WMGetFilePanelFileName(WMFilePanel *panel);
@@ -1884,7 +1884,7 @@ char* WMGetFilePanelFileName(WMFilePanel *panel);
 void WMFreeFilePanel(WMFilePanel *panel);
 
 int WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
-                                    char *path, const char *name, char **fileTypes);
+                                    const char *path, const char *name, char **fileTypes);
 
 void WMSetFilePanelAccessoryView(WMFilePanel *panel, WMView *view);
 

@@ -343,7 +343,7 @@ void WMFreeFilePanel(WMFilePanel * panel)
 }
 
 int
-WMRunModalFilePanelForDirectory(WMFilePanel * panel, WMWindow * owner, char *path, const char *name, char **fileTypes)
+WMRunModalFilePanelForDirectory(WMFilePanel * panel, WMWindow * owner, const char *path, const char *name, char **fileTypes)
 {
 	WMScreen *scr = WMWidgetScreen(panel->win);
 
@@ -387,12 +387,12 @@ WMRunModalFilePanelForDirectory(WMFilePanel * panel, WMWindow * owner, char *pat
 	return (panel->flags.canceled ? False : True);
 }
 
-void WMSetFilePanelDirectory(WMFilePanel * panel, char *path)
+void WMSetFilePanelDirectory(WMFilePanel * panel, const char *path)
 {
 	WMList *list;
 	WMListItem *item;
 	int col;
-	char *rest;
+	const char *rest;
 
 	rest = WMSetBrowserPath(panel->browser, path);
 	if (strcmp(path, "/") == 0)
@@ -761,7 +761,7 @@ static void goFloppy(WMWidget *widget, void *p_panel)
 static void goHome(WMWidget *widget, void *p_panel)
 {
 	WMFilePanel *panel = p_panel;
-	char *home;
+	const char *home;
 
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) widget;

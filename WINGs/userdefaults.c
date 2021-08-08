@@ -51,7 +51,8 @@ const char *wusergnusteppath()
 {
 	static const char subdir[] = "/GNUstep";
 	static char *path = NULL;
-	char *gspath, *h;
+	char *gspath;
+	const char *h;
 	int pathlen;
 
 	if (path)

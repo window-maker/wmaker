@@ -619,11 +619,12 @@ void WMSetBrowserHasScroller(WMBrowser * bPtr, int hasScroller)
 	bPtr->flags.hasScroller = hasScroller;
 }
 
-char *WMSetBrowserPath(WMBrowser * bPtr, char *path)
+const char *WMSetBrowserPath(WMBrowser * bPtr, const char *path)
 {
 	int i;
 	char *str;
-	char *tmp, *retPtr = NULL;
+	char *tmp;
+	const char *retPtr = NULL;
 	int item;
 	WMListItem *listItem;
 
