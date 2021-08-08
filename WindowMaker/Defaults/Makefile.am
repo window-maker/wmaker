@@ -1,4 +1,4 @@
-defsdata_DATA = WMRootMenu WMWindowAttributes WindowMaker WMState WMGLOBAL
+pkgconf_DATA = WMRootMenu WMWindowAttributes WindowMaker WMState WMGLOBAL
 
 wpexecbindir = @wprefs_bindir@
 

@@ -1,6 +1,6 @@
 
-defsdatadir = $(pkgdatadir)/Backgrounds
+bgdatadir = $(pkgdatadir)/Backgrounds
 
-defsdata_DATA = BlueImage.jpeg
+bgdata_DATA = BlueImage.jpeg
 
-EXTRA_DIST = $(defsdata_DATA)
+EXTRA_DIST = $(bgdata_DATA)
