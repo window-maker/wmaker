@@ -1003,7 +1003,7 @@ void wFrameWindowPaint(WFrameWindow * fwin)
 		int titlelen;
 		int allButtons = 1;
 
-		if (!wPreferences.new_style == TS_NEW) {
+		if (wPreferences.new_style != TS_NEW) {
 			if (fwin->left_button && !fwin->flags.hide_left_button && !fwin->flags.lbutton_dont_fit)
 				lofs += fwin->left_button->width + 3;
 			else
@@ -1266,7 +1266,7 @@ static void checkTitleSize(WFrameWindow * fwin)
 		width = fwin->titlebar->width - 6 - 6;
 	}
 
-	if (!wPreferences.new_style == TS_NEW) {
+	if (wPreferences.new_style != TS_NEW) {
 		if (fwin->left_button && !fwin->flags.hide_left_button && !fwin->flags.lbutton_dont_fit)
 			width -= fwin->left_button->width + 3;
 
@@ -1352,7 +1352,7 @@ static void paintButton(WCoreWindow * button, WTexture * texture, unsigned long 
 		x = (button->width - width) / 2 + d;
 		y = (button->height - image->height) / 2 + d;
 		XSetClipOrigin(dpy, copy_gc, x - left, y);
-		if (!wPreferences.new_style == TS_NEW) {
+		if (wPreferences.new_style != TS_NEW) {
 			XSetForeground(dpy, copy_gc, scr->black_pixel);
 			if (!pushed) {
 				if (image->depth == 1)
