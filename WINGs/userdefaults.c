@@ -81,6 +81,19 @@ const char *wusergnusteppath()
 	return path;
 }
 
+const char *wuserdatapath(void)
+{
+	static char *path = NULL;
+
+	if (path)
+		/* Value have been already computed, re-use it */
+		return path;
+
+	path = wstrconcat(wusergnusteppath(), "/" USERDATA_SUBDIR);
+
+	return path;
+}
+
 char *wdefaultspathfordomain(const char *domain)
 {
 	char *path;

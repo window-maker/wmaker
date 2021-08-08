@@ -864,6 +864,7 @@ Bool WMWritePropListToFile(WMPropList *plist, const char *path);
 
 /* don't free the returned string */
 const char* wusergnusteppath(void);
+const char* wuserdatapath(void);
 
 /* Free the returned string when you no longer need it */
 char* wdefaultspathfordomain(const char *domain);
