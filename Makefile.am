@@ -19,7 +19,7 @@ config-paths.h: Makefile
 	@echo '#define PIXMAPDIR "$(pixmapdir)"' >> $@
 	@echo '' >> $@
 	@echo '/* where shared data is stored */' >> $@
-	@echo '#define PKGDATADIR "$(datadir)/WindowMaker"' >> $@
+	@echo '#define PKGDATADIR "$(datadir)/$(PACKAGE_TARNAME)"' >> $@
 	@echo '' >> $@
 	@echo '/* where the global defaults are stored */' >> $@
 	@echo '#define PKGCONFDIR "$(pkgconfdir)"' >> $@
