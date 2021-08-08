@@ -1493,16 +1493,11 @@ static WMPropList *getDefaultMenu(_Panel * panel)
 
 static void showData(_Panel * panel)
 {
-	const char *gspath;
 	char *menuPath, *labelText;
 	char buf[1024];
 	WMPropList *pmenu;
 
-	gspath = wusergnusteppath();
-
-	menuPath = wmalloc(strlen(gspath) + 32);
-	strcpy(menuPath, gspath);
-	strcat(menuPath, "/Defaults/WMRootMenu");
+	menuPath = wdefaultspathfordomain("WMRootMenu");
 
 	pmenu = WMReadPropListFromFile(menuPath);
 
