@@ -37,7 +37,7 @@ wmaker.1: wmaker.in Makefile $(top_builddir)/config.h
 		--header "$(top_builddir)/config.h" --filter "HAVE_INOTIFY" \
 		--filter "USE_ICCCM_WMREPLACE" \
 		-D"pkgdatadir=$(pkgdatadir)" --replace "pkgdatadir" \
-		-D"defsdatadir=$(defsdatadir)" --replace "defsdatadir" \
+		-D"pkgconfdir=$(pkgconfdir)" --replace "pkgconfdir" \
 		-o "wmaker.1"  "$(srcdir)/wmaker.in"
 
 wmsetbg.1: wmsetbg.in Makefile $(top_builddir)/config.h

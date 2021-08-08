@@ -116,9 +116,9 @@ char *wglobaldefaultspathfordomain(const char *domain)
 	char *t = NULL;
 	size_t len;
 
-	len = strlen(DEFSDATADIR) + strlen(domain) + 2;
+	len = strlen(PKGCONFDIR) + strlen(domain) + 2;
 	t = wmalloc(len);
-	snprintf(t, len, "%s/%s", DEFSDATADIR, domain);
+	snprintf(t, len, "%s/%s", PKGCONFDIR, domain);
 
 	return t;
 }

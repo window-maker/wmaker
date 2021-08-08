@@ -1017,7 +1017,7 @@ Bool UpdateDomainFile(WDDomain * domain)
 	dict = domain->dictionary;
 	if (WMIsPLDictionary(domain->dictionary)) {
 		/* retrieve global system dictionary */
-		snprintf(path, sizeof(path), "%s/%s", DEFSDATADIR, domain->domain_name);
+		snprintf(path, sizeof(path), "%s/%s", PKGCONFDIR, domain->domain_name);
 		if (stat(path, &stbuf) >= 0) {
 			shared_dict = WMReadPropListFromFile(path);
 			if (shared_dict) {

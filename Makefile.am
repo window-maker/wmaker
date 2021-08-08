@@ -22,7 +22,7 @@ config-paths.h: Makefile
 	@echo '#define PKGDATADIR "$(datadir)/WindowMaker"' >> $@
 	@echo '' >> $@
 	@echo '/* where the global defaults are stored */' >> $@
-	@echo '#define DEFSDATADIR "$(defsdatadir)"' >> $@
+	@echo '#define PKGCONFDIR "$(pkgconfdir)"' >> $@
 	@echo '' >> $@
 	@echo '/* where the user data root is located */' >> $@
 	@echo '#define GSUSER_SUBDIR "GNUstep"' >> $@

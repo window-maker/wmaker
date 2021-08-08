@@ -658,7 +658,7 @@ static int real_main(int argc, char **argv)
 				printf("Window Maker %s\n", VERSION);
 				exit(0);
 			} else if (strcmp(argv[i], "--global_defaults_path") == 0) {
-			  printf("%s\n", DEFSDATADIR);
+				printf("%s\n", PKGCONFDIR);
 				exit(0);
 			} else if (strcmp(argv[i], "-locale") == 0 || strcmp(argv[i], "--locale") == 0) {
 				i++;

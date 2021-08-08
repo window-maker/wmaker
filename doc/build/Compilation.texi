@@ -449,7 +449,7 @@ Specific to @sc{Window Maker}, this option defines an additional path where @emp
 searched. Nothing will be installed there; the default path taken is @file{@emph{DATADIR}/pixmaps},
 where @var{DATADIR} is the path defined from @option{--datadir}.
 
-@item --with-defsdatadir=@i{DIR}
+@item --with-pkgconfdir=@i{DIR}
 Specific to @sc{Window Maker}, defines the directory where system configuration
 files, e.g., @file{WindowMaker}, @file{WMRootMenu}, etc., are installed.  The
 default value is @file{@emph{SYSCONFDIR}/WindowMaker}, where @var{SYSCONFDIR} is
