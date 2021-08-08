@@ -846,6 +846,12 @@ AC_ARG_WITH([pkgconfdir],
         [AC_MSG_ERROR([bad path '$withval' for pkgconfdir, expecting an absolute path])])],
     [with_pkgconfdir=""])
 
+dnl Provide a message when trying to use "--with-defsdatadir" so that user can update its
+dnl arguments. Otherwise only a warning is issued, which is likely to be missed, which will
+dnl lead to perceived misbehaviour much later (and hard to debug).
+WM_DENY_ARG_WITH([defsdatadir],
+    [AC_MSG_ERROR([option "--with-defsdatadir" have been replaced by "--with-pkgconfdir"])])
+
 AS_IF([test "x$with_pkgconfdir" != "x"],
     [pkgconfdir="$with_pkgconfdir"],
     [pkgconfdir='${sysconfdir}/${PACKAGE_TARNAME}'])

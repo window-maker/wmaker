@@ -24,6 +24,15 @@ m4_pattern_forbid([^_?WM_])
 m4_pattern_allow([^WM_OSDEP(_[A-Z]*)?$])
 
 
+# WM_DENY_ARG_WITH(PACKAGE, ACTION-IF-GIVEN)
+#
+# Check if the argument "--with-PACKAGE" was used, and if it is the case
+# execute ACTION-IF-GIVEN which is supposed to call AC_MSG_ERROR to
+# stop any further processing and tell the user its arguments are bad
+AC_DEFUN([WM_DENY_ARG_WITH],
+[AS_IF([test "${[with_]m4_translit([$1], [-+.], [___])+set}" = set], [$2])])
+
+
 # WM_CHECK_XFT_VERSION(MIN_VERSION, [ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]])
 #
 # $XFT_CFLAGS should be defined before calling this macro,
