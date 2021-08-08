@@ -113,14 +113,7 @@ char *wdefaultspathfordomain(const char *domain)
 /* XXX: doesn't quite belong to *user*defaults.c */
 char *wglobaldefaultspathfordomain(const char *domain)
 {
-	char *t = NULL;
-	size_t len;
-
-	len = strlen(PKGCONFDIR) + strlen(domain) + 2;
-	t = wmalloc(len);
-	snprintf(t, len, "%s/%s", PKGCONFDIR, domain);
-
-	return t;
+	return wstrconcat(PKGCONFDIR "/", domain);
 }
 
 void w_save_defaults_changes(void)
