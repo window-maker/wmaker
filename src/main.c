@@ -488,7 +488,7 @@ static void inotifyWatchConfig(void)
 			   " Changes to the defaults database will require"
 			   " a restart to take effect. Check your kernel!"));
 	} else {
-		watchPath = wstrconcat(wusergnusteppath(), "/Defaults");
+		watchPath = wdefaultspathfordomain("");
 		/* Add the watch; really we are only looking for modify events
 		 * but we might want more in the future so check all events for now.
 		 * The individual events are checked for in event.c.
