@@ -29,6 +29,12 @@
 # define _(text) (text)
 #endif
 
+#ifdef HAVE_SECURE_GETENV
+#define GETENV(x) secure_getenv((x))
+#else
+#define GETENV(x) getenv((x))
+#endif
+
 
 #endif /* WINGS_CONFIG_H_ */
 
