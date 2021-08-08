@@ -5,9 +5,9 @@
 
 /* the notifications about views */
 
-char *WMViewSizeDidChangeNotification = "WMViewSizeDidChangeNotification";
-char *WMViewFocusDidChangeNotification = "WMViewFocusDidChangeNotification";
-char *WMViewRealizedNotification = "WMViewRealizedNotification";
+const char *WMViewSizeDidChangeNotification = "WMViewSizeDidChangeNotification";
+const char *WMViewFocusDidChangeNotification = "WMViewFocusDidChangeNotification";
+const char *WMViewRealizedNotification = "WMViewRealizedNotification";
 
 #define EVENT_MASK  \
     KeyPressMask|KeyReleaseMask|ButtonPressMask|ButtonReleaseMask| \

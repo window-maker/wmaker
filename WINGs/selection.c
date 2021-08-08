@@ -7,7 +7,7 @@
 
 #define MAX_PROPERTY_SIZE 8*1024
 
-char *WMSelectionOwnerDidChangeNotification = "WMSelectionOwnerDidChange";
+const char *WMSelectionOwnerDidChangeNotification = "WMSelectionOwnerDidChange";
 
 typedef struct SelectionHandler {
 	WMView *view;

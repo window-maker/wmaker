@@ -44,7 +44,7 @@
 # include <X11/extensions/shape.h>
 #endif
 
-char *WMColorPanelColorChangedNotification = "WMColorPanelColorChangedNotification";
+const char *WMColorPanelColorChangedNotification = "WMColorPanelColorChangedNotification";
 
 /*
  * Bitmaps for magnifying glass cursor

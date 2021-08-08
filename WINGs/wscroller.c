@@ -20,7 +20,7 @@
 
 #define AUTOSCROLL_DELAY 		40
 
-char *WMScrollerDidScrollNotification = "WMScrollerDidScrollNotification";
+const char *WMScrollerDidScrollNotification = "WMScrollerDidScrollNotification";
 
 typedef struct W_Scroller {
 	W_Class widgetClass;

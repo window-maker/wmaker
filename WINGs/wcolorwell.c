@@ -3,7 +3,7 @@
 
 #define XDND_COLOR_DATA_TYPE "application/X-color"
 
-char *WMColorWellDidChangeNotification = "WMColorWellDidChangeNotification";
+const char *WMColorWellDidChangeNotification = "WMColorWellDidChangeNotification";
 
 typedef struct W_ColorWell {
 	W_Class widgetClass;

@@ -1,8 +1,8 @@
 
 #include "WINGsP.h"
 
-char *WMListDidScrollNotification = "WMListDidScrollNotification";
-char *WMListSelectionDidChangeNotification = "WMListSelectionDidChangeNotification";
+const char *WMListDidScrollNotification = "WMListDidScrollNotification";
+const char *WMListSelectionDidChangeNotification = "WMListSelectionDidChangeNotification";
 
 typedef struct W_List {
 	W_Class widgetClass;

@@ -10,9 +10,9 @@
 #define CURSOR_BLINK_ON_DELAY	600
 #define CURSOR_BLINK_OFF_DELAY	300
 
-char *WMTextDidChangeNotification = "WMTextDidChangeNotification";
-char *WMTextDidBeginEditingNotification = "WMTextDidBeginEditingNotification";
-char *WMTextDidEndEditingNotification = "WMTextDidEndEditingNotification";
+const char *WMTextDidChangeNotification = "WMTextDidChangeNotification";
+const char *WMTextDidBeginEditingNotification = "WMTextDidBeginEditingNotification";
+const char *WMTextDidEndEditingNotification = "WMTextDidEndEditingNotification";
 
 typedef struct W_TextField {
 	W_Class widgetClass;
@@ -942,7 +942,7 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 {
 	char buffer[64];
 	KeySym ksym;
-	char *textEvent = NULL;
+	const char *textEvent = NULL;
 	void *data = NULL;
 	int count, refresh = 0;
 	int control_pressed = 0;

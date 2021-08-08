@@ -9,7 +9,7 @@
 
 struct W_Application WMApplication;
 
-char *_WINGS_progname = NULL;
+const char *_WINGS_progname = NULL;
 
 Bool W_ApplicationInitialized(void)
 {
