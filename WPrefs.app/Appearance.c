@@ -1828,7 +1828,7 @@ static void createPanel(Panel * p)
 	char *tmp;
 	Bool ok = True;
 
-	panel->fprefix = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
+	panel->fprefix = wstrconcat(wuserdatapath(), "/" PACKAGE_TARNAME);
 
 	if (access(panel->fprefix, F_OK) != 0) {
 		if (mkdir(panel->fprefix, 0755) < 0) {
