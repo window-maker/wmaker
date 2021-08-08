@@ -83,7 +83,7 @@ void WMSetResourcePath(const char *path)
 	WMApplication.resourcePath = wstrdup(path);
 }
 
-char *WMGetApplicationName()
+char *WMGetApplicationName(void)
 {
 	return WMApplication.applicationName;
 }

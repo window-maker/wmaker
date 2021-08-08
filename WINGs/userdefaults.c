@@ -46,7 +46,7 @@ static void synchronizeUserDefaults(void *foo);
 #define UD_SYNC_INTERVAL	2000
 #endif
 
-const char *wusergnusteppath()
+const char *wusergnusteppath(void)
 {
 	static const char subdir[] = "/" GSUSER_SUBDIR;
 	static char *path = NULL;

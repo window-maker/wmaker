@@ -599,7 +599,7 @@ static void dragSourceResponseTimeOut(void *destView)
 	W_DragDestinationInfoClear(info);
 }
 
-void W_DragDestinationStopTimer()
+void W_DragDestinationStopTimer(void)
 {
 	if (dndDestinationTimer != NULL) {
 		WMDeleteTimerHandler(dndDestinationTimer);

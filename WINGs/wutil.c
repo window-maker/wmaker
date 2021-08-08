@@ -5,7 +5,7 @@
 
 #include "WINGsP.h"
 
-void WHandleEvents()
+void WHandleEvents(void)
 {
 	/* Check any expired timers */
 	W_CheckTimerHandlers();
