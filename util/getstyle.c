@@ -55,6 +55,9 @@
 #include "../src/wconfig.h"
 
 
+#define THEME_SUBPATH "/" PACKAGE_TARNAME "/Themes/"
+#define THEME_EXTDIR  ".themed/"
+
 /* table of style related options */
 static char *options[] = {
 	"TitleJustify",
@@ -137,7 +140,9 @@ static noreturn void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [-t] [-p] [-h] [-v] [file]\n", prog_name);
 	if (print_usage) {
-		puts("Retrieves style/theme configuration and outputs to ~/GNUstep/Library/WindowMaker/Themes/file.themed/style or to stdout");
+		puts("Retrieves style/theme configuration and outputs to "
+		     "~/" GSUSER_SUBDIR "/" USERDATA_SUBDIR THEME_SUBPATH "file" THEME_EXTDIR "style"
+		     " or to stdout");
 		puts("");
 		puts("  -h, --help           display this help and exit");
 		puts("  -v, --version        output version information and exit");
@@ -174,9 +179,6 @@ static void findCopyFile(const char *dir, const char *file)
 	wcopy_file(dir, fullPath, file);
 	wfree(fullPath);
 }
-
-#define THEME_SUBPATH "/" PACKAGE_TARNAME "/Themes/"
-#define THEME_EXTDIR  ".themed/"
 
 static void makeThemePack(WMPropList * style, const char *themeName)
 {
