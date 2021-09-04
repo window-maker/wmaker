@@ -204,7 +204,7 @@ char *wstrndup(const char *str, size_t len)
 char *wstrconcat(const char *str1, const char *str2)
 {
 	char *str;
-	size_t slen;
+	size_t slen, slen1;
 
 	if (!str1 && str2)
 		return wstrdup(str2);
@@ -213,13 +213,11 @@ char *wstrconcat(const char *str1, const char *str2)
 	else if (!str1 && !str2)
 		return NULL;
 
-	slen = strlen(str1) + strlen(str2) + 1;
+	slen1 = strlen(str1);
+	slen = slen1 + strlen(str2) + 1;
 	str = wmalloc(slen);
-	if (wstrlcpy(str, str1, slen) >= slen ||
-	    wstrlcat(str, str2, slen) >= slen) {
-		wfree(str);
-		return NULL;
-	}
+	strcpy(str, str1);
+	strcpy(str + slen1, str2);
 
 	return str;
 }
