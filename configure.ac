@@ -405,7 +405,7 @@ m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_WITH([libbsd],
   [AS_HELP_STRING([--without-libbsd], [do not use libbsd for strlcat and strlcpy [default=check]])],
   [AS_IF([test "x$with_libbsd" != "xno"],
-    [with_libbsd=bsd]
+    [with_libbsd=bsd],
     [with_libbsd=]
   )],
   [with_libbsd=bsd])
