@@ -147,7 +147,8 @@ AM_CONDITIONAL([HAVE_XGETTEXT], [test "x$XGETTEXT" != "x"])dnl
 # wish to customize the menus, and thus can make them translatable
 # with their own po/mo files without having to touch WMaker's stuff.
 AC_DEFUN_ONCE([WM_I18N_MENUTEXTDOMAIN],
-[AC_ARG_WITH([menu-textdomain],
+[m4_divert_push([INIT_PREPARE])dnl
+ AC_ARG_WITH([menu-textdomain],
     [AS_HELP_STRING([--with-menu-textdomain=DOMAIN],
         [specify gettext domain used for menu translations])],
     [AS_CASE([$withval],
@@ -155,6 +156,7 @@ AC_DEFUN_ONCE([WM_I18N_MENUTEXTDOMAIN],
         [no],  [menutextdomain=""],
         [menutextdomain="$withval"])],
     [menutextdomain=""])
+m4_divert_pop([INIT_PREPARE])dnl
 AS_IF([test "x$menutextdomain" != "x"],
     [AC_DEFINE_UNQUOTED([MENU_TEXTDOMAIN], ["$menutextdomain"],
         [gettext domain to be used for menu translations]) ])
@@ -167,13 +169,15 @@ dnl
 dnl X11 needs to redefine the function 'setlocale' to properly initialize itself,
 dnl we check if user wants to disable this behaviour or if it is not supported
 AC_DEFUN_ONCE([WM_I18N_XLOCALE],
-[AC_ARG_ENABLE([xlocale],
+[m4_divert_push([INIT_PREPARE])dnl
+ AC_ARG_ENABLE([xlocale],
     [AS_HELP_STRING([--disable-xlocale],
         [disable initialization of locale for X])],
     [AS_CASE([$enableval],
         [yes|no], [],
         [AC_MSG_ERROR([bad value '$enableval' for --disable-xlocale])])],
     [enable_xlocale=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 AS_IF([test "x$enable_xlocale" != "xno"],
     [AC_CHECK_LIB([X11], [_Xsetlocale],
         [AC_DEFINE([X_LOCALE], [1],
