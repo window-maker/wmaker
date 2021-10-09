@@ -1,133 +1,133 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
 .TH "Window Maker" 1 "Srpen 1998"
-.SH JMÉNO
-wmaker \- okenní mana¾er pro X11 se vzhledem NEXTSTEPu
+.SH JMÃ‰NO
+wmaker \- okennÃ­ manaÅ¾er pro X11 se vzhledem NEXTSTEPu
 .SH SYNTAXE
 .B wmaker
 .I "[-volby]"
 .SH "POPIS"
-Window Maker je okenní mana¾er pro X11 se vzhledem NEXTSTEPu. Sna¾í se
-napodobit vzhled NeXTu jak jen to je mo¾né, ale v pøípadì potøeby tento
-trend nedodr¾uje.
+Window Maker je okennÃ­ manaÅ¾er pro X11 se vzhledem NEXTSTEPu. SnaÅ¾Ã­ se
+napodobit vzhled NeXTu jak jen to je moÅ¾nÃ©, ale v pÅ™Ã­padÄ› potÅ™eby tento
+trend nedodrÅ¾uje.
 .SH "VOLBY"
 .TP
 .B \-\-no\-cpp
-zakázat preprocessing konfiguraèních souborù
+zakÃ¡zat preprocessing konfiguraÄnÃ­ch souborÅ¯
 .TP
 .B \-\-no\-dock
-neotvírat Dok aplikací
+neotvÃ­rat Dok aplikacÃ­
 .TP
 .B \-\-no\-clip
-neotvírat Sponku pracovních ploch
+neotvÃ­rat Sponku pracovnÃ­ch ploch
 .TP
 .B \-display host:display.screen
-pou¾ít danou obrazovku.
-Na strojích s více obrazovkami bude Window Maker automaticky spravovat
-v¹echny obrazovky. Pokud chcete, aby Window Maker spravoval jen specifickou
-obrazovku, musíte zadat èíslo obrazovky pomocí argumentu pøíkazové øádky
+pouÅ¾Ã­t danou obrazovku.
+Na strojÃ­ch s vÃ­ce obrazovkami bude Window Maker automaticky spravovat
+vÅ¡echny obrazovky. Pokud chcete, aby Window Maker spravoval jen specifickou
+obrazovku, musÃ­te zadat ÄÃ­slo obrazovky pomocÃ­ argumentu pÅ™Ã­kazovÃ© Å™Ã¡dky
 .B \-display.
-Napøíklad, pokud chcete, aby Window Maker spravoval jen obrazovku 1, spus»te ho
+NapÅ™Ã­klad, pokud chcete, aby Window Maker spravoval jen obrazovku 1, spusÅ¥te ho
 takto:
 .B wmaker -display :0.1
 .TP
 .B \-\-version
-vypí¹e verzi a ukonèí se
+vypÃ­Å¡e verzi a ukonÄÃ­ se
 .TP
 .B \-\-visual\-id
-urèí èísla obrazového re¾imu. Spus»te
+urÄÃ­ ÄÃ­sla obrazovÃ©ho reÅ¾imu. SpusÅ¥te
 .BR xdpyinfo (1)
-pro seznam obrazovıch re¾imù dostupnıch na va¹em displeji.
+pro seznam obrazovÃ½ch reÅ¾imÅ¯ dostupnÃ½ch na vaÅ¡em displeji.
 .TP
 .B \-\-help
-vypí¹e krátkı pomocnı text
+vypÃ­Å¡e krÃ¡tkÃ½ pomocnÃ½ text
 .PP
 .SH SOUBORY
 .TP
 .B ~/GNUstep/Defaults/WindowMaker
-v¹eobecné nastavení Window Makera.
+vÅ¡eobecnÃ© nastavenÃ­ Window Makera.
 .TP
 .B ~/GNUstep/Defaults/WMState
-informace o Doku a Sponce. Neditujte za bìhu Window Makera. Bude
-pøepsanı.
+informace o Doku a Sponce. Neditujte za bÄ›hu Window Makera. Bude
+pÅ™epsanÃ½.
 .TP
 .B ~/GNUstep/Defaults/WMRootMenu
-Obsahuje jméno souboru, z kterého se má naèíst hlavní menu nebo
-menu samotné ve formátu proplist.
+Obsahuje jmÃ©no souboru, z kterÃ©ho se mÃ¡ naÄÃ­st hlavnÃ­ menu nebo
+menu samotnÃ© ve formÃ¡tu proplist.
 .TP
 .B ~/GNUstep/Defaults/WMWindowAttributes
-Atributy pro rùzné tøídy a instance aplikací. Pou¾ijte editor nastavení
-(stisknìte pravé tlaèítko my¹i na horní li¹tì aplikace, zvolte Atributy)
-namísto pøímého editování tohoto souboru. Je jen málo nastavení, která
-nejsou dostupná z editora nastavení.
+Atributy pro rÅ¯znÃ© tÅ™Ã­dy a instance aplikacÃ­. PouÅ¾ijte editor nastavenÃ­
+(stisknÄ›te pravÃ© tlaÄÃ­tko myÅ¡i na hornÃ­ liÅ¡tÄ› aplikace, zvolte Atributy)
+namÃ­sto pÅ™Ã­mÃ©ho editovÃ¡nÃ­ tohoto souboru. Je jen mÃ¡lo nastavenÃ­, kterÃ¡
+nejsou dostupnÃ¡ z editora nastavenÃ­.
 .TP
 .B /usr/share/WindowMaker/Defaults/
-V¹echny vı¹e uvedené soubory se NAèÍTAJÍ odtud. Pokud se je nepodaøí
-najít, kromì WMState, kterı se odtud ZKOPÍRUJE. Nezále¾í na tom, odkud
-jsou naèítané. Pokud je potøeba zapsat zmìnu konfigurace zpìt do tìchto
-souborù, zapí¹ou se do u¾ivatelskıch souborù.
+VÅ¡echny vÃ½Å¡e uvedenÃ© soubory se NAÄÃTAJÃ odtud. Pokud se je nepodaÅ™Ã­
+najÃ­t, kromÄ› WMState, kterÃ½ se odtud ZKOPÃRUJE. NezÃ¡leÅ¾Ã­ na tom, odkud
+jsou naÄÃ­tanÃ©. Pokud je potÅ™eba zapsat zmÄ›nu konfigurace zpÄ›t do tÄ›chto
+souborÅ¯, zapÃ­Å¡ou se do uÅ¾ivatelskÃ½ch souborÅ¯.
 .TP
 .B ~/GNUstep/Library/WindowMaker/autostart
-Tento skript se automaticky vykoná pri startu Window Makera.
+Tento skript se automaticky vykonÃ¡ pri startu Window Makera.
 .TP
 .B ~/GNUstep/Library/WindowMaker/exitscript
-Tento skript se automaticky vykoná bezprostøednì pøed ukonèením Window Makera.
-.B Poznámka:
-Kdy¾ potøebujete spustit z tohoto skriptu nìco, co vy¾aduje spu¹tìnı X server,
-tak nepou¾ívejte na ukonèení Window Makera pøíkaz
+Tento skript se automaticky vykonÃ¡ bezprostÅ™ednÄ› pÅ™ed ukonÄenÃ­m Window Makera.
+.B PoznÃ¡mka:
+KdyÅ¾ potÅ™ebujete spustit z tohoto skriptu nÄ›co, co vyÅ¾aduje spuÅ¡tÄ›nÃ½ X server,
+tak nepouÅ¾Ã­vejte na ukonÄenÃ­ Window Makera pÅ™Ã­kaz
 .I SHUTDOWN
-z hlavního menu. Jinak se mù¾e stát, ¾e X server se ukonèí døív ne¾ se vykoná
+z hlavnÃ­ho menu. Jinak se mÅ¯Å¾e stÃ¡t, Å¾e X server se ukonÄÃ­ dÅ™Ã­v neÅ¾ se vykonÃ¡
 tento skript.
 .TP
 .B ~/GNUstep/Library/WindowMaker/
-Soubor menu, jeho¾ název je uveden v souboru WMRootMenu, se hledá zde...
+Soubor menu, jehoÅ¾ nÃ¡zev je uveden v souboru WMRootMenu, se hledÃ¡ zde...
 .TP
 .B /etc/X11/WindowMaker/
-a zde, v tomto poøadí, pokud název není absolutní cesta.
+a zde, v tomto poÅ™adÃ­, pokud nÃ¡zev nenÃ­ absolutnÃ­ cesta.
 .TP
 .B ~/GNUstep/Library/WindowMaker/Pixmaps/
-Zde hledá Window Maker obrázky
+Zde hledÃ¡ Window Maker obrÃ¡zky
 .TP
 .B ~/GNUstep/Library/WindowMaker/Backgrounds/
-Zde hledá Window Maker pozadí
+Zde hledÃ¡ Window Maker pozadÃ­
 .TP
 .B ~/GNUstep/Library/WindowMaker/Styles/
-Zde hledá Window Maker soubory se styly (ne úplnì... vypadá to tak, ale
-i tak musíte zadat úplnou cestu. Je to jen vyhrazené místo, aby byly
-vìci pìknì uspoøádané)
+Zde hledÃ¡ Window Maker soubory se styly (ne ÃºplnÄ›... vypadÃ¡ to tak, ale
+i tak musÃ­te zadat Ãºplnou cestu. Je to jen vyhrazenÃ© mÃ­sto, aby byly
+vÄ›ci pÄ›knÄ› uspoÅ™Ã¡danÃ©)
 .TP
 .B ~/GNUstep/Library/WindowMaker/Themes/
-Zde hledá Window Maker soubory s tématy (viz. vı¹e)
+Zde hledÃ¡ Window Maker soubory s tÃ©maty (viz. vÃ½Å¡e)
 .TP
 .B /usr/share/WindowMaker/Pixmaps/
-Obrázky spoloèné pro celı systém se nacházejí zde...
+ObrÃ¡zky spoloÄnÃ© pro celÃ½ systÃ©m se nachÃ¡zejÃ­ zde...
 .TP
 .B /usr/share/WindowMaker/Pixmaps/
 a zde.
 .TP
 .B /usr/share/WindowMaker/Styles/
-Styly spoloèné pro celı systém se nacházejí zde
+Styly spoloÄnÃ© pro celÃ½ systÃ©m se nachÃ¡zejÃ­ zde
 .TP
 .B /usr/share/WindowMaker/Themes/
-A teï to zkuste sami... ;-)
-.SH PROMÌNNÉ PROSØEDÍ
+A teÄ to zkuste sami... ;-)
+.SH PROMÄšNNÃ‰ PROSÅ˜EDÃ
 .IP WMAKER_USER_ROOT
-specifikuje cestu k adresáøi Defaults. "Defaults/" je pøidán k této
-promìnné, èím¾ se urèí umístìní databází. Pokud promìnná není nastavená,
-ta její implicitní hodnota je "~/GNUstep"
+specifikuje cestu k adresÃ¡Å™i Defaults. "Defaults/" je pÅ™idÃ¡n k tÃ©to
+promÄ›nnÃ©, ÄÃ­mÅ¾ se urÄÃ­ umÃ­stÄ›nÃ­ databÃ¡zÃ­. Pokud promÄ›nnÃ¡ nenÃ­ nastavenÃ¡,
+ta jejÃ­ implicitnÃ­ hodnota je "~/GNUstep"
 .IP GNUSTEP_LOCAL_ROOT
-specifikuje umístìní systémového \fBlokálního\fP GNUstep adresáøe (to
-je u¾iteèné v pøípadì, ¾e umístìní adresáøe spoleèného pro celı systém je
-ve skuteènosti spoleèné pro celou sí»). Kdy¾ je tato promìnná prázdna, pou¾ije
+specifikuje umÃ­stÄ›nÃ­ systÃ©movÃ©ho \fBlokÃ¡lnÃ­ho\fP GNUstep adresÃ¡Å™e (to
+je uÅ¾iteÄnÃ© v pÅ™Ã­padÄ›, Å¾e umÃ­stÄ›nÃ­ adresÃ¡Å™e spoleÄnÃ©ho pro celÃ½ systÃ©m je
+ve skuteÄnosti spoleÄnÃ© pro celou sÃ­Å¥). KdyÅ¾ je tato promÄ›nnÃ¡ prÃ¡zdna, pouÅ¾ije
 se GNUSTEP_SYSTEM_ROOT.
 .IP GNUSTEP_SYSTEM_ROOT
-specifikuje umístìní systémového GNUstep adresáøe. Pokud je tato promìnná
-prázdna, tak její implicitní hodnota je /etc/GNUstep
-.SH PODÍVEJTE SE TAKÉ
+specifikuje umÃ­stÄ›nÃ­ systÃ©movÃ©ho GNUstep adresÃ¡Å™e. Pokud je tato promÄ›nnÃ¡
+prÃ¡zdna, tak jejÃ­ implicitnÃ­ hodnota je /etc/GNUstep
+.SH PODÃVEJTE SE TAKÃ‰
 The Window Maker User Guide
-(U¾ivatelská pøíruèka Window Makera)
+(UÅ¾ivatelskÃ¡ pÅ™Ã­ruÄka Window Makera)
 .PP
 The Window Maker FAQ
-(Èasto kladené dotazy)
+(ÄŒasto kladenÃ© dotazy)
 .PP
 .BR X (7),
 .BR wdwrite (1),
@@ -140,9 +140,9 @@ The Window Maker FAQ
 .BR setstyle (1),
 .BR wmsetbg (1)
 .SH AUTOR
-Autoøi Window Makera jsou Alfredo K. Kojima <kojima@windowmaker.info>,
-Dan Pascu <dan@windowmaker.info> a mnoho dal¹ích lidí z celého svìta.
+AutoÅ™i Window Makera jsou Alfredo K. Kojima <kojima@windowmaker.info>,
+Dan Pascu <dan@windowmaker.info> a mnoho dalÅ¡Ã­ch lidÃ­ z celÃ©ho svÄ›ta.
 .PP
-Tuto manuálovou stránku napsal Marcelo E. Magallon, <mmagallo@debian.org>.
+Tuto manuÃ¡lovou strÃ¡nku napsal Marcelo E. Magallon, <mmagallo@debian.org>.
 .PP
-Do èe¹tiny pøelo¾il Jiøí Hnídek <jiri.hnidek@vslib.cz>
+Do ÄeÅ¡tiny pÅ™eloÅ¾il JiÅ™Ã­ HnÃ­dek <jiri.hnidek@vslib.cz>
