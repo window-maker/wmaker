@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.5
+Type=Application
+Name=WPrefs
+Comment=Window Maker Preferences
+TryExec=#wprefs_bindir#/WPrefs
+Exec=WPrefs
+Icon=#wprefs_datadir#/WPrefs.xpm
+Categories=Settings;DesktopSettings;

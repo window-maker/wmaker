@@ -10,9 +10,20 @@ wpdatadir = @wprefs_datadir@
 
 wpdata_DATA = WPrefs.tiff WPrefs.xpm
 
+applicationsdir = @datadir@/applications
+
+applications_DATA = WPrefs.desktop
+
+WPrefs.desktop: WPrefs.desktop.in
+	$(AM_V_GEN)sed -e "s:#wprefs_bindir#:${wprefs_bindir}:" \
+		       -e "s:#wprefs_datadir#:${wprefs_datadir}:" $< > $@
+
 EXTRA_DIST = $(wpdata_DATA) \
 	KeyboardSettings.c \
-	Themes.c
+	Themes.c \
+	WPrefs.desktop.in
+
+DISTCLEANFILES = WPrefs.desktop
 
 WPrefs_SOURCES = \
 	main.c \
