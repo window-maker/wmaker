@@ -77,7 +77,7 @@ nodist_prefsdata_DATA = $(GENERATED_MENUS)
 xsessionsdir = @datadir@/xsessions
 xsessions_DATA = wmaker.desktop
 
-EXTRA_DIST = $(addsuffix .in, $(GENERATED_MENUS))
+EXTRA_DIST = $(addsuffix .in, $(GENERATED_MENUS)) wmaker.desktop
 
 CLEANFILES = $(GENERATED_MENUS)
 
