@@ -3009,12 +3009,25 @@ static void swapDock(WDock *dock)
 	WAppIcon *btn;
 	int x, i;
 
-	if (dock->on_right_side)
-		x = dock->x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
-	else
-		x = dock->x_pos = DOCK_EXTRA_SPACE;
+
+	if (wPreferences.keep_dock_on_primary_head) {
+		WMRect rect;
+
+		rect = wGetRectForHead(scr, scr->xine_info.primary_head);
+		x = rect.pos.x;
+		if (dock->on_right_side)
+			x += rect.size.width - ICON_SIZE - DOCK_EXTRA_SPACE;
+		else
+			x += DOCK_EXTRA_SPACE;
+	} else {
+		if (dock->on_right_side)
+			x = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
+		else
+			x = DOCK_EXTRA_SPACE;
+	}
 
 	swapDrawers(scr, x);
+	dock->x_pos = x;
 
 	for (i = 0; i < dock->max_icons; i++) {
 		btn = dock->icon_array[i];
