@@ -521,6 +521,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.minipreview_size, getInt, NULL, NULL, NULL},
 	{"IgnoreGtkHints", "NO", NULL,
 	    &wPreferences.ignore_gtk_decoration_hints, getBool, NULL, NULL, NULL},
+	{"KeepDockOnPrimaryHead", "NO", NULL,
+	    &wPreferences.keep_dock_on_primary_head, getBool, NULL, NULL, NULL},
 
 	/* style options */
 

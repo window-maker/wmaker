@@ -405,6 +405,7 @@ extern struct WPreferences {
 	char ignore_gtk_decoration_hints;
 
 	char dont_blink;                   /* do not blink icon selection */
+	char keep_dock_on_primary_head;    /* keep dock on primary head */
 
 	/* Appearance options */
 	char new_style;                    /* Use newstyle buttons */
