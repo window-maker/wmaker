@@ -1,6 +1,15 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+-- 0.95.10
+
+Keep dock on primary head
+-------------------------
+
+To keep the dock on the primary head in a multi-head setup, set the option
+"KeepDockOnPrimaryHead" in ~/GNUstep/Defaults/WindowMaker to "YES" or click
+"Keep dock on primary head" under the WPrefs "Expert User Preferences" tab.
+
 -- 0.95.9
 
 Configurable SwitchPanel
