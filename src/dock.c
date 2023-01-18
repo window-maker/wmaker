@@ -814,6 +814,29 @@ static void unhideHereCallback(WMenu *menu, WMenuEntry *entry)
 	wUnhideApplication(wapp, False, True);
 }
 
+static int getDockXPosition(WScreen *scr, Bool on_right_side)
+{
+	int x;
+
+	if (wPreferences.keep_dock_on_primary_head) {
+		WMRect rect;
+
+		rect = wGetRectForHead(scr, scr->xine_info.primary_head);
+		x = rect.pos.x;
+		if (on_right_side)
+			x += rect.size.width - ICON_SIZE - DOCK_EXTRA_SPACE;
+		else
+			x += DOCK_EXTRA_SPACE;
+	} else {
+		if (on_right_side)
+			x = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
+		else
+			x = DOCK_EXTRA_SPACE;
+	}
+
+	return x;
+}
+
 /* Name is only used when type == WM_DRAWER and when restoring a specific
  * drawer, with a specific name. When creating a drawer, leave name to NULL
  * and mainIconCreate will find the first unused unique name */
@@ -3010,22 +3033,7 @@ static void swapDock(WDock *dock)
 	int x, i;
 
 
-	if (wPreferences.keep_dock_on_primary_head) {
-		WMRect rect;
-
-		rect = wGetRectForHead(scr, scr->xine_info.primary_head);
-		x = rect.pos.x;
-		if (dock->on_right_side)
-			x += rect.size.width - ICON_SIZE - DOCK_EXTRA_SPACE;
-		else
-			x += DOCK_EXTRA_SPACE;
-	} else {
-		if (dock->on_right_side)
-			x = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
-		else
-			x = DOCK_EXTRA_SPACE;
-	}
-
+	x = getDockXPosition(scr, dock->on_right_side);
 	swapDrawers(scr, x);
 	dock->x_pos = x;
 
