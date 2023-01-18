@@ -106,6 +106,7 @@
 	SwitchPanelOnlyOpen = NO;
 	MiniPreviewSize = 128;
 	IgnoreGtkHints = NO;
+	KeepDockOnPrimaryHead = NO;
 	MenuStyle = normal;
 	WidgetColor = (solid, gray);
 	WorkspaceSpecificBack = ();
