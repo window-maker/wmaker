@@ -154,6 +154,7 @@ static WDECallbackUpdate setModifierKeyLabels;
 
 static WDECallbackConvert getCursor;
 static WDECallbackUpdate setCursor;
+static WDECallbackUpdate updateDock        ;
 
 /*
  * Tables to convert strings to enumeration values.
@@ -522,7 +523,8 @@ WDefaultEntry optionList[] = {
 	{"IgnoreGtkHints", "NO", NULL,
 	    &wPreferences.ignore_gtk_decoration_hints, getBool, NULL, NULL, NULL},
 	{"KeepDockOnPrimaryHead", "NO", NULL,
-	    &wPreferences.keep_dock_on_primary_head, getBool, NULL, NULL, NULL},
+	    &wPreferences.keep_dock_on_primary_head, getBool, updateDock,
+	    NULL, NULL},
 
 	/* style options */
 
@@ -3482,6 +3484,18 @@ static int setCursor(WScreen * scr, WDefaultEntry * entry, void *tdata, void *ex
 	if (widx == WCUR_ROOT && *cursor != None) {
 		XDefineCursor(dpy, scr->root_win, *cursor);
 	}
+
+	return 0;
+}
+
+static int updateDock(WScreen * scr, WDefaultEntry * entry,
+			      void *tdata, void *extra_data) {
+	(void) entry;
+	(void) tdata;
+	(void) extra_data;
+
+	if (scr->dock)
+		wDockSwap(scr->dock);
 
 	return 0;
 }
