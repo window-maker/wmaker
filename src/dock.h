@@ -91,6 +91,7 @@ void wDockTrackWindowLaunch(WDock *dock, Window window);
 WAppIcon *wDockFindIconForWindow(WDock *dock, Window window);
 void wDockDoAutoLaunch(WDock *dock, int workspace);
 void wDockLaunchWithState(WAppIcon *btn, WSavedState *state);
+void wDockSwap(WDock *dock);
 
 #ifdef USE_DOCK_XDND
 int wDockReceiveDNDDrop(WScreen *scr, XEvent *event);

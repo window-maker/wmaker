@@ -3032,7 +3032,7 @@ static void moveDock(WDock *dock, int new_x, int new_y)
 	}
 }
 
-static void swapDock(WDock *dock)
+void wDockSwap(WDock *dock)
 {
 	WScreen *scr = dock->screen_ptr;
 	WAppIcon *btn;
@@ -3778,7 +3778,7 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				if (now_on_right != dock->on_right_side)
 				{
 					dock->on_right_side = now_on_right;
-					swapDock(dock);
+					wDockSwap(dock);
 					wArrangeIcons(scr, False);
 				}
 				// Also perform the vertical move
