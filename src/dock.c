@@ -859,7 +859,7 @@ static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name)
 		btn = wAppIconCreateForDock(scr, NULL, "Logo", "WMDock", TILE_NORMAL);
 		if (wPreferences.flags.clip_merged_in_dock)
 			btn->icon->core->descriptor.handle_expose = clipIconExpose;
-		x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
+		x_pos = getDockXPosition(scr, True);
 		break;
 	case WM_DRAWER:
 		if (name == NULL)
