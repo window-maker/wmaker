@@ -1846,11 +1846,17 @@ WDock *wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
 					dock->x_pos = scr->scr_width - ICON_SIZE;
 				}
 			} else {
-				if (dock->x_pos >= 0) {
-					dock->x_pos = DOCK_EXTRA_SPACE;
+				int left, right, midpoint;
+
+				left = getDockXPosition(scr, False);
+				right = getDockXPosition(scr, True);
+				midpoint = (left + right) / 2;
+
+				if (dock->x_pos < midpoint) {
+					dock->x_pos = left;
 					dock->on_right_side = 0;
 				} else {
-					dock->x_pos = scr->scr_width - DOCK_EXTRA_SPACE - ICON_SIZE;
+					dock->x_pos = right;
 					dock->on_right_side = 1;
 				}
 			}
