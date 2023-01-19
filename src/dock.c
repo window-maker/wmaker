@@ -3622,7 +3622,10 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 			x_pos = scr->scr_width - dock->menu->frame->core->width - 4;
 		}
 	} else {
-		x_pos = dock->on_right_side ? scr->scr_width - dock->menu->frame->core->width - 3 : 0;
+		x_pos = dock->x_pos;
+		if (dock->on_right_side)
+			x_pos += ICON_SIZE + DOCK_EXTRA_SPACE
+				- dock->menu->frame->core->width - 3;
 	}
 
 	wMenuMapAt(dock->menu, x_pos, event->xbutton.y_root + 2, False);
