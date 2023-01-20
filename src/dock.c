@@ -1568,7 +1568,7 @@ static WMPropList *dockSaveState(WDock *dock)
 		WMPutInPLDictionary(dock_state, key, list);
 		WMReleasePropList(key);
 
-		snprintf(buffer, sizeof(buffer), "%i,%i", (dock->on_right_side ? -ICON_SIZE : 0), dock->y_pos);
+		snprintf(buffer, sizeof(buffer), "%i,%i", dock->x_pos, dock->y_pos);
 		value = WMCreatePLString(buffer);
 		WMPutInPLDictionary(dock_state, dPosition, value);
 		WMReleasePropList(value);
