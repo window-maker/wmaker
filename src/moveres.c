@@ -1199,46 +1199,65 @@ updateWindowPosition(WWindow * wwin, MoveData * data, Bool doResistance,
 static void draw_snap_frame(WWindow *wwin, int direction)
 {
 	WScreen *scr;
+	int head, x, y;
+	unsigned int width, height;
+	WMRect rect;
 
 	scr = wwin->screen_ptr;
+	head = wGetHeadForWindow(wwin);
+	rect = wGetRectForHead(scr, head);
+
+	x = rect.pos.x;
+	y = rect.pos.y;
+	width = rect.size.width;
+	height = rect.size.height;
 
 	switch (direction) {
 	case SNAP_LEFT:
-		drawTransparentFrame(wwin, 0, 0, scr->scr_width/2, scr->scr_height);
+		width /= 2;
 		break;
 
 	case SNAP_RIGHT:
-		drawTransparentFrame(wwin, scr->scr_width/2, 0, scr->scr_width/2, scr->scr_height);
+		width /= 2;
+		x += width;
 		break;
 
 	case SNAP_TOP:
-		if (wPreferences.snap_to_top_maximizes_fullscreen)
-			drawTransparentFrame(wwin, 0, 0, scr->scr_width, scr->scr_height);
-		else
-			drawTransparentFrame(wwin, 0, 0, scr->scr_width, scr->scr_height/2);
+		if (!wPreferences.snap_to_top_maximizes_fullscreen)
+			height /= 2;
 		break;
 
 	case SNAP_BOTTOM:
-		drawTransparentFrame(wwin, 0, scr->scr_height/2, scr->scr_width, scr->scr_height/2);
+		height /= 2;
+		y += height;
 		break;
 
 	case SNAP_TOPLEFT:
-		drawTransparentFrame(wwin, 0, 0, scr->scr_width/2, scr->scr_height/2);
+		width /= 2;
+		height /= 2;
 		break;
 
 	case SNAP_TOPRIGHT:
-		drawTransparentFrame(wwin, scr->scr_width/2, 0, scr->scr_width/2, scr->scr_height/2);
+		width /= 2;
+		height /= 2;
+		x += width;
 		break;
 
 	case SNAP_BOTTOMLEFT:
-		drawTransparentFrame(wwin, 0, scr->scr_height/2, scr->scr_width/2, scr->scr_height/2);
+		width /= 2;
+		height /= 2;
+		y += height;
 		break;
 
 	case SNAP_BOTTOMRIGHT:
-		drawTransparentFrame(wwin, scr->scr_width/2, scr->scr_height/2,
-				     scr->scr_width/2, scr->scr_height/2);
+		width /= 2;
+		height /= 2;
+		x += width;
+		y += height;
 		break;
 	}
+
+	drawTransparentFrame(wwin, x, y, width, height);
 }
 
 static int get_snap_direction(WScreen *scr, int x, int y)
