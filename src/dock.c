@@ -4610,7 +4610,7 @@ static void swapDrawer(WDock *drawer, int new_x)
 {
 	int i;
 
-	drawer->on_right_side = !drawer->on_right_side;
+	drawer->on_right_side = drawer->screen_ptr->dock->on_right_side;
 	drawer->x_pos = new_x;
 
 	for (i = 0; i < drawer->max_icons; i++) {
