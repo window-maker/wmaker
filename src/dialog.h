@@ -22,6 +22,7 @@
 #ifndef WMDIALOG_H_
 #define WMDIALOG_H_
 
+#include "screen.h"
 
 enum {
     WMAbort=0,
