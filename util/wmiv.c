@@ -750,7 +750,7 @@ int main(int argc, char **argv)
 
 	dpy = XOpenDisplay(NULL);
 	if (!dpy) {
-		fprintf(stderr, "Error: can't open display");
+		fprintf(stderr, "Error: can't open display\n");
 		linked_list_free(&list);
 		return EXIT_FAILURE;
 	}
