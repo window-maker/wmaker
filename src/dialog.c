@@ -36,6 +36,7 @@
 #include <dirent.h>
 #include <limits.h>
 #include <errno.h>
+#include <time.h>
 
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
@@ -1153,7 +1154,7 @@ typedef struct {
 #define COPYRIGHT_TEXT  \
     "Copyright \xc2\xa9 1997-2006 Alfredo K. Kojima\n"\
     "Copyright \xc2\xa9 1998-2006 Dan Pascu\n"\
-    "Copyright \xc2\xa9 2013-2020 Window Maker Developers Team"
+    "Copyright \xc2\xa9 2013-%hu Window Maker Developers Team"
 
 static InfoPanel *infoPanel = NULL;
 
@@ -1194,6 +1195,16 @@ void wShowInfoPanel(WScreen *scr)
 	};
 	int wmScaleWidth, wmScaleHeight;
 	int pwidth, pheight;
+	int current_year = 2020;
+	time_t s;
+	struct tm *current_time;
+
+	s = time(NULL);
+	if (s) {
+		current_time = localtime(&s);
+		if (current_time->tm_year > (current_year - 1900))
+			current_year = current_time->tm_year + 1900;
+	}
 
 	if (infoPanel) {
 		if (infoPanel->scr == scr) {
@@ -1276,7 +1287,9 @@ void wShowInfoPanel(WScreen *scr)
 	WMResizeWidget(panel->copyrL, WMScaleX(360), WMScaleY(60));
 	WMMoveWidget(panel->copyrL, WMScaleX(15), WMScaleY(190));
 	WMSetLabelTextAlignment(panel->copyrL, WALeft);
-	WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
+
+	snprintf(buffer, sizeof(buffer), COPYRIGHT_TEXT, current_year);
+	WMSetLabelText(panel->copyrL, buffer);
 	font = WMSystemFontOfSize(scr->wmscreen, WMScaleY(11));
 	if (font) {
 		WMSetLabelFont(panel->copyrL, font);
