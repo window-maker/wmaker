@@ -1320,14 +1320,15 @@ void wShowInfoPanel(WScreen *scr)
 		break;
 	}
 
-#if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO)
+#if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO2)
+
 	{
-		struct mallinfo ma = mallinfo();
+		struct mallinfo2 ma = mallinfo2();
 		snprintf(buffer, sizeof(buffer),
 #ifdef DEBUG
-					_("Total memory allocated: %i kB (in use: %i kB, %d free chunks).\n"),
+					_("Total memory allocated: %lu kB (in use: %lu kB, %lu free chunks).\n"),
 #else
-					_("Total memory allocated: %i kB (in use: %i kB).\n"),
+					_("Total memory allocated: %lu kB (in use: %lu kB).\n"),
 #endif
 					(ma.arena + ma.hblkhd) / 1024,
 					(ma.uordblks + ma.hblkhd) / 1024
