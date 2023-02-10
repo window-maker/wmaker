@@ -51,7 +51,7 @@ static WMColor *findCloseColor(WMScreen * scr, unsigned short red, unsigned shor
 	color->refCount = 1;
 	color->color = xcolor;
 	color->alpha = alpha;
-	color->flags.exact = 1;
+	color->flags.exact = 0;
 	color->gc = NULL;
 
 	return color;
