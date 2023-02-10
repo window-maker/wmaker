@@ -61,6 +61,7 @@ struct SwitchPanel {
 
 	WMFont *font;
 	WMColor *white;
+	WMColor *gray;
 };
 
 /* these values will be updated whenever the switch panel
@@ -154,11 +155,9 @@ static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim,
 				  border_space + pos.y, back->width, back->height, 0, 0);
 		} else {
 			RColor color;
-			WMScreen *wscr = WMWidgetScreen(icon);
-			color.red = 255;
-			color.red = WMRedComponentOfColor(WMGrayColor(wscr)) >> 8;
-			color.green = WMGreenComponentOfColor(WMGrayColor(wscr)) >> 8;
-			color.blue = WMBlueComponentOfColor(WMGrayColor(wscr)) >> 8;
+			color.red = WMRedComponentOfColor(panel->gray) >> 8;
+			color.green = WMGreenComponentOfColor(panel->gray) >> 8;
+			color.blue = WMBlueComponentOfColor(panel->gray) >> 8;
 			RFillImage(back, &color);
 		}
 
@@ -454,6 +453,7 @@ WSwitchPanel *wInitSwitchPanel(WScreen *scr, WWindow *curwin, Bool class_only)
 	}
 
 	panel->white = WMWhiteColor(scr->wmscreen);
+	panel->gray = WMGrayColor(scr->wmscreen);
 	panel->font = WMBoldSystemFontOfSize(scr->wmscreen, WMScaleY(12));
 	panel->icons = WMCreateArray(count);
 	panel->images = WMCreateArray(count);
@@ -588,6 +588,9 @@ void wSwitchPanelDestroy(WSwitchPanel *panel)
 
 	if (panel->white)
 		WMReleaseColor(panel->white);
+
+	if (panel->gray)
+		WMReleaseColor(panel->gray);
 
 	wfree(panel);
 }

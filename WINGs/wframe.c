@@ -253,6 +253,9 @@ WMFrame *WMCreateFrame(WMWidget * parent)
 
 static void destroyFrame(Frame * fPtr)
 {
+	if (fPtr->textColor)
+		WMReleaseColor(fPtr->textColor);
+
 	if (fPtr->caption)
 		wfree(fPtr->caption);
 

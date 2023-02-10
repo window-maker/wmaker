@@ -91,7 +91,7 @@ WMColor *WMCreateRGBColor(WMScreen * scr, unsigned short red, unsigned short gre
 		color = findCloseColor(scr, red, green, blue, 0xffff);
 	}
 	if (!color)
-		color = WMBlackColor(scr);
+		color = scr->black;
 
 	return color;
 }
@@ -117,7 +117,7 @@ WMColor *WMCreateRGBAColor(WMScreen * scr, unsigned short red, unsigned short gr
 		color = findCloseColor(scr, red, green, blue, alpha);
 	}
 	if (!color)
-		color = WMBlackColor(scr);
+		color = scr->black;
 
 	return color;
 }
