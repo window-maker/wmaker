@@ -422,7 +422,7 @@ static char *get_icon_cache_path(void)
 {
 	const char *prefix;
 	char *path;
-	int len, ret;
+	int ret;
 
 	prefix = wuserdatapath();
 	path = wstrconcat(prefix, CACHE_ICON_PATH "/");
