@@ -320,7 +320,7 @@ char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 				/* conditional mask check to get numeric keypad keys */
 				ksym = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, ev.xkey.state & numlock_mask?1:0);
 			else
-				ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
+				ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, ev.xkey.state & numlock_mask?1:0);
 
 			if (!IsModifierKey(ksym)) {
 				if (convert_case) {
