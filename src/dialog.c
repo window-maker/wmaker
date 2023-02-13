@@ -1220,7 +1220,11 @@ void wShowInfoPanel(WScreen *scr)
 
 	panel->win = WMCreateWindow(scr->wmscreen, "info");
 	WMGetScaleBaseFromSystemFont(scr->wmscreen, &wmScaleWidth, &wmScaleHeight);
+#if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO2) && defined(DEBUG)
+	pwidth = WMScaleX(412);
+#else
 	pwidth = WMScaleX(382);
+#endif
 	pheight = WMScaleY(250);
 	WMResizeWidget(panel->win, pwidth, pheight);
 
@@ -1321,7 +1325,6 @@ void wShowInfoPanel(WScreen *scr)
 	}
 
 #if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO2)
-
 	{
 		struct mallinfo2 ma = mallinfo2();
 		snprintf(buffer, sizeof(buffer),
@@ -1395,7 +1398,11 @@ void wShowInfoPanel(WScreen *scr)
 #endif
 
 	panel->infoL = WMCreateLabel(panel->win);
+#if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO2) && defined(DEBUG)
+	WMResizeWidget(panel->infoL, WMScaleX(380), WMScaleY(80));
+#else
 	WMResizeWidget(panel->infoL, WMScaleX(350), WMScaleY(80));
+#endif
 	WMMoveWidget(panel->infoL, WMScaleX(15), WMScaleY(115));
 	WMSetLabelText(panel->infoL, strbuf);
 	font = WMSystemFontOfSize(scr->wmscreen, WMScaleY(11));
