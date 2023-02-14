@@ -25,7 +25,7 @@ static void handleKeyPress(XEvent * event, void *clientData)
 
 	XLookupString(&event->xkey, NULL, 0, &ksym, NULL);
 
-	if (ksym == XK_Return && panel->defBtn) {
+	if ((ksym == XK_Return || ksym == XK_KP_Enter) && panel->defBtn) {
 		WMPerformButtonClick(panel->defBtn);
 	} else if (ksym == XK_Escape) {
 		if (panel->altBtn || panel->othBtn) {
@@ -421,7 +421,7 @@ static void handleKeyPress2(XEvent * event, void *clientData)
 
 	XLookupString(&event->xkey, NULL, 0, &ksym, NULL);
 
-	if (ksym == XK_Return && panel->defBtn) {
+	if ((ksym == XK_Return || ksym == XK_KP_Enter) && panel->defBtn) {
 		WMPerformButtonClick(panel->defBtn);
 	} else if (ksym == XK_Escape) {
 		if (panel->altBtn) {
@@ -709,7 +709,7 @@ static void handleKeyPress3(XEvent * event, void *clientData)
 
 	XLookupString(&event->xkey, NULL, 0, &ksym, NULL);
 
-	if (ksym == XK_Return && panel->defBtn) {
+	if ((ksym == XK_Return || ksym == XK_KP_Enter) && panel->defBtn) {
 		WMPerformButtonClick(panel->defBtn);
 	} else if (ksym == XK_Escape) {
 		if (panel->altBtn) {
