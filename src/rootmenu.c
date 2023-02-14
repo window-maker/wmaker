@@ -186,7 +186,7 @@ static void exitCommand(WMenu * menu, WMenuEntry * entry)
 
 		oldSaveSessionFlag = wPreferences.save_session_on_exit;
 		r = wExitDialog(menu->frame->screen_ptr, _("Exit"),
-				_("Exit window manager?"), _("Exit"), _("Cancel"), NULL);
+				_("Are you sure you want to quit Window Maker?"), _("Exit"), _("Cancel"), NULL);
 
 		if (r == WAPRDefault) {
 			result = R_EXIT;
