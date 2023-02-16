@@ -1209,13 +1209,12 @@ char *getPrettyOSName(void)
 							if ((c = *src++) == '\0')
 								break;
 							*dst++ = c;
-						}
-						else if (c != '"' && c != '\'')
+						} else if (c != '"' && c != '\'')
 							*dst++ = c;
 					}
 					*dst = '\0';
-					posn = malloc(strlen(token));
-					strncpy(posn, token, strlen(token));
+					posn = wmalloc(strlen(token) + 1);
+					strcpy(posn, token);
 				}
 			}
 			break;
