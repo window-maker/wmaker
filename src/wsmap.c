@@ -337,9 +337,9 @@ static  WMPixmap *get_mini_workspace(WWorkspaceMap *wsmap, int index)
 
 static void create_mini_workspace(WScreen *scr, WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 {
-	int workspace_index;
+	unsigned short workspace_index;
 	int mini_workspace_cnt;
-	char name[10];
+	char name[6];
 	WMButton *mini_workspace_btn;
 	WMPixmap *icon;
 
@@ -363,7 +363,7 @@ static void create_mini_workspace(WScreen *scr, WWorkspaceMap *wsmap, W_Workspac
 			WMReleasePixmap(icon);
 		}
 
-		snprintf(name, sizeof(name), "%d", workspace_index);
+		snprintf(name, sizeof(name), "%hu", workspace_index);
 		WMSetButtonText(mini_workspace_btn, name);
 		WMSetButtonAction(mini_workspace_btn, selected_workspace_callback, wsmap);
 	}
@@ -423,9 +423,9 @@ static WWorkspaceMap *create_workspace_map(WScreen *scr, W_WorkspaceMap *wsmap_a
 
 static void update_mini_workspace(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array, int bulk_of_ten)
 {
-	int local_index, general_index;
+	unsigned short local_index, general_index;
 	int mini_workspace_cnt;
-	char name[10];
+	char name[6];
 	WMPixmap *icon;
 
 	if (bulk_of_ten == wsmap_bulk_index)
@@ -448,7 +448,7 @@ static void update_mini_workspace(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_ar
 		if (general_index < wsmap->scr->workspace_count) {
 			/* updating label */
 			WMSetLabelText(wsmap_array[local_index].workspace_label, wsmap->scr->workspaces[general_index]->name);
-			snprintf(name, sizeof(name), "%d", general_index);
+			snprintf(name, sizeof(name), "%hu", general_index);
 			WMSetButtonText(wsmap_array[local_index].workspace_img_button, name);
 
 			/* updating label background*/
