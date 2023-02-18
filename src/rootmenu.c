@@ -148,20 +148,7 @@ static Shortcut *shortcutList = NULL;
 
 static void execCommand(WMenu * menu, WMenuEntry * entry)
 {
-	char *cmdline;
-
-	cmdline = ExpandOptions(menu->frame->screen_ptr, (char *)entry->clientdata);
-
-	XGrabPointer(dpy, menu->frame->screen_ptr->root_win, True, 0,
-		     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
-	XSync(dpy, 0);
-
-	if (cmdline) {
-		ExecuteShellCommand(menu->frame->screen_ptr, cmdline);
-		wfree(cmdline);
-	}
-	XUngrabPointer(dpy, CurrentTime);
-	XSync(dpy, 0);
+	ExecuteInputCommand(menu->frame->screen_ptr, (char *)entry->clientdata);
 }
 
 static void exitCommand(WMenu * menu, WMenuEntry * entry)

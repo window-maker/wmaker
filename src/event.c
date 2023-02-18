@@ -1852,21 +1852,7 @@ static void handleKeyPress(XEvent * event)
 
 	case WKBD_RUN:
 	{
-		char *cmdline;
-
-		cmdline = ExpandOptions(scr, _("exec %A(Run,Type command to run:)"));
-
-		if (cmdline) {
-			XGrabPointer(dpy, scr->root_win, True, 0,
-			     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
-			XSync(dpy, False);
-
-			ExecuteShellCommand(scr, cmdline);
-			wfree(cmdline);
-
-			XUngrabPointer(dpy, CurrentTime);
-			XSync(dpy, False);
-		}
+		ExecuteInputCommand(scr, _("exec %A(Run, Type command:)"));
 		break;
 	}
 

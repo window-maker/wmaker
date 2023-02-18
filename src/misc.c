@@ -679,6 +679,24 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 	return NULL;
 }
 
+void ExecuteInputCommand(WScreen *scr, const char *cmdline)
+{
+	char *cmd;
+
+	cmd = ExpandOptions(scr, cmdline);
+	if (cmd) {
+		XGrabPointer(dpy, scr->root_win, True, 0,
+		     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
+		XSync(dpy, False);
+
+		ExecuteShellCommand(scr, cmd);
+		wfree(cmd);
+
+		XUngrabPointer(dpy, CurrentTime);
+		XSync(dpy, False);
+	}
+}
+
 void ParseWindowName(WMPropList *value, char **winstance, char **wclass, const char *where)
 {
 	char *name;
