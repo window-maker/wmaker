@@ -60,6 +60,8 @@ WArea wGetUsableAreaForHead(WScreen *scr, int head, WArea *totalAreaPtr, Bool no
 
 WMPoint wGetPointToCenterRectInHead(WScreen *scr, int head, int width, int height);
 
+void wGetRectUnion(const WMRect *rect1, const WMRect *rect2, WMRect *dest);
+
 Bool wWindowTouchesHead(WWindow *wwin, int head);
 Bool wAppIconTouchesHead(WAppIcon *aicon, int head);
 

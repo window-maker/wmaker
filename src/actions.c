@@ -912,6 +912,54 @@ void wUnmaximizeWindow(WWindow *wwin)
 	WMPostNotificationName(WMNChangedState, wwin, "maximize");
 }
 
+#ifdef USE_XINERAMA
+void wFullscreenMonitorsWindow(WWindow *wwin, unsigned long top, unsigned long bottom,
+					unsigned long left, unsigned long right)
+{
+	int i;
+	long monitor;
+	WMRect rect1, rect2;
+
+	if ((int)top < wwin->screen_ptr->xine_info.count &&
+	    (int)bottom < wwin->screen_ptr->xine_info.count &&
+	    (int)left < wwin->screen_ptr->xine_info.count &&
+	    (int)right < wwin->screen_ptr->xine_info.count) {
+		wwin->flags.fullscreen_monitors[0] = top;
+		wwin->flags.fullscreen_monitors[1] = bottom;
+		wwin->flags.fullscreen_monitors[2] = left;
+		wwin->flags.fullscreen_monitors[3] = right;
+	} else {
+		wwin->flags.fullscreen_monitors[0] = -1;
+		return;
+	}
+
+	wwin->flags.fullscreen = True;
+	wWindowConfigureBorders(wwin);
+	ChangeStackingLevel(wwin->frame->core, WMFullscreenLevel);
+
+	wwin->bfs_geometry.x = wwin->frame_x;
+	wwin->bfs_geometry.y = wwin->frame_y;
+	wwin->bfs_geometry.width = wwin->frame->core->width;
+	wwin->bfs_geometry.height = wwin->frame->core->height;
+
+	i = 0;
+	monitor = wwin->flags.fullscreen_monitors[i];
+	rect1 = wwin->screen_ptr->xine_info.screens[monitor];
+
+	for (i = 1; i <= 3; i++) {
+		monitor = wwin->flags.fullscreen_monitors[i];
+		rect2 = wwin->screen_ptr->xine_info.screens[monitor];
+		wGetRectUnion(&rect1, &rect2, &rect1);
+	}
+	wWindowConfigure(wwin, rect1.pos.x, rect1.pos.y, rect1.size.width, rect1.size.height);
+
+	wwin->screen_ptr->bfs_focused_window = wwin->screen_ptr->focused_window;
+	wSetFocusTo(wwin->screen_ptr, wwin);
+
+	WMPostNotificationName(WMNChangedState, wwin, "fullscreen");
+}
+#endif
+
 void wFullscreenWindow(WWindow *wwin)
 {
 	int head;

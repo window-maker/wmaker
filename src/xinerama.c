@@ -410,3 +410,33 @@ WMPoint wGetPointToCenterRectInHead(WScreen * scr, int head, int width, int heig
 
 	return p;
 }
+
+/* Find the bounding rect of the union of two rectangles */
+void wGetRectUnion(const WMRect *rect1, const WMRect *rect2, WMRect *dest)
+{
+	int dest_x, dest_y;
+	int dest_w, dest_h;
+
+	dest_x = rect1->pos.x;
+	dest_y = rect1->pos.y;
+	dest_w = rect1->size.width;
+	dest_h = rect1->size.height;
+
+	if (rect2->pos.x < dest_x) {
+		dest_w += dest_x - rect2->pos.x;
+		dest_x = rect2->pos.x;
+	}
+	if (rect2->pos.y < dest_y) {
+		dest_h += dest_y - rect2->pos.y;
+		dest_y = rect2->pos.y;
+	}
+	if (rect2->pos.x + rect2->size.width > dest_x + dest_w)
+		dest_w = rect2->pos.x + rect2->size.width - dest_x;
+	if (rect2->pos.y + rect2->size.height > dest_y + dest_h)
+		dest_h = rect2->pos.y + rect2->size.height - dest_y;
+
+	dest->pos.x = dest_x;
+	dest->pos.y = dest_y;
+	dest->size.width = dest_w;
+	dest->size.height = dest_h;
+}

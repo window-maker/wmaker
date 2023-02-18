@@ -688,6 +688,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	XChangeWindowAttributes(dpy, window, CWEventMask | CWDontPropagate | CWSaveUnder, &attribs);
 	XSetWindowBorderWidth(dpy, window, 0);
 
+	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "DockApp") != 0)
+		wwin->flags.fullscreen_monitors[0] = -1;
+
 	/* get hints from GNUstep app */
 	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "GNUstep") == 0)
 		wwin->flags.is_gnustep = 1;

@@ -75,6 +75,9 @@ void wArrangeIcons(WScreen *scr, Bool arrangeAll);
 
 void wMakeWindowVisible(WWindow *wwin);
 
+void wFullscreenMonitorsWindow(WWindow *wwin, unsigned long top, unsigned long bottom,
+					unsigned long left, unsigned long right);
+
 void wFullscreenWindow(WWindow *wwin);
 void wUnfullscreenWindow(WWindow *wwin);
 
