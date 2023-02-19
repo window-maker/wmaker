@@ -183,8 +183,13 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 		win = wwin->client_win;
 
 	command = GetCommandForWindow(win);
-	if (!command)
-		return NULL;
+	if (!command) {
+		if (wapp->app_icon && wapp->app_icon->command) {
+			command = wmalloc(strlen(wapp->app_icon->command));
+			strcpy(command, wapp->app_icon->command);
+		} else
+			return NULL;
+	}
 
 	if (PropGetWMClass(win, &class, &instance)) {
 		if (class && instance)
