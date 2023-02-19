@@ -142,8 +142,6 @@ static Shortcut *shortcutList = NULL;
  *
  */
 
-#define M_QUICK		1
-
 /* menu commands */
 
 static void execCommand(WMenu * menu, WMenuEntry * entry)
@@ -153,42 +151,8 @@ static void execCommand(WMenu * menu, WMenuEntry * entry)
 
 static void exitCommand(WMenu * menu, WMenuEntry * entry)
 {
-	static int inside = 0;
-	int result;
+	ExecuteExitCommand(menu->frame->screen_ptr, (long)entry->clientdata);
 
-	/* prevent reentrant calls */
-	if (inside)
-		return;
-	inside = 1;
-
-#define R_CANCEL 0
-#define R_EXIT   1
-
-	result = R_CANCEL;
-
-	if ((long)entry->clientdata == M_QUICK) {
-		result = R_EXIT;
-	} else {
-		int r, oldSaveSessionFlag;
-
-		oldSaveSessionFlag = wPreferences.save_session_on_exit;
-		r = wExitDialog(menu->frame->screen_ptr, _("Exit"),
-				_("Are you sure you want to quit Window Maker?"), _("Exit"), _("Cancel"), NULL);
-
-		if (r == WAPRDefault) {
-			result = R_EXIT;
-		} else if (r == WAPRAlternate) {
-			/* Don't modify the "save session on exit" flag if the
-			 * user canceled the operation. */
-			wPreferences.save_session_on_exit = oldSaveSessionFlag;
-		}
-	}
-	if (result == R_EXIT)
-		Shutdown(WSExitMode);
-
-#undef R_EXIT
-#undef R_CANCEL
-	inside = 0;
 }
 
 static void shutdownCommand(WMenu * menu, WMenuEntry * entry)

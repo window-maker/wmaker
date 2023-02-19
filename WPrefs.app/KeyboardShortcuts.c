@@ -156,6 +156,7 @@ static const struct {
 	{ "WindowRelaunchKey", N_("Launch new instance of application") },
 	{ "ScreenSwitchKey",   N_("Switch to Next Screen/Monitor") },
 	{ "RunKey",            N_("Run application") },
+	{ "ExitKey",            N_("Exit Window Maker") },
 	{ "DockRaiseLowerKey", N_("Raise/Lower Dock") },
 	{ "ClipRaiseLowerKey", N_("Raise/Lower Clip") }
 #ifdef XKB_MODELOCK

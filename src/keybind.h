@@ -145,6 +145,9 @@ enum {
 	/* open "run" dialog */
 	WKBD_RUN,
 
+	/* open "exit" dialog */
+	WKBD_EXIT,
+
 #ifdef KEEP_XKB_LOCK_STATUS
 	WKBD_TOGGLE,
 #endif

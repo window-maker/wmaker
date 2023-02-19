@@ -1856,6 +1856,13 @@ static void handleKeyPress(XEvent * event)
 		break;
 	}
 
+	case WKBD_EXIT:
+	{
+		/* quick mode is not allowed to prevent inadvertently call */
+		ExecuteExitCommand(scr, 0);
+		break;
+	}
+
 	case WKBD_NEXTWSLAYER:
 	case WKBD_PREVWSLAYER:
 		{

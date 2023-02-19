@@ -25,6 +25,8 @@
 #include "keybind.h"
 #include "appicon.h"
 
+#define M_QUICK 1
+
 Bool wFetchName(Display *dpy, Window win, char **winname);
 Bool wGetIconName(Display *dpy, Window win, char **iconname);
 Bool UpdateDomainFile(WDDomain * domain);
@@ -46,6 +48,7 @@ char *ShrinkString(WMFont *font, const char *string, int width);
 char *FindImage(const char *paths, const char *file);
 char *ExpandOptions(WScreen * scr, const char *cmdline);
 void ExecuteInputCommand(WScreen *scr, const char *cmdline);
+void ExecuteExitCommand(WScreen *scr, long quickmode);
 char *GetShortcutString(const char *text);
 char *GetShortcutKey(WShortKey key);
 char *EscapeWM_CLASS(const char *name, const char *class);

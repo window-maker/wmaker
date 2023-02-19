@@ -53,6 +53,7 @@
 #include "xmodifier.h"
 #include "main.h"
 #include "event.h"
+#include "shutdown.h"
 
 
 #define ICON_SIZE wPreferences.icon_size
@@ -677,6 +678,46 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 	if (selection)
 		XFree(selection);
 	return NULL;
+}
+
+void ExecuteExitCommand(WScreen *scr, long quickmode)
+{
+	static int inside = 0;
+	int result;
+
+	/* prevent reentrant calls */
+	if (inside)
+		return;
+	inside = 1;
+
+#define R_CANCEL 0
+#define R_EXIT   1
+
+	result = R_CANCEL;
+
+	if (quickmode == M_QUICK) {
+		result = R_EXIT;
+	} else {
+		int r, oldSaveSessionFlag;
+
+		oldSaveSessionFlag = wPreferences.save_session_on_exit;
+		r = wExitDialog(scr, _("Exit"),
+				_("Are you sure you want to quit Window Maker?"), _("Exit"), _("Cancel"), NULL);
+
+		if (r == WAPRDefault) {
+			result = R_EXIT;
+		} else if (r == WAPRAlternate) {
+			/* Don't modify the "save session on exit" flag if the
+			 * user canceled the operation. */
+			wPreferences.save_session_on_exit = oldSaveSessionFlag;
+		}
+	}
+	if (result == R_EXIT)
+		Shutdown(WSExitMode);
+
+#undef R_EXIT
+#undef R_CANCEL
+	inside = 0;
 }
 
 void ExecuteInputCommand(WScreen *scr, const char *cmdline)
