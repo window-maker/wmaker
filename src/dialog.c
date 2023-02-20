@@ -1433,6 +1433,10 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, ", XDnD");
 #endif
 
+#ifdef USE_XRES
+	strbuf = wstrappend(strbuf, ", XRes");
+#endif
+
 #ifdef USE_MAGICK
 	strbuf = wstrappend(strbuf, ", ImageMagick");
 #endif
