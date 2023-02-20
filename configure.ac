@@ -580,6 +580,18 @@ AS_IF([test "x$enable_wmreplace" = "xyes"],
        [define to support ICCCM protocol for window manager replacement])
      supported_xext="$supported_xext WMReplace"])
 
+dnl XRes support
+dnl ==============
+m4_divert_push([INIT_PREPARE])dnl
+AC_ARG_ENABLE([res],
+    [AS_HELP_STRING([--disable-res], [disable resource window extension support])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-res]) ]) ],
+    [enable_res=auto])
+m4_divert_pop([INIT_PREPARE])dnl
+
+WM_XEXT_CHECK_XRES
 
 dnl XShape support
 dnl ==============

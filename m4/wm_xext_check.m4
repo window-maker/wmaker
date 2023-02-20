@@ -16,6 +16,33 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+# WM_XEXT_CHECK_XRES
+# --------------------
+#
+# Check for the X Resource Window extension
+# The check depends on variable 'enable_xshape' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, disable support
+#   auto - detect, disable if not found
+#
+# When found, append appropriate stuff in XLIBS, and append info to
+# the variable 'supported_xext'
+# When not found, append info to variable 'unsupported'
+AC_DEFUN_ONCE([WM_XEXT_CHECK_XRES],
+[WM_LIB_CHECK([XRes], [-lXRes], [XResQueryClientIds], [$XLIBS],
+    [wm_save_CFLAGS="$CFLAGS"
+     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([dnl
+@%:@include <X11/extensions/XRes.h>
+], [dnl
+
+  XResQueryClientIds(NULL, 0, NULL, NULL, NULL);])]
+        [],
+        [AC_MSG_ERROR([found $CACHEVAR but cannot compile using XRes header])])
+     CFLAGS="$wm_save_CFLAGS"],
+    [supported_xext], [XLIBS], [enable_res], [-])dnl
+]) dnl AC_DEFUN
+
+
 # WM_XEXT_CHECK_XSHAPE
 # --------------------
 #

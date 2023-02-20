@@ -29,6 +29,9 @@
 #ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
 #endif	  /* KEEP_XKB_LOCK_STATUS */
+#ifdef USE_XRES
+#include <X11/extensions/XRes.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -475,6 +478,41 @@ Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured)
 	return True;
 }
 
+/* Get the corresponding Process Identification Number of the active window */
+static pid_t getWindowPid(Window win)
+{
+	pid_t pid = -1;
+
+	pid = wNETWMGetPidForWindow(win);
+#ifdef USE_XRES
+	if (pid > 0)
+		return pid;
+	else {
+		XResClientIdSpec spec;
+		int status;
+		long i, num_ids = 0;
+		XResClientIdValue *client_ids = NULL;
+
+		spec.client = win;
+		spec.mask = XRES_CLIENT_ID_PID_MASK;
+
+		status = XResQueryClientIds(dpy, 1, &spec, &num_ids, &client_ids);
+
+		if (status != Success)
+			return -1;
+
+		for (i = 0; i < num_ids; i++) {
+			if (client_ids[i].spec.mask == XRES_CLIENT_ID_PID_MASK) {
+				pid = XResGetClientPid(&client_ids[i]);
+				break;
+			}
+		}
+		XResClientIdsDestroy(num_ids, client_ids);
+	}
+#endif
+	return pid;
+}
+
 static void fixLeaderProperties(WWindow *wwin)
 {
 	XClassHint *classHint;
@@ -487,7 +525,7 @@ static void fixLeaderProperties(WWindow *wwin)
 
 	classHint = XAllocClassHint();
 	clientHints = XGetWMHints(dpy, wwin->client_win);
-	pid = wNETWMGetPidForWindow(wwin->client_win);
+	pid = getWindowPid(wwin->client_win);
 	if (pid > 0)
 		haveCommand = GetCommandForPid(pid, &argv, &argc);
 	else

@@ -56,6 +56,7 @@
 #include "dialog.h"
 #include "main.h"
 #include "monitor.h"
+#include "misc.h"
 
 #include <WINGs/WUtil.h>
 
@@ -354,11 +355,19 @@ Bool RelaunchWindow(WWindow *wwin)
 
 	char **argv;
 	int argc;
+	char *command = NULL;
 
-	if (! XGetCommand(dpy, wwin->client_win, &argv, &argc) || argc == 0 || argv == NULL) {
+	command = GetCommandForWindow(wwin->client_win);
+	if (!command) {
+#ifdef USE_XRES
+		werror("cannot relaunch the application because no associated process found");
+#else
 		werror("cannot relaunch the application because no WM_COMMAND property is set");
+#endif
 		return False;
-	}
+	} else
+		wtokensplit(command, &argv, &argc);
+
 
 	pid_t pid = fork();
 
@@ -384,18 +393,19 @@ Bool RelaunchWindow(WWindow *wwin)
 	} else if (pid < 0) {
 		werror("cannot fork a new process");
 
-		XFreeStringList(argv);
+		wfree(argv);
+		wfree(command);
 		return False;
 	} else {
 		_tuple *data = wmalloc(sizeof(_tuple));
 
 		data->scr = wwin->screen_ptr;
-		data->command = wtokenjoin(argv, argc);
+		data->command = command;
 
 		/* not actually a shell command */
 		wAddDeathHandler(pid, shellCommandHandler, data);
 
-		XFreeStringList(argv);
+		wfree(argv);
 	}
 
 	return True;
