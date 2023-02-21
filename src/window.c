@@ -919,6 +919,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		if (win_state->state->miniaturized > 0 && !WFLAGP(wwin, no_miniaturizable))
 			wwin->flags.miniaturized = win_state->state->miniaturized;
 
+		if (win_state->state->maximized > 0)
+			wwin->flags.maximized = win_state->state->maximized;
+
 		if (!IS_OMNIPRESENT(wwin)) {
 			int w = wDefaultGetStartWorkspace(scr, wwin->wm_instance,
 							  wwin->wm_class);
@@ -2694,7 +2697,7 @@ void wWindowUpdateGNUstepAttr(WWindow * wwin, GNUstepWMAttributes * attr)
 }
 
 WMagicNumber wWindowAddSavedState(const char *instance, const char *class,
-											 const char *command, pid_t pid, WSavedState * state)
+				const char *command, pid_t pid, WSavedState *state)
 {
 	WWindowState *wstate;
 

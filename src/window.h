@@ -309,9 +309,9 @@ typedef struct WWindow {
 typedef struct WSavedState {
     int workspace;
     int miniaturized;
+    int maximized;
     int shaded;
     int hidden;
-    int maximized;
     int x;			       /* original geometry of the */
     int y;			       /* window if it's maximized */
     unsigned int w;

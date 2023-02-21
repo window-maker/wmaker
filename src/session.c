@@ -93,6 +93,7 @@ static WMPropList *sHost;
 static WMPropList *sWorkspace;
 static WMPropList *sShaded;
 static WMPropList *sMiniaturized;
+static WMPropList *sMaximized;
 static WMPropList *sHidden;
 static WMPropList *sGeometry;
 static WMPropList *sShortcutMask;
@@ -112,6 +113,7 @@ static void make_keys(void)
 	sWorkspace = WMCreatePLString("Workspace");
 	sShaded = WMCreatePLString("Shaded");
 	sMiniaturized = WMCreatePLString("Miniaturized");
+	sMaximized = WMCreatePLString("Maximized");
 	sHidden = WMCreatePLString("Hidden");
 	sGeometry = WMCreatePLString("Geometry");
 	sDock = WMCreatePLString("Dock");
@@ -174,7 +176,7 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 	unsigned mask;
 	char *class, *instance, *command = NULL, buffer[512];
 	WMPropList *win_state, *cmd, *name, *workspace;
-	WMPropList *shaded, *miniaturized, *hidden, *geometry;
+	WMPropList *shaded, *miniaturized, *maximized, *hidden, *geometry;
 	WMPropList *dock, *shortcut;
 
 	if (wwin->orig_main_window != None && wwin->orig_main_window != wwin->client_win)
@@ -207,6 +209,8 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 
 		shaded = wwin->flags.shaded ? sYes : sNo;
 		miniaturized = wwin->flags.miniaturized ? sYes : sNo;
+		snprintf(buffer, sizeof(buffer), "%i", wwin->flags.maximized);
+		maximized = WMCreatePLString(buffer);
 		hidden = wwin->flags.hidden ? sYes : sNo;
 		snprintf(buffer, sizeof(buffer), "%ix%i+%i+%i",
 			 wwin->client.width, wwin->client.height, wwin->frame_x, wwin->frame_y);
@@ -226,6 +230,7 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 						 sWorkspace, workspace,
 						 sShaded, shaded,
 						 sMiniaturized, miniaturized,
+						 sMaximized, maximized,
 						 sHidden, hidden,
 						 sShortcutMask, shortcut, sGeometry, geometry, NULL);
 
@@ -380,7 +385,7 @@ static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
 	WSavedState *state = wmalloc(sizeof(WSavedState));
 	WMPropList *value;
 	char *tmp;
-	unsigned mask;
+	unsigned mask, maxf;
 	int i;
 
 	state->workspace = -1;
@@ -407,6 +412,12 @@ static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
 	value = WMGetFromPLDictionary(win_state, sMiniaturized);
 	if (value != NULL)
 		state->miniaturized = getBool(value);
+
+	value = WMGetFromPLDictionary(win_state, sMaximized);
+	if (value != NULL) {
+		maxf = getInt(value);
+		state->maximized = maxf;
+	}
 
 	value = WMGetFromPLDictionary(win_state, sHidden);
 	if (value != NULL)
