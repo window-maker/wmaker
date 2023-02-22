@@ -1735,9 +1735,8 @@ void wWindowSingleFocus(WWindow *wwin)
 	/* bring window back to visible area */
 	move = wScreenBringInside(scr, &x, &y, wwin->frame->core->width, wwin->frame->core->height);
 
-	if (move) {
+	if (move)
 		wWindowConfigure(wwin, x, y, wwin->client.width, wwin->client.height);
-	}
 }
 
 void wWindowFocusPrev(WWindow *wwin, Bool inSameWorkspace)
@@ -1901,6 +1900,16 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 	int baseW = 0;
 	int baseH = 0;
 
+	/*
+	 * X11 proto defines width and height as a CARD16
+	 * if window size is guaranteed to fail, failsafe to a reasonable size
+	 */
+	if (width > USHRT_MAX && height > USHRT_MAX) {
+		width = 640;
+		height = 480;
+		return;
+	}
+
 	if (wwin->normal_hints) {
 		if (!wwin->flags.maximized) {
 			winc = wwin->normal_hints->width_inc;
@@ -1921,15 +1930,19 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 		baseH = wwin->normal_hints->base_height;
 	}
 
+	/* trust the mins provided by the client but not the maxs */
 	if (width < minW)
 		width = minW;
 	if (height < minH)
 		height = minH;
 
-	if (width > maxW)
-		width = maxW;
-	if (height > maxH)
-		height = maxH;
+	/* if only one dimension is over the top, set a default 4/3 ratio */
+	if (width > maxW && height < maxH) {
+		width = height * 4 / 3;
+	} else {
+		if(height > maxH && width < maxW)
+			height = width * 3 / 4;
+	}
 
 	/* aspect ratio code borrowed from olwm */
 	if (minAX > 0) {
@@ -2134,14 +2147,6 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 {
 	int synth_notify = False;
 	int resize;
-
-	/* if window size is guaranteed to fail - fix it to some reasonable
-	 * defaults */
-	if (req_height > SHRT_MAX)
-		req_height = 480;
-
-	if (req_width > SHRT_MAX)
-		req_height = 640;
 
 	resize = (req_width != wwin->client.width || req_height != wwin->client.height);
 	/*
@@ -2932,7 +2937,6 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 			}
 
 			/* maximize window */
-			
 			if (dir != 0 && IS_RESIZABLE(wwin)) {
 				int ndir = dir ^ wwin->flags.maximized;
 
