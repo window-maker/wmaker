@@ -2440,7 +2440,7 @@ static int restoreMenu(WScreen *scr, WMPropList *menu)
 static int restoreMenuRecurs(WScreen *scr, WMPropList *menus, WMenu *menu, const char *path)
 {
 	WMPropList *key, *entry;
-	char buffer[512];
+	char buffer[1024];
 	int i, x, y, res;
 	Bool lowered;
 
