@@ -279,7 +279,8 @@ WParserMacro *menu_parser_find_macro(WMenuParser parser, const char *name)
 			continue;
 
 		return macro;
-	check_next_macro: ;
+	check_next_macro:
+		;
 	}
 	return NULL;
 }

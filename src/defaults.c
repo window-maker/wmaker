@@ -154,7 +154,7 @@ static WDECallbackUpdate setModifierKeyLabels;
 
 static WDECallbackConvert getCursor;
 static WDECallbackUpdate setCursor;
-static WDECallbackUpdate updateDock        ;
+static WDECallbackUpdate updateDock;
 
 /*
  * Tables to convert strings to enumeration values.

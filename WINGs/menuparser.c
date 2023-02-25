@@ -612,7 +612,7 @@ static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists)
 		macro = menu_parser_find_macro(parser, macro_name);
 		parser->cond.stack[0].skip =
 			((check_exists)  && (macro == NULL)) ||
-			((!check_exists) && (macro != NULL)) ;
+			((!check_exists) && (macro != NULL));
 	}
 
 	strcpy(parser->cond.stack[0].name, cmd_name);

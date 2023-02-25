@@ -622,7 +622,7 @@ static void paintText(Text * tPtr)
 	TextBlock *tb;
 	WMFont *font;
 	const char *text;
-	int len, y, c, s, done = False, dir /* 1 = down */ ;
+	int len, y, c, s, done = False, dir; /* dir 1 = down */
 	WMScreen *scr = tPtr->view->screen;
 	Display *dpy = tPtr->view->screen->display;
 	Window win = tPtr->view->window;
