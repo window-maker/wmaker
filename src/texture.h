@@ -162,7 +162,7 @@ WTexSolid *wTextureMakeSolid(WScreen*, XColor*);
 WTexGradient *wTextureMakeGradient(WScreen*, int, const RColor*, const RColor*);
 WTexMGradient *wTextureMakeMGradient(WScreen*, int, RColor**);
 WTexTGradient *wTextureMakeTGradient(WScreen*, int, const RColor*, const RColor*, const char *, int);
-WTexIGradient *wTextureMakeIGradient(WScreen*, int, const RColor[], int, const RColor[]);
+WTexIGradient *wTextureMakeIGradient(WScreen*, int, const RColor[2], int, const RColor[2]);
 WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, const char *pixmap_file,
                                XColor *color);
 void wTextureDestroy(WScreen*, WTexture*);
