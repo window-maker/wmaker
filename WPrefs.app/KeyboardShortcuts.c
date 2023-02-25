@@ -369,6 +369,36 @@ char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 	return wstrdup(buffer);
 }
 
+/*
+ * check if the keystr entered is already set to another action
+ * if found it returns the position in the keyOptions
+ */
+static int isKeySet(_Panel *panel, char *keystr)
+{
+	int i;
+	char *str;
+
+	for (i = 0; i < panel->actionCount; i++) {
+		str = NULL;
+		if (panel->shortcuts[i]) {
+			str = wtrimspace(panel->shortcuts[i]);
+			if (strlen(str) == 0) {
+				wfree(str);
+				str = NULL;
+			}
+		}
+		if (str) {
+			if (strcmp(keystr, str) == 0) {
+				wfree(str);
+				return i;
+			}
+			wfree(str);
+		}
+	}
+
+	return -1;
+}
+
 static void captureClick(WMWidget * w, void *data)
 {
 	_Panel *panel = (_Panel *) data;
@@ -383,17 +413,31 @@ static void captureClick(WMWidget * w, void *data)
 		XGrabKeyboard(dpy, WMWidgetXID(panel->parent), True, GrabModeAsync, GrabModeAsync, CurrentTime);
 		shortcut = capture_shortcut(dpy, &panel->capturing, 1);
 		if (shortcut) {
+			int key_idx = -1;
 			int row = WMGetListSelectedItemRow(panel->actLs);
 
-			WMSetTextFieldText(panel->shoT, shortcut);
-			if (row >= 0) {
-				if (panel->shortcuts[row])
-					wfree(panel->shortcuts[row]);
-				panel->shortcuts[row] = shortcut;
+			key_idx = isKeySet(panel, shortcut);
+			if (key_idx >= 0 && (key_idx != row)) {
+				char *msg;
 
-				WMRedisplayWidget(panel->actLs);
-			} else {
+				msg = wstrconcat(_("Key shortcut already in use by the "), _(keyOptions[key_idx].title));
+				WMRunAlertPanel(WMWidgetScreen(w), GetWindow(),
+						_("Error"),
+						msg,
+						_("OK"), NULL, NULL);
+				wfree(msg);
 				wfree(shortcut);
+			} else {
+				WMSetTextFieldText(panel->shoT, shortcut);
+				if (row >= 0) {
+					if (panel->shortcuts[row])
+						wfree(panel->shortcuts[row]);
+					panel->shortcuts[row] = shortcut;
+
+					WMRedisplayWidget(panel->actLs);
+				} else {
+					wfree(shortcut);
+				}
 			}
 		}
 	}
