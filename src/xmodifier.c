@@ -36,6 +36,7 @@ Perpetrator: Sudish Joseph <sj@eng.mindspring.net>, Sept. 1997. */
 #include <X11/XKBlib.h>
 
 #include <WINGs/WUtil.h>
+#include <WINGs/WINGsP.h>
 #include "WindowMaker.h"
 #include "xmodifier.h"
 
@@ -174,7 +175,7 @@ static void x_reset_modifier_mapping(Display * display)
 				}
 
 				code = x_modifier_keymap->modifiermap[modifier_index * mkpm + modifier_key];
-				sym = (code ? XkbKeycodeToKeysym(display, code, 0, column) : NoSymbol);
+				sym = (code ? W_KeycodeToKeysym(display, code, column) : NoSymbol);
 
 				if (sym == last_sym)
 					continue;

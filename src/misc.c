@@ -38,6 +38,7 @@
 #include <X11/XKBlib.h>
 
 #include <WINGs/WUtil.h>
+#include <WINGs/WINGsP.h>
 #include <wraster.h>
 
 #include "window.h"
@@ -840,7 +841,7 @@ char *GetShortcutKey(WShortKey key)
 		}
 	}
 
-	key_name = XKeysymToString(XkbKeycodeToKeysym(dpy, key.keycode, 0, 0));
+	key_name = XKeysymToString(W_KeycodeToKeysym(dpy, key.keycode, 0));
 	if (!key_name)
 		return NULL;
 
