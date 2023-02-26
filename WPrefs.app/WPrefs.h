@@ -33,6 +33,7 @@
 #include <wraster.h>
 
 #include <WINGs/WINGs.h>
+#include <WINGs/WINGsP.h>
 
 /* Needed for HAVE_LIBINTL_H and EXTENDED_WINDOWSHORTCUT */
 #include "../src/wconfig.h"
@@ -54,7 +55,6 @@
 /****/
 
 extern char *NOptionValueChanged;
-extern Bool xext_xkb_supported;
 
 typedef struct _Panel Panel;
 

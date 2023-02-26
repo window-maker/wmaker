@@ -35,8 +35,6 @@
 #endif
 
 char *NOptionValueChanged = "NOptionValueChanged";
-Bool xext_xkb_supported = False;
-
 
 #define MAX_DEATHS	64
 
@@ -156,8 +154,6 @@ int main(int argc, char **argv)
 		wfatal(_("could not initialize application"));
 		exit(0);
 	}
-
-	xext_xkb_supported = XkbQueryExtension(dpy, NULL, NULL, NULL, NULL, NULL);
 
 	WMPLSetCaseSensitive(False);
 

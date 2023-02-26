@@ -171,10 +171,7 @@ static void x_reset_modifier_mapping(Display * display)
 				KeySym sym;
 
 				if (code) {
-					if (xext_xkb_supported)
-						sym = XkbKeycodeToKeysym(display, code, 0, column);
-					else
-						sym = XKeycodeToKeysym(display, code, column);
+					sym = W_KeycodeToKeysym(display, code, column);
 				} else {
 					sym = NoSymbol;
 				}
