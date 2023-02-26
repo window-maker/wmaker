@@ -551,6 +551,10 @@ Disable use of the @emph{MIT shared memory} extension.
 This will slow down texture generation a little bit, but in some cases it seems to be necessary due
 to a bug that manifests as messed icons and textures.
 
+@item --disable-res
+Disables support for @emph{XRes} resource window extension support.
+Which is used to find the underlying processes (and PIDs) displaying the windows.
+
 @item --disable-shape
 Disables support for @emph{shaped} windows (for @command{oclock}, @command{xeyes}, etc.).
 
