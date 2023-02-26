@@ -494,6 +494,8 @@ void W_SetPreeditPositon(W_View *view, int x, int y);
 int W_LookupString(W_View *view, XKeyPressedEvent *event, char *buffer,
                    int buflen, KeySym *keysym, Status *status);
 
+KeySym W_KeycodeToKeysym(Display *display, KeyCode keycode, int index);
+
 
 /* ---[ wmisc.c ]--------------------------------------------------------- */
 

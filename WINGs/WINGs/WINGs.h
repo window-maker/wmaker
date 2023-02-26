@@ -26,7 +26,7 @@
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20210726
+#define WINGS_H_VERSION  20230226
 
 
 #ifdef __cplusplus

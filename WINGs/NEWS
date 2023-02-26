@@ -1,7 +1,9 @@
-** API and ABI modifications since wmaker 0.92.0
+** API and ABI modifications since wmaker 0.95.10
+----------------------------------------------------
 
 ** libWINGs **
 <WINGsP.h>
+W_KeycodeToKeysym ADDED
 struct W_DragDestinationInfo: new members added SIZE CHANGE
 
 <WINGs.h>

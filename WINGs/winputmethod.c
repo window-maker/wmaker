@@ -213,3 +213,35 @@ int W_LookupString(W_View *view, XKeyPressedEvent *event, char *buffer, int bufl
 #endif
 	return XLookupString(event, buffer, buflen, keysym, (XComposeStatus *) status);
 }
+
+/*
+ * Map a keycode to the corresponding keysym
+ * To replace the deprecated X11 function XKeycodeToKeysym
+ */
+KeySym W_KeycodeToKeysym(Display *display, KeyCode keycode, int index)
+{
+	static int min_kc = -1;
+	static int max_kc;
+	int num_syms;
+	KeySym *key_syms;
+	KeySym ks;
+
+	if (min_kc == -1) {
+		(void) XDisplayKeycodes(display, &min_kc, &max_kc);
+	}
+
+	if (keycode < min_kc || keycode > max_kc || index < 0) {
+		return NoSymbol;
+	}
+
+	key_syms = XGetKeyboardMapping(display, keycode, 1, &num_syms);
+	if (index >= num_syms) {
+		XFree(key_syms);
+		return NoSymbol;
+	}
+
+	ks = key_syms[index];
+	XFree(key_syms);
+
+	return ks;
+}
