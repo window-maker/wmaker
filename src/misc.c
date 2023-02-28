@@ -799,6 +799,7 @@ char *GetShortcutString(const char *shortcut)
 		*k = 0;
 		mod = wXModifierFromKey(text);
 		if (mod < 0) {
+			wfree(buffer);
 			return wstrdup("bug");
 		}
 		lbl = wXModifierToShortcutLabel(mod);
