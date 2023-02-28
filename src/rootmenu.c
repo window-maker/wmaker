@@ -1038,8 +1038,6 @@ static WMenu *readMenu(WScreen *scr, const char *flat_file, FILE *file)
 			freeline(title, command, params, shortcut);
 			break;
 		}
-
-		freeline(title, command, params, shortcut);
 	}
 
 	WMenuParserDelete(parser);
