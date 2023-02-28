@@ -371,6 +371,7 @@ static pid_t execCommand(WScreen *scr, char *command)
 	wtokensplit(command, &argv, &argc);
 
 	if (!argc) {
+		wfree(argv);
 		return 0;
 	}
 
