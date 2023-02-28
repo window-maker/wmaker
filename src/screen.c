@@ -617,7 +617,7 @@ WScreen *wScreenInit(int screen_number)
 {
 	WScreen *scr;
 	XIconSize icon_size[1];
-	RContextAttributes rattr;
+	RContextAttributes rattr = {};
 	long event_mask;
 	XErrorHandler oldHandler;
 	int i;

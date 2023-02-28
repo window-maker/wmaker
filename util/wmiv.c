@@ -680,7 +680,7 @@ link_t *connect_dir(char *dirpath, linked_list_t *li)
 int main(int argc, char **argv)
 {
 	int option = -1;
-	RContextAttributes attr;
+	RContextAttributes attr = {};
 	XEvent e;
 	KeySym keysym;
 	char *reading_filename = "";
