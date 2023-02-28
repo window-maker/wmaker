@@ -175,7 +175,7 @@ static void x_reset_modifier_mapping(Display * display)
 				}
 
 				code = x_modifier_keymap->modifiermap[modifier_index * mkpm + modifier_key];
-				sym = (code ? W_KeycodeToKeysym(display, code, column) : NoSymbol);
+				sym = W_KeycodeToKeysym(display, code, column);
 
 				if (sym == last_sym)
 					continue;
