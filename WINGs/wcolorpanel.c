@@ -2259,7 +2259,7 @@ static void wheelPositionSelectionOutBounds(W_ColorPanel * panel, int x, int y)
 
 static void wheelUpdateBrightnessGradientFromLocation(W_ColorPanel * panel)
 {
-	CPColor from;
+	CPColor from = {};
 	unsigned long ofs;
 
 	ofs = panel->coly * panel->wheelMtrx->width + panel->colx;
@@ -2604,7 +2604,7 @@ static void cmykTextFieldCallback(void *observerData, WMNotification * notificat
 
 static void hsbSliderCallback(WMWidget * w, void *data)
 {
-	CPColor cpColor;
+	CPColor cpColor = {};
 	int value[3];
 	char tmp[4];
 	W_ColorPanel *panel = (W_ColorPanel *) data;
@@ -2640,7 +2640,7 @@ static void hsbSliderCallback(WMWidget * w, void *data)
 
 static void hsbTextFieldCallback(void *observerData, WMNotification * notification)
 {
-	CPColor cpColor;
+	CPColor cpColor = {};
 	int value[3];
 	char tmp[12];  /* We only 4 bytes needed, but compilers cannot know that */
 	int n;
