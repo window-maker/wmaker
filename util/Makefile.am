@@ -70,10 +70,13 @@ wmmenugen_SOURCES = wmmenugen.c wmmenugen.h wmmenugen_misc.c \
 	wmmenugen_parse_wmconfig.c \
 	wmmenugen_parse_xdg.c
 
+wmiv_CFLAGS = @PANGO_CFLAGS@ @PTHREAD_CFLAGS@
+
 wmiv_LDADD = \
 	$(top_builddir)/wrlib/libwraster.la \
-	@XLFLAGS@ @XLIBS@ \
-	@GFXLIBS@ $(PTHREAD_CFLAGS) $(PTHREAD_LIBS) $(LIBEXIF)
+	$(top_builddir)/WINGs/libWINGs.la \
+	@XLFLAGS@ @XLIBS@ @GFXLIBS@ \
+	@PANGO_LIBS@ @PTHREAD_LIBS@ @LIBEXIF@
 
 wmiv_SOURCES = wmiv.c wmiv.h
 

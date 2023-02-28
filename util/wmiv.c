@@ -22,11 +22,10 @@
 #define _GNU_SOURCE
 #endif
 
-#include <X11/keysym.h>
-#include <X11/XKBlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
-#include "wraster.h"
+#include <WINGs/WINGsP.h>
+#include <wraster.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -932,7 +931,7 @@ int main(int argc, char **argv)
 			continue;
 		}
 		if (e.type == KeyPress) {
-			keysym = XkbKeycodeToKeysym(dpy, e.xkey.keycode, 0, e.xkey.state & ShiftMask?1:0);
+			keysym = W_KeycodeToKeysym(dpy, e.xkey.keycode, e.xkey.state & ShiftMask?1:0);
 #ifdef HAVE_PTHREAD
 			if (keysym != XK_Right)
 				diaporama_flag = False;
