@@ -435,6 +435,7 @@ int zoom_in_out(int z)
 				tmp->height + (int)(tmp->height * zoom_factor));
 		if (!img) {
 			img = old_img;
+			RReleaseImage(tmp);
 			return EXIT_FAILURE;
 		}
 	} else {
@@ -449,6 +450,7 @@ int zoom_in_out(int z)
 		img = RScaleImage(tmp, new_width, new_height);
 		if (!img) {
 			img = old_img;
+			RReleaseImage(tmp);
 			return EXIT_FAILURE;
 		}
 	}
