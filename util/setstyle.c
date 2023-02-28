@@ -349,6 +349,7 @@ static void hackStyle(WMPropList * style)
 
 				t = WMCreatePLArray(WMCreatePLString("solid"), value, NULL);
 				WMPutInPLDictionary(style, WMCreatePLString("ResizebarBack"), t);
+				WMReleasePropList(value);
 			}
 		}
 	}
