@@ -898,6 +898,7 @@ static noreturn void helperLoop(RContext * rc)
 	int errcount = 4;
 
 	memset(textures, 0, WORKSPACE_COUNT * sizeof(BackgroundTexture *));
+	memset(buffer, 0, sizeof(buffer));
 
 	while (1) {
 		int workspace = -1;
