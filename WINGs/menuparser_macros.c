@@ -167,6 +167,7 @@ void menu_parser_define_macro(WMenuParser parser)
 		return;
 	}
 	macro = wmalloc(sizeof(*macro));
+	memset(arg_name, 0, MAX_MACRO_ARG_COUNT * sizeof(char *));
 
 	/* Isolate name of macro */
 	idx = 0;
@@ -391,6 +392,8 @@ void menu_parser_expand_macro(WMenuParser parser, WParserMacro *macro)
 	unsigned char *rd;
 	unsigned int size;
 	int i, space_left;
+
+	memset(arg_value, 0, MAX_MACRO_ARG_COUNT * sizeof(char *));
 
 	/* Skip the name of the macro, this was not done by caller */
 	for (i = 0; macro->name[i] != '\0'; i++)
