@@ -1483,7 +1483,8 @@ void wNETWMPositionSplash(WWindow *wwin, int *x, int *y, int width, int height)
 static void updateWindowType(WWindow *wwin)
 {
 	Atom type_ret;
-	int fmt_ret, layer;
+	int fmt_ret;
+	int layer = INT_MIN; //illegal level
 	unsigned long nitems_ret, bytes_after_ret;
 	long *data = NULL;
 
@@ -1501,7 +1502,8 @@ static void updateWindowType(WWindow *wwin)
 	}
 
 	if (wwin->frame != NULL) {
-		ChangeStackingLevel(wwin->frame->core, layer);
+		if (layer != INT_MIN)
+			ChangeStackingLevel(wwin->frame->core, layer);
 		wwin->frame->flags.need_texture_change = 1;
 		wWindowConfigureBorders(wwin);
 		wFrameWindowPaint(wwin->frame);
