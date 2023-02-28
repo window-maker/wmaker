@@ -693,7 +693,7 @@ static void w_create_macro(WMenuParser parser, const char *name, WParserMacroFun
 	WParserMacro *macro;
 
 	macro = wmalloc(sizeof(*macro));
-	strcpy(macro->name, name);
+	strncpy(macro->name, name, sizeof(macro->name) - 1);
 	macro->function = handler;
 	macro->arg_count = -1;
 	macro->next = parser->macros;

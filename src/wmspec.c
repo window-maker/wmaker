@@ -997,7 +997,7 @@ static void updateWorkspaceNames(WScreen *scr)
 	len = 0;
 	for (i = 0; i < scr->workspace_count; i++) {
 		curr_size = strlen(scr->workspaces[i]->name);
-		strcpy(pos, scr->workspaces[i]->name);
+		strncpy(pos, scr->workspaces[i]->name, sizeof(pos) - 1);
 		pos += (curr_size + 1);
 		len += (curr_size + 1);
 	}

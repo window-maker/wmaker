@@ -615,7 +615,7 @@ static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists)
 			((!check_exists) && (macro != NULL));
 	}
 
-	strcpy(parser->cond.stack[0].name, cmd_name);
+	strncpy(parser->cond.stack[0].name, cmd_name, sizeof(parser->cond.stack[0].name) - 1);
 	parser->cond.stack[0].line = parser->line_number;
 }
 
