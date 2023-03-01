@@ -196,9 +196,13 @@ static void storeData(_Panel * panel)
 	int i;
 
 	i = WMGetPopUpButtonSelectedItem(panel->sizeP);
+	if (i < 0)
+		return;
 	SetStringForKey(resize_display[i].db_value, "ResizeDisplay");
 
 	i = WMGetPopUpButtonSelectedItem(panel->posiP);
+	if (i < 0)
+		return;
 	SetStringForKey(move_display[i].db_value, "MoveDisplay");
 
 	lr = WMGetButtonSelected(panel->lrB);
