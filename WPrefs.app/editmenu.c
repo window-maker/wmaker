@@ -1150,7 +1150,7 @@ static void dragItem(WEditMenu * menu, WEditMenuItem * item, Bool copy)
 	static XColor back = { 0, 0xffff, 0xffff, 0xffff, DoRed | DoGreen | DoBlue, 0 };
 	Display *dpy = W_VIEW_DISPLAY(menu->view);
 	WMScreen *scr = W_VIEW_SCREEN(menu->view);
-	int x, y;
+	int x = 0, y = 0;
 	int dx, dy;
 	Bool done = False;
 	Window blaw;
