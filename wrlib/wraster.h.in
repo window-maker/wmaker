@@ -41,7 +41,7 @@
 
 
 /* version of the header for the library */
-#define WRASTER_HEADER_VERSION	24
+#define WRASTER_HEADER_VERSION	25
 
 
 #include <X11/Xlib.h>
@@ -389,6 +389,9 @@ RImage *RGetImageFromXPMData(RContext *context, char **xpmData)
  * RImage storing
  */
 Bool RSaveImage(RImage *image, const char *filename, const char *format)
+	__wrlib_nonnull(1, 2, 3);
+
+Bool RSaveTitledImage(RImage *image, const char *filename, const char *format, char *title)
 	__wrlib_nonnull(1, 2, 3);
 
 /*

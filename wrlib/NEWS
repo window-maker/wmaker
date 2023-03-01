@@ -1,7 +1,18 @@
-** API and ABI modifications since wmaker 0.92.0
+** API and ABI modifications
+----------------------------------------------------
+
+Sat 25 Feb 2023
+
+RSaveImage: Improved
+Able to save image on disk as PNG or JPEG file
+
+RSaveTitledImage: Added
+Image title can be set on the image to be saved
+
+----------------------------------------------------
+Since wmaker 0.92.0
 
 RLightImage: ADDED
-
 
 ----------------------------------------------------
 

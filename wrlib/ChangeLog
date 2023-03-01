@@ -1,3 +1,5 @@
+- added RSaveTitledImage()
+
 - removed obsoleted RDestroyImage()
 - removed Hermes code.
 - Put back asm/mmx optimized code.

@@ -1,4 +1,4 @@
-/* nxpm.c - load "normalized" XPM image
+/* save_xpm.c - save "normalized" XPM image
  *
  * Raster graphics library
  *
