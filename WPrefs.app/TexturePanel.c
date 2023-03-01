@@ -689,7 +689,7 @@ static void changeTypeCallback(WMWidget *w, void *data)
 	int i;
 
 	newType = WMGetPopUpButtonSelectedItem(w);
-	if (newType == panel->currentType)
+	if (newType < 0 || newType == panel->currentType)
 		return;
 
 	if (panel->currentType >= 0) {
