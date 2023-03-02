@@ -1736,7 +1736,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 		if (wwin->frame->workspace == wwin->screen_ptr->current_workspace /* No workspace change */
 		    || event->data.l[0] == 2 /* Requested by pager */
 		    || WFLAGP(wwin, focus_across_wksp) /* Explicitly allowed */) {
-				wNETWMShowingDesktop(scr, False);
+				wNETWMShowingDesktop(wwin->screen_ptr, False);
 				wMakeWindowVisible(wwin);
 		}
 		return True;
