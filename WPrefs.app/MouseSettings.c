@@ -748,6 +748,8 @@ static void storeData(_Panel * panel)
 		int action;
 
 		action = WMGetPopUpButtonSelectedItem(panel->mouse_action[i].popup);
+		if (action < 0)
+			continue;
 		if (button_list[i].type == T_BUTTON)
 			db_value = button_actions[action].db_value;
 		else
