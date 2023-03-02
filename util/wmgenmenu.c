@@ -451,6 +451,7 @@ static void find_and_write(const char *group, char *list[][2], int this_is_termi
 			WMAddToPLArray(L2Menu, L3Menu);
 			wfree(t);
 		}
+		wfree(argv);
 		i++;
 	}
 	if (L2Menu)
