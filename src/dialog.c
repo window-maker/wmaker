@@ -1103,14 +1103,16 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 		} else {
 			defaultPath = FindImage(wPreferences.icon_path, *file);
 			wantedPath = WMGetTextFieldText(panel->fileField);
-			/* if the file is not the default, use full path */
-			if (strcmp(wantedPath, defaultPath) != 0) {
-				*file = wantedPath;
-			} else {
-				*file = wstrdup(*file);
-				wfree(wantedPath);
+			if (defaultPath) {
+				/* if the file is not the default, use full path */
+				if (strcmp(wantedPath, defaultPath) != 0) {
+					*file = wstrdup(wantedPath);
+				} else {
+					*file = wstrdup(*file);
+				}
+				wfree(defaultPath);
 			}
-			wfree(defaultPath);
+			wfree(wantedPath);
 		}
 	} else {
 		*file = NULL;
