@@ -1076,6 +1076,8 @@ static void deleteTexture(WMWidget * w, void *data)
 	(void) w;
 
 	section = WMGetPopUpButtonSelectedItem(panel->secP);
+	if (section < 0)
+		return;
 	row = WMGetListSelectedItemRow(panel->texLs);
 	item = WMGetListItem(panel->texLs, row);
 	titem = (TextureListItem *) item->clientData;
@@ -1134,6 +1136,8 @@ static void changePage(WMWidget * w, void *data)
 
 	if (w) {
 		section = WMGetPopUpButtonSelectedItem(panel->secP);
+		if (section < 0)
+			return;
 
 		WMSelectListItem(panel->texLs, panel->textureIndex[section]);
 
@@ -1233,6 +1237,8 @@ static void textureDoubleClick(WMWidget * w, void *data)
 
 	/* unselect old texture */
 	section = WMGetPopUpButtonSelectedItem(panel->secP);
+	if (section < 0)
+		return;
 
 	item = WMGetListItem(panel->texLs, panel->textureIndex[section]);
 	titem = (TextureListItem *) item->clientData;
@@ -1261,7 +1267,7 @@ static void paintListItem(WMList * lPtr, int index, Drawable d, char *text, int 
 {
 	_Panel *panel = (_Panel *) WMGetHangedData(lPtr);
 	WMScreen *scr = WMWidgetScreen(lPtr);
-	int width, height, x, y;
+	int width, height, x, y, tmp;
 	Display *dpy = WMScreenDisplay(scr);
 	WMColor *back = (state & WLDSSelected) ? WMWhiteColor(scr) : WMGrayColor(scr);
 	WMListItem *item;
@@ -1290,7 +1296,8 @@ static void paintListItem(WMList * lPtr, int index, Drawable d, char *text, int 
 		XCopyArea(dpy, titem->preview, d, WMColorGC(black), 0, 0,
 			  TEXPREV_WIDTH, TEXPREV_HEIGHT, x + 5, y + 5);
 
-	if ((1 << WMGetPopUpButtonSelectedItem(panel->secP)) & titem->selectedFor)
+	tmp = WMGetPopUpButtonSelectedItem(panel->secP);
+	if ((tmp >= 0) && ((1 << tmp) & titem->selectedFor))
 		WMDrawPixmap(panel->onLed, d, x + TEXPREV_WIDTH + 10, y + 6);
 	else if (titem->selectedFor)
 		WMDrawPixmap(panel->offLed, d, x + TEXPREV_WIDTH + 10, y + 6);
@@ -1425,6 +1432,10 @@ static void changeColorPage(WMWidget * w, void *data)
 	WMScreen *scr = WMWidgetScreen(panel->box);
 	RContext *rc = WMScreenRContext(scr);
 
+	section = WMGetPopUpButtonSelectedItem(panel->colP);
+	if (section < 0)
+		return;
+
 	if (panel->preview) {
 		GC gc;
 
@@ -1436,7 +1447,6 @@ static void changeColorPage(WMWidget * w, void *data)
 			  colorOptions[panel->oldcsection].hand.y);
 	}
 	if (w) {
-		section = WMGetPopUpButtonSelectedItem(panel->colP);
 
 		panel->oldcsection = section;
 		if (panel->preview)
@@ -1737,6 +1747,8 @@ static void colorWellObserver(void *self, WMNotification * n)
 	(void) n;
 
 	p = WMGetPopUpButtonSelectedItem(panel->colP);
+	if (p < 0)
+		return;
 
 	WMReleaseColor(panel->colors[p]);
 
