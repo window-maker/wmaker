@@ -291,6 +291,8 @@ static void changedItemPad(WMWidget * w, void *data)
 	_Panel *panel = (_Panel *) data;
 	int padn = WMGetPopUpButtonSelectedItem(w);
 
+	if (padn < 0)
+		return;
 	WMUnmapWidget(panel->itemPad[panel->currentPad]);
 	WMMapWidget(panel->itemPad[padn]);
 
