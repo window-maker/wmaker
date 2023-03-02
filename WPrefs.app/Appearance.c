@@ -1831,7 +1831,7 @@ static void createPanel(Panel * p)
 	panel->fprefix = wstrconcat(wuserdatapath(), "/" PACKAGE_TARNAME);
 
 	if (access(panel->fprefix, F_OK) != 0) {
-		if (mkdir(panel->fprefix, 0755) < 0) {
+		if (-1 == mkdir(panel->fprefix, 0755) && errno != EEXIST) {
 			werror("%s", panel->fprefix);
 			ok = False;
 		}
@@ -1841,7 +1841,7 @@ static void createPanel(Panel * p)
 		wfree(panel->fprefix);
 		panel->fprefix = tmp;
 		if (access(panel->fprefix, F_OK) != 0) {
-			if (mkdir(panel->fprefix, 0755) < 0) {
+			if (-1 == mkdir(panel->fprefix, 0755) && errno != EEXIST) {
 				werror("%s", panel->fprefix);
 			}
 		}
