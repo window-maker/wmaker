@@ -25,7 +25,7 @@
 /* This structure containts the list of all the check-buttons to display in the
  * expert tab of the window with the corresponding information for effect
  */
-static const struct {
+static struct expert_option {
 	const char *label;  /* Text displayed to user */
 
 	int def_state;  /* True/False: the default value, if not defined in current config */
@@ -172,6 +172,19 @@ static void upButtonCallback(WMWidget *self, void *data)
 	changeIntTextfield(data, 1);
 }
 
+static int cmpExpertOptions(const void *v1, const void *v2)
+{
+	int rc;
+	const struct expert_option *opt1 = (struct expert_option *)v1;
+	const struct expert_option *opt2 = (struct expert_option *)v2;
+
+	if ((rc = strcmp(opt1->label, opt2->label)) < 0)
+		return -1;
+	else if (rc > 0)
+		return 1;
+	return 0;
+}
+
 static void createPanel(Panel *p)
 {
 	_Panel *panel = (_Panel *) p;
@@ -195,6 +208,7 @@ static void createPanel(Panel *p)
 	WMSetFrameRelief(f, WRFlat);
 
 	udb = WMGetStandardUserDefaults();
+	qsort(expert_options, wlengthof(expert_options), sizeof(expert_options[0]), cmpExpertOptions);
 	for (i = 0; i < wlengthof(expert_options); i++) {
 		if (expert_options[i].class != OPTION_WMAKER_INT) {
 			panel->swi[i] = WMCreateSwitchButton(f);

@@ -65,7 +65,7 @@ typedef struct _Panel {
  * First parameter is the internal keyword known by WMaker
  * Second is the text displayed to the user
  */
-static const struct {
+static struct keyOption {
 	const char *key;
 	const char *title;
 } keyOptions[] = {
@@ -541,6 +541,20 @@ static void paintItem(WMList * lPtr, int index, Drawable d, char *text, int stat
 	WMDrawString(scr, d, panel->black, panel->font, x + 20, y, text, strlen(text));
 }
 
+static int cmpKeyOptions(const void *v1, const void *v2)
+{
+	int rc;
+	const struct keyOption *opt1 = (struct keyOption *)v1;
+	const struct keyOption *opt2 = (struct keyOption *)v2;
+
+	if ((rc = strcmp(opt1->title, opt2->title)) < 0)
+		return -1;
+	else if (rc > 0)
+		return 1;
+	return 0;
+}
+
+
 static void createPanel(Panel * p)
 {
 	_Panel *panel = (_Panel *) p;
@@ -580,6 +594,7 @@ static void createPanel(Panel * p)
 	WMSetListUserDrawProc(panel->actLs, paintItem);
 	WMHangData(panel->actLs, panel);
 
+	qsort(keyOptions, wlengthof(keyOptions), sizeof(keyOptions[0]), cmpKeyOptions);
 	for (i = 0; i < wlengthof(keyOptions); i++) {
 		WMAddListItem(panel->actLs, _(keyOptions[i].title));
 	}
