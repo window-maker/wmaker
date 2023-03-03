@@ -22,6 +22,8 @@ POTFILES  = \
 	$(top_srcdir)/wrlib/rotate.c	\
 	$(top_srcdir)/wrlib/flip.c	\
 	$(top_srcdir)/wrlib/convolve.c	\
+	$(top_srcdir)/wrlib/save_jpeg.c	\
+	$(top_srcdir)/wrlib/save_png.c	\
 	$(top_srcdir)/wrlib/save_xpm.c	\
 	$(top_srcdir)/wrlib/xutil.c	\
 	$(top_srcdir)/wrlib/load_ppm.c	\
