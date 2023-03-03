@@ -627,6 +627,10 @@ static RXImage *image2StandardPseudoColor(RContext * ctx, RImage * image)
 			RDestroyXImage(ctx, ximg);
 			return NULL;
 		}
+
+		memset(err, 0, 3 * (image->width + 2) * sizeof(short));
+		memset(nerr, 0, 3 * (image->width + 2) * sizeof(short));
+
 		for (x = 0, x1 = 0; x < image->width * 3; x1 += channels - 3) {
 			err[x++] = ptr[x1++];
 			err[x++] = ptr[x1++];
