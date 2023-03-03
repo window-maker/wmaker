@@ -207,12 +207,15 @@ static void createPanel(Panel * p)
 
 static void storeData(_Panel * panel)
 {
+	int tmp = WMGetPopUpButtonSelectedItem(panel->posP);
+
+	if (tmp < 0)
+		return;
 	SetBoolForKey(!WMGetButtonSelected(panel->linkB), "DontLinkWorkspaces");
 	SetBoolForKey(WMGetButtonSelected(panel->cyclB), "CycleWorkspaces");
 	SetBoolForKey(WMGetButtonSelected(panel->newB), "AdvanceToNewWorkspace");
 
-	SetStringForKey(WSNamePositions[WMGetPopUpButtonSelectedItem(panel->posP)],
-			"WorkspaceNameDisplayPosition");
+	SetStringForKey(WSNamePositions[tmp], "WorkspaceNameDisplayPosition");
 }
 
 Panel *InitWorkspace(WMWidget *parent)
