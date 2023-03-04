@@ -379,8 +379,14 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(RMenu, L1Menu);
 
-	printf("%s", WMGetPropListDescription(RMenu, True));
-	puts("");
+	wfree(tmp);
+	wfree(theme_paths);
+	wfree(style_paths);
+	wfree(icon_paths);
+
+	tmp = WMGetPropListDescription(RMenu, True);
+	printf("%s\n", tmp);
+	wfree(tmp);
 
 	return 0;
 }
@@ -504,7 +510,7 @@ noreturn void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [-h] [-v]\n", prog_name);
 	if (print_usage) {
-		puts("Writes a menu structure usable as ~/" GSUSER_SUBDIR "/" USERDATA_SUBDIR "/WMRootMenu to stdout");
+		puts("Writes a menu structure usable as ~/" GSUSER_SUBDIR "/" DEFAULTS_SUBDIR "/WMRootMenu to stdout");
 		puts("");
 		puts("  -h, --help           display this help and exit");
 		puts("  -v, --version        output version information and exit");
