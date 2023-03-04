@@ -392,9 +392,7 @@ static pid_t execCommand(WScreen *scr, char *command)
 		execvp(argv[0], args);
 		exit(111);
 	}
-	while (argc > 0)
-		wfree(argv[--argc]);
-	wfree(argv);
+	wtokenfree(argv, argc);
 	return pid;
 }
 

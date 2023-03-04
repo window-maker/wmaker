@@ -393,7 +393,7 @@ Bool RelaunchWindow(WWindow *wwin)
 	} else if (pid < 0) {
 		werror("cannot fork a new process");
 
-		wfree(argv);
+		wtokenfree(argv, argc);
 		wfree(command);
 		return False;
 	} else {
@@ -405,7 +405,7 @@ Bool RelaunchWindow(WWindow *wwin)
 		/* not actually a shell command */
 		wAddDeathHandler(pid, shellCommandHandler, data);
 
-		wfree(argv);
+		wtokenfree(argv, argc);
 	}
 
 	return True;
