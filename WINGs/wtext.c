@@ -166,12 +166,15 @@ typedef struct W_Text {
 	WMArray *xdndDestinationTypes;
 } Text;
 
+/* not used */
+#if 0
 #define NOTIFY(T,C,N,A) {\
     WMNotification *notif = WMCreateNotification(N,T,A);\
     if ((T)->delegate && (T)->delegate->C)\
         (*(T)->delegate->C)((T)->delegate,notif);\
     WMPostNotification(notif);\
     WMReleaseNotification(notif);}
+#endif
 
 #define TYPETEXT 0
 
