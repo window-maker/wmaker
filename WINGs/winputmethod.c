@@ -226,10 +226,7 @@ KeySym W_KeycodeToKeysym(Display *display, KeyCode keycode, int index)
 	KeySym *key_syms;
 	KeySym ks;
 
-	if (min_kc == -1) {
-		(void) XDisplayKeycodes(display, &min_kc, &max_kc);
-	}
-
+	XDisplayKeycodes(display, &min_kc, &max_kc);
 	if (keycode < min_kc || keycode > max_kc || index < 0) {
 		return NoSymbol;
 	}
