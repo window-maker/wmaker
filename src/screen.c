@@ -24,6 +24,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -54,10 +58,12 @@
 #include "geomview.h"
 #include "wmspec.h"
 #include "rootmenu.h"
+#include "misc.h"
 
 #include "xinerama.h"
 
 #include <WINGs/WUtil.h>
+#include <WINGs/WINGsP.h>
 
 #include "defaults.h"
 
@@ -593,6 +599,7 @@ static void createInternalWindows(WScreen * scr)
 	scr->workspace_name =
 	    XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
 			  CopyFromParent, scr->w_visual, vmask, &attribs);
+	scr->mini_screenshot_timeout = 0;
 }
 
 /*
@@ -1125,4 +1132,247 @@ int wScreenKeepInside(WScreen * scr, int *x, int *y, int width, int height)
 		*y = sy2 - height, moved = 1;
 
 	return moved;
+}
+
+static XImage *imageCaptureArea(WScreen *scr)
+{
+	XEvent event;
+	int quit = 0;
+	int xp = -1;
+	int yp = -1;
+	int w = 0, h = 0;
+	int x = xp, y = yp;
+
+	if (XGrabPointer(dpy, scr->root_win, False, ButtonMotionMask
+			| ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
+			GrabModeAsync, None, wPreferences.cursor[WCUR_CAPTURE], CurrentTime) != Success) {
+		return NULL;
+	}
+
+	XGrabServer(dpy);
+
+	while (!quit) {
+		WMMaskEvent(dpy, ButtonReleaseMask | PointerMotionMask | ButtonPressMask | KeyPressMask, &event);
+
+		switch (event.type) {
+		case ButtonPress:
+			if (event.xbutton.button == Button1) {
+				xp = event.xbutton.x_root;
+				yp = event.xbutton.y_root;
+			}
+			break;
+		case ButtonRelease:
+			if (event.xbutton.button == Button1) {
+				quit = 1;
+				if (w > 0 && h > 0) {
+					XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
+					XUngrabServer(dpy);
+					XUngrabPointer(dpy, CurrentTime);
+					return XGetImage(dpy, scr->root_win, x, y, w, h, AllPlanes, ZPixmap);
+				}
+			}
+			break;
+		case MotionNotify:
+			XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
+			x = event.xmotion.x_root;
+                        if (x < xp) {
+                                w = xp - x;
+                        } else {
+                                w = x - xp;
+                                x = xp;
+                        }
+                        y = event.xmotion.y_root;
+                        if (y < yp) {
+                                h = yp - y;
+                        } else {
+                                h = y - yp;
+                                y = yp;
+                        }
+			XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
+			break;
+		case KeyPress:
+			if (W_KeycodeToKeysym(dpy, event.xkey.keycode, 0) == XK_Escape)
+				quit = 1;
+			break;
+		default:
+			WMHandleEvent(&event);
+			break;
+		}
+	}
+
+	XUngrabServer(dpy);
+	XUngrabPointer(dpy, CurrentTime);
+	return NULL;
+}
+
+static void hideMiniScreenshot(void *data)
+{
+	WScreen *scr = (WScreen *) data;
+
+	if (time(NULL) < scr->mini_screenshot_timeout) {
+		scr->mini_screenshot_timer = WMAddTimerHandler(WORKSPACE_NAME_FADE_DELAY, hideMiniScreenshot, scr);
+	} else {
+		XWindowAttributes attr;
+
+		WMDeleteTimerHandler(scr->mini_screenshot_timer);
+		if (XGetWindowAttributes(dpy, scr->mini_screenshot, &attr))
+			slide_window(scr->mini_screenshot, attr.x, attr.y, attr.x + attr.width, attr.y);
+		XUnmapWindow(dpy, scr->mini_screenshot);
+		XDestroyWindow(dpy, scr->mini_screenshot);
+		scr->mini_screenshot_timeout = 0;
+	}
+}
+
+static void showMiniScreenshot(WScreen *scr, RImage *img)
+{
+	Pixmap pix;
+	int x = scr->scr_width - img->width - 20;
+	int y = scr->scr_height - img->height - 20;
+
+	if (!scr->mini_screenshot_timeout) {
+		Window win;
+
+		win = XCreateSimpleWindow(dpy, scr->root_win, x, y,
+			img->width, img->height, scr->frame_border_width, 0, 0);
+		scr->mini_screenshot = win;
+	}
+	RConvertImage(scr->rcontext, img, &pix);
+	XMapWindow(dpy, scr->mini_screenshot);
+	XCopyArea(dpy, pix, scr->mini_screenshot, scr->rcontext->copy_gc, 0, 0, img->width, img->height, 0, 0);
+	XFlush(dpy);
+
+	scr->mini_screenshot_timeout = time(NULL) + 2;
+	scr->mini_screenshot_timer = WMAddTimerHandler(WORKSPACE_NAME_FADE_DELAY, hideMiniScreenshot, scr);
+}
+
+void ScreenCapture(WScreen *scr, int mode)
+{
+	time_t s;
+	short i = 0;
+	struct tm *tm_info;
+	char index_str[12] = "";
+	char filename_date_part[60];
+	char filename[60];
+	char *filepath;
+	char *screenshot_dir;
+	RImage *img = NULL;
+	RImage *scale_img = NULL;
+
+#ifdef USE_PNG
+	char *filetype = ".png";
+#else
+#ifdef USE_JPEG
+	char *filetype = ".jpg";
+#else
+	char *filetype = NULL;
+#endif
+#endif
+
+	if (!filetype) {
+		werror(_("Unable to find a proper screenshot image format"));
+		return;
+	}
+
+	screenshot_dir = wstrconcat(wusergnusteppath(), "/Library/WindowMaker/Screenshots/");
+	if (-1 == mkdir(screenshot_dir, 0700) && errno != EEXIST) {
+		wfree(screenshot_dir);
+		werror(_("Unable to create screenshot directory: %s"), strerror(errno));
+		return;
+	}
+
+	s = time(NULL);
+	tm_info = localtime(&s);
+	strftime(filename_date_part, sizeof(filename_date_part), "screenshot_%Y-%m-%d_at_%H:%M:%S", tm_info);
+	strcpy(filename, filename_date_part);
+
+	filepath = wstrconcat(screenshot_dir, strcat(filename, filetype));
+	while (access(filepath, F_OK) == 0 && i < 600) {
+		i++;
+		strcpy(filename, filename_date_part);
+		sprintf(index_str, "_%d", i);
+		strncat(filename, index_str, sizeof(filename) - strlen(filename) - 1);
+		wfree(filepath);
+		filepath = wstrconcat(screenshot_dir, strcat(filename, filetype));
+	}
+
+	/* cannot generate an available filename ?! */
+	if (i == 600) {
+		wfree(filepath);
+		wfree(screenshot_dir);
+		werror(_("Could not generate a free screenshot filename"));
+		return;
+	}
+
+	switch (mode) {
+		case PRINT_WINDOW:
+			WWindow *wwin = scr->focused_window;
+			if (wwin && !wwin->flags.shaded) {
+				/*
+				 * check if hint WM_TAKE_FOCUS is set, if it's the case
+				 * we can take screenshot of the out of screen window
+				 */
+				if (wwin->focus_mode >= WFM_LOCALLY_ACTIVE) {
+					img = RCreateImageFromDrawable(scr->rcontext, wwin->client_win, None);
+				}
+				else {
+					/* we will only capture the visible window part */
+					XImage *pimg;
+					int x_crop = 0;
+					int y_crop = 0;
+					int w_crop = wwin->client.width;
+					int h_crop = wwin->client.height;
+
+					if (wwin->client.x > 0)
+						x_crop = wwin->client.x;
+					if (wwin->client.y > 0)
+						y_crop = wwin->client.y;
+
+					if (wwin->client.x + wwin->client.width > scr->scr_width)
+						w_crop = scr->scr_width - wwin->client.x;
+					if (wwin->client.y + wwin->client.height > scr->scr_height)
+						h_crop = scr->scr_height - wwin->client.y;
+
+					pimg = XGetImage(dpy, scr->root_win, x_crop, y_crop,
+							(wwin->client.x > 0)?w_crop:w_crop + wwin->client.x,
+							(wwin->client.y > 0)?h_crop:h_crop + wwin->client.y,
+							AllPlanes, ZPixmap);
+
+					if (pimg) {
+						img = RCreateImageFromXImage(scr->rcontext, pimg, None);
+						XDestroyImage(pimg);
+					}
+				}
+			}
+			break;
+		case PRINT_PARTIAL:
+			XImage *pimg;
+
+			pimg = imageCaptureArea(scr);
+			if (pimg) {
+				img = RCreateImageFromXImage(scr->rcontext, pimg, None);
+				XDestroyImage(pimg);
+			}
+			break;
+		default:
+			/* PRINT_SCREEN*/
+			img = RCreateImageFromDrawable(scr->rcontext, scr->root_win, None);
+	}
+
+	if (img) {
+#ifdef USE_PNG
+		if (RSaveTitledImage(img, filepath, (char *)(filetype + 1), "Screenshot from Window Maker")) {
+#else
+		if (RSaveTitledImage(img, filepath, (char *)(filetype + 1), "Screenshot from Window Maker")) {
+#endif
+			scale_img = RSmoothScaleImage(img, scr->scr_width / 10, scr->scr_height / 10);
+			showMiniScreenshot(scr, scale_img);
+			RReleaseImage(scale_img);
+#ifdef DEBUG
+			wmessage("screenshot filepath: %s", filepath);
+#endif
+		}
+		RReleaseImage(img);
+	}
+	wfree(filepath);
+	wfree(screenshot_dir);
 }

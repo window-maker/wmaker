@@ -158,7 +158,10 @@ static struct keyOption {
 	{ "RunKey",            N_("Run application") },
 	{ "ExitKey",            N_("Exit Window Maker") },
 	{ "DockRaiseLowerKey", N_("Raise/Lower Dock") },
-	{ "ClipRaiseLowerKey", N_("Raise/Lower Clip") }
+	{ "ClipRaiseLowerKey", N_("Raise/Lower Clip") },
+	{ "ScreenCaptureKey", N_("Capture the entire screen") },
+	{ "WindowCaptureKey", N_("Capture a window") },
+	{ "PartialCaptureKey", N_("Capture a portion of the screen") }
 #ifdef XKB_MODELOCK
 	,{ "ToggleKbdModeKey", N_("Toggle keyboard language") }
 #endif				/* XKB_MODELOCK */

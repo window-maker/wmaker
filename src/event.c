@@ -1863,6 +1863,24 @@ static void handleKeyPress(XEvent * event)
 		break;
 	}
 
+	case WKBD_PRINTS:
+	{
+		ScreenCapture(scr, PRINT_SCREEN);
+		break;
+	}
+
+	case WKBD_PRINTW:
+	{
+		ScreenCapture(scr, PRINT_WINDOW);
+		break;
+	}
+
+	case WKBD_PRINTP:
+	{
+		ScreenCapture(scr, PRINT_PARTIAL);
+		break;
+	}
+
 	case WKBD_NEXTWSLAYER:
 	case WKBD_PREVWSLAYER:
 		{

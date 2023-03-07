@@ -148,6 +148,15 @@ enum {
 	/* open "exit" dialog */
 	WKBD_EXIT,
 
+	/* screen print */
+	WKBD_PRINTS,
+
+	/* window print */
+	WKBD_PRINTW,
+
+	/* partial print */
+	WKBD_PRINTP,
+
 #ifdef KEEP_XKB_LOCK_STATUS
 	WKBD_TOGGLE,
 #endif

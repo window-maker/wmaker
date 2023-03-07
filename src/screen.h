@@ -27,6 +27,9 @@
 
 #include <WINGs/WUtil.h>
 
+#define PRINT_SCREEN 1
+#define PRINT_WINDOW 2
+#define PRINT_PARTIAL 3
 
 typedef struct {
     WMRect *screens;
@@ -271,6 +274,11 @@ typedef struct _WScreen {
     WMHandlerID *workspace_name_timer;
     struct WorkspaceNameData *workspace_name_data;
 
+    /* mini screenshot data */
+    Window mini_screenshot;
+    time_t mini_screenshot_timeout;
+    WMHandlerID *mini_screenshot_timer;
+
     /* for raise-delay */
     WMHandlerID *autoRaiseTimer;
     Window autoRaiseWindow;	       /* window that is scheduled to be
@@ -314,7 +322,7 @@ void wScreenRestoreState(WScreen *scr);
 
 int wScreenBringInside(WScreen *scr, int *x, int *y, int width, int height);
 int wScreenKeepInside(WScreen *scr, int *x, int *y, int width, int height);
-
+void ScreenCapture(WScreen *scr, int mode);
 
 /* in startup.c */
 WScreen *wScreenWithNumber(int i);

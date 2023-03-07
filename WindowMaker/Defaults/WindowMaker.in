@@ -233,6 +233,9 @@
 	ScreenSwitchKey = None;
 	RunKey = None;
 	ExitKey = None;
+	ScreenCaptureKey = Print;
+	WindowCaptureKey = None;
+	PartialCaptureKey = None;
 	NormalCursor = (builtin, left_ptr);
 	ArrowCursor = (builtin, top_left_arrow);
 	MoveCursor = (builtin, fleur);

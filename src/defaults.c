@@ -790,6 +790,12 @@ WDefaultEntry optionList[] = {
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"ExitKey", "None", (void *)WKBD_EXIT,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"ScreenCaptureKey", "None", (void *)WKBD_PRINTS,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"WindowCaptureKey", "None", (void *)WKBD_PRINTW,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"PartialCaptureKey", "None", (void *)WKBD_PRINTP,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 
 #ifdef KEEP_XKB_LOCK_STATUS
 	{"ToggleKbdModeKey", "None", (void *)WKBD_TOGGLE,
@@ -825,6 +831,8 @@ WDefaultEntry optionList[] = {
 	{"TextCursor", "(builtin, xterm)", (void *)WCUR_TEXT,
 	    NULL, getCursor, setCursor, NULL, NULL},
 	{"SelectCursor", "(builtin, cross)", (void *)WCUR_SELECT,
+	    NULL, getCursor, setCursor, NULL, NULL},
+	{"CaptureCursor", "(builtin, crosshair)", (void *)WCUR_CAPTURE,
 	    NULL, getCursor, setCursor, NULL, NULL},
 	{"DialogHistoryLines", "500", NULL,
 	    &wPreferences.history_lines, getInt, NULL, NULL, NULL},

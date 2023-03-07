@@ -493,6 +493,7 @@ void StartUp(Bool defaultScreenOnly)
 	wPreferences.cursor[WCUR_QUESTION] = XCreateFontCursor(dpy, XC_question_arrow);
 	wPreferences.cursor[WCUR_TEXT] = XCreateFontCursor(dpy, XC_xterm);	/* odd name??? */
 	wPreferences.cursor[WCUR_SELECT] = XCreateFontCursor(dpy, XC_cross);
+	wPreferences.cursor[WCUR_CAPTURE] = XCreateFontCursor(dpy, XC_crosshair);
 
 	Pixmap cur = XCreatePixmap(dpy, DefaultRootWindow(dpy), 16, 16, 1);
 	GC gc = XCreateGC(dpy, cur, 0, NULL);
