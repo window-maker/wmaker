@@ -11,14 +11,14 @@
 
 #include "logo.xpm"
 
-void wAbort()
+_Noreturn void wAbort(void)
 {
-	exit(1);
+	 exit(1);
 }
 
 char *ProgName;
 
-void usage(void)
+_Noreturn void usage(void)
 {
 	fprintf(stderr,
 		"usage:\n"
@@ -45,8 +45,6 @@ int main(int argc, char **argv)
 	char *initial = NULL;
 	char *result = NULL;
 	int ch;
-	extern char *optarg;
-	extern int optind;
 
 	WMInitializeApplication("WMQuery", &argc, argv);
 

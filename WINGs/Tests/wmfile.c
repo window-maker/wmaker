@@ -19,14 +19,14 @@
 
 #include "logo.xpm"
 
-void wAbort()
+_Noreturn void wAbort(void)
 {
 	exit(1);
 }
 
 char *ProgName;
 
-void usage(void)
+_Noreturn void usage(void)
 {
 	fprintf(stderr,
 		"usage:\n"
@@ -53,13 +53,10 @@ int main(int argc, char **argv)
 	WMPixmap *pixmap;
 	WMOpenPanel *oPanel;
 	WMSavePanel *sPanel;
-	/*  RImage *image; */
 	char *title = NULL;
 	char *initial = "/";
 	int ch;
 	int panelType = OPEN_PANEL_TYPE;
-	extern char *optarg;
-	extern int optind;
 
 	if (!dpy) {
 		puts("could not open display");
@@ -96,14 +93,14 @@ int main(int argc, char **argv)
 	if (panelType == SAVE_PANEL_TYPE) {
 		sPanel = WMGetSavePanel(scr);
 		if (WMRunModalFilePanelForDirectory(sPanel, NULL, initial,
-						    /*title */ NULL, NULL) == True)
+						    title, NULL) == True)
 			printf("%s\n", WMGetFilePanelFileName(sPanel));
 		else
 			printf("\n");
 	} else {
 		oPanel = WMGetOpenPanel(scr);
 		if (WMRunModalFilePanelForDirectory(oPanel, NULL, initial,
-						    /*title */ NULL, NULL) == True)
+						   title, NULL) == True)
 			printf("%s\n", WMGetFilePanelFileName(oPanel));
 		else
 			printf("\n");

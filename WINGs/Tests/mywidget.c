@@ -64,6 +64,7 @@ static W_Class myWidgetClass = 0;
  */
 W_Class InitMyWidget(WMScreen * scr)
 {
+	(void)scr;
 	/* register our widget with WINGs and get our widget class ID */
 	if (!myWidgetClass) {
 		myWidgetClass = W_RegisterUserWidget();

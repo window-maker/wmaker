@@ -4,7 +4,7 @@
 
 #include "mywidget.h"
 
-void wAbort()
+_Noreturn void wAbort(void)
 {
 	exit(1);
 }

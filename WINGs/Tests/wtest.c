@@ -14,7 +14,7 @@
  * This will be called when the application will be terminated because
  * of a fatal error (only for memory allocation failures ATM).
  */
-void wAbort()
+_Noreturn void wAbort(void)
 {
 	exit(1);
 }
@@ -25,6 +25,7 @@ int windowCount = 0;
 
 void closeAction(WMWidget * self, void *data)
 {
+	(void)data;
 	WMDestroyWidget(self);
 	windowCount--;
 	printf("window closed, window count = %d\n", windowCount);
@@ -165,10 +166,13 @@ void testBox(WMScreen * scr)
 
 static void singleClick(WMWidget * self, void *data)
 {
+	(void)self;
+	(void)data;
 }
 
 static void doubleClick(WMWidget * self, void *data)
 {
+	(void)data;
 	WMSelectAllListItems((WMList *) self);
 }
 
@@ -480,6 +484,7 @@ void testColorPanel(WMScreen * scr)
 
 void sliderCallback(WMWidget * w, void *data)
 {
+	(void)data;
 	printf("SLIDER == %i\n", WMGetSliderValue(w));
 }
 
@@ -749,6 +754,8 @@ void testTabView(WMScreen * scr)
 
 void splitViewConstrainProc(WMSplitView * sPtr, int indView, int *minSize, int *maxSize)
 {
+	(void)sPtr;
+
 	switch (indView) {
 	case 0:
 		*minSize = 20;
@@ -782,6 +789,7 @@ static void resizeSplitView(XEvent * event, void *data)
 
 void appendSubviewButtonAction(WMWidget * self, void *data)
 {
+	(void)self;
 	WMSplitView *sPtr = (WMSplitView *) data;
 	char buf[64];
 	WMLabel *label = WMCreateLabel(sPtr);
@@ -796,6 +804,7 @@ void appendSubviewButtonAction(WMWidget * self, void *data)
 
 void removeSubviewButtonAction(WMWidget * self, void *data)
 {
+	(void)self;
 	WMSplitView *sPtr = (WMSplitView *) data;
 	int count = WMGetSplitViewSubviewsCount(sPtr);
 
@@ -808,12 +817,14 @@ void removeSubviewButtonAction(WMWidget * self, void *data)
 
 void orientationButtonAction(WMWidget * self, void *data)
 {
+	(void)self;
 	WMSplitView *sPtr = (WMSplitView *) data;
 	WMSetSplitViewVertical(sPtr, !WMGetSplitViewVertical(sPtr));
 }
 
 void adjustSubviewsButtonAction(WMWidget * self, void *data)
 {
+	(void)self;
 	WMAdjustSplitViewSubviews((WMSplitView *) data);
 }
 
@@ -902,7 +913,7 @@ void testSplitView(WMScreen * scr)
 	WMMapWidget(win);
 }
 
-void testUD()
+void testUD(void)
 {
 	WMUserDefaults *defs;
 	char str[32];
