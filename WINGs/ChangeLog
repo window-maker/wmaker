@@ -1,4 +1,4 @@
-Changes since wmaker 0.95.10:
+Changes since wmaker 0.96.0:
 ............................
 
 - added W_KeycodeToKeysym to replace XKeycodeToKeysym/XkbKeycodeToKeysym calls

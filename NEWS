@@ -1,7 +1,25 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
--- 0.95.10
+-- 0.96.0
+
+Screenshot capture feature
+--------------------------
+
+In WPrefs "Keyboard Shortcut Preferences" tab, three new actions can
+be configured: "Capture a portion of the screen", "Capture a window",
+"Capture the entire screen". The file is saved in
+~/GNUstep/Library/WindowMaker/Screenshots directory under a filename
+format "screenshot_%Y-%m-%d_at_%H:%M:%S" followed by the extension.
+Which can be png or jpg based on WRaster dependencies.
+
+
+Support for _NET_WM_FULLSCREEN_MONITORS hint
+--------------------------------------------
+
+That hint allows applications that support it to be set as fullscreen on multiple heads.
+It depends on Xinerama extension support.
+
 
 Keep dock on primary head
 -------------------------
@@ -9,6 +27,7 @@ Keep dock on primary head
 To keep the dock on the primary head in a multi-head setup, set the option
 "KeepDockOnPrimaryHead" in ~/GNUstep/Defaults/WindowMaker to "YES" or click
 "Keep dock on primary head" under the WPrefs "Expert User Preferences" tab.
+
 
 -- 0.95.9
 
