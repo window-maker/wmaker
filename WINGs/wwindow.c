@@ -395,7 +395,11 @@ static void setWindowMakerHints(WMWindow * win)
 
 	memset(&attribs, 0, sizeof(GNUstepWMAttributes));
 	attribs.flags = GSWindowStyleAttr | GSWindowLevelAttr | GSExtraFlagsAttr;
+
+	if (win->minSize.width == win->maxSize.width && win->minSize.height == win->maxSize.height)
+		win->flags.style &= ~WMResizableWindowMask;
 	attribs.window_style = win->flags.style;
+
 	attribs.window_level = win->level;
 	if (win->flags.documentEdited)
 		attribs.extra_flags = GSDocumentEditedFlag;
