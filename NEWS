@@ -14,6 +14,13 @@ format "screenshot_%Y-%m-%d_at_%H:%M:%S" followed by the extension.
 Which can be png or jpg based on WRaster dependencies.
 
 
+libXRes is now an optional dependency
+-------------------------------------
+
+XRes the resource extension for the X protocol is used to find the
+underlying processes (and PIDs) responsible for displaying the windows.
+
+
 Support for _NET_WM_FULLSCREEN_MONITORS hint
 --------------------------------------------
 
