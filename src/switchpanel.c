@@ -158,6 +158,7 @@ static void changeImage(WSwitchPanel *panel, int idecks, int selected, Bool dim,
 			color.red = WMRedComponentOfColor(panel->gray) >> 8;
 			color.green = WMGreenComponentOfColor(panel->gray) >> 8;
 			color.blue = WMBlueComponentOfColor(panel->gray) >> 8;
+			color.alpha = 255;
 			RFillImage(back, &color);
 		}
 
