@@ -256,7 +256,7 @@ static WMPixmap *dummy_background_pixmap(WWorkspaceMap *wsmap)
 	RImage *img;
 	WMPixmap *icon;
 
-	img = RCreateImage(wsmap->wswidth, wsmap->wsheight, 0);
+	img = RCreateImage(wsmap->mini_workspace_width, wsmap->mini_workspace_height, 0);
 
 	if (!img)
 		return NULL;
@@ -327,7 +327,7 @@ static void hide_mini_workspace(W_WorkspaceMap *wsmap_array, int i)
 static  WMPixmap *get_mini_workspace(WWorkspaceMap *wsmap, int index)
 {
 	if (!wsmap->scr->workspaces[index]->map)
-		return dummy_background_pixmap(wsmap);
+		return NULL;
 
 	if (index == wsmap->scr->current_workspace)
 		return enlight_workspace(wsmap->scr, wsmap->scr->workspaces[index]->map);
@@ -486,8 +486,8 @@ static void handle_event(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 
 	w_global.process_workspacemap_event = True;
 	while (w_global.process_workspacemap_event) {
-		WMMaskEvent(dpy, KeyPressMask | KeyReleaseMask | ExposureMask
-		            | PointerMotionMask | ButtonPressMask | ButtonReleaseMask | EnterWindowMask, &ev);
+		WMMaskEvent(dpy, KeyPressMask | KeyReleaseMask | ExposureMask | PointerMotionMask |
+		             ButtonPressMask | ButtonReleaseMask | EnterWindowMask | FocusChangeMask, &ev);
 
 		modifiers = ev.xkey.state & w_global.shortcut.modifiers_mask;
 
@@ -528,6 +528,29 @@ static void handle_event(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 			default:
 				WMHandleEvent(&ev);
 			}
+			break;
+
+		case  FocusIn:
+			WMScreen *wmscr = wsmap->scr->wmscreen;
+			WMColor *black = WMBlackColor(wmscr);
+			const char *text = "?";
+			WMFont *bold = WMBoldSystemFontOfSize(wmscr, wsmap->mini_workspace_width / 3);
+			int x = (wsmap->mini_workspace_width / 2) - (WMWidthOfString(bold, text, strlen(text)) / 2);
+			int y = (wsmap->mini_workspace_height / 2) - (WMFontHeight(bold) / 2);
+			WMPixmap *icon = dummy_background_pixmap(wsmap);
+
+			if (icon) {
+				int i;
+
+				WMDrawString(wmscr, WMGetPixmapXID(icon),
+						black, bold, x, y, text, strlen(text));
+				for (i = 0; i < wsmap->scr->workspace_count; i++) {
+					if (!wsmap->scr->workspaces[i]->map)
+						WMSetButtonImage(wsmap_array[i].workspace_img_button, icon);
+				}
+				WMReleasePixmap(icon);
+			}
+			WMHandleEvent(&ev);
 			break;
 
 		default:
