@@ -2913,17 +2913,18 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 			} 
 		}
 		
-		if (wPreferences.double_click_fullscreen){
+		if (wPreferences.double_click_fullscreen) {
 			int dir = 0;
+
 			if (event->xbutton.state == 0) {
 				/* maximize window full screen*/
 				dir |= (MAX_VERTICAL|MAX_HORIZONTAL);
 				int ndir = dir ^ wwin->flags.maximized;
+				if (ndir != 0)
 					wMaximizeWindow(wwin, ndir, wGetHeadForWindow(wwin));
-			
-			} 
-
-					
+				else
+					wUnmaximizeWindow(wwin);
+			}
 		} else {
 			int dir = 0;
 
