@@ -10,7 +10,7 @@ include_HEADERS = wtableview.h wtabledelegates.h
 
 lib_LTLIBRARIES = libExtraWINGs.la
 
-noinst_PROGRAMS = test
+noinst_PROGRAMS = tableview
 
 EXTRA_DIST =
 
@@ -25,6 +25,6 @@ AM_CPPFLAGS = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs \
 
 LDADD= $(top_builddir)/WINGs/libWINGs.la $(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/WINGs/libWUtil.la \
-	@XFT_LIBS@ @INTLIBS@
+	@XFT_LIBS@ @INTLIBS@ @XLIBS@
 
-test_LDADD = wtableview.o wtabledelegates.o $(LDADD)
+tableview_LDADD = wtableview.o wtabledelegates.o $(LDADD)

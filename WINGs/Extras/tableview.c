@@ -19,13 +19,18 @@ static char *options[] = {
 
 int numberOfRows(WMTableViewDelegate * self, WMTableView * table)
 {
+	(void) self;
+	(void) table;
+
 	return 20;
 }
 
 void *valueForCell(WMTableViewDelegate * self, WMTableColumn * column, int row)
 {
+	(void) self;
 	/*WMTableView *table = (WMTableView*)WMGetTableColumnTableView(column); */
 	int i;
+
 	if (col1[0] == 0) {
 		for (i = 0; i < 20; i++) {
 			char buf[128];
@@ -44,6 +49,8 @@ void *valueForCell(WMTableViewDelegate * self, WMTableColumn * column, int row)
 
 void setValueForCell(WMTableViewDelegate * self, WMTableColumn * column, int row, void *data)
 {
+	(void) self;
+
 	if ((uintptr_t)WMGetTableColumnId(column) == 1)
 		col1[row] = data;
 	else
@@ -59,6 +66,7 @@ static WMTableViewDelegate delegate = {
 
 void clickedTable(WMWidget * w, void *self)
 {
+	(void) w;
 	int row = WMGetTableViewClickedRow((WMTableView *) self);
 
 	WMEditTableViewRow(self, row);

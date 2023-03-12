@@ -2,6 +2,8 @@
 #include <WINGs/WINGsP.h>
 #include <X11/cursorfont.h>
 #include <stdint.h>
+#include <math.h>
+#include <float.h>
 
 #include "wtableview.h"
 
@@ -274,7 +276,7 @@ static void adjustScrollers(WMTableView * table)
 			prop = 1.0;
 		} else {
 			oprop = WMGetScrollerKnobProportion(table->hscroll);
-			if (oprop == 0.0)
+			if (fabs(oprop) <= DBL_EPSILON)
 				oprop = 1.0;
 			ovalue = WMGetScrollerValue(table->hscroll);
 
@@ -290,7 +292,7 @@ static void adjustScrollers(WMTableView * table)
 			prop = 1.0;
 		} else {
 			oprop = WMGetScrollerKnobProportion(table->vscroll);
-			if (oprop == 0.0)
+			if (fabs(oprop) <= DBL_EPSILON)
 				oprop = 1.0;
 			ovalue = WMGetScrollerValue(table->vscroll);
 
@@ -332,7 +334,7 @@ static void doScroll(WMWidget * self, void *data)
 	case WSIncrementWheel:
 	case WSIncrementLine:
 		value += (float)table->rowHeight / size;
-		if (value > 1.0)
+		if (value > (float)1.0)
 			value = 1.0;
 		WMSetScrollerParameters(self, value, WMGetScrollerKnobProportion(self));
 		repaintTable(table);
@@ -344,7 +346,7 @@ static void doScroll(WMWidget * self, void *data)
 
 	case WSDecrementPage:
 		value -= vpsize / size;
-		if (value < 0.0)
+		if (value < (float)0.0)
 			value = 0.0;
 		WMSetScrollerParameters(self, value, WMGetScrollerKnobProportion(self));
 		repaintTable(table);
@@ -352,7 +354,7 @@ static void doScroll(WMWidget * self, void *data)
 
 	case WSIncrementPage:
 		value += vpsize / size;
-		if (value > 1.0)
+		if (value > (float)1.0)
 			value = 1.0;
 		WMSetScrollerParameters(self, value, WMGetScrollerKnobProportion(self));
 		repaintTable(table);
@@ -398,6 +400,7 @@ static void doScroll(WMWidget * self, void *data)
 
 static void splitterHandler(XEvent * event, void *data)
 {
+	(void) event;
 	WMTableColumn *column = (WMTableColumn *) data;
 	WMTableView *table = column->table;
 	int done = 0;
@@ -451,6 +454,8 @@ static void splitterHandler(XEvent * event, void *data)
 
 static void realizeTable(void *data, WMNotification * notif)
 {
+	(void) notif;
+
 	repaintTable(data);
 }
 
@@ -790,7 +795,6 @@ void WMSetTableViewRowHeight(WMTableView * table, int height)
 
 void WMScrollTableViewRowToVisible(WMTableView * table, int row)
 {
-	WMScroller *scroller;
 	WMRange range;
 	WMRect rect;
 	int newY, tmp;
@@ -798,7 +802,6 @@ void WMScrollTableViewRowToVisible(WMTableView * table, int row)
 	rect = getVisibleRect(table);
 	range = rowsInRect(table, rect);
 
-	scroller = table->vscroll;
 
 	if (row < range.position) {
 		newY = row * table->rowHeight - rect.size.height / 2;
@@ -1157,6 +1160,8 @@ static void handleEvents(XEvent * event, void *data)
 
 static void handleResize(W_ViewDelegate * self, WMView * view)
 {
+	(void) self;
+
 	reorganizeInterior(view->self);
 }
 
@@ -1167,7 +1172,8 @@ static void reorganizeInterior(WMTableView * table)
 	WMSize size = getTotalSize(table);
 	WMView *view = table->view;
 	int vw, vh;
-	int hsThickness, vsThickness;
+	int hsThickness = 0;
+	int vsThickness = 0;
 
 	if (table->vscroll)
 		vsThickness = WMWidgetWidth(table->vscroll);
