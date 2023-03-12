@@ -1,7 +1,7 @@
 /*
  *  Window Maker window manager
  *
- *  Copyright (c) 2014 Window Maker Team - David Maciejak
+ *  Copyright (c) 2014-2023 Window Maker Team - David Maciejak
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

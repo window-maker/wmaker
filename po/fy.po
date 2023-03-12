@@ -1,5 +1,5 @@
 # Translation into Western Frisian for Window Maker
-# Copyright (C) 2015-2016 Window Maker Developers Team
+# Copyright (C) 2015-2020 Window Maker Developers Team
 # This file is distributed under the same license as the windowmaker package.
 # Original by Alwin <translations@ziggo.nl>, 2015.
 #

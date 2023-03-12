@@ -2,7 +2,7 @@
  *
  *  WPrefs - Window Maker Preferences Program
  *
- *  Copyright (c) 2014 Window Maker Team
+ *  Copyright (c) 2014-2023 Window Maker Team
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
  *
  *  This program is free software; you can redistribute it and/or modify

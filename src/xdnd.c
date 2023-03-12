@@ -2,7 +2,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- *  Copyright (c) 2014 Window Maker Team
+ *  Copyright (c) 2014-2015 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

@@ -1,6 +1,6 @@
 # wm_libexif.m4 - Macros to check proper libexif
 #
-# Copyright (c) 2014 Window Maker Team
+# Copyright (c) 2014-2015 Window Maker Team
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

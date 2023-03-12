@@ -4,7 +4,7 @@
 #  Window Maker window manager
 #
 #  Copyright (c) 2014 Christophe CURIS
-#  Copyright (c) 2014 Window Maker Team
+#  Copyright (c) 2014-2015 Window Maker Team
 #
 #  This program is free software; you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by

@@ -1,7 +1,7 @@
 # wm_i18n.m4 - Macros to check and enable translations in WindowMaker
 #
 # Copyright (c) 2014-2015 Christophe CURIS
-# Copyright (c) 2015 The Window Maker Tean
+# Copyright (c) 2015-2021 The Window Maker Tean
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

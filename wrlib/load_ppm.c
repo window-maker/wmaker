@@ -3,7 +3,7 @@
  * Raster graphics library
  *
  * Copyright (c) 1997-2003 Alfredo K. Kojima
- * Copyright (c) 2014 Window Maker Team
+ * Copyright (c) 2014-2021 Window Maker Team
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public

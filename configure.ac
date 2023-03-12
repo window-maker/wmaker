@@ -2,7 +2,7 @@ dnl ============================================================================
 dnl
 dnl Window Maker autoconf input
 dnl
-AC_COPYRIGHT([Copyright (c) 2001-2015 The Window Maker Team])
+AC_COPYRIGHT([Copyright (c) 2001-2023 The Window Maker Team])
 dnl
 dnl ============================================================================
 dnl
