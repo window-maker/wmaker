@@ -1383,6 +1383,10 @@ void wShowInfoPanel(WScreen *scr)
 	case 32:
 		strbuf = wstrappend(strbuf, _("(16 million colors)\n"));
 		break;
+	case 30:
+	case 40:
+		strbuf = wstrappend(strbuf, _("(1 billion colors)\n"));
+		break;
 	default:
 		snprintf(buffer, sizeof(buffer), _("(%d colors)\n"), 1 << scr->w_depth);
 		strbuf = wstrappend(strbuf, buffer);
