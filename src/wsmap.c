@@ -492,6 +492,9 @@ static void handle_event(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 		modifiers = ev.xkey.state & w_global.shortcut.modifiers_mask;
 
 		switch (ev.type) {
+			WMScreen *wmscr;
+			WMColor *black;
+
 		case KeyPress:
 			if (ev.xkey.keycode == escKey || (wKeyBindings[WKBD_WORKSPACEMAP].keycode != 0 &&
 			                                  wKeyBindings[WKBD_WORKSPACEMAP].keycode == ev.xkey.keycode &&
@@ -531,8 +534,8 @@ static void handle_event(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 			break;
 
 		case  FocusIn:
-			WMScreen *wmscr = wsmap->scr->wmscreen;
-			WMColor *black = WMBlackColor(wmscr);
+			wmscr = wsmap->scr->wmscreen;
+			black = WMBlackColor(wmscr);
 			const char *text = "?";
 			WMFont *bold = WMBoldSystemFontOfSize(wmscr, wsmap->mini_workspace_width / 3);
 			int x = (wsmap->mini_workspace_width / 2) - (WMWidthOfString(bold, text, strlen(text)) / 2);

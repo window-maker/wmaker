@@ -1304,8 +1304,11 @@ void ScreenCapture(WScreen *scr, int mode)
 	}
 
 	switch (mode) {
+		WWindow *wwin;
+		XImage *pimg;
+
 		case PRINT_WINDOW:
-			WWindow *wwin = scr->focused_window;
+			wwin = scr->focused_window;
 			if (wwin && !wwin->flags.shaded) {
 				/*
 				 * check if hint WM_TAKE_FOCUS is set, if it's the case
@@ -1316,7 +1319,6 @@ void ScreenCapture(WScreen *scr, int mode)
 				}
 				else {
 					/* we will only capture the visible window part */
-					XImage *pimg;
 					int x_crop = 0;
 					int y_crop = 0;
 					int w_crop = wwin->client.width;
@@ -1345,8 +1347,6 @@ void ScreenCapture(WScreen *scr, int mode)
 			}
 			break;
 		case PRINT_PARTIAL:
-			XImage *pimg;
-
 			pimg = imageCaptureArea(scr);
 			if (pimg) {
 				img = RCreateImageFromXImage(scr->rcontext, pimg, None);
