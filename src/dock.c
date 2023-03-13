@@ -4,6 +4,7 @@
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
+ *  Copyright (c) 2009-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -3038,7 +3039,6 @@ void wDockSwap(WDock *dock)
 	WAppIcon *btn;
 	int x, i;
 
-
 	x = getDockXPosition(scr, dock->on_right_side);
 	swapDrawers(scr, x);
 	dock->x_pos = x;
@@ -4619,7 +4619,10 @@ static void swapDrawer(WDock *drawer, int new_x)
 		ai = drawer->icon_array[i];
 		if (ai == NULL)
 			continue;
-		ai->xindex *= -1; /* so A B C becomes C B A */
+		if (drawer->on_right_side)
+			ai->xindex = -abs(ai->xindex);
+		else
+			ai->xindex = abs(ai->xindex);
 		ai->x_pos = new_x + ai->xindex * ICON_SIZE;
 
 		/* Update drawer's tile */
