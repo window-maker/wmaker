@@ -4926,6 +4926,13 @@ static WDock * drawerRestoreState(WScreen *scr, WMPropList *drawer_state)
 		drawer->icon_array[drawer->icon_count] = aicon;
 
 		if (aicon) {
+			/* don't trust the stored direction sign as the dock is
+			 * dynamically positioned depending on the screen size
+			 */
+			if (drawer->screen_ptr->dock->on_right_side)
+				aicon->xindex = -abs(aicon->xindex);
+			else
+				aicon->xindex = abs(aicon->xindex);
 			aicon->dock = drawer;
 			aicon->x_pos = drawer->x_pos + (aicon->xindex * ICON_SIZE);
 			aicon->y_pos = drawer->y_pos + (aicon->yindex * ICON_SIZE);
