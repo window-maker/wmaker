@@ -724,9 +724,12 @@ static void paintEntry(WMenu * menu, int index, int selected)
 	/* draw indicator */
 	if (entry->flags.indicator && entry->flags.indicator_on) {
 		int iw, ih;
-		WPixmap *indicator;
+		WPixmap *indicator = NULL;
 
 		switch (entry->flags.indicator_type) {
+		case MI_DIAMOND:
+			indicator = scr->menu_radio_indicator;
+			break;
 		case MI_CHECK:
 			indicator = scr->menu_check_indicator;
 			break;
@@ -739,35 +742,69 @@ static void paintEntry(WMenu * menu, int index, int selected)
 		case MI_SHADED:
 			indicator = scr->menu_shade_indicator;
 			break;
-		case MI_DIAMOND:
+		case MI_SNAP_V:
+			indicator = scr->menu_snap_vertically_indicator;
+			break;
+		case MI_SNAP_H:
+			indicator = scr->menu_snap_horizontally_indicator;
+			break;
+		case MI_SNAP_RH:
+			indicator = scr->menu_snap_rh_indicator;
+			break;
+		case MI_SNAP_LH:
+			indicator = scr->menu_snap_lh_indicator;
+			break;
+		case MI_SNAP_TH:
+			indicator = scr->menu_snap_th_indicator;
+			break;
+		case MI_SNAP_BH:
+			indicator = scr->menu_snap_bh_indicator;
+			break;
+		case MI_SNAP_TL:
+			indicator = scr->menu_snap_tl_indicator;
+			break;
+		case MI_SNAP_TR:
+			indicator = scr->menu_snap_tr_indicator;
+			break;
+		case MI_SNAP_BL:
+			indicator = scr->menu_snap_bl_indicator;
+			break;
+		case MI_SNAP_BR:
+			indicator = scr->menu_snap_br_indicator;
+			break;
+		case MI_SNAP_TILED:
+			indicator = scr->menu_snap_tiled_indicator;
+			break;
+		case MI_NONE:
 		default:
-			indicator = scr->menu_radio_indicator;
 			break;
 		}
 
-		iw = indicator->width;
-		ih = indicator->height;
-		XSetClipMask(dpy, scr->copy_gc, indicator->mask);
-		XSetClipOrigin(dpy, scr->copy_gc, 5, y + (h - ih) / 2);
-		if (selected) {
-			if (entry->flags.enabled) {
-				XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->select_text_color));
+		if (indicator) {
+			iw = indicator->width;
+			ih = indicator->height;
+			XSetClipMask(dpy, scr->copy_gc, indicator->mask);
+			XSetClipOrigin(dpy, scr->copy_gc, 5, y + (h - ih) / 2);
+			if (selected) {
+				if (entry->flags.enabled) {
+					XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->select_text_color));
+				} else {
+					XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->dtext_color));
+				}
 			} else {
-				XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->dtext_color));
+				if (entry->flags.enabled) {
+					XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->mtext_color));
+				} else {
+					XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->dtext_color));
+				}
 			}
-		} else {
-			if (entry->flags.enabled) {
-				XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->mtext_color));
-			} else {
-				XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->dtext_color));
-			}
+			XFillRectangle(dpy, win, scr->copy_gc, 5, y + (h - ih) / 2, iw, ih);
+			/*
+			 XCopyArea(dpy, indicator->image, win, scr->copy_gc, 0, 0,
+			 iw, ih, 5, y+(h-ih)/2);
+			*/
+			XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
 		}
-		XFillRectangle(dpy, win, scr->copy_gc, 5, y + (h - ih) / 2, iw, ih);
-		/*
-		   XCopyArea(dpy, indicator->image, win, scr->copy_gc, 0, 0,
-		   iw, ih, 5, y+(h-ih)/2);
-		 */
-		XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
 	}
 
 	/* draw right text */

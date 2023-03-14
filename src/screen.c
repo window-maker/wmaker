@@ -484,45 +484,33 @@ static void createPixmaps(WScreen * scr)
 	WPixmap *pix;
 
 	/* load pixmaps */
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_RADIO_INDICATOR_XBM_DATA,
-				       (char *)MENU_RADIO_INDICATOR_XBM_DATA,
-				       MENU_RADIO_INDICATOR_XBM_SIZE,
-				       MENU_RADIO_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_radio_indicator = pix;
+#define LOADPIXMAPINDICATOR(XBM,W,I) {\
+	pix = wPixmapCreateFromXBMData(scr, (char *)XBM, (char *)XBM,\
+					W, MENU_SNAP_INDICATOR_H_XBM_SIZE,\
+					scr->black_pixel, scr->white_pixel);\
+	if (pix != NULL)\
+		pix->shared = 1;\
+	scr->I = pix;}
 
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_CHECK_INDICATOR_XBM_DATA,
-				       (char *)MENU_CHECK_INDICATOR_XBM_DATA,
-				       MENU_CHECK_INDICATOR_XBM_SIZE,
-				       MENU_CHECK_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_check_indicator = pix;
+	LOADPIXMAPINDICATOR(MENU_RADIO_INDICATOR_XBM_DATA, MENU_RADIO_INDICATOR_XBM_SIZE, menu_radio_indicator)
+	LOADPIXMAPINDICATOR(MENU_CHECK_INDICATOR_XBM_DATA, MENU_CHECK_INDICATOR_XBM_SIZE, menu_check_indicator)
+	LOADPIXMAPINDICATOR(MENU_MINI_INDICATOR_XBM_DATA, MENU_MINI_INDICATOR_XBM_SIZE, menu_mini_indicator)
+	LOADPIXMAPINDICATOR(MENU_HIDE_INDICATOR_XBM_DATA, MENU_HIDE_INDICATOR_XBM_SIZE, menu_hide_indicator)
+	LOADPIXMAPINDICATOR(MENU_SHADE_INDICATOR_XBM_DATA, MENU_SHADE_INDICATOR_XBM_SIZE, menu_shade_indicator)
 
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_MINI_INDICATOR_XBM_DATA,
-				       (char *)MENU_MINI_INDICATOR_XBM_DATA,
-				       MENU_MINI_INDICATOR_XBM_SIZE,
-				       MENU_MINI_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_mini_indicator = pix;
+	LOADPIXMAPINDICATOR(MENU_SNAP_V_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_vertically_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_H_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_horizontally_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_RH_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_rh_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_LH_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_lh_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_TH_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_th_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_BH_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_bh_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_TL_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_tl_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_TR_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_tr_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_BL_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_bl_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_BR_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_br_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_TILED_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_tiled_indicator)
 
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_HIDE_INDICATOR_XBM_DATA,
-				       (char *)MENU_HIDE_INDICATOR_XBM_DATA,
-				       MENU_HIDE_INDICATOR_XBM_SIZE,
-				       MENU_HIDE_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_hide_indicator = pix;
-
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_SHADE_INDICATOR_XBM_DATA,
-				       (char *)MENU_SHADE_INDICATOR_XBM_DATA,
-				       MENU_SHADE_INDICATOR_XBM_SIZE,
-				       MENU_SHADE_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_shade_indicator = pix;
+#undef LOADPIXMAPINDICATOR
 
 	create_logo_image(scr);
 

@@ -119,21 +119,22 @@ static const char *const menu_options_entries[] = {
  * Defines the menu entries for the Other maximization sub-menu
  */
 static const struct {
+	unsigned int indicator;
 	const char *label;
 	unsigned int shortcut_idx;
 	int maxim_direction;
 } menu_maximize_entries[] = {
-	{ N_("Maximize vertically"), WKBD_VMAXIMIZE, MAX_VERTICAL },
-	{ N_("Maximize horizontally"), WKBD_HMAXIMIZE, MAX_HORIZONTAL },
-	{ N_("Maximize left half"), WKBD_LHMAXIMIZE, MAX_VERTICAL | MAX_LEFTHALF },
-	{ N_("Maximize right half"), WKBD_RHMAXIMIZE, MAX_VERTICAL | MAX_RIGHTHALF },
-	{ N_("Maximize top half"), WKBD_THMAXIMIZE, MAX_HORIZONTAL | MAX_TOPHALF },
-	{ N_("Maximize bottom half"), WKBD_BHMAXIMIZE, MAX_HORIZONTAL | MAX_BOTTOMHALF },
-	{ N_("Maximize left top corner"), WKBD_LTCMAXIMIZE, MAX_LEFTHALF | MAX_TOPHALF },
-	{ N_("Maximize right top corner"), WKBD_RTCMAXIMIZE, MAX_RIGHTHALF | MAX_TOPHALF },
-	{ N_("Maximize left bottom corner"), WKBD_LBCMAXIMIZE, MAX_LEFTHALF | MAX_BOTTOMHALF },
-	{ N_("Maximize right bottom corner"), WKBD_RBCMAXIMIZE, MAX_RIGHTHALF | MAX_BOTTOMHALF },
-	{ N_("Maximus: tiled maximization"), WKBD_MAXIMUS, MAX_MAXIMUS }
+	{ MI_SNAP_V, N_("Vertically"), WKBD_VMAXIMIZE, MAX_VERTICAL },
+	{ MI_SNAP_H, N_("Horizontally"), WKBD_HMAXIMIZE, MAX_HORIZONTAL },
+	{ MI_SNAP_LH, N_("Left half"), WKBD_LHMAXIMIZE, MAX_VERTICAL | MAX_LEFTHALF },
+	{ MI_SNAP_RH, N_("Right half"), WKBD_RHMAXIMIZE, MAX_VERTICAL | MAX_RIGHTHALF },
+	{ MI_SNAP_TH, N_("Top half"), WKBD_THMAXIMIZE, MAX_HORIZONTAL | MAX_TOPHALF },
+	{ MI_SNAP_BH, N_("Bottom half"), WKBD_BHMAXIMIZE, MAX_HORIZONTAL | MAX_BOTTOMHALF },
+	{ MI_SNAP_TL, N_("Top left"), WKBD_LTCMAXIMIZE, MAX_LEFTHALF | MAX_TOPHALF },
+	{ MI_SNAP_TR, N_("Top right"), WKBD_RTCMAXIMIZE, MAX_RIGHTHALF | MAX_TOPHALF },
+	{ MI_SNAP_BL, N_("Bottom left"), WKBD_LBCMAXIMIZE, MAX_LEFTHALF | MAX_BOTTOMHALF },
+	{ MI_SNAP_BR, N_("Bottom right"), WKBD_RBCMAXIMIZE, MAX_RIGHTHALF | MAX_BOTTOMHALF },
+	{ MI_SNAP_TILED, N_("Tiled"), WKBD_MAXIMUS, MAX_MAXIMUS }
 };
 
 static void updateOptionsMenu(WMenu * menu, WWindow * wwin);
@@ -562,6 +563,7 @@ static WMenu *makeOptionsMenu(WScreen * scr)
 static WMenu *makeMaximizeMenu(WScreen * scr)
 {
 	WMenu *menu;
+	WMenuEntry *entry;
 	int i;
 
 	menu = wMenuCreate(scr, NULL, False);
@@ -570,8 +572,11 @@ static WMenu *makeMaximizeMenu(WScreen * scr)
 		return NULL;
 	}
 
-	for (i = 0; i < wlengthof(menu_maximize_entries); i++)
-		wMenuAddCallback(menu, _(menu_maximize_entries[i].label), execMaximizeCommand, NULL);
+	for (i = 0; i < wlengthof(menu_maximize_entries); i++) {
+		entry = wMenuAddCallback(menu, _(menu_maximize_entries[i].label), execMaximizeCommand, NULL);
+		entry->flags.indicator = entry->flags.indicator_on = 1;
+		entry->flags.indicator_type = menu_maximize_entries[i].indicator;
+	}
 
 	return menu;
 }

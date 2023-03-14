@@ -23,11 +23,23 @@
 
 #include "wcore.h"
 
-#define MI_DIAMOND	0
-#define MI_CHECK	1
-#define MI_MINIWINDOW	2
-#define MI_HIDDEN	3
-#define MI_SHADED	4
+#define MI_NONE		0
+#define MI_DIAMOND	1
+#define MI_CHECK	2
+#define MI_MINIWINDOW	3
+#define MI_HIDDEN	4
+#define MI_SHADED	5
+#define MI_SNAP_V	6
+#define MI_SNAP_H	7
+#define MI_SNAP_RH	8
+#define MI_SNAP_LH	9
+#define MI_SNAP_TH	10
+#define MI_SNAP_BH	11
+#define MI_SNAP_TL	12
+#define MI_SNAP_TR	13
+#define MI_SNAP_BL	14
+#define MI_SNAP_BR	15
+#define MI_SNAP_TILED	16
 
 typedef struct WMenuEntry {
 	int order;
@@ -44,7 +56,7 @@ typedef struct WMenuEntry {
 		unsigned int enabled:1;	       /* entry is selectable */
 		unsigned int indicator:1;      /* left indicator */
 		unsigned int indicator_on:1;
-		unsigned int indicator_type:3;
+		unsigned int indicator_type:5;
 		unsigned int editable:1;
 	} flags;
 } WMenuEntry;
