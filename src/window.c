@@ -1901,25 +1901,20 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 	int baseW = 0;
 	int baseH = 0;
 
-	/*
-	 * X11 proto defines width and height as a CARD16
-	 * if window size is guaranteed to fail, failsafe to a reasonable size
-	 */
-	if (width > USHRT_MAX && height > USHRT_MAX) {
-		width = 640;
-		height = 480;
-		return;
-	}
-
 	if (wwin->normal_hints) {
 		if (!wwin->flags.maximized) {
 			winc = wwin->normal_hints->width_inc;
 			hinc = wwin->normal_hints->height_inc;
 		}
-		minW = wwin->normal_hints->min_width;
-		minH = wwin->normal_hints->min_height;
-		maxW = wwin->normal_hints->max_width;
-		maxH = wwin->normal_hints->max_height;
+		if (wwin->normal_hints->min_width > minW)
+			minW = wwin->normal_hints->min_width;
+		if (wwin->normal_hints->min_height > minH)
+			minH = wwin->normal_hints->min_height;
+		if (wwin->normal_hints->max_width < maxW)
+			maxW = wwin->normal_hints->max_width;
+		if (wwin->normal_hints->max_height < maxH)
+			maxH = wwin->normal_hints->max_height;
+
 		if (wwin->normal_hints->flags & PAspect) {
 			minAX = wwin->normal_hints->min_aspect.x;
 			minAY = wwin->normal_hints->min_aspect.y;
@@ -1938,11 +1933,14 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 		height = minH;
 
 	/* if only one dimension is over the top, set a default 4/3 ratio */
-	if (width > maxW && height < maxH) {
+	if (width > maxW && height < maxH)
 		width = height * 4 / 3;
-	} else {
-		if(height > maxH && width < maxW)
-			height = width * 3 / 4;
+	else if(height > maxH && width < maxW)
+		height = width * 3 / 4;
+	else if(width > maxW && height > maxH) {
+		/* if both are over the top, set size to almost fullscreen */
+		height = wwin->screen_ptr->scr_height - 2 * wPreferences.icon_size;
+		width = wwin->screen_ptr->scr_width - 2 * wPreferences.icon_size;
 	}
 
 	/* aspect ratio code borrowed from olwm */
