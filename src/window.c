@@ -2150,12 +2150,6 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 	int resize;
 
 	resize = (req_width != wwin->client.width || req_height != wwin->client.height);
-	/*
-	 * if the window is being moved but not resized then
-	 * send a synthetic ConfigureNotify
-	 */
-	if ((req_x != wwin->frame_x || req_y != wwin->frame_y) && !resize)
-		synth_notify = True;
 
 	if (WFLAGP(wwin, dont_move_off))
 		wScreenBringInside(wwin->screen_ptr, &req_x, &req_y, req_width, req_height);
@@ -2192,10 +2186,17 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 		wwin->client.width = req_width;
 		wwin->client.height = req_height;
 	} else {
-		wwin->client.x = req_x;
-		wwin->client.y = req_y + wwin->frame->top_width;
-
-		XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);
+		if (req_x != wwin->frame_x || req_y != wwin->frame_y) {
+			wwin->client.x = req_x;
+			wwin->client.y = req_y + wwin->frame->top_width;
+			XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);
+		}
+		/*
+		 * if the window is being moved but not resized
+		 * or if we change nothing then
+		 * send a synthetic ConfigureNotify
+		 */
+		synth_notify = True;
 	}
 	wwin->frame_x = req_x;
 	wwin->frame_y = req_y;
