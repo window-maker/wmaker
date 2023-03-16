@@ -4,6 +4,7 @@
  *
  *  Copyright (c) 2014-2023 Window Maker Team
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
+ *  Copyright (c) 2009-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -88,7 +89,7 @@ static struct expert_option {
 	  /* default: */ False, OPTION_WMAKER, "KbdModeLock" },
 #endif /* XKB_MODELOCK */
 
-	{ N_("Maximize (snap) a window to edge or corner by dragging."),
+	{ N_("Snap a window to edge or corner by dragging."),
 	  /* default: */ False, OPTION_WMAKER, "WindowSnapping" },
 
 	{ N_("Distance from edge to begin window snap."),
@@ -97,7 +98,7 @@ static struct expert_option {
 	{ N_("Distance from corner to begin window snap."),
 	  /* default: */ 10, OPTION_WMAKER_INT, "SnapCornerDetect" },
 
-	{ N_("Snapping a window to the top maximizes it to the full screen."),
+	{ N_("Snap a window to the top to maximize it to the full screen."),
 	  /* default: */ False, OPTION_WMAKER, "SnapToTopMaximizesFullscreen" },
 
 	{ N_("Allow move half-maximized windows between multiple screens."),
@@ -115,7 +116,7 @@ static struct expert_option {
 	{ N_("Wrap dock-attached icons around the screen edges."),
 	  /* default: */ True, OPTION_WMAKER, "WrapAppiconsInDock" },
 	  
-	{ N_("Double click on titlebar maximize a window to full screen."),
+	{ N_("Double click on titlebar maximizes/minimizes a window to/from full screen."),
 	  /* default: */ False, OPTION_WMAKER, "DbClickFullScreen" },
 
 	{ N_("Close rootmenu when mouse (left or right) is clicked outside focus."),

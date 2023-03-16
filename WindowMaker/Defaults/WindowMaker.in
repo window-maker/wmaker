@@ -171,10 +171,10 @@
 	RHMaximizeKey = None;
 	THMaximizeKey = None;
 	BHMaximizeKey = None;
-	LTCMaximizeKey = None;
-	RTCMaximizeKey = None;
-	LBCMaximizeKey = None;
-	RBCMaximizeKey = None;
+	TLCMaximizeKey = None;
+	TRCMaximizeKey = None;
+	BLCMaximizeKey = None;
+	BRCMaximizeKey = None;
 	MaximusKey = None;
 	KeepOnTopKey = None;
 	KeepAtBottomKey = None;
