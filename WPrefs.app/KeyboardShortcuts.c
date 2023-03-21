@@ -154,7 +154,7 @@ static struct keyOption {
 
 	/* Misc. */
 	{ "WindowRelaunchKey", N_("Launch new instance of application") },
-	{ "ScreenSwitchKey",   N_("Switch to Next Screen/Monitor") },
+	{ "ScreenSwitchKey",   N_("Switch to next screen/monitor") },
 	{ "RunKey",            N_("Run application") },
 	{ "ExitKey",            N_("Exit Window Maker") },
 	{ "DockRaiseLowerKey", N_("Raise/Lower Dock") },
@@ -550,7 +550,7 @@ static int cmpKeyOptions(const void *v1, const void *v2)
 	const struct keyOption *opt1 = (struct keyOption *)v1;
 	const struct keyOption *opt2 = (struct keyOption *)v2;
 
-	if ((rc = strcmp(opt1->title, opt2->title)) < 0)
+	if ((rc = strncmp(opt1->title, opt2->title, 20)) < 0)
 		return -1;
 	else if (rc > 0)
 		return 1;
