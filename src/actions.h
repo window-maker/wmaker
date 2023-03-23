@@ -84,7 +84,7 @@ void wUnfullscreenWindow(WWindow *wwin);
 void animateResize(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh);
 void update_saved_geometry(WWindow *wwin);
 
-void movePionterToWindowCenter(WWindow *wwin);
+void movePointerToWindowCenter(WWindow *wwin);
 void moveBetweenHeads(WWindow *wwin, int direction);
 
 #endif

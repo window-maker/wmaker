@@ -2215,7 +2215,7 @@ void wMakeWindowVisible(WWindow *wwin)
 	}
 }
 
-void movePionterToWindowCenter(WWindow *wwin)
+void movePointerToWindowCenter(WWindow *wwin)
 {
 	if (!wPreferences.pointer_with_half_max_windows)
 		return;

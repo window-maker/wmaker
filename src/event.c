@@ -1512,7 +1512,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_HORIZONTAL | MAX_KEYBOARD);
-			movePionterToWindowCenter(wwin);
+			movePointerToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_LHMAXIMIZE:
@@ -1520,7 +1520,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_VERTICAL | MAX_LEFTHALF | MAX_KEYBOARD);
-			movePionterToWindowCenter(wwin);
+			movePointerToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_RHMAXIMIZE:
@@ -1528,7 +1528,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_VERTICAL | MAX_RIGHTHALF | MAX_KEYBOARD);
-			movePionterToWindowCenter(wwin);
+			movePointerToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_THMAXIMIZE:
@@ -1536,7 +1536,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_HORIZONTAL | MAX_TOPHALF | MAX_KEYBOARD);
-			movePionterToWindowCenter(wwin);
+			movePointerToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_BHMAXIMIZE:
@@ -1544,7 +1544,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_HORIZONTAL | MAX_BOTTOMHALF | MAX_KEYBOARD);
-			movePionterToWindowCenter(wwin);
+			movePointerToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_LTCMAXIMIZE:
@@ -1552,7 +1552,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_LEFTHALF | MAX_TOPHALF | MAX_KEYBOARD);
-			movePionterToWindowCenter(wwin);
+			movePointerToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_RTCMAXIMIZE:
@@ -1560,7 +1560,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_RIGHTHALF | MAX_TOPHALF | MAX_KEYBOARD);
-			movePionterToWindowCenter(wwin);
+			movePointerToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_LBCMAXIMIZE:
@@ -1568,7 +1568,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_LEFTHALF | MAX_BOTTOMHALF | MAX_KEYBOARD);
-			movePionterToWindowCenter(wwin);
+			movePointerToWindowCenter(wwin);
 		}
 		 break;
 	case WKBD_RBCMAXIMIZE:
@@ -1576,7 +1576,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_RIGHTHALF | MAX_BOTTOMHALF | MAX_KEYBOARD);
-			movePionterToWindowCenter(wwin);
+			movePointerToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_MAXIMUS:
