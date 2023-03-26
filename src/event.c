@@ -1928,26 +1928,103 @@ static void handleKeyPress(XEvent * event)
 	}
 }
 
-static void handleMotionNotify(XEvent * event)
-{
-	WScreen *scr = wScreenForRootWindow(event->xmotion.root);
+#define CORNER_NONE 0
+#define CORNER_TOPLEFT 1
+#define CORNER_TOPRIGHT 2
+#define CORNER_BOTTOMLEFT 3
+#define CORNER_BOTTOMRIGHT 4
 
-	if (wPreferences.scrollable_menus) {
+static int get_corner(WMRect rect, WMPoint p)
+{
+	if (p.x <= (rect.pos.x + wPreferences.hot_corner_edge) && p.y <= (rect.pos.y + wPreferences.hot_corner_edge))
+		return CORNER_TOPLEFT;
+	if (p.x >= (rect.pos.x + rect.size.width - wPreferences.hot_corner_edge) && p.y <= (rect.pos.y + wPreferences.hot_corner_edge))
+		return CORNER_TOPRIGHT;
+	if (p.x <= (rect.pos.x + wPreferences.hot_corner_edge) && p.y >= (rect.pos.y + rect.size.height - wPreferences.hot_corner_edge))
+		return CORNER_BOTTOMLEFT;
+	if (p.x >= (rect.pos.x + rect.size.width - wPreferences.hot_corner_edge) && p.y >= (rect.pos.y + rect.size.height - wPreferences.hot_corner_edge))
+		return CORNER_BOTTOMRIGHT;
+	return CORNER_NONE;
+}
+
+static void hotCornerDelay(void *data)
+{
+	WScreen *scr = (WScreen *) data;
+	if (scr->flags.in_hot_corner && wPreferences.hot_corner_actions[scr->flags.in_hot_corner - 1])
+		ExecuteShellCommand(scr, wPreferences.hot_corner_actions[scr->flags.in_hot_corner - 1]);
+	WMDeleteTimerHandler(scr->hot_corner_timer);
+	scr->hot_corner_timer = NULL;
+}
+
+static void handleMotionNotify(XEvent *event)
+{
+	if (wPreferences.scrollable_menus || wPreferences.hot_corners) {
+		WScreen *scr = wScreenForRootWindow(event->xmotion.root);
 		WMPoint p = wmkpoint(event->xmotion.x_root, event->xmotion.y_root);
 		WMRect rect = wGetRectForHead(scr, wGetHeadForPoint(scr, p));
 
-		if (scr->flags.jump_back_pending ||
-		    p.x <= (rect.pos.x + 1) ||
-		    p.x >= (rect.pos.x + rect.size.width - 2) ||
-		    p.y <= (rect.pos.y + 1) || p.y >= (rect.pos.y + rect.size.height - 2)) {
-			WMenu *menu;
+		if (wPreferences.hot_corners) {
+			if (!scr->flags.in_hot_corner) {
+				scr->flags.in_hot_corner = get_corner(rect, p);
+				if (scr->flags.in_hot_corner && !scr->hot_corner_timer)
+					scr->hot_corner_timer = WMAddTimerHandler(wPreferences.hot_corner_delay, hotCornerDelay, scr);
+			} else {
+				int out_hot_corner = 0;
 
-			menu = wMenuUnderPointer(scr);
-			if (menu != NULL)
-				wMenuScroll(menu);
+				switch (scr->flags.in_hot_corner) {
+					case CORNER_TOPLEFT:
+						if ((p.x > (rect.pos.x + wPreferences.hot_corner_edge)) ||
+						    (p.y > (rect.pos.y + wPreferences.hot_corner_edge)))
+							out_hot_corner = 1;
+						break;
+					case CORNER_TOPRIGHT:
+						if ((p.x < (rect.pos.x + rect.size.width - wPreferences.hot_corner_edge)) ||
+						    (p.y > (rect.pos.y + wPreferences.hot_corner_edge)))
+							out_hot_corner = 1;
+						break;
+					case CORNER_BOTTOMLEFT:
+						if ((p.x > (rect.pos.x + wPreferences.hot_corner_edge)) ||
+						    (p.y < (rect.pos.y + rect.size.height - wPreferences.hot_corner_edge)))
+							out_hot_corner = 1;
+						break;
+					case CORNER_BOTTOMRIGHT:
+						if ((p.x < (rect.pos.x + rect.size.width - wPreferences.hot_corner_edge)) ||
+						    (p.y < (rect.pos.y + rect.size.height - wPreferences.hot_corner_edge)))
+							out_hot_corner = 1;
+						break;
+
+				}
+				if (out_hot_corner) {
+					scr->flags.in_hot_corner = CORNER_NONE;
+					if (scr->hot_corner_timer) {
+						WMDeleteTimerHandler(scr->hot_corner_timer);
+						scr->hot_corner_timer = NULL;
+					}
+				}
+
+			}
+		}
+
+		if (wPreferences.scrollable_menus) {
+			if (scr->flags.jump_back_pending ||
+			    p.x <= (rect.pos.x + 1) ||
+			    p.x >= (rect.pos.x + rect.size.width - 2) ||
+			    p.y <= (rect.pos.y + 1) || p.y >= (rect.pos.y + rect.size.height - 2)) {
+				WMenu *menu;
+
+				menu = wMenuUnderPointer(scr);
+				if (menu != NULL)
+					wMenuScroll(menu);
+			}
 		}
 	}
 }
+
+#undef CORNER_NONE
+#undef CORNER_TOPLEFT
+#undef CORNER_TOPRIGHT
+#undef CORNER_BOTTOMLEFT
+#undef CORNER_BOTTOMRIGHT
 
 static void handleVisibilityNotify(XEvent * event)
 {

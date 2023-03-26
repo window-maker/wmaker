@@ -295,6 +295,8 @@ typedef struct _WScreen {
     WMHandlerID *autoRaiseTimer;
     Window autoRaiseWindow;	       /* window that is scheduled to be
                                         * raised */
+    /* for hot-corners delay */
+    WMHandlerID *hot_corner_timer;
 
     /* for window shortcuts */
     WMArray *shortcutWindows[MAX_WINDOW_SHORTCUTS];
@@ -323,6 +325,7 @@ typedef struct _WScreen {
         unsigned int doing_alt_tab:1;
         unsigned int jump_back_pending:1;
         unsigned int ignore_focus_events:1;
+        unsigned int in_hot_corner:3;
     } flags;
 } WScreen;
 

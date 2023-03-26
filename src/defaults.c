@@ -151,6 +151,7 @@ static WDECallbackUpdate setSwPOptions;
 static WDECallbackUpdate updateUsableArea;
 
 static WDECallbackUpdate setModifierKeyLabels;
+static WDECallbackUpdate setHotCornerActions;
 
 static WDECallbackConvert getCursor;
 static WDECallbackUpdate setCursor;
@@ -525,6 +526,14 @@ WDefaultEntry optionList[] = {
 	{"KeepDockOnPrimaryHead", "NO", NULL,
 	    &wPreferences.keep_dock_on_primary_head, getBool, updateDock,
 	    NULL, NULL},
+	{"HotCorners", "NO", NULL,
+	    &wPreferences.hot_corners, getBool, NULL, NULL, NULL},
+	{"HotCornerDelay", "250", (void *)&wPreferences.hot_corner_delay,
+	    &wPreferences.hot_corner_delay, getInt, NULL, NULL, NULL},
+	{"HotCornerEdge", "2", (void *)&wPreferences.hot_corner_edge,
+	    &wPreferences.hot_corner_edge, getInt, NULL, NULL, NULL},
+	{"HotCornerActions", "(\"None\", \"None\", \"None\", \"None\")", &wPreferences,
+	    NULL, getPropList, setHotCornerActions, NULL, NULL},
 
 	/* style options */
 
@@ -3460,6 +3469,43 @@ static int setModifierKeyLabels(WScreen * scr, WDefaultEntry * entry, void *tdat
 
 	return 0;
 }
+
+static int setHotCornerActions(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
+{
+	WMPropList *array = tdata;
+	int i;
+	struct WPreferences *prefs = foo;
+
+	if (!WMIsPLArray(array) || WMGetPropListItemCount(array) != 4) {
+		wwarning(_("Value for option \"%s\" must be an array of 4 strings"), entry->key);
+		WMReleasePropList(array);
+		return 0;
+	}
+
+	DestroyWindowMenu(scr);
+
+	for (i = 0; i < 4; i++) {
+		if (prefs->hot_corner_actions[i])
+			wfree(prefs->hot_corner_actions[i]);
+
+		if (WMIsPLString(WMGetFromPLArray(array, i))) {
+			const char *val;
+			val = WMGetFromPLString(WMGetFromPLArray(array, i));
+			if (strcasecmp(val, "NONE") != 0)
+				prefs->hot_corner_actions[i] = wstrdup(val);
+			else
+				prefs->hot_corner_actions[i] = NULL;
+		} else {
+			wwarning(_("Invalid argument for option \"%s\" item %d"), entry->key, i);
+			prefs->hot_corner_actions[i] = NULL;
+		}
+	}
+
+	WMReleasePropList(array);
+
+	return 0;
+}
+
 
 static int setDoubleClick(WScreen *scr, WDefaultEntry *entry, void *tdata, void *foo)
 {

@@ -474,6 +474,11 @@ extern struct WPreferences {
 
 	char show_clip_title;
 
+	char hot_corners;                  /* let corners execute actions */
+	int hot_corner_delay;		   /* Delay after which the hot corner is triggered */
+	int hot_corner_edge;		   /* Hot corner edge size */
+	char *hot_corner_actions[4];	   /* Action of each corner */
+
 	struct {
 #ifdef USE_ICCCM_WMREPLACE
 		unsigned int replace:1;               /* replace existing window manager */
