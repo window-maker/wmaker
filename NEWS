@@ -3,6 +3,26 @@ NEWS for veteran Window Maker users
 
 -- 0.96.0
 
+Hot Corners feature
+--------------------------
+
+Screen corners can be assigned an external command to be
+executed when the mouse pointer is entering those areas.
+In WPrefs, "Hot Corner Shortcut Preferences" can be used
+for configuration or by manually adding a "HotCorners" key
+and value to "YES" in the ~/GNUstep/Defaults/WindowMaker file.
+Hot Corners feature is disabled by default.
+Actions are specified by the "HotCornerActions" and are defined
+as a four entries list ("top left action", "top right action",
+"bottom left action", "bottom right action").
+A screen corner area is a cube shape defined by the "HotCornerEdge"
+which is a number of pixels from 2 (by default) to 10.
+To lower the risk of triggering that feature accidentally a
+"HotCornerDelay" key can be used which is the time before the action
+is triggered while the pointer is in one of the screen corner.
+Default value is 250 ms.
+
+
 Screenshot capture feature
 --------------------------
 
