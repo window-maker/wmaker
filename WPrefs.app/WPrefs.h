@@ -155,6 +155,7 @@ Panel *InitDocks(WMWidget *parent);
 Panel *InitExpert(WMWidget *parent);
 Panel *InitFocus(WMWidget *parent);
 Panel *InitFontSimple(WMWidget *parent);
+Panel *InitHotCornerShortcuts(WMWidget *parent);
 Panel *InitIcons(WMWidget *parent);
 Panel *InitKeyboardShortcuts(WMWidget *parent);
 Panel *InitMenu(WMWidget *parent);

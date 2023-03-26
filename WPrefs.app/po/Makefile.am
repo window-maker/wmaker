@@ -14,6 +14,7 @@ POTFILES  = \
 	$(top_srcdir)/WPrefs.app/Expert.c \
 	$(top_srcdir)/WPrefs.app/Focus.c \
 	$(top_srcdir)/WPrefs.app/FontSimple.c \
+	$(top_srcdir)/WPrefs.app/HotCornerShortcuts.c \
 	$(top_srcdir)/WPrefs.app/Icons.c \
 	$(top_srcdir)/WPrefs.app/KeyboardShortcuts.c \
 	$(top_srcdir)/WPrefs.app/Menu.c \

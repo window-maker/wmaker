@@ -15,6 +15,7 @@ dist_xpmdata_DATA = \
 	ergonomic.xpm \
 	expert.xpm \
 	fonts.xpm \
+	hotcorners.xpm \
 	iconprefs.xpm \
 	keyboard.xpm \
 	keyboardprefs.xpm \

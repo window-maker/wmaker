@@ -15,6 +15,7 @@ dist_tiffdata_DATA = \
 	ergonomic.tiff \
 	expert.tiff \
 	fonts.tiff \
+	hotcorners.tiff \
 	iconprefs.tiff \
 	keyboard.tiff \
 	keyboardprefs.tiff \
