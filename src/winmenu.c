@@ -124,8 +124,9 @@ static const struct {
 	unsigned int shortcut_idx;
 	int maxim_direction;
 } menu_maximize_entries[] = {
-	{ MI_SNAP_V, N_("Vertically"), WKBD_VMAXIMIZE, MAX_VERTICAL },
-	{ MI_SNAP_H, N_("Horizontally"), WKBD_HMAXIMIZE, MAX_HORIZONTAL },
+	{ MI_SNAP_V, N_("Vertical"), WKBD_VMAXIMIZE, MAX_VERTICAL },
+	{ MI_SNAP_H, N_("Horizontal"), WKBD_HMAXIMIZE, MAX_HORIZONTAL },
+	{ MI_CENTRAL, N_("Central"), WKBD_CENTRAL, MAX_CENTRAL },
 	{ MI_SNAP_LH, N_("Left half"), WKBD_LHMAXIMIZE, MAX_VERTICAL | MAX_LEFTHALF },
 	{ MI_SNAP_RH, N_("Right half"), WKBD_RHMAXIMIZE, MAX_VERTICAL | MAX_RIGHTHALF },
 	{ MI_SNAP_TH, N_("Top half"), WKBD_THMAXIMIZE, MAX_HORIZONTAL | MAX_TOPHALF },
@@ -181,13 +182,17 @@ static void updateUnmaximizeShortcut(WMenuEntry * entry, int flags)
 {
 	int key;
 
-	switch (flags & (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS)) {
+	switch (flags & (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS | MAX_CENTRAL)) {
 	case MAX_HORIZONTAL:
 		key = WKBD_HMAXIMIZE;
 		break;
 
 	case MAX_VERTICAL:
 		key = WKBD_VMAXIMIZE;
+		break;
+
+	case MAX_CENTRAL:
+		key = WKBD_CENTRAL;
 		break;
 
 	case MAX_LEFTHALF | MAX_VERTICAL:

@@ -1515,6 +1515,14 @@ static void handleKeyPress(XEvent * event)
 			movePointerToWindowCenter(wwin);
 		}
 		break;
+	case WKBD_CENTRAL:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
+			CloseWindowMenu(scr);
+
+			handleMaximize(wwin, MAX_CENTRAL | MAX_KEYBOARD);
+			movePointerToWindowCenter(wwin);
+		}
+		break;
 	case WKBD_LHMAXIMIZE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && IS_RESIZABLE(wwin)) {
 			CloseWindowMenu(scr);

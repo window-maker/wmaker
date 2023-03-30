@@ -30,8 +30,9 @@
 #define MAX_TOPHALF            (1 << 4)
 #define MAX_BOTTOMHALF         (1 << 5)
 #define MAX_MAXIMUS            (1 << 6)
-#define MAX_IGNORE_XINERAMA    (1 << 7)
-#define MAX_KEYBOARD           (1 << 8)
+#define MAX_CENTRAL	       (1 << 7)
+#define MAX_IGNORE_XINERAMA    (1 << 8)
+#define MAX_KEYBOARD           (1 << 9)
 
 #define SAVE_GEOMETRY_X        (1 << 0)
 #define SAVE_GEOMETRY_Y        (1 << 1)

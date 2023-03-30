@@ -743,10 +743,13 @@ static void paintEntry(WMenu * menu, int index, int selected)
 			indicator = scr->menu_shade_indicator;
 			break;
 		case MI_SNAP_V:
-			indicator = scr->menu_snap_vertically_indicator;
+			indicator = scr->menu_snap_vertical_indicator;
 			break;
 		case MI_SNAP_H:
-			indicator = scr->menu_snap_horizontally_indicator;
+			indicator = scr->menu_snap_horizontal_indicator;
+			break;
+		case MI_CENTRAL:
+			indicator = scr->menu_central_indicator;
 			break;
 		case MI_SNAP_RH:
 			indicator = scr->menu_snap_rh_indicator;

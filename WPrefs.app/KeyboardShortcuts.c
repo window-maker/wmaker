@@ -89,6 +89,7 @@ static struct keyOption {
 	{ "BLCMaximizeKey", N_("Maximize active window bottom left corner") },
 	{ "BRCMaximizeKey", N_("Maximize active window bottom right corner") },
 	{ "MaximusKey",     N_("Tile active window") },
+	{ "CenterKey",      N_("Center active window") },
 	{ "KeepOnTopKey",   N_("Toggle window on top status") },
 	{ "KeepAtBottomKey",N_("Toggle window at bottom status") },
 	{ "OmnipresentKey", N_("Toggle window omnipresent status") },

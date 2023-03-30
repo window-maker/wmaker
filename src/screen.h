@@ -214,8 +214,8 @@ typedef struct _WScreen {
     struct WPixmap *menu_mini_indicator;   /* for miniwindow */
     struct WPixmap *menu_hide_indicator;   /* for hidden window */
     struct WPixmap *menu_shade_indicator;  /* for shaded window */
-    struct WPixmap *menu_snap_vertically_indicator;  /* for vertically snap window */
-    struct WPixmap *menu_snap_horizontally_indicator;  /* for horizontally snap window */
+    struct WPixmap *menu_snap_vertical_indicator;  /* for vertical snap window */
+    struct WPixmap *menu_snap_horizontal_indicator;  /* for horizontal snap window */
     struct WPixmap *menu_snap_rh_indicator;  /* for righ half snap window */
     struct WPixmap *menu_snap_lh_indicator;  /* for left half snap window */
     struct WPixmap *menu_snap_th_indicator;  /* for top half snap window */
@@ -225,6 +225,7 @@ typedef struct _WScreen {
     struct WPixmap *menu_snap_bl_indicator;  /* for bottom left snap window */
     struct WPixmap *menu_snap_br_indicator;  /* for bottom right snap window */
     struct WPixmap *menu_snap_tiled_indicator;  /* for tiled window */
+    struct WPixmap *menu_central_indicator;  /* for central window */
 
     int app_menu_x, app_menu_y;	       /* position for application menus */
 

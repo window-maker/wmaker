@@ -681,6 +681,8 @@ WDefaultEntry optionList[] = {
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"MaximusKey", "None", (void*)WKBD_MAXIMUS,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"CenterKey", "None", (void *)WKBD_CENTRAL,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"KeepOnTopKey", "None", (void *)WKBD_KEEP_ON_TOP,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"KeepAtBottomKey", "None", (void *)WKBD_KEEP_AT_BOTTOM,

@@ -40,6 +40,7 @@
 #define MI_SNAP_BL	14
 #define MI_SNAP_BR	15
 #define MI_SNAP_TILED	16
+#define MI_CENTRAL	17
 
 typedef struct WMenuEntry {
 	int order;

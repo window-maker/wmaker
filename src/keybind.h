@@ -76,6 +76,7 @@ enum {
 	WKBD_FOCUSPREV,
 	WKBD_GROUPNEXT,
 	WKBD_GROUPPREV,
+	WKBD_CENTRAL,
 
 	/* window, menu */
 	WKBD_CLOSE,
