@@ -62,7 +62,7 @@ typedef struct {
 	long functions;
 	long decorations;
 	long inputMode;
-	long unknown;
+	long status;
 } MWMHints;
 
 static Atom _XA_MOTIF_WM_HINTS;
@@ -180,7 +180,7 @@ static int getMWMHints(Window window, MWMHints *mwmhints)
 		mwmhints->decorations = data[2];
 		mwmhints->inputMode = data[3];
 		if (count > 5)
-			mwmhints->unknown = data[4];
+			mwmhints->status = data[4];
 	}
 	XFree(data);
 
