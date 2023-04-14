@@ -198,9 +198,9 @@ AC_DEFUN_ONCE([WM_IMGFMT_CHECK_WEBP],
          dnl a symbol without first using the header to handle it
          wm_save_LIBS="$LIBS"
          LIBS="$LIBS -lwebp"
-         AC_TRY_LINK(
-             [@%:@include <webp/decode.h>],
-             [WebPGetFeatures(NULL, 1024, NULL);],
+         AC_LINK_IFELSE(
+             [AC_LANG_PROGRAM([@%:@include <webp/decode.h>],
+                 [WebPGetFeatures(NULL, 1024, NULL);])],
              [wm_cv_imgfmt_webp="-lwebp"])
          LIBS="$wm_save_LIBS"
          AS_IF([test "x$enable_webp$wm_cv_imgfmt_webp" = "xyesno"],

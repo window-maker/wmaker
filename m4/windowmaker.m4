@@ -47,14 +47,15 @@ AC_DEFUN([WM_CHECK_XFT_VERSION],
  AC_CACHE_CHECK([whether libXft is at least version $1], [ac_cv_lib_xft_version_ok],
     [CPPFLAGS_save="$CPPFLAGS"
      CPPFLAGS="$CPPFLAGS $XFT_CFLAGS $inc_search_path"
-     AC_TRY_LINK([
+     AC_LINK_IFELSE(
+[AC_LANG_PROGRAM([
 #include <X11/Xlib.h>
 #include <X11/Xft/Xft.h>
 ], [
 #if !defined(XFT_VERSION) || XFT_VERSION < ]XFT_REQUIRED_VERSION[
 #error libXft on this system is too old. Consider upgrading to at least $1
 #endif
-], [ac_cv_lib_xft_version_ok=yes], [ac_cv_lib_xft_version_ok=no])
+])], [ac_cv_lib_xft_version_ok=yes], [ac_cv_lib_xft_version_ok=no])
      CPPFLAGS="$CPPFLAGS_save"])
  m4_undefine([XFT_REQUIRED_VERSION])dnl
  AS_IF([test "x$ac_cv_lib_xft_version_ok" != "xyes"], [$3], [$2])dnl
