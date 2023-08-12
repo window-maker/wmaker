@@ -77,10 +77,8 @@ while [ $# -gt 0 ]; do
 
         -v)
             shift
-            # Version may be 'x:y:z', we keep only 'x'
-            version="`echo "$1" | sed -e 's,:.*$,,' `"
-            # the version should only be a number
-            echo "$version" | grep '^[1-9][0-9]*$' > /dev/null || \
+            version="$1"
+            echo "$version" | grep -E '^[1-9][0-9]*(:[0-9]+(:[0-9]+)?)?$' > /dev/null || \
                 arg_error "version \"$1\" is not valid"
           ;;
 
@@ -109,9 +107,18 @@ fi
 # generate the rest of the script so that other symbols will not be kept.
 awk '
 BEGIN {
+  # Version number here uses only 1 number from the full version used in libtool
+  libversion="'"$version"'";
+  if (split(libversion, subversions, ":") > 1) {
+    # Calculate [CURRENT - AGE], the goal is that the number will not
+    # change when functions are added to the API, but it will be incremented
+    # when functions are removed or argument change (which breaks compat)
+    libversion = subversions[1] - subversions[3];
+  }
+
   print "/* Generated version-script for ld */";
   print "";
-  print "'"$libname$version"'";
+  print "'"$libname"'" libversion;
   print "{";
   print "  global:";
 }
