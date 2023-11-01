@@ -217,7 +217,7 @@ int main(int argc, char *argv[])
 		WMCreatePLString(label),								\
 		WMCreatePLString("EXEC"),								\
 		WMCreatePLString("wdwrite WindowMaker WorkspaceBack '(vgradient, \"" 			\
-		    fcolorspec "\", \"" tcolorspec "\"'"),						\
+		    fcolorspec "\", \"" tcolorspec "\")'"),						\
 		NULL											\
 	);												\
 	WMAddToPLArray(L3Menu, L4Menu)
