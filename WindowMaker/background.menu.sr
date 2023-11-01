@@ -1,0 +1,32 @@
+#include "wmmacros"
+
+"Позадина" MENU
+        "Једнобојна" MENU
+                "Црна" WS_BACK '(solid, black)'
+                "Плава"  WS_BACK '(solid, "#505075")'
+                "Индиго" WS_BACK '(solid, "#243e6c")'
+                "Маринско плава" WS_BACK '(solid, "#224477")'
+                "Тамно плава" WS_BACK '(solid, "#180090")'
+                "Љубичаста" WS_BACK '(solid, "#554466")'
+                "Боја жита"  WS_BACK '(solid, "wheat4")'
+                "Тамно сива"  WS_BACK '(solid, "#333340")'
+                "Боја вина" WS_BACK '(solid, "#400020")'
+        "Једнобојна" END
+        "Претапање" MENU
+		"Залазак сунца" WS_BACK '(mvgradient, deepskyblue4, black, deepskyblue4, tomato4)'
+		"Небо" WS_BACK '(vgradient, blue4, white)'
+		"Нијансе плаве" WS_BACK '(vgradient, "#7080a5", "#101020")'
+		"Индиго нијансе" WS_BACK '(vgradient, "#746ebc", "#242e4c")'
+	    	"Нијансе љубичасте" WS_BACK '(vgradient, "#654c66", "#151426")'
+		"Нијансе боје жита" WS_BACK '(vgradient, "#a09060", "#302010")'
+		"Нијансе сиве" WS_BACK '(vgradient, "#636380", "#131318")'
+		"Нијансе боје вина" WS_BACK '(vgradient, "#600040", "#180010")'
+        "Претапање" END
+        "Слике" MENU
+            "Поплочано" OPEN_MENU  BACKGROUNDS_DIR USER_BACKGROUNDS_DIR WITH wmsetbg -u -t
+            "Развучене" OPEN_MENU  BACKGROUNDS_DIR USER_BACKGROUNDS_DIR WITH wmsetbg -u -s
+            "Центриране" OPEN_MENU  BACKGROUNDS_DIR USER_BACKGROUNDS_DIR WITH wmsetbg -u -e
+            "Максимизоване" OPEN_MENU  BACKGROUNDS_DIR USER_BACKGROUNDS_DIR WITH wmsetbg -u -a
+            "Попуњене" OPEN_MENU  BACKGROUNDS_DIR USER_BACKGROUNDS_DIR WITH wmsetbg -u -f
+        "Слике" END
+"Позадина" END

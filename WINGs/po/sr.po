@@ -1,0 +1,806 @@
+# Serbian messages for Window Maker
+# Copyright (C) 1997-2006 Alfredo K. Kojima
+#		1998-2006 Dan Pascu
+#		2013-2020 Window Maker Developers Team
+# This file is distributed under the same license as the Window Maker package.
+# Strahinya Radich (Страхиња Радић) <contact@strahinja.org>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WindowMaker 0.95.9\n"
+"Report-Msgid-Bugs-To: wmaker-dev@googlegroups.com\n"
+"POT-Creation-Date: 2023-10-25 14:44+0200\n"
+"PO-Revision-Date: 2023-10-30 17:35+0100\n"
+"Last-Translator: Страхиња Радић <contact@strahinja.org>\n"
+"Language-Team: Serbian <sr@li.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: poe 1.6.0-1-g10e6dcc\n"
+
+#: ../../WINGs/error.c:106
+msgid "fatal: "
+msgstr "фатално: "
+
+#: ../../WINGs/error.c:112
+msgid "error: "
+msgstr "грешка: "
+
+#: ../../WINGs/error.c:118
+msgid "warning: "
+msgstr "упозорење: "
+
+#: ../../WINGs/findfile.c:59
+#, c-format
+msgid "could not get password entry for UID %i"
+msgstr "не може се добавити унос лозинке за UID %i"
+
+#: ../../WINGs/findfile.c:89
+#, c-format
+msgid "could not get password entry for user %s"
+msgstr "не може се добавити унос лозинке за корисника %s"
+
+#: ../../WINGs/findfile.c:208
+#, c-format
+msgid "could not expand %s"
+msgstr "не може се проширити %s"
+
+#: ../../WINGs/findfile.c:437
+#, c-format
+msgid "Could not open input file \"%s\": %s"
+msgstr "Не може се отворити улазна датотека „%s“: %s"
+
+#: ../../WINGs/findfile.c:453
+#, c-format
+msgid "Could not create target file \"%s\": %s"
+msgstr "Не може се креирати одредишна датотека „%s“: %s"
+
+#: ../../WINGs/findfile.c:461
+msgid "could not allocate memory for the copy buffer"
+msgstr "не може се алоцирати меморија за бафер за копирање"
+
+#: ../../WINGs/findfile.c:478
+#, c-format
+msgid "could not read from file \"%s\": %s"
+msgstr "не може се прочитати датотека „%s“: %s"
+
+#: ../../WINGs/findfile.c:493
+#, c-format
+msgid "could not write data to file \"%s\": %s"
+msgstr "не могу се уписати подаци у датотеку „%s“: %s"
+
+#: ../../WINGs/findfile.c:505
+#, c-format
+msgid "could not set permission 0%03o on file \"%s\": %s"
+msgstr "не може се поставити дозвола 0%03o на датотеци „%s“: %s"
+
+#: ../../WINGs/findfile.c:509
+#, c-format
+msgid "could not close the file \"%s\": %s"
+msgstr "не може се затворити датотека „%s“: %s"
+
+#: ../../WINGs/menuparser.c:110
+#, c-format
+msgid "   included from file \"%s\" at line %d"
+msgstr "   укључена из датотеке „%s“ у реду %d"
+
+#: ../../WINGs/menuparser.c:142
+#, c-format
+msgid "missing #endif to match #%s at line %d"
+msgstr "недостаје #endif који би одговарао #%s у реду %d"
+
+#: ../../WINGs/menuparser.c:200
+msgid "multiple SHORTCUT definition not valid"
+msgstr "вишеструка дефиниција SHORTCUT није исправна"
+
+#: ../../WINGs/menuparser.c:253
+msgid "premature end of file while expecting a new line after '\\'"
+msgstr "прерани крај датотеке док се очекивао нови ред после „\\“"
+
+#: ../../WINGs/menuparser.c:279
+#, c-format
+msgid "reached end of file while searching '*/' for comment started at line %d"
+msgstr "достигнут крај датотеке приликом тражења „*/“ за коментар започет у реду %d"
+
+#: ../../WINGs/menuparser.c:344
+msgid "missing closing double-quote before end-of-line"
+msgstr "недостаје завршни наводник пре краја реда"
+
+#: ../../WINGs/menuparser.c:362
+msgid "missing closing simple-quote before end-of-line"
+msgstr "недостаје завршни апостроф пре краја реда"
+
+#: ../../WINGs/menuparser.c:380
+msgid "too many nested macro expansions, breaking loop"
+msgstr "превише угњеждених проширења макроа, прекида се петља"
+
+#: ../../WINGs/menuparser.c:439
+#, c-format
+msgid "unknown directive '#%s'"
+msgstr "непозната директива „#%s“"
+
+#: ../../WINGs/menuparser.c:444
+#, c-format
+msgid "extra text after '#' command is ignored: \"%.16s...\""
+msgstr "сувишни текст после наредбе „#“ је игнорисан: „%.16s...“"
+
+#: ../../WINGs/menuparser.c:459
+msgid "no file name found for #include"
+msgstr "назив датотеке у #include-у није пронађен"
+
+#: ../../WINGs/menuparser.c:471
+msgid "file name must be enclosed in brackets or double-quotes for #define"
+msgstr "назив датотеке у #define-у мора бити окружен угластим заградама или наводницима"
+
+#: ../../WINGs/menuparser.c:485
+#, c-format
+msgid "missing closing '%c' in filename specification"
+msgstr "недостаје завршно „%c“ у задавању назива датотеке"
+
+#: ../../WINGs/menuparser.c:503
+msgid "too many nested #include's"
+msgstr "превише угњеждених #include-ова"
+
+#: ../../WINGs/menuparser.c:568
+#, c-format
+msgid "could not find file \"%s\" for #include"
+msgstr "не може се наћи датотека „%s“ у #include-у"
+
+#: ../../WINGs/menuparser.c:589
+#, c-format
+msgid "missing macro name argument to #%s"
+msgstr "недостаје аргумент #%s - назив макроа"
+
+#: ../../WINGs/menuparser.c:600
+msgid "too many nested #if sequences"
+msgstr "превише угњеждених секвенци #if"
+
+#: ../../WINGs/menuparser.c:626 ../../WINGs/menuparser.c:643
+#, c-format
+msgid "found #%s but has no matching #if"
+msgstr "пронађено #%s, али без одговарајућег #if"
+
+#: ../../WINGs/menuparser_macros.c:166
+msgid "no macro name found for #define"
+msgstr "назив макроа за #define није пронађен"
+
+#: ../../WINGs/menuparser_macros.c:187
+#, c-format
+msgid "premature end of file while reading arg-list for macro \"%s\""
+msgstr "прерани крај датотеке приликом читања листе аргумената за макро „%s“"
+
+#: ../../WINGs/menuparser_macros.c:194
+#, c-format
+msgid "too many parameters for macro \"%s\" definition"
+msgstr "превише параметара за дефиницију макроа „%s“"
+
+#: ../../WINGs/menuparser_macros.c:209
+#, c-format
+msgid "invalid character '%c' in arg-list for macro \"%s\" while expecting parameter name"
+msgstr "неисправни знак „%c“ у листи аргумената за макро „%s“ док се очекивао назив параметра"
+
+#: ../../WINGs/menuparser_macros.c:220
+#, c-format
+msgid "invalid character '%c' in arg-list for macro \"%s\" while expecting ',' or ')'"
+msgstr "неисправни знак „%c“ у листи аргумената за макро „%s“ док се очекивало „,“ или „)“"
+
+#: ../../WINGs/menuparser_macros.c:253
+#, c-format
+msgid "macro \"%s\" already defined, ignoring redefinition"
+msgstr "макро „%s“ је већ дефинисан, игнорише се поновна дефиниција"
+
+#: ../../WINGs/menuparser_macros.c:346
+#, c-format
+msgid "more content than supported for the macro \"%s\""
+msgstr "више садржаја него што је подржано за макро „%s“"
+
+#: ../../WINGs/menuparser_macros.c:455
+#, c-format
+msgid "expansion for macro \"%s\" too big, line truncated"
+msgstr "проширење макроа „%s“ је превелико, ред је исечен"
+
+#: ../../WINGs/menuparser_macros.c:467
+#, c-format
+msgid "macro \"%s\" needs parenthesis for arguments"
+msgstr "макроу „%s“ су потребне заграде за аргументе"
+
+#: ../../WINGs/menuparser_macros.c:498
+msgid "missing closing quote or double-quote before end-of-line"
+msgstr "недостаје завршни наводник или апостроф пре краја реда"
+
+#: ../../WINGs/menuparser_macros.c:521
+#, c-format
+msgid "too many arguments for macro \"%s\", expected only %d"
+msgstr "превише аргумената за макро „%s“, очекује се само %d"
+
+#: ../../WINGs/menuparser_macros.c:530
+#, c-format
+msgid "premature end of line while searching for arguments to macro \"%s\""
+msgstr "прерани крај реда приликом тражења аргумената за макро „%s“"
+
+#: ../../WINGs/menuparser_macros.c:536
+#, c-format
+msgid "not enough arguments for macro \"%s\", expected %d but got only %d"
+msgstr "недовољно аргумената за макро „%s“, очекује се %d, али само постоји %d"
+
+#: ../../WINGs/menuparser_macros.c:541
+#, c-format
+msgid "too much data in parameter list of macro \"%s\", truncated"
+msgstr "превише података у листи параметара макроа „%s“, исечено"
+
+#: ../../WINGs/menuparser_macros.c:561
+#, c-format
+msgid "size of value for macro '%s' is too big, truncated"
+msgstr "величина вредности макроа „%s“ је превелика, исечено"
+
+#: ../../WINGs/menuparser_macros.c:642 ../../WINGs/menuparser_macros.c:668
+#, c-format
+msgid "could not determine %s"
+msgstr "не може се одредити %s"
+
+#: ../../WINGs/proplist.c:78
+#, c-format
+msgid "syntax error in %s %s, line %i: %s"
+msgstr "синтаксна грешка у %s %s, ред %i: %s"
+
+#: ../../WINGs/proplist.c:134
+msgid "Only string or data is supported for a proplist dictionary key"
+msgstr "Само ниска или подаци су подржани у proplist речничком кључу"
+
+#: ../../WINGs/proplist.c:167 ../../WINGs/proplist.c:217
+#: ../../WINGs/proplist.c:382 ../../WINGs/proplist.c:458
+#: ../../WINGs/proplist.c:1048 ../../WINGs/proplist.c:1098
+#: ../../WINGs/proplist.c:1246 ../../WINGs/proplist.c:1326
+#: ../../WINGs/proplist.c:1431 ../../WINGs/proplist.c:1475
+msgid "Used proplist functions on non-WMPropLists objects"
+msgstr "Користе се proplist функције над не-WMPropLists објектима"
+
+#: ../../WINGs/proplist.c:635
+msgid "unterminated PropList string"
+msgstr "незатворена PropList ниска"
+
+#: ../../WINGs/proplist.c:673
+msgid "unterminated PropList data"
+msgstr "незатворен PropList податак"
+
+#: ../../WINGs/proplist.c:681
+msgid "unterminated PropList data (missing hexdigit)"
+msgstr "незатворен PropList податак (недостаје хекс-цифра)"
+
+#: ../../WINGs/proplist.c:693 ../../WINGs/proplist.c:698
+msgid "non hexdigit character in PropList data"
+msgstr "знак који није хекс-цифра у PropList подацима"
+
+#: ../../WINGs/proplist.c:730
+msgid "unterminated PropList array"
+msgstr "незатворен PropList низ"
+
+#: ../../WINGs/proplist.c:738
+msgid "missing or unterminated PropList array"
+msgstr "недостајући или незатворени PropList низ"
+
+#: ../../WINGs/proplist.c:748
+msgid "could not get PropList array element"
+msgstr "не може се добавити елемент PropList низа"
+
+#: ../../WINGs/proplist.c:775
+msgid "unterminated PropList dictionary"
+msgstr "незатворени PropList речник"
+
+#: ../../WINGs/proplist.c:792
+msgid "missing PropList dictionary key"
+msgstr "недостајући кључ PropList речника"
+
+#: ../../WINGs/proplist.c:794
+msgid "missing PropList dictionary entry key or unterminated dictionary"
+msgstr "недостаје кључ PropList речничке ставке или је речник незатворен"
+
+#: ../../WINGs/proplist.c:802
+msgid "error parsing PropList dictionary key"
+msgstr "грешка приликом рашчлањивања кључа PropList речника"
+
+#: ../../WINGs/proplist.c:810
+msgid "missing = in PropList dictionary entry"
+msgstr "недостаје = у ставци PropList речника"
+
+#: ../../WINGs/proplist.c:818
+msgid "error parsing PropList dictionary entry value"
+msgstr "грешка приликом рашчлањивања вредности PropList речничког уноса"
+
+#: ../../WINGs/proplist.c:826
+msgid "missing ; in PropList dictionary entry"
+msgstr "недостаје ; у речничком уносу PropList"
+
+#: ../../WINGs/proplist.c:885
+msgid "was expecting a string, data, array or dictionary. If it's a string, try enclosing it with \"."
+msgstr "очекује се ниска, податак, низ или речник. Ако је у питању ниска, пробајте да је окружите са \"."
+
+#: ../../WINGs/proplist.c:888
+msgid "Comments are not allowed inside WindowMaker owned domain files."
+msgstr "Коментари нису дозвољени унутар датотека домена WindowMaker-а."
+
+#: ../../WINGs/proplist.c:1495 ../../WINGs/proplist.c:1560
+#: ../../WINGs/proplist.c:1624
+msgid "extra data after end of property list"
+msgstr "вишак података после листе особина"
+
+#: ../../WINGs/proplist.c:1535
+#, c-format
+msgid "could not get size for file '%s'"
+msgstr "не може се одредити величина датотеке „%s“"
+
+#: ../../WINGs/proplist.c:1543
+#, c-format
+msgid "error reading from file '%s'"
+msgstr "грешка приликом читања датотеке „%s“"
+
+#: ../../WINGs/proplist.c:1590
+#, c-format
+msgid "%s:could not open menu file"
+msgstr "%s:не може се отворити датотека менија"
+
+#: ../../WINGs/proplist.c:1672
+#, c-format
+msgid "mkstemp (%s) failed"
+msgstr "mkstemp (%s) није успео"
+
+#: ../../WINGs/proplist.c:1682
+#, c-format
+msgid "mktemp (%s) failed"
+msgstr "mktemp (%s) није успео"
+
+#: ../../WINGs/proplist.c:1689
+#, c-format
+msgid "open (%s) failed"
+msgstr "open (%s) није успео"
+
+#: ../../WINGs/proplist.c:1696
+#, c-format
+msgid "writing to file: %s failed"
+msgstr "уписивање у датотеку: %s није успело"
+
+#: ../../WINGs/proplist.c:1706
+#, c-format
+msgid "fclose (%s) failed"
+msgstr "fclose (%s) није успео"
+
+#: ../../WINGs/proplist.c:1714
+#, c-format
+msgid "rename ('%s' to '%s') failed"
+msgstr "rename („%s“ у „%s“) није успео"
+
+#: ../../WINGs/proplist.c:1797
+#, c-format
+msgid "Could not create path component %s"
+msgstr "Не може се креирати компонента путање %s"
+
+#: ../../WINGs/userdefaults.c:68
+msgid "variable WMAKER_USER_ROOT defined with invalid path, not used"
+msgstr "променљива WMAKER_USER_ROOT је задата са неисправном путањом, не користи се"
+
+#. something happened with the file. just overwrite it
+#: ../../WINGs/userdefaults.c:208 ../../WINGs/userdefaults.c:223
+#, c-format
+msgid "cannot read domain from file '%s' when syncing"
+msgstr "не може се учитати домен из датотеке „%s“ приликом синхронизовања"
+
+#: ../../WINGs/dragcommon.c:60
+#, c-format
+msgid "unknown XDND action %s"
+msgstr "непозната XDND акција %s"
+
+#: ../../WINGs/dragcommon.c:142
+#, c-format
+msgid "target %lu for XDND message no longer exists"
+msgstr "одредиште %lu XDND поруке више не постоји"
+
+#: ../../WINGs/dragcommon.c:220
+#, c-format
+msgid "unsupported version %i for XDND enter message"
+msgstr "неподржана верзија %i XDND улазне поруке"
+
+#: ../../WINGs/dragsource.c:163
+msgid "XDND selection lost during drag operation..."
+msgstr "XDND избор је изгубљен приликом операције превлачења..."
+
+#: ../../WINGs/dragsource.c:758
+msgid "could not get XDND version for target of drop"
+msgstr "не може се одредити верзија XDND-а за одредиште превлачења"
+
+#: ../../WINGs/dragsource.c:774
+msgid "could not get ownership of XDND selection"
+msgstr "не може се одредити власништво над XDND избором"
+
+#: ../../WINGs/dragsource.c:1070
+msgid "delay for drag destination response expired"
+msgstr "пауза за одговор одредишта превлачења је истекла"
+
+#: ../../WINGs/wcolor.c:204 ../../WINGs/wcolor.c:214 ../../WINGs/wcolor.c:250
+#: ../../WINGs/wcolor.c:288
+#, c-format
+msgid "could not allocate %s color"
+msgstr "не може се алоцирати боја %s"
+
+#: ../../WINGs/wcolor.c:204
+msgid "white"
+msgstr "бела"
+
+#: ../../WINGs/wcolor.c:214
+msgid "black"
+msgstr "црна"
+
+#: ../../WINGs/wcolor.c:250
+msgid "gray"
+msgstr "сива"
+
+#: ../../WINGs/wcolor.c:288
+msgid "dark gray"
+msgstr "тамно сива"
+
+#: ../../WINGs/wcolorpanel.c:390
+msgid "Colors"
+msgstr "Боје"
+
+#: ../../WINGs/wcolorpanel.c:565 ../../WINGs/wcolorpanel.c:2716
+msgid "Brightness"
+msgstr "Светлина"
+
+#: ../../WINGs/wcolorpanel.c:567 ../../WINGs/wcolorpanel.c:641
+#: ../../WINGs/wcolorpanel.c:672 ../../WINGs/wcolorpanel.c:703
+#: ../../WINGs/wcolorpanel.c:778 ../../WINGs/wcolorpanel.c:809
+#: ../../WINGs/wcolorpanel.c:841 ../../WINGs/wcolorpanel.c:874
+#: ../../WINGs/wcolorpanel.c:2010 ../../WINGs/wcolorpanel.c:2718
+#: ../../WINGs/wcolorpanel.c:2752 ../../WINGs/wcolorpanel.c:2786
+msgid "Color Panel: Could not allocate memory"
+msgstr "Панел за боје: Неуспешно алоцирање меморије"
+
+#: ../../WINGs/wcolorpanel.c:639
+msgid "Red"
+msgstr "Црвена"
+
+#: ../../WINGs/wcolorpanel.c:670
+msgid "Green"
+msgstr "Зелена"
+
+#: ../../WINGs/wcolorpanel.c:701
+msgid "Blue"
+msgstr "Плава"
+
+#: ../../WINGs/wcolorpanel.c:715
+msgid "Decimal"
+msgstr "Децимално"
+
+#: ../../WINGs/wcolorpanel.c:723
+msgid "Hexadecimal"
+msgstr "Хексадекадно"
+
+#: ../../WINGs/wcolorpanel.c:776
+msgid "Cyan"
+msgstr "Цијан"
+
+#: ../../WINGs/wcolorpanel.c:807
+msgid "Magenta"
+msgstr "Магента"
+
+#: ../../WINGs/wcolorpanel.c:839
+msgid "Yellow"
+msgstr "Жута"
+
+#: ../../WINGs/wcolorpanel.c:872
+msgid "Black"
+msgstr "Црна"
+
+#: ../../WINGs/wcolorpanel.c:947
+msgid "Spectrum"
+msgstr "Спектар"
+
+#: ../../WINGs/wcolorpanel.c:973
+msgid "Palette"
+msgstr "Палета"
+
+#: ../../WINGs/wcolorpanel.c:978
+msgid "New from File..."
+msgstr "Нова из датотеке..."
+
+#: ../../WINGs/wcolorpanel.c:979 ../../WINGs/wcolorpanel.c:1024
+#: ../../WINGs/wcolorpanel.c:1039
+msgid "Rename..."
+msgstr "Преименуј..."
+
+#: ../../WINGs/wcolorpanel.c:980 ../../WINGs/wcolorpanel.c:1025
+#: ../../WINGs/wcolorpanel.c:1040 ../../WINGs/wcolorpanel.c:3176
+msgid "Remove"
+msgstr "Уклони"
+
+#: ../../WINGs/wcolorpanel.c:981
+msgid "Copy"
+msgstr "Копирај"
+
+#: ../../WINGs/wcolorpanel.c:982
+msgid "New from Clipboard"
+msgstr "Нова из клипборда"
+
+#: ../../WINGs/wcolorpanel.c:1001
+msgid "X11-Colors"
+msgstr "X11 боје"
+
+#: ../../WINGs/wcolorpanel.c:1018
+msgid "Color"
+msgstr "Боја"
+
+#: ../../WINGs/wcolorpanel.c:1023
+msgid "Add..."
+msgstr "Додај..."
+
+#: ../../WINGs/wcolorpanel.c:1033
+msgid "List"
+msgstr "Листа"
+
+#: ../../WINGs/wcolorpanel.c:1038
+msgid "New..."
+msgstr "Нова..."
+
+#: ../../WINGs/wcolorpanel.c:1165
+#, c-format
+msgid "Color Panel: Could not create directory %s needed to store configurations"
+msgstr "Панел за боје: Не може се креирати директоријум %s неопходан за чување подешавања"
+
+#. Delete the file, it doesn't belong here
+#: ../../WINGs/wcolorpanel.c:1171 ../../WINGs/wcolorpanel.c:3069
+#: ../../WINGs/wcolorpanel.c:3073
+msgid "File Error"
+msgstr "Грешка датотеке"
+
+#: ../../WINGs/wcolorpanel.c:1172
+msgid "Could not create ColorPanel configuration directory"
+msgstr "Не може се креирати директоријум са подешавањима ColorPanel"
+
+#: ../../WINGs/wcolorpanel.c:1173 ../../WINGs/wcolorpanel.c:3070
+#: ../../WINGs/wcolorpanel.c:3075 ../../WINGs/wcolorpanel.c:3100
+#: ../../WINGs/wfilepanel.c:227 ../../WINGs/wfilepanel.c:596
+#: ../../WINGs/wfilepanel.c:611 ../../WINGs/wfilepanel.c:715
+#: ../../WINGs/wfilepanel.c:883 ../../WINGs/wfontpanel.c:532
+msgid "OK"
+msgstr "ОК"
+
+#: ../../WINGs/wcolorpanel.c:1178
+msgid "Color Panel: Could not find file"
+msgstr "Панел за боје: Не може се пронаћи датотека"
+
+#: ../../WINGs/wcolorpanel.c:1374 ../../WINGs/wcolorpanel.c:1435
+#: ../../WINGs/wcolorpanel.c:1495
+msgid "Color Panel: X failed request"
+msgstr "Панел за боје: Неуспешан захтев X-а"
+
+#: ../../WINGs/wcolorpanel.c:2750
+msgid "Saturation"
+msgstr "Засићење"
+
+#: ../../WINGs/wcolorpanel.c:2784
+msgid "Hue"
+msgstr "Нијанса"
+
+#: ../../WINGs/wcolorpanel.c:3008
+msgid "Open Palette"
+msgstr "Отвори палету"
+
+#: ../../WINGs/wcolorpanel.c:3070
+msgid "Invalid file format !"
+msgstr "Неисправан формат датотеке !"
+
+#: ../../WINGs/wcolorpanel.c:3072
+#, c-format
+msgid "can't remove file %s"
+msgstr "не може се уклонити датотека %s"
+
+#: ../../WINGs/wcolorpanel.c:3074
+msgid "Couldn't remove file from Configuration Directory !"
+msgstr "Не може се уклонити датотека из директоријума са подешавањима !"
+
+#: ../../WINGs/wcolorpanel.c:3099
+msgid "Rename"
+msgstr "Преименовање"
+
+#: ../../WINGs/wcolorpanel.c:3099
+msgid "Rename palette to:"
+msgstr "Преименуј палету у:"
+
+#: ../../WINGs/wcolorpanel.c:3100 ../../WINGs/wfilepanel.c:236
+#: ../../WINGs/wfilepanel.c:611 ../../WINGs/wfilepanel.c:715
+msgid "Cancel"
+msgstr "Поништи"
+
+#. Careful, this palette exists already
+#: ../../WINGs/wcolorpanel.c:3116 ../../WINGs/wfilepanel.c:715
+msgid "Warning"
+msgstr "Упозорење"
+
+#: ../../WINGs/wcolorpanel.c:3117
+msgid "Palette already exists !\n\nOverwrite ?"
+msgstr "Палета већ постоји !\n\nПреписати ?"
+
+#: ../../WINGs/wcolorpanel.c:3117 ../../WINGs/wcolorpanel.c:3176
+msgid "No"
+msgstr "Не"
+
+#: ../../WINGs/wcolorpanel.c:3117 ../../WINGs/wcolorpanel.c:3176
+msgid "Yes"
+msgstr "Да"
+
+#: ../../WINGs/wcolorpanel.c:3148
+#, c-format
+msgid "Couldn't rename palette %s to %s"
+msgstr "Палета %s се не може преименовати у %s"
+
+#: ../../WINGs/wcolorpanel.c:3171
+msgid "This will permanently remove the palette "
+msgstr "Ово ће трајно уклонити палету "
+
+#: ../../WINGs/wcolorpanel.c:3173
+msgid ".\n\nAre you sure you want to remove this palette ?"
+msgstr ".\n\nДа ли сте сигурни да желите да уклоните палету ?"
+
+#: ../../WINGs/wcolorpanel.c:3195
+#, c-format
+msgid "Couldn't remove palette %s"
+msgstr "Не може се уклонити палета %s"
+
+#: ../../WINGs/wcolorpanel.c:3498
+msgid "Color Panel: Color unspecified"
+msgstr "Панел за боју: Боја није задата"
+
+#: ../../WINGs/wfilepanel.c:216
+msgid "Name:"
+msgstr "Назив:"
+
+#: ../../WINGs/wfilepanel.c:306 ../../WINGs/wfilepanel.c:364
+msgid "Open"
+msgstr "Отвори"
+
+#: ../../WINGs/wfilepanel.c:322 ../../WINGs/wfilepanel.c:370
+msgid "Save"
+msgstr "Сачувај"
+
+#: ../../WINGs/wfilepanel.c:506
+#, c-format
+msgid "WINGs: could not open directory %s\n"
+msgstr "WINGs: не може се отворити директоријум %s\n"
+
+#: ../../WINGs/wfilepanel.c:526
+#, c-format
+msgid "WINGs: could not stat %s\n"
+msgstr "WINGs: не може се stat-овати %s\n"
+
+#: ../../WINGs/wfilepanel.c:596 ../../WINGs/wfilepanel.c:883
+#: ../../WINGs/wfontpanel.c:531
+msgid "Error"
+msgstr "Грешка"
+
+#: ../../WINGs/wfilepanel.c:610
+msgid "Create Directory"
+msgstr "Креирање директоријума"
+
+#: ../../WINGs/wfilepanel.c:611
+msgid "Enter directory name"
+msgstr "Унесите назив директоријума"
+
+#: ../../WINGs/wfilepanel.c:639
+#, c-format
+msgid "Can not create %s: %s"
+msgstr "Не може се креирати %s: %s"
+
+#: ../../WINGs/wfilepanel.c:705
+#, c-format
+msgid "Can not find %s: %s"
+msgstr "Не може се наћи %s: %s"
+
+#: ../../WINGs/wfilepanel.c:711
+#, c-format
+msgid "Delete %s %s?"
+msgstr "Обрисати %s %s?"
+
+#: ../../WINGs/wfilepanel.c:712
+msgid "directory"
+msgstr "директоријум"
+
+#: ../../WINGs/wfilepanel.c:712
+msgid "file"
+msgstr "датотеку"
+
+#: ../../WINGs/wfilepanel.c:719
+#, c-format
+msgid "Removing %s failed: %s"
+msgstr "Уклањање %s није успело: %s"
+
+#: ../../WINGs/wfilepanel.c:751
+#, c-format
+msgid "An error occurred browsing '%s'."
+msgstr "Догодила се грешка приликом прегледања „%s“."
+
+#: ../../WINGs/wfilepanel.c:754
+#, c-format
+msgid "'%s' is not a directory."
+msgstr "„%s“ није директоријум."
+
+#: ../../WINGs/wfilepanel.c:883
+msgid "File does not exist."
+msgstr "Датотека не постоји."
+
+#: ../../WINGs/wfont.c:43
+#, c-format
+msgid "invalid font: %s. Trying '%s'"
+msgstr "неисправан фонт: %s. Проба се „%s“"
+
+#: ../../WINGs/wfont.c:270 ../../WINGs/wfont.c:288
+#, c-format
+msgid "could not load font: %s."
+msgstr "не може се учитати фонт: %s."
+
+#. WMSetWidgetBackgroundColor(panel->win, WMWhiteColor(scr));
+#: ../../WINGs/wfontpanel.c:184
+msgid "Font Panel"
+msgstr "Панел за фонт"
+
+#: ../../WINGs/wfontpanel.c:220
+msgid "The quick brown fox jumps over the lazy dog"
+msgstr "Одбациће кавгаџија плаштом чађ у жељезни фењер"
+
+#: ../../WINGs/wfontpanel.c:226
+msgid "Family"
+msgstr "Фамилија"
+
+#: ../../WINGs/wfontpanel.c:237
+msgid "Typeface"
+msgstr "Словни лик"
+
+#: ../../WINGs/wfontpanel.c:248
+msgid "Size"
+msgstr "Величина"
+
+#: ../../WINGs/wfontpanel.c:267
+msgid "Set"
+msgstr "Постави"
+
+#: ../../WINGs/wfontpanel.c:273
+msgid "Revert"
+msgstr "Врати"
+
+#: ../../WINGs/wfontpanel.c:532
+msgid "Could not init font config library\n"
+msgstr "Не може се иницијализовати библиотека font config\n"
+
+#: ../../WINGs/widgets.c:447
+#, c-format
+msgid "WINGs: could not load widget images file: %s"
+msgstr "WINGs: не може се учитати датотека са сликама виџета: %s"
+
+#: ../../WINGs/widgets.c:543
+#, c-format
+msgid "WINGs: could not open display %s"
+msgstr "WINGs: не може се отворити приказ %s"
+
+#: ../../WINGs/widgets.c:772
+msgid "could not load any fonts. Make sure your font installation and locale settings are correct."
+msgstr "не може се учитати ниједан фонт. Проверите да ли су фонтови исправно инсталирани и да али су подешавања језика исправна."
+
+#: ../../WINGs/winputmethod.c:65
+msgid "could not add destroy callback for XIM input method"
+msgstr "не може се додати destroy callback за XIM метод уноса"
+
+#: ../../WINGs/wruler.c:175
+msgid "0   inches"
+msgstr "0   инча"
+
+#: ../../WINGs/wtextfield.c:494
+msgid "only left alignment is supported in textfields"
+msgstr "у текстуалним пољима је подржано само лево уравнање"
+
+#: ../../WINGs/wwindow.c:160
+msgid "window title conversion error... using STRING encoding"
+msgstr "грешка приликом конверзије наслова прозора... користи се STRING кодирање"
+
+#: ../../WINGs/wwindow.c:181
+msgid "icon title conversion error... using STRING encoding"
+msgstr "грешка приликом конверзије наслова иконе... користи се STRING кодирање"

@@ -1,0 +1,199 @@
+/*
+ * Root Menu definition for WindowMaker
+ *
+ * Syntax is:
+ *
+ * <Title> [SHORTCUT <Shortcut>] <Command> <Parameters>
+ *
+ * <Title> is any string to be used as title. Must be enclosed with " if it
+ * 	has spaces
+ *
+ * SHORTCUT specifies a shortcut for that item. <Shortcut> has the
+ * same syntax of the shortcuts key options in the
+ * $HOME/GNUstep/Defaults/WindowMaker file, such as RootMenuKey or MiniaturizeKey.
+ *
+ * You can't specify a shortcut for a MENU or OPEN_MENU entry.
+ *
+ * <Command> one of the valid commands:
+ *	MENU - starts (sub)menu definition
+ *	END  - end (sub)menu definition
+ *	OPEN_MENU - opens a menu from a file, pipe or directory(ies) contents
+ *		    and eventually precede each with a command.
+ *	WORKSPACE_MENU - adds a submenu for workspace operations. Only one
+ *		    workspace_menu is allowed.
+ *	EXEC <program> - executes an external program
+ *	SHEXEC <command> - executes a shell command (like gimp > /dev/null)
+ *	EXIT - exits the window manager
+ *	RESTART [<window manager>] - restarts WindowMaker or start another
+ *			window manager
+ *	REFRESH - refreshes the desktop
+ *	ARRANGE_ICONS - rearranges the icons on the workspace
+ *	SHUTDOWN - kills all clients (and close the X window session)
+ *	SHOW_ALL - unhides all windows on workspace
+ *	HIDE_OTHERS - hides all windows on the workspace, except the
+ *		focused one (or the last one that received focus)
+ *	SAVE_SESSION - saves the current state of the desktop, which include
+ *		       all running applications, all their hints (geometry,
+ *		       position on screen, workspace they live on, the dock
+ *		       or clip from where they were launched, and
+ *		       if minimized, shaded or hidden. Also saves the current
+ *		       workspace the user is on. All will be restored on every
+ *		       start of windowmaker until another SAVE_SESSION or
+ *		       CLEAR_SESSION is used. If SaveSessionOnExit = Yes; in
+ *		       WindowMaker domain file, then saving is automatically
+ *		       done on every windowmaker exit, overwriting any
+ *		       SAVE_SESSION or CLEAR_SESSION (see below).
+ *	CLEAR_SESSION - clears any previous saved session. This will not have
+ *		       any effect if SaveSessionOnExit is True.
+ *	INFO - shows the Info Panel
+ *
+ * OPEN_MENU syntax:
+ *   1. File menu handling.
+ *	// opens file.menu which must contain a valid menu file and inserts
+ *	// it in current position
+ *	OPEN_MENU file.menu
+ *   2. Pipe menu handling.
+ *	// opens command and uses its stdout to construct menu.
+ *	// Command's output must be a valid menu description.
+ *	// The space between '|' and command itself is optional.
+ *      // Use '||' instead of '|' if you want the menu to always update
+ *	// when opened. It might be slow.
+ *	OPEN_MENU | command
+ *      OPEN_MENU || command
+ *   3. Directory handling.
+ *	// Opens one or more directories and constructs a menu with all
+ *	// the subdirectories and executable files in them sorted
+ *	// alphabetically.
+ *	OPEN_MENU /some/dir [/some/other/dir ...]
+ *   4. Directory handling with command.
+ *	// Opens one or more directories and constructs menu with all
+ *	// subdirectories and readable files in them sorted alphabetically,
+ *	// preceding each of them with command.
+ *	OPEN_MENU [options] /some/dir [/some/other/dir ...] WITH command -options
+ *		Options:
+ * 			-noext 	strip whatever is after the last dot in the
+ *				file name
+ *
+ *      // Use #usergnusteppath# as a placeholder for the path to the user
+ *      // GNUstep directory.  Window Maker will replace this with the value
+ *      // of WMAKER_USER_ROOT, if this environment variable is set, or
+ *      // "~/GNUstep" otherwise
+ *
+ * <Parameters> is the program to execute.
+ *
+ * ** Options for command line in EXEC:
+ * %s - substitute with current selection
+ * %a(title[,prompt]) - opens an input box with the specified title and the
+ *			optional prompt	and do substitution with what you typed
+ * %w - substitute with XID for the current focused window
+ * %W - substitute with the number of the current workspace
+ *
+ * You can override special characters (as % and ") with the \ character:
+ * ex: xterm -T "\"Hello World\""
+ *
+ * You can also use character escapes, like \n
+ *
+ * Each MENU statement must have one mathching END statement at the end.
+ *
+ * Example:
+ *
+ * "Test" MENU
+ *	"XTerm" EXEC xterm
+ *		// creates a submenu with the contents of /usr/openwin/bin
+ *	"XView apps" OPEN_MENU "/usr/openwin/bin"
+ *		// some X11 apps in different directories
+ *	"X11 apps" OPEN_MENU /usr/X11/bin $HOME/bin/X11
+ *		// set some background images
+ *	"Background" OPEN_MENU -noext $HOME/images /usr/share/images WITH wmsetbg -u -t
+ *		// inserts the style.menu in this entry
+ *	"Style" OPEN_MENU style.menu
+ * "Test" END
+ */
+
+#include "wmmacros"
+
+"Апликације" MENU
+	"Информације" MENU
+		"Информациони панел" INFO_PANEL
+		"Права" LEGAL_PANEL
+		"Системска конзола" EXEC xconsole
+		"Искоришћеност система" SHEXEC xosview || xload
+		"Листа процеса" EXEC xterm -e top
+		"Прегледач упутства" EXEC xman
+	"Информације" END
+	"Покрени..." SHEXEC %a(Покрени,Унесите наредбу за покретање:)
+	"XTerm" EXEC xterm -sb
+	"Mozilla Firefox" EXEC firefox
+	"Радне површине" WORKSPACE_MENU
+	"Апликације" MENU
+		"Gimp" SHEXEC gimp >/dev/null
+  		"Ghostview" EXEC ghostview %a(GhostView,Enter file to view)
+		"Xpdf" EXEC xpdf %a(Xpdf,Enter PDF to view)
+		"Abiword" EXEC abiword
+		"Dia" EXEC dia
+		"OpenOffice.org" MENU
+			"OpenOffice.org" EXEC ooffice
+			"Писач" EXEC oowriter
+			"Табела" EXEC oocalc
+			"Цртање" EXEC oodraw
+			"Презентације" EXEC ooimpress
+		"OpenOffice.org" END
+
+		"Уређивачи" MENU
+			"XEmacs" EXEC xemacs
+			"Emacs" EXEC emacs
+			"XJed" EXEC xjed
+			"VI" EXEC xterm -e vi
+			"GVIM" EXEC gvim
+			"NEdit" EXEC nedit
+			"Xedit" EXEC xedit
+		"Уређивачи" END
+
+		"Мултимедија" MENU
+			"XMMS" MENU
+				"XMMS" EXEC xmms
+				"XMMS пусти/паузирај" EXEC xmms -t
+				"XMMS заустави" EXEC xmms -s
+			"XMMS" END
+			"Видео плејер Xine" EXEC xine
+			"MPlayer" EXEC mplayer
+		"Мултимедија" END
+	"Апликације" END
+
+	"Помоћни програми" MENU
+		"Калкулатор" EXEC xcalc
+		"Особине прозора" SHEXEC xprop | xmessage -center -title 'xprop' -file -
+		"Бирач фонта" EXEC xfontsel
+		"Лупа" EXEC wmagnify
+		"Мапа боја" EXEC xcmap
+		"Убиј X апликацију" EXEC xkill
+	"Помоћни програми" END
+
+	"Избор" MENU
+		"Копирај" SHEXEC echo '%s' | wxcopy
+		"Пошаљи мејлом на" EXEC xterm -name mail -T "Pine" -e pine %s
+		"Прегледај веб читачем" EXEC netscape %s
+		"Тражи у упутству" SHEXEC MANUAL_SEARCH(%s)
+	"Избор" END
+
+	"Наредбе" MENU
+		"Сакриј остале" HIDE_OTHERS
+		"Прикажи све" SHOW_ALL
+		"Поређај иконе" ARRANGE_ICONS
+		"Освежи" REFRESH
+		"Закључај" EXEC xlock -allowroot -usefirst
+	"Наредбе" END
+
+	"Изглед" OPEN_MENU "appearance.menu"
+
+	"Сесија" MENU
+		"Сачувај сесију" SAVE_SESSION
+		"Очисти сесију" CLEAR_SESSION
+		"Поново покрени Window Maker" RESTART
+		"Покрени BlackBox" RESTART blackbox
+		"Покрени IceWM" RESTART icewm
+		"Изађи"  EXIT
+	"Сесија" END
+"Апликације" END
+
+

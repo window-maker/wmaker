@@ -1,0 +1,12 @@
+#include "wmmacros"
+
+"Изглед" MENU
+  "Позадина" OPEN_MENU background.menu
+  "Стилови" OPEN_MENU -noext  STYLES_DIR USER_STYLES_DIR WITH setstyle
+  "Теме" OPEN_MENU -noext  THEMES_DIR USER_THEMES_DIR WITH setstyle
+  "Сетови икона" OPEN_MENU -noext  ICON_SETS_DIR USER_ICON_SETS_DIR WITH seticons
+  "Сачувај сет икона" EXEC geticonset USER_ICON_SETS_DIR/"%a(Назив сета икона)"
+  "Сачувај тему" EXEC getstyle -p "%a(Назив теме)"
+  "Алат за подешавања" EXEC #wprefs#
+"Изглед" END
+

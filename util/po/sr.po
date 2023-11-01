@@ -1,0 +1,2007 @@
+# Serbian messages for Window Maker
+# Copyright (C) 1997-2006 Alfredo K. Kojima
+#		1998-2006 Dan Pascu
+#		2013-2020 Window Maker Developers Team
+# This file is distributed under the same license as the Window Maker package.
+# Strahinya Radich (Страхиња Радић) <contact@strahinja.org>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WindowMaker 0.95.9\n"
+"Report-Msgid-Bugs-To: wmaker-dev@googlegroups.com\n"
+"POT-Creation-Date: 2023-10-25 14:44+0200\n"
+"PO-Revision-Date: 2023-10-30 19:13+0100\n"
+"Last-Translator: Страхиња Радић <contact@strahinja.org>\n"
+"Language-Team: Serbian <sr@li.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: poe 1.6.0-1-g10e6dcc\n"
+
+#. Root -> Applications
+#: ../../util/wmgenmenu.c:117
+msgid "Applications"
+msgstr "Апликације"
+
+#. Root -> Applications -> <category>
+#: ../../util/wmgenmenu.c:120
+msgid "Terminals"
+msgstr "Терминали"
+
+#. always keep terminals the top item
+#: ../../util/wmgenmenu.c:121
+msgid "Internet"
+msgstr "Интернет"
+
+#: ../../util/wmgenmenu.c:122
+msgid "Email"
+msgstr "Мејл"
+
+#: ../../util/wmgenmenu.c:123
+msgid "Mathematics"
+msgstr "Математика"
+
+#: ../../util/wmgenmenu.c:124
+msgid "File Managers"
+msgstr "Менаџери датотека"
+
+#: ../../util/wmgenmenu.c:125
+msgid "Graphics"
+msgstr "Графика"
+
+#: ../../util/wmgenmenu.c:126
+msgid "Multimedia"
+msgstr "Мултимедија"
+
+#: ../../util/wmgenmenu.c:127
+msgid "Editors"
+msgstr "Уређивачи текста"
+
+#: ../../util/wmgenmenu.c:128
+msgid "Development"
+msgstr "Развојни алати"
+
+#: ../../util/wmgenmenu.c:130
+msgid "Office"
+msgstr "Канцеларијски програми"
+
+#: ../../util/wmgenmenu.c:131
+msgid "Astronomy"
+msgstr "Астрономија"
+
+#: ../../util/wmgenmenu.c:132
+msgid "Sound"
+msgstr "Звук"
+
+#: ../../util/wmgenmenu.c:133
+msgid "Comics"
+msgstr "Стрипови"
+
+#: ../../util/wmgenmenu.c:134
+msgid "Viewers"
+msgstr "Прегледачи"
+
+#: ../../util/wmgenmenu.c:135
+msgid "Utilities"
+msgstr "Помоћни програми"
+
+#: ../../util/wmgenmenu.c:136
+msgid "System"
+msgstr "Системски програми"
+
+#: ../../util/wmgenmenu.c:137
+msgid "Video"
+msgstr "Видео"
+
+#: ../../util/wmgenmenu.c:138
+msgid "Chat and Talk"
+msgstr "Чет и разговор"
+
+#: ../../util/wmgenmenu.c:139
+msgid "P2P Network"
+msgstr "P2P мрежа"
+
+#: ../../util/wmgenmenu.c:140
+msgid "Games"
+msgstr "Игре"
+
+#: ../../util/wmgenmenu.c:148
+msgid "Run..."
+msgstr "Покрени..."
+
+#: ../../util/wmgenmenu.c:150
+#, c-format
+msgid "%A(Run, Type command:)"
+msgstr "%A(Покрени, Унесите наредбу:)"
+
+#. Root -> Appearance
+#: ../../util/wmgenmenu.c:156
+msgid "Appearance"
+msgstr "Изглед"
+
+#: ../../util/wmgenmenu.c:160
+msgid "Themes"
+msgstr "Теме"
+
+#: ../../util/wmgenmenu.c:169
+msgid "Styles"
+msgstr "Стилови"
+
+#: ../../util/wmgenmenu.c:178
+msgid "Icon Sets"
+msgstr "Сетови икона"
+
+#. Root -> Appearance -> Background
+#: ../../util/wmgenmenu.c:186
+msgid "Background"
+msgstr "Позадина"
+
+#. Root -> Appearance -> Background -> Solid
+#: ../../util/wmgenmenu.c:189
+msgid "Solid"
+msgstr "Једнобојна"
+
+#. Root -> Appearance -> Background -> Solid -> <color>
+#: ../../util/wmgenmenu.c:201
+msgid "Black"
+msgstr "Црна"
+
+#: ../../util/wmgenmenu.c:202
+msgid "Blue"
+msgstr "Плава"
+
+#: ../../util/wmgenmenu.c:203
+msgid "Indigo"
+msgstr "Индиго"
+
+#: ../../util/wmgenmenu.c:204
+msgid "Bluemarine"
+msgstr "Аквамарин"
+
+#: ../../util/wmgenmenu.c:205
+msgid "Purple"
+msgstr "Љубичаста"
+
+#: ../../util/wmgenmenu.c:206
+msgid "Wheat"
+msgstr "Боја жита"
+
+#: ../../util/wmgenmenu.c:207
+msgid "Dark Gray"
+msgstr "Тамно сива"
+
+#: ../../util/wmgenmenu.c:208
+msgid "Wine"
+msgstr "Боја вина"
+
+#. Root -> Appearance -> Background -> Gradient
+#: ../../util/wmgenmenu.c:213
+msgid "Gradient"
+msgstr "Претапање"
+
+#: ../../util/wmgenmenu.c:227
+msgid "Sunset"
+msgstr "Залазак сунца"
+
+#: ../../util/wmgenmenu.c:234
+msgid "Sky"
+msgstr "Небо"
+
+#: ../../util/wmgenmenu.c:235
+msgid "Blue Shades"
+msgstr "Нијансе плаве"
+
+#: ../../util/wmgenmenu.c:236
+msgid "Indigo Shades"
+msgstr "Индиго нијансе"
+
+#: ../../util/wmgenmenu.c:237
+msgid "Purple Shades"
+msgstr "Нијансе љубичасте"
+
+#: ../../util/wmgenmenu.c:238
+msgid "Wheat Shades"
+msgstr "Нијансе боје жита"
+
+#: ../../util/wmgenmenu.c:239
+msgid "Grey Shades"
+msgstr "Нијансе сиве"
+
+#: ../../util/wmgenmenu.c:240
+msgid "Wine Shades"
+msgstr "Нијансе боје вина"
+
+#: ../../util/wmgenmenu.c:246
+msgid "Images"
+msgstr "Слике"
+
+#: ../../util/wmgenmenu.c:257
+msgid "Save Theme"
+msgstr "Сачувај тему"
+
+#: ../../util/wmgenmenu.c:266
+msgid "Save IconSet"
+msgstr "Сачувај сет икона"
+
+#: ../../util/wmgenmenu.c:277
+msgid "Workspaces"
+msgstr "Радне површине"
+
+#. Root -> Workspace
+#: ../../util/wmgenmenu.c:284
+msgid "Workspace"
+msgstr "Радна површина"
+
+#: ../../util/wmgenmenu.c:286
+msgid "Hide Others"
+msgstr "Сакриј остале"
+
+#: ../../util/wmgenmenu.c:294
+msgid "Show All"
+msgstr "Прикажи све"
+
+#: ../../util/wmgenmenu.c:302
+msgid "Arrange Icons"
+msgstr "Поређај иконе"
+
+#: ../../util/wmgenmenu.c:310
+msgid "Refresh"
+msgstr "Освежи"
+
+#: ../../util/wmgenmenu.c:318
+msgid "Save Session"
+msgstr "Сачувај сесију"
+
+#: ../../util/wmgenmenu.c:326
+msgid "Clear Session"
+msgstr "Очисти сесију"
+
+#: ../../util/wmgenmenu.c:335
+msgid "Configure Window Maker"
+msgstr "Подеси Window Maker"
+
+#: ../../util/wmgenmenu.c:344
+msgid "Info Panel"
+msgstr "Панел за информације"
+
+#: ../../util/wmgenmenu.c:352
+msgid "Restart Window Maker"
+msgstr "Поново покрени Window Maker"
+
+#: ../../util/wmgenmenu.c:365
+msgid "Lock Screen"
+msgstr "Закључај екран"
+
+#: ../../util/wmgenmenu.c:376
+msgid "Exit Window Maker"
+msgstr "Изађи из Window Maker-а"
+
+#: ../../util/wmgenmenu.c:480
+#, c-format
+msgid "Start %s"
+msgstr "Покрени %s"
+
+#: ../../util/wmgenmenu.c:490
+msgid "Other Window Managers"
+msgstr "Други менаџери прозора"
+
+#: ../../util/wmgenmenu.h:26
+msgid "xterm"
+msgstr "xterm"
+
+#: ../../util/wmgenmenu.h:27
+msgid "st"
+msgstr "st"
+
+#: ../../util/wmgenmenu.h:28
+msgid "mrxvt"
+msgstr "mrxvt"
+
+#: ../../util/wmgenmenu.h:29
+msgid "Konsole"
+msgstr "Konsole"
+
+#: ../../util/wmgenmenu.h:30
+msgid "Urxvt"
+msgstr "Urxvt"
+
+#: ../../util/wmgenmenu.h:35
+msgid "Dolphin"
+msgstr "Dolphin"
+
+#: ../../util/wmgenmenu.h:36
+msgid "Thunar"
+msgstr "Thunar"
+
+#: ../../util/wmgenmenu.h:37
+msgid "ROX filer"
+msgstr "ROX filer"
+
+#: ../../util/wmgenmenu.h:38
+msgid "PCManFM"
+msgstr "PCManFM"
+
+#: ../../util/wmgenmenu.h:39
+msgid "GWorkspace"
+msgstr "GWorkspace"
+
+#: ../../util/wmgenmenu.h:40
+msgid "Midnight Commander"
+msgstr "Поноћни наредник"
+
+#: ../../util/wmgenmenu.h:41
+msgid "XFTree"
+msgstr "XFTree"
+
+#: ../../util/wmgenmenu.h:42 ../../util/wmgenmenu.h:143
+msgid "Konqueror"
+msgstr "Konqueror"
+
+#: ../../util/wmgenmenu.h:43
+msgid "Nautilus"
+msgstr "Nautilus"
+
+#: ../../util/wmgenmenu.h:44
+msgid "FSViewer"
+msgstr "FSViewer"
+
+#: ../../util/wmgenmenu.h:45
+msgid "Xfe"
+msgstr "Xfe"
+
+#: ../../util/wmgenmenu.h:50
+msgid "Xmaxima"
+msgstr "Xmaxima"
+
+#: ../../util/wmgenmenu.h:51
+msgid "Maxima"
+msgstr "Maxima"
+
+#: ../../util/wmgenmenu.h:52
+msgid "Maple"
+msgstr "Maple"
+
+#: ../../util/wmgenmenu.h:53
+msgid "Scilab"
+msgstr "Scilab"
+
+#: ../../util/wmgenmenu.h:54
+msgid "bc"
+msgstr "bc"
+
+#: ../../util/wmgenmenu.h:55
+msgid "KCalc"
+msgstr "KCalc"
+
+#: ../../util/wmgenmenu.h:56
+msgid "XCalc"
+msgstr "XCalc"
+
+#: ../../util/wmgenmenu.h:57
+msgid "Mathematica"
+msgstr "Mathematica"
+
+#: ../../util/wmgenmenu.h:58
+msgid "Math"
+msgstr "Математика"
+
+#. command-line Mathematica
+#: ../../util/wmgenmenu.h:59
+msgid "Free42"
+msgstr "Free42"
+
+#: ../../util/wmgenmenu.h:60
+msgid "X48"
+msgstr "X48"
+
+#: ../../util/wmgenmenu.h:65
+msgid "Xplns"
+msgstr "Xplns"
+
+#: ../../util/wmgenmenu.h:66
+msgid "Stellarium"
+msgstr "Stellarium"
+
+#: ../../util/wmgenmenu.h:71
+msgid "GIMP"
+msgstr "GIMP"
+
+#: ../../util/wmgenmenu.h:72
+msgid "Sodipodi"
+msgstr "Sodipodi"
+
+#: ../../util/wmgenmenu.h:73
+msgid "Inkscape"
+msgstr "Inkscape"
+
+#: ../../util/wmgenmenu.h:74
+msgid "KIllustrator"
+msgstr "KIllustrator"
+
+#: ../../util/wmgenmenu.h:75
+msgid "Krayon"
+msgstr "Krayon"
+
+#: ../../util/wmgenmenu.h:76
+msgid "KPovModeler"
+msgstr "KPovModeler"
+
+#: ../../util/wmgenmenu.h:77
+msgid "XBitmap"
+msgstr "XBitmap"
+
+#: ../../util/wmgenmenu.h:78
+msgid "XPaint"
+msgstr "XPaint"
+
+#: ../../util/wmgenmenu.h:79
+msgid "XFig"
+msgstr "XFig"
+
+#: ../../util/wmgenmenu.h:80
+msgid "KPaint"
+msgstr "KPaint"
+
+#: ../../util/wmgenmenu.h:81
+msgid "Blender"
+msgstr "Blender"
+
+#: ../../util/wmgenmenu.h:82
+msgid "KSnapshot"
+msgstr "KSnapshot"
+
+#: ../../util/wmgenmenu.h:83
+msgid "Spectacle"
+msgstr "Spectacle"
+
+#: ../../util/wmgenmenu.h:84
+msgid "GPhoto"
+msgstr "GPhoto"
+
+#: ../../util/wmgenmenu.h:85
+msgid "DigiKam"
+msgstr "DigiKam"
+
+#: ../../util/wmgenmenu.h:86
+msgid "GQview"
+msgstr "GQview"
+
+#: ../../util/wmgenmenu.h:87
+msgid "Geeqie"
+msgstr "Geeqie"
+
+#: ../../util/wmgenmenu.h:88
+msgid "KView"
+msgstr "KView"
+
+#: ../../util/wmgenmenu.h:89
+msgid "Dia"
+msgstr "Dia"
+
+#: ../../util/wmgenmenu.h:90
+msgid "CompuPic"
+msgstr "CompuPic"
+
+#: ../../util/wmgenmenu.h:91
+msgid "Pixie"
+msgstr "Pixie"
+
+#: ../../util/wmgenmenu.h:92
+msgid "ImageMagick Display"
+msgstr "ImageMagick приказивање"
+
+#: ../../util/wmgenmenu.h:93
+msgid "XV"
+msgstr "XV"
+
+#: ../../util/wmgenmenu.h:94
+msgid "Eye of GNOME"
+msgstr "Око GNOME-а"
+
+#: ../../util/wmgenmenu.h:95
+msgid "Quick Image Viewer"
+msgstr "Брзи прегледач слика"
+
+#: ../../util/wmgenmenu.h:100 ../../util/wmgenmenu.h:504
+msgid "Audacious"
+msgstr "Audacious"
+
+#: ../../util/wmgenmenu.h:101
+msgid "Kaffeine"
+msgstr "Kaffeine"
+
+#: ../../util/wmgenmenu.h:102
+msgid "Audacity"
+msgstr "Audacity"
+
+#: ../../util/wmgenmenu.h:103
+msgid "Amarok"
+msgstr "Amarok"
+
+#: ../../util/wmgenmenu.h:104
+msgid "XMMS"
+msgstr "XMMS"
+
+#: ../../util/wmgenmenu.h:105
+msgid "K9Copy"
+msgstr "K9Copy"
+
+#: ../../util/wmgenmenu.h:106
+msgid "HandBrake"
+msgstr "HandBrake"
+
+#: ../../util/wmgenmenu.h:107
+msgid "OGMRip"
+msgstr "OGMRip"
+
+#: ../../util/wmgenmenu.h:108
+msgid "DVBcut"
+msgstr "DVBcut"
+
+#: ../../util/wmgenmenu.h:109
+msgid "AcidRip"
+msgstr "AcidRip"
+
+#: ../../util/wmgenmenu.h:110
+msgid "RipperX"
+msgstr "RipperX"
+
+#: ../../util/wmgenmenu.h:111
+msgid "Avidemux"
+msgstr "Avidemux"
+
+#: ../../util/wmgenmenu.h:112
+msgid "GQmpeg"
+msgstr "GQmpeg"
+
+#: ../../util/wmgenmenu.h:113
+msgid "SMPlayer"
+msgstr "SMPlayer"
+
+#: ../../util/wmgenmenu.h:114
+msgid "Linux MultiMedia Studio"
+msgstr "Linux MultiMedia Studio"
+
+#: ../../util/wmgenmenu.h:115
+msgid "Freeamp"
+msgstr "Freeamp"
+
+#: ../../util/wmgenmenu.h:116
+msgid "RealPlayer"
+msgstr "RealPlayer"
+
+#: ../../util/wmgenmenu.h:117
+msgid "Mediathek"
+msgstr "Mediathek"
+
+#: ../../util/wmgenmenu.h:118
+msgid "KMid"
+msgstr "KMid"
+
+#: ../../util/wmgenmenu.h:119
+msgid "Kmidi"
+msgstr "Kmidi"
+
+#: ../../util/wmgenmenu.h:120
+msgid "Gtcd"
+msgstr "Gtcd"
+
+#: ../../util/wmgenmenu.h:121
+msgid "Grip"
+msgstr "Grip"
+
+#: ../../util/wmgenmenu.h:122
+msgid "AVIplay"
+msgstr "AVIplay"
+
+#: ../../util/wmgenmenu.h:123
+msgid "Gtv"
+msgstr "Gtv"
+
+#: ../../util/wmgenmenu.h:124
+msgid "VLC"
+msgstr "VLC"
+
+#: ../../util/wmgenmenu.h:125
+msgid "Sinek"
+msgstr "Sinek"
+
+#: ../../util/wmgenmenu.h:126
+msgid "xine"
+msgstr "xine"
+
+#: ../../util/wmgenmenu.h:127
+msgid "aKtion"
+msgstr "aKtion"
+
+#: ../../util/wmgenmenu.h:128
+msgid "Gcd"
+msgstr "Gcd"
+
+#: ../../util/wmgenmenu.h:129
+msgid "XawTV"
+msgstr "XawTV"
+
+#: ../../util/wmgenmenu.h:130
+msgid "XPlayCD"
+msgstr "XPlayCD"
+
+#: ../../util/wmgenmenu.h:131
+msgid "XBMC"
+msgstr "XBMC"
+
+#: ../../util/wmgenmenu.h:132
+msgid "Kodi"
+msgstr "Kodi"
+
+#: ../../util/wmgenmenu.h:137 ../../util/wmgenmenu.h:138
+msgid "Chromium"
+msgstr "Chromium"
+
+#: ../../util/wmgenmenu.h:139
+msgid "Google Chrome"
+msgstr "Google Chrome"
+
+#: ../../util/wmgenmenu.h:140
+msgid "Mozilla Firefox"
+msgstr "Mozilla Firefox"
+
+#: ../../util/wmgenmenu.h:141
+msgid "Galeon"
+msgstr "Galeon"
+
+#: ../../util/wmgenmenu.h:142
+msgid "SkipStone"
+msgstr "SkipStone"
+
+#: ../../util/wmgenmenu.h:144
+msgid "Dillo"
+msgstr "Dillo"
+
+#: ../../util/wmgenmenu.h:145
+msgid "Epiphany"
+msgstr "Epiphany"
+
+#: ../../util/wmgenmenu.h:146
+msgid "Opera"
+msgstr "Opera"
+
+#: ../../util/wmgenmenu.h:147
+msgid "Midori"
+msgstr "Midori"
+
+#: ../../util/wmgenmenu.h:148
+msgid "Mozilla SeaMonkey"
+msgstr "Mozilla SeaMonkey"
+
+#: ../../util/wmgenmenu.h:149
+msgid "Kazehakase"
+msgstr "Kazehakase"
+
+#: ../../util/wmgenmenu.h:150
+msgid "Links"
+msgstr "Links"
+
+#: ../../util/wmgenmenu.h:151
+msgid "Lynx"
+msgstr "Lynx"
+
+#: ../../util/wmgenmenu.h:152
+msgid "W3M"
+msgstr "W3M"
+
+#: ../../util/wmgenmenu.h:157
+msgid "Mozilla Thunderbird"
+msgstr "Mozilla Thunderbird"
+
+#: ../../util/wmgenmenu.h:158
+msgid "Mutt"
+msgstr "Mutt"
+
+#: ../../util/wmgenmenu.h:159
+msgid "GNUMail"
+msgstr "GNUMail"
+
+#: ../../util/wmgenmenu.h:160
+msgid "Claws Mail"
+msgstr "Claws Mail"
+
+#: ../../util/wmgenmenu.h:161
+msgid "Evolution"
+msgstr "Evolution"
+
+#: ../../util/wmgenmenu.h:162
+msgid "Kleopatra"
+msgstr "Kleopatra"
+
+#: ../../util/wmgenmenu.h:163
+msgid "Sylpheed"
+msgstr "Sylpheed"
+
+#: ../../util/wmgenmenu.h:164
+msgid "Spruce"
+msgstr "Spruce"
+
+#: ../../util/wmgenmenu.h:165
+msgid "KMail"
+msgstr "KMail"
+
+#: ../../util/wmgenmenu.h:166
+msgid "Exmh"
+msgstr "Exmh"
+
+#: ../../util/wmgenmenu.h:167
+msgid "Pine"
+msgstr "Pine"
+
+#: ../../util/wmgenmenu.h:168
+msgid "ELM"
+msgstr "ELM"
+
+#: ../../util/wmgenmenu.h:169
+msgid "Alpine"
+msgstr "Alpine"
+
+#: ../../util/wmgenmenu.h:174
+msgid "soundKonverter"
+msgstr "soundKonverter"
+
+#: ../../util/wmgenmenu.h:175
+msgid "Krecord"
+msgstr "Krecord"
+
+#: ../../util/wmgenmenu.h:176
+msgid "Grecord"
+msgstr "Grecord"
+
+#: ../../util/wmgenmenu.h:177
+msgid "ALSA mixer"
+msgstr "ALSA миксер"
+
+#: ../../util/wmgenmenu.h:178
+msgid "VolWheel"
+msgstr "VolWheel"
+
+#: ../../util/wmgenmenu.h:179
+msgid "Sound configuration"
+msgstr "Подешавање звука"
+
+#: ../../util/wmgenmenu.h:180
+msgid "aumix"
+msgstr "aumix"
+
+#: ../../util/wmgenmenu.h:181
+msgid "Gmix"
+msgstr "Gmix"
+
+#: ../../util/wmgenmenu.h:186
+msgid "XJed"
+msgstr "XJed"
+
+#: ../../util/wmgenmenu.h:187
+msgid "Jed"
+msgstr "Jed"
+
+#: ../../util/wmgenmenu.h:188
+msgid "Emacs"
+msgstr "Емакс"
+
+#: ../../util/wmgenmenu.h:189
+msgid "XEmacs"
+msgstr "XEmacs"
+
+#: ../../util/wmgenmenu.h:190
+msgid "SciTE"
+msgstr "SciTE"
+
+#: ../../util/wmgenmenu.h:191
+msgid "Bluefish"
+msgstr "Bluefish"
+
+#: ../../util/wmgenmenu.h:192
+msgid "gVIM"
+msgstr "gVIM"
+
+#: ../../util/wmgenmenu.h:193
+msgid "vi"
+msgstr "vi"
+
+#: ../../util/wmgenmenu.h:194
+msgid "VIM"
+msgstr "VIM"
+
+#: ../../util/wmgenmenu.h:195
+msgid "gedit"
+msgstr "gedit"
+
+#: ../../util/wmgenmenu.h:196
+msgid "KEdit"
+msgstr "KEdit"
+
+#: ../../util/wmgenmenu.h:197
+msgid "XEdit"
+msgstr "XEdit"
+
+#: ../../util/wmgenmenu.h:198
+msgid "KWrite"
+msgstr "KWrite"
+
+#: ../../util/wmgenmenu.h:199
+msgid "Kate"
+msgstr "Kate"
+
+#: ../../util/wmgenmenu.h:200
+msgid "Pico"
+msgstr "Pico"
+
+#: ../../util/wmgenmenu.h:201
+msgid "Nano"
+msgstr "Nano"
+
+#: ../../util/wmgenmenu.h:202
+msgid "Joe"
+msgstr "Joe"
+
+#: ../../util/wmgenmenu.h:207
+msgid "Omnia data"
+msgstr "Omnia data"
+
+#: ../../util/wmgenmenu.h:208
+msgid "Comix"
+msgstr "Comix"
+
+#: ../../util/wmgenmenu.h:209
+msgid "QComicBook"
+msgstr "QComicBook"
+
+#: ../../util/wmgenmenu.h:214
+msgid "Evince"
+msgstr "Evince"
+
+#: ../../util/wmgenmenu.h:215
+msgid "KGhostView"
+msgstr "KGhostView"
+
+#: ../../util/wmgenmenu.h:216
+msgid "gv"
+msgstr "gv"
+
+#: ../../util/wmgenmenu.h:217
+msgid "ePDFView"
+msgstr "ePDFView"
+
+#: ../../util/wmgenmenu.h:218
+msgid "GGv"
+msgstr "GGv"
+
+#: ../../util/wmgenmenu.h:219
+msgid "Xdvi"
+msgstr "Xdvi"
+
+#: ../../util/wmgenmenu.h:220
+msgid "KDVI"
+msgstr "KDVI"
+
+#: ../../util/wmgenmenu.h:221
+msgid "Xpdf"
+msgstr "Xpdf"
+
+#: ../../util/wmgenmenu.h:222
+msgid "Adobe Reader"
+msgstr "Adobe Reader"
+
+#: ../../util/wmgenmenu.h:223
+msgid "Gless"
+msgstr "Gless"
+
+#: ../../util/wmgenmenu.h:228
+msgid "Google Desktop"
+msgstr "Google Desktop"
+
+#: ../../util/wmgenmenu.h:229
+msgid "K3B"
+msgstr "K3B"
+
+#: ../../util/wmgenmenu.h:230
+msgid "X-CD-Roast"
+msgstr "X-CD-Roast"
+
+#: ../../util/wmgenmenu.h:231
+msgid "Nero Linux"
+msgstr "Nero Linux"
+
+#: ../../util/wmgenmenu.h:232
+msgid "Nero Linux Express"
+msgstr "Nero Linux Express"
+
+#: ../../util/wmgenmenu.h:233
+msgid "gtkfind"
+msgstr "gtkfind"
+
+#: ../../util/wmgenmenu.h:234
+msgid "gdict"
+msgstr "gdict"
+
+#: ../../util/wmgenmenu.h:235
+msgid "gpsdrive"
+msgstr "gpsdrive"
+
+#: ../../util/wmgenmenu.h:236
+msgid "Task Coach"
+msgstr "Task Coach"
+
+#: ../../util/wmgenmenu.h:237
+msgid "XSnap"
+msgstr "XSnap"
+
+#: ../../util/wmgenmenu.h:238
+msgid "Screengrab"
+msgstr "Screengrab"
+
+#: ../../util/wmgenmenu.h:239
+msgid "XSane"
+msgstr "XSane"
+
+#: ../../util/wmgenmenu.h:240
+msgid "wfcmgr"
+msgstr "wfcmgr"
+
+#: ../../util/wmgenmenu.h:241
+msgid "switch"
+msgstr "switch"
+
+#: ../../util/wmgenmenu.h:242
+msgid "Cairo Clock"
+msgstr "Cairo сат"
+
+#: ../../util/wmgenmenu.h:243
+msgid "Conky"
+msgstr "Conky"
+
+#: ../../util/wmgenmenu.h:244
+msgid "GNU Privacy Assistant"
+msgstr "ГНУ асистент за приватност"
+
+#: ../../util/wmgenmenu.h:245
+msgid "Vidalia (tor)"
+msgstr "Vidalia (tor)"
+
+#: ../../util/wmgenmenu.h:246
+msgid "kaddressbook"
+msgstr "kaddressbook"
+
+#: ../../util/wmgenmenu.h:247
+msgid "kab"
+msgstr "kab"
+
+#: ../../util/wmgenmenu.h:248
+msgid "Filezilla"
+msgstr "Filezilla"
+
+#: ../../util/wmgenmenu.h:249
+msgid "Bleachbit"
+msgstr "Bleachbit"
+
+#: ../../util/wmgenmenu.h:250
+msgid "Teamviewer"
+msgstr "Teamviewer"
+
+#: ../../util/wmgenmenu.h:251
+msgid "gUVCView"
+msgstr "gUVCView"
+
+#: ../../util/wmgenmenu.h:252
+msgid "LinPopUp"
+msgstr "LinPopUp"
+
+#: ../../util/wmgenmenu.h:253
+msgid "Wine Configurator"
+msgstr "Конфигуратор Wine-а"
+
+#: ../../util/wmgenmenu.h:254
+msgid "NMap"
+msgstr "NMap"
+
+#: ../../util/wmgenmenu.h:255
+msgid "Hydra"
+msgstr "Hydra"
+
+#: ../../util/wmgenmenu.h:256
+msgid "XTeddy"
+msgstr "XTeddy"
+
+#: ../../util/wmgenmenu.h:257
+msgid "XTeddy TEST"
+msgstr "XTeddy TEST"
+
+#: ../../util/wmgenmenu.h:258
+msgid "VNC Viewer"
+msgstr "VNC прегледач"
+
+#: ../../util/wmgenmenu.h:259
+msgid "Java Control Panel"
+msgstr "Java контролни панел"
+
+#: ../../util/wmgenmenu.h:260
+msgid "kfind"
+msgstr "kfind"
+
+#: ../../util/wmgenmenu.h:261
+msgid "oclock"
+msgstr "oclock"
+
+#: ../../util/wmgenmenu.h:262
+msgid "rclock"
+msgstr "rclock"
+
+#: ../../util/wmgenmenu.h:263
+msgid "Isomaster"
+msgstr "Isomaster"
+
+#: ../../util/wmgenmenu.h:264
+msgid "xclock"
+msgstr "xclock"
+
+#: ../../util/wmgenmenu.h:265
+msgid "HP Systray"
+msgstr "HP Systray"
+
+#: ../../util/wmgenmenu.h:266
+msgid "kppp"
+msgstr "kppp"
+
+#: ../../util/wmgenmenu.h:267
+msgid "Xarchiver"
+msgstr "Xarchiver"
+
+#: ../../util/wmgenmenu.h:276
+msgid "Pidgin"
+msgstr "Pidgin"
+
+#: ../../util/wmgenmenu.h:277
+msgid "Skype"
+msgstr "Skype"
+
+#: ../../util/wmgenmenu.h:278
+msgid "Gizmo"
+msgstr "Gizmo"
+
+#: ../../util/wmgenmenu.h:279
+msgid "Gajim"
+msgstr "Gajim"
+
+#: ../../util/wmgenmenu.h:280
+msgid "Kopete"
+msgstr "Kopete"
+
+#: ../../util/wmgenmenu.h:281
+msgid "XChat"
+msgstr "XChat"
+
+#: ../../util/wmgenmenu.h:282
+msgid "Ekiga"
+msgstr "Ekiga"
+
+#: ../../util/wmgenmenu.h:283
+msgid "KVIrc"
+msgstr "KVIrc"
+
+#: ../../util/wmgenmenu.h:284
+msgid "BitchX"
+msgstr "BitchX"
+
+#: ../../util/wmgenmenu.h:285
+msgid "EPIC"
+msgstr "EPIC"
+
+#: ../../util/wmgenmenu.h:286
+msgid "Linphone"
+msgstr "Linphone"
+
+#: ../../util/wmgenmenu.h:287
+msgid "Mumble"
+msgstr "Mumble"
+
+#: ../../util/wmgenmenu.h:288
+msgid "EPIC4"
+msgstr "EPIC4"
+
+#: ../../util/wmgenmenu.h:289
+msgid "Irssi"
+msgstr "Irssi"
+
+#: ../../util/wmgenmenu.h:290
+msgid "TinyIRC"
+msgstr "TinyIRC"
+
+#: ../../util/wmgenmenu.h:291
+msgid "Ksirc"
+msgstr "Ksirc"
+
+#: ../../util/wmgenmenu.h:292
+msgid "gtalk"
+msgstr "gtalk"
+
+#: ../../util/wmgenmenu.h:293
+msgid "GnomeICU"
+msgstr "GnomeICU"
+
+#: ../../util/wmgenmenu.h:294
+msgid "Licq"
+msgstr "Licq"
+
+#: ../../util/wmgenmenu.h:295
+msgid "aMSN"
+msgstr "aMSN"
+
+#: ../../util/wmgenmenu.h:300
+msgid "aMule"
+msgstr "aMule"
+
+#: ../../util/wmgenmenu.h:301
+msgid "gFTP"
+msgstr "gFTP"
+
+#: ../../util/wmgenmenu.h:302
+msgid "Smb4K"
+msgstr "Smb4K"
+
+#: ../../util/wmgenmenu.h:303
+msgid "KTorrent"
+msgstr "KTorrent"
+
+#: ../../util/wmgenmenu.h:304
+msgid "BitTorrent GUI"
+msgstr "BitTorrent GUI"
+
+#: ../../util/wmgenmenu.h:305
+msgid "Transmission GTK"
+msgstr "Transmission GTK"
+
+#: ../../util/wmgenmenu.h:306
+msgid "ftp"
+msgstr "ftp"
+
+#: ../../util/wmgenmenu.h:307
+msgid "Deluge"
+msgstr "Deluge"
+
+#: ../../util/wmgenmenu.h:308
+msgid "sftp"
+msgstr "sftp"
+
+#: ../../util/wmgenmenu.h:309
+msgid "Pavuk"
+msgstr "Pavuk"
+
+#: ../../util/wmgenmenu.h:310
+msgid "gtm"
+msgstr "gtm"
+
+#: ../../util/wmgenmenu.h:311
+msgid "Gnut"
+msgstr "Gnut"
+
+#: ../../util/wmgenmenu.h:312
+msgid "GTK Gnutella"
+msgstr "GTK Gnutella"
+
+#: ../../util/wmgenmenu.h:313
+msgid "Gnutmeg"
+msgstr "Gnutmeg"
+
+#: ../../util/wmgenmenu.h:318
+msgid "FlightGear Flight Simulator"
+msgstr "FlightGear симулатор лета"
+
+#: ../../util/wmgenmenu.h:319
+msgid "Tremulous"
+msgstr "Tremulous"
+
+#: ../../util/wmgenmenu.h:320
+msgid "XBoard"
+msgstr "XBoard"
+
+#: ../../util/wmgenmenu.h:321
+msgid "GNOME Chess"
+msgstr "GNOME шах"
+
+#: ../../util/wmgenmenu.h:322
+msgid "Darkplaces (Quake 1)"
+msgstr "Darkplaces (Quake 1)"
+
+#: ../../util/wmgenmenu.h:323
+msgid "QuakeSpasm (Quake 1)"
+msgstr "QuakeSpasm (Quake 1)"
+
+#: ../../util/wmgenmenu.h:324
+msgid "Quake 2"
+msgstr "Quake 2"
+
+#: ../../util/wmgenmenu.h:325
+msgid "KM Quake 2 (Quake 2"
+msgstr "KM Quake 2 (Quake 2"
+
+#: ../../util/wmgenmenu.h:326
+msgid "QMax (Quake 2"
+msgstr "QMax (Quake 2"
+
+#: ../../util/wmgenmenu.h:327
+msgid "Quake 3"
+msgstr "Quake 3"
+
+#: ../../util/wmgenmenu.h:328
+msgid "Quake 4"
+msgstr "Quake 4"
+
+#: ../../util/wmgenmenu.h:329
+msgid "Quake 4 SMP"
+msgstr "Quake 4 SMP"
+
+#: ../../util/wmgenmenu.h:330
+msgid "Openarena"
+msgstr "Openarena"
+
+#: ../../util/wmgenmenu.h:331
+msgid "Quake 3: Urban Terror 2"
+msgstr "Quake 3: Urban Terror 2"
+
+#: ../../util/wmgenmenu.h:332
+msgid "Soldier of Fortune"
+msgstr "Soldier of Fortune"
+
+#: ../../util/wmgenmenu.h:333
+msgid "Rune"
+msgstr "Rune"
+
+#: ../../util/wmgenmenu.h:334
+msgid "Doom 3"
+msgstr "Doom 3"
+
+#: ../../util/wmgenmenu.h:335
+msgid "Zelda Solarus"
+msgstr "Zelda Solarus"
+
+#: ../../util/wmgenmenu.h:336
+msgid "Solarwolf"
+msgstr "Solarwolf"
+
+#: ../../util/wmgenmenu.h:337
+msgid "Pachi"
+msgstr "Pachi"
+
+#: ../../util/wmgenmenu.h:338
+msgid "Tribes 2"
+msgstr "Tribes 2"
+
+#: ../../util/wmgenmenu.h:339
+msgid "GNUjump"
+msgstr "GNUjump"
+
+#: ../../util/wmgenmenu.h:340
+msgid "Supertransball 2"
+msgstr "Supertransball 2"
+
+#: ../../util/wmgenmenu.h:341
+msgid "Supertux"
+msgstr "Supertux"
+
+#: ../../util/wmgenmenu.h:342
+msgid "Supertux 2"
+msgstr "Supertux 2"
+
+#: ../../util/wmgenmenu.h:343
+msgid "Mega Mario"
+msgstr "Mega Mario"
+
+#: ../../util/wmgenmenu.h:344
+msgid "Frogatto"
+msgstr "Frogatto"
+
+#: ../../util/wmgenmenu.h:345
+msgid "Minecraft"
+msgstr "Minecraft"
+
+#: ../../util/wmgenmenu.h:346
+msgid "Alienarena"
+msgstr "Alienarena"
+
+#: ../../util/wmgenmenu.h:347
+msgid "Nexuiz"
+msgstr "Nexuiz"
+
+#: ../../util/wmgenmenu.h:348
+msgid "Bomberclone"
+msgstr "Bomberclone"
+
+#: ../../util/wmgenmenu.h:349
+msgid "Chromium-BSU"
+msgstr "Chromium-BSU"
+
+#: ../../util/wmgenmenu.h:350
+msgid "Clanbomber"
+msgstr "Clanbomber"
+
+#: ../../util/wmgenmenu.h:351
+msgid "Clanbomber 2"
+msgstr "Clanbomber 2"
+
+#: ../../util/wmgenmenu.h:352
+msgid "Defendguin"
+msgstr "Defendguin"
+
+#: ../../util/wmgenmenu.h:353
+msgid "Dosbox"
+msgstr "Dosbox"
+
+#: ../../util/wmgenmenu.h:354
+msgid "Duke Nukem 3D"
+msgstr "Duke Nukem 3D"
+
+#: ../../util/wmgenmenu.h:355
+msgid "eDuke32"
+msgstr "eDuke32"
+
+#: ../../util/wmgenmenu.h:356
+msgid "Emilia Pinball"
+msgstr "Emilia Pinball"
+
+#: ../../util/wmgenmenu.h:357
+msgid "Extreme-Tuxracer"
+msgstr "Extreme-Tuxracer"
+
+#: ../../util/wmgenmenu.h:358
+msgid "Freedroid RPG"
+msgstr "Freedroid RPG"
+
+#: ../../util/wmgenmenu.h:359
+msgid "Frozen Bubble"
+msgstr "Frozen Bubble"
+
+#: ../../util/wmgenmenu.h:360
+msgid "Frozen Bubble Editor"
+msgstr "Frozen Bubble уређивач"
+
+#: ../../util/wmgenmenu.h:361
+msgid "GL 117"
+msgstr "GL 117"
+
+#: ../../util/wmgenmenu.h:362
+msgid "LBreakout 2"
+msgstr "LBreakout 2"
+
+#: ../../util/wmgenmenu.h:363
+msgid "Legends"
+msgstr "Legends"
+
+#: ../../util/wmgenmenu.h:364
+msgid "Lincity-NG"
+msgstr "Lincity-NG"
+
+#: ../../util/wmgenmenu.h:365
+msgid "Neverball"
+msgstr "Neverball"
+
+#: ../../util/wmgenmenu.h:366
+msgid "Neverput"
+msgstr "Neverput"
+
+#: ../../util/wmgenmenu.h:367
+msgid "Openastromenace"
+msgstr "Openastromenace"
+
+#: ../../util/wmgenmenu.h:368
+msgid "Penguin Command"
+msgstr "Penguin Command"
+
+#: ../../util/wmgenmenu.h:369
+msgid "Powermanga"
+msgstr "Powermanga"
+
+#: ../../util/wmgenmenu.h:370
+msgid "Return to Castle Wolfenstein SP"
+msgstr "Return to Castle Wolfenstein SP"
+
+#: ../../util/wmgenmenu.h:371
+msgid "Return to Castle Wolfenstein MP"
+msgstr "Return to Castle Wolfenstein MP"
+
+#: ../../util/wmgenmenu.h:372
+msgid "Snes9X"
+msgstr "Snes9X"
+
+#: ../../util/wmgenmenu.h:373
+msgid "Slune"
+msgstr "Slune"
+
+#: ../../util/wmgenmenu.h:374
+msgid "Torcs"
+msgstr "Torcs"
+
+#: ../../util/wmgenmenu.h:375
+msgid "Speed Dreams"
+msgstr "Speed Dreams"
+
+#: ../../util/wmgenmenu.h:376
+msgid "Trackballs"
+msgstr "Trackballs"
+
+#: ../../util/wmgenmenu.h:377
+msgid "VDrift"
+msgstr "VDrift"
+
+#: ../../util/wmgenmenu.h:378
+msgid "Warmux"
+msgstr "Warmux"
+
+#: ../../util/wmgenmenu.h:379
+msgid "Warsow"
+msgstr "Warsow"
+
+#: ../../util/wmgenmenu.h:380
+msgid "Wesnoth"
+msgstr "Wesnoth"
+
+#: ../../util/wmgenmenu.h:381
+msgid "World of Padman"
+msgstr "World of Padman"
+
+#: ../../util/wmgenmenu.h:382
+msgid "XBlast"
+msgstr "XBlast"
+
+#: ../../util/wmgenmenu.h:383
+msgid "XPenguins"
+msgstr "XPenguins"
+
+#: ../../util/wmgenmenu.h:384
+msgid "XTux"
+msgstr "XTux"
+
+#: ../../util/wmgenmenu.h:385 ../../util/wmgenmenu.h:386
+msgid "The Mana World"
+msgstr "The Mana World"
+
+#: ../../util/wmgenmenu.h:387
+msgid "Super Mario Chronicles"
+msgstr "Super Mario Chronicles"
+
+#: ../../util/wmgenmenu.h:388
+msgid "Unreal"
+msgstr "Unreal"
+
+#: ../../util/wmgenmenu.h:389
+msgid "Unreal Tournament"
+msgstr "Unreal Tournament"
+
+#: ../../util/wmgenmenu.h:390
+msgid "Unreal Tournament 2004"
+msgstr "Unreal Tournament 2004"
+
+#: ../../util/wmgenmenu.h:391
+msgid "Xonotic"
+msgstr "Xonotic"
+
+#: ../../util/wmgenmenu.h:392
+msgid "Descent 3"
+msgstr "Descent 3"
+
+#: ../../util/wmgenmenu.h:393
+msgid "Myth 2"
+msgstr "Myth 2"
+
+#: ../../util/wmgenmenu.h:394 ../../util/wmgenmenu.h:395
+#: ../../util/wmgenmenu.h:396
+msgid "Sauerbraten"
+msgstr "Sauerbraten"
+
+#: ../../util/wmgenmenu.h:397
+msgid "Railroad Tycoon 2"
+msgstr "Railroad Tycoon 2"
+
+#: ../../util/wmgenmenu.h:398
+msgid "Heretic 2"
+msgstr "Heretic 2"
+
+#: ../../util/wmgenmenu.h:399
+msgid "Kohan"
+msgstr "Kohan"
+
+#: ../../util/wmgenmenu.h:400
+msgid "XQF"
+msgstr "XQF"
+
+#: ../../util/wmgenmenu.h:405
+msgid "OpenOffice.org Writer"
+msgstr "OpenOffice.org Writer"
+
+#: ../../util/wmgenmenu.h:406
+msgid "OpenOffice.org Calc"
+msgstr "OpenOffice.org Calc"
+
+#: ../../util/wmgenmenu.h:407
+msgid "OpenOffice.org Draw"
+msgstr "OpenOffice.org Draw"
+
+#: ../../util/wmgenmenu.h:408
+msgid "OpenOffice.org Impress"
+msgstr "OpenOffice.org Impress"
+
+#: ../../util/wmgenmenu.h:409
+msgid "OpenOffice.org Math"
+msgstr "OpenOffice.org Math"
+
+#: ../../util/wmgenmenu.h:410
+msgid "OpenOffice.org"
+msgstr "OpenOffice.org"
+
+#: ../../util/wmgenmenu.h:411
+msgid "StarOffice Writer"
+msgstr "StarOffice Writer"
+
+#: ../../util/wmgenmenu.h:412
+msgid "StarOffice Calc"
+msgstr "StarOffice Calc"
+
+#: ../../util/wmgenmenu.h:413
+msgid "StarOffice Draw"
+msgstr "StarOffice Draw"
+
+#: ../../util/wmgenmenu.h:414
+msgid "StarOffice Impress"
+msgstr "StarOffice Impress"
+
+#: ../../util/wmgenmenu.h:415
+msgid "StarOffice Math"
+msgstr "StarOffice Math"
+
+#: ../../util/wmgenmenu.h:416
+msgid "StarOffice"
+msgstr "StarOffice"
+
+#: ../../util/wmgenmenu.h:417
+msgid "LibreOffice Writer"
+msgstr "LibreOffice Writer"
+
+#: ../../util/wmgenmenu.h:418
+msgid "LibreOffice Calc"
+msgstr "LibreOffice Calc"
+
+#: ../../util/wmgenmenu.h:419
+msgid "LibreOffice Draw"
+msgstr "LibreOffice Draw"
+
+#: ../../util/wmgenmenu.h:420
+msgid "LibreOffice Impress"
+msgstr "LibreOffice Impress"
+
+#: ../../util/wmgenmenu.h:421
+msgid "LibreOffice Math"
+msgstr "LibreOffice Math"
+
+#: ../../util/wmgenmenu.h:422
+msgid "LibreOffice Base"
+msgstr "LibreOffice Base"
+
+#: ../../util/wmgenmenu.h:423
+msgid "LibreOffice Web"
+msgstr "LibreOffice Web"
+
+#: ../../util/wmgenmenu.h:424
+msgid "LibreOffice"
+msgstr "LibreOffice"
+
+#: ../../util/wmgenmenu.h:425
+msgid "AbiWord"
+msgstr "AbiWord"
+
+#: ../../util/wmgenmenu.h:426
+msgid "KWord"
+msgstr "KWord"
+
+#: ../../util/wmgenmenu.h:427
+msgid "KPresenter"
+msgstr "KPresenter"
+
+#: ../../util/wmgenmenu.h:428
+msgid "KSpread"
+msgstr "KSpread"
+
+#: ../../util/wmgenmenu.h:429
+msgid "KChart"
+msgstr "KChart"
+
+#: ../../util/wmgenmenu.h:430
+msgid "KOrganizer"
+msgstr "KOrganizer"
+
+#: ../../util/wmgenmenu.h:431
+msgid "LyX"
+msgstr "LyX"
+
+#: ../../util/wmgenmenu.h:432
+msgid "Klyx"
+msgstr "Klyx"
+
+#: ../../util/wmgenmenu.h:433
+msgid "GnuCash"
+msgstr "GnuCash"
+
+#: ../../util/wmgenmenu.h:434
+msgid "Gnumeric"
+msgstr "Gnumeric"
+
+#: ../../util/wmgenmenu.h:435
+msgid "GnomeCal"
+msgstr "GnomeCal"
+
+#: ../../util/wmgenmenu.h:436
+msgid "GnomeCard"
+msgstr "GnomeCard"
+
+#: ../../util/wmgenmenu.h:441
+msgid "gitk"
+msgstr "gitk"
+
+#: ../../util/wmgenmenu.h:442
+msgid "gitview"
+msgstr "gitview"
+
+#: ../../util/wmgenmenu.h:443
+msgid "qgit"
+msgstr "qgit"
+
+#: ../../util/wmgenmenu.h:444
+msgid "git-gui"
+msgstr "git-gui"
+
+#: ../../util/wmgenmenu.h:445
+msgid "glimmer"
+msgstr "glimmer"
+
+#: ../../util/wmgenmenu.h:446
+msgid "glade"
+msgstr "glade"
+
+#: ../../util/wmgenmenu.h:447
+msgid "Geany"
+msgstr "Geany"
+
+#: ../../util/wmgenmenu.h:448
+msgid "Codeblocks"
+msgstr "Codeblocks"
+
+#: ../../util/wmgenmenu.h:449
+msgid "kdevelop"
+msgstr "kdevelop"
+
+#: ../../util/wmgenmenu.h:450
+msgid "designer"
+msgstr "designer"
+
+#: ../../util/wmgenmenu.h:451
+msgid "kbabel"
+msgstr "kbabel"
+
+#: ../../util/wmgenmenu.h:452
+msgid "idle"
+msgstr "idle"
+
+#: ../../util/wmgenmenu.h:453
+msgid "ghex"
+msgstr "ghex"
+
+#: ../../util/wmgenmenu.h:454
+msgid "hexedit"
+msgstr "hexedit"
+
+#: ../../util/wmgenmenu.h:455
+msgid "memprof"
+msgstr "memprof"
+
+#: ../../util/wmgenmenu.h:456
+msgid "tclsh"
+msgstr "tclsh"
+
+#: ../../util/wmgenmenu.h:457
+msgid "gdb"
+msgstr "gdb"
+
+#: ../../util/wmgenmenu.h:458
+msgid "xxgdb"
+msgstr "xxgdb"
+
+#: ../../util/wmgenmenu.h:459
+msgid "xev"
+msgstr "xev"
+
+#: ../../util/wmgenmenu.h:464
+msgid "Iotop"
+msgstr "Iotop"
+
+#: ../../util/wmgenmenu.h:465
+msgid "Iostat"
+msgstr "Iostat"
+
+#: ../../util/wmgenmenu.h:466
+msgid "keybconf"
+msgstr "keybconf"
+
+#: ../../util/wmgenmenu.h:467
+msgid "GNOME System Monitor"
+msgstr "GNOME системски монитор"
+
+#: ../../util/wmgenmenu.h:468
+msgid "top"
+msgstr "top"
+
+#: ../../util/wmgenmenu.h:469
+msgid "KDE Process Monitor"
+msgstr "KDE монитор процеса"
+
+#: ../../util/wmgenmenu.h:470
+msgid "gw"
+msgstr "gw"
+
+#: ../../util/wmgenmenu.h:471
+msgid "GNOME Control Center"
+msgstr "GNOME контролни центар"
+
+#: ../../util/wmgenmenu.h:472
+msgid "GKrellM"
+msgstr "GKrellM"
+
+#: ../../util/wmgenmenu.h:473
+msgid "tksysv"
+msgstr "tksysv"
+
+#: ../../util/wmgenmenu.h:474
+msgid "ksysv"
+msgstr "ksysv"
+
+#: ../../util/wmgenmenu.h:475
+msgid "GNOME PPP"
+msgstr "GNOME PPP"
+
+#: ../../util/wmgenmenu.h:480
+msgid "YaST 2"
+msgstr "YaST 2"
+
+#: ../../util/wmgenmenu.h:481
+msgid "YaST"
+msgstr "YaST"
+
+#: ../../util/wmgenmenu.h:482
+msgid "System Settings"
+msgstr "Системска подешавања"
+
+#: ../../util/wmgenmenu.h:483
+msgid "UMTSMon"
+msgstr "UMTSMon"
+
+#: ../../util/wmgenmenu.h:488
+msgid "DrakNetCenter"
+msgstr "DrakNetCenter"
+
+#: ../../util/wmgenmenu.h:489
+msgid "RPMDrake"
+msgstr "RPMDrake"
+
+#: ../../util/wmgenmenu.h:490
+msgid "HardDrake"
+msgstr "HardDrake"
+
+#: ../../util/wmgenmenu.h:491
+msgid "DrakConf"
+msgstr "DrakConf"
+
+#: ../../util/wmgenmenu.h:492
+msgid "MandrakeUpdate"
+msgstr "MandrakeUpdate"
+
+#: ../../util/wmgenmenu.h:493
+msgid "XDrakRes"
+msgstr "XDrakRes"
+
+#: ../../util/wmgenmenu.h:498
+msgid "Docker"
+msgstr "Docker"
+
+#: ../../util/wmgenmenu.h:499
+msgid "Net"
+msgstr "Мрежа"
+
+#: ../../util/wmgenmenu.h:500
+msgid "Net Load"
+msgstr "Искоришћеност мреже"
+
+#: ../../util/wmgenmenu.h:501 ../../util/wmgenmenu.h:502
+msgid "Ping"
+msgstr "Ping"
+
+#: ../../util/wmgenmenu.h:503 ../../util/wmgenmenu.h:546
+msgid "Power"
+msgstr "Напајање"
+
+#: ../../util/wmgenmenu.h:505
+msgid "Harddisk Monitor"
+msgstr "Монитор хард диска"
+
+#: ../../util/wmgenmenu.h:506
+msgid "Download"
+msgstr "Преузимања"
+
+#: ../../util/wmgenmenu.h:507
+msgid "Dots"
+msgstr "Тачке"
+
+#: ../../util/wmgenmenu.h:508
+msgid "Matrix"
+msgstr "Матрикс"
+
+#: ../../util/wmgenmenu.h:509
+msgid "Fire"
+msgstr "Ватра"
+
+#: ../../util/wmgenmenu.h:510
+msgid "Net send"
+msgstr "Net send"
+
+#: ../../util/wmgenmenu.h:511
+msgid "Laptop"
+msgstr "Лаптоп"
+
+#: ../../util/wmgenmenu.h:512
+msgid "WiFi"
+msgstr "WiFi"
+
+#: ../../util/wmgenmenu.h:513
+msgid "Interface Info"
+msgstr "Информације о интерфејсу"
+
+#: ../../util/wmgenmenu.h:514 ../../util/wmgenmenu.h:515
+#: ../../util/wmgenmenu.h:520
+msgid "Weather"
+msgstr "Време"
+
+#: ../../util/wmgenmenu.h:516
+msgid "Sticky Notes"
+msgstr "Лепљиви подсетници"
+
+#: ../../util/wmgenmenu.h:517
+msgid "Pinboard"
+msgstr "Огласна табла"
+
+#: ../../util/wmgenmenu.h:518 ../../util/wmgenmenu.h:519
+msgid "Mixer"
+msgstr "Миксер"
+
+#: ../../util/wmgenmenu.h:521
+msgid "CPU Load"
+msgstr "Искоришћеност CPU-а"
+
+#: ../../util/wmgenmenu.h:522
+msgid "CPU Freq"
+msgstr "Фреквенција CPU-а"
+
+#: ../../util/wmgenmenu.h:523
+msgid "Memory Load"
+msgstr "Искоришћеност меморије"
+
+#: ../../util/wmgenmenu.h:524
+msgid "Memory Free"
+msgstr "Слободно меморије"
+
+#: ../../util/wmgenmenu.h:525
+msgid "Memory Monitor"
+msgstr "Монитор меморије"
+
+#: ../../util/wmgenmenu.h:526
+msgid "Clock Mon"
+msgstr "Clock Mon"
+
+#: ../../util/wmgenmenu.h:527
+msgid "Network Devices"
+msgstr "Мрежни уређаји"
+
+#: ../../util/wmgenmenu.h:528
+msgid "Calendar & Clock"
+msgstr "Календар и сат"
+
+#: ../../util/wmgenmenu.h:529
+msgid "Time"
+msgstr "Време"
+
+#: ../../util/wmgenmenu.h:530
+msgid "Date"
+msgstr "Датум"
+
+#: ../../util/wmgenmenu.h:531
+msgid "Time & Date"
+msgstr "Време и датум"
+
+#: ../../util/wmgenmenu.h:532 ../../util/wmgenmenu.h:533
+msgid "System Monitor"
+msgstr "Системски монитор"
+
+#: ../../util/wmgenmenu.h:534
+msgid "Sensor Monitor"
+msgstr "Монитор сензора"
+
+#: ../../util/wmgenmenu.h:535 ../../util/wmgenmenu.h:536
+msgid "System Tray"
+msgstr "Системски Tray"
+
+#: ../../util/wmgenmenu.h:537
+msgid "SMP Monitor"
+msgstr "SMP монитор"
+
+#: ../../util/wmgenmenu.h:538
+msgid "Timer"
+msgstr "Тајмер"
+
+#: ../../util/wmgenmenu.h:539 ../../util/wmgenmenu.h:540
+msgid "Mounter"
+msgstr "Монтер"
+
+#: ../../util/wmgenmenu.h:541
+msgid "Uptime"
+msgstr "Uptime"
+
+#: ../../util/wmgenmenu.h:542
+msgid "Work Timer"
+msgstr "Радни тајмер"
+
+#: ../../util/wmgenmenu.h:543
+msgid "Interfaces"
+msgstr "Интерфејси"
+
+#: ../../util/wmgenmenu.h:544
+msgid "Button"
+msgstr "Дугме"
+
+#: ../../util/wmgenmenu.h:545
+msgid "xmms"
+msgstr "xmms"
+
+#: ../../util/wmgenmenu.h:547
+msgid "Magnify"
+msgstr "Лупа"
+
+#: ../../util/wmgenmenu.h:552
+msgid "IceWM"
+msgstr "IceWM"
+
+#: ../../util/wmgenmenu.h:553
+msgid "KWin"
+msgstr "KWin"
+
+#: ../../util/wmgenmenu.h:554
+msgid "twm"
+msgstr "twm"
+
+#: ../../util/wmgenmenu.h:555
+msgid "Fluxbox"
+msgstr "Fluxbox"
+
+#: ../../util/wmgenmenu.h:556
+msgid "Blackbox"
+msgstr "Blackbox"
+
+#: ../../util/wmgenmenu.h:557
+msgid "Ion"
+msgstr "Ion"
+
+#: ../../util/wmgenmenu.h:558
+msgid "Motif Window Manager"
+msgstr "Motif менаџер прозора"
+
+#: ../../util/wmgenmenu.h:559
+msgid "FVWM"
+msgstr "FVWM"
+
+#: ../../util/wmgenmenu.h:560
+msgid "FVWM-Crystal"
+msgstr "FVWM-Crystal"

@@ -9,6 +9,7 @@ GENERATED_MENUS =\
 	appearance.menu\
 	appearance.menu.fy\
 	appearance.menu.nl\
+	appearance.menu.sr\
 	menu\
 	menu.bg\
 	menu.fi\
@@ -18,6 +19,7 @@ GENERATED_MENUS =\
 	menu.nl\
 	menu.ro\
 	menu.sk\
+	menu.sr\
 	menu.zh_TW\
 	plmenu\
 	plmenu.bg\
@@ -30,6 +32,7 @@ GENERATED_MENUS =\
 	plmenu.pl\
 	plmenu.ro\
 	plmenu.sk\
+	plmenu.sr\
 	plmenu.zh_CN\
 	plmenu.zh_TW\
 	wmmacros
@@ -67,6 +70,7 @@ dist_prefsdata_DATA =\
 	background.menu\
 	background.menu.fy\
 	background.menu.nl\
+	background.menu.sr\
 	exitscript.sh\
 	README\
 	README.themes\

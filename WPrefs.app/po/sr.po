@@ -1,0 +1,2585 @@
+# Serbian messages for Window Maker
+# Copyright (C) 1997-2006 Alfredo K. Kojima
+#		1998-2006 Dan Pascu
+#		2013-2020 Window Maker Developers Team
+# This file is distributed under the same license as the Window Maker package.
+# Strahinya Radich (Страхиња Радић) <contact@strahinja.org>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: WindowMaker 0.95.9\n"
+"Report-Msgid-Bugs-To: wmaker-dev@googlegroups.com\n"
+"POT-Creation-Date: 2023-10-25 14:44+0200\n"
+"PO-Revision-Date: 2023-10-30 18:28+0100\n"
+"Last-Translator: Страхиња Радић <contact@strahinja.org>\n"
+"Language-Team: Serbian <sr@li.org>\n"
+"Language: sr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: poe 1.6.0-1-g10e6dcc\n"
+
+#. Related to Window titles
+#: ../../WPrefs.app/Appearance.c:44
+msgid "Focused Window Title"
+msgstr "Наслов фокусираног прозора"
+
+#: ../../WPrefs.app/Appearance.c:46
+msgid "Unfocused Window Title"
+msgstr "Наслов нефокусираног прозора"
+
+#: ../../WPrefs.app/Appearance.c:48
+msgid "Owner of Focused Window Title"
+msgstr "Власник фокусираног прозора"
+
+#. Related to Menus
+#: ../../WPrefs.app/Appearance.c:52 ../../WPrefs.app/Appearance.c:1510
+#: ../../WPrefs.app/FontSimple.c:100
+msgid "Menu Title"
+msgstr "Наслов мен."
+
+#: ../../WPrefs.app/Appearance.c:54
+msgid "Menu Item Text"
+msgstr "Текст ставке менија"
+
+#: ../../WPrefs.app/Appearance.c:56
+msgid "Disabled Menu Item Text"
+msgstr "Текст искључене ставке менија"
+
+#: ../../WPrefs.app/Appearance.c:58
+msgid "Menu Highlight Color"
+msgstr "Боја истицања менија"
+
+#: ../../WPrefs.app/Appearance.c:60
+msgid "Highlighted Menu Text Color"
+msgstr "Боја истакнутог текста менија"
+
+#.
+#. * yuck kluge: the coordinate for HighlightTextColor are actually those of the last "Normal item"
+#. * at the bottom when user clicks it, the "yuck kluge" in the function 'previewClick' will swap it
+#. * for the MenuTextColor selection as user would expect
+#. *
+#. * Note that the entries are reffered by their index for performance
+#.
+#. Related to Window's border
+#: ../../WPrefs.app/Appearance.c:71
+msgid "Focused Window Border Color"
+msgstr "Боја ивице фокусираног прозора"
+
+#: ../../WPrefs.app/Appearance.c:73
+msgid "Window Border Color"
+msgstr "Боја ивице прозора"
+
+#: ../../WPrefs.app/Appearance.c:75
+msgid "Selected Window Border Color"
+msgstr "Боја ивице изабраног прозора"
+
+#. Related to Icons and Clip
+#: ../../WPrefs.app/Appearance.c:79
+msgid "Miniwindow Title"
+msgstr "Наслов минипрозора"
+
+#: ../../WPrefs.app/Appearance.c:81
+msgid "Miniwindow Title Back"
+msgstr "Позадина наслова минипрозора"
+
+#: ../../WPrefs.app/Appearance.c:83 ../../WPrefs.app/FontSimple.c:103
+msgid "Clip Title"
+msgstr "Наслов спајалице"
+
+#: ../../WPrefs.app/Appearance.c:85
+msgid "Collapsed Clip Title"
+msgstr "Наслов скупљене спајалице"
+
+#: ../../WPrefs.app/Appearance.c:110
+msgid "Left"
+msgstr "Лево"
+
+#: ../../WPrefs.app/Appearance.c:111 ../../WPrefs.app/TexturePanel.c:1407
+#: ../../WPrefs.app/WindowHandling.c:93 ../../WPrefs.app/Workspace.c:189
+msgid "Center"
+msgstr "Средина"
+
+#: ../../WPrefs.app/Appearance.c:112
+msgid "Right"
+msgstr "Десно"
+
+#: ../../WPrefs.app/Appearance.c:382
+msgid "[Focused]"
+msgstr "[Фокусирано]"
+
+#: ../../WPrefs.app/Appearance.c:383
+msgid "Titlebar of Focused Window"
+msgstr "Насловна линија фокусираног прозора"
+
+#: ../../WPrefs.app/Appearance.c:386
+msgid "[Unfocused]"
+msgstr "[Нефокусирано]"
+
+#: ../../WPrefs.app/Appearance.c:387
+msgid "Titlebar of Unfocused Windows"
+msgstr "Наслов нефокусираних прозора"
+
+#: ../../WPrefs.app/Appearance.c:390
+msgid "[Owner of Focused]"
+msgstr "[Надређени фокусираном]"
+
+#: ../../WPrefs.app/Appearance.c:391
+msgid "Titlebar of Focused Window's Owner"
+msgstr "Наслов надређеног фокусираном"
+
+#: ../../WPrefs.app/Appearance.c:394
+msgid "[Resizebar]"
+msgstr "[Трака за пром.вел.]"
+
+#: ../../WPrefs.app/Appearance.c:395
+msgid "Window Resizebar"
+msgstr "Трака за пром. вел. прозора"
+
+#: ../../WPrefs.app/Appearance.c:398
+msgid "[Menu Title]"
+msgstr "[Наслов менија]"
+
+#: ../../WPrefs.app/Appearance.c:399
+msgid "Titlebar of Menus"
+msgstr "Наслови менија"
+
+#: ../../WPrefs.app/Appearance.c:402
+msgid "[Menu Item]"
+msgstr "[Ставка менија]"
+
+#: ../../WPrefs.app/Appearance.c:403
+msgid "Menu Items"
+msgstr "Ставке менија"
+
+#: ../../WPrefs.app/Appearance.c:406
+msgid "[Icon]"
+msgstr "[Икона]"
+
+#: ../../WPrefs.app/Appearance.c:407
+msgid "Icon Background"
+msgstr "Позадина иконе"
+
+#: ../../WPrefs.app/Appearance.c:410
+msgid "[Background]"
+msgstr "[Позадина]"
+
+#: ../../WPrefs.app/Appearance.c:411
+msgid "Workspace Background"
+msgstr "Позадина радне површине"
+
+#: ../../WPrefs.app/Appearance.c:568 ../../WPrefs.app/TexturePanel.c:880
+#, c-format
+msgid "could not load file '%s': %s"
+msgstr "не може се учитати датотека „%s“: %s"
+
+#: ../../WPrefs.app/Appearance.c:571
+#, c-format
+msgid "could not find file '%s' for texture type %s"
+msgstr "не може се пронаћи датотека „%s“ за врсту текстуре %s"
+
+#: ../../WPrefs.app/Appearance.c:619 ../../WPrefs.app/Appearance.c:646
+#: ../../WPrefs.app/Appearance.c:681
+#, c-format
+msgid "unknown direction in '%s', falling back to diagonal"
+msgstr "непознато усмерење у „%s“, узима се дијагонално"
+
+#: ../../WPrefs.app/Appearance.c:729
+#, c-format
+msgid "type '%s' is not a supported type for a texture"
+msgstr "тип „%s“ није подржан за текстуру"
+
+#: ../../WPrefs.app/Appearance.c:1097
+#, c-format
+msgid "could not remove file %s"
+msgstr "не може се уклонити датотека %s"
+
+#: ../../WPrefs.app/Appearance.c:1119
+msgid "Select File"
+msgstr "Изабери датотеку"
+
+#: ../../WPrefs.app/Appearance.c:1322
+#, c-format
+msgid "could not read size of image from '%s', ignoring"
+msgstr "не може се учитати величина слике из „%s“, игнорише се"
+
+#: ../../WPrefs.app/Appearance.c:1327
+#, c-format
+msgid "image \"%s\" has an invalid depth of %d, ignoring"
+msgstr "слика „%s“ има неисправну дубину %d, игнорише се"
+
+#: ../../WPrefs.app/Appearance.c:1333
+#, c-format
+msgid "could not create RImage for \"%s\": %s"
+msgstr "не може се креирати RImage за „%s“: %s"
+
+#: ../../WPrefs.app/Appearance.c:1490
+msgid "Focused Window"
+msgstr "Фокусирани прозор"
+
+#: ../../WPrefs.app/Appearance.c:1497
+msgid "Unfocused Window"
+msgstr "Нефокусирани прозор"
+
+#: ../../WPrefs.app/Appearance.c:1504
+msgid "Owner of Focused Window"
+msgstr "Надређени фокусираном"
+
+#: ../../WPrefs.app/Appearance.c:1516 ../../WPrefs.app/Appearance.c:1520
+msgid "Normal Item"
+msgstr "Обична ставка"
+
+#: ../../WPrefs.app/Appearance.c:1526
+msgid "Disabled Item"
+msgstr "Деакт. ставка"
+
+#: ../../WPrefs.app/Appearance.c:1541
+msgid "Highlighted"
+msgstr "Означено"
+
+#: ../../WPrefs.app/Appearance.c:1634
+msgid "Icon Text"
+msgstr "Текст иконе"
+
+#: ../../WPrefs.app/Appearance.c:1718 ../../WPrefs.app/Appearance.c:1725
+msgid "Clip"
+msgstr "Спајалица"
+
+#: ../../WPrefs.app/Appearance.c:1722
+msgid "Coll."
+msgstr "Саж."
+
+#: ../../WPrefs.app/Appearance.c:1886
+msgid "Texture"
+msgstr "Текстура"
+
+#: ../../WPrefs.app/Appearance.c:1909
+msgid "Double click in the texture you want to use\nfor the selected item."
+msgstr ""
+"Два пута притисните текстуру коју желите да\n"
+"користите за означену ставку."
+
+#: ../../WPrefs.app/Appearance.c:1921
+msgid "New"
+msgstr "Нова"
+
+#: ../../WPrefs.app/Appearance.c:1925
+msgid "Create a new texture."
+msgstr "Креира нову текстуру."
+
+#: ../../WPrefs.app/Appearance.c:1932
+msgid "Extract..."
+msgstr "Издвој..."
+
+#: ../../WPrefs.app/Appearance.c:1936
+msgid "Extract texture(s) from a theme or a style file."
+msgstr "Издваја текстуре из теме или датотеке стила."
+
+#: ../../WPrefs.app/Appearance.c:1945
+msgid "Edit"
+msgstr "Уреди"
+
+#: ../../WPrefs.app/Appearance.c:1948
+msgid "Edit the highlighted texture."
+msgstr "Уређује означену текстуру."
+
+#: ../../WPrefs.app/Appearance.c:1955 ../../WPrefs.app/TexturePanel.c:1218
+msgid "Delete"
+msgstr "Бриши"
+
+#: ../../WPrefs.app/Appearance.c:1959
+msgid "Delete the highlighted texture."
+msgstr "Брише означену текстуру."
+
+#: ../../WPrefs.app/Appearance.c:1971
+msgid "Color"
+msgstr "Боја"
+
+#: ../../WPrefs.app/Appearance.c:2027
+msgid "Options"
+msgstr "Опције"
+
+#: ../../WPrefs.app/Appearance.c:2034
+msgid "Menu Style"
+msgstr "Стил менија"
+
+#: ../../WPrefs.app/Appearance.c:2052 ../../WPrefs.app/Configurations.c:179
+#: ../../WPrefs.app/Configurations.c:191 ../../WPrefs.app/Docks.c:212
+#: ../../WPrefs.app/Docks.c:220 ../../WPrefs.app/Focus.c:279
+#: ../../WPrefs.app/Focus.c:290 ../../WPrefs.app/MenuPreferences.c:127
+#: ../../WPrefs.app/MenuPreferences.c:138
+#: ../../WPrefs.app/MenuPreferences.c:166
+#: ../../WPrefs.app/MenuPreferences.c:181 ../../WPrefs.app/MouseSettings.c:554
+#: ../../WPrefs.app/MouseSettings.c:565 ../../WPrefs.app/WPrefs.c:459
+#: ../../WPrefs.app/WPrefs.c:473
+#, c-format
+msgid "could not load icon file %s"
+msgstr "не може се учитати датотека иконе %s"
+
+#: ../../WPrefs.app/Appearance.c:2065
+msgid "Title Alignment"
+msgstr "Уравнање"
+
+#: ../../WPrefs.app/Appearance.c:2263
+msgid "Appearance Preferences"
+msgstr "Подешавања изгледа"
+
+#: ../../WPrefs.app/Appearance.c:2265
+msgid "Background texture configuration for windows,\nmenus and icons."
+msgstr "Подешавање позадинске текстуре за прозоре,\nменије и иконе."
+
+#: ../../WPrefs.app/Appearance.c:2301
+msgid "Extract Texture"
+msgstr "Издвој текстуру"
+
+#: ../../WPrefs.app/Appearance.c:2321
+msgid "Textures"
+msgstr "Текстуре"
+
+#: ../../WPrefs.app/Appearance.c:2330 ../../WPrefs.app/WPrefs.c:253
+msgid "Close"
+msgstr "Затвори"
+
+#: ../../WPrefs.app/Appearance.c:2335
+msgid "Extract"
+msgstr "Издвој"
+
+#: ../../WPrefs.app/Configurations.c:130 ../../WPrefs.app/Docks.c:170
+#: ../../WPrefs.app/Workspace.c:106
+#, c-format
+msgid "could not load image file %s"
+msgstr "не може се учитати датотека слике %s"
+
+#: ../../WPrefs.app/Configurations.c:141
+msgid "Icon Slide Speed"
+msgstr "Брзина клизања иконе"
+
+#: ../../WPrefs.app/Configurations.c:147
+msgid "Shade Animation Speed"
+msgstr "Брзина анимације замотавања"
+
+#: ../../WPrefs.app/Configurations.c:206
+msgid "Smooth Scaling"
+msgstr "Умекшавање"
+
+#: ../../WPrefs.app/Configurations.c:237
+msgid ""
+"Smooth scaled background images, neutralizing\n"
+"the `pixelization' effect. This will slow\n"
+"down loading of background images considerably."
+msgstr ""
+"Умекшава увећане позадинске слике, неутралишући\n"
+"ефекат „пикселизације“. Ово ће значајно успорити\n"
+"учитавање позадинских слика."
+
+#: ../../WPrefs.app/Configurations.c:247
+msgid "Titlebar Style"
+msgstr "Стил наслова"
+
+#: ../../WPrefs.app/Configurations.c:300 ../../WPrefs.app/Configurations.c:306
+msgid "Animations"
+msgstr "Анимације"
+
+#: ../../WPrefs.app/Configurations.c:317
+msgid ""
+"Disable/enable animations such as those shown\n"
+"for window miniaturization, shading etc."
+msgstr ""
+"Укључује/искључује анимације, као што су оне\n"
+"приказане при минијатуризацији прозора,\n"
+"замотавању, итд."
+
+#: ../../WPrefs.app/Configurations.c:324
+msgid "Superfluous"
+msgstr "Непотр."
+
+#: ../../WPrefs.app/Configurations.c:335
+msgid ""
+"Disable/enable `superfluous' features and\n"
+"animations. These include the `ghosting' of the\n"
+"dock when it's being moved to another side and\n"
+"the explosion animation when undocking icons."
+msgstr ""
+"Укључује/искључује „непотребне“ могућности и\n"
+"анимације. Оне укључују анимацију дока када се\n"
+"премешта на другу страну и анимацију\n"
+"„експлозије“ при од-доковању икона."
+
+#: ../../WPrefs.app/Configurations.c:348
+msgid "Dithering colormap for 8bpp"
+msgstr "Мапа боја тачкања за 8bpp"
+
+#: ../../WPrefs.app/Configurations.c:350
+msgid ""
+"Number of colors to reserve for Window Maker\n"
+"on displays that support only 8bpp (PseudoColor)."
+msgstr ""
+"Број резервисаних боја за Window Maker\n"
+"на дисплејима који подржавају само 8bpp\n"
+"(псеудо-боје)."
+
+#: ../../WPrefs.app/Configurations.c:357
+msgid "Disable dithering in any visual/depth"
+msgstr "Искључи тачкање при било ком приказу/дубини"
+
+#: ../../WPrefs.app/Configurations.c:378
+msgid "More colors for\napplications"
+msgstr "Више боја за\nапликације"
+
+#: ../../WPrefs.app/Configurations.c:385
+msgid "More colors for\nWindow Maker"
+msgstr "Више боја за\nWindow Maker"
+
+#: ../../WPrefs.app/Configurations.c:434
+msgid "Other Configurations"
+msgstr "Друга подешавања"
+
+#: ../../WPrefs.app/Configurations.c:435
+msgid ""
+"Animation speeds, titlebar styles, various option\n"
+"toggling and number of colors to reserve for\n"
+"Window Maker on 8bit displays."
+msgstr ""
+"Брзине анимација, стилови наслова, разне опције\n"
+"и број боја резервисаних за Window Maker на\n"
+"8-битним дисплејима."
+
+#: ../../WPrefs.app/Docks.c:26
+msgid "Clip autocollapsing delays"
+msgstr "Застој код аутоскупљања спајалице"
+
+#: ../../WPrefs.app/Docks.c:27
+msgid "Clip autoraising delays"
+msgstr "Застој код аутоиздизања"
+
+#: ../../WPrefs.app/Docks.c:34
+msgid "Before auto-expansion"
+msgstr "Пре ауто-одмотавања"
+
+#: ../../WPrefs.app/Docks.c:35
+msgid "Before auto-collapsing"
+msgstr "Пре ауто-скупљања"
+
+#: ../../WPrefs.app/Docks.c:36
+msgid "Before auto-raising"
+msgstr "Пре ауто-издизања"
+
+#: ../../WPrefs.app/Docks.c:37
+msgid "Before auto-lowering"
+msgstr "Пре ауто-спуштања"
+
+#: ../../WPrefs.app/Docks.c:48
+msgid ""
+"Disable/enable the application Dock (the\n"
+"vertical icon bar in the side of the screen)."
+msgstr ""
+"Укључује/искључује док апликација (вертикални\n"
+"панел са иконама дуж бочне ивице екрана)."
+
+#: ../../WPrefs.app/Docks.c:50
+msgid "Disable/enable the Clip (that thing with\na paper clip icon)."
+msgstr "Укључује/искључује спајалицу (стварчицу са\nиконом спајалице)."
+
+#: ../../WPrefs.app/Docks.c:52
+msgid ""
+"Disable/enable Drawers (a dock that stores\n"
+"application icons horizontally). The dock is required."
+msgstr ""
+"Укључује/искључује фиоке (хоризонтални док\n"
+"који садржи иконе апликација). Захтева док."
+
+#: ../../WPrefs.app/Docks.c:234 ../../WPrefs.app/Focus.c:309
+#: ../../WPrefs.app/MouseSettings.c:595
+msgid "ms"
+msgstr "ms"
+
+#: ../../WPrefs.app/Docks.c:250
+msgid "Dock/Clip/Drawer"
+msgstr "Док/спај./фиока"
+
+#: ../../WPrefs.app/Docks.c:322
+msgid "Dock Preferences"
+msgstr "Подешавања дока"
+
+#: ../../WPrefs.app/Docks.c:324
+msgid ""
+"Dock and clip features.\n"
+"Enable/disable the Dock and Clip, and tune some delays."
+msgstr ""
+"Особине дока и спајалице.\n"
+"Укључује/искључује док и спајалицу, и подешава неке застоје."
+
+#: ../../WPrefs.app/Expert.c:44
+msgid "Disable miniwindows (icons for minimized windows). For use with KDE/GNOME."
+msgstr "Искључи минипрозоре (иконе минимизованих прозора). За KDE/GNOME."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:47
+msgid "Ignore decoration hints for GTK applications."
+msgstr "Игнориши хинтове за декорацију за GTK апликације."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:50
+msgid "Enable workspace pager."
+msgstr "Укључи страничник радних површина."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:53
+msgid "Do not set non-WindowMaker specific parameters (do not use xset)."
+msgstr "Не постављај не-WindowMaker параметре (не користи xset)."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:56
+msgid "Automatically save session when exiting Window Maker."
+msgstr "Аутоматски чувај сесију приликом изласка из Window Maker-а."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:59
+msgid "Use SaveUnder in window frames, icons, menus and other objects."
+msgstr "Користи SaveUnder у оквирима, иконама, менијима и др. објектима."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:62
+msgid "Disable confirmation panel for the Kill command."
+msgstr "Искључи панел за потврду за наредбу „убиј“."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:65
+msgid "Disable selection animation for selected icons."
+msgstr "Искључи анимацију избора за изабране иконе."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:68
+msgid "Smooth font edges (needs restart)."
+msgstr "Умекшај ивице фонтова (захтева поновно покретање)."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:71
+msgid "Cycle windows only on the active head."
+msgstr "Пребацуј се између прозора само на активном монитору."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:74
+msgid "Ignore minimized windows when cycling."
+msgstr "Игнориши минимизоване прозоре приликом пребацивања."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:77
+msgid "Show switch panel when cycling windows."
+msgstr "Прикажи панел за пребацивање приликом пребацивања."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:80
+msgid "Show workspace title on Clip."
+msgstr "Прикажи наслов радне површине у спајалици."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:83
+msgid "Highlight the icon of the application when it has the focus."
+msgstr "Истакни икону апликације када има фокус."
+
+#: ../../WPrefs.app/Expert.c:87
+msgid "Enable keyboard language switch button in window titlebars."
+msgstr "Укључи дугме за пребацивање језика у насловима прозора."
+
+#: ../../WPrefs.app/Expert.c:91
+msgid "Maximize (snap) a window to edge or corner by dragging."
+msgstr "Максимизуј (привуци) прозор ка ивици или углу превлачењем."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:94
+msgid "Distance from edge to begin window snap."
+msgstr "Удаљеност од ивице за започињање привлачења."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:97
+msgid "Distance from corner to begin window snap."
+msgstr "Удаљеност од угла за започињање привлачења."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:100
+msgid "Snapping a window to the top maximizes it to the full screen."
+msgstr "Привлачење прозора врху га максимизује на пун екран."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:103
+msgid "Allow move half-maximized windows between multiple screens."
+msgstr "Дозволи премештање напола-максимизованих прозора између екрана."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:106
+msgid "Alternative transitions between states for half maximized windows."
+msgstr "Алтернативни прелази између стања за напола максимизоване прозоре."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:109
+msgid "Move mouse pointer with half maximized windows."
+msgstr "Померај показивач миша са напола-максимизованим прозорима."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:112
+msgid "Open dialogs in the same workspace as their owners."
+msgstr "Отварај дијалоге на истој радној површини као надређене."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:115
+msgid "Wrap dock-attached icons around the screen edges."
+msgstr "Премотај иконе закачене за док на ивицама екрана."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:118
+msgid "Double click on titlebar maximize a window to full screen."
+msgstr "Двост. клик на насловну линију максимизује прозор на пун екран."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:121
+msgid "Close rootmenu when mouse (left or right) is clicked outside focus."
+msgstr "Затвори мени при (десном или левом) клику ван фокуса."
+
+#. default:
+#: ../../WPrefs.app/Expert.c:123
+msgid "Keep dock on primary head."
+msgstr "Задржавај док на примарном монитору."
+
+#: ../../WPrefs.app/Expert.c:335
+msgid "Expert User Preferences"
+msgstr "Експертска корисничка подешавања"
+
+#: ../../WPrefs.app/Expert.c:337
+msgid ""
+"Options for people who know what they're doing...\n"
+"Also has some other misc. options."
+msgstr ""
+"Опције за оне који знају шта раде...\n"
+"Такође садржи и неке разне опције."
+
+#: ../../WPrefs.app/Focus.c:75
+#, c-format
+msgid "bad option value %s for option FocusMode. Using default Manual"
+msgstr "лоша вредност %s за опцију FocusMode. Користи се подразумевана, Ручно"
+
+#: ../../WPrefs.app/Focus.c:87
+#, c-format
+msgid "bad option value %s for option ColormapMode. Using default Auto"
+msgstr "лоша вредност %s опције ColormapMode. Користи се подразумевана, Аутоматски"
+
+#: ../../WPrefs.app/Focus.c:154 ../../WPrefs.app/Icons.c:161
+#: ../../WPrefs.app/Icons.c:369 ../../WPrefs.app/Preferences.c:120
+#: ../../WPrefs.app/WindowHandling.c:140 ../../WPrefs.app/WindowHandling.c:159
+#, c-format
+msgid "OFF"
+msgstr "ИСКЉУЧЕНО"
+
+#: ../../WPrefs.app/Focus.c:199
+msgid "Input Focus Mode"
+msgstr "Режим фокусирања улаза"
+
+#: ../../WPrefs.app/Focus.c:207
+msgid "Manual:  Click on the window to set keyboard input focus"
+msgstr "Ручни: Фокус се подешава кликом на прозор"
+
+#: ../../WPrefs.app/Focus.c:213
+msgid "Auto:  Set keyboard input focus to the window under the mouse pointer"
+msgstr "Аутоматски: Фокус се поставља на прозор под показивачем миша"
+
+#: ../../WPrefs.app/Focus.c:226
+msgid "Install colormap from the window..."
+msgstr "Инсталирај мапу боја из прозора..."
+
+#: ../../WPrefs.app/Focus.c:228
+msgid ""
+"This option is for screens that can display only a limited number\n"
+"of colors at a time, so they use an indexed table of colors (called\n"
+"a ColorMap) that each application customizes for its needs, and\n"
+"WindowMaker will set the global ColorMap dynamically from the\n"
+"active application.\n"
+"You can know the capability of your screen in WindowMaker's info\n"
+"panel as the 'visual'."
+msgstr ""
+"Ова опција је за екране који могу да прикажу само ограничен број\n"
+"боја у датом тренутку, па користе индексирану табелу боја (која\n"
+"се назива МапаБоја), коју свака апликација прилагођава својим\n"
+"потребама, а WindowMaker поставља глобалну МапуБоја динамички\n"
+"из активне апликације.\n"
+"Можете видети способности вашег екрана у панелу WindowMaker-а\n"
+"за информације под ставком „visual“."
+
+#: ../../WPrefs.app/Focus.c:240
+msgid "...that has the input focus"
+msgstr "...који има фокус"
+
+#: ../../WPrefs.app/Focus.c:245
+msgid "...that's under the mouse pointer"
+msgstr "...који је под показивачем миша"
+
+#: ../../WPrefs.app/Focus.c:254
+msgid "Automatic Window Raise Delay"
+msgstr "Застој аутоматског издизања"
+
+#: ../../WPrefs.app/Focus.c:326
+msgid "Do not let applications receive the click used to focus windows"
+msgstr "Не дозволи да апликације приме први клик код фокусирања"
+
+#: ../../WPrefs.app/Focus.c:331
+msgid "Automatically focus new windows"
+msgstr "Аутоматски фокусирај нове прозоре"
+
+#: ../../WPrefs.app/Focus.c:336
+msgid "Raise window when switching focus with keyboard"
+msgstr "Издигни прозоре при преб. фокуса тастатуром"
+
+#: ../../WPrefs.app/Focus.c:352
+msgid "Window Focus Preferences"
+msgstr "Подешавања фокусирања прозора"
+
+#: ../../WPrefs.app/Focus.c:353
+msgid "Keyboard focus switching policy and related options."
+msgstr "Политика пребацивања фокуса преко тастатуре и сродне опције."
+
+#: ../../WPrefs.app/FontSimple.c:99
+msgid "Window Title"
+msgstr "Наслов прозора"
+
+#: ../../WPrefs.app/FontSimple.c:101
+msgid "Menu Text"
+msgstr "Текст менија"
+
+#: ../../WPrefs.app/FontSimple.c:102
+msgid "Icon Title"
+msgstr "Наслов иконе"
+
+#: ../../WPrefs.app/FontSimple.c:104
+msgid "Desktop Caption"
+msgstr "Натпис на радној површини"
+
+#: ../../WPrefs.app/FontSimple.c:105
+msgid "System Font"
+msgstr "Системски фонт"
+
+#: ../../WPrefs.app/FontSimple.c:106
+msgid "Bold System Font"
+msgstr "Подебљани системски фонт"
+
+#: ../../WPrefs.app/FontSimple.c:661
+msgid "Sample Text"
+msgstr "Пример"
+
+#: ../../WPrefs.app/FontSimple.c:678
+msgid "Family"
+msgstr "Фамилија"
+
+#: ../../WPrefs.app/FontSimple.c:704
+msgid "Style"
+msgstr "Стил"
+
+#: ../../WPrefs.app/FontSimple.c:707
+msgid "Size"
+msgstr "Величина"
+
+#: ../../WPrefs.app/FontSimple.c:739
+msgid "Font Configuration"
+msgstr "Подешавање фонта"
+
+#: ../../WPrefs.app/FontSimple.c:741
+msgid "Configure fonts for Window Maker titlebars, menus etc."
+msgstr "Подешавање фонтова за насловне линије Window Maker-а, менија, итд."
+
+#: ../../WPrefs.app/Icons.c:29
+msgid "Shrinking/Zooming"
+msgstr "Скупљање/Увећање"
+
+#: ../../WPrefs.app/Icons.c:30
+msgid "Spinning/Twisting"
+msgstr "Вртење/Увртање"
+
+#: ../../WPrefs.app/Icons.c:31
+msgid "3D-flipping"
+msgstr "3D окретање"
+
+#: ../../WPrefs.app/Icons.c:32 ../../WPrefs.app/MouseSettings.c:56
+#: ../../WPrefs.app/MouseSettings.c:70
+msgid "None"
+msgstr "Ништа"
+
+#: ../../WPrefs.app/Icons.c:186 ../../WPrefs.app/Preferences.c:145
+#: ../../WPrefs.app/Preferences.c:159
+#, c-format
+msgid "bad value \"%s\" for option %s, using default \"%s\""
+msgstr "лоша вредност „%s“ опције %s, користи се подразумевано „%s“"
+
+#: ../../WPrefs.app/Icons.c:228
+#, c-format
+msgid "animation style \"%s\" is unknown, resetting to \"%s\""
+msgstr "стил анимације „%s“ је непознат, враћено је на „%s“"
+
+#: ../../WPrefs.app/Icons.c:255
+msgid "Icon Positioning"
+msgstr "Позиционирање иконе"
+
+#: ../../WPrefs.app/Icons.c:334
+msgid "Icon Size"
+msgstr "Вел. иконе"
+
+#: ../../WPrefs.app/Icons.c:336
+msgid "The size of the dock/application icon and miniwindows"
+msgstr "Величина дока/иконе апликације и минипрозора"
+
+#: ../../WPrefs.app/Icons.c:353
+msgid "Mini-Previews for Icons"
+msgstr "Мини-преглед"
+
+#: ../../WPrefs.app/Icons.c:355
+msgid ""
+"The Mini-Preview provides a small view of the content of the\n"
+"window when the mouse is placed over the icon."
+msgstr ""
+"Мини-преглед обезбеђује мали преглед садржаја прозора када\n"
+"се миш наднесе над икону."
+
+#: ../../WPrefs.app/Icons.c:377
+msgid "Iconification Animation"
+msgstr "Анимација иконификације"
+
+#: ../../WPrefs.app/Icons.c:398
+msgid "Auto-arrange icons"
+msgstr "Ауто-ређај иконе"
+
+#: ../../WPrefs.app/Icons.c:400
+msgid "Keep icons and miniwindows arranged all the time."
+msgstr "Све време ређа иконе и минипрозоре."
+
+#: ../../WPrefs.app/Icons.c:406
+msgid "Omnipresent miniwindows"
+msgstr "Свеприс. минипрозори"
+
+#: ../../WPrefs.app/Icons.c:408
+msgid "Make miniwindows be present in all workspaces."
+msgstr "Минипрозори ће бити присутни на свим површинама."
+
+#: ../../WPrefs.app/Icons.c:414
+msgid "Single click activation"
+msgstr "Активација јединм кликом"
+
+#: ../../WPrefs.app/Icons.c:416
+msgid "Launch applications and restore windows with a single click."
+msgstr "Покреће апликације и враћа прозоре једним кликом."
+
+#: ../../WPrefs.app/Icons.c:422
+msgid "Enforce icon margin"
+msgstr "Приморај маргину икона"
+
+#: ../../WPrefs.app/Icons.c:424
+msgid "Make sure that the icon image does not protrude into the icon frame."
+msgstr "Слике икона неће прелазити преко оквира иконе."
+
+#: ../../WPrefs.app/Icons.c:472
+msgid "Icon Preferences"
+msgstr "Подешавања икона"
+
+#: ../../WPrefs.app/Icons.c:474
+msgid ""
+"Icon/Miniwindow handling options. Icon positioning\n"
+"area, sizes of icons, miniaturization animation style."
+msgstr ""
+"Опције руковањем иконама/минипрозорима. Област\n"
+"позиционирања икона, величина икона, стил\n"
+"анимације минијатуризације."
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:72
+msgid "Open applications menu"
+msgstr "Отвори мени са апликацијама"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:73
+msgid "Open window list menu"
+msgstr "Отвори мени са листом прозора"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:74
+msgid "Open window commands menu"
+msgstr "Отвори мени са наредбама за прозоре"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:75
+msgid "Hide active application"
+msgstr "Сакриј активну апликацију"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:76
+msgid "Hide other applications"
+msgstr "Сакриј друге апликације"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:77
+msgid "Miniaturize active window"
+msgstr "Минијатуризуј активни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:78
+msgid "Miniaturize all windows"
+msgstr "Минијатуризуј све прозоре"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:79
+msgid "Close active window"
+msgstr "Затвори активни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:80
+msgid "Maximize active window"
+msgstr "Максимизуј активни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:81
+msgid "Maximize active window vertically"
+msgstr "Вертикално максимизуј активни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:82
+msgid "Maximize active window horizontally"
+msgstr "Хоризонтално максимизуј активни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:83
+msgid "Maximize active window left half"
+msgstr "Максимизуј активни прозор преко леве половине"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:84
+msgid "Maximize active window right half"
+msgstr "Максимизуј активни прозор преко десне половине"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:85
+msgid "Maximize active window top half"
+msgstr "Максимизуј активни прозор преко горње половине"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:86
+msgid "Maximize active window bottom half"
+msgstr "Максимизуј активни прозор преко доње половине"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:87
+msgid "Maximize active window left top corner"
+msgstr "Максимизуј активни прозор у левом горњем углу"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:88
+msgid "Maximize active window right top corner"
+msgstr "Максимизуј активни прозор у десном горњем углу"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:89
+msgid "Maximize active window left bottom corner"
+msgstr "Максимизуј активни прозор у левом доњем углу"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:90
+msgid "Maximize active window right bottom corner"
+msgstr "Максимизуј активни прозор у десном доњем углу"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:91
+msgid "Maximus: Tiled maximization "
+msgstr "Максимус: поплочана максимизација"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:92
+msgid "Toggle window on top status"
+msgstr "Смени статус прозора „на врху“"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:93
+msgid "Toggle window at bottom status"
+msgstr "Смени статус прозора „на дну“"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:94
+msgid "Toggle window omnipresent status"
+msgstr "Смени свеприсутност прозора"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:95
+msgid "Raise active window"
+msgstr "Издигни активни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:96
+msgid "Lower active window"
+msgstr "Спусти активни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:97
+msgid "Raise/Lower window under mouse pointer"
+msgstr "Издигни/спусти прозор испод показивача миша"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:98
+msgid "Shade active window"
+msgstr "Замотај активни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:99
+msgid "Move/Resize active window"
+msgstr "Премести/промени величину активном прозору"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:100
+msgid "Select active window"
+msgstr "Изабери активни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:101
+msgid "Focus next window"
+msgstr "Фокусирај следећи прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:102
+msgid "Focus previous window"
+msgstr "Фокусирај претходни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:103
+msgid "Focus next group window"
+msgstr "Фокусирај следећи групни прозор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:104
+msgid "Focus previous group window"
+msgstr "Фокусирај претходни групни прозор"
+
+#. Workspace Related
+#: ../../WPrefs.app/KeyboardShortcuts.c:107
+msgid "Open workspace pager"
+msgstr "Отвори страничник прозора"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:108
+msgid "Switch to next workspace"
+msgstr "Пређи на следећу површину"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:109
+msgid "Switch to previous workspace"
+msgstr "Пређи на претходну површину"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:110
+msgid "Switch to last used workspace"
+msgstr "Пређи на последње коришћену површину"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:111
+msgid "Switch to next ten workspaces"
+msgstr "Пређи на следећих десет површина"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:112
+msgid "Switch to previous ten workspaces"
+msgstr "Пређи на претходних десет површина"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:113
+msgid "Switch to workspace 1"
+msgstr "Пређи на површину 1"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:114
+msgid "Switch to workspace 2"
+msgstr "Пређи на површину 2"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:115
+msgid "Switch to workspace 3"
+msgstr "Пређи на површину 3"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:116
+msgid "Switch to workspace 4"
+msgstr "Пређи на површину 4"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:117
+msgid "Switch to workspace 5"
+msgstr "Пређи на површину 5"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:118
+msgid "Switch to workspace 6"
+msgstr "Пређи на површину 6"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:119
+msgid "Switch to workspace 7"
+msgstr "Пређи на површину 7"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:120
+msgid "Switch to workspace 8"
+msgstr "Пређи на површину 8"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:121
+msgid "Switch to workspace 9"
+msgstr "Пређи на површину 9"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:122
+msgid "Switch to workspace 10"
+msgstr "Пређи на површину 10"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:123
+msgid "Move window to next workspace"
+msgstr "Премести прозор на следећу површину"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:124
+msgid "Move window to previous workspace"
+msgstr "Премести прозор на претходну површину"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:125
+msgid "Move window to last used workspace"
+msgstr "Премести прозор на последње коришћену површину"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:126
+msgid "Move window to next ten workspaces"
+msgstr "Премести прозор на следећих десет површина"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:127
+msgid "Move window to previous ten workspaces"
+msgstr "Премести прозор на претходних десет површина"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:128
+msgid "Move window to workspace 1"
+msgstr "Премести прозор на површину 1"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:129
+msgid "Move window to workspace 2"
+msgstr "Премести прозор на површину 2"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:130
+msgid "Move window to workspace 3"
+msgstr "Премести прозор на површину 3"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:131
+msgid "Move window to workspace 4"
+msgstr "Премести прозор на површину 4"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:132
+msgid "Move window to workspace 5"
+msgstr "Премести прозор на површину 5"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:133
+msgid "Move window to workspace 6"
+msgstr "Премести прозор на површину 6"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:134
+msgid "Move window to workspace 7"
+msgstr "Премести прозор на површину 7"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:135
+msgid "Move window to workspace 8"
+msgstr "Премести прозор на површину 8"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:136
+msgid "Move window to workspace 9"
+msgstr "Премести прозор на површину 9"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:137
+msgid "Move window to workspace 10"
+msgstr "Премести прозор на површину 10"
+
+#. Window Selection
+#: ../../WPrefs.app/KeyboardShortcuts.c:140
+msgid "Shortcut for window 1"
+msgstr "Пречица за прозор 1"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:141
+msgid "Shortcut for window 2"
+msgstr "Пречица за прозор 2"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:142
+msgid "Shortcut for window 3"
+msgstr "Пречица за прозор 3"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:143
+msgid "Shortcut for window 4"
+msgstr "Пречица за прозор 4"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:144
+msgid "Shortcut for window 5"
+msgstr "Пречица за прозор 5"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:145
+msgid "Shortcut for window 6"
+msgstr "Пречица за прозор 6"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:146
+msgid "Shortcut for window 7"
+msgstr "Пречица за прозор 7"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:147
+msgid "Shortcut for window 8"
+msgstr "Пречица за прозор 8"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:148
+msgid "Shortcut for window 9"
+msgstr "Пречица за прозор 9"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:149
+msgid "Shortcut for window 10"
+msgstr "Пречица за прозор 10"
+
+#. Head Selection
+#: ../../WPrefs.app/KeyboardShortcuts.c:152
+msgid "Move to right/bottom/left/top head"
+msgstr "Пребаци на десни/доњи/леви/горњи монитор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:153
+msgid "Move to left/top/right/bottom head"
+msgstr "Пребаци на леви/горњи/деснии/доњи монитор"
+
+#. Misc.
+#: ../../WPrefs.app/KeyboardShortcuts.c:156
+msgid "Launch new instance of application"
+msgstr "Покрени нову инстанцу апликације"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:157
+msgid "Switch to Next Screen/Monitor"
+msgstr "Пређи на следећи екран/монитор"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:158
+msgid "Run application"
+msgstr "Покрени апликацију"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:159
+msgid "Raise/Lower Dock"
+msgstr "Издигни/спусти док"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:160
+msgid "Raise/Lower Clip"
+msgstr "Издигни/спусти спајалицу"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:162
+msgid "Toggle keyboard language"
+msgstr "Смени језик тастатуре"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:379 ../../WPrefs.app/Menu.c:275
+#: ../../WPrefs.app/TexturePanel.c:1425
+msgid "Cancel"
+msgstr "Поништи"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:381
+msgid "Press the desired shortcut key(s) or click Cancel to stop capturing."
+msgstr "Притисните тастере или кликните Поништи да зауставите."
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:400
+#: ../../WPrefs.app/KeyboardShortcuts.c:570 ../../WPrefs.app/Menu.c:285
+#: ../../WPrefs.app/Menu.c:740
+msgid "Capture"
+msgstr "Сними"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:401
+#: ../../WPrefs.app/KeyboardShortcuts.c:578
+msgid "Click on Capture to interactively define the shortcut key."
+msgstr "Притисните Сними да интерактивно задате тастер пречице."
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:527
+msgid "Actions"
+msgstr "Акције"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:554
+msgid "Shortcut"
+msgstr "Пречица"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:564 ../../WPrefs.app/Menu.c:746
+msgid "Clear"
+msgstr "Очисти"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:619
+msgid "Keyboard Shortcut Preferences"
+msgstr "Подешавања пречица са тастатуре"
+
+#: ../../WPrefs.app/KeyboardShortcuts.c:621
+msgid ""
+"Change the keyboard shortcuts for actions such\n"
+"as changing workspaces and opening menus."
+msgstr ""
+"Измена пречица са тастатуре за акције као што\n"
+"су промена површине и отварање менија."
+
+#: ../../WPrefs.app/Menu.c:251
+msgid "Select Program"
+msgstr "Изабери програм"
+
+#: ../../WPrefs.app/Menu.c:413
+msgid "New Items"
+msgstr "Нове ставке"
+
+#: ../../WPrefs.app/Menu.c:414
+msgid "Sample Commands"
+msgstr "Примери наредби"
+
+#: ../../WPrefs.app/Menu.c:415
+msgid "Sample Submenus"
+msgstr "Примери подменија"
+
+#: ../../WPrefs.app/Menu.c:427
+msgid "Run Program"
+msgstr "Покрени програм"
+
+#: ../../WPrefs.app/Menu.c:428
+msgid "Internal Command"
+msgstr "Интерна наредба"
+
+#: ../../WPrefs.app/Menu.c:429
+msgid "Submenu"
+msgstr "Подмени"
+
+#: ../../WPrefs.app/Menu.c:430
+msgid "External Submenu"
+msgstr "Екстерни подмени"
+
+#: ../../WPrefs.app/Menu.c:431
+msgid "Generated Submenu"
+msgstr "Генерисани подмени"
+
+#: ../../WPrefs.app/Menu.c:432
+msgid "Generated PL Menu"
+msgstr "Генерисани PL мени"
+
+#: ../../WPrefs.app/Menu.c:433
+msgid "Directory Contents"
+msgstr "Садржај директоријума"
+
+#: ../../WPrefs.app/Menu.c:434
+msgid "Workspace Menu"
+msgstr "Мени са површинама"
+
+#: ../../WPrefs.app/Menu.c:435 ../../WPrefs.app/MouseSettings.c:58
+msgid "Window List Menu"
+msgstr "Мени са листом прозора"
+
+#: ../../WPrefs.app/Menu.c:454
+msgid "XTerm"
+msgstr "XTerm"
+
+#: ../../WPrefs.app/Menu.c:457
+msgid "rxvt"
+msgstr "rxvt"
+
+#: ../../WPrefs.app/Menu.c:460
+msgid "ETerm"
+msgstr "ETerm"
+
+#: ../../WPrefs.app/Menu.c:463
+msgid "Run..."
+msgstr "Покрени..."
+
+#: ../../WPrefs.app/Menu.c:464
+#, c-format
+msgid "%A(Run,Type command to run)"
+msgstr "%A(Покрени,Унесите наредбу за покретање)"
+
+#: ../../WPrefs.app/Menu.c:466
+msgid "Firefox"
+msgstr "Firefox"
+
+#: ../../WPrefs.app/Menu.c:469
+msgid "gimp"
+msgstr "gimp"
+
+#: ../../WPrefs.app/Menu.c:472
+msgid "epic"
+msgstr "epic"
+
+#: ../../WPrefs.app/Menu.c:475
+msgid "ee"
+msgstr "ee"
+
+#: ../../WPrefs.app/Menu.c:478
+msgid "xv"
+msgstr "xv"
+
+#: ../../WPrefs.app/Menu.c:481
+msgid "Evince"
+msgstr "Evince"
+
+#: ../../WPrefs.app/Menu.c:484
+msgid "ghostview"
+msgstr "ghostview"
+
+#: ../../WPrefs.app/Menu.c:487 ../../WPrefs.app/Menu.c:765
+msgid "Exit Window Maker"
+msgstr "Изађи из Window Maker-а"
+
+#: ../../WPrefs.app/Menu.c:509
+msgid "Debian Menu"
+msgstr "Debian-ов мени"
+
+#: ../../WPrefs.app/Menu.c:512
+msgid "RedHat Menu"
+msgstr "RedHat-ов мени"
+
+#: ../../WPrefs.app/Menu.c:515
+msgid "Menu Conectiva"
+msgstr "Conectiva мени"
+
+#: ../../WPrefs.app/Menu.c:518
+msgid "Themes"
+msgstr "Теме"
+
+#: ../../WPrefs.app/Menu.c:526
+msgid "Bg Images (scale)"
+msgstr "Позадинске слике (развучене)"
+
+#: ../../WPrefs.app/Menu.c:534
+msgid "Bg Images (tile)"
+msgstr "Позадинске слике (поплочане)"
+
+#: ../../WPrefs.app/Menu.c:542
+msgid "Assorted XTerms"
+msgstr "Изабрани XTerm-ови"
+
+#: ../../WPrefs.app/Menu.c:544
+msgid "XTerm Yellow on Blue"
+msgstr "XTerm жуто на плавом"
+
+#: ../../WPrefs.app/Menu.c:547
+msgid "XTerm White on Black"
+msgstr "XTerm бело на црном"
+
+#: ../../WPrefs.app/Menu.c:550
+msgid "XTerm Black on White"
+msgstr "XTerm црно на белом"
+
+#: ../../WPrefs.app/Menu.c:553
+msgid "XTerm Black on Beige"
+msgstr "XTerm црно на беж"
+
+#: ../../WPrefs.app/Menu.c:556
+msgid "XTerm White on Green"
+msgstr "XTerm бело на зеленом"
+
+#: ../../WPrefs.app/Menu.c:559
+msgid "XTerm White on Olive"
+msgstr "XTerm бело на маслинастом"
+
+#: ../../WPrefs.app/Menu.c:562
+msgid "XTerm Blue on Blue"
+msgstr "XTerm плаво на плавом"
+
+#: ../../WPrefs.app/Menu.c:565
+msgid "XTerm BIG FONTS"
+msgstr "XTerm ВЕЛИКИ ФОНТОВИ"
+
+#: ../../WPrefs.app/Menu.c:586
+msgid "Program to Run"
+msgstr "Програм за покретање"
+
+#: ../../WPrefs.app/Menu.c:596
+msgid "Browse"
+msgstr "Бирај"
+
+#: ../../WPrefs.app/Menu.c:605
+msgid "Run the program inside a Xterm"
+msgstr "Покрени програм унутар Xterm-а"
+
+#: ../../WPrefs.app/Menu.c:614
+msgid "Path for Menu"
+msgstr "Путања менија"
+
+#: ../../WPrefs.app/Menu.c:625
+msgid ""
+"Enter the path for a file containing a menu\n"
+"or a list of directories with the programs you\n"
+"want to have listed in the menu. Ex:\n"
+"~/"
+msgstr ""
+"Унесите путању датотеке која садржи мени\n"
+"или листу директоријума са програмима које\n"
+"желите излистане у менију. На пример:\n"
+"~/"
+
+#: ../../WPrefs.app/Menu.c:638 ../../WPrefs.app/Menu.c:663
+msgid "Command"
+msgstr "Наредба"
+
+#: ../../WPrefs.app/Menu.c:649
+msgid ""
+"Enter a command that outputs a menu\n"
+"definition to stdout when invoked."
+msgstr "Унесите наредбу која исписује дефиницију\nменија на stdout."
+
+#: ../../WPrefs.app/Menu.c:654 ../../WPrefs.app/Menu.c:679
+msgid "Cache menu contents after opening for\nthe first time"
+msgstr "Кеширај садржај менија после првог\nотварања"
+
+#: ../../WPrefs.app/Menu.c:674
+msgid ""
+"Enter a command that outputs a proplist menu\n"
+"definition to stdout when invoked."
+msgstr ""
+"Унесите наредбу која исписује proplist\n"
+"дефиницију менија на stdout при покретању."
+
+#: ../../WPrefs.app/Menu.c:688
+msgid "Command to Open Files"
+msgstr "Наредба за отварање датотека"
+
+#: ../../WPrefs.app/Menu.c:699
+msgid ""
+"Enter the command you want to use to open the\n"
+"files in the directories listed below."
+msgstr "Унесите наредбу за отварање датотека у\nдиректоријумима који следе."
+
+#: ../../WPrefs.app/Menu.c:707
+msgid "Directories with Files"
+msgstr "Директоријуми са датотекама"
+
+#: ../../WPrefs.app/Menu.c:718
+msgid "Strip extensions from file names"
+msgstr "Уклони екстензије из назива датотека"
+
+#: ../../WPrefs.app/Menu.c:729
+msgid "Keyboard Shortcut"
+msgstr "Пречица са тастатуре"
+
+#: ../../WPrefs.app/Menu.c:761
+msgid "Arrange Icons"
+msgstr "Поређај иконе"
+
+#: ../../WPrefs.app/Menu.c:762
+msgid "Hide All Windows Except For The Focused One"
+msgstr "Сакриј све прозоре осим фокусираног"
+
+#: ../../WPrefs.app/Menu.c:763
+msgid "Show All Windows"
+msgstr "Прикажи све прозоре"
+
+#: ../../WPrefs.app/Menu.c:766
+msgid "Exit X Session"
+msgstr "Изађи из сесије X-а"
+
+#: ../../WPrefs.app/Menu.c:767
+msgid "Restart Window Maker"
+msgstr "Поново покрени Window Maker"
+
+#: ../../WPrefs.app/Menu.c:768
+msgid "Start Another Window Manager   : ("
+msgstr "Покрени други менаџер прозора   : ("
+
+#: ../../WPrefs.app/Menu.c:770
+msgid "Save Current Session"
+msgstr "Сачувај тренутну сесију"
+
+#: ../../WPrefs.app/Menu.c:771
+msgid "Clear Saved Session"
+msgstr "Очисти сачувану сесију"
+
+#: ../../WPrefs.app/Menu.c:772
+msgid "Refresh Screen"
+msgstr "Освежи екран"
+
+#: ../../WPrefs.app/Menu.c:773
+msgid "Open Info Panel"
+msgstr "Отвори панел за информације"
+
+#: ../../WPrefs.app/Menu.c:774
+msgid "Open Copyright Panel"
+msgstr "Отвори панел за копирајт"
+
+#: ../../WPrefs.app/Menu.c:779
+msgid "Window Manager to Start"
+msgstr "Менаџер прозора за покретање"
+
+#: ../../WPrefs.app/Menu.c:792
+msgid "Do not confirm action."
+msgstr "Не потврђуј акцију."
+
+#: ../../WPrefs.app/Menu.c:799
+msgid ""
+"Instructions:\n"
+"\n"
+" - drag items from the left to the menu to add new items\n"
+" - drag items out of the menu to remove items\n"
+" - drag items in menu to change their position\n"
+" - drag items with Control pressed to copy them\n"
+" - double click in a menu item to change the label\n"
+" - click on a menu item to change related information"
+msgstr ""
+"Упутства:\n"
+"\n"
+" - превуците ставке слева у мени да их додате\n"
+" - превуците ставке ван менија да их обришете\n"
+" - превуците ставке у менију да их пресложите\n"
+" - превуците ставке уз Control да их копирате\n"
+" - двапут притисните ставку да је преименујете\n"
+" - притисните ставку менија да је измените"
+
+#: ../../WPrefs.app/Menu.c:1049
+#, c-format
+msgid "unknown command '%s' in menu"
+msgstr "непозната наредба „%s“ у менију"
+
+#: ../../WPrefs.app/Menu.c:1073
+msgid ": Execute Program"
+msgstr ": Изврши програм"
+
+#: ../../WPrefs.app/Menu.c:1077
+msgid ": Perform Internal Command"
+msgstr ": Изврши интерну наредбу"
+
+#: ../../WPrefs.app/Menu.c:1081
+msgid ": Open a Submenu"
+msgstr ": Отвори подмени"
+
+#: ../../WPrefs.app/Menu.c:1085
+msgid ": Program Generated Submenu"
+msgstr ": Подмени генерисан програмом"
+
+#: ../../WPrefs.app/Menu.c:1089
+msgid ": Program Generated Proplist Submenu"
+msgstr ": Proplist подмени генерисан програмом"
+
+#: ../../WPrefs.app/Menu.c:1093
+msgid ": Directory Contents Menu"
+msgstr ": Мени са садржајем директоријума"
+
+#: ../../WPrefs.app/Menu.c:1097
+msgid ": Open Workspaces Submenu"
+msgstr ": Отвори подмени са површинама"
+
+#: ../../WPrefs.app/Menu.c:1101
+msgid ": Open Window List Submenu"
+msgstr ": Отвори подмени са листом прозора"
+
+#: ../../WPrefs.app/Menu.c:1317
+msgid "Remove Submenu"
+msgstr "Уклони подмени"
+
+#: ../../WPrefs.app/Menu.c:1318
+msgid ""
+"Removing this item will destroy all items inside\n"
+"the submenu. Do you really want to do that?"
+msgstr ""
+"Уклањање ове ставке ће уништити све ставке\n"
+"унутар подменија. Желите ли то да урадите?"
+
+#: ../../WPrefs.app/Menu.c:1320
+msgid "Yes"
+msgstr "Да"
+
+#: ../../WPrefs.app/Menu.c:1320
+msgid "No"
+msgstr "Не"
+
+#: ../../WPrefs.app/Menu.c:1320
+msgid "Yes, don't ask again"
+msgstr "Да, не питај поново"
+
+#: ../../WPrefs.app/Menu.c:1459
+#, c-format
+msgid "Invalid menu command \"%s\" with label \"%s\" cleared"
+msgstr "Неисправна наредба менија „%s“ са натписом „%s“ је очишћена"
+
+#: ../../WPrefs.app/Menu.c:1462 ../../WPrefs.app/Menu.c:1539
+#: ../../WPrefs.app/Menu.c:1554 ../../WPrefs.app/WPrefs.c:668
+msgid "Warning"
+msgstr "Упозорење"
+
+#: ../../WPrefs.app/Menu.c:1462 ../../WPrefs.app/Menu.c:1494
+#: ../../WPrefs.app/Menu.c:1540 ../../WPrefs.app/MouseSettings.c:156
+#: ../../WPrefs.app/MouseSettings.c:176 ../../WPrefs.app/TexturePanel.c:585
+#: ../../WPrefs.app/TexturePanel.c:663 ../../WPrefs.app/TexturePanel.c:1419
+#: ../../WPrefs.app/WPrefs.c:617 ../../WPrefs.app/WPrefs.c:621
+#: ../../WPrefs.app/WPrefs.c:641 ../../WPrefs.app/WPrefs.c:653
+#: ../../WPrefs.app/WPrefs.c:659 ../../WPrefs.app/WPrefs.c:668
+#: ../../WPrefs.app/WPrefs.c:699 ../../WPrefs.app/WPrefs.c:703
+msgid "OK"
+msgstr "У реду"
+
+#: ../../WPrefs.app/Menu.c:1490
+#, c-format
+msgid "Could not open default menu from '%s'"
+msgstr "Не може се отворити подразумевани мени из „%s“"
+
+#: ../../WPrefs.app/Menu.c:1494 ../../WPrefs.app/MouseSettings.c:154
+#: ../../WPrefs.app/MouseSettings.c:173 ../../WPrefs.app/TexturePanel.c:585
+#: ../../WPrefs.app/TexturePanel.c:661 ../../WPrefs.app/WPrefs.c:617
+#: ../../WPrefs.app/WPrefs.c:621 ../../WPrefs.app/WPrefs.c:638
+#: ../../WPrefs.app/WPrefs.c:649 ../../WPrefs.app/WPrefs.c:659
+#: ../../WPrefs.app/WPrefs.c:699 ../../WPrefs.app/WPrefs.c:703
+msgid "Error"
+msgstr "Грешка"
+
+#: ../../WPrefs.app/Menu.c:1533
+#, c-format
+msgid ""
+"The menu file \"%s\" referenced by WMRootMenu is read-only.\n"
+"You cannot use WPrefs to modify it."
+msgstr ""
+"Датотека менија „%s“ коју позива WMRootMenu је само за\n"
+"читање. Не можете користити WPrefs да је измените."
+
+#: ../../WPrefs.app/Menu.c:1555
+msgid ""
+"The menu file format currently in use is not supported\n"
+"by this tool. Do you want to discard the current menu\n"
+"to use this tool?"
+msgstr ""
+"Овај алат не подржава формат датотеке менија која се\n"
+"тренутно користи. Желите ли да одбаците тренутни мени\n"
+"да бисте користили овај алат?"
+
+#: ../../WPrefs.app/Menu.c:1558
+msgid "Yes, Discard and Update"
+msgstr "Да, одбаци и ажурирај"
+
+#: ../../WPrefs.app/Menu.c:1558
+msgid "No, Keep Current Menu"
+msgstr "Не, задржи тренутни мени"
+
+#: ../../WPrefs.app/Menu.c:1575
+#, c-format
+msgid "\n\nWhen saved, the menu will be written to the file\n\"%s\"."
+msgstr "\n\nПри чувању, мени ће бити уписан у датотеку\n„%s“."
+
+#: ../../WPrefs.app/Menu.c:1809
+msgid "Applications Menu Definition"
+msgstr "Дефиниција менија апликација"
+
+#: ../../WPrefs.app/Menu.c:1811
+msgid "Edit the menu for launching applications."
+msgstr "Уређивање менија за покретање апликација."
+
+#: ../../WPrefs.app/MenuPreferences.c:105
+msgid "Menu Scrolling Speed"
+msgstr "Брзина скроловања менија"
+
+#: ../../WPrefs.app/MenuPreferences.c:153
+msgid "Submenu Alignment"
+msgstr "Уравнање подменија"
+
+#: ../../WPrefs.app/MenuPreferences.c:197
+msgid "Always open submenus inside the screen, instead of scrolling."
+msgstr "Увек отварај подменије унутар екрана, уместо скроловања."
+
+#: ../../WPrefs.app/MenuPreferences.c:202
+msgid "Scroll off-screen menus when pointer is moved over them."
+msgstr "Скролуј меније ван екрана кад се наднесе показивач."
+
+#: ../../WPrefs.app/MenuPreferences.c:206
+msgid "Use h/j/k/l keys to select menu options."
+msgstr "Користи тастере h/j/k/l за избор опција менија."
+
+#: ../../WPrefs.app/MenuPreferences.c:222
+msgid "Menu Preferences"
+msgstr "Подешавања менија"
+
+#: ../../WPrefs.app/MenuPreferences.c:224
+msgid ""
+"Menu usability related options. Scrolling speed,\n"
+"alignment of submenus etc."
+msgstr ""
+"Опције у вези са употребљивошћу менија. Брзина\n"
+"скроловања, уравнање подменија, итд."
+
+#: ../../WPrefs.app/MouseSettings.c:43
+msgid "Left Button"
+msgstr "Лево дугме"
+
+#: ../../WPrefs.app/MouseSettings.c:44
+msgid "Middle Button"
+msgstr "Средње дугме"
+
+#: ../../WPrefs.app/MouseSettings.c:45
+msgid "Right Button"
+msgstr "Десно дугме"
+
+#: ../../WPrefs.app/MouseSettings.c:46
+msgid "Back Button"
+msgstr "Дугме назад"
+
+#: ../../WPrefs.app/MouseSettings.c:47
+msgid "Forward Button"
+msgstr "Дугме напред"
+
+#: ../../WPrefs.app/MouseSettings.c:48
+msgid "Mouse Wheel"
+msgstr "Точкић миша"
+
+#: ../../WPrefs.app/MouseSettings.c:49
+msgid "Mouse Wheel Tilt"
+msgstr "Нагињање точкића миша"
+
+#: ../../WPrefs.app/MouseSettings.c:57
+msgid "Applications Menu"
+msgstr "Мени апликација"
+
+#: ../../WPrefs.app/MouseSettings.c:59
+msgid "Select Windows"
+msgstr "Изабери прозоре"
+
+#: ../../WPrefs.app/MouseSettings.c:60
+msgid "Previous Workspace"
+msgstr "Претходна површина"
+
+#: ../../WPrefs.app/MouseSettings.c:61
+msgid "Next Workspace"
+msgstr "Следећа површина"
+
+#: ../../WPrefs.app/MouseSettings.c:62
+msgid "Previous Window"
+msgstr "Претходни прозор"
+
+#: ../../WPrefs.app/MouseSettings.c:63
+msgid "Next Window"
+msgstr "Следећи прозор"
+
+#: ../../WPrefs.app/MouseSettings.c:71
+msgid "Switch Workspaces"
+msgstr "Пребаци површине"
+
+#: ../../WPrefs.app/MouseSettings.c:72
+msgid "Switch Windows"
+msgstr "Пребаци прозоре"
+
+#: ../../WPrefs.app/MouseSettings.c:155
+msgid "Invalid mouse acceleration value. Must be a positive real value."
+msgstr "Неисправна вредност убрзања. Мора бити позитиван реалан број."
+
+#: ../../WPrefs.app/MouseSettings.c:175
+msgid "Invalid mouse acceleration threshold value. Must be the number of pixels to travel before accelerating."
+msgstr "Неисправна вредност прага убрзања. Мора бити број пиксела кретања пре убрзања."
+
+#: ../../WPrefs.app/MouseSettings.c:284
+#, c-format
+msgid "bad value %s for option %s"
+msgstr "лоша вредност %s за опцију %s"
+
+#: ../../WPrefs.app/MouseSettings.c:343
+#, c-format
+msgid "modifier key %s for option ModifierKey was not recognized. Using %s as default"
+msgstr "модификатор %s за опцију ModifierKey није препознат. Користи се %s као подразумевано"
+
+#: ../../WPrefs.app/MouseSettings.c:364
+msgid "could not retrieve keyboard modifier mapping"
+msgstr "не може се одредити додела модификатора тастатуре"
+
+#: ../../WPrefs.app/MouseSettings.c:458
+msgid "Mouse Speed"
+msgstr "Брзина миша"
+
+#: ../../WPrefs.app/MouseSettings.c:471 ../../WPrefs.app/WPrefs.c:408
+#: ../../WPrefs.app/WPrefs.c:424 ../../WPrefs.app/WindowHandling.c:372
+#: ../../WPrefs.app/WindowHandling.c:423 ../../WPrefs.app/WindowHandling.c:435
+#: ../../WPrefs.app/WindowHandling.c:454 ../../WPrefs.app/WindowHandling.c:466
+#, c-format
+msgid "could not load icon %s"
+msgstr "не може се учитати икона %s"
+
+#: ../../WPrefs.app/MouseSettings.c:488
+msgid "Accel.:"
+msgstr "Убрз.:"
+
+#: ../../WPrefs.app/MouseSettings.c:499
+msgid "Threshold:"
+msgstr "Праг:"
+
+#: ../../WPrefs.app/MouseSettings.c:512
+msgid "Mouse Grab Modifier"
+msgstr "Модификатор за хватање мишем"
+
+#: ../../WPrefs.app/MouseSettings.c:514
+msgid ""
+"Keyboard modifier to use for actions that\n"
+"involve dragging windows with the mouse,\n"
+"clicking inside the window."
+msgstr ""
+"Модификатор са тастатуре за акције које\n"
+"укључују премештање прозора мишем када\n"
+"се кликне унутар прозора."
+
+#: ../../WPrefs.app/MouseSettings.c:530
+msgid "Double-Click Delay"
+msgstr "Застој при двоструком клику"
+
+#: ../../WPrefs.app/MouseSettings.c:573
+msgid "Test"
+msgstr "Тест"
+
+#: ../../WPrefs.app/MouseSettings.c:604
+msgid "Workspace Mouse Actions"
+msgstr "Акције мишем радне површине"
+
+#: ../../WPrefs.app/MouseSettings.c:609
+msgid "Disable mouse actions"
+msgstr "Искључи акције мишем"
+
+#: ../../WPrefs.app/MouseSettings.c:659
+#, c-format
+msgid "could not create %s"
+msgstr "не може се креирати %s"
+
+#: ../../WPrefs.app/MouseSettings.c:674
+#, c-format
+msgid "could not create temporary file %s"
+msgstr "не може се креирати привремена датотека %s"
+
+#: ../../WPrefs.app/MouseSettings.c:707
+#, c-format
+msgid "could not rename file %s to %s"
+msgstr "не може се преименовати датотека %s у %s"
+
+#: ../../WPrefs.app/MouseSettings.c:712
+#, c-format
+msgid "could not set permission 0%03o on file \"%s\""
+msgstr "не може се поставити дозвола 0%03o на датотеку „%s“"
+
+#: ../../WPrefs.app/MouseSettings.c:776
+msgid "Shift"
+msgstr "Shift"
+
+#: ../../WPrefs.app/MouseSettings.c:777
+msgid "Lock"
+msgstr "Lock"
+
+#: ../../WPrefs.app/MouseSettings.c:778
+msgid "Control"
+msgstr "Control"
+
+#: ../../WPrefs.app/MouseSettings.c:779
+msgid "Mod1"
+msgstr "Mod1"
+
+#: ../../WPrefs.app/MouseSettings.c:780
+msgid "Mod2"
+msgstr "Mod2"
+
+#: ../../WPrefs.app/MouseSettings.c:781
+msgid "Mod3"
+msgstr "Mod3"
+
+#: ../../WPrefs.app/MouseSettings.c:782
+msgid "Mod4"
+msgstr "Mod4"
+
+#: ../../WPrefs.app/MouseSettings.c:783
+msgid "Mod5"
+msgstr "Mod5"
+
+#: ../../WPrefs.app/MouseSettings.c:787
+msgid "Mouse Preferences"
+msgstr "Подешавања миша"
+
+#: ../../WPrefs.app/MouseSettings.c:789
+msgid ""
+"Mouse speed/acceleration, double click delay,\n"
+"mouse button bindings etc."
+msgstr ""
+"Брзина/убрзање миша, застој при двоструком\n"
+"клику, доделе дугмадима миша, итд."
+
+#: ../../WPrefs.app/Paths.c:78
+msgid "bad value in option IconPath. Using default path list"
+msgstr "лоша вредност опције IconPath. Користи се подразумевана листа путања"
+
+#: ../../WPrefs.app/Paths.c:95
+msgid "bad value in option PixmapPath. Using default path list"
+msgstr "лоша вредност опције PixmapPath. Користи се подразумевана листа путања"
+
+#: ../../WPrefs.app/Paths.c:140
+msgid "Select directory"
+msgstr "Изаберите директоријум"
+
+#: ../../WPrefs.app/Paths.c:250
+msgid "Icon Search Paths"
+msgstr "Путање за претрагу икона"
+
+#: ../../WPrefs.app/Paths.c:261 ../../WPrefs.app/Paths.c:292
+#: ../../WPrefs.app/TexturePanel.c:1212
+msgid "Add"
+msgstr "Додај"
+
+#: ../../WPrefs.app/Paths.c:268 ../../WPrefs.app/Paths.c:299
+msgid "Remove"
+msgstr "Уклони"
+
+#: ../../WPrefs.app/Paths.c:281
+msgid "Pixmap Search Paths"
+msgstr "Путање за претрагу пиксмапа"
+
+#: ../../WPrefs.app/Paths.c:316
+msgid "Search Path Configuration"
+msgstr "Подешавање путања за претрагу"
+
+#: ../../WPrefs.app/Paths.c:318
+msgid "Search paths to use when looking for pixmaps\nand icons."
+msgstr "Путање за претрагу када се траже пиксмапе\nи иконе."
+
+#: ../../WPrefs.app/Preferences.c:30 ../../WPrefs.app/Preferences.c:42
+msgid "Corner of screen"
+msgstr "Угао екрана"
+
+#: ../../WPrefs.app/Preferences.c:31 ../../WPrefs.app/Preferences.c:43
+msgid "Center of screen"
+msgstr "Средина екрана"
+
+#: ../../WPrefs.app/Preferences.c:32 ../../WPrefs.app/Preferences.c:44
+msgid "Center of resized window"
+msgstr "Средина прозора"
+
+#: ../../WPrefs.app/Preferences.c:33
+msgid "Technical drawing-like"
+msgstr "Попут техничког цртежа"
+
+#: ../../WPrefs.app/Preferences.c:34 ../../WPrefs.app/Preferences.c:45
+msgid "Disabled"
+msgstr "Искључено"
+
+#: ../../WPrefs.app/Preferences.c:53
+msgid "incomplete window titles"
+msgstr "непотп. наслове прозора"
+
+#: ../../WPrefs.app/Preferences.c:54
+msgid "miniwindow titles"
+msgstr "наслове минипрозора"
+
+#: ../../WPrefs.app/Preferences.c:55
+msgid "application/dock icons"
+msgstr "иконе апликација/дока"
+
+#: ../../WPrefs.app/Preferences.c:56
+msgid "internal help"
+msgstr "интерну помоћ"
+
+#: ../../WPrefs.app/Preferences.c:65
+msgid "Disable AppIcon bounce"
+msgstr "Искљ. поскакивање AppIcon-а"
+
+#: ../../WPrefs.app/Preferences.c:66
+msgid "By default, the AppIcon bounces when the application is launched"
+msgstr "Подразумевано, AppIcon поскакује када се апликација покрене"
+
+#: ../../WPrefs.app/Preferences.c:68
+msgid "Bounce when the application wants attention"
+msgstr "Поскакуј када апл. жели пажњу"
+
+#: ../../WPrefs.app/Preferences.c:71
+msgid "Raise AppIcon when bouncing"
+msgstr "Издигни AppIcon при поск."
+
+#: ../../WPrefs.app/Preferences.c:72
+msgid ""
+"Otherwise you will not see it bouncing if\n"
+"there is a window in front of the AppIcon"
+msgstr ""
+"У супротном нећете видети поскакивање ако\n"
+"испред AppIcon-а постоји прозор"
+
+#: ../../WPrefs.app/Preferences.c:122
+#, c-format
+msgid "1 pixel"
+msgstr "1 пиксел"
+
+#. 2-4
+#: ../../WPrefs.app/Preferences.c:125
+#, c-format
+msgid "%i pixels"
+msgstr "%i пиксела"
+
+#. >4
+#: ../../WPrefs.app/Preferences.c:128
+#, c-format
+msgid "%i pixels "
+msgstr "%i пиксела"
+
+#: ../../WPrefs.app/Preferences.c:236
+msgid "Size Display"
+msgstr "Приказ промене величине"
+
+#: ../../WPrefs.app/Preferences.c:238
+msgid ""
+"The position or style of the window size\n"
+"display that's shown when a window is resized."
+msgstr ""
+"Позиција или стил приказа промене величине\n"
+"прозора када се прозору мења величина."
+
+#: ../../WPrefs.app/Preferences.c:253
+msgid "Position Display"
+msgstr "Приказ позиционирања"
+
+#: ../../WPrefs.app/Preferences.c:255
+msgid ""
+"The position or style of the window position\n"
+"display that's shown when a window is moved."
+msgstr ""
+"Позиција или стил приказа позиционирања\n"
+"прозора када се прозор премешта."
+
+#: ../../WPrefs.app/Preferences.c:270
+msgid "Show balloon for..."
+msgstr "Прикажи балон за..."
+
+#: ../../WPrefs.app/Preferences.c:285
+msgid "AppIcon bouncing"
+msgstr "Поскакивање AppIcon-а"
+
+#: ../../WPrefs.app/Preferences.c:307
+msgid "Workspace border"
+msgstr "Ивица површине"
+
+#: ../../WPrefs.app/Preferences.c:323
+msgid "Left/Right"
+msgstr "Лева/дес."
+
+#: ../../WPrefs.app/Preferences.c:328
+msgid "Top/Bottom"
+msgstr "Горња/д."
+
+#: ../../WPrefs.app/Preferences.c:344
+msgid "Miscellaneous Ergonomic Preferences"
+msgstr "Разна ергономска подешавања"
+
+#: ../../WPrefs.app/Preferences.c:345
+msgid "Various settings like balloon text, geometry\ndisplays etc."
+msgstr "Разна подешавања, као што су текст балона,\nприкази геометрије, итд."
+
+#: ../../WPrefs.app/TexturePanel.c:296
+msgid "Saturation"
+msgstr "Засићење"
+
+#: ../../WPrefs.app/TexturePanel.c:298
+msgid "Brightness"
+msgstr "Осветљеност"
+
+#: ../../WPrefs.app/TexturePanel.c:343 ../../WPrefs.app/TexturePanel.c:349
+msgid "Hue"
+msgstr "Нијанса"
+
+#: ../../WPrefs.app/TexturePanel.c:582
+msgid "Could not load the selected file: "
+msgstr "Не може се учитати изабрана датотека:"
+
+#: ../../WPrefs.app/TexturePanel.c:632
+msgid "Open Image"
+msgstr "Отварање слике"
+
+#: ../../WPrefs.app/TexturePanel.c:662
+msgid "The selected file does not contain a supported image."
+msgstr "Изабрана датотека не садржи подржану слику."
+
+#: ../../WPrefs.app/TexturePanel.c:995
+#, c-format
+msgid "error creating texture %s"
+msgstr "грешка приликом креирања текстуре %s"
+
+#: ../../WPrefs.app/TexturePanel.c:1157
+msgid "Texture Panel"
+msgstr "Панел за текстуру"
+
+#: ../../WPrefs.app/TexturePanel.c:1164
+msgid "Texture Name"
+msgstr "Назив текстуре"
+
+#: ../../WPrefs.app/TexturePanel.c:1176
+msgid "Solid Color"
+msgstr "Једнобојно"
+
+#: ../../WPrefs.app/TexturePanel.c:1177
+msgid "Gradient Texture"
+msgstr "Текстура претапања"
+
+#: ../../WPrefs.app/TexturePanel.c:1178
+msgid "Simple Gradient Texture"
+msgstr "Једноставна текстура претапања"
+
+#: ../../WPrefs.app/TexturePanel.c:1179
+msgid "Textured Gradient"
+msgstr "Претапање са текстуром"
+
+#: ../../WPrefs.app/TexturePanel.c:1180
+msgid "Image Texture"
+msgstr "Сликовна текстура"
+
+#: ../../WPrefs.app/TexturePanel.c:1188
+msgid "Default Color"
+msgstr "Подразумевана боја"
+
+#: ../../WPrefs.app/TexturePanel.c:1200
+msgid "Gradient Colors"
+msgstr "Боје претапања"
+
+#: ../../WPrefs.app/TexturePanel.c:1289
+msgid "Direction"
+msgstr "Смер"
+
+#: ../../WPrefs.app/TexturePanel.c:1317
+msgid "Gradient"
+msgstr "Претапање"
+
+#: ../../WPrefs.app/TexturePanel.c:1333
+msgid "Gradient Opacity"
+msgstr "Прозирност претапања"
+
+#: ../../WPrefs.app/TexturePanel.c:1373
+msgid "Image"
+msgstr "Слика"
+
+#: ../../WPrefs.app/TexturePanel.c:1393
+msgid "Browse..."
+msgstr "Бирај..."
+
+#: ../../WPrefs.app/TexturePanel.c:1405
+msgid "Tile"
+msgstr "Поплочај"
+
+#: ../../WPrefs.app/TexturePanel.c:1406
+msgid "Scale"
+msgstr "Развуци"
+
+#: ../../WPrefs.app/TexturePanel.c:1408
+msgid "Maximize"
+msgstr "Максимизуј"
+
+#: ../../WPrefs.app/TexturePanel.c:1409
+msgid "Fill"
+msgstr "Попуни"
+
+#: ../../WPrefs.app/WPrefs.c:212 ../../WPrefs.app/WPrefs.c:282
+msgid "Window Maker Preferences"
+msgstr "Подешавања Window Maker-а"
+
+#: ../../WPrefs.app/WPrefs.c:216
+msgid "Preferences"
+msgstr "Подешавања"
+
+#: ../../WPrefs.app/WPrefs.c:235
+msgid "Revert Page"
+msgstr "Врати страну"
+
+#: ../../WPrefs.app/WPrefs.c:241
+msgid "Revert All"
+msgstr "Врати све"
+
+#: ../../WPrefs.app/WPrefs.c:247
+msgid "Save"
+msgstr "Сачувај"
+
+#: ../../WPrefs.app/WPrefs.c:259
+msgid "Balloon Help"
+msgstr "Помоћ у балонима"
+
+#: ../../WPrefs.app/WPrefs.c:289
+#, c-format
+msgid "Version %s"
+msgstr "Верзија %s"
+
+#: ../../WPrefs.app/WPrefs.c:296
+msgid "Starting..."
+msgstr "Покретање..."
+
+#: ../../WPrefs.app/WPrefs.c:383
+#, c-format
+msgid "could not locate image file %s"
+msgstr "не може се лоцирати датотека слике %s"
+
+#: ../../WPrefs.app/WPrefs.c:437
+#, c-format
+msgid "could not process icon %s: %s"
+msgstr "не може се обрадити икона %s: %s"
+
+#: ../../WPrefs.app/WPrefs.c:537
+#, c-format
+msgid "could not load image file %s:%s"
+msgstr "не може се учитати датотека слике %s: %s"
+
+#: ../../WPrefs.app/WPrefs.c:554
+msgid "Loading Window Maker configuration files..."
+msgstr "Учитавање датотека са подешавањима Window Maker-а..."
+
+#: ../../WPrefs.app/WPrefs.c:558
+msgid "Initializing configuration panels..."
+msgstr "Иницијализовање панела са подешавањима..."
+
+#: ../../WPrefs.app/WPrefs.c:616 ../../WPrefs.app/WPrefs.c:698
+#, c-format
+msgid "Window Maker domain (%s) is corrupted!"
+msgstr "Домен Window Maker-а (%s) је оштећен!"
+
+#: ../../WPrefs.app/WPrefs.c:620
+#, c-format
+msgid "Could not load Window Maker domain (%s) from defaults database."
+msgstr "Не може се учитати домен (%s) Window Maker-а из датотеке подр. вредности."
+
+#: ../../WPrefs.app/WPrefs.c:635
+msgid "could not extract version information from Window Maker"
+msgstr "не може се извући информација о верзији из Window Maker-а"
+
+#: ../../WPrefs.app/WPrefs.c:636
+msgid "Make sure wmaker is in your search path."
+msgstr "Обезбедите да је wmaker у вашој путањи за претрагу."
+
+#: ../../WPrefs.app/WPrefs.c:640
+msgid "Could not extract version from Window Maker. Make sure it is correctly installed and is in your PATH environment variable."
+msgstr "Не може се извући верзија из Window Maker-а. Обезбедите да је исправно инсталиран и у вашој променљивој окружења PATH."
+
+#: ../../WPrefs.app/WPrefs.c:650
+msgid "Could not extract version from Window Maker. Make sure it is correctly installed and the path where it installed is in the PATH environment variable."
+msgstr "Не може се извући верзија из Window Maker-а. Обезбедите да је исправно инсталиран и да је путања у којој је инсталиран у променљивој окружења PATH."
+
+#: ../../WPrefs.app/WPrefs.c:657
+#, c-format
+msgid ""
+"WPrefs only supports Window Maker 0.18.0 or newer.\n"
+"The version installed is %i.%i.%i\n"
+msgstr ""
+"WPrefs само подржава Window Maker 0.18.0 или новији.\n"
+"Инсталирана верзија је %i.%i.%i\n"
+
+#: ../../WPrefs.app/WPrefs.c:666
+#, c-format
+msgid "Window Maker %i.%i.%i, which is installed in your system, is not fully supported by this version of WPrefs."
+msgstr "Window Maker %i.%i.%i, који је инсталиран на вашем систему, није сасвим подржан од стране ове верзије WPrefs-а."
+
+#: ../../WPrefs.app/WPrefs.c:679
+#, c-format
+msgid "could not run \"%s --global_defaults_path\"."
+msgstr "не може се покренути „%s --global_defaults_path“."
+
+#: ../../WPrefs.app/WPrefs.c:702
+#, c-format
+msgid "Could not load global Window Maker domain (%s)."
+msgstr "Не може се учитати глобални домен Window Maker-а (%s)."
+
+#: ../../WPrefs.app/WPrefs.c:922
+#, c-format
+msgid "bad speed value for option %s; using default Medium"
+msgstr "лоша вредност брзине за опцију %s; користи се подразумевана, Средње"
+
+#: ../../WPrefs.app/WindowHandling.c:88
+msgid "Automatic"
+msgstr "Аутоматско"
+
+#: ../../WPrefs.app/WindowHandling.c:89
+msgid "Random"
+msgstr "Случајно"
+
+#: ../../WPrefs.app/WindowHandling.c:90
+msgid "Manual"
+msgstr "Ручно"
+
+#: ../../WPrefs.app/WindowHandling.c:91
+msgid "Cascade"
+msgstr "Ређање"
+
+#: ../../WPrefs.app/WindowHandling.c:92
+msgid "Smart"
+msgstr "Паметно"
+
+#: ../../WPrefs.app/WindowHandling.c:100
+msgid "...changes its position (normal behavior)"
+msgstr "...мења његову позицију (уобичајено)"
+
+#: ../../WPrefs.app/WindowHandling.c:101
+msgid "...restores its unmaximized geometry"
+msgstr "...враћа његову одмаксимизовану геометрију"
+
+#: ../../WPrefs.app/WindowHandling.c:102
+msgid "...considers the window now unmaximized"
+msgstr "...сматра да прозор није одмаксимизован"
+
+#: ../../WPrefs.app/WindowHandling.c:103
+msgid "...does not move the window"
+msgstr "...не премешта прозор"
+
+#: ../../WPrefs.app/WindowHandling.c:178 ../../WPrefs.app/WindowHandling.c:194
+#, c-format
+msgid "bad option value %s in WindowPlacement. Using default value"
+msgstr "лоша вредност опције %s у WindowPlacement. Користи се подразумевана вредност"
+
+#: ../../WPrefs.app/WindowHandling.c:214
+msgid "invalid data in option WindowPlaceOrigin. Using default (0,0)"
+msgstr "неисправни подаци у опцији WindowPlaceOrigin. Користи се подразумевана вредност, (0,0)"
+
+#: ../../WPrefs.app/WindowHandling.c:310
+msgid "Window Placement"
+msgstr "Постављање прозора"
+
+#: ../../WPrefs.app/WindowHandling.c:311
+msgid "How to place windows when they are first put\non screen."
+msgstr "Како ће се први пут постављати прозори\nна екран."
+
+#: ../../WPrefs.app/WindowHandling.c:325
+msgid "Origin:"
+msgstr "Поч.:"
+
+#: ../../WPrefs.app/WindowHandling.c:406
+msgid "Opaque Move/Resize"
+msgstr "Неп.прем./пром.вел."
+
+#: ../../WPrefs.app/WindowHandling.c:407
+msgid ""
+"Whether the window contents or only a frame should\n"
+"be displayed during a move or resize.\n"
+msgstr ""
+"Да ли се садржај прозора, или само оквир, приказују\n"
+"приликом премештања или промене величине.\n"
+
+#: ../../WPrefs.app/WindowHandling.c:474
+msgid "by keyboard"
+msgstr "тастатуром"
+
+#: ../../WPrefs.app/WindowHandling.c:476
+msgid ""
+"When selected, moving or resizing windows\n"
+"using keyboard shortcuts will also display its\n"
+"content instead of just a frame."
+msgstr ""
+"Када је изабрано, премештање или промена\n"
+"величине прозора преко пречица ће приказати\n"
+"и његов садржај уместо оквира."
+
+#: ../../WPrefs.app/WindowHandling.c:487
+msgid "When maximizing..."
+msgstr "При максим. ..."
+
+#: ../../WPrefs.app/WindowHandling.c:490
+msgid "...do not cover:"
+msgstr "...не прекривај:"
+
+#: ../../WPrefs.app/WindowHandling.c:497
+msgid "Icons"
+msgstr "Иконе"
+
+#: ../../WPrefs.app/WindowHandling.c:502
+msgid "The dock"
+msgstr "Док"
+
+#: ../../WPrefs.app/WindowHandling.c:510
+msgid "Mod+Wheel"
+msgstr "Mod+Точкић"
+
+#: ../../WPrefs.app/WindowHandling.c:513
+msgid "Resize increment:"
+msgstr "Корак промене:"
+
+#: ../../WPrefs.app/WindowHandling.c:534
+msgid "Edge Resistance"
+msgstr "Отпор ивице"
+
+#: ../../WPrefs.app/WindowHandling.c:536
+msgid ""
+"Edge resistance will make windows `resist'\n"
+"being moved further for the defined threshold\n"
+"when moved against other windows or the edges\n"
+"of the screen."
+msgstr ""
+"Отпор ивице ће учинити да се прозори\n"
+"„опиру“ премештању у оквиру задате границе\n"
+"када се премештају уз друге прозоре или\n"
+"ивице екрана."
+
+#: ../../WPrefs.app/WindowHandling.c:555
+msgid "Resist"
+msgstr "Отпор"
+
+#: ../../WPrefs.app/WindowHandling.c:560
+msgid "Attract"
+msgstr "Привл."
+
+#: ../../WPrefs.app/WindowHandling.c:569
+msgid "Dragging a maximized window..."
+msgstr "Превлачење максимизованог прозора..."
+
+#: ../../WPrefs.app/WindowHandling.c:598
+msgid "Window Handling Preferences"
+msgstr "Подешавања руковања прозорима"
+
+#: ../../WPrefs.app/WindowHandling.c:600
+msgid ""
+"Window handling options. Initial placement style\n"
+"edge resistance, opaque move etc."
+msgstr ""
+"Опције за руковање прозорима. Стил првог\n"
+"постављања, отпор ивице, непрозирно премештање итд."
+
+#: ../../WPrefs.app/Workspace.c:118
+msgid "Workspace Navigation"
+msgstr "Навигација површинама"
+
+#: ../../WPrefs.app/Workspace.c:123
+msgid "Wrap to the first workspace from the last workspace"
+msgstr "Премотај на прву површину са последње"
+
+#: ../../WPrefs.app/Workspace.c:139
+msgid "Switch workspaces while dragging windows"
+msgstr "Пребацуј површине при превлачењу прозора"
+
+#: ../../WPrefs.app/Workspace.c:155
+msgid "Automatically create new workspaces"
+msgstr "Аутоматски креирај нове површине"
+
+#. WMSetLabelTextAlignment(panel->posL, WARight);
+#: ../../WPrefs.app/Workspace.c:172
+msgid "Position of workspace name display"
+msgstr "Позиција приказа назива површине"
+
+#: ../../WPrefs.app/Workspace.c:188
+msgid "Disable"
+msgstr "Искључи"
+
+#: ../../WPrefs.app/Workspace.c:190
+msgid "Top"
+msgstr "Врх"
+
+#: ../../WPrefs.app/Workspace.c:191
+msgid "Bottom"
+msgstr "Дно"
+
+#: ../../WPrefs.app/Workspace.c:192
+msgid "Top/Left"
+msgstr "Врх/лево"
+
+#: ../../WPrefs.app/Workspace.c:193
+msgid "Top/Right"
+msgstr "Врх/десно"
+
+#: ../../WPrefs.app/Workspace.c:194
+msgid "Bottom/Left"
+msgstr "Дно/лево"
+
+#: ../../WPrefs.app/Workspace.c:195
+msgid "Bottom/Right"
+msgstr "Дно/десно"
+
+#: ../../WPrefs.app/Workspace.c:224
+msgid "Workspace Preferences"
+msgstr "Подешавања површине"
+
+#: ../../WPrefs.app/Workspace.c:226
+msgid "Workspace navigation features\nand workspace name display settings."
+msgstr "Својства навигације површине и\nподешавања приказа назива површине."
+
+#: ../../WPrefs.app/main.c:62
+#, c-format
+msgid "usage: %s [options]\n"
+msgstr "употреба: %s [опције]\n"
+
+#: ../../WPrefs.app/main.c:63
+msgid "options:"
+msgstr "опције:"
+
+#: ../../WPrefs.app/main.c:64
+msgid " -display <display>\tdisplay to be used"
+msgstr " -display <дисплеј>\tдисплеј који се користи"
+
+#: ../../WPrefs.app/main.c:65
+msgid " --version\t\tprint version number and exit"
+msgstr " --version\t\tштампа број верзије и излази"
+
+#: ../../WPrefs.app/main.c:66
+msgid " --help\t\tprint this message and exit"
+msgstr " --help\t\tштампа ову поруку и излази"
+
+#: ../../WPrefs.app/main.c:120
+#, c-format
+msgid "too few arguments for %s"
+msgstr "премало аргумената за %s"
+
+#: ../../WPrefs.app/main.c:142
+msgid "X server does not support locale"
+msgstr "X сервер не подржава локалитет"
+
+#: ../../WPrefs.app/main.c:145
+msgid "cannot set locale modifiers"
+msgstr "не могу се поставити модификатори локалитета"
+
+#: ../../WPrefs.app/main.c:151
+#, c-format
+msgid "could not open display %s"
+msgstr "не може се отворити дисплеј %s"
+
+#: ../../WPrefs.app/main.c:156
+msgid "could not initialize application"
+msgstr "не може се иницијализовати апликација"
+
+#: ../../WPrefs.app/xmodifier.c:125
+#, c-format
+msgid "%s (0x%x) generates %s which is generated by %s"
+msgstr "%s (0x%x) генерише %s који је генерисан од стране %s"
+
+#: ../../WPrefs.app/xmodifier.c:129 ../../WPrefs.app/xmodifier.c:134
+#, c-format
+msgid "%s (0x%x) generates %s which is nonsensical"
+msgstr "%s (0x%x) генерише %s, што нема смисла"
+
+#: ../../WPrefs.app/xmodifier.c:139
+#, c-format
+msgid "%s (0x%x) generates both %s and %s which is nonsensical"
+msgstr "%s (0x%x) генерише и %s и %s, што нема смисла"
+
+#: ../../WPrefs.app/xmodifier.c:160
+msgid "XGetModifierMapping returned NULL, there is no modifier or no memory"
+msgstr "XGetModifierMapping је вратио NULL, или нема модификатора или меморије"
+
+#: ../../WPrefs.app/xmodifier.c:268
+#, c-format
+msgid "%s is being used for both %s and %s"
+msgstr "%s се користи и за %s и за %s"
