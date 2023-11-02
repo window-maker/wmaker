@@ -1,23 +1,24 @@
 # Serbian messages for Window Maker
 # Copyright (C) 1997-2006 Alfredo K. Kojima
-#		1998-2006 Dan Pascu
-#		2013-2020 Window Maker Developers Team
+# 		1998-2006 Dan Pascu
+# 		2013-2020 Window Maker Developers Team
 # This file is distributed under the same license as the Window Maker package.
 # Strahinya Radich (Страхиња Радић) <contact@strahinja.org>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: WindowMaker 0.95.9\n"
+"Project-Id-Version: WindowMaker 0.96.0\n"
 "Report-Msgid-Bugs-To: wmaker-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-10-25 14:44+0200\n"
-"PO-Revision-Date: 2023-10-31 14:01+0100\n"
+"POT-Creation-Date: 2023-11-02 19:43+0100\n"
+"PO-Revision-Date: 2023-11-02 19:48+0100\n"
 "Last-Translator: Страхиња Радић <contact@strahinja.org>\n"
 "Language-Team: Serbian <sr@li.org>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: poe 1.6.0-2-ge0263e3\n"
 
 #: ../../wrlib/load.c:130
@@ -29,8 +30,7 @@ msgstr "wrlib: недовољно меморије за кеш слика\n"
 #, c-format
 msgid "wrlib: invalid window or pixmap passed to RCreateImageFromDrawable\n"
 msgstr ""
-"wrlib: RCreateImageFromDrawable прослеђени неисправан прозор или"
-" пиксмапа\n"
+"wrlib: RCreateImageFromDrawable прослеђени неисправан прозор или пиксмапа\n"
 
 #: ../../wrlib/context.c:410
 #, c-format
@@ -124,20 +124,18 @@ msgstr "wrlib: EOF / грешка приликом читања бајта из 
 #: ../../wrlib/load_ppm.c:91
 #, c-format
 msgid ""
-"wrlib: junk in PPM file \"%s\", expected an unsigned integer but got"
-" 0x%02X\n"
+"wrlib: junk in PPM file \"%s\", expected an unsigned integer but got 0x%02X\n"
 msgstr ""
-"wrlib: смеће у PPM датотеци „%s“, очекује се неозначен цео број, али је"
-" присутно 0x%02X\n"
+"wrlib: смеће у PPM датотеци „%s“, очекује се неозначен цео број, али је "
+"присутно 0x%02X\n"
 
 #: ../../wrlib/load_ppm.c:100 ../../wrlib/load_ppm.c:107
 #, c-format
 msgid ""
-"wrlib: ASCII decimal integer in PPM file \"%s\" is too large to be"
-" processed\n"
+"wrlib: ASCII decimal integer in PPM file \"%s\" is too large to be "
+"processed\n"
 msgstr ""
-"wrlib: ASCII децимални цео број у PPM датотеци „%s“ је превелик за"
-" обраду\n"
+"wrlib: ASCII децимални цео број у PPM датотеци „%s“ је превелик за обраду\n"
 
 #: ../../wrlib/load_webp.c:47
 msgid "invalid parameter"

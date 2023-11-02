@@ -1,16 +1,16 @@
 # Serbian messages for Window Maker
 # Copyright (C) 1997-2006 Alfredo K. Kojima
-#		1998-2006 Dan Pascu
-#		2013-2020 Window Maker Developers Team
+# 		1998-2006 Dan Pascu
+# 		2013-2020 Window Maker Developers Team
 # This file is distributed under the same license as the Window Maker package.
 # Strahinya Radich (Страхиња Радић) <contact@strahinja.org>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: WindowMaker 0.95.9\n"
+"Project-Id-Version: WindowMaker 0.96.0\n"
 "Report-Msgid-Bugs-To: wmaker-dev@googlegroups.com\n"
-"POT-Creation-Date: 2023-10-25 14:44+0200\n"
-"PO-Revision-Date: 2023-10-30 17:35+0100\n"
+"POT-Creation-Date: 2023-11-02 19:36+0100\n"
+"PO-Revision-Date: 2023-11-02 19:48+0100\n"
 "Last-Translator: Страхиња Радић <contact@strahinja.org>\n"
 "Language-Team: Serbian <sr@li.org>\n"
 "Language: sr\n"
@@ -166,76 +166,76 @@ msgstr "пронађено #%s, али без одговарајућег #if"
 msgid "no macro name found for #define"
 msgstr "назив макроа за #define није пронађен"
 
-#: ../../WINGs/menuparser_macros.c:187
+#: ../../WINGs/menuparser_macros.c:188
 #, c-format
 msgid "premature end of file while reading arg-list for macro \"%s\""
 msgstr "прерани крај датотеке приликом читања листе аргумената за макро „%s“"
 
-#: ../../WINGs/menuparser_macros.c:194
+#: ../../WINGs/menuparser_macros.c:195
 #, c-format
 msgid "too many parameters for macro \"%s\" definition"
 msgstr "превише параметара за дефиницију макроа „%s“"
 
-#: ../../WINGs/menuparser_macros.c:209
+#: ../../WINGs/menuparser_macros.c:210
 #, c-format
 msgid "invalid character '%c' in arg-list for macro \"%s\" while expecting parameter name"
 msgstr "неисправни знак „%c“ у листи аргумената за макро „%s“ док се очекивао назив параметра"
 
-#: ../../WINGs/menuparser_macros.c:220
+#: ../../WINGs/menuparser_macros.c:221
 #, c-format
 msgid "invalid character '%c' in arg-list for macro \"%s\" while expecting ',' or ')'"
 msgstr "неисправни знак „%c“ у листи аргумената за макро „%s“ док се очекивало „,“ или „)“"
 
-#: ../../WINGs/menuparser_macros.c:253
+#: ../../WINGs/menuparser_macros.c:254
 #, c-format
 msgid "macro \"%s\" already defined, ignoring redefinition"
 msgstr "макро „%s“ је већ дефинисан, игнорише се поновна дефиниција"
 
-#: ../../WINGs/menuparser_macros.c:346
+#: ../../WINGs/menuparser_macros.c:348
 #, c-format
 msgid "more content than supported for the macro \"%s\""
 msgstr "више садржаја него што је подржано за макро „%s“"
 
-#: ../../WINGs/menuparser_macros.c:455
+#: ../../WINGs/menuparser_macros.c:459
 #, c-format
 msgid "expansion for macro \"%s\" too big, line truncated"
 msgstr "проширење макроа „%s“ је превелико, ред је исечен"
 
-#: ../../WINGs/menuparser_macros.c:467
+#: ../../WINGs/menuparser_macros.c:471
 #, c-format
 msgid "macro \"%s\" needs parenthesis for arguments"
 msgstr "макроу „%s“ су потребне заграде за аргументе"
 
-#: ../../WINGs/menuparser_macros.c:498
+#: ../../WINGs/menuparser_macros.c:502
 msgid "missing closing quote or double-quote before end-of-line"
 msgstr "недостаје завршни наводник или апостроф пре краја реда"
 
-#: ../../WINGs/menuparser_macros.c:521
+#: ../../WINGs/menuparser_macros.c:525
 #, c-format
 msgid "too many arguments for macro \"%s\", expected only %d"
 msgstr "превише аргумената за макро „%s“, очекује се само %d"
 
-#: ../../WINGs/menuparser_macros.c:530
+#: ../../WINGs/menuparser_macros.c:534
 #, c-format
 msgid "premature end of line while searching for arguments to macro \"%s\""
 msgstr "прерани крај реда приликом тражења аргумената за макро „%s“"
 
-#: ../../WINGs/menuparser_macros.c:536
+#: ../../WINGs/menuparser_macros.c:540
 #, c-format
 msgid "not enough arguments for macro \"%s\", expected %d but got only %d"
 msgstr "недовољно аргумената за макро „%s“, очекује се %d, али само постоји %d"
 
-#: ../../WINGs/menuparser_macros.c:541
+#: ../../WINGs/menuparser_macros.c:545
 #, c-format
 msgid "too much data in parameter list of macro \"%s\", truncated"
 msgstr "превише података у листи параметара макроа „%s“, исечено"
 
-#: ../../WINGs/menuparser_macros.c:561
+#: ../../WINGs/menuparser_macros.c:565
 #, c-format
 msgid "size of value for macro '%s' is too big, truncated"
 msgstr "величина вредности макроа „%s“ је превелика, исечено"
 
-#: ../../WINGs/menuparser_macros.c:642 ../../WINGs/menuparser_macros.c:668
+#: ../../WINGs/menuparser_macros.c:646 ../../WINGs/menuparser_macros.c:672
 #, c-format
 msgid "could not determine %s"
 msgstr "не може се одредити %s"
@@ -371,10 +371,10 @@ msgstr "fclose (%s) није успео"
 msgid "rename ('%s' to '%s') failed"
 msgstr "rename („%s“ у „%s“) није успео"
 
-#: ../../WINGs/proplist.c:1797
+#: ../../WINGs/proplist.c:1785
 #, c-format
-msgid "Could not create path component %s"
-msgstr "Не може се креирати компонента путање %s"
+msgid "Could not create component %s"
+msgstr "Не може се креирати компонента %s"
 
 #: ../../WINGs/userdefaults.c:68
 msgid "variable WMAKER_USER_ROOT defined with invalid path, not used"
