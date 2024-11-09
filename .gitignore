@@ -133,6 +133,8 @@ WPrefs.app/WPrefs.desktop
 /WPrefs.app/po/*.mo
 /util/po/*.pot
 /util/po/*.mo
+/wrlib/po/*.pot
+/wrlib/po/*.mo
 
 # Some text editors generate backup files
 *~
