@@ -2086,11 +2086,3 @@ msgstr "toets %s (0x%x) generearret sawol %s as %s, wat ûnsinnich is"
 #, c-format
 msgid "Can't convert keymask 0x%04X to a shortcut label"
 msgstr "Kin 'keymask' 0x%04X net omsette nei fluchtoetsbeneaming"
-
-# Keep next entry for wmaker-0.95.7
-msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to %s."
-msgstr ""
-" Dizze ûnwerstelbere flater trede mooglik op troch in bug. Folje a.j.w. "
-"bygeand BUGFORM yn, en rapportearje it oan %s."

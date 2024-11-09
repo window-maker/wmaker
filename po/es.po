@@ -491,7 +491,7 @@ msgstr "Window Maker recibió la señal %i."
 
 #: ../src/dialog.c:1576
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 " Este error fatal ocurrió probablemente debido a un fallo.\n"

@@ -75,7 +75,7 @@ while [ $# -gt 0 ]; do
 	  ;;
 
 	-h|-help|--help) print_help ;;
-	-*) arg_error "unknow option '$1'" ;;
+	-*) arg_error "unknown option '$1'" ;;
 
 	*)
 	    [ "x$trans_dir" != "x" ] || arg_error "only 1 directory can be specified for translation"
@@ -226,7 +226,7 @@ END {
     error_count++;
   }
 
-  # If error(s) occured, use non-zero status to stop 'make'
+  # If error(s) occurred, use non-zero status to stop 'make'
   # We use 3 to distinguish for awk's possible own problems (status 1 or 2)
   if (error_count > 0) { exit 3 }
 }"

@@ -545,7 +545,7 @@ msgstr "Window Maker modtog signal %i"
 # ../src/dialog.c:1450
 #: ../src/dialog.c:1790
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 "en fatal fejl er opstået, sikkert pga. en bug. Udfyld venligst den vedlagte "
@@ -1686,7 +1686,7 @@ msgstr "det lykkedes ikke at starte alternativ vindueshåndtering. Afbryder."
 # ../src/startup.c:349
 #: ../src/startup.c:419
 msgid ""
-"a fatal error has occured, probably due to a bug. Please fill the included "
+"a fatal error has occurred, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
 "en fatal fejl er opstået, sikkert pga. en bug. Udfyld venligst den vedlagte "

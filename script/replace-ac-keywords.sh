@@ -120,7 +120,7 @@ while [ $# -gt 0 ]; do
             list_replaces="$list_replaces $1"
           ;;
 
-        -*) arg_error "unknow option '$1'" ;;
+        -*) arg_error "unknown option '$1'" ;;
 
         *)
             [ "x$input_file" = "x" ] || arg_error "only 1 input file can be specified, not \"$input_file\" and \"$1\""

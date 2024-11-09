@@ -460,7 +460,7 @@ msgstr "Window Maker は シグナル %i を受けました."
 
 #: ../src/dialog.c:1576
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 "この致命的なエラーはバグによるものかもしれません. 同梱のバグフォームを使って "

@@ -495,7 +495,7 @@ msgstr "Window Maker ha rebut un senyal %i."
 #: ../src/dialog.c:1632
 #, c-format
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 " Aquest error fatal probablement ha estat causat per un \"bug\". Si us plau, "
@@ -1472,7 +1472,7 @@ msgstr "no s'ha pogut iniciar cap gestor de finestres alternatiu. S'avorta."
 
 #: ../src/startup.c:419
 msgid ""
-"a fatal error has occured, probably due to a bug. Please fill the included "
+"a fatal error has occurred, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
 "s'ha produït un error fatal, probablement a causa d'un \"bug\". Si us plau, "

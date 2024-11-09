@@ -151,7 +151,7 @@ while [ $# -gt 0 ]; do
             project_version="$1"
           ;;
 
-        -*) arg_error "unknow option '$1'" ;;
+        -*) arg_error "unknown option '$1'" ;;
 
         *)
             [ "x$input_file" = "x" ] || arg_error "only 1 input file can be specified, not \"$input_file\" and \"$1\""
@@ -903,7 +903,7 @@ function execute_commands(line,               replaced_line, command) {
     # Variable and Conditional commands ########################################
     } else if (command == "value") {
       if (variable[cmdargs] == "") {
-        report_error("variable '" cmdargs "' is unknow, for @value at line " NR);
+        report_error("variable '" cmdargs "' is unknown, for @value at line " NR);
       }
       line = variable[cmdargs] line;
 
@@ -913,7 +913,7 @@ function execute_commands(line,               replaced_line, command) {
       line = "";
 
     } else {
-      report_error("unknow command @" command " at line " NR);
+      report_error("unknown command @" command " at line " NR);
     }
 
   }
@@ -971,7 +971,7 @@ function process_end(line) {
     par_indent = 0;
 
   } else {
-    report_error("unknow command @end " line " at line " NR);
+    report_error("unknown command @end " line " at line " NR);
   }
 }
 

@@ -513,7 +513,7 @@ msgstr "Window Maker 收到訊號 %i。"
 
 #: ../src/dialog.c:1768
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 "這個嚴重錯誤可能是因為程式錯誤所致。請填寫附帶的 BUGFORM 並向 "
@@ -1928,7 +1928,7 @@ msgstr "刪除最後的工作區"
 #~ msgstr "另一套視窗管理員啟動失敗。放棄中。"
 
 #~ msgid ""
-#~ "a fatal error has occured, probably due to a bug. Please fill the "
+#~ "a fatal error has occurred, probably due to a bug. Please fill the "
 #~ "included BUGFORM and report it."
 #~ msgstr "發生嚴重錯誤，可能因為程式錯誤。請填寫 BUGFORM 並提出報告。"
 

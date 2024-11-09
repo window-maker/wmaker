@@ -301,7 +301,7 @@ msgstr "Window Maker收到信号%i."
 
 #: ../src/dialog.c:1450
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 "发生一个致命错误,也许是因为一个 bug.请填写好软件中包含的 BUGFORM 并向"
@@ -1164,7 +1164,7 @@ msgstr "无法启动替代的窗口管理器.中止."
 
 #: ../src/startup.c:349
 msgid ""
-"a fatal error has occured, probably due to a bug. Please fill the included "
+"a fatal error has occurred, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
 "发生一个致命错误,也许是因为一个 bug.请填写好软件中包含的 BUGFORM 并报告 bug."

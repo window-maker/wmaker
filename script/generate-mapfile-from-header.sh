@@ -83,7 +83,7 @@ while [ $# -gt 0 ]; do
           ;;
 
         -h|-help|--help) print_help ;;
-        -*) arg_error "unknow option '$1'" ;;
+        -*) arg_error "unknown option '$1'" ;;
 
         *)
             [ -r "$1" ] || arg_error "source file \"$1\" is not readable"

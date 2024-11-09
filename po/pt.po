@@ -353,7 +353,7 @@ msgstr "O Window Maker recebeu o sinal %i."
 
 #: ../src/dialog.c:1564
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 " Este erro fatal ocorreu provavelmente devido a uma falha.\n"
@@ -1231,7 +1231,7 @@ msgstr "tentativa de iniciar gerenciador alternativo falhou. Abortando."
 
 #: ../src/startup.c:352
 msgid ""
-"a fatal error has occured, probably due to a bug. Please fill the included "
+"a fatal error has occurred, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
 "um erro fatal ocorreu, provavelmente devido a uma falha. Por favor preencha "

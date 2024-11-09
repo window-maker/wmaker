@@ -487,7 +487,7 @@ msgstr "Window Maker võttis vastu signaali %i."
 
 #: ../src/dialog.c:1573
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 " See fataalviga on arvatavasti põhjustatud programmi enese veast. Palun "

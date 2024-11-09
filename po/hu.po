@@ -491,7 +491,7 @@ msgstr "A Window Maker %i jelzést kapott."
 
 #: ../../wmaker-crm/src/dialog.c:1599
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr " Ezt a végzetes hibát valószínűleg egy programozási hiba okozta. Légy szíves töltsd ki a mellékelt BUGFORM kérdőívet és küldd el a %s e-mail címre!"
 
@@ -800,7 +800,7 @@ msgstr "a beállítás adatbázist tartalmazó egységet lecsatolták. \"--stati
 msgid "Inotify: Reading config files in defaults database."
 msgstr "Inotify: újraolvasom a konfigurációs fájlokat a beállítás adatbázisból."
 
-#. an error has occured
+#. an error has occurred
 #: ../../wmaker-crm/src/event.c:391
 msgid ""
 "select failed. The inotify instance will be closed. Changes to the defaults "

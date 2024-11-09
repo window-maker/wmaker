@@ -472,7 +472,7 @@ msgstr "윈도우 메이커가 %i 신호를 받음."
 
 #: ../src/dialog.c:1596
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 "버그로 인해 치명적인 오류가 발생했습니다. BUGFORM을 작성하여 "
@@ -1954,7 +1954,7 @@ msgstr "마지막으로 사용됨"
 #~ msgstr "대체용 창 관리자를 실행 실패. 종료."
 
 #~ msgid ""
-#~ "a fatal error has occured, probably due to a bug. Please fill the "
+#~ "a fatal error has occurred, probably due to a bug. Please fill the "
 #~ "included BUGFORM and report it."
 #~ msgstr ""
 #~ "치명적인 오류 발생, 아마도 버그인 것 같습니다. BUGFORM을 작성해 보내주시"

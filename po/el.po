@@ -1174,7 +1174,7 @@ msgstr "αποτυχία εκκίνησης εναλλακτικού διαχε�
 
 #: ../src/startup.c:349
 msgid ""
-"a fatal error has occured, probably due to a bug. Please fill the included "
+"a fatal error has occurred, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
 

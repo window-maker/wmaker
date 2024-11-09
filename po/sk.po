@@ -499,7 +499,7 @@ msgstr "Window Maker prijal signál %i."
 #: ../src/dialog.c:1632
 #, c-format
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 "Táto fatálna chyba sa vyskytla "
@@ -1481,7 +1481,7 @@ msgstr "nepodarilo sa spustiť alternatívny manažér okien. Koniec."
 
 #: ../src/startup.c:419
 msgid ""
-"a fatal error has occured, probably due to a bug. Please fill the included "
+"a fatal error has occurred, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
 "fatálna chyba nastala pravdepodobne v dôsledku chyby vo Window Makery. "

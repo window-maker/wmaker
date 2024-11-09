@@ -983,7 +983,7 @@ msgid "crashed while trying to do some post-crash cleanup. Aborting immediatelly
 msgstr "załamanie podczas próby uporządkowania po załamaniu. Wyjście awaryjne."
 
 #: ../src/startup.c:304
-msgid "a fatal error has occured, probably due to a bug. Please fill the included BUGFORM and report it."
+msgid "a fatal error has occurred, probably due to a bug. Please fill the included BUGFORM and report it."
 msgstr "wystąpił poważny błąd, prawdopodobnie pluskwa. Prosimy o wypełnienie formularza BUGFORM i wysłanie go do nas."
 
 #. restart another window manager so that the X session doesn't

@@ -93,7 +93,7 @@ while [ $# -gt 0 ]; do
           ;;
 
         -h|-help|--help) print_help ;;
-        -*) arg_error "unknow option '$1'" ;;
+        -*) arg_error "unknown option '$1'" ;;
 
         *)
             [ -z "$edit_file" ] || arg_error "only 1 file to modify can be specified"

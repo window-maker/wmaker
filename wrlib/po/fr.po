@@ -96,7 +96,7 @@ msgstr "wrlib: impossible d'allouer un segment de mémoire partagé, %s: %s\n"
 #: ../../../wrlib/xutil.c:125 ../../../wrlib/xutil.c:145
 #: ../../../wrlib/xutil.c:147
 #, c-format
-msgid "wrlib: error occured while aborting %s, %s\n"
+msgid "wrlib: error occurred while aborting %s, %s\n"
 msgstr "wrlib: une erreur s'est produit en annulant %s, %s\n"
 
 #: ../../../wrlib/xutil.c:141
@@ -106,7 +106,7 @@ msgstr "wrlib: impossible de lier le segment de mémoire partagé a une XImage\n
 
 #: ../../../wrlib/xutil.c:169 ../../../wrlib/xutil.c:171
 #, c-format
-msgid "wrlib: error occured while releasing XImage, %s: %s\n"
+msgid "wrlib: error occurred while releasing XImage, %s: %s\n"
 msgstr "wrlib: une erreur s'est produite en libérant une XImage, %s: %s\n"
 
 #: ../../../wrlib/load_ppm.c:57 ../../../wrlib/load_ppm.c:64
@@ -151,7 +151,7 @@ msgstr "pas assez de données"
 
 #: ../../../wrlib/load_webp.c:61
 #, c-format
-msgid "unknow status code %d"
+msgid "unknown status code %d"
 msgstr "code de statut inconnu %d"
 
 #: ../../../wrlib/load_webp.c:106

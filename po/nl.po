@@ -2090,11 +2090,3 @@ msgstr "toets %s (0x%x) genereert zowel %s als %s, wat onzinnig is"
 #, c-format
 msgid "Can't convert keymask 0x%04X to a shortcut label"
 msgstr "Kan 'keymask' 0x%04X niet omzetten naar sneltoetsbenaming"
-
-# Keep next entry for wmaker-0.95.7
-msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to %s."
-msgstr ""
-" Deze onherstelbare fout trad mogelijk op door 'n bug. Vul a.u.b. "
-"bijgaand BUGFORM in, en rapporteer 't aan %s."

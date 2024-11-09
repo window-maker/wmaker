@@ -843,9 +843,6 @@ msgstr "Kon invoerbestand \"%s\" niet openen"
 msgid "Could not create target file \"%s\""
 msgstr "Kon doelbestand \"%s\" niet aanmaken"
 
-msgid "An error occured browsing '%s'."
-msgstr "Er trad 'n fout op bij bladeren door '%s'."
-
 msgid ""
 "invalid characted '%c' in arg-list for macro \"%s\" while expecting "
 "parameter name"
@@ -859,9 +856,6 @@ msgid ""
 msgstr ""
 "ongeldig letterteken '%c' in arg.-lijst voor macro \"%s\", verwachtte ',' "
 "of ')'"
-
-msgid "unknow directive '#%s'"
-msgstr "onbekende aanwijzing '#%s'"
 
 msgid "found #%s but have no matching #if"
 msgstr "#%s gevonden, maar heeft geen bijbehorende #if"

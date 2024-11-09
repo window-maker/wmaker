@@ -466,7 +466,7 @@ msgstr "Window Maker vastaanotti signaalin %i."
 
 #: ../src/dialog.c:1707
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 " Tämä vakava virhe tapahtui luultavasti bugin johdosta. Ole hyvä ja täytä "
@@ -1390,7 +1390,7 @@ msgstr "vaihtoehtoisen ikkunamanagerin käynnistys epäonnistui. Keskeytetään.
 
 #: ../src/startup.c:412
 msgid ""
-"a fatal error has occured, probably due to a bug. Please fill the included "
+"a fatal error has occurred, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
 "vakava virhe on tapahtunut - luultavasti bugin johdosta. Ole hyvä ja täytä "

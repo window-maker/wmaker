@@ -21,7 +21,7 @@ Changes since version 0.95.7:
 - debian: Ignore missing documentation for --runstatedir.
 - debian: Use dh_autoreconf.
 - debian: Simplify debian/rules.
-- debian: Fix typo occured. (Thanks, lintian.)
+- debian: Fix typo occurred. (Thanks, lintian.)
 - debian: wmaker manpage moved from 1x to 1.
   (Andreas Metzler <ametzler@bebt.de>)
 - debian: Add wmiv to wmaker package.
@@ -498,7 +498,7 @@ Changes since version 0.95.6:
 - doc: Add manpage for wmiv.
   (Doug Torrance <dtorrance@monmouthcollege.edu>)
 - wmaker: replaced old email address with the official one
-- WINGs: Updated news with the API changes that occured between 0.95.6 and
+- WINGs: Updated news with the API changes that occurred between 0.95.6 and
   0.95.7
 - WINGs: ran spell checker on the NEWS file
 - WINGs: fix non-portable int conversion for printf in font panel size handling
@@ -969,7 +969,7 @@ Changes since version 0.95.5:
 - WMaker: moved XGrab/XUngrabPointer into the conditional code
 - News: created section dedicated to the changes related to 0.95.3
 - News: added description of a change that may be interesting to users
-- News: added section to describe the changes that have occured in 0.95.4
+- News: added section to describe the changes that have occurred in 0.95.4
 - News: marked the current changes as part of 0.95.5 and describe the drawers
   feature
 - News: described the new features for future 0.95.6 release
@@ -1103,7 +1103,7 @@ Changes since version 0.95.5:
   #50158)
 - WPrefs: fix NULL pointer handling when getting the Modifiers (Coverity
   #50200)
-- WPrefs: add warning when renderTexture encounters some unknow settings
+- WPrefs: add warning when renderTexture encounters some unknown settings
   (Christophe CURIS <christophe.curis@free.fr>)
 - util/wmiv: add image auto orientation detection
   (David Maciejak <david.maciejak@gmail.com>)

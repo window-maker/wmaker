@@ -122,7 +122,7 @@ RXImage *RCreateXImage(RContext * context, int depth, unsigned width, unsigned h
 			fprintf(stderr, _("wrlib: could not allocate shared memory segment, %s: %s\n"), "shmat", strerror(errno));
 			context->attribs->use_shared_memory = 0;
 			if (shmctl(rximg->info.shmid, IPC_RMID, 0) < 0)
-				fprintf(stderr, _("wrlib: error occured while aborting %s, %s\n"), "shmctl", strerror(errno));
+				fprintf(stderr, _("wrlib: error occurred while aborting %s, %s\n"), "shmctl", strerror(errno));
 			XDestroyImage(rximg->image);
 			goto retry_without_shm;
 		}
@@ -142,9 +142,9 @@ RXImage *RCreateXImage(RContext * context, int depth, unsigned width, unsigned h
 			context->attribs->use_shared_memory = 0;
 			XDestroyImage(rximg->image);
 			if (shmdt(rximg->info.shmaddr) < 0)
-				fprintf(stderr, _("wrlib: error occured while aborting %s, %s\n"), "shmdt", strerror(errno));
+				fprintf(stderr, _("wrlib: error occurred while aborting %s, %s\n"), "shmdt", strerror(errno));
 			if (shmctl(rximg->info.shmid, IPC_RMID, 0) < 0)
-				fprintf(stderr, _("wrlib: error occured while aborting %s, %s\n"), "shmctl", strerror(errno));
+				fprintf(stderr, _("wrlib: error occurred while aborting %s, %s\n"), "shmctl", strerror(errno));
 			goto retry_without_shm;
 		}
 	}
@@ -166,9 +166,9 @@ void RDestroyXImage(RContext * context, RXImage * rximage)
 		XShmDetach(context->dpy, &rximage->info);
 		XDestroyImage(rximage->image);
 		if (shmdt(rximage->info.shmaddr) < 0)
-			fprintf(stderr, _("wrlib: error occured while releasing XImage, %s: %s\n"), "shmdt", strerror(errno));
+			fprintf(stderr, _("wrlib: error occurred while releasing XImage, %s: %s\n"), "shmdt", strerror(errno));
 		if (shmctl(rximage->info.shmid, IPC_RMID, 0) < 0)
-			fprintf(stderr, _("wrlib: error occured while releasing XImage, %s: %s\n"), "shmctl", strerror(errno));
+			fprintf(stderr, _("wrlib: error occurred while releasing XImage, %s: %s\n"), "shmctl", strerror(errno));
 	} else {
 		XDestroyImage(rximage->image);
 	}

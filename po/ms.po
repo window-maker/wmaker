@@ -457,7 +457,7 @@ msgstr "Window Maker menerima isyarat %i."
 
 #: ../src/dialog.c:1786
 msgid ""
-" This fatal error occured probably due to a bug. Please fill the included "
+" This fatal error occurred probably due to a bug. Please fill the included "
 "BUGFORM and report it to %s."
 msgstr ""
 " Ralat fatal ini berlaku kemungkinan disebabkan pepijat. Sila ini BUGFORM "
@@ -1415,7 +1415,7 @@ msgstr "gagl menghidupkan pengurus tetingkap lain. Diabaikan."
 
 #: ../src/startup.c:419
 msgid ""
-"a fatal error has occured, probably due to a bug. Please fill the included "
+"a fatal error has occurred, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
 "ralat fatal berlaku, mungkin kerana pepijat. Sila ini BUGFORM yang "

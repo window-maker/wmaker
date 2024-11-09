@@ -58,7 +58,7 @@ static const char *webp_message_from_status(VP8StatusCode status)
 			return known_message[status];
 
 	snprintf(custom_message, sizeof(custom_message),
-	         _("unknow status code %d"), status);
+	         _("unknown status code %d"), status);
 	return custom_message;
 }
 

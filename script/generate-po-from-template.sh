@@ -90,7 +90,7 @@ while [ $# -gt 0 ]; do
             project_version="$1"
           ;;
 
-        -*) arg_error "unknow option '$1'" ;;
+        -*) arg_error "unknown option '$1'" ;;
 
         *)
             [ "x$lang_file" = "x" ] || arg_error "only 1 po file can be specified, not \"$lang_file\" and \"$1\""
