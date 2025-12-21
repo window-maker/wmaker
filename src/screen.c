@@ -1348,11 +1348,7 @@ void ScreenCapture(WScreen *scr, int mode)
 	}
 
 	if (img) {
-#ifdef USE_PNG
 		if (RSaveTitledImage(img, filepath, (char *)(filetype + 1), "Screenshot from Window Maker")) {
-#else
-		if (RSaveTitledImage(img, filepath, (char *)(filetype + 1), "Screenshot from Window Maker")) {
-#endif
 			scale_img = RSmoothScaleImage(img, scr->scr_width / 10, scr->scr_height / 10);
 			showMiniScreenshot(scr, scale_img);
 			RReleaseImage(scale_img);
