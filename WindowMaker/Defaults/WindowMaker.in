@@ -233,7 +233,7 @@
 	ScreenSwitchKey = None;
 	RunKey = None;
 	ExitKey = None;
-	ScreenCaptureKey = Print;
+	ScreenCaptureKey = None;
 	WindowCaptureKey = None;
 	PartialCaptureKey = None;
 	NormalCursor = (builtin, left_ptr);
