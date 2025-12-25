@@ -35,8 +35,16 @@
 #include "resources.h"
 #include "screen.h"
 
-int wGetColorForColormap(Colormap colormap, const char *color_name, XColor *color)
+int wGetColorForColormap(WScreen *scr, Colormap colormap, const char *color_name, XColor *color)
 {
+	if (scr->w_visual->class == TrueColor) {
+		XColor dummy_exact;
+		if (!XLookupColor(dpy, colormap, color_name, &dummy_exact, color)) {
+			wwarning(_("could not lookup color \"%s\""), color_name);
+			return False;
+		}
+		return True;
+	}
 	if (!XParseColor(dpy, colormap, color_name, color)) {
 		wwarning(_("could not parse color \"%s\""), color_name);
 		return False;
@@ -50,11 +58,14 @@ int wGetColorForColormap(Colormap colormap, const char *color_name, XColor *colo
 
 int wGetColor(WScreen *scr, const char *color_name, XColor *color)
 {
-	return wGetColorForColormap(scr->w_colormap, color_name, color);
+	return wGetColorForColormap(scr, scr->w_colormap, color_name, color);
 }
 
 void wFreeColor(WScreen * scr, unsigned long pixel)
 {
+	if (scr->w_visual->class == TrueColor)
+		return;
+
 	if (pixel != scr->white_pixel && pixel != scr->black_pixel) {
 		unsigned long colors[1];
 

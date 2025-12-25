@@ -58,14 +58,14 @@ static void paintButton(WCoreWindow * button, WTexture * texture,
 
 static void updateTitlebar(WFrameWindow * fwin);
 
-static void allocFrameBorderPixel(Colormap colormap, const char *color_name, unsigned long **pixel);
+static void allocFrameBorderPixel(WFrameWindow *fwin, const char *color_name, unsigned long **pixel);
 
-static void allocFrameBorderPixel(Colormap colormap, const char *color_name, unsigned long **pixel) {
+static void allocFrameBorderPixel(WFrameWindow *fwin, const char *color_name, unsigned long **pixel) {
 	XColor xcol;
 
 	*pixel = NULL;
 
-	if (! wGetColorForColormap(colormap, color_name, &xcol))
+	if (! wGetColorForColormap(fwin->screen_ptr, fwin->colormap, color_name, &xcol))
 		return;
 
 	*pixel = wmalloc(sizeof(unsigned long));
@@ -412,9 +412,9 @@ void wFrameWindowUpdateBorders(WFrameWindow * fwin, int flags)
 
 	checkTitleSize(fwin);
 
-	allocFrameBorderPixel(fwin->colormap, WMGetColorRGBDescription(scr->frame_border_color), &fwin->border_pixel);
-	allocFrameBorderPixel(fwin->colormap, WMGetColorRGBDescription(scr->frame_focused_border_color), &fwin->focused_border_pixel);
-	allocFrameBorderPixel(fwin->colormap, WMGetColorRGBDescription(scr->frame_selected_border_color), &fwin->selected_border_pixel);
+	allocFrameBorderPixel(fwin, WMGetColorRGBDescription(scr->frame_border_color), &fwin->border_pixel);
+	allocFrameBorderPixel(fwin, WMGetColorRGBDescription(scr->frame_focused_border_color), &fwin->focused_border_pixel);
+	allocFrameBorderPixel(fwin, WMGetColorRGBDescription(scr->frame_selected_border_color), &fwin->selected_border_pixel);
 
 	if (flags & WFF_SELECTED) {
 		if (fwin->selected_border_pixel)
