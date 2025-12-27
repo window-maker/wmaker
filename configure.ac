@@ -766,6 +766,19 @@ m4_divert_pop([INIT_PREPARE])dnl
 WM_IMGFMT_CHECK_JPEG
 
 
+dnl JXL Support
+dnl ============
+m4_divert_push([INIT_PREPARE])dnl
+AC_ARG_ENABLE([jxl],
+    [AS_HELP_STRING([--disable-jxl], [disable JXL support through libjxl])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-jxl])] )],
+    [enable_jxl=auto])
+m4_divert_pop([INIT_PREPARE])dnl
+WM_IMGFMT_CHECK_JXL
+
+
 dnl GIF Support
 dnl ============
 m4_divert_push([INIT_PREPARE])dnl

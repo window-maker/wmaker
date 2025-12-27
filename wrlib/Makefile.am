@@ -58,6 +58,10 @@ libwraster_la_SOURCES += load_jpeg.c
 libwraster_la_SOURCES += save_jpeg.c
 endif
 
+if USE_JXL
+libwraster_la_SOURCES += load_jxl.c
+endif
+
 if USE_PNG
 libwraster_la_SOURCES += load_png.c
 libwraster_la_SOURCES += save_png.c

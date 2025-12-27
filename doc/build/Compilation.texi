@@ -204,6 +204,11 @@ Note that if you don't have it, @command{configure} will issue a big warning in 
 this is because JPEG images are often used in themes and for background images
 so you probably want this format supported.
 
+@item @emph{libjxl} 0.7.0 or newer
+
+For @emph{JXL} image support,
+@uref{https://github.com/libjxl/libjxl}
+
 @item @emph{libgif} 2.2 or @emph{libungif}
 
 For @emph{GIF} image support,
@@ -476,6 +481,9 @@ Disable GIF support in @emph{WRaster} library; when enabled use @file{libgif} or
 
 @item --disable-jpeg
 Disable JPEG support in @emph{WRaster} library; when enabled use @file{libjpeg}.
+
+@item --disable-jxl
+Disable JPEG-XL support in @emph{WRaster} library; when enabled use @file{libjxl}.
 
 @item --without-libbsd
 Refuse use of the @file{libbsd} compatibility library in @emph{WINGs} utility library,

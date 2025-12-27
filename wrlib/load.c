@@ -3,7 +3,7 @@
  * Raster graphics library
  *
  * Copyright (c) 1997-2003 Alfredo K. Kojima
- * Copyright (c) 2014-2021 Window Maker Team
+ * Copyright (c) 2014-2025 Window Maker Team
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -92,6 +92,9 @@ char **RSupportedFileFormats(void)
 #endif
 #ifdef USE_JPEG
 	tmp[i++] = "JPEG";
+#endif
+#ifdef USE_JXL
+	tmp[i++] = "JXL";
 #endif
 #ifdef USE_GIF
 	tmp[i++] = "GIF";
@@ -219,6 +222,12 @@ RImage *RLoadImage(RContext *context, const char *file, int index)
 		break;
 #endif				/* USE_JPEG */
 
+#ifdef USE_JXL
+	case IM_JXL:
+		image = RLoadJXL(file);
+		break;
+#endif				/* USE_JXL */
+
 #ifdef USE_GIF
 	case IM_GIF:
 		image = RLoadGIF(file, index);
@@ -305,6 +314,11 @@ char *RGetImageFileFormat(const char *file)
 		return "JPEG";
 #endif				/* USE_JPEG */
 
+#ifdef USE_JXL
+	case IM_JXL:
+		return "JXL";
+#endif				/* USE_JXL */
+
 #ifdef USE_GIF
 	case IM_GIF:
 		return "GIF";
@@ -376,6 +390,13 @@ static WRImgFormat identFile(const char *path)
 	/* check for JPEG */
 	if (buffer[0] == 0xff && buffer[1] == 0xd8)
 		return IM_JPEG;
+
+	/* check for JXL */
+	if ((buffer[0] == 0xff && buffer[1] == 0x0a) ||  /* naked codestream */
+	    (buffer[0] == 0x00 && buffer[1] == 0x00 && buffer[2] == 0x00 && buffer[3] == 0x0c &&  /* container format */
+	     buffer[4] == 0x4a && buffer[5] == 0x58 && buffer[6] == 0x4c && buffer[7] == 0x20 &&
+	     buffer[8] == 0x0d && buffer[9] == 0x0a && buffer[10] == 0x87 && buffer[11] == 0x0a))
+		return IM_JXL;
 
 	/* check for GIF */
 	if (buffer[0] == 'G' && buffer[1] == 'I' && buffer[2] == 'F' && buffer[3] == '8' &&

@@ -113,6 +113,37 @@ AC_DEFUN_ONCE([WM_IMGFMT_CHECK_JPEG],
 ]) dnl AC_DEFUN
 
 
+# WM_IMGFMT_CHECK_JXL
+# -------------------
+#
+# Check for JXL (JPEG XL) file support through 'libjxl'
+# The check depends on variable 'enable_jxl' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, disable support
+#   auto - detect, disable if not found
+#
+# When found, append appropriate stuff in GFXLIBS, and append info to
+# the variable 'supported_gfx'
+# When not found, append info to variable 'unsupported'
+AC_DEFUN_ONCE([WM_IMGFMT_CHECK_JXL],
+[WM_LIB_CHECK([JXL], [-ljxl], [JxlDecoderCreate], [$XLFLAGS $XLIBS],
+    [AC_COMPILE_IFELSE(
+                [AC_LANG_PROGRAM(
+                    [@%:@include <stdlib.h>
+@%:@include <jxl/decode.h>],
+                    [  JxlDecoder* dec = JxlDecoderCreate(NULL);
+  JxlDecoderDestroy(dec);])],
+                [],
+                [AS_ECHO([failed])
+                 AS_ECHO(["$as_me: error: found $CACHEVAR but cannot compile header"])
+                 AS_ECHO(["$as_me: error:   - does header 'jxl/decode.h' exists? (is package 'libjxl-dev' missing?)"])
+                 AS_ECHO(["$as_me: error:   - version of header is not supported? (report to dev team)"])
+                 AC_MSG_ERROR([JXL library is not usable, cannot continue])])
+           ],
+    [supported_gfx], [GFXLIBS])dnl
+]) dnl AC_DEFUN
+
+
 # WM_IMGFMT_CHECK_PNG
 # -------------------
 #

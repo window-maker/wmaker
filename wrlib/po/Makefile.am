@@ -29,6 +29,7 @@ POTFILES  = \
 	$(top_srcdir)/wrlib/load_ppm.c	\
 	$(top_srcdir)/wrlib/load_gif.c	\
 	$(top_srcdir)/wrlib/load_jpeg.c	\
+	$(top_srcdir)/wrlib/load_jxl.c	\
 	$(top_srcdir)/wrlib/load_png.c	\
 	$(top_srcdir)/wrlib/load_tiff.c	\
 	$(top_srcdir)/wrlib/load_xpm.c	\
