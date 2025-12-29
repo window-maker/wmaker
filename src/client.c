@@ -454,15 +454,16 @@ void wClientCheckProperty(WWindow * wwin, XPropertyEvent * event)
 			/* update icon */
 			if ((wwin->wm_hints->flags & IconPixmapHint)
 			    || (wwin->wm_hints->flags & IconWindowHint)) {
-				WApplication *wapp;
+				if (!WFLAGP(wwin, always_user_icon)) {
+					WApplication *wapp;
+					if (wwin->flags.miniaturized && wwin->icon)
+						wIconUpdate(wwin->icon);
 
-				if (wwin->flags.miniaturized && wwin->icon)
-					wIconUpdate(wwin->icon);
-
-				wapp = wApplicationOf(wwin->main_window);
-				if (wapp && wapp->app_icon) {
-					wIconUpdate(wapp->app_icon->icon);
-					wAppIconPaint(wapp->app_icon);
+					wapp = wApplicationOf(wwin->main_window);
+					if (wapp && wapp->app_icon) {
+						wIconUpdate(wapp->app_icon->icon);
+						wAppIconPaint(wapp->app_icon);
+					}
 				}
 			}
 

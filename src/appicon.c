@@ -1186,14 +1186,17 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 
 		wapp->app_icon->running = 1;
 		wapp->app_icon->icon->owner = mainw;
-		if (mainw->wm_hints && (mainw->wm_hints->flags & IconWindowHint))
-			wapp->app_icon->icon->icon_win = mainw->wm_hints->icon_window;
 
-		/* Update the icon images */
-		wIconUpdate(wapp->app_icon->icon);
+		if (!WFLAGP(wwin, always_user_icon)) {
+			if (mainw->wm_hints && (mainw->wm_hints->flags & IconWindowHint))
+				wapp->app_icon->icon->icon_win = mainw->wm_hints->icon_window;
 
-		/* Paint it */
-		wAppIconPaint(wapp->app_icon);
+			/* Update the icon images */
+			wIconUpdate(wapp->app_icon->icon);
+
+			/* Paint it */
+			wAppIconPaint(wapp->app_icon);
+		}
 	}
 }
 
