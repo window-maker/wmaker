@@ -259,13 +259,22 @@ void slide_windows(Window wins[], int n, int from_x, int from_y, int to_x, int t
 	eatExpose();
 }
 
+/* find the start of a UTF-8 character at or before the given position */
+static int utf8_find_char_start(const char *string, int pos)
+{
+	while (pos > 0 && (string[pos] & 0xC0) == 0x80) {
+		pos--;
+	}
+	return pos;
+}
+
 char *ShrinkString(WMFont *font, const char *string, int width)
 {
 	int w, w1 = 0;
 	int p;
 	char *pos;
 	char *text;
-	int p1, p2, t;
+	int p1, p2, t, utf8_safe_pos;
 
 	p = strlen(string);
 	w = WMWidthOfString(font, string, p);
@@ -303,7 +312,11 @@ char *ShrinkString(WMFont *font, const char *string, int width)
 	p2 = p;
 	t = (p2 - p1) / 2;
 	while (p2 > p1 && p1 != t) {
-		w = WMWidthOfString(font, &string[p - t], t);
+		/* ensure we cut at UTF-8 character boundary */
+		utf8_safe_pos = utf8_find_char_start(string, p - t);
+		t = p - utf8_safe_pos;
+
+		w = WMWidthOfString(font, &string[utf8_safe_pos], t);
 		if (w > width) {
 			p2 = t;
 			t = p1 + (p2 - p1) / 2;
@@ -313,7 +326,10 @@ char *ShrinkString(WMFont *font, const char *string, int width)
 		} else
 			p2 = p1 = t;
 	}
-	strcat(text, &string[p - p1]);
+
+	/* ensure final cut is at UTF-8 character boundary */
+	utf8_safe_pos = utf8_find_char_start(string, p - p1);
+	strcat(text, &string[utf8_safe_pos]);
 
 	return text;
 }
