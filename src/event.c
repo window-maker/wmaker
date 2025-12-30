@@ -575,18 +575,14 @@ static void handleExtensions(XEvent * event)
 	}
 #endif				/*KEEP_XKB_LOCK_STATUS */
 #ifdef USE_RANDR
-	if (w_global.xext.randr.supported) {
-		int base = w_global.xext.randr.event_base;
-		if (event->type == base + RRScreenChangeNotify ||
-		   (event->type == base + RRNotify && ((XRRNotifyEvent*)event)->subtype == RRNotify_CrtcChange)) {
-			/* From xrandr man page: "Clients must call back into Xlib using
-			* XRRUpdateConfiguration when screen configuration change notify
-			* events are generated */
-			XRRUpdateConfiguration(event);
-			WCHANGE_STATE(WSTATE_RESTARTING);
-			Shutdown(WSRestartPreparationMode);
-			Restart(NULL,True);
-		}
+	if (w_global.xext.randr.supported && event->type == (w_global.xext.randr.event_base + RRScreenChangeNotify)) {
+		/* From xrandr man page: "Clients must call back into Xlib using
+		 * XRRUpdateConfiguration when screen configuration change notify
+		 * events are generated */
+		XRRUpdateConfiguration(event);
+		WCHANGE_STATE(WSTATE_RESTARTING);
+		Shutdown(WSRestartPreparationMode);
+		Restart(NULL,True);
 	}
 #endif
 }
