@@ -72,6 +72,9 @@ static struct expert_option {
 	{ N_("Cycle windows only on the active head."),
 	  /* default: */ False, OPTION_WMAKER, "CycleActiveHeadOnly" },
 
+	{ N_("Cycle all windows from all workspaces."),
+	  /* default: */ False, OPTION_WMAKER, "CycleAllWorkspaces" },
+
 	{ N_("Ignore minimized windows when cycling."),
 	  /* default: */ False, OPTION_WMAKER, "CycleIgnoreMinimized" },
 

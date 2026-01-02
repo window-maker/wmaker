@@ -252,5 +252,6 @@
 	SelectCursor = (builtin, cross);
 	DialogHistoryLines = 500;
 	CycleActiveHeadOnly = NO;
+	CycleAllWorkspaces = NO;
 	CycleIgnoreMinimized = NO;
 }

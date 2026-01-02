@@ -849,6 +849,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.history_lines, getInt, NULL, NULL, NULL},
 	{"CycleActiveHeadOnly", "NO", NULL,
 	    &wPreferences.cycle_active_head_only, getBool, NULL, NULL, NULL},
+	{"CycleAllWorkspaces", "NO", NULL,
+	    &wPreferences.cycle_all_workspaces, getBool, NULL, NULL, NULL},
 	{"CycleIgnoreMinimized", "NO", NULL,
 	    &wPreferences.cycle_ignore_minimized, getBool, NULL, NULL, NULL},
 	{"DbClickFullScreen", "NO", NULL,

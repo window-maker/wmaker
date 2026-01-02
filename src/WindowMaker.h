@@ -454,6 +454,7 @@ extern struct WPreferences {
 	char single_click;                  /* single click to lauch applications */
 	int history_lines;                  /* history of "Run..." dialog */
 	char cycle_active_head_only;        /* Cycle only windows on the active head */
+	char cycle_all_workspaces;          /* Cycle all windows from all workspaces */
 	char cycle_ignore_minimized;        /* Ignore minimized windows when cycling */
 	char double_click_fullscreen;       /* Double click on titlebar maximize a window to full screen*/
 	char close_rootmenu_left_right_click;/* Close application menu when mouse (left or right) is clicked outside focus */

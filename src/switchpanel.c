@@ -79,7 +79,7 @@ static short int label_height;
 
 static int canReceiveFocus(WWindow *wwin)
 {
-	if (wwin->frame->workspace != wwin->screen_ptr->current_workspace)
+	if (!wPreferences.cycle_all_workspaces && wwin->frame->workspace != wwin->screen_ptr->current_workspace)
 		return 0;
 
 	if (wPreferences.cycle_active_head_only &&
@@ -90,7 +90,7 @@ static int canReceiveFocus(WWindow *wwin)
 		return 0;
 
 	if (!wwin->flags.mapped) {
-		if (!wwin->flags.shaded && !wwin->flags.miniaturized && !wwin->flags.hidden)
+		if (!wwin->flags.shaded && !wwin->flags.miniaturized && !wwin->flags.hidden && !wPreferences.cycle_all_workspaces)
 			return 0;
 		else
 			return -1;
