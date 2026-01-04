@@ -12,7 +12,7 @@ necessary.
 .SH "OPTIONS"
 .TP
 .BI \-display " host:display.screen"
-specify display to use.
+specify the display to use.
 On multiheaded machines, Window Maker will automatically manage all screens.
 If you want Window Maker to manage only a specific screen, you must supply
 the screen number you want to have managed with the
@@ -24,13 +24,13 @@ wmaker -display :0.1
 .EE
 .TP
 .B \-\-dont\-restore
-do not restore saved session
+do not restore the saved session
 .TP
 .B \-\-global_defaults_path
 print the path where the files for the default configuration are installed and exit
 .TP
 .B \-\-help
-print the list of command line options supported, one per line, and exit
+print the list of supported command line options, one per line, and exit
 .TP
 .BI \-\-locale " locale"
 specify the locale (i18n language) to use; Window Maker will also set the variable
@@ -38,7 +38,7 @@ specify the locale (i18n language) to use; Window Maker will also set the variab
 which will be inherited by all applications started from Window Maker
 .TP
 .B \-\-no\-autolaunch
-do not launch at start-up the applications that were marked in the configuration as autolanched
+do not launch at start-up the applications that were marked in the configuration as autolaunched
 .TP
 .B \-\-no\-clip
 do not show the workspace Clip
@@ -53,7 +53,7 @@ disable the Drawers in the Dock
 @!HAVE_INOTIFY@disable the periodic check on the configuration file to reload it automatically
 @USE_ICCCM_WMREPLACE@.TP
 @USE_ICCCM_WMREPLACE@.B \-\-replace
-@USE_ICCCM_WMREPLACE@ask the currently running window manager to let Window Maker take his place
+@USE_ICCCM_WMREPLACE@ask the currently running window manager to let Window Maker take its place
 .TP
 .B \-\-static
 do not update or save automatically the configuration
@@ -88,7 +88,7 @@ few options not available using the Attributes Editor.
 .B @pkgconfdir@/
 All the above-mentioned files are READ from here if not found except
 for WMState, which is COPIED from here. No matter where they are read
-from, if it's necessary to write configuration changes back into this
+from, if it's necessary to write configuration changes back into these
 files, user's files will be written to.
 .TP
 .B ~/GNUstep/Library/WindowMaker/autostart
@@ -108,7 +108,7 @@ might be shut down before the script is executed.
 The menu file indicated in WMRootMenu is looked for here...
 .TP
 .B @pkgdatadir@/
-and here, in that order. Unless, the indicated path is an absolute path.
+and here, in that order. Unless the indicated path is an absolute path.
 .TP
 .B ~/GNUstep/Library/WindowMaker/Pixmaps/
 Window Maker looks for \fBpixmaps\fP here
@@ -131,7 +131,7 @@ Window Maker looks for theme files here (ibid)
 System-wide (Window Maker-specific) pixmaps are located here
 .TP
 .B @pkgdatadir@/Styles/
-System wide styles are here
+System-wide styles are here
 .TP
 .B @pkgdatadir@/Themes/
 Guess... ;-)
