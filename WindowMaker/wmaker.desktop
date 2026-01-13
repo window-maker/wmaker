@@ -4,4 +4,3 @@ Comment=This session logs you into Window Maker
 Exec=wmaker
 TryExec=wmaker
 DesktopNames=WindowMaker
-X-GDM-SessionRegisters=true
