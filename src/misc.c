@@ -311,7 +311,8 @@ char *ShrinkString(WMFont *font, const char *string, int width)
 	p1 = 0;
 	p2 = p;
 	t = (p2 - p1) / 2;
-	while (p2 > p1 && p1 != t) {
+	while (p2 > p1) {
+		int old_t = t;
 		/* ensure we cut at UTF-8 character boundary */
 		utf8_safe_pos = utf8_find_char_start(string, p - t);
 		t = p - utf8_safe_pos;
@@ -319,12 +320,20 @@ char *ShrinkString(WMFont *font, const char *string, int width)
 		w = WMWidthOfString(font, &string[utf8_safe_pos], t);
 		if (w > width) {
 			p2 = t;
-			t = p1 + (p2 - p1) / 2;
 		} else if (w < width) {
 			p1 = t;
-			t = p1 + (p2 - p1) / 2;
-		} else
-			p2 = p1 = t;
+		} else {
+			p1 = t;
+			break;
+		}
+
+		/* Calculate new t for next iteration */
+		t = p1 + (p2 - p1) / 2;
+
+		/* Prevent infinite loop if we're not making progress */
+		if (t == old_t || (p2 - p1) <= 1) {
+			break;
+		}
 	}
 
 	/* ensure final cut is at UTF-8 character boundary */
