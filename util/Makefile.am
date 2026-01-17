@@ -76,9 +76,10 @@ wmiv_LDADD = \
 	$(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/WINGs/libWINGs.la \
 	@XLFLAGS@ @XLIBS@ @GFXLIBS@ \
-	@PANGO_LIBS@ @PTHREAD_LIBS@ @LIBEXIF@
+	@PANGO_LIBS@ @PTHREAD_LIBS@ @LIBEXIF@ \
+	@LIBARCHIVE_LIBS@ @LIBM@ @LIBXRANDR@
 
-wmiv_SOURCES = wmiv.c wmiv.h
+wmiv_SOURCES = wmiv.c wmiv.hi xdnd.c xdnd.h
 
 CLEANFILES = wmaker.inst
 

@@ -3,14 +3,17 @@
 wmiv \- quick image viewer using wrlib
 .SH SYNOPSIS
 .B wmiv
-.RI [ \,image(s)\/ | \,directory\/ ]
+.RI [ \,image(s)\/ | \,directory\/ | \,archive\/]
 .SH OPTIONS
 .TP
-.B \-\-help
+.B \-h, \-\-help
 print help text
 .TP
-.B \-\-version
+.B \-v, \-\-version
 print version
+.TP
+.B \-i, \-\-ignore-unknown
+ignore unknown image format
 .SH KEYS
 .TP
 [+]
@@ -18,21 +21,6 @@ zoom in
 .TP
 [\-]
 zoom out
-.TP
-[Esc]
-actual size
-.TP
-[D]
-launch diaporama mode
-.TP
-[L]
-rotate image on the left
-.TP
-[Q]
-quit
-.TP
-[R]
-rotate image on the right
 .TP
 [▸]
 next image
@@ -45,6 +33,27 @@ first image
 .TP
 [▾]
 last image
+.TP
+[Ctrl+C]
+copy image to clipboard
+.TP
+[D]
+start slideshow
+.TP
+[Esc]
+actual size
+.TP
+[F]
+toggle full-screen mode
+.TP
+[L]
+rotate image on the left
+.TP
+[Q]
+quit
+.TP
+[R]
+rotate image on the right
 .SH AUTHOR
 .B wmiv
 is a part of Window Maker.  It was written by David Maciejak.

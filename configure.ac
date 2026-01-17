@@ -857,6 +857,22 @@ AM_CONDITIONAL([ICON_EXT_XPM],  [test "x$ICONEXT" = "xxpm"])
 AM_CONDITIONAL([ICON_EXT_TIFF], [test "x$ICONEXT" = "xtiff"])
 
 
+dnl Archive Support for wmiv
+dnl =================================
+dnl Check for libarchive (comprehensive archive support)
+AC_CHECK_LIB([archive], [archive_read_new], [
+    AC_CHECK_HEADER([archive.h], [
+        AC_DEFINE([HAVE_LIBARCHIVE], [1], [Define if libarchive is available])
+        LIBARCHIVE_LIBS="-larchive"
+    ], [
+        AC_MSG_WARN([libarchive header not found, archive support disabled])
+    ])
+], [
+    AC_MSG_WARN([libarchive not found, archive support disabled])
+])
+AC_SUBST([LIBARCHIVE_LIBS])
+
+
 dnl ==============================================
 dnl         End of Graphic Format Libraries
 dnl ==============================================
