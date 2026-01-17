@@ -90,10 +90,12 @@ Bool RSaveXPM(RImage *image, const char *filename);
 
 #ifdef USE_PNG
 Bool RSavePNG(RImage *image, const char *filename, char *title);
+Bool RSaveRawPNG(RImage *image, char *title, unsigned char **out_buf, size_t *out_size);
 #endif
 
 #ifdef USE_JPEG
 Bool RSaveJPEG(RImage *image, const char *filename, char *title);
+Bool RSaveRawJPEG(RImage *image, char *title, unsigned char **out_buf, size_t *out_size);
 #endif
 
 /*

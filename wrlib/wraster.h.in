@@ -391,6 +391,9 @@ RImage *RGetImageFromXPMData(RContext *context, char **xpmData)
 Bool RSaveImage(RImage *image, const char *filename, const char *format)
 	__wrlib_nonnull(1, 2, 3);
 
+Bool RSaveRawImage(RImage *image, const char *format, unsigned char **out_buf, size_t *out_size)
+	__wrlib_nonnull(1, 2, 3, 4);
+
 Bool RSaveTitledImage(RImage *image, const char *filename, const char *format, char *title)
 	__wrlib_nonnull(1, 2, 3);
 

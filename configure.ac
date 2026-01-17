@@ -71,9 +71,9 @@ dnl 6. If any interfaces have been removed or changed since the last
 dnl public release, then set age to 0.
 dnl
 dnl libwraster
-WRASTER_CURRENT=7
+WRASTER_CURRENT=8
 WRASTER_REVISION=0
-WRASTER_AGE=1
+WRASTER_AGE=2
 WRASTER_VERSION=$WRASTER_CURRENT:$WRASTER_REVISION:$WRASTER_AGE
 AC_SUBST(WRASTER_VERSION)
 dnl

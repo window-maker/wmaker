@@ -1,3 +1,5 @@
+- added RSaveRawImage()
+
 - added RSaveTitledImage()
 
 - removed obsoleted RDestroyImage()

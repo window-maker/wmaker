@@ -3,7 +3,7 @@
  * Raster graphics library
  *
  * Copyright (c) 1998-2003 Alfredo K. Kojima
- * Copyright (c) 2013-2023 Window Maker Team
+ * Copyright (c) 2013-2025 Window Maker Team
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -38,6 +38,25 @@
 Bool RSaveImage(RImage *image, const char *filename, const char *format)
 {
 	return RSaveTitledImage(image, filename, format, NULL);
+}
+
+Bool RSaveRawImage(RImage *image, const char *format, unsigned char **out_buf, size_t *out_size)
+{
+#ifdef USE_PNG
+	if (strcasecmp(format, "PNG") == 0)
+		return RSaveRawPNG(image, NULL, out_buf, out_size);
+#endif
+
+#ifdef USE_JPEG
+	if (strcasecmp(format, "JPG") == 0)
+		return RSaveRawJPEG(image, NULL, out_buf, out_size);
+
+	if (strcasecmp(format, "JPEG") == 0)
+		return RSaveRawJPEG(image, NULL, out_buf, out_size);
+#endif
+
+	RErrorCode = RERR_BADFORMAT;
+	return False;
 }
 
 Bool RSaveTitledImage(RImage *image, const char *filename, const char *format, char *title)

@@ -162,6 +162,11 @@ RImage *RLoadImage(RContext *context, const char *file, int index)
 
 	assert(file != NULL);
 
+	/* just to suppress the compilation warning as index is only used with TIFF and GIF */
+#if !defined(USE_TIFF) && !defined(USE_GIF)
+	(void)index;
+#endif
+
 	if (RImageCacheSize < 0)
 		init_cache();
 
