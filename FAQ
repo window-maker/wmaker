@@ -15,7 +15,7 @@ Summary of Contents:
      1.2 Where can I get Window Maker?
      1.3 Where are the mailing list archives?
      1.4 Where is more documentation on configuring Window Maker?
-     1.5 What is an App Icon?
+     1.5 What is an appicon?
      1.6 How can I get a question added to the FAQ?
      1.7 How do I report bugs?
      1.8 Is there an anonymous cvs server?
@@ -134,7 +134,7 @@ Introduction:
 
 1.1 What is Window Maker?
 ----------------------------------
-Window Maker is an elegant X11 window manger that emulates the
+Window Maker is an elegant X11 window manager that emulates the
 OpenStep desktop with some noticeable enhancements. Look at
 http://wm.current.nu/themes/my-themes.html and
 http://wm.current.nu/themes/screenshots.html
@@ -507,7 +507,7 @@ exec wmaker
 Things to try if it doesn't work: (somewhat fuzzy and random)
 
 This should do it although I did have problems sometimes initially which I
-fixed by randomly trying absolute pathes for wmaker in .xsession/.xinitrc and/or
+fixed by randomly trying absolute paths for wmaker in .xsession/.xinitrc and/or
 making the dtprofile/.xinitrc/etc executable. It helps logging in on the console
 (select from CDE login screen) and start X manually using 'X'.
 If it works that way it should work when logging into the CDE environment.
@@ -628,7 +628,7 @@ the last app started by .xinitrc is closed.
 the X server will be closed, and your session will end.
 
 
-3.3 How do I "dock" AppIcons on the Clip?
+3.3 How do I "dock" appicons on the Clip?
 -----------------------------------------
 Just drag icons near it like you would for the dock.  Note that if you place
 the clip near the dock, you may have problems docking appicons in either.
@@ -674,7 +674,7 @@ David Reviejo <dreviejo@arrakis.es> best summed up this answer:
 
 
 
-3.7 How do I "undock" AppIcons?
+3.7 How do I "undock" appicons?
 ----------------------------------
 If the program is not running, just drag the icon to the middle of your
 desktop (away from the dock and clip) and watch it disappear.
@@ -731,7 +731,7 @@ These directories will be listed under the "Search Path" section of WPrefs.
 3.11 When I run GNOME application they have no title bar.
 ----------------------------------
 
-The GNOME toolkit decided to behave his own way, so it draws its own title bar
+The GNOME toolkit decided to behave in its own way, so it draws its own title bar
 with buttons, and asks Window Maker to not draw anything (title bar, resize bar,
 close and miniaturise button, ...).
 
@@ -838,7 +838,7 @@ AlwaysUserIcon=Yes;
 };
 
 
-4.6 How do I get a Tile background for my AppIcons (those things in
+4.6 How do I get a Tile background for my appicons (those things in
     the dock)?
 ----------------------------------
 You need to change 1 line to your ~/GNUstep/Defaults/WindowMaker file.
@@ -868,9 +868,9 @@ Application Icon'' Option then Save, Apply and close the dialog.
 
 This should allow you do dock the program normally.
 
-Emulate Appicon does exactly the same thing as dockit, a small app
+Emulate AppIcon does exactly the same thing as dockit, a small app
 distributed with ancient versions of Window Maker before the Attribute
-Editor existed (now deprecated for the obvious reason). If Emulate Appicon
+Editor existed (now deprecated for the obvious reason). If Emulate AppIcon
 does not work, dockit will not work either.  Such applications violate the
 ICCCM (Inter-Client Communication Conventions Manual) and are considered
 badly coded for not setting the instance.class hints.
@@ -898,7 +898,7 @@ NoAppIcon=Yes;
 
 4.9 How do I set a pixmap background?
 ----------------------------------
-Here is the in depth explanation straight from the NEWS file:
+Here is the in-depth explanation straight from the NEWS file:
 
 wmsetbg now accepts the following options:
 usage: wmsetbg [-options] image
@@ -1476,7 +1476,7 @@ Themes:
 8.1 What exactly are themes?
 ----------------------------------
 Themes are a great aspect of Window Maker allowing a user to simply
-save the entire 'look' of their desktop in a Archive to distribute freely among
+save the entire 'look' of their desktop in an archive to distribute freely among
 friends, fellow users and/or the whole net in general. :)
 
 See the theme-HOWTO at http://wm.current.nu/themes/theme-HOWTO.html
