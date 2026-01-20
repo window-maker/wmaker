@@ -219,9 +219,9 @@ static char *default_bullet[] = {
 };
 
 /* These id are used when sharing the selected text between applications */
-static Atom XA_Targets = None;
-static Atom XA_Format_Text = None;
-static Atom XA_Format_Compound_Text = None;
+static Atom XA_TARGETS = None;
+static Atom XA_TEXT = None;
+static Atom XA_COMPOUND_TEXT = None;
 
 static void handleEvents(XEvent * event, void *data);
 static void layOutDocument(Text * tPtr);
@@ -2050,7 +2050,7 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 	(void) selection;
 	(void) cdata;
 
-	if (target == XA_STRING || target == XA_Format_Text || target == XA_Format_Compound_Text) {
+	if (target == XA_STRING || target == XA_TEXT || target == XA_COMPOUND_TEXT) {
 		char *text = WMGetTextSelectedStream(tPtr);
 
 		if (text) {
@@ -2063,18 +2063,18 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 	} else
 		printf("didn't get it\n");
 
-	if (target == XA_Targets) {
-		Atom array[4];
+	if (target == XA_TARGETS) {
+		Atom supported_type[4];
 
-		array[0] = XA_Targets;
-		array[1] = XA_STRING;
-		array[2] = XA_Format_Text;
-		array[3] = XA_Format_Compound_Text;
+		supported_type[0] = XA_TARGETS;
+		supported_type[1] = XA_STRING;
+		supported_type[2] = XA_TEXT;
+		supported_type[3] = XA_COMPOUND_TEXT;
 
-		data = WMCreateDataWithBytes(&array, sizeof(array));
+		data = WMCreateDataWithBytes(supported_type, sizeof(supported_type));
 		WMSetDataFormat(data, 32);
 
-		*type = target;
+		*type = XA_ATOM;
 		return data;
 	}
 
@@ -2977,15 +2977,15 @@ WMText *WMCreateTextForDocumentType(WMWidget * parent, WMAction * parser, WMActi
 	dpy = tPtr->view->screen->display;
 	scr = tPtr->view->screen;
 
-	if (XA_Targets == None) {
+	if (XA_TARGETS == None) {
 		/*
 		 * Because the X protocol guaranties that the value will never change in
 		 * the lifespan of the server, we query the values only the first time a
 		 * widget is created
 		 */
-		XA_Targets = XInternAtom(dpy, "TARGETS", False);
-		XA_Format_Text = XInternAtom(dpy, "TEXT", False);
-		XA_Format_Compound_Text = XInternAtom(dpy, "COMPOUND_TEXT", False);
+		XA_TARGETS = XInternAtom(dpy, "TARGETS", False);
+		XA_TEXT = XInternAtom(dpy, "TEXT", False);
+		XA_COMPOUND_TEXT = XInternAtom(dpy, "COMPOUND_TEXT", False);
 	}
 
 	tPtr->view->self = tPtr;

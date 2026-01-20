@@ -239,9 +239,9 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 	TextField *tPtr = view->self;
 	int count;
 	Display *dpy = tPtr->view->screen->display;
-	Atom _TARGETS;
-	Atom TEXT = XInternAtom(dpy, "TEXT", False);
-	Atom COMPOUND_TEXT = XInternAtom(dpy, "COMPOUND_TEXT", False);
+	Atom XA_TARGETS;
+	Atom XA_TEXT = XInternAtom(dpy, "TEXT", False);
+	Atom XA_COMPOUND_TEXT = XInternAtom(dpy, "COMPOUND_TEXT", False);
 	WMData *data;
 
 	/* Parameter not used, but tell the compiler that it is ok */
@@ -251,7 +251,7 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 	count = tPtr->selection.count < 0
 	    ? tPtr->selection.position + tPtr->selection.count : tPtr->selection.position;
 
-	if (target == XA_STRING || target == TEXT || target == COMPOUND_TEXT) {
+	if (target == XA_STRING || target == XA_TEXT || target == XA_COMPOUND_TEXT) {
 
 		data = WMCreateDataWithBytes(&(tPtr->text[count]), abs(tPtr->selection.count));
 		WMSetDataFormat(data, 8);
@@ -260,19 +260,19 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 		return data;
 	}
 
-	_TARGETS = XInternAtom(dpy, "TARGETS", False);
-	if (target == _TARGETS) {
+	XA_TARGETS = XInternAtom(dpy, "TARGETS", False);
+	if (target == XA_TARGETS) {
 		Atom supported_type[4];
 
-		supported_type[0] = _TARGETS;
+		supported_type[0] = XA_TARGETS;
 		supported_type[1] = XA_STRING;
-		supported_type[2] = TEXT;
-		supported_type[3] = COMPOUND_TEXT;
+		supported_type[2] = XA_TEXT;
+		supported_type[3] = XA_COMPOUND_TEXT;
 
 		data = WMCreateDataWithBytes(supported_type, sizeof(supported_type));
 		WMSetDataFormat(data, 32);
 
-		*type = target;
+		*type = XA_ATOM;
 		return data;
 	}
 
