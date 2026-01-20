@@ -446,6 +446,13 @@ void WMDeleteTextFieldRange(WMTextField * tPtr, WMRange range)
 
 	decrToFit(tPtr);
 
+	/* Ensure cursor is visible after deletion */
+	if (tPtr->cursorPosition < tPtr->viewPosition) {
+		tPtr->viewPosition = tPtr->cursorPosition;
+	} else {
+		incrToFit2(tPtr);
+	}
+
 	paintTextField(tPtr);
 }
 
