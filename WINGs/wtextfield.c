@@ -1036,7 +1036,6 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 	case XK_Left:
 		if (tPtr->cursorPosition > 0) {
 			int i;
-			paintCursor(tPtr);
 
 			i = tPtr->cursorPosition;
 			i += oneUTF8CharBackward(&tPtr->text[i], i);
@@ -1052,9 +1051,8 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 
 			if (tPtr->cursorPosition < tPtr->viewPosition) {
 				tPtr->viewPosition = tPtr->cursorPosition;
-				refresh = 1;
-			} else
-				paintCursor(tPtr);
+			}
+			refresh = 1;
 		}
 		if (shifted)
 			cancelSelection = 0;
@@ -1077,7 +1075,6 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 	case XK_Right:
 		if (tPtr->cursorPosition < tPtr->textLen) {
 			int i;
-			paintCursor(tPtr);
 
 			i = tPtr->cursorPosition;
 			if (controled) {
@@ -1090,10 +1087,8 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 			}
 			tPtr->cursorPosition = i;
 
-			refresh = incrToFit2(tPtr);
-
-			if (!refresh)
-				paintCursor(tPtr);
+			incrToFit2(tPtr);
+			refresh = 1;
 		}
 		if (shifted)
 			cancelSelection = 0;
@@ -1116,13 +1111,11 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 	case XK_Home:
 		if (!controled) {
 			if (tPtr->cursorPosition > 0) {
-				paintCursor(tPtr);
 				tPtr->cursorPosition = 0;
 				if (tPtr->viewPosition > 0) {
 					tPtr->viewPosition = 0;
-					refresh = 1;
-				} else
-					paintCursor(tPtr);
+				}
+				refresh = 1;
 			}
 			if (shifted)
 				cancelSelection = 0;
@@ -1145,14 +1138,11 @@ static void handleTextFieldKeyPress(TextField * tPtr, XEvent * event)
 	case XK_End:
 		if (!controled) {
 			if (tPtr->cursorPosition < tPtr->textLen) {
-				paintCursor(tPtr);
 				tPtr->cursorPosition = tPtr->textLen;
 				tPtr->viewPosition = 0;
 
-				refresh = incrToFit(tPtr);
-
-				if (!refresh)
-					paintCursor(tPtr);
+				incrToFit(tPtr);
+				refresh = 1;
 			}
 			if (shifted)
 				cancelSelection = 0;
