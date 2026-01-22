@@ -70,37 +70,30 @@ static Bool hasProperty(FcPattern * pattern, const char *property)
 	return False;
 }
 
-static Bool hasPropertyWithStringValue(FcPattern * pattern, const char *object, const char *value)
-{
-	FcChar8 *str;
-	int id;
-
-	if (!value || value[0] == 0)
-		return True;
-
-	id = 0;
-	while (FcPatternGetString(pattern, object, id, &str) == FcResultMatch) {
-		if (strcasecmp(value, (char *)str) == 0) {
-			return True;
-		}
-		id++;
-	}
-
-	return False;
-}
-
 static char *makeFontOfSize(const char *font, int size, const char *fallback)
 {
-	FcPattern *pattern;
+	FcPattern *pattern = NULL;
 	char *result;
 
-	if (font[0] == '-') {
+	if (font && font[0] == '-') {
 		pattern = xlfdToFcPattern(font);
 	} else {
 		pattern = FcNameParse((const FcChar8 *) font);
 	}
 
-	/*FcPatternPrint(pattern); */
+	if (!pattern) {
+		wwarning(_("could not load font spec: %s."), font);
+		if (!fallback)
+			return NULL;
+		pattern = FcPatternCreate();
+		if (!pattern)
+			return NULL;
+		if (!FcPatternAddString(pattern, FC_FAMILY, (const FcChar8 *) fallback)) {
+			wfatal(_("could not load default font spec: %s."), fallback);
+			FcPatternDestroy(pattern);
+			return NULL;
+		}
+	}
 
 	if (size > 0) {
 		FcPatternDel(pattern, FC_PIXEL_SIZE);
@@ -108,12 +101,6 @@ static char *makeFontOfSize(const char *font, int size, const char *fallback)
 	} else if (size == 0 && !hasProperty(pattern, "size") && !hasProperty(pattern, FC_PIXEL_SIZE)) {
 		FcPatternAddDouble(pattern, FC_PIXEL_SIZE, (double)DEFAULT_SIZE);
 	}
-
-	if (fallback && !hasPropertyWithStringValue(pattern, FC_FAMILY, fallback)) {
-		FcPatternAddString(pattern, FC_FAMILY, (const FcChar8 *) fallback);
-	}
-
-	/*FcPatternPrint(pattern); */
 
 	result = (char *)FcNameUnparse(pattern);
 	FcPatternDestroy(pattern);
@@ -135,7 +122,7 @@ WMFont *WMCreateFont(WMScreen * scrPtr, const char *fontName)
 	double size;
 #endif
 
-	if (fontName[0] == '-') {
+	if (fontName && fontName[0] == '-') {
 		fname = xlfdToFcName(fontName);
 	} else {
 		fname = wstrdup(fontName);
@@ -262,7 +249,11 @@ WMFont *WMSystemFontOfSize(WMScreen * scrPtr, int size)
 	WMFont *font;
 	char *fontSpec;
 
-	fontSpec = makeFontOfSize(WINGsConfiguration.systemFont, size, NULL);
+	fontSpec = makeFontOfSize(WINGsConfiguration.systemFont, size, DEFAULT_FONT);
+
+	if (!fontSpec) {
+		return NULL;
+	}
 
 	font = WMCreateFont(scrPtr, fontSpec);
 
@@ -280,7 +271,11 @@ WMFont *WMBoldSystemFontOfSize(WMScreen * scrPtr, int size)
 	WMFont *font;
 	char *fontSpec;
 
-	fontSpec = makeFontOfSize(WINGsConfiguration.boldSystemFont, size, NULL);
+	fontSpec = makeFontOfSize(WINGsConfiguration.boldSystemFont, size, DEFAULT_FONT);
+
+	if (!fontSpec) {
+		return NULL;
+	}
 
 	font = WMCreateFont(scrPtr, fontSpec);
 
