@@ -1736,9 +1736,9 @@ int main(int argc, char **argv)
 	red.green = red.blue = 0;
 
 	static struct option long_options[] = {
-		{"version", no_argument, 0, 'v'},
 		{"help", no_argument, 0, 'h'},
 		{"ignore-unknown", no_argument, 0, 'i'},
+		{"version", no_argument, 0, 'v'},
 		{0, 0, 0, 0}
 	};
 	int option_index = 0;
@@ -1749,9 +1749,9 @@ int main(int argc, char **argv)
 		case 'h':
 			printf("Usage: %s [image(s)|directory|archive]\n"
 			"Options:\n"
-			"  -h, --help            print this help text\n"
-			"  -v, --version         print version\n"
+			"  -h, --help            display this help and exit\n"
 			"  -i, --ignore-unknown  ignore unknown image format\n"
+			"  -v, --version         print version\n"
 			"\nKeys:\n\n"
 			"  [+]            zoom in\n"
 			"  [-]            zoom out\n"
