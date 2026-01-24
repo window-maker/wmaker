@@ -1641,6 +1641,8 @@ typedef struct _CrashPanel {
 	int action;		/* what to do after */
 
 	KeyCode retKey;
+	KeyCode upKey;
+	KeyCode downKey;
 
 } CrashPanel;
 
@@ -1650,6 +1652,17 @@ static void handleKeyPress(XEvent * event, void *clientData)
 
 	if (event->xkey.keycode == panel->retKey) {
 		WMPerformButtonClick(panel->okB);
+		return;
+	}
+
+	if (event->xkey.keycode == panel->upKey) {
+		WMSelectPopUpButtonPreviousItem(panel->whatP);
+		return;
+	}
+
+	if (event->xkey.keycode == panel->downKey) {
+		WMSelectPopUpButtonNextItem(panel->whatP);
+		return;
 	}
 }
 
@@ -1721,6 +1734,8 @@ int wShowCrashingDialogPanel(int whatSig)
 	panel = wmalloc(sizeof(CrashPanel));
 
 	panel->retKey = XKeysymToKeycode(dpy, XK_Return);
+	panel->upKey = XKeysymToKeycode(dpy, XK_Up);
+	panel->downKey = XKeysymToKeycode(dpy, XK_Down);
 
 	panel->win = WMCreateWindow(scr, "crashingDialog");
 	WMResizeWidget(panel->win, PWIDTH, PHEIGHT);
