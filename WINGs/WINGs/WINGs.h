@@ -1462,6 +1462,10 @@ void WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag);
 
 Bool WMGetPopUpButtonEnabled(WMPopUpButton *bPtr);
 
+int WMSelectPopUpButtonPreviousItem(WMPopUpButton *bPtr);
+
+int WMSelectPopUpButtonNextItem(WMPopUpButton *bPtr);
+
 /* ---[ WINGs/wprogressindicator.c ]------------------------------------- */
 
 WMProgressIndicator* WMCreateProgressIndicator(WMWidget *parent);

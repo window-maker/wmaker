@@ -252,6 +252,56 @@ WMMenuItem *WMGetPopUpButtonMenuItem(WMPopUpButton * bPtr, int index)
 	return WMGetFromArray(bPtr->items, index);
 }
 
+int WMSelectPopUpButtonPreviousItem(WMPopUpButton * bPtr)
+{
+	int testIndex;
+
+	CHECK_CLASS(bPtr, WC_PopUpButton);
+
+	if (bPtr->flags.pullsDown || bPtr->selectedItemIndex < 0)
+		return -1;
+
+	testIndex = bPtr->selectedItemIndex - 1;
+
+	while (testIndex >= 0 && !WMGetPopUpButtonItemEnabled(bPtr, testIndex))
+		testIndex--;
+
+	if (testIndex != -1) {
+		WMSetPopUpButtonSelectedItem(bPtr, testIndex);
+		if (bPtr->action)
+			(*bPtr->action) (bPtr, bPtr->clientData);
+		return testIndex;
+	}
+
+	return -1;
+}
+
+int WMSelectPopUpButtonNextItem(WMPopUpButton * bPtr)
+{
+	int itemCount;
+	int testIndex;
+
+	CHECK_CLASS(bPtr, WC_PopUpButton);
+
+	if (bPtr->flags.pullsDown || bPtr->selectedItemIndex < 0)
+		return -1;
+
+	itemCount = WMGetArrayItemCount(bPtr->items);
+	testIndex = bPtr->selectedItemIndex + 1;
+
+	while (testIndex < itemCount && !WMGetPopUpButtonItemEnabled(bPtr, testIndex))
+		testIndex++;
+
+	if (testIndex != itemCount) {
+		WMSetPopUpButtonSelectedItem(bPtr, testIndex);
+		if (bPtr->action)
+			(*bPtr->action) (bPtr, bPtr->clientData);
+		return testIndex;
+	}
+
+	return -1;
+}
+
 static void paintPopUpButton(PopUpButton * bPtr)
 {
 	W_Screen *scr = bPtr->view->screen;
