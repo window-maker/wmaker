@@ -651,6 +651,10 @@ appropriate requirements and works with this.
 Despite all this, if you think there's a use for it and feel in the mood to help, do not hesitate to
 discuss on the mailing list @value{emailsupport} to get it working.
 
+@item --enable-native
+Enable native CPU optimizations by adding @option{-march=native} to the compiler flags, tuning the
+generated code for the build machine at the expense of portability.
+
 @item --with-web-repo=@i{PATH}
 Enable generation of HTML documentation to be uploaded to @sc{Window Maker}'s website.
 The @file{@i{PATH}} is the directory where you have cloned the homepage's repository.

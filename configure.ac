@@ -130,6 +130,20 @@ AS_IF([test "x$debug" = "xyes"],
 ])
 
 
+dnl Native CPU Optimizations Option
+dnl =================
+m4_divert_push([INIT_PREPARE])dnl
+AC_ARG_ENABLE([native],
+    [AS_HELP_STRING([--enable-native], [enable native option, @<:@default=no@:>@])],
+    [AS_CASE(["$enableval"],
+        [yes], [native=yes],
+        [no],  [native=no],
+        [AC_MSG_ERROR([bad value $enableval for --enable-native])] )],
+    [native=no])
+m4_divert_pop([INIT_PREPARE])dnl
+AS_IF([test "x$native" = "xyes"],
+    [AX_CFLAGS_GCC_OPTION([-march=native])])
+
 AX_CFLAGS_GCC_OPTION([-Wall])
 AX_CFLAGS_GCC_OPTION([-Wextra -Wno-sign-compare])
 dnl
@@ -1037,6 +1051,9 @@ echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
 echo "Pango text layout support in WINGs  : $pango"
 echo "Translated languages to support     :$supported_locales"
+AS_IF([test "x$native" = "xyes"],
+    [AS_ECHO(["Target architecture                 : native"]) ],
+    [AS_ECHO(["Target architecture                 : generic"]) ])
 AS_IF([test "x$WEB_REPO_ROOT" != "x"],
     [AS_ECHO(["Git repository for WMaker's Website : $WEB_REPO_ROOT"]) ])
 AS_IF([test "x$debug" = "xyes"],
