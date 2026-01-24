@@ -32,7 +32,9 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
+#include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 #include <WINGs/WUtil.h>
 #include "WindowMaker.h"
@@ -274,6 +276,9 @@ static void setSupportedHints(WScreen *scr)
 {
 	Atom atom[wlengthof(atomNames)];
 	int i = 0;
+	long pid = 0;
+	char wm_name[64] = "";
+	XClassHint *class_hint;
 
 	/* set supported hints list */
 	/* XXX: extend this !!! */
@@ -357,6 +362,25 @@ static void setSupportedHints(WScreen *scr)
 
 	XChangeProperty(dpy, scr->info_window, net_supporting_wm_check, XA_WINDOW,
 			32, PropModeReplace, (unsigned char *)&scr->info_window, 1);
+
+	/* set _NET_WM_NAME on supporting window */
+	snprintf(wm_name, sizeof(wm_name), "Window Maker %s", VERSION);
+	XChangeProperty(dpy, scr->info_window, net_wm_name, utf8_string, 8,
+					PropModeReplace, (unsigned char *)wm_name, strlen(wm_name));
+
+	/* set _NET_WM_PID on supporting window */
+	pid = getpid();
+	XChangeProperty(dpy, scr->info_window, net_wm_pid, XA_CARDINAL, 32,
+					PropModeReplace, (unsigned char *)&pid, 1);
+
+	/* set WM_CLASS on supporting window */
+	class_hint = XAllocClassHint();
+	if (class_hint) {
+			class_hint->res_name = "wmaker";
+			class_hint->res_class = "WindowMaker";
+			XSetClassHint(dpy, scr->info_window, class_hint);
+			XFree(class_hint);
+	}
 }
 
 void wNETWMUpdateDesktop(WScreen *scr)
