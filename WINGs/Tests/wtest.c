@@ -521,7 +521,7 @@ void testSlider(WMScreen * scr)
 void testTextField(WMScreen * scr)
 {
 	WMWindow *win;
-	WMTextField *field, *field2;
+	WMTextField *field, *field2, *field3;
 
 	windowCount++;
 
@@ -539,6 +539,11 @@ void testTextField(WMScreen * scr)
 	WMResizeWidget(field2, 200, 20);
 	WMMoveWidget(field2, 20, 50);
 	WMSetTextFieldAlignment(field2, WARight);
+
+	field3 = WMCreateTextField(win);
+	WMResizeWidget(field3, 200, 20);
+	WMMoveWidget(field3, 20, 80);
+	WMSetTextFieldAlignment(field3, WACenter);
 
 	WMRealizeWidget(win);
 	WMMapSubwidgets(win);
