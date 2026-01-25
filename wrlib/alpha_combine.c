@@ -25,47 +25,47 @@
 
 
 void RCombineAlpha(unsigned char *d, unsigned char *s, int s_has_alpha,
-		   int width, int height, int dwi, int swi, int opacity) {
-	int x, y;
-	int t, sa;
-	int alpha;
-	float ratio, cratio;
+                    int width, int height, int dwi, int swi, int opacity) {
+    int x, y;
+    unsigned char *dst = d;
+    unsigned char *src = s;
 
-	for (y=0; y<height; y++) {
-		for (x=0; x<width; x++) {
-			sa=s_has_alpha?*(s+3):255;
+    for (y = 0; y < height; y++) {
+        for (x = 0; x < width; x++) {
+            int sa = s_has_alpha ? src[3] : 255;
+            int t, alpha;
 
-			if (opacity!=255) {
-				t = sa * opacity + 0x80;
-				sa = ((t>>8)+t)>>8;
-			}
+            if (opacity != 255) {
+                t = sa * opacity + 0x80;
+                sa = ((t >> 8) + t) >> 8;
+            }
 
-			t = *(d+3) * (255-sa) + 0x80;
-			alpha = sa + (((t>>8)+t)>>8);
+            t = dst[3] * (255 - sa) + 0x80;
+            alpha = sa + (((t >> 8) + t) >> 8);
 
-			if (sa==0 || alpha==0) {
-				ratio = 0;
-				cratio = 1.0;
-			} else if(sa == alpha) {
-				ratio = 1.0;
-				cratio = 0;
-			} else {
-				ratio = (float)sa / alpha;
-				cratio = 1.0F - ratio;
-			}
+            if (alpha == 0) {
+                dst[3] = 0;
+            } else if (sa == alpha) {
+                dst[0] = src[0];
+                dst[1] = src[1];
+                dst[2] = src[2];
+                dst[3] = alpha;
+            } else if (sa == 0) {
+                dst[3] = alpha;
+            } else {
+                int ratio = (sa << 8) / alpha;
+                int inv_ratio = 256 - ratio;
 
-			*d = (int)*d * cratio + (int)*s * ratio;
-			s++; d++;
-			*d = (int)*d * cratio + (int)*s * ratio;
-			s++; d++;
-			*d = (int)*d * cratio + (int)*s * ratio;
-			s++; d++;
-			*d = alpha;
-			d++;
+                dst[0] = (dst[0] * inv_ratio + src[0] * ratio) >> 8;
+                dst[1] = (dst[1] * inv_ratio + src[1] * ratio) >> 8;
+                dst[2] = (dst[2] * inv_ratio + src[2] * ratio) >> 8;
+                dst[3] = alpha;
+            }
 
-			if (s_has_alpha) s++;
-		}
-		d+=dwi;
-		s+=swi;
-	}
+            dst += 4;
+            src += s_has_alpha ? 4 : 3;
+        }
+        dst += dwi;
+        src += swi;
+    }
 }
