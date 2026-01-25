@@ -244,8 +244,25 @@ static double Mitchell_filter(double t)
 	return (0.0);
 }
 
-static double (*filterf)(double) = Mitchell_filter;
-static double fwidth = Mitchell_support;
+#define	CatmullRom_support	(2.0)
+
+static double CatmullRom_filter(double t)
+{
+	double tt;
+
+	tt = t * t;
+	if (t < 0)
+		t = -t;
+	if (t < 1.0) {
+		return ((1.5 * t * tt) - (2.5 * tt) + 1.0);
+	} else if (t < 2.0) {
+		return ((-0.5 * t * tt) + (2.5 * tt) - (4.0 * t) + 2.0);
+	}
+	return (0.0);
+}
+
+static double (*filterf)(double) = CatmullRom_filter;
+static double fwidth = CatmullRom_support;
 
 void wraster_change_filter(RScalingFilter type)
 {
@@ -270,10 +287,14 @@ void wraster_change_filter(RScalingFilter type)
 		filterf = Lanczos3_filter;
 		fwidth = Lanczos3_support;
 		break;
-	default:
 	case RMitchellFilter:
 		filterf = Mitchell_filter;
 		fwidth = Mitchell_support;
+		break;
+	default:
+	case RCatmullRomFilter:
+		filterf = CatmullRom_filter;
+		fwidth = CatmullRom_support;
 		break;
 	}
 }

@@ -554,7 +554,7 @@ RContext *RCreateContext(Display * dpy, int screen_number, const RContextAttribu
 
 	if (!(context->attribs->flags & RC_ScalingFilter)) {
 		context->attribs->flags |= RC_ScalingFilter;
-		context->attribs->scaling_filter = RMitchellFilter;
+		context->attribs->scaling_filter = RCatmullRomFilter;
 	}
 
 	/* get configuration from environment variables */
