@@ -364,7 +364,7 @@ static void setSupportedHints(WScreen *scr)
 			32, PropModeReplace, (unsigned char *)&scr->info_window, 1);
 
 	/* set _NET_WM_NAME on supporting window */
-	snprintf(wm_name, sizeof(wm_name), "Window Maker %s", VERSION);
+	snprintf(wm_name, sizeof(wm_name), "WindowMaker %s", VERSION);
 	XChangeProperty(dpy, scr->info_window, net_wm_name, utf8_string, 8,
 					PropModeReplace, (unsigned char *)wm_name, strlen(wm_name));
 
