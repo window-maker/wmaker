@@ -257,7 +257,7 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->hcdescF, 15, 130);
 
 	panel->hcdescL = WMCreateLabel(panel->hcdescF);
-	WMResizeWidget(panel->hcdescL, 200, 60);
+	WMResizeWidget(panel->hcdescL, 200, 70);
 	WMMoveWidget(panel->hcdescL, 15, 10);
 	WMSetLabelText(panel->hcdescL,
 		       _("Instructions:\n\n"

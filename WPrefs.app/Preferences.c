@@ -284,14 +284,14 @@ static void createPanel(Panel * p)
 
     /***************** Options ****************/
 	panel->optF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->optF, 255, 94);
+	WMResizeWidget(panel->optF, 255, 96);
 	WMMoveWidget(panel->optF, 15, 125);
 	WMSetFrameTitle(panel->optF, _("AppIcon bouncing"));
 
 	for (i = 0; i < wlengthof(appicon_bouncing); i++) {
 		panel->bounceB[i] = WMCreateSwitchButton(panel->optF);
 		WMResizeWidget(panel->bounceB[i], 237, 26);
-		WMMoveWidget(panel->bounceB[i], 9, 14 + i * 25);
+		WMMoveWidget(panel->bounceB[i], 9, 16 + i * 26);
 		WMSetButtonText(panel->bounceB[i], _(appicon_bouncing[i].label));
 
 		if (appicon_bouncing[i].default_value)
@@ -306,7 +306,7 @@ static void createPanel(Panel * p)
 
     /***************** Workspace border ****************/
 	panel->borderF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->borderF, 220, 75);
+	WMResizeWidget(panel->borderF, 220, 77);
 	WMMoveWidget(panel->borderF, 285, 144);
 	WMSetFrameTitle(panel->borderF, _("Workspace border"));
 
