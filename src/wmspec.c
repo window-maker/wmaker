@@ -71,7 +71,7 @@ static Atom net_showing_desktop;
 /* Other Root Window Messages */
 static Atom net_close_window;
 static Atom net_moveresize_window;	/* TODO */
-static Atom net_wm_moveresize;	/* TODO */
+static Atom net_wm_moveresize;
 
 /* Application Window Properties */
 static Atom net_wm_name;
@@ -125,7 +125,7 @@ static Atom net_wm_strut;
 static Atom net_wm_strut_partial;	/* TODO: doesn't really fit into the current strut scheme */
 static Atom net_wm_icon_geometry;	/* FIXME: should work together with net_wm_handled_icons, gnome-panel-2.2.0.1 doesn't use _NET_WM_HANDLED_ICONS, thus present situation. */
 static Atom net_wm_icon;
-static Atom net_wm_pid;		/* TODO */
+static Atom net_wm_pid;
 static Atom net_wm_handled_icons;	/* FIXME: see net_wm_icon_geometry */
 static Atom net_wm_window_opacity;
 
@@ -226,35 +226,6 @@ static atomitem_t atomNames[] = {
 #define _NET_WM_STATE_ADD 1
 #define _NET_WM_STATE_TOGGLE 2
 
-#if 0
-/*
- * These constant provide information on the kind of window move/resize when
- * it is initiated by the application instead of by WindowMaker. They are
- * parameter for the client message _NET_WM_MOVERESIZE, as defined by the
- * FreeDesktop wm-spec standard:
- *   http://standards.freedesktop.org/wm-spec/1.5/ar01s04.html
- *
- * Today, WindowMaker does not support this at all (the corresponding Atom
- * is not added to the list in setSupportedHints), probably because there is
- * nothing it needs to do about it, the application is assumed to know what
- * it is doing, and WindowMaker won't get in the way.
- *
- * The definition of the constants (taken from the standard) are disabled to
- * avoid a spurious warning (-Wunused-macros).
- */
-#define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
-#define _NET_WM_MOVERESIZE_SIZE_TOP          1
-#define _NET_WM_MOVERESIZE_SIZE_TOPRIGHT     2
-#define _NET_WM_MOVERESIZE_SIZE_RIGHT        3
-#define _NET_WM_MOVERESIZE_SIZE_BOTTOMRIGHT  4
-#define _NET_WM_MOVERESIZE_SIZE_BOTTOM       5
-#define _NET_WM_MOVERESIZE_SIZE_BOTTOMLEFT   6
-#define _NET_WM_MOVERESIZE_SIZE_LEFT         7
-#define _NET_WM_MOVERESIZE_MOVE              8	/* movement only */
-#define _NET_WM_MOVERESIZE_SIZE_KEYBOARD     9	/* size via keyboard */
-#define _NET_WM_MOVERESIZE_MOVE_KEYBOARD    10	/* move via keyboard */
-#endif
-
 static void observer(void *self, WMNotification *notif);
 static void wsobserver(void *self, WMNotification *notif);
 
@@ -294,9 +265,7 @@ static void setSupportedHints(WScreen *scr)
 	atom[i++] = net_workarea;
 	atom[i++] = net_supporting_wm_check;
 	atom[i++] = net_showing_desktop;
-#if 0
 	atom[i++] = net_wm_moveresize;
-#endif
 	atom[i++] = net_wm_desktop;
 #ifdef USE_XINERAMA
 	atom[i++] = net_wm_fullscreen_monitors;
@@ -1812,6 +1781,84 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 				wWindowSetOmnipresent(wwin, False);
 			wWindowChangeWorkspace(wwin, desktop);
 		}
+		return True;
+
+	} else if (event->message_type == net_wm_moveresize) {
+		XEvent fake_event;
+		int direction = event->data.l[2];
+		int x_root = event->data.l[0];
+		int y_root = event->data.l[1];
+		int button = event->data.l[3];
+		int junk;
+		Window junkw;
+		unsigned int mask;
+
+		if (direction == _NET_WM_MOVERESIZE_CANCEL) {
+			if (wwin->moveresize.active) {
+				memset(&fake_event, 0, sizeof(XEvent));
+				fake_event.type = ButtonRelease;
+				fake_event.xbutton.window = wwin->frame->core->window;
+				fake_event.xbutton.x_root = x_root;
+				fake_event.xbutton.y_root = y_root;
+				fake_event.xbutton.button = event->data.l[3];
+				XSendEvent(dpy, wwin->frame->core->window, False, ButtonReleaseMask, &fake_event);
+			}
+			return True;
+		}
+
+		/* Check if already in progress */
+		if (wwin->moveresize.active)
+			return True;
+
+		/* Check if the initiating button is actually pressed */
+		if (!XQueryPointer(dpy, wwin->screen_ptr->root_win, &junkw, &junkw,
+					&junk, &junk, &junk, &junk, &mask))
+			return True;
+
+		if (button > 0) {
+			unsigned int expected =
+				button == 1 ? Button1Mask :
+				button == 2 ? Button2Mask :
+				button == 3 ? Button3Mask :
+				0;
+
+			if (expected && !(mask & expected))
+				/* Race: button already released */
+				return True;
+		}
+
+		/* Check if operation is allowed */
+		if (direction == _NET_WM_MOVERESIZE_MOVE) {
+			if (WFLAGP(wwin, no_movable))
+				return True;
+		} else if (direction <= _NET_WM_MOVERESIZE_SIZE_LEFT) {
+			if (WFLAGP(wwin, no_resizable))
+				return True;
+		} else {
+			return True;
+		}
+
+		/* Grab the pointer for the operation */
+		if (XGrabPointer(dpy, wwin->frame->core->window, False,
+								ButtonReleaseMask | PointerMotionMask | ButtonPressMask,
+								GrabModeAsync, GrabModeAsync,
+								None, None, CurrentTime) != GrabSuccess)
+			return True;
+
+		/* Set up the move/resize state */
+		wwin->moveresize.active = 1;
+		wwin->moveresize.resize_edge = direction;
+
+		memset(&fake_event, 0, sizeof(XEvent));
+		fake_event.type = MotionNotify;
+		fake_event.xmotion.x_root = x_root;
+		fake_event.xmotion.y_root = y_root;
+		fake_event.xmotion.window = wwin->frame->core->window;
+		if (direction == _NET_WM_MOVERESIZE_MOVE)
+			wMouseMoveWindow(wwin, &fake_event);
+		else
+			wMouseResizeWindow(wwin, &fake_event);
+
 		return True;
 
 #ifdef USE_XINERAMA

@@ -237,6 +237,12 @@ typedef struct WWindow {
 	int cmap_window_no;
 	Window *cmap_windows;
 
+	/* move/resize state for _NET_WM_MOVERESIZE support */
+	struct {
+		int active;			/* 1 if move/resize is in progress */
+		int resize_edge;		/* which edge for resize (0-7) */
+	} moveresize;
+
 	/* protocols */
 	WProtocols protocols;			/* accepted WM_PROTOCOLS */
 
