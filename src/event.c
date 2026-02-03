@@ -1958,16 +1958,31 @@ static void handleKeyPress(XEvent * event)
 #define CORNER_BOTTOMLEFT 3
 #define CORNER_BOTTOMRIGHT 4
 
-static int get_corner(WMRect rect, WMPoint p)
+static inline int get_corner(WMRect rect, WMPoint p)
 {
-	if (p.x <= (rect.pos.x + wPreferences.hot_corner_edge) && p.y <= (rect.pos.y + wPreferences.hot_corner_edge))
+	const int edge = wPreferences.hot_corner_edge;
+	const int left_edge = rect.pos.x + edge;
+	const int right_edge = rect.pos.x + rect.size.width - edge;
+	const int top_edge = rect.pos.y + edge;
+	const int bottom_edge = rect.pos.y + rect.size.height - edge;
+
+	int in_left = (p.x <= left_edge);
+	int in_right = (p.x >= right_edge);
+	int in_top = (p.y <= top_edge);
+	int in_bottom = (p.y >= bottom_edge);
+
+	if (!(in_left || in_right) || !(in_top || in_bottom))
+		return CORNER_NONE;
+
+	if (in_left && in_top)
 		return CORNER_TOPLEFT;
-	if (p.x >= (rect.pos.x + rect.size.width - wPreferences.hot_corner_edge) && p.y <= (rect.pos.y + wPreferences.hot_corner_edge))
+	if (in_right && in_top)
 		return CORNER_TOPRIGHT;
-	if (p.x <= (rect.pos.x + wPreferences.hot_corner_edge) && p.y >= (rect.pos.y + rect.size.height - wPreferences.hot_corner_edge))
+	if (in_left && in_bottom)
 		return CORNER_BOTTOMLEFT;
-	if (p.x >= (rect.pos.x + rect.size.width - wPreferences.hot_corner_edge) && p.y >= (rect.pos.y + rect.size.height - wPreferences.hot_corner_edge))
+	if (in_right && in_bottom)
 		return CORNER_BOTTOMRIGHT;
+
 	return CORNER_NONE;
 }
 
