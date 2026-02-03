@@ -495,15 +495,16 @@ static void paintItem(List * lPtr, int index)
 static void paintList(List * lPtr)
 {
 	W_Screen *scrPtr = lPtr->view->screen;
-	int i, lim;
+	int i, lim, itemCount;
 
 	if (!lPtr->view->flags.mapped)
 		return;
 
-	if (WMGetArrayItemCount(lPtr->items) > 0) {
-		if (lPtr->topItem + lPtr->fullFitLines + lPtr->flags.dontFitAll > WMGetArrayItemCount(lPtr->items)) {
+	itemCount = WMGetArrayItemCount(lPtr->items);
+	if (itemCount > 0) {
+		if (lPtr->topItem + lPtr->fullFitLines + lPtr->flags.dontFitAll > itemCount) {
 
-			lim = WMGetArrayItemCount(lPtr->items) - lPtr->topItem;
+			lim = itemCount - lPtr->topItem;
 			XClearArea(scrPtr->display, lPtr->view->window, 19,
 				   2 + lim * lPtr->itemHeight, lPtr->view->size.width - 21,
 				   lPtr->view->size.height - lim * lPtr->itemHeight - 3, False);
@@ -820,7 +821,7 @@ void WMSetListSelectionToRange(WMList * lPtr, WMRange range)
 
 void WMSelectAllListItems(WMList * lPtr)
 {
-	int i;
+	int i, itemCount;
 	WMListItem *item;
 
 	if (!lPtr->flags.allowMultipleSelection)
@@ -833,7 +834,8 @@ void WMSelectAllListItems(WMList * lPtr)
 	WMFreeArray(lPtr->selectedItems);
 	lPtr->selectedItems = WMCreateArrayWithArray(lPtr->items);
 
-	for (i = 0; i < WMGetArrayItemCount(lPtr->items); i++) {
+	itemCount = WMGetArrayItemCount(lPtr->items);
+	for (i = 0; i < itemCount; i++) {
 		item = WMGetFromArray(lPtr->items, i);
 		if (!item->selected) {
 			item->selected = 1;
@@ -859,10 +861,11 @@ void WMSelectAllListItems(WMList * lPtr)
  */
 static void unselectAllListItems(WMList * lPtr, WMListItem * exceptThis)
 {
-	int i;
+	int i, itemCount;
 	WMListItem *item;
 
-	for (i = 0; i < WMGetArrayItemCount(lPtr->items); i++) {
+	itemCount = WMGetArrayItemCount(lPtr->items);
+	for (i = 0; i < itemCount; i++) {
 		item = WMGetFromArray(lPtr->items, i);
 		if (item != exceptThis && item->selected) {
 			item->selected = 0;
