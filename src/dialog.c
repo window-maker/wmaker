@@ -1276,9 +1276,9 @@ void wShowInfoPanel(WScreen *scr)
 	panel->win = WMCreateWindow(scr->wmscreen, "info");
 	WMGetScaleBaseFromSystemFont(scr->wmscreen, &wmScaleWidth, &wmScaleHeight);
 #if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO2) && defined(DEBUG)
-	pwidth = WMScaleX(412);
+	pwidth = WMScaleX(432);
 #else
-	pwidth = WMScaleX(382);
+	pwidth = WMScaleX(392);
 #endif
 	pheight = WMScaleY(270);
 	WMResizeWidget(panel->win, pwidth, pheight);
@@ -1344,7 +1344,7 @@ void wShowInfoPanel(WScreen *scr)
 
 	panel->copyrL = WMCreateLabel(panel->win);
 	WMResizeWidget(panel->copyrL, WMScaleX(360), WMScaleY(60));
-	WMMoveWidget(panel->copyrL, WMScaleX(15), WMScaleY(210));
+	WMMoveWidget(panel->copyrL, WMScaleX(15), WMScaleY(215));
 	WMSetLabelTextAlignment(panel->copyrL, WALeft);
 
 	snprintf(buffer, sizeof(buffer), COPYRIGHT_TEXT, current_year);
@@ -1455,7 +1455,7 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, _("Xinerama: "));
 	{
 		char tmp[128];
-		snprintf(tmp, sizeof(tmp) - 1, _("%d head(s) found"), scr->xine_info.count);
+		snprintf(tmp, sizeof(tmp) - 1, scr->xine_info.count > 1 ? _("%d head(s) found") : _("%d head found"), scr->xine_info.count);
 		strbuf = wstrappend(strbuf, tmp);
 	}
 #endif
@@ -1471,9 +1471,9 @@ void wShowInfoPanel(WScreen *scr)
 
 	panel->infoL = WMCreateLabel(panel->win);
 #if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO2) && defined(DEBUG)
-	WMResizeWidget(panel->infoL, WMScaleX(380), WMScaleY(100));
+	WMResizeWidget(panel->infoL, WMScaleX(430), WMScaleY(105));
 #else
-	WMResizeWidget(panel->infoL, WMScaleX(350), WMScaleY(100));
+	WMResizeWidget(panel->infoL, WMScaleX(370), WMScaleY(105));
 #endif
 	WMMoveWidget(panel->infoL, WMScaleX(15), WMScaleY(115));
 	WMSetLabelText(panel->infoL, strbuf);
