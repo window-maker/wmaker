@@ -504,33 +504,6 @@ static int showIconFor(WMScreen *scrPtr, InspectorPanel *panel, const char *wm_i
 	return 0;
 }
 
-static int getBool(WMPropList *value)
-{
-	char *val;
-
-	if (!WMIsPLString(value))
-		return 0;
-
-	val = WMGetFromPLString(value);
-	if (val == NULL)
-		return 0;
-
-	if ((val[1] == '\0' &&
-	     (val[0] == 'y' || val[0] == 'Y' || val[0] == 'T' ||
-	      val[0] == 't' || val[0] == '1')) ||
-	     (strcasecmp(val, "YES") == 0 || strcasecmp(val, "TRUE") == 0)) {
-		return 1;
-	} else if ((val[1] == '\0' &&
-		   (val[0] == 'n' || val[0] == 'N' || val[0] == 'F' ||
-		    val[0] == 'f' || val[0] == '0')) ||
-		   (strcasecmp(val, "NO") == 0 || strcasecmp(val, "FALSE") == 0)) {
-		return 0;
-	} else {
-		wwarning(_("can't convert \"%s\" to boolean"), val);
-		return 0;
-	}
-}
-
 /* Will insert the attribute = value; pair in window's list,
  * if it's different from the defaults.
  * Defaults means either defaults database, or attributes saved
@@ -554,7 +527,7 @@ insertAttribute(WMPropList *dict, WMPropList *window, WMPropList *attr, WMPropLi
 		def_value = ((flags & IS_BOOLEAN) != 0) ? No : EmptyString;
 
 	if (flags & IS_BOOLEAN)
-		update = (getBool(value) != getBool(def_value));
+		update = (WMPLGetBool(value) != WMPLGetBool(def_value));
 	else
 		update = !WMIsPropListEqualTo(value, def_value);
 

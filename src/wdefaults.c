@@ -43,14 +43,13 @@
 #include "icon.h"
 #include "misc.h"
 
-#define APPLY_VAL(value, flag, attrib)	\
-    if (value) {attr->flag = getBool(attrib, value); \
-    if (mask) mask->flag = 1;}
+#define APPLY_VAL(value, flag, attrib) \
+	if (value) {attr->flag = WMPLGetBool(value); \
+	if (mask) mask->flag = 1;}
 
 /* Local stuff */
 
 /* type converters */
-static int getBool(WMPropList *, WMPropList *);
 static char *getString(WMPropList *, WMPropList *);
 static WMPropList *ANoTitlebar = NULL;
 static WMPropList *ANoResizebar;
@@ -632,38 +631,6 @@ void wDefaultPurgeInfo(const char *instance, const char *class)
 	wfree(buffer);
 	WMReleasePropList(key);
 	WMPLSetCaseSensitive(False);
-}
-
-/* --------------------------- Local ----------------------- */
-
-static int getBool(WMPropList * key, WMPropList * value)
-{
-	char *val;
-
-	if (!WMIsPLString(value)) {
-		wwarning(_("Wrong option format for key \"%s\". Should be %s."),
-			 WMGetFromPLString(key), "Boolean");
-		return 0;
-	}
-	val = WMGetFromPLString(value);
-
-	if ((val[1] == '\0' && (val[0] == 'y' || val[0] == 'Y' || val[0] == 'T' || val[0] == 't' || val[0] == '1'))
-	    || (strcasecmp(val, "YES") == 0 || strcasecmp(val, "TRUE") == 0)) {
-
-		return 1;
-	} else if ((val[1] == '\0'
-		    && (val[0] == 'n' || val[0] == 'N' || val[0] == 'F' || val[0] == 'f' || val[0] == '0'))
-		   || (strcasecmp(val, "NO") == 0 || strcasecmp(val, "FALSE") == 0)) {
-
-		return 0;
-	} else {
-		wwarning(_("can't convert \"%s\" to boolean"), val);
-		/* We return False if we can't convert to BOOLEAN.
-		 * This is because all options defaults to False.
-		 * -1 is not checked and thus is interpreted as True,
-		 * which is not good.*/
-		return 0;
-	}
 }
 
 /* WARNING: Do not free the value returned by this function!! */

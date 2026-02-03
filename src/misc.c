@@ -124,6 +124,44 @@ Bool wGetIconName(Display *dpy, Window win, char **iconname)
 	return False;
 }
 
+int WMStrEqual(const char *x, const char *y)
+{
+	if ((x == NULL) && (y == NULL))
+		return 1;
+
+	if ((x == NULL) || (y == NULL))
+		return 0;
+
+	return (strcmp(x, y) == 0);
+}
+
+int WMPLGetBool(WMPropList *value)
+{
+	char *val;
+
+	if (!WMIsPLString(value))
+		return 0;
+
+	val = WMGetFromPLString(value);
+	if (val == NULL)
+		return 0;
+
+	if ((val[1] == '\0' &&
+		 (val[0] == 'y' || val[0] == 'Y' || val[0] == 'T' ||
+		  val[0] == 't' || val[0] == '1')) ||
+		(strcasecmp(val, "YES") == 0 || strcasecmp(val, "TRUE") == 0)) {
+		return 1;
+	} else if ((val[1] == '\0' &&
+				(val[0] == 'n' || val[0] == 'N' || val[0] == 'F' ||
+				 val[0] == 'f' || val[0] == '0')) ||
+			   (strcasecmp(val, "NO") == 0 || strcasecmp(val, "FALSE") == 0)) {
+		return 0;
+	} else {
+		wwarning(_("can't convert \"%s\" to boolean"), val);
+		return 0;
+	}
+}
+
 static void eatExpose(void)
 {
 	XEvent event, foo;

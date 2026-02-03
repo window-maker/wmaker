@@ -2726,20 +2726,6 @@ WMagicNumber wWindowAddSavedState(const char *instance, const char *class,
 	return wstate;
 }
 
-static inline int is_same(const char *x, const char *y)
-{
-	if ((x == NULL) && (y == NULL))
-		return 1;
-
-	if ((x == NULL) || (y == NULL))
-		return 0;
-
-	if (strcmp(x, y) == 0)
-		return 1;
-	else
-		return 0;
-}
-
 WMagicNumber wWindowGetSavedState(Window win)
 {
 	char *instance, *class, *command = NULL;
@@ -2754,9 +2740,9 @@ WMagicNumber wWindowGetSavedState(Window win)
 
 	if (PropGetWMClass(win, &class, &instance)) {
 		while (wstate) {
-			if (is_same(instance, wstate->instance) &&
-			    is_same(class, wstate->class) &&
-			    is_same(command, wstate->command)) {
+			if (WMStrEqual(instance, wstate->instance) &&
+			    WMStrEqual(class, wstate->class) &&
+			    WMStrEqual(command, wstate->command)) {
 				break;
 			}
 			wstate = wstate->next;
