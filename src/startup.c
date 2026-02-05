@@ -41,9 +41,7 @@
 #ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
-#ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
-#endif
 #ifdef USE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
@@ -601,12 +599,15 @@ void StartUp(Bool defaultScreenOnly)
 	w_global.xext.randr.supported = XRRQueryExtension(dpy, &w_global.xext.randr.event_base, &j);
 #endif
 
-#ifdef KEEP_XKB_LOCK_STATUS
 	w_global.xext.xkb.supported = XkbQueryExtension(dpy, NULL, &w_global.xext.xkb.event_base, NULL, NULL, NULL);
+#ifdef KEEP_XKB_LOCK_STATUS
 	if (wPreferences.modelock && !w_global.xext.xkb.supported) {
 		wwarning(_("XKB is not supported. KbdModeLock is automatically disabled."));
 		wPreferences.modelock = 0;
 	}
+#else
+	if (!w_global.xext.xkb.supported)
+		wwarning(_("XKB is not supported."));
 #endif
 
 	if (defaultScreenOnly)

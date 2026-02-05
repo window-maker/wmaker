@@ -32,9 +32,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
-#endif				/* KEEP_XKB_LOCK_STATUS */
 #ifdef USE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
@@ -663,9 +661,11 @@ WScreen *wScreenInit(int screen_number)
 	/* Only GroupLock doesn't work correctly in my system since right-alt
 	 * can change mode while holding it too - ]d
 	 */
-	if (w_global.xext.xkb.supported) {
-		XkbSelectEvents(dpy, XkbUseCoreKbd, XkbStateNotifyMask, XkbStateNotifyMask);
-	}
+	if (w_global.xext.xkb.supported)
+		XkbSelectEvents(dpy, XkbUseCoreKbd, XkbIndicatorStateNotifyMask|XkbNewKeyboardNotifyMask, XkbIndicatorStateNotifyMask|XkbNewKeyboardNotifyMask);
+#else
+	if (w_global.xext.xkb.supported)
+		XkbSelectEvents(dpy, XkbUseCoreKbd, XkbNewKeyboardNotifyMask, XkbNewKeyboardNotifyMask);
 #endif				/* KEEP_XKB_LOCK_STATUS */
 
 #ifdef USE_RANDR

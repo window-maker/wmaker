@@ -1303,6 +1303,29 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 	}
 }
 
+void wReadKeybindings(WScreen *scr, WMPropList *dict)
+{
+	WDefaultEntry *entry;
+	unsigned int i;
+	void *tdata;
+
+	for (i = 0; i < wlengthof(optionList); i++) {
+		entry = &optionList[i];
+		if (entry->convert == getKeybind) {
+			WMPropList *plvalue = NULL;
+			if (dict)
+				plvalue = WMGetFromPLDictionary(dict, entry->plkey);
+			if (!plvalue)
+				plvalue = entry->plvalue;
+			if (plvalue) {
+				int ok = (*entry->convert)(scr, entry, plvalue, entry->addr, &tdata);
+				if (ok && entry->update)
+					(*entry->update)(scr, entry, tdata, entry->extra_data);
+				}
+			}
+	}
+}
+
 void wDefaultUpdateIcons(WScreen *scr)
 {
 	WAppIcon *aicon = scr->app_icon_list;

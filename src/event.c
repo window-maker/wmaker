@@ -49,9 +49,7 @@
 #include <X11/extensions/Xrandr.h>
 #endif
 
-#ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
-#endif				/* KEEP_XKB_LOCK_STATUS */
 
 #include "WindowMaker.h"
 #include "window.h"
@@ -103,7 +101,9 @@ static void handleKeyPress(XEvent *event);
 static void handleFocusIn(XEvent *event);
 static void handleMotionNotify(XEvent *event);
 static void handleVisibilityNotify(XEvent *event);
+#ifdef HAVE_INOTIFY
 static void handle_inotify_events(void);
+#endif
 static void handle_selection_request(XSelectionRequestEvent *event);
 static void handle_selection_clear(XSelectionClearEvent *event);
 static void wdelete_death_handler(WMagicNumber id);
@@ -569,11 +569,26 @@ static void handleExtensions(XEvent * event)
 		handleShapeNotify(event);
 	}
 #endif
+	if (w_global.xext.xkb.supported && event->type == w_global.xext.xkb.event_base) {
+		XkbEvent *xkbevent = (XkbEvent *) event;
+
+		if (xkbevent->any.xkb_type == XkbNewKeyboardNotify) {
+			int j;
+			WScreen *scr;
+
+			for (j = 0; j < w_global.screen_count; j++) {
+				scr = wScreenWithNumber(j);
+				wReadKeybindings(scr, w_global.domain.wmaker->dictionary);
+			}
+		}
 #ifdef KEEP_XKB_LOCK_STATUS
-	if (wPreferences.modelock && (event->type == w_global.xext.xkb.event_base)) {
-		handleXkbIndicatorStateNotify((XkbEvent *) event);
+		else {
+			if (wPreferences.modelock && (xkbevent->any.xkb_type == XkbIndicatorStateNotify)) {
+				handleXkbIndicatorStateNotify((XkbEvent *) event);
+			}
+		}
+#endif /*KEEP_XKB_LOCK_STATUS */
 	}
-#endif				/*KEEP_XKB_LOCK_STATUS */
 #ifdef USE_RANDR
 	if (w_global.xext.randr.supported && event->type == (w_global.xext.randr.event_base + RRScreenChangeNotify)) {
 		/* From xrandr man page: "Clients must call back into Xlib using
@@ -1275,6 +1290,7 @@ static void handleXkbIndicatorStateNotify(XkbEvent *event)
 	WScreen *scr;
 	XkbStateRec staterec;
 	int i;
+	(void) event;
 
 	for (i = 0; i < w_global.screen_count; i++) {
 		scr = wScreenWithNumber(i);

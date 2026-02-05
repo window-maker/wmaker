@@ -619,12 +619,10 @@ extern struct wmaker_global_variables {
 		} shape;
 #endif
 
-#ifdef KEEP_XKB_LOCK_STATUS
 		struct {
 			Bool supported;
 			int event_base;
 		} xkb;
-#endif
 
 #ifdef USE_RANDR
 		struct {
