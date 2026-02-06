@@ -497,11 +497,6 @@ void WMSetTextFieldAlignment(WMTextField * tPtr, WMAlignment alignment)
 
 	tPtr->flags.alignment = alignment;
 
-	if (alignment != WALeft) {
-		wwarning(_("only left alignment is supported in textfields"));
-		return;
-	}
-
 	if (tPtr->view->flags.realized) {
 		paintTextField(tPtr);
 	}
