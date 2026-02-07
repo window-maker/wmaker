@@ -681,6 +681,15 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		return NULL;
 	}
 
+	/* Some applications create placeholder windows with 1x1 size
+	 * (e.g. VirtualBox internal windows). Don't manage those initial
+	 * 1x1 windows — wait for a proper ConfigureNotify/MapRequest with
+	 * a real size. */
+	if (wattribs.width <= 1 && wattribs.height <= 1) {
+		XUngrabServer(dpy);
+		return NULL;
+	}
+
 	wm_state = PropGetWindowState(window);
 
 	/* if it's startup and the window is unmapped, don't manage it */
