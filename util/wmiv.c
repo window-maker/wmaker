@@ -1858,7 +1858,7 @@ int main(int argc, char **argv)
 
 	merge_with_background(img);
 
-	win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 0, 0, 1, 1, 0, 0, BlackPixel(dpy, screen_num));
+	win = XCreateSimpleWindow(dpy, DefaultRootWindow(dpy), 0, 0, 10, 10, 0, 0, BlackPixel(dpy, screen_num));
 	XSelectInput(dpy, win, KeyPressMask|StructureNotifyMask|ExposureMask|ButtonPressMask|ButtonReleaseMask|PointerMotionMask|FocusChangeMask|PropertyChangeMask);
 
 	size_hints = XAllocSizeHints();
