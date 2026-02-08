@@ -1394,7 +1394,7 @@ static void handleButtonExpose(WObjDescriptor * desc, XEvent * event)
 
 #ifdef XKB_BUTTON_HINT
 	if (button == fwin->language_button) {
-		if (wPreferences.modelock)
+		if (!fwin->flags.hide_language_button)
 			paintButton(button, fwin->title_texture[fwin->flags.state],
 				    WMColorPixel(fwin->title_color[fwin->flags.state]),
 				    fwin->languagebutton_image, False);

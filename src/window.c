@@ -1437,7 +1437,8 @@ WWindow *wManageInternalWindow(WScreen *scr, Window window, Window owner,
 	foo = WFF_RIGHT_BUTTON | WFF_BORDER;
 	foo |= WFF_TITLEBAR;
 #ifdef XKB_BUTTON_HINT
-	foo |= WFF_LANGUAGE_BUTTON;
+	if (wPreferences.modelock)
+		foo |= WFF_LANGUAGE_BUTTON;
 #endif
 
 	wwin->frame = wFrameWindowCreate(scr, WMFloatingLevel,
