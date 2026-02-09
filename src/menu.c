@@ -267,6 +267,7 @@ WMenuEntry *wMenuInsertCallback(WMenu *menu, int index, const char *text,
 	entry = wmalloc(sizeof(WMenuEntry));
 	entry->flags.enabled = 1;
 	entry->text = wstrdup(text);
+	entry->icon = NULL;
 	entry->cascade = -1;
 	entry->clientdata = clientdata;
 	entry->callback = callback;
@@ -368,6 +369,9 @@ void wMenuRemoveItem(WMenu * menu, int index)
 
 	if (menu->entries[index]->text)
 		wfree(menu->entries[index]->text);
+
+	if (menu->entries[index]->icon)
+		wPixmapDestroy(menu->entries[index]->icon);
 
 	if (menu->entries[index]->rtext)
 		wfree(menu->entries[index]->rtext);
@@ -499,6 +503,10 @@ void wMenuRealize(WMenu * menu)
 		text = menu->entries[i]->text;
 		width = WMWidthOfString(scr->menu_entry_font, text, strlen(text)) + 10;
 
+		if (wPreferences.window_list_app_icons && menu->entries[i]->icon) {
+			width += menu->entries[i]->icon->width + 4;
+		}
+
 		if (menu->entries[i]->flags.indicator) {
 			width += MENU_INDICATOR_SPACE;
 		}
@@ -561,6 +569,9 @@ void wMenuDestroy(WMenu * menu, int recurse)
 		for (i = 0; i < menu->entry_no; i++) {
 
 			wfree(menu->entries[i]->text);
+
+			if (menu->entries[i]->icon)
+				wPixmapDestroy(menu->entries[i]->icon);
 
 			if (menu->entries[i]->rtext)
 				wfree(menu->entries[i]->rtext);
@@ -710,6 +721,26 @@ static void paintEntry(WMenu * menu, int index, int selected)
 	x = 5;
 	if (entry->flags.indicator)
 		x += MENU_INDICATOR_SPACE + 2;
+
+	if (wPreferences.window_list_app_icons && entry->icon && entry->icon->image != None) {
+		int ix = x;
+		int iy = y + (h - entry->icon->height) / 2;
+
+		if (entry->icon->mask != None) {
+			XSetClipMask(dpy, scr->copy_gc, entry->icon->mask);
+			XSetClipOrigin(dpy, scr->copy_gc, ix, iy);
+		} else {
+			XSetClipMask(dpy, scr->copy_gc, None);
+			XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
+		}
+
+		XCopyArea(dpy, entry->icon->image, win, scr->copy_gc,
+			  0, 0, entry->icon->width, entry->icon->height, ix, iy);
+		XSetClipMask(dpy, scr->copy_gc, None);
+		XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
+
+		x += entry->icon->width + 4;
+	}
 
 	WMDrawString(scr->wmscreen, win, color, scr->menu_entry_font,
 		     x, 3 + y + wPreferences.menu_text_clearance, entry->text, strlen(entry->text));

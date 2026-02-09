@@ -48,6 +48,50 @@ static int initialized = 0;
 static void observer(void *self, WMNotification * notif);
 static void wsobserver(void *self, WMNotification * notif);
 
+static WPixmap *switchMenuIconForWindow(WScreen *scr, WWindow *wwin)
+{
+	RImage *image = NULL;
+	WPixmap *pix;
+	WApplication *wapp;
+	int max_size;
+
+	if (!scr || !wwin)
+		return NULL;
+
+	max_size = WMFontHeight(scr->menu_entry_font) + 2;
+	if (max_size < 12)
+		max_size = 12;
+
+	/* Prefer the actual appicon image when available */
+	wapp = wApplicationOf(wwin->main_window);
+	if (wapp && wapp->app_icon && wapp->app_icon->icon && wapp->app_icon->icon->file_image) {
+		image = RRetainImage(wapp->app_icon->icon->file_image);
+	}
+
+	/* Fall back to _NET_WM_ICON, then the default icon */
+	if (!image && !WFLAGP(wwin, always_user_icon) && wwin->net_icon_image)
+		image = RRetainImage(wwin->net_icon_image);
+	if (!image)
+		image = get_icon_image(scr, wwin->wm_instance, wwin->wm_class, max_size);
+
+	if (!image)
+		return NULL;
+
+	image = wIconValidateIconSize(image, max_size);
+	if (!image)
+		return NULL;
+
+	pix = wmalloc(sizeof(WPixmap));
+	memset(pix, 0, sizeof(WPixmap));
+	RConvertImageMask(scr->rcontext, image, &pix->image, &pix->mask, 128);
+	pix->width = image->width;
+	pix->height = image->height;
+	pix->depth = scr->w_depth;
+
+	RReleaseImage(image);
+	return pix;
+}
+
 /*
  * FocusWindow
  *
@@ -216,6 +260,8 @@ void UpdateSwitchMenu(WScreen * scr, WWindow * wwin, int action)
 		entry = wMenuInsertCallback(switchmenu, idx, t, focusWindow, wwin);
 		wfree(t);
 
+		entry->icon = switchMenuIconForWindow(scr, wwin);
+
 		entry->flags.indicator = 1;
 		entry->rtext = wmalloc(MAX_WORKSPACENAME_WIDTH + 8);
 		if (IS_OMNIPRESENT(wwin))
@@ -273,6 +319,7 @@ void UpdateSwitchMenu(WScreen * scr, WWindow * wwin, int action)
 					if (entry->rtext) {
 						int idx = -1;
 						char *t, *rt;
+						WPixmap *ipix;
 						int it, ion;
 
 						if (IS_OMNIPRESENT(wwin)) {
@@ -285,6 +332,8 @@ void UpdateSwitchMenu(WScreen * scr, WWindow * wwin, int action)
 
 						rt = entry->rtext;
 						entry->rtext = NULL;
+						ipix = entry->icon;
+						entry->icon = NULL;
 						t = entry->text;
 						entry->text = NULL;
 
@@ -300,6 +349,7 @@ void UpdateSwitchMenu(WScreen * scr, WWindow * wwin, int action)
 						entry = wMenuInsertCallback(switchmenu, idx, t, focusWindow, wwin);
 						wfree(t);
 						entry->rtext = rt;
+						entry->icon = ipix;
 						entry->flags.indicator = 1;
 						entry->flags.indicator_type = it;
 						entry->flags.indicator_on = ion;

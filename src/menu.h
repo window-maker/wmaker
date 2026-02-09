@@ -46,6 +46,7 @@ typedef struct WMenuEntry {
 	int order;
 	char *text;			       /* entry text */
 	char *rtext;		       /* text to show in the right part */
+	struct WPixmap *icon;		/* optional icon displayed before the text */
 	void (*callback)(struct WMenu *menu, struct WMenuEntry *entry);
 	void (*free_cdata)(void *data);    /* proc to be used to free clientdata */
 	void *clientdata;		       /* data to pass to callback */

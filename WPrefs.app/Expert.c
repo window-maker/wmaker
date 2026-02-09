@@ -78,6 +78,9 @@ static struct expert_option {
 	{ N_("Ignore minimized windows when cycling."),
 	  /* default: */ False, OPTION_WMAKER, "CycleIgnoreMinimized" },
 
+	{ N_("Show app icons in window list."),
+	  /* default: */ False, OPTION_WMAKER, "WindowListAppIcons" },
+
 	{ N_("Show switch panel when cycling windows."),
 	  /* default: */ True, OPTION_WMAKER_ARRAY, "SwitchPanelImages" },
 

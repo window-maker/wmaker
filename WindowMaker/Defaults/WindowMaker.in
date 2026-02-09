@@ -254,4 +254,5 @@
 	CycleActiveHeadOnly = NO;
 	CycleAllWorkspaces = NO;
 	CycleIgnoreMinimized = NO;
+	WindowListAppIcons = NO;
 }

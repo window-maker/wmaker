@@ -479,6 +479,7 @@ extern struct WPreferences {
 	int hot_corner_delay;		   /* Delay after which the hot corner is triggered */
 	int hot_corner_edge;		   /* Hot corner edge size */
 	char *hot_corner_actions[4];	   /* Action of each corner */
+	char window_list_app_icons;        /* Show app icons in window list */
 
 	struct {
 #ifdef USE_ICCCM_WMREPLACE

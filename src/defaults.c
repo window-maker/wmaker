@@ -534,6 +534,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.hot_corner_edge, getInt, NULL, NULL, NULL},
 	{"HotCornerActions", "(\"None\", \"None\", \"None\", \"None\")", &wPreferences,
 	    NULL, getPropList, setHotCornerActions, NULL, NULL},
+	{"WindowListAppIcons", "NO", NULL,
+		&wPreferences.window_list_app_icons, getBool, NULL, NULL, NULL},
 
 	/* style options */
 
