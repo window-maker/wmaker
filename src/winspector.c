@@ -55,7 +55,11 @@
 #define UPDATE_TEXT_FIELD	2
 #define REVERT_TO_DEFAULT	4
 #define PWIDTH			290
+#ifdef XKB_BUTTON_HINT
+#define PHEIGHT			380
+#else
 #define PHEIGHT			360
+#endif
 #define UNDEFINED_POS		0xffffff
 #define UPDATE_DEFAULTS		1
 #define IS_BOOLEAN		2
@@ -1315,7 +1319,11 @@ static void create_tab_window_advanced(WWindow *wwin, InspectorPanel *panel, int
 	panel->moreFrm = WMCreateFrame(panel->win);
 	WMSetFrameTitle(panel->moreFrm, _("Advanced"));
 	WMMoveWidget(panel->moreFrm, 15, 45);
+#ifdef XKB_BUTTON_HINT
+	WMResizeWidget(panel->moreFrm, frame_width, 285);
+#else
 	WMResizeWidget(panel->moreFrm, frame_width, 265);
+#endif
 
 	for (i = 0; i < wlengthof(advanced_option); i++) {
 		int is_userdef, flag;
