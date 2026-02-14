@@ -24,8 +24,9 @@
 #include <WINGs/WINGs.h>
 #include <WINGs/WUtil.h>
 #include <inttypes.h>
+#include <stdnoreturn.h>
 
-void wAbort()
+noreturn void wAbort(void)
 {
 	exit(0);
 }
@@ -40,7 +41,7 @@ void show(WMWidget * self, void *data)
 	WMSetLabelText(l, buf);
 }
 
-void quit(WMWidget * self, void *data)
+noreturn void quit(WMWidget * self, void *data)
 {
 	(void) self;
 	(void) data;
