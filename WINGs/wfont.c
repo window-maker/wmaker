@@ -174,6 +174,10 @@ WMFont *WMCreateFont(WMScreen * scrPtr, const char *fontName)
 	pango_layout_set_font_description(layout, description);
 
 	font->layout = layout;
+
+	pango_font_description_free(description);
+	g_object_unref(context);
+	FcPatternDestroy(pattern);
 #endif
 
 	assert(WMHashInsert(scrPtr->fontCache, font->name, font) == NULL);
@@ -197,6 +201,11 @@ void WMReleaseFont(WMFont * font)
 	font->refCount--;
 	if (font->refCount < 1) {
 		XftFontClose(font->screen->display, font->font);
+#ifdef USE_PANGO
+		if (font->layout) {
+			g_object_unref(font->layout);
+		}
+#endif
 		if (font->name) {
 			WMHashRemove(font->screen->fontCache, font->name);
 			wfree(font->name);
@@ -331,7 +340,7 @@ void WMDrawString(WMScreen * scr, Drawable d, WMColor * color, WMFont * font, in
 
 #ifdef USE_PANGO
 	previous_text = pango_layout_get_text(font->layout);
-	if ((previous_text == NULL) || (strcmp(text, previous_text) != 0))
+	if ((previous_text == NULL) || (strncmp(text, previous_text, length) != 0) || previous_text[length] != '\0')
 		pango_layout_set_text(font->layout, text, length);
 	pango_xft_render_layout(scr->xftdraw, &xftcolor, font->layout, x * PANGO_SCALE, y * PANGO_SCALE);
 #else
@@ -369,7 +378,7 @@ WMDrawImageString(WMScreen * scr, Drawable d, WMColor * color, WMColor * backgro
 
 #ifdef USE_PANGO
 	previous_text = pango_layout_get_text(font->layout);
-	if ((previous_text == NULL) || (strcmp(text, previous_text) != 0))
+	if ((previous_text == NULL) || (strncmp(text, previous_text, length) != 0) || previous_text[length] != '\0')
 		pango_layout_set_text(font->layout, text, length);
 	pango_xft_render_layout(scr->xftdraw, &textColor, font->layout, x * PANGO_SCALE, y * PANGO_SCALE);
 #else
