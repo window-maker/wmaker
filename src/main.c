@@ -326,7 +326,8 @@ void ExecuteShellCommand(WScreen *scr, const char *command)
 #endif
 		execl(shell, shell, "-c", command, NULL);
 		werror("could not execute %s -c %s", shell, command);
-		Exit(-1);
+		/* exec failed in child -- exit immediately without running parent cleanup */
+		_exit(127);
 	} else if (pid < 0) {
 		werror("cannot fork a new process");
 	} else {
@@ -377,10 +378,10 @@ Bool RelaunchWindow(WWindow *wwin)
 		setsid();
 #endif
 		/* argv is not null-terminated */
-		char **a = (char **) malloc(argc + 1);
+		char **a = malloc((argc + 1) * sizeof(char *));
 		if (! a) {
 			werror("out of memory trying to relaunch the application");
-			Exit(-1);
+			_exit(127);
 		}
 
 		int i;
@@ -389,7 +390,8 @@ Bool RelaunchWindow(WWindow *wwin)
 		a[i] = NULL;
 
 		execvp(a[0], a);
-		Exit(-1);
+		/* exec failed in child -- exit immediately */
+		_exit(127);
 	} else if (pid < 0) {
 		werror("cannot fork a new process");
 
