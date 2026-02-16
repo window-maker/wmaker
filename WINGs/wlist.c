@@ -1,5 +1,7 @@
 
 #include "WINGsP.h"
+#include <ctype.h>
+#include <strings.h>
 
 const char *WMListDidScrollNotification = "WMListDidScrollNotification";
 const char *WMListSelectionDidChangeNotification = "WMListSelectionDidChangeNotification";
@@ -27,10 +29,14 @@ typedef struct W_List {
 	WMHandlerID *idleID;	/* for updating the scroller after adding elements */
 
 	WMHandlerID *selectID;	/* for selecting items in list while scrolling */
+	WMHandlerID *typeaheadID;	/* for clearing typeahead buffer */
 
 	WMScroller *vScroller;
 
 	Pixmap doubleBuffer;
+
+	char *typeahead;
+	int typeaheadLen;
 
 	struct {
 		unsigned int allowMultipleSelection:1;
@@ -48,6 +54,7 @@ typedef struct W_List {
 #define DEFAULT_HEIGHT	150
 
 #define SCROLL_DELAY    100
+#define TYPEAHEAD_CLEAR_DELAY 700
 
 static void destroyList(List * lPtr);
 static void paintList(List * lPtr);
@@ -62,6 +69,8 @@ static void scrollBackwardSelecting(void *data);
 static void vScrollCallBack(WMWidget * scroller, void *self);
 
 static void toggleItemSelection(WMList * lPtr, int index);
+static void jumpToFirstItemWithPrefix(WMList * lPtr, const char *prefix, int prefixLen);
+static void typeaheadTimeout(void *data);
 
 static void updateGeometry(WMList * lPtr);
 static void didResizeList(W_ViewDelegate * self, WMView * view);
@@ -113,6 +122,9 @@ WMList *WMCreateList(WMWidget * parent)
 	W_Screen *scrPtr = W_VIEW(parent)->screen;
 
 	lPtr = wmalloc(sizeof(List));
+	lPtr->typeahead = NULL;
+	lPtr->typeaheadLen = 0;
+	lPtr->typeaheadID = NULL;
 
 	lPtr->widgetClass = WC_List;
 
@@ -129,7 +141,8 @@ WMList *WMCreateList(WMWidget * parent)
 			     | ClientMessageMask, handleEvents, lPtr);
 
 	WMCreateEventHandler(lPtr->view, ButtonPressMask | ButtonReleaseMask
-			     | EnterWindowMask | LeaveWindowMask | ButtonMotionMask, handleActionEvents, lPtr);
+			     | EnterWindowMask | LeaveWindowMask | ButtonMotionMask
+			     | KeyPressMask, handleActionEvents, lPtr);
 
 	lPtr->itemHeight = WMFontHeight(scrPtr->normalFont) + 1;
 
@@ -287,6 +300,14 @@ void WMClearList(WMList * lPtr)
 	if (lPtr->selectID) {
 		WMDeleteTimerHandler(lPtr->selectID);
 		lPtr->selectID = NULL;
+	}
+	if (lPtr->typeaheadID) {
+		WMDeleteTimerHandler(lPtr->typeaheadID);
+		lPtr->typeaheadID = NULL;
+	}
+	if (lPtr->typeahead) {
+		lPtr->typeahead[0] = '\0';
+		lPtr->typeaheadLen = 0;
 	}
 	if (lPtr->view->flags.realized) {
 		updateScroller(lPtr);
@@ -923,6 +944,85 @@ static void toggleItemSelection(WMList * lPtr, int index)
 	}
 }
 
+static int findItemWithPrefix(List * lPtr, const char *prefix, int prefixLen)
+{
+	if (prefixLen <= 0)
+		return -1;
+
+	int i, itemCount;
+
+	itemCount = WMGetArrayItemCount(lPtr->items);
+	for (i = 0; i < itemCount; i++) {
+		WMListItem *item = WMGetFromArray(lPtr->items, i);
+
+		if (!item || !item->text || item->text[0] == '\0')
+			continue;
+		if (strncasecmp(item->text, prefix, prefixLen) == 0)
+			return i;
+	}
+
+	return -1;
+}
+
+static void jumpToFirstItemWithPrefix(WMList * lPtr, const char *prefix, int prefixLen)
+{
+	int index, oldTop, visibleCount;
+
+	index = findItemWithPrefix(lPtr, prefix, prefixLen);
+	if (index < 0)
+		return;
+
+	if (lPtr->flags.allowMultipleSelection) {
+		WMRange range;
+
+		range.position = index;
+		range.count = 1;
+		WMSetListSelectionToRange(lPtr, range);
+	} else {
+		WMSelectListItem(lPtr, index);
+		/* Trigger action callback */
+		if (lPtr->action)
+			(*lPtr->action) (lPtr, lPtr->clientData);
+	}
+
+	visibleCount = lPtr->fullFitLines + lPtr->flags.dontFitAll;
+	if (visibleCount < 1)
+		visibleCount = 1;
+
+	oldTop = lPtr->topItem;
+	if (index < lPtr->topItem) {
+		lPtr->topItem = index;
+	} else {
+		if (lPtr->flags.dontFitAll) {
+			if (lPtr->fullFitLines <= 0) {
+				lPtr->topItem = index;
+			} else {
+				int lastFullyVisible = lPtr->topItem + lPtr->fullFitLines - 1;
+				if (index > lastFullyVisible)
+					lPtr->topItem = index - lPtr->fullFitLines + 1;
+			}
+		} else if (index >= lPtr->topItem + visibleCount) {
+			lPtr->topItem = index - visibleCount + 1;
+		}
+	}
+	if (lPtr->topItem < 0)
+		lPtr->topItem = 0;
+
+	if (lPtr->view->flags.realized && lPtr->topItem != oldTop)
+		updateScroller(lPtr);
+}
+
+static void typeaheadTimeout(void *data)
+{
+	List *lPtr = (List *) data;
+
+	lPtr->typeaheadID = NULL;
+	if (lPtr->typeahead) {
+		lPtr->typeahead[0] = '\0';
+		lPtr->typeaheadLen = 0;
+	}
+}
+
 static void handleActionEvents(XEvent * event, void *data)
 {
 	List *lPtr = (List *) data;
@@ -962,6 +1062,7 @@ static void handleActionEvents(XEvent * event, void *data)
 			WMDeleteTimerHandler(lPtr->selectID);
 			lPtr->selectID = NULL;
 		}
+		WMSetFocusToWidget(lPtr);
 		break;
 
 	case LeaveNotify:
@@ -973,6 +1074,9 @@ static void handleActionEvents(XEvent * event, void *data)
 				lPtr->selectID = WMAddTimerHandler(SCROLL_DELAY, scrollBackwardSelecting, lPtr);
 			}
 		}
+		WMWidget *parentWidget = WMWidgetOfView(lPtr->view->parent);
+		if (parentWidget)
+			WMSetFocusToWidget(parentWidget);
 		break;
 
 	case ButtonPress:
@@ -1079,6 +1183,381 @@ static void handleActionEvents(XEvent * event, void *data)
 			prevItem = tmp;
 		}
 		break;
+
+	case KeyPress:
+		char buffer[16];
+		KeySym ksym;
+		Status status;
+		int len;
+		WMScreen *scr = lPtr->view->screen;
+		XWindowAttributes wattr;
+
+		if (event->xkey.state & (ControlMask | Mod1Mask))
+			break;
+
+		if (!(XGetWindowAttributes(scr->display, lPtr->view->window, &wattr) && wattr.map_state == IsViewable))
+			break;
+
+		len = W_LookupString(lPtr->view, &event->xkey, buffer, (int)sizeof(buffer) - 1, &ksym, &status);
+		if (len < 0)
+			break;
+		if (len > 0)
+			buffer[len] = '\0';
+
+		/* Handle navigation keys */
+		switch (ksym) {
+		case XK_Up: {
+			int newRow;
+			int itemCount = WMGetArrayItemCount(lPtr->items);
+			int cur = WMGetListSelectedItemRow(lPtr);
+
+			if (lPtr->flags.allowMultipleSelection && WMGetArrayItemCount(lPtr->selectedItems) > 0) {
+				WMListItem *lastSel = WMGetFromArray(lPtr->selectedItems, WMGetArrayItemCount(lPtr->selectedItems) - 1);
+				if (lastSel)
+					cur = WMGetFirstInArray(lPtr->items, lastSel);
+			}
+
+			if (cur == WLNotFound)
+				cur = lPtr->topItem;
+			newRow = cur - 1;
+			if (newRow < 0)
+				newRow = 0;
+
+			if (newRow != cur && itemCount > 0) {
+				if (lPtr->flags.allowMultipleSelection) {
+					if (event->xkey.state & ShiftMask) {
+						WMRange range;
+						int anchor = WMGetListSelectedItemRow(lPtr);
+						if (anchor == WLNotFound || WMGetArrayItemCount(lPtr->selectedItems) == 0) {
+							anchor = cur;
+						}
+
+						range.position = anchor;
+						if (newRow >= anchor)
+							range.count = newRow - anchor + 1;
+						else
+							range.count = newRow - anchor - 1;
+						WMSetListSelectionToRange(lPtr, range);
+					} else {
+						WMRange range = { .position = newRow, .count = 1 };
+						WMSetListSelectionToRange(lPtr, range);
+						lastClicked = newRow;
+					}
+				} else {
+					WMSelectListItem(lPtr, newRow);
+					lastClicked = newRow;
+				}
+
+				/* Ensure visibility */
+				if (newRow < lPtr->topItem) {
+					lPtr->topItem = newRow;
+					if (lPtr->view->flags.realized)
+						updateScroller(lPtr);
+				}
+				/* Trigger action callback */
+				if (lPtr->action)
+					(*lPtr->action) (lPtr, lPtr->clientData);
+			}
+			break;
+		}
+		case XK_Down: {
+			int newRow;
+			int itemCount = WMGetArrayItemCount(lPtr->items);
+			int cur = WMGetListSelectedItemRow(lPtr);
+
+			if (lPtr->flags.allowMultipleSelection && WMGetArrayItemCount(lPtr->selectedItems) > 0) {
+				WMListItem *lastSel = WMGetFromArray(lPtr->selectedItems, WMGetArrayItemCount(lPtr->selectedItems) - 1);
+				if (lastSel)
+					cur = WMGetFirstInArray(lPtr->items, lastSel);
+			}
+
+			if (cur == WLNotFound)
+				cur = lPtr->topItem;
+			newRow = cur + 1;
+			if (newRow >= itemCount)
+				newRow = itemCount - 1;
+
+			if (newRow != cur && itemCount > 0) {
+				if (lPtr->flags.allowMultipleSelection) {
+					if (event->xkey.state & ShiftMask) {
+						WMRange range;
+						int anchor = WMGetListSelectedItemRow(lPtr);
+						if (anchor == WLNotFound || WMGetArrayItemCount(lPtr->selectedItems) == 0) {
+							anchor = cur;
+						}
+
+						range.position = anchor;
+						if (newRow >= anchor)
+							range.count = newRow - anchor + 1;
+						else
+							range.count = newRow - anchor - 1;
+						WMSetListSelectionToRange(lPtr, range);
+					} else {
+						WMRange range = { .position = newRow, .count = 1 };
+						WMSetListSelectionToRange(lPtr, range);
+						lastClicked = newRow;
+					}
+				} else {
+					WMSelectListItem(lPtr, newRow);
+					lastClicked = newRow;
+				}
+
+				/* Ensure visibility */
+				if (newRow > (lPtr->topItem + lPtr->fullFitLines - 1)) {
+					lPtr->topItem = newRow - lPtr->fullFitLines + 1;
+					if (lPtr->topItem < 0)
+						lPtr->topItem = 0;
+					/* Ensure we don't scroll past the end */
+					if (lPtr->topItem + lPtr->fullFitLines > itemCount)
+						lPtr->topItem = itemCount - lPtr->fullFitLines;
+					if (lPtr->topItem < 0)
+						lPtr->topItem = 0;
+					if (lPtr->view->flags.realized)
+						updateScroller(lPtr);
+				}
+
+				/* Trigger action callback */
+				if (lPtr->action)
+					(*lPtr->action) (lPtr, lPtr->clientData);
+			}
+			break;
+		}
+		case XK_Page_Up: {
+			int newRow;
+			int page = lPtr->fullFitLines > 0 ? lPtr->fullFitLines : 1;
+			int cur = WMGetListSelectedItemRow(lPtr);
+
+			if (cur == WLNotFound)
+				cur = lPtr->topItem;
+			newRow = cur - page;
+			if (newRow < 0)
+				newRow = 0;
+
+			if (newRow != cur) {
+				if (lPtr->flags.allowMultipleSelection) {
+					if (event->xkey.state & ShiftMask) {
+						WMRange range;
+						int anchor = WMGetListSelectedItemRow(lPtr);
+						if (anchor == WLNotFound || WMGetArrayItemCount(lPtr->selectedItems) == 0) {
+							anchor = cur;
+						}
+
+						range.position = anchor;
+						if (newRow >= anchor)
+							range.count = newRow - anchor + 1;
+						else
+							range.count = newRow - anchor - 1;
+						WMSetListSelectionToRange(lPtr, range);
+					} else {
+						WMRange range = { .position = newRow, .count = 1 };
+						WMSetListSelectionToRange(lPtr, range);
+						lastClicked = newRow;
+					}
+				} else {
+					WMSelectListItem(lPtr, newRow);
+					lastClicked = newRow;
+				}
+				if (newRow < lPtr->topItem) {
+					lPtr->topItem = newRow;
+					if (lPtr->view->flags.realized)
+						updateScroller(lPtr);
+				}
+				/* Trigger action callback */
+				if (lPtr->action)
+					(*lPtr->action) (lPtr, lPtr->clientData);
+			}
+			break;
+		}
+		case XK_Page_Down: {
+			int newRow;
+			int page = lPtr->fullFitLines > 0 ? lPtr->fullFitLines : 1;
+			int itemCount = WMGetArrayItemCount(lPtr->items);
+			int cur = WMGetListSelectedItemRow(lPtr);
+
+			if (cur == WLNotFound)
+				cur = lPtr->topItem;
+			newRow = cur + page;
+			if (newRow >= itemCount)
+				newRow = itemCount - 1;
+
+			if (newRow != cur && itemCount > 0) {
+				if (lPtr->flags.allowMultipleSelection) {
+					if (event->xkey.state & ShiftMask) {
+						WMRange range;
+						int anchor = WMGetListSelectedItemRow(lPtr);
+						if (anchor == WLNotFound || WMGetArrayItemCount(lPtr->selectedItems) == 0) {
+							anchor = cur;
+						}
+
+						range.position = anchor;
+						if (newRow >= anchor)
+							range.count = newRow - anchor + 1;
+						else
+							range.count = newRow - anchor - 1;
+						WMSetListSelectionToRange(lPtr, range);
+					} else {
+						WMRange range = { .position = newRow, .count = 1 };
+						WMSetListSelectionToRange(lPtr, range);
+						lastClicked = newRow;
+					}
+				} else {
+					WMSelectListItem(lPtr, newRow);
+					lastClicked = newRow;
+				}
+
+				/* Ensure visibility */
+				if (newRow > (lPtr->topItem + lPtr->fullFitLines - 1)) {
+					lPtr->topItem = newRow - lPtr->fullFitLines + 1;
+					if (lPtr->topItem < 0)
+						lPtr->topItem = 0;
+					/* Ensure we don't scroll past the end */
+					if (lPtr->topItem + lPtr->fullFitLines > itemCount)
+						lPtr->topItem = itemCount - lPtr->fullFitLines;
+					if (lPtr->topItem < 0)
+						lPtr->topItem = 0;
+					if (lPtr->view->flags.realized)
+						updateScroller(lPtr);
+				}
+
+				/* Trigger action callback */
+				if (lPtr->action)
+					(*lPtr->action) (lPtr, lPtr->clientData);
+			}
+			break;
+		}
+		case XK_Home: {
+			int itemCount = WMGetArrayItemCount(lPtr->items);
+			if (itemCount > 0) {
+				int newRow = 0;
+				if (lPtr->flags.allowMultipleSelection) {
+					if (event->xkey.state & ShiftMask) {
+						WMRange range;
+						int anchor = WMGetListSelectedItemRow(lPtr);
+						if (anchor == WLNotFound || WMGetArrayItemCount(lPtr->selectedItems) == 0) {
+							anchor = lPtr->topItem;
+						}
+
+						range.position = anchor;
+						if (newRow >= anchor)
+							range.count = newRow - anchor + 1;
+						else
+							range.count = newRow - anchor - 1;
+						WMSetListSelectionToRange(lPtr, range);
+					} else {
+						WMRange range = { .position = newRow, .count = 1 };
+						WMSetListSelectionToRange(lPtr, range);
+						lastClicked = newRow;
+					}
+				} else {
+					WMSelectListItem(lPtr, newRow);
+					lastClicked = newRow;
+				}
+				if (newRow < lPtr->topItem) {
+					lPtr->topItem = newRow;
+					if (lPtr->view->flags.realized)
+						updateScroller(lPtr);
+				}
+				/* Trigger action callback */
+				if (lPtr->action)
+					(*lPtr->action) (lPtr, lPtr->clientData);
+			}
+			break;
+		}
+		case XK_End: {
+			int itemCount = WMGetArrayItemCount(lPtr->items);
+			if (itemCount > 0) {
+				int newRow = itemCount - 1;
+				if (lPtr->flags.allowMultipleSelection) {
+					if (event->xkey.state & ShiftMask) {
+						WMRange range;
+						int anchor = WMGetListSelectedItemRow(lPtr);
+						if (anchor == WLNotFound || WMGetArrayItemCount(lPtr->selectedItems) == 0) {
+							anchor = lPtr->topItem;
+						}
+
+						range.position = anchor;
+						if (newRow >= anchor)
+							range.count = newRow - anchor + 1;
+						else
+							range.count = newRow - anchor - 1;
+						WMSetListSelectionToRange(lPtr, range);
+					} else {
+						WMRange range = { .position = newRow, .count = 1 };
+						WMSetListSelectionToRange(lPtr, range);
+						lastClicked = newRow;
+					}
+				} else {
+					WMSelectListItem(lPtr, newRow);
+					lastClicked = newRow;
+				}
+
+				/* Ensure the last item is fully visible */
+				lPtr->topItem = itemCount - lPtr->fullFitLines;
+				if (lPtr->topItem < 0)
+					lPtr->topItem = 0;
+				if (lPtr->view->flags.realized)
+					updateScroller(lPtr);
+
+				/* Trigger action callback */
+				if (lPtr->action)
+					(*lPtr->action) (lPtr, lPtr->clientData);
+			}
+			break;
+		}
+		default:
+			break;
+		}
+
+		/* If we handled a navigation keysym, avoid falling through to typeahead logic */
+		if (ksym == XK_Up || ksym == XK_Down || ksym == XK_Page_Up || ksym == XK_Page_Down || ksym == XK_Home || ksym == XK_End)
+			break;
+
+		if (len <= 0)
+			break;
+
+		buffer[len] = '\0';
+
+		if (ksym == XK_Escape) {
+			if (lPtr->typeaheadID) {
+				WMDeleteTimerHandler(lPtr->typeaheadID);
+				lPtr->typeaheadID = NULL;
+			}
+			if (lPtr->typeahead) {
+				lPtr->typeahead[0] = '\0';
+				lPtr->typeaheadLen = 0;
+			}
+			break;
+		}
+
+		if (ksym == XK_BackSpace) {
+			if (lPtr->typeaheadLen > 0 && lPtr->typeahead) {
+				lPtr->typeaheadLen--;
+				lPtr->typeahead[lPtr->typeaheadLen] = '\0';
+			}
+		} else if (len == 1 && isalnum((unsigned char)buffer[0])) {
+			if (!lPtr->typeahead) {
+				lPtr->typeahead = wmalloc(2);
+				lPtr->typeaheadLen = 0;
+			}
+			lPtr->typeahead = wrealloc(lPtr->typeahead, lPtr->typeaheadLen + 2);
+			lPtr->typeahead[lPtr->typeaheadLen] = buffer[0];
+			lPtr->typeaheadLen++;
+			lPtr->typeahead[lPtr->typeaheadLen] = '\0';
+		} else {
+			break;
+		}
+
+		if (lPtr->typeaheadLen > 0)
+			jumpToFirstItemWithPrefix(lPtr, lPtr->typeahead, lPtr->typeaheadLen);
+
+		if (lPtr->typeaheadID) {
+			WMDeleteTimerHandler(lPtr->typeaheadID);
+			lPtr->typeaheadID = NULL;
+		}
+		if (lPtr->typeaheadLen > 0)
+			lPtr->typeaheadID = WMAddTimerHandler(TYPEAHEAD_CLEAR_DELAY, typeaheadTimeout, lPtr);
+		break;
+
 	}
 	if (lPtr->topItem != topItem)
 		WMPostNotificationName(WMListDidScrollNotification, lPtr, NULL);
@@ -1126,6 +1605,10 @@ static void destroyList(List * lPtr)
 		WMDeleteTimerHandler(lPtr->selectID);
 	lPtr->selectID = NULL;
 
+	if (lPtr->typeaheadID)
+		WMDeleteTimerHandler(lPtr->typeaheadID);
+	lPtr->typeaheadID = NULL;
+
 	if (lPtr->selectedItems)
 		WMFreeArray(lPtr->selectedItems);
 
@@ -1134,6 +1617,9 @@ static void destroyList(List * lPtr)
 
 	if (lPtr->doubleBuffer)
 		XFreePixmap(lPtr->view->screen->display, lPtr->doubleBuffer);
+
+	if (lPtr->typeahead)
+		wfree(lPtr->typeahead);
 
 	WMRemoveNotificationObserver(lPtr);
 

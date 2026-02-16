@@ -1083,6 +1083,7 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 	WMMapWidget(panel->win);
 
 	wWindowMap(wwin);
+	wSetFocusTo(scr, wwin);
 
 	while (!panel->done) {
 		XEvent event;
