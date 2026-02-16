@@ -4,7 +4,7 @@
  *
  *  Copyright (c) 2014-2023 Window Maker Team
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
- *  Copyright (c) 2009-2023 Window Maker Team
+ *  Copyright (c) 2009-2026 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -147,6 +147,8 @@ typedef struct _Panel {
 	WMButton *swi[wlengthof_nocheck(expert_options)];
 
 	WMTextField *textfield[wlengthof_nocheck(expert_options)];
+	WMScrollView *sv;
+	WMWidget *frame;
 
 } _Panel;
 
@@ -165,6 +167,124 @@ static void changeIntTextfield(void *data, int delta)
 	value += delta;
 	sprintf(buffer, "%d", value);
 	WMSetTextFieldText(textfield, buffer);
+}
+
+static void scrollViewWheelHandler(XEvent *event, void *data)
+{
+	_Panel *panel = (_Panel *) data;
+	int amount, viewH, contentH, newY, maxY;
+	WMRect rect;
+	WMPoint pt;
+
+	if (!panel || !panel->sv || !panel->frame)
+		return;
+
+	if (event->type != ButtonPress)
+		return;
+
+	if (event->xbutton.button != WINGsConfiguration.mouseWheelUp &&
+		event->xbutton.button != WINGsConfiguration.mouseWheelDown)
+		return;
+
+	rect = WMGetScrollViewVisibleRect(panel->sv);
+	viewH = rect.size.height;
+	contentH = WMWidgetHeight(panel->frame);
+
+	if (event->xbutton.state & ControlMask) {
+		amount = viewH; /* page */
+	} else if (event->xbutton.state & ShiftMask) {
+		amount = 1; /* line */
+	} else {
+		amount = viewH / 3; /* default */
+		if (amount == 0)
+			amount = 1;
+	}
+
+	if (event->xbutton.button == WINGsConfiguration.mouseWheelUp)
+		amount = -amount;
+
+	newY = rect.pos.y + amount;
+	maxY = contentH - viewH;
+	if (maxY < 0)
+		maxY = 0;
+	if (newY < 0)
+		newY = 0;
+	if (newY > maxY)
+		newY = maxY;
+
+	pt.x = rect.pos.x;
+	pt.y = newY;
+
+	WMScrollViewScrollPoint(panel->sv, pt);
+}
+
+static void scrollViewRealizeObserver(void *self, WMNotification *not)
+{
+	(void) not;
+	_Panel *panel = (_Panel *) self;
+	Display *dpy = NULL;
+	Window viewport_win = 0;
+	WMView *frameView;
+
+	if (!panel || !panel->frame)
+		return;
+
+	frameView = WMWidgetView(panel->frame);
+
+	if (frameView && frameView->parent) {
+		dpy = frameView->screen->display;
+		viewport_win = frameView->parent->window;
+	}
+
+	/* fallback: use the scrollview's view window if parent viewport not available */
+	if (!viewport_win && panel->sv) {
+		WMView *svView = WMWidgetView(panel->sv);
+		if (svView && svView->screen) {
+			dpy = svView->screen->display;
+			viewport_win = svView->window;
+		}
+	}
+
+	if (!dpy || viewport_win == 0)
+		return;
+
+	XGrabButton(dpy, WINGsConfiguration.mouseWheelUp, AnyModifier, viewport_win,
+				True, ButtonPressMask, GrabModeAsync, GrabModeAsync, None, None);
+	XGrabButton(dpy, WINGsConfiguration.mouseWheelDown, AnyModifier, viewport_win,
+				True, ButtonPressMask, GrabModeAsync, GrabModeAsync, None, None);
+}
+
+static void scrollViewPrepareForClose(Panel *p)
+{
+	_Panel *panel = (_Panel *) p;
+	Display *dpy = NULL;
+	Window viewport_win = 0;
+
+	if (!panel)
+		return;
+
+	if (panel->frame) {
+		WMView *frameView = WMWidgetView(panel->frame);
+		if (frameView && frameView->parent) {
+			dpy = frameView->screen->display;
+			viewport_win = frameView->parent->window;
+		}
+	}
+
+	if (!viewport_win && panel->sv) {
+		WMView *svView = WMWidgetView(panel->sv);
+		if (svView && svView->screen) {
+			dpy = svView->screen->display;
+			viewport_win = svView->window;
+		}
+	}
+
+	if (dpy && viewport_win != 0) {
+		XUngrabButton(dpy, WINGsConfiguration.mouseWheelUp, AnyModifier, viewport_win);
+		XUngrabButton(dpy, WINGsConfiguration.mouseWheelDown, AnyModifier, viewport_win);
+	}
+
+	WMRemoveNotificationObserver(panel);
 }
 
 static void downButtonCallback(WMWidget *self, void *data)
@@ -290,7 +410,7 @@ static void createPanel(Panel *p)
 
 		default:
 #ifdef DEBUG
-			wwarning("export_options[%d].class = %d, this should not happen\n",
+			wwarning("expert_options[%d].class = %d, this should not happen\n",
 				i, expert_options[i].class);
 #endif
 			state = expert_options[i].def_state;
@@ -302,6 +422,11 @@ static void createPanel(Panel *p)
 
 	WMMapSubwidgets(panel->box);
 	WMSetScrollViewContentView(sv, WMWidgetView(f));
+	/* keep references for the wheel handler and register it */
+	panel->sv = sv;
+	panel->frame = f;
+	WMCreateEventHandler(WMWidgetView(sv), ButtonPressMask, scrollViewWheelHandler, panel);
+	WMAddNotificationObserver(scrollViewRealizeObserver, panel, WMViewRealizedNotification, WMWidgetView(sv));
 	WMRealizeWidget(panel->box);
 }
 
@@ -362,6 +487,7 @@ Panel *InitExpert(WMWidget *parent)
 
 	panel->callbacks.createWidgets = createPanel;
 	panel->callbacks.updateDomain = storeDefaults;
+	panel->callbacks.prepareForClose = scrollViewPrepareForClose;
 
 	AddSection(panel, ICON_FILE);
 

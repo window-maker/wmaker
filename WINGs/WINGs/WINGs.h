@@ -1533,6 +1533,8 @@ void WMSetScrollViewRelief(WMScrollView *sPtr, WMReliefType type);
 
 WMRect WMGetScrollViewVisibleRect(WMScrollView *sPtr);
 
+void WMScrollViewScrollPoint(WMScrollView * sPtr, WMPoint point);
+
 WMScroller* WMGetScrollViewHorizontalScroller(WMScrollView *sPtr);
 
 WMScroller* WMGetScrollViewVerticalScroller(WMScrollView *sPtr);
