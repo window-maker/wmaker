@@ -105,6 +105,16 @@ static void tileObserver(void *self, WMNotification *notif)
 
 static int getSize(Drawable d, unsigned int *w, unsigned int *h, unsigned int *dep)
 {
+	if (d == None) {
+		if (w)
+			*w = 0;
+		if (h)
+			*h = 0;
+		if (dep)
+			*dep = 0;
+		return 0;
+	}
+
 	Window rjunk;
 	int xjunk, yjunk;
 	unsigned int bjunk;
@@ -195,6 +205,7 @@ static WIcon *icon_create_core(WScreen *scr, int coord_x, int coord_y)
 	/* Icon image */
 	icon->file = NULL;
 	icon->file_image = NULL;
+	icon->icon_win = None;
 
 	return icon;
 }
@@ -752,7 +763,10 @@ static void set_dockapp_in_icon(WIcon *icon)
 
 	/* We need the application size to center it
 	 * and show in the correct position */
-	getSize(icon->icon_win, &w, &h, &d);
+	if (!getSize(icon->icon_win, &w, &h, &d)) {
+		wwarning("Drawable invalid, skip reparenting dock app to icon.");
+		return;
+	}
 
 	/* Set the background pixmap */
 	XSetWindowBackgroundPixmap(dpy, icon->core->window, scr->icon_tile_pixmap);
