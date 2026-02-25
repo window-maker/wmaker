@@ -393,6 +393,7 @@ extern struct WPreferences {
 	signed char workspace_name_display_position;
 	unsigned int modifier_mask;        /* mask to use as kbd modifier */
 	char *modifier_labels[7];          /* Names of the modifiers */
+	char *modifier_short_labels[9];    /* Short names of the modifiers */
 
 	unsigned int supports_tiff;        /* Use tiff files */
 

@@ -280,24 +280,30 @@ const char *wXModifierToShortcutLabel(int mask)
 	if (mask < 0)
 		return NULL;
 
-	if (mask == ShiftMask)
-		return "Sh+";
-	if (mask ==  ControlMask)
-		return "^";
-	if (mask ==  AltMask)
-		return "A+";
-	if (mask ==  Mod1Mask)
-		return "M1+";
-	if (mask ==  Mod2Mask)
-		return "M2+";
-	if (mask ==  Mod3Mask)
-		return "M3+";
-	if (mask ==  Mod4Mask)
-		return "M4+";
-	if (mask ==  Mod5Mask)
-		return "M5+";
-	if (mask ==  MetaMask)
-		return "M+";
+	struct map_entry {
+		int mask;
+		int label_index;
+		const char *def;
+	} maps[] = {
+		{ ShiftMask,   0, "Sh+"},
+		{ ControlMask, 1, "^"  },
+		{ AltMask,     8, "A+" },
+		{ Mod1Mask,    2, "M1+"},
+		{ Mod2Mask,    3, "M2+"},
+		{ Mod3Mask,    4, "M3+"},
+		{ Mod4Mask,    5, "M4+"},
+		{ Mod5Mask,    6, "M5+"},
+		{ MetaMask,    7, "M+" }
+	};
+
+	for (size_t i = 0; i < sizeof(maps)/sizeof(maps[0]); i++) {
+		if (mask == maps[i].mask) {
+			int idx = maps[i].label_index;
+			if (idx >= 0 && idx < 9 && wPreferences.modifier_short_labels[idx])
+				return wPreferences.modifier_short_labels[idx];
+			return maps[i].def;
+		}
+	}
 
 	wwarning(_("Can't convert keymask 0x%04X to a shortcut label"), mask);
 	return NULL;

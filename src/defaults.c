@@ -151,6 +151,7 @@ static WDECallbackUpdate setSwPOptions;
 static WDECallbackUpdate updateUsableArea;
 
 static WDECallbackUpdate setModifierKeyLabels;
+static WDECallbackUpdate setModifierShortKeyLabels;
 static WDECallbackUpdate setHotCornerActions;
 
 static WDECallbackConvert getCursor;
@@ -624,6 +625,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getPropList, setSwPOptions, NULL, NULL},
 	{"ModifierKeyLabels", "(\"Shift+\", \"Control+\", \"Mod1+\", \"Mod2+\", \"Mod3+\", \"Mod4+\", \"Mod5+\")", &wPreferences,
 	    NULL, getPropList, setModifierKeyLabels, NULL, NULL},
+	{"ModifierKeyShortLabels", "(\"Sh+\", \"^\", \"M1+\", \"M2+\", \"M3+\", \"M4+\", \"M5+\", \"M+\", \"A+\")", &wPreferences,
+	    NULL, getPropList, setModifierShortKeyLabels, NULL, NULL},
 	{"FrameBorderWidth", "1", NULL,
 	    NULL, getInt, setFrameBorderWidth, NULL, NULL},
 	{"FrameBorderColor", "black", NULL,
@@ -3491,6 +3494,42 @@ static int setModifierKeyLabels(WScreen * scr, WDefaultEntry * entry, void *tdat
 		} else {
 			wwarning(_("Invalid argument for option \"%s\" item %d"), entry->key, i);
 			prefs->modifier_labels[i] = NULL;
+		}
+	}
+
+	WMReleasePropList(array);
+
+	return 0;
+}
+
+static int setModifierShortKeyLabels(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
+{
+	WMPropList *array = tdata;
+	int i;
+	struct WPreferences *prefs = foo;
+
+	if (!WMIsPLArray(array) || WMGetPropListItemCount(array) != 9) {
+		wwarning(_("Value for option \"%s\" must be an array of 9 strings"), entry->key);
+		WMReleasePropList(array);
+		return 0;
+	}
+
+	DestroyWindowMenu(scr);
+
+	for (i = 0; i < 9; i++) {
+		if (prefs->modifier_short_labels[i])
+			wfree(prefs->modifier_short_labels[i]);
+
+		if (WMIsPLString(WMGetFromPLArray(array, i))) {
+			prefs->modifier_short_labels[i] = wstrdup(WMGetFromPLString(WMGetFromPLArray(array, i)));
+			if (prefs->modifier_short_labels[i][0] == '\0') {
+				wwarning(_("Invalid argument for option \"%s\" item %d, cannot be empty"), entry->key, i);
+				wfree(prefs->modifier_short_labels[i]);
+				prefs->modifier_short_labels[i] = NULL;
+			}
+		} else {
+			wwarning(_("Invalid argument for option \"%s\" item %d"), entry->key, i);
+			prefs->modifier_short_labels[i] = NULL;
 		}
 	}
 
