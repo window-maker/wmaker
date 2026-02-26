@@ -2984,7 +2984,7 @@ static void frameMouseDown(WObjDescriptor *desc, XEvent *event)
 
 	CloseWindowMenu(wwin->screen_ptr);
 
-	if (event->xbutton.button != Button4 && event->xbutton.button != Button5 && !(event->xbutton.state & ControlMask) && !WFLAGP(wwin, no_focusable))
+	if ((wPreferences.mouse_wheel_focus || (event->xbutton.button != Button4 && event->xbutton.button != Button5)) && !(event->xbutton.state & ControlMask) && !WFLAGP(wwin, no_focusable))
 		wSetFocusTo(wwin->screen_ptr, wwin);
 
 	if (event->xbutton.button == Button1)

@@ -537,6 +537,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getPropList, setHotCornerActions, NULL, NULL},
 	{"WindowListAppIcons", "NO", NULL,
 		&wPreferences.window_list_app_icons, getBool, NULL, NULL, NULL},
+	{"MouseWheelFocus", "NO", NULL,
+		&wPreferences.mouse_wheel_focus, getBool, NULL, NULL, NULL},
 
 	/* style options */
 

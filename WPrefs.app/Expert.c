@@ -130,6 +130,8 @@ static struct expert_option {
 	{ N_("Keep dock on primary head."),
 	  /* default: */ False, OPTION_WMAKER, "KeepDockOnPrimaryHead"},
 
+	{ N_("Allow windows to take focus using mouse wheel."),
+	  /* default: */ False, OPTION_WMAKER, "MouseWheelFocus"},
 };
 
 
