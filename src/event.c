@@ -357,10 +357,28 @@ static void handle_inotify_events(void)
 
 			wPreferences.flags.noupdates = 1;
 		}
-		if ((pevent->mask & IN_MODIFY) && oneShotFlag == 0) {
-			wwarning(_("Inotify: Reading config files in defaults database."));
-			wDefaultsCheckDomains(NULL);
-			oneShotFlag = 1;
+		/* Only react when a known config file inside the Defaults directory is affected */
+		if (pevent->len > 0) {
+			char *fname = pevent->name;
+			const char *allowed[] = { "WMRootMenu", "WMWindowAttributes",
+						  "WindowMaker", "WMState", "WMGLOBAL", NULL };
+			int i, matched = 0;
+
+			for (i = 0; allowed[i]; i++) {
+				if (strcmp(fname, allowed[i]) == 0) {
+					matched = 1;
+					break;
+				}
+			}
+
+			if (matched) {
+				/* react to events that indicate a file was created/moved/written */
+				if ((pevent->mask & (IN_MODIFY | IN_CLOSE_WRITE | IN_MOVED_TO | IN_CREATE)) && oneShotFlag == 0) {
+					wwarning(_("Inotify: Reading config files in defaults database."));
+					wDefaultsCheckDomains(NULL);
+					oneShotFlag = 1;
+				}
+			}
 		}
 
 		/* move to next event in the buffer */
