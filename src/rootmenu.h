@@ -22,7 +22,8 @@
 #ifndef WMROOTMENU_H
 #define WMROOTMENU_H
 
-Bool wRootMenuPerformShortcut(XEvent * event);
+void wRootMenuInsertIntoTree(void);
+void wRootMenuReparse(WScreen *scr);
 void wRootMenuBindShortcuts(Window window);
 void OpenRootMenu(WScreen * scr, int x, int y, int keyboard);
 WMenu *configureMenu(WScreen *scr, WMPropList *definition);

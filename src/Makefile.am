@@ -45,6 +45,8 @@ wmaker_SOURCES = 	\
 	icon.c \
 	icon.h \
 	keybind.h \
+	keytree.c \
+	keytree.h \
 	main.c \
 	main.h \
 	menu.c \

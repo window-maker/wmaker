@@ -60,8 +60,6 @@
 
 #include <WINGs/WUtil.h>
 
-#define MAX_SHORTCUT_LENGTH 32
-
 static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen *scr, const char *file_name);
@@ -75,6 +73,11 @@ typedef struct Shortcut {
 	KeyCode keycode;
 	WMenuEntry *entry;
 	WMenu *menu;
+
+	/* Key-chain support */
+	int chain_length;
+	unsigned int *chain_modifiers;   /* heap-allocated, NULL for single keys */
+	KeyCode *chain_keycodes;    /* heap-allocated, NULL for single keys */
 } Shortcut;
 
 static Shortcut *shortcutList = NULL;
@@ -320,27 +323,44 @@ static char *getLocalizedMenuFile(const char *menu)
 	return NULL;
 }
 
-Bool wRootMenuPerformShortcut(XEvent * event)
+/*
+ * Insert all root-menu shortcuts into the
+ * global key-binding trie (wKeyTreeRoot)
+ */
+void wRootMenuInsertIntoTree(void)
 {
-	WScreen *scr = wScreenForRootWindow(event->xkey.root);
 	Shortcut *ptr;
-	int modifiers;
-	int done = 0;
-
-	/* ignore CapsLock */
-	modifiers = event->xkey.state & w_global.shortcut.modifiers_mask;
 
 	for (ptr = shortcutList; ptr != NULL; ptr = ptr->next) {
-		if (ptr->keycode == 0 || ptr->menu->menu->screen_ptr != scr)
+		unsigned int *mods;
+		KeyCode *keys;
+		int len, j;
+		WKeyNode *leaf;
+
+		if (ptr->keycode == 0)
 			continue;
 
-		if (ptr->keycode == event->xkey.keycode && ptr->modifier == modifiers) {
-			(*ptr->entry->callback) (ptr->menu, ptr->entry);
-			done = True;
+		len  = (ptr->chain_length > 1) ? ptr->chain_length : 1;
+		mods = wmalloc(len * sizeof(unsigned int));
+		keys = wmalloc(len * sizeof(KeyCode));
+		mods[0] = ptr->modifier;
+		keys[0] = ptr->keycode;
+
+		for (j = 1; j < len; j++) {
+			mods[j] = ptr->chain_modifiers[j - 1];
+			keys[j] = ptr->chain_keycodes[j - 1];
+		}
+
+		leaf = wKeyTreeInsert(&wKeyTreeRoot, mods, keys, len);
+		wfree(mods);
+		wfree(keys);
+
+		if (leaf) {
+			WKeyAction *act = wKeyNodeAddAction(leaf, WKN_MENU);
+			act->u.menu.menu  = ptr->menu;
+			act->u.menu.entry = ptr->entry;
 		}
 	}
-
-	return done;
 }
 
 void wRootMenuBindShortcuts(Window window)
@@ -377,6 +397,16 @@ static void rebindKeygrabs(WScreen * scr)
 	}
 }
 
+static void freeShortcut(Shortcut *s)
+{
+	if (!s)
+		return;
+
+	wfree(s->chain_modifiers);
+	wfree(s->chain_keycodes);
+	wfree(s);
+}
+
 static void removeShortcutsForMenu(WMenu * menu)
 {
 	Shortcut *ptr, *tmp;
@@ -386,7 +416,7 @@ static void removeShortcutsForMenu(WMenu * menu)
 	while (ptr != NULL) {
 		tmp = ptr->next;
 		if (ptr->menu == menu) {
-			wfree(ptr);
+			freeShortcut(ptr);
 		} else {
 			ptr->next = newList;
 			newList = ptr;
@@ -400,51 +430,76 @@ static void removeShortcutsForMenu(WMenu * menu)
 static Bool addShortcut(const char *file, const char *shortcutDefinition, WMenu *menu, WMenuEntry *entry)
 {
 	Shortcut *ptr;
-	KeySym ksym;
-	char *k;
-	char buf[MAX_SHORTCUT_LENGTH], *b;
+	char buf[MAX_SHORTCUT_LENGTH];
+	char *token, *saveptr;
+	int step;
 
 	ptr = wmalloc(sizeof(Shortcut));
-
 	wstrlcpy(buf, shortcutDefinition, MAX_SHORTCUT_LENGTH);
-	b = (char *)buf;
 
-	/* get modifiers */
-	ptr->modifier = 0;
-	while ((k = strchr(b, '+')) != NULL) {
-		int mod;
+	/*
+	 * Parse space-separated tokens.
+	 * The first token is the leader key, subsequent tokens are chain steps
+	 */
+	step = 0;
+	token = strtok_r(buf, " ", &saveptr);
+	while (token != NULL) {
+		KeySym ksym;
+		KeyCode kcode;
+		unsigned int mod = 0;
+		char tmp[MAX_SHORTCUT_LENGTH];
+		char *b, *k;
 
-		*k = 0;
-		mod = wXModifierFromKey(b);
-		if (mod < 0) {
-			wwarning(_("%s: invalid key modifier \"%s\""), file, b);
-			wfree(ptr);
+		wstrlcpy(tmp, token, MAX_SHORTCUT_LENGTH);
+		b = tmp;
+
+		while ((k = strchr(b, '+')) != NULL) {
+			int m;
+			*k = 0;
+			m = wXModifierFromKey(b);
+			if (m < 0) {
+				wwarning(_("%s: invalid key modifier \"%s\""), file, b);
+				freeShortcut(ptr);
+				return False;
+			}
+			mod |= m;
+			b = k + 1;
+		}
+
+		ksym = XStringToKeysym(b);
+		if (ksym == NoSymbol) {
+			wwarning(_("%s: invalid kbd shortcut specification \"%s\" for entry %s"),
+					 file, shortcutDefinition, entry->text);
+			freeShortcut(ptr);
 			return False;
 		}
-		ptr->modifier |= mod;
 
-		b = k + 1;
+		kcode = XKeysymToKeycode(dpy, ksym);
+		if (kcode == 0) {
+			wwarning(_("%s: invalid key in shortcut \"%s\" for entry %s"),
+					 file, shortcutDefinition, entry->text);
+			freeShortcut(ptr);
+			return False;
+		}
+
+		if (step == 0) {
+			ptr->modifier = mod;
+			ptr->keycode  = kcode;
+		} else {
+			ptr->chain_modifiers = wrealloc(ptr->chain_modifiers,
+			                                step * sizeof(unsigned int));
+			ptr->chain_keycodes  = wrealloc(ptr->chain_keycodes,
+			                                step * sizeof(KeyCode));
+			ptr->chain_modifiers[step - 1] = mod;
+			ptr->chain_keycodes[step - 1]  = kcode;
+		}
+
+		step++;
+		token = strtok_r(NULL, " ", &saveptr);
 	}
 
-	/* get key */
-	ksym = XStringToKeysym(b);
-
-	if (ksym == NoSymbol) {
-		wwarning(_("%s:invalid kbd shortcut specification \"%s\" for entry %s"),
-			 file, shortcutDefinition, entry->text);
-		wfree(ptr);
-		return False;
-	}
-
-	ptr->keycode = XKeysymToKeycode(dpy, ksym);
-	if (ptr->keycode == 0) {
-		wwarning(_("%s:invalid key in shortcut \"%s\" for entry %s"), file,
-			 shortcutDefinition, entry->text);
-		wfree(ptr);
-		return False;
-	}
-
-	ptr->menu = menu;
+	ptr->chain_length = (step > 1) ? step : 1;
+	ptr->menu  = menu;
 	ptr->entry = entry;
 
 	ptr->next = shortcutList;
@@ -1561,6 +1616,47 @@ WMenu *configureMenu(WScreen *scr, WMPropList *definition)
 	}
 
 	return menu;
+}
+
+/*
+ *----------------------------------------------------------------------
+ * wRootMenuReparse--
+ *	Rebuild the root menu (and its shortcuts / key-grabs) from the
+ *	current WMRootMenu dictionary without mapping the menu.
+ *----------------------------------------------------------------------
+ */
+void wRootMenuReparse(WScreen *scr)
+{
+	WMenu *menu = NULL;
+	WMPropList *definition;
+
+	definition = w_global.domain.root_menu->dictionary;
+	if (!definition)
+		return;
+
+	scr->flags.root_menu_changed_shortcuts = 0;
+	scr->flags.added_workspace_menu = 0;
+	scr->flags.added_windows_menu = 0;
+
+	if (WMIsPLArray(definition)) {
+		if (!scr->root_menu ||
+		    w_global.domain.root_menu->timestamp > scr->root_menu->timestamp) {
+			menu = configureMenu(scr, definition);
+			if (menu)
+				menu->timestamp = w_global.domain.root_menu->timestamp;
+		}
+	} else {
+		menu = configureMenu(scr, definition);
+	}
+
+	if (menu) {
+		if (scr->root_menu)
+			wMenuDestroy(scr->root_menu, True);
+		scr->root_menu = menu;
+	}
+
+	if (scr->flags.root_menu_changed_shortcuts)
+		rebindKeygrabs(scr);
 }
 
 /*

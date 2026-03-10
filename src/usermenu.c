@@ -78,9 +78,6 @@
 
 #include "framewin.h"
 
-#define MAX_SHORTCUT_LENGTH 32
-
-
 typedef struct {
 	WScreen *screen;
 	WShortKey *key;

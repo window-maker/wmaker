@@ -2639,6 +2639,11 @@ void wWindowSetKeyGrabs(WWindow * wwin)
 
 		if (key->keycode == 0)
 			continue;
+
+		/* WKBD_KEYCHAIN_CANCEL is only meaningful while inside an active key chain */
+		if (i == WKBD_KEYCHAIN_CANCEL)
+			continue;
+
 		if (key->modifier != AnyModifier) {
 			XGrabKey(dpy, key->keycode, key->modifier | LockMask,
 				 wwin->frame->core->window, True, GrabModeAsync, GrabModeAsync);

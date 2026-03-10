@@ -384,6 +384,12 @@ static void handle_inotify_events(void)
 		/* move to next event in the buffer */
 		i += sizeof(struct inotify_event) + pevent->len;
 	}
+
+	for (i = 0; i < w_global.screen_count; i++) {
+		WScreen *scr = wScreenWithNumber(i);
+		if (scr)
+			wKeyTreeRebuild(scr);
+	}
 }
 #endif /* HAVE_INOTIFY */
 
@@ -1422,55 +1428,54 @@ static int CheckFullScreenWindowFocused(WScreen * scr)
 		return 0;
 }
 
-static void handleKeyPress(XEvent * event)
+/* ------------------------------------------------------------------ *
+ * Key-chain timeout support                                          *
+ *                                                                    *
+ * wPreferences.keychain_timeout_delay in milliseconds after a chain  *
+ * leader is pressed, the chain is automatically cancelled so the     *
+ * user is not stuck in a half-entered sequence. Set to 0 to disable. *
+ * ------------------------------------------------------------------ */
+
+/* Cancels the chain on inactivity */
+static void chainTimeoutCallback(void *data)
 {
-	WScreen *scr = wScreenForRootWindow(event->xkey.root);
-	WWindow *wwin = scr->focused_window;
-	short i, widx;
-	int modifiers;
-	int command = -1;
+	(void)data;
+
+	XUngrabKeyboard(dpy, CurrentTime);
+	w_global.shortcut.curpos = NULL;
+	w_global.shortcut.chain_timeout_handler = NULL;
+}
+
+/* Start (or restart) the chain inactivity timer */
+static void wStartChainTimer(void)
+{
+	if (wPreferences.keychain_timeout_delay > 0) {
+		if (w_global.shortcut.chain_timeout_handler)
+			WMDeleteTimerHandler(w_global.shortcut.chain_timeout_handler);
+		w_global.shortcut.chain_timeout_handler =
+			WMAddTimerHandler(wPreferences.keychain_timeout_delay, chainTimeoutCallback, NULL);
+	}
+}
+
+/* Cancel the chain inactivity timer, if armed */
+static void wCancelChainTimer(void)
+{
+	if (w_global.shortcut.chain_timeout_handler) {
+		WMDeleteTimerHandler(w_global.shortcut.chain_timeout_handler);
+		w_global.shortcut.chain_timeout_handler = NULL;
+	}
+}
+
+#define ISMAPPED(w) ((w) && !(w)->flags.miniaturized && ((w)->flags.mapped || (w)->flags.shaded))
+#define ISFOCUSED(w) ((w) && (w)->flags.focused)
+
+static void dispatchWKBDCommand(int command, WScreen *scr, WWindow *wwin, XEvent *event)
+{
+	short widx;
+	int i;
 #ifdef KEEP_XKB_LOCK_STATUS
 	XkbStateRec staterec;
 #endif				/*KEEP_XKB_LOCK_STATUS */
-
-	/* ignore CapsLock */
-	modifiers = event->xkey.state & w_global.shortcut.modifiers_mask;
-
-	for (i = 0; i < WKBD_LAST; i++) {
-		if (wKeyBindings[i].keycode == 0)
-			continue;
-
-		if (wKeyBindings[i].keycode == event->xkey.keycode && (	/*wKeyBindings[i].modifier==0
-									   || */ wKeyBindings[i].modifier ==
-									      modifiers)) {
-			command = i;
-			break;
-		}
-	}
-
-	if (command < 0) {
-
-		if (!wRootMenuPerformShortcut(event)) {
-			static int dontLoop = 0;
-
-			if (dontLoop > 10) {
-				wwarning("problem with key event processing code");
-				return;
-			}
-			dontLoop++;
-			/* if the focused window is an internal window, try redispatching
-			 * the event to the managed window, as it can be a WINGs window */
-			if (wwin && wwin->flags.internal_window && wwin->client_leader != None) {
-				/* client_leader contains the WINGs toplevel */
-				event->xany.window = wwin->client_leader;
-				WMHandleEvent(event);
-			}
-			dontLoop--;
-		}
-		return;
-	}
-#define ISMAPPED(w) ((w) && !(w)->flags.miniaturized && ((w)->flags.mapped || (w)->flags.shaded))
-#define ISFOCUSED(w) ((w) && (w)->flags.focused)
 
 	switch (command) {
 
@@ -1968,6 +1973,132 @@ static void handleKeyPress(XEvent * event)
 		break;
 #endif	/* KEEP_XKB_LOCK_STATUS */
 	}
+}
+
+static void handleKeyPress(XEvent * event)
+{
+	WScreen *scr = wScreenForRootWindow(event->xkey.root);
+	WWindow *wwin = scr->focused_window;
+	WKeyNode  *siblings;
+	WKeyNode  *match;
+	WKeyAction *act;
+	int modifiers;
+
+	/* ignore CapsLock */
+	modifiers = event->xkey.state & w_global.shortcut.modifiers_mask;
+
+	/* ------------------------------------------------------------------ *
+	 * Trie-based key-chain matching                                      *
+	 *                                                                    *
+	 * wKeyTreeRoot is a prefix trie covering ALL key bindings            *
+	 * (wKeyBindings and root-menu shortcuts combined).                   *
+	 * curpos tracks the last matched internal node.                      *
+	 * NULL means we are at the root (idle).                              *
+	 * ------------------------------------------------------------------ */
+
+	if (w_global.shortcut.curpos != NULL) {
+		/*  Inside a chain: look for the next key among children */
+		if (event->xkey.keycode == wKeyBindings[WKBD_KEYCHAIN_CANCEL].keycode &&
+			modifiers == wKeyBindings[WKBD_KEYCHAIN_CANCEL].modifier) {
+			wCancelChainTimer();
+			XUngrabKeyboard(dpy, CurrentTime);
+			w_global.shortcut.curpos = NULL;
+			return;
+		}
+
+		siblings = w_global.shortcut.curpos->first_child;
+		match = wKeyTreeFind(siblings, modifiers, event->xkey.keycode);
+
+		if (match != NULL && match->first_child != NULL) {
+			/* Internal node: advance and keep waiting */
+			w_global.shortcut.curpos = match;
+			wStartChainTimer();
+			return;
+		}
+
+		if (match == NULL) {
+			/* Unrecognized key inside chain: exit chain mode */
+			wCancelChainTimer();
+			XUngrabKeyboard(dpy, CurrentTime);
+			w_global.shortcut.curpos = NULL;
+			return;
+		}
+
+		/*
+		 * Sticky-chain mode: when a KeychainCancelKey is configured,
+		 * stay at the parent level after executing a leaf instead of always
+		 * returning to root.
+		 */
+		if (wKeyBindings[WKBD_KEYCHAIN_CANCEL].keycode != 0) {
+			WKeyNode *parent = match->parent;
+			WKeyNode *child;
+			int nchildren = 0;
+
+			for (child = parent->first_child; child != NULL; child = child->next_sibling)
+				nchildren++;
+
+			if (nchildren > 1) {
+				/* Multi-branch parent: stay in chain mode at this level */
+				w_global.shortcut.curpos = parent;
+				wStartChainTimer();
+			} else {
+				/* Single-branch parent: nothing left to wait for, exit chain */
+				wCancelChainTimer();
+				XUngrabKeyboard(dpy, CurrentTime);
+				w_global.shortcut.curpos = NULL;
+			}
+		} else {
+			/* No cancel key configured: always exit chain after a leaf */
+			wCancelChainTimer();
+			XUngrabKeyboard(dpy, CurrentTime);
+			w_global.shortcut.curpos = NULL;
+		}
+	} else {
+		/* Idle: look for a root-level match */
+		match = wKeyTreeFind(wKeyTreeRoot, modifiers, event->xkey.keycode);
+
+		if (match == NULL) {
+			/* Not a known shortcut: try to redispatch it */
+			static int dontLoop = 0;
+
+			if (dontLoop > 10) {
+				wwarning("problem with key event processing code");
+				return;
+			}
+			dontLoop++;
+			if (wwin && wwin->flags.internal_window &&
+				wwin->client_leader != None) {
+				event->xany.window = wwin->client_leader;
+				WMHandleEvent(event);
+			}
+			dontLoop--;
+
+			return;
+		}
+
+		if (match->first_child != NULL) {
+			/* Internal node: enter chain mode */
+			w_global.shortcut.curpos = match;
+			XGrabKeyboard(dpy, scr->root_win, False,
+							GrabModeAsync, GrabModeAsync, CurrentTime);
+			wStartChainTimer();
+
+			return;
+		}
+	}
+
+	/* Execute all leaf actions for this key sequence */
+	for (act = match->actions; act != NULL; act = act->next) {
+		if (act->type == WKN_MENU) {
+			WMenu *menu  = (WMenu *) act->u.menu.menu;
+			WMenuEntry *entry = (WMenuEntry *) act->u.menu.entry;
+
+			(*entry->callback)(menu, entry);
+		} else {
+			dispatchWKBDCommand(act->u.wkbd_idx, scr, wwin, event);
+		}
+	}
+	return;
 }
 
 #define CORNER_NONE 0

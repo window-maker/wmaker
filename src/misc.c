@@ -881,46 +881,85 @@ char *GetShortcutString(const char *shortcut)
 
 char *GetShortcutKey(WShortKey key)
 {
-	const char *key_name;
-	char buffer[256];
-	char *wr;
+	char buf[MAX_SHORTCUT_LENGTH];
+	char *wr, *result, *seg;
+	int step;
 
 	void append_string(const char *text)
 	{
-		const char *string = text;
+		const char *s = text;
 
-		while (*string) {
-			if (wr >= buffer + sizeof(buffer) - 1)
+		while (*s) {
+			if (wr >= buf + sizeof(buf) - 1)
 				break;
-			*wr++ = *string++;
+			*wr++ = *s++;
 		}
 	}
 
 	void append_modifier(int modifier_index, const char *fallback_name)
 	{
-		if (wPreferences.modifier_labels[modifier_index]) {
+		if (wPreferences.modifier_labels[modifier_index])
 			append_string(wPreferences.modifier_labels[modifier_index]);
-		} else {
+		else
 			append_string(fallback_name);
-		}
 	}
 
-	key_name = XKeysymToString(W_KeycodeToKeysym(dpy, key.keycode, 0));
-	if (!key_name)
+	Bool build_token(unsigned int mod, KeyCode kcode)
+	{
+		const char *kname = XKeysymToString(W_KeycodeToKeysym(dpy, kcode, 0));
+
+		if (!kname)
+			return False;
+
+		wr = buf;
+		if (mod & ControlMask) append_modifier(1, "Control+");
+		if (mod & ShiftMask)   append_modifier(0, "Shift+");
+		if (mod & Mod1Mask)    append_modifier(2, "Mod1+");
+		if (mod & Mod2Mask)    append_modifier(3, "Mod2+");
+		if (mod & Mod3Mask)    append_modifier(4, "Mod3+");
+		if (mod & Mod4Mask)    append_modifier(5, "Mod4+");
+		if (mod & Mod5Mask)    append_modifier(6, "Mod5+");
+		append_string(kname);
+		*wr = '\0';
+
+		return True;
+	}
+
+	if (!build_token(key.modifier, key.keycode))
 		return NULL;
 
-	wr = buffer;
-	if (key.modifier & ControlMask) append_modifier(1, "Control+");
-	if (key.modifier & ShiftMask)   append_modifier(0, "Shift+");
-	if (key.modifier & Mod1Mask)    append_modifier(2, "Mod1+");
-	if (key.modifier & Mod2Mask)    append_modifier(3, "Mod2+");
-	if (key.modifier & Mod3Mask)    append_modifier(4, "Mod3+");
-	if (key.modifier & Mod4Mask)    append_modifier(5, "Mod4+");
-	if (key.modifier & Mod5Mask)    append_modifier(6, "Mod5+");
-	append_string(key_name);
-	*wr = '\0';
+	/* Convert the leader token to its display string */
+	result = GetShortcutString(buf);
 
-	return GetShortcutString(buffer);
+	/* Append each chain follower separated by a space */
+	for (step = 0; step < key.chain_length - 1; step++) {
+		char *combined;
+
+		if (key.chain_keycodes[step] == 0)
+			break;
+
+		if (!build_token(key.chain_modifiers[step], key.chain_keycodes[step]))
+			break;
+
+		seg = GetShortcutString(buf);
+		combined = wstrconcat(result, " ");
+		wfree(result);
+		result = wstrconcat(combined, seg);
+		wfree(combined);
+		wfree(seg);
+	}
+
+	return result;
+}
+
+void wShortKeyFree(WShortKey *key)
+{
+	if (!key)
+		return;
+
+	wfree(key->chain_modifiers);
+	wfree(key->chain_keycodes);
+	memset(key, 0, sizeof(*key));
 }
 
 char *EscapeWM_CLASS(const char *name, const char *class)

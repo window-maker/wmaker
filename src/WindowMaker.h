@@ -26,6 +26,7 @@
 #include <assert.h>
 #include <limits.h>
 #include <WINGs/WINGs.h>
+#include "keytree.h"
 
 
 /* class codes */
@@ -470,6 +471,8 @@ extern struct WPreferences {
 	int clip_auto_expand_delay;         /* Delay after which the clip will expand when entered */
 	int clip_auto_collapse_delay;       /* Delay after which the clip will collapse when leaved */
 
+	int keychain_timeout_delay;         /* Delay after which a keychain is reset, 0 means disabled */
+
 	RImage *swtileImage;
 	RImage *swbackImage[9];
 
@@ -649,6 +652,17 @@ extern struct wmaker_global_variables {
 		 * impact the shortcuts (typically: CapsLock, NumLock, ScrollLock)
 		 */
 		unsigned int modifiers_mask;
+
+		/*
+		 * Key-chain trie cursor.
+		 *
+		 * curpos == NULL  : idle, no active chain.
+		 * curpos != NULL  : inside a chain; curpos points to the last matched
+		 *                   internal node in wKeyTreeRoot.  The next expected
+		 *                   key is one of curpos->first_child's siblings.
+		 */
+		WKeyNode    *curpos;
+		WMHandlerID  chain_timeout_handler; /* non-NULL while chain timer is armed */
 	} shortcut;
 } w_global;
 

@@ -425,6 +425,10 @@ void StartUp(Bool defaultScreenOnly)
 	 */
 	w_global.shortcut.modifiers_mask &= ~(_NumLockMask | _ScrollLockMask);
 
+	/* No active key chain at startup */
+	w_global.shortcut.curpos = NULL;
+	w_global.shortcut.chain_timeout_handler = NULL;
+
 	memset(&wKeyBindings, 0, sizeof(wKeyBindings));
 
 	w_global.context.client_win = XUniqueContext();
@@ -702,6 +706,10 @@ void StartUp(Bool defaultScreenOnly)
 			wWorkspaceForceChange(wScreen[j], lastDesktop);
 		else
 			wSessionRestoreLastWorkspace(wScreen[j]);
+	}
+
+	for (j = 0; j < w_global.screen_count; j++) {
+		wKeyTreeRebuild(wScreen[j]);
 	}
 
 	if (w_global.screen_count == 0) {
