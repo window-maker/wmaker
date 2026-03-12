@@ -193,9 +193,9 @@ static void addIconForWindow(WSwitchPanel *panel, WMWidget *parent, WWindow *wwi
 	WMMoveWidget(icon, x, y);
 
 	wapp = wApplicationOf(wwin->main_window);
-	if (wapp && wapp->app_icon && wapp->app_icon->icon && wapp->app_icon->icon->file_image) {
+	if (!WFLAGP(wwin, always_user_icon) && wapp && wapp->app_icon &&
+			wapp->app_icon->icon && wapp->app_icon->icon->file_image)
 		image = RRetainImage(wapp->app_icon->icon->file_image);
-	}
 
 	if (!image && !WFLAGP(wwin, always_user_icon) && wwin->net_icon_image)
 		image = RRetainImage(wwin->net_icon_image);
