@@ -24,6 +24,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/Xatom.h>
 #ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
@@ -38,6 +39,12 @@
 #include <string.h>
 #include <stdint.h>
 #include <math.h>
+#include <ctype.h>
+
+#ifdef XKB_BUTTON_HINT
+#include <X11/extensions/XKBfile.h>  // Required for XkbRF_VarDefsRec
+#include <X11/extensions/XKBrules.h> // Required for XkbRF_GetNamesProp
+#endif
 
 /* For getting mouse wheel mappings from WINGs */
 #include <WINGs/WINGs.h>
@@ -2304,14 +2311,6 @@ void wWindowUpdateButtonImages(WWindow *wwin)
 			fwin->lbutton_image = scr->b_pixmaps[WBUT_ICONIFY];
 		}
 	}
-#ifdef XKB_BUTTON_HINT
-	if (!WFLAGP(wwin, no_language_button)) {
-		if (fwin->languagebutton_image && !fwin->languagebutton_image->shared)
-			wPixmapDestroy(fwin->languagebutton_image);
-
-		fwin->languagebutton_image = scr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
-	}
-#endif
 
 	/* close button */
 
@@ -3145,6 +3144,37 @@ static void windowCloseDblClick(WCoreWindow *sender, void *data, XEvent *event)
 }
 
 #ifdef XKB_BUTTON_HINT
+/* Helper function to extract the 2-letter language code for a given XKB group index */
+void wWindowGetLanguageLabel(int group_index, char *label)
+{
+	XkbRF_VarDefsRec vd;
+	/* Default to empty - will fallback to pixmap if we can't get the label */
+	label[0] = '\0';
+
+	if (XkbRF_GetNamesProp(dpy, NULL, &vd) && vd.layout) {
+		int i;
+		char *layout_list = strdup(vd.layout);
+		char *tok = strtok(layout_list, ",");
+
+		/* Iterate to the requested group index */
+		for (i = 0; i < group_index && tok != NULL; i++) {
+			tok = strtok(NULL, ",");
+		}
+
+		if (tok) {
+			/* Copy exactly the first two bytes, then format: first uppercase, second lowercase */
+			strncpy(label, tok, 2);
+			label[2] = '\0';
+			if (label[0])
+				label[0] = (char) toupper((unsigned char) label[0]);
+			if (label[1])
+				label[1] = (char) tolower((unsigned char) label[1]);
+		}
+
+		free(layout_list);
+	}
+}
+
 static void windowLanguageClick(WCoreWindow *sender, void *data, XEvent *event)
 {
 	WWindow *wwin = data;
@@ -3158,11 +3188,45 @@ static void windowLanguageClick(WCoreWindow *sender, void *data, XEvent *event)
 	if (event->xbutton.button != Button1 && event->xbutton.button != Button3)
 		return;
 	tl = wwin->frame->languagemode;
-	wwin->frame->languagemode = wwin->frame->last_languagemode;
-	wwin->frame->last_languagemode = tl;
+
+	/* Try to advance to the next available XKB group */
+	XkbDescPtr desc = XkbGetKeyboard(dpy, XkbAllComponentsMask, XkbUseCoreKbd);
+	int newgroup = -1;
+	if (desc && desc->names) {
+		int i;
+		const int MAX_GROUPS = 4; /* typical XKB max groups */
+		for (i = 1; i <= MAX_GROUPS; i++) {
+			int cand = (tl + i) % MAX_GROUPS;
+			Atom a = desc->names->groups[cand];
+			if (a != None) {
+				/* Use XGetAtomName to ensure the atom actually has a name */
+				char *nm = XGetAtomName(dpy, a);
+				if (nm && nm[0] != '\0') {
+					newgroup = cand;
+					XFree(nm);
+					break;
+				}
+				if (nm)
+					XFree(nm);
+			}
+		}
+	}
+
+	if (newgroup >= 0) {
+		wwin->frame->last_languagemode = tl;
+		wwin->frame->languagemode = newgroup;
+		XkbLockGroup(dpy, XkbUseCoreKbd, wwin->frame->languagemode);
+	} else {
+		/* fallback to previous toggle behaviour for setups with only two
+		 * groups or when group info is not available */
+		wwin->frame->languagemode = wwin->frame->last_languagemode;
+		wwin->frame->last_languagemode = tl;
+		XkbLockGroup(dpy, XkbUseCoreKbd, wwin->frame->languagemode);
+	}
+	/* Update label */
+	wWindowGetLanguageLabel(wwin->frame->languagemode, wwin->frame->language_label);
+
 	wSetFocusTo(scr, wwin);
-	wwin->frame->languagebutton_image =
-	    wwin->frame->screen_ptr->b_pixmaps[WBUT_XKBGROUP1 + wwin->frame->languagemode];
 	wFrameWindowUpdateLanguageButton(wwin->frame);
 	if (event->xbutton.button == Button3)
 		return;

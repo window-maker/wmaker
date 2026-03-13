@@ -405,4 +405,9 @@ void wWindowDeleteSavedState(WMagicNumber id);
 Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured);
 
 void wWindowSetOmnipresent(WWindow *wwin, Bool flag);
+
+#ifdef XKB_BUTTON_HINT
+void wWindowGetLanguageLabel(int group_index, char *label);
+#endif
+
 #endif

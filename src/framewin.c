@@ -54,7 +54,7 @@ static void resizebarMouseDown(WObjDescriptor * desc, XEvent * event);
 static void checkTitleSize(WFrameWindow * fwin);
 
 static void paintButton(WCoreWindow * button, WTexture * texture,
-			unsigned long color, WPixmap * image, int pushed);
+			unsigned long color, WPixmap * image, int pushed, int from_xpm);
 
 static void updateTitlebar(WFrameWindow * fwin);
 
@@ -98,6 +98,7 @@ WFrameWindow *wFrameWindowCreate(WScreen * scr, int wlevel, int x, int y,
 #ifdef KEEP_XKB_LOCK_STATUS
 	fwin->languagemode = XkbGroup1Index;
 	fwin->last_languagemode = XkbGroup2Index;
+	wWindowGetLanguageLabel(fwin->languagemode, fwin->language_label);
 #endif
 
 	fwin->depth = depth;
@@ -145,6 +146,7 @@ void wFrameWindowUpdateBorders(WFrameWindow * fwin, int flags)
 			theight = *fwin->title_min_height;
 	} else {
 		theight = 0;
+		fwin->flags.titlebar = 0;
 	}
 
 	if (wPreferences.new_style == TS_NEW) {
@@ -536,6 +538,8 @@ static void updateTitlebar(WFrameWindow * fwin)
 #ifdef XKB_BUTTON_HINT
 	else {
 		int bsize = theight - 7;
+		if (wPreferences.new_style == TS_NEXT)
+			bsize -= 1;
 		if (fwin->flags.hide_left_button || !fwin->left_button || fwin->flags.lbutton_dont_fit) {
 			if (fwin->language_button)
 				wCoreConfigure(fwin->language_button, 3, (theight - bsize) / 2,
@@ -950,6 +954,10 @@ void wFrameWindowPaint(WFrameWindow * fwin)
 					remakeTexture(fwin, i);
 			}
 		}
+#ifdef XKB_BUTTON_HINT
+		if (wPreferences.modelock)
+			wFrameWindowUpdateLanguageButton(fwin);
+#endif
 	}
 
 	if (fwin->flags.need_texture_change) {
@@ -1023,7 +1031,8 @@ void wFrameWindowPaint(WFrameWindow * fwin)
 				allButtons = 0;
 		}
 #ifdef XKB_BUTTON_HINT
-		fwin->languagebutton_image = scr->b_pixmaps[WBUT_XKBGROUP1 + fwin->languagemode];
+		if (fwin->flags.language_button && !fwin->languagebutton_image[0])
+			wFrameWindowUpdateLanguageButton(fwin);
 #endif
 
 		if (fwin->title) {
@@ -1228,10 +1237,145 @@ int wFrameWindowChangeTitle(WFrameWindow *fwin, const char *new_title)
 }
 
 #ifdef XKB_BUTTON_HINT
+
+static int wFrameWindowSetLanguageButtonImages(WFrameWindow *fwin, Pixmap *pixmaps, int count)
+{
+	int i;
+	for (i = 0; i < count; i++) {
+		WPixmap *wp = wPixmapCreate(pixmaps[i], None);
+		if (!wp) {
+			int j;
+			XFreePixmap(dpy, pixmaps[i]);
+			for (j = i + 1; j < count; j++)
+				XFreePixmap(dpy, pixmaps[j]);
+			return 0;
+		}
+		wp->client_owned = 0;
+		wp->client_owned_mask = 0;
+		if (fwin->languagebutton_image[i] && !fwin->languagebutton_image[i]->shared)
+			wPixmapDestroy(fwin->languagebutton_image[i]);
+		fwin->languagebutton_image[i] = wp;
+	}
+	return 1;
+}
+
 void wFrameWindowUpdateLanguageButton(WFrameWindow * fwin)
 {
-	paintButton(fwin->language_button, fwin->title_texture[fwin->flags.state],
-		    WMColorPixel(fwin->title_color[fwin->flags.state]), fwin->languagebutton_image, True);
+	WScreen *scr = fwin->screen_ptr;
+	WCoreWindow *button = fwin->language_button;
+	GC gc = scr->copy_gc;
+	int i, text_width, text_height;
+	int border_thickness = 3;
+	int key_width, key_height;
+	int group_index;
+	Pixmap tmp[2];		/* focused, unfocused */
+
+	if (!fwin->flags.titlebar || fwin->core->descriptor.parent_type != WCLASS_WINDOW)
+		return;
+
+	if (!button || fwin->language_label[0] == '\0')
+		return;
+
+	group_index = fwin->languagemode;
+	if (group_index < 0 || group_index >= 4)
+		return;
+
+	/* Calculate text dimensions */
+	int small_px = WMFontHeight(*fwin->font) * 55 / 100;
+	WMFont *small = WMBoldSystemFontOfSize(scr->wmscreen, small_px);
+	text_width = WMWidthOfString(small, fwin->language_label, strlen(fwin->language_label));
+	text_height = WMFontHeight(small);
+
+	key_width = button->width - border_thickness;
+	key_height = button->height - border_thickness;
+
+	/* Ensure dimensions are valid */
+	if (key_width < 1 || key_height < 1) {
+		WMReleaseFont(small);
+		return;
+	}
+
+	/* Create temporary pixmaps for immediate drawing */
+	tmp[0] = XCreatePixmap(dpy, button->window, 2*key_width, key_height, scr->w_depth);
+	if (tmp[0] == None) {
+		WMReleaseFont(small);
+		return;
+	}
+
+	tmp[1] = None;
+	if (wPreferences.new_style == TS_NEW) {
+		tmp[1] = XCreatePixmap(dpy, button->window, 2*key_width, key_height, scr->w_depth);
+		if (tmp[1] == None) {
+			XFreePixmap(dpy, tmp[0]);
+			WMReleaseFont(small);
+			return;
+		}
+	}
+
+	/* Reset GC to ensure clean state for drawing */
+	XSetClipMask(dpy, gc, None);
+
+	/* Draw the language label centered in the button */
+	int text_x = (key_width - text_width) / 2;
+	int text_y = (key_height - text_height) / 2;
+
+	/* Fill the color pixmap depending on the style  */
+	if (wPreferences.new_style == TS_NEW) {
+		for (i = 0; i < 2; i++) {
+			if (fwin->title_texture[i]->any.type != WTEX_SOLID && fwin->title_back[i] != None) {
+				XCopyArea(dpy, fwin->languagebutton_back[i], tmp[i], scr->copy_gc,
+						  0, 0, button->width, button->height, -1, -1);
+			} else {
+				unsigned long bg_pixel = fwin->title_texture[i]->solid.normal.pixel;
+				XSetForeground(dpy, gc, bg_pixel);
+				XFillRectangle(dpy, tmp[i], gc, 0, 0, key_width, key_height);
+			}
+			WMDrawString(scr->wmscreen, tmp[i], fwin->title_color[i],
+						 small, text_x, text_y, fwin->language_label, strlen(fwin->language_label));
+		}
+	} else if (wPreferences.new_style == TS_OLD) {
+		unsigned long bg_pixel = scr->widget_texture->normal.pixel;
+		XSetForeground(dpy, gc, bg_pixel);
+		XFillRectangle(dpy, tmp[0], gc, 0, 0, key_width, key_height);
+		WMDrawString(scr->wmscreen, tmp[0], WMBlackColor(scr->wmscreen),
+					 small, text_x, text_y, fwin->language_label, strlen(fwin->language_label));
+	} else {
+		unsigned long bg_pixel = scr->widget_texture->dark.pixel;
+		XSetForeground(dpy, gc, bg_pixel);
+		XFillRectangle(dpy, tmp[0], gc, 0, 0, key_width, key_height);
+		WMColor *silver = WMCreateRGBColor(scr->wmscreen, 0xc0c0, 0xc0c0, 0xc0c0, True);
+		WMDrawString(scr->wmscreen, tmp[0], silver,
+					 small, text_x, text_y, fwin->language_label, strlen(fwin->language_label));
+		WMReleaseColor(silver);
+	}
+
+	/* pushed button next to normal for easy access when painting */
+	text_x = key_width + (key_width - text_width) / 2;
+	if (wPreferences.new_style == TS_NEW) {
+		XSetForeground(dpy, gc, scr->white_pixel);
+		for (i = 0; i < 2; i++) {
+			XFillRectangle(dpy, tmp[i], gc, key_width, 0, key_width, key_height);
+			WMDrawString(scr->wmscreen, tmp[i], WMBlackColor(scr->wmscreen),
+						 small, text_x, text_y, fwin->language_label, strlen(fwin->language_label));
+		}
+	} else if (wPreferences.new_style == TS_OLD) {
+		XSetForeground(dpy, gc, scr->white_pixel);
+		XFillRectangle(dpy, tmp[0], gc, key_width, 0, key_width, key_height);
+		WMDrawString(scr->wmscreen, tmp[0], WMDarkGrayColor(scr->wmscreen),
+			small, text_x, text_y, fwin->language_label, strlen(fwin->language_label));
+	} else {
+		unsigned long bg_pixel = scr->widget_texture->dark.pixel;
+		WMColor *silver = WMCreateRGBColor(scr->wmscreen, 0xc0c0, 0xc0c0, 0xc0c0, True);
+		XSetForeground(dpy, gc, bg_pixel);
+		XFillRectangle(dpy, tmp[0], gc, key_width, 0, key_width, key_height);
+		WMDrawString(scr->wmscreen, tmp[0], silver,
+					 small, text_x, text_y, fwin->language_label, strlen(fwin->language_label));
+		WMReleaseColor(silver);
+	}
+
+	WMReleaseFont(small);
+
+	wFrameWindowSetLanguageButtonImages(fwin, tmp, (wPreferences.new_style == TS_NEW) ? 2 : 1);
 }
 #endif				/* XKB_BUTTON_HINT */
 
@@ -1286,7 +1430,7 @@ static void checkTitleSize(WFrameWindow * fwin)
 		fwin->flags.incomplete_title = 0;
 }
 
-static void paintButton(WCoreWindow * button, WTexture * texture, unsigned long color, WPixmap * image, int pushed)
+static void paintButton(WCoreWindow * button, WTexture * texture, unsigned long color, WPixmap * image, int pushed, int from_xpm)
 {
 	WScreen *scr = button->screen_ptr;
 	GC copy_gc = scr->copy_gc;
@@ -1364,8 +1508,12 @@ static void paintButton(WCoreWindow * button, WTexture * texture, unsigned long 
 			} else {
 				if (wPreferences.new_style == TS_OLD) {
 					XSetForeground(dpy, copy_gc, scr->dark_pixel);
-					XFillRectangle(dpy, button->window, copy_gc, 0, 0,
-						       button->width, button->height);
+					if (from_xpm)
+						XFillRectangle(dpy, button->window, copy_gc, 0, 0,
+								button->width, button->height);
+					else
+						XCopyArea(dpy, image->image, button->window, copy_gc,
+							left, 0, width, image->height, x, y);
 				} else {
 					XSetForeground(dpy, copy_gc, scr->black_pixel);
 					XCopyArea(dpy, image->image, button->window, copy_gc,
@@ -1379,7 +1527,11 @@ static void paintButton(WCoreWindow * button, WTexture * texture, unsigned long 
 				XSetForeground(dpy, copy_gc, color);
 				XSetBackground(dpy, copy_gc, texture->any.color.pixel);
 			}
-			XFillRectangle(dpy, button->window, copy_gc, 0, 0, button->width, button->height);
+			if (from_xpm)
+				XFillRectangle(dpy, button->window, copy_gc, 0, 0, button->width, button->height);
+			else
+				XCopyArea(dpy, image->image, button->window, copy_gc,
+					left, 0, width, image->height, x, y);
 		}
 	}
 }
@@ -1394,18 +1546,23 @@ static void handleButtonExpose(WObjDescriptor * desc, XEvent * event)
 
 #ifdef XKB_BUTTON_HINT
 	if (button == fwin->language_button) {
-		if (!fwin->flags.hide_language_button)
+		if (!fwin->flags.hide_language_button) {
+			/* map focused and pfocused states to focus language button image */
+			int lb_index = wPreferences.new_style == TS_NEW && (fwin->flags.state == 1) ? 1 : 0;
+
 			paintButton(button, fwin->title_texture[fwin->flags.state],
 				    WMColorPixel(fwin->title_color[fwin->flags.state]),
-				    fwin->languagebutton_image, False);
+				    fwin->languagebutton_image[lb_index],
+				    False, False);
+		}
 	} else
 #endif
 	if (button == fwin->left_button)
 		paintButton(button, fwin->title_texture[fwin->flags.state],
-			    WMColorPixel(fwin->title_color[fwin->flags.state]), fwin->lbutton_image, False);
+			    WMColorPixel(fwin->title_color[fwin->flags.state]), fwin->lbutton_image, False, True);
 	else
 		paintButton(button, fwin->title_texture[fwin->flags.state],
-			    WMColorPixel(fwin->title_color[fwin->flags.state]), fwin->rbutton_image, False);
+			    WMColorPixel(fwin->title_color[fwin->flags.state]), fwin->rbutton_image, False, True);
 }
 
 static void titlebarMouseDown(WObjDescriptor * desc, XEvent * event)
@@ -1437,7 +1594,7 @@ static void buttonMouseDown(WObjDescriptor * desc, XEvent * event)
 	WCoreWindow *button = desc->self;
 	WPixmap *image;
 	XEvent ev;
-	int done = 0, execute = 1;
+	int done = 0, execute = 1, from_xpm = True;
 	WTexture *texture;
 	unsigned long pixel;
 	int clickButton = event->xbutton.button;
@@ -1458,13 +1615,18 @@ static void buttonMouseDown(WObjDescriptor * desc, XEvent * event)
 	if (button == fwin->language_button) {
 		if (!wPreferences.modelock)
 			return;
-		image = fwin->languagebutton_image;
+
+		/* map focused and pfocused states to focus language button image */
+		int lb_index = wPreferences.new_style == TS_NEW && (fwin->flags.state == 1) ? 1 : 0;
+
+		image = fwin->languagebutton_image[lb_index];
+		from_xpm = False;
 	}
 #endif
 
 	pixel = WMColorPixel(fwin->title_color[fwin->flags.state]);
 	texture = fwin->title_texture[fwin->flags.state];
-	paintButton(button, texture, pixel, image, True);
+	paintButton(button, texture, pixel, image, True, from_xpm);
 
 	while (!done) {
 		WMMaskEvent(dpy, LeaveWindowMask | EnterWindowMask | ButtonReleaseMask
@@ -1472,12 +1634,12 @@ static void buttonMouseDown(WObjDescriptor * desc, XEvent * event)
 		switch (ev.type) {
 		case LeaveNotify:
 			execute = 0;
-			paintButton(button, texture, pixel, image, False);
+			paintButton(button, texture, pixel, image, False, from_xpm);
 			break;
 
 		case EnterNotify:
 			execute = 1;
-			paintButton(button, texture, pixel, image, True);
+			paintButton(button, texture, pixel, image, True, from_xpm);
 			break;
 
 		case ButtonPress:
@@ -1492,7 +1654,7 @@ static void buttonMouseDown(WObjDescriptor * desc, XEvent * event)
 			WMHandleEvent(&ev);
 		}
 	}
-	paintButton(button, texture, pixel, image, False);
+	paintButton(button, texture, pixel, image, False, from_xpm);
 
 	if (execute) {
 		if (button == fwin->left_button) {

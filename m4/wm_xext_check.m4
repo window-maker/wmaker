@@ -232,3 +232,35 @@ AC_DEFUN_ONCE([WM_XEXT_CHECK_XRANDR],
     [supported_xext], [LIBXRANDR], [], [-])dnl
 AC_SUBST([LIBXRANDR])dnl
 ]) dnl AC_DEFUN
+
+
+# WM_XEXT_CHECK_XKBFILE
+# ---------------------
+#
+# Check for the XKB File extension library (libxkbfile)
+# The check depends on variable 'enable_modelock' being either:
+#   yes  - detect, fail if not found
+#   no   - do not detect, disable support
+#
+# When found, append appropriate stuff in LIBXKBFILE, and append info to
+# the variable 'supported_xext'
+# When not found, generate an error because it's required for modelock
+AC_DEFUN_ONCE([WM_XEXT_CHECK_XKBFILE],
+[WM_LIB_CHECK([XKBFile], [-lxkbfile], [XkbRF_GetNamesProp], [$XLIBS],
+    [wm_save_CFLAGS="$CFLAGS"
+     AC_COMPILE_IFELSE([AC_LANG_PROGRAM([dnl
+@%:@include <stdio.h>
+@%:@include <X11/Xlib.h>
+@%:@include <X11/XKBlib.h>
+@%:@include <X11/extensions/XKBfile.h>
+@%:@include <X11/extensions/XKBrules.h>
+], [dnl
+  Display *dpy = NULL;
+  XkbRF_VarDefsRec vd;
+  XkbRF_GetNamesProp(dpy, NULL, &vd);])],
+        [],
+        [AC_MSG_ERROR([found $CACHEVAR but cannot compile using XKBfile header])])
+     CFLAGS="$wm_save_CFLAGS"],
+    [supported_xext], [LIBXKBFILE], [enable_modelock], [-])dnl
+AC_SUBST([LIBXKBFILE])dnl
+]) dnl AC_DEFUN

@@ -593,10 +593,12 @@ static void handleExtensions(XEvent * event)
 		handleShapeNotify(event);
 	}
 #endif
-	if (w_global.xext.xkb.supported && event->type == w_global.xext.xkb.event_base) {
+	if (w_global.xext.xkb.supported && event->type >= w_global.xext.xkb.event_base
+		&& event->type <= w_global.xext.xkb.event_base + 255) {
 		XkbEvent *xkbevent = (XkbEvent *) event;
+		int xkb_type = xkbevent->any.xkb_type;
 
-		if (xkbevent->any.xkb_type == XkbNewKeyboardNotify) {
+		if (xkb_type == XkbNewKeyboardNotify) {
 			int j;
 			WScreen *scr;
 
@@ -607,8 +609,10 @@ static void handleExtensions(XEvent * event)
 		}
 #ifdef KEEP_XKB_LOCK_STATUS
 		else {
-			if (wPreferences.modelock && (xkbevent->any.xkb_type == XkbIndicatorStateNotify)) {
-				handleXkbIndicatorStateNotify((XkbEvent *) event);
+			/* Listen not only for IndicatorStateNotify but also for StateNotify
+			 * which is commonly emitted on group (layout) changes. */
+			if (wPreferences.modelock && (xkb_type == XkbIndicatorStateNotify || xkb_type == XkbStateNotify)) {
+				handleXkbIndicatorStateNotify(xkbevent);
 			}
 		}
 #endif /*KEEP_XKB_LOCK_STATUS */
@@ -1324,6 +1328,8 @@ static void handleXkbIndicatorStateNotify(XkbEvent *event)
 			if (wwin->frame->languagemode != staterec.group) {
 				wwin->frame->last_languagemode = wwin->frame->languagemode;
 				wwin->frame->languagemode = staterec.group;
+				wWindowGetLanguageLabel(wwin->frame->languagemode, wwin->frame->language_label);
+				wFrameWindowUpdateLanguageButton(wwin->frame);
 			}
 #ifdef XKB_BUTTON_HINT
 			if (wwin->frame->titlebar) {
@@ -1967,7 +1973,8 @@ static void dispatchWKBDCommand(int command, WScreen *scr, WWindow *wwin, XEvent
 				wwin->frame->languagemode = wwin->frame->last_languagemode;
 				wwin->frame->last_languagemode = staterec.group;
 				XkbLockGroup(dpy, XkbUseCoreKbd, wwin->frame->languagemode);
-
+				/* Update the language label text */
+				wWindowGetLanguageLabel(wwin->frame->languagemode, wwin->frame->language_label);
 			}
 		}
 		break;

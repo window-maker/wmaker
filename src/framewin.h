@@ -80,7 +80,7 @@ typedef struct WFrameWindow {
     WPixmap *lbutton_image;
     WPixmap *rbutton_image;
 #ifdef XKB_BUTTON_HINT
-    WPixmap *languagebutton_image;
+    WPixmap *languagebutton_image[2];    /* focused, unfocused */
 #endif
 
     union WTexture **title_texture;
@@ -93,6 +93,7 @@ typedef struct WFrameWindow {
 #ifdef KEEP_XKB_LOCK_STATUS
     int languagemode;
     int last_languagemode;
+    char language_label[3];        /* 2-letter language code */
 #endif /* KEEP_XKB_LOCK_STATUS */
 
     /* thing that uses this frame. passed as data to callbacks */
