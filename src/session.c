@@ -181,8 +181,11 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 	}
 
 	if (PropGetWMClass(win, &class, &instance)) {
-		if (class && instance)
-			snprintf(buffer, sizeof(buffer), "%s.%s", instance, class);
+		if (class && instance) {
+			if (class[0] == '\0' && wwin->wm_class && wwin->wm_class[0] != '\0')
+				class = strdup(wwin->wm_class);
+			snprintf(buffer, sizeof(buffer), "%s%s%s", instance, class[0] ? "." : "", class);
+		}
 		else if (instance)
 			snprintf(buffer, sizeof(buffer), "%s", instance);
 		else if (class)
