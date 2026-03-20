@@ -1270,7 +1270,14 @@ void ScreenCapture(WScreen *scr, int mode)
 
 	s = time(NULL);
 	tm_info = localtime(&s);
-	strftime(filename_date_part, sizeof(filename_date_part), "screenshot_%Y-%m-%d_at_%H:%M:%S", tm_info);
+	strftime(filename_date_part, sizeof(filename_date_part), wPreferences.screenshot_filename_template, tm_info);
+
+	if (strchr(filename_date_part, '/') != NULL) {
+		wfree(screenshot_dir);
+		werror(_("Unsafe screenshot filename template, it should not contain a path separator"));
+		return;
+	}
+
 	strcpy(filename, filename_date_part);
 
 	filepath = wstrconcat(screenshot_dir, strcat(filename, filetype));

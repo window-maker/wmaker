@@ -191,6 +191,9 @@
 #define DEF_APPMENU_X		         10
 #define DEF_APPMENU_Y		         10
 
+/* default strftime format for screenshot filenames */
+#define DEF_SCREENSHOT_FILENAME_TEMPLATE "\"screenshot_%Y-%m-%d_at_%H:%M:%S\""
+
 /* calculate window edge resistance from edge resistance */
 #define WIN_RESISTANCE(x)	(((x)*20)/30)
 

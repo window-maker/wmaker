@@ -91,6 +91,7 @@ typedef struct {
 /* type converters */
 static WDECallbackConvert getBool;
 static WDECallbackConvert getInt;
+static WDECallbackConvert getString;
 static WDECallbackConvert getCoord;
 static WDECallbackConvert getPathList;
 static WDECallbackConvert getEnum;
@@ -540,6 +541,8 @@ WDefaultEntry optionList[] = {
 		&wPreferences.mouse_wheel_focus, getBool, NULL, NULL, NULL},
 	{"KeychainTimeoutDelay", "500", NULL,
 	    &wPreferences.keychain_timeout_delay, getInt, NULL, NULL, NULL},
+	{"ScreenshotFilenameTemplate", DEF_SCREENSHOT_FILENAME_TEMPLATE, NULL,
+	    &wPreferences.screenshot_filename_template, getString, NULL, NULL, NULL},
 
 	/* style options */
 
@@ -1496,6 +1499,29 @@ static int string2index(WMPropList *key, WMPropList *val, const char *def, WOpti
  * ret - is the address to store a pointer to a temporary buffer. ret
  * 	must not be freed and is used by the set functions
  */
+static int getString(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
+{
+	const char *val;
+	char **sptr;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+
+	GET_STRING_OR_DEFAULT("String", val);
+
+	if (ret)
+		*ret = (void *)val;
+
+	if (addr) {
+		sptr = (char **)addr;
+		if (*sptr)
+			wfree(*sptr);
+		*sptr = wstrdup(val);
+	}
+
+	return True;
+}
+
 static int getBool(WScreen * scr, WDefaultEntry * entry, WMPropList * value, void *addr, void **ret)
 {
 	static char data;

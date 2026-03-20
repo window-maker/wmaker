@@ -505,6 +505,7 @@ extern struct WPreferences {
 	Cursor cursor[WCUR_LAST];
 
     int switch_panel_icon_size;               /* icon size in switch panel */
+    char *screenshot_filename_template;       /* strftime format for screenshot filenames */
 
 } wPreferences;
 
