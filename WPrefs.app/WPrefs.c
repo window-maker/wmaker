@@ -23,6 +23,7 @@
 
 #include "WPrefs.h"
 #include <assert.h>
+#include <X11/Xatom.h>
 
 #ifdef HAVE_STDNORETURN
 #include <stdnoreturn.h>
@@ -516,6 +517,9 @@ void Initialize(WMScreen * scr)
 	char **list;
 	int i;
 	char *path;
+	long pid;
+	Atom net_wm_pid;
+	Display *dpy = WMScreenDisplay(scr);
 
 	list = RSupportedFileFormats();
 	for (i = 0; list[i] != NULL; i++) {
@@ -546,6 +550,11 @@ void Initialize(WMScreen * scr)
 	createMainWindow(scr);
 
 	WMRealizeWidget(WPrefs.win);
+
+	net_wm_pid = XInternAtom(dpy, "_NET_WM_PID", False);
+	pid = (long)getpid();
+	XChangeProperty(dpy, WMWidgetXID(WPrefs.win), net_wm_pid, XA_CARDINAL,
+	                32, PropModeReplace, (unsigned char *)&pid, 1);
 
 	WMSetWindowMiniwindowImage(WPrefs.win, WMGetApplicationIconImage(scr));
 
