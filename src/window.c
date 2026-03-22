@@ -1051,8 +1051,28 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		Bool dontBring = False;
 
 		if (win_state && win_state->state->w > 0) {
+			WMRect rect;
+			int head, flags;
+
 			x = win_state->state->x;
 			y = win_state->state->y;
+
+			/* If the saved position falls in dead space (for example a monitor that no longer
+			* exists), clamp the window to the nearest active head. */
+			rect.pos.x = x;
+			rect.pos.y = y;
+			rect.size.width = width;
+			rect.size.height = height;
+
+			head = wGetRectPlacementInfo(scr, rect, &flags);
+			if (flags & XFLAG_DEAD) {
+				rect = wGetRectForHead(scr, head);
+
+				x = rect.pos.x + (x * rect.size.width) / scr->scr_width;
+				y = rect.pos.y + (y * rect.size.height) / scr->scr_height;
+
+				wScreenBringInside(scr, &x, &y, width, height);
+			}
 		} else if ((wwin->transient_for == None || wPreferences.window_placement != WPM_MANUAL)
 			   && !scr->flags.startup
 			   && !wwin->flags.miniaturized
