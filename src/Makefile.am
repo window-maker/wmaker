@@ -195,5 +195,5 @@ defaults-callbacks-dynamic:
 		--source "$(srcdir)/defaults.c" --structure "optionList"  \
 		--field-value-ptr 4 --field-callback 5  \
 		--struct-def "wPreferences=$(srcdir)/WindowMaker.h"  \
-		--callback "getBool=char, getEnum=char, getInt=int"  \
+		--callback "getBool=char, getEnum=char, getInt=int, getString=char*"  \
 		--callback "getPathList=char*, getCoord=WCoord"
