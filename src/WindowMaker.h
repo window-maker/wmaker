@@ -410,6 +410,9 @@ extern struct WPreferences {
 
 	char dont_blink;                   /* do not blink icon selection */
 	char keep_dock_on_primary_head;    /* keep dock on primary head */
+#ifdef USE_RANDR
+	char hotplug_monitor;              /* auto-(de)activate monitors */
+#endif
 
 	/* Appearance options */
 	char new_style;                    /* Use newstyle buttons */

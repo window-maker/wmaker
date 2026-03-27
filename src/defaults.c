@@ -5,7 +5,6 @@
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
  *  Copyright (c) 2014-2026 Window Maker Team
-
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -527,6 +526,10 @@ WDefaultEntry optionList[] = {
 	{"KeepDockOnPrimaryHead", "NO", NULL,
 	    &wPreferences.keep_dock_on_primary_head, getBool, updateDock,
 	    NULL, NULL},
+#ifdef USE_RANDR
+	{"HotplugMonitor", "NO", NULL,
+	    &wPreferences.hotplug_monitor, getBool, NULL, NULL, NULL},
+#endif
 	{"HotCorners", "NO", NULL,
 	    &wPreferences.hot_corners, getBool, NULL, NULL, NULL},
 	{"HotCornerDelay", "250", (void *)&wPreferences.hot_corner_delay,

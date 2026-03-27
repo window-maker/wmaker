@@ -132,6 +132,11 @@ static struct expert_option {
 
 	{ N_("Allow windows to take focus using mouse wheel."),
 	  /* default: */ False, OPTION_WMAKER, "MouseWheelFocus"},
+
+#ifdef USE_RANDR
+	{ N_("Automatically (de)activate monitors on hotplug events."),
+	  /* default: */ False, OPTION_WMAKER, "HotplugMonitor"},
+#endif
 };
 
 
