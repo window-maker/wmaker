@@ -2294,6 +2294,26 @@ void wWindowMove(WWindow *wwin, int req_x, int req_y)
 #endif
 }
 
+/* Move the window to the nearest on-screen position if its stored
+ * frame origin falls in dead space (for example when a RandR monitor
+ * was removed while the window was miniaturized or hidden) */
+void wWindowSnapToHead(WWindow *wwin)
+{
+#ifdef USE_RANDR
+	int bw = HAS_BORDER(wwin) ? wwin->screen_ptr->frame_border_width : 0;
+	int rx = wwin->frame_x - bw;
+	int ry = wwin->frame_y - bw;
+
+	if (wScreenBringInside(wwin->screen_ptr, &rx, &ry,
+	                       wwin->frame->core->width  + 2 * bw,
+	                       wwin->frame->core->height + 2 * bw))
+		wWindowMove(wwin, rx + bw, ry + bw);
+#else
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) wwin;
+#endif
+}
+
 void wWindowUpdateButtonImages(WWindow *wwin)
 {
 	WScreen *scr = wwin->screen_ptr;

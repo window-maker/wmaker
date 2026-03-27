@@ -657,11 +657,11 @@ dnl RandR support
 dnl =============
 m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([randr],
-    [AS_HELP_STRING([--enable-randr], [enable RandR extension support (NOT recommended, buggy)])],
+    [AS_HELP_STRING([--enable-randr], [enable RandR extension support for multi-monitor live reconfiguration])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-randr]) ]) ],
-    [enable_randr=no])
+    [enable_randr=auto])
 m4_divert_pop([INIT_PREPARE])dnl
 WM_XEXT_CHECK_XRANDR
 

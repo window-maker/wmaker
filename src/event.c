@@ -3,7 +3,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- *  Copyright (c) 2014-2023 Window Maker Team
+ *  Copyright (c) 2014-2026 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -46,7 +46,7 @@
 #endif
 
 #ifdef USE_RANDR
-#include <X11/extensions/Xrandr.h>
+#include "randr.h"
 #endif
 
 #include <X11/XKBlib.h>
@@ -271,10 +271,6 @@ void DispatchEvent(XEvent * event)
 		break;
 
 	case ConfigureNotify:
-#ifdef USE_RANDR
-		if (event->xconfigure.window == DefaultRootWindow(dpy))
-			XRRUpdateConfiguration(event);
-#endif
 		break;
 
 	case SelectionRequest:
@@ -618,14 +614,14 @@ static void handleExtensions(XEvent * event)
 #endif /*KEEP_XKB_LOCK_STATUS */
 	}
 #ifdef USE_RANDR
-	if (w_global.xext.randr.supported && event->type == (w_global.xext.randr.event_base + RRScreenChangeNotify)) {
-		/* From xrandr man page: "Clients must call back into Xlib using
-		 * XRRUpdateConfiguration when screen configuration change notify
-		 * events are generated */
-		XRRUpdateConfiguration(event);
-		WCHANGE_STATE(WSTATE_RESTARTING);
-		Shutdown(WSRestartPreparationMode);
-		Restart(NULL,True);
+	if (w_global.xext.randr.supported &&
+	    (event->type == (w_global.xext.randr.event_base + RRScreenChangeNotify) ||
+	     event->type == (w_global.xext.randr.event_base + RRNotify))) {
+		WScreen *randr_scr;
+
+		randr_scr = wScreenForRootWindow(event->xany.window);
+		if (randr_scr)
+			wRandRHandleNotify(randr_scr, event);
 	}
 #endif
 }

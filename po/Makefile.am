@@ -27,6 +27,7 @@ POTFILES  = \
 	$(top_srcdir)/src/framewin.c \
 	$(top_srcdir)/src/geomview.c \
 	$(top_srcdir)/src/icon.c \
+	$(top_srcdir)/src/keytree.c \
 	$(top_srcdir)/src/main.c \
 	$(top_srcdir)/src/menu.c \
 	$(top_srcdir)/src/misc.c \
@@ -40,6 +41,7 @@ POTFILES  = \
 	$(top_srcdir)/src/pixmap.c \
 	$(top_srcdir)/src/placement.c \
 	$(top_srcdir)/src/properties.c \
+	$(top_srcdir)/src/randr.c \
 	$(top_srcdir)/src/resources.c \
 	$(top_srcdir)/src/rootmenu.c \
 	$(top_srcdir)/src/screen.c \

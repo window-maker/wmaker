@@ -4,7 +4,7 @@
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
- *  Copyright (c) 2014-2023 Window Maker Team
+ *  Copyright (c) 2014-2026 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1608,6 +1608,9 @@ void wDeiconifyWindow(WWindow *wwin)
 		}
 	}
 
+	/* Relocate to an active head if the stored position is in dead space */
+	wWindowSnapToHead(wwin);
+
 	/* if the window is in another workspace, do it silently */
 	if (!netwm_hidden) {
 #ifdef USE_ANIMATIONS
@@ -1875,6 +1878,9 @@ static void unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int
 		wWindowChangeWorkspace(wwin, wwin->screen_ptr->current_workspace);
 
 	wwin->flags.hidden = 0;
+
+	/* Relocate to an active head if the stored position is in dead space */
+	wWindowSnapToHead(wwin);
 
 #ifdef USE_ANIMATIONS
 	if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations && animate) {

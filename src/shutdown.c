@@ -36,6 +36,7 @@
 #include "winspector.h"
 #include "wmspec.h"
 #include "colormap.h"
+#include "screen.h"
 #include "shutdown.h"
 
 
@@ -81,6 +82,7 @@ void Shutdown(WShutdownMode mode)
 					wipeDesktop(scr);
 				else
 					RestoreDesktop(scr);
+				wScreenDestroy(scr);
 			}
 		}
 		ExecExitScript();
@@ -103,6 +105,7 @@ void Shutdown(WShutdownMode mode)
 					kill(scr->helper_pid, SIGKILL);
 				wScreenSaveState(scr);
 				RestoreDesktop(scr);
+				wScreenDestroy(scr);
 			}
 		}
 		break;

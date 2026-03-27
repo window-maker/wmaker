@@ -61,6 +61,8 @@ wmaker_SOURCES = 	\
 	placement.h \
 	properties.c \
 	properties.h \
+	randr.c \
+	randr.h \
 	resources.c \
 	resources.h \
 	rootmenu.c \

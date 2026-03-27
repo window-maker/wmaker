@@ -362,6 +362,7 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y,
                       int req_width, int req_height);
 
 void wWindowMove(WWindow *wwin, int req_x, int req_y);
+void wWindowSnapToHead(WWindow *wwin);
 
 void wWindowSynthConfigureNotify(WWindow *wwin);
 

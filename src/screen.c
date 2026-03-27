@@ -34,7 +34,7 @@
 #include <X11/Xatom.h>
 #include <X11/XKBlib.h>
 #ifdef USE_RANDR
-#include <X11/extensions/Xrandr.h>
+#include "randr.h"
 #endif
 
 #include <wraster.h>
@@ -642,6 +642,10 @@ WScreen *wScreenInit(int screen_number)
 		scr->usableArea[i].y2 = scr->totalUsableArea[i].y2 = rect.pos.y + rect.size.height;
 	}
 
+#ifdef USE_RANDR
+	wRandRInit(scr);
+#endif
+
 	scr->fakeGroupLeaders = WMCreateArray(16);
 
 	CantManageScreen = 0;
@@ -669,7 +673,10 @@ WScreen *wScreenInit(int screen_number)
 
 #ifdef USE_RANDR
 	if (w_global.xext.randr.supported)
-		XRRSelectInput(dpy, scr->root_win, RRScreenChangeNotifyMask);
+		XRRSelectInput(dpy, scr->root_win,
+		               RRScreenChangeNotifyMask |
+		               RRCrtcChangeNotifyMask   |
+		               RROutputChangeNotifyMask);
 #endif
 
 	XSync(dpy, False);
@@ -1366,4 +1373,14 @@ void ScreenCapture(WScreen *scr, int mode)
 	}
 	wfree(filepath);
 	wfree(screenshot_dir);
+}
+
+void wScreenDestroy(WScreen *scr)
+{
+#ifdef USE_RANDR
+	wRandRTeardown(scr);
+#else
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) scr;
+#endif
 }

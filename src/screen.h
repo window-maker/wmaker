@@ -299,6 +299,11 @@ typedef struct _WScreen {
     /* for hot-corners delay */
     WMHandlerID *hot_corner_timer;
 
+#ifdef USE_RANDR
+    WMHandlerID *randr_debounce_timer;
+    void *randr_state;
+#endif
+
     /* for window shortcuts */
     WMArray *shortcutWindows[MAX_WINDOW_SHORTCUTS];
 
@@ -345,7 +350,7 @@ WScreen *wScreenWithNumber(int i);
 WScreen *wScreenForRootWindow(Window window);   /* window must be valid */
 WScreen *wScreenForWindow(Window window);   /* slower than above functions */
 
-void wScreenFinish(WScreen *scr);
+void wScreenDestroy(WScreen *scr);
 void wScreenUpdateUsableArea(WScreen *scr);
 
 void create_logo_image(WScreen *scr);
