@@ -2219,6 +2219,14 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 			wFrameWindowConfigure(wwin->frame, req_x, req_y, req_width, h);
 		}
 
+		/*
+		 * When the frame is resized/moved, the X server repositions a client
+		 * with non-NorthWest gravity inside the frame to compensate (visible as
+		 * a GravityNotify with xev), leaving it at the wrong offset.
+		 */
+		if (wwin->normal_hints->win_gravity != NorthWestGravity)
+			XMoveWindow(dpy, wwin->client_win, 0, wwin->frame->top_width);
+
 		if (!(req_height > wwin->frame->core->height || req_width > wwin->frame->core->width))
 			XResizeWindow(dpy, wwin->client_win, req_width, req_height);
 

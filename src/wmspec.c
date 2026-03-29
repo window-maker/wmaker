@@ -1524,7 +1524,7 @@ void wNETWMCheckClientHints(WWindow *wwin, int *layer, int *workspace)
 			*workspace = desktop;
 	}
 
-	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_state, 0, 1, False,
+	if (XGetWindowProperty(dpy, wwin->client_win, net_wm_state, 0, 1024L, False,
 			       XA_ATOM, &type_ret, &fmt_ret, &nitems_ret,
 			       &bytes_after_ret, (unsigned char **)&data) == Success && data) {
 
