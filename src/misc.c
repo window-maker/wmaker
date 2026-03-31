@@ -847,6 +847,34 @@ static char *keysymToString(KeySym keysym, unsigned int state)
 }
 #endif
 
+Bool GetCanonicalShortcutLabel(unsigned int modifiers, KeySym ksym, char *buf, size_t bufsz)
+{
+	static const struct { unsigned int mask; const char *name; } mt[] = {
+		{ ShiftMask,   "Shift+"   },
+		{ ControlMask, "Control+" },
+		{ Mod1Mask,    "Mod1+"    },
+		{ Mod2Mask,    "Mod2+"    },
+		{ Mod3Mask,    "Mod3+"    },
+		{ Mod4Mask,    "Mod4+"    },
+		{ Mod5Mask,    "Mod5+"    },
+		{ 0, NULL }
+	};
+	const char *kname = XKeysymToString(ksym);
+	size_t i;
+
+	if (!kname)
+		return False;
+
+	buf[0] = '\0';
+	for (i = 0; mt[i].mask; i++) {
+		if (modifiers & mt[i].mask)
+			wstrlcat(buf, mt[i].name, bufsz);
+	}
+	wstrlcat(buf, kname, bufsz);
+
+	return True;
+}
+
 char *GetShortcutString(const char *shortcut)
 {
 	char *buffer = NULL;
@@ -882,50 +910,12 @@ char *GetShortcutString(const char *shortcut)
 char *GetShortcutKey(WShortKey key)
 {
 	char buf[MAX_SHORTCUT_LENGTH];
-	char *wr, *result, *seg;
+	char *result, *seg;
 	int step;
 
-	void append_string(const char *text)
-	{
-		const char *s = text;
-
-		while (*s) {
-			if (wr >= buf + sizeof(buf) - 1)
-				break;
-			*wr++ = *s++;
-		}
-	}
-
-	void append_modifier(int modifier_index, const char *fallback_name)
-	{
-		if (wPreferences.modifier_labels[modifier_index])
-			append_string(wPreferences.modifier_labels[modifier_index]);
-		else
-			append_string(fallback_name);
-	}
-
-	Bool build_token(unsigned int mod, KeyCode kcode)
-	{
-		const char *kname = XKeysymToString(W_KeycodeToKeysym(dpy, kcode, 0));
-
-		if (!kname)
-			return False;
-
-		wr = buf;
-		if (mod & ControlMask) append_modifier(1, "Control+");
-		if (mod & ShiftMask)   append_modifier(0, "Shift+");
-		if (mod & Mod1Mask)    append_modifier(2, "Mod1+");
-		if (mod & Mod2Mask)    append_modifier(3, "Mod2+");
-		if (mod & Mod3Mask)    append_modifier(4, "Mod3+");
-		if (mod & Mod4Mask)    append_modifier(5, "Mod4+");
-		if (mod & Mod5Mask)    append_modifier(6, "Mod5+");
-		append_string(kname);
-		*wr = '\0';
-
-		return True;
-	}
-
-	if (!build_token(key.modifier, key.keycode))
+	if (!GetCanonicalShortcutLabel(key.modifier,
+				       W_KeycodeToKeysym(dpy, key.keycode, 0),
+				       buf, sizeof(buf)))
 		return NULL;
 
 	/* Convert the leader token to its display string */
@@ -938,7 +928,9 @@ char *GetShortcutKey(WShortKey key)
 		if (key.chain_keycodes[step] == 0)
 			break;
 
-		if (!build_token(key.chain_modifiers[step], key.chain_keycodes[step]))
+		if (!GetCanonicalShortcutLabel(key.chain_modifiers[step],
+					       W_KeycodeToKeysym(dpy, key.chain_keycodes[step], 0),
+					       buf, sizeof(buf)))
 			break;
 
 		seg = GetShortcutString(buf);

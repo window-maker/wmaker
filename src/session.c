@@ -97,6 +97,7 @@ static WMPropList *sMaximized;
 static WMPropList *sHidden;
 static WMPropList *sGeometry;
 static WMPropList *sShortcutMask;
+static WMPropList *sMarkKey;
 
 static WMPropList *sDock;
 static WMPropList *sYes, *sNo;
@@ -118,6 +119,7 @@ static void make_keys(void)
 	sGeometry = WMCreatePLString("Geometry");
 	sDock = WMCreatePLString("Dock");
 	sShortcutMask = WMCreatePLString("ShortcutMask");
+	sMarkKey = WMCreatePLString("MarkKey");
 
 	sYes = WMCreatePLString("Yes");
 	sNo = WMCreatePLString("No");
@@ -165,6 +167,7 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 	WMPropList *win_state, *cmd, *name, *workspace;
 	WMPropList *shaded, *miniaturized, *maximized, *hidden, *geometry;
 	WMPropList *dock, *shortcut;
+	WMPropList *mark_key_pl = NULL;
 
 	if (wwin->orig_main_window != None && wwin->orig_main_window != wwin->client_win)
 		win = wwin->orig_main_window;
@@ -215,6 +218,9 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 		snprintf(buffer, sizeof(buffer), "%u", mask);
 		shortcut = WMCreatePLString(buffer);
 
+		if (wwin->mark_key_label)
+			mark_key_pl = WMCreatePLString(wwin->mark_key_label);
+
 		win_state = WMCreatePLDictionary(sName, name,
 						 sCommand, cmd,
 						 sWorkspace, workspace,
@@ -223,6 +229,11 @@ static WMPropList *makeWindowState(WWindow * wwin, WApplication * wapp)
 						 sMaximized, maximized,
 						 sHidden, hidden,
 						 sShortcutMask, shortcut, sGeometry, geometry, NULL);
+
+		if (mark_key_pl) {
+			WMPutInPLDictionary(win_state, sMarkKey, mark_key_pl);
+			WMReleasePropList(mark_key_pl);
+		}
 
 		WMReleasePropList(name);
 		WMReleasePropList(cmd);
@@ -418,6 +429,13 @@ static WSavedState *getWindowState(WScreen * scr, WMPropList * win_state)
 		state->window_shortcuts = mask;
 	}
 
+	value = WMGetFromPLDictionary(win_state, sMarkKey);
+	if (value != NULL && WMIsPLString(value)) {
+		char *s = WMGetFromPLString(value);
+		if (s && *s)
+			state->mark_key = wstrdup(s);
+	}
+
 	value = WMGetFromPLDictionary(win_state, sGeometry);
 	if (value && WMIsPLString(value)) {
 		if (!(sscanf(WMGetFromPLString(value), "%ix%i+%i+%i",
@@ -531,6 +549,8 @@ void wSessionRestoreState(WScreen *scr)
 		} else if ((pid = execCommand(scr, command)) > 0) {
 			wWindowAddSavedState(instance, class, command, pid, state);
 		} else {
+			if (state->mark_key)
+				wfree(state->mark_key);
 			wfree(state);
 		}
 

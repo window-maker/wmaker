@@ -823,6 +823,17 @@ WDefaultEntry optionList[] = {
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"PartialCaptureKey", "None", (void *)WKBD_PRINTP,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	/* Vim-like Window Marking */
+	{"MarkSetKey", "None", (void *)WKBD_MARK_SET,
+		NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MarkUnsetKey", "None", (void *)WKBD_MARK_UNSET,
+		NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MarkBringKey", "None", (void *)WKBD_MARK_BRING,
+		NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MarkJumpKey", "None", (void *)WKBD_MARK_JUMP,
+		NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MarkSwapKey", "None", (void *)WKBD_MARK_SWAP,
+		NULL, getKeybind, setKeyGrab, NULL, NULL},
 
 #ifdef KEEP_XKB_LOCK_STATUS
 	{"ToggleKbdModeKey", "None", (void *)WKBD_TOGGLE,

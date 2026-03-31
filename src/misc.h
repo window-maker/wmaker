@@ -50,6 +50,7 @@ char *ExpandOptions(WScreen * scr, const char *cmdline);
 void ExecuteInputCommand(WScreen *scr, const char *cmdline);
 void ExecuteExitCommand(WScreen *scr, long quickmode);
 char *GetShortcutString(const char *text);
+Bool GetCanonicalShortcutLabel(unsigned int modifiers, KeySym ksym, char *buf, size_t bufsz);
 char *GetShortcutKey(WShortKey key);
 char *EscapeWM_CLASS(const char *name, const char *class);
 char *StrConcatDot(const char *a, const char *b);

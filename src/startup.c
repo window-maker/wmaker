@@ -387,6 +387,7 @@ static char *atomNames[] = {
 	"_WINDOWMAKER_COMMAND",
 	"_WINDOWMAKER_ICON_SIZE",
 	"_WINDOWMAKER_ICON_TILE",
+	"_WINDOWMAKER_MARK_KEY",
 
 	GNUSTEP_WM_ATTR_NAME,
 	GNUSTEP_WM_MINIATURIZE_WINDOW,
@@ -474,6 +475,7 @@ void StartUp(Bool defaultScreenOnly)
 	w_global.atom.desktop.gtk_object_path = atom[20];
 
 	w_global.atom.wm.ignore_focus_events = atom[21];
+	w_global.atom.wmaker.mark_key  = atom[22];
 
 #ifdef USE_DOCK_XDND
 	wXDNDInitializeAtoms();

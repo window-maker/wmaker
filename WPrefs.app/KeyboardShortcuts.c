@@ -106,6 +106,13 @@ static struct keyOption {
 	{ "GroupNextKey",   N_("Focus next group window") },
 	{ "GroupPrevKey",   N_("Focus previous group window") },
 
+	/* Vim-like Window Marking */
+	{ "MarkSetKey",   N_("Mark window: set mark") },
+	{ "MarkUnsetKey", N_("Mark window: unset mark") },
+	{ "MarkBringKey", N_("Mark window: bring marked window here") },
+	{ "MarkJumpKey",  N_("Mark window: jump to marked window") },
+	{ "MarkSwapKey",  N_("Mark window: swap with marked window") },
+
 	/* Workspace Related */
 	{ "WorkspaceMapKey",  N_("Open workspace pager") },
 	{ "NextWorkspaceKey", N_("Switch to next workspace") },

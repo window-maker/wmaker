@@ -59,6 +59,14 @@ typedef struct WDrawerChain {
     struct WDrawerChain *next;
 } WDrawerChain;
 
+typedef enum {
+    MARK_CAPTURE_IDLE  = 0,
+    MARK_CAPTURE_SET   = 1,
+    MARK_CAPTURE_BRING = 2,
+    MARK_CAPTURE_JUMP  = 3,
+    MARK_CAPTURE_SWAP  = 4
+} WMarkCaptureMode;
+
 /*
  * each WScreen is saved into a context associated with its root window
  */
@@ -332,6 +340,8 @@ typedef struct _WScreen {
         unsigned int jump_back_pending:1;
         unsigned int ignore_focus_events:1;
         unsigned int in_hot_corner:3;
+        unsigned int mark_capture_mode:3;  /* one of WMarkCaptureMode */
+
     } flags;
 } WScreen;
 

@@ -609,6 +609,7 @@ extern struct wmaker_global_variables {
 
 			Atom icon_size;
 			Atom icon_tile;
+			Atom mark_key;
 		} wmaker;
 
 	} atom;

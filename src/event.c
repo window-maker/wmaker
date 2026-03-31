@@ -1471,6 +1471,12 @@ static void wCancelChainTimer(void)
 #define ISMAPPED(w) ((w) && !(w)->flags.miniaturized && ((w)->flags.mapped || (w)->flags.shaded))
 #define ISFOCUSED(w) ((w) && (w)->flags.focused)
 
+static void startMarkCapture(WScreen *scr, Display *dpy, WMarkCaptureMode mode)
+{
+	scr->flags.mark_capture_mode = mode;
+	XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, CurrentTime);
+}
+
 static void dispatchWKBDCommand(int command, WScreen *scr, WWindow *wwin, XEvent *event)
 {
 	short widx;
@@ -1975,6 +1981,29 @@ static void dispatchWKBDCommand(int command, WScreen *scr, WWindow *wwin, XEvent
 		}
 		break;
 #endif	/* KEEP_XKB_LOCK_STATUS */
+
+	case WKBD_MARK_SET:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin))
+			startMarkCapture(scr, dpy, MARK_CAPTURE_SET);
+		break;
+
+	case WKBD_MARK_UNSET:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin) && wwin->mark_key_label != NULL)
+			wWindowUnsetMark(wwin);
+		break;
+
+	case WKBD_MARK_BRING:
+		startMarkCapture(scr, dpy, MARK_CAPTURE_BRING);
+		break;
+
+	case WKBD_MARK_JUMP:
+		startMarkCapture(scr, dpy, MARK_CAPTURE_JUMP);
+		break;
+
+	case WKBD_MARK_SWAP:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin))
+			startMarkCapture(scr, dpy, MARK_CAPTURE_SWAP);
+		break;
 	}
 }
 
@@ -1989,6 +2018,118 @@ static void handleKeyPress(XEvent * event)
 
 	/* ignore CapsLock */
 	modifiers = event->xkey.state & w_global.shortcut.modifiers_mask;
+
+	/* ----------------------------------------------------------- *
+	* Window mark capture mode                                     *
+	*                                                              *
+	* We grabbed the keyboard so all keypresses come here until    *
+	* we release the grab.                                         *
+	* ------------------------------------------------------------ */
+	if (scr->flags.mark_capture_mode != MARK_CAPTURE_IDLE) {
+		int capture_mode = scr->flags.mark_capture_mode;
+		KeySym cap_ksym;
+		char label[MAX_SHORTCUT_LENGTH];
+
+		/* Skip modifier-only keypresses */
+		cap_ksym = XLookupKeysym(&event->xkey, 0);
+		if (cap_ksym == NoSymbol || IsModifierKey(cap_ksym))
+			return;
+
+		/* Real key received: exit capture mode and release grab */
+		scr->flags.mark_capture_mode = MARK_CAPTURE_IDLE;
+		XUngrabKeyboard(dpy, CurrentTime);
+
+		if (!GetCanonicalShortcutLabel(modifiers, cap_ksym, label, sizeof(label)))
+			wstrlcpy(label, "?", sizeof(label));
+
+		if (capture_mode == MARK_CAPTURE_SET) {
+			WWindow *target = scr->focused_window;
+			Bool conflict = False;
+			int i;
+
+			/* Conflict check against static wmaker bindings */
+			for (i = 0; i < WKBD_LAST; i++) {
+				if (wKeyBindings[i].keycode == event->xkey.keycode && wKeyBindings[i].modifier == modifiers) {
+					wwarning("window mark: '%s' is already a wmaker binding, mark not assigned", label);
+					conflict = True;
+					break;
+				}
+			}
+
+			/* Conflict check against existing marks on other windows */
+			if (!conflict) {
+				WWindow *tw = scr->focused_window;
+				while (tw) {
+					if (tw != target && tw->mark_key_label != NULL && strcmp(tw->mark_key_label, label) == 0) {
+						wwarning("window mark: label '%s' is already used by another window, mark not assigned", label);
+						conflict = True;
+						break;
+					}
+					tw = tw->prev;
+				}
+			}
+
+			if (!conflict && target != NULL)
+				wWindowSetMark(target, label);
+
+		} else {
+			/* Find marked window by label */
+			WWindow *tw = scr->focused_window;
+
+			while (tw) {
+				if (tw->mark_key_label != NULL && strcmp(tw->mark_key_label, label) == 0)
+					break;
+				tw = tw->prev;
+			}
+			if (tw == NULL) {
+				wwarning("window mark: no window labelled '%s'", label);
+			} else if (capture_mode == MARK_CAPTURE_BRING) {
+				if (tw->frame->workspace != scr->current_workspace)
+					wWindowChangeWorkspace(tw, scr->current_workspace);
+				wMakeWindowVisible(tw);
+			} else if (capture_mode == MARK_CAPTURE_JUMP) {
+				wMakeWindowVisible(tw);
+			} else {
+				/* MARK_CAPTURE_SWAP: swap position, size and workspace between focused and tw */
+				WWindow *focused = scr->focused_window;
+				int fx, fy, fw, fh, tx, ty, tw_w, tw_h;
+				int f_ws, t_ws;
+
+				if (focused == NULL || focused == tw)
+					return;
+
+				/* Snapshot both geometries */
+				fx   = focused->frame_x;
+				fy   = focused->frame_y;
+				fw   = focused->client.width;
+				fh   = focused->client.height;
+				f_ws = focused->frame->workspace;
+
+				tx   = tw->frame_x;
+				ty   = tw->frame_y;
+				tw_w = tw->client.width;
+				tw_h = tw->client.height;
+				t_ws = tw->frame->workspace;
+
+				/* Swap workspaces first so configure lands in the right one */
+				if (f_ws != t_ws) {
+					wWindowChangeWorkspace(focused, t_ws);
+					wWindowChangeWorkspace(tw, f_ws);
+				}
+
+				/* Swap positions and sizes */
+				wWindowConfigure(focused, tx, ty, tw_w, tw_h);
+				wWindowConfigure(tw, fx, fy, fw, fh);
+
+				/* Follow origin window: switch view to the workspace it landed in,
+				* then restore focus to it */
+				if (f_ws != t_ws)
+					wWorkspaceChange(scr, t_ws);
+				wSetFocusTo(scr, focused);
+			}
+		}
+		return;
+	}
 
 	/* ------------------------------------------------------------------ *
 	 * Trie-based key-chain matching                                      *
