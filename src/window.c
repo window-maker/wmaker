@@ -470,6 +470,35 @@ void wWindowSetupInitialAttributes(WWindow *wwin, int *level, int *workspace)
 		wwin->client_flags.no_focusable = 1;
 }
 
+/*
+ * Returns True if every pixel of 'wwin' is covered by at least one other
+ * mapped window on the same workspace, making it invisible to the user
+ */
+Bool wWindowIsFullyCovered(WWindow *wwin)
+{
+	WScreen *scr = wwin->screen_ptr;
+	int cx = wwin->frame_x;
+	int cy = wwin->frame_y;
+	int cright  = cx + (int)wwin->frame->core->width;
+	int cbottom = cy + (int)wwin->frame->core->height;
+	WWindow *w;
+
+	for (w = scr->focused_window; w != NULL; w = w->prev) {
+		if (w == wwin)
+			continue;
+		if (!w->flags.mapped)
+			continue;
+		if (!w->frame || w->frame->workspace != scr->current_workspace)
+			continue;
+		if (w->frame_x <= cx &&
+		    w->frame_y <= cy &&
+		    w->frame_x + (int)w->frame->core->width  >= cright &&
+		    w->frame_y + (int)w->frame->core->height >= cbottom)
+			return True;
+	}
+	return False;
+}
+
 Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured)
 {
 	int w1, h1, w2, h2;

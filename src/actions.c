@@ -240,6 +240,100 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 	old_scr = scr;
 }
 
+/*
+ *----------------------------------------------------------------------
+ * wSetFocusToDirection--
+ *	Moves focus to the nearest window in the given cardinal
+ *	direction (DIRECTION_LEFT, DIRECTION_RIGHT, DIRECTION_UP,
+ *	DIRECTION_DOWN from xinerama.h).
+ *
+ *	Selection algorithm: candidate windows are scored by
+ *	(primary_distance + perpendicular_offset). A large penalty is
+ *	added when the perpendicular offset exceeds the primary distance
+ *	(i.e. the candidate is more than 45 degrees off-axis). The window
+ *	with the lowest score wins. If no candidate exists in the requested
+ *	direction the call is silently ignored.
+ *----------------------------------------------------------------------
+ */
+void wSetFocusToDirection(WScreen *scr, int direction)
+{
+	WWindow *focused = scr->focused_window;
+	WWindow *best = NULL;
+	WWindow *candidate = NULL;
+	int my_cx, my_cy;
+	long best_score = -1;
+
+	if (!focused || !focused->flags.mapped)
+		return;
+
+	/* centre of the focused window */
+	my_cx = focused->frame_x + (int)focused->frame->core->width  / 2;
+	my_cy = focused->frame_y + (int)focused->frame->core->height / 2;
+
+	/* Iterate from most-recently-focused to least-recently-focused */
+	for (candidate = focused->prev; candidate != NULL; candidate = candidate->prev) {
+		int his_cx, his_cy, distance, offset;
+		long score;
+
+		if (!candidate->flags.mapped)
+			continue;
+		if (WFLAGP(candidate, no_focusable))
+			continue;
+		if (!candidate->frame || candidate->frame->workspace != scr->current_workspace)
+			continue;
+
+		/* ignore fully covered windows if cannot raised them */
+		if (!wPreferences.circ_raise && wWindowIsFullyCovered(candidate))
+			continue;
+
+		/* relative centre of candidate */
+		his_cx = (candidate->frame_x - my_cx) + (int)candidate->frame->core->width  / 2;
+		his_cy = (candidate->frame_y - my_cy) + (int)candidate->frame->core->height / 2;
+
+		switch (direction) {
+		case DIRECTION_RIGHT:
+			distance = his_cx;
+			offset = his_cy < 0 ? -his_cy : his_cy;
+			break;
+		case DIRECTION_LEFT:
+			distance = -his_cx;
+			offset = his_cy < 0 ? -his_cy : his_cy;
+			break;
+		case DIRECTION_DOWN:
+			distance = his_cy;
+			offset = his_cx < 0 ? -his_cx : his_cx;
+			break;
+		case DIRECTION_UP:
+			distance = -his_cy;
+			offset = his_cx < 0 ? -his_cx : his_cx;
+			break;
+		default:
+			continue;
+		}
+
+		/* candidate must be strictly in the requested direction */
+		if (distance <= 0)
+			continue;
+
+		score = distance + offset;
+
+		/* heavy penalty for windows more than 45 degrees off-axis */
+		if (offset > distance)
+			score += 1000000L;
+
+		if (best_score < 0 || score < best_score) {
+			best = candidate;
+			best_score = score;
+		}
+	}
+
+	if (best) {
+		if (wPreferences.circ_raise)
+			wRaiseFrame(best->frame->core);
+		wSetFocusTo(scr, best);
+	}
+}
+
 void wShadeWindow(WWindow *wwin)
 {
 

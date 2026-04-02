@@ -405,6 +405,7 @@ WMagicNumber wWindowGetSavedState(Window win);
 
 void wWindowDeleteSavedState(WMagicNumber id);
 
+Bool wWindowIsFullyCovered(WWindow *wwin);
 Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured);
 
 void wWindowSetOmnipresent(WWindow *wwin, Bool flag);

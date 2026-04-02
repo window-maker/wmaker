@@ -103,6 +103,11 @@ static struct keyOption {
 	{ "SelectKey",      N_("Select active window") },
 	{ "FocusNextKey",   N_("Focus next window") },
 	{ "FocusPrevKey",   N_("Focus previous window") },
+	/* Directional window focus */
+	{ "FocusWindowLeftKey",  N_("Focus the window to the left") },
+	{ "FocusWindowRightKey", N_("Focus the window to the right") },
+	{ "FocusWindowUpKey",    N_("Focus the window above") },
+	{ "FocusWindowDownKey",  N_("Focus the window below") },
 	{ "GroupNextKey",   N_("Focus next group window") },
 	{ "GroupPrevKey",   N_("Focus previous group window") },
 

@@ -1732,6 +1732,22 @@ static void dispatchWKBDCommand(int command, WScreen *scr, WWindow *wwin, XEvent
 		StartWindozeCycle(wwin, event, False, False);
 		break;
 
+	case WKBD_FOCUSLEFT:
+		wSetFocusToDirection(scr, DIRECTION_LEFT);
+		break;
+
+	case WKBD_FOCUSRIGHT:
+		wSetFocusToDirection(scr, DIRECTION_RIGHT);
+		break;
+
+	case WKBD_FOCUSUP:
+		wSetFocusToDirection(scr, DIRECTION_UP);
+		break;
+
+	case WKBD_FOCUSDOWN:
+		wSetFocusToDirection(scr, DIRECTION_DOWN);
+		break;
+
 	case WKBD_GROUPNEXT:
 		StartWindozeCycle(wwin, event, True, True);
 		break;
