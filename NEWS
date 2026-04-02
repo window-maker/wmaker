@@ -1,10 +1,183 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+-- 0.97.0
+
+Directional window focus
+------------------------
+
+The keyboard focus can now be moved in a specific direction (left, right,
+up, down) relative to the currently focused window, using window centres
+for comparison. The shortcuts can be configured in WPrefs under
+"Keyboard Shortcuts", or set directly in ~/GNUstep/Defaults/WindowMaker
+via "FocusWindowLeftKey", "FocusWindowRightKey", "FocusWindowUpKey" and
+"FocusWindowDownKey" (disabled by default).
+
+The existing "CirculateRaise" option ("Raise window when switching focus
+with keyboard" in WPrefs) also controls whether windows that are fully
+obscured by others are raised when receiving focus this way.
+
+
+Vim-like window marking
+-----------------------
+
+Windows can now be dynamically assigned a mark label (a key or
+modifier+key combination) allowing them to be instantly recalled without
+searching. This is inspired by vim's mark-and-jump navigation.
+
+The mark label is displayed in the window list menu between the window
+title and the workspace name.
+
+Five actions can be configured in ~/GNUstep/Defaults/WindowMaker
+(or in WPrefs under "Keyboard Shortcuts")
+
+   "MarkSetKey": assign a label to the focused window (e.g. with the
+   action bound to "Super+M", pressing "Super+M x" marks the focused
+   window with label 'x').
+
+   "MarkUnsetKey": remove the mark from a labeled window.
+
+   "MarkJumpKey": focus and raise the window with the given label.
+
+   "MarkBringKey": move the marked window to the current workspace and
+   focus it.
+
+   "MarkSwapKey": swap the focused window with the marked window.
+
+Those are disabled by default.
+Marks are persistent across sessions and saved in the WMState file.
+
+
+Multi-key and sticky-chain keybindings
+--------------------------------------
+
+Keyboard shortcuts now support multi-key sequences, similar to
+Emacs-style prefix bindings (e.g. pressing a leader key followed by
+one or more continuation keys).
+
+An optional sticky-chain mode allows a prefix key to remain active
+until a cancel key is pressed or a timeout expires, making it possible
+to trigger multiple actions in sequence without re-entering the prefix.
+New options in ~/GNUstep/Defaults/WindowMaker:
+
+   "KeychainTimeoutDelay" is the timeout in milliseconds after which an
+   active chain expires. Default is 500. Set to 0 to disable the
+   timeout.
+
+   "KeychainCancelKey" sets a key to explicitly cancel an active chain.
+   (disabled by default).
+
+
+Configurable modifier key labels
+---------------------------------
+
+A new "ModifierKeyShortLabels" option in ~/GNUstep/Defaults/WindowMaker
+allows customizing the labels shown for modifier keys in menus and
+keyboard shortcut displays. Unicode symbols can be used in place of the
+default text labels. For example to use the same symbol as defined on
+MacOS:
+
+ModifierKeyShortLabels = (
+  "\342\207\247",
+  "\342\214\203",
+  "\342\214\245",
+  "\342\207\255",
+  "\342\207\263",
+  "\342\214\230",
+  "\342\207\252",
+  "\342\227\206",
+  "\342\214\245"
+);
+
+Configurable mouse wheel focus behavior
+----------------------------------------
+
+Scrolling the mouse wheel over a window can now optionally move the
+keyboard focus to that window. The option is available in WPrefs under
+"Expert User Preferences", or by setting "MouseWheelFocusEnable" in
+~/GNUstep/Defaults/WindowMaker (NO by default).
+
+
+Application icons in the window list
+-------------------------------------
+
+Application icons can now be shown in the window list menu. This behavior
+can be configured by setting the "WindowListAppIcons" option in
+~/GNUstep/Defaults/WindowMaker or "Show app icons in window list." in
+WPrefs under "Expert User Preferences" (NO by default).
+
+
+Configurable screenshot filename template
+-----------------------------------------
+
+The filename (strftime compatible) format used when saving screenshots
+can now be customized by setting the "ScreenshotFileNameTemplate"
+option in ~/GNUstep/Defaults/WindowMaker. The default remains the
+format introduced in 0.96.0.
+
+
+JPEG XL image support
+---------------------
+
+WRaster can now optionally load JPEG XL images if the libjxl
+library is present at build time. The feature can be toggled at
+configure time with --enable-jxl/--disable-jxl.
+
+
+wmiv: archive files and unknown format handling
+-----------------------------------------------
+
+wmiv can now open images stored inside archive files (with libarchive).
+A new option to silently skip unknown image formats is also available.
+It supports ctrl+c shortcut to copy the current image to the clipboard.
+
+
+Support for _NET_WM_MOVERESIZE
+------------------------------
+
+Window Maker now handles the _NET_WM_MOVERESIZE EWMH message, which
+allows applications to initiate interactive window moves and resizes
+through a standard protocol request (for those applications without
+decorations: VS Code, Google Chrome, Steam and Discord, ...).
+
+
+Cycle windows across all workspaces
+-----------------------------------
+
+A new 'Cycle all windows from all workspaces' expert option allows
+the Alt-Tab window switcher to include windows from all workspaces,
+not only the current one. Which is the "CycleAllWorkspaces" option
+in ~/GNUstep/Defaults/WindowMaker (NO by default).
+
+
+RandR and multi-monitor improvements
+------------------------------------
+
+RandR version >= 1.3 is automatically enabled when detected. By default,
+it operates in static mode, requiring the screen layout to be defined
+manually. A new "HotplugMonitor" option in ~/GNUstep/Defaults/WindowMaker
+(NO by default) enables automatic monitor detection on hotplug events,
+adding newly connected monitors to the right of the existing layout.
+This option is also available in WPrefs expert panel under
+"Automatically (de)activate monitors on hotplug events".
+
+
+Titlebar language button revamp
+-------------------------------
+
+When the modelock feature is enabled, the legacy hardcoded language
+dropdown icons in the titlebar are replaced by a compact button
+displaying the short name of the current XKB locale (those are
+basically the layouts displayed via setxkbmap -query).
+Clicking the button cycles through up to four keyboard layouts
+(matching the four XKB groups). The xkbfile library is required for
+this feature.
+
+
 -- 0.96.0
 
 Hot Corners feature
---------------------------
+-------------------
 
 Screen corners can be assigned an external command to be
 executed when the mouse pointer is entering those areas.
