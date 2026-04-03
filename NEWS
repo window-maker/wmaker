@@ -276,12 +276,12 @@ file.
 Alternative way for traverse half-maximized windows
 ---------------------------------------------------
 
-For now, there could be three possible state of the window while using
-half-maximized feature. Unmaximized window have its state saved during that
-process, which was use to unmaximize it. For example, if there is a window,
-which is maximized on the half left side of the screen, and while requesting
-left-half-maximized, it become unmaximized with size and dimension restored to
-original state.
+For now, there could be three possible states of the window while using
+the half-maximized feature. Unmaximized windows have their state saved during
+that process, which is used to unmaximize them. For example, if there is a
+window that is maximized on the left half of the screen, and while requesting
+left-half-maximize it becomes unmaximized with its size and dimensions
+restored to the original state.
 
 By setting "AlternativeHalfMaximized" option to "Yes"
 ~/GNUstep/Defaults/WindowMaker config file (or by using WPrefs.app and option
@@ -309,9 +309,9 @@ Window can be moved using keyboard shortcut right-half-maximize:
  ├┬┐        └──────────┘│
  └┴┴────────────────────┘
 
-Further invoking right-half-maximize will do nothing. Note, that window always
-can be unmaximzied using appropriate keyboard shortcut or by selecting
-"Unmaximize" from window menu.
+Further invoking right-half-maximize will do nothing. Note, that the window always
+can be unmaximized using an appropriate keyboard shortcut or by selecting
+"Unmaximize" from the window menu.
 
 Going to opposite direction by invoking left-half-maximize, will make the window
 maximized in both, vertical and horizontal directions:
@@ -402,8 +402,8 @@ left and second display is on the right with window on first screen:
  ├┬┐               ├┬┬┐               │
  └┴┴───────────────┴┴┴┴───────────────┘
 
-It can be right-half-maximized (using previously defined key combination), so it
-become:
+It can be right-half-maximized (using the previously defined key combination), so it
+becomes:
 
  ┌┬───────┬────────┬─────────────────┬┐
  ├┘       ├────────┤                 ├┤
@@ -415,7 +415,7 @@ become:
  └┴┴───────────────┴┴┴┴───────────────┘
 
 In this example there is an assumption that WindowMaker is configured, that
-maximized windows wont cover mini icons nor dock.
+maximized windows won't cover mini icons nor the dock.
 
 Without setting new option to true, issuing another right-half-maximize will
 restore window dimensions and position to the original state (like on the first
@@ -430,7 +430,7 @@ figure). With new option set to true it will move window to second screen like:
  ├┬┐               ├┬┬┬─────┘         │
  └┴┴───────────────┴┴┴┴───────────────┘
 
-Another activation of right-half-maxmimize:
+Another activation of right-half-maximize:
 
  ┌┬────────────────┬────────┬────────┬┐
  ├┘                │        ├────────┼┤
@@ -441,7 +441,7 @@ Another activation of right-half-maxmimize:
  ├┬┐               ├┬┬┐     └────────┘│
  └┴┴───────────────┴┴┴┴───────────────┘
 
-And final activation of right-half-maxmimize:
+And final activation of right-half-maximize:
 
  ┌┬────────────────┬───────┬─────────┬┐
  ├┘                ├───────┤         ├┤
@@ -452,8 +452,8 @@ And final activation of right-half-maxmimize:
  ├┬┐               ├┬┬┐               │
  └┴┴───────────────┴┴┴┴───────────────┘
 
-Where window is restored its size (but not position, since it it on different
-head now). Moving window in directions like left-half-maximize,
+Where the window is restored to its size (but not position, since it is on a different
+head now). Moving a window in directions like left-half-maximize,
 top-half-maximize and bottom-half-maximize will behave in similar way depending
 on the layout of displays.
 
@@ -525,12 +525,12 @@ There are four choices:
   geometry is restored.
 * "Unmaximize" ("...consider the window unmaximized") causes a maximized window
   to be moved when dragged and remains partially maximized, i.e., it keeps its
-  maximized geometry, but is consider to be unmaximized.  In particular, it can
+  maximized geometry, but is considered to be unmaximized.  In particular, it can
   be immediately re-maximized.
 * "NoMove" ("...do not move the window") prevents a maximized window from being
   moved when dragged.
 
-Note that, to accomodate this option in the "Window Handling Preferences" tab in
+Note that, to accommodate this option in the "Window Handling Preferences" tab in
 WPrefs.app, the option to "Open dialogs in the same workspace as their owners"
 (which sets the "OpenTransientOnOwnerWorkspace" option from
 ~/GNUstep/Defaults/WindowMaker) has been moved to "Expert User Preferences".
@@ -1330,7 +1330,7 @@ Others
 
 - added DONT_SCALE_ICONS compile time option
 - added --dont-restore cmd line option. When passed to wmaker, it
-  wont restore the state saved previously.
+   won't restore the state saved previously.
 
 --- 0.61.1
 
@@ -1870,10 +1870,10 @@ Clip icons when the mouse pointer enter/leave the Clip. To avoid unwanted
 raising/lowering there is a time threshold before raising/lowering.
 The thresholds can be changed in wconfig.h by changing one or both of
 AUTO_LOWER_DELAY and AUTO_RAISE_DELAY (expressed in milliseconds).
-For example if you set AUTO_RAISE_DELAY to 0, then the Clip will be raised as
+For example, if you set AUTO_RAISE_DELAY to 0, then the Clip will be raised as
 soon as the mouse pointer enters its area. Setting AUTO_RAISE_DELAY to a very
-big value, will make the Clip to practically do not auto raise unless clicked,
-but to be automatically lowered after AUTO_LOWER_DELAY (ms) when leaved.
+big value will make the Clip practically not auto-raise unless clicked,
+but it will still be automatically lowered after AUTO_LOWER_DELAY (ms) when left.
 
 
 New ThemePack Format
@@ -2640,7 +2640,7 @@ applets of that kind, because the icon window do not belongs to WindowMaker,
 but to the application itself. For such icons you must keep the mouse over the
 icon groundplate, else it will collapse back. But usually these type of icons
 will not stay in a collapsed clip, since one needs to see what they show.
-When the clip is leaved it will collapse back after a delay of 1 second, unless
+When the clip is left it will collapse back after a delay of 1 second, unless
 the mouse is moved back to the clip area. The delay can be set modifying
 AUTO_COLLAPSE_DELAY in wconfig.h. Default is 1000 (ms) which means 1 second.
 
@@ -2977,8 +2977,8 @@ When the step to move becomes smaller than IconSlideStep, IconSlideStep will
 be used further until the destination is reached.
 
 This way a nice deceleration effect is achieved, since while the icon
-approaches destination, it will use smaller steps, gibing the illusion that
-the icons is moving slower.
+approaches the destination, it will use smaller steps, giving the illusion that
+the icons are moving slower.
 
 IconSlideDelay will give the pause between steps, and is expressed in ms.
 

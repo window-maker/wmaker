@@ -190,7 +190,7 @@ Performance Tuning
 ==================
 
 If you want to diminish Window Maker's memory usage and improve performance,
-while keeping a nice appearance and good functionality, follow the items bellow:
+while keeping a nice appearance and good functionality, follow the items below:
 
 - use solid textures for everything, mainly title bars and menus. If you want a
   nice looking desktop, use the Traditional style.
@@ -240,7 +240,7 @@ pointer faster;
 clicked with the 0 (Ins) key.
 
 
-The above key values work in a XFree86 3.2 (X11R6.1) X server but your
+The above key values work on an XFree86 3.2 (X11R6.1) X server, but your
 mileage may vary.
 
 
@@ -252,7 +252,7 @@ that crashes Window Maker, please send a backtrace with your bug report.
 
 To make a useful backtrace, you need a core file with debugging information
 produced by Window Maker when it crashes. It should have been installed without
-stripping too.
+being stripped.
 
 To compile wmaker with debugging information:
 
@@ -287,7 +287,7 @@ The icons listed in COPYING.WTFPL and are distributed in this program and were
 made by Banlu Kemiyatorn (]d), are licensed through the "do What The Fuck you
 want to Public License". Read the COPYING.WTFPL file for the complete license.
 
-NeXT, OpenStep and NEXTSTEP are a trademarks of NeXT Computer, Inc.  All other
+NeXT, OpenStep and NEXTSTEP are trademarks of NeXT Computer, Inc.  All other
 trademarks are property of their respective owners.
 
 The authors reserve the right to make changes in the software without prior
@@ -307,7 +307,7 @@ screenshots.
 
 
 The AUTHORS file contains a list of the people who have contributed to the
-project. The name of people who have helped with localization (translation) can
+project. The names of people who have helped with localization (translation) can
 be found in po/README and Window Maker/README
 
 If you have any comments, fixes and bug reports (filled BUGFORMs) send them
