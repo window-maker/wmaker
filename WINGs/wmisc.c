@@ -122,11 +122,14 @@ static int fitText(const char *text, WMFont * font, int width, int wrap)
 		word1 = word2;
 	}
 
-	for (i = word1; i < word2; i++) {
-		w = WMWidthOfString(font, text, i);
-		if (w > width) {
+	/* Advance character by character (not byte by byte) */
+	i = word1;
+	while (i < word2) {
+		int next_i = i + oneUTF8CharForward(text + i, word2 - i);
+		w = WMWidthOfString(font, text, next_i);
+		if (w > width)
 			break;
-		}
+		i = next_i;
 	}
 
 	/* keep words complete if possible */
