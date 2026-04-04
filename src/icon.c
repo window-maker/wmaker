@@ -803,6 +803,9 @@ RImage *get_rimage_icon_from_wm_hints(WIcon *icon)
 
 	wwin = icon->owner;
 
+	if (!wwin->wm_hints)
+		return NULL;
+
 	if (!getSize(wwin->wm_hints->icon_pixmap, &w, &h, &d)) {
 		icon->owner->wm_hints->flags &= ~IconPixmapHint;
 		return NULL;
