@@ -122,35 +122,6 @@ static WMSelectionProcs selectionHandler = {
 #define TEXT_WIDTH2(tPtr, start, end) (WMWidthOfString((tPtr)->font, \
     &((tPtr)->text[(start)]), (end) - (start)))
 
-static inline int oneUTF8CharBackward(const char *str, int len)
-{
-	const unsigned char *ustr = (const unsigned char *)str;
-	int pos = 0;
-
-	while (len-- > 0 && ustr[--pos] >= 0x80 && ustr[pos] <= 0xbf) ;
-	return pos;
-}
-
-static inline int oneUTF8CharForward(const char *str, int len)
-{
-	const unsigned char *ustr = (const unsigned char *)str;
-	int pos = 0;
-
-	while (len-- > 0 && ustr[++pos] >= 0x80 && ustr[pos] <= 0xbf) ;
-	return pos;
-}
-
-// find the beginning of the UTF8 char pointed by str
-static inline int seekUTF8CharStart(const char *str, int len)
-{
-	const unsigned char *ustr = (const unsigned char *)str;
-	int pos = 0;
-
-	while (len-- > 0 && ustr[pos] >= 0x80 && ustr[pos] <= 0xbf)
-		--pos;
-	return pos;
-}
-
 static void normalizeRange(TextField * tPtr, WMRange * range)
 {
 	if (range->position < 0 && range->count < 0)

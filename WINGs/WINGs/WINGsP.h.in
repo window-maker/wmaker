@@ -686,6 +686,37 @@ void W_BroadcastMessage(W_View *targetParent, XEvent *event);
 
 void W_DispatchMessage(W_View *target, XEvent *event);
 
+/* ---[ UTF-8 helpers ]--------------------------------------------------- */
+
+static inline int oneUTF8CharBackward(const char *str, int len)
+{
+	const unsigned char *ustr = (const unsigned char *)str;
+	int pos = 0;
+
+	while (len-- > 0 && ustr[--pos] >= 0x80 && ustr[pos] <= 0xbf) ;
+	return pos;
+}
+
+static inline int oneUTF8CharForward(const char *str, int len)
+{
+	const unsigned char *ustr = (const unsigned char *)str;
+	int pos = 0;
+
+	while (len-- > 0 && ustr[++pos] >= 0x80 && ustr[pos] <= 0xbf) ;
+	return pos;
+}
+
+// find the beginning of the UTF8 char pointed by str
+static inline int seekUTF8CharStart(const char *str, int len)
+{
+	const unsigned char *ustr = (const unsigned char *)str;
+	int pos = 0;
+
+	while (len-- > 0 && ustr[pos] >= 0x80 && ustr[pos] <= 0xbf)
+		--pos;
+	return pos;
+}
+
 
 #ifdef __cplusplus
 }
