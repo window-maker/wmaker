@@ -1443,10 +1443,10 @@ static void create_tab_app_specific(WWindow *wwin, InspectorPanel *panel, int fr
 
 		if (WFLAGP(wwin, emulate_appicon)) {
 			WMSetButtonEnabled(panel->appChk[1], False);
-			WMSetButtonEnabled(panel->moreChk[7], True);
+			WMSetButtonEnabled(panel->moreChk[8], True);
 		} else {
 			WMSetButtonEnabled(panel->appChk[1], True);
-			WMSetButtonEnabled(panel->moreChk[7], False);
+			WMSetButtonEnabled(panel->moreChk[8], False);
 		}
 	} else {
 		if ((wwin->transient_for != None && wwin->transient_for != scr->root_win)
@@ -1455,7 +1455,7 @@ static void create_tab_app_specific(WWindow *wwin, InspectorPanel *panel, int fr
 		else
 			tmp = True;
 
-		WMSetButtonEnabled(panel->moreChk[7], tmp);
+		WMSetButtonEnabled(panel->moreChk[8], tmp);
 
 		WMSetPopUpButtonItemEnabled(panel->pagePopUp, 4, False);
 		panel->appFrm = NULL;
