@@ -408,6 +408,8 @@ static RImage *makeRImageFromARGBData(unsigned long *data)
 		return NULL;
 
 	image = RCreateImage(width, height, True);
+	if (!image)
+		return NULL;
 
 	for (imgdata = image->data, i = 2; i < size + 2; i++, imgdata += 4) {
 		pixel = data[i];
