@@ -1143,6 +1143,7 @@ static XImage *imageCaptureArea(WScreen *scr)
 			GrabModeAsync, None, wPreferences.cursor[WCUR_CAPTURE], CurrentTime) != Success) {
 		return NULL;
 	}
+	XGrabKeyboard(dpy, scr->root_win, False, GrabModeAsync, GrabModeAsync, CurrentTime);
 
 	XGrabServer(dpy);
 
@@ -1162,6 +1163,7 @@ static XImage *imageCaptureArea(WScreen *scr)
 				if (w > 0 && h > 0) {
 					XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
 					XUngrabServer(dpy);
+					XUngrabKeyboard(dpy, CurrentTime);
 					XUngrabPointer(dpy, CurrentTime);
 					return XGetImage(dpy, scr->root_win, x, y, w, h, AllPlanes, ZPixmap);
 				}
@@ -1186,8 +1188,11 @@ static XImage *imageCaptureArea(WScreen *scr)
 			XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
 			break;
 		case KeyPress:
-			if (W_KeycodeToKeysym(dpy, event.xkey.keycode, 0) == XK_Escape)
+			if (W_KeycodeToKeysym(dpy, event.xkey.keycode, 0) == XK_Escape) {
+				if (w > 0 && h > 0)
+					XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
 				quit = 1;
+			}
 			break;
 		default:
 			WMHandleEvent(&event);
@@ -1196,6 +1201,7 @@ static XImage *imageCaptureArea(WScreen *scr)
 	}
 
 	XUngrabServer(dpy);
+	XUngrabKeyboard(dpy, CurrentTime);
 	XUngrabPointer(dpy, CurrentTime);
 	return NULL;
 }
