@@ -1170,6 +1170,10 @@ static XImage *imageCaptureArea(WScreen *scr)
 			}
 			break;
 		case MotionNotify:
+			/* drop stale root MotionNotify still queued from before
+			 * the grab, otherwise the rectangle anchors at (-1,-1) */
+			if (xp < 0)
+				break;
 			XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
 			x = event.xmotion.x_root;
                         if (x < xp) {
