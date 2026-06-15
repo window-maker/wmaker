@@ -781,8 +781,12 @@ static Pixmap duplicatePixmap(Pixmap pixmap, int width, int height)
 	Display *tmpDpy;
 	Pixmap copyP;
 
-	/* must open a new display or the RetainPermanent will
-	 * leave stuff allocated in RContext unallocated after exit */
+	/* Open a separate connection so the pixmap survives our exit.
+	 * RetainTemporary (not RetainPermanent) is used intentionally:
+	 * the pixmap lives until the X session ends, avoiding the need
+	 * for XKillClient() on old pixmaps (which can crash when the
+	 * X server reuses a client ID that now belongs to our own
+	 * connection, causing "X connection broken"). */
 	tmpDpy = XOpenDisplay(display);
 	if (!tmpDpy) {
 		wwarning("could not open display to update background image information");
@@ -795,21 +799,13 @@ static Pixmap duplicatePixmap(Pixmap pixmap, int width, int height)
 		XCopyArea(tmpDpy, pixmap, copyP, DefaultGC(tmpDpy, scr), 0, 0, width, height, 0, 0);
 		XSync(tmpDpy, False);
 
-		XSetCloseDownMode(tmpDpy, RetainPermanent);
+		XSetCloseDownMode(tmpDpy, RetainTemporary);
 		XCloseDisplay(tmpDpy);
 	}
 
 	return copyP;
 }
 
-static int dummyErrorHandler(Display * dpy, XErrorEvent * err)
-{
-	/* Parameter not used, but tell the compiler that it is ok */
-	(void) dpy;
-	(void) err;
-
-	return 0;
-}
 
 static void setPixmapProperty(Pixmap pixmap)
 {
@@ -818,7 +814,6 @@ static void setPixmapProperty(Pixmap pixmap)
 	int format;
 	unsigned long length, after;
 	unsigned char *data;
-	int mode;
 
 	if (!prop) {
 		prop = XInternAtom(dpy, "_XROOTPMAP_ID", False);
@@ -826,23 +821,21 @@ static void setPixmapProperty(Pixmap pixmap)
 
 	XGrabServer(dpy);
 
-	/* Clear out the old pixmap */
+	/* Read and discard the old property data.  We no longer call
+	 * XKillClient() on the old pixmap: since duplicatePixmap() uses
+	 * RetainTemporary, old pixmaps are freed automatically when the
+	 * X session ends.  Calling XKillClient() here was unsafe because
+	 * the X server reuses client IDs; if the stored resource ID was
+	 * reassigned to our own connection the server would kill us,
+	 * producing "X connection to :0 broken". */
 	XGetWindowProperty(dpy, root, prop, 0L, 1L, False, AnyPropertyType,
 			   &type, &format, &length, &after, &data);
 	if (data)
 		XFree(data);
 
-	if ((type == XA_PIXMAP) && (format == 32) && (length == 1)) {
-		XSetErrorHandler(dummyErrorHandler);
-		XKillClient(dpy, *((Pixmap *) data));
-		XSync(dpy, False);
-		XSetErrorHandler(NULL);
-		mode = PropModeReplace;
-	} else {
-		mode = PropModeAppend;
-	}
 	if (pixmap)
-		XChangeProperty(dpy, root, prop, XA_PIXMAP, 32, mode, (unsigned char *)&pixmap, 1);
+		XChangeProperty(dpy, root, prop, XA_PIXMAP, 32, PropModeReplace,
+				(unsigned char *)&pixmap, 1);
 	else
 		XDeleteProperty(dpy, root, prop);
 
