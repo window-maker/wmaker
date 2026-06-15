@@ -829,6 +829,8 @@ static void setPixmapProperty(Pixmap pixmap)
 	/* Clear out the old pixmap */
 	XGetWindowProperty(dpy, root, prop, 0L, 1L, False, AnyPropertyType,
 			   &type, &format, &length, &after, &data);
+	if (data)
+		XFree(data);
 
 	if ((type == XA_PIXMAP) && (format == 32) && (length == 1)) {
 		XSetErrorHandler(dummyErrorHandler);
