@@ -781,12 +781,8 @@ static Pixmap duplicatePixmap(Pixmap pixmap, int width, int height)
 	Display *tmpDpy;
 	Pixmap copyP;
 
-	/* Open a separate connection so the pixmap survives our exit.
-	 * RetainTemporary (not RetainPermanent) is used intentionally:
-	 * the pixmap lives until the X session ends, avoiding the need
-	 * for XKillClient() on old pixmaps (which can crash when the
-	 * X server reuses a client ID that now belongs to our own
-	 * connection, causing "X connection broken"). */
+	/* must open a new display or the RetainPermanent will
+	 * leave stuff allocated in RContext unallocated after exit */
 	tmpDpy = XOpenDisplay(display);
 	if (!tmpDpy) {
 		wwarning("could not open display to update background image information");
@@ -799,45 +795,83 @@ static Pixmap duplicatePixmap(Pixmap pixmap, int width, int height)
 		XCopyArea(tmpDpy, pixmap, copyP, DefaultGC(tmpDpy, scr), 0, 0, width, height, 0, 0);
 		XSync(tmpDpy, False);
 
-		XSetCloseDownMode(tmpDpy, RetainTemporary);
+		XSetCloseDownMode(tmpDpy, RetainPermanent);
 		XCloseDisplay(tmpDpy);
 	}
 
 	return copyP;
 }
 
+static int dummyErrorHandler(Display * dpy, XErrorEvent * err)
+{
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) dpy;
+	(void) err;
+
+	return 0;
+}
+
+static Bool getRootPixmapAtom(Atom prop, Pixmap *ret)
+{
+	Atom type;
+	int format;
+	unsigned long length, after;
+	unsigned char *data = NULL;
+
+	*ret = None;
+	if (XGetWindowProperty(dpy, root, prop, 0L, 1L, False, AnyPropertyType,
+			       &type, &format, &length, &after, &data) != Success)
+		return False;
+	if (type == XA_PIXMAP && format == 32 && length == 1 && data) {
+		*ret = *(Pixmap *)data;
+		XFree(data);
+		return True;
+	}
+	if (data)
+		XFree(data);
+	return False;
+}
 
 static void setPixmapProperty(Pixmap pixmap)
 {
 	static Atom prop = 0;
-	Atom type;
-	int format;
-	unsigned long length, after;
-	unsigned char *data;
+	static Atom eprop = 0;
+	Pixmap old_root, old_eset;
+	Bool have_root, have_eset;
 
 	if (!prop) {
 		prop = XInternAtom(dpy, "_XROOTPMAP_ID", False);
+		eprop = XInternAtom(dpy, "ESETROOT_PMAP_ID", False);
 	}
 
 	XGrabServer(dpy);
 
-	/* Read and discard the old property data.  We no longer call
-	 * XKillClient() on the old pixmap: since duplicatePixmap() uses
-	 * RetainTemporary, old pixmaps are freed automatically when the
-	 * X session ends.  Calling XKillClient() here was unsafe because
-	 * the X server reuses client IDs; if the stored resource ID was
-	 * reassigned to our own connection the server would kill us,
-	 * producing "X connection to :0 broken". */
-	XGetWindowProperty(dpy, root, prop, 0L, 1L, False, AnyPropertyType,
-			   &type, &format, &length, &after, &data);
-	if (data)
-		XFree(data);
+	/* Free the previous background pixmap only when both _XROOTPMAP_ID
+	 * and ESETROOT_PMAP_ID hold the same XID, that pairing marks a
+	 * RetainPermanent zombie left by a compliant root setter so
+	 * XKillClient on it cannot hit a live connection.  A bare
+	 * _XROOTPMAP_ID may come from a tool that closed in Destroy mode,
+	 * in which case the client bits of the stored XID can already be
+	 * recycled to a live client, including our own dpy, and killing
+	 * it produces "X connection broken". */
+	have_root = getRootPixmapAtom(prop, &old_root);
+	have_eset = getRootPixmapAtom(eprop, &old_eset);
+	if (have_root && have_eset && old_root == old_eset && old_eset != None) {
+		XSetErrorHandler(dummyErrorHandler);
+		XKillClient(dpy, old_eset);
+		XSync(dpy, False);
+		XSetErrorHandler(NULL);
+	}
 
-	if (pixmap)
+	if (pixmap) {
 		XChangeProperty(dpy, root, prop, XA_PIXMAP, 32, PropModeReplace,
 				(unsigned char *)&pixmap, 1);
-	else
+		XChangeProperty(dpy, root, eprop, XA_PIXMAP, 32, PropModeReplace,
+				(unsigned char *)&pixmap, 1);
+	} else {
 		XDeleteProperty(dpy, root, prop);
+		XDeleteProperty(dpy, root, eprop);
+	}
 
 	XUngrabServer(dpy);
 	XFlush(dpy);
