@@ -578,6 +578,8 @@ RImage *RMakeTiledImage(RImage * tile, unsigned width, unsigned height)
 		int has_alpha = HAS_ALPHA(tile);
 
 		image = RCreateImage(width, height, has_alpha);
+		if (!image)
+			return NULL;
 
 		d = image->data;
 		s = tile->data;
