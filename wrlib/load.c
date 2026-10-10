@@ -130,6 +130,7 @@ static void init_cache(void)
 		RImageCache = malloc(sizeof(RCachedImage) * RImageCacheSize);
 		if (RImageCache == NULL) {
 			fprintf(stderr, _("wrlib: out of memory for image cache\n"));
+			RImageCacheSize = 0;
 			return;
 		}
 		memset(RImageCache, 0, sizeof(RCachedImage) * RImageCacheSize);
