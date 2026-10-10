@@ -1931,7 +1931,7 @@ static void dispatchWKBDCommand(int command, WScreen *scr, WWindow *wwin, XEvent
 
 		} else if (scr->selected_windows && WMGetArrayItemCount(scr->selected_windows)) {
 
-			if (wwin->flags.selected && scr->selected_windows) {
+			if (wwin && wwin->flags.selected && scr->selected_windows) {
 				if (scr->shortcutWindows[widx]) {
 					WMFreeArray(scr->shortcutWindows[widx]);
 				}
