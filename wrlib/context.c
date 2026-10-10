@@ -567,7 +567,7 @@ RContext *RCreateContext(Display * dpy, int screen_number, const RContextAttribu
 		templ.visualid = context->attribs->visualid;
 		vinfo = XGetVisualInfo(context->dpy, VisualIDMask | VisualScreenMask, &templ, &nret);
 		if (!vinfo || nret == 0) {
-			free(context);
+			RDestroyContext(context);
 			RErrorCode = RERR_BADVISUALID;
 			return NULL;
 		}
@@ -614,13 +614,13 @@ RContext *RCreateContext(Display * dpy, int screen_number, const RContextAttribu
 
 	if (context->vclass == PseudoColor || context->vclass == StaticColor) {
 		if (!setupPseudoColorColormap(context)) {
-			free(context);
+			RDestroyContext(context);
 			return NULL;
 		}
 	} else if (context->vclass == GrayScale || context->vclass == StaticGray) {
 		context->colors = allocateGrayScale(context);
 		if (!context->colors) {
-			free(context);
+			RDestroyContext(context);
 			return NULL;
 		}
 	} else if (context->vclass == TrueColor) {
@@ -665,7 +665,8 @@ void RDestroyContext(RContext *context)
 			XFreeGC(context->dpy, context->copy_gc);
 		if (context->attribs) {
 			if ((context->attribs->flags & RC_VisualID) &&
-			    !(context->attribs->flags & RC_DefaultVisual))
+			    !(context->attribs->flags & RC_DefaultVisual) &&
+			    context->drawable != None)
 				XDestroyWindow(context->dpy, context->drawable);
 			free(context->attribs);
 		}
